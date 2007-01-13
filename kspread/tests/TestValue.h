@@ -41,7 +41,6 @@ private Q_SLOTS:
     void testArray();
     void testCopy();
     void testAssignment();
-    void testDetach();
 };
 
 } // namespace KSpread

@@ -287,28 +287,45 @@ void TestValue::testAssignment()
   // value assignment
   v1 = new Value( 14.3 );
   v2 = new Value( true );
-  v2->assign( *v1 );
+  *v2 = *v1;
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v2->type(), Value::Float );
   QCOMPARE( v1->asFloat(), 14.3 );
   QCOMPARE( v2->asFloat(), 14.3 );
   delete v1;
   delete v2;
-}
 
-void TestValue::testDetach()
-{
-  Value* v1;
-  Value* v2;
+  // test copying/detaching of string values (QString*)
+  v1 = new Value( "Hello" );
+  v2 = new Value( true );
+  *v2 = *v1;
+  QCOMPARE( v1->type(), Value::String );
+  QCOMPARE( v2->type(), Value::String );
+  QCOMPARE( v1->asString(), QString("Hello") );
+  QCOMPARE( v2->asString(), QString("Hello") );
+  v2->setValue( QString("World") );
+  QCOMPARE( v1->asString(), QString("Hello") );
+  QCOMPARE( v2->asString(), QString("World") );
+  delete v1;
+  delete v2;
 
-  // verify detachment
-  v1 = new Value( 14.3 );
-  v2 = new Value( *v1 );
-  v2->detach(); // v1 and v2 don't share data anymore
-  QCOMPARE( v1->type(), Value::Float );
-  QCOMPARE( v2->type(), Value::Float );
-  QCOMPARE( v1->asFloat(), 14.3 );
-  QCOMPARE( v2->asFloat(), 14.3 );
+  // test copying/detaching of arrays (ValueArray*)
+  v1 = new Value( Value::Array );
+  v1->setElement( 0, 0, Value(1) );
+  v1->setElement( 0, 1, Value(2) );
+  v2 = new Value( true );
+  *v2 = *v1;
+  QCOMPARE( v1->type(), Value::Array );
+  QCOMPARE( v2->type(), Value::Array );
+  QCOMPARE( v1->element( 0, 0 ), Value(1) );
+  QCOMPARE( v1->element( 0, 1 ), Value(2) );
+  QCOMPARE( v2->element( 0, 0 ), Value(1) );
+  QCOMPARE( v2->element( 0, 1 ), Value(2) );
+  v2->setElement( 0, 0, Value(3) );
+  QCOMPARE( v1->element( 0, 0 ), Value(1) );
+  QCOMPARE( v1->element( 0, 1 ), Value(2) );
+  QCOMPARE( v2->element( 0, 0 ), Value(3) );
+  QCOMPARE( v2->element( 0, 1 ), Value(2) );
   delete v1;
   delete v2;
 }

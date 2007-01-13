@@ -34,17 +34,12 @@ using namespace KSpread;
 
 typedef PointStorage<Value> ValueArray;
 
-
-// helper class for Value
-class KSpread::ValueData
+class Value::Private : public QSharedData
 {
   public:
 
     Value::Type type:4;
     Value::Format format:4;
-
-    // reference count, at least one when object exists
-    unsigned int count:24;
 
     union
     {
@@ -56,26 +51,48 @@ class KSpread::ValueData
     };
 
     // create empty data
-    ValueData(): type( Value::Empty ),
-      format (Value::fmt_None), count( 1 ), ps( 0 ) { };
+    Private() : type( Value::Empty ), format( Value::fmt_None ), ps( 0 ) {}
+
+    Private( const Private& o )
+        : QSharedData( o )
+        , type( o.type )
+        , format( o.format )
+    {
+        switch ( type )
+        {
+            case Value::Empty:
+            default:
+                ps = 0;
+                break;
+            case Value::Boolean:
+                b = o.b;
+                break;
+            case Value::Integer:
+                i = o.i;
+                break;
+            case Value::Float:
+                f = o.f;
+                break;
+            case Value::String:
+            case Value::Error:
+                ps = new QString( *o.ps );
+                break;
+            case Value::Array:
+                pa = new ValueArray( *o.pa );
+                break;
+        }
+    }
 
     // destroys data
-    ~ValueData(){ if( this == s_null ) s_null = 0;
+    ~Private(){ if( this == s_null ) s_null = 0;
        if( type == Value::Array ) delete pa;
        if( type == Value::String ) delete ps;
        if( type == Value::Error ) delete ps;
      }
 
     // static empty data to be shared
-    static ValueData* null()
-      { if( !s_null) s_null = new ValueData; else s_null->ref(); return s_null; }
-
-    // increase reference count
-    void ref() { count++; }
-
-    // decrease reference count
-    void unref()
-      {  --count; if( !count ) delete this; }
+    static Private* null()
+      { if( !s_null) s_null = new Private; return s_null; }
 
     // true if it's null (which is shared)
     bool isNull(){ return this == s_null; }
@@ -84,11 +101,10 @@ class KSpread::ValueData
     void setFormatByType ();
 
   private:
-
-    static ValueData* s_null;
+    static Private* s_null;
 };
 
-void KSpread::ValueData::setFormatByType ()
+void Value::Private::setFormatByType ()
 {
   switch (type) {
     case Value::Empty:
@@ -119,7 +135,7 @@ void KSpread::ValueData::setFormatByType ()
 }
 
 // to be shared between all empty value
-ValueData* ValueData::s_null = 0;
+Value::Private* Value::Private::s_null = 0;
 
 // static things
 Value ks_value_empty;
@@ -136,52 +152,50 @@ Value ks_error_value;
 
 // create an empty value
 Value::Value()
+    : d( Private::null() )
 {
-  d = ValueData::null();
 }
 
 // destructor
 Value::~Value()
 {
-  d->unref();
 }
 
 // create value of certain type
 Value::Value( Value::Type _type )
+    : d( Private::null() )
 {
-  d = new ValueData;
   d->type = _type;
   d->setFormatByType ();
 }
 
 // copy constructor
 Value::Value( const Value& _value )
+    : d( _value.d )
 {
-  d = ValueData::null();
-  assign( _value );
 }
 
 // assignment operator
 Value& Value::operator=( const Value& _value )
 {
-  return assign( _value );
+    d = _value.d;
+    return *this;
 }
 
 // comparison operator - returns true only if strictly identical, unlike equal()/compare()
-bool Value::operator==( const Value& v ) const
+bool Value::operator==( const Value& o ) const
 {
-  const ValueData* n = v.d;
-  if ( d->type != n->type )
+  if ( d->type != o.d->type )
     return false;
   switch( d->type )
   {
-    case Empty: return true;
-    case Boolean: return n->b == d->b;
-    case Integer: return n->i == d->i;
-    case Float:   return compare( n->f, d->f ) == 0;
-    case String:  return *n->ps == *d->ps;
-    case Array:   return *n->pa == *d->pa;
-    case Error:   return *n->ps == *d->ps;
+    case Empty:   return true;
+    case Boolean: return o.d->b == d->b;
+    case Integer: return o.d->i == d->i;
+    case Float:   return compare( o.d->f, d->f ) == 0;
+    case String:  return *o.d->ps == *d->ps;
+    case Array:   return *o.d->pa == *d->pa;
+    case Error:   return *o.d->ps == *d->ps;
     default: break;
   }
   kWarning() << "Unhandled type in Value::operator==: " << d->type << endl;
@@ -191,74 +205,64 @@ bool Value::operator==( const Value& v ) const
 // create a boolean value
 Value::Value( bool b )
 {
-  d = ValueData::null();
+  d = Private::null();
   setValue( b );
 }
 
 // create an integer value
 Value::Value( long i )
 {
-  d = ValueData::null();
+  d = Private::null();
   setValue ( i );
 }
 
 // create an integer value
 Value::Value( int i )
 {
-  d = ValueData::null();
+  d = Private::null();
   setValue ( i );
 }
 
 // create a floating-point value
 Value::Value( double f )
 {
-  d = ValueData::null();
+  d = Private::null();
   setValue( f );
 }
 
 // create a string value
 Value::Value( const QString& s )
 {
-  d = ValueData::null();
+  d = Private::null();
   setValue( s );
 }
 
 // create a string value
 Value::Value (const char *s)
 {
-  d = ValueData::null();
+  d = Private::null();
   setValue (QString (s));
 }
 
 // create a floating-point value from date/time
 Value::Value( const QDateTime& dt, const Doc* doc )
 {
-  d = ValueData::null();
+  d = Private::null();
   setValue( dt, doc );
 }
 
 // create a floating-point value from time
 Value::Value( const QTime& dt, const Doc* doc )
 {
-  d = ValueData::null();
+  d = Private::null();
   setValue( dt, doc );
 }
 
 // create a floating-point value from date
 Value::Value( const QDate& dt, const Doc* doc )
 {
-  d = ValueData::null();
+  d = Private::null();
   setValue( dt, doc );
-}
-
-// assign value from other
-// shallow copy: only copy the data pointer
-Value& Value::assign( const Value& _value )
-{
-  d->unref();
-  d = _value.d;
-  d->ref();
-  return *this;
 }
 
 // return type of the value
@@ -270,7 +274,6 @@ Value::Type Value::type() const
 // set the value to boolean
 void Value::setValue( bool b )
 {
-  detach();
   d->type = Boolean;
   d->b = b;
   d->format = fmt_Boolean;
@@ -290,7 +293,6 @@ bool Value::asBoolean() const
 // set the value to integer
 void Value::setValue( long i )
 {
-  detach();
   d->type = Integer;
   d->i = i;
   d->format = fmt_Number;
@@ -299,7 +301,6 @@ void Value::setValue( long i )
 // set the value to integer
 void Value::setValue( int i )
 {
-  detach();
   d->type = Integer;
   d->i = static_cast<long>( i );
   d->format = fmt_Number;
@@ -321,13 +322,12 @@ long Value::asInteger() const
 
 void Value::setValue( const Value& v )
 {
-  assign( v );
+    d = v.d;
 }
 
 // set the value as floating-point
 void Value::setValue( double f )
 {
-  detach();
   d->type = Float;
   d->f = f;
   d->format = fmt_Number;
@@ -350,7 +350,6 @@ double Value::asFloat() const
 // set the value as string
 void Value::setValue( const QString& s )
 {
-  detach();
   d->type = String;
   d->ps = new QString( s );
   d->format = fmt_String;
@@ -371,7 +370,6 @@ QString Value::asString() const
 // set error message
 void Value::setError( const QString& msg )
 {
-  detach();
   d->type = Error;
   d->ps = new QString( msg );
 }
@@ -467,7 +465,6 @@ Value::Format Value::format() const
 
 void Value::setFormat (Value::Format fmt)
 {
-  detach();
   d->format = fmt;
 }
 
@@ -489,7 +486,6 @@ void Value::setElement( unsigned column, unsigned row, const Value& v )
 {
   if( d->type != Array ) return;
   if( !d->pa ) d->pa = new ValueArray();
-  detach();
   d->pa->insert( column + 1, row + 1, v );
 }
 
@@ -598,32 +594,6 @@ const Value& Value::errorVALUE()
   if( !ks_error_value.isError() )
     ks_error_value.setError( "#VALUE!" );
   return ks_error_value;
-}
-
-// detach, create deep copy of ValueData
-void Value::detach()
-{
-  if( d->isNull() || ( d->count > 1 ) )
-  {
-    ValueData* n;
-    n = new ValueData;
-
-    n->type = d->type;
-    switch( n->type )
-    {
-    case Empty: break;
-    case Boolean: n->b = d->b; break;
-    case Integer: n->i = d->i; break;
-    case Float:   n->f = d->f; break;
-    case String:  n->ps = new QString( *d->ps ); break;
-    case Array:   n->pa = new ValueArray; *n->pa = (*d->pa); break;
-    case Error:   n->ps = new QString( *d->ps ); break;
-    default: break;
-    }
-
-    d->unref();
-    d = n;
-  }
 }
 
 int Value::compare( double v1, double v2 )

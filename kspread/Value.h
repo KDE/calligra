@@ -21,6 +21,7 @@
 #define KSPREAD_VALUE_H
 
 #include <QDateTime>
+#include <QSharedDataPointer>
 #include <QString>
 #include <QTextStream>
 
@@ -31,7 +32,6 @@
 namespace KSpread
 {
 class Doc;
-class ValueData;
 
 /**
  * Provides a wrapper for cell value.
@@ -95,11 +95,6 @@ class KSPREAD_EXPORT Value
      * doesn't consume additional memory.
      */
     Value& operator= ( const Value& _value );
-
-    /**
-     * Assigns from another value. Same as above.
-     */
-    Value& assign( const Value& _value );
 
     /**
      * Creates a boolean value.
@@ -339,13 +334,6 @@ class KSPREAD_EXPORT Value
     QString errorMessage() const;
 
     /**
-     * Detaches itself from shared value data, i.e make a private, deep copy
-     * of the data. Usually this function is called automatically so you
-     * don't have to care about it.
-     */
-    void detach();
-
-    /**
      * Returns constant reference to empty value.
      */
     static const Value& empty();
@@ -460,9 +448,9 @@ class KSPREAD_EXPORT Value
 
     static bool isZero( double v );
 
-  protected:
-
-    ValueData* d; // can't never be 0
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 } // namespace KSpread
