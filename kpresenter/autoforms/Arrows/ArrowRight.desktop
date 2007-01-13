@@ -4,5 +4,6 @@ Type=Link
 URL=.source/ArrowRight.atf
 Name=Arrow Right
 Name[fr]=Flèche droite
+Name[ja]=右矢印
 Name[x-test]=xxArrow Rightxx
 Icon=.icon/ArrowRight.png

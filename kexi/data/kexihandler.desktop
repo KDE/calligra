@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=Kexi/Handler
 Comment=Kexi Project Handlers
 Comment[fr]=Gestionnaires de projet Kexi
+Comment[ja]=Kexi プロジェクトハンドラ
 Comment[x-test]=xxKexi Project Handlersxx
 
 [PropertyDef::X-Kexi-PartVersion]

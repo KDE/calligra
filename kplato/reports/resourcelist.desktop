@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=List of Resources
 Name[fr]=Liste de ressources
+Name[ja]=リソースのリスト
 Name[x-test]=xxList of Resourcesxx
 Type=Link
 URL= .source/resourcelist.ktf

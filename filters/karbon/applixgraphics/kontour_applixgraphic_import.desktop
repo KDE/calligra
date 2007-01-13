@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=Kontour Applixgraphics Import Filter
 Name[fr]=Filtre d'importation Applix Graphics vers Kontour
+Name[ja]=Kontour Applixgraphics インポートフィルタ
 Name[x-test]=xxKontour Applixgraphics Import Filterxx
 X-KDE-Export=application/x-kontour
 X-KDE-Import=application/x-applixgraphics

@@ -4,6 +4,7 @@ Name=SQLite3
 Name[x-test]=xxSQLite3xx
 Comment=SQLite is default Kexi embedded SQL engine
 Comment[fr]=SQLite est le moteur SQL par défaut intégré à Kexi
+Comment[ja]=SQLite は Kexi の標準埋め込み SQL エンジンです。
 Comment[x-test]=xxSQLite is default Kexi embedded SQL enginexx
 X-KDE-Library=kexidb_sqlite3driver
 ServiceTypes=Kexi/DBDriver

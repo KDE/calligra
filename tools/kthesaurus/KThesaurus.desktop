@@ -8,6 +8,7 @@ Icon=kthesaurus
 Exec=kthesaurus
 GenericName=Related Words
 GenericName[fr]=Mots liés
+GenericName[ja]=類義語
 GenericName[x-test]=xxRelated Wordsxx
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Office;X-KDE-More;

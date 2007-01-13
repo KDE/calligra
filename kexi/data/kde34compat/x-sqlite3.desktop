@@ -6,4 +6,5 @@ Icon=empty
 Patterns=
 Comment=SQLite3 Database File
 Comment[fr]=Fichier de base de données SQLite3
+Comment[ja]=SQLite3 データベースファイル
 Comment[x-test]=xxSQLite3 Database Filexx

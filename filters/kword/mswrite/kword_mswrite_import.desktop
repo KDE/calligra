@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KWord Microsoft Write Import Filter
 Name[fr]=Filtre d'importation MS-Write de KWord
+Name[ja]=KWord Microsoft Write インポートフィルタ
 Name[x-test]=xxKWord Microsoft Write Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/x-mswrite

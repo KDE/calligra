@@ -5,6 +5,7 @@ Name[x-test]=xxKivioxx
 Exec=kivio %u
 GenericName=Flowchart & Diagram Editing
 GenericName[fr]=Conception de diagrammes et de tableaux
+GenericName[ja]=フローチャート & ダイアグラム編集
 GenericName[x-test]=xxFlowchart & Diagram Editingxx
 MimeType=application/vnd.oasis.opendocument.graphics;application/x-kivio
 Type=Application

@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Illustration Document...
 Name[fr]=Document d'illustration...
+Name[ja]=Illustration ドキュメント...
 Name[x-test]=xxIllustration Document...xx
 Comment=New Karbon14 document:
 Comment[fr]=Nouveau document Karbon14 :
+Comment[ja]=Karbon14 ドキュメント
 Comment[x-test]=xxNew Karbon14 document:xx
 Type=Link
 URL=.source/Illustration.karbon

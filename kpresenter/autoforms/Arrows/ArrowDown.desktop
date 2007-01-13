@@ -4,5 +4,6 @@ Type=Link
 URL=.source/ArrowDown.atf
 Name=Arrow Down
 Name[fr]=Flèche basse
+Name[ja]=下矢印
 Name[x-test]=xxArrow Downxx
 Icon=.icon/ArrowDown.png

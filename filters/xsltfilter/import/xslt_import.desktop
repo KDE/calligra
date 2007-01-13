@@ -8,6 +8,7 @@ X-KDE-Weight=1
 ImportDescription=XSLT
 Name=KOffice XSLT Import Filter
 Name[fr]=Filtre d'importation XSLT de KOffice
+Name[ja]=KOffice XSLT インポートフィルタ
 Name[x-test]=xxKOffice XSLT Import Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

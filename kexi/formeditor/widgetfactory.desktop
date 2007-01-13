@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KFormDesigner/WidgetFactory
 Comment=Widget Factory Base
 Comment[fr]=Base de création de widgets
+Comment[ja]=ウィジェットファクトリーベース
 Comment[x-test]=xxWidget Factory Basexx
 
 [PropertyDef::X-KFormDesigner-FactoryGroup]

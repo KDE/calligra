@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=Kexi/DBDriver
 Comment=Kexi SQL-Driver plugin
 Comment[fr]=Module de pilotage SQL de Kexi
+Comment[ja]=Kexi SQL ドライバ プラグイン
 Comment[x-test]=xxKexi SQL-Driver pluginxx
 
 [PropertyDef::X-Kexi-FileDBDriverMime]

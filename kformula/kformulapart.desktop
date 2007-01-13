@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KOffice Formula Component
 Name[fr]=Composant formules de KOffice
+Name[ja]=KOffice 数式コンポーネント
 Name[x-test]=xxKOffice Formula Componentxx
 X-KDE-Library=libkformulapart
 MimeType=application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.formula-template;application/x-kformula;application/mathml+xml
@@ -12,5 +13,6 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.formula
 X-KDE-ExtraNativeMimeTypes=application/x-kformula,application/vnd.oasis.opendocument.formula-template,application/mathml+xml
 GenericName=Formula Editor
 GenericName[fr]=Éditeur de formules
+GenericName[ja]=数式エディタ
 GenericName[x-test]=xxFormula Editorxx
 Icon=kformula

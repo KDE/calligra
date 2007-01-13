@@ -5,9 +5,11 @@ ServiceTypes=Kexi/Handler
 
 GenericName=Relationships
 GenericName[fr]=Relations
+GenericName[ja]=リレーションシップ
 GenericName[x-test]=xxRelationshipsxx
 Name=Relationships
 Name[fr]=Relations
+Name[ja]=リレーションシップ
 Name[x-test]=xxRelationshipsxx
 X-KDE-Library=kexihandler_relation
 X-KDE-ParentApp=kexi

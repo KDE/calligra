@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KWord WML Import Filter
 Name[fr]=Filtre d'importation WML de KWord
+Name[ja]=KWord WML インポートフィルタ
 Name[x-test]=xxKWord WML Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=text/vnd.wap.wml

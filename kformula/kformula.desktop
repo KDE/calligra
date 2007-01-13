@@ -5,6 +5,7 @@ Name[x-test]=xxKFormulaxx
 Exec=kformula %u
 GenericName=Formula Editor
 GenericName[fr]=Éditeur de formules
+GenericName[ja]=数式エディタ
 GenericName[x-test]=xxFormula Editorxx
 MimeType=application/vnd.oasis.opendocument.formula;application/x-kformula
 Type=Application

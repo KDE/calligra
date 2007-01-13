@@ -5,9 +5,11 @@ ServiceTypes=Kexi/Handler
 
 GenericName=Forms
 GenericName[fr]=Formulaires
+GenericName[ja]=フォーム
 GenericName[x-test]=xxFormsxx
 Name=Forms
 Name[fr]=Formulaires
+Name[ja]=フォーム
 Name[x-test]=xxFormsxx
 X-KDE-Library=kexihandler_form
 X-KDE-ParentApp=kexi

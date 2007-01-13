@@ -9,6 +9,7 @@ X-KDE-Available=check
 ImportDescription=KWord
 Name=KOffice XSLT Export Filter
 Name[fr]=Filtre d'exportation XSLT de KOffice
+Name[ja]=KOffice XSLT エクスポートフィルタ
 Name[x-test]=xxKOffice XSLT Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

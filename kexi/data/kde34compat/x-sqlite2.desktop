@@ -6,4 +6,5 @@ Icon=empty
 Patterns=
 Comment=SQLite2 Database File
 Comment[fr]=Fichier de base de données SQLite2
+Comment[ja]=SQLite2 データベースファイル
 Comment[x-test]=xxSQLite2 Database Filexx

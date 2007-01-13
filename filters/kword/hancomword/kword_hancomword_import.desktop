@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KWord HancomWord Import Filter
 Name[fr]=Filtre d'importation HancomWord de KWord
+Name[ja]=KWord HancomWord インポートフィルタ
 Name[x-test]=xxKWord HancomWord Import Filterxx
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/x-hancomword

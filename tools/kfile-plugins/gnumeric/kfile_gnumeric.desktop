@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=Gnumeric Info
 Name[fr]=Informations sur Gnumeric
+Name[ja]=Gnumeric 情報
 Name[x-test]=xxGnumeric Infoxx
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_gnumeric

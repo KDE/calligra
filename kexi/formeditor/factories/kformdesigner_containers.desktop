@@ -5,6 +5,7 @@ ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Container Widgets
 Name[fr]=Conteneur d'éléments graphiques
+Name[ja]=コンテナウィジェット
 Name[x-test]=xxContainer Widgetsxx
 
 X-KDE-Library=kformdesigner_containers

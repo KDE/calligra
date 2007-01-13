@@ -4,5 +4,6 @@ Type=Link
 URL=.source/VacationChecklist.kst
 Name=Vacation Checklist
 Name[fr]=Checklist des vacances
+Name[ja]=休暇チェックリスト
 Name[x-test]=xxVacation Checklistxx
 Icon=template_vacationchecklist

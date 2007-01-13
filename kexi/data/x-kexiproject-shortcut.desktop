@@ -6,4 +6,5 @@ Icon=kexiproject_shortcut
 Patterns=*.kexis
 Comment=Shortcut to Kexi Project on Database Server
 Comment[fr]=Raccourci vers le projet Kexi sur le serveur de bases de données
+Comment[ja]=データベースサーバの Kexi プロジェクトへのショートカット
 Comment[x-test]=xxShortcut to Kexi Project on Database Serverxx

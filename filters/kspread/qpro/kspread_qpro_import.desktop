@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=Quattro Pro Import Filter for KSpread
 Name[fr]=Filtre d'importation Quattro Pro pour KSpread
+Name[ja]=KSpread Quattro Pro インポートフィルタ
 Name[x-test]=xxQuattro Pro Import Filter for KSpreadxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-quattropro

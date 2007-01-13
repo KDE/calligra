@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=List of Tasks
 Name[fr]=Liste de tâches
+Name[ja]=タスクのリスト
 Name[x-test]=xxList of Tasksxx
 Type=Link
 URL= .source/tasklist.ktf

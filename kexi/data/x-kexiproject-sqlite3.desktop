@@ -7,4 +7,5 @@ Patterns=*.kexi
 X-KDE-IsAlso=application/x-sqlite3
 Comment=Kexi Database File-Based Project
 Comment[fr]=Projet de base de données Kexi basé sur un fichier
+Comment[ja]=Kexi データベース ファイルベースのプロジェクト
 Comment[x-test]=xxKexi Database File-Based Projectxx

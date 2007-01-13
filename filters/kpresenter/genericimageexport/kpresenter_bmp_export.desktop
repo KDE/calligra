@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KPresenter BMP Export Filter
 Name[fr]=Filtre d'exportation BMP de KPresenter
+Name[ja]=KPresenter BMP エクスポートフィルタ
 Name[x-test]=xxKPresenter BMP Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-bmp

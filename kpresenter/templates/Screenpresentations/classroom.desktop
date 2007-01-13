@@ -3,6 +3,7 @@ Encoding=UTF-8
 Icon=template_classroom
 Name=Classroom
 Name[fr]=Salle de classe
+Name[ja]=クラスルーム
 Name[x-test]=xxClassroomxx
 Comment=Classroom by dannya
 Comment[fr]=Salle de classe, par Dannya

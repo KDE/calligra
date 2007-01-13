@@ -8,6 +8,7 @@ Type=Application
 DocPath=kformdesigner/kformdesigner.html
 GenericName=Form Designer
 GenericName[fr]=Concepteur d'interfaces graphiques
+GenericName[ja]=フォームデザイナー
 GenericName[x-test]=xxForm Designerxx
 MimeType=application/x-designer;
 Terminal=false

@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Text Document...
 Name[fr]=Document texte...
+Name[ja]=テキスト文書...
 Name[x-test]=xxText Document...xx
 Comment=New KWord document:
 Comment[fr]=Nouveau document KWord :
+Comment[ja]=新規 KWord ドキュメント:
 Comment[x-test]=xxNew KWord document:xx
 Type=Link
 URL=.source/TextDocument.kwt

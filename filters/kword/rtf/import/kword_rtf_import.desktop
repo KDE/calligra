@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KWord RTF Import Filter
 Name[fr]=Filtre d'importation RTF de KWord
+Name[ja]=KWord RTF エクスポートフィルタ
 Name[x-test]=xxKWord RTF Import Filterxx
 X-KDE-Import=text/rtf
 X-KDE-Weight=1

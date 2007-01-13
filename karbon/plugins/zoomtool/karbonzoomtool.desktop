@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Zoom Tool
 Name[fr]=Outil de zoom
+Name[ja]=ズームツール
 Name[x-test]=xxZoom Toolxx
 ServiceTypes=Karbon/CoreModule
 Type=Service

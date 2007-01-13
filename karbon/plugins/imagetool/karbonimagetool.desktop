@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Image Tool
 Name[fr]=Outil d'images
+Name[ja]=画像ツール
 Name[x-test]=xxImage Toolxx
 ServiceTypes=Karbon/CoreModule
 Type=Service

@@ -4,6 +4,7 @@ Name=KPlato
 Name[x-test]=xxKPlatoxx
 GenericName=Project Management
 GenericName[fr]=Gestion de projets
+GenericName[ja]=プロジェクト管理
 GenericName[x-test]=xxProject Managementxx
 Exec=kplato %u
 MimeType=application/x-vnd.kde.kplato

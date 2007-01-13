@@ -8,6 +8,7 @@ X-KDE-Weight=1
 ImportDescription=KFormula
 Name=KFormula LaTeX Export Filter
 Name[fr]=Filtre d'exportation LaTeX de KFormula
+Name[ja]=KFormula LaTeX エクスポートフィルタ
 Name[x-test]=xxKFormula LaTeX Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

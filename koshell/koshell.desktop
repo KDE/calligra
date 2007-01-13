@@ -2,11 +2,13 @@
 Encoding=UTF-8
 Name=KOffice Workspace
 Name[fr]=Espace de travail KOffice
+Name[ja]=KOffice ワークスペース
 Name[x-test]=xxKOffice Workspacexx
 DocPath=koshell/index.html
 Exec=koshell
 GenericName=Office Suite
 GenericName[fr]=Suite bureautique
+GenericName[ja]=オフィススイート
 GenericName[x-test]=xxOffice Suitexx
 Type=Application
 Icon=koshell

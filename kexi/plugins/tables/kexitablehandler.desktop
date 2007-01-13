@@ -5,9 +5,11 @@ ServiceTypes=Kexi/Handler
 
 GenericName=Tables
 GenericName[fr]=Tableaux
+GenericName[ja]=テーブル
 GenericName[x-test]=xxTablesxx
 Name=Tables
 Name[fr]=Tableaux
+Name[ja]=テーブル
 Name[x-test]=xxTablesxx
 X-KDE-Library=kexihandler_table
 X-KDE-ParentApp=kexi

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KWord Ascii Export Filter
 Name[fr]=Filtre d'exportation ASCII de KWord
+Name[ja]=KWord Ascii エクスポートフィルタ
 Name[x-test]=xxKWord Ascii Export Filterxx
 X-KDE-Export=text/plain
 X-KDE-Import=application/x-kword

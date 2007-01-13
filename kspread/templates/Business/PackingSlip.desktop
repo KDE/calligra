@@ -4,5 +4,6 @@ Type=Link
 URL=.source/PackingSlip.kst
 Name=Packing Slip
 Name[fr]=Bon de livraison
+Name[ja]=梱包明細書
 Name[x-test]=xxPacking Slipxx
 Icon=template_packingslip
