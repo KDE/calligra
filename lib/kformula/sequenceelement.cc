@@ -486,9 +486,6 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         if ( fromPos > 0 ) {
             children.at( fromPos - 1)->moveLeft( cursor, this );
         }
-        else {
-            cursor->setTo(this, fromPos);
-        }
 
         // invisible elements are not visible so we move on.
         if (from->isInvisible()) {
