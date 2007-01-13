@@ -298,13 +298,13 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
             connect( formula, SIGNAL( errorMsg( const QString& ) ),
                      this, SLOT( slotErrorMessage( const QString& ) ) );
         }
-        m_doc->formulaDocument()->setCreationStrategy( "Ordinary" );
-        if ( !formula->load( formulaElem.firstChild().toElement() ) ) {
+        m_doc->formulaDocument()->setCreationStrategy( "Oasis" );
+        if ( !formula->loadMathML( formulaElem.firstChild().toElement() ) ) {
             kdError(32001) << "Error loading formula" << endl;
         }
     }
     else {
-        kdError(32001) << "Missing FORMULA tag in FRAMESET" << endl;
+        kdError(32001) << "Missing math tag in FRAMESET" << endl;
     }
 }
 

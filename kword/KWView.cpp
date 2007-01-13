@@ -4113,7 +4113,7 @@ void KWView::insertFormula( QMimeSource* source )
             QByteArray data = source->encodedData( KFormula::MimeSource::selectionMimeType() );
             QDomDocument formula;
             formula.setContent( data );
-            QDomElement formulaElem = formula.namedItem("KFORMULA").toElement();
+            QDomElement formulaElem = formula.namedItem("math").toElement();
             frameset->paste( formulaElem );
         }
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
