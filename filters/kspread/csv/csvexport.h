@@ -40,7 +40,7 @@ class CSVExport : public KoFilter
   virtual KoFilter::ConversionStatus convert( const QCString & from, const QCString & to );
 
   private:
-  QString exportCSVCell( KSpread::Sheet const * const sheet, int col, int row, QChar const & textQuote );
+  QString exportCSVCell( KSpread::Sheet const * const sheet, int col, int row, QChar const & textQuote, QChar delimiter );
 
   private:
   QString m_eol; ///< End of line (LF, CR or CRLF)  

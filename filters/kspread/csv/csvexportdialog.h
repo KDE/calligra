@@ -50,6 +50,8 @@ class CSVExportDialog : public KDialogBase
   QTextCodec* getCodec(void) const;
 
  private:
+  void loadSettings();
+  void saveSettings();
   ExportDialogUI * m_dialog;
 
   QValidator* m_delimiterValidator;

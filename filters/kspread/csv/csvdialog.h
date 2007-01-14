@@ -50,6 +50,8 @@ public:
     QString getText(int row, int col);
 
 private:
+    void loadSettings();
+    void saveSettings();
     void fillTable();
     void fillComboBox();
     void setText(int row, int col, const QString& text);

@@ -34,6 +34,7 @@
 #include <qtextcodec.h>
 
 #include <kapplication.h>
+#include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcombobox.h>
@@ -57,7 +58,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
 {
     setCaption( i18n( "Import" ) );
     kapp->restoreOverrideCursor();
-
+    
     QStringList encodings;
     encodings << i18n( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
     encodings << i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QTextCodec::codecForLocale()->name() );
@@ -78,6 +79,8 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     m_dialog->m_formatComboBox->insertStringList( m_formatList );
 
     m_dialog->m_sheet->setReadOnly( true );
+
+    loadSettings();
 
     fillTable();
 
@@ -109,7 +112,47 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
 
 CSVDialog::~CSVDialog()
 {
+    saveSettings();
     kapp->setOverrideCursor(Qt::waitCursor);
+}
+
+void CSVDialog::loadSettings()
+{
+    KConfig *config = kapp->config();
+    config->setGroup("CSVDialog Settings");
+    m_textquote = config->readEntry("textquote", "\"")[0];
+    m_delimiter = config->readEntry("delimiter", ",");
+    m_ignoreDups = config->readBoolEntry("ignoreDups", false);
+    const QString codecText = config->readEntry("codec", "");
+
+    // update widgets
+    if (!codecText.isEmpty()) {
+      m_dialog->comboBoxEncoding->setCurrentText(codecText);
+      m_codec = getCodec();
+    }
+    if (m_delimiter == ",") m_dialog->m_radioComma->setChecked(true);
+    else if (m_delimiter == "\t") m_dialog->m_radioTab->setChecked(true);
+    else if (m_delimiter == " ") m_dialog->m_radioSpace->setChecked(true);
+    else if (m_delimiter == ";") m_dialog->m_radioSemicolon->setChecked(true);
+    else {
+        m_dialog->m_radioOther->setChecked(true);
+        m_dialog->m_delimiterEdit->setText(m_delimiter);
+    }
+    m_dialog->m_ignoreDuplicates->setChecked(m_ignoreDups);
+    m_dialog->m_comboQuote->setCurrentItem(m_textquote == '\'' ? 1
+        : m_textquote == '"' ? 0 : 2);
+}
+
+void CSVDialog::saveSettings()
+{
+    KConfig *config = kapp->config();
+    config->setGroup("CSVDialog Settings");
+    QString q = m_textquote;
+    config->writeEntry("textquote", q);
+    config->writeEntry("delimiter", m_delimiter);
+    config->writeEntry("ignoreDups", m_ignoreDups);
+    config->writeEntry("codec", m_dialog->comboBoxEncoding->currentText());
+    config->sync();
 }
 
 void CSVDialog::fillTable( )

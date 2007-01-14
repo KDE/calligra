@@ -64,7 +64,7 @@ CSVExport::CSVExport( KoFilter *, const char *, const QStringList & )
 {
 }
 
-QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, QChar const & textQuote )
+QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, QChar const & textQuote, QChar csvDelimiter )
 {
   // This function, given a cell, returns a string corresponding to its export in CSV format
   // It proceeds by:
@@ -89,6 +89,8 @@ QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, Q
         text = cell->strOutText();
   }
 
+  // quote only when needed (try to mimic excel)
+  bool quote = false;
   if ( !text.isEmpty() )
   {
     if ( text.find( textQuote ) != -1 )
@@ -96,8 +98,17 @@ QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, Q
       QString doubleTextQuote(textQuote);
       doubleTextQuote.append(textQuote);
       text.replace(textQuote, doubleTextQuote);
-    }
+      quote = true;
 
+    } else if ( text[0].isSpace() || text[text.length()-1].isSpace() )
+      quote = true;
+    else if ( text.find( csvDelimiter ) != -1 )
+      quote = true;
+    else if ( text.find( "\n" ) != -1 || text.find( "\r" ) != -1 )
+      quote = true;
+  }
+
+  if ( quote ) {
     text.prepend(textQuote);
     text.append(textQuote);
   }
@@ -164,6 +175,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       return KoFilter::StupidError;
     }
     csvDelimiter = expDialog->getDelimiter();
+    m_eol = expDialog->getEndOfLine();
   }
   else
   {
@@ -229,7 +241,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       for ( int col = selection.left();
             col <= right && idxCol <= CSVMaxCol; ++col, ++idxCol )
       {
-        str += exportCSVCell( sheet, col, row, textQuote );
+        str += exportCSVCell( sheet, col, row, textQuote, csvDelimiter );
 
         if ( idxCol < CSVMaxCol )
           str += csvDelimiter;
@@ -324,13 +336,22 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
           i = 0;
         }
 
+        QString collect;  // buffer delimiters while reading empty cells
+
         for ( int col = 1 ; col <= CSVMaxCol ; col++ )
         {
-          str += exportCSVCell( sheet, col, row, textQuote );
+          const QString txt = exportCSVCell( sheet, col, row, textQuote, csvDelimiter );
 
-          if ( col < CSVMaxCol )
-            str += csvDelimiter;
+          // if we encounter a non-empty cell, commit the buffered delimiters
+	  if (!txt.isEmpty()) {
+	    str += collect + txt;
+	    collect = QString();
+	  }
+
+          collect += csvDelimiter;
         }
+        // Here, throw away buffered delimiters. They're trailing and therefore
+	// superfluous.
 
         str += m_eol;
       }
