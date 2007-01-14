@@ -48,6 +48,8 @@ KFormulaCanvas::~KFormulaCanvas()
 
 void KFormulaCanvas::paintEvent( QPaintEvent* e )
 {
+    Q_UNUSED( e );
+
 /*    QPainter p;
 
     if( m_dirtyBuffer )
@@ -106,6 +108,7 @@ bool KFormulaCanvas::snapToGrid() const
     
 void KFormulaCanvas::addCommand( QUndoCommand *command )
 {
+    Q_UNUSED( command );
 }
     
 KoShapeManager* KFormulaCanvas::shapeManager() const

@@ -51,6 +51,8 @@ void KFormulaPartViewAdaptor::addQuadSpace()
 
 void KFormulaPartViewAdaptor::addBracket( int left, int right )
 {
+    Q_UNUSED( left );
+    Q_UNUSED( right );
 /*    m_view->document()->getDocument()->
         wrapper()->addBracket( static_cast<KFormula::SymbolType>( left ),
                                static_cast<KFormula::SymbolType>( right ) );*/
@@ -108,6 +110,8 @@ void KFormulaPartViewAdaptor::addMatrix()
 
 void KFormulaPartViewAdaptor::addMatrix( uint rows, uint columns )
 {
+    Q_UNUSED( rows );
+    Q_UNUSED( columns );
 //    m_view->document()->getDocument()->wrapper()->addMatrix( rows, columns );
 }
 
@@ -163,6 +167,7 @@ void KFormulaPartViewAdaptor::makeGreek()
 
 void KFormulaPartViewAdaptor::insertSymbol( const QString& name )
 {
+    Q_UNUSED( name );
 //    m_view->document()->getDocument()->wrapper()->insertSymbol( name );
 }
 
@@ -198,31 +203,37 @@ void KFormulaPartViewAdaptor::removeRow()
 
 void KFormulaPartViewAdaptor::moveRight( int flag )
 {
+    Q_UNUSED( flag );
 //    m_view->formulaView()->moveRight( flag );
 }
 
 void KFormulaPartViewAdaptor::moveUp( int flag )
 {
+    Q_UNUSED( flag );
 //    m_view->formulaView()->moveUp( flag );
 }
 
 void KFormulaPartViewAdaptor::moveDown( int flag )
 {
+    Q_UNUSED( flag );
 //    m_view->formulaView()->moveDown( flag );
 }
 
 void KFormulaPartViewAdaptor::moveLeft( int flag )
 {
+    Q_UNUSED( flag );
 //    m_view->formulaView()->moveLeft( flag );
 }
 
 void KFormulaPartViewAdaptor::moveHome( int flag )
 {
+    Q_UNUSED( flag );
 //    m_view->formulaView()->moveHome( flag );
 }
 
 void KFormulaPartViewAdaptor::moveEnd( int flag )
 {
+    Q_UNUSED( flag );
 //    m_view->formulaView()->moveEnd( flag );
 }
 
@@ -240,16 +251,19 @@ bool KFormulaPartViewAdaptor::isEnd() const
 
 void KFormulaPartViewAdaptor::eraseSelection( int direction )
 {
+    Q_UNUSED( direction );
 //    m_view->formulaView()->eraseSelection( static_cast<KFormula::Direction>( direction ) );
 }
 
 void KFormulaPartViewAdaptor::addText( const QString& str )
 {
+    Q_UNUSED( str );
 //    m_view->formulaView()->addText( str );
 }
 
 QStringList KFormulaPartViewAdaptor::readFormulaString( const QString& text )
 {
+    Q_UNUSED( text );
 //    return m_view->readFormulaString( text );
     return QStringList();
 }

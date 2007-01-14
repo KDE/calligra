@@ -59,14 +59,18 @@ KFormulaPartDocument::~KFormulaPartDocument()
 
 void KFormulaPartDocument::addShape (KoShape *shape)
 {
+    Q_UNUSED( shape );
 }
 
 void KFormulaPartDocument::removeShape (KoShape *shape)
 {
+    Q_UNUSED( shape );
 }
 
 bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+    Q_UNUSED( store );
+    Q_UNUSED( manifestWriter );
 /*  KoStoreDevice dev( store );
  
     KoXmlWriter* contentWriter = createOasisXmlWriter( &dev, "math:math" );
@@ -82,6 +86,7 @@ bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWrite
 bool KFormulaPartDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&,
                                       const QDomDocument&, KoStore* )
 {
+    Q_UNUSED( doc );
 /*    if ( document->loadOasis( doc ) )
     {
         m_commandHistory->clear();
@@ -126,7 +131,10 @@ bool KFormulaPartDocument::showEmbedInitDialog(QWidget* /*parent*/)
 void KFormulaPartDocument::paintContent( QPainter& painter, const QRect& rect,
                                          bool transparent, double zoomX, double zoomY )
 {
-    bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
+    Q_UNUSED( zoomX );
+    Q_UNUSED( zoomY );
+
+    //bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
 
     if ( !transparent )
         painter.fillRect( rect, Qt::white );

@@ -128,6 +128,7 @@ void KFormulaPartView::slotShowTip()
 
 void KFormulaPartView::setEnabled( bool enabled )
 {
+    Q_UNUSED( enabled );
 /*    m_addBracketAction->setEnabled( enabled );
     m_addFractionAction->setEnabled( enabled );
     m_addRootAction->setEnabled( enabled );
@@ -154,7 +155,7 @@ void KFormulaPartView::setupPrinter( KPrinter& )
 
 void KFormulaPartView::print( KPrinter& printer )
 {
-
+    Q_UNUSED( printer );
 }
 
 void KFormulaPartView::cursorChanged( bool visible, bool selecting )
@@ -166,6 +167,7 @@ void KFormulaPartView::cursorChanged( bool visible, bool selecting )
 
 void KFormulaPartView::sizeSelected( int size )
 {
+    Q_UNUSED( size );
 //    document()->getFormula()->setFontSize( size );
 //    m_formulaCanvas->setFocus();
 }
