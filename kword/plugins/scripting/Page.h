@@ -23,6 +23,8 @@
 #include <QObject>
 #include <KWPage.h>
 
+#include "Module.h"
+
 namespace Scripting {
 
     /**
@@ -32,8 +34,8 @@ namespace Scripting {
     {
             Q_OBJECT
         public:
-            Page( QObject* parent, KWPage* page )
-                : QObject( parent ), m_page( page ) {}
+            Page( Module* module, KWPage* page )
+                : QObject( module ), m_page( page ) {}
             virtual ~Page() {}
 
         public Q_SLOTS:

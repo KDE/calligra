@@ -25,8 +25,14 @@
 #include <QTextList>
 #include <QTextBlock>
 #include <QTextCursor>
+#include <QTextListFormat>
+#include <kdebug.h>
+
+#include <KoParagraphStyle.h>
+#include <KoListStyle.h>
 
 #include "TextCursor.h"
+#include "Style.h"
 
 namespace Scripting {
 
@@ -67,6 +73,33 @@ namespace Scripting {
             void removeItem(int index) {
                 m_list->removeItem(index);
             }
+
+            /** Set the style this TextList uses to the as argument passed \a Style object. */
+            void setStyle(QObject* style) {
+                Style* s = dynamic_cast<Style*>(style);
+                if( ! s ) {
+                    kWarning() << "TextList.setStyle Invalid Style object" << endl;
+                    return;
+                }
+                KoParagraphStyle* ps = s->style();
+                if( ! ps ) {
+                    kWarning() << "TextList.setStyle Invalid KoParagraphStyle object" << endl;
+                    return;
+                }
+                for(int i = 0; i < m_list->count(); ++i) {
+                    QTextBlock block = m_list->item(i);
+                    ps->applyStyle(block);
+                }
+            }
+
+#if 0
+            void setListStyle(int liststyle) {
+                KoListStyle s;
+                s.setStyle( (KoListStyle::Style)liststyle );
+                for(int i = 0; i < m_list->count(); i++)
+                    s.applyStyle( m_list->item(i) );
+            }
+#endif
 
         private:
             QPointer<QTextList> m_list;

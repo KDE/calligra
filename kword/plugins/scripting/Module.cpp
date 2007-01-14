@@ -22,6 +22,7 @@
 #include "Page.h"
 #include "PageLayout.h"
 #include "FrameSet.h"
+#include "Style.h"
 
 #include <QPointer>
 #include <QApplication>
@@ -228,6 +229,26 @@ void Module::setDefaultPageLayout(QObject* pagelayout)
     PageLayout* l = dynamic_cast<PageLayout*>( pagelayout );
     if( l )
         doc()->setDefaultPageLayout( l->pageLayout() );
+}
+
+QObject* Module::defaultParagraphStyle()
+{
+    KoParagraphStyle* s = doc()->styleManager()->defaultParagraphStyle();
+    return s ? new Style(this, s) : 0;
+}
+
+QObject* Module::paragraphStyle(const QString& name)
+{
+    KoParagraphStyle* s = doc()->styleManager()->paragraphStyle(name);
+    return s ? new Style(this, s) : 0;
+}
+
+QObject* Module::addParagraphStyle(const QString& name)
+{
+    KoParagraphStyle* s = new KoParagraphStyle();
+    s->setName(name);
+    doc()->styleManager()->add(s);
+    return new Style(this, s);
 }
 
 #include "Module.moc"

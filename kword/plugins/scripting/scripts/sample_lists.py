@@ -13,6 +13,9 @@ doc = fs.textDocument()
 if doc == None:
     raise "No textdocument within the first frameset"
 
+#####################################################################
+# Some lists created with HTML
+
 # Set the default cascading stylesheet.
 doc.setDefaultStyleSheet(
     (
@@ -117,6 +120,9 @@ doc.setHtml(
     )
 )
 
+#####################################################################
+# Some lists created with a Cursor
+
 # Get a cursor located at the end of the main textdocument.
 cursor = doc.rootFrame().lastCursorPosition()
 #cursor = doc.firstCursor()
@@ -125,28 +131,36 @@ cursor = doc.rootFrame().lastCursorPosition()
 # Insert a heading.
 cursor.insertHtml("<h2>Some lists created with a Cursor</h2>")
 
-# The block seems to be needed cause else additional insertHtml-calls don't respect the line-break whyever.
-cursor.insertBlock()
+def addList(text,liststyle):
+    global KWord, cursor
+    # The block seems to be needed cause else additional insertHtml-calls don't respect the line-break whyever.
+    cursor.insertBlock()
+    # We like to create a new list
+    cursor.insertHtml("<h3>%s</h3>" % text)
+    # Create a new style and set the liststyle
+    s = KWord.addParagraphStyle("My%sStyle" % text)
+    s.setListStyle( getattr(s,liststyle) ) # e.g. s.setListStyle( s.SquareItem )
+    # Create the list and apply the style
+    l = cursor.insertList()
+    l.setStyle(s)
+    # Fill the list with some items
+    for i in range(1, 6):
+        if i != 1:
+            cursor.insertBlock()
+        cursor.insertHtml( "item nr=%i count=%i" % (i,l.countItems()) )
 
-# Demonstrate bullet lists.
-cursor.insertHtml("<h3>Bullets</h3>")
-l = cursor.insertList()
-for i in range(1, 6):
-    if i != 1:
-        cursor.insertBlock()
-    cursor.insertHtml( "item nr=%i count=%i" % (i,l.countItems()) )
+addList("Square","SquareItem")
+addList("Disc","DiscItem")
+addList("Circle","CircleItem")
+addList("Decimal","DecimalItem")
+addList("AlphaLower","AlphaLowerItem")
+addList("AlphaUpper","AlphaUpperItem")
+addList("RomanLower","RomanLowerItem")
+addList("RomanUpper","RomanUpperItem")
 
-#cursor.insertHtml("<h3>Bullets with prefix and suffix</h3>")
-#cursor.insertBlock()
-#cursor.insertHtml("<h3>Lists</h3>")
-#cursor.insertBlock()
-#cursor.insertHtml("<h3>Roman</h3>")
-#cursor.insertBlock()
-#cursor.insertHtml("<h3>Restart Numbering</h3>")
-#cursor.insertBlock()
-#cursor.insertHtml("<h3>Numbering with different startvalue</h3>")
-#cursor.insertBlock()
-#cursor.insertHtml("<h3>Counted item</h3>")
-#cursor.insertBlock()
-#cursor.insertHtml("<h3>Right aligned</h3>")
-#cursor.insertBlock()
+#TODO
+#prefix+suffix
+#restart numbering
+#startvalue
+#aligned
+#counted

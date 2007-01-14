@@ -25,9 +25,6 @@
 #include <QTextDocument>
 #include <kdebug.h>
 
-#include "TextDocument.h"
-#include "Frame.h"
-
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 
@@ -42,6 +39,10 @@
 #include <KWFrameSet.h>
 #include <KWTextFrameSet.h>
 
+#include "Module.h"
+#include "TextDocument.h"
+#include "Frame.h"
+
 namespace Scripting {
 
     /**
@@ -52,8 +53,8 @@ namespace Scripting {
     {
             Q_OBJECT
         public:
-            FrameSet(QObject* parent, KWFrameSet* frameset)
-                : QObject(parent), m_frameset(frameset) {}
+            FrameSet(Module* module, KWFrameSet* frameset)
+                : QObject(module), m_frameset(frameset) {}
             virtual ~FrameSet() {}
 
         public Q_SLOTS:

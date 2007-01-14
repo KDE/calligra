@@ -113,6 +113,15 @@ namespace Scripting {
             /** Set the default page layout. */
             void setDefaultPageLayout(QObject* pagelayout);
 
+            /***** Style *****/
+
+            /** Return the default paragraph \a Style that will always be present in each document. */
+            QObject* defaultParagraphStyle();
+            /** Return the first paragraph \a Style with the param user-visible-name. */
+            QObject* paragraphStyle(const QString& name);
+            /** Add and return a new paragraph \a Style object. */
+            QObject* addParagraphStyle(const QString& name);
+
         private:
             /// \internal d-pointer class.
             class Private;

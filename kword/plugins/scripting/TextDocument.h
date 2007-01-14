@@ -39,7 +39,9 @@ namespace Scripting {
     {
             Q_OBJECT
         public:
-            TextDocument(QObject* parent, QTextDocument* doc) : QObject( parent ), m_doc( doc ) {
+            TextDocument(QObject* parentFrameSet, QTextDocument* doc)
+                : QObject( parentFrameSet ), m_doc( doc )
+            {
                 connect(m_doc, SIGNAL(contentsChange(int,int,int)), this, SIGNAL(contentsChange(int,int,int)));
                 connect(m_doc, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SIGNAL(cursorPositionChanged()));
                 connect(m_doc->documentLayout(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SIGNAL(documentSizeChanged()));
