@@ -1346,6 +1346,9 @@ QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &
 
 void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool copy ) const
 {
+    Q_UNUSED( force );
+    Q_UNUSED( copy );
+
     if ( d->subStyles.contains( HorizontalAlignment ) && halign() != HAlignUndefined )
         format.setAttribute( "alignX", (int) halign() );
 
@@ -1485,6 +1488,9 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
 
 bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
 {
+    Q_UNUSED( mode );
+    Q_UNUSED( paste );
+
     bool ok;
     if ( format.hasAttribute( "type" ) )
     {

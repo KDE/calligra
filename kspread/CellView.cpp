@@ -254,6 +254,9 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
                                   const QPoint& cellRef,
                                   QLinkedList<QPoint> &mergedCellsPainted, Cell* cell )
 {
+    Q_UNUSED( view );
+    Q_UNUSED( mergedCellsPainted );
+
     if ( d->hidden )
         return;
     if ( d->merged )
@@ -316,6 +319,8 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                                  const QPoint& cellCoordinate, const QRect& cellRegion,
                                  QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView )
 {
+    Q_UNUSED( mergedCellsPainted );
+
     // The parameter cellCoordinate should be *this, unless this is the default cell.
     Q_ASSERT(cell->isDefault() || ((cellCoordinate.x() == cell->column()) && (cellCoordinate.y() == cell->row())));
 
@@ -951,6 +956,8 @@ void CellView::paintText( QPainter& painter,
                           const QRectF &cellRect,
                           const QPoint &cellRef, Cell* cell )
 {
+  Q_UNUSED( cellRef );
+
   QColor textColorPrint = d->style.fontColor();
 
   // Resolve the text color if invalid (=default).
@@ -1217,6 +1224,8 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
                                   const QRectF &cellRect, const QPoint &cellRef,
                                   Borders paintBorder )
 {
+    Q_UNUSED( cellRef );
+
     //Sanity check: If we are not painting any of the borders then the function
     //really shouldn't be called at all.
     if ( paintBorder == NoBorder )
@@ -1819,6 +1828,7 @@ void CellView::makeLayout( SheetView* sheetView, Cell* cell )
 
 void CellView::calculateCellDimension( const Cell* cell )
 {
+    Q_UNUSED( cell );
 #if 0
   double width  = cell->sheet()->columnFormat( cell->column() )->dblWidth();
   double height = cell->sheet()->rowFormat( cell->row() )->dblHeight();

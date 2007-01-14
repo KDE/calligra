@@ -1368,6 +1368,7 @@ MethodOfCalc Doc::getTypeOfCalc() const
 
 void Doc::setKSpellConfig(K3SpellConfig _kspell)
 {
+    Q_UNUSED( _kspell );
 #ifdef __GNUC__
 #warning TODO KDE4 port to sonnet
 #endif
