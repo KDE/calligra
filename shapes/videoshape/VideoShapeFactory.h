@@ -3,8 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; only
-   version 2 of the License.
+   License version 2 as published by the Free Software Foundation.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,22 +16,37 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef VIDEO_TOOL_FACTORY
-#define VIDEO_TOOL_FACTORY
+#ifndef VIDEO_SHAPE_FACTORY
+#define VIDEO_SHAPE_FACTORY
 
 #include <QStringList>
 
-#include <KoToolFactory.h>
+#include <KoShapeFactory.h>
 
-class VideoToolFactory : public KoToolFactory
+#include <koffice_export.h>
+
+class KoShape;
+
+class VideoShapePlugin : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    VideoShapePlugin( QObject * parent,  const QStringList & );
+    ~VideoShapePlugin() {}
+
+};
+
+class VideoShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:
-    VideoToolFactory( QObject* parent, const QStringList& );
-    ~VideoToolFactory();
+    VideoShapeFactory( QObject* parent, const QStringList& );
+    ~VideoShapeFactory() {}
 
-    KoTool* createTool( KoCanvasBase* canvas );
+    KoShape* createDefaultShape() const;
+    KoShape* createShape( const KoProperties* params ) const;
 };
-
 
 #endif 

@@ -3,8 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; only
-   version 2 of the License.
+   License version 2 as published by the Free Software Foundation.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,37 +16,32 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef VIDEO_SHAPE_FACTORY
-#define VIDEO_SHAPE_FACTORY
+#include <klocale.h>
 
-#include <QStringList>
+#include "VideoShape.h"
+#include "VideoTool.h"
 
-#include <KoShapeFactory.h>
+#include "VideoToolFactory.h"
 
-#include <koffice_export.h>
 
-class KoShape;
-
-class VideoShapePlugin : public QObject
+VideoToolFactory::VideoToolFactory( QObject* parent, const QStringList& )
+    : KoToolFactory( parent, "VideoToolFactoryId", i18n( "Video Tool" ) )
 {
-    Q_OBJECT
+    setToolTip( i18n( "Video editing tool" ) );
+    setIcon( "videoshape" );
+    setToolType( dynamicToolType() );
+    setPriority( 1 );
+    setActivationShapeID( VideoShapeId );
+}
 
-public:
-
-    VideoShapePlugin( QObject * parent,  const QStringList & );
-    ~VideoShapePlugin() {}
-
-};
-
-class VideoShapeFactory : public KoShapeFactory
+VideoToolFactory::~VideoToolFactory()
 {
-    Q_OBJECT
-public:
-    VideoShapeFactory( QObject* parent, const QStringList& );
-    ~VideoShapeFactory() {}
+}
 
-    KoShape* createDefaultShape() const;
-    KoShape* createShape( const KoProperties* params ) const;
-};
+KoTool* VideoToolFactory::createTool( KoCanvasBase* canvas )
+{
+    return new VideoTool( canvas );
+}
 
-#endif 
+#include "VideoToolFactory.moc"
+

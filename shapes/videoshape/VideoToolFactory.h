@@ -3,8 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; only
-   version 2 of the License.
+   License version 2 as published by the Free Software Foundation.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,32 +16,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
+#ifndef VIDEO_TOOL_FACTORY
+#define VIDEO_TOOL_FACTORY
 
-#include "VideoShape.h"
-#include "VideoTool.h"
+#include <QStringList>
 
-#include "VideoToolFactory.h"
+#include <KoToolFactory.h>
 
-
-VideoToolFactory::VideoToolFactory( QObject* parent, const QStringList& )
-    : KoToolFactory( parent, "VideoToolFactoryId", i18n( "Video Tool" ) )
+class VideoToolFactory : public KoToolFactory
 {
-    setToolTip( i18n( "Video editing tool" ) );
-    setIcon( "videoshape" );
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeID( VideoShapeId );
-}
+    Q_OBJECT
+public:
+    VideoToolFactory( QObject* parent, const QStringList& );
+    ~VideoToolFactory();
 
-VideoToolFactory::~VideoToolFactory()
-{
-}
+    KoTool* createTool( KoCanvasBase* canvas );
+};
 
-KoTool* VideoToolFactory::createTool( KoCanvasBase* canvas )
-{
-    return new VideoTool( canvas );
-}
 
-#include "VideoToolFactory.moc"
-
+#endif 
