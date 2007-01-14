@@ -190,15 +190,18 @@ KoEnhancedPathParameter * KoEnhancedPathShape::parameter( const QString & text )
             parameter = new KoEnhancedPathReferenceParameter( text );
         else
         {
-            Identifier identifier = KoEnhancedPathNamedParameter::identifierFromString( text );
-            if( identifier != IdentifierUnknown )
-                parameter = new KoEnhancedPathNamedParameter( identifier );
-            else
+            if( c.isDigit() )
             {
                 bool success = false;
                 double constant = text.toDouble( &success );
                 if( success )
                     parameter = new KoEnhancedPathConstantParameter( constant );
+            }
+            else
+            {
+                Identifier identifier = KoEnhancedPathNamedParameter::identifierFromString( text );
+                if( identifier != IdentifierUnknown )
+                    parameter = new KoEnhancedPathNamedParameter( identifier );
             }
         }
 
