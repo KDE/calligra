@@ -328,6 +328,9 @@ void KWDocument::clear() {
     padding.left = MM_TO_POINT(3);
     padding.right = MM_TO_POINT(3);
     m_pageManager.setPadding(padding);
+
+    m_inlineTextObjectManager->setProperty(KoInlineObject::StartPage, startPage());
+    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
 bool KWDocument::loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*) {
