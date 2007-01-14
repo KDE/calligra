@@ -45,6 +45,8 @@ namespace Scripting {
             virtual ~Style() {}
             KoParagraphStyle* style() { return m_style; }
 
+            //TODO rather then to duplicate it, it may an idea to just
+            //reuse the definition in KoListStyle...
             enum ListStyle {
                 NoItem = KoListStyle::NoItem,
                 SquareItem = KoListStyle::SquareItem,
@@ -58,6 +60,11 @@ namespace Scripting {
             };
 
         public Q_SLOTS:
+
+            //TODO propably just refactor KoParagraphStyle to use Qt's property
+            //implementation rather then using an own implementation or just
+            //provide public getter/setter to be able to just redirect the methods
+            //rather then defining them here again.
 
             const QString& name() const { return m_style->name(); }
             void setName(const QString& name) { m_style->setName(name); }
