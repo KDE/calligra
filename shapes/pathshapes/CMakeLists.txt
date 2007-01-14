@@ -13,6 +13,12 @@ set(pathshapes_PART_SRCS
     rectangle/KoRectangleShapeFactory.cpp
     arrow/KoArrowShape.cpp
     arrow/KoArrowShapeFactory.cpp
+    enhancedpath/KoEnhancedPathShape.cpp
+    enhancedpath/KoEnhancedPathShapeFactory.cpp
+    enhancedpath/KoEnhancedPathCommand.cpp
+    enhancedpath/KoEnhancedPathParameter.cpp
+    enhancedpath/KoEnhancedPathFormula.cpp
+    enhancedpath/KoEnhancedPathHandle.cpp
     KoPathShapesPlugin.cpp
 )
 
