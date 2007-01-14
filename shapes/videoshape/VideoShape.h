@@ -48,6 +48,14 @@ public:
     void stop();
     void changeUrl();
     void pause();
+    
+    /*
+     * Return current url
+     */
+    KUrl currentUrl() const;
+    void setCurrentUrl(const KUrl&url);
+
+    void changePosition(int pos);
 
     virtual void resize( const QSizeF &newSize );
 private:
@@ -57,7 +65,6 @@ private:
     AudioPath *m_audiopath;
     MediaObject *m_mediaobject;
     QFrame *m_widget;
-    KUrl m_currentUrl;
 };
 
 

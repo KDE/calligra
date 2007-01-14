@@ -25,7 +25,6 @@
 
 
 VideoShape::VideoShape(const KUrl&url)
- : m_currentUrl(url)
 {
   m_widget = new QFrame(0);
   QVBoxLayout *box = new QVBoxLayout( m_widget );
@@ -41,10 +40,27 @@ VideoShape::VideoShape(const KUrl&url)
   m_audiopath->addOutput( m_audiooutput );
 
   m_mediaobject->setTickInterval( 350 );
+  m_mediaobject->setUrl(url);
 }
 
 VideoShape::~VideoShape()
 {
+}
+
+void VideoShape::changePosition(int pos)
+{
+  //TODO
+  //m_mediaobject->setPosition(position);
+}
+
+void VideoShape::setCurrentUrl(const KUrl&url)
+{
+  m_mediaobject->setUrl(url);
+}
+
+KUrl VideoShape::currentUrl() const
+{
+  return m_mediaobject->url();
 }
 
 void VideoShape::resize( const QSizeF &newSize )

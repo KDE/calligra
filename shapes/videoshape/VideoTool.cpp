@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <KFileDialog>
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -131,7 +132,7 @@ QWidget * VideoTool::createOptionWidget()
     button->setIcon( SmallIcon("open") );
     button->setToolTip( i18n( "Open" ) );
     layout->addWidget( button, 0, 5 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotOpen() ) );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotChangeUrl() ) );
 
     return optionWidget;
 
@@ -168,8 +169,9 @@ void VideoTool::slotStop()
 void VideoTool::slotChangeUrl()
 {
   kDebug()<<" VideoTool::slotChangeUrl \n";
-  if(m_videoshape)
-    m_videoshape->changeUrl();
+  KUrl url = KFileDialog::getOpenUrl();
+  if(!url.isEmpty() && m_videoshape)
+    m_videoshape->setCurrentUrl(url);
 }
 
 void VideoTool::slotNext()
