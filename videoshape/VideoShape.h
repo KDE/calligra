@@ -42,18 +42,20 @@ public:
 
     void play();
     void start();
+    void previous();
+    void next();
     void stop();
     void changeUrl();
-
-protected:
+    void pause();
 
 private:
-    VideoWidget *videowidget;
-    VideoPath *videopath;
-    AudioOutput *audiooutput;
-    AudioPath *audiopath;
-    MediaObject *mediaobject;
-    KUrl currentUrl;
+    VideoWidget *m_videowidget;
+    VideoPath *m_videopath;
+    AudioOutput *m_audiooutput;
+    AudioPath *m_audiopath;
+    MediaObject *m_mediaobject;
+    QWidget *m_widget;
+    KUrl m_currentUrl;
 };
 
 

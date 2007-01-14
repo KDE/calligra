@@ -99,31 +99,51 @@ QWidget * VideoTool::createOptionWidget()
     QToolButton *button = 0;
 
     button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("previous") );
+    button->setToolTip( i18n( "Previous" ) );
+    layout->addWidget( button, 0, 0 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotPrevious() ) );
+
+    button = new QToolButton( optionWidget );
     button->setIcon( SmallIcon("start") );
     button->setToolTip( i18n( "Play" ) );
-    layout->addWidget( button, 0, 0 );
+    layout->addWidget( button, 0, 1 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotPlay() ) );
 
     button = new QToolButton( optionWidget );
     button->setIcon( SmallIcon("stop") );
     button->setToolTip( i18n( "Stop" ) );
-    layout->addWidget( button, 0, 1 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotStop() ) );
-    
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("play") );
-    button->setToolTip( i18n( "Play" ) );
     layout->addWidget( button, 0, 2 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotPlay() ) );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotStop() ) );
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("pause") );
+    button->setToolTip( i18n( "Pause" ) );
+    layout->addWidget( button, 0, 3 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotPause() ) );
+ 
+
+    button = new QToolButton( optionWidget );
+    button->setIcon( SmallIcon("next") );
+    button->setToolTip( i18n( "Next" ) );
+    layout->addWidget( button, 0, 4 );
+    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotNext() ) );
 
     button = new QToolButton( optionWidget );
     button->setIcon( SmallIcon("open") );
     button->setToolTip( i18n( "Open" ) );
-    layout->addWidget( button, 0, 3 );
+    layout->addWidget( button, 0, 5 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotOpen() ) );
 
     return optionWidget;
 
+}
+
+void VideoTool::slotPrevious()
+{
+  kDebug()<<"VideoTool::slotPrevious\n";
+  if(m_videoshape)
+    m_videoshape->previous();
 }
 
 void VideoTool::slotPlay()
@@ -154,4 +174,17 @@ void VideoTool::slotChangeUrl()
     m_videoshape->changeUrl();
 }
 
+void VideoTool::slotNext()
+{
+  kDebug()<<" VideoTool::slotNext \n";
+  if(m_videoshape)
+    m_videoshape->next();
+}
 
+void VideoTool::slotPause()
+{
+  kDebug()<<" VideoTool::slotPause \n";
+  if(m_videoshape)
+    m_videoshape->pause();
+ 
+}

@@ -29,7 +29,7 @@ VideoToolFactory::VideoToolFactory( QObject* parent, const QStringList& )
     : KoToolFactory( parent, "VideoToolFactoryId", i18n( "Video Tool" ) )
 {
     setToolTip( i18n( "Video editing tool" ) );
-    setIcon( "videoflake" );
+    setIcon( "videoshape" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeID( VideoShapeId );

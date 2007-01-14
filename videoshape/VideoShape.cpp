@@ -25,19 +25,20 @@
 
 
 VideoShape::VideoShape(const KUrl&url)
- : currentUrl(url)
+ : m_currentUrl(url)
 {
-  videowidget = new VideoWidget( 0);
-  videopath = new VideoPath( 0 );
-  audiooutput = new AudioOutput( Phonon::VideoCategory, 0 );
-  audiopath = new AudioPath( 0 );
-  mediaobject = new MediaObject( 0 );
-  mediaobject->addVideoPath( videopath );
-  videopath->addOutput( videowidget );
-  mediaobject->addAudioPath( audiopath );
-  audiopath->addOutput( audiooutput );
+  m_widget = new QWidget(0);
+  m_videowidget = new VideoWidget(m_widget );
+  m_videopath = new VideoPath( m_widget );
+  m_audiooutput = new AudioOutput( Phonon::VideoCategory, m_widget );
+  m_audiopath = new AudioPath( m_widget );
+  m_mediaobject = new MediaObject( m_widget );
+  m_mediaobject->addVideoPath( m_videopath );
+  m_videopath->addOutput( m_videowidget );
+  m_mediaobject->addAudioPath( m_audiopath );
+  m_audiopath->addOutput( m_audiooutput );
 
-  mediaobject->setTickInterval( 350 );
+  m_mediaobject->setTickInterval( 350 );
 }
 
 VideoShape::~VideoShape()
@@ -46,24 +47,26 @@ VideoShape::~VideoShape()
 
 void VideoShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
+  kDebug()<<" VideoShape::paint( QPainter& painter, const KoViewConverter& converter )\n";
+  m_widget->repaint();
 }
 
 void VideoShape::play()
 {
   kDebug()<<" VideoShape::play\n";
-  mediaobject->play();
+  m_mediaobject->play();
 }
 
 void VideoShape::start()
 { 
   kDebug()<<"VideoShape::start\n";
-  mediaobject->play();
+  m_mediaobject->play();
 }
 
 void VideoShape::stop()
 { 
   kDebug()<<"VideoShape::stop \n";
-  mediaobject->stop();
+  m_mediaobject->stop();
 }
 
 void VideoShape::changeUrl()
@@ -73,4 +76,20 @@ void VideoShape::changeUrl()
 
 }
 
+void VideoShape::next()
+{
+  kDebug()<<"VideoShape::next\n";
+  //TODO
+}
 
+void VideoShape::previous()
+{
+  kDebug()<<"VideoShape::previous \n";
+  //TODO
+}
+
+void VideoShape::pause()
+{
+ kDebug()<<" VideoShape::pause \n";
+ m_mediaobject->pause();
+}

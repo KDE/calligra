@@ -45,8 +45,11 @@ protected:
 protected slots:
    void slotPlay();
    void slotStart();
+   void slotPrevious();
    void slotStop();
    void slotChangeUrl();
+   void slotNext();
+   void slotPause();
 private:
    VideoShape *m_videoshape;
 };
