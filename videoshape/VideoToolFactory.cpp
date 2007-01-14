@@ -19,7 +19,7 @@
 
 #include <klocale.h>
 
-#include "VideoFlake.h"
+#include "VideoShape.h"
 #include "VideoTool.h"
 
 #include "VideoToolFactory.h"
@@ -32,7 +32,7 @@ VideoToolFactory::VideoToolFactory( QObject* parent, const QStringList& )
     setIcon( "videoflake" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
-    setActivationShapeID( VideoFlakeId );
+    setActivationShapeID( VideoShapeId );
 }
 
 VideoToolFactory::~VideoToolFactory()

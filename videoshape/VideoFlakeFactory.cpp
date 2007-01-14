@@ -25,40 +25,40 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
-#include "VideoFlake.h"
+#include "VideoShape.h"
 #include "VideoToolFactory.h"
 
-#include "VideoFlakeFactory.h"
+#include "VideoShapeFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( videoflake, KGenericFactory<VideoFlakePlugin>( "VideoFlake" ) )
+K_EXPORT_COMPONENT_FACTORY( videoflake, KGenericFactory<VideoShapePlugin>( "VideoShape" ) )
 
-VideoFlakePlugin::VideoFlakePlugin( QObject * parent,  const QStringList & list )
+VideoShapePlugin::VideoShapePlugin( QObject * parent,  const QStringList & list )
 {
-    KoShapeRegistry::instance()->add( new VideoFlakeFactory( parent, list ) );
+    KoShapeRegistry::instance()->add( new VideoShapeFactory( parent, list ) );
     KoToolRegistry::instance()->add( new VideoToolFactory( parent, list ) );
 }
 
 
-VideoFlakeFactory::VideoFlakeFactory( QObject* parent, const QStringList& list )
-    : KoShapeFactory( parent, VideoFlakeId, i18n( "Video Flake" ) )
+VideoShapeFactory::VideoShapeFactory( QObject* parent, const QStringList& list )
+    : KoShapeFactory( parent, VideoShapeId, i18n( "Video Flake" ) )
 {
     setToolTip( i18n( "A flake which display a video" ) );
     setIcon( "videoflake" );
 
 }
 
-KoShape* VideoFlakeFactory::createDefaultShape() const
+KoShape* VideoShapeFactory::createDefaultShape() const
 {
-    VideoFlake* shape = new VideoFlake();
+    VideoShape* shape = new VideoShape();
     shape->setShapeId( shapeId() );
     return shape;
 }
 
-KoShape* VideoFlakeFactory::createShape( const KoProperties* params ) const
+KoShape* VideoShapeFactory::createShape( const KoProperties* params ) const
 {
-    VideoFlake* shape = new VideoFlake();
+    VideoShape* shape = new VideoShape();
     shape->setShapeId( shapeId() );
     return shape;
 }
 
-#include "VideoFlakeFactory.moc"
+#include "VideoShapeFactory.moc"

@@ -3,8 +3,8 @@ include_directories( ${KOFFICEUI_INCLUDES} )
 ########### Flake Plugin library ###############
 
 SET (videoflake_LIB_SRCS
-	VideoFlake.cpp
-	VideoFlakeFactory.cpp
+	VideoShape.cpp
+	VideoShapeFactory.cpp
 	VideoTool.cpp
 	VideoToolFactory.cpp
 	)

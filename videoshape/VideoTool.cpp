@@ -30,7 +30,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 
-#include "VideoFlake.h"
+#include "VideoShape.h"
 
 #include "VideoTool.h"
 #include "VideoTool.moc"
@@ -53,7 +53,7 @@ void VideoTool::activate (bool temporary)
     KoSelection* selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
     {
-        m_videoshape = dynamic_cast<VideoFlake*>( shape );
+        m_videoshape = dynamic_cast<VideoShape*>( shape );
         if ( m_videoshape )
             break;
     }

@@ -20,11 +20,11 @@
 #include <QPainter>
 
 #include <kdebug.h>
-#include "VideoFlake.h"
+#include "VideoShape.h"
 
 
 
-VideoFlake::VideoFlake(const KUrl&url)
+VideoShape::VideoShape(const KUrl&url)
  : currentUrl(url)
 {
   videowidget = new VideoWidget( 0);
@@ -40,35 +40,35 @@ VideoFlake::VideoFlake(const KUrl&url)
   mediaobject->setTickInterval( 350 );
 }
 
-VideoFlake::~VideoFlake()
+VideoShape::~VideoShape()
 {
 }
 
-void VideoFlake::paint( QPainter& painter, const KoViewConverter& converter )
+void VideoShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
 }
 
-void VideoFlake::play()
+void VideoShape::play()
 {
-  kDebug()<<" VideoFlake::play\n";
+  kDebug()<<" VideoShape::play\n";
   mediaobject->play();
 }
 
-void VideoFlake::start()
+void VideoShape::start()
 { 
-  kDebug()<<"VideoFlake::start\n";
+  kDebug()<<"VideoShape::start\n";
   mediaobject->play();
 }
 
-void VideoFlake::stop()
+void VideoShape::stop()
 { 
-  kDebug()<<"VideoFlake::stop \n";
+  kDebug()<<"VideoShape::stop \n";
   mediaobject->stop();
 }
 
-void VideoFlake::changeUrl()
+void VideoShape::changeUrl()
 {
-  kDebug()<<"VideoFlake::changeUrl \n";
+  kDebug()<<"VideoShape::changeUrl \n";
   //TODO
 
 }

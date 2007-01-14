@@ -28,23 +28,23 @@
 
 class KoShape;
 
-class VideoFlakePlugin : public QObject
+class VideoShapePlugin : public QObject
 {
     Q_OBJECT
 
 public:
 
-    VideoFlakePlugin( QObject * parent,  const QStringList & );
-    ~VideoFlakePlugin() {}
+    VideoShapePlugin( QObject * parent,  const QStringList & );
+    ~VideoShapePlugin() {}
 
 };
 
-class VideoFlakeFactory : public KoShapeFactory
+class VideoShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:
-    VideoFlakeFactory( QObject* parent, const QStringList& );
-    ~VideoFlakeFactory() {}
+    VideoShapeFactory( QObject* parent, const QStringList& );
+    ~VideoShapeFactory() {}
 
     KoShape* createDefaultShape() const;
     KoShape* createShape( const KoProperties* params ) const;

@@ -17,44 +17,38 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef VIDEO_FLAKE
-#define VIDEO_FLAKE
+#ifndef VIDEO_TOOL
+#define VIDEO_TOOL
 
+#include <KoTool.h>
+class VideoShape;
 
-#include <KoShape.h>
-#include <kurl.h>
-#define VideoFlakeId "VideoFlake"
-
-#include <phonon/ui/videowidget.h>
-#include <phonon/videopath.h>
-#include <phonon/audiooutput.h>
-#include <phonon/audiopath.h>
-#include <phonon/mediaobject.h>
-using namespace Phonon;
-
-class VideoFlake : public KoShape
+class VideoTool : public KoTool
 {
+  Q_OBJECT
 public:
-    VideoFlake(const KUrl&url = KUrl());
-    virtual ~VideoFlake();
+  explicit VideoTool( KoCanvasBase* canvas );
+  ~VideoTool();
 
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+  virtual void paint( QPainter& painter, KoViewConverter& converter );
 
-    void play();
-    void start();
-    void stop();
-    void changeUrl();
+  virtual void mousePressEvent( KoPointerEvent* event ) ;
+  virtual void mouseMoveEvent( KoPointerEvent* event );
+  virtual void mouseReleaseEvent( KoPointerEvent* event );
+
+  void activate (bool temporary=false);
+  void deactivate();
 
 protected:
+    virtual QWidget * createOptionWidget();
 
+protected slots:
+   void slotPlay();
+   void slotStart();
+   void slotStop();
+   void slotChangeUrl();
 private:
-    VideoWidget *videowidget;
-    VideoPath *videopath;
-    AudioOutput *audiooutput;
-    AudioPath *audiopath;
-    MediaObject *mediaobject;
-    KUrl currentUrl;
+   VideoShape *m_videoshape;
 };
 
-
-#endif // VIDEO_FLAKE
+#endif 
