@@ -62,34 +62,7 @@ KoEnhancedPathNamedParameter::KoEnhancedPathNamedParameter( Identifier identifie
 
 KoEnhancedPathNamedParameter::KoEnhancedPathNamedParameter( const QString &identifier )
 {
-    if( identifier.isEmpty() )
-        m_identifier = IdentifierUnknown;
-    else if( identifier == "pi" )
-        m_identifier = IdentifierPi;
-    else if( identifier == "left" )
-        m_identifier = IdentifierLeft;
-    else if( identifier == "top" )
-        m_identifier = IdentifierTop;
-    else if( identifier == "right" )
-        m_identifier = IdentifierRight;
-    else if( identifier == "bottom" )
-        m_identifier = IdentifierBottom;
-    else if( identifier == "xstretch" )
-        m_identifier = IdentifierXstretch;
-    else if( identifier == "ystretch" )
-        m_identifier = IdentifierYstretch;
-    else if( identifier == "hasstroke" )
-        m_identifier = IdentifierHasStroke;
-    else if( identifier == "hasfill" )
-        m_identifier = IdentifierHasFill;
-    else if( identifier == "width" )
-        m_identifier = IdentifierWidth;
-    else if( identifier == "height" )
-        m_identifier = IdentifierHeight;
-    else if( identifier == "logwidth" )
-        m_identifier = IdentifierLogwidth;
-    else if( identifier == "logheight" )
-        m_identifier = IdentifierLogheight;
+    m_identifier = identifierFromString( identifier );
 }
 
 double KoEnhancedPathNamedParameter::evaluate( KoEnhancedPathShape *path )
@@ -137,6 +110,40 @@ double KoEnhancedPathNamedParameter::evaluate( KoEnhancedPathShape *path )
             return 0.0;
     }
     return 0.0;
+}
+
+Identifier KoEnhancedPathNamedParameter::identifierFromString( const QString &text )
+{
+    if( text.isEmpty() )
+        return IdentifierUnknown;
+    else if( text == "pi" )
+        return IdentifierPi;
+    else if( text == "left" )
+        return IdentifierLeft;
+    else if( text == "top" )
+        return IdentifierTop;
+    else if( text == "right" )
+        return IdentifierRight;
+    else if( text == "bottom" )
+        return IdentifierBottom;
+    else if( text == "xstretch" )
+        return IdentifierXstretch;
+    else if( text == "ystretch" )
+        return IdentifierYstretch;
+    else if( text == "hasstroke" )
+        return IdentifierHasStroke;
+    else if( text == "hasfill" )
+        return IdentifierHasFill;
+    else if( text == "width" )
+        return IdentifierWidth;
+    else if( text == "height" )
+        return IdentifierHeight;
+    else if( text == "logwidth" )
+        return IdentifierLogwidth;
+    else if( text == "logheight" )
+        return IdentifierLogheight;
+    else
+        return IdentifierUnknown;
 }
 
 KoEnhancedPathReferenceParameter::KoEnhancedPathReferenceParameter( const QString &reference )

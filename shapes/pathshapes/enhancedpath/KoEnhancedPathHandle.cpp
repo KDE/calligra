@@ -30,12 +30,6 @@ KoEnhancedPathHandle::KoEnhancedPathHandle( KoEnhancedPathParameter * x, KoEnhan
 
 KoEnhancedPathHandle::~KoEnhancedPathHandle()
 {
-    delete m_positionX;
-    delete m_positionY;
-    delete m_minimumX;
-    delete m_maximumX;
-    delete m_minimumY;
-    delete m_maximumY;
 }
 
 QPointF KoEnhancedPathHandle::position( KoEnhancedPathShape * path )
@@ -65,16 +59,12 @@ void KoEnhancedPathHandle::setPosition( const QPointF &position, KoEnhancedPathS
 
 void KoEnhancedPathHandle::setRangeX( KoEnhancedPathParameter *minX, KoEnhancedPathParameter *maxX )
 {
-    delete m_minimumX;
-    delete m_maximumX;
     m_minimumX = minX;
     m_maximumX = maxX;
 }
 
 void KoEnhancedPathHandle::setRangeY( KoEnhancedPathParameter *minY, KoEnhancedPathParameter *maxY )
 {
-    delete m_minimumY;
-    delete m_maximumY;
     m_minimumY = minY;
     m_maximumY = maxY;
 }

@@ -28,7 +28,6 @@ KoEnhancedPathCommand::KoEnhancedPathCommand( const QChar & command )
 
 KoEnhancedPathCommand::~KoEnhancedPathCommand()
 {
-    qDeleteAll( m_parameters );
 }
 
 bool KoEnhancedPathCommand::execute( KoEnhancedPathShape * path )

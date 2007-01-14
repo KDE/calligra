@@ -62,7 +62,7 @@ public:
     KoEnhancedPathConstantParameter( double value );
     double evaluate( KoEnhancedPathShape *path );
 private:
-    double m_value;
+    double m_value; ///< the constant value
 };
 
 /// a named parameter
@@ -72,8 +72,10 @@ public:
     KoEnhancedPathNamedParameter( Identifier identifier );
     KoEnhancedPathNamedParameter( const QString &identifier );
     double evaluate( KoEnhancedPathShape *path );
+    /// Returns identfier type from given string
+    static Identifier identifierFromString( const QString &text );
 private:
-    Identifier m_identifier;
+    Identifier m_identifier; ///< the identifier type
 };
 
 /// a referencing parameter
@@ -84,7 +86,7 @@ public:
     double evaluate( KoEnhancedPathShape *path );
     virtual void modify( double value, KoEnhancedPathShape *path );
 private:
-    QString m_reference;
+    QString m_reference; ///< the reference
 };
 
 #endif // KOENHANCEDPATHPARAMETER_H

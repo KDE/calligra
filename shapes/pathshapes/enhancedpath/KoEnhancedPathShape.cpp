@@ -36,40 +36,40 @@ KoEnhancedPathShape::KoEnhancedPathShape()
     m_modifiers.append( 35 );
 
     KoEnhancedPathCommand * cmd = 0;
+
     cmd = new KoEnhancedPathCommand( 'M' );
-    cmd->addParameter( new KoEnhancedPathReferenceParameter( "$0" ) );
-    cmd->addParameter( new KoEnhancedPathReferenceParameter( "$1" ) );
+    cmd->addParameter( parameter( "$0" ) );
+    cmd->addParameter( parameter( "$1" ) );
     m_commands.append( cmd );
 
     cmd = new KoEnhancedPathCommand( 'L' );
 
-    cmd->addParameter( new KoEnhancedPathReferenceParameter( "$0" ) );
-    cmd->addParameter( new KoEnhancedPathConstantParameter( 0 ) );
+    cmd->addParameter( parameter( "$0" ) );
+    cmd->addParameter( parameter( "0" ) );
 
-    cmd->addParameter( new KoEnhancedPathNamedParameter( IdentifierWidth ) );
-    cmd->addParameter( new KoEnhancedPathReferenceParameter( "?HalfHeight" ) );
+    cmd->addParameter( parameter( "width" ) );
+    cmd->addParameter( parameter( "?HalfHeight" ) );
 
-    cmd->addParameter( new KoEnhancedPathReferenceParameter( "$0" ) );
-    cmd->addParameter( new KoEnhancedPathNamedParameter( IdentifierHeight ) );
+    cmd->addParameter( parameter( "$0" ) );
+    cmd->addParameter( parameter( "height" ) );
 
-    cmd->addParameter( new KoEnhancedPathReferenceParameter( "$0" ) );
-    cmd->addParameter( new KoEnhancedPathReferenceParameter( "?LowerCorner" ) );
+    cmd->addParameter( parameter( "$0" ) );
+    cmd->addParameter( parameter( "?LowerCorner" ) );
 
-    cmd->addParameter( new KoEnhancedPathConstantParameter( 0 ) );
-    cmd->addParameter( new KoEnhancedPathReferenceParameter( "?LowerCorner" ) );
+    cmd->addParameter( parameter( "0" ) );
+    cmd->addParameter( parameter( "?LowerCorner" ) );
 
-    cmd->addParameter( new KoEnhancedPathConstantParameter( 0 ) );
-    cmd->addParameter( new KoEnhancedPathReferenceParameter( "$1" ) );
+    cmd->addParameter( parameter( "0" ) );
+    cmd->addParameter( parameter( "$1" ) );
 
     m_commands.append( cmd );
 
     cmd = new KoEnhancedPathCommand( 'Z' );
     m_commands.append( cmd );
 
-    KoEnhancedPathHandle *handle = 0;
-    handle = new KoEnhancedPathHandle( new KoEnhancedPathReferenceParameter( "$0" ), new KoEnhancedPathReferenceParameter( "$1" ) );
-    handle->setRangeX( new KoEnhancedPathConstantParameter( 0 ), new KoEnhancedPathNamedParameter( IdentifierWidth ) );
-    handle->setRangeY( new KoEnhancedPathConstantParameter( 0 ), new KoEnhancedPathReferenceParameter( "?HalfHeight" ) );
+    KoEnhancedPathHandle *handle = new KoEnhancedPathHandle( parameter( "$0" ), parameter( "$1" ) );
+    handle->setRangeX( parameter( "0" ), parameter( "width" ) );
+    handle->setRangeY( parameter( "0" ), parameter( "?HalfHeight" ) );
     m_enhancedHandles.append( handle );
 
     foreach( KoEnhancedPathHandle *handle, m_enhancedHandles )
@@ -83,6 +83,7 @@ KoEnhancedPathShape::~KoEnhancedPathShape()
     qDeleteAll( m_commands );
     qDeleteAll( m_enhancedHandles );
     qDeleteAll( m_formulae );
+    qDeleteAll( m_parameters );
 }
 
 void KoEnhancedPathShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
@@ -172,4 +173,38 @@ void KoEnhancedPathShape::resize( const QSizeF &newSize )
 {
     KoShape::resize( newSize );
     updatePath( newSize );
+}
+
+KoEnhancedPathParameter * KoEnhancedPathShape::parameter( const QString & text )
+{
+    Q_ASSERT( ! text.isEmpty() );
+
+    ParameterStore::const_iterator parameterIt = m_parameters.find( text );
+    if( parameterIt != m_parameters.end() )
+        return parameterIt.value();
+    else
+    {
+        KoEnhancedPathParameter *parameter = 0;
+        QChar c = text[0];
+        if( c.toAscii() == '$' || c.toAscii() == '?' )
+            parameter = new KoEnhancedPathReferenceParameter( text );
+        else
+        {
+            Identifier identifier = KoEnhancedPathNamedParameter::identifierFromString( text );
+            if( identifier != IdentifierUnknown )
+                parameter = new KoEnhancedPathNamedParameter( identifier );
+            else
+            {
+                bool success = false;
+                double constant = text.toDouble( &success );
+                if( success )
+                    parameter = new KoEnhancedPathConstantParameter( constant );
+            }
+        }
+
+        if( parameter )
+            m_parameters[text] = parameter;
+
+        return parameter;
+    }
 }

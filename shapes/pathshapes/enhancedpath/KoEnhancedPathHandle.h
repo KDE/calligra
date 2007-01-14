@@ -35,9 +35,6 @@ public:
     /**
      * Constructs a new handle with the given coordinate parameters.
      *
-     * Note that the given parameter objects are now owned by the
-     * handle, which take care of destroying them.
-     *
      * @param x the x-coordinate of the handle position
      * @param y the y-coordinate of the handle position
      */
@@ -66,6 +63,9 @@ public:
 
     /**
      * Sets the range of the handles x-coordinate.
+     *
+     * A zero pointer has the effect of no maximum/minimum value.
+     *
      * @param minX the minimum x-coordinate
      * @param maxX the maximum x-coordinate
      */
@@ -73,18 +73,21 @@ public:
 
     /**
      * Sets the range of the handles y-coordinate.
+     *
+     * A zero pointer has the effect of no maximum/minimum value.
+     *
      * @param minY the minimum y-coordinate
      * @param maxY the maximum y-coordinate
      */
     void setRangeY( KoEnhancedPathParameter *minY, KoEnhancedPathParameter *maxY );
 
 private:
-    KoEnhancedPathParameter * m_positionX;
-    KoEnhancedPathParameter * m_positionY;
-    KoEnhancedPathParameter * m_minimumX;
-    KoEnhancedPathParameter * m_minimumY;
-    KoEnhancedPathParameter * m_maximumX;
-    KoEnhancedPathParameter * m_maximumY;
+    KoEnhancedPathParameter * m_positionX; ///< the position x-coordinate 
+    KoEnhancedPathParameter * m_positionY; ///< the position y-coordinate
+    KoEnhancedPathParameter * m_minimumX;  ///< the minimum x-coordinate
+    KoEnhancedPathParameter * m_minimumY;  ///< the minmum y-coordinate
+    KoEnhancedPathParameter * m_maximumX;  ///< the maximum x-coordinate
+    KoEnhancedPathParameter * m_maximumY;  ///< the maximum y-coordinate
 };
 
 #endif // KOENHANCEDPATHHANDLE_H

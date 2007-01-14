@@ -29,6 +29,7 @@
 class KoEnhancedPathCommand;
 class KoEnhancedPathHandle;
 class KoEnhancedPathFormula;
+class KoEnhancedPathParameter;
 
 /**
  * An enhanced shape is a custom shape which can be defined
@@ -71,14 +72,18 @@ protected:
     // from KoParameterShape
     void updatePath( const QSizeF &size );
 private:
-    QList<KoEnhancedPathCommand*> m_commands; ///< the command creating the outline
-    QList<KoEnhancedPathHandle*> m_enhancedHandles; ///< the handles for modifiying the shape
+    /// Returns parameter from given textual representation
+    KoEnhancedPathParameter * parameter( const QString & text );
 
     typedef QMap<QString, KoEnhancedPathFormula*> FormulaStore;
     typedef QList<double> ModifierStore;
+    typedef QMap<QString, KoEnhancedPathParameter*> ParameterStore;
 
-    FormulaStore m_formulae;   ///< the formulae
-    ModifierStore m_modifiers; ///< the modifier values
+    QList<KoEnhancedPathCommand*> m_commands; ///< the commands creating the outline
+    QList<KoEnhancedPathHandle*> m_enhancedHandles; ///< the handles for modifiying the shape
+    FormulaStore m_formulae;     ///< the formulae
+    ModifierStore m_modifiers;   ///< the modifier values
+    ParameterStore m_parameters; ///< the shared parameters
 };
 
 #endif // KOENHANCEDPATHSHAPE_H
