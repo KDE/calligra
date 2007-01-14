@@ -45,6 +45,7 @@
 #include <KoToolDockerFactory.h>
 #include <KoShapeSelectorFactory.h>
 #include <KoTextSelectionHandler.h>
+#include <KoInlineObjectRegistry.h>
 #include <KoToolProxy.h>
 
 // KDE + Qt includes
@@ -56,6 +57,7 @@
 #include <kdebug.h>
 #include <kicon.h>
 #include <kactioncollection.h>
+#include <kactionmenu.h>
 
 KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     : KoView( document, parent )
@@ -243,6 +245,10 @@ void KWView::setupActions() {
     actionCollection()->addAction("send_toback_frame", m_actionSendBackward);
     connect(m_actionSendBackward, SIGNAL(triggered()), this, SLOT( sendToBack() ));
 
+    KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
+    foreach(QAction *action, KoInlineObjectRegistry::instance()->createInsertVariableActions(kwcanvas()))
+        actionMenu->addAction(action);
+    actionCollection()->addAction("insert_variable", actionMenu);
 
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
@@ -396,7 +402,6 @@ This saves problems with finding out which we missed near the end.
     m_actionInsertContents->setToolTip( i18n( "Insert table of contents at the current cursor position" ) );
     m_actionInsertContents->setWhatsThis( i18n( "Insert table of contents at the current cursor position." ) );
 
-    m_variableDefMap.clear();
     actionInsertVariable = new KActionMenu( i18n( "Variable" ),
             actionCollection(), "insert_variable" );
 

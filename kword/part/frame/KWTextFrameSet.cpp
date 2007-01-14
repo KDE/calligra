@@ -104,7 +104,10 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
     if(frameCount() == 1 && m_document->isEmpty()) { // just added first frame...
         delete m_document;
         m_document = data->document();
-        m_document->setDocumentLayout(new KWTextDocumentLayout(this));
+        KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
+        if(m_kwordDocument)
+            layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+        m_document->setDocumentLayout(layout);
         data->setDocument(m_document, false);
     }
     else {
