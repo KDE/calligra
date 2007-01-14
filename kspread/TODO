@@ -155,6 +155,7 @@ Things not in bugzilla
       garbage and each piece is checked when time allows. To avoid the
       check of the whole tree every minute (at worst), the changed
       region's rectangle/data pairs are marked as possible garbage.
+    - Revisit Style::loadXML(), Style::saveXML(). Check copy&paste!	----
 
   + Speed up selection.						      1 ----
     - Clipped selection painting.					done
