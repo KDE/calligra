@@ -7207,7 +7207,7 @@ void View::handleDamages( const QList<Damage*>& damages )
     QRegion paintRegion;
     bool paintClipped = true;
 
-    ElapsedTime et( "Damage processing", ElapsedTime::PrintOnlyTime );
+//     ElapsedTime et( "Damage processing", ElapsedTime::PrintOnlyTime );
 
     QList<Damage*>::ConstIterator end(damages.end());
     for( QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it )
