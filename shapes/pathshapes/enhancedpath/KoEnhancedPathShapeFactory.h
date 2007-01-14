@@ -35,6 +35,13 @@ public:
     ~KoEnhancedPathShapeFactory() {}
     KoShape * createDefaultShape() const;
     KoShape * createShape(const KoProperties * params) const;
+private:
+    typedef QMap< QString, QString > Formulae;
+
+    KoProperties* dataToProperties(
+        const QString &modifiers, const QStringList &commands,
+        const QStringList &handles, const Formulae & formulae ) const;
+
 };
 
 #endif // KOENHANCEDPATHSHAPEFACTORY_H

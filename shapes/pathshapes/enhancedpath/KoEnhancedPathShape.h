@@ -66,6 +66,14 @@ public:
     // from KoShape
     virtual void resize( const QSizeF &newSize );
 
+    /// Add formula with given name and textual represenation
+    void addFormula( const QString &name, const QString &formula );
+    /// Add a single handle with format: x y minX maxX minY maxY
+    void addHandle( const QString &handle );
+    /// Add modifiers with format: modifier0 modifier1 modifier2 ...
+    void addModifiers( const QString &modifiers );
+    /// Add command for instance "M 0 0"
+    void addCommand( const QString &command );
 protected:
     // from KoParameterShape
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );

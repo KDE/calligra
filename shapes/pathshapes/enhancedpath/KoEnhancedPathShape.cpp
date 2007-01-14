@@ -23,59 +23,9 @@
 #include "KoEnhancedPathHandle.h"
 #include "KoEnhancedPathFormula.h"
 
-#include <kdebug.h>
-
 KoEnhancedPathShape::KoEnhancedPathShape()
 {
     KoShape::resize( QSize(100, 100) );
-
-    m_formulae["HalfHeight"] = new KoEnhancedPathFormula( "0.5 * height" );
-    m_formulae["LowerCorner"] = new KoEnhancedPathFormula( "height - $1" );
-
-    m_modifiers.append( 60 );
-    m_modifiers.append( 35 );
-
-    KoEnhancedPathCommand * cmd = 0;
-
-    cmd = new KoEnhancedPathCommand( 'M' );
-    cmd->addParameter( parameter( "$0" ) );
-    cmd->addParameter( parameter( "$1" ) );
-    m_commands.append( cmd );
-
-    cmd = new KoEnhancedPathCommand( 'L' );
-
-    cmd->addParameter( parameter( "$0" ) );
-    cmd->addParameter( parameter( "0" ) );
-
-    cmd->addParameter( parameter( "width" ) );
-    cmd->addParameter( parameter( "?HalfHeight" ) );
-
-    cmd->addParameter( parameter( "$0" ) );
-    cmd->addParameter( parameter( "height" ) );
-
-    cmd->addParameter( parameter( "$0" ) );
-    cmd->addParameter( parameter( "?LowerCorner" ) );
-
-    cmd->addParameter( parameter( "0" ) );
-    cmd->addParameter( parameter( "?LowerCorner" ) );
-
-    cmd->addParameter( parameter( "0" ) );
-    cmd->addParameter( parameter( "$1" ) );
-
-    m_commands.append( cmd );
-
-    cmd = new KoEnhancedPathCommand( 'Z' );
-    m_commands.append( cmd );
-
-    KoEnhancedPathHandle *handle = new KoEnhancedPathHandle( parameter( "$0" ), parameter( "$1" ) );
-    handle->setRangeX( parameter( "0" ), parameter( "width" ) );
-    handle->setRangeY( parameter( "0" ), parameter( "?HalfHeight" ) );
-    m_enhancedHandles.append( handle );
-
-    foreach( KoEnhancedPathHandle *handle, m_enhancedHandles )
-        m_handles.append( handle->position( this ) );
-
-    updatePath( QSize( 100, 100 ) );
 }
 
 KoEnhancedPathShape::~KoEnhancedPathShape()
@@ -112,7 +62,6 @@ void KoEnhancedPathShape::updatePath( const QSizeF &size )
 
 double KoEnhancedPathShape::evaluateReference( const QString &reference )
 {
-    kDebug() << "evaluating reference " << reference << endl;
     if( reference.isEmpty() )
         return 0.0;
 
@@ -150,7 +99,6 @@ double KoEnhancedPathShape::evaluateReference( const QString &reference )
         break;
     }
 
-    kDebug() << "evaluation result = " << res << endl;
     return res;
 }
 
@@ -165,13 +113,20 @@ void KoEnhancedPathShape::modifyReference( const QString &reference, double valu
     {
         bool success = false;
         int modifierIndex = reference.mid( 1 ).toInt( &success );
-        m_modifiers[modifierIndex] = value;
+        if( modifierIndex >= 0 && modifierIndex < m_modifiers.count() )
+            m_modifiers[modifierIndex] = value;
     }
 }
 
 void KoEnhancedPathShape::resize( const QSizeF &newSize )
 {
     KoShape::resize( newSize );
+    KoParameterShape::resize( newSize );
+
+    uint handleCount = m_enhancedHandles.size();
+    for( uint i = 0; i < handleCount; ++i )
+        m_enhancedHandles[i]->setPosition( m_handles[i], this );
+
     updatePath( newSize );
 }
 
@@ -210,4 +165,68 @@ KoEnhancedPathParameter * KoEnhancedPathShape::parameter( const QString & text )
 
         return parameter;
     }
+}
+
+void KoEnhancedPathShape::addFormula( const QString &name, const QString &formula )
+{
+    if( name.isEmpty() || formula.isEmpty() )
+        return;
+
+    m_formulae[name] = new KoEnhancedPathFormula( formula );
+}
+
+void KoEnhancedPathShape::addHandle( const QString &handle )
+{
+    if( handle.isEmpty() )
+        return;
+
+    QStringList tokens = handle.simplified().split( ' ' );
+    int tokenCount = tokens.count();
+    if( tokenCount < 2 )
+        return;
+    KoEnhancedPathHandle *h = new KoEnhancedPathHandle( parameter( tokens[0] ), parameter( tokens[1] ) );
+    if( tokenCount >= 4 )
+        h->setRangeX( parameter( tokens[2] ), parameter( tokens[3] ) );
+    if( tokenCount >= 6 )
+        h->setRangeY( parameter( tokens[4] ), parameter( tokens[5] ) );
+
+    m_enhancedHandles.append( h );
+
+    m_handles.clear();
+    foreach( KoEnhancedPathHandle *handle, m_enhancedHandles )
+        m_handles.append( handle->position( this ) );
+}
+
+void KoEnhancedPathShape::addModifiers( const QString &modifiers )
+{
+    if( modifiers.isEmpty() )
+        return;
+
+    QStringList tokens = modifiers.simplified().split( ' ' );
+    int tokenCount = tokens.count();
+    for( int i = 0; i < tokenCount; ++i )
+       m_modifiers.append( tokens[i].toDouble() );
+}
+
+void KoEnhancedPathShape::addCommand( const QString &command )
+{
+    if( command.isEmpty() )
+        return;
+
+    QStringList tokens = command.simplified().split( ' ' );
+    int tokenCount = tokens.count();
+    if( ! tokenCount )
+        return;
+
+    if( tokens[0].length() != 1 )
+        return;
+
+    KoEnhancedPathCommand * cmd = new KoEnhancedPathCommand( tokens[0][0] );
+
+    for( int i = 1; i < tokenCount; ++i )
+        cmd->addParameter( parameter( tokens[i] ) );
+
+    m_commands.append( cmd );
+
+    updatePath( size() );
 }

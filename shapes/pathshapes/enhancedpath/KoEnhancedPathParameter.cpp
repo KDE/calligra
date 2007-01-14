@@ -95,11 +95,9 @@ double KoEnhancedPathNamedParameter::evaluate( KoEnhancedPathShape *path )
             return path->background().style() == Qt::NoBrush ? 0.0 : 1.0;
         break;
         case IdentifierWidth:
-            kDebug() << "identifier width = " << path->KoShape::size().width() << endl;
             return path->KoShape::size().width();
         break;
         case IdentifierHeight:
-            kDebug() << "identifier height = " << path->KoShape::size().width() << endl;
             return path->KoShape::size().height();
         break;
         case IdentifierLogwidth:
