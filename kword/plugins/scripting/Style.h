@@ -56,7 +56,7 @@ namespace Scripting {
                 AlphaLowerItem = KoListStyle::AlphaLowerItem,
                 AlphaUpperItem = KoListStyle::UpperAlphaItem,
                 RomanLowerItem = KoListStyle::RomanLowerItem,
-                RomanUpperItem = KoListStyle::UpperRomanItem,
+                RomanUpperItem = KoListStyle::UpperRomanItem
             };
 
         public Q_SLOTS:
