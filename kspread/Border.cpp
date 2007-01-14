@@ -553,6 +553,8 @@ void VBorder::paintEvent( QPaintEvent* event )
 
   // fonts
   QFont normalFont( painter.font() );
+  // FIXME Stefan: Find a better way to scale the font. X- and Y-resolution may vary!
+  normalFont.setPointSizeF( normalFont.pointSizeF() / m_pCanvas->d->view->doc()->resolutionY() );
   QFont boldFont( normalFont );
   boldFont.setBold( true );
 
@@ -1261,6 +1263,8 @@ void HBorder::paintEvent( QPaintEvent* event )
 
   // fonts
   QFont normalFont( painter.font() );
+  // FIXME Stefan: Find a better way to scale the font. X- and Y-resolution may vary!
+  normalFont.setPointSizeF( normalFont.pointSizeF() / m_pCanvas->d->view->doc()->resolutionY() );
   QFont boldFont( normalFont );
   boldFont.setBold( true );
 
