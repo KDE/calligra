@@ -40,6 +40,8 @@ namespace KChart
 KCPrinterDialog::KCPrinterDialog( QWidget *parent, const char *name )
   : KPrintDialogPage( parent )
 {
+  Q_UNUSED( name );
+
   setTitle( i18n( "KChart Options" ) );
   Q3VBoxLayout *layout = new Q3VBoxLayout( this );
   layout->setMargin( KDialog::marginHint() );
