@@ -29,6 +29,8 @@
 #include <phonon/audiooutput.h>
 #include <phonon/audiopath.h>
 #include <phonon/mediaobject.h>
+
+class QFrame;
 using namespace Phonon;
 
 class VideoShape : public KoShape
@@ -54,7 +56,7 @@ private:
     AudioOutput *m_audiooutput;
     AudioPath *m_audiopath;
     MediaObject *m_mediaobject;
-    QWidget *m_widget;
+    QFrame *m_widget;
     KUrl m_currentUrl;
 };
 

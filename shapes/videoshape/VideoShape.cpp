@@ -17,7 +17,8 @@
 */
 
 #include <QPainter>
-
+#include <QFrame>
+#include <QVBoxLayout>
 #include <kdebug.h>
 #include "VideoShape.h"
 
@@ -26,8 +27,10 @@
 VideoShape::VideoShape(const KUrl&url)
  : m_currentUrl(url)
 {
-  m_widget = new QWidget(0);
+  m_widget = new QFrame(0);
+  QVBoxLayout *box = new QVBoxLayout( m_widget );
   m_videowidget = new VideoWidget(m_widget );
+  box->addWidget(  m_videowidget );
   m_videopath = new VideoPath( m_widget );
   m_audiooutput = new AudioOutput( Phonon::VideoCategory, m_widget );
   m_audiopath = new AudioPath( m_widget );
@@ -56,6 +59,7 @@ void VideoShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
   kDebug()<<" VideoShape::paint( QPainter& painter, const KoViewConverter& converter )\n";
   m_widget->repaint();
+  m_videowidget->repaint();
 }
 
 void VideoShape::play()
