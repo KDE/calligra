@@ -768,6 +768,7 @@ int opPrecedence( FormulaToken::Operator op )
         case FormulaToken::OperatorDiv     : prec = 6; break;
         case FormulaToken::OperatorAdd     : prec = 3; break;
         case FormulaToken::OperatorSub     : prec = 3; break;
+        case FormulaToken::OperatorComma   : prec = 0; break;
         case FormulaToken::OperatorRightPar: prec = 0; break;
         case FormulaToken::OperatorLeftPar : prec = -1; break;
         default: prec = -1; break;
