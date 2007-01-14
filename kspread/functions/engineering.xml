@@ -15,15 +15,14 @@
 	<Comment>Base</Comment>
 	<Type>Int</Type>
       </Parameter>
-      <Parameter>
-	<Comment>Precision</Comment>
+      <Parameter optional="true">
+	<Comment>MinLength</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
 	<Text>The BASE() function converts a number from base-10 to a string value in a target base from 2 to 36.</Text>
 	<Syntax>BASE(number;base;prec)</Syntax>
 	<Example>BASE(128;8) returns "200"</Example>
-	<Example>BASE(123.47;16;6) returns "7B.7851EB"</Example>
       </Help>
     </Function>
 
@@ -192,6 +191,10 @@
 	<Comment>The value to convert</Comment>
 	<Type>Int</Type>
       </Parameter>
+      <Parameter optional="true">
+	<Comment>The minimum length of the output</Comment>
+	<Type>Int</Type>
+      </Parameter>
       <Help>
 	<Text>The DEC2BIN() function returns the value formatted as a binary number.</Text>
 	<Syntax>DEC2BIN(value)</Syntax>
@@ -205,6 +208,10 @@
       <Type>String</Type>
       <Parameter>
 	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>The minimum length of the output</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
@@ -222,6 +229,10 @@
 	<Comment>The value to convert</Comment>
 	<Type>Int</Type>
       </Parameter>
+      <Parameter optional="true">
+	<Comment>The minimum length of the output</Comment>
+	<Type>Int</Type>
+      </Parameter>
       <Help>
 	<Text>The DEC2OCT() function returns the value formatted as an octal number.</Text>
 	<Syntax>DEC2OCT(value)</Syntax>
@@ -236,6 +247,10 @@
       <Parameter>
 	<Comment>The value to convert</Comment>
 	<Type>String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>The minimum length of the output</Comment>
+	<Type>Int</Type>
       </Parameter>
       <Help>
 	<Text>The OCT2BIN() function returns the value formatted as a binary number.</Text>
@@ -267,11 +282,15 @@
 	<Comment>The value to convert</Comment>
 	<Type>String</Type>
       </Parameter>
+      <Parameter optional="true">
+	<Comment>The minimum length of the output</Comment>
+	<Type>Int</Type>
+      </Parameter>
       <Help>
 	<Text>The OCT2HEX() function returns the value formatted as a hexadecimal number.</Text>
 	<Syntax>OCT2HEX(value)</Syntax>
-	<Example>OCT2HEX("12") returns "a"</Example>
-	<Example>OCT2HEX("55") returns "2d"</Example>
+	<Example>OCT2HEX("12") returns "A"</Example>
+	<Example>OCT2HEX("55") returns "2D"</Example>
       </Help>
     </Function>
 
@@ -297,6 +316,10 @@
 	<Comment>The value to convert</Comment>
 	<Type>String</Type>
       </Parameter>
+      <Parameter optional="true">
+	<Comment>The minimum length of the output</Comment>
+	<Type>Int</Type>
+      </Parameter>
       <Help>
 	<Text>The BIN2OCT() function returns the value formatted as an octal number.</Text>
 	<Syntax>BIN2OCT(value)</Syntax>
@@ -311,6 +334,10 @@
       <Parameter>
 	<Comment>The value to convert</Comment>
 	<Type>String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>The minimum length of the output</Comment>
+	<Type>Int</Type>
       </Parameter>
       <Help>
 	<Text>The BIN2HEX() function returns the value formatted as a hexadecimal number.</Text>

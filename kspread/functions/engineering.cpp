@@ -58,6 +58,7 @@ Value func_convert (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_decimal (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_delta (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_erf (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_erfc (valVector args, ValueCalc *calc, FuncExtra *);
@@ -108,8 +109,10 @@ void RegisterEngineeringFunctions()
   f = new Function ("BIN2DEC",     func_bin2dec);
   repo->add (f);
   f = new Function ("BIN2OCT",     func_bin2oct);
+  f->setParamCount (1, 2 );
   repo->add (f);
   f = new Function ("BIN2HEX",     func_bin2hex);
+  f->setParamCount (1, 2 );
   repo->add (f);
   f = new Function ("COMPLEX",     func_complex);
   f->setParamCount (2);
@@ -118,10 +121,16 @@ void RegisterEngineeringFunctions()
   f->setParamCount (3);
   repo->add (f);
   f = new Function ("DEC2HEX",     func_dec2hex);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("DEC2BIN",     func_dec2bin);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("DEC2OCT",     func_dec2oct);
+  f->setParamCount (1, 2);
+  repo->add (f);
+  f = new Function ("DECIMAL",     func_decimal);
+  f->setParamCount (2);
   repo->add (f);
   f = new Function ("DELTA",       func_delta);
   f->setParamCount (1, 2);
@@ -136,10 +145,12 @@ void RegisterEngineeringFunctions()
   f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("HEX2BIN",     func_hex2bin);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("HEX2DEC",     func_hex2dec);
   repo->add (f);
   f = new Function ("HEX2OCT",     func_hex2oct);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("IMABS",       func_imabs);
   repo->add (f);
@@ -185,10 +196,12 @@ void RegisterEngineeringFunctions()
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("OCT2BIN",     func_oct2bin);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("OCT2DEC",     func_oct2dec);
   repo->add (f);
   f = new Function ("OCT2HEX",     func_oct2hex);
+  f->setParamCount (1, 2);
   repo->add (f);
 }
 
@@ -196,17 +209,17 @@ void RegisterEngineeringFunctions()
 Value func_base (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int base = 10;
-  int prec = 0;
+  int minLength = 0;
   if (args.count() > 1)
     base = calc->conv()->asInteger (args[1]).asInteger();
   if (args.count() == 3)
-    prec = calc->conv()->asInteger (args[2]).asInteger();
+    minLength = calc->conv()->asInteger (args[2]).asInteger();
 
   if ((base < 2) || (base > 36))
     return Value::errorVALUE();
-  if (prec < 0) prec = 2;
+  if (minLength < 0) minLength = 2;
 
-  return calc->base (args[0], base, prec);
+  return calc->base (args[0], base, 0, minLength);
 }
 
 // Function: BESSELI
@@ -244,19 +257,55 @@ Value func_bessely (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: DEC2HEX
 Value func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->base (args[0], 16);
+    QRegExp rx("[0-9]+");
+    int minLength = 0;
+    if ( args.count() > 1 )
+        // we have the optional "minimum length" argument
+        minLength = calc->conv()->asInteger (args[1]).asInteger();
+
+    if ( rx.exactMatch( calc->conv()->asString( args[0] ).asString() ) )
+    {
+        // this only contains decimal digits.
+        return calc->base (args[0], 16, 0, minLength);
+    } else {
+        return Value::errorVALUE();
+    }
 }
 
 // Function: DEC2OCT
 Value func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->base (args[0], 8);
+    QRegExp rx("[0-9]+");
+    int minLength = 0;
+    if ( args.count() > 1 )
+        // we have the optional "minimum length" argument
+        minLength = calc->conv()->asInteger (args[1]).asInteger();
+
+    if ( rx.exactMatch( calc->conv()->asString( args[0] ).asString() ) )
+    {
+        // this only contains decimal digits.
+        return calc->base (args[0], 8, 0, minLength);
+    } else {
+        return Value::errorVALUE();
+    }
 }
 
 // Function: DEC2BIN
 Value func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->base (args[0], 2);
+    QRegExp rx("[0-9]+");
+    int minLength = 0;
+    if ( args.count() > 1 )
+        // we have the optional "minimum length" argument
+        minLength = calc->conv()->asInteger (args[1]).asInteger();
+
+    if ( rx.exactMatch( calc->conv()->asString( args[0] ).asString() ) )
+    {
+        // this only contains decimal digits.
+        return calc->base (args[0], 2, 0, minLength);
+    } else {
+        return Value::errorVALUE();
+    }
 }
 
 // Function: BIN2DEC
@@ -268,13 +317,38 @@ Value func_bin2dec (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: BIN2OCT
 Value func_bin2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->base (calc->fromBase (args[0], 2), 8);
+    QRegExp rx("[01]+");
+    int minLength = 0;
+    if ( args.count() > 1 )
+        // we have the optional "minimum length" argument
+        minLength = calc->conv()->asInteger (args[1]).asInteger();
+
+    if ( rx.exactMatch( calc->conv()->asString( args[0] ).asString() ) )
+    {
+        // this only contains 0s and 1s.
+        return calc->base (calc->fromBase( args[0], 2 ), 8, 0, minLength);
+    } else {
+        return Value::errorVALUE();
+    }
 }
 
 // Function: BIN2HEX
 Value func_bin2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->base (calc->fromBase (args[0], 2), 16);
+    QRegExp rx("[01]+");
+    int minLength = 0;
+    if ( args.count() > 1 )
+        // we have the optional "minimum length" argument
+        minLength = calc->conv()->asInteger (args[1]).asInteger();
+
+    if ( rx.exactMatch( calc->conv()->asString( args[0] ).asString() ) )
+    {
+        // this only contains 0s and 1s.
+        return calc->base (calc->fromBase (args[0], 2), 16, 0, minLength);
+    } else {
+        return Value::errorVALUE();
+    }
+
 }
 
 // Function: OCT2DEC
@@ -286,13 +360,37 @@ Value func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: OCT2BIN
 Value func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->base (calc->fromBase (args[0], 8), 2);
+    QRegExp rx("[01234567]+");
+    int minLength = 0;
+    if ( args.count() > 1 )
+        // we have the optional "minimum length" argument
+        minLength = calc->conv()->asInteger (args[1]).asInteger();
+
+    if ( rx.exactMatch( calc->conv()->asString( args[0] ).asString() ) )
+    {
+        // this only contains decimal digits.
+        return calc->base (calc->fromBase( args[0], 8 ), 2, 0, minLength);
+    } else {
+        return Value::errorVALUE();
+    }
 }
 
 // Function: OCT2HEX
 Value func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->base (calc->fromBase (args[0], 8), 16);
+    QRegExp rx("[01234567]+");
+    int minLength = 0;
+    if ( args.count() > 1 )
+        // we have the optional "minimum length" argument
+        minLength = calc->conv()->asInteger (args[1]).asInteger();
+
+    if ( rx.exactMatch( calc->conv()->asString( args[0] ).asString() ) )
+    {
+        // this only contains decimal digits.
+        return calc->base (calc->fromBase( args[0], 8 ), 16, 0, minLength);
+    } else {
+        return Value::errorVALUE();
+    }
 }
 
 // Function: HEX2DEC
@@ -304,15 +402,62 @@ Value func_hex2dec (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: HEX2BIN
 Value func_hex2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->base (calc->fromBase (args[0], 16), 2);
+    QRegExp rx("[0123456789ABCDEFabcdef]+");
+    int minLength = 0;
+    if ( args.count() > 1 )
+        // we have the optional "minimum length" argument
+        minLength = calc->conv()->asInteger (args[1]).asInteger();
+
+    if ( rx.exactMatch( calc->conv()->asString( args[0] ).asString() ) )
+    {
+        // this only contains decimal digits.
+        return calc->base (calc->fromBase( args[0], 16 ), 2, 0, minLength);
+    } else {
+        return Value::errorVALUE();
+    }
 }
 
 // Function: HEX2OCT
 Value func_hex2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->base (calc->fromBase (args[0], 16), 8);
+    QRegExp rx("[0123456789ABCDEFabcdef]+");
+    int minLength = 0;
+    if ( args.count() > 1 )
+        // we have the optional "minimum length" argument
+        minLength = calc->conv()->asInteger (args[1]).asInteger();
+
+    if ( rx.exactMatch( calc->conv()->asString( args[0] ).asString() ) )
+    {
+        // this only contains decimal digits.
+        return calc->base (calc->fromBase( args[0], 16 ), 8, 0, minLength);
+    } else {
+        return Value::errorVALUE();
+    }
 }
 
+// Function: DECIMAL
+Value func_decimal (valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QString text = calc->conv()->asString( args[0] ).asString();
+    text.remove( QChar( ' ' ) );
+    text.remove( QChar( '\t' ) );
+    int radix = calc->conv()->asInteger (args[1]).asInteger();
+    if ( radix == 16 ) {
+        if ( text.startsWith( "0x", Qt::CaseInsensitive ) ) {
+            text = text.mid( 2 );
+        }
+        if ( text.endsWith( "h", Qt::CaseInsensitive ) ) {
+            text = text.left( text.length() -1 ); // all but the last char
+        }
+    }
+    if ( radix == 2 ) {
+        if ( text.endsWith( "b", Qt::CaseInsensitive ) ) {
+            text = text.left( text.length() -1 ); // all but the last char
+        }
+    }
+
+    return calc->fromBase ( Value( text ), radix );
+}
 
 // check if unit may contain prefix, for example "kPa" is "Pa" with
 // return prefix factor found in unit, or 1.0 for no prefix

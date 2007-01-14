@@ -784,7 +784,7 @@ Value ValueCalc::lcm (const Value &a, const Value &b)
   return div (mul (aa, bb), g);
 }
 
-Value ValueCalc::base (const Value &val, int base, int prec)
+Value ValueCalc::base (const Value &val, int base, int prec, int minLength)
 {
   if (prec < 0) prec = 2;
   if ((base < 2) || (base > 36))
@@ -792,6 +792,8 @@ Value ValueCalc::base (const Value &val, int base, int prec)
 
   double value = converter->asFloat (val).asFloat();
   QString result = QString::number ((int)value, base);
+  if ( result.length() < minLength )
+      result = result.rightJustified( minLength, QChar( '0' ) );
 
   if (prec > 0)
   {

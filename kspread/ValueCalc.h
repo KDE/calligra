@@ -176,7 +176,7 @@ class ValueCalc {
   Value lcm (const Value &a, const Value &b);
 
   /** base conversion 10 -> base */
-  Value base (const Value &val, int base = 16, int prec = 0);
+  Value base (const Value &val, int base = 16, int prec = 0, int minLength = 0);
   /** base conversion base -> 10 */
   Value fromBase (const Value &val, int base = 16);
 
