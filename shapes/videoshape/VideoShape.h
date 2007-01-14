@@ -47,6 +47,7 @@ public:
     void changeUrl();
     void pause();
 
+    virtual void resize( const QSizeF &newSize );
 private:
     VideoWidget *m_videowidget;
     VideoPath *m_videopath;

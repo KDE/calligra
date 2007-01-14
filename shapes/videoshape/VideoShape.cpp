@@ -44,6 +44,14 @@ VideoShape::~VideoShape()
 {
 }
 
+void VideoShape::resize( const QSizeF &newSize )
+{
+  kDebug()<<" VideoShape::resize( const QSizeF &newSize )\n";
+  QSize tmpSize(newSize.toSize());
+  m_widget->resize(tmpSize);
+  KoShape::resize(newSize);
+}
+
 void VideoShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
   kDebug()<<" VideoShape::paint( QPainter& painter, const KoViewConverter& converter )\n";
