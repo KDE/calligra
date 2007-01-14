@@ -194,9 +194,9 @@ bool Value::operator==( const Value& o ) const
     case Boolean: return o.d->b == d->b;
     case Integer: return o.d->i == d->i;
     case Float:   return compare( o.d->f, d->f ) == 0;
-    case String:  return *o.d->ps == *d->ps;
-    case Array:   return *o.d->pa == *d->pa;
-    case Error:   return *o.d->ps == *d->ps;
+    case String:  return ( !d->ps && !o.d->ps ) || ( ( d->ps && o.d->ps ) && ( *o.d->ps == *d->ps ) );
+    case Array:   return ( !d->pa && !o.d->pa ) || ( ( d->pa && o.d->pa ) && ( *o.d->pa == *d->pa ) );
+    case Error:   return ( !d->ps && !o.d->ps ) || ( ( d->ps && o.d->ps ) && ( *o.d->ps == *d->ps ) );
     default: break;
   }
   kWarning() << "Unhandled type in Value::operator==: " << d->type << endl;

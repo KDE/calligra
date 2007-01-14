@@ -105,6 +105,7 @@ void TestValue::testFloat()
 void TestValue::testString()
 {
   Value* v1;
+  Value* v2;
 
   // string value
   v1 = new Value( QString("Ailinon" ) );
@@ -119,6 +120,16 @@ void TestValue::testString()
   QCOMPARE( v1->isNumber(), false );
   QCOMPARE( v1->asString(), QString("spreadsheet" ) );
   delete v1;
+
+  // equality
+  v1 = new Value( Value::String );
+  v2 = new Value( Value::String );
+  QCOMPARE( *v1, *v2 );
+  v1->setValue( QString( "spreadsheet" ) );
+  v2->setValue( QString( "spreadsheet" ) );
+  QCOMPARE( *v1, *v2 );
+  delete v1;
+  delete v2;
 }
 
 void TestValue::testDate()
@@ -187,11 +198,24 @@ void TestValue::testTime()
 
 void TestValue::testError()
 {
+  Value* v1;
+  Value* v2;
+
   // TODO error values
 
   // TODO compare values
   // TODO add, sub, mul, div values
   // TODO pow
+
+  // equality
+  v1 = new Value( Value::Error );
+  v2 = new Value( Value::Error );
+  QCOMPARE( *v1, *v2 );
+  v1->setValue( Value::errorVALUE() );
+  v2->setValue( Value::errorVALUE() );
+  QCOMPARE( *v1, *v2 );
+  delete v1;
+  delete v2;
 }
 
 void TestValue::testArray()
@@ -259,6 +283,18 @@ void TestValue::testArray()
   v1 = new Value( v2->element( 0, 0 ) );
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v1->asFloat(), 14.3 );
+  delete v1;
+  delete v2;
+
+  // equality
+  v1 = new Value( Value::Array );
+  v2 = new Value( Value::Array );
+  QCOMPARE( *v1, *v2 );
+  v1->setElement( 0, 0, Value(1) );
+  v1->setElement( 0, 1, Value(2) );
+  v2->setElement( 0, 0, Value(1) );
+  v2->setElement( 0, 1, Value(2) );
+  QCOMPARE( *v1, *v2 );
   delete v1;
   delete v2;
 }
