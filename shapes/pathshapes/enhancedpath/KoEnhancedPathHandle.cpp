@@ -23,11 +23,19 @@
 
 KoEnhancedPathHandle::KoEnhancedPathHandle( KoEnhancedPathParameter * x, KoEnhancedPathParameter * y )
 : m_positionX( x ), m_positionY( y )
+, m_minimumX( 0 ), m_minimumY( 0 )
+, m_maximumX( 0 ), m_maximumY( 0 )
 {
 }
 
 KoEnhancedPathHandle::~KoEnhancedPathHandle()
 {
+    delete m_positionX;
+    delete m_positionY;
+    delete m_minimumX;
+    delete m_maximumX;
+    delete m_minimumY;
+    delete m_maximumY;
 }
 
 QPointF KoEnhancedPathHandle::position( KoEnhancedPathShape * path )
@@ -37,8 +45,36 @@ QPointF KoEnhancedPathHandle::position( KoEnhancedPathShape * path )
 
 void KoEnhancedPathHandle::setPosition( const QPointF &position, KoEnhancedPathShape * path )
 {
-    m_positionX->modify( position.x(), path );
-    m_positionY->modify( position.y(), path );
+    QPointF constrainedPosition( position );
+
+    // constrain x coordinate
+    if( m_minimumX )
+        constrainedPosition.setX( qMax( m_minimumX->evaluate( path ), constrainedPosition.x() ) );
+    if( m_maximumX )
+        constrainedPosition.setX( qMin( m_maximumX->evaluate( path ), constrainedPosition.x() ) );
+
+    // constrain y coordinate
+    if( m_minimumY )
+        constrainedPosition.setY( qMax( m_minimumY->evaluate( path ), constrainedPosition.y() ) );
+    if( m_maximumY )
+        constrainedPosition.setY( qMin( m_maximumY->evaluate( path ), constrainedPosition.y() ) );
+
+    m_positionX->modify( constrainedPosition.x(), path );
+    m_positionY->modify( constrainedPosition.y(), path );
 }
 
+void KoEnhancedPathHandle::setRangeX( KoEnhancedPathParameter *minX, KoEnhancedPathParameter *maxX )
+{
+    delete m_minimumX;
+    delete m_maximumX;
+    m_minimumX = minX;
+    m_maximumX = maxX;
+}
 
+void KoEnhancedPathHandle::setRangeY( KoEnhancedPathParameter *minY, KoEnhancedPathParameter *maxY )
+{
+    delete m_minimumY;
+    delete m_maximumY;
+    m_minimumY = minY;
+    m_maximumY = maxY;
+}

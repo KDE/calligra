@@ -68,6 +68,8 @@ KoEnhancedPathShape::KoEnhancedPathShape()
 
     KoEnhancedPathHandle *handle = 0;
     handle = new KoEnhancedPathHandle( new KoEnhancedPathReferenceParameter( "$0" ), new KoEnhancedPathReferenceParameter( "$1" ) );
+    handle->setRangeX( new KoEnhancedPathConstantParameter( 0 ), new KoEnhancedPathNamedParameter( IdentifierWidth ) );
+    handle->setRangeY( new KoEnhancedPathConstantParameter( 0 ), new KoEnhancedPathReferenceParameter( "?HalfHeight" ) );
     m_enhancedHandles.append( handle );
 
     foreach( KoEnhancedPathHandle *handle, m_enhancedHandles )
