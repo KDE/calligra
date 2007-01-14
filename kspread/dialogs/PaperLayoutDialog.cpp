@@ -146,7 +146,7 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
     grid->addWidget( pPrintRange, 0, 0 );
 
     ePrintRange = new QLineEdit( rangeGroup );
-    ePrintRange->setText( util_rangeName( print->printRange() ) );
+    ePrintRange->setText( Region( print->printRange() ).name() );
     grid->addWidget( ePrintRange, 0, 1 );
 
     QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), rangeGroup );
@@ -532,15 +532,19 @@ void PaperLayout::slotSelectionChanged()
   if (!m_pView->selection()->isValid())
     return;
 
-  QString area = util_rangeName( m_pView->selection()->lastRange() );
+  QString area = Region( m_pView->selection()->lastRange() ).name();
   if ( m_focus )
   {
       if ( m_focus == ePrintRange )
-        area = util_rangeName( m_pView->selection()->lastRange() );
+        area = Region( m_pView->selection()->lastRange() ).name();
       else if ( m_focus == eRepeatRows )
-        area = util_rangeRowName( m_pView->selection()->lastRange() );
+        area = QString( "%1:%2" )
+                  .arg( m_pView->selection()->lastRange().top() )
+                  .arg( m_pView->selection()->lastRange().bottom() );
       else if ( m_focus == eRepeatCols )
-        area = util_rangeColumnName( m_pView->selection()->lastRange() );
+        area = QString( "%1:%2" )
+                  .arg( Cell::columnName( m_pView->selection()->lastRange().left() ) )
+                  .arg( Cell::columnName( m_pView->selection()->lastRange().right() ) );
       else
           return;
       m_focus->setText( area );

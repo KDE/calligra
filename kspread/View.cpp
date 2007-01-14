@@ -127,6 +127,7 @@
 #include "StyleManager.h"
 #include "StyleManipulators.h"
 #include "Undo.h"
+#include "Util.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 

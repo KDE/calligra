@@ -1342,7 +1342,7 @@ bool LocationEditWidget::activateItem()
         {
             QString tmp = (*it).sheet_name;
             tmp += '!';
-            tmp += util_rangeName((*it).rect);
+            tmp += Region((*it).rect).name();
             m_pView->selection()->initialize( Region(m_pView->doc()->map(), tmp, m_pView->activeSheet()) );
             return true;
         }

@@ -46,6 +46,7 @@
 
 // KSpread
 #include "Formula.h"
+#include "Value.h"
 
 namespace KSpread
 {

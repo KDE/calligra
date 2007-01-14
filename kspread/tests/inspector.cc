@@ -36,6 +36,7 @@
 #include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
+#include "Value.h"
 
 namespace KSpread
 {

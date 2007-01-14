@@ -1122,7 +1122,7 @@ bool DatabaseDialog::optionsDoNext()
 
   m_sqlQuery->setText(query);
   m_cell->setText(Cell::name( m_targetRect.left(), m_targetRect.top() ) );
-  m_region->setText(util_rangeName( m_targetRect ) );
+  m_region->setText( Region( m_targetRect ).name() );
 
   setFinishEnabled( m_result, true );
 

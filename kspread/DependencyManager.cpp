@@ -30,6 +30,7 @@
 #include "Map.h"
 #include "Region.h"
 #include "Sheet.h"
+#include "Value.h"
 
 using namespace KSpread;
 
@@ -71,11 +72,6 @@ public:
    * in \p region .
    */
   void generateDepths(const Region& region);
-
-  /**
-   * \return dependencies of \p cell
-   */
-  Region getDependencies (const Region::Point &cell);
 
   /**
    * \return cells depending on \p cell
@@ -265,11 +261,6 @@ void DependencyManager::updateAllDependencies(const Map* map)
     }
 }
 
-// RangeList DependencyManager::getDependencies (const Region::Point &cell)
-// {
-//   return d->getDependencies (cell);
-// }
-
 KSpread::Region DependencyManager::getDependents(const Cell* cell) const
 {
   return d->getDependents(cell);
@@ -357,7 +348,7 @@ void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLoc
         Token token = tokens[i];
         Token::Type tokenType = token.type();
 
-        //parse each cell/range and put it to our RangeList
+        //parse each cell/range and put it to our expression
         if (tokenType == Token::Cell || tokenType == Token::Range)
         {
             const Region region( sheet->map(), token.text(), sheet );
@@ -388,11 +379,6 @@ void DependencyManager::Private::reset ()
 {
   dependencies.clear();
   dependents.clear();
-}
-
-KSpread::Region DependencyManager::Private::getDependencies (const Region::Point &cell)
-{
-  return dependencies.value(cell);
 }
 
 KSpread::Region DependencyManager::Private::getDependents(const Cell* cell) const
@@ -671,7 +657,7 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
         Token token = tokens[i];
         Token::Type tokenType = token.type();
 
-    //parse each cell/range and put it to our RangeList
+        //parse each cell/range and put it to our Region
         if (tokenType == Token::Cell || tokenType == Token::Range)
         {
             Region subRegion(sheet->map(), token.text(), sheet);

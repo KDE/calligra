@@ -36,7 +36,6 @@
 #include "RowColumnFormat.h"
 #include "RowColumnManipulators.h"
 #include "Sheet.h"
-#include "Util.h"
 #include "View.h"
 
 // Local

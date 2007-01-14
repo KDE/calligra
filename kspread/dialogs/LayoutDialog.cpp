@@ -70,7 +70,6 @@
 #include "StyleManipulators.h"
 #include "StyleStorage.h"
 #include "Undo.h"
-#include "Util.h"
 #include "RowColumnManipulators.h"
 #include "Selection.h"
 #include "ValueFormatter.h"

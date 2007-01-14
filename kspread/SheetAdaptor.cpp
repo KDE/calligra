@@ -30,7 +30,6 @@
 
 #include "Sheet.h"
 #include "SheetPrint.h"
-#include "Util.h"
 #include "Doc.h"
 #include "DataManipulators.h"
 

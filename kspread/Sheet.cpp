@@ -1508,11 +1508,11 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
     {
 
         // Complete rows selected ?
-        if ( util_isRowSelected(region) )
+        if ( Region::Range(region).isRow() )
         {
         }
         // Complete columns selected ?
-        else if ( util_isColumnSelected(region) )
+        else if ( Region::Range(region).isColumn() )
         {
         }
     }
@@ -2038,11 +2038,11 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
 
   // find size of rectangle that we want to paste to (either clipboard size or current selection)
   const int pasteWidth = ( pasteArea.width() >= columnsInClpbrd
-                            && util_isRowSelected(pasteArea) == false
+                            && Region::Range(pasteArea).isRow() == false
                             && root.namedItem( "rows" ).toElement().isNull() )
     ? pasteArea.width() : columnsInClpbrd;
   const int pasteHeight = ( pasteArea.height() >= rowsInClpbrd
-                            && util_isColumnSelected(pasteArea) == false
+                            && Region::Range(pasteArea).isColumn() == false
                             && root.namedItem( "columns" ).toElement().isNull())
     ? pasteArea.height() : rowsInClpbrd;
 
@@ -2209,11 +2209,11 @@ void Sheet::loadSelectionUndo(const KoXmlDocument& d, const QRect& loadArea,
 
   // find rect that we paste to
   const int pasteWidth = (loadArea.width() >= columnsInClpbrd &&
-                          util_isRowSelected(loadArea) == false &&
+                          Region::Range(loadArea).isRow() == false &&
                           root.namedItem( "rows" ).toElement().isNull())
       ? loadArea.width() : columnsInClpbrd;
   const int pasteHeight = (loadArea.height() >= rowsInClpbrd &&
-                           util_isColumnSelected(loadArea) == false &&
+                           Region::Range(loadArea).isColumn() == false &&
                            root.namedItem( "columns" ).toElement().isNull())
       ? loadArea.height() : rowsInClpbrd;
 
@@ -2443,7 +2443,7 @@ void Sheet::deleteSelection( Selection* selection, bool undo )
     QRect range = (*it)->rect();
 
     // Entire rows selected ?
-    if ( util_isRowSelected(range) )
+    if ( Region::Range(range).isRow() )
     {
         for( int i = range.top(); i <= range.bottom(); ++i )
         {
@@ -2454,7 +2454,7 @@ void Sheet::deleteSelection( Selection* selection, bool undo )
         emit sig_updateVBorder( this );
     }
     // Entire columns selected ?
-    else if ( util_isColumnSelected(range) )
+    else if ( Region::Range(range).isColumn() )
     {
         for( int i = range.left(); i <= range.right(); ++i )
         {

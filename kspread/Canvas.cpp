@@ -3612,7 +3612,7 @@ void Canvas::updatePosWidget()
         if (sheet->getLcMode())
         {
           buffer = QString::number( (selection()->lastRange().bottom()-selection()->lastRange().top()+1) )+"Lx";
-          if ( util_isRowSelected( selection()->lastRange() ) )
+          if ( Region::Range( selection()->lastRange() ).isRow() )
             buffer+=QString::number((KS_colMax-selection()->lastRange().left()+1))+'C';
             else
               buffer+=QString::number((selection()->lastRange().right()-selection()->lastRange().left()+1))+'C';

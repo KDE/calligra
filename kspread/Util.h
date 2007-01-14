@@ -236,73 +236,7 @@ private:
   bool _bottomFixed;
 };
 
-/**
-range-list and cell-list
-TODO: move to a separate file, improve structure, add iterators and all that
-TODO: use this class instead of other means of range-walking all over KSpread
-TODO: use this as selection
-TODO: anything I forgot ;)
-*/
-struct RangeList {
-  QLinkedList<Point> cells;
-  QLinkedList<Range> ranges;
-};
 
-
-/**
- * RangeIterator
- *
- * Class to simplify the process of iterating through each cell in a
- * range that has already been allocated
- */
-class RangeIterator
-{
-public:
-  /**
-   * Contstruct the iterator with the rectangular cell area and which
-   * sheet the area is on
-   */
-  RangeIterator(QRect _range, Sheet* _sheet);
-  ~RangeIterator();
-
-  /**
-   * @return the first allocated cell in the area
-   */
-  Cell* first();
-
-  /**
-   * @return the next allocated cell in the area after the previous one
-   * retrieved, or 0 if it was the last one.
-   */
-  Cell* next();
-private:
-
-  QRect range;
-  Sheet* sheet;
-  QPoint current;
-};
-
-
-
-// TODO Stefan: move to Region class as static members
-//BEGIN
-KSPREAD_EXPORT QString util_rangeName( const QRect &_area );
-KSPREAD_EXPORT QString util_rangeName( Sheet *_sheet, const QRect &_area );
-//END
-
-// TODO Stefan: used nowhere
-//BEGIN
-QString util_rangeColumnName( const QRect &_area);
-QString util_rangeRowName( const QRect &_area);
-//END
-
-// TODO Stefan: move to Region class as static members
-//BEGIN
-bool util_isAllSelected(const QRect &selection);
-bool util_isColumnSelected(const QRect &selection);
-bool util_isRowSelected(const QRect &selection);
-bool util_isRowOrColumnSelected( const QRect &selection );
-//END
 
 namespace Util
 {

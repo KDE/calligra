@@ -22,7 +22,6 @@
 #include "qtest_kde.h"
 
 #include <Formula.h>
-#include <Util.h>
 #include <Value.h>
 
 #include "TestFormula.h"

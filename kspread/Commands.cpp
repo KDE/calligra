@@ -26,7 +26,6 @@
 #include "Map.h"
 #include "Sheet.h"
 #include "Undo.h"
-#include "Util.h"
 
 #include "SheetPrint.h"
 
@@ -69,7 +68,7 @@ MergeCellCommand::MergeCellCommand( Cell* c, int cs, int rs )
   if( cell )
   {
     QRect area( cell->column(), cell->row(), cs+1, rs+1 );
-    rangeName = util_rangeName( area );
+    rangeName = Region( area ).name();
   }
 }
 

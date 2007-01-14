@@ -132,8 +132,7 @@ void reference::displayAreaValues(QString const & areaName)
         kDebug(36001) << "(*it).table_name '" << (*it).sheet_name
                        << "' not found!*********" << endl;
       else
-        tmpName = util_rangeName(m_pView->doc()->map()->findSheet( (*it).sheet_name),
-                                 (*it).rect);
+        tmpName = Region( (*it).rect, m_pView->doc()->map()->findSheet( (*it).sheet_name) ).name();
       break;
     }
   }
@@ -328,7 +327,7 @@ EditAreaName::EditAreaName( View * parent,
         kDebug(36001) << "(*it).table_name '" << (*it).sheet_name
                        << "' not found!*********" << endl;
       else
-        tmpName = util_rangeName( (*it).rect );
+        tmpName = Region( (*it).rect ).name();
       break;
     }
   }

@@ -56,7 +56,6 @@
 #include "Map.h"
 #include "Sheet.h"
 #include "View.h"
-#include "Util.h"
 #include "SortManipulator.h"
 #include "Selection.h"
 
@@ -342,7 +341,7 @@ void SortDialog::init()
   bool selectionMayHaveHeader = true;
 
   // Entire columns selected ?
-  if ( util_isColumnSelected(r) )
+  if ( Region::Range(r).isColumn() )
   {
     m_sortColumn->setEnabled(false);
     m_sortRow->setChecked(true);
@@ -368,7 +367,7 @@ void SortDialog::init()
      // m_listColumn += i18n("Column %1",Cell::columnName(i));
   }
   // Entire rows selected ?
-  else if ( util_isRowSelected(r) )
+  else if ( Region::Range( r ).isRow() )
   {
     m_sortRow->setEnabled(false);
     m_sortColumn->setChecked(true);

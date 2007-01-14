@@ -38,7 +38,7 @@
 
 #include <koffice_export.h>
 
-#include "Util.h"
+#include "Global.h"
 
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20

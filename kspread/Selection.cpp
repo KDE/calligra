@@ -29,7 +29,6 @@
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "View.h"
-#include "Util.h"
 
 #include "Selection.h"
 

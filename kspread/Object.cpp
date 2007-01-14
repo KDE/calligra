@@ -19,7 +19,9 @@
 #include "Object.h"
 #include "Canvas.h"
 #include "Doc.h"
+#include "Region.h"
 #include "Sheet.h"
+#include "Util.h"
 #include "View.h"
 
 #include <assert.h>
@@ -626,7 +628,7 @@ bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) con
 
     if(m_pBinding) { // see http://bugs.kde.org/show_bug.cgi?id=120395
         QRect dataArea = m_pBinding->dataArea();
-        QString rangeName = util_rangeName( dataArea);
+        QString rangeName = Region( dataArea ).name();
         rangeName.insert( rangeName.indexOf(':') +1, sheet()->sheetName() + '.' );
         rangeName.prepend( sheet()->sheetName() + '.' );
         sc.xmlWriter.addAttribute( "draw:notify-on-update-of-ranges", rangeName );

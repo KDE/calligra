@@ -25,7 +25,7 @@
 #include "DependencyManager.h"
 #include "Sheet.h"
 #include "Region.h"
-#include "Util.h"
+#include "Value.h"
 #include "ValueFormatter.h"
 
 #include "RecalcManager.h"

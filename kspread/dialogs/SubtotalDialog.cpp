@@ -35,7 +35,6 @@
 #include "Sheet.h"
 #include "View.h"
 #include "Doc.h"
-#include "Util.h"
 
 #include "SubtotalDialog.h"
 

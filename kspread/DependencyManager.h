@@ -23,7 +23,6 @@
 #include <QLinkedList>
 
 #include "Region.h"
-#include "Util.h"
 
 namespace KSpread
 {
@@ -54,9 +53,6 @@ public:
 
   /** Updates the whole map. */
   void updateAllDependencies(const Map* map);
-
-  /** get dependencies of a cell */
-  Region getDependencies (const Point &cell);
 
   /**
    * \return cells depending on \p cell

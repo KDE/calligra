@@ -30,7 +30,6 @@
 #include "SheetPrint.h"
 #include "Style.h"
 #include "StyleManager.h"
-#include "Util.h"
 
 #include "Undo.h"
 //Added by qt3to4:
@@ -820,7 +819,7 @@ void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
   int bottom = range.bottom();
   int right  = range.right();
 
-  if ( util_isColumnSelected( range ) )
+  if ( Region::Range( range ).isColumn() )
   {
     /* Don't need to go through the loop twice...
       for (int i = range.left(); i <= right; ++i)
@@ -877,7 +876,7 @@ void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
       }
     */
   }
-  else if (util_isRowSelected( range ) )
+  else if (Region::Range( range ).isRow() )
   {
     for ( int row = range.top(); row <= bottom; ++row )
     {
@@ -1000,7 +999,7 @@ void UndoCellFormat::undo()
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
     QRect range = (*it)->rect();
-  if( util_isColumnSelected( range ) )
+  if( Region::Range( range ).isColumn() )
   {
     QLinkedList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstColFormats.begin(); it2 != m_lstColFormats.end(); ++it2 )
@@ -1009,7 +1008,7 @@ void UndoCellFormat::undo()
       col->copy( *(*it2).l );
     }
   }
-  else if( util_isRowSelected( range ) )
+  else if( Region::Range( range ).isRow() )
   {
     QLinkedList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRowFormats.begin(); it2 != m_lstRowFormats.end(); ++it2 )
@@ -1047,7 +1046,7 @@ void UndoCellFormat::redo()
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
     QRect range = (*it)->rect();
-  if ( util_isColumnSelected( range ) )
+  if ( Region::Range( range ).isColumn() )
   {
     QLinkedList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstRedoColFormats.begin(); it2 != m_lstRedoColFormats.end(); ++it2 )
@@ -1056,7 +1055,7 @@ void UndoCellFormat::redo()
       col->copy( *(*it2).l );
     }
   }
-  else if( util_isRowSelected( range ) )
+  else if( Region::Range( range ).isRow() )
   {
     QLinkedList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRedoRowFormats.begin(); it2 != m_lstRedoRowFormats.end(); ++it2 )
@@ -1142,7 +1141,7 @@ void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutCol
   }
   list.clear();
 
-  if ( util_isColumnSelected( m_rctRect ) )
+  if ( Region::Range( m_rctRect ).isColumn() )
   {
     Cell * c;
     for (int col = m_rctRect.left(); col <= m_rctRect.right(); ++col)
@@ -1171,7 +1170,7 @@ void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutCol
       }
     }
   }
-  else if ( util_isRowSelected( m_rctRect ) )
+  else if ( Region::Range( m_rctRect ).isRow() )
   {
     Cell * c;
     for ( int row = m_rctRect.top(); row <= m_rctRect.bottom(); ++row)
@@ -1277,7 +1276,7 @@ void UndoSort::undo()
   copyAll( m_lstRedoFormats, m_lstRedoColFormats,
            m_lstRedoRowFormats, sheet );
 
-  if ( util_isColumnSelected( m_rctRect ) )
+  if ( Region::Range( m_rctRect ).isColumn() )
   {
     QLinkedList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstColFormats.begin(); it2 != m_lstColFormats.end(); ++it2 )
@@ -1286,7 +1285,7 @@ void UndoSort::undo()
       col->copy( *(*it2).l );
     }
   }
-  else if( util_isRowSelected( m_rctRect ) )
+  else if( Region::Range( m_rctRect ).isRow() )
   {
     QLinkedList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRowFormats.begin(); it2 != m_lstRowFormats.end(); ++it2 )
@@ -1328,7 +1327,7 @@ void UndoSort::redo()
     doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
-    if( util_isColumnSelected( m_rctRect ) )
+    if( Region::Range( m_rctRect ).isColumn() )
     {
       QLinkedList<layoutColumn>::Iterator it2;
       for ( it2 = m_lstRedoColFormats.begin(); it2 != m_lstRedoColFormats.end(); ++it2 )
@@ -1337,7 +1336,7 @@ void UndoSort::redo()
         col->copy( *(*it2).l );
       }
     }
-    else if( util_isRowSelected( m_rctRect ) )
+    else if( Region::Range( m_rctRect ).isRow() )
     {
       QLinkedList<layoutRow>::Iterator it2;
       for ( it2 = m_lstRedoRowFormats.begin(); it2 != m_lstRedoRowFormats.end(); ++it2 )
@@ -1634,7 +1633,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
     {
       QRect m_rctRect = (*it)->rect();
 
-    if( util_isColumnSelected( m_rctRect ) ) // entire column(s)
+    if( Region::Range( m_rctRect ).isColumn() ) // entire column(s)
     {
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
@@ -1648,7 +1647,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
 	     }
         }
     }
-    else if( util_isRowSelected( m_rctRect ) ) // entire row(s)
+    else if( Region::Range( m_rctRect ).isRow() ) // entire row(s)
     {
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
@@ -1710,7 +1709,7 @@ void UndoResizeColRow::undo()
     {
       QRect m_rctRect = (*it)->rect();
 
-    if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
+    if( Region::Range( m_rctRect ).isColumn() ) // complete column(s)
     {
     QLinkedList<columnSize>::Iterator it2;
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
@@ -1719,7 +1718,7 @@ void UndoResizeColRow::undo()
            cl->setDblWidth((*it2).columnWidth);
         }
     }
-    else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
+    else if( Region::Range( m_rctRect ).isRow() ) // complete row(s)
     {
     QLinkedList<rowSize>::Iterator it2;
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
@@ -1761,7 +1760,7 @@ void UndoResizeColRow::redo()
     {
       QRect m_rctRect = (*it)->rect();
 
-    if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
+    if( Region::Range( m_rctRect ).isColumn() ) // complete column(s)
     {
     QLinkedList<columnSize>::Iterator it2;
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
@@ -1770,7 +1769,7 @@ void UndoResizeColRow::redo()
            cl->setDblWidth((*it2).columnWidth);
         }
     }
-    else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
+    else if( Region::Range( m_rctRect ).isRow() ) // complete row(s)
     {
     QLinkedList<rowSize>::Iterator it2;
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
@@ -1828,7 +1827,7 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
     int bottom = m_rctRect.bottom();
     int right  = m_rctRect.right();
 
-    if( util_isColumnSelected( m_rctRect ) )
+    if( Region::Range( m_rctRect ).isColumn() )
     {
       Cell * c;
       for ( int col = m_rctRect.left(); col <= right; ++col )
@@ -1848,7 +1847,7 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
         }
       }
     }
-    else if ( util_isRowSelected( m_rctRect ) )
+    else if ( Region::Range( m_rctRect ).isRow() )
     {
       Cell * c;
       for ( int row = m_rctRect.top(); row <= bottom; ++row )
@@ -1916,8 +1915,8 @@ void UndoChangeAreaTextCell::undo()
     {
       QRect m_rctRect = (*it)->rect();
 
-    if ( !util_isRowSelected( m_rctRect )
-         && !util_isColumnSelected( m_rctRect ) )
+    if ( !Region::Range( m_rctRect ).isRow()
+         && !Region::Range( m_rctRect ).isColumn() )
     {
       for ( int x = m_rctRect.left(); x <= m_rctRect.right(); ++x )
         for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
@@ -1982,8 +1981,8 @@ void UndoChangeAreaTextCell::redo()
     {
       QRect m_rctRect = (*it)->rect();
 
-    if ( !util_isRowSelected( m_rctRect )
-         && !util_isColumnSelected( m_rctRect ) )
+    if ( !Region::Range( m_rctRect ).isRow()
+         && !Region::Range( m_rctRect ).isColumn() )
     {
       for ( int x = m_rctRect.left(); x <= m_rctRect.right(); ++x )
         for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
@@ -2764,7 +2763,7 @@ void UndoStyleCell::createListCell( QLinkedList<styleCell> &listCell, Sheet* she
 {
   int bottom = m_selection.bottom();
   int right  = m_selection.right();
-  if ( util_isColumnSelected( m_selection ) )
+  if ( Region::Range( m_selection ).isColumn() )
   {
     Cell * c;
     for ( int col = m_selection.left(); col <= right; ++ col )
@@ -2783,7 +2782,7 @@ void UndoStyleCell::createListCell( QLinkedList<styleCell> &listCell, Sheet* she
       }
     }
   }
-  else if ( util_isRowSelected( m_selection ) )
+  else if ( Region::Range( m_selection ).isRow() )
   {
     Cell * c;
     for ( int row = m_selection.top(); row <= bottom; ++row )

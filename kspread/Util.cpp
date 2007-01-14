@@ -29,6 +29,7 @@
 #include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
+#include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "Util.h"
@@ -54,33 +55,6 @@ int KSpread::Util::decodeColumnLabelText( const QString &_col )
             kDebug(36001) << "Util::decodeColumnLabelText: Wrong characters in label text for col:'" << _col << '\'' << endl;
     }
     return col;
-}
-
-//used in dialogs/kspread_dlg_paperlayout.cc
-QString KSpread::util_rangeColumnName( const QRect &_area)
-{
-    return QString("%1:%2")
-        .arg( Cell::columnName( _area.left()))
-        .arg( Cell::columnName(_area.right()));
-}
-
-//used in dialogs/kspread_dlg_paperlayout.cc
-QString KSpread::util_rangeRowName( const QRect &_area)
-{
-    return QString("%1:%2")
-        .arg( _area.top())
-        .arg(_area.bottom());
-}
-
-QString KSpread::util_rangeName(const QRect &_area)
-{
-    return Cell::name( _area.left(), _area.top() ) + ':' +
-  Cell::name( _area.right(), _area.bottom() );
-}
-
-QString KSpread::util_rangeName(Sheet * _sheet, const QRect &_area)
-{
-    return _sheet->sheetName() + '!' + util_rangeName(_area);
 }
 
 QDomElement KSpread::NativeFormat::createElement( const QString & tagName, const QFont & font, QDomDocument & doc )
@@ -580,11 +554,11 @@ QString Range::toString() const
 
   if (_sheet)
   {
-    result=util_rangeName(_sheet,_range);
+    result=Region(_range,_sheet).name();
   }
   else
   {
-    result=util_rangeName(_range);
+    result=Region(_range).name();
   }
 
   //Insert $ characters to show fixed parts of range
@@ -719,29 +693,6 @@ QString Range::namedArea() const
     return _namedArea;
 }
 
-
-bool KSpread::util_isAllSelected(const QRect &selection)
-{
-  return ( selection.top() == 1 && selection.bottom() == KS_rowMax
-     && selection.left() == 1 && selection.right() == KS_colMax);
-}
-
-bool KSpread::util_isColumnSelected(const QRect &selection)
-{
-  return ( (selection.top() == 1) && (selection.bottom() == KS_rowMax) );
-}
-
-bool KSpread::util_isRowSelected(const QRect &selection)
-{
-  return ( (selection.left() == 1) && (selection.right() == KS_colMax) );
-}
-
-bool KSpread::util_isRowOrColumnSelected(const QRect &selection)
-{
-    return ( (selection.left() == 1) && (selection.right() == KS_colMax)
-             || (selection.top() == 1) && (selection.bottom() == KS_rowMax) );
-}
-
 //used in View::slotRename
 bool KSpread::Util::validateSheetName(const QString &name)
 {
@@ -761,55 +712,6 @@ bool KSpread::Util::validateSheetName(const QString &name)
   return true;
 }
 
-
-RangeIterator::RangeIterator(QRect _range, Sheet* _sheet)
-{
-  range = _range;
-  sheet = _sheet;
-  current = QPoint(0,0);
-}
-
-RangeIterator::~RangeIterator()
-{
-}
-
-Cell* RangeIterator::first()
-{
-  current.setY(range.top());
-
-  /* OK, because even if this equals zero, the 'getNextCellRight' won't
-     try to access it*/
-  current.setX(range.left() - 1);
-  return next();
-}
-
-Cell* RangeIterator::next()
-{
-  if (current.x() == 0 && current.y() == 0)
-  {
-    return first();
-  }
-
-  Cell* cell = 0;
-  bool done = false;
-
-  while (cell == 0 && !done)
-  {
-    cell = sheet->getNextCellRight(current.x(), current.y());
-    if (cell != 0 && cell->column() > range.right())
-    {
-      cell = 0;
-    }
-
-    if (cell == 0)
-    {
-      current.setX(range.left() - 1);
-      current.setY(current.y() + 1);
-      done = (current.y() > range.bottom());
-    }
-  }
-  return cell;
-}
 
 //not used anywhere
 int KSpread::Util::penCompare( QPen const & pen1, QPen const & pen2 )

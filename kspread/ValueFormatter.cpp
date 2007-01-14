@@ -23,7 +23,6 @@
 #include "Cell.h"
 #include "Doc.h"
 #include "Localization.h"
-#include "Util.h"
 #include "ValueConverter.h"
 
 #include <kcalendarsystem.h>
