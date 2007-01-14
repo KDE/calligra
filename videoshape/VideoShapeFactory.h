@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef VIDEO_FLAKE_FACTORY
-#define VIDEO_FLAKE_FACTORY
+#ifndef VIDEO_SHAPE_FACTORY
+#define VIDEO_SHAPE_FACTORY
 
 #include <QStringList>
 

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef VIDEO_FLAKE
-#define VIDEO_FLAKE
+#ifndef VIDEO_SHAPE
+#define VIDEO_SHAPE
 
 
 #include <KoShape.h>

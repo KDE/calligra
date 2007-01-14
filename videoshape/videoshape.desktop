@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Video Flake
+Name=Video Shape
 ServiceTypes=KOffice/Shape
 Type=Service
-X-KDE-Library=videoflake
+X-KDE-Library=videoshape
 X-Flake-Version=1
