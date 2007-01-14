@@ -30,7 +30,7 @@
 
 #include "VideoShapeFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( videoflake, KGenericFactory<VideoShapePlugin>( "VideoShape" ) )
+K_EXPORT_COMPONENT_FACTORY( videoshape, KGenericFactory<VideoShapePlugin>( "VideoShape" ) )
 
 VideoShapePlugin::VideoShapePlugin( QObject * parent,  const QStringList & list )
 {
