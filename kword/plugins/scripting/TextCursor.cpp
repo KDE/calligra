@@ -21,7 +21,6 @@
 #include "TextFrame.h"
 #include "TextList.h"
 #include "TextTable.h"
-#include "TextFormat.h"
 
 #include <QObject>
 #include <QTextCursor>
@@ -31,59 +30,67 @@
 using namespace Scripting;
 
 TextCursor::TextCursor(QObject* parent, const QTextCursor& cursor)
-    : QObject( parent ), m_cursor( cursor ) {}
+    : QObject( parent ), m_cursor( cursor )
+{
+}
 
-TextCursor::~TextCursor() {}
+TextCursor::~TextCursor()
+{
+}
 
-int TextCursor::position() const {
+int TextCursor::position() const
+{
     return m_cursor.position();
 }
 
-void TextCursor::setPosition(int pos) {
+void TextCursor::setPosition(int pos)
+{
     m_cursor.setPosition(pos);
 }
 
-void TextCursor::insertText(const QString& text) {
+void TextCursor::insertText(const QString& text)
+{
     m_cursor.insertText(text);
 }
 
-void TextCursor::insertHtml(const QString& html) {
+void TextCursor::insertHtml(const QString& html)
+{
     m_cursor.insertHtml(html);
 }
 
-void TextCursor::insertBlock(QObject* textformat) {
-    TextFormat* format = dynamic_cast<TextFormat*>(textformat);
-    if( format )
-        m_cursor.insertBlock(format->format()->toBlockFormat());
-    else
-        m_cursor.insertBlock();
+void TextCursor::insertBlock()
+{
+    m_cursor.insertBlock();
 }
 
-QObject* TextCursor::insertFrame(QObject* textformat)
+void TextCursor::insertDefaultBlock()
 {
-    TextFormat* format = dynamic_cast<TextFormat*>(textformat);
+    QTextBlockFormat bf;
+    QTextCharFormat cf;
+    m_cursor.insertBlock(bf, cf);
+}
+
+QObject* TextCursor::insertFrame()
+{
     QTextFrameFormat f;
-    if( format )
-        f = format->format()->toFrameFormat();
     QTextFrame* frame = m_cursor.insertFrame(f);
     return frame ? new TextFrame(this, frame) : 0;
 }
 
-QObject* TextCursor::insertList(QObject* textformat) {
-    TextFormat* format = dynamic_cast<TextFormat*>(textformat);
+QObject* TextCursor::insertList()
+{
     QTextListFormat f;
-    if(format)
-        f = format->format()->toListFormat();
-    else {
-        //testcase
-        f.setStyle(QTextListFormat::ListDisc);
-        f.setIndent(f.indent()+1);
-    }
+
+    //testcase
+    //f.setStyle(QTextListFormat::ListDisc);
+    //f.setIndent(f.indent()+1);
+
     QTextList* l = m_cursor.insertList(f);
     return l ? new TextList(this, l) : 0;
 }
 
-QObject* TextCursor::insertTable(int rows, int columns) {
+QObject* TextCursor::insertTable(int rows, int columns)
+{
     QTextTableFormat format;
     //format.setColumns(columns);
     //format.setHeaderRowCount(1);

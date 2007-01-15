@@ -16,7 +16,7 @@ set(krossmodulekword_PART_SRCS
 qt4_wrap_cpp(krossmodulekword_PART_SRCS
 	Page.h PageLayout.h
 	Style.h
-	TextDocument.h TextFrame.h TextList.h TextTable.h TextFormat.h
+	TextDocument.h TextFrame.h TextList.h TextTable.h
 	Frame.h FrameSet.h
 )
 

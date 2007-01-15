@@ -4,7 +4,8 @@ install(FILES
     insert_framelist.py
     insert_shape.py
     sample_text.py
-    sample_lists.py
+    sample_lists_html.py
+    sample_lists_cursor.py
     sample_tables.py
     sample_shapes.py
     sample_allshapes.py

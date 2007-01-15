@@ -38,11 +38,17 @@
             interpreter="python"
             file="extensions/sample_text.py" />
         <script
-            name="pysamplelist"
-            text="Lists"
+            name="pysamplelisthtml"
+            text="Lists with HTML"
             comment="This python script demonstrates how to deal with lists"
             interpreter="python"
-            file="extensions/sample_lists.py" />
+            file="extensions/sample_lists_html.py" />
+        <script
+            name="pysamplelistcursor"
+            text="Lists with Cursor"
+            comment="This python script demonstrates how to deal with lists"
+            interpreter="python"
+            file="extensions/sample_lists_cursor.py" />
         <script
             name="pysampletables"
             text="Tables"

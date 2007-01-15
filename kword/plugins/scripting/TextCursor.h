@@ -54,11 +54,12 @@ namespace Scripting {
             /** Insert the \p html html-text at the current cursor position. */
             void insertHtml(const QString& html);
             /** Insert a block element at the current cursor position. */
-            void insertBlock(QObject* textformat = 0);
+            void insertBlock();
+            void insertDefaultBlock();
             /** Insert and return a new \a TextFrame object at the current cursor position. */
-            QObject* insertFrame(QObject* textformat = 0);
+            QObject* insertFrame();
             /** Insert and return a new \a TextList object at the current cursor position. */
-            QObject* insertList(QObject* textformat = 0);
+            QObject* insertList();
             /** Insert and return a new \a TextTable object at the current cursor position. */
             QObject* insertTable(int rows, int columns);
 

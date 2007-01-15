@@ -13,16 +13,12 @@ doc = fs.textDocument()
 if doc == None:
     raise "No textdocument within the first frameset"
 
-#####################################################################
-# Some lists created with HTML
-
 # Set the default cascading stylesheet.
 doc.setDefaultStyleSheet(
     (
         # Style for the headers.
         "h1 { color:#0000ff; }"
-        "h2 { color:#0000aa; }"
-        "h3 { color:#000066; }"
+        "h2 { color:#000099; }"
 
         # Style for the unsorted list. This does not seem to work :-(
         #".ulist ul { list-style-type:disc; }"
@@ -31,7 +27,10 @@ doc.setDefaultStyleSheet(
         #".ulist ul { list-style-type:square; }"
 
         # Style for the items in the unsorted list.
-        ".ulist li { margin-left:1em; }"
+        ".ulist1 li { margin-left:1em; }"
+        ".ulist2 li { margin-left:1em; color:#aa0000; }"
+        ".ulist3 li { margin-left:1em; color:#00aa00; }"
+        ".ulist4 li { margin-left:1em; color:#006666; }"
 
         # Style for the sorted list. This does not seem to work :-(
         #".olist ul { list-style-type:decimal; }"
@@ -46,7 +45,10 @@ doc.setDefaultStyleSheet(
         #".olist ul { list-style-type:georgian; }"
 
         # Style for the items in the sorted list.
-        ".olist li { margin-left:1em; }"
+        ".olist1 li { margin-left:1em; }"
+        ".olist2 li { margin-left:1em; color:#aa0000; }"
+        ".olist3 li { margin-left:1em; color:#00aa00; }"
+        ".olist4 li { margin-left:1em; color:#006666; }"
     )
 )
 
@@ -54,7 +56,7 @@ doc.setDefaultStyleSheet(
 # got replaced with the new HTML content.
 doc.setHtml(
     (
-        "<h1>Python Sample: Lists</h1>"
+        "<h1>Python Sample: Lists with HTML</h1>"
         "<p align=\"justify\">This script demonstrates how to work in KWord with lists using the Python "
         "scripting language. The whole content displayed here was created direct within "
         "the Python script. You are also able to use Ruby or JavaScript. All supported "
@@ -66,48 +68,50 @@ doc.setHtml(
         "more abstract level.</p>"
         "<p align=\"center\"><b>KOffice 2.0 to maximize your productivity</b></p>"
         "<p align=\"right\"><a href=\"http://www.koffice.org\">http://www.koffice.org</a></p>"
-        "<h2>Some lists created with HTML</h2>"
-        "<h3>Unsorted list (UL)</h3>"
-        "<ul class=\"ulist\">"
+        "<h2>Unsorted list (UL)</h2>"
+        "<ul class=\"ulist1\">"
             "<li>First main item"
-                "<ul>"
-                    "<li>First child item of first main item</li>"
-                    "<li>Second child item of first main item</li>"
+                "<ul class=\"ulist2\">"
+                    "<li>First child item of the first main item</li>"
+                    "<li>Second child item of the first main item</li>"
                 "</ul>"
             "</li>"
             "<li>Second main item"
-                "<ul>"
-                    "<li>First child item of second main item"
-                        "<ul>"
+                "<ul class=\"ulist3\">"
+                    "<li>First child item of the second main item"
+                        "<ul class=\"ulist4\">"
                             "<li>First sub-child item of the first child item which is child of the second main item. Propably somewhat confusing but it is used as example only anyway to fill this item with some more text.</li>"
-                            "<li>Second sub-child item</li>"
+                            "<li align=\"right\">Second sub-child item aligned right</li>"
+                            "<li align=\"justify\">Theird sub-child item which has the align set to \"justify\" and should just like the intro-sentence be, well, aligned justified. Sounds at least somewhat logical in some situations with some conditions sometimes.</li>"
                         "</ul>"
                     "</li>"
-                    "<li>Second child item of second main item</li>"
+                    "<li>Second child item of the second main item</li>"
+                    "<li>Theird child item of the second main item</li>"
                 "</ul>"
             "</li>"
         "</ul>"
-        "<h3>Sorted list (OL)</h3>"
-        "<ol class=\"olist\">"
+        "<h2>Sorted list (OL)</h2>"
+        "<ol class=\"olist1\">"
             "<li>First main item"
-                "<ol>"
-                    "<li>First child item of first main item</li>"
-                    "<li>Second child item of first main item</li>"
+                "<ol class=\"olist2\">"
+                    "<li>First child item of the first main item</li>"
+                    "<li>Second child item of the first main item</li>"
                 "</ol>"
             "</li>"
             "<li>Second main item"
-                "<ol>"
-                    "<li>First child item of second main item"
-                        "<ol>"
+                "<ol class=\"olist3\">"
+                    "<li>First child item of the second main item"
+                        "<ol class=\"olist4\">"
                             "<li>First sub-child item of the first child item which is child of the second main item. Propably somewhat confusing but it is used as example only anyway to fill this item with some more text.</li>"
                             "<li>Second sub-child item</li>"
                         "</ol>"
                     "</li>"
-                    "<li>Second child item of second main item</li>"
+                    "<li>Second child item of the second main item</li>"
+                    "<li>Theird child item of the second main item</li>"
                 "</ol>"
             "</li>"
         "</ol>"
-        "<h3>List of definitions (DT)</h3>"
+        "<h2>List of definitions (DT)</h2>"
         "<dl>"
             "<dt>KDE</dt>"
                 "<dd>The Desktop Environment</dd>"
@@ -115,52 +119,10 @@ doc.setHtml(
                 "<dd>The Integrated Office Suite</dd>"
             "<dt>KWord</dt>"
                 "<dd>The word-processing and desktop publishing application</dd>"
+            "<dt>Kross</dt>"
+                "<dd>The Scripting Framework</dd>"
+            "<dt>Kaugummi</dt>"
+                "<dd>The german word for chewing gum and useful if you like to stop smoking :-)</dd>"
         "</dl>"
-        "<p></p>" # seems to be needed else the lastCursorPosition() is within the dl-block :-(
     )
 )
-
-#####################################################################
-# Some lists created with a Cursor
-
-# Get a cursor located at the end of the main textdocument.
-cursor = doc.rootFrame().lastCursorPosition()
-#cursor = doc.firstCursor()
-#cursor = doc.lastCursor()
-
-# Insert a heading.
-cursor.insertHtml("<h2>Some lists created with a Cursor</h2>")
-
-def addList(text,liststyle):
-    global KWord, cursor
-    # The block seems to be needed cause else additional insertHtml-calls don't respect the line-break whyever.
-    cursor.insertBlock()
-    # We like to create a new list
-    cursor.insertHtml("<h3>%s</h3>" % text)
-    # Create a new style and set the liststyle
-    s = KWord.addParagraphStyle("My%sStyle" % text)
-    s.setListStyle( getattr(s,liststyle) ) # e.g. s.setListStyle( s.SquareItem )
-    # Create the list and apply the style
-    l = cursor.insertList()
-    l.setStyle(s)
-    # Fill the list with some items
-    for i in range(1, 6):
-        if i != 1:
-            cursor.insertBlock()
-        cursor.insertHtml( "item nr=%i count=%i" % (i,l.countItems()) )
-
-addList("Square","SquareItem")
-addList("Disc","DiscItem")
-addList("Circle","CircleItem")
-addList("Decimal","DecimalItem")
-addList("AlphaLower","AlphaLowerItem")
-addList("AlphaUpper","AlphaUpperItem")
-addList("RomanLower","RomanLowerItem")
-addList("RomanUpper","RomanUpperItem")
-
-#TODO
-#prefix+suffix
-#restart numbering
-#startvalue
-#aligned
-#counted

@@ -107,7 +107,6 @@ namespace Scripting {
 
             /** Return the standard page layout. */
             QObject* standardPageLayout();
-
             /** Return the default page layout. */
             QObject* defaultPageLayout();
             /** Set the default page layout. */
