@@ -53,8 +53,14 @@ public:
      * Return current url
      */
     KUrl currentUrl() const;
+    /*
+     * Change video url
+     */
     void setCurrentUrl(const KUrl&url);
 
+    /*
+     * Change video position 
+     */
     void changePosition(int pos);
 
     virtual void resize( const QSizeF &newSize );

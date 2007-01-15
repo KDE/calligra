@@ -73,8 +73,6 @@ void VideoTool::deactivate()
 void VideoTool::paint( QPainter& painter, KoViewConverter& viewConverter )
 {
     Q_UNUSED( viewConverter );
-    QBrush brush( Qt::red );
-    painter.fillRect(10,10,10,10, brush);
 }
 
 void VideoTool::mousePressEvent( KoPointerEvent* )
@@ -186,5 +184,5 @@ void VideoTool::slotPause()
   kDebug()<<" VideoTool::slotPause \n";
   if(m_videoshape)
     m_videoshape->pause();
- 
 }
+

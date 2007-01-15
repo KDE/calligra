@@ -39,6 +39,9 @@ public:
   void deactivate();
 
 protected:
+  /*
+   * Create default option widget
+   */
     virtual QWidget * createOptionWidget();
 
 protected slots:
