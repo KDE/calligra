@@ -79,9 +79,7 @@ void Project::calculate( ScheduleManager &sm )
 {
     emit sigProgress( 0 );
     //kDebug()<<k_funcinfo<<endl;
-    emit scheduleToBeAdded( 0 );
     sm.createSchedules();
-    emit scheduleAdded( 0 );
     
     calculate( sm.expected() );
     emit scheduleChanged( sm.expected() );
@@ -633,20 +631,20 @@ QList<ResourceGroup*> &Project::resourceGroups()
 
 void Project::addResource( ResourceGroup *group, Resource *resource, int index )
 {
-    int i = index == -1 ? group->resources().count() : index;
-    sendResourceToBeAdded( group, resource );
+    int i = index == -1 ? group->numResources() : index;
+    emit resourceToBeAdded( group, i );
     group->addResource( i, resource, 0 );
     setResourceId( resource );
-    sendResourceAdded( group, resource );
+    emit resourceAdded( resource );
 }
 
 Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
 {
-    sendResourceToBeRemoved( group, resource );
+    emit resourceToBeRemoved( resource );
     removeResourceId( resource->id() );
     Resource *r = group->takeResource( resource );
     Q_ASSERT( resource == r );
-    sendResourceRemoved( group, r );
+    emit resourceRemoved( resource );
     return r;
 }
 
@@ -681,23 +679,11 @@ bool Project::addTask( Node* task, Node* position )
     return addSubTask( task, index + 1, parentNode );
 }
 
-bool Project::addSubTask( Node* task, Node* position )
+bool Project::addSubTask( Node* task, Node* parent )
 {
     // we want to add a subtask to the node "position". It will become
     // position's last child.
-    if ( 0 == position ) {
-        kError() << k_funcinfo << "No parent, can not add subtask: " << task->name() << endl;
-        return false;
-    }
-    if ( !registerNodeId( task ) ) {
-        kError() << k_funcinfo << "Failed to register node id, can not add subtask: " << task->name() << endl;
-        return false;
-    }
-    emit nodeToBeAdded( position );
-    position->addChildNode( task );
-    emit nodeAdded( task );
-    //kDebug()<<k_funcinfo<<endl;
-    return true;
+    return addSubTask( task, -1, parent );
 }
 
 bool Project::addSubTask( Node* task, int index, Node* parent )
@@ -711,8 +697,9 @@ bool Project::addSubTask( Node* task, int index, Node* parent )
         kError() << k_funcinfo << "Failed to register node id, can not add subtask: " << task->name() << endl;
         return false;
     }
-    emit nodeToBeAdded( parent );
-    parent->insertChildNode( index, task );
+    int i = index == -1 ? parent->numChildren() : index;
+    emit nodeToBeAdded( parent, i );
+    parent->insertChildNode( i, task );
     emit nodeAdded( task );
     return true;
 }
@@ -725,11 +712,16 @@ void Project::delTask( Node *node )
         return ;
     }
     removeId( node->id() );
-    emit nodeToBeRemoved( parent );
+    emit nodeToBeRemoved( node );
     parent->takeChildNode( node );
     emit nodeRemoved( node );
 }
 
+void Project::moveTask( Node* node, Node *newParent, int newPos )
+{
+    delTask( node );
+    addSubTask( node, newPos, newParent );
+}
 
 bool Project::canIndentTask( Node* node )
 {
@@ -767,10 +759,8 @@ bool Project::indentTask( Node* node, int index )
 {
     if ( canIndentTask( node ) ) {
         Node * newParent = node->siblingBefore();
-        emit nodeToBeMoved( node );
-        node->getParent() ->takeChildNode( node );
-        newParent->insertChildNode( index, node );
-        emit nodeMoved( node );
+        int i = index == -1 ? newParent->numChildren() : index;
+        moveTask( node, newParent, i );
         //kDebug()<<k_funcinfo<<endl;
         return true;
     }
@@ -811,11 +801,12 @@ bool Project::unindentTask( Node* node )
 {
     if ( canUnindentTask( node ) ) {
         Node * parentNode = node->getParent();
-        emit nodeToBeMoved( node );
         Node *grandParentNode = parentNode->getParent();
-        parentNode->takeChildNode( node );
-        grandParentNode->addChildNode( node, parentNode );
-        emit nodeMoved( node );
+        int i = grandParentNode->indexOf( parentNode ) + 1;
+        if ( i == 0 )  {
+            i = grandParentNode->numChildren();
+        }
+        moveTask( node, grandParentNode, i );
         //kDebug()<<k_funcinfo<<endl;
         return true;
     }
@@ -845,13 +836,8 @@ bool Project::canMoveTaskUp( Node* node )
 bool Project::moveTaskUp( Node* node )
 {
     if ( canMoveTaskUp( node ) ) {
-        emit nodeToBeMoved( node );
-        if ( node->getParent()->moveChildUp( node ) ) {
-            emit nodeMoved( node );
-            //kDebug()<<k_funcinfo<<endl;
-            return true;
-        }
-        emit nodeMoved( node ); // Not actually moved, but what to do ?
+        moveTask( node, node->getParent(), node->getParent()->indexOf( node ) - 1 );
+        return true;
     }
     return false;
 }
@@ -878,12 +864,8 @@ bool Project::canMoveTaskDown( Node* node )
 bool Project::moveTaskDown( Node* node )
 {
     if ( canMoveTaskDown( node ) ) {
-        emit nodeToBeMoved( node );
-        if ( node->getParent() ->moveChildDown( node ) ) {
-            emit nodeMoved( node );
-            return true;
-        }
-        emit nodeMoved( node ); // Not actually moved, but what to do ?
+        moveTask( node, node->getParent(), node->getParent()->indexOf( node ) + 1 );
+        return true;
     }
     return false;
 }
@@ -1370,18 +1352,18 @@ QString Project::uniqueScheduleName() const {
 
 void Project::addScheduleManager( ScheduleManager *sm )
 {
-    emit scheduleManagerToBeAdded( sm );
+    emit scheduleManagerToBeAdded( sm, m_managers.count() );
     m_managers.append( sm ); 
-    emit scheduleManagerAdded( 0 );
+    emit scheduleManagerAdded( sm );
     //kDebug()<<k_funcinfo<<"Added: "<<sm->name()<<", now "<<m_managers.count()<<endl;
 }
 
 void Project::takeScheduleManager( ScheduleManager *sm )
 {
     if ( indexOf( sm ) >= 0 ) {
-        emit scheduleManagerToBeAdded( sm );
+        emit scheduleManagerToBeRemoved( sm );
         m_managers.removeAt( indexOf( sm ) );
-        emit scheduleManagerAdded( 0 );
+        emit scheduleManagerRemoved( sm );
     }
 }
 
@@ -1423,7 +1405,6 @@ void Project::addMainSchedule( MainSchedule *sch )
     if ( sch == 0 ) {
         return;
     }
-    emit scheduleToBeAdded( sch );
     //kDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
     long i = 1;
     while ( m_schedules.contains( i ) ) {
@@ -1432,7 +1413,6 @@ void Project::addMainSchedule( MainSchedule *sch )
     sch->setId( i );
     sch->setNode( this );
     addSchedule( sch );
-    emit scheduleAdded( sch );
 }
 
 bool Project::removeCalendarId( const QString &id )
@@ -1458,37 +1438,38 @@ void Project::changed( Node *node )
 
 void Project::changed( ResourceGroup *group )
 {
+    kDebug()<<k_funcinfo<<endl;
     emit resourceGroupChanged( group );
 }
 
-void Project::changed( ScheduleManager *sm, int type )
+void Project::changed( ScheduleManager *sm )
 {
-    if ( type == 0 )
-        emit scheduleManagerChanged( sm );
-    else if ( type == 1 ) {
-        emit scheduleToBeAdded( 0 );
-    } else if ( type == 2 ) {
-        emit scheduleAdded( 0 );
-    }
+    emit scheduleManagerChanged( sm );
 }
 
-void Project::sendResourceAdded( const ResourceGroup *group, const Resource *resource )
+void Project::changed( MainSchedule *sch )
 {
-    emit resourceAdded( resource );
+    emit scheduleChanged( sch );
 }
 
-void Project::sendResourceToBeAdded( const ResourceGroup *group, const Resource *resource )
+void Project::sendScheduleToBeAdded( const ScheduleManager *sm, int row )
 {
-    emit resourceToBeAdded( resource, group->numResources() );
+    emit scheduleToBeAdded( sm, row );
 }
 
-void Project::sendResourceRemoved( const ResourceGroup *group, const Resource *resource )
+void Project::sendScheduleAdded( const MainSchedule *sch )
 {
-    emit resourceRemoved( resource );
+    emit scheduleAdded( sch );
 }
-void Project::sendResourceToBeRemoved( const ResourceGroup *group, const Resource *resource )
+
+void Project::sendScheduleToBeRemoved( const MainSchedule *sch )
 {
-    emit resourceToBeRemoved( resource );
+    emit scheduleToBeRemoved( sch );
+}
+
+void Project::sendScheduleRemoved( const MainSchedule *sch )
+{
+    emit scheduleRemoved( sch );
 }
 
 void Project::changed( Resource *resource )

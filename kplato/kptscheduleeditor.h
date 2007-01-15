@@ -57,6 +57,8 @@ public:
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    QModelIndex index( const ScheduleManager *manager ) const;
+    QModelIndex index( const MainSchedule *sch ) const;
 
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
@@ -80,6 +82,15 @@ protected slots:
     void slotManagerChanged( ScheduleManager *sch );
     void slotScheduleChanged( MainSchedule *sch );
 
+    void slotScheduleManagerToBeInserted( const ScheduleManager *manager, int row );
+    void slotScheduleManagerInserted( const ScheduleManager *manager );
+    void slotScheduleManagerToBeRemoved( const ScheduleManager *manager );
+    void slotScheduleManagerRemoved( const ScheduleManager *manager );
+    void slotScheduleToBeInserted( const ScheduleManager *manager, int row );
+    void slotScheduleInserted( const MainSchedule *schedule );
+    void slotScheduleToBeRemoved( const MainSchedule *schedule );
+    void slotScheduleRemoved( const MainSchedule *schedule );
+
 protected:
     int row( const Schedule *sch ) const;
     
@@ -98,6 +109,8 @@ protected:
     QVariant calculateAll( const QModelIndex &index, int role ) const;
     bool setCalculateAll( const QModelIndex &index, const QVariant &value, int role );
 
+private:
+    ScheduleManager *m_manager; // for sanety check
 };
 
 class ScheduleTreeView : public TreeViewBase

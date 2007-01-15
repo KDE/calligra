@@ -351,9 +351,6 @@ public:
     void setManager( ScheduleManager *sm ) { m_manager = sm; }
     ScheduleManager *manager() const { return m_manager; }
     
-    int numSchedules() const;
-    int indexOf( MainSchedule *sch ) const;
-    
     DateTime calculateForward( int use );
     DateTime calculateBackward( int use );
     DateTime scheduleForward( const DateTime &earliest, int use );
@@ -436,7 +433,7 @@ public:
 
     QList<MainSchedule*> schedules() const;
     int numSchedules() const;
-    int indexOf( MainSchedule *sch ) const;
+    int indexOf( const MainSchedule *sch ) const;
 
     bool loadXML( QDomElement &element, XMLLoaderObject &status );
     void saveXML( QDomElement &element ) const;
@@ -453,6 +450,7 @@ protected:
     MainSchedule *m_expected;
     MainSchedule *m_optimistic;
     MainSchedule *m_pessimistic;
+    QList<MainSchedule*> m_schedules;
 };
 
 

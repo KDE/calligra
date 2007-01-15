@@ -79,7 +79,7 @@ public:
     
 protected slots:
     void slotAccountChanged( Account* );
-    void slotAccountToBeInserted( const Account *account, int row );
+    void slotAccountToBeInserted( const Account *parent, int row );
     void slotAccountInserted( const Account *account );
     void slotAccountToBeRemoved( const Account *account );
     void slotAccountRemoved( const Account *account );

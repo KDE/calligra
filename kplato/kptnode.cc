@@ -35,7 +35,9 @@
 namespace KPlato
 {
 
-Node::Node(Node *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
+Node::Node(Node *parent) 
+    : QObject(),
+      m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_parent = parent;
     init();
@@ -170,7 +172,7 @@ void Node::takeChildNode( int number ) {
     }
 }
 
-void Node::insertChildNode( unsigned int index, Node *node) {
+void Node::insertChildNode( int index, Node *node ) {
     if (index == -1)
         m_nodes.append(node);
     else
@@ -209,6 +211,12 @@ bool Node::isChildOf( Node* node )
 const Node* Node::childNode(int number) const {
     return m_nodes.at(number);
 }
+
+int Node::indexOf( const Node *node ) const
+{
+    return m_nodes.indexOf( const_cast<Node*>(node) );
+}
+
 
 Duration *Node::getDelay() {
     /* TODO

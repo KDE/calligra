@@ -74,20 +74,20 @@ ResourceItemModel::~ResourceItemModel()
 {
 }
 
-void ResourceItemModel::slotResourceToBeInserted( const Resource *resource, int row )
+void ResourceItemModel::slotResourceToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug()<<k_funcinfo<<resource->name()<<endl;
-    Q_ASSERT( m_resource == 0 );
-    m_resource = const_cast<Resource*>(resource);
-    beginInsertRows( index( resource->parentGroup() ), row, row );
+    //kDebug()<<k_funcinfo<<group->name()<<", "<<row<<endl;
+    Q_ASSERT( m_group == 0 );
+    m_group = const_cast<ResourceGroup*>(group);
+    beginInsertRows( index( group ), row, row );
 }
 
 void ResourceItemModel::slotResourceInserted( const Resource *resource )
 {
     //kDebug()<<k_funcinfo<<resource->name()<<endl;
-    Q_ASSERT( resource == m_resource );
+    Q_ASSERT( resource->parentGroup() == m_group );
     endInsertRows();
-    m_resource = 0;
+    m_group = 0;
 }
 
 void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
@@ -126,7 +126,7 @@ void ResourceItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 void ResourceItemModel::slotResourceGroupToBeRemoved( const ResourceGroup *group )
 {
     //kDebug()<<k_funcinfo<<group->name()<<endl;
-    Q_ASSERT( m_resource == 0 );
+    Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     int row = index( group ).row();
     beginRemoveRows( QModelIndex(), row, row );
@@ -144,13 +144,13 @@ void ResourceItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( Resource* ) ) );
+        disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
         
         disconnect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
         
         disconnect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
         
-        disconnect( m_project, SIGNAL( resourceToBeAdded( const Resource*, int ) ), this, SLOT( slotResourceToBeInserted( const Resource*, int ) ) );
+        disconnect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
         
         disconnect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
         
@@ -164,14 +164,15 @@ void ResourceItemModel::setProject( Project *project )
         
     }
     m_project = project;
+    if ( m_project ) {
         connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( Resource* ) ) );
+        connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
         
         connect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
         
         connect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
         
-        connect( m_project, SIGNAL( resourceToBeAdded( const Resource*, int ) ), this, SLOT( slotResourceToBeInserted( const Resource*, int ) ) );
+        connect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
         
         connect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
         
@@ -182,7 +183,7 @@ void ResourceItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
         
         connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
-        
+    }
 }
 
 Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const

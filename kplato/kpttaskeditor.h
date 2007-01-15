@@ -59,6 +59,7 @@ public:
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    virtual QModelIndex index( const Node *node ) const;
     
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
@@ -81,6 +82,11 @@ public:
 
 protected slots:
     void slotNodeChanged( Node* );
+    void slotNodeToBeInserted( Node *node, int row );
+    void slotNodeInserted( Node *node );
+    void slotNodeToBeRemoved( Node *node );
+    void slotNodeRemoved( Node *node );
+
     
 protected:
     QVariant name( const Node *node, int role ) const;
@@ -111,6 +117,8 @@ protected:
     QVariant test( const Node *node, int role ) const;
     bool setTest( Node *node, const QVariant &value, int role );
 
+private:
+    Node *m_node; // for sanety check
 };
 
 class NodeTreeView : public TreeViewBase

@@ -57,7 +57,8 @@ namespace KPlato
 {
 
 ScheduleItemModel::ScheduleItemModel( Part *part, QObject *parent )
-    : ItemModelBase( part, parent )
+    : ItemModelBase( part, parent ),
+    m_manager( 0 )
 {
 }
 
@@ -65,33 +66,117 @@ ScheduleItemModel::~ScheduleItemModel()
 {
 }
 
+void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *manager, int row )
+{
+    //kDebug()<<k_funcinfo<<manager->name()<<endl;
+    Q_ASSERT( m_manager == 0 );
+    m_manager = const_cast<ScheduleManager*>(manager);
+    beginInsertRows( QModelIndex(), row, row );
+}
+
+void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *manager )
+{
+    //kDebug()<<k_funcinfo<<manager->name()<<endl;
+    Q_ASSERT( manager == m_manager );
+    endInsertRows();
+    m_manager = 0;
+}
+
+void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *manager )
+{
+    //kDebug()<<k_funcinfo<<manager->name()<<endl;
+    Q_ASSERT( m_manager == 0 );
+    m_manager = const_cast<ScheduleManager*>(manager);
+    int row = index( manager ).row();
+    beginRemoveRows( QModelIndex(), row, row );
+}
+
+void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manager )
+{
+    //kDebug()<<k_funcinfo<<manager->name()<<endl;
+    Q_ASSERT( manager == m_manager );
+    endRemoveRows();
+    m_manager = 0;
+}
+
+void ScheduleItemModel::slotScheduleToBeInserted( const ScheduleManager *manager, int row )
+{
+    kDebug()<<k_funcinfo<<manager->name()<<" row="<<row<<endl;
+    Q_ASSERT( m_manager == 0 );
+    m_manager = const_cast<ScheduleManager*>(manager);
+    beginInsertRows( index( manager ), row, row );
+}
+
+void ScheduleItemModel::slotScheduleInserted( const MainSchedule *schedule )
+{
+    kDebug()<<k_funcinfo<<schedule<<"<--"<<schedule->manager()<<endl;
+    Q_ASSERT( schedule->manager() == m_manager );
+    endInsertRows();
+    m_manager = 0;
+}
+
+void ScheduleItemModel::slotScheduleToBeRemoved( const MainSchedule *schedule )
+{
+    //kDebug()<<k_funcinfo<<schedule->name()<<endl;
+    Q_ASSERT( m_manager == 0 );
+    m_manager = const_cast<ScheduleManager*>(schedule->manager());
+    int row = index( schedule ).row();
+    beginRemoveRows( index( schedule->manager() ), row, row );
+}
+
+void ScheduleItemModel::slotScheduleRemoved( const MainSchedule *schedule )
+{
+    //kDebug()<<k_funcinfo<<schedule->name()<<endl;
+    Q_ASSERT( schedule->manager() == m_manager );
+    endRemoveRows();
+    m_manager = 0;
+}
+
 void ScheduleItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotManagerChanged( ScheduleManager* ) ) );
         
+        disconnect( m_project, SIGNAL( scheduleManagerToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleManagerToBeInserted( const ScheduleManager*, int) ) );
+        
+        disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
+    
+        disconnect( m_project, SIGNAL( scheduleManagerAdded( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
+    
+        disconnect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
+    
         disconnect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
         
-        disconnect( m_project, SIGNAL( scheduleManagerToBeAdded( const ScheduleManager* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        disconnect( m_project, SIGNAL( scheduleToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleToBeInserted( const ScheduleManager*, int ) ) );
+        
+        disconnect( m_project, SIGNAL( scheduleToBeRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleToBeRemoved( const MainSchedule* ) ) );
     
-        disconnect( m_project, SIGNAL( scheduleToBeAdded( const MainSchedule* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    
-        disconnect( m_project, SIGNAL( scheduleManagerAdded( const ScheduleManager* ) ), this, SLOT( slotLayoutChanged() ) );
-    
-        disconnect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotScheduleInserted( const MainSchedule* ) ) );
+        
+        disconnect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     }
     m_project = project;
-    connect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotManagerChanged( ScheduleManager* ) ) );
+    if ( m_project ) {
+        connect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotManagerChanged( ScheduleManager* ) ) );
         
-    connect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
+        connect( m_project, SIGNAL( scheduleManagerToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleManagerToBeInserted( const ScheduleManager*, int) ) );
         
-    connect( m_project, SIGNAL( scheduleManagerToBeAdded( const ScheduleManager* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        connect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
     
-    connect( m_project, SIGNAL( scheduleToBeAdded( const MainSchedule* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        connect( m_project, SIGNAL( scheduleManagerAdded( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
     
-    connect( m_project, SIGNAL( scheduleManagerAdded( const ScheduleManager* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
     
-    connect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
+        
+        connect( m_project, SIGNAL( scheduleToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleToBeInserted( const ScheduleManager*, int ) ) );
+        
+        connect( m_project, SIGNAL( scheduleToBeRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleToBeRemoved( const MainSchedule* ) ) );
+    
+        connect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotScheduleInserted( const MainSchedule* ) ) );
+        
+        connect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
+    }
 }
 
 void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
@@ -166,6 +251,23 @@ QModelIndex ScheduleItemModel::index( int row, int column, const QModelIndex &pa
         return createIndex( row, column, manager( parent )->schedules().value( row ) );
     }
     return createIndex( row, column, m_project->scheduleManagers().value( row ) );
+}
+
+QModelIndex ScheduleItemModel::index( const ScheduleManager *manager ) const
+{
+    if ( m_project == 0 || manager == 0 ) {
+        return QModelIndex();
+    }
+    return createIndex( m_project->indexOf( manager ), 0, const_cast<ScheduleManager*>(manager) );
+
+}
+
+QModelIndex ScheduleItemModel::index( const MainSchedule *sch ) const
+{
+    if ( m_project == 0 || sch == 0 || sch->manager() == 0) {
+        return QModelIndex();
+    }
+    return createIndex( sch->manager()->indexOf( sch ), 0, const_cast<MainSchedule*>(sch) );
 }
 
 int ScheduleItemModel::columnCount( const QModelIndex &parent ) const

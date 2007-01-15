@@ -72,18 +72,18 @@ AccountItemModel::~AccountItemModel()
 {
 }
 
-void AccountItemModel::slotAccountToBeInserted( const Account *account, int row )
+void AccountItemModel::slotAccountToBeInserted( const Account *parent, int row )
 {
-    //kDebug()<<k_funcinfo<<account->name()<<endl;
+    //kDebug()<<k_funcinfo<<parent->name()<<endl;
     Q_ASSERT( m_account == 0 );
-    m_account = const_cast<Account*>(account);
-    beginInsertRows( index( account->parent() ), row, row );
+    m_account = const_cast<Account*>(parent);
+    beginInsertRows( index( parent ), row, row );
 }
 
 void AccountItemModel::slotAccountInserted( const Account *account )
 {
     //kDebug()<<k_funcinfo<<account->name()<<endl;
-    Q_ASSERT( account == m_account );
+    Q_ASSERT( account->parent() == m_account );
     endInsertRows();
     m_account = 0;
 }
@@ -111,8 +111,8 @@ void AccountItemModel::setProject( Project *project )
         Accounts *acc = &( m_project->accounts() );
         disconnect( acc , SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
         
-        disconnect( acc, SIGNAL( accountAdded( const Account*, int ) ), this, SLOT( slotAccountInserted( const Account*, int ) ) );
-        disconnect( acc, SIGNAL( accountToBeAdded( const Account* ) ), this, SLOT( slotLayoutToBeChanged( const Account* ) ) );
+        disconnect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
+        disconnect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
         
         disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
         disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
@@ -123,8 +123,8 @@ void AccountItemModel::setProject( Project *project )
         kDebug()<<k_funcinfo<<acc<<endl;
         connect( acc, SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
         
-        connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotLayoutChanged() ) );
-        connect( acc, SIGNAL( accountToBeAdded( const Account* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
+        connect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
         
         connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
         connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );

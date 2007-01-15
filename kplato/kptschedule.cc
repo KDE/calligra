@@ -969,30 +969,31 @@ ScheduleManager::ScheduleManager( Project &project, const QString name )
 
 void ScheduleManager::createSchedules()
 {
-    m_expected = m_project.createSchedule( m_name, Schedule::Expected );
-    m_expected->setManager( this );
+    setExpected( m_project.createSchedule( m_name, Schedule::Expected ) );
     if ( m_calculateAll ) {
-        m_optimistic = m_project.createSchedule( m_name, Schedule::Optimistic );
-        m_optimistic->setManager( this );
-        m_pessimistic = m_project.createSchedule( m_name, Schedule::Pessimistic );
-        m_pessimistic->setManager( this );
+        setOptimistic( m_project.createSchedule( m_name, Schedule::Optimistic ) );
+        setPessimistic( m_project.createSchedule( m_name, Schedule::Pessimistic ) );
     } else {
-        m_optimistic = 0;
-        m_pessimistic = 0;
+        setOptimistic( 0 );
+        setPessimistic( 0 );
     }
-    m_project.changed( this );
 }
 
 void ScheduleManager::setName( const QString& name )
 {
     m_name = name;
-    if ( m_expected )
+    if ( m_expected ) {
         m_expected->setName( name );
-    if ( m_optimistic )
+        m_project.changed( m_expected );
+    }
+    if ( m_optimistic ) {
         m_optimistic->setName( name );
-    if ( m_pessimistic )
+        m_project.changed( m_optimistic );
+    }
+    if ( m_pessimistic ) {
         m_pessimistic->setName( name );
-
+        m_project.changed( m_pessimistic );
+    }
     m_project.changed( this );
 }
 
@@ -1024,31 +1025,75 @@ void ScheduleManager::setCalculateAll( bool on )
 
 void ScheduleManager::setDeleted( bool on )
 {
-    foreach ( MainSchedule *s,  schedules() ) {
-        s->setDeleted( on );
+    if ( m_expected ) {
+        m_expected->setDeleted( on );
+        m_project.changed( m_expected );
     }
-    m_project.changed( this );
+    if ( m_optimistic ) {
+        m_optimistic->setDeleted( on );
+        m_project.changed( m_optimistic );
+    }
+    if ( m_pessimistic ) {
+        m_pessimistic->setDeleted( on );
+        m_project.changed( m_pessimistic );
+    }
 }
 
 void ScheduleManager::setExpected( MainSchedule *sch )
 {
-    m_project.changed( this, 1 );
+    //kDebug()<<k_funcinfo<<m_expected<<", "<<sch<<endl;
+    if ( m_expected ) {
+        int i = m_schedules.indexOf( m_expected );
+        m_project.sendScheduleToBeRemoved( m_expected );
+        m_schedules.removeAt( i );
+        m_project.sendScheduleRemoved( m_expected );
+    }
     m_expected = sch;
-    m_project.changed( this, 2 );
+    if ( sch ) {
+        m_project.sendScheduleToBeAdded( this, 0 );
+        sch->setManager( this );
+        m_schedules.insert( 0, sch );
+        m_project.sendScheduleAdded( sch );
+    }
+    Q_ASSERT( m_schedules.count() <= 3 );
 }
 
 void ScheduleManager::setOptimistic( MainSchedule *sch )
 {
-    m_project.changed( this, 1 );
+    if ( m_optimistic ) {
+        int i = m_schedules.indexOf( m_optimistic );
+        m_project.sendScheduleToBeRemoved( m_optimistic );
+        m_schedules.removeAt( i );
+        m_project.sendScheduleRemoved( m_optimistic );
+    }
     m_optimistic = sch;
-    m_project.changed( this, 2 );
+    if ( sch ) {
+        int i = m_schedules.count() >= 1 ? 1 : 0;
+        m_project.sendScheduleToBeAdded( this, i );
+        sch->setManager( this );
+        m_schedules.insert( i, sch );
+        m_project.sendScheduleAdded( sch );
+    }
+    Q_ASSERT( m_schedules.count() <= 3 );
 }
 
 void ScheduleManager::setPessimistic( MainSchedule *sch )
-{ 
-    m_project.changed( this, 1 );
-    m_pessimistic = sch; 
-    m_project.changed( this, 2 );
+{
+    if ( m_pessimistic ) {
+        int i = m_schedules.indexOf( m_pessimistic );
+        m_project.sendScheduleToBeRemoved( m_pessimistic );
+        m_schedules.removeAt( i );
+        m_project.sendScheduleRemoved( m_pessimistic );
+    }
+    m_pessimistic = sch;
+    if ( sch ) {
+        int i = m_schedules.count() >= 2 ? 2 : m_schedules.count();
+        m_project.sendScheduleToBeAdded( this, i );
+        sch->setManager( this );
+        m_schedules.insert( i, sch );
+        m_project.sendScheduleAdded( sch );
+    }
+    Q_ASSERT( m_schedules.count() <= 3 );
 }
 
 QStringList ScheduleManager::state() const
@@ -1081,21 +1126,14 @@ int ScheduleManager::numSchedules() const
     return schedules().count();
 }
 
-int ScheduleManager::indexOf( MainSchedule* sch ) const
+int ScheduleManager::indexOf( const MainSchedule* sch ) const
 {
-    return schedules().indexOf( sch );
+    return schedules().indexOf( const_cast<MainSchedule*>(sch) );
 }
 
 QList<MainSchedule*> ScheduleManager::schedules() const
 {
-    QList<MainSchedule*> lst;
-    if ( m_expected )
-        lst << m_expected;
-    if ( m_optimistic )
-        lst << m_optimistic;
-    if ( m_pessimistic )
-        lst << m_pessimistic;
-    return lst;
+    return m_schedules;
 }
 
 bool ScheduleManager::loadXML( QDomElement &element, XMLLoaderObject &status )
@@ -1107,9 +1145,9 @@ bool ScheduleManager::loadXML( QDomElement &element, XMLLoaderObject &status )
         if ( sch ) {
             sch->setManager( this );
             switch ( sch->type() ) {
-                case Schedule::Expected: m_expected = sch; break;
-                case Schedule::Optimistic: m_optimistic = sch; break;
-                case Schedule::Pessimistic: m_pessimistic = sch; break;
+                case Schedule::Expected: setExpected( sch ); break;
+                case Schedule::Optimistic: setOptimistic( sch ); break;
+                case Schedule::Pessimistic: setPessimistic( sch ); break;
             }
             m_calculateAll = schedules().count() > 1;
         }
@@ -1128,9 +1166,9 @@ bool ScheduleManager::loadXML( QDomElement &element, XMLLoaderObject &status )
                 if ( sch ) {
                     sch->setManager( this );
                     switch ( sch->type() ) {
-                        case Schedule::Expected: m_expected = sch; break;
-                        case Schedule::Optimistic: m_optimistic = sch; break;
-                        case Schedule::Pessimistic: m_pessimistic = sch; break;
+                        case Schedule::Expected: setExpected( sch ); break;
+                        case Schedule::Optimistic: setOptimistic( sch ); break;
+                        case Schedule::Pessimistic: setPessimistic( sch ); break;
                     }
                 }
             }

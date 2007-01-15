@@ -102,13 +102,14 @@ public:
     const QList<Node*> &childNodeIterator() const { return m_nodes; }
     int numChildren() const { return m_nodes.count(); }
     virtual void addChildNode(Node *node, Node *after=0);
-    virtual void insertChildNode(unsigned int index, Node *node);
+    virtual void insertChildNode(int index, Node *node);
     void takeChildNode(Node *node );
     void takeChildNode(int number );
     Node* childNode(int number) { return m_nodes.at(number); }
     const Node* childNode(int number) const;
     int findChildNode( Node* node );
     bool isChildOf( Node *node );
+    int indexOf( const Node *node ) const;
 
     // Time-dependent child-node-management.
     // list all nodes that are dependent upon this one.

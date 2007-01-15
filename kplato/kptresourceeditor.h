@@ -90,7 +90,7 @@ protected slots:
     void slotResourceGroupInserted( const ResourceGroup *group );
     void slotResourceGroupToBeRemoved( const ResourceGroup *group );
     void slotResourceGroupRemoved( const ResourceGroup *group );
-    void slotResourceToBeInserted( const Resource *resource, int row );
+    void slotResourceToBeInserted( const ResourceGroup *group, int row );
     void slotResourceInserted( const Resource *resource );
     void slotResourceToBeRemoved( const Resource *resource );
     void slotResourceRemoved( const Resource *resource );
@@ -136,9 +136,8 @@ protected:
     bool setFixedCost( Resource *res, const QVariant &value, int role );
 
 private:
-    // Used for sanity checks
-    Resource *m_resource;
-    ResourceGroup *m_group;
+    ResourceGroup *m_group; // Used for sanity checks
+    Resource *m_resource; // Used for sanity checks
 };
 
 class ResourceTreeView : public TreeViewBase

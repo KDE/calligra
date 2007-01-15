@@ -406,7 +406,7 @@ void Accounts::insert(Account *account, Account *parent, int index) {
     Q_ASSERT(account);
     if ( parent == 0 ) {
         int i = index == -1 ? m_accountList.count() : index;
-        emit accountToBeAdded( account, i );
+        emit accountToBeAdded( parent, i );
         m_accountList.insert(i, account);
         account->setList(this);
         account->setParent(0); // incase...
@@ -414,7 +414,7 @@ void Accounts::insert(Account *account, Account *parent, int index) {
         account->insertChildren();
     } else {
         int i = index == -1 ? parent->accountList().count() : index;
-        emit accountToBeAdded( account, i );
+        emit accountToBeAdded( parent, i );
         parent->insert( account, i );
     }
     //kDebug()<<k_funcinfo<<account->name()<<endl;
@@ -425,9 +425,9 @@ void Accounts::take(Account *account){
     if (account == 0) {
         return;
     }
-    emit accountToBeRemoved( account );
     removeId(account->name());
     if (account->parent()) {
+        emit accountToBeRemoved( account );
         account->parent()->take(account);
         emit accountRemoved( account );
         //kDebug()<<k_funcinfo<<account->name()<<endl;
@@ -435,9 +435,10 @@ void Accounts::take(Account *account){
     }
     int i = m_accountList.indexOf(account);
     if (i != -1) {
+        emit accountToBeRemoved( account );
         m_accountList.removeAt(i);
+        emit accountRemoved( account );
     }
-    emit accountRemoved( account );
     //kDebug()<<k_funcinfo<<account->name()<<endl;
 }
     

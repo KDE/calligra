@@ -56,7 +56,8 @@ namespace KPlato
 {
 
 NodeItemModel::NodeItemModel( Part *part, QObject *parent )
-    : ItemModelBase( part, parent )
+    : ItemModelBase( part, parent ),
+    m_node( 0 )
 {
 }
 
@@ -64,28 +65,62 @@ NodeItemModel::~NodeItemModel()
 {
 }
     
+void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
+{
+    //kDebug()<<k_funcinfo<<node->name()<<endl;
+    Q_ASSERT( m_node == 0 );
+    m_node = parent;
+    beginInsertRows( index( parent ), row, row );
+}
+
+void NodeItemModel::slotNodeInserted( Node *node )
+{
+    //kDebug()<<k_funcinfo<<node->getParent->name()<<"-->"<<node->name()<<endl;
+    Q_ASSERT( node->getParent() == m_node );
+    endInsertRows();
+    m_node = 0;
+}
+
+void NodeItemModel::slotNodeToBeRemoved( Node *node )
+{
+    kDebug()<<k_funcinfo<<node->name()<<endl;
+    Q_ASSERT( m_node == 0 );
+    m_node = node;
+    int row = index( node ).row();
+    beginRemoveRows( index( node->getParent() ), row, row );
+}
+
+void NodeItemModel::slotNodeRemoved( Node *node )
+{
+    //kDebug()<<k_funcinfo<<node->name()<<endl;
+    Q_ASSERT( node == m_node );
+    endRemoveRows();
+    m_node = 0;
+}
+
 void NodeItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
     
-        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotLayoutChanged() ) );
-        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
     }
     m_project = project;
-    connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+    if ( project ) {
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
     
-    connect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    
-    connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotLayoutChanged() ) );
-    connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
-    connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+    }
 }
     
 Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
@@ -171,6 +206,20 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     Node *n = p->childNode( row );
 
     return createIndex(row, column, n);
+}
+
+QModelIndex NodeItemModel::index( const Node *node ) const
+{
+    if ( m_project == 0 || node == 0 ) {
+        return QModelIndex();
+    }
+    Node *par = node->getParent();
+    if ( par ) {
+        kDebug()<<k_funcinfo<<par<<"-->"<<node<<endl;
+        return createIndex( par->indexOf( node ), 0, const_cast<Node*>(node) );
+    }
+    kDebug()<<k_funcinfo<<node<<endl;
+    return QModelIndex();
 }
 
 bool NodeItemModel::insertRows( int row, int count, const QModelIndex &parent )
@@ -954,7 +1003,7 @@ Node *TaskEditor::selectedNode() const
     if ( n->type() == Node::Type_Project ) {
         return 0;
     }
-    kDebug()<<k_funcinfo<<n->name()<<endl;
+    kDebug()<<k_funcinfo<<n<<", "<<n->name()<<endl;
     return n;
 }
 

@@ -90,6 +90,7 @@ public:
     bool addSubTask( Node* task, Node* position );
     bool addSubTask( Node* task, int index, Node* parent );
     void delTask( Node *node );
+    void moveTask( Node* node, Node *newParent, int newPos );
     bool canIndentTask( Node* node );
     bool indentTask( Node* node, int index = -1 );
     bool canUnindentTask( Node* node );
@@ -260,22 +261,22 @@ public:
     ScheduleManager *createScheduleManager( const QString name );
     QList<ScheduleManager*> scheduleManagers() const { return m_managers; }
     int numScheduleManagers() const { return m_managers.count(); }
-    int indexOf( ScheduleManager *sm ) const { return m_managers.indexOf( sm ); }
+    int indexOf( const ScheduleManager *sm ) const { return m_managers.indexOf( const_cast<ScheduleManager*>(sm) ); }
     bool isScheduleManager( void* ptr ) const { return indexOf( static_cast<ScheduleManager*>( ptr ) ) >= 0; }
     void addScheduleManager( ScheduleManager *sm );
     void takeScheduleManager( ScheduleManager *sm );
     ScheduleManager *findScheduleManager( const QString name ) const;
     
     void changed( ResourceGroup *group );
-    void sendResourceAdded( const ResourceGroup *group, const Resource *resource );
-    void sendResourceToBeAdded( const ResourceGroup *group, const Resource *resource );
-    void sendResourceRemoved( const ResourceGroup *group, const Resource *resource );
-    void sendResourceToBeRemoved( const ResourceGroup *group, const Resource *resource );
-    
     void changed( Resource *resource );
     
-    void changed( ScheduleManager *sm, int type = 0 );
-            
+    void changed( ScheduleManager *sm );
+    void changed( MainSchedule *sch );
+    void sendScheduleAdded( const MainSchedule *sch );
+    void sendScheduleToBeAdded( const ScheduleManager *manager, int row );
+    void sendScheduleRemoved( const MainSchedule *sch );
+    void sendScheduleToBeRemoved( const MainSchedule *sch );
+
 signals:
     void currentScheduleChanged();
     void sigProgress( int );
@@ -283,7 +284,7 @@ signals:
     /// This signal is emitted when one of the nodes members is changed.
     void nodeChanged( Node* );
     /// This signal is emitted when the node is to be added to the project.
-    void nodeToBeAdded( Node* );
+    void nodeToBeAdded( Node*, int );
     /// This signal is emitted when the node has been added to the project.
     void nodeAdded( Node* );
     /// This signal is emitted when the node is to be removed from the project.
@@ -303,17 +304,21 @@ signals:
     
     void resourceChanged( Resource *resource );
     void resourceAdded( const Resource *resource );
-    void resourceToBeAdded( const Resource *resource, int row );
+    void resourceToBeAdded( const ResourceGroup *group, int row );
     void resourceRemoved( const Resource *resource );
     void resourceToBeRemoved( const Resource *resource );
 
     void scheduleManagerChanged( ScheduleManager *sch );
     void scheduleManagerAdded( const ScheduleManager *sch );
-    void scheduleManagerToBeAdded( const ScheduleManager *sch );
+    void scheduleManagerToBeAdded( const ScheduleManager *sch, int row );
+    void scheduleManagerRemoved( const ScheduleManager *sch );
+    void scheduleManagerToBeRemoved( const ScheduleManager *sch );
     
     void scheduleChanged( MainSchedule *sch );
+    void scheduleToBeAdded( const ScheduleManager *manager, int row );
     void scheduleAdded( const MainSchedule *sch );
-    void scheduleToBeAdded( const MainSchedule *sch );
+    void scheduleToBeRemoved( const MainSchedule *sch );
+    void scheduleRemoved( const MainSchedule *sch );
 
 protected:
     /**
