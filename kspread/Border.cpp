@@ -553,8 +553,6 @@ void VBorder::paintEvent( QPaintEvent* event )
 
   // fonts
   QFont normalFont( painter.font() );
-  // FIXME Stefan: Find a better way to scale the font. X- and Y-resolution may vary!
-  normalFont.setPointSizeF( normalFont.pointSizeF() / m_pCanvas->d->view->doc()->resolutionY() );
   QFont boldFont( normalFont );
   boldFont.setBold( true );
 
@@ -1263,8 +1261,6 @@ void HBorder::paintEvent( QPaintEvent* event )
 
   // fonts
   QFont normalFont( painter.font() );
-  // FIXME Stefan: Find a better way to scale the font. X- and Y-resolution may vary!
-  normalFont.setPointSizeF( normalFont.pointSizeF() / m_pCanvas->d->view->doc()->resolutionY() );
   QFont boldFont( normalFont );
   boldFont.setBold( true );
 
@@ -1297,7 +1293,7 @@ void HBorder::paintEvent( QPaintEvent* event )
     xPos = xPos - m_pCanvas->xOffset();
   }
 
-  double height = painter.font().pointSizeF() + 5;
+  double height = painter.fontMetrics().height();
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
@@ -1482,7 +1478,7 @@ void SelectAllButton::paintEvent( QPaintEvent* event )
         painter.setBrush( backgroundBrush );
     }
     double width = YBORDER_WIDTH;
-    double height = painter.font().pointSizeF() + 5;
+    double height = painter.fontMetrics().height();
     painter.drawRect( QRectF( 0, 0, width, height ) );
 }
 

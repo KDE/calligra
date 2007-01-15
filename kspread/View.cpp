@@ -5370,9 +5370,10 @@ void View::refreshView()
 
   d->canvas->updatePosWidget();
 
-  d->hBorderWidget->setMinimumHeight( doc()->zoomItY( KoGlobal::defaultFont().pointSizeF() + 5 ) );
+  QFontMetricsF fontMetrics( KoGlobal::defaultFont() );
+  d->hBorderWidget->setMinimumHeight( doc()->zoomItY( fontMetrics.height() ) );
   d->vBorderWidget->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
-  d->selectAllButton->setMinimumHeight( doc()->zoomItY( KoGlobal::defaultFont().pointSizeF() + 5 ) );
+  d->selectAllButton->setMinimumHeight( doc()->zoomItY( fontMetrics.height() ) );
   d->selectAllButton->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
 
   Sheet::LayoutDirection sheetDir = sheet->layoutDirection();

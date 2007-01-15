@@ -206,9 +206,9 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->configLoadFromFile = false;
   d->captureAllArrowKeys = true;
 
-  QFont font( KoGlobal::defaultFont() );
-  RowFormat::setGlobalRowHeight( font.pointSizeF() + 3 );
-  ColumnFormat::setGlobalColWidth( ( font.pointSizeF() + 3 ) * 5 );
+  QFontMetricsF fontMetrics( KoGlobal::defaultFont() );
+  RowFormat::setGlobalRowHeight( fontMetrics.height() );
+  ColumnFormat::setGlobalColWidth( fontMetrics.height() * 5 );
 
   d->delayCalculation = false;
 
