@@ -31,10 +31,11 @@
 #include <KoShapeSizeCommand.h>
 #include <KoShapeLockCommand.h>
 #include <KoShapeRotateCommand.h>
+#include <KoShapeKeepAspectRatioCommand.h>
 
 #include "KivioDocument.h"
 
-KivioShapeGeometry::KivioShapeGeometry(KivioDocument* doc)
+KivioShapeGeometry::KivioShapeGeometry(KoDocument* doc)
     : QDockWidget(i18n("Geometry")), Ui::KivioShapeGeometry(), m_doc(doc)
 {
     m_lockedForUpdate = false;
@@ -54,6 +55,7 @@ KivioShapeGeometry::KivioShapeGeometry(KivioDocument* doc)
     connect(m_heightInput, SIGNAL(valueChangedPt(double)), this, SLOT(sizeChanged()));
     connect(m_protectSizeCheck, SIGNAL(toggled(bool)), this, SLOT(protectSizeChanged(bool)));
     connect(m_rotationInput, SIGNAL(valueChanged(double)), this, SLOT(rotationChanged()));
+    connect(m_aspectRatioCheck, SIGNAL(toggled(bool)), this, SLOT(setKeepAspectRatio(bool)));
 }
 
 void KivioShapeGeometry::setSelection(KoSelection* selection)
@@ -89,6 +91,7 @@ void KivioShapeGeometry::update()
 
     m_protectSizeCheck->setChecked(firstShape->isLocked());
     protectSizeChanged(firstShape->isLocked()); // set the other widgets enabled/disabled
+    m_aspectRatioCheck->setChecked(firstShape->keepAspectRatio());
     m_lockedForUpdate = false;
 }
 
@@ -147,16 +150,6 @@ void KivioShapeGeometry::sizeChanged()
         shapes.append(shape);
         QSizeF s = shape->size();
         prevSize.append(s);
-
-        if(m_aspectRatioCheck->isChecked()) {
-            double ratio = s.width() / s.height();
-
-            if(dx != 0.0) {
-                dy = dx / ratio;
-            } else if(dy != 0.0) {
-                dx = dy * ratio;
-            }
-        }
 
         s.setWidth(s.width() + dx);
         s.setHeight(s.height() + dy);
@@ -235,12 +228,30 @@ void KivioShapeGeometry::setUnit(KoUnit unit)
     m_heightInput->setUnit(unit);
 }
 
+void KivioShapeGeometry::setKeepAspectRatio(bool keep)
+{
+    if(m_lockedForUpdate)
+        return;
+
+    QList<KoShape*> selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
+    QList<bool> oldKeepAspectRatio;
+    QList<bool> newKeepAspectRatio;
+
+    foreach(KoShape* shape, selectionSet) {
+        oldKeepAspectRatio.append(shape->keepAspectRatio());
+        newKeepAspectRatio.append(keep);
+    }
+
+    KoShapeKeepAspectRatioCommand* keepAspectRatioCommand = new KoShapeKeepAspectRatioCommand(selectionSet, oldKeepAspectRatio, newKeepAspectRatio);
+    m_doc->addCommand(keepAspectRatioCommand);
+}
+
 
 //
 // KivioShapeGeometryFactory
 //
 
-KivioShapeGeometryFactory::KivioShapeGeometryFactory(KivioDocument* doc)
+KivioShapeGeometryFactory::KivioShapeGeometryFactory(KoDocument* doc)
     : KoDockFactory()
 {
     m_doc = doc;

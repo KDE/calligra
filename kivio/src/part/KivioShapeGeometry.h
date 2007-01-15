@@ -27,13 +27,13 @@
 #include "ui_KivioShapeGeometry.h"
 
 class KoSelection;
-class KivioDocument;
+class KoDocument;
 
 class KivioShapeGeometry : public QDockWidget, public Ui::KivioShapeGeometry
 {
     Q_OBJECT
     public:
-        KivioShapeGeometry(KivioDocument* doc);
+        KivioShapeGeometry(KoDocument* doc);
 
     public slots:
         void setSelection(KoSelection* selection);
@@ -46,9 +46,10 @@ class KivioShapeGeometry : public QDockWidget, public Ui::KivioShapeGeometry
         void sizeChanged();
         void protectSizeChanged(bool protect);
         void rotationChanged();
+        void setKeepAspectRatio(bool keep);
 
     private:
-        KivioDocument* m_doc;
+        KoDocument* m_doc;
         KoSelection* m_selection;
         QWidget* m_mainWidget;
 
@@ -58,14 +59,14 @@ class KivioShapeGeometry : public QDockWidget, public Ui::KivioShapeGeometry
 class KivioShapeGeometryFactory : public KoDockFactory
 {
     public:
-        KivioShapeGeometryFactory(KivioDocument* doc);
+        KivioShapeGeometryFactory(KoDocument* doc);
 
         virtual QString dockId() const;
         virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
         virtual QDockWidget* createDockWidget();
 
     private:
-        KivioDocument* m_doc;
+        KoDocument* m_doc;
 };
 
 #endif
