@@ -117,8 +117,8 @@ void Project::calculate()
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     Effort::Use estType = ( Effort::Use ) cs->type();
     if ( type() == Type_Project ) {
-        initiateCalculationLists( *cs );
         initiateCalculation( *cs );
+        initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         if ( m_constraint == Node::MustStartOn ) {
             //kDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString()<<endl;
             cs->startTime = m_constraintStartTime;
