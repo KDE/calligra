@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Picture Shape
+ServiceTypes=KOffice/Shape
+Type=Service
+X-KDE-Library=pictureshape
+X-Flake-Version=1
