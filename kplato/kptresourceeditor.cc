@@ -924,6 +924,28 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
     return true;
 }
 
+QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
+{
+    kDebug()<<k_funcinfo<<endl;
+    m_part->addCommand( new AddResourceGroupCmd( m_part, m_project, g, i18n( "Add resource group" ) ) );
+    int row = m_project->resourceGroups().indexOf( g );
+    if ( row != -1 ) {
+        return createIndex( row, 0, g );
+    }
+    return QModelIndex();
+}
+
+QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource */*after*/ )
+{
+    kDebug()<<k_funcinfo<<endl;
+    m_part->addCommand( new AddResourceCmd( m_part, g, r, i18n( "Add resource" ) ) );
+    int row = g->indexOf( r );
+    if ( row != -1 ) {
+        return createIndex( row, 0, r );
+    }
+    return QModelIndex();
+}
+
 
 //--------------------
 ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
@@ -968,14 +990,14 @@ void ResourceTreeView::selectionChanged( const QItemSelection &sel, const QItemS
     foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
         kDebug()<<k_funcinfo<<i.row()<<", "<<i.column()<<endl;
     }
-    QTreeView::selectionChanged( sel, desel );
+    TreeViewBase::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
 }
 
 void ResourceTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
     kDebug()<<k_funcinfo<<endl;
-    QTreeView::currentChanged( current, previous );
+    TreeViewBase::currentChanged( current, previous );
     emit currentChanged( current );
 }
 
@@ -996,16 +1018,28 @@ QList<QObject*> ResourceTreeView::selectedObjects() const
     return lst;
 }
 
-QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
+QList<ResourceGroup*> ResourceTreeView::selectedGroups() const
 {
-    kDebug()<<k_funcinfo<<endl;
-    m_part->addCommand( new AddResourceGroupCmd( m_part, m_project, g, i18n( "Add resource group" ) ) );
-    int row = m_project->resourceGroups().indexOf( g );
-    if ( row != -1 ) {
-        return createIndex( row, 0, g );
+    QList<ResourceGroup*> gl;
+    foreach ( QObject *o, selectedObjects() ) {
+        ResourceGroup* g = qobject_cast<ResourceGroup*>( o );
+        if ( g ) {
+            gl << g;
+        }
     }
-    return QModelIndex();
-    kDebug()<<k_funcinfo<<endl;
+    return gl;
+}
+
+QList<Resource*> ResourceTreeView::selectedResources() const
+{
+    QList<Resource*> rl;
+    foreach ( QObject *o, selectedObjects() ) {
+        Resource* r = qobject_cast<Resource*>( o );
+        if ( r ) {
+            rl << r;
+        }
+    }
+    return rl;
 }
 
 //-----------------------------------
@@ -1079,40 +1113,38 @@ ResourceGroup *ResourceEditor::currentResourceGroup() const
 void ResourceEditor::slotCurrentChanged(  const QModelIndex &curr )
 {
     kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
-    slotEnableActions();
+//    slotEnableActions();
 }
 
 void ResourceEditor::slotSelectionChanged( const QModelIndexList list)
 {
     kDebug()<<k_funcinfo<<list.count()<<endl;
-    bool res = false, grp = false;
-    foreach ( QModelIndex i, list ) {
-        Resource *r = qobject_cast<Resource*>( m_view->itemModel()->object( i ) );
-        if ( r ) {
-            res = true;
-            continue;
-        }
-        ResourceGroup *g = qobject_cast<ResourceGroup*>( m_view->itemModel()->object( i ) );
-        if ( r ) {
-            grp = true;
-        }
-    }
-    slotEnableActions( res, grp );
+    updateActionsEnabled();
 }
 
-void ResourceEditor::slotEnableActions( bool resource, bool group )
+void ResourceEditor::slotEnableActions( bool on )
 {
-    updateActionsEnabled( true );
+    updateActionsEnabled( on );
 }
 
-void ResourceEditor::updateActionsEnabled(  bool resource, bool group )
+void ResourceEditor::updateActionsEnabled(  bool on )
 {
-    Project *p = m_view->project();
+    bool o = on && m_view->project();
 
-    actionAddResource->setEnabled( resource );
-    actionAddGroup->setEnabled( resource );
-    actionDeleteSelection->setEnabled( resource || group );
-
+    QList<ResourceGroup*> groupList = m_view->selectedGroups();
+    bool nogroup = groupList.isEmpty();
+    bool group = groupList.count() == 1;
+    bool groups = groupList.count() > 1;
+    QList<Resource*> resourceList = m_view->selectedResources();
+    bool noresource = resourceList.isEmpty(); 
+    bool resource = resourceList.count() == 1;
+    bool resources = resourceList.count() > 1;
+    
+    bool any = !nogroup || !noresource;
+    
+    actionAddResource->setEnabled( o && ( (group  && noresource) || (resource && nogroup) ) );
+    actionAddGroup->setEnabled( o && ( group && noresource ) );
+    actionDeleteSelection->setEnabled( o && any );
 }
 
 void ResourceEditor::setupGui()
@@ -1143,18 +1175,30 @@ void ResourceEditor::setupGui()
 void ResourceEditor::slotAddResource()
 {
     kDebug()<<k_funcinfo<<endl;
-    ResourceGroup *g = currentResourceGroup();
-    if ( g == 0 ) {
-        Resource *r = currentResource();
-        if ( r == 0 ) {
+    QList<ResourceGroup*> gl = m_view->selectedGroups();
+    if ( gl.count() > 1 ) {
+        return;
+    }
+    ResourceGroup *g = 0;
+    if ( !gl.isEmpty() ) {
+        g = gl.first();
+    } else {
+        QList<Resource*> rl = m_view->selectedResources();
+        if ( rl.count() != 1 ) {
             return;
         }
-        g = r->parentGroup();
+        g = rl.first()->parentGroup();
     }
     if ( g == 0 ) {
         return;
     }
-    emit addResource( g );
+    Resource *r = new Resource();
+    QModelIndex i = m_view->itemModel()->insertResource( g, r );
+    if ( i.isValid() ) {
+        m_view->setCurrentIndex( i );
+        m_view->edit( i );
+    }
+
 }
 
 void ResourceEditor::slotAddGroup()

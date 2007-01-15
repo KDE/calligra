@@ -82,7 +82,8 @@ public:
 
     QObject *object( const QModelIndex &index ) const;
     QModelIndex insertGroup( ResourceGroup *g );
-    
+    QModelIndex insertResource( ResourceGroup *g, Resource *r, Resource *after = 0 );
+
 protected slots:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );
@@ -153,8 +154,9 @@ public:
 
     QObject *currentObject() const;
     QList<QObject*> selectedObjects() const;
-    QModelIndex insertGroup( ResourceGroup *g );
-    
+    QList<ResourceGroup*> selectedGroups() const;
+    QList<Resource*> selectedResources() const;
+
 signals:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( QModelIndex, QModelIndex );
@@ -197,14 +199,14 @@ public slots:
     virtual void setGuiActive( bool activate );
 
 protected:
-    void updateActionsEnabled(  bool resource = false, bool group = false  );
+    void updateActionsEnabled(  bool on = true );
 
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
     
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
-    void slotEnableActions( bool resource = false, bool group = false );
+    void slotEnableActions( bool on );
 
     void slotAddResource();
     void slotAddGroup();
