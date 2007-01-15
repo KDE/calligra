@@ -4,22 +4,22 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CM
 
 INCLUDE (FindMySQL)
 IF (MYSQL_FOUND)
-   add_subdirectory( mysql )
+#   add_subdirectory( mysql )
 ENDIF (MYSQL_FOUND)
 
 INCLUDE (FindPostgreSQL)
 INCLUDE (FindPqxx)
 IF (POSTGRESQL_FOUND AND PQXX_FOUND)
-   add_subdirectory( pqxx )
+#   add_subdirectory( pqxx )
 ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
 
 ########### next target ###############
 
 set(keximigrate_LIB_SRCS 
    keximigrate.cpp 
-   importwizard.cpp 
-   migratemanager.cpp 
    keximigratedata.cpp 
+   migratemanager.cpp 
+   importwizard.cpp 
    importoptionsdlg.cpp )
 
 kde4_automoc(${keximigrate_LIB_SRCS})
