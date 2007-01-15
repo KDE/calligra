@@ -189,6 +189,33 @@ TreeViewBase::TreeViewBase( QWidget *parent )
 {
 }
 
+int TreeViewBase::nextColumn( int col ) const
+{
+    int s = header()->visualIndex( col ) + 1;
+    while ( isColumnHidden( header()->logicalIndex( s ) ) ) {
+        if ( s >= header()->count() ) {
+            kDebug()<<col<<": -1"<<endl;
+            return -1;
+        }
+        ++s;
+    }
+    //kDebug()<<k_funcinfo<<col<<": next="<<header()->logicalIndex( s )<<", "<<s<<endl;
+    return header()->logicalIndex( s );
+}
+
+int TreeViewBase::previousColumn( int col ) const
+{
+    int s = header()->visualIndex( col ) - 1;
+    while ( isColumnHidden( header()->logicalIndex( s ) ) ) {
+        if ( s < 0 ) {
+            return -1;
+        }
+        --s;
+    }
+    //kDebug()<<k_funcinfo<<col<<": prev="<<header()->logicalIndex( s )<<", "<<s<<endl;
+    return header()->logicalIndex( s );
+}
+
 /*!
     \reimp
  */
@@ -203,8 +230,9 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
     if ( current.isValid() ) {
         switch (event->key()) {
             case Qt::Key_Right: {
-                if ( current.column() < model()->columnCount() - 1 ) {
-                    QModelIndex i = model()->index( current.row(), current.column() + 1, current.parent() );
+                int nxt = nextColumn( current.column() );
+                if ( nxt != -1 ) {
+                    QModelIndex i = model()->index( current.row(), nxt, current.parent() );
                     selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
                 }
                 event->accept();
@@ -212,8 +240,9 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
                 break;
             }
             case Qt::Key_Left: {
-                if ( current.column() > 0 ) {
-                    QModelIndex i = model()->index( current.row(), current.column() - 1, current.parent() );
+                int prv = previousColumn( current.column() );
+                if ( prv != -1 ) {
+                    QModelIndex i = model()->index( current.row(), prv, current.parent() );
                     selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
                 }
                 event->accept();

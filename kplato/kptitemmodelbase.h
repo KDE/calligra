@@ -103,6 +103,9 @@ public:
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
 
+    int nextColumn( int col ) const;
+    int previousColumn( int col ) const;
+
 protected:
     void keyPressEvent(QKeyEvent *event);
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
