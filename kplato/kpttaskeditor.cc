@@ -33,11 +33,9 @@
 #include <QItemDelegate>
 #include <QItemSelectionModel>
 #include <QLineEdit>
-#include <QListWidget>
 #include <QMap>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
-#include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -859,6 +857,36 @@ void NodeItemModel::slotNodeChanged( Node *node )
     emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
 }
 
+QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
+{
+    m_part->addCommand( new TaskAddCmd( m_part, m_project, node, after, i18n( "Add Task") ) );
+    int row = -1;
+    if ( node->getParent() ) {
+        row = node->getParent()->indexOf( node );
+    }
+    if ( row != -1 ) {
+        //kDebug()<<k_funcinfo<<"Inserted: "<<account->name()<<endl;
+        return createIndex( row, 0, node );
+    }
+    kDebug()<<k_funcinfo<<"Can't find "<<node->name()<<endl;
+    return QModelIndex();
+}
+
+QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
+{
+    m_part->addCommand( new SubtaskAddCmd( m_part, m_project, node, parent, i18n( "Add Subtask" ) ) );
+    int row = -1;
+    if ( node->getParent() ) {
+        row = node->getParent()->indexOf( node );
+    }
+    if ( row != -1 ) {
+        //kDebug()<<k_funcinfo<<"Inserted: "<<account->name()<<endl;
+        return createIndex( row, 0, node );
+    }
+    kDebug()<<k_funcinfo<<"Can't find "<<node->name()<<endl;
+    return QModelIndex();
+}
+
 //--------------------
 NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
     : TreeViewBase( parent )
@@ -896,14 +924,14 @@ void NodeTreeView::selectionChanged( const QItemSelection &sel, const QItemSelec
     foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
         kDebug()<<k_funcinfo<<i.row()<<", "<<i.column()<<endl;
     }
-    QTreeView::selectionChanged( sel, desel );
+    TreeViewBase::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
 }
 
 void NodeTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
     kDebug()<<k_funcinfo<<endl;
-    QTreeView::currentChanged( current, previous );
+    TreeViewBase::currentChanged( current, previous );
     emit currentChanged( current );
 }
 
@@ -930,20 +958,20 @@ TaskEditor::TaskEditor( Part *part, QWidget *parent )
 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_editor = new NodeTreeView( part, this );
-    l->addWidget( m_editor );
-    m_editor->setEditTriggers( m_editor->editTriggers() | QAbstractItemView::EditKeyPressed );
+    m_view = new NodeTreeView( part, this );
+    l->addWidget( m_view );
+    m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( m_editor, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT ( slotCurrentChanged( QModelIndex ) ) );
+    connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT ( slotCurrentChanged( QModelIndex ) ) );
 
-    connect( m_editor, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
     
-    connect( m_editor, SIGNAL( contextMenuRequested( Node*, const QPoint& ) ), SLOT( slotContextMenuRequested( Node*, const QPoint& ) ) );
+    connect( m_view, SIGNAL( contextMenuRequested( Node*, const QPoint& ) ), SLOT( slotContextMenuRequested( Node*, const QPoint& ) ) );
 }
 
 void TaskEditor::draw( Project &project )
 {
-    m_editor->setProject( &project );
+    m_view->setProject( &project );
 }
 
 void TaskEditor::draw()
@@ -955,8 +983,8 @@ void TaskEditor::setGuiActive( bool activate )
     kDebug()<<k_funcinfo<<activate<<endl;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_editor->currentIndex().isValid() ) {
-        m_editor->selectionModel()->setCurrentIndex(m_editor->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
+    if ( activate && !m_view->currentIndex().isValid() ) {
+        m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }
 
@@ -974,18 +1002,18 @@ void TaskEditor::slotSelectionChanged( const QModelIndexList list)
 
 int TaskEditor::selectedNodeCount() const
 {
-    QItemSelectionModel* sm = m_editor->selectionModel();
+    QItemSelectionModel* sm = m_view->selectionModel();
     return sm->selectedRows().count();
 }
 
 QList<Node*> TaskEditor::selectedNodes() const {
     QList<Node*> lst;
-    QItemSelectionModel* sm = m_editor->selectionModel();
+    QItemSelectionModel* sm = m_view->selectionModel();
     if ( sm == 0 ) {
         return lst;
     }
     foreach ( QModelIndex i, sm->selectedRows() ) {
-        Node * n = m_editor->itemModel()->node( i );
+        Node * n = m_view->itemModel()->node( i );
         if ( n != 0 && n->type() != Node::Type_Project ) {
             lst.append( n );
         }
@@ -995,20 +1023,15 @@ QList<Node*> TaskEditor::selectedNodes() const {
 
 Node *TaskEditor::selectedNode() const
 {
-    QItemSelectionModel* sm = m_editor->selectionModel();
-    if ( sm == 0 || sm->selectedRows().count() != 1 ) {
+    QList<Node*> lst = selectedNodes();
+    if ( lst.count() != 1 ) {
         return 0;
     }
-    Node * n = m_editor->itemModel()->node( sm->selectedRows().first() );
-    if ( n->type() == Node::Type_Project ) {
-        return 0;
-    }
-    kDebug()<<k_funcinfo<<n<<", "<<n->name()<<endl;
-    return n;
+    return lst.first();
 }
 
 Node *TaskEditor::currentNode() const {
-    Node * n = m_editor->itemModel()->node( m_editor->currentIndex() );
+    Node * n = m_view->itemModel()->node( m_view->currentIndex() );
     if ( n->type() == Node::Type_Project ) {
         return 0;
     }
@@ -1041,7 +1064,7 @@ void TaskEditor::slotEnableActions()
 
 void TaskEditor::updateActionsEnabled( bool on )
 {
-    Project *p = m_editor->project();
+    Project *p = m_view->project();
     
     bool o = ( on && p && selectedNodeCount() <= 1 );
     actionAddTask->setEnabled( o );
@@ -1111,19 +1134,58 @@ void TaskEditor::setupGui()
 void TaskEditor::slotAddTask()
 {
     kDebug()<<k_funcinfo<<endl;
-    emit addTask();
+    if ( selectedNodeCount() == 0 ) {
+        // insert under main project
+        Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
+        edit( m_view->itemModel()->insertSubtask( t, t->getParent() ) );
+        return;
+    }
+    Node *sib = selectedNode();
+    if ( sib == 0 ) {
+        return;
+    }
+    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), sib->getParent() );
+    edit( m_view->itemModel()->insertTask( t, sib ) );
 }
 
 void TaskEditor::slotAddMilestone()
 {
     kDebug()<<k_funcinfo<<endl;
-    emit addMilestone();
+    if ( selectedNodeCount() == 0 ) {
+        // insert under main project
+        Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
+        t->effort()->set( Duration::zeroDuration );
+        edit( m_view->itemModel()->insertSubtask( t, t->getParent() ) );
+        return;
+    }
+    Node *sib = selectedNode(); // sibling
+    if ( sib == 0 ) {
+        return;
+    }
+    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), sib->getParent() );
+    t->effort()->set( Duration::zeroDuration );
+    edit( m_view->itemModel()->insertTask( t, sib ) );
 }
 
 void TaskEditor::slotAddSubtask()
 {
     kDebug()<<k_funcinfo<<endl;
-    emit addSubtask();
+    Node *parent = selectedNode();
+    if ( parent == 0 ) {
+        return;
+    }
+    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), parent );
+    edit( m_view->itemModel()->insertSubtask( t, parent ) );
+}
+
+void TaskEditor::edit( QModelIndex i )
+{
+    if ( i.isValid() ) {
+        QModelIndex p = m_view->model()->parent( i );
+        m_view->setExpanded( p, true );
+        m_view->setCurrentIndex( i );
+        m_view->edit( i );
+    }
 }
 
 void TaskEditor::slotDeleteTask()

@@ -80,6 +80,9 @@ public:
     Node *node( const QModelIndex &index ) const;
     QItemDelegate *createDelegate( int column, QWidget *parent ) const;
 
+    QModelIndex insertTask( Node *node, Node *after );
+    QModelIndex insertSubtask( Node *node, Node *parent );
+    
 protected slots:
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
@@ -186,7 +189,7 @@ public slots:
 protected:
     void updateActionsEnabled( bool on );
     int selectedNodeCount() const;
-    
+
 private slots:
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
@@ -204,7 +207,10 @@ private slots:
     void slotMoveTaskDown();
 
 private:
-    NodeTreeView *m_editor;
+    void edit( QModelIndex index );
+
+private:
+    NodeTreeView *m_view;
 
     KAction *actionAddTask;
     KAction *actionAddMilestone;
