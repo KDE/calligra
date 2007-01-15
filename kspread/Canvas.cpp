@@ -614,7 +614,7 @@ void Canvas::slotScrollHorz( int _value )
     if ( sheet->layoutDirection() == Sheet::RightToLeft )
         _value = horzScrollBar()->maximum() - _value;
 
-    if ( _value < 0.0 ) {
+    if ( _value < 0 ) {
         kDebug (36001)
                 << "Canvas::slotScrollHorz: value out of range (_value: "
                 << _value << ')' << endl;
@@ -634,6 +634,8 @@ void Canvas::slotScrollHorz( int _value )
     // New absolute position
     // NOTE Stefan: Always store whole pixels, otherwise we'll get offsets.
     d->xOffset -=  d->view->doc()->unzoomItX( dx );
+    if ( d->xOffset < 0.05 )
+        d->xOffset = 0.0;
 
     // scrolling the widgets in the right direction
     if ( sheet->layoutDirection() == Sheet::RightToLeft )
@@ -672,6 +674,8 @@ void Canvas::slotScrollVert( int _value )
     // New absolute position
     // NOTE Stefan: Always store whole pixels, otherwise we'll get offsets.
     d->yOffset -= d->view->doc()->unzoomItY( dy );
+    if ( d->yOffset < 0.05 )
+        d->yOffset = 0.0;
 
     sheet->enableScrollBarUpdates( true );
 }
