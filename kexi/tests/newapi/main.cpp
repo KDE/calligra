@@ -165,7 +165,7 @@ int main(int argc, char** argv)
 	if (gui) {
 		app = new KApplication(true);
 		instance = app;
-		KGlobal::iconLoader()->addAppDir("kexi");
+		KIconLoader::global()->addAppDir("kexi");
 	}
 	else {
 		instance = new KInstance(prgname);
