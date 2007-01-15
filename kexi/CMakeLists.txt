@@ -2,6 +2,8 @@ project(kexi)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )
 
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+
 add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )
 add_subdirectory( kexidb )
@@ -17,7 +19,7 @@ add_subdirectory( main2 )
 
 ##add_subdirectory( migration )
 #add_subdirectory( plugins )
-#add_subdirectory( tests )
+add_subdirectory( tests )
 
 ########### next target ###############
 
