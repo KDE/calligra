@@ -213,6 +213,7 @@ double KoEnhancedPathFormula::evaluate( KoEnhancedPathShape * path )
             // (i.e. there's a bug in the compile() function)
             if( stack.count() < index )
             {
+                kWarning() << "not enough arguments for function " << m_text << endl;
                 m_error = ErrorValue; // not enough arguments
                 return 0.0;
             }
@@ -280,7 +281,7 @@ double KoEnhancedPathFormula::evaluateFunction( Function function, const QList<d
             return qMax( arguments[0], arguments[1] );
         break;
         case KoEnhancedPathFormula::FunctionIf:
-            if( arguments[0] )
+            if( arguments[0] > 0.0 )
                 return arguments[1];
             else
                 return arguments[2];

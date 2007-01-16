@@ -79,6 +79,93 @@ KoEnhancedPathShapeFactory::KoEnhancedPathShapeFactory( QObject *parent )
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
 
     addTemplate(t);
+
+    modifiers = "10 150";
+
+    commands.clear();
+    commands.append( "M ?1w8 0" );
+    commands.append( "X 0 ?1h8" );
+    commands.append( "L ?f2 ?f3 0 ?3h8 0 ?5h8 ?f4 ?f5 0 ?7h8" );
+    commands.append( "Y ?1w8 height" );
+    commands.append( "L ?f6 ?f7 ?3w8 height ?5w8 height ?f8 ?f9 ?7w8 height" );
+    commands.append( "X width ?7h8" );
+    commands.append( "L ?f10 ?f11 width ?5h8 width ?3h8 ?f12 ?f13 width ?1h8" );
+    commands.append( "Y ?7w8 0" );
+    commands.append( "L ?f14 ?f15 ?5w8 0 ?3w8 0 ?f16 ?f17" );
+    commands.append( "Z" );
+    commands.append( "N" );
+
+    handles.clear();
+    handles.append( "$0 $1" );
+
+    formulae.clear();
+    formulae["1h8"] = "0.125 * height";
+    formulae["3h8"] = "0.400 * height";
+    formulae["5h8"] = "0.600 * height";
+    formulae["7h8"] = "0.875 * height";
+    formulae["1w8"] = "0.125 * width";
+    formulae["3w8"] = "0.400 * width";
+    formulae["5w8"] = "0.600 * width";
+    formulae["7w8"] = "0.875 * width";
+
+    formulae["f0"] = "$0 - 0.5 * width";
+    formulae["f1"] = "$1 - 0.5 * height";
+
+    formulae["f2"] = "if(?f18 , $0 , 0)";    // x2
+    formulae["f3"] = "if(?f18 , $1 , 0.2625*height )";   // y2
+
+    formulae["f4"] = "if(?f23 , $0 , 0)";       // x5
+    formulae["f5"] = "if(?f23 , $1 , 0.7375*height )";  // y5
+
+    formulae["f6"] = "if(?f26 , $0 , 0.2625*width )";   // x8
+    formulae["f7"] = "if(?f26 , $1 , height )";  // y8
+
+    formulae["f8"] = "if(?f29 , $0 , 0.7375*width )";  // x11
+    formulae["f9"] = "if(?f29 , $1 , height )";  // y11
+
+    formulae["f10"] = "if(?f32 , $0 , width)"; // x14
+    formulae["f11"] = "if(?f32 , $1 , 0.7375*height )"; // y14
+
+    formulae["f12"] = "if(?f34 , $0 , width )"; // x17
+    formulae["f13"] = "if(?f34 , $1 , 0.2625*height )";  // y17
+
+    formulae["f14"] = "if(?f36 , $0 , 0.7375*width )"; // x20
+    formulae["f15"] = "if(?f36 , $1 , 0)";      // y20
+
+    formulae["f16"] = "if(?f38 , $0 , 0.2625*width )";  // x23
+    formulae["f17"] = "if(?f38 , $1 , 0)";      // y23
+
+    formulae["f18"] = "if($0 , -1, ?f19 )";
+    formulae["f19"] = "if(?f1 , -1, ?f22 )";
+    formulae["f20"] = "abs( ?f0 )";
+    formulae["f21"] = "abs( ?f1 )";
+    formulae["f22"] = "?f20 - ?f21";
+    formulae["f23"] = "if( $0, -1, ?f24 )";
+    formulae["f24"] = "if( ?f1, ?f22, -1 )";
+    formulae["f25"] = "$1 - height";
+    formulae["f26"] = "if( ?f25, ?f27, -1 )";
+    formulae["f27"] = "if( ?f0, -1, ?f28 )";
+    formulae["f28"] = "?f21 - ?f20";
+    formulae["f29"] = "if( ?f25, ?f30, -1 )";
+    formulae["f30"] = "if( ?f0, ?f28, -1 )";
+    formulae["f31"] = "$0 - width";
+    formulae["f32"] = "if( ?f31, ?f33, -1)";
+    formulae["f33"] = "if( ?f1, ?f22, -1)";
+    formulae["f34"] = "if( ?f31, ?f35, -1)";
+    formulae["f35"] = "if( ?f1, -1, ?f22 )";
+    formulae["f36"] = "if( $1, -1, ?f37 )";
+    formulae["f37"] = "if( ?f0, ?f28, -1 )";
+    formulae["f38"] = "if( $1, -1, ?f39 )";
+    formulae["f39"] = "if( ?f0, -1, ?f28 )";
+    formulae["f40"] = "$0";
+    formulae["f41"] = "$1";
+
+    t.name = i18n("Enhanced Path");
+    t.toolTip = i18n("A callout");
+    t.icon = "callout";
+    t.properties = dataToProperties( modifiers, commands, handles, formulae );
+
+    addTemplate(t);
 }
 
 KoShape * KoEnhancedPathShapeFactory::createDefaultShape() const
