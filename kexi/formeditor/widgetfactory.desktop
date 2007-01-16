@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KFormDesigner/WidgetFactory
 Comment=Widget Factory Base
+Comment[el]=Βάση μηχανής γραφικών συστατικών
 Comment[fr]=Base de création de widgets
 Comment[ja]=ウィジェットファクトリーベース
 Comment[x-test]=xxWidget Factory Basexx

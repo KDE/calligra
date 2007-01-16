@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Kexi DB Widgets
+Name[el]=Γραφικά συστατικά Kexi DB
 Name[fr]=Éléments graphiques de base de données Kexi
 Name[ja]=Kexi DB ウィジェット
 Name[x-test]=xxKexi DB Widgetsxx

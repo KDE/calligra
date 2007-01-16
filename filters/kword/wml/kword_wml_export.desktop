@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord WML Export Filter
+Name[el]=Φίλτρο εξαγωγής WML του KWord
 Name[fr]=Filtre d'exportation WML de KWord
 Name[ja]=KWord WML エクスポートフィルタ
 Name[x-test]=xxKWord WML Export Filterxx

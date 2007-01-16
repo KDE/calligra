@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart XPM Export Filter
+Name[el]=Φίλτρο εξαγωγής XPM του KChart
 Name[fr]=Filtre d'exportation XPM de KChart
 Name[ja]=KChart XPM エクスポートフィルタ
 Name[x-test]=xxKChart XPM Export Filterxx

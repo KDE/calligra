@@ -4,10 +4,12 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=KSpread Table Source
+Name[el]=Πηγή πίνακα του KSpread
 Name[fr]=Source de tableaux KSpread
 Name[ja]=KSpread テーブルソース
 Name[x-test]=xxKSpread Table Sourcexx
 Comment=This datasource type lets you use your entries from a kspread file.
+Comment[el]=Αυτή η πηγή δεδομένων σας επιτρέπει να χρησιμοποιήσετε τις καταχωρήσεις σας από ένα αρχείο του KSpread.
 Comment[fr]=Ce type de source de données vous permet d'utiliser vos saisies depuis un fichier KSpread.
 Comment[ja]=KSpread ファイルのデータを使用できるようにします。
 Comment[x-test]=xxThis datasource type lets you use your entries from a kspread file.xx

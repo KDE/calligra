@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/VacationChecklist.kst
 Name=Vacation Checklist
+Name[el]=Λίστα ελέγχου διακοπών
 Name[fr]=Checklist des vacances
 Name[ja]=休暇チェックリスト
 Name[x-test]=xxVacation Checklistxx

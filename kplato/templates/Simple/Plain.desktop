@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Plain.kplatot
 Name=Plain
+Name[el]=Απλό
 Name[fr]=Brut
 Name[ja]=プレーン
 Name[x-test]=xxPlainxx

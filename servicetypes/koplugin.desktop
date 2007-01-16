@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KOfficePlugin
 Comment=KOffice Plugin
+Comment[el]=Πρόσθετο του KOffice
 Comment[fr]=Module externe de KOffice
 Comment[ja]=KOffice プラグイン
 Comment[x-test]=xxKOffice Pluginxx

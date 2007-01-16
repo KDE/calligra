@@ -2,10 +2,12 @@
 Encoding=UTF-8
 Icon=template_bluebreezepicture
 Name=Blue Breeze Picture
+Name[el]=Εικόνα Blue Breeze
 Name[fr]=Brise bleue, image
 Name[ja]=ブルーブリーズ ピクチャー
 Name[x-test]=xxBlue Breeze Picturexx
 Comment=A peaceful presentation with a title and picture area
+Comment[el]=Μια ήρεμη παρουσίαση με τίτλο και με περιοχή εικόνας
 Comment[fr]=Une présentation apaisée avec un titre et une image
 Comment[ja]=タイトルと画像領域で構成するおとなしいプレゼンテーション
 Comment[x-test]=xxA peaceful presentation with a title and picture areaxx

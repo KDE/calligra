@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ArrowLeftUp.atf
 Name=Arrow Left/Up
+Name[el]=Αριστερό/πάνω βέλος
 Name[fr]=Flèche gauche / haute
 Name[ja]=左上矢印
 Name[x-test]=xxArrow Left/Upxx

@@ -5,6 +5,7 @@ URL=.source/kde3.kpt
 Name=KDE 3
 Name[x-test]=xxKDE 3xx
 Comment=A presentation with KDE 3 theming
+Comment[el]=Μια παρουσίαση με χρωματικό θέμα το KDE 3
 Comment[fr]=Une présentation avec un thème KDE 3
 Comment[ja]=KDE 3 テーマによるプレゼンテーション
 Comment[x-test]=xxA presentation with KDE 3 themingxx

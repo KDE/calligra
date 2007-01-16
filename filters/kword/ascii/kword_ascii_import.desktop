@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord ASCII Import Filter
+Name[el]=Φίλτρο εισαγωγής ascii του KWord
 Name[fr]=Filtre d'importation ASCII de KWord
 Name[ja]=KWord ASCII インポートフィルタ
 Name[x-test]=xxKWord ASCII Import Filterxx

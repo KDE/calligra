@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Spreadsheet Component
+Name[el]=Συστατικό λογιστικών φύλλων του KOffice
 Name[fr]=Composant tableur de KOffice
 Name[ja]=KOffice 表計算コンポーネント
 Name[x-test]=xxKOffice Spreadsheet Componentxx
@@ -12,6 +13,7 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-template,application/x-kspread
 GenericName=Spreadsheets
+GenericName[el]=Λογιστικά φύλλα
 GenericName[fr]=Tableurs
 GenericName[ja]=表計算
 GenericName[x-test]=xxSpreadsheetsxx

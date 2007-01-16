@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/StudentIDCard.kst
 Name=Student ID Card
+Name[el]=Δελτίο ταυτότητας μαθητή
 Name[fr]=Carte d'étudiant
 Name[ja]=学生 ID カード
 Name[x-test]=xxStudent ID Cardxx

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord AmiPro Export Filter
+Name[el]=Φίλτρο εξαγωγής AmiPro του KWord
 Name[fr]=Filtre d'exportation AmiPro de KWord
 Name[ja]=KWord AmiPro エクスポートフィルタ
 Name[x-test]=xxKWord AmiPro Export Filterxx

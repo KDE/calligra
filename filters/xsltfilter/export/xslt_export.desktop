@@ -8,6 +8,7 @@ X-KDE-Weight=1
 X-KDE-Available=check
 ImportDescription=KWord
 Name=KOffice XSLT Export Filter
+Name[el]=Φίλτρο εξαγωγής XSLT του KOffice
 Name[fr]=Filtre d'exportation XSLT de KOffice
 Name[ja]=KOffice XSLT エクスポートフィルタ
 Name[x-test]=xxKOffice XSLT Export Filterxx

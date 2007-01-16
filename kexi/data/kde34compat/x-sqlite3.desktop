@@ -5,6 +5,7 @@ MimeType=application/x-sqlite3
 Icon=empty
 Patterns=
 Comment=SQLite3 Database File
+Comment[el]=Αρχείο βάσης δεδομένων SQLite3
 Comment[fr]=Fichier de base de données SQLite3
 Comment[ja]=SQLite3 データベースファイル
 Comment[x-test]=xxSQLite3 Database Filexx

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=CSV Export Filter for KSpread
+Name[el]=Φίλτρο εξαγωγής CSV για το KSpread
 Name[fr]=Filtre d'exportation CSV de KSpread
 Name[ja]=KSpread CSV エクスポートフィルタ
 Name[x-test]=xxCSV Export Filter for KSpreadxx

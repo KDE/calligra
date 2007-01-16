@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KSpread Applix Spreadsheet Import Filter
+Name[el]=Φίλτρο εισαγωγής λογιστικού φύλλου Applix του KSpread
 Name[fr]=Filtre d'importation Applix Spreadsheet de KSpread
 Name[ja]=KSpread Applix スプレッドシート インポートフィルタ
 Name[x-test]=xxKSpread Applix Spreadsheet Import Filterxx

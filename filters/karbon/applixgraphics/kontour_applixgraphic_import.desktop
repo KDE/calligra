@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Kontour Applixgraphics Import Filter
+Name[el]=Φίλτρο εισαγωγής Applixgraphics του Kontour
 Name[fr]=Filtre d'importation Applix Graphics vers Kontour
 Name[ja]=Kontour Applixgraphics インポートフィルタ
 Name[x-test]=xxKontour Applixgraphics Import Filterxx

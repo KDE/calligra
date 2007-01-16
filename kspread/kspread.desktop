@@ -4,6 +4,7 @@ Name=KSpread
 Name[x-test]=xxKSpreadxx
 Exec=kspread %u
 GenericName=Spreadsheets
+GenericName[el]=Λογιστικά φύλλα
 GenericName[fr]=Tableurs
 GenericName[ja]=表計算
 GenericName[x-test]=xxSpreadsheetsxx

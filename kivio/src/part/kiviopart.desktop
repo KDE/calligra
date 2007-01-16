@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Flowchart & Diagram Editing Component
+Name[el]=Συστατικό επεξεργασίας διαγραμμάτων ροής & απλών διαγραμμάτων του KOffice
 Name[fr]=Composant conception de diagrammes et de tableaux de KOffice
 Name[ja]=KOffice フローチャート & ダイアグラム編集コンポーネント
 Name[x-test]=xxKOffice Flowchart & Diagram Editing Componentxx
@@ -11,6 +12,7 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 Categories=Qt;KDE;Office;
 GenericName=Flowchart & Diagram
+GenericName[el]=Διάγραμμα ροής & απλό διάγραμμα
 GenericName[fr]=Diagramme et tableau
 GenericName[ja]=フローチャート & ダイアグラム編集
 GenericName[x-test]=xxFlowchart & Diagramxx

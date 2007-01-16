@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ArrowDown.atf
 Name=Arrow Down
+Name[el]=Κάτω βέλος
 Name[fr]=Flèche basse
 Name[ja]=下矢印
 Name[x-test]=xxArrow Downxx

@@ -4,10 +4,12 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Tables
+GenericName[el]=Πίνακες
 GenericName[fr]=Tableaux
 GenericName[ja]=テーブル
 GenericName[x-test]=xxTablesxx
 Name=Tables
+Name[el]=Πίνακες
 Name[fr]=Tableaux
 Name[ja]=テーブル
 Name[x-test]=xxTablesxx

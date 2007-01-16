@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ArrowRight.atf
 Name=Arrow Right
+Name[el]=Δεξί βέλος
 Name[fr]=Flèche droite
 Name[ja]=右矢印
 Name[x-test]=xxArrow Rightxx

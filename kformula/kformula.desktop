@@ -4,6 +4,7 @@ Name=KFormula
 Name[x-test]=xxKFormulaxx
 Exec=kformula %u
 GenericName=Formula Editor
+GenericName[el]=Επεξεργαστής μαθηματικών τύπων
 GenericName[fr]=Éditeur de formules
 GenericName[ja]=数式エディタ
 GenericName[x-test]=xxFormula Editorxx

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord Microsoft Write Import Filter
+Name[el]=Φίλτρο εισαγωγής Microsoft Write του KWord
 Name[fr]=Filtre d'importation MS-Write de KWord
 Name[ja]=KWord Microsoft Write インポートフィルタ
 Name[x-test]=xxKWord Microsoft Write Import Filterxx

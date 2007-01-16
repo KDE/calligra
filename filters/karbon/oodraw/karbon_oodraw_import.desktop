@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Draw Import Filter for Karbon14
+Name[el]=Φίλτρο εισαγωγής OpenOffice.org Draw για το Karbon14
 Name[fr]=Filtre d'importation OpenOffice.org Draw de Karbon14
 Name[ja]=Karbon14 OpenOffice.org Draw インポートフィルタ
 Name[x-test]=xxOpenOffice.org Draw Import Filter for Karbon14xx

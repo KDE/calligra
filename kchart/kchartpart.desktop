@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Chart Component
+Name[el]=Συστατικό γραφημάτων του KOffice
 Name[fr]=Composant diagramme de KOffice
 Name[ja]=KOffice グラフ作成コンポーネント
 Name[x-test]=xxKOffice Chart Componentxx
@@ -12,6 +13,7 @@ X-KDE-NativeMimeType=application/x-kchart
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.chart,application/vnd.oasis.opendocument.chart-template
 GenericName=Chart
+GenericName[el]=Γράφημα
 GenericName[fr]=Diagramme
 GenericName[ja]=グラフ
 GenericName[x-test]=xxChartxx

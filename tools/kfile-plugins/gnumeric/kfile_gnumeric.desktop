@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Gnumeric Info
+Name[el]=Πληροφορίες Gnumeric
 Name[fr]=Informations sur Gnumeric
 Name[ja]=Gnumeric 情報
 Name[x-test]=xxGnumeric Infoxx

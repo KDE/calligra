@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter JPEG Export Filter
+Name[el]=Φίλτρο εξαγωγής JPEG του KPresenter
 Name[fr]=Filtre d'exportation JPEG de KPresenter
 Name[ja]=KPresenter JPEG エクスポートフィルタ
 Name[x-test]=xxKPresenter JPEG Export Filterxx

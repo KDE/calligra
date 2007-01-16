@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Thesaurus Tool
+Name[el]=Εργαλείο συνωνύμων
 Name[fr]=Outil Thésaurus
 Name[ja]=類義語ツール
 Name[x-test]=xxThesaurus Toolxx
@@ -9,6 +10,7 @@ X-KDE-Library=libthesaurustool
 Type=Service
 Commands=thesaurus
 Comment=Show Related Words
+Comment[el]=Εμφάνιση συγγενικών λέξεων
 Comment[fr]=Afficher les mots liés
 Comment[ja]=類義語を表示
 Comment[x-test]=xxShow Related Wordsxx

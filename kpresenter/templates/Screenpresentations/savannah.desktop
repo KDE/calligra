@@ -2,10 +2,12 @@
 Encoding=UTF-8
 Icon=template_savannah
 Name=Savannah
+Name[el]=Σαβάνα
 Name[fr]=Savane
 Name[ja]=サバンナ
 Name[x-test]=xxSavannahxx
 Comment=Savannah by dannya
+Comment[el]=Σαβάνα από dannya
 Comment[fr]=Savane par Dannya
 Comment[x-test]=xxSavannah by dannyaxx
 Type=Link

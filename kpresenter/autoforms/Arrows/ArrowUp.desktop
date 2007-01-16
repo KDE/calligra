@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ArrowUp.atf
 Name=Arrow Up
+Name[el]=Πάνω βέλος
 Name[fr]=Flèche haute
 Name[ja]=上矢印
 Name[x-test]=xxArrow Upxx

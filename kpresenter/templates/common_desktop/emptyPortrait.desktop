@@ -2,10 +2,12 @@
 Encoding=UTF-8
 Icon=template_emptyportrait
 Name=Empty Portrait
+Name[el]=Κενό πορτραίτο
 Name[fr]=Portrait, neutre
 Name[ja]=空 (縦長)
 Name[x-test]=xxEmpty Portraitxx
 Comment=Empty presentation (portrait-oriented)
+Comment[el]=Κενή παρουσίαση (διάταξη πορτραίτου)
 Comment[fr]=Présentation vide (portrait)
 Comment[ja]=空のプレゼンテーション (縦長)
 Comment[x-test]=xxEmpty presentation (portrait-oriented)xx

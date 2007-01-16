@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord Applixword Import Filter
+Name[el]=Φίλτρο εισαγωγής Applixword του KWord
 Name[fr]=Filtre d'importation Applix Word de KWord
 Name[ja]=KWord Applixword インポートフィルタ
 Name[x-test]=xxKWord Applixword Import Filterxx

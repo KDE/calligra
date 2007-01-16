@@ -7,6 +7,7 @@ Type=Application
 Icon=kthesaurus
 Exec=kthesaurus
 GenericName=Related Words
+GenericName[el]=Συγγενικές λέξεις
 GenericName[fr]=Mots liés
 GenericName[ja]=類義語
 GenericName[x-test]=xxRelated Wordsxx

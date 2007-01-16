@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Invoice.kst
 Name=Invoice
+Name[el]=Τιμολόγιο
 Name[fr]=Rentrées
 Name[ja]=送り状
 Name[x-test]=xxInvoicexx

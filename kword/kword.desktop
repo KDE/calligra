@@ -5,6 +5,7 @@ Name=KWord
 Name[x-test]=xxKWordxx
 Exec=kword %u
 GenericName=Word Processing
+GenericName[el]=Επεξεργασία κειμένου
 GenericName[fr]=Traitement de texte
 GenericName[ja]=ワープロ
 GenericName[x-test]=xxWord Processingxx

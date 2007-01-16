@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/PriceQuotation.kst
 Name=Price Quotation
+Name[el]=Εμφάνιση τιμών
 Name[fr]=Chiffrage
 Name[ja]=見積書
 Name[x-test]=xxPrice Quotationxx

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Project Management Component
+Name[el]=Συστατικό διαχείρισης έργων του KOffice
 Name[fr]=Composant gestion de projets de KOffice
 Name[ja]=KOffice プロジェクト管理コンポーネント
 Name[x-test]=xxKOffice Project Management Componentxx
@@ -10,6 +11,7 @@ Type=Service
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-vnd.kde.kplato
 GenericName=Project Management
+GenericName[el]=Διαχείριση έργων
 GenericName[fr]=Gestion de projets
 GenericName[ja]=プロジェクト管理
 GenericName[x-test]=xxProject Managementxx

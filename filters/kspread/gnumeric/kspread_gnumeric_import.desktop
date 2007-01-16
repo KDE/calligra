@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=GNUMERIC Import Filter for KSpread
+Name[el]=Φίλτρο εισαγωγής GNUMERIC για το KSpread
 Name[fr]=Filtre d'importation GNUmeric de KSpread
 Name[ja]=KSpread GNUmeric インポートフィルタ
 Name[x-test]=xxGNUMERIC Import Filter for KSpreadxx

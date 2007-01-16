@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord AbiWord Import Filter
+Name[el]=Φίλτρο εισαγωγής Abiword του KWord
 Name[fr]=Filtre d'importation AbiWord de KWord
 Name[ja]=KWord AbiWord インポートフィルタ
 Name[x-test]=xxKWord AbiWord Import Filterxx

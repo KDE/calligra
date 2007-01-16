@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=KPlato
 Name[x-test]=xxKPlatoxx
 GenericName=Project Management
+GenericName[el]=Διαχείριση έργων
 GenericName[fr]=Gestion de projets
 GenericName[ja]=プロジェクト管理
 GenericName[x-test]=xxProject Managementxx

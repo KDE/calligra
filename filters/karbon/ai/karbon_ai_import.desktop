@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon14 Illustrator Import Filter
+Name[el]=Φίλτρο εισαγωγής Illustrator του Karbon14
 Name[fr]=Filtre d'importation Illustrator vers Karbon 14
 Name[ja]=Karbon14 Illustrator インポートフィルタ
 Name[x-test]=xxKarbon14 Illustrator Import Filterxx

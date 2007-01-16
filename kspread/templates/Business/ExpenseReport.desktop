@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ExpenseReport.kst
 Name=Expense Report
+Name[el]=Αναφορά εξόδων
 Name[fr]=Rapport des dépenses
 Name[ja]=経費報告書
 Name[x-test]=xxExpense Reportxx

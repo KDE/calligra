@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord HTML Import Filter
+Name[el]=Φίλτρο εισαγωγής HTML του KWord
 Name[fr]=Filtre d'importation HTML de KWord
 Name[ja]=KWord HTML インポートフィルタ
 Name[x-test]=xxKWord HTML Import Filterxx

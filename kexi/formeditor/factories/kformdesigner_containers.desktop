@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Container Widgets
+Name[el]=Γραφικά συστατικά υποδοχείς
 Name[fr]=Conteneur d'éléments graphiques
 Name[ja]=コンテナウィジェット
 Name[x-test]=xxContainer Widgetsxx

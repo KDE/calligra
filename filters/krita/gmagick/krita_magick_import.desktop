@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita Magick Import Filter
+Name[el]=Φίλτρο εισαγωγής Magick του Krita
 Name[fr]=Filtre d'importation Magick de Krita
 Name[ja]=Krita Magick インポートフィルタ
 Name[x-test]=xxKrita Magick Import Filterxx

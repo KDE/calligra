@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Info
+Name[el]=Πληροφορίες KOffice
 Name[fr]=Informations sur KOffice
 Name[ja]=KOffice 情報
 Name[x-test]=xxKOffice Infoxx

@@ -2,10 +2,12 @@
 Encoding=UTF-8
 Icon=template_classroom
 Name=Classroom
+Name[el]=Σχολική τάξη
 Name[fr]=Salle de classe
 Name[ja]=クラスルーム
 Name[x-test]=xxClassroomxx
 Comment=Classroom by dannya
+Comment[el]=Παρουσίαση σχολικής τάξης από dannya
 Comment[fr]=Salle de classe, par Dannya
 Comment[x-test]=xxClassroom by dannyaxx
 Type=Link

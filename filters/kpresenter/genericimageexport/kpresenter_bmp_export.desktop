@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter BMP Export Filter
+Name[el]=Φίλτρο εξαγωγής BMP του KPresenter
 Name[fr]=Filtre d'exportation BMP de KPresenter
 Name[ja]=KPresenter BMP エクスポートフィルタ
 Name[x-test]=xxKPresenter BMP Export Filterxx

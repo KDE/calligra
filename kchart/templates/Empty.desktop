@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Empty.chrt
 Name=Blank Worksheet
+Name[el]=Κενό φύλλο εργασίας
 Name[fr]=Feuille de travail blanche
 Name[ja]=空のワークシート
 Name[x-test]=xxBlank Worksheetxx

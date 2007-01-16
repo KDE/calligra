@@ -4,10 +4,12 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Migration Plugin
+GenericName[el]=Πρόσθετο μεταφοράς
 GenericName[fr]=Module de migration
 GenericName[ja]=データ移行プラグイン
 GenericName[x-test]=xxMigration Pluginxx
 Name=Migration Plugin
+Name[el]=Πρόσθετο μεταφοράς
 Name[fr]=Module de migration
 Name[ja]=データ移行プラグイン
 Name[x-test]=xxMigration Pluginxx

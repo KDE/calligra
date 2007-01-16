@@ -2,10 +2,12 @@
 Encoding=UTF-8
 Icon=template_totallynewproduct
 Name=Totally New Product
+Name[el]=Εντελώς καινούριο προϊόν
 Name[fr]=Produit totalement nouveau
 Name[ja]=新商品
 Name[x-test]=xxTotally New Productxx
 Comment=An informal, green-swirl presentation
+Comment[el]=Μια ανεπίσημη βασισμένη στο πράσινο παρουσίαση
 Comment[fr]=Un tourbillon vert, présentation informelle
 Comment[x-test]=xxAn informal, green-swirl presentationxx
 Type=Link

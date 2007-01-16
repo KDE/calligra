@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord PDF Import Filter
+Name[el]=Φίλτρο εισαγωγής PDF του KWord
 Name[fr]=Filtre d'importation PDF de KWord
 Name[ja]=KWord PDF インポートフィルタ
 Name[x-test]=xxKWord PDF Import Filterxx

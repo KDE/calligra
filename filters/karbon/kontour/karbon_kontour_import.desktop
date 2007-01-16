@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon Kontour Import Filter
+Name[el]=Φίλτρο εισαγωγής Kontour του Karbon
 Name[fr]=Filtre d'importation Kontour de Karbon 14
 Name[ja]=Karbon Kontour インポートフィルタ
 Name[x-test]=xxKarbon Kontour Import Filterxx

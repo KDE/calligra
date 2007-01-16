@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=MySQL
 Name[x-test]=xxMySQLxx
 Comment=MySQL Migration Driver for Kexi
+Comment[el]=Οδηγός μεταφοράς MySQL του Kexi
 Comment[fr]=Pilote de migration MySQL pour Kexi
 Comment[ja]=Kexi MySQL データ移行ドライバ
 Comment[x-test]=xxMySQL Migration Driver for Kexixx

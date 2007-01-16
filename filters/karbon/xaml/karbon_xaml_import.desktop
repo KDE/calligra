@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon XAML Import Filter
+Name[el]=Φίλτρο εισαγωγής XAML του Karbon
 Name[fr]=Filtre d'importation XAML de Karbon 14
 Name[ja]=Karbon XAML インポートフィルタ
 Name[x-test]=xxKarbon XAML Import Filterxx

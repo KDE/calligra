@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Connection4.atf
 Name=Connection 04
+Name[el]=Σύνδεση 04
 Name[fr]=Connexion 04
 Name[ja]=接続 04
 Name[x-test]=xxConnection 04xx

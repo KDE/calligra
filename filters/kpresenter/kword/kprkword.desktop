@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter KWord Filter
+Name[el]=KPresenter KWord φίλτρο
 Name[fr]=Filtre KWord pour KPresenter
 Name[ja]=KPresenter KWord フィルタ
 Name[x-test]=xxKPresenter KWord Filterxx

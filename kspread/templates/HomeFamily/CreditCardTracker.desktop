@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/CreditCardTracker.kst
 Name=Credit Card Tracker
+Name[el]=Εποπτεία πιστωτικών καρτών
 Name[fr]=Traqueur de carte de crédit
 Name[ja]=クレジットカード管理表
 Name[x-test]=xxCredit Card Trackerxx

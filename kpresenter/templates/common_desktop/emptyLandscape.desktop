@@ -2,10 +2,12 @@
 Encoding=UTF-8
 Icon=template_emptylandscape
 Name=Empty
+Name[el]=Κενό
 Name[fr]=Neutre
 Name[ja]=空
 Name[x-test]=xxEmptyxx
 Comment=Empty presentation
+Comment[el]=Κενή παρουσίαση
 Comment[fr]=Présentation vide
 Comment[ja]=空のプレゼンテーション
 Comment[x-test]=xxEmpty presentationxx

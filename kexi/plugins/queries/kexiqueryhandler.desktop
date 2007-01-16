@@ -4,10 +4,12 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Queries
+GenericName[el]=Ερωτήματα
 GenericName[fr]=Requêtes
 GenericName[ja]=クエリ
 GenericName[x-test]=xxQueriesxx
 Name=Queries
+Name[el]=Ερωτήματα
 Name[fr]=Requêtes
 Name[ja]=クエリ
 Name[x-test]=xxQueriesxx

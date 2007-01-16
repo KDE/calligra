@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Other Office Files
+Name[el]=Άλλα αρχεία γραφείου
 Name[fr]=Autres documents bureautiques
 Name[ja]=その他の Office ファイル
 Name[x-test]=xxOther Office Filesxx

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart BMP Export Filter
+Name[el]=Φίλτρο εξαγωγής BMP του KChart
 Name[fr]=Filtre d'exportation BMP de KChart
 Name[ja]=KChar BMP エクスポートフィルタ
 Name[x-test]=xxKChart BMP Export Filterxx

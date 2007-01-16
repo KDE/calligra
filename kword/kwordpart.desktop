@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Word Processing Component
+Name[el]=Συστατικό επεξεργασίας κειμένου του KOffice
 Name[fr]=Composant traitement de texte de KOffice
 Name[ja]=KOffice ワープロコンポーネント
 Name[x-test]=xxKOffice Word Processing Componentxx
@@ -12,6 +13,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text-template,appl
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 GenericName=Text Documents
+GenericName[el]=Έγγραφα κειμένου
 GenericName[fr]=Documents texte
 GenericName[ja]=テキスト文書
 GenericName[x-test]=xxText Documentsxx

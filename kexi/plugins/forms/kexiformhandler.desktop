@@ -4,10 +4,12 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Forms
+GenericName[el]=Φόρμες
 GenericName[fr]=Formulaires
 GenericName[ja]=フォーム
 GenericName[x-test]=xxFormsxx
 Name=Forms
+Name[el]=Φόρμες
 Name[fr]=Formulaires
 Name[ja]=フォーム
 Name[x-test]=xxFormsxx

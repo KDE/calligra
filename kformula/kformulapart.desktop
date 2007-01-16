@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Formula Component
+Name[el]=Συστατικό μαθηματικών τύπων του KOffice
 Name[fr]=Composant formules de KOffice
 Name[ja]=KOffice 数式コンポーネント
 Name[x-test]=xxKOffice Formula Componentxx
@@ -12,6 +13,7 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.formula
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.formula
 X-KDE-ExtraNativeMimeTypes=application/x-kformula,application/vnd.oasis.opendocument.formula-template,application/mathml+xml
 GenericName=Formula Editor
+GenericName[el]=Επεξεργαστής μαθηματικών τύπων
 GenericName[fr]=Éditeur de formules
 GenericName[ja]=数式エディタ
 GenericName[x-test]=xxFormula Editorxx

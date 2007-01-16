@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon SVG Import Filter
+Name[el]=Φίλτρο εισαγωγής SVG του Karbon
 Name[fr]=Filtre d'exportation SVG de Karbon 14
 Name[ja]=Karbon SVG インポートフィルタ
 Name[x-test]=xxKarbon SVG Import Filterxx

@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOfficePart
 X-KDE-Derived=KParts/ReadWritePart
 Comment=KOffice Component
+Comment[el]=Συστατικό του KOffice
 Comment[fr]=Composant KOffice
 Comment[ja]=KOffice コンポーネント
 Comment[x-test]=xxKOffice Componentxx

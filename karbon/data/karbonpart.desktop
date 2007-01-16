@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Scalable Graphics Component
+Name[el]=Συστατικό διανυσματικών γραφικών του KOffice
 Name[fr]=Composant graphiques vectoriels de KOffice
 Name[ja]=KOffice スケーラブルグラフィックス コンポーネント
 Name[x-test]=xxKOffice Scalable Graphics Componentxx
@@ -14,6 +15,7 @@ X-KDE-NativeMimeType=application/x-karbon
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template
 GenericName=Scalable Graphics
+GenericName[el]=Διανυσματικά γραφικά
 GenericName[fr]=Graphiques vectoriels
 GenericName[ja]=スケーラブルグラフィックス
 GenericName[x-test]=xxScalable Graphicsxx

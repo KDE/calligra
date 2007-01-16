@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Abiword Info
+Name[el]=Πληροφορίες Abiword
 Name[fr]=Informations sur Abiword
 Name[ja]=Abiword 情報
 Name[x-test]=xxAbiword Infoxx

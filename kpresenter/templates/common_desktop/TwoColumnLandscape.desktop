@@ -2,10 +2,12 @@
 Encoding=UTF-8
 Icon=template_twocolumnlandscape
 Name=Two Column
+Name[el]=Δύο στήλες
 Name[fr]=Deux colonnes
 Name[ja]=2 列
 Name[x-test]=xxTwo Columnxx
 Comment=Presentation with a page title and two text columns
+Comment[el]=Παρουσίαση με τίτλο μίας σελίδας και δύο στήλες κειμένου
 Comment[fr]=Présentation avec un titre de page et deux colonnes de texte
 Comment[ja]=タイトルと二つのテキスト欄で構成するプレゼンテーション
 Comment[x-test]=xxPresentation with a page title and two text columnsxx

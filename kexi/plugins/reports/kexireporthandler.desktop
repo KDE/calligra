@@ -4,10 +4,12 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Reports
+GenericName[el]=Αναφορές
 GenericName[fr]=Rapports
 GenericName[ja]=レポート
 GenericName[x-test]=xxReportsxx
 Name=Reports
+Name[el]=Αναφορές
 Name[fr]=Rapports
 Name[ja]=レポート
 Name[x-test]=xxReportsxx

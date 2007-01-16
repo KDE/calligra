@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/BalanceSheet.kst
 Name=Balance Sheet
+Name[el]=Φύλλο ισολογισμού
 Name[fr]=Feuille balance comptable
 Name[ja]=貸借対照表
 Name[x-test]=xxBalance Sheetxx

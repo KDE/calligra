@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Files
+Name[el]=Αρχεία KOffice
 Name[fr]=Fichiers KOffice
 Name[ja]=KOffice ファイル
 Name[x-test]=xxKOffice Filesxx
