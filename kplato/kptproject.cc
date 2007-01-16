@@ -608,6 +608,7 @@ void Project::addResourceGroup( ResourceGroup *group, int index )
 ResourceGroup *Project::takeResourceGroup( ResourceGroup *group )
 {
     int i = m_resourceGroups.indexOf( group );
+    Q_ASSERT( i != -1 );
     if ( i == -1 ) {
         return 0;
     }
@@ -641,7 +642,7 @@ void Project::addResource( ResourceGroup *group, Resource *resource, int index )
 Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
 {
     emit resourceToBeRemoved( resource );
-    removeResourceId( resource->id() );
+    Q_ASSERT( removeResourceId( resource->id() ) == true );
     Resource *r = group->takeResource( resource );
     Q_ASSERT( resource == r );
     emit resourceRemoved( resource );
@@ -966,12 +967,24 @@ ResourceGroup *Project::group( const QString& id )
 
 ResourceGroup *Project::groupByName( const QString& name ) const
 {
-    foreach ( ResourceGroup *g, resourceGroupIdDict.values() ) {
+    foreach ( QString k, resourceGroupIdDict.keys() ) {
+        ResourceGroup *g = resourceGroupIdDict[ k ];
         if ( g->name() == name ) {
+            Q_ASSERT( k == g->id() );
             return g;
         }
     }
     return 0;
+}
+
+void Project::insertResourceId( const QString &id, Resource *resource )
+{
+    resourceIdDict.insert( id, resource );
+}
+
+bool Project::removeResourceId( const QString &id )
+{
+    return resourceIdDict.remove( id );
 }
 
 bool Project::setResourceId( Resource *resource )
@@ -1015,8 +1028,10 @@ Resource *Project::resource( const QString& id )
 
 Resource *Project::resourceByName( const QString& name ) const
 {
-    foreach ( Resource *r, resourceIdDict.values() ) {
+    foreach ( QString k, resourceIdDict.keys() ) {
+        Resource *r = resourceIdDict[ k ];
         if ( r->name() == name ) {
+            Q_ASSERT( k == r->id() );
             return r;
         }
     }

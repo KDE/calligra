@@ -72,7 +72,7 @@ void ResourceGroup::setId(const QString& id) {
 
 void ResourceGroup::setName( const QString& n )
 {
-    m_name = n;
+    m_name = n.trimmed();
     changed();
 }
 
@@ -101,9 +101,6 @@ void ResourceGroup::setProject( Project *project )
         }
     }
     m_project = project;
-    if ( project ) {
-        insertId( m_id );
-    }
     foreach ( Resource *r, m_resources ) {
         r->setProject( project );
     }
@@ -159,7 +156,7 @@ bool ResourceGroup::load(QDomElement &element, XMLLoaderObject &status ) {
                // Load the resource
                 Resource *child = new Resource();
                 if (child->load(e, status)) {
-                    addResource( -1, child, 0);
+                    status.project().addResource( this, child );
                 } else {
                     // TODO: Complain about this
                     delete child;
@@ -208,6 +205,7 @@ bool ResourceGroup::removeId(const QString &id) {
 }
 
 void ResourceGroup::insertId(const QString &id) { 
+    kDebug()<<k_funcinfo<<endl;
     if (m_project)
         m_project->insertResourceGroupId(id, this);
 }
@@ -325,13 +323,13 @@ QStringList Resource::typeToStringList( bool trans ) {
 
 void Resource::setName( const QString n )
 {
-    m_name = n;
+    m_name = n.trimmed();
     changed();
 }
 
 void Resource::setInitials( const QString initials )
 {
-    m_initials = initials;
+    m_initials = initials.trimmed();
     changed();
 }
 
@@ -698,6 +696,7 @@ bool Resource::removeId(const QString &id) {
 }
 
 void Resource::insertId(const QString &id) { 
+    kDebug()<<k_funcinfo<<endl;
     if (m_project)
         m_project->insertResourceId(id, this); 
 }
@@ -741,9 +740,6 @@ void Resource::setProject( Project *project )
         }
     }
     m_project = project;
-    if ( project ) {
-        insertId( m_id );
-    }
 }
 
 /////////   Risk   /////////

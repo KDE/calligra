@@ -79,13 +79,6 @@ public:
     virtual bool load( QDomElement &element, XMLLoaderObject &status );
     virtual void save( QDomElement &element ) const;
 
-    QList<ResourceGroup*> &resourceGroups();
-    virtual void addResourceGroup( ResourceGroup *resource, int index = -1 );
-    ResourceGroup *takeResourceGroup( ResourceGroup *resource );
-    int indexOf( ResourceGroup *resource ) const { return m_resourceGroups.indexOf( resource ); }
-    ResourceGroup *resourceGroupAt( int pos ) const { return m_resourceGroups.value( pos ); }
-    int numResourceGroups() const { return m_resourceGroups.count(); }
-    
     bool addTask( Node* task, Node* position );
     bool addSubTask( Node* task, Node* position );
     bool addSubTask( Node* task, int index, Node* parent );
@@ -102,14 +95,37 @@ public:
     Task *createTask( Node* parent );
     Task *createTask( Task &def, Node* parent );
 
+    QList<ResourceGroup*> &resourceGroups();
+    /// Adds the resource group to the project.
+    virtual void addResourceGroup( ResourceGroup *resource, int index = -1 );
+    /**
+     * Removes the resource group from the project.
+     * The resource group is not deleted.
+     */
+    ResourceGroup *takeResourceGroup( ResourceGroup *resource );
+    int indexOf( ResourceGroup *resource ) const { return m_resourceGroups.indexOf( resource ); }
+    ResourceGroup *resourceGroupAt( int pos ) const { return m_resourceGroups.value( pos ); }
+    int numResourceGroups() const { return m_resourceGroups.count(); }
+    
     /// Returns the resourcegroup with identity id.
     ResourceGroup *group( const QString& id );
+    /// Returns the resource group with the matching name, 0 if no match is found.
     ResourceGroup *groupByName( const QString& name ) const;
     
+    /**
+     * Adds the resource to the project and resource group.
+     * Always use this to add resources.
+     */
     void addResource( ResourceGroup *group, Resource *resource, int index = -1 );
+    /** 
+     * Removes the resource from the project and resource group.
+     * The resource is not deleted.
+     * Always use this to remove resources.
+     */ 
     Resource *takeResource( ResourceGroup *group, Resource *resource );
     /// Returns the resource with identity id.
     Resource *resource( const QString& id );
+    /// Returns the resource with matching name, 0 if no match is found.
     Resource *resourceByName( const QString& name ) const;
     QStringList resourceNameList() const;
 
@@ -220,10 +236,9 @@ public:
         return 0;
     }
     /// Remove the resource with identity id from the register
-    bool removeResourceId( const QString &id ) { return resourceIdDict.remove( id ); }
+    bool removeResourceId( const QString &id );
     /// Insert the resource with identity id
-    void insertResourceId( const QString &id, Resource *resource )
-    { resourceIdDict.insert( id, resource ); }
+    void insertResourceId( const QString &id, Resource *resource );
     /// Generate, set and insert unique id
     bool setResourceId( Resource *resource );
     /// returns a unique resource id

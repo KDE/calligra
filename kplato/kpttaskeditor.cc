@@ -306,8 +306,10 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
             KMacroCommand *cmd = 0;
             QStringList res = m_project->resourceNameList();
             QStringList req = node->requestNameList();
-            QStringList alloc = value.toString().split(',');
-            
+            QStringList alloc;
+            foreach ( QString s, value.toString().split( QRegExp(" *, *"), QString::SkipEmptyParts ) ) {
+                alloc << s.trimmed();
+            }
             // first add all new resources (to "default" group)
             ResourceGroup *pargr = m_project->groupByName( i18n( "Resources" ) );
             foreach ( QString s, alloc ) {
@@ -315,32 +317,31 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 if ( r != 0 ) {
                     continue;
                 }
-                if ( cmd == 0 ) cmd = new KMacroCommand( i18n( "Add resource" ) );
+                if ( cmd == 0 ) cmd = new KMacroCommand( i18n( "Add Resource" ) );
                 if ( pargr == 0 ) {
                     pargr = new ResourceGroup();
                     pargr->setName( i18n( "Resources" ) );
                     cmd->addCommand( new AddResourceGroupCmd( m_part, m_project, pargr ) );
-                    kDebug()<<k_funcinfo<<"add group: "<<pargr->name()<<endl;
+                    //kDebug()<<k_funcinfo<<"add group: "<<pargr->name()<<endl;
                 }
                 r = new Resource();
                 r->setName( s.trimmed() );
                 cmd->addCommand( new AddResourceCmd( m_part, pargr, r ) );
-                kDebug()<<k_funcinfo<<"add resource: "<<r->name()<<endl;
+                //kDebug()<<k_funcinfo<<"add resource: "<<r->name()<<endl;
                 m_part->addCommand( cmd );
                 cmd = 0;
             }
             
-            QString c = i18n( "Modify resource allocations" );
+            QString c = i18n( "Modify Resource Allocations" );
             // Handle deleted requests
             foreach ( QString s, req ) {
                 // if a request is not in alloc, it must have been be removed by the user
-                int p = alloc.indexOf( QRegExp( s.trimmed(), Qt::CaseSensitive, QRegExp::FixedString ) );
-                if ( p == -1 ) {
+                if ( alloc.indexOf( s ) == -1 ) {
                     // remove removed resource request
-                    ResourceRequest *r = node->resourceRequest( s.trimmed() );
+                    ResourceRequest *r = node->resourceRequest( s );
                     if ( r ) {
                         if ( cmd == 0 ) cmd = new KMacroCommand( c );
-                        kDebug()<<k_funcinfo<<"delete request: "<<r->resource()->name()<<" group: "<<r->parent()->group()->name()<<endl;
+                        //kDebug()<<k_funcinfo<<"delete request: "<<r->resource()->name()<<" group: "<<r->parent()->group()->name()<<endl;
                         cmd->addCommand( new RemoveResourceRequestCmd( m_part, r->parent(), r ) );
                     }
                 }
@@ -348,10 +349,9 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
             // Handle new requests
             foreach ( QString s, alloc ) {
                 // if an allocation is not in req, it must be added
-                int p = req.indexOf( QRegExp( s.trimmed(), Qt::CaseSensitive, QRegExp::FixedString ) );
-                if ( p == -1 ) {
+                if ( req.indexOf( s ) == -1 ) {
                     ResourceGroup *pargr = 0;
-                    Resource *r = m_project->resourceByName( s.trimmed() );
+                    Resource *r = m_project->resourceByName( s );
                     if ( r == 0 ) {
                         // Handle request to non exixting resource
                         pargr = m_project->groupByName( i18n( "Resources" ) );
@@ -359,16 +359,17 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                             pargr = new ResourceGroup();
                             pargr->setName( i18n( "Resources" ) );
                             cmd->addCommand( new AddResourceGroupCmd( m_part, m_project, pargr ) );
-                            kDebug()<<k_funcinfo<<"add group: "<<pargr->name()<<endl;
+                            //kDebug()<<k_funcinfo<<"add group: "<<pargr->name()<<endl;
                         }
                         r = new Resource();
-                        r->setName( s.trimmed() );
+                        r->setName( s );
                         cmd->addCommand( new AddResourceCmd( m_part, pargr, r ) );
-                        kDebug()<<k_funcinfo<<"add resource: "<<r->name()<<endl;
+                        //kDebug()<<k_funcinfo<<"add resource: "<<r->name()<<endl;
                         m_part->addCommand( cmd );
                         cmd = 0;
                     } else {
                         pargr = r->parentGroup();
+                        //kDebug()<<k_funcinfo<<"add '"<<r->name()<<"' to group: "<<pargr<<endl;
                     }
                     // add request
                     ResourceGroupRequest *g = node->resourceGroupRequest( pargr );
@@ -377,11 +378,11 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                         if ( cmd == 0 ) cmd = new KMacroCommand( c );
                         g = new ResourceGroupRequest( pargr );
                         cmd->addCommand( new AddResourceGroupRequestCmd( m_part, *task, g ) );
-                        kDebug()<<k_funcinfo<<"add group request: "<<g->group()<<endl;
+                        //kDebug()<<k_funcinfo<<"add group request: "<<g<<endl;
                     }
                     if ( cmd == 0 ) cmd = new KMacroCommand( c );
                     cmd->addCommand( new AddResourceRequestCmd( m_part, g, new ResourceRequest( r, 100 ) ) );
-                    kDebug()<<k_funcinfo<<"add request: "<<r->name()<<" group: "<<g->group()->name()<<endl;
+                    kDebug()<<k_funcinfo<<"add request: "<<r->name()<<" group: "<<g<<endl;
                 }
             }
             if ( cmd ) {
@@ -711,7 +712,7 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
                 return QVariant();
         }
         if ( result.isValid() ) {
-            if ( result.type() == QVariant::String && result.toString().isEmpty()) {
+            if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
                 // HACK to show focus in empty cells
                 result = " ";
             }
@@ -764,7 +765,7 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
                 case 7: return i18n( "Pessimistic" );
                 case 8: return i18n( "Constraint" );
                 case 9: return i18n( "Constraint Start" );
-                case 19: return i18n( "Constraint End" );
+                case 10: return i18n( "Constraint End" );
                 case 11: return i18n( "Description" );
                 default: return QVariant();
             }

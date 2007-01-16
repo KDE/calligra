@@ -1197,6 +1197,7 @@ AddResourceCmd::~AddResourceCmd()
 }
 void AddResourceCmd::execute()
 {
+    Q_ASSERT( m_group->project() );
     if ( m_group->project() ) {
         m_group->project()->addResource( m_group, m_resource, m_index );
         m_mine = false;
@@ -1206,12 +1207,14 @@ void AddResourceCmd::execute()
 }
 void AddResourceCmd::unexecute()
 {
+    Q_ASSERT( m_group->project() );
     if ( m_group->project() ) {
         m_group->project()->takeResource( m_group, m_resource );
         //kDebug()<<k_funcinfo<<"removed: "<<m_resource<<endl;
         m_mine = true;
     }
     setCommandType( 0 );
+    Q_ASSERT( m_group->project() );
 }
 
 RemoveResourceCmd::RemoveResourceCmd( Part *part, ResourceGroup *group, Resource *resource, const QString& name )
