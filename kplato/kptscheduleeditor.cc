@@ -497,7 +497,7 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
             return QVariant();
     }
     if ( result.isValid() ) {
-        if ( result.type() == QVariant::String && result.toString().isEmpty()) {
+        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
             result = " ";
         }

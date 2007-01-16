@@ -681,10 +681,10 @@ QVariant ResourceItemModel::notUsed( const ResourceGroup *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
             return QString(" ");
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
+        case Qt::EditRole:
         case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -718,7 +718,7 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
                 return QVariant();
         }
         if ( result.isValid() ) {
-            if ( result.type() == QVariant::String && result.toString().isEmpty()) {
+            if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
                 // HACK to show focus in empty cells
                 result = " ";
             }
@@ -739,7 +739,7 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
                     }
             }
             if ( result.isValid() ) {
-                if ( result.type() == QVariant::String && result.toString().isEmpty()) {
+                if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
                 // HACK to show focus in empty cells
                     result = " ";
                 }
