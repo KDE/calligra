@@ -326,7 +326,7 @@ void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLoc
     const Formula* formula = cell->formula();
     if ( !formula )
     {
-        kDebug(36002) << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->inputText() << endl;
+        kDebug(36002) << cell->name() << " marked as formula, but formula is 0. Formula string: " << cell->inputText() << endl;
         return;
     }
 
@@ -635,7 +635,7 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
     const Formula* f = cell->formula();
     if (f==0)
     {
-        kDebug(36002) << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->inputText() << endl;
+        kDebug(36002) << cell->name() << " marked as formula, but formula is 0. Formula string: " << cell->inputText() << endl;
 //     Q_ASSERT(cell->formula());
         return Region();
     }

@@ -23,6 +23,7 @@
 
 #include "Cell.h"
 #include "DependencyManager.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "Region.h"
 #include "Value.h"
@@ -51,14 +52,14 @@ public:
    * \li depth(A3) = 2
    */
   QMap<int, Cell*> depths;
-  DependencyManager* depManager;
+  const Map* map;
   bool busy;
 };
 
-RecalcManager::RecalcManager(DependencyManager* depManager)
+RecalcManager::RecalcManager( const Map* map )
   : d(new Private)
 {
-  d->depManager = depManager;
+  d->map  = map;
   d->busy = false;
 }
 
@@ -74,7 +75,7 @@ void RecalcManager::regionChanged(const Region& region)
     d->busy = true;
     kDebug(36002) << "RecalcManager::regionChanged " << region.name() << endl;
     ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
-    d->depths = d->depManager->cellsToCalculate( region );
+    d->depths = d->map->dependencyManager()->cellsToCalculate( region );
     recalc();
     d->busy = false;
 }
@@ -85,7 +86,7 @@ void RecalcManager::recalcSheet(Sheet* const sheet)
         return;
     d->busy = true;
     ElapsedTime et( "Overall sheet recalculation", ElapsedTime::PrintOnlyTime );
-    d->depths = d->depManager->cellsToCalculate( sheet );
+    d->depths = d->map->dependencyManager()->cellsToCalculate( sheet );
     recalc();
     d->busy = false;
 }
@@ -96,7 +97,7 @@ void RecalcManager::recalcMap()
         return;
     d->busy = true;
     ElapsedTime et( "Overall map recalculation", ElapsedTime::PrintOnlyTime );
-    d->depths = d->depManager->cellsToCalculate();
+    d->depths = d->map->dependencyManager()->cellsToCalculate();
     recalc();
     d->busy = false;
 }
@@ -108,10 +109,10 @@ void RecalcManager::recalc()
     {
         // only recalculate, if no circular dependency occurred
         if ( cell->value() != Value::errorCIRCLE() )
-            cell->calc( false );
+            cell->calc();
     }
     kDebug(36002) << "Recalculating " << d->depths.count() << " cell(s).." << endl;
-    dump();
+//     dump();
     d->depths.clear();
 }
 

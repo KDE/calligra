@@ -4985,7 +4985,7 @@ void Sheet::update()
 
 void Sheet::updateCellArea(const Region& cellArea)
 {
-  if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
+  if ( doc()->isLoading() || (!getAutoCalc()))
     return;
 
   setRegionPaintDirty( cellArea );

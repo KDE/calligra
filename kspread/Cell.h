@@ -217,8 +217,10 @@ public:
      * It also clears all errors, if the value itself is not an error.
      * In addition to this, it calculates the outstring and sets the dirty
      * flags so that a redraw is forced.
+     * \param value the new value
+     * \param triggerRecalc if \c true ,triggers a recalculation event
      */
-    void setValue( const Value& value );
+    void setValue( const Value& value, bool triggerRecalc = true );
 
     /**
      * Sets the value for this cell and its formatting and input text, if
@@ -498,13 +500,10 @@ public:
 
     /**
      * Starts calculating.
-     * @param delay true if you want to check for delay condition in doc()
-     *         false if you really have to calculate the value right now
-     *         e.g. if you sort with formula as key
      *
      * @return true on success and false on error.
      */
-    bool calc(bool delay = true);
+    bool calc();
 
     //
     //END
@@ -752,10 +751,10 @@ private:
     Private * const d;
 
     /**
-     * Handle the fact that a cell has been updated - calls cellUpdated()
-     * in the parent Sheet object.
+     * Triggers the events, that are necessary after a value change.
+     * \param triggerRecalc if \c true ,triggers a recalculation event
      */
-    void valueChanged();
+    void valueChanged( bool triggerRecalc = true );
 
     /**
      * \ingroup NativeFormat

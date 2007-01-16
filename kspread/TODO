@@ -227,12 +227,13 @@ Things not in bugzilla
   + Scrollbar that supports jumping one row/column forward or back    2 ----
 
 * Formula/Value engine
-  + DependencyManager / RecalcManager				      1 DONE
-    - The reference depth changes only if a formula was altered. So,
+  + DependencyManager / RecalcManager				      1 ----
+    - The reference depth changes only if a formula was altered. So,	done
       it belongs to the DependencyManager and has to be moved. OTOH,
       it is only use for recalculation. If this is disabled, the
       reference depth is useless. Therefore, we have to respect the
       automatic recalc setting.
+    - Move Cell::calc() to RecalcManager.				----
 
   + Value							      1 ----
     - Support datetimes.						----

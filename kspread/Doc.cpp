@@ -151,7 +151,6 @@ public:
   KGlobalSettings::Completion completionMode;
   KSpread::MoveTo moveTo;
   MethodOfCalc calcMethod;
-  bool delayCalculation         : 1;
   K3SpellConfig *spellConfig;
   bool dontCheckUpperWord       : 1;
   bool dontCheckTitleCase       : 1;
@@ -209,8 +208,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   QFontMetricsF fontMetrics( KoGlobal::defaultFont() );
   RowFormat::setGlobalRowHeight( fontMetrics.height() );
   ColumnFormat::setGlobalColWidth( fontMetrics.height() * 5 );
-
-  d->delayCalculation = false;
 
   documents().append( this );
 
@@ -2061,7 +2058,6 @@ void Doc::emitBeginOperation(bool waitCursor)
 //    }
 
     KoDocument::emitBeginOperation();
-    d->delayCalculation = true;
     d->numOperations++;
 }
 
@@ -2081,7 +2077,6 @@ void Doc::emitEndOperation()
   }
 
   d->numOperations = 0;
-  d->delayCalculation = false;
 
   KoDocument::emitEndOperation();
 
@@ -2104,11 +2099,6 @@ void Doc::emitEndOperation( const Region& region )
 void Doc::emitEndOperation( const QRect& rect )
 {
   emitEndOperation( Region( rect ) );
-}
-
-bool Doc::delayCalculation() const
-{
-   return d->delayCalculation;
 }
 
 void Doc::updateBorderButton()
@@ -2191,11 +2181,13 @@ void Doc::addDamage( Damage* damage )
 
 void Doc::flushDamages()
 {
-    emit damagesFlushed( d->damages );
-    QList<Damage*>::Iterator it;
-    for( it = d->damages.begin(); it != d->damages.end(); ++it )
-      delete *it;
+    // Copy the damages to process. This allows new damages while processing.
+    QList<Damage*> damages = d->damages;
     d->damages.clear();
+    emit damagesFlushed( damages );
+    QList<Damage*>::Iterator it;
+    for( it = damages.begin(); it != damages.end(); ++it )
+        delete *it;
 }
 
 void Doc::loadConfigFromFile()

@@ -346,7 +346,7 @@ const Value Cell::value() const
 // In addition to this, it calculates the outstring and sets the dirty
 // flags so that a redraw is forced.
 //
-void Cell::setValue( const Value& value )
+void Cell::setValue( const Value& value, bool triggerRecalc )
 {
 //   kDebug() << k_funcinfo << endl;
   if (!value.isError())
@@ -363,8 +363,8 @@ void Cell::setValue( const Value& value )
 
   d->value = value;
 
-  // Value of the cell has changed - trigger necessary actions
-  valueChanged ();
+    // Value of the cell has changed - trigger necessary actions
+    valueChanged( triggerRecalc );
 }
 
 void Cell::setCellValue (const Value &value, Format::Type fmtType, const QString &txt)
@@ -827,12 +827,19 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
 }
 
 
-void Cell::valueChanged ()
+void Cell::valueChanged( bool triggerRecalc )
 {
-  /* TODO - is this a good place for this? */
-  updateChart( true );
+    // TODO Stefan: Use a Damage for this.
+    //              Not the same CellDamage change as for recalculation:
+    //              The updating of the chart should happen on each value change.
+    //              Either use CellDamage::Value for this and find a better name
+    //              for the change that triggers recalculation. Or vice versa.
+    updateChart( true );
 
-  doc()->addDamage( new CellDamage( this, CellDamage::Appearance | CellDamage::Value ) );
+    CellDamage::Changes changes = CellDamage::Appearance;
+    if ( triggerRecalc )
+        changes |= CellDamage::Value;
+    doc()->addDamage( new CellDamage( this, changes ) );
 }
 
 
@@ -885,7 +892,7 @@ void Cell::clearFormula()
     }
 }
 
-bool Cell::calc(bool delay)
+bool Cell::calc()
 {
   if ( !isFormula() )
     return true;
@@ -906,14 +913,8 @@ bool Cell::calc(bool delay)
     }
   }
 
-  if ( delay )
-  {
-    if ( doc()->delayCalculation() )
-      return true;
-  }
-
   Value result = d->formula->eval ();
-  setValue (result);
+  setValue( result, false );
   if (result.isNumber())
     checkNumberFormat(); // auto-chooses number or scientific
 

@@ -1965,7 +1965,7 @@ void Canvas::processEnterKey(QKeyEvent* event)
      direction, not extends the selection
   */
   QRect r( moveDirection( direction, false ) );
-  d->view->doc()->emitEndOperation( Region(r) );
+  d->view->doc()->emitEndOperation(/* Region(r) */);
 }
 
 void Canvas::processArrowKey( QKeyEvent *event)
@@ -2020,7 +2020,7 @@ void Canvas::processArrowKey( QKeyEvent *event)
   }
 
   QRect r( moveDirection( direction, makingSelection ) );
-  d->view->doc()->emitEndOperation( Region(r) );
+  d->view->doc()->emitEndOperation(/* Region(r) */);
 }
 
 void Canvas::processEscapeKey(QKeyEvent * event)

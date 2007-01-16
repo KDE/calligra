@@ -2105,12 +2105,7 @@ void View::initCalcMenu()
 
 void View::recalcWorkBook()
 {
-  if (!activeSheet())
-    return;
-
-  doc()->emitBeginOperation( true );
-  doc()->map()->recalcManager()->recalcMap();
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->map()->recalcManager()->recalcMap();
 }
 
 void View::refreshLocale()
@@ -2125,12 +2120,9 @@ void View::refreshLocale()
 
 void View::recalcWorkSheet()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( true );
-    doc()->map()->recalcManager()->recalcSheet(d->activeSheet);
-    doc()->emitEndOperation( d->canvas->visibleCells() );
-  }
+    if ( !activeSheet() )
+        return;
+    doc()->map()->recalcManager()->recalcSheet( activeSheet() );
 }
 
 

@@ -127,7 +127,7 @@ Value func_info (valVector args, ValueCalc *calc, FuncExtra *)
   {
     QString result;
     if (calc->doc()) {
-      if (calc->doc()->delayCalculation())
+      if ( !calc->doc()->displaySheet()->getAutoCalc() )
         result = i18n ("Manual");
       else
         result = i18n ("Automatic");

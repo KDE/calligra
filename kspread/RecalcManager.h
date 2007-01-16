@@ -23,7 +23,7 @@
 namespace KSpread
 {
 class Cell;
-class DependencyManager;
+class Map;
 class Sheet;
 
 /**
@@ -49,10 +49,9 @@ public:
   /**
    * Creates a RecalcManager. It is used for a whole map.
    *
-   * \param depManager The DependencyManger which provides
-   * the necessary cell dependencies.
+   * \param map The Map which this RecalcManager belongs to.
    */
-  explicit RecalcManager(DependencyManager* depManager);
+  explicit RecalcManager( const Map* map );
 
   /**
    * Destructor.

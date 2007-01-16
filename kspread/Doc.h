@@ -678,8 +678,6 @@ public:
   void saveConfig();
   void refreshLocale();
 
-  bool delayCalculation() const;
-
   void updateBorderButton();
 
   void insertSheet( Sheet * sheet );
