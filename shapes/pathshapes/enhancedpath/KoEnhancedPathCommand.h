@@ -34,7 +34,7 @@ class KoEnhancedPathParameter;
 class KoEnhancedPathCommand
 {
 public:
-    KoEnhancedPathCommand( const QChar & command );
+    explicit KoEnhancedPathCommand( const QChar & command );
     ~KoEnhancedPathCommand();
     /// Excutes the command on the specified path shape
     bool execute( KoEnhancedPathShape * path );

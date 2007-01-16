@@ -327,7 +327,7 @@ TokenList KoEnhancedPathFormula::scan( const QString &formula ) const
                     state = InNumber;
                 }
                 // beginning with alphanumeric ?
-                // could be identifier, function, funtion reference, modifier refrence
+                // could be identifier, function, function reference, modifier refrence
                 else if( isIdentifier( ch ) )
                 {
                     state = InIdentifier;

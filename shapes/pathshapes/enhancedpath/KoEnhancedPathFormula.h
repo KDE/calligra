@@ -34,7 +34,7 @@ public:
       TypeUnknown = 0, ///< unknown type
       TypeNumber,      ///< 14, 3, 1977, 3.141592, 1e10, 5.9e-7
       TypeOperator,    ///< +, *, /, -
-      TypeIdentifier   ///< function name, funtion reference, modifier reference or named variable
+      TypeIdentifier   ///< function name, function reference, modifier reference or named variable
     };
 
     /// operators

@@ -69,7 +69,7 @@ private:
 class KoEnhancedPathNamedParameter : public KoEnhancedPathParameter
 {
 public:
-    KoEnhancedPathNamedParameter( Identifier identifier );
+    explicit KoEnhancedPathNamedParameter( Identifier identifier );
     KoEnhancedPathNamedParameter( const QString &identifier );
     double evaluate( KoEnhancedPathShape *path );
     /// Returns identfier type from given string
