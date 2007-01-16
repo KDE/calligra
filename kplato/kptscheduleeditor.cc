@@ -544,7 +544,11 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return "Yesssssss";//ToolTip::ScheduleName;
+            case 0: return ToolTip::ScheduleName;
+            case 1: return ToolTip::ScheduleState;
+            case 2: return ToolTip::ScheduleOverbooking;
+            case 3: return ToolTip::ScheduleDistribution;
+            case 4: return ToolTip::ScheduleCalculate;
             default: return QVariant();
         }
     }

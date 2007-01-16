@@ -74,6 +74,12 @@ namespace ToolTip
     static QString AccountName = i18n( "The name of the account" );
     static QString AccountDescription = i18n( "The description of the account" );
 
+    static QString ScheduleName = i18n( "The name of the schedule." );
+    static QString ScheduleState = i18n( "The schedules state." );
+    static QString ScheduleOverbooking = i18n( "Allow or avoid resource overbooking when calculating." );
+    static QString ScheduleDistribution = i18n( "The distribution to be used during calculation." );
+    static QString ScheduleCalculate = i18n( "Defines the schedules to be calculated." );
+
 } //namespace ToolTip
 
 
