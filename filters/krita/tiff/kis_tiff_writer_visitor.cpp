@@ -233,7 +233,3 @@ bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
     return true;
 }
 
-bool KisTIFFWriterVisitor::visit(KisPartLayer *)
-{
-    return true;
-}

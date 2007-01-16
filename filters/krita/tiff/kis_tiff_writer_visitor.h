@@ -40,7 +40,6 @@ class KisTIFFWriterVisitor : public KisLayerVisitor
         virtual bool visit(KisExternalLayer * layer) { return true; }
         virtual bool visit(KisPaintLayer *layer);
         virtual bool visit(KisGroupLayer *layer);
-        virtual bool visit(KisPartLayer *layer);
         virtual bool visit(KisAdjustmentLayer* ) { return true; }
     private:
         inline TIFF* image() { return m_image; }

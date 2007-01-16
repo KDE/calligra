@@ -70,7 +70,6 @@ class KisExifInfoVisitor : public KisLayerVisitor
             }
             return true;
         }
-        virtual bool visit(KisPartLayer *) { return true; };
         virtual bool visit(KisAdjustmentLayer* ) {  return true; };
     public:
         inline uint countPaintLayer() { return m_countPaintLayer; }
