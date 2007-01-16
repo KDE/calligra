@@ -75,6 +75,8 @@ set(libkplatopart_SRCS
     kptwbsdefinitionpanel.cc
     kptwbsdefinition.cc
     KPtViewAdaptor.cc
+    kptresourceassignmentview.cc
+
 )
 kde4_add_ui_files(libkplatopart_SRCS
     kptdurationwidget.ui

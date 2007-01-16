@@ -100,6 +100,8 @@
 #include "kptwbsdefinitiondialog.h"
 #include "kptaccountsdialog.h"
 
+#include "kptresourceassignmentview.h"
+
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
 #include "KPtViewAdaptor.h"
@@ -538,6 +540,12 @@ View::View( Part* part, QWidget* parent )
     connect( m_scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
     connect( m_scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
     connect( m_scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
+
+    m_resourceAssignmentView = new ResourceAssignmentView( getPart(), m_tab );
+    m_tab->addWidget( m_resourceAssignmentView );
+    m_updateResourceAssignmentView = true;
+    m_resourceAssignmentView->draw( getProject() );
+
     //m_reportview = new ReportView(this, m_tab);
     //m_tab->addWidget(m_reportview);
 
@@ -552,7 +560,8 @@ View::View( Part* part, QWidget* parent )
     m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, getPart(), "gantt_chart" );
     m_viewlist->addView( cat, i18n( "Resources" ), m_resourceview, getPart(), "resources" );
     m_viewlist->addView( cat, i18n( "Accounts" ), m_accountsview, getPart(), "accounts" );
-    
+    m_viewlist->addView( cat, i18n( "Tasks by resources" ), m_resourceAssignmentView , getPart(), "resource_assignment" );
+
     connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
     connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
 
@@ -1704,6 +1713,7 @@ void View::slotUpdate()
     m_updateGanttview = true;
     m_updateResourceview = true;
     m_updateAccountsview = true;
+    m_updateResourceAssignmentView = true;
 
     updateView( m_tab->currentWidget() );
 }
@@ -1881,6 +1891,10 @@ void View::updateView( QWidget *widget )
         //kDebug()<<k_funcinfo<<"draw taskeditor"<<endl;
     } else if ( widget == m_resourceview ) {
         //kDebug()<<k_funcinfo<<"draw resourceeditor"<<endl;
+    } else if ( widget == m_resourceAssignmentView ) {
+	if ( m_updateResourceAssignmentView )
+            m_resourceAssignmentView->draw( getPart() ->getProject() );
+        m_updateResourceAssignmentView = false;
     }
     /*    else if (widget == m_reportview)
         {
@@ -1919,7 +1933,7 @@ bool View::setContext( Context &context )
     m_currentEstimateType = context.currentEstimateType;
     getProject().setCurrentSchedule( context.currentSchedule );
 //     actionViewExpected->setChecked( context.actionViewExpected );
-//     actionViewOptimistic->setChecked( context.actionViewOptimistic );
+//     ationViewOptimistic->setChecked( context.actionViewOptimistic );
 //     actionViewPessimistic->setChecked( context.actionViewPessimistic );
 
     m_ganttview->setContext( context.ganttview, getProject() );
@@ -1971,6 +1985,8 @@ void View::getContext( Context &context ) const
         context.currentView = "taskeditor";
     } else if (m_tab->currentWidget() == m_resourceeditor) {
         context.currentView = "resourceeditor";
+    } else if (m_tab->currentWidget() == m_resourceAssignmentView){
+	context.currentView = "resourceassignmentview";
     }
 m_ganttview->getContext( context.ganttview );
 //    m_resourceview->getContext( context.resourceview );
