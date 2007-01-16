@@ -14,6 +14,7 @@ set(libkplatopart_SRCS
     kptviewbase.cc
     kptitemmodelbase.cc
     kptaccountseditor.cc
+    kptperteditor.cc
     kpttaskeditor.cc
     kptresourceeditor.cc
     kptscheduleeditor.cc

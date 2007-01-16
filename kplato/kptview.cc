@@ -83,6 +83,7 @@
 #include "kptganttview.h"
 //#include "kptreportview.h"
 #include "kpttaskeditor.h"
+#include "kptperteditor.h"
 #include "kptdatetime.h"
 #include "kptcommand.h"
 #include "kptrelation.h"
@@ -508,7 +509,14 @@ View::View( Part* part, QWidget* parent )
     m_tab->addWidget( m_scheduleeditor );
     m_scheduleeditor->draw( getProject() );
     connect( m_scheduleeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    m_perteditor = new PertEditor( getPart(), m_tab );
+    m_tab->addWidget( m_perteditor );
+    m_perteditor->draw( getProject() );
+    connect( m_perteditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
     m_ganttview = new GanttView( getPart(), m_tab, part->isReadWrite() );
     m_tab->addWidget( m_ganttview );
     m_updateGanttview = false;
@@ -555,6 +563,7 @@ View::View( Part* part, QWidget* parent )
     m_viewlist->addView( cat, i18n( "Resources" ), m_resourceeditor, getPart(), "resource_editor" );
     m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, getPart(), "task_editor" );
     m_viewlist->addView( cat, i18n( "Schedules" ), m_scheduleeditor, getPart(), "schedule_editor" );
+    m_viewlist->addView( cat, i18n( "Pert" ), m_perteditor, getPart(), "task_editor" );
 
     cat = m_viewlist->addCategory( i18n( "Views" ) );
     m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, getPart(), "gantt_chart" );

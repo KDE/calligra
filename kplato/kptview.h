@@ -54,6 +54,7 @@ class ViewListItem;
 class ViewListWidget;
 class AccountsView;
 class GanttView;
+class PertEditor;
 class ResourceView;
 class AccountsEditor;
 class TaskEditor;
@@ -292,6 +293,7 @@ private:
     TaskEditor *m_taskeditor;
     ResourceEditor *m_resourceeditor;
     ScheduleEditor *m_scheduleeditor;
+    PertEditor *m_perteditor;
     //    ReportView *m_reportview;
     //    Q3PtrList<QString> m_reportTemplateFiles;
 
