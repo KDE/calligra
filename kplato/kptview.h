@@ -61,6 +61,8 @@ class TaskEditor;
 class ResourceEditor;
 class ScheduleEditor;
 class ScheduleManager;
+
+class ResourceAssignmentView;
 //class ReportView;
 class Part;
 class DocumentChild;
@@ -293,6 +295,7 @@ private:
     TaskEditor *m_taskeditor;
     ResourceEditor *m_resourceeditor;
     ScheduleEditor *m_scheduleeditor;
+    ResourceAssignmentView *m_resourceAssignmentView;
     PertEditor *m_perteditor;
     //    ReportView *m_reportview;
     //    Q3PtrList<QString> m_reportTemplateFiles;
@@ -309,6 +312,7 @@ private:
     bool m_updateGanttview;
     bool m_updateResourceview;
     bool m_updateAccountsview;
+    bool m_updateResourceAssignmentView;
 
     KStatusBarLabel *m_estlabel;
     QProgressBar *m_progress;
