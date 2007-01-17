@@ -208,3 +208,4 @@ void ResourceAssignmentView::updateTasks()
 }  //KPlato namespace
 
 #include "kptresourceassignmentview.moc"
+

@@ -82,3 +82,4 @@ namespace KPlato
 }  //KPlato namespace
 
 #endif
+
