@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>548</width>
-    <height>500</height>
+    <width>503</width>
+    <height>383</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -14,7 +14,7 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -23,6 +23,9 @@
     <widget class="QSplitter" name="splitter" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="handleWidth" >
+      <number>6</number>
      </property>
      <widget class="QWidget" name="" >
       <layout class="QVBoxLayout" >
