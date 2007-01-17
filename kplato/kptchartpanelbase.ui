@@ -1,0 +1,72 @@
+<ui version="4.0" >
+ <author>Frédéric Lambert &lt;konkistadorr@gmail.com></author>
+ <class>KPlato::ChartPanelBase</class>
+ <widget class="QWidget" name="KPlato::ChartPanelBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>487</width>
+    <height>348</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <widget class="QCheckBox" name="checkBox" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>270</y>
+     <width>87</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>CheckBox</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_2" >
+   <property name="geometry" >
+    <rect>
+     <x>130</x>
+     <y>270</y>
+     <width>87</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>CheckBox</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_3" >
+   <property name="geometry" >
+    <rect>
+     <x>230</x>
+     <y>270</y>
+     <width>87</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>CheckBox</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton" >
+   <property name="geometry" >
+    <rect>
+     <x>360</x>
+     <y>270</y>
+     <width>80</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>PushButton</string>
+   </property>
+  </widget>
+ </widget>
+ <includes/>
+ <resources/>
+ <connections/>
+</ui>

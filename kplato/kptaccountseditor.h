@@ -166,6 +166,8 @@ private slots:
     void slotAddSubAccount();
     void slotDeleteSelection();
 
+    void slotAccountsOk();
+
 private:
     AccountTreeView *m_view;
 

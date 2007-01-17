@@ -100,7 +100,7 @@
 #include "kptconfigdialog.h"
 #include "kptwbsdefinitiondialog.h"
 #include "kptaccountsdialog.h"
-
+#include "kptchartdialog.h"
 #include "kptresourceassignmentview.h"
 
 #include "KDGanttView.h"
@@ -661,6 +661,11 @@ View::View( Part* part, QWidget* parent )
     actionEditMainProject  = new KAction(KIcon( "edit" ), i18n("Edit Main Project..."), this);
     actionCollection()->addAction("project_edit", actionEditMainProject );
     connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
+    
+    actionChartIndicators  = new KAction(KIcon( "edit" ), i18n("Chart Indicators..."), this);
+    actionCollection()->addAction("chart_indicators", actionChartIndicators );
+    connect( actionChartIndicators, SIGNAL( triggered( bool ) ), SLOT( slotChartDisplay() ) );
+    
     actionEditStandardWorktime  = new KAction(KIcon( "edit" ), i18n("Edit Standard Worktime..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
@@ -1245,6 +1250,23 @@ void View::slotConfigure()
     dia->exec();
     delete dia;
 }
+
+
+void View::slotChartDisplay()
+{
+    ChartDialog * dia = new ChartDialog();
+    if ( dia->exec()  == QDialog::Accepted) {
+       // KCommand * cmd = dia->buildCommand( getPart() );
+      //  if ( cmd ) {
+        //    getPart() ->addCommand( cmd );
+       // }
+    }
+    delete dia;
+}
+
+
+
+
 
 Node *View::currentTask()
 {

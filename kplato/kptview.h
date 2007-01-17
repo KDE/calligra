@@ -199,6 +199,10 @@ public slots:
     
     void slotViewAccounts();
     
+    void slotChartDisplay();
+
+
+
     void slotViewTaskEditor();
     void slotAddTask();
     void slotAddSubTask();
@@ -353,6 +357,7 @@ private:
     KAction *actionEditCalendar;
     KAction *actionEditAccounts;
     KAction *actionEditResources;
+    KAction *actionChartIndicators;
     
     // ------ Reports
     KAction *actionFirstpage;

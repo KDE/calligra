@@ -47,6 +47,7 @@
             <Separator/>
         </Menu>
         <Menu name="project"><text>&amp;Project</text>
+	    <Action name="chart_indicators"/>
             <Action name="project_edit"/>
             <Action name="project_worktime"/>
             <Action name="project_calendar"/>
@@ -76,7 +77,8 @@
         <Action name="project_edit"/>
         <Separator/>
         <ActionList name="dummy"/> <!-- HACK to get a separator -->
-        <Separator/>
+
+	<Separator/>
         <ActionList name="taskeditor_add_list"/>
         <Separator/>
         <ActionList name="taskeditor_move_list"/>

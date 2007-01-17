@@ -17,40 +17,49 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptaccountsdialog.h"
+#ifndef KPTCHARTPANEL_H
+#define KPTCHARTPANEL_H
 
-#include "kptaccountspanel.h"
+#include "ui_kptchartpanelbase.h"
 
-#include <klocale.h>
+#include <QList>
+#include <QHash>
+
+class QTreeWidget;
+class QTreeWidgetItem;
+class QWidget;
+
+class KCommand;
+class KMacroCommand;
+
 
 namespace KPlato
 {
 
-AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p, const char *n)
-    : KDialog(p)
+class Part;
+class Project;
+
+class ChartPanelBase : public QWidget, public Ui::ChartPanelBase
 {
-    setCaption( i18n("Edit Accounts") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
-    m_panel = new AccountsPanel(acc, this);
-    setMainWidget(m_panel);
+public:
+  explicit ChartPanelBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
-    enableButtonOk(false);
-    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-}
 
-KCommand *AccountsDialog::buildCommand(Part *part) {
-    return m_panel->buildCommand(part);
-}
-
-void AccountsDialog::slotOk() {
-    kDebug()<< "Dialog : slotok : appel panel";
-    m_panel->slotOk();
-    accept();
-}
+class ChartPanel : public ChartPanelBase {
+    Q_OBJECT
+public:
+    ChartPanel(QWidget *parent=0);
+    
+   // KCommand *buildCommand(Part *part);
+    
+public slots:
+ void slotClose();
+    
+};
 
 } //namespace KPlato
 
-#include "kptaccountsdialog.moc"
+#endif

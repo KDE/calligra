@@ -308,11 +308,11 @@ KCommand *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) 
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item->account == 0) {
         if (!item->text(0).isEmpty()) {
-            //kDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
+            kDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
             if (!cmd) cmd = new KMacroCommand("");
             item->account = new Account(item->text(0), item->text(1));
             if (item->parent()) {
-                //kDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
+                kDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
                 cmd->addCommand(new AddAccountCmd(part, project, item->account, item->parent()->text(0)));
             } else {
                 cmd->addCommand(new AddAccountCmd(part, project, item->account));
@@ -379,7 +379,7 @@ void AccountsPanel::slotRemoveItem(QTreeWidgetItem *i) {
 }
 
 void AccountsPanel::slotOk() {
-
+	//emit slotAccountsOk;
 }
 
 } //namespace KPlato

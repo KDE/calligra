@@ -374,8 +374,8 @@ QVariant AccountItemModel::headerData( int section, Qt::Orientation orientation,
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::AccountName;
-            case 1: return ToolTip::AccountDescription;
+       /*     case 0: return ToolTip::AccountName;
+            case 1: return ToolTip::AccountDescription;*/
             default: return QVariant();
         }
     }
@@ -675,6 +675,15 @@ void AccountsEditor::slotDeleteSelection()
     m_view->itemModel()->removeAccounts( m_view->selectedAccounts() );
 }
 
+void AccountsEditor::slotAccountsOk()
+{
+     kDebug()<<"Account Editor : slotAccountsOk"<<k_funcinfo<<endl;
+     //QModelList
+     
+
+     //QModelIndex i = m_view->itemModel()->insertGroup( g );
+     
+}
 
 } // namespace KPlato
 

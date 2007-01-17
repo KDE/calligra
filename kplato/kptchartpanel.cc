@@ -17,40 +17,26 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptaccountsdialog.h"
-
-#include "kptaccountspanel.h"
+#include "kptchartpanel.h"
 
 #include <klocale.h>
+
+#include <kdebug.h>
 
 namespace KPlato
 {
 
-AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p, const char *n)
-    : KDialog(p)
+ChartPanel::ChartPanel(QWidget *p) : ChartPanelBase(p)
 {
-    setCaption( i18n("Edit Accounts") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
-    m_panel = new AccountsPanel(acc, this);
-    setMainWidget(m_panel);
 
-    enableButtonOk(false);
-    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+kDebug()<<"Chart Panel : constructeur";
+
 }
-
-KCommand *AccountsDialog::buildCommand(Part *part) {
-    return m_panel->buildCommand(part);
-}
-
-void AccountsDialog::slotOk() {
-    kDebug()<< "Dialog : slotok : appel panel";
-    m_panel->slotOk();
-    accept();
+    
+void ChartPanel::slotClose() {
+	//emit slotAccountsOk;
 }
 
 } //namespace KPlato
 
-#include "kptaccountsdialog.moc"
+#include "kptchartpanel.moc"

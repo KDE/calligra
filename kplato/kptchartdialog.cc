@@ -17,40 +17,38 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptaccountsdialog.h"
-
-#include "kptaccountspanel.h"
-
+#include "kptchartdialog.h"
+#include "kptchartpanel.h"
 #include <klocale.h>
 
 namespace KPlato
 {
 
-AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p, const char *n)
-    : KDialog(p)
+ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
 {
-    setCaption( i18n("Edit Accounts") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
+    kDebug()<<"HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO WORRRRRRRRRLLLLLLLLLLDDDDDDDD";
+    setCaption( i18n("Project Charts Indicators") );
+    //setDefaultButton( CloseButton );
     showButtonSeparator( true );
-    m_panel = new AccountsPanel(acc, this);
+    m_panel = new ChartPanel(this);
     setMainWidget(m_panel);
-
-    enableButtonOk(false);
-    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    m_panel->show();
+    //enableButtonOk(false);
+   // connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonClose(bool)));
+   // connect(this,SIGNAL(CloseClicked()),this,SLOT(slotClose()));
 }
 
-KCommand *AccountsDialog::buildCommand(Part *part) {
-    return m_panel->buildCommand(part);
+KCommand *ChartDialog::buildCommand(Part *part) {
+	kDebug()<< "Chart Dialog : buildCommand";
+    //return m_panel->buildCommand(part);
 }
 
-void AccountsDialog::slotOk() {
-    kDebug()<< "Dialog : slotok : appel panel";
-    m_panel->slotOk();
-    accept();
+void ChartDialog::slotClose() {
+    kDebug()<< "Chart Dialog : slotClose";
+    //m_panel->slotClose();
+
 }
 
 } //namespace KPlato
 
-#include "kptaccountsdialog.moc"
+#include "kptchartdialog.moc"
