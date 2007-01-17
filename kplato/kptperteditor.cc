@@ -49,50 +49,11 @@ namespace KPlato
 PertEditor::PertEditor( Part *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-    setupGui();
-
-    QHBoxLayout * Main_PERT = new QHBoxLayout( this );
-
-    Main_PERT->setObjectName("Main_PERT");
-
-    vboxLayout = new QVBoxLayout();
-    vboxLayout->setSpacing(6);
-    vboxLayout->setMargin(0);
-    vboxLayout->setObjectName("hboxLayout");
-    label = new QLabel(i18n("Tasks List : "));
-    label->setObjectName("labeltasklist");
-    vboxLayout->addWidget(label);
-    tableTaskWidget = new QTableWidget();
-    tableTaskWidget->setObjectName("tableTaskWidget");
-    tableTaskWidget->setColumnCount(2);
-    QTableWidgetItem * colItem = new QTableWidgetItem();
-    QTableWidgetItem * colItem1 = new QTableWidgetItem();
-    colItem->setText(i18n("Task Name"));
-    colItem1->setText(i18n("Duration"));
-    tableTaskWidget->setHorizontalHeaderItem(0,colItem);
-    tableTaskWidget->setHorizontalHeaderItem(1,colItem1);
-
-
-    vboxLayout->addWidget(tableTaskWidget);
-
-    Main_PERT->addLayout(vboxLayout);
-
-    vboxLayout1 = new QVBoxLayout();
-    vboxLayout1->setSpacing(6);
-    vboxLayout1->setMargin(0);
-    vboxLayout1->setObjectName("hboxLayout");
-    label1 = new QLabel(i18n("Required Tasks : "));
-    label1->setObjectName("labelrequiredlist");
-    vboxLayout1->addWidget(label1);
-
-    assignList = new KActionSelector(this);
-    assignList->setObjectName("tableTaskWidget");
-    assignList->setShowUpDownButtons(false);
-    assignList->setSelectedLabel(i18n("Required"));
-    vboxLayout1->addWidget(assignList);
-    
-    Main_PERT->addLayout(vboxLayout1);
-
+kDebug() << " ---------------- KPlato: Creating PertEditor ----------------" << endl;
+    widget.setupUi(this);
+    widget.assignList->setSelectedLabel(i18n("Required"));
+    widget.assignList->setShowUpDownButtons(false);
+    widget.assignList->layout()->setMargin(0);
 }
 
 void PertEditor::setupGui()

@@ -155,9 +155,6 @@
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
-    <references>
-      <pcs>Qt</pcs>
-      <pcs>KDElibs</pcs>
-    </references>
+    <references/>
   </kdevcppsupport>
 </kdevelop>

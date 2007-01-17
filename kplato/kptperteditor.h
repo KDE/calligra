@@ -54,6 +54,7 @@
 #include <kactionselector.h>
 
 #include "kptcontext.h"
+#include <ui_kptperteditor.h>
 
 class QPoint;
 class QTreeWidgetItem;
@@ -77,14 +78,10 @@ public:
 
     void setupGui();
 
-private:
-    KActionSelector * assignList;
-    QVBoxLayout *vboxLayout;
-    QLabel *label;
-    QTableWidget *tableTaskWidget;
-    QVBoxLayout *vboxLayout1;
-    QLabel *label1;
 
+private:
+
+    Ui::PertEditor widget;
 };
 
 }  //KPlato namespace
