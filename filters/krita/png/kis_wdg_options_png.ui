@@ -5,29 +5,55 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>286</width>
-    <height>107</height>
+    <width>432</width>
+    <height>125</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Options of Your PNG</string>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>0</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
-   <item row="0" column="0" >
-    <layout class="QHBoxLayout" >
+   <item>
+    <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
      </property>
      <property name="spacing" >
-      <number>6</number>
+      <number>0</number>
      </property>
-     <item>
+     <item row="1" column="1" colspan="2" >
+      <widget class="QSlider" name="compressionLevel" >
+       <property name="toolTip" >
+        <string>Note: the compression level doesn't change the quality of the result</string>
+       </property>
+       <property name="whatsThis" >
+        <string>&lt;p>Adjust the compression time. Better compression takes longer.
+&lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
+       </property>
+       <property name="minimum" >
+        <number>1</number>
+       </property>
+       <property name="maximum" >
+        <number>9</number>
+       </property>
+       <property name="pageStep" >
+        <number>1</number>
+       </property>
+       <property name="value" >
+        <number>9</number>
+       </property>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item rowspan="2" row="1" column="0" >
       <widget class="QLabel" name="textLabel1" >
        <property name="toolTip" >
         <string>Note: the compression level does not change the quality of the result</string>
@@ -44,96 +70,59 @@
        </property>
       </widget>
      </item>
-     <item>
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
+     <item row="0" column="2" >
+      <widget class="QLabel" name="textLabel4_2" >
+       <property name="whatsThis" >
+        <string>&lt;p>Adjust the compression time. Better compression takes longer.
+&lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+       <property name="text" >
+        <string>Slow</string>
        </property>
-       <item>
-        <widget class="QSlider" name="compressionLevel" >
-         <property name="toolTip" >
-          <string>Note: the compression level doesn't change the quality of the result</string>
-         </property>
-         <property name="whatsThis" >
-          <string>&lt;p>Adjust the compression time. Better compression takes longer.
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLabel" name="textLabel3" >
+       <property name="whatsThis" >
+        <string>&lt;p>Adjust the compression time. Better compression takes longer.
 &lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
-         </property>
-         <property name="minimum" >
-          <number>1</number>
-         </property>
-         <property name="maximum" >
-          <number>9</number>
-         </property>
-         <property name="pageStep" >
-          <number>1</number>
-         </property>
-         <property name="value" >
-          <number>9</number>
-         </property>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="textLabel3" >
-           <property name="whatsThis" >
-            <string>&lt;p>Adjust the compression time. Better compression takes longer.
+       </property>
+       <property name="text" >
+        <string>Fast</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" >
+      <widget class="QLabel" name="textLabel4" >
+       <property name="whatsThis" >
+        <string>&lt;p>Adjust the compression time. Better compression takes longer.
 &lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
-           </property>
-           <property name="text" >
-            <string>Fast</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="textLabel4" >
-           <property name="whatsThis" >
-            <string>&lt;p>Adjust the compression time. Better compression takes longer.
+       </property>
+       <property name="text" >
+        <string>Small</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QLabel" name="textLabel3_2" >
+       <property name="whatsThis" >
+        <string>&lt;p>Adjust the compression time. Better compression takes longer.
 &lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
-           </property>
-           <property name="text" >
-            <string>Small</string>
-           </property>
-           <property name="alignment" >
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
+       </property>
+       <property name="text" >
+        <string>Bag</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
-   <item row="3" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>5</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" >
+   <item>
     <widget class="QCheckBox" name="interlacing" >
      <property name="toolTip" >
       <string>Use interlacing when publishing on the Internet</string>
@@ -147,7 +136,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
+   <item>
     <widget class="QCheckBox" name="alpha" >
      <property name="toolTip" >
       <string>Disable to get smaller files if your image has no transparency</string>
@@ -163,6 +152,22 @@ You can uncheck the box if you are not using transparency and you want to make t
       <bool>true</bool>
      </property>
     </widget>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>414</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
