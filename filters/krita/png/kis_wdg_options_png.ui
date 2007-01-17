@@ -116,7 +116,7 @@
 &lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
        </property>
        <property name="text" >
-        <string>Bag</string>
+        <string>Big</string>
        </property>
       </widget>
      </item>
