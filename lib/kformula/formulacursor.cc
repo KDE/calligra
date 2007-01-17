@@ -391,7 +391,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
         mainChild->selectAllChildren(this);
         remove(childrenList);
     }
-    element->getParent()->moveRight(this, element);
+    element->getParent()->selectChild(this, element);
     setSelection(false);
     remove(list);
     insert(childrenList, direction);
