@@ -73,18 +73,17 @@ class PertEditor : public ViewBase
     Q_OBJECT
 public:
 
+    PertEditor( Part *part, QWidget *parent );
+
+    void setupGui();
+
+private:
     KActionSelector * assignList;
     QVBoxLayout *vboxLayout;
     QLabel *label;
     QTableWidget *tableTaskWidget;
     QVBoxLayout *vboxLayout1;
     QLabel *label1;
-
-    PertEditor( Part *part, QWidget *parent );
-
-    void setupGui();
-    
-
 
 };
 

@@ -53,17 +53,17 @@ PertEditor::PertEditor( Part *part, QWidget *parent )
 
     QHBoxLayout * Main_PERT = new QHBoxLayout( this );
 
-    Main_PERT->setObjectName(i18n("Main_PERT"));
+    Main_PERT->setObjectName("Main_PERT");
 
     vboxLayout = new QVBoxLayout();
     vboxLayout->setSpacing(6);
     vboxLayout->setMargin(0);
-    vboxLayout->setObjectName(i18n("hboxLayout"));
+    vboxLayout->setObjectName("hboxLayout");
     label = new QLabel(i18n("Tasks List : "));
-    label->setObjectName(i18n("labeltasklist"));
+    label->setObjectName("labeltasklist");
     vboxLayout->addWidget(label);
     tableTaskWidget = new QTableWidget();
-    tableTaskWidget->setObjectName(i18n("tableTaskWidget"));
+    tableTaskWidget->setObjectName("tableTaskWidget");
     tableTaskWidget->setColumnCount(2);
     QTableWidgetItem * colItem = new QTableWidgetItem();
     QTableWidgetItem * colItem1 = new QTableWidgetItem();
@@ -80,13 +80,13 @@ PertEditor::PertEditor( Part *part, QWidget *parent )
     vboxLayout1 = new QVBoxLayout();
     vboxLayout1->setSpacing(6);
     vboxLayout1->setMargin(0);
-    vboxLayout1->setObjectName(i18n("hboxLayout"));
+    vboxLayout1->setObjectName("hboxLayout");
     label1 = new QLabel(i18n("Required Tasks : "));
-    label1->setObjectName(i18n("labelrequiredlist"));
+    label1->setObjectName("labelrequiredlist");
     vboxLayout1->addWidget(label1);
 
     assignList = new KActionSelector(this);
-    assignList->setObjectName(i18n("tableTaskWidget"));
+    assignList->setObjectName("tableTaskWidget");
     assignList->setShowUpDownButtons(false);
     assignList->setSelectedLabel(i18n("Required"));
     vboxLayout1->addWidget(assignList);
