@@ -808,6 +808,35 @@ void NodeMoveDownCmd::unexecute()
     setCommandType( 0 );
 }
 
+NodeMoveCmd::NodeMoveCmd( Part *part, Project *project, Node *node, Node *newParent, int newPos, const QString& name )
+    : NamedCommand( part, name ),
+    m_project( project ),
+    m_node( node ),
+    m_newparent( newParent ),
+    m_newpos( newPos ),
+    m_moved( false )
+{
+    m_oldparent = node->getParent();
+    Q_ASSERT( m_oldparent );
+    m_oldpos = m_oldparent->indexOf( node );
+}
+
+void NodeMoveCmd::execute()
+{
+    if ( m_project ) {
+        m_moved = m_project->moveTask( m_node, m_newparent, m_newpos );
+    }
+    setCommandType( 0 );
+}
+void NodeMoveCmd::unexecute()
+{
+    if ( m_project && m_moved ) {
+        m_project->moveTask( m_node, m_oldparent, m_oldpos );
+    }
+    m_moved = false;
+    setCommandType( 0 );
+}
+
 AddRelationCmd::AddRelationCmd( Part *part, Relation *rel, const QString& name )
         : NamedCommand( part, name ),
         m_rel( rel )

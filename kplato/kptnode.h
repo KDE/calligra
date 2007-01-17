@@ -105,7 +105,7 @@ public:
     virtual void insertChildNode(int index, Node *node);
     void takeChildNode(Node *node );
     void takeChildNode(int number );
-    Node* childNode(int number) { return m_nodes.at(number); }
+    Node* childNode(int number);
     const Node* childNode(int number) const;
     int findChildNode( Node* node );
     bool isChildOf( Node *node );
@@ -155,7 +155,8 @@ public:
 
     bool isParentOf(Node *node);
     bool isDependChildOf(Node *node);
-
+    virtual bool canMoveTo( Node *newParent );
+    
     Relation *findParentRelation(Node *node);
     Relation *findChildRelation(Node *node);
     Relation *findRelation(Node *node);

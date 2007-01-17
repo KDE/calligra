@@ -29,6 +29,10 @@
 #include <QAbstractItemModel>
 #include <QApplication>
 #include <QComboBox>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QMimeData>
 #include <QHeaderView>
 #include <QItemDelegate>
 #include <QItemSelectionModel>
@@ -124,11 +128,14 @@ void NodeItemModel::setProject( Project *project )
 Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
 {
     Qt::ItemFlags flags = QAbstractItemModel::flags( index );
-    if ( !index.isValid() )
+    if ( !index.isValid() ) {
+        if ( m_readWrite ) {
+            flags |= Qt::ItemIsDropEnabled;
+        }
         return flags;
-    if ( !m_readWrite ) {
-        flags &= ~Qt::ItemIsEditable;
-    } else {
+    }
+    if ( m_readWrite ) {
+        flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
             case 1: break; // Node type
             
@@ -223,13 +230,15 @@ QModelIndex NodeItemModel::index( const Node *node ) const
 bool NodeItemModel::insertRows( int row, int count, const QModelIndex &parent )
 {
     //TODO
-    return false;
+    kDebug()<<k_funcinfo<<endl;
+    return true;
 }
 
 bool NodeItemModel::removeRows( int row, int count, const QModelIndex &parent )
 {
     //TODO
-    return false;
+    kDebug()<<k_funcinfo<<endl;
+    return true;
 }
     
 QVariant NodeItemModel::name( const Node *node, int role ) const
@@ -825,14 +834,149 @@ void NodeItemModel::sort( int column, Qt::SortOrder order )
 {
 }
 
-QMimeData * NodeItemModel::mimeData( const QModelIndexList &indexes ) const
+Qt::DropActions NodeItemModel::supportedDropActions() const
 {
-    return 0;
+    return Qt::CopyAction | Qt::MoveAction;
 }
 
-QStringList NodeItemModel::mimeTypes () const
+
+QStringList NodeItemModel::mimeTypes() const
 {
-    return QStringList();
+    return QStringList() << "application/x-vnd.kde.kplato.nodeitemmodel.internal";
+}
+
+QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
+{
+    QMimeData *m = new QMimeData();
+    QByteArray encodedData;
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    QList<int> rows;
+    foreach (QModelIndex index, indexes) {
+        if ( index.isValid() && !rows.contains( index.row() ) ) {
+            kDebug()<<k_funcinfo<<index.row()<<endl;
+            Node *n = node( index );
+            if ( n ) {
+                rows << index.row();
+                stream << n->id();
+            }
+        }
+    }
+    m->setData("application/x-vnd.kde.kplato.nodeitemmodel.internal", encodedData);
+    return m;
+}
+
+bool NodeItemModel::dropAllowed( Node *on, const QMimeData *data )
+{
+    if ( !data->hasFormat("application/x-vnd.kde.kplato.nodeitemmodel.internal") ) {
+        return false;
+    }
+    if ( on == m_project ) {
+        return true;
+    }
+    QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    QList<Node*> lst = nodeList( stream );
+    foreach ( Node *n, lst ) {
+        if ( on == n || on->isChildOf( n ) ) {
+            return false;
+        }
+    }
+    lst = removeChildNodes( lst );
+    foreach ( Node *n, lst ) {
+        if ( ! m_project->canMoveTask( n, on ) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+QList<Node*> NodeItemModel::nodeList( QDataStream &stream )
+{
+    QList<Node*> lst;
+    while (!stream.atEnd()) {
+        QString id;
+        stream >> id;
+        Node *node = m_project->findNode( id );
+        if ( node ) {
+            lst << node;
+        }
+    }
+    return lst;
+}
+
+QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
+{
+    QList<Node*> lst;
+    foreach ( Node *node, nodes ) {
+        bool ins = true;
+        foreach ( Node *n, lst ) {
+            if ( node->isChildOf( n ) ) {
+                kDebug()<<k_funcinfo<<node->name()<<" is child of "<<n->name()<<endl;
+                ins = false;
+                break;
+            }
+        }
+        if ( ins ) {
+            kDebug()<<k_funcinfo<<" insert "<<node->name()<<endl;
+            lst << node;
+        }
+    }
+    QList<Node*> nl = lst;
+    QList<Node*> nlst = lst;
+    foreach ( Node *node, nl ) {
+        foreach ( Node *n, nlst ) {
+            if ( n->isChildOf( node ) ) {
+                kDebug()<<k_funcinfo<<n->name()<<" is child of "<<node->name()<<endl;
+                int i = nodes.indexOf( n );
+                lst.removeAt( i );
+            }
+        }
+    }
+    return lst;
+}
+
+bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+{
+    kDebug()<<k_funcinfo<<action<<endl;
+    if (action == Qt::IgnoreAction) {
+        return true;
+    }
+    if ( !data->hasFormat( "application/x-vnd.kde.kplato.nodeitemmodel.internal" ) ) {
+        return false;
+    }
+    if ( action == Qt::MoveAction ) {
+        kDebug()<<k_funcinfo<<"MoveAction"<<endl;
+        
+        QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+        Node *par = 0;
+        if ( parent.isValid() ) {
+            par = node( parent );
+        } else {
+            par = m_project;
+        }
+        QList<Node*> lst = nodeList( stream );
+        QList<Node*> nodes = removeChildNodes( lst ); // children goes with their parent
+        foreach ( Node *n, nodes ) {
+            if ( ! m_project->canMoveTask( n, par ) ) {
+                //kDebug()<<k_funcinfo<<"Can't move task: "<<n->name()<<endl;
+                return false;
+            }
+        }
+        int offset = 0;
+        KMacroCommand *cmd = 0;
+        foreach ( Node *n, nodes ) {
+            if ( cmd == 0 ) cmd = new KMacroCommand( i18n( "Move tasks" ) );
+            cmd->addCommand( new NodeMoveCmd( m_part, m_project, n, par, row + offset ) );
+            offset++;
+        }
+        if ( cmd ) {
+            m_part->addCommand( cmd );
+        }
+        //kDebug()<<k_funcinfo<<row<<", "<<column<<" parent="<<parent.row()<<", "<<parent.column()<<": "<<par->name()<<endl;
+        return true;
+    }
+    return false;
 }
 
 Node *NodeItemModel::node( const QModelIndex &index ) const
@@ -951,6 +1095,47 @@ void NodeTreeView::contextMenuEvent ( QContextMenuEvent * event )
     emit contextMenuRequested( node, event->globalPos() );
 }
 
+void NodeTreeView::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (dragDropMode() == InternalMove
+        && (event->source() != this || !(event->possibleActions() & Qt::MoveAction)))
+        return;
+
+    TreeViewBase::dragMoveEvent( event );
+    if ( ! event->isAccepted() ) {
+        return;
+    }
+    //QTreeView thinks it's ok to drop
+    event->ignore();
+    QModelIndex index = indexAt( event->pos() );
+    if ( ! index.isValid() ) {
+        event->accept();
+        return; // always ok to drop on main project
+    }
+    Node *dn = itemModel()->node( index );
+    if ( dn == 0 ) {
+        kError()<<k_funcinfo<<"no node to drop on!"<<endl;
+        return; // hmmm
+    }
+    switch ( dropIndicatorPosition() ) {
+        case AboveItem:
+        case BelowItem:
+            //dn == sibling
+            if ( itemModel()->dropAllowed( dn->getParent(), event->mimeData() ) ) {
+                event->accept();
+            }
+            break;
+        case OnItem:
+            //dn == new parent
+            if ( itemModel()->dropAllowed( dn, event->mimeData() ) ) {
+                event->accept();
+            }
+            break;
+        default:
+            break;
+    }
+}
+
 //-----------------------------------
 TaskEditor::TaskEditor( Part *part, QWidget *parent )
     : ViewBase( part, parent )
@@ -963,6 +1148,11 @@ TaskEditor::TaskEditor( Part *part, QWidget *parent )
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
+    m_view->setDragDropMode( QAbstractItemView::InternalMove );
+    m_view->setDropIndicatorShown ( true );
+    m_view->setDragEnabled ( true );
+    m_view->setAcceptDrops( true );
+    
     connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT ( slotCurrentChanged( QModelIndex ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );

@@ -718,10 +718,30 @@ void Project::delTask( Node *node )
     emit nodeRemoved( node );
 }
 
-void Project::moveTask( Node* node, Node *newParent, int newPos )
+bool Project::canMoveTask( Node* node, Node *newParent )
 {
+    kDebug()<<k_funcinfo<<node->name()<<" to "<<newParent->name()<<endl;
+    Node *p = newParent;
+    while ( p && p != this ) {
+        if ( ! node->canMoveTo( p ) ) {
+            return false;
+        }
+        p = p->getParent();
+    }
+    return true;
+}
+
+bool Project::moveTask( Node* node, Node *newParent, int newPos )
+{
+    //kDebug()<<k_funcinfo<<node->name()<<" to "<<newParent->name()<<", "<<newPos<<endl;
+    if ( ! canMoveTask( node, newParent ) ) {
+        return false;
+    }
+    const Node *before = newParent->childNode( newPos );
     delTask( node );
-    addSubTask( node, newPos, newParent );
+    int i = before == 0 ? newParent->numChildren() : newParent->indexOf( before );
+    addSubTask( node, i, newParent );
+    return true;
 }
 
 bool Project::canIndentTask( Node* node )

@@ -34,6 +34,7 @@
 #include "KoView.h"
 
 class QListWidget;
+class QMimeData;
 class QModelIndex;
 class QTreeWidgetItem;
 
@@ -76,12 +77,18 @@ public:
     
     virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
     virtual QStringList mimeTypes () const;
-    
+    virtual Qt::DropActions supportedDropActions() const;
+    virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+
     Node *node( const QModelIndex &index ) const;
     QItemDelegate *createDelegate( int column, QWidget *parent ) const;
 
     QModelIndex insertTask( Node *node, Node *after );
     QModelIndex insertSubtask( Node *node, Node *parent );
+    
+    QList<Node*> nodeList( QDataStream &stream );
+    static QList<Node*> removeChildNodes( const QList<Node*> nodes );
+    bool dropAllowed( Node *on, const QMimeData *data );
     
 protected slots:
     void slotNodeChanged( Node* );
@@ -90,7 +97,6 @@ protected slots:
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
 
-    
 protected:
     QVariant name( const Node *node, int role ) const;
     bool setName( Node *node, const QVariant &value, int role );
@@ -151,6 +157,7 @@ protected slots:
     
 protected:
     void contextMenuEvent( QContextMenuEvent * event );
+    void dragMoveEvent(QDragMoveEvent *event);
 
 };
 

@@ -208,8 +208,15 @@ bool Node::isChildOf( Node* node )
 }
 
 
-const Node* Node::childNode(int number) const {
-    return m_nodes.at(number);
+Node* Node::childNode(int number)
+{
+    //kDebug()<<k_funcinfo<<number<<endl;
+    return m_nodes.value( number );
+}
+
+const Node* Node::childNode(int number) const
+{
+    return const_cast<Node*>( childNode( number ) );
 }
 
 int Node::indexOf( const Node *node ) const
@@ -342,6 +349,26 @@ bool Node::isDependChildOf(Node *node) {
 		    return true;
     }
 	return false;
+}
+
+bool Node::canMoveTo( Node *newParent )
+{
+    if ( m_parent == newParent ) {
+        return true;
+    }
+    if ( newParent->isChildOf( this ) ) {
+        return false;
+    }
+    if ( isDependChildOf( newParent ) || newParent->isDependChildOf( this ) ) {
+        kDebug()<<k_funcinfo<<"Can't move, node is dependent on new parent"<<endl;
+        return false;
+    }
+    foreach ( Node *n, m_nodes ) {
+        if ( !n->canMoveTo( newParent ) ) {
+            return false;
+        }
+    }
+    return true;
 }
 
 Duration Node::duration(const DateTime &time, int use, bool backward) {

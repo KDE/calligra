@@ -396,6 +396,23 @@ private:
     bool m_moved;
 };
 
+class NodeMoveCmd : public NamedCommand
+{
+public:
+    NodeMoveCmd( Part *part, Project *project, Node *node, Node *newParent, int newPos, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Node *m_node;
+    Node *m_newparent;
+    Node *m_oldparent;
+    int m_newpos;
+    int m_oldpos;
+    bool m_moved;
+};
+
 class AddRelationCmd : public NamedCommand
 {
 public:

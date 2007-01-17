@@ -83,7 +83,8 @@ public:
     bool addSubTask( Node* task, Node* position );
     bool addSubTask( Node* task, int index, Node* parent );
     void delTask( Node *node );
-    void moveTask( Node* node, Node *newParent, int newPos );
+    bool canMoveTask( Node* node, Node *newParent );
+    bool moveTask( Node* node, Node *newParent, int newPos );
     bool canIndentTask( Node* node );
     bool indentTask( Node* node, int index = -1 );
     bool canUnindentTask( Node* node );
