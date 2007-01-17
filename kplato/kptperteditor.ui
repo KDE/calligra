@@ -1,0 +1,64 @@
+<ui version="4.0" >
+ <class>PertEditor</class>
+ <widget class="QWidget" name="PertEditor" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>453</width>
+    <height>360</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>PertEditor</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="1" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Required Tasks:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Tasks:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="KActionSelector" name="assignList" />
+   </item>
+   <item row="1" column="0" >
+    <widget class="QTableWidget" name="tableTaskWidget" >
+     <column>
+      <property name="text" >
+       <string>Task Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Duration</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KActionSelector</class>
+   <extends>QFrame</extends>
+   <header>kactionselector.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

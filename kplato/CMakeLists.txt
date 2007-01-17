@@ -99,6 +99,7 @@ kde4_add_ui_files(libkplatopart_SRCS
     kpttaskgeneralpanelbase.ui
     kpttaskprogresspanelbase.ui
     kptconfigtaskpanelbase.ui
+    kptperteditor.ui
 )
 
 
