@@ -216,7 +216,10 @@ Node* Node::childNode(int number)
 
 const Node* Node::childNode(int number) const
 {
-    return const_cast<Node*>( childNode( number ) );
+    if ( number < 0 || number >= m_nodes.count() ) {
+        return 0;
+    }
+    return m_nodes.at( number );
 }
 
 int Node::indexOf( const Node *node ) const
