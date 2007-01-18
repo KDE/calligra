@@ -27,10 +27,10 @@
 
 #ifndef KPRESENTER_EXPORT
 # if defined(MAKE_KPRESENTERPRIVATE_LIB)
-   /* We are building this library */ 
+   /* We are building this library */
 #  define KPRESENTER_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+   /* We are using this library */
 #  define KPRESENTER_EXPORT KDE_IMPORT
 # endif
 #endif
@@ -39,6 +39,23 @@
 
 #define KPRESENTER_EXPORT KDE_EXPORT
 
+#endif
+
+
+/* Now the same for KPRESENTER_TEST_EXPORT, if compiling with unit tests enabled */
+
+#ifdef COMPILING_TESTS
+#if defined _WIN32 || defined _WIN64
+# if defined(MAKE_KPRESENTERPRIVATE_LIB)
+#       define KPRESENTER_TEST_EXPORT KDE_EXPORT
+#   else
+#       define KPRESENTER_TEST_EXPORT KDE_IMPORT
+#   endif
+# else /* not windows */
+#   define KPRESENTER_TEST_EXPORT KDE_EXPORT
+# endif
+#else /* not compiling tests */
+#   define KPRESENTER_TEST_EXPORT
 #endif
 
 #endif
