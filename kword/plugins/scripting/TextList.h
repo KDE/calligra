@@ -86,7 +86,8 @@ namespace Scripting {
                     kWarning() << "TextList.setStyle Invalid KoParagraphStyle object" << endl;
                     return;
                 }
-                for(int i = 0; i < m_list->count(); ++i) {
+                const int count = m_list->count();
+                for(int i = 0; i < count; ++i) {
                     QTextBlock block = m_list->item(i);
                     ps->applyStyle(block);
                 }
