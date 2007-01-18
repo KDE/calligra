@@ -246,7 +246,7 @@ void KWView::setupActions() {
     connect(m_actionSendBackward, SIGNAL(triggered()), this, SLOT( sendToBack() ));
 
     KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
-    foreach(QAction *action, KoInlineObjectRegistry::instance()->createInsertVariableActions(kwcanvas()))
+    foreach(QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(kwcanvas()))
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
