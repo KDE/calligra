@@ -67,6 +67,8 @@ public:
 
     virtual void setZoom( double zoom );
     void show();
+    virtual void setProject( Project *project );
+    virtual void draw();
     virtual void draw( Project &project );
     virtual void drawChanges();
     virtual void drawChanges( Project &project );
@@ -140,6 +142,8 @@ private slots:
 
     void slotModifyLink( KDGanttViewTaskLink* link );
 
+    void slotScheduleIdChanged( long id );
+    
 protected:
     int linkTypeToRelation( int fc, int tc );
     void setRenameEnabled( Q3ListViewItem *item, bool on );
@@ -209,6 +213,7 @@ private:
     bool m_firstTime;
     Q3PtrList<KDGanttViewTaskLink> m_taskLinks;
     Project *m_project;
+    long m_id;
 };
 
 }  //KPlato namespace

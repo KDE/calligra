@@ -60,12 +60,12 @@ class AccountsView : public ViewBase
     Q_OBJECT
 public:
 
-    AccountsView( Project &project, Part *part, QWidget *parent );
+    AccountsView( Project *project, Part *part, QWidget *parent );
 
     //~AccountsView();
 
     virtual void setZoom( double zoom );
-
+    virtual void setProject( Project *project );
     virtual void draw();
     void print( KPrinter &printer );
 
@@ -80,13 +80,14 @@ public slots:
 
 protected slots:
     void slotUpdate();
-
+    void slotScheduleIdChanged( long id );
+    
 protected:
     void getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const;
     void setContextClosedItems( Context::Accountsview &context );
 
 private:
-class AccountItem : public DoubleListViewBase::MasterListItem
+    class AccountItem : public DoubleListViewBase::MasterListItem
     {
     public:
         AccountItem( Account *a, QTreeWidget *parent, bool highlight = false );
@@ -99,7 +100,7 @@ class AccountItem : public DoubleListViewBase::MasterListItem
         Account *account;
         EffortCostMap costMap;
     };
-
+    
     void init();
     void initAccList( const AccountList &list );
     void initAccSubItems( Account *acc, AccountItem *parent );
@@ -109,8 +110,7 @@ class AccountItem : public DoubleListViewBase::MasterListItem
     QString periodText( int offset );
 
 private:
-    Project &m_project;
-    Accounts &m_accounts;
+    Project *m_project;
 
     int m_defaultFontSize;
 

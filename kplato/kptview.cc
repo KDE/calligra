@@ -528,7 +528,7 @@ View::View( Part* part, QWidget* parent )
     m_tab->addWidget( m_resourceview );
     connect( m_resourceview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
-    m_accountsview = new AccountsView( getProject(), getPart(), m_tab );
+    m_accountsview = new AccountsView( &getProject(), getPart(), m_tab );
     m_updateAccountsview = true;
     m_tab->addWidget( m_accountsview );
     connect( m_accountsview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
@@ -773,9 +773,9 @@ View::View( Part* part, QWidget* parent )
         //addStatusBarItem( m_progress, 0, true );
         //m_progress->hide();
     }
+    connect( &getProject(), SIGNAL( currentViewScheduleIdChanged( long ) ), SLOT( slotCurrentScheduleChanged( long ) ) );
     slotPlugScheduleActions();
     connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotPlugScheduleActions() ) );
-    connect( &getProject(), SIGNAL( currentScheduleChanged() ), SLOT( slotCurrentScheduleChanged() ) );
     
     setScheduleActionsEnabled();
 
@@ -1029,20 +1029,18 @@ void View::slotProjectResources()
     delete dia;
 }
 
-void View::slotCurrentScheduleChanged()
+void View::slotCurrentScheduleChanged( long id )
 {
     kDebug()<<k_funcinfo<<endl;
     // hmmm, find a better way. Maybe a "current view schedule"?
-    Schedule *sch = getProject().currentSchedule();
+    Schedule *sch = getProject().findSchedule( id );
     foreach ( QAction *act, m_scheduleActions.keys() ) {
         if ( m_scheduleActions[ act ] == sch ) {
             act->setChecked( true );
             break;
         }
     }
-    m_ganttview->drawChanges();
-    //m_resourceview->draw();
-    m_accountsview->draw();
+    m_accountsview->draw(); // TODO
     setLabel();
     
 }
@@ -1052,8 +1050,8 @@ void View::slotViewSchedule( QAction *act )
     kDebug()<<k_funcinfo<<endl;
     Schedule *sch = m_scheduleActions.value( act, 0 );
     // hmmm, find a better way. Maybe a "current view schedule"?
-    if ( sch != getProject().currentSchedule() ) {
-        getProject().setCurrentSchedule( sch->id() );
+    if ( sch->id() != getProject().currentViewScheduleId() ) {
+        getProject().setCurrentViewScheduleId( sch->id() );
     }
 }
 
@@ -1094,6 +1092,7 @@ void View::slotPlugScheduleActions()
     }
     if ( ca ) {
         ca->setChecked( true );
+        slotViewSchedule( ca );
     }
     setLabel();
 }
@@ -2028,7 +2027,7 @@ m_ganttview->getContext( context.ganttview );
 void View::setLabel()
 {
     kDebug()<<k_funcinfo<<endl;
-    Schedule *s = getProject().currentSchedule();
+    Schedule *s = getProject().findSchedule( getProject().currentViewScheduleId() );
     if ( s == 0 || getProject().notScheduled() ) {
         m_estlabel->setText( i18n( "Not scheduled" ) );
     } else {

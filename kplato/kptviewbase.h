@@ -53,6 +53,7 @@ public:
     Part *part() const;
     
     virtual void setZoom(double /*zoom*/) {}
+    virtual void setProject( Project */*project*/ ) {}
     virtual void draw() {}
     virtual void draw(Project &/*project*/) {}
     virtual void drawChanges(Project &project) { draw(project); }

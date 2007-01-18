@@ -371,14 +371,14 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
             ec += n->plannedEffortCostPrDay(start, end, id);
         }
         if (cp->startup()) {
-            if (n->startTime().date() >= start &&
-                n->startTime().date() <= end)
-                ec.add(n->startTime().date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+            if (n->startTime( id ).date() >= start &&
+                n->startTime( id ).date() <= end)
+                ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
         }
         if (cp->shutdown()) {
-            if (n->endTime().date() >= start &&
-                n->endTime().date() <= end)
-                ec.add(n->endTime().date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+            if (n->endTime( id ).date() >= start &&
+                n->endTime( id ).date() <= end)
+                ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
         }
     }
     if (&account == m_defaultAccount) {
@@ -388,14 +388,14 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
                 ec += n->plannedEffortCostPrDay(start, end, id);
             }
             if (n->startupAccount() == 0) {
-                if (n->startTime().date() >= start &&
-                    n->startTime().date() <= end)
-                    ec.add(n->startTime().date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+                if (n->startTime( id ).date() >= start &&
+                    n->startTime( id ).date() <= end)
+                    ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
             }
             if (n->shutdownAccount() == 0) {
-                if (n->endTime().date() >= start &&
-                    n->endTime().date() <= end)
-                    ec.add(n->endTime().date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+                if (n->endTime( id ).date() >= start &&
+                    n->endTime( id ).date() <= end)
+                    ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
             }
         }
     }

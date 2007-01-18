@@ -66,8 +66,8 @@ public:
      */
     void calculate( ScheduleManager &sm );
 
-    virtual DateTime startTime() const;
-    virtual DateTime endTime() const;
+    virtual DateTime startTime( long id = -1 ) const;
+    virtual DateTime endTime( long id = -1 ) const;
 
     /**
      * Instead of using the expected duration, generate a random value using
@@ -261,7 +261,18 @@ public:
 
     Accounts &accounts() { return m_accounts; }
 
-    /// Set current schedule to schedule with identity id, for me and my children
+    /// Set current view schedule identity to id.
+    void setCurrentViewScheduleId( long id );
+    /**
+     * Returns the id of the current view schedule.
+     * This is meant to be used by views when fetching data from nodes.
+     */
+    long currentViewScheduleId() const { return m_currentViewScheduleId; }
+
+    /**
+     * Set current schedule to schedule with identity id, for me and my children
+     * Note that this is used (and may be changed) when calculating schedules
+     */
     virtual void setCurrentSchedule( long id );
     /// Create new schedule with unique name and id of type Expected.
     MainSchedule *createSchedule();
@@ -336,6 +347,8 @@ signals:
     void scheduleToBeRemoved( const MainSchedule *sch );
     void scheduleRemoved( const MainSchedule *sch );
 
+    void currentViewScheduleIdChanged( long id );
+    
 protected:
     /**
      * Calculate the schedule.
@@ -372,7 +385,8 @@ protected:
 
 private:
     void init();
-
+    long m_currentViewScheduleId;
+    
     QHash<QString, ResourceGroup*> resourceGroupIdDict;
     QHash<QString, Resource*> resourceIdDict;
     QHash<QString, Node*> nodeIdDict;

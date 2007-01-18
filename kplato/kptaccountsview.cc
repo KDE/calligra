@@ -85,12 +85,9 @@ void AccountsView::AccountItem::add
         m_slaveItem->setText( col, KGlobal::locale() ->formatMoney( cm.cost(), "", 0 ) );
 }
 
-AccountsView::AccountsView( Project &project, Part *part, QWidget *parent )
-        : ViewBase( part, parent ),
-        m_project( project ),
-        m_accounts( project.accounts() )
+AccountsView::AccountsView( Project *project, Part *part, QWidget *parent )
+        : ViewBase( part, parent )
 {
-
     m_date = QDate::currentDate();
     m_period = 0;
     m_periodTexts << i18n( "Day" ) << i18n( "Week" ) << i18n( "Month" );
@@ -112,6 +109,7 @@ AccountsView::AccountsView( Project &project, Part *part, QWidget *parent )
     m_dlv = new DoubleListViewBase( this, true );
     m_dlv->setNameHeader( i18n( "Account" ) );
 
+    setProject( project );
     init();
 
     lay1->addWidget( m_dlv );
@@ -135,15 +133,41 @@ void AccountsView::init()
 {
     m_date = QDate::currentDate();
     m_period = 0;
-    initAccList( m_accounts.accountList() );
+    if ( m_project ) {
+        initAccList( m_project->accounts().accountList() );
+    } else {
+        m_dlv->clearLists();
+    }
+}
+
+void AccountsView::setProject( Project *project )
+{
+    if ( m_project && project != m_project ) {
+        disconnect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotScheduleIdChanged( long ) ) );
+        m_dlv->clearLists();
+    }
+    if ( project && project != m_project ) {
+        m_project = project;
+        connect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotScheduleIdChanged( long ) ) );
+        draw();
+    }
+}
+
+void AccountsView::slotScheduleIdChanged( long /*id*/ )
+{
+    draw();
 }
 
 void AccountsView::draw()
 {
+    if ( m_project == 0 ) {
+        m_dlv->clearLists();
+        return;
+    }
     //kDebug()<<k_funcinfo<<endl;
     Context::Accountsview context;
     getContextClosedItems( context, m_dlv->masterListView() ->topLevelItem( 0 ) );
-    initAccList( m_accounts.accountList() );
+    initAccList( m_project->accounts().accountList() );
     setContextClosedItems( context );
     slotUpdate();
 }
@@ -207,6 +231,11 @@ void AccountsView::createPeriods()
 
 void AccountsView::slotUpdate()
 {
+    if ( m_project == 0 ) {
+        return;
+    }
+    Accounts &accounts = m_project->accounts();
+    long id = m_project->currentViewScheduleId();
     //kDebug()<<k_funcinfo<<endl;
     QApplication::setOverrideCursor( Qt::WaitCursor );
     createPeriods();
@@ -222,7 +251,7 @@ void AccountsView::slotUpdate()
     m_label->setText( t );
 
     // Add columns for selected period/periods
-    QDate start = m_project.startTime().date();
+    QDate start = m_project->startTime( id ).date();
     QDate end = m_date;
     //kDebug()<<k_funcinfo<<start<<" - "<<end<<endl;
     QStringList df;
@@ -236,7 +265,7 @@ void AccountsView::slotUpdate()
             if ( !item || !item->account || !item->account->isElement() ) {
                 continue;
             }
-            item->costMap = m_accounts.plannedCost( *( item->account ), start, end );
+            item->costMap = accounts.plannedCost( *( item->account ), start, end, id );
             double cost = 0.0;
             int col = 0;
             for ( QDate d = start; d <= end; d = cal->addDays( d, 1 ), ++col ) {
@@ -278,7 +307,7 @@ void AccountsView::slotUpdate()
             if ( !item || !item->account || !item->account->isElement() ) {
                 continue;
             }
-            item->costMap = m_accounts.plannedCost( *( item->account ), start, end );
+            item->costMap = accounts.plannedCost( *( item->account ), start, end, id );
             double cost = 0.0;
             QDate d = start;
             QDate pend = cal->addDays( d, 7 + weekStartDay - 1 - cal->dayOfWeek( d ) );
@@ -324,7 +353,7 @@ void AccountsView::slotUpdate()
             if ( !item || !item->account || !item->account->isElement() ) {
                 continue;
             }
-            item->costMap = m_accounts.plannedCost( *( item->account ), start, end );
+            item->costMap = accounts.plannedCost( *( item->account ), start, end, id );
             double cost = 0.0;
             QDate d = start;
             cal->setYMD( pend, d.year(), d.month(), d.daysInMonth() );

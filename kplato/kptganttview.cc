@@ -86,7 +86,8 @@ GanttView::GanttView( Part *part, QWidget *parent, bool readWrite, const char* n
         m_currentItem( 0 ),
         m_taskView( 0 ),
         m_firstTime( true ),
-        m_project( 0 )
+        m_project( 0 ),
+        m_id( -1 )
 {
     kDebug() << " ---------------- KPlato: Creating GanttView ----------------" << endl;
 
@@ -169,27 +170,55 @@ void GanttView::setShowTaskLinks( bool on )
     m_gantt->setShowTaskLinks( on );
 }
 
+void GanttView::setProject( Project *project )
+{
+    if ( m_project && project != m_project ) {
+        disconnect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotScheduleIdChanged( long ) ) );
+        clear();
+    }
+    if ( project && project != m_project ) {
+        m_project = project;
+        connect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotScheduleIdChanged( long ) ) );
+        draw();
+    }
+}
+
+void GanttView::slotScheduleIdChanged( long id )
+{
+    m_id = id;
+    drawChanges();
+}
+
 void GanttView::draw( Project &project )
 {
-    m_project = &project;
+    setProject( &project );
     //kDebug()<<k_funcinfo<<"Schedule: "<<(sch?sch->typeToString():"None")<<endl;
+    draw();
+}
+
+void GanttView::draw()
+{
     m_gantt->setUpdateEnabled( false );
-
     clear();
-    drawChildren( NULL, project );
-    drawRelations();
-
-    if ( m_firstTime ) {
-        m_gantt->centerTimelineAfterShow( project.startTime().addDays( -1 ) );
-        m_firstTime = false;
+    if ( m_project ) {
+        drawChildren( NULL, *m_project );
+        drawRelations();
+    
+        if ( m_firstTime ) {
+            m_gantt->centerTimelineAfterShow( m_project->startTime( m_project->currentViewScheduleId() ).addDays( -1 ) );
+            m_firstTime = false;
+        }
+        currentItemChanged( m_gantt->firstChild() ); //hmmm
     }
     m_gantt->setUpdateEnabled( true );
-    currentItemChanged( m_currentItem );
 }
 
 void GanttView::drawChanges( Project &project )
 {
-    m_project = &project; //FIXME Only draw changes on same project
+    if ( m_project != &project ) {
+        setProject( &project );
+        return;
+    }
     drawChanges();
 }
 
@@ -471,8 +500,9 @@ void GanttView::modifyProject( KDGanttViewItem *item, Node *node )
     //kDebug()<<k_funcinfo<<endl;
     item->setListViewText( node->name() );
     item->setListViewText( 1, node->wbs() );
-    item->setStartTime( node->startTime() );
-    item->setEndTime( node->endTime() );
+    
+    item->setStartTime( node->startTime( m_id ) );
+    item->setEndTime( node->endTime( m_id ) );
     //item->setOpen(true);
     setDrawn( item, true );
 
@@ -482,16 +512,17 @@ void GanttView::modifySummaryTask( KDGanttViewItem *item, Task *task )
 {
     //kDebug()<<k_funcinfo<<endl;
     KLocale * locale = KGlobal::locale();
+    
     //kDebug()<<k_funcinfo<<task->name()<<": "<<task->currentSchedule()<<", "<<task->notScheduled()<<", "<<(m_project ? m_project->notScheduled() : false)<<endl;
-    if ( task->currentSchedule() == 0 ) {
+    if ( task->findSchedule( m_id ) == 0 ) {
         item->setShowNoInformation( m_showNoInformation );
-        item->setStartTime( task->projectNode() ->startTime() );
+        item->setStartTime( task->projectNode() ->startTime( m_id ) );
         item->setEndTime( item->startTime().addDays( 1 ) );
     } else {
-        bool noinf = m_showNoInformation && ( task->notScheduled() || ( m_project ? m_project->notScheduled() : false /*hmmm, no project?*/ ) );
+        bool noinf = m_showNoInformation && ( task->notScheduled( m_id ) || ( m_project ? m_project->notScheduled( m_id ) : false /*hmmm, no project?*/ ) );
         item->setShowNoInformation( noinf );
-        item->setStartTime( task->startTime() );
-        item->setEndTime( task->endTime() );
+        item->setStartTime( task->startTime( m_id ) );
+        item->setEndTime( task->endTime( m_id ) );
     }
     item->setListViewText( task->name() );
     item->setListViewText( 1, task->wbs() );
@@ -503,15 +534,15 @@ void GanttView::modifySummaryTask( KDGanttViewItem *item, Task *task )
     }
     QString w = i18n( "Name: %1", task->name() );
     if ( !task->notScheduled() ) {
-        w += '\n' + i18n( "Start: %1", locale->formatDateTime( task->startTime() ) );
-        w += '\n' + i18n( "End: %1", locale->formatDateTime( task->endTime() ) );
+        w += '\n' + i18n( "Start: %1", locale->formatDateTime( task->startTime( m_id ) ) );
+        w += '\n' + i18n( "End: %1", locale->formatDateTime( task->endTime( m_id ) ) );
     }
     bool ok = true;
-    if ( task->notScheduled() ) {
+    if ( task->notScheduled( m_id ) ) {
         w += '\n' + i18n( "Not scheduled" );
         ok = false;
     } else {
-        if ( !m_showNoInformation && m_project && m_project->notScheduled() ) {
+        if ( !m_showNoInformation && m_project && m_project->notScheduled( m_id ) ) {
             ok = false;
         }
     }
@@ -530,26 +561,27 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
 {
     //kDebug()<<k_funcinfo<<endl;
     KLocale * locale = KGlobal::locale();
+    
     //kDebug()<<k_funcinfo<<task->name()<<": "<<task->currentSchedule()<<", "<<task->notScheduled()<<", "<<(m_project ? m_project->notScheduled() : false)<<endl;
     item->setListViewText( task->name() );
     item->setListViewText( 1, task->wbs() );
-    if ( task->currentSchedule() == 0 ) {
+    if ( task->findSchedule( m_id ) == 0 ) {
         item->setShowNoInformation( m_showNoInformation );
-        item->setStartTime( task->projectNode() ->startTime() );
+        item->setStartTime( task->projectNode() ->startTime( m_id ) );
         item->setEndTime( item->startTime().addDays( 1 ) );
     } else {
-        bool noinf = m_showNoInformation && ( task->notScheduled() || ( m_project ? m_project->notScheduled() : false /*hmmm, no project?*/ ) );
+        bool noinf = m_showNoInformation && ( task->notScheduled( m_id ) || ( m_project ? m_project->notScheduled( m_id ) : false /*hmmm, no project?*/ ) );
         item->setShowNoInformation( noinf );
-        item->setStartTime( task->startTime() );
-        item->setEndTime( task->endTime() );
+        item->setStartTime( task->startTime( m_id ) );
+        item->setEndTime( task->endTime( m_id ) );
     }
     //item->setOpen(true);
     QString text;
     if ( m_showTaskName ) {
         text = task->name();
     }
-    if ( m_showResources && !task->notScheduled() ) {
-        QList<Appointment*> lst = task->appointments();
+    if ( m_showResources && !task->notScheduled( m_id ) ) {
+        QList<Appointment*> lst = task->appointments( m_id );
         if ( lst.count() > 0 ) {
             if ( !text.isEmpty() )
                 text += ' ';
@@ -571,8 +603,8 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
         item->setProgress( 0 );
     }
     if ( m_showPositiveFloat ) {
-        QDateTime t = task->endTime() + task->positiveFloat();
-        if ( t.isValid() && t > task->endTime() ) {
+        QDateTime t = task->endTime( m_id ) + task->positiveFloat( m_id );
+        if ( t.isValid() && t > task->endTime( m_id ) ) {
             item->setFloatEndTime( t );
         } else {
             item->setFloatEndTime( QDateTime() );
@@ -582,53 +614,53 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
         item->setFloatEndTime( QDateTime() );
     }
     QString w = i18n( "Name: %1", task->name() );
-    if ( !task->notScheduled() ) {
+    if ( !task->notScheduled( m_id ) ) {
         w += '\n';
-        w += i18n( "Start: %1", locale->formatDateTime( task->startTime() ) );
+        w += i18n( "Start: %1", locale->formatDateTime( task->startTime( m_id ) ) );
         w += '\n';
-        w += i18n( "End: %1", locale->formatDateTime( task->endTime() ) );
+        w += i18n( "End: %1", locale->formatDateTime( task->endTime( m_id ) ) );
         if ( m_showProgress ) {
             w += '\n';
             w += i18n( "Completion: %1%", task->completion().percentFinished() );
         }
         if ( task->positiveFloat() > Duration::zeroDuration ) {
-            w += '\n' + i18n( "Float: %1", task->positiveFloat().toString( Duration::Format_i18nDayTime ) );
+            w += '\n' + i18n( "Float: %1", task->positiveFloat( m_id ).toString( Duration::Format_i18nDayTime ) );
         }
-        if ( task->inCriticalPath() ) {
+        if ( task->inCriticalPath( m_id ) ) {
             w += '\n' + i18n( "Critical path" );
-        } else if ( task->isCritical() ) {
+        } else if ( task->isCritical( m_id ) ) {
             w += '\n' + i18n( "Critical" );
         }
     }
     QString sts;
     bool ok = true;
-    if ( task->notScheduled() ) {
+    if ( task->notScheduled( m_id ) ) {
         sts += '\n' + i18n( "Not scheduled" );
         ok = false;
     } else {
-        if ( task->resourceError() ) {
+        if ( task->resourceError( m_id ) ) {
             sts += '\n' + i18n( "No resource assigned" );
             ok = false;
         }
-        if ( task->resourceNotAvailable() ) {
+        if ( task->resourceNotAvailable( m_id ) ) {
             sts += '\n' + i18n( "Resource not available" );
             ok = false;
         }
-        if ( task->schedulingError() ) {
+        if ( task->schedulingError( m_id ) ) {
             sts += '\n' + i18n( "Scheduling conflict" );
             ok = false;
         }
-        if ( task->effortMetError() ) {
+        if ( task->effortMetError( m_id ) ) {
             sts += '\n' + i18n( "Requested effort could not be met" );
             ok = false;
         }
-        if ( task->resourceOverbooked() ) {
+        if ( task->resourceOverbooked( m_id ) ) {
             ok = false;
-            QStringList rl = task->overbookedResources();
+            QStringList rl = task->overbookedResources( m_id );
             sts += '\n' + i18nc( "arg: list of resources", "Resource overbooked: %1" ,rl.join( "," ) );
 
         }
-        if ( !m_showNoInformation && m_project && m_project->notScheduled() ) {
+        if ( !m_showNoInformation && m_project && m_project->notScheduled( m_id ) ) {
             ok = false;
         }
     }
@@ -642,9 +674,9 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
     }
     item->setHighlight( false );
     if ( m_showCriticalTasks ) {
-        item->setHighlight( task->isCritical() );
+        item->setHighlight( task->isCritical( m_id ) );
     } else if ( m_showCriticalPath ) {
-        item->setHighlight( task->inCriticalPath() );
+        item->setHighlight( task->inCriticalPath( m_id ) );
     }
 
     item->setTooltipText( w );
@@ -655,14 +687,15 @@ void GanttView::modifyMilestone( KDGanttViewItem *item, Task *task )
 {
     //kDebug()<<k_funcinfo<<endl;
     KLocale * locale = KGlobal::locale();
+    
     //kDebug()<<k_funcinfo<<task->name()<<": "<<task->currentSchedule()<<", "<<task->notScheduled()<<", "<<(m_project ? m_project->notScheduled() : false)<<endl;
-    if ( task->currentSchedule() == 0 ) {
+    if ( task->findSchedule( m_id ) == 0 ) {
         item->setShowNoInformation( m_showNoInformation );
-        item->setStartTime( task->projectNode() ->startTime() );
+        item->setStartTime( task->projectNode() ->startTime( m_id ) );
     } else {
-        bool noinf = m_showNoInformation && ( task->notScheduled() || ( m_project ? m_project->notScheduled() : false /*hmmm, no project?*/ ) );
+        bool noinf = m_showNoInformation && ( task->notScheduled( m_id ) || ( m_project ? m_project->notScheduled( m_id ) : false /*hmmm, no project?*/ ) );
         item->setShowNoInformation( noinf );
-        item->setStartTime( task->startTime() );
+        item->setStartTime( task->startTime( m_id ) );
     }
     item->setListViewText( task->name() );
     item->setListViewText( 1, task->wbs() );
@@ -673,9 +706,9 @@ void GanttView::modifyMilestone( KDGanttViewItem *item, Task *task )
         item->setText( QString() );
     }
     if ( m_showPositiveFloat ) {
-        DateTime t = task->startTime() + task->positiveFloat();
+        DateTime t = task->startTime( m_id ) + task->positiveFloat( m_id );
         //kDebug()<<k_funcinfo<<task->name()<<" float: "<<t.toString()<<endl;
-        if ( t.isValid() && t > task->startTime() ) {
+        if ( t.isValid() && t > task->startTime( m_id ) ) {
             item->setFloatEndTime( t );
         } else {
             item->setFloatEndTime( QDateTime() );
@@ -687,28 +720,28 @@ void GanttView::modifyMilestone( KDGanttViewItem *item, Task *task )
     //TODO: Show progress
 
     QString w = i18n( "Name: %1", task->name() );
-    if ( !task->notScheduled() ) {
-        w += '\n' + i18n( "Time: %1", locale->formatDateTime( task->startTime() ) );
+    if ( !task->notScheduled( m_id ) ) {
+        w += '\n' + i18n( "Time: %1", locale->formatDateTime( task->startTime( m_id ) ) );
 
-        if ( task->positiveFloat() > Duration::zeroDuration ) {
-            w += '\n' + i18n( "Float: %1", task->positiveFloat().toString( Duration::Format_i18nDayTime ) );
+        if ( task->positiveFloat( m_id ) > Duration::zeroDuration ) {
+            w += '\n' + i18n( "Float: %1", task->positiveFloat( m_id ).toString( Duration::Format_i18nDayTime ) );
         }
-        if ( task->inCriticalPath() ) {
+        if ( task->inCriticalPath( m_id ) ) {
             w += '\n' + i18n( "Critical path" );
-        } else if ( task->isCritical() ) {
+        } else if ( task->isCritical( m_id ) ) {
             w += '\n' + i18n( "Critical" );
         }
     }
     bool ok = true;
-    if ( task->notScheduled() ) {
+    if ( task->notScheduled( m_id ) ) {
         w += '\n' + i18n( "Not scheduled" );
         ok = false;
     } else {
-        if ( task->schedulingError() ) {
+        if ( task->schedulingError( m_id ) ) {
             w += '\n' + i18n( "Scheduling conflict" );
             ok = false;
         }
-        if ( !m_showNoInformation && m_project && m_project->notScheduled() ) {
+        if ( !m_showNoInformation && m_project && m_project->notScheduled( m_id ) ) {
             ok = false;
         }
     }
@@ -721,9 +754,9 @@ void GanttView::modifyMilestone( KDGanttViewItem *item, Task *task )
     }
     item->setHighlight( false );
     if ( m_showCriticalTasks ) {
-        item->setHighlight( task->isCritical() );
+        item->setHighlight( task->isCritical( m_id ) );
     } else if ( m_showCriticalPath ) {
-        item->setHighlight( task->inCriticalPath() );
+        item->setHighlight( task->inCriticalPath( m_id ) );
     }
 
     item->setTooltipText( w );

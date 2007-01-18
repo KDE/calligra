@@ -231,7 +231,7 @@ protected slots:
     void slotViewActivated( ViewListItem*, ViewListItem* );
     void slotPlugScheduleActions();
     void slotViewSchedule( QAction *act );
-    void slotCurrentScheduleChanged();
+    void slotCurrentScheduleChanged( long id );
     
     void slotAddScheduleManager( Project *project );
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );

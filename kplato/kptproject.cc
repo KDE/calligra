@@ -174,22 +174,22 @@ bool Project::calcCriticalPath( bool fromEnd )
     return false;
 }
 
-DateTime Project::startTime() const
+DateTime Project::startTime( long id ) const
 {
-    //kDebug()<<k_funcinfo<<(m_currentSchedule?m_currentSchedule->id():-1)<<" "<<(m_currentSchedule?m_currentSchedule->typeToString():"")<<endl;
-    if ( m_currentSchedule )
-        return m_currentSchedule->startTime;
-
-    return m_constraintStartTime;
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->startTime : m_constraintStartTime;
 }
 
-DateTime Project::endTime() const
+DateTime Project::endTime(  long id ) const
 {
-    //kDebug()<<k_funcinfo<<(m_currentSchedule?m_currentSchedule->id():-1)<<" "<<(m_currentSchedule?m_currentSchedule->typeToString():"")<<endl;
-    if ( m_currentSchedule )
-        return m_currentSchedule->endTime;
-
-    return m_constraintEndTime;
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->endTime : m_constraintEndTime;
 }
 
 Duration *Project::getRandomDuration()
@@ -580,6 +580,14 @@ void Project::save( QDomElement &element ) const
         foreach ( ScheduleManager *sm, m_managers ) {
             sm->saveXML( el );
         }
+    }
+}
+
+void Project::setCurrentViewScheduleId( long id )
+{
+    if ( id != m_currentViewScheduleId ) {
+        m_currentViewScheduleId = id;
+        emit currentViewScheduleIdChanged( id );
     }
 }
 
