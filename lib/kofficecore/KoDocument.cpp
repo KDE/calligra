@@ -63,6 +63,7 @@
 
 #include <config.h>
 #include <assert.h>
+#include <locale.h>
 
 
 // Define the protocol used here for embedded documents' URL
@@ -371,6 +372,11 @@ bool KoDocument::exp0rt( const KURL & _url )
 bool KoDocument::saveFile()
 {
     kdDebug(30003) << "KoDocument::saveFile() doc='" << url().url() <<"'"<< endl;
+    
+    // set local again as it can happen that it gets resetted
+    // so that all saved numbers have a . and not e.g a , as a 
+    // decimal seperator
+    setlocale( LC_NUMERIC, "C" );
 
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified ();
@@ -1255,6 +1261,11 @@ QPixmap KoDocument::generatePreview( const QSize& size )
 
 QString KoDocument::autoSaveFile( const QString & path ) const
 {
+    // set local again as it can happen that it gets resetted
+    // so that all saved numbers have a . and not e.g a , as a 
+    // decimal seperator
+    setlocale( LC_NUMERIC, "C" );
+
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType( nativeFormatMimeType() );
     QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
