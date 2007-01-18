@@ -764,7 +764,7 @@ int Sheet::bottomRow( double _ypos ) const
     return row;
 }
 
-double Sheet::dblColumnPos( int _col ) const
+double Sheet::columnPosition( int _col ) const
 {
     double x = 0.0;
     for ( int col = 1; col < _col; col++ )
@@ -784,11 +784,11 @@ double Sheet::dblColumnPos( int _col ) const
 
 int Sheet::columnPos( int _col ) const
 {
-    return (int)dblColumnPos( _col );
+    return (int)columnPosition( _col );
 }
 
 
-double Sheet::dblRowPos( int _row ) const
+double Sheet::rowPosition( int _row ) const
 {
     double y = 0.0;
 
@@ -809,7 +809,7 @@ double Sheet::dblRowPos( int _row ) const
 
 int Sheet::rowPos( int _row ) const
 {
-    return (int)dblRowPos( _row );
+    return (int)rowPosition( _row );
 }
 
 

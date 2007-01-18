@@ -1726,11 +1726,11 @@ void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
     //
     QPointF topLeft;
     if ( view == 0 ) //Most propably we are embedded and inactive, so no offset
-        topLeft = QPointF( sheet->dblColumnPos( cellRegion.left() ),
-                           sheet->dblRowPos( cellRegion.top() ) );
+        topLeft = QPointF( sheet->columnPosition( cellRegion.left() ),
+                           sheet->rowPosition( cellRegion.top() ) );
     else
-        topLeft = QPointF( sheet->dblColumnPos( cellRegion.left() ) - view->canvasWidget()->xOffset(),
-                           sheet->dblRowPos( cellRegion.top() ) - view->canvasWidget()->yOffset() );
+        topLeft = QPointF( sheet->columnPosition( cellRegion.left() ) - view->canvasWidget()->xOffset(),
+                           sheet->rowPosition( cellRegion.top() ) - view->canvasWidget()->yOffset() );
 
     SheetView sheetView( sheet ); // FIXME Stefan: make member, otherwise cache lost
     sheetView.setPaintCellRange( cellRegion );

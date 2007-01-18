@@ -439,8 +439,8 @@ void Canvas::validateSelection()
             kDebug(36001)<<" display info validation\n";
             double u = cell->width( col );
             double v = cell->height( row );
-            double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
-            double ypos = sheet->dblRowPos( markerRow() ) - yOffset();
+            double xpos = sheet->columnPosition( markerColumn() ) - xOffset();
+            double ypos = sheet->rowPosition( markerRow() ) - yOffset();
             // Special treatment for obscured cells.
             if ( cell->isPartOfMerged() )
             {
@@ -451,8 +451,8 @@ void Canvas::validateSelection()
                 // Use the obscuring cells dimensions
                 u = cell->width( moveX );
                 v = cell->height( moveY );
-                xpos = sheet->dblColumnPos( moveX );
-                ypos = sheet->dblRowPos( moveY );
+                xpos = sheet->columnPosition( moveX );
+                ypos = sheet->rowPosition( moveY );
             }
             //d->validationInfo->setGeometry( 3, y + 3, len + 2, hei + 2 );
             d->validationInfo->setAlignment( Qt::AlignVCenter );
@@ -535,8 +535,8 @@ void Canvas::scrollToCell(QPoint location) const
 
   // xpos is the position of the cell in the current window in unzoomed
   // document coordinates.
-  double xpos = sheet->dblColumnPos( location.x() ) - xOffset();
-  double ypos = sheet->dblRowPos( location.y() ) - yOffset();
+  double xpos = sheet->columnPosition( location.x() ) - xOffset();
+  double ypos = sheet->rowPosition( location.y() ) - yOffset();
 
   double minY = 40.0;
   double maxY = unzoomedHeight - 40.0;
@@ -621,7 +621,7 @@ void Canvas::slotScrollHorz( int _value )
         _value = 0;
     }
 
-    double xpos = sheet->dblColumnPos( qMin( KS_colMax, sheet->maxColumn()+10 ) ) - d->xOffset;
+    double xpos = sheet->columnPosition( qMin( KS_colMax, sheet->maxColumn()+10 ) ) - d->xOffset;
     if ( _value > ( xpos + d->xOffset ) )
         _value = (int) ( xpos + d->xOffset );
 
@@ -659,7 +659,7 @@ void Canvas::slotScrollVert( int _value )
                 _value << ')' << endl;
     }
 
-    double ypos = sheet->dblRowPos( qMin( KS_rowMax, sheet->maxRow()+10 ) );
+    double ypos = sheet->rowPosition( qMin( KS_rowMax, sheet->maxRow()+10 ) );
     if ( _value > ypos )
         _value = (int) ypos;
 
@@ -687,7 +687,7 @@ void Canvas::slotMaxColumn( int _max_column )
     return;
 
   int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
-  double xpos = sheet->dblColumnPos( qMin( KS_colMax, _max_column + 10 ) ) - xOffset();
+  double xpos = sheet->columnPosition( qMin( KS_colMax, _max_column + 10 ) ) - xOffset();
   double unzoomWidth = d->view->doc()->unzoomItXOld( width() );
 
   //Don't go beyond the maximum column range (KS_colMax)
@@ -707,7 +707,7 @@ void Canvas::slotMaxRow( int _max_row )
   if (!sheet)
     return;
 
-  double ypos = sheet->dblRowPos( qMin( KS_rowMax, _max_row + 10 ) ) - yOffset();
+  double ypos = sheet->rowPosition( qMin( KS_rowMax, _max_row + 10 ) ) - yOffset();
   double unzoomHeight = d->view->doc()->unzoomItYOld( height() );
 
   //Don't go beyond the maximum row range (KS_rowMax)
@@ -914,10 +914,10 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   QRect r1;
   QRect r2;
 
-  double lx = sheet->dblColumnPos( rct.left() );
-  double rx = sheet->dblColumnPos( rct.right() + 1 );
-  double ty = sheet->dblRowPos( rct.top() );
-  double by = sheet->dblRowPos( rct.bottom() + 1 );
+  double lx = sheet->columnPosition( rct.left() );
+  double rx = sheet->columnPosition( rct.right() + 1 );
+  double ty = sheet->rowPosition( rct.top() );
+  double by = sheet->rowPosition( rct.bottom() + 1 );
 
   r1.setLeft( (int) (lx - 1) );
   r1.setTop( (int) (ty - 1) );
@@ -1281,10 +1281,10 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     QRect r1;
     QRect r2;
     {
-      double lx = sheet->dblColumnPos( rct.left() );
-      double rx = sheet->dblColumnPos( rct.right() + 1 );
-      double ty = sheet->dblRowPos( rct.top() );
-      double by = sheet->dblRowPos( rct.bottom() + 1 );
+      double lx = sheet->columnPosition( rct.left() );
+      double rx = sheet->columnPosition( rct.right() + 1 );
+      double ty = sheet->rowPosition( rct.top() );
+      double by = sheet->rowPosition( rct.bottom() + 1 );
 
       r1.setLeft( (int) (lx - 1) );
       r1.setTop( (int) (ty - 1) );
@@ -1513,8 +1513,8 @@ void Canvas::paintEvent( QPaintEvent* event )
     const QRect visibleRect = visibleCells();
 // kDebug() << "visibleCells: " << visibleRect << endl;
 // kDebug() << "offset: " << xOffset() << ", " << yOffset() << endl;
-    const QPointF topLeft( sheet->dblColumnPos(visibleRect.left()) - xOffset(),
-                           sheet->dblRowPos(visibleRect.top()) - yOffset() );
+    const QPointF topLeft( sheet->columnPosition(visibleRect.left()) - xOffset(),
+                           sheet->rowPosition(visibleRect.top()) - yOffset() );
     view()->sheetView( sheet )->setPaintCellRange( visibleRect );
     view()->sheetView( sheet )->paintCells( d->view, painter, paintRect, topLeft );
 
@@ -1627,8 +1627,8 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   }
 #endif
   const QPoint dragAnchor = selection()->boundingRect().topLeft();
-  double xpos = sheet->dblColumnPos( dragAnchor.x() );
-  double ypos = sheet->dblRowPos( dragAnchor.y() );
+  double xpos = sheet->columnPosition( dragAnchor.x() );
+  double ypos = sheet->rowPosition( dragAnchor.y() );
   double width  = sheet->columnFormat( dragAnchor.x() )->width();
   double height = sheet->rowFormat( dragAnchor.y() )->height();
 
@@ -1684,8 +1684,8 @@ void Canvas::dropEvent( QDropEvent * _ev )
     return;
   }
 
-  double xpos = sheet->dblColumnPos( selection()->lastRange().left() );
-  double ypos = sheet->dblRowPos( selection()->lastRange().top() );
+  double xpos = sheet->columnPosition( selection()->lastRange().left() );
+  double ypos = sheet->rowPosition( selection()->lastRange().top() );
   double width  = sheet->columnFormat( selection()->lastRange().left() )->width();
   double height = sheet->rowFormat( selection()->lastRange().top() )->height();
 
@@ -3404,7 +3404,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
         double min_w = cell->width( markerColumn() );
         double min_h = cell->height( markerRow() );
 
-        double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
+        double xpos = sheet->columnPosition( markerColumn() ) - xOffset();
 
         Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
         bool rtlText = cell->displayText().isRightToLeft();
@@ -3423,7 +3423,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
             xpos = dwidth - w2 - xpos;
         }
 
-        double ypos = sheet->dblRowPos( markerRow() ) - yOffset();
+        double ypos = sheet->rowPosition( markerRow() ) - yOffset();
         QPalette editorPalette( d->cellEditor->palette() );
 
         QColor color = cell->style().fontColor();
@@ -3986,10 +3986,10 @@ QRectF Canvas::cellCoordinatesToDocument( const QRect& cellRange ) const
         return QRectF();
 
     QRectF rect;
-    rect.setLeft  ( sheet->dblColumnPos( cellRange.left() ) );
-    rect.setRight ( sheet->dblColumnPos( cellRange.right() + 1 ) );
-    rect.setTop   ( sheet->dblRowPos( cellRange.top() ) );
-    rect.setBottom( sheet->dblRowPos( cellRange.bottom() + 1 ) );
+    rect.setLeft  ( sheet->columnPosition( cellRange.left() ) );
+    rect.setRight ( sheet->columnPosition( cellRange.right() + 1 ) );
+    rect.setTop   ( sheet->rowPosition( cellRange.top() ) );
+    rect.setBottom( sheet->rowPosition( cellRange.bottom() + 1 ) );
     return rect;
 }
 
@@ -4135,8 +4135,8 @@ void Canvas::showToolTip( const QPoint& p )
       // Use the obscuring cells dimensions
       u = cell->width( moveX );
       v = cell->height( moveY );
-      xpos = sheet->dblColumnPos( moveX );
-      ypos = sheet->dblRowPos( moveY );
+      xpos = sheet->columnPosition( moveX );
+      ypos = sheet->rowPosition( moveY );
     }
 
     // Get the cell dimensions

@@ -861,7 +861,7 @@ public:
      * to avoid rounding problems
      * @param col the column's index
      */
-    double dblColumnPos( int col ) const;
+    double columnPosition( int col ) const;
 
     /**
      * @return the top corner of the row as int.
@@ -875,7 +875,7 @@ public:
      * to avoid rounding problems
      * @param _row the row's index
      */
-    double dblRowPos( int _row ) const;
+    double rowPosition( int _row ) const;
 
     /**
      * @return the maximum horizontal size

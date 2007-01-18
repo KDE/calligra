@@ -249,7 +249,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
         }
 
         double height = 0.0;
-        double y = sheet->dblRowPos( m_iResizedRow );
+        double y = sheet->rowPosition( m_iResizedRow );
         if ( ev_PosY - y <= 0.0 )
             height = 0.0;
         else
@@ -390,7 +390,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
       if ( row < KS_rowMax )
       {
         const RowFormat* rowFormat = sheet->rowFormat( row + 1 );
-        y = sheet->dblRowPos( row + 1 );
+        y = sheet->rowPosition( row + 1 );
         m_pCanvas->vertScrollBar()->setValue( (int) ( ev_PosY + rowFormat->height() - dHeight) );
       }
     }
@@ -479,7 +479,7 @@ void VBorder::paintSizeIndicator( int mouseY )
     m_iResizePos = mouseY;
 
     // Dont make the row have a height < 2 pixel.
-    double y = m_pCanvas->d->view->doc()->zoomItY( sheet->dblRowPos( m_iResizedRow ) - m_pCanvas->yOffset() );
+    double y = m_pCanvas->d->view->doc()->zoomItY( sheet->rowPosition( m_iResizedRow ) - m_pCanvas->yOffset() );
     if ( m_iResizePos < y + 2 )
         m_iResizePos = (int) y;
 
@@ -525,8 +525,8 @@ void VBorder::updateRows( int from, int to )
     if (!sheet)
         return;
 
-    double y0 = sheet->doc()->zoomItY( sheet->dblRowPos( from ) );
-    double y1 = sheet->doc()->zoomItY( sheet->dblRowPos( to + 1 ) );
+    double y0 = sheet->doc()->zoomItY( sheet->rowPosition( from ) );
+    double y1 = sheet->doc()->zoomItY( sheet->rowPosition( to + 1 ) );
     update( 0, (int) y0, width(), (int) (y1-y0) );
 }
 
@@ -874,7 +874,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
         else
           ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
 
-        x = sheet->dblColumnPos( m_iResizedColumn );
+        x = sheet->columnPosition( m_iResizedColumn );
 
         if ( ev_PosX - x <= 0.0 )
           width = 0.0;
@@ -1019,7 +1019,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
       if ( _ev->pos().x() < width() - m_pCanvas->width() )
       {
         const ColumnFormat *cl = sheet->columnFormat( col + 1 );
-        x = sheet->dblColumnPos( col + 1 );
+        x = sheet->columnPosition( col + 1 );
         m_pCanvas->horzScrollBar()->setValue( m_pCanvas->horzScrollBar()->maximum()
                                               - (int) ( ( ev_PosX + cl->width() ) - dWidth ) );
       }
@@ -1035,7 +1035,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
         if ( col < KS_colMax )
         {
           const ColumnFormat *cl = sheet->columnFormat( col + 1 );
-          x = sheet->dblColumnPos( col + 1 );
+          x = sheet->columnPosition( col + 1 );
           m_pCanvas->horzScrollBar()->setValue( (int) ( ev_PosX + cl->width() - dWidth ) );
         }
       }
@@ -1174,7 +1174,7 @@ void HBorder::paintSizeIndicator( int mouseX )
       m_iResizePos = mouseX;
 
     // Dont make the column have a width < 2 pixels.
-    double x = m_pCanvas->d->view->doc()->zoomItX( sheet->dblColumnPos( m_iResizedColumn ) - m_pCanvas->xOffset() );
+    double x = m_pCanvas->d->view->doc()->zoomItX( sheet->columnPosition( m_iResizedColumn ) - m_pCanvas->xOffset() );
 
     if ( sheet->layoutDirection() == Sheet::RightToLeft )
     {
@@ -1231,8 +1231,8 @@ void HBorder::updateColumns( int from, int to )
     if (!sheet)
         return;
 
-    double x0 = sheet->doc()->zoomItX( sheet->dblColumnPos( from ) );
-    double x1 = sheet->doc()->zoomItX( sheet->dblColumnPos( to + 1 ) );
+    double x0 = sheet->doc()->zoomItX( sheet->columnPosition( from ) );
+    double x1 = sheet->doc()->zoomItX( sheet->columnPosition( to + 1 ) );
     update( (int) x0, 0, (int) (x1-x0), height() );
 }
 

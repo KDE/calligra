@@ -159,7 +159,7 @@ int SheetPrint::pagesX( const QRect& cellsPrintRange )
 {
     int pages = 0;
 
-    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cellsPrintRange.right() ) + prinsheetWidthPts() ) );
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->columnPosition( cellsPrintRange.right() ) + prinsheetWidthPts() ) );
 
     for( int i = cellsPrintRange.left(); i <= cellsPrintRange.right(); i++  )
     {
@@ -173,7 +173,7 @@ int SheetPrint::pagesY( const QRect& cellsPrintRange )
 {
     int pages = 0;
 
-    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cellsPrintRange.bottom() ) + prinsheetHeightPts() ) );
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->rowPosition( cellsPrintRange.bottom() ) + prinsheetHeightPts() ) );
 
     for( int i = cellsPrintRange.top(); i <= cellsPrintRange.bottom(); i++  )
     {
@@ -199,11 +199,11 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
 
     //Page empty, but maybe children on it?
 
-        QRect intView = QRect( QPoint( m_pDoc->zoomItXOld( m_pSheet->dblColumnPos( page_range.left() ) ),
-                                       m_pDoc->zoomItYOld( m_pSheet->dblRowPos( page_range.top() ) ) ),
-                               QPoint( m_pDoc->zoomItXOld( m_pSheet->dblColumnPos( page_range.right() ) +
+        QRect intView = QRect( QPoint( m_pDoc->zoomItXOld( m_pSheet->columnPosition( page_range.left() ) ),
+                                       m_pDoc->zoomItYOld( m_pSheet->rowPosition( page_range.top() ) ) ),
+                               QPoint( m_pDoc->zoomItXOld( m_pSheet->columnPosition( page_range.right() ) +
                                                         m_pSheet->columnFormat( page_range.right() )->width() ),
-                                       m_pDoc->zoomItYOld( m_pSheet->dblRowPos( page_range.bottom() ) +
+                                       m_pDoc->zoomItYOld( m_pSheet->rowPosition( page_range.bottom() ) +
                                                         m_pSheet->rowFormat( page_range.bottom() )->height() ) ) );
 
         Q3PtrListIterator<KoDocumentChild> it( m_pDoc->children() );
@@ -253,8 +253,8 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
     kDebug()<<"cellsPrintRange() :"<<cellsPrintRange()<<endl;
     //Ensure, that our newPage lists are generated for the whole sheet to print
     //For this we add to the lists the width/height of 1 page
-    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cell_range.right() ) + prinsheetWidthPts() ) );
-    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( cell_range.bottom() ) + prinsheetHeightPts() ) );
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->columnPosition( cell_range.right() ) + prinsheetWidthPts() ) );
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->rowPosition( cell_range.bottom() ) + prinsheetHeightPts() ) );
 
     // Find out how many pages need printing
     // and which cells to print on which page.
@@ -274,12 +274,12 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
             //Append page when there is something to print
             if ( pageNeedsPrinting( page_range ) )
             {
-                QRectF view = QRectF( QPointF( m_pSheet->dblColumnPos( page_range.left() ),
-                                               m_pSheet->dblRowPos( page_range.top() ) ),
-                                      QSizeF( m_pSheet->dblColumnPos( page_range.right() ) +
-                                               m_pSheet->columnFormat( page_range.right() )->width()- m_pSheet->dblColumnPos( page_range.left() ),
-                                               m_pSheet->dblRowPos( page_range.bottom() ) +
-                                               m_pSheet->rowFormat( page_range.bottom() )->height()- m_pSheet->dblRowPos( page_range.top() ) ) );
+                QRectF view = QRectF( QPointF( m_pSheet->columnPosition( page_range.left() ),
+                                               m_pSheet->rowPosition( page_range.top() ) ),
+                                      QSizeF( m_pSheet->columnPosition( page_range.right() ) +
+                                               m_pSheet->columnFormat( page_range.right() )->width()- m_pSheet->columnPosition( page_range.left() ),
+                                               m_pSheet->rowPosition( page_range.bottom() ) +
+                                               m_pSheet->rowFormat( page_range.bottom() )->height()- m_pSheet->rowPosition( page_range.top() ) ) );
                 page_list.append( page_range );
                 page_frame_list.append( view );
                 page_frame_list_offset.append( QPointF( (*itX).offset(), (*itY).offset() ) );
@@ -1346,7 +1346,7 @@ void SheetPrint::calculateZoomForPageLimitX()
         m_dZoom = 1.0;
 
     QRect printRange = cellsPrintRange();
-    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->columnPosition( printRange.right() ) + prinsheetWidthPts() ) );
     int currentPages = pagesX( printRange );
 
     if (currentPages <= m_iPageLimitX)
@@ -1371,7 +1371,7 @@ void SheetPrint::calculateZoomForPageLimitX()
 
     updatePrintRepeatColumnsWidth();
     updateNewPageListX( 0 );
-    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->columnPosition( printRange.right() ) + prinsheetWidthPts() ) );
     currentPages = pagesX( printRange );
 
     kDebug() << "Number of pages with this zoom: " << currentPages << endl;
@@ -1381,7 +1381,7 @@ void SheetPrint::calculateZoomForPageLimitX()
         m_dZoom -= 0.01;
         updatePrintRepeatColumnsWidth();
         updateNewPageListX( 0 );
-        updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
+        updateNewPageX( m_pSheet->rightColumn( m_pSheet->columnPosition( printRange.right() ) + prinsheetWidthPts() ) );
         currentPages = pagesX( printRange );
         kDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
     }
@@ -1408,7 +1408,7 @@ void SheetPrint::calculateZoomForPageLimitY()
         m_dZoom = 1.0;
 
     QRect printRange = cellsPrintRange();
-    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->rowPosition( printRange.bottom() ) + prinsheetHeightPts() ) );
     int currentPages = pagesY( printRange );
 
     if (currentPages <= m_iPageLimitY)
@@ -1432,7 +1432,7 @@ void SheetPrint::calculateZoomForPageLimitY()
 
     updatePrintRepeatRowsHeight();
     updateNewPageListY( 0 );
-    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->rowPosition( printRange.bottom() ) + prinsheetHeightPts() ) );
     currentPages = pagesY( printRange );
 
     kDebug() << "Number of pages with this zoom: " << currentPages << endl;
@@ -1442,7 +1442,7 @@ void SheetPrint::calculateZoomForPageLimitY()
         m_dZoom -= 0.01;
         updatePrintRepeatRowsHeight();
         updateNewPageListY( 0 );
-        updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
+        updateNewPageY( m_pSheet->bottomRow( m_pSheet->rowPosition( printRange.bottom() ) + prinsheetHeightPts() ) );
         currentPages = pagesY( printRange );
         kDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
     }

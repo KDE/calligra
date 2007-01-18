@@ -111,89 +111,89 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     // otherwise the cell's painting location will flip back and forth in
     // consecutive calls to paintCell when painting obscured cells.
     const bool rightToLeft = sheet()->layoutDirection() == Sheet::RightToLeft;
-    QPointF dblCorner( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
+    QPointF offset( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     int right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->width() );
-// kDebug() << "dblCorner: " << dblCorner << endl;
+            offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
+// kDebug() << "offset: " << offset << endl;
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
-            cellView.paintCellBackground( painter, dblCorner );
-            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->height() );
+            cellView.paintCellBackground( painter, offset );
+            offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
         }
-        dblCorner.setY( topLeft.y() );
+        offset.setY( topLeft.y() );
         if ( !rightToLeft )
-            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() + d->sheet->columnFormat( col )->width() );
     }
 
     // 2. Paint the cell content including markers (formula, comment, ...)
-    dblCorner = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
+    offset = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
-            cellView.paintCellContents( paintRect, painter, view, dblCorner,
+            cellView.paintCellContents( paintRect, painter, view, offset,
                                         QPoint( col, row ), mergedCellsPainted,
                                         sheet()->cellAt( col, row ) );
-            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->height() );
+            offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
         }
-        dblCorner.setY( topLeft.y() );
+        offset.setY( topLeft.y() );
         if ( !rightToLeft )
-            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() + d->sheet->columnFormat( col )->width() );
     }
 
     // 3. Paint the default borders
-    dblCorner = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
+    offset = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             Cell* const cell = sheet()->cellAt( col, row );
-            const QRectF cellRect = QRectF( dblCorner.x(), dblCorner.y(), cell->width(col), cell->height(row) );
+            const QRectF cellRect = QRectF( offset.x(), offset.y(), cell->width(col), cell->height(row) );
             CellView cellView = this->cellView( col, row );
             cellView.paintDefaultBorders( painter, paintRect, cellRect, QPoint( col, row ),
                                           CellView::LeftBorder | CellView::RightBorder |
                                           CellView::TopBorder | CellView::BottomBorder,
                                           d->visibleRect, cell, this );
-            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->height() );
+            offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
         }
-        dblCorner.setY( topLeft.y() );
+        offset.setY( topLeft.y() );
         if ( !rightToLeft )
-            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() + d->sheet->columnFormat( col )->width() );
     }
 
     // 4. Paint the custom borders, diagonal lines and page borders
-    dblCorner = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
+    offset = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
-            cellView.paintCellBorders( paintRect, painter, dblCorner,
+            cellView.paintCellBorders( paintRect, painter, offset,
                                        QPoint( col, row ), d->visibleRect,
                                        mergedCellsPainted, sheet()->cellAt( col, row ), this );
-            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->height() );
+            offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
         }
-        dblCorner.setY( topLeft.y() );
+        offset.setY( topLeft.y() );
         if ( !rightToLeft )
-            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() + d->sheet->columnFormat( col )->width() );
     }
 }
 

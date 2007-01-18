@@ -4884,8 +4884,8 @@ QPointF View::markerDocumentPosition()
 {
   QPoint marker=selection()->marker();
 
-  return QPointF( d->activeSheet->dblColumnPos(marker.x()),
-            d->activeSheet->dblRowPos(marker.y()) );
+  return QPointF( d->activeSheet->columnPosition(marker.x()),
+            d->activeSheet->rowPosition(marker.y()) );
 }
 
 void View::insertPicture()
@@ -5664,8 +5664,8 @@ void View::slotListChoosePopupMenu( )
   if ( itemList.isEmpty() )
     return;
   const RowFormat * rl = d->activeSheet->rowFormat( d->canvas->markerRow());
-  double tx = d->activeSheet->dblColumnPos( d->canvas->markerColumn() );
-  double ty = d->activeSheet->dblRowPos( d->canvas->markerRow() );
+  double tx = d->activeSheet->columnPosition( d->canvas->markerColumn() );
+  double ty = d->activeSheet->rowPosition( d->canvas->markerRow() );
   double h = cell->height( d->canvas->markerRow() );
   const CellView cellView = sheetView( d->activeSheet )->cellView( d->canvas->markerColumn(), d->canvas->markerRow() );
   if ( cellView.obscuresCells() )

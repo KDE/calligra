@@ -691,8 +691,8 @@ QRectF Selection::selectionHandleArea() const
   }
   const Cell* cell = d->view->activeSheet()->cellAt(column, row);
 
-  double xpos = d->view->activeSheet()->dblColumnPos( column );
-  double ypos = d->view->activeSheet()->dblRowPos( row );
+  double xpos = d->view->activeSheet()->columnPosition( column );
+  double ypos = d->view->activeSheet()->rowPosition( row );
   double width = cell->width( column );
   double height = cell->height( row );
 

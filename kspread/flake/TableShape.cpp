@@ -85,7 +85,6 @@ void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
     painter.setClipRect( paintRect, Qt::IntersectClip );
 
     // painting cell contents
-    QPointF dblCorner( 0.0, 0.0 );
     d->sheetView->setPaintCellRange( QRect( 1, 1, d->columns, d->rows ) );
     d->sheetView->paintCells( 0 /*view*/, painter, paintRect, QPointF( 0.0, 0.0 ) );
 }
