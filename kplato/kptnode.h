@@ -398,6 +398,8 @@ public:
     /// Set parent schedule recursivly
     virtual void setParentSchedule(Schedule *sch);
     
+    virtual ResourceRequestCollection *requests() const { return 0; }
+    
 public:
     // These shouldn't be available to other than those who inherits
     /// Calculate the critical path

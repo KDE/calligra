@@ -47,7 +47,7 @@ void NamedCommand::setSchDeleted()
 {
     QMap<Schedule*, bool>::Iterator it;
     for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
-        kDebug() << k_funcinfo << it.key() ->id() << ": " << it.value() << endl;
+        //kDebug() << k_funcinfo << it.key() ->id() << ": " << it.value() << endl;
         it.key() ->setDeleted( it.value() );
     }
 }
@@ -55,7 +55,7 @@ void NamedCommand::setSchDeleted( bool state )
 {
     QMap<Schedule*, bool>::Iterator it;
     for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
-        kDebug() << k_funcinfo << it.key() ->id() << ": " << state << endl;
+        //kDebug() << k_funcinfo << it.key() ->id() << ": " << state << endl;
         it.key() ->setDeleted( state );
     }
 }
@@ -63,7 +63,7 @@ void NamedCommand::setSchScheduled()
 {
     QMap<Schedule*, bool>::Iterator it;
     for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
-        kDebug() << k_funcinfo << it.key() ->id() << ": " << it.value() << endl;
+        //kDebug() << k_funcinfo << it.key() ->id() << ": " << it.value() << endl;
         it.key() ->setScheduled( it.value() );
     }
 }
@@ -71,13 +71,13 @@ void NamedCommand::setSchScheduled( bool state )
 {
     QMap<Schedule*, bool>::Iterator it;
     for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
-        kDebug() << k_funcinfo << it.key() ->id() << ": " << state << endl;
+        //kDebug() << k_funcinfo << it.key() ->id() << ": " << state << endl;
         it.key() ->setScheduled( state );
     }
 }
 void NamedCommand::addSchScheduled( Schedule *sch )
 {
-    kDebug() << k_funcinfo << sch->id() << ": " << sch->isScheduled() << endl;
+    //kDebug() << k_funcinfo << sch->id() << ": " << sch->isScheduled() << endl;
     m_schedules.insert( sch, sch->isScheduled() );
     foreach ( Appointment * a, sch->appointments() ) {
         if ( a->node() == sch ) {
@@ -89,7 +89,7 @@ void NamedCommand::addSchScheduled( Schedule *sch )
 }
 void NamedCommand::addSchDeleted( Schedule *sch )
 {
-    kDebug() << k_funcinfo << sch->id() << ": " << sch->isDeleted() << endl;
+    //kDebug() << k_funcinfo << sch->id() << ": " << sch->isDeleted() << endl;
     m_schedules.insert( sch, sch->isDeleted() );
     foreach ( Appointment * a, sch->appointments() ) {
         if ( a->node() == sch ) {
@@ -330,7 +330,7 @@ CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd( Part *part, Calendar *cal, i
 {
 
     m_value = value;
-    kDebug() << k_funcinfo << cal->name() << " (" << value << ")" << endl;
+    //kDebug() << k_funcinfo << cal->name() << " (" << value << ")" << endl;
     // TODO check if any resources uses this calendar
     if ( part ) {
         foreach ( Schedule * s, part->getProject().schedules() ) {
@@ -340,7 +340,7 @@ CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd( Part *part, Calendar *cal, i
 }
 CalendarModifyWeekdayCmd::~CalendarModifyWeekdayCmd()
 {
-    kDebug() << k_funcinfo << m_weekday << ": " << m_value << endl;
+    //kDebug() << k_funcinfo << m_weekday << ": " << m_value << endl;
     delete m_value;
 
 }
@@ -405,7 +405,9 @@ void NodeDeleteCmd::execute()
             a->detach();
             m_appointments.append( a );
         }
-        m_cmd->execute();
+        if ( m_cmd ) {
+            m_cmd->execute();
+        }
         m_project->delTask( m_node );
         m_mine = true;
         setSchScheduled( false );
@@ -417,7 +419,9 @@ void NodeDeleteCmd::unexecute()
     if ( m_parent && m_project ) {
         //kDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
         m_project->addSubTask( m_node, m_index, m_parent );
-        m_cmd->unexecute();
+        if ( m_cmd ) {
+            m_cmd->unexecute();
+        }
         while ( !m_appointments.isEmpty() ) {
             m_appointments.takeFirst() ->attach();
         }
@@ -479,7 +483,8 @@ SubtaskAddCmd::SubtaskAddCmd( Part *part, Project *project, Node *node, Node *pa
         m_project( project ),
         m_node( node ),
         m_parent( parent ),
-        m_added( false )
+        m_added( false ),
+        m_cmd( 0 )
 {
 
     // set some reasonable defaults for normally calculated values
@@ -489,15 +494,28 @@ SubtaskAddCmd::SubtaskAddCmd( Part *part, Project *project, Node *node, Node *pa
     node->setLatestFinish( node->endTime() );
     node->setWorkStartTime( node->startTime() );
     node->setWorkEndTime( node->endTime() );
+    
+    // Summarytasks can't have resources, so remove resource requests from the new parent
+    ResourceRequestCollection *rc = parent->requests();
+    if ( rc ) {
+        foreach ( ResourceGroupRequest *r, rc->requests() ) {
+            if ( m_cmd == 0 ) m_cmd = new KMacroCommand( "" );
+            m_cmd->addCommand( new RemoveResourceGroupRequestCmd( m_part, r ) );
+        }
+    }
 }
 SubtaskAddCmd::~SubtaskAddCmd()
 {
+    delete m_cmd;
     if ( !m_added )
         delete m_node;
 }
 void SubtaskAddCmd::execute()
 {
     m_project->addSubTask( m_node, m_parent );
+    if ( m_cmd ) {
+        m_cmd->execute();
+    }
     m_added = true;
 
     setCommandType( 1 );
@@ -505,6 +523,9 @@ void SubtaskAddCmd::execute()
 void SubtaskAddCmd::unexecute()
 {
     m_project->delTask( m_node );
+    if ( m_cmd ) {
+        m_cmd->unexecute();
+    }
     m_added = false;
 
     setCommandType( 1 );
@@ -706,8 +727,13 @@ NodeIndentCmd::NodeIndentCmd( Part *part, Node &node, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         m_newparent( 0 ),
-        m_newindex( -1 )
+        m_newindex( -1 ),
+        m_cmd( 0 )
 {
+}
+NodeIndentCmd::~NodeIndentCmd()
+{
+    delete m_cmd;
 }
 void NodeIndentCmd::execute()
 {
@@ -717,6 +743,19 @@ void NodeIndentCmd::execute()
     if ( p && p->indentTask( &m_node, m_newindex ) ) {
         m_newparent = m_node.getParent();
         m_newindex = m_newparent->findChildNode( &m_node );
+        // Summarytasks can't have resources, so remove resource requests from the new parent
+        if ( m_cmd == 0 ) {
+            ResourceRequestCollection *rc = m_newparent->requests();
+            if ( rc ) {
+                foreach ( ResourceGroupRequest *r, rc->requests() ) {
+                    if ( m_cmd == 0 ) m_cmd = new KMacroCommand( "" );
+                    m_cmd->addCommand( new RemoveResourceGroupRequestCmd( m_part, r ) );
+                }
+            }
+        }
+        if ( m_cmd ) {
+            m_cmd->execute();
+        }
     }
 
     setCommandType( 1 );
@@ -726,6 +765,9 @@ void NodeIndentCmd::unexecute()
     Project * p = dynamic_cast<Project *>( m_node.projectNode() );
     if ( m_newindex != -1 && p && p->unindentTask( &m_node ) ) {
         m_newindex = -1;
+        if ( m_cmd ) {
+            m_cmd->unexecute();
+        }
     }
 
     setCommandType( 1 );
@@ -814,24 +856,44 @@ NodeMoveCmd::NodeMoveCmd( Part *part, Project *project, Node *node, Node *newPar
     m_node( node ),
     m_newparent( newParent ),
     m_newpos( newPos ),
-    m_moved( false )
+    m_moved( false ),
+    m_cmd( 0 )
 {
     m_oldparent = node->getParent();
     Q_ASSERT( m_oldparent );
     m_oldpos = m_oldparent->indexOf( node );
+    
+    // Summarytasks can't have resources, so remove resource requests from the new parent
+    ResourceRequestCollection *rc = newParent->requests();
+    if ( rc ) {
+        foreach ( ResourceGroupRequest *r, rc->requests() ) {
+            if ( m_cmd == 0 ) m_cmd = new KMacroCommand( "" );
+            m_cmd->addCommand( new RemoveResourceGroupRequestCmd( m_part, r ) );
+        }
+    }
+    // TODO appointments ??
 }
-
+NodeMoveCmd::~NodeMoveCmd()
+{
+    delete m_cmd;
+}
 void NodeMoveCmd::execute()
 {
     if ( m_project ) {
         m_moved = m_project->moveTask( m_node, m_newparent, m_newpos );
+        if ( m_moved && m_cmd ) {
+            m_cmd->execute();
+        }
     }
     setCommandType( 0 );
 }
 void NodeMoveCmd::unexecute()
 {
     if ( m_project && m_moved ) {
-        m_project->moveTask( m_node, m_oldparent, m_oldpos );
+        m_moved = m_project->moveTask( m_node, m_oldparent, m_oldpos );
+        if ( m_moved && m_cmd ) {
+            m_cmd->unexecute();
+        }
     }
     m_moved = false;
     setCommandType( 0 );
@@ -1032,24 +1094,42 @@ ModifyEffortCmd::ModifyEffortCmd( Part *part, Node &node, Duration oldvalue, Dur
         : NamedCommand( part, name ),
         m_effort( node.effort() ),
         m_oldvalue( oldvalue ),
-        m_newvalue( newvalue )
+        m_newvalue( newvalue ),
+        m_cmd( 0 )
 {
-
     foreach ( Schedule * s, node.schedules() ) {
         addSchScheduled( s );
     }
+    if ( newvalue == Duration::zeroDuration ) {
+        // Milestones can't have resources, so remove resource requests
+        ResourceRequestCollection *rc = node.requests();
+        if ( rc ) {
+            foreach ( ResourceGroupRequest *r, rc->requests() ) {
+                if ( m_cmd == 0 ) m_cmd = new KMacroCommand( "" );
+                m_cmd->addCommand( new RemoveResourceGroupRequestCmd( m_part, r ) );
+            }
+        }
+    }
+}
+ModifyEffortCmd::~ModifyEffortCmd()
+{
+    delete m_cmd;
 }
 void ModifyEffortCmd::execute()
 {
-    m_effort->set
-    ( m_newvalue );
+    m_effort->set( m_newvalue );
     setSchScheduled( false );
+    if ( m_cmd ) {
+        m_cmd->execute();
+    }
     setCommandType( 1 );
 }
 void ModifyEffortCmd::unexecute()
 {
-    m_effort->set
-    ( m_oldvalue );
+    m_effort->set( m_oldvalue );
+    if ( m_cmd ) {
+        m_cmd->unexecute();
+    }
     setSchScheduled();
     setCommandType( 1 );
 }
@@ -1411,7 +1491,7 @@ ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Part *part, Reso
             if ( sch ) {
                 s = sch->start();
                 e = sch->end();
-                kDebug() << k_funcinfo << "old=" << m_oldvalue << " new=" << value << " s=" << s << " e=" << e << endl;
+                //kDebug() << k_funcinfo << "old=" << m_oldvalue << " new=" << value << " s=" << s << " e=" << e << endl;
             }
             if ( !s.isValid() || !e.isValid() || ( ( m_oldvalue > s || value > s ) && ( m_oldvalue < e || value < e ) ) ) {
                 addSchScheduled( rs );
@@ -1447,7 +1527,7 @@ ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Part *part, Re
             if ( sch ) {
                 s = sch->start();
                 e = sch->end();
-                kDebug() << k_funcinfo << "old=" << m_oldvalue << " new=" << value << " s=" << s << " e=" << e << endl;
+                //kDebug() << k_funcinfo << "old=" << m_oldvalue << " new=" << value << " s=" << s << " e=" << e << endl;
             }
             if ( !s.isValid() || !e.isValid() || ( ( m_oldvalue > s || value > s ) && ( m_oldvalue < e || value < e ) ) ) {
                 addSchScheduled( rs );

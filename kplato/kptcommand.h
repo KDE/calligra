@@ -67,7 +67,8 @@ protected:
     void addSchDeleted( Schedule *sch );
 
     QMap<Schedule*, bool> m_schedules;
-private:
+
+protected:
     Part *m_part;
 };
 
@@ -225,6 +226,7 @@ private:
     Node *m_node;
     Node *m_parent;
     bool m_added;
+    KMacroCommand *m_cmd;
 };
 
 
@@ -348,6 +350,7 @@ class NodeIndentCmd : public NamedCommand
 {
 public:
     NodeIndentCmd( Part *part, Node &node, const QString& name = QString() );
+    ~NodeIndentCmd();
     void execute();
     void unexecute();
 
@@ -355,6 +358,7 @@ private:
     Node &m_node;
     Node *m_oldparent, *m_newparent;
     int m_oldindex, m_newindex;
+    KMacroCommand *m_cmd;
 };
 
 class NodeUnindentCmd : public NamedCommand
@@ -400,6 +404,7 @@ class NodeMoveCmd : public NamedCommand
 {
 public:
     NodeMoveCmd( Part *part, Project *project, Node *node, Node *newParent, int newPos, const QString& name = QString() );
+    ~NodeMoveCmd();
     void execute();
     void unexecute();
 
@@ -411,6 +416,7 @@ private:
     int m_newpos;
     int m_oldpos;
     bool m_moved;
+    KMacroCommand *m_cmd;
 };
 
 class AddRelationCmd : public NamedCommand
@@ -503,12 +509,14 @@ class ModifyEffortCmd : public NamedCommand
 {
 public:
     ModifyEffortCmd( Part *part, Node &node, Duration oldvalue, Duration newvalue, const QString& name = QString() );
+    ~ModifyEffortCmd();
     void execute();
     void unexecute();
 
 private:
     Effort *m_effort;
     Duration m_oldvalue, m_newvalue;
+    KMacroCommand *m_cmd;
 
 };
 

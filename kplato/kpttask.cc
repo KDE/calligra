@@ -104,8 +104,10 @@ ResourceGroupRequest *Task::resourceGroupRequest(ResourceGroup *group) const {
 }
 
 void Task::clearResourceRequests() {
-    if (m_requests)
+    if (m_requests) {
         m_requests->clear();
+        changed( this );
+    }
 }
 
 void Task::addRequest(ResourceGroup *group, int numResources) {
@@ -113,8 +115,10 @@ void Task::addRequest(ResourceGroup *group, int numResources) {
 }
 
 void Task::addRequest(ResourceGroupRequest *request) {
-    if (!m_requests)
+    kDebug()<<k_funcinfo<<request<<endl;
+    if (!m_requests) {
         m_requests = new ResourceRequestCollection(*this);
+    }
     m_requests->addRequest(request);
 }
 

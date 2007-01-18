@@ -249,6 +249,8 @@ public:
     
     Completion &completion() { return m_completion; }
     
+    ResourceRequestCollection *requests() const { return m_requests; }
+    
 protected:
     /// Check if this node has any dependent child nodes
     virtual bool isEndNode() const;
