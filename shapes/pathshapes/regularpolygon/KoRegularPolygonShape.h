@@ -24,7 +24,7 @@
 
 class QPainter;
 
-class FLAKE_EXPORT KoRegularPolygonShape : public KoShape 
+class KoRegularPolygonShape : public KoShape 
 {
 public:
 	KoRegularPolygonShape();

@@ -24,7 +24,7 @@
 
 #define KoArrowShapeId "KoArrowShape"
 
-class FLAKE_EXPORT KoArrowShape : public KoPathShape
+class KoArrowShape : public KoPathShape
 {
 public:
     enum KoArrowType
