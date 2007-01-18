@@ -28,31 +28,24 @@
 
 class KoShape;
 
-namespace KSpread
-{
-
 class KSPREAD_EXPORT TableShapePlugin : public QObject
 {
     Q_OBJECT
-
 public:
 
     TableShapePlugin( QObject * parent,  const QStringList & );
     ~TableShapePlugin() {}
-
 };
 
 class KSPREAD_EXPORT TableShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:
-    TableShapeFactory( QObject* parent, const QStringList& );
+    TableShapeFactory( QObject* parent );
     ~TableShapeFactory() {}
 
     KoShape* createDefaultShape() const;
     KoShape* createShape( const KoProperties* params ) const;
 };
-
-} // namespace KSpread
 
 #endif // KSPREAD_TABLE_SHAPE_FACTORY

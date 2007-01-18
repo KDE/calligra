@@ -51,9 +51,8 @@ TableTool::~TableTool()
 
 void TableTool::paint( QPainter& painter, KoViewConverter& viewConverter )
 {
+    Q_UNUSED( painter );
     Q_UNUSED( viewConverter );
-    QBrush brush( Qt::red );
-    painter.fillRect(10,10,10,10, brush);
 }
 
 void TableTool::mousePressEvent( KoPointerEvent* )

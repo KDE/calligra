@@ -26,7 +26,7 @@
 
 using namespace KSpread;
 
-TableToolFactory::TableToolFactory( QObject* parent, const QStringList& )
+TableToolFactory::TableToolFactory( QObject* parent )
     : KoToolFactory( parent, "TableToolFactoryId", i18n( "Table tool" ) )
 {
     setToolTip( i18n( "Table editing tool" ) );

@@ -31,7 +31,7 @@ class TableToolFactory : public KoToolFactory
 {
     Q_OBJECT
 public:
-    TableToolFactory( QObject* parent, const QStringList& );
+    TableToolFactory( QObject* parent );
     ~TableToolFactory();
 
     KoTool* createTool( KoCanvasBase* canvas );

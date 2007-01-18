@@ -24,6 +24,7 @@
 #include <CellView.h>
 #include <Doc.h>
 #include <Map.h>
+#include <RowColumnFormat.h>
 #include <Sheet.h>
 #include <SheetView.h>
 
@@ -65,12 +66,14 @@ TableShape::~TableShape()
 void TableShape::setColumns( int columns )
 {
     Q_ASSERT( columns > 0 );
+//     ColumnFormat::setGlobalColWidth( size().width() / columns );
     d->columns = columns;
 }
 
 void TableShape::setRows( int rows )
 {
     Q_ASSERT( rows > 0 );
+//     RowFormat::setGlobalRowHeight( size().height() / rows );
     d->rows = rows;
 }
 

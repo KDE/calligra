@@ -32,19 +32,16 @@
 
 using namespace KSpread;
 
-K_EXPORT_COMPONENT_FACTORY( tableshape, KGenericFactory<KSpread::TableShapePlugin>( "TableShape" ) )
+K_EXPORT_COMPONENT_FACTORY( tableshape, KGenericFactory<TableShapePlugin>( "TableShape" ) )
 
-TableShapePlugin::TableShapePlugin( QObject * parent,  const QStringList & list )
+TableShapePlugin::TableShapePlugin( QObject * parent,  const QStringList& )
 {
-    KoShapeRegistry::instance()->add( new TableShapeFactory( parent, list ) );
-#if 0
-    KoToolRegistry::instance()->add( new TableToolFactory( parent, list ) );
-# endif
-
+    KoShapeRegistry::instance()->add( new TableShapeFactory( parent ) );
+    KoToolRegistry::instance()->add( new TableToolFactory( parent ) );
 }
 
 
-TableShapeFactory::TableShapeFactory( QObject* parent, const QStringList& list )
+TableShapeFactory::TableShapeFactory( QObject* parent )
     : KoShapeFactory( parent, TableShapeId, i18n( "Table" ) )
 {
     setToolTip( i18n( "A shape that shows a table" ) );
@@ -67,14 +64,12 @@ TableShapeFactory::TableShapeFactory( QObject* parent, const QStringList& list )
 KoShape* TableShapeFactory::createDefaultShape() const
 {
     TableShape* shape = new TableShape();
-    shape->setShapeId( shapeId() );
     return shape;
 }
 
 KoShape* TableShapeFactory::createShape( const KoProperties* params ) const
 {
     TableShape* shape = new TableShape();
-    shape->setShapeId( shapeId() );
     return shape;
 }
 
