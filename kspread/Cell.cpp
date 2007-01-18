@@ -954,11 +954,6 @@ double Cell::dblWidth( int _col ) const
     return d->sheet->columnFormat( _col )->dblWidth();
 }
 
-int Cell::width( int _col ) const
-{
-  return int( dblWidth( _col ) );
-}
-
 double Cell::dblHeight( int _row ) const
 {
     if ( _row < 0 )
@@ -966,11 +961,6 @@ double Cell::dblHeight( int _row ) const
     if ( d->hasExtra() && d->extra()->mergedYCells != 0 )
         return d->extra()->mergedHeight;
     return d->sheet->rowFormat( _row )->dblHeight();
-}
-
-int Cell::height( int _row ) const
-{
-  return int( dblHeight( _row ) );
 }
 
 ///////////////////////////////////////////

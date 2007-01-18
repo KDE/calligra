@@ -360,24 +360,6 @@ public:
      * @param _col the column this cell is assumed to be in.
      *             This parameter defaults to the return value of column().
      *
-     * @return the width of this cell as int
-     * \deprecated
-     */
-    KDE_DEPRECATED int width( int _col = -1 ) const;
-
-    /**
-     * @param _row the row this cell is assumed to be in.
-     *             This parameter defaults to the return value of row().
-     *
-     * @return the height of this cell as int
-     * \deprecated
-     */
-    KDE_DEPRECATED int height( int _row = -1 ) const;
-
-    /**
-     * @param _col the column this cell is assumed to be in.
-     *             This parameter defaults to the return value of column().
-     *
      * @return the width of this cell as double
      */
     double dblWidth( int _col = -1 ) const;
