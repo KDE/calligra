@@ -94,16 +94,6 @@ void RowFormat::setSheet( Sheet* sheet )
     d->sheet = sheet;
 }
 
-void RowFormat::setMMHeight( double height )
-{
-    setDblHeight( MM_TO_POINT ( height ) );
-}
-
-void RowFormat::setHeight( int height )
-{
-    setDblHeight( (double) height );
-}
-
 void RowFormat::setDblHeight( double height )
 {
     // avoid unnecessary updates
@@ -130,21 +120,11 @@ void RowFormat::setDblHeight( double height )
     d->sheet->emit_updateRow( this, d->row );
 }
 
-int RowFormat::height() const
-{
-    return (int) dblHeight();
-}
-
 double RowFormat::dblHeight() const
 {
     if( d->hide )
         return 0.0;
     return d->height;
-}
-
-double RowFormat::mmHeight() const
-{
-    return POINT_TO_MM ( dblHeight() );
 }
 
 QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
@@ -339,16 +319,6 @@ void ColumnFormat::setSheet( Sheet* sheet )
     d->sheet = sheet;
 }
 
-void ColumnFormat::setMMWidth( double width )
-{
-    setDblWidth( MM_TO_POINT ( width ) );
-}
-
-void ColumnFormat::setWidth( int width )
-{
-    setDblWidth( (double)width );
-}
-
 void ColumnFormat::setDblWidth( double width )
 {
     // avoid unnecessary updates
@@ -375,23 +345,12 @@ void ColumnFormat::setDblWidth( double width )
     d->sheet->emit_updateColumn( this, d->column );
 }
 
-int ColumnFormat::width() const
-{
-    return (int) dblWidth();
-}
-
 double ColumnFormat::dblWidth() const
 {
     if ( d->hide )
         return 0.0;
     return d->width;
 }
-
-double ColumnFormat::mmWidth() const
-{
-    return POINT_TO_MM( dblWidth() );
-}
-
 
 QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
 {

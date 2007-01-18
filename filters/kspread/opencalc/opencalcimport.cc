@@ -230,7 +230,7 @@ bool OpenCalcImport::readRowFormat( KoXmlElement & rowNode, KoXmlElement * rowSt
     if ( height != -1 )
     {
       kDebug(30518) << "Setting row height to " << height << endl;
-      rowL->setHeight( int( height ) );
+      rowL->setDblHeight( height );
     }
 
     // if ( insertPageBreak ) TODO:
@@ -532,8 +532,8 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
                   */
                 kDebug(30518) << "Rotation: height: " << textHeight << endl;
 
-                if ( table->rowFormat( row )->height() < textHeight )
-                  table->nonDefaultRowFormat( row )->setHeight( textHeight + 2 );
+                if ( table->rowFormat( row )->dblHeight() < textHeight )
+                  table->nonDefaultRowFormat( row )->setDblHeight( textHeight + 2 );
               }
             }
           }
@@ -1119,7 +1119,7 @@ bool OpenCalcImport::readColLayouts( KoXmlElement & content, Sheet * table )
       col->setColumn( column );
       table->setStyle( KSpread::Region(QRect(column,1,1,KS_rowMax)), styleLayout );
       if ( width != -1.0 )
-        col->setWidth( int( width ) );
+        col->setDblWidth( width );
 
       // if ( insertPageBreak )
       //   col->setPageBreak( true )

@@ -3618,7 +3618,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
           columnFormat = cf;
 
           if ( width != -1.0 ) //safe
-            cf->setWidth( (int) width );
+            cf->setDblWidth( width );
         // if ( insertPageBreak )
         //   columnFormat->setPageBreak( true )
           if ( collapsed )
@@ -3755,7 +3755,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
         rowFormat = rf;
 
         if ( height != -1.0 )
-          rf->setHeight( (int) height );
+          rf->setDblHeight( height );
         if ( collapse )
           rf->setHidden( true );
       }

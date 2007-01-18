@@ -63,30 +63,10 @@ public:
     bool loadOasis( const KoXmlElement& row, KoXmlElement * rowStyle );
 
     /**
-     * @return the height in zoomed pixels as integer value.
-     * \deprecated
-     */
-    KDE_DEPRECATED int height() const;
-
-    /**
      * @return the height in zoomed pixels as double value.
      * Use this function, if you want to work with height without having rounding problems.
      */
     double dblHeight() const;
-
-    /**
-     * @return the height in millimeters.
-     * \deprecated
-     */
-    KDE_DEPRECATED double mmHeight() const;
-
-    /**
-     * Sets the height to _h zoomed pixels.
-     *
-     * @param _h is calculated in display pixels as integer value. The function cares for zooming.
-     * \deprecated
-     */
-    KDE_DEPRECATED void setHeight( int _h );
 
     /**
      * Sets the height to _h zoomed pixels.
@@ -95,14 +75,6 @@ public:
      * Use this function when setting the height, to not get rounding problems.
      */
     void setDblHeight( double _h );
-
-    /**
-     * Sets the height.
-     *
-     * @param '_h' is assumed to be a unzoomed millimeter value.
-     * \deprecated
-     */
-    KDE_DEPRECATED void setMMHeight( double _h );
 
     /**
      * @reimp
@@ -150,32 +122,11 @@ public:
     bool load( const KoXmlElement& row, int xshift = 0,Paste::Mode sp = Paste::Normal, bool paste = false );
 
     /**
-     * @return the width in zoomed pixels as integer.
-     * \deprecated
-     */
-    KDE_DEPRECATED int width() const;
-
-    /**
      * @return the width in zoomed pixels as double.
      * Use this function, if you want to use the width and later restore it back,
      * so you don't get rounding problems
      */
     double dblWidth() const;
-
-    /**
-     * @return the width in millimeters.
-     * \deprecated
-     */
-    KDE_DEPRECATED double mmWidth() const;
-
-    /**
-     * Sets the width to _w zoomed pixels.
-     *
-     * @param _w is calculated in display pixels. The function cares for
-     *           zooming.
-     * \deprecated
-     */
-    KDE_DEPRECATED void setWidth( int _w );
 
     /**
      * Sets the width to _w zoomed pixels as double value.
@@ -185,14 +136,6 @@ public:
      *           zooming.
      */
     void setDblWidth( double _w );
-
-    /**
-     * Sets the width.
-     *
-     * @param _w is assumed to be a unzoomed millimeter value.
-     * \deprecated
-     */
-    KDE_DEPRECATED void setMMWidth( double _w );
 
     /**
      * @reimp
