@@ -41,6 +41,7 @@ ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
 KCommand *ChartDialog::buildCommand(Part *part) {
 	kDebug()<< "Chart Dialog : buildCommand";
     //return m_panel->buildCommand(part);
+    return 0;
 }
 
 void ChartDialog::slotClose() {
