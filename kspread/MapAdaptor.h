@@ -25,7 +25,7 @@
 #include <QStringList>
 
 #include <QtDBus/QtDBus>
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 namespace KSpread
 {

@@ -29,7 +29,7 @@
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
 #include <KoZoomMode.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 //Added by qt3to4:
 #include <QDropEvent>
 #include <QResizeEvent>

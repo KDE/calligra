@@ -22,7 +22,7 @@
 
 #include "vvisitor.h"
 #include <QString>
-#include <koffice_export.h>
+#include <karbon_export.h>
 /**
  * This visitors visits structures and tries to capture relevant object type info
  * as text. There are two methods, one creates a large description like "(1 group, containing

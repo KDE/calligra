@@ -21,7 +21,7 @@
 #define __VTRANSFORMNODES_H__
 
 #include <qmatrix.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 #include "vvisitor.h"
 
 

@@ -24,7 +24,6 @@
 #include <QPixmap>
 #include <QImage>
 #include <QPainter>
-//Added by qt3to4:
 #include <QTimerEvent>
 
 #include <kapplication.h>
@@ -37,11 +36,11 @@
 #include <KoStore.h>
 #include <KoDocument.h>
 #include <QAbstractEventDispatcher>
-#include "koffice_export.h"
+#include <kdemacros.h>
 
 extern "C"
 {
-    KOFFICETOOLS_EXPORT ThumbCreator *new_creator()
+    KDE_EXPORT ThumbCreator *new_creator()
     {
         return new KOfficeCreator;
     }

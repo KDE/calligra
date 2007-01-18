@@ -26,7 +26,7 @@
 #include <QFont>
 #include <QPen>
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 #include <KoXmlReader.h>
 
 #include "Global.h"

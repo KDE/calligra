@@ -24,7 +24,7 @@
 
 #include <kparts/plugin.h>
 
-#include <koffice_export.h>
+#include <kspread_export.h>
 
 class QObject;
 class QStringList;

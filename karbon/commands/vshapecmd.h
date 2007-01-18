@@ -22,7 +22,7 @@
 #define __VSHAPECMD_H__
 
 #include "vcommand.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 class VPath;
 
 /*

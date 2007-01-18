@@ -26,7 +26,7 @@
 #include "RectStorage.h"
 #include "Style.h"
 #include "Value.h"
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 #include <QList>
 #include <QStringList>
@@ -64,7 +64,7 @@ class AbstractDataManipulator : public Manipulator {
       Q_UNUSED(row)
       return true;
     };
-    
+
     /** return value stored at given coordinates */
     Value stored (int col, int row, bool *parse);
 
@@ -126,10 +126,10 @@ class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator {
 class KSPREAD_EXPORT SeriesManipulator : public AbstractDataManipulator {
   public:
     enum Series { Column, Row, Linear, Geometric };
-    
+
     SeriesManipulator ();
     virtual ~SeriesManipulator ();
-    
+
     /** Setup the series. This sets the necessary parameters, and also the
     correct range. */
     void setupSeries (const QPoint &_marker, double start, double end,
@@ -137,7 +137,7 @@ class KSPREAD_EXPORT SeriesManipulator : public AbstractDataManipulator {
   protected:
     virtual Value newValue (Element *element, int col, int row, bool *,
         Format::Type *);
-    
+
     Series m_type;
     Value m_start, m_step, m_prev;
     int m_last;
@@ -159,7 +159,7 @@ class KSPREAD_EXPORT FillManipulator : public AbstractDFManipulator {
   public:
     FillManipulator ();
     virtual ~FillManipulator ();
-    
+
     enum Direction { Up = 0, Down, Left, Right };
 
     void setDirection (Direction d) { m_dir = d; };
@@ -175,7 +175,7 @@ class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator {
   public:
     CaseManipulator ();
     virtual ~CaseManipulator ();
-    
+
     enum CaseMode {
       Upper = 0,
       Lower,
@@ -190,7 +190,7 @@ class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator {
 
     /** do we want to change this cell ? */
     virtual bool wantChange (Element *element, int col, int row);
-    
+
     CaseMode m_mode;
 };
 

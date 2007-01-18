@@ -20,7 +20,7 @@
 #ifndef __VVISITOR_H__
 #define __VVISITOR_H__
 
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 class VPath;
 class VDocument;

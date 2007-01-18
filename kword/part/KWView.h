@@ -27,6 +27,7 @@
 #include <KoShapeReorderCommand.h>
 
 #include <QWidget>
+#include "kword_export.h"
 
 class KWDocument;
 class KWCanvas;

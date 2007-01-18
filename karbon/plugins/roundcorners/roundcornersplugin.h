@@ -23,7 +23,7 @@
 #include <kparts/plugin.h>
 #include <kdialog.h>
 #include <commands/vreplacingcmd.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 class KarbonView;
 class VRoundCornersDlg;

@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QPixmap>
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 #include <KoUnit.h>
 
 class KoGenStyles;

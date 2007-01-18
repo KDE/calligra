@@ -24,7 +24,7 @@
 
 #include <QColor>
 #include <QString>
-#include <koffice_export.h>
+#include <karbon_export.h>
 class QDomElement;
 
 

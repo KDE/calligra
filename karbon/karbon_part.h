@@ -26,7 +26,7 @@
 #include <KoDocument.h>
 #include <KoUnit.h>
 #include "vdocument.h"
-#include "koffice_export.h"
+#include "karbon_export.h"
 
 class QRectF;
 class QRect;

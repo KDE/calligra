@@ -36,7 +36,7 @@
 #include <klineedit.h>
 #include <ksharedptr.h>
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 class KTextEdit;
 class QFont;

@@ -30,9 +30,9 @@
 
 #include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"
-#include <koffice_export.h>
+#include <kword_libexport_export.h>
 
-class KOFFICEFILTER_EXPORT KWEFKWordLeader
+class KWORD_LIBEXPORT_EXPORT KWEFKWordLeader
 {
     public:
         explicit KWEFKWordLeader(void);

@@ -20,7 +20,7 @@
 #ifndef __kspread_style_manager__
 #define __kspread_style_manager__
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 #include <KoXmlReader.h>
 
 #include <Style.h>
@@ -68,7 +68,7 @@ class KSPREAD_EXPORT StyleManager
   CustomStyle * style( QString const & name ) const;
 
   void resetDefaultStyle ();
- 
+
   bool checkCircle( QString const & name, QString const & parent );
   bool validateStyleName( QString const & name, CustomStyle * style );
   void changeName( QString const & oldName, QString const & newName );

@@ -22,6 +22,7 @@
 #define KPRESENTER_FACTORY_H
 
 #include <KoFactory.h>
+#include "kpresenter_export.h"
 
 class KAboutData;
 class KIconLoader;
@@ -40,9 +41,9 @@ public:
 
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
-    
+
     static KIconLoader* iconLoader();
-    
+
 private:
     static KInstance* s_instance;
     static KAboutData* s_aboutData;

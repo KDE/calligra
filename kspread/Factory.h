@@ -21,6 +21,7 @@
 #define KSPREAD_FACTORY_H
 
 #include <KoFactory.h>
+#include "kspread_export.h"
 
 class KAboutData;
 class KIconLoader;
@@ -39,7 +40,7 @@ public:
     virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, QObject *parent = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
 
     static KInstance* global();
-    
+
     static KIconLoader* iconLoader();
 
     // _Creates_ a KAboutData but doesn't keep ownership

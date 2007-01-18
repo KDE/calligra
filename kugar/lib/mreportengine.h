@@ -20,7 +20,7 @@
 #include <qpointer.h>
 //Added by qt3to4:
 #include <Q3PtrList>
-#include <koffice_export.h>
+#include <kugarlib_export.h>
 
 #include "mlineobject.h"
 #include "mlabelobject.h"

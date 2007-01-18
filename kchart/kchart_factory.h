@@ -9,7 +9,7 @@
 
 
 #include <KoFactory.h>
-
+#include "kchart_export.h"
 
 class KInstance;
 class KIconLoader;

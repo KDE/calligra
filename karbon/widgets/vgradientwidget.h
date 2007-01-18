@@ -24,7 +24,7 @@
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QMouseEvent>
-#include <koffice_export.h>
+#include <karbon_export.h>
 class VGradient;
 class QPainter;
 class VColor;

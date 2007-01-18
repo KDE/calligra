@@ -21,7 +21,7 @@
 #define __VDASHPATTERN_H__
 
 #include <q3valuelist.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 class QDomElement;
 

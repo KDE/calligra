@@ -23,8 +23,6 @@
 
 #include <KoShapeFactory.h>
 
-#include <koffice_export.h>
-
 class KoShape;
 
 class VideoShapePlugin : public QObject

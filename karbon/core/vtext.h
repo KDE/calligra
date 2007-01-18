@@ -25,7 +25,7 @@
 #include <q3ptrlist.h>
 #include <QString>
 #include <QFont>
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 #include "vpath.h"
 #include "vcomposite.h"

@@ -24,7 +24,7 @@
 #include "vcolor.h"
 #include "vgradient.h"
 #include "vpattern.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 class QDomElement;
 class KoGenStyle;

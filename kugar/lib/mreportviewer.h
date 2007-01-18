@@ -22,7 +22,7 @@
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QPaintEvent>
-#include <koffice_export.h>
+#include <kugarlib_export.h>
 #include "mreportengine.h"
 #include "mpagecollection.h"
 #include "mpagedisplay.h"

@@ -26,7 +26,7 @@
 #include <QMouseEvent>
 #include <kaction.h>
 #include <klocale.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 class KAction;
 class KActionCollection;
 class KarbonPart;

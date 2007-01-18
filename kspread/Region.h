@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 #include "Global.h"
 

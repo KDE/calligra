@@ -25,7 +25,6 @@
 #define KSPREAD_INSERTCALENDARDIALOG_H
 
 #include <ui_InsertCalendarDialog.h>
-#include <koffice_export.h>
 
 #include <QDateTime>
 
@@ -34,7 +33,7 @@ class KDatePicker;
 namespace KSpread
 {
 
-class KSPREAD_EXPORT InsertCalendarDialog : public QDialog, public Ui::InsertCalendarDialogBase
+class InsertCalendarDialog : public QDialog, public Ui::InsertCalendarDialogBase
 {
   Q_OBJECT
 

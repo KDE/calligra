@@ -23,7 +23,7 @@
 #include <q3ptrlist.h>
 #include <q3ptrvector.h>
 
-#include <koffice_export.h>
+#include <karbon_export.h>
 #include <QPointF>
 
 #include "vcolor.h"

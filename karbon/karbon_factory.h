@@ -21,7 +21,7 @@
 #define __KARBON_FACTORY_H__
 
 #include <KoFactory.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 class KAboutData;
 class KInstance;
 

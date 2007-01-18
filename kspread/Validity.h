@@ -42,7 +42,7 @@
 
 // KOffice
 #include <KoXmlReader.h>
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 // KSpread
 #include "Condition.h"

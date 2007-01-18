@@ -27,7 +27,7 @@ static KCmdLineOptions options[] =
         KCmdLineLastOption
     };
 
-extern "C" KUGAR_EXPORT int kdemain( int argc, char *argv[] )
+extern "C" KDE_EXPORT int kdemain( int argc, char *argv[] )
 {
 
     KCmdLineArgs::init( argc, argv, newKugarAboutData() );

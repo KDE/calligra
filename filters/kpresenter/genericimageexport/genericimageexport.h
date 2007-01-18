@@ -22,7 +22,6 @@
 
 #include <KoFilter.h>
 #include <QPixmap>
-#include <koffice_export.h>
 
 class QPixmap;
 class GenericImageExport : public KoFilter

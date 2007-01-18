@@ -23,7 +23,7 @@
 #include <QString>
 #include <QTextStream>
 #include <QVector>
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 #define KSPREAD_INLINE_ARRAYS
 

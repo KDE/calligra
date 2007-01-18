@@ -19,7 +19,7 @@
 
 #include "kptaboutdata.h"
 
-#include <koffice_export.h>
+#include <kdemacros.h>
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
 
@@ -35,7 +35,7 @@ static const KCmdLineOptions options[]=
 }  //KPlato namespace
 
 
-extern "C" KPLATO_EXPORT int kdemain( int argc, char **argv ) {
+extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     KCmdLineArgs::init( argc, argv, KPlato::newAboutData());
     KCmdLineArgs::addCmdLineOptions( KPlato::options );
 

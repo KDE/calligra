@@ -27,7 +27,7 @@
 
 #include "vobject.h"
 
-#include <koffice_export.h>
+#include <karbon_export.h>
 #include <KoUnit.h>
 #include <KoShapeControllerBase.h>
 

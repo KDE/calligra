@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KivioTextTool" library="libkiviotargettool" version="1">
+<kpartgui name="KivioTargetTool" library="libkiviotargettool" version="1">
   <MenuBar>
     <Menu name="Tools">
       <Action name="addTargetTool"/>

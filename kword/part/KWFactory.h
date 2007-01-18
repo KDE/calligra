@@ -21,6 +21,7 @@
 #define KWORD_FACTORY_H
 
 #include <KoFactory.h>
+#include "kword_export.h"
 
 class KAboutData;
 

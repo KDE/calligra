@@ -21,7 +21,7 @@
 #define KUDESIGNER_FACTORY_H
 
 #include <KoFactory.h>
-#include <koffice_export.h>
+#include <kugardesigner_export.h>
 class KInstance;
 class KAboutData;
 

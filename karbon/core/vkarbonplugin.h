@@ -21,7 +21,7 @@
 #define __VKARBONPLUGIN_H__
 
 #include <kparts/plugin.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 class KARBONBASE_EXPORT VKarbonPlugin : public KParts::Plugin
 {

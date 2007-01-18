@@ -21,7 +21,7 @@
 
 #include "KWPageManager.h"
 #include "KoPageLayout.h"
-#include <koffice_export.h>
+#include <kword_export.h>
 #include <QRectF>
 class KoZoomHandler;
 

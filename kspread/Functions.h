@@ -25,7 +25,7 @@
 #include <QList>
 #include <QStringList>
 #include <QVector>
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 class QDomElement;
 

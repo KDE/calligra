@@ -20,18 +20,8 @@
 #ifndef _KEXIDB_EXPORT_H_
 #define _KEXIDB_EXPORT_H_
 
-#ifdef __cplusplus
-# include <kdeversion.h> /* this will also include <kdelibs_export.h>, if available */
-#endif 
-/* KDE_EXPORT will be defined multiple times without this on kdelibs 3.3 (tested on 3.3.1) */
 #include <kdemacros.h>
 
-/* workaround for KDElibs < 3.2 on !win32 */
-#ifndef KDE_EXPORT
-# define KDE_EXPORT
-#endif
-
-/* TODO: #include <koffice_export.h> ??? */
 #ifdef MAKE_KEXI_DB_LIB
 # define KEXI_DB_EXPORT KDE_EXPORT
 #elif defined(KDE_MAKE_LIB)

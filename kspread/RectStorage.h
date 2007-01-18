@@ -23,7 +23,7 @@
 #include <QCache>
 #include <QTimer>
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 #include "Condition.h"
 #include "Doc.h"

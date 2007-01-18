@@ -25,14 +25,15 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <koffice_export.h>
+#include <kdemacros.h>
+
 static KCmdLineOptions options[] =
 {
 	{ "+[term]",   I18N_NOOP("Term to search for when starting up"), 0 },
 	KCmdLineLastOption
 };
 
-extern "C" KOFFICETOOLS_EXPORT int kdemain(int argc, char **argv)
+extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
 
 	KAboutData aboutData("kthesaurus", I18N_NOOP("KThesaurus"), "1.0",

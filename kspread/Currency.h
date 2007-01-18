@@ -23,7 +23,7 @@
 
 #include <QMetaType>
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 namespace KSpread
 {

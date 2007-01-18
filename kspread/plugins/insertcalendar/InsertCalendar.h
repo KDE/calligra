@@ -26,8 +26,6 @@
 
 #include <kparts/plugin.h>
 
-#include <koffice_export.h>
-
 #include <QDateTime>
 
 class KAboutData;
@@ -48,7 +46,7 @@ class InsertCalendarDialog;
  * makes it possible to insert calendars into
  * the spreadsheet.
  */
-class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
+class PluginInsertCalendar : public KParts::Plugin
 {
   Q_OBJECT
 

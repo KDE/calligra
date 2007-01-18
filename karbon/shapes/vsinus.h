@@ -21,7 +21,7 @@
 #define __VSINUS_H__
 
 #include "vcomposite.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 #include <QPointF>
 

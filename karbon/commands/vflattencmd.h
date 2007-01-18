@@ -21,7 +21,7 @@
 #define __FLATTENCMD_H__
 
 #include <commands/vreplacingcmd.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 class VSubpath;
 
 class KARBONCOMMAND_EXPORT VFlattenCmd : public VReplacingCmd

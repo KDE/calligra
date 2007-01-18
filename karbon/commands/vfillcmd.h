@@ -26,7 +26,7 @@
 #include "vgroup.h"
 
 #include <q3valuevector.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 class VSelection;
 
 // Fill object(s)

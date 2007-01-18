@@ -21,7 +21,7 @@
 #define __VRECTANGLE_H__
 
 #include "KoRectangleShape.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 #include <QPointF>
 

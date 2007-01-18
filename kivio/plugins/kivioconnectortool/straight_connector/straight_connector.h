@@ -80,7 +80,7 @@ class KivioStraightConnector : public Kivio1DStencil
     virtual bool hasTextBox() const;
 };
 
-class KIVIOPLUGINS_EXPORT KivioConnectorFactory : public KivioStencilFactory
+class KivioConnectorFactory : public KivioStencilFactory
 {
   Q_OBJECT
   public:

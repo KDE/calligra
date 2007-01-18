@@ -27,14 +27,14 @@
 #include <Q3ValueList>
 
 #include <KWEFStructures.h>
-#include <koffice_export.h>
+#include <kword_libexport_export.h>
 #include <QImage>
 class KWEFKWordLeader;
 
 /**
  * Base worker of the libexport system
  */
-class KOFFICEFILTER_EXPORT KWEFBaseWorker
+class KWORD_LIBEXPORT_EXPORT KWEFBaseWorker
 {
     public:
         explicit KWEFBaseWorker(void) : m_kwordLeader(NULL) {}

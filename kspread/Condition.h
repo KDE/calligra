@@ -25,7 +25,7 @@
 #include <QLinkedList>
 #include <QSharedData>
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 #include <KoXmlReader.h>
 
 class QColor;

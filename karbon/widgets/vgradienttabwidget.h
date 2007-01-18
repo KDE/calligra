@@ -27,7 +27,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>
-#include <koffice_export.h>
+#include <karbon_export.h>
 #include "vgradient.h"
 
 class KComboBox;

@@ -11,7 +11,7 @@
 
 #include <koChart.h>
 #include "kchart_params.h"
-#include "koffice_export.h"
+#include "kchart_export.h"
 //Added by qt3to4:
 #include <QPixmap>
 

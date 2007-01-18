@@ -21,6 +21,7 @@
 #define KIVIOFACTORY_H
 
 #include <KoFactory.h>
+#include "kivio_export.h"
 
 class KInstance;
 class KAboutData;

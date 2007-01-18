@@ -67,7 +67,7 @@ int KoShellApp::newInstance()
   return KUniqueApplication::newInstance();
 }
 
-extern "C" KOSHELL_EXPORT int kdemain( int argc, char **argv )
+extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
   KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOffice Workspace"),
      version, description, KAboutData::License_GPL,

@@ -28,7 +28,7 @@
 #define KSPREAD_TABLE_IFACE_H
 
 #include <QtDBus/QtDBus>
-#include <koffice_export.h>
+#include "kspread_export.h"
 #include <QRect>
 #include <QString>
 

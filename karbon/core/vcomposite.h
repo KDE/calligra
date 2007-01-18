@@ -29,7 +29,7 @@
 #include "vobject.h"
 #include "svgpathparser.h"
 #include "vfillrule.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 class QDomElement;
 class VPainter;

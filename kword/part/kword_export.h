@@ -16,24 +16,45 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <koffice_export.h>
 
-#ifndef _KWORD_EXPORT_H
-#define _KWORD_EXPORT_H
+#ifndef KWORD_EXPORT_H
+#define KWORD_EXPORT_H
+
+/* needed for KDE_EXPORT and KDE_IMPORT macros */
+#include <kdemacros.h>
+
+/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
+#if defined _WIN32 || defined _WIN64
+
+#ifndef KWORD_EXPORT
+# if defined(MAKE_KWORDPRIVATE_LIB)
+   /* We are building this library */
+#  define KWORD_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */
+#  define KWORD_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#else /* UNIX */
+
+#define KWORD_EXPORT KDE_EXPORT
+
+#endif
+
+/* Now the same for KWORD_TEST_EXPORT, if compiling with unit tests enabled */
 
 #ifdef COMPILING_TESTS
-# ifdef Q_WS_WIN
-#   ifdef MAKE_KWORD_TEST_LIB
+#if defined _WIN32 || defined _WIN64
+# if defined(MAKE_KWORDPRIVATE_LIB)
 #       define KWORD_TEST_EXPORT KDE_EXPORT
-#   elif KDE_MAKE_LIB
-#       define KWORD_TEST_EXPORT KDE_IMPORT
 #   else
-#       define KWORD_TEST_EXPORT
+#       define KWORD_TEST_EXPORT KDE_IMPORT
 #   endif
-# else // not windows
+# else /* not windows */
 #   define KWORD_TEST_EXPORT KDE_EXPORT
 # endif
-#else // not compiling tests
+#else /* not compiling tests */
 #   define KWORD_TEST_EXPORT
 #endif
 

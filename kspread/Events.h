@@ -27,7 +27,7 @@
 #include <string.h>
 
 #include <kparts/event.h>
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 #include "Region.h"
 namespace KSpread

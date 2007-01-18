@@ -32,7 +32,7 @@
 #include <QWidget>
 #include <QList>
 
-#include <koffice_export.h>
+#include <karbon_export.h>
 #include <KoCanvasBase.h>
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>

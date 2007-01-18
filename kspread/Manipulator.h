@@ -29,7 +29,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 #include "Undo.h"
 #include "Region.h"
@@ -96,7 +96,7 @@ public:
   /** Set whether the manipulator will automatically bail out with an error
   message box, if the range is protected. */
   void setProtectedCheck (bool protcheck) { m_protcheck = protcheck; };
-  
+
   /**
    * Sets the name to \p name . The name is used for the undo/redo
    * functionality.

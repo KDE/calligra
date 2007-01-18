@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-#include <koffice_export.h>
+#include "kspread_export.h"
 
 namespace KSpread
 {

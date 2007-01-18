@@ -28,7 +28,7 @@
 
 #include "vcommand.h"
 #include "vgroup.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 // Transform object(s) with a specified matrix and allow undo.
 
 

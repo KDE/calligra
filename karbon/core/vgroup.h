@@ -24,7 +24,7 @@
 #include <QRectF>
 
 #include "vobject.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 typedef Q3PtrList<VObject> VObjectList;
 typedef Q3PtrListIterator<VObject> VObjectListIterator;

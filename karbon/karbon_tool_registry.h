@@ -22,7 +22,7 @@
 #define KARBON_TOOL_REGISTRY_H_
 
 #include <q3valuevector.h>
-#include <koffice_export.h>
+#include <karbon_export.h>
 class KActionCollection;
 class VTool;
 class KarbonView;

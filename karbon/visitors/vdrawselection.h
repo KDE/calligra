@@ -22,7 +22,7 @@
 
 #include "vgroup.h"
 #include "vvisitor.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 /**
  *  Helper class to draw the outline of a composite path, including (?)
  *  optionally its bezier helper lines, depending on the state.

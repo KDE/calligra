@@ -23,7 +23,7 @@
 
 
 #include <QRectF>
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 class QDomElement;
 class VDocument;

@@ -27,7 +27,7 @@
 
 #include "vobject.h"
 #include "vvisitor.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 
 class QPointF;
 class QObject;

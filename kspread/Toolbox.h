@@ -26,7 +26,7 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QChildEvent>
-#include <koffice_export.h>
+#include "kspread_export.h"
 class QVBoxLayout;
 class QSpinBox;
 

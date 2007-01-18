@@ -23,7 +23,7 @@
 
 #include "kactioncollection.h"
 #include "karbon_view.h"
-#include <koffice_export.h>
+#include <karbon_export.h>
 #include <vtool.h>
 
 class KARBONBASE_EXPORT KarbonAbstractToolFactory
