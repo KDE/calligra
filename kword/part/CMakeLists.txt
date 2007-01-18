@@ -56,7 +56,7 @@ kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake kofficeui kotext)
 
 if(KDE4_BUILD_TESTS)
-    # only with this definition will the KWORD_EXPORT_TEST macro do something
+    # only with this definition will the KWORD_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
