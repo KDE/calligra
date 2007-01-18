@@ -549,12 +549,6 @@ public:
     const RowFormat* rowFormat( int _row ) const;
 
     /**
-     * \return the row format of row \p _row . The default row format,
-     * if no special one exists.
-     */
-    RowFormat* rowFormat( int _row );
-
-    /**
      * If no special RowFormat exists for this row, then a new one is created.
      *
      * @return a non default RowFormat for this row.
@@ -581,12 +575,6 @@ public:
      * if no special one exists.
      */
     const ColumnFormat* columnFormat( int _column ) const;
-
-    /**
-     * \return the column format of column \p _column . The default column format,
-     * if no special one exists.
-     */
-    ColumnFormat* columnFormat( int _column );
 
     /**
      * If no special ColumnFormat exists for this column, then a new one is created.

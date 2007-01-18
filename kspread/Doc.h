@@ -63,6 +63,7 @@ class KoXmlWriter;
 
 namespace KSpread
 {
+class ColumnFormat;
 class Damage;
 class ValueParser;
 class ValueConverter;
@@ -73,6 +74,7 @@ class Doc;
 class View;
 class Map;
 class Region;
+class RowFormat;
 class StyleManager;
 class UndoAction;
 class LoadingInfo;
@@ -185,6 +187,25 @@ public:
    */
   ValueCalc *calc () const;
 
+    /**
+     * \return the default row format
+     */
+    const ColumnFormat* defaultColumnFormat() const;
+
+    /**
+     * \return the default row format
+     */
+    const RowFormat* defaultRowFormat() const;
+
+    /**
+     * Sets the default column width to \p width.
+     */
+    void setDefaultColumnWidth( double width );
+
+    /**
+     * Sets the default row height to \p height.
+     */
+    void setDefaultRowHeight( double height );
 
   /**
    * \ingroup Operations

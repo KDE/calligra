@@ -108,6 +108,10 @@ public:
   ValueConverter *converter;
   ValueCalc *calc;
 
+    // default objects
+    ColumnFormat* defaultColumnFormat;
+    RowFormat* defaultRowFormat;
+
   Sheet *activeSheet;
   LoadingInfo *loadingInfo;
   static QList<Doc*> s_docs;
@@ -199,6 +203,9 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->calc->setDoc (this);
   d->formatter = new ValueFormatter( d->converter );
 
+  d->defaultColumnFormat = new ColumnFormat();
+  d->defaultRowFormat = new RowFormat();
+
   d->activeSheet = 0;
 
   d->pageBorderColor = Qt::red;
@@ -206,8 +213,8 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->captureAllArrowKeys = true;
 
   QFontMetricsF fontMetrics( KoGlobal::defaultFont() );
-  RowFormat::setGlobalRowHeight( fontMetrics.height() );
-  ColumnFormat::setGlobalColWidth( fontMetrics.height() * 5 );
+  d->defaultRowFormat->setDblHeight( fontMetrics.height() );
+  d->defaultColumnFormat->setDblWidth( fontMetrics.height() * 5 );
 
   documents().append( this );
 
@@ -274,6 +281,9 @@ Doc::~Doc()
   delete d->commandHistory;
 
   delete d->spellConfig;
+
+  delete d->defaultColumnFormat;
+  delete d->defaultRowFormat;
 
   delete d->locale;
   delete d->map;
@@ -353,6 +363,26 @@ ValueConverter *Doc::converter () const
 ValueCalc *Doc::calc () const
 {
   return d->calc;
+}
+
+const ColumnFormat* Doc::defaultColumnFormat() const
+{
+    return d->defaultColumnFormat;
+}
+
+const RowFormat* Doc::defaultRowFormat() const
+{
+    return d->defaultRowFormat;
+}
+
+void Doc::setDefaultColumnWidth( double width )
+{
+    d->defaultColumnFormat->setDblWidth( width );
+}
+
+void Doc::setDefaultRowHeight( double height )
+{
+    d->defaultRowFormat->setDblHeight( height );
 }
 
 void Doc::saveConfig()
@@ -500,8 +530,8 @@ QDomDocument Doc::saveXML()
 #endif
 
     QDomElement defaults = doc.createElement( "defaults" );
-    defaults.setAttribute( "row-height", RowFormat::globalRowHeight() );
-    defaults.setAttribute( "col-width", ColumnFormat::globalColWidth() );
+    defaults.setAttribute( "row-height", d->defaultRowFormat->dblHeight() );
+    defaults.setAttribute( "col-width", d->defaultColumnFormat->dblWidth() );
     spread.appendChild( defaults );
 
     QDomElement s = styleManager()->save( doc );
@@ -572,13 +602,13 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle( Doc::STYLE_COLUMN_USER, "table-column" );
-    defaultColumnStyle.addPropertyPt( "style:column-width", ColumnFormat::globalColWidth() );
+    defaultColumnStyle.addPropertyPt( "style:column-width", d->defaultColumnFormat->dblWidth() );
     defaultColumnStyle.setDefaultStyle( true );
     mainStyles.lookup( defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering );
 
     // Saving the default row style
     KoGenStyle defaultRowStyle( Doc::STYLE_ROW_USER, "table-row" );
-    defaultRowStyle.addPropertyPt( "style:row-height", RowFormat::globalRowHeight() );
+    defaultRowStyle.addPropertyPt( "style:row-height", d->defaultRowFormat->dblHeight() );
     defaultRowStyle.setDefaultStyle( true );
     mainStyles.lookup( defaultRowStyle, "Default", KoGenStyles::DontForceNumbering );
 
@@ -925,7 +955,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         if ( width != -1.0 )
         {
 //           kDebug() << "\tstyle:column-width: " << width << endl;
-          ColumnFormat::setGlobalColWidth( width );
+          d->defaultColumnFormat->setDblWidth( width );
         }
       }
     }
@@ -944,7 +974,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         if ( height != -1.0 )
         {
 //           kDebug() << "\tstyle:row-height: " << height << endl;
-          RowFormat::setGlobalRowHeight( height );
+          d->defaultRowFormat->setDblHeight( height );
         }
       }
     }
@@ -1018,17 +1048,17 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
   if ( !defaults.isNull() )
   {
     bool ok = false;
-    double d = defaults.attribute( "row-height" ).toDouble( &ok );
+    double dim = defaults.attribute( "row-height" ).toDouble( &ok );
     if ( !ok )
       return false;
-    RowFormat::setGlobalRowHeight( d );
+    d->defaultRowFormat->setDblHeight( dim );
 
-    d = defaults.attribute( "col-width" ).toDouble( &ok );
+    dim = defaults.attribute( "col-width" ).toDouble( &ok );
 
     if ( !ok )
       return false;
 
-    ColumnFormat::setGlobalColWidth( d );
+    d->defaultColumnFormat->setDblWidth( dim );
   }
 
   d->refs.clear();

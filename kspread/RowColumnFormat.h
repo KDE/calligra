@@ -52,8 +52,11 @@ class Sheet;
 class KSPREAD_EXPORT RowFormat
 {
 public:
-    RowFormat( Sheet* sheet, int row );
+    RowFormat();
+    RowFormat( const RowFormat& other );
     ~RowFormat();
+
+    void setSheet( Sheet* sheet );
 
     QDomElement save( QDomDocument&, int yshift = 0, bool copy = false ) const;
     bool load( const KoXmlElement& row, int yshift = 0, Paste::Mode sp = Paste::Normal, bool paste = false );
@@ -123,16 +126,10 @@ public:
     void setHidden( bool _hide, bool repaint = true );
     bool hidden() const;
 
-    static void setGlobalRowHeight( double height ) { s_rowHeight = height; }
-    static double globalRowHeight() { return s_rowHeight; }
-
     bool operator==( const RowFormat& other ) const;
     inline bool operator!=( const RowFormat& other ) const { return !operator==( other ); }
 
 private:
-    // default column width and row height
-    static double s_rowHeight;
-
     class Private;
     Private * const d;
 };
@@ -143,8 +140,11 @@ private:
 class KSPREAD_EXPORT ColumnFormat
 {
 public:
-    ColumnFormat( Sheet* sheet, int column );
+    ColumnFormat();
+    ColumnFormat( const ColumnFormat& other );
     ~ColumnFormat();
+
+    void setSheet( Sheet* sheet );
 
     QDomElement save( QDomDocument&, int xshift = 0, bool copy = false ) const;
     bool load( const KoXmlElement& row, int xshift = 0,Paste::Mode sp = Paste::Normal, bool paste = false );
@@ -213,16 +213,10 @@ public:
     void setHidden( bool _hide );
     bool hidden() const;
 
-    static void setGlobalColWidth( double width ) { s_columnWidth = width; }
-    static double globalColWidth() { return s_columnWidth; }
-
     bool operator==( const ColumnFormat& other ) const;
     inline bool operator!=( const ColumnFormat& other ) const { return !operator==( other ); }
 
 private:
-    // default column width
-    static double s_columnWidth;
-
     class Private;
     Private * const d;
 };

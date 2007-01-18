@@ -455,8 +455,8 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
 
   value = obj->value();
 
-  RowFormat *rl;
-  ColumnFormat *cl;
+  const RowFormat *rl;
+  const ColumnFormat *cl;
   widthSize = 0.0;
   heightSize = 0.0;
 
@@ -2283,11 +2283,11 @@ void CellFormatPagePosition::apply( CustomStyle * style )
   {
     if ( (int) height->value() != (int) dlg->heightSize )
     {
-      RowFormat::setGlobalRowHeight( height->value() );
+      dlg->getDoc()->setDefaultRowHeight( height->value() );
     }
     if ( (int) width->value() != (int) dlg->widthSize )
     {
-      ColumnFormat::setGlobalColWidth( width->value() );
+      dlg->getDoc()->setDefaultColumnWidth( width->value() );
     }
   }
 }

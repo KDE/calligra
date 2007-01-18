@@ -298,13 +298,11 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             kDebug(36001) << "selected: T " << rect.top() << " B " << rect.bottom() << endl;
 
             int i;
-            RowFormat * row;
             QList<int> hiddenRows;
 
             for ( i = rect.top(); i <= rect.bottom(); ++i )
             {
-                row = sheet->rowFormat( i );
-                if ( row->hidden() )
+                if ( sheet->rowFormat( i )->hidden() )
                 {
                     hiddenRows.append(i);
                 }
@@ -391,7 +389,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
     {
       if ( row < KS_rowMax )
       {
-        RowFormat* rowFormat = sheet->rowFormat( row + 1 );
+        const RowFormat* rowFormat = sheet->rowFormat( row + 1 );
         y = sheet->dblRowPos( row + 1 );
         m_pCanvas->vertScrollBar()->setValue( (int) ( ev_PosY + rowFormat->dblHeight() - dHeight) );
       }
@@ -926,13 +924,11 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             kDebug(36001) << "selected: L " << rect.left() << " R " << rect.right() << endl;
 
             int i;
-            ColumnFormat * col;
             QList<int> hiddenCols;
 
             for ( i = rect.left(); i <= rect.right(); ++i )
             {
-                col = sheet->columnFormat( i );
-                if ( col->hidden() )
+                if ( sheet->columnFormat( i )->hidden() )
                 {
                     hiddenCols.append(i);
                 }
@@ -1022,7 +1018,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
     {
       if ( _ev->pos().x() < width() - m_pCanvas->width() )
       {
-        ColumnFormat *cl = sheet->columnFormat( col + 1 );
+        const ColumnFormat *cl = sheet->columnFormat( col + 1 );
         x = sheet->dblColumnPos( col + 1 );
         m_pCanvas->horzScrollBar()->setValue( m_pCanvas->horzScrollBar()->maximum()
                                               - (int) ( ( ev_PosX + cl->dblWidth() ) - dWidth ) );
@@ -1038,7 +1034,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
       {
         if ( col < KS_colMax )
         {
-          ColumnFormat *cl = sheet->columnFormat( col + 1 );
+          const ColumnFormat *cl = sheet->columnFormat( col + 1 );
           x = sheet->dblColumnPos( col + 1 );
           m_pCanvas->horzScrollBar()->setValue( (int) ( ev_PosX + cl->dblWidth() - dWidth ) );
         }

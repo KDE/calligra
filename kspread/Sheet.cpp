@@ -249,8 +249,6 @@ public:
 
   // default objects
   Cell* defaultCell;
-  RowFormat* defaultRowFormat;
-  ColumnFormat* defaultColumnFormat;
 
   // hold the print object
   SheetPrint* print;
@@ -334,13 +332,11 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->validityStorage = new ValidityStorage( this );
 
   d->defaultCell = new Cell( this, 0, 0 );
-  d->defaultRowFormat = new RowFormat( this, 0 );
-  d->defaultColumnFormat = new ColumnFormat( this, 0 );
 
   d->maxColumn = 256;
   d->maxRow = 256;
-  d->sizeMaxX = KS_colMax * d->defaultColumnFormat->dblWidth(); // default is max cols * default width
-  d->sizeMaxY = KS_rowMax * d->defaultRowFormat->dblHeight(); // default is max rows * default height
+  d->sizeMaxX = KS_colMax * doc()->defaultColumnFormat()->dblWidth(); // default is max cols * default width
+  d->sizeMaxY = KS_rowMax * doc()->defaultRowFormat()->dblHeight(); // default is max rows * default height
 
   d->scrollBarUpdates = true;
 
@@ -519,16 +515,7 @@ const ColumnFormat* Sheet::columnFormat( int _column ) const
     if ( p != 0 )
         return p;
 
-    return d->defaultColumnFormat;
-}
-
-ColumnFormat* Sheet::columnFormat( int _column )
-{
-    ColumnFormat *p = d->columns.lookup( _column );
-    if ( p != 0 )
-        return p;
-
-    return d->defaultColumnFormat;
+    return doc()->defaultColumnFormat();
 }
 
 const RowFormat* Sheet::rowFormat( int _row ) const
@@ -537,16 +524,7 @@ const RowFormat* Sheet::rowFormat( int _row ) const
     if ( p != 0 )
         return p;
 
-    return d->defaultRowFormat;
-}
-
-RowFormat* Sheet::rowFormat( int _row )
-{
-    RowFormat *p = d->rows.lookup( _row );
-    if ( p != 0 )
-        return p;
-
-    return d->defaultRowFormat;
+    return doc()->defaultRowFormat();
 }
 
 Value Sheet::value (int col, int row) const
@@ -654,22 +632,6 @@ void Sheet::setValidity( const Region& region, KSpread::Validity validity ) cons
 ValidityStorage* Sheet::validityStorage() const
 {
     return d->validityStorage;
-}
-
-void Sheet::setDefaultHeight( double height )
-{
-  if ( isProtected() )
-    NO_MODIFICATION_POSSIBLE;
-
-  d->defaultRowFormat->setDblHeight( height );
-}
-
-void Sheet::setDefaultWidth( double width )
-{
-  if ( isProtected() )
-    NO_MODIFICATION_POSSIBLE;
-
-  d->defaultColumnFormat->setDblWidth( width );
 }
 
 double Sheet::sizeMaxX() const
@@ -915,9 +877,9 @@ ColumnFormat* Sheet::nonDefaultColumnFormat( int _column, bool force_creation )
     if ( p != 0 || !force_creation )
         return p;
 
-    p = new ColumnFormat( this, _column );
-    // TODO: copy the default ColumnFormat here!!
-    p->setDblWidth( d->defaultColumnFormat->dblWidth() );
+    p = new ColumnFormat( *doc()->defaultColumnFormat() );
+    p->setSheet( this );
+    p->setColumn( _column );
 
     d->columns.insertElement( p, _column );
 
@@ -930,9 +892,9 @@ RowFormat* Sheet::nonDefaultRowFormat( int _row, bool force_creation )
     if ( p != 0 || !force_creation )
         return p;
 
-    p = new RowFormat( this, _row );
-    // TODO: copy the default RowLFormat here!!
-    p->setDblHeight( d->defaultRowFormat->dblHeight() );
+    p = new RowFormat( *doc()->defaultRowFormat() );
+    p->setSheet( this );
+    p->setRow( _row );
 
     d->rows.insertElement( p, _row );
 
@@ -2080,7 +2042,8 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
         {
             if ( c.tagName() == "column" )
             {
-                ColumnFormat *cl = new ColumnFormat( this, 0 );
+                ColumnFormat *cl = new ColumnFormat();
+                cl->setSheet( this );
                 if ( cl->load( c, _xshift, mode, pasteFC ) )
                     insertColumnFormat( cl );
                 else
@@ -2112,7 +2075,8 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
         {
             if ( c.tagName() == "row" )
             {
-                RowFormat *cl = new RowFormat( this, 0 );
+                RowFormat *cl = new RowFormat();
+                cl->setSheet( this );
                 if ( cl->load( c, _yshift, mode, pasteFC ) )
                     insertRowFormat( cl );
                 else
@@ -2626,7 +2590,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
 
       // TODO Stefan: Inefficient, use cluster functionality
       // Save the row formats if there are any
-      RowFormat* format;
+      const RowFormat* format;
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         format = rowFormat( row );
@@ -2667,7 +2631,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
 
       // TODO Stefan: Inefficient, use the cluster functionality
       // Save the column formats if there are any
-      ColumnFormat* format;
+      const ColumnFormat* format;
       for (int col = range.left(); col <= range.right(); ++col)
       {
         format = columnFormat(col);
@@ -2894,7 +2858,10 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
         else if ( styleIndex )
         {
-            QDomElement e = RowFormat( this, styleIndex ).save( dd );
+            RowFormat rowFormat;
+            rowFormat.setSheet( this );
+            rowFormat.setRow( styleIndex );
+            QDomElement e = rowFormat.save( dd );
             if ( e.isNull() )
                 return QDomElement();
             sheet.appendChild( e );
@@ -2919,7 +2886,10 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
         else if ( styleIndex )
         {
-            QDomElement e = ColumnFormat( this, styleIndex ).save( dd );
+            ColumnFormat columnFormat;
+            columnFormat.setSheet( this );
+            columnFormat.setColumn( styleIndex );
+            QDomElement e = columnFormat.save( dd );
             if ( e.isNull() )
                 return QDomElement();
             sheet.appendChild( e );
@@ -3641,17 +3611,18 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     {
         kDebug(36003)<<" insert new column: pos :"<<indexCol<<" width :"<<width<<" hidden ? "<<collapsed<<endl;
 
-        ColumnFormat* columnFormat;
+        const ColumnFormat* columnFormat;
         if ( isNonDefaultColumn )
         {
-          columnFormat = nonDefaultColumnFormat( indexCol );
+          ColumnFormat* cf = nonDefaultColumnFormat( indexCol );
+          columnFormat = cf;
 
           if ( width != -1.0 ) //safe
-            columnFormat->setWidth( (int) width );
+            cf->setWidth( (int) width );
         // if ( insertPageBreak )
         //   columnFormat->setPageBreak( true )
           if ( collapsed )
-            columnFormat->setHidden( true );
+            cf->setHidden( true );
         }
         else
         {
@@ -3777,15 +3748,16 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     {
        // kDebug(36003)<<" create non defaultrow format :"<<rowIndex<<" repeate : "<<number<<" height :"<<height<<endl;
 
-      RowFormat* rowFormat;
+      const RowFormat* rowFormat;
       if ( isNonDefaultRow )
       {
-        rowFormat = nonDefaultRowFormat( rowIndex );
+        RowFormat* rf = nonDefaultRowFormat( rowIndex );
+        rowFormat = rf;
 
         if ( height != -1.0 )
-          rowFormat->setHeight( (int) height );
+          rf->setHeight( (int) height );
         if ( collapse )
-          rowFormat->setHidden( true );
+          rf->setHidden( true );
       }
       else
       {
@@ -4292,7 +4264,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     int i = 1;
     while ( i <= maxCols )
     {
-        ColumnFormat* column = columnFormat( i );
+        const ColumnFormat* column = columnFormat( i );
 //         kDebug(36003) << "Sheet::saveOasisColRowCell: first col loop:"
 //                   << " i: " << i
 //                   << ", column: " << (column ? column->column() : 0) << endl;
@@ -4392,7 +4364,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     // we have to loop through all rows of the used area
     for ( i = 1; i <= maxRows; ++i )
     {
-        RowFormat* const row = rowFormat( i );
+        const RowFormat* row = rowFormat( i );
 
         KoGenStyle currentRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
         currentRowStyle.addPropertyPt( "style:row-height", row->dblHeight() );
@@ -4426,7 +4398,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             //   next row with different Format
             while ( j <= maxRows && !getFirstCellRow( j ) )
             {
-              RowFormat* const nextRow = rowFormat( j );
+              const RowFormat* nextRow = rowFormat( j );
 //               kDebug(36003) << "Sheet::saveOasisColRowCell: second row loop:"
 //                         << " j: " << j
 //                         << " row: " << nextRow->row() << endl;
@@ -4818,7 +4790,8 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
         }
             else if ( tagName == "row" )
         {
-            RowFormat *rl = new RowFormat( this, 0 );
+            RowFormat *rl = new RowFormat();
+            rl->setSheet( this );
             if ( rl->load( e ) )
                 insertRowFormat( rl );
             else
@@ -4826,7 +4799,8 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
         }
             else if ( tagName == "column" )
         {
-            ColumnFormat *cl = new ColumnFormat( this, 0 );
+            ColumnFormat *cl = new ColumnFormat();
+            cl->setSheet( this );
             if ( cl->load( e ) )
                 insertColumnFormat( cl );
             else
@@ -5236,8 +5210,6 @@ Sheet::~Sheet()
     d->cells.clear(); // cells destructor needs sheet to still exist
 
     delete d->defaultCell;
-    delete d->defaultRowFormat;
-    delete d->defaultColumnFormat;
     delete d->styleStorage;
     delete d->commentStorage;
     delete d->conditionsStorage;

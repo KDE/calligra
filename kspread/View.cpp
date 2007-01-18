@@ -5472,7 +5472,7 @@ void View::popupColumnMenu( const QPoint & _point )
 
       d->actions->showSelColumns->setEnabled(false);
 
-      ColumnFormat* format;
+      const ColumnFormat* format;
       //kDebug(36001) << "Column: L: " << rect.left() << endl;
       Region::ConstIterator endOfList = d->selection->constEnd();
       for (Region::ConstIterator it = d->selection->constBegin(); it != endOfList; ++it)
@@ -5560,7 +5560,7 @@ void View::popupRowMenu( const QPoint & _point )
 
       d->actions->showSelColumns->setEnabled(false);
 
-      RowFormat* format;
+      const RowFormat* format;
       Region::ConstIterator endOfList = d->selection->constEnd();
       for (Region::ConstIterator it = d->selection->constBegin(); it != endOfList; ++it)
       {
@@ -5663,7 +5663,7 @@ void View::slotListChoosePopupMenu( )
 
   if ( itemList.isEmpty() )
     return;
-  RowFormat * rl = d->activeSheet->rowFormat( d->canvas->markerRow());
+  const RowFormat * rl = d->activeSheet->rowFormat( d->canvas->markerRow());
   double tx = d->activeSheet->dblColumnPos( d->canvas->markerColumn() );
   double ty = d->activeSheet->dblRowPos( d->canvas->markerRow() );
   double h = cell->dblHeight( d->canvas->markerRow() );

@@ -150,7 +150,7 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     Q_ASSERT( 0 <= row && row <= KS_rowMax );
 
     const Sheet* sheet = sheetView->sheet();
-    Cell* const cell = sheet->cellAt( col, row );
+    const Cell* cell = sheet->cellAt( col, row );
 
     // create the effective style
     if ( cell->isPartOfMerged() )
@@ -252,7 +252,7 @@ QString CellView::testAnchor( const Cell* cell, double x, double y ) const
 void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
                                   View* view, const QPointF& coordinate,
                                   const QPoint& cellRef,
-                                  QLinkedList<QPoint> &mergedCellsPainted, Cell* cell )
+                                  QLinkedList<QPoint> &mergedCellsPainted, const Cell* cell )
 {
     Q_UNUSED( view );
     Q_UNUSED( mergedCellsPainted );
@@ -317,7 +317,7 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
 void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                                  const QPointF& paintCoordinate,
                                  const QPoint& cellCoordinate, const QRect& cellRegion,
-                                 QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView )
+                                 QLinkedList<QPoint> &mergedCellsPainted, const Cell* cell, SheetView* sheetView )
 {
     Q_UNUSED( mergedCellsPainted );
 
@@ -557,7 +557,7 @@ void CellView::paintCellBackground( QPainter& painter, const QPointF& paintCoord
 void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
                                     const QRectF &cellRect, const QPoint &cellRef,
                                     Borders paintBorder, const QRect& cellRegion,
-                                    Cell* cell, SheetView* sheetView )
+                                    const Cell* cell, SheetView* sheetView )
 {
     Q_UNUSED(cellRef);
 
@@ -824,7 +824,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 void CellView::paintCommentIndicator( QPainter& painter,
                                       const QRectF &cellRect,
                                       const QPoint &cellRef,
-                                      Cell* cell )
+                                      const Cell* cell )
 {
     // Point the little corner if there is a comment attached
     // to this cell.
@@ -870,7 +870,7 @@ void CellView::paintCommentIndicator( QPainter& painter,
 //
 void CellView::paintFormulaIndicator( QPainter& painter,
                                       const QRectF &cellRect,
-                                      Cell* cell )
+                                      const Cell* cell )
 {
   if ( cell->isFormula() &&
        cell->sheet()->getShowFormulaIndicator() &&
@@ -954,7 +954,7 @@ void CellView::paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect
 //
 void CellView::paintText( QPainter& painter,
                           const QRectF &cellRect,
-                          const QPoint &cellRef, Cell* cell )
+                          const QPoint &cellRef, const Cell* cell )
 {
   Q_UNUSED( cellRef );
 
@@ -1148,7 +1148,7 @@ void CellView::paintText( QPainter& painter,
 // Paint page borders on the page.  Only do this on the screen.
 //
 void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
-                                 const QPoint &cellRef, Borders paintBorder, Cell* cell )
+                                 const QPoint &cellRef, Borders paintBorder, const Cell* cell )
 {
   // Not screen?  Return immediately.
   if ( dynamic_cast<QPrinter*>(painter.device()) )
@@ -1599,7 +1599,7 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
 //
 // Used in paintText().
 //
-QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
+QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
 {
   Style::HAlign hAlign = style().halign();
   if ( !d->fittingWidth )
@@ -1662,7 +1662,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
         if ( style().angle() != 0 )
         {
           QString tmp2;
-          RowFormat *rl = cell->sheet()->rowFormat( cell->row() );
+          const RowFormat *rl = cell->sheet()->rowFormat( cell->row() );
           if ( d->textHeight > rl->dblHeight() )
           {
             for ( int j = d->displayText.length(); j != 0; j-- )
@@ -1740,7 +1740,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
 //
 // Used in makeLayout() and calculateTextParameters().
 //
-QFont CellView::effectiveFont( Cell* cell ) const
+QFont CellView::effectiveFont( const Cell* cell ) const
 {
     QFont tmpFont( d->style.font() );
     // Scale the font size according to the current zoom.
@@ -1765,7 +1765,7 @@ QFont CellView::effectiveFont( Cell* cell ) const
 //
 //   d->displayText
 //
-void CellView::makeLayout( SheetView* sheetView, Cell* cell )
+void CellView::makeLayout( SheetView* sheetView, const Cell* cell )
 {
   if ( d->hidden )
     return;
@@ -1856,7 +1856,7 @@ void CellView::calculateCellDimension( const Cell* cell )
 
 
 //used in Sheet::adjustColumnHelper and Sheet::adjustRow
-void CellView::calculateTextParameters( Cell* cell )
+void CellView::calculateTextParameters( const Cell* cell )
 {
   // Get the font metrics for the effective font.
   const QFontMetrics fontMetrics( effectiveFont( cell ) );
@@ -1872,7 +1872,7 @@ void CellView::calculateTextParameters( Cell* cell )
 //
 // Used in makeLayout() and calculateTextParameters().
 //
-void CellView::textOffset( const QFontMetrics& fontMetrics, Cell* cell )
+void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell* cell )
 {
     const double ascent = fontMetrics.ascent();
     Style::HAlign hAlign = d->style.halign();
@@ -2175,7 +2175,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
   }
 }
 
-void CellView::obscureHorizontalCells( SheetView* sheetView, Cell* masterCell )
+void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell* masterCell )
 {
     if ( d->hidden )
         return;
@@ -2262,7 +2262,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, Cell* masterCell )
     }
 }
 
-void CellView::obscureVerticalCells( SheetView* sheetView, Cell* masterCell )
+void CellView::obscureVerticalCells( SheetView* sheetView, const Cell* masterCell )
 {
     if ( d->hidden )
         return;

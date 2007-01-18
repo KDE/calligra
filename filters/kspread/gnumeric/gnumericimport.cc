@@ -356,16 +356,13 @@ void setColInfo(QDomNode * sheet, Sheet * table)
   QDomNode columns =  sheet->namedItem("gmr:Cols");
   QDomNode columninfo = columns.namedItem("gmr:ColInfo");
 
+  double defaultWidth = 0.0;
+  bool defaultWidthOk = false;
+
   QDomElement def = columns.toElement();
   if ( def.hasAttribute( "DefaultSizePts" ) )
   {
-    bool ok = false;
-    double d = def.attribute( "DefaultSizePts" ).toDouble( &ok );
-    if ( ok )
-    {
-      ColumnFormat::setGlobalColWidth( d );
-      table->setDefaultWidth( d );
-    }
+    defaultWidth = def.attribute( "DefaultSizePts" ).toDouble( &defaultWidthOk );
   }
 
   while( !columninfo.isNull() )
@@ -374,7 +371,9 @@ void setColInfo(QDomNode * sheet, Sheet * table)
     int column_number;
 
     column_number = e.attribute("No").toInt()+1;
-    ColumnFormat *cl = new ColumnFormat(table, column_number);
+    ColumnFormat *cl = new ColumnFormat();
+    cl->setSheet( table );
+    cl->setColumn( column_number );
     if (e.hasAttribute("Hidden"))
     {
       if (e.attribute("Hidden")=="1")
@@ -385,8 +384,12 @@ void setColInfo(QDomNode * sheet, Sheet * table)
     if (e.hasAttribute("Unit"))
     {
       //  xmm = (x_points) * (1 inch / 72 points) * (25.4 mm/ 1 inch)
-      cl->setDblWidth(e.attribute("Unit").toDouble());
-      //cl->setWidth(e.attribute("Unit").toInt());
+      bool ok = false;
+      double dbl = e.attribute( "Unit" ).toDouble( &ok );
+      if ( ok )
+        cl->setDblWidth( dbl );
+      else if ( defaultWidthOk )
+        cl->setDblWidth( defaultWidth );
     }
     table->insertColumnFormat(cl);
     columninfo = columninfo.nextSibling();
@@ -398,18 +401,13 @@ void setRowInfo(QDomNode *sheet, Sheet *table)
   QDomNode rows =  sheet->namedItem("gmr:Rows");
   QDomNode rowinfo = rows.namedItem("gmr:RowInfo");
 
-  double d;
-  bool ok = false;
+  double defaultHeight = 0.0;
+  bool defaultHeightOk = false;
 
   QDomElement def = rows.toElement();
   if ( def.hasAttribute( "DefaultSizePts" ) )
   {
-    d = def.attribute( "DefaultSizePts" ).toDouble( &ok );
-    if ( ok )
-    {
-      RowFormat::setGlobalRowHeight( d );
-      table->setDefaultHeight( d );
-    }
+    defaultHeight = def.attribute( "DefaultSizePts" ).toDouble( &defaultHeightOk );
   }
 
   while( !rowinfo.isNull() )
@@ -417,7 +415,9 @@ void setRowInfo(QDomNode *sheet, Sheet *table)
     QDomElement e = rowinfo.toElement(); // try to convert the node to an element.
     int row_number;
     row_number = e.attribute("No").toInt() + 1;
-    RowFormat *rl = new RowFormat(table, row_number);
+    RowFormat *rl = new RowFormat();
+    rl->setSheet( table );
+    rl->setRow( row_number );
 
     if (e.hasAttribute("Hidden"))
     {
@@ -428,9 +428,12 @@ void setRowInfo(QDomNode *sheet, Sheet *table)
     }
     if (e.hasAttribute("Unit"))
     {
+      bool ok = false;
       double dbl = e.attribute( "Unit" ).toDouble( &ok );
       if ( ok )
         rl->setDblHeight( dbl );
+      else if ( defaultHeightOk )
+        rl->setDblHeight( defaultHeight );
     }
     table->insertRowFormat(rl);
     rowinfo = rowinfo.nextSibling();

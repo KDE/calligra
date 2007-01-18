@@ -532,14 +532,8 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
                   */
                 kDebug(30518) << "Rotation: height: " << textHeight << endl;
 
-                RowFormat * l = table->rowFormat( row );
-                if ( l->height() < textHeight )
-                {
-                  if ( l->isDefault() )
-                    l = table->nonDefaultRowFormat( row );
-
-                  l->setHeight( textHeight + 2 );
-                }
+                if ( table->rowFormat( row )->height() < textHeight )
+                  table->nonDefaultRowFormat( row )->setHeight( textHeight + 2 );
               }
             }
           }
@@ -1120,7 +1114,9 @@ bool OpenCalcImport::readColLayouts( KoXmlElement & content, Sheet * table )
     {
       kDebug(30518) << "Inserting colLayout: " << column << endl;
 
-      ColumnFormat * col = new ColumnFormat( table, column );
+      ColumnFormat * col = new ColumnFormat();
+      col->setSheet( table );
+      col->setColumn( column );
       table->setStyle( KSpread::Region(QRect(column,1,1,KS_rowMax)), styleLayout );
       if ( width != -1.0 )
         col->setWidth( int( width ) );
@@ -1450,8 +1446,8 @@ bool OpenCalcImport::parseBody( int numOfTables )
   int step = (int) ( 80 / numOfTables );
   int progress = 15;
 
-  ColumnFormat::setGlobalColWidth( MM_TO_POINT( 22.7 ) );
-  RowFormat::setGlobalRowHeight( MM_TO_POINT( 4.3 ) );
+  m_doc->setDefaultColumnWidth( MM_TO_POINT( 22.7 ) );
+  m_doc->setDefaultRowHeight( MM_TO_POINT( 4.3 ) );
   kDebug(30518) << "Global Height: " << MM_TO_POINT( 4.3 ) << ", Global width: " << MM_TO_POINT( 22.7) << endl;
 
   while ( !sheet.isNull() )
@@ -1484,8 +1480,8 @@ bool OpenCalcImport::parseBody( int numOfTables )
       kDebug(30518) << "Copy default style to default cell" << endl;
       defaultCell->setStyle( *defaultStyle );
     }
-    table->setDefaultHeight( MM_TO_POINT( 4.3 ) );
-    table->setDefaultWidth( MM_TO_POINT( 22.7 ) );
+    table->doc()->setDefaultRowHeight( MM_TO_POINT( 4.3 ) );
+    table->doc()->setDefaultColumnWidth( MM_TO_POINT( 22.7 ) );
 
     kDebug(30518) << "Added table: " << t.attributeNS( ooNS::table, "name", QString::null ) << endl;
 

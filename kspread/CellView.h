@@ -107,7 +107,7 @@ public:
   void paintCellContents( const QRectF& paintRegion, QPainter& painter,
                           View * view, const QPointF& paintCoordinate,
                           const QPoint & cellCoordinate,
-                          QLinkedList<QPoint> &mergedCellsPainted, Cell* cell );
+                          QLinkedList<QPoint> &mergedCellsPainted, const Cell* cell );
 
   /**
    * \ingroup Painting
@@ -125,7 +125,7 @@ public:
                          const QPointF& paintCoordinate,
                          const QPoint& cellCoordinate, const QRect& cellRange,
                          QLinkedList<QPoint> &mergedCellsPainted,
-                         Cell* cell, SheetView* sheetView );
+                         const Cell* cell, SheetView* sheetView );
 
   /**
    * \ingroup Painting
@@ -142,14 +142,14 @@ public:
   void paintDefaultBorders( QPainter& painter, const QRectF &paintRegion,
                             const QRectF &cellRegion, const QPoint &cellCoordinate,
                             Borders paintBorder, const QRect& cellRange,
-                            Cell* cell, SheetView* sheetView );
+                            const Cell* cell, SheetView* sheetView );
 
   /**
    * \ingroup Layout
    * Calculates the text dimensions and the offset
    * for the current displayed text.
    */
-  void calculateTextParameters( Cell* cell );
+  void calculateTextParameters( const Cell* cell );
 
   /**
    * \return width of the text
@@ -188,7 +188,7 @@ private:
      * breaks lines of the text to fit it into the cell, obscures neighbouring
      * cells, if necessary.
      */
-    void makeLayout( SheetView* sheetView, Cell* cell );
+    void makeLayout( SheetView* sheetView, const Cell* cell );
 
   /**
    * \ingroup Layout
@@ -223,7 +223,7 @@ private:
    *
    * \internal Called from makeLayout() and calculateTextParameters().
    */
-  void textOffset( const QFontMetrics& fontMetrics, Cell* cell );
+  void textOffset( const QFontMetrics& fontMetrics, const Cell* cell );
 
   /**
    * \ingroup Layout
@@ -251,7 +251,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void obscureHorizontalCells( SheetView* sheetView, Cell* cell );
+  void obscureHorizontalCells( SheetView* sheetView, const Cell* cell );
 
   /**
    * \ingroup Layout
@@ -260,7 +260,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void obscureVerticalCells( SheetView* sheetView, Cell* cell );
+  void obscureVerticalCells( SheetView* sheetView, const Cell* cell );
 
   /**
    * \ingroup Layout
@@ -277,7 +277,7 @@ private:
    *
    * \internal
    */
-  QFont effectiveFont( Cell* cell ) const;
+  QFont effectiveFont( const Cell* cell ) const;
 
   /**
    * \ingroup Painting
@@ -293,7 +293,7 @@ private:
    *
    * \internal Called from paintText().
    */
-  QString textDisplaying( const QFontMetrics& fontMetrics, Cell* cell );
+  QString textDisplaying( const QFontMetrics& fontMetrics, const Cell* cell );
 
   /**
    * \ingroup Painting
@@ -312,7 +312,7 @@ private:
    * @internal
    */
   void paintPageBorders( QPainter& painter, const QRectF &cellRect,
-                         const QPoint &cellRef, Borders paintBorder, Cell* cell );
+                         const QPoint &cellRef, Borders paintBorder, const Cell* cell );
 
   /**
    * \ingroup Painting
@@ -321,7 +321,7 @@ private:
    * @internal
    */
   void paintText( QPainter& painter, const QRectF &cellRect,
-                  const QPoint &cellRef, Cell* cell );
+                  const QPoint &cellRef, const Cell* cell );
 
   /**
    * \ingroup Painting
@@ -338,7 +338,7 @@ private:
    * @internal
    */
   void paintCommentIndicator( QPainter& painter, const QRectF &cellRect,
-                              const QPoint &cellRef, Cell* cell );
+                              const QPoint &cellRef, const Cell* cell );
 
   /**
    * \ingroup Painting
@@ -346,7 +346,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintFormulaIndicator( QPainter& painter, const QRectF &cellRect, Cell* cell );
+  void paintFormulaIndicator( QPainter& painter, const QRectF &cellRect, const Cell* cell );
 
   /**
    * \ingroup Painting

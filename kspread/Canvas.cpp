@@ -1845,8 +1845,8 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 
   /* how many cells must we move to get to the next cell? */
   int offset = 0;
-  RowFormat *rl = 0;
-  ColumnFormat *cl = 0;
+  const RowFormat *rl = 0;
+  const ColumnFormat *cl = 0;
   switch (direction)
     /* for each case, figure out how far away the next cell is and then keep
        going one row/col at a time after that until a visible row/col is found
@@ -3646,7 +3646,7 @@ void Canvas::equalizeRow()
     return;
 
   QRect s( selection()->lastRange() );
-  RowFormat* rowFormat = sheet->rowFormat(s.top());
+  const RowFormat* rowFormat = sheet->rowFormat(s.top());
   double size = rowFormat->dblHeight();
   if ( s.top() == s.bottom() )
       return;
@@ -3664,7 +3664,7 @@ void Canvas::equalizeColumn()
     return;
 
   QRect s( selection()->lastRange() );
-  ColumnFormat* columnFormat = sheet->columnFormat(s.left());
+  const ColumnFormat* columnFormat = sheet->columnFormat(s.left());
   double size = columnFormat->dblWidth();
   if ( s.left() == s.right() )
       return;

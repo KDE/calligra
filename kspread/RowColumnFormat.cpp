@@ -47,11 +47,6 @@
 using namespace std;
 using namespace KSpread;
 
-// static variable construction
-// NOTE Stefan: These values are always overridden by the Doc c'tor.
-double ColumnFormat::s_columnWidth = 100.0;
-double RowFormat::s_rowHeight = 20.0;
-
 /*****************************************************************************
  *
  * RowFormat
@@ -69,15 +64,20 @@ public:
     RowFormat*  prev;
 };
 
-RowFormat::RowFormat( Sheet* sheet, int row )
+RowFormat::RowFormat()
     : d( new Private )
 {
-    d->sheet    = sheet;
-    d->row      = row;
-    d->height   = s_rowHeight;
+    d->sheet    = 0;
+    d->row      = 0;
+    d->height   = 0.0;
+    d->hide     = false;
     d->next     = 0;
     d->prev     = 0;
-    d->hide     = false;
+}
+
+RowFormat::RowFormat( const RowFormat& other )
+    : d( new Private( *other.d ) )
+{
 }
 
 RowFormat::~RowFormat()
@@ -87,6 +87,11 @@ RowFormat::~RowFormat()
     if ( d->prev )
         d->prev->setNext( d->next );
     delete d;
+}
+
+void RowFormat::setSheet( Sheet* sheet )
+{
+    d->sheet = sheet;
 }
 
 void RowFormat::setMMHeight( double height )
@@ -104,6 +109,13 @@ void RowFormat::setDblHeight( double height )
     // avoid unnecessary updates
     if ( qAbs( height - dblHeight() ) < DBL_EPSILON )
         return;
+
+    // default RowFormat?
+    if ( !d->sheet )
+    {
+        d->height = height;
+        return;
+    }
 
     // Lower maximum size by old height
     d->sheet->adjustSizeMaxY ( - dblHeight() );
@@ -125,8 +137,6 @@ int RowFormat::height() const
 
 double RowFormat::dblHeight() const
 {
-    if (d->row == 0)
-        return s_rowHeight;
     if( d->hide )
         return 0.0;
     return d->height;
@@ -139,6 +149,7 @@ double RowFormat::mmHeight() const
 
 QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
 {
+    Q_ASSERT( d->sheet );
     QDomElement row = doc.createElement( "row" );
     row.setAttribute( "height", d->height );
     row.setAttribute( "row", d->row - yshift );
@@ -159,6 +170,7 @@ QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
 
 bool RowFormat::load( const KoXmlElement & row, int yshift, Paste::Mode sp, bool paste )
 {
+    Q_ASSERT( d->sheet );
     bool ok;
 
     d->row = row.attribute( "row" ).toInt( &ok ) + yshift;
@@ -240,6 +252,7 @@ void RowFormat::setPrevious( RowFormat* prev )
 
 void RowFormat::setHidden( bool _hide, bool repaint )
 {
+    Q_ASSERT( d->sheet );
     if ( _hide != d->hide ) // only if we change the status
     {
         if ( _hide )
@@ -266,11 +279,7 @@ bool RowFormat::hidden() const
 
 bool RowFormat::isDefault() const
 {
-    if ( d->height != s_rowHeight )
-        return false;
-    if ( d->hide == true )
-        return false;
-    return true;
+    return !d->sheet;
 }
 
 bool RowFormat::operator==( const RowFormat& other ) const
@@ -300,15 +309,20 @@ public:
     ColumnFormat*   prev;
 };
 
-ColumnFormat::ColumnFormat( Sheet* sheet, int column )
+ColumnFormat::ColumnFormat()
     : d( new Private )
 {
-    d->sheet    = sheet;
-    d->column   = column;
-    d->width    = s_columnWidth;
+    d->sheet    = 0;
+    d->column   = 0;
+    d->width    = 0.0;
     d->hide     = false;
-    d->prev     = 0;
     d->next     = 0;
+    d->prev     = 0;
+}
+
+ColumnFormat::ColumnFormat( const ColumnFormat& other )
+    : d( new Private( *other.d ) )
+{
 }
 
 ColumnFormat::~ColumnFormat()
@@ -318,6 +332,11 @@ ColumnFormat::~ColumnFormat()
     if ( d->prev )
         d->prev->setNext( d->next );
     delete d;
+}
+
+void ColumnFormat::setSheet( Sheet* sheet )
+{
+    d->sheet = sheet;
 }
 
 void ColumnFormat::setMMWidth( double width )
@@ -335,6 +354,13 @@ void ColumnFormat::setDblWidth( double width )
     // avoid unnecessary updates
     if ( qAbs( width - dblWidth() ) < DBL_EPSILON )
         return;
+
+    // default ColumnFormat?
+    if ( !d->sheet )
+    {
+        d->width = width;
+        return;
+    }
 
     // Lower maximum size by old width
     d->sheet->adjustSizeMaxX ( - dblWidth() );
@@ -356,8 +382,6 @@ int ColumnFormat::width() const
 
 double ColumnFormat::dblWidth() const
 {
-    if (d->column == 0)
-        return s_columnWidth;
     if ( d->hide )
         return 0.0;
     return d->width;
@@ -371,6 +395,7 @@ double ColumnFormat::mmWidth() const
 
 QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
 {
+    Q_ASSERT( d->sheet );
     QDomElement col( doc.createElement( "column" ) );
     col.setAttribute( "width", d->width );
     col.setAttribute( "column", d->column - xshift );
@@ -392,6 +417,7 @@ QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
 
 bool ColumnFormat::load( const KoXmlElement & col, int xshift, Paste::Mode sp, bool paste )
 {
+    Q_ASSERT( d->sheet );
     bool ok;
     if ( col.hasAttribute( "width" ) )
     {
@@ -473,6 +499,7 @@ void ColumnFormat::setPrevious( ColumnFormat* prev )
 
 void ColumnFormat::setHidden( bool _hide )
 {
+    Q_ASSERT( d->sheet );
     if ( _hide != d->hide ) // only if we change the status
     {
         if ( _hide )
@@ -499,11 +526,7 @@ bool ColumnFormat::hidden() const
 
 bool ColumnFormat::isDefault() const
 {
-    if ( d->width != s_columnWidth )
-        return false;
-    if ( d->hide == true )
-        return false;
-    return true;
+    return !d->sheet;
 }
 
 bool ColumnFormat::operator==( const ColumnFormat& other ) const

@@ -947,8 +947,8 @@ void Selection::emitChanged(const Region& region)
     Element* element = *it;
     QRect area = element->rect();
 
-    ColumnFormat *col;
-    RowFormat *rl;
+    const ColumnFormat *col;
+    const RowFormat *rl;
     //look at if column is hiding.
     //if it's hiding refreshing column+1 (or column -1 )
     int left = area.left();

@@ -133,11 +133,8 @@ bool HideShowManipulator::preProcessing()
           int col;
           for (col = 1; col < range.left(); ++col)
           {
-            ColumnFormat* format = m_sheet->columnFormat(col);
-            if (!format->hidden())
-            {
+            if ( !m_sheet->columnFormat( col )->hidden() )
               break;
-            }
           }
           if (col == range.left())
           {
@@ -146,8 +143,7 @@ bool HideShowManipulator::preProcessing()
         }
         for (int col = range.left(); col <= range.right(); ++col)
         {
-          ColumnFormat* format = m_sheet->columnFormat(col);
-          if (format->hidden())
+          if ( m_sheet->columnFormat( col )->hidden() )
           {
             region.add(QRect(col, 1, 1, KS_rowMax));
           }
@@ -160,7 +156,7 @@ bool HideShowManipulator::preProcessing()
           int row;
           for (row = 1; row < range.top(); ++row)
           {
-            RowFormat* format = m_sheet->rowFormat(row);
+            const RowFormat* format = m_sheet->rowFormat(row);
             if (!format->hidden())
             {
               break;
@@ -173,7 +169,7 @@ bool HideShowManipulator::preProcessing()
         }
         for (int row = range.top(); row <= range.bottom(); ++row)
         {
-          RowFormat* format = m_sheet->rowFormat(row);
+          const RowFormat* format = m_sheet->rowFormat(row);
           if (format->hidden())
           {
             region.add(QRect(1, row, KS_colMax, 1));
@@ -390,8 +386,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               if (!m_newWidths.contains(col))
               {
                 m_newWidths[col] = -1.0;
-                ColumnFormat* format = m_sheet->columnFormat(col);
-                m_oldWidths[col] = format->dblWidth();
+                m_oldWidths[col] = m_sheet->columnFormat( col )->dblWidth();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
@@ -404,7 +399,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               if (!m_newHeights.contains(row))
               {
                 m_newHeights[row] = -1.0;
-                RowFormat* format = m_sheet->rowFormat(row);
+                const RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->dblHeight();
               }
               if (!cell->isEmpty() && !cell->isPartOfMerged())
@@ -430,8 +425,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               if (!m_newWidths.contains(col))
               {
                 m_newWidths[col] = -1.0;
-                ColumnFormat* format = m_sheet->columnFormat(col);
-                m_oldWidths[col] = format->dblWidth();
+                m_oldWidths[col] = m_sheet->columnFormat( col )->dblWidth();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
@@ -444,7 +438,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               if (!m_newHeights.contains(row))
               {
                 m_newHeights[row] = -1.0;
-                RowFormat* format = m_sheet->rowFormat(row);
+                const RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->dblHeight();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
@@ -470,8 +464,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               if (!m_newWidths.contains(col))
               {
                 m_newWidths[col] = -1.0;
-                ColumnFormat* format = m_sheet->columnFormat(col);
-                m_oldWidths[col] = format->dblWidth();
+                m_oldWidths[col] = m_sheet->columnFormat( col )->dblWidth();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
@@ -484,7 +477,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               if (!m_newHeights.contains(row))
               {
                 m_newHeights[row] = -1.0;
-                RowFormat* format = m_sheet->rowFormat(row);
+                const RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->dblHeight();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
