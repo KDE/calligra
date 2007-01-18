@@ -86,7 +86,8 @@ void AccountsView::AccountItem::add
 }
 
 AccountsView::AccountsView( Project *project, Part *part, QWidget *parent )
-        : ViewBase( part, parent )
+        : ViewBase( part, parent ),
+        m_project(0)
 {
     m_date = QDate::currentDate();
     m_period = 0;
