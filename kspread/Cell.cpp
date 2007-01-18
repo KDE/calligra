@@ -494,9 +494,9 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
     d->extra()->mergedWidth = 0.0;
     d->extra()->mergedHeight = 0.0;
     for ( int x = _col; x <= _col + _x; ++x )
-        d->extra()->mergedWidth += d->sheet->columnFormat( x )->dblWidth();
+        d->extra()->mergedWidth += d->sheet->columnFormat( x )->width();
     for ( int y = _row; y <= _row + _y; ++y )
-        d->extra()->mergedHeight += d->sheet->rowFormat( y )->dblHeight();
+        d->extra()->mergedHeight += d->sheet->rowFormat( y )->height();
 }
 
 void Cell::move( int col, int row )
@@ -945,22 +945,22 @@ int Cell::defineAlignX()
     return align;
 }
 
-double Cell::dblWidth( int _col ) const
+double Cell::width( int _col ) const
 {
     if ( _col < 0 )
         _col = d->column;
     if ( d->hasExtra() && d->extra()->mergedXCells != 0 )
         return d->extra()->mergedWidth;
-    return d->sheet->columnFormat( _col )->dblWidth();
+    return d->sheet->columnFormat( _col )->width();
 }
 
-double Cell::dblHeight( int _row ) const
+double Cell::height( int _row ) const
 {
     if ( _row < 0 )
         _row = d->row;
     if ( d->hasExtra() && d->extra()->mergedYCells != 0 )
         return d->extra()->mergedHeight;
-    return d->sheet->rowFormat( _row )->dblHeight();
+    return d->sheet->rowFormat( _row )->height();
 }
 
 ///////////////////////////////////////////

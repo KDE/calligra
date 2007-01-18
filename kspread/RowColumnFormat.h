@@ -66,7 +66,7 @@ public:
      * @return the height in zoomed pixels as double value.
      * Use this function, if you want to work with height without having rounding problems.
      */
-    double dblHeight() const;
+    double height() const;
 
     /**
      * Sets the height to _h zoomed pixels.
@@ -74,7 +74,7 @@ public:
      * @param _h is calculated in display pixels as double value. The function cares for zooming.
      * Use this function when setting the height, to not get rounding problems.
      */
-    void setDblHeight( double _h );
+    void setHeight( double _h );
 
     /**
      * @reimp
@@ -126,7 +126,7 @@ public:
      * Use this function, if you want to use the width and later restore it back,
      * so you don't get rounding problems
      */
-    double dblWidth() const;
+    double width() const;
 
     /**
      * Sets the width to _w zoomed pixels as double value.
@@ -135,7 +135,7 @@ public:
      * @param _w is calculated in display pixels. The function cares for
      *           zooming.
      */
-    void setDblWidth( double _w );
+    void setWidth( double _w );
 
     /**
      * @reimp

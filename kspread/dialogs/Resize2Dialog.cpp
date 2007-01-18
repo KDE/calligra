@@ -74,7 +74,7 @@ ResizeRow::ResizeRow( View* parent, const char* name )
 
     QRect selection( m_pView->selection()->selection() );
     const RowFormat* rl = m_pView->activeSheet()->rowFormat( selection.top() );
-    rowHeight = rl->dblHeight();
+    rowHeight = rl->height();
 
     QLabel * label1 = new QLabel( page );
     label1->setText( i18n( "Height:" ) );
@@ -125,7 +125,7 @@ void ResizeRow::slotDefault()
   Sheet* sheet = m_pView->activeSheet();
   if (!sheet)
     return;
-  double points = sheet->rowFormat(0)->dblHeight();
+  double points = sheet->rowFormat(0)->height();
   m_pHeight->setValue(KoUnit::toUserValue(points, m_pView->doc()->unit()));
 }
 
@@ -148,7 +148,7 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
 
     QRect selection( m_pView->selection()->selection() );
     const ColumnFormat* cl = m_pView->activeSheet()->columnFormat( selection.left() );
-    columnWidth = cl->dblWidth();
+    columnWidth = cl->width();
 
     QLabel * label1 = new QLabel( page );
     label1->setText( i18n( "Width:" ) );
@@ -200,7 +200,7 @@ void ResizeColumn::slotDefault()
   Sheet* sheet = m_pView->activeSheet();
   if (!sheet)
     return;
-  double points = sheet->columnFormat(0)->dblWidth();
+  double points = sheet->columnFormat(0)->width();
   m_pWidth->setValue(KoUnit::toUserValue(points, m_pView->doc()->unit()));
 }
 

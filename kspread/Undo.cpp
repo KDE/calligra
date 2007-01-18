@@ -1406,7 +1406,7 @@ void UndoDelete::createListCell( QByteArray &listCell,QLinkedList<columnSize> &l
            {
                 columnSize tmpSize;
                 tmpSize.columnNumber=y;
-                tmpSize.columnWidth=cl->dblWidth();
+                tmpSize.columnWidth=cl->width();
                 listCol.append(tmpSize);
            }
         }
@@ -1422,7 +1422,7 @@ void UndoDelete::createListCell( QByteArray &listCell,QLinkedList<columnSize> &l
                 {
                 rowSize tmpSize;
                 tmpSize.rowNumber=y;
-                tmpSize.rowHeight=rw->dblHeight();
+                tmpSize.rowHeight=rw->height();
                 listRow.append(tmpSize);
                 }
         }
@@ -1454,7 +1454,7 @@ void UndoDelete::undo()
         for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-           cl->setDblWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     }
 
@@ -1463,7 +1463,7 @@ void UndoDelete::undo()
         for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
-           rw->setDblHeight((*it2).rowHeight);
+           rw->setHeight((*it2).rowHeight);
         }
     }
 
@@ -1490,7 +1490,7 @@ void UndoDelete::redo()
         for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-           cl->setDblWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     }
 
@@ -1499,7 +1499,7 @@ void UndoDelete::redo()
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
-           rw->setDblHeight((*it2).rowHeight);
+           rw->setHeight((*it2).rowHeight);
         }
     }
 
@@ -1642,7 +1642,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
-	       tmpSize.columnWidth=cl->dblWidth();
+	       tmpSize.columnWidth=cl->width();
 	       listCol.append(tmpSize);
 	     }
         }
@@ -1656,7 +1656,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;
-	       tmpSize.rowHeight=rw->dblHeight();
+	       tmpSize.rowHeight=rw->height();
 	       listRow.append(tmpSize);
 	     }
         }
@@ -1670,7 +1670,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
-	       tmpSize.columnWidth=cl->dblWidth();
+	       tmpSize.columnWidth=cl->width();
 	       listCol.append(tmpSize);
 	     }
         }
@@ -1681,7 +1681,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;
-	       tmpSize.rowHeight=rw->dblHeight();
+	       tmpSize.rowHeight=rw->height();
 	       listRow.append(tmpSize);
 	     }
         }
@@ -1715,7 +1715,7 @@ void UndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-           cl->setDblWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     }
     else if( Region::Range( m_rctRect ).isRow() ) // complete row(s)
@@ -1724,7 +1724,7 @@ void UndoResizeColRow::undo()
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
-           rw->setDblHeight((*it2).rowHeight);
+           rw->setHeight((*it2).rowHeight);
         }
     }
     else // row and column
@@ -1733,13 +1733,13 @@ void UndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-           cl->setDblWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     QLinkedList<rowSize>::Iterator it1;
     for ( it1 = m_lstRow.begin(); it1 != m_lstRow.end(); ++it1 )
         {
            RowFormat *rw=sheet->nonDefaultRowFormat((*it1).rowNumber);
-           rw->setDblHeight((*it1).rowHeight);
+           rw->setHeight((*it1).rowHeight);
         }
     }
     }
@@ -1766,7 +1766,7 @@ void UndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-           cl->setDblWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     }
     else if( Region::Range( m_rctRect ).isRow() ) // complete row(s)
@@ -1775,7 +1775,7 @@ void UndoResizeColRow::redo()
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
-           rw->setDblHeight((*it2).rowHeight);
+           rw->setHeight((*it2).rowHeight);
         }
     }
     else // row and column
@@ -1784,13 +1784,13 @@ void UndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-           cl->setDblWidth((*it2).columnWidth);
+           cl->setWidth((*it2).columnWidth);
         }
     QLinkedList<rowSize>::Iterator it1;
     for ( it1 = m_lstRedoRow.begin(); it1 != m_lstRedoRow.end(); ++it1 )
         {
            RowFormat *rw=sheet->nonDefaultRowFormat((*it1).rowNumber);
-           rw->setDblHeight((*it1).rowHeight);
+           rw->setHeight((*it1).rowHeight);
         }
     }
     }
@@ -2473,7 +2473,7 @@ void UndoCellPaste::createListCell(QByteArray& listCell,
         {
           columnSize tmpSize;
           tmpSize.columnNumber=y;
-          tmpSize.columnWidth=cl->dblWidth();
+          tmpSize.columnWidth=cl->width();
           listCol.append(tmpSize);
         }
       }
@@ -2489,7 +2489,7 @@ void UndoCellPaste::createListCell(QByteArray& listCell,
         {
           rowSize tmpSize;
           tmpSize.rowNumber=y;
-          tmpSize.rowHeight=rw->dblHeight();
+          tmpSize.rowHeight=rw->height();
           listRow.append(tmpSize);
         }
       }
@@ -2530,7 +2530,7 @@ void UndoCellPaste::undo()
         for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
           ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-          cl->setDblWidth((*it2).columnWidth);
+          cl->setWidth((*it2).columnWidth);
         }
       }
       else
@@ -2546,7 +2546,7 @@ void UndoCellPaste::undo()
         for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
           RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
-          rw->setDblHeight((*it2).rowHeight);
+          rw->setHeight((*it2).rowHeight);
         }
       }
       else
@@ -2712,7 +2712,7 @@ void UndoCellPaste::redo()
       for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
       {
         ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-        cl->setDblWidth((*it2).columnWidth);
+        cl->setWidth((*it2).columnWidth);
       }
     }
     else if ((*it)->isRow())
@@ -2721,7 +2721,7 @@ void UndoCellPaste::redo()
       for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
       {
         RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
-        rw->setDblHeight((*it2).rowHeight);
+        rw->setHeight((*it2).rowHeight);
       }
     }
   } // for (Region::...

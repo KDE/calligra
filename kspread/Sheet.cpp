@@ -335,8 +335,8 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
 
   d->maxColumn = 256;
   d->maxRow = 256;
-  d->sizeMaxX = KS_colMax * doc()->defaultColumnFormat()->dblWidth(); // default is max cols * default width
-  d->sizeMaxY = KS_rowMax * doc()->defaultRowFormat()->dblHeight(); // default is max rows * default height
+  d->sizeMaxX = KS_colMax * doc()->defaultColumnFormat()->width(); // default is max cols * default width
+  d->sizeMaxY = KS_rowMax * doc()->defaultRowFormat()->height(); // default is max rows * default height
 
   d->scrollBarUpdates = true;
 
@@ -687,7 +687,7 @@ int Sheet::leftColumn( double _xpos, double &_left ) const
     _left = 0.0;
 
     int col = 1;
-    double x = columnFormat( col )->dblWidth();
+    double x = columnFormat( col )->width();
     while ( x < _xpos )
     {
         // Should never happen
@@ -696,9 +696,9 @@ int Sheet::leftColumn( double _xpos, double &_left ) const
             kDebug(36001) << "Sheet:leftColumn: invalid column (col: " << col + 1 << ')' << endl;
             return KS_colMax + 1; //Return out of range value, so other code can react on this
         }
-        _left += columnFormat( col )->dblWidth();
+        _left += columnFormat( col )->width();
         col++;
-        x += columnFormat( col )->dblWidth();
+        x += columnFormat( col )->width();
     }
 
     return col;
@@ -707,7 +707,7 @@ int Sheet::leftColumn( double _xpos, double &_left ) const
 int Sheet::rightColumn( double _xpos ) const
 {
     int col = 1;
-    double x = columnFormat( col )->dblWidth();
+    double x = columnFormat( col )->width();
     while ( x <= _xpos )
     {
         // Should never happen
@@ -717,7 +717,7 @@ int Sheet::rightColumn( double _xpos ) const
                   return KS_colMax + 1; //Return out of range value, so other code can react on this
         }
         col++;
-        x += columnFormat( col )->dblWidth();
+        x += columnFormat( col )->width();
     }
 
     return col;
@@ -728,7 +728,7 @@ int Sheet::topRow( double _ypos, double & _top ) const
     _top = 0.0;
 
     int row = 1;
-    double y = rowFormat( row )->dblHeight();
+    double y = rowFormat( row )->height();
     while ( y < _ypos )
     {
         // Should never happen
@@ -737,9 +737,9 @@ int Sheet::topRow( double _ypos, double & _top ) const
             kDebug(36001) << "Sheet:topRow: invalid row (row: " << row + 1 << ')' << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
         }
-        _top += rowFormat( row )->dblHeight();
+        _top += rowFormat( row )->height();
         row++;
-        y += rowFormat( row )->dblHeight();
+        y += rowFormat( row )->height();
     }
 
     return row;
@@ -748,7 +748,7 @@ int Sheet::topRow( double _ypos, double & _top ) const
 int Sheet::bottomRow( double _ypos ) const
 {
     int row = 1;
-    double y = rowFormat( row )->dblHeight();
+    double y = rowFormat( row )->height();
     while ( y <= _ypos )
     {
         // Should never happen
@@ -758,7 +758,7 @@ int Sheet::bottomRow( double _ypos ) const
                   return KS_rowMax + 1; //Return out of range value, so other code can react on this
         }
         row++;
-        y += rowFormat( row )->dblHeight();
+        y += rowFormat( row )->height();
     }
 
     return row;
@@ -776,7 +776,7 @@ double Sheet::dblColumnPos( int _col ) const
             return x;
         }
 
-        x += columnFormat( col )->dblWidth();
+        x += columnFormat( col )->width();
     }
 
     return x;
@@ -801,7 +801,7 @@ double Sheet::dblRowPos( int _row ) const
             return y;
         }
 
-        y += rowFormat( row )->dblHeight();
+        y += rowFormat( row )->height();
     }
 
     return y;
@@ -1130,13 +1130,13 @@ void Sheet::insertColumns( int col, int number )
     for( int i=0; i<number; i++ )
     {
         // Recalculate range max (minus size of last column)
-        d->sizeMaxX -= columnFormat( KS_colMax )->dblWidth();
+        d->sizeMaxX -= columnFormat( KS_colMax )->width();
 
         d->cells.insertColumn( col );
         d->columns.insertColumn( col );
 
         //Recalculate range max (plus size of new column)
-        d->sizeMaxX += columnFormat( col+i )->dblWidth();
+        d->sizeMaxX += columnFormat( col+i )->width();
     }
     foreach ( Sheet* sheet, map()->sheetList() )
     {
@@ -1155,13 +1155,13 @@ void Sheet::insertRows( int row, int number )
     for( int i=0; i<number; i++ )
     {
         // Recalculate range max (minus size of last row)
-        d->sizeMaxY -= rowFormat( KS_rowMax )->dblHeight();
+        d->sizeMaxY -= rowFormat( KS_rowMax )->height();
 
         d->cells.insertRow( row );
         d->rows.insertRow( row );
 
         //Recalculate range max (plus size of new row)
-        d->sizeMaxY += rowFormat( row )->dblHeight();
+        d->sizeMaxY += rowFormat( row )->height();
     }
     foreach ( Sheet* sheet, map()->sheetList() )
     {
@@ -1180,13 +1180,13 @@ void Sheet::deleteColumns( int col, int number )
     for ( int i = 0; i < number; ++i )
     {
         // Recalculate range max (minus size of removed column)
-        d->sizeMaxX -= columnFormat( col )->dblWidth();
+        d->sizeMaxX -= columnFormat( col )->width();
 
         d->cells.removeColumn( col );
         d->columns.removeColumn( col );
 
         //Recalculate range max (plus size of new column)
-        d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
+        d->sizeMaxX += columnFormat( KS_colMax )->width();
     }
     foreach ( Sheet* sheet, map()->sheetList() )
     {
@@ -1205,13 +1205,13 @@ void Sheet::deleteRows( int row, int number )
     for( int i=0; i<number; i++ )
     {
         // Recalculate range max (minus size of removed row)
-        d->sizeMaxY -= rowFormat( row )->dblHeight();
+        d->sizeMaxY -= rowFormat( row )->height();
 
         d->cells.removeRow( row );
         d->rows.removeRow( row );
 
         //Recalculate range max (plus size of new row)
-        d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
+        d->sizeMaxY += rowFormat( KS_rowMax )->height();
     }
     foreach ( Sheet* sheet, map()->sheetList() )
     {
@@ -3618,7 +3618,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
           columnFormat = cf;
 
           if ( width != -1.0 ) //safe
-            cf->setDblWidth( width );
+            cf->setWidth( width );
         // if ( insertPageBreak )
         //   columnFormat->setPageBreak( true )
           if ( collapsed )
@@ -3755,7 +3755,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
         rowFormat = rf;
 
         if ( height != -1.0 )
-          rf->setDblHeight( height );
+          rf->setHeight( height );
         if ( collapse )
           rf->setHidden( true );
       }
@@ -4270,7 +4270,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //                   << ", column: " << (column ? column->column() : 0) << endl;
 
         KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
-        currentColumnStyle.addPropertyPt( "style:column-width", column->dblWidth() );
+        currentColumnStyle.addPropertyPt( "style:column-width", column->width() );
         currentColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         //style default layout for column
@@ -4318,7 +4318,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           }
 #if 0
           KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
-          nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );
+          nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->width() );
           nextColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
           KoGenStyle nextDefaultCellStyle; // the type is determined in saveOasisCellStyle
@@ -4367,7 +4367,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         const RowFormat* row = rowFormat( i );
 
         KoGenStyle currentRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
-        currentRowStyle.addPropertyPt( "style:row-height", row->dblHeight() );
+        currentRowStyle.addPropertyPt( "style:row-height", row->height() );
         currentRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         // default cell style for row
@@ -4416,7 +4416,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 #if 0
               // create the Oasis representation of the format for the comparison
               KoGenStyle nextRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
-              nextRowStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );
+              nextRowStyle.addPropertyPt( "style:row-height", nextRow->height() );
               nextRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
               // default cell style name for next row

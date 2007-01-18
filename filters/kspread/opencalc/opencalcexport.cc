@@ -528,7 +528,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
     const ColumnFormat * column = sheet->columnFormat( i );
     ColumnStyle cs;
     cs.breakB = ::Style::automatic;
-    cs.size   = POINT_TO_MM( column->dblWidth() ) / 10;
+    cs.size   = POINT_TO_MM( column->width() ) / 10;
     bool hide = column->hidden();
 
     int j        = i + 1;
@@ -538,7 +538,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
       const ColumnFormat *c = sheet->columnFormat( j );
       ColumnStyle cs1;
       cs1.breakB = ::Style::automatic;
-      cs1.size   = POINT_TO_MM( c->dblWidth() ) / 10;
+      cs1.size   = POINT_TO_MM( c->width() ) / 10;
 
       if ( ColumnStyle::isEqual( &cs, cs1 ) && ( hide == c->hidden() ) )
         ++repeated;
@@ -565,7 +565,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
     const RowFormat * row = sheet->rowFormat( i );
     RowStyle rs;
     rs.breakB = ::Style::automatic;
-    rs.size   = POINT_TO_MM( row->dblHeight() ) / 10;
+    rs.size   = POINT_TO_MM( row->height() ) / 10;
 
     QDomElement rowElem = doc.createElement( "table:table-row" );
     rowElem.setAttribute( "table:style-name", m_styles.rowStyle( rs ) );

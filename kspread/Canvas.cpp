@@ -437,8 +437,8 @@ void Canvas::validateSelection()
             if ( !d->validationInfo )
                 d->validationInfo = new QLabel(  this );
             kDebug(36001)<<" display info validation\n";
-            double u = cell->dblWidth( col );
-            double v = cell->dblHeight( row );
+            double u = cell->width( col );
+            double v = cell->height( row );
             double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
             double ypos = sheet->dblRowPos( markerRow() ) - yOffset();
             // Special treatment for obscured cells.
@@ -449,8 +449,8 @@ void Canvas::validateSelection()
                 int moveY = cell->row();
 
                 // Use the obscuring cells dimensions
-                u = cell->dblWidth( moveX );
-                v = cell->dblHeight( moveY );
+                u = cell->width( moveX );
+                v = cell->height( moveY );
                 xpos = sheet->dblColumnPos( moveX );
                 ypos = sheet->dblRowPos( moveY );
             }
@@ -936,7 +936,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
         CellView cellView = view()->sheetView( sheet )->cellView( col, row );
-        anchor = cellView.testAnchor( cell, cell->dblWidth() - ev_PosX + xpos, ev_PosY - ypos );
+        anchor = cellView.testAnchor( cell, cell->width() - ev_PosX + xpos, ev_PosY - ypos );
     }
     else
     {
@@ -1629,8 +1629,8 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   const QPoint dragAnchor = selection()->boundingRect().topLeft();
   double xpos = sheet->dblColumnPos( dragAnchor.x() );
   double ypos = sheet->dblRowPos( dragAnchor.y() );
-  double width  = sheet->columnFormat( dragAnchor.x() )->dblWidth();
-  double height = sheet->rowFormat( dragAnchor.y() )->dblHeight();
+  double width  = sheet->columnFormat( dragAnchor.x() )->width();
+  double height = sheet->rowFormat( dragAnchor.y() )->height();
 
   // consider also the selection rectangle
   const QRectF noGoArea( xpos - 1, ypos - 1, width + 3, height + 3 );
@@ -1686,8 +1686,8 @@ void Canvas::dropEvent( QDropEvent * _ev )
 
   double xpos = sheet->dblColumnPos( selection()->lastRange().left() );
   double ypos = sheet->dblRowPos( selection()->lastRange().top() );
-  double width  = sheet->columnFormat( selection()->lastRange().left() )->dblWidth();
-  double height = sheet->rowFormat( selection()->lastRange().top() )->dblHeight();
+  double width  = sheet->columnFormat( selection()->lastRange().left() )->width();
+  double height = sheet->rowFormat( selection()->lastRange().top() )->height();
 
   const QRectF noGoArea( xpos - 1, ypos - 1, width + 3, height + 3 );
 
@@ -3399,10 +3399,10 @@ bool Canvas::createEditor( bool clear,  bool focus )
         d->editWidget->setEditMode( true );
         d->cellEditor = new KSpread::CellEditor( cell, this, doc()->captureAllArrowKeys() );
 
-        double w = cell->dblWidth( markerColumn() );
-        double h = cell->dblHeight( markerRow() );
-        double min_w = cell->dblWidth( markerColumn() );
-        double min_h = cell->dblHeight( markerRow() );
+        double w = cell->width( markerColumn() );
+        double h = cell->height( markerRow() );
+        double min_w = cell->width( markerColumn() );
+        double min_h = cell->height( markerRow() );
 
         double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
 
@@ -3647,12 +3647,12 @@ void Canvas::equalizeRow()
 
   QRect s( selection()->lastRange() );
   const RowFormat* rowFormat = sheet->rowFormat(s.top());
-  double size = rowFormat->dblHeight();
+  double size = rowFormat->height();
   if ( s.top() == s.bottom() )
       return;
   for ( int i = s.top() + 1; i <= s.bottom(); i++ )
   {
-      size = qMax( sheet->rowFormat(i)->dblHeight(), size );
+      size = qMax( sheet->rowFormat(i)->height(), size );
   }
   d->view->vBorderWidget()->equalizeRow(size);
 }
@@ -3665,13 +3665,13 @@ void Canvas::equalizeColumn()
 
   QRect s( selection()->lastRange() );
   const ColumnFormat* columnFormat = sheet->columnFormat(s.left());
-  double size = columnFormat->dblWidth();
+  double size = columnFormat->width();
   if ( s.left() == s.right() )
       return;
 
   for(int i=s.left()+1;i<=s.right();i++)
   {
-    size = qMax( sheet->columnFormat(i)->dblWidth(), size );
+    size = qMax( sheet->columnFormat(i)->width(), size );
   }
   d->view->hBorderWidget()->equalizeColumn(size);
 }
@@ -4122,8 +4122,8 @@ void Canvas::showToolTip( const QPoint& p )
         tipText = tipText.left(maxLen).append("...");
 
     // Determine position and width of the current cell.
-    double u = cell->dblWidth( col );
-    double v = cell->dblHeight( row );
+    double u = cell->width( col );
+    double v = cell->height( row );
 
     // Special treatment for obscured cells.
     if ( cell->isPartOfMerged() )
@@ -4133,8 +4133,8 @@ void Canvas::showToolTip( const QPoint& p )
       const int moveY = cell->row();
 
       // Use the obscuring cells dimensions
-      u = cell->dblWidth( moveX );
-      v = cell->dblHeight( moveY );
+      u = cell->width( moveX );
+      v = cell->height( moveY );
       xpos = sheet->dblColumnPos( moveX );
       ypos = sheet->dblRowPos( moveY );
     }

@@ -387,9 +387,9 @@ void setColInfo(QDomNode * sheet, Sheet * table)
       bool ok = false;
       double dbl = e.attribute( "Unit" ).toDouble( &ok );
       if ( ok )
-        cl->setDblWidth( dbl );
+        cl->setWidth( dbl );
       else if ( defaultWidthOk )
-        cl->setDblWidth( defaultWidth );
+        cl->setWidth( defaultWidth );
     }
     table->insertColumnFormat(cl);
     columninfo = columninfo.nextSibling();
@@ -431,9 +431,9 @@ void setRowInfo(QDomNode *sheet, Sheet *table)
       bool ok = false;
       double dbl = e.attribute( "Unit" ).toDouble( &ok );
       if ( ok )
-        rl->setDblHeight( dbl );
+        rl->setHeight( dbl );
       else if ( defaultHeightOk )
-        rl->setDblHeight( defaultHeight );
+        rl->setHeight( defaultHeight );
     }
     table->insertRowFormat(rl);
     rowinfo = rowinfo.nextSibling();

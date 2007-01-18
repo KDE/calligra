@@ -116,8 +116,8 @@ void Inspector::Private::handleCell()
 
   new Q3ListViewItem( cellView, "Link", cell->link() );
 
-  new Q3ListViewItem( cellView, "Width", QString::number( cell->dblWidth() ) );
-  new Q3ListViewItem( cellView, "Height", QString::number( cell->dblHeight() ) );
+  new Q3ListViewItem( cellView, "Width", QString::number( cell->width() ) );
+  new Q3ListViewItem( cellView, "Height", QString::number( cell->height() ) );
 }
 
 void Inspector::Private::handleFormat()

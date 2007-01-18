@@ -332,8 +332,8 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             case Style::VAlignUndefined:
                 break;
             }
-            line+=" width=\""+QString::number(cell->dblWidth())+"\"";
-            line+=" height=\""+QString::number(cell->dblHeight())+"\"";
+            line+=" width=\""+QString::number(cell->width())+"\"";
+            line+=" height=\""+QString::number(cell->height())+"\"";
 
             if (cell->mergedXCells()>0)
             {

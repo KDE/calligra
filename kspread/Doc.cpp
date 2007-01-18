@@ -213,8 +213,8 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->captureAllArrowKeys = true;
 
   QFontMetricsF fontMetrics( KoGlobal::defaultFont() );
-  d->defaultRowFormat->setDblHeight( fontMetrics.height() );
-  d->defaultColumnFormat->setDblWidth( fontMetrics.height() * 5 );
+  d->defaultRowFormat->setHeight( fontMetrics.height() );
+  d->defaultColumnFormat->setWidth( fontMetrics.height() * 5 );
 
   documents().append( this );
 
@@ -377,12 +377,12 @@ const RowFormat* Doc::defaultRowFormat() const
 
 void Doc::setDefaultColumnWidth( double width )
 {
-    d->defaultColumnFormat->setDblWidth( width );
+    d->defaultColumnFormat->setWidth( width );
 }
 
 void Doc::setDefaultRowHeight( double height )
 {
-    d->defaultRowFormat->setDblHeight( height );
+    d->defaultRowFormat->setHeight( height );
 }
 
 void Doc::saveConfig()
@@ -530,8 +530,8 @@ QDomDocument Doc::saveXML()
 #endif
 
     QDomElement defaults = doc.createElement( "defaults" );
-    defaults.setAttribute( "row-height", d->defaultRowFormat->dblHeight() );
-    defaults.setAttribute( "col-width", d->defaultColumnFormat->dblWidth() );
+    defaults.setAttribute( "row-height", d->defaultRowFormat->height() );
+    defaults.setAttribute( "col-width", d->defaultColumnFormat->width() );
     spread.appendChild( defaults );
 
     QDomElement s = styleManager()->save( doc );
@@ -602,13 +602,13 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle( Doc::STYLE_COLUMN_USER, "table-column" );
-    defaultColumnStyle.addPropertyPt( "style:column-width", d->defaultColumnFormat->dblWidth() );
+    defaultColumnStyle.addPropertyPt( "style:column-width", d->defaultColumnFormat->width() );
     defaultColumnStyle.setDefaultStyle( true );
     mainStyles.lookup( defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering );
 
     // Saving the default row style
     KoGenStyle defaultRowStyle( Doc::STYLE_ROW_USER, "table-row" );
-    defaultRowStyle.addPropertyPt( "style:row-height", d->defaultRowFormat->dblHeight() );
+    defaultRowStyle.addPropertyPt( "style:row-height", d->defaultRowFormat->height() );
     defaultRowStyle.setDefaultStyle( true );
     mainStyles.lookup( defaultRowStyle, "Default", KoGenStyles::DontForceNumbering );
 
@@ -955,7 +955,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         if ( width != -1.0 )
         {
 //           kDebug() << "\tstyle:column-width: " << width << endl;
-          d->defaultColumnFormat->setDblWidth( width );
+          d->defaultColumnFormat->setWidth( width );
         }
       }
     }
@@ -974,7 +974,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         if ( height != -1.0 )
         {
 //           kDebug() << "\tstyle:row-height: " << height << endl;
-          d->defaultRowFormat->setDblHeight( height );
+          d->defaultRowFormat->setHeight( height );
         }
       }
     }
@@ -1051,14 +1051,14 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
     double dim = defaults.attribute( "row-height" ).toDouble( &ok );
     if ( !ok )
       return false;
-    d->defaultRowFormat->setDblHeight( dim );
+    d->defaultRowFormat->setHeight( dim );
 
     dim = defaults.attribute( "col-width" ).toDouble( &ok );
 
     if ( !ok )
       return false;
 
-    d->defaultColumnFormat->setDblWidth( dim );
+    d->defaultColumnFormat->setWidth( dim );
   }
 
   d->refs.clear();

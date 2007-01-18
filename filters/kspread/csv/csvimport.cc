@@ -130,7 +130,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     int i;
-    double init = sheet->nonDefaultColumnFormat( 1 )->dblWidth();
+    double init = sheet->nonDefaultColumnFormat( 1 )->width();
     Q3MemArray<double> widths( numCols );
     for ( i = 0; i < numCols; ++i )
       widths[i] = init;
@@ -273,7 +273,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     for ( i = 0; i < numCols; ++i )
     {
       ColumnFormat * c  = sheet->nonDefaultColumnFormat( i + 1 );
-      c->setDblWidth( widths[i] );
+      c->setWidth( widths[i] );
     }
 
     emit sigProgress( 100 );

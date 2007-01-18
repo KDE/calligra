@@ -94,10 +94,10 @@ void RowFormat::setSheet( Sheet* sheet )
     d->sheet = sheet;
 }
 
-void RowFormat::setDblHeight( double height )
+void RowFormat::setHeight( double height )
 {
     // avoid unnecessary updates
-    if ( qAbs( height - dblHeight() ) < DBL_EPSILON )
+    if ( qAbs( height - this->height() ) < DBL_EPSILON )
         return;
 
     // default RowFormat?
@@ -108,19 +108,19 @@ void RowFormat::setDblHeight( double height )
     }
 
     // Lower maximum size by old height
-    d->sheet->adjustSizeMaxY ( - dblHeight() );
+    d->sheet->adjustSizeMaxY ( - this->height() );
 
     d->height = height;
 
     // Rise maximum size by new height
-    d->sheet->adjustSizeMaxY ( dblHeight() );
+    d->sheet->adjustSizeMaxY ( this->height() );
     d->sheet->print()->updatePrintRepeatRowsHeight();
     d->sheet->print()->updateNewPageListY ( row() );
 
     d->sheet->emit_updateRow( this, d->row );
 }
 
-double RowFormat::dblHeight() const
+double RowFormat::height() const
 {
     if( d->hide )
         return 0.0;
@@ -238,7 +238,7 @@ void RowFormat::setHidden( bool _hide, bool repaint )
         if ( _hide )
         {
 	    // Lower maximum size by height of row
-            d->sheet->adjustSizeMaxY ( - dblHeight() );
+            d->sheet->adjustSizeMaxY ( - height() );
             d->hide = _hide; //hide must be set after we requested the height
             d->sheet->emit_updateRow( this, d->row, repaint );
         }
@@ -246,7 +246,7 @@ void RowFormat::setHidden( bool _hide, bool repaint )
         {
 	    // Rise maximum size by height of row
             d->hide = _hide; //unhide must be set before we request the height
-            d->sheet->adjustSizeMaxY ( dblHeight() );
+            d->sheet->adjustSizeMaxY ( height() );
             d->sheet->emit_updateRow( this, d->row, repaint );
         }
     }
@@ -319,10 +319,10 @@ void ColumnFormat::setSheet( Sheet* sheet )
     d->sheet = sheet;
 }
 
-void ColumnFormat::setDblWidth( double width )
+void ColumnFormat::setWidth( double width )
 {
     // avoid unnecessary updates
-    if ( qAbs( width - dblWidth() ) < DBL_EPSILON )
+    if ( qAbs( width - this->width() ) < DBL_EPSILON )
         return;
 
     // default ColumnFormat?
@@ -333,19 +333,19 @@ void ColumnFormat::setDblWidth( double width )
     }
 
     // Lower maximum size by old width
-    d->sheet->adjustSizeMaxX ( - dblWidth() );
+    d->sheet->adjustSizeMaxX ( - this->width() );
 
     d->width = width;
 
     // Rise maximum size by new width
-    d->sheet->adjustSizeMaxX ( dblWidth() );
+    d->sheet->adjustSizeMaxX ( this->width() );
     d->sheet->print()->updatePrintRepeatColumnsWidth();
     d->sheet->print()->updateNewPageListX ( column() );
 
     d->sheet->emit_updateColumn( this, d->column );
 }
 
-double ColumnFormat::dblWidth() const
+double ColumnFormat::width() const
 {
     if ( d->hide )
         return 0.0;
@@ -464,7 +464,7 @@ void ColumnFormat::setHidden( bool _hide )
         if ( _hide )
         {
 	    // Lower maximum size by width of column
-            d->sheet->adjustSizeMaxX ( - dblWidth() );
+            d->sheet->adjustSizeMaxX ( - width() );
             d->hide = _hide; //hide must be set after we requested the width
           //  d->sheet->emit_updateColumn( this, d->column );
         }
@@ -472,7 +472,7 @@ void ColumnFormat::setHidden( bool _hide )
         {
 	    // Rise maximum size by width of column
             d->hide = _hide; //unhide must be set before we request the width
-            d->sheet->adjustSizeMaxX ( dblWidth() );
+            d->sheet->adjustSizeMaxX ( width() );
          //   d->sheet->emit_updateColumn( this, d->column );
         }
     }

@@ -362,7 +362,7 @@ public:
      *
      * @return the width of this cell as double
      */
-    double dblWidth( int _col = -1 ) const;
+    double width( int _col = -1 ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
@@ -370,7 +370,7 @@ public:
      *
      * @return the height of this cell as double
      */
-    double dblHeight( int _row = -1 ) const;
+    double height( int _row = -1 ) const;
 
     /**
      * \return a QRect for this cell (i.e., a 1x1 rect).

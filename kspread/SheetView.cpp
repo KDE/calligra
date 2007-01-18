@@ -116,18 +116,18 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->dblWidth() );
+            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->width() );
 // kDebug() << "dblCorner: " << dblCorner << endl;
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
             cellView.paintCellBackground( painter, dblCorner );
-            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
+            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->height() );
         }
         dblCorner.setY( topLeft.y() );
         if ( !rightToLeft )
-            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
+            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->width() );
     }
 
     // 2. Paint the cell content including markers (formula, comment, ...)
@@ -136,7 +136,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->dblWidth() );
+            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->width() );
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
@@ -144,11 +144,11 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             cellView.paintCellContents( paintRect, painter, view, dblCorner,
                                         QPoint( col, row ), mergedCellsPainted,
                                         sheet()->cellAt( col, row ) );
-            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
+            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->height() );
         }
         dblCorner.setY( topLeft.y() );
         if ( !rightToLeft )
-            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
+            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->width() );
     }
 
     // 3. Paint the default borders
@@ -157,22 +157,22 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->dblWidth() );
+            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->width() );
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             Cell* const cell = sheet()->cellAt( col, row );
-            const QRectF cellRect = QRectF( dblCorner.x(), dblCorner.y(), cell->dblWidth(col), cell->dblHeight(row) );
+            const QRectF cellRect = QRectF( dblCorner.x(), dblCorner.y(), cell->width(col), cell->height(row) );
             CellView cellView = this->cellView( col, row );
             cellView.paintDefaultBorders( painter, paintRect, cellRect, QPoint( col, row ),
                                           CellView::LeftBorder | CellView::RightBorder |
                                           CellView::TopBorder | CellView::BottomBorder,
                                           d->visibleRect, cell, this );
-            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
+            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->height() );
         }
         dblCorner.setY( topLeft.y() );
         if ( !rightToLeft )
-            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
+            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->width() );
     }
 
     // 4. Paint the custom borders, diagonal lines and page borders
@@ -181,7 +181,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->dblWidth() );
+            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->width() );
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
@@ -189,11 +189,11 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             cellView.paintCellBorders( paintRect, painter, dblCorner,
                                        QPoint( col, row ), d->visibleRect,
                                        mergedCellsPainted, sheet()->cellAt( col, row ), this );
-            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
+            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->height() );
         }
         dblCorner.setY( topLeft.y() );
         if ( !rightToLeft )
-            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
+            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->width() );
     }
 }
 

@@ -496,7 +496,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
         for ( int x = left; x <= right; x++ )
         {
             cl = m_pView->activeSheet()->columnFormat( x );
-            widthSize = qMax( cl->dblWidth(), widthSize );
+            widthSize = qMax( cl->width(), widthSize );
         }
     }
 
@@ -506,7 +506,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
         for ( int y = top; y <= bottom; y++ )
         {
             rl = m_pView->activeSheet()->rowFormat(y);
-            heightSize = qMax( rl->dblHeight(), heightSize );
+            heightSize = qMax( rl->height(), heightSize );
         }
     }
 
@@ -649,8 +649,8 @@ void CellFormatDialog::initMembers()
   m_currency      = Currency(); // locale default
 
   Sheet* sheet = m_pView->activeSheet();
-  defaultWidthSize  = sheet ? sheet->columnFormat(0)->dblWidth() : 0;
-  defaultHeightSize = sheet ? sheet->rowFormat(0)->dblHeight() : 0;
+  defaultWidthSize  = sheet ? sheet->columnFormat(0)->width() : 0;
+  defaultHeightSize = sheet ? sheet->rowFormat(0)->height() : 0;
 }
 
 bool CellFormatDialog::checkCircle( QString const & name, QString const & parent )

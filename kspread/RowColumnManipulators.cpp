@@ -50,7 +50,7 @@ bool ResizeColumnManipulator::process(Element* element)
   for (int col = range.right(); col >= range.left(); --col)
   {
     ColumnFormat *format = m_sheet->nonDefaultColumnFormat( col );
-    format->setDblWidth( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
+    format->setWidth( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
   }
   return true;
 }
@@ -75,7 +75,7 @@ bool ResizeRowManipulator::process(Element* element)
   for (int row = range.bottom(); row >= range.top(); --row)
   {
     RowFormat* rl = m_sheet->nonDefaultRowFormat( row );
-    rl->setDblHeight( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
+    rl->setHeight( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
   }
   return true;
 }
@@ -287,9 +287,9 @@ bool AdjustColumnRowManipulator::process(Element* element)
             if (widths.contains(col) && widths[col] != -1.0)
             {
               ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
-              if ( qAbs(format->dblWidth() - widths[col] ) > DBL_EPSILON )
+              if ( qAbs(format->width() - widths[col] ) > DBL_EPSILON )
               {
-                format->setDblWidth( qMax( 2.0, widths[col] ) );
+                format->setWidth( qMax( 2.0, widths[col] ) );
               }
             }
           }
@@ -304,9 +304,9 @@ bool AdjustColumnRowManipulator::process(Element* element)
         if (widths.contains(col) && widths[col] != -1.0)
         {
           ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
-          if ( qAbs(format->dblWidth() - widths[col] ) > DBL_EPSILON )
+          if ( qAbs(format->width() - widths[col] ) > DBL_EPSILON )
           {
-            format->setDblWidth( qMax( 2.0, widths[col] ) );
+            format->setWidth( qMax( 2.0, widths[col] ) );
           }
         }
       }
@@ -327,9 +327,9 @@ bool AdjustColumnRowManipulator::process(Element* element)
             if (heights.contains(row) && heights[row] != -1.0)
             {
               RowFormat* format = sheet->nonDefaultRowFormat(row);
-              if ( qAbs(format->dblHeight() - heights[row] ) > DBL_EPSILON )
+              if ( qAbs(format->height() - heights[row] ) > DBL_EPSILON )
               {
-                format->setDblHeight( qMax( 2.0, heights[row] ) );
+                format->setHeight( qMax( 2.0, heights[row] ) );
               }
             }
           }
@@ -344,9 +344,9 @@ bool AdjustColumnRowManipulator::process(Element* element)
         if (heights.contains(row) && heights[row] != -1.0)
         {
           RowFormat* format = sheet->nonDefaultRowFormat(row);
-          if ( qAbs(format->dblHeight() - heights[row] ) > DBL_EPSILON )
+          if ( qAbs(format->height() - heights[row] ) > DBL_EPSILON )
           {
-            format->setDblHeight( qMax( 2.0, heights[row] ) );
+            format->setHeight( qMax( 2.0, heights[row] ) );
           }
         }
       }
@@ -386,7 +386,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               if (!m_newWidths.contains(col))
               {
                 m_newWidths[col] = -1.0;
-                m_oldWidths[col] = m_sheet->columnFormat( col )->dblWidth();
+                m_oldWidths[col] = m_sheet->columnFormat( col )->width();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
@@ -400,7 +400,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               {
                 m_newHeights[row] = -1.0;
                 const RowFormat* format = m_sheet->rowFormat(row);
-                m_oldHeights[row] = format->dblHeight();
+                m_oldHeights[row] = format->height();
               }
               if (!cell->isEmpty() && !cell->isPartOfMerged())
               {
@@ -425,7 +425,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               if (!m_newWidths.contains(col))
               {
                 m_newWidths[col] = -1.0;
-                m_oldWidths[col] = m_sheet->columnFormat( col )->dblWidth();
+                m_oldWidths[col] = m_sheet->columnFormat( col )->width();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
@@ -439,7 +439,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               {
                 m_newHeights[row] = -1.0;
                 const RowFormat* format = m_sheet->rowFormat(row);
-                m_oldHeights[row] = format->dblHeight();
+                m_oldHeights[row] = format->height();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
@@ -464,7 +464,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               if (!m_newWidths.contains(col))
               {
                 m_newWidths[col] = -1.0;
-                m_oldWidths[col] = m_sheet->columnFormat( col )->dblWidth();
+                m_oldWidths[col] = m_sheet->columnFormat( col )->width();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
@@ -478,7 +478,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               {
                 m_newHeights[row] = -1.0;
                 const RowFormat* format = m_sheet->rowFormat(row);
-                m_oldHeights[row] = format->dblHeight();
+                m_oldHeights[row] = format->height();
               }
               if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {

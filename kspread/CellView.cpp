@@ -130,8 +130,8 @@ public:
     {
         if ( !s_empty )
             s_empty = new Private( sheet->doc()->styleManager()->defaultStyle(),
-                                   sheet->columnFormat( 0 )->dblWidth(),
-                                   sheet->rowFormat( 0 )->dblHeight() );
+                                   sheet->columnFormat( 0 )->width(),
+                                   sheet->rowFormat( 0 )->height() );
         return s_empty;
     }
 
@@ -172,16 +172,16 @@ CellView::CellView( SheetView* sheetView, int col, int row )
             d->style.merge( *style );
     }
 
-    if ( cell->dblWidth( col ) != sheetView->sheet()->columnFormat( 0 )->dblWidth() )
-        d->width = cell->dblWidth( col );
-    if ( cell->dblHeight( row ) != sheetView->sheet()->rowFormat( 0 )->dblHeight() )
-        d->height = cell->dblHeight( row );
+    if ( cell->width( col ) != sheetView->sheet()->columnFormat( 0 )->width() )
+        d->width = cell->width( col );
+    if ( cell->height( row ) != sheetView->sheet()->rowFormat( 0 )->height() )
+        d->height = cell->height( row );
 
     // do not touch the other Private members, just return here.
     if ( cell->isDefault() ) return;
 
     d->layoutDirection = sheet->layoutDirection();
-    d->hidden = sheet->columnFormat( col )->hidden() || ( sheet->rowFormat( row )->dblHeight() <= sheet->doc()->unzoomItY( 2 ) );
+    d->hidden = sheet->columnFormat( col )->hidden() || ( sheet->rowFormat( row )->height() <= sheet->doc()->unzoomItY( 2 ) );
 
     // horizontal align
     if ( d->style.halign() == Style::HAlignUndefined )
@@ -1619,7 +1619,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
     for ( int i = cell->column(); i <= cell->column() + d->obscuredCellsX; i++ )
     {
       ColumnFormat *cl2 = cell->sheet()->columnFormat( i );
-      len += cl2->dblWidth() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
+      len += cl2->width() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
     }
 #endif
 
@@ -1663,12 +1663,12 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
         {
           QString tmp2;
           const RowFormat *rl = cell->sheet()->rowFormat( cell->row() );
-          if ( d->textHeight > rl->dblHeight() )
+          if ( d->textHeight > rl->height() )
           {
             for ( int j = d->displayText.length(); j != 0; j-- )
             {
               tmp2 = d->displayText.left( j );
-              if ( fm.width( tmp2 ) < rl->dblHeight() - 1.0 )
+              if ( fm.width( tmp2 ) < rl->height() - 1.0 )
               {
                 return d->displayText.left( qMin( tmp.length(), tmp2.length() ) );
               }
@@ -1700,7 +1700,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
       ColumnFormat  *cl2 = cell->sheet()->columnFormat( i );
 
       // -1.0 because the pixel in between 2 cells is shared between both cells
-      len += cl2->dblWidth() - 1.0;
+      len += cl2->width() - 1.0;
     }
 #endif
 
@@ -1711,7 +1711,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
       return QString( "" );
 
     for ( int i = d->displayText.length(); i != 0; i-- ) {
-      if ( fm.ascent() + fm.descent() * i < rl->dblHeight() - 1.0 )
+      if ( fm.ascent() + fm.descent() * i < rl->height() - 1.0 )
         return d->displayText.left( i );
     }
 
@@ -1829,8 +1829,8 @@ void CellView::calculateCellDimension( const Cell* cell )
 {
     Q_UNUSED( cell );
 #if 0
-  double width  = cell->sheet()->columnFormat( cell->column() )->dblWidth();
-  double height = cell->sheet()->rowFormat( cell->row() )->dblHeight();
+  double width  = cell->sheet()->columnFormat( cell->column() )->width();
+  double height = cell->sheet()->rowFormat( cell->row() )->height();
 
   // Calculate extraWidth and extraHeight if we have a merged cell.
   if ( cell->testFlag( Cell::Flag_Merged ) ) {
@@ -1838,10 +1838,10 @@ void CellView::calculateCellDimension( const Cell* cell )
     //        instead (see FIXME about this in paintCell()).
 
     for ( int x = cell->column() + 1; x <= cell->column() + d->obscuredCellsX; x++ )
-      width += cell->sheet()->columnFormat( x )->dblWidth();
+      width += cell->sheet()->columnFormat( x )->width();
 
     for ( int y = cell->row() + 1; y <= cell->row() + d->obscuredCellsY; y++ )
-      height += cell->sheet()->rowFormat( y )->dblHeight();
+      height += cell->sheet()->rowFormat( y )->height();
   }
 
   // Cache the newly calculated extraWidth and extraHeight if we have
@@ -2215,7 +2215,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell* masterC
 
             if ( nextCell->isEmpty() )
             {
-                extraWidth += nextCell->dblWidth( col + 1 ) - 1;
+                extraWidth += nextCell->width( col + 1 ) - 1;
                 col += 1 + nextCell->mergedXCells();
 
                 // Enough space?
@@ -2288,7 +2288,7 @@ void CellView::obscureVerticalCells( SheetView* sheetView, const Cell* masterCel
 
             if ( nextCell->isEmpty() )
             {
-                extraHeight += nextCell->dblHeight( row + 1 ) - 1.0;
+                extraHeight += nextCell->height( row + 1 ) - 1.0;
                 row += 1 + nextCell->mergedYCells();
 
                 // Enough space ?

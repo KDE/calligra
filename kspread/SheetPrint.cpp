@@ -202,9 +202,9 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
         QRect intView = QRect( QPoint( m_pDoc->zoomItXOld( m_pSheet->dblColumnPos( page_range.left() ) ),
                                        m_pDoc->zoomItYOld( m_pSheet->dblRowPos( page_range.top() ) ) ),
                                QPoint( m_pDoc->zoomItXOld( m_pSheet->dblColumnPos( page_range.right() ) +
-                                                        m_pSheet->columnFormat( page_range.right() )->dblWidth() ),
+                                                        m_pSheet->columnFormat( page_range.right() )->width() ),
                                        m_pDoc->zoomItYOld( m_pSheet->dblRowPos( page_range.bottom() ) +
-                                                        m_pSheet->rowFormat( page_range.bottom() )->dblHeight() ) ) );
+                                                        m_pSheet->rowFormat( page_range.bottom() )->height() ) ) );
 
         Q3PtrListIterator<KoDocumentChild> it( m_pDoc->children() );
         for( ;it.current(); ++it )
@@ -277,9 +277,9 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
                 QRectF view = QRectF( QPointF( m_pSheet->dblColumnPos( page_range.left() ),
                                                m_pSheet->dblRowPos( page_range.top() ) ),
                                       QSizeF( m_pSheet->dblColumnPos( page_range.right() ) +
-                                               m_pSheet->columnFormat( page_range.right() )->dblWidth()- m_pSheet->dblColumnPos( page_range.left() ),
+                                               m_pSheet->columnFormat( page_range.right() )->width()- m_pSheet->dblColumnPos( page_range.left() ),
                                                m_pSheet->dblRowPos( page_range.bottom() ) +
-                                               m_pSheet->rowFormat( page_range.bottom() )->dblHeight()- m_pSheet->dblRowPos( page_range.top() ) ) );
+                                               m_pSheet->rowFormat( page_range.bottom() )->height()- m_pSheet->dblRowPos( page_range.top() ) ) );
                 page_list.append( page_range );
                 page_frame_list.append( view );
                 page_frame_list_offset.append( QPointF( (*itX).offset(), (*itY).offset() ) );
@@ -452,10 +452,10 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     QPointF bottomRight( topLeft );
     for ( int x = regionLeft; x <= regionRight; ++x )
         bottomRight.setX( bottomRight.x()
-                          + m_pSheet->columnFormat( x )->dblWidth() );
+                          + m_pSheet->columnFormat( x )->width() );
     for ( int y = regionTop; y <= regionBottom; ++y )
         bottomRight.setY( bottomRight.y()
-                          + m_pSheet->rowFormat( y )->dblHeight() );
+                          + m_pSheet->rowFormat( y )->height() );
     QRectF paintRect;
     paintRect.setTopLeft( topLeft );
     paintRect.setBottomRight( bottomRight );
@@ -477,17 +477,17 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
         {
             col_lay = m_pSheet->columnFormat( x );
             double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) ?
-                             view.width() - xpos - col_lay->dblWidth() : xpos;
+                             view.width() - xpos - col_lay->width() : xpos;
             CellView tmpCellView( m_pSheet, x, y );
             CellView* cellView = &tmpCellView;
             cellView->paintCell( paintRect, painter, 0,
                                 QPointF( effXPos, ypos ), QPoint( x, y ),
                                 mergedCellsPainted );
 
-            xpos += col_lay->dblWidth();
+            xpos += col_lay->width();
         }
 
-        ypos += row_lay->dblHeight();
+        ypos += row_lay->height();
     }
 
     ypos = topLeft.y();
@@ -501,17 +501,17 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
         {
             col_lay = m_pSheet->columnFormat( x );
             double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
-                             ? view.width() - xpos - col_lay->dblWidth() : xpos;
+                             ? view.width() - xpos - col_lay->width() : xpos;
             CellView tmpCellView( m_pSheet, x, y );
             CellView* cellView = &tmpCellView;
             cellView->paintCellBorders( paintRect, painter, 0, QPointF( effXPos, ypos ),
                                         QPoint( x, y ), printRect,
                                         mergedCellsPainted );
 
-            xpos += col_lay->dblWidth();
+            xpos += col_lay->width();
         }
 
-        ypos += row_lay->dblHeight();
+        ypos += row_lay->height();
     }
 #endif
     //
@@ -690,7 +690,7 @@ void SheetPrint::updateNewPageX( int _column )
     {
         int startCol = m_lnewPageListX.last().startItem();
         int col = startCol;
-        double x = m_pSheet->columnFormat( col )->dblWidth();
+        double x = m_pSheet->columnFormat( col )->width();
 
         //Add repeated column width, when necessary
         if ( col > m_printRepeatColumns.first )
@@ -710,7 +710,7 @@ void SheetPrint::updateNewPageX( int _column )
                 QList<PrintNewPageEntry>::iterator it;
                 it = findNewPageColumn( startCol );
                 (*it).setEndItem( col - 1 );
-                (*it).setSize( x - m_pSheet->columnFormat( col )->dblWidth() );
+                (*it).setSize( x - m_pSheet->columnFormat( col )->width() );
                 (*it).setOffset( offset );
 
                 //start a new page
@@ -723,7 +723,7 @@ void SheetPrint::updateNewPageX( int _column )
                 }
                 else
                 {
-                    x = m_pSheet->columnFormat( col )->dblWidth();
+                    x = m_pSheet->columnFormat( col )->width();
                     if ( col >= m_printRepeatColumns.first )
                     {
                         x += m_dPrintRepeatColumnsWidth;
@@ -733,7 +733,7 @@ void SheetPrint::updateNewPageX( int _column )
             }
 
             col++;
-            x += m_pSheet->columnFormat( col )->dblWidth();
+            x += m_pSheet->columnFormat( col )->width();
         }
     }
 
@@ -806,7 +806,7 @@ void SheetPrint::updateNewPageY( int _row )
     {
         int startRow = m_lnewPageListY.last().startItem();
         int row = startRow;
-        double y = m_pSheet->rowFormat( row )->dblHeight();
+        double y = m_pSheet->rowFormat( row )->height();
 
         //Add repeated row height, when necessary
         if ( row > m_printRepeatRows.first )
@@ -826,7 +826,7 @@ void SheetPrint::updateNewPageY( int _row )
                 QList<PrintNewPageEntry>::iterator it;
                 it = findNewPageRow( startRow );
                 (*it).setEndItem( row - 1 );
-                (*it).setSize( y - m_pSheet->rowFormat( row )->dblHeight() );
+                (*it).setSize( y - m_pSheet->rowFormat( row )->height() );
                 (*it).setOffset( offset );
 
                 //start a new page
@@ -839,7 +839,7 @@ void SheetPrint::updateNewPageY( int _row )
                 }
                 else
                 {
-                    y = m_pSheet->rowFormat( row )->dblHeight();
+                    y = m_pSheet->rowFormat( row )->height();
                     if ( row >= m_printRepeatRows.first )
                     {
                         y += m_dPrintRepeatRowsHeight;
@@ -849,7 +849,7 @@ void SheetPrint::updateNewPageY( int _row )
             }
 
             row++;
-            y += m_pSheet->rowFormat( row )->dblHeight();
+            y += m_pSheet->rowFormat( row )->height();
         }
     }
 
@@ -1517,7 +1517,7 @@ void SheetPrint::updatePrintRepeatColumnsWidth()
     {
         for( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++ )
         {
-            m_dPrintRepeatColumnsWidth += m_pSheet->columnFormat( i )->dblWidth();
+            m_dPrintRepeatColumnsWidth += m_pSheet->columnFormat( i )->width();
         }
     }
 }
@@ -1529,7 +1529,7 @@ void SheetPrint::updatePrintRepeatRowsHeight()
     {
         for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
         {
-            m_dPrintRepeatRowsHeight += m_pSheet->rowFormat( i )->dblHeight();
+            m_dPrintRepeatRowsHeight += m_pSheet->rowFormat( i )->height();
         }
     }
 }

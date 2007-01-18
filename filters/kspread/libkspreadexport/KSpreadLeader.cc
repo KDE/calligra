@@ -261,8 +261,8 @@ KoFilter::ConversionStatus Leader::doSpreadCell(Cell*spreadCell, int column, int
 	KSpreadFilterProperty docSpreadCellProperty;
 	docSpreadCellProperty["column"] = QString::number(column);
 	docSpreadCellProperty["row"] = QString::number(row);
-	docSpreadCellProperty["width"] = QString::number(spreadCell->dblWidth());
-	docSpreadCellProperty["height"] = QString::number(spreadCell->dblHeight());
+	docSpreadCellProperty["width"] = QString::number(spreadCell->width());
+	docSpreadCellProperty["height"] = QString::number(spreadCell->height());
 	docSpreadCellProperty["empty"] = (spreadCell->isEmpty()==0?"false":"true");
 	if (!spreadCell->isEmpty()) {
 		docSpreadCellProperty["text"] = spreadCell->inputText();

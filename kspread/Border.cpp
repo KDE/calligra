@@ -140,7 +140,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   // Did the user click between two rows?
   while ( y < ( dHeight + m_pCanvas->yOffset() ) && ( !m_bResize ) )
   {
-    double h = sheet->rowFormat( row )->dblHeight();
+    double h = sheet->rowFormat( row )->height();
     row++;
     if ( row > KS_rowMax )
       row = KS_rowMax;
@@ -274,7 +274,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             if ( height != 0.0 )
             {
               if ( !rl->hidden() )
-                rl->setDblHeight( height );
+                rl->setHeight( height );
             }
             else
             {
@@ -334,7 +334,7 @@ void VBorder::equalizeRow( double resize )
   {
      rl = sheet->nonDefaultRowFormat( i );
      resize = qMax( 2.0, resize);
-     rl->setDblHeight( resize );
+     rl->setHeight( resize );
   }
 }
 
@@ -391,7 +391,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
       {
         const RowFormat* rowFormat = sheet->rowFormat( row + 1 );
         y = sheet->dblRowPos( row + 1 );
-        m_pCanvas->vertScrollBar()->setValue( (int) ( ev_PosY + rowFormat->dblHeight() - dHeight) );
+        m_pCanvas->vertScrollBar()->setValue( (int) ( ev_PosY + rowFormat->height() - dHeight) );
       }
     }
   }
@@ -406,7 +406,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
 
     while ( y < dHeight + m_pCanvas->yOffset() )
     {
-      double h = sheet->rowFormat( tmpRow )->dblHeight();
+      double h = sheet->rowFormat( tmpRow )->height();
       //if col is hide and it's the first column
       //you mustn't resize it.
       if ( ev_PosY >= y + h - 2 * unzoomedPixel &&
@@ -581,7 +581,7 @@ void VBorder::paintEvent( QPaintEvent* event )
     const bool highlighted = (!selected && affectedRows.contains(y));
 
     const RowFormat* rowFormat = sheet->rowFormat( y );
-    const double height = rowFormat->dblHeight();
+    const double height = rowFormat->height();
 
     if ( selected || highlighted )
     {
@@ -613,7 +613,7 @@ void VBorder::paintEvent( QPaintEvent* event )
                                                    - painter.fontMetrics().descent() ) / 2 ),
                           rowText );
 
-    yPos += rowFormat->dblHeight();
+    yPos += rowFormat->height();
     y++;
   }
 }
@@ -704,7 +704,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     kDebug() << "evPos: " << ev_PosX << ", x: " << x << ", COL: " << tmpCol << endl;
     while ( ev_PosX > x && ( !m_bResize ) )
     {
-      double w = sheet->columnFormat( tmpCol )->dblWidth();
+      double w = sheet->columnFormat( tmpCol )->width();
 
       kDebug() << "evPos: " << ev_PosX << ", x: " << x << ", w: " << w << ", COL: " << tmpCol << endl;
 
@@ -742,7 +742,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     // Did the user click between two columns?
     while ( x < ( dWidth + m_pCanvas->xOffset() ) && ( !m_bResize ) )
     {
-      double w = sheet->columnFormat( col )->dblWidth();
+      double w = sheet->columnFormat( col )->width();
       col++;
       if ( col > KS_colMax )
         col = KS_colMax;
@@ -900,7 +900,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             if ( width != 0.0 )
             {
                 if ( !cl->hidden() )
-                    cl->setDblWidth( width );
+                    cl->setWidth( width );
             }
             else
             {
@@ -959,7 +959,7 @@ void HBorder::equalizeColumn( double resize )
   {
       cl = sheet->nonDefaultColumnFormat( i );
       resize = qMax( 2.0, resize );
-      cl->setDblWidth( resize );
+      cl->setWidth( resize );
   }
 
 }
@@ -1021,7 +1021,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
         const ColumnFormat *cl = sheet->columnFormat( col + 1 );
         x = sheet->dblColumnPos( col + 1 );
         m_pCanvas->horzScrollBar()->setValue( m_pCanvas->horzScrollBar()->maximum()
-                                              - (int) ( ( ev_PosX + cl->dblWidth() ) - dWidth ) );
+                                              - (int) ( ( ev_PosX + cl->width() ) - dWidth ) );
       }
       else if ( _ev->pos().x() > width() )
         m_pCanvas->horzScrollBar()->setValue( (int) ( m_pCanvas->horzScrollBar()->maximum() - ( ev_PosX - dWidth + m_pCanvas->d->view->doc()->unzoomItX( m_pCanvas->width() ) ) ) );
@@ -1036,7 +1036,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
         {
           const ColumnFormat *cl = sheet->columnFormat( col + 1 );
           x = sheet->dblColumnPos( col + 1 );
-          m_pCanvas->horzScrollBar()->setValue( (int) ( ev_PosX + cl->dblWidth() - dWidth ) );
+          m_pCanvas->horzScrollBar()->setValue( (int) ( ev_PosX + cl->width() - dWidth ) );
         }
       }
     }
@@ -1055,7 +1055,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
 
       while ( ev_PosX > x )
       {
-        double w = sheet->columnFormat( tmpCol )->dblWidth();
+        double w = sheet->columnFormat( tmpCol )->width();
         ++tmpCol;
 
         //if col is hide and it's the first column
@@ -1077,7 +1077,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
 
       while ( x < m_pCanvas->d->view->doc()->unzoomItY( width() ) + m_pCanvas->xOffset() )
       {
-        double w = sheet->columnFormat( tmpCol )->dblWidth();
+        double w = sheet->columnFormat( tmpCol )->width();
         //if col is hide and it's the first column
         //you mustn't resize it.
         if ( ev_PosX >= x + w - unzoomedPixel &&
@@ -1296,7 +1296,7 @@ void HBorder::paintEvent( QPaintEvent* event )
     if ( x > KS_colMax )
       x = KS_colMax;
 
-    xPos -= sheet->columnFormat( x )->dblWidth();
+    xPos -= sheet->columnFormat( x )->width();
 
     const QSet<int> selectedColumns = m_pView->selection()->columnsSelected();
     const QSet<int> affectedColumns = m_pView->selection()->columnsAffected();
@@ -1307,7 +1307,7 @@ void HBorder::paintEvent( QPaintEvent* event )
       bool highlighted = (!selected && affectedColumns.contains(x));
 
       const ColumnFormat * col_lay = sheet->columnFormat( x );
-      double width = xPos + col_lay->dblWidth() - xPos;
+      double width = xPos + col_lay->width() - xPos;
 
       if ( selected || highlighted )
       {
@@ -1349,7 +1349,7 @@ void HBorder::paintEvent( QPaintEvent* event )
                                                 painter.fontMetrics().descent() ) / 2 ),
                             tmp.setNum(x) );
       }
-      xPos += col_lay->dblWidth();
+      xPos += col_lay->width();
       --x;
     }
   }
@@ -1364,7 +1364,7 @@ void HBorder::paintEvent( QPaintEvent* event )
       bool highlighted = (!selected && affectedColumns.contains(x));
 
       const ColumnFormat *col_lay = sheet->columnFormat( x );
-      double width = col_lay->dblWidth();
+      double width = col_lay->width();
 
       QColor backgroundColor = palette().window().color();
 
@@ -1408,7 +1408,7 @@ void HBorder::paintEvent( QPaintEvent* event )
                                                 painter.fontMetrics().descent() ) / 2 ),
                             tmp.setNum(x) );
       }
-      xPos += col_lay->dblWidth();
+      xPos += col_lay->width();
       ++x;
     }
   }
