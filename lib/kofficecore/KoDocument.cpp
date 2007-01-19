@@ -1443,11 +1443,11 @@ bool KoDocument::openFile()
     }
 
     // Special case for flat XML files (e.g. using directory store)
-    if ( u.fileName() == "maindoc.xml" || typeName == "inode/directory" )
+    if ( u.fileName() == "maindoc.xml" || u.fileName() == "content.xml" || typeName == "inode/directory" )
     {
         typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
         d->m_specialOutputFlag = SaveAsDirectoryStore;
-        kdDebug(30003) << "KoDocument::openFile loading maindoc.xml, using directory store for " << m_file << endl;
+        kdDebug(30003) << "KoDocument::openFile loading " << u.fileName() << ", using directory store for " << m_file << "; typeName=" << typeName << endl;
     }
     kdDebug(30003) << "KoDocument::openFile " << m_file << " type:" << typeName << endl;
 
