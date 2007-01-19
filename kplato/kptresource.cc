@@ -628,6 +628,14 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
 }
 
 DateTime Resource::availableAfter(const DateTime &time, const DateTime limit ) const {
+    return availableAfter( time, limit, m_currentSchedule );
+}
+
+DateTime Resource::availableBefore(const DateTime &time, const DateTime limit) const {
+    return availableBefore( time, limit, m_currentSchedule );
+}
+
+DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Schedule *sch) const {
     DateTime t;
     if (m_units == 0) {
         return t;
@@ -649,12 +657,12 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit ) c
         return t;
     }
     t = m_availableFrom > time ? m_availableFrom : time;
-    t = cal->firstAvailableAfter(t, lmt, m_currentSchedule);
+    t = cal->firstAvailableAfter(t, lmt, sch);
     //kDebug()<<k_funcinfo<<m_currentSchedule<<" "<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns: "<<time<<"="<<t<<" "<<lmt<<endl;
     return t;
 }
 
-DateTime Resource::availableBefore(const DateTime &time, const DateTime limit) const {
+DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, Schedule *sch) const {
     DateTime t;
     if (m_units == 0) {
         return t;
@@ -682,7 +690,7 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit) c
         t = m_availableUntil < time ? m_availableUntil : time;
     }
     //kDebug()<<k_funcinfo<<t<<", "<<lmt<<endl;
-    t = cal->firstAvailableBefore(t, lmt, m_currentSchedule);
+    t = cal->firstAvailableBefore(t, lmt, sch );
     //kDebug()<<k_funcinfo<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns: "<<time<<"="<<t<<" "<<lmt<<endl;
     return t;
 }
@@ -811,6 +819,14 @@ Schedule *ResourceRequest::resourceSchedule( Schedule *ns )
     s->setCalculationMode( ns->calculationMode() );
     //kDebug()<<k_funcinfo<<s->name()<<": id="<<s->id()<<" mode="<<s->calculationMode()<<endl;
     return s;
+}
+
+DateTime ResourceRequest::workTimeAfter(const DateTime &dt) {
+    return m_resource->availableAfter( dt, DateTime(), 0 );
+}
+
+DateTime ResourceRequest::workTimeBefore(const DateTime &dt) {
+    return m_resource->availableBefore( dt, DateTime(), 0 );
 }
 
 DateTime ResourceRequest::availableAfter(const DateTime &time, Schedule *ns) {
@@ -1110,6 +1126,31 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     return (end>time?end-time:time-end);
 }
 
+DateTime ResourceGroupRequest::workTimeAfter(const DateTime &time) {
+    DateTime start;
+    foreach (ResourceRequest *r, m_resourceRequests) {
+        DateTime t = r->workTimeAfter( time );
+        if (t.isValid() && (!start.isValid() || t < start))
+            start = t;
+    }
+    if (start.isValid() && start < time)
+        start = time;
+    //kDebug()<<k_funcinfo<<time.toString()<<"="<<start.toString()<<endl;
+    return start;
+}
+
+DateTime ResourceGroupRequest::workTimeBefore(const DateTime &time) {
+    DateTime end;
+    foreach (ResourceRequest *r, m_resourceRequests) {
+        DateTime t = r->workTimeBefore( time );
+        if (t.isValid() && (!end.isValid() ||t > end))
+            end = t;
+    }
+    if (!end.isValid() || end > time)
+        end = time;
+    return end;
+}
+
 DateTime ResourceGroupRequest::availableAfter(const DateTime &time, Schedule *ns) {
     DateTime start;
     foreach (ResourceRequest *r, m_resourceRequests) {
@@ -1274,6 +1315,31 @@ Duration ResourceRequestCollection::duration(const DateTime &time, const Duratio
         }
     }
     return dur;
+}
+
+DateTime ResourceRequestCollection::workTimeAfter(const DateTime &time) {
+    DateTime start;
+    foreach (ResourceGroupRequest *r, m_requests) {
+        DateTime t = r->workTimeAfter( time );
+        if (t.isValid() && (!start.isValid() || t < start))
+            start = t;
+    }
+    if (start.isValid() && start < time)
+        start = time;
+    //kDebug()<<k_funcinfo<<time.toString()<<"="<<start.toString()<<endl;
+    return start;
+}
+
+DateTime ResourceRequestCollection::workTimeBefore(const DateTime &time) {
+    DateTime end;
+    foreach (ResourceGroupRequest *r, m_requests) {
+        DateTime t = r->workTimeBefore( time );
+        if (t.isValid() && (!end.isValid() ||t > end))
+            end = t;
+    }
+    if (!end.isValid() || end > time)
+        end = time;
+    return end;
 }
 
 DateTime ResourceRequestCollection::availableAfter(const DateTime &time, Schedule *ns) {

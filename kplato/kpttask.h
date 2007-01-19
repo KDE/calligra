@@ -197,54 +197,53 @@ public:
     double costPerformanceIndex(const QDate &date, bool *error=0);
     
     /**
-     * Return the time when work can actually start on this task.
-     * This will be the time assigned resources can start work in accordance
-     * with their calendar, or if no resources have been assigned,
-     * the scheduled starttime is used.
-     */
-    virtual DateTime workStartTime() const;
-    
-    /**
-     * Return the time when work can actually finish on this task.
-     * This will be the time assigned resources can end work in accordance
-     * with their calendar, or if no resources have been assigned,
-     * the scheduled endtime is used.
-     */
-    virtual DateTime workEndTime() const;
-    
-    /**
      * Return the duration that an activity's start can be delayed 
      * without affecting the project completion date. 
      * An activity with positive float is not on the critical path.
+     * @param id Schedule identity. If id is -1, use current schedule.
      */
-    Duration positiveFloat( long id = -1 );
+    Duration positiveFloat( long id = -1 ) const;
     /**
      * Return the duration by which the duration of an activity or path 
      * has to be reduced in order to fullfill a timing constraint.
+     * @param id Schedule identity. If id is -1, use current schedule.
      */
-    Duration negativeFloat() { return Duration(); }
+    Duration negativeFloat( long id = -1 ) const;
     /**
      * Return the duration by which an activity can be delayed or extended 
      * without affecting the start of any succeeding activity.
+     * @param id Schedule identity. If id is -1, use current schedule.
      */
-    Duration freeFloat() { return Duration(); }
+    Duration freeFloat( long id = -1 ) const;
     /**
      * Return the duration from Early Start to Late Start.
+     * @param id Schedule identity. If id is -1, use current schedule.
      */
-    Duration startFloat() { return Duration(); }
+    Duration startFloat( long id = -1 ) const;
     /**
      * Return the duration the task has at its finish  before a successor task starts.
      * This is the difference between the start time of the successor and
      * the finish time of this task.
+     * @param id Schedule identity. If id is -1, use current schedule.
      */
-    Duration finishFloat() { return Duration(); }
+    Duration finishFloat( long id = -1 ) const;
     
-    /// A task is critical if there is no positive float
+    /**
+     * A task is critical if positive float equals 0
+     * @param id Schedule identity. If id is -1, use current schedule.
+     */
     virtual bool isCritical( long id = -1 ) const;
     
-    /// Set current schedule to schedule with identity id, for me nd my children
+    /**
+     * Set current schedule to schedule with identity id, for me and my children.
+     * @param id Schedule identity
+     */
     virtual void setCurrentSchedule(long id);
     
+    /**
+     * The assigned resources can not fullfill the estimated effort.
+     * @param id Schedule identity. If id is -1, use current schedule.
+     */
     virtual bool effortMetError( long id = -1 ) const;
     
     Completion &completion() { return m_completion; }
@@ -360,9 +359,13 @@ private:
     DateTime scheduleSuccessors(const QList<Relation*> &list, int use);
     DateTime schedulePredeccessors(const QList<Relation*> &list, int use);
     
+    // Check appointments if specified in currentschedule
     DateTime workStartAfter(const DateTime &dt);
     DateTime workFinishBefore(const DateTime &dt);
-
+    // Don't check for appointments
+    DateTime workTimeAfter(const DateTime &dt) const;
+    DateTime workTimeBefore(const DateTime &dt) const;
+    
 private:
     QList<ResourceGroup*> m_resource;
 

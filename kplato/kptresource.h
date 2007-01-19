@@ -318,13 +318,28 @@ public:
     /**
      * Find the first available time after time, within limit.
      * Returns invalid DateTime if not available.
+     * Uses the current schedule to check for appointments.
      */
     DateTime availableAfter( const DateTime &time, const DateTime limit = DateTime() ) const;
     /**
      * Find the first available time before time, within limit.
      * Returns invalid DateTime if not available.
+     * Uses the current schedule to check for appointments.
      */
     DateTime availableBefore( const DateTime &time, const DateTime limit = DateTime()) const;
+
+    /**
+     * Find the first available time after time, within limit.
+     * Returns invalid DateTime if not available.
+     * If sch == 0, Appointments are not checked.
+     */
+    DateTime availableAfter( const DateTime &time, const DateTime limit, Schedule *sch ) const;
+    /**
+     * Find the first available time before time, within limit.
+     * Returns invalid DateTime if not available.
+     * If sch == 0, Appointments are not checked.
+     */
+    DateTime availableBefore( const DateTime &time, const DateTime limit, Schedule *sch ) const;
 
     Resource *findId() const { return findId( m_id ); }
     Resource *findId( const QString &id ) const;
@@ -473,6 +488,8 @@ public:
     DateTime availableAfter(const DateTime &time, Schedule *ns);
     DateTime availableBefore(const DateTime &time, Schedule *ns);
     Duration effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok = 0 );
+    DateTime workTimeAfter(const DateTime &dt);
+    DateTime workTimeBefore(const DateTime &dt);
 
 private:
     Resource *m_resource;
@@ -537,6 +554,8 @@ public:
 
     DateTime availableAfter( const DateTime &time, Schedule *ns );
     DateTime availableBefore( const DateTime &time, Schedule *ns );
+    DateTime workTimeAfter(const DateTime &dt);
+    DateTime workTimeBefore(const DateTime &dt);
 
     /**
      * Makes appointments for task @param task to the 
@@ -631,7 +650,9 @@ public:
 
     DateTime availableAfter( const DateTime &time, Schedule *ns );
     DateTime availableBefore( const DateTime &time, Schedule *ns );
-
+    DateTime workTimeAfter(const DateTime &dt);
+    DateTime workTimeBefore(const DateTime &dt);
+    
     /**
     * Makes appointments for the task @param task to the requested resources.
     * Assumes that @ref duration() has been run.

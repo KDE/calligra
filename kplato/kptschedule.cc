@@ -582,6 +582,11 @@ void NodeSchedule::init()
     notScheduled = true;
     inCriticalPath = false;
     m_calculationMode = Schedule::Scheduling;
+    positiveFloat = Duration::zeroDuration;
+    negativeFloat = Duration::zeroDuration;
+    freeFloat = Duration::zeroDuration;
+    startFloat = Duration::zeroDuration;
+    finishFloat = Duration::zeroDuration;
 }
 
 void NodeSchedule::setDeleted( bool on )
@@ -630,6 +635,12 @@ bool NodeSchedule::loadXML( const QDomElement &sch )
     schedulingError = sch.attribute( "scheduling-conflict", "0" ).toInt();
     notScheduled = sch.attribute( "not-scheduled", "1" ).toInt();
 
+    positiveFloat = Duration::fromString( sch.attribute( "positive-float" ) );
+    negativeFloat = Duration::fromString( sch.attribute( "negative-float" ) );
+    freeFloat = Duration::fromString( sch.attribute( "free-float" ) );
+    startFloat = Duration::fromString( sch.attribute( "start-float" ) );
+    finishFloat = Duration::fromString( sch.attribute( "finish-float" ) );
+
     return true;
 }
 
@@ -661,6 +672,12 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     sch.setAttribute( "resource-not-available", resourceNotAvailable );
     sch.setAttribute( "scheduling-conflict", schedulingError );
     sch.setAttribute( "not-scheduled", notScheduled );
+    
+    sch.setAttribute( "positive-float", positiveFloat.toString() );
+    sch.setAttribute( "negative-float", negativeFloat.toString() );
+    sch.setAttribute( "free-float", freeFloat.toString() );
+    sch.setAttribute( "start-float", startFloat.toString() );
+    sch.setAttribute( "finish-float", finishFloat.toString() );
 }
 
 void NodeSchedule::addAppointment( Schedule *resource, DateTime &start, DateTime &end, double load )

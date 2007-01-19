@@ -85,6 +85,7 @@ public:
     virtual bool usePert() const;
     virtual bool allowOverbooking() const;
 
+    bool isCritical() const { return positiveFloat == Duration::zeroDuration; }
 
     virtual bool loadXML( const QDomElement &element );
     virtual void saveXML( QDomElement &element ) const;
@@ -249,6 +250,33 @@ protected:
     DateTime workStartTime;
     DateTime workEndTime;
     bool inCriticalPath;
+    /**
+     * The duration that an activity's start can be delayed 
+     * without affecting the project completion date. 
+     * An activity with positive float is not on the critical path.
+     * Calculated as latestFinishWork - endTime.
+     */
+    Duration positiveFloat;
+    /**
+     * The duration by which the duration of an activity or path 
+     * has to be reduced in order to fullfill a timing constraint.
+     */
+    Duration negativeFloat;
+    /**
+     * The duration by which an activity can be delayed or extended 
+     * without affecting the start of any succeeding activity.
+     */
+    Duration freeFloat;
+    /**
+     * The duration from Early Start to Late Start.
+     */
+    Duration startFloat;
+    /**
+     * The duration the task has at its finish  before a successor task starts.
+     * This is the difference between the start time of the successor and
+     * the finish time of this task.
+     */
+    Duration finishFloat;
 
 #ifndef NDEBUG
 public:
