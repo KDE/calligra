@@ -240,6 +240,13 @@ public:
                        const QString& inputText = QString::null);
 
     /**
+     * Parses \p text and sets the appropriate formatting.
+     * The high-level method for setting text, when the user inputs it.
+     * It will revert back to the old text, if testValidity() returns action==stop.
+     */
+    void setCellText( const QString& text, bool asString = false );
+
+    /**
      * \return the previous cell in the cell cluster
      * \see Cluster
      */
@@ -412,12 +419,6 @@ public:
      * behind the dot minus 1.
      */
     void decPrecision();
-
-    /**
-     * The high-level method for setting text, when the user inputs it.
-     * It will revert back to the old text, if testValidity() returns action==stop.
-     */
-    void setCellText( const QString& _text, bool asString = false );
 
     /**
      * Sets a link for this cell. For example, setLink( "mailto:joe@somewhere.com" )
@@ -677,21 +678,18 @@ protected:
     void clearFormula();
 
     /**
-     * Sets the text in the cell when the user inputs it.
-     * Will determine the type of contents automatically.
+     * Assigns the input text and creates formula or parses the input.
      * \internal Called by setCellText().
      */
-    void setDisplayText( const QString& _text );
+    void setCellTextHelper( const QString& _text );
 
     /**
-     * Check the input from the user, and determine the contents of the cell accordingly
-     * (in particular the data type).
-     * This is to be called only when m_content == Text.
-     *
-     * Input: m_strText
-     * Output: m_dataType
+     * Parses the input text.
+     * Converts first letter to uppercase, if enabled in the settings.
+     * \see ValueParser::parse
+     * \internal
      */
-    void checkTextInput();
+    void parseInputText();
 
     /**
      * \ingroup OpenDocument

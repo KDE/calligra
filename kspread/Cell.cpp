@@ -853,28 +853,28 @@ bool Cell::makeFormula()
 {
 //   kDebug(36002) << k_funcinfo << endl;
 
-  d->formula = new KSpread::Formula (sheet(), this);
-  d->formula->setExpression (d->inputText);
+    d->formula = new KSpread::Formula( sheet(), this );
+    d->formula->setExpression( d->inputText );
 
-  if (!d->formula->isValid ()) {
-  // Did a syntax error occur ?
-    clearFormula();
-
-    if (doc()->showMessageError())
+    if ( !d->formula->isValid() )
     {
-      QString tmp(i18n("Error in cell %1\n\n"));
-      tmp = tmp.arg( fullName() );
-      KMessageBox::error( (QWidget*)0, tmp);
+        // Did a syntax error occur ?
+        clearFormula();
+
+        if (doc()->showMessageError())
+        {
+            QString tmp(i18n("Error in cell %1\n\n"));
+            tmp = tmp.arg( fullName() );
+            KMessageBox::error( 0, tmp );
+        }
+        setValue( Value::errorPARSE() );
+        return false;
     }
-    setValue( Value::errorPARSE() );
-    return false;
-  }
 
-  // Update the dependencies and recalculate.
-  doc()->addDamage( new CellDamage( this, CellDamage::Formula |
-                                                             CellDamage::Value ) );
+    // Update the dependencies and recalculate.
+    doc()->addDamage( new CellDamage( this, CellDamage::Formula | CellDamage::Value ) );
 
-  return true;
+    return true;
 }
 
 void Cell::clearFormula()
@@ -1041,72 +1041,85 @@ void Cell::setCellText( const QString& _text, bool asText )
 {
 //   kDebug() << k_funcinfo << endl;
 
-  // Clears the formula and updates the dependencies, if a formula exist.
-  clearFormula();
+    // Clears the formula and updates the dependencies, if a formula exist.
+    clearFormula();
 
-  // empty string?
-  if (_text.isEmpty())
-  {
-    d->inputText.clear();
-    setValue( Value::empty() );
-    return;
-  }
+    // empty string?
+    if ( _text.isEmpty() )
+    {
+        d->inputText.clear();
+        setValue( Value::empty() );
+        return;
+    }
 
-  // as text?
-  if (asText)
-  {
-    d->inputText    = _text;
-    setValue( Value( _text ) );
-    return;
-  }
+    // as text?
+    if ( asText )
+    {
+        d->inputText    = _text;
+        setValue( Value( _text ) );
+        return;
+    }
 
-  const QString oldText = d->inputText;
-  setDisplayText( _text );
-  Validity validity = this->validity();
-  if ( !d->sheet->isLoading() && !validity.testValidity( this ) )
-  {
-    //reapply old value if action == stop
-    setDisplayText( oldText );
-  }
+    const QString oldText = d->inputText;
+    setCellTextHelper( _text );
+    Validity validity = this->validity();
+    if ( !d->sheet->isLoading() && !validity.testValidity( this ) )
+    {
+        //reapply old value if action == stop
+        setCellTextHelper( oldText );
+    }
 }
 
-void Cell::setDisplayText( const QString& _text )
+void Cell::setCellTextHelper( const QString& _text )
+{
+    d->inputText = _text;
+
+    // A real formula "=A1+A2*3" was entered.
+    if ( !d->inputText.isEmpty() && d->inputText[0] == '=' )
+        makeFormula();
+    // Some numeric value or a string.
+    else
+    {
+        // Find out what data type it is
+        parseInputText();
+    }
+}
+
+void Cell::parseInputText()
 {
 //   kDebug() << k_funcinfo << endl;
-  const bool isLoading = d->sheet->isLoading();
+    // Goal of this method: determine the value of the cell
+    clearAllErrors();
 
-  if ( !isLoading )
-    doc()->emitBeginOperation( false );
+    d->value = Value::empty();
 
-  d->inputText = _text;
+    // Parses the text and sets its value appropriately (calls Cell::setValue).
+    doc()->parser()->parse( d->inputText, this );
 
-  // A real formula "=A1+A2*3" was entered.
-  if ( !d->inputText.isEmpty() && d->inputText[0] == '=' )
-  {
-    makeFormula();
-  }
-  // Some numeric value or a string.
-  else
-  {
-    // Find out what data type it is
-    checkTextInput();
-  }
+    // Parsing as time acts like an autoformat: we even change d->inputText
+    // [h]:mm:ss -> might get set by ValueParser
+    if ( isTime() && ( formatType() != Format::Time7 ) )
+        d->inputText = locale()->formatTime( value().asDateTime( doc() ).time(), true );
 
-  if ( !isLoading )
-    doc()->emitEndOperation( Region( QRect( d->column, d->row, 1, 1 ) ) );
+    // convert first letter to uppercase ?
+    if ( sheet()->getFirstLetterUpper() && value().isString() && !d->inputText.isEmpty() )
+    {
+        QString str = value().asString();
+        setValue( Value( str[0].toUpper() + str.right( str.length()-1 ) ) );
+    }
 }
 
 void Cell::setLink( const QString& link )
 {
-  d->extra()->link = link;
+    d->extra()->link = link;
 
-  if( !link.isEmpty() && d->inputText.isEmpty() )
-    setCellText( link );
+    if( !link.isEmpty() && d->inputText.isEmpty() )
+        setCellText( link );
 }
 
 QString Cell::link() const
 {
-  return d->hasExtra() ? d->extra()->link : QString();
+    return d->hasExtra() ? d->extra()->link : QString();
 }
 
 Format::Type Cell::formatType( int col, int row ) const
@@ -1247,34 +1260,6 @@ void Cell::convertToDate ()
   date = date.addDays( (int) value().asFloat() - 1 );
   date = value().asDateTime( doc() ).date();
   setCellText (locale()->formatDate (date, true));
-}
-
-void Cell::checkTextInput()
-{
-//   kDebug() << k_funcinfo << endl;
-  // Goal of this method: determine the value of the cell
-  clearAllErrors();
-
-  d->value = Value::empty();
-
-  // Get the text from that cell
-  QString str = d->inputText;
-
-  // Parses the text and sets its value appropriately (calls Cell::setValue).
-  doc()->parser()->parse (str, this);
-
-  // Parsing as time acts like an autoformat: we even change d->inputText
-  // [h]:mm:ss -> might get set by ValueParser
-  if (isTime() && (formatType() != Format::Time7))
-    d->inputText = locale()->formatTime( value().asDateTime( doc() ).time(), true);
-
-  // convert first letter to uppercase ?
-  if (d->sheet->getFirstLetterUpper() && value().isString() &&
-      (!d->inputText.isEmpty()))
-  {
-    QString str = value().asString();
-    setValue( Value( str[0].toUpper() + str.right( str.length()-1 ) ) );
-  }
 }
 
 
@@ -2378,7 +2363,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
     {
         dataType = text.attribute( "dataType" );
     }
-    else // old docs: do the ugly solution of calling checkTextInput to parse the text
+    else // old docs: do the ugly solution of calling parseInputText to parse the text
     {
       // ...except for date/time
       if (isDate() && ( t.contains('/') == 2 ))
@@ -2388,8 +2373,8 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
       else
       {
         d->inputText = pasteOperation( t, d->inputText, op );
-        checkTextInput();
-        //kDebug(36001) << "Cell::load called checkTextInput, got dataType=" << dataType << "  t=" << t << endl;
+        parseInputText();
+        //kDebug(36001) << "Cell::load called parseInputText, got dataType=" << dataType << "  t=" << t << endl;
         newStyleLoading = false;
       }
     }
@@ -2458,7 +2443,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         else // This happens with old docs, when format is set wrongly to date
         {
           d->inputText = pasteOperation( t, d->inputText, op );
-          checkTextInput();
+          parseInputText();
         }
       }
 
@@ -2480,7 +2465,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         else  // This happens with old docs, when format is set wrongly to time
         {
           d->inputText = pasteOperation( t, d->inputText, op );
-          checkTextInput();
+          parseInputText();
         }
       }
 
