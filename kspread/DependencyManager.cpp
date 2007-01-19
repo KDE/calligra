@@ -723,6 +723,8 @@ void DependencyManager::Private::cellsToCalculate( const Region& region, QSet<Ce
             for (int row = range.top(); row <= range.bottom(); ++row)
             {
                 Cell* cell = sheet->cellAt(col, row);
+                if ( cell->isDefault() )
+                    continue;
 
                 // check for already processed cells
                 if ( cells.contains( cell ) )
