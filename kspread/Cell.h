@@ -453,20 +453,6 @@ public:
     /** returns true, if cell format is of time type or content is a time */
     bool isTime( int col = 0, int row = 0 ) const;
 
-    /** return the cell's value as a double */
-    double getDouble ();
-
-    /** converts content to double format */
-    void convertToDouble ();
-    /** converts content to percentageformat */
-    void convertToPercent ();
-    /** converts content to money format */
-    void convertToMoney ();
-    /** converts content to time format */
-    void convertToTime ();
-    /** converts content to date format */
-    void convertToDate ();
-
     /**
     * Refreshing chart
     * @param refresh is default true
