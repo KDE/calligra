@@ -28,19 +28,9 @@ KoDirectoryStore::KoDirectoryStore( const QString& path, Mode _mode )
     : m_basePath( path )
 {
     const int pos = path.findRev( '/' );
-    bool stripFileName = false;
-    if (_mode == Read) { // the user clicked on foo/content.xml -> remove filename
-        stripFileName = true;
-    } else {
-        const QString fileName = path.mid(pos+1);
-        stripFileName = fileName == "content.xml";
-    }
-
-    if (stripFileName) {
-        // The parameter must include "maindoc.xml" or "content.xml"
-        if ( pos != -1 && pos != (int)m_basePath.length()-1 )
-            m_basePath = m_basePath.left( pos );
-    }
+    // The parameter must include "maindoc.xml" or "content.xml"
+    if ( pos != -1 && pos != (int)m_basePath.length()-1 )
+        m_basePath = m_basePath.left( pos );
     if ( !m_basePath.endsWith("/") )
         m_basePath += '/';
     m_currentPath = m_basePath;

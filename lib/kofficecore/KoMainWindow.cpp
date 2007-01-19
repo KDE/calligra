@@ -32,6 +32,7 @@
 #include "kkbdaccessextensions.h"
 #include "KoSpeaker.h"
 
+#include <kaboutdata.h>
 #include <kprinter.h>
 #include <kdeversion.h>
 #include <kstdaction.h>
@@ -836,6 +837,14 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
                 break;
             }
 
+            // adjust URL before doing checks on whether the file exists.
+            if ( specialOutputFlag == KoDocument::SaveAsDirectoryStore ) {
+                QString fileName = newURL.fileName();
+                if ( fileName != "content.xml"  ) {
+                    newURL.addPath( "content.xml" );
+                }
+            }
+
             // this file exists and we are not just clicking "Save As" to change filter options
             // => ask for confirmation
             if ( KIO::NetAccess::exists( newURL, false /*will write*/, this ) && !justChangingFilterOptions )
@@ -1200,6 +1209,11 @@ void KoMainWindow::print(bool quick) {
 
     if ( title.isEmpty() )
         title = fileName;
+    if ( title.isEmpty() ) {
+        // #139905 - breaks message freeze though
+        //const QString programName = instance()->aboutData() ? instance()->aboutData()->programName() : instance()->instanceName();
+        //title = i18n("%1 unsaved document (%2)").arg(programName).arg(KGlobal::locale()->formatDate(QDate::currentDate(), true/*short*/));
+    }
     printer.setDocName( title );
     printer.setDocFileName( fileName );
     printer.setDocDirectory( rootView()->koDocument()->url().directory() );
