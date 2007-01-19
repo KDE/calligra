@@ -404,7 +404,8 @@ public:
     // These shouldn't be available to other than those who inherits
     /// Calculate the critical path
     virtual bool calcCriticalPath(bool fromEnd);
-
+    virtual void calcFreeFloat();
+    
     /// Check if this node has any dependent child nodes
     virtual bool isEndNode() const;
     /// Check if this node has any dependent parent nodes
@@ -514,6 +515,10 @@ protected:
     bool m_visitedBackward;
     Duration m_durationForward;
     Duration m_durationBackward;
+    DateTime m_earlyStart;
+    DateTime m_lateStart;
+    DateTime m_earlyFinish;
+    DateTime m_lateFinish;
     
     QHash<long, Schedule*> m_schedules;
     Schedule *m_currentSchedule;

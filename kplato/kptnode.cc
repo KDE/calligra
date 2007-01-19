@@ -925,6 +925,13 @@ bool Node::calcCriticalPath(bool fromEnd) {
     return m_currentSchedule->inCriticalPath;
 }
 
+void Node::calcFreeFloat() {
+    foreach ( Node *n, m_nodes ) {
+        n->calcFreeFloat();
+    }
+    return;
+}
+
 int Node::level() {
     Node *n = getParent();
     return n ? n->level() + 1 : 0;

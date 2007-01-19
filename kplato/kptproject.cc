@@ -145,6 +145,7 @@ void Project::calculate()
         //makeAppointments();
         calcResourceOverbooked();
         cs->notScheduled = false;
+        calcFreeFloat();
         emit scheduleChanged( cs );
     } else if ( type() == Type_Subproject ) {
         kWarning() << k_funcinfo << "Subprojects not implemented" << endl;

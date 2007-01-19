@@ -221,9 +221,7 @@ public:
      */
     Duration startFloat( long id = -1 ) const;
     /**
-     * Return the duration the task has at its finish  before a successor task starts.
-     * This is the difference between the start time of the successor and
-     * the finish time of this task.
+     * Return the duration from Early Finish to Late Finish.
      * @param id Schedule identity. If id is -1, use current schedule.
      */
     Duration finishFloat( long id = -1 ) const;
@@ -344,7 +342,8 @@ protected:
 
     /// Calculate the critical path
     virtual bool calcCriticalPath(bool fromEnd);
-
+    virtual void calcFreeFloat();
+    
     // Proxy relations are relations to/from summarytasks. 
     // These relations are distributed to the child tasks before calculation.
     virtual void clearProxyRelations();
