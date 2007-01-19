@@ -452,12 +452,6 @@ public:
     /** returns true, if cell format is of time type or content is a time */
     bool isTime( int col = 0, int row = 0 ) const;
 
-    /**
-     * Sets the cell content to \p number .
-     * \note Used by some filters.
-     */
-    void setNumber( double number );
-
     /** return the cell's value as a double */
     double getDouble ();
 
@@ -698,12 +692,6 @@ protected:
      * Output: m_dataType
      */
     void checkTextInput();
-
-    /**
-     * Automatically chooses between a number format and
-     * a scientific format (if the number is too big)
-     */
-    void checkNumberFormat();
 
     /**
      * \ingroup OpenDocument

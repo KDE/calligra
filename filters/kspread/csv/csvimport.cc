@@ -41,6 +41,7 @@
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
 #include <kspread/Cell.h>
+#include <kspread/Value.h>
 
 #include <csvdialog.h>
 
@@ -191,7 +192,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     else
                     {
                         cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-                        cell->setNumber( d );
+                        cell->setCellValue( Value( d ), Format::Number, text );
                     }
                     Style style;
                     style.setPrecision( 2 );
@@ -214,7 +215,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     else
                     {
                         cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-                        cell->setNumber( d );
+                        cell->setCellValue( Value( d ), Format::Number, tmp );
                     }
                     Style style;
                     style.setPrecision( 2 );
@@ -237,7 +238,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     else
                     {
                         cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-                        cell->setNumber( d );
+                        cell->setCellValue( Value( d ), Format::Number, tmp );
                     }
                     Style style;
                     style.setPrecision( 2 );

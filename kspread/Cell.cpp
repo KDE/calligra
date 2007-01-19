@@ -915,13 +915,9 @@ bool Cell::calc()
 
   Value result = d->formula->eval ();
   setValue( result, false );
-  if (result.isNumber())
-    checkNumberFormat(); // auto-chooses number or scientific
 
   return true;
 }
-
-
 
 
 int Cell::defineAlignX()
@@ -1039,17 +1035,6 @@ void Cell::decPrecision()
     else if ( preciTmp > 0 )
         style.setPrecision( --preciTmp );
     setStyle( style );
-}
-
-//set numerical value
-//used in CSVFilter::convert (nowhere else yet)
-void Cell::setNumber( double number )
-{
-  setValue( Value( number ) );
-
-  d->inputText.setNum( number );
-  setDisplayText(d->inputText);
-  checkNumberFormat();
 }
 
 void Cell::setCellText( const QString& _text, bool asText )
@@ -1290,20 +1275,6 @@ void Cell::checkTextInput()
     QString str = value().asString();
     setValue( Value( str[0].toUpper() + str.right( str.length()-1 ) ) );
   }
-}
-
-//used in calc, setNumber, ValueParser
-void Cell::checkNumberFormat()
-{
-    if ( formatType() == Format::Number && value().isNumber() )
-    {
-        if ( value().asFloat() > 1e+10 )
-        {
-            Style style;
-            style.setFormatType( Format::Scientific );
-            setStyle( style );
-        }
-    }
 }
 
 
