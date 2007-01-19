@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DEPENDENCIES
-#define KSPREAD_DEPENDENCIES
+#ifndef KSPREAD_DEPENDENCY_MANAGER
+#define KSPREAD_DEPENDENCY_MANAGER
 
 #include <QLinkedList>
 
@@ -34,38 +34,39 @@ class Sheet;
  */
 class KSPREAD_EXPORT DependencyManager
 {
-  friend class RecalcManager;
+    friend class RecalcManager;
 
 public:
-  /** constructor */
-   DependencyManager();
-  /** destructor */
-  ~DependencyManager ();
+    /** constructor */
+     DependencyManager();
+    /** destructor */
+    ~DependencyManager ();
 
-  /** clear all data */
-  void reset ();
+    /** clear all data */
+    void reset ();
 
-  /** handle the fact that cell's contents have changed */
-  void regionChanged (const Region& region);
+    /** handle the fact that cell's contents have changed */
+    void regionChanged (const Region& region);
 
-  /** a named area was somehow modified */
-  void areaModified (const QString &name);
+    /** a named area was somehow modified */
+    void areaModified (const QString &name);
 
-  /** Updates the whole map. */
-  void updateAllDependencies(const Map* map);
+    /** Updates the whole map. */
+    void updateAllDependencies(const Map* map);
 
-  /**
-   * \return cells depending on \p cell
-   */
-  Region getDependents(const Cell* cell) const;
+    /**
+     * Returns the region, that consumes the value of \p cell.
+     * \return region consuming \p cell 's value
+     */
+    Region consumingRegion(const Cell* cell) const;
 
-  /**
-   * Adjusts formulas after cut & paste operations or column/row insertions/deletions.
-   *
-   * \param movedRegion the region, that was moved
-   * \param destination the new upper left corner of the region
-   */
-  void regionMoved( const Region& movedRegion, const Region::Point& destination );
+    /**
+     * Adjusts formulas after cut & paste operations or column/row insertions/deletions.
+     *
+     * \param movedRegion the region, that was moved
+     * \param destination the new upper left corner of the region
+     */
+    void regionMoved( const Region& movedRegion, const Region::Point& destination );
 
 protected:
     /**
@@ -89,19 +90,19 @@ protected:
      */
     QMap<int, Cell*> cellsToCalculate( Sheet* sheet = 0 ) const;
 
-  /**
-   * \param cell the cell which formula should  be altered
-   * \param oldLocation the location/range, that was cut
-   * \param offset the relative movement and new sheet, if applicable
-   *
-   * \see regionMoved()
-   */
-  void updateFormula( Cell* cell, const Region::Element* oldLocation, const Region::Point& offset );
+    /**
+     * \param cell the cell which formula should  be altered
+     * \param oldLocation the location/range, that was cut
+     * \param offset the relative movement and new sheet, if applicable
+     *
+     * \see regionMoved()
+     */
+    void updateFormula( Cell* cell, const Region::Element* oldLocation, const Region::Point& offset );
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread
 
-#endif // KSPREAD_DEPENDENCIES
+#endif // KSPREAD_DEPENDENCY_MANAGER
