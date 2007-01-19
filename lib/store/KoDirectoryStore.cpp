@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 David Faure <faure@kde.org>
+   Copyright (C) 2002, 2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,14 +27,22 @@
 KoDirectoryStore::KoDirectoryStore( const QString& path, Mode _mode )
     : m_basePath( path )
 {
-    // The parameter must include "maindoc.xml"
-    int pos = m_basePath.findRev( '/' );
-    if ( pos != -1 && pos != (int)m_basePath.length()-1 )
-        m_basePath = m_basePath.left( pos );
+    const int pos = path.findRev( '/' );
+    bool stripFileName = false;
+    if (_mode == Read) { // the user clicked on foo/content.xml -> remove filename
+        stripFileName = true;
+    } else {
+        const QString fileName = path.mid(pos+1);
+        stripFileName = fileName == "content.xml";
+    }
+
+    if (stripFileName) {
+        // The parameter must include "maindoc.xml" or "content.xml"
+        if ( pos != -1 && pos != (int)m_basePath.length()-1 )
+            m_basePath = m_basePath.left( pos );
+    }
     if ( !m_basePath.endsWith("/") )
         m_basePath += '/';
-    //if ( !m_basePath.startsWith("/") )
-    //    m_basePath.prepend( QDir::currentDirPath() + '/' );
     m_currentPath = m_basePath;
     kdDebug(s_area) << "KoDirectoryStore::KoDirectoryStore base path:" << m_basePath << endl;
     m_bGood = init( _mode );
