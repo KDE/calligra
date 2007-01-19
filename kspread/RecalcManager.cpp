@@ -23,6 +23,7 @@
 
 #include "Cell.h"
 #include "DependencyManager.h"
+#include "Formula.h"
 #include "Map.h"
 #include "Sheet.h"
 #include "Region.h"
@@ -104,14 +105,31 @@ void RecalcManager::recalcMap()
 
 void RecalcManager::recalc()
 {
+    kDebug(36002) << "Recalculating " << d->depths.count() << " cell(s).." << endl;
     ElapsedTime et( "Recalculating cells", ElapsedTime::PrintOnlyTime );
     foreach (Cell* cell, d->depths)
     {
+        if ( !cell->isFormula() )
+            continue;
         // only recalculate, if no circular dependency occurred
-        if ( cell->value() != Value::errorCIRCLE() )
-            cell->calc();
+        if ( cell->value() == Value::errorCIRCLE() )
+            continue;
+        // Formula object not yet created?
+        if ( cell->formula() == 0 )
+        {
+            // because of a parse error?
+            if ( cell->value() == Value::errorPARSE() )
+                continue;
+            // We were probably at a "isLoading() = true" state,
+            // when we originally parsed. Try again.
+            if ( !cell->makeFormula() )
+                continue; // there was a parse error
+        }
+
+        // evaluate the formula and set the result
+        Value result = cell->formula()->eval();
+        cell->setValue( result, false );
     }
-    kDebug(36002) << "Recalculating " << d->depths.count() << " cell(s).." << endl;
 //     dump();
     d->depths.clear();
 }

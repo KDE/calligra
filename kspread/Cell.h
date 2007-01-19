@@ -475,13 +475,6 @@ public:
     */
     bool updateChart(bool refresh=true);
 
-    /**
-     * Starts calculating.
-     *
-     * @return true on success and false on error.
-     */
-    bool calc();
-
     //
     //END
     //

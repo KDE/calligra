@@ -54,7 +54,6 @@
 #include "Condition.h"
 #include "Damages.h"
 #include "Doc.h"
-#include "Formula.h"
 #include "GenValidationStyle.h"
 #include "Global.h"
 #include "Localization.h"
@@ -891,34 +890,6 @@ void Cell::clearFormula()
         d->formula = 0;
     }
 }
-
-bool Cell::calc()
-{
-  if ( !isFormula() )
-    return true;
-
-  if (d->formula == 0)
-  {
-    if ( d->value == Value::errorPARSE() )  // there was a parse error
-      return false;
-    else
-    {
-      /* we were probably at a "isLoading() = true" state when we originally
-       * parsed
-       */
-      makeFormula ();
-
-      if ( d->formula == 0 ) // there was a parse error
-        return false;
-    }
-  }
-
-  Value result = d->formula->eval ();
-  setValue( result, false );
-
-  return true;
-}
-
 
 int Cell::defineAlignX()
 {

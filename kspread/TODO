@@ -233,7 +233,7 @@ Things not in bugzilla
       it is only use for recalculation. If this is disabled, the
       reference depth is useless. Therefore, we have to respect the
       automatic recalc setting.
-    - Move Cell::calc() to RecalcManager.				----
+    - Move Cell::calc() to RecalcManager.				done
 
   + Value							      1 ----
     - Support datetimes.						----
