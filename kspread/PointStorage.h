@@ -269,15 +269,13 @@ public:
         int dataCount = 0;
         int rowCount = 0;
         // save the old data
-        for ( int row = KS_rowMax - number + 1; row - 1 <= m_rows.count() && row <= KS_rowMax; ++row )
+        for ( int row = KS_rowMax - number + 1; row <= m_rows.count() && row <= KS_rowMax; ++row )
         {
-            const int rowStart = m_rows.value( row - 1 );
-            const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
-            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
-            const QVector<int> data = m_data.mid( rowStart, rowLength );
-            for ( int col = 0; col < cols.count(); ++col )
-                oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
-            dataCount += data.count();
+            const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
+            const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
+            for ( QVector<int>::const_iterator cit = cstart; cit != cend; ++cit )
+                oldData.append( qMakePair( QPoint( *cit, row ), m_data.value( cit - m_cols.begin() ) ) );
+            dataCount += ( cend - cstart );
             ++rowCount;
         }
         // remove the out of range data
