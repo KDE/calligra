@@ -46,6 +46,8 @@ private Q_SLOTS:
     void testLastInRow();
     void testNextInColumn();
     void testNextInRow();
+    void testPrevInColumn();
+    void testPrevInRow();
     void testIteration();
     void testSubStorage();
 };

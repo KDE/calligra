@@ -602,7 +602,41 @@ public:
         const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
         const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
         const QVector<int>::const_iterator cit = qUpperBound( cstart, cend, col );
-        return ( cit == cend ) ? T() : m_data.value( m_rows.value( row - 1 ) + ( cit - cstart ) );
+        return ( cit == cend || *cit <= col ) ? T() : m_data.value( m_rows.value( row - 1 ) + ( cit - cstart ) );
+    }
+
+    /**
+     * Retrieve the previous used data in \p col after \p row .
+     * Can be used in conjunction with lastInColumn() to loop through a column.
+     * \return the previous used data in \p col or the default data, there is no further data.
+     */
+    T prevInColumn( int col, int row ) const
+    {
+        Q_ASSERT( 1 <= col && col <= KS_colMax );
+        Q_ASSERT( 1 <= row && row <= KS_rowMax );
+        if ( m_rows.value( row - 1 ) == 0 )
+            return T();
+        return m_data.value( m_cols.lastIndexOf( col, m_rows.value( row - 1 ) - 1 ) );
+    }
+
+    /**
+     * Retrieve the previous used data in \p row after \p col .
+     * Can be used in conjunction with lastInRow() to loop through a row.
+     * \return the previous used data in \p row or the default data, if there is no further data.
+     */
+    T prevInRow( int col, int row ) const
+    {
+        Q_ASSERT( 1 <= col && col <= KS_colMax );
+        Q_ASSERT( 1 <= row && row <= KS_rowMax );
+        // is the row not present?
+        if ( row - 1 > m_rows.count() )
+            return T();
+        const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
+        const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
+        const QVector<int>::const_iterator cit = qLowerBound( cstart, cend, col );
+        if ( cit == cend || cit == cstart )
+            return T();
+        return m_data.value( cit - 1 - m_cols.begin() );
     }
 
     /**
