@@ -1,0 +1,16 @@
+
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_FUNCS(rewinddir popen mkstemp)
+
+dnl ##### Check for fseeko/ftello or fseek64/ftell64
+dnl The LARGEFILE and FSEEKO macros have to be called in C, not C++, mode.
+AC_SYS_LARGEFILE
+AC_FUNC_FSEEKO
+AC_CHECK_FUNCS(fseek64)
+AC_CHECK_FUNCS(ftell64)
+
+dnl ##### Check for libpaper (Debian).
+KDE_CHECK_HEADERS(paper.h)
+KDE_CHECK_LIB(paper, paperinit, [LIBPAPER="-lpaper"])
+AC_SUBST(LIBPAPER)

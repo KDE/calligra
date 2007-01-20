@@ -1,0 +1,101 @@
+dnl ======================================
+dnl KNewStuff Configuration
+dnl ======================================
+dnl
+dnl Copyright (C) 2004 Josef Spillner <spillner@kde.org>
+dnl This file is to be used within KDE's build system.
+dnl It defines $(LIB_KNEWSTUFF) if knewstuff has been found,
+dnl and a HAVE_KNEWSTUFF #define statement is added.
+dnl
+
+AC_MSG_CHECKING([for KDE library: knewstuff])
+
+ac_knewstuff_includes=NO ac_knewstuff_libraries=NO
+knewstuff_libraries=""
+knewstuff_includes=""
+
+AC_CACHE_VAL(ac_cv_have_knewstuff,
+[
+AC_FIND_FILE(knewstuff/downloaddialog.h, $kde_incdirs, knewstuff_incdir)
+ac_knewstuff_includes="$knewstuff_incdir"
+
+AC_FIND_FILE(libknewstuff.so, $kde_libdirs, knewstuff_libdir)
+ac_knewstuff_libraries="$knewstuff_libdir"
+
+if test "$ac_knewstuff_includes" = NO || test "$ac_knewstuff_libraries" = NO; then
+  ac_cv_have_knewstuff="have_knewstuff=no"
+  ac_knewstuff_notfound=""
+else
+  have_knewstuff="yes"
+fi
+])
+
+eval "$ac_cv_have_knewstuff"
+
+if test "$have_knewstuff" != yes; then
+  AC_MSG_RESULT([$have_knewstuff])
+else
+  AC_MSG_RESULT([$have_knewstuff (libraries $ac_knewstuff_libraries, headers $ac_knewstuff_includes)])
+
+dnl  AC_DEFINE_UNQUOTED(HAVE_KNEWSTUFF, 1, [Add KNewStuff functionality.])
+  CXXFLAGS="$CXXFLAGS -DHAVE_KNEWSTUFF"
+
+  LIB_KNEWSTUFF='-lknewstuff'
+  AC_SUBST(LIB_KNEWSTUFF)
+fi
+
+AC_CHECK_FILE([kexi/3rdparty/kexifeedbackwizard/lib/kexifeedbackwizard.cpp],
+  have_internal_feedback="yes"
+,
+  have_internal_feedback="no"
+)
+
+AC_MSG_CHECKING([for KDE library: kfeedbackwizard])
+
+ac_kfeedback_includes=NO ac_kfeedback_libraries=NO
+kfeedback_libraries=""
+kfeedback_includes=""
+
+AC_CACHE_VAL(ac_cv_have_kfeedback,
+[
+AC_FIND_FILE(kfeedbackwizard.h, $kde_incdirs, kfeedback_incdir)
+ac_kfeedback_includes="$kfeedback_incdir"
+
+AC_FIND_FILE(libkfeedbackwizard.so, $kde_libdirs, kfeedback_libdir)
+ac_kfeedback_libraries="$kfeedback_libdir"
+
+if test "$ac_kfeedback_includes" = NO || test "$ac_kfeedback_libraries" = NO; then
+  ac_cv_have_kfeedback="have_kfeedback=no"
+  ac_kfeedback_notfound=""
+else
+  have_kfeedback="yes"
+fi
+])
+
+eval "$ac_cv_have_kfeedback"
+
+INC_KFEEDBACK=''
+LIB_KFEEDBACK=''
+if test "$have_kfeedback" != yes; then
+  if test "$have_internal_feedback" = yes; then
+    CXXFLAGS="$CXXFLAGS -DFEEDBACK_CLASS=KexiFeedbackWizard -DFEEDBACK_INCLUDE=\"<kexifeedbackwizard.h>\""
+    use_kexifb="yes"
+    AC_MSG_RESULT([using internal])
+    INC_KFEEDBACK='-I../3rdparty/kexifeedbackwizard/lib'
+    LIB_KFEEDBACK='../3rdparty/kexifeedbackwizard/lib/libkexifeedbackwizard.la'
+  else
+    use_kexifb="no"
+    AC_MSG_RESULT([dont use])
+  fi
+else
+  use_kexifb="no"
+  AC_MSG_RESULT([$have_kfeedback (libraries $ac_kfeedback_libraries, headers $ac_kfeedback_includes)])
+
+dnl  AC_DEFINE_UNQUOTED(HAVE_KFEEDBACK, 1, [Add KNewStuff functionality.])
+  CXXFLAGS="$CXXFLAGS -DFEEDBACK_CLASS=KFeedbackWizard -DFEEDBACK_INCLUDE=\"<kfeedbackwizard.h>\""
+
+  LIB_KFEEDBACK='-lkfeedbackwizard'
+fi
+AC_SUBST(LIB_KFEEDBACK)
+AC_SUBST(INC_KFEEDBACK)
+AM_CONDITIONAL(use_kexifeedback, test "$use_kexifb" = "yes")
