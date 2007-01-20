@@ -25,8 +25,6 @@
 #include <QString>
 #include <QVector>
 
-#include "Global.h"
-
 namespace KSpread
 {
 

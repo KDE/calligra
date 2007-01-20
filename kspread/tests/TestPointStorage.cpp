@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#define KS_colMax 10
+#define KS_rowMax 10
+
 #include "PointStorage.h"
 
 #include "TestPointStorage.h"
@@ -182,8 +185,12 @@ void PointStorageTest::testInsertColumns()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.insertColumns( 2, 2 ); // in the middle
-    storage.insertColumns( 9, 1 ); // beyond the current end
+    QVector< QPair<QPoint,int> > old;
+    old = storage.insertColumns( 2, 2 ); // in the middle
+    QVERIFY( old.count() == 0 );
+
+    old = storage.insertColumns( 9, 1 ); // beyond the current end
+    QVERIFY( old.count() == 0 );
     // ( 1,  ,  , 2,  ,  , 3)
     // ( 4,  ,  , 5, 6,  ,  )
     // (  ,  ,  , 7, 8,  , 9)
@@ -210,8 +217,21 @@ void PointStorageTest::testDeleteColumns()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.removeColumns( 2, 2 ); // in the middle
-    storage.removeColumns( 3, 1 ); // beyond the current end
+    QVector< QPair<QPoint,int> > old;
+    old = storage.removeColumns( 2, 2 ); // in the middle
+    QVERIFY( old.count() == 5 );
+    QVERIFY( old.contains( qMakePair( QPoint(2,1),  2 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(2,2),  5 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(3,2),  6 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(2,3),  7 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(3,3),  8 ) ) );
+
+    old = storage.removeColumns( 3, 1 ); // beyond the current end
+    QVERIFY( old.count() == 3 );
+    QVERIFY( old.contains( qMakePair( QPoint(3,1),  3 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(3,3),  9 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(3,5), 12 ) ) );
+
     // ( 1,  )
     // ( 4,  )
     // (  ,  )
@@ -238,8 +258,13 @@ void PointStorageTest::testInsertRows()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.insertRows( 2, 2 ); // in the middle
-    storage.insertRows( 9, 1 ); // beyond the current end
+    QVector< QPair<QPoint,int> > old;
+    old = storage.insertRows( 2, 2 ); // in the middle
+    QVERIFY( old.count() == 0 );
+
+    old = storage.insertRows( 9, 1 ); // beyond the current end
+    QVERIFY( old.count() == 0 );
+
     // ( 1, 2,  ,  , 3)
     // (  ,  ,  ,  ,  )
     // (  ,  ,  ,  ,  )
@@ -268,8 +293,20 @@ void PointStorageTest::testDeleteRows()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.removeRows( 2, 2 ); // in the middle
-    storage.removeRows( 3, 1 ); // at the current end
+    QVector< QPair<QPoint,int> > old;
+    old = storage.removeRows( 2, 2 ); // in the middle
+    QVERIFY( old.count() == 6 );
+    QVERIFY( old.contains( qMakePair( QPoint(1,2),  4 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(2,2),  5 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(3,2),  6 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(2,3),  7 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(3,3),  8 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(5,3),  9 ) ) );
+
+    old = storage.removeRows( 3, 1 ); // at the current end
+    QVERIFY( old.count() == 2 );
+    QVERIFY( old.contains( qMakePair( QPoint(1,3), 11 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(5,3), 12 ) ) );
     // ( 1, 2,  ,  , 3)
     // (  ,  ,  ,10,  )
 
@@ -293,8 +330,17 @@ void PointStorageTest::testShiftLeft()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.removeShiftLeft( QRect( 2, 2, 2, 2 ) );
-    storage.removeShiftLeft( QRect( 5, 5, 1, 1 ) );
+    QVector< QPair<QPoint,int> > old;
+    old = storage.removeShiftLeft( QRect( 2, 2, 2, 2 ) );
+    QVERIFY( old.count() == 4 );
+    QVERIFY( old.contains( qMakePair( QPoint(2,2),  5 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(3,2),  6 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(2,3),  7 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(3,3),  8 ) ) );
+
+    old = storage.removeShiftLeft( QRect( 5, 5, 1, 1 ) );
+    QVERIFY( old.count() == 1 );
+    QVERIFY( old.contains( qMakePair( QPoint(5,5), 12 ) ) );
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
     // (  ,  , 9,  ,  )
@@ -321,8 +367,12 @@ void PointStorageTest::testShiftRight()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.insertShiftRight( QRect( 2, 2, 2, 2 ) );
-    storage.insertShiftRight( QRect( 5, 5, 1, 1 ) );
+    QVector< QPair<QPoint,int> > old;
+    old = storage.insertShiftRight( QRect( 2, 2, 2, 2 ) );
+    QVERIFY( old.count() == 0 );
+
+    old = storage.insertShiftRight( QRect( 5, 5, 1, 1 ) );
+    QVERIFY( old.count() == 0 );
     // ( 1, 2,  ,  , 3,  ,  )
     // ( 4,  ,  , 5, 6,  ,  )
     // (  ,  ,  , 7, 8,  , 9)
@@ -349,8 +399,15 @@ void PointStorageTest::testShiftUp()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.removeShiftUp( QRect( 2, 2, 2, 1 ) );
-    storage.removeShiftUp( QRect( 5, 5, 1, 1 ) );
+    QVector< QPair<QPoint,int> > old;
+    old = storage.removeShiftUp( QRect( 2, 2, 2, 1 ) );
+    QVERIFY( old.count() == 2 );
+    QVERIFY( old.contains( qMakePair( QPoint(2,2),  5 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(3,2),  6 ) ) );
+
+    old = storage.removeShiftUp( QRect( 5, 5, 1, 1 ) );
+    QVERIFY( old.count() == 1 );
+    QVERIFY( old.contains( qMakePair( QPoint(5,5), 12 ) ) );
     // ( 1, 2,  ,  , 3)
     // ( 4, 7, 8,  ,  )
     // (  ,  ,  ,  , 9)
@@ -377,8 +434,13 @@ void PointStorageTest::testShiftDown()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.insertShiftDown( QRect( 2, 2, 2, 2 ) );
-    storage.insertShiftDown( QRect( 5, 5, 1, 1 ) );
+    QVector< QPair<QPoint,int> > old;
+    old = storage.insertShiftDown( QRect( 2, 2, 2, 2 ) );
+    QVERIFY( old.count() == 0 );
+
+    old = storage.insertShiftDown( QRect( 5, 5, 1, 1 ) );
+    QVERIFY( old.count() == 0 );
+
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
     // (  ,  ,  ,  , 9)

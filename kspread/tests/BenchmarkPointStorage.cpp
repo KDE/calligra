@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "Global.h"
+
 #include "BenchmarkHelper.h"
 #include "PointStorage.h"
 

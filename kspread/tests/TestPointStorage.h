@@ -20,7 +20,6 @@
 #ifndef KSPREAD_POINT_STORAGE_TEST
 #define KSPREAD_POINT_STORAGE_TEST
 
-#include <QtGui>
 #include <QtTest/QtTest>
 
 namespace KSpread
