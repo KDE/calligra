@@ -541,7 +541,38 @@ public:
     T firstInRow( int row ) const
     {
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
+        // row's empty?
+        if ( m_rows.value( row - 1 ) == m_rows.value( row ) )
+            return T();
         return m_data.value( m_rows.value( row - 1 ) );
+    }
+
+    /**
+     * Retrieve the last used data in \p col .
+     * Can be used in conjunction with prevInColumn() to loop through a column.
+     * \return the last used data in \p col or the default data, if the column is empty.
+     */
+    T lastInColumn( int col ) const
+    {
+        Q_ASSERT( 1 <= col && col <= KS_colMax );
+        return m_data.value( m_cols.lastIndexOf( col ) );
+    }
+
+    /**
+     * Retrieve the last used data in \p row .
+     * Can be used in conjunction with prevInRow() to loop through a row.
+     * \return the last used data in \p row or the default data, if the row is empty.
+     */
+    T lastInRow( int row ) const
+    {
+        Q_ASSERT( 1 <= row && row <= KS_rowMax );
+        // row's empty?
+        if ( m_rows.value( row - 1 ) == m_rows.value( row ) || m_rows.value( row - 1 ) == m_data.count() )
+            return T();
+        // last row ends on data vector end
+        if ( row == m_rows.count() )
+            return m_data.value( m_data.count() - 1 );
+        return m_data.value( m_rows.value( row ) - 1 );
     }
 
     /**
