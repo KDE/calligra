@@ -920,7 +920,7 @@ void KexiMainWindowImpl::initActions()
 
 	// -- add a few missing tooltips (usable especially in Form's "Assign action" dialog)
 	if ((action = actionCollection()->action("window_close")))
-		action->setToolTip("Close the current window");
+		action->setToolTip(i18n("Close the current window"));
 
 	// ----- declare action categories, so form's "assign action to button"
 	//       (and macros in the future) will be able to recognize category 
