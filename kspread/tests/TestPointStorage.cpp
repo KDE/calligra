@@ -66,6 +66,7 @@ void PointStorageTest::testInsertion()
     // ( 3, 8,13,18,23)
     // ( 4, 9,14,19,24)
     // ( 5,10,15,20,25)
+//     qDebug() << endl << qPrintable( storage.dump() );
 
     QVector<int> data( QVector<int>() << 1<< 6 << 11 << 16 << 21
                                       << 2 << 7 << 12 << 17 << 22
@@ -81,6 +82,12 @@ void PointStorageTest::testInsertion()
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
+//     qDebug() << "data result: " << storage.m_data;
+//     qDebug() << "data expect: " << data;
+//     qDebug() << "rows result: " << storage.m_rows;
+//     qDebug() << "rows expect: " << rows;
+//     qDebug() << "cols result: " << storage.m_cols;
+//     qDebug() << "cols expect: " << cols;
 
 
     // reverse filling
@@ -440,24 +447,16 @@ void PointStorageTest::testShiftDown()
 
     old = storage.insertShiftDown( QRect( 5, 5, 1, 1 ) );
     QVERIFY( old.count() == 0 );
-
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
     // (  ,  ,  ,  , 9)
     // (  , 5, 6,10,  )
     // (11, 7, 8,  ,  )
     // (  ,  ,  ,  ,12)
-    qDebug() << endl << qPrintable( storage.dump() );
 
     const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 9 << 5 << 6 << 10 << 11 << 7 << 8 << 12 );
-    const QVector<int> rows( QVector<int>() << 0 << 3 << 4 << 5 << 8 << 11 << 12 );
+    const QVector<int> rows( QVector<int>() << 0 << 3 << 4 << 5 << 8 << 11 );
     const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 5 << 2 << 3 << 4 << 1 << 2 << 3 << 5 );
-    qDebug() << "data result: " << storage.m_data;
-    qDebug() << "data expect: " << data;
-    qDebug() << "rows result: " << storage.m_rows;
-    qDebug() << "rows expect: " << rows;
-    qDebug() << "cols result: " << storage.m_cols;
-    qDebug() << "cols expect: " << cols;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
