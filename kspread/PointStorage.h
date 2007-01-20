@@ -176,7 +176,7 @@ public:
         // row's missing?
         if ( row - 1 > m_rows.count() )
             return T();
-        const int rowStart = m_rows.value( row - 1 );
+        const int rowStart = ( row - 1 < m_rows.count() ) ? m_rows.value( row - 1 ) : m_data.count();
         const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
         const QVector<int> cols = m_cols.mid( rowStart, rowLength );
         QVector<int>::const_iterator cit = qBinaryFind( cols, col );
@@ -341,7 +341,7 @@ public:
     {
         Q_ASSERT( 1 <= rect.left() && rect.left() <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
-        for ( int row = rect.bottom(); row >= rect.top(); --row )
+        for ( int row = qMin( rect.bottom(), m_rows.count() ); row >= rect.top(); --row )
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
@@ -374,14 +374,14 @@ public:
     {
         Q_ASSERT( 1 <= rect.left() && rect.left() <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
-        for ( int row = rect.left(); row <= rect.right(); ++row )
+        for ( int row = rect.top(); row <= rect.bottom() && row <= m_rows.count(); ++row )
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
             const QVector<int> cols = m_cols.mid( rowStart, rowLength );
             for ( int col = 0; col < cols.count(); ++col )
             {
-                if ( cols.value( col ) > KS_colMax - rect.left() )
+                if ( cols.value( col ) + rect.width() > KS_colMax )
                     oldData.append( qMakePair( QPoint( cols.value( col ), row ), m_data.value( rowStart + col ) ) );
                 else if ( cols.value( col ) >= rect.left() )
                     m_cols[rowStart + col] += rect.width();
@@ -451,7 +451,7 @@ public:
         if ( rect.top() - 1 > m_rows.count() )
             return QVector< QPair<QPoint,T> >();
         QVector< QPair<QPoint,T> > oldData;
-        for ( int row = rect.bottom(); row >= rect.top(); --row )
+        for ( int row = qMin( rect.bottom(), m_rows.count() ); row >= rect.top(); --row )
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;

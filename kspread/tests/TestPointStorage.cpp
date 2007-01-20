@@ -447,6 +447,7 @@ void PointStorageTest::testShiftRight()
     // (  ,  ,  , 7, 8,  , 9,  ,  ,  )
     // (  ,  ,  ,10,  ,  ,  ,  ,  ,  )
     // (11,  ,  ,  ,  ,12,  ,  ,  ,  )
+    qDebug() << endl << qPrintable( storage.dump() );
 
     data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 7 << 8 << 9 << 10 << 11 << 12;
     rows = QVector<int>() << 0 << 3 << 5 << 8 << 9;
@@ -544,6 +545,7 @@ void PointStorageTest::testShiftDown()
     // (  ,  ,  ,  ,  )
     // (  ,  ,  ,  ,  )
     // (  , 5,  ,  ,  )
+    qDebug() << endl << qPrintable( storage.dump() );
 
     data = QVector<int>() << 1 << 2 << 3 << 4 << 9 << 6 << 10 << 11 << 8 << 12 << 5;
     rows = QVector<int>() << 0 << 3 << 4 << 5 << 7 << 9 << 10 << 10 << 10 << 10;
