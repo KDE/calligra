@@ -38,6 +38,8 @@ private Q_SLOTS:
     void testDeleteRowsPerformance();
     void testShiftLeftPerformance();
     void testShiftRightPerformance();
+    void testShiftUpPerformance();
+    void testShiftDownPerformance();
     void testIterationPerformance();
 };
 

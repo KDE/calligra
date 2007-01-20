@@ -234,6 +234,39 @@ void PointStorageBenchmark::testShiftRightPerformance()
     qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
 }
 
+void PointStorageBenchmark::testShiftUpPerformance()
+{
+    PointStorage<int> storage;
+    for ( int r = 0; r < KS_rowMax; ++r )
+    {
+        storage.m_data << 1;
+        storage.m_cols << 1;
+        storage.m_rows << r;
+    }
+    qDebug() << "start measuring...";
+    Time::tval start = Time::stamp();
+    for ( int i = 1; i < 1000; ++i )
+        storage.removeShiftUp( QRect( 1, 42, 1, 3) );
+    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 1000 ) );
+}
+
+void PointStorageBenchmark::testShiftDownPerformance()
+{
+    PointStorage<int> storage;
+    for ( int r = 0; r < KS_rowMax; ++r )
+    {
+        storage.m_data << 1;
+        storage.m_cols << 1;
+        storage.m_rows << r;
+    }
+    storage.m_rows << 0;
+    qDebug() << "start measuring...";
+    Time::tval start = Time::stamp();
+    for ( int i = 1; i < 1000; ++i )
+        storage.insertShiftDown( QRect( 1, 42, 1, 3) );
+    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 1000 ) );
+}
+
 void PointStorageBenchmark::testIterationPerformance()
 {
     // row x column
@@ -277,10 +310,6 @@ void PointStorageBenchmark::testIterationPerformance()
 
         Time::tval start = 0;
         int v;
-        int col = 0;
-        int row = 0;
-        int cols = 0;
-        int rows = 0;
         start = Time::stamp();
         for ( int i = 0; i < storage.count(); ++i )
         {
