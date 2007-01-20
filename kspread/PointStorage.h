@@ -317,7 +317,7 @@ public:
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
             const QVector<int> cols = m_cols.mid( rowStart, rowLength );
-            const QVector<int> data = m_data.mid( rowStart, rowLength );
+            const QVector<T> data = m_data.mid( rowStart, rowLength );
             for ( int col = 0; col < cols.count(); ++col )
                 oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
             dataCount += data.count();
@@ -419,7 +419,7 @@ public:
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
             const QVector<int> cols = m_cols.mid( rowStart, rowLength );
-            const QVector<int> data = m_data.mid( rowStart, rowLength );
+            const QVector<T> data = m_data.mid( rowStart, rowLength );
             for ( int col = cols.count() - 1; col >= 0; --col )
             {
                 if ( cols.value( col ) >= rect.left() && cols.value( col ) <= rect.right() )
@@ -468,7 +468,7 @@ public:
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
             const QVector<int> cols = m_cols.mid( rowStart, rowLength );
-            const QVector<int> data = m_data.mid( rowStart, rowLength );
+            const QVector<T> data = m_data.mid( rowStart, rowLength );
             for ( int col = cols.count() - 1; col >= 0; --col )
             {
                 if ( cols.value( col ) >= rect.left() && cols.value( col ) <= rect.right() )
