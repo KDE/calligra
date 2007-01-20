@@ -675,6 +675,29 @@ public:
     }
 
     /**
+     * Creates a substorage consisting of the values in \p rect.
+     * \return 
+     */
+    PointStorage<T> subStorage( const QRect& rect ) const
+    {
+        QRect range( rect.normalized() );
+        Q_ASSERT( 1 <= range.left() && range.right() <= KS_colMax );
+        Q_ASSERT( 1 <= range.top() && range.bottom() <= KS_rowMax );
+
+        // this generates an array of values
+        PointStorage<T> subStorage;
+        for ( int row = range.top(); row <= range.bottom() && row <= m_rows.count(); ++row )
+        {
+            const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
+            const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
+            for ( QVector<int>::const_iterator cit = cstart; cit != cend; ++cit )
+                if ( *cit >= range.left() && *cit <= range.right() )
+                    subStorage.insert( *cit, row, m_data.value( cit - m_cols.begin() ) );
+        }
+        return subStorage;
+    }
+
+    /**
      * Equality operator.
      */
     bool operator==( const PointStorage<T>& o ) const

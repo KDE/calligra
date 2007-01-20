@@ -45,6 +45,7 @@ private Q_SLOTS:
     void testNextInColumn();
     void testNextInRow();
     void testIteration();
+    void testSubStorage();
 };
 
 } // namespace KSpread

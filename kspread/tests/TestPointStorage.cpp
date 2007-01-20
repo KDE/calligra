@@ -668,6 +668,59 @@ void PointStorageTest::testIteration()
     QCOMPARE( storage.row( 11 ),  5 );
 }
 
+void PointStorageTest::testSubStorage()
+{
+    PointStorage<int> storage;
+    storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
+    storage.m_rows << 0 << 3 << 6 << 9 << 10;
+    storage.m_cols << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5;
+    // ( 1, 2,  ,  , 3)
+    // ( 4, 5, 6,  ,  )
+    // (  , 7, 8,  , 9)
+    // (  ,  ,  ,10,  )
+    // (11,  ,  ,  ,12)
+
+    PointStorage<int> subStorage;
+    subStorage = storage.subStorage( QRect( 1, 1, 5, 5 ) ); // all
+    // ( 1, 2,  ,  , 3)
+    // ( 4, 5, 6,  ,  )
+    // (  , 7, 8,  , 9)
+    // (  ,  ,  ,10,  )
+    // (11,  ,  ,  ,12)
+
+    QVector<int> data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
+    QVector<int> rows = QVector<int>() << 0 << 3 << 6 << 9 << 10;
+    QVector<int> cols = QVector<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5;
+    QCOMPARE( subStorage.m_data, data );
+    QCOMPARE( subStorage.m_rows, rows );
+    QCOMPARE( subStorage.m_cols, cols );
+
+    subStorage = storage.subStorage( QRect( 1, 1, 3, 3 ) ); // upper left
+    // ( 1, 2,  )
+    // ( 4, 5, 6)
+    // (  , 7, 8)
+
+    data = QVector<int>() << 1 << 2 << 4 << 5 << 6 << 7 << 8;
+    rows = QVector<int>() << 0 << 2 << 5;
+    cols = QVector<int>() << 1 << 2 << 1 << 2 << 3 << 2 << 3;
+    QCOMPARE( subStorage.m_data, data );
+    QCOMPARE( subStorage.m_rows, rows );
+    QCOMPARE( subStorage.m_cols, cols );
+
+    subStorage = storage.subStorage( QRect( 4, 4, 5, 5 ) ); // lower right
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,10,  )
+    // (  ,  ,  ,  ,12)
+
+    data = QVector<int>() << 10 << 12;
+    rows = QVector<int>() << 0 << 0 << 0 << 0 << 1;
+    cols = QVector<int>() << 4 << 5;
+    QCOMPARE( subStorage.m_data, data );
+    QCOMPARE( subStorage.m_rows, rows );
+    QCOMPARE( subStorage.m_cols, cols );
+}
 
 QTEST_MAIN(PointStorageTest)
 
