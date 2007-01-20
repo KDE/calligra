@@ -460,6 +460,8 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
           if (!valid)
               tm = m_doc->locale()->readTime (tmp + ":00 " + stringAm, &valid);
       }
+      if (valid)
+          tmpTime.setTime(tm);
     }
   }
   if (valid)
