@@ -218,17 +218,10 @@ void PointStorageTest::testInsertColumns()
     // (  ,  ,  , 7, 8,  ,  ,  ,  ,  )
     // (  ,  ,  ,  ,  ,  ,  ,  ,  ,10)
     // (11,  ,  ,  ,  ,  ,  ,  ,  ,  )
-    qDebug() << endl << qPrintable( storage.dump() );
 
     data = QVector<int>() << 1 << 2 << 4 << 5 << 6 << 7 << 8 << 10 << 11;
     rows = QVector<int>() << 0 << 2 << 5 << 7 << 8;
-    cols = QVector<int>() << 1 << 4 << 1 << 4 << 5 << 4 << 5 << 6 << 1;
-    qDebug() << "data result: " << storage.m_data;
-    qDebug() << "data expect: " << data;
-    qDebug() << "rows result: " << storage.m_rows;
-    qDebug() << "rows expect: " << rows;
-    qDebug() << "cols result: " << storage.m_cols;
-    qDebug() << "cols expect: " << cols;
+    cols = QVector<int>() << 1 << 4 << 1 << 4 << 5 << 4 << 5 << 10 << 1;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );

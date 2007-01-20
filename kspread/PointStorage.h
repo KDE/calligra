@@ -204,18 +204,26 @@ public:
     {
         Q_ASSERT( 1 <= position && position <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
-        for ( int row = 1; row <= m_rows.count(); ++row )
+        for ( int row = m_rows.count(); row >= 1; --row )
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
             const QVector<int> cols = m_cols.mid( rowStart, rowLength );
-            for ( int col = 0; col < cols.count(); ++col )
+            for ( int col = cols.count(); col >= 0; --col )
             {
                 if ( cols.value( col ) >= position )
                 {
                     if ( cols.value( col ) + number > KS_colMax )
+                    {
                         oldData.append( qMakePair( QPoint( cols.value( col ), row ), m_data.value( rowStart + col ) ) );
-                    m_cols[rowStart + col] += number;
+                        m_cols.remove( rowStart + col );
+                        m_data.remove( rowStart + col );
+                        // adjust the offsets of the following rows
+                        for ( int r = row; r < m_rows.count(); ++r )
+                            --m_rows[r];
+                    }
+                    else
+                        m_cols[rowStart + col] += number;
                 }
             }
         }
@@ -230,7 +238,7 @@ public:
     {
         Q_ASSERT( 1 <= position && position <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
-        for ( int row = m_rows.count(); row >= 0; --row )
+        for ( int row = m_rows.count(); row >= 1; --row )
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
