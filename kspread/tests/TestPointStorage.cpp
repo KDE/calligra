@@ -545,17 +545,10 @@ void PointStorageTest::testShiftDown()
     // (  ,  ,  ,  ,  )
     // (  ,  ,  ,  ,  )
     // (  , 5,  ,  ,  )
-    qDebug() << endl << qPrintable( storage.dump() );
 
     data = QVector<int>() << 1 << 2 << 3 << 4 << 9 << 6 << 10 << 11 << 8 << 12 << 5;
     rows = QVector<int>() << 0 << 3 << 4 << 5 << 7 << 9 << 10 << 10 << 10 << 10;
     cols = QVector<int>() << 1 << 2 << 5 << 1 << 5 << 3 << 4 << 1 << 3 << 5 << 2;
-    qDebug() << "data result: " << storage.m_data;
-    qDebug() << "data expect: " << data;
-    qDebug() << "rows result: " << storage.m_rows;
-    qDebug() << "rows expect: " << rows;
-    qDebug() << "cols result: " << storage.m_cols;
-    qDebug() << "cols expect: " << cols;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );

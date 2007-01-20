@@ -461,37 +461,41 @@ public:
             {
                 if ( cols.value( col ) >= rect.left() && cols.value( col ) <= rect.right() )
                 {
-                    // save old data
                     if ( row + rect.height() > KS_rowMax )
-                        oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
-
-                    // insert missing rows
-                    if ( row + rect.height() > m_rows.count() )
-                        m_rows.insert( m_rows.count(), row + rect.height() - m_rows.count(), m_data.count() );
-
-                    // copy the data down
-                    const int row2 = row + rect.height();
-                    const QVector<int>::const_iterator cstart2( m_cols.begin() + m_rows.value( row2 - 1 ) );
-                    const QVector<int>::const_iterator cend2( ( row2 < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row2 ) ) : m_cols.end() );
-                    const QVector<int>::const_iterator cit2 = qLowerBound( cstart2, cend2, cols.value( col ) );
-                    // column's missing?
-                    if ( cit2 == cend2 || *cit2 != cols.value( col ) )
                     {
-                        // determine the index where the data and column has to be inserted
-                        const int index = m_rows.value( row2 - 1 ) + ( cit2 - cstart2 );
-                        // insert the actual data
-                        m_data.insert( index, data.value( col ) );
-                        // insert the column index
-                        m_cols.insert( index, cols.value( col ) );
-                        // adjust the offsets of the following rows
-                        for ( int r = row2; r < m_rows.count(); ++r )
-                            ++m_rows[r];
+                        // save old data
+                        oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
                     }
-                    // column exists
                     else
                     {
-                        const int index = m_rows.value( row2 - 1 ) + ( cit2 - cstart2 );
-                        m_data[ index ] = data.value( col );
+                        // insert missing rows
+                        if ( row + rect.height() > m_rows.count() )
+                            m_rows.insert( m_rows.count(), row + rect.height() - m_rows.count(), m_data.count() );
+
+                        // copy the data down
+                        const int row2 = row + rect.height();
+                        const QVector<int>::const_iterator cstart2( m_cols.begin() + m_rows.value( row2 - 1 ) );
+                        const QVector<int>::const_iterator cend2( ( row2 < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row2 ) ) : m_cols.end() );
+                        const QVector<int>::const_iterator cit2 = qLowerBound( cstart2, cend2, cols.value( col ) );
+                        // column's missing?
+                        if ( cit2 == cend2 || *cit2 != cols.value( col ) )
+                        {
+                            // determine the index where the data and column has to be inserted
+                            const int index = m_rows.value( row2 - 1 ) + ( cit2 - cstart2 );
+                            // insert the actual data
+                            m_data.insert( index, data.value( col ) );
+                            // insert the column index
+                            m_cols.insert( index, cols.value( col ) );
+                            // adjust the offsets of the following rows
+                            for ( int r = row2; r < m_rows.count(); ++r )
+                                ++m_rows[r];
+                        }
+                        // column exists
+                        else
+                        {
+                            const int index = m_rows.value( row2 - 1 ) + ( cit2 - cstart2 );
+                            m_data[ index ] = data.value( col );
+                        }
                     }
 
                     // remove the data
