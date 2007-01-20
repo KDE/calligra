@@ -440,17 +440,10 @@ void PointStorageTest::testShiftRight()
     // (  ,  ,  , 7, 8,  , 9,  ,  ,  )
     // (  ,  ,  ,10,  ,  ,  ,  ,  ,  )
     // (11,  ,  ,  ,  ,12,  ,  ,  ,  )
-    qDebug() << endl << qPrintable( storage.dump() );
 
     data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 7 << 8 << 9 << 10 << 11 << 12;
     rows = QVector<int>() << 0 << 3 << 5 << 8 << 9;
     cols = QVector<int>() << 1 << 2 << 5 << 1 << 10 << 4 << 5 << 7 << 4 << 1 << 6;
-    qDebug() << "data result: " << storage.m_data;
-    qDebug() << "data expect: " << data;
-    qDebug() << "rows result: " << storage.m_rows;
-    qDebug() << "rows expect: " << rows;
-    qDebug() << "cols result: " << storage.m_cols;
-    qDebug() << "cols expect: " << cols;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
