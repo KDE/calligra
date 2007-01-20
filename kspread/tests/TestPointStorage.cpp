@@ -204,9 +204,34 @@ void PointStorageTest::testInsertColumns()
     // (  ,  ,  ,  ,  ,10,  )
     // (11,  ,  ,  ,  ,  ,12)
 
-    const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
-    const QVector<int> rows( QVector<int>() << 0 << 3 << 6 << 9 << 10 );
-    const QVector<int> cols( QVector<int>() << 1 << 4 << 7 << 1 << 4 << 5 << 4 << 5 << 7 << 6 << 1 << 7 );
+    QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
+    QVector<int> rows( QVector<int>() << 0 << 3 << 6 << 9 << 10 );
+    QVector<int> cols( QVector<int>() << 1 << 4 << 7 << 1 << 4 << 5 << 4 << 5 << 7 << 6 << 1 << 7 );
+    QCOMPARE( storage.m_data, data );
+    QCOMPARE( storage.m_rows, rows );
+    QCOMPARE( storage.m_cols, cols );
+
+    old = storage.insertColumns( 6, 4 ); // shift the last column out of range
+    QVERIFY( old.count() == 3 );
+    QVERIFY( old.contains( qMakePair( QPoint(7,1),  3 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(7,3),  9 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(7,5), 12 ) ) );
+    // ( 1,  ,  , 2,  ,  ,  ,  ,  ,  )
+    // ( 4,  ,  , 5, 6,  ,  ,  ,  ,  )
+    // (  ,  ,  , 7, 8,  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  ,  ,  ,  ,  ,10)
+    // (11,  ,  ,  ,  ,  ,  ,  ,  ,  )
+    qDebug() << endl << qPrintable( storage.dump() );
+
+    data = QVector<int>() << 1 << 2 << 4 << 5 << 6 << 7 << 8 << 10 << 11;
+    rows = QVector<int>() << 0 << 2 << 5 << 7 << 8;
+    cols = QVector<int>() << 1 << 4 << 1 << 4 << 5 << 4 << 5 << 6 << 1;
+    qDebug() << "data result: " << storage.m_data;
+    qDebug() << "data expect: " << data;
+    qDebug() << "rows result: " << storage.m_rows;
+    qDebug() << "rows expect: " << rows;
+    qDebug() << "cols result: " << storage.m_cols;
+    qDebug() << "cols expect: " << cols;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -280,9 +305,39 @@ void PointStorageTest::testInsertRows()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
-    const QVector<int> rows( QVector<int>() << 0 << 3 << 3 << 3 << 6 << 9 << 10 );
-    const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5 );
+    QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
+    QVector<int> rows( QVector<int>() << 0 << 3 << 3 << 3 << 6 << 9 << 10 );
+    QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5 );
+    QCOMPARE( storage.m_data, data );
+    QCOMPARE( storage.m_rows, rows );
+    QCOMPARE( storage.m_cols, cols );
+
+
+    old = storage.insertRows( 6, 4 ); // shift the last row out of range
+    QVERIFY( old.count() == 2 );
+    QVERIFY( old.contains( qMakePair( QPoint(1,7), 11 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(5,7), 12 ) ) );
+    // ( 1, 2,  ,  , 3)
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  )
+    // ( 4, 5, 6,  ,  )
+    // (  , 7, 8,  , 9)
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,10,  )
+    qDebug() << endl << qPrintable( storage.dump() );
+
+    data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10;
+    rows = QVector<int>() << 0 << 3 << 3 << 3 << 6 << 9 << 9 << 9 << 9 << 9;
+    cols = QVector<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4;
+    qDebug() << "data result: " << storage.m_data;
+    qDebug() << "data expect: " << data;
+    qDebug() << "rows result: " << storage.m_rows;
+    qDebug() << "rows expect: " << rows;
+    qDebug() << "cols result: " << storage.m_cols;
+    qDebug() << "cols expect: " << cols;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -386,9 +441,32 @@ void PointStorageTest::testShiftRight()
     // (  ,  ,  ,10,  ,  ,  )
     // (11,  ,  ,  ,  ,12,  )
 
-    const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
-    const QVector<int> rows( QVector<int>() << 0 << 3 << 6 << 9 << 10 );
-    const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 4 << 5 << 4 << 5 << 7 << 4 << 1 << 6 );
+    QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
+    QVector<int> rows( QVector<int>() << 0 << 3 << 6 << 9 << 10 );
+    QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 4 << 5 << 4 << 5 << 7 << 4 << 1 << 6 );
+    QCOMPARE( storage.m_data, data );
+    QCOMPARE( storage.m_rows, rows );
+    QCOMPARE( storage.m_cols, cols );
+
+
+    old = storage.insertShiftRight( QRect( 4, 2, 6, 1 ) ); // shift the 6 out of range
+    QVERIFY( old.count() == 1 );
+    QVERIFY( old.contains( qMakePair( QPoint(5,2),  6 ) ) );
+    // ( 1, 2,  ,  , 3,  ,  ,  ,  ,  )
+    // ( 4,  ,  ,  ,  ,  ,  ,  ,  , 5)
+    // (  ,  ,  , 7, 8,  , 9,  ,  ,  )
+    // (  ,  ,  ,10,  ,  ,  ,  ,  ,  )
+    // (11,  ,  ,  ,  ,12,  ,  ,  ,  )
+
+    data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 7 << 8 << 9 << 10 << 11 << 12;
+    rows = QVector<int>() << 0 << 3 << 5 << 8 << 9;
+    cols = QVector<int>() << 1 << 2 << 5 << 1 << 10 << 4 << 5 << 7 << 4 << 1 << 6;
+    qDebug() << "data result: " << storage.m_data;
+    qDebug() << "data expect: " << data;
+    qDebug() << "rows result: " << storage.m_rows;
+    qDebug() << "rows expect: " << rows;
+    qDebug() << "cols result: " << storage.m_cols;
+    qDebug() << "cols expect: " << cols;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -454,9 +532,38 @@ void PointStorageTest::testShiftDown()
     // (11, 7, 8,  ,  )
     // (  ,  ,  ,  ,12)
 
-    const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 9 << 5 << 6 << 10 << 11 << 7 << 8 << 12 );
-    const QVector<int> rows( QVector<int>() << 0 << 3 << 4 << 5 << 8 << 11 );
-    const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 5 << 2 << 3 << 4 << 1 << 2 << 3 << 5 );
+    QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 9 << 5 << 6 << 10 << 11 << 7 << 8 << 12 );
+    QVector<int> rows( QVector<int>() << 0 << 3 << 4 << 5 << 8 << 11 );
+    QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 5 << 2 << 3 << 4 << 1 << 2 << 3 << 5 );
+    QCOMPARE( storage.m_data, data );
+    QCOMPARE( storage.m_rows, rows );
+    QCOMPARE( storage.m_cols, cols );
+
+
+    old = storage.insertShiftDown( QRect( 2, 4, 1, 6 ) ); // shift the 7 out of range
+    QVERIFY( old.count() == 1 );
+    QVERIFY( old.contains( qMakePair( QPoint(2,5),  7 ) ) );
+    // ( 1, 2,  ,  , 3)
+    // ( 4,  ,  ,  ,  )
+    // (  ,  ,  ,  , 9)
+    // (  ,  , 6,10,  )
+    // (11,  , 8,  ,  )
+    // (  ,  ,  ,  ,12)
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  )
+    // (  ,  ,  ,  ,  )
+    // (  , 5,  ,  ,  )
+
+    data = QVector<int>() << 1 << 2 << 3 << 4 << 9 << 6 << 10 << 11 << 8 << 12 << 5;
+    rows = QVector<int>() << 0 << 3 << 4 << 5 << 7 << 9 << 10 << 10 << 10 << 10;
+    cols = QVector<int>() << 1 << 2 << 5 << 1 << 5 << 3 << 4 << 1 << 3 << 5 << 2;
+    qDebug() << "data result: " << storage.m_data;
+    qDebug() << "data expect: " << data;
+    qDebug() << "rows result: " << storage.m_rows;
+    qDebug() << "rows expect: " << rows;
+    qDebug() << "cols result: " << storage.m_cols;
+    qDebug() << "cols expect: " << cols;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
