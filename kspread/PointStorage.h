@@ -211,10 +211,12 @@ public:
             const QVector<int> cols = m_cols.mid( rowStart, rowLength );
             for ( int col = 0; col < cols.count(); ++col )
             {
-                if ( cols.value( col ) > KS_colMax - position )
-                    oldData.append( qMakePair( QPoint( cols.value( col ), row ), m_data.value( rowStart + col ) ) );
-                else if ( cols.value( col ) >= position )
+                if ( cols.value( col ) >= position )
+                {
+                    if ( cols.value( col ) + number > KS_colMax )
+                        oldData.append( qMakePair( QPoint( cols.value( col ), row ), m_data.value( rowStart + col ) ) );
                     m_cols[rowStart + col] += number;
+                }
             }
         }
         return oldData;
@@ -459,17 +461,15 @@ public:
             const QVector<int> data = m_data.mid( rowStart, rowLength );
             for ( int col = 0; col < cols.count(); ++col )
             {
-                if ( cols.value( col ) >= rect.left() )
+                if ( cols.value( col ) >= rect.left() && cols.value( col ) <= rect.right() )
                 {
-                    if ( cols.value( col ) <= rect.right() )
-                    {
+                    if ( row + rect.height() > KS_rowMax )
                         oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
-                        m_cols.remove( rowStart + col );
-                        m_data.remove( rowStart + col );
-                        // adjust the offsets of the following rows
-                        for ( int r = row; r < m_rows.count(); ++r )
-                            --m_rows[r];
-                    }
+                    m_cols.remove( rowStart + col );
+                    m_data.remove( rowStart + col );
+                    // adjust the offsets of the following rows
+                    for ( int r = row; r < m_rows.count(); ++r )
+                        --m_rows[r];
                 }
             }
         }
