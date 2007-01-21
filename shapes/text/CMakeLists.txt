@@ -1,3 +1,7 @@
+project( textPlugin)
+
+add_subdirectory( tests )
+
 include_directories( ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kotext ${CMAKE_SOURCE_DIR}/libs/kotext/styles )
 
 ########### Flake Plugin library ###############
