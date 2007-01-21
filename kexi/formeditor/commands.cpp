@@ -750,13 +750,11 @@ InsertWidgetCommand::execute()
 		kWarning() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
 		return;
 	}
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
 //! @todo allow setting this for data view mode as well
 	if (m_form->designMode()) {
 		//don't generate accelerators for widgets in design mode
 		KAcceleratorManager::setNoAccel(w);
 	}
-#endif
 
 	// if the insertRect is invalid (ie only one point), we use widget' size hint
 	if(( (m_insertRect.width() < 21) && (m_insertRect.height() < 21)))
@@ -903,7 +901,6 @@ CreateLayoutCommand::execute()
 		m_name = m_form->objectTree()->generateUniqueName(classname);
 
 	QWidget *w = lib->createWidget(classname, container->widget(), m_name.latin1(), container);
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
 //! @todo allow setting this for data view mode as well
 	if (w) {
 		if (m_form->designMode()) {
@@ -911,7 +908,6 @@ CreateLayoutCommand::execute()
 			KAcceleratorManager::setNoAccel(w);
 		}
 	}
-#endif
 	ObjectTreeItem *tree = w ? m_form->objectTree()->lookup(w->name()) : 0;
 	if(!tree)
 		return;

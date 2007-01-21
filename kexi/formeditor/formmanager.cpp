@@ -55,9 +55,9 @@
 #include <kfontdialog.h>
 
 #include <kdeversion.h>
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9) && !defined(Q_WS_WIN)
+//#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9) && !defined(Q_WS_WIN)
 # include <kactioncollection.h>
-#endif
+//#endif
 
 #include "widgetpropertyset.h"
 #include "objecttree.h"

@@ -1241,13 +1241,11 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 
 	if(!w)
 		return;
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
 //! @todo allow setting this for data view mode as well
 	if (m_currentForm->designMode()) {
 		//don't generate accelerators for widgets in design mode
 		KAcceleratorManager::setNoAccel(w);
 	}
-#endif
 	w->setStyle(container->widget()->style());
 	w->show();
 
@@ -1329,7 +1327,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 
 	}
 	// And rename the widget and its ObjectTreeItem
-	container->setName(wname.toLatin1());
+	container->setObjectName(wname);
 	if(form->objectTree())
 		form->objectTree()->rename(form->objectTree()->name(), wname);
 	form->setInteractiveMode(false);
@@ -1349,7 +1347,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 		ObjectTreeItem *item = form->objectTree()->lookup(it.currentKey());
 		if(!item || !item->widget())
 		{
-			kDebug() << "Cannot assign buddy for widget " << it.current()->name() << " to " << it.currentKey() << endl;
+			kDebug() << "Cannot assign buddy for widget " << it.current()->objectName() << " to " << it.currentKey() << endl;
 			continue;
 		}
 		it.current()->setBuddy(item->widget());
@@ -1584,7 +1582,7 @@ FormIO::saveImage(QDomDocument &domDoc, const QPixmap &pixmap)
 	QString name = "image" + QString::number(count);
 	image.setAttribute("name", name);
 
-	const QImage img( pixmap.convertToImage() );
+	const QImage img( pixmap.toImage() );
 	QByteArray ba;
 	QBuffer buf(&ba);
 	buf.open( QIODevice::WriteOnly | QIODevice::Text );
@@ -1633,7 +1631,7 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
 	}
 
 	QPixmap pix;
-	QString data = image.namedItem("data").toElement().text();
+	QString data( image.namedItem("data").toElement().text() );
 	const int lengthOffset = 4;
 	int baSize = data.length() / 2 + lengthOffset;
 	uchar *ba = new uchar[baSize];
@@ -1657,7 +1655,7 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
 	QString format = image.namedItem("data").toElement().attribute("format", "PNG");
 	if((format == "XPM.GZ") || (format == "XBM.GZ"))
 	{
-		ulong len = image.attribute("length").toULong();
+		int len = image.attribute("length").toInt();
 		if(len < data.length() * 5)
 		    len = data.length() * 5;
 		// qUncompress() expects the first 4 bytes to be the expected length of
@@ -1667,7 +1665,7 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
 		ba[2] = ( len & 0x0000ff00 ) >> 8;
 		ba[3] = ( len & 0x000000ff );
 		QByteArray baunzip = qUncompress(ba, baSize);
-		pix.loadFromData( (const uchar*)baunzip.data(), baunzip.size(), format.left(format.find('.')).toLatin1() );
+		pix.loadFromData( (const uchar*)baunzip.data(), baunzip.size(), format.left(format.indexOf('.')).toLatin1() );
 	}
 	else
 		pix.loadFromData( (const uchar*)ba+lengthOffset, baSize-lengthOffset, format.toLatin1() );
