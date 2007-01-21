@@ -70,7 +70,7 @@ void TextShape::paint(QPainter &painter, const KoViewConverter &converter) {
 }
 
 QPointF TextShape::convertScreenPos(const QPointF &point) {
-    QPointF p = m_invMatrix.map(point);
+    QPointF p = matrix().inverted().map(point);
     return p + QPointF(0.0, m_textShapeData->documentOffset());
 }
 
