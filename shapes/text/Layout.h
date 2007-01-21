@@ -21,11 +21,14 @@
 #define LAYOUTHELPER_H
 
 #include <KoTextDocumentLayout.h>
+#include <KoInsets.h>
 
 #include <QTextLine>
+#include <QTextBlock>
 
-class LayoutPrivate;
 class KoStyleManager;
+class KoTextBlockData;
+class KoTextShapeData;
 
 class Layout : public KoTextDocumentLayout::LayoutState {
 public:
@@ -63,7 +66,20 @@ private:
 
     void resetPrivate();
 
-    LayoutPrivate *d;
+private:
+    KoStyleManager *m_styleManager;
+
+    double m_y;
+    QTextBlock m_block;
+    KoTextBlockData *m_blockData;
+
+    QTextBlockFormat m_format;
+    QTextBlock::Iterator m_fragmentIterator;
+    KoTextShapeData *m_data;
+    bool m_newShape, m_newParag, m_reset, m_isRtl;
+    KoInsets m_borderInsets;
+    KoInsets m_shapeBorder;
+    KoTextDocumentLayout *m_parent;
 };
 
 #endif
