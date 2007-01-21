@@ -20,7 +20,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 
-#include "KoPathShapesPlugin.h"
+#include "PathShapesPlugin.h"
 #include "star/KoStarShapeFactory.h"
 #include "regularpolygon/KoRegularPolygonShapeFactory.h"
 #include "rectangle/KoRectangleShapeFactory.h"
@@ -30,9 +30,9 @@
 #include <kgenericfactory.h>
 
 K_EXPORT_COMPONENT_FACTORY(pathshapes,
-                           KGenericFactory<KoPathShapesPlugin>( "PathShapes" ) )
+                           KGenericFactory<PathShapesPlugin>( "PathShapes" ) )
 
-KoPathShapesPlugin::KoPathShapesPlugin( QObject *parent, const QStringList& )
+PathShapesPlugin::PathShapesPlugin( QObject *parent, const QStringList& )
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add( new KoStarShapeFactory( parent));
@@ -43,4 +43,4 @@ KoPathShapesPlugin::KoPathShapesPlugin( QObject *parent, const QStringList& )
     KoShapeRegistry::instance()->add( new KoEnhancedPathShapeFactory(parent));
 }
 
-#include "KoPathShapesPlugin.moc"
+#include "PathShapesPlugin.moc"

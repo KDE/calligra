@@ -19,7 +19,7 @@ set(pathshapes_PART_SRCS
     enhancedpath/KoEnhancedPathParameter.cpp
     enhancedpath/KoEnhancedPathFormula.cpp
     enhancedpath/KoEnhancedPathHandle.cpp
-    KoPathShapesPlugin.cpp
+    PathShapesPlugin.cpp
 )
 
 kde4_automoc(${pathshapes_PART_SRCS})

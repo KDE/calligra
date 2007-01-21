@@ -17,17 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOPATHSHAPESPLUGIN_H
-#define KOPATHSHAPESPLUGIN_H
+#ifndef PATHSHAPESPLUGIN_H
+#define PATHSHAPESPLUGIN_H
 
 #include <QObject>
 
-class KoPathShapesPlugin : public QObject {
+class PathShapesPlugin : public QObject {
     Q_OBJECT
 
 public:
-    KoPathShapesPlugin(QObject * parent,  const QStringList & );
-    ~KoPathShapesPlugin() {}
+    PathShapesPlugin(QObject * parent,  const QStringList & );
+    ~PathShapesPlugin() {}
 
 };
 
