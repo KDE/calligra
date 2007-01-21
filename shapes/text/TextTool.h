@@ -20,8 +20,9 @@
 #ifndef KOTEXTTOOL_H
 #define KOTEXTTOOL_H
 
-#include "KoTextShape.h"
-#include "KoTextSelectionHandler.h"
+#include "TextShape.h"
+
+#include <KoTextSelectionHandler.h>
 
 #include <KoTool.h>
 
@@ -31,11 +32,11 @@
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
-class KoTextTool : public KoTool {
+class TextTool : public KoTool {
     Q_OBJECT
 public:
-    explicit KoTextTool(KoCanvasBase *canvas);
-    ~KoTextTool();
+    explicit TextTool(KoCanvasBase *canvas);
+    ~TextTool();
 
     void paint( QPainter &painter, KoViewConverter &converter );
 
@@ -57,7 +58,7 @@ private:
     void updateSelectionHandler();
 
 private:
-    KoTextShape *m_textShape;
+    TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
     QTextCursor m_caret;
     KoTextSelectionHandler m_selectionHandler;

@@ -16,23 +16,22 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "KoTextPlugin.h"
-#include "KoTextToolFactory.h"
-#include "KoTextShapeFactory.h"
+#include "TextPlugin.h"
+#include "TextToolFactory.h"
+#include "TextShapeFactory.h"
 
-#include <KoProperties.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<KoTextPlugin>( "TextShape" ) )
+K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<TextPlugin>( "TextShape" ) )
 
-KoTextPlugin::KoTextPlugin(QObject * parent, const QStringList &)
+TextPlugin::TextPlugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new KoTextToolFactory(parent));
-    KoShapeRegistry::instance()->add(new KoTextShapeFactory(parent));
+    KoToolRegistry::instance()->add(new TextToolFactory(parent));
+    KoShapeRegistry::instance()->add(new TextShapeFactory(parent));
 }
 
-#include "KoTextPlugin.moc"
+#include "TextPlugin.moc"

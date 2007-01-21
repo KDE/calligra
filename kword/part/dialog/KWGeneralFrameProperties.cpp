@@ -56,7 +56,7 @@ void KWGeneralFrameProperties::open(KoShape *shape) {
     widget.allFrames->setVisible(false);
     widget.resizeLastFrame->setChecked(true);
     widget.isCopyOfPrevious->setVisible(false);
-    if(shape->shapeId() == KoTextShape_SHAPEID)
+    if(shape->shapeId() == TextShape_SHAPEID)
         widget.reconnect->setChecked(true);
     else {
         widget.noFollowup->setChecked(true);

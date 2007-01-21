@@ -17,27 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTextToolFactory.h"
-#include "KoTextTool.h"
-#include "KoTextShape.h"
+#ifndef KOTEXTTOOLFACTORY_H
+#define KOTEXTTOOLFACTORY_H
 
-#include <klocale.h>
+#include <KoToolFactory.h>
 
-KoTextToolFactory::KoTextToolFactory(QObject *parent)
-: KoToolFactory(parent, "TextToolFactory_ID", i18n("Text tool"))
-{
-    setToolTip (i18n("Text editing tool"));
-    setToolType (dynamicToolType());
-    setIcon ("edittext");
-    setPriority (1);
-    setActivationShapeID (KoTextShape_SHAPEID);
-}
+#include <QStringList>
 
-KoTextToolFactory::~KoTextToolFactory() {
-}
+class TextToolFactory : public KoToolFactory {
+    Q_OBJECT
+public:
+    explicit TextToolFactory(QObject *parent);
+    ~TextToolFactory();
 
-KoTool * KoTextToolFactory::createTool(KoCanvasBase *canvas) {
-    return new KoTextTool(canvas);
-}
+    KoTool * createTool(KoCanvasBase *canvas);
+};
 
-#include "KoTextToolFactory.moc"
+#endif

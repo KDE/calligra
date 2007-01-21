@@ -16,26 +16,16 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef TEXTPLUGIN_H
+#define TEXTPLUGIN_H
 
-#ifndef TEXTSHAPEFACTORY_H
-#define TEXTSHAPEFACTORY_H
+#include <QObject>
 
-#include <KoShapeFactory.h>
-
-class KoShape;
-
-class KoTextShapeFactory : public KoShapeFactory {
+class TextPlugin : public QObject {
     Q_OBJECT
 
 public:
-    /// constructor
-    explicit KoTextShapeFactory(QObject *parent);
-    ~KoTextShapeFactory() {}
-
-    KoShape *createDefaultShape() const;
-    KoShape *createShape(const KoProperties * params) const;
-
-    //QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    TextPlugin(QObject * parent, const QStringList &);
+    ~TextPlugin() {};
 };
-
 #endif

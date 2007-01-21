@@ -17,7 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoTextTool.h>
+#include "TextTool.h"
+
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -30,17 +31,17 @@
 #include <QTextLayout>
 #include <QAbstractTextDocumentLayout>
 
-KoTextTool::KoTextTool(KoCanvasBase *canvas)
+TextTool::TextTool(KoCanvasBase *canvas)
 : KoTool(canvas)
 , m_textShape(0)
 , m_textShapeData(0)
 {
 }
 
-KoTextTool::~KoTextTool() {
+TextTool::~TextTool() {
 }
 
-void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
+void TextTool::paint( QPainter &painter, KoViewConverter &converter) {
     if(painter.hasClipping()) {
         QRect shape = converter.documentToView(m_textShape->boundingRect()).toRect();
         if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())
@@ -79,11 +80,11 @@ void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
     block.layout()->drawCursor(&painter, QPointF(0,0), m_caret.position() - block.position());
 }
 
-void KoTextTool::mousePressEvent( KoPointerEvent *event ) {
+void TextTool::mousePressEvent( KoPointerEvent *event ) {
     if(! m_textShape->boundingRect().contains(event->point)) {
         QRectF area(event->point, QSizeF(1,1));
         foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
-            KoTextShape *textShape = dynamic_cast<KoTextShape*> (shape);
+            TextShape *textShape = dynamic_cast<TextShape*> (shape);
             if(textShape) {
                 m_textShape = textShape;
                 KoTextShapeData *d = static_cast<KoTextShapeData*> (textShape->userData());
@@ -104,13 +105,13 @@ void KoTextTool::mousePressEvent( KoPointerEvent *event ) {
     updateSelectionHandler();
 }
 
-void KoTextTool::updateSelectionHandler() {
+void TextTool::updateSelectionHandler() {
     m_selectionHandler.setShape(m_textShape);
     m_selectionHandler.setShapeData(m_textShapeData);
     m_selectionHandler.setCaret(&m_caret);
 }
 
-int KoTextTool::pointToPosition(const QPointF & point) const {
+int TextTool::pointToPosition(const QPointF & point) const {
     QPointF p = m_textShape->convertScreenPos(point);
     int caretPos = m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
     caretPos = qMax(caretPos, m_textShapeData->position());
@@ -120,11 +121,11 @@ int KoTextTool::pointToPosition(const QPointF & point) const {
     return caretPos;
 }
 
-void KoTextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
+void TextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
     // TODO select whole word, or when clicking in between two words select 2 words.
 }
 
-void KoTextTool::mouseMoveEvent( KoPointerEvent *event ) {
+void TextTool::mouseMoveEvent( KoPointerEvent *event ) {
     useCursor(Qt::IBeamCursor);
     if(event->buttons() == Qt::NoButton)
         return;
@@ -138,11 +139,11 @@ void KoTextTool::mouseMoveEvent( KoPointerEvent *event ) {
     updateSelectionHandler();
 }
 
-void KoTextTool::mouseReleaseEvent( KoPointerEvent *event ) {
+void TextTool::mouseReleaseEvent( KoPointerEvent *event ) {
     event->ignore();
 }
 
-void KoTextTool::keyPressEvent(QKeyEvent *event) {
+void TextTool::keyPressEvent(QKeyEvent *event) {
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     switch(event->key()) { // map input to moveOperation
 /* TODO
@@ -208,15 +209,15 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
     updateSelectionHandler();
 }
 
-void KoTextTool::keyReleaseEvent(QKeyEvent *event) {
+void TextTool::keyReleaseEvent(QKeyEvent *event) {
     event->ignore();
 }
 
-void KoTextTool::activate (bool temporary) {
+void TextTool::activate (bool temporary) {
     Q_UNUSED(temporary);
     KoSelection *selection = m_canvas->shapeManager()->selection();
     foreach(KoShape *shape, selection->selectedShapes()) {
-        m_textShape = dynamic_cast<KoTextShape*> (shape);
+        m_textShape = dynamic_cast<TextShape*> (shape);
         if(m_textShape)
             break;
     }
@@ -238,7 +239,7 @@ void KoTextTool::activate (bool temporary) {
     updateSelectionHandler();
 }
 
-void KoTextTool::deactivate() {
+void TextTool::deactivate() {
     m_textShape = 0;
     if(m_textShapeData)
         m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.
@@ -247,7 +248,7 @@ void KoTextTool::deactivate() {
     updateSelectionHandler();
 }
 
-void KoTextTool::repaint() {
+void TextTool::repaint() {
     QTextBlock block = m_caret.block();
     if(block.isValid()) {
         QTextLine tl = block.layout()->lineForTextPosition(m_caret.position() - block.position());
@@ -265,8 +266,8 @@ void KoTextTool::repaint() {
     }
 }
 
-KoToolSelection* KoTextTool::selection() {
+KoToolSelection* TextTool::selection() {
     return &m_selectionHandler;
 }
 
-#include "KoTextTool.moc"
+#include "TextTool.moc"

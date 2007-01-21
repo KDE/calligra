@@ -16,7 +16,9 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <KoTextShapeFactory.h>
+#include "TextShapeFactory.h"
+#include "TextShape.h"
+//#include "TextToolFactory.h"
 
 #include <klocale.h>
 
@@ -24,12 +26,10 @@
 #include <KoShapeGeometry.h>
 #include <KoShape.h>
 
-#include "KoTextShapeData.h"
-#include "KoTextShape.h"
-#include "KoTextToolFactory.h"
+#include <KoTextShapeData.h>
 
-KoTextShapeFactory::KoTextShapeFactory(QObject *parent)
-    : KoShapeFactory(parent, KoTextShape_SHAPEID, i18n("Text"))
+TextShapeFactory::TextShapeFactory(QObject *parent)
+    : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text"))
 {
     setToolTip(i18n("A Shape That Shows Text"));
 
@@ -42,24 +42,24 @@ KoTextShapeFactory::KoTextShapeFactory(QObject *parent)
     addTemplate(t);
 }
 
-KoShape *KoTextShapeFactory::createDefaultShape() const {
-    KoTextShape *text = new KoTextShape();
+KoShape *TextShapeFactory::createDefaultShape() const {
+    TextShape *text = new TextShape();
     return text;
 }
 
-KoShape *KoTextShapeFactory::createShape(const KoProperties * params) const {
-    KoTextShape *shape = new KoTextShape();
+KoShape *TextShapeFactory::createShape(const KoProperties * params) const {
+    TextShape *shape = new TextShape();
     KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
     data->document()->setHtml( params->getProperty("text").toString() );
     return shape;
 }
 
 #if 0
-QList<KoShapeConfigWidgetBase*> KoTextShapeFactory::createShapeOptionPanels() {
+QList<KoShapeConfigWidgetBase*> TextShapeFactory::createShapeOptionPanels() {
     QList<KoShapeConfigWidgetBase*> answer;
     answer.append(new KoShapeGeometry());
     return answer;
 }
 #endif
 
-#include "KoTextShapeFactory.moc"
+#include "TextShapeFactory.moc"

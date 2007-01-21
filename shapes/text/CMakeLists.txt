@@ -3,11 +3,11 @@ include_directories( ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kotext ${CMA
 ########### Flake Plugin library ###############
 
 SET ( textshape_SRCS
-    KoTextPlugin.cpp
-    KoTextShape.cpp
-    KoTextShapeFactory.cpp
-    KoTextTool.cpp
-    KoTextToolFactory.cpp
+    TextPlugin.cpp
+    TextShape.cpp
+    TextShapeFactory.cpp
+    TextTool.cpp
+    TextToolFactory.cpp
     Layout.cpp
     ListItemsHelper.cpp
 )

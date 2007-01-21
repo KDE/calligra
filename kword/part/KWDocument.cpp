@@ -481,7 +481,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
 
 void KWDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow) {
     // print error if kotext not available
-    if( KoShapeRegistry::instance()->get(KoTextShape_SHAPEID) == 0 )
+    if( KoShapeRegistry::instance()->get(TextShape_SHAPEID) == 0 )
         // need to wait 1 event since exiting here would not work.
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
     else

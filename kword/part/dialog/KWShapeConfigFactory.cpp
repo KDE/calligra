@@ -39,7 +39,7 @@ QString KWFrameConnectSelectorFactory::name() const {
 }
 
 bool KWFrameConnectSelectorFactory::showForShapeId(const QString &id) const {
-    return id == KoTextShape_SHAPEID;
+    return id == TextShape_SHAPEID;
 }
 
 

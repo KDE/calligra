@@ -27,19 +27,17 @@
 #include <QTextDocument>
 #include <QPainter>
 
-#include <ksharedptr.h>
-
-#define KoTextShape_SHAPEID "TextShapeID"
+#define TextShape_SHAPEID "TextShapeID"
 
 /**
  * A text shape.
  * The Text shape is capable of drawing structured text.
  * @see KoTextShapeData
  */
-class KoTextShape : public KoShape {
+class TextShape : public KoShape {
 public:
-    KoTextShape();
-    virtual ~KoTextShape();
+    TextShape();
+    virtual ~TextShape();
 
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter);

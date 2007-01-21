@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTextShape.h"
+#include "TextShape.h"
 #include "Layout.h"
 
 #include <KoTextDocumentLayout.h>
@@ -31,11 +31,9 @@
 #include <KoViewConverter.h>
 
 
-// ############ KoTextShape ################
-
-KoTextShape::KoTextShape()
+TextShape::TextShape()
 {
-    setShapeId(KoTextShape_SHAPEID);
+    setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document());
@@ -47,10 +45,10 @@ KoTextShape::KoTextShape()
     setCollisionDetection(true);
 }
 
-KoTextShape::~KoTextShape() {
+TextShape::~TextShape() {
 }
 
-void KoTextShape::paint(QPainter &painter, const KoViewConverter &converter) {
+void TextShape::paint(QPainter &painter, const KoViewConverter &converter) {
     painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
     if(m_textShapeData->endPosition() < 0) { // not layouted yet.
         QTextDocument *doc = m_textShapeData->document();
@@ -71,12 +69,12 @@ void KoTextShape::paint(QPainter &painter, const KoViewConverter &converter) {
     doc->documentLayout()->draw( &painter, pc);
 }
 
-QPointF KoTextShape::convertScreenPos(const QPointF &point) {
+QPointF TextShape::convertScreenPos(const QPointF &point) {
     QPointF p = m_invMatrix.map(point);
     return p + QPointF(0.0, m_textShapeData->documentOffset());
 }
 
-void KoTextShape::shapeChanged(ChangeType type) {
+void TextShape::shapeChanged(ChangeType type) {
     if(type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->faul();
         m_textShapeData->fireResizeEvent();
