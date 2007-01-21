@@ -22,6 +22,8 @@
 #include "KWTextFrame.h"
 #include "KWDocument.h"
 
+#include <KoTextShapeData.h>
+
 #include <QList>
 #include <QPainterPath>
 
@@ -136,6 +138,13 @@ KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
     m_frameSet(frameSet),
     m_lastKnownFrameCount(0)
 {
+    if(m_frameSet->frameCount()) {
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (m_frameSet->frames().first()->shape()->userData());
+        if(data) { // reset layout.
+            data->setEndPosition(-1);
+            data->faul();
+        }
+    }
 }
 
 KWTextDocumentLayout::~KWTextDocumentLayout() {

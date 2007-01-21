@@ -1,4 +1,4 @@
-include_directories( ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kotext )
+include_directories( ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kotext ${CMAKE_SOURCE_DIR}/libs/kotext/styles )
 
 ########### Flake Plugin library ###############
 
@@ -8,6 +8,8 @@ SET ( textshape_SRCS
     KoTextShapeFactory.cpp
     KoTextTool.cpp
     KoTextToolFactory.cpp
+    Layout.cpp
+    ListItemsHelper.cpp
 )
 
 kde4_automoc(${textshape_SRCS})

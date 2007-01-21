@@ -19,6 +19,7 @@
  */
 
 #include "KoTextShape.h"
+#include "Layout.h"
 
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
@@ -38,6 +39,7 @@ KoTextShape::KoTextShape()
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document());
+    lay->setLayout(new Layout(lay));
     lay->addShape(this);
     m_textShapeData->document()->setDocumentLayout(lay);
 
@@ -50,8 +52,15 @@ KoTextShape::~KoTextShape() {
 
 void KoTextShape::paint(QPainter &painter, const KoViewConverter &converter) {
     painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
-    if(m_textShapeData->endPosition() < 0) // not layouted yet.
+    if(m_textShapeData->endPosition() < 0) { // not layouted yet.
+        QTextDocument *doc = m_textShapeData->document();
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (doc->documentLayout());
+        if(lay == 0)
+            kWarning() << "Painting shape that doesn't have a kotext doc-layout, which can't work\n";
+        else if(! lay->hasLayouter())
+            lay->setLayout(new Layout(lay));
         return;
+    }
     applyConversion(painter, converter);
     QAbstractTextDocumentLayout::PaintContext pc;
     pc.cursorPosition = -1;

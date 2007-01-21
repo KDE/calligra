@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ListItemsHelper_p.h"
+#include "ListItemsHelper.h"
 
-#include "KoTextBlockData.h"
-#include "styles/KoListStyle.h"
-#include "styles/KoParagraphStyle.h"
+#include <KoTextBlockData.h>
+#include <KoListStyle.h>
+#include <KoParagraphStyle.h>
 
 #include <kdebug.h>
 #include <QTextList>
