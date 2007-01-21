@@ -527,10 +527,19 @@ public:
      * Can be used in conjunction with nextInColumn() to loop through a column.
      * \return the first used data in \p col or the default data, if the column is empty.
      */
-    T firstInColumn( int col ) const
+    T firstInColumn( int col, int* newRow = 0 ) const
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
-        return m_data.value( m_cols.indexOf( col ) );
+        const int index = m_cols.indexOf( col );
+        if ( newRow )
+        {
+            qDebug() << "rows:" << m_rows;
+            qDebug() << "index:" << index;
+            *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
+            qDebug() << "lowerbound:" << *newRow;
+            if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+        }
+        return m_data.value( index );
     }
 
     /**
@@ -538,12 +547,18 @@ public:
      * Can be used in conjunction with nextInRow() to loop through a row.
      * \return the first used data in \p row or the default data, if the row is empty.
      */
-    T firstInRow( int row ) const
+    T firstInRow( int row, int* newCol = 0 ) const
     {
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // row's empty?
         if ( m_rows.value( row - 1 ) == m_rows.value( row ) )
+        {
+            if ( newCol )
+                *newCol = 0;
             return T();
+        }
+        if ( newCol )
+            *newCol = m_cols.value( m_rows.value( row - 1 ) );
         return m_data.value( m_rows.value( row - 1 ) );
     }
 
@@ -552,10 +567,16 @@ public:
      * Can be used in conjunction with prevInColumn() to loop through a column.
      * \return the last used data in \p col or the default data, if the column is empty.
      */
-    T lastInColumn( int col ) const
+    T lastInColumn( int col, int* newRow = 0 ) const
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
-        return m_data.value( m_cols.lastIndexOf( col ) );
+        const int index = m_cols.lastIndexOf( col );
+        if ( newRow )
+        {
+            *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
+            if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+        }
+        return m_data.value( index );
     }
 
     /**
@@ -563,15 +584,25 @@ public:
      * Can be used in conjunction with prevInRow() to loop through a row.
      * \return the last used data in \p row or the default data, if the row is empty.
      */
-    T lastInRow( int row ) const
+    T lastInRow( int row, int* newCol = 0 ) const
     {
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // row's empty?
         if ( m_rows.value( row - 1 ) == m_rows.value( row ) || m_rows.value( row - 1 ) == m_data.count() )
+        {
+            if ( newCol )
+                *newCol = 0;
             return T();
+        }
         // last row ends on data vector end
         if ( row == m_rows.count() )
+        {
+            if ( newCol )
+                *newCol = m_cols.value( m_data.count() - 1 );
             return m_data.value( m_data.count() - 1 );
+        }
+        if ( newCol )
+            *newCol = m_cols.value( m_rows.value( row ) - 1 );
         return m_data.value( m_rows.value( row ) - 1 );
     }
 
@@ -580,11 +611,17 @@ public:
      * Can be used in conjunction with firstInColumn() to loop through a column.
      * \return the next used data in \p col or the default data, there is no further data.
      */
-    T nextInColumn( int col, int row ) const
+    T nextInColumn( int col, int row, int* newRow = 0 ) const
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
-        return m_data.value( m_cols.indexOf( col, m_rows.value( row ) ) );
+        const int index = m_cols.indexOf( col, m_rows.value( row ) );
+        if ( newRow )
+        {
+            *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
+            if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+        }
+        return m_data.value( index );
     }
 
     /**
@@ -592,17 +629,29 @@ public:
      * Can be used in conjunction with firstInRow() to loop through a row.
      * \return the next used data in \p row or the default data, if there is no further data.
      */
-    T nextInRow( int col, int row ) const
+    T nextInRow( int col, int row, int* newCol = 0 ) const
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // is the row not present?
         if ( row > m_rows.count() )
+        {
+            if ( newCol )
+                *newCol = 0;
             return T();
+        }
         const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
         const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
         const QVector<int>::const_iterator cit = qUpperBound( cstart, cend, col );
-        return ( cit == cend || *cit <= col ) ? T() : m_data.value( m_rows.value( row - 1 ) + ( cit - cstart ) );
+        if ( cit == cend || *cit <= col )
+        {
+            if ( newCol )
+                *newCol = 0;
+            return T();
+        }
+        if ( newCol )
+            *newCol = m_cols.value( m_rows.value( row - 1 ) + ( cit - cstart ) );
+        return m_data.value( m_rows.value( row - 1 ) + ( cit - cstart ) );
     }
 
     /**
@@ -610,13 +659,23 @@ public:
      * Can be used in conjunction with lastInColumn() to loop through a column.
      * \return the previous used data in \p col or the default data, there is no further data.
      */
-    T prevInColumn( int col, int row ) const
+    T prevInColumn( int col, int row, int* newRow = 0 ) const
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         if ( m_rows.value( row - 1 ) == 0 )
+        {
+            if ( newRow )
+                *newRow = 0;
             return T();
-        return m_data.value( m_cols.lastIndexOf( col, m_rows.value( row - 1 ) - 1 ) );
+        }
+        const int index = m_cols.lastIndexOf( col, m_rows.value( row - 1 ) - 1 );
+        if ( newRow )
+        {
+            *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
+            if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+        }
+        return m_data.value( index );
     }
 
     /**
@@ -624,18 +683,28 @@ public:
      * Can be used in conjunction with lastInRow() to loop through a row.
      * \return the previous used data in \p row or the default data, if there is no further data.
      */
-    T prevInRow( int col, int row ) const
+    T prevInRow( int col, int row, int* newCol = 0 ) const
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // is the row not present?
         if ( row > m_rows.count() )
+        {
+            if ( newCol )
+                *newCol = 0;
             return T();
+        }
         const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
         const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
         const QVector<int>::const_iterator cit = qLowerBound( cstart, cend, col );
         if ( cit == cend || cit == cstart )
+        {
+            if ( newCol )
+                *newCol = 0;
             return T();
+        }
+        if ( newCol )
+            *newCol = m_cols.value( cit - 1 - m_cols.begin() );
         return m_data.value( cit - 1 - m_cols.begin() );
     }
 
