@@ -22,8 +22,6 @@
 #include "frame/KWFrame.h"
 #include "frame/KWTextFrameSet.h"
 
-#include <KoTextShape.h>
-
 KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state)
     : m_state(state),
     m_shape(0)

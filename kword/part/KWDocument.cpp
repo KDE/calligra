@@ -37,7 +37,6 @@
 #include <KoShapeManager.h>
 #include <KoOasisStyles.h>
 #include <KoToolManager.h>
-#include <KoTextShape.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoStyleManager.h>

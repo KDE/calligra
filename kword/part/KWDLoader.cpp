@@ -26,7 +26,6 @@
 // koffice
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
-#include <KoTextShape.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>

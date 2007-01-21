@@ -27,7 +27,6 @@
 
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
-#include <KoTextShape.h>
 
 #include <klocale.h>
 #include <kdebug.h>

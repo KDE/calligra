@@ -20,6 +20,8 @@
 #ifndef KWORD_H
 #define KWORD_H
 
+#define KoTextShape_SHAPEID "TextShapeID"
+
 /// The kword-global namespace for all KWord related things.
 class KWord {
 public:
