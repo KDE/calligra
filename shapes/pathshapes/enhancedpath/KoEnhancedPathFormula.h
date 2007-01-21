@@ -34,7 +34,8 @@ public:
       TypeUnknown = 0, ///< unknown type
       TypeNumber,      ///< 14, 3, 1977, 3.141592, 1e10, 5.9e-7
       TypeOperator,    ///< +, *, /, -
-      TypeIdentifier   ///< function name, function reference, modifier reference or named variable
+      TypeReference,   ///< function reference, modifier reference or named variable
+      TypeFunction     ///< function name
     };
 
     /// operators
@@ -69,8 +70,10 @@ public:
     bool isNumber() const { return m_type == TypeNumber; }
     /// Returns if the token is a operator, OperatorInvalid if token is no operator
     bool isOperator() const { return m_type == TypeOperator; }
-    /// Returns if token is an identifier
-    bool isIdentifier() const { return m_type == TypeIdentifier; }
+    /// Returns if token is a function
+    bool isFunction() const { return m_type == TypeFunction; }
+    /// Returns  if token is a reference
+    bool isReference() const { return m_type == TypeReference; }
 
     /// Returns the token converted to double
     double asNumber() const;

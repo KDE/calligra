@@ -42,6 +42,8 @@ bool isIdentifier( QChar ch );
 int opPrecedence( FormulaToken::Operator op );
 // helper function: return function of given token text
 KoEnhancedPathFormula::Function matchFunction( const QString & text );
+// helper function: return function name from function identifier
+QString matchFunction( KoEnhancedPathFormula::Function function );
 
 class FormulaToken;
 
@@ -226,10 +228,9 @@ double KoEnhancedPathFormula::evaluate( KoEnhancedPathShape * path )
                 args.push_front( value );
             }
 
-            // function name as string value
+            // function identifier as int value
             int function = stack.pop().toInt();
-            double value = evaluateFunction( (Function)function, args );
-            stack.push( QVariant( value ) );
+            stack.push( QVariant( evaluateFunction( (Function)function, args ) ) );
         }
         break;
 
@@ -328,7 +329,7 @@ TokenList KoEnhancedPathFormula::scan( const QString &formula ) const
                     state = InNumber;
                 }
                 // beginning with alphanumeric ?
-                // could be identifier, function, function reference, modifier refrence
+                // could be identifier, function, function reference, modifier reference
                 else if( isIdentifier( ch ) )
                 {
                     state = InIdentifier;
@@ -368,7 +369,7 @@ TokenList KoEnhancedPathFormula::scan( const QString &formula ) const
                 // a '(' ? then this must be a function identifier
                 else if( ch == '(' )
                 {
-                    tokens.append( FormulaToken( FormulaToken::TypeIdentifier, tokenText, tokenStart) );
+                    tokens.append( FormulaToken( FormulaToken::TypeFunction, tokenText, tokenStart) );
                     tokenStart = i;
                     tokenText = "";
                     state = Start;
@@ -376,7 +377,7 @@ TokenList KoEnhancedPathFormula::scan( const QString &formula ) const
                 // we're done with identifier
                 else
                 {
-                    tokens.append( FormulaToken( FormulaToken::TypeIdentifier, tokenText, tokenStart) );
+                    tokens.append( FormulaToken( FormulaToken::TypeReference, tokenText, tokenStart) );
                     tokenStart = i;
                     tokenText = "";
                     state = Start;
@@ -493,16 +494,14 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
         // generate code to load from a constant
         if( tokenType == FormulaToken::TypeNumber )
         {
-            kDebug() << "found number token " << token.asNumber() << endl;
             syntaxStack.push( token );
             m_constants.append( QVariant( token.asNumber() ) );
             m_codes.append( Opcode( Opcode::Load, m_constants.count()-1 ) );
         }
         // for identifier, push immediately to stack
         // generate code to load from reference
-        if( tokenType == FormulaToken::TypeIdentifier )
+        if( tokenType == FormulaToken::TypeFunction || tokenType == FormulaToken::TypeReference )
         {
-            kDebug() << "found identifier token " << token.text() << endl;
             syntaxStack.push( token );
             m_constants.append( QVariant( token.text() ) );
             m_codes.append( Opcode( Opcode::Ref, m_constants.count()-1 ) );
@@ -516,7 +515,7 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
             FormulaToken id = syntaxStack.top( 2 );
             if( !arg.isOperator() &&
                  par.asOperator() == FormulaToken::OperatorLeftPar &&
-                 id.isIdentifier() )
+                 id.isFunction() )
             {
                 argStack.push( argCount );
                 argCount = 1;
@@ -531,7 +530,7 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
                 bool ruleFound = false;
 
                 // rule for function arguments, if token is , or )
-                // id ( arg1 ; arg2 -> id ( arg
+                // id ( arg1 , arg2 -> id ( arg
                 if( !ruleFound )
                 if( syntaxStack.itemCount() >= 5 )
                 if( ( token.asOperator() == FormulaToken::OperatorRightPar ) ||
@@ -546,7 +545,7 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
                     if( sep.asOperator() == FormulaToken::OperatorComma )
                     if( !arg1.isOperator() )
                     if( par.asOperator() == FormulaToken::OperatorLeftPar )
-                    if( id.isIdentifier() )
+                    if( id.isFunction() )
                     {
                         ruleFound = true;
                         syntaxStack.pop();
@@ -566,7 +565,7 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
                     if( par2.asOperator() == FormulaToken::OperatorRightPar )
                     if( !arg.isOperator() )
                     if( par1.asOperator() == FormulaToken::OperatorLeftPar )
-                    if( id.isIdentifier() )
+                    if( id.isFunction() )
                     {
                         ruleFound = true;
                         syntaxStack.pop();
@@ -576,6 +575,27 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
                         syntaxStack.push( arg );
                         m_codes.append( Opcode( Opcode::Function, argCount ) );
                         argCount = argStack.empty() ? 0 : argStack.pop();
+                    }
+                }
+
+                // rule for parenthesis:  ( Y ) -> Y
+                if( !ruleFound )
+                if( syntaxStack.itemCount() >= 3 )
+                {
+                    FormulaToken right = syntaxStack.top();
+                    FormulaToken y = syntaxStack.top( 1 );
+                    FormulaToken left = syntaxStack.top( 2 );
+                    if( right.isOperator() )
+                    if( !y.isOperator() )
+                    if( left.isOperator() )
+                    if( right.asOperator() == FormulaToken::OperatorRightPar )
+                    if( left.asOperator() == FormulaToken::OperatorLeftPar )
+                    {
+                        ruleFound = true;
+                        syntaxStack.pop();
+                        syntaxStack.pop();
+                        syntaxStack.pop();
+                        syntaxStack.push( y );
                     }
                 }
 
@@ -589,7 +609,6 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
                     FormulaToken b = syntaxStack.top();
                     FormulaToken op = syntaxStack.top( 1 );
                     FormulaToken a = syntaxStack.top( 2 );
-                    kDebug() << "found binary operator " << a.text() << " " << op.text() << " " << b.text() << endl;
                     if( !a.isOperator() )
                     if( !b.isOperator() )
                     if( op.isOperator() )
@@ -683,11 +702,11 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
     {
         m_constants.clear();
         m_codes.clear();
-        kDebug() << "compiling failed" << endl;
+        kDebug() << "compiling of "<< m_text << " failed" << endl;
     }
     else
     {
-        kDebug() << "compiling successful" << endl;
+        kDebug() << "compiling of "<< m_text << " successful" << endl;
     }
 
     return m_valid;
@@ -801,6 +820,47 @@ KoEnhancedPathFormula::Function matchFunction( const QString & text )
         return KoEnhancedPathFormula::FunctionIf;
 
     return KoEnhancedPathFormula::FunctionUnknown;
+}
+
+QString matchFunction( KoEnhancedPathFormula::Function function )
+{
+    switch( function )
+    {
+        case KoEnhancedPathFormula::FunctionAbs:
+            return "fabs";
+        break;
+        case KoEnhancedPathFormula::FunctionSqrt:
+            return "sqrt";
+        break;
+        case KoEnhancedPathFormula::FunctionSin:
+            return "sin";
+        break;
+        case KoEnhancedPathFormula::FunctionCos:
+            return "cos";
+        break;
+        case KoEnhancedPathFormula::FunctionTan:
+            return "tan";
+        break;
+        case KoEnhancedPathFormula::FunctionAtan:
+            return "atan";
+        break;
+        case KoEnhancedPathFormula::FunctionAtan2:
+            return "atan2";
+        break;
+        case KoEnhancedPathFormula::FunctionMin:
+            return "min";
+        break;
+        case KoEnhancedPathFormula::FunctionMax:
+            return "max";
+        break;
+        case KoEnhancedPathFormula::FunctionIf:
+            return "if";
+        break;
+        default:
+            return "unknown";
+    }
+
+    return "unknown";
 }
 
 void KoEnhancedPathFormula::debugTokens( const TokenList &tokens )
