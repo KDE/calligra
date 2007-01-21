@@ -3,5 +3,5 @@ Encoding=UTF-8
 Name=Text Shape
 ServiceTypes=KOffice/Flake
 Type=Service
-X-KDE-Library=kotext2
+X-KDE-Library=textshape
 X-Flake-Version=1

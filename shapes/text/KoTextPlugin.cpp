@@ -26,7 +26,7 @@
 
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(kotext2, KGenericFactory<KoTextPlugin>( "TextShape" ) )
+K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<KoTextPlugin>( "TextShape" ) )
 
 KoTextPlugin::KoTextPlugin(QObject * parent, const QStringList &)
     : QObject(parent)
