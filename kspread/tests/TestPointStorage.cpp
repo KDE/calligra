@@ -144,6 +144,17 @@ void PointStorageTest::testLookup()
     QCOMPARE( storage.lookup( 5, 3),  9 );
     QCOMPARE( storage.lookup( 5, 4),  0 );
     QCOMPARE( storage.lookup( 5, 5), 12 );
+
+
+    // first row checking
+    storage.clear();
+    storage.insert( 1, 1, 1 );
+    // ( 1)
+
+    QCOMPARE( storage.lookup( 1, 1),  1 );
+    QCOMPARE( storage.lookup( 2, 1),  0 );
+    QCOMPARE( storage.lookup( 1, 2),  0 );
+    QCOMPARE( storage.lookup( 2, 2),  0 );
 }
 
 void PointStorageTest::testDeletion()

@@ -154,7 +154,7 @@ public:
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // is the row not present?
-        if ( row - 1 > m_rows.count() )
+        if ( row > m_rows.count() )
             return T();
         const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
         const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
@@ -174,7 +174,7 @@ public:
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // row's missing?
-        if ( row - 1 > m_rows.count() )
+        if ( row > m_rows.count() )
             return T();
         const int rowStart = ( row - 1 < m_rows.count() ) ? m_rows.value( row - 1 ) : m_data.count();
         const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
@@ -597,7 +597,7 @@ public:
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // is the row not present?
-        if ( row - 1 > m_rows.count() )
+        if ( row > m_rows.count() )
             return T();
         const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
         const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
@@ -629,7 +629,7 @@ public:
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // is the row not present?
-        if ( row - 1 > m_rows.count() )
+        if ( row > m_rows.count() )
             return T();
         const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
         const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
