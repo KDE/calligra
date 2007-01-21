@@ -94,7 +94,7 @@ namespace Scripting {
 
             /** Add and return a new \a Frame to this frameset which has the
             shapeId KoTextShape_SHAPEID and is used to display the \a TextDocument . */
-            QObject* addTextFrame() { return addFrame(KoTextShape_SHAPEID); }
+            QObject* addTextFrame() { return addFrame(TextShape_SHAPEID); }
 
             //void addFrame(KWFrame *frame);
             //void removeFrame(KWFrame *frame);
