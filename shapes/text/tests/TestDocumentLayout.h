@@ -27,9 +27,6 @@ public:
 private slots:
     void initTestCase();
 
-    /// Test the hittest of KoTextDocumentLayout
-    void testHitTest();
-
     /// make sure empty paragraphs are initialized properly
     void testEmptyParag();
 
