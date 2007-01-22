@@ -81,13 +81,37 @@ public:
      */
     void setRangeY( KoEnhancedPathParameter *minY, KoEnhancedPathParameter *maxY );
 
+    /**
+     * Sets the center of a polar handle.
+     *
+     * If both parameters are valid pointers, then the handle behaves like
+     * a polar handle. This means the the x-coordinate of the position represents
+     * an angle in degree and the y-coordinate a radius.
+     * 
+     * @param minY the minimum y-coordinate
+     * @param maxY the maximum y-coordinate
+     */
+    void setPolarCenter( KoEnhancedPathParameter *polarX, KoEnhancedPathParameter *polarY );
+
+    /**
+     * Sets the range of the radius for polar handles.
+     * @param minRadius the minimum polar radius
+     * @param maxRadius the maximum polar radius
+     */
+    void setRadiusRange( KoEnhancedPathParameter *minRadius, KoEnhancedPathParameter *maxRadius );
 private:
+    /// Returns if handle is polar
+    bool isPolar() const;
     KoEnhancedPathParameter * m_positionX; ///< the position x-coordinate 
     KoEnhancedPathParameter * m_positionY; ///< the position y-coordinate
     KoEnhancedPathParameter * m_minimumX;  ///< the minimum x-coordinate
     KoEnhancedPathParameter * m_minimumY;  ///< the minmum y-coordinate
     KoEnhancedPathParameter * m_maximumX;  ///< the maximum x-coordinate
     KoEnhancedPathParameter * m_maximumY;  ///< the maximum y-coordinate
+    KoEnhancedPathParameter * m_polarX;    ///< the polar center x-coordinate
+    KoEnhancedPathParameter * m_polarY;    ///< the polar center y-coordinate
+    KoEnhancedPathParameter * m_minRadius; ///< the minimum polar radius
+    KoEnhancedPathParameter * m_maxRadius; ///< the maximum polar radius
 };
 
 #endif // KOENHANCEDPATHHANDLE_H
