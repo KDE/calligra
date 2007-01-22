@@ -32,7 +32,7 @@ class KoTextShapeData;
 
 class Layout : public KoTextDocumentLayout::LayoutState {
 public:
-    Layout(KoTextDocumentLayout *parent);
+    explicit Layout(KoTextDocumentLayout *parent);
     /// start layouting, return false when there is nothing to do
     bool start();
     /// end layouting
