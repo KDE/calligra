@@ -30,3 +30,13 @@ KDChartVectorTableData::~KDChartVectorTableData()
     delete sh;
 }
 
+uint KDChartVectorTableData::usedCols() const {
+     return _useUsedCols ? _usedCols : cols();
+}
+
+uint KDChartVectorTableData::usedRows() const {
+     return _useUsedRows ? _usedRows : rows();
+}
+
+
+

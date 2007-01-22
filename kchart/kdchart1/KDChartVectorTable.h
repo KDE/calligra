@@ -275,9 +275,7 @@ public slots:
         _useUsedRows = true;
     }
 
-    uint usedRows() const {
-        return _useUsedRows ? _usedRows : rows();
-    }
+    uint usedRows() const;
 
     void setUsedCols( uint _cols ) {
         Q_ASSERT( _cols <= cols() );
@@ -287,9 +285,7 @@ public slots:
         _useUsedCols = true;
     }
 
-    uint usedCols() const {
-        return _useUsedCols ? _usedCols : cols();
-    }
+    uint usedCols() const;
 
 private:
     /**
