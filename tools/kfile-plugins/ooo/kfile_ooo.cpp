@@ -546,7 +546,7 @@ QIODevice* KOfficePlugin::getData(KArchive &m_zip) const
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
     if (!f)
 	    return 0;
-    return f->device();
+    return f->createDevice();
 }
 
 QDomDocument KOfficePlugin::getMetaDocument(const QString &path) const
@@ -554,8 +554,10 @@ QDomDocument KOfficePlugin::getMetaDocument(const QString &path) const
     QDomDocument doc;
     KZip m_zip(path);
     QIODevice * io = getData(m_zip);
-    if (!io || !io->isReadable())
+    if (!io || !io->isReadable()) {
+        delete io;
 	    return doc;
+    }
     QString errorMsg;
     int errorLine, errorColumn;
     if ( !doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) ){

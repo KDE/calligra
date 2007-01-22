@@ -557,7 +557,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlD
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
     kDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
-    QIODevice* io = f->device();
+    QIODevice* io = f->createDevice();
     KoFilter::ConversionStatus convertStatus = loadAndParse( io,doc, filename );
     delete io;
     return convertStatus;
@@ -586,7 +586,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
         return KoFilter::WrongFormat;
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
-    QIODevice* io = f->device();
+    QIODevice* io = f->createDevice();
     kDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
 
     if ( ! io->open( QIODevice::ReadOnly ) )

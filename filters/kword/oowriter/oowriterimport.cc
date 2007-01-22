@@ -1834,7 +1834,7 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& obje
             return frameName;
         }
         const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
-        QIODevice* io=f->device();
+        QIODevice* io=f->createDevice();
         kDebug(30518) << "Picture " << filename << " has size " << f->size() << endl;
 
         if (!io)
@@ -1844,6 +1844,7 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& obje
         }
         if (!picture.load(io,strExtension))
             kWarning(30518) << "Cannot load picture: " << frameName << " " << href << endl;
+        delete io;
     }
     else
     {
