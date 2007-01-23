@@ -40,7 +40,7 @@ DurationSpinBox::DurationSpinBox(QWidget *parent)
 {
     setAlignment( Qt::AlignRight );
     setUnit( Duration::Unit_h );
-    setMaximum(140737488355328.0); // NOTE: 2**47. Less than qint64, but let's see if it gets us problems (4886718,35 days)
+    setMaximum(140737488355328.0);
 
     msToFromSec = 1000.0;
     secToFromMin = 60.0;
