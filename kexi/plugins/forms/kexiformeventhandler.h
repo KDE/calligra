@@ -79,7 +79,7 @@ class KEXIFORMUTILS_EXPORT KexiFormEventAction : public KAction
 
 				QString string; //!< action string with prefix, like "kaction:edit_copy" or "table:<tableName>"
 
-				QString option; //!< option used when name is "table/query/etc.:<objectName>" is set;
+				QString option; //!< option used when name is "table/query/etc.:\<objectName\>" is set;
 				                //!< can be set to "open", "design", "editText", etc. 
 				                //!< @see ActionToExecuteListView::showActionsForMimeType()
 		};

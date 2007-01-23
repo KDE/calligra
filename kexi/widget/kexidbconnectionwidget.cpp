@@ -48,6 +48,7 @@
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 
+//! Templorary hides db list
 //! @todo reenable this when implemented
 #define NO_LOAD_DB_LIST
 

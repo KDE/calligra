@@ -235,7 +235,7 @@ namespace KexiUtils
 	KEXIUTILS_EXPORT QMap<QString,QString> deserializeMap(const QString& string);
 
 	/*! \return a valid filename converted from \a string by:
-	 - replacing \\, /, :, *, ?, ", <, >, |, \n \t characters with a space
+	 - replacing \\, /, :, *, ?, ", <, >, |, \n \\t characters with a space
 	 - simplifing whitespace by removing redundant space characters using QString::simplified()
 	 Do not pass full paths here, but only filename strings. */
 	KEXIUTILS_EXPORT QString stringToFileName(const QString& string);

@@ -74,9 +74,9 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 
 		/*! \return user-visible string better describing the project than just databaseName(). 
 		 For server-based projects returns i18n'd string: 
-		 "<project name>" (connection: user@server:port).
+		 "<project name>" (connection: user\@server:port).
 		 For file-based projects returns project's filename. 
-		 If \a nobr is true, <nobr> tags are added around '(connection: user@server:port)'
+		 If \a nobr is true, \<nobr\> tags are added around '(connection: user\@server:port)'
 		 (useful for displaying in message boxes). */
 		QString infoString(bool nobr = true) const;
 
