@@ -614,9 +614,10 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
 		}
 		if (!values.isEmpty()) {
 			//update field, so it will be created as one step
-			KexiDB::Field f = field();
-			if (KexiDB::setFieldProperties( f, values )) {
-				field() = f;
+			KexiDB::Field *f = new KexiDB::Field( field() );
+			if (KexiDB::setFieldProperties( *f, values )) {
+				//field() = f;
+				setField( f );
 				field().debug();
 #ifdef KEXI_DEBUG_GUI
 				KexiUtils::addAlterTableActionDebug(
@@ -629,6 +630,7 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
 					QString("** Failed to set properties for field ")+field().debugString(), 0);
 #endif
 				KexiDBWarn << "AlterTableHandler::InsertFieldAction::simplifyActions(): KexiDB::setFieldProperties() failed!" << endl;
+				delete f;
 			}
 		}
 	}
