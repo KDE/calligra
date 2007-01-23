@@ -49,7 +49,7 @@ namespace KPlato
 PertEditor::PertEditor( Part *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-kDebug() << " ---------------- KPlato: Creating PertEditor ----------------" << endl;
+    kDebug() << " ---------------- KPlato: Creating PertEditor ----------------" << endl;
     widget.setupUi(this);
     widget.assignList->setSelectedLabel(i18n("Required"));
     widget.assignList->setShowUpDownButtons(false);

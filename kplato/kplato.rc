@@ -34,12 +34,14 @@
                 <Action name="view_gantt_showCriticalPath"/>
                 <Action name="view_gantt_showCriticalTasks"/>
                 <Action name="view_task_appointments"/>
+<Action name="calculate_schedule"/>
             </Menu>
             <Separator/>
             <!--<Action name="view_pert"/> -->
             <Separator/>
             <Menu name="view_resource_options"><text>Resourceview Options</text>
-                <Action name="view_resource_appointments"/>
+                <Action name="view_resource_appointments"/> <Action name="calculate_schedule"/>
+
             </Menu>
             <Separator/>
             <!-- <Menu name="view_accounts_options"><text>Accountsview Options</text>
@@ -53,6 +55,7 @@
             <Action name="project_calendar"/>
             <Action name="project_accounts"/>
             <Action name="project_resources"/>
+	   
         </Menu>
         <Menu name="tools"><text>&amp;Tools</text>
             <Action name="tools_define_wbs"/>

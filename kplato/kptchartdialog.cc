@@ -28,12 +28,12 @@ ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
 {
     kDebug()<<"HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO WORRRRRRRRRLLLLLLLLLLDDDDDDDD";
     setCaption( i18n("Project Charts Indicators") );
-    //setDefaultButton( CloseButton );
+    setButtons( KDialog::Ok );
+    setDefaultButton( Ok );
     showButtonSeparator( true );
     m_panel = new ChartPanel(this);
     setMainWidget(m_panel);
     m_panel->show();
-    //enableButtonOk(false);
    // connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonClose(bool)));
    // connect(this,SIGNAL(CloseClicked()),this,SLOT(slotClose()));
 }
@@ -53,3 +53,4 @@ void ChartDialog::slotClose() {
 } //namespace KPlato
 
 #include "kptchartdialog.moc"
+

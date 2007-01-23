@@ -93,7 +93,7 @@ AccountsView::AccountsView( Project *project, Part *part, QWidget *parent )
     m_period = 0;
     m_periodTexts << i18n( "Day" ) << i18n( "Week" ) << i18n( "Month" );
     m_cumulative = false;
-
+    m_project=project;
     QVBoxLayout *lay1 = new QVBoxLayout( this, 0, KDialog::spacingHint() );
 
     QHBoxLayout *lay2 = new QHBoxLayout( 0, 0, KDialog::spacingHint() );

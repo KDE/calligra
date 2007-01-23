@@ -40,3 +40,4 @@ void ChartPanel::slotClose() {
 } //namespace KPlato
 
 #include "kptchartpanel.moc"
+
