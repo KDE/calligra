@@ -29,6 +29,7 @@
 #include <QListIterator>
 #include <qdom.h>
 
+#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -971,12 +972,14 @@ Effort::Effort( Duration e, Duration p, Duration o) {
   m_optimisticEffort = o;
   m_type = Type_Effort;
   m_risktype = Risk_None;
+  m_displayUnit = Duration::Unit_h;
 }
 
 Effort::Effort(const Effort &effort) {
     set(effort.expected(), effort.pessimistic(), effort.optimistic());
     setType(effort.type());
     setRisktype(effort.risktype());
+    setDisplayUnit( effort.displayUnit() );
 }
 
 Effort::~Effort() {
@@ -986,6 +989,7 @@ const Effort Effort::zeroEffort( Duration::zeroDuration,
                        Duration::zeroDuration,
                        Duration::zeroDuration );
 
+
 void Effort::set( Duration e, Duration p, Duration o ) {
     m_expectedEffort = e;
     m_pessimisticEffort = (p == Duration::zeroDuration) ? e :  p;
@@ -994,9 +998,9 @@ void Effort::set( Duration e, Duration p, Duration o ) {
 }
 
 void Effort::set( int e, int p, int o ) {
-    m_expectedEffort = Duration(e);
-    m_pessimisticEffort = (p < 0) ? Duration(e) :  Duration(p);
-    m_optimisticEffort = (o < 0) ? Duration(e) :  Duration(o);
+    m_expectedEffort = Duration((qint64)(e)*1000);
+    m_pessimisticEffort = (p < 0) ? Duration((qint64)(e)*1000) :  Duration((qint64)(p)*1000);
+    m_optimisticEffort = (o < 0) ? Duration((qint64)(e)*1000) :  Duration((qint64)(o)*1000);
     //kDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
     //kDebug()<<k_funcinfo<<"   Optimistic: "<<m_optimisticEffort.toString()<<endl;
     //kDebug()<<k_funcinfo<<"   Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
@@ -1056,6 +1060,7 @@ bool Effort::load(QDomElement &element) {
     m_pessimisticEffort = Duration::fromString(element.attribute("pessimistic"));
     setType(element.attribute("type", "WorkBased"));
     setRisktype(element.attribute("risk"));
+    m_displayUnit = (Duration::Unit)(element.attribute("display-unit", QString().number(Duration::Unit_h) ).toInt());
     return true;
 }
 
@@ -1067,6 +1072,7 @@ void Effort::save(QDomElement &element) const {
     me.setAttribute("pessimistic", m_pessimisticEffort.toString());
     me.setAttribute("type", typeToString());
     me.setAttribute("risk", risktypeToString());
+    me.setAttribute("display-unit", m_displayUnit);
 }
 
 QString Effort::typeToString( bool trans ) const {
@@ -1132,6 +1138,67 @@ int Effort::pessimisticRatio() const {
         return 0;
     return m_pessimisticEffort.milliseconds()*100/m_expectedEffort.milliseconds()-100;
 }
+
+double Effort::scale( const Duration &value, Duration::Unit unit, QList<double> scales )
+{
+    QList<double> lst = scales;
+    switch ( lst.count() ) {
+        case 0:
+            lst << 24.0; // add hours in day
+        case 1:
+            lst << 60.0; // add minutes in hour
+        case 2:
+            lst << 60.0; // add seconds in minute
+        case 3:
+            lst << 1000.0; // add milliseconds in second
+        default:
+            break;
+    }
+    double v = (double)value.milliseconds();
+    if (unit == Duration::Unit_ms) return v;
+    v /= lst[3];
+    if (unit == Duration::Unit_s) return v;
+    v /= lst[2];
+    if (unit == Duration::Unit_m) return v;
+    v /= lst[1];
+    if (unit == Duration::Unit_h) return v;
+    v /= lst[0];
+    kDebug()<<k_funcinfo<<value.toString()<<", "<<unit<<"="<<v<<endl;
+    return v;
+}
+
+Duration Effort::scale( double value, Duration::Unit unit, const QList<double> scales )
+{
+    QList<double> lst = scales;
+    switch ( lst.count() ) {
+        case 0:
+            lst << 24.0; // add hours in day
+        case 1:
+            lst << 60.0; // add minutes in hour
+        case 2:
+            lst << 60.0; // add seconds in minute
+        case 3:
+            lst << 1000.0; // add milliseconds in second
+        default:
+            break;
+    }
+    double v = value;
+    switch ( unit ) {
+        case Duration::Unit_d:
+            v *= lst[0];
+        case Duration::Unit_h:
+            v *= lst[1];
+        case Duration::Unit_m:
+            v *= lst[2];
+        case Duration::Unit_s:
+            v *= lst[3];
+        case Duration::Unit_ms:
+            break; // nothing
+    }
+    kDebug()<<k_funcinfo<<value<<", "<<unit<<"="<<v<<endl;
+    return Duration( v, Duration::Unit_ms );
+}
+
 
 // Debugging
 #ifndef NDEBUG

@@ -590,14 +590,14 @@ double Task::effortPerformanceIndex(const QDate &date, bool *error) {
 //FIXME Handle summarytasks
 double Task::costPerformanceIndex(const QDate &date, bool *error) {
     double res = 0.0;
-    Duration ac = qint64(actualCostTo(date));
+    double ac = actualCostTo(date);
     
-    bool e = (ac == Duration::zeroDuration || m_completion.percentFinished() == 0);
+    bool e = (ac == 0.0 || m_completion.percentFinished() == 0);
     if (error) {
         *error = e;
     }
     if (!e) {
-        res = (plannedCostTo(date) * m_completion.percentFinished())/(100 * actualCostTo(date));
+        res = (plannedCostTo(date) * m_completion.percentFinished())/(100 * ac);
     }
     return res;
 }
@@ -1917,12 +1917,12 @@ int Completion::percentFinished() const
     
 Duration Completion::remainingEffort() const
 {
-     return m_entries.isEmpty() ? 0 : m_entries.values().last()->remainingEffort;
+     return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->remainingEffort;
 }
 
 Duration Completion::totalPerformed() const
 {
-     return m_entries.isEmpty() ? 0 : m_entries.values().last()->totalPerformed;
+     return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->totalPerformed;
 }
 
 bool Completion::loadXML( QDomElement &element, XMLLoaderObject &status )

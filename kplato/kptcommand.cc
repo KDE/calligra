@@ -1206,6 +1206,23 @@ void ModifyEffortTypeCmd::unexecute()
     setCommandType( 1 );
 }
 
+ModifyEffortUnitCmd::ModifyEffortUnitCmd( Part *part, Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name )
+        : NamedCommand( part, name ),
+        m_effort( node.effort() ),
+        m_oldvalue( oldvalue ),
+        m_newvalue( newvalue )
+{
+}
+void ModifyEffortUnitCmd::execute()
+{
+    m_effort->setDisplayUnit( m_newvalue );
+    setCommandType( 0 );
+}
+void ModifyEffortUnitCmd::unexecute()
+{
+    m_effort->setDisplayUnit( m_oldvalue );
+}
+
 EffortModifyRiskCmd::EffortModifyRiskCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_effort( node.effort() ),

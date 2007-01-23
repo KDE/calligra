@@ -146,7 +146,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case 7: // pessimisticRatio
             {
                 Node *n = node( index );
-                if ( n && n->type() == Node::Type_Task ) {
+                if ( n && n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -597,27 +597,33 @@ QVariant NodeItemModel::estimate( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
-            if ( node->type() == Node::Type_Task ) {
-                return node->effort()->expected().toString( Duration::Format_i18nDay );
-            }
-            return QString();
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
-                return node->effort()->expected().toString( Duration::Format_i18nDay );
+                Duration::Unit unit = node->effort()->displayUnit();
+                QList<double> scales; // TODO: week
+                if ( node->effort()->type() == Effort::Type_Effort ) {
+                    scales << m_project->standardWorktime()->day();
+                    // rest is default
+                }
+                double v = Effort::scale( node->effort()->expected(), unit, scales );
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
             }
             break;
-        case Role::DurationValue:
+        case Qt::EditRole:
             return node->effort()->expected().milliseconds();
         case Role::DurationScales: {
-            QList<QVariant> lst; // TODO: week
+            QVariantList lst; // TODO: week
             if ( node->effort()->type() == Effort::Type_Effort ) {
                 lst.append( m_project->standardWorktime()->day() );
             } else {
                 lst.append( 24.0 );
             }
+            lst << 60.0 << 60.0 << 1000.0;
             return lst;
         }
+        case Role::DurationUnit:
+            return static_cast<int>( node->effort()->displayUnit() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -629,8 +635,13 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
         case Qt::EditRole:
-            Duration v = Duration( value.toLongLong() );
-            m_part->addCommand( new ModifyEffortCmd( m_part, *node, node->effort()->expected(), v, "Modify estimate" ) );
+            Duration d = value.toList()[0].toLongLong();
+            Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+            kDebug()<<k_funcinfo<<value.toList()[0].toLongLong()<<", "<<unit<<" -> "<<d.milliseconds()<<endl;
+            KMacroCommand *cmd = new KMacroCommand( i18n( "Modify estimate" ) );
+            cmd->addCommand( new ModifyEffortCmd( m_part, *node, node->effort()->expected(), d ) );
+            cmd->addCommand( new ModifyEffortUnitCmd( m_part, *node, node->effort()->displayUnit(), unit ) );
+            m_part->addCommand( cmd );
             return true;
     }
     return false;
@@ -810,7 +821,7 @@ QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) cons
     switch ( column ) {
         //case 3: return new ??Delegate( parent );
         case 4: return new EnumDelegate( parent );
-        case 5: return new DurationDelegate( parent );
+        case 5: return new DurationSpinBoxDelegate( parent );
         case 6: return new SpinBoxDelegate( parent );
         case 7: return new SpinBoxDelegate( parent );
         case 8: return new EnumDelegate( parent );

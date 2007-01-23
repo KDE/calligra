@@ -559,6 +559,18 @@ private:
 
 };
 
+class ModifyEffortUnitCmd : public NamedCommand
+{
+public:
+    ModifyEffortUnitCmd( Part *part, Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Effort *m_effort;
+    Duration::Unit m_oldvalue, m_newvalue;
+};
+
 class EffortModifyRiskCmd : public NamedCommand
 {
 public:

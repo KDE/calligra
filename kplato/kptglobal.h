@@ -34,7 +34,7 @@ namespace Role
         EnumListValue,
         List,
         ListValues,
-        DurationValue,
+        DurationUnit,
         DurationScales,
         Maximum,
         Minimum

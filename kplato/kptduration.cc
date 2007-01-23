@@ -24,7 +24,9 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+
 #include <QRegExp>
+#include <QStringList>
 
 namespace KPlato
 {
@@ -34,6 +36,14 @@ const Duration Duration::zeroDuration( 0, 0, 0 );
 
 Duration::Duration() {
     m_ms = 0;
+}
+
+Duration::Duration( double value, Duration::Unit unit ) {
+    if (unit == Unit_ms) m_ms = (qint64)value;
+    else if (unit == Unit_s) m_ms = (qint64)value * 1000;
+    else if (unit == Unit_m) m_ms = (qint64)value * ( 1000 * 60 );
+    else if (unit == Unit_h) m_ms = (qint64)value * ( 1000 * 60 * 60 );
+    else if (unit == Unit_d) m_ms = (qint64)value * ( 1000 * 60 * 60 * 24 );
 }
 
 Duration::Duration(const Duration &d) {
@@ -48,8 +58,8 @@ Duration::Duration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) 
     m_ms += static_cast<qint64>(d) * 24 * 60 * 60 * 1000;
 }
 
-Duration::Duration(qint64 seconds) {
-    m_ms = seconds * 1000;
+Duration::Duration(qint64 ms) {
+    m_ms = ms;
 }
 
 Duration::~Duration() {
@@ -221,7 +231,7 @@ Duration::Duration Duration::fromString(const QString &s, Format format, bool *o
             double f = KGlobal::locale()->readNumber(s, &res);
             if (ok) *ok = res;
             if (res) {
-                return Duration((qint64)(f*3600.0));
+                return Duration((qint64)(f)*3600*1000);
             }
             break;
         }
@@ -253,5 +263,58 @@ void Duration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned 
     if (milliseconds)
         *milliseconds = ms;
 }
+
+QStringList Duration::unitList( bool trans )
+{
+    QStringList lst;
+    lst << ( trans ? i18n( "d" ) : "d" )
+        << ( trans ? i18n( "h" ) : "h" )
+        << ( trans ? i18n( "m" ) : "m" )
+        << ( trans ? i18n( "s" ) : "s" )
+        << ( trans ? i18n( "ms" ) : "ms" );
+    return lst;
+}
+
+QString Duration::unitToString( Duration::Unit unit, bool trans )
+{
+    switch ( unit ) {
+        case Unit_ms: return trans ? i18n( "ms" ) : "ms";
+        case Unit_s: return trans ? i18n( "s" ) : "s";
+        case Unit_m: return trans ? i18n( "m" ) : "m";
+        case Unit_h: return trans ? i18n( "h" ) : "h";
+        case Unit_d: return trans ? i18n( "d" ) : "d";
+    }
+    return QString();
+}
+
+Duration::Unit Duration::unitFromString( const QString &u )
+{
+    if (u == "ms") return Unit_ms;
+    else if (u == "s") return Unit_s;
+    else if (u == "m") return Unit_m;
+    else if (u == "h") return Unit_h;
+    else if (u == "d") return Unit_d;
+    else kError()<<k_funcinfo<<"Illegal unit: "<<u<<endl;
+    return Unit_ms; 
+}
+
+bool Duration::valueFromString( const QString &value, double &rv, Unit &unit ) {
+    QStringList lst = Duration::unitList();
+    foreach ( QString s, lst ) {
+        int pos = value.lastIndexOf( s );
+        if ( pos != -1 ) {
+            unit = Duration::unitFromString( s );
+            QString v = value;
+            v.remove( s );
+            bool ok;
+            rv = v.toDouble( &ok );
+            kError()<<k_funcinfo<<value<<" -> "<<v<<", "<<s<<" = "<<ok<<endl;
+            return ok;
+        }
+    }
+    kError()<<k_funcinfo<<"Illegal format, no unit: "<<value<<endl;
+    return false;
+}
+
 
 }  //KPlato namespace

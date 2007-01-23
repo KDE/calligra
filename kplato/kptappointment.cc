@@ -231,7 +231,7 @@ Duration Appointment::UsedEffort::usedEffortTo(const QDate &date, bool includeOv
 
 Duration Appointment::UsedEffort::usedOvertime() const {
     if (isEmpty()) {
-        return 0;
+        return Duration::zeroDuration;
     }
     return usedOvertime(first()->date());
 }

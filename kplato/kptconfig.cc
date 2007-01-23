@@ -56,7 +56,7 @@ void Config::load() {
         m_taskDefaults.setConstraintStartTime(config->readEntry("ConstraintStartTime",QDateTime()));
         m_taskDefaults.setConstraintEndTime(config->readEntry("ConstraintEndTime",QDateTime()));
         m_taskDefaults.effort()->setType((Effort::Type)config->readEntry("EffortType",0));
-        m_taskDefaults.effort()->set(Duration((qint64)config->readEntry("ExpectedEffort",0)));
+        m_taskDefaults.effort()->set(Duration((qint64)(config->readEntry("ExpectedEffort",0))*1000)); //FIXME
         m_taskDefaults.effort()->setPessimisticRatio(config->readEntry("PessimisticEffort",0));
         m_taskDefaults.effort()->setOptimisticRatio(config->readEntry("OptimisticEffort",0));
     }

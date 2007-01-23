@@ -22,6 +22,7 @@
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kptdurationwidget.h"
+#include "kptdurationspinbox.h"
 
 #include <QAbstractItemModel>
 #include <QItemDelegate>
@@ -88,7 +89,7 @@ QWidget *DurationDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 void DurationDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     DurationWidget *dw = static_cast<DurationWidget*>(editor);
-    Duration value = Duration( index.model()->data(index, Role::DurationValue).toLongLong() / 1000 ); //FIXME??
+    Duration value = Duration( index.model()->data(index, Qt::EditRole).toLongLong() );
     QVariantList scales = index.model()->data(index, Role::DurationScales ).value<QVariantList>();
     for(int i = 0; i < scales.count(); ++i ) {
         dw->setFieldScale( i, scales[ i ].toDouble() );
@@ -115,6 +116,45 @@ void DurationDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionV
     editor->setGeometry(r);
 }
 
+//----------------------
+DurationSpinBoxDelegate::DurationSpinBoxDelegate( QObject *parent )
+    : QItemDelegate( parent )
+{
+}
+
+QWidget *DurationSpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+{
+    DurationSpinBox *editor = new DurationSpinBox(parent);
+    editor->installEventFilter(const_cast<DurationSpinBoxDelegate*>(this));
+    return editor;
+}
+
+void DurationSpinBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    DurationSpinBox *dsb = static_cast<DurationSpinBox*>(editor);
+    dsb->setScales( index.model()->data( index, Role::DurationScales ) );
+    dsb->setUnit( (Duration::Unit)( index.model()->data( index, Role::DurationUnit ).toInt() ) );
+    dsb->setValue( index.model()->data( index, Qt::EditRole ).toLongLong() );
+}
+
+void DurationSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                const QModelIndex &index) const
+{
+    DurationSpinBox *dsb = static_cast<DurationSpinBox*>(editor);
+    QVariantList lst;
+    lst << QVariant( dsb->value() ) << QVariant( (int)( dsb->unit() ) );
+    model->setData( index, QVariant( lst ), Qt::EditRole );
+}
+
+void DurationSpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    kDebug()<<k_funcinfo<<editor<<": "<<option.rect<<", "<<editor->sizeHint()<<endl;
+    QRect r = option.rect;
+    //r.setHeight(r.height() + 50);
+    editor->setGeometry(r);
+}
+
+//---------------------------
 SpinBoxDelegate::SpinBoxDelegate( QObject *parent )
     : QItemDelegate( parent )
 {

@@ -380,7 +380,7 @@ public:
     /// Set the work time of a normal year.
     void setYear(const Duration year) { m_year = year; }
     /// Set the work time of a normal year.
-    void setYear(double hours) { m_year = Duration((qint64)(hours*60.0*60.0)); }
+    void setYear(double hours) { m_year = Duration((qint64)(hours*60.0*60.0*1000.0)); }
     
     /// The work time of a normal month
     Duration durationMonth() const { return m_month; }
@@ -389,7 +389,7 @@ public:
     /// Set the work time of a normal month
     void setMonth(const Duration month) { m_month = month; }
     /// Set the work time of a normal month
-    void setMonth(double hours) { m_month = Duration((qint64)(hours*60.0*60.0)); }
+    void setMonth(double hours) { m_month = Duration((qint64)(hours*60.0*60.0*1000.0)); }
     
     /// The work time of a normal week
     Duration durationWeek() const { return m_week; }
@@ -398,7 +398,7 @@ public:
     /// Set the work time of a normal week
     void setWeek(const Duration week) { m_week = week; }
     /// Set the work time of a normal week
-    void setWeek(double hours) { m_week = Duration((qint64)(hours*60.0*60.0)); }
+    void setWeek(double hours) { m_week = Duration((qint64)(hours*60.0*60.0*1000.0)); }
     
     /// The work time of a normal day
     Duration durationDay() const { return m_day; }
@@ -407,7 +407,7 @@ public:
     /// Set the work time of a normal day
     void setDay(const Duration day) { m_day = day; }
     /// Set the work time of a normal day
-    void setDay(double hours) { m_day = Duration((qint64)(hours*60.0*60.0)); }
+    void setDay(double hours) { m_day = Duration((qint64)(hours*60.0*60.0*1000.0)); }
     
     bool load(QDomElement &element);
     void save(QDomElement &element) const;

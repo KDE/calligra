@@ -550,8 +550,7 @@ public:
   */
 class Effort {
 public:
-    Effort ( Duration e = Duration::zeroDuration, Duration p = Duration::zeroDuration,
-		Duration o = Duration::zeroDuration );
+    Effort ( Duration e = Duration::zeroDuration, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
 
     Effort ( double e, double p = 0, double o = 0);
     
@@ -580,6 +579,11 @@ public:
     const Duration& pessimistic() const {return m_pessimisticEffort;}
     const Duration& expected() const {return m_expectedEffort;}
 
+    /// The unit in which this this value was last entered.
+    Duration::Unit displayUnit() const { return m_displayUnit; }
+    /// Set display unit.
+    void setDisplayUnit( Duration::Unit unit ) { m_displayUnit = unit; }
+    
     void set( Duration e, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
     void set( int e, int p = -1, int o = -1 );
     void set(unsigned days, unsigned hours, unsigned minutes);
@@ -619,6 +623,10 @@ public:
     Duration pertOptimistic() const;
     Duration pertPessimistic() const;
 
+    static double scale( const Duration &value, Duration::Unit unit, QList<double> scales );
+    static Duration scale( double value, Duration::Unit unit, QList<double> scales );
+
+
 private:
     Duration m_optimisticEffort;
     Duration m_pessimisticEffort;
@@ -626,6 +634,9 @@ private:
 
     Type m_type;
     Risktype m_risktype;
+    
+    Duration::Unit m_displayUnit;
+    
     
 #ifndef NDEBUG
 public:

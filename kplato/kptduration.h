@@ -41,10 +41,14 @@ class Duration {
          */
         enum Format { Format_DayTime, Format_Day, Format_Hour, Format_HourFraction, Format_i18nDayTime, Format_i18nDay, Format_i18nHour, Format_i18nHourFraction };
 
+        //NOTE: These must match fieldnumbers in duration widget!
+        enum Unit { Unit_d, Unit_h, Unit_m, Unit_s, Unit_ms };
+        
         Duration();
         Duration(const Duration &d);
         Duration(unsigned d, unsigned h, unsigned m, unsigned s=0, unsigned ms=0);
-        Duration(qint64 seconds);
+        Duration(qint64 ms);
+        Duration(double value, Duration::Unit unit);
         ~Duration();
 
         /**
@@ -109,8 +113,6 @@ class Duration {
         QString toString(Format format = Format_DayTime) const;
         static Duration fromString(const QString &s, Format format = Format_DayTime, bool *ok=0);
         
-        //NOTE: These must match fieldnumbers in duration widget!
-        enum Unit { Unit_d, Unit_h, Unit_m, Unit_s, Unit_ms };
         double toDouble(Unit u=Unit_ms) const { 
             if (u == Unit_ms) return (double)m_ms;
             else if (u == Unit_s) return (double)m_ms/1000.0;
@@ -119,7 +121,11 @@ class Duration {
             else if (u == Unit_d) return (double)m_ms/(1000.0*60.0*60.0*24.0);
             return (double)m_ms; 
         }
-
+        static QStringList unitList( bool trans = false );
+        static QString unitToString( Duration::Unit unit, bool trans = false );
+        static Unit unitFromString( const QString &unit );
+        /// Returns value and unit from a <value><unit> coded string in rv and unit.
+        static bool valueFromString( const QString &value, double &rv, Unit &unit );
         /**
          * This is useful for occasions where we need a zero duration.
          */
