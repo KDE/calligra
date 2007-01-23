@@ -327,7 +327,7 @@ void KexiUtils::drawPixmap( QPainter& p, int lineWidth, const QRect& rect,
 //		target->drawPixmap(pos, pixmap);
 //		if (!fast)
 //			p2.begin(&pixmapBuffer, p.device());
-		p.drawPixmap(lineWidth, lineWidth, pixmap);
+		p.drawPixmap(lineWidth+pos.x(), lineWidth+pos.y(), pixmap);
 	}
 	if (scaledContents && !fast && p.isActive()) {
 		p2.end();
