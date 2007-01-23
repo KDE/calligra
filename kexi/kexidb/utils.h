@@ -261,7 +261,7 @@ namespace KexiDB
 	//! Used in splitToTableAndFieldParts().
 	enum SplitToTableAndFieldPartsOptions {
 		FailIfNoTableOrFieldName = 0, //!< default value for splitToTableAndFieldParts()
-		SetFieldNameIfNoTableName = 1 //!< @see splitToTableAndFieldParts()
+		SetFieldNameIfNoTableName = 1 //!< see splitToTableAndFieldParts()
 	};
 
 	/*! Splits \a string like "table.field" into "table" and "field" parts. 
@@ -328,7 +328,7 @@ namespace KexiDB
 		const QVariant& value);
 
 	/*! @return property value loaded from a DOM \a node, written in a QtDesigner-like
-	 notation: <number>int</number> or <bool>bool</bool>, etc. Supported types are
+	 notation: &lt;number&gt;int&lt;/number&gt; or &lt;bool&gt;bool&lt;/bool&gt;, etc. Supported types are
 	 "string", "cstring", "bool", "number". For invalid values null QVariant is returned.
 	 You can check the validity of the returned value using QVariant::type(). */
 	KEXI_DB_EXPORT QVariant loadPropertyValueFromDom( const QDomNode& node );

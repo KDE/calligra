@@ -89,7 +89,7 @@ namespace KoMacro {
 			void setAction(KSharedPtr<Action> action);
 
 			/**
-			* @return a @Variant from the @a Variable identified with
+			* @return @a Variant from the @a Variable identified with
 			* the name @param name . If this @a MacroItem doesn't
 			* have a @a Variable with that name NULL is
 			* returned.

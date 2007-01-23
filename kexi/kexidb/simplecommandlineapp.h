@@ -32,12 +32,12 @@ namespace KexiDB
 	//! @short A skeleton for creating a simple command line database application.
 	/*! This class creates a KInstance object and automatically handles the following 
 	 command line options:
-	 - --driver <name> (Database driver name) or -drv
-	 - --user <name> (Database user name) or -u
+	 - --driver \<name\> (Database driver name) or -drv
+	 - --user \<name\> (Database user name) or -u
 	 - --password (Prompt for password) or -p
-	 - --host <name> (Server (host) name) or -h
-	 - --port <number> (Server's port number)
-	 - --local-socket <filename> (Server's local socket filename, if needed) or -s
+	 - --host \<name\> (Server (host) name) or -h
+	 - --port \<number\> (Server's port number)
+	 - --local-socket \<filename\> (Server's local socket filename, if needed) or -s
 
 	 You can use this helper class to create test applications or small tools that open 
 	 a KexiDB-compatible database using command line arguments, do some data processing

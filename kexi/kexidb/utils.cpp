@@ -944,7 +944,7 @@ QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
 		ADD(Field::Boolean, QVariant(false, 0));
 		ADD(Field::Float, 0.0);
 		ADD(Field::Double, 0.0);
-//! @ok? we have no better defaults
+//! @todo ok? we have no better defaults
 		ADD(Field::Text, QString(" "));
 		ADD(Field::LongText, QString(" "));
 		ADD(Field::BLOB, QByteArray());

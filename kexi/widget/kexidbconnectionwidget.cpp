@@ -46,6 +46,7 @@
 #include <qthread.h>
 #include <qradiobutton.h>
 
+//! Templorary hides db list
 //! @todo reenable this when implemented
 #define NO_LOAD_DB_LIST
 
