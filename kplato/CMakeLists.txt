@@ -80,6 +80,7 @@ set(libkplatopart_SRCS
     kptresourceassignmentview.cc
     kptchartdialog.cc
     kptchartpanel.cc
+    kptchartwidget.cc
 )
 kde4_add_ui_files(libkplatopart_SRCS
     kptdurationwidget.ui
@@ -102,7 +103,7 @@ kde4_add_ui_files(libkplatopart_SRCS
     kpttaskprogresspanelbase.ui
     kptconfigtaskpanelbase.ui
     kptperteditor.ui
-    kptchartpanelbase.ui
+    kptchartpanelbase.ui 
 )
 
 
