@@ -21,6 +21,7 @@
 #define KPTCHARTPANEL_H
 
 #include "ui_kptchartpanelbase.h"
+#include "kptchartwidget.h"
 
 #include <QList>
 #include <QHash>
@@ -41,6 +42,7 @@ class Project;
 
 class ChartPanelBase : public QWidget, public Ui::ChartPanelBase
 {
+
 public:
   explicit ChartPanelBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
@@ -50,6 +52,9 @@ public:
 
 class ChartPanel : public ChartPanelBase {
     Q_OBJECT
+
+private:
+ChartWidget * chart;
 public:
     ChartPanel(QWidget *parent=0);
     

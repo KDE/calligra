@@ -17,39 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptchartdialog.h"
-#include "kptchartpanel.h"
-#include <klocale.h>
+
+#ifndef KPTCHARTWIDGET_H
+#define KPTCHARTWIDGET_H
+
+#include <QWidget>
 
 namespace KPlato
 {
 
-ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
-{
-    setCaption( i18n("Project Charts Indicators") );
-    setButtons( KDialog::Ok );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
-    m_panel = new ChartPanel(this);
-    setMainWidget(m_panel);
-    m_panel->show();
-   // connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonClose(bool)));
-   // connect(this,SIGNAL(CloseClicked()),this,SLOT(slotClose()));
-}
+class ChartWidget : public QWidget {
 
-KCommand *ChartDialog::buildCommand(Part *part) {
-	kDebug()<< "Chart Dialog : buildCommand";
-    //return m_panel->buildCommand(part);
-    return 0;
-}
+public:
+    ChartWidget(QWidget *parent=0, const char *name=0);
 
-void ChartDialog::slotClose() {
-    kDebug()<< "Chart Dialog : slotClose";
-    //m_panel->slotClose();
-
-}
+    void paintEvent();
+    
+};
 
 } //namespace KPlato
 
-#include "kptchartdialog.moc"
-
+#endif

@@ -16,40 +16,27 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include "kptchartwidget.h"
 
-#include "kptchartdialog.h"
-#include "kptchartpanel.h"
 #include <klocale.h>
+#include <kdebug.h>
 
 namespace KPlato
 {
 
-ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
+
+ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,name)
 {
-    setCaption( i18n("Project Charts Indicators") );
-    setButtons( KDialog::Ok );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
-    m_panel = new ChartPanel(this);
-    setMainWidget(m_panel);
-    m_panel->show();
-   // connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonClose(bool)));
-   // connect(this,SIGNAL(CloseClicked()),this,SLOT(slotClose()));
-}
-
-KCommand *ChartDialog::buildCommand(Part *part) {
-	kDebug()<< "Chart Dialog : buildCommand";
-    //return m_panel->buildCommand(part);
-    return 0;
-}
-
-void ChartDialog::slotClose() {
-    kDebug()<< "Chart Dialog : slotClose";
-    //m_panel->slotClose();
+kDebug() << "ChartWidget :: Constructor";
 
 }
 
-} //namespace KPlato
 
-#include "kptchartdialog.moc"
+void ChartWidget::paintEvent()
+{
+kDebug() << "Print My Chart PLease :D";
+drawText(10,10,"I am a Chart!");
 
+}
+
+} // namespace Kplato

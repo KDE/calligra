@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005 Frédéric Lambert <konkistadorr@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,7 +16,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 #include "kptchartpanel.h"
 
 #include <klocale.h>
@@ -29,12 +28,14 @@ namespace KPlato
 ChartPanel::ChartPanel(QWidget *p) : ChartPanelBase(p)
 {
 
-kDebug()<<"Chart Panel : constructeur";
-
+kDebug()<<"Chart Panel : constructeur!!";
+chart = new ChartWidget(this,"MyChartWidget");
+chart->paintEvent();
+gridLayout->addWidget(chart,1,1,1,1);
 }
     
 void ChartPanel::slotClose() {
-	//emit slotAccountsOk;
+	
 }
 
 } //namespace KPlato
