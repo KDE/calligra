@@ -25,11 +25,20 @@
 #include <KoPointerEvent.h>
 
 #include <kdebug.h>
+#include <kstandardshortcut.h>
 #include <QKeyEvent>
 #include <QAction>
 #include <QTextBlock>
 #include <QTextLayout>
 #include <QAbstractTextDocumentLayout>
+
+static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut) {
+    foreach(QKeySequence ks, KStandardShortcut::shortcut(shortcut)) {
+        if(input == ks)
+            return true;
+    }
+    return false;
+}
 
 TextTool::TextTool(KoCanvasBase *canvas)
 : KoTool(canvas)
@@ -99,7 +108,8 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
 
     int position = pointToPosition(event->point);
     repaint();
-    m_caret.setPosition(position);
+    m_caret.setPosition(position,
+            (event->modifiers() & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
     repaint();
 
     updateSelectionHandler();
@@ -145,62 +155,61 @@ void TextTool::mouseReleaseEvent( KoPointerEvent *event ) {
 
 void TextTool::keyPressEvent(QKeyEvent *event) {
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
-    switch(event->key()) { // map input to moveOperation
-/* TODO
- * Look at KoTextView::handleKeyPressEvent
- * Use    if ( KShortcut(  e->key() ) == KStandardShortcut::deleteWordBack() )  and friends
- */
-        case Qt::Key_Backspace:
-            useCursor(Qt::BlankCursor);
+    if(event->key() == Qt::Key_Backspace) {
+//       if(event->modifiers() & Qt::ControlModifier)
+//           m_caret.deletePreviousWord();
+//       else
             m_caret.deletePreviousChar();
-            break;
-        case Qt::Key_Tab:
-            kDebug(32500) << "Tab key pressed";
-            break;
-        case Qt::Key_Delete:
-            useCursor(Qt::BlankCursor);
+    }
+    else if(event->key() == Qt::Key_Delete) {
+//       if(event->modifiers() & Qt::ControlModifier)
+//           m_caret.deleteWord();
+//       else
             m_caret.deleteChar();
-            break;
-        case Qt::Key_Left:
-            if(event->modifiers() & Qt::ControlModifier)
-                moveOperation = QTextCursor::WordLeft;
-            else
-                moveOperation = QTextCursor::Left;
-            break;
-        case Qt::Key_Up:
-            moveOperation = QTextCursor::Up;
-            break;
-        case Qt::Key_Right:
-            if(event->modifiers() & Qt::ControlModifier)
-                moveOperation = QTextCursor::NextWord;
-            else
-                moveOperation = QTextCursor::Right;
-            break;
-        case Qt::Key_Down:
-            moveOperation = QTextCursor::Down;
-            break;
-        case Qt::Key_PageUp:
-            //moveOperation = QTextCursor::Left;
-            break;
-        case Qt::Key_PageDown:
-            //moveOperation = QTextCursor::Left;
-            break;
-        case Qt::Key_End:
-            moveOperation = QTextCursor::EndOfLine;
-            break;
-        case Qt::Key_Home:
+    }
+    else if((event->key() == Qt::Key_Left) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
+        moveOperation = QTextCursor::Left;
+    else if((event->key() == Qt::Key_Right) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
+        moveOperation = QTextCursor::Right;
+    else if((event->key() == Qt::Key_Up) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
+        moveOperation = QTextCursor::Up;
+    else if((event->key() == Qt::Key_Down) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
+        moveOperation = QTextCursor::Down;
+    else {
+        // check for shortcuts.
+        QKeySequence item(event->key() | event->modifiers());
+        if(hit(item, KStandardShortcut::Home))
+            // Goto beginning of the document. Default: Ctrl-Home
+            moveOperation = QTextCursor::StartOfLine; // TODO
+        else if(hit(item, KStandardShortcut::End))
+            // Goto end of the document. Default: Ctrl-End
+            moveOperation = QTextCursor::StartOfLine; // TODO
+       else if(hit(item, KStandardShortcut::Prior)) // page up
+            // Scroll up one page. Default: Prior
+           moveOperation = QTextCursor::StartOfLine; // TODO
+        else if(hit(item, KStandardShortcut::Next))
+            // Scroll down one page. Default: Next
+            moveOperation = QTextCursor::StartOfLine; // TODO
+        else if(hit(item, KStandardShortcut::BeginningOfLine))
+            // Goto beginning of current line. Default: Home
             moveOperation = QTextCursor::StartOfLine;
-            break;
-        default:
-            if((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {
-                event->ignore();
-                return;
-            }
-            useCursor(Qt::BlankCursor);
-            m_caret.insertText(event->text());
+        else if(hit(item, KStandardShortcut::EndOfLine))
+            // Goto end of current line. Default: End
+            moveOperation = QTextCursor::EndOfLine;
+        else if(hit(item, KStandardShortcut::BackwardWord))
+            moveOperation = QTextCursor::WordLeft;
+        else if(hit(item, KStandardShortcut::ForwardWord))
+            moveOperation = QTextCursor::NextWord;
+        else if((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {
+            event->ignore();
+            return;
+        }
+        m_caret.insertText(event->text());
     }
     if(moveOperation != QTextCursor::NoMove) {
+        useCursor(Qt::BlankCursor);
         repaint();
+    //  if RTL toggle direction of cursor movement.
         m_caret.movePosition(moveOperation,
             (event->modifiers() & Qt::ShiftModifier)?QTextCursor::KeepAnchor:QTextCursor::MoveAnchor);
         repaint();
