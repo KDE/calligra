@@ -67,22 +67,24 @@ KoEnhancedPathNamedParameter::KoEnhancedPathNamedParameter( const QString &ident
 
 double KoEnhancedPathNamedParameter::evaluate( KoEnhancedPathShape *path )
 {
+    const QRectF &viewBox = path->viewBox();
+
     switch( m_identifier )
     {
         case IdentifierPi:
             return M_PI;
         break;
         case IdentifierLeft:
-            return path->boundingRect().left();
+            return viewBox.left();
         break;
         case IdentifierTop:
-            return path->boundingRect().top();
+            return viewBox.top();
         break;
         case IdentifierRight:
-            return path->boundingRect().right();
+            return viewBox.right();
         break;
         case IdentifierBottom:
-            return path->boundingRect().bottom();
+            return viewBox.bottom();
         break;
         case IdentifierXstretch:
         break;
@@ -95,10 +97,10 @@ double KoEnhancedPathNamedParameter::evaluate( KoEnhancedPathShape *path )
             return path->background().style() == Qt::NoBrush ? 0.0 : 1.0;
         break;
         case IdentifierWidth:
-            return path->KoShape::size().width();
+            return viewBox.width();
         break;
         case IdentifierHeight:
-            return path->KoShape::size().height();
+            return viewBox.height();
         break;
         case IdentifierLogwidth:
         break;

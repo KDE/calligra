@@ -24,7 +24,6 @@
 #include <KoProperties.h>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <QString>
 #include <QMap>
@@ -35,142 +34,16 @@ KoEnhancedPathShapeFactory::KoEnhancedPathShapeFactory( QObject *parent )
     setToolTip( i18n( "An enhanced path" ) );
     setIcon("enhancedpath");
 
-    QString modifiers( "35" );
-    QStringList commands;
-    commands.append( "M $0 0" );
-    commands.append( "L ?Right 0 ?Right $0 width $0 width ?Bottom ?Right ?Bottom" );
-    commands.append( "L ?Right height $0 height $0 ?Bottom 0 ?Bottom 0 $0 $0 $0" );
-    commands.append( "Z" );
-
-    QStringList handles;
-    handles.append( "$0 0 0 ?Half" );
-
-    Formulae formulae;
-    formulae["Right"] = "width - $0";
-    formulae["Bottom"] = "height - $0";
-    formulae["Half"] = "min( 0.5 * height, 0.5 * width )";
-
-    KoShapeTemplate t;
-    t.id = KoPathShapeId;
-    t.name = i18n("Enhanced Path");
-    t.toolTip = i18n("A cross");
-    t.icon = "cross";
-    t.properties = dataToProperties( modifiers, commands, handles, formulae );
-
-    addTemplate(t);
-
-    modifiers = "60 35";
-
-    commands.clear();
-    commands.append( "M $0 $1" );
-    commands.append( "L $0 0 width ?HalfHeight $0 height $0 ?LowerCorner 0 ?LowerCorner 0 $1" );
-    commands.append( "Z" );
-
-    handles.clear();
-    handles.append( "$0 $1 0 width 0 ?HalfHeight" );
-
-    formulae.clear();
-    formulae["HalfHeight"] = "0.5 * height";
-    formulae["LowerCorner"] = "height - $1";
-
-    t.name = i18n("Enhanced Path");
-    t.toolTip = i18n("An arrow");
-    t.icon = "arrow";
-    t.properties = dataToProperties( modifiers, commands, handles, formulae );
-
-    addTemplate(t);
-
-    modifiers = "10 150";
-
-    commands.clear();
-    commands.append( "M ?1w8 0" );
-    commands.append( "X 0 ?1h8" );
-    commands.append( "L ?f2 ?f3 0 ?3h8 0 ?5h8 ?f4 ?f5 0 ?7h8" );
-    commands.append( "Y ?1w8 height" );
-    commands.append( "L ?f6 ?f7 ?3w8 height ?5w8 height ?f8 ?f9 ?7w8 height" );
-    commands.append( "X width ?7h8" );
-    commands.append( "L ?f10 ?f11 width ?5h8 width ?3h8 ?f12 ?f13 width ?1h8" );
-    commands.append( "Y ?7w8 0" );
-    commands.append( "L ?f14 ?f15 ?5w8 0 ?3w8 0 ?f16 ?f17" );
-    commands.append( "Z" );
-    commands.append( "N" );
-
-    handles.clear();
-    handles.append( "$0 $1" );
-
-    formulae.clear();
-    formulae["1h8"] = "0.125 * height";
-    formulae["3h8"] = "0.400 * height";
-    formulae["5h8"] = "0.600 * height";
-    formulae["7h8"] = "0.875 * height";
-    formulae["1w8"] = "0.125 * width";
-    formulae["3w8"] = "0.400 * width";
-    formulae["5w8"] = "0.600 * width";
-    formulae["7w8"] = "0.875 * width";
-
-    formulae["f0"] = "$0 - 0.5 * width";
-    formulae["f1"] = "$1 - 0.5 * height";
-
-    formulae["f2"] = "if(?f18 , $0 , 0)";    // x2
-    formulae["f3"] = "if(?f18 , $1 , 0.2625*height )";   // y2
-
-    formulae["f4"] = "if(?f23 , $0 , 0)";       // x5
-    formulae["f5"] = "if(?f23 , $1 , 0.7375*height )";  // y5
-
-    formulae["f6"] = "if(?f26 , $0 , 0.2625*width )";   // x8
-    formulae["f7"] = "if(?f26 , $1 , height )";  // y8
-
-    formulae["f8"] = "if(?f29 , $0 , 0.7375*width )";  // x11
-    formulae["f9"] = "if(?f29 , $1 , height )";  // y11
-
-    formulae["f10"] = "if(?f32 , $0 , width)"; // x14
-    formulae["f11"] = "if(?f32 , $1 , 0.7375*height )"; // y14
-
-    formulae["f12"] = "if(?f34 , $0 , width )"; // x17
-    formulae["f13"] = "if(?f34 , $1 , 0.2625*height )";  // y17
-
-    formulae["f14"] = "if(?f36 , $0 , 0.7375*width )"; // x20
-    formulae["f15"] = "if(?f36 , $1 , 0)";      // y20
-
-    formulae["f16"] = "if(?f38 , $0 , 0.2625*width )";  // x23
-    formulae["f17"] = "if(?f38 , $1 , 0)";      // y23
-
-    formulae["f18"] = "if($0 , -1, ?f19 )";
-    formulae["f19"] = "if(?f1 , -1, ?f22 )";
-    formulae["f20"] = "abs( ?f0 )";
-    formulae["f21"] = "abs( ?f1 )";
-    formulae["f22"] = "?f20 - ?f21";
-    formulae["f23"] = "if( $0, -1, ?f24 )";
-    formulae["f24"] = "if( ?f1, ?f22, -1 )";
-    formulae["f25"] = "$1 - height";
-    formulae["f26"] = "if( ?f25, ?f27, -1 )";
-    formulae["f27"] = "if( ?f0, -1, ?f28 )";
-    formulae["f28"] = "?f21 - ?f20";
-    formulae["f29"] = "if( ?f25, ?f30, -1 )";
-    formulae["f30"] = "if( ?f0, ?f28, -1 )";
-    formulae["f31"] = "$0 - width";
-    formulae["f32"] = "if( ?f31, ?f33, -1)";
-    formulae["f33"] = "if( ?f1, ?f22, -1)";
-    formulae["f34"] = "if( ?f31, ?f35, -1)";
-    formulae["f35"] = "if( ?f1, -1, ?f22 )";
-    formulae["f36"] = "if( $1, -1, ?f37 )";
-    formulae["f37"] = "if( ?f0, ?f28, -1 )";
-    formulae["f38"] = "if( $1, -1, ?f39 )";
-    formulae["f39"] = "if( ?f0, -1, ?f28 )";
-    formulae["f40"] = "$0";
-    formulae["f41"] = "$1";
-
-    t.name = i18n("Enhanced Path");
-    t.toolTip = i18n("A callout");
-    t.icon = "callout";
-    t.properties = dataToProperties( modifiers, commands, handles, formulae );
-
-    addTemplate(t);
+    addCross();
+    addArrow();
+    addCallout();
+    addSmiley();
+    addCircularArrow();
 }
 
 KoShape * KoEnhancedPathShapeFactory::createDefaultShape() const
 {
-    KoEnhancedPathShape *shape = new KoEnhancedPathShape();
+    KoEnhancedPathShape *shape = new KoEnhancedPathShape( QRectF( 0, 0, 100, 100 ) );
     shape->setBorder( new KoLineBorder( 1.0 ) );
     shape->setShapeId( KoPathShapeId );
 
@@ -185,7 +58,11 @@ KoShape * KoEnhancedPathShapeFactory::createDefaultShape() const
     shape->addCommand( "L ?Right height $0 height $0 ?Bottom 0 ?Bottom 0 $0 $0 $0" );
     shape->addCommand( "Z" );
 
-    shape->addHandle("$0 0 0 ?Half" );
+    ComplexType handle;
+    handle["draw:handle-position"] = "$0 0";
+    handle["draw:handle-range-x-minimum"] = "0";
+    handle["draw:handle-range-x-maximum"] = "?Half";
+    shape->addHandle( handle );
     shape->resize( QSize(100, 100) );
 
     return shape;
@@ -193,68 +70,316 @@ KoShape * KoEnhancedPathShapeFactory::createDefaultShape() const
 
 KoShape * KoEnhancedPathShapeFactory::createShape(const KoProperties * params) const
 {
-    KoEnhancedPathShape *shape = new KoEnhancedPathShape();
+    QRectF viewBox( 0, 0, 100, 100 );
+    QVariant viewboxData;
+    if( params->getProperty( "viewBox", viewboxData ) )
+        viewBox = viewboxData.toRectF();
+
+    KoEnhancedPathShape *shape = new KoEnhancedPathShape( viewBox );
     if( ! shape )
         return 0;
 
-    shape->setBorder( new KoLineBorder( 1.0 ) );
     shape->setShapeId( KoPathShapeId );
-
+    shape->setBorder( new KoLineBorder( 1.0 ) );
     shape->addModifiers( params->getString( "modifiers" ) );
 
-    int handleCount = params->getInt( "handleCount" );
-    for( int i = 0; i < handleCount; ++i )
-        shape->addHandle( params->getString( QString( "handle%1").arg( i ) ) );
+    ListType handles = params->getProperty( "handles" ).toList();
+    foreach( QVariant v, handles )
+        shape->addHandle( v.toMap() );
 
-    int commandCount = params->getInt( "commandCount" );
-    for( int i = 0; i < commandCount; ++i )
-        shape->addCommand( params->getString( QString( "command%1").arg( i ) ) );
+    ComplexType formulae = params->getProperty( "formulae" ).toMap();
+    ComplexType::const_iterator formula = formulae.constBegin();
+    ComplexType::const_iterator lastFormula = formulae.constEnd();
+    for( ; formula != lastFormula; ++formula )
+        shape->addFormula( formula.key(), formula.value().toString() );
 
-    int formulaCount = params->getInt( "formulaCount" );
-    for( int i = 0; i < formulaCount; ++i )
-    {
-        QString name = params->getString( QString( "formula%1" ).arg( i ) );
-        shape->addFormula( name, params->getString( name ) );
-    }
+    QStringList commands = params->getProperty( "commands" ).toStringList();
+    foreach( QString cmd, commands )
+        shape->addCommand( cmd );
 
     QVariant color;
     if( params->getProperty( "background", color ) )
         shape->setBackground( color.value<QColor>() );
 
-    shape->resize( QSize(100, 100) );
+    QSizeF size = shape->size();
+    double ratio = size.height() / size.width();
+
+    shape->resize( QSizeF( 100, 100*ratio ) );
 
     return shape;
 }
 
 KoProperties* KoEnhancedPathShapeFactory::dataToProperties(
     const QString &modifiers, const QStringList &commands,
-    const QStringList &handles, const Formulae & formulae ) const
+    const ListType &handles, const ComplexType & formulae ) const
 {
     KoProperties *props = new KoProperties();
     props->setProperty( "modifiers", modifiers );
-
-    props->setProperty( "commandCount", commands.count() );
-    for( int i = 0; i < commands.count(); ++i )
-        props->setProperty( QString("command%1").arg( i ), QVariant( commands[i] ) );
-
-    props->setProperty( "handleCount", handles.count() );
-    for( int i = 0; i < handles.count(); ++i )
-        props->setProperty( QString("handle%1").arg( i ), QVariant( handles[i] ) );
-
-    Formulae::const_iterator formula = formulae.begin();
-    Formulae::const_iterator lastFormula = formulae.end();
-    props->setProperty( "formulaCount", formulae.count() );
-    int i = 0;
-    for( ; formula != lastFormula; ++formula )
-    {
-        props->setProperty( QString("formula%1").arg( i++ ), formula.key() );
-        props->setProperty( formula.key(), formula.value() );
-    }
-
-    QVariant color;
-    color.setValue( QColor( Qt::red ) );
-    props->setProperty( "background", color );
+    props->setProperty( "commands", commands );
+    props->setProperty( "handles", handles );
+    props->setProperty( "formulae", formulae );
+    props->setProperty( "background", QVariant::fromValue<QColor>( QColor( Qt::red ) ) );
 
     return props;
 }
+
+void KoEnhancedPathShapeFactory::addCross()
+{
+    QString modifiers( "35" );
+
+    QStringList commands;
+    commands.append( "M $0 0" );
+    commands.append( "L ?Right 0 ?Right $0 width $0 width ?Bottom ?Right ?Bottom" );
+    commands.append( "L ?Right height $0 height $0 ?Bottom 0 ?Bottom 0 $0 $0 $0" );
+    commands.append( "Z" );
+
+    ListType handles;
+    ComplexType handle;
+    handle["draw:handle-position"] = "$0 0";
+    handle["draw:handle-range-x-minimum"] = "0";
+    handle["draw:handle-range-x-maximum"] = "?Half";
+    handles.append( QVariant( handle ) );
+
+    ComplexType formulae;
+    formulae["Right"] = "width - $0";
+    formulae["Bottom"] = "height - $0";
+    formulae["Half"] = "min( 0.5 * height, 0.5 * width )";
+
+    KoShapeTemplate t;
+    t.id = KoPathShapeId;
+    t.name = i18n("Enhanced Path");
+    t.toolTip = i18n("A cross");
+    t.icon = "cross";
+    t.properties = dataToProperties( modifiers, commands, handles, formulae );
+
+    addTemplate(t);
+}
+
+void KoEnhancedPathShapeFactory::addArrow()
+{
+    QString modifiers( "60 35" );
+
+    QStringList commands;
+    commands.append( "M $0 $1" );
+    commands.append( "L $0 0 width ?HalfHeight $0 height $0 ?LowerCorner 0 ?LowerCorner 0 $1" );
+    commands.append( "Z" );
+
+    ListType handles;
+    ComplexType handle;
+    handle["draw:handle-position"] = "$0 $1";
+    handle["draw:handle-range-x-minimum"] = "0";
+    handle["draw:handle-range-x-maximum"] = "width";
+    handle["draw:handle-range-y-minimum"] = "0";
+    handle["draw:handle-range-y-maximum"] = "?HalfHeight";
+    handles.append( QVariant( handle ) );
+
+    ComplexType formulae;
+    formulae["HalfHeight"] = "0.5 * height";
+    formulae["LowerCorner"] = "height - $1";
+
+    KoShapeTemplate t;
+    t.id = KoPathShapeId;
+    t.name = i18n("Enhanced Path");
+    t.toolTip = i18n("An arrow");
+    t.icon = "arrow";
+    t.properties = dataToProperties( modifiers, commands, handles, formulae );
+
+    addTemplate(t);
+}
+
+void KoEnhancedPathShapeFactory::addCallout()
+{
+    QString modifiers( "4250 45000" );
+
+    QStringList commands;
+    commands.append( "M 3590 0" );
+    commands.append( "X 0 3590" );
+    commands.append( "L ?f2 ?f3 0 8970 0 12630 ?f4 ?f5 0 18010" );
+    commands.append( "Y 3590 21600" );
+    commands.append( "L ?f6 ?f7 8970 21600 12630 21600 ?f8 ?f9 18010 21600" );
+    commands.append( "X 21600 18010" );
+    commands.append( "L ?f10 ?f11 21600 12630 21600 8970 ?f12 ?f13 21600 3590" );
+    commands.append( "Y 18010 0" );
+    commands.append( "L ?f14 ?f15 12630 0 8970 0 ?f16 ?f17" );
+    commands.append( "Z" );
+    commands.append( "N" );
+
+    ComplexType formulae;
+    formulae["f0"] = "$0 -10800";
+    formulae["f1"] = "$1 -10800";
+    formulae["f2"] = "if(?f18 ,$0 ,0)";
+    formulae["f3"] = "if(?f18 ,$1 ,6280)";
+    formulae["f4"] = "if(?f23 ,$0 ,0)";
+    formulae["f5"] = "if(?f23 ,$1 ,15320)";
+    formulae["f6"] = "if(?f26 ,$0 ,6280)";
+    formulae["f7"] = "if(?f26 ,$1 ,21600)";
+    formulae["f8"] = "if(?f29 ,$0 ,15320)";
+    formulae["f9"] = "if(?f29 ,$1 ,21600)";
+    formulae["f10"] = "if(?f32 ,$0 ,21600)";
+    formulae["f11"] = "if(?f32 ,$1 ,15320)";
+    formulae["f12"] = "if(?f34 ,$0 ,21600)";
+    formulae["f13"] = "if(?f34 ,$1 ,6280)";
+    formulae["f14"] = "if(?f36 ,$0 ,15320)";
+    formulae["f15"] = "if(?f36 ,$1 ,0)";
+    formulae["f16"] = "if(?f38 ,$0 ,6280)";
+    formulae["f17"] = "if(?f38 ,$1 ,0)";
+    formulae["f18"] = "if($0 ,-1,?f19 )";
+    formulae["f19"] = "if(?f1 ,-1,?f22 )";
+    formulae["f20"] = "abs(?f0 )";
+    formulae["f21"] = "abs(?f1 )";
+    formulae["f22"] = "?f20 -?f21 ";
+    formulae["f23"] = "if($0 ,-1,?f24 )";
+    formulae["f24"] = "if(?f1 ,?f22 ,-1)";
+    formulae["f25"] = "$1 -21600";
+    formulae["f26"] = "if(?f25 ,?f27 ,-1)";
+    formulae["f27"] = "if(?f0 ,-1,?f28 )";
+    formulae["f28"] = "?f21 -?f20 ";
+    formulae["f29"] = "if(?f25 ,?f30 ,-1)";
+    formulae["f30"] = "if(?f0 ,?f28 ,-1)";
+    formulae["f31"] = "$0 -21600";
+    formulae["f32"] = "if(?f31 ,?f33 ,-1)";
+    formulae["f33"] = "if(?f1 ,?f22 ,-1)";
+    formulae["f34"] = "if(?f31 ,?f35 ,-1)";
+    formulae["f35"] = "if(?f1 ,-1,?f22 )";
+    formulae["f36"] = "if($1 ,-1,?f37 )";
+    formulae["f37"] = "if(?f0 ,?f28 ,-1)";
+    formulae["f38"] = "if($1 ,-1,?f39 )";
+    formulae["f39"] = "if(?f0 ,-1,?f28 )";
+    formulae["f40"] = "$0 ";
+    formulae["f41"] = "$1 ";
+
+    ListType handles;
+    ComplexType handle;
+    handle["draw:handle-position"] = "$0 $1";
+    handles.append( QVariant( handle ) );
+
+    KoShapeTemplate t;
+    t.id = KoPathShapeId;
+    t.name = i18n("Enhanced Path");
+    t.toolTip = i18n("A callout");
+    t.icon = "callout";
+    t.properties = dataToProperties( modifiers, commands, handles, formulae );
+    t.properties->setProperty( "viewBox", QRectF( 0, 0, 21600, 21600 ) );
+
+    addTemplate(t);
+}
+
+void KoEnhancedPathShapeFactory::addSmiley()
+{
+    QString modifiers("17520");
+
+    QStringList commands;
+    commands.append( "U 10800 10800 10800 10800 0 23592960" );
+    commands.append( "Z" );
+    commands.append( "N" );
+    commands.append( "U 7305 7515 1165 1165 0 23592960" );
+    commands.append( "Z" );
+    commands.append( "N" );
+    commands.append( "U 14295 7515 1165 1165 0 23592960" );
+    commands.append( "Z" );
+    commands.append( "N" );
+    commands.append( "M 4870 ?f1" );
+    commands.append( "C 8680 ?f2 12920 ?f2 16730 ?f1" );
+    commands.append( "F" );
+    commands.append( "N" );
+
+    ComplexType formulae;
+    formulae["f0"] = "$0 -15510";
+    formulae["f1"] = "17520-?f0 ";
+    formulae["f2"] = "15510+?f0 ";
+
+    ListType handles;
+    ComplexType handle;
+    handle["draw:handle-position"] = "10800 $0";
+    handle["draw:handle-range-y-minimum"] = "15510";
+    handle["draw:handle-range-y-maximum"] = "17520";
+    handles.append( QVariant( handle ) );
+
+    KoShapeTemplate t;
+    t.id = KoPathShapeId;
+    t.name = i18n("Enhanced Path");
+    t.toolTip = i18n("A smiley");
+    t.icon = "smiley";
+    t.properties = dataToProperties( modifiers, commands, handles, formulae );
+    t.properties->setProperty( "viewBox", QRectF( 0, 0, 21600, 21600 ) );
+
+    addTemplate(t);
+}
+
+void KoEnhancedPathShapeFactory::addCircularArrow()
+{
+    QString modifiers("180 0 5500");
+
+    QStringList commands;
+    commands.append( "B ?f3 ?f3 ?f20 ?f20 ?f19 ?f18 ?f17 ?f16" );
+    commands.append( "W 0 0 21600 21600 ?f9 ?f8 ?f11 ?f10" );
+    commands.append( "L ?f24 ?f23 ?f36 ?f35 ?f29 ?f28" );
+    commands.append( "Z" );
+    commands.append( "N" );
+
+    ComplexType formulae;
+
+    formulae["f0"] = "$0 ";
+    formulae["f1"] = "$1 ";
+    formulae["f2"] = "$2 ";
+    formulae["f3"] = "10800+$2 ";
+    formulae["f4"] = "10800*sin($0 *(pi/180))";
+    formulae["f5"] = "10800*cos($0 *(pi/180))";
+    formulae["f6"] = "10800*sin($1 *(pi/180))";
+    formulae["f7"] = "10800*cos($1 *(pi/180))";
+    formulae["f8"] = "?f4 +10800";
+    formulae["f9"] = "?f5 +10800";
+    formulae["f10"] = "?f6 +10800";
+    formulae["f11"] = "?f7 +10800";
+    formulae["f12"] = "?f3 *sin($0 *(pi/180))";
+    formulae["f13"] = "?f3 *cos($0 *(pi/180))";
+    formulae["f14"] = "?f3 *sin($1 *(pi/180))";
+    formulae["f15"] = "?f3 *cos($1 *(pi/180))";
+    formulae["f16"] = "?f12 +10800";
+    formulae["f17"] = "?f13 +10800";
+    formulae["f18"] = "?f14 +10800";
+    formulae["f19"] = "?f15 +10800";
+    formulae["f20"] = "21600-?f3 ";
+    formulae["f21"] = "13500*sin($1 *(pi/180))";
+    formulae["f22"] = "13500*cos($1 *(pi/180))";
+    formulae["f23"] = "?f21 +10800";
+    formulae["f24"] = "?f22 +10800";
+    formulae["f25"] = "$2 -2700";
+    formulae["f26"] = "?f25 *sin($1 *(pi/180))";
+    formulae["f27"] = "?f25 *cos($1 *(pi/180))";
+    formulae["f28"] = "?f26 +10800";
+    formulae["f29"] = "?f27 +10800";
+    formulae["f30"] = "($1+45)*pi/180";
+    formulae["f31"] = "sqrt(((?f29-?f24)*(?f29-?f24))+((?f28-?f23)*(?f28-?f23)))";
+    formulae["f32"] = "sqrt(2)/2*?f31";
+    formulae["f33"] = "?f32*sin(?f30)";
+    formulae["f34"] = "?f32*cos(?f30)";
+    formulae["f35"] = "?f28+?f33";
+    formulae["f36"] = "?f29+?f34";
+
+    ListType handles;
+    ComplexType handle;
+    handle["draw:handle-position"] = "$0 10800";
+    handle["draw:handle-polar"] = "10800 10800";
+    handle["draw:handle-radius-range-minimum"] = "10800";
+    handle["draw:handle-radius-range-maximum"] = "10800";
+    handles.append( QVariant( handle ) );
+
+    handle.clear();
+    handle["draw:handle-position"] = "$1 $2";
+    handle["draw:handle-polar"] = "10800 10800";
+    handle["draw:handle-radius-range-minimum"] = "0";
+    handle["draw:handle-radius-range-maximum"] = "10800";
+    handles.append( QVariant( handle ) );
+
+    KoShapeTemplate t;
+    t.id = KoPathShapeId;
+    t.name = i18n("Enhanced Path");
+    t.toolTip = i18n("A circular-arrow");
+    t.icon = "circular-arrow";
+    t.properties = dataToProperties( modifiers, commands, handles, formulae );
+    t.properties->setProperty( "viewBox", QRectF( 0, 0, 21600, 21600 ) );
+    addTemplate(t);
+}
+
 #include "KoEnhancedPathShapeFactory.moc"

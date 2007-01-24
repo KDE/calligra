@@ -22,6 +22,11 @@
 #include "KoEnhancedPathShape.h"
 #include <math.h>
 
+#include <kdebug.h>
+
+// radian to degree factor
+const double rad2deg = 180.0/M_PI;
+
 KoEnhancedPathCommand::KoEnhancedPathCommand( const QChar & command )
     : m_command( command )
 {
@@ -33,58 +38,170 @@ KoEnhancedPathCommand::~KoEnhancedPathCommand()
 
 bool KoEnhancedPathCommand::execute( KoEnhancedPathShape * path )
 {
+    /*
+     * The parameters of the commands are in viewbox coordinates, which have
+     * to be converted to the shapes coordinate system by calling viewboxToShape
+     * on the enhanced path the command works on.
+     * Parameters which resemble angles are angles cooresponding to the viewbox
+     * coordinate system. Those have to be transformed into angles corresponding
+     * to the normal mathematically coordinate system to be used for the arcTo
+     * drawing routine. This is done by computing (2*M_PI - angle).
+     */
     QList<QPointF> points = pointsFromParameters( path );
     uint pointsCount = points.size();
 
-    // get the last added point from the path which is needed for some commands
-    KoPathPoint *lastPoint = 0;
-    int subpathCount = path->subpathCount();
-    if( subpathCount )
-    {
-        int subpathPointCount = path->pointCountSubpath( subpathCount-1 );
-        lastPoint = path->pointByIndex( KoPathPointIndex( subpathCount-1, subpathPointCount-1 ) );
-    }
-
     switch( m_command.toAscii() )
     {
+        // starts new subpath at given position (x y) +
         case 'M':
             if( ! pointsCount )
                 return false;
-            path->moveTo( points[0] );
+            path->moveTo( path->viewboxToShape( points[0] ) );
+            if( pointsCount > 1 )
+                for( uint i = 1; i < pointsCount; i++ )
+                    path->lineTo( path->viewboxToShape( points[i] ) );
         break;
+        // line from current point (x y) +
         case 'L':
             foreach( QPointF point, points )
-                lastPoint = path->lineTo( point );
+                path->lineTo( path->viewboxToShape( point ) );
         break;
+        // cubic bezier curve from current point (x1 y1 x2 y2 x y) +
         case 'C':
             for( uint i = 0; i < pointsCount; i+=3 )
-                lastPoint = path->curveTo( points[i], points[i+1], points[i+2] );
+                path->curveTo( path->viewboxToShape( points[i] ),
+                               path->viewboxToShape( points[i+1] ),
+                               path->viewboxToShape( points[i+2] ) );
         break;
+        // closes the current subpath
         case 'Z':
             path->close();
         break;
+        // ends the current set of subpaths
+        case 'N':
+            // N just ends the complete path
+        break;
+        // no fill for current set of subpaths
+        case 'F':
+            // TODO implement me
+        break;
+        // no stroke for current set of subpaths
+        case 'S':
+            // TODO implement me
+        break;
+        // segment of an ellipse (x y w h t0 t1) +
+        case 'T':
+        // same like T but with implied movement to starting point (x y w h t0 t1) +
+        case 'U':
+        {
+            bool lineTo = m_command == 'T';
+
+            for( uint i = 0; i < pointsCount; i+=3 )
+            {
+                const QPointF &radii = path->viewboxToShape( points[i+1] );
+                const QPointF &angles = points[i+2] / rad2deg;
+                // compute the ellipses starting point
+                QPointF start( radii.x() * cos( angles.x() ), radii.y() * sin( angles.x() ) );
+                double sweepAngle = degSweepAngle( points[i+2].x(), points[i+2].y(), false );
+
+                if( lineTo )
+                    path->lineTo( path->viewboxToShape( points[i] ) + start );
+                else 
+                    path->moveTo( path->viewboxToShape( points[i] ) + start );
+
+                path->arcTo( radii.x(), radii.y(), points[i+2].x(), sweepAngle );
+            }
+        }
+        break;
+        // counter-clockwise arc (x1 y1 x2 y2 x3 y3 x y) +
+        case 'A':
+        // the same as A, with implied moveto to the starting point (x1 y1 x2 y2 x3 y3 x y) +
+        case 'B':
+        {
+            bool lineTo = m_command == 'A';
+
+            for( uint i = 0; i < pointsCount; i+=4 )
+            {
+                QRectF bbox = rectFromPoints( points[i], points[i+1] );
+                QPointF center = bbox.center();
+                double rx = 0.5 * path->viewboxToShape( bbox.width() );
+                double ry = 0.5 * path->viewboxToShape( bbox.height() );
+                double startAngle = angleFromPoint( points[i+2] - center );
+                double stopAngle = angleFromPoint( points[i+3] - center );
+                // we are moving counter-clockwise to the end angle
+                double sweepAngle = radSweepAngle( startAngle, stopAngle, false );
+                // compute the starting point to draw the line to
+                QPointF startPoint( rx * cos( startAngle ), ry * sin( 2*M_PI - startAngle ) );
+
+                if( lineTo )
+                    path->moveTo( path->viewboxToShape( center ) + startPoint );
+                else
+                    path->moveTo( path->viewboxToShape( center ) + startPoint );
+
+                path->arcTo( rx, ry, startAngle * rad2deg, sweepAngle * rad2deg );
+            }
+        }
+        break;
+        // clockwise arc (x1 y1 x2 y2 x3 y3 x y) +
+        case 'W':
+        // the same as W, but implied moveto (x1 y1 x2 y2 x3 y3 x y) +
+        case 'V':
+        {
+            bool lineTo = m_command == 'W';
+
+            for( uint i = 0; i < pointsCount; i+=4 )
+            {
+                QRectF bbox = rectFromPoints( points[i], points[i+1] );
+                QPointF center = bbox.center();
+                double rx = 0.5 * path->viewboxToShape( bbox.width() );
+                double ry = 0.5 * path->viewboxToShape( bbox.height() );
+                double startAngle = angleFromPoint( points[i+2] - center );
+                double stopAngle = angleFromPoint( points[i+3] - center );
+                // we are moving clockwise to the end angle
+                double sweepAngle = radSweepAngle( startAngle, stopAngle, true );
+
+                if( lineTo )
+                    path->lineTo( path->viewboxToShape( points[i+2] ) );
+                else
+                    path->lineTo( path->viewboxToShape( points[i+2] ) );
+
+                path->arcTo( rx, ry, startAngle * rad2deg, sweepAngle * rad2deg );
+            }
+        }
+        break;
+        // elliptical quadrant (initial segment tangential to x-axis) (x y) +
         case 'X':
+        {
+            KoPathPoint * lastPoint = lastPathPoint( path );
             foreach( QPointF point, points )
             {
+                point = path->viewboxToShape( point );
                 double rx = lastPoint->point().x() - point.x();
                 double ry = lastPoint->point().y() - point.y();
                 double startAngle = ry > 0.0 ? 270.0 : 90.0;
                 double sweepAngle = rx*rx > 0.0 ? 90.0 : -90.0;
                 lastPoint = path->arcTo( fabs(rx), fabs(ry), startAngle, sweepAngle );
             }
+        }
         break;
+        // elliptical quadrant (initial segment tangential to y-axis) (x y) +
         case 'Y':
+        {
+            KoPathPoint * lastPoint = lastPathPoint( path );
             foreach( QPointF point, points )
             {
+                point = path->viewboxToShape( point );
                 double rx = lastPoint->point().x() - point.x();
                 double ry = lastPoint->point().y() - point.y();
                 double startAngle = rx > 0.0 ? 0.0 : 180.0;
                 double sweepAngle = ry*ry > 0.0 ? 90.0 : -90.0;
                 lastPoint = path->arcTo( fabs(rx), fabs(ry), startAngle, sweepAngle );
             }
+        }
         break;
-        case 'N':
-            /// N just ends the complete path
+        // quadratic bezier curve (x1 y1 x y)+
+        case 'Q':
+            // TODO implement me
         break;
         default:
         break;
@@ -96,16 +213,13 @@ QList<QPointF> KoEnhancedPathCommand::pointsFromParameters( KoEnhancedPathShape 
 {
     QList<QPointF> points;
     QPointF p;
+
     uint paramCount = m_parameters.count();
-    for( uint i = 0; i < paramCount; ++i )
+    for( uint i = 0; i < paramCount; i+=2 )
     {
-        if( i % 2 == 0 )
-            p.setX( m_parameters[i]->evaluate( path ) );
-        else
-        {
-            p.setY( m_parameters[i]->evaluate( path ) );
-            points.append( p );
-        }
+        p.setX( m_parameters[i]->evaluate( path ) );
+        p.setY( m_parameters[i+1]->evaluate( path ) );
+        points.append( p );
     }
     return points;
 }
@@ -114,4 +228,68 @@ void KoEnhancedPathCommand::addParameter( KoEnhancedPathParameter *parameter )
 {
     if( parameter )
         m_parameters.append( parameter );
+}
+
+double KoEnhancedPathCommand::angleFromPoint( const QPointF & point ) const
+{
+    double angle = atan2( point.y(), point.x() );
+    if( angle < 0.0 )
+        angle += 2*M_PI;
+
+    return 2*M_PI - angle;
+}
+
+double KoEnhancedPathCommand::radSweepAngle( double start, double stop, bool clockwise ) const
+{
+    double sweepAngle = stop - start;
+    if( clockwise )
+    {
+        // we are moving clockwise to the end angle
+        if( stop > start )
+            sweepAngle = (stop - start) - 2*M_PI;
+    }
+    else
+    {
+        // we are moving counter-clockwise to the stop angle
+        if( start > stop )
+            sweepAngle = 2*M_PI - (start-stop);
+    }
+
+   return sweepAngle;
+}
+
+double KoEnhancedPathCommand::degSweepAngle( double start, double stop, bool clockwise ) const
+{
+    double sweepAngle = stop - start;
+    if( clockwise )
+    {
+        // we are moving clockwise to the end angle
+        if( stop > start )
+            sweepAngle = (stop - start) - 360.0;
+    }
+    else
+    {
+        // we are moving counter-clockwise to the stop angle
+        if( start > stop )
+            sweepAngle = 360.0 - (start-stop);
+    }
+
+   return sweepAngle;
+}
+
+KoPathPoint * KoEnhancedPathCommand::lastPathPoint( KoEnhancedPathShape * path ) const
+{
+    KoPathPoint * lastPoint = 0;
+    int subpathCount = path->subpathCount();
+    if( subpathCount )
+    {
+        int subpathPointCount = path->pointCountSubpath( subpathCount-1 );
+        lastPoint = path->pointByIndex( KoPathPointIndex( subpathCount-1, subpathPointCount-1 ) );
+    }
+    return lastPoint;
+}
+
+QRectF KoEnhancedPathCommand::rectFromPoints( const QPointF &tl, const QPointF &br ) const
+{
+    return QRectF( tl, QSizeF( br.x()-tl.x(), br.y()-tl.y() ) ).normalized();
 }

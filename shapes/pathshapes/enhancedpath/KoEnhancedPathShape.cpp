@@ -23,9 +23,9 @@
 #include "KoEnhancedPathHandle.h"
 #include "KoEnhancedPathFormula.h"
 
-KoEnhancedPathShape::KoEnhancedPathShape()
+KoEnhancedPathShape::KoEnhancedPathShape( const QRectF &viewBox )
+: m_viewBox( viewBox ), m_viewBoxOffset( 0.0, 0.0 )
 {
-    KoShape::resize( QSize(100, 100) );
 }
 
 KoEnhancedPathShape::~KoEnhancedPathShape()
@@ -42,22 +42,58 @@ void KoEnhancedPathShape::moveHandleAction( int handleId, const QPointF & point,
     KoEnhancedPathHandle *handle = m_enhancedHandles[ handleId ];
     if( handle )
     {
-        handle->setPosition( point, this );
-        m_handles[handleId] = handle->position( this );
+        handle->setPosition( shapeToViewbox( point ), this );
+        evaluateHandles();
     }
 }
 
-void KoEnhancedPathShape::updatePath( const QSizeF &size )
+void KoEnhancedPathShape::updatePath( const QSizeF & )
 {
-    KoShape::resize( size );
-
     clear();
+
     foreach( KoEnhancedPathCommand *cmd, m_commands )
         cmd->execute( this );
 
-    uint handleCount = m_enhancedHandles.size();
-    for( uint i = 0; i < handleCount; ++i )
-        m_handles[i] = m_enhancedHandles[i]->position( this );
+    normalize();
+}
+
+void KoEnhancedPathShape::resize( const QSizeF &newSize )
+{
+    QSizeF oldSize = size();
+
+    KoParameterShape::resize( newSize );
+
+    double scaleX = newSize.width() / oldSize.width();
+    double scaleY = newSize.height() / oldSize.height();
+    m_viewBoxOffset.rx() *= scaleX;
+    m_viewBoxOffset.ry() *= scaleY;
+    m_viewMatrix.scale( scaleX, scaleY );
+}
+
+
+QPointF KoEnhancedPathShape::normalize()
+{
+    QPointF offset = KoPathShape::normalize();
+    m_viewBoxOffset -= offset;
+
+    return offset;
+}
+
+void KoEnhancedPathShape::evaluateHandles()
+{
+    if( m_handles.size() != m_enhancedHandles.size() )
+    {
+        m_handles.clear();
+        uint handleCount = m_enhancedHandles.size();
+        for( uint i = 0; i < handleCount; ++i )
+            m_handles.append( viewboxToShape( m_enhancedHandles[i]->position( this ) ) );
+    }
+    else
+    {
+        uint handleCount = m_enhancedHandles.size();
+        for( uint i = 0; i < handleCount; ++i )
+            m_handles[i] = viewboxToShape( m_enhancedHandles[i]->position( this ) );
+    }
 }
 
 double KoEnhancedPathShape::evaluateReference( const QString &reference )
@@ -118,18 +154,6 @@ void KoEnhancedPathShape::modifyReference( const QString &reference, double valu
     }
 }
 
-void KoEnhancedPathShape::resize( const QSizeF &newSize )
-{
-    KoShape::resize( newSize );
-    KoParameterShape::resize( newSize );
-
-    uint handleCount = m_enhancedHandles.size();
-    for( uint i = 0; i < handleCount; ++i )
-        m_enhancedHandles[i]->setPosition( m_handles[i], this );
-
-    updatePath( newSize );
-}
-
 KoEnhancedPathParameter * KoEnhancedPathShape::parameter( const QString & text )
 {
     Q_ASSERT( ! text.isEmpty() );
@@ -175,26 +199,57 @@ void KoEnhancedPathShape::addFormula( const QString &name, const QString &formul
     m_formulae[name] = new KoEnhancedPathFormula( formula );
 }
 
-void KoEnhancedPathShape::addHandle( const QString &handle )
+void KoEnhancedPathShape::addHandle( const QMap<QString,QVariant> &handle )
 {
     if( handle.isEmpty() )
         return;
 
-    QStringList tokens = handle.simplified().split( ' ' );
-    int tokenCount = tokens.count();
-    if( tokenCount < 2 )
+    KoEnhancedPathHandle *newHandle = 0;
+
+    if( ! handle.contains( "draw:handle-position" ) )
         return;
-    KoEnhancedPathHandle *h = new KoEnhancedPathHandle( parameter( tokens[0] ), parameter( tokens[1] ) );
-    if( tokenCount >= 4 )
-        h->setRangeX( parameter( tokens[2] ), parameter( tokens[3] ) );
-    if( tokenCount >= 6 )
-        h->setRangeY( parameter( tokens[4] ), parameter( tokens[5] ) );
+    QVariant position = handle.value("draw:handle-position");
 
-    m_enhancedHandles.append( h );
+    QStringList tokens = position.toString().simplified().split( ' ' );
+    if( tokens.count() < 2 )
+        return;
 
-    m_handles.clear();
-    foreach( KoEnhancedPathHandle *handle, m_enhancedHandles )
-        m_handles.append( handle->position( this ) );
+    newHandle = new KoEnhancedPathHandle( parameter( tokens[0] ), parameter( tokens[1] ) );
+
+    // check if we have a polar handle
+    if( handle.contains( "draw:handle-polar" ) )
+    {
+        QVariant polar = handle.value( "draw:handle-polar" );
+        QStringList tokens = polar.toString().simplified().split( ' ' );
+        if( tokens.count() == 2 )
+        {
+            newHandle->setPolarCenter( parameter( tokens[0] ), parameter( tokens[1] ) );
+
+            QVariant minRadius = handle.value( "draw:handle-radius-range-minimum" );
+            QVariant maxRadius = handle.value( "draw:handle-radius-range-maximum" );
+            if( minRadius.isValid() && maxRadius.isValid() )
+                newHandle->setRadiusRange( parameter( minRadius.toString() ), parameter( maxRadius.toString() ) );
+        }
+    }
+    else
+    {
+        QVariant minX = handle.value( "draw:handle-range-x-minimum" );
+        QVariant maxX = handle.value( "draw:handle-range-x-maximum" );
+        if( minX.isValid() && maxX.isValid() )
+            newHandle->setRangeX( parameter( minX.toString() ), parameter( maxX.toString() ) );
+
+        QVariant minY = handle.value( "draw:handle-range-y-minimum" );
+        QVariant maxY = handle.value( "draw:handle-range-y-maximum" );
+        if( minY.isValid() && maxY.isValid() )
+            newHandle->setRangeY( parameter( minY.toString() ), parameter( maxY.toString() ) );
+    }
+
+    if( ! newHandle )
+        return;
+
+    m_enhancedHandles.append( newHandle );
+
+    evaluateHandles();
 }
 
 void KoEnhancedPathShape::addModifiers( const QString &modifiers )
@@ -229,4 +284,29 @@ void KoEnhancedPathShape::addCommand( const QString &command )
     m_commands.append( cmd );
 
     updatePath( size() );
+}
+
+const QRectF & KoEnhancedPathShape::viewBox() const
+{
+    return m_viewBox;
+}
+
+QPointF KoEnhancedPathShape::shapeToViewbox( const QPointF & point ) const
+{
+    return m_viewMatrix.inverted().map( point-m_viewBoxOffset );
+}
+
+QPointF KoEnhancedPathShape::viewboxToShape( const QPointF & point ) const
+{
+    return m_viewMatrix.map( point ) + m_viewBoxOffset;
+}
+
+double KoEnhancedPathShape::shapeToViewbox( double value ) const
+{
+    return m_viewMatrix.inverted().map( QPointF( value, value ) ).x();
+}
+
+double KoEnhancedPathShape::viewboxToShape( double value ) const
+{
+    return m_viewMatrix.map( QPointF( value, value ) ).x();
 }

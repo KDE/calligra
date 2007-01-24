@@ -36,11 +36,17 @@ public:
     KoShape * createDefaultShape() const;
     KoShape * createShape(const KoProperties * params) const;
 private:
-    typedef QMap< QString, QString > Formulae;
+    void addCross();
+    void addArrow();
+    void addCallout();
+    void addSmiley();
+    void addCircularArrow();
 
+    typedef QMap<QString, QVariant > ComplexType;
+    typedef QList<QVariant> ListType;
     KoProperties* dataToProperties(
         const QString &modifiers, const QStringList &commands,
-        const QStringList &handles, const Formulae & formulae ) const;
+        const ListType &handles, const ComplexType & formulae ) const;
 
 };
 

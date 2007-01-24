@@ -22,8 +22,6 @@
 #include "KoEnhancedPathParameter.h"
 #include <math.h>
 
-#include <kdebug.h>
-
 KoEnhancedPathHandle::KoEnhancedPathHandle( KoEnhancedPathParameter * x, KoEnhancedPathParameter * y )
 : m_positionX( x ), m_positionY( y )
 , m_minimumX( 0 ), m_minimumY( 0 )
@@ -42,15 +40,10 @@ QPointF KoEnhancedPathHandle::position( KoEnhancedPathShape * path )
     QPointF position( m_positionX->evaluate( path ), m_positionY->evaluate( path ) );
     if( isPolar() )
     {
-        kDebug() << "KoEnhancedPathHandle::position" << endl;
         // convert polar coordinates into cartesian coordinates
         QPointF center( m_polarX->evaluate( path ), m_polarY->evaluate( path ) );
-        kDebug() << "polar center = " << center << endl;
-        kDebug() << "polar angle = " << position.x() << endl;
-        kDebug() << "polar radius = " << position.y() << endl;
-        double angleInRadian = position.x()/180.0*M_PI;
+        double angleInRadian = position.x() * M_PI / 180.0;
         position = center + position.y() * QPointF( cos( angleInRadian ), sin( angleInRadian ) );
-        kDebug() << "polar position = " << position << endl;
     }
 
     return position;
@@ -62,25 +55,24 @@ void KoEnhancedPathHandle::setPosition( const QPointF &position, KoEnhancedPathS
 
     if( isPolar() )
     {
-        kDebug() << "KoEnhancedPathHandle::setPosition" << endl;
-        kDebug() << "raw position = " << position << endl;
         // convert cartesian coordinates into polar coordinates
-        QPointF center( m_polarX->evaluate( path ), m_polarY->evaluate( path ) );
-        kDebug() << "polar center = " << center << endl;
-        constrainedPosition -= center;
-        double radius = sqrt( constrainedPosition.x()*constrainedPosition.x() + constrainedPosition.y()*constrainedPosition.y() );
-        double angle = atan2( constrainedPosition.y(), constrainedPosition.x() );
+        QPointF polarCenter( m_polarX->evaluate( path ), m_polarY->evaluate( path ) );
+        QPointF diff = constrainedPosition - polarCenter;
+        // compute the polar radius
+        double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+        // compute the polar angle
+        double angle = atan2( diff.y(), diff.x() );
         if( angle < 0.0 )
             angle += 2 * M_PI;
-        constrainedPosition.setX( angle * 180.0 / M_PI );
-        kDebug() << "polar angle = " << constrainedPosition.x() << endl;
+
+        // constrain the radius
         if( m_minRadius )
             radius = qMax( m_minRadius->evaluate( path ), radius );
         if( m_maxRadius )
             radius = qMin( m_maxRadius->evaluate( path ), radius );
-        kDebug() << "polar radius = " << radius << endl;
+
+        constrainedPosition.setX( angle * 180.0 / M_PI );
         constrainedPosition.setY( radius );
-        kDebug() << "polar position = " << constrainedPosition << endl;
     }
     else
     {

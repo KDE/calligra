@@ -23,6 +23,7 @@
 #include <KoParameterShape.h>
 #include <QList>
 #include <QMap>
+#include <QRectF>
 
 #define KoEnhancedPathShapeId "KoEnhancedPathShape"
 
@@ -43,7 +44,7 @@ class KoEnhancedPathParameter;
 class KoEnhancedPathShape : public KoParameterShape
 {
 public:
-    KoEnhancedPathShape();
+    KoEnhancedPathShape( const QRectF &viewBox );
     ~KoEnhancedPathShape();
 
     /**
@@ -65,15 +66,23 @@ public:
 
     // from KoShape
     virtual void resize( const QSizeF &newSize );
+    // from KoParameterShape
+    virtual QPointF normalize();
 
     /// Add formula with given name and textual represenation
     void addFormula( const QString &name, const QString &formula );
     /// Add a single handle with format: x y minX maxX minY maxY
-    void addHandle( const QString &handle );
+    void addHandle( const QMap<QString,QVariant> &handle );
     /// Add modifiers with format: modifier0 modifier1 modifier2 ...
     void addModifiers( const QString &modifiers );
     /// Add command for instance "M 0 0"
     void addCommand( const QString &command );
+    /// Returns the viewbox of the enhanced path shape
+    const QRectF & viewBox() const;
+    QPointF shapeToViewbox( const QPointF & point ) const;
+    QPointF viewboxToShape( const QPointF & point ) const;
+    double shapeToViewbox( double value ) const;
+    double viewboxToShape( double value ) const;
 protected:
     // from KoParameterShape
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
@@ -83,10 +92,15 @@ private:
     /// Returns parameter from given textual representation
     KoEnhancedPathParameter * parameter( const QString & text );
 
+    void evaluateHandles();
+
     typedef QMap<QString, KoEnhancedPathFormula*> FormulaStore;
     typedef QList<double> ModifierStore;
     typedef QMap<QString, KoEnhancedPathParameter*> ParameterStore;
 
+    QRectF m_viewBox;
+    QMatrix m_viewMatrix;
+    QPointF m_viewBoxOffset;
     QList<KoEnhancedPathCommand*> m_commands; ///< the commands creating the outline
     QList<KoEnhancedPathHandle*> m_enhancedHandles; ///< the handles for modifiying the shape
     FormulaStore m_formulae;     ///< the formulae
