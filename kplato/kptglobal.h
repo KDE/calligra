@@ -53,11 +53,17 @@ namespace ToolTip
     static QString NodeDescription = i18n( "Task notes." );
     static QString NodeWBS = i18n( "Work Breakdown Structure Code" );
     static QString NodeRisk = i18n( "Risk controles the PERT distribution used when calculating the actual estimate for this task." );
+    static QString NodeRunningAccount = i18n( "Account for running costs." );
+    static QString NodeStartupAccount = i18n( "Account for cost incurred at startup of the task." );
+    static QString NodeStartupCost = i18n( "The cost incurred at startup of the task." );
+    static QString NodeShutdownAccount = i18n( "Account for cost incurred at shutdown of the task." );
+    static QString NodeShutdownCost = i18n( "The cost incurred at shutdown of the task." );
 
     static QString EstimateType = i18n( "Type of estimate." );
     static QString Estimate = i18n( "The expected estimate." );
     static QString OptimisticRatio = i18n( "Optimistic estimate." );
     static QString PessimisticRatio = i18n( "Pessimistic estimate." );
+    static QString RiskType = i18n( "Type of risk." );
 
     static QString ResourceName = i18n( "The name of the resource or resource group." );
     static QString ResourceType = i18n( "The type of the resource or resource group." );

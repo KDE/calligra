@@ -355,19 +355,19 @@ public:
     QString wbs() const { return m_wbs; }
     
     double startupCost() const { return m_startupCost; }
-    void setStartupCost(double cost) { m_startupCost = cost; }
+    void setStartupCost(double cost);
     
     Account *startupAccount() const { return m_startupAccount; }
-    void setStartupAccount(Account *acc) { m_startupAccount = acc; }
+    void setStartupAccount(Account *acc);
     
     double shutdownCost() const { return m_shutdownCost; }
-    void  setShutdownCost(double cost) { m_shutdownCost = cost; }
+    void setShutdownCost(double cost);
     
     Account *shutdownAccount() const { return m_shutdownAccount; }
-    void setShutdownAccount(Account *acc) { m_shutdownAccount = acc; }
+    void setShutdownAccount(Account *acc);
     
     Account *runningAccount() const { return m_runningAccount; }
-    void setRunningAccount(Account *acc) { m_runningAccount = acc; }
+    void setRunningAccount(Account *acc);
 
     /// Return current schedule
     Schedule *currentSchedule() const { return m_currentSchedule; }

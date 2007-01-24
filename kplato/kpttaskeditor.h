@@ -122,6 +122,18 @@ protected:
     bool setOptimisticRatio( Node *node, const QVariant &value, int role );
     QVariant pessimisticRatio( const Node *node, int role ) const;
     bool setPessimisticRatio( Node *node, const QVariant &value, int role );
+    QVariant riskType( const Node *node, int role ) const;
+    bool setRiskType( Node *node, const QVariant &value, int role );
+    QVariant runningAccount( const Node *node, int role ) const;
+    bool setRunningAccount( Node *node, const QVariant &value, int role );
+    QVariant startupAccount( const Node *node, int role ) const;
+    bool setStartupAccount( Node *node, const QVariant &value, int role );
+    QVariant startupCost( const Node *node, int role ) const;
+    bool setStartupCost( Node *node, const QVariant &value, int role );
+    QVariant shutdownAccount( const Node *node, int role ) const;
+    bool setShutdownAccount( Node *node, const QVariant &value, int role );
+    QVariant shutdownCost( const Node *node, int role ) const;
+    bool setShutdownCost( Node *node, const QVariant &value, int role );
     
     QVariant test( const Node *node, int role ) const;
     bool setTest( Node *node, const QVariant &value, int role );

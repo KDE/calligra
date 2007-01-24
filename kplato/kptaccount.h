@@ -105,14 +105,8 @@ public:
         CostPlace(Account *acc) 
             : m_account(acc), m_nodeId(), m_node(0), m_running(false), m_startup(false), m_shutdown(false)
         {}
-        CostPlace(Account *acc, Node *node, bool running=false, bool strtup=false, bool shutdown=false)
-            : m_account(acc), m_nodeId(node->id()), m_node(node) {
-            if (node) {
-                setRunning(running);
-                setStartup(strtup);
-                setShutdown(shutdown);
-            }
-        }
+        CostPlace(Account *acc, Node *node, bool running=false, bool strtup=false, bool shutdown=false);
+        
         CostPlace(CostPlace *cp) {
             m_account = cp->m_account;
             m_nodeId = cp->m_nodeId;

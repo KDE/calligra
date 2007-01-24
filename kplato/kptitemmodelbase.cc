@@ -31,6 +31,7 @@
 #include <QStyleOptionViewItem>
 #include <QTreeWidgetItem>
 
+#include <klineedit.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -190,6 +191,40 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionVi
     kDebug()<<k_funcinfo<<editor<<": "<<option.rect<<", "<<editor->sizeHint()<<endl;
     QRect r = option.rect;
     //r.setHeight(r.height() + 50);
+    editor->setGeometry(r);
+}
+
+//---------------------------
+MoneyDelegate::MoneyDelegate( QObject *parent )
+    : QItemDelegate( parent )
+{
+}
+
+QWidget *MoneyDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+{
+    KLineEdit *editor = new KLineEdit(parent);
+    //TODO: validator
+    editor->installEventFilter(const_cast<MoneyDelegate*>(this));
+    return editor;
+}
+
+void MoneyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    QString value = index.model()->data(index, Qt::EditRole).toString();
+    KLineEdit *e = static_cast<KLineEdit*>(editor);
+    e->setText( value );
+}
+
+void MoneyDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                const QModelIndex &index) const
+{
+    KLineEdit *e = static_cast<KLineEdit*>(editor);
+    model->setData( index, e->text(), Qt::EditRole );
+}
+
+void MoneyDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    QRect r = option.rect;
     editor->setGeometry(r);
 }
 

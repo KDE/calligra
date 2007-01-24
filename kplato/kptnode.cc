@@ -958,6 +958,39 @@ void Node::setCurrentSchedule(long id) {
     //kDebug()<<k_funcinfo<<m_name<<" id: "<<id<<"="<<m_currentSchedule<<endl;
 }
 
+void Node::setStartupCost(double cost)
+{
+    m_startupCost = cost;
+    changed();
+}
+
+void Node::setStartupAccount(Account *acc)
+{
+    kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
+    m_startupAccount = acc;
+    changed();
+}
+
+void Node::setShutdownCost(double cost)
+{
+    m_shutdownCost = cost;
+    changed();
+}
+
+void Node::setShutdownAccount(Account *acc)
+{
+    kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
+    m_shutdownAccount = acc;
+    changed();
+}
+
+void Node::setRunningAccount(Account *acc)
+{
+    kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
+    m_runningAccount = acc;
+    changed();
+}
+
 void Node::changed(Node *node) {
     if (m_parent)
         m_parent->changed(this);

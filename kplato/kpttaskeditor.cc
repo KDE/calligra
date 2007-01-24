@@ -151,7 +151,15 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case 9: { // constraint start
+            case 8: // risktype
+            {
+                Node *n = node( index );
+                if ( n && n->type() == Node::Type_Task ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
+            case 10: { // constraint start
                 Node *n = node( index );
                 if ( n == 0 )
                     break;
@@ -161,12 +169,23 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case 10: { // constraint end
+            case 11: { // constraint end
                 Node *n = node( index );
                 if ( n == 0 )
                     break;
                 int c = n->constraint();
                 if ( c == Node::MustFinishOn || c == Node::FinishNotLater || c ==  Node::FixedInterval ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
+            case 12: // running account
+            case 13: // startup account
+            case 14: // startup cost
+            case 15: // shutdown account
+            case 16: { // shutdown cost
+                Node *n = node( index );
+                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -452,11 +471,11 @@ QVariant NodeItemModel::constraint( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole: 
         case Qt::ToolTipRole:
             return node->constraintToString( true );
         case Role::EnumList: 
             return Node::constraintList( true );
+        case Qt::EditRole: 
         case Role::EnumListValue: 
             return (int)node->constraint();
         case Qt::TextAlignmentRole:
@@ -565,7 +584,6 @@ QVariant NodeItemModel::estimateType( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole: 
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 return node->effort()->typeToString( true );
@@ -573,6 +591,7 @@ QVariant NodeItemModel::estimateType( const Node *node, int role ) const
             return QString();
         case Role::EnumList: 
             return Effort::typeToStringList( true );
+        case Qt::EditRole:
         case Role::EnumListValue: 
             return (int)node->effort()->type();
         case Qt::StatusTipRole:
@@ -691,7 +710,7 @@ QVariant NodeItemModel::pessimisticRatio( const Node *node, int role ) const
         case Role::Minimum:
             return 0;
         case Role::Maximum:
-            return 999;
+            return INT_MAX;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -704,6 +723,239 @@ bool NodeItemModel::setPessimisticRatio( Node *node, const QVariant &value, int 
     switch ( role ) {
         case Qt::EditRole:
             m_part->addCommand( new EffortModifyPessimisticRatioCmd( m_part, *node, node->effort()->pessimisticRatio(), value.toInt(), "Modify estimate" ) );
+            return true;
+    }
+    return false;
+}
+
+QVariant NodeItemModel::riskType( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task ) {
+                return node->effort()->risktypeToString( true );
+            }
+            return QString();
+        case Role::EnumList: 
+            return Effort::risktypeToStringList( true );
+        case Qt::EditRole:
+        case Role::EnumListValue: 
+            return (int)node->effort()->risktype();
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool NodeItemModel::setRiskType( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            Effort::Risktype v = Effort::Risktype( value.toInt() );
+            m_part->addCommand( new EffortModifyRiskCmd( m_part, *node, node->effort()->risktype(), v, "Modify Risk Type" ) );
+            return true;
+    }
+    return false;
+}
+
+QVariant NodeItemModel::runningAccount( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task ) {
+                Account *a = node->runningAccount();
+                return a == 0 ? i18n( "None" ) : a->name();
+            }
+            break;
+        case Role::EnumListValue:
+        case Qt::EditRole: {
+            Account *a = node->runningAccount();
+            return a == 0 ? 0 : ( m_project->accounts().costElements().indexOf( a->name() ) + 1 );
+        }
+        case Role::EnumList: {
+            QStringList lst;
+            lst << i18n("None");
+            lst += m_project->accounts().costElements();
+            return lst;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool NodeItemModel::setRunningAccount( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            kDebug()<<k_funcinfo<<node->name()<<endl;
+            QStringList lst = runningAccount( node, Role::EnumList ).toStringList();
+            if ( value.toInt() >= lst.count() ) {
+                return false;
+            }
+            Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
+            Account *old = node->runningAccount();
+            if ( old != a ) {
+                m_part->addCommand( new NodeModifyRunningAccountCmd( m_part, *node, old, a, i18n( "Modify Running Account" ) ) );
+            }
+            return true;
+    }
+    return false;
+}
+
+QVariant NodeItemModel::startupAccount( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
+                Account *a = node->startupAccount();
+                kDebug()<<k_funcinfo<<node->name()<<": "<<a<<endl;
+                return a == 0 ? i18n( "None" ) : a->name();
+            }
+            break;
+        case Role::EnumListValue:
+        case Qt::EditRole: {
+            Account *a = node->startupAccount();
+            return a == 0 ? 0 : ( m_project->accounts().costElements().indexOf( a->name() ) + 1 );
+        }
+        case Role::EnumList: {
+            QStringList lst;
+            lst << i18n("None");
+            lst += m_project->accounts().costElements();
+            return lst;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool NodeItemModel::setStartupAccount( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            kDebug()<<k_funcinfo<<node->name()<<endl;
+            QStringList lst = startupAccount( node, Role::EnumList ).toStringList();
+            if ( value.toInt() >= lst.count() ) {
+                return false;
+            }
+            Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
+            Account *old = node->startupAccount();
+            kDebug()<<k_funcinfo<<(value.toInt())<<"; "<<(lst.at( value.toInt()))<<": "<<a<<endl;
+            if ( old != a ) {
+                m_part->addCommand( new NodeModifyStartupAccountCmd( m_part, *node, old, a, i18n( "Modify Startup Account" ) ) );
+            }
+            return true;
+    }
+    return false;
+}
+
+QVariant NodeItemModel::startupCost( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task || node->type() == Node::Type_Milestone ) {
+                return KGlobal::locale()->formatMoney( node->startupCost() );
+            }
+            break;
+        case Qt::EditRole:
+            return KGlobal::locale()->formatMoney( node->startupCost() );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool NodeItemModel::setStartupCost( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            double v = KGlobal::locale()->readMoney( value.toString() );
+            m_part->addCommand( new NodeModifyStartupCostCmd( m_part, *node, v, i18n( "Modify Startup Cost" ) ) );
+            return true;
+    }
+    return false;
+}
+
+QVariant NodeItemModel::shutdownAccount( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task || node->type() == Node::Type_Milestone ) {
+                Account *a = node->shutdownAccount();
+                return a == 0 ? i18n( "None" ) : a->name();
+            }
+            break;
+        case Role::EnumListValue:
+        case Qt::EditRole: {
+            Account *a = node->shutdownAccount();
+            return a == 0 ? 0 : ( m_project->accounts().costElements().indexOf( a->name() ) + 1 );
+        }
+        case Role::EnumList: {
+            QStringList lst;
+            lst << i18n("None");
+            lst += m_project->accounts().costElements();
+            return lst;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool NodeItemModel::setShutdownAccount( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            kDebug()<<k_funcinfo<<node->name()<<endl;
+            QStringList lst = shutdownAccount( node, Role::EnumList ).toStringList();
+            if ( value.toInt() >= lst.count() ) {
+                return false;
+            }
+            Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
+            Account *old = node->shutdownAccount();
+            if ( old != a ) {
+                m_part->addCommand( new NodeModifyShutdownAccountCmd( m_part, *node, old, a, i18n( "Modify Shutdown Account" ) ) );
+            }
+            return true;
+    }
+    return false;
+}
+
+QVariant NodeItemModel::shutdownCost( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task || node->type() == Node::Type_Milestone ) {
+                return KGlobal::locale()->formatMoney( node->shutdownCost() );
+            }
+            break;
+        case Qt::EditRole:
+            return KGlobal::locale()->formatMoney( node->shutdownCost() );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            double v = KGlobal::locale()->readMoney( value.toString() );
+            m_part->addCommand( new NodeModifyShutdownCostCmd( m_part, *node, v, i18n( "Modify Shutdown Cost" ) ) );
             return true;
     }
     return false;
@@ -723,10 +975,16 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
             case 5: result = estimate( n, role ); break;
             case 6: result = optimisticRatio( n, role ); break;
             case 7: result = pessimisticRatio( n, role ); break;
-            case 8: result = constraint( n, role ); break;
-            case 9: result = constraintStartTime( n, role ); break;
-            case 10: result = constraintEndTime( n, role ); break;
-            case 11: result = description( n, role ); break;
+            case 8: result = riskType( n, role ); break;
+            case 9: result = constraint( n, role ); break;
+            case 10: result = constraintStartTime( n, role ); break;
+            case 11: result = constraintEndTime( n, role ); break;
+            case 12: result = runningAccount( n, role ); break;
+            case 13: result = startupAccount( n, role ); break;
+            case 14: result = startupCost( n, role ); break;
+            case 15: result = shutdownAccount( n, role ); break;
+            case 16: result = shutdownCost( n, role ); break;
+            case 17: result = description( n, role ); break;
             default:
                 kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
                 return QVariant();
@@ -759,10 +1017,16 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
         case 5: return setEstimate( n, value, role );
         case 6: return setOptimisticRatio( n, value, role );
         case 7: return setPessimisticRatio( n, value, role );
-        case 8: return setConstraint( n, value, role );
-        case 9: return setConstraintStartTime( n, value, role );
-        case 10: return setConstraintEndTime( n, value, role );
-        case 11: return setDescription( n, value, role );
+        case 8: return setRiskType( n, value, role );
+        case 9: return setConstraint( n, value, role );
+        case 10: return setConstraintStartTime( n, value, role );
+        case 11: return setConstraintEndTime( n, value, role );
+        case 12: return setRunningAccount( n, value, role );
+        case 13: return setStartupAccount( n, value, role );
+        case 14: return setStartupCost( n, value, role );
+        case 15: return setShutdownAccount( n, value, role );
+        case 16: return setShutdownCost( n, value, role );
+        case 17: return setDescription( n, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             return false;
@@ -783,10 +1047,16 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
                 case 5: return i18n( "Estimate" );
                 case 6: return i18n( "Optimistic" );
                 case 7: return i18n( "Pessimistic" );
-                case 8: return i18n( "Constraint" );
-                case 9: return i18n( "Constraint Start" );
-                case 10: return i18n( "Constraint End" );
-                case 11: return i18n( "Description" );
+                case 8: return i18n( "Risk" );
+                case 9: return i18n( "Constraint" );
+                case 10: return i18n( "Constraint Start" );
+                case 11: return i18n( "Constraint End" );
+                case 12: return i18n( "Running Account" );
+                case 13: return i18n( "Startup Account" );
+                case 14: return i18n( "Startup Cost" );
+                case 15: return i18n( "Shutdown Account" );
+                case 16: return i18n( "Shutdown Cost" );
+                case 17: return i18n( "Description" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -806,10 +1076,16 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
             case 5: return ToolTip::Estimate;
             case 6: return ToolTip::OptimisticRatio;
             case 7: return ToolTip::PessimisticRatio;
-            case 8: return ToolTip::NodeConstraint;
-            case 9: return ToolTip::NodeConstraintStart;
-            case 10: return ToolTip::NodeConstraintEnd;
-            case 11: return ToolTip::NodeDescription;
+            case 8: return ToolTip::RiskType;
+            case 9: return ToolTip::NodeConstraint;
+            case 10: return ToolTip::NodeConstraintStart;
+            case 11: return ToolTip::NodeConstraintEnd;
+            case 12: return ToolTip::NodeRunningAccount;
+            case 13: return ToolTip::NodeStartupAccount;
+            case 14: return ToolTip::NodeStartupCost;
+            case 15: return ToolTip::NodeShutdownAccount;
+            case 16: return ToolTip::NodeShutdownCost;
+            case 17: return ToolTip::NodeDescription;
             default: return QVariant();
         }
     }
@@ -825,6 +1101,12 @@ QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) cons
         case 6: return new SpinBoxDelegate( parent );
         case 7: return new SpinBoxDelegate( parent );
         case 8: return new EnumDelegate( parent );
+        case 9: return new EnumDelegate( parent );
+        case 12: return new EnumDelegate( parent );
+        case 13: return new EnumDelegate( parent );
+        case 14: return new MoneyDelegate( parent );
+        case 15: return new EnumDelegate( parent );
+        case 16: return new MoneyDelegate( parent );
         default: return 0;
     }
     return 0;
@@ -832,7 +1114,7 @@ QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) cons
 
 int NodeItemModel::columnCount( const QModelIndex &parent ) const
 {
-    return 12;
+    return 18;
 }
 
 int NodeItemModel::rowCount( const QModelIndex &parent ) const
