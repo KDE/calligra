@@ -29,9 +29,14 @@ ChartPanel::ChartPanel(QWidget *p) : ChartPanelBase(p)
 {
 
 kDebug()<<"Chart Panel : constructeur!!";
-chart = new ChartWidget(this,"MyChartWidget");
-chart->paintEvent();
-gridLayout->addWidget(chart,1,1,1,1);
+chart = new ChartWidget(horizontalLayout_2,"MyChartWidget");
+hboxLayout1->addWidget(chart,1,0);
+
+horizontalLayout_2->setGeometry(QRect(20, 20, 600, 300));
+horizontalLayout->setGeometry(QRect(20, 306, 600, 150));
+
+
+chart->update();
 }
     
 void ChartPanel::slotClose() {

@@ -28,15 +28,28 @@ namespace KPlato
 ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,name)
 {
 kDebug() << "ChartWidget :: Constructor";
-
+setMaximumSize(600,300);
+//setFont(new QFont(blue));
 }
 
 
-void ChartWidget::paintEvent()
+void ChartWidget::paintEvent(QPaintEvent * ev)
 {
-kDebug() << "Print My Chart PLease :D";
-drawText(10,10,"I am a Chart!");
+QPainter painter(this);
+kDebug() << "Print it PLease :D";
 
+/* CHANGE COLORS !! */
+painter.setPen(QColor(Qt::blue));
+
+//painter.fillRect(QRectF(-1000, -1000, 1000, 1000),QBrush(QColor(Qt::red))); 
+painter.drawText(200,150,"I am a Chart!");
+
+/* attributes :  1er : par rapport au coté, 2eme : par rapport au haut !
+*/
+painter.drawLine(QLine(12,15,12,maximumHeight()-10));
+painter.drawLine(QLine(12,maximumHeight()-10,maximumWidth()-10,maximumHeight()-10));
+
+painter.end();
 }
 
 } // namespace Kplato

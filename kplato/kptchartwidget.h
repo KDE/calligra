@@ -22,17 +22,19 @@
 #define KPTCHARTWIDGET_H
 
 #include <QWidget>
-
+#include <QPainter>
+#include <QBrush>
 namespace KPlato
 {
 
-class ChartWidget : public QWidget {
+class ChartWidget : public QWidget{
+
+private:
 
 public:
     ChartWidget(QWidget *parent=0, const char *name=0);
 
-    void paintEvent();
-    
+    void paintEvent(QPaintEvent * ev);
 };
 
 } //namespace KPlato
