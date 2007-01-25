@@ -34,7 +34,7 @@ KPrView::~KPrView()
 
 void KPrView::initGUI()
 {
-    KoPAView::initGUI();
+    // KoPAView::initGUI();
     // do special kpresenter stuff here
 }
 
@@ -45,7 +45,7 @@ void KPrView::initActions()
     else
        setXMLFile( "kpresenter.rc" );
 
-    KoPAView::initActions();
+    // KoPAView::initActions();
     // do special kpresenter stuff here
 }
 
