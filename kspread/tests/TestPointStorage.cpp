@@ -888,6 +888,8 @@ void PointStorageTest::testPrevInColumn()
     QCOMPARE( newRow,  1 );
     QCOMPARE( storage.prevInColumn( 6, 3, &newRow ),  0 );
     QCOMPARE( newRow,  0 );
+    QCOMPARE( storage.prevInColumn( 3, 7, &newRow ),  8 );
+    QCOMPARE( newRow,  3 );
 }
 
 void PointStorageTest::testPrevInRow()

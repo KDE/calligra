@@ -717,6 +717,13 @@ public:
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
+        // first row?
+        if ( row <= m_rows.count() && m_rows.value( row - 1 ) == 0 )
+        {
+            if ( newRow )
+                *newRow = 0;
+            return T();
+        }
         const int index = m_cols.lastIndexOf( col, m_rows.value( row - 1 ) - 1 );
         if ( newRow )
         {
