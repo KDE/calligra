@@ -1052,15 +1052,19 @@ Region::Range::~Range()
 {
 }
 
-QString Region::Range::name(Sheet* originSheet) const
+bool Region::Range::isColumn() const
 {
-  QString name = "";
-  if (m_sheet && m_sheet != originSheet)
-  {
-    name = m_sheet->sheetName() + '!';
-  }
-  return name + Cell::name(m_range.left(), m_range.top()) + ':' +
-                Cell::name(m_range.right(), m_range.bottom() );
+    return (m_range.top() == 1 && m_range.bottom() == KS_rowMax);
+}
+
+bool Region::Range::isRow() const
+{
+    return (m_range.left() == 1 && m_range.right() == KS_colMax);
+}
+
+bool Region::Range::isAll() const
+{
+    return (m_range == QRect( 1, 1, KS_colMax, KS_rowMax ));
 }
 
 bool Region::Range::contains(const QPoint& point) const
@@ -1071,6 +1075,17 @@ bool Region::Range::contains(const QPoint& point) const
 bool Region::Range::contains(const QRect& range) const
 {
   return m_range.contains( normalized( range ) );
+}
+
+QString Region::Range::name(Sheet* originSheet) const
+{
+  QString name = "";
+  if (m_sheet && m_sheet != originSheet)
+  {
+    name = m_sheet->sheetName() + '!';
+  }
+  return name + Cell::name(m_range.left(), m_range.top()) + ':' +
+                Cell::name(m_range.right(), m_range.bottom() );
 }
 
 } // namespace KSpread

@@ -25,6 +25,8 @@
 #include <QString>
 #include <QVector>
 
+#include "Region.h"
+
 namespace KSpread
 {
 
@@ -701,12 +703,6 @@ public:
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
-        if ( m_rows.value( row - 1 ) == 0 )
-        {
-            if ( newRow )
-                *newRow = 0;
-            return T();
-        }
         const int index = m_cols.lastIndexOf( col, m_rows.value( row - 1 ) - 1 );
         if ( newRow )
         {
@@ -725,17 +721,10 @@ public:
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
-        // is the row not present?
-        if ( row > m_rows.count() )
-        {
-            if ( newCol )
-                *newCol = 0;
-            return T();
-        }
-        const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
+        const QVector<int>::const_iterator cstart( ( row - 1 < m_rows.count() ) ? m_cols.begin() + m_rows.value( row - 1 ) : m_cols.end() );
         const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
         const QVector<int>::const_iterator cit = qLowerBound( cstart, cend, col );
-        if ( cit == cend || cit == cstart )
+        if ( cit == cstart )
         {
             if ( newCol )
                 *newCol = 0;
@@ -848,23 +837,25 @@ public:
     }
 
     /**
-     * Creates a substorage consisting of the values in \p rect.
-     * \return 
+     * Creates a substorage consisting of the values in \p region.
+     * \return a subset of the storage stripped down to the values in \p region
      */
-    PointStorage<T> subStorage( const QRect& rect ) const
+    PointStorage<T> subStorage( const Region& region ) const
     {
-        Q_ASSERT( 1 <= rect.left() && rect.right() <= KS_colMax );
-        Q_ASSERT( 1 <= rect.top() && rect.bottom() <= KS_rowMax );
-
         // this generates an array of values
         PointStorage<T> subStorage;
-        for ( int row = rect.top(); row <= rect.bottom() && row <= m_rows.count(); ++row )
+        Region::ConstIterator end( region.constEnd() );
+        for ( Region::ConstIterator it( region.constBegin() ); it != end; ++it )
         {
-            const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
-            const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
-            for ( QVector<int>::const_iterator cit = cstart; cit != cend; ++cit )
-                if ( *cit >= rect.left() && *cit <= rect.right() )
-                    subStorage.insert( *cit, row, m_data.value( cit - m_cols.begin() ) );
+            const QRect rect = (*it)->rect();
+            for ( int row = rect.top(); row <= rect.bottom() && row <= m_rows.count(); ++row )
+            {
+                const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
+                const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
+                for ( QVector<int>::const_iterator cit = cstart; cit != cend; ++cit )
+                    if ( *cit >= rect.left() && *cit <= rect.right() )
+                        subStorage.insert( *cit, row, m_data.value( cit - m_cols.begin() ) );
+            }
         }
         return subStorage;
     }

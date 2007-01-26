@@ -32,6 +32,7 @@ class ConditionsStorage;
 class FormulaStorage;
 class FusionStorage;
 class LinkStorage;
+class Region;
 class Sheet;
 class StyleStorage;
 class ValidityStorage;
@@ -214,10 +215,10 @@ public:
     int rows() const;
 
     /**
-     * Creates a substorage consisting of the values in \p rect.
-     * \return
+     * Creates a substorage consisting of the values in \p region.
+     * \return a subset of the storage stripped down to the values in \p region
      */
-    CellStorage subStorage( const QRect& rect ) const;
+    CellStorage subStorage( const Region& region ) const;
 
     CommentStorage* commentStorage() const;
     ConditionsStorage* conditionsStorage() const;

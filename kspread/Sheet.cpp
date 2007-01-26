@@ -541,13 +541,13 @@ ValueStorage* Sheet::valueStorage() const
     return d->cellStorage->valueStorage();
 }
 
-Value Sheet::valueRange( const QRect& _range ) const
+Value Sheet::valueRegion( const Region& region ) const
 {
-    const QRect range( _range.normalized() );
-    const PointStorage<Value> subStorage = valueStorage()->subStorage( range );
+    const QRect rect = region.boundingRect();
+    const PointStorage<Value> subStorage = valueStorage()->subStorage( region );
     Value array( Value::Array );
     for ( int c = 0; c < subStorage.count(); ++c )
-        array.setElement( subStorage.col( c ) - range.left(), subStorage.row( c ) - range.top(), subStorage.data( c ) );
+        array.setElement( subStorage.col( c ) - rect.left(), subStorage.row( c ) - rect.top(), subStorage.data( c ) );
     return array;
 }
 
@@ -1844,7 +1844,7 @@ QString Sheet::copyAsText( Selection* selection )
     int right = lastRange.left();
 
     int max = 1;
-    CellStorage subStorage = d->cellStorage->subStorage( lastRange );
+    CellStorage subStorage = d->cellStorage->subStorage( Region( lastRange ) );
     for ( int row = lastRange.top(); row <= lastRange.bottom(); ++row )
     {
         Cell cell = subStorage.firstInRow( row );
@@ -2512,7 +2512,7 @@ void Sheet::refreshView( const Region& region )
         QRect range = (*it)->rect();
         QRect tmp(range);
 
-        CellStorage subStorage = d->cellStorage->subStorage( range );
+        CellStorage subStorage = d->cellStorage->subStorage( Region( range ) );
         for ( int row = range.top(); row <= range.bottom(); ++row )
         {
             Cell cell = subStorage.firstInRow( row );

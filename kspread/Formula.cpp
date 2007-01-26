@@ -23,6 +23,7 @@
 #include "Cell.h"
 #include "Sheet.h"
 #include "Doc.h"
+#include "Region.h"
 #include "Util.h"
 #include "Value.h"
 
@@ -1511,7 +1512,7 @@ Value Formula::eval() const
           Range range (c, sheet->map(), sheet);
           if (range.isValid())
           {
-            val1 = range.sheet()->valueRange( range.range() );
+            val1 = range.sheet()->valueRegion( Region( range.range() ) );
             // store the reference, so we can use it within functions
             entry.col1 = range.startCol();
             entry.row1 = range.startRow();

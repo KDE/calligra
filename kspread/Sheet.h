@@ -660,9 +660,9 @@ public:
     ValueStorage* valueStorage() const;
 
     /**
-     * Creates a value array containing the values in \p range.
+     * Creates a value array containing the values in \p region.
      */
-    Value valueRange( const QRect& range ) const;
+    Value valueRegion( const Region& region ) const;
 
     /**
      * \return the formula associated with the Cell at \p column , \p row .

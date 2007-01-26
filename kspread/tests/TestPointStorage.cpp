@@ -757,6 +757,8 @@ void PointStorageTest::testLastInColumn()
     QCOMPARE( newRow,  4 );
     QCOMPARE( storage.lastInColumn( 5, &newRow ), 12 );
     QCOMPARE( newRow,  5 );
+    QCOMPARE( storage.lastInColumn( 6, &newRow ),  0 );
+    QCOMPARE( newRow,  0 );
 }
 
 void PointStorageTest::testLastInRow()
@@ -782,6 +784,8 @@ void PointStorageTest::testLastInRow()
     QCOMPARE( newCol,  4 );
     QCOMPARE( storage.lastInRow( 5, &newCol ), 12 );
     QCOMPARE( newCol,  5 );
+    QCOMPARE( storage.lastInRow( 6, &newCol ),  0 );
+    QCOMPARE( newCol,  0 );
 }
 
 void PointStorageTest::testNextInColumn()
@@ -807,6 +811,8 @@ void PointStorageTest::testNextInColumn()
     QCOMPARE( newRow,  4 );
     QCOMPARE( storage.nextInColumn( 5, 3, &newRow ), 12 );
     QCOMPARE( newRow,  5 );
+    QCOMPARE( storage.nextInColumn( 6, 3, &newRow ),  0 );
+    QCOMPARE( newRow,  0 );
 }
 
 void PointStorageTest::testNextInRow()
@@ -832,6 +838,8 @@ void PointStorageTest::testNextInRow()
     QCOMPARE( newCol,  4 );
     QCOMPARE( storage.nextInRow( 3, 5, &newCol ), 12 );
     QCOMPARE( newCol,  5 );
+    QCOMPARE( storage.nextInRow( 3, 6, &newCol ),  0 );
+    QCOMPARE( newCol,  0 );
 }
 
 void PointStorageTest::testPrevInColumn()
@@ -857,6 +865,8 @@ void PointStorageTest::testPrevInColumn()
     QCOMPARE( newRow,  0 );
     QCOMPARE( storage.prevInColumn( 5, 3, &newRow ),  3 );
     QCOMPARE( newRow,  1 );
+    QCOMPARE( storage.prevInColumn( 6, 3, &newRow ),  0 );
+    QCOMPARE( newRow,  0 );
 }
 
 void PointStorageTest::testPrevInRow()
@@ -882,6 +892,8 @@ void PointStorageTest::testPrevInRow()
     QCOMPARE( newCol,  0 );
     QCOMPARE( storage.prevInRow( 3, 5, &newCol ), 11 );
     QCOMPARE( newCol,  1 );
+    QCOMPARE( storage.prevInRow( 3, 6, &newCol ),  0 );
+    QCOMPARE( newCol,  0 );
 }
 
 void PointStorageTest::testIteration()
@@ -949,7 +961,7 @@ void PointStorageTest::testSubStorage()
     // (11,  ,  ,  ,12)
 
     PointStorage<int> subStorage;
-    subStorage = storage.subStorage( QRect( 1, 1, 5, 5 ) ); // all
+    subStorage = storage.subStorage( Region( QRect( 1, 1, 5, 5 ) ) ); // all
     // ( 1, 2,  ,  , 3)
     // ( 4, 5, 6,  ,  )
     // (  , 7, 8,  , 9)
@@ -963,7 +975,7 @@ void PointStorageTest::testSubStorage()
     QCOMPARE( subStorage.m_rows, rows );
     QCOMPARE( subStorage.m_cols, cols );
 
-    subStorage = storage.subStorage( QRect( 1, 1, 3, 3 ) ); // upper left
+    subStorage = storage.subStorage( Region( QRect( 1, 1, 3, 3 ) ) ); // upper left
     // ( 1, 2,  )
     // ( 4, 5, 6)
     // (  , 7, 8)
@@ -975,7 +987,7 @@ void PointStorageTest::testSubStorage()
     QCOMPARE( subStorage.m_rows, rows );
     QCOMPARE( subStorage.m_cols, cols );
 
-    subStorage = storage.subStorage( QRect( 4, 4, 5, 5 ) ); // lower right
+    subStorage = storage.subStorage( Region( QRect( 4, 4, 5, 5 ) ) ); // lower right
     // (  ,  ,  ,  ,  )
     // (  ,  ,  ,  ,  )
     // (  ,  ,  ,  ,  )

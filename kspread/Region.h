@@ -29,8 +29,6 @@
 
 #include "kspread_export.h"
 
-#include "Global.h"
-
 namespace KSpread
 {
 class Cell;
@@ -495,9 +493,9 @@ public:
 
   virtual Type type() const { return Element::Range; }
   virtual bool isValid() const { return !m_range.isNull() && Region::isValid(m_range); }
-  virtual bool isColumn() const { return (m_range.top() == 1 && m_range.bottom() == KS_rowMax); }
-  virtual bool isRow() const { return (m_range.left() == 1 && m_range.right() == KS_colMax); }
-  virtual bool isAll() const { return (m_range == QRect( 1, 1, KS_colMax, KS_rowMax )); }
+  virtual bool isColumn() const;
+  virtual bool isRow() const;
+  virtual bool isAll() const;
 
   virtual bool contains(const QPoint&) const;
   virtual bool contains(const QRect&) const;

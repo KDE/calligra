@@ -130,7 +130,7 @@ kde4_automoc(${TestPointStorage_SRCS})
 
 kde4_add_executable(TestPointStorage RUN_UNINSTALLED ${TestPointStorage_SRCS})
 
-target_link_libraries(TestPointStorage ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestPointStorage kspreadcommon ${QT_QTTEST_LIBRARY})
 
 add_test(PointStorage TestPointStorage)
 

@@ -6813,11 +6813,10 @@ void View::calcStatusBarOp()
   Sheet * sheet = activeSheet();
   ValueCalc* calc = d->doc->calc();
   Value val;
-  QRect tmpRect(d->selection->selection());
   MethodOfCalc tmpMethod = doc()->getTypeOfCalc();
   if ( tmpMethod != NoneCalc )
   {
-    Value range = sheet->valueRange( tmpRect );
+    Value range = sheet->valueRegion( *d->selection );
     switch (tmpMethod)
     {
       case SumOfNumber:

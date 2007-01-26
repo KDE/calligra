@@ -309,13 +309,13 @@ int CellStorage::rows() const
     return max;
 }
 
-CellStorage CellStorage::subStorage( const QRect& rect ) const
+CellStorage CellStorage::subStorage( const Region& region ) const
 {
     CellStorage subStorage( d->sheet );
-    subStorage.d->formulaStorage = d->formulaStorage.subStorage( rect );
-    subStorage.d->linkStorage = d->linkStorage.subStorage( rect );
-    subStorage.d->valueStorage = d->valueStorage.subStorage( rect );
-    subStorage.d->storage = d->storage.subStorage( rect );
+    subStorage.d->formulaStorage = d->formulaStorage.subStorage( region );
+    subStorage.d->linkStorage = d->linkStorage.subStorage( region );
+    subStorage.d->valueStorage = d->valueStorage.subStorage( region );
+    subStorage.d->storage = d->storage.subStorage( region );
     return subStorage;
 }
 
