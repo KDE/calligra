@@ -813,6 +813,26 @@ void PointStorageTest::testNextInColumn()
     QCOMPARE( newRow,  5 );
     QCOMPARE( storage.nextInColumn( 6, 3, &newRow ),  0 );
     QCOMPARE( newRow,  0 );
+
+
+    //
+    storage.clear();
+    storage.m_data << 1 << 2 << 3 << 4;
+    storage.m_rows << 0 << 0 << 1 << 2 << 4;
+    storage.m_cols << 1 << 1 << 1 << 2;
+    // (  ,  )
+    // (  ,  )
+    // ( 1,  )
+    // ( 2,  )
+    // ( 3, 4)
+    QCOMPARE( storage.nextInColumn( 1, 1, &newRow ),  1 );
+    QCOMPARE( newRow,  3 );
+    QCOMPARE( storage.nextInColumn( 2, 1, &newRow ),  4 );
+    QCOMPARE( newRow,  5 );
+    QCOMPARE( storage.nextInColumn( 1, 7, &newRow ),  0 );
+    QCOMPARE( newRow,  0 );
+    QCOMPARE( storage.nextInColumn( 2, 5, &newRow ),  0 );
+    QCOMPARE( newRow,  0 );
 }
 
 void PointStorageTest::testNextInRow()

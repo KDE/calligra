@@ -655,11 +655,37 @@ public:
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
+        // no next row?
+        if ( row + 1 > m_rows.count() )
+        {
+            if ( newRow )
+                *newRow = 0;
+            return T();
+        }
+        // search beginning in rows after the specified row
         const int index = m_cols.indexOf( col, m_rows.value( row ) );
         if ( newRow )
         {
-            *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
-            if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+            if ( index == -1 ) // not found
+                *newRow = 0;
+            else
+            {
+                *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
+                if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+#if 0
+                // find the beginning of the previous row
+                *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
+                // skipping empty rows
+                while ( m_rows.value( *newRow ) == index && *newRow + 1 < m_rows.count() )
+                    (*newRow)++;
+                qDebug() << "index:" << index;
+                qDebug() << "newRow:" << *newRow;
+                qDebug() << "m_rows.value( *newRow ):" << m_rows.value( *newRow );
+                // if the index is behind the next row's beginning
+                if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+                qDebug() << "effective newRow:" << *newRow;
+#endif
+            }
         }
         return m_data.value( index );
     }
