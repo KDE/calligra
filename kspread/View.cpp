@@ -102,6 +102,7 @@
 #include <ktoolinvocation.h>
 
 // KSpread includes
+#include "CellStorage.h"
 #include "Commands.h"
 #include "Damages.h"
 #include "DataManipulators.h"
@@ -117,6 +118,7 @@
 #include "Handler.h"
 #include "Localization.h"
 #include "Map.h"
+#include "PointStorage.h"
 #include "RecalcManager.h"
 #include "RowColumnManipulators.h"
 #include "Selection.h"
@@ -177,6 +179,9 @@
 
 namespace KSpread
 {
+class FormulaStorage : public PointStorage<Formula> {};
+class LinkStorage : public PointStorage<QString> {};
+class ValueStorage : public PointStorage<Value> {};
 class ViewActions;
 
 class View::Private
@@ -275,7 +280,7 @@ public:
       K3Spell *   kspell;
       Sheet *  firstSpellSheet;
       Sheet *  currentSpellSheet;
-      Cell  *  currentCell;
+      int      currentCellIndex;
       MacroManipulator *macroCmdSpellCheck;
       unsigned int    spellCurrCellX;
       unsigned int    spellCurrCellY;
@@ -303,7 +308,7 @@ public:
 
     void initActions();
     void adjustActions( bool mode );
-    void adjustActions( Cell *cell, int column, int row );
+    void adjustActions( Cell cell, int column, int row );
     void adjustWorkbookActions( bool mode );
     QAbstractButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0 );
 
@@ -734,32 +739,31 @@ void View::Private::initActions()
 
   // -- cell operation actions --
 
-  actions->editCell  = new KAction(KIcon("cell_edit" ), i18n("Modify Cell"), view);
+  actions->editCell = new KAction(KIcon("cell_edit" ), i18n("Modify Cell"), view);
   ac->addAction("editCell", actions->editCell );
   actions->editCell->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_M));
   connect(actions->editCell, SIGNAL(triggered(bool)), view, SLOT( editCell() ));
 
   actions->editCell->setToolTip(i18n("Edit the highlighted cell"));
 
-  actions->insertCell  = new KAction(KIcon( "insertcell" ), i18n("Insert Cells..."), view);
+  actions->insertCell = new KAction(KIcon( "insertcell" ), i18n("Insert Cells..."), view);
   ac->addAction("insertCell", actions->insertCell );
   connect(actions->insertCell, SIGNAL(triggered(bool)), view, SLOT( slotInsert() ));
 
   actions->insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet"));
 
-  actions->removeCell  = new KAction(KIcon( "removecell" ), i18n("Remove Cells..."), view);
+  actions->removeCell = new KAction(KIcon( "removecell" ), i18n("Remove Cells..."), view);
   ac->addAction("removeCell", actions->removeCell );
   connect(actions->removeCell, SIGNAL(triggered(bool)), view, SLOT( slotRemove() ));
 
   actions->removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet"));
 
-  actions->deleteCell  = new KAction(KIcon( "deletecell" ), i18n("Delete"), view);
+  actions->deleteCell = new KAction(KIcon( "deletecell" ), i18n("Delete"), view);
   ac->addAction("delete", actions->deleteCell );
   connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( deleteSelection() ));
-
   actions->deleteCell->setToolTip(i18n("Delete all contents and formatting of the current cell"));
 
-  actions->mergeCell  = new KToolBarPopupAction(KIcon( "mergecell" ), i18n("Merge Cells"), view);
+  actions->mergeCell = new KToolBarPopupAction(KIcon( "mergecell" ), i18n("Merge Cells"), view);
   ac->addAction("mergecell", actions->mergeCell );
   connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( mergeCell() ));
   actions->mergeCell->setToolTip(i18n("Merge the selected region"));
@@ -779,7 +783,7 @@ void View::Private::initActions()
   actions->mergeCellVertical->setToolTip(i18n("Merge the selected region vertically"));
   actions->mergeCell->menu()->addAction( actions->mergeCellVertical );
 
-  actions->dissociateCell  = new KAction(KIcon("dissociatecell" ), i18n("Dissociate Cells"), view);
+  actions->dissociateCell = new KAction(KIcon("dissociatecell" ), i18n("Dissociate Cells"), view);
   ac->addAction("dissociatecell", actions->dissociateCell );
   connect(actions->dissociateCell, SIGNAL(triggered(bool)), view, SLOT( dissociateCell() ));
 
@@ -1240,7 +1244,7 @@ void View::Private::initActions()
 
   // -- navigation actions --
 
-  actions->gotoCell  = new KAction(KIcon("goto" ), i18n("Goto Cell..."), view);
+  actions->gotoCell = new KAction(KIcon("goto" ), i18n("Goto Cell..."), view);
   ac->addAction("gotoCell", actions->gotoCell );
   connect(actions->gotoCell, SIGNAL(triggered(bool)), view, SLOT( gotoCell() ));
   actions->gotoCell->setToolTip(i18n("Move to a particular cell"));
@@ -1497,11 +1501,11 @@ void View::Private::adjustActions( bool mode )
   }
 }
 
-void View::Private::adjustActions( Cell* cell, int column, int row )
+void View::Private::adjustActions( Cell cell, int column, int row )
 {
   toolbarLock = true;
 
-  const Style style = cell->style( column, row );
+  const Style style = cell.style();
 
   // workaround for bug #59291 (crash upon starting from template)
   // certain Qt and Fontconfig combination fail miserably if can not
@@ -1541,14 +1545,14 @@ void View::Private::adjustActions( Cell* cell, int column, int row )
   actions->money->setChecked( ft == Format::Money );
 
   if ( activeSheet && !activeSheet->isProtected() )
-    actions->removeComment->setEnabled( !cell->comment( column, row ).isEmpty() );
+    actions->removeComment->setEnabled( !cell.comment().isEmpty() );
 
   if ( activeSheet && !activeSheet->isProtected() )
     actions->decreaseIndent->setEnabled( style.indentation() > 0.0 );
 
   toolbarLock = false;
 
-  if ( activeSheet && activeSheet->isProtected() && !cell->isDefault() && style.notProtected() )
+  if ( activeSheet && activeSheet->isProtected() && !cell.isDefault() && style.notProtected() )
   {
     if ( selection->isSingular() )
     {
@@ -1662,7 +1666,7 @@ View::View( QWidget *_parent, Doc *_doc )
     d->spell.macroCmdSpellCheck = 0;
     d->spell.firstSpellSheet = 0;
     d->spell.currentSpellSheet = 0;
-    d->spell.currentCell = 0;
+    d->spell.currentCellIndex = 0;
     d->spell.spellStartCellX = 0;
     d->spell.spellStartCellY = 0;
     d->spell.spellEndCellX   = 0;
@@ -2148,7 +2152,7 @@ void View::extraSpelling()
     d->spell.spellEndCellX   = 0;
     d->spell.spellEndCellY   = 0;
     d->spell.spellCheckSelection = false;
-    d->spell.currentCell     = d->activeSheet->firstCell();
+    d->spell.currentCellIndex = 0;
   }
   else
   {
@@ -2157,7 +2161,7 @@ void View::extraSpelling()
     d->spell.spellEndCellX   = selection.right();
     d->spell.spellEndCellY   = selection.bottom();
     d->spell.spellCheckSelection = true;
-    d->spell.currentCell     = 0;
+    d->spell.currentCellIndex = 0;
 
     // "-1" because X gets increased every time we go into spellCheckReady()
     d->spell.spellCurrCellX = d->spell.spellStartCellX - 1;
@@ -2233,19 +2237,24 @@ void View::spellCheckerReady()
   {
     // if nothing is selected we have to check every cell
     // we use a different way to make it faster
-    while ( d->spell.currentCell )
+    while ( d->spell.currentCellIndex < d->spell.currentSpellSheet->valueStorage()->count() )
     {
+        Sheet* sheet = d->spell.currentSpellSheet;
+        ValueStorage* valueStorage = sheet->valueStorage();
+        int index = d->spell.currentCellIndex;
+        Cell currentCell( sheet, valueStorage->col( index ), valueStorage->row( index ) );
+
       // check text only
-      if ( d->spell.currentCell->value().isString() )
+      if ( currentCell.value().isString() )
       {
-        d->spell.kspell->check( d->spell.currentCell->inputText(), true );
+        d->spell.kspell->check( currentCell.inputText(), true );
 
         return;
       }
 
-      d->spell.currentCell = d->spell.currentCell->nextCell();
-      if ( d->spell.currentCell && d->spell.currentCell->isDefault() )
-        kDebug() << "checking default cell!!" << endl << endl;
+      d->spell.currentCellIndex++;
+/*      if ( d->spell.currentCell && d->spell.currentCell.isDefault() )
+        kDebug() << "checking default cell!!" << endl << endl;*/
     }
 
     if (spellSwitchToOtherSheet())
@@ -2272,16 +2281,16 @@ void View::spellCheckerReady()
   {
     for ( x = d->spell.spellCurrCellX; x <= d->spell.spellEndCellX; ++x )
     {
-      Cell * cell = d->spell.currentSpellSheet->cellAt( x, y );
+      Cell cell = Cell( d->spell.currentSpellSheet, x, y );
 
       // check text only
-      if (cell->isDefault() || !cell->value().isString())
+      if (cell.isDefault() || !cell.value().isString())
         continue;
 
       d->spell.spellCurrCellX = x;
       d->spell.spellCurrCellY = y;
 
-      d->spell.kspell->check( cell->inputText(), true );
+      d->spell.kspell->check( cell.inputText(), true );
 
       return;
     }
@@ -2315,7 +2324,7 @@ void View::spellCleanup()
   d->spell.kspell            = 0;
   d->spell.firstSpellSheet   = 0;
   d->spell.currentSpellSheet = 0;
-  d->spell.currentCell       = 0;
+  d->spell.currentCellIndex  = 0;
   d->spell.replaceAll.clear();
 
 
@@ -2362,7 +2371,7 @@ bool View::spellSwitchToOtherSheet()
   }
   else
   {
-    d->spell.currentCell = d->spell.currentSpellSheet->firstCell();
+    d->spell.currentCellIndex = 0;
   }
 
   if ( KMessageBox::questionYesNo( this,
@@ -2383,36 +2392,39 @@ void View::spellCheckerMisspelling( const QString &,
   // scroll to the cell
   if ( !d->spell.spellCheckSelection )
   {
-    d->spell.spellCurrCellX = d->spell.currentCell->column();
-    d->spell.spellCurrCellY = d->spell.currentCell->row();
+    d->spell.spellCurrCellX = d->spell.currentSpellSheet->valueStorage()->col( d->spell.currentCellIndex );
+    d->spell.spellCurrCellY = d->spell.currentSpellSheet->valueStorage()->row( d->spell.currentCellIndex );
   }
 
   d->selection->initialize(QPoint(d->spell.spellCurrCellX, d->spell.spellCurrCellY));
 }
 
 
-void View::spellCheckerCorrected( const QString & old, const QString & corr,
-                                         unsigned int pos )
+void View::spellCheckerCorrected( const QString & old, const QString & corr, unsigned int pos )
 {
-  Cell * cell;
+    Cell cell;
 
-  if (d->spell.spellCheckSelection)
-  {
-    cell = d->spell.currentSpellSheet->cellAt( d->spell.spellCurrCellX,
-                                              d->spell.spellCurrCellY );
-  }
-  else
-  {
-    cell = d->spell.currentCell;
-    d->spell.spellCurrCellX = cell->column();
-    d->spell.spellCurrCellY = cell->row();
-  }
+    if (d->spell.spellCheckSelection)
+    {
+        cell = Cell( d->spell.currentSpellSheet,
+                     d->spell.spellCurrCellX,
+                     d->spell.spellCurrCellY );
+    }
+    else
+    {
+        Sheet* sheet = d->spell.currentSpellSheet;
+        ValueStorage* valueStorage = sheet->valueStorage();
+        int index = d->spell.currentCellIndex;
+        cell = Cell( sheet, valueStorage->col( index ), valueStorage->row( index ) );
+        d->spell.spellCurrCellX = d->spell.currentSpellSheet->valueStorage()->col( d->spell.currentCellIndex );
+        d->spell.spellCurrCellY = d->spell.currentSpellSheet->valueStorage()->row( d->spell.currentCellIndex );
+    }
 
   Q_ASSERT( cell );
   if ( !cell )
     return;
-  
-  QString content (cell->inputText());
+
+  QString content (cell.inputText());
   content.replace (pos, old.length(), corr);
 
   DataManipulator *manipulator = new DataManipulator;
@@ -2420,7 +2432,7 @@ void View::spellCheckerCorrected( const QString & old, const QString & corr,
   manipulator->setName (i18n ("Correct Misspelled Word"));
   manipulator->setValue (Value (content));
   manipulator->setParsing (false);
-  manipulator->add (QPoint (cell->column(), cell->row()));
+  manipulator->add (QPoint (cell.column(), cell.row()));
   manipulator->setRegisterUndo (false);
   manipulator->execute ();
 
@@ -2458,12 +2470,9 @@ void View::spellCheckerDone( const QString & )
         }
         else
         {
-            if ( d->spell.currentCell )
+            if ( ++d->spell.currentCellIndex < d->spell.currentSpellSheet->valueStorage()->count() )
             {
-                d->spell.currentCell = d->spell.currentCell->nextCell();
-
                 startKSpell();
-
                 return;
             }
         }
@@ -2613,7 +2622,7 @@ void View::updateEditWidgetOnPress()
     int column = d->canvas->markerColumn();
     int row    = d->canvas->markerRow();
 
-    Cell* cell = d->activeSheet->cellAt( column, row );
+    Cell cell = Cell( d->activeSheet, column, row );
     if ( !cell )
     {
         d->editWidget->setText( "" );
@@ -2621,11 +2630,11 @@ void View::updateEditWidgetOnPress()
     }
     const Style style = d->activeSheet->style( column, row );
     if ( d->activeSheet->isProtected() && style.hideFormula() )
-        d->editWidget->setText( cell->displayText() );
+        d->editWidget->setText( cell.displayText() );
     else if ( d->activeSheet->isProtected() && style.hideAll() )
         d->editWidget->setText( "" );
     else
-        d->editWidget->setText( cell->inputText() );
+        d->editWidget->setText( cell.inputText() );
 
     d->adjustActions(cell, column, row);
 }
@@ -2638,8 +2647,8 @@ void View::updateEditWidget()
     const int column = d->canvas->markerColumn();
     const int row    = d->canvas->markerRow();
 
-    Cell * const cell = d->activeSheet->cellAt( column, row );
-    const Style style = cell->style( column, row );
+    const Cell cell = Cell( d->activeSheet, column, row );
+    const Style style = cell.style();
     const bool active = activeSheet()->getShowFormula()
         && !( d->activeSheet->isProtected() && style.hideFormula() );
 
@@ -2651,11 +2660,11 @@ void View::updateEditWidget()
     }
 
     if ( d->activeSheet->isProtected() && style.hideFormula() )
-        d->editWidget->setText( cell->displayText() );
+        d->editWidget->setText( cell.displayText() );
     else if ( d->activeSheet->isProtected() && style.hideAll() )
         d->editWidget->setText( "" );
     else
-        d->editWidget->setText( cell->inputText() );
+        d->editWidget->setText( cell.inputText() );
 
     if ( d->activeSheet->isProtected() && !style.notProtected() )
       d->editWidget->setEnabled( false );
@@ -2791,11 +2800,11 @@ void View::autoSum()
 
       int start = -1, end = -1;
 
-      if ( (d->selection->marker().y() > 1) && activeSheet()->cellAt(d->selection->marker().x(), d->selection->marker().y()-1)->value().isNumber() )
+      if ( (d->selection->marker().y() > 1) && Cell( activeSheet(),d->selection->marker().x(), d->selection->marker().y()-1).value().isNumber() )
       {
         // check cells above the current one
         start = end = d->selection->marker().y()-1;
-        for (start--; (start > 0) && activeSheet()->cellAt(d->selection->marker().x(), start)->value().isNumber(); start--) ;
+        for (start--; (start > 0) && Cell( activeSheet(),d->selection->marker().x(), start).value().isNumber(); start--) ;
 
         Point startPoint, endPoint;
         startPoint.setRow(start+1);
@@ -2810,11 +2819,11 @@ void View::autoSum()
         d->canvas->editor()->setCursorPosition(5 + str.length());
         return;
       }
-      else if ( (d->selection->marker().x() > 1) && activeSheet()->cellAt(d->selection->marker().x()-1, d->selection->marker().y())->value().isNumber() )
+      else if ( (d->selection->marker().x() > 1) && Cell( activeSheet(),d->selection->marker().x()-1, d->selection->marker().y()).value().isNumber() )
       {
         // check cells to the left of the current one
         start = end = d->selection->marker().x()-1;
-        for (start--; (start > 0) && activeSheet()->cellAt(start, d->selection->marker().y())->value().isNumber(); start--) ;
+        for (start--; (start > 0) && Cell( activeSheet(),start, d->selection->marker().y()).value().isNumber(); start--) ;
 
         Point startPoint, endPoint;
         startPoint.setColumn(start+1);
@@ -3253,8 +3262,8 @@ void View::fontSizeSelected( int _size )
     // Dont leave the focus in the toolbars combo box ...
     if ( d->canvas->editor() )
     {
-        Cell * cell = d->activeSheet->cellAt( d->selection->marker() );
-        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+        Cell cell( d->activeSheet, d->selection->marker() );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true );
         d->canvas->editor()->setFocus();
     }
     else
@@ -3277,8 +3286,8 @@ void View::bold( bool b )
     {
         int col = d->canvas->markerColumn();
         int row = d->canvas->markerRow();
-        Cell * cell = d->activeSheet->cellAt( col, row );
-        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+        Cell cell = Cell( d->activeSheet, col, row );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true );
     }
 }
 
@@ -3298,8 +3307,8 @@ void View::underline( bool b )
     {
         int col = d->canvas->markerColumn();
         int row = d->canvas->markerRow();
-        Cell * cell = d->activeSheet->cellAt( col, row );
-        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+        Cell cell = Cell( d->activeSheet, col, row );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true );
     }
 }
 
@@ -3319,8 +3328,8 @@ void View::strikeOut( bool b )
     {
         int col = d->canvas->markerColumn();
         int row = d->canvas->markerRow();
-        Cell * cell = d->activeSheet->cellAt( col, row );
-        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+        Cell cell = Cell( d->activeSheet, col, row );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true );
     }
 }
 
@@ -3341,8 +3350,8 @@ void View::italic( bool b )
     {
         int col = d->canvas->markerColumn();
         int row = d->canvas->markerRow();
-        Cell * cell = d->activeSheet->cellAt( col, row );
-        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+        Cell cell = Cell( d->activeSheet, col, row );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true );
     }
 }
 
@@ -4343,17 +4352,17 @@ void View::findNext()
         return;
     }
     KFind::Result res = KFind::NoMatch;
-    Cell* cell = findNextCell();
+    Cell cell = findNextCell();
     bool forw = ! ( d->findOptions & KFind::FindBackwards );
-    while ( res == KFind::NoMatch && cell )
+    while ( res == KFind::NoMatch && !cell.isNull() )
     {
         if ( findObj->needData() )
         {
             if ( d->typeValue == FindOption::Note )
-                findObj->setData( cell->comment( cell->column(), cell->row() ) );
+                findObj->setData( cell.comment() );
             else
-                findObj->setData( cell->inputText() );
-            d->findPos = QPoint( cell->column(), cell->row() );
+                findObj->setData( cell.inputText() );
+            d->findPos = QPoint( cell.column(), cell.row() );
             //kDebug() << "setData(cell " << d->findPos << ')' << endl;
         }
 
@@ -4401,23 +4410,23 @@ void View::findNext()
     }
 }
 
-Cell* View::nextFindValidCell( int col, int row )
+Cell View::nextFindValidCell( int col, int row )
 {
-    Cell *cell = d->searchInSheets.currentSheet->cellAt( col, row );
-    if ( cell->isDefault() || cell->isPartOfMerged() || cell->isFormula() )
-        cell = 0;
-    if ( d->typeValue == FindOption::Note && cell && cell->comment(col, row).isEmpty())
-        cell = 0;
+    Cell cell = Cell( d->searchInSheets.currentSheet, col, row );
+    if ( cell.isDefault() || cell.isPartOfMerged() || cell.isFormula() )
+        cell = Cell();
+    if ( d->typeValue == FindOption::Note && !cell.isNull() && cell.comment().isEmpty())
+        cell = Cell();
     return cell;
 }
 
-Cell* View::findNextCell()
+Cell View::findNextCell()
 {
-    // getFirstCellRow / getNextCellRight would be faster at doing that,
+    // cellStorage()->firstInRow / cellStorage()->nextInRow would be faster at doing that,
     // but it doesn't seem to be easy to combine it with 'start a column d->find.x()'...
 
     Sheet* sheet = d->searchInSheets.currentSheet;
-    Cell* cell = 0;
+    Cell cell;
     bool forw = ! ( d->findOptions & KFind::FindBackwards );
     int col = d->findPos.x();
     int row = d->findPos.y();
@@ -4434,7 +4443,7 @@ Cell* View::findNextCell()
                 if ( forw ) ++col;
                 else --col;
             }
-            if ( cell )
+            if ( !cell.isNull() )
                 break;
             // Prepare looking in the next row
             if ( forw )  {
@@ -4457,7 +4466,7 @@ Cell* View::findNextCell()
                 if ( forw ) ++row;
                 else --row;
             }
-            if ( cell )
+            if ( !cell.isNull() )
                 break;
             // Prepare looking in the next col
             if ( forw )  {
@@ -4534,7 +4543,7 @@ void View::replace()
     {
         QRect region( d->findPos, d->findEnd );
         //TODO create undo/redo for comment
-        UndoChangeAreaTextCell *undo = new UndoChangeAreaTextCell( doc(), d->searchInSheets.currentSheet, Region( region ) );
+        UndoChangeAreaTextCell* undo = new UndoChangeAreaTextCell( doc(), d->searchInSheets.currentSheet, Region( region ) );
         doc()->addCommand( undo );
     }
 
@@ -4543,10 +4552,10 @@ void View::replace()
 #if 0
     // Refresh the editWidget
     // TODO - after a replacement only?
-    Cell *cell = activeSheet()->cellAt( canvasWidget()->markerColumn(),
+    Cell cell = Cell( activeSheet(), canvasWidget()->markerColumn(),
                                                canvasWidget()->markerRow() );
-    if ( cell->inputText() != 0 )
-        d->editWidget->setText( cell->inputText() );
+    if ( cell.inputText() != 0 )
+        d->editWidget->setText( cell.inputText() );
     else
         d->editWidget->setText( "" );
 #endif
@@ -4569,13 +4578,13 @@ void View::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*
 void View::slotReplace( const QString &newText, int, int, int )
 {
     // Which cell was this again?
-    Cell *cell = d->searchInSheets.currentSheet->cellAt( d->findPos );
+    Cell cell( d->searchInSheets.currentSheet, d->findPos );
 
     // ...now I remember, update it!
     if ( d->typeValue == FindOption::Value )
-        cell->setCellText( newText );
+        cell.setCellText( newText );
     else if ( d->typeValue == FindOption::Note )
-      cell->setComment( newText ); // FIXME decouple from cell
+        cell.setComment( newText );
 }
 
 void View::conditional()
@@ -4615,16 +4624,16 @@ void View::sort()
 void View::removeHyperlink()
 {
     QPoint marker( d->selection->marker() );
-    Cell * cell = d->activeSheet->cellAt( marker );
+    Cell cell( d->activeSheet, marker );
     if( !cell ) return;
-    if( cell->link().isEmpty() ) return;
+    if( cell.link().isEmpty() ) return;
 
     LinkCommand* command = new LinkCommand( cell, QString::null, QString::null );
     doc()->addCommand( command );
     command->execute();
 
   canvasWidget()->setFocus();
-  d->editWidget->setText( cell->inputText() );
+  d->editWidget->setText( cell.inputText() );
 }
 
 void View::insertHyperlink()
@@ -4635,23 +4644,23 @@ void View::insertHyperlink()
     d->canvas->closeEditor();
 
     QPoint marker( d->selection->marker() );
-    Cell* cell = d->activeSheet->cellAt( marker );
+    Cell cell( d->activeSheet, marker );
 
     LinkDialog* dlg = new LinkDialog( this );
     dlg->setWindowTitle( i18n( "Insert Link" ) );
-    if( cell )
+    if ( !cell.isNull() )
     {
-      dlg->setText( cell->inputText() );
-      if( !cell->link().isEmpty() )
+      dlg->setText( cell.inputText() );
+      if( !cell.link().isEmpty() )
       {
         dlg->setWindowTitle( i18n( "Edit Link" ) );
-        dlg->setLink( cell->link() );
+        dlg->setLink( cell.link() );
       }
     }
 
     if( dlg->exec() == KDialog::Accepted )
     {
-        cell = d->activeSheet->nonDefaultCell( marker );
+        cell = Cell( d->activeSheet, marker );
 
         LinkCommand* command = new LinkCommand( cell, dlg->text(), dlg->link() );
         doc()->addCommand( command );
@@ -4659,7 +4668,7 @@ void View::insertHyperlink()
 
         //refresh editWidget
       canvasWidget()->setFocus();
-      d->editWidget->setText( cell->inputText() );
+      d->editWidget->setText( cell.inputText() );
     }
     delete dlg;
 }
@@ -5363,10 +5372,10 @@ void View::refreshView()
   d->canvas->updatePosWidget();
 
   QFontMetricsF fontMetrics( KoGlobal::defaultFont() );
-  d->hBorderWidget->setMinimumHeight( doc()->zoomItY( fontMetrics.height() ) );
-  d->vBorderWidget->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
-  d->selectAllButton->setMinimumHeight( doc()->zoomItY( fontMetrics.height() ) );
-  d->selectAllButton->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
+  d->hBorderWidget->setMinimumHeight( qRound( doc()->zoomItY( fontMetrics.height() ) ) );
+  d->vBorderWidget->setMinimumWidth( qRound( doc()->zoomItX( YBORDER_WIDTH ) ) );
+  d->selectAllButton->setMinimumHeight( qRound( doc()->zoomItY( fontMetrics.height() ) ) );
+  d->selectAllButton->setMinimumWidth( qRound( doc()->zoomItX( YBORDER_WIDTH ) ) );
 
   Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
   bool interfaceIsRTL = QApplication::isRightToLeft();
@@ -5615,41 +5624,41 @@ void View::slotListChoosePopupMenu( )
 
   d->popupListChoose = new QMenu();
   QRect selection( d->selection->selection() );
-  Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
-  QString tmp = cell->inputText();
+  Cell cell( d->activeSheet, d->selection->marker() );
+  QString tmp = cell.inputText();
   QStringList itemList;
 
   for ( int col = selection.left(); col <= selection.right(); ++col )
   {
-    Cell * c = d->activeSheet->getFirstCellColumn( col );
-    while ( c )
+    Cell cell = d->activeSheet->cellStorage()->firstInColumn( col );
+    while ( !cell.isNull() )
     {
-      if ( !c->isPartOfMerged()
+      if ( !cell.isPartOfMerged()
            && !( col == d->canvas->markerColumn()
-                 && c->row() == d->canvas->markerRow()) )
+                 && cell.row() == d->canvas->markerRow()) )
       {
-        if ( c->value().isString() && c->inputText() != tmp && !c->inputText().isEmpty() )
+        if ( cell.value().isString() && cell.inputText() != tmp && !cell.inputText().isEmpty() )
         {
-          if ( itemList.indexOf( c->inputText() ) == -1 )
-            itemList.append(c->inputText());
+          if ( itemList.indexOf( cell.inputText() ) == -1 )
+            itemList.append(cell.inputText());
         }
       }
 
-      c = d->activeSheet->getNextCellDown( col, c->row() );
+      cell = d->activeSheet->cellStorage()->nextInColumn( col, cell.row() );
     }
   }
 
   /* TODO: remove this later:
-    for( ;c; c = c->nextCell() )
+    for( ;cell; cell = cell.nextCell() )
    {
-     int col = c->column();
+     int col = cell.column();
      if ( selection.left() <= col && selection.right() >= col
-    &&!c->isPartOfMerged()&& !(col==d->canvas->markerColumn()&& c->row()==d->canvas->markerRow()))
+    &&!cell.isPartOfMerged()&& !(col==d->canvas->markerColumn()&& cell.row()==d->canvas->markerRow()))
        {
-   if (c->isString() && c->text()!=tmp && !c->text().isEmpty())
+   if (cell.isString() && cell.text()!=tmp && !cell.text().isEmpty())
      {
-       if (itemList.indexOf(c->text())==-1)
-                 itemList.append(c->text());
+       if (itemList.indexOf(cell.text())==-1)
+                 itemList.append(cell.text());
      }
 
        }
@@ -5666,7 +5675,7 @@ void View::slotListChoosePopupMenu( )
   const RowFormat * rl = d->activeSheet->rowFormat( d->canvas->markerRow());
   double tx = d->activeSheet->columnPosition( d->canvas->markerColumn() );
   double ty = d->activeSheet->rowPosition( d->canvas->markerRow() );
-  double h = cell->height( d->canvas->markerRow() );
+  double h = cell.height( d->canvas->markerRow() );
   const CellView cellView = sheetView( d->activeSheet )->cellView( d->canvas->markerColumn(), d->canvas->markerRow() );
   if ( cellView.obscuresCells() )
       h = cellView.cellHeight();
@@ -5696,8 +5705,8 @@ void View::slotItemSelected( QAction* action )
   QString tmp = action->text();
   int x = d->canvas->markerColumn();
   int y = d->canvas->markerRow();
-  Cell * cell = d->activeSheet->cellAt (x, y);
-  if (tmp == cell->inputText())
+  Cell cell( d->activeSheet, x, y );
+  if (tmp == cell.inputText())
     return;
 
   DataManipulator *manipulator = new DataManipulator;
@@ -5732,10 +5741,10 @@ void View::openPopupMenu( const QPoint & _point )
       return;
     }
 
-    Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
+    Cell cell = Cell( d->activeSheet, d->canvas->markerColumn(), d->canvas->markerRow() );
 
     bool isProtected = d->activeSheet->isProtected();
-    if ( !cell->isDefault() && cell->style().notProtected() && d->selection->isSingular() )
+    if ( !cell.isDefault() && cell.style().notProtected() && d->selection->isSingular() )
       isProtected = false;
 
     if ( !isProtected )
@@ -6346,7 +6355,7 @@ void View::createStyleFromCell()
         return;
 
     QPoint p( d->selection->marker() );
-    Cell * cell = d->activeSheet->nonDefaultCell( p.x(), p.y() );
+    Cell cell = Cell( d->activeSheet, p.x(), p.y() );
 
     bool ok = false;
     QString styleName( "" );
@@ -6375,12 +6384,12 @@ void View::createStyleFromCell()
         break;
     }
 
-    const Style cellStyle = cell->style();
+    const Style cellStyle = cell.style();
     CustomStyle * style = new CustomStyle( styleName );
     style->merge( cellStyle );
 
     doc()->styleManager()->insertStyle( style );
-    cell->setStyle( *style );
+    cell.setStyle( *style );
     QStringList lst( d->actions->selectStyle->items() );
     lst.push_back( styleName );
     d->actions->selectStyle->setItems( lst );
@@ -6628,8 +6637,8 @@ void View::setText (const QString & _text, bool array)
 
     d->activeSheet->setText( y, x, _text );
 
-    Cell * cell = d->activeSheet->cellAt( x, y );
-    if ( cell->value().isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell->isFormula() )
+    Cell cell = Cell( d->activeSheet, x, y );
+    if ( cell.value().isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell.isFormula() )
       doc()->addStringCompletion( _text );
   }
 }
@@ -6808,9 +6817,7 @@ void View::calcStatusBarOp()
   MethodOfCalc tmpMethod = doc()->getTypeOfCalc();
   if ( tmpMethod != NoneCalc )
   {
-
-    Value range = sheet->valueRange (tmpRect.left(), tmpRect.top(),
-        tmpRect.right(), tmpRect.bottom());
+    Value range = sheet->valueRange( tmpRect );
     switch (tmpMethod)
     {
       case SumOfNumber:
@@ -7249,7 +7256,7 @@ void View::handleDamages( const QList<Damage*>& damages )
             {
                 foreach ( CellBinding* binding, damagedSheet->cellBindings() )
                 {
-                     binding->cellChanged( 0 );
+                     binding->cellChanged( Cell() );
                 }
 
                 d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
@@ -7296,7 +7303,7 @@ void View::runInspector()
 {
     // useful to inspect objects
     if(!d->activeSheet) return;
-    Cell * cell = d->activeSheet->cellAt( d->selection->marker() );
+    Cell cell( d->activeSheet, d->selection->marker() );
     KSpread::Inspector* ins = new KSpread::Inspector( cell );
     ins->exec();
     delete ins;

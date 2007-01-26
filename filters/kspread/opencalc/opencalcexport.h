@@ -74,8 +74,6 @@ class OpenCalcExport : public KoFilter
 
   bool writeMetaFile( KoStore * store, uint filesWritten );
 
-  void maxRowCols( const KSpread::Sheet * sheet,
-                   int & maxCols, int & maxRows );
   void convertPart( QString const & part, QDomDocument & doc,
                     QDomElement & parent, const KSpread::Doc * ksdoc );
   void addText( QString const & text, QDomDocument & doc,

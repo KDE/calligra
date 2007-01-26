@@ -145,7 +145,7 @@ struct st_cell
 {
   QString xdesc;
   QString ydesc;
-  Cell* cell;
+  Cell cell;
   QString sheet;
   int x;
   int y;
@@ -285,13 +285,13 @@ void ConsolidateDialog::slotOk()
         {
 	  Sheet *t = (*it).sheet();
 	  assert( t );
-	  Cell *c = t->cellAt( x + (*it).range().left(), y + (*it).range().top() );
-          if(!c->isDefault())
+	  Cell cell = Cell( t, x + (*it).range().left(), y + (*it).range().top() );
+          if(!cell.isDefault())
                 novalue=false;
 	  if ( it != ranges.begin() )
 	    formula += ';';
 	  formula += (*it).sheetName() + '!';
-	  formula += c->name();
+	  formula += cell.name();
 	}
 	formula += ')';
 
@@ -313,10 +313,10 @@ void ConsolidateDialog::slotOk()
 //      kDebug(36001) << "FROM " << (*it).range.left() << " to " << (*it).range.right() << endl;
       for( int x = (*it).range().left(); x <= (*it).range().right() ; ++x )
       {
-	Cell *c = t->cellAt( x, (*it).range().top() );
-	if ( c )
+	Cell cell = Cell( t, x, (*it).range().top() );
+ if ( !cell.isNull() )
 	{
-	  QString s = c->value().asString();
+	  QString s = cell.value().asString();
 	  if ( !lst.contains( s ) )
 	    lst.append( s );
 	}
@@ -362,12 +362,12 @@ void ConsolidateDialog::slotOk()
 	  {
 	    Sheet *t = (*it).sheet();
 	    assert( t );
-	    Cell *c = t->cellAt( i, (*it).range().top() );
-	    if ( c )
+	    Cell cell = Cell( t, i, (*it).range().top() );
+	    if ( !cell.isNull() )
 	    {
-	      if ( c->value().asString() == *s )
+	      if ( cell.value().asString() == *s )
 	      {
-//		Cell *c2 = t->cellAt( i, y + (*it).range.top() );
+//		Cell cell2 = Cell( t, i, y + (*it).range.top() );
 		count++;
 		if ( it != ranges.begin() )
 		  formula += ';';
@@ -395,10 +395,10 @@ void ConsolidateDialog::slotOk()
       assert( t );
       for( int y = (*it).range().top(); y <= (*it).range().bottom() ; ++y )
       {
-	Cell *c = t->cellAt( (*it).range().left(), y );
-	if ( c )
+	Cell cell = Cell( t, (*it).range().left(), y );
+ if ( !cell.isNull() )
 	{
-	  QString s = c->value().asString();
+	  QString s = cell.value().asString();
 	  if ( !s.isEmpty() && lst.indexOf( s ) == -1 )
 	    lst.append( s );
 	}
@@ -444,13 +444,13 @@ void ConsolidateDialog::slotOk()
 	  {
 	    Sheet *t = (*it).sheet();
 	    assert( t );
-	    Cell *c = t->cellAt( (*it).range().left(), i );
-	    if ( c )
+	    Cell cell = Cell( t, (*it).range().left(), i );
+     if ( !cell.isNull() )
 	    {
-	      QString v = c->value().asString();
+	      QString v = cell.value().asString();
 	      if ( !v.isEmpty() && *s == v )
 	      {
-//		Cell *c2 = t->cellAt( x + (*it).range.left(), i );
+//		Cell cell2 = Cell( t, x + (*it).range.left(), i );
 		count++;
 		if ( it != ranges.begin() ) formula += ';';
 		formula += (*it).sheetName() + '!';
@@ -478,10 +478,10 @@ void ConsolidateDialog::slotOk()
       assert( t );
       for( int y = (*it).range().top() + 1; y <= (*it).range().bottom() ; ++y )
       {
-	Cell *c = t->cellAt( (*it).range().left(), y );
-	if ( c )
+	Cell cell = Cell( t, (*it).range().left(), y );
+ if ( !cell.isNull() )
 	{
-	  QString s = c->value().asString();
+	  QString s = cell.value().asString();
 	  if ( !s.isEmpty() && cols.indexOf( s ) == -1 )
 	    cols.append( s );
 	}
@@ -498,10 +498,10 @@ void ConsolidateDialog::slotOk()
       assert( t );
       for( int x = (*it).range().left() + 1; x <= (*it).range().right() ; ++x )
       {
-	Cell *c = t->cellAt( x, (*it).range().top() );
-	if ( c )
+	Cell cell = Cell( t, x, (*it).range().top() );
+ if ( !cell.isNull() )
 	{
-	  QString s = c->value().asString();
+	  QString s = cell.value().asString();
 	  if ( !s.isEmpty() && rows.indexOf( s ) == -1 )
 	    rows.append( s );
 	}
@@ -538,23 +538,23 @@ void ConsolidateDialog::slotOk()
       assert( t );
       for( int x = (*it).range().left() + 1; x <= (*it).range().right() ; ++x )
       {
-	Cell *c = t->cellAt( x, (*it).range().top() );
-	if ( c )
+	Cell cell = Cell( t, x, (*it).range().top() );
+ if ( !cell.isNull() )
 	{
-	  QString ydesc = c->value().asString();
+	  QString ydesc = cell.value().asString();
 	  for( int y = (*it).range().top() + 1; y <= (*it).range().bottom() ; ++y )
 	  {
-	    Cell *c2 = t->cellAt( (*it).range().left(), y );
-	    if ( c2 )
+	    Cell cell2 = Cell( t, (*it).range().left(), y );
+	    if ( !cell2.isNull() )
 	    {
-	      QString xdesc = c2->value().asString();
-	      Cell *c3 = t->cellAt( x, y );
-	      if ( c3 && c3->value().isNumber() )
+	      QString xdesc = cell2.value().asString();
+	      Cell cell3 = Cell( t, x, y );
+	      if ( !cell3.isNull() && cell3.value().isNumber() )
 	      {
 		st_cell k;
 		k.xdesc = xdesc;
 		k.ydesc = ydesc;
-		k.cell = c3;
+		k.cell = cell3;
 		k.sheet = (*it).sheetName();
 		k.x = x;
 		k.y = y;

@@ -102,7 +102,7 @@ public:
     /**
      * \return the style that matches first (or 0 if no condition matches)
      */
-    Style* testConditions( const Cell* cell ) const;
+    Style* testConditions( const Cell& cell ) const;
 
     /**
      * Retrieve the current list of conditions we're checking
@@ -157,7 +157,7 @@ private:
      *
      * \return true if one of the conditions is true, false if not.
      */
-    bool currentCondition( const Cell* cell, Conditional & condition ) const;
+    bool currentCondition( const Cell& cell, Conditional & condition ) const;
 
     /**
      * \ingroup OpenDocument

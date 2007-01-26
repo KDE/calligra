@@ -256,47 +256,47 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
 
         for ( int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++ )
         {
-            Cell * cell = sheet->cellAt( currentcolumn, currentrow, false );
-            const Style style = cell->style( currentcolumn, currentrow );
-            colspan_cells=cell->mergedXCells();
-            if (cell->needsPrinting())
+            Cell cell( sheet, currentcolumn, currentrow );
+            const Style style = cell.style();
+            colspan_cells=cell.mergedXCells();
+            if (cell.needsPrinting())
                 nonempty_cells++;
             QString text;
             QColor bgcolor = style.fontColor();
-            // FIXME: some formatting seems to be missing with cell->inputText(), e.g.
+            // FIXME: some formatting seems to be missing with cell.inputText(), e.g.
             // "208.00" in KSpread will be "208" in HTML (not always?!)
             bool link = false;
 
-            if ( !cell->link().isEmpty() )
+            if ( !cell.link().isEmpty() )
             {
-                if ( Util::localReferenceAnchor(cell->link()) )
+                if ( Util::localReferenceAnchor(cell.link()) )
                 {
-                    text = cell->inputText();
+                    text = cell.inputText();
                 }
                 else
                 {
-                    text = " <A href=\"" + cell->link() + "\">" + cell->inputText() + "</A>";
+                    text = " <A href=\"" + cell.link() + "\">" + cell.inputText() + "</A>";
                     link = true;
                 }
             }
             else
-                text=cell->displayText();
+                text=cell.displayText();
 #if 0
-            switch( cell->content() ) {
+            switch( cell.content() ) {
             case Cell::Text:
-                text = cell->inputText();
+                text = cell.inputText();
                 break;
             case Cell::RichText:
             case Cell::VisualFormula:
-                text = cell->inputText(); // untested
+                text = cell.inputText(); // untested
                 break;
             case Cell::Formula:
-                cell->calc( true ); // Incredible, cells are not calculated if the document was just opened
-                text = cell->valueString();
+                cell.calc( true ); // Incredible, cells are not calculated if the document was just opened
+                text = cell.valueString();
                 break;
             }
-            text = cell->prefix(currentrow, currentcolumn) + ' ' + text + ' '
-                   + cell->postfix(currentrow, currentcolumn);
+            text = cell.prefix(currentrow, currentcolumn) + ' ' + text + ' '
+                   + cell.postfix(currentrow, currentcolumn);
 #endif
             line += "  <" + html_cell_tag + html_cell_options;
 	    if (text.isRightToLeft() != (sheet->layoutDirection() == Sheet::RightToLeft))
@@ -304,7 +304,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
 
-            switch((Style::HAlign)cell->defineAlignX())
+            switch((Style::HAlign)cell.defineAlignX())
             {
             case Style::Left:
                 line+=" align=\"" + html_left +"\"";
@@ -332,13 +332,13 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             case Style::VAlignUndefined:
                 break;
             }
-            line+=" width=\""+QString::number(cell->width())+"\"";
-            line+=" height=\""+QString::number(cell->height())+"\"";
+            line+=" width=\""+QString::number(cell.width())+"\"";
+            line+=" height=\""+QString::number(cell.height())+"\"";
 
-            if (cell->mergedXCells()>0)
+            if (cell.mergedXCells()>0)
             {
                 QString tmp;
-                int extra_cells=cell->mergedXCells();
+                int extra_cells=cell.mergedXCells();
                 line += " colspan=\"" + tmp.setNum(extra_cells+1) + "\"";
                 currentcolumn += extra_cells;
             }
@@ -455,19 +455,19 @@ void HTMLExport::detectFilledCells( Sheet *sheet, int &rows, int &columns )
 
   for ( int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow)
   {
-    Cell * cell = 0L;
+    Cell cell;
     int iUsedColumn=0;
     for ( int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
     {
-      cell = sheet->cellAt( currentcolumn, currentrow, false );
+      cell = Cell( sheet, currentcolumn, currentrow );
       QString text;
-      if ( !cell->isDefault() && !cell->isEmpty() )
+      if ( !cell.isDefault() && !cell.isEmpty() )
       {
         iUsedColumn = currentcolumn;
       }
     }
-    if (cell)
-      iUsedColumn += cell->mergedXCells();
+    if ( !cell.isNull() )
+      iUsedColumn += cell.mergedXCells();
     if (iUsedColumn > columns)
       columns = iUsedColumn;
     if ( iUsedColumn > 0 )

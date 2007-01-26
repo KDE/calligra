@@ -56,12 +56,12 @@ enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
   void dateInit();
   QString convertVars( QString const & str, KSpread::Sheet * table ) const;
   void ParsePrintInfo( QDomNode const & printInfo, KSpread::Sheet * table );
-  void ParseFormat(QString const & formatString, KSpread::Cell* kspread_cell);
+  void ParseFormat(QString const & formatString, const KSpread::Cell& kspread_cell);
   void setStyleInfo(QDomNode * sheet, KSpread::Sheet * table);
-  bool setType( KSpread::Cell* kspread_cell, QString const & formatString, QString & cell_content );
+  bool setType( const KSpread::Cell& kspread_cell, QString const & formatString, QString & cell_content );
   void convertFormula( QString & formula ) const;
-    void importBorder( QDomElement  border, borderStyle _style,  KSpread::Cell*cell);
-    void ParseBorder( QDomElement & gmr_styleborder, KSpread::Cell* kspread_cell );
+    void importBorder( QDomElement  border, borderStyle _style, const KSpread::Cell&cell);
+    void ParseBorder( QDomElement & gmr_styleborder, const KSpread::Cell& kspread_cell );
     double parseAttribute( const QDomElement &_element );
 
 };

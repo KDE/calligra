@@ -110,8 +110,8 @@ class OpenCalcImport : public KoFilter
   void loadOasisMasterLayoutPage( KSpread::Sheet * table,KoStyleStack &styleStack );
   void loadOasisValidationValue( KSpread::Validity val, const QStringList &listVal );
     QString translatePar( QString & par ) const;
-    void loadCondition( KSpread::Cell*cell,const KoXmlElement &property );
-    void loadOasisCondition(KSpread::Cell*cell,const KoXmlElement &property );
+    void loadCondition( const KSpread::Cell& cell, const KoXmlElement &property );
+    void loadOasisCondition(const KSpread::Cell& cell, const KoXmlElement &property );
     void loadOasisConditionValue( const QString &styleCondition, KSpread::Conditional &newCondition );
     void loadOasisCondition( QString &valExpression, KSpread::Conditional &newCondition );
     void loadOasisValidationValue( const QStringList &listVal, KSpread::Conditional &newCondition );

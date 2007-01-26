@@ -78,7 +78,7 @@ private:
 
 protected:
 	KSpreadBaseWorker *getWorker() const;
-	KoFilter::ConversionStatus doSpreadCell(Cell *spreadCell, int column, int row);
+	KoFilter::ConversionStatus doSpreadCell(const Cell& spreadCell, int column, int row);
 	KoFilter::ConversionStatus doSpreadSheet(Sheet *spreadSheet);
 	KoFilter::ConversionStatus doSpreadBook(Doc *document);
 	KoFilter::ConversionStatus doInfo(KoDocumentInfo *info);

@@ -100,7 +100,7 @@ void SubtotalDialog::slotOk()
   int bottom = m_selection.bottom();
   int top    = m_selection.top();
   left       = m_selection.left();
-  QString oldText = m_pSheet->cellAt( mainCol, top )->displayText();
+  QString oldText = Cell( m_pSheet, mainCol, top ).displayText();
   QString newText;
   QString result( ' ' + i18n("Result") );
   int lastChangedRow = top;
@@ -115,7 +115,7 @@ void SubtotalDialog::slotOk()
     while ( y <= bottom )
     {
       addRow = true;
-      newText = m_pSheet->cellAt( mainCol, y )->displayText();
+      newText = Cell( m_pSheet, mainCol, y ).displayText();
 
       if ( ignoreEmptyCells && (newText.length() == 0) )
       {
@@ -203,7 +203,7 @@ void SubtotalDialog::removeSubtotalLines()
   int l = m_selection.left();
   int t = m_selection.top();
 
-  Cell * cell;
+  Cell cell;
   QString text;
 
   for ( int y = m_selection.bottom(); y >= t; --y )
@@ -212,11 +212,11 @@ void SubtotalDialog::removeSubtotalLines()
     bool containsSubtotal = false;
     for (int x = l; x <= r; ++x )
     {
-      cell = m_pSheet->cellAt( x, y );
-      if ( cell->isDefault() || !cell->isFormula() )
+      cell = Cell( m_pSheet, x, y );
+      if ( cell.isDefault() || !cell.isFormula() )
         continue;
 
-      text = cell->inputText();
+      text = cell.inputText();
       if ( text.indexOf( "SUBTOTAL" ) != -1 )
       {
         containsSubtotal = true;
@@ -246,7 +246,7 @@ void SubtotalDialog::fillColumnBoxes()
   int r = m_selection.right();
   int row = m_selection.top();
 
-  Cell    * cell;
+  Cell cell;
   Q3CheckListItem * item;
 
   QString text;
@@ -255,8 +255,8 @@ void SubtotalDialog::fillColumnBoxes()
   int index = 0;
   for ( int i = m_selection.left(); i <= r; ++i )
   {
-    cell = m_pSheet->cellAt( i, row );
-    text = cell->displayText();
+    cell = Cell( m_pSheet, i, row );
+    text = cell.displayText();
 
     if ( text.length() > 0 )
     {
@@ -306,13 +306,13 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
 
         m_selection.setHeight( m_selection.height() + 1 );
 
-        Cell * cell = m_pSheet->nonDefaultCell( mainCol, row + 1 );
-        cell->setCellText( text );
+        Cell cell = Cell( m_pSheet, mainCol, row + 1 );
+        cell.setCellText( text );
         Style style;
         style.setFontBold( true );
         style.setFontItalic( true );
         style.setFontUnderline( true );
-        cell->setStyle( style );
+        cell.setStyle( style );
     }
 
     QString colName = Cell::columnName( column );
@@ -330,13 +330,13 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
     }
     formula += ')';
 
-    Cell * cell = m_pSheet->nonDefaultCell( column, row + 1 );
-    cell->setCellText( formula );
+    Cell cell = Cell( m_pSheet, column, row + 1 );
+    cell.setCellText( formula );
     Style style;
     style.setFontBold( true );
     style.setFontItalic( true );
     style.setFontUnderline( true );
-    cell->setStyle( style );
+    cell.setStyle( style );
     return true;
 }
 

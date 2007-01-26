@@ -23,7 +23,9 @@
 #include <klocale.h>
 
 #include "Cell.h"
+#include "CellStorage.h"
 #include "Doc.h"
+#include "PointStorage.h"
 #include "Sheet.h"
 #include "StyleStorage.h"
 #include "ValueCalc.h"
@@ -32,6 +34,12 @@
 #include <math.h>
 
 using namespace KSpread;
+
+namespace KSpread {
+class FormulaStorage : public PointStorage<Formula> {};
+class LinkStorage : public PointStorage<QString> {};
+class ValueStorage : public PointStorage<Value> {};
+}
 
 AbstractDataManipulator::AbstractDataManipulator ()
 {
@@ -74,21 +82,21 @@ bool AbstractDataManipulator::process (Element* element)
 
       // we have the data - set it !
       if (parse) {
-        Cell *cell = m_sheet->nonDefaultCell (col, row);
+        Cell cell = Cell( m_sheet, col, row);
         if (fmtType != Format::None)
         {
             Style style;
             style.setFormatType (fmtType);
-            cell->setStyle( style );
+            cell.setStyle( style );
         }
-        cell->setCellText (text);
+        cell.setCellText (text);
       } else {
-        Cell *cell = m_sheet->cellAt (col, row);
-        if (!(val.isEmpty() && cell->isDefault()))
+        Cell cell( m_sheet, col, row );
+        if (!(val.isEmpty() && cell.isDefault()))
         // nothing if value and cell both empty
         {
-          Cell *cell = m_sheet->nonDefaultCell (col, row);
-          cell->setCellValue (val, fmtType, text);
+          Cell cell = Cell( m_sheet, col, row);
+          cell.setCellValue (val, fmtType, text);
         }
       }
     }
@@ -119,18 +127,18 @@ bool AbstractDataManipulator::preProcessing ()
     for (int col = range.left(); col <= range.right(); ++col)
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
-        Cell* cell = m_sheet->cellAt(col, row);
-        if (!cell->isDefault())  // non-default cell - remember it
+        Cell cell = Cell( m_sheet, col, row);
+        if (!cell.isDefault())  // non-default cell - remember it
         {
           ADMStorage st;
 
           int colidx = col - range.left();
           int rowidx = row - range.top();
 
-          if (cell->isFormula())
-            st.text = cell->inputText();
-          st.val = m_sheet->value (col, row);
-          st.format = cell->formatType(col, row);
+          if (cell.isFormula())
+            st.text = cell.inputText();
+          st.val = cell.value();
+          st.format = cell.formatType();
           oldData[colidx][rowidx] = st;
         }
       }
@@ -161,15 +169,15 @@ bool AbstractDFManipulator::process (Element* element)
   for (int col = range.left(); col <= range.right(); ++col)
   {
     for (int row = range.top(); row <= range.bottom(); ++row) {
-      Cell *cell = m_sheet->cellAt (col, row);
+      Cell cell( m_sheet, col, row );
       int colidx = col - range.left();
       int rowidx = row - range.top();
       // only non-default cells will be formatted
       // TODO: is this really correct ?
-      if (!cell->isDefault())
+      if (!cell.isDefault())
       {
         Style style = m_reverse ? formats[colidx][rowidx] : newFormat (element, col, row);
-        cell->setStyle( style );
+        cell.setStyle( style );
       }
     }
   }
@@ -190,12 +198,12 @@ bool AbstractDFManipulator::preProcessing ()
     for (int col = range.left(); col <= range.right(); ++col)
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
-        Cell* cell = m_sheet->cellAt(col, row);
-        if (!cell->isDefault())  // non-default cell - remember it
+        Cell cell = Cell( m_sheet, col, row);
+        if (!cell.isDefault())  // non-default cell - remember it
         {
           int colidx = col - range.left();
           int rowidx = row - range.top();
-          Style style = cell->style();
+          Style style = cell.style();
           formats[colidx][rowidx] = style;
         }
       }
@@ -327,8 +335,8 @@ Value ArrayFormulaManipulator::newValue (Element *element, int col, int row,
     return Value(cellRef + QString::number (rowidx+1) + ';' +
         QString::number (colidx+1) + ')');
   } else {
-    Cell *cell = m_sheet->nonDefaultCell (col, row);
-    cellRef = "=INDEX(" + cell->name() + ';';
+    Cell cell = Cell( m_sheet, col, row);
+    cellRef = "=INDEX(" + cell.name() + ';';
     return Value(m_text);
   }
 }
@@ -394,7 +402,7 @@ Value CaseManipulator::newValue (Element *element, int col, int row,
   Q_UNUSED(element)
   // if we are here, we know that we want the change
   *parse = false;
-  QString str = m_sheet->cellAt (col, row)->value().asString();
+  QString str = Cell( m_sheet, col, row).value().asString();
   switch (m_mode) {
     case Upper: str = str.toUpper();
     break;
@@ -411,12 +419,12 @@ Value CaseManipulator::newValue (Element *element, int col, int row,
 bool CaseManipulator::wantChange (Element *element, int col, int row)
 {
   Q_UNUSED(element)
-  Cell *cell = m_sheet->cellAt (col, row);
+  Cell cell( m_sheet, col, row );
   // don't change cells with a formula
-  if (cell->isFormula())
+  if (cell.isFormula())
     return false;
   // don't change cells containing other things than strings
-  if (!cell->value().isString())
+  if (!cell.value().isString())
     return false;
   // original version was dismissing text starting with '!' and '*', is this
   // necessary ?
@@ -427,7 +435,14 @@ bool CaseManipulator::wantChange (Element *element, int col, int row)
 
 ShiftManipulator::ShiftManipulator()
     : Manipulator()
+    , m_mode( Insert )
 {
+}
+
+void ShiftManipulator::setReverse( bool reverse )
+{
+    m_reverse = reverse;
+    m_mode = reverse ? Delete : Insert;
 }
 
 bool ShiftManipulator::process(Element* element)
@@ -435,64 +450,47 @@ bool ShiftManipulator::process(Element* element)
     const QRect range = element->rect();
     if ( !m_reverse ) // insertion
     {
-        // create undo for cells
-        if ( m_firstrun )
-        {
-            if ( m_direction == ShiftBottom )
-            {
-                for ( int col = KS_colMax - range.width(); col <= KS_colMax; ++col )
-                {
-                    Cell* cell;
-                    for ( int row = range.top(); row<= range.bottom(); ++row )
-                    {
-                        cell = m_sheet->cellAt( col, row );
-                        if ( cell->isDefault() ) continue;
-                        m_undoCells.insert( cell->cellPosition(), cell->inputText() );
-                        cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
-                    }
-                }
-            }
-            else if ( m_direction == ShiftRight )
-            {
-                for ( int row = KS_rowMax - range.height(); row <= KS_rowMax; ++row )
-                {
-                    Cell* cell;
-                    for ( int col = range.left(); col <= range.right(); ++col )
-                    {
-                        cell = m_sheet->cellAt( col, row );
-                        if ( cell->isDefault() ) continue;
-                        m_undoCells.insert( cell->cellPosition(), cell->inputText() );
-                        cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
-                    }
-                }
-            }
-        }
-
         // insert rows
+        QVector< QPair<QPoint,Formula> > undoFormulas;
+        QVector< QPair<QPoint,Value> > undoValues;
+        QVector< QPair<QPoint,QString> > undoLinks;
+        QList< QPair<QRectF,bool> > undoFusion;
         QList< QPair<QRectF,SharedSubStyle> > undoStyles;
         QList< QPair<QRectF,QString> > undoComment;
         QList< QPair<QRectF,Conditions> > undoConditions;
         QList< QPair<QRectF,Validity> > undoValidity;
         if ( m_direction == ShiftBottom )
         {
-            m_sheet->shiftColumns( range );
-            undoStyles = m_sheet->styleStorage()->shiftColumns( range );
-            undoComment = m_sheet->commentStorage()->shiftColumns( range );
-            undoConditions = m_sheet->conditionsStorage()->shiftColumns( range );
-            undoValidity = m_sheet->validityStorage()->shiftColumns( range );
+            m_sheet->insertShiftDown( range );
+            undoFormulas = m_sheet->formulaStorage()->insertShiftDown( range );
+            undoValues = m_sheet->valueStorage()->insertShiftDown( range );
+            undoLinks = m_sheet->linkStorage()->insertShiftDown( range );
+            undoFusion = m_sheet->fusionStorage()->insertShiftDown( range );
+            undoStyles = m_sheet->styleStorage()->insertShiftDown( range );
+            undoComment = m_sheet->commentStorage()->insertShiftDown( range );
+            undoConditions = m_sheet->conditionsStorage()->insertShiftDown( range );
+            undoValidity = m_sheet->validityStorage()->insertShiftDown( range );
         }
         else if ( m_direction == ShiftRight )
         {
-            m_sheet->shiftRows( range );
-            undoStyles = m_sheet->styleStorage()->shiftRows( range );
-            undoComment = m_sheet->commentStorage()->shiftRows( range );
-            undoConditions = m_sheet->conditionsStorage()->shiftRows( range );
-            undoValidity = m_sheet->validityStorage()->shiftRows( range );
+            m_sheet->insertShiftRight( range );
+            undoFormulas = m_sheet->formulaStorage()->insertShiftRight( range );
+            undoValues = m_sheet->valueStorage()->insertShiftRight( range );
+            undoLinks = m_sheet->linkStorage()->insertShiftRight( range );
+            undoFusion = m_sheet->fusionStorage()->insertShiftRight( range );
+            undoStyles = m_sheet->styleStorage()->insertShiftRight( range );
+            undoComment = m_sheet->commentStorage()->insertShiftRight( range );
+            undoConditions = m_sheet->conditionsStorage()->insertShiftRight( range );
+            undoValidity = m_sheet->validityStorage()->insertShiftRight( range );
         }
 
         // create undo for styles, comments, conditions, validity
         if ( m_firstrun )
         {
+            m_undoFormulas = undoFormulas;
+            m_undoValues = undoValues;
+            m_undoLinks = undoLinks;
+            m_undoFusion = undoFusion;
             m_undoStyles = undoStyles;
             m_undoComment = undoComment;
             m_undoConditions = undoConditions;
@@ -500,10 +498,16 @@ bool ShiftManipulator::process(Element* element)
         }
 
         // undo deletion
-        if ( !m_firstrun )
+        if ( m_mode == Delete )
         {
-            foreach ( const QPoint& position, m_undoCells.keys() )
-                m_sheet->nonDefaultCell( position.x(), position.y() )->setCellText( m_undoCells[position] );
+            for ( int i = 0; i < m_undoFormulas.count(); ++i )
+                m_sheet->formulaStorage()->insert( m_undoFormulas[i].first.x(), m_undoFormulas[i].first.y(), m_undoFormulas[i].second );
+            for ( int i = 0; i < m_undoValues.count(); ++i )
+                m_sheet->valueStorage()->insert( m_undoValues[i].first.x(), m_undoValues[i].first.y(), m_undoValues[i].second );
+            for ( int i = 0; i < m_undoLinks.count(); ++i )
+                m_sheet->linkStorage()->insert( m_undoLinks[i].first.x(), m_undoLinks[i].first.y(), m_undoLinks[i].second );
+            for ( int i = 0; i < m_undoFusion.count(); ++i )
+                m_sheet->fusionStorage()->insert( Region(m_undoFusion[i].first.toRect()), m_undoFusion[i].second );
             for ( int i = 0; i < m_undoStyles.count(); ++i )
                 m_sheet->styleStorage()->insert( m_undoStyles[i].first.toRect(), m_undoStyles[i].second );
             for ( int i = 0; i < m_undoComment.count(); ++i )
@@ -516,47 +520,47 @@ bool ShiftManipulator::process(Element* element)
     }
     else // deletion
     {
-        // create undo for cells
-        if ( m_firstrun )
-        {
-            for ( int col = range.left(); col <= range.right(); ++col )
-            {
-                Cell* cell;
-                for ( int row = range.top(); row <= range.bottom(); ++row )
-                {
-                    cell = m_sheet->cellAt( col, row );
-                    if ( cell->isDefault() ) continue;
-                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
-                    cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
-                }
-            }
-        }
-
         // delete rows
+        QVector< QPair<QPoint,Formula> > undoFormulas;
+        QVector< QPair<QPoint,Value> > undoValues;
+        QVector< QPair<QPoint,QString> > undoLinks;
+        QList< QPair<QRectF,bool> > undoFusion;
         QList< QPair<QRectF,SharedSubStyle> > undoStyles;
         QList< QPair<QRectF,QString> > undoComment;
         QList< QPair<QRectF,Conditions> > undoConditions;
         QList< QPair<QRectF,Validity> > undoValidity;
         if ( m_direction == ShiftBottom )
         {
-            m_sheet->unshiftColumns( range );
-            undoStyles = m_sheet->styleStorage()->unshiftColumns( range );
-            undoComment = m_sheet->commentStorage()->unshiftColumns( range );
-            undoConditions = m_sheet->conditionsStorage()->unshiftColumns( range );
-            undoValidity = m_sheet->validityStorage()->unshiftColumns( range );
+            m_sheet->removeShiftUp( range );
+            undoFormulas = m_sheet->formulaStorage()->removeShiftUp( range );
+            undoValues = m_sheet->valueStorage()->removeShiftUp( range );
+            undoLinks = m_sheet->linkStorage()->removeShiftUp( range );
+            undoFusion = m_sheet->fusionStorage()->removeShiftUp( range );
+            undoStyles = m_sheet->styleStorage()->removeShiftUp( range );
+            undoComment = m_sheet->commentStorage()->removeShiftUp( range );
+            undoConditions = m_sheet->conditionsStorage()->removeShiftUp( range );
+            undoValidity = m_sheet->validityStorage()->removeShiftUp( range );
         }
         else if ( m_direction == ShiftRight )
         {
-            m_sheet->unshiftRows( range );
-            undoStyles = m_sheet->styleStorage()->unshiftRows( range );
-            undoComment = m_sheet->commentStorage()->unshiftRows( range );
-            undoConditions = m_sheet->conditionsStorage()->unshiftRows( range );
-            undoValidity = m_sheet->validityStorage()->unshiftRows( range );
+            m_sheet->removeShiftLeft( range );
+            undoFormulas = m_sheet->formulaStorage()->removeShiftLeft( range );
+            undoValues = m_sheet->valueStorage()->removeShiftLeft( range );
+            undoLinks = m_sheet->linkStorage()->removeShiftLeft( range );
+            undoFusion = m_sheet->fusionStorage()->removeShiftLeft( range );
+            undoStyles = m_sheet->styleStorage()->removeShiftLeft( range );
+            undoComment = m_sheet->commentStorage()->removeShiftLeft( range );
+            undoConditions = m_sheet->conditionsStorage()->removeShiftLeft( range );
+            undoValidity = m_sheet->validityStorage()->removeShiftLeft( range );
         }
 
         // create undo for styles, comments, conditions, validity
         if ( m_firstrun )
         {
+            m_undoFormulas = undoFormulas;
+            m_undoValues = undoValues;
+            m_undoLinks = undoLinks;
+            m_undoFusion = undoFusion;
             m_undoStyles = undoStyles;
             m_undoComment = undoComment;
             m_undoConditions = undoConditions;
@@ -564,10 +568,16 @@ bool ShiftManipulator::process(Element* element)
         }
 
         // undo insertion
-        if ( !m_firstrun )
+        if ( m_mode == Insert )
         {
-            foreach ( const QPoint& position, m_undoCells.keys() )
-                m_sheet->nonDefaultCell( position.x(), position.y() )->setCellText( m_undoCells[position] );
+            for ( int i = 0; i < m_undoFormulas.count(); ++i )
+                m_sheet->formulaStorage()->insert( m_undoFormulas[i].first.x(), m_undoFormulas[i].first.y(), m_undoFormulas[i].second );
+            for ( int i = 0; i < m_undoValues.count(); ++i )
+                m_sheet->valueStorage()->insert( m_undoValues[i].first.x(), m_undoValues[i].first.y(), m_undoValues[i].second );
+            for ( int i = 0; i < m_undoLinks.count(); ++i )
+                m_sheet->linkStorage()->insert( m_undoLinks[i].first.x(), m_undoLinks[i].first.y(), m_undoLinks[i].second );
+            for ( int i = 0; i < m_undoFusion.count(); ++i )
+                m_sheet->fusionStorage()->insert( Region(m_undoFusion[i].first.toRect()), m_undoFusion[i].second );
             for ( int i = 0; i < m_undoStyles.count(); ++i )
                 m_sheet->styleStorage()->insert( m_undoStyles[i].first.toRect(), m_undoStyles[i].second );
             for ( int i = 0; i < m_undoComment.count(); ++i )

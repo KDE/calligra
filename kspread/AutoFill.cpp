@@ -59,31 +59,31 @@ QStringList *AutoFillSequenceItem::other = 0;
  *
  **********************************************************************************/
 
-AutoFillSequenceItem::AutoFillSequenceItem( const Cell* cell )
+AutoFillSequenceItem::AutoFillSequenceItem( const Cell& cell )
     : m_IValue( 0 )
     , m_DValue( 0.0 )
     , m_OtherBegin( 0 )
     , m_OtherEnd( 0 )
     , m_Type( INTEGER )
 {
-    if ( cell->isFormula() )
+    if ( cell.isFormula() )
     {
-        m_String = cell->encodeFormula();
+        m_String = cell.encodeFormula();
         m_Type = FORMULA;
     }
-    else if ( cell->value().isInteger() || ( !cell->isDefault() && cell->isDate() ) )
+    else if ( cell.value().isInteger() || ( !cell.isDefault() && cell.isDate() ) )
     {
-        m_IValue = static_cast<int>( cell->value().asInteger() );
+        m_IValue = static_cast<int>( cell.value().asInteger() );
         m_Type = INTEGER;
     }
-    else if ( cell->value().isFloat() || ( !cell->isDefault() && cell->isTime() ) )
+    else if ( cell.value().isFloat() || ( !cell.isDefault() && cell.isTime() ) )
     {
-        m_DValue = cell->value().asFloat();
+        m_DValue = cell.value().asFloat();
         m_Type = FLOAT;
     }
-    else if ( !cell->inputText().isEmpty() )
+    else if ( !cell.inputText().isEmpty() )
     {
-        m_String = cell->inputText();
+        m_String = cell.inputText();
         m_Type = STRING;
 
         if ( month == 0 )
@@ -525,8 +525,8 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
     return deltaSequence;
 }
 
-static void fillSequence( const QList<Cell*>& _srcList,
-                          const QList<Cell*>& _destList,
+static void fillSequence( const QList<Cell>& _srcList,
+                          const QList<Cell>& _destList,
                           const AutoFillSequence& _seqList,
                           const QList<double>& deltaSequence,
                           bool down )
@@ -539,7 +539,7 @@ static void fillSequence( const QList<Cell*>& _srcList,
     kDebug() << "Valid interval, number of intervals: " << block << endl;
 
     // Start iterating with the first cell
-    Cell* cell;
+    Cell cell;
     int destIndex = 0;
     if ( down )
         cell = _destList.first();
@@ -552,7 +552,7 @@ static void fillSequence( const QList<Cell*>& _srcList,
 
     // Fill destination cells
     //
-    while ( cell )
+    while ( !cell.isNull() )
     {
         // End of block? -> start again from beginning
         if ( down )
@@ -572,7 +572,7 @@ static void fillSequence( const QList<Cell*>& _srcList,
             }
         }
 
-        kDebug() << "Cell: " << cell->name() << ", position: " << s << ", block: " << block << endl;
+        kDebug() << "Cell: " << cell.name() << ", position: " << s << ", block: " << block << endl;
 
         // Calculate the new value of 'cell' by adding 'block' times the delta to the
         // value of cell 's'.
@@ -587,23 +587,23 @@ static void fillSequence( const QList<Cell*>& _srcList,
         //
         if ( _seqList.value( s )->type() == AutoFillSequenceItem::TIME )
         {
-            const Value timeValue = cell->doc()->converter()->asTime( Value( variant.toDouble() ) );
-            cell->setCellValue( timeValue );
+            const Value timeValue = cell.doc()->converter()->asTime( Value( variant.toDouble() ) );
+            cell.setCellValue( timeValue );
         }
         else if ( _seqList.value( s )->type() == AutoFillSequenceItem::DATE )
         {
-            const Value dateValue = cell->doc()->converter()->asDate( Value( variant.toInt() ) );
-            cell->setCellValue( dateValue );
+            const Value dateValue = cell.doc()->converter()->asDate( Value( variant.toInt() ) );
+            cell.setCellValue( dateValue );
         }
         else if ( _seqList.value( s )->type() == AutoFillSequenceItem::FORMULA )
         {
             // Special handling for formulas
-            cell->setCellText( cell->decodeFormula( _seqList.value( s )->getString() ) );
+            cell.setCellText( cell.decodeFormula( _seqList.value( s )->getString() ) );
         }
         else if ( variant.type() == QVariant::Double )
-            cell->setCellValue( Value( variant.toDouble() ) );
+            cell.setCellValue( Value( variant.toDouble() ) );
         else if ( variant.type() == QVariant::Int )
-            cell->setCellValue( Value( variant.toInt() ) );
+            cell.setCellValue( Value( variant.toInt() ) );
         else if ( variant.type() == QVariant::String )
         {
             QRegExp number( "(\\d+)" );
@@ -611,21 +611,21 @@ static void fillSequence( const QList<Cell*>& _srcList,
             if ( pos!=-1 )
             {
                 const int num = number.cap( 1 ).toInt() + 1;
-                cell->setCellText( variant.toString().replace( number, QString::number( num ) ) );
+                cell.setCellText( variant.toString().replace( number, QString::number( num ) ) );
             }
-            else if ( !_srcList.at( s )->link().isEmpty() )
+            else if ( !_srcList.at( s ).link().isEmpty() )
             {
-                cell->setCellText( variant.toString() );
-                cell->setLink( _srcList.at( s )->link() );
+                cell.setCellText( variant.toString() );
+                cell.setLink( _srcList.at( s ).link() );
             }
             else
-                cell->setCellValue( Value( variant.toString() ) );
+                cell.setCellValue( Value( variant.toString() ) );
         }
 
         // copy the style of the source cell
         //
-        if ( !_srcList.at( s )->isDefault() ) // FIXME Stefan: there could be a style also for default cells.
-            cell->copyFormat( _srcList.at( s ) );
+        if ( !_srcList.at( s ).isDefault() ) // FIXME Stefan: there could be a style also for default cells.
+            cell.copyFormat( _srcList.at( s ) );
 
         // next/previous cell
         if ( down )
@@ -671,15 +671,15 @@ void Sheet::autofill( const QRect& src, const QRect& dest )
         for ( int y = src.top(); y <= src.bottom(); y++ )
         {
             int x;
-            QList<Cell*> destList;
+            QList<Cell> destList;
             for ( x = src.right() + 1; x <= dest.right(); x++ )
-                destList.append( nonDefaultCell( x, y ) );
-            QList<Cell*> srcList;
+                destList.append(Cell( this, x, y ) );
+            QList<Cell> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
-                srcList.append( cellAt( x, y ) );
+                srcList.append(Cell( this, x, y ) );
             AutoFillSequence seqList;
             for ( x = src.left(); x <= src.right(); x++ )
-                seqList.append( new AutoFillSequenceItem( cellAt( x, y ) ) );
+                seqList.append( new AutoFillSequenceItem(Cell( this, x, y ) ) );
             fillSequence( srcList, destList, seqList );
             qDeleteAll( seqList );
         }
@@ -691,15 +691,15 @@ void Sheet::autofill( const QRect& src, const QRect& dest )
         for ( int x = src.left(); x <= dest.right(); x++ )
         {
             int y;
-            QList<Cell*> destList;
+            QList<Cell> destList;
             for ( y = src.bottom() + 1; y <= dest.bottom(); y++ )
-                destList.append( nonDefaultCell( x, y ) );
-            QList<Cell*> srcList;
+                destList.append(Cell( this, x, y ) );
+            QList<Cell> srcList;
             for ( y = src.top(); y <= src.bottom(); y++ )
-                srcList.append( cellAt( x, y ) );
+                srcList.append(Cell( this, x, y ) );
             AutoFillSequence seqList;
             for ( y = src.top(); y <= src.bottom(); y++ )
-                seqList.append( new AutoFillSequenceItem( cellAt( x, y ) ) );
+                seqList.append( new AutoFillSequenceItem(Cell( this, x, y ) ) );
             fillSequence( srcList, destList, seqList );
             qDeleteAll( seqList );
         }
@@ -711,15 +711,15 @@ void Sheet::autofill( const QRect& src, const QRect& dest )
         for ( int y = dest.top(); y <= dest.bottom(); y++ )
         {
             int x;
-            QList<Cell*> destList;
+            QList<Cell> destList;
             for ( x = dest.left(); x < src.left(); x++ )
-                destList.append( nonDefaultCell( x, y ) );
-            QList<Cell*> srcList;
+                destList.append(Cell( this, x, y ) );
+            QList<Cell> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
-                srcList.append( cellAt( x, y ) );
+                srcList.append(Cell( this, x, y ) );
             AutoFillSequence seqList;
             for ( x = src.left(); x <= src.right(); x++ )
-                seqList.append( new AutoFillSequenceItem( cellAt( x, y ) ) );
+                seqList.append( new AutoFillSequenceItem(Cell( this, x, y ) ) );
             fillSequence( srcList, destList, seqList, false );
             qDeleteAll( seqList );
         }
@@ -733,15 +733,15 @@ void Sheet::autofill( const QRect& src, const QRect& dest )
         for ( int x = startVal; x <= endVal; x++ )
         {
             int y;
-            QList<Cell*> destList;
+            QList<Cell> destList;
             for ( y = dest.top(); y < src.top(); y++ )
-                destList.append( nonDefaultCell( x, y ) );
-            QList<Cell*> srcList;
+                destList.append(Cell( this, x, y ) );
+            QList<Cell> srcList;
             for ( y = src.top(); y <= src.bottom(); ++y )
-                srcList.append( cellAt( x, y ) );
+                srcList.append(Cell( this, x, y ) );
             AutoFillSequence seqList;
             for ( y = src.top(); y <= src.bottom(); y++ )
-                seqList.append( new AutoFillSequenceItem( cellAt( x, y ) ) );
+                seqList.append( new AutoFillSequenceItem(Cell( this, x, y ) ) );
             fillSequence( srcList, destList, seqList, false );
             qDeleteAll( seqList );
         }
@@ -757,8 +757,8 @@ void Sheet::autofill( const QRect& src, const QRect& dest )
     // doc()->emitEndOperation();
 }
 
-void Sheet::fillSequence( const QList<Cell*>& _srcList,
-                          const QList<Cell*>& _destList,
+void Sheet::fillSequence( const QList<Cell>& _srcList,
+                          const QList<Cell>& _destList,
                           const AutoFillSequence& _seqList,
                           bool down )
 {
@@ -778,13 +778,13 @@ void Sheet::fillSequence( const QList<Cell*>& _srcList,
     //respectively
     if ( _srcList.count() == 1 )
     {
-        const Cell* cell = _srcList.value( 0 );
-        if ( !cell->isDefault() && cell->isTime() )
+        const Cell cell = _srcList.value( 0 );
+        if ( !cell.isDefault() && cell.isTime() )
         {
             // TODO Stefan: delta depending on minimum unit of format
             deltaSequence.append( Value( QTime( 1, 0 ), doc() ).asFloat() );
         }
-        else if ( !cell->isDefault() && cell->isDate() )
+        else if ( !cell.isDefault() && cell.isDate() )
         {
             // TODO Stefan: delta depending on minimum unit of format
             deltaSequence.append( Value( QDate( 0, 0, 1 ), doc() ).asInteger() );

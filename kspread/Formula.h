@@ -20,9 +20,11 @@
 #ifndef KSPREAD_FORMULA
 #define KSPREAD_FORMULA
 
+#include <QSharedDataPointer>
 #include <QString>
 #include <QTextStream>
 #include <QVector>
+
 #include "kspread_export.h"
 
 #define KSPREAD_INLINE_ARRAYS
@@ -245,17 +247,26 @@ protected:
 class KSPREAD_EXPORT Formula
 {
   public:
+    /**
+     * Creates a formula. It must be owned by a sheet.
+     */
+    Formula( Sheet *sheet, const Cell& cell );
 
     /**
-     * Creates a formula. It must be owned by a sheet, and optionally sheet.
+     * Creates a formula. It must be owned by a sheet.
      */
-    explicit Formula (Sheet *sheet,  Cell *cell = 0);
+    explicit Formula( Sheet *sheet );
 
     /**
      * Creates a formula that is not owned by any sheet.
      * This might be useful in some cases.
      */
     Formula();
+
+    /**
+     * Copy constructor.
+     */
+    Formula( const Formula& );
 
     /**
      * Destroys the formula.
@@ -269,7 +280,7 @@ class KSPREAD_EXPORT Formula
     /**
      * Returns the cell which owns this formula.
      */
-    Cell* cell() const;
+    const Cell& cell() const;
 
     /**
      * Sets the expression for this formula.
@@ -313,6 +324,14 @@ class KSPREAD_EXPORT Formula
      */
     Tokens scan( const QString& expr, const KLocale* locale = 0 ) const;
 
+    /**
+     * Assignment operator.
+     */
+    Formula& operator=( const Formula& );
+
+    bool operator==( const Formula& ) const;
+    inline bool operator!=( const Formula& o ) const { return !operator==( o ); }
+
     QString dump() const;
 
   protected:
@@ -326,10 +345,7 @@ class KSPREAD_EXPORT Formula
 
   private:
     class Private;
-    Private *d;
-    // no copy or assign
-    Formula( const Formula& );
-    Formula& operator=( const Formula& );
+    QSharedDataPointer<Private> d;
 };
 
 /**

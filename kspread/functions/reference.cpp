@@ -368,9 +368,9 @@ Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
   if ( !p.isValid() )
     return Value::errorVALUE();
 
-  Cell * cell = p.cell();
-  if (cell)
-    return cell->value();
+  Cell cell = p.cell();
+  if ( !cell.isNull() )
+    return cell.value();
   return Value::errorVALUE();
 }
 

@@ -32,6 +32,7 @@
 #include <kpushbutton.h>
 
 #include <Cell.h>
+#include "CellStorage.h"
 #include <DataManipulators.h>
 #include <Doc.h>
 #include <Sheet.h>
@@ -50,10 +51,10 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
 {
   // Limit the range
   int column = m_targetRect.left();
-  Cell* lastCell = m_pView->activeSheet()->getLastCellColumn( column );
-  if( lastCell )
-    if( m_targetRect.bottom() > lastCell->row() )
-      m_targetRect.setBottom( lastCell->row() );
+  Cell lastCell = m_pView->activeSheet()->cellStorage()->lastInColumn( column );
+  if ( !lastCell.isNull() )
+    if( m_targetRect.bottom() > lastCell.row() )
+      m_targetRect.setBottom( lastCell.row() );
 
   if ( m_mode == Clipboard )
   {
@@ -105,15 +106,15 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
     setWindowTitle( i18n( "Text to Columns" ) );
     m_dialog->m_tabWidget->setTabEnabled(0, false);
     m_fileArray.clear();
-    Cell  * cell;
+    Cell cell;
     Sheet * sheet = m_pView->activeSheet();
     int col = m_targetRect.left();
     for (int i = m_targetRect.top(); i <= m_targetRect.bottom(); ++i)
     {
-      cell = sheet->cellAt( col, i );
-      if ( !cell->isEmpty() && !cell->isDefault() )
+      cell = Cell( sheet, col, i );
+      if ( !cell.isEmpty() && !cell.isDefault() )
       {
-        m_fileArray.append( cell->displayText().toUtf8() /* FIXME */ );
+        m_fileArray.append( cell.displayText().toUtf8() /* FIXME */ );
       }
       m_fileArray.append( '\n' );
     }

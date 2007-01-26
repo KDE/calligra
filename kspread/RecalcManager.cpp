@@ -52,7 +52,7 @@ public:
    * \li depth(A2) = 1
    * \li depth(A3) = 2
    */
-  QMap<int, Cell*> depths;
+  QMap<int, Cell> depths;
   const Map* map;
   bool busy;
 };
@@ -107,28 +107,28 @@ void RecalcManager::recalc()
 {
     kDebug(36002) << "Recalculating " << d->depths.count() << " cell(s).." << endl;
     ElapsedTime et( "Recalculating cells", ElapsedTime::PrintOnlyTime );
-    foreach (Cell* cell, d->depths)
+    foreach (Cell cell, d->depths)
     {
-        if ( !cell->isFormula() )
+        if ( !cell.isFormula() )
             continue;
         // only recalculate, if no circular dependency occurred
-        if ( cell->value() == Value::errorCIRCLE() )
+        if ( cell.value() == Value::errorCIRCLE() )
             continue;
         // Formula object not yet created?
-        if ( cell->formula() == 0 )
+        if ( !cell.formula().isValid() )
         {
             // because of a parse error?
-            if ( cell->value() == Value::errorPARSE() )
+            if ( cell.value() == Value::errorPARSE() )
                 continue;
             // We were probably at a "isLoading() = true" state,
             // when we originally parsed. Try again.
-            if ( !cell->makeFormula() )
+            if ( !cell.makeFormula() )
                 continue; // there was a parse error
         }
 
         // evaluate the formula and set the result
-        Value result = cell->formula()->eval();
-        cell->setValue( result, false );
+        Value result = cell.formula().eval();
+        cell.setValue( result, false );
     }
 //     dump();
     d->depths.clear();
@@ -136,11 +136,11 @@ void RecalcManager::recalc()
 
 void RecalcManager::dump() const
 {
-    QMap<int, Cell*>::ConstIterator end(d->depths.constEnd());
-    for ( QMap<int, Cell*>::ConstIterator it(d->depths.constBegin()); it != end; ++it )
+    QMap<int, Cell>::ConstIterator end(d->depths.constEnd());
+    for ( QMap<int, Cell>::ConstIterator it(d->depths.constBegin()); it != end; ++it )
     {
-        Cell* cell = it.value();
-        QString cellName = cell->name();
+        Cell cell = it.value();
+        QString cellName = cell.name();
         while ( cellName.count() < 4 ) cellName.prepend( ' ' );
         kDebug(36002) << "depth( " << cellName << " ) = " << it.key() << endl;
     }

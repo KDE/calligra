@@ -50,6 +50,7 @@
 #include <QPolygon>
 #include <QRegExp>
 
+#include "CellStorage.h"
 #include "Canvas.h"
 #include "Condition.h"
 #include "Damages.h"
@@ -91,133 +92,134 @@
 
 using namespace KSpread;
 
-Cell::Cell( Sheet * _sheet, int _column, int _row )
-    : d(new Private)
+Cell::Cell()
+    : d( new Private )
 {
-    d->row = _row;
-    d->column = _column;
-    d->sheet = _sheet;
-
-    clearAllErrors();
+    d->sheet = 0;
+    d->column = 0;
+    d->row = 0;
 }
 
-Style Cell::style( int col, int row ) const
+Cell::Cell( const Sheet* sheet, int col, int row )
+    : d( new Private )
 {
-    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
-    if ( col == 0 )
-        col = this->column();
-    if ( row == 0 )
-        row = this->row();
-    return d->sheet->style( col, row );
+    Q_ASSERT( sheet != 0 );
+    Q_ASSERT( 1 <= col && col <= KS_colMax );
+    Q_ASSERT( 1 <= row && row <= KS_rowMax );
+    d->sheet = const_cast<Sheet*>( sheet );
+    d->column = col;
+    d->row = row;
 }
 
-void Cell::setStyle( const Style& style, int col, int row ) const
+Cell::Cell( const Sheet* sheet, const QPoint& pos )
+    : d( new Private )
 {
-    if ( style.isEmpty() )
-        return;
-    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
-    if ( col == 0 )
-        col = this->column();
-    if ( row == 0 )
-        row = this->row();
-    d->sheet->setStyle( Region(QPoint(col, row)), style );
+    Q_ASSERT( sheet != 0 );
+    Q_ASSERT( 1 <= pos.x() && pos.x() <= KS_colMax );
+    Q_ASSERT( 1 <= pos.y() && pos.y() <= KS_rowMax );
+    d->sheet = const_cast<Sheet*>( sheet );
+    d->column = pos.x();
+    d->row = pos.y();
 }
 
-QString Cell::comment( int col, int row ) const
+Cell::Cell( const Cell& other )
+    : d( other.d )
 {
-    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
-    if ( col == 0 )
-        col = this->column();
-    if ( row == 0 )
-        row = this->row();
-    return d->sheet->comment( col, row );
 }
 
-void Cell::setComment( const QString& comment, int col, int row ) const
+Cell::~Cell()
 {
-    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
-    if ( col == 0 )
-        col = this->column();
-    if ( row == 0 )
-        row = this->row();
-    d->sheet->setComment( Region(QPoint(col, row)), comment );
-}
-
-Conditions Cell::conditions() const
-{
-    Q_ASSERT( !isDefault() );
-    return d->sheet->conditions( d->column, d->row );
-}
-
-void Cell::setConditions( Conditions conditions ) const
-{
-    Q_ASSERT( !isDefault() );
-    d->sheet->setConditions( Region(cellPosition()), conditions );
-}
-
-Validity Cell::validity() const
-{
-    Q_ASSERT( !isDefault() );
-    return d->sheet->validity( d->column, d->row );
-}
-
-void Cell::setValidity( Validity validity ) const
-{
-    Q_ASSERT( !isDefault() );
-    d->sheet->setValidity( Region(cellPosition()), validity );
+//     if ( d->nextCell )
+//         d->nextCell.setPreviousCell( d->previousCell );
+//     if ( d->previousCell )
+//         d->previousCell->setNextCell( d->nextCell );
 }
 
 // Return the sheet that this cell belongs to.
-Sheet * Cell::sheet() const
+Sheet* Cell::sheet() const
 {
+    Q_ASSERT( !isNull() );
     return d->sheet;
 }
 
 // Return the sheet that this cell belongs to.
 Doc* Cell::doc() const
 {
-    return d->sheet->doc();
+    return sheet()->doc();
+}
+
+KLocale* Cell::locale() const
+{
+    return doc()->locale();
 }
 
 // Return true if this is the default cell.
 bool Cell::isDefault() const
 {
-  return ( d->column == 0 );
+    // check each stored attribute
+    if ( value() != Value() )
+        return false;
+    if ( formula() != Formula() )
+        return false;
+    if ( link() != QString() )
+        return false;
+    if ( doesMergeCells() == true )
+        return false;
+    // FIXME Stefan: Check for style, comment, validity, etc. after iteration reversal.
+    return true;
 }
 
-// Return the row number of this cell.
-int Cell::row() const
+bool Cell::isEmpty() const
 {
-  // Make sure this isn't called for the default cell.  This assert
-  // can save you (could have saved me!) the hassle of some very
-  // obscure bugs.
-  Q_ASSERT( !isDefault() );
-  if ( isDefault() )
-  {
-    kWarning(36001) << "Error: Calling Cell::row() for default cell" << endl;
-    return 0;
-  }
-
-  return d->row;
+    // empty = no value or formula
+    if ( value() != Value() )
+        return false;
+    if ( formula() != Formula() )
+        return false;
+    return true;
 }
 
+bool Cell::isNull() const
+{
+    return ( !d || d->sheet == 0 );
+}
 
 // Return the column number of this cell.
 //
 int Cell::column() const
 {
-  // Make sure this isn't called for the default cell.  This assert
-  // can save you (could have saved me!) the hassle of some very
-  // obscure bugs.
-  Q_ASSERT( !isDefault() );
-  if ( isDefault() )
-  {
-    kWarning(36001) << "Error: Calling Cell::column() for default cell" << endl;
-    return 0;
-  }
-  return d->column;
+    // Make sure this isn't called for the null cell.  This assert
+    // can save you (could have saved me!) the hassle of some very
+    // obscure bugs.
+    Q_ASSERT( !isNull() );
+    Q_ASSERT( 1 <= d->column ); //&& d->column <= KS_colMax );
+    return d->column;
 }
 
+// Return the row number of this cell.
+int Cell::row() const
+{
+    // Make sure this isn't called for the null cell.  This assert
+    // can save you (could have saved me!) the hassle of some very
+    // obscure bugs.
+    Q_ASSERT( !isNull() );
+    Q_ASSERT( 1 <= d->row ); //&& d->row <= KS_rowMax );
+    return d->row;
+}
+
+void Cell::setColumn( int col )
+{
+    Q_ASSERT( !isNull() );
+    Q_ASSERT( 1 <= col && col <= KS_colMax );
+    d->column = col;
+}
+
+void Cell::setRow( int row )
+{
+    Q_ASSERT( !isNull() );
+    Q_ASSERT( 1 <= row && row <= KS_rowMax );
+    d->row = row;
+}
 
 // Return the name of this cell, i.e. the string that the user would
 // use to reference it.  Example: A1, BZ16
@@ -227,14 +229,13 @@ QString Cell::name() const
     return name( d->column, d->row );
 }
 
-
 // Return the name of any cell given by (col, row).
 //
+// static
 QString Cell::name( int col, int row )
 {
     return columnName( col ) + QString::number( row );
 }
-
 
 // Return the name of this cell, including the sheet name.
 // Example: sheet1!A5
@@ -244,38 +245,34 @@ QString Cell::fullName() const
     return fullName( sheet(), d->column, d->row );
 }
 
-
 // Return the full name of any cell given a sheet and (col, row).
 //
+// static
 QString Cell::fullName( const Sheet* s, int col, int row )
 {
-  return s->sheetName() + '!' + name( col, row );
+    return s->sheetName() + '!' + name( col, row );
 }
-
 
 // Return the symbolic name of the column of this cell.  Examples: A, BB.
 //
 QString Cell::columnName() const
 {
-  return columnName( d->column );
-}
-
-KLocale* Cell::locale() const
-{
-  return doc()->locale();
+    return columnName( d->column );
 }
 
 // Return the symbolic name of any column.
 //
+// static
 QString Cell::columnName( uint column )
 {
+    if ( column > KS_colMax )
+        return QString("@@@");
+
     QString   str;
     unsigned  digits = 1;
     unsigned  offset = 0;
 
     column--;
-
-    if( column > 4058115285U ) return  QString("@@@");
 
     for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
         offset += limit;
@@ -286,12 +283,56 @@ QString Cell::columnName( uint column )
     return str;
 }
 
+Style Cell::style() const
+{
+    return sheet()->style( d->column, d->row );
+}
+
+void Cell::setStyle( const Style& style ) const
+{
+    if ( style.isEmpty() )
+        return;
+    sheet()->setStyle( Region(cellPosition()), style );
+}
+
+QString Cell::comment() const
+{
+    return sheet()->comment( d->column, d->row );
+}
+
+void Cell::setComment( const QString& comment ) const
+{
+    sheet()->setComment( Region(cellPosition()), comment );
+}
+
+Conditions Cell::conditions() const
+{
+    return sheet()->conditions( d->column, d->row );
+}
+
+void Cell::setConditions( Conditions conditions ) const
+{
+    sheet()->setConditions( Region(cellPosition()), conditions );
+}
+
+Validity Cell::validity() const
+{
+    return sheet()->validity( d->column, d->row );
+}
+
+void Cell::setValidity( Validity validity ) const
+{
+    sheet()->setValidity( Region(cellPosition()), validity );
+}
+
+
+
 
 // Return true if this cell is a formula.
 //
 bool Cell::isFormula() const
 {
-    return d->inputText[0] == '=';
+    return !formula().expression().isEmpty();
 }
 
 
@@ -300,7 +341,30 @@ bool Cell::isFormula() const
 //
 QString Cell::inputText() const
 {
-    return d->inputText;
+    const Formula formula = this->formula();
+    if ( !formula.expression().isEmpty() )
+        return formula.expression();
+    return doc()->converter()->asString( value() ).asString();
+}
+
+void Cell::setInputText( const QString& string )
+{
+    if ( !string.isEmpty() && string[0] == '=' )
+    {
+        // set the formula
+        Formula formula( sheet(), *this );
+        formula.setExpression( string );
+        setFormula( formula );
+        // remove an existing value
+        sheet()->setValue( d->column, d->row, Value() );
+    }
+    else
+    {
+        // remove an existing formula
+        setFormula( Formula() );
+        // set the value
+        sheet()->setValue( d->column, d->row, Value( string ) );
+    }
 }
 
 
@@ -310,24 +374,29 @@ QString Cell::inputText() const
 //
 QString Cell::displayText() const
 {
-    if ( isDefault() )
+    if ( isNull() )
         return QString();
 
     QString string;
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
-    if ( isFormula() && d->sheet->getShowFormula()
-           && !( d->sheet->isProtected() && style().hideFormula() ) || isEmpty() )
-        string = d->inputText;
+    if ( isFormula() && sheet()->getShowFormula()
+           && !( sheet()->isProtected() && style().hideFormula() ) || isEmpty() )
+        string = inputText();
     else
         string = doc()->formatter()->formatText(this, formatType());
 
     return string;
 }
 
-const Formula* Cell::formula() const
+Formula Cell::formula() const
 {
-  return d->formula;
+    return sheet()->formula( d->column, d->row );
+}
+
+void Cell::setFormula( const Formula& formula )
+{
+    sheet()->setFormula( column(), row(), formula );
 }
 
 
@@ -335,7 +404,7 @@ const Formula* Cell::formula() const
 //
 const Value Cell::value() const
 {
-  return d->value;
+    return sheet()->value( d->column, d->row );
 }
 
 
@@ -357,10 +426,10 @@ void Cell::setValue( const Value& value, bool triggerRecalc )
   //even though the value has not.  For example, if this cell was previously empty (and its value is
   //therefore empty) and a new dependency upon an empty cell has been added.  The new value would still
   //be empty, but the dependencies need to be updated (via the call to valueChanged() below).
-  if ( ( d->value == value ) && ( !isFormula() ) )
+  if ( ( this->value() == value ) && ( !isFormula() ) )
     return;
 
-  d->value = value;
+    sheet()->setValue( d->column, d->row, value );
 
     // Value of the cell has changed - trigger necessary actions
     valueChanged( triggerRecalc );
@@ -370,12 +439,12 @@ void Cell::setCellValue (const Value &value, Format::Type fmtType, const QString
 {
     if ( !txt.isNull() )
     {
-        d->inputText = txt;
+        setInputText( txt );
         if ( isFormula() )
             makeFormula();
     }
     else if ( !isFormula() )
-        d->inputText = doc()->converter()->asString( value ).asString();
+        setInputText( doc()->converter()->asString( value ).asString() );
     if ( fmtType != Format::None )
     {
         Style style;
@@ -390,118 +459,80 @@ void Cell::setCellValue (const Value &value, Format::Type fmtType, const QString
 
 Cell* Cell::previousCell() const
 {
-    return d->previousCell;
+    return 0;//d->previousCell;
 }
 
 Cell* Cell::nextCell() const
 {
-    return d->nextCell;
+    return 0;//d->nextCell;
 }
 
 void Cell::setPreviousCell( Cell* cell )
 {
-    d->previousCell = cell;
+//     d->previousCell = cell;
 }
 
 void Cell::setNextCell( Cell* cell )
 {
-    d->nextCell = cell;
+//     d->nextCell = cell;
 }
 
-void Cell::copyFormat( const Cell* cell )
+void Cell::copyFormat( const Cell& cell )
 {
-    Q_ASSERT( !isDefault() ); // trouble ahead...
-    Q_ASSERT( cell );
-    Q_ASSERT( !cell->isDefault() );
-    d->value.setFormat(cell->d->value.format());
-    const Style style = cell->style();
+    Q_ASSERT( !isNull() ); // trouble ahead...
+    Q_ASSERT( !cell.isNull() );
+    Value value = this->value();
+    value.setFormat( cell.value().format() );
+    sheet()->setValue( d->column, d->row, value );
+    const Style style = cell.style();
     if ( !style.isDefault() )
         setStyle( style );
-    const Conditions conditions = cell->conditions();
+    const Conditions conditions = cell.conditions();
     if ( !conditions.isEmpty() )
         setConditions( conditions );
 }
 
-void Cell::copyAll( Cell *cell )
+void Cell::copyAll( const Cell& cell )
 {
-    Q_ASSERT( !isDefault() ); // trouble ahead...
-    Q_ASSERT( cell );
-    Q_ASSERT( !cell->isDefault() );
+    Q_ASSERT( !isNull() ); // trouble ahead...
+    Q_ASSERT( !cell.isNull() );
     copyFormat( cell );
     copyContent( cell );
-    const QString comment = cell->comment();
+    const QString comment = cell.comment();
     if ( !comment.isEmpty() )
         setComment( comment );
-    const Validity validity = cell->validity();
+    const Validity validity = cell.validity();
     if ( !validity.isEmpty() )
         setValidity( validity );
 }
 
-void Cell::copyContent( const Cell* cell )
+void Cell::copyContent( const Cell& cell )
 {
-    Q_ASSERT( !isDefault() ); // trouble ahead...
-    Q_ASSERT( cell );
-    if (cell->isFormula() && cell->column() > 0 && cell->row() > 0)
+    Q_ASSERT( !isNull() ); // trouble ahead...
+    Q_ASSERT( !cell.isNull() );
+    if (cell.isFormula() && cell.column() > 0 && cell.row() > 0)
     {
       // change all the references, e.g. from A1 to A3 if copying
       // from e.g. B2 to B4
-      QString d = cell->encodeFormula();
-      setCellText( cell->decodeFormula( d ) );
+      QString d = cell.encodeFormula();
+      setCellText( cell.decodeFormula( d ) );
     }
     else
-      setCellText( cell->inputText() );
+      setCellText( cell.inputText() );
 }
 
 
 // Merge a number of cells, i.e. make this cell obscure a number of
 // other cells.  If _x and _y == 0, then the merging is removed.
-
 void Cell::mergeCells( int _col, int _row, int _x, int _y )
 {
-    // Start by unmerging the cells that we merge right now
-    const int right = _col + d->extra()->mergedXCells;
-    const int bottom = _row + d->extra()->mergedYCells;
-    for ( int x = _col; x <= right; ++x ) {
-        for ( int y = _row; y <= bottom; ++y ) {
-            if ( x != _col || y != _row )
-                d->sheet->cellAt( x, y )->unmerge( this );
-        }
-    }
-
-    // If no merging, then remove all traces, and return.
-    if ( _x == 0 && _y == 0 ) {
-        if (d->hasExtra()) {
-            d->extra()->mergedWidth  = 0.0;
-            d->extra()->mergedHeight = 0.0;
-            d->extra()->mergedXCells = 0;
-            d->extra()->mergedYCells = 0;
-        }
-        return;
-    }
-
-    // At this point, we know that we will merge some cells.
-    d->extra()->mergedXCells = _x;
-    d->extra()->mergedYCells = _y;
-
-    // Merge the cells
-    for ( int x = _col; x <= _col + _x; ++x )
-        for ( int y = _row; y <= _row + _y; ++y )
-            if ( x != _col || y != _row )
-                d->sheet->nonDefaultCell( x, y )->merge( this );
-
-    // calculate mergedDimension
-    d->extra()->mergedWidth = 0.0;
-    d->extra()->mergedHeight = 0.0;
-    for ( int x = _col; x <= _col + _x; ++x )
-        d->extra()->mergedWidth += d->sheet->columnFormat( x )->width();
-    for ( int y = _row; y <= _row + _y; ++y )
-        d->extra()->mergedHeight += d->sheet->rowFormat( y )->height();
+    sheet()->mergeCells( _col, _row, _x, _y );
 }
 
 void Cell::move( int col, int row )
 {
     // For the old position (the new is handled in valueChanged() at the end):
-    doc()->addDamage( new CellDamage( this, CellDamage::Appearance | CellDamage::Value ) );
+    doc()->addDamage( new CellDamage( *this, CellDamage::Appearance | CellDamage::Value ) );
 
     // Unmerge cells
     mergeCells( d->column, d->row, 0, 0 );
@@ -519,7 +550,7 @@ bool Cell::needsPrinting() const
     if ( isDefault() )
         return false;
 
-    if ( !d->inputText.trimmed().isEmpty() )
+    if ( !inputText().trimmed().isEmpty() )
         return true;
 
     const Style style = this->style();
@@ -556,49 +587,18 @@ bool Cell::needsPrinting() const
     return false;
 }
 
-bool Cell::isEmpty() const
-{
-    return isDefault() || d->inputText.isEmpty();
-}
-
 
 // Return true if this cell is part of a merged cell, but not the
 // master cell.
 
 bool Cell::isPartOfMerged() const
 {
-    if ( isDefault() )
-        return false;
-    if ( !d->hasExtra() )
-        return false;
-    if ( !d->extra()->masterCell )
-        return false;
-    // just to be sure...
-    Q_ASSERT( column() <= d->extra()->masterCell->column() + d->extra()->masterCell->mergedXCells() );
-    Q_ASSERT( row() <= d->extra()->masterCell->row() + d->extra()->masterCell->mergedYCells() );
-    return true;
+    return sheet()->isPartOfMerged( d->column, d->row );
 }
 
-Cell* Cell::masterCell() const
+Cell Cell::masterCell() const
 {
-    return d->hasExtra() ? d->extra()->masterCell : 0;
-}
-
-void Cell::merge( Cell* masterCell )
-{
-    Q_ASSERT( masterCell != this );
-    d->extra()->masterCell = masterCell;
-    d->sheet->setRegionPaintDirty( Region(cellPosition()) );
-}
-
-void Cell::unmerge( Cell* masterCell )
-{
-    if ( d->hasExtra() )
-    {
-        Q_ASSERT( d->extra()->masterCell == masterCell );
-        d->extra()->masterCell = 0;
-        d->sheet->setRegionPaintDirty( Region(cellPosition()) );
-    }
+    return sheet()->masterCell( d->column, d->row );
 }
 
 QString Cell::encodeFormula( bool _era, int _col, int _row ) const
@@ -610,85 +610,87 @@ QString Cell::encodeFormula( bool _era, int _col, int _row ) const
 
     QString erg = "";
 
-    if(d->inputText.isEmpty())
-        return d->inputText;
+    if ( inputText().isEmpty() )
+        return QString();
+
+    const QString inputText = this->inputText();
 
     bool fix1 = false;
     bool fix2 = false;
     bool onNumber = false;
     unsigned int pos = 0;
-    const unsigned int length = d->inputText.length();
+    const unsigned int length = inputText.length();
 
     // All this can surely be made 10 times faster, but I just "ported" it to QString
     // without any attempt to optimize things -- this is really brittle (Werner)
     while ( pos < length )
     {
-        if ( d->inputText[pos] == '"' )
+        if ( inputText[pos] == '"' )
         {
-            erg += d->inputText[pos++];
-            while ( pos < length && d->inputText[pos] != '"' )  // till the end of the world^H^H^H "string"
+            erg += inputText[pos++];
+            while ( pos < length && inputText[pos] != '"' )  // till the end of the world^H^H^H "string"
             {
-                erg += d->inputText[pos++];
+                erg += inputText[pos++];
                 // Allow escaped double quotes (\")
-                if ( pos < length && d->inputText[pos] == '\\' && d->inputText[pos+1] == '"' )
+                if ( pos < length && inputText[pos] == '\\' && inputText[pos+1] == '"' )
                 {
-                    erg += d->inputText[pos++];
-                    erg += d->inputText[pos++];
+                    erg += inputText[pos++];
+                    erg += inputText[pos++];
                 }
             }
             if ( pos < length )  // also copy the trailing double quote
-                erg += d->inputText[pos++];
+                erg += inputText[pos++];
 
             onNumber = false;
         }
-        else if ( d->inputText[pos].isDigit() )
+        else if ( inputText[pos].isDigit() )
         {
-          erg += d->inputText[pos++];
+          erg += inputText[pos++];
           fix1 = fix2 = false;
           onNumber = true;
         }
-        else if ( d->inputText[pos] != '$' && !d->inputText[pos].isLetter() )
+        else if ( inputText[pos] != '$' && !inputText[pos].isLetter() )
         {
-            erg += d->inputText[pos++];
+            erg += inputText[pos++];
             fix1 = fix2 = false;
             onNumber = false;
         }
         else
         {
             QString tmp = "";
-            if ( d->inputText[pos] == '$' )
+            if ( inputText[pos] == '$' )
             {
                 tmp = '$';
                 pos++;
                 fix1 = true;
             }
-            if ( d->inputText[pos].isLetter() )
+            if ( inputText[pos].isLetter() )
             {
                 QString buffer;
                 unsigned int pos2 = 0;
-                while ( pos < length && d->inputText[pos].isLetter() )
+                while ( pos < length && inputText[pos].isLetter() )
                 {
-                    tmp += d->inputText[pos];
-                    buffer[pos2++] = d->inputText[pos++];
+                    tmp += inputText[pos];
+                    buffer[pos2++] = inputText[pos++];
                 }
-                if ( d->inputText[pos] == '$' )
+                if ( inputText[pos] == '$' )
                 {
                     tmp += '$';
                     pos++;
                     fix2 = true;
                 }
-                if ( d->inputText[pos].isDigit() )
+                if ( inputText[pos].isDigit() )
                 {
                     const unsigned int oldPos = pos;
-                    while ( pos < length && d->inputText[pos].isDigit() ) ++pos;
+                    while ( pos < length && inputText[pos].isDigit() ) ++pos;
                     int row = 0;
                     if ( pos != oldPos )
-                        row = d->inputText.mid(oldPos, pos-oldPos).toInt();
+                        row = inputText.mid(oldPos, pos-oldPos).toInt();
                     // Is it a sheet name || is it a function name like DEC2HEX
                     /* or if we're parsing a number, this could just be the
                        exponential part of it  (1.23E4) */
-                    if ( ( d->inputText[pos] == '!' ) ||
-                         d->inputText[pos].isLetter() ||
+                    if ( ( inputText[pos] == '!' ) ||
+                         inputText[pos].isLetter() ||
                          onNumber )
                     {
                         erg += tmp;
@@ -838,7 +840,7 @@ void Cell::valueChanged( bool triggerRecalc )
     CellDamage::Changes changes = CellDamage::Appearance;
     if ( triggerRecalc )
         changes |= CellDamage::Value;
-    doc()->addDamage( new CellDamage( this, changes ) );
+    doc()->addDamage( new CellDamage( *this, changes ) );
 }
 
 
@@ -852,13 +854,19 @@ bool Cell::makeFormula()
 {
 //   kDebug(36002) << k_funcinfo << endl;
 
-    d->formula = new KSpread::Formula( sheet(), this );
-    d->formula->setExpression( d->inputText );
+    // sanity check
+    if ( !isFormula() )
+        return false;
 
-    if ( !d->formula->isValid() )
+    // parse the formula and check for errors
+    if ( !formula().isValid() )
     {
-        // Did a syntax error occur ?
-        clearFormula();
+        // Update the dependencies.
+        if ( !sheet()->isLoading() )
+        {
+            kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
+            doc()->addDamage( new CellDamage( *this, CellDamage::Formula ) );
+        }
 
         if (doc()->showMessageError())
         {
@@ -871,24 +879,9 @@ bool Cell::makeFormula()
     }
 
     // Update the dependencies and recalculate.
-    doc()->addDamage( new CellDamage( this, CellDamage::Formula | CellDamage::Value ) );
+    doc()->addDamage( new CellDamage( *this, CellDamage::Formula | CellDamage::Value ) );
 
     return true;
-}
-
-void Cell::clearFormula()
-{
-    // Update the dependencies, if this was a formula.
-    if (d->formula)
-    {
-        if ( !d->sheet->isLoading() )
-        {
-            kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
-            doc()->addDamage( new CellDamage( this, CellDamage::Formula ) );
-        }
-        delete d->formula;
-        d->formula = 0;
-    }
 }
 
 int Cell::defineAlignX()
@@ -916,18 +909,22 @@ double Cell::width( int _col ) const
 {
     if ( _col < 0 )
         _col = d->column;
-    if ( d->hasExtra() && d->extra()->mergedXCells != 0 )
-        return d->extra()->mergedWidth;
-    return d->sheet->columnFormat( _col )->width();
+    const int rightCol = d->column + mergedXCells();
+    double width = 0.0;
+    for ( int col = d->column; col <= rightCol; ++col )
+        width += sheet()->columnFormat( col )->width();
+    return width;
 }
 
 double Cell::height( int _row ) const
 {
     if ( _row < 0 )
         _row = d->row;
-    if ( d->hasExtra() && d->extra()->mergedYCells != 0 )
-        return d->extra()->mergedHeight;
-    return d->sheet->rowFormat( _row )->height();
+    const int bottomRow = _row + mergedYCells();
+    double height = 0.0;
+    for ( int row = _row; row <= bottomRow; ++row )
+        height += sheet()->rowFormat( row )->height();
+    return height;
 }
 
 ///////////////////////////////////////////
@@ -1008,107 +1005,130 @@ void Cell::decPrecision()
     setStyle( style );
 }
 
-void Cell::setCellText( const QString& _text, bool asText )
+// parses the text
+void Cell::setCellText( const QString& text )
 {
 //   kDebug() << k_funcinfo << endl;
 
-    // Clears the formula and updates the dependencies, if a formula exist.
-    clearFormula();
+    // Enqueues a dependency update, if the old value is a formula.
+    if ( isFormula() && !sheet()->isLoading() )
+    {
+        kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
+        doc()->addDamage( new CellDamage( *this, CellDamage::Formula ) );
+    }
 
     // empty string?
-    if ( _text.isEmpty() )
+    if ( text.isEmpty() )
     {
-        d->inputText.clear();
         setValue( Value::empty() );
+        setFormula( Formula() );
         return;
     }
 
-    // as text?
-    if ( asText )
+    // a formula?
+    if ( text[0] == '=' )
     {
-        d->inputText    = _text;
-        setValue( Value( _text ) );
+        Formula formula( sheet(), *this );
+        formula.setExpression( text );
+        setFormula( formula );
+
+        // parse the formula and check for errors
+        if ( !formula.isValid() )
+        {
+            if (doc()->showMessageError())
+            {
+                QString tmp(i18n("Error in cell %1\n\n"));
+                tmp = tmp.arg( fullName() );
+                KMessageBox::error( 0, tmp );
+            }
+            setValue( Value::errorPARSE() );
+            return;
+        }
+
+        // Update the dependencies and recalculate.
+        doc()->addDamage( new CellDamage( *this, CellDamage::Formula | CellDamage::Value ) );
+
         return;
     }
 
-    const QString oldText = d->inputText;
-    setCellTextHelper( _text );
-    Validity validity = this->validity();
-    if ( !d->sheet->isLoading() && !validity.testValidity( this ) )
-    {
-        //reapply old value if action == stop
-        setCellTextHelper( oldText );
-    }
-}
+    // keep the old formula and value for the case, that validation fails
+    const Formula oldFormula = formula();
+    const Value oldValue = value();
 
-void Cell::setCellTextHelper( const QString& _text )
-{
-    d->inputText = _text;
+    // here, the new value is not a formula anymore; clear an existing one
+    setFormula( Formula() );
 
-    // A real formula "=A1+A2*3" was entered.
-    if ( !d->inputText.isEmpty() && d->inputText[0] == '=' )
-        makeFormula();
-    // Some numeric value or a string.
-    else
-    {
-        // Find out what data type it is
-        parseInputText();
-    }
-}
-
-void Cell::parseInputText()
-{
-//   kDebug() << k_funcinfo << endl;
-    // Goal of this method: determine the value of the cell
     clearAllErrors();
 
-    d->value = Value::empty();
-
-    // Parses the text and sets its value appropriately (calls Cell::setValue).
-    doc()->parser()->parse( d->inputText, this );
-
-    // Parsing as time acts like an autoformat: we even change d->inputText
-    // [h]:mm:ss -> might get set by ValueParser
-    if ( isTime() && ( formatType() != Format::Time7 ) )
-        d->inputText = locale()->formatTime( value().asDateTime( doc() ).time(), true );
-
-    // convert first letter to uppercase ?
-    if ( sheet()->getFirstLetterUpper() && value().isString() && !d->inputText.isEmpty() )
+    Value value;
+    if ( style().formatType() == Format::Text )
+        value = Value( QString( text ) );
+    else
     {
-        QString str = value().asString();
-        setValue( Value( str[0].toUpper() + str.right( str.length()-1 ) ) );
+        // Parses the text and return the appropriate value.
+        value = doc()->parser()->parse( text );
+
+#if 0
+        // Parsing as time acts like an autoformat: we even change the input text
+        // [h]:mm:ss -> might get set by ValueParser
+        if ( isTime() && ( formatType() != Format::Time7 ) )
+            setInputText( locale()->formatTime( value().asDateTime( doc() ).time(), true ) );
+#endif
+
+        // convert first letter to uppercase ?
+        if ( sheet()->getFirstLetterUpper() && value.isString() && !text.isEmpty() )
+        {
+            QString str = value.asString();
+            value = Value( str[0].toUpper() + str.right( str.length()-1 ) );
+        }
+    }
+    // set the new value
+    setFormula( Formula() );
+    setValue( value );
+
+    // validation
+    if ( !sheet()->isLoading() )
+    {
+        Validity validity = this->validity();
+        if ( !validity.testValidity( this ) )
+        {
+            kDebug() << "Validation failed" << endl;
+            //reapply old value if action == stop
+            setFormula( oldFormula );
+            setValue( oldValue );
+        }
     }
 }
 
 void Cell::setLink( const QString& link )
 {
-    d->extra()->link = link;
+    sheet()->setLink( d->column, d->row, link );
 
-    if( !link.isEmpty() && d->inputText.isEmpty() )
+    if ( !link.isEmpty() && inputText().isEmpty() )
         setCellText( link );
 }
 
 QString Cell::link() const
 {
-    return d->hasExtra() ? d->extra()->link : QString();
+    return sheet()->link( d->column, d->row );
 }
 
-Format::Type Cell::formatType( int col, int row ) const
+Format::Type Cell::formatType() const
 {
-    return style( col, row ).formatType();
+    return style().formatType();
 }
 
-bool Cell::isDate( int col, int row ) const
+bool Cell::isDate() const
 {
-    Format::Type ft = formatType( col, row );
+    Format::Type ft = formatType();
 
     return (Format::isDate (ft) || ((ft == Format::Generic) &&
             (value().format() == Value::fmt_Date)));
 }
 
-bool Cell::isTime( int col, int row ) const
+bool Cell::isTime() const
 {
-    Format::Type ft = formatType( col, row );
+    Format::Type ft = formatType();
 
     return (Format::isTime (ft) || ((ft == Format::Generic) &&
             (value().format() == Value::fmt_Time)));
@@ -1117,12 +1137,12 @@ bool Cell::isTime( int col, int row ) const
 
 int Cell::mergedXCells() const
 {
-    return d->hasExtra() ? d->extra()->mergedXCells : 0;
+    return sheet()->mergedXCells( d->column, d->row );
 }
 
 int Cell::mergedYCells() const
 {
-    return d->hasExtra() ? d->extra()->mergedYCells : 0;
+    return sheet()->mergedYCells( d->column, d->row );
 }
 
 
@@ -1131,14 +1151,14 @@ bool Cell::updateChart(bool refresh)
     // Update a chart for example if it depends on this cell.
     if ( d->row != 0 && d->column != 0 )
     {
-        foreach ( CellBinding* binding, d->sheet->cellBindings() )
+        foreach ( CellBinding* binding, sheet()->cellBindings() )
         {
             if ( binding->contains( d->column, d->row ) )
             {
                 if (!refresh)
                     return true;
 
-                binding->cellChanged( this );
+                binding->cellChanged( *this );
             }
         }
         return true;
@@ -1301,7 +1321,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
 
 void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column )
 {
-    const QString comment = this->comment( column, row );
+    const QString comment = this->comment();
     if ( !comment.isEmpty() )
     {
         //<office:annotation draw:style-name="gr1" draw:text-style-name="P1" svg:width="2.899cm" svg:height="2.691cm" svg:x="2.858cm" svg:y="0.001cm" draw:caption-point-x="-2.858cm" draw:caption-point-y="-0.001cm">
@@ -1318,14 +1338,14 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column )
 
 QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles, int col, int row )
 {
-    Conditions conditions = d->sheet->conditions( col, row );
+    Conditions conditions = this->conditions();
     if ( !conditions.isEmpty() )
     {
         // this has to be an automatic style
         currentCellStyle = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
         conditions.saveOasisConditions( currentCellStyle );
     }
-    return style( col, row ).saveOasis( currentCellStyle, mainStyles );
+    return style().saveOasis( currentCellStyle, mainStyles );
 }
 
 
@@ -1340,13 +1360,13 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
 #if 0
     //add font style
     QFont font;
-    Value const value( cell->value() );
-    if ( !cell->isDefault() )
+    Value const value( cell.value() );
+    if ( !cell.isDefault() )
     {
-      font = cell->format()->textFont( i, row );
+      font = cell.format()->textFont( i, row );
       m_styles.addFont( font );
 
-      if ( cell->format()->hasProperty( Style::SComment ) )
+      if ( cell.format()->hasProperty( Style::SComment ) )
         hasComment = true;
     }
 #endif
@@ -1361,25 +1381,25 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
       xmlwriter.addAttribute( "table:style-name", mainStyles.styles()[currentCellStyle] );
 
     // group empty cells with the same style
-    const QString comment = this->comment( column, row );
+    const QString comment = this->comment();
     if ( isEmpty() && comment.isEmpty() && !isPartOfMerged() && !doesMergeCells() )
     {
       bool refCellIsDefault = isDefault();
       int j = column + 1;
-      Cell *nextCell = d->sheet->getNextCellRight( column, row );
-      while ( nextCell )
+      Cell nextCell = sheet()->cellStorage()->nextInRow( column, row );
+      while ( !nextCell.isNull() )
       {
         // if
         //   the next cell is not the adjacent one
         // or
         //   the next cell is not empty
-        if ( nextCell->column() != j || !nextCell->isEmpty() )
+        if ( nextCell.column() != j || !nextCell.isEmpty() )
         {
           if ( refCellIsDefault )
           {
             // if the origin cell was a default cell,
             // we count the default cells
-            repeated = nextCell->column() - j + 1;
+            repeated = nextCell.column() - j + 1;
           }
           // otherwise we just stop here to process the adjacent
           // cell in the next iteration of the outer loop
@@ -1388,17 +1408,17 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         }
 
         KoGenStyle nextCellStyle; // the type is determined in saveOasisCellStyle
-        nextCell->saveOasisCellStyle( nextCellStyle, mainStyles, nextCell->column(), nextCell->row() );
+        nextCell.saveOasisCellStyle( nextCellStyle, mainStyles, nextCell.column(), nextCell.row() );
 
-        if ( nextCell->isPartOfMerged() || nextCell->doesMergeCells() ||
-             !nextCell->comment().isEmpty() ||
+        if ( nextCell.isPartOfMerged() || nextCell.doesMergeCells() ||
+             !nextCell.comment().isEmpty() ||
              !(nextCellStyle == currentCellStyle) )
         {
           break;
         }
         ++repeated;
         // get the next cell and set the index to the adjacent cell
-        nextCell = d->sheet->getNextCellRight( j++, row );
+        nextCell = sheet()->cellStorage()->nextInRow( j++, row );
       }
       kDebug(36003) << "Cell::saveOasis: empty cell in column " << column << " "
                     << "repeated " << repeated << " time(s)" << endl;
@@ -1407,7 +1427,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
     }
 
-    Validity validity = d->sheet->validity( column, row );
+    Validity validity = sheet()->validity( column, row );
     if ( !validity.isEmpty() )
     {
         GenValidationStyle styleVal(&validity);
@@ -1583,8 +1603,8 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         oasisFormula = Oasis::decodeFormula( oasisFormula, locale() );
         setCellText( oasisFormula );
     }
-    else if ( !d->inputText.isEmpty() && d->inputText.at(0) == '=' ) //prepend ' to the text to avoid = to be painted
-        d->inputText.prepend('\'');
+    else if ( !inputText().isEmpty() && inputText().at(0) == '=' ) //prepend ' to the text to avoid = to be painted
+        setInputText( inputText().prepend('\'') );
 
     //
     // validation
@@ -1623,7 +1643,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             if( ok )
                 setCellValue( Value(value) );
 
-            if ( !isFormula && d->inputText.isEmpty())
+            if ( !isFormula && inputText().isEmpty())
             {
                 QString str = locale()->formatNumber( value, 15 );
                 setCellText( str );
@@ -1659,7 +1679,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
                 value.setFormat (Value::fmt_Percent);
                 setCellValue( Value(value) );
 
-                if ( !isFormula && d->inputText.isEmpty())
+                if ( !isFormula && inputText().isEmpty())
                 {
                     QString str = locale()->formatNumber( percent, 15 );
                     setCellText( str );
@@ -1746,7 +1766,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             if ( ok )
             {
                 // Value kval( timeToNum( hours, minutes, seconds ) );
-                // cell->setValue( kval );
+                // cell.setValue( kval );
                 setCellValue( Value( QTime( hours % 24, minutes, seconds ), doc() ) );
                 Style style;
                 style.setFormatType( Format::Time );
@@ -1819,7 +1839,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
       loadOasisObjects( frame, oasisContext );
 
     if (isFormula)   // formulas must be recalculated
-      doc()->addDamage( new CellDamage( this, CellDamage::Formula |
+      doc()->addDamage( new CellDamage( *this, CellDamage::Formula |
                                                                  CellDamage::Value ) );
 
     return true;
@@ -1918,21 +1938,21 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
               continue;
 
             QRectF geometry = obj->geometry();
-            geometry.setLeft( geometry.left() + d->sheet->columnPos( d->column ) );
-            geometry.setTop( geometry.top() + d->sheet->rowPos( d->row ) );
+            geometry.setLeft( geometry.left() + sheet()->columnPos( d->column ) );
+            geometry.setTop( geometry.top() + sheet()->rowPos( d->row ) );
 
             QString str = e.attributeNS( KoXmlNS::table, "end-x", QString::null );
             if ( !str.isNull() )
             {
               uint end_x = (uint) KoUnit::parseValue( str );
-              geometry.setRight( d->sheet->columnPos( point.column() ) + end_x );
+              geometry.setRight( sheet()->columnPos( point.column() ) + end_x );
             }
 
             str = e.attributeNS( KoXmlNS::table, "end-y", QString::null );
             if ( !str.isNull() )
             {
               uint end_y = (uint) KoUnit::parseValue( str );
-              geometry.setBottom( d->sheet->rowPos( point.row() ) + end_y );
+              geometry.setBottom( sheet()->rowPos( point.row() ) + end_y );
             }
 
             obj->setGeometry( geometry );
@@ -1982,6 +2002,8 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             return false;
         setStyle( style );
 
+        int mergedXCells = 0;
+        int mergedYCells = 0;
         if ( formatElement.hasAttribute( "colspan" ) )
         {
             int i = formatElement.attribute("colspan").toInt( &ok );
@@ -1992,8 +2014,8 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
                 kDebug(36001) << "Value out of range Cell::colspan=" << i << endl;
                 return false;
             }
-            if (i || d->hasExtra())
-              d->extra()->mergedXCells = i;
+            if ( i )
+              mergedXCells = i;
         }
 
         if ( formatElement.hasAttribute( "rowspan" ) )
@@ -2006,12 +2028,12 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
                 kDebug(36001) << "Value out of range Cell::rowspan=" << i << endl;
                 return false;
             }
-            if (i || d->hasExtra())
-              d->extra()->mergedYCells = i;
+            if ( i )
+              mergedYCells = i;
         }
 
-        if ( d->hasExtra() && ( d->extra()->mergedXCells != 0 || d->extra()->mergedYCells != 0 ) )
-            mergeCells( d->column, d->row, d->extra()->mergedXCells, d->extra()->mergedYCells );
+        if ( mergedXCells != 0 || mergedYCells != 0 )
+            mergeCells( d->column, d->row, mergedXCells, mergedYCells );
     }
 
     //
@@ -2086,7 +2108,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         // and the source cell contains a formula
         // note that we mustn't use setCellValue after this, or else we lose
         // all the formulas ...
-          d->inputText = result.text();
+          setInputText( result.text() );
       else
           //otherwise copy everything
           loadCellData(text, op);
@@ -2175,18 +2197,18 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
 
 bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
 {
-  //TODO: use converter()->asString() to generate d->inputText
+  //TODO: use converter()->asString() to generate inputText()
 
   QString t = text.text();
   t = t.trimmed();
 
-  d->sheet->setRegionPaintDirty( Region( cellPosition() ) );
+  sheet()->setRegionPaintDirty( Region( cellPosition() ) );
 
   // A formula like =A1+A2 ?
   if( (!t.isEmpty()) && (t[0] == '=') )
   {
     t = decodeFormula( t, d->column, d->row );
-    setCellText (pasteOperation( t, d->inputText, op ));
+    setCellText (pasteOperation( t, inputText(), op ));
 
     clearAllErrors();
 
@@ -2235,9 +2257,9 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
       }
 
       if( !qml_link.isEmpty() )
-        d->extra()->link = qml_link;
-      d->inputText = qml_text;
-      setValue( Value(d->inputText) );
+        setLink( qml_link );
+      setInputText( qml_text );
+      setValue( Value( qml_text ) );
   }
   else
   {
@@ -2248,7 +2270,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
     {
         dataType = text.attribute( "dataType" );
     }
-    else // old docs: do the ugly solution of calling parseInputText to parse the text
+    else // old docs: do the ugly solution of parsing the text
     {
       // ...except for date/time
       if (isDate() && ( t.contains('/') == 2 ))
@@ -2257,16 +2279,14 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         dataType = "Time";
       else
       {
-        d->inputText = pasteOperation( t, d->inputText, op );
-        parseInputText();
-        //kDebug(36001) << "Cell::load called parseInputText, got dataType=" << dataType << "  t=" << t << endl;
+        setCellText( pasteOperation( t, inputText(), op ) );
         newStyleLoading = false;
       }
     }
 
     if ( newStyleLoading )
     {
-      d->value = Value::empty();
+      sheet()->setValue( d->column, d->row, Value() );
       clearAllErrors();
 
       // boolean ?
@@ -2301,8 +2321,8 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
             t = locale->formatNumber( value().asInteger() * 100 );
           else
             t = locale->formatNumber( value().asFloat() * 100.0, precision );
-          d->inputText = pasteOperation( t, d->inputText, op );
-          d->inputText += '%';
+          setInputText( pasteOperation( t, inputText(), op ) );
+          setInputText( inputText() + '%' );
         }
         else
         {
@@ -2310,7 +2330,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
             t = locale->formatLong(value().asInteger());
           else
             t = locale->formatNumber(value().asFloat(), precision);
-          d->inputText = pasteOperation( t, d->inputText, op );
+          setInputText( pasteOperation( t, inputText(), op ) );
         }
       }
 
@@ -2324,11 +2344,10 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         int day = t.right(t.length()-pos1-1).toInt();
         setValue( Value( QDate(year,month,day), doc() ) );
         if ( value().asDate( doc() ).isValid() ) // Should always be the case for new docs
-          d->inputText = locale()->formatDate( value().asDate( doc() ), true );
+          setInputText( locale()->formatDate( value().asDate( doc() ), true ) );
         else // This happens with old docs, when format is set wrongly to date
         {
-          d->inputText = pasteOperation( t, d->inputText, op );
-          parseInputText();
+          setCellText( pasteOperation( t, inputText(), op ) );
         }
       }
 
@@ -2346,25 +2365,24 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         second = t.right(t.length()-pos1-1).toInt();
         setValue( Value( QTime(hours,minutes,second), doc() ) );
         if ( value().asTime( doc() ).isValid() ) // Should always be the case for new docs
-          d->inputText = locale()->formatTime( value().asTime( doc() ), true );
+          setInputText( locale()->formatTime( value().asTime( doc() ), true ) );
         else  // This happens with old docs, when format is set wrongly to time
         {
-          d->inputText = pasteOperation( t, d->inputText, op );
-          parseInputText();
+          setCellText( pasteOperation( t, inputText(), op ) );
         }
       }
 
       else
       {
         // Set the cell's text
-        d->inputText = pasteOperation( t, d->inputText, op );
-        setValue( Value(d->inputText) );
+        setInputText( pasteOperation( t, inputText(), op ) );
+        setValue( Value(inputText()) );
       }
     }
   }
 
-  if ( !d->sheet->isLoading() )
-    setCellText( d->inputText );
+  if ( !sheet()->isLoading() )
+    setCellText( inputText() );
 
   return true;
 }
@@ -2466,7 +2484,7 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
             Q_ASSERT( 0 );
         }
 
-        d->sheet->setRegionPaintDirty( Region( cellPosition() ) );
+        sheet()->setRegionPaintDirty( Region( cellPosition() ) );
         clearAllErrors();
 
         return tmp_op;
@@ -2493,14 +2511,14 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
         }
 
         tmp_op = decodeFormula( tmp_op, d->column, d->row );
-        d->sheet->setRegionPaintDirty( Region( cellPosition() ) );
+        sheet()->setRegionPaintDirty( Region( cellPosition() ) );
         clearAllErrors();
 
         return tmp_op;
     }
 
     tmp = decodeFormula( new_text, d->column, d->row );
-    d->sheet->setRegionPaintDirty( Region( cellPosition() ) );
+    sheet()->setRegionPaintDirty( Region( cellPosition() ) );
     clearAllErrors();
 
     return tmp;
@@ -2508,58 +2526,34 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
 
 void Cell::sheetDies()
 {
-    // Avoid unobscuring the cells in the destructor.
-    if (d->hasExtra())
-    {
-      d->extra()->mergedXCells = 0;
-      d->extra()->mergedYCells = 0;
-    }
-
     //d->nextCell = 0;
     //d->previousCell = 0;
 }
 
-Cell::~Cell()
+Cell& Cell::operator=( const Cell& other )
 {
-    if ( d->nextCell )
-        d->nextCell->setPreviousCell( d->previousCell );
-    if ( d->previousCell )
-        d->previousCell->setNextCell( d->nextCell );
-
-    if ( !isDefault() )
-        setValidity( Validity() );
-    // FIXME Stefan: Clear conditions?
-
-    // Unmerge cells
-    if ( !isDefault() )
-        mergeCells( d->column, d->row, 0, 0 );
-
-    d->value = Value::empty();
-
-    if (!isDefault())
-      valueChanged ();  //our value has been changed (is now null), but only if we aren't default
-
-    delete d;
+    d = other.d;
+    return *this;
 }
 
 bool Cell::operator==( const Cell& other ) const
 {
-  if ( d->inputText != other.d->inputText )
-    return false;
-  if ( d->value != other.d->value )
-    return false;
-  if ( d->hasExtra() )
-  {
-    if ( !other.d->hasExtra() )
-      return false;
-    if ( d->extra()->link != other.d->extra()->link )
-      return false;
-    if ( d->extra()->mergedXCells != other.d->extra()->mergedXCells )
-      return false;
-    if ( d->extra()->mergedYCells != other.d->extra()->mergedYCells )
-      return false;
-  }
-  return true;
+    if ( value() != other.value() )
+        return false;
+    if ( formula() != other.formula() )
+        return false;
+    if ( link() != other.link() )
+        return false;
+    if ( mergedXCells() != other.mergedXCells() )
+        return false;
+    if ( mergedYCells() != other.mergedYCells() )
+        return false;
+    return true;
+}
+
+bool Cell::operator!() const
+{
+    return ( !d || d->sheet == 0 ); // isNull()
 }
 
 QRect Cell::cellRect() const
@@ -2571,13 +2565,13 @@ QRect Cell::cellRect() const
 
 QPoint Cell::cellPosition() const
 {
-    Q_ASSERT( !isDefault() );
-    return QPoint( d->column, d->row );
+    Q_ASSERT( !isNull() );
+    return QPoint( column(), row() );
 }
 
 QLinkedList<Conditional> Cell::conditionList() const
 {
-    Conditions conditions = d->sheet->conditions( d->column, d->row );
+    Conditions conditions = sheet()->conditions( d->column, d->row );
     return conditions.conditionList();
 }
 
@@ -2592,14 +2586,15 @@ void Cell::clearAllErrors()
 {
     if ( value().isError() )
     {
-        d->value = Value::empty();
+        kDebug() << "\tClearing all errors..." << endl;
+        sheet()->setValue( d->column, d->row, Value() );
         valueChanged();
     }
 }
 
 bool Cell::doesMergeCells() const
 {
-    return d->hasExtra() && ( d->extra()->mergedXCells != 0 || d->extra()->mergedYCells != 0 );
+    return sheet()->doesMergeCells( d->column, d->row );
 }
 
 

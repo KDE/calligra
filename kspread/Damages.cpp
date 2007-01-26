@@ -49,12 +49,12 @@ public:
   Region region;
 };
 
-CellDamage::CellDamage( KSpread::Cell* cell, Changes changes )
+CellDamage::CellDamage( const KSpread::Cell& cell, Changes changes )
   : d( new Private )
 {
-  d->sheet = cell->sheet();
-  if ( Region::isValid( QPoint( cell->column(), cell->row() ) ) )
-    d->region = Region( cell->column(), cell->row(), d->sheet );
+  d->sheet = cell.sheet();
+  if ( Region::isValid( QPoint( cell.column(), cell.row() ) ) )
+    d->region = Region( cell.column(), cell.row(), d->sheet );
   d->changes = changes;
 }
 

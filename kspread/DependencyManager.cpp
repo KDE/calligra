@@ -25,14 +25,24 @@
 #include <KoRTree.h>
 
 #include "Cell.h"
-#include "DependencyManager.h"
+#include "CellStorage.h"
 #include "Formula.h"
 #include "Map.h"
+#include "PointStorage.h"
 #include "Region.h"
 #include "Sheet.h"
 #include "Value.h"
 
+#include "DependencyManager.h"
+
 using namespace KSpread;
+
+namespace KSpread
+{
+class FormulaStorage : public PointStorage<Formula> {};
+class LinkStorage : public PointStorage<QString> {};
+class ValueStorage : public PointStorage<Value> {};
+}
 
 class DependencyManager::Private
 {
@@ -51,7 +61,7 @@ public:
      * \see computeDependencies
      * \see addDependencies
      */
-    void generateDependencies(const Cell* cell);
+    void generateDependencies(const Cell& cell);
 
     /**
      * Computes the reference depth.
@@ -68,7 +78,7 @@ public:
      * \li depth(A2) = 1
      * \li depth(A3) = 2
      */
-    int computeDepth(Cell* cell) const;
+    int computeDepth(Cell cell) const;
 
     /**
      * Used in the recalculation events for changed regions.
@@ -84,24 +94,24 @@ public:
      * Returns the region, that consumes the value of \p cell.
      * \return region consuming \p cell 's value
      */
-    Region consumingRegion(const Cell* cell) const;
+    Region consumingRegion(const Cell& cell) const;
 
     void areaModified (const QString &name);
 
     /**
      * Updates structures: \p cell depends on cells in \p region and vice versa.
      */
-    void addDependencies(const Cell* cell, const Region& region);
+    void addDependencies(const Cell& cell, const Region& region);
 
     /**
      * Removes all dependencies of \p cell .
      */
-    void removeDependencies(const Cell* cell);
+    void removeDependencies(const Cell& cell);
 
     /**
      * \return a list of cells that \p cell depends on
      */
-    Region computeDependencies(const Cell* cell) const;
+    Region computeDependencies(const Cell& cell) const;
 
     /**
      * Removes the circular dependency flag from \p region and all their dependencies.
@@ -111,7 +121,7 @@ public:
     /**
      * Helper function for DependencyManager::cellsToCalculate().
      */
-    void cellsToCalculate( const Region& region, QSet<Cell*>& cells ) const;
+    void cellsToCalculate( const Region& region, QSet<Cell>& cells ) const;
 
     /**
      * For debugging/testing purposes.
@@ -141,7 +151,7 @@ public:
      * \li depth(A2) = 1
      * \li depth(A3) = 2
      */
-    QHash<Cell*, int> depths;
+    QHash<Cell, int> depths;
 };
 
 // This is currently not called - but it's really convenient to call it from
@@ -180,9 +190,9 @@ void DependencyManager::Private::dump() const
         }
     }
 
-    foreach ( Cell* cell, depths.keys() )
+    foreach ( Cell cell, depths.keys() )
     {
-        QString cellName = cell->name();
+        QString cellName = cell.name();
         while ( cellName.count() < 4 ) cellName.prepend( ' ' );
         kDebug(36002) << "depth( " << cellName << " ) = " << depths[cell] << endl;
     }
@@ -218,13 +228,13 @@ void DependencyManager::regionChanged(const Region& region)
         {
             for (int row = range.top(); row <= range.bottom(); ++row)
             {
-                Cell* cell = sheet->cellAt(col, row);
+                Cell cell( sheet,col, row);
 
                 // remove it from the reference depth list
                 d->depths.remove( cell );
 
                 // empty or default cell or cell without a formula? remove it
-                if ( cell->isEmpty() || !cell->isFormula() )
+                if ( cell.isEmpty() || !cell.isFormula() )
                 {
                     d->removeDependencies(cell);
                     continue;
@@ -253,49 +263,51 @@ void DependencyManager::updateAllDependencies(const Map* map)
 
     foreach (const Sheet* sheet, map->sheetList())
     {
-        for (Cell* cell = sheet->firstCell(); cell; cell = cell->nextCell())
+        for ( int c = 0; c < sheet->formulaStorage()->count(); ++c )
         {
+            Cell cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
+
             // empty or default cell or cell without a formula? remove it
-            if ( cell->isEmpty() || !cell->isFormula() )
+            if ( sheet->formulaStorage()->data( c ) == Formula() )
             {
-                d->removeDependencies(cell);
+                d->removeDependencies( cell );
                 continue;
             }
 
-            d->generateDependencies(cell);
-            if (!d->depths.contains(cell))
+            d->generateDependencies( cell );
+            if (!d->depths.contains( cell ))
             {
-                int depth = d->computeDepth(cell);
-                d->depths.insert(cell, depth);
+                int depth = d->computeDepth( cell );
+                d->depths.insert( cell , depth);
             }
         }
     }
 }
 
-KSpread::Region DependencyManager::consumingRegion(const Cell* cell) const
+KSpread::Region DependencyManager::consumingRegion(const Cell& cell) const
 {
     return d->consumingRegion(cell);
 }
 
-QMap<int, Cell*> DependencyManager::cellsToCalculate( const Region& region ) const
+QMap<int, Cell> DependencyManager::cellsToCalculate( const Region& region ) const
 {
     if (region.isEmpty())
-        return QMap<int, Cell*>();
+        return QMap<int, Cell>();
 
-    QSet<Cell*> cells;
+    QSet<Cell> cells;
     d->cellsToCalculate( region, cells );
-    QMap<int, Cell*> depths;
-    foreach ( Cell* cell, cells )
+    QMap<int, Cell> depths;
+    foreach ( Cell cell, cells )
         depths.insertMulti( d->depths[cell], cell );
     return depths;
 }
 
-QMap<int, Cell*> DependencyManager::cellsToCalculate( Sheet* sheet ) const
+QMap<int, Cell> DependencyManager::cellsToCalculate( Sheet* sheet ) const
 {
-    QMap<int, Cell*> depths;
-    foreach ( Cell* cell, d->depths.keys() )
+    QMap<int, Cell> depths;
+    foreach ( Cell cell, d->depths.keys() )
     {
-        if ( sheet && cell->sheet() != sheet )
+        if ( sheet && cell.sheet() != sheet )
             continue;
         depths.insertMulti( d->depths[cell], cell );
     }
@@ -321,38 +333,33 @@ void DependencyManager::regionMoved( const Region& movedRegion, const Region::Po
             for ( int i = 0; i < dependentLocations.count(); ++i )
             {
                 const Region::Point location = dependentLocations[i];
-                Cell* const cell = location.sheet()->cellAt( location.pos().x(), location.pos().y() );
+                const Cell cell( location.sheet(), location.pos() );
                 updateFormula( cell, (*it), locationOffset );
             }
         }
     }
 }
 
-void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLocation, const Region::Point& offset )
+void DependencyManager::updateFormula( const Cell& cell, const Region::Element* oldLocation, const Region::Point& offset )
 {
     // Not a formula -> no dependencies
-    if (!cell->isFormula())
+    if (!cell.isFormula())
         return;
 
-    const Formula* formula = cell->formula();
-    if ( !formula )
-    {
-        kDebug(36002) << cell->name() << " marked as formula, but formula is 0. Formula string: " << cell->inputText() << endl;
-        return;
-    }
+    const Formula formula = cell.formula();
 
     // Broken formula -> meaningless dependencies
-    if ( !formula->isValid() )
+    if ( !formula.isValid() )
         return;
 
-    Tokens tokens = formula->tokens();
+    Tokens tokens = formula.tokens();
 
     //return empty list if the tokens aren't valid
     if (!tokens.valid())
         return;
 
     QString expression = "=";
-    Sheet* sheet = cell->sheet();
+    Sheet* sheet = cell.sheet();
     Region region;
     for( int i = 0; i < tokens.count(); i++ )
     {
@@ -383,7 +390,7 @@ void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLoc
             expression.append( token.text() );
         }
     }
-    cell->setCellText( expression );
+    Cell( cell ).setCellText( expression );
 }
 
 void DependencyManager::Private::reset()
@@ -392,9 +399,9 @@ void DependencyManager::Private::reset()
     consumers.clear();
 }
 
-KSpread::Region DependencyManager::Private::consumingRegion(const Cell* cell) const
+KSpread::Region DependencyManager::Private::consumingRegion(const Cell& cell) const
 {
-    Sheet* const sheet = cell->sheet();
+    Sheet* const sheet = cell.sheet();
 
     if (!consumers.contains(sheet))
     {
@@ -403,7 +410,7 @@ KSpread::Region DependencyManager::Private::consumingRegion(const Cell* cell) co
     }
 
     const KoRTree<Region::Point>* tree = consumers.value(sheet);
-    const QList<Region::Point> providers = tree->contains(cell->cellPosition());
+    const QList<Region::Point> providers = tree->contains(cell.cellPosition());
 
     Region region;
     foreach (const Region::Point& point, providers)
@@ -423,20 +430,20 @@ void DependencyManager::Private::areaModified (const QString &name)
     QMap<Region::Point, bool>::iterator it;
     for (it = areaDeps[name].begin(); it != areaDeps[name].end(); ++it)
     {
-        Cell *cell = it.key().sheet()->cellAt(it.key().pos());
+        Cell cell( it.key().sheet(), it.key().pos() );
         // this forces the cell to regenerate everything - new range dependencies
         // and so on
-        cell->setValue (cell->value ());
+        cell.setValue (cell.value ());
     }
 }
 
-void DependencyManager::Private::addDependencies(const Cell* cell, const Region& region)
+void DependencyManager::Private::addDependencies(const Cell& cell, const Region& region)
 {
     // NOTE Stefan: Also store cells without dependencies to avoid an
     //              iteration over all cells in a map/sheet on recalculation.
 
-    Region::Point point(QPoint(cell->column(), cell->row()));
-    point.setSheet(cell->sheet());
+    Region::Point point(QPoint(cell.column(), cell.row()));
+    point.setSheet(cell.sheet());
 
     // empty region will be created automatically, if necessary
     providers[point].add(region);
@@ -452,10 +459,10 @@ void DependencyManager::Private::addDependencies(const Cell* cell, const Region&
     }
 }
 
-void DependencyManager::Private::removeDependencies(const Cell* cell)
+void DependencyManager::Private::removeDependencies(const Cell& cell)
 {
-    Region::Point point(QPoint(cell->column(), cell->row()));
-    point.setSheet(cell->sheet());
+    Region::Point point(QPoint(cell.column(), cell.row()));
+    point.setSheet(cell.sheet());
 
     // look if the cell has any providers
     if (!providers.contains (point))
@@ -483,7 +490,7 @@ void DependencyManager::Private::removeDependencies(const Cell* cell)
     }
 
     // clear the circular dependency flags
-//   if ( cell->value() == Value::errorCIRCLE() )
+//   if ( cell.value() == Value::errorCIRCLE() )
     {
         removeCircularDependencyFlags(providers.value(point));
     }
@@ -492,12 +499,12 @@ void DependencyManager::Private::removeDependencies(const Cell* cell)
     providers.remove(point);
 }
 
-void DependencyManager::Private::generateDependencies(const Cell* cell)
+void DependencyManager::Private::generateDependencies(const Cell& cell)
 {
     //new dependencies only need to be generated if the cell contains a formula
-    if (cell->isDefault())
+    if (cell.isNull())
         return;
-    if (!cell->isFormula())
+    if (!cell.isFormula())
         return;
 
     //get rid of old dependencies first
@@ -513,7 +520,7 @@ void DependencyManager::Private::generateDependencies(const Cell* cell)
 
 void DependencyManager::Private::generateDepths(const Region& region)
 {
-    static QSet<Cell*> processedCells;
+    static QSet<Cell> processedCells;
 
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
@@ -526,20 +533,20 @@ void DependencyManager::Private::generateDepths(const Region& region)
         {
             for (int row = range.top(); row <= bottom; ++row)
             {
-                Cell* const cell = sheet->cellAt(col, row);
-                if ( cell->isDefault() )
-                    continue;
+                Cell cell( sheet,col, row);
+//                 if ( cell.isDefault() )
+//                     continue;
 
                 //prevent infinite recursion (circular dependencies)
-                if ( processedCells.contains( cell ) || cell->value() == Value::errorCIRCLE() )
+                if ( processedCells.contains( cell ) || cell.value() == Value::errorCIRCLE() )
                 {
-                    kDebug(36002) << "Circular dependency at " << cell->fullName() << endl;
+                    kDebug(36002) << "Circular dependency at " << cell.fullName() << endl;
                     // don't set anything if the cell already has all these things set
                     // this prevents endless loop for inter-sheet curcular dependencies,
                     // where the usual mechanisms fail doe to having multiple dependency
                     // managers ...
-                    if ( cell->value() != Value::errorCIRCLE() )
-                        cell->setValue( Value::errorCIRCLE() );
+                    if ( cell.value() != Value::errorCIRCLE() )
+                        cell.setValue( Value::errorCIRCLE() );
                     depths.insert(cell, 0);
                     // clear the compute reference depth flag
                     processedCells.remove( cell );
@@ -555,7 +562,7 @@ void DependencyManager::Private::generateDepths(const Region& region)
                 // Recursion. We need the whole dependency tree of the changed region.
                 // An infinite loop is prevented by the check above.
                 Region dependentRegion = consumingRegion(cell);
-                if (!dependentRegion.contains(QPoint(col, row), cell->sheet()))
+                if (!dependentRegion.contains(QPoint(col, row), cell.sheet()))
                     generateDepths(dependentRegion);
 
                 // clear the compute reference depth flag
@@ -565,21 +572,21 @@ void DependencyManager::Private::generateDepths(const Region& region)
     }
 }
 
-int DependencyManager::Private::computeDepth(Cell* cell) const
+int DependencyManager::Private::computeDepth(Cell cell) const
 {
     // a set of cell, which depth is currently calculated
-    static QSet<Cell*> processedCells;
+    static QSet<Cell> processedCells;
 
     //prevent infinite recursion (circular dependencies)
-    if ( processedCells.contains( cell ) || cell->value() == Value::errorCIRCLE() )
+    if ( processedCells.contains( cell ) || cell.value() == Value::errorCIRCLE() )
     {
-        kDebug(36002) << "Circular dependency at " << cell->fullName() << endl;
+        kDebug(36002) << "Circular dependency at " << cell.fullName() << endl;
         // don't set anything if the cell already has all these things set
         // this prevents endless loop for inter-sheet curcular dependencies,
         // where the usual mechanisms fail doe to having multiple dependency
         // managers ...
-        if ( cell->value() != Value::errorCIRCLE() )
-            cell->setValue( Value::errorCIRCLE() );
+        if ( cell.value() != Value::errorCIRCLE() )
+            cell.setValue( Value::errorCIRCLE() );
         //clear the compute reference depth flag
         processedCells.remove( cell );
         return 0;
@@ -590,8 +597,8 @@ int DependencyManager::Private::computeDepth(Cell* cell) const
 
     int depth = 0;
 
-    Region::Point point(cell->column(), cell->row());
-    point.setSheet(cell->sheet());
+    Region::Point point(cell.column(), cell.row());
+    point.setSheet(cell.sheet());
     const Region region = providers.value(point);
 
     Region::ConstIterator end(region.constEnd());
@@ -615,7 +622,7 @@ int DependencyManager::Private::computeDepth(Cell* cell) const
                     continue;
                 }
 
-                Cell* referencedCell = sheet->cellAt(col, row);
+                Cell referencedCell = Cell( sheet,col, row);
                 if (depths.contains(referencedCell))
                 {
                     // the referenced cell depth was already computed
@@ -636,31 +643,25 @@ int DependencyManager::Private::computeDepth(Cell* cell) const
     return depth;
 }
 
-KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell) const
+KSpread::Region DependencyManager::Private::computeDependencies(const Cell& cell) const
 {
     // Not a formula -> no dependencies
-    if (!cell->isFormula())
+    if (!cell.isFormula())
         return Region();
 
-    const Formula* f = cell->formula();
-    if (f==0)
-    {
-        kDebug(36002) << cell->name() << " marked as formula, but formula is 0. Formula string: " << cell->inputText() << endl;
-//     Q_ASSERT(cell->formula());
-        return Region();
-    }
+    const Formula formula = cell.formula();
 
     // Broken formula -> meaningless dependencies
-    if ( !f->isValid() )
+    if ( !formula.isValid() )
         return Region();
 
-    Tokens tokens = f->tokens();
+    Tokens tokens = formula.tokens();
 
     //return empty list if the tokens aren't valid
     if (!tokens.valid())
         return Region();
 
-    Sheet* sheet = cell->sheet();
+    Sheet* sheet = cell.sheet();
     Region region;
     for( int i = 0; i < tokens.count(); i++ )
     {
@@ -681,7 +682,7 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
 void DependencyManager::Private::removeCircularDependencyFlags(const Region& region)
 {
     // a set of cells, which circular dependency flag is currently removed
-    static QSet<Cell*> processedCells;
+    static QSet<Cell> processedCells;
 
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
@@ -692,17 +693,17 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
         {
             for (int row = range.top(); row <= range.bottom(); ++row)
             {
-                Cell* cell = sheet->cellAt(col, row);
+                Cell cell( sheet,col, row);
 
                 if ( processedCells.contains( cell ) )
                     continue;
                 processedCells.insert( cell );
 
-                if ( cell->value() == Value::errorCIRCLE() )
-                    cell->setValue( Value::empty() );
+                if ( cell.value() == Value::errorCIRCLE() )
+                    cell.setValue( Value::empty() );
 
                 Region::Point point(col, row);
-                point.setSheet(cell->sheet());
+                point.setSheet(cell.sheet());
                 removeCircularDependencyFlags(providers.value(point));
 
                 processedCells.remove( cell );
@@ -711,7 +712,7 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
     }
 }
 
-void DependencyManager::Private::cellsToCalculate( const Region& region, QSet<Cell*>& cells ) const
+void DependencyManager::Private::cellsToCalculate( const Region& region, QSet<Cell>& cells ) const
 {
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
@@ -722,8 +723,8 @@ void DependencyManager::Private::cellsToCalculate( const Region& region, QSet<Ce
         {
             for (int row = range.top(); row <= range.bottom(); ++row)
             {
-                Cell* cell = sheet->cellAt(col, row);
-                if ( cell->isDefault() )
+                Cell cell( sheet,col, row);
+                if ( !cell.isFormula() )
                     continue;
 
                 // check for already processed cells
@@ -733,9 +734,8 @@ void DependencyManager::Private::cellsToCalculate( const Region& region, QSet<Ce
                 // add it to the list
                 cells.insert( cell );
 
-                // add its dependents to the list
-                const Region dependencies = consumingRegion( cell );
-                cellsToCalculate( dependencies, cells );
+                // add its consumers to the list
+                cellsToCalculate( consumingRegion( cell ), cells );
             }
         }
     }

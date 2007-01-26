@@ -100,25 +100,25 @@ void Solver::optimize()
     return;
 
   const QPoint point = (*region.constBegin())->rect().topLeft();
-  const Cell* formulaCell = sheet->cellAt( point.x(), point.y() );
-  if (!formulaCell->isFormula())
+  const Cell formulaCell = Cell( sheet, point.x(), point.y() );
+  if (!formulaCell.isFormula())
     return;
 
-  kDebug() << formulaCell->inputText() << endl;
+  kDebug() << formulaCell.inputText() << endl;
   s_formula = new Formula( sheet );
   if (d->dialog->minimizeButton->isChecked())
   {
-    s_formula->setExpression( formulaCell->inputText() );
+    s_formula->setExpression( formulaCell.inputText() );
   }
   else if (d->dialog->maximizeButton->isChecked())
   {
     // invert the formula
-    s_formula->setExpression( "=-(" + formulaCell->inputText().mid(1) + ')' );
+    s_formula->setExpression( "=-(" + formulaCell.inputText().mid(1) + ')' );
   }
   else // if (d->dialog->valueButton->isChecked())
   {
     // TODO
-    s_formula->setExpression( "=ABS(" + formulaCell->inputText().mid(1) + '-'
+    s_formula->setExpression( "=ABS(" + formulaCell.inputText().mid(1) + '-'
                                       + d->dialog->value->text() + ')' );
   }
 
@@ -134,7 +134,7 @@ void Solver::optimize()
     {
       for ( int row = range.top(); row <= range.bottom(); ++row )
       {
-        parameters->cells.append( sheet->cellAt( col, row ) );
+        parameters->cells.append( Cell( sheet, col, row ) );
         ++dimension;
       }
     }
@@ -147,9 +147,9 @@ void Solver::optimize()
   /* Initialize starting point */
   int index = 0;
   gsl_vector* x = gsl_vector_alloc( dimension );
-  foreach (Cell* cell, parameters->cells)
+  foreach (Cell cell, parameters->cells)
   {
-    gsl_vector_set( x, index++, cell->value().asFloat() );
+    gsl_vector_set( x, index++, cell.value().asFloat() );
   }
 
   /* Initialize method and iterate */
@@ -214,7 +214,7 @@ double function(const gsl_vector* vector, void *params)
 
   for ( int i = 0; i < parameters->cells.count(); ++i )
   {
-    parameters->cells[i]->setValue( KSpread::Value( gsl_vector_get(vector, i) ) );
+    parameters->cells[i].setValue( KSpread::Value( gsl_vector_get(vector, i) ) );
   }
 
   // TODO check for errors/correct type

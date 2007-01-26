@@ -191,7 +191,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
       case QpFormulaCell:
          lRecFormula = (QpRecFormulaCell*)lRec;
          {
-           Formula lAnswer(*lRecFormula, lTableNames);
+            QuattroPro::Formula lAnswer(*lRecFormula, lTableNames);
 
             char*     lFormula = lAnswer.formula();
 

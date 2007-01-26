@@ -626,7 +626,7 @@ protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
     void initFindReplace();
-    Cell* findNextCell();
+    Cell findNextCell();
 
 private:
     class Private;
@@ -641,7 +641,7 @@ private:
     bool spellSwitchToOtherSheet();
     void spellCleanup();
 
-    Cell* nextFindValidCell( int col, int row );
+    Cell nextFindValidCell( int col, int row );
 
     friend class Private;
 };

@@ -406,7 +406,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
       continue;
     }
 
-    Cell* cell = 0;
+    Cell cell;
 
     kDebug(30518) << " Cell: " << columns << ", " << row << endl;
 
@@ -440,8 +440,8 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
           if ( link[0]=='#' )
               link=link.remove( 0, 1 );
           if ( !cell )
-              cell = table->nonDefaultCell( columns, row );
-          cell->setLink( link );
+              cell = Cell( table, columns, row );
+          cell.setLink( link );
         }
       }
       else
@@ -478,8 +478,8 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
     if ( e.hasAttributeNS( ooNS::table, "style-name" ) )
     {
       if ( !cell )
-        cell = table->nonDefaultCell( columns, row );
-      Style style = cell->style( columns, row );
+        cell = Cell( table, columns, row );
+      Style style = cell.style();
 
       QString psName( "Default" );
       if ( e.hasAttributeNS( ooNS::style, "parent-style-name" ) )
@@ -522,12 +522,12 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
                 int tmpAngle = style.angle();
                 int textHeight = static_cast<int>( cos( tmpAngle * M_PI / 180 )
                                                    * ( fm.ascent() + fm.descent() )
-                                                   + abs ( ( int )(  fm.width( cell->displayText() )
+                                                   + abs ( ( int )(  fm.width( cell.displayText() )
                                                                      * sin( tmpAngle * M_PI / 180 )  ) ) );
                 /*
                   int textWidth = static_cast<int>( abs ( ( int ) ( sin( tmpAngle * M_PI / 180 )
                   * ( fm.ascent() + fm.descent() ) ) )
-                  + fm.width( cell->displayText() )
+                  + fm.width( cell.displayText() )
                   * cos( tmpAngle * M_PI / 180 ) );
                   */
                 kDebug(30518) << "Rotation: height: " << textHeight << endl;
@@ -557,8 +557,8 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
       convertFormula( formula, e.attributeNS( ooNS::table, "formula", QString::null ) );
 
       if ( !cell )
-        cell = table->nonDefaultCell( columns, row );
-      cell->setCellText( formula );
+        cell = Cell( table, columns, row );
+      cell.setCellText( formula );
     }
     if ( e.hasAttributeNS( ooNS::table, "validation-name" ) )
     {
@@ -568,10 +568,10 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
     if ( e.hasAttributeNS( ooNS::table, "value-type" ) )
     {
       if ( !cell )
-        cell = table->nonDefaultCell( columns, row );
+        cell = Cell( table, columns, row );
       Style style;
 
-      cell->setCellText( text );
+      cell.setCellText( text );
 
       QString value = e.attributeNS( ooNS::table, "value", QString::null );
       QString type  = e.attributeNS( ooNS::table, "value-type", QString::null );
@@ -587,7 +587,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
         if ( ok )
         {
           if ( !isFormula )
-            cell->setValue( Value( dv ) );
+            cell.setValue( Value( dv ) );
 
           if ( type == "currency" )
           {
@@ -604,9 +604,9 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
           if ( ok )
           {
             if ( !isFormula )
-              cell->setValue( Value( dv ) );
+              cell.setValue( Value( dv ) );
             //TODO fixme
-			//cell->setFactor( 100 );
+			//cell.setFactor( 100 );
             // TODO: replace with custom...
             style.setFormatType( Format::Percentage );
           }
@@ -618,9 +618,9 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
 
           kDebug(30518) << "Type: boolean" << endl;
           if ( value == "true" )
-            cell->setValue( Value( true ) );
+            cell.setValue( Value( true ) );
           else
-            cell->setValue( Value( false ) );
+            cell.setValue( Value( false ) );
           ok = true;
           style.setFormatType( Format::Custom );
         }
@@ -656,8 +656,8 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
           {
             QDateTime dt( QDate( year, month, day ) );
             //            KSpreadValue kval( dt );
-            // cell->setValue( kval );
-            cell->setValue( Value( QDate( year, month, day ), cell->sheet()->doc() ) );
+            // cell.setValue( kval );
+            cell.setValue( Value( QDate( year, month, day ), cell.sheet()->doc() ) );
             kDebug(30518) << "Set QDate: " << year << " - " << month << " - " << day << endl;
           }
         }
@@ -700,28 +700,28 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
           if ( ok )
           {
             // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
-            // cell->setValue( kval );
-            cell->setValue( Value( QTime( hours % 24, minutes, seconds ), cell->sheet()->doc() ) );
+            // cell.setValue( kval );
+            cell.setValue( Value( QTime( hours % 24, minutes, seconds ), cell.sheet()->doc() ) );
             style.setFormatType( Format::Custom );
           }
         }
 
-      cell->setStyle( style );
+      cell.setStyle( style );
       if ( !ok ) // just in case we couldn't set the value directly
-        cell->setCellText( text );
+        cell.setCellText( text );
     }
     else if ( !text.isEmpty() )
     {
       if ( !cell )
-        cell = table->nonDefaultCell( columns, row );
-      cell->setCellText( text );
+        cell = Cell( table, columns, row );
+      cell.setCellText( text );
     }
 
     if ( spanR > 1 || spanC > 1 )
     {
       if ( !cell )
-        cell = table->nonDefaultCell( columns, row );
-      cell->mergeCells( columns, row, spanC - 1, spanR - 1 );
+        cell = Cell( table, columns, row );
+      cell.mergeCells( columns, row, spanC - 1, spanR - 1 );
     }
 
     cellNode = cellNode.nextSibling();
@@ -731,7 +731,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
       // copy cell from left
       bool ok = false;
       int number = e.attributeNS( ooNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-      Cell* cellDest = 0;
+      Cell cellDest;
 
       // don't repeat more than 10 if it is the last cell and empty
       if ( !ok || cellNode.isNull() )
@@ -744,10 +744,10 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
       {
         ++columns;
 
-        if ( cell )
+        if ( !cell.isNull() )
         {
-          cellDest = table->nonDefaultCell( columns, row );
-          cellDest->copyAll( cell );
+          cellDest = Cell( table, columns, row );
+          cellDest.copyAll( cell );
         }
       }
     }
@@ -759,16 +759,16 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
 }
 
 
-void OpenCalcImport::loadCondition( Cell*cell,const KoXmlElement &property )
+void OpenCalcImport::loadCondition( const Cell& cell, const KoXmlElement &property )
 {
     kDebug(30518)<<"void OpenCalcImport::loadCondition( Cell*cell,const KoXmlElement &property )*******\n";
     loadOasisCondition( cell, property );
 }
 
-void OpenCalcImport::loadOasisCondition(Cell*cell,const KoXmlElement &property )
+void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &property )
 {
     KoXmlElement elementItem( property );
-    StyleManager * manager = cell->sheet()->doc()->styleManager();
+    StyleManager * manager = cell.sheet()->doc()->styleManager();
 
     Q3ValueList<Conditional> cond;
     while ( !elementItem.isNull() )
@@ -800,7 +800,7 @@ void OpenCalcImport::loadOasisCondition(Cell*cell,const KoXmlElement &property )
         elementItem = elementItem.nextSibling().toElement();
     }
     if ( !cond.isEmpty() )
-        cell->setConditionList( cond );
+        Cell( cell ).setConditionList( cond );
 }
 
 void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, Conditional &newCondition )
@@ -923,9 +923,9 @@ bool OpenCalcImport::readRowsAndCells( KoXmlElement & content, Sheet * table )
   int columns = 1;
   int backupRow = 1;
   KoXmlElement * rowStyle = 0;
-  //Cell* cell = 0;
-  //Cell* cellDest = 0;
-  //Cell* defCell = table->defaultCell();
+  //Cell cell;
+  //Cell cellDest;
+  //Cell defCell = table->defaultCell();
   KoXmlNode rowNode = KoXml::namedItemNS( content, ooNS::table, "table-row" );
 
   while ( !rowNode.isNull() )
@@ -975,12 +975,12 @@ bool OpenCalcImport::readRowsAndCells( KoXmlElement & content, Sheet * table )
        *       if so we will probably also need to copy them for repeated col layouts.
       for ( j = 1; j <= columns; ++j )
       {
-        Cell* cell = table->cellAt( j, backupRow );
+        Cell cell( table, j, backupRow );
 
         kDebug(30518) << "Cell: " << cell << "DefCell: " << defCell << endl;
         if ( cell && (cell != defCell) )
         {
-          cellDest = table->nonDefaultCell( j, backupRow + i );
+          cellDest = Cell( table, j, backupRow + i );
           cellDest->copyAll( cell );
         }
       }
@@ -1476,9 +1476,8 @@ bool OpenCalcImport::parseBody( int numOfTables )
     Style * defaultStyle = m_defaultStyles[ "Default" ];
     if ( defaultStyle )
     {
-      Cell* defaultCell = table->defaultCell();
       kDebug(30518) << "Copy default style to default cell" << endl;
-      defaultCell->setStyle( *defaultStyle );
+      table->doc()->styleManager()->defaultStyle()->merge( *defaultStyle );
     }
     table->doc()->setDefaultRowHeight( MM_TO_POINT( 4.3 ) );
     table->doc()->setDefaultColumnWidth( MM_TO_POINT( 22.7 ) );

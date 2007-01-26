@@ -356,13 +356,13 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   else
     oneRow = false;
 
-  Cell* obj = m_sheet->cellAt( left, top );
+  Cell cell = Cell( m_sheet, left, top );
   oneCell = (left == right && top == bottom &&
-             !obj->doesMergeCells());
+             !cell.doesMergeCells());
 
-  isMerged = ((obj->doesMergeCells() &&
-               left + obj->mergedXCells() >= right &&
-               top + obj->mergedYCells() >= bottom));
+  isMerged = ((cell.doesMergeCells() &&
+               left + cell.mergedXCells() >= right &&
+               top + cell.mergedYCells() >= bottom));
 
   // Initialize with the upper left object.
   const Style styleTopLeft = m_sheet->style( left, top );
@@ -392,17 +392,17 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   borders[BorderType_Bottom].color = styleBottomLeft.bottomBorderPen().color();
 
   // Just an assumption
-  obj = m_sheet->cellAt( right, top );
-  if ( obj->isPartOfMerged() )
+  cell = Cell( m_sheet, right, top );
+  if ( cell.isPartOfMerged() )
   {
-    obj = obj->masterCell();
+    cell = cell.masterCell();
 
-    const Style styleMove1 = m_sheet->style( obj->column(), top );
+    const Style styleMove1 = m_sheet->style( cell.column(), top );
     borders[BorderType_Vertical].style = styleMove1.leftBorderPen().style();
     borders[BorderType_Vertical].width = styleMove1.leftBorderPen().width();
     borders[BorderType_Vertical].color = styleMove1.leftBorderPen().color();
 
-    const Style styleMove2 = m_sheet->style( right, obj->row() );
+    const Style styleMove2 = m_sheet->style( right, cell.row() );
     borders[BorderType_Horizontal].style = styleMove2.topBorderPen().style();
     borders[BorderType_Horizontal].width = styleMove2.topBorderPen().width();
     borders[BorderType_Horizontal].color = styleMove2.topBorderPen().color();
@@ -418,7 +418,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
     borders[BorderType_Horizontal].color = styleBottomRight.topBorderPen().color();
   }
 
-  obj = m_sheet->cellAt( left, top );
+  cell = Cell( m_sheet, left, top );
   prefix = styleTopLeft.prefix();
   postfix = styleTopLeft.postfix();
   precision = styleTopLeft.precision();
@@ -453,7 +453,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
 
   indent = styleTopLeft.indentation();
 
-  value = obj->value();
+  value = cell.value();
 
   const RowFormat *rl;
   const ColumnFormat *cl;

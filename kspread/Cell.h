@@ -38,6 +38,7 @@
 #include <QDate>
 #include <QLinkedList>
 #include <QList>
+#include <QSharedDataPointer>
 
 #include <KoXmlReader.h>
 
@@ -87,12 +88,28 @@ class View;
 class KSPREAD_EXPORT Cell
 {
 public:
+    /**
+     * Constructor.
+     * Creates the null cell.
+     */
+    Cell();
 
     /**
      * Constructor.
      * Creates a cell in \p sheet at position \p col , \p row .
      */
-    Cell( Sheet* sheet, int column, int row );
+    Cell( const Sheet* sheet, int column, int row );
+
+    /**
+     * Constructor.
+     * Creates a cell in \p sheet at position \p pos .
+     */
+    Cell( const Sheet* sheet, const QPoint& pos );
+
+    /**
+     * Copy constructor.
+     */
+    Cell( const Cell& other );
 
     /**
      * @see #sheetDies
@@ -110,6 +127,11 @@ public:
     Doc* doc() const;
 
     /**
+     * Returns the locale setting of this cell.
+     */
+    KLocale* locale() const;
+
+    /**
      * Returns true if this is a default cell (with row and column equal to zero).
      * Normally, cell constructed within a sheet can't be a default cell.
      */
@@ -121,6 +143,11 @@ public:
     bool isEmpty() const;
 
     /**
+     * Returns true if this cell is the null cell.
+     */
+    bool isNull() const;
+
+    /**
      * Returns the cell's column. This could be 0 if the cell is the default cell.
      */
     int column() const;
@@ -129,6 +156,16 @@ public:
      * Returns the cell's row. This could be 0 if the cell is the default cell.
      */
     int row() const;
+
+    /**
+     * Set the column index to \p col.
+     */
+    void setColumn( int col );
+
+    /**
+     * Set the row index to \p row.
+     */
+    void setRow( int row );
 
     /**
      * Returns the name of the cell. For example, the cell in first column and
@@ -166,16 +203,6 @@ public:
     static QString columnName( uint column );
 
     /**
-     * Returns the locale setting of this cell.
-     */
-    KLocale* locale() const;
-
-    /**
-     * Returns true if this cell holds a formula.
-     */
-    bool isFormula() const;
-
-    /**
      * Return the text the user entered. This could be a value (e.g. "14.03")
      * or a formula (e.g. "=SUM(A1:A10)")
      */
@@ -187,24 +214,34 @@ public:
     QString displayText() const;
 
     /**
+     * Returns true if this cell holds a formula.
+     */
+    bool isFormula() const;
+
+    /**
      * The cell's formula. Usable to analyze the formula's tokens.
      * \return pointer to the cell's formula object
      */
-    const Formula* formula() const;
+    Formula formula() const;
+
+    /**
+     * Sets \p formula as associated formula of this cell.
+     */
+    void setFormula( const Formula& formula );
 
     /**
      * \return the Style associated with this Cell
      */
-    Style style( int col = 0, int row = 0 ) const;
+    Style style() const;
 
-    void setStyle( const Style& style, int col = 0, int row = 0 ) const;
+    void setStyle( const Style& style ) const;
 
     /**
      * \return the comment associated with this cell
      */
-    QString comment( int col = 0, int row = 0 ) const;
+    QString comment() const;
 
-    void setComment( const QString& comment, int col = 0, int row = 0 ) const;
+    void setComment( const QString& comment ) const;
 
     /**
      * Returns the value that this cell holds. It could be from the user
@@ -244,7 +281,7 @@ public:
      * The high-level method for setting text, when the user inputs it.
      * It will revert back to the old text, if testValidity() returns action==stop.
      */
-    void setCellText( const QString& text, bool asString = false );
+    void setCellText( const QString& text );
 
     /**
      * \return the previous cell in the cell cluster
@@ -345,23 +382,23 @@ public:
      *
      * @see copyAll(Cell *cell)
      */
-    void copyFormat( const Cell* cell );
+    void copyFormat( const Cell& cell );
 
     /**
      * Copies the content from \p cell .
      *
      * @see copyAll(Cell *cell)
      */
-    void copyContent( const Cell* cell );
+    void copyContent( const Cell& cell );
 
     /**
      * Copies the format and the content. It does not copy the row and column indices.
      * Besides that all persistent attributes are copied. setCellText() is called to set the real
      * content.
      *
-     * @see copyFormat( const Cell* cell )
+     * @see copyFormat( const Cell& cell )
      */
-    void copyAll(Cell *cell);
+    void copyAll( const Cell& cell);
 
     /**
      * @param _col the column this cell is assumed to be in.
@@ -446,12 +483,12 @@ public:
      * Note that this is "how the user would like the data to be displayed if possible".
      * If he selects a date format, and the cell contains a string, we won't apply that format.
      */
-    Format::Type formatType( int col = 0, int row = 0 ) const;
+    Format::Type formatType() const;
 
     /** returns true, if cell format is of date type or content is a date */
-    bool isDate( int col = 0, int row = 0 ) const;
+    bool isDate() const;
     /** returns true, if cell format is of time type or content is a time */
-    bool isTime( int col = 0, int row = 0 ) const;
+    bool isTime() const;
 
     /**
     * Refreshing chart
@@ -480,7 +517,7 @@ public:
     /**
      * \return the merging cell (might be null)
      */
-    Cell* masterCell() const;
+    Cell masterCell() const;
 
     /**
      * Merge a number of cells, i.e. force the cell to occupy other
@@ -631,6 +668,11 @@ public:
     //
 
     /**
+     * Assignment.
+     */
+    Cell& operator=( const Cell& other );
+
+    /**
      * Tests for equality of all cell attributes to those in \p other .
      */
     bool operator==( const Cell& other ) const;
@@ -639,6 +681,11 @@ public:
      * Tests for inequality of all cell attributes to those in \p other .
      */
     inline bool operator!=( const Cell& other ) const { return !operator==( other ); }
+
+    /**
+     * Is null.
+     */
+    bool operator!() const;
 
     //
     //END Operators
@@ -649,27 +696,6 @@ public:
     //
 
 protected:
-    /**
-     * Cleans up formula stuff.
-     * Call this before you store a new formula or to delete the
-     * formula.
-     */
-    void clearFormula();
-
-    /**
-     * Assigns the input text and creates formula or parses the input.
-     * \internal Called by setCellText().
-     */
-    void setCellTextHelper( const QString& _text );
-
-    /**
-     * Parses the input text.
-     * Converts first letter to uppercase, if enabled in the settings.
-     * \see ValueParser::parse
-     * \internal
-     */
-    void parseInputText();
-
     /**
      * \ingroup OpenDocument
      * Load the text paragraphs from an OASIS XML cell description.
@@ -693,9 +719,8 @@ protected:
     void loadOasisConditional( const KoXmlElement* style );
 
 private:
-    class Extra;
     class Private;
-    Private * const d;
+    QSharedDataPointer<Private> d;
 
     /**
      * Triggers the events, that are necessary after a value change.
@@ -731,20 +756,18 @@ private:
     QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, int column, int row );
 
     /**
-     * Tells this cell, that it is merged into the Cell \p masterCell .
-     * If this cell has to be redrawn, then \p masterCell is redrawn instead.
-     *
-     * \param masterCell the merging cell
+     * Sets the input text.
+     * If it's a formula, creates a formula object and sets the input text as
+     * its expression. Otherwise, sets the input text as string value.
+     * \internal
      */
-    void merge( Cell* masterCell );
-
-    /**
-     * Tells this cell, that it no longer merged into the Cell \p masterCell .
-     *
-     * \param masterCell the formerly merging cell
-     */
-    void unmerge( Cell* masterCell );
+    void setInputText( const QString& string );
 };
+
+inline uint qHash( const Cell& cell )
+{
+    return ( static_cast<uint>( cell.column() ) << 16 ) + static_cast<uint>( cell.row() );
+}
 
 } // namespace KSpread
 

@@ -213,7 +213,7 @@ void ClusterBenchmark::testShiftLeftPerformance()
 
     Time::tval start = Time::stamp();
     for ( int i = 1; i < 1000; ++i )
-        storage.unshiftRow( QPoint( 42, 1 ) );
+        storage.removeShiftLeft( QPoint( 42, 1 ) );
     qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 1000 ) );
 }
 
@@ -227,7 +227,7 @@ void ClusterBenchmark::testShiftRightPerformance()
 
     Time::tval start = Time::stamp();
     for ( int i = 1; i < 1000; ++i )
-        storage.shiftRow( QPoint( 42, 1 ) );
+        storage.insertShiftRight( QPoint( 42, 1 ) );
     qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 1000 ) );
 }
 
@@ -241,7 +241,7 @@ void ClusterBenchmark::testShiftUpPerformance()
 
     Time::tval start = Time::stamp();
     for ( int i = 1; i < 1000; ++i )
-        storage.unshiftColumn( QPoint( 1, 42 ) );
+        storage.removeShiftUp( QPoint( 1, 42 ) );
     qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 1000 ) );
 }
 
@@ -255,7 +255,7 @@ void ClusterBenchmark::testShiftDownPerformance()
 
     Time::tval start = Time::stamp();
     for ( int i = 1; i < 1000; ++i )
-        storage.shiftColumn( QPoint( 1, 42 ) );
+        storage.insertShiftDown( QPoint( 1, 42 ) );
     qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 1000 ) );
 }
 

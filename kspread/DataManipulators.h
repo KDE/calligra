@@ -202,6 +202,7 @@ public:
     enum Direction { ShiftRight, ShiftBottom };
     ShiftManipulator();
     void setDirection( Direction direction ) { m_direction = direction; }
+    virtual void setReverse( bool reverse );
 
 protected:
     bool process(Element*);
@@ -214,7 +215,13 @@ private:
     QList< QPair<QRectF,QString> >        m_undoComment;
     QList< QPair<QRectF,Conditions> >     m_undoConditions;
     QList< QPair<QRectF,Validity> >       m_undoValidity;
-    QHash<QPoint,QString>                 m_undoCells;
+    QVector< QPair<QPoint,Formula> >      m_undoFormulas;
+    QVector< QPair<QPoint,Value> >        m_undoValues;
+    QVector< QPair<QPoint,QString> >      m_undoLinks;
+    QList< QPair<QRectF,bool> >           m_undoFusion;
+
+    enum Mode { Insert, Delete };
+    Mode m_mode;
 };
 
 } // namespace KSpread

@@ -141,6 +141,7 @@ public:
                 return oldData;
             }
         }
+        squeezeRows();
         return T();
     }
 
@@ -193,6 +194,7 @@ public:
         // adjust the offsets of the following rows
         for ( int r = row; r < m_rows.count(); ++r )
             --m_rows[r];
+        squeezeRows();
         return oldData;
     }
 
@@ -224,6 +226,7 @@ public:
                     m_cols[rowStart + col] += number;
             }
         }
+        squeezeRows();
         return oldData;
     }
 
@@ -257,6 +260,7 @@ public:
                 }
             }
         }
+        squeezeRows();
         return oldData;
     }
 
@@ -268,7 +272,7 @@ public:
     {
         Q_ASSERT( 1 <= position && position <= KS_rowMax );
         // row's missing?
-        if ( position - 1 > m_rows.count() )
+        if ( position > m_rows.count() )
             return QVector< QPair<QPoint,T> >();
         QVector< QPair<QPoint,T> > oldData;
         int dataCount = 0;
@@ -295,6 +299,7 @@ public:
         const int index = m_rows.value( position - 1 );
         for ( int r = 0; r < number; ++r )
             m_rows.insert( position, index );
+        squeezeRows();
         return oldData;
     }
 
@@ -306,7 +311,7 @@ public:
     {
         Q_ASSERT( 1 <= position && position <= KS_rowMax );
         // row's missing?
-        if ( position - 1 > m_rows.count() )
+        if ( position > m_rows.count() )
             return QVector< QPair<QPoint,T> >();
         QVector< QPair<QPoint,T> > oldData;
         int dataCount = 0;
@@ -334,6 +339,7 @@ public:
         }
         while ( rowCount-- > 0 )
             m_rows.remove( position - 1 );
+        squeezeRows();
         return oldData;
     }
 
@@ -368,6 +374,7 @@ public:
                 }
             }
         }
+        squeezeRows();
         return oldData;
     }
 
@@ -399,6 +406,7 @@ public:
                     m_cols[rowStart + col] += rect.width();
             }
         }
+        squeezeRows();
         return oldData;
     }
 
@@ -411,7 +419,7 @@ public:
     {
         Q_ASSERT( 1 <= rect.top() && rect.top() <= KS_rowMax );
         // row's missing?
-        if ( rect.top() - 1 > m_rows.count() )
+        if ( rect.top() > m_rows.count() )
             return QVector< QPair<QPoint,T> >();
         QVector< QPair<QPoint,T> > oldData;
         for ( int row = rect.top(); row <= m_rows.count() && row <= KS_rowMax - rect.height(); ++row )
@@ -420,6 +428,7 @@ public:
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
             const QVector<int> cols = m_cols.mid( rowStart, rowLength );
             const QVector<T> data = m_data.mid( rowStart, rowLength );
+            // first, iterate over the destination row
             for ( int col = cols.count() - 1; col >= 0; --col )
             {
                 if ( cols.value( col ) >= rect.left() && cols.value( col ) <= rect.right() )
@@ -445,10 +454,41 @@ public:
                     {
                         // copy
                         m_data[rowStart + col] = m_data.value( cit2 - m_cols.begin() );
+                        // remove
+                        m_cols.remove( cit2 - m_cols.begin() );
+                        m_data.remove( cit2 - m_cols.begin() );
+                        // adjust the offsets of the following rows
+                        for ( int r = row + rect.height(); r < m_rows.count(); ++r )
+                            --m_rows[r];
                     }
                 }
             }
+            // last, iterate over the source row
+            const int rowStart2 = ( row + rect.height() -1 < m_rows.count() ) ? m_rows.value( row + rect.height() - 1 ) : m_data.count();
+            const int rowLength2 = ( row + rect.height() < m_rows.count() ) ? m_rows.value( row + rect.height() ) - rowStart2 : -1;
+            const QVector<int> cols2 = m_cols.mid( rowStart2, rowLength2 );
+            const QVector<T> data2 = m_data.mid( rowStart2, rowLength2 );
+            for ( int col = cols2.count() - 1; col >= 0; --col )
+            {
+                if ( cols2.value( col ) >= rect.left() && cols2.value( col ) <= rect.right() )
+                {
+                    // find the insertion position
+                    const QVector<int>::const_iterator cstart( ( row - 1 < m_rows.count() ) ? m_cols.begin() + m_rows.value( row - 1 ) : m_cols.end() );
+                    const QVector<int>::const_iterator cend( ( ( row < m_rows.count() ) ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
+                    const QVector<int>::const_iterator cit = qUpperBound( cstart, cend, cols2.value( col ) );
+                    // copy it to its new position
+                    m_data.insert( cit - m_cols.begin(), m_data.value( rowStart2 + col ) );
+                    m_cols.insert( cit - m_cols.begin(), m_cols.value( rowStart2 + col ) );
+                    // remove it from its old position
+                    m_data.remove( rowStart2 + col + 1 );
+                    m_cols.remove( rowStart2 + col + 1 );
+                    // adjust the offsets of the following rows
+                    for ( int r = row; r < row + rect.height(); ++r )
+                        ++m_rows[r];
+                }
+            }
         }
+        squeezeRows();
         return oldData;
     }
 
@@ -460,10 +500,10 @@ public:
     {
         Q_ASSERT( 1 <= rect.top() && rect.top() <= KS_rowMax );
         // row's missing?
-        if ( rect.top() - 1 > m_rows.count() )
+        if ( rect.top() > m_rows.count() )
             return QVector< QPair<QPoint,T> >();
         QVector< QPair<QPoint,T> > oldData;
-        for ( int row = qMin( rect.bottom(), m_rows.count() ); row >= rect.top(); --row )
+        for ( int row = m_rows.count(); row >= rect.top(); --row )
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
@@ -519,6 +559,7 @@ public:
                 }
             }
         }
+        squeezeRows();
         return oldData;
     }
 
@@ -533,10 +574,7 @@ public:
         const int index = m_cols.indexOf( col );
         if ( newRow )
         {
-            qDebug() << "rows:" << m_rows;
-            qDebug() << "index:" << index;
             *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
-            qDebug() << "lowerbound:" << *newRow;
             if ( m_rows.value( *newRow ) == index ) (*newRow)++;
         }
         return m_data.value( index );
@@ -738,6 +776,7 @@ public:
                 while ( counter-- > 1 )
                     str += "  ,";
                 str += QString( "%1," ).arg( data.value( col ), 2 );
+//                 str += QString( "%1," ).arg( (data.value( col ) == T()) ? "" : "_", 2 );
                 lastCol = cols.value( col );
             }
             // fill the column up to the max
@@ -814,18 +853,17 @@ public:
      */
     PointStorage<T> subStorage( const QRect& rect ) const
     {
-        QRect range( rect.normalized() );
-        Q_ASSERT( 1 <= range.left() && range.right() <= KS_colMax );
-        Q_ASSERT( 1 <= range.top() && range.bottom() <= KS_rowMax );
+        Q_ASSERT( 1 <= rect.left() && rect.right() <= KS_colMax );
+        Q_ASSERT( 1 <= rect.top() && rect.bottom() <= KS_rowMax );
 
         // this generates an array of values
         PointStorage<T> subStorage;
-        for ( int row = range.top(); row <= range.bottom() && row <= m_rows.count(); ++row )
+        for ( int row = rect.top(); row <= rect.bottom() && row <= m_rows.count(); ++row )
         {
             const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
             const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
             for ( QVector<int>::const_iterator cit = cstart; cit != cend; ++cit )
-                if ( *cit >= range.left() && *cit <= range.right() )
+                if ( *cit >= rect.left() && *cit <= rect.right() )
                     subStorage.insert( *cit, row, m_data.value( cit - m_cols.begin() ) );
         }
         return subStorage;
@@ -837,6 +875,16 @@ public:
     bool operator==( const PointStorage<T>& o ) const
     {
         return ( m_rows == o.m_rows && m_cols == o.m_cols && m_data == o.m_data );
+    }
+
+private:
+    void squeezeRows()
+    {
+        for ( int row = m_rows.count() - 1; row >= 0; --row )
+        {
+            if ( m_rows.value( row ) == m_data.count() )
+                m_rows.remove( row );
+        }
     }
 
 private:

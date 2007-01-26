@@ -183,10 +183,10 @@ public:
     * @param captureAllKeyEvents Controls whether or not the text editor swallows arrow key events or sends them to the parent canvas instead.  If this is set to true, pressing the arrow keys will navigate backwards and forwards through the text in the editor.  If it is false, the key events will be sent to the parent canvas which will change the cell being edited (depending on the direction of the arrow pressed).  Generally this should be set to true if the user double clicks on the cell to edit it, and false if the user initiates editing by typing whilst the cell is selected.
     * @param _name This parameter is sent to the QObject constructor
     */
-    explicit CellEditor( Cell* cell, Canvas* _parent = 0, bool captureAllKeyEvents = false, const char* _name = 0 );
+    explicit CellEditor( const Cell& cell, Canvas* _parent = 0, bool captureAllKeyEvents = false, const char* _name = 0 );
     ~CellEditor();
 
-    Cell* cell() const;
+    const Cell& cell() const;
     Canvas* canvas() const;
 
     void handleKeyPressEvent( QKeyEvent* _ev );

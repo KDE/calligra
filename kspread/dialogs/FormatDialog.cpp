@@ -196,8 +196,8 @@ void FormatDialog::slotOk()
         for( int col = rect.left() + 1; col <= rect.right(); ++col )
         {
             int pos = 1 + ( ( col - rect.left() - 1 ) % 2 );
-            Cell* cell = sheet->cellAt( col, rect.top() );
-            if ( !cell->isPartOfMerged() )
+            Cell cell( sheet, col, rect.top() );
+            if ( !cell.isPartOfMerged() )
             {
                 if ( m_styles[pos] && !m_styles[pos]->isDefault() )
                     sheet->setStyle( Region(col, rect.top()), *m_styles[pos] );
@@ -231,8 +231,8 @@ void FormatDialog::slotOk()
         for ( int row = rect.top() + 1; row <= rect.bottom(); ++row )
         {
             int pos = 4 + ( ( row - rect.top() - 1 ) % 2 ) * 4;
-            Cell* cell = sheet->cellAt( rect.left(), row );
-            if ( !cell->isPartOfMerged() )
+            Cell cell( sheet, rect.left(), row );
+            if ( !cell.isPartOfMerged() )
             {
                 if ( m_styles[pos] && !m_styles[pos]->isDefault() )
                     sheet->setStyle( Region(rect.left(), row), *m_styles[pos] );
@@ -261,8 +261,8 @@ void FormatDialog::slotOk()
             for ( int row = rect.top() + 1; row <= rect.bottom(); ++row )
             {
                 int pos = 5 + ( ( row - rect.top() - 1 ) % 2 ) * 4 + ( ( col - rect.left() - 1 ) % 2 );
-                Cell* cell = sheet->cellAt( col, row );
-                if ( !cell->isPartOfMerged() )
+                Cell cell( sheet, col, row );
+                if ( !cell.isPartOfMerged() )
                 {
                     if ( m_styles[pos] && !m_styles[pos]->isDefault() )
                         sheet->setStyle( Region(col, row), *m_styles[pos] );
@@ -298,8 +298,8 @@ void FormatDialog::slotOk()
         // Outer right border
         for ( int row = rect.top(); row <= rect.bottom(); ++row )
         {
-            Cell* cell = sheet->cellAt( rect.right(), row );
-            if ( !cell->isPartOfMerged() )
+            Cell cell( sheet, rect.right(), row );
+            if ( !cell.isPartOfMerged() )
             {
                 if ( row == rect.top() )
                 {
@@ -334,8 +334,8 @@ void FormatDialog::slotOk()
         // Outer bottom border
         for ( int col = rect.left(); col <= rect.right(); ++col )
         {
-            Cell* cell = sheet->cellAt( col, rect.bottom() );
-            if(!cell->isPartOfMerged())
+            Cell cell( sheet, col, rect.bottom() );
+            if(!cell.isPartOfMerged())
             {
                 if ( col == rect.left() )
                 {

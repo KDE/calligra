@@ -567,7 +567,7 @@ void EmbeddedChart::setDataArea( const QRect& _data )
 void EmbeddedChart::update()
 {
     if ( m_pBinding )
-        m_pBinding->cellChanged( 0 );
+        m_pBinding->cellChanged( Cell() );
 }
 
 const char * EmbeddedChart::getOasisElementName() const

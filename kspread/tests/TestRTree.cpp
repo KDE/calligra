@@ -54,7 +54,7 @@ void TestRTree::testShiftRows()
 {
     RTree<SharedTestClass> tree;
     tree.insert( QRect(2,2,2,1), new DerivedClass(QString("foo") ) );
-    tree.shiftRows( QRect(2,1,3,4) );
+    tree.insertShiftRight( QRect(2,1,3,4) );
     QList< QPair<QRectF,SharedTestClass> > pairs = tree.intersectingPairs( QRect(1,1,10,10) );
     QCOMPARE(pairs.count(),3);
     QCOMPARE(pairs[0].first, QRectF(2,2,2,1));
@@ -69,7 +69,7 @@ void TestRTree::testShiftColumns()
 {
     RTree<SharedTestClass> tree;
     tree.insert( QRect(2,2,1,2), new DerivedClass(QString("foo") ) );
-    tree.shiftColumns( QRect(2,1,4,3) );
+    tree.insertShiftDown( QRect(2,1,4,3) );
     QList< QPair<QRectF,SharedTestClass> > pairs = tree.intersectingPairs( QRect(1,1,10,10) );
     QCOMPARE(pairs.count(),3);
     QCOMPARE(pairs[0].first, QRectF(2,2,1,2));
@@ -84,7 +84,7 @@ void TestRTree::testUnshiftRows()
 {
     RTree<SharedTestClass> tree;
     tree.insert( QRect(5,2,2,1), new DerivedClass(QString("foo") ) );
-    tree.unshiftRows( QRect(2,1,3,4) );
+    tree.removeShiftLeft( QRect(2,1,3,4) );
     QList< QPair<QRectF,SharedTestClass> > pairs = tree.intersectingPairs( QRect(1,1,10,10) );
     QCOMPARE(pairs.count(),3);
     QCOMPARE(pairs[0].first, QRectF(5,2,2,1));
@@ -99,7 +99,7 @@ void TestRTree::testUnshiftColumns()
 {
     RTree<SharedTestClass> tree;
     tree.insert( QRect(2,5,1,2), new DerivedClass(QString("foo") ) );
-    tree.unshiftColumns( QRect(2,1,4,3) );
+    tree.removeShiftUp( QRect(2,1,4,3) );
     QList< QPair<QRectF,SharedTestClass> > pairs = tree.intersectingPairs( QRect(1,1,10,10) );
     QCOMPARE(pairs.count(),3);
     QCOMPARE(pairs[0].first, QRectF(2,5,1,2));

@@ -617,7 +617,7 @@ void DatabaseDialog::accept()
       queryStr += ' ';
   }
 
-  Cell * cell;
+  Cell cell;
   QSqlQuery query( m_dbConnection );
 
   // Check the whole query for SQL that might modify database.
@@ -688,8 +688,8 @@ void DatabaseDialog::accept()
     {
       for ( i = 0; i < count; ++i )
       {
-        cell = sheet->nonDefaultCell( left + i, top + y );
-        cell->setCellText( query.value( i ).toString() );
+        cell = Cell( sheet, left + i, top + y );
+        cell.setCellText( query.value( i ).toString() );
       }
       ++y;
     }
@@ -704,8 +704,8 @@ void DatabaseDialog::accept()
 
       for ( i = 0; i < count; ++i )
       {
-        cell = sheet->nonDefaultCell( left + i, top + y );
-        cell->setCellText( query.value( i ).toString() );
+        cell = Cell( sheet, left + i, top + y );
+        cell.setCellText( query.value( i ).toString() );
       }
       ++y;
 

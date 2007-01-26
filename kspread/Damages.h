@@ -61,7 +61,7 @@ class CellDamage : public Damage
     };
     Q_DECLARE_FLAGS( Changes, Change )
 
-    CellDamage( KSpread::Cell* cell, Changes changes );
+    CellDamage( const KSpread::Cell& cell, Changes changes );
     CellDamage( KSpread::Sheet* sheet, const Region& region, Changes changes );
 
     virtual ~CellDamage();

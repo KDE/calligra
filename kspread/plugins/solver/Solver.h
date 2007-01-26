@@ -45,7 +45,7 @@ class KSPREAD_EXPORT Solver : public KParts::Plugin
 public:
   struct Parameters
   {
-    QList<Cell*> cells;
+    QList<Cell> cells;
   };
 
   /**

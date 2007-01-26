@@ -31,7 +31,7 @@ class Inspector : public KPageDialog
 Q_OBJECT
 
 public:
-  Inspector( Cell* cell );
+  Inspector( const Cell& cell );
   ~Inspector();
   
 private:

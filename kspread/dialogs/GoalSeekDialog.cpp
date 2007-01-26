@@ -26,7 +26,6 @@
 #include "GoalSeekDialog.h"
 
 #include "Canvas.h"
-#include "Cell.h"
 #include "Doc.h"
 #include "Editors.h"
 #include "Map.h"
@@ -211,7 +210,7 @@ GoalSeekDialog::~GoalSeekDialog()
   if ( !m_restored )
   {
     m_pView->doc()->emitBeginOperation( false );
-    m_sourceCell->setValue(Value(m_oldSource));
+    m_sourceCell.setValue(Value(m_oldSource));
     m_pView->slotUpdateView( m_pView->activeSheet() );
   }
 }
@@ -267,7 +266,7 @@ void GoalSeekDialog::buttonOkClicked()
     m_sourceCell = source.cell();
     m_targetCell = target.cell();
 
-    if ( !m_sourceCell->value().isNumber() )
+    if ( !m_sourceCell.value().isNumber() )
     {
       KMessageBox::error( this, i18n("Source cell must contain a numeric value.") );
       m_selector3->textEdit()->selectAll();
@@ -277,7 +276,7 @@ void GoalSeekDialog::buttonOkClicked()
       return;
     }
 
-    if ( !m_targetCell->isFormula() )
+    if ( !m_targetCell.isFormula() )
     {
       KMessageBox::error( this, i18n("Target cell must contain a formula.") );
       m_selector1->textEdit()->selectAll();
@@ -298,7 +297,7 @@ void GoalSeekDialog::buttonOkClicked()
 
     m_restored = false;
 
-    startCalc( m_sourceCell->value().asFloat(), goal );
+    startCalc( m_sourceCell.value().asFloat(), goal );
     m_pView->slotUpdateView( m_pView->activeSheet() );
 
     return;
@@ -318,7 +317,7 @@ void GoalSeekDialog::buttonCancelClicked()
   if ( !m_restored )
   {
     m_pView->doc()->emitBeginOperation( false );
-    m_sourceCell->setValue(Value(m_oldSource));
+    m_sourceCell.setValue(Value(m_oldSource));
     m_restored = true;
     m_pView->slotUpdateView( m_pView->activeSheet() );
   }
@@ -363,7 +362,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   double resultA, resultB;
 
   // save old value
-  m_oldSource = m_sourceCell->value().asFloat();
+  m_oldSource = m_sourceCell.value().asFloat();
   resultA = _goal;
 
   // initialize start value
@@ -377,14 +376,14 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     startA = startB;
     startB = x;
 
-    m_sourceCell->setValue(Value(startA));
-    resultA = m_targetCell->value().asFloat() - _goal;
-    //    kDebug() << "Target A: " << m_targetCell->value().asFloat() << ", " << m_targetCell->inputText() << " Calc: " << resultA << endl;
+    m_sourceCell.setValue(Value(startA));
+    resultA = m_targetCell.value().asFloat() - _goal;
+    //    kDebug() << "Target A: " << m_targetCell.value().asFloat() << ", " << m_targetCell.inputText() << " Calc: " << resultA << endl;
 
-    m_sourceCell->setValue(Value(startB));
-    resultB = m_targetCell->value().asFloat() - _goal;
+    m_sourceCell.setValue(Value(startB));
+    resultB = m_targetCell.value().asFloat() - _goal;
     /*
-      kDebug() << "Target B: " << m_targetCell->value().asFloat() << ", " << m_targetCell->inputText() << " Calc: " << resultB << endl;
+      kDebug() << "Target B: " << m_targetCell.value().asFloat() << ", " << m_targetCell.inputText() << " Calc: " << resultB << endl;
 
       kDebug() << "Iteration: " << m_maxIter << ", StartA: " << startA
               << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "
@@ -428,8 +427,8 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   m_newValueDesc->setText( i18n( "New value:" ) );
   if ( ok )
   {
-    m_sourceCell->setValue( Value(startA ) );
-    m_sourceCell->sheet()->setRegionPaintDirty(Region(m_sourceCell->cellPosition()));
+    m_sourceCell.setValue( Value(startA ) );
+    m_sourceCell.sheet()->setRegionPaintDirty(Region(m_sourceCell.cellPosition()));
 
     m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:",
                                  m_selector3->textEdit()->toPlainText() ) );
@@ -440,8 +439,8 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   else
   {
     // restore the old value
-    m_sourceCell->setValue( Value( m_oldSource ) );
-    m_sourceCell->sheet()->setRegionPaintDirty(Region(m_sourceCell->cellPosition()));
+    m_sourceCell.setValue( Value( m_oldSource ) );
+    m_sourceCell.sheet()->setRegionPaintDirty(Region(m_sourceCell.cellPosition()));
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution.",
                                  m_selector3->textEdit()->toPlainText() ) );
     m_newValue->setText( "" );

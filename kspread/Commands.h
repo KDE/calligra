@@ -110,14 +110,14 @@ protected:
 class KDE_DEPRECATED MergeCellCommand : public KCommand
 {
 public:
-  MergeCellCommand( Cell* cell, int colSpan, int rowSpan );
+  MergeCellCommand( const Cell& cell, int colSpan, int rowSpan );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  Cell* cell;
+  Cell cell;
   int colSpan;
   int rowSpan;
   int oldColSpan;
@@ -133,14 +133,14 @@ protected:
 class KDE_DEPRECATED DissociateCellCommand : public KCommand
 {
 public:
-  explicit DissociateCellCommand( Cell* cell );
+  explicit DissociateCellCommand( const Cell& cell );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  Cell* cell;
+  Cell cell;
   int oldColSpan;
   int oldRowSpan;
 };
@@ -325,14 +325,14 @@ protected:
 class LinkCommand : public KCommand
 {
 public:
-  LinkCommand( Cell* cell, const QString& text, const QString& link );
+  LinkCommand( const Cell& cell, const QString& text, const QString& link );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  Cell* cell;
+  Cell cell;
   Doc* doc;
   QString oldText;
   QString oldLink;

@@ -100,7 +100,7 @@ public:
 
     Cell* firstCell() const;
 
-    bool shiftRow( const QPoint& marker );
+    bool insertShiftRight( const QPoint& marker );
     /**
      * Moves all cells in the column marker.x() beginning with
      * the one at marker.y() one position downwards.
@@ -108,14 +108,14 @@ public:
      * @return false if a cell would drop out of the sheet because of that.
      *         In this case the shift is not performed.
      */
-    bool shiftColumn( const QPoint& marker );
+    bool insertShiftDown( const QPoint& marker );
 
     /**
      * Moves all cells in the column marker.x() beginning with
      * the one at marker.y() + 1 one position upwards.
      */
-    void unshiftColumn( const QPoint& marker );
-    void unshiftRow( const QPoint& marker );
+    void removeShiftUp( const QPoint& marker );
+    void removeShiftLeft( const QPoint& marker );
 
     /**
      * Moves all columns beginning with @p col one position
@@ -245,11 +245,11 @@ private:
      * @param work is set to true if the method found some clusters
      *        which belong to the shifted row.
      */
-    bool shiftRow( const QPoint& marker, bool& work );
-    bool shiftColumn( const QPoint& marker, bool& work );
+    bool insertShiftRight( const QPoint& marker, bool& work );
+    bool insertShiftDown( const QPoint& marker, bool& work );
 
-    void unshiftColumn( const QPoint& marker, bool& work );
-    void unshiftRow( const QPoint& marker, bool& work );
+    void removeShiftUp( const QPoint& marker, bool& work );
+    void removeShiftLeft( const QPoint& marker, bool& work );
 
     /** helper method used by valueRange */
     Value makeArray (int col1, int row1, int col2, int row2) const;

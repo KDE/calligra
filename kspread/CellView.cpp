@@ -143,21 +143,26 @@ private:
 CellView::Private* CellView::Private::s_empty = 0;
 
 
+CellView::CellView( SheetView* sheetView )
+    : d( Private::empty( sheetView->sheet() ) )
+{
+}
+
 CellView::CellView( SheetView* sheetView, int col, int row )
     : d( Private::empty( sheetView->sheet() ) )
 {
-    Q_ASSERT( 0 <= col && col <= KS_colMax );
-    Q_ASSERT( 0 <= row && row <= KS_rowMax );
+    Q_ASSERT( 1 <= col && col <= KS_colMax );
+    Q_ASSERT( 1 <= row && row <= KS_rowMax );
 
     const Sheet* sheet = sheetView->sheet();
-    const Cell* cell = sheet->cellAt( col, row );
+    Cell cell( sheet, col, row );
 
     // create the effective style
-    if ( cell->isPartOfMerged() )
+    if ( cell.isPartOfMerged() )
     {
         d->merged = true;
-        const Cell* masterCell = cell->masterCell();
-        d->style = sheetView->cellView( masterCell->column(), masterCell->row() ).style();
+        Cell masterCell = cell.masterCell();
+        d->style = sheetView->cellView( masterCell.column(), masterCell.row() ).style();
     }
     else
     {
@@ -172,13 +177,13 @@ CellView::CellView( SheetView* sheetView, int col, int row )
             d->style.merge( *style );
     }
 
-    if ( cell->width( col ) != sheetView->sheet()->columnFormat( 0 )->width() )
-        d->width = cell->width( col );
-    if ( cell->height( row ) != sheetView->sheet()->rowFormat( 0 )->height() )
-        d->height = cell->height( row );
+    if ( cell.width( col ) != sheetView->sheet()->columnFormat( 0 )->width() )
+        d->width = cell.width( col );
+    if ( cell.height( row ) != sheetView->sheet()->rowFormat( 0 )->height() )
+        d->height = cell.height( row );
 
     // do not touch the other Private members, just return here.
-    if ( cell->isDefault() ) return;
+    if ( cell.isDefault() ) return;
 
     d->layoutDirection = sheet->layoutDirection();
     d->hidden = sheet->columnFormat( col )->hidden() || ( sheet->rowFormat( row )->height() <= sheet->doc()->unzoomItY( 2 ) );
@@ -187,11 +192,11 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     if ( d->style.halign() == Style::HAlignUndefined )
     {
         //numbers should be right-aligned by default, as well as BiDi text
-        if ( ( d->style.formatType() == Format::Text) || cell->value().isString() )
+        if ( ( d->style.formatType() == Format::Text) || cell.value().isString() )
             d->style.setHAlign( d->displayText.isRightToLeft() ? Style::Right : Style::Left );
         else
         {
-            Value val = cell->value();
+            Value val = cell.value();
             while (val.isArray())
                 val = val.element(0, 0);
             d->style.setHAlign( (val.isBoolean() || val.isNumber()) ? Style::Right : Style::Left );
@@ -225,14 +230,14 @@ double CellView::textHeight() const
   return d->textHeight;
 }
 
-QString CellView::testAnchor( const Cell* cell, double x, double y ) const
+QString CellView::testAnchor( const Cell& cell, double x, double y ) const
 {
-  if( cell->link().isEmpty() )
+  if( cell.link().isEmpty() )
     return QString();
 
   if( x > d->textX ) if( x < d->textX + d->textWidth )
       if( y > d->textY - d->textHeight ) if( y < d->textY )
-          return cell->link();
+          return cell.link();
 
   return QString();
 }
@@ -252,7 +257,7 @@ QString CellView::testAnchor( const Cell* cell, double x, double y ) const
 void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
                                   View* view, const QPointF& coordinate,
                                   const QPoint& cellRef,
-                                  QLinkedList<QPoint> &mergedCellsPainted, const Cell* cell )
+                                  QLinkedList<QPoint> &mergedCellsPainted, const Cell& cell )
 {
     Q_UNUSED( view );
     Q_UNUSED( mergedCellsPainted );
@@ -264,9 +269,8 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     if ( d->obscured )
         return;
 
-    // The parameter cellref should be *this, unless this is the default cell.
-    Q_ASSERT(cell->isDefault()
-            || (((cellRef.x() == cell->column()) && (cellRef.y() == cell->row()))));
+    // The parameter cellref should be *this
+    Q_ASSERT( (cellRef.x() == cell.column()) && (cellRef.y() == cell.row()) );
 
     // ----------------  Start the actual painting.  ----------------
 
@@ -279,15 +283,12 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
 
     // 1. Paint possible comment indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
-            || cell->sheet()->print()->printCommentIndicator() )
+            || cell.sheet()->print()->printCommentIndicator() )
         paintCommentIndicator( painter, cellRect, cellRef, cell );
-
-    if ( cell->isDefault() )
-        return;
 
     // 2. Paint possible formula indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
-            || cell->sheet()->print()->printFormulaIndicator() )
+            || cell.sheet()->print()->printFormulaIndicator() )
         paintFormulaIndicator( painter, cellRect, cell );
 
     // 3. Paint possible indicator for clipped text.
@@ -307,7 +308,7 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     //  c) the sheet is protected and the cell is hidden.
     if ( !d->displayText.isEmpty()
             && ( !dynamic_cast<QPrinter*>(painter.device()) || style().printText() )
-            && !( cell->sheet()->isProtected()
+            && !( cell.sheet()->isProtected()
             && style().hideAll() ) )
     {
         paintText( painter, cellRect, cellRef, cell );
@@ -317,12 +318,12 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
 void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                                  const QPointF& paintCoordinate,
                                  const QPoint& cellCoordinate, const QRect& cellRegion,
-                                 QLinkedList<QPoint> &mergedCellsPainted, const Cell* cell, SheetView* sheetView )
+                                 QLinkedList<QPoint> &mergedCellsPainted, const Cell& cell, SheetView* sheetView )
 {
     Q_UNUSED( mergedCellsPainted );
 
-    // The parameter cellCoordinate should be *this, unless this is the default cell.
-    Q_ASSERT(cell->isDefault() || ((cellCoordinate.x() == cell->column()) && (cellCoordinate.y() == cell->row())));
+    // The parameter cellCoordinate should be *this
+    Q_ASSERT( ( (cellCoordinate.x() == cell.column()) && (cellCoordinate.y() == cell.row())) );
 
     const int col = cellCoordinate.x();
     const int row = cellCoordinate.y();
@@ -452,13 +453,13 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
              )
 {
   //painter.drawLine(cellRect.left(),cellRect.top(),cellRect.right(),cellRect.bottom());
-  //QPen pen(cell->d->extra()->highlight);
+  //QPen pen(cell.d->extra()->highlight);
   //painter.setPen(highlightPen);
 
   QBrush nullBrush;
   painter.setBrush(nullBrush);
 
-  QRect zoomedCellRect = cell->doc()->zoomRect( cellRect );
+  QRect zoomedCellRect = cell.doc()->zoomRect( cellRect );
 
   //The highlight rect is just inside the main cell rect
   //This saves the hassle of repainting nearby cells when the highlight is changed as the highlight areas
@@ -557,7 +558,7 @@ void CellView::paintCellBackground( QPainter& painter, const QPointF& paintCoord
 void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
                                     const QRectF &cellRect, const QPoint &cellRef,
                                     Borders paintBorder, const QRect& cellRegion,
-                                    const Cell* cell, SheetView* sheetView )
+                                    const Cell& cell, SheetView* sheetView )
 {
     Q_UNUSED(cellRef);
 
@@ -575,7 +576,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 
     I also couldn't work out under what conditions the variables dt / db would
     come out as anything other than 0 in the code for painting the various borders.
-    The cell->effTopBorderPen / cell->effBottomBorderPen calls were taking
+    The cell.effTopBorderPen / cell.effBottomBorderPen calls were taking
     up a lot of time according some profiling I did.  If that code really is
     necessary, we need to find a more efficient way of getting the widths than
     grabbing the whole QPen object and asking it.
@@ -640,24 +641,24 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 
     const bool paintLeft    = ( paintBorder & LeftBorder &&
                                 d->style.leftBorderPen().style() == Qt::NoPen &&
-                                cell->sheet()->getShowGrid() &&
+                                cell.sheet()->getShowGrid() &&
                                 !isMergedOrObscured );
     const bool paintRight   = ( paintBorder & RightBorder &&
                                 d->style.rightBorderPen().style() == Qt::NoPen &&
-                                cell->sheet()->getShowGrid() &&
+                                cell.sheet()->getShowGrid() &&
                                 !isMergedOrObscured );
     const bool paintTop     = ( paintBorder & TopBorder &&
                                 d->style.topBorderPen().style() == Qt::NoPen &&
-                                cell->sheet()->getShowGrid() &&
+                                cell.sheet()->getShowGrid() &&
                                 !isMergedOrObscured );
     const bool paintBottom  = ( paintBorder & BottomBorder &&
-                                cell->sheet()->getShowGrid() &&
+                                cell.sheet()->getShowGrid() &&
                                 d->style.bottomBorderPen().style() == Qt::NoPen &&
                                 !isMergedOrObscured );
 
     // Set the single-pixel width pen for drawing the borders with.
     // NOTE Stefan: Use a cosmetic pen (width = 0), because we want the grid always one pixel wide
-    painter.setPen( QPen( cell->doc()->gridColor(), 0, Qt::SolidLine ) );
+    painter.setPen( QPen( cell.doc()->gridColor(), 0, Qt::SolidLine ) );
 
     QLineF line;
 
@@ -669,7 +670,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 
 #if 0
         if ( cellRef.x() > 1 ) {
-        Cell  *cell_west = cell->sheet()->cellAt( cellRef.x() - 1,
+        Cell  *cell_west = Cell( cell.sheet(), cellRef.x() - 1,
         cellRef.y() );
         QPen t = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
         QPen b = cell_west->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
@@ -706,7 +707,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 
 #if 0
         if ( cellRef.y() > 1 ) {
-            Cell  *cell_north = cell->sheet()->cellAt( cellRef.x(),
+            Cell  *cell_north = Cell( cell.sheet(), cellRef.x(),
             cellRef.y() - 1 );
 
             QPen l = cell_north->effLeftBorderPen(  cellRef.x(), cellRef.y() - 1 );
@@ -744,7 +745,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 
 #if 0
         if ( cellRef.x() < KS_colMax ) {
-            Cell  *cell_east = cell->sheet()->cellAt( cellRef.x() + 1,
+            Cell  *cell_east = Cell( cell.sheet(), cellRef.x() + 1,
             cellRef.y() );
 
             QPen t = cell_east->effTopBorderPen(    cellRef.x() + 1, cellRef.y() );
@@ -757,7 +758,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
         }
 #endif
 
-        //painter.setPen( QPen( cell->doc()->gridColor(), 1, Qt::SolidLine ) );
+        //painter.setPen( QPen( cell.doc()->gridColor(), 1, Qt::SolidLine ) );
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -784,7 +785,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
         int dr = 0;
 #if 0
         if ( cellRef.y() < KS_rowMax ) {
-            Cell  *cell_south = cell->sheet()->cellAt( cellRef.x(),
+            Cell  *cell_south = Cell( cell.sheet(), cellRef.x(),
             cellRef.y() + 1 );
 
             QPen l = cell_south->effLeftBorderPen(  cellRef.x(), cellRef.y() + 1 );
@@ -824,15 +825,15 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 void CellView::paintCommentIndicator( QPainter& painter,
                                       const QRectF &cellRect,
                                       const QPoint &cellRef,
-                                      const Cell* cell )
+                                      const Cell& cell )
 {
     // Point the little corner if there is a comment attached
     // to this cell.
-    if ( ( !cell->comment( cellRef.x(), cellRef.y() ).isEmpty() )
+    if ( ( !cell.comment().isEmpty() )
             && cellRect.width() > 10.0
             && cellRect.height() > 10.0
-            && ( cell->sheet()->print()->printCommentIndicator()
-            || ( !dynamic_cast<QPrinter*>(painter.device()) && cell->sheet()->getShowCommentIndicator() ) ) )
+            && ( cell.sheet()->print()->printCommentIndicator()
+            || ( !dynamic_cast<QPrinter*>(painter.device()) && cell.sheet()->getShowCommentIndicator() ) ) )
     {
         QColor penColor = Qt::red;
 
@@ -870,10 +871,10 @@ void CellView::paintCommentIndicator( QPainter& painter,
 //
 void CellView::paintFormulaIndicator( QPainter& painter,
                                       const QRectF &cellRect,
-                                      const Cell* cell )
+                                      const Cell& cell )
 {
-  if ( cell->isFormula() &&
-       cell->sheet()->getShowFormulaIndicator() &&
+  if ( cell.isFormula() &&
+       cell.sheet()->getShowFormulaIndicator() &&
        cellRect.width()  > 10.0 &&
        cellRect.height() > 10.0 )
   {
@@ -954,7 +955,7 @@ void CellView::paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect
 //
 void CellView::paintText( QPainter& painter,
                           const QRectF &cellRect,
-                          const QPoint &cellRef, const Cell* cell )
+                          const QPoint &cellRef, const Cell& cell )
 {
   Q_UNUSED( cellRef );
 
@@ -974,17 +975,17 @@ void CellView::paintText( QPainter& painter,
   painter.setFont( effectiveFont( cell ) );
 
     // Check for red font color for negative values.
-    if ( cell->value().isNumber()
-        && !( cell->sheet()->getShowFormula()
-        && !( cell->sheet()->isProtected()
+    if ( cell.value().isNumber()
+        && !( cell.sheet()->getShowFormula()
+        && !( cell.sheet()->isProtected()
         && style().hideFormula() ) ) )
     {
-        if ( style().floatColor() == Style::NegRed && cell->value().asFloat() < 0.0 )
+        if ( style().floatColor() == Style::NegRed && cell.value().asFloat() < 0.0 )
             tmpPen.setColor( Qt::red );
     }
 
   // Check for blue color, for hyperlink.
-  if ( !cell->link().isEmpty() ) {
+  if ( !cell.link().isEmpty() ) {
     tmpPen.setColor( QApplication::palette().link().color() );
     QFont font = painter.font();
     font.setUnderline( true );
@@ -1025,13 +1026,13 @@ void CellView::paintText( QPainter& painter,
   const Style::HAlign hAlign = d->style.halign();
 
     // Apply indent if text is align to left not when text is at right or middle.
-    if (  hAlign == Style::Left && !cell->isEmpty() )
+    if (  hAlign == Style::Left && !cell.isEmpty() )
     {
         indent = d->style.indentation();
     }
 
   // Made an offset, otherwise ### is under red triangle.
-  if ( hAlign == Style::Right && !cell->isEmpty() && !d->fittingWidth )
+  if ( hAlign == Style::Right && !cell.isEmpty() && !d->fittingWidth )
     offsetCellTooShort = 4;
 
   const QFontMetrics fm2 = painter.fontMetrics();
@@ -1099,8 +1100,8 @@ void CellView::paintText( QPainter& painter,
       }
 
       int align = d->style.halign();
-      if ( cell->sheet()->getShowFormula()
-          && !( cell->sheet()->isProtected()
+      if ( cell.sheet()->getShowFormula()
+          && !( cell.sheet()->isProtected()
           && style().hideFormula() ) )
         align = Style::Left;
 
@@ -1148,16 +1149,16 @@ void CellView::paintText( QPainter& painter,
 // Paint page borders on the page.  Only do this on the screen.
 //
 void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
-                                 const QPoint &cellRef, Borders paintBorder, const Cell* cell )
+                                 const QPoint &cellRef, Borders paintBorder, const Cell& cell )
 {
   // Not screen?  Return immediately.
   if ( dynamic_cast<QPrinter*>(painter.device()) )
     return;
 
-  if ( ! cell->sheet()->isShowPageBorders() )
+  if ( ! cell.sheet()->isShowPageBorders() )
     return;
 
-  SheetPrint* const print = cell->sheet()->print();
+  SheetPrint* const print = cell.sheet()->print();
 
   // Draw page borders
   QLineF line;
@@ -1170,7 +1171,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     if ( print->isOnNewPageX( cellRef.x() )
          && cellRef.y() <= print->printRange().bottom() )
     {
-      painter.setPen( cell->doc()->pageBorderColor() );
+      painter.setPen( cell.doc()->pageBorderColor() );
 
       if ( d->layoutDirection == Sheet::RightToLeft )
         line = QLineF( cellRect.right(), cellRect.top(),
@@ -1184,7 +1185,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     if ( print->isOnNewPageY( cellRef.y() ) &&
          ( cellRef.x() <= print->printRange().right() ) )
     {
-      painter.setPen( cell->doc()->pageBorderColor() );
+      painter.setPen( cell.doc()->pageBorderColor() );
       line = QLineF( cellRect.left(),  cellRect.top(),
                         cellRect.right(), cellRect.top() );
       painter.drawLine( line );
@@ -1193,7 +1194,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     if ( paintBorder & RightBorder ) {
       if ( print->isOnNewPageX( cellRef.x() + 1 )
            && cellRef.y() <= print->printRange().bottom() ) {
-        painter.setPen( cell->doc()->pageBorderColor() );
+        painter.setPen( cell.doc()->pageBorderColor() );
 
         if ( d->layoutDirection == Sheet::RightToLeft )
           line = QLineF( cellRect.left(), cellRect.top(),
@@ -1208,7 +1209,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     if ( paintBorder & BottomBorder ) {
       if ( print->isOnNewPageY( cellRef.y() + 1 )
            && cellRef.x() <= print->printRange().right() ) {
-        painter.setPen( cell->doc()->pageBorderColor() );
+        painter.setPen( cell.doc()->pageBorderColor() );
         line = QLineF( cellRect.left(),  cellRect.bottom(),
                           cellRect.right(), cellRect.bottom() );
         painter.drawLine( line );
@@ -1362,14 +1363,14 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
     int   vert_penWidth, horz_penWidth;
 
     // Some useful referenses.
-    Cell  *cell_north     = cell->sheet()->cellAt( cellRef.x(),     cellRef.y() - 1 );
-    Cell  *cell_northwest = cell->sheet()->cellAt( cellRef.x() - 1, cellRef.y() - 1 );
-    Cell  *cell_west      = cell->sheet()->cellAt( cellRef.x() - 1, cellRef.y() );
-    Cell  *cell_northeast = cell->sheet()->cellAt( cellRef.x() + 1, cellRef.y() - 1 );
-    Cell  *cell_east      = cell->sheet()->cellAt( cellRef.x() + 1, cellRef.y() );
-    Cell  *cell_south     = cell->sheet()->cellAt( cellRef.x(),     cellRef.y() + 1 );
-    Cell  *cell_southwest = cell->sheet()->cellAt( cellRef.x() - 1, cellRef.y() + 1 );
-    Cell  *cell_southeast = cell->sheet()->cellAt( cellRef.x() + 1, cellRef.y() + 1 );
+    Cell  *cell_north     = Cell( cell.sheet(), cellRef.x(),     cellRef.y() - 1 );
+    Cell  *cell_northwest = Cell( cell.sheet(), cellRef.x() - 1, cellRef.y() - 1 );
+    Cell  *cell_west      = Cell( cell.sheet(), cellRef.x() - 1, cellRef.y() );
+    Cell  *cell_northeast = Cell( cell.sheet(), cellRef.x() + 1, cellRef.y() - 1 );
+    Cell  *cell_east      = Cell( cell.sheet(), cellRef.x() + 1, cellRef.y() );
+    Cell  *cell_south     = Cell( cell.sheet(), cellRef.x(),     cellRef.y() + 1 );
+    Cell  *cell_southwest = Cell( cell.sheet(), cellRef.x() - 1, cellRef.y() + 1 );
+    Cell  *cell_southeast = Cell( cell.sheet(), cellRef.x() + 1, cellRef.y() + 1 );
 
     // Fix the borders which meet at the top left corner
     if ( cell_north->effLeftBorderValue( cellRef.x(), cellRef.y() - 1 )
@@ -1437,7 +1438,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
             horz_pen = cell_northeast->effBottomBorderPen( cellRef.x() + 1,
                 cellRef.y() - 1 );
 
-        // horz_pen = cell->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
+        // horz_pen = cell.effTopBorderPen( cellRef.x() + 1, cellRef.y() );
         horz_penWidth = qMax( 1, doc->zoomItYOld( horz_pen.width() ) );
         int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2 + 1;
 
@@ -1490,7 +1491,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
                 horz_pen = cell_southwest->effTopBorderPen( cellRef.x() - 1,
                     cellRef.y() + 1 );
 
-            // horz_pen = cell->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
+            // horz_pen = cell.effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
             horz_penWidth = qMax( 1, doc->zoomItXOld( horz_pen.width() ) );
             int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2;
 
@@ -1534,13 +1535,13 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
                  >= cell_southeast->effTopBorderValue( cellRef.x() + 1,
                          cellRef.y() + 1 ) )
 
-                horz_pen = cell->sheet()->cellAt( cellRef.x() + 1, cellRef.y() )
+                horz_pen = Cell( cell.sheet(), cellRef.x() + 1, cellRef.y() )
                         ->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
             else
-                horz_pen = cell->sheet()->cellAt( cellRef.x() + 1, cellRef.y() + 1 )
+                horz_pen = Cell( cell.sheet(), cellRef.x() + 1, cellRef.y() + 1 )
                         ->effTopBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
 
-            // horz_pen = cell->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
+            // horz_pen = cell.effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
             horz_penWidth = qMax( 1, doc->zoomItXOld( horz_pen.width() ) );
             int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2;
 
@@ -1599,13 +1600,13 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
 //
 // Used in paintText().
 //
-QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
+QString CellView::textDisplaying( const QFontMetrics& fm, const Cell& cell )
 {
   Style::HAlign hAlign = style().halign();
   if ( !d->fittingWidth )
       hAlign = Style::Left; // force left alignment, if text does not fit
 
-  const bool isNumeric = cell->value().isNumber();
+  const bool isNumeric = cell.value().isNumber();
 
   if ( !style().verticalText() )
   {
@@ -1616,16 +1617,16 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
 
     len = d->width;
 #if 0
-    for ( int i = cell->column(); i <= cell->column() + d->obscuredCellsX; i++ )
+    for ( int i = cell.column(); i <= cell.column() + d->obscuredCellsX; i++ )
     {
-      ColumnFormat *cl2 = cell->sheet()->columnFormat( i );
+      ColumnFormat *cl2 = cell.sheet()->columnFormat( i );
       len += cl2->width() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
     }
 #endif
 
     QString  tmp;
     double   tmpIndent = 0.0;
-    if ( !cell->isEmpty() )
+    if ( !cell.isEmpty() )
       tmpIndent = style().indentation();
 
     // Estimate worst case length to reduce the number of iterations.
@@ -1662,7 +1663,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
         if ( style().angle() != 0 )
         {
           QString tmp2;
-          const RowFormat *rl = cell->sheet()->rowFormat( cell->row() );
+          const RowFormat *rl = cell.sheet()->rowFormat( cell.row() );
           if ( d->textHeight > rl->height() )
           {
             for ( int j = d->displayText.length(); j != 0; j-- )
@@ -1688,7 +1689,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
   {
     // Vertical text.
 
-    const RowFormat  *rl = cell->sheet()->rowFormat( cell->row() );
+    const RowFormat  *rl = cell.sheet()->rowFormat( cell.row() );
     double      tmpIndent = 0.0;
 
     // Not enough space but align to left.
@@ -1696,15 +1697,15 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
 
     len = d->width;
 #if 0
-    for ( int i = cell->column(); i <= cell->column() + d->obscuredCellsX; i++ ) {
-      ColumnFormat  *cl2 = cell->sheet()->columnFormat( i );
+    for ( int i = cell.column(); i <= cell.column() + d->obscuredCellsX; i++ ) {
+      ColumnFormat  *cl2 = cell.sheet()->columnFormat( i );
 
       // -1.0 because the pixel in between 2 cells is shared between both cells
       len += cl2->width() - 1.0;
     }
 #endif
 
-    if ( !cell->isEmpty() )
+    if ( !cell.isEmpty() )
       tmpIndent = style().indentation();
 
     if ( ( d->textWidth + tmpIndent > len ) || d->textWidth == 0.0 )
@@ -1740,11 +1741,11 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell* cell )
 //
 // Used in makeLayout() and calculateTextParameters().
 //
-QFont CellView::effectiveFont( const Cell* cell ) const
+QFont CellView::effectiveFont( const Cell& cell ) const
 {
     QFont tmpFont( d->style.font() );
     // Scale the font size according to the current zoom.
-//     tmpFont.setPointSizeF( tmpFont.pointSizeF() / cell->doc()->resolutionY() );
+//     tmpFont.setPointSizeF( tmpFont.pointSizeF() / cell.doc()->resolutionY() );
     return tmpFont;
 }
 
@@ -1765,22 +1766,22 @@ QFont CellView::effectiveFont( const Cell* cell ) const
 //
 //   d->displayText
 //
-void CellView::makeLayout( SheetView* sheetView, const Cell* cell )
+void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
 {
   if ( d->hidden )
     return;
 
-  // Get the output text, cell->displayText().
-  d->displayText = cell->displayText();
+  // Get the output text, cell.displayText().
+  d->displayText = cell.displayText();
 
     // Hide zero.
-    if ( cell->sheet()->getHideZero() && cell->value().isNumber() && cell->value().asFloat() == 0 )
+    if ( cell.sheet()->getHideZero() && cell.value().isNumber() && cell.value().asFloat() == 0 )
         d->displayText.clear();
 
-  // Empty text?  Reset the outstring and, if this is the default
+  // Empty text?  Reset the outstring and, if this is a default
   // cell, return.
   if ( d->displayText.isEmpty() ) {
-    if ( cell->isDefault() ) {
+    if ( cell.isDefault() ) {
       return;
     }
   }
@@ -1825,38 +1826,38 @@ void CellView::makeLayout( SheetView* sheetView, const Cell* cell )
 }
 
 
-void CellView::calculateCellDimension( const Cell* cell )
+void CellView::calculateCellDimension( const Cell& cell )
 {
     Q_UNUSED( cell );
 #if 0
-  double width  = cell->sheet()->columnFormat( cell->column() )->width();
-  double height = cell->sheet()->rowFormat( cell->row() )->height();
+  double width  = cell.sheet()->columnFormat( cell.column() )->width();
+  double height = cell.sheet()->rowFormat( cell.row() )->height();
 
   // Calculate extraWidth and extraHeight if we have a merged cell.
-  if ( cell->testFlag( Cell::Flag_Merged ) ) {
+  if ( cell.testFlag( Cell::Flag_Merged ) ) {
     // FIXME: Introduce double extraWidth/Height here and use them
     //        instead (see FIXME about this in paintCell()).
 
-    for ( int x = cell->column() + 1; x <= cell->column() + d->obscuredCellsX; x++ )
-      width += cell->sheet()->columnFormat( x )->width();
+    for ( int x = cell.column() + 1; x <= cell.column() + d->obscuredCellsX; x++ )
+      width += cell.sheet()->columnFormat( x )->width();
 
-    for ( int y = cell->row() + 1; y <= cell->row() + d->obscuredCellsY; y++ )
-      height += cell->sheet()->rowFormat( y )->height();
+    for ( int y = cell.row() + 1; y <= cell.row() + d->obscuredCellsY; y++ )
+      height += cell.sheet()->rowFormat( y )->height();
   }
 
   // Cache the newly calculated extraWidth and extraHeight if we have
   // already allocated a struct for it.  Otherwise it will be zero, so
   // don't bother.
-  if (cell->d->hasExtra()) {
-    cell->d->extra()->extraWidth  = width;
-    cell->d->extra()->extraHeight = height;
+  if (cell.d->hasExtra()) {
+    cell.d->extra()->extraWidth  = width;
+    cell.d->extra()->extraHeight = height;
   }
 #endif
 }
 
 
 //used in Sheet::adjustColumnHelper and Sheet::adjustRow
-void CellView::calculateTextParameters( const Cell* cell )
+void CellView::calculateTextParameters( const Cell& cell )
 {
   // Get the font metrics for the effective font.
   const QFontMetrics fontMetrics( effectiveFont( cell ) );
@@ -1872,7 +1873,7 @@ void CellView::calculateTextParameters( const Cell* cell )
 //
 // Used in makeLayout() and calculateTextParameters().
 //
-void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell* cell )
+void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
 {
     const double ascent = fontMetrics.ascent();
     Style::HAlign hAlign = d->style.halign();
@@ -2026,7 +2027,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell* cell )
   }
 
   hAlign = d->style.halign();
-  if ( cell->sheet()->getShowFormula() && !( cell->sheet()->isProtected() && style().hideFormula() ) )
+  if ( cell.sheet()->getShowFormula() && !( cell.sheet()->isProtected() && style().hideFormula() ) )
   {
     hAlign = Style::Left;
   }
@@ -2175,7 +2176,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
   }
 }
 
-void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell* masterCell )
+void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell& masterCell )
 {
     if ( d->hidden )
         return;
@@ -2185,7 +2186,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell* masterC
 
     // Get indentation.  This is only used for left aligned text.
     double indent = 0.0;
-    if ( align == Style::Left && !masterCell->isEmpty() )
+    if ( align == Style::Left && !masterCell.isEmpty() )
         indent = style().indentation();
 
     // Set d->fittingWidth to false, if the text is vertical or angled, and too
@@ -2202,21 +2203,21 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell* masterC
     //
     if ( d->textWidth + indent > ( d->width - 2 * s_borderSpace
          - style().leftBorderPen().width() - style().rightBorderPen().width() ) &&
-         masterCell->mergedYCells() == 0 )
+         masterCell.mergedYCells() == 0 )
     {
-        const int effectiveCol = masterCell->column() + masterCell->mergedXCells();
+        const int effectiveCol = masterCell.column() + masterCell.mergedXCells();
         int col = effectiveCol;
 
         // Find free cells to the right of this one.
         enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
         while ( status == Undefined )
         {
-            Cell* nextCell = masterCell->sheet()->visibleCellAt( col + 1, masterCell->row() );
+            Cell nextCell = masterCell.sheet()->visibleCellAt( col + 1, masterCell.row() );
 
-            if ( nextCell->isEmpty() )
+            if ( nextCell.isEmpty() )
             {
-                extraWidth += nextCell->width( col + 1 ) - 1;
-                col += 1 + nextCell->mergedXCells();
+                extraWidth += nextCell.width( col + 1 ) - 1;
+                col += 1 + nextCell.mergedXCells();
 
                 // Enough space?
                 if ( d->textWidth + indent <= ( d->width + extraWidth - 2 * s_borderSpace
@@ -2240,15 +2241,15 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell* masterC
         //        setting d->fittingWidth to false?
         //
         if ( style().halign() == Style::Left || ( style().halign() == Style::HAlignUndefined
-             && !masterCell->value().isNumber() ) )
+             && !masterCell.value().isNumber() ) )
         {
             if ( col > effectiveCol )
             {
                 d->obscuredCellsX = col - effectiveCol;
                 d->width += extraWidth;
 
-                const QRect obscuredRange( effectiveCol + 1, masterCell->row(), d->obscuredCellsX, 1 );
-                sheetView->obscureCells( obscuredRange, masterCell->cellPosition() );
+                const QRect obscuredRange( effectiveCol + 1, masterCell.row(), d->obscuredCellsX, 1 );
+                sheetView->obscureCells( obscuredRange, masterCell.cellPosition() );
 
                 // Not enough space
                 if ( status == NotEnoughSpace )
@@ -2262,7 +2263,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell* masterC
     }
 }
 
-void CellView::obscureVerticalCells( SheetView* sheetView, const Cell* masterCell )
+void CellView::obscureVerticalCells( SheetView* sheetView, const Cell& masterCell )
 {
     if ( d->hidden )
         return;
@@ -2277,19 +2278,19 @@ void CellView::obscureVerticalCells( SheetView* sheetView, const Cell* masterCel
          d->textHeight > ( d->height - 2 * s_borderSpace
          - style().topBorderPen().width() - style().bottomBorderPen().width() ) )
     {
-        const int effectiveRow = masterCell->row() + masterCell->mergedYCells();
+        const int effectiveRow = masterCell.row() + masterCell.mergedYCells();
         int row = effectiveRow;
 
         // Find free cells bottom to this one
         enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
         while ( status == Undefined )
         {
-            Cell* nextCell = masterCell->sheet()->visibleCellAt( masterCell->column(), row + 1 );
+            Cell nextCell = masterCell.sheet()->visibleCellAt( masterCell.column(), row + 1 );
 
-            if ( nextCell->isEmpty() )
+            if ( nextCell.isEmpty() )
             {
-                extraHeight += nextCell->height( row + 1 ) - 1.0;
-                row += 1 + nextCell->mergedYCells();
+                extraHeight += nextCell.height( row + 1 ) - 1.0;
+                row += 1 + nextCell.mergedYCells();
 
                 // Enough space ?
                 if ( d->textHeight <= ( d->height + extraHeight - 2 * s_borderSpace
@@ -2307,8 +2308,8 @@ void CellView::obscureVerticalCells( SheetView* sheetView, const Cell* masterCel
             d->obscuredCellsY = row - effectiveRow;
             d->height += extraHeight;
 
-            const QRect obscuredRange( masterCell->column(), effectiveRow + 1, 1, d->obscuredCellsY );
-            sheetView->obscureCells( obscuredRange, masterCell->cellPosition() );
+            const QRect obscuredRange( masterCell.column(), effectiveRow + 1, 1, d->obscuredCellsY );
+            sheetView->obscureCells( obscuredRange, masterCell.cellPosition() );
 
             // Not enough space
             if ( status == NotEnoughSpace )

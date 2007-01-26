@@ -92,6 +92,30 @@ Things not in bugzilla
   + Zooming							      1 ----
     Make it view dependent and not document dependent.
 
+  + Cell Storage						      1 STEF
+    - Move all cell attributes to separate storages.			done
+    - Undo for LinkStorage (insert/remove columns/rows/cell ranges)	done
+    - Undo for FusionStorage (insert/remove columns/rows/cell ranges)	done
+    - Move all storages out of Sheet.					done
+      This CellStorage (SuperStorage) should provide methods to iterate
+      over the non-empty cells, i.e. those that have at least one
+      attribute. All getter and setter should be moved from Sheet to
+      this super storage.
+    - Merge new Cell Storage into trunk					done
+    - A common undo object.						----
+      Provide a startUndoRecord() and a stopUndoRecord() method.
+      On stopping the recording an undo data object containing all
+      necessary data for each storage is returned. Provide a method
+      that takes such an undo data object and performs the undo.
+      For each storage one has to store a list/vector. If empty, those
+      take just the size of a pointer.
+      The undo process will than be in one place and the undo data
+      object can be stored on the heap. By just passing its pointer
+      around the undo data object can be implemented as a private
+      class of the super storage.
+    - (Re-)Adjust the saving algos to use the new (old) iteration	----
+      functionality.
+
   + Style Storage						      1 STEF
     This would dramatically reduce memory consumption and allows
     styles for empty cells.

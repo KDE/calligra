@@ -92,17 +92,16 @@ public:
   Opcode( unsigned t, unsigned i ): type(t), index(i) {};
 };
 
-class Formula::Private
+class Formula::Private : public QSharedData
 {
 public:
-  Formula *formula;
-  Cell *cell;
+  Cell cell;
   Sheet *sheet;
-  bool dirty;
-  bool valid;
+  mutable bool dirty;
+  mutable bool valid;
   QString expression;
-  QVector<Opcode> codes;
-  QVector<Value> constants;
+  mutable QVector<Opcode> codes;
+  mutable QVector<Value> constants;
 };
 
 class TokenStack : public QVector<Token>
@@ -386,30 +385,42 @@ bool KSpread::isIdentifier( QChar ch )
 
 // Constructor
 
-Formula::Formula (Sheet *sheet, Cell *cell)
+Formula::Formula( Sheet *sheet, const Cell& cell )
+    : d( new Private )
 {
-  d = new Private;
   d->cell = cell;
   d->sheet = sheet;
   clear();
 }
 
-Formula::Formula()
+Formula::Formula( Sheet *sheet )
+    : d( new Private )
 {
-  d = new Private;
-  d->cell = 0;
+  d->cell = Cell();
+  d->sheet = sheet;
+  clear();
+}
+
+Formula::Formula()
+    : d( new Private )
+{
+  d->cell = Cell();
   d->sheet = 0;
   clear();
+}
+
+Formula::Formula( const Formula& other )
+    : d( other.d )
+{
 }
 
 // Destructor
 
 Formula::~Formula()
 {
-  delete d;
 }
 
-Cell* Formula::cell() const
+const Cell& Formula::cell() const
 {
   return d->cell;
 }
@@ -444,7 +455,7 @@ bool Formula::isValid() const
 {
   if( d->dirty )
   {
-    KLocale* locale = d->cell ? d->cell->locale() : 0;
+    KLocale* locale = !d->cell.isNull() ? d->cell.locale() : 0;
     if ((!locale) && d->sheet)
       locale = d->sheet->doc()->locale();
     Tokens tokens = scan( d->expression, locale );
@@ -474,7 +485,7 @@ void Formula::clear()
 
 Tokens Formula::tokens() const
 {
-  KLocale* locale = d->cell ? d->cell->locale() : 0;
+  KLocale* locale = !d->cell.isNull() ? d->cell.locale() : 0;
   if ((!locale) && d->sheet)
     locale = d->sheet->doc()->locale();
   return scan( d->expression, locale );
@@ -1310,9 +1321,9 @@ Value Formula::eval() const
   Function* function;
   FuncExtra fe;
   fe.mycol = fe.myrow = 0;
-  if (d->cell) {
-    fe.mycol = d->cell->column();
-    fe.myrow = d->cell->row();
+  if ( !d->cell.isNull() ) {
+    fe.mycol = d->cell.column();
+    fe.myrow = d->cell.row();
   }
 
   if( d->dirty )
@@ -1500,8 +1511,7 @@ Value Formula::eval() const
           Range range (c, sheet->map(), sheet);
           if (range.isValid())
           {
-            val1 = range.sheet()->valueRange (range.startCol(), range.startRow(),
-                range.endCol(), range.endRow());
+            val1 = range.sheet()->valueRange( range.range() );
             // store the reference, so we can use it within functions
             entry.col1 = range.startCol();
             entry.row1 = range.startRow();
@@ -1599,6 +1609,17 @@ Value Formula::eval() const
     return Value::errorVALUE();
 
   return stack.pop().val;
+}
+
+Formula& Formula::operator=( const Formula& other )
+{
+    d = other.d;
+    return *this;
+}
+
+bool Formula::operator==( const Formula& other ) const
+{
+    return ( d->expression == other.d->expression );
 }
 
 // Debugging aid

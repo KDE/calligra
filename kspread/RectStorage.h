@@ -99,39 +99,39 @@ public:
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,T> > deleteRows(int position, int number = 1);
+    QList< QPair<QRectF,T> > removeRows(int position, int number = 1);
 
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,T> > deleteColumns(int position, int number = 1);
+    QList< QPair<QRectF,T> > removeColumns(int position, int number = 1);
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,T> > shiftRows(const QRect& rect);
+    QList< QPair<QRectF,T> > insertShiftRight(const QRect& rect);
 
     /**
      * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,T> > shiftColumns(const QRect& rect);
+    QList< QPair<QRectF,T> > insertShiftDown(const QRect& rect);
 
     /**
      * Shifts the rows left of \p rect to the left by the width of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QList< QPair<QRectF,T> > unshiftRows(const QRect& rect);
+    QList< QPair<QRectF,T> > removeShiftLeft(const QRect& rect);
 
     /**
      * Shifts the columns on top of \p rect to the top by the height of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QList< QPair<QRectF,T> > unshiftColumns(const QRect& rect);
+    QList< QPair<QRectF,T> > removeShiftUp(const QRect& rect);
 
 protected:
     virtual void triggerGarbageCollection();
@@ -256,62 +256,62 @@ QList< QPair<QRectF,T> > RectStorage<T>::insertColumns(int position, int number)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RectStorage<T>::deleteRows(int position, int number)
+QList< QPair<QRectF,T> > RectStorage<T>::removeRows(int position, int number)
 {
     const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    QList< QPair<QRectF,T> > undoData = m_tree.deleteRows(position, number);
+    QList< QPair<QRectF,T> > undoData = m_tree.removeRows(position, number);
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RectStorage<T>::deleteColumns(int position, int number)
+QList< QPair<QRectF,T> > RectStorage<T>::removeColumns(int position, int number)
 {
     const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    QList< QPair<QRectF,T> > undoData = m_tree.deleteColumns(position, number);
+    QList< QPair<QRectF,T> > undoData = m_tree.removeColumns(position, number);
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RectStorage<T>::shiftRows(const QRect& rect)
+QList< QPair<QRectF,T> > RectStorage<T>::insertShiftRight(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
-    QList< QPair<QRectF,T> > undoData = m_tree.shiftRows( rect );
+    QList< QPair<QRectF,T> > undoData = m_tree.insertShiftRight( rect );
     regionChanged( invalidRect );
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RectStorage<T>::shiftColumns(const QRect& rect)
+QList< QPair<QRectF,T> > RectStorage<T>::insertShiftDown(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
-    QList< QPair<QRectF,T> > undoData = m_tree.shiftColumns( rect );
+    QList< QPair<QRectF,T> > undoData = m_tree.insertShiftDown( rect );
     regionChanged( invalidRect );
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RectStorage<T>::unshiftRows(const QRect& rect)
+QList< QPair<QRectF,T> > RectStorage<T>::removeShiftLeft(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
-    QList< QPair<QRectF,T> > undoData = m_tree.unshiftRows( rect );
+    QList< QPair<QRectF,T> > undoData = m_tree.removeShiftLeft( rect );
     regionChanged( invalidRect );
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RectStorage<T>::unshiftColumns(const QRect& rect)
+QList< QPair<QRectF,T> > RectStorage<T>::removeShiftUp(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
-    QList< QPair<QRectF,T> > undoData = m_tree.unshiftColumns( rect );
+    QList< QPair<QRectF,T> > undoData = m_tree.removeShiftUp( rect );
     regionChanged( invalidRect );
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
@@ -425,6 +425,19 @@ public:
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
     virtual void garbageCollection() { RectStorage<Conditions>::garbageCollection(); }
+};
+
+
+
+class FusionStorage : public QObject, public RectStorage<bool>
+{
+    Q_OBJECT
+public:
+    explicit FusionStorage( Sheet* sheet ) : RectStorage<bool>( sheet ) {}
+
+protected Q_SLOTS:
+    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
+    virtual void garbageCollection() { RectStorage<bool>::garbageCollection(); }
 };
 
 

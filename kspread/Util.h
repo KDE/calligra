@@ -70,7 +70,7 @@ public:
   bool isValid() const { return ( util_isPointValid(pos()) && ( _sheet != 0 || _sheetName.isEmpty() ) ); }
   bool isSheetKnown() const { return ( ! _sheetName.isEmpty() && _sheet != 0 ); }
 
-  Cell* cell() const;
+  Cell cell() const;
 
   bool operator== (const Point &cell) const;
   bool operator< (const Point &cell) const;

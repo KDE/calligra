@@ -95,8 +95,8 @@ class AdjustColumnRowManipulator : public Manipulator
   protected:
     virtual QString name() const;
 
-    double adjustColumnHelper( Cell * c);
-    double adjustRowHelper( Cell * c);
+    double adjustColumnHelper( const Cell& cell );
+    double adjustRowHelper( const Cell& cell );
 
   private:
     bool m_adjustColumn : 1;
@@ -145,6 +145,8 @@ class InsertDeleteColumnManipulator : public Manipulator
 public:
     InsertDeleteColumnManipulator();
 
+    virtual void setReverse( bool reverse );
+
 protected:
     virtual bool process(Element*);
     virtual bool postProcessing();
@@ -155,7 +157,13 @@ private:
     QList< QPair<QRectF,QString> >        m_undoComment;
     QList< QPair<QRectF,Conditions> >     m_undoConditions;
     QList< QPair<QRectF,Validity> >       m_undoValidity;
-    QHash<QPoint,QString>                 m_undoCells;
+    QVector< QPair<QPoint,Formula> >      m_undoFormulas;
+    QVector< QPair<QPoint,Value> >        m_undoValues;
+    QVector< QPair<QPoint,QString> >      m_undoLinks;
+    QList< QPair<QRectF,bool> >           m_undoFusion;
+
+    enum Mode { Insert, Delete };
+    Mode m_mode;
 };
 
 
@@ -169,6 +177,8 @@ class InsertDeleteRowManipulator : public Manipulator
 public:
     InsertDeleteRowManipulator();
 
+    virtual void setReverse( bool reverse );
+
 protected:
     virtual bool process(Element*);
     virtual bool postProcessing();
@@ -179,7 +189,13 @@ private:
     QList< QPair<QRectF,QString> >        m_undoComment;
     QList< QPair<QRectF,Conditions> >     m_undoConditions;
     QList< QPair<QRectF,Validity> >       m_undoValidity;
-    QHash<QPoint,QString>                 m_undoCells;
+    QVector< QPair<QPoint,Formula> >      m_undoFormulas;
+    QVector< QPair<QPoint,Value> >        m_undoValues;
+    QVector< QPair<QPoint,QString> >      m_undoLinks;
+    QList< QPair<QRectF,bool> >           m_undoFusion;
+
+    enum Mode { Insert, Delete };
+    Mode m_mode;
 };
 
 }  // namespace KSpread

@@ -158,10 +158,10 @@ bool Manipulator::process(Element* element)
       sheet->enableScrollBarUpdates(false);
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
-        Cell* cell = m_creation ? sheet->nonDefaultCell(col, row) : sheet->cellAt(col, row);
+        Cell cell( sheet,col, row);
 
         // NOTE Stefan: Don't process cells covered due to merging. WYSIWYG!
-        if ( !cell->isPartOfMerged() )
+        if ( !cell.isPartOfMerged() )
         {
           if (!process(cell))
           {
@@ -250,8 +250,8 @@ bool ProtectedCheck::check ()
     {
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
-        Cell *cell = m_sheet->cellAt (col, row);
-        if (!cell->style().notProtected())
+        Cell cell( m_sheet, col, row );
+        if (!cell.style().notProtected())
         {
           prot = true;
           break;
@@ -317,17 +317,17 @@ bool MergeManipulator::process(Element* element)
         int rows = 0;
         for (int col = left; col <= right; ++col)
         {
-          Cell *cell = m_sheet->cellAt( col, row );
-          if (cell->doesMergeCells())
+          Cell cell = Cell( m_sheet, col, row );
+          if (cell.doesMergeCells())
           {
-            rows = qMax(rows, cell->mergedYCells());
-            cell->mergeCells( col, row, 0, 0 );
+            rows = qMax(rows, cell.mergedYCells());
+            cell.mergeCells( col, row, 0, 0 );
           }
         }
-        Cell *cell = m_sheet->nonDefaultCell( left, row );
-        if (!cell->isPartOfMerged())
+        Cell cell = Cell( m_sheet,  left, row );
+        if (!cell.isPartOfMerged())
         {
-          cell->mergeCells( left, row, width - 1, rows );
+          cell.mergeCells( left, row, width - 1, rows );
         }
       }
     }
@@ -338,24 +338,24 @@ bool MergeManipulator::process(Element* element)
         int cols = 0;
         for (int row = top; row <= bottom; ++row)
         {
-          Cell *cell = m_sheet->cellAt( col, row );
-          if (cell->doesMergeCells())
+          Cell cell = Cell( m_sheet, col, row );
+          if (cell.doesMergeCells())
           {
-            cols = qMax(cols, cell->mergedXCells());
-            cell->mergeCells( col, row, 0, 0 );
+            cols = qMax(cols, cell.mergedXCells());
+            cell.mergeCells( col, row, 0, 0 );
           }
         }
-        Cell *cell = m_sheet->nonDefaultCell( col, top );
-        if (!cell->isPartOfMerged())
+        Cell cell = Cell( m_sheet, col, top );
+        if (!cell.isPartOfMerged())
         {
-          cell->mergeCells( col, top, cols, height - 1);
+          cell.mergeCells( col, top, cols, height - 1);
         }
       }
     }
     else
     {
-      Cell *cell = m_sheet->nonDefaultCell( left, top );
-      cell->mergeCells( left, top, width - 1, height - 1);
+      Cell cell = Cell( m_sheet,  left, top );
+      cell.mergeCells( left, top, width - 1, height - 1);
     }
   }
   else // dissociate
@@ -364,12 +364,12 @@ bool MergeManipulator::process(Element* element)
     {
       for (int row = top; row <= bottom; ++row)
       {
-        Cell *cell = m_sheet->cellAt( col, row );
-        if (!cell->doesMergeCells())
+        Cell cell = Cell( m_sheet, col, row );
+        if (!cell.doesMergeCells())
         {
           continue;
         }
-        cell->mergeCells( col, row, 0, 0 );
+        cell.mergeCells( col, row, 0, 0 );
       }
     }
   }
@@ -420,10 +420,10 @@ bool MergeManipulator::preProcessing()
       {
         for (int col = range.left(); col <= right; ++col)
         {
-          Cell *cell = m_sheet->cellAt(col, row);
-          if (cell->doesMergeCells())
+          Cell cell = Cell( m_sheet, col, row);
+          if (cell.doesMergeCells())
           {
-            QRect rect(col, row, cell->mergedXCells() + 1, cell->mergedYCells() + 1);
+            QRect rect(col, row, cell.mergedXCells() + 1, cell.mergedYCells() + 1);
             mergedCells.add(rect);
           }
         }

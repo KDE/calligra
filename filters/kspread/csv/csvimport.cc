@@ -115,7 +115,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
 
     ElapsedTime t( "Filling data into document" );
 
-    Cell*cell;
     Sheet *sheet=ksdoc->map()->addNewSheet();
 
     int numRows = dialog->getRows();
@@ -136,8 +135,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     for ( i = 0; i < numCols; ++i )
       widths[i] = init;
 
-    Cell* c = sheet->nonDefaultCell( 1, 1 );
-    QFontMetrics fm( c->style().font() );
+    Cell cell( sheet, 1, 1 );
+    QFontMetrics fm( cell.style().font() );
 
     Style * s = ksdoc->styleManager()->defaultStyle();
 
@@ -163,16 +162,17 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                //I will use this approach only for the TEXT format in the CSV import filter... (raphael)
                //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
 
-               cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-               cell->setCellText( text );
+               cell = Cell( sheet, col + 1, row + 1 );
+               cell.setStyle( *s );
+               cell.setCellText( text );
 
                Style style;
                style.setFormatType (Format::Generic);
-               cell->setStyle(style);
+               cell.setStyle(style);
 
                /* old code
-              cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-              cell->setCellText( text, true );
+              cell = Cell( sheet, col + 1, row + 1, s );
+              cell.setValue( Value( text ) );
                */
               break;
              // ### TODO: put the code for the different numbers together (at least partially)
@@ -186,17 +186,19 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         d = text.toDouble( &ok );
                     if ( !ok )
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-                        cell->setCellText( text, true );
+                        cell = Cell( sheet, col + 1, row + 1 );
+                        cell.setStyle( *s );
+                        cell.setValue( Value( text ) );
                     }
                     else
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-                        cell->setCellValue( Value( d ), Format::Number, text );
+                        cell = Cell( sheet,  col + 1, row + 1 );
+                        cell.setStyle( *s );
+                        cell.setCellValue( Value( d ), Format::Number, text );
                     }
                     Style style;
                     style.setPrecision( 2 );
-                    cell->setStyle(style);
+                    cell.setStyle(style);
                     break;
                 }
              case CSVDialog::COMMANUMBER:
@@ -209,17 +211,19 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-                        cell->setCellText( text, true );
+                        cell = Cell( sheet, col + 1, row + 1 );
+                        cell.setStyle( *s );
+                        cell.setValue( Value( text ) );
                     }
                     else
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-                        cell->setCellValue( Value( d ), Format::Number, tmp );
+                        cell = Cell( sheet, col + 1, row + 1 );
+                        cell.setStyle( *s );
+                        cell.setCellValue( Value( d ), Format::Number, tmp );
                     }
                     Style style;
                     style.setPrecision( 2 );
-                    cell->setStyle(style);
+                    cell.setStyle(style);
                     break;
                 }
              case CSVDialog::POINTNUMBER:
@@ -232,36 +236,40 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-                        cell->setCellText( text,  true );
+                        cell = Cell( sheet, col + 1, row + 1 );
+                        cell.setStyle( *s );
+                        cell.setValue( Value( text ) );
                     }
                     else
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-                        cell->setCellValue( Value( d ), Format::Number, tmp );
+                        cell = Cell( sheet, col + 1, row + 1 );
+                        cell.setStyle( *s );
+                        cell.setCellValue( Value( d ), Format::Number, tmp );
                     }
                     Style style;
                     style.setPrecision( 2 );
-                    cell->setStyle(style);
+                    cell.setStyle(style);
                     break;
                 }
              case CSVDialog::DATE:
              {
-              cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-              cell->setCellText( text );
+              cell = Cell( sheet, col + 1, row + 1 );
+              cell.setStyle( *s );
+              cell.setCellText( text );
               Style style;
               style.setFormatType( Format::ShortDate );
-              cell->setStyle(style);
+              cell.setStyle(style);
               break;
              }
              case CSVDialog::CURRENCY:
              {
-              cell = sheet->nonDefaultCell( col + 1, row + 1, s );
-              cell->setCellText( text, false );
+              cell = Cell( sheet, col + 1, row + 1 );
+              cell.setStyle( *s );
+              cell.setValue( Value( text ) );
               Style style;
               style.setFormatType( Format::Money );
               style.setPrecision( 2 );
-              cell->setStyle(style);
+              cell.setStyle(style);
               break;
              }
             }

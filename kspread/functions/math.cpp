@@ -1040,10 +1040,10 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
   if ((r1 > 0) && (c1 > 0) && (r2 > 0) && (c2 > 0)) {
     for (int r = r1; r <= r2; ++r)
       for (int c = c1; c <= c2; ++c) {
-        Cell *cell = e->sheet->cellAt (c, r);
-        if (cell->isDefault())
+        Cell cell( e->sheet, c, r );
+        if (cell.isDefault())
           continue;
-        if (cell->isFormula() && cell->inputText().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
+        if (cell.isFormula() && cell.inputText().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
           // cell contains the word SUBTOTAL - replace value with empty
           range.setElement (c-c1, r-r1, empty);
       }
@@ -1154,18 +1154,18 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
   if ( ( args[1]->doubleValue() != args[2]->doubleValue() )
        || ( args[3]->doubleValue() != args[4]->doubleValue() ) )
   {
-    cell = sheet->cellAt( point.pos.x(), point.pos.y() );
+    cell = Cell( sheet, point.pos.x(), point.pos.y() );
     cell->setValue( args[2]->doubleValue() );
     kDebug() << "Setting value " << args[2]->doubleValue() << " on cell " << point.pos.x()
               << ", " << point.pos.y() << endl;
 
-    cell = sheet->cellAt( point2.pos.x(), point.pos.y() );
+    cell = Cell( sheet, point2.pos.x(), point.pos.y() );
     cell->setValue( args[4]->doubleValue() );
     kDebug() << "Setting value " << args[4]->doubleValue() << " on cell " << point2.pos.x()
               << ", " << point2.pos.y() << endl;
   }
 
-  Cell * cell1 = sheet->cellAt( point3.pos.x(), point3.pos.y() );
+  Cell * cell1 = Cell( sheet, point3.pos.x(), point3.pos.y() );
   cell1->calc( false );
 
   double d = cell1->value().asFloat();
@@ -1174,10 +1174,10 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
 
   kDebug() << "Resetting old values" << endl;
 
-  cell = sheet->cellAt( point.pos.x(), point.pos.y() );
+  cell = Cell( sheet, point.pos.x(), point.pos.y() );
   cell->setValue( oldCol );
 
-  cell = sheet->cellAt( point2.pos.x(), point2.pos.y() );
+  cell = Cell( sheet, point2.pos.x(), point2.pos.y() );
   cell->setValue( oldRow );
 
   cell1->calc( false );

@@ -28,14 +28,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Sheet.h"
-#include "SheetPrint.h"
-#include "Doc.h"
-#include "DataManipulators.h"
-
 #include <kdebug.h>
 
-// #include "KSpreadCellIface.h"
+#include "CellStorage.h"
+#include "DataManipulators.h"
+#include "Doc.h"
+#include "Sheet.h"
+#include "SheetPrint.h"
 #include "Region.h"
 #include "RowColumnManipulators.h"
 
@@ -89,8 +88,8 @@ QPoint SheetAdaptor::cellLocation( const QString& cellname )
 
 QString SheetAdaptor::text( int x, int y )
 {
-    Cell* cell = m_sheet->cellAt(x, y);
-    return cell ? cell->inputText() : QString();
+    Cell cell = Cell( m_sheet, x, y);
+    return cell.inputText();
 }
 
 QString SheetAdaptor::text( const QString& cellname )
@@ -163,8 +162,8 @@ QVariant valueToVariant(const KSpread::Value& value)
 
 QVariant SheetAdaptor::value( int x, int y )
 {
-    Cell* cell = m_sheet ? m_sheet->cellAt(x, y) : 0;
-    return cell ? valueToVariant( cell->value() ) : QVariant();
+    Cell cell = Cell( m_sheet, x, y);
+    return valueToVariant( cell.value() );
 }
 
 QVariant SheetAdaptor::value( const QString& cellname )
@@ -175,9 +174,9 @@ QVariant SheetAdaptor::value( const QString& cellname )
 
 bool SheetAdaptor::setValue( int x, int y, const QVariant& value )
 {
-	Cell* cell = m_sheet ? m_sheet->cellAt(x, y) : 0;
+	Cell cell = Cell( m_sheet, x, y);
 	if(! cell) return false;
-	KSpread::Value v = cell->value();
+	KSpread::Value v = cell.value();
 	switch( value.type() ) {
 		case QVariant::Bool: v.setValue( value.toBool() ); break;
 		case QVariant::ULongLong: v.setValue( (long)value.toLongLong() ); break;
@@ -229,14 +228,12 @@ bool SheetAdaptor::setSheetName( const QString & name)
 
 int SheetAdaptor::lastColumn() const
 {
-    Cell* cell = m_sheet->firstCell();
-    return cell ? cell->column() : 0;
+    return m_sheet->cellStorage()->columns();
 }
 
 int SheetAdaptor::lastRow() const
 {
-    Cell* cell = m_sheet->firstCell();
-    return cell ? cell->row() : 0;
+    return m_sheet->cellStorage()->rows();
 }
 
 // bool SheetAdaptor::processDynamic( const DCOPCString& fun, const QByteArray&/*data*/,

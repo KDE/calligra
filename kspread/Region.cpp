@@ -1011,9 +1011,9 @@ bool Region::Point::contains(const QRect& range) const
     return (range.width() == 1) && (range.height() == 1) && (range.topLeft() == m_point);
 }
 
-Cell* Region::Point::cell() const
+Cell Region::Point::cell() const
 {
-  return m_sheet->cellAt(m_point);
+    return Cell( m_sheet, m_point );
 }
 
 /***************************************************************************

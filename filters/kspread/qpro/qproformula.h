@@ -5,6 +5,8 @@
 
 namespace KSpread
 {
+namespace QuattroPro
+{
 
 class Formula : public QpFormula
 {
@@ -13,6 +15,7 @@ public:
    ~Formula();
 };
 
+}
 }
 
 #endif // QPROFORMULA_H

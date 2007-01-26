@@ -445,10 +445,10 @@ bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
 }
 
 // all except the number style
-void CellStyle::loadData( CellStyle & cs, Cell const * const cell )
+void CellStyle::loadData( CellStyle & cs, const Cell& cell )
 {
-  const KSpread::Style style = cell->style();
-  const KSpread::Style* defaultStyle = cell->sheet()->doc()->styleManager()->defaultStyle();
+  const KSpread::Style style = cell.style();
+  const KSpread::Style* defaultStyle = cell.sheet()->doc()->styleManager()->defaultStyle();
 
   QFont font = style.font();
   if ( font != defaultStyle->font() )

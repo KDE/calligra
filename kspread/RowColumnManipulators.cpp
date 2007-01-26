@@ -21,7 +21,9 @@
 
 #include <float.h>
 
+#include "CellStorage.h"
 #include "CellView.h"
+#include "PointStorage.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetView.h"
@@ -30,7 +32,11 @@
 
 using namespace KSpread;
 
-
+namespace KSpread {
+class FormulaStorage : public PointStorage<Formula> {};
+class LinkStorage : public PointStorage<QString> {};
+class ValueStorage : public PointStorage<Value> {};
+}
 
 /***************************************************************************
   class ResizeColumnManipulator
@@ -278,11 +284,11 @@ bool AdjustColumnRowManipulator::process(Element* element)
     {
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
-        Cell* cell = sheet->getFirstCellRow( row );
-        while ( cell )
+        Cell cell = sheet->cellStorage()->firstInRow( row );
+        while ( !cell.isNull() )
         {
-          int col = cell->column();
-          if ( !cell->isEmpty() && !cell->isPartOfMerged())
+          int col = cell.column();
+          if ( !cell.isEmpty() && !cell.isPartOfMerged())
           {
             if (widths.contains(col) && widths[col] != -1.0)
             {
@@ -293,7 +299,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
               }
             }
           }
-          cell = sheet->getNextCellRight(col, row);
+          cell = sheet->cellStorage()->nextInRow(col, row);
         }
       }
     }
@@ -318,11 +324,11 @@ bool AdjustColumnRowManipulator::process(Element* element)
     {
       for (int col = range.left(); col <= range.right(); ++col)
       {
-        Cell* cell = sheet->getFirstCellColumn( col );
-        while ( cell )
+        Cell cell = sheet->cellStorage()->firstInColumn( col );
+        while ( !cell.isNull() )
         {
-          int row = cell->row();
-          if ( !cell->isEmpty() && !cell->isPartOfMerged())
+          int row = cell.row();
+          if ( !cell.isEmpty() && !cell.isPartOfMerged())
           {
             if (heights.contains(row) && heights[row] != -1.0)
             {
@@ -333,7 +339,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
               }
             }
           }
-          cell = sheet->getNextCellDown( col, row );
+          cell = sheet->cellStorage()->nextInColumn( col, row );
         }
       }
     }
@@ -377,10 +383,10 @@ bool AdjustColumnRowManipulator::preProcessing()
       {
         for (int col = range.left(); col <= range.right(); ++col)
         {
-          Cell* cell = m_sheet->getFirstCellColumn( col );
-          while ( cell )
+          Cell cell = m_sheet->cellStorage()->firstInColumn( col );
+          while ( !cell.isNull() )
           {
-            int row = cell->row();
+            int row = cell.row();
             if (m_adjustColumn)
             {
               if (!m_newWidths.contains(col))
@@ -388,7 +394,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 m_newWidths[col] = -1.0;
                 m_oldWidths[col] = m_sheet->columnFormat( col )->width();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
+              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -402,13 +408,13 @@ bool AdjustColumnRowManipulator::preProcessing()
                 const RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->height();
               }
-              if (!cell->isEmpty() && !cell->isPartOfMerged())
+              if (!cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
               }
             }
-            cell = m_sheet->getNextCellDown( col, row );
+            cell = m_sheet->cellStorage()->nextInColumn( col, row );
           }
         }
       }
@@ -416,10 +422,10 @@ bool AdjustColumnRowManipulator::preProcessing()
       {
         for (int row = range.top(); row <= range.bottom(); ++row)
         {
-          Cell* cell = m_sheet->getFirstCellRow( row );
-          while ( cell )
+          Cell cell = m_sheet->cellStorage()->firstInRow( row );
+          while ( !cell.isNull() )
           {
-            int col = cell->column();
+            int col = cell.column();
             if (m_adjustColumn)
             {
               if (!m_newWidths.contains(col))
@@ -427,7 +433,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 m_newWidths[col] = -1.0;
                 m_oldWidths[col] = m_sheet->columnFormat( col )->width();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
+              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -441,24 +447,24 @@ bool AdjustColumnRowManipulator::preProcessing()
                 const RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->height();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
+              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
               }
             }
-            cell = m_sheet->getNextCellRight(col, row);
+            cell = m_sheet->cellStorage()->nextInRow(col, row);
           }
         }
       }
       else
       {
-        Cell* cell;
+        Cell cell;
         for (int col = range.left(); col <= range.right(); ++col)
         {
           for ( int row = range.top(); row <= range.bottom(); ++row )
           {
-            cell = m_sheet->cellAt( col, row );
+            cell = Cell( m_sheet,  col, row );
             if (m_adjustColumn)
             {
               if (!m_newWidths.contains(col))
@@ -466,7 +472,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 m_newWidths[col] = -1.0;
                 m_oldWidths[col] = m_sheet->columnFormat( col )->width();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
+              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -480,7 +486,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 const RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->height();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
+              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
@@ -494,20 +500,20 @@ bool AdjustColumnRowManipulator::preProcessing()
   return true;
 }
 
-double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
+double AdjustColumnRowManipulator::adjustColumnHelper( const Cell& cell )
 {
-    Q_ASSERT(!cell->isDefault());
+    Q_ASSERT(!cell.isDefault());
   double long_max = 0.0;
-  SheetView sheetView( cell->sheet() );
-  CellView cellView( &sheetView, cell->column(), cell->row() ); // FIXME
+  SheetView sheetView( cell.sheet() );
+  CellView cellView( &sheetView, cell.column(), cell.row() ); // FIXME
   cellView.calculateTextParameters( cell );
   if ( cellView.textWidth() > long_max )
   {
     double indent = 0.0;
-    Style::HAlign alignment = cell->style().halign();
+    Style::HAlign alignment = cell.style().halign();
     if (alignment == Style::HAlignUndefined)
     {
-      if (cell->value().isNumber() || cell->isDate() || cell->isTime())
+      if (cell.value().isNumber() || cell.isDate() || cell.isTime())
       {
         alignment = Style::Right;
       }
@@ -519,11 +525,11 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 
     if (alignment == Style::Left)
     {
-      indent = cell->style().indentation();
+      indent = cell.style().indentation();
     }
     long_max = indent + cellView.textWidth()
-        + cell->style().leftBorderPen().width()
-        + cell->style().rightBorderPen().width();
+        + cell.style().leftBorderPen().width()
+        + cell.style().rightBorderPen().width();
   }
 
   // add 4 because long_max is the length of the text
@@ -538,19 +544,19 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
   }
 }
 
-double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell)
+double AdjustColumnRowManipulator::adjustRowHelper( const Cell& cell )
 {
-    Q_ASSERT(!cell->isDefault());
+    Q_ASSERT(!cell.isDefault());
   double long_max = 0.0;
 
-  SheetView sheetView( cell->sheet() );
-  CellView cellView( &sheetView, cell->column(), cell->row() ); // FIXME
+  SheetView sheetView( cell.sheet() );
+  CellView cellView( &sheetView, cell.column(), cell.row() ); // FIXME
   cellView.calculateTextParameters( cell );
   if ( cellView.textHeight() > long_max )
   {
     long_max = cellView.textHeight()
-        + cell->style().topBorderPen().width()
-        + cell->style().bottomBorderPen().width();
+        + cell.style().topBorderPen().width()
+        + cell.style().bottomBorderPen().width();
   }
 
   //  add 1 because long_max is the height of the text
@@ -587,7 +593,14 @@ QString AdjustColumnRowManipulator::name() const
 
 InsertDeleteColumnManipulator::InsertDeleteColumnManipulator()
     : Manipulator()
+    , m_mode( Insert )
 {
+}
+
+void InsertDeleteColumnManipulator::setReverse( bool reverse )
+{
+    m_reverse = reverse;
+    m_mode = reverse ? Delete : Insert;
 }
 
 bool InsertDeleteColumnManipulator::process( Element* element )
@@ -597,22 +610,12 @@ bool InsertDeleteColumnManipulator::process( Element* element )
     const int num = range.width();
     if ( !m_reverse ) // insertion
     {
-        // create undo for cells
-        if ( m_firstrun )
-        {
-            for ( int col = KS_colMax - range.width(); col <= KS_colMax; ++col )
-            {
-                Cell* cell = m_sheet->getFirstCellColumn( col );
-                while ( cell )
-                {
-                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
-                    cell = m_sheet->getNextCellDown( cell->column(), cell->row() );
-                }
-            }
-        }
-
         // insert rows
         m_sheet->insertColumns( pos, num );
+        QVector< QPair<QPoint,Formula> > undoFormulas = m_sheet->formulaStorage()->insertColumns(pos, num);
+        QVector< QPair<QPoint,Value> > undoValues = m_sheet->valueStorage()->insertColumns(pos, num);
+        QVector< QPair<QPoint,QString> > undoLinks = m_sheet->linkStorage()->insertColumns(pos, num);
+        QList< QPair<QRectF,bool> > undoFusion = m_sheet->fusionStorage()->insertColumns(pos, num);
         QList< QPair<QRectF,SharedSubStyle> > undoStyles = m_sheet->styleStorage()->insertColumns(pos, num);
         QList< QPair<QRectF,QString> > undoComment = m_sheet->commentStorage()->insertColumns(pos, num);
         QList< QPair<QRectF,Conditions> > undoConditions = m_sheet->conditionsStorage()->insertColumns(pos, num);
@@ -621,6 +624,10 @@ bool InsertDeleteColumnManipulator::process( Element* element )
         // create undo for styles, comments, conditions, validity
         if ( m_firstrun )
         {
+            m_undoFormulas = undoFormulas;
+            m_undoValues = undoValues;
+            m_undoLinks = undoLinks;
+            m_undoFusion = undoFusion;
             m_undoStyles = undoStyles;
             m_undoComment = undoComment;
             m_undoConditions = undoConditions;
@@ -628,10 +635,16 @@ bool InsertDeleteColumnManipulator::process( Element* element )
         }
 
         // undo deletion
-        if ( !m_firstrun )
+        if ( m_mode == Delete )
         {
-            foreach ( const QPoint& position, m_undoCells.keys() )
-                m_sheet->nonDefaultCell( position.x(), position.y() )->setCellText( m_undoCells[position] );
+            for ( int i = 0; i < m_undoFormulas.count(); ++i )
+                m_sheet->formulaStorage()->insert( m_undoFormulas[i].first.x(), m_undoFormulas[i].first.y(), m_undoFormulas[i].second );
+            for ( int i = 0; i < m_undoValues.count(); ++i )
+                m_sheet->valueStorage()->insert( m_undoValues[i].first.x(), m_undoValues[i].first.y(), m_undoValues[i].second );
+            for ( int i = 0; i < m_undoLinks.count(); ++i )
+                m_sheet->linkStorage()->insert( m_undoLinks[i].first.x(), m_undoLinks[i].first.y(), m_undoLinks[i].second );
+            for ( int i = 0; i < m_undoFusion.count(); ++i )
+                m_sheet->fusionStorage()->insert( Region(m_undoFusion[i].first.toRect()), m_undoFusion[i].second );
             for ( int i = 0; i < m_undoStyles.count(); ++i )
                 m_sheet->styleStorage()->insert( m_undoStyles[i].first.toRect(), m_undoStyles[i].second );
             for ( int i = 0; i < m_undoComment.count(); ++i )
@@ -644,30 +657,24 @@ bool InsertDeleteColumnManipulator::process( Element* element )
     }
     else // deletion
     {
-        // create undo for cells
-        if ( m_firstrun )
-        {
-            for ( int col = range.left(); col <= range.right(); ++col )
-            {
-                Cell* cell = m_sheet->getFirstCellColumn( col );
-                while ( cell )
-                {
-                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
-                    cell = m_sheet->getNextCellDown( cell->column(), cell->row() );
-                }
-            }
-        }
-
         // delete rows
-        m_sheet->deleteColumns( pos, num );
-        QList< QPair<QRectF,SharedSubStyle> > undoStyles = m_sheet->styleStorage()->deleteColumns(pos, num);
-        QList< QPair<QRectF,QString> > undoComment = m_sheet->commentStorage()->deleteColumns(pos, num);
-        QList< QPair<QRectF,Conditions> > undoConditions = m_sheet->conditionsStorage()->deleteColumns(pos, num);
-        QList< QPair<QRectF,Validity> > undoValidity = m_sheet->validityStorage()->deleteColumns(pos, num);
+        m_sheet->removeColumns( pos, num );
+        QVector< QPair<QPoint,Formula> > undoFormulas = m_sheet->formulaStorage()->removeColumns(pos, num);
+        QVector< QPair<QPoint,Value> > undoValues = m_sheet->valueStorage()->removeColumns(pos, num);
+        QVector< QPair<QPoint,QString> > undoLinks = m_sheet->linkStorage()->removeColumns(pos, num);
+        QList< QPair<QRectF,bool> > undoFusion = m_sheet->fusionStorage()->removeColumns(pos, num);
+        QList< QPair<QRectF,SharedSubStyle> > undoStyles = m_sheet->styleStorage()->removeColumns(pos, num);
+        QList< QPair<QRectF,QString> > undoComment = m_sheet->commentStorage()->removeColumns(pos, num);
+        QList< QPair<QRectF,Conditions> > undoConditions = m_sheet->conditionsStorage()->removeColumns(pos, num);
+        QList< QPair<QRectF,Validity> > undoValidity = m_sheet->validityStorage()->removeColumns(pos, num);
 
         // create undo for styles, comments, conditions, validity
         if ( m_firstrun )
         {
+            m_undoFormulas = undoFormulas;
+            m_undoValues = undoValues;
+            m_undoLinks = undoLinks;
+            m_undoFusion = undoFusion;
             m_undoStyles = undoStyles;
             m_undoComment = undoComment;
             m_undoConditions = undoConditions;
@@ -675,10 +682,16 @@ bool InsertDeleteColumnManipulator::process( Element* element )
         }
 
         // undo insertion
-        if ( !m_firstrun )
+        if ( m_mode == Insert )
         {
-            foreach ( const QPoint& position, m_undoCells.keys() )
-                m_sheet->nonDefaultCell( position.x(), position.y() )->setCellText( m_undoCells[position] );
+            for ( int i = 0; i < m_undoFormulas.count(); ++i )
+                m_sheet->formulaStorage()->insert( m_undoFormulas[i].first.x(), m_undoFormulas[i].first.y(), m_undoFormulas[i].second );
+            for ( int i = 0; i < m_undoValues.count(); ++i )
+                m_sheet->valueStorage()->insert( m_undoValues[i].first.x(), m_undoValues[i].first.y(), m_undoValues[i].second );
+            for ( int i = 0; i < m_undoLinks.count(); ++i )
+                m_sheet->linkStorage()->insert( m_undoLinks[i].first.x(), m_undoLinks[i].first.y(), m_undoLinks[i].second );
+            for ( int i = 0; i < m_undoFusion.count(); ++i )
+                m_sheet->fusionStorage()->insert( Region(m_undoFusion[i].first.toRect()), m_undoFusion[i].second );
             for ( int i = 0; i < m_undoStyles.count(); ++i )
                 m_sheet->styleStorage()->insert( m_undoStyles[i].first.toRect(), m_undoStyles[i].second );
             for ( int i = 0; i < m_undoComment.count(); ++i )
@@ -713,7 +726,14 @@ QString InsertDeleteColumnManipulator::name() const
 
 InsertDeleteRowManipulator::InsertDeleteRowManipulator()
     : Manipulator()
+    , m_mode( Insert )
 {
+}
+
+void InsertDeleteRowManipulator::setReverse( bool reverse )
+{
+    m_reverse = reverse;
+    m_mode = reverse ? Delete : Insert;
 }
 
 bool InsertDeleteRowManipulator::process( Element* element )
@@ -723,22 +743,12 @@ bool InsertDeleteRowManipulator::process( Element* element )
     const int num = range.height();
     if ( !m_reverse ) // insertion
     {
-        // create undo for cells
-        if ( m_firstrun )
-        {
-            for ( int row = KS_rowMax - range.height(); row <= KS_rowMax; ++row )
-            {
-                Cell* cell = m_sheet->getFirstCellRow( row);
-                while ( cell )
-                {
-                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
-                    cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
-                }
-            }
-        }
-
         // insert rows
         m_sheet->insertRows( pos, num );
+        QVector< QPair<QPoint,Formula> > undoFormulas = m_sheet->formulaStorage()->insertRows(pos, num);
+        QVector< QPair<QPoint,Value> > undoValues = m_sheet->valueStorage()->insertRows(pos, num);
+        QVector< QPair<QPoint,QString> > undoLinks = m_sheet->linkStorage()->insertRows(pos, num);
+        QList< QPair<QRectF,bool> > undoFusion = m_sheet->fusionStorage()->insertRows(pos, num);
         QList< QPair<QRectF,SharedSubStyle> > undoStyles = m_sheet->styleStorage()->insertRows(pos, num);
         QList< QPair<QRectF,QString> > undoComment = m_sheet->commentStorage()->insertRows(pos, num);
         QList< QPair<QRectF,Conditions> > undoConditions = m_sheet->conditionsStorage()->insertRows(pos, num);
@@ -747,6 +757,10 @@ bool InsertDeleteRowManipulator::process( Element* element )
         // create undo for styles, comments, conditions, validity
         if ( m_firstrun )
         {
+            m_undoFormulas = undoFormulas;
+            m_undoValues = undoValues;
+            m_undoLinks = undoLinks;
+            m_undoFusion = undoFusion;
             m_undoStyles = undoStyles;
             m_undoComment = undoComment;
             m_undoConditions = undoConditions;
@@ -754,10 +768,16 @@ bool InsertDeleteRowManipulator::process( Element* element )
         }
 
         // undo deletion
-        if ( !m_firstrun )
+        if ( m_mode == Delete )
         {
-            foreach ( const QPoint& position, m_undoCells.keys() )
-                m_sheet->nonDefaultCell( position.x(), position.y() )->setCellText( m_undoCells[position] );
+            for ( int i = 0; i < m_undoFormulas.count(); ++i )
+                m_sheet->formulaStorage()->insert( m_undoFormulas[i].first.x(), m_undoFormulas[i].first.y(), m_undoFormulas[i].second );
+            for ( int i = 0; i < m_undoValues.count(); ++i )
+                m_sheet->valueStorage()->insert( m_undoValues[i].first.x(), m_undoValues[i].first.y(), m_undoValues[i].second );
+            for ( int i = 0; i < m_undoLinks.count(); ++i )
+                m_sheet->linkStorage()->insert( m_undoLinks[i].first.x(), m_undoLinks[i].first.y(), m_undoLinks[i].second );
+            for ( int i = 0; i < m_undoFusion.count(); ++i )
+                m_sheet->fusionStorage()->insert( Region(m_undoFusion[i].first.toRect()), m_undoFusion[i].second );
             for ( int i = 0; i < m_undoStyles.count(); ++i )
                 m_sheet->styleStorage()->insert( m_undoStyles[i].first.toRect(), m_undoStyles[i].second );
             for ( int i = 0; i < m_undoComment.count(); ++i )
@@ -770,30 +790,24 @@ bool InsertDeleteRowManipulator::process( Element* element )
     }
     else // deletion
     {
-        // create undo for cells
-        if ( m_firstrun )
-        {
-            for ( int row = range.top(); row <= range.bottom(); ++row )
-            {
-                Cell* cell = m_sheet->getFirstCellRow( row );
-                while ( cell )
-                {
-                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
-                    cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
-                }
-            }
-        }
-
         // delete rows
-        m_sheet->deleteRows( pos, num );
-        QList< QPair<QRectF,SharedSubStyle> > undoStyles = m_sheet->styleStorage()->deleteRows(pos, num);
-        QList< QPair<QRectF,QString> > undoComment = m_sheet->commentStorage()->deleteRows(pos, num);
-        QList< QPair<QRectF,Conditions> > undoConditions = m_sheet->conditionsStorage()->deleteRows(pos, num);
-        QList< QPair<QRectF,Validity> > undoValidity = m_sheet->validityStorage()->deleteRows(pos, num);
+        m_sheet->removeRows( pos, num );
+        QVector< QPair<QPoint,Formula> > undoFormulas = m_sheet->formulaStorage()->removeRows(pos, num);
+        QVector< QPair<QPoint,Value> > undoValues = m_sheet->valueStorage()->removeRows(pos, num);
+        QVector< QPair<QPoint,QString> > undoLinks = m_sheet->linkStorage()->removeRows(pos, num);
+        QList< QPair<QRectF,bool> > undoFusion = m_sheet->fusionStorage()->removeRows(pos, num);
+        QList< QPair<QRectF,SharedSubStyle> > undoStyles = m_sheet->styleStorage()->removeRows(pos, num);
+        QList< QPair<QRectF,QString> > undoComment = m_sheet->commentStorage()->removeRows(pos, num);
+        QList< QPair<QRectF,Conditions> > undoConditions = m_sheet->conditionsStorage()->removeRows(pos, num);
+        QList< QPair<QRectF,Validity> > undoValidity = m_sheet->validityStorage()->removeRows(pos, num);
 
         // create undo for styles, comments, conditions, validity
         if ( m_firstrun )
         {
+            m_undoFormulas = undoFormulas;
+            m_undoValues = undoValues;
+            m_undoLinks = undoLinks;
+            m_undoFusion = undoFusion;
             m_undoStyles = undoStyles;
             m_undoComment = undoComment;
             m_undoConditions = undoConditions;
@@ -801,10 +815,16 @@ bool InsertDeleteRowManipulator::process( Element* element )
         }
 
         // undo insertion
-        if ( !m_firstrun )
+        if ( m_mode == Insert )
         {
-            foreach ( const QPoint& position, m_undoCells.keys() )
-                m_sheet->nonDefaultCell( position.x(), position.y() )->setCellText( m_undoCells[position] );
+            for ( int i = 0; i < m_undoFormulas.count(); ++i )
+                m_sheet->formulaStorage()->insert( m_undoFormulas[i].first.x(), m_undoFormulas[i].first.y(), m_undoFormulas[i].second );
+            for ( int i = 0; i < m_undoValues.count(); ++i )
+                m_sheet->valueStorage()->insert( m_undoValues[i].first.x(), m_undoValues[i].first.y(), m_undoValues[i].second );
+            for ( int i = 0; i < m_undoLinks.count(); ++i )
+                m_sheet->linkStorage()->insert( m_undoLinks[i].first.x(), m_undoLinks[i].first.y(), m_undoLinks[i].second );
+            for ( int i = 0; i < m_undoFusion.count(); ++i )
+                m_sheet->fusionStorage()->insert( Region(m_undoFusion[i].first.toRect()), m_undoFusion[i].second );
             for ( int i = 0; i < m_undoStyles.count(); ++i )
                 m_sheet->styleStorage()->insert( m_undoStyles[i].first.toRect(), m_undoStyles[i].second );
             for ( int i = 0; i < m_undoComment.count(); ++i )

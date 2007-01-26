@@ -66,9 +66,9 @@ GNUMERICExport::GNUMERICExport(QObject* parent, const QStringList&)
 /**
  * This function will check if a cell has any type of border.
  */
-bool GNUMERICExport::hasBorder(Cell *cell, int currentcolumn, int currentrow)
+bool GNUMERICExport::hasBorder( const Cell& cell, int currentcolumn, int currentrow)
 {
-    const Style style = cell->style(currentcolumn, currentrow);
+    const Style style = cell.style();
     if ( ( (style.leftBorderPen().width() != 0) &&
            (style.leftBorderPen().style() != Qt::NoPen ) ) ||
          ( (style.rightBorderPen().width() != 0) &&
@@ -91,7 +91,7 @@ const QString GNUMERICExport::ColorToString(int red, int green, int blue)
     return QString::number(red,16)+':'+QString::number(green,16)+':'+QString::number(blue,16);
 }
 
-QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell, int currentcolumn, int currentrow)
+QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,const Cell& cell, int currentcolumn, int currentrow)
 {
     QDomElement border_style;
     QDomElement border;
@@ -100,7 +100,7 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
     QColor color;
 
     border_style = gnumeric_doc.createElement("gmr:StyleBorder");
-    const Style style = cell->style(currentcolumn, currentrow);
+    const Style style = cell.style();
 
     if ( (style.leftBorderPen().width() != 0) &&
          (style.leftBorderPen().style() != Qt::NoPen ) )
@@ -231,12 +231,12 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
     return border_style;
 }
 
-QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell )
+QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, const Cell& cell )
 {
     //<gmr:Validation Style="1" Type="1" Operator="7" AllowBlank="true" UseDropdown="false" Title="ghhg" Message="ghghhhjfhfghjfghj&#10;fg&#10;hjgf&#10;hj">
     //        <gmr:Expression0>45</gmr:Expression0>
     //      </gmr:Validation>
-    Validity kspread_validity = cell->validity();
+    Validity kspread_validity = cell.validity();
     QDomElement val = gnumeric_doc.createElement( "gmr:Validation" );
     val.setAttribute( "Title", kspread_validity.title() );
     val.setAttribute( "Message", kspread_validity.message() );
@@ -489,10 +489,10 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
     return val;
 }
 
-QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,Cell * cell, int currentcolumn, int currentrow)
+QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,const Cell& cell, int currentcolumn, int currentrow)
 {
     QDomElement font_style;
-    const Style style = cell->style(currentcolumn, currentrow);
+    const Style style = cell.style();
     kDebug()<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow<<endl;
     font_style = gnumeric_doc.createElement("gmr:Font");
     font_style.appendChild(gnumeric_doc.createTextNode(style.fontFamily()));
@@ -550,7 +550,7 @@ QDomElement GNUMERICExport::GetLinkStyle(QDomDocument gnumeric_doc)
     return link_style;
 }
 
-QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, int currentcolumn, int currentrow)
+QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,const Cell& cell, int currentcolumn, int currentrow)
 {
     QColorGroup defaultColorGroup = QApplication::palette().active();
 
@@ -560,7 +560,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
     int red, green, blue;
 
-    const Style style = cell->style(currentcolumn, currentrow);
+    const Style style = cell.style();
     QColor bgColor =  style.backgroundColor();
 	red = bgColor.red()<<8;
 	green = bgColor.green()<<8;
@@ -705,7 +705,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
     cell_style.appendChild(GetFontStyle(gnumeric_doc, cell, currentcolumn, currentrow));
 
-    if ( !cell->validity().isEmpty() )
+    if ( !cell.validity().isEmpty() )
     {
         cell_style.appendChild( GetValidity( gnumeric_doc, cell ) );
     }
@@ -752,10 +752,10 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 		    stringFormat="0.00E+00";
 			break;
 		case Format::ShortDate:
-			stringFormat=cell->locale()->dateFormatShort();
+			stringFormat=cell.locale()->dateFormatShort();
 			break;
 		case Format::TextDate:
-			stringFormat=cell->locale()->dateFormat();
+			stringFormat=cell.locale()->dateFormat();
 			break;
 		case Format::Date1:
             stringFormat="dd-mmm-yy";
@@ -837,7 +837,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
             break;
 		case Format::Time:
 		case Format::SecondeTime:
-			stringFormat=cell->locale()->timeFormat();
+			stringFormat=cell.locale()->timeFormat();
 			break;
         case Format::Time1:
             stringFormat = "h:mm AM/PM";
@@ -1336,7 +1336,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
             for (int currentcolumn = 1; currentcolumn <= iMaxColumn; currentcolumn++)
             {
                 QDomElement cell_contents;
-                Cell * cell = table->cellAt( currentcolumn, currentrow, false );
+                Cell cell( table, currentcolumn, currentrow );
 
                 QString text, style;
                 QDomDocument domLink;
@@ -1344,36 +1344,36 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                 QDomNode domNode;
                 QDomNodeList childNodes;
 
-                if (!cell->isDefault() && !cell->isEmpty())
+                if (!cell.isDefault() && !cell.isEmpty())
                 {
-                    if ( cell->isFormula() )
+                    if ( cell.isFormula() )
                     {
-                        QString tmp = cell->inputText();
+                        QString tmp = cell.inputText();
                         if ( tmp.contains( "==" ) )
                             tmp=tmp.replace( "==", "=" );
                         text = tmp;
                         isLink = false;
                     }
-                    else if ( !cell->link().isEmpty() )
+                    else if ( !cell.link().isEmpty() )
                     {
                         isLink = true;
                         isLinkBold = false;
                         isLinkItalic = false;
                         //TODO FIXME
-                        linkUrl = cell->link();
-                        linkText = cell->inputText();
+                        linkUrl = cell.link();
+                        linkText = cell.inputText();
 
                     }
                     else
                     {
-                        text = cell->inputText();
+                        text = cell.inputText();
                         isLink = false;
                     }
 #if 0
-                    switch (cell->content())
+                    switch (cell.content())
                     {
                     case Cell::Text:
-                        text = cell->inputText();
+                        text = cell.inputText();
                         isLink = false;
                         break;
                     case Cell::RichText:
@@ -1382,7 +1382,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                         isLink = true;
                         isLinkBold = false;
                         isLinkItalic = false;
-                        domLink.setContent(cell->inputText().section("!",1,1));
+                        domLink.setContent(cell.inputText().section("!",1,1));
 
                         domNode = domLink.firstChild();
                         domRoot = domNode.toElement();
@@ -1409,49 +1409,49 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                         break;
                     case Cell::VisualFormula:
                         isLink = false;
-                        text = cell->inputText(); // untested
+                        text = cell.inputText(); // untested
                         break;
                     case Cell::Formula:
                         isLink = false;
-                        QString tmp = cell->inputText();
+                        QString tmp = cell.inputText();
                         if ( tmp =="==" )
                             tmp=replace( "==", "=" );
-                        /* cell->calc( true ); // Incredible, cells are not calculated if the document was just opened text = cell->valueString(); */
+                        /* cell.calc( true ); // Incredible, cells are not calculated if the document was just opened text = cell.valueString(); */
                         text = tmp;
                         break;
                     }
 #endif
                 }
 
-                if (!cell->isDefault())
+                if (!cell.isDefault())
                 {
 
                     // Check if the cell is merged
                     // Only cells with content are interesting?
                     // Otherwise it can take a while to parse a large sheet
 
-                    if (cell->doesMergeCells())
+                    if (cell.doesMergeCells())
                     {
                         // The cell is forced to occupy other cells
                         QDomElement merge = gnumeric_doc.createElement("gmr:Merge");
 
                         // Set up the range
                         QString fromCol, toCol, fromRow, toRow;
-                        fromCol = cell->columnName(currentcolumn);
+                        fromCol = cell.columnName(currentcolumn);
                         fromRow = QString::number(currentrow);
-                        toCol = cell->columnName(currentcolumn + cell->mergedXCells());
-                        toRow = QString::number(currentrow + cell->mergedYCells());
+                        toCol = cell.columnName(currentcolumn + cell.mergedXCells());
+                        toRow = QString::number(currentrow + cell.mergedYCells());
 
                         merge.appendChild(gnumeric_doc.createTextNode(fromCol + fromRow + ':' + toCol + toRow));
                         mergedCells = true;
                         merged.appendChild(merge);
                     }
                     // ---
-                    if ( !cell->comment( currentcolumn, currentrow ).isEmpty() )
+                    if ( !cell.comment().isEmpty() )
                     {
                         //<gmr:CellComment Author="" Text="cvbcvbxcvb&#10;cb&#10;xc&#10;vbxcv&#10;" ObjectBound="A1" ObjectOffset="0 0 0 0" ObjectAnchorType="17 16 17 16" Direction="17"/>
                         cellComment = gnumeric_doc.createElement("gmr:CellComment");
-                        cellComment.setAttribute( "Text", cell->comment( currentcolumn, currentrow ) );
+                        cellComment.setAttribute( "Text", cell.comment() );
                         QString sCell=QString( "%1%2" ).arg( Cell::columnName(currentcolumn ) ).arg( currentrow );
 
                         cellComment.setAttribute("ObjectBound", sCell );

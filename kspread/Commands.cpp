@@ -63,11 +63,11 @@ MergeCellCommand::MergeCellCommand( Cell* c, int cs, int rs )
   cell = c;
   colSpan = cs;
   rowSpan = rs;
-  oldColSpan = cell->extraXCells();
-  oldRowSpan = cell->extraYCells();
+  oldColSpan = cell.extraXCells();
+  oldRowSpan = cell.extraYCells();
   if( cell )
   {
-    QRect area( cell->column(), cell->row(), cs+1, rs+1 );
+    QRect area( cell.column(), cell.row(), cs+1, rs+1 );
     rangeName = Region( area ).name();
   }
 }
@@ -82,16 +82,16 @@ QString MergeCellCommand::name() const
 
 void MergeCellCommand::execute()
 {
-  Sheet* sheet = cell->sheet();
+  Sheet* sheet = cell.sheet();
   if( !sheet ) return;
-  sheet->changeMergedCell( cell->column(), cell->row(), colSpan, rowSpan);
+  sheet->changeMergedCell( cell.column(), cell.row(), colSpan, rowSpan);
 }
 
 void MergeCellCommand::unexecute()
 {
-  Sheet* sheet = cell->sheet();
+  Sheet* sheet = cell.sheet();
   if( !sheet ) return;
-  sheet->changeMergedCell( cell->column(), cell->row(), oldColSpan, oldRowSpan);
+  sheet->changeMergedCell( cell.column(), cell.row(), oldColSpan, oldRowSpan);
 }
 
 // ----- DissociateCellCommand -----
@@ -99,8 +99,8 @@ void MergeCellCommand::unexecute()
 DissociateCellCommand::DissociateCellCommand( Cell* c )
 {
   cell = c;
-  oldColSpan = cell->extraXCells();
-  oldRowSpan = cell->extraYCells();
+  oldColSpan = cell.extraXCells();
+  oldRowSpan = cell.extraYCells();
 }
 
 QString DissociateCellCommand::name() const
@@ -110,16 +110,16 @@ QString DissociateCellCommand::name() const
 
 void DissociateCellCommand::execute()
 {
-  Sheet* sheet = cell->sheet();
+  Sheet* sheet = cell.sheet();
   if( !sheet ) return;
-  sheet->changeMergedCell( cell->column(), cell->row(), 0, 0 );
+  sheet->changeMergedCell( cell.column(), cell.row(), 0, 0 );
 }
 
 void DissociateCellCommand::unexecute()
 {
-  Sheet* sheet = cell->sheet();
+  Sheet* sheet = cell.sheet();
   if( !sheet ) return;
-  sheet->changeMergedCell( cell->column(), cell->row(), oldColSpan, oldRowSpan);
+  sheet->changeMergedCell( cell.column(), cell.row(), oldColSpan, oldRowSpan);
 }
 #endif
 
@@ -508,15 +508,15 @@ QString PaperLayoutCommand::name() const
     return i18n("Set Page Layout");
 }
 
-LinkCommand::LinkCommand( Cell* c, const QString& text, const QString& link )
+LinkCommand::LinkCommand( const Cell& c, const QString& text, const QString& link )
 {
   cell = c;
-  oldText = cell->inputText();
-  oldLink = cell->link();
+  oldText = cell.inputText();
+  oldLink = cell.link();
   newText = text;
   newLink = link;
 
-  Sheet* s = cell->sheet();
+  Sheet* s = cell.sheet();
   if( s ) doc = s->doc();
 }
 
@@ -525,8 +525,8 @@ void LinkCommand::execute()
   if( !cell ) return;
 
   if( !newText.isEmpty() )
-    cell->setCellText( newText );
-  cell->setLink( newLink  );
+    cell.setCellText( newText );
+  cell.setLink( newLink  );
 
   doc->addDamage( new CellDamage( cell, CellDamage::Appearance ) );
 }
@@ -535,8 +535,8 @@ void LinkCommand::unexecute()
 {
   if( !cell ) return;
 
-  cell->setCellText( oldText );
-  cell->setLink( oldLink );
+  cell.setCellText( oldText );
+  cell.setLink( oldLink );
 
   doc->addDamage( new CellDamage( cell, CellDamage::Appearance ) );
 }

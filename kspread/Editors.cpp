@@ -478,7 +478,7 @@ void FunctionCompletion::showCompletion( const QStringList &choices )
 class CellEditor::Private
 {
 public:
-  Cell*                     cell;
+  Cell                      cell;
   Canvas*                   canvas;
   KTextEdit*                textEdit;
   FormulaEditorHighlighter* highlighter;
@@ -501,7 +501,7 @@ public:
 };
 
 
-CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, const char* /*_name*/ )
+CellEditor::CellEditor( const Cell& _cell, Canvas* _parent, bool captureAllKeyEvents, const char* /*_name*/ )
   : QWidget( _parent )
 {
   d = new Private();
@@ -538,7 +538,7 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
   connect( d->functionCompletionTimer, SIGNAL( timeout() ),
     SLOT( triggerFunctionAutoComplete() ) );
 
-  if ( !_cell->style().wrapText() )
+  if ( !_cell.style().wrapText() )
     d->textEdit->setWordWrapMode( QTextOption::NoWrap );
   else
     d->textEdit->setWordWrapMode( QTextOption::WordWrap );
@@ -561,7 +561,7 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 //  canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
 
   // set font size according to zoom factor
-  QFont font( _cell->style().font() );
+  QFont font( _cell.style().font() );
   font.setPointSizeF( 0.01 * _parent->doc()->zoomInPercent() * font.pointSizeF() );
   d->textEdit->setFont( font );
 
@@ -582,7 +582,7 @@ CellEditor::~CellEditor()
   delete d;
 }
 
-Cell* CellEditor::cell() const
+const Cell& CellEditor::cell() const
 {
   return d->cell;
 }
@@ -918,7 +918,7 @@ void CellEditor::slotTextChanged()
     d->length -= 2; */
   }
 
-  if ( (cell()->formatType()) == Format::Percentage )
+  if ( (cell().formatType()) == Format::Percentage )
   {
     if ( (t.length() == 1) && t[0].isDigit() )
     {

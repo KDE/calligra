@@ -488,9 +488,9 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
 
     tabElem.setAttribute( "table:name", name );
 
-    maxRowCols( sheet, maxCols, maxRows );
+    const QRect usedArea = sheet->usedArea();
 
-    exportSheet( doc, tabElem, sheet, maxCols, maxRows );
+    exportSheet( doc, tabElem, sheet, usedArea.width(), usedArea.height() );
 
     body.appendChild( tabElem );
   }
@@ -585,20 +585,20 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
   while ( i <= maxCols )
   {
     int  repeated = 1;
-    const Cell* cell = sheet->cellAt( i, row );
-    const KSpread::Style style = cell->style( i, row );
+    const Cell cell( sheet, i, row );
+    const KSpread::Style style = cell.style();
     QDomElement cellElem;
 
-    if ( !cell->isPartOfMerged() )
+    if ( !cell.isPartOfMerged() )
       cellElem = doc.createElement( "table:table-cell" );
     else
       cellElem = doc.createElement( "table:covered-table-cell" );
 
     QFont font;
-    Value const value( cell->value() );
+    Value const value( cell.value() );
     font = style.font();
     m_styles.addFont( font );
-    QString comment = cell->comment( i, row );
+    QString comment = cell.comment();
 
     CellStyle c;
     CellStyle::loadData( c, cell ); // TODO: number style
@@ -606,18 +606,18 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     cellElem.setAttribute( "table:style-name", m_styles.cellStyle( c ) );
 
     // group empty cells with the same style
-    if ( cell->isEmpty() && !comment.isEmpty() && !cell->isPartOfMerged() && !cell->doesMergeCells() )
+    if ( cell.isEmpty() && !comment.isEmpty() && !cell.isPartOfMerged() && !cell.doesMergeCells() )
     {
       int j = i + 1;
       while ( j <= maxCols )
       {
-        const Cell *cell1 = sheet->cellAt( j, row );
+        const Cell cell1( sheet, j, row );
 
         CellStyle c1;
         CellStyle::loadData( c1, cell1 ); // TODO: number style
 
-        if ( cell1->isEmpty() && !comment.isEmpty()
-             && CellStyle::isEqual( &c, c1 ) && !cell->isPartOfMerged() && !cell->doesMergeCells() )
+        if ( cell1.isEmpty() && !comment.isEmpty()
+             && CellStyle::isEqual( &c, c1 ) && !cell.isPartOfMerged() && !cell.doesMergeCells() )
           ++repeated;
         else
           break;
@@ -650,42 +650,42 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       kDebug(30518) << "Type: " << value.type() << endl;
     }
 
-    if ( cell->isFormula() )
+    if ( cell.isFormula() )
     {
       kDebug(30518) << "Formula found" << endl;
 
-      QString formula( convertFormula( cell->inputText() ) );
+      QString formula( convertFormula( cell.inputText() ) );
       cellElem.setAttribute( "table:formula", formula );
     }
-    else if ( !cell->link().isEmpty() )
+    else if ( !cell.link().isEmpty() )
     {
       QDomElement link = doc.createElement( "text:p" );
       QDomElement linkref = doc.createElement( "text:a" );
 
-      QString tmp = cell->link();
+      QString tmp = cell.link();
        if ( Util::localReferenceAnchor( tmp ) )
            linkref.setAttribute( "xlink:href", ( '#'+tmp ) );
        else
            linkref.setAttribute( "xlink:href", tmp  );
 
-       linkref.appendChild( doc.createTextNode( cell->inputText() ) );
+       linkref.appendChild( doc.createTextNode( cell.inputText() ) );
 
        link.appendChild( linkref );
        cellElem.appendChild( link );
     }
-    else if ( !cell->isEmpty() )
+    else if ( !cell.isEmpty() )
     {
       QDomElement textElem = doc.createElement( "text:p" );
-      textElem.appendChild( doc.createTextNode( cell->displayText() ) );
+      textElem.appendChild( doc.createTextNode( cell.displayText() ) );
 
       cellElem.appendChild( textElem );
-      kDebug(30518) << "Cell StrOut: " << cell->displayText() << endl;
+      kDebug(30518) << "Cell StrOut: " << cell.displayText() << endl;
     }
 
-    if ( cell->doesMergeCells() )
+    if ( cell.doesMergeCells() )
     {
-      int colSpan = cell->mergedXCells() + 1;
-      int rowSpan = cell->mergedYCells() + 1;
+      int colSpan = cell.mergedXCells() + 1;
+      int rowSpan = cell.mergedYCells() + 1;
 
       if ( colSpan > 1 )
         cellElem.setAttribute( "table:number-columns-spanned", QString::number( colSpan ) );
@@ -708,43 +708,6 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
     i += repeated;
   }
-}
-
-void OpenCalcExport::maxRowCols( const Sheet *sheet,
-                                 int & maxCols, int & maxRows )
-{
-  Cell const * cell = sheet->firstCell();
-
-  while ( cell )
-  {
-    if ( cell->column() > maxCols )
-      maxCols = cell->column();
-
-    if ( cell->row() > maxRows )
-      maxRows = cell->row();
-
-    cell = cell->nextCell();
-  }
-
-  RowFormat const * row = sheet->firstRow();
-
-  while ( row )
-  {
-    if ( row->row() > maxRows )
-      maxRows = row->row();
-
-    row = row->next();
-  }
-
-  ColumnFormat const * col = sheet->firstCol();
-  while ( col )
-  {
-    if ( col->column() > maxCols )
-      maxCols = col->column();
-
-    col = col->next();
-  }
-
 }
 
 bool OpenCalcExport::exportStyles( KoStore * store, const Doc *ksdoc )

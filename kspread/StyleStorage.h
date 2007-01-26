@@ -120,39 +120,39 @@ public:
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,SharedSubStyle> > deleteRows(int position, int number = 1);
+    QList< QPair<QRectF,SharedSubStyle> > removeRows(int position, int number = 1);
 
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,SharedSubStyle> > deleteColumns(int position, int number = 1);
+    QList< QPair<QRectF,SharedSubStyle> > removeColumns(int position, int number = 1);
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,SharedSubStyle> > shiftRows(const QRect& rect);
+    QList< QPair<QRectF,SharedSubStyle> > insertShiftRight(const QRect& rect);
 
     /**
      * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,SharedSubStyle> > shiftColumns(const QRect& rect);
+    QList< QPair<QRectF,SharedSubStyle> > insertShiftDown(const QRect& rect);
 
     /**
      * Shifts the rows left of \p rect to the left by the width of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QList< QPair<QRectF,SharedSubStyle> > unshiftRows(const QRect& rect);
+    QList< QPair<QRectF,SharedSubStyle> > removeShiftLeft(const QRect& rect);
 
     /**
      * Shifts the columns on top of \p rect to the top by the height of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QList< QPair<QRectF,SharedSubStyle> > unshiftColumns(const QRect& rect);
+    QList< QPair<QRectF,SharedSubStyle> > removeShiftUp(const QRect& rect);
 
 protected Q_SLOTS:
     void garbageCollection();

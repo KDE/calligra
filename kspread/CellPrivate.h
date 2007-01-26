@@ -58,44 +58,7 @@ class Value;
 
 using namespace KSpread;
 
-// Some variables are placed in Cell::Extra because normally they're
-// not required in simple case of cell(s). For example, most plain
-// text cells don't need to store information about spanned columns
-// and rows, as this is only the case with merged cells.
-//
-// When the cell is getting complex (e.g. merged with other cells,
-// contains rich text, has validation criteria, etc), this Cell::Extra
-// is allocated by Cell::Private and starts to be
-// available. Otherwise, it won't exist at all.
-
-class Cell::Extra
-{
-public:
-    Extra() {}
-
-    // Not empty when the cell holds a link
-    QString link;
-
-    // Number of cells explicitly merged by the user in X and Y directions.
-    int mergedXCells : 16; // KS_colMax
-    int mergedYCells : 16; // KS_rowMax
-
-    // If this cell merges other cells, then we have the cells width and
-    // height stored here.
-    double mergedWidth;
-    double mergedHeight;
-
-    // If this cell is part of a merged cell, this points to the master cell,
-    // that does the merging.
-    Cell* masterCell;
-
-private:
-    // Don't allow implicit copy.
-    Extra& operator=( const Extra& );
-};
-
-
-class Cell::Private
+class Cell::Private : public QSharedData
 {
 public:
 
@@ -104,21 +67,11 @@ public:
     // Some basic data.
     row     = 0;
     column  = 0;
-    value   = Value::empty();
-    formula = 0;
-
-    nextCell     = 0;
-    previousCell = 0;
-
-    // Default is to not have the "extra" stuff in a cell.
-    cellExtra = 0;
-    sheet = 0;
+    sheet   = 0;
   }
 
   ~Private()
   {
-    delete cellExtra;
-    delete formula;
   }
 
 public:
@@ -129,59 +82,9 @@ public:
   int  row    : 16; // KS_rowMax
   int  column : 16; // KS_colMax
 
-  // Value of the cell, either typed by user or as result of formula
-  Value value;
-
-  // Holds the user's input.
-  //
-  // FIXME:
-  // Eventually, we'll want to get rid of inputText and generate
-  // user's input on-the-fly. Then, for normal cells, we'll generate
-  // this string using converter()->asString
-  // (value()).
-  //
-  // Here the problem is, that inputText also holds the formula -
-  // we'll need to provide some method to generate it from the
-  // parsed version, created in KSpread::Formula. Hence, we won't be
-  // able to get rid of inputText until we switch to the new formula
-  // parser and until we write some method that re-generates the
-  // input formula...
-  //
-  // Alternately, we can keep using inputText for formulas and
-  // generate it dynamically for static cells...
-  //
-  //  /Tomas
-  //
-  QString inputText;
-
-  // the Formula object for the cell
-  KSpread::Formula *formula;
-
-  // Pointers to neighboring cells.
-  // FIXME (comment): Which order?
-  Cell  *nextCell;
-  Cell  *previousCell;
-
-    bool hasExtra() const { return (cellExtra != 0); };
-    Extra* extra()
-    {
-        if ( !cellExtra )
-        {
-            cellExtra = new Extra;
-            cellExtra->mergedXCells = 0;
-            cellExtra->mergedYCells = 0;
-            cellExtra->mergedWidth  = 0.0;
-            cellExtra->mergedHeight = 0.0;
-            cellExtra->masterCell   = 0;
-        }
-        return cellExtra;
-    }
-
     Sheet* sheet;
 
 private:
-  // "Extra stuff", see explanation for Cell::Extra.
-  Extra  *cellExtra;
 };
 
 #endif

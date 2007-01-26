@@ -161,42 +161,42 @@ public:
    * It shrinks or shifts rectangles, respectively.
    * \return the removed rectangle/data pairs
    */
-  virtual QList< QPair<QRectF,T> > deleteRows(int position, int number, InsertMode mode = DefaultInsertMode);
+  virtual QList< QPair<QRectF,T> > removeRows(int position, int number, InsertMode mode = DefaultInsertMode);
 
   /**
    * Deletes \p number columns at the position \p position .
    * It shrinks or shifts rectangles, respectively.
    * \return the removed rectangle/data pairs
    */
-  virtual QList< QPair<QRectF,T> > deleteColumns(int position, int number, InsertMode mode = DefaultInsertMode);
+  virtual QList< QPair<QRectF,T> > removeColumns(int position, int number, InsertMode mode = DefaultInsertMode);
 
   /**
    * Shifts the rows right of \p rect to the right by the width of \p rect .
    * It extends or shifts rectangles, respectively.
    * \return the former rectangle/data pairs
    */
-  virtual QList< QPair<QRectF,T> > shiftRows(const QRect& rect, InsertMode mode = DefaultInsertMode);
+  virtual QList< QPair<QRectF,T> > insertShiftRight(const QRect& rect, InsertMode mode = DefaultInsertMode);
 
   /**
    * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
    * It extends or shifts rectangles, respectively.
    * \return the former rectangle/data pairs
    */
-  virtual QList< QPair<QRectF,T> > shiftColumns(const QRect& rect, InsertMode mode = DefaultInsertMode);
+  virtual QList< QPair<QRectF,T> > insertShiftDown(const QRect& rect, InsertMode mode = DefaultInsertMode);
 
   /**
    * Shifts the rows left of \p rect to the left by the width of \p rect .
    * It shrinks or shifts rectangles, respectively.
    * \return the former rectangle/data pairs
    */
-  virtual QList< QPair<QRectF,T> > unshiftRows(const QRect& rect, InsertMode mode = DefaultInsertMode);
+  virtual QList< QPair<QRectF,T> > removeShiftLeft(const QRect& rect, InsertMode mode = DefaultInsertMode);
 
   /**
    * Shifts the columns on top of \p rect to the top by the height of \p rect .
    * It shrinks or shifts rectangles, respectively.
    * \return the former rectangle/data pairs
    */
-  virtual QList< QPair<QRectF,T> > unshiftColumns(const QRect& rect, InsertMode mode = DefaultInsertMode);
+  virtual QList< QPair<QRectF,T> > removeShiftUp(const QRect& rect, InsertMode mode = DefaultInsertMode);
 
 protected:
   class Node;
@@ -230,8 +230,8 @@ public:
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const = 0;
   virtual QList< QPair<QRectF,T> > insertRows(int position, int number) = 0;
   virtual QList< QPair<QRectF,T> > insertColumns(int position, int number) = 0;
-  virtual QList< QPair<QRectF,T> > deleteRows(int position, int number) = 0;
-  virtual QList< QPair<QRectF,T> > deleteColumns(int position, int number) = 0;
+  virtual QList< QPair<QRectF,T> > removeRows(int position, int number) = 0;
+  virtual QList< QPair<QRectF,T> > removeColumns(int position, int number) = 0;
 };
 
 /**
@@ -252,8 +252,8 @@ public:
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
   virtual QList< QPair<QRectF,T> > insertRows(int position, int number);
   virtual QList< QPair<QRectF,T> > insertColumns(int position, int number);
-  virtual QList< QPair<QRectF,T> > deleteRows(int position, int number);
-  virtual QList< QPair<QRectF,T> > deleteColumns(int position, int number);
+  virtual QList< QPair<QRectF,T> > removeRows(int position, int number);
+  virtual QList< QPair<QRectF,T> > removeColumns(int position, int number);
 };
 
 /**
@@ -274,8 +274,8 @@ public:
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
   virtual QList< QPair<QRectF,T> > insertRows(int position, int number);
   virtual QList< QPair<QRectF,T> > insertColumns(int position, int number);
-  virtual QList< QPair<QRectF,T> > deleteRows(int position, int number);
-  virtual QList< QPair<QRectF,T> > deleteColumns(int position, int number);
+  virtual QList< QPair<QRectF,T> > removeRows(int position, int number);
+  virtual QList< QPair<QRectF,T> > removeColumns(int position, int number);
 };
 
 
@@ -354,25 +354,25 @@ QList< QPair<QRectF,T> > RTree<T>::insertColumns(int position, int number, Inser
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::deleteRows(int position, int number, InsertMode mode)
+QList< QPair<QRectF,T> > RTree<T>::removeRows(int position, int number, InsertMode mode)
 {
     if (position < 1 || position > KS_rowMax)
         return QList< QPair<QRectF,T> >();
     const int pos = position - (mode == CopyPrevious) ? 1 : 0;
-    return dynamic_cast<Node*>(this->m_root)->deleteRows(pos, number);
+    return dynamic_cast<Node*>(this->m_root)->removeRows(pos, number);
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::deleteColumns(int position, int number, InsertMode mode)
+QList< QPair<QRectF,T> > RTree<T>::removeColumns(int position, int number, InsertMode mode)
 {
     if (position < 1 || position > KS_colMax)
         return QList< QPair<QRectF,T> >();
     const int pos = position - (mode == CopyPrevious) ? 1 : 0;
-    return dynamic_cast<Node*>(this->m_root)->deleteColumns(pos, number);
+    return dynamic_cast<Node*>(this->m_root)->removeColumns(pos, number);
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::shiftRows(const QRect& r, InsertMode mode)
+QList< QPair<QRectF,T> > RTree<T>::insertShiftRight(const QRect& r, InsertMode mode)
 {
     const QRect rect( r.normalized() );
     if (rect.left() < 1 || rect.left() > KS_colMax)
@@ -404,7 +404,7 @@ QList< QPair<QRectF,T> > RTree<T>::shiftRows(const QRect& r, InsertMode mode)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::shiftColumns(const QRect& r, InsertMode mode)
+QList< QPair<QRectF,T> > RTree<T>::insertShiftDown(const QRect& r, InsertMode mode)
 {
     Q_UNUSED(mode);
     const QRect rect( r.normalized() );
@@ -437,7 +437,7 @@ QList< QPair<QRectF,T> > RTree<T>::shiftColumns(const QRect& r, InsertMode mode)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::unshiftRows(const QRect& r, InsertMode mode)
+QList< QPair<QRectF,T> > RTree<T>::removeShiftLeft(const QRect& r, InsertMode mode)
 {
     Q_UNUSED(mode);
     const QRect rect( r.normalized() );
@@ -459,7 +459,7 @@ QList< QPair<QRectF,T> > RTree<T>::unshiftRows(const QRect& r, InsertMode mode)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::unshiftColumns(const QRect& r, InsertMode mode)
+QList< QPair<QRectF,T> > RTree<T>::removeShiftUp(const QRect& r, InsertMode mode)
 {
     Q_UNUSED(mode);
     const QRect rect( r.normalized() );
@@ -564,7 +564,7 @@ QList< QPair<QRectF,T> > RTree<T>::LeafNode::insertColumns(int position, int num
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::LeafNode::deleteRows(int position, int number)
+QList< QPair<QRectF,T> > RTree<T>::LeafNode::removeRows(int position, int number)
 {
     if (position > this->m_boundingBox.bottom())
         return QList< QPair<QRectF,T> >();
@@ -588,7 +588,7 @@ QList< QPair<QRectF,T> > RTree<T>::LeafNode::deleteRows(int position, int number
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::LeafNode::deleteColumns(int position, int number)
+QList< QPair<QRectF,T> > RTree<T>::LeafNode::removeColumns(int position, int number)
 {
     if (position > this->m_boundingBox.right())
         return QList< QPair<QRectF,T> >();
@@ -688,7 +688,7 @@ QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::insertColumns(int position, int
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::deleteRows(int position, int number)
+QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::removeRows(int position, int number)
 {
     if (position > this->m_boundingBox.bottom())
         return QList< QPair<QRectF,T> >();
@@ -701,7 +701,7 @@ QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::deleteRows(int position, int nu
     for ( int i = 0; i < this->childCount(); ++i )
     {
         this->m_childBoundingBox[ i ].adjust(0, (position < this->m_childBoundingBox[ i ].top()) ? -number : 0, 0, -number);
-        removedPairs += dynamic_cast<Node*>(this->m_childs[i])->deleteRows(position, number);
+        removedPairs += dynamic_cast<Node*>(this->m_childs[i])->removeRows(position, number);
         if (this->m_childBoundingBox[ i ].isEmpty())
         {
             delete this->m_childs[i];
@@ -712,7 +712,7 @@ QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::deleteRows(int position, int nu
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::deleteColumns(int position, int number)
+QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::removeColumns(int position, int number)
 {
     if (position > this->m_boundingBox.right())
         return QList< QPair<QRectF,T> >();
@@ -725,7 +725,7 @@ QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::deleteColumns(int position, int
     for ( int i = 0; i < this->childCount(); ++i )
     {
         this->m_childBoundingBox[ i ].adjust((position < this->m_childBoundingBox[ i ].left()) ? -number : 0, 0, -number, 0);
-        removedPairs += dynamic_cast<Node*>(this->m_childs[i])->deleteColumns(position, number);
+        removedPairs += dynamic_cast<Node*>(this->m_childs[i])->removeColumns(position, number);
         if (this->m_childBoundingBox[ i ].isEmpty())
         {
             delete this->m_childs[i];

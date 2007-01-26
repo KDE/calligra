@@ -44,7 +44,7 @@ namespace KSpread
 class Inspector::Private
 {
 public:
-  Cell* cell;
+  Cell cell;
   Style style;
   Sheet* sheet;
 
@@ -96,28 +96,28 @@ void Inspector::Private::handleCell()
 
   cellView->clear();
 
-  new Q3ListViewItem( cellView, "Column", QString::number( cell->column() ) );
-  new Q3ListViewItem( cellView, "Row", QString::number( cell->row() ) );
-  new Q3ListViewItem( cellView, "Name", cell->name() );
-  new Q3ListViewItem( cellView, "Full Name", cell->fullName() );
+  new Q3ListViewItem( cellView, "Column", QString::number( cell.column() ) );
+  new Q3ListViewItem( cellView, "Row", QString::number( cell.row() ) );
+  new Q3ListViewItem( cellView, "Name", cell.name() );
+  new Q3ListViewItem( cellView, "Full Name", cell.fullName() );
 
-  new Q3ListViewItem( cellView, "Default", boolAsString( cell->isDefault() ) );
-  new Q3ListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );
-  new Q3ListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
-//   new Q3ListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell->style()->propertiesMask() ) ) );
-//   new Q3ListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->style()->style()->features() ) ) );
-  new Q3ListViewItem( cellView, "Text", cell->inputText() );
+  new Q3ListViewItem( cellView, "Default", boolAsString( cell.isDefault() ) );
+  new Q3ListViewItem( cellView, "Empty", boolAsString( cell.isEmpty() ) );
+  new Q3ListViewItem( cellView, "Formula", boolAsString( cell.isFormula() ) );
+//   new Q3ListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell.style()->propertiesMask() ) ) );
+//   new Q3ListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell.style()->style()->features() ) ) );
+  new Q3ListViewItem( cellView, "Text", cell.inputText() );
   new Q3ListViewItem( cellView, "Text (Displayed)",
-		     cell->displayText().replace( QChar('\n'), "\\n" ) );
+		     cell.displayText().replace( QChar('\n'), "\\n" ) );
 
   QTextStream ts( &str, QIODevice::WriteOnly );
-  ts << cell->value();
+  ts << cell.value();
   new Q3ListViewItem( cellView, "Value", str );
 
-  new Q3ListViewItem( cellView, "Link", cell->link() );
+  new Q3ListViewItem( cellView, "Link", cell.link() );
 
-  new Q3ListViewItem( cellView, "Width", QString::number( cell->width() ) );
-  new Q3ListViewItem( cellView, "Height", QString::number( cell->height() ) );
+  new Q3ListViewItem( cellView, "Width", QString::number( cell.width() ) );
+  new Q3ListViewItem( cellView, "Height", QString::number( cell.height() ) );
 }
 
 void Inspector::Private::handleFormat()
@@ -149,7 +149,7 @@ void Inspector::Private::handleFormat()
 void Inspector::Private::handleStyle() // direct style access
 {
   styleView->clear();
-  const Style style = cell->style();
+  const Style style = cell.style();
 
   Q3ListViewItem* flags = new Q3ListViewItem( styleView, "Flags" );
   new Q3ListViewItem( flags, "Border (left)",
@@ -196,7 +196,7 @@ void Inspector::Private::handleDep()
 
 }
 
-Inspector::Inspector( Cell* cell ):
+Inspector::Inspector( const Cell& cell ):
   KPageDialog()
 {
   setFaceType( Tabbed );
@@ -206,8 +206,8 @@ Inspector::Inspector( Cell* cell ):
   d = new Private;
 
   d->cell = cell;
-  d->style = cell->style();
-  d->sheet = cell->sheet();
+  d->style = cell.style();
+  d->sheet = cell.sheet();
 
   QFrame* cellPage = new QFrame();
   addPage( cellPage, QString("Cell") );

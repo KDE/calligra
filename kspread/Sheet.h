@@ -35,11 +35,10 @@
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
 #include <KoXmlReader.h>
 
-//#include "AutoFill.h"
 #include "Cell.h"
+#include "Formula.h"
 #include "Style.h"
 #include "Global.h"
-//#include "Object.h"
 
 class QWidget;
 class QPainter;
@@ -65,16 +64,20 @@ namespace KSpread
 class AutoFillSequence;
 class Canvas;
 class Cell;
+class CellStorage;
 class ColumnFormat;
 class CommentStorage;
 class ConditionsStorage;
-class RowFormat;
+class FormulaStorage;
 class EmbeddedChart;
 class Doc;
+class FusionStorage;
 class GenValidationStyles;
+class LinkStorage;
 class Map;
 class Point;
 class Region;
+class RowFormat;
 class Selection;
 class Sheet;
 class SheetPrint;
@@ -83,6 +86,7 @@ class StyleStorage;
 class UndoInsertRemoveAction;
 class Validity;
 class ValidityStorage;
+class ValueStorage;
 class View;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;
@@ -112,7 +116,7 @@ public:
      *
      * @param _obj may by 0. In this case all cells may have changed.
      */
-    virtual void cellChanged( Cell *_obj );
+    virtual void cellChanged( const Cell& cell );
 
     virtual void setIgnoreChanges( bool _ignore ) { m_bIgnoreChanges = _ignore; }
 
@@ -122,7 +126,7 @@ public:
     Sheet* sheet()const { return m_pSheet; }
 
 signals:
-    void changed( Cell *_obj );
+    void changed( const Cell& _obj );
 
 protected:
     QRect m_rctDataArea;
@@ -141,7 +145,7 @@ public:
     ChartBinding( Sheet *_sheet, const QRect& _area, EmbeddedChart *_child );
     virtual ~ChartBinding();
 
-    virtual void cellChanged( Cell *_obj );
+    virtual void cellChanged( const Cell& cell );
 
 private:
     EmbeddedChart* m_child;
@@ -595,174 +599,29 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to accessing cells
+    //BEGIN Methods for Storage access
     //
 
     /**
-     * @return the first non-default cell
+     * Returns the visible cell at \p column, \p row.
+     * I.e. if the cell is merged into another cell, the latter is returned.
+     * \param column the cell's column index
+     * \param row the cell's row index
+     * \return the visible cell at the position
      */
-    Cell* firstCell() const;
+    Cell visibleCellAt( int column, int row );
 
     /**
-     * @param column the cell's column index
-     * @param row the cell's row index
+     * \return the cell storage
      */
-    Cell* cellAt( int column, int row ) const;
+    CellStorage* cellStorage() const;
 
     /**
-     * @param column the cell's column index
-     * @param row the cell's row index
-     * @param scrollbar_update will change the scrollbar if set to true disregarding
-     *                          whether _column/_row are bigger than
-     *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          Sheet::Private::scrollbarUpdates.
+     * Determines the used area, i.e. the area spanning from A1 to the maximum
+     * occupied column and row.
+     * \return the used area
      */
-    Cell* cellAt( int column, int row, bool scrollbar_update = false );
-
-    /**
-     * A convenience function.
-     * @param point the cell's coordinates
-     * @param scrollbar_update will change the scrollbar if set to true disregarding
-     *                          whether _column/_row are bigger than
-     *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          Sheet::Private::scrollbarUpdates .
-     */
-    Cell* cellAt( const QPoint& point, bool scrollbar_update = false )
-      { return cellAt( point.x(), point.y(), scrollbar_update ); }
-
-    /**
-     * @return the pointer to the cell that is visible at a certain position.
-     *         That means If the cell at this position is obscured then the
-     *         obscuring cell is returned
-     * @param _column the cell's column index
-     * @param _row the cell's row index
-     * @param _scrollbar_update will change the scrollbar if set to true disregarding
-     *                          whether _column/_row are bigger than
-     *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          Sheet::Private::scrollbarUpdates .
-     */
-    Cell* visibleCellAt( int _column, int _row, bool _scrollbar_update = false );
-
-    /**
-     * If no special Cell exists for this position then a new one is created.
-     *
-     * @param _column the cell's column index
-     * @param _row the cell's row index
-     * @param _style if a new cell is created, this Style is used
-     * @return a non default Cell for the position.
-     */
-    Cell* nonDefaultCell( int _column, int _row, Style* _style = 0 );
-
-    /**
-     * Convenience function.
-     * \param cellRef the cell's location
-     * \see nonDefaultCell(int, int, Style*)
-     */
-    Cell* nonDefaultCell( QPoint const & cellRef )
-      { return nonDefaultCell( cellRef.x(), cellRef.y() ); }
-
-    /**
-     * Retrieve the first used cell in a given column.  Can be used in conjunction
-     * with getNextCellDown to loop through a column.
-     *
-     * @param col The column to get the first cell from
-     *
-     * @return Returns a pointer to the cell, or 0 if there are no used cells
-     *         in this column
-     */
-    Cell* getFirstCellColumn(int col) const;
-
-    /**
-     * Retrieve the last used cell in a given column.  Can be used in conjunction
-     * with getNextCellUp to loop through a column.
-     *
-     * @param col The column to get the cell from
-     *
-     * @return Returns a pointer to the cell, or 0 if there are no used cells
-     *         in this column
-     */
-    Cell* getLastCellColumn(int col) const;
-
-    /**
-     * Retrieve the first used cell in a given row.  Can be used in conjunction
-     * with getNextCellRight to loop through a row.
-     *
-     * @param row The row to get the first cell from
-     *
-     * @return Returns a pointer to the cell, or 0 if there are no used cells
-     *         in this row
-     */
-    Cell* getFirstCellRow(int row) const;
-
-    /**
-     * Retrieve the last used cell in a given row.  Can be used in conjunction
-     * with getNextCellLeft to loop through a row.
-     *
-     * @param row The row to get the last cell from
-     *
-     * @return Returns a pointer to the cell, or 0 if there are no used cells
-     *         in this row
-     */
-    Cell* getLastCellRow(int row) const;
-
-    /**
-     * Retrieves the next used cell above the given col/row pair.  The given
-     * col/row pair does not need to reference a used cell.
-     *
-     * @param col column to start looking through
-     * @param row the row above which to start looking.
-     *
-     * @return Returns the next used cell above this one, or 0 if there are none
-     */
-    Cell* getNextCellUp(int col, int row) const;
-
-    /**
-     * Retrieves the next used cell below the given col/row pair.  The given
-     * col/row pair does not need to reference a used cell.
-     *
-     * @param col column to start looking through
-     * @param row the row below which to start looking.
-     *
-     * @return Returns the next used cell below this one, or 0 if there are none
-     */
-    Cell* getNextCellDown(int col, int row) const;
-
-    /**
-     * Retrieves the next used cell to the right of the given col/row pair.
-     * The given col/row pair does not need to reference a used cell.
-     *
-     * @param col the column after which should be searched
-     * @param row the row to search through
-     *
-     * @return Returns the next used cell to the right of this one, or 0 if
-     * there are none
-     */
-    Cell* getNextCellLeft(int col, int row) const;
-
-    /**
-     * Retrieves the next used cell to the left of the given col/row pair.
-     * The given col/row pair does not need to reference a used cell.
-     *
-     * @param col the column before which should be searched
-     * @param row the row to search through
-     *
-     * @return Returns the next used cell to the left of this one, or 0 if
-     * there are none
-     */
-    Cell* getNextCellRight(int col, int row) const;
-
-    /**
-     * \return the default cell
-     */
-    Cell* defaultCell() const;
-
-    //
-    //END Methods related to accessing cells
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //BEGIN UNSORTED METHODS !!!
-    //
+    QRect usedArea() const;
 
     /**
      * \return the Style associated with the Cell at \p column , \p row .
@@ -793,11 +652,49 @@ public:
     void setValidity( const Region& region, KSpread::Validity validity ) const;
     ValidityStorage* validityStorage() const;
 
-    /** retrieve a value */
-    Value value (int col, int row) const;
+    /**
+     * \return the value associated with the Cell at \p column , \p row .
+     */
+    Value value( int column, int row ) const;
+    void setValue( int column, int row, const Value& value );
+    ValueStorage* valueStorage() const;
 
-    /** retrieve a range of values */
-    Value valueRange (int col1, int row1, int col2, int row2) const;
+    /**
+     * Creates a value array containing the values in \p range.
+     */
+    Value valueRange( const QRect& range ) const;
+
+    /**
+     * \return the formula associated with the Cell at \p column , \p row .
+     */
+    Formula formula( int column, int row ) const;
+    void setFormula( int column, int row, const Formula& formula );
+    FormulaStorage* formulaStorage() const;
+
+    /**
+     * \return the hyperlink associated with the Cell at \p column , \p row .
+     */
+    QString link( int column, int row ) const;
+    void setLink( int column, int row, const QString& link );
+    LinkStorage* linkStorage() const;
+
+    /**
+     */
+    bool doesMergeCells( int column, int row ) const;
+    bool isPartOfMerged( int column, int row ) const;
+    void mergeCells( int column, int row, int width, int height );
+    Cell masterCell( int column, int row ) const;
+    int mergedXCells( int column, int row ) const;
+    int mergedYCells( int column, int row ) const;
+    FusionStorage* fusionStorage() const;
+
+    //
+    //END Methods for Storage access
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN UNSORTED METHODS !!!
+    //
 
     /**
      * Sets the contents of the cell at row,column to text
@@ -914,13 +811,13 @@ public:
      * Handles the fact that a cell has been changed.
      * Recalculates dependent cells.
      */
-    void valueChanged (Cell *cell);
+    void valueChanged( const Cell& cell );
 
     /**
      * Handles the fact, that a formula has been changed.
      * Updates the dependencies accordingly.
      */
-    void formulaChanged(Cell *cell);
+    void formulaChanged( const Cell& cell );
 
     /**
      * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
@@ -1044,25 +941,25 @@ public:
      * Helper method.
      * \see ShiftManipulator
      */
-    void shiftRows( const QRect& rect );
+    void insertShiftRight( const QRect& rect );
 
     /**
      * Helper method.
      * \see ShiftManipulator
      */
-    void shiftColumns( const QRect& rect );
+    void insertShiftDown( const QRect& rect );
 
     /**
      * Helper method.
      * \see ShiftManipulator
      */
-    void unshiftColumns( const QRect& rect );
+    void removeShiftUp( const QRect& rect );
 
     /**
      * Helper method.
      * \see ShiftManipulator
      */
-    void unshiftRows( const QRect& rect );
+    void removeShiftLeft( const QRect& rect );
 
     /**
      * Helper method.
@@ -1085,14 +982,14 @@ public:
      * \see InsertDeleteColumnManipulator
      * Deletes \p number columns beginning at \p col .
      */
-    void deleteColumns( int row, int numbers );
+    void removeColumns( int row, int numbers );
 
     /**
      * Helper method.
      * \see InsertDeleteRowManipulator
      * Deletes \p number rows beginning at \p row .
      */
-    void deleteRows( int row, int numbers );
+    void removeRows( int row, int numbers );
 
     /**
      * Updates vertical border and view.
@@ -1185,7 +1082,7 @@ public:
      * The cells we are interested in are in the rectangle '_range'.
      * The cells are stored row after row in '_list'.
      */
-    bool getCellRectangle( const QRect &_range, QList<Cell*> &_list );
+    bool getCellRectangle( const QRect &_range, QList<Cell> &_list );
 
     /**
      * A convenience function that finds a sheet by its name.
@@ -1202,7 +1099,7 @@ public:
      *          the range explicitly by using checkRangeHBorder() and
      *          checkRangeVBorder() ONCE after the processing is done.
      */
-    void insertCell( Cell *_cell );
+    void insertCell( const Cell& cell );
 
     /**
      * Used by Undo.
@@ -1325,29 +1222,6 @@ public:
      * Test whether a cell needs repainted
      */
     const Region& paintDirtyData() const;
-
-    /**
-     * \ingroup Painting
-     * Marks the Cell at @p col , @p row as dirty.
-     * \deprecated use setRegionPaintDirty
-     */
-    KDE_DEPRECATED void updateCell( Cell* cell, int col, int row );
-
-    /**
-     * \ingroup Painting
-     * Like updateCell except it works on a range of cells.  Use this function
-     * rather than calling updateCell(..) on several adjacent cells so there
-     * will be one paint event instead of several
-     * \deprecated use setRegionPaintDirty
-     */
-    KDE_DEPRECATED void updateCellArea(const Region& cellArea);
-
-    /**
-     * \ingroup Painting
-     * Updates every cell on the sheet
-     * \deprecated use setRegionPaintDirty
-     */
-    KDE_DEPRECATED void update();
 
     /**
      * \ingroup Painting
@@ -1509,11 +1383,6 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void usedArea( int & maxCols, int & maxRows );
-
-    /**
-     * \ingroup OpenDocument
-     */
     bool compareRows( int row1, int row2, int & maxCols ) const;
 
     /**
@@ -1540,13 +1409,13 @@ protected:
     /**
      * @see autofill
      */
-    void fillSequence( const QList<Cell*>& _srcList,
-                       const QList<Cell*>& _destList,
+    void fillSequence( const QList<Cell>& _srcList,
+                       const QList<Cell>& _destList,
                        const AutoFillSequence& _seqList,
                        bool down = true );
 
     // helper function for areaIsEmpty
-    bool cellIsEmpty (Cell *c, TestType _type, int col, int row);
+    bool cellIsEmpty ( const Cell& cell, TestType _type, int col, int row);
 
     static Sheet* find( int _id );
     static int s_id;

@@ -111,13 +111,13 @@ protected:
   /**
    * Processes \p element , a Region::Point or a Region::Range .
    * Invoked by mainProcessing() .
-   * Calls process(Cell*) or process(Format*) depending on \p element .
+   * Calls process(const Cell&) or process(Format*) depending on \p element .
    */
   virtual bool process(Element* element);
   /**
    * Processes \p cell .
    */
-  virtual bool process(Cell* cell) { Q_UNUSED(cell); return true; }
+  virtual bool process(const Cell& cell) { Q_UNUSED(cell); return true; }
 
   /**
    * Preprocessing the region.

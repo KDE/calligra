@@ -43,7 +43,7 @@ public:
     enum Type { INTEGER, FLOAT, STRING, DAY, SHORTDAY,
       MONTH, SHORTMONTH, FORMULA, OTHER, DATE, TIME };
 
-    explicit AutoFillSequenceItem( const Cell* cell );
+    explicit AutoFillSequenceItem( const Cell& cell );
 
     double delta( AutoFillSequenceItem *_seq, bool *ok = 0 ) const;
 

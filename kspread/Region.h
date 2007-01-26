@@ -452,7 +452,7 @@ public:
   virtual QRect rect() const { return QRect(m_point,m_point); }
 
   QPoint pos() const { return m_point; }
-  Cell* cell() const;
+  Cell cell() const;
 
   bool operator<(const Point& other) const
   {

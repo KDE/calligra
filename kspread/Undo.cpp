@@ -19,6 +19,7 @@
 
 
 #include "Cell.h"
+#include "CellStorage.h"
 #include "DataManipulators.h"
 #include "Doc.h"
 #include "Global.h"
@@ -197,10 +198,10 @@ void UndoInsertRemoveAction::undoFormulaReference()
         Sheet* sheet = doc()->map()->findSheet( (*it).sheetName() );
         if ( sheet )
         {
-            Cell * cell = sheet->cellAt( (*it).col(), (*it).row() );
-            if ( cell && !cell->isDefault() )
+            Cell cell( sheet, (*it).col(), (*it).row() );
+            if ( !cell.isNull() && !cell.isDefault() )
             {
-                cell->setCellText( (*it).formula() );
+                cell.setCellText( (*it).formula() );
             }
         }
     }
@@ -811,7 +812,7 @@ void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
   }
   list.clear();
 
-  Cell * cell;
+  Cell cell;
   Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
@@ -839,23 +840,23 @@ void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
       tmplayout.l->copy( *(sheet->columnFormat( c )) );
       listCol.append(tmplayout);
 
-      cell = sheet->getFirstCellColumn( c );
-      while ( cell )
+      cell = sheet->cellStorage()->firstInColumn( c );
+      while ( !cell.isNull() )
       {
-        if ( cell->isPartOfMerged() )
+        if ( cell.isPartOfMerged() )
         {
-          cell = sheet->getNextCellDown( c, cell->row() );
+          cell = sheet->cellStorage()->nextInColumn( c, cell.row() );
           continue;
         }
 
         layoutCell tmplayout;
         tmplayout.col = c;
-        tmplayout.row = cell->row();
+        tmplayout.row = cell.row();
         tmplayout.l = new Style();
-        tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )->format()) );
+        tmplayout.l->copy( *(Cell( sheet, tmplayout.col, tmplayout.row )->format()) );
         list.append(tmplayout);
 
-        cell = sheet->getNextCellDown( c, cell->row() );
+        cell = sheet->cellStorage()->nextInColumn( c, cell.row() );
       }
     }
     /*
@@ -870,7 +871,7 @@ void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
         tmplayout.col = c->column();
         tmplayout.row = c->row();
         tmplayout.l = new Format( sheet, 0 );
-        tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
+        tmplayout.l->copy( *(Cell( sheet, tmplayout.col, tmplayout.row )) );
         list.append(tmplayout);
       }
       }
@@ -886,22 +887,22 @@ void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
       tmplayout.l->copy( *(sheet->rowFormat( row )) );
       listRow.append(tmplayout);
 
-      cell = sheet->getFirstCellRow( row );
-      while ( cell )
+      cell = sheet->cellStorage()->firstInRow( row );
+      while ( !cell.isNull() )
       {
-        if ( cell->isPartOfMerged() )
+        if ( cell.isPartOfMerged() )
         {
-          cell = sheet->getNextCellRight( cell->column(), row );
+          cell = sheet->cellStorage()->nextInRow( cell.column(), row );
           continue;
         }
         layoutCell tmplayout;
-        tmplayout.col = cell->column();
+        tmplayout.col = cell.column();
         tmplayout.row = row;
         tmplayout.l = new Format( sheet, 0 );
-        tmplayout.l->copy( *(sheet->cellAt( cell->column(), row )->format()) );
+        tmplayout.l->copy( *(Cell( sheet, cell.column(), row )->format()) );
         list.append(tmplayout);
 
-        cell = sheet->getNextCellRight( cell->column(), row );
+        cell = sheet->cellStorage()->nextInRow( cell.column(), row );
       }
     }
     /*
@@ -916,7 +917,7 @@ void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
         tmplayout.col = c->column();
         tmplayout.row = c->row();
         tmplayout.l = new Format( sheet, 0 );
-        tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
+        tmplayout.l->copy( *(Cell( sheet, tmplayout.col, tmplayout.row )) );
         list.append(tmplayout);
       }
       }
@@ -927,14 +928,14 @@ void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
     for ( int y = range.top(); y <= bottom; ++y )
       for ( int x = range.left(); x <= right; ++x )
       {
-        Cell * cell = sheet->nonDefaultCell( x, y );
-        if ( !cell->isPartOfMerged() )
+        Cell cell( sheet, x, y );
+        if ( !cell.isPartOfMerged() )
         {
           layoutCell tmplayout;
           tmplayout.col = x;
           tmplayout.row = y;
           tmplayout.l = new Format( sheet, 0 );
-          tmplayout.l->copy( *(sheet->cellAt( x, y )->format()) );
+          tmplayout.l->copy( *(Cell( sheet, x, y )->format()) );
           list.append(tmplayout);
         }
       }
@@ -1021,9 +1022,9 @@ void UndoCellFormat::undo()
   QLinkedList<layoutCell>::Iterator it2;
   for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
-    Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
-    cell->format()->copy( *(*it2).l );
-    cell->setLayoutDirtyFlag();
+    Cell cell( sheet, (*it2).col,(*it2).row );
+    cell.format()->copy( *(*it2).l );
+    cell.setLayoutDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
   }
   }
@@ -1068,9 +1069,9 @@ void UndoCellFormat::redo()
   QLinkedList<layoutCell>::Iterator it2;
   for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
   {
-    Cell * cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
-    cell->format()->copy( *(*it2).l );
-    cell->setLayoutDirtyFlag();
+    Cell cell( sheet, (*it2).col,(*it2).row );
+    cell.format()->copy( *(*it2).l );
+    cell.setLayoutDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
   }
   }
@@ -1152,7 +1153,7 @@ void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutCol
       tmplayout.l->copy( *(sheet->columnFormat( col )) );
       listCol.append(tmplayout);
 
-      c = sheet->getFirstCellColumn( col );
+      c = sheet->cellStorage()->firstInColumn( col );
       while ( c )
       {
         if ( !c->isPartOfMerged() )
@@ -1161,12 +1162,12 @@ void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutCol
           tmplayout.col = col;
           tmplayout.row = c->row();
           tmplayout.l = new Format( sheet, 0 );
-          tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )->format()) );
+          tmplayout.l->copy( *(Cell( sheet, tmplayout.col, tmplayout.row )->format()) );
           tmplayout.text = c->text();
           list.append(tmplayout);
         }
 
-        c = sheet->getNextCellDown( col, c->row() );
+        c = sheet->cellStorage()->nextInColumn( col, c->row() );
       }
     }
   }
@@ -1181,7 +1182,7 @@ void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutCol
       tmplayout.l->copy( *(sheet->rowFormat( row )) );
       listRow.append(tmplayout);
 
-      c = sheet->getFirstCellRow( row );
+      c = sheet->cellStorage()->firstInRow( row );
       while ( c )
       {
         if ( !c->isPartOfMerged() )
@@ -1190,11 +1191,11 @@ void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutCol
           tmplayout.col = c->column();
           tmplayout.row = row;
           tmplayout.l   = new Format( sheet, 0 );
-          tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )->format()) );
+          tmplayout.l->copy( *(Cell( sheet, tmplayout.col, tmplayout.row )->format()) );
           tmplayout.text = c->text();
           list.append(tmplayout);
         }
-        c = sheet->getNextCellRight( c->column(), row );
+        c = sheet->cellStorage()->nextInRow( c->column(), row );
       }
     }
   }
@@ -1202,19 +1203,19 @@ void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutCol
   {
     int bottom = m_rctRect.bottom();
     int right  = m_rctRect.right();
-    Cell * cell;
+    Cell cell;
     for ( int y = m_rctRect.top(); y <= bottom; ++y )
       for ( int x = m_rctRect.left(); x <= right; ++x )
       {
-        cell = sheet->nonDefaultCell( x, y );
-        if (!cell->isPartOfMerged())
+        cell = Cell( sheet, x, y );
+        if (!cell.isPartOfMerged())
         {
           layoutTextCell tmplayout;
           tmplayout.col = x;
           tmplayout.row = y;
           tmplayout.l   = new Format( sheet, 0 );
-          tmplayout.l->copy( *(sheet->cellAt( x, y )->format()) );
-          tmplayout.text = cell->inputText();
+          tmplayout.l->copy( *(Cell( sheet, x, y )->format()) );
+          tmplayout.text = cell.inputText();
           list.append(tmplayout);
         }
       }
@@ -1298,17 +1299,17 @@ void UndoSort::undo()
   QLinkedList<layoutTextCell>::Iterator it2;
   for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
-    Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
+    Cell cell( sheet, (*it2).col,(*it2).row );
     if ( (*it2).text.isEmpty() )
     {
-      if(!cell->inputText().isEmpty())
-        cell->setCellText( "" );
+      if(!cell.inputText().isEmpty())
+        cell.setCellText( "" );
     }
     else
-      cell->setCellText( (*it2).text );
+      cell.setCellText( (*it2).text );
 
-    cell->format()->copy( *(*it2).l );
-    cell->setLayoutDirtyFlag();
+    cell.format()->copy( *(*it2).l );
+    cell.setLayoutDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
   }
 
@@ -1349,18 +1350,18 @@ void UndoSort::redo()
     QLinkedList<layoutTextCell>::Iterator it2;
     for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
     {
-      Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
+      Cell cell( sheet, (*it2).col,(*it2).row );
 
       if ( (*it2).text.isEmpty() )
       {
-        if(!cell->inputText().isEmpty())
-          cell->setCellText( "" );
+        if(!cell.inputText().isEmpty())
+          cell.setCellText( "" );
       }
       else
-        cell->setCellText( (*it2).text );
+        cell.setCellText( (*it2).text );
 
-      cell->format()->copy( *(*it2).l );
-      cell->setLayoutDirtyFlag();
+      cell.format()->copy( *(*it2).l );
+      cell.setLayoutDirtyFlag();
       sheet->updateCell( cell, (*it2).col, (*it2).row );
     }
     sheet->setRegionPaintDirty(Region(m_rctRect));
@@ -1829,63 +1830,63 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
 
     if( Region::Range( m_rctRect ).isColumn() )
     {
-      Cell * c;
+      Cell cell;
       for ( int col = m_rctRect.left(); col <= right; ++col )
       {
-        c = sheet->getFirstCellColumn( col );
-        while ( c )
+        cell = sheet->cellStorage()->firstInColumn( col );
+        while ( !cell.isNull() )
         {
-          if ( !c->isPartOfMerged() )
+          if ( !cell.isPartOfMerged() )
           {
             //textOfCell tmpText;
             //tmpText.col = col;
-            //tmpText.row = c->row();
-            //tmpText.text = c->text();
-            map.insert( QPoint(col,c->row()) , c->inputText() );
+            //tmpText.row = cell.row();
+            //tmpText.text = cell.text();
+            map.insert( QPoint(col,cell.row()) , cell.inputText() );
           }
-          c = sheet->getNextCellDown( col, c->row() );
+          cell = sheet->cellStorage()->nextInColumn( col, cell.row() );
         }
       }
     }
     else if ( Region::Range( m_rctRect ).isRow() )
     {
-      Cell * c;
+      Cell cell;
       for ( int row = m_rctRect.top(); row <= bottom; ++row )
       {
-        c = sheet->getFirstCellRow( row );
-        while ( c )
+        cell = sheet->cellStorage()->firstInRow( row );
+        while ( !cell.isNull() )
         {
-          if ( !c->isPartOfMerged() )
+          if ( !cell.isPartOfMerged() )
           {
             //textOfCell tmpText;
-            //tmpText.col = c->column();
+            //tmpText.col = cell.column();
             //tmpText.row = row;
-            //tmpText.text = c->text();
-            map.insert( QPoint(c->column(),row) , c->inputText() );
+            //tmpText.text = cell.text();
+            map.insert( QPoint(cell.column(),row) , cell.inputText() );
           }
-          c = sheet->getNextCellRight( c->column(), row );
+          cell = sheet->cellStorage()->nextInRow( cell.column(), row );
         }
       }
     }
     else
     {
-      Cell * cell;
+      Cell cell;
       for ( int x = m_rctRect.left(); x <= right; ++x )
       {
-        cell = sheet->getFirstCellColumn( x );
+        cell = sheet->cellStorage()->firstInColumn( x );
         if ( !cell )
           continue;
-        while ( cell && cell->row() <= bottom )
+        while ( !cell.isNull() && cell.row() <= bottom )
         {
-          if ( !cell->isPartOfMerged() )
+          if ( !cell.isPartOfMerged() )
           {
             //textOfCell tmpText;
             //tmpText.col  = x;
-            //tmpText.row  = cell->row();
-            //tmpText.text = cell->inputText();
-            map.insert( QPoint(x,cell->row()) , cell->inputText());
+            //tmpText.row  = cell.row();
+            //tmpText.text = cell.inputText();
+            map.insert( QPoint(x,cell.row()) , cell.inputText());
           }
-          cell = sheet->getNextCellDown( x, cell->row() );
+          cell = sheet->cellStorage()->nextInColumn( x, cell.row() );
         }
       }
     }
@@ -1921,25 +1922,25 @@ void UndoChangeAreaTextCell::undo()
       for ( int x = m_rctRect.left(); x <= m_rctRect.right(); ++x )
         for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
         {
-          Cell* cell = sheet->nonDefaultCell( x, y );
+          Cell cell( sheet, x, y );
 
           const QPoint location(x,y);
 
           if ( m_lstTextCell.contains(location) )
-                cell->setCellText( m_lstTextCell[location] );
+                cell.setCellText( m_lstTextCell[location] );
           else
-                cell->setCellText( "",true );
+                cell.setValue( Value( QString("") ) );
 
            /*bool found = false;
           QLinkedList<textOfCell>::Iterator it;
           for( it = m_lstTextCell.begin(); it != m_lstTextCell.end(); ++it )
             if ( (*it).col == x && (*it).row == y && !found )
             {
-              cell->setCellText( (*it).text );
+              cell.setCellText( (*it).text );
               found = true;
             }
           if( !found )
-            cell->setCellText( "", true );*/
+            cell.setCellText( "", true );*/
         }
 
     }
@@ -1948,14 +1949,14 @@ void UndoChangeAreaTextCell::undo()
       QMap<QPoint,QString>::Iterator it2;
       for ( it2 = m_lstTextCell.begin(); it2 != m_lstTextCell.end(); ++it2 )
       {
-        Cell *cell = sheet->nonDefaultCell( it2.key().x(), it2.key().y() );
+        Cell cell( sheet, it2.key().x(), it2.key().y() );
         if ( it2.value().isEmpty() )
         {
-          if ( !cell->inputText().isEmpty() )
-            cell->setCellText( "" );
+          if ( !cell.inputText().isEmpty() )
+            cell.setCellText( "" );
         }
         else
-          cell->setCellText( it2.value() );
+          cell.setCellText( it2.value() );
       }
     }
     }
@@ -1987,24 +1988,24 @@ void UndoChangeAreaTextCell::redo()
       for ( int x = m_rctRect.left(); x <= m_rctRect.right(); ++x )
         for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
         {
-          Cell* cell = sheet->nonDefaultCell( x, y );
+          Cell cell( sheet, x, y );
 
           const QPoint location(x,y);
 
           if (m_lstRedoTextCell.contains(location))
-                  cell->setCellText( m_lstRedoTextCell[location] );
+                  cell.setCellText( m_lstRedoTextCell[location] );
           else
-                  cell->setCellText( "" , true );
+                  cell.setValue( Value( QString("") ) );
           /*bool found = false;
           QLinkedList<textOfCell>::Iterator it;
           for( it = m_lstRedoTextCell.begin(); it != m_lstRedoTextCell.end(); ++it )
             if ( (*it).col == x && (*it).row == y && !found )
             {
-              cell->setCellText( (*it).text );
+              cell.setCellText( (*it).text );
               found = true;
             }
           if( !found )
-            cell->setCellText( "", true );*/
+            cell.setCellText( "", true );*/
         }
 
     }
@@ -2013,14 +2014,14 @@ void UndoChangeAreaTextCell::redo()
       QMap<QPoint,QString>::Iterator it2;
       for ( it2 = m_lstRedoTextCell.begin(); it2 != m_lstRedoTextCell.end(); ++it2 )
       {
-        Cell *cell = sheet->nonDefaultCell( it2.key().x(), it2.key().y() );
+        Cell cell( sheet, it2.key().x(), it2.key().y() );
         if ( it2.value().isEmpty() )
         {
-          if ( !cell->inputText().isEmpty() )
-            cell->setCellText( "" );
+          if ( !cell.inputText().isEmpty() )
+            cell.setCellText( "" );
         }
         else
-          cell->setCellText( it2.value() );
+          cell.setCellText( it2.value() );
       }
     }
     }
@@ -2062,9 +2063,9 @@ void UndoMergedCell::undo()
 
     doc()->setUndoLocked( true );
 
-    Cell *cell = sheet->nonDefaultCell( m_iCol, m_iRow );
-    m_iExtraRedoX=cell->extraXCells();
-    m_iExtraRedoY=cell->extraYCells();
+    Cell cell( sheet, m_iCol, m_iRow );
+    m_iExtraRedoX=cell.extraXCells();
+    m_iExtraRedoY=cell.extraYCells();
 
     sheet->changeMergedCell( m_iCol, m_iRow, m_iExtraX,m_iExtraY);
 
@@ -2182,7 +2183,7 @@ void UndoInsertCellRow::undo()
 	return;
 
     doc()->setUndoLocked( true );
-    sheet->unshiftRow( m_rect);
+    sheet->removeShiftLeft( m_rect);
     doc()->setUndoLocked( false );
 
     undoFormulaReference();
@@ -2195,7 +2196,7 @@ void UndoInsertCellRow::redo()
 	return;
 
     doc()->setUndoLocked( true );
-    sheet->shiftRow( m_rect);
+    sheet->insertShiftRight( m_rect);
     doc()->setUndoLocked( false );
 }
 
@@ -2226,7 +2227,7 @@ void UndoInsertCellCol::undo()
 	return;
 
     doc()->setUndoLocked( true );
-    sheet->unshiftColumn( m_rect);
+    sheet->removeShiftUp( m_rect);
     doc()->setUndoLocked( false );
 
     undoFormulaReference();
@@ -2239,7 +2240,7 @@ void UndoInsertCellCol::redo()
 	return;
 
     doc()->setUndoLocked( true );
-    sheet->shiftColumn( m_rect );
+    sheet->insertShiftDown( m_rect );
     doc()->setUndoLocked( false );
 }
 
@@ -2274,7 +2275,7 @@ void UndoRemoveCellRow::undo()
 	return;
 
     doc()->setUndoLocked( true );
-    sheet->shiftRow( m_rect );
+    sheet->insertShiftRight( m_rect );
     sheet->paste( m_data, m_rect );
     doc()->setUndoLocked( false );
 
@@ -2288,7 +2289,7 @@ void UndoRemoveCellRow::redo()
 	return;
 
     doc()->setUndoLocked( true );
-    sheet->unshiftRow( m_rect);
+    sheet->removeShiftLeft( m_rect);
     doc()->setUndoLocked( false );
 }
 
@@ -2323,7 +2324,7 @@ void UndoRemoveCellCol::undo()
 	return;
 
     doc()->setUndoLocked( true );
-    sheet->shiftColumn( m_rect );
+    sheet->insertShiftDown( m_rect );
     sheet->paste( m_data, m_rect );
     doc()->setUndoLocked( false );
 
@@ -2337,7 +2338,7 @@ void UndoRemoveCellCol::redo()
 	return;
 
     doc()->setUndoLocked( true );
-    sheet->unshiftColumn( m_rect );
+    sheet->removeShiftUp( m_rect );
     doc()->setUndoLocked( false );
 }
 
@@ -2768,7 +2769,7 @@ void UndoStyleCell::createListCell( QLinkedList<styleCell> &listCell, Sheet* she
     Cell * c;
     for ( int col = m_selection.left(); col <= right; ++ col )
     {
-      c = sheet->getFirstCellColumn( col );
+      c = sheet->cellStorage()->firstInColumn( col );
       while ( c )
       {
         if ( !c->isPartOfMerged() )
@@ -2778,7 +2779,7 @@ void UndoStyleCell::createListCell( QLinkedList<styleCell> &listCell, Sheet* she
 	  tmpStyleCell.col = col;
 	  listCell.append(tmpStyleCell);
         }
-        c = sheet->getNextCellDown( col, c->row() );
+        c = sheet->cellStorage()->nextInColumn( col, c->row() );
       }
     }
   }
@@ -2787,7 +2788,7 @@ void UndoStyleCell::createListCell( QLinkedList<styleCell> &listCell, Sheet* she
     Cell * c;
     for ( int row = m_selection.top(); row <= bottom; ++row )
     {
-      c = sheet->getFirstCellRow( row );
+      c = sheet->cellStorage()->firstInRow( row );
       while ( c )
       {
         if ( !c->isPartOfMerged() )
@@ -2797,17 +2798,17 @@ void UndoStyleCell::createListCell( QLinkedList<styleCell> &listCell, Sheet* she
 	  tmpStyleCell.col = c->column();
 	  listCell.append(tmpStyleCell);
         }
-        c = sheet->getNextCellRight( c->column(), row );
+        c = sheet->cellStorage()->nextInRow( c->column(), row );
       }
     }
   }
   else
   {
-    Cell * cell;
+    Cell cell;
     for ( int i = m_selection.top(); i <= bottom; ++i)
 	for ( int j = m_selection.left(); j <= right; ++j )
         {
-          cell = sheet->nonDefaultCell( j, i);
+          cell = Cell( sheet, j, i);
           styleCell tmpStyleCell;
           tmpStyleCell.row = i;
           tmpStyleCell.col = j;
@@ -2831,7 +2832,7 @@ void UndoStyleCell::undo()
     QLinkedList<styleCell>::Iterator it2;
     for ( it2 = m_lstStyleCell.begin(); it2 != m_lstStyleCell.end(); ++it2 )
       {
-	sheet->nonDefaultCell( (*it2).col, (*it2).row);
+	Cell( sheet, (*it2).col, (*it2).row);
       }
     sheet->setRegionPaintDirty(Region(m_selection));
     sheet->updateView( Region(m_selection) );
@@ -2852,7 +2853,7 @@ void UndoStyleCell::redo()
     QLinkedList<styleCell>::Iterator it2;
     for ( it2 = m_lstRedoStyleCell.begin(); it2 != m_lstRedoStyleCell.end(); ++it2 )
       {
-	sheet->nonDefaultCell( (*it2).col, (*it2).row);
+	Cell( sheet, (*it2).col, (*it2).row);
       }
     sheet->setRegionPaintDirty(m_selection);
     sheet->updateView();

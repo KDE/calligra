@@ -136,7 +136,7 @@ bool Conditions::isEmpty() const
     return d->conditionList.isEmpty();
 }
 
-Style* Conditions::testConditions( const Cell* cell ) const
+Style* Conditions::testConditions( const Cell& cell ) const
 {
     Conditional condition;
     if ( currentCondition( cell, condition ) )
@@ -145,13 +145,13 @@ Style* Conditions::testConditions( const Cell* cell ) const
         return 0;
 }
 
-bool Conditions::currentCondition( const Cell* cell, Conditional & condition ) const
+bool Conditions::currentCondition( const Cell& cell, Conditional & condition ) const
 {
     /* for now, the first condition that is true is the one that will be used */
 
     QLinkedList<Conditional>::const_iterator it;
-    double value   = cell->value().asFloat();
-    QString strVal = cell->value().asString();
+    double value   = cell.value().asFloat();
+    QString strVal = cell.value().asString();
 
 
     for ( it = d->conditionList.begin(); it != d->conditionList.end(); ++it )
@@ -164,7 +164,7 @@ bool Conditions::currentCondition( const Cell* cell, Conditional & condition ) c
 //     kDebug()<<"*it style :"<<(  *it ).style <<endl;
 
 
-        if ( condition.strVal1 && cell->value().isNumber() )
+        if ( condition.strVal1 && cell.value().isNumber() )
             continue;
 
         switch ( condition.cond )

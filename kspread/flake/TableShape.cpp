@@ -53,7 +53,7 @@ TableShape::TableShape( int columns, int rows )
     setColumns( columns );
     setRows( rows );
 
-    sheet()->nonDefaultCell(1,1)->setCellText( "42" );
+    Cell( sheet(), 1, 1 ).setCellText( "42" );
 }
 
 TableShape::~TableShape()

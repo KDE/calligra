@@ -76,21 +76,21 @@ QString CSVExport::exportCSVCell( const KSpread::Doc* doc, Sheet const * const s
   //  - protecting quote characters within cells, if any
   //  - enclosing the cell in quotes if the cell is non empty
 
-  KSpread::Cell const * const cell = sheet->cellAt( col, row );
+  const KSpread::Cell cell( sheet, col, row );
   QString text;
 
-  if ( !cell->isDefault() && !cell->isEmpty() )
+  if ( !cell.isDefault() && !cell.isEmpty() )
   {
-    if ( cell->isFormula() )
-        text = cell->displayText();
-    else if ( !cell->link().isEmpty() )
-        text = cell->inputText(); // untested
-    else if( cell->isTime() )
-        text = cell->value().asTime(doc).toString("hh:mm:ss");
-    else if( cell->isDate() )
-        text = cell->value().asDate(doc).toString("yyyy-MM-dd");
+    if ( cell.isFormula() )
+        text = cell.displayText();
+    else if ( !cell.link().isEmpty() )
+        text = cell.inputText(); // untested
+    else if( cell.isTime() )
+        text = cell.value().asTime(doc).toString("hh:mm:ss");
+    else if( cell.isDate() )
+        text = cell.value().asDate(doc).toString("yyyy-MM-dd");
     else
-        text = cell->displayText();
+        text = cell.displayText();
   }
 
   if ( !text.isEmpty() )
@@ -215,7 +215,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
     {
       for ( int idxCol = 1, col = selection.left(); col <= right; ++col, ++idxCol )
       {
-        if( ! sheet->cellAt( col, row )->isEmpty() )
+        if ( !KSpread::Cell( sheet, col, row ).isEmpty() )
         {
           if ( idxRow > CSVMaxRow )
             CSVMaxRow = idxRow;
@@ -268,7 +268,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
       {
         for ( int col = 1 ; col <= sheetMaxCol ; col++ )
         {
-          if( ! sheet->cellAt( col, row )->isEmpty() )
+          if( !KSpread::Cell( sheet, col, row ).isEmpty() )
           {
             if ( row > CSVMaxRow )
               CSVMaxRow = row;

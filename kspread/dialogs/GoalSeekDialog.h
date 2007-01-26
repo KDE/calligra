@@ -26,10 +26,8 @@
 #ifndef __kspread_dlg_goalseek__
 #define __kspread_dlg_goalseek__
 
-#include <kdialog.h>
 #include <QPoint>
 #include <QRect>
-//Added by qt3to4:
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -37,6 +35,10 @@
 #include <QFrame>
 #include <QEvent>
 #include <QCloseEvent>
+
+#include <kdialog.h>
+
+#include "Cell.h"
 
 class QFrame;
 class QGridLayout;
@@ -48,7 +50,6 @@ class QVBoxLayout;
 
 namespace KSpread
 {
-class Cell;
 class Point;
 class RegionSelector;
 class Sheet;
@@ -76,8 +77,8 @@ class GoalSeekDialog : public KDialog
 
  private:
   View * m_pView;
-  Cell * m_sourceCell;
-  Cell * m_targetCell;
+  Cell          m_sourceCell;
+  Cell          m_targetCell;
   double        m_result;
   int           m_maxIter;
   bool          m_restored;

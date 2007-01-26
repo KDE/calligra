@@ -213,28 +213,28 @@ void Cluster::remove( int x, int y )
     }
 }
 
-bool Cluster::shiftRow( const QPoint& marker )
+bool Cluster::insertShiftRight( const QPoint& marker )
 {
     bool dummy;
-    return shiftRow( marker, dummy );
+    return insertShiftRight( marker, dummy );
 }
 
-bool Cluster::shiftColumn( const QPoint& marker )
+bool Cluster::insertShiftDown( const QPoint& marker )
 {
     bool dummy;
-    return shiftColumn( marker, dummy );
+    return insertShiftDown( marker, dummy );
 }
 
-void Cluster::unshiftColumn( const QPoint& marker )
+void Cluster::removeShiftUp( const QPoint& marker )
 {
     bool dummy;
-    unshiftColumn( marker, dummy );
+    removeShiftUp( marker, dummy );
 }
 
-void Cluster::unshiftRow( const QPoint& marker )
+void Cluster::removeShiftLeft( const QPoint& marker )
 {
     bool dummy;
-    unshiftRow( marker, dummy );
+    removeShiftLeft( marker, dummy );
 }
 
 void Cluster::setAutoDelete( bool b )
@@ -252,14 +252,14 @@ Cell* Cluster::firstCell() const
     return m_first;
 }
 
-bool Cluster::shiftRow( const QPoint& marker, bool& work )
+bool Cluster::insertShiftRight( const QPoint& marker, bool& work )
 {
     work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kDebug(36001) << "Cluster::shiftRow: invalid column or row value (col: "
+	kDebug(36001) << "Cluster::insertShiftRight: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return false;
     }
@@ -309,14 +309,14 @@ bool Cluster::shiftRow( const QPoint& marker, bool& work )
     return true;
 }
 
-bool Cluster::shiftColumn( const QPoint& marker, bool& work )
+bool Cluster::insertShiftDown( const QPoint& marker, bool& work )
 {
     work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kDebug(36001) << "Cluster::shiftColumn: invalid column or row value (col: "
+	kDebug(36001) << "Cluster::insertShiftDown: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return false;
     }
@@ -391,7 +391,7 @@ bool Cluster::insertColumn( int col )
     {
 	bool work = true;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
-	    shiftRow( QPoint( col, t1 * KSPREAD_CLUSTER_LEVEL2 + t2 ), work );
+	    insertShiftRight( QPoint( col, t1 * KSPREAD_CLUSTER_LEVEL2 + t2 ), work );
     }
 
     return true;
@@ -421,20 +421,20 @@ bool Cluster::insertRow( int row )
     {
 	bool work = true;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
-	    shiftColumn( QPoint( t1 * KSPREAD_CLUSTER_LEVEL2 + t2, row ), work );
+	    insertShiftDown( QPoint( t1 * KSPREAD_CLUSTER_LEVEL2 + t2, row ), work );
     }
 
     return true;
 }
 
-void Cluster::unshiftColumn( const QPoint& marker, bool& work )
+void Cluster::removeShiftUp( const QPoint& marker, bool& work )
 {
     work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kDebug(36001) << "Cluster::unshiftColumn: invalid column or row value (col: "
+	kDebug(36001) << "Cluster::removeShiftUp: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return;
     }
@@ -475,14 +475,14 @@ void Cluster::unshiftColumn( const QPoint& marker, bool& work )
     setAutoDelete( a );
 }
 
-void Cluster::unshiftRow( const QPoint& marker, bool& work )
+void Cluster::removeShiftLeft( const QPoint& marker, bool& work )
 {
     work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kDebug(36001) << "Cluster::unshiftRow: invalid column or row value (col: "
+	kDebug(36001) << "Cluster::removeShiftLeft: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return;
     }
@@ -548,7 +548,7 @@ void Cluster::removeColumn( int col )
     {
 	bool work = true;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
-	    unshiftRow( QPoint( col, t1 * KSPREAD_CLUSTER_LEVEL2 + t2 ), work );
+	    removeShiftLeft( QPoint( col, t1 * KSPREAD_CLUSTER_LEVEL2 + t2 ), work );
     }
 }
 
@@ -577,7 +577,7 @@ void Cluster::removeRow( int row )
     {
 	bool work = true;
 	for( int t2 = 0; work && t2 < KSPREAD_CLUSTER_LEVEL2; ++t2 )
-	    unshiftColumn( QPoint( t1 * KSPREAD_CLUSTER_LEVEL2 + t2, row ), work );
+	    removeShiftUp( QPoint( t1 * KSPREAD_CLUSTER_LEVEL2 + t2, row ), work );
     }
 }
 

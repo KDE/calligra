@@ -71,20 +71,19 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     m_focus = 0;
     m_desc = 0;
 
-    Cell* cell = m_pView->activeSheet()->cellAt( m_pView->canvasWidget()->markerColumn(),
-							m_pView->canvasWidget()->markerRow() );
-     m_oldText=cell->inputText();
+    Cell cell( m_pView->activeSheet(), m_pView->selection()->marker() );
+     m_oldText=cell.inputText();
     // Make sure that there is a cell editor running.
     if ( !m_pView->canvasWidget()->editor() )
     {
         m_pView->canvasWidget()->createEditor();
-        if(cell->inputText().isEmpty())
+        if(cell.inputText().isEmpty())
           m_pView->canvasWidget()->editor()->setText( "=" );
         else
-          if(cell->inputText().at(0)!='=')
-            m_pView->canvasWidget()->editor()->setText( '='+cell->inputText() );
+          if(cell.inputText().at(0)!='=')
+            m_pView->canvasWidget()->editor()->setText( '='+cell.inputText() );
           else
-            m_pView->canvasWidget()->editor()->setText( cell->inputText() );
+            m_pView->canvasWidget()->editor()->setText( cell.inputText() );
     }
 
     Q_ASSERT( m_pView->canvasWidget()->editor() );

@@ -371,6 +371,24 @@ void PointStorageTest::testInsertRows()
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
+
+
+    // first row checking
+    storage.clear();
+    storage.insert( 1, 1, 1 );
+    // ( 1)
+
+    old = storage.insertRows( 1, 1 );
+    QVERIFY( old.count() == 0 );
+    // (  )
+    // ( 1)
+
+    data = QVector<int>() << 1;
+    rows = QVector<int>() << 0 << 0;
+    cols = QVector<int>() << 1;
+    QCOMPARE( storage.m_data, data );
+    QCOMPARE( storage.m_rows, rows );
+    QCOMPARE( storage.m_cols, cols );
 }
 
 void PointStorageTest::testDeleteRows()
@@ -523,9 +541,33 @@ void PointStorageTest::testShiftUp()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,  )
 
-    const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 7 << 8 << 9 << 10 << 11 );
-    const QVector<int> rows( QVector<int>() << 0 << 3 << 6 << 7 << 8 );
-    const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 5 << 4 << 1 );
+    QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 7 << 8 << 9 << 10 << 11 );
+    QVector<int> rows( QVector<int>() << 0 << 3 << 6 << 7 << 8 );
+    QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 5 << 4 << 1 );
+    QCOMPARE( storage.m_data, data );
+    QCOMPARE( storage.m_rows, rows );
+    QCOMPARE( storage.m_cols, cols );
+
+
+    // first row
+    storage.clear();
+    storage.m_data << 1 << 2 << 3 << 4;
+    storage.m_rows << 0 << 1 << 3;
+    storage.m_cols << 1 << 1 << 2 << 2;
+    // ( 1,  )
+    // ( 2, 3)
+    // (  , 4)
+
+    old = storage.removeShiftUp( QRect( 1, 1, 2, 2 ) );
+    QVERIFY( old.count() == 3 );
+    QVERIFY( old.contains( qMakePair( QPoint(1,1),  1 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(1,2),  2 ) ) );
+    QVERIFY( old.contains( qMakePair( QPoint(2,2),  3 ) ) );
+    // (  , 4)
+
+    data = QVector<int>() << 4;
+    rows = QVector<int>() << 0;
+    cols = QVector<int>() << 2;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -582,6 +624,31 @@ void PointStorageTest::testShiftDown()
     data = QVector<int>() << 1 << 2 << 3 << 4 << 9 << 6 << 10 << 11 << 8 << 12 << 5;
     rows = QVector<int>() << 0 << 3 << 4 << 5 << 7 << 9 << 10 << 10 << 10 << 10;
     cols = QVector<int>() << 1 << 2 << 5 << 1 << 5 << 3 << 4 << 1 << 3 << 5 << 2;
+    QCOMPARE( storage.m_data, data );
+    QCOMPARE( storage.m_rows, rows );
+    QCOMPARE( storage.m_cols, cols );
+
+
+    // first row
+    storage.clear();
+    storage.m_data << 1 << 2 << 3 << 4;
+    storage.m_rows << 0 << 1 << 3;
+    storage.m_cols << 1 << 1 << 2 << 2;
+    // ( 1,  )
+    // ( 2, 3)
+    // (  , 4)
+
+    old = storage.insertShiftDown( QRect( 1, 1, 2, 2 ) );
+    QVERIFY( old.count() == 0 );
+    // (  ,  )
+    // (  ,  )
+    // ( 1,  )
+    // ( 2, 3)
+    // (  , 4)
+
+    data = QVector<int>() << 1 << 2 << 3 << 4;
+    rows = QVector<int>() << 0 << 0 << 0 << 1 << 3;
+    cols = QVector<int>() << 1 << 1 << 2 << 2;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );

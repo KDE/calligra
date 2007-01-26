@@ -378,9 +378,9 @@ Point::Point( const QString & str, Map * map,
     init( str.mid( p ) );
 }
 
-Cell *Point::cell() const
+Cell Point::cell() const
 {
-    return _sheet->cellAt(_pos);
+    return Cell( _sheet, _pos );
 }
 
 bool Point::operator== (const Point &cell) const

@@ -67,12 +67,12 @@ int main( int argc, char** argv )
 
   cout << "Row deletion performance test (5 rows at row 1)..." << endl;
   start = Time::stamp();
-  tree.deleteRows(1,5);
+  tree.removeRows(1,5);
   cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
 
   cout << "Column deletion performance test (5 columns at column 1)..." << endl;
   start = Time::stamp();
-  tree.deleteColumns(1,5);
+  tree.removeColumns(1,5);
   cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
 
   cout << "Lookup performance test..." << endl;

@@ -87,7 +87,7 @@ class CellStyle
   static bool isEqual( CellStyle const * const t1, CellStyle const & t2 );
 
   // all except the number style
-  static void loadData( CellStyle & cs, KSpread::Cell const * const cell );
+  static void loadData( CellStyle & cs, const KSpread::Cell& cell );
 
   QString     name;
 

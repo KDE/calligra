@@ -48,7 +48,7 @@ SheetView::SheetView( const Sheet* sheet )
     d->sheet = sheet;
     d->visibleRect = QRect(1,1,0,0);
     d->cache.setMaxCost( 10000 );
-    d->defaultCellView = new CellView( this, 0, 0 );
+    d->defaultCellView = new CellView( this );
 }
 
 SheetView::~SheetView()
@@ -143,7 +143,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             CellView cellView = this->cellView( col, row );
             cellView.paintCellContents( paintRect, painter, view, offset,
                                         QPoint( col, row ), mergedCellsPainted,
-                                        sheet()->cellAt( col, row ) );
+                                        Cell( sheet(), col, row ) );
             offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
         }
         offset.setY( topLeft.y() );
@@ -161,8 +161,8 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
-            Cell* const cell = sheet()->cellAt( col, row );
-            const QRectF cellRect = QRectF( offset.x(), offset.y(), cell->width(col), cell->height(row) );
+            Cell cell = Cell( sheet(), col, row );
+            const QRectF cellRect = QRectF( offset.x(), offset.y(), cell.width(col), cell.height(row) );
             CellView cellView = this->cellView( col, row );
             cellView.paintDefaultBorders( painter, paintRect, cellRect, QPoint( col, row ),
                                           CellView::LeftBorder | CellView::RightBorder |
@@ -188,7 +188,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             CellView cellView = this->cellView( col, row );
             cellView.paintCellBorders( paintRect, painter, offset,
                                        QPoint( col, row ), d->visibleRect,
-                                       mergedCellsPainted, sheet()->cellAt( col, row ), this );
+                                       mergedCellsPainted, Cell( sheet(), col, row ), this );
             offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
         }
         offset.setY( topLeft.y() );

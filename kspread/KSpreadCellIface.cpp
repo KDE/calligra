@@ -50,21 +50,21 @@ void CellIface::setCell( Sheet* sheet, const QPoint& point )
 bool CellIface::isDefault() const
 {
     if( !m_sheet ) return false;
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->isDefault();
 }
 
 bool CellIface::isEmpty() const
 {
 	if (!m_sheet) return true;
-	Cell *cell=m_sheet->cellAt(m_point);
+	Cell *cell=m_Cell( sheet,m_point);
 	return cell->isEmpty();
 }
 
 QString CellIface::text() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return m_sheet->doc()->converter()->asString (cell->value()).asString();
 }
 
@@ -93,7 +93,7 @@ QString CellIface::visibleContentAsString() const
 QString CellIface::comment() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->format()->comment(m_point.x(), m_point.y());
 }
 
@@ -122,7 +122,7 @@ void CellIface::setValue( double value )
 double CellIface::value() const
 {
     if( !m_sheet ) return 0.0;
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return m_sheet->doc()->converter()->asFloat (cell->value()).asFloat();
 }
 
@@ -147,14 +147,14 @@ void CellIface::setBgColor(int r,int g,int b)
 QString CellIface::bgColor() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->bgColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::textColor() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->format()->textColor( m_point.x(), m_point.y() ).name();
 }
 
@@ -654,14 +654,14 @@ int  CellIface::leftBorderWidth() const
 QString CellIface::leftBorderColor() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->format()->leftBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::leftBorderStyle() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     Qt::PenStyle penStyle=cell->format()->leftBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
@@ -737,14 +737,14 @@ int  CellIface::rightBorderWidth() const
 QString CellIface::rightBorderColor() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->format()->rightBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::rightBorderStyle() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     Qt::PenStyle penStyle=cell->format()->rightBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
@@ -819,14 +819,14 @@ int  CellIface::topBorderWidth() const
 QString CellIface::topBorderColor() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->format()->topBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::topBorderStyle() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     Qt::PenStyle penStyle=cell->format()->topBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
@@ -901,14 +901,14 @@ int  CellIface::bottomBorderWidth() const
 QString CellIface::bottomBorderColor() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->format()->bottomBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::bottomBorderStyle() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     Qt::PenStyle penStyle=cell->format()->bottomBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
@@ -983,14 +983,14 @@ int  CellIface::fallDiagonalWidth() const
 QString CellIface::fallDiagonalColor() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->format()->fallDiagonalColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::fallDiagonalStyle() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     Qt::PenStyle penStyle=cell->format()->fallDiagonalStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
@@ -1066,14 +1066,14 @@ int  CellIface::goUpDiagonalWidth() const
 QString CellIface::goUpDiagonalColor() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     return cell->format()->goUpDiagonalColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::goUpDiagonalStyle() const
 {
     if( !m_sheet ) return QString();
-    Cell* cell = m_sheet->cellAt( m_point );
+    Cell* cell = m_Cell( sheet, m_point );
     Qt::PenStyle penStyle=cell->format()->goUpDiagonalStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)

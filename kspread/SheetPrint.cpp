@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "CellStorage.h"
 #include "Commands.h"
 #include "Doc.h"
 #include "Localization.h"
@@ -118,20 +119,7 @@ QString SheetPrint::saveOasisSheetStyleLayout( KoGenStyles &mainStyles )
 QRect SheetPrint::cellsPrintRange()
 {
     // Find maximum right/bottom cell with content
-    QRect cell_range;
-    cell_range.setCoords( 1, 1, 1, 1 );
-
-    Cell* c = m_pSheet->firstCell();
-    for( ;c; c = c->nextCell() )
-    {
-        if ( c->needsPrinting() )
-        {
-            if ( c->column() > cell_range.right() )
-                cell_range.setRight( c->column() );
-            if ( c->row() > cell_range.bottom() )
-                cell_range.setBottom( c->row() );
-        }
-    }
+    QRect cell_range( 1, 1, m_pSheet->cellStorage()->columns(), m_pSheet->cellStorage()->rows() );
 
     // Now look at the children
     Q3PtrListIterator<KoDocumentChild> cit( m_pDoc->children() );
@@ -191,7 +179,7 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
     // Look at the cells
     for( int r = page_range.top();  r <= page_range.bottom() ; ++r )
         for( int c = page_range.left();  c <= page_range.right() ; ++c )
-            if ( m_pSheet->cellAt( c, r )->needsPrinting() )
+            if ( Cell( m_pSheet, c, r ).needsPrinting() )
 	    {
 	    	return true;
 	    }
