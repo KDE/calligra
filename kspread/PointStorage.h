@@ -576,8 +576,10 @@ public:
         const int index = m_cols.indexOf( col );
         if ( newRow )
         {
-            *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
-            if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+            if ( index == -1 ) // not found
+                *newRow = 0;
+            else
+                *newRow = qUpperBound( m_rows, index ) - m_rows.begin();
         }
         return m_data.value( index );
     }
@@ -613,8 +615,10 @@ public:
         const int index = m_cols.lastIndexOf( col );
         if ( newRow )
         {
-            *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
-            if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+            if ( index == -1 ) // not found
+                *newRow = 0;
+            else
+                *newRow = qUpperBound( m_rows, index ) - m_rows.begin();
         }
         return m_data.value( index );
     }
@@ -716,8 +720,10 @@ public:
         const int index = m_cols.lastIndexOf( col, m_rows.value( row - 1 ) - 1 );
         if ( newRow )
         {
-            *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
-            if ( m_rows.value( *newRow ) == index ) (*newRow)++;
+            if ( index == -1 ) // not found
+                *newRow = 0;
+            else
+                *newRow = qUpperBound( m_rows, index ) - m_rows.begin();
         }
         return m_data.value( index );
     }
