@@ -818,13 +818,14 @@ void PointStorageTest::testNextInColumn()
     //
     storage.clear();
     storage.m_data << 1 << 2 << 3 << 4;
-    storage.m_rows << 0 << 0 << 1 << 2 << 4;
+    storage.m_rows << 0 << 0 << 0 << 1 << 2;
     storage.m_cols << 1 << 1 << 1 << 2;
     // (  ,  )
     // (  ,  )
     // ( 1,  )
     // ( 2,  )
     // ( 3, 4)
+
     QCOMPARE( storage.nextInColumn( 1, 1, &newRow ),  1 );
     QCOMPARE( newRow,  3 );
     QCOMPARE( storage.nextInColumn( 2, 1, &newRow ),  4 );
@@ -970,6 +971,7 @@ void PointStorageTest::testIteration()
 
 void PointStorageTest::testSubStorage()
 {
+// #if 0
     PointStorage<int> storage;
     storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
     storage.m_rows << 0 << 3 << 6 << 9 << 10;
@@ -1020,6 +1022,7 @@ void PointStorageTest::testSubStorage()
     QCOMPARE( subStorage.m_data, data );
     QCOMPARE( subStorage.m_rows, rows );
     QCOMPARE( subStorage.m_cols, cols );
+// #endif
 }
 
 QTEST_MAIN(PointStorageTest)

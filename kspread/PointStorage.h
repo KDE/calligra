@@ -669,23 +669,7 @@ public:
             if ( index == -1 ) // not found
                 *newRow = 0;
             else
-            {
-                *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
-                if ( m_rows.value( *newRow ) == index ) (*newRow)++;
-#if 0
-                // find the beginning of the previous row
-                *newRow = qLowerBound( m_rows, index ) - m_rows.begin();
-                // skipping empty rows
-                while ( m_rows.value( *newRow ) == index && *newRow + 1 < m_rows.count() )
-                    (*newRow)++;
-                qDebug() << "index:" << index;
-                qDebug() << "newRow:" << *newRow;
-                qDebug() << "m_rows.value( *newRow ):" << m_rows.value( *newRow );
-                // if the index is behind the next row's beginning
-                if ( m_rows.value( *newRow ) == index ) (*newRow)++;
-                qDebug() << "effective newRow:" << *newRow;
-#endif
-            }
+                *newRow = qUpperBound( m_rows, index ) - m_rows.begin();
         }
         return m_data.value( index );
     }
@@ -897,11 +881,9 @@ public:
 private:
     void squeezeRows()
     {
-        for ( int row = m_rows.count() - 1; row >= 0; --row )
-        {
-            if ( m_rows.value( row ) == m_data.count() )
-                m_rows.remove( row );
-        }
+        int row = m_rows.count() - 1;
+        while ( m_rows.value( row ) == m_data.count() && row >= 0 )
+            m_rows.remove( row-- );
     }
 
 private:
