@@ -3347,6 +3347,11 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     // insert the styles into the storage
     loadOasisInsertStyles( autoStyles, cellStyleRegions, QRect( 1, 1, maxColumn, rowIndex - 1 ) );
 
+    // initialize the scrollbars' values
+    const QRect usedArea = this->usedArea();
+    checkRangeHBorder( usedArea.width() );
+    checkRangeVBorder( usedArea.height() );
+
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
     {
         // e.g.: Sheet4.A1:Sheet4.E28
@@ -4846,6 +4851,10 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
         n = n.nextSibling();
     }
 
+    // initialize the scrollbars' values
+    const QRect usedArea = this->usedArea();
+    checkRangeHBorder( usedArea.width() );
+    checkRangeVBorder( usedArea.height() );
 
     // load print repeat columns
     KoXmlElement printrepeatcolumns = sheet.namedItem( "printrepeatcolumns" ).toElement();
