@@ -63,7 +63,7 @@
 	<Type>String</Type>
       </Parameter>
       <Parameter optional="true">
-	<Comment>Occurrence of replacement</Comment>
+	<Comment>Which occurrence to replace</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
