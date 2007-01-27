@@ -15,6 +15,7 @@ private Q_SLOTS:
     void testShiftRows();
     void testUnshiftColumns();
     void testUnshiftRows();
+    void testPrimitive();
 };
 
 } // namespace KSpread

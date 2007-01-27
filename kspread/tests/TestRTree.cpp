@@ -110,5 +110,18 @@ void TestRTree::testUnshiftColumns()
     QCOMPARE(pairs[2].second->member, QString("foo"));
 }
 
+void TestRTree::testPrimitive()
+{
+    RTree<bool> tree;
+    tree.insert( QRect(2,5,1,2), true );
+    QCOMPARE( tree.contains( QPoint( 2, 2 ) ).isEmpty(), true );
+    QCOMPARE( tree.contains( QPoint( 2, 5 ) ).first(), true );
+    QCOMPARE( tree.contains( QPoint( 3, 5 ) ).isEmpty(), true );
+    QCOMPARE( tree.contains( QPoint( 2, 6 ) ).first(), true );
+    const QList< QPair<QRectF,bool> > pairs = tree.intersectingPairs( QRect(2,5,1,2) );
+    QCOMPARE( pairs.count(), 1 );
+    QCOMPARE( pairs.first().first.toRect(), QRect(2,5,1,2) );
+    QCOMPARE( pairs.first().second, true );
+}
 QTEST_MAIN(TestRTree)
 #include "TestRTree.moc"
