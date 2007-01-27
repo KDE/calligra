@@ -71,7 +71,7 @@ Things not in bugzilla
   - Fix loading order of columns, rows and cells		      1 done
 
 * OpenFormula compliance (Medium group)
-    see list of missing functions below				      1 ----
+    see koffice/kspread/functions/TODO				      1 ----
     see [2]
 
 * Flake integration.
@@ -374,99 +374,6 @@ OpenCalc - filter
 - save formula results etc in a certain way in the cell (Norbert)
 
 
-Missing formulas (compared with XL)
-===================================
-
-Statistical:
-
-BETAINV
-BINOMDIST  (different from BINO?)
-CHIINV
-CHITEST
-CRITBINOM
-FINV
-FORECAST
-GAMMAINV
-GROWTH
-LINEST
-LOGEST
-PERCENTILE
-PERCENTRANK
-PROB
-QUARTILE
-RANK
-RSQ
-TREND
-TRIMEAN
-
-
-Lookup:
-
-HYPERLINK
-MATCH
-OFFSET
-TRANSPOSE
-
-
-Logic:
-
-
-Information:
-
-CELL
-
-EXPRESSION
-GETENV
-SELECTION
-
-
-Engineering:
-
-
-Date & Time:
-
-
-Math:
-
-MINVERSE
-SERIESSUM
-SUMXMY2 (=SUM2XMY?)
-
-
-Financial:
-
-AMORDEGRC
-AMORLINC
-COUPDAYBC
-COUPDAYS
-COUPDAYSNC
-COUPNCD
-COUPPCD
-FVSCHEDULE
-MDURATION
-MIRR
-ODDFPRICE
-ODDFYIELD
-ODDLPRICE
-ODDLYIELD
-PRICE
-PRICEDISC
-PRICEMAT
-RATE
-VDB
-XIRR
-XNPV
-YIELD
-YIELDDISC
-YIELDMAT
-
-IRR
-NPV
-
-
-Trig:
-
-IMTAN
 
 
 ******************************************************************************
