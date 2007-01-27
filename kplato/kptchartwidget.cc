@@ -46,6 +46,9 @@ painter.drawText(200,150,"I am a Chart!");
 
 /* attributes :  1er : par rapport au coté, 2eme : par rapport au haut !
 */
+painter.drawText(5, 10,"Budget");
+//painter.drawText(maximumWidth()-15, maximumHeight()-20,"Time");
+painter.drawText(530,300 ,"Time");
 painter.drawLine(QLine(12,15,12,maximumHeight()-10));
 painter.drawLine(QLine(12,maximumHeight()-10,maximumWidth()-10,maximumHeight()-10));
 

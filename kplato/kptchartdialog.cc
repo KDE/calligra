@@ -34,7 +34,7 @@ ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
     setMainWidget(m_panel);
     m_panel->show();
 
-    resize(610,480);
+    resize(610,550);
 
    // connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonClose(bool)));
    // connect(this,SIGNAL(CloseClicked()),this,SLOT(slotClose()));
