@@ -307,7 +307,7 @@ void ConditionalDialog::init()
 
   Sheet* sheet = m_view->activeSheet();
 
-  conditionList = sheet->conditions( m_marker.left(), m_marker.top() ).conditionList();
+  conditionList = Cell( sheet, m_marker.topLeft() ).conditions().conditionList();
   /* this is the list, but only display the conditions common to all selected
      cells*/
 
@@ -315,7 +315,7 @@ void ConditionalDialog::init()
   {
     for ( int y = m_marker.top(); y <= m_marker.bottom(); y++ )
     {
-      otherList = sheet->conditions( x, y ).conditionList();
+      otherList = Cell( sheet, x, y ).conditions().conditionList();
 
       it1 = conditionList.begin();
       while ( it1 != conditionList.end() )

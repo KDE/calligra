@@ -75,7 +75,6 @@
 #include "Localization.h"
 #include "Map.h"
 #include "Object.h"
-#include "PointStorage.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "RowColumnManipulators.h"
@@ -105,10 +104,6 @@ do { \
 } while(0)
 
 namespace KSpread {
-
-class FormulaStorage : public PointStorage<Formula> {};
-class LinkStorage : public PointStorage<QString> {};
-class ValueStorage : public PointStorage<Value> {};
 
 /*****************************************************************************
  *
@@ -519,23 +514,6 @@ const RowFormat* Sheet::rowFormat( int _row ) const
     return doc()->defaultRowFormat();
 }
 
-Value Sheet::value( int column, int row ) const
-{
-    if ( column == 0 || row == 0 )
-        return Value();
-    return valueStorage()->lookup( column, row );
-}
-
-void Sheet::setValue( int column, int row, const Value& value )
-{
-    if ( column == 0 || row == 0 )
-        return;
-    if ( value.isEmpty() )
-        valueStorage()->take( column, row );
-    else
-        valueStorage()->insert( column, row, value );
-}
-
 ValueStorage* Sheet::valueStorage() const
 {
     return d->cellStorage->valueStorage();
@@ -551,43 +529,9 @@ Value Sheet::valueRegion( const Region& region ) const
     return array;
 }
 
-Formula Sheet::formula( int column, int row ) const
-{
-    if ( column == 0 || row == 0 )
-        return Formula();
-    return formulaStorage()->lookup( column, row );
-}
-
-void Sheet::setFormula( int column, int row, const Formula& formula )
-{
-    if ( column == 0 || row == 0 )
-        return;
-    if ( formula.expression().isEmpty() )
-        formulaStorage()->take( column, row );
-    else
-        formulaStorage()->insert( column, row, formula );
-}
-
 FormulaStorage* Sheet::formulaStorage() const
 {
     return d->cellStorage->formulaStorage();
-}
-
-QString Sheet::link( int column, int row ) const
-{
-    if ( column == 0 || row == 0 )
-        return QString();
-    return linkStorage()->lookup( column, row );
-}
-
-void Sheet::setLink( int column, int row, const QString& link )
-{
-    if ( column == 0 || row == 0 )
-        return;
-    if ( link.isEmpty() )
-        linkStorage()->take( column, row );
-    else
-        linkStorage()->insert( column, row, link );
 }
 
 LinkStorage* Sheet::linkStorage() const
@@ -700,44 +644,14 @@ StyleStorage* Sheet::styleStorage() const
     return d->cellStorage->styleStorage();
 }
 
-QString Sheet::comment( int column, int row ) const
-{
-    return commentStorage()->contains( QPoint( column, row ) );
-}
-
-void Sheet::setComment( const Region& region, const QString& comment ) const
-{
-    commentStorage()->insert( region, comment );
-}
-
 CommentStorage* Sheet::commentStorage() const
 {
     return d->cellStorage->commentStorage();
 }
 
-Conditions Sheet::conditions( int column, int row ) const
-{
-    return conditionsStorage()->contains( QPoint( column, row ) );
-}
-
-void Sheet::setConditions( const Region& region, Conditions conditions ) const
-{
-    conditionsStorage()->insert( region, conditions );
-}
-
 ConditionsStorage* Sheet::conditionsStorage() const
 {
     return d->cellStorage->conditionsStorage();
-}
-
-KSpread::Validity Sheet::validity( int column, int row ) const
-{
-    return validityStorage()->contains( QPoint( column, row ) );
-}
-
-void Sheet::setValidity( const Region& region, KSpread::Validity validity ) const
-{
-    validityStorage()->insert( region, validity );
 }
 
 ValidityStorage* Sheet::validityStorage() const
@@ -1581,7 +1495,7 @@ void Sheet::refreshPreference()
 
 
 // helper function for Sheet::areaIsEmpty
-bool Sheet::cellIsEmpty( const Cell& cell, TestType _type, int col, int row)
+bool Sheet::cellIsEmpty( const Cell& cell, TestType _type)
 {
   if ( !cell.isPartOfMerged())
   {
@@ -1592,15 +1506,15 @@ bool Sheet::cellIsEmpty( const Cell& cell, TestType _type, int col, int row)
         return false;
       break;
     case Validity:
-      if ( !validity( col, row ).isEmpty() )
+      if ( !cell.validity().isEmpty() )
         return false;
       break;
     case Comment:
-      if ( !comment( col, row ).isEmpty())
+      if ( !cell.comment().isEmpty())
         return false;
       break;
     case ConditionalCellAttribute:
-      if ( conditions( col, row ).conditionList().count() > 0)
+      if ( cell.conditions().conditionList().count() > 0)
         return false;
       break;
     }
@@ -1620,7 +1534,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
       for ( int row = range.top(); row <= range.bottom(); ++row ) {
         Cell cell = d->cellStorage->firstInRow( row );
         while( !cell.isNull() ) {
-          if (!cellIsEmpty (cell, _type, cell.column(), row))
+          if (!cellIsEmpty (cell, _type))
             return false;
           cell = d->cellStorage->nextInRow( cell.column(), row );
         }
@@ -1631,7 +1545,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
       for ( int col = range.left(); col <= range.right(); ++col ) {
         Cell cell = d->cellStorage->firstInColumn( col );
         while( !cell.isNull() ) {
-          if (!cellIsEmpty (cell, _type, col, cell.row()))
+          if (!cellIsEmpty (cell, _type))
             return false;
           cell = d->cellStorage->nextInColumn( col, cell.row() );
         }
@@ -1644,7 +1558,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
       for ( int x = range.left(); x <= right; ++x )
         for ( int y = range.top(); y <= bottom; ++y ) {
           cell = Cell( this, x, y );
-          if (!cellIsEmpty (cell, _type, x, y))
+          if (!cellIsEmpty (cell, _type))
             return false;
         }
     }
@@ -1674,7 +1588,7 @@ QString Sheet::guessColumnTitle(QRect& area, int col)
       return QString();
   }*/
 
-  Value cellValue=value(col,area.top());
+  Value cellValue = cellStorage()->value( col, area.top() );
   return cellValue.asString();
 }
 
@@ -1699,7 +1613,7 @@ QString Sheet::guessRowTitle(QRect& area, int row)
       return QString();
   }*/
 
-  Value cellValue=value(area.left(),row);
+  Value cellValue = cellStorage()->value( area.left(), row );
   return cellValue.asString();
 }
 
@@ -3840,7 +3754,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                         // FIXME POSSIBLE DATA LOSS!
                         cols = qMin( n, KS_colMax - columnIndex + 1 );
 
-                    if ( !cellHasStyle && ( cell.isEmpty() && comment( columnIndex, backupRow ).isEmpty() ) )
+                    if ( !cellHasStyle && ( cell.isEmpty() && Cell( this, columnIndex, backupRow ).comment().isEmpty() ) )
                     {
                         // just increment it
                         columnIndex += cols - 1;
@@ -3863,15 +3777,15 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                                 // TODO Stefan: set the attributes in one go for the repeated range
                                 if ( cellHasStyle && !styleName.isEmpty())
                                     cellStyleRegions[styleName] += QRect( columnIndex, newRow, 1, 1 );
-                                const QString comment = this->comment( columnIndex, backupRow );
+                                const QString comment = Cell( this, columnIndex, backupRow ).comment();
                                 if ( !comment.isEmpty() )
-                                    setComment( Region(QPoint(columnIndex, newRow)), comment );
-                                const Conditions conditions = this->conditions( columnIndex, backupRow );
+                                    cellStorage()->setComment( Region(QPoint(columnIndex, newRow)), comment );
+                                const Conditions conditions = cellStorage()->conditions( columnIndex, backupRow );
                                 if ( !conditions.isEmpty() )
-                                    setConditions( Region(QPoint(columnIndex, newRow)), conditions );
-                                const KSpread::Validity validity = this->validity( columnIndex, backupRow );
+                                    cellStorage()->setConditions( Region(QPoint(columnIndex, newRow)), conditions );
+                                const KSpread::Validity validity = cellStorage()->validity( columnIndex, backupRow );
                                 if ( !validity.isEmpty() )
-                                    setValidity( Region(QPoint(columnIndex, newRow)), validity );
+                                    cellStorage()->setValidity( Region(QPoint(columnIndex, newRow)), validity );
                             }
                         }
                     }
@@ -3931,14 +3845,6 @@ bool Sheet::compareRows( int row1, int row2, int& maxCols ) const
 //             kDebug(36003) << "\t Cell at column " << col << " in row " << row2 << " differs from the one in row " << row1 << endl;
             return false;
         }
-        if ( style( col, row1 ) != style( col, row2 ) )
-            return false;
-        if ( comment( col, row1 ) != comment( col, row2 ) )
-            return false;
-        if ( conditions( col, row1 ) != conditions( col, row2 ) )
-            return false;
-        if ( validity( col, row1 ) != validity( col, row2 ) )
-            return false;
     }
     return true;
 }
@@ -4944,21 +4850,6 @@ Sheet* Sheet::findSheet( const QString & _name )
     return 0;
 
   return map()->findSheet( _name );
-}
-
-void Sheet::insertCell( const Cell& _cell )
-{
-    // insert the new and delete the old cell
-    d->cellStorage->insert( _cell.column(), _cell.row(), _cell );
-
-    // TODO Stefan: use a SheetDamage
-    //              124806: creating series takes extremely long time
-    // Adjust the scrollbar range, if the max. dimension has changed.
-    if ( d->scrollBarUpdates )
-    {
-        checkRangeHBorder( _cell.column() );
-        checkRangeVBorder( _cell.row() );
-    }
 }
 
 void Sheet::insertColumnFormat( ColumnFormat *l )

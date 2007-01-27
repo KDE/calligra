@@ -153,13 +153,13 @@ bool SortManipulator::shouldReorder (Element *element, int first, int second)
     int row2 = firstrow + (m_rows ? second : which);
     int col1 = firstcol + (m_rows ? which : first);
     int col2 = firstcol + (m_rows ? which : second);
-    Value val1 = m_sheet->value (col1, row1);
-    Value val2 = m_sheet->value (col2, row2);
+    Value val1 = Cell( m_sheet, col1, row1 ).value();
+    Value val2 = Cell( m_sheet, col2, row2 ).value();
     // empty values always go to the end, so if second value is empty and
     // first one is not, we don't need to reorder
     if ((!val1.isEmpty()) && val2.isEmpty())
       return false;
-    
+
     // custom list ?
     if (m_usecustomlist) {
       QString s1 = conv->asString (val1).asString().toLower();

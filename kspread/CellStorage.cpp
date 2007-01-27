@@ -19,7 +19,6 @@
 
 #include "Cell.h"
 #include "Formula.h"
-#include "PointStorage.h"
 #include "RectStorage.h"
 #include "StyleStorage.h"
 #include "Value.h"
@@ -27,41 +26,6 @@
 #include "CellStorage.h"
 
 using namespace KSpread;
-
-namespace KSpread
-{
-
-class FormulaStorage : public PointStorage<Formula>
-{
-public:
-    FormulaStorage& operator=( const PointStorage<Formula>& o )
-    {
-        PointStorage<Formula>::operator=( o );
-        return *this;
-    }
-};
-
-class LinkStorage : public PointStorage<QString>
-{
-public:
-    LinkStorage& operator=( const PointStorage<QString>& o )
-    {
-        PointStorage<QString>::operator=( o );
-        return *this;
-    }
-};
-
-class ValueStorage : public PointStorage<Value>
-{
-public:
-    ValueStorage& operator=( const PointStorage<Value>& o )
-    {
-        PointStorage<Value>::operator=( o );
-        return *this;
-    }
-};
-
-}
 
 class CellStorage::Private
 {
@@ -96,41 +60,93 @@ CellStorage::~CellStorage()
     delete d;
 }
 
-void CellStorage::clear()
+void CellStorage::take( int col, int row )
 {
-    d->storage.clear();
+    // TODO Stefan: Undo?!
+    d->formulaStorage.take( col, row );
+    d->linkStorage.take( col, row );
+    d->valueStorage.take( col, row );
 }
 
-int CellStorage::count() const
+QString CellStorage::comment( int column, int row ) const
 {
-    return d->storage.count();
+    return commentStorage()->contains( QPoint( column, row ) );
 }
 
-Cell CellStorage::insert( int col, int row, Cell data )
+void CellStorage::setComment( const Region& region, const QString& comment ) const
 {
-    return d->storage.insert( col, row, data );
+    commentStorage()->insert( region, comment );
 }
 
-Cell CellStorage::lookup( int col, int row ) const
+Conditions CellStorage::conditions( int column, int row ) const
 {
-    Cell cell = d->storage.lookup( col, row );
-    if ( !cell.isNull() )
-    {
-        cell.setColumn( col );
-        cell.setRow( row );
-    }
-    return cell;
+    return conditionsStorage()->contains( QPoint( column, row ) );
 }
 
-Cell CellStorage::take( int col, int row )
+void CellStorage::setConditions( const Region& region, Conditions conditions ) const
 {
-    Cell cell = d->storage.take( col, row );
-    if ( !cell.isNull() )
-    {
-        cell.setColumn( col );
-        cell.setRow( row );
-    }
-    return cell;
+    conditionsStorage()->insert( region, conditions );
+}
+
+Formula CellStorage::formula( int column, int row ) const
+{
+    if ( column == 0 || row == 0 )
+        return Formula();
+    return formulaStorage()->lookup( column, row );
+}
+
+void CellStorage::setFormula( int column, int row, const Formula& formula )
+{
+    if ( column == 0 || row == 0 )
+        return;
+    if ( formula.expression().isEmpty() )
+        formulaStorage()->take( column, row );
+    else
+        formulaStorage()->insert( column, row, formula );
+}
+
+QString CellStorage::link( int column, int row ) const
+{
+    if ( column == 0 || row == 0 )
+        return QString();
+    return linkStorage()->lookup( column, row );
+}
+
+void CellStorage::setLink( int column, int row, const QString& link )
+{
+    if ( column == 0 || row == 0 )
+        return;
+    if ( link.isEmpty() )
+        linkStorage()->take( column, row );
+    else
+        linkStorage()->insert( column, row, link );
+}
+
+Validity CellStorage::validity( int column, int row ) const
+{
+    return validityStorage()->contains( QPoint( column, row ) );
+}
+
+void CellStorage::setValidity( const Region& region, Validity validity ) const
+{
+    validityStorage()->insert( region, validity );
+}
+
+Value CellStorage::value( int column, int row ) const
+{
+    if ( column == 0 || row == 0 )
+        return Value();
+    return valueStorage()->lookup( column, row );
+}
+
+void CellStorage::setValue( int column, int row, const Value& value )
+{
+    if ( column == 0 || row == 0 )
+        return;
+    if ( value.isEmpty() )
+        valueStorage()->take( column, row );
+    else
+        valueStorage()->insert( column, row, value );
 }
 
 QVector< QPair<QPoint,Cell> > CellStorage::insertColumns( int position, int number )
@@ -315,7 +331,6 @@ CellStorage CellStorage::subStorage( const Region& region ) const
     subStorage.d->formulaStorage = d->formulaStorage.subStorage( region );
     subStorage.d->linkStorage = d->linkStorage.subStorage( region );
     subStorage.d->valueStorage = d->valueStorage.subStorage( region );
-    subStorage.d->storage = d->storage.subStorage( region );
     return subStorage;
 }
 
@@ -357,9 +372,4 @@ ValidityStorage* CellStorage::validityStorage() const
 ValueStorage* CellStorage::valueStorage() const
 {
     return &d->valueStorage;
-}
-
-bool CellStorage::operator==( const CellStorage& o ) const
-{
-    return d->storage.operator==( o.d->storage );
 }

@@ -118,7 +118,6 @@
 #include "Handler.h"
 #include "Localization.h"
 #include "Map.h"
-#include "PointStorage.h"
 #include "RecalcManager.h"
 #include "RowColumnManipulators.h"
 #include "Selection.h"
@@ -179,9 +178,6 @@
 
 namespace KSpread
 {
-class FormulaStorage : public PointStorage<Formula> {};
-class LinkStorage : public PointStorage<QString> {};
-class ValueStorage : public PointStorage<Value> {};
 class ViewActions;
 
 class View::Private
@@ -5777,7 +5773,7 @@ void View::openPopupMenu( const QPoint & _point )
 
       d->popupMenu->addSeparator();
       d->popupMenu->addAction( d->actions->addModifyComment );
-      if ( !activeSheet()->comment(d->canvas->markerColumn(), d->canvas->markerRow()).isEmpty() )
+      if ( !Cell( activeSheet(), d->selection->marker() ).comment().isEmpty() )
       {
         d->popupMenu->addAction( d->actions->removeComment );
       }

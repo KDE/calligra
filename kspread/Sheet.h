@@ -36,7 +36,6 @@
 #include <KoXmlReader.h>
 
 #include "Cell.h"
-#include "Formula.h"
 #include "Style.h"
 #include "Global.h"
 
@@ -631,52 +630,17 @@ public:
     void setStyle( const Region& region, const Style& style ) const;
     StyleStorage* styleStorage() const;
 
-    /**
-     * \return the comment associated with the Cell at \p column , \p row .
-     */
-    QString comment( int column, int row ) const;
-    void setComment( const Region& region, const QString& comment ) const;
     CommentStorage* commentStorage() const;
-
-    /**
-     * \return the conditional formattings associated with the Cell at \p column , \p row .
-     */
-    Conditions conditions( int column, int row ) const;
-    void setConditions( const Region& region, Conditions conditions ) const;
     ConditionsStorage* conditionsStorage() const;
-
-    /**
-     * \return the validity checks associated with the Cell at \p column , \p row .
-     */
-    KSpread::Validity validity( int column, int row ) const;
-    void setValidity( const Region& region, KSpread::Validity validity ) const;
+    FormulaStorage* formulaStorage() const;
+    LinkStorage* linkStorage() const;
     ValidityStorage* validityStorage() const;
-
-    /**
-     * \return the value associated with the Cell at \p column , \p row .
-     */
-    Value value( int column, int row ) const;
-    void setValue( int column, int row, const Value& value );
     ValueStorage* valueStorage() const;
 
     /**
      * Creates a value array containing the values in \p region.
      */
     Value valueRegion( const Region& region ) const;
-
-    /**
-     * \return the formula associated with the Cell at \p column , \p row .
-     */
-    Formula formula( int column, int row ) const;
-    void setFormula( int column, int row, const Formula& formula );
-    FormulaStorage* formulaStorage() const;
-
-    /**
-     * \return the hyperlink associated with the Cell at \p column , \p row .
-     */
-    QString link( int column, int row ) const;
-    void setLink( int column, int row, const QString& link );
-    LinkStorage* linkStorage() const;
 
     /**
      */
@@ -1009,12 +973,6 @@ public:
     //BEGIN UNSORTED METHODS !!!
     //
 
-    /**
-     * \todo TODO Stefan: remove after Undo.cpp|h and Commands.cpp|h are obsolete
-     * \deprecated use MergeManipulator
-     */
-    KDE_DEPRECATED void changeMergedCell( int /*m_iCol*/, int /*m_iRow*/, int /*m_iExtraX*/, int /*m_iExtraY*/) {}
-
     void refreshPreference() ;
 
     void hideSheet(bool _hide);
@@ -1088,18 +1046,6 @@ public:
      * A convenience function that finds a sheet by its name.
      */
     Sheet *findSheet( const QString & _name );
-
-    /**
-     * Inserts the \p cell into the sheet.
-     * All cells depending on this cell will be actualized.
-     * The max. scroll range will be actualized, when the cell exceeds the
-     * current max. range.
-     * \warning If you process many cells, you should disable the scroll
-     *          range update by using enableScrollBarUpdates() and update
-     *          the range explicitly by using checkRangeHBorder() and
-     *          checkRangeVBorder() ONCE after the processing is done.
-     */
-    void insertCell( const Cell& cell );
 
     /**
      * Used by Undo.
@@ -1415,7 +1361,7 @@ protected:
                        bool down = true );
 
     // helper function for areaIsEmpty
-    bool cellIsEmpty ( const Cell& cell, TestType _type, int col, int row);
+    bool cellIsEmpty( const Cell& cell, TestType _type );
 
     static Sheet* find( int _id );
     static int s_id;

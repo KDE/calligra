@@ -167,12 +167,12 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     else
     {
         // lookup the 'normal' style
-        Style style = sheet->style( col, row );
+        Style style = cell.style();
         if ( !style.isDefault() )
             d->style = style;
 
         // use conditional formatting attributes
-        Conditions conditions = sheet->conditions( col, row );
+        Conditions conditions = cell.conditions();
         if ( Style* style = conditions.testConditions( cell ) )
             d->style.merge( *style );
     }

@@ -25,7 +25,6 @@
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Doc.h"
-#include "PointStorage.h"
 #include "Sheet.h"
 #include "StyleStorage.h"
 #include "ValueCalc.h"
@@ -34,12 +33,6 @@
 #include <math.h>
 
 using namespace KSpread;
-
-namespace KSpread {
-class FormulaStorage : public PointStorage<Formula> {};
-class LinkStorage : public PointStorage<QString> {};
-class ValueStorage : public PointStorage<Value> {};
-}
 
 AbstractDataManipulator::AbstractDataManipulator ()
 {

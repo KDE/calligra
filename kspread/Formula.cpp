@@ -1490,13 +1490,13 @@ Value Formula::eval() const
         entry.reset();
         if (sheet)
         {
-          Point cell (c, sheet->map(), sheet);
-          if (cell.isValid())
+          Point point(c, sheet->map(), sheet);
+          if (point.isValid())
           {
-            val1 = cell.sheet()->value (cell.column(), cell.row());
+            val1 = Cell( sheet, point.pos() ).value();
             // store the reference, so we can use it within functions
-            entry.col1 = entry.col2 = cell.column();
-            entry.row1 = entry.row2 = cell.row();
+            entry.col1 = entry.col2 = point.column();
+            entry.row1 = entry.row2 = point.row();
           }
         }
         entry.val = val1;

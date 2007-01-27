@@ -76,7 +76,7 @@ public:
  * \class Conditions
  * Manages a set of conditions for a cell.
  */
-class Conditions
+class KSPREAD_EXPORT Conditions
 {
 public:
     /**

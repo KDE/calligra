@@ -297,32 +297,32 @@ void Cell::setStyle( const Style& style ) const
 
 QString Cell::comment() const
 {
-    return sheet()->comment( d->column, d->row );
+    return sheet()->cellStorage()->comment( d->column, d->row );
 }
 
 void Cell::setComment( const QString& comment ) const
 {
-    sheet()->setComment( Region(cellPosition()), comment );
+    sheet()->cellStorage()->setComment( Region(cellPosition()), comment );
 }
 
 Conditions Cell::conditions() const
 {
-    return sheet()->conditions( d->column, d->row );
+    return sheet()->cellStorage()->conditions( d->column, d->row );
 }
 
 void Cell::setConditions( Conditions conditions ) const
 {
-    sheet()->setConditions( Region(cellPosition()), conditions );
+    sheet()->cellStorage()->setConditions( Region(cellPosition()), conditions );
 }
 
 Validity Cell::validity() const
 {
-    return sheet()->validity( d->column, d->row );
+    return sheet()->cellStorage()->validity( d->column, d->row );
 }
 
 void Cell::setValidity( Validity validity ) const
 {
-    sheet()->setValidity( Region(cellPosition()), validity );
+    sheet()->cellStorage()->setValidity( Region(cellPosition()), validity );
 }
 
 
@@ -356,14 +356,14 @@ void Cell::setInputText( const QString& string )
         formula.setExpression( string );
         setFormula( formula );
         // remove an existing value
-        sheet()->setValue( d->column, d->row, Value() );
+        sheet()->cellStorage()->setValue( d->column, d->row, Value() );
     }
     else
     {
         // remove an existing formula
         setFormula( Formula() );
         // set the value
-        sheet()->setValue( d->column, d->row, Value( string ) );
+        sheet()->cellStorage()->setValue( d->column, d->row, Value( string ) );
     }
 }
 
@@ -391,12 +391,12 @@ QString Cell::displayText() const
 
 Formula Cell::formula() const
 {
-    return sheet()->formula( d->column, d->row );
+    return sheet()->cellStorage()->formula( d->column, d->row );
 }
 
 void Cell::setFormula( const Formula& formula )
 {
-    sheet()->setFormula( column(), row(), formula );
+    sheet()->cellStorage()->setFormula( column(), row(), formula );
 }
 
 
@@ -404,7 +404,7 @@ void Cell::setFormula( const Formula& formula )
 //
 const Value Cell::value() const
 {
-    return sheet()->value( d->column, d->row );
+    return sheet()->cellStorage()->value( d->column, d->row );
 }
 
 
@@ -429,7 +429,7 @@ void Cell::setValue( const Value& value, bool triggerRecalc )
   if ( ( this->value() == value ) && ( !isFormula() ) )
     return;
 
-    sheet()->setValue( d->column, d->row, value );
+    sheet()->cellStorage()->setValue( d->column, d->row, value );
 
     // Value of the cell has changed - trigger necessary actions
     valueChanged( triggerRecalc );
@@ -483,7 +483,7 @@ void Cell::copyFormat( const Cell& cell )
     Q_ASSERT( !cell.isNull() );
     Value value = this->value();
     value.setFormat( cell.value().format() );
-    sheet()->setValue( d->column, d->row, value );
+    sheet()->cellStorage()->setValue( d->column, d->row, value );
     const Style style = cell.style();
     if ( !style.isDefault() )
         setStyle( style );
@@ -1100,17 +1100,17 @@ void Cell::setCellText( const QString& text )
     }
 }
 
+QString Cell::link() const
+{
+    return sheet()->cellStorage()->link( d->column, d->row );
+}
+
 void Cell::setLink( const QString& link )
 {
-    sheet()->setLink( d->column, d->row, link );
+    sheet()->cellStorage()->setLink( d->column, d->row, link );
 
     if ( !link.isEmpty() && inputText().isEmpty() )
         setCellText( link );
-}
-
-QString Cell::link() const
-{
-    return sheet()->link( d->column, d->row );
 }
 
 Format::Type Cell::formatType() const
@@ -1427,7 +1427,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
     }
 
-    Validity validity = sheet()->validity( column, row );
+    Validity validity = Cell( sheet(), column, row ).validity();
     if ( !validity.isEmpty() )
     {
         GenValidationStyle styleVal(&validity);
@@ -2286,7 +2286,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
 
     if ( newStyleLoading )
     {
-      sheet()->setValue( d->column, d->row, Value() );
+      sheet()->cellStorage()->setValue( d->column, d->row, Value() );
       clearAllErrors();
 
       // boolean ?
@@ -2548,6 +2548,14 @@ bool Cell::operator==( const Cell& other ) const
         return false;
     if ( mergedYCells() != other.mergedYCells() )
         return false;
+    if ( style() != other.style() )
+        return false;
+    if ( comment() != other.comment() )
+        return false;
+    if ( conditions() != other.conditions() )
+        return false;
+    if ( validity() != other.validity() )
+        return false;
     return true;
 }
 
@@ -2569,25 +2577,12 @@ QPoint Cell::cellPosition() const
     return QPoint( column(), row() );
 }
 
-QLinkedList<Conditional> Cell::conditionList() const
-{
-    Conditions conditions = sheet()->conditions( d->column, d->row );
-    return conditions.conditionList();
-}
-
-void Cell::setConditionList( const QLinkedList<Conditional> & newList )
-{
-    Conditions conditions;
-    conditions.setConditionList( newList );
-    setConditions( conditions );
-}
-
 void Cell::clearAllErrors()
 {
     if ( value().isError() )
     {
         kDebug() << "\tClearing all errors..." << endl;
-        sheet()->setValue( d->column, d->row, Value() );
+        sheet()->cellStorage()->setValue( d->column, d->row, Value() );
         valueChanged();
     }
 }

@@ -63,7 +63,7 @@ CommentDialog::CommentDialog( View* parent, const char* name,const QPoint &_mark
 
     multiLine->setFocus();
 
-    const QString comment = m_pView->activeSheet()->comment( marker.x(), marker.y() );
+    const QString comment = Cell( m_pView->activeSheet(), marker ).comment();
     if ( !comment.isEmpty() )
         multiLine->setText( comment );
 

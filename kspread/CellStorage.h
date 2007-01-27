@@ -24,6 +24,13 @@
 #include <QRect>
 #include <QVector>
 
+#include "Condition.h"
+#include "Formula.h"
+#include "Global.h"
+#include "PointStorage.h"
+#include "Validity.h"
+#include "Value.h"
+
 namespace KSpread
 {
 class Cell;
@@ -63,38 +70,45 @@ public:
     ~CellStorage();
 
     /**
-     * Clears the storage.
+     * Removes all data at \p col , \p row .
      */
-    void clear();
+    void take( int col, int row );
 
     /**
-     * Returns the number of items in the storage.
-     * Usable to iterate over all non-default data.
-     * \return number of items
-     * \see col()
-     * \see row()
-     * \see data()
+     * \return the comment associated with the Cell at \p column , \p row .
      */
-    int count() const;
+    QString comment( int column, int row ) const;
+    void setComment( const Region& region, const QString& comment ) const;
 
     /**
-     * Inserts \p data at \p col , \p row .
-     * \return the overridden data (default data, if no overwrite)
+     * \return the conditional formattings associated with the Cell at \p column , \p row .
      */
-    Cell insert( int col, int row, Cell data );
+    Conditions conditions( int column, int row ) const;
+    void setConditions( const Region& region, Conditions conditions ) const;
 
     /**
-     * Looks up the data at \p col , \p row . If no data was found returns a
-     * default object.
-     * \return the data at the given coordinate
+     * \return the formula associated with the Cell at \p column , \p row .
      */
-    Cell lookup( int col, int row ) const;
+    Formula formula( int column, int row ) const;
+    void setFormula( int column, int row, const Formula& formula );
 
     /**
-     * Removes data at \p col , \p row .
-     * \return the removed data (default data, if none)
+     * \return the hyperlink associated with the Cell at \p column , \p row .
      */
-    Cell take( int col, int row );
+    QString link( int column, int row ) const;
+    void setLink( int column, int row, const QString& link );
+
+    /**
+     * \return the validity checks associated with the Cell at \p column , \p row .
+     */
+    Validity validity( int column, int row ) const;
+    void setValidity( const Region& region, Validity validity ) const;
+
+    /**
+     * \return the value associated with the Cell at \p column , \p row .
+     */
+    Value value( int column, int row ) const;
+    void setValue( int column, int row, const Value& value );
 
     /**
      * Insert \p number columns at \p position .
@@ -229,14 +243,39 @@ public:
     ValidityStorage* validityStorage() const;
     ValueStorage* valueStorage() const;
 
-    /**
-     * Equality operator.
-     */
-    bool operator==( const CellStorage& o ) const;
-
 private:
     class Private;
     Private * const d;
+};
+
+class FormulaStorage : public PointStorage<Formula>
+{
+public:
+    FormulaStorage& operator=( const PointStorage<Formula>& o )
+    {
+        PointStorage<Formula>::operator=( o );
+        return *this;
+    }
+};
+
+class LinkStorage : public PointStorage<QString>
+{
+public:
+    LinkStorage& operator=( const PointStorage<QString>& o )
+    {
+        PointStorage<QString>::operator=( o );
+        return *this;
+    }
+};
+
+class ValueStorage : public PointStorage<Value>
+{
+public:
+    ValueStorage& operator=( const PointStorage<Value>& o )
+    {
+        PointStorage<Value>::operator=( o );
+        return *this;
+    }
 };
 
 } // namespace KSpread

@@ -427,7 +427,7 @@ void Canvas::validateSelection()
         int col = selection()->marker().x();
         int row = selection()->marker().y();
         Cell cell( sheet, col,row );
-        Validity validity = sheet->validity( col, row );
+        Validity validity = cell.validity();
         if ( validity.displayValidationInformation() )
         {
             QString title = validity.titleInfo();
@@ -4097,7 +4097,7 @@ void Canvas::showToolTip( const QPoint& p )
     //  - cell comment
     //  - hyperlink
     QString tipText;
-    QString comment = sheet->comment( col, row );
+    QString comment = Cell( sheet, col, row ).comment();
     // If cell is too small, show the content
     if ( !view()->sheetView( sheet )->cellView( col, row ).dimensionFits() )
     {

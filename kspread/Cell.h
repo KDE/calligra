@@ -636,16 +636,6 @@ public:
 
     void setValidity( Validity validity ) const;
 
-    /**
-     * Gets a copy of the list of current conditions
-     */
-    QLinkedList<Conditional> conditionList() const;
-
-    /**
-     * Replace the old set of conditions with a new one
-     */
-    void setConditionList(const QLinkedList<Conditional> &newList);
-
     //
     //END Conditional styles / content validity
     //

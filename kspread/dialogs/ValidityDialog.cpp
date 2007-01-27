@@ -445,7 +445,7 @@ void DlgValidity::changeIndexCond(int _index)
 
 void DlgValidity::init()
 {
-  Validity validity = m_pView->activeSheet()->validity( marker.left(), marker.top() );
+  Validity validity = Cell( m_pView->activeSheet(), marker.topLeft() ).validity();
   if ( !validity.isEmpty() )
   {
     message->setPlainText(validity.message());

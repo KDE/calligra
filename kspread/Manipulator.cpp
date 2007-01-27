@@ -26,6 +26,7 @@
 
 #include "Canvas.h"
 #include "Cell.h"
+#include "CellStorage.h"
 #include "Doc.h"
 #include "Map.h"
 #include "Sheet.h"
@@ -523,7 +524,7 @@ bool CommentManipulator::process( Element* element )
         // create undo
         if ( m_firstrun )
             m_undoData += m_sheet->commentStorage()->undoData( element->rect() );
-        m_sheet->setComment( Region(element->rect()), m_comment );
+        m_sheet->cellStorage()->setComment( Region(element->rect()), m_comment );
     }
     return true;
 }
@@ -532,9 +533,9 @@ bool CommentManipulator::mainProcessing()
 {
     if ( m_reverse )
     {
-        m_sheet->setComment( *this, QString() );
+        m_sheet->cellStorage()->setComment( *this, QString() );
         for ( int i = 0; i < m_undoData.count(); ++i )
-            m_sheet->setComment( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
+            m_sheet->cellStorage()->setComment( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
     }
     return Manipulator::mainProcessing();
 }
@@ -565,7 +566,7 @@ bool ConditionalManipulator::process( Element* element )
         // create undo
         if ( m_firstrun )
             m_undoData += m_sheet->conditionsStorage()->undoData( element->rect() );
-        m_sheet->setConditions( Region(element->rect()), m_conditions );
+        m_sheet->cellStorage()->setConditions( Region(element->rect()), m_conditions );
     }
     return true;
 }
@@ -574,9 +575,9 @@ bool ConditionalManipulator::mainProcessing()
 {
     if ( m_reverse )
     {
-        m_sheet->setConditions( *this, Conditions() );
+        m_sheet->cellStorage()->setConditions( *this, Conditions() );
         for ( int i = 0; i < m_undoData.count(); ++i )
-            m_sheet->setConditions( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
+            m_sheet->cellStorage()->setConditions( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
     }
     return Manipulator::mainProcessing();
 }
@@ -607,7 +608,7 @@ bool ValidityManipulator::process( Element* element )
         // create undo
         if ( m_firstrun )
             m_undoData += m_sheet->validityStorage()->undoData( element->rect() );
-        m_sheet->setValidity( Region(element->rect()), m_validity );
+        m_sheet->cellStorage()->setValidity( Region(element->rect()), m_validity );
     }
     return true;
 }
@@ -616,9 +617,9 @@ bool ValidityManipulator::mainProcessing()
 {
     if ( m_reverse )
     {
-        m_sheet->setValidity( *this, Validity() );
+        m_sheet->cellStorage()->setValidity( *this, Validity() );
         for ( int i = 0; i < m_undoData.count(); ++i )
-            m_sheet->setValidity( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
+            m_sheet->cellStorage()->setValidity( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
     }
     return Manipulator::mainProcessing();
 }

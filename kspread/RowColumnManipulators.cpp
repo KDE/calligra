@@ -23,7 +23,6 @@
 
 #include "CellStorage.h"
 #include "CellView.h"
-#include "PointStorage.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetView.h"
@@ -31,12 +30,6 @@
 #include "Value.h"
 
 using namespace KSpread;
-
-namespace KSpread {
-class FormulaStorage : public PointStorage<Formula> {};
-class LinkStorage : public PointStorage<QString> {};
-class ValueStorage : public PointStorage<Value> {};
-}
 
 /***************************************************************************
   class ResizeColumnManipulator

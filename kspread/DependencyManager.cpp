@@ -28,7 +28,6 @@
 #include "CellStorage.h"
 #include "Formula.h"
 #include "Map.h"
-#include "PointStorage.h"
 #include "Region.h"
 #include "Sheet.h"
 #include "Value.h"
@@ -36,13 +35,6 @@
 #include "DependencyManager.h"
 
 using namespace KSpread;
-
-namespace KSpread
-{
-class FormulaStorage : public PointStorage<Formula> {};
-class LinkStorage : public PointStorage<QString> {};
-class ValueStorage : public PointStorage<Value> {};
-}
 
 class DependencyManager::Private
 {

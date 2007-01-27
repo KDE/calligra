@@ -468,7 +468,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
         if( !comment.isEmpty() )
         {
             kDebug(30518)<<" columns :"<<columns<<" row :"<<row<<endl;
-            table->setComment( KSpread::Region(QPoint(columns,row)), comment );
+            Cell( table, columns, row ).setComment( comment );
         }
     }
 
@@ -563,7 +563,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
     if ( e.hasAttributeNS( ooNS::table, "validation-name" ) )
     {
         kDebug(30518)<<" Celle has a validation :"<<e.attributeNS( ooNS::table, "validation-name", QString::null )<<endl;
-        loadOasisValidation( table->validity( columns, row ), e.attributeNS( ooNS::table, "validation-name", QString::null ) );
+        loadOasisValidation( Cell( table, columns, row ).validity(), e.attributeNS( ooNS::table, "validation-name", QString::null ) );
     }
     if ( e.hasAttributeNS( ooNS::table, "value-type" ) )
     {
@@ -800,7 +800,11 @@ void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &pr
         elementItem = elementItem.nextSibling().toElement();
     }
     if ( !cond.isEmpty() )
-        Cell( cell ).setConditionList( cond );
+    {
+        Conditions conditions;
+        conditions.setConditionList( cond );
+        Cell( cell ).setConditions( conditions );
+    }
 }
 
 void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, Conditional &newCondition )
