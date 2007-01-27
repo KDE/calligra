@@ -87,17 +87,24 @@
 #include <kdebug.h>
 
 #include "Cell.h"
-#include "CellPrivate.h"
 #include "CellView.h"
 
 using namespace KSpread;
 
+class Cell::Private : public QSharedData
+{
+public:
+    Private() : sheet( 0 ), column( 0 ), row( 0 ) {}
+
+    Sheet*  sheet;
+    int     column  : 16; // KS_colMax
+    int     row     : 16; // KS_rowMax
+};
+
+
 Cell::Cell()
     : d( new Private )
 {
-    d->sheet = 0;
-    d->column = 0;
-    d->row = 0;
 }
 
 Cell::Cell( const Sheet* sheet, int col, int row )

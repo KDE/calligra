@@ -55,11 +55,11 @@
 #include "SheetPrint.h"
 #include "SheetView.h"
 #include "StyleManager.h"
+#include "Value.h"
 #include "View.h"
 
 // Local
 #include "CellView.h"
-#include "CellPrivate.h"
 
 using namespace KSpread;
 
