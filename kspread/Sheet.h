@@ -606,14 +606,14 @@ public:
      */
     CellStorage* cellStorage() const;
 
-    CommentStorage* commentStorage() const;
-    ConditionsStorage* conditionsStorage() const;
-    FormulaStorage* formulaStorage() const;
-    FusionStorage* fusionStorage() const;
-    LinkStorage* linkStorage() const;
+    const CommentStorage* commentStorage() const;
+    const ConditionsStorage* conditionsStorage() const;
+    const FormulaStorage* formulaStorage() const;
+    const FusionStorage* fusionStorage() const;
+    const LinkStorage* linkStorage() const;
     StyleStorage* styleStorage() const;
-    ValidityStorage* validityStorage() const;
-    ValueStorage* valueStorage() const;
+    const ValidityStorage* validityStorage() const;
+    const ValueStorage* valueStorage() const;
 
     /**
      * Determines the used area, i.e. the area spanning from A1 to the maximum

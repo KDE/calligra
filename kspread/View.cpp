@@ -2236,7 +2236,7 @@ void View::spellCheckerReady()
     while ( d->spell.currentCellIndex < d->spell.currentSpellSheet->valueStorage()->count() )
     {
         Sheet* sheet = d->spell.currentSpellSheet;
-        ValueStorage* valueStorage = sheet->valueStorage();
+        const ValueStorage* valueStorage = sheet->valueStorage();
         int index = d->spell.currentCellIndex;
         Cell currentCell( sheet, valueStorage->col( index ), valueStorage->row( index ) );
 
@@ -2409,7 +2409,7 @@ void View::spellCheckerCorrected( const QString & old, const QString & corr, uns
     else
     {
         Sheet* sheet = d->spell.currentSpellSheet;
-        ValueStorage* valueStorage = sheet->valueStorage();
+        const ValueStorage* valueStorage = sheet->valueStorage();
         int index = d->spell.currentCellIndex;
         cell = Cell( sheet, valueStorage->col( index ), valueStorage->row( index ) );
         d->spell.spellCurrCellX = d->spell.currentSpellSheet->valueStorage()->col( d->spell.currentCellIndex );

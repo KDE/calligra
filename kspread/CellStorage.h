@@ -256,14 +256,14 @@ public:
      */
     CellStorage subStorage( const Region& region ) const;
 
-    CommentStorage* commentStorage() const;
-    ConditionsStorage* conditionsStorage() const;
-    FormulaStorage* formulaStorage() const;
-    FusionStorage* fusionStorage() const;
-    LinkStorage* linkStorage() const;
+    const CommentStorage* commentStorage() const;
+    const ConditionsStorage* conditionsStorage() const;
+    const FormulaStorage* formulaStorage() const;
+    const FusionStorage* fusionStorage() const;
+    const LinkStorage* linkStorage() const;
     StyleStorage* styleStorage() const;
-    ValidityStorage* validityStorage() const;
-    ValueStorage* valueStorage() const;
+    const ValidityStorage* validityStorage() const;
+    const ValueStorage* valueStorage() const;
 
     /**
      * Start the undo recording.

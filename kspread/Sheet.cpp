@@ -514,27 +514,27 @@ CellStorage* Sheet::cellStorage() const
     return d->cellStorage;
 }
 
-CommentStorage* Sheet::commentStorage() const
+const CommentStorage* Sheet::commentStorage() const
 {
     return d->cellStorage->commentStorage();
 }
 
-ConditionsStorage* Sheet::conditionsStorage() const
+const ConditionsStorage* Sheet::conditionsStorage() const
 {
     return d->cellStorage->conditionsStorage();
 }
 
-FormulaStorage* Sheet::formulaStorage() const
+const FormulaStorage* Sheet::formulaStorage() const
 {
     return d->cellStorage->formulaStorage();
 }
 
-FusionStorage* Sheet::fusionStorage() const
+const FusionStorage* Sheet::fusionStorage() const
 {
     return d->cellStorage->fusionStorage();
 }
 
-LinkStorage* Sheet::linkStorage() const
+const LinkStorage* Sheet::linkStorage() const
 {
     return d->cellStorage->linkStorage();
 }
@@ -544,12 +544,12 @@ StyleStorage* Sheet::styleStorage() const
     return d->cellStorage->styleStorage();
 }
 
-ValidityStorage* Sheet::validityStorage() const
+const ValidityStorage* Sheet::validityStorage() const
 {
     return d->cellStorage->validityStorage();
 }
 
-ValueStorage* Sheet::valueStorage() const
+const ValueStorage* Sheet::valueStorage() const
 {
     return d->cellStorage->valueStorage();
 }
