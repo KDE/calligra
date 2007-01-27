@@ -122,6 +122,15 @@ public:
     void setValue( int column, int row, const Value& value );
 
     /**
+     */
+    bool doesMergeCells( int column, int row ) const;
+    bool isPartOfMerged( int column, int row ) const;
+    void mergeCells( int column, int row, int width, int height );
+    Cell masterCell( int column, int row ) const;
+    int mergedXCells( int column, int row ) const;
+    int mergedYCells( int column, int row ) const;
+
+    /**
      * Insert \p number columns at \p position .
      * \return the data, that became out of range (shifted over the end)
      */

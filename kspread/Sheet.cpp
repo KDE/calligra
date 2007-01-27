@@ -831,14 +831,6 @@ void Sheet::adjustSizeMaxY ( double _y )
     d->sizeMaxY += _y;
 }
 
-Cell Sheet::visibleCellAt( int _column, int _row )
-{
-    Cell cell( this, _column, _row );
-    if ( cell.masterCell() != cell ) // FIXME
-        return cell.masterCell();
-    return cell;
-}
-
 RowFormat* Sheet::firstRow() const
 {
     return d->rows.first();

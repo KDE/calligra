@@ -2212,7 +2212,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell& masterC
         enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
         while ( status == Undefined )
         {
-            Cell nextCell = masterCell.sheet()->visibleCellAt( col + 1, masterCell.row() );
+            Cell nextCell = Cell( masterCell.sheet(), col + 1, masterCell.row() ).masterCell();
 
             if ( nextCell.isEmpty() )
             {
@@ -2285,7 +2285,7 @@ void CellView::obscureVerticalCells( SheetView* sheetView, const Cell& masterCel
         enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
         while ( status == Undefined )
         {
-            Cell nextCell = masterCell.sheet()->visibleCellAt( masterCell.column(), row + 1 );
+            Cell nextCell = Cell( masterCell.sheet(), masterCell.column(), row + 1 ).masterCell();
 
             if ( nextCell.isEmpty() )
             {

@@ -929,7 +929,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
   // Test whether the mouse is over some anchor
   {
-    Cell cell = sheet->visibleCellAt( col, row );
+    Cell cell = Cell( sheet, col, row ).masterCell();
     QString anchor;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
@@ -4083,7 +4083,7 @@ void Canvas::showToolTip( const QPoint& p )
     int row = sheet->topRow( (doc()->unzoomItYOld( p.y() ) +
                                    yOffset()), ypos );
 
-    Cell cell = sheet->visibleCellAt( col, row );
+    Cell cell = Cell( sheet, col, row ).masterCell();
     if ( !cell )
         return;
 

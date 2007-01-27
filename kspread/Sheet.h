@@ -602,15 +602,6 @@ public:
     //
 
     /**
-     * Returns the visible cell at \p column, \p row.
-     * I.e. if the cell is merged into another cell, the latter is returned.
-     * \param column the cell's column index
-     * \param row the cell's row index
-     * \return the visible cell at the position
-     */
-    Cell visibleCellAt( int column, int row );
-
-    /**
      * \return the cell storage
      */
     CellStorage* cellStorage() const;
@@ -625,6 +616,7 @@ public:
     CommentStorage* commentStorage() const;
     ConditionsStorage* conditionsStorage() const;
     FormulaStorage* formulaStorage() const;
+    FusionStorage* fusionStorage() const;
     LinkStorage* linkStorage() const;
     StyleStorage* styleStorage() const;
     ValidityStorage* validityStorage() const;
@@ -634,16 +626,6 @@ public:
      * Creates a value array containing the values in \p region.
      */
     Value valueRegion( const Region& region ) const;
-
-    /**
-     */
-    bool doesMergeCells( int column, int row ) const;
-    bool isPartOfMerged( int column, int row ) const;
-    void mergeCells( int column, int row, int width, int height );
-    Cell masterCell( int column, int row ) const;
-    int mergedXCells( int column, int row ) const;
-    int mergedYCells( int column, int row ) const;
-    FusionStorage* fusionStorage() const;
 
     //
     //END Methods for Storage access
