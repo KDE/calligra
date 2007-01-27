@@ -6810,7 +6810,7 @@ void View::calcStatusBarOp()
   MethodOfCalc tmpMethod = doc()->getTypeOfCalc();
   if ( tmpMethod != NoneCalc )
   {
-    Value range = sheet->valueRegion( *d->selection );
+    Value range = sheet->cellStorage()->valueRegion( *d->selection );
     switch (tmpMethod)
     {
       case SumOfNumber:

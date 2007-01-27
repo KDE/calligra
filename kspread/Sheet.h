@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1998,1999 Torben Weis <weis@kde.org>
+   Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KSPREAD_SHEET
@@ -606,13 +606,6 @@ public:
      */
     CellStorage* cellStorage() const;
 
-    /**
-     * Determines the used area, i.e. the area spanning from A1 to the maximum
-     * occupied column and row.
-     * \return the used area
-     */
-    QRect usedArea() const;
-
     CommentStorage* commentStorage() const;
     ConditionsStorage* conditionsStorage() const;
     FormulaStorage* formulaStorage() const;
@@ -623,9 +616,11 @@ public:
     ValueStorage* valueStorage() const;
 
     /**
-     * Creates a value array containing the values in \p region.
+     * Determines the used area, i.e. the area spanning from A1 to the maximum
+     * occupied column and row.
+     * \return the used area
      */
-    Value valueRegion( const Region& region ) const;
+    QRect usedArea() const;
 
     //
     //END Methods for Storage access

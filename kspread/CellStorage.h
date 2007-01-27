@@ -119,6 +119,11 @@ public:
      * \return the value associated with the Cell at \p column , \p row .
      */
     Value value( int column, int row ) const;
+
+    /**
+     * Creates a value array containing the values in \p region.
+     */
+    Value valueRegion( const Region& region ) const;
     void setValue( int column, int row, const Value& value );
 
     /**

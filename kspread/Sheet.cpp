@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1998,1999 Torben Weis <weis@kde.org>
+   Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <assert.h>
@@ -529,6 +529,11 @@ FormulaStorage* Sheet::formulaStorage() const
     return d->cellStorage->formulaStorage();
 }
 
+FusionStorage* Sheet::fusionStorage() const
+{
+    return d->cellStorage->fusionStorage();
+}
+
 LinkStorage* Sheet::linkStorage() const
 {
     return d->cellStorage->linkStorage();
@@ -547,74 +552,6 @@ ValidityStorage* Sheet::validityStorage() const
 ValueStorage* Sheet::valueStorage() const
 {
     return d->cellStorage->valueStorage();
-}
-
-Value Sheet::valueRegion( const Region& region ) const
-{
-    const QRect rect = region.boundingRect();
-    const PointStorage<Value> subStorage = valueStorage()->subStorage( region );
-    Value array( Value::Array );
-    for ( int c = 0; c < subStorage.count(); ++c )
-        array.setElement( subStorage.col( c ) - rect.left(), subStorage.row( c ) - rect.top(), subStorage.data( c ) );
-    return array;
-}
-
-bool Sheet::doesMergeCells( int column, int row ) const
-{
-    const QList< QPair<QRectF,bool> > pairs = fusionStorage()->undoData( QRect( column, row, 1, 1 ) );
-    return pairs.isEmpty() ? false : ( pairs.last().first.topLeft() == QPoint( column, row ) );
-}
-
-bool Sheet::isPartOfMerged( int column, int row ) const
-{
-    return fusionStorage()->contains( QPoint( column, row ) );
-}
-
-void Sheet::mergeCells( int column, int row, int width, int height )
-{
-    // Start by unmerging the cells that we merge right now
-    const QList< QPair<QRectF,bool> > pairs = fusionStorage()->undoData( QRect( column, row, 1, 1 ) );
-    for ( int i = 0; i < pairs.count(); ++i )
-        fusionStorage()->insert( Region( pairs[i].first.toRect() ), false );
-    // Merge the cells
-    if ( width != 0 && height != 0 )
-        fusionStorage()->insert( Region( column, row, width, height ), true );
-}
-
-Cell Sheet::masterCell( int column, int row ) const
-{
-    const QList< QPair<QRectF,bool> > pairs = fusionStorage()->undoData( QRect( column, row, 1, 1 ) );
-    if ( pairs.isEmpty() )
-        return Cell( this, column, row );
-    const QPoint location = pairs.last().first.topLeft().toPoint();
-    return Cell( this, location );
-}
-
-int Sheet::mergedXCells( int column, int row ) const
-{
-    const QList< QPair<QRectF,bool> > pairs = fusionStorage()->undoData( QRect( column, row, 1, 1 ) );
-    if ( pairs.isEmpty() )
-        return 0;
-    // Not the master cell?
-    if ( pairs.last().first.topLeft() != QPoint( column, row ) )
-        return 0;
-    return pairs.last().first.toRect().width();
-}
-
-int Sheet::mergedYCells( int column, int row ) const
-{
-    const QList< QPair<QRectF,bool> > pairs = fusionStorage()->undoData( QRect( column, row, 1, 1 ) );
-    if ( pairs.isEmpty() )
-        return 0;
-    // Not the master cell?
-    if ( pairs.last().first.topLeft() != QPoint( column, row ) )
-        return 0;
-    return pairs.last().first.toRect().height();
-}
-
-FusionStorage* Sheet::fusionStorage() const
-{
-    return d->cellStorage->fusionStorage();
 }
 
 void Sheet::password( QByteArray & passwd ) const

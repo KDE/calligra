@@ -506,13 +506,6 @@ void Cell::copyContent( const Cell& cell )
 }
 
 
-// Merge a number of cells, i.e. make this cell obscure a number of
-// other cells.  If _x and _y == 0, then the merging is removed.
-void Cell::mergeCells( int _col, int _row, int _x, int _y )
-{
-    sheet()->mergeCells( _col, _row, _x, _y );
-}
-
 void Cell::move( int col, int row )
 {
     // For the old position (the new is handled in valueChanged() at the end):
@@ -571,19 +564,6 @@ bool Cell::needsPrinting() const
     return false;
 }
 
-
-// Return true if this cell is part of a merged cell, but not the
-// master cell.
-
-bool Cell::isPartOfMerged() const
-{
-    return sheet()->isPartOfMerged( d->column, d->row );
-}
-
-Cell Cell::masterCell() const
-{
-    return sheet()->masterCell( d->column, d->row );
-}
 
 QString Cell::encodeFormula( bool _era, int _col, int _row ) const
 {
@@ -1119,14 +1099,39 @@ bool Cell::isTime() const
 }
 
 
+// Return true if this cell is part of a merged cell, but not the
+// master cell.
+
+bool Cell::isPartOfMerged() const
+{
+    return sheet()->cellStorage()->isPartOfMerged( d->column, d->row );
+}
+
+Cell Cell::masterCell() const
+{
+    return sheet()->cellStorage()->masterCell( d->column, d->row );
+}
+
+// Merge a number of cells, i.e. make this cell obscure a number of
+// other cells.  If _x and _y == 0, then the merging is removed.
+void Cell::mergeCells( int _col, int _row, int _x, int _y )
+{
+    sheet()->cellStorage()->mergeCells( _col, _row, _x, _y );
+}
+
+bool Cell::doesMergeCells() const
+{
+    return sheet()->cellStorage()->doesMergeCells( d->column, d->row );
+}
+
 int Cell::mergedXCells() const
 {
-    return sheet()->mergedXCells( d->column, d->row );
+    return sheet()->cellStorage()->mergedXCells( d->column, d->row );
 }
 
 int Cell::mergedYCells() const
 {
-    return sheet()->mergedYCells( d->column, d->row );
+    return sheet()->cellStorage()->mergedYCells( d->column, d->row );
 }
 
 
@@ -2569,11 +2574,6 @@ void Cell::clearAllErrors()
         sheet()->cellStorage()->setValue( d->column, d->row, Value() );
         valueChanged();
     }
-}
-
-bool Cell::doesMergeCells() const
-{
-    return sheet()->doesMergeCells( d->column, d->row );
 }
 
 
