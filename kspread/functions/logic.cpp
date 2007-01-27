@@ -73,7 +73,7 @@ void RegisterLogicFunctions()
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("IF", func_if);
-  f->setParamCount (3);
+  f->setParamCount (2, 3);
   repo->add (f);
 }
 
@@ -98,6 +98,9 @@ bool asBool (Value val, ValueCalc *calc)
 // Function: NOT
 Value func_not (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  if ( args[0].isError() )
+    return Value::errorNA();
+
   bool val = asBool (args[0], calc) ? false : true;
   return Value (val);
 }
@@ -112,6 +115,10 @@ Value func_or (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result(false);
   int cnt = args.count();
+  for (int i = 0; i < cnt; ++i) {
+    if ( args[i].isError() )
+      return Value::errorNA();
+  }
   for (int i = 0; i < cnt; ++i) {
     calc->arrayWalk (args[i], result, awOr, Value(0));
     if (result.asBoolean())
@@ -140,6 +147,10 @@ Value func_and (valVector args, ValueCalc *calc, FuncExtra *)
   Value result(true);
   int cnt = args.count();
   for (int i = 0; i < cnt; ++i) {
+    if ( args[i].isError() )
+      return Value::errorNA();
+  }
+  for (int i = 0; i < cnt; ++i) {
     calc->arrayWalk (args[i], result, awAnd, Value(0));
     if (! result.asBoolean())
       // if any value is false, return false
@@ -167,6 +178,10 @@ Value func_xor (valVector args, ValueCalc *calc, FuncExtra *)
   // exclusive OR - exactly one value must be true
   int cnt = args.count();
   Value count(0);
+  for (int i = 0; i < cnt; ++i) {
+    if ( args[i].isError() )
+      return Value::errorNA();
+  }
   for (int i = 0; i < cnt; ++i)
     calc->arrayWalk (args[i], count, awXor, Value(0));
   return Value (count.asInteger() == 1);
@@ -175,8 +190,31 @@ Value func_xor (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: IF
 Value func_if (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  if ( ( !args[0].isBoolean() ) && ( !args[0].isInteger() ) )
+    return Value::errorNA();
+
   if (asBool (args[0], calc))
+  {
     return args[1];
+  }
   else
-    return args[2];
+  {
+    // evaluated to false
+    if ( args.count() == 3 )
+    {
+      if ( args[2].isEmpty() )
+      {
+        return Value ( 0 );
+      }
+      else
+      {
+        return args[2];
+      }
+    }
+    else
+    {
+      // only two arguments
+      return Value( false );
+    }
+  }
 }
