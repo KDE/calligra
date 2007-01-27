@@ -27,6 +27,40 @@
 
 using namespace KSpread;
 
+class KSpread::CellStorageUndoData
+{
+public:
+    bool isEmpty() const
+    {
+        if ( !comments.isEmpty() )
+            return false;
+        if ( !conditions.isEmpty() )
+            return false;
+        if ( !formulas.isEmpty() )
+            return false;
+        if ( !fusions.isEmpty() )
+            return false;
+        if ( !links.isEmpty() )
+            return false;
+        if ( !styles.isEmpty() )
+            return false;
+        if ( !validities.isEmpty() )
+            return false;
+        if ( !values.isEmpty() )
+            return false;
+        return true;
+    }
+
+    QList< QPair<QRectF,QString> >          comments;
+    QList< QPair<QRectF,Conditions> >       conditions;
+    QVector< QPair<QPoint,Formula> >        formulas;
+    QList< QPair<QRectF,bool> >             fusions;
+    QVector< QPair<QPoint,QString> >        links;
+    QList< QPair<QRectF,SharedSubStyle> >   styles;
+    QList< QPair<QRectF,Validity> >         validities;
+    QVector< QPair<QPoint,Value> >          values;
+};
+
 class CellStorage::Private
 {
 public:
@@ -36,18 +70,19 @@ public:
         , conditionsStorage( sheet )
         , fusionStorage( sheet )
         , styleStorage( sheet )
-        , validityStorage( sheet ) {}
+        , validityStorage( sheet )
+        , undoData( 0 ) {}
 
-    Sheet*              sheet;
-    CommentStorage      commentStorage;
-    ConditionsStorage   conditionsStorage;
-    FormulaStorage      formulaStorage;
-    FusionStorage       fusionStorage;
-    LinkStorage         linkStorage;
-    StyleStorage        styleStorage;
-    ValidityStorage     validityStorage;
-    ValueStorage        valueStorage;
-    PointStorage<Cell>  storage; // TODO Stefan: Remove!
+    Sheet*                  sheet;
+    CommentStorage          commentStorage;
+    ConditionsStorage       conditionsStorage;
+    FormulaStorage          formulaStorage;
+    FusionStorage           fusionStorage;
+    LinkStorage             linkStorage;
+    StyleStorage            styleStorage;
+    ValidityStorage         validityStorage;
+    ValueStorage            valueStorage;
+    CellStorageUndoData*    undoData;
 };
 
 CellStorage::CellStorage( Sheet* sheet )
@@ -227,44 +262,196 @@ int CellStorage::mergedYCells( int column, int row ) const
     return pairs.last().first.toRect().height();
 }
 
-QVector< QPair<QPoint,Cell> > CellStorage::insertColumns( int position, int number )
+void CellStorage::insertColumns( int position, int number )
 {
-    return d->storage.insertColumns( position, number );
+    QList< QPair<QRectF,QString> > comments = d->commentStorage.insertColumns( position, number );
+    QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage.insertColumns( position, number );
+    QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage.insertColumns( position, number );
+    QList< QPair<QRectF,bool> > fusions = d->fusionStorage.insertColumns( position, number );
+    QVector< QPair<QPoint,QString> > links = d->linkStorage.insertColumns( position, number );
+    QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage.insertColumns( position, number );
+    QList< QPair<QRectF,Validity> > validities = d->validityStorage.insertColumns( position, number );
+    QVector< QPair<QPoint,Value> > values = d->valueStorage.insertColumns( position, number );
+    // recording undo?
+    if ( d->undoData )
+    {
+        d->undoData->comments   << comments;
+        d->undoData->conditions << conditions;
+        d->undoData->formulas   << formulas;
+        d->undoData->links      << links;
+        d->undoData->fusions    << fusions;
+        d->undoData->styles     << styles;
+        d->undoData->validities << validities;
+        d->undoData->values     << values;
+    }
 }
 
-QVector< QPair<QPoint,Cell> > CellStorage::removeColumns( int position, int number )
+void CellStorage::removeColumns( int position, int number )
 {
-    return d->storage.removeColumns( position, number );
+    QList< QPair<QRectF,QString> > comments = d->commentStorage.removeColumns( position, number );
+    QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage.removeColumns( position, number );
+    QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage.removeColumns( position, number );
+    QList< QPair<QRectF,bool> > fusions = d->fusionStorage.removeColumns( position, number );
+    QVector< QPair<QPoint,QString> > links = d->linkStorage.removeColumns( position, number );
+    QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage.removeColumns( position, number );
+    QList< QPair<QRectF,Validity> > validities = d->validityStorage.removeColumns( position, number );
+    QVector< QPair<QPoint,Value> > values = d->valueStorage.removeColumns( position, number );
+    // recording undo?
+    if ( d->undoData )
+    {
+        d->undoData->comments   << comments;
+        d->undoData->conditions << conditions;
+        d->undoData->formulas   << formulas;
+        d->undoData->links      << links;
+        d->undoData->fusions    << fusions;
+        d->undoData->styles     << styles;
+        d->undoData->validities << validities;
+        d->undoData->values     << values;
+    }
 }
 
-QVector< QPair<QPoint,Cell> > CellStorage::insertRows( int position, int number )
+void CellStorage::insertRows( int position, int number )
 {
-    return d->storage.insertRows( position, number );
+    QList< QPair<QRectF,QString> > comments = d->commentStorage.insertRows( position, number );
+    QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage.insertRows( position, number );
+    QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage.insertRows( position, number );
+    QList< QPair<QRectF,bool> > fusions = d->fusionStorage.insertRows( position, number );
+    QVector< QPair<QPoint,QString> > links = d->linkStorage.insertRows( position, number );
+    QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage.insertRows( position, number );
+    QList< QPair<QRectF,Validity> > validities = d->validityStorage.insertRows( position, number );
+    QVector< QPair<QPoint,Value> > values = d->valueStorage.insertRows( position, number );
+    // recording undo?
+    if ( d->undoData )
+    {
+        d->undoData->comments   << comments;
+        d->undoData->conditions << conditions;
+        d->undoData->formulas   << formulas;
+        d->undoData->links      << links;
+        d->undoData->fusions    << fusions;
+        d->undoData->styles     << styles;
+        d->undoData->validities << validities;
+        d->undoData->values     << values;
+    }
 }
 
-QVector< QPair<QPoint,Cell> > CellStorage::removeRows( int position, int number )
+void CellStorage::removeRows( int position, int number )
 {
-    return d->storage.removeRows( position, number );
+    QList< QPair<QRectF,QString> > comments = d->commentStorage.removeRows( position, number );
+    QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage.removeRows( position, number );
+    QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage.removeRows( position, number );
+    QList< QPair<QRectF,bool> > fusions = d->fusionStorage.removeRows( position, number );
+    QVector< QPair<QPoint,QString> > links = d->linkStorage.removeRows( position, number );
+    QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage.removeRows( position, number );
+    QList< QPair<QRectF,Validity> > validities = d->validityStorage.removeRows( position, number );
+    QVector< QPair<QPoint,Value> > values = d->valueStorage.removeRows( position, number );
+    // recording undo?
+    if ( d->undoData )
+    {
+        d->undoData->comments   << comments;
+        d->undoData->conditions << conditions;
+        d->undoData->formulas   << formulas;
+        d->undoData->links      << links;
+        d->undoData->fusions    << fusions;
+        d->undoData->styles     << styles;
+        d->undoData->validities << validities;
+        d->undoData->values     << values;
+    }
 }
 
-QVector< QPair<QPoint,Cell> > CellStorage::removeShiftLeft( const QRect& rect )
+void CellStorage::removeShiftLeft( const QRect& rect )
 {
-    return d->storage.removeShiftLeft( rect );
+    QList< QPair<QRectF,QString> > comments = d->commentStorage.removeShiftLeft( rect );
+    QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage.removeShiftLeft( rect );
+    QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage.removeShiftLeft( rect );
+    QList< QPair<QRectF,bool> > fusions = d->fusionStorage.removeShiftLeft( rect );
+    QVector< QPair<QPoint,QString> > links = d->linkStorage.removeShiftLeft( rect );
+    QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage.removeShiftLeft( rect );
+    QList< QPair<QRectF,Validity> > validities = d->validityStorage.removeShiftLeft( rect );
+    QVector< QPair<QPoint,Value> > values = d->valueStorage.removeShiftLeft( rect );
+    // recording undo?
+    if ( d->undoData )
+    {
+        d->undoData->comments   << comments;
+        d->undoData->conditions << conditions;
+        d->undoData->formulas   << formulas;
+        d->undoData->links      << links;
+        d->undoData->fusions    << fusions;
+        d->undoData->styles     << styles;
+        d->undoData->validities << validities;
+        d->undoData->values     << values;
+    }
 }
 
-QVector< QPair<QPoint,Cell> > CellStorage::insertShiftRight( const QRect& rect )
+void CellStorage::insertShiftRight( const QRect& rect )
 {
-    return d->storage.insertShiftRight( rect );
+    QList< QPair<QRectF,QString> > comments = d->commentStorage.insertShiftRight( rect );
+    QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage.insertShiftRight( rect );
+    QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage.insertShiftRight( rect );
+    QList< QPair<QRectF,bool> > fusions = d->fusionStorage.insertShiftRight( rect );
+    QVector< QPair<QPoint,QString> > links = d->linkStorage.insertShiftRight( rect );
+    QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage.insertShiftRight( rect );
+    QList< QPair<QRectF,Validity> > validities = d->validityStorage.insertShiftRight( rect );
+    QVector< QPair<QPoint,Value> > values = d->valueStorage.insertShiftRight( rect );
+    // recording undo?
+    if ( d->undoData )
+    {
+        d->undoData->comments   << comments;
+        d->undoData->conditions << conditions;
+        d->undoData->formulas   << formulas;
+        d->undoData->links      << links;
+        d->undoData->fusions    << fusions;
+        d->undoData->styles     << styles;
+        d->undoData->validities << validities;
+        d->undoData->values     << values;
+    }
 }
 
-QVector< QPair<QPoint,Cell> > CellStorage::removeShiftUp( const QRect& rect )
+void CellStorage::removeShiftUp( const QRect& rect )
 {
-    return d->storage.removeShiftUp( rect );
+    QList< QPair<QRectF,QString> > comments = d->commentStorage.removeShiftUp( rect );
+    QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage.removeShiftUp( rect );
+    QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage.removeShiftUp( rect );
+    QList< QPair<QRectF,bool> > fusions = d->fusionStorage.removeShiftUp( rect );
+    QVector< QPair<QPoint,QString> > links = d->linkStorage.removeShiftUp( rect );
+    QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage.removeShiftUp( rect );
+    QList< QPair<QRectF,Validity> > validities = d->validityStorage.removeShiftUp( rect );
+    QVector< QPair<QPoint,Value> > values = d->valueStorage.removeShiftUp( rect );
+    // recording undo?
+    if ( d->undoData )
+    {
+        d->undoData->comments   << comments;
+        d->undoData->conditions << conditions;
+        d->undoData->formulas   << formulas;
+        d->undoData->links      << links;
+        d->undoData->fusions    << fusions;
+        d->undoData->styles     << styles;
+        d->undoData->validities << validities;
+        d->undoData->values     << values;
+    }
 }
 
-QVector< QPair<QPoint,Cell> > CellStorage::insertShiftDown( const QRect& rect )
+void CellStorage::insertShiftDown( const QRect& rect )
 {
-    return d->storage.insertShiftDown( rect );
+    QList< QPair<QRectF,QString> > comments = d->commentStorage.insertShiftDown( rect );
+    QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage.insertShiftDown( rect );
+    QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage.insertShiftDown( rect );
+    QList< QPair<QRectF,bool> > fusions = d->fusionStorage.insertShiftDown( rect );
+    QVector< QPair<QPoint,QString> > links = d->linkStorage.insertShiftDown( rect );
+    QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage.insertShiftDown( rect );
+    QList< QPair<QRectF,Validity> > validities = d->validityStorage.insertShiftDown( rect );
+    QVector< QPair<QPoint,Value> > values = d->valueStorage.insertShiftDown( rect );
+    // recording undo?
+    if ( d->undoData )
+    {
+        d->undoData->comments   << comments;
+        d->undoData->conditions << conditions;
+        d->undoData->formulas   << formulas;
+        d->undoData->links      << links;
+        d->undoData->fusions    << fusions;
+        d->undoData->styles     << styles;
+        d->undoData->validities << validities;
+        d->undoData->values     << values;
+    }
 }
 
 Cell CellStorage::firstInColumn( int col ) const
@@ -450,4 +637,47 @@ ValidityStorage* CellStorage::validityStorage() const
 ValueStorage* CellStorage::valueStorage() const
 {
     return &d->valueStorage;
+}
+
+void CellStorage::startUndoRecording()
+{
+    // If undoData is not null, the recording wasn't stopped.
+    // Should actually not happen, hence this assertion.
+    Q_ASSERT( d->undoData == 0 );
+    d->undoData = new CellStorageUndoData();
+}
+
+CellStorageUndoData* CellStorage::stopUndoRecording()
+{
+    CellStorageUndoData* undoData = d->undoData;
+    d->undoData = 0;
+    // do not store an object unnecessarily
+    if ( undoData->isEmpty() )
+    {
+        delete undoData;
+        undoData = 0;
+    }
+    return undoData;
+}
+
+void CellStorage::undo( CellStorageUndoData* data )
+{
+    if ( !data ) // nothing to do?
+        return;
+    for ( int i = 0; i < data->formulas.count(); ++i )
+        d->formulaStorage.insert( data->formulas[i].first.x(), data->formulas[i].first.y(), data->formulas[i].second );
+    for ( int i = 0; i < data->values.count(); ++i )
+        d->valueStorage.insert( data->values[i].first.x(), data->values[i].first.y(), data->values[i].second );
+    for ( int i = 0; i < data->links.count(); ++i )
+        d->linkStorage.insert( data->links[i].first.x(), data->links[i].first.y(), data->links[i].second );
+    for ( int i = 0; i < data->fusions.count(); ++i )
+        d->fusionStorage.insert( Region(data->fusions[i].first.toRect()), data->fusions[i].second );
+    for ( int i = 0; i < data->styles.count(); ++i )
+        d->styleStorage.insert( data->styles[i].first.toRect(), data->styles[i].second );
+    for ( int i = 0; i < data->comments.count(); ++i )
+        d->commentStorage.insert( Region(data->comments[i].first.toRect()), data->comments[i].second );
+    for ( int i = 0; i < data->conditions.count(); ++i )
+        d->conditionsStorage.insert( Region(data->conditions[i].first.toRect()), data->conditions[i].second );
+    for ( int i = 0; i < data->validities.count(); ++i )
+        d->validityStorage.insert( Region(data->validities[i].first.toRect()), data->validities[i].second );
 }

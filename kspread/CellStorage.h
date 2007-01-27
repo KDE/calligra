@@ -34,6 +34,7 @@
 namespace KSpread
 {
 class Cell;
+class CellStorageUndoData;
 class CommentStorage;
 class ConditionsStorage;
 class FormulaStorage;
@@ -139,51 +140,47 @@ public:
      * Insert \p number columns at \p position .
      * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint,Cell> > insertColumns( int position, int number = 1 );
+    void insertColumns( int position, int number = 1 );
 
     /**
      * Removes \p number columns at \p position .
      * \return the removed data
      */
-    QVector< QPair<QPoint,Cell> > removeColumns( int position, int number = 1 );
+    void removeColumns( int position, int number = 1 );
 
     /**
      * Insert \p number rows at \p position .
      * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint,Cell> > insertRows( int position, int number = 1 );
+    void insertRows( int position, int number = 1 );
 
     /**
      * Removes \p number rows at \p position .
      * \return the removed data
      */
-    QVector< QPair<QPoint,Cell> > removeRows( int position, int number = 1 );
+    void removeRows( int position, int number = 1 );
 
     /**
      * Shifts the data right of \p rect to the left by the width of \p rect .
      * The data formerly contained in \p rect becomes overridden.
-     * \return the removed data
      */
-    QVector< QPair<QPoint,Cell> > removeShiftLeft( const QRect& rect );
+    void removeShiftLeft( const QRect& rect );
 
     /**
      * Shifts the data in and right of \p rect to the right by the width of \p rect .
-     * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint,Cell> > insertShiftRight( const QRect& rect );
+    void insertShiftRight( const QRect& rect );
 
     /**
      * Shifts the data below \p rect to the top by the height of \p rect .
      * The data formerly contained in \p rect becomes overridden.
-     * \return the removed data
      */
-    QVector< QPair<QPoint,Cell> > removeShiftUp( const QRect& rect );
+    void removeShiftUp( const QRect& rect );
 
     /**
      * Shifts the data in and below \p rect to the bottom by the height of \p rect .
-     * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint,Cell> > insertShiftDown( const QRect& rect );
+    void insertShiftDown( const QRect& rect );
 
     /**
      * Retrieve the first used data in \p col .
@@ -268,10 +265,36 @@ public:
     ValidityStorage* validityStorage() const;
     ValueStorage* valueStorage() const;
 
+    /**
+     * Start the undo recording.
+     * While recording the undo data of each storage operation is saved in
+     * the undo data object, that is returned when the recording is stopped.
+     * \see stopUndoRecording
+     * \see undo
+     */
+    void startUndoRecording();
+
+    /**
+     * Stops the undo recording and return the undo data object.
+     * If no undo data occured, it returns null.
+     * \see startUndoRecording
+     * \see undo
+     * \return the undo object
+     */
+    CellStorageUndoData* stopUndoRecording();
+
+    /**
+     * Reapplies the data stored in \p undoData.
+     * \see startUndoRecording
+     * \see stopUndoRecording
+     */
+    void undo( CellStorageUndoData* undoData );
+
 private:
     class Private;
     Private * const d;
 };
+
 
 class FormulaStorage : public PointStorage<Formula>
 {

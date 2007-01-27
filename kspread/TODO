@@ -102,7 +102,7 @@ Things not in bugzilla
       attribute. All getter and setter should be moved from Sheet to
       this super storage.
     - Merge new Cell Storage into trunk					done
-    - A common undo object.						----
+    - A common undo object.						done
       Provide a startUndoRecord() and a stopUndoRecord() method.
       On stopping the recording an undo data object containing all
       necessary data for each storage is returned. Provide a method

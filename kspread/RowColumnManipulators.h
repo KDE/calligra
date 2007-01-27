@@ -21,11 +21,10 @@
 #define KSPREAD_MANIPULATOR_ROWCOL
 
 #include "Manipulator.h"
-#include "RectStorage.h"
-#include "Style.h"
 
 namespace KSpread
 {
+class CellStorageUndoData;
 
 /**
    * \class ResizeColumnManipulator
@@ -153,14 +152,7 @@ protected:
     virtual QString name() const;
 
 private:
-    QList< QPair<QRectF,SharedSubStyle> > m_undoStyles;
-    QList< QPair<QRectF,QString> >        m_undoComment;
-    QList< QPair<QRectF,Conditions> >     m_undoConditions;
-    QList< QPair<QRectF,Validity> >       m_undoValidity;
-    QVector< QPair<QPoint,Formula> >      m_undoFormulas;
-    QVector< QPair<QPoint,Value> >        m_undoValues;
-    QVector< QPair<QPoint,QString> >      m_undoLinks;
-    QList< QPair<QRectF,bool> >           m_undoFusion;
+    CellStorageUndoData* m_undoData;
 
     enum Mode { Insert, Delete };
     Mode m_mode;
@@ -185,14 +177,7 @@ protected:
     virtual QString name() const;
 
 private:
-    QList< QPair<QRectF,SharedSubStyle> > m_undoStyles;
-    QList< QPair<QRectF,QString> >        m_undoComment;
-    QList< QPair<QRectF,Conditions> >     m_undoConditions;
-    QList< QPair<QRectF,Validity> >       m_undoValidity;
-    QVector< QPair<QPoint,Formula> >      m_undoFormulas;
-    QVector< QPair<QPoint,Value> >        m_undoValues;
-    QVector< QPair<QPoint,QString> >      m_undoLinks;
-    QList< QPair<QRectF,bool> >           m_undoFusion;
+    CellStorageUndoData* m_undoData;
 
     enum Mode { Insert, Delete };
     Mode m_mode;

@@ -23,16 +23,15 @@
 
 #include "Manipulator.h"
 #include "Global.h"
-#include "RectStorage.h"
 #include "Style.h"
 #include "Value.h"
 #include "kspread_export.h"
 
-#include <QList>
 #include <QStringList>
 
 namespace KSpread {
 
+class CellStorageUndoData;
 
 /**
  * AbstractDataManipulator - provides storage of old cell data (for undo)
@@ -211,14 +210,7 @@ protected:
 
 private:
     Direction m_direction;
-    QList< QPair<QRectF,SharedSubStyle> > m_undoStyles;
-    QList< QPair<QRectF,QString> >        m_undoComment;
-    QList< QPair<QRectF,Conditions> >     m_undoConditions;
-    QList< QPair<QRectF,Validity> >       m_undoValidity;
-    QVector< QPair<QPoint,Formula> >      m_undoFormulas;
-    QVector< QPair<QPoint,Value> >        m_undoValues;
-    QVector< QPair<QPoint,QString> >      m_undoLinks;
-    QList< QPair<QRectF,bool> >           m_undoFusion;
+    CellStorageUndoData* m_undoData;
 
     enum Mode { Insert, Delete };
     Mode m_mode;
