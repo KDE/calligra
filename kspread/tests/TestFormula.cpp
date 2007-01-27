@@ -189,6 +189,9 @@ void TestFormula::testTokenizer()
 
   // invalid formulas, can't be parsed correctly
   CHECK_TOKENIZE( "+1.23E", QString() );
+
+  // empty parameter
+  CHECK_TOKENIZE( "IF(A1;A2;)", "xococoo" );
 }
 
 void TestFormula::testConstant()
