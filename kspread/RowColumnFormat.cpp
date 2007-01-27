@@ -33,6 +33,7 @@
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
 
+#include "CellStorage.h"
 #include "Canvas.h"
 #include "Doc.h"
 #include "Global.h"
@@ -136,7 +137,7 @@ QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
     if( d->hide )
         row.setAttribute( "hide", (int) d->hide );
 
-    const Style style = d->sheet->style( QRect( 1, d->row, KS_colMax, 1 ) );
+    const Style style = d->sheet->cellStorage()->style( QRect( 1, d->row, KS_colMax, 1 ) );
     if ( !style.isEmpty() )
     {
         kDebug(36003) << "saving cell style of row " << d->row << endl;
@@ -193,7 +194,7 @@ bool RowFormat::load( const KoXmlElement & row, int yshift, Paste::Mode sp, bool
         Style style;
         if ( !style.loadXML( f, sp, paste ) )
             return false;
-        d->sheet->setStyle( Region(QRect( 1, d->row, KS_colMax, 1 )), style );
+        d->sheet->cellStorage()->setStyle( Region(QRect( 1, d->row, KS_colMax, 1 )), style );
         return true;
     }
 
@@ -362,7 +363,7 @@ QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
     if ( d->hide )
         col.setAttribute( "hide", (int) d->hide );
 
-    const Style style = d->sheet->style( QRect( d->column, 1, 1, KS_rowMax ) );
+    const Style style = d->sheet->cellStorage()->style( QRect( d->column, 1, 1, KS_rowMax ) );
     if ( !style.isEmpty() )
     {
         kDebug(36003) << "saving cell style of column " << d->column << endl;
@@ -419,7 +420,7 @@ bool ColumnFormat::load( const KoXmlElement & col, int xshift, Paste::Mode sp, b
         Style style;
         if ( !style.loadXML( f, sp, paste ) )
             return false;
-        d->sheet->setStyle( Region(QRect( d->column, 1, 1, KS_rowMax )), style );
+        d->sheet->cellStorage()->setStyle( Region(QRect( d->column, 1, 1, KS_rowMax )), style );
         return true;
     }
 

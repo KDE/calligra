@@ -691,7 +691,7 @@ void GNUMERICFilter::importBorder( QDomElement border, borderStyle _style, const
             if ( bottomPen.style() != Qt::NoPen ) style.setBottomBorderPen( bottomPen );
             if ( fallPen.style() != Qt::NoPen ) style.setFallDiagonalPen( fallPen );
             if ( goUpPen.style() != Qt::NoPen ) style.setGoUpDiagonalPen( goUpPen );
-            cell.setStyle(style);
+            Cell( cell ).setStyle(style);
         }
     }
 }
@@ -769,7 +769,7 @@ bool GNUMERICFilter::setType( const Cell& kspread_cell,
       cell.setValue( Value( date, kspread_cell.sheet()->doc() ) );
       Style style;
       style.setFormatType( type );
-      kspread_cell.setStyle(style);
+      cell.setStyle(style);
 
       return true;
     }
@@ -815,7 +815,7 @@ bool GNUMERICFilter::setType( const Cell& kspread_cell,
       cell.setValue( Value( time, kspread_cell.sheet()->doc() ) );
       Style style;
       style.setFormatType( type );
-      kspread_cell.setStyle( style );
+      cell.setStyle( style );
 
       return true;
     }
@@ -1038,7 +1038,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspre
       {
         // TODO: fixme!
         style.setFormatType( Format::fraction_three_digits );
-        kspread_cell.setStyle(style);
+        Cell( kspread_cell ).setStyle(style);
         return;
       }
       // so it's nothing we want to understand:-)
@@ -1094,7 +1094,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspre
     else
       style.setFloatColor( Style::NegBrackets );
   }
-  kspread_cell.setStyle(style);
+  Cell( kspread_cell ).setStyle(style);
 }
 
 void GNUMERICFilter::convertFormula( QString & formula ) const

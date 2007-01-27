@@ -491,11 +491,6 @@ bool Sheet::isShowPageBorders() const
     return d->showPageBorders;
 }
 
-CellStorage* Sheet::cellStorage() const
-{
-    return d->cellStorage;
-}
-
 const ColumnFormat* Sheet::columnFormat( int _column ) const
 {
     const ColumnFormat *p = d->columns.lookup( _column );
@@ -514,6 +509,41 @@ const RowFormat* Sheet::rowFormat( int _row ) const
     return doc()->defaultRowFormat();
 }
 
+CellStorage* Sheet::cellStorage() const
+{
+    return d->cellStorage;
+}
+
+CommentStorage* Sheet::commentStorage() const
+{
+    return d->cellStorage->commentStorage();
+}
+
+ConditionsStorage* Sheet::conditionsStorage() const
+{
+    return d->cellStorage->conditionsStorage();
+}
+
+FormulaStorage* Sheet::formulaStorage() const
+{
+    return d->cellStorage->formulaStorage();
+}
+
+LinkStorage* Sheet::linkStorage() const
+{
+    return d->cellStorage->linkStorage();
+}
+
+StyleStorage* Sheet::styleStorage() const
+{
+    return d->cellStorage->styleStorage();
+}
+
+ValidityStorage* Sheet::validityStorage() const
+{
+    return d->cellStorage->validityStorage();
+}
+
 ValueStorage* Sheet::valueStorage() const
 {
     return d->cellStorage->valueStorage();
@@ -527,16 +557,6 @@ Value Sheet::valueRegion( const Region& region ) const
     for ( int c = 0; c < subStorage.count(); ++c )
         array.setElement( subStorage.col( c ) - rect.left(), subStorage.row( c ) - rect.top(), subStorage.data( c ) );
     return array;
-}
-
-FormulaStorage* Sheet::formulaStorage() const
-{
-    return d->cellStorage->formulaStorage();
-}
-
-LinkStorage* Sheet::linkStorage() const
-{
-    return d->cellStorage->linkStorage();
 }
 
 bool Sheet::doesMergeCells( int column, int row ) const
@@ -620,43 +640,6 @@ bool Sheet::checkPassword( QByteArray const & passwd ) const
 SheetPrint* Sheet::print() const
 {
     return d->print;
-}
-
-Style Sheet::style( int column, int row ) const
-{
-    return styleStorage()->contains( QPoint( column, row ) );
-}
-
-Style Sheet::style( const QRect& rect ) const
-{
-    return styleStorage()->contains( rect );
-}
-
-void Sheet::setStyle( const Region& region, const Style& style ) const
-{
-    if ( style.isEmpty() )
-        return;
-    styleStorage()->insert( region, style );
-}
-
-StyleStorage* Sheet::styleStorage() const
-{
-    return d->cellStorage->styleStorage();
-}
-
-CommentStorage* Sheet::commentStorage() const
-{
-    return d->cellStorage->commentStorage();
-}
-
-ConditionsStorage* Sheet::conditionsStorage() const
-{
-    return d->cellStorage->conditionsStorage();
-}
-
-ValidityStorage* Sheet::validityStorage() const
-{
-    return d->cellStorage->validityStorage();
 }
 
 double Sheet::sizeMaxX() const
@@ -3601,13 +3584,13 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
             if ( autoStyles.contains( styleNames[i] ) )
             {
                 kDebug(36003) << "\tautomatic: " << styleNames[i] << " at " << rect << endl;
-                setStyle( Region(rect), autoStyles[styleNames[i]] );
+                cellStorage()->setStyle( Region(rect), autoStyles[styleNames[i]] );
             }
             else
             {
                 const CustomStyle* style = doc()->styleManager()->style( styleNames[i] );
                 kDebug(36003) << "\tcustom: " << style->name() << " at " << rect << endl;
-                setStyle( Region(rect), *style );
+                cellStorage()->setStyle( Region(rect), *style );
             }
         }
     }
@@ -4202,7 +4185,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         //style default layout for column
         KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
-        const Style style = this->style( QRect( i, 1, 1, KS_rowMax ) );
+        const Style style = cellStorage()->style( QRect( i, 1, 1, KS_rowMax ) );
         QString currentDefaultCellStyleName = style.saveOasis( currentDefaultCellStyle, mainStyles );
 
         bool hide = column->hidden();
@@ -4260,7 +4243,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 #endif
           if ( nextColumn && ( *column != *nextColumn ) )
               break;
-          const Style nextStyle = this->style( QRect( j, 1, 1, KS_rowMax ) );
+          const Style nextStyle = cellStorage()->style( QRect( j, 1, 1, KS_rowMax ) );
           if ( style != nextStyle )
               break;
           ++repeated;
@@ -4299,7 +4282,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         // default cell style for row
         KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
-        const Style style = this->style( QRect( 1, i, KS_colMax, 1 ) );
+        const Style style = cellStorage()->style( QRect( 1, i, KS_colMax, 1 ) );
         QString currentDefaultCellStyleName = style.saveOasis( currentDefaultCellStyle, mainStyles );
 
         xmlWriter.startElement( "table:table-row" );
@@ -4360,7 +4343,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 #endif
               if ( *row != *nextRow )
                   break;
-              const Style nextStyle = this->style( QRect( 1, j, KS_colMax, 1 ) );
+              const Style nextStyle = cellStorage()->style( QRect( 1, j, KS_colMax, 1 ) );
               if ( style != nextStyle )
                   break;
               // otherwise, process the next
@@ -4421,7 +4404,7 @@ void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int
     int i = 1;
     Cell cell( this, i, row );
     Cell nextCell = d->cellStorage->nextInRow( i, row );
-    Style style = this->style( i, row );
+    Style style = cellStorage()->style( i, row );
     int nextStyleColumnIndex = styleStorage()->nextStyleRight( i, row );
     // while
     //   the current cell is not a default one
@@ -4440,7 +4423,7 @@ void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int
           break;
         cell = Cell( this, i, row );
         nextCell = d->cellStorage->nextInRow( i, row );
-        style = this->style( i, row );
+        style = cellStorage()->style( i, row );
         nextStyleColumnIndex = styleStorage()->nextStyleRight( i, row );
     }
 }

@@ -73,7 +73,7 @@ QString CellStorage::comment( int column, int row ) const
     return commentStorage()->contains( QPoint( column, row ) );
 }
 
-void CellStorage::setComment( const Region& region, const QString& comment ) const
+void CellStorage::setComment( const Region& region, const QString& comment )
 {
     commentStorage()->insert( region, comment );
 }
@@ -83,7 +83,7 @@ Conditions CellStorage::conditions( int column, int row ) const
     return conditionsStorage()->contains( QPoint( column, row ) );
 }
 
-void CellStorage::setConditions( const Region& region, Conditions conditions ) const
+void CellStorage::setConditions( const Region& region, Conditions conditions )
 {
     conditionsStorage()->insert( region, conditions );
 }
@@ -122,12 +122,27 @@ void CellStorage::setLink( int column, int row, const QString& link )
         linkStorage()->insert( column, row, link );
 }
 
+Style CellStorage::style( int column, int row ) const
+{
+    return styleStorage()->contains( QPoint( column, row ) );
+}
+
+Style CellStorage::style( const QRect& rect ) const
+{
+    return styleStorage()->contains( rect );
+}
+
+void CellStorage::setStyle( const Region& region, const Style& style )
+{
+    styleStorage()->insert( region, style );
+}
+
 Validity CellStorage::validity( int column, int row ) const
 {
     return validityStorage()->contains( QPoint( column, row ) );
 }
 
-void CellStorage::setValidity( const Region& region, Validity validity ) const
+void CellStorage::setValidity( const Region& region, Validity validity )
 {
     validityStorage()->insert( region, validity );
 }

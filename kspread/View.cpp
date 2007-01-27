@@ -2624,7 +2624,7 @@ void View::updateEditWidgetOnPress()
         d->editWidget->setText( "" );
         return;
     }
-    const Style style = d->activeSheet->style( column, row );
+    const Style style = cell.style();
     if ( d->activeSheet->isProtected() && style.hideFormula() )
         d->editWidget->setText( cell.displayText() );
     else if ( d->activeSheet->isProtected() && style.hideAll() )
@@ -3088,8 +3088,7 @@ void View::fontSelected( const QString & _font )
     // Dont leave the focus in the toolbars combo box ...
     if ( d->canvas->editor() )
     {
-        const QPoint marker = selection()->marker();
-        const Style style = d->activeSheet->style( marker.x(), marker.y() );
+        const Style style = Cell( d->activeSheet, selection()->marker() ).style();
         d->canvas->editor()->setEditorFont( style.font(), true );
         d->canvas->editor()->setFocus();
     }
@@ -3112,8 +3111,7 @@ void View::setSelectionFontSize( int deltaSize )
     if ( d->toolbarLock )
         return;
 
-    const QPoint marker = selection()->marker();
-    const Style style = d->activeSheet->style( marker.x(), marker.y() );
+    const Style style = Cell( d->activeSheet, selection()->marker() ).style();
     const int size = style.fontSize();
 
     StyleManipulator* manipulator = new StyleManipulator();
@@ -3200,12 +3198,12 @@ void View::slotSpecialChar( QChar c, const QString & _font )
     if ( d->activeSheet )
     {
         QPoint marker( d->selection->marker() );
-        const Style style = d->activeSheet->style( marker.x(), marker.y() );
+        const Style style = Cell( d->activeSheet, marker ).style();
         if ( style.fontFamily() != _font )
         {
             Style newStyle;
             newStyle.setFontFamily( _font );
-            d->activeSheet->setStyle( Region(marker), newStyle );
+            d->activeSheet->cellStorage()->setStyle( Region(marker), newStyle );
         }
         EditWidget * edit = d->editWidget;
         QKeyEvent keyEvent( QEvent::KeyPress, 0, Qt::NoModifier, QString( c ) );

@@ -30,7 +30,6 @@
 
 #include <kdebug.h>
 
-#include "CellStorage.h"
 #include "DataManipulators.h"
 #include "Doc.h"
 #include "Sheet.h"
@@ -228,12 +227,12 @@ bool SheetAdaptor::setSheetName( const QString & name)
 
 int SheetAdaptor::lastColumn() const
 {
-    return m_sheet->cellStorage()->columns();
+    return m_sheet->usedArea().width();
 }
 
 int SheetAdaptor::lastRow() const
 {
-    return m_sheet->cellStorage()->rows();
+    return m_sheet->usedArea().height();
 }
 
 // bool SheetAdaptor::processDynamic( const DCOPCString& fun, const QByteArray&/*data*/,

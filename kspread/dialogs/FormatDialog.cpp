@@ -38,8 +38,8 @@
 #include <ksimpleconfig.h>
 #include <kinstance.h>
 
-#include "FormatDialog.h"
 #include "Cell.h"
+#include "CellStorage.h"
 #include "Doc.h"
 #include "Localization.h"
 #include "Sheet.h"
@@ -49,6 +49,7 @@
 #include "View.h"
 #include "Selection.h"
 
+#include "FormatDialog.h"
 
 using namespace KSpread;
 
@@ -191,7 +192,7 @@ void FormatDialog::slotOk()
         const QRect rect = (*it)->rect();
         // Top left corner
         if ( m_styles[0] && !m_styles[0]->isDefault() )
-            sheet->setStyle( Region(rect.topLeft()), *m_styles[0] );
+            sheet->cellStorage()->setStyle( Region(rect.topLeft()), *m_styles[0] );
         // Top column
         for( int col = rect.left() + 1; col <= rect.right(); ++col )
         {
@@ -200,14 +201,14 @@ void FormatDialog::slotOk()
             if ( !cell.isPartOfMerged() )
             {
                 if ( m_styles[pos] && !m_styles[pos]->isDefault() )
-                    sheet->setStyle( Region(col, rect.top()), *m_styles[pos] );
+                    sheet->cellStorage()->setStyle( Region(col, rect.top()), *m_styles[pos] );
 
                 Style* style = ( col == rect.right() ) ? m_styles[2] : m_styles[1];
                 if ( style )
                 {
                     Style tmpStyle;
                     tmpStyle.setTopBorderPen( style->topBorderPen() );
-                    sheet->setStyle( Region(col, rect.top()), tmpStyle );
+                    sheet->cellStorage()->setStyle( Region(col, rect.top()), tmpStyle );
                 }
 
                 style = ( col == rect.left() + 1 ) ? m_styles[1] : m_styles[2];
@@ -215,7 +216,7 @@ void FormatDialog::slotOk()
                 {
                     Style tmpStyle;
                     tmpStyle.setLeftBorderPen( style->leftBorderPen() );
-                    sheet->setStyle( Region(col, rect.top()), tmpStyle );
+                    sheet->cellStorage()->setStyle( Region(col, rect.top()), tmpStyle );
                 }
             }
         }
@@ -224,7 +225,7 @@ void FormatDialog::slotOk()
         {
             Style tmpStyle;
             tmpStyle.setRightBorderPen( m_styles[3]->leftBorderPen() );
-            sheet->setStyle( Region(rect.topRight()), tmpStyle );
+            sheet->cellStorage()->setStyle( Region(rect.topRight()), tmpStyle );
         }
 
         // Left row
@@ -235,14 +236,14 @@ void FormatDialog::slotOk()
             if ( !cell.isPartOfMerged() )
             {
                 if ( m_styles[pos] && !m_styles[pos]->isDefault() )
-                    sheet->setStyle( Region(rect.left(), row), *m_styles[pos] );
+                    sheet->cellStorage()->setStyle( Region(rect.left(), row), *m_styles[pos] );
 
                 Style* style = ( row == rect.bottom() ) ? m_styles[8] : m_styles[4];
                 if ( style )
                 {
                     Style tmpStyle;
                     tmpStyle.setLeftBorderPen( style->leftBorderPen() );
-                    sheet->setStyle( Region(rect.left(), row), tmpStyle );
+                    sheet->cellStorage()->setStyle( Region(rect.left(), row), tmpStyle );
                 }
 
                 style = ( row == rect.top() + 1 ) ? m_styles[4] : m_styles[8];
@@ -250,7 +251,7 @@ void FormatDialog::slotOk()
                 {
                     Style tmpStyle;
                     tmpStyle.setTopBorderPen( style->topBorderPen() );
-                    sheet->setStyle( Region(rect.left(), row), tmpStyle );
+                    sheet->cellStorage()->setStyle( Region(rect.left(), row), tmpStyle );
                 }
             }
         }
@@ -265,7 +266,7 @@ void FormatDialog::slotOk()
                 if ( !cell.isPartOfMerged() )
                 {
                     if ( m_styles[pos] && !m_styles[pos]->isDefault() )
-                        sheet->setStyle( Region(col, row), *m_styles[pos] );
+                        sheet->cellStorage()->setStyle( Region(col, row), *m_styles[pos] );
 
                     Style* style;
                     if ( col == rect.left() + 1 )
@@ -277,7 +278,7 @@ void FormatDialog::slotOk()
                     {
                         Style tmpStyle;
                         tmpStyle.setLeftBorderPen( style->leftBorderPen() );
-                        sheet->setStyle( Region(col, row), tmpStyle );
+                        sheet->cellStorage()->setStyle( Region(col, row), tmpStyle );
                     }
 
                     if ( row == rect.top() + 1 )
@@ -289,7 +290,7 @@ void FormatDialog::slotOk()
                     {
                         Style tmpStyle;
                         tmpStyle.setTopBorderPen( style->topBorderPen() );
-                        sheet->setStyle( Region(col, row), tmpStyle );
+                        sheet->cellStorage()->setStyle( Region(col, row), tmpStyle );
                     }
                 }
             }
@@ -307,7 +308,7 @@ void FormatDialog::slotOk()
                     {
                         Style tmpStyle;
                         tmpStyle.setRightBorderPen( m_styles[3]->leftBorderPen() );
-                        sheet->setStyle( Region(rect.right(), row), tmpStyle );
+                        sheet->cellStorage()->setStyle( Region(rect.right(), row), tmpStyle );
                     }
                 }
                 else if ( row == rect.right() )
@@ -316,7 +317,7 @@ void FormatDialog::slotOk()
                     {
                         Style tmpStyle;
                         tmpStyle.setRightBorderPen( m_styles[11]->leftBorderPen() );
-                        sheet->setStyle( Region(rect.right(), row), tmpStyle );
+                        sheet->cellStorage()->setStyle( Region(rect.right(), row), tmpStyle );
                     }
                 }
                 else
@@ -325,7 +326,7 @@ void FormatDialog::slotOk()
                     {
                         Style tmpStyle;
                         tmpStyle.setRightBorderPen( m_styles[7]->leftBorderPen() );
-                        sheet->setStyle( Region(rect.right(), row), tmpStyle );
+                        sheet->cellStorage()->setStyle( Region(rect.right(), row), tmpStyle );
                     }
                 }
             }
@@ -343,7 +344,7 @@ void FormatDialog::slotOk()
                     {
                         Style tmpStyle;
                         tmpStyle.setBottomBorderPen( m_styles[12]->topBorderPen() );
-                        sheet->setStyle( Region(col, rect.bottom()), tmpStyle );
+                        sheet->cellStorage()->setStyle( Region(col, rect.bottom()), tmpStyle );
                     }
                 }
                 else if ( col == rect.right() )
@@ -352,7 +353,7 @@ void FormatDialog::slotOk()
                     {
                         Style tmpStyle;
                         tmpStyle.setBottomBorderPen( m_styles[14]->topBorderPen() );
-                        sheet->setStyle( Region(col, rect.bottom()), tmpStyle );
+                        sheet->cellStorage()->setStyle( Region(col, rect.bottom()), tmpStyle );
                     }
                 }
                 else
@@ -361,7 +362,7 @@ void FormatDialog::slotOk()
                     {
                         Style tmpStyle;
                         tmpStyle.setBottomBorderPen( m_styles[13]->topBorderPen() );
-                        sheet->setStyle( Region(col, rect.bottom()), tmpStyle );
+                        sheet->cellStorage()->setStyle( Region(col, rect.bottom()), tmpStyle );
                     }
                 }
             }

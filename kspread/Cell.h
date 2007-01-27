@@ -148,6 +148,11 @@ public:
     bool isNull() const;
 
     /**
+     * Returns true if this cell holds a formula.
+     */
+    bool isFormula() const;
+
+    /**
      * Returns the cell's column. This could be 0 if the cell is the default cell.
      */
     int column() const;
@@ -156,16 +161,6 @@ public:
      * Returns the cell's row. This could be 0 if the cell is the default cell.
      */
     int row() const;
-
-    /**
-     * Set the column index to \p col.
-     */
-    void setColumn( int col );
-
-    /**
-     * Set the row index to \p row.
-     */
-    void setRow( int row );
 
     /**
      * Returns the name of the cell. For example, the cell in first column and
@@ -214,9 +209,18 @@ public:
     QString displayText() const;
 
     /**
-     * Returns true if this cell holds a formula.
+     * \return the comment associated with this cell
      */
-    bool isFormula() const;
+    QString comment() const;
+
+    void setComment( const QString& comment );
+
+    /**
+     * \return the conditions associated with this cell
+     */
+    Conditions conditions() const;
+
+    void setConditions( Conditions conditions );
 
     /**
      * The cell's formula. Usable to analyze the formula's tokens.
@@ -230,18 +234,32 @@ public:
     void setFormula( const Formula& formula );
 
     /**
+     * Returns the link associated with cell. It is empty if this cell
+     * contains no link.
+     */
+    QString link() const;
+
+    /**
+     * Sets a link for this cell. For example, setLink( "mailto:joe@somewhere.com" )
+     * will open a new e-mail if this cell is clicked.
+     * Possible choices for link are URL (web, ftp), e-mail address, local file,
+     * or another cell.
+     */
+    void setLink( const QString& link );
+
+    /**
      * \return the Style associated with this Cell
      */
     Style style() const;
 
-    void setStyle( const Style& style ) const;
+    void setStyle( const Style& style );
 
     /**
-     * \return the comment associated with this cell
+     * \return the validity checks associated with this cell
      */
-    QString comment() const;
+    Validity validity() const;
 
-    void setComment( const QString& comment ) const;
+    void setValidity( Validity validity );
 
     /**
      * Returns the value that this cell holds. It could be from the user
@@ -457,20 +475,6 @@ public:
      */
     void decPrecision();
 
-    /**
-     * Sets a link for this cell. For example, setLink( "mailto:joe@somewhere.com" )
-     * will open a new e-mail if this cell is clicked.
-     * Possible choices for link are URL (web, ftp), e-mail address, local file,
-     * or another cell.
-     */
-    void setLink( const QString& link );
-
-    /**
-     * Returns the link associated with cell. It is empty if this cell
-     * contains no link.
-     */
-    QString link() const;
-
     //////////////////////
     //
     // Other stuff
@@ -619,28 +623,6 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Conditional styles / content validity
-    //
-
-    /**
-     * \return the conditions associated with this cell
-     */
-    Conditions conditions() const;
-
-    void setConditions( Conditions conditions ) const;
-
-    /**
-     * \return the validity checks associated with this cell
-     */
-    Validity validity() const;
-
-    void setValidity( Validity validity ) const;
-
-    //
-    //END Conditional styles / content validity
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
     //BEGIN 
     //
 
@@ -701,7 +683,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column );
+    void saveOasisAnnotation( KoXmlWriter &xmlwriter );
 
     /**
      * \ingroup OpenDocument
@@ -743,7 +725,7 @@ private:
      * \ingroup OpenDocument
      * @return the OASIS style's name
      */
-    QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, int column, int row );
+    QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles );
 
     /**
      * Sets the input text.

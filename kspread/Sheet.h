@@ -622,18 +622,11 @@ public:
      */
     QRect usedArea() const;
 
-    /**
-     * \return the Style associated with the Cell at \p column , \p row .
-     */
-    Style style( int column, int row ) const;
-    Style style( const QRect& rect ) const;
-    void setStyle( const Region& region, const Style& style ) const;
-    StyleStorage* styleStorage() const;
-
     CommentStorage* commentStorage() const;
     ConditionsStorage* conditionsStorage() const;
     FormulaStorage* formulaStorage() const;
     LinkStorage* linkStorage() const;
+    StyleStorage* styleStorage() const;
     ValidityStorage* validityStorage() const;
     ValueStorage* valueStorage() const;
 

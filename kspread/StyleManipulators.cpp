@@ -20,6 +20,7 @@
 #include <kdebug.h>
 
 #include "Cell.h"
+#include "CellStorage.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleStorage.h"
@@ -79,32 +80,32 @@ bool StyleManipulator::process(Element* element)
         }
 
         // set the actual style
-        m_sheet->setStyle( Region(range), *m_style );
+        m_sheet->cellStorage()->setStyle( Region(range), *m_style );
 
         // set the outer border styles
         Style style;
         if ( leftPen.style() != Qt::NoPen )
         {
             style.setLeftBorderPen( leftPen );
-            m_sheet->setStyle( Region(QRect(range.left(), range.top(), 1, range.height())), style );
+            m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), 1, range.height())), style );
         }
         if ( rightPen.style() != Qt::NoPen )
         {
             style.clear();
             style.setRightBorderPen( rightPen );
-            m_sheet->setStyle( Region(QRect(range.right(), range.top(), 1, range.height())), style );
+            m_sheet->cellStorage()->setStyle( Region(QRect(range.right(), range.top(), 1, range.height())), style );
         }
         if ( topPen.style() != Qt::NoPen )
         {
             style.clear();
             style.setTopBorderPen( topPen );
-            m_sheet->setStyle( Region(QRect(range.left(), range.top(), range.width(), 1)), style );
+            m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), range.width(), 1)), style );
         }
         if ( bottomPen.style() != Qt::NoPen )
         {
             style.clear();
             style.setBottomBorderPen( bottomPen );
-            m_sheet->setStyle( Region(QRect(range.left(), range.bottom(), range.width(), 1)), style );
+            m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.bottom(), range.width(), 1)), style );
         }
     }
     return true;
@@ -123,7 +124,7 @@ bool StyleManipulator::mainProcessing()
     {
         Style style;
         style.setDefault();
-        m_sheet->setStyle( *this, style );
+        m_sheet->cellStorage()->setStyle( *this, style );
         for ( int i = 0; i < m_undoData.count(); ++i )
         {
             m_sheet->styleStorage()->insert( m_undoData[i].first.toRect(), m_undoData[i].second );
@@ -170,28 +171,28 @@ bool IncreaseIndentManipulator::process( Element* element )
     {
         // increase the indentation set for the whole rectangle
         style.setIndentation( m_sheet->styleStorage()->contains( element->rect() ).indentation() + m_sheet->doc()->indentValue()  );
-        m_sheet->setStyle( Region(element->rect()), style );
+        m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
         // increase the several indentations
         for ( int i = 0; i < indentationPairs.count(); ++i )
         {
             style.clear();
             style.insertSubStyle( indentationPairs[i].second );
             style.setIndentation( style.indentation() + m_sheet->doc()->indentValue() );
-            m_sheet->setStyle( Region(indentationPairs[i].first.toRect()), style );
+            m_sheet->cellStorage()->setStyle( Region(indentationPairs[i].first.toRect()), style );
         }
     }
     else // m_reverse
     {
         // decrease the indentation set for the whole rectangle
         style.setIndentation( m_sheet->styleStorage()->contains( element->rect() ).indentation() - m_sheet->doc()->indentValue()  );
-        m_sheet->setStyle( Region(element->rect()), style );
+        m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
         // decrease the several indentations
         for ( int i = 0; i < indentationPairs.count(); ++i )
         {
             style.clear();
             style.insertSubStyle( indentationPairs[i].second );
             style.setIndentation( style.indentation() - m_sheet->doc()->indentValue() );
-            m_sheet->setStyle( Region(indentationPairs[i].first.toRect()), style );
+            m_sheet->cellStorage()->setStyle( Region(indentationPairs[i].first.toRect()), style );
         }
     }
     return true;
@@ -299,7 +300,7 @@ bool BorderColorManipulator::mainProcessing()
                 pen.setColor( m_color );
                 style.setGoUpDiagonalPen( pen );
             }
-            m_sheet->setStyle( Region(m_undoData[i].first.toRect()), style );
+            m_sheet->cellStorage()->setStyle( Region(m_undoData[i].first.toRect()), style );
         }
     }
     else // m_reverse
@@ -308,7 +309,7 @@ bool BorderColorManipulator::mainProcessing()
         {
             Style style;
             style.insertSubStyle( m_undoData[i].second );
-            m_sheet->setStyle( Region(m_undoData[i].first.toRect()), style );
+            m_sheet->cellStorage()->setStyle( Region(m_undoData[i].first.toRect()), style );
         }
     }
     return true;
@@ -348,7 +349,7 @@ bool IncreasePrecisionManipulator::process( Element* element )
         int precision = m_sheet->styleStorage()->contains( element->rect() ).precision() + 1;
         style.setPrecision( precision );
         if ( precision <= 10 )
-            m_sheet->setStyle( Region(element->rect()), style );
+            m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
         // increase the several precisions
         for ( int i = 0; i < precisionPairs.count(); ++i )
         {
@@ -357,7 +358,7 @@ bool IncreasePrecisionManipulator::process( Element* element )
             precision = style.precision() + 1;
             style.setPrecision( precision );
             if ( precision <= 10 )
-                m_sheet->setStyle( Region(precisionPairs[i].first.toRect()), style );
+                m_sheet->cellStorage()->setStyle( Region(precisionPairs[i].first.toRect()), style );
         }
     }
     else // m_reverse
@@ -367,7 +368,7 @@ bool IncreasePrecisionManipulator::process( Element* element )
         int precision = m_sheet->styleStorage()->contains( element->rect() ).precision() - 1;
         style.setPrecision( precision );
         if ( precision >= 0 )
-            m_sheet->setStyle( Region(element->rect()), style );
+            m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
         // decrease the several precisions
         for ( int i = 0; i < precisionPairs.count(); ++i )
         {
@@ -376,7 +377,7 @@ bool IncreasePrecisionManipulator::process( Element* element )
             precision = style.precision() - 1;
             if ( precision >= 0 )
                 style.setPrecision( precision );
-            m_sheet->setStyle( Region(precisionPairs[i].first.toRect()), style );
+            m_sheet->cellStorage()->setStyle( Region(precisionPairs[i].first.toRect()), style );
         }
     }
     return true;

@@ -62,6 +62,7 @@
 
 #include "Canvas.h"
 #include "Cell.h"
+#include "CellStorage.h"
 #include "LayoutDialog.h"
 #include "Localization.h"
 #include "Sheet.h"
@@ -365,7 +366,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
                top + cell.mergedYCells() >= bottom));
 
   // Initialize with the upper left object.
-  const Style styleTopLeft = m_sheet->style( left, top );
+  const Style styleTopLeft = cell.style();
   borders[BorderType_Left].style = styleTopLeft.leftBorderPen().style();
   borders[BorderType_Left].width = styleTopLeft.leftBorderPen().width();
   borders[BorderType_Left].color = styleTopLeft.leftBorderPen().color();
@@ -380,13 +381,13 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   borders[BorderType_RisingDiagonal].color = styleTopLeft.goUpDiagonalPen().color();
 
   // Look at the upper right one for the right border.
-  const Style styleTopRight = m_sheet->style( right, top );
+  const Style styleTopRight = Cell( m_sheet, right, top ).style();
   borders[BorderType_Right].style = styleTopRight.rightBorderPen().style();
   borders[BorderType_Right].width = styleTopRight.rightBorderPen().width();
   borders[BorderType_Right].color = styleTopRight.rightBorderPen().color();
 
   // Look at the bottom left cell for the bottom border.
-  const Style styleBottomLeft = m_sheet->style( left, bottom );
+  const Style styleBottomLeft = Cell( m_sheet, left, bottom ).style();
   borders[BorderType_Bottom].style = styleBottomLeft.bottomBorderPen().style();
   borders[BorderType_Bottom].width = styleBottomLeft.bottomBorderPen().width();
   borders[BorderType_Bottom].color = styleBottomLeft.bottomBorderPen().color();
@@ -397,12 +398,12 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   {
     cell = cell.masterCell();
 
-    const Style styleMove1 = m_sheet->style( cell.column(), top );
+    const Style styleMove1 = Cell( m_sheet, cell.column(), top ).style();
     borders[BorderType_Vertical].style = styleMove1.leftBorderPen().style();
     borders[BorderType_Vertical].width = styleMove1.leftBorderPen().width();
     borders[BorderType_Vertical].color = styleMove1.leftBorderPen().color();
 
-    const Style styleMove2 = m_sheet->style( right, cell.row() );
+    const Style styleMove2 = Cell( m_sheet, right, cell.row() ).style();
     borders[BorderType_Horizontal].style = styleMove2.topBorderPen().style();
     borders[BorderType_Horizontal].width = styleMove2.topBorderPen().width();
     borders[BorderType_Horizontal].color = styleMove2.topBorderPen().color();
@@ -412,7 +413,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
     borders[BorderType_Vertical].style = styleTopRight.leftBorderPen().style();
     borders[BorderType_Vertical].width = styleTopRight.leftBorderPen().width();
     borders[BorderType_Vertical].color = styleTopRight.leftBorderPen().color();
-    const Style styleBottomRight = m_sheet->style( right, bottom );
+    const Style styleBottomRight = Cell( m_sheet, right, bottom ).style();
     borders[BorderType_Horizontal].style = styleBottomRight.topBorderPen().style();
     borders[BorderType_Horizontal].width = styleBottomRight.topBorderPen().width();
     borders[BorderType_Horizontal].color = styleBottomRight.topBorderPen().color();
@@ -464,20 +465,20 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
     for (Selection::ConstIterator it(m_pView->selection()->constBegin()); it != end; ++it)
     {
         QRect range = (*it)->rect();
-        Style style = m_pView->activeSheet()->style( range ); // FIXME merge
+        Style style = m_pView->activeSheet()->cellStorage()->style( range ); // FIXME merge
         initParameters( style );
 
         // left border
         range.setWidth( 1 );
-        checkBorderLeft( m_pView->activeSheet()->style( range ) );
+        checkBorderLeft( m_pView->activeSheet()->cellStorage()->style( range ) );
         // right border
         range = (*it)->rect();
         range.setLeft( range.right() );
-        checkBorderRight( m_pView->activeSheet()->style( range ) );
+        checkBorderRight( m_pView->activeSheet()->cellStorage()->style( range ) );
         // inner borders
         range = (*it)->rect();
         range = range.adjusted( 1, 1, -1, -1 );
-        style = m_pView->activeSheet()->style( range );
+        style = m_pView->activeSheet()->cellStorage()->style( range );
         checkBorderHorizontal( style );
         checkBorderVertical( style );
         // top border
@@ -487,7 +488,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
         // bottom border
         range = (*it)->rect();
         range.setBottom( range.top() );
-        checkBorderBottom( m_pView->activeSheet()->style( range ) );
+        checkBorderBottom( m_pView->activeSheet()->cellStorage()->style( range ) );
     }
 
     // column width

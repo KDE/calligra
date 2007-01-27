@@ -45,6 +45,7 @@
 #include <ooutils.h>
 
 #include <kspread/Cell.h>
+#include <kspread/CellStorage.h>
 #include <kspread/Condition.h>
 #include <kspread/Doc.h>
 #include <kspread/Global.h>
@@ -225,7 +226,7 @@ bool OpenCalcImport::readRowFormat( KoXmlElement & rowNode, KoXmlElement * rowSt
   for ( int i = 0; i < number; ++i )
   {
     RowFormat * rowL = table->nonDefaultRowFormat( row );
-    table->setStyle( KSpread::Region(QRect(1,row,KS_colMax,1)), layout );
+    table->cellStorage()->setStyle( KSpread::Region(QRect(1,row,KS_colMax,1)), layout );
 
     if ( height != -1 )
     {
@@ -548,7 +549,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
       Style * layout = m_defaultStyles[psName];
 
       if ( layout )
-        table->setStyle( KSpread::Region(QPoint(columns,row)), *layout );
+        table->cellStorage()->setStyle( KSpread::Region(QPoint(columns,row)), *layout );
     }
     if ( e.hasAttributeNS( ooNS::table, "formula" ) )
     {
@@ -1121,7 +1122,7 @@ bool OpenCalcImport::readColLayouts( KoXmlElement & content, Sheet * table )
       ColumnFormat * col = new ColumnFormat();
       col->setSheet( table );
       col->setColumn( column );
-      table->setStyle( KSpread::Region(QRect(column,1,1,KS_rowMax)), styleLayout );
+      table->cellStorage()->setStyle( KSpread::Region(QRect(column,1,1,KS_rowMax)), styleLayout );
       if ( width != -1.0 )
         col->setWidth( width );
 

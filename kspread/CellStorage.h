@@ -55,7 +55,7 @@ class ValueStorage;
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  */
-class CellStorage
+class KSPREAD_EXPORT CellStorage
 {
 public:
     /**
@@ -78,13 +78,13 @@ public:
      * \return the comment associated with the Cell at \p column , \p row .
      */
     QString comment( int column, int row ) const;
-    void setComment( const Region& region, const QString& comment ) const;
+    void setComment( const Region& region, const QString& comment );
 
     /**
      * \return the conditional formattings associated with the Cell at \p column , \p row .
      */
     Conditions conditions( int column, int row ) const;
-    void setConditions( const Region& region, Conditions conditions ) const;
+    void setConditions( const Region& region, Conditions conditions );
 
     /**
      * \return the formula associated with the Cell at \p column , \p row .
@@ -99,10 +99,21 @@ public:
     void setLink( int column, int row, const QString& link );
 
     /**
+     * \return the Style associated with the Cell at \p column , \p row .
+     */
+    Style style( int column, int row ) const;
+
+    /**
+     * \return the Style associated with \p rect.
+     */
+    Style style( const QRect& rect ) const;
+    void setStyle( const Region& region, const Style& style );
+
+    /**
      * \return the validity checks associated with the Cell at \p column , \p row .
      */
     Validity validity( int column, int row ) const;
-    void setValidity( const Region& region, Validity validity ) const;
+    void setValidity( const Region& region, Validity validity );
 
     /**
      * \return the value associated with the Cell at \p column , \p row .

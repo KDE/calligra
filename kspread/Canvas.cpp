@@ -3430,7 +3430,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
             color = palette().text().color();
         editorPalette.setColor( QPalette::Text, color );
 
-        color = sheet->style(  marker().x(), marker().y() ).backgroundColor(); // FIXME effective!
+        color = Cell( sheet, marker() ).style().backgroundColor(); // FIXME effective!
         if ( !color.isValid() )
             color = editorPalette.base().color();
         editorPalette.setColor( QPalette::Background, color );

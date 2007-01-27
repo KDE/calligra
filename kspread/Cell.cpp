@@ -184,6 +184,13 @@ bool Cell::isNull() const
     return ( !d || d->sheet == 0 );
 }
 
+// Return true if this cell is a formula.
+//
+bool Cell::isFormula() const
+{
+    return !formula().expression().isEmpty();
+}
+
 // Return the column number of this cell.
 //
 int Cell::column() const
@@ -205,20 +212,6 @@ int Cell::row() const
     Q_ASSERT( !isNull() );
     Q_ASSERT( 1 <= d->row ); //&& d->row <= KS_rowMax );
     return d->row;
-}
-
-void Cell::setColumn( int col )
-{
-    Q_ASSERT( !isNull() );
-    Q_ASSERT( 1 <= col && col <= KS_colMax );
-    d->column = col;
-}
-
-void Cell::setRow( int row )
-{
-    Q_ASSERT( !isNull() );
-    Q_ASSERT( 1 <= row && row <= KS_rowMax );
-    d->row = row;
 }
 
 // Return the name of this cell, i.e. the string that the user would
@@ -283,24 +276,12 @@ QString Cell::columnName( uint column )
     return str;
 }
 
-Style Cell::style() const
-{
-    return sheet()->style( d->column, d->row );
-}
-
-void Cell::setStyle( const Style& style ) const
-{
-    if ( style.isEmpty() )
-        return;
-    sheet()->setStyle( Region(cellPosition()), style );
-}
-
 QString Cell::comment() const
 {
     return sheet()->cellStorage()->comment( d->column, d->row );
 }
 
-void Cell::setComment( const QString& comment ) const
+void Cell::setComment( const QString& comment )
 {
     sheet()->cellStorage()->setComment( Region(cellPosition()), comment );
 }
@@ -310,9 +291,29 @@ Conditions Cell::conditions() const
     return sheet()->cellStorage()->conditions( d->column, d->row );
 }
 
-void Cell::setConditions( Conditions conditions ) const
+void Cell::setConditions( Conditions conditions )
 {
     sheet()->cellStorage()->setConditions( Region(cellPosition()), conditions );
+}
+
+Formula Cell::formula() const
+{
+    return sheet()->cellStorage()->formula( d->column, d->row );
+}
+
+void Cell::setFormula( const Formula& formula )
+{
+    sheet()->cellStorage()->setFormula( column(), row(), formula );
+}
+
+Style Cell::style() const
+{
+    return sheet()->cellStorage()->style( d->column, d->row );
+}
+
+void Cell::setStyle( const Style& style )
+{
+    sheet()->cellStorage()->setStyle( Region(cellPosition()), style );
 }
 
 Validity Cell::validity() const
@@ -320,20 +321,13 @@ Validity Cell::validity() const
     return sheet()->cellStorage()->validity( d->column, d->row );
 }
 
-void Cell::setValidity( Validity validity ) const
+void Cell::setValidity( Validity validity )
 {
     sheet()->cellStorage()->setValidity( Region(cellPosition()), validity );
 }
 
 
 
-
-// Return true if this cell is a formula.
-//
-bool Cell::isFormula() const
-{
-    return !formula().expression().isEmpty();
-}
 
 
 // Return the input text of this cell.  This could, for instance, be a
@@ -387,16 +381,6 @@ QString Cell::displayText() const
         string = doc()->formatter()->formatText(this, formatType());
 
     return string;
-}
-
-Formula Cell::formula() const
-{
-    return sheet()->cellStorage()->formula( d->column, d->row );
-}
-
-void Cell::setFormula( const Formula& formula )
-{
-    sheet()->cellStorage()->setFormula( column(), row(), formula );
 }
 
 
@@ -1319,7 +1303,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
   return true; /* really isn't much of a way for this function to fail */
 }
 
-void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column )
+void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 {
     const QString comment = this->comment();
     if ( !comment.isEmpty() )
@@ -1336,7 +1320,7 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column )
     }
 }
 
-QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles, int col, int row )
+QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles )
 {
     Conditions conditions = this->conditions();
     if ( !conditions.isEmpty() )
@@ -1375,7 +1359,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
       saveOasisValue (xmlwriter);
 
     KoGenStyle currentCellStyle; // the type determined in saveOasisCellStyle
-    saveOasisCellStyle( currentCellStyle, mainStyles, column, row );
+    saveOasisCellStyle( currentCellStyle, mainStyles );
     // skip 'table:style-name' attribute for the default style
     if ( !currentCellStyle.isDefaultStyle() )
       xmlwriter.addAttribute( "table:style-name", mainStyles.styles()[currentCellStyle] );
@@ -1408,7 +1392,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         }
 
         KoGenStyle nextCellStyle; // the type is determined in saveOasisCellStyle
-        nextCell.saveOasisCellStyle( nextCellStyle, mainStyles, nextCell.column(), nextCell.row() );
+        nextCell.saveOasisCellStyle( nextCellStyle, mainStyles );
 
         if ( nextCell.isPartOfMerged() || nextCell.doesMergeCells() ||
              !nextCell.comment().isEmpty() ||
@@ -1473,7 +1457,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.endElement();
     }
 
-    saveOasisAnnotation( xmlwriter, row, column );
+    saveOasisAnnotation( xmlwriter );
 
     xmlwriter.endElement();
     return true;
