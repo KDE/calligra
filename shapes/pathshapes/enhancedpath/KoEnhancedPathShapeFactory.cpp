@@ -72,7 +72,7 @@ KoShape * KoEnhancedPathShapeFactory::createShape(const KoProperties * params) c
 {
     QRectF viewBox( 0, 0, 100, 100 );
     QVariant viewboxData;
-    if( params->getProperty( "viewBox", viewboxData ) )
+    if( params->property( "viewBox", viewboxData ) )
         viewBox = viewboxData.toRectF();
 
     KoEnhancedPathShape *shape = new KoEnhancedPathShape( viewBox );
@@ -81,24 +81,24 @@ KoShape * KoEnhancedPathShapeFactory::createShape(const KoProperties * params) c
 
     shape->setShapeId( KoPathShapeId );
     shape->setBorder( new KoLineBorder( 1.0 ) );
-    shape->addModifiers( params->getString( "modifiers" ) );
+    shape->addModifiers( params->stringProperty( "modifiers" ) );
 
-    ListType handles = params->getProperty( "handles" ).toList();
+    ListType handles = params->property( "handles" ).toList();
     foreach( QVariant v, handles )
         shape->addHandle( v.toMap() );
 
-    ComplexType formulae = params->getProperty( "formulae" ).toMap();
+    ComplexType formulae = params->property( "formulae" ).toMap();
     ComplexType::const_iterator formula = formulae.constBegin();
     ComplexType::const_iterator lastFormula = formulae.constEnd();
     for( ; formula != lastFormula; ++formula )
         shape->addFormula( formula.key(), formula.value().toString() );
 
-    QStringList commands = params->getProperty( "commands" ).toStringList();
+    QStringList commands = params->property( "commands" ).toStringList();
     foreach( QString cmd, commands )
         shape->addCommand( cmd );
 
     QVariant color;
-    if( params->getProperty( "background", color ) )
+    if( params->property( "background", color ) )
         shape->setBackground( color.value<QColor>() );
 
     QSizeF size = shape->size();

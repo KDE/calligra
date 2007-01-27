@@ -50,7 +50,7 @@ KoShape *TextShapeFactory::createDefaultShape() const {
 KoShape *TextShapeFactory::createShape(const KoProperties * params) const {
     TextShape *shape = new TextShape();
     KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
-    data->document()->setHtml( params->getProperty("text").toString() );
+    data->document()->setHtml( params->stringProperty("text") );
     return shape;
 }
 

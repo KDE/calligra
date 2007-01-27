@@ -50,24 +50,20 @@ KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent)
 
 KoShape *KoRegularPolygonShapeFactory::createDefaultShape() const
 {
-	KoRegularPolygonShape *s = new KoRegularPolygonShape();
-	s->setPoints(5);
-	s->resize(QSizeF(100,100));
-	s->setBackground(QBrush(Qt::red));
-	return s;
+    KoRegularPolygonShape *s = new KoRegularPolygonShape();
+    s->setPoints(5);
+    s->resize(QSizeF(100,100));
+    s->setBackground(QBrush(Qt::red));
+    return s;
 }
 
 KoShape *KoRegularPolygonShapeFactory::createShape(const KoProperties* props) const
 {
-	KoRegularPolygonShape *s = new KoRegularPolygonShape();
-	bool ok;
-	int points = props->getProperty("points").toUInt(&ok);
-	if (ok) {
-		s->setPoints(points);
-	}
-	s->resize(QSizeF(100,100));
-	s->setBackground(QBrush(Qt::red));
-	return s;
+    KoRegularPolygonShape *s = new KoRegularPolygonShape();
+    s->setPoints(props->intProperty("points", 5));
+    s->resize(QSizeF(100,100));
+    s->setBackground(QBrush(Qt::red));
+    return s;
 }
 
 #include <KoRegularPolygonShapeFactory.moc>

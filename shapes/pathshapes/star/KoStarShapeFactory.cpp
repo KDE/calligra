@@ -90,16 +90,16 @@ KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
     if( ! star )
         return 0;
 
-    star->setCornerCount( params->getInt("corners", 5 ) );
-    star->setConvex( params->getBool( "convex", false ) );
-    star->setBaseRadius( params->getDouble( "baseRadius", 25.0 ) );
-    star->setTipRadius( params->getDouble( "tipRadius", 50.0 ) );
-    star->setBaseRoundness( params->getDouble( "baseRoundness", 0.0 ) );
-    star->setTipRoundness( params->getDouble( "tipRoundness", 0.0 ) );
+    star->setCornerCount( params->intProperty("corners", 5 ) );
+    star->setConvex( params->boolProperty( "convex", false ) );
+    star->setBaseRadius( params->boolProperty( "baseRadius", 25.0 ) );
+    star->setTipRadius( params->boolProperty( "tipRadius", 50.0 ) );
+    star->setBaseRoundness( params->boolProperty( "baseRoundness", 0.0 ) );
+    star->setTipRoundness( params->boolProperty( "tipRoundness", 0.0 ) );
     star->setBorder( new KoLineBorder( 1.0 ) );
     star->setShapeId( KoPathShapeId );
     QVariant v;
-    if( params->getProperty( "background", v ) )
+    if( params->property( "background", v ) )
         star->setBackground( v.value<QColor>() );
 
     return star;

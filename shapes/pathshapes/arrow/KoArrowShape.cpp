@@ -20,14 +20,18 @@
 #include "arrow/KoArrowShape.h"
 
 
-KoArrowShape::KoArrowShape() 
+KoArrowShape::KoArrowShape()
 {
+    m_type = ArrowLeft;
 }
 
 void KoArrowShape::setType(KoArrowType _type)
 {
+    // TODO check input, and don't accept type if its not in the list of known types.
+
     //TODO think to clear point if we change type.
     m_type=_type;
+    // TODO use real size, not a hardcoded size
     QSizeF size( 100, 100 );
     createPath(size);
 }
@@ -36,7 +40,7 @@ void KoArrowShape::createPath( const QSizeF &size )
 {
     switch(m_type)
     {
-    case ArrowRight: 
+    case ArrowRight:
     {
     moveTo( QPointF( 0, size.height()/3));
     lineTo( QPointF( size.width()/2, size.height()/3));
@@ -57,7 +61,7 @@ void KoArrowShape::createPath( const QSizeF &size )
     lineTo( QPointF( size.width(), size.height()*2/3));
     lineTo( QPointF( size.width()/3, size.height()*2/3));
     lineTo( QPointF( size.width()/3, size.height()));
-    closeMerge();      
+    closeMerge();
     break;
     }
     case ArrowBottom:
@@ -105,6 +109,6 @@ void KoArrowShape::createPath( const QSizeF &size )
     break;
     }
     default:
-    break; //TODO
+        Q_ASSERT(false); // internal error.
     }
 }
