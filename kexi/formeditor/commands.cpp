@@ -230,7 +230,7 @@ AlignWidgetsCommand::AlignWidgetsCommand(int type, WidgetList &list, Form *form)
 : Command(), m_form(form), m_type(type)
 {
 	for(QWidget *w = list.first(); w; w = list.next())
-		m_pos.insert(w->name(), w->pos());
+		m_pos.insert(w->objectName().toLatin1().constData(), w->pos());
 }
 
 void
@@ -344,7 +344,7 @@ AlignWidgetsCommand::unexecute()
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
-			item->widget()->move( m_pos[item->widget()->name()] );
+			item->widget()->move( m_pos[item->widget()->objectName().toLatin1().constData()] );
 		m_form->setSelectedWidget(item->widget(), true); // We restore selection
 	}
 }
@@ -372,7 +372,7 @@ AlignWidgetsCommand::name() const
 void
 AlignWidgetsCommand::debug()
 {
-	kDebug() << "AlignWidgetsCommand: name=\"" << name() << "\" form=" << m_form->widget()->name() 
+	kDebug() << "AlignWidgetsCommand: name=\"" << name() << "\" form=" << m_form->widget()->objectName() 
 		<< " widgets=" << m_pos.keys() << endl;
 }
 
@@ -383,16 +383,15 @@ AdjustSizeCommand::AdjustSizeCommand(int type, WidgetList &list, Form *form)
 {
 	for(QWidget *w = list.first(); w; w = list.next())
 	{
-		if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
-		{
+		if(w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {
 			w = w->parentWidget(); // widget is WidgetStack page
 			if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
 				w = w->parentWidget();
 		}
 
-		m_sizes.insert(w->name(), w->size());
+		m_sizes.insert(w->objectName().toLatin1().constData(), w->size());
 		if(m_type == SizeToGrid) // SizeToGrid also move widgets
-			m_pos.insert(w->name(), w->pos());
+			m_pos.insert(w->objectName().toLatin1().constData(), w->pos());
 	}
 }
 
@@ -439,7 +438,7 @@ AdjustSizeCommand::execute()
 		case SizeToFit:
 		{
 			for(QWidget *w = list.first(); w; w = list.next()) {
-				ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
+				ObjectTreeItem *item = m_form->objectTree()->lookup(w->objectName());
 				if(item && !item->children()->isEmpty()) { // container
 					QSize s;
 					if(item->container() && item->container()->layout())
@@ -578,9 +577,9 @@ AdjustSizeCommand::unexecute()
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
 		{
-			item->widget()->resize(  m_sizes[item->widget()->name()] );
+			item->widget()->resize(  m_sizes[item->widget()->objectName().toLatin1().constData()] );
 			if(m_type == SizeToGrid)
-				item->widget()->move( m_pos[item->widget()->name()] );
+				item->widget()->move( m_pos[item->widget()->objectName().toLatin1().constData()] );
 			m_form->setSelectedWidget(item->widget(), true); // We restore selection
 		}
 	}
@@ -611,7 +610,8 @@ AdjustSizeCommand::name() const
 void
 AdjustSizeCommand::debug()
 {
-	kDebug() << "AdjustSizeCommand: name=\"" << name() << "\" form=" << m_form->widget()->name() 
+	kDebug() << "AdjustSizeCommand: name=\"" << name() << "\" form=" 
+		<< m_form->widget()->objectName() 
 		<< " widgets=" << m_sizes.keys() << endl;
 }
 
@@ -628,7 +628,7 @@ LayoutPropertyCommand::LayoutPropertyCommand(WidgetPropertySet *buf, const Q3CSt
 	Container *m_container = titem->container();
 	// We save the geometry of each wigdet
 	for(ObjectTreeItem *it = m_container->objectTree()->children()->first(); it; it = m_container->objectTree()->children()->next())
-		m_geometries.insert(it->name().latin1(), it->widget()->geometry());
+		m_geometries.insert(it->name().toLatin1(), it->widget()->geometry());
 }
 
 void
@@ -651,7 +651,7 @@ LayoutPropertyCommand::unexecute()
 	{
 		ObjectTreeItem *tree = m_container->form()->objectTree()->lookup(it.key());
 		if(tree)
-			tree->widget()->setGeometry(it.data());
+			tree->widget()->setGeometry(it.value());
 	}
 
 	PropertyCommand::unexecute();
@@ -676,13 +676,13 @@ LayoutPropertyCommand::debug()
 InsertWidgetCommand::InsertWidgetCommand(Container *container)
   : Command()
 {
-	m_containername = container->widget()->name();
+	m_containername = container->widget()->objectName();
 	m_form = container->form();
 	m_class = FormManager::self()->selectedClass();
 	m_insertRect = container->m_insertRect;
 	m_point = container->m_insertBegin;
 	m_name = container->form()->objectTree()->generateUniqueName(
-		container->form()->library()->namePrefix(m_class).latin1(),
+		container->form()->library()->namePrefix(m_class).toLatin1(),
 		/*!numberSuffixRequired*/false);
 }
 
@@ -690,14 +690,14 @@ InsertWidgetCommand::InsertWidgetCommand(Container *container,
 	const Q3CString& className, const QPoint& pos, const Q3CString& namePrefix)
   : Command()
 {
-	m_containername = container->widget()->name();
+	m_containername = container->widget()->objectName();
 	m_form = container->form();
 	m_class = className;
 	//m_insertRect is null (default)
 	m_point = pos;
 	if (namePrefix.isEmpty()) {
 		m_name = container->form()->objectTree()->generateUniqueName(
-			container->form()->library()->namePrefix(m_class).latin1() );
+			container->form()->library()->namePrefix(m_class).toLatin1() );
 	}
 	else {
 		m_name = container->form()->objectTree()->generateUniqueName(
@@ -800,7 +800,8 @@ InsertWidgetCommand::execute()
 	}
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
-	Q3ValueList<Q3CString> list(m_container->form()->library()->autoSaveProperties(w->className()));
+	Q3ValueList<Q3CString> list(m_container->form()->library()->autoSaveProperties(
+		w->metaObject()->className()));
 
 	Q3ValueList<Q3CString>::ConstIterator endIt = list.constEnd();
 	for(Q3ValueList<Q3CString>::ConstIterator it = list.constBegin(); it != endIt; ++it)
@@ -809,11 +810,11 @@ InsertWidgetCommand::execute()
 	m_container->reloadLayout(); // reload the layout to take the new wigdet into account
 
 	m_container->setSelectedWidget(w, false);
-	if (m_container->form()->library()->internalProperty(w->className(), 
+	if (m_container->form()->library()->internalProperty(w->metaObject()->className(), 
 			"dontStartEditingOnInserting").isEmpty())
 	{
 		m_container->form()->library()->startEditing(
-			w->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
+			w->metaObject()->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
 	}
 //! @todo update widget's width for entered text's metrics
 	kDebug() << "Container::eventFilter(): widget added " << this << endl;
@@ -844,7 +845,7 @@ InsertWidgetCommand::debug()
 {
 	kDebug() << "InsertWidgetCommand: name=\"" << name() << "\" generatedName=" << m_name 
 		<< " container=" << m_containername
-		<< " form=" << m_form->widget()->name() << " class=" << m_class 
+		<< " form=" << m_form->widget()->objectName() << " class=" << m_class 
 		<< " rect=" << m_insertRect << " pos=" << m_point << endl;
 }
 
@@ -871,8 +872,8 @@ CreateLayoutCommand::CreateLayoutCommand(int layoutType, WidgetList &list, Form 
 	m_list->sort(); // we sort them now, before creating the layout
 
 	for(QWidget *w = m_list->first(); w; w = m_list->next())
-		m_pos.insert(w->name(), w->geometry());
-	ObjectTreeItem *item = form->objectTree()->lookup(m_list->first()->name());
+		m_pos.insert(w->objectName().toLatin1().constData(), w->geometry());
+	ObjectTreeItem *item = form->objectTree()->lookup(m_list->first()->objectName());
 	if(item && item->parent()->container())
 		m_containername = item->parent()->name();
 	delete m_list;
@@ -894,13 +895,13 @@ CreateLayoutCommand::execute()
 		case Container::HSplitter: case Container::VSplitter:
 			classname = "QSplitter"; break;
 		default:
-			classname = Container::layoutTypeToString(m_type).latin1();
+			classname = Container::layoutTypeToString(m_type).toLatin1();
 	}
 
 	if(m_name.isEmpty())// the name must be generated only once
 		m_name = m_form->objectTree()->generateUniqueName(classname);
 
-	QWidget *w = lib->createWidget(classname, container->widget(), m_name.latin1(), container);
+	QWidget *w = lib->createWidget(classname, container->widget(), m_name.toLatin1(), container);
 //! @todo allow setting this for data view mode as well
 	if (w) {
 		if (m_form->designMode()) {
@@ -908,12 +909,12 @@ CreateLayoutCommand::execute()
 			KAcceleratorManager::setNoAccel(w);
 		}
 	}
-	ObjectTreeItem *tree = w ? m_form->objectTree()->lookup(w->name()) : 0;
+	ObjectTreeItem *tree = w ? m_form->objectTree()->lookup(w->objectName()) : 0;
 	if(!tree)
 		return;
 
 	container->setSelectedWidget(0, false);
-	w->move(m_pos.begin().data().topLeft()); // we move the layout at the position of the topleft widget
+	w->move(m_pos.begin().value().topLeft()); // we move the layout at the position of the topleft widget
 	// sizeHint of these widgets depends on geometry, so give them appropriate geometry
 	if(m_type == Container::HFlow)
 		w->resize( QSize(700, 20) );
@@ -928,7 +929,7 @@ CreateLayoutCommand::execute()
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
 		{
-			item->widget()->reparent(w, item->widget()->pos(), true);
+			item->widget()->setParent(w);
 			item->eventEater()->setContainer(tree->container());
 			m_form->objectTree()->reparent(item->name(), m_name);
 		}
@@ -961,7 +962,8 @@ CreateLayoutCommand::unexecute()
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if(item && item->widget())
 		{
-			item->widget()->reparent(parent->widget(), QPoint(0,0), true);
+			item->widget()->setParent(parent->widget());
+			item->widget()->move(0,0);
 			item->eventEater()->setContainer(parent->container());
 			if(m_pos[it.key()].isValid())
 				item->widget()->setGeometry(m_pos[it.key()]);
@@ -1008,7 +1010,7 @@ CreateLayoutCommand::debug()
 {
 	kDebug() << "CreateLayoutCommand: name=\"" << name() << "\" generatedName=" << m_name 
 		<< " widgets=" << m_pos.keys() << " container=" << m_containername
-		<< " form=" << m_form->widget()->name() << endl;
+		<< " form=" << m_form->widget()->objectName() << endl;
 }
 
 /// BreakLayoutCommand ///////////////
@@ -1016,15 +1018,15 @@ CreateLayoutCommand::debug()
 BreakLayoutCommand::BreakLayoutCommand(Container *container)
  : CreateLayoutCommand()
 {
-	m_containername = container->toplevel()->widget()->name();
-	m_name = container->widget()->name();
+	m_containername = container->toplevel()->widget()->objectName();
+	m_name = container->widget()->objectName();
 	m_form = container->form();
 	m_type = container->layoutType();
 
 	for(ObjectTreeItem *tree = container->objectTree()->children()->first(); tree; tree = container->objectTree()->children()->next())
 	{
 		QRect r(container->widget()->mapTo(container->widget()->parentWidget(), tree->widget()->pos()), tree->widget()->size());
-		m_pos.insert(tree->widget()->name(), r);
+		m_pos.insert(tree->widget()->objectName().toLatin1().constData(), r);
 	}
 }
 
@@ -1051,7 +1053,7 @@ BreakLayoutCommand::debug()
 {
 	kDebug() << "BreakLayoutCommand: name=\"" << name()
 		<< " widgets=" << m_pos.keys() << " container=" << m_containername
-		<< " form=" << m_form->widget()->name() << endl;
+		<< " form=" << m_form->widget()->objectName() << endl;
 }
 
 // PasteWidgetCommand
@@ -1060,7 +1062,7 @@ PasteWidgetCommand::PasteWidgetCommand(QDomDocument &domDoc, Container *containe
  : m_point(p)
 {
 	m_data = domDoc.toString();
-	m_containername = container->widget()->name();
+	m_containername = container->widget()->objectName();
 	m_form = container->form();
 
 	if(domDoc.namedItem("UI").firstChild().nextSibling().toElement().tagName() != "widget")
@@ -1302,12 +1304,12 @@ PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, const QP
 	QRect r(rx + p.x(), ry + p.y(), rw, rh);
 	kDebug() << "Moving widget by " << p << " from " << rx << "  " << ry << " to " << r.topLeft() << endl;
 
-	QWidget *w = m_form->widget()->childAt(r.x() + 6, r.y() + 6, false);
+	QWidget *w = m_form->widget()->childAt(r.x() + 6, r.y() + 6);
 
 	while(w && (w->geometry() == r))// there is already a widget there, with the same size
 	{
-		w = m_form->widget()->childAt(w->x() + 16, w->y() + 16, false);
-		r.moveBy(10,10);
+		w = m_form->widget()->childAt(w->x() + 16, w->y() + 16);
+		r.translate(10,10);
 	}
 
 	// the pasted wigdet should stay inside container's boundaries
@@ -1368,7 +1370,7 @@ PasteWidgetCommand::debug()
 {
 	kDebug() << "PasteWidgetCommand: pos=" << m_point
 		<< " widgets=" << m_names << " container=" << m_containername
-		<< " form=" << m_form->widget()->name() 
+		<< " form=" << m_form->widget()->objectName() 
 		<< " data=\"" << m_data.left(80) << "...\"" << endl;
 }
 
@@ -1395,17 +1397,16 @@ DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
 	}*/
 	removeChildrenFromList(list);
 
-	for(WidgetListIterator it(list); it.current() != 0; ++it)
-	{
-		ObjectTreeItem *item = m_form->objectTree()->lookup(it.current()->name());
+	for(WidgetListIterator it(list); it.current() != 0; ++it) {
+		ObjectTreeItem *item = m_form->objectTree()->lookup(it.current()->objectName());
 		if (!item)
 			return;
 
 		// We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
-		m_containers.insert(item->name().latin1(), m_form->parentContainer(item->widget())->widget()->name());
-		m_parents.insert(item->name().latin1(), item->parent()->name().latin1());
+		m_containers.insert(item->name().toLatin1(), m_form->parentContainer(item->widget())->widget()->objectName().toLatin1().constData());
+		m_parents.insert(item->name().toLatin1(), item->parent()->name().toLatin1());
 		FormIO::saveWidget(item, parent, m_domDoc);
-		form->connectionBuffer()->saveAllConnectionsForWidget(item->widget()->name(), m_domDoc);
+		form->connectionBuffer()->saveAllConnectionsForWidget(item->widget()->objectName(), m_domDoc);
 	}
 
 	FormIO::cleanClipboard(parent);
@@ -1449,7 +1450,7 @@ DeleteWidgetCommand::unexecute()
 		{
 			if((m.toElement().tagName() == "property") && (m.toElement().attribute("name") == "name"))
 			{
-				wname = m.toElement().text().latin1();
+				wname = m.toElement().text().toLatin1();
 				break;
 			}
 		}
@@ -1478,7 +1479,7 @@ void
 DeleteWidgetCommand::debug()
 {
 	kDebug() << "DeleteWidgetCommand: containers=" << m_containers.keys()
-		<< " parents=" << m_parents.keys() << " form=" << m_form->widget()->name() << endl;
+		<< " parents=" << m_parents.keys() << " form=" << m_form->widget()->objectName() << endl;
 }
 
 // CutWidgetCommand
@@ -1512,7 +1513,7 @@ void
 CutWidgetCommand::debug()
 {
 	kDebug() << "CutWidgetCommand: containers=" << m_containers.keys()
-		<< " parents=" << m_parents.keys() << " form=" << m_form->widget()->name()
+		<< " parents=" << m_parents.keys() << " form=" << m_form->widget()->objectName()
 		<< " data=\"" << m_data.left(80) << "...\"" << endl;
 }
 
