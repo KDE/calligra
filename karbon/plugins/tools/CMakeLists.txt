@@ -6,7 +6,10 @@ set(karbon_tools_PART_SRCS
    KarbonToolsPlugin.cpp
    KarbonCurveFit.cpp
    KarbonPencilTool.cpp
-   KarbonPencilToolFactory.cpp )
+   KarbonPencilToolFactory.cpp
+   KarbonGradientTool.cpp
+   KarbonGradientToolFactory.cpp
+)
 
 kde4_automoc(${karbon_tools_PART_SRCS})
 
@@ -16,6 +19,7 @@ target_link_libraries(karbontools ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} koffi
 
 install(TARGETS karbontools DESTINATION ${PLUGIN_INSTALL_DIR})
 
+kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )
 
 ########### install files ###############
 

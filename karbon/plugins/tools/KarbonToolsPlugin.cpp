@@ -19,6 +19,7 @@
 
 #include "KarbonToolsPlugin.h"
 #include "KarbonPencilToolFactory.h"
+#include "KarbonGradientToolFactory.h"
 
 #include <KoToolRegistry.h>
 #include <kgenericfactory.h>
@@ -29,6 +30,7 @@ KarbonToolsPlugin::KarbonToolsPlugin( QObject *parent, const QStringList& )
     : QObject(parent)
 {
     KoToolRegistry::instance()->add( new KarbonPencilToolFactory( parent ) );
+    KoToolRegistry::instance()->add( new KarbonGradientToolFactory( parent ) );
 }
 
 #include "KarbonToolsPlugin.moc"
