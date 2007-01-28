@@ -19,31 +19,13 @@
   <property name="windowTitle" >
    <string>Project Chart Indicators</string>
   </property>
-  <widget class="QWidget" name="horizontalLayout_2" >
-   <property name="geometry" >
-    <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>461</width>
-     <height>221</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" >
-    <property name="margin" >
-     <number>0</number>
-    </property>
-    <property name="spacing" >
-     <number>6</number>
-    </property>
-   </layout>
-  </widget>
   <widget class="QWidget" name="verticalLayout" >
    <property name="geometry" >
     <rect>
      <x>20</x>
-     <y>260</y>
-     <width>461</width>
-     <height>121</height>
+     <y>300</y>
+     <width>561</width>
+     <height>81</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" >
@@ -51,7 +33,7 @@
      <number>0</number>
     </property>
     <property name="spacing" >
-     <number>6</number>
+     <number>3</number>
     </property>
     <item>
      <widget class="QCheckBox" name="curve2" >
@@ -92,6 +74,24 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayout_2" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>561</width>
+     <height>271</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" >
+    <property name="margin" >
+     <number>0</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
    </layout>
   </widget>
  </widget>

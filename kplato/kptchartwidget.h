@@ -30,11 +30,22 @@ namespace KPlato
 class ChartWidget : public QWidget{
 
 private:
+int curve_draw;
+QPainter* painter;
+bool bcwp;
+bool bcws;
+bool acwp;
 
 public:
     ChartWidget(QWidget *parent=0, const char *name=0);
 
     void paintEvent(QPaintEvent * ev);
+    void drawBCWP();
+    void undrawBCWP();
+    void drawBCWS();
+    void undrawBCWS();
+    void drawACWP();
+    void undrawACWP();
 };
 
 } //namespace KPlato

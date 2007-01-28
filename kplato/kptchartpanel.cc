@@ -32,18 +32,60 @@ kDebug()<<"Chart Panel : constructeur!!";
 chart = new ChartWidget(horizontalLayout_2,"MyChartWidget");
 hboxLayout->addWidget(chart,1,0);
 
-horizontalLayout_2->setGeometry(QRect(20, 20, 600, 300));
-verticalLayout->setGeometry(QRect(20, 306, 600, 150));
-
+horizontalLayout_2->setGeometry(QRect(10, 10, 600, 350));
+verticalLayout->setGeometry(QRect(10, 365, 600, 80));
 
 chart->update();
+connect(curve2,SIGNAL(clicked()),SLOT(slotBCPW()));
+connect(curve1,SIGNAL(clicked()),SLOT(slotBCPS()));
+connect(curve3,SIGNAL(clicked()),SLOT(slotACPW()));
+bcwp=false;
+bcws=false;
+acwp=false;
 }
     
-void ChartPanel::slotClose() {
-	
+
+void ChartPanel::slotBCPW()
+{
+	if(bcwp==false)
+	{
+		chart->drawBCWP();
+		bcwp=true;
+	}
+	else
+	{
+		chart->undrawBCWP();
+		bcwp=false;
+	}
+
 }
+void ChartPanel::slotBCPS()
+{
+	if(bcws==false)
+	{
+		chart->drawBCWS();
+		bcws=true;
+	}
+	else
+	{
+		chart->undrawBCWS();
+		bcws=false;
+	}
+}
+void ChartPanel::slotACPW()
+{
+	if(acwp==false){
+		chart->drawACWP();
+		acwp=true;
+	}
+	else
+	{
+		chart->undrawACWP();
+		acwp=false;
+	}
+}   
+
 
 } //namespace KPlato
 
 #include "kptchartpanel.moc"
-

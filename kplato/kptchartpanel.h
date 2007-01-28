@@ -55,14 +55,17 @@ class ChartPanel : public ChartPanelBase {
 
 private:
 ChartWidget * chart;
+bool bcwp;
+bool bcws;
+bool acwp;
+
 public:
     ChartPanel(QWidget *parent=0);
     
-   // KCommand *buildCommand(Part *part);
-    
 public slots:
- void slotClose();
-    
+    void slotBCPW();
+    void slotBCPS();
+    void slotACPW();
 };
 
 } //namespace KPlato
