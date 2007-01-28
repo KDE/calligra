@@ -376,7 +376,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
                 text.insert(0, "<font color=\"" + textColor.name() + "\">");
                 text.append("</font>");
             }
-            line += '  ' + text;
+            line += ' ' + text;
             line += "\n  </" + html_cell_tag + ">\n";
         }
 
