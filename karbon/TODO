@@ -29,13 +29,11 @@ Shapes/Tools:
 ---------------
 - check if the KoTextShape provided by KWord is flexible enough for our use cases (i.e. text along a path)
 - check if we can reuse/extend/port some existing tools (e.g. gradient, pattern)
-- figure out how we can set a name for a shape (can that be done in flake or do we have to do it at the top of flake)
 - add support for adding shapes like sinus, spiral, etc. (see odf spec for custom shape/enhanced geometry)
 
 ODF support:
 ------------
 - implement full odf loading and saving for all the shapes so we can switch our native format to odf
-- we need an improved odf path parser which supports embedded functions/formulae
 - use http://netmoc.cpe.ucf.edu/Projects/OpenDocument/TestSuite.html for testing (when they have some more drawing tests)
 
 Dockers:
@@ -48,7 +46,6 @@ Plugins:
 - port the flatten path plugin
 - port the round corners plugin
 - port the whirlpinch plugin
-- port the pencil tool for freehand drawing
 - port the zoom tool plugin ???
 
 Filters:
