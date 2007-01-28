@@ -1311,12 +1311,10 @@ LocationEditWidget::LocationEditWidget( QWidget * _parent,
 
 void LocationEditWidget::addCompletionItem( const QString &_item )
 {
-    kDebug()<<"  LocationEditWidget::addCompletionItem add :"<<_item<<endl;
     if ( completionList.items().contains( _item) == 0 )
     {
         completionList.addItem( _item );
-        kDebug()<<" _utem :"<<_item<<endl;
-        kDebug()<<" completionList.items().count()"<<completionList.items().count()<<endl;
+        kDebug(36005) << "LocationEditWidget::addCompletionItem: " << _item << endl;
     }
 }
 
