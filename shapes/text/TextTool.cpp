@@ -112,6 +112,34 @@ TextTool::TextTool(KoCanvasBase *canvas)
             KIcon(QApplication::isRightToLeft() ? "format_increaseindent" :"format_decreaseindent"),
             i18n("Decrease Indent"), this);
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent );
+
+    // ------------------- Actions with a key binding and no GUI item
+    QAction *action  = new QAction(i18n("Insert Non-Breaking Space"), this);
+    addAction("nonbreaking_space", action );
+    action->setShortcut( Qt::CTRL+Qt::Key_Space);
+    connect(action, SIGNAL(triggered()), this, SLOT( nonbreakingSpace() ));
+
+    action  = new QAction(i18n("Insert Non-Breaking Hyphen"), this);
+    addAction("nonbreaking_hyphen", action );
+    action->setShortcut( Qt::CTRL+Qt::SHIFT+Qt::Key_Minus);
+    connect(action, SIGNAL(triggered()), this, SLOT( nonbreakingHyphen() ));
+
+    action  = new QAction(i18n("Insert Soft Hyphen"), this);
+    addAction("soft_hyphen", action );
+    //action->setShortcut( Qt::CTRL+Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
+    connect(action, SIGNAL(triggered()), this, SLOT( softHyphen() ));
+
+    action  = new QAction(i18n("Line Break"), this);
+    addAction("line_break", action );
+    action->setShortcut( Qt::SHIFT+Qt::Key_Return);
+    connect(action, SIGNAL(triggered()), this, SLOT( lineBreak() ));
+
+    action  = new QAction(i18n("Font..."), this);
+    addAction("format_font", action );
+    action->setShortcut( Qt::ALT + Qt::CTRL + Qt::Key_F);
+    action->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
+    action->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
+    connect(action, SIGNAL(triggered()), this, SLOT( formatFont() ));
 }
 
 TextTool::~TextTool() {
@@ -397,6 +425,26 @@ void TextTool::textUnderline(bool underline) {
 
 void TextTool::textStrikeOut(bool strikeout) {
     m_selectionHandler.strikeOut(strikeout);
+}
+
+void TextTool::nonbreakingSpace() {
+    m_selectionHandler.insert(QString(QChar(0xa0)));
+}
+
+void TextTool::nonbreakingHyphen() {
+    m_selectionHandler.insert(QString(QChar(0x2013)));
+}
+
+void TextTool::softHyphen() {
+    m_selectionHandler.insert(QString(QChar(0xad)));
+}
+
+void TextTool::lineBreak() {
+    m_selectionHandler.insert(QString(QChar('\n')));
+}
+
+void TextTool::formatFont() {
+    m_selectionHandler.selectFont(0);
 }
 
 

@@ -58,6 +58,11 @@ private slots:
     void textItalic(bool italic);
     void textUnderline(bool underline);
     void textStrikeOut(bool strikeout);
+    void nonbreakingSpace();
+    void nonbreakingHyphen();
+    void softHyphen();
+    void lineBreak();
+    void formatFont();
 
 private:
     void repaint();

@@ -121,16 +121,7 @@ private slots:
 
     // actions
     void print();
-    void textBold(bool bold);
-    void textItalic(bool italic);
-    void textUnderline(bool underline);
-    void textStrikeOut(bool strikeout);
-    void slotNonbreakingSpace();
-    void slotNonbreakingHyphen();
-    void slotSoftHyphen();
-    void slotLineBreak();
     void insertFrameBreak();
-    void formatFont();
     void editDeleteFrame();
     void toggleHeader();
     void toggleFooter();

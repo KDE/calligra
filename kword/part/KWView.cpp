@@ -131,28 +131,6 @@ void KWView::setupActions() {
     QAction *print  = new KAction("MyPrint", this);
     actionCollection()->addAction("file_my_print", print );
     connect(print, SIGNAL(triggered()), this, SLOT(print()));
-
-    // ------------------- Actions with a key binding and no GUI item
-    KAction *action  = new KAction(i18n("Insert Non-Breaking Space"), this);
-    actionCollection()->addAction("nonbreaking_space", action );
-    action->setShortcut( KShortcut( Qt::CTRL+Qt::Key_Space));
-    connect(action, SIGNAL(triggered()), this, SLOT( slotNonbreakingSpace() ));
-
-    action  = new KAction(i18n("Insert Non-Breaking Hyphen"), this);
-    actionCollection()->addAction("nonbreaking_hyphen", action );
-    action->setShortcut( KShortcut( Qt::CTRL+Qt::SHIFT+Qt::Key_Minus));
-    connect(action, SIGNAL(triggered()), this, SLOT( slotNonbreakingHyphen() ));
-
-    action  = new KAction(i18n("Insert Soft Hyphen"), this);
-    actionCollection()->addAction("soft_hyphen", action );
-    action->setShortcut( KShortcut( Qt::CTRL+Qt::Key_Minus));
-    connect(action, SIGNAL(triggered()), this, SLOT( slotSoftHyphen() ));
-
-    action  = new KAction(i18n("Line Break"), this);
-    actionCollection()->addAction("line_break", action );
-    action->setShortcut( KShortcut( Qt::SHIFT+Qt::Key_Return));
-    connect(action, SIGNAL(triggered()), this, SLOT( slotLineBreak() ));
-
     m_actionInsertFrameBreak  = new KAction(QString::null, this);
     actionCollection()->addAction("insert_framebreak", m_actionInsertFrameBreak );
     m_actionInsertFrameBreak->setShortcut( KShortcut( Qt::CTRL + Qt::Key_Return));
@@ -166,13 +144,6 @@ void KWView::setupActions() {
         m_actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next frame" ) );
         m_actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
     } */
-
-    m_actionFormatFont  = new KAction(i18n("Font..."), this);
-    actionCollection()->addAction("format_font", m_actionFormatFont );
-    m_actionInsertFrameBreak->setShortcut( KShortcut( Qt::ALT + Qt::CTRL + Qt::Key_F));
-    m_actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
-    m_actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
-    connect(m_actionFormatFont, SIGNAL(triggered()), this, SLOT( formatFont() ));
 
     m_actionEditDelFrame  = new KAction(i18n("Delete Frame"), this);
     actionCollection()->addAction("edit_delframe", m_actionEditDelFrame );
@@ -519,23 +490,6 @@ This saves problems with finding out which we missed near the end.
             this, SLOT( textSpacingDouble() ),
             actionCollection(), "format_spacingdouble" );
     m_actionFormatSpacingDouble->setActionGroup( spacingActionGroup );
-
-    m_actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
-            this, SLOT( textSuperScript() ),
-            actionCollection(), "format_super" );
-    m_actionFormatSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
-            this, SLOT( textSubScript() ),
-            actionCollection(), "format_sub" );
-
-    m_actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ),
-            QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent", 0,
-            this, SLOT( textIncreaseIndent() ),
-            actionCollection(), "format_increaseindent" );
-
-    m_actionFormatDecreaseIndent= new KAction( i18n( "Decrease Indent" ),
-            QApplication::isRightToLeft() ? "format_increaseindent" :"format_decreaseindent", 0,
-            this, SLOT( textDecreaseIndent() ),
-            actionCollection(), "format_decreaseindent" );
 
     m_actionFormatColor = new TKSelectColorAction( i18n( "Text Color..." ), TKSelectColorAction::TextColor,
             this, SLOT( textColor() ),
@@ -1088,64 +1042,10 @@ const bool clipToPage=false; // should become a setting in the GUI
     painter.end();
 }
 
-void KWView::textBold(bool bold) {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
-    if(handler)
-        handler->bold(bold);
-}
-
-void KWView::textItalic(bool italic) {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
-    if(handler)
-        handler->italic(italic);
-}
-
-void KWView::textUnderline(bool underline) {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
-    if(handler)
-        handler->underline(underline);
-}
-
-void KWView::textStrikeOut(bool strikeout) {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
-    if(handler)
-        handler->strikeOut(strikeout);
-}
-
-void KWView::slotNonbreakingSpace() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
-    if(handler)
-        handler->insert(QString(QChar(0xa0)));
-}
-
-void KWView::slotNonbreakingHyphen() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
-    if(handler)
-        handler->insert(QString(QChar(0x2013)));
-}
-
-void KWView::slotSoftHyphen() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
-    if(handler)
-        handler->insert(QString(QChar(0xad)));
-}
-
-void KWView::slotLineBreak() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
-    if(handler)
-        handler->insert(QString(QChar('\n')));
-}
-
 void KWView::insertFrameBreak() {
     KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
     if(handler)
         handler->insertFrameBreak();
-}
-
-void KWView::formatFont() {
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
-    if(handler)
-        handler->selectFont(this);
 }
 
 void KWView::editDeleteFrame() {
