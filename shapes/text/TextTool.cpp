@@ -48,59 +48,70 @@ TextTool::TextTool(KoCanvasBase *canvas)
 , m_textShape(0)
 , m_textShapeData(0)
 {
-    // TODO move this to the createWidget method
     m_actionFormatBold  = new QAction(KIcon("text_bold"), i18n("Bold"), this);
+    addAction("format_bold", m_actionFormatBold );
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
     connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textBold(bool)) );
 
     m_actionFormatItalic  = new QAction(KIcon("text_italic"), i18n("Italic"), this);
+    addAction("format_italic", m_actionFormatItalic );
     m_actionFormatItalic->setShortcut( Qt::CTRL + Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
     connect( m_actionFormatItalic, SIGNAL(toggled(bool)), this, SLOT(textItalic(bool)) );
 
     m_actionFormatUnderline  = new QAction(KIcon("text_under"), i18n("Underline"), this);
+    addAction("format_underline", m_actionFormatUnderline );
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
     connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), this, SLOT(textUnderline(bool)) );
 
     m_actionFormatStrikeOut  = new QAction(KIcon("text_strike"), i18n("Strike Out"), this);
+    addAction("format_strike", m_actionFormatStrikeOut );
     m_actionFormatStrikeOut->setCheckable(true);
     connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), this, SLOT(textStrikeOut(bool)) );
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
     m_actionAlignLeft  = new QAction(KIcon("text_left"), i18n("Align Left"), this);
+    addAction("format_alignleft", m_actionAlignLeft );
     m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
 
     m_actionAlignRight  = new QAction(KIcon("text_right"), i18n("Align Right"), this);
+    addAction("format_alignright", m_actionAlignRight );
     m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
 
     m_actionAlignCenter  = new QAction(KIcon("text_center"), i18n("Align Center"), this);
+    addAction("format_aligncenter", m_actionAlignCenter );
     m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
     m_actionAlignCenter->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignCenter);
 
     m_actionAlignBlock  = new QAction(KIcon("text_block"), i18n("Align Block"), this);
+    addAction("format_alignblock", m_actionAlignBlock );
     m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
 
     m_actionFormatSuper = new QAction(KIcon("super"), i18n("Superscript"), this);
+    addAction("format_super", m_actionFormatSuper );
     m_actionFormatSuper->setCheckable(true);
 
     m_actionFormatSub = new QAction(KIcon("sub"), i18n("Subscript"), this);
+    addAction("format_sub", m_actionFormatSub );
     m_actionFormatSub->setCheckable(true);
 
     m_actionFormatIncreaseIndent = new QAction(
             KIcon(QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent"),
             i18n("Increase Indent"), this);
+    addAction("format_increaseindent", m_actionFormatIncreaseIndent );
     m_actionFormatDecreaseIndent = new QAction(
             KIcon(QApplication::isRightToLeft() ? "format_increaseindent" :"format_decreaseindent"),
             i18n("Decrease Indent"), this);
+    addAction("format_decreaseindent", m_actionFormatDecreaseIndent );
 }
 
 TextTool::~TextTool() {
