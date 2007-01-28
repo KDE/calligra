@@ -35,7 +35,8 @@
 
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
-   : m_blockData(0),
+   : m_styleManager(0),
+    m_blockData(0),
     m_data(0),
     m_reset(true),
     m_isRtl(false)
