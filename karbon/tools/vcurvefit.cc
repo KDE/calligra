@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
+   Copyright (C) 2001-2003 Rob Buis <buis@kde.org>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,16 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <karbon_part.h>
-#include <karbon_view.h>
-#include <core/vcolor.h>
-#include <core/vcomposite.h>
-#include <core/vfill.h>
-#include <core/vstroke.h>
-#include <core/vglobal.h>
-#include <render/vpainter.h>
-#include <render/vpainterfactory.h>
-#include <commands/vshapecmd.h>
+#include "vcurvefit.h"
+#include <KoPathShape.h>
+#include <math.h>
 
 /*
 	An Algorithm for Automatically Fitting Digitized Curves
@@ -37,17 +31,11 @@
 	http://www.acm.org/pubs/tog/GraphicsGems/gems/README
 */
 
-
-#include "vcurvefit.h"
-//Added by qt3to4:
-#include <Q3PtrList>
-
 #define MAXPOINTS	1000		/* The most points you can have */
-
 
 class FitVector {
 	public:
-	FitVector(QPointF &p){
+	FitVector(const QPointF &p){
 		m_X=p.x();
 		m_Y=p.y();
 	}
@@ -57,7 +45,7 @@ class FitVector {
 		m_Y=0;
 	}
 
-	FitVector(QPointF &a,QPointF &b){
+	FitVector(const QPointF &a, const QPointF &b){
 		m_X=a.x()-b.x();
 		m_Y=a.y()-b.y();
 	}
@@ -82,7 +70,7 @@ class FitVector {
 		m_Y *= s/len;
 	}
 
-	double dot(FitVector &v){
+	double dot(const FitVector &v){
 		return ((m_X*v.m_X)+(m_Y*v.m_Y));
 	}
 
@@ -90,7 +78,7 @@ class FitVector {
 		return (double) sqrt(m_X*m_X+m_Y*m_Y); 
 	}
 
-	QPointF operator+(QPointF &p){
+	QPointF operator+(const QPointF &p){
 		QPointF b(p.x()+m_X,p.y()+m_Y);
 		return b;
 	}
@@ -99,23 +87,23 @@ class FitVector {
 		double m_X,m_Y;
 };
 
-double distance(QPointF *p1,QPointF *p2){
-	double dx = (p1->x()-p2->x());
-	double dy = (p1->y()-p2->y());
+double distance(const QPointF &p1, const QPointF &p2){
+	double dx = (p1.x()-p2.x());
+	double dy = (p1.y()-p2.y());
 	return sqrt( dx*dx + dy*dy );
 }
 
 
-FitVector ComputeLeftTangent(Q3PtrList<QPointF> &points,int end){
-	FitVector tHat1(*points.at(end+1),*points.at(end));
+FitVector ComputeLeftTangent(const QList<QPointF> &points,int end){
+	FitVector tHat1( points.at(end+1), points.at(end) );
 
 	tHat1.normalize();
 
 	return tHat1;
 }
 
-FitVector ComputeRightTangent(Q3PtrList<QPointF> &points,int end){
-	FitVector tHat1(*points.at(end-1),*points.at(end));
+FitVector ComputeRightTangent(const QList<QPointF> &points,int end){
+	FitVector tHat1( points.at(end-1), points.at(end) );
 
 	tHat1.normalize();
 
@@ -127,7 +115,7 @@ FitVector ComputeRightTangent(Q3PtrList<QPointF> &points,int end){
  *	Assign parameter values to digitized points 
  *	using relative distances between points.
  */
-static double *ChordLengthParameterize(Q3PtrList<QPointF> points,int first,int last)
+static double *ChordLengthParameterize(const QList<QPointF> &points,int first,int last)
 {
     int		i;	
     double	*u;			/*  Parameterization		*/
@@ -167,13 +155,13 @@ static FitVector VectorSub(FitVector a,FitVector b)
     return (c);
 }
 
-static FitVector ComputeCenterTangent(Q3PtrList<QPointF> points,int center)
+static FitVector ComputeCenterTangent(const QList<QPointF> &points,int center)
 {
     FitVector V1, V2, tHatCenter;
-    
-    FitVector cpointb = *points.at(center-1);
-    FitVector cpoint = *points.at(center);
-    FitVector cpointa = *points.at(center+1);
+
+    FitVector cpointb( points.at(center-1) );
+    FitVector cpoint( points.at(center) );
+    FitVector cpointa( points.at(center+1) );
 
     V1 = VectorSub(cpointb,cpoint);
     V2 = VectorSub(cpoint,cpointa);
@@ -216,7 +204,7 @@ static double B3(double u)
  *  Use least-squares method to find Bezier control points for region.
  *
  */
-QPointF* GenerateBezier(Q3PtrList<QPointF> &points, int first, int last, double *uPrime,FitVector tHat1,FitVector tHat2)
+QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, double *uPrime,FitVector tHat1,FitVector tHat2)
 {
     int 	i;
     FitVector	A[MAXPOINTS][2];	/* Precomputed rhs for eqn	*/
@@ -261,9 +249,9 @@ QPointF* GenerateBezier(Q3PtrList<QPointF> &points, int first, int last, double 
 		C[1][0] = C[0][1];
 		C[1][1] += A[i][1].dot(A[i][1]);
 
-		FitVector vfirstp1(*points.at(first+i));
-		FitVector vfirst(*points.at(first));
-		FitVector vlast(*points.at(last));
+		FitVector vfirstp1( points.at(first+i) );
+		FitVector vfirst( points.at(first) );
+		FitVector vlast( points.at(last) );
 
 		tmp = VectorSub(vfirstp1,
 	        VectorAdd(
@@ -275,8 +263,8 @@ QPointF* GenerateBezier(Q3PtrList<QPointF> &points, int first, int last, double 
 	                    		VectorScale(vlast, B3(uPrime[i])) ))));
 	
 
-	X[0] += A[i][0].dot(tmp);
-	X[1] += A[i][1].dot(tmp);
+        X[0] += A[i][0].dot(tmp);
+        X[1] += A[i][1].dot(tmp);
     }
 
     /* Compute the determinants of C and X	*/
@@ -299,23 +287,23 @@ QPointF* GenerateBezier(Q3PtrList<QPointF> &points, int first, int last, double 
 		double	dist = distance(points.at(last),points.at(first)) /
 					3.0;
 
-		curve[0] = *points.at(first);
-		curve[3] = *points.at(last);
+		curve[0] = points.at(first);
+		curve[3] = points.at(last);
 
 		tHat1.scale(dist);
 		tHat2.scale(dist);
 
 		curve[1] = tHat1 + curve[0];
 		curve[2] = tHat2 + curve[3];
-    		return curve;
+        return curve;
     }
 
     /*  First and last control points of the Bezier curve are */
     /*  positioned exactly at the first and last data points */
     /*  Control points 1 and 2 are positioned an alpha distance out */
     /*  on the tangent vectors, left and right, respectively */
-	curve[0] = *points.at(first);
-	curve[3] = *points.at(last);
+	curve[0] = points.at(first);
+	curve[3] = points.at(last);
 
 	tHat1.scale(alpha_l);
 	tHat2.scale(alpha_r);
@@ -361,7 +349,7 @@ static QPointF BezierII(int degree,QPointF *V, double t)
  *	Find the maximum squared distance of digitized points
  *	to fitted curve.
 */
-static double ComputeMaxError(Q3PtrList<QPointF> points,int first,int last,QPointF *curve,double *u,int *splitPoint)
+static double ComputeMaxError(const QList<QPointF> &points,int first,int last,QPointF *curve,double *u,int *splitPoint)
 {
     int		i;
     double	maxDist;		/*  Maximum error		*/
@@ -373,7 +361,7 @@ static double ComputeMaxError(Q3PtrList<QPointF> points,int first,int last,QPoin
     maxDist = 0.0;
     for (i = first + 1; i < last; i++) {
 		P = BezierII(3, curve, u[i-first]);
-		v = VectorSub(P, *points.at(i));
+		v = VectorSub(P, points.at(i));
 		dist = v.length();
 		if (dist >= maxDist) {
 	    	maxDist = dist;
@@ -431,7 +419,7 @@ static double NewtonRaphsonRootFind(QPointF *Q,QPointF P,double u)
  *   a better parameterization.
  *
  */
-static double *Reparameterize(Q3PtrList<QPointF> points,int first,int last,double *u,QPointF *curve)
+static double *Reparameterize(const QList<QPointF> &points,int first,int last,double *u,QPointF *curve)
 {
     int 	nPts = last-first+1;	
     int 	i;
@@ -439,13 +427,12 @@ static double *Reparameterize(Q3PtrList<QPointF> points,int first,int last,doubl
 
     uPrime = new double[nPts];
     for (i = first; i <= last; i++) {
-		uPrime[i-first] = NewtonRaphsonRootFind(curve, *points.at(i), u[i-
-					first]);
+		uPrime[i-first] = NewtonRaphsonRootFind(curve, points.at(i), u[i-first]);
     }
     return (uPrime);
 }
 
-QPointF *FitCubic(Q3PtrList<QPointF> &points,int first,int last,FitVector tHat1,FitVector tHat2,float error,int &width){
+QPointF *FitCubic(const QList<QPointF> &points,int first,int last,FitVector tHat1,FitVector tHat2,float error,int &width){
 	double *u;
 	double *uPrime;
 	double maxError;
@@ -468,8 +455,8 @@ QPointF *FitCubic(Q3PtrList<QPointF> &points,int first,int last,FitVector tHat1,
 
 		curve = new QPointF[4];
 		
-		curve[0] = *points.at(first);
-		curve[3] = *points.at(last);
+		curve[0] = points.at(first);
+		curve[3] = points.at(last);
 
 		tHat1.scale(dist);
 		tHat2.scale(dist);
@@ -541,7 +528,7 @@ QPointF *FitCubic(Q3PtrList<QPointF> &points,int first,int last,FitVector tHat1,
 }
 
 
-VPath *bezierFit(Q3PtrList<QPointF> &points,float error){
+KoPathShape * bezierFit(const QList<QPointF> &points,float error){
 	FitVector tHat1, tHat2;
 
 	tHat1 = ComputeLeftTangent(points,0);
@@ -551,7 +538,7 @@ VPath *bezierFit(Q3PtrList<QPointF> &points,float error){
 	QPointF *curve;
 	curve = FitCubic(points,0,points.count()-1,tHat1,tHat2,error,width);
 	
-	VPath *path = new VPath(NULL);
+	KoPathShape * path = new KoPathShape();
 
 	if(width>3){
 		path->moveTo(curve[0]);
@@ -560,7 +547,6 @@ VPath *bezierFit(Q3PtrList<QPointF> &points,float error){
 			path->curveTo(curve[i+1],curve[i+2],curve[i+3]);	
 		}
 	}
-
 
 	delete[] curve;
 	return path;
