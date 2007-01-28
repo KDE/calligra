@@ -28,6 +28,8 @@ Layers:
 Shapes/Tools:
 ---------------
 - check if the KoTextShape provided by KWord is flexible enough for our use cases (i.e. text along a path)
+  KoText intends to have a shape that does most of what karbon needs.  Text along a path is an exception,
+  but that feature will be provided by Qt4.3 (in QPainterPath) [TZ]
 - check if we can reuse/extend/port some existing tools (e.g. gradient, pattern)
 - add support for adding shapes like sinus, spiral, etc. (see odf spec for custom shape/enhanced geometry)
 
