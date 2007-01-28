@@ -1233,10 +1233,11 @@ bool Doc::completeLoading( KoStore* /* _store */ )
 
   d->isLoading = false;
 
-  //  map()->update();
-
   foreach ( KoView* view, views() )
     static_cast<View *>( view )->initialPosition();
+
+    // update all dependencies and recalc all cells
+    addDamage( new WorkbookDamage( map(), WorkbookDamage::Formula | WorkbookDamage::Value ) );
 
   kDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 

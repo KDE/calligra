@@ -111,6 +111,31 @@ class SheetDamage : public Damage
 Q_DECLARE_OPERATORS_FOR_FLAGS( SheetDamage::Changes )
 
 
+class WorkbookDamage : public Damage
+{
+  public:
+    enum Change
+    {
+      None       = 0x00,
+      Formula    = 0x01,
+      Value      = 0x02
+    };
+    Q_DECLARE_FLAGS( Changes, Change )
+
+    WorkbookDamage( KSpread::Map* map, Changes changes );
+    virtual ~WorkbookDamage();
+
+    virtual Type type() const { return Damage::Workbook; }
+    KSpread::Map* map() const;
+    Changes changes() const;
+
+  private:
+    class Private;
+    Private * const d;
+};
+Q_DECLARE_OPERATORS_FOR_FLAGS( WorkbookDamage::Changes )
+
+
 class SelectionDamage : public Damage
 {
   public:

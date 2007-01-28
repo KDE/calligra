@@ -28,6 +28,13 @@
 
 using namespace KSpread;
 
+class WorkbookDamage::Private
+{
+public:
+  KSpread::Map* map;
+  Changes changes;
+};
+
 class SheetDamage::Private
 {
 public:
@@ -108,6 +115,30 @@ SheetDamage::Changes SheetDamage::changes() const
 {
   return d->changes;
 }
+
+
+WorkbookDamage::WorkbookDamage( KSpread::Map* map, Changes changes )
+    : d( new Private )
+{
+    d->map = map;
+    d->changes = changes;
+}
+
+WorkbookDamage::~WorkbookDamage()
+{
+    delete d;
+}
+
+Map* WorkbookDamage::map() const
+{
+    return d->map;
+}
+
+WorkbookDamage::Changes WorkbookDamage::changes() const
+{
+    return d->changes;
+}
+
 
 SelectionDamage::SelectionDamage( const Region& region )
   : d( new Private )

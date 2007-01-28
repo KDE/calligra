@@ -495,10 +495,10 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
 void DependencyManager::Private::generateDependencies(const Cell& cell)
 {
     //new dependencies only need to be generated if the cell contains a formula
-    if (cell.isNull())
-        return;
-    if (!cell.isFormula())
-        return;
+//     if (cell.isNull())
+//         return;
+//     if (!cell.isFormula())
+//         return;
 
     //get rid of old dependencies first
     removeDependencies(cell);
@@ -641,8 +641,8 @@ int DependencyManager::Private::computeDepth(Cell cell) const
 KSpread::Region DependencyManager::Private::computeDependencies(const Cell& cell) const
 {
     // Not a formula -> no dependencies
-    if (!cell.isFormula())
-        return Region();
+//     if (!cell.isFormula())
+//         return Region();
 
     const Formula formula = cell.formula();
 

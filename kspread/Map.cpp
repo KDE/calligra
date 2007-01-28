@@ -403,10 +403,6 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
     //delete any styles which were not used
     doc()->styleManager()->releaseUnusedAutoStyles( autoStyles );
 
-    // update all dependencies and recalc all cells
-    d->dependencyManager->updateAllDependencies(this);
-    d->recalcManager->recalcMap();
-
     return true;
 }
 
@@ -456,10 +452,6 @@ bool Map::loadXML( const KoXmlElement& mymap )
     // Used by View's constructor
     d->initialActiveSheet = findSheet( activeSheet );
   }
-
-  // update all dependencies and recalc all cells
-  d->dependencyManager->updateAllDependencies(this);
-  d->recalcManager->recalcMap();
 
   return true;
 }

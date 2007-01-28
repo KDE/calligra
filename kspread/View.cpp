@@ -7199,6 +7199,7 @@ void View::handleDamages( const QList<Damage*>& damages )
     Region valueChangedRegion;
     QRegion paintRegion;
     bool paintClipped = true;
+    WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
 
 //     ElapsedTime et( "Damage processing", ElapsedTime::PrintOnlyTime );
 
@@ -7220,7 +7221,8 @@ void View::handleDamages( const QList<Damage*>& damages )
                 sheetView( damagedSheet )->invalidateRegion( region );
                 paintClipped = false;
             }
-            if ( cellDamage->changes() & CellDamage::Formula )
+            if ( ( cellDamage->changes() & CellDamage::Formula ) &&
+                 !( workbookChanges & WorkbookDamage::Formula ) )
             {
                 formulaChangedRegion.add( region, damagedSheet );
             }
@@ -7232,7 +7234,8 @@ void View::handleDamages( const QList<Damage*>& damages )
             {
                 textFormatChagedRegion.add( region, damagedSheet );
             }
-            if ( cellDamage->changes() & CellDamage::Value )
+            if ( ( cellDamage->changes() & CellDamage::Value ) &&
+                 !( workbookChanges & WorkbookDamage::Value ) )
             {
                 valueChangedRegion.add( region, damagedSheet );
             }
@@ -7255,6 +7258,19 @@ void View::handleDamages( const QList<Damage*>& damages )
                 d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
                 refreshView = true;
             }
+            continue;
+        }
+
+        if( damage->type() == Damage::Workbook )
+        {
+            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>( damage );
+            kDebug(36007) << "Processing\t " << *damage << endl;
+
+            workbookChanges |= workbookDamage->changes();
+            if ( workbookDamage->changes() & WorkbookDamage::Formula )
+                formulaChangedRegion.clear();
+            if ( workbookDamage->changes() & WorkbookDamage::Value )
+                valueChangedRegion.clear();
             continue;
         }
 
@@ -7281,6 +7297,8 @@ void View::handleDamages( const QList<Damage*>& damages )
     // Tell the RecalcManager which cells have had a value change.
     if ( !valueChangedRegion.isEmpty() )
         doc()->map()->recalcManager()->regionChanged( valueChangedRegion );
+    else if ( workbookChanges & WorkbookDamage::Value )
+        doc()->map()->recalcManager()->recalcMap();
     // TODO Stefan: handle text format changes
     // TODO Stefan: handle layout changes
     // At last repaint the dirty cells.
@@ -7290,6 +7308,10 @@ void View::handleDamages( const QList<Damage*>& damages )
         canvas()->update();
     if ( refreshView )
         this->refreshView();
+    if ( workbookChanges & WorkbookDamage::Formula )
+        doc()->map()->dependencyManager()->updateAllDependencies( doc()->map() );
+    if ( workbookChanges & WorkbookDamage::Formula )
+        doc()->map()->dependencyManager()->updateAllDependencies( doc()->map() );
 }
 
 void View::runInspector()
