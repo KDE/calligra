@@ -67,9 +67,9 @@ void ScriptingSheetsListView::initialize()
     KSpread::Doc* doc = m_module->doc();
     if( doc && doc->map() ) {
         foreach(KSpread::Sheet* sheet, doc->map()->sheetList()) {
-            KSpread::Cell* cell = sheet->firstCell();
+            QRect area = sheet->usedArea();
+            bool enabled = area.isValid() && ! sheet->isHidden();
 
-            bool enabled = cell && ! sheet->isHidden();
             QString range;
             foreach(QVariant v, m_prevlist) {
                 QVariantList l = v.toList();
@@ -100,8 +100,8 @@ void ScriptingSheetsListView::initialize()
             nameitem->setEditable(false);
             nameitem->setCheckState( enabled ? Qt::Checked : Qt::Unchecked );
 
-            if( range.isEmpty() && cell )
-                range = QString("A1:%1").arg(cell->name());
+            if( range.isEmpty() && area.isValid() )
+                range = KSpread::Region(area, sheet).name(sheet);
 
             model->appendRow( QList< QStandardItem* >() << nameitem << new QStandardItem(range) );
         }
