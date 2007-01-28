@@ -14,6 +14,13 @@ SET ( textshape_SRCS
     TextToolFactory.cpp
     Layout.cpp
     ListItemsHelper.cpp
+    StylesWidget.cpp
+    SimpleStyleWidget.cpp
+)
+
+kde4_add_ui_files(textshape_SRCS
+    SimpleStyleWidget.ui
+    StylesWidget.ui
 )
 
 kde4_automoc(${textshape_SRCS})

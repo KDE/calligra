@@ -18,6 +18,8 @@
  */
 
 #include "TextTool.h"
+#include "SimpleStyleWidget.h"
+#include "StylesWidget.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -29,6 +31,7 @@
 #include <QKeyEvent>
 #include <QAction>
 #include <QTextBlock>
+#include <QTabWidget>
 #include <QTextLayout>
 #include <QAbstractTextDocumentLayout>
 
@@ -45,6 +48,59 @@ TextTool::TextTool(KoCanvasBase *canvas)
 , m_textShape(0)
 , m_textShapeData(0)
 {
+    // TODO move this to the createWidget method
+    m_actionFormatBold  = new QAction(KIcon("text_bold"), i18n("Bold"), this);
+    m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
+    m_actionFormatBold->setCheckable(true);
+    connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textBold(bool)) );
+
+    m_actionFormatItalic  = new QAction(KIcon("text_italic"), i18n("Italic"), this);
+    m_actionFormatItalic->setShortcut( Qt::CTRL + Qt::Key_I);
+    m_actionFormatItalic->setCheckable(true);
+    connect( m_actionFormatItalic, SIGNAL(toggled(bool)), this, SLOT(textItalic(bool)) );
+
+    m_actionFormatUnderline  = new QAction(KIcon("text_under"), i18n("Underline"), this);
+    m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
+    m_actionFormatUnderline->setCheckable(true);
+    connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), this, SLOT(textUnderline(bool)) );
+
+    m_actionFormatStrikeOut  = new QAction(KIcon("text_strike"), i18n("Strike Out"), this);
+    m_actionFormatStrikeOut->setCheckable(true);
+    connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), this, SLOT(textStrikeOut(bool)) );
+
+    QActionGroup *alignmentGroup = new QActionGroup(this);
+    m_actionAlignLeft  = new QAction(KIcon("text_left"), i18n("Align Left"), this);
+    m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
+    m_actionAlignLeft->setCheckable(true);
+    alignmentGroup->addAction(m_actionAlignLeft);
+
+    m_actionAlignRight  = new QAction(KIcon("text_right"), i18n("Align Right"), this);
+    m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
+    m_actionAlignRight->setCheckable(true);
+    alignmentGroup->addAction(m_actionAlignRight);
+
+    m_actionAlignCenter  = new QAction(KIcon("text_center"), i18n("Align Center"), this);
+    m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
+    m_actionAlignCenter->setCheckable(true);
+    alignmentGroup->addAction(m_actionAlignCenter);
+
+    m_actionAlignBlock  = new QAction(KIcon("text_block"), i18n("Align Block"), this);
+    m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
+    m_actionAlignBlock->setCheckable(true);
+    alignmentGroup->addAction(m_actionAlignBlock);
+
+    m_actionFormatSuper = new QAction(KIcon("super"), i18n("Superscript"), this);
+    m_actionFormatSuper->setCheckable(true);
+
+    m_actionFormatSub = new QAction(KIcon("sub"), i18n("Subscript"), this);
+    m_actionFormatSub->setCheckable(true);
+
+    m_actionFormatIncreaseIndent = new QAction(
+            KIcon(QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent"),
+            i18n("Increase Indent"), this);
+    m_actionFormatDecreaseIndent = new QAction(
+            KIcon(QApplication::isRightToLeft() ? "format_increaseindent" :"format_decreaseindent"),
+            i18n("Decrease Indent"), this);
 }
 
 TextTool::~TextTool() {
@@ -209,10 +265,11 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
     if(moveOperation != QTextCursor::NoMove) {
         useCursor(Qt::BlankCursor);
         repaint();
-    //  if RTL toggle direction of cursor movement.
+        // TODO if RTL toggle direction of cursor movement.
         m_caret.movePosition(moveOperation,
             (event->modifiers() & Qt::ShiftModifier)?QTextCursor::KeepAnchor:QTextCursor::MoveAnchor);
         repaint();
+        updateActions();
     }
 
     updateSelectionHandler();
@@ -220,6 +277,33 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
 
 void TextTool::keyReleaseEvent(QKeyEvent *event) {
     event->ignore();
+}
+
+void TextTool::updateActions() {
+    QTextCharFormat cf = m_caret.charFormat();
+    bool sigs = signalsBlocked();
+    blockSignals(true);
+    m_actionFormatBold->setChecked(cf.fontWeight() > QFont::Normal);
+    m_actionFormatItalic->setChecked(cf.fontItalic());
+    m_actionFormatUnderline->setChecked(cf.fontUnderline());
+    m_actionFormatStrikeOut->setChecked(cf.fontStrikeOut());
+    bool super=false, sub=false;
+    switch(cf.verticalAlignment()) {
+        case QTextCharFormat::AlignSuperScript: super = true; break;
+        case QTextCharFormat::AlignSubScript: sub = true; break;
+        default:;
+    }
+    m_actionFormatSuper->setChecked(super);
+    m_actionFormatSub->setChecked(sub);
+
+    QTextBlockFormat bf = m_caret.blockFormat();
+    switch(bf.alignment()) {
+        case Qt::AlignLeft: m_actionAlignLeft->setChecked(true); break;
+        case Qt::AlignRight: m_actionAlignRight->setChecked(true); break;
+        case Qt::AlignHCenter: m_actionAlignCenter->setChecked(true); break;
+        case Qt::AlignJustify: m_actionAlignBlock->setChecked(true); break;
+    }
+    blockSignals(sigs);
 }
 
 void TextTool::activate (bool temporary) {
@@ -246,6 +330,7 @@ void TextTool::activate (bool temporary) {
     m_textShape->repaint();
 
     updateSelectionHandler();
+    updateActions();
 }
 
 void TextTool::deactivate() {
@@ -278,5 +363,30 @@ void TextTool::repaint() {
 KoToolSelection* TextTool::selection() {
     return &m_selectionHandler;
 }
+
+QWidget *TextTool::createOptionWidget() {
+    QTabWidget *widget = new QTabWidget();
+    widget->addTab(new SimpleStyleWidget(this, widget), i18n("Style"));
+    widget->addTab(new StylesWidget(widget), i18n("Paragraph"));
+    widget->addTab(new StylesWidget(widget), i18n("Character"));
+    return widget;
+}
+
+void TextTool::textBold(bool bold) {
+    m_selectionHandler.bold(bold);
+}
+
+void TextTool::textItalic(bool italic) {
+    m_selectionHandler.italic(italic);
+}
+
+void TextTool::textUnderline(bool underline) {
+    m_selectionHandler.underline(underline);
+}
+
+void TextTool::textStrikeOut(bool strikeout) {
+    m_selectionHandler.strikeOut(strikeout);
+}
+
 
 #include "TextTool.moc"

@@ -27,7 +27,7 @@
 #include <KoTool.h>
 
 #include <QTextCursor>
-
+#include <QAction>
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -51,17 +51,39 @@ public:
     void deactivate();
 
     KoToolSelection* selection();
+    QWidget *createOptionWidget();
+
+private slots:
+    void textBold(bool bold);
+    void textItalic(bool italic);
+    void textUnderline(bool underline);
+    void textStrikeOut(bool strikeout);
 
 private:
     void repaint();
     int pointToPosition(const QPointF & point) const;
     void updateSelectionHandler();
+    void updateActions();
 
 private:
+    friend class SimpleStyleWidget;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
     QTextCursor m_caret;
     KoTextSelectionHandler m_selectionHandler;
+
+    QAction *m_actionFormatBold;
+    QAction *m_actionFormatItalic;
+    QAction *m_actionFormatUnderline;
+    QAction *m_actionFormatStrikeOut;
+    QAction *m_actionAlignLeft;
+    QAction *m_actionAlignRight;
+    QAction *m_actionAlignCenter;
+    QAction *m_actionAlignBlock;
+    QAction *m_actionFormatSuper;
+    QAction *m_actionFormatSub;
+    QAction *m_actionFormatIncreaseIndent;
+    QAction *m_actionFormatDecreaseIndent;
 };
 
 #endif
