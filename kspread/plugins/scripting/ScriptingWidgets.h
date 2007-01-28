@@ -30,7 +30,9 @@ class QTreeView;
 class ScriptingModule;
 
 /**
- *
+ * The ScriptingSheetsListView provides a listview-widget that displays
+ * all sheets and lets the user choose 0..n of them plus specify
+ * cell-ranges for all of them.
  */
 class ScriptingSheetsListView : public QWidget
 {
@@ -40,6 +42,7 @@ class ScriptingSheetsListView : public QWidget
         virtual ~ScriptingSheetsListView();
 
     public slots:
+
         /**
         * Return the list of all selected sheets. Selected are those sheets the
         * user enabled the checkbutton for and the resulting list contains for
