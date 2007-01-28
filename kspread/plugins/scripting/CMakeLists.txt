@@ -9,7 +9,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 add_subdirectory( scripts )
 
 # the KSpread Scripting KParts::Plugin + Kross module
-set(krossmodulekspread_PART_SRCS ScriptingModule.cpp ScriptingFunction.cpp ScriptingPart.cpp)
+set(krossmodulekspread_PART_SRCS ScriptingModule.cpp ScriptingFunction.cpp ScriptingWidgets.cpp ScriptingPart.cpp)
 kde4_automoc(${krossmodulekspread_PART_SRCS})
 kde4_add_plugin(krossmodulekspread ${krossmodulekspread_PART_SRCS})
 

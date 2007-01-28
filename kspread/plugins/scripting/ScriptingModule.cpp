@@ -22,9 +22,11 @@
 
 #include "ScriptingModule.h"
 #include "ScriptingFunction.h"
+#include "ScriptingWidgets.h"
 
 #include <QPointer>
 #include <QApplication>
+#include <QLayout>
 #include <kdebug.h>
 
 #include <Doc.h>
@@ -172,6 +174,14 @@ bool ScriptingModule::importUrl(const QString& url)
 bool ScriptingModule::exportUrl(const QString& url)
 {
 	return doc()->exp0rt(url);
+}
+
+QWidget* ScriptingModule::createSheetsListView(QWidget* parent)
+{
+	ScriptingSheetsListView* listview = new ScriptingSheetsListView(this, parent);
+	if( parent && parent->layout() )
+		parent->layout()->addWidget(listview);
+	return listview;
 }
 
 #include "ScriptingModule.moc"

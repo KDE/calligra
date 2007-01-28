@@ -124,6 +124,12 @@ class ScriptingModule : public QObject
 		bool importUrl(const QString& url);
 		bool exportUrl(const QString& url);
 
+		/**
+		* Create and return a new \a ScriptingSheetsListView widget instance which
+		* could be used to select 0..n sheets from a list of all available sheets.
+		*/
+		QWidget* createSheetsListView(QWidget* parent);
+
 	private:
 		/// \internal d-pointer class.
 		class Private;

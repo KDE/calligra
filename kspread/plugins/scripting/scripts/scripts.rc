@@ -5,14 +5,10 @@
             comment="Export an OpenDocument Spreadsheet File to a HTML File"
             interpreter="python"
             file="extensions/htmlexport.py" />
-<!--
-    <collection name="functions" text="Functions">
-        <script
-            name="pyfunctions"
-            text="Python Scripting Functions"
-            comment="Load the python scripting functions"
+    <script
+            name="odfpyexport"
+            text="OdfPy Export"
+            comment="Export an OpenDocument Spreadsheet File to an OpenDocument File"
             interpreter="python"
-            file="functions/functions.py" />
-    </collection>
-//-->
+            file="extensions/odfpyexport.py" />
 </KrossScripting>
