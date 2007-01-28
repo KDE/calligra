@@ -28,6 +28,8 @@ using namespace KSpread;
 
 // prototypes (sorted alphabetically)
 Value func_and (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bitand (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bitor (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_false (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_if (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_nand (valVector args, ValueCalc *calc, FuncExtra *);
@@ -74,6 +76,12 @@ void RegisterLogicFunctions()
   repo->add (f);
   f = new Function ("IF", func_if);
   f->setParamCount (2, 3);
+  repo->add (f);
+  f = new Function ("BITAND", func_bitand);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("BITOR", func_bitor);
+  f->setParamCount (2);
   repo->add (f);
 }
 
@@ -217,4 +225,22 @@ Value func_if (valVector args, ValueCalc *calc, FuncExtra *)
       return Value( false );
     }
   }
+}
+
+// Function: BITAND
+Value func_bitand (valVector args, ValueCalc *, FuncExtra *)
+{
+  unsigned long x = args[0].asInteger();
+  unsigned long y = args[1].asInteger();
+  double result = ( double) ( x & y );
+  return Value (result);
+}
+
+// Function: BITOR
+Value func_bitor (valVector args, ValueCalc *, FuncExtra *)
+{
+  unsigned long x = args[0].asInteger();
+  unsigned long y = args[1].asInteger();
+  double result = ( double) ( x | y );
+  return Value (result);
 }
