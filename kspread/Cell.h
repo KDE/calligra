@@ -645,14 +645,10 @@ public:
     Cell& operator=( const Cell& other );
 
     /**
-     * Tests for equality of all cell attributes to those in \p other .
+     * Tests for equality with \p other 's location only.
+     * \note Does not compare the cell attributes/data.
      */
     bool operator==( const Cell& other ) const;
-
-    /**
-     * Tests for inequality of all cell attributes to those in \p other .
-     */
-    inline bool operator!=( const Cell& other ) const { return !operator==( other ); }
 
     /**
      * Is null.
@@ -666,6 +662,11 @@ public:
     //
     //BEGIN
     //
+
+    /**
+     * Tests for equality of all cell attributes/data to those in \p other .
+     */
+    bool compareData( const Cell& other ) const;
 
 protected:
     /**

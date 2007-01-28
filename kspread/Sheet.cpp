@@ -3683,7 +3683,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                                 if ( !cell.isEmpty() )
                                 {
                                     Cell target = Cell( this, columnIndex, newRow );
-                                    if (cell != target)
+                                    if ( !cell.compareData( target ) )
                                         target.copyContent( cell );
                                 }
                                 // TODO Stefan: set the attributes in one go for the repeated range
@@ -3752,7 +3752,7 @@ bool Sheet::compareRows( int row1, int row2, int& maxCols ) const
     // TODO Stefan: Make use of the cluster functionality.
     for ( int col = 1; col <= maxCols; ++col )
     {
-        if ( Cell( this, col, row1 ) != Cell( this, col, row2 ) )
+        if ( !Cell( this, col, row1 ).compareData( Cell( this, col, row2 ) ) )
         {
 //             kDebug(36003) << "\t Cell at column " << col << " in row " << row2 << " differs from the one in row " << row1 << endl;
             return false;

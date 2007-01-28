@@ -225,8 +225,8 @@ void DependencyManager::regionChanged(const Region& region)
                 // remove it from the reference depth list
                 d->depths.remove( cell );
 
-                // empty or default cell or cell without a formula? remove it
-                if ( cell.isEmpty() || !cell.isFormula() )
+                // cell without a formula? remove it
+                if ( !cell.isFormula() )
                 {
                     d->removeDependencies(cell);
                     continue;
@@ -253,14 +253,15 @@ void DependencyManager::updateAllDependencies(const Map* map)
     // clear the reference depth list
     d->depths.clear();
 
+    Cell cell;
     foreach (const Sheet* sheet, map->sheetList())
     {
         for ( int c = 0; c < sheet->formulaStorage()->count(); ++c )
         {
-            Cell cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
+            cell = Cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
 
             // empty or default cell or cell without a formula? remove it
-            if ( sheet->formulaStorage()->data( c ) == Formula() )
+            if ( sheet->formulaStorage()->data( c ).expression().isEmpty() )
             {
                 d->removeDependencies( cell );
                 continue;
@@ -526,8 +527,6 @@ void DependencyManager::Private::generateDepths(const Region& region)
             for (int row = range.top(); row <= bottom; ++row)
             {
                 Cell cell( sheet,col, row);
-//                 if ( cell.isDefault() )
-//                     continue;
 
                 //prevent infinite recursion (circular dependencies)
                 if ( processedCells.contains( cell ) || cell.value() == Value::errorCIRCLE() )
@@ -566,6 +565,10 @@ void DependencyManager::Private::generateDepths(const Region& region)
 
 int DependencyManager::Private::computeDepth(Cell cell) const
 {
+    // non-formula cells have a depth of zero
+    if ( !cell.isFormula() )
+        return 0;
+
     // a set of cell, which depth is currently calculated
     static QSet<Cell> processedCells;
 

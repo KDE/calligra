@@ -2534,6 +2534,16 @@ Cell& Cell::operator=( const Cell& other )
 
 bool Cell::operator==( const Cell& other ) const
 {
+    return ( row() == other.row() && column() == other.column() && sheet() == other.sheet() );
+}
+
+bool Cell::operator!() const
+{
+    return ( !d || d->sheet == 0 ); // isNull()
+}
+
+bool Cell::compareData( const Cell& other ) const
+{
     if ( value() != other.value() )
         return false;
     if ( formula() != other.formula() )
@@ -2555,11 +2565,6 @@ bool Cell::operator==( const Cell& other ) const
     return true;
 }
 
-bool Cell::operator!() const
-{
-    return ( !d || d->sheet == 0 ); // isNull()
-}
-
 QRect Cell::cellRect() const
 {
   // this asserts if the invoicetemplate.ods file in http://kross.dipe.org/KSpreadInvoiceExample.tar.gz is opened.
@@ -2577,7 +2582,7 @@ void Cell::clearAllErrors()
 {
     if ( value().isError() )
     {
-        kDebug() << "\tClearing all errors..." << endl;
+//         kDebug(36002) << "\tClearing all errors..." << endl;
         sheet()->cellStorage()->setValue( d->column, d->row, Value() );
         valueChanged();
     }
