@@ -990,6 +990,30 @@ void Formula::compile( const Tokens& tokens ) const
           }
         }
 
+        // rule for empty function arguments, if token is ; or )
+        // id ( arg ; -> id ( arg
+        if( !ruleFound )
+        if( syntaxStack.itemCount() >= 3 )
+        if( ( token.asOperator() == Token::RightPar ) ||
+            ( token.asOperator() == Token::Semicolon ) )
+        {
+          Token sep = syntaxStack.top();
+          Token arg = syntaxStack.top( 1 );
+          Token par = syntaxStack.top( 2 );
+          Token id = syntaxStack.top( 3 );
+          if( sep.asOperator() == Token::Semicolon )
+          if( !arg.isOperator() )
+          if( par.asOperator() == Token::LeftPar )
+          if( id.isIdentifier() )
+          {
+            ruleFound = true;
+            syntaxStack.pop();
+            d->constants.append( Value() );
+            d->codes.append( Opcode( Opcode::Load, d->constants.count()-1 ) );
+            argCount++;
+          }
+        }
+
         // rule for function last argument:
         //  id ( arg ) -> arg
         if( !ruleFound )
