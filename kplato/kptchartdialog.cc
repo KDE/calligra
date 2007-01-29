@@ -40,6 +40,11 @@ ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
    // connect(this,SIGNAL(CloseClicked()),this,SLOT(slotClose()));
 }
 
+ChartDialog::~ChartDialog()
+{
+	delete m_panel;
+}
+
 KCommand *ChartDialog::buildCommand(Part *part) {
 	kDebug()<< "Chart Dialog : buildCommand";
     //return m_panel->buildCommand(part);

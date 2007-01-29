@@ -27,14 +27,20 @@
 namespace KPlato
 {
 
+
+
 class ChartWidget : public QWidget{
 
 private:
 int curve_draw;
-QPainter* painter;
-bool bcwp;
-bool bcws;
-bool acwp;
+QPainter painter;
+bool is_bcwp_draw;
+bool is_bcws_draw;
+bool is_acwp_draw;
+
+QVector<QPointF> bcwpPoints;
+QVector<QPointF> bcwsPoints;
+QVector<QPointF> acwpPoints;
 
 public:
     ChartWidget(QWidget *parent=0, const char *name=0);
@@ -46,6 +52,11 @@ public:
     void undrawBCWS();
     void drawACWP();
     void undrawACWP();
+    void setPointsBCPW(QVector<QPointF> );
+    void setPointsBCPS(QVector<QPointF> );
+    void setPointsACPW(QVector<QPointF> );
+    const int getMaximumWidth();
+    const int getMaximumHeight();
 };
 
 } //namespace KPlato

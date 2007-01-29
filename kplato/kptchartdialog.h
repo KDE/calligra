@@ -36,7 +36,7 @@ class ChartDialog : public KDialog {
     Q_OBJECT
 public:
     explicit ChartDialog(QWidget *parent=0, const char *name=0);
-
+   ~ChartDialog();
     KCommand *buildCommand(Part *part);
 
     ChartPanel * m_panel;
@@ -45,6 +45,7 @@ protected slots:
     void slotCurve2();
     void slotCurve3();*/
     void slotClose();
+
     
 };
 

@@ -30,90 +30,117 @@ ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,nam
 kDebug() << "ChartWidget :: Constructor";
 setMaximumSize(600,350);
 //setFont(new QFont(blue));
-curve_draw=0;
-bcwp=false;
-bcws=false;
-acwp=false;
+
+is_bcwp_draw=false;
+is_bcws_draw=false;
+is_acwp_draw=false;
+
+/* TEST */
+bcwpPoints.push_back(QPointF(10,maximumHeight()-15));
+bcwpPoints.push_back(QPointF(125,250));
+bcwpPoints.push_back(QPointF(200,200));
+bcwpPoints.push_back(QPointF(400,175));
+bcwpPoints.push_back(QPointF(600,40));
 }
 
 
 void ChartWidget::paintEvent(QPaintEvent * ev)
 {
-painter=new QPainter(this);
+QPainter painter(this);
 kDebug() << "Print it PLease :D";
 /* CHANGE COLORS !! */
-painter->setPen(QColor(Qt::blue));
+painter.setPen(QColor(Qt::blue));
 
 //painter.fillRect(QRectF(-1000, -1000, 1000, 1000),QBrush(QColor(Qt::red))); 
-painter->drawText(200,150,"I am a Chart!");
+painter.drawText(200,150,"I am a Chart!");
 
 /* attributes :  1er : par rapport au coté, 2eme : par rapport au haut !
 */
-painter->drawText(2, 10,"Budget");
+painter.drawText(2, 10,"Budget");
 //painter.drawText(maximumWidth()-15, maximumHeight()-20,"Time");
-painter->drawText(maximumWidth()-70,maximumHeight() ,"Time");
-painter->drawLine(QLine(10,15,10,maximumHeight()-15));
-painter->drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,maximumHeight()-15));
+painter.drawText(maximumWidth()-70,maximumHeight() ,"Time");
+painter.drawLine(QLine(10,15,10,maximumHeight()-15));
+painter.drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,maximumHeight()-15));
 
-if(bcwp==true)
+if(is_bcwp_draw==true)
 {
-    painter->setPen(QColor(Qt::red));
-    // DRAW BCWP FUNCTION
-    painter->drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,32));
-    bcwp=true;
+    painter.setPen(QColor(Qt::red));    
+    painter.drawPolyline(QPolygonF(bcwpPoints));
+   // painter.drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,32));
+    is_bcwp_draw=true;
 }
-else{
 
+if(is_bcws_draw==true){
+    painter.setPen(QColor(Qt::yellow));
+    //painter.drawPolyline(QPolygonF(bcwsPoints));
+    painter.drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,150));
+    is_bcws_draw=true;
 }
-if(bcws==true){
-    painter->setPen(QColor(Qt::yellow));
-    // DRAW BCWP FUNCTION
-    painter->drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,150));
-    bcws=true;
-}
-else
+
+if(is_acwp_draw==true)
 {
+    painter.setPen(QColor(Qt::green));
+    //painter.drawPolyline(QPolygonF(acwpPoints));
+    painter.drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,100));
+    is_acwp_draw=true;
+}
+	
 
-}
-if(acwp==true)
-{
-    painter->setPen(QColor(Qt::green));
-    // DRAW BCWP FUNCTION
-    painter->drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,100));
-    acwp=true;
-}
-else{ 
-
-}	
-painter->end();
-}
+}// end PaintEvent();
 
 void ChartWidget::drawBCWP(){
-	bcwp=true;
+	is_bcwp_draw=true;
 	this->update();
 }
 
 void ChartWidget::undrawBCWP(){
-	bcwp=false;
+	is_bcwp_draw=false;
 	this->update();
 }
 void ChartWidget::drawBCWS(){
-	bcws=true;
+	is_bcws_draw=true;
 	this->update();
 }
 
 void ChartWidget::undrawBCWS(){
-	bcws=false;
+	is_bcws_draw=false;
 	this->update();
 }
 void ChartWidget::drawACWP(){
-	acwp=true;
+	is_acwp_draw=true;
 	this->update();
 }
 
 void ChartWidget::undrawACWP(){
-	acwp=false;
+	is_acwp_draw=false;
 	this->update();
 }
+
+/* API CURVES TO GET POINTS*/
+
+/* GETTERS AND SETTERS */ 
+
+void ChartWidget::setPointsBCPW(QVector<QPointF> vec)
+{
+	this->bcwpPoints = vec;
+}
+void ChartWidget::setPointsBCPS(QVector<QPointF> vec)
+{
+	this->bcwsPoints = vec;
+}
+void ChartWidget::setPointsACPW(QVector<QPointF> vec)
+{
+	this->acwpPoints = vec;
+}
+
+const int ChartWidget::getMaximumWidth()
+{
+	return(this->maximumWidth());
+}
+const int ChartWidget::getMaximumHeight()
+{
+	return(this->maximumHeight());
+}
+
 
 } // namespace Kplato

@@ -25,6 +25,9 @@
 namespace KPlato
 {
 
+
+
+
 ChartPanel::ChartPanel(QWidget *p) : ChartPanelBase(p)
 {
 
@@ -39,49 +42,53 @@ chart->update();
 connect(curve2,SIGNAL(clicked()),SLOT(slotBCPW()));
 connect(curve1,SIGNAL(clicked()),SLOT(slotBCPS()));
 connect(curve3,SIGNAL(clicked()),SLOT(slotACPW()));
-bcwp=false;
-bcws=false;
-acwp=false;
+is_bcwp_draw=false;
+is_bcws_draw=false;
+is_acwp_draw=false;
 }
     
+ChartPanel::~ChartPanel()
+{
+	delete chart;
+}
 
 void ChartPanel::slotBCPW()
 {
-	if(bcwp==false)
+	if(is_bcwp_draw==false)
 	{
 		chart->drawBCWP();
-		bcwp=true;
+		is_bcwp_draw=true;
 	}
 	else
 	{
 		chart->undrawBCWP();
-		bcwp=false;
+		is_bcwp_draw=false;
 	}
 
 }
 void ChartPanel::slotBCPS()
 {
-	if(bcws==false)
+	if(is_bcws_draw==false)
 	{
 		chart->drawBCWS();
-		bcws=true;
+		is_bcws_draw=true;
 	}
 	else
 	{
 		chart->undrawBCWS();
-		bcws=false;
+		is_bcws_draw=false;
 	}
 }
 void ChartPanel::slotACPW()
 {
-	if(acwp==false){
+	if(is_acwp_draw==false){
 		chart->drawACWP();
-		acwp=true;
+		is_acwp_draw=true;
 	}
 	else
 	{
 		chart->undrawACWP();
-		acwp=false;
+		is_acwp_draw=false;
 	}
 }   
 

@@ -55,13 +55,13 @@ class ChartPanel : public ChartPanelBase {
 
 private:
 ChartWidget * chart;
-bool bcwp;
-bool bcws;
-bool acwp;
+bool is_bcwp_draw;
+bool is_bcws_draw;
+bool is_acwp_draw;
 
 public:
     ChartPanel(QWidget *parent=0);
-    
+    ~ChartPanel();    
 public slots:
     void slotBCPW();
     void slotBCPS();
