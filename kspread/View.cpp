@@ -7220,7 +7220,7 @@ void View::handleDamages( const QList<Damage*>& damages )
                 paintClipped = false;
             }
             if ( ( cellDamage->changes() & CellDamage::Formula ) &&
-                 !( workbookChanges & WorkbookDamage::Formula ) )
+                 !workbookChanges.testFlag( WorkbookDamage::Formula ) )
             {
                 formulaChangedRegion.add( region, damagedSheet );
             }
@@ -7233,7 +7233,7 @@ void View::handleDamages( const QList<Damage*>& damages )
                 textFormatChagedRegion.add( region, damagedSheet );
             }
             if ( ( cellDamage->changes() & CellDamage::Value ) &&
-                 !( workbookChanges & WorkbookDamage::Value ) )
+                 !workbookChanges.testFlag( WorkbookDamage::Value ) )
             {
                 valueChangedRegion.add( region, damagedSheet );
             }
@@ -7304,9 +7304,9 @@ void View::handleDamages( const QList<Damage*>& damages )
         canvas()->update();
     if ( refreshView )
         this->refreshView();
-    if ( workbookChanges & WorkbookDamage::Formula )
+    if ( workbookChanges.testFlag( WorkbookDamage::Formula ) )
         doc()->map()->dependencyManager()->updateAllDependencies( doc()->map() );
-    if ( workbookChanges & WorkbookDamage::Value )
+    if ( workbookChanges.testFlag( WorkbookDamage::Value ) )
         doc()->map()->recalcManager()->recalcMap();
 }
 
