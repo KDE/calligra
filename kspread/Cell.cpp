@@ -475,12 +475,8 @@ void Cell::copyFormat( const Cell& cell )
     Value value = this->value();
     value.setFormat( cell.value().format() );
     sheet()->cellStorage()->setValue( d->column, d->row, value );
-    const Style style = cell.style();
-    if ( !style.isDefault() )
-        setStyle( style );
-    const Conditions conditions = cell.conditions();
-    if ( !conditions.isEmpty() )
-        setConditions( conditions );
+    setStyle( cell.style() );
+    setConditions( cell.conditions() );
 }
 
 void Cell::copyAll( const Cell& cell )
@@ -489,27 +485,24 @@ void Cell::copyAll( const Cell& cell )
     Q_ASSERT( !cell.isNull() );
     copyFormat( cell );
     copyContent( cell );
-    const QString comment = cell.comment();
-    if ( !comment.isEmpty() )
-        setComment( comment );
-    const Validity validity = cell.validity();
-    if ( !validity.isEmpty() )
-        setValidity( validity );
+    setComment( cell.comment() );
+    setValidity( cell.validity() );
 }
 
 void Cell::copyContent( const Cell& cell )
 {
     Q_ASSERT( !isNull() ); // trouble ahead...
     Q_ASSERT( !cell.isNull() );
-    if (cell.isFormula() && cell.column() > 0 && cell.row() > 0)
+    if (cell.isFormula())
     {
-      // change all the references, e.g. from A1 to A3 if copying
-      // from e.g. B2 to B4
-      QString d = cell.encodeFormula();
-      setCellText( cell.decodeFormula( d ) );
+        // change all the references, e.g. from A1 to A3 if copying
+        // from e.g. B2 to B4
+        Formula formula;
+        formula.setExpression( decodeFormula( cell.encodeFormula() ) );
+        setFormula( formula );
     }
     else
-      setCellText( cell.inputText() );
+        sheet()->cellStorage()->setValue( d->column, d->row, cell.value() );
 }
 
 

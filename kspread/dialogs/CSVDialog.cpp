@@ -112,7 +112,7 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
     for (int i = m_targetRect.top(); i <= m_targetRect.bottom(); ++i)
     {
       cell = Cell( sheet, col, i );
-      if ( !cell.isEmpty() && !cell.isDefault() )
+      if ( !cell.isEmpty() )
       {
         m_fileArray.append( cell.displayText().toUtf8() /* FIXME */ );
       }

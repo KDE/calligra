@@ -199,7 +199,7 @@ void UndoInsertRemoveAction::undoFormulaReference()
         if ( sheet )
         {
             Cell cell( sheet, (*it).col(), (*it).row() );
-            if ( !cell.isNull() && !cell.isDefault() )
+            if ( !cell.isNull() )
             {
                 cell.setCellText( (*it).formula() );
             }

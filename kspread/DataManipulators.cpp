@@ -84,7 +84,7 @@ bool AbstractDataManipulator::process (Element* element)
         cell.setCellText (text);
       } else {
         Cell cell( m_sheet, col, row );
-        if (!(val.isEmpty() && cell.isDefault()))
+        if (!(val.isEmpty()))
         // nothing if value and cell both empty
         {
           Cell cell = Cell( m_sheet, col, row);
@@ -120,8 +120,6 @@ bool AbstractDataManipulator::preProcessing ()
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         Cell cell = Cell( m_sheet, col, row);
-        if (!cell.isDefault())  // non-default cell - remember it
-        {
           ADMStorage st;
 
           int colidx = col - range.left();
@@ -132,7 +130,6 @@ bool AbstractDataManipulator::preProcessing ()
           st.val = cell.value();
           st.format = cell.formatType();
           oldData[colidx][rowidx] = st;
-        }
       }
   }
   return true;
@@ -164,13 +161,8 @@ bool AbstractDFManipulator::process (Element* element)
       Cell cell( m_sheet, col, row );
       int colidx = col - range.left();
       int rowidx = row - range.top();
-      // only non-default cells will be formatted
-      // TODO: is this really correct ?
-      if (!cell.isDefault())
-      {
         Style style = m_reverse ? formats[colidx][rowidx] : newFormat (element, col, row);
         cell.setStyle( style );
-      }
     }
   }
   return true;
@@ -191,13 +183,10 @@ bool AbstractDFManipulator::preProcessing ()
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         Cell cell = Cell( m_sheet, col, row);
-        if (!cell.isDefault())  // non-default cell - remember it
-        {
           int colidx = col - range.left();
           int rowidx = row - range.top();
           Style style = cell.style();
           formats[colidx][rowidx] = style;
-        }
       }
   }
   return true;
@@ -490,7 +479,6 @@ bool ShiftManipulator::process(Element* element)
 
 bool ShiftManipulator::postProcessing()
 {
-    m_sheet->refreshMergedCell();
     m_sheet->recalc();
     return true;
 }

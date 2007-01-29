@@ -742,18 +742,6 @@ public:
     void recalc( bool force = false );
 
     /**
-     * Handles the fact that a cell has been changed.
-     * Recalculates dependent cells.
-     */
-    void valueChanged( const Cell& cell );
-
-    /**
-     * Handles the fact, that a formula has been changed.
-     * Updates the dependencies accordingly.
-     */
-    void formulaChanged( const Cell& cell );
-
-    /**
      * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
      * This is used, for example, by the Data Sort dialog, to guess the names of columns
      * within the selected area.  An empty string may be returned if guessColumnTitle does not think
@@ -984,11 +972,6 @@ public:
      * @param ref see ChangeRef
      */
     void refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref);
-
-    /**
-     * Refresh merged cell when you insert or remove row or column
-     */
-    void refreshMergedCell();
 
     /**
      * Adds the CellBinding @p bind to the sheet's list of bindings.

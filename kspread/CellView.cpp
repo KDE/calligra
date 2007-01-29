@@ -1778,13 +1778,9 @@ void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
     if ( cell.sheet()->getHideZero() && cell.value().isNumber() && cell.value().asFloat() == 0 )
         d->displayText.clear();
 
-  // Empty text?  Reset the outstring and, if this is a default
-  // cell, return.
-  if ( d->displayText.isEmpty() ) {
-    if ( cell.isDefault() ) {
+  // Empty text?
+  if ( d->displayText.isEmpty() )
       return;
-    }
-  }
 
   // Up to here, we have just cared about the contents, not the
   // painting of it.  Now it is time to see if the contents fits into

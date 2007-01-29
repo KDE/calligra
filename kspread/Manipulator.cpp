@@ -499,10 +499,6 @@ bool MergeManipulator::postProcessing()
       m_sheet->recalc();
     }
   }
-  else
-  {
-    m_sheet->refreshMergedCell();
-  }
   return true;
 }
 

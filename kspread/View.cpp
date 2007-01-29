@@ -1548,7 +1548,7 @@ void View::Private::adjustActions( Cell cell, int column, int row )
 
   toolbarLock = false;
 
-  if ( activeSheet && activeSheet->isProtected() && !cell.isDefault() && style.notProtected() )
+  if ( activeSheet && activeSheet->isProtected() && style.notProtected() )
   {
     if ( selection->isSingular() )
     {
@@ -2249,8 +2249,6 @@ void View::spellCheckerReady()
       }
 
       d->spell.currentCellIndex++;
-/*      if ( d->spell.currentCell && d->spell.currentCell.isDefault() )
-        kDebug() << "checking default cell!!" << endl << endl;*/
     }
 
     if (spellSwitchToOtherSheet())
@@ -2280,7 +2278,7 @@ void View::spellCheckerReady()
       Cell cell = Cell( d->spell.currentSpellSheet, x, y );
 
       // check text only
-      if (cell.isDefault() || !cell.value().isString())
+      if (!cell.value().isString())
         continue;
 
       d->spell.spellCurrCellX = x;
@@ -5738,7 +5736,7 @@ void View::openPopupMenu( const QPoint & _point )
     Cell cell = Cell( d->activeSheet, d->canvas->markerColumn(), d->canvas->markerRow() );
 
     bool isProtected = d->activeSheet->isProtected();
-    if ( !cell.isDefault() && cell.style().notProtected() && d->selection->isSingular() )
+    if ( cell.style().notProtected() && d->selection->isSingular() )
       isProtected = false;
 
     if ( !isProtected )

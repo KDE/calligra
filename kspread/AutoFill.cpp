@@ -71,12 +71,12 @@ AutoFillSequenceItem::AutoFillSequenceItem( const Cell& cell )
         m_String = cell.encodeFormula();
         m_Type = FORMULA;
     }
-    else if ( cell.value().isInteger() || ( !cell.isDefault() && cell.isDate() ) )
+    else if ( cell.value().isInteger() || cell.isDate() )
     {
         m_IValue = static_cast<int>( cell.value().asInteger() );
         m_Type = INTEGER;
     }
-    else if ( cell.value().isFloat() || ( !cell.isDefault() && cell.isTime() ) )
+    else if ( cell.value().isFloat() || cell.isTime() )
     {
         m_DValue = cell.value().asFloat();
         m_Type = FLOAT;
@@ -624,8 +624,7 @@ static void fillSequence( const QList<Cell>& _srcList,
 
         // copy the style of the source cell
         //
-        if ( !_srcList.at( s ).isDefault() ) // FIXME Stefan: there could be a style also for default cells.
-            cell.copyFormat( _srcList.at( s ) );
+        cell.copyFormat( _srcList.at( s ) );
 
         // next/previous cell
         if ( down )
@@ -779,12 +778,12 @@ void Sheet::fillSequence( const QList<Cell>& _srcList,
     if ( _srcList.count() == 1 )
     {
         const Cell cell = _srcList.value( 0 );
-        if ( !cell.isDefault() && cell.isTime() )
+        if ( cell.isTime() )
         {
             // TODO Stefan: delta depending on minimum unit of format
             deltaSequence.append( Value( QTime( 1, 0 ), doc() ).asFloat() );
         }
-        else if ( !cell.isDefault() && cell.isDate() )
+        else if ( cell.isDate() )
         {
             // TODO Stefan: delta depending on minimum unit of format
             deltaSequence.append( Value( QDate( 0, 0, 1 ), doc() ).asInteger() );

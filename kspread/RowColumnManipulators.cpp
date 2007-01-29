@@ -385,7 +385,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 m_newWidths[col] = -1.0;
                 m_oldWidths[col] = m_sheet->columnFormat( col )->width();
               }
-              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
+              if (!cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -424,7 +424,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 m_newWidths[col] = -1.0;
                 m_oldWidths[col] = m_sheet->columnFormat( col )->width();
               }
-              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
+              if (!cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -438,7 +438,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 const RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->height();
               }
-              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
+              if (!cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
@@ -463,7 +463,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 m_newWidths[col] = -1.0;
                 m_oldWidths[col] = m_sheet->columnFormat( col )->width();
               }
-              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
+              if (!cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -477,7 +477,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 const RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->height();
               }
-              if (!cell.isDefault() && !cell.isEmpty() && !cell.isPartOfMerged())
+              if (!cell.isEmpty() && !cell.isPartOfMerged())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
@@ -493,7 +493,6 @@ bool AdjustColumnRowManipulator::preProcessing()
 
 double AdjustColumnRowManipulator::adjustColumnHelper( const Cell& cell )
 {
-    Q_ASSERT(!cell.isDefault());
   double long_max = 0.0;
   SheetView sheetView( cell.sheet() );
   CellView cellView( &sheetView, cell.column(), cell.row() ); // FIXME
@@ -537,7 +536,6 @@ double AdjustColumnRowManipulator::adjustColumnHelper( const Cell& cell )
 
 double AdjustColumnRowManipulator::adjustRowHelper( const Cell& cell )
 {
-    Q_ASSERT(!cell.isDefault());
   double long_max = 0.0;
 
   SheetView sheetView( cell.sheet() );
@@ -630,7 +628,6 @@ bool InsertDeleteColumnManipulator::process( Element* element )
 
 bool InsertDeleteColumnManipulator::postProcessing()
 {
-    m_sheet->refreshMergedCell();
     m_sheet->recalc();
     return true;
 }
@@ -695,7 +692,6 @@ bool InsertDeleteRowManipulator::process( Element* element )
 
 bool InsertDeleteRowManipulator::postProcessing()
 {
-    m_sheet->refreshMergedCell();
     m_sheet->recalc();
     return true;
 }

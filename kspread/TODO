@@ -115,6 +115,7 @@ Things not in bugzilla
       class of the super storage.
     - (Re-)Adjust the saving algos to use the new (old) iteration	----
       functionality.
+    - Rewrite the MergeManipulator to work directly on the CellStorage.	----
 
   + Style Storage						      1 STEF
     This would dramatically reduce memory consumption and allows

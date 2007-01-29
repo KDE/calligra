@@ -850,39 +850,10 @@ void Sheet::recalc( bool force )
   emit sig_updateView( this );
 }
 
-void Sheet::valueChanged( const Cell& cell )
-{
-    // Recalculate cells depending on this cell.
-    if ( !doc()->isLoading() && getAutoCalc() )
-    {
-        // recalculate cells
-        doc()->addDamage( new CellDamage( cell, CellDamage::Appearance | CellDamage::Value ) );
-    }
-
-  //REMOVED - modification change - this was causing modified flag to be set inappropriately.
-  //nobody else seems to be setting the modified flag, so we do it here
-//  doc()->setModified (true);
-}
-
-void Sheet::formulaChanged( const Cell& cell )
-{
-  // NOTE Stefan: Always update the dependencies, not just for recalculations,
-  //              because we want formulas to be updated on cut'n'paste.
-
-  // Prepare the Region structure.
-  Region region;
-  region.add(QPoint(cell.column(), cell.row()), this);
-
-  // Update dependencies.
-  if (!doc()->isLoading())
-    d->workbook->dependencyManager()->regionChanged (region);
-}
-
 void Sheet::slotAreaModified (const QString &name)
 {
   d->workbook->dependencyManager()->areaModified (name);
 }
-
 
 void Sheet::refreshRemoveAreaName(const QString & _areaName)
 {
@@ -1142,20 +1113,6 @@ void Sheet::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref
     }
 
 }
-
-void Sheet::refreshMergedCell()
-{
-// TODO Stefan: Old functionality. Remove!
-//     for ( int c = 0; c < d->cellStorage->count(); ++c )
-//     {
-//         if ( d->cellStorage->data( c ).doesMergeCells() )
-//             d->cellStorage->data( c ).mergeCells( d->cellStorage->col( c ),
-//                                             d->cellStorage->row( c ),
-//                                             d->cellStorage->data( c ).mergedXCells(),
-//                                             d->cellStorage->data( c ).mergedYCells() );
-//     }
-}
-
 
 void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                                       ChangeRef ref, QString tabname, int nbCol,
@@ -1656,9 +1613,7 @@ QString Sheet::copyAsText( Selection* selection )
     if ( selection->isSingular() )
     {
         Cell cell( this, selection->marker() );
-        if( !cell.isDefault() )
-          return cell.displayText();
-        return "";
+        return cell.displayText();
     }
 
     QRect lastRange( selection->selection() );
@@ -2024,9 +1979,6 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
 
     this->doc()->setModified( true );
 
-    if (!isLoading())
-        refreshMergedCell();
-
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
@@ -2247,16 +2199,6 @@ void Sheet::deleteCells(const Region& region)
     // recalculate dependent cells
     doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance | CellDamage::Value ) );
 
-// TODO Stefan: Old functionality. Remove!
-    // TODO: don't go through all cells here!
-    // Since obscured cells might have been deleted we
-    // have to reenforce it.
-//     for ( int c = 0; c < d->cellStorage->count(); ++c )
-//     {
-//       if ( d->cellStorage->data( c ).doesMergeCells() && !d->cellStorage->data( c ).isDefault() )
-//         d->cellStorage->data( c ).mergeCells( d->cellStorage->col( c ), d->cellStorage->row( c ),
-//            d->cellStorage->data( c ).mergedXCells(), d->cellStorage->data( c ).mergedYCells() );
-//     }
     doc()->setModified( true );
 }
 
@@ -2315,7 +2257,6 @@ void Sheet::deleteSelection( Selection* selection, bool undo )
         deleteCells( Region( range ) );
     }
   }
-    refreshMergedCell();
     emit sig_updateView( this );
 }
 
@@ -4339,7 +4280,7 @@ void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int
     //   the current cell is not a default one
     // or
     //   we have a further cell in this row
-    while ( !cell.isDefault() || !nextCell.isNull() || !style.isDefault() || nextStyleColumnIndex )
+    while ( !nextCell.isNull() || !style.isDefault() || nextStyleColumnIndex )
     {
 //         kDebug(36003) << "Sheet::saveOasisCells:"
 //                   << " i: " << i
@@ -5005,11 +4946,6 @@ Sheet::~Sheet()
     if( s_mapSheets->count()==0)
       s_id=0;
 
-// TODO Stefan: Cluster functionality. Remove!
-//     for ( int c = 0; c < d->cellStorage->count(); ++c )
-//         d->cellStorage->data( c ).sheetDies();
-//     d->cellStorage->clear(); // cells destructor needs sheet to still exist
-
     delete d->print;
     delete d->cellStorage;
 
@@ -5200,7 +5136,7 @@ void Sheet::printDebug()
         for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
         {
             cell = Cell( this, currentcolumn, currentrow );
-            if ( !cell.isDefault() && !cell.isEmpty() )
+            if ( !cell.isEmpty() )
             {
                 QString cellDescr = Cell::name( currentcolumn, currentrow );
                 cellDescr = cellDescr.rightJustified( 4,' ' );

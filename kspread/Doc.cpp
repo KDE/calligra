@@ -2216,9 +2216,7 @@ void Doc::flushDamages()
     QList<Damage*> damages = d->damages;
     d->damages.clear();
     emit damagesFlushed( damages );
-    QList<Damage*>::Iterator it;
-    for( it = damages.begin(); it != damages.end(); ++it )
-        delete *it;
+    qDeleteAll( damages );
 }
 
 void Doc::loadConfigFromFile()

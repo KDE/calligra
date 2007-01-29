@@ -213,7 +213,7 @@ void SubtotalDialog::removeSubtotalLines()
     for (int x = l; x <= r; ++x )
     {
       cell = Cell( m_pSheet, x, y );
-      if ( cell.isDefault() || !cell.isFormula() )
+      if ( !cell.isFormula() )
         continue;
 
       text = cell.inputText();
