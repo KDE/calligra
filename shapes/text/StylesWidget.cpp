@@ -30,6 +30,7 @@ StylesWidget::StylesWidget(Type type, QWidget *parent)
     m_styleManager(0)
 {
     widget.setupUi(this);
+    connect(widget.styleList, SIGNAL(itemPressed(QListWidgetItem *)), this, SLOT(itemSelected()));
 }
 
 void StylesWidget::setStyleManager(KoStyleManager *sm) {
@@ -49,6 +50,15 @@ void StylesWidget::setStyleManager(KoStyleManager *sm) {
 
     foreach(Entry entry, m_items)
         widget.styleList->addItem(entry.first);
+}
+
+void StylesWidget::itemSelected() {
+    int styleId = m_items[widget.styleList->currentRow()].second;
+
+    if(m_type == CharacterStyle)
+        emit characterStyleSelected(m_styleManager->characterStyle(styleId));
+    else
+        emit paragraphStyleSelected(m_styleManager->paragraphStyle(styleId));
 }
 
 #include <StylesWidget.moc>

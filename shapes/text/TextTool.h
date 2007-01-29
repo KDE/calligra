@@ -57,17 +57,6 @@ public:
 signals:
     void styleManagerChanged(KoStyleManager *manager);
 
-private slots:
-    void textBold(bool bold);
-    void textItalic(bool italic);
-    void textUnderline(bool underline);
-    void textStrikeOut(bool strikeout);
-    void nonbreakingSpace();
-    void nonbreakingHyphen();
-    void softHyphen();
-    void lineBreak();
-    void formatFont();
-
 private:
     void repaint();
     int pointToPosition(const QPointF & point) const;

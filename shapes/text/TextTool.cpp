@@ -53,24 +53,24 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_bold", m_actionFormatBold );
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
-    connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textBold(bool)) );
+    connect( m_actionFormatBold, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(textBold(bool)) );
 
     m_actionFormatItalic  = new QAction(KIcon("text_italic"), i18n("Italic"), this);
     addAction("format_italic", m_actionFormatItalic );
     m_actionFormatItalic->setShortcut( Qt::CTRL + Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
-    connect( m_actionFormatItalic, SIGNAL(toggled(bool)), this, SLOT(textItalic(bool)) );
+    connect( m_actionFormatItalic, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(textItalic(bool)) );
 
     m_actionFormatUnderline  = new QAction(KIcon("text_under"), i18n("Underline"), this);
     addAction("format_underline", m_actionFormatUnderline );
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
-    connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), this, SLOT(textUnderline(bool)) );
+    connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(textUnderline(bool)) );
 
     m_actionFormatStrikeOut  = new QAction(KIcon("text_strike"), i18n("Strike Out"), this);
     addAction("format_strike", m_actionFormatStrikeOut );
     m_actionFormatStrikeOut->setCheckable(true);
-    connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), this, SLOT(textStrikeOut(bool)) );
+    connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(textStrikeOut(bool)) );
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
     m_actionAlignLeft  = new QAction(KIcon("text_left"), i18n("Align Left"), this);
@@ -122,29 +122,29 @@ TextTool::TextTool(KoCanvasBase *canvas)
     QAction *action  = new QAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action );
     action->setShortcut( Qt::CTRL+Qt::Key_Space);
-    connect(action, SIGNAL(triggered()), this, SLOT( nonbreakingSpace() ));
+    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( nonbreakingSpace() ));
 
     action  = new QAction(i18n("Insert Non-Breaking Hyphen"), this);
     addAction("nonbreaking_hyphen", action );
     action->setShortcut( Qt::CTRL+Qt::SHIFT+Qt::Key_Minus);
-    connect(action, SIGNAL(triggered()), this, SLOT( nonbreakingHyphen() ));
+    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( nonbreakingHyphen() ));
 
     action  = new QAction(i18n("Insert Soft Hyphen"), this);
     addAction("soft_hyphen", action );
     //action->setShortcut( Qt::CTRL+Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
-    connect(action, SIGNAL(triggered()), this, SLOT( softHyphen() ));
+    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( softHyphen() ));
 
     action  = new QAction(i18n("Line Break"), this);
     addAction("line_break", action );
     action->setShortcut( Qt::SHIFT+Qt::Key_Return);
-    connect(action, SIGNAL(triggered()), this, SLOT( lineBreak() ));
+    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( lineBreak() ));
 
     action  = new QAction(i18n("Font..."), this);
     addAction("format_font", action );
     action->setShortcut( Qt::ALT + Qt::CTRL + Qt::Key_F);
     action->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
     action->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
-    connect(action, SIGNAL(triggered()), this, SLOT( formatFont() ));
+    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( formatFont() ));
 }
 
 TextTool::~TextTool() {
@@ -430,44 +430,12 @@ QWidget *TextTool::createOptionWidget() {
 
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), paragTab, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), charTab, SLOT(setStyleManager(KoStyleManager *)));
+
+    connect(paragTab, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), &m_selectionHandler, SLOT(setStyle(KoParagraphStyle*)));
+    connect(charTab, SIGNAL(characterStyleSelected(KoCharacterStyle *)), &m_selectionHandler, SLOT(setStyle(KoCharacterStyle*)));
+
     updateStyleManager();
     return widget;
-}
-
-void TextTool::textBold(bool bold) {
-    m_selectionHandler.bold(bold);
-}
-
-void TextTool::textItalic(bool italic) {
-    m_selectionHandler.italic(italic);
-}
-
-void TextTool::textUnderline(bool underline) {
-    m_selectionHandler.underline(underline);
-}
-
-void TextTool::textStrikeOut(bool strikeout) {
-    m_selectionHandler.strikeOut(strikeout);
-}
-
-void TextTool::nonbreakingSpace() {
-    m_selectionHandler.insert(QString(QChar(0xa0)));
-}
-
-void TextTool::nonbreakingHyphen() {
-    m_selectionHandler.insert(QString(QChar(0x2013)));
-}
-
-void TextTool::softHyphen() {
-    m_selectionHandler.insert(QString(QChar(0xad)));
-}
-
-void TextTool::lineBreak() {
-    m_selectionHandler.insert(QString(QChar('\n')));
-}
-
-void TextTool::formatFont() {
-    m_selectionHandler.selectFont(0);
 }
 
 #include "TextTool.moc"

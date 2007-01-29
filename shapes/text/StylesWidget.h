@@ -25,6 +25,8 @@
 #include <ui_StylesWidget.h>
 
 class KoStyleManager;
+class KoParagraphStyle;
+class KoCharacterStyle;
 
 class StylesWidget : public QWidget {
     Q_OBJECT
@@ -35,6 +37,11 @@ public:
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
+    void itemSelected();
+
+signals:
+    void paragraphStyleSelected(KoParagraphStyle *style);
+    void characterStyleSelected(KoCharacterStyle *style);
 
 private:
     Ui::StylesWidget widget;
