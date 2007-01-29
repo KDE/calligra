@@ -65,6 +65,8 @@ public:
      */
     CellStorage( Sheet* sheet );
 
+    CellStorage( const CellStorage& other );
+
     /**
      * Destructor.
      */
@@ -291,6 +293,8 @@ public:
     void undo( CellStorageUndoData* undoData );
 
 private:
+    CellStorage& operator=( const CellStorage& );
+
     class Private;
     Private * const d;
 };
