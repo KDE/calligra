@@ -719,8 +719,8 @@ void DependencyManager::Private::cellsToCalculate( const Region& region, QSet<Ce
             for (int row = range.top(); row <= range.bottom(); ++row)
             {
                 Cell cell( sheet,col, row);
-                if ( !cell.isFormula() )
-                    continue;
+                // Even empty cells may act as value
+                // providers and need to be processed.
 
                 // check for already processed cells
                 if ( cells.contains( cell ) )
