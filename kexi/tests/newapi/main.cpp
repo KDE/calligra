@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <kaboutdata.h>
 
@@ -54,7 +54,7 @@ KexiDB::ConnectionData conn_data;
 QPointer<KexiDB::Connection> conn;
 QPointer<KexiDB::Driver> driver;
 KApplication *app = 0;
-KInstance *instance = 0;
+KComponentData *instance = 0;
 
 static KCmdLineOptions options[] =
 {
@@ -164,11 +164,11 @@ int main(int argc, char** argv)
 	
 	if (gui) {
 		app = new KApplication(true);
-		instance = app;
+		instance = new KComponentData(KGlobal::mainComponent());
 		KIconLoader::global()->addAppDir("kexi");
 	}
 	else {
-		instance = new KInstance(prgname);
+		instance = new KComponentData(prgname);
 	}
 
 	drv_name = args->arg(0);

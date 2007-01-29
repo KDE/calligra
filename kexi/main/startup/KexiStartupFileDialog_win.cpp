@@ -33,6 +33,7 @@
 #include <qlineedit.h>
 
 #include <win/win32_utils.h>
+#include <kconfiggroup.h>
 
 //! @internal
 class KexiStartupFileDialogBasePrivate
@@ -99,7 +100,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //(js)    d->autoSelectExtCheckBox = 0; // delayed loading
 //TODO    d->autoSelectExtChecked = false;
 //(js)    d->urlBar = 0; // delayed loading
-//TODO    KConfig *config = KGlobal::config();
+//TODO    KSharedConfig::Ptr config = KGlobal::config();
 //TODO    KConfigGroupSaver cs( config, ConfigGroup );
 //TODO    d->initializeSpeedbar = config->readBoolEntry( "Set speedbar defaults",
 //TODO                                                   true );

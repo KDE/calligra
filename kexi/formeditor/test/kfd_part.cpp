@@ -31,7 +31,7 @@
 
 #include <kdeversion.h>
 #include <kaction.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kdebug.h>
@@ -85,20 +85,20 @@ class KFDPart_FormManager : public KFormDesigner::FormManager
 		KFormDesignerPart *m_part;
 };
 
-KInstance *KFDFactory::m_instance = 0L;
+KComponentData *KFDFactory::m_componentData = 0L;
 
 KFDFactory::KFDFactory()
 {}
 
 KFDFactory::~KFDFactory()
 {
-	if (m_instance)
+	if (m_componentData)
 	{
-		delete m_instance->aboutData();
-		delete m_instance;
+		delete m_componentData.aboutData();
+		delete m_componentData;
 	}
 
-	m_instance = 0;
+	m_componentData = 0;
 }
 
 KParts::Part*
@@ -110,12 +110,11 @@ KFDFactory::createPartObject( QWidget *parentWidget, const char *, QObject *, co
 	return part;
 }
 
-KInstance*
-KFDFactory::instance()
+const KComponentData &KFDFactory::componentData()
 {
-	if (!m_instance)
-		m_instance = new KInstance(aboutData());
-	return m_instance;
+	if (!m_componentData)
+		m_componentData = new KComponentData(aboutData());
+	return *m_componentData;
 }
 
 KAboutData*
@@ -130,9 +129,9 @@ KFormDesigner::WidgetLibrary* KFormDesignerPart::static_formsLibrary = 0L;
 KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool readOnly, const QStringList &args)
 : KParts::ReadWritePart(parent, name), m_count(0)
 {
-	setInstance(KFDFactory::instance());
-	instance()->iconLoader()->addAppDir("kexi");
-	instance()->iconLoader()->addAppDir("kformdesigner");
+	setComponentData(KFDFactory::componentData());
+	componentData().iconLoader()->addAppDir("kexi");
+	componentData().iconLoader()->addAppDir("kformdesigner");
 
 	setReadWrite(!readOnly);
 	m_uniqueFormMode = true;

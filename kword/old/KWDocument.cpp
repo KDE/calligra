@@ -96,6 +96,7 @@
 
 #include <unistd.h>
 #include <math.h>
+#include <kconfiggroup.h>
 
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
@@ -181,13 +182,13 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     m_tableTemplateColl = new KWTableTemplateCollection();
     m_pictureCollection = new KoPictureCollection();
 
-    m_personalExpressionPath = KWFactory::instance()->dirs()->resourceDirs("expression");
+    m_personalExpressionPath = KWFactory::componentData().dirs()->resourceDirs("expression");
 
     m_bShowGrid = false;
     m_bSnapToGrid = false;
 
 
-    setInstance( KWFactory::instance(), false );
+    setComponentData( KWFactory::componentData(), false );
     setTemplateType( "kword_template" );
 
     m_gridX = m_gridY = MM_TO_POINT(5.0 );
@@ -253,7 +254,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     // It's important to call this to have the kformula actions
     // created. The real document is still to be created if needed.
     m_formulaDocumentWrapper =
-        new KFormula::DocumentWrapper( instance()->config(),
+        new KFormula::DocumentWrapper( componentData().config(),
                                        actionCollection(),
                                        m_commandHistory );
 
@@ -263,7 +264,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     initConfig();
 
     // Get default font from the KWord config file
-    KConfig *config = KWFactory::instance()->config();
+    KSharedConfigPtr config = KWFactory::componentData().config();
     config->setGroup("Document defaults" );
     QString defaultFontname=config->readEntry("DefaultFont");
     if ( !defaultFontname.isEmpty() )
@@ -281,7 +282,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     //kDebug() << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
 
 
-    KoToolManager::instance()->toolBox()->show();
+    KoToolManager::componentData().toolBox()->show();
 }
 
 
@@ -313,7 +314,7 @@ KWDocument::~KWDocument()
 
 void KWDocument::initConfig()
 {
-  KConfig *config = KWFactory::instance()->config();
+  KSharedConfigPtr config = KWFactory::componentData().config();
   if( config->hasGroup("KSpell kword" ) )
   {
       config->setGroup( "KSpell kword" );
@@ -427,7 +428,7 @@ void KWDocument::saveConfig()
     {
         // Only save the config that is manipulated by the UI directly.
         // The config from the config dialog is saved by the dialog itself.
-        KConfig *config = KWFactory::instance()->config();
+        KConfig *config = KWFactory::componentData().config();
         config->setGroup( "Interface" );
         config->writeEntry( "ViewFormattingChars", m_viewFormattingChars );
         config->writeEntry( "ViewFormattingBreaks", m_viewFormattingBreak );
@@ -532,7 +533,7 @@ void KWDocument::initEmpty()
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
     m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
 
-    QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );
+    QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::componentData() ) );
     bool ok = loadNativeFormat( fileName );
     if ( !ok )
         showLoadingErrorDialog();
@@ -5107,7 +5108,7 @@ void KWDocument::changeBgSpellCheckingState( bool b )
 {
     enableBackgroundSpellCheck( b );
     reactivateBgSpellChecking();
-    KConfig *config = KWFactory::instance()->config();
+    KSharedConfigPtr config = KWFactory::componentData().config();
     config->setGroup("KSpell kword" );
     config->writeEntry( "SpellCheck", (int)b );
 }
@@ -5316,7 +5317,7 @@ void KWDocument::updateDirectCursorButton()
 void KWDocument::setInsertDirectCursor(bool b)
 {
     m_bInsertDirectCursor=b;
-    KConfig *config = KWFactory::instance()->config();
+    KSharedConfigPtr config = KWFactory::componentData().config();
     config->setGroup( "Interface" );
     config->writeEntry( "InsertDirectCursor", b );
     updateDirectCursorButton();

@@ -152,7 +152,7 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_tableSplit.columns = 1;
     m_tableSplit.rows = 1;
 
-    setInstance( KWFactory::instance() );
+    setComponentData( KWFactory::componentData() );
     if ( !m_doc->isReadWrite() )
         setXMLFile( "kword_readonly.rc" );
     else
@@ -1364,7 +1364,7 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
         }
     }
 
-    //QStringList files = KWFactory::instance()->dirs()->findAllResources( "expression", "*.xml", true );
+    //QStringList files = KWFactory::componentData().dirs()->findAllResources( "expression", "*.xml", true );
     int i = 0;
     int nbFile = 0;
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it,nbFile++ )
@@ -4005,10 +4005,10 @@ void KWView::extraCreateTemplate()
 
     m_doc->saveNativeFormat( tempFile.fileName() );
 
-    KoTemplateCreateDia::createTemplate( "kword_template", KWFactory::instance(),
+    KoTemplateCreateDia::createTemplate( "kword_template", KWFactory::componentData(),
                                          tempFile.fileName(), pix, this );
 
-    KWFactory::instance()->dirs()->addResourceType("kword_template",
+    KWFactory::componentData().dirs()->addResourceType("kword_template",
                                                     KStandardDirs::kde_default( "data" ) +
                                                     "kword/templates/");
 }

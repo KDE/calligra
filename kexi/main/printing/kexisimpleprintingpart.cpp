@@ -34,7 +34,7 @@ KexiSimplePrintingPart::KexiSimplePrintingPart()
 	// REGISTERED ID:
 //??	m_registeredPartID = (int)KexiPart::QueryObjectType;
 
-/*	m_names["instanceName"] 
+/*	m_names["componentName"] 
 		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 

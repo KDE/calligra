@@ -26,12 +26,12 @@
 #include <kaboutdata.h>
 
 struct KCmdLineOptions;
-class KInstance;
+class KComponentData;
 
 namespace KexiDB
 {
 	//! @short A skeleton for creating a simple command line database application.
-	/*! This class creates a KInstance object and automatically handles the following 
+	/*! This class creates a KComponentData object and automatically handles the following 
 	 command line options:
 	 - --driver \<name\> (Database driver name) or -drv
 	 - --user \<name\> (Database user name) or -u
@@ -57,7 +57,7 @@ namespace KexiDB
 		~SimpleCommandLineApp();
 
 		//! \return program instance
-		KInstance* instance() const;
+		const KComponentData &componentData() const;
 
 		/*! Opens database \a databaseName for connection data 
 		 specified via the command line. \return true in success.

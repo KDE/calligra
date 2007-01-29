@@ -176,9 +176,9 @@ KWMailMergeDataSource *KWMailMergeDataBase::loadPlugin(const QString& name)
           if (create)
           {
               // create the module
-              KWMailMergeDataSource * (*func)(KInstance*,QObject*);
-              func = (KWMailMergeDataSource* (*)(KInstance*,QObject*)) create;
-              KWMailMergeDataSource *tmpsource =func(KWFactory::instance(),this);
+              KWMailMergeDataSource * (*func)(const KComponentData &,QObject*);
+              func = (KWMailMergeDataSource* (*)(const KComponentData &,QObject*)) create;
+              KWMailMergeDataSource *tmpsource =func(KWFactory::componentData(),this);
               if (tmpsource)
               {
                   QDataStream tmpstream( &tmpsource->info,QIODevice::WriteOnly);

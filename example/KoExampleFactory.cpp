@@ -20,7 +20,7 @@
 #include <KoExampleFactory.h>
 #include <KoExamplePart.h>
 #include <KoExampleAboutData.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -29,7 +29,7 @@
 //K_EXPORT_COMPONENT_FACTORY( libkoexamplepart, ExampleFactory )
 K_EXPORT_PLUGIN( ExampleFactory )
 
-KInstance* ExampleFactory::s_global = 0L;
+KComponentData* ExampleFactory::s_global = 0L;
 KAboutData* ExampleFactory::s_aboutData = 0L;
 
 ExampleFactory::ExampleFactory( QObject* parent )
@@ -68,17 +68,17 @@ KAboutData* ExampleFactory::aboutData()
     return s_aboutData;
 }
 
-KInstance* ExampleFactory::global()
+const KComponentData &ExampleFactory::global()
 {
     if ( !s_global )
     {
-        s_global = new KInstance( aboutData() );
+        s_global = new KComponentData( aboutData() );
         // Add any application-specific resource directories here
 
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
     }
-    return s_global;
+    return *s_global;
 }
 
 #include "KoExampleFactory.moc"

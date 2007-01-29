@@ -52,7 +52,7 @@ class KWClassicSerialDataSource: public KWMailMergeDataSource
 {
     Q_OBJECT
     public:
-    KWClassicSerialDataSource(KInstance *inst,QObject *parent);
+    KWClassicSerialDataSource(const KComponentData &inst,QObject *parent);
     ~KWClassicSerialDataSource();
 
     virtual void save( QDomDocument &doc,QDomElement&);

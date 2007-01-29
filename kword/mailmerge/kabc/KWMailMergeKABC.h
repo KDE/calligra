@@ -35,7 +35,7 @@ class KWMailMergeKABC: public KWMailMergeDataSource
     Q_OBJECT
 
 public:
-    KWMailMergeKABC( KInstance *inst, QObject *parent );
+    KWMailMergeKABC( const KComponentData &inst, QObject *parent );
     ~KWMailMergeKABC();
 
     /**

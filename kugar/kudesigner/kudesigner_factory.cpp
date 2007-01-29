@@ -20,13 +20,13 @@
 #include <kudesigner_factory.h>
 #include <kudesigner_doc.h>
 #include <kudesigner_aboutdata.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-KInstance* KudesignerFactory::s_global = 0L;
+KComponentData* KudesignerFactory::s_global = 0L;
 KAboutData* KudesignerFactory::s_aboutData = 0L;
 
 KudesignerFactory::KudesignerFactory( QObject* parent )
@@ -81,11 +81,11 @@ KAboutData* KudesignerFactory::aboutData()
     return s_aboutData;
 }
 
-KInstance* KudesignerFactory::global()
+const KComponentData &KudesignerFactory::global()
 {
     if ( !s_global )
     {
-        s_global = new KInstance( aboutData() );
+        s_global = new KComponentData( aboutData() );
         // Add any application-specific resource directories here
         s_global->dirs() ->addResourceType( "kudesigner_template",
                                             KStandardDirs::kde_default( "data" ) + "kudesigner/templates/" );
@@ -93,7 +93,7 @@ KInstance* KudesignerFactory::global()
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global() ->addAppDir( "koffice" );
     }
-    return s_global;
+    return *s_global;
 }
 
 #include <kudesigner_factory.moc>

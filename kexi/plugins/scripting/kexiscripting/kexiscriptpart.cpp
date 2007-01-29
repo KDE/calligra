@@ -92,7 +92,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 	if(scriptaction) {
 
 		const QString dontAskAgainName = "askExecuteScript";
-		KConfig* config = KGlobal::config();
+		KSharedConfig::Ptr config = KGlobal::config();
 		QString dontask = config->readEntry(dontAskAgainName).lower();
 
 		bool exec = (dontask == "yes");

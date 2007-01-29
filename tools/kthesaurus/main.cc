@@ -26,6 +26,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdemacros.h>
+#include <kcomponentdata.h>
 
 static KCmdLineOptions options[] =
 {
@@ -52,7 +53,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 		return 1;
 	}
 
-	KDataToolInfo *info = new KDataToolInfo(service, 0);
+	KDataToolInfo *info = new KDataToolInfo(service, KComponentData());
 	KDataTool *tool = info->createTool();
 	if ( !tool ) {
 		kWarning() << "Could not create tool 'thesaurustool'!" << endl;

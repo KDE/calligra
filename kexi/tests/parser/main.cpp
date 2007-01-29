@@ -6,7 +6,7 @@
 #include <Q3CString>
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 	kDebug() << "main()" << endl;
 	QFileInfo info=QFileInfo(argv[0]);
 	prgname = info.baseName().latin1();
-	KInstance instance( prgname );
+	KComponentData componentData( prgname );
 	if (argc<2) {
 		return 1;
 	}

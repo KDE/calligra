@@ -36,7 +36,6 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
-#include <kinstance.h>
 
 #include "Cell.h"
 #include "CellStorage.h"
@@ -80,7 +79,7 @@ FormatDialog::FormatDialog( View* view, const char* name )
     vbox->addWidget( m_label );
 
 
-    QStringList lst = Factory::global()->dirs()->findAllResources( "sheet-styles", "*.ksts", true );
+    QStringList lst = Factory::global().dirs()->findAllResources( "sheet-styles", "*.ksts", true );
 
     int index = 0;
     QStringList::Iterator it = lst.begin();
@@ -116,7 +115,7 @@ void FormatDialog::slotActivated( int index )
 {
 	enableButtonOk(true);
 
-    QString img = Factory::global()->dirs()->findResource( "sheet-styles", m_entries[ index ].image );
+    QString img = Factory::global().dirs()->findResource( "sheet-styles", m_entries[ index ].image );
     if ( img.isEmpty() )
     {
 	QString str( i18n( "Could not find image %1." ) );
@@ -148,7 +147,7 @@ void FormatDialog::slotOk()
 
     m_view->doc()->emitBeginOperation( false );
 
-    QString xml = Factory::global()->dirs()->findResource( "sheet-styles", m_entries[ m_combo->currentIndex() ].xml );
+    QString xml = Factory::global().dirs()->findResource( "sheet-styles", m_entries[ m_combo->currentIndex() ].xml );
     if ( xml.isEmpty() )
     {
 	QString str( i18n( "Could not find sheet-style XML file '%1'." ) );

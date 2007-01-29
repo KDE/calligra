@@ -43,7 +43,7 @@
  *
  ******************************************************************/
 
-KWQtSqlPowerSerialDataSource::KWQtSqlPowerSerialDataSource(KInstance *inst,QObject *parent)
+KWQtSqlPowerSerialDataSource::KWQtSqlPowerSerialDataSource(const KComponentData &inst,QObject *parent)
 	: KWQtSqlSerialDataSourceBase(inst,parent),myquery(0)
 {
 	port=i18n("default");
@@ -251,7 +251,7 @@ KWQtSqlPowerMailMergeEditor::~KWQtSqlPowerMailMergeEditor(){;}
 
 
 extern "C" {
-        KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb_power(KInstance *inst,QObject *parent)
+        KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb_power(const KComponentData &inst,QObject *parent)
         {
                 return new KWQtSqlPowerSerialDataSource(inst,parent);
         }

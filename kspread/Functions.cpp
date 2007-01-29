@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kstaticdeleter.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 #include "Formula.h"
 #include "Factory.h"
@@ -212,7 +212,7 @@ FunctionRepository* FunctionRepository::self()
     kDebug() << s_self->d->functions.count() << " functions registered, loading descriptions" << endl;
 
     // find all XML description files
-    QStringList files = Factory::global()->dirs()->findAllResources
+    QStringList files = Factory::global().dirs()->findAllResources
         ("functions", "*.xml", true);
 
     // load desc/help from XML file

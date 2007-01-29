@@ -12,7 +12,7 @@
 #include <QtGui>
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 #define ROUNDING 0.126
 #define FRAME_SPACING 10.0

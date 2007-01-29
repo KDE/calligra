@@ -23,7 +23,7 @@
 namespace Kivio {
   Plugin::Plugin(KivioView* parent, const char* name) : KParts::Plugin(parent, name)
   {
-    setInstance(KivioFactory::global());
+    setComponentData(KivioFactory::global());
   }
   
   Plugin::~Plugin()

@@ -21,7 +21,7 @@
 #include <kprinter.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kxmlguifactory.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -63,7 +63,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     // No flicker
     setBackgroundMode( Qt::NoBackground );
 
-    setInstance( KChartFactory::global() );
+    setComponentData( KChartFactory::global() );
     if ( koDocument()->isReadWrite() )
         setXMLFile( "kchart.rc" );
     else
@@ -342,7 +342,7 @@ void KChartView::slotRepaint()
 void KChartView::saveConfig()
 {
     kDebug(35001) << "Save config..." << endl;
-    ((KChartPart*)koDocument())->saveConfig( KGlobal::config() );
+    ((KChartPart*)koDocument())->saveConfig( KGlobal::config().data() );
 }
 
 
@@ -351,7 +351,7 @@ void KChartView::loadConfig()
     kDebug(35001) << "Load config..." << endl;
 
     KGlobal::config()->reparseConfiguration();
-    ((KChartPart*)koDocument())->loadConfig( KGlobal::config() );
+    ((KChartPart*)koDocument())->loadConfig( KGlobal::config().data() );
 
     updateGuiTypeOfChart();
     //refresh chart when you load config
@@ -740,7 +740,7 @@ void KChartView::extraCreateTemplate()
     KoTemplateCreateDia::createTemplate( "kchart_template", KChartFactory::global(),
                                          tempFile.fileName(), pix, this );
 
-    KChartFactory::global()->dirs()->addResourceType("kchart_template",
+    KChartFactory::global().dirs()->addResourceType("kchart_template",
                                                     KStandardDirs::kde_default( "data" ) +
                                                     "kchart/templates/");
 }

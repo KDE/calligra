@@ -1,6 +1,6 @@
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
@@ -9,7 +9,7 @@
 
 int main(int argc, char * argv[])
 {
-	KInstance instance("newapi");
+	KComponentData componentData("newapi");
 	KexiDB::DriverManager manager;
 	QStringList names = manager.driverNames();
 	kDebug() << "DRIVERS: " << endl;

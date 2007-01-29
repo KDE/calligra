@@ -21,7 +21,7 @@
 #include <kaboutdata.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kservicetypetrader.h>
@@ -38,13 +38,13 @@
 
 KarbonResourceServer* KarbonFactory::s_rserver = 0;
 
-KInstance* KarbonFactory::s_instance = 0L;
+KComponentData* KarbonFactory::s_instance = 0L;
 KAboutData* KarbonFactory::s_aboutData = 0L;
 
 KarbonFactory::KarbonFactory( QObject* parent, const char* name )
 		: KoFactory( parent, name )
 {
-	instance();
+	componentData();
 
 	KarbonToolRegistry::instance();
 
@@ -104,12 +104,11 @@ KarbonFactory::aboutData()
 	return s_aboutData;
 }
 
-KInstance*
-KarbonFactory::instance()
+const KComponentData &KarbonFactory::componentData()
 {
 	if( !s_instance )
 	{
-		s_instance = new KInstance( aboutData() );
+		s_instance = new KComponentData( aboutData() );
 		// Add any application-specific resource directories here
 
 		s_instance->dirs()->addResourceType( "kis_brushes",
@@ -128,7 +127,7 @@ KarbonFactory::instance()
         KIconLoader::global()->addAppDir("koffice");
 	}
 
-	return s_instance;
+	return *s_instance;
 }
 
 KarbonResourceServer *KarbonFactory::rServer()

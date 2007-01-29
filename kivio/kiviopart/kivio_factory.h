@@ -21,7 +21,7 @@
 
 #include <KoFactory.h>
 #include <koffice_export.h>
-class KInstance;
+class KComponentData;
 class KAboutData;
 
 class KIVIO_EXPORT KivioFactory : public KoFactory
@@ -32,11 +32,11 @@ public:
 
   virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
 
-  static KInstance* global();
+  static const KComponentData &global();
   static KAboutData* aboutData();
 
 private:
-  static KInstance* s_global;
+  static KComponentData* s_global;
   static KAboutData* s_aboutData;
 };
 

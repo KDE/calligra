@@ -29,7 +29,7 @@
 
 using namespace KSpread;
 
-KWMailMergeKSpread::KWMailMergeKSpread( KInstance *instance, QObject *parent )
+KWMailMergeKSpread::KWMailMergeKSpread( const KComponentData &instance, QObject *parent )
   : KWMailMergeDataSource( instance, parent ), _spreadSheetNumber( 1 )
 {
 }
@@ -204,7 +204,7 @@ QString KWMailMergeKSpread::cellText( const KSpread::Cell *cell ) const
 
 extern "C"
 {
-  KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_kspread( KInstance *instance, QObject *parent )
+  KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_kspread( const KComponentData &instance, QObject *parent )
   {
     return new KWMailMergeKSpread( instance, parent );
   }

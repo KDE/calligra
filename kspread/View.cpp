@@ -59,7 +59,7 @@
 // KDE includes
 #include <kactioncollection.h>
 #include <kconfig.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kfind.h>
 #include <kfinddialog.h>
@@ -1672,7 +1672,7 @@ View::View( QWidget *_parent, Doc *_doc )
     d->insertHandler = 0;
     d->specialCharDlg = 0;
 
-    setInstance( Factory::global() );
+    setComponentData( Factory::global() );
     if ( doc()->isReadWrite() )
       setXMLFile( "kspread.rc" );
     else
@@ -1996,7 +1996,7 @@ SheetView* View::sheetView( const Sheet* sheet ) const
 
 void View::initConfig()
 {
-    KConfig *config = Factory::global()->config();
+    KSharedConfigPtr config = Factory::global().config();
     if ( config->hasGroup("Parameters" ))
     {
         const bool configFromDoc = doc()->configLoadFromFile();
@@ -2740,7 +2740,7 @@ void View::createTemplate()
   KoTemplateCreateDia::createTemplate( "kspread_template", Factory::global(),
                                            tempFile.fileName(), pix, this );
 
-  Factory::global()->dirs()->addResourceType("kspread_template",
+  Factory::global().dirs()->addResourceType("kspread_template",
                                                        KStandardDirs::kde_default( "data" ) +
                                                        "kspread/templates/");
 }
@@ -5789,7 +5789,7 @@ void View::openPopupMenu( const QPoint & _point )
     {
       d->popupMenuFirstToolId = 10;
       int i = 0;
-      QList<KDataToolInfo> tools = KDataToolInfo::query( "QString", "text/plain", doc()->instance() );
+      QList<KDataToolInfo> tools = KDataToolInfo::query( "QString", "text/plain", doc()->componentData() );
       if ( tools.count() > 0 )
       {
         d->popupMenu->addSeparator();

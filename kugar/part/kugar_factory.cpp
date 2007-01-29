@@ -5,7 +5,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kaboutdata.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -14,7 +14,7 @@
 #include "kugar_part.h"
 #include "kugar_about.h"
 
-KInstance *KugarFactory::s_instance = 0L;
+KComponentData *KugarFactory::s_instance = 0L;
 KAboutData *KugarFactory::s_aboutdata = 0L;
 
 
@@ -30,16 +30,16 @@ KugarFactory::KugarFactory( QObject *parent ) : KoFactory( parent )
     global();
 }
 
-KInstance* KugarFactory::global()
+const KComponentData &KugarFactory::global()
 {
     if ( !s_instance )
     {
-        s_instance = new KInstance( aboutData() );
+        s_instance = new KComponentData( aboutData() );
         KIconLoader::global() ->addAppDir( "koffice" );
         KIconLoader::global() ->addAppDir( "kugar" );
 
     }
-    return s_instance;
+    return *s_instance;
 }
 
 // The factory dtor.

@@ -122,7 +122,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     : KParts::Plugin(parent)
     , d(new Private())
 {
-    setInstance(KWScriptingPart::instance());
+    setComponentData(KWScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data","kword/kpartplugins/scripting.rc"), true);
 
     kDebug(32010) << "KWScripting plugin. Class: " << metaObject()->className() << ", Parent: " << parent->metaObject()->className() << endl;

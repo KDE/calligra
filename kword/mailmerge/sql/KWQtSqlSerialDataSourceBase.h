@@ -40,7 +40,7 @@ class KWQtSqlSerialDataSourceBase: public KWMailMergeDataSource
     Q_OBJECT
     K_DCOP
     public:
-    KWQtSqlSerialDataSourceBase(KInstance *inst,QObject *parent);
+    KWQtSqlSerialDataSourceBase(const KComponentData &inst,QObject *parent);
     ~KWQtSqlSerialDataSourceBase();
 
    virtual bool showConfigDialog(QWidget *par,int action);

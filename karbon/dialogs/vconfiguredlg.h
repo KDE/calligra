@@ -24,9 +24,9 @@
 
 #include <kpagedialog.h>
 #include <kvbox.h>
+#include <kconfig.h>
 
 class KarbonView;
-class KConfig;
 class KIntNumInput;
 class KColorButton;
 class KoUnitDoubleSpinBox;
@@ -47,7 +47,7 @@ public slots:
 
 private:
 	KarbonView* m_view;
-	KConfig* m_config;
+	KSharedConfigPtr m_config;
 
 	KIntNumInput* m_recentFiles;
 	int m_oldRecentFiles;
@@ -79,7 +79,7 @@ public slots:
 
 private:
 	KarbonView* m_view;
-	KConfig* m_config;
+	KSharedConfigPtr m_config;
 
 	KIntNumInput* m_undoRedo;
 	int m_oldUndoRedo;
@@ -101,7 +101,7 @@ public slots:
 
 private:
 	KarbonView* m_view;
-	KConfig* m_config;
+	KSharedConfigPtr m_config;
 
 	KIntNumInput* m_autoSave;
 	int m_oldAutoSave;
@@ -142,7 +142,7 @@ private:
 	QCheckBox* m_gridChBox;
 	//QCheckBox* m_snapChBox;
 	KColorButton* m_gridColorBtn;
-	KConfig* m_config;
+	KSharedConfigPtr m_config;
 };
 
 class VConfigureDlg : public KPageDialog

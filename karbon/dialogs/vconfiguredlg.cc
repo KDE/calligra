@@ -33,7 +33,7 @@
 #include <knuminput.h>
 #include <kcolorbutton.h>
 #include <KoUnitWidgets.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kicon.h>
 #include <KoGridData.h>
 
@@ -106,7 +106,7 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view, char* name )
 	setObjectName(name);
 
 	m_view = view;
-	m_config = KarbonFactory::instance()->config();
+	m_config = KarbonFactory::componentData().config();
 
 	m_oldRecentFiles = 10;
 	m_oldCopyOffset = 10;
@@ -216,7 +216,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, char* name )
     setObjectName(name);
 
     m_view = view;
-    m_config = KarbonFactory::instance()->config();
+    m_config = KarbonFactory::componentData().config();
 
     KoUnit unit = view->part()->unit();
 
@@ -294,7 +294,7 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 {
 	setObjectName(name);
 
-	m_config = KarbonFactory::instance()->config();
+	m_config = KarbonFactory::componentData().config();
 
 	m_view = view;
 	KoUnit unit = view->part()->document().unit();
@@ -433,7 +433,7 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view, char* name )
 
     m_view = view;
 
-    m_config = KarbonFactory::instance()->config();
+    m_config = KarbonFactory::componentData().config();
 
     QGroupBox* gbDocumentSettings = new QGroupBox( i18n( "Document Settings" ), this );
     QVBoxLayout *layout = new QVBoxLayout( gbDocumentSettings );

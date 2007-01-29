@@ -11,7 +11,7 @@
 #include "mpagecollection.h"
 #include "mreportengine.h"
 
-class KInstance;
+class KComponentData;
 class KugarBrowserExtension;
 
 class KugarPart: public KoDocument

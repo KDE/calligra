@@ -121,7 +121,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
     m_dialog->setCursor(Qt::ArrowCursor);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
-    KConfig * cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup("rawimport");
 
     m_page->radioGray->setChecked(cfg->readEntry("gray", false));

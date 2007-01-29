@@ -63,7 +63,7 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
     m_zoomMode = KoZoomMode::ZOOM_WIDTH;
 
-    setInstance( KWFactory::instance(), false );
+    setComponentData( KWFactory::componentData(), false );
     setTemplateType( "kword_template" );
 
     connect (&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));

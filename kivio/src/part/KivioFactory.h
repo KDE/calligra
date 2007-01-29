@@ -23,7 +23,7 @@
 #include <KoFactory.h>
 #include "kivio_export.h"
 
-class KInstance;
+class KComponentData;
 class KAboutData;
 
 class KIVIO_EXPORT KivioFactory : public KoFactory
@@ -39,13 +39,13 @@ class KIVIO_EXPORT KivioFactory : public KoFactory
                                            const char* classname = "KoDocument",
                                            const QStringList &args = QStringList());
 
-    static KInstance* instance();
+    static const KComponentData &componentData();
 
     /// Creates a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 
   private:
-    static KInstance* s_instance;
+    static KComponentData* s_instance;
     static KAboutData* s_aboutData;
 };
 

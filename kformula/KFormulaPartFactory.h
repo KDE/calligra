@@ -22,7 +22,7 @@
 
 #include <KoFactory.h>
 
-class KInstance;
+class KComponentData;
 class KAboutData;
 
 /**
@@ -33,7 +33,7 @@ class KAboutData;
  * aboutData() method with the help of newKFormulaAboutData() which is implemented
  * in the KFormulaAboutData.h file.
  * Use createPartObject() to obtain a pointer to a new instance of the KFormulaPart.
- * With global you can access the current @ref KInstance of KFormula
+ * With global you can access the current @ref KComponentData of KFormula
  */
 class KFormulaPartFactory : public KoFactory
 {
@@ -46,11 +46,11 @@ public:
 		                            QObject *parent = 0,
 					    const char *classname = "KoDocument",
    			                    const QStringList &args = QStringList() );
-    static KInstance* global();
+    static const KComponentData &global();
     static KAboutData* aboutData();
 
 private:
-    static KInstance* s_global;
+    static KComponentData* s_global;
     static KAboutData* s_aboutData;
 };
 

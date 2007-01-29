@@ -32,7 +32,7 @@
 #include "form.h"
 
 class KAboutData;
-class KInstance;
+class KComponentData;
 class QWorkspace;
 class QCloseEvent;
 
@@ -49,11 +49,11 @@ class KFORMEDITOR_EXPORT KFDFactory : public KParts::Factory
 		virtual KParts::Part* createPartObject(QWidget *parentWidget=0, const char *widgetName=0, QObject *parent=0, const char *name=0,
 		  const char *classname="KParts::Part", const QStringList &args=QStringList());
 
-		static KInstance *instance();
+		static const KComponentData &componentData();
 		static KAboutData *aboutData();
 
 	private:
-		static KInstance *m_instance;
+		static KComponentData *m_componentData;
 };
 
 class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart

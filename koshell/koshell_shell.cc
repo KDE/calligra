@@ -62,7 +62,7 @@
 #include <ktoolinvocation.h>
 
 KoShellWindow::KoShellWindow()
- : KoMainWindow( KGlobal::instance() )
+ : KoMainWindow( KGlobal::mainComponent() )
 {
   m_activePage = m_lstPages.end();
 
@@ -491,7 +491,7 @@ void KoShellWindow::switchToPage( Q3ValueList<Page>::Iterator it )
   v->setFocus();
 
   partSpecificHelpAction->setEnabled(true);
-  partSpecificHelpAction->setText(i18n("%1 Handbook",(*m_activePage).m_pDoc->instance()->aboutData()->programName()));
+  partSpecificHelpAction->setText(i18n("%1 Handbook",(*m_activePage).m_pDoc->componentData().aboutData()->programName()));
 }
 
 void KoShellWindow::slotFileNew()
@@ -710,7 +710,7 @@ void KoShellWindow::showPartSpecificHelp()
   if((m_activePage == m_lstPages.end()) || ((*m_activePage).m_pDoc == 0))
     return;
 
-  KToolInvocation::invokeHelp("", (*m_activePage).m_pDoc->instance()->aboutData()->appName(), "");
+  KToolInvocation::invokeHelp("", (*m_activePage).m_pDoc->componentData().aboutData()->appName(), "");
 }
 
 

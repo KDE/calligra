@@ -34,7 +34,6 @@
 
 #include <kconfig.h>
 #include <kicon.h>
-#include <kinstance.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
@@ -216,7 +215,7 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
 //   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
   KVBox* tmpQGroupBox = box;
 
-  config = Factory::global()->config();
+  config = Factory::global().config();
   int _page=1;
 
   oldRecent=10;
@@ -417,7 +416,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
 //   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Misc"), box );
   KVBox* tmpQGroupBox = box;
 
-  config = Factory::global()->config();
+  config = Factory::global().config();
   indentUnit = _view->doc()->unit();
   double _indent = KoUnit::toUserValue( 10.0, indentUnit);
   bool m_bMsgError=false;
@@ -726,7 +725,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
  :QObject ( box->parent() )
 {
   m_pView = _view;
-  config = Factory::global()->config();
+  config = Factory::global().config();
 
   QColor _gridColor(Qt::lightGray);
 
@@ -807,7 +806,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
 //   grid1->addItem(new QSpacerItem( 0, KDialog::marginHint() ), 0, 0 );
   grid1->setRowStretch( 7, 10 );
 
-  config = Factory::global()->config();
+  config = Factory::global().config();
 
   QLabel *label=new QLabel(i18n("Default page &size:"), tmpQGroupBox);
 
@@ -907,7 +906,7 @@ configureSpellPage::configureSpellPage( View* _view,KVBox *box , char * /*name*/
 {
   m_pView = _view;
 
-  config = Factory::global()->config();
+  config = Factory::global().config();
 
 
 #ifdef __GNUC__

@@ -471,7 +471,7 @@ View::View( Part* part, QWidget* parent )
     //kDebug()<<k_funcinfo<<endl;
     getProject().setCurrentSchedule( Schedule::Expected );
 
-    setInstance( Factory::global() );
+    setComponentData( Factory::global() );
     if ( !part->isReadWrite() )
         setXMLFile( "kplato_readonly.rc" );
     else

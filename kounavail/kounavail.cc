@@ -23,7 +23,7 @@
 #include <qicon.h>
 #include <QPaintEvent>
 #include <kaction.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandardaction.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -109,7 +109,7 @@ void KoUnavailPart::paintContent( QPainter& painter, const QRect& rect, bool /*t
 KoUnavailView::KoUnavailView( KoUnavailPart* part, QWidget* parent)
     : KoView( part, parent )
 {
-    setInstance( KoUnavailFactory::global() );
+    setComponentData( KoUnavailFactory::global() );
     //setXMLFile( "kounavail.rc" );
 }
 
@@ -128,7 +128,7 @@ void KoUnavailView::paintEvent( QPaintEvent* ev )
 
 K_EXPORT_COMPONENT_FACTORY( libkounavailpart, KoUnavailFactory )
 
-KInstance* KoUnavailFactory::s_global = 0L;
+KComponentData* KoUnavailFactory::s_global = 0L;
 KAboutData* KoUnavailFactory::s_aboutData = 0L;
 
 KoUnavailFactory::KoUnavailFactory( QObject* parent, const char* name )
@@ -164,15 +164,15 @@ KAboutData* KoUnavailFactory::aboutData()
     return s_aboutData;
 }
 
-KInstance* KoUnavailFactory::global()
+const KComponentData &KoUnavailFactory::global()
 {
     if ( !s_global )
     {
-        s_global = new KInstance( aboutData() );
+        s_global = new KComponentData( aboutData() );
         // Tell the iconloader about share/apps/koffice/icons
         //s_global->iconLoader()->addAppDir("koffice");
     }
-    return s_global;
+    return *s_global;
 }
 
 #include "kounavail.moc"

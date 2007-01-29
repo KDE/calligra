@@ -68,7 +68,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 	Q_UNUSED(widgetName)
 
 	setObjectName(name);
-	setInstance( KarbonFactory::instance(), false );
+	setComponentData( KarbonFactory::componentData(), false );
 	setTemplateType( "karbon_template" );
 	m_bShowStatusBar = true;
 
@@ -555,7 +555,7 @@ KarbonPart::setUndoRedoLimit( int undos )
 void
 KarbonPart::initConfig()
 {
-	KConfig* config = KarbonPart::instance()->config();
+	KSharedConfigPtr config = KarbonPart::componentData().config();
 
     // disable grid by default
     gridData().setShowGrid( false );

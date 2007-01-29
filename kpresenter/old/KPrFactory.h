@@ -36,7 +36,7 @@ public:
     virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, QObject *parent = 0,
                                             const char *classname = "KoDocument",
                                             const QStringList &args = QStringList() );
-    static KInstance* global();
+    static const KComponentData &global();
 
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
@@ -44,7 +44,7 @@ public:
     static KIconLoader* iconLoader();
 
 private:
-    static KInstance* s_global;
+    static KComponentData* s_global;
     static KAboutData* s_aboutData;
     static KIconLoader* s_iconLoader;
 };

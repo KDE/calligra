@@ -48,7 +48,7 @@
 
 int KWQtSqlSerialDataSourceBase::connectionId=0;
 
-KWQtSqlSerialDataSourceBase::KWQtSqlSerialDataSourceBase(KInstance *inst,QObject *parent)
+KWQtSqlSerialDataSourceBase::KWQtSqlSerialDataSourceBase(const KComponentData &inst,QObject *parent)
 	: KWMailMergeDataSource(inst,parent)
 {
 	DataBaseConnection=QString("KWQTSQLPOWER")+parent->name()+QString("--%1").arg(connectionId++);

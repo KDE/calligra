@@ -59,7 +59,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     m_update = m_calculate = false;
     m_commandHistory = new KCommandHistory( actionCollection() );
 
-    setInstance( Factory::global() );
+    setComponentData( Factory::global() );
     setTemplateType( "kplato_template" );
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
     m_config.load();

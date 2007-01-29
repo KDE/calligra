@@ -106,6 +106,7 @@
 #include "KoApplication.h"
 #include <KoOasisStyles.h>
 #include <KoOasisContext.h>
+#include <kconfiggroup.h>
 
 #include "KPrLoadingInfo.h"
 
@@ -142,7 +143,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, QObject* parent,
       _gradientCollection(), m_customListTest( 0L ),
       m_childCountBeforeInsert( 0 )
 {
-    setInstance( KPrFactory::global() );
+    setComponentData( KPrFactory::global() );
     setTemplateType( "kpresenter_template" );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;

@@ -218,7 +218,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   documents().append( this );
 
-  setInstance( Factory::global(), false );
+  setComponentData( Factory::global(), false );
   setTemplateType( "kspread_template" );
 
 //   d->dcop = 0;
@@ -312,7 +312,7 @@ void Doc::openTemplate (const KUrl& url)
 
 void Doc::initEmpty()
 {
-    KConfig *config = Factory::global()->config();
+    KSharedConfigPtr config = Factory::global().config();
     int _page=1;
     if( config->hasGroup("Parameters" ))
     {
@@ -389,7 +389,7 @@ void Doc::saveConfig()
 {
     if ( isEmbedded() ||!isReadWrite())
         return;
-    KConfig *config = Factory::global()->config();
+    KSharedConfigPtr config = Factory::global().config();
     config->setGroup( "Parameters" );
     config->writeEntry( "Zoom", zoomInPercent() );
 
@@ -397,7 +397,7 @@ void Doc::saveConfig()
 
 void Doc::initConfig()
 {
-    KConfig *config = Factory::global()->config();
+    KSharedConfigPtr config = Factory::global().config();
     int zoom = 100;
 
     if( config->hasGroup("KSpread Page Layout" ))
@@ -1423,7 +1423,7 @@ K3SpellConfig * Doc::getKSpellConfig()
     {
       K3SpellConfig ksconfig;
 
-      KConfig *config = Factory::global()->config();
+      KSharedConfigPtr config = Factory::global().config();
       if( config->hasGroup("KSpell kspread" ) )
       {
           config->setGroup( "KSpell kspread" );

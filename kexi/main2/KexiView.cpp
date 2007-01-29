@@ -95,7 +95,7 @@ KexiView::KexiView(QWidget* parent, KexiDocument* document)
     : KoView(document, parent)
     , d( new Private(document) )
 {
-    setInstance( KexiFactory::global() );
+    setComponentData( KexiFactory::global() );
     if ( doc()->isReadWrite() )
         setXMLFile( "kexi.rc" );
     else

@@ -28,7 +28,7 @@
 KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
   : KoPADocument(parentWidget, parent, singleViewMode)
 {
-    setInstance(KivioFactory::instance(), false);
+    setComponentData(KivioFactory::componentData(), false);
     setTemplateType("kivio_template");
 }
 

@@ -40,7 +40,7 @@
  *
  ******************************************************************/
 
-KWQtSqlSerialDataSource::KWQtSqlSerialDataSource(KInstance *inst,QObject *parent)
+KWQtSqlSerialDataSource::KWQtSqlSerialDataSource(const KComponentData &inst,QObject *parent)
 	: KWQtSqlSerialDataSourceBase(inst,parent)
 {
   myquery=0;
@@ -213,7 +213,7 @@ void KWQtSqlDataSourceEditor::editFilter()
 }
 
 extern "C" {
-        KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb(KInstance *inst,QObject *parent)
+        KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb(const KComponentData &inst,QObject *parent)
         {
                 return new KWQtSqlSerialDataSource(inst,parent);
         }

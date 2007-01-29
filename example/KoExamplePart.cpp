@@ -26,7 +26,7 @@
 ExamplePart::ExamplePart( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument( parentWidget, parent, singleViewMode )
 {
-    setInstance( ExampleFactory::global(), false );
+    setComponentData( ExampleFactory::global(), false );
 }
 
 KoView* ExamplePart::createViewInstance( QWidget* parent )

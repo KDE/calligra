@@ -30,7 +30,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -75,7 +75,7 @@ KarbonResourceServer::KarbonResourceServer()
 	for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
 	{
 		format = *it;
-		QStringList l = KarbonFactory::instance()->dirs()->findAllResources(
+		QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
 							"kis_pattern", format, false, true );
 		lst += l;
 	}
@@ -104,7 +104,7 @@ KarbonResourceServer::KarbonResourceServer()
 	for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
 	{
 		format = *it;
-		QStringList l = KarbonFactory::instance()->dirs()->findAllResources(
+		QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
 							"karbon_gradient", format, false, true );
 		lst += l;
 	}
@@ -133,7 +133,7 @@ KarbonResourceServer::KarbonResourceServer()
 	for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
 	{
 		format = *it;
-		QStringList l = KarbonFactory::instance()->dirs()->findAllResources(
+		QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
 							"karbon_clipart", format, false, true );
 		lst += l;
 	}
@@ -190,7 +190,7 @@ KarbonResourceServer::addPattern( const QString& tilename )
 
 	QString ext = '.' + fi.suffix();
 
-	QString filename = KarbonFactory::instance()->dirs()->saveLocation(
+	QString filename = KarbonFactory::componentData().dirs()->saveLocation(
 						   "kis_pattern" ) + name + ext;
 
 	i = 1;
@@ -199,7 +199,7 @@ KarbonResourceServer::addPattern( const QString& tilename )
 
 	while( fi.exists() == true )
 	{
-		filename = KarbonFactory::instance()->dirs()->saveLocation("kis_pattern" ) + name + i + ext;
+		filename = KarbonFactory::componentData().dirs()->saveLocation("kis_pattern" ) + name + i + ext;
 		fi.setFile( filename );
 		kDebug(38000) << fi.fileName() << endl;
 	}
@@ -243,16 +243,16 @@ KarbonResourceServer::addGradient( VGradient* gradient )
 	QFileInfo fi;
 
 	sprintf( buffer, "%04d.kgr", i++ );
-	fi.setFile( KarbonFactory::instance()->dirs()->saveLocation( "karbon_gradient" ) + buffer );
+	fi.setFile( KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer );
 
 	while( fi.exists() == true )
 	{
 		sprintf( buffer, "%04d.kgr", i++ );
-		fi.setFile( KarbonFactory::instance()->dirs()->saveLocation( "karbon_gradient" ) + buffer );
+		fi.setFile( KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer );
 		kDebug(38000) << fi.fileName() << endl;
 	}
 
-	QString filename = KarbonFactory::instance()->dirs()->saveLocation( "karbon_gradient" ) + buffer;
+	QString filename = KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer;
 
 	saveGradient( gradient, filename );
 
@@ -378,10 +378,10 @@ KarbonResourceServer::addClipart( VObject* clipart, double width, double height 
 	char buffer[ 20 ];
 	sprintf( buffer, "%04d.kclp", i++ );
 
-	while( KStandardDirs::exists( KarbonFactory::instance()->dirs()->saveLocation( "karbon_clipart" ) + buffer ) )
+	while( KStandardDirs::exists( KarbonFactory::componentData().dirs()->saveLocation( "karbon_clipart" ) + buffer ) )
 		sprintf( buffer, "%04d.kclp", i++ );
 
-	QString filename = KarbonFactory::instance()->dirs()->saveLocation( "karbon_clipart" ) + buffer;
+	QString filename = KarbonFactory::componentData().dirs()->saveLocation( "karbon_clipart" ) + buffer;
 
 	saveClipart( clipart, width, height, filename );
 

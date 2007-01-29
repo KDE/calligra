@@ -430,7 +430,7 @@ QMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
 
     bool singleWord= false;
     KWDocument * doc = m_view->frame()->frameSet()->kWordDocument();
-    actionList = fse->dataToolActionList(doc->instance(), actionCollection, word, singleWord);
+    actionList = fse->dataToolActionList(doc->componentData(), actionCollection, word, singleWord);
 
     KoVariable* var = fse->variable();
     doc->variableCollection()->setVariableSelected(var);

@@ -41,7 +41,7 @@ KFormulaPartDocument::KFormulaPartDocument( QWidget *parentWidget, QObject* pare
                                               bool singleViewMode )
                      : KoDocument( parentWidget, parent, singleViewMode )
 {
-    setInstance( KFormulaPartFactory::global(), false );
+    setComponentData( KFormulaPartFactory::global(), false );
 
     m_commandHistory = new KCommandHistory( actionCollection() );
 /*    connect( m_commandHistory, SIGNAL( commandExecuted() ),

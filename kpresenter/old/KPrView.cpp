@@ -284,7 +284,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent )
     : KoView( _doc, _parent )
 {
 
-    setInstance( KPrFactory::global() );
+    setComponentData( KPrFactory::global() );
     if ( !_doc->isReadWrite() )
         setXMLFile( "kpresenter_readonly.rc" );
     else
@@ -472,12 +472,12 @@ KPrView::~KPrView()
     delete m_findReplace;
     m_findReplace = 0L;
     if(sidebar) {
-        KConfig *config=KGlobal::config();
+        KSharedConfig::Ptr config = KGlobal::config();
         config->setGroup("Global");
         config->writeEntry("Sidebar", sidebar->isVisible());
     }
     if(notebar) {
-        KConfig *config=KGlobal::config();
+        KSharedConfig::Ptr config = KGlobal::config();
         config->setGroup("Global");
         config->writeEntry("Notebar", notebar->isVisible());
     }
@@ -2260,7 +2260,7 @@ void KPrView::createGUI()
     {
         sidebar->outline()->setCurrentItem( sidebar->outline()->firstChild() );
         sidebar->outline()->setSelected( sidebar->outline()->firstChild(), true );
-        KConfig *config=KGlobal::config();
+        KSharedConfig::Ptr config = KGlobal::config();
         config->setGroup("Global");
         if(!config->readEntry("Sidebar", true)) {
             sidebar->hide();
@@ -2271,7 +2271,7 @@ void KPrView::createGUI()
 
     if ( notebar )
     {
-        KConfig *config=KGlobal::config();
+        KSharedConfig::Ptr config = KGlobal::config();
         config->setGroup("Global");
         if(!config->readEntry("Notebar", true)) {
             notebar->hide();

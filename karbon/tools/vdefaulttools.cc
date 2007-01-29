@@ -40,7 +40,7 @@ K_EXPORT_COMPONENT_FACTORY( karbon_defaulttools, VDefaultToolsFactory( "karbon_d
 VDefaultTools::VDefaultTools(QObject *parent, const QStringList &)
 	: KParts::Plugin(parent/*, name*/)
 {
-	setInstance(VDefaultToolsFactory::instance());
+	setComponentData(VDefaultToolsFactory::componentData());
 
 	kDebug() << "VDefaultTools. Class: "
 		<< metaObject()->className()

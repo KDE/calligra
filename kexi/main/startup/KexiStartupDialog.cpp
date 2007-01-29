@@ -45,7 +45,7 @@
 
 #include <klocale.h>
 #include <kdeversion.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kpushbutton.h>
 #include <kjanuswidget.h>
@@ -203,7 +203,7 @@ QString captionForDialogType(int type)
 }
 
 /*================================================================*/
-/*KexiStartupDialog::KexiStartupDialog(QWidget *parent, const char *name, KInstance* global,
+/*KexiStartupDialog::KexiStartupDialog(QWidget *parent, const char *name, KComponentData global,
 	const QCString &format, const QString &nativePattern,
 	const QString &nativeName, const DialogType &dialogType,
 	const QCString& templateType) :

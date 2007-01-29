@@ -5,7 +5,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kaboutdata.h>
 #include <kaction.h>
 #include <kstandardaction.h>
@@ -30,7 +30,7 @@
 KugarView::KugarView( KugarPart *part, QWidget *parent)
         : KoView( part, parent)
 {
-    setInstance( KugarFactory::global() );
+    setComponentData( KugarFactory::global() );
 
     ( new Q3VBoxLayout( this ) ) ->setAutoAdd( true );
     view = new Kugar::MReportViewer( part->reportEngine(), this );

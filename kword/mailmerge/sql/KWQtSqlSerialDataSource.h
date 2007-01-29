@@ -36,7 +36,7 @@
 class KWQtSqlSerialDataSource: public KWQtSqlSerialDataSourceBase
 {
     public:
-    KWQtSqlSerialDataSource(KInstance *inst,QObject *parent);
+    KWQtSqlSerialDataSource(const KComponentData &inst,QObject *parent);
     ~KWQtSqlSerialDataSource();
 
     virtual void save( QDomDocument &doc,QDomElement&);

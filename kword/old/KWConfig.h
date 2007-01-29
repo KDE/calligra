@@ -24,6 +24,7 @@
 //Added by qt3to4:
 #include <QLabel>
 #include <kvbox.h>
+#include <kconfig.h>
 #include <Q3ListViewItem>
 
 namespace KFormula {
@@ -152,7 +153,7 @@ private slots:
     void slotSelectionChanged(Q3ListViewItem *);
 private:
     KWView* m_pView;
-    KConfig* config;
+    KSharedConfigPtr config;
     K3ListView* m_pPathView;
     QPushButton *m_modifyPath;
 };

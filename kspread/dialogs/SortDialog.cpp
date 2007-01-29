@@ -49,7 +49,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kvbox.h>
-#include <kinstance.h>
 
 #include "SortDialog.h"
 #include "Doc.h"
@@ -302,7 +301,7 @@ void SortDialog::init()
   ',' + i18n("Thursday") + ',' + i18n("Friday") + ',' + i18n("Saturday") +
   ',' + i18n("Sunday");
 
-  KConfig * config = Factory::global()->config();
+  KSharedConfigPtr config = Factory::global().config();
   config->setGroup( "Parameters" );
   QStringList other = config->readEntry("Other list", QStringList());
   QString tmp;

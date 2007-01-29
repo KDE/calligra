@@ -93,9 +93,9 @@ bool DriverManagerInternal::lookupDrivers()
 	if (qApp) {
 		connect(qApp,SIGNAL(aboutToQuit()),this,SLOT(slotAppQuits()));
 	}
-//TODO: for QT-only version check for KInstance wrapper
-//		KexiDBWarn << "DriverManagerInternal::lookupDrivers(): cannot work without KInstance (KGlobal::instance()==0)!" << endl;
-//		setError("Driver Manager cannot work without KInstance (KGlobal::instance()==0)!");
+//TODO: for QT-only version check for KComponentData wrapper
+//		KexiDBWarn << "DriverManagerInternal::lookupDrivers(): cannot work without KComponentData (KGlobal::mainComponent()==0)!" << endl;
+//		setError("Driver Manager cannot work without KComponentData (KGlobal::mainComponent()==0)!");
 
 	lookupDriversNeeded = false;
 	clearError();

@@ -26,12 +26,12 @@
 #include "KexiAboutData.h"
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kaboutdata.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 
-KInstance* KexiFactory::s_global = 0;
+KComponentData* KexiFactory::s_global = 0;
 KAboutData* KexiFactory::s_aboutData = 0;
 KIconLoader* KexiFactory::s_iconLoader = 0;
 
@@ -64,22 +64,22 @@ KAboutData* KexiFactory::aboutData()
     return s_aboutData;
 }
 
-KInstance* KexiFactory::global()
+const KComponentData &KexiFactory::global()
 {
     if ( !s_global ) {
-        s_global = new KInstance( aboutData() );
+        s_global = new KComponentData( aboutData() );
         //s_global->dirs()->addResourceType( "kspread_template", KStandardDirs::kde_default("data") + "kspread/templates/");
         //s_global->dirs()->addResourceType( "toolbar", KStandardDirs::kde_default("data") + "koffice/toolbar/");
         //s_global->dirs()->addResourceType( "functions", KStandardDirs::kde_default("data") + "kspread/functions/");
         //s_global->dirs()->addResourceType( "sheet-styles", KStandardDirs::kde_default("data") + "kspread/sheetstyles/");
     }
-    return s_global;
+    return *s_global;
 }
 
 KIconLoader* KexiFactory::iconLoader()
 {
     if( !s_iconLoader ) {
-        s_iconLoader = new KIconLoader(global()->instanceName(), global()->dirs());
+        s_iconLoader = new KIconLoader(global().componentName(), global()->dirs());
         s_iconLoader->addAppDir("koffice");
     }
     return s_iconLoader;

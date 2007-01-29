@@ -67,7 +67,7 @@ KexiSimplePrintingSettings KexiSimplePrintingSettings::load()
 {
 	KexiSimplePrintingSettings settings; //this will set defaults
 
-	KConfig *config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup("Simple Printing");
 	if (config->hasKey("pageTitleFont"))
 		settings.pageTitleFont = config->readFontEntry("pageTitleFont");
@@ -99,7 +99,7 @@ KexiSimplePrintingSettings KexiSimplePrintingSettings::load()
 
 void KexiSimplePrintingSettings::save()
 {
-	KConfig *config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup("Simple Printing");
 	config->writeEntry( "pageTitleFont", pageTitleFont );
 	config->writeEntry( "pageFormat", KoPageFormat::formatString( pageLayout.format ) );

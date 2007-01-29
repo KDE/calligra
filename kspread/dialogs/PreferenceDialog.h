@@ -31,8 +31,8 @@
 //Added by qt3to4:
 #include <QLabel>
 #include <kvbox.h>
+#include <kconfig.h>
 
-class KConfig;
 class KIntNumInput;
 class KDoubleNumInput;
 class KSpellConfig;
@@ -88,7 +88,7 @@ protected:
     QCheckBox *m_createBackupFile;
   bool m_oldBackupFile;
 
-  KConfig* config;
+  KSharedConfigPtr config;
   int oldRecent;
   int oldAutoSaveValue;
 } ;
@@ -115,7 +115,7 @@ protected:
    * Needed to ensure the same unit for loading and saving.
    */
   KoUnit indentUnit;
-  KConfig* config;
+  KSharedConfigPtr config;
   QComboBox *typeCompletion;
   QComboBox *typeCalc;
   QComboBox *typeOfMove;
@@ -136,7 +136,7 @@ protected:
   View* m_pView;
   KColorButton* gridColor;
   KColorButton* pageBorderColor;
-  KConfig* config;
+  KSharedConfigPtr config;
 } ;
 
 class configureLayoutPage : public QObject
@@ -157,7 +157,7 @@ protected:
   int orientation;
   int unit;
 
-  KConfig* config;
+  KSharedConfigPtr config;
 } ;
 
 class configureSpellPage : public QObject
@@ -169,7 +169,7 @@ public:
   void slotDefault();
 protected:
   View * m_pView;
-  KConfig * config;
+  KSharedConfigPtr config;
     KSpellConfig *m_spellConfigWidget;
     QCheckBox *dontCheckUpperWord;
     QCheckBox *dontCheckTitleCase;
@@ -185,7 +185,7 @@ public:
 private slots:
   void screenReaderOptionChanged() {}
 private:
-  KConfig* config;
+  KSharedConfigPtr config;
   QCheckBox* m_cbSpeakPointerWidget;
   QCheckBox* m_cbSpeakFocusWidget;
   QGroupBox* m_gbScreenReaderOptions;

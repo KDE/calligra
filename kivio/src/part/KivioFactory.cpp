@@ -19,7 +19,7 @@
 
 #include "KivioFactory.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -27,13 +27,13 @@
 #include "KivioDocument.h"
 #include "KivioAboutData.h"
 
-KInstance* KivioFactory::s_instance = 0;
+KComponentData* KivioFactory::s_instance = 0;
 KAboutData* KivioFactory::s_aboutData = 0;
 
 KivioFactory::KivioFactory(QObject* parent)
   : KoFactory(parent)
 {
-  (void) instance();
+  (void) componentData();
 }
 
 KivioFactory::~KivioFactory()
@@ -59,17 +59,17 @@ KParts::Part* KivioFactory::createPartObject(QWidget* parentWidget,
   return doc;
 }
 
-KInstance* KivioFactory::instance()
+const KComponentData &KivioFactory::componentData()
 {
   if (!s_instance) {
-    s_instance = new KInstance(aboutData());
+    s_instance = new KComponentData(aboutData());
 
     s_instance->dirs()->addResourceType("kivio_template", KStandardDirs::kde_default("data")
                                         + "kivio/templates/");
     KIconLoader::global()->addAppDir("koffice");
   }
 
-  return s_instance;
+  return *s_instance;
 }
 
 KAboutData* KivioFactory::aboutData()

@@ -22,10 +22,10 @@
 
 #include <QRectF>
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 void TestPageManager::init() {
-    new KInstance ("TestPageManager");
+    new KComponentData("TestPageManager");
 }
 
 void TestPageManager::getAddPages() {

@@ -21,7 +21,7 @@
 
 #include "kivio_view.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 
 /***************************************************
@@ -29,12 +29,12 @@
  ***************************************************/
 K_EXPORT_COMPONENT_FACTORY( libkivioconnectortool, ConnectorToolFactory )
 
-KInstance* ConnectorToolFactory::s_global = 0;
+KComponentData ConnectorToolFactory::s_global = 0;
 
 ConnectorToolFactory::ConnectorToolFactory( QObject* parent, const char* name )
 : KLibFactory( parent, name )
 {
-  s_global = new KInstance("kivio");
+  s_global("kivio");
 }
 
 ConnectorToolFactory::~ConnectorToolFactory()
@@ -51,7 +51,7 @@ QObject* ConnectorToolFactory::createObject( QObject* parent, const char*, const
   return obj;
 }
 
-KInstance* ConnectorToolFactory::global()
+KComponentData ConnectorToolFactory::global()
 {
   return s_global;
 }

@@ -21,7 +21,7 @@
 
 #include "kivio_view.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 
 /***************************************************
@@ -29,12 +29,12 @@
  ***************************************************/
 K_EXPORT_COMPONENT_FACTORY( libkivioselecttool, SelectToolFactory )
 
-KInstance* SelectToolFactory::s_global = 0;
+KComponentData SelectToolFactory::s_global = 0;
 
 SelectToolFactory::SelectToolFactory( QObject* parent, const char* name )
 : KLibFactory( parent, name )
 {
-  s_global = new KInstance("kivio");
+  s_global("kivio");
 }
 
 SelectToolFactory::~SelectToolFactory()
@@ -51,7 +51,7 @@ QObject* SelectToolFactory::createObject( QObject* parent, const char*, const ch
   return obj;
 }
 
-KInstance* SelectToolFactory::global()
+KComponentData SelectToolFactory::global()
 {
   return s_global;
 }

@@ -21,7 +21,7 @@
 
 #include "kivio_view.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 
 /***************************************************
@@ -29,12 +29,12 @@
  ***************************************************/
 K_EXPORT_COMPONENT_FACTORY( libkiviozoomtool, ZoomToolFactory )
 
-KInstance* ZoomToolFactory::s_global = 0;
+KComponentData ZoomToolFactory::s_global = 0;
 
 ZoomToolFactory::ZoomToolFactory( QObject* parent, const char* name )
 : KLibFactory( parent, name )
 {
-  s_global = new KInstance("kivio");
+  s_global("kivio");
 }
 
 ZoomToolFactory::~ZoomToolFactory()
@@ -51,7 +51,7 @@ QObject* ZoomToolFactory::createObject( QObject* parent, const char*, const char
   return obj;
 }
 
-KInstance* ZoomToolFactory::global()
+KComponentData ZoomToolFactory::global()
 {
   return s_global;
 }

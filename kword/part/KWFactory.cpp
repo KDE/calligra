@@ -20,12 +20,12 @@
 #include "KWFactory.h"
 #include "KWAboutData.h"
 #include "KWDocument.h"
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
 #include <kiconloader.h>
 
-KInstance* KWFactory::s_instance = 0;
+KComponentData* KWFactory::s_instance = 0;
 KAboutData* KWFactory::s_aboutData = 0;
 
 KWFactory::KWFactory( QObject* parent, const char* name )
@@ -33,7 +33,7 @@ KWFactory::KWFactory( QObject* parent, const char* name )
 {
   // Create our instance, so that it becomes KGlobal::instance if the
   // main app is KWord.
-  (void) instance();
+  (void) componentData();
 }
 
 KWFactory::~KWFactory()
@@ -64,18 +64,18 @@ KAboutData* KWFactory::aboutData()
     return s_aboutData;
 }
 
-KInstance* KWFactory::instance()
+const KComponentData &KWFactory::componentData()
 {
     if ( !s_instance )
     {
-      s_instance = new KInstance( aboutData() );
+      s_instance = new KComponentData( aboutData() );
 
       s_instance->dirs()->addResourceType( "kword_template",
               KStandardDirs::kde_default("data") + "kword/templates/");
 
       KIconLoader::global()->addAppDir("koffice");
     }
-    return s_instance;
+    return *s_instance;
 }
 
 #include "KWFactory.moc"

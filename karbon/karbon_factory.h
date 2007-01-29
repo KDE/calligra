@@ -23,7 +23,7 @@
 #include <KoFactory.h>
 #include <karbon_export.h>
 class KAboutData;
-class KInstance;
+class KComponentData;
 
 class KarbonResourceServer;
 
@@ -38,13 +38,13 @@ public:
 
 	virtual KParts::Part* createPartObject( QWidget *parentWidget = 0, QObject* parent = 0L, const char* classname = "KoDocument", const QStringList& args = QStringList() );
 
-	static KInstance* instance();
+	static const KComponentData &componentData();
 	static KAboutData* aboutData();
 
 	static KarbonResourceServer *rServer();
 
 private:
-	static KInstance*	s_instance;
+	static KComponentData* s_instance;
 	static KAboutData*	s_aboutData;
 	static KarbonResourceServer* s_rserver;
 };

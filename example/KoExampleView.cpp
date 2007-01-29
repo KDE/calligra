@@ -34,7 +34,7 @@
 ExampleView::ExampleView( ExamplePart* part, QWidget* parent )
     : KoView( part, parent)
 {
-    setInstance( ExampleFactory::global() );
+    setComponentData( ExampleFactory::global() );
     if ( !part->isReadWrite() ) // readonly case, e.g. when embedded into konqueror
         setXMLFile( "example_readonly.rc" ); // simplified GUI
     else

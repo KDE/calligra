@@ -42,7 +42,7 @@
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kprinter.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 #include <kcommand.h>
@@ -143,7 +143,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	m_toolController = new VToolController( this );
 	m_toolController->init();
 
-	setInstance( KarbonFactory::instance(), true );
+	setComponentData( KarbonFactory::componentData(), true );
 
 	setClientBuilder( this );
 
@@ -480,7 +480,7 @@ KarbonView::editPaste()
 		return;
 
 	// Paste with a small offset.
-	double copyOffset = part()->instance()->config()->readEntry( "CopyOffset", 10 );
+	double copyOffset = part()->componentData().config()->readEntry( "CopyOffset", 10 );
 	part()->addCommand( new VInsertCmd( &part()->document(),
 										objects.count() == 1
 											? i18n( "Paste Object" )
@@ -722,7 +722,7 @@ KarbonView::selectionDuplicate()
 	}
 
 	// Paste with a small offset.
-	double copyOffset = part()->instance()->config()->readEntry( "CopyOffset", 10 );
+	double copyOffset = part()->componentData().config()->readEntry( "CopyOffset", 10 );
 	part()->addCommand( new VInsertCmd( &part()->document(),
 										objects.count() == 1
 											? i18n( "Duplicate Object" )
@@ -1372,7 +1372,7 @@ KarbonView::mousePositionChanged( const QPoint &position )
     double x = KoUnit::toUserValue(documentPos.x(), part()->unit());
     double y = KoUnit::toUserValue(documentPos.y(), part()->unit());
 
-    m_cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::_locale->formatNumber(x, 2)).arg(KGlobal::_locale->formatNumber(y, 2)) );
+    m_cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)) );
 }
 
 void

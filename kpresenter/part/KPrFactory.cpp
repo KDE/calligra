@@ -23,18 +23,18 @@
 #include "KPrAboutData.h"
 
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
 
-KInstance* KPrFactory::s_instance = 0;
+KComponentData* KPrFactory::s_instance = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
 KIconLoader* KPrFactory::s_iconLoader = 0;
 
 KPrFactory::KPrFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
-    (void)instance();
+    (void)componentData();
 }
 
 KPrFactory::~KPrFactory()
@@ -70,7 +70,7 @@ KIconLoader* KPrFactory::iconLoader()
 {
     if( !s_iconLoader )
     {
-        s_iconLoader = new KIconLoader( instance()->instanceName() );
+        s_iconLoader = new KIconLoader( componentData().componentName() );
         // Tell the iconloader about share/apps/koffice/icons
         s_iconLoader->addAppDir("koffice");
     }
@@ -78,18 +78,18 @@ KIconLoader* KPrFactory::iconLoader()
     return s_iconLoader;
 }
 
-KInstance* KPrFactory::instance()
+const KComponentData &KPrFactory::componentData()
 {
     if ( !s_instance )
     {
-        s_instance = new KInstance(aboutData());
+        s_instance = new KComponentData(aboutData());
 
         s_instance->dirs()->addResourceType("kpresenter_template",
                 KStandardDirs::kde_default("data") + "kpresenter/templates/");
         s_instance->dirs()->addResourceType("slideshow",
                 KStandardDirs::kde_default("data") + "kpresenter/slideshow/");
     }
-    return s_instance;
+    return *s_instance;
 }
 
 #include "KPrFactory.moc"

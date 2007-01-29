@@ -24,10 +24,10 @@
 
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 
-KInstance* KPrFactory::s_global = 0;
+KComponentData* KPrFactory::s_global = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
 KIconLoader* KPrFactory::s_iconLoader = 0;
 
@@ -69,7 +69,7 @@ KIconLoader* KPrFactory::iconLoader()
 {
     if( !s_iconLoader )
     {
-        s_iconLoader = new KIconLoader( global()->instanceName() );
+        s_iconLoader = new KIconLoader( global().componentName() );
         // Tell the iconloader about share/apps/koffice/icons
         s_iconLoader->addAppDir("koffice");
     }
@@ -77,11 +77,11 @@ KIconLoader* KPrFactory::iconLoader()
     return s_iconLoader;
 }
 
-KInstance* KPrFactory::global()
+const KComponentData &KPrFactory::global()
 {
     if ( !s_global )
     {
-        s_global = new KInstance(aboutData());
+        s_global = new KComponentData(aboutData());
 
         s_global->dirs()->addResourceType("kpresenter_template",
                                           KStandardDirs::kde_default("data") + "kpresenter/templates/");
@@ -90,7 +90,7 @@ KInstance* KPrFactory::global()
         s_global->dirs()->addResourceType("slideshow",
                                           KStandardDirs::kde_default("data") + "kpresenter/slideshow/");
     }
-    return s_global;
+    return *s_global;
 }
 
 #include "KPrFactory.moc"

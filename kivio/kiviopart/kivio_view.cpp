@@ -258,7 +258,7 @@ KivioView::KivioView( QWidget *_parent, KivioDoc* doc )
   connect( this, SIGNAL( invalidated() ), m_pCanvas, SLOT( update() ) );
   connect( this, SIGNAL( regionInvalidated( const QRegion&, bool ) ), m_pCanvas, SLOT( repaint( const QRegion&, bool ) ) );
 
-  setInstance(KivioFactory::global());
+  setComponentData(KivioFactory::global());
   if ( !m_pDoc->isReadWrite() )
     setXMLFile("kivio_readonly.rc");
   else

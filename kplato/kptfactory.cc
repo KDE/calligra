@@ -20,7 +20,7 @@
 #include "kptfactory.h"
 #include "kptpart.h"
 #include "kptaboutdata.h"
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -29,7 +29,7 @@
 namespace KPlato
 {
 
-KInstance* Factory::s_global = 0L;
+KComponentData* Factory::s_global = 0L;
 KAboutData* Factory::s_aboutData = 0L;
 
 Factory::Factory( QObject* parent, const char* name )
@@ -74,11 +74,11 @@ KAboutData* Factory::aboutData()
     return s_aboutData;
 }
 
-KInstance* Factory::global()
+const KComponentData &Factory::global()
 {
     if ( !s_global )
     {
-        s_global = new KInstance( aboutData() );
+        s_global = new KComponentData( aboutData() );
 
         // Add any application-specific resource directories here
 	s_global->dirs()->addResourceType("kplato_template",
@@ -90,7 +90,7 @@ KInstance* Factory::global()
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
     }
-    return s_global;
+    return *s_global;
 }
 
 } // KPlato namespace

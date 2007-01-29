@@ -22,12 +22,12 @@
 
 K_EXPORT_COMPONENT_FACTORY( libkiviotargettool, KivioTargetToolFactory )
 
-KInstance* KivioTargetToolFactory::s_global = 0;
+KComponentData KivioTargetToolFactory::s_global = 0;
 
 KivioTargetToolFactory::KivioTargetToolFactory(QObject *parent, const char *name)
  : KLibFactory(parent, name)
 {
-  s_global = new KInstance("kivio");
+  s_global("kivio");
 }
 
 KivioTargetToolFactory::~KivioTargetToolFactory()
@@ -44,7 +44,7 @@ QObject* KivioTargetToolFactory::createObject( QObject* parent, const char*, con
   return obj;
 }
 
-KInstance* KivioTargetToolFactory::global()
+KComponentData KivioTargetToolFactory::global()
 {
   return s_global;
 }

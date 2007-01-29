@@ -45,7 +45,7 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent )
     m_dbus = new KFormulaPartViewAdaptor( this );
     QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
 
-    setInstance( KFormulaPartFactory::global() );
+    setComponentData( KFormulaPartFactory::global() );
 
     m_formulaCanvas = new KFormulaCanvas( this, m_partDocument );
     m_zoomHandler = new KoZoomHandler();

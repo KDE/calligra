@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 #include <kexidb/drivermanager.h>
 #include <widget/kexidbdrivercombobox.h>

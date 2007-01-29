@@ -26,7 +26,7 @@ DESCRIPTION
 
 #include <klibloader.h>
 
-class KInstance;
+class KComponentData;
 
 class XFIGImportFactory :
     public KLibFactory
@@ -38,9 +38,9 @@ public:
 
     virtual QObject* createObject(QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList());
 
-    static KInstance* global();
+    static const KComponentData &global();
 
 private:
-    static KInstance* s_global;
+    static KComponentData* s_global;
 };
 #endif

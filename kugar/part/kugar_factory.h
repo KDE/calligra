@@ -10,7 +10,7 @@
 #include <KoFactory.h>
 #include <kaboutdata.h>
 
-class KInstance;
+class KComponentData;
 
 
 class KugarFactory : public KoFactory
@@ -24,12 +24,12 @@ public:
                                             QObject *parent = 0, const char *classname = "KoDocument",
                                             const QStringList &args = QStringList() );
 
-    static KInstance* global();
+    static const KComponentData &global();
 
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 private:
-    static KInstance* s_instance;
+    static KComponentData* s_instance;
     static KAboutData* s_aboutdata;
 };
 

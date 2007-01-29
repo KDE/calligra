@@ -35,7 +35,6 @@
 
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kinstance.h>
 
 #include "Doc.h"
 #include "Localization.h"
@@ -147,7 +146,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const Cell& cell )
         if ( other == 0 )
         {
             // other=new QStringList();
-            KConfig *config = Factory::global()->config();
+            KSharedConfigPtr config = Factory::global().config();
             config->setGroup( "Parameters" );
             other=new QStringList(config->readEntry("Other list", QStringList()));
         }

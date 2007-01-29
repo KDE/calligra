@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <KoTextZoomHandler.h>
 #include <math.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 using namespace std;
 
 KPrAutoformObject::KPrAutoformObject()

@@ -113,7 +113,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   m_loadTimer = 0;
   m_currentFile = 0;
 
-  setInstance( KivioFactory::global(), false );
+  setComponentData( KivioFactory::global(), false );
   setTemplateType("kivio_template");
 
   if ( !name )
@@ -130,7 +130,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   // Load autoLoadStencils in internal StencilSpawnerSet
   m_pInternalSet = new KivioStencilSpawnerSet("Kivio_Internal");
   m_pInternalSet->setId("Kivio - Internal - Do Not Touch");
-  QStringList list = instance()->dirs()->findAllResources("data",instance()->instanceName()+"/autoloadStencils/*",true,false);
+  QStringList list = componentData().dirs()->findAllResources("data",componentData().componentName()+"/autoloadStencils/*",true,false);
   QStringList::ConstIterator pIt = list.begin();
   QStringList::ConstIterator pEnd = list.end();
 

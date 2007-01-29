@@ -35,7 +35,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-KWMailMergeKABC::KWMailMergeKABC( KInstance *inst, QObject *parent )
+KWMailMergeKABC::KWMailMergeKABC( const KComponentData &inst, QObject *parent )
         : KWMailMergeDataSource( inst, parent )
 {
     _addressBook = KABC::StdAddressBook::self();
@@ -539,7 +539,7 @@ QStringList KWMailMergeKABC::singleRecords() const
 
 extern "C"
 {
-    KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_kabc( KInstance *inst, QObject *parent )
+    KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_kabc( const KComponentData &inst, QObject *parent )
     {
         return new KWMailMergeKABC( inst, parent );
     }

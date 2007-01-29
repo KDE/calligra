@@ -45,13 +45,13 @@ public:
     virtual KParts::Part* createPartObject( QWidget * = 0, QObject* parent = 0, const char* classname = "KoDocument", const QStringList &args = QStringList() );
 
     /// Return an instance
-    static KInstance* instance();
+    static const KComponentData &componentData();
 
     /// Creates a new KAboutData instance
     static KAboutData* aboutData();
 
 private:
-    static KInstance* s_instance;
+    static KComponentData *s_instance;
     static KAboutData* s_aboutData;
 };
 

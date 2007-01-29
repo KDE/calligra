@@ -34,7 +34,7 @@ class KWMailMergeKSpread: public KWMailMergeDataSource
   Q_OBJECT
 
   public:
-    KWMailMergeKSpread( KInstance *inst, QObject *parent );
+    KWMailMergeKSpread( const KComponentData &inst, QObject *parent );
     ~KWMailMergeKSpread();
 
     /**

@@ -33,7 +33,7 @@ K_EXPORT_COMPONENT_FACTORY( karbon_zoomtoolplugin, ZoomToolPluginFactory( "karbo
 ZoomToolPlugin::ZoomToolPlugin(QObject *parent, const QStringList &)
 	: KParts::Plugin(parent)
 {
-	setInstance(ZoomToolPluginFactory::instance());
+	setComponentData(ZoomToolPluginFactory::componentData());
 
 	/*kDebug() << "Zoom tool plugin. Class: "
 		<< className()

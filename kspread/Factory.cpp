@@ -19,7 +19,7 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
 #include "AboutData.h"
@@ -30,7 +30,7 @@
 
 using namespace KSpread;
 
-KInstance* Factory::s_global = 0;
+KComponentData* Factory::s_global = 0;
 KIconLoader* Factory::s_iconLoader = 0;
 // DCOPObject* Factory::s_dcopObject = 0;
 KAboutData* Factory::s_aboutData = 0;
@@ -77,11 +77,11 @@ KAboutData* Factory::aboutData()
   return s_aboutData;
 }
 
-KInstance* Factory::global()
+const KComponentData &Factory::global()
 {
     if ( !s_global )
     {
-      s_global = new KInstance(aboutData());
+      s_global = new KComponentData(aboutData());
 
       s_global->dirs()->addResourceType( "kspread_template",
                                           KStandardDirs::kde_default("data") + "kspread/templates/");
@@ -92,7 +92,7 @@ KInstance* Factory::global()
       s_global->dirs()->addResourceType( "sheet-styles", KStandardDirs::kde_default("data") + "kspread/sheetstyles/");
       
     }
-    return s_global;
+    return *s_global;
 }
 
 KIconLoader* Factory::iconLoader()
@@ -100,7 +100,7 @@ KIconLoader* Factory::iconLoader()
   if( !s_iconLoader )
   {
       // Tell the iconloader about share/apps/koffice/icons
-      s_iconLoader = new KIconLoader(global()->instanceName(), global()->dirs());
+      s_iconLoader = new KIconLoader(global().componentName(), global().dirs());
       s_iconLoader->addAppDir("koffice");
   }
   

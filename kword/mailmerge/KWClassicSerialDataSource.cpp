@@ -50,7 +50,7 @@
  *
  ******************************************************************/
 
-KWClassicSerialDataSource::KWClassicSerialDataSource(KInstance *inst,QObject *parent)
+KWClassicSerialDataSource::KWClassicSerialDataSource(const KComponentData &inst,QObject *parent)
 	: KWMailMergeDataSource(inst,parent)
 //    : doc( doc_ )
 {
@@ -570,7 +570,7 @@ void KWClassicMailMergeEditor::removeRecord()
 }
 
 extern "C" {
-	KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_classic(KInstance *inst,QObject *parent)
+	KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_classic(const KComponentData &inst,QObject *parent)
 	{
 		return new KWClassicSerialDataSource(inst,parent);
 	}

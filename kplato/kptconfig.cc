@@ -23,7 +23,7 @@
 
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 namespace KPlato
 {
@@ -39,7 +39,7 @@ Config::~Config()
 
 void Config::load() {
     //kDebug()<<k_funcinfo<<endl;
-    KConfig *config = Factory::global()->config();
+    KSharedConfigPtr config = Factory::global().config();
 
 /*    if( config->hasGroup("Behavior"))
     {
@@ -67,7 +67,7 @@ void Config::save() {
     if (!m_readWrite)
         return;
 
-    KConfig *config = Factory::global()->config();
+    KSharedConfigPtr config = Factory::global().config();
 
 //     config->setGroup( "Behavior" );
 //     config->writeEntry("CalculationMode",m_behavior.calculationMode);

@@ -5,7 +5,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kaboutdata.h>
 #include <kaction.h>
 #include <kstandardaction.h>
@@ -32,7 +32,7 @@ KugarPart::KugarPart( QWidget *parentWidget,
     : KoDocument( parentWidget, parent, singleViewMode ),
     m_templateOk( false )
 {
-    setInstance( KugarFactory::global(), false );
+    setComponentData( KugarFactory::global(), false );
     m_reportEngine = new Kugar::MReportEngine();
     connect( m_reportEngine, SIGNAL( preferedTemplate( const QString & ) ),
              SLOT( slotPreferredTemplate( const QString & ) ) );

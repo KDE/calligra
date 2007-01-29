@@ -66,7 +66,7 @@ KexiDocument::KexiDocument(QWidget *parentWidget, QObject* parent, bool singleVi
 {
     setObjectName( QString("Document%1").arg(d->s_docId++).toLocal8Bit() );
     documents().append( this );
-    setInstance( KexiFactory::global(), false );
+    setComponentData( KexiFactory::global(), false );
 }
 
 KexiDocument::~KexiDocument()

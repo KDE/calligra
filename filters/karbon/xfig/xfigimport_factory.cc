@@ -25,19 +25,19 @@ DESCRIPTION
 #include "xfigimport_factory.moc"
 #include "xfigimport.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
 
 K_EXPORT_COMPONENT_FACTORY( libxfigimport, XFIGImportFactory )
 
-KInstance *XFIGImportFactory::s_global = 0;
+KComponentData *XFIGImportFactory::s_global = 0;
 
 XFIGImportFactory::XFIGImportFactory(
     QObject *parent,
     const char *name) :
         KLibFactory(parent, name)
 {
-    s_global = new KInstance("xfigimport");
+    s_global = new KComponentData("xfigimport");
 }
 
 XFIGImportFactory::~XFIGImportFactory()
@@ -61,7 +61,7 @@ QObject *XFIGImportFactory::createObject(
     return f;
 }
 
-KInstance *XFIGImportFactory::global()
+const KComponentData &XFIGImportFactory::global()
 {
-    return s_global;
+    return *s_global;
 }

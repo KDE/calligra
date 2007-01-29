@@ -21,12 +21,12 @@
 #include "kivio_aboutdata.h"
 
 #include <klocale.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
 
-KInstance* KivioFactory::s_global = 0;
+KComponentData* KivioFactory::s_global = 0;
 KAboutData* KivioFactory::s_aboutData = 0;
 
 KivioFactory::KivioFactory( QObject* parent, const char* name )
@@ -62,17 +62,17 @@ KAboutData* KivioFactory::aboutData()
   return s_aboutData;
 }
 
-KInstance* KivioFactory::global()
+const KComponentData &KivioFactory::global()
 {
   if ( !s_global )
   {
-    s_global = new KInstance(aboutData());
+    s_global = new KComponentData(aboutData());
     s_global->dirs()->addResourceType( "kivio_template", KStandardDirs::kde_default("data") + "kivio/templates/" );
     s_global->dirs()->addResourceType( "toolbar", KStandardDirs::kde_default("data") + "koffice/toolbar/");
     s_global->iconLoader()->addAppDir("koffice");
   }
 
-  return s_global;
+  return *s_global;
 }
 
 #include "kivio_factory.moc"

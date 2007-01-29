@@ -117,12 +117,12 @@ int KivioArrowHeadAction::plug( QWidget* widget, int index)
                           index );
     else
     {
-      KInstance *instance;
+      KComponentData instance;
 
       if ( m_parentCollection )
-        instance = m_parentCollection->instance();
+        instance = m_parentCollection->componentData();
       else
-        instance = KGlobal::instance();
+        instance = KGlobal::mainComponent();
 
       bar->insertButton( icon(), id_, SIGNAL( clicked() ), this,
                           SLOT( slotActivated() ), isEnabled(), plainText(),

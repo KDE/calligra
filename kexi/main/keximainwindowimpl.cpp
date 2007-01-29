@@ -2008,7 +2008,7 @@ KexiMainWindowImpl::storeSettings()
 {
 	kDebug() << "KexiMainWindowImpl::storeSettings()" << endl;
 
-//	saveWindowSize( d->config ); //instance()->config() );
+//	saveWindowSize( d->config ); //componentData().config() );
 	saveMainWindowSettings( d->config, "MainWindow" );
 	d->config->setGroup("MainWindow");
 	KMdi::MdiMode modeToSave = mdiMode();
@@ -3038,7 +3038,7 @@ tristate KexiMainWindowImpl::getNewObjectInfo(
 					+"</p><p>"+i18n("Please choose other name.")+"</p>");
 //				" For example: Table \"my_table\" already exists" ,
 //				"%1 \"%2\" already exists.\nPlease choose other name.")
-//				.arg(dlg->part()->instanceName()).arg(d->nameDialog->widget()->nameText()));
+//				.arg(dlg->part().componentName()).arg(d->nameDialog->widget()->nameText()));
 				continue;
 			}
 		}

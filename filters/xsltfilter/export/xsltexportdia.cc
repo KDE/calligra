@@ -79,7 +79,7 @@ XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QByteArray &format, QWidge
 	}
 
 	/* Common xslt files box */
-	QString appName = (const char*) KGlobal::instance()->instanceName();
+	QString appName = (const char*) KGlobal::mainComponent().componentName();
 	kDebug() << "app name = " << appName << endl;
 
 	QString filenames = QString("xsltfilter") + QDir::separator() + QString("export") +

@@ -63,7 +63,6 @@ public:
 			conn->disconnect();
 			delete (Connection*)conn;
 		}
-		delete instance;
 
 		for (KCmdLineOptions *optionsPtr = allOptions; optionsPtr->name; optionsPtr++) {
 			delete optionsPtr->name;
@@ -75,7 +74,7 @@ public:
 
 	KexiDB::DriverManager manager;
 	KCmdLineOptions *allOptions;
-	KInstance* instance;
+	KComponentData componentData;
 	ConnectionData connData;
 	QPointer<Connection> conn;
 };
@@ -105,7 +104,7 @@ SimpleCommandLineApp::SimpleCommandLineApp(
 	for (KCmdLineOptions *optionsPtr = options; optionsPtr->name; optionsPtr++, userOptionsCount++)
 		;
 
-	d->instance = new KInstance(appName);
+	d->componentData = KComponentData(appName);
 
 	// join the predefined options and user options
 	d->allOptions = new KCmdLineOptions[predefinedOptionsCount + userOptionsCount + 1];
@@ -215,9 +214,9 @@ bool SimpleCommandLineApp::closeDatabase()
 	return true;
 }
 
-KInstance* SimpleCommandLineApp::instance() const
+const KComponentData &SimpleCommandLineApp::componentData() const
 {
-	return d->instance;
+	return d->componentData;
 }
 
 KexiDB::ConnectionData* SimpleCommandLineApp::connectionData() const

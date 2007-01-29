@@ -77,7 +77,7 @@ using namespace Kudesigner;
 KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent)
         : KoView( part, parent ), m_propertyEditor( 0 ), m_doc( part )
 {
-    setInstance( KudesignerFactory::global() );
+    setComponentData( KudesignerFactory::global() );
     if ( !part->isReadWrite() )  // readonly case, e.g. when embedded into konqueror
         setXMLFile( "kudesigner_readonly.rc" ); // simplified GUI
     else

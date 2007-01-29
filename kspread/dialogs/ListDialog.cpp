@@ -24,7 +24,6 @@
 #include <QLineEdit>
 #include <q3listbox.h>
 #include <q3multilineedit.h>
-#include <kinstance.h>
 #include <QPushButton>
 //Added by qt3to4:
 #include <QGridLayout>
@@ -33,6 +32,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kcomponentdata.h>
 
 #include "AutoFill.h"
 #include "Factory.h"
@@ -167,7 +167,7 @@ void ListDialog::init()
     sday+=i18n("Sun");
     lst.append(sday);
 
-    config = Factory::global()->config();
+    config = Factory::global().config();
     config->setGroup( "Parameters" );
     QStringList other=config->readEntry("Other list", QStringList());
     QString tmp;

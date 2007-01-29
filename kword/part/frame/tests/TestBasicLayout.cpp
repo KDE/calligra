@@ -10,7 +10,7 @@
 #include "KWord.h"
 
 #include <QList>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 class Helper {
 public:
@@ -34,7 +34,7 @@ public:
 };
 
 TestBasicLayout::TestBasicLayout() {
-    new KInstance ("TestBasicLayout");
+    new KComponentData("TestBasicLayout");
 }
 
 void TestBasicLayout::testGetOrCreateFrameSet() {

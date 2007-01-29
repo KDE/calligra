@@ -21,7 +21,7 @@
 
 #include "kivio_view.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 
 /***************************************************
@@ -29,12 +29,12 @@
  ***************************************************/
 K_EXPORT_COMPONENT_FACTORY( libkiviotexttool, TextToolFactory )
 
-KInstance* TextToolFactory::s_global = 0;
+KComponentData TextToolFactory::s_global = 0;
 
 TextToolFactory::TextToolFactory( QObject* parent, const char* name )
 : KLibFactory( parent, name )
 {
-  s_global = new KInstance("kivio");
+  s_global("kivio");
 }
 
 TextToolFactory::~TextToolFactory()
@@ -51,7 +51,7 @@ QObject* TextToolFactory::createObject( QObject* parent, const char*, const char
   return obj;
 }
 
-KInstance* TextToolFactory::global()
+KComponentData TextToolFactory::global()
 {
   return s_global;
 }

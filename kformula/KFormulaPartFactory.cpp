@@ -22,7 +22,7 @@
 #include "KFormulaPartDocument.h"
 #include "KFormulaAboutData.h"
 
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -32,7 +32,7 @@
 
 K_EXPORT_COMPONENT_FACTORY( libkformulapart, KFormulaPartFactory )
 
-KInstance* KFormulaPartFactory::s_global = 0;
+KComponentData* KFormulaPartFactory::s_global = 0;
 KAboutData* KFormulaPartFactory::s_aboutData = 0;
 
 KFormulaPartFactory::KFormulaPartFactory( QObject* parent ) : KoFactory( parent )
@@ -65,17 +65,17 @@ KParts::Part* KFormulaPartFactory::createPartObject( QWidget *parentWidget,
     return doc;
 }
 
-KInstance* KFormulaPartFactory::global()
+const KComponentData &KFormulaPartFactory::global()
 {
     if ( !s_global )
     {
-        s_global = new KInstance( aboutData() );
+        s_global = new KComponentData( aboutData() );
         s_global->dirs()->addResourceType( "toolbar",
                         KStandardDirs::kde_default("data") + "koffice/toolbar/");
         // Tell the iconloader about share/apps/koffice/icons*/
         KIconLoader::global()->addAppDir("koffice");
     }
-    return s_global;
+    return *s_global;
 }
 
 KAboutData* KFormulaPartFactory::aboutData()

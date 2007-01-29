@@ -23,14 +23,13 @@
 #define __kspread_dlg_list__
 
 #include <kdialog.h>
+#include <kconfig.h>
 
 class Q3ListBox;
 class Q3ListBoxItem;
 class QLineEdit;
 class Q3MultiLineEdit;
 class QPushButton;
-
-class KConfig;
 
 namespace KSpread
 {
@@ -54,7 +53,7 @@ public slots:
   void slotCopy();
 
 protected:
-  KConfig *config;
+  KSharedConfigPtr config;
 
   Q3ListBox * list;
   Q3MultiLineEdit *entryList;

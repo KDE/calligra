@@ -26,7 +26,7 @@
 #include <knumvalidator.h>
 #include <kfontdialog.h>
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kvbox.h>
 #include <QCheckBox>
 #include <QLabel>
@@ -81,7 +81,7 @@ using namespace KSpell2;
 // little helper stolen from kmail
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)
 static inline QPixmap loadIcon( const char * name ) {
-  return KGlobal::instance()->iconLoader()
+  return KGlobal::mainComponent().iconLoader()
     ->loadIcon( QString::fromLatin1(name), K3Icon::NoGroup, K3Icon::SizeMedium );
 }
 
@@ -124,7 +124,7 @@ KWConfig::KWConfig( KWView* parent )
   pageItem->setIcon( loadIcon("kformula") );
   addPage( pageItem );
   m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->formulaDocument( false ),
-                                             this, KWFactory::instance()->config(), page5 );
+                                             this, KWFactory::componentData().config(), page5 );
 
   KVBox *page3 = new KVBox();
   pageItem = new KPageWidgetItem( page3, i18n("Misc") );
@@ -206,7 +206,7 @@ void KWConfig::slotApply()
     m_formulaPage->apply();
     if (macro)
         m_doc->addCommand( macro );
-    KWFactory::instance()->config()->sync();
+    KWFactory::componentData().config()->sync();
 }
 
 void KWConfig::slotDefault()
@@ -247,7 +247,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *view, KVBox *box, char *name )
     : QObject( box->parent(), name )
 {
     m_pView=view;
-    config = KWFactory::instance()->config();
+    config = KWFactory::componentData().config();
     m_spellConfigWidget = new ConfigWidget( view->loader(), box );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
     m_spellConfigWidget->layout()->setMargin( 0 );
@@ -275,7 +275,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, KVBox *box, char *
  : QObject( box->parent(), name )
 {
     m_pView=view;
-    config = KWFactory::instance()->config();
+    config = KWFactory::componentData().config();
     Q3GroupBox * gbInterfaceGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Interface"), box, "GroupBox" );
     //gbInterfaceGroup->setMargin( KDialog::marginHint() );
     gbInterfaceGroup->setInsideSpacing( KDialog::spacingHint() );
@@ -517,7 +517,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, KVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     m_pView=view;
-    config = KWFactory::instance()->config();
+    config = KWFactory::componentData().config();
     Q3GroupBox * gbMiscGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Misc"), box, "GroupBox" );
     //gbMiscGroup->setMargin( KDialog::marginHint() );
     gbMiscGroup->setInsideSpacing( KDialog::spacingHint() );
@@ -718,7 +718,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
 {
     m_pView=view;
     KWDocument * doc = m_pView->kWordDocument();
-    config = KWFactory::instance()->config();
+    config = KWFactory::componentData().config();
     Q3GroupBox * gbDocumentDefaults = new Q3GroupBox(1, Qt::Horizontal, i18n("Document Defaults"), box, "GroupBox" );
     //gbDocumentDefaults->setMargin( KDialog::marginHint() );
     gbDocumentDefaults->setInsideSpacing( KDialog::spacingHint() );
@@ -978,7 +978,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *view, KVBox *box, char *name )
 {
     m_pView=view;
     KWDocument * doc = m_pView->kWordDocument();
-    config = KWFactory::instance()->config();
+    config = KWFactory::componentData().config();
     Q3GroupBox * gbPathGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Path"), box, "GroupBox" );
     //gbPathGroup->setMargin( KDialog::marginHint() );
     gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
@@ -1028,7 +1028,7 @@ void ConfigurePathPage::slotDefault()
 {
     Q3ListViewItem * item = m_pPathView->findItem(i18n("Personal Expression"), 0);
     if ( item )
-        item->setText(1, KWFactory::instance()->dirs()->resourceDirs("expression").join(";"));
+        item->setText(1, KWFactory::componentData().dirs()->resourceDirs("expression").join(";"));
     item = m_pPathView->findItem(i18n("Backup Path"), 0);
     if ( item )
         item->setText(1, QString::null );

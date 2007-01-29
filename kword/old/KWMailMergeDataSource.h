@@ -22,7 +22,7 @@
 #define _SERIALLETTER_INTERFACE_H_
 #include <q3cstring.h>
 #include <qdom.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 
 #include <QMap>
 #include <QObject>
@@ -48,13 +48,13 @@ class KWORD_EXPORT KWMailMergeDataSource: public QObject
     Q_OBJECT
     //Q_CLASSINFO("D-Bus Interface", "org.kde.kword.mailmerge")
     public:
-    KWMailMergeDataSource(KInstance* inst,QObject *parent);
+    KWMailMergeDataSource(const KComponentData &inst,QObject *parent);
     virtual ~KWMailMergeDataSource(){;}
     virtual class QString getValue( const class QString &name, int record = -1 ) const=0;
 
     const QMap< QString, QString > &getRecordEntries() const;
 
-    KInstance *KWInstance(){return m_instance;}
+    KComponentData KWInstance(){return m_componentData;}
     virtual  bool showConfigDialog(class QWidget*,int) =0;
 
     virtual void save(QDomDocument&, QDomElement&)=0;
@@ -65,7 +65,7 @@ class KWORD_EXPORT KWMailMergeDataSource: public QObject
     protected:
     DbRecord sampleRecord;
     private:
-    KInstance *m_instance;
+    KComponentData m_componentData;
 /*	
 public Q_SLOTS:
     Q_SCRIPTABLE virtual  int getNumRecords() const =0;
