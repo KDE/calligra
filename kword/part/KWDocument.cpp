@@ -196,9 +196,8 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
         tfs->setPageManager(pageManager());
         m_styleManager->add( tfs->document() );
         KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*> (tfs->document()->documentLayout());
-        if(lay) {
+        if(lay)
             lay->setStyleManager(m_styleManager);
-        }
         if(tfs->textFrameSetType() == KWord::MainTextFrameSet ||
                 tfs->textFrameSetType() == KWord::OtherTextFrameSet) {
             connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),

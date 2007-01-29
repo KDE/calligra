@@ -25,8 +25,9 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoTextDocumentLayout.h>
 
-#include <kdebug.h>
+// #include <kdebug.h>
 #include <kstandardshortcut.h>
 #include <QKeyEvent>
 #include <QAction>
@@ -103,6 +104,10 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_actionFormatSub = new QAction(KIcon("sub"), i18n("Subscript"), this);
     addAction("format_sub", m_actionFormatSub );
     m_actionFormatSub->setCheckable(true);
+
+
+
+
 
     m_actionFormatIncreaseIndent = new QAction(
             KIcon(QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent"),
@@ -201,13 +206,14 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
         m_caret = QTextCursor(m_textShapeData->document());
     }
 
-    int position = pointToPosition(event->point);
     repaint();
+    int position = pointToPosition(event->point);
     m_caret.setPosition(position,
             (event->modifiers() & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
     repaint();
 
     updateSelectionHandler();
+    updateStyleManager();
 }
 
 void TextTool::updateSelectionHandler() {
@@ -221,7 +227,7 @@ int TextTool::pointToPosition(const QPointF & point) const {
     int caretPos = m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
     caretPos = qMax(caretPos, m_textShapeData->position());
     if(m_textShapeData->endPosition() == -1)
-        kWarning() << "Clicking in not fully laid-out textframe\n";
+        kWarning(32500) << "Clicking in not fully laid-out textframe\n";
     caretPos = qMin(caretPos, m_textShapeData->endPosition());
     return caretPos;
 }
@@ -345,6 +351,16 @@ void TextTool::updateActions() {
     blockSignals(sigs);
 }
 
+void TextTool::updateStyleManager() {
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_caret.block().document()->documentLayout());
+    if(lay)
+        emit(styleManagerChanged(lay->styleManager()));
+    else {
+        emit(styleManagerChanged(0));
+        kWarning(32500) << "Shape does not have a KoTextDocumentLayout\n";
+    }
+}
+
 void TextTool::activate (bool temporary) {
     Q_UNUSED(temporary);
     KoSelection *selection = m_canvas->shapeManager()->selection();
@@ -370,6 +386,7 @@ void TextTool::activate (bool temporary) {
 
     updateSelectionHandler();
     updateActions();
+    updateStyleManager();
 }
 
 void TextTool::deactivate() {
@@ -406,8 +423,14 @@ KoToolSelection* TextTool::selection() {
 QWidget *TextTool::createOptionWidget() {
     QTabWidget *widget = new QTabWidget();
     widget->addTab(new SimpleStyleWidget(this, widget), i18n("Style"));
-    widget->addTab(new StylesWidget(widget), i18n("Paragraph"));
-    widget->addTab(new StylesWidget(widget), i18n("Character"));
+    StylesWidget *paragTab = new StylesWidget(StylesWidget::ParagraphStyle, widget);
+    widget->addTab(paragTab, i18n("Paragraph"));
+    StylesWidget *charTab =new StylesWidget(StylesWidget::CharacterStyle, widget);
+    widget->addTab(charTab, i18n("Character"));
+
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), paragTab, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), charTab, SLOT(setStyleManager(KoStyleManager *)));
+    updateStyleManager();
     return widget;
 }
 
@@ -446,6 +469,5 @@ void TextTool::lineBreak() {
 void TextTool::formatFont() {
     m_selectionHandler.selectFont(0);
 }
-
 
 #include "TextTool.moc"

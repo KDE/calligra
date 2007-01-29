@@ -54,8 +54,10 @@ public:
     /// paint the document
     void draw(QPainter *painter);
 
+    void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
+    KoStyleManager *styleManager() const { return m_styleManager; }
+
 private:
-    void setStyleManager(KoStyleManager *sm);
     void updateBorders();
     double topMargin();
     double listIndent();

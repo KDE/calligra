@@ -18,10 +18,37 @@
  */
 #include "StylesWidget.h"
 
-StylesWidget::StylesWidget(QWidget *parent)
-    : QWidget(parent)
+#include <KoStyleManager.h>
+#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
+
+#include <kdebug.h>
+
+StylesWidget::StylesWidget(Type type, QWidget *parent)
+    : QWidget(parent),
+    m_type(type),
+    m_styleManager(0)
 {
     widget.setupUi(this);
+}
+
+void StylesWidget::setStyleManager(KoStyleManager *sm) {
+    if(sm == m_styleManager)
+        return;
+    m_styleManager = sm;
+    widget.styleList->clear();
+    if(m_styleManager == 0)
+        return;
+
+    if(m_type == CharacterStyle)
+        foreach(KoCharacterStyle *style, m_styleManager->characterStyles())
+            m_items.append(Entry(style->name(), style->styleId()));
+    else
+        foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())
+            m_items.append(Entry(style->name(), style->styleId()));
+
+    foreach(Entry entry, m_items)
+        widget.styleList->addItem(entry.first);
 }
 
 #include <StylesWidget.moc>

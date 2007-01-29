@@ -23,11 +23,12 @@
 #include "TextShape.h"
 
 #include <KoTextSelectionHandler.h>
-
 #include <KoTool.h>
 
 #include <QTextCursor>
 #include <QAction>
+
+class KoStyleManager;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -53,6 +54,9 @@ public:
     KoToolSelection* selection();
     QWidget *createOptionWidget();
 
+signals:
+    void styleManagerChanged(KoStyleManager *manager);
+
 private slots:
     void textBold(bool bold);
     void textItalic(bool italic);
@@ -69,6 +73,7 @@ private:
     int pointToPosition(const QPointF & point) const;
     void updateSelectionHandler();
     void updateActions();
+    void updateStyleManager();
 
 private:
     TextShape *m_textShape;

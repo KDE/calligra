@@ -68,10 +68,6 @@ bool Layout::interrupted() {
     return m_reset;
 }
 
-void Layout::setStyleManager(KoStyleManager *sm) {
-    m_styleManager = sm;
-}
-
 double Layout::width() {
     Q_ASSERT(shape);
     double ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();

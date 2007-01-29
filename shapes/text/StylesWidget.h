@@ -20,16 +20,29 @@
 #define STYLESWIDGET_H
 
 #include <QWidget>
+#include <QList>
 
 #include <ui_StylesWidget.h>
+
+class KoStyleManager;
 
 class StylesWidget : public QWidget {
     Q_OBJECT
 public:
-    StylesWidget(QWidget *parent = 0);
+    enum Type { CharacterStyle, ParagraphStyle };
+
+    StylesWidget(Type type, QWidget *parent = 0);
+
+public slots:
+    void setStyleManager(KoStyleManager *sm);
 
 private:
     Ui::StylesWidget widget;
+    Type m_type;
+    KoStyleManager *m_styleManager;
+
+    typedef QPair<QString, int> Entry;
+    QList<Entry> m_items;
 };
 
 #endif
