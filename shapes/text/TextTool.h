@@ -71,7 +71,6 @@ private:
     void updateActions();
 
 private:
-    friend class SimpleStyleWidget;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
     QTextCursor m_caret;

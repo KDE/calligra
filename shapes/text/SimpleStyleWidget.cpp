@@ -23,18 +23,18 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
-    widget.bold->setDefaultAction(tool->m_actionFormatBold);
-    widget.italic->setDefaultAction(tool->m_actionFormatItalic);
-    widget.strikeOut->setDefaultAction(tool->m_actionFormatStrikeOut);
-    widget.underline->setDefaultAction(tool->m_actionFormatUnderline);
-    widget.alignLeft->setDefaultAction(tool->m_actionAlignLeft);
-    widget.alignRight->setDefaultAction(tool->m_actionAlignRight);
-    widget.alignCenter->setDefaultAction(tool->m_actionAlignCenter);
-    widget.alignBlock->setDefaultAction(tool->m_actionAlignBlock);
-    widget.superscript->setDefaultAction(tool->m_actionFormatSuper);
-    widget.subscript->setDefaultAction(tool->m_actionFormatSub);
-    widget.decreaseIndent->setDefaultAction(tool->m_actionFormatDecreaseIndent);
-    widget.increaseIndent->setDefaultAction(tool->m_actionFormatIncreaseIndent);
+    widget.bold->setDefaultAction(tool->action("format_bold"));
+    widget.italic->setDefaultAction(tool->action("format_italic"));
+    widget.strikeOut->setDefaultAction(tool->action("format_strike"));
+    widget.underline->setDefaultAction(tool->action("format_underline"));
+    widget.alignLeft->setDefaultAction(tool->action("format_alignleft"));
+    widget.alignRight->setDefaultAction(tool->action("format_alignright"));
+    widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
+    widget.alignBlock->setDefaultAction(tool->action("format_alignblock"));
+    widget.superscript->setDefaultAction(tool->action("format_super"));
+    widget.subscript->setDefaultAction(tool->action("format_sub"));
+    widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
+    widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
 }
 
 #include <SimpleStyleWidget.moc>
