@@ -38,6 +38,8 @@ class ScriptingPart : public KParts::Plugin
 		virtual ~ScriptingPart();
 
 	private:
+		Q_DISABLE_COPY( ScriptingPart )
+
 		/// \internal d-pointer class.
 		class Private;
 		/// \internal d-pointer instance.

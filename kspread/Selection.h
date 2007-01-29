@@ -307,6 +307,8 @@ protected:
   void dump() const;
 
 private:
+    Selection& operator=( const Selection& );
+
   class Private;
   Private *d;
 };

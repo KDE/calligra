@@ -370,6 +370,9 @@ private:
      */
     CellView( SheetView* sheetView );
 
+    // not allowed
+    CellView& operator=( const CellView& );
+
     class Private;
     QSharedDataPointer<Private> d;
 };

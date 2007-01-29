@@ -208,6 +208,8 @@ signals:
   void sig_addSheet( Sheet *_table );
 
 private:
+    Q_DISABLE_COPY( Map )
+
   class Private;
   Private * const d;
 };

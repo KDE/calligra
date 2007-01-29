@@ -102,6 +102,8 @@ public:
     inline bool operator!=( const RowFormat& other ) const { return !operator==( other ); }
 
 private:
+    RowFormat& operator=(const RowFormat&);
+
     class Private;
     Private * const d;
 };
@@ -160,6 +162,8 @@ public:
     inline bool operator!=( const ColumnFormat& other ) const { return !operator==( other ); }
 
 private:
+    ColumnFormat& operator=(const ColumnFormat&);
+
     class Private;
     Private * const d;
 };

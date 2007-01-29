@@ -23,6 +23,7 @@
 #include <QList>
 #include <QRect>
 #include <QSet>
+#include <QSharedDataPointer>
 #include <QString>
 
 #include <kdebug.h>
@@ -364,8 +365,8 @@ protected:
   virtual Range* createRange(const Range&) const;
 
 private:
-  class Private;
-  Private *d;
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 

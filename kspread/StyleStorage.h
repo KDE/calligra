@@ -183,6 +183,8 @@ protected:
     StyleManager* styleManager() const;
 
 private:
+    Q_DISABLE_COPY( StyleStorage )
+
     class Private;
     Private * const d;
 };

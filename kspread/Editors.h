@@ -110,6 +110,8 @@ protected:
   void handleBrace(uint index);
 
 private:
+    Q_DISABLE_COPY( FormulaEditorHighlighter )
+
   class Private;
   Private* d;
 };
@@ -237,6 +239,8 @@ protected slots:
     void functionAutoComplete( const QString& item );
 
 private:
+    Q_DISABLE_COPY( CellEditor )
+
     class Private;
     Private* d;
 };
@@ -351,6 +355,8 @@ protected Q_SLOTS:
   void choiceChanged();
 
 private:
+    Q_DISABLE_COPY( RegionSelector )
+
   class Private;
   Private * const d;
 };

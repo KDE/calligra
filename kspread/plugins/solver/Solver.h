@@ -74,6 +74,8 @@ protected Q_SLOTS:
   void optimize();
 
 private:
+    Q_DISABLE_COPY( Solver )
+
   class Private;
   Private * const d;
 };

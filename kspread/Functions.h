@@ -76,6 +76,8 @@ public:
   Value exec (valVector args, ValueCalc *calc, FuncExtra *extra = 0);
 
 private:
+    Q_DISABLE_COPY( Function )
+
   class Private;
   Private* d;
 };

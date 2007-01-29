@@ -582,6 +582,8 @@ private:
   void showToolTip( const QPoint& point );
 
 private:
+    Q_DISABLE_COPY( Canvas )
+
   class Private;
   Private* d;
 };

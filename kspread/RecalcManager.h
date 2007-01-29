@@ -97,8 +97,10 @@ protected:
   void recalc();
 
 private:
-  class Private;
-  Private * const d;
+    Q_DISABLE_COPY( RecalcManager )
+
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread

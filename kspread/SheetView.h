@@ -96,6 +96,8 @@ private:
      */
     void obscureCells( const QRect& range, const QPoint& position );
 
+    Q_DISABLE_COPY( SheetView )
+
     class Private;
     Private * const d;
 };

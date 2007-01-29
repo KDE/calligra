@@ -33,7 +33,7 @@
 namespace KSpread
 {
 
-class Region::Private
+class Region::Private : public QSharedData
 {
 public:
   Private()
@@ -43,7 +43,7 @@ public:
   }
 
   Map* map;
-  QList<Element*> cells;
+  mutable QList<Element*> cells;
 };
 
 
@@ -210,8 +210,7 @@ Region::Region(int x, int y, int width, int height, Sheet* sheet)
 
 Region::~Region()
 {
-  d->cells.clear();
-  delete d;
+    qDeleteAll( d->cells );
 }
 
 Map* Region::map() const

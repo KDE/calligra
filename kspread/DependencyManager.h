@@ -99,6 +99,9 @@ protected:
      */
     void updateFormula( const Cell& cell, const Region::Element* oldLocation, const Region::Point& offset );
 
+private:
+    Q_DISABLE_COPY( DependencyManager )
+
     class Private;
     Private * const d;
 };

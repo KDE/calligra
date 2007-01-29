@@ -93,6 +93,9 @@ private:
     QSpinBox* m_shearX;
     QSpinBox* m_shearY;
     KoDocumentChild* m_child;
+
+    Q_DISABLE_COPY( KoTransformToolBox )
+
     class Private;
     Private *d;
 };

@@ -69,6 +69,8 @@ class ScriptingFunction : public QObject
         void called(QVariantList args);
 
     private:
+        Q_DISABLE_COPY( ScriptingFunction )
+
         /// \internal d-pointer class.
         class Private;
         /// \internal d-pointer instance.

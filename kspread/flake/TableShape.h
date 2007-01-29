@@ -46,6 +46,8 @@ protected:
     Sheet* sheet() const;
 
 private:
+    Q_DISABLE_COPY( TableShape )
+
     class Private;
     Private * const d;
 };

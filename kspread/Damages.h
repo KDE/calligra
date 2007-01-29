@@ -74,6 +74,8 @@ class CellDamage : public Damage
     Changes changes() const;
 
   private:
+    Q_DISABLE_COPY( CellDamage )
+
     class Private;
     Private * const d;
 };
@@ -105,6 +107,8 @@ class SheetDamage : public Damage
     Changes changes() const;
 
   private:
+    Q_DISABLE_COPY( SheetDamage )
+
     class Private;
     Private * const d;
 };
@@ -130,6 +134,8 @@ class WorkbookDamage : public Damage
     Changes changes() const;
 
   private:
+    Q_DISABLE_COPY( WorkbookDamage )
+
     class Private;
     Private * const d;
 };
@@ -147,6 +153,8 @@ class SelectionDamage : public Damage
     const Region& region() const;
 
   private:
+    Q_DISABLE_COPY( SelectionDamage )
+
     class Private;
     Private * const d;
 };

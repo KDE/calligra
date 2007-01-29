@@ -33,7 +33,6 @@ namespace KSpread
 class LinkDialog : public KPageDialog
 {
     Q_OBJECT
-
 public:
     explicit LinkDialog( QWidget* parent, const char* name = 0 );
     ~LinkDialog();
@@ -43,11 +42,13 @@ public:
 public slots:
     void setText( const QString& text );
     void setLink( const QString& link );
-    
+
 protected slots:
-    void slotOk();    
+    void slotOk();
 
 private:
+    Q_DISABLE_COPY( LinkDialog )
+
     class Private;
     Private* d;
 };

@@ -41,6 +41,8 @@ public:
   virtual void deactivate();
 
 private:
+    Q_DISABLE_COPY( TableTool )
+
     class Private;
     Private * const d;
 };

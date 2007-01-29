@@ -131,6 +131,8 @@ class ScriptingModule : public QObject
 		QWidget* createSheetsListView(QWidget* parent);
 
 	private:
+		Q_DISABLE_COPY( ScriptingModule )
+
 		/// \internal d-pointer class.
 		class Private;
 		/// \internal d-pointer instance.

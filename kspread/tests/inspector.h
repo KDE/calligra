@@ -28,15 +28,16 @@ class Cell;
 
 class Inspector : public KPageDialog
 {
-Q_OBJECT
-
+    Q_OBJECT
 public:
-  Inspector( const Cell& cell );
-  ~Inspector();
-  
+    Inspector( const Cell& cell );
+    ~Inspector();
+
 private:
-  class Private;
-  Private* d;
+    Q_DISABLE_COPY( Inspector )
+
+    class Private;
+    Private* d;
 };
 
 }
