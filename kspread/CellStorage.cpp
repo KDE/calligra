@@ -211,55 +211,71 @@ void CellStorage::setValue( int column, int row, const Value& value )
 
 bool CellStorage::doesMergeCells( int column, int row ) const
 {
-    const QList< QPair<QRectF,bool> > pairs = d->fusionStorage.undoData( QRect( column, row, 1, 1 ) );
-    return pairs.isEmpty() ? false : ( pairs.last().first.topLeft() == QPoint( column, row ) );
+    const QPair<QRectF,bool> pair = d->fusionStorage.containedPair( QPoint( column, row ) );
+    if ( pair.first.isNull() )
+        return false;
+    if ( pair.second == false )
+        return false;
+    // master cell?
+    if ( pair.first.toRect().topLeft() != QPoint( column, row ) )
+        return false;
+    return true;
 }
 
 bool CellStorage::isPartOfMerged( int column, int row ) const
 {
-    return d->fusionStorage.contains( QPoint( column, row ) );
+    const QPair<QRectF,bool> pair = d->fusionStorage.containedPair( QPoint( column, row ) );
+    if ( pair.first.isNull() )
+        return false;
+    if ( pair.second == false )
+        return false;
+    // master cell?
+    if ( pair.first.toRect().topLeft() == QPoint( column, row ) )
+        return false;
+    return true;
 }
 
-void CellStorage::mergeCells( int column, int row, int width, int height )
+void CellStorage::mergeCells( int column, int row, int numXCells, int numYCells )
 {
     // Start by unmerging the cells that we merge right now
-    const QList< QPair<QRectF,bool> > pairs = d->fusionStorage.undoData( QRect( column, row, 1, 1 ) );
-    for ( int i = 0; i < pairs.count(); ++i )
-        d->fusionStorage.insert( Region( pairs[i].first.toRect() ), false );
+    const QPair<QRectF,bool> pair = d->fusionStorage.containedPair( QPoint( column, row ) );
+    if ( !pair.first.isNull() )
+        d->fusionStorage.insert( Region( pair.first.toRect() ), false );
     // Merge the cells
-    if ( width != 0 && height != 0 )
-        d->fusionStorage.insert( Region( column, row, width, height ), true );
+    if ( numXCells != 0 || numYCells != 0 )
+        d->fusionStorage.insert( Region( column, row, numXCells + 1, numYCells + 1 ), true );
 }
 
 Cell CellStorage::masterCell( int column, int row ) const
 {
-    const QList< QPair<QRectF,bool> > pairs = d->fusionStorage.undoData( QRect( column, row, 1, 1 ) );
-    if ( pairs.isEmpty() )
+    const QPair<QRectF,bool> pair = d->fusionStorage.containedPair( QPoint( column, row ) );
+    if ( pair.first.isNull() )
         return Cell( d->sheet, column, row );
-    const QPoint location = pairs.last().first.topLeft().toPoint();
-    return Cell( d->sheet, location );
+    if ( pair.second == false )
+        return Cell( d->sheet, column, row );
+    return Cell( d->sheet, pair.first.toRect().topLeft() );
 }
 
 int CellStorage::mergedXCells( int column, int row ) const
 {
-    const QList< QPair<QRectF,bool> > pairs = d->fusionStorage.undoData( QRect( column, row, 1, 1 ) );
-    if ( pairs.isEmpty() )
+    const QPair<QRectF,bool> pair = d->fusionStorage.containedPair( QPoint( column, row ) );
+    if ( pair.first.isNull() )
         return 0;
     // Not the master cell?
-    if ( pairs.last().first.topLeft() != QPoint( column, row ) )
+    if ( pair.first.topLeft() != QPoint( column, row ) )
         return 0;
-    return pairs.last().first.toRect().width();
+    return pair.first.toRect().width() - 1;
 }
 
 int CellStorage::mergedYCells( int column, int row ) const
 {
-    const QList< QPair<QRectF,bool> > pairs = d->fusionStorage.undoData( QRect( column, row, 1, 1 ) );
-    if ( pairs.isEmpty() )
+    const QPair<QRectF,bool> pair = d->fusionStorage.containedPair( QPoint( column, row ) );
+    if ( pair.first.isNull() )
         return 0;
     // Not the master cell?
-    if ( pairs.last().first.topLeft() != QPoint( column, row ) )
+    if ( pair.first.topLeft() != QPoint( column, row ) )
         return 0;
-    return pairs.last().first.toRect().height();
+    return pair.first.toRect().height() - 1;
 }
 
 void CellStorage::insertColumns( int position, int number )

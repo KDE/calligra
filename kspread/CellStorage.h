@@ -131,7 +131,7 @@ public:
      */
     bool doesMergeCells( int column, int row ) const;
     bool isPartOfMerged( int column, int row ) const;
-    void mergeCells( int column, int row, int width, int height );
+    void mergeCells( int column, int row, int numXCells, int numYCells );
     Cell masterCell( int column, int row ) const;
     int mergedXCells( int column, int row ) const;
     int mergedYCells( int column, int row ) const;

@@ -70,6 +70,11 @@ public:
      */
     T contains(const QPoint& point) const;
 
+    /**
+     * \return the stored rect/value pair at the position \p point .
+     */
+    QPair<QRectF, T> containedPair(const QPoint& point) const;
+
     QList< QPair<QRectF, T> > undoData(const QRect& rect) const;
 
     /**
@@ -185,6 +190,13 @@ T RectStorage<T>::contains(const QPoint& point) const
     m_cache.insert( point, new T(data) );
     m_cachedArea += QRect( point, point );
     return data;
+}
+
+template<typename T>
+QPair<QRectF, T> RectStorage<T>::containedPair(const QPoint& point) const
+{
+    const QList< QPair<QRectF,T> > results = m_tree.intersectingPairs( QRect(point,point) );
+    return results.isEmpty() ? qMakePair(QRectF(),T()) : results.last();
 }
 
 template<typename T>
