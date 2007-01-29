@@ -21,6 +21,8 @@
 
 #include <QWidget>
 #include <QList>
+#include <QTextBlockFormat>
+#include <QTextCharFormat>
 
 #include <ui_StylesWidget.h>
 
@@ -38,6 +40,8 @@ public:
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void itemSelected();
+    void setCurrentFormat(const QTextBlockFormat &format);
+    void setCurrentFormat(const QTextCharFormat &format);
 
 signals:
     void paragraphStyleSelected(KoParagraphStyle *style);
@@ -50,6 +54,9 @@ private:
 
     typedef QPair<QString, int> Entry;
     QList<Entry> m_items;
+    QTextBlockFormat m_currentBlockFormat;
+    QTextCharFormat m_currentCharFormat;
+    bool m_blockSignals;
 };
 
 #endif

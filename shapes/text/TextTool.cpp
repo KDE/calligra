@@ -53,24 +53,24 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_bold", m_actionFormatBold );
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
-    connect( m_actionFormatBold, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(textBold(bool)) );
+    connect( m_actionFormatBold, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(bold(bool)) );
 
     m_actionFormatItalic  = new QAction(KIcon("text_italic"), i18n("Italic"), this);
     addAction("format_italic", m_actionFormatItalic );
     m_actionFormatItalic->setShortcut( Qt::CTRL + Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
-    connect( m_actionFormatItalic, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(textItalic(bool)) );
+    connect( m_actionFormatItalic, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(italic(bool)) );
 
     m_actionFormatUnderline  = new QAction(KIcon("text_under"), i18n("Underline"), this);
     addAction("format_underline", m_actionFormatUnderline );
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
-    connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(textUnderline(bool)) );
+    connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(underline(bool)) );
 
     m_actionFormatStrikeOut  = new QAction(KIcon("text_strike"), i18n("Strike Out"), this);
     addAction("format_strike", m_actionFormatStrikeOut );
     m_actionFormatStrikeOut->setCheckable(true);
-    connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(textStrikeOut(bool)) );
+    connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(strikeOut(bool)) );
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
     m_actionAlignLeft  = new QAction(KIcon("text_left"), i18n("Align Left"), this);
@@ -122,29 +122,29 @@ TextTool::TextTool(KoCanvasBase *canvas)
     QAction *action  = new QAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action );
     action->setShortcut( Qt::CTRL+Qt::Key_Space);
-    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( nonbreakingSpace() ));
+    connect(action, SIGNAL(triggered()), this, SLOT( nonbreakingSpace() ));
 
     action  = new QAction(i18n("Insert Non-Breaking Hyphen"), this);
     addAction("nonbreaking_hyphen", action );
     action->setShortcut( Qt::CTRL+Qt::SHIFT+Qt::Key_Minus);
-    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( nonbreakingHyphen() ));
+    connect(action, SIGNAL(triggered()), this, SLOT( nonbreakingHyphen() ));
 
     action  = new QAction(i18n("Insert Soft Hyphen"), this);
     addAction("soft_hyphen", action );
     //action->setShortcut( Qt::CTRL+Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
-    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( softHyphen() ));
+    connect(action, SIGNAL(triggered()), this, SLOT( softHyphen() ));
 
     action  = new QAction(i18n("Line Break"), this);
     addAction("line_break", action );
     action->setShortcut( Qt::SHIFT+Qt::Key_Return);
-    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( lineBreak() ));
+    connect(action, SIGNAL(triggered()), this, SLOT( lineBreak() ));
 
     action  = new QAction(i18n("Font..."), this);
     addAction("format_font", action );
     action->setShortcut( Qt::ALT + Qt::CTRL + Qt::Key_F);
     action->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
     action->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
-    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( formatFont() ));
+    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( selectFont() ));
 }
 
 TextTool::~TextTool() {
@@ -214,6 +214,7 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
 
     updateSelectionHandler();
     updateStyleManager();
+    updateActions();
 }
 
 void TextTool::updateSelectionHandler() {
@@ -349,6 +350,9 @@ void TextTool::updateActions() {
         case Qt::AlignJustify: m_actionAlignBlock->setChecked(true); break;
     }
     blockSignals(sigs);
+
+    emit charFormatChanged(cf);
+    emit blockFormatChanged(bf);
 }
 
 void TextTool::updateStyleManager() {
@@ -430,12 +434,37 @@ QWidget *TextTool::createOptionWidget() {
 
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), paragTab, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), charTab, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)),
+            paragTab, SLOT(setCurrentFormat(const QTextCharFormat &)));
+    connect(this, SIGNAL(blockFormatChanged(const QTextBlockFormat &)),
+            paragTab, SLOT(setCurrentFormat(const QTextBlockFormat &)));
+    connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)),
+            charTab, SLOT(setCurrentFormat(const QTextCharFormat &)));
 
-    connect(paragTab, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), &m_selectionHandler, SLOT(setStyle(KoParagraphStyle*)));
-    connect(charTab, SIGNAL(characterStyleSelected(KoCharacterStyle *)), &m_selectionHandler, SLOT(setStyle(KoCharacterStyle*)));
+    connect(paragTab, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)),
+            &m_selectionHandler, SLOT(setStyle(KoParagraphStyle*)));
+    connect(charTab, SIGNAL(characterStyleSelected(KoCharacterStyle *)),
+            &m_selectionHandler, SLOT(setStyle(KoCharacterStyle*)));
 
     updateStyleManager();
     return widget;
 }
+
+void TextTool::nonbreakingSpace() {
+    m_selectionHandler.insert(QString(QChar(0xa0)));
+}
+
+void TextTool::nonbreakingHyphen() {
+    m_selectionHandler.insert(QString(QChar(0x2013)));
+}
+
+void TextTool::softHyphen() {
+    m_selectionHandler.insert(QString(QChar(0xad)));
+}
+
+void TextTool::lineBreak() {
+    m_selectionHandler.insert(QString(QChar('\n')));
+}
+
 
 #include "TextTool.moc"

@@ -56,6 +56,14 @@ public:
 
 signals:
     void styleManagerChanged(KoStyleManager *manager);
+    void charFormatChanged(const QTextCharFormat &format);
+    void blockFormatChanged(const QTextBlockFormat &format);
+
+private slots:
+    void nonbreakingSpace();
+    void nonbreakingHyphen();
+    void softHyphen();
+    void lineBreak();
 
 private:
     void repaint();
