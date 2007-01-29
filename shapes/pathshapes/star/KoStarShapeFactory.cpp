@@ -92,10 +92,10 @@ KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
 
     star->setCornerCount( params->intProperty("corners", 5 ) );
     star->setConvex( params->boolProperty( "convex", false ) );
-    star->setBaseRadius( params->boolProperty( "baseRadius", 25.0 ) );
-    star->setTipRadius( params->boolProperty( "tipRadius", 50.0 ) );
-    star->setBaseRoundness( params->boolProperty( "baseRoundness", 0.0 ) );
-    star->setTipRoundness( params->boolProperty( "tipRoundness", 0.0 ) );
+    star->setBaseRadius( params->doubleProperty( "baseRadius", 25.0 ) );
+    star->setTipRadius( params->doubleProperty( "tipRadius", 50.0 ) );
+    star->setBaseRoundness( params->doubleProperty( "baseRoundness", 0.0 ) );
+    star->setTipRoundness( params->doubleProperty( "tipRoundness", 0.0 ) );
     star->setBorder( new KoLineBorder( 1.0 ) );
     star->setShapeId( KoPathShapeId );
     QVariant v;
