@@ -528,6 +528,10 @@ void DependencyManager::Private::generateDepths(const Region& region)
             {
                 Cell cell( sheet,col, row);
 
+                // skip non-formula cells
+                if ( !cell.isFormula() )
+                    continue;
+
                 //prevent infinite recursion (circular dependencies)
                 if ( processedCells.contains( cell ) || cell.value() == Value::errorCIRCLE() )
                 {
@@ -565,10 +569,6 @@ void DependencyManager::Private::generateDepths(const Region& region)
 
 int DependencyManager::Private::computeDepth(Cell cell) const
 {
-    // non-formula cells have a depth of zero
-    if ( !cell.isFormula() )
-        return 0;
-
     // a set of cell, which depth is currently calculated
     static QSet<Cell> processedCells;
 
@@ -727,7 +727,8 @@ void DependencyManager::Private::cellsToCalculate( const Region& region, QSet<Ce
                     continue;
 
                 // add it to the list
-                cells.insert( cell );
+                if ( cell.isFormula() )
+                    cells.insert( cell );
 
                 // add its consumers to the list
                 cellsToCalculate( consumingRegion( cell ), cells );
