@@ -7297,8 +7297,6 @@ void View::handleDamages( const QList<Damage*>& damages )
     // Tell the RecalcManager which cells have had a value change.
     if ( !valueChangedRegion.isEmpty() )
         doc()->map()->recalcManager()->regionChanged( valueChangedRegion );
-    else if ( workbookChanges & WorkbookDamage::Value )
-        doc()->map()->recalcManager()->recalcMap();
     // TODO Stefan: handle text format changes
     // TODO Stefan: handle layout changes
     // At last repaint the dirty cells.
@@ -7310,8 +7308,8 @@ void View::handleDamages( const QList<Damage*>& damages )
         this->refreshView();
     if ( workbookChanges & WorkbookDamage::Formula )
         doc()->map()->dependencyManager()->updateAllDependencies( doc()->map() );
-    if ( workbookChanges & WorkbookDamage::Formula )
-        doc()->map()->dependencyManager()->updateAllDependencies( doc()->map() );
+    if ( workbookChanges & WorkbookDamage::Value )
+        doc()->map()->recalcManager()->recalcMap();
 }
 
 void View::runInspector()
