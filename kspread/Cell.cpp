@@ -653,7 +653,8 @@ QString Cell::encodeFormula( bool _era, int _col, int _row ) const
                     // Is it a sheet name || is it a function name like DEC2HEX
                     /* or if we're parsing a number, this could just be the
                        exponential part of it  (1.23E4) */
-                    if ( ( inputText[pos] == '!' ) ||
+                    if ( pos < length &&
+                         ( inputText[pos] == '!' ) ||
                          inputText[pos].isLetter() ||
                          onNumber )
                     {
