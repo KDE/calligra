@@ -17,22 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonToolsPlugin.h"
-#include "KarbonPencilToolFactory.h"
-#include "KarbonGradientToolFactory.h"
 #include "KarbonPatternToolFactory.h"
+#include "KarbonPatternTool.h"
 
 #include <KoToolRegistry.h>
-#include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(karbontools, KGenericFactory<KarbonToolsPlugin>( "KarbonTools" ) )
+#include <klocale.h>
+#include <kdebug.h>
 
-KarbonToolsPlugin::KarbonToolsPlugin( QObject *parent, const QStringList& )
-    : QObject(parent)
+KarbonPatternToolFactory::KarbonPatternToolFactory(QObject *parent)
+: KoToolFactory(parent, "KarbonPatternTool", i18n("Pattern tool") )
 {
-    KoToolRegistry::instance()->add( new KarbonPencilToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new KarbonGradientToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new KarbonPatternToolFactory( parent ) );
+    setToolTip( i18n("Pattern Editing Tool") );
+    setToolType( mainToolType() );
+    setIcon( "14_pattern" );
+    setPriority( 3 );
 }
 
-#include "KarbonToolsPlugin.moc"
+KarbonPatternToolFactory::~KarbonPatternToolFactory() {
+}
+
+KoTool * KarbonPatternToolFactory::createTool(KoCanvasBase *canvas) {
+    return new KarbonPatternTool(canvas);
+}
+
+#include "KarbonPatternToolFactory.moc"
