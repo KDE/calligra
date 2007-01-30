@@ -64,6 +64,14 @@ private slots:
     void nonbreakingHyphen();
     void softHyphen();
     void lineBreak();
+    void alignLeft();
+    void alignRight();
+    void alignCenter();
+    void alignBlock();
+    void superScript(bool);
+    void subScript(bool);
+    void decreaseIndent();
+    void increaseIndent();
 
 private:
     void repaint();

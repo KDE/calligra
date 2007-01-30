@@ -78,45 +78,50 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
+    connect(m_actionAlignLeft, SIGNAL(toggled(bool)), this, SLOT(alignLeft()));
 
     m_actionAlignRight  = new QAction(KIcon("text_right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight );
     m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
+    connect(m_actionAlignRight, SIGNAL(toggled(bool)), this, SLOT(alignRight()));
 
     m_actionAlignCenter  = new QAction(KIcon("text_center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter );
     m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
     m_actionAlignCenter->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignCenter);
+    connect(m_actionAlignCenter, SIGNAL(toggled(bool)), this, SLOT(alignCenter()));
 
     m_actionAlignBlock  = new QAction(KIcon("text_block"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock );
     m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
+    connect(m_actionAlignBlock, SIGNAL(toggled(bool)), this, SLOT(alignBlock()));
 
     m_actionFormatSuper = new QAction(KIcon("super"), i18n("Superscript"), this);
     addAction("format_super", m_actionFormatSuper );
     m_actionFormatSuper->setCheckable(true);
+    connect(m_actionFormatSuper, SIGNAL(toggled(bool)), this, SLOT(superScript(bool)));
 
     m_actionFormatSub = new QAction(KIcon("sub"), i18n("Subscript"), this);
     addAction("format_sub", m_actionFormatSub );
     m_actionFormatSub->setCheckable(true);
-
-
-
-
+    connect(m_actionFormatSub, SIGNAL(toggled(bool)), this, SLOT(subScript(bool)));
 
     m_actionFormatIncreaseIndent = new QAction(
             KIcon(QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent"),
             i18n("Increase Indent"), this);
     addAction("format_increaseindent", m_actionFormatIncreaseIndent );
+    connect(m_actionFormatIncreaseIndent, SIGNAL(triggered()), this, SLOT(increaseIndent()));
+
     m_actionFormatDecreaseIndent = new QAction(
             KIcon(QApplication::isRightToLeft() ? "format_increaseindent" :"format_decreaseindent"),
             i18n("Decrease Indent"), this);
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent );
+    connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
     // ------------------- Actions with a key binding and no GUI item
     QAction *action  = new QAction(i18n("Insert Non-Breaking Space"), this);
@@ -349,6 +354,7 @@ void TextTool::updateActions() {
         case Qt::AlignHCenter: m_actionAlignCenter->setChecked(true); break;
         case Qt::AlignJustify: m_actionAlignBlock->setChecked(true); break;
     }
+    m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
     blockSignals(sigs);
 
     emit charFormatChanged(cf);
@@ -466,5 +472,42 @@ void TextTool::lineBreak() {
     m_selectionHandler.insert(QString(QChar('\n')));
 }
 
+void TextTool::alignLeft() {
+    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignLeft);
+}
+
+void TextTool::alignRight() {
+    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignRight);
+}
+
+void TextTool::alignCenter() {
+    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignHCenter);
+}
+
+void TextTool::alignBlock() {
+    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignJustify);
+}
+
+void TextTool::superScript(bool on) {
+    if(on)
+        m_actionFormatSub->setChecked(false);
+    m_selectionHandler.setVerticalTextAlignment(on ? Qt::AlignTop : Qt::AlignVCenter);
+}
+
+void TextTool::subScript(bool on) {
+    if(on)
+        m_actionFormatSuper->setChecked(false);
+    m_selectionHandler.setVerticalTextAlignment(on ? Qt::AlignBottom : Qt::AlignVCenter);
+}
+
+void TextTool::increaseIndent() {
+    m_selectionHandler.increaseIndent();
+    m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
+}
+
+void TextTool::decreaseIndent() {
+    m_selectionHandler.decreaseIndent();
+    m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
+}
 
 #include "TextTool.moc"

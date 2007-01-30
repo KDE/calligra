@@ -68,7 +68,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format) {
     if(m_type == CharacterStyle || format == m_currentBlockFormat)
         return;
     m_currentBlockFormat = format;
-    int id = m_currentBlockFormat.intProperty(KoCharacterStyle::StyleId);
+    int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     int index = 0;
     foreach(Entry entry, m_items) {
         if(entry.second == id)
@@ -83,7 +83,27 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format) {
 }
 
 void StylesWidget::setCurrentFormat(const QTextCharFormat &format) {
+    if(format == m_currentCharFormat)
+        return;
+    m_currentCharFormat = format;
 
+    int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
+    if(m_type == CharacterStyle) { // update the list-selection
+        int index = 0;
+        foreach(Entry entry, m_items) {
+            if(entry.second == id)
+                break;
+            index++;
+        }
+        if(index >= m_items.count()) // not here, so default to the first one.
+            index = 0;
+        m_blockSignals = true;
+        widget.styleList->setCurrentItem(widget.styleList->item(index));
+        m_blockSignals = false;
+    }
+    else { // if the characterStyle is not the same as our parag style's one, mark it.
+        // TODO
+    }
 }
 
 #include <StylesWidget.moc>
