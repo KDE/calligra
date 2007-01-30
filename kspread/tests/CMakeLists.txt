@@ -134,5 +134,17 @@ target_link_libraries(TestPointStorage kspreadcommon ${QT_QTTEST_LIBRARY})
 
 add_test(PointStorage TestPointStorage)
 
+########### next target ###############
+
+set(TestBitopsFunctions_SRCS TestBitopsFunctions.cpp)
+
+kde4_automoc(${TestBitopsFunctions_SRCS})
+
+kde4_add_executable(TestBitopsFunctions RUN_UNINSTALLED ${TestBitopsFunctions_SRCS})
+
+target_link_libraries(TestBitopsFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(BitopsFunctions TestBitopsFunctions)
+
 
 endif(KDE4_BUILD_TESTS)

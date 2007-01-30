@@ -61,6 +61,7 @@ kde4_add_ui_files(dialogs_DIR_SRCS
 	)
 
 SET (functions_DIR_SRCS
+	functions/bitops.cpp
 	functions/conversion.cpp
 	functions/database.cpp
 	functions/datetime.cpp

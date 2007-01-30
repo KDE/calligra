@@ -1,5 +1,6 @@
 
 INSTALL(FILES
+	bitops.xml
 	builtin.xml
 	financial.xml
 	trig.xml

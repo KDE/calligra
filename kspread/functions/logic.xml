@@ -216,44 +216,6 @@
       </Help>
     </Function>
 
-    <Function>
-      <Name>BITAND</Name>
-      <Type>Int</Type>
-      <Parameter>
-        <Comment>First number</Comment>
-        <Type>Int</Type>
-      </Parameter>
-      <Parameter>
-        <Comment>Second number</Comment>
-        <Type>Int</Type>
-      </Parameter>
-      <Help>
-	<Text>The BITAND() function performs a bit-wise AND operation for the two integer parameters. Note that this function is currently restricted to operation on values of 2^31 or less, which is non-confomant to the OpenFormula specification.</Text>
-	<Syntax>BITAND(value; value)</Syntax>
-	<Example>BITAND(12;10) returns 8 (because decimal 12 is binary 1100, and decimal 10 is binary 0100; and 1100 "anded" with 0110 is 0100, which is integer 8).</Example>
-	<Related>BITOR</Related>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>BITOR</Name>
-      <Type>Int</Type>
-      <Parameter>
-        <Comment>First number</Comment>
-        <Type>Int</Type>
-      </Parameter>
-      <Parameter>
-        <Comment>Second number</Comment>
-        <Type>Int</Type>
-      </Parameter>
-      <Help>
-	<Text>The BITOR() function performs a bit-wise OR operation for the two integer parameters. Note that this function is currently restricted to operation on values of 2^31 or less, which is non-confomant to the OpenFormula specification.</Text>
-	<Syntax>BITOR(value; value)</Syntax>
-	<Example>BITOR(12;10) returns 14 (because decimal 12 is binary 1100, and decimal 10 is binary 0100; and 1100 "ored" with 0110 is 1110, which is integer 14).</Example>
-	<Related>BITAND</Related>
-      </Help>
-    </Function>
-
   </Group>
 
 </KSpreadFunctions>

@@ -167,7 +167,8 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
 }
 
 
-// these are defined in kspread_function_*.cc
+// these are defined in ./functions/*.cpp
+void RegisterBitopsFunctions();
 void RegisterConversionFunctions();
 void RegisterDatabaseFunctions();
 void RegisterDateTimeFunctions();
@@ -196,6 +197,7 @@ FunctionRepository* FunctionRepository::self()
     kDebug() << "Registering functions" << endl;
 
     // register all existing functions
+    RegisterBitopsFunctions();
     RegisterConversionFunctions();
     RegisterDatabaseFunctions();
     RegisterDateTimeFunctions();
@@ -322,6 +324,8 @@ void FunctionRepository::loadFile (const QString& filename)
           desc->setGroup (group);
           if ( d->functions.contains( desc->name() ) )
             d->funcs.insert (desc->name(), desc);
+          else
+            delete desc;
         }
       }
       group = "";
