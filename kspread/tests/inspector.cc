@@ -196,14 +196,14 @@ void Inspector::Private::handleDep()
 
 }
 
-Inspector::Inspector( const Cell& cell ):
-  KPageDialog()
+Inspector::Inspector( const Cell& cell )
+    : KPageDialog()
+    , d( new Private )
 {
   setFaceType( Tabbed );
   setCaption( "Inspector" );
   setButtons( Close );
   setDefaultButton( Close );
-  d = new Private;
 
   d->cell = cell;
   d->style = cell.style();

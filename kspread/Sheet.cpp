@@ -289,7 +289,8 @@ Sheet* Sheet::find( int _id )
 }
 
 Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
-  : QObject( map )
+    : QObject( map )
+    , d( new Private )
 {
   Q_ASSERT(objectName);
   // Get a unique name so that we can offer scripting
@@ -301,7 +302,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
 
   if ( s_mapSheets == 0 )
     s_mapSheets = new QHash<int,Sheet*>;
-  d = new Private;
 
   d->workbook = map;
 
@@ -4950,9 +4950,6 @@ Sheet::~Sheet()
     delete d->cellStorage;
 
     delete d;
-
-    //this is for debugging a crash
-    d=0;
 }
 
 void Sheet::checkRangeHBorder ( int _column )

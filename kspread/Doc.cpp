@@ -188,9 +188,9 @@ QList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
 Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
-  : KoDocument( parentWidget, parent, singleViewMode )
+    : KoDocument( parentWidget, parent, singleViewMode )
+    , d( new Private )
 {
-  d = new Private;
   d->loadingInfo = 0;
 
   d->map = new Map( this, "Map" );

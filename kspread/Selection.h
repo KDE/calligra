@@ -310,7 +310,7 @@ private:
     Selection& operator=( const Selection& );
 
   class Private;
-  Private *d;
+  Private * const d;
 };
 
 /***************************************************************************

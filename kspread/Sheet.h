@@ -1344,7 +1344,7 @@ private:
     void checkContentDirection( QString const & name );
 
     class Private;
-    Private* d;
+    Private * const d;
 
     // don't allow copy or assignment
     Sheet( const Sheet& );

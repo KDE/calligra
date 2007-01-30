@@ -97,7 +97,7 @@ private:
     Q_DISABLE_COPY( KoTransformToolBox )
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 } // namespace KSpread

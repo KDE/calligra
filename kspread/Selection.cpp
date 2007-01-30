@@ -90,17 +90,19 @@ public:
 namespace KSpread {
 
 Selection::Selection(View *view)
-  : QObject(view), Region(1,1)
+    : QObject(view)
+    , Region(1,1)
+    , d( new Private( view ) )
 {
-  d = new Private(view);
   d->activeSubRegionStart = 0;
   d->activeSubRegionLength = 1;
 }
 
 Selection::Selection(const Selection& selection)
-  : QObject(selection.d->view), Region()
+    : QObject(selection.d->view)
+    , Region()
+    , d( new Private( selection.d->view ) )
 {
-  d = new Private(selection.d->view);
   d->sheet = selection.d->sheet;
   d->activeSubRegionStart = 0;
   d->activeSubRegionLength = cells().count();

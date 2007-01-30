@@ -630,7 +630,7 @@ protected:
 
 private:
     class Private;
-    Private* d;
+    Private * const d;
 
     // don't allow copy or assignment
     View( const View& );

@@ -585,7 +585,7 @@ private:
     Q_DISABLE_COPY( Canvas )
 
   class Private;
-  Private* d;
+  Private * const d;
 };
 
 

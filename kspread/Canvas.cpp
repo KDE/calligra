@@ -121,10 +121,9 @@ using namespace KSpread;
  ****************************************************************/
 
 Canvas::Canvas(View *view)
-  : QWidget( view )
+    : QWidget( view )
+    , d( new Private )
 {
-  d = new Private;
-
   setAttribute( Qt::WA_OpaquePaintEvent );
   setAttribute( Qt::WA_StaticContents );
 

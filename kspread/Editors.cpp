@@ -90,9 +90,9 @@ public:
 
 
 FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas)
-  : QSyntaxHighlighter(textEdit)
+    : QSyntaxHighlighter(textEdit)
+    , d( new Private )
 {
-  d = new Private();
   d->canvas = canvas;
 }
 
@@ -314,10 +314,10 @@ public:
   QLabel* hintLabel;
 };
 
-FunctionCompletion::FunctionCompletion( CellEditor* editor ):
-QObject( editor )
+FunctionCompletion::FunctionCompletion( CellEditor* editor )
+    : QObject( editor )
+    , d( new Private )
 {
-  d = new Private;
   d->editor = editor;
   d->hintLabel = 0;
 
@@ -502,9 +502,9 @@ public:
 
 
 CellEditor::CellEditor( const Cell& _cell, Canvas* _parent, bool captureAllKeyEvents, const char* /*_name*/ )
-  : QWidget( _parent )
+    : QWidget( _parent )
+    , d( new Private )
 {
-  d = new Private();
   d->cell = _cell;
   d->canvas = _parent;
   d->textEdit = new KTextEdit(this);

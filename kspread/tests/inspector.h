@@ -37,7 +37,7 @@ private:
     Q_DISABLE_COPY( Inspector )
 
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 }

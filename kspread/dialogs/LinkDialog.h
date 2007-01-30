@@ -50,7 +50,7 @@ private:
     Q_DISABLE_COPY( LinkDialog )
 
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 } // namepsace KSpread

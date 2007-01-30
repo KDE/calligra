@@ -79,7 +79,7 @@ private:
     Q_DISABLE_COPY( Function )
 
   class Private;
-  Private* d;
+  Private * const d;
 };
 
 enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean, KSpread_Any };
@@ -158,7 +158,7 @@ public:
 private:
 
   class Private;
-  Private* d;
+  Private * const d;
 
   static FunctionRepository* s_self;
 

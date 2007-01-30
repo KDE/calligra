@@ -61,13 +61,12 @@ public:
 };
 
 LinkDialog::LinkDialog( QWidget*, const char* )
-  :  KPageDialog( )
+    : KPageDialog()
+    , d( new Private )
 {
     setCaption( i18n("Insert Link") );
     setButtons( Ok | Cancel );
     setFaceType( List );
-
-    d = new Private;
 
     // link for web or ftp
     d->internetPage = new QWidget();

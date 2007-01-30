@@ -118,6 +118,7 @@ void ToolBox::mouseMoveEvent( QMouseEvent* ev )
 
 KoTransformToolBox::KoTransformToolBox( KoDocumentChild* ch, QWidget* parent, const char* name )
     : ToolBox( parent, name )
+    , d( 0 )
 {
     m_child = 0;
 

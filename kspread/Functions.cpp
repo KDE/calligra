@@ -62,8 +62,8 @@ public:
 using namespace KSpread;
 
 Function::Function( const QString& name, FunctionPtr ptr )
+    : d( new Private )
 {
-  d = new Private;
   d->name = name;
   d->ptr = ptr;
   d->acceptArray = false;
@@ -228,8 +228,8 @@ FunctionRepository* FunctionRepository::self()
 }
 
 FunctionRepository::FunctionRepository()
+    : d( new Private )
 {
-  d = new Private;
 }
 
 FunctionRepository::~FunctionRepository()

@@ -113,7 +113,7 @@ private:
     Q_DISABLE_COPY( FormulaEditorHighlighter )
 
   class Private;
-  Private* d;
+  Private * const d;
 };
 
 
@@ -163,7 +163,7 @@ signals:
 
 private:
     class Private;
-    Private* d;
+    Private * const d;
     FunctionCompletion( const FunctionCompletion& );
     FunctionCompletion& operator=( const FunctionCompletion& );
 };
@@ -242,7 +242,7 @@ private:
     Q_DISABLE_COPY( CellEditor )
 
     class Private;
-    Private* d;
+    Private * const d;
 };
 
 
