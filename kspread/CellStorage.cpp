@@ -17,11 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Cell.h"
-#include "Formula.h"
 #include "RectStorage.h"
 #include "StyleStorage.h"
-#include "Value.h"
 
 #include "CellStorage.h"
 

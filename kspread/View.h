@@ -629,12 +629,10 @@ protected:
     Cell findNextCell();
 
 private:
+    Q_DISABLE_COPY( View )
+
     class Private;
     Private * const d;
-
-    // don't allow copy or assignment
-    View( const View& );
-    View& operator=( const View& );
 
     void initView();
 

@@ -855,12 +855,10 @@ protected:
   virtual bool saveChildren( KoStore* _store );
 
 private:
-  class Private;
-  Private * const d;
+    Q_DISABLE_COPY( Doc )
 
-  // don't allow copy or assignment
-  Doc( const Doc& );
-  Doc& operator=( const Doc& );
+    class Private;
+    Private * const d;
 
   /* helper functions for painting */
 

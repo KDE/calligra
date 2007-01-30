@@ -1343,12 +1343,10 @@ private:
      */
     void checkContentDirection( QString const & name );
 
+    Q_DISABLE_COPY( Sheet )
+
     class Private;
     Private * const d;
-
-    // don't allow copy or assignment
-    Sheet( const Sheet& );
-    Sheet& operator=( const Sheet& );
 };
 
 } // namespace KSpread

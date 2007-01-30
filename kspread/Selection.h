@@ -307,10 +307,11 @@ protected:
   void dump() const;
 
 private:
+    // do not allow assignment
     Selection& operator=( const Selection& );
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 /***************************************************************************

@@ -24,6 +24,7 @@
 #include <QRect>
 #include <QVector>
 
+#include "Cell.h"
 #include "Condition.h"
 #include "Formula.h"
 #include "Global.h"
@@ -293,6 +294,7 @@ public:
     void undo( CellStorageUndoData* undoData );
 
 private:
+    // do not allow assignment
     CellStorage& operator=( const CellStorage& );
 
     class Private;

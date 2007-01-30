@@ -102,6 +102,7 @@ public:
     inline bool operator!=( const RowFormat& other ) const { return !operator==( other ); }
 
 private:
+    // do not allow assignment
     RowFormat& operator=(const RowFormat&);
 
     class Private;
@@ -162,6 +163,7 @@ public:
     inline bool operator!=( const ColumnFormat& other ) const { return !operator==( other ); }
 
 private:
+    // do not allow assignment
     ColumnFormat& operator=(const ColumnFormat&);
 
     class Private;
