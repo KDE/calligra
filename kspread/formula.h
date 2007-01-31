@@ -159,7 +159,7 @@ class Token
      * Returns integer value for an integer token.
      * For any other type of token, returns 0.
      */
-    int asInteger() const;
+    long asInteger() const;
 
     /**
      * Returns floating-point value for a floating-point token.

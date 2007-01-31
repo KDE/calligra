@@ -240,9 +240,9 @@ bool Token::asBoolean() const
   // FIXME check also for i18n version
 }
 
-int Token::asInteger() const
+long Token::asInteger() const
 {
-  if( isInteger() ) return m_text.toInt();
+  if( isInteger() ) return m_text.toLong();
   else return 0;
 }
 

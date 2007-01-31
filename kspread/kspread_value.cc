@@ -478,7 +478,7 @@ long Value::asInteger() const
     result = d->i;
 
   if( type() == Value::Float )
-    result = static_cast<int>(d->f);
+    result = static_cast<long>(d->f);
 
   return result;
 }
@@ -853,7 +853,7 @@ int Value::compare( const Value& v ) const
   if( ( t1 == Integer ) && ( t2 == Integer ) )
   {
     long p = asInteger();
-    long q = v.asInteger();   
+    long q = v.asInteger();
     return ( p == q ) ? 0 : ( p < q ) ? -1 : 1;
   }  
   
