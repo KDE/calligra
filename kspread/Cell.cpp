@@ -103,7 +103,7 @@ public:
 
 
 Cell::Cell()
-    : d( new Private )
+    : d( 0 )
 {
 }
 
@@ -188,7 +188,7 @@ bool Cell::isEmpty() const
 
 bool Cell::isNull() const
 {
-    return ( !d || d->sheet == 0 );
+    return ( !d );
 }
 
 // Return true if this cell is a formula.
@@ -2533,7 +2533,7 @@ bool Cell::operator==( const Cell& other ) const
 
 bool Cell::operator!() const
 {
-    return ( !d || d->sheet == 0 ); // isNull()
+    return ( !d ); // isNull()
 }
 
 bool Cell::compareData( const Cell& other ) const
