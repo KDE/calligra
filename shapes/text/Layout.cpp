@@ -230,6 +230,7 @@ bool Layout::nextParag() {
     m_y += topMargin();
     layout = m_block.layout();
     QTextOption options = layout->textOption();
+    options.setWrapMode(QTextOption::WrapAnywhere);
     options.setAlignment(m_format.alignment());
     if(m_isRtl)
         options.setTextDirection(Qt::RightToLeft);
