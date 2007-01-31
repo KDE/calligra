@@ -122,8 +122,8 @@ for each widget in addition to the text of the widget.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Speak Whats This</guilabel></term>
-<listitem><para>When checked, &kspread; will speak the Whats This help
+<term><guilabel>Speak What's This</guilabel></term>
+<listitem><para>When checked, &kspread; will speak the <quote>What's This?</quote> help
 for each widget in addition to the text of the widget.</para>
 </listitem>
 </varlistentry>
