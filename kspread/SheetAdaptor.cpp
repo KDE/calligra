@@ -178,7 +178,7 @@ bool SheetAdaptor::setValue( int x, int y, const QVariant& value )
 	KSpread::Value v = cell.value();
 	switch( value.type() ) {
 		case QVariant::Bool: v.setValue( value.toBool() ); break;
-		case QVariant::ULongLong: v.setValue( (long)value.toLongLong() ); break;
+		case QVariant::ULongLong: v.setValue( value.toLongLong() ); break;
 		case QVariant::Int: v.setValue( value.toInt() ); break;
 		case QVariant::Double: v.setValue( value.toDouble() ); break;
 		case QVariant::String: v.setValue( value.toString() ); break;

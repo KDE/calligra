@@ -29,28 +29,11 @@
 
 using namespace KSpread;
 
-#define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber( y ))
 
-// round to get at most 15-digits number
-static Value RoundNumber(double f)
-{
-  return Value( QString::number(f, 'g', 15) );
-}
+// because we may need to promote expected value from integer to float
+#define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
-static Value RoundNumber(const Value& v)
-{
-  if(v.isNumber())
-  {
-    double d = v.asFloat();
-    if(fabs(d) < DBL_EPSILON)
-      d = 0.0;
-    return Value( QString::number(d, 'g', 15) );
-  }
-  else
-    return v;
-}
-
-Value TestBitopsFunctions::evaluate(const QString& formula)
+Value TestBitopsFunctions::evaluate(const QString& formula, Value& ex)
 {
   Formula f;
   QString expr = formula;
@@ -59,24 +42,22 @@ Value TestBitopsFunctions::evaluate(const QString& formula)
   f.setExpression( expr );
   Value result = f.eval();
 
-#if 0
-  // this magically generates the CHECKs
-  printf("  CHECK_EVAL( \"%s\",  %15g) );\n", qPrintable(formula), result.asFloat());
-#endif
+  if(result.isFloat() && ex.isInteger())
+    ex = Value(ex.asFloat());
+  if(result.isInteger() && ex.isFloat())
+    result = Value(result.asFloat());
 
-  return RoundNumber(result);
+  return result;
 }
-namespace QTest
+
+namespace QTest 
 {
   template<>
   char *toString(const Value& value)
   {
     QString message;
     QTextStream ts( &message, QIODevice::WriteOnly );
-    if( value.isFloat() )
-      ts << QString::number(value.asFloat(), 'g', 20);
-    else
-      ts << value;
+    ts << value;
     return qstrdup(message.toLatin1());
   }
 }
@@ -84,15 +65,15 @@ namespace QTest
 void TestBitopsFunctions::testBITAND()
 {
     // basic check of all four bit combinations
-    CHECK_EVAL( "BITAND(12;10)", 8 );
+    CHECK_EVAL( "BITAND(12;10)", Value( 8 ) );
     // test using an all-zero combo
-    CHECK_EVAL( "BITAND(7;0)",  0 );
+    CHECK_EVAL( "BITAND(7;0)", Value( 0 ) );
     // test of 31-bit value
-    CHECK_EVAL( "BITAND(2147483641; 2147483637)", 2147483633 );
+    CHECK_EVAL( "BITAND(2147483641; 2147483637)", Value( 2147483633 ) );
     // test of 32-bit value
-    CHECK_EVAL( "BITAND(4294967289.0; 4294967285.0)", 4294967281 );
+    CHECK_EVAL( "BITAND(4294967289.0; 4294967285.0)", Value( (qint64) 4294967281 ) );
     // test of 32-bit value
-    CHECK_EVAL( "BITAND(4294967289; 4294967285)", 4294967281 );
+    CHECK_EVAL( "BITAND(4294967289; 4294967285)", Value( (qint64) 4294967281 ) );
 
 }
 

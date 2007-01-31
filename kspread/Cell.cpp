@@ -2293,7 +2293,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         if (t.contains('.'))
           setValue ( Value( t.toDouble(&ok) ) ); // We save in non-localized format
         else
-          setValue ( Value( t.toLong(&ok) ) );
+          setValue ( Value( t.toLongLong(&ok) ) );
         if ( !ok )
         {
           kWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;

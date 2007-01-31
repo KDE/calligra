@@ -47,24 +47,15 @@ void RegisterBitopsFunctions()
 // Function: BITAND
 Value func_bitand (valVector args, ValueCalc *, FuncExtra *)
 {
-    if ( args[0].type() == Value::Integer )
-        kDebug()<< "its an integer" << endl;
-    else if ( args[0].type() == Value::Float )
-        kDebug()<< "its a float" << endl;
-    else
-        kDebug()<< "beats me: " << args[0].type() <<endl;
-
-  unsigned long long x = ( unsigned long long ) args[0].asFloat();
-  unsigned long long y = ( unsigned long long ) args[1].asFloat();
-  double result = ( double ) ( x & y );
-  return Value (result);
+  const quint64 x = args[0].asInteger();
+  const quint64 y = args[1].asInteger();
+  return Value( static_cast<qint64>( x & y ) );
 }
 
 // Function: BITOR
 Value func_bitor (valVector args, ValueCalc *, FuncExtra *)
 {
-  unsigned long x = args[0].asInteger();
-  unsigned long y = args[1].asInteger();
-  double result = ( double) ( x | y );
-  return Value (result);
+  const quint64 x = args[0].asInteger();
+  const quint64 y = args[1].asInteger();
+  return Value( static_cast<qint64>( x | y ) );
 }

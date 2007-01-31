@@ -319,7 +319,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
       //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
       //    "' successfully parsed as number: " << val << endl;
 	  if (isInt)
-		value.setValue (static_cast<long> (val));
+		value.setValue (static_cast<qint64> (val));
 	  else
 		value.setValue (val);
 

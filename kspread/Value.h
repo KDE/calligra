@@ -105,7 +105,7 @@ class KSPREAD_EXPORT Value
     /**
      * Creates an integer value.
      */
-    explicit Value( long i );
+    explicit Value( qint64 i );
 
     /**
      * Creates an integer value.
@@ -206,7 +206,7 @@ class KSPREAD_EXPORT Value
     /**
      * Sets this value to integer value.
      */
-    void setValue( long i );
+    void setValue( qint64 i );
 
     /**
      * Sets this value to integer value.
@@ -258,7 +258,7 @@ class KSPREAD_EXPORT Value
      *
      * Call this function only if isNumber() returns true.
      */
-    long asInteger() const;
+    qint64 asInteger() const;
 
     /**
      * Returns the floating-point value of this value.

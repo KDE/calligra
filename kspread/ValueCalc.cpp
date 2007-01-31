@@ -815,7 +815,7 @@ Value ValueCalc::fromBase (const Value &val, int base)
 {
   QString str = converter->asString (val).asString();
   bool ok;
-  double num = str.toLong (&ok, base);
+  qint64 num = str.toLongLong(&ok, base);
   if (ok)
     return Value (num);
   return Value::errorVALUE();

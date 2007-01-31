@@ -35,7 +35,7 @@ class TestBitopsFunctions: public QObject
 private slots:
   void testBITAND();
 private:
-  Value evaluate(const QString&);
+  Value evaluate(const QString&, Value& ex);
 };
 
 } // namespace KSpread

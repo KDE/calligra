@@ -45,7 +45,7 @@ class Value::Private : public QSharedData
     union
     {
       bool b;
-      long i;
+      qint64 i;
       double f;
       QString* ps;
       ValueArray* pa;
@@ -211,7 +211,7 @@ Value::Value( bool b )
 }
 
 // create an integer value
-Value::Value( long i )
+Value::Value( qint64 i )
 {
   d = Private::null();
   setValue ( i );
@@ -292,7 +292,7 @@ bool Value::asBoolean() const
 }
 
 // set the value to integer
-void Value::setValue( long i )
+void Value::setValue( qint64 i )
 {
   d->type = Integer;
   d->i = i;
@@ -303,20 +303,20 @@ void Value::setValue( long i )
 void Value::setValue( int i )
 {
   d->type = Integer;
-  d->i = static_cast<long>( i );
+  d->i = static_cast<qint64>( i );
   d->format = fmt_Number;
 }
 
 // get the value as integer
-long Value::asInteger() const
+qint64 Value::asInteger() const
 {
-  long result = 0;
+  qint64 result = 0;
 
   if( type() == Value::Integer )
     result = d->i;
 
   if( type() == Value::Float )
-    result = static_cast<int>(floor( d->f ) );
+    result = static_cast<qint64>( floor( d->f ) );
 
   return result;
 }
@@ -704,8 +704,8 @@ int Value::compare( const Value& v ) const
   // integer vs integer
   if( ( t1 == Integer ) && ( t2 == Integer ) )
   {
-    long p = asInteger();
-    long q = v.asInteger();
+    qint64 p = asInteger();
+    qint64 q = v.asInteger();
     return ( p == q ) ? 0 : ( p < q ) ? -1 : 1;
   }
 

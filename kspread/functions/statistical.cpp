@@ -1118,8 +1118,8 @@ Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *) {
     {
       result = Value(1.0);
       Value fFak(1.0);
-      unsigned long nEnd = calc->conv()->asInteger (x).asInteger();
-      for (unsigned long i = 1; i <= nEnd; i++)
+      qint64 nEnd = calc->conv()->asInteger (x).asInteger();
+      for (qint64 i = 1; i <= nEnd; i++)
       {
         // fFak *= i
         fFak = calc->mul (fFak, i);

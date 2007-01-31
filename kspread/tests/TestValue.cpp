@@ -71,7 +71,7 @@ void TestValue::testInteger()
   // integer value
   v1 = new Value( 1977 );
   QCOMPARE( v1->type(), Value::Integer );
-  QCOMPARE( v1->asInteger(), (long)1977 );
+  QCOMPARE( v1->asInteger(), (qint64)1977 );
   v1->setValue( false ); // dummy
   v1->setValue( 14 );
   QCOMPARE( v1->type(), Value::Integer );
@@ -79,7 +79,7 @@ void TestValue::testInteger()
   QCOMPARE( v1->isFloat(), false );
   QCOMPARE( v1->isString(), false );
   QCOMPARE( v1->isNumber(), true );
-  QCOMPARE( v1->asInteger(), (long)14 );
+  QCOMPARE( v1->asInteger(), (qint64)14 );
   delete v1;
 }
 
