@@ -321,7 +321,7 @@ private:
     QAbstractButton* m_pCancelButton;
     QAbstractButton* m_pOkButton;
     Canvas* m_pCanvas;
-    bool isArray;
+    bool m_isArray;
 };
 
 

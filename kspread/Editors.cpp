@@ -1457,7 +1457,7 @@ EditWidget::EditWidget( QWidget *_parent, Canvas *_canvas,
   // properly in the layout - but they are then managed here.
   m_pCancelButton = cancelButton;
   m_pOkButton = okButton;
-  isArray = false;
+  m_isArray = false;
 
   installEventFilter(m_pCanvas);
 
@@ -1496,8 +1496,8 @@ void EditWidget::slotAbortEdit()
 
 void EditWidget::slotDoneEdit()
 {
-  m_pCanvas->deleteEditor( true /*keep changes*/, isArray);
-  isArray = false;
+  m_pCanvas->deleteEditor( true /*keep changes*/, m_isArray);
+  m_isArray = false;
   // will take care of the buttons
 }
 
@@ -1537,7 +1537,7 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
       // This is why we call slotDoneEdit now, instead of sending
       // to the canvas.
       //QApplication::sendEvent( m_pCanvas, _ev );
-      isArray = (_ev->modifiers() & Qt::AltModifier) &&
+      m_isArray = (_ev->modifiers() & Qt::AltModifier) &&
           (_ev->modifiers() & Qt::ControlModifier);
       slotDoneEdit();
       m_pCanvas->view()->updateEditWidget();
