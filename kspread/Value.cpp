@@ -23,6 +23,7 @@
 #include "CellStorage.h"
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <QString>
 #include <QTextStream>
@@ -487,7 +488,7 @@ const Value& Value::empty()
 const Value& Value::errorCIRCLE()
 {
   if( !ks_error_circle.isError() )
-    ks_error_circle.setError( "#CIRCLE!" );
+    ks_error_circle.setError( i18n( "#CIRCLE!" ) );
   return ks_error_circle;
 }
 
@@ -495,7 +496,7 @@ const Value& Value::errorCIRCLE()
 const Value& Value::errorDEPEND()
 {
   if( !ks_error_depend.isError() )
-    ks_error_depend.setError( "#DEPEND!" );
+    ks_error_depend.setError( i18n( "#DEPEND!" ) );
   return ks_error_depend;
 }
 
@@ -503,7 +504,7 @@ const Value& Value::errorDEPEND()
 const Value& Value::errorDIV0()
 {
   if( !ks_error_div0.isError() )
-    ks_error_div0.setError( "#DIV/0!" );
+    ks_error_div0.setError( i18n( "#DIV/0!" ) );
   return ks_error_div0;
 }
 
@@ -511,7 +512,7 @@ const Value& Value::errorDIV0()
 const Value& Value::errorNA()
 {
   if( !ks_error_na.isError() )
-    ks_error_na.setError( "#N/A" );
+    ks_error_na.setError( i18n( "#N/A" ) );
   return ks_error_na;
 }
 
@@ -519,7 +520,7 @@ const Value& Value::errorNA()
 const Value& Value::errorNAME()
 {
   if( !ks_error_name.isError() )
-    ks_error_name.setError( "#NAME?" );
+    ks_error_name.setError( i18n( "#NAME?" ) );
   return ks_error_name;
 }
 
@@ -527,7 +528,7 @@ const Value& Value::errorNAME()
 const Value& Value::errorNUM()
 {
   if( !ks_error_num.isError() )
-    ks_error_num.setError( "#NUM!" );
+    ks_error_num.setError( i18n( "#NUM!" ) );
   return ks_error_num;
 }
 
@@ -535,7 +536,7 @@ const Value& Value::errorNUM()
 const Value& Value::errorNULL()
 {
   if( !ks_error_null.isError() )
-    ks_error_null.setError( "#NULL!" );
+    ks_error_null.setError( i18n( "#NULL!" ) );
   return ks_error_null;
 }
 
@@ -543,7 +544,7 @@ const Value& Value::errorNULL()
 const Value& Value::errorPARSE()
 {
   if( !ks_error_parse.isError() )
-    ks_error_parse.setError( "#PARSE!" );
+    ks_error_parse.setError( i18n( "#PARSE!" ) );
   return ks_error_parse;
 }
 
@@ -551,7 +552,7 @@ const Value& Value::errorPARSE()
 const Value& Value::errorREF()
 {
   if( !ks_error_ref.isError() )
-    ks_error_ref.setError( "#REF!" );
+    ks_error_ref.setError( i18n( "#REF!" ) );
   return ks_error_ref;
 }
 
@@ -559,7 +560,7 @@ const Value& Value::errorREF()
 const Value& Value::errorVALUE()
 {
   if( !ks_error_value.isError() )
-    ks_error_value.setError( "#VALUE!" );
+    ks_error_value.setError( i18n( "#VALUE!" ) );
   return ks_error_value;
 }
 
