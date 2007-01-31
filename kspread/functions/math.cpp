@@ -98,6 +98,7 @@ Value func_sum (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_suma (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumif (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumsq (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_transpose (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *);
 
 
@@ -307,6 +308,10 @@ void RegisterMathFunctions()
   repo->add (f);
   f = new Function ("SUMSQ",         func_sumsq);
   f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("TRANSPOSE",     func_transpose);
+  f->setParamCount (1);
   f->setAcceptArray ();
   repo->add (f);
 }
@@ -1099,6 +1104,25 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
     return Value::errorVALUE();
   }
   return res;
+}
+
+// Function: TRANSPOSE
+Value func_transpose (valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value matrix = args[0];
+    const int cols = matrix.columns();
+    const int rows = matrix.rows();
+
+    Value transpose( Value::Array );
+    for ( int row = 0; row < rows; ++row )
+    {
+        for ( int col = 0; col < cols; ++col )
+        {
+            if ( !matrix.element( col, row ).isEmpty() )
+                transpose.setElement( row, col, matrix.element( col, row ) );
+        }
+    }
+    return transpose;
 }
 
 /*
