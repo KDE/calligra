@@ -18,6 +18,7 @@
  */
 
 #include "KarbonPatternTool.h"
+#include "KarbonPatternEditStrategy.h"
 
 #include <karbon_factory.h>
 #include <karbon_resourceserver.h>
@@ -45,175 +46,6 @@
 
 #include <Q3PtrList>
 
-/// The class used for editing a shapes pattern
-class KarbonPatternTool::PatternStrategy
-{
-public:
-    PatternStrategy( KoShape * shape )
-    : m_shape( shape ),m_selectedHandle( -1 ), m_editing( false )
-    {
-        // cache the shapes transformation matrix
-        m_matrix = m_shape->transformationMatrix( 0 );
-        QSizeF size = m_shape->size();
-        // the fixed length of half the average shape dimension
-        m_normalizedLength = 0.25 * ( size.width() + size.height() );
-        // the center handle at the center point of the shape
-        QPointF center( 0.5 * size.width(), 0.5 * size.height() );
-        // the direction handle with the length of half the average shape dimension
-        QPointF dirVec = QPointF( m_normalizedLength, 0.0 );
-        m_handles.append( center );
-        m_handles.append( center + m_shape->background().matrix().map( dirVec ) );
-    }
-
-    ~PatternStrategy() {}
-
-    /// painting of the pattern editing handles
-    void paint( QPainter &painter, KoViewConverter &converter )
-    {
-        QPointF centerPoint = m_matrix.map( m_handles[center] );
-        QPointF directionPoint = m_matrix.map( m_handles[direction] );
-
-        m_shape->applyConversion( painter, converter );
-        painter.drawLine( centerPoint, directionPoint );
-        //paintHandle( painter, converter, centerPoint );
-        paintHandle( painter, converter, directionPoint );
-    }
-
-    void paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position )
-    {
-        QRectF handleRect = converter.viewToDocument( QRectF( m_handleRadius, m_handleRadius, 2*m_handleRadius, 2*m_handleRadius ) );
-        handleRect.moveCenter( position );
-        painter.drawRect( handleRect );
-    }
-
-    bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos )
-    {
-        QPointF handle = m_matrix.map( handlePos );
-        if( mousePos.x() < handle.x()-m_handleRadius )
-            return false;
-        if( mousePos.x() > handle.x()+m_handleRadius )
-            return false;
-        if( mousePos.y() < handle.y()-m_handleRadius )
-            return false;
-        if( mousePos.y() > handle.y()+m_handleRadius )
-            return false;
-        return true;
-    }
-
-    /// selects handle at the given position
-    bool selectHandle( const QPointF &mousePos )
-    {
-        int handleIndex = 0;
-        foreach( QPointF handle, m_handles )
-        {
-            if( mouseInsideHandle( mousePos, handle ) )
-            {
-                m_selectedHandle = handleIndex;
-                return true;
-            }
-            handleIndex++;
-        }
-        m_selectedHandle = -1;
-        return false;
-    }
-
-    /// mouse position handling for moving handles
-    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
-    {
-        Q_UNUSED( modifiers )
-
-        if( m_selectedHandle == direction )
-        {
-            QPointF newPos = m_matrix.inverted().map( mouseLocation ) - m_handles[center];
-            // calculate the temporary length after handle movement
-            double newLength = sqrt( newPos.x()*newPos.x() + newPos.y()*newPos.y() );
-            // set the new direction vector with the new direction and normalized length
-            m_handles[m_selectedHandle] = m_handles[center] + m_normalizedLength / newLength * newPos;
-        }
-
-        m_newBackground = background();
-        m_shape->setBackground( m_newBackground );
-    }
-
-    /// sets the strategy into editing mode
-    void setEditing( bool on )
-    {
-        m_editing = on;
-        // if we are going into editing mode, save the old background
-        // for use inside the command emitted when finished
-        if( on )
-            m_oldBackground = m_shape->background();
-    }
-
-    /// checks if strategy is in editing mode
-    bool isEditing() { return m_editing; }
-
-    /// create the command for changing the shapes background
-    QUndoCommand * createCommand()
-    {
-        m_shape->setBackground( m_oldBackground );
-        QList<KoShape*> shapes;
-        return new KoShapeBackgroundCommand( shapes << m_shape, m_newBackground, 0 );
-    }
-
-    /// schedules a repaint of the shape and gradient handles
-    void repaint() const
-    {
-        m_shape->repaint();
-    }
-
-    /// returns the pattern handles bounding rect
-    QRectF boundingRect()
-    {
-        // calculate the bounding rect of the handles
-        QRectF bbox( m_matrix.map( m_handles[0] ), QSize(0,0) );
-        for( int i = 1; i < m_handles.count(); ++i )
-        {
-            QPointF handle = m_matrix.map( m_handles[i] );
-            bbox.setLeft( qMin( handle.x(), bbox.left() ) );
-            bbox.setRight( qMax( handle.x(), bbox.right() ) );
-            bbox.setTop( qMin( handle.y(), bbox.top() ) );
-            bbox.setBottom( qMax( handle.y(), bbox.bottom() ) );
-        }
-        return bbox.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius );
-    }
-
-    QBrush background()
-    {
-        // the direction vector controls the rotation of the pattern
-        QPointF dirVec = m_handles[direction]-m_handles[center];
-        double angle = atan2( dirVec.y(), dirVec.x() ) * 180.0 / M_PI;
-        QMatrix matrix;
-        matrix.rotate( angle );
-
-        QBrush newBrush( m_oldBackground );
-        newBrush.setMatrix( matrix );
-        return newBrush;
-    }
-
-    /// sets the handle radius used for painting the handles
-    static void setHandleRadius( int radius ) { m_handleRadius = radius; }
-
-    /// returns the actual handle radius
-    static int handleRadius() { return m_handleRadius; }
-
-private:
-    enum Handles { center, direction };
-
-    KoShape *m_shape;          ///< the shape we are working on
-    int m_selectedHandle;      ///< index of currently deleted handle or -1 if none selected
-    QBrush m_oldBackground;    ///< the old background brush
-    QBrush m_newBackground;    ///< the new background brush
-    QList<QPointF> m_handles;  ///< the list of handles
-    QMatrix m_matrix;          ///< matrix to map handle into document coordinate system
-    static int m_handleRadius; ///< the handle radius for all gradient strategies
-    bool m_editing;            ///< the edit mode flag
-    double m_normalizedLength; ///< the normalized direction vector length
-};
-
-int KarbonPatternTool::PatternStrategy::m_handleRadius = 3;
-
-
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
 : KoTool( canvas ), m_patternChooser( 0 ), m_buttonGroup( 0 )
@@ -231,7 +63,7 @@ void KarbonPatternTool::paint( QPainter &painter, KoViewConverter &converter )
     painter.setPen( Qt::blue ); //TODO make configurable
 
     // paint all the strategies
-    foreach( PatternStrategy *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategy *strategy, m_patterns )
     {
         painter.save();
         strategy->paint( painter, converter );
@@ -248,7 +80,7 @@ void KarbonPatternTool::paint( QPainter &painter, KoViewConverter &converter )
 
 void KarbonPatternTool::repaintDecorations()
 {
-    foreach( PatternStrategy *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategy *strategy, m_patterns )
         m_canvas->updateCanvas( strategy->boundingRect() );
 }
 
@@ -271,7 +103,7 @@ void KarbonPatternTool::mouseMoveEvent( KoPointerEvent *event )
             return;
         }
     }
-    foreach( PatternStrategy *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategy *strategy, m_patterns )
     {
         if( strategy->selectHandle( event->point ) )
         {
@@ -302,7 +134,7 @@ void KarbonPatternTool::keyPressEvent(QKeyEvent *event)
     {
         case Qt::Key_I:
         {
-            uint handleRadius = PatternStrategy::handleRadius();
+            uint handleRadius = m_canvas->resourceProvider()->handleRadius();
             if(event->modifiers() & Qt::ControlModifier)
                 handleRadius--;
             else
@@ -321,7 +153,7 @@ void KarbonPatternTool::initialize()
 {
     m_currentStrategy = 0;
 
-    foreach( PatternStrategy* strategy, m_patterns )
+    foreach( KarbonPatternEditStrategy* strategy, m_patterns )
     {
         strategy->repaint();
         delete strategy;
@@ -333,7 +165,7 @@ void KarbonPatternTool::initialize()
         const QBrush &background = shape->background();
         if( background.style() == Qt::TexturePattern )
         {
-            m_patterns.append( new PatternStrategy( shape ) );
+            m_patterns.append( new KarbonPatternEditStrategy( shape ) );
             m_patterns.last()->repaint();
         }
     }
@@ -350,14 +182,14 @@ void KarbonPatternTool::activate( bool temporary )
 
     initialize();
 
-    PatternStrategy::setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
+    KarbonPatternEditStrategy::setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
 
     useCursor(Qt::ArrowCursor, true);
 }
 
 void KarbonPatternTool::deactivate()
 {
-    foreach( PatternStrategy* strategy, m_patterns )
+    foreach( KarbonPatternEditStrategy* strategy, m_patterns )
     {
         strategy->repaint();
         delete strategy;
@@ -372,10 +204,12 @@ void KarbonPatternTool::resourceChanged( KoCanvasResource::EnumCanvasResource ke
     switch( key )
     {
         case KoCanvasResource::HandleRadius:
-            foreach( PatternStrategy *strategy, m_patterns )
+            foreach( KarbonPatternEditStrategy *strategy, m_patterns )
                 strategy->repaint();
-            PatternStrategy::setHandleRadius( res.toUInt() );
-            foreach( PatternStrategy *strategy, m_patterns )
+
+            KarbonPatternEditStrategy::setHandleRadius( res.toUInt() );
+
+            foreach( KarbonPatternEditStrategy *strategy, m_patterns )
                 strategy->repaint();
         break;
         default:

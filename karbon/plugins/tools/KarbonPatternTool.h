@@ -22,15 +22,13 @@
 
 #include <KoTool.h>
 
-#include <QBrush>
-
 class QPainter;
 class QButtonGroup;
 class QTableWidgetItem;
-class QUndoCommand;
 class KoPatternChooser;
-class KoShape;
 class VPattern;
+class KarbonPatternEditStrategy;
+
 
 class KarbonPatternTool : public KoTool
 {
@@ -67,9 +65,8 @@ private:
     QButtonGroup * m_buttonGroup;
     VPattern * m_pattern;
 
-    class PatternStrategy;
-    QList<PatternStrategy*> m_patterns;  ///< the list of editing strategies, one for each shape
-    PatternStrategy * m_currentStrategy; ///< the current editing strategy
+    QList<KarbonPatternEditStrategy*> m_patterns;  ///< the list of editing strategies, one for each shape
+    KarbonPatternEditStrategy * m_currentStrategy; ///< the current editing strategy
 };
 
 #endif // _KARBONPATTERNTOOL_H_

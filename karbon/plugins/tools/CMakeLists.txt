@@ -11,6 +11,7 @@ set(karbon_tools_PART_SRCS
    KarbonGradientToolFactory.cpp
    KarbonPatternTool.cpp
    KarbonPatternToolFactory.cpp
+   KarbonPatternEditStrategy.cpp
 )
 
 kde4_automoc(${karbon_tools_PART_SRCS})
