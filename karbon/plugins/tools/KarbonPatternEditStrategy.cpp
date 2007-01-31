@@ -53,7 +53,7 @@ KarbonPatternEditStrategy::~KarbonPatternEditStrategy()
 {
 }
 
-void KarbonPatternEditStrategy::paint( QPainter &painter, KoViewConverter &converter )
+void KarbonPatternEditStrategy::paint( QPainter &painter, KoViewConverter &converter ) const
 {
     QPointF centerPoint = m_matrix.map( m_origin + m_handles[center] );
     QPointF directionPoint = m_matrix.map( m_origin + m_handles[direction] );
@@ -64,14 +64,14 @@ void KarbonPatternEditStrategy::paint( QPainter &painter, KoViewConverter &conve
     paintHandle( painter, converter, directionPoint );
 }
 
-void KarbonPatternEditStrategy::paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position )
+void KarbonPatternEditStrategy::paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position ) const
 {
     QRectF handleRect = converter.viewToDocument( QRectF( m_handleRadius, m_handleRadius, 2*m_handleRadius, 2*m_handleRadius ) );
     handleRect.moveCenter( position );
     painter.drawRect( handleRect );
 }
 
-bool KarbonPatternEditStrategy::mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos )
+bool KarbonPatternEditStrategy::mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos ) const
 {
     QPointF handle = m_matrix.map( m_origin + handlePos );
     if( mousePos.x() < handle.x()-m_handleRadius )
@@ -145,7 +145,7 @@ void KarbonPatternEditStrategy::repaint() const
     m_shape->repaint();
 }
 
-QRectF KarbonPatternEditStrategy::boundingRect()
+QRectF KarbonPatternEditStrategy::boundingRect() const
 {
     // calculate the bounding rect of the handles
     QRectF bbox( m_matrix.map( m_origin + m_handles[0] ), QSize(0,0) );
@@ -160,12 +160,13 @@ QRectF KarbonPatternEditStrategy::boundingRect()
     return bbox.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius );
 }
 
-QBrush KarbonPatternEditStrategy::background()
+QBrush KarbonPatternEditStrategy::background() const
 {
     // the direction vector controls the rotation of the pattern
     QPointF dirVec = m_handles[direction]-m_handles[center];
     double angle = atan2( dirVec.y(), dirVec.x() ) * 180.0 / M_PI;
     QMatrix matrix;
+    // the center handle controls the translation
     matrix.translate( m_handles[center].x(), m_handles[center].y() );
     matrix.rotate( angle );
 

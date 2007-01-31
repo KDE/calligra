@@ -33,19 +33,13 @@ class KarbonPatternEditStrategy
 {
 public:
     /// constructs an edit strategy working on the given shape
-    KarbonPatternEditStrategy( KoShape * shape );
+    explicit KarbonPatternEditStrategy( KoShape * shape );
 
     /// destroy the edit strategy
     ~KarbonPatternEditStrategy();
 
     /// painting of the pattern editing handles
-    void paint( QPainter &painter, KoViewConverter &converter );
-
-    /// paints a singale handle
-    void paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position );
-
-    /// checks if mouse position is inside handle rect
-    bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos );
+    void paint( QPainter &painter, KoViewConverter &converter ) const;
 
     /// selects handle at the given position
     bool selectHandle( const QPointF &mousePos );
@@ -57,7 +51,7 @@ public:
     void setEditing( bool on );
 
     /// checks if strategy is in editing mode
-    bool isEditing() { return m_editing; }
+    bool isEditing() const { return m_editing; }
 
     /// create the command for changing the shapes background
     QUndoCommand * createCommand();
@@ -66,10 +60,10 @@ public:
     void repaint() const;
 
     /// returns the pattern handles bounding rect
-    QRectF boundingRect();
+    QRectF boundingRect() const;
 
     /// returns the actual background brush
-    QBrush background();
+    QBrush background() const;
 
     /// sets the handle radius used for painting the handles
     static void setHandleRadius( int radius ) { m_handleRadius = radius; }
@@ -78,6 +72,13 @@ public:
     static int handleRadius() { return m_handleRadius; }
 
 private:
+
+    /// paints a singale handle
+    void paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position ) const;
+
+    /// checks if mouse position is inside handle rect
+    bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos ) const;
+
     enum Handles { center, direction };
 
     KoShape *m_shape;          ///< the shape we are working on
