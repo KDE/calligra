@@ -325,6 +325,16 @@ public:
 class ValueStorage : public PointStorage<Value>
 {
 public:
+    ValueStorage()
+        : PointStorage<Value>()
+    {
+    }
+
+    ValueStorage( const PointStorage<Value>& o )
+        : PointStorage<Value>( o )
+    {
+    }
+
     ValueStorage& operator=( const PointStorage<Value>& o )
     {
         PointStorage<Value>::operator=( o );

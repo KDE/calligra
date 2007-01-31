@@ -208,12 +208,8 @@ Value CellStorage::value( int column, int row ) const
 
 Value CellStorage::valueRegion( const Region& region ) const
 {
-    const QRect rect = region.boundingRect();
-    const PointStorage<Value> subStorage = d->valueStorage->subStorage( region );
-    Value array( Value::Array );
-    for ( int c = 0; c < subStorage.count(); ++c )
-        array.setElement( subStorage.col( c ) - rect.left(), subStorage.row( c ) - rect.top(), subStorage.data( c ) );
-    return array;
+    // create a subStorage with adjusted origin
+    return Value( d->valueStorage->subStorage( region, false ) );
 }
 
 void CellStorage::setValue( int column, int row, const Value& value )

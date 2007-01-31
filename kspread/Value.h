@@ -33,6 +33,7 @@
 namespace KSpread
 {
 class Doc;
+class ValueStorage;
 
 /**
  * Provides a wrapper for cell value.
@@ -123,6 +124,11 @@ class KSPREAD_EXPORT Value
     explicit Value( const QString& s );
 
     explicit Value (const char *s);
+
+    /**
+     * Creates an array value using the data from \p array.
+     */
+    explicit Value( const ValueStorage& array );
 
     /**
      * Create a floating-point value from date/time.
@@ -242,6 +248,11 @@ class KSPREAD_EXPORT Value
      * Sets this value to floating-point number representing the time.
      */
     void setValue( const QDate& dt, const Doc* doc );
+
+    /**
+     * Sets \p array as new data.
+     */
+    void setValue( const ValueStorage& array );
 
     /** Sets format information for this value. */
     void setFormat (Format fmt);

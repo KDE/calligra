@@ -250,6 +250,8 @@ void DependencyManager::areaModified (const QString &name)
 
 void DependencyManager::updateAllDependencies(const Map* map)
 {
+    ElapsedTime( "Generating dependencies", ElapsedTime::PrintOnlyTime );
+
     // clear the reference depth list
     d->depths.clear();
 

@@ -20,7 +20,7 @@
 
 #include "Value.h"
 #include "Doc.h"
-#include "PointStorage.h"
+#include "CellStorage.h"
 
 #include <kdebug.h>
 
@@ -33,7 +33,7 @@
 
 using namespace KSpread;
 
-typedef PointStorage<Value> ValueArray;
+typedef ValueStorage ValueArray;
 
 class Value::Private : public QSharedData
 {
@@ -266,6 +266,13 @@ Value::Value( const QDate& dt, const Doc* doc )
   setValue( dt, doc );
 }
 
+// create an array value
+Value::Value( const ValueStorage& array )
+{
+    d = Private::null();
+    setValue( array );
+}
+
 // return type of the value
 Value::Type Value::type() const
 {
@@ -420,6 +427,13 @@ void Value::setValue( const QDate& date, const Doc* doc )
 
   setValue( i );
   d->format = fmt_Date;
+}
+
+void Value::setValue( const ValueStorage& array )
+{
+    d->type = Array;
+    d->pa = new ValueArray( array );
+    d->format = fmt_None;
 }
 
 // get the value as date/time

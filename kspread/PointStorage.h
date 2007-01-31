@@ -861,10 +861,15 @@ public:
 
     /**
      * Creates a substorage consisting of the values in \p region.
+     * If \p keepOffset is \c true, the values' positions are not altered.
+     * Otherwise, the upper left of \p region's bounding rect is used as new origin,
+     * and all positions are adjusted.
      * \return a subset of the storage stripped down to the values in \p region
      */
-    PointStorage<T> subStorage( const Region& region ) const
+    PointStorage<T> subStorage( const Region& region, bool keepOffset = true ) const
     {
+        // Determine the offset.
+        const QPoint offset = keepOffset ? QPoint( 0, 0 ) : region.boundingRect().topLeft() - QPoint( 1, 1 );
         // this generates an array of values
         PointStorage<T> subStorage;
         Region::ConstIterator end( region.constEnd() );
@@ -876,8 +881,15 @@ public:
                 const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
                 const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
                 for ( QVector<int>::const_iterator cit = cstart; cit != cend; ++cit )
+                {
                     if ( *cit >= rect.left() && *cit <= rect.right() )
-                        subStorage.insert( *cit, row, m_data.value( cit - m_cols.begin() ) );
+                    {
+                        if ( keepOffset )
+                            subStorage.insert( *cit, row, m_data.value( cit - m_cols.begin() ) );
+                        else
+                            subStorage.insert( *cit - offset.x(), row - offset.y(), m_data.value( cit - m_cols.begin() ) );
+                    }
+                }
             }
         }
         return subStorage;
