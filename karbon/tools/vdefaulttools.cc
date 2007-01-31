@@ -26,7 +26,6 @@
 
 #include "vdefaulttools.h"
 
-#include "vpatterntool.h"
 #include "vpolylinetool.h"
 #include "vshapetool.h"
 #include "vsinustool.h"
@@ -51,7 +50,6 @@ VDefaultTools::VDefaultTools(QObject *parent, const QStringList &)
 	if ( parent->inherits("KarbonFactory") )
 	{
 		KarbonToolRegistry* r = KarbonToolRegistry::instance();
-		r->add(new KarbonToolFactory<VPatternTool>());
 		r->add(new KarbonToolFactory<VPolylineTool>());
 		r->add(new KarbonToolFactory<VSinusTool>());
 		r->add(new KarbonToolFactory<VSpiralTool>());
