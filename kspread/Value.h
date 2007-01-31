@@ -200,59 +200,9 @@ class KSPREAD_EXPORT Value
     bool isError() const { return type() == Error; }
 
     /**
-     * Sets this value to another value.
-     */
-    void setValue( const Value& v );
-
-    /**
-     * Sets this value to boolean value.
-     */
-    void setValue( bool b );
-
-    /**
-     * Sets this value to integer value.
-     */
-    void setValue( qint64 i );
-
-    /**
-     * Sets this value to integer value.
-     */
-    void setValue( int i );
-
-    /**
-     * Sets this value to floating-point value.
-     */
-    void setValue( double f );
-
-    /**
-     * Sets this value to string value.
-     */
-    void setValue( const QString& s );
-
-    /**
      * Sets this value to hold error message.
      */
     void setError( const QString& msg );
-
-    /**
-     * Sets this value to floating-point number representing the date/time.
-     */
-    void setValue( const QDateTime& dt, const Doc* doc );
-
-    /**
-     * Sets this value to floating-point number representing the date.
-     */
-    void setValue( const QTime& dt, const Doc* doc );
-
-    /**
-     * Sets this value to floating-point number representing the time.
-     */
-    void setValue( const QDate& dt, const Doc* doc );
-
-    /**
-     * Sets \p array as new data.
-     */
-    void setValue( const ValueStorage& array );
 
     /** Sets format information for this value. */
     void setFormat (Format fmt);

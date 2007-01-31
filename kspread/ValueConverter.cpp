@@ -44,21 +44,21 @@ Value ValueConverter::asBoolean (const Value &value) const
   bool ok;
   switch (value.type()) {
     case Value::Empty:
-      val.setValue (false);
+      val = Value(false);
     break;
     case Value::Boolean:
       val = value;
     break;
     case Value::Integer:
-      val.setValue (value.asInteger() ? true : false);
+      val = Value(value.asInteger() ? true : false);
     break;
     case Value::Float:
-      val.setValue ((value.asFloat() == 0.0) ? false : true);
+      val = Value((value.asFloat() == 0.0) ? false : true);
     break;
     case Value::String:
       val = parser->tryParseBool (value.asString(), &ok);
       if (!ok)
-        val.setValue (false);
+        val = Value(false);
     break;
     case Value::Array:
       val = asBoolean (value.element (0, 0));
@@ -67,7 +67,7 @@ Value ValueConverter::asBoolean (const Value &value) const
       /* NOTHING */
     break;
     case Value::Error:
-      val.setValue (false);
+      val = Value(false);
     break;
   };
 
@@ -81,22 +81,22 @@ Value ValueConverter::asInteger (const Value &value) const
 
   switch (value.type()) {
     case Value::Empty:
-      val.setValue (0);
+      val = Value(0);
     break;
     case Value::Boolean:
-      val.setValue (value.asBoolean() ? 1 : 0);
+      val = Value(value.asBoolean() ? 1 : 0);
     break;
     case Value::Integer:
       val = value;
     break;
     case Value::Float:
-      val.setValue (value.asInteger());
+      val = Value(value.asInteger());
     break;
     case Value::String:
-      val.setValue ((int) parser->tryParseNumber
+      val = Value((int) parser->tryParseNumber
           (value.asString(), &ok).asFloat());
       if (!ok)
-        val.setValue (0);
+        val = Value(0);
     break;
     case Value::Array:
       val = asInteger (value.element (0, 0));
@@ -105,7 +105,7 @@ Value ValueConverter::asInteger (const Value &value) const
       /* NOTHING */
     break;
     case Value::Error:
-      val.setValue (0);
+      val = Value(0);
     break;
   };
 
@@ -119,13 +119,13 @@ Value ValueConverter::asFloat (const Value &value) const
 
   switch (value.type()) {
     case Value::Empty:
-      val.setValue (0.0);
+      val = Value(0.0);
     break;
     case Value::Boolean:
-      val.setValue (value.asBoolean() ? 1.0 : 0.0);
+      val = Value(value.asBoolean() ? 1.0 : 0.0);
     break;
     case Value::Integer:
-      val.setValue (value.asFloat ());
+      val = Value(value.asFloat ());
     break;
     case Value::Float:
       val = value;
@@ -133,7 +133,7 @@ Value ValueConverter::asFloat (const Value &value) const
     case Value::String:
       val = parser->tryParseNumber (value.asString(), &ok);
       if (!ok)
-        val.setValue (0.0);
+        val = Value(0.0);
     break;
     case Value::Array:
       val = asFloat (value.element (0, 0));
@@ -142,7 +142,7 @@ Value ValueConverter::asFloat (const Value &value) const
       /* NOTHING */
     break;
     case Value::Error:
-      val.setValue (0.0);
+      val = Value(0.0);
     break;
   };
 
@@ -171,7 +171,7 @@ Value ValueConverter::asString (const Value &value) const
       val = Value(QString());
     break;
     case Value::Boolean:
-      val.setValue (value.asBoolean() ? ki18n("True").toString(parser->locale()) :
+      val = Value(value.asBoolean() ? ki18n("True").toString(parser->locale()) :
         ki18n("False").toString(parser->locale()));
     break;
     case Value::Integer:
@@ -206,7 +206,7 @@ Value ValueConverter::asString (const Value &value) const
           s = s.replace (pos, 1, decimal_point);
         if (fmt == Value::fmt_Percent)
           s += " %";
-        val.setValue (s);
+        val = Value(s);
       }
     break;
     case Value::String:
@@ -219,7 +219,7 @@ Value ValueConverter::asString (const Value &value) const
       /* NOTHING */
     break;
     case Value::Error:
-      val.setValue (value.errorMessage ());
+      val = Value(value.errorMessage ());
     break;
   };
 
@@ -233,18 +233,18 @@ Value ValueConverter::asDateTime (const Value &value) const
 
   switch (value.type()) {
     case Value::Empty:
-      val.setValue ( Value( QDateTime::currentDateTime(), doc() ) );
+      val = Value( QDateTime::currentDateTime(), doc() );
     break;
     case Value::Boolean:
       //ignore the bool value... any better idea? ;)
-      val.setValue ( Value( QDateTime::currentDateTime(), doc() ) );
+      val = Value( QDateTime::currentDateTime(), doc() );
     break;
     case Value::Integer:
-      val.setValue (value.asFloat());
+      val = Value(value.asFloat());
       val.setFormat (Value::fmt_DateTime);
     break;
     case Value::Float:
-      val.setValue (value.asFloat());
+      val = Value(value.asFloat());
       val.setFormat (Value::fmt_DateTime);
     break;
     case Value::String:
@@ -274,18 +274,18 @@ Value ValueConverter::asDate (const Value &value) const
 
   switch (value.type()) {
     case Value::Empty:
-      val.setValue ( Value( QDate::currentDate(), doc() ) );
+      val = Value( QDate::currentDate(), doc() );
     break;
     case Value::Boolean:
       //ignore the bool value... any better idea? ;)
-      val.setValue ( Value( QDate::currentDate(), doc() ) );
+      val = Value( QDate::currentDate(), doc() );
     break;
     case Value::Integer:
-      val.setValue (value.asFloat());
+      val = Value(value.asFloat());
       val.setFormat (Value::fmt_Date);
     break;
     case Value::Float:
-      val.setValue (value.asFloat());
+      val = Value(value.asFloat());
       val.setFormat (Value::fmt_Date);
     break;
     case Value::String:
@@ -313,18 +313,18 @@ Value ValueConverter::asTime (const Value &value) const
 
   switch (value.type()) {
     case Value::Empty:
-      val.setValue ( Value( QTime::currentTime(), doc() ) );
+      val = Value( QTime::currentTime(), doc() );
     break;
     case Value::Boolean:
       //ignore the bool value... any better idea? ;)
-      val.setValue ( Value( QTime::currentTime(), doc() ) );
+      val = Value( QTime::currentTime(), doc() );
     break;
     case Value::Integer:
-      val.setValue (value.asFloat());
+      val = Value(value.asFloat());
       val.setFormat (Value::fmt_Time);
     break;
     case Value::Float:
-      val.setValue (value.asFloat());
+      val = Value(value.asFloat());
       val.setFormat (Value::fmt_Time);
     break;
     case Value::String:

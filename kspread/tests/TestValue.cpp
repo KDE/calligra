@@ -47,8 +47,8 @@ void TestValue::testBoolean()
   v1 = new Value( true );
   QCOMPARE( v1->type(), Value::Boolean );
   QCOMPARE( v1->asBoolean(), true );
-  v1->setValue( 1 ); // dummy
-  v1->setValue( true );
+  *v1 = Value( 1 ); // dummy
+  *v1 = Value( true );
   QCOMPARE( v1->type(), Value::Boolean );
   QCOMPARE( v1->asBoolean(), true );
   delete v1;
@@ -57,8 +57,8 @@ void TestValue::testBoolean()
   v1 = new Value( false );
   QCOMPARE( v1->type(), Value::Boolean );
   QCOMPARE( v1->asBoolean(), false );
-  v1->setValue( 4 ); // dummy
-  v1->setValue( false );
+  *v1 = Value( 4 ); // dummy
+  *v1 = Value( false );
   QCOMPARE( v1->type(), Value::Boolean );
   QCOMPARE( v1->asBoolean(), false );
   delete v1;
@@ -72,8 +72,8 @@ void TestValue::testInteger()
   v1 = new Value( 1977 );
   QCOMPARE( v1->type(), Value::Integer );
   QCOMPARE( v1->asInteger(), (qint64)1977 );
-  v1->setValue( false ); // dummy
-  v1->setValue( 14 );
+  *v1 = Value( false ); // dummy
+  *v1 = Value( 14 );
   QCOMPARE( v1->type(), Value::Integer );
   QCOMPARE( v1->isInteger(), true );
   QCOMPARE( v1->isFloat(), false );
@@ -91,8 +91,8 @@ void TestValue::testFloat()
   v1 = new Value( M_PI );
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v1->asFloat(), M_PI );
-  v1->setValue( false ); // dummy
-  v1->setValue( 14.03 );
+  *v1 = Value( false ); // dummy
+  *v1 = Value( 14.03 );
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v1->isInteger(), false );
   QCOMPARE( v1->isFloat(), true );
@@ -111,8 +111,8 @@ void TestValue::testString()
   v1 = new Value( QString("Ailinon" ) );
   QCOMPARE( v1->type(), Value::String );
   QCOMPARE( v1->asString(), QString("Ailinon" ) );
-  v1->setValue( 7 ); // dummy
-  v1->setValue( QString("spreadsheet" ) );
+  *v1 = Value( 7 ); // dummy
+  *v1 = Value( QString("spreadsheet" ) );
   QCOMPARE( v1->type(), Value::String );
   QCOMPARE( v1->isInteger(), false );
   QCOMPARE( v1->isFloat(), false );
@@ -125,8 +125,8 @@ void TestValue::testString()
   v1 = new Value( Value::String );
   v2 = new Value( Value::String );
   QCOMPARE( *v1, *v2 );
-  v1->setValue( QString( "spreadsheet" ) );
-  v2->setValue( QString( "spreadsheet" ) );
+  *v1 = Value( QString( "spreadsheet" ) );
+  *v2 = Value( QString( "spreadsheet" ) );
   QCOMPARE( *v1, *v2 );
   delete v1;
   delete v2;
@@ -149,7 +149,7 @@ void TestValue::testDate()
     QDate dv1 = QDate( y, m, d );
     if( !dv1.isValid() ) continue;
     double serialNo = -dv1.daysTo( refDate ) + 1.0;
-    v1->setValue( Value( dv1, &doc ) );
+    *v1 = Value( Value( dv1, &doc ) );
     QCOMPARE(v1->asFloat(),serialNo);
     date_error = v1->asFloat() != serialNo;
   }
@@ -163,14 +163,14 @@ void TestValue::testTime()
 
   // time value
   v1 = new Value();
-  v1->setValue( Value( QTime( 0, 0, 0 ), &doc ) );
+  *v1 = Value( Value( QTime( 0, 0, 0 ), &doc ) );
   QCOMPARE( v1->type(), Value::Float );
   for( unsigned h = 0; h < 24; h++ )
   for( unsigned m = 0; m < 60; m++ )
   for( unsigned s = 0; s < 60; s++ )
   {
     QTime t1 = QTime( h, m, s );
-    v1->setValue( Value( t1, &doc ) );
+    *v1 = Value( Value( t1, &doc ) );
     QTime t2 = v1->asTime( &doc );
     QCOMPARE( t1.hour(), t2.hour() );
     QCOMPARE( t1.minute(), t2.minute() );
@@ -181,12 +181,12 @@ void TestValue::testTime()
 
   // time value (msec)
   v1 = new Value();
-  v1->setValue( Value( QTime( 0, 0, 0 ), &doc ) );
+  *v1 = Value( Value( QTime( 0, 0, 0 ), &doc ) );
   QCOMPARE( v1->type(), Value::Float );
   for( unsigned ms= 0;ms < 1000;ms++ )
   {
     QTime t1 = QTime( 1, 14, 2, ms );
-    v1->setValue( Value( t1, &doc ) );
+    *v1 = Value( Value( t1, &doc ) );
     QTime t2 = v1->asTime( &doc );
     QCOMPARE( t1.hour(), t2.hour() );
     QCOMPARE( t1.minute(), t2.minute() );
@@ -211,8 +211,8 @@ void TestValue::testError()
   v1 = new Value( Value::Error );
   v2 = new Value( Value::Error );
   QCOMPARE( *v1, *v2 );
-  v1->setValue( Value::errorVALUE() );
-  v2->setValue( Value::errorVALUE() );
+  *v1 = Value( Value::errorVALUE() );
+  *v2 = Value( Value::errorVALUE() );
   QCOMPARE( *v1, *v2 );
   delete v1;
   delete v2;
@@ -306,7 +306,7 @@ void TestValue::testCopy()
 
   // copy value
   v1 = new Value();
-  v1->setValue( 14.3 );
+  *v1 = Value( 14.3 );
   v2 = new Value( *v1 );
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v2->type(), Value::Float );
@@ -340,7 +340,7 @@ void TestValue::testAssignment()
   QCOMPARE( v2->type(), Value::String );
   QCOMPARE( v1->asString(), QString("Hello") );
   QCOMPARE( v2->asString(), QString("Hello") );
-  v2->setValue( QString("World") );
+  *v2 = Value( QString("World") );
   QCOMPARE( v1->asString(), QString("Hello") );
   QCOMPARE( v2->asString(), QString("World") );
   delete v1;

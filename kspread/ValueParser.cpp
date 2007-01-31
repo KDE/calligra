@@ -103,7 +103,7 @@ Value ValueParser::parse (const QString &str)
   // then we don't parse as a value, but as string.
   if ( str.isEmpty() || str.at(0)=='\'' )
   {
-    val.setValue (str);
+    val = Value( str );
     return val;
   }
 
@@ -129,7 +129,7 @@ Value ValueParser::parse (const QString &str)
   double money = m_doc->locale()->readMoney (strStripped, &ok);
   if (ok)
   {
-    val.setValue (money);
+    val = Value( money );
     val.setFormat (Value::fmt_Money);
     return val;
   }
@@ -143,7 +143,7 @@ Value ValueParser::parse (const QString &str)
     return val;
 
   // Nothing particular found, then this is simply a string
-  val.setValue (str);
+  val = Value( str );
   return val;
 }
 
@@ -194,13 +194,13 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
   if ((lowerStr == "true") ||
        (lowerStr == ki18n("true").toString(m_doc->locale()).toLower()))
   {
-    val.setValue (true);
+    val = Value( true );
     if (ok) *ok = true;
   }
   else if ((lowerStr == "false") ||
       (lowerStr == ki18n("false").toString(m_doc->locale()).toLower()))
   {
-    val.setValue (false);
+    val = Value( false );
     if (ok) *ok = true;
     fmtType = Format::Number;    //TODO: really?
   }
@@ -310,7 +310,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
     {
       //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
       //    "' successfully parsed as percentage: " << val << '%' << endl;
-      value.setValue (val / 100.0);
+      value = Value( val / 100.0 );
       value.setFormat (Value::fmt_Percent);
       fmtType = Format::Percentage;
     }
@@ -319,9 +319,9 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
       //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
       //    "' successfully parsed as number: " << val << endl;
 	  if (isInt)
-		value.setValue (static_cast<qint64> (val));
+		value = Value( static_cast<qint64>( val ) );
 	  else
-		value.setValue (val);
+		value = Value( val );
 
       if ( str2.contains('E') || str2.contains('e') )
         fmtType = Format::Scientific;
@@ -469,11 +469,11 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
     fmtType = Format::Time;
     if ( duration )
     {
-      val.setValue( Value( tmpTime, doc() ) );
+      val = Value( tmpTime, doc() );
       fmtType = Format::Time7;
     }
     else
-      val.setValue( Value( tmpTime.time(), doc() ) );
+      val = Value( tmpTime.time(), doc() );
   }
 
   if (ok)

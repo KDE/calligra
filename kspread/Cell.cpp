@@ -1664,10 +1664,9 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             double percent = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
-                Value value;
-                value.setValue(percent);
-                value.setFormat (Value::fmt_Percent);
-                setCellValue( Value(value) );
+                Value value( percent );
+                value.setFormat( Value::fmt_Percent );
+                setCellValue( value );
 
                 if ( !isFormula && inputText().isEmpty())
                 {

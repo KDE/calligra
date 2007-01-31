@@ -1445,7 +1445,7 @@ Value Formula::eval() const
         if (val1.isError() || val2.isError())
 	  val1 = Value::errorVALUE();
 	else
-          val1.setValue( val2.asString().append( val1.asString() ) );
+          val1 = Value( val2.asString().append( val1.asString() ) );
         entry.reset();
         entry.val = val1;
         stack.push (entry);
@@ -1457,7 +1457,7 @@ Value Formula::eval() const
         if( val1.isError() )
 	  val1 = Value::errorVALUE();
 	else
-	  val1.setValue( !val1.asBoolean() );
+	  val1 = Value( !val1.asBoolean() );
         entry.reset();
         entry.val = val1;
         stack.push (entry);

@@ -85,11 +85,12 @@ class Value::Private : public QSharedData
     }
 
     // destroys data
-    ~Private(){ if( this == s_null ) s_null = 0;
-       if( type == Value::Array ) delete pa;
-       if( type == Value::String ) delete ps;
-       if( type == Value::Error ) delete ps;
-     }
+    ~Private()
+    {
+        if ( this == s_null )
+            s_null = 0;
+        clear();
+    }
 
     // static empty data to be shared
     static Private* null()
@@ -97,6 +98,14 @@ class Value::Private : public QSharedData
 
     // true if it's null (which is shared)
     bool isNull(){ return this == s_null; }
+
+    /** Deletes all data. */
+    void clear()
+    {
+        if ( type == Value::Array )  delete pa;
+        if ( type == Value::Error )  delete ps;
+        if ( type == Value::String ) delete ps;
+    }
 
     /** set most probable formatting based on the type */
     void setFormatByType ();
@@ -205,86 +214,107 @@ bool Value::operator==( const Value& o ) const
 
 // create a boolean value
 Value::Value( bool b )
+    : d( Private::null() )
 {
-  d = Private::null();
-  setValue( b );
+    d->type = Boolean;
+    d->b = b;
+    d->format = fmt_Boolean;
 }
 
 // create an integer value
 Value::Value( qint64 i )
+    : d( Private::null() )
 {
-  d = Private::null();
-  setValue ( i );
+    d->type = Integer;
+    d->i = i;
+    d->format = fmt_Number;
 }
 
 // create an integer value
 Value::Value( int i )
+    : d( Private::null() )
 {
-  d = Private::null();
-  setValue ( i );
+    d->type = Integer;
+    d->i = static_cast<qint64>( i );
+    d->format = fmt_Number;
 }
 
 // create a floating-point value
 Value::Value( double f )
+    : d( Private::null() )
 {
-  d = Private::null();
-  setValue( f );
+    d->type = Float;
+    d->f = f;
+    d->format = fmt_Number;
 }
 
 // create a string value
 Value::Value( const QString& s )
+    : d( Private::null() )
 {
-  d = Private::null();
-  setValue( s );
+    d->type = String;
+    d->ps = new QString( s );
+    d->format = fmt_String;
 }
 
 // create a string value
 Value::Value (const char *s)
+    : d( Private::null() )
 {
-  d = Private::null();
-  setValue (QString (s));
+    d->type = String;
+    d->ps = new QString( s );
+    d->format = fmt_String;
 }
 
 // create a floating-point value from date/time
 Value::Value( const QDateTime& dt, const Doc* doc )
+    : d( Private::null() )
 {
-  d = Private::null();
-  setValue( dt, doc );
+    const QDate refDate( doc->referenceDate() );
+    const QTime refTime( 0, 0 );  // reference time is midnight
+
+    d->type = Float;
+    d->f = refDate.daysTo( dt.date() );
+    d->f += static_cast<double>( refTime.msecsTo( dt.time() ) ) / 86400000.0; // 24*60*60*1000
+    d->format = fmt_DateTime;
 }
 
 // create a floating-point value from time
-Value::Value( const QTime& dt, const Doc* doc )
+Value::Value( const QTime& time, const Doc* doc )
+    : d( Private::null() )
 {
-  d = Private::null();
-  setValue( dt, doc );
+    Q_UNUSED( doc );
+    const QTime refTime( 0, 0 );  // reference time is midnight
+
+    d->type = Float;
+    d->f = static_cast<double>( refTime.msecsTo( time ) ) / 86400000.0; // 24*60*60*1000
+    d->format = fmt_Time;
 }
 
 // create a floating-point value from date
-Value::Value( const QDate& dt, const Doc* doc )
+Value::Value( const QDate& date, const Doc* doc )
+    : d( Private::null() )
 {
-  d = Private::null();
-  setValue( dt, doc );
+  const QDate refDate( doc->referenceDate() );
+
+  d->type = Integer;
+  d->i = refDate.daysTo( date );
+  d->format = fmt_Date;
 }
 
 // create an array value
 Value::Value( const ValueStorage& array )
+    : d( Private::null() )
 {
-    d = Private::null();
-    setValue( array );
+    d->type = Array;
+    d->pa = new ValueArray( array );
+    d->format = fmt_None;
 }
 
 // return type of the value
 Value::Type Value::type() const
 {
   return d ? d->type : Empty;
-}
-
-// set the value to boolean
-void Value::setValue( bool b )
-{
-  d->type = Boolean;
-  d->b = b;
-  d->format = fmt_Boolean;
 }
 
 // get the value as boolean
@@ -296,22 +326,6 @@ bool Value::asBoolean() const
     result = d->b;
 
   return result;
-}
-
-// set the value to integer
-void Value::setValue( qint64 i )
-{
-  d->type = Integer;
-  d->i = i;
-  d->format = fmt_Number;
-}
-
-// set the value to integer
-void Value::setValue( int i )
-{
-  d->type = Integer;
-  d->i = static_cast<qint64>( i );
-  d->format = fmt_Number;
 }
 
 // get the value as integer
@@ -328,19 +342,6 @@ qint64 Value::asInteger() const
   return result;
 }
 
-void Value::setValue( const Value& v )
-{
-    d = v.d;
-}
-
-// set the value as floating-point
-void Value::setValue( double f )
-{
-  d->type = Float;
-  d->f = f;
-  d->format = fmt_Number;
-}
-
 // get the value as floating-point
 double Value::asFloat() const
 {
@@ -353,14 +354,6 @@ double Value::asFloat() const
     result = static_cast<double>(d->i);
 
   return result;
-}
-
-// set the value as string
-void Value::setValue( const QString& s )
-{
-  d->type = String;
-  d->ps = new QString( s );
-  d->format = fmt_String;
 }
 
 // get the value as string
@@ -378,8 +371,9 @@ QString Value::asString() const
 // set error message
 void Value::setError( const QString& msg )
 {
-  d->type = Error;
-  d->ps = new QString( msg );
+    d->clear();
+    d->type = Error;
+    d->ps = new QString( msg );
 }
 
 // get error message
@@ -392,48 +386,6 @@ QString Value::errorMessage() const
     result = QString( *d->ps );
 
   return result;
-}
-
-// set the value as date/time
-// NOTE: date/time is stored as serial number
-void Value::setValue( const QDateTime& dt, const Doc* doc  )
-{
-  const QDate refDate( doc->referenceDate() );
-  const QTime refTime( 0, 0 );  // reference time is midnight
-
-  double f= refDate.daysTo( dt.date() );
-  f += static_cast<double>( refTime.msecsTo( dt.time() ) ) / 86400000.0; // 24*60*60*1000
-
-  setValue( f );
-  d->format = fmt_DateTime;
-}
-
-void Value::setValue( const QTime& time, const Doc* doc )
-{
-  Q_UNUSED( doc );
-  const QTime refTime( 0, 0 );  // reference time is midnight
-
-  const double f = static_cast<double>( refTime.msecsTo( time ) ) / 86400000.0; // 24*60*60*1000
-
-  setValue( f );
-  d->format = fmt_Time;
-}
-
-void Value::setValue( const QDate& date, const Doc* doc )
-{
-  const QDate refDate( doc->referenceDate() );
-
-  const int i = refDate.daysTo( date );
-
-  setValue( i );
-  d->format = fmt_Date;
-}
-
-void Value::setValue( const ValueStorage& array )
-{
-    d->type = Array;
-    d->pa = new ValueArray( array );
-    d->format = fmt_None;
 }
 
 // get the value as date/time

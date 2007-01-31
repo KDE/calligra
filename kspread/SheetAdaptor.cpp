@@ -177,14 +177,14 @@ bool SheetAdaptor::setValue( int x, int y, const QVariant& value )
 	if(! cell) return false;
 	KSpread::Value v = cell.value();
 	switch( value.type() ) {
-		case QVariant::Bool: v.setValue( value.toBool() ); break;
-		case QVariant::ULongLong: v.setValue( value.toLongLong() ); break;
-		case QVariant::Int: v.setValue( value.toInt() ); break;
-		case QVariant::Double: v.setValue( value.toDouble() ); break;
-		case QVariant::String: v.setValue( value.toString() ); break;
-		//case QVariant::Date: v.setValue( value.toDate() ); break;
-		//case QVariant::Time: v.setValue( value.toTime() ); break;
-		//case QVariant::DateTime: v.setValue( value.toDateTime() ); break;
+		case QVariant::Bool: v = Value( value.toBool() ); break;
+		case QVariant::ULongLong: v = Value( value.toLongLong() ); break;
+		case QVariant::Int: v = Value( value.toInt() ); break;
+		case QVariant::Double: v = Value( value.toDouble() ); break;
+		case QVariant::String: v = Value( value.toString() ); break;
+		//case QVariant::Date: v = Value( value.toDate() ); break;
+		//case QVariant::Time: v = Value( value.toTime() ); break;
+		//case QVariant::DateTime: v = Value( value.toDateTime() ); break;
 		default: return false;
 	}
 	return true;
