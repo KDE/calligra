@@ -462,10 +462,9 @@ double Layout::topMargin() {
     return 0.0;
 }
 
-void Layout::draw(QPainter *painter) {
-painter->setPen(Qt::black); // TODO use theme color, or a kword wide hardcoded default.
+void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context) {
+    painter->setPen(context.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion();
-    // da real work
     QTextBlock block = m_parent->document()->begin();
     bool started=false;
     while(block.isValid()) {
@@ -498,7 +497,24 @@ painter->setPen(Qt::black); // TODO use theme color, or a kword wide hardcoded d
                 painter->save();
                 decorateParagraph(painter, block);
                 painter->restore();
-                layout->draw(painter, QPointF(0,0));
+
+                QVector<QTextLayout::FormatRange> selections;
+                foreach(QAbstractTextDocumentLayout::Selection selection, context.selections) {
+                    QTextCursor cursor = selection.cursor;
+                    int begin = cursor.position();
+                    int end = cursor.anchor();
+                    if(begin > end)
+                        qSwap(begin, end);
+
+                   if(end < block.position() || begin > block.position() + block.length())
+                       continue; // selection does not intersect this block.
+                    QTextLayout::FormatRange fr;
+                    fr.start = begin - block.position();
+                    fr.length = end - begin;
+                    fr.format = selection.format;
+                    selections.append(fr);
+                }
+                layout->draw(painter, QPointF(0,0), selections);
             }
             else if(started) // when out of the cliprect, then we are done drawing.
                 return;

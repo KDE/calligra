@@ -52,7 +52,7 @@ public:
     double documentOffsetInShape();
 
     /// paint the document
-    void draw(QPainter *painter);
+    void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext & context);
 
     void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
     KoStyleManager *styleManager() const { return m_styleManager; }

@@ -73,28 +73,28 @@ TextTool::TextTool(KoCanvasBase *canvas)
     connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(strikeOut(bool)) );
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
-    m_actionAlignLeft  = new QAction(KIcon("text_left"), i18n("Align Left"), this);
+    m_actionAlignLeft  = new QAction(KIcon("#text_left"), i18n("Align Left"), this);
     addAction("format_alignleft", m_actionAlignLeft );
     m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
     connect(m_actionAlignLeft, SIGNAL(toggled(bool)), this, SLOT(alignLeft()));
 
-    m_actionAlignRight  = new QAction(KIcon("text_right"), i18n("Align Right"), this);
+    m_actionAlignRight  = new QAction(KIcon("#text_right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight );
     m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
     connect(m_actionAlignRight, SIGNAL(toggled(bool)), this, SLOT(alignRight()));
 
-    m_actionAlignCenter  = new QAction(KIcon("text_center"), i18n("Align Center"), this);
+    m_actionAlignCenter  = new QAction(KIcon("#text_center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter );
     m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
     m_actionAlignCenter->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignCenter);
     connect(m_actionAlignCenter, SIGNAL(toggled(bool)), this, SLOT(alignCenter()));
 
-    m_actionAlignBlock  = new QAction(KIcon("text_block"), i18n("Align Block"), this);
+    m_actionAlignBlock  = new QAction(KIcon("#text_block"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock );
     m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignBlock->setCheckable(true);
@@ -156,6 +156,10 @@ TextTool::~TextTool() {
 }
 
 void TextTool::paint( QPainter &painter, KoViewConverter &converter) {
+    QTextBlock block = m_caret.block();
+    if(! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
+        return;
+
     if(painter.hasClipping()) {
         QRect shape = converter.documentToView(m_textShape->boundingRect()).toRect();
         if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())
@@ -166,23 +170,24 @@ void TextTool::paint( QPainter &painter, KoViewConverter &converter) {
     double zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
-    //const QTextDocument *document = m_caret.block().document();
+    painter.translate(0, -m_textShapeData->documentOffset());
 
-/*
-    QAbstractTextDocumentLayout::PaintContext pc;
-    pc.cursorPosition = m_caret.position();
-    QAbstractTextDocumentLayout::Selection selection;
-    selection.cursor = m_caret;
-    selection.format.setTextOutline(QPen(Qt::red));
-    pc.selections.append(selection);
-    document->documentLayout()->draw( &painter, pc);
-*/
+    if(m_textShapeData && m_caret.hasSelection()) {
+        QAbstractTextDocumentLayout::PaintContext pc;
+        QAbstractTextDocumentLayout::Selection selection;
+        selection.cursor = m_caret;
+        selection.format.setBackground(QBrush(Qt::yellow)); // TODO use configured selection color
+        selection.format.setForeground(QBrush(Qt::black)); // TODO use configured selected-text color
+        pc.selections.append(selection);
 
-    QTextBlock block = m_caret.block();
-    if(! block.layout())
-        return;
+        QRectF clip = textRect(m_caret.position(), m_caret.anchor());
+        painter.save();
+        painter.setClipRect(clip, Qt::IntersectClip);
+        m_textShapeData->document()->documentLayout()->draw( &painter, pc);
+        painter.restore();
+    }
 
-    // paint caret.
+    // paint caret
     QPen pen(Qt::black);
     if(! m_textShape->hasTransparency()) {
         QColor bg = m_textShape->background().color();
@@ -190,7 +195,6 @@ void TextTool::paint( QPainter &painter, KoViewConverter &converter) {
         pen.setColor(invert);
     }
     painter.setPen(pen);
-    painter.translate(0, -m_textShapeData->documentOffset());
     block.layout()->drawCursor(&painter, QPointF(0,0), m_caret.position() - block.position());
 }
 
@@ -211,11 +215,18 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
         m_caret = QTextCursor(m_textShapeData->document());
     }
 
-    repaint();
+    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+    if(m_caret.hasSelection() && !shiftPressed)
+        repaintSelection(m_caret.position(), m_caret.anchor()); // will erase selection
+    else if(! m_caret.hasSelection())
+        repaintCaret();
+    int prevPosition = m_caret.position();
     int position = pointToPosition(event->point);
-    m_caret.setPosition(position,
-            (event->modifiers() & Qt::ShiftModifier) ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
-    repaint();
+    m_caret.setPosition(position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+    if(shiftPressed) // altered selection.
+        repaintSelection(prevPosition, m_caret.position());
+    else
+        repaintCaret();
 
     updateSelectionHandler();
     updateStyleManager();
@@ -248,9 +259,9 @@ void TextTool::mouseMoveEvent( KoPointerEvent *event ) {
         return;
     int position = pointToPosition(event->point);
     if(position >= 0) {
-        repaint();
+        repaintCaret();
         m_caret.setPosition(position, QTextCursor::KeepAnchor);
-        repaint();
+        repaintCaret();
     }
 
     updateSelectionHandler();
@@ -315,11 +326,19 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
     }
     if(moveOperation != QTextCursor::NoMove) {
         useCursor(Qt::BlankCursor);
-        repaint();
+        bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+        if(m_caret.hasSelection() && !shiftPressed)
+            repaintSelection(m_caret.position(), m_caret.anchor()); // will erase selection
+        else if(! m_caret.hasSelection())
+            repaintCaret();
         // TODO if RTL toggle direction of cursor movement.
+        int prevPosition = m_caret.position();
         m_caret.movePosition(moveOperation,
-            (event->modifiers() & Qt::ShiftModifier)?QTextCursor::KeepAnchor:QTextCursor::MoveAnchor);
-        repaint();
+            shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        if(shiftPressed) // altered selection.
+            repaintSelection(prevPosition, m_caret.position());
+        else
+            repaintCaret();
         updateActions();
     }
 
@@ -408,7 +427,7 @@ void TextTool::deactivate() {
     updateSelectionHandler();
 }
 
-void TextTool::repaint() {
+void TextTool::repaintCaret() {
     QTextBlock block = m_caret.block();
     if(block.isValid()) {
         QTextLine tl = block.layout()->lineForTextPosition(m_caret.position() - block.position());
@@ -416,14 +435,35 @@ void TextTool::repaint() {
         if(tl.isValid()) {
             repaintRect = tl.rect();
             repaintRect.setX(tl.cursorToX(m_caret.position() - block.position()));
-            repaintRect.setWidth(2);
+            repaintRect.setWidth(6);
         }
-        else // layouting info was removed already :(
-            repaintRect = block.layout()->boundingRect();
         repaintRect.moveTop(repaintRect.y() - m_textShapeData->documentOffset());
         repaintRect = m_textShape->transformationMatrix(0).mapRect(repaintRect);
         m_canvas->updateCanvas(repaintRect);
     }
+}
+
+void TextTool::repaintSelection(int startPosition, int endPosition) {
+    QRectF repaintRect = textRect(startPosition, endPosition);
+    repaintRect.moveTop(repaintRect.y() - m_textShapeData->documentOffset());
+    repaintRect = m_textShape->transformationMatrix(0).mapRect(repaintRect);
+    m_canvas->updateCanvas(repaintRect);
+}
+
+QRectF TextTool::textRect(int startPosition, int endPosition) {
+    if(startPosition > endPosition)
+        qSwap(startPosition, endPosition);
+    QTextBlock block = m_textShapeData->document()->findBlock(startPosition);
+    QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
+    double startX = line1.cursorToX(startPosition - block.position());
+
+    block = m_textShapeData->document()->findBlock(endPosition);
+    QTextLine line2 = block.layout()->lineForTextPosition(endPosition - block.position());
+    double endX = line2.cursorToX(endPosition - block.position());
+
+    if(line1.textStart() == line2.textStart())
+        return QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height());
+    return QRectF(0, line1.y(), 10E6, line2.y() + line2.height() - line1.y());
 }
 
 KoToolSelection* TextTool::selection() {

@@ -74,7 +74,9 @@ private slots:
     void increaseIndent();
 
 private:
-    void repaint();
+    void repaintCaret();
+    void repaintSelection(int from, int to);
+    QRectF textRect(int startPosition, int endPosition);
     int pointToPosition(const QPointF & point) const;
     void updateSelectionHandler();
     void updateActions();
