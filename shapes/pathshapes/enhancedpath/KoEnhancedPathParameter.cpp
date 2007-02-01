@@ -22,8 +22,6 @@
 #include "KoEnhancedPathShape.h"
 #include <math.h>
 
-#include <kdebug.h>
-
 KoEnhancedPathParameter::KoEnhancedPathParameter()
 {
 }

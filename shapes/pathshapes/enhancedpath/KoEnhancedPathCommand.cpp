@@ -22,8 +22,6 @@
 #include "KoEnhancedPathShape.h"
 #include <math.h>
 
-#include <kdebug.h>
-
 // radian to degree factor
 const double rad2deg = 180.0/M_PI;
 
@@ -42,7 +40,7 @@ bool KoEnhancedPathCommand::execute( KoEnhancedPathShape * path )
      * The parameters of the commands are in viewbox coordinates, which have
      * to be converted to the shapes coordinate system by calling viewboxToShape
      * on the enhanced path the command works on.
-     * Parameters which resemble angles are angles cooresponding to the viewbox
+     * Parameters which resemble angles are angles corresponding to the viewbox
      * coordinate system. Those have to be transformed into angles corresponding
      * to the normal mathematically coordinate system to be used for the arcTo
      * drawing routine. This is done by computing (2*M_PI - angle).

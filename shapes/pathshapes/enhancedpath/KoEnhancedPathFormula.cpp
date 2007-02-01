@@ -474,8 +474,6 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
     if( tokens.count() == 0 )
         return false;
 
-    kDebug() << "starting to compile " << tokens.count() << " tokens" << endl;
-
     FormulaTokenStack syntaxStack;
     QStack<int> argStack;
     unsigned argCount = 1;
@@ -702,11 +700,7 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
     {
         m_constants.clear();
         m_codes.clear();
-        kDebug() << "compiling of "<< m_text << " failed" << endl;
-    }
-    else
-    {
-        kDebug() << "compiling of "<< m_text << " successful" << endl;
+        kWarning() << "compiling of "<< m_text << " failed" << endl;
     }
 
     return m_valid;
@@ -863,14 +857,18 @@ QString matchFunction( KoEnhancedPathFormula::Function function )
     return "unknown";
 }
 
+
 void KoEnhancedPathFormula::debugTokens( const TokenList &tokens )
 {
+#ifndef NDEBUG
     for( int i = 0; i < tokens.count(); i++ )
         kDebug() << tokens[i].text() << endl;
+#endif
 }
 
 void KoEnhancedPathFormula::debugOpcodes()
 {
+#ifndef NDEBUG
     foreach( Opcode c, m_codes )
     {
         QString ctext;
@@ -888,4 +886,5 @@ void KoEnhancedPathFormula::debugOpcodes()
         }
         kDebug() << ctext << endl;
     }
+#endif
 }

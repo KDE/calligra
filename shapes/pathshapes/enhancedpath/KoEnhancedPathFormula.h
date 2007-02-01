@@ -38,7 +38,7 @@ public:
       TypeFunction     ///< function name
     };
 
-    /// operators
+    /// operator types
     enum Operator {
         OperatorInvalid,   ///< invalid operator
         OperatorAdd,       ///< + addition
@@ -50,8 +50,8 @@ public:
         OperatorComma      ///< , comma
     };
 
-    /// Constructs token with givne tyoe, textm and position
-    FormulaToken( Type type = TypeUnknown, const QString & text = QString(), int position = -1 );
+    /// Constructs token with given type, text and position
+    explicit FormulaToken( Type type = TypeUnknown, const QString & text = QString(), int position = -1 );
 
     /// copy constructor
     FormulaToken( const FormulaToken &token );
@@ -92,7 +92,7 @@ class Opcode;
 class KoEnhancedPathFormula
 {
 public:
-    /// functions
+    /// predefined functions
     enum Function {
         FunctionUnknown,
         // unary functions
@@ -102,39 +102,66 @@ public:
         FunctionCos,
         FunctionTan,
         FunctionAtan,
-        FunctionAtan2,
         // binary functions
+        FunctionAtan2,
         FunctionMin,
         FunctionMax,
         // ternary functions
         FunctionIf
     };
 
+    /// The possible error code returned by error()
     enum Error {
         ErrorNone,    ///< no error
         ErrorValue,   ///< error when converting value
         ErrorParse,   ///< parsing error
         ErrorCompile, ///< compiling error
-        ErrorName     ///< function name value
+        ErrorName     ///< invalid function name value
     };
 
-    KoEnhancedPathFormula( const QString &text );
+    /// Constructs a new formula from the specified string representation
+    explicit KoEnhancedPathFormula( const QString &text );
+
+    /// Destroys the formula
     ~KoEnhancedPathFormula();
+
+    /**
+     * Evaluates the formula using the given path as possible input.
+     *
+     * @param path the path to use as input
+     * @return the evaluated result
+     */
     double evaluate( KoEnhancedPathShape * path );
+
+    /// Returns the last occured error
     Error error() { return m_error; }
+
 private:
     /// Separates the given formula text into tokens.
     TokenList scan( const QString &formula ) const;
+
+    /// Compiles the formula tokens into byte code
     bool compile( const TokenList & tokens );
+
+    /**
+     * Evaluates a predefined function.
+     *
+     * @param function the identifier of the function to evaluate
+     * @param arguments the functions arguments
+     */
     double evaluateFunction( Function function, const QList<double> &arguments ) const;
+
+    /// Prints token list
     void debugTokens( const TokenList &tokens );
+    /// Prints byte code
     void debugOpcodes();
-    bool m_valid;
-    bool m_compiled;
-    Error m_error;
+
+    bool m_valid;    ///< flag that shows if function is valid, i.e the function was compiled successfully
+    bool m_compiled; ///< flag that shows if function was compiled
+    Error m_error;   ///< the last occured error
     QString m_text; ///< the formula text representation
     QList<QVariant> m_constants; ///< constant values
-    QList<Opcode> m_codes; ///< byte code
+    QList<Opcode> m_codes; ///< the compiled byte code
 };
 
 #endif // KOENHANCEDPATHFORMULA_H

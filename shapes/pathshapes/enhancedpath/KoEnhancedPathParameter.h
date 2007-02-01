@@ -43,7 +43,7 @@ enum Identifier {
     IdentifierLogheight  ///< The height of the svg:viewBox in 1/100th mm is used.
 };
 
-/// abstract parameter class
+/// The bstract parameter class
 class KoEnhancedPathParameter
 {
 public:
@@ -55,22 +55,25 @@ public:
     virtual void modify( double value, KoEnhancedPathShape *path );
 };
 
-/// a constant parameter
+/// A constant parameter, a fixed value (i.e. 5, 11.3, -7 )
 class KoEnhancedPathConstantParameter : public KoEnhancedPathParameter
 {
 public:
-    KoEnhancedPathConstantParameter( double value );
+    /// Constructs the constant parameter with the given value
+    explicit KoEnhancedPathConstantParameter( double value );
     double evaluate( KoEnhancedPathShape *path );
 private:
     double m_value; ///< the constant value
 };
 
-/// a named parameter
+/// A named parameter, one that refers to a variable of the path
 class KoEnhancedPathNamedParameter : public KoEnhancedPathParameter
 {
 public:
+    /// Constructs named parameter from given identifier
     explicit KoEnhancedPathNamedParameter( Identifier identifier );
-    KoEnhancedPathNamedParameter( const QString &identifier );
+    /// Constructs named parameter from given identifier string
+    explicit KoEnhancedPathNamedParameter( const QString &identifier );
     double evaluate( KoEnhancedPathShape *path );
     /// Returns identfier type from given string
     static Identifier identifierFromString( const QString &text );
@@ -78,15 +81,16 @@ private:
     Identifier m_identifier; ///< the identifier type
 };
 
-/// a referencing parameter
+/// A referencing parameter, one that refrences another formula or a modifier
 class KoEnhancedPathReferenceParameter : public KoEnhancedPathParameter
 {
 public:
-    KoEnhancedPathReferenceParameter( const QString &reference );
+    /// Constructs reference paramater from the fiven reference string
+    explicit KoEnhancedPathReferenceParameter( const QString &reference );
     double evaluate( KoEnhancedPathShape *path );
     virtual void modify( double value, KoEnhancedPathShape *path );
 private:
-    QString m_reference; ///< the reference
+    QString m_reference; ///< the reference, formula or modifier
 };
 
 #endif // KOENHANCEDPATHPARAMETER_H

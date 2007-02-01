@@ -36,6 +36,7 @@ class KoPathPoint;
 class KoEnhancedPathCommand
 {
 public:
+    /// Constructs a new command from the given command type
     explicit KoEnhancedPathCommand( const QChar & command );
     ~KoEnhancedPathCommand();
     /// Excutes the command on the specified path shape

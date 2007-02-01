@@ -44,7 +44,7 @@ class KoEnhancedPathParameter;
 class KoEnhancedPathShape : public KoParameterShape
 {
 public:
-    KoEnhancedPathShape( const QRectF &viewBox );
+    explicit KoEnhancedPathShape( const QRectF &viewBox );
     ~KoEnhancedPathShape();
 
     /**
