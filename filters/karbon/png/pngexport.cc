@@ -34,6 +34,7 @@
 #include "vselection.h"
 #include "vkopainter.h"
 #include "vlayer.h"
+#include "vcomputeboundingbox.h"
 
 #include <kdebug.h>
 
@@ -67,19 +68,10 @@ PngExport::convert( const QCString& from, const QCString& to )
 	VDocument doc;
 	doc.load( docNode );
 
-	VLayerListIterator layerItr( doc.layers() );
-	VLayer *currentLayer;
-
-	for( ; currentLayer = layerItr.current(); ++layerItr )
-	{
-		if( currentLayer->state() == VObject::normal || currentLayer->state() == VObject::normal_locked || currentLayer->state() == VObject::selected )
-		{
-			doc.selection()->append(currentLayer->objects());
-		}
-	}
-
-	// get the bounding box of all selected objects:
-	const KoRect& rect = doc.selection()->boundingBox();
+	// calculate the documents bounding box
+	VComputeBoundingBox bbox( true );
+	doc.accept( bbox );
+	const KoRect &rect = bbox.boundingRect();
 
 	// create image with correct width and height
 	QImage img( int( rect.width() ), int( rect.height() ), 32 );
@@ -89,15 +81,8 @@ PngExport::convert( const QCString& from, const QCString& to )
 	VKoPainter p( img.bits(), rect.width(), rect.height() );
 	p.clear( qRgba( 0xFF, 0xFF, 0xFF, 0xFF ) );
 	p.setWorldMatrix( QWMatrix().translate( -rect.x(), -rect.y() ) );
-	VObjectList objects = doc.selection()->objects();
-	VObjectListIterator itr = objects;
 
-	// we dont need the selection anymore:
-	doc.selection()->clear();
-
-	// paint shapes over image
-	for ( ; itr.current(); ++itr )
-		itr.current()->draw( &p, &rect );
+	doc.draw( &p, &rect );
 
 	QImage image = img.swapRGB();
 	QImage mirrored = image.mirror( false, true );

@@ -38,6 +38,8 @@ VComputeBoundingBox::visitVDocument( VDocument& document )
 
 	for( ; itr.current(); ++itr )
 	{
+		if( itr.current()->state() == VObject::deleted )
+			continue;
 		// do not use hidden layers
 		if( m_omitHidden && ! isVisible( itr.current() ) )
 			continue;
@@ -52,6 +54,8 @@ VComputeBoundingBox::visitVLayer( VLayer& layer )
 
 	for( ; itr.current(); ++itr )
 	{
+		if( itr.current()->state() == VObject::deleted )
+			continue;
 		// do not export hidden objects
 		if( m_omitHidden && ! isVisible( itr.current() ) )
 			continue;
@@ -66,6 +70,8 @@ VComputeBoundingBox::visitVGroup( VGroup& group )
 
 	for( ; itr.current(); ++itr )
 	{
+		if( itr.current()->state() == VObject::deleted )
+			continue;
 		// do not use hidden child objects
 		if( m_omitHidden && ! isVisible( itr.current() ) )
 			continue;
