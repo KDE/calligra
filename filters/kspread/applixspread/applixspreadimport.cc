@@ -444,7 +444,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           {
 	    // Output
             printf ("   Cell (%2d)   >%s< ",
-                    nn, (*it).toLatin1() );
+                    nn, (*it).toLatin1().data() );
             nn++;
 
 	    if ((*it)[0] == 'T')
@@ -951,8 +951,8 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mc
                      &tmc->c, &tmc->m, &tmc->y, &tmc->k);
 
        printf ("  - <%-20s> <%-15s> <%3d> <%3d> <%3d> <%3d>  pos: %d\n",
-                mystr.toLatin1(),
-                colstr.toLatin1(),
+                mystr.toLatin1().data(),
+                colstr.toLatin1().data(),
                 tmc->c, tmc->m, tmc->y, tmc->k, pos);
 
        // Color transformation cmyk -> rgb
@@ -1034,7 +1034,7 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
             int pos = (*it).indexOf (":");
             (*it).remove (pos, len-pos);
 
-            printf( "     >%s<- -<%c><%d>  \n", (*it).toLatin1(), ccolumn, colwidth);
+            printf( "     >%s<- -<%c><%d>  \n", (*it).toLatin1().data(), ccolumn, colwidth);
 
             // Transformat ascii column to int column
             icolumn = translateColumnNumber (*it);
@@ -1094,8 +1094,8 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
    rc.tabname.append (tabname);
    rc.rc.append (rowcolstr);
 
-   printf ("%s %s\n", tabname.toLatin1(),
-                      rowcolstr.toLatin1());
+   printf ("%s %s\n", tabname.toLatin1().data(),
+                      rowcolstr.toLatin1().data());
 
    printf ("...done \n\n");
 }
@@ -1258,8 +1258,8 @@ APPLIXSPREADImport::readHeader (QTextStream &stream)
     // Check the headline
     if (rueck <= 0)
     {
-      printf ("Header not correkt - May be it is not an applixspreadsheet file\n");
-      printf ("Headerline: <%s>\n", mystr.toLatin1());
+      printf ("Header not correct - May be it is not an applixspreadsheet file\n");
+      printf ("Headerline: <%s>\n", mystr.toLatin1().data());
 
       QMessageBox::critical (0L, "Applix spreadsheet header problem",
               QString ("The Applix Spreadsheet header is not correct. "
@@ -1315,7 +1315,7 @@ APPLIXSPREADImport::translateColumnNumber (QString colstr)
 
    }
 
-   printf ("translateColumnNumber : <%s> -> %d\n", colstr.toLatin1(), icol);
+   printf ("translateColumnNumber : <%s> -> %d\n", colstr.toLatin1().data(), icol);
    return icol;
 }
 
