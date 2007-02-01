@@ -9,6 +9,7 @@ set(karbon_tools_PART_SRCS
    KarbonPencilToolFactory.cpp
    KarbonGradientTool.cpp
    KarbonGradientToolFactory.cpp
+   KarbonGradientEditStrategy.cpp
    KarbonPatternTool.cpp
    KarbonPatternToolFactory.cpp
    KarbonPatternEditStrategy.cpp
