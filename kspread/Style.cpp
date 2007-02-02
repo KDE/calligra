@@ -348,7 +348,12 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
-        setBackgroundColor( QColor(  styleStack.attributeNS( KoXmlNS::fo, "background-color" ) ) );
+        QColor color( styleStack.attributeNS( KoXmlNS::fo, "background-color" ) );
+        if ( color.isValid() )
+        {
+            kDebug(36003) << "\t\t fo:background-color: " << color.name() << endl;
+            setBackgroundColor( color );
+        }
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" )&&( styleStack.attributeNS( KoXmlNS::fo, "wrap-option" )=="wrap" ) )
@@ -1161,7 +1166,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
             style.addProperty( "style:vertical-align", value );
     }
 
-    if ( d->subStyles.contains( BackgroundColor ) && backgroundColor() != QColor() && backgroundColor().isValid() )
+    if ( d->subStyles.contains( BackgroundColor ) && backgroundColor().isValid() )
         style.addProperty( "fo:background-color", colorName(backgroundColor()) );
 
     if ( d->subStyles.contains( MultiRow ) && d->subStyles.contains( MultiRow ) )
@@ -1355,7 +1360,7 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     if ( d->subStyles.contains( VerticalAlignment ) && valign() != Middle )
         format.setAttribute( "alignY", (int) valign() );
 
-    if ( d->subStyles.contains( BackgroundColor ) && backgroundColor() != QColor() && backgroundColor().isValid() )
+    if ( d->subStyles.contains( BackgroundColor ) && backgroundColor().isValid() )
         format.setAttribute( "bgcolor", backgroundColor().name() );
 
     if ( d->subStyles.contains( MultiRow ) && d->subStyles.contains( MultiRow ) )
@@ -1522,7 +1527,9 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
 
     if ( format.hasAttribute( "bgcolor" ) )
     {
-        setBackgroundColor( QColor( format.attribute( "bgcolor" ) ) );
+        QColor color( format.attribute( "bgcolor" ) );
+        if ( color.isValid() )
+            setBackgroundColor( color );
     }
 
     if ( format.hasAttribute( "multirow" ) )
@@ -1677,9 +1684,13 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
 
     if ( format.hasAttribute( "brushcolor" ) )
     {
-        QBrush brush = backgroundBrush();
-        brush.setColor( QColor( format.attribute( "brushcolor" ) ) );
-        setBackgroundBrush( brush );
+        QColor color( format.attribute( "brushcolor" ) );
+        if ( color.isValid() )
+        {
+            QBrush brush = backgroundBrush();
+            brush.setColor( color );
+            setBackgroundBrush( brush );
+        }
     }
 
     if ( format.hasAttribute( "brushstyle" ) )

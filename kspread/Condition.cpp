@@ -639,7 +639,11 @@ void Conditions::loadConditions( const StyleManager* styleManager, const KoXmlEl
         }
 
         if ( conditionElement.hasAttribute( "color" ) )
-            newCondition.colorcond = new QColor( conditionElement.attribute( "color" ) );
+        {
+            QColor color( conditionElement.attribute( "color" ) );
+            if ( color.isValid() )
+                newCondition.colorcond = new QColor( color );
+        }
 
         KoXmlElement font = conditionElement.namedItem( "font" ).toElement();
         if ( !font.isNull() )
