@@ -55,6 +55,8 @@ namespace KSpread
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  * \note For data assigned to rectangular regions use RectStorage.
+ * \note It's QVector based. To boost performance a lot, declare the stored
+ *       data type as movable.
  */
 template<typename T>
 class PointStorage
