@@ -38,7 +38,7 @@ class VConfigInterfacePage : public KVBox
 	Q_OBJECT
 
 public:
-	VConfigInterfacePage( KarbonView* view, char* name = 0L );
+	explicit VConfigInterfacePage( KarbonView* view, char* name = 0L );
 
 	void apply();
 
@@ -67,7 +67,7 @@ class VConfigMiscPage : public KVBox
 	Q_OBJECT
 
 public:
-	VConfigMiscPage( KarbonView* view, char* name = 0L );
+	explicit VConfigMiscPage( KarbonView* view, char* name = 0L );
 
 	void apply();
 
@@ -92,7 +92,7 @@ class VConfigDefaultPage : public KVBox
 	Q_OBJECT
 
 public:
-	VConfigDefaultPage( KarbonView* view, char* name = 0L );
+	explicit VConfigDefaultPage( KarbonView* view, char* name = 0L );
 
 	void apply();
 
@@ -118,8 +118,7 @@ class VConfigGridPage : public QWidget
 	Q_OBJECT
 
 public:
-	VConfigGridPage(
-		KarbonView* view, char* name = 0L );
+	explicit VConfigGridPage( KarbonView* view, char* name = 0L );
 
 	void apply();
 

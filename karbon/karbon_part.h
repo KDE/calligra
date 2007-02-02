@@ -46,7 +46,7 @@ class KARBONCOMMON_EXPORT KarbonPart : public KoDocument, public KoShapeControll
 {
 	Q_OBJECT
 public:
-	KarbonPart( QWidget* parentWidget = 0L, const char* widgetName = 0L,
+	explicit KarbonPart( QWidget* parentWidget = 0L, const char* widgetName = 0L,
 				QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );
 	virtual ~KarbonPart();
 

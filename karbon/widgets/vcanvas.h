@@ -56,7 +56,7 @@ class KarbonCanvas: public QWidget, public KoCanvasBase
     Q_OBJECT
 
 public:
-    KarbonCanvas( KarbonPart *p );
+    explicit KarbonCanvas( KarbonPart *p );
     virtual ~KarbonCanvas();
 
     // from KoCanvasBase

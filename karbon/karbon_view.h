@@ -77,7 +77,7 @@ class KARBONCOMMON_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
 	Q_OBJECT
 
 public:
-	KarbonView( KarbonPart* part, QWidget* parent = 0 );
+	explicit KarbonView( KarbonPart* part, QWidget* parent = 0 );
 	virtual ~KarbonView();
 
 	KarbonPart *part() const { return m_part; }
