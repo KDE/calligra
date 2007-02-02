@@ -49,7 +49,7 @@ VPattern::load( const QString &tilename )
 	}
  
 	m_image = m_image.convertToFormat( QImage::Format_ARGB32 );
-	m_pixmap.fromImage(m_image, Qt::AutoColor);
+	m_pixmap = QPixmap::fromImage(m_image, Qt::AutoColor);
 	if( m_image.width() > THUMB_SIZE || m_image.height() > THUMB_SIZE )
 	{
 		int xsize = THUMB_SIZE;
