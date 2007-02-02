@@ -23,8 +23,7 @@ noinst_HEADERS =  kformula_doc.h \
 		  kformula_view.h kformula_factory.h \
 		  kformula_aboutdata.h kformula_view_iface.h formulastring.h fsparser.h
 
-kdelnk_DATA = kformula.desktop
-kdelnkdir = $(kde_appsdir)/Office
+xdg_apps_DATA = kformula.desktop
 
 rc_DATA = kformula.rc kformula_readonly.rc
 rcdir = $(kde_datadir)/kformula

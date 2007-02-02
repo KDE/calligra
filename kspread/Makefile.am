@@ -47,8 +47,7 @@ kspread_la_SOURCES = main.cc
 kspread_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kspread_la_LIBADD = $(LIB_KOFFICECORE)
 
-kdelnk_DATA = kspread.desktop
-kdelnkdir = $(kde_appsdir)/Office
+xdg_apps_DATA = kspread.desktop
 
 kde_services_DATA = kspreadpart.desktop
 

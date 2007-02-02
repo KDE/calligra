@@ -54,9 +54,6 @@ kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
 
 kivio_la_LIBADD = $(LIB_KOFFICECORE)
 
-
-#kdelnk_DATA = kivio.desktop
-#kdelnkdir = $(kde_appsdir)/Office
 xdg_apps_DATA = kivio.desktop
 
 kde_services_DATA = kiviopart.desktop

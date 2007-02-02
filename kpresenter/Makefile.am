@@ -89,8 +89,7 @@ kpresenter_la_LIBADD = $(LIB_KOFFICECORE)
 
 METASOURCES = AUTO
 
-kdelnk_DATA = kpresenter.desktop
-kdelnkdir = $(kde_appsdir)/Office
+xdg_apps_DATA = kpresenter.desktop
 
 kde_services_DATA = kpresenterpart.desktop
 

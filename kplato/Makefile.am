@@ -116,8 +116,7 @@ kplato_la_SOURCES = main.cc
 kplato_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kplato_la_LIBADD = $(LIB_KOFFICECORE)
 
-kdelnk_DATA = kplato.desktop
-kdelnkdir = $(kde_appsdir)/Office
+xdg_apps_DATA = kplato.desktop
 
 rcdir = $(kde_datadir)/kplato
 rc_DATA = kplato.rc kplato_readonly.rc

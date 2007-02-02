@@ -23,8 +23,7 @@ kudesigner_la_SOURCES = main.cpp
 kudesigner_la_LDFLAGS = $(all_libraries) -module -avoid-version
 kudesigner_la_LIBADD = $(LIB_KOFFICECORE)
 
-appsdir = $(kde_appsdir)/Office
-apps_DATA = kudesigner.desktop
+xdg_apps_DATA = $(kde_appsdir)/Office
 
 METASOURCES = AUTO
 

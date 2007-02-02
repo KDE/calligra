@@ -76,8 +76,7 @@ kword_la_SOURCES = main.cpp
 kword_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kword_la_LIBADD = $(LIB_KOFFICECORE)
 
-kdelnk_DATA = kword.desktop
-kdelnkdir = $(kde_appsdir)/Office
+xdg_apps_DATA = kword.desktop
 
 kde_services_DATA = kwordpart.desktop
 

@@ -86,8 +86,7 @@ METASOURCES = AUTO
 rcdir = $(kde_datadir)/kchart
 rc_DATA = kchart.rc kchart_readonly.rc
 
-kdelnk_DATA = kchart.desktop
-kdelnkdir = $(kde_appsdir)/Office
+xdg_apps_DATA = kchart.desktop
 
 SUBDIRS =  kdchart . toolbar pics templates
 
