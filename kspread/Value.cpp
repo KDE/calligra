@@ -488,7 +488,7 @@ const Value& Value::empty()
 const Value& Value::errorCIRCLE()
 {
   if( !ks_error_circle.isError() )
-    ks_error_circle.setError( i18n( "#CIRCLE!" ) );
+    ks_error_circle.setError( i18nc( "Error: circular formula dependency", "#CIRCLE!" ) );
   return ks_error_circle;
 }
 
@@ -496,7 +496,7 @@ const Value& Value::errorCIRCLE()
 const Value& Value::errorDEPEND()
 {
   if( !ks_error_depend.isError() )
-    ks_error_depend.setError( i18n( "#DEPEND!" ) );
+    ks_error_depend.setError( i18nc( "Error: broken cell reference", "#DEPEND!" ) );
   return ks_error_depend;
 }
 
@@ -504,7 +504,7 @@ const Value& Value::errorDEPEND()
 const Value& Value::errorDIV0()
 {
   if( !ks_error_div0.isError() )
-    ks_error_div0.setError( i18n( "#DIV/0!" ) );
+    ks_error_div0.setError( i18nc( "Error: division by zero", "#DIV/0!" ) );
   return ks_error_div0;
 }
 
@@ -512,7 +512,7 @@ const Value& Value::errorDIV0()
 const Value& Value::errorNA()
 {
   if( !ks_error_na.isError() )
-    ks_error_na.setError( i18n( "#N/A" ) );
+    ks_error_na.setError( i18nc( "Error: not available", "#N/A" ) );
   return ks_error_na;
 }
 
@@ -520,7 +520,7 @@ const Value& Value::errorNA()
 const Value& Value::errorNAME()
 {
   if( !ks_error_name.isError() )
-    ks_error_name.setError( i18n( "#NAME?" ) );
+    ks_error_name.setError( i18nc( "Error: unknown function name", "#NAME?" ) );
   return ks_error_name;
 }
 
@@ -528,7 +528,7 @@ const Value& Value::errorNAME()
 const Value& Value::errorNUM()
 {
   if( !ks_error_num.isError() )
-    ks_error_num.setError( i18n( "#NUM!" ) );
+    ks_error_num.setError( i18nc( "Error: number out of range", "#NUM!" ) );
   return ks_error_num;
 }
 
@@ -536,7 +536,7 @@ const Value& Value::errorNUM()
 const Value& Value::errorNULL()
 {
   if( !ks_error_null.isError() )
-    ks_error_null.setError( i18n( "#NULL!" ) );
+    ks_error_null.setError( i18nc( "Error: empty intersecting area", "#NULL!" ) );
   return ks_error_null;
 }
 
@@ -544,7 +544,7 @@ const Value& Value::errorNULL()
 const Value& Value::errorPARSE()
 {
   if( !ks_error_parse.isError() )
-    ks_error_parse.setError( i18n( "#PARSE!" ) );
+    ks_error_parse.setError( i18nc( "Error: formula not parseable", "#PARSE!" ) );
   return ks_error_parse;
 }
 
@@ -552,7 +552,7 @@ const Value& Value::errorPARSE()
 const Value& Value::errorREF()
 {
   if( !ks_error_ref.isError() )
-    ks_error_ref.setError( i18n( "#REF!" ) );
+    ks_error_ref.setError( i18nc( "Error: invalid cell/array reference", "#REF!" ) );
   return ks_error_ref;
 }
 
@@ -560,7 +560,7 @@ const Value& Value::errorREF()
 const Value& Value::errorVALUE()
 {
   if( !ks_error_value.isError() )
-    ks_error_value.setError( i18n( "#VALUE!" ) );
+    ks_error_value.setError( i18nc( "Error: wrong (number of) function argument(s)", "#VALUE!" ) );
   return ks_error_value;
 }
 
