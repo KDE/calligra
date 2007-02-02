@@ -349,6 +349,8 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
         QColor color( styleStack.attributeNS( KoXmlNS::fo, "background-color" ) );
+        if ( styleStack.attributeNS( KoXmlNS::fo, "background-color" ) == "transparent" )
+            color = QColor(); // Transparent color found: invalidate it.
         if ( color.isValid() )
         {
             kDebug(36003) << "\t\t fo:background-color: " << color.name() << endl;
