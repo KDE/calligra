@@ -185,4 +185,6 @@ private:
 
 } // namespace KSpread
 
+Q_DECLARE_TYPEINFO( KSpread::Conditions, Q_MOVABLE_TYPE );
+
 #endif // KSPREAD_CONDITION_H

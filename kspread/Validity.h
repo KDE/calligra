@@ -187,4 +187,6 @@ private:
 
 } // namespace KSpread
 
+Q_DECLARE_TYPEINFO( KSpread::Validity, Q_MOVABLE_TYPE );
+
 #endif // KSPREAD_VALIDITY

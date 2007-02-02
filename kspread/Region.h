@@ -514,6 +514,8 @@ private:
 
 } // namespace KSpread
 
+Q_DECLARE_TYPEINFO( KSpread::Region, Q_MOVABLE_TYPE );
+
 
 /***************************************************************************
   kDebug support

@@ -463,4 +463,8 @@ public:
 
 } // namespace KSpread
 
+Q_DECLARE_TYPEINFO( KSpread::Style, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO( KSpread::CustomStyle, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO( KSpread::SharedSubStyle, Q_MOVABLE_TYPE );
+
 #endif // KSPREAD_STYLE

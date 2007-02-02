@@ -367,7 +367,7 @@ bool isIdentifier( QChar ch );
 
 } // namespace KSpread
 
-
+Q_DECLARE_TYPEINFO( KSpread::Formula, Q_MOVABLE_TYPE );
 
 #endif // KSPREAD_FORMULA
 

@@ -381,4 +381,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CellView::Borders)
 
 } // namespace KSpread
 
+Q_DECLARE_TYPEINFO( KSpread::CellView, Q_MOVABLE_TYPE );
+
 #endif

@@ -744,4 +744,6 @@ inline uint qHash( const Cell& cell )
 
 } // namespace KSpread
 
+Q_DECLARE_TYPEINFO( KSpread::Cell, Q_MOVABLE_TYPE );
+
 #endif  // KSPREAD_CELL
