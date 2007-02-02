@@ -41,43 +41,47 @@ class KPrinter;
 
 namespace KPlato
 {
-	class ResourcesList;
+    class ResourcesList;
 
-	class ResourceItemPrivate;
-	
-	class ResourcesList : public QTreeWidget
-	{
-		Q_OBJECT
-	
-	public:
-		ResourcesList( QWidget * parent = 0 );
-	};
+    class ResourceItemPrivate;
 
-	class ResourceAssignmentView : public ViewBase
-	{
-	Q_OBJECT
-	
-	public:
-		ResourceAssignmentView( Part *part, QWidget *parent);
-		void draw( Project &project );
-		void drawResourcesName( QTreeWidgetItem *parent, ResourceGroup *group );
-	
-	private:
-	    QSplitter *m_splitter;
-	    ResourcesList *m_resList;
-	    ResourcesList *m_taskList;
-	    QTreeWidgetItem *m_selectedItem;
-		
-	    Part *m_part;
+    class ResourcesList : public QTreeWidget
+    {
+        Q_OBJECT
 
-	    void updateTasks();
+    public:
+        ResourcesList( QWidget * parent = 0 );
+    };
 
-	protected slots:
-    		void resSelectionChanged();
-    		void resSelectionChanged( QTreeWidgetItem *item );
+    class ResourceAssignmentView : public ViewBase
+    {
+        Q_OBJECT
 
-	};
-	
+        public:
+            ResourceAssignmentView( Part *part, QWidget *parent);
+            void draw( Project &project );
+            void drawResourcesName( QTreeWidgetItem *parent, ResourceGroup *group );
+            void drawTasksAttributedToAResource (Resource *res, QTreeWidgetItem *parent);
+            void drawTasksAttributedToAGroup (ResourceGroup *group, QTreeWidgetItem *parent);
+
+        private:
+            QSplitter *m_splitter;
+            ResourcesList *m_resList;
+            ResourcesList *m_taskList;
+            QTreeWidgetItem *m_selectedItem;
+            QTreeWidgetItem *m_tasktreeroot;
+
+
+            Part *m_part;
+
+            void updateTasks();
+
+        protected slots:
+            void resSelectionChanged();
+            void resSelectionChanged( QTreeWidgetItem *item );
+
+    };
+
 
 }  //KPlato namespace
 

@@ -84,12 +84,12 @@ void ResourceAssignmentView::drawResourcesName( QTreeWidgetItem *parent, Resourc
         switch ( res->type() ) {
             case Resource::Type_Work:
                 item->setText( 0, res->name() );
-		item->setText( 1, i18n( "Work" ) );
+                item->setText( 1, i18n( "Work" ) );
                 break;
-	    case Resource::Type_Material:
-		item->setText( 0, res->name() );
-		item->setText( 1, i18n( "Material" ) );
-		break;
+            case Resource::Type_Material:
+                item->setText( 0, res->name() );
+                item->setText( 1, i18n( "Material" ) );
+                break;
             default:
                 break;
         }
@@ -115,6 +115,7 @@ kDebug() << " ---------------- KPlato: Creating ResourceAssignmentView ---------
     m_resList->setHeaderLabels( sl );
 
     m_taskList = new ResourcesList( m_splitter );
+    m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
 
     QStringList sl2;
     sl2 << i18n( "Task" );
@@ -155,54 +156,102 @@ void ResourceAssignmentView::resSelectionChanged( QTreeWidgetItem *item )
 
 void ResourceAssignmentView::updateTasks()
 {
-	/*Detecter element selectionne*/
+    /*Find Selected Item*/
+    Resource* ItemRes;
+    ResourceGroup* ItemGrp;
+
+    QString name = m_selectedItem->text(0);
+    QString type = m_selectedItem->text(1);
+    if(type != ""){
+        kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Item Selected: " << name << " / Type: " << type << endl;
+    }
+    else{
+        kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Group Selected: " << name << endl;
+    }
+
+
+    m_taskList->clear();
+    m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
+
+    /*Find tasks attributed to the selected item*/
+
+    /*The selected item is a resource*/
+    if(type != "")
+    {
+        foreach ( ResourceGroup * gr, ((m_part->getProject()).resourceGroups()) ) {
+            foreach ( Resource * res, gr->resources() ) {
+                if (name == res->name())
+                {
+                    ItemRes = res;
+                    kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Selected Resource founded";
+                }
+                else
+                {
+                kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Not founded";
+                }
+            }
+        }
+        drawTasksAttributedToAResource(ItemRes,m_tasktreeroot);
+    }
+    else
+    /*The selected item is a group*/
+    {
+        foreach ( ResourceGroup * gr, ((m_part->getProject()).resourceGroups()) ) {
+            if (name == gr->name())
+            {
+                ItemGrp = gr;
+                kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Selected Group founded";
+            }
+            else
+            {
+            kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Group Not founded";
+            }
+        }
+        drawTasksAttributedToAGroup(ItemGrp,m_tasktreeroot);
+    }
+}
+
+void ResourceAssignmentView::drawTasksAttributedToAResource (Resource *res, QTreeWidgetItem *parent)
+{
+    QString taskName;
+
+    parent->setText( 0, res->name() );
+
+    if((res->requests()).isEmpty())
+    {
+        QTreeWidgetItem * item = new QTreeWidgetItem( parent );
+        item->setText( 0, i18n( "No task attributed" ) );
+    }
+    else
+    {
+    foreach ( ResourceRequest * rr , res->requests() ){
+
+        taskName = ((rr->parent())->task())->name();
+
+        QTreeWidgetItem * item = new QTreeWidgetItem( parent );
+        item->setText( 0, taskName );
+    }
+    }
+}
+
+void ResourceAssignmentView::drawTasksAttributedToAGroup (ResourceGroup *group, QTreeWidgetItem *parent)
+{
+    parent->setText( 0, group->name() );
+
+    if((group->resources()).isEmpty())
+    {
+        QTreeWidgetItem * groupnode = new QTreeWidgetItem( parent );
+        groupnode->setText( 0, i18n( "No resource attributed" ) );
+    }
+    else
+    {
+        foreach ( Resource * res, group->resources() ) 
+        {
+            QTreeWidgetItem * groupnode = new QTreeWidgetItem( parent );
+            drawTasksAttributedToAResource(res,groupnode);
+        }
+    }
 	
-	Resource* ItemRes;
-	QString taskName;
-
-	QString name = m_selectedItem->text(0);
-	QString type = m_selectedItem->text(1);
-	if(type != ""){
-	kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Item Selected: " << name << " / Type: " << type << endl;
-	}
-	else{
-	kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Group Selected: " << name << endl;
-	}
-
-
-	/*Trouver tache attribuees*/
-	if(type != "")
-	{
-		foreach ( ResourceGroup * gr, ((m_part->getProject()).resourceGroups()) ) {
-			foreach ( Resource * res, gr->resources() ) {
-				if (name == res->name())
-				{
-					ItemRes = res;
-					kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Selected Resource founded";
-				}
-				else
-				{
-					kDebug() << "[void KPlato::ResourceAssignmentView::updateTasks()] Not founded";
-				}
-			}
-		}
-
-		m_taskList->clear();
-
-		QTreeWidgetItem * root = new QTreeWidgetItem( m_taskList );
-        	root->setText( 0, i18n ( "Tasks" ) );
-		
-		foreach ( ResourceRequest * rr , ItemRes->requests() ){
-
-			taskName = ((rr->parent())->task())->name();
-
-			QTreeWidgetItem * item = new QTreeWidgetItem( root );
-        		item->setText( 0, taskName );
-			
-		}
-	}
-
-	/*Afficher taches*/
 }
 
 }  //KPlato namespace
