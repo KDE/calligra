@@ -260,8 +260,9 @@ void TextTool::mouseMoveEvent( KoPointerEvent *event ) {
     int position = pointToPosition(event->point);
     if(position >= 0) {
         repaintCaret();
+        int prevPos = m_caret.position();
         m_caret.setPosition(position, QTextCursor::KeepAnchor);
-        repaintCaret();
+        repaintSelection(prevPos, m_caret.position());
     }
 
     updateSelectionHandler();
