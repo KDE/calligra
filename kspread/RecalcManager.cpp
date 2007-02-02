@@ -22,6 +22,7 @@
 #include <QMap>
 
 #include "Cell.h"
+#include "CellStorage.h"
 #include "DependencyManager.h"
 #include "Formula.h"
 #include "Map.h"
@@ -37,25 +38,127 @@ using namespace KSpread;
 class RecalcManager::Private
 {
 public:
-  /**
-   * Stores cells ordered by its reference depth.
-   * Depth means the maximum depth of all cells this cell depends on plus one,
-   * while a cell which has a formula without cell references has a depth
-   * of zero.
-   *
-   * Examples:
-   * \li A1: '=1.0'
-   * \li A2: '=A1+A1'
-   * \li A3: '=A1+A1+A2'
-   *
-   * \li depth(A1) = 0
-   * \li depth(A2) = 1
-   * \li depth(A3) = 2
-   */
-  QMap<int, Cell> cells;
-  const Map* map;
-  bool busy;
+    /**
+     * Finds all cells in region and their dependents, that need recalculation.
+     *
+     * \see RecalcManager::regionChanged
+     */
+    void cellsToCalculate( const Region& region );
+
+    /**
+     * Finds all cells in \p sheet , that have got a formula and hence need
+     * recalculation.
+     * If \p sheet is zero, all cells in the Map a returned.
+     *
+     * \see RecalcManager::recalcMap
+     * \see RecalcManager::recalcSheet
+     */
+    void cellsToCalculate( Sheet* sheet = 0 );
+
+    /**
+     * Helper function for cellsToCalculate(const Region&) and cellsToCalculate(Sheet*).
+     */
+    void cellsToCalculate( const Region& region, QSet<Cell>& cells ) const;
+
+    /*
+     * Stores cells ordered by its reference depth.
+     * Depth means the maximum depth of all cells this cell depends on plus one,
+     * while a cell which has a formula without cell references has a depth
+     * of zero.
+     *
+     * Examples:
+     * \li A1: '=1.0'
+     * \li A2: '=A1+A1'
+     * \li A3: '=A1+A1+A2'
+     *
+     * \li depth(A1) = 0
+     * \li depth(A2) = 1
+     * \li depth(A3) = 2
+     */
+    QMap<int, Cell> cells;
+    const Map* map;
+    bool busy;
 };
+
+void RecalcManager::Private::cellsToCalculate( const Region& region )
+{
+    if (region.isEmpty())
+        return;
+
+    // retrieve the cell depths
+    QHash<Cell, int> depths = map->dependencyManager()->depths();
+
+    // create the cell map ordered by depth
+    QSet<Cell> cells;
+    cellsToCalculate( region, cells );
+    const QSet<Cell>::ConstIterator end( cells.end() );
+    for ( QSet<Cell>::ConstIterator it( cells.begin() ); it != end; ++it )
+        this->cells.insertMulti( depths[*it], *it );
+}
+
+void RecalcManager::Private::cellsToCalculate( Sheet* sheet )
+{
+    // retrieve the cell depths
+    QHash<Cell, int> depths = map->dependencyManager()->depths();
+
+    // NOTE Stefan: It's necessary, that the cells are filled in row-wise;
+    //              beginning with the top left; ending with the bottom right.
+    //              This ensures, that the value storage is processed the same
+    //              way, which boosts performance (using PointStorage) for an
+    //              empty storage (on loading). For an already filled value
+    //              storage, the speed gain is not that sensible.
+    Cell cell;
+    if ( !sheet ) // map recalculation
+    {
+        for ( int s = 0; s < map->count(); ++s )
+        {
+            sheet = map->sheet( s );
+            for ( int c = 0; c < sheet->formulaStorage()->count(); ++c )
+            {
+                cell = Cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
+                cells.insertMulti( depths[cell], cell );
+            }
+        }
+    }
+    else // sheet recalculation
+    {
+        for ( int c = 0; c < sheet->formulaStorage()->count(); ++c )
+        {
+            cell = Cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
+            cells.insertMulti( depths[cell], cell );
+        }
+    }
+}
+
+void RecalcManager::Private::cellsToCalculate( const Region& region, QSet<Cell>& cells ) const
+{
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
+    {
+        const QRect range = (*it)->rect();
+        const Sheet* sheet = (*it)->sheet();
+        for (int col = range.left(); col <= range.right(); ++col)
+        {
+            for (int row = range.top(); row <= range.bottom(); ++row)
+            {
+                Cell cell( sheet,col, row);
+                // Even empty cells may act as value
+                // providers and need to be processed.
+
+                // check for already processed cells
+                if ( cells.contains( cell ) )
+                    continue;
+
+                // add it to the list
+                if ( cell.isFormula() )
+                    cells.insert( cell );
+
+                // add its consumers to the list
+                cellsToCalculate( map->dependencyManager()->consumingRegion( cell ), cells );
+            }
+        }
+    }
+}
 
 RecalcManager::RecalcManager( const Map* map )
   : d(new Private)
@@ -76,7 +179,7 @@ void RecalcManager::regionChanged(const Region& region)
     d->busy = true;
     kDebug(36002) << "RecalcManager::regionChanged " << region.name() << endl;
     ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
-    d->cells = d->map->dependencyManager()->cellsToCalculate( region );
+    d->cellsToCalculate( region );
     recalc();
     d->busy = false;
 }
@@ -87,7 +190,7 @@ void RecalcManager::recalcSheet(Sheet* const sheet)
         return;
     d->busy = true;
     ElapsedTime et( "Overall sheet recalculation", ElapsedTime::PrintOnlyTime );
-    d->cells = d->map->dependencyManager()->cellsToCalculate( sheet );
+    d->cellsToCalculate( sheet );
     recalc();
     d->busy = false;
 }
@@ -98,7 +201,7 @@ void RecalcManager::recalcMap()
         return;
     d->busy = true;
     ElapsedTime et( "Overall map recalculation", ElapsedTime::PrintOnlyTime );
-    d->cells = d->map->dependencyManager()->cellsToCalculate();
+    d->cellsToCalculate();
     recalc();
     d->busy = false;
 }

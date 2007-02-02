@@ -55,6 +55,12 @@ public:
     void updateAllDependencies(const Map* map);
 
     /**
+     * Returns the cell depths.
+     * \return the cell depths
+     */
+    QHash<Cell, int> depths() const;
+
+    /**
      * Returns the region, that consumes the value of \p cell.
      * \return region consuming \p cell 's value
      */
@@ -69,27 +75,6 @@ public:
     void regionMoved( const Region& movedRegion, const Region::Point& destination );
 
 protected:
-    /**
-     * Finds all cells in region and their dependents, that need recalculation.
-     *
-     * \return the cells, that need recalculation, ordered by reference depth
-     *
-     * \see RecalcManager::regionChanged
-     */
-    QMap<int,Cell> cellsToCalculate( const Region& region ) const;
-
-    /**
-     * Finds all cells in \p sheet , that have got a formula and hence need
-     * recalculation.
-     * If \p sheet is zero, all cells in the Map a returned.
-     *
-     * \return the cells, that need recalculation, ordered by reference depth
-     *
-     * \see RecalcManager::recalcMap
-     * \see RecalcManager::recalcSheet
-     */
-    QMap<int,Cell> cellsToCalculate( Sheet* sheet = 0 ) const;
-
     /**
      * \param cell the cell which formula should  be altered
      * \param oldLocation the location/range, that was cut

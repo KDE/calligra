@@ -111,11 +111,6 @@ public:
     void removeCircularDependencyFlags(const Region& region);
 
     /**
-     * Helper function for DependencyManager::cellsToCalculate().
-     */
-    void cellsToCalculate( const Region& region, QSet<Cell>& cells ) const;
-
-    /**
      * For debugging/testing purposes.
      */
     void dump() const;
@@ -282,55 +277,14 @@ void DependencyManager::updateAllDependencies(const Map* map)
     }
 }
 
+QHash<Cell, int> DependencyManager::depths() const
+{
+    return d->depths;
+}
+
 KSpread::Region DependencyManager::consumingRegion(const Cell& cell) const
 {
     return d->consumingRegion(cell);
-}
-
-QMap<int, Cell> DependencyManager::cellsToCalculate( const Region& region ) const
-{
-    if (region.isEmpty())
-        return QMap<int, Cell>();
-
-    QSet<Cell> cells;
-    d->cellsToCalculate( region, cells );
-    QMap<int, Cell> depths;
-    foreach ( Cell cell, cells )
-        depths.insertMulti( d->depths[cell], cell );
-    return depths;
-}
-
-QMap<int, Cell> DependencyManager::cellsToCalculate( Sheet* sheet ) const
-{
-    // NOTE Stefan: It's necessary, that the cells are filled in row-wise;
-    //              beginning with the top left; ending with the bottom right.
-    //              This ensures, that the value storage is processed the same
-    //              way, which boosts performance (using PointStorage) for an
-    //              empty storage (on loading). For an already filled value
-    //              storage, the speed gain is not that sensible.
-    QMap<int, Cell> cells;
-    Cell cell;
-    if ( !sheet ) // map recalculation
-    {
-        for ( int s = 0; s < d->map->count(); ++s )
-        {
-            sheet = d->map->sheet( s );
-            for ( int c = 0; c < sheet->formulaStorage()->count(); ++c )
-            {
-                cell = Cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
-                cells.insertMulti( d->depths[cell], cell );
-            }
-        }
-    }
-    else // sheet recalculation
-    {
-        for ( int c = 0; c < sheet->formulaStorage()->count(); ++c )
-        {
-            cell = Cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
-            cells.insertMulti( d->depths[cell], cell );
-        }
-    }
-    return cells;
 }
 
 void DependencyManager::regionMoved( const Region& movedRegion, const Region::Point& destination )
@@ -722,36 +676,6 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
                 removeCircularDependencyFlags(providers.value(point));
 
                 processedCells.remove( cell );
-            }
-        }
-    }
-}
-
-void DependencyManager::Private::cellsToCalculate( const Region& region, QSet<Cell>& cells ) const
-{
-    Region::ConstIterator end(region.constEnd());
-    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
-    {
-        const QRect range = (*it)->rect();
-        const Sheet* sheet = (*it)->sheet();
-        for (int col = range.left(); col <= range.right(); ++col)
-        {
-            for (int row = range.top(); row <= range.bottom(); ++row)
-            {
-                Cell cell( sheet,col, row);
-                // Even empty cells may act as value
-                // providers and need to be processed.
-
-                // check for already processed cells
-                if ( cells.contains( cell ) )
-                    continue;
-
-                // add it to the list
-                if ( cell.isFormula() )
-                    cells.insert( cell );
-
-                // add its consumers to the list
-                cellsToCalculate( consumingRegion( cell ), cells );
             }
         }
     }
