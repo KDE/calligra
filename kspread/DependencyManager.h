@@ -38,7 +38,7 @@ class KSPREAD_EXPORT DependencyManager
 
 public:
     /** constructor */
-     DependencyManager();
+    DependencyManager( const Map* map );
     /** destructor */
     ~DependencyManager ();
 

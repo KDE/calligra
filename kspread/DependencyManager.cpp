@@ -53,7 +53,7 @@ public:
      * \see computeDependencies
      * \see addDependencies
      */
-    void generateDependencies(const Cell& cell);
+    void generateDependencies(const Cell& cell, const Formula& formula);
 
     /**
      * Computes the reference depth.
@@ -103,7 +103,7 @@ public:
     /**
      * \return a list of cells that \p cell depends on
      */
-    Region computeDependencies(const Cell& cell) const;
+    Region computeDependencies(const Cell& cell, const Formula& formula) const;
 
     /**
      * Removes the circular dependency flag from \p region and all their dependencies.
@@ -120,6 +120,7 @@ public:
      */
     void dump() const;
 
+    const Map* map;
     // stores providing regions ordered by their consuming cell locations
     QMap<Region::Point, Region> providers;
     // stores consuming cell locations ordered by their providing regions
@@ -190,9 +191,10 @@ void DependencyManager::Private::dump() const
     }
 }
 
-DependencyManager::DependencyManager()
+DependencyManager::DependencyManager( const Map* map )
     : d(new Private)
 {
+    d->map = map;
 }
 
 DependencyManager::~DependencyManager ()
@@ -220,19 +222,20 @@ void DependencyManager::regionChanged(const Region& region)
         {
             for (int row = range.top(); row <= range.bottom(); ++row)
             {
-                Cell cell( sheet,col, row);
+                const Cell cell( sheet, col, row );
+                const Formula formula = cell.formula();
 
                 // remove it from the reference depth list
                 d->depths.remove( cell );
 
                 // cell without a formula? remove it
-                if ( !cell.isFormula() )
+                if ( formula.expression().isEmpty() )
                 {
                     d->removeDependencies(cell);
                     continue;
                 }
 
-                d->generateDependencies(cell);
+                d->generateDependencies(cell, formula);
             }
         }
     }
@@ -240,7 +243,7 @@ void DependencyManager::regionChanged(const Region& region)
         ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
         d->generateDepths(region);
     }
-    d->dump();
+//     d->dump();
 }
 
 void DependencyManager::areaModified (const QString &name)
@@ -250,7 +253,7 @@ void DependencyManager::areaModified (const QString &name)
 
 void DependencyManager::updateAllDependencies(const Map* map)
 {
-    ElapsedTime( "Generating dependencies", ElapsedTime::PrintOnlyTime );
+    ElapsedTime et( "Generating dependencies", ElapsedTime::PrintOnlyTime );
 
     // clear the reference depth list
     d->depths.clear();
@@ -269,7 +272,7 @@ void DependencyManager::updateAllDependencies(const Map* map)
                 continue;
             }
 
-            d->generateDependencies( cell );
+            d->generateDependencies( cell, sheet->formulaStorage()->data( c ) );
             if (!d->depths.contains( cell ))
             {
                 int depth = d->computeDepth( cell );
@@ -299,14 +302,35 @@ QMap<int, Cell> DependencyManager::cellsToCalculate( const Region& region ) cons
 
 QMap<int, Cell> DependencyManager::cellsToCalculate( Sheet* sheet ) const
 {
-    QMap<int, Cell> depths;
-    foreach ( Cell cell, d->depths.keys() )
+    // NOTE Stefan: It's necessary, that the cells are filled in row-wise;
+    //              beginning with the top left; ending with the bottom right.
+    //              This ensures, that the value storage is processed the same
+    //              way, which boosts performance (using PointStorage) for an
+    //              empty storage (on loading). For an already filled value
+    //              storage, the speed gain is not that sensible.
+    QMap<int, Cell> cells;
+    Cell cell;
+    if ( !sheet ) // map recalculation
     {
-        if ( sheet && cell.sheet() != sheet )
-            continue;
-        depths.insertMulti( d->depths[cell], cell );
+        for ( int s = 0; s < d->map->count(); ++s )
+        {
+            sheet = d->map->sheet( s );
+            for ( int c = 0; c < sheet->formulaStorage()->count(); ++c )
+            {
+                cell = Cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
+                cells.insertMulti( d->depths[cell], cell );
+            }
+        }
     }
-    return depths;
+    else // sheet recalculation
+    {
+        for ( int c = 0; c < sheet->formulaStorage()->count(); ++c )
+        {
+            cell = Cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
+            cells.insertMulti( d->depths[cell], cell );
+        }
+    }
+    return cells;
 }
 
 void DependencyManager::regionMoved( const Region& movedRegion, const Region::Point& destination )
@@ -494,7 +518,7 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     providers.remove(point);
 }
 
-void DependencyManager::Private::generateDependencies(const Cell& cell)
+void DependencyManager::Private::generateDependencies(const Cell& cell, const Formula& formula)
 {
     //new dependencies only need to be generated if the cell contains a formula
 //     if (cell.isNull())
@@ -506,7 +530,7 @@ void DependencyManager::Private::generateDependencies(const Cell& cell)
     removeDependencies(cell);
 
     //now we need to generate dependencies
-    Region region = computeDependencies(cell);
+    Region region = computeDependencies(cell, formula);
 
     //now that we have the new dependencies, we put them into our data structures
     //and we're done
@@ -640,14 +664,8 @@ int DependencyManager::Private::computeDepth(Cell cell) const
     return depth;
 }
 
-KSpread::Region DependencyManager::Private::computeDependencies(const Cell& cell) const
+KSpread::Region DependencyManager::Private::computeDependencies( const Cell& cell, const Formula& formula ) const
 {
-    // Not a formula -> no dependencies
-//     if (!cell.isFormula())
-//         return Region();
-
-    const Formula formula = cell.formula();
-
     // Broken formula -> meaningless dependencies
     if ( !formula.isValid() )
         return Region();

@@ -226,7 +226,7 @@ int Cell::row() const
 //
 QString Cell::name() const
 {
-    return name( d->column, d->row );
+    return name( column(), row() );
 }
 
 // Return the name of any cell given by (col, row).
@@ -242,7 +242,7 @@ QString Cell::name( int col, int row )
 //
 QString Cell::fullName() const
 {
-    return fullName( sheet(), d->column, d->row );
+    return fullName( sheet(), column(), row() );
 }
 
 // Return the full name of any cell given a sheet and (col, row).
@@ -257,7 +257,7 @@ QString Cell::fullName( const Sheet* s, int col, int row )
 //
 QString Cell::columnName() const
 {
-    return columnName( d->column );
+    return columnName( column() );
 }
 
 // Return the symbolic name of any column.
@@ -357,7 +357,7 @@ void Cell::setInputText( const QString& string )
         formula.setExpression( string );
         setFormula( formula );
         // remove an existing value
-        sheet()->cellStorage()->setValue( d->column, d->row, Value() );
+//         sheet()->cellStorage()->setValue( d->column, d->row, Value() );
     }
     else
     {
@@ -497,7 +497,7 @@ void Cell::copyContent( const Cell& cell )
     {
         // change all the references, e.g. from A1 to A3 if copying
         // from e.g. B2 to B4
-        Formula formula;
+        Formula formula( sheet(), *this );
         formula.setExpression( decodeFormula( cell.encodeFormula() ) );
         setFormula( formula );
     }

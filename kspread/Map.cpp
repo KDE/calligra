@@ -91,7 +91,7 @@ Map::Map ( Doc* doc, const char* name)
 {
   setObjectName( name ); // necessary for D-Bus
   d->doc = doc;
-  d->dependencyManager = new DependencyManager();
+  d->dependencyManager = new DependencyManager( this );
   d->recalcManager = new RecalcManager( this );
   d->initialActiveSheet = 0;
   d->initialMarkerColumn = 0;

@@ -38,7 +38,7 @@ class RecalcManager::Private
 {
 public:
   /**
-   * Stores cells with its reference depth.
+   * Stores cells ordered by its reference depth.
    * Depth means the maximum depth of all cells this cell depends on plus one,
    * while a cell which has a formula without cell references has a depth
    * of zero.
@@ -52,7 +52,7 @@ public:
    * \li depth(A2) = 1
    * \li depth(A3) = 2
    */
-  QMap<int, Cell> depths;
+  QMap<int, Cell> cells;
   const Map* map;
   bool busy;
 };
@@ -76,7 +76,7 @@ void RecalcManager::regionChanged(const Region& region)
     d->busy = true;
     kDebug(36002) << "RecalcManager::regionChanged " << region.name() << endl;
     ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
-    d->depths = d->map->dependencyManager()->cellsToCalculate( region );
+    d->cells = d->map->dependencyManager()->cellsToCalculate( region );
     recalc();
     d->busy = false;
 }
@@ -87,7 +87,7 @@ void RecalcManager::recalcSheet(Sheet* const sheet)
         return;
     d->busy = true;
     ElapsedTime et( "Overall sheet recalculation", ElapsedTime::PrintOnlyTime );
-    d->depths = d->map->dependencyManager()->cellsToCalculate( sheet );
+    d->cells = d->map->dependencyManager()->cellsToCalculate( sheet );
     recalc();
     d->busy = false;
 }
@@ -98,46 +98,37 @@ void RecalcManager::recalcMap()
         return;
     d->busy = true;
     ElapsedTime et( "Overall map recalculation", ElapsedTime::PrintOnlyTime );
-    d->depths = d->map->dependencyManager()->cellsToCalculate();
+    d->cells = d->map->dependencyManager()->cellsToCalculate();
     recalc();
     d->busy = false;
 }
 
 void RecalcManager::recalc()
 {
-    kDebug(36002) << "Recalculating " << d->depths.count() << " cell(s).." << endl;
+    kDebug(36002) << "Recalculating " << d->cells.count() << " cell(s).." << endl;
     ElapsedTime et( "Recalculating cells", ElapsedTime::PrintOnlyTime );
-    foreach (Cell cell, d->depths)
+    const QList<Cell> cells = d->cells.values();
+    for ( int c = 0; c < cells.count(); ++c )
     {
-        if ( !cell.isFormula() )
-            continue;
         // only recalculate, if no circular dependency occurred
-        if ( cell.value() == Value::errorCIRCLE() )
+        if ( cells.value( c ).value() == Value::errorCIRCLE() )
             continue;
-        // Formula object not yet created?
-        if ( !cell.formula().isValid() )
-        {
-            // because of a parse error?
-            if ( cell.value() == Value::errorPARSE() )
-                continue;
-            // We were probably at a "isLoading() = true" state,
-            // when we originally parsed. Try again.
-            if ( !cell.makeFormula() )
-                continue; // there was a parse error
-        }
+        // Check for valid formula; parses the expression, if not done already.
+        if ( !cells.value( c ).formula().isValid() )
+            continue;
 
         // evaluate the formula and set the result
-        Value result = cell.formula().eval();
-        cell.setValue( result, false );
+        Value result = cells.value( c ).formula().eval();
+        Cell( cells.value( c ) ).setValue( result, false );
     }
 //     dump();
-    d->depths.clear();
+    d->cells.clear();
 }
 
 void RecalcManager::dump() const
 {
-    QMap<int, Cell>::ConstIterator end(d->depths.constEnd());
-    for ( QMap<int, Cell>::ConstIterator it(d->depths.constBegin()); it != end; ++it )
+    QMap<int, Cell>::ConstIterator end(d->cells.constEnd());
+    for ( QMap<int, Cell>::ConstIterator it(d->cells.constBegin()); it != end; ++it )
     {
         Cell cell = it.value();
         QString cellName = cell.name();

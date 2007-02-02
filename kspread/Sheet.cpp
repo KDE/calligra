@@ -898,9 +898,9 @@ void Sheet::changeCellTabName( QString const & old_name, QString const & new_nam
                 int pos = tmp.indexOf( old_name + '!' );
                 tmp.replace( pos, len, new_name + '!' );
             }
-            Formula formula;
-            formula.setExpression( tmp );
             Cell cell( this, formulaStorage()->col( c ), formulaStorage()->row( c ) );
+            Formula formula( this, cell );
+            formula.setExpression( tmp );
             cell.setFormula( formula );
             cell.makeFormula();
         }
@@ -1271,9 +1271,9 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
           undo->saveFormulaReference( this, origCol, origRow, formulaText );
       }
 
-      Formula formula;
-      formula.setExpression( newText );
       Cell cell( this, formulaStorage()->col( c ), formulaStorage()->row( c ) );
+      Formula formula( this, cell );
+      formula.setExpression( newText );
       cell.setFormula( formula );
     }
 }
