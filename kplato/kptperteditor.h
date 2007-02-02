@@ -53,9 +53,34 @@
 
 #include <kactionselector.h>
 
+#include "kptpart.h"
+#include "kpttask.h"
 #include "kptcontext.h"
+#include "kpttaskeditor.h"
 #include <ui_kptperteditor.h>
 
+//#include "kptcommand.h"
+//#include "kptitemmodelbase.h"
+//#include "kptcalendar.h"
+//#include "kptduration.h"
+//#include "kptfactory.h"
+//#include "kptresourceappointmentsview.h"
+#include "kptview.h"
+#include "kptnode.h"
+//#include "kptproject.h"
+//#include "kpttask.h"
+//#include "kptschedule.h"
+//#include "kptdatetime.h"
+//#include "kptcontext.h"
+
+#include <kicon.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kprinter.h>
+#include <kxmlguifactory.h>
+#include <kactioncollection.h>
+
+#include <kdebug.h>
 class QPoint;
 class QTreeWidgetItem;
 class QSplitter;
@@ -75,12 +100,14 @@ class PertEditor : public ViewBase
 public:
 
     PertEditor( Part *part, QWidget *parent );
-
-    void setupGui();
-
+    void draw( Project &project);
+    void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);
+    void dispAvailableTasks();
 
 private:
-
+    QTreeWidget * m_tasktree;
+    KActionSelector * m_assignList;
+    
     Ui::PertEditor widget;
 };
 

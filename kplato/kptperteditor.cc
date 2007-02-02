@@ -19,45 +19,66 @@
 */
 #include "kptperteditor.h"
 
-//#include "kptcommand.h"
-//#include "kptitemmodelbase.h"
-//#include "kptcalendar.h"
-//#include "kptduration.h"
-//#include "kptfactory.h"
-//#include "kptresourceappointmentsview.h"
-#include "kptview.h"
-//#include "kptnode.h"
-//#include "kptproject.h"
-//#include "kpttask.h"
-//#include "kptschedule.h"
-//#include "kptdatetime.h"
-//#include "kptcontext.h"
-
-//#include <kicon.h>
-//#include <kglobal.h>
-//#include <klocale.h>
-//#include <kprinter.h>
-//#include <kxmlguifactory.h>
-//#include <kactioncollection.h>
-
-#include <kdebug.h>
-
 namespace KPlato
 {
 
+void PertEditor::draw( Project &project)
+{
+    m_tasktree->clear();
+    
+    foreach(Node * currentNode, project.projectNode()->childNodeIterator()){
+        if (currentNode->type()!=4){
+            QTreeWidgetItem * item = new QTreeWidgetItem( m_tasktree );
+            item->setText( 0, currentNode->name());
+            drawSubTasksName(item,currentNode);
+        }
+        //kDebug() << "[void KPlato::PertEditor::draw( Project &project )] TASK FOUNDED" << endl;
+    }
+
+}
+
+void PertEditor::drawSubTasksName( QTreeWidgetItem *parent, Node * currentNode)
+{
+    if (currentNode->numChildren() > 0){
+        foreach(Node * currentChild, currentNode->childNodeIterator()){
+            if (currentChild->type()!=4){
+                QTreeWidgetItem * item = new QTreeWidgetItem( parent );
+                item->setText( 0, currentChild->name());
+                drawSubTasksName( item, currentChild);
+            }
+            //kDebug() << "[void KPlato::PertEditor::draw( Project &project )] SUBTASK FOUNDED" << endl;
+        }
+    }
+}
+
+
 //-----------------------------------
-PertEditor::PertEditor( Part *part, QWidget *parent )
-    : ViewBase( part, parent )
+PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertEditor ----------------" << endl;
     widget.setupUi(this);
     widget.assignList->setSelectedLabel(i18n("Required"));
     widget.assignList->setShowUpDownButtons(false);
     widget.assignList->layout()->setMargin(0);
+
+    m_tasktree = widget.tableTaskWidget;
+    m_assignList = widget.assignList;
+
+    draw( part->getProject() );
+
+    connect( m_tasktree, SIGNAL( itemSelectionChanged() ), SLOT( dispAvailableTasks() ) );
 }
 
-void PertEditor::setupGui()
-{
+void dispAvailableTasks(){/*
+    QListBox * availableTasksList = new QListBox();
+    
+    foreach(QTreeWidgetItem * currentItem, m_tasktree->selectedItems()){
+        availableTasksList->insertItem(currentItem->text(0));
+    }*/
+    
+    
+    
+    
 
 }
 

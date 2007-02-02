@@ -27,7 +27,7 @@
      <property name="handleWidth" >
       <number>6</number>
      </property>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" name="layoutWidget" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
         <number>0</number>
@@ -43,10 +43,10 @@
         </widget>
        </item>
        <item>
-        <widget class="QTableWidget" name="tableTaskWidget" >
+        <widget class="QTreeWidget" name="tableTaskWidget" >
          <column>
           <property name="text" >
-           <string>Task Name</string>
+           <string>Tasks</string>
           </property>
          </column>
          <column>
@@ -58,7 +58,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" name="layoutWidget" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
         <number>0</number>
