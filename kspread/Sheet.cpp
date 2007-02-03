@@ -3357,7 +3357,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
       const QString styleName = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
       if ( !styleName.isEmpty() )
       {
-          columnStyleRegions[styleName] += QRect( indexCol, 1, indexCol + number - 1, KS_rowMax /*FIXME*/ );
+          columnStyleRegions[styleName] += QRect( indexCol, 1, number, KS_rowMax );
       }
     }
 
@@ -3454,13 +3454,19 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
             if ( autoStyles.contains( styleNames[i] ) )
             {
                 kDebug(36003) << "\tautomatic: " << styleNames[i] << " at " << rect << endl;
-                cellStorage()->setStyle( Region(rect), autoStyles[styleNames[i]] );
+                Style style;
+                style.setDefault(); // "overwrite" existing style
+                style.merge( autoStyles[styleNames[i]] );
+                cellStorage()->setStyle( Region(rect), style );
             }
             else
             {
-                const CustomStyle* style = doc()->styleManager()->style( styleNames[i] );
-                kDebug(36003) << "\tcustom: " << style->name() << " at " << rect << endl;
-                cellStorage()->setStyle( Region(rect), *style );
+                const CustomStyle* namedStyle = doc()->styleManager()->style( styleNames[i] );
+                kDebug(36003) << "\tcustom: " << namedStyle->name() << " at " << rect << endl;
+                Style style;
+                style.setDefault(); // "overwrite" existing style
+                style.merge( *namedStyle );
+                cellStorage()->setStyle( Region(rect), style );
             }
         }
     }
@@ -3506,7 +3512,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
       const QString styleName = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
       if ( !styleName.isEmpty() )
       {
-          rowStyleRegions[styleName] += QRect( 1, rowIndex, KS_colMax /*FIXME*/, rowIndex + number - 1 );
+          rowStyleRegions[styleName] += QRect( 1, rowIndex, KS_colMax, number );
       }
     }
 
