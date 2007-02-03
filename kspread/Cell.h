@@ -220,7 +220,7 @@ public:
      */
     Conditions conditions() const;
 
-    void setConditions( Conditions conditions );
+    void setConditions( const Conditions& conditions );
 
     /**
      * The cell's formula. Usable to analyze the formula's tokens.

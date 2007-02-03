@@ -298,7 +298,7 @@ Conditions Cell::conditions() const
     return sheet()->cellStorage()->conditions( d->column, d->row );
 }
 
-void Cell::setConditions( Conditions conditions )
+void Cell::setConditions( const Conditions& conditions )
 {
     sheet()->cellStorage()->setConditions( Region(cellPosition()), conditions );
 }
