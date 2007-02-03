@@ -38,6 +38,7 @@
 //#include <kcmdlineargs.h>
 //#include <kurl.h>
 
+#include <KoDockFactory.h>
 #include <KWView.h>
 
 #include <kross/core/manager.h>
@@ -50,14 +51,15 @@
  */
 
 KWScriptingDocker::KWScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
-    : QWidget(parent)
+    : QDockWidget(i18n("Scripts"), parent)
     , m_guiclient(guiclient)
 {
+    QWidget* widget = new QWidget(this);
     QBoxLayout* layout = new QVBoxLayout(this);
     layout->setMargin(0);
-    setLayout(layout);
+    widget->setLayout(layout);
 
-    m_view = new QTreeView(this);
+    m_view = new QTreeView(widget);
     m_view->setRootIsDecorated(false);
     m_view->header()->hide();
     m_model = new Kross::ActionCollectionProxyModel(this);
@@ -65,13 +67,16 @@ KWScriptingDocker::KWScriptingDocker(QWidget* parent, Kross::GUIClient* guiclien
     layout->addWidget(m_view, 1);
     m_view->expandAll();
 
-    QToolBar* tb = new QToolBar(this);
+    QToolBar* tb = new QToolBar(widget);
     layout->addWidget(tb);
     tb->setMovable(false);
     //tb->setOrientation(Qt::Vertical);
     //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     tb->addAction(KIcon("player_play"), i18n("Run"), this, SLOT(runScript()) );
     tb->addAction(KIcon("player_stop"), i18n("Stop"), this, SLOT(stopScript()) );
+
+    setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
+    setWidget(widget);
 
     connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(runScript()));
 }
@@ -99,6 +104,19 @@ void KWScriptingDocker::stopScript()
             action->finalize();
     }
 }
+
+/// \internal factory class to create \a KWScriptingDocker instances.
+class KWScriptingDockerFactory : public KoDockFactory
+{
+    public:
+        KWScriptingDockerFactory(KWView* view, Kross::GUIClient* guiclient) : KoDockFactory(), m_view(view), m_guiclient(guiclient) {}
+        virtual QString dockId() const { return "KWordScripting"; }
+        virtual Qt::DockWidgetArea defaultDockWidgetArea() const { return Qt::RightDockWidgetArea; }
+        virtual QDockWidget* createDockWidget() { return new KWScriptingDocker(m_view, m_guiclient); }
+    private:
+        KWView* m_view;
+        Kross::GUIClient* m_guiclient;
+};
 
 /***********************************************************************
  * KWScriptingPart
@@ -153,9 +171,9 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
 
-    QDockWidget* dock = d->view->createDock(i18n("Scripts"), new KWScriptingDocker(d->view, d->guiclient));
+    KWScriptingDockerFactory factory(d->view, d->guiclient);
+    QDockWidget* dock = d->view->createDockWidget(&factory);
     Q_UNUSED(dock);
-    //dock->setVisible(false);
 }
 
 KWScriptingPart::~KWScriptingPart()

@@ -21,6 +21,7 @@
 #ifndef KWSCRIPTINGPART_H
 #define KWSCRIPTINGPART_H
 
+#include <QDockWidget>
 #include <kparts/plugin.h>
 
 class QTreeView;
@@ -35,7 +36,7 @@ namespace Kross {
 * The KWScriptingDocker class implements a widget
 * displayed in a docker.
 */
-class KWScriptingDocker : public QWidget
+class KWScriptingDocker : public QDockWidget
 {
         Q_OBJECT
     public:
