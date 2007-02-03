@@ -450,15 +450,12 @@ namespace KexiDB
 		}
 		if (f->isFPNumericType())
 			return QString::fromLatin1(data, length).toDouble();
-		if (f->type()==KexiDB::Field::BLOB) {
-			QByteArray ba;
-			ba.duplicate(data, length);
-			return ba;
-		}
+		if (f->type()==KexiDB::Field::BLOB)
+			return QByteArray::fromRawData(data, length);
 		// the default
 //! @todo date/time?
 		QVariant result(QString::fromUtf8(data, length));
-		if (!result.cast( KexiDB::Field::variantType(f->type()) ))
+		if (!result.convert( KexiDB::Field::variantType(f->type()) ))
 			return QVariant();
 		return result;
 	}
