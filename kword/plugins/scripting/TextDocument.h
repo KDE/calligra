@@ -118,9 +118,9 @@ namespace Scripting {
             /** Add a new variable. */
             bool addVariable(const QString& variablename, const QString& value) {
                 KoVariableManager* manager = variableManager();
-                if( ! manager ) return false;
-                KoVariable* v = manager->createVariable(variablename);
-                v->setValue(value);
+                KoVariable* variable = manager ? manager->createVariable(variablename) : 0;
+                if( ! variable ) return false;
+                variable->setValue(value);
                 return true;
             }
             /** Remove an existing variable. */
