@@ -56,6 +56,12 @@
             interpreter="python"
             file="extensions/sample_tables.py" />
         <script
+            name="pysamplevariables"
+            text="Variables"
+            comment="This python script demonstrates how to handle variables"
+            interpreter="python"
+            file="extensions/sample_variables.py" />
+        <script
             name="pysampleshapes"
             text="Shapes"
             comment="This python script demonstrates usage of shapes"

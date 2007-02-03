@@ -7,6 +7,7 @@ install(FILES
     sample_lists_html.py
     sample_lists_cursor.py
     sample_tables.py
+    sample_variables.py
     sample_shapes.py
     sample_allshapes.py
     DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/extensions)

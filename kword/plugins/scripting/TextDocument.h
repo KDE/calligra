@@ -25,6 +25,11 @@
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
 
+#include <KoVariable.h>
+#include <KoVariableManager.h>
+#include <KoInlineTextObjectManager.h>
+#include <KWTextDocumentLayout.h>
+
 #include "TextFrame.h"
 #include "TextTable.h"
 #include "TextCursor.h"
@@ -49,6 +54,13 @@ namespace Scripting {
             }
             virtual ~TextDocument() {}
 
+            KoVariableManager* variableManager() {
+                KWTextDocumentLayout* layout = dynamic_cast< KWTextDocumentLayout* >( m_doc->documentLayout() );
+                if( ! layout ) return 0;
+                KoInlineTextObjectManager* textobjmanager = layout->inlineObjectTextManager();
+                return textobjmanager ? textobjmanager->variableManager() : 0;
+            }
+
         public Q_SLOTS:
 
             /** Return the width of the document in pt. */
@@ -65,7 +77,9 @@ namespace Scripting {
             /** Return the root \a Frame object of the document. */
             QObject* rootFrame() { return new TextFrame(this, m_doc->rootFrame()); }
 
+            /** Return the first \a Cursior object of the document. */
             QObject* firstCursor() { return new TextCursor(this, QTextCursor(m_doc->begin())); }
+            /** Return the last \a Cursior object of the document. */
             QObject* lastCursor() { return new TextCursor(this, QTextCursor(m_doc->end())); }
 
             //QTextObject * object ( int objectIndex ) const 
@@ -83,6 +97,37 @@ namespace Scripting {
             QString toHtml(const QString& encoding = QString()) const { return m_doc->toHtml( encoding.isNull() ? QByteArray() : encoding.toLatin1() ); }
             /** Set the content of the document to the \p html HTML-text. */
             void setHtml(const QString & html) { m_doc->setHtml(html); }
+
+            /** Return a list of all variablenames. */
+            QStringList variableNames() {
+                KoVariableManager* manager = variableManager();
+                return manager ? manager->variables() : QStringList();
+            }
+            /** Return the value of a variable. */
+            QString variableValue(const QString& variablename) {
+                KoVariableManager* manager = variableManager();
+                return manager ? manager->value(variablename) : QString();
+            }
+            /** Set the value of a variable. */
+            bool setVariableValue(const QString& variablename, const QString& value) {
+                KoVariableManager* manager = variableManager();
+                if( ! manager ) return false;
+                manager->setValue(variablename, value);
+                return true;
+            }
+            /** Add a new variable. */
+            bool addVariable(const QString& variablename, const QString& value) {
+                KoVariableManager* manager = variableManager();
+                if( ! manager ) return false;
+                KoVariable* v = manager->createVariable(variablename);
+                v->setValue(value);
+                return true;
+            }
+            /** Remove a value. */
+            void removeVariable(const QString& variablename) {
+                KoVariableManager* manager = variableManager();
+                if( manager ) manager->remove(variablename);
+            }
 
         signals:
 
