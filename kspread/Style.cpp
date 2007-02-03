@@ -205,7 +205,7 @@ void Style::loadAttributes( const QList<SharedSubStyle>& subStyles )
 
 void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement & element )
 {
-  // NOTE Stefan: Don't fill the style stack with the parent styles!
+    // NOTE Stefan: Don't fill the style stack with the parent styles!
     KoStyleStack styleStack;
     styleStack.push( element );
     styleStack.setTypeProperties( "table-cell" );
@@ -1013,18 +1013,18 @@ QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format::Type 
         case Format::Time: //TODO FIXME
             format = "hh:mm:ss";
             break;
-            case Format::SecondeTime: //TODO FIXME
-                format = "hh:mm";
-                break;
+        case Format::SecondeTime: //TODO FIXME
+            format = "hh:mm";
+            break;
         case Format::Time1:
             format = "h:mm AP";
             break;
         case Format::Time2:
             format = "h:mm:ss AP";
             break;
-            case Format::Time3: // 9 h 01 min 28 s
-                format = "hh \\h mm \\m\\i\\n ss \\s";
-                break;
+        case Format::Time3: // 9 h 01 min 28 s
+            format = "hh \\h mm \\m\\i\\n ss \\s";
+            break;
         case Format::Time4:
             format = "hh:mm";
             break;
@@ -1182,166 +1182,166 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
     }
 #if 0
     if ( d->subStyles.contains( FloatFormat ) )
-    format.setAttribute( "float", (int) floatFormat() );
+        format.setAttribute( "float", (int) floatFormat() );
 
-                                 if ( d->subStyles.contains( FloatColor ) )
-                                 format.setAttribute( "floatcolor", (int)floatColor() );
+    if ( d->subStyles.contains( FloatColor ) )
+        format.setAttribute( "floatcolor", (int)floatColor() );
 
-                                 if ( d->subStyles.contains( CustomFormat ) && !customFormat().isEmpty() )
-                                 format.setAttribute( "custom", customFormat() );
+    if ( d->subStyles.contains( CustomFormat ) && !customFormat().isEmpty() )
+        format.setAttribute( "custom", customFormat() );
 
-                                 if ( d->subStyles.contains( Format::Type ) && formatType() == Money )
-                         {
-                                 format.setAttribute( "type", (int) currency().type );
-                                 format.setAttribute( "symbol", currency().symbol );
-}
+    if ( d->subStyles.contains( Format::Type ) && formatType() == Money )
+    {
+        format.setAttribute( "type", (int) currency().type );
+        format.setAttribute( "symbol", currency().symbol );
+    }
 #endif
-                                 if ( d->subStyles.contains( Angle ) && angle() != 0 )
-                         {
-                             style.addProperty( "style:rotation-align", "none" );
-                             style.addProperty( "style:rotation-angle", QString::number( -1.0 * angle()  ) );
-                         }
+    if ( d->subStyles.contains( Angle ) && angle() != 0 )
+    {
+        style.addProperty( "style:rotation-align", "none" );
+        style.addProperty( "style:rotation-angle", QString::number( -1.0 * angle()  ) );
+    }
 
-                         if ( d->subStyles.contains( Indentation ) && indentation() != 0.0 )
-                         {
-                             style.addPropertyPt("fo:margin-left", indentation(), KoGenStyle::ParagraphType );
+    if ( d->subStyles.contains( Indentation ) && indentation() != 0.0 )
+    {
+        style.addPropertyPt("fo:margin-left", indentation(), KoGenStyle::ParagraphType );
         //FIXME
         //if ( a == HAlignUndefined )
         //currentCellStyle.addProperty("fo:text-align", "start" );
-                         }
+    }
 
-                         if ( d->subStyles.contains( DontPrintText ) && d->subStyles.contains( DontPrintText ) )
-                             style.addProperty( "style:print-content", "false");
+    if ( d->subStyles.contains( DontPrintText ) && d->subStyles.contains( DontPrintText ) )
+        style.addProperty( "style:print-content", "false");
 
     // protection
-                         bool hideAll = false;
-                         bool hideFormula = false;
-                         bool isNotProtected = false;
+    bool hideAll = false;
+    bool hideFormula = false;
+    bool isNotProtected = false;
 
-                         if ( d->subStyles.contains( NotProtected ) && d->subStyles.contains( NotProtected ) )
-                             isNotProtected = true;
+    if ( d->subStyles.contains( NotProtected ) && d->subStyles.contains( NotProtected ) )
+        isNotProtected = true;
 
-                         if ( d->subStyles.contains( HideAll ) && d->subStyles.contains( HideAll ) )
-                             hideAll=true;
+    if ( d->subStyles.contains( HideAll ) && d->subStyles.contains( HideAll ) )
+        hideAll=true;
 
-                         if ( d->subStyles.contains( HideFormula ) && d->subStyles.contains( HideFormula ) )
-                             hideFormula = true;
+    if ( d->subStyles.contains( HideFormula ) && d->subStyles.contains( HideFormula ) )
+        hideFormula = true;
 
-                         if ( hideAll )
-                             style.addProperty( "style:cell-protect", "hidden-and-protected" );
-                         else
-                         {
-                             if ( isNotProtected && !hideFormula )
-                                 style.addProperty( "style:cell-protect", "none" );
-                             else if ( isNotProtected && hideFormula )
-                                 style.addProperty( "style:cell-protect", "Formula.hidden" );
-                             else if ( hideFormula )
-                                 style.addProperty( "style:cell-protect", "protected Formula.hidden" );
-                             else if ( d->subStyles.contains( NotProtected ) && !d->subStyles.contains( NotProtected ) )
+    if ( hideAll )
+        style.addProperty( "style:cell-protect", "hidden-and-protected" );
+    else
+    {
+        if ( isNotProtected && !hideFormula )
+            style.addProperty( "style:cell-protect", "none" );
+        else if ( isNotProtected && hideFormula )
+            style.addProperty( "style:cell-protect", "Formula.hidden" );
+        else if ( hideFormula )
+            style.addProperty( "style:cell-protect", "protected Formula.hidden" );
+        else if ( d->subStyles.contains( NotProtected ) && !d->subStyles.contains( NotProtected ) )
             // write out, only if it is explicitly set
-                                 style.addProperty( "style:cell-protect", "protected" );
-                         }
+            style.addProperty( "style:cell-protect", "protected" );
+    }
 
     // borders
     // NOTE Stefan: QPen api docs:
     //              A line width of zero indicates a cosmetic pen. This means
     //              that the pen width is always drawn one pixel wide,
     //              independent of the transformation set on the painter.
-                         if ( d->subStyles.contains( LeftPen ) && d->subStyles.contains( RightPen ) &&
-                              d->subStyles.contains( TopPen ) && d->subStyles.contains( BottomPen ) &&
-                              ( leftBorderPen() == topBorderPen() ) &&
-                              ( leftBorderPen() == rightBorderPen() ) &&
-                              ( leftBorderPen() == bottomBorderPen() ) )
-                         {
-                             if ( leftBorderPen().style() != Qt::NoPen )
-                                 style.addProperty("fo:border", Oasis::encodePen( leftBorderPen() ) );
-                         }
-                         else
-                         {
-                             if ( d->subStyles.contains( LeftPen ) && ( leftBorderPen().style() != Qt::NoPen ) )
-                                 style.addProperty( "fo:border-left", Oasis::encodePen( leftBorderPen() ) );
+    if ( d->subStyles.contains( LeftPen ) && d->subStyles.contains( RightPen ) &&
+        d->subStyles.contains( TopPen ) && d->subStyles.contains( BottomPen ) &&
+        ( leftBorderPen() == topBorderPen() ) &&
+        ( leftBorderPen() == rightBorderPen() ) &&
+        ( leftBorderPen() == bottomBorderPen() ) )
+    {
+        if ( leftBorderPen().style() != Qt::NoPen )
+            style.addProperty("fo:border", Oasis::encodePen( leftBorderPen() ) );
+    }
+    else
+    {
+        if ( d->subStyles.contains( LeftPen ) && ( leftBorderPen().style() != Qt::NoPen ) )
+            style.addProperty( "fo:border-left", Oasis::encodePen( leftBorderPen() ) );
 
-                             if ( d->subStyles.contains( RightPen ) && ( rightBorderPen().style() != Qt::NoPen ) )
-                                 style.addProperty( "fo:border-right", Oasis::encodePen( rightBorderPen() ) );
+        if ( d->subStyles.contains( RightPen ) && ( rightBorderPen().style() != Qt::NoPen ) )
+            style.addProperty( "fo:border-right", Oasis::encodePen( rightBorderPen() ) );
 
-                             if ( d->subStyles.contains( TopPen ) && ( topBorderPen().style() != Qt::NoPen ) )
-                                 style.addProperty( "fo:border-top", Oasis::encodePen( topBorderPen() ) );
+        if ( d->subStyles.contains( TopPen ) && ( topBorderPen().style() != Qt::NoPen ) )
+            style.addProperty( "fo:border-top", Oasis::encodePen( topBorderPen() ) );
 
-                             if ( d->subStyles.contains( BottomPen ) && ( bottomBorderPen().style() != Qt::NoPen ) )
-                                 style.addProperty( "fo:border-bottom", Oasis::encodePen( bottomBorderPen() ) );
-                         }
-                         if ( d->subStyles.contains( FallDiagonalPen ) && ( fallDiagonalPen().style() != Qt::NoPen ) )
-                         {
-                             style.addProperty("style:diagonal-tl-br", Oasis::encodePen( fallDiagonalPen() ) );
-                         }
-                         if ( d->subStyles.contains( GoUpDiagonalPen ) && ( goUpDiagonalPen().style() != Qt::NoPen ) )
-                         {
-                             style.addProperty("style:diagonal-bl-tr", Oasis::encodePen( goUpDiagonalPen() ) );
-                         }
+        if ( d->subStyles.contains( BottomPen ) && ( bottomBorderPen().style() != Qt::NoPen ) )
+            style.addProperty( "fo:border-bottom", Oasis::encodePen( bottomBorderPen() ) );
+    }
+    if ( d->subStyles.contains( FallDiagonalPen ) && ( fallDiagonalPen().style() != Qt::NoPen ) )
+    {
+        style.addProperty("style:diagonal-tl-br", Oasis::encodePen( fallDiagonalPen() ) );
+    }
+    if ( d->subStyles.contains( GoUpDiagonalPen ) && ( goUpDiagonalPen().style() != Qt::NoPen ) )
+    {
+        style.addProperty("style:diagonal-bl-tr", Oasis::encodePen( goUpDiagonalPen() ) );
+    }
 
     // font
-                         if ( d->subStyles.contains( FontFamily ) ) // !fontFamily().isEmpty() == true
-                         {
-                             style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType );
-                         }
-                         if ( d->subStyles.contains( FontSize ) ) // fontSize() != 0
-                         {
-                             style.addPropertyPt("fo:font-size",fontSize(), KoGenStyle::TextType  );
-                         }
+    if ( d->subStyles.contains( FontFamily ) ) // !fontFamily().isEmpty() == true
+    {
+        style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType );
+    }
+    if ( d->subStyles.contains( FontSize ) ) // fontSize() != 0
+    {
+        style.addPropertyPt("fo:font-size",fontSize(), KoGenStyle::TextType  );
+    }
 
-                         if ( d->subStyles.contains( FontBold ) && bold() )
-                             style.addProperty("fo:font-weight","bold", KoGenStyle::TextType );
+    if ( d->subStyles.contains( FontBold ) && bold() )
+        style.addProperty("fo:font-weight","bold", KoGenStyle::TextType );
 
-                         if ( d->subStyles.contains( FontItalic ) && italic() )
-                             style.addProperty("fo:font-style", "italic", KoGenStyle::TextType );
+    if ( d->subStyles.contains( FontItalic ) && italic() )
+        style.addProperty("fo:font-style", "italic", KoGenStyle::TextType );
 
-                         if ( d->subStyles.contains( FontUnderline ) && underline() )
-                         {
+    if ( d->subStyles.contains( FontUnderline ) && underline() )
+    {
         //style:text-underline-style="solid" style:text-underline-width="auto"
-                             style.addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
+        style.addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
         //copy from oo-129
-                             style.addProperty( "style:text-underline-width", "auto", KoGenStyle::TextType );
-                             style.addProperty( "style:text-underline-color", "font-color", KoGenStyle::TextType );
-                         }
+        style.addProperty( "style:text-underline-width", "auto", KoGenStyle::TextType );
+        style.addProperty( "style:text-underline-color", "font-color", KoGenStyle::TextType );
+    }
 
-                         if ( d->subStyles.contains( FontStrike ) && strikeOut() )
-                             style.addProperty( "style:text-line-through-style", "solid", KoGenStyle::TextType );
+    if ( d->subStyles.contains( FontStrike ) && strikeOut() )
+        style.addProperty( "style:text-line-through-style", "solid", KoGenStyle::TextType );
 
-                         if ( d->subStyles.contains( FontColor ) && fontColor().isValid() ) // always save
-                         {
-                             style.addProperty("fo:color", colorName( fontColor() ), KoGenStyle::TextType );
-                         }
+    if ( d->subStyles.contains( FontColor ) && fontColor().isValid() ) // always save
+    {
+        style.addProperty("fo:color", colorName( fontColor() ), KoGenStyle::TextType );
+    }
 
     //I don't think there is a reason why the background brush should be saved if it is null,
     //but remove the check if it causes problems.  -- Robert Knight <robertknight@gmail.com>
-                         if ( d->subStyles.contains( BackgroundBrush ) && (backgroundBrush().style() != Qt::NoBrush) )
-                         {
-                             QString tmp = saveOasisBackgroundStyle( mainStyles, backgroundBrush() );
-                             if ( !tmp.isEmpty() )
-                                 style.addProperty("draw:style-name", tmp );
-                         }
+    if ( d->subStyles.contains( BackgroundBrush ) && (backgroundBrush().style() != Qt::NoBrush) )
+    {
+        QString tmp = saveOasisBackgroundStyle( mainStyles, backgroundBrush() );
+        if ( !tmp.isEmpty() )
+            style.addProperty("draw:style-name", tmp );
+    }
 
-                         QString _prefix;
-                         QString _postfix;
-                         int _precision = -1;
-                         if ( d->subStyles.contains( Prefix ) && !prefix().isEmpty() )
-                             _prefix = prefix();
-                         if ( d->subStyles.contains( Postfix ) && !postfix().isEmpty() )
-                             _postfix = postfix();
-                         if ( d->subStyles.contains( Precision ) && precision() != -1 )
-                             _precision = precision();
+    QString _prefix;
+    QString _postfix;
+    int _precision = -1;
+    if ( d->subStyles.contains( Prefix ) && !prefix().isEmpty() )
+        _prefix = prefix();
+    if ( d->subStyles.contains( Postfix ) && !postfix().isEmpty() )
+        _postfix = postfix();
+    if ( d->subStyles.contains( Precision ) && precision() != -1 )
+        _precision = precision();
 
-                         QString currencyCode;
-                         if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Format::Money )
-                         {
-                             currencyCode = currency().code();
-                         }
+    QString currencyCode;
+    if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Format::Money )
+    {
+        currencyCode = currency().code();
+    }
 
-                         QString numericStyle = saveOasisStyleNumeric( style, mainStyles, formatType(),
-                                 _prefix, _postfix, _precision,
-                                 currencyCode );
-                         if ( !numericStyle.isEmpty() )
-                             style.addAttribute( "style:data-style-name", numericStyle );
+    QString numericStyle = saveOasisStyleNumeric( style, mainStyles, formatType(),
+            _prefix, _postfix, _precision,
+            currencyCode );
+    if ( !numericStyle.isEmpty() )
+        style.addAttribute( "style:data-style-name", numericStyle );
 }
 
 QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )
@@ -1636,7 +1636,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         setHideFormula( true );
     }
 
-  // TODO: remove that...
+    // TODO: remove that...
     KoXmlElement font = format.namedItem( "font" ).toElement();
     if ( !font.isNull() )
     {
@@ -1814,133 +1814,133 @@ QColor Style::fontColor() const
 {
     if ( !d->subStyles.contains( FontColor ) )
         return Qt::black;//SubStyleOne<FontColor, QColor>().value1;
-    return static_cast<const SubStyleOne<FontColor, QColor>*>( d->subStyles[FontColor].data() )->value1;;
+    return static_cast<const SubStyleOne<FontColor, QColor>*>( d->subStyles[FontColor].data() )->value1;
 }
 
 QColor Style::backgroundColor() const
 {
     if ( !d->subStyles.contains( BackgroundColor ) )
         return SubStyleOne<BackgroundColor, QColor>().value1;
-    return static_cast<const SubStyleOne<BackgroundColor, QColor>*>( d->subStyles[BackgroundColor].data() )->value1;;
+    return static_cast<const SubStyleOne<BackgroundColor, QColor>*>( d->subStyles[BackgroundColor].data() )->value1;
 }
 
 QPen Style::rightBorderPen() const
 {
     if ( !d->subStyles.contains( RightPen ) )
         return BorderPenStyle<RightPen>().value1;
-    return static_cast<const BorderPenStyle<RightPen>*>( d->subStyles[RightPen].data() )->value1;;
+    return static_cast<const BorderPenStyle<RightPen>*>( d->subStyles[RightPen].data() )->value1;
 }
 
 QPen Style::bottomBorderPen() const
 {
     if ( !d->subStyles.contains( BottomPen ) )
         return BorderPenStyle<BottomPen>().value1;
-    return static_cast<const BorderPenStyle<BottomPen>*>( d->subStyles[BottomPen].data() )->value1;;
+    return static_cast<const BorderPenStyle<BottomPen>*>( d->subStyles[BottomPen].data() )->value1;
 }
 
 QPen Style::leftBorderPen() const
 {
     if ( !d->subStyles.contains( LeftPen ) )
         return BorderPenStyle<LeftPen>().value1;
-    return static_cast<const BorderPenStyle<LeftPen>*>( d->subStyles[LeftPen].data() )->value1;;
+    return static_cast<const BorderPenStyle<LeftPen>*>( d->subStyles[LeftPen].data() )->value1;
 }
 
 QPen Style::topBorderPen() const
 {
     if ( !d->subStyles.contains( TopPen ) )
         return BorderPenStyle<TopPen>().value1;
-    return static_cast<const BorderPenStyle<TopPen>*>( d->subStyles[TopPen].data() )->value1;;
+    return static_cast<const BorderPenStyle<TopPen>*>( d->subStyles[TopPen].data() )->value1;
 }
 
 QPen Style::fallDiagonalPen() const
 {
     if ( !d->subStyles.contains( FallDiagonalPen ) )
         return PenStyle<FallDiagonalPen>().value1;
-    return static_cast<const PenStyle<FallDiagonalPen>*>( d->subStyles[FallDiagonalPen].data() )->value1;;
+    return static_cast<const PenStyle<FallDiagonalPen>*>( d->subStyles[FallDiagonalPen].data() )->value1;
 }
 
 QPen Style::goUpDiagonalPen() const
 {
     if ( !d->subStyles.contains( GoUpDiagonalPen ) )
         return PenStyle<GoUpDiagonalPen>().value1;
-    return static_cast<const PenStyle<GoUpDiagonalPen>*>( d->subStyles[GoUpDiagonalPen].data() )->value1;;
+    return static_cast<const PenStyle<GoUpDiagonalPen>*>( d->subStyles[GoUpDiagonalPen].data() )->value1;
 }
 
 QBrush Style::backgroundBrush() const
 {
     if ( !d->subStyles.contains( BackgroundBrush ) )
         return SubStyleOne<BackgroundBrush, QBrush>().value1;
-    return static_cast<const SubStyleOne<BackgroundBrush, QBrush>*>( d->subStyles[BackgroundBrush].data() )->value1;;
+    return static_cast<const SubStyleOne<BackgroundBrush, QBrush>*>( d->subStyles[BackgroundBrush].data() )->value1;
 }
 
 QString Style::customFormat() const
 {
     if ( !d->subStyles.contains( CustomFormat ) )
         return SubStyleOne<CustomFormat,QString>().value1;
-    return static_cast<const SubStyleOne<CustomFormat, QString>*>( d->subStyles[CustomFormat].data() )->value1;;
+    return static_cast<const SubStyleOne<CustomFormat, QString>*>( d->subStyles[CustomFormat].data() )->value1;
 }
 
 QString Style::prefix() const
 {
     if ( !d->subStyles.contains( Prefix ) )
         return SubStyleOne<Prefix, QString>().value1;
-    return static_cast<const SubStyleOne<Prefix, QString>*>( d->subStyles[Prefix].data() )->value1;;
+    return static_cast<const SubStyleOne<Prefix, QString>*>( d->subStyles[Prefix].data() )->value1;
 }
 
 QString Style::postfix() const
 {
     if ( !d->subStyles.contains( Postfix ) )
         return SubStyleOne<Postfix, QString>().value1;
-    return static_cast<const SubStyleOne<Postfix, QString>*>( d->subStyles[Postfix].data() )->value1;;
+    return static_cast<const SubStyleOne<Postfix, QString>*>( d->subStyles[Postfix].data() )->value1;
 }
 
 QString Style::fontFamily() const
 {
     if ( !d->subStyles.contains( FontFamily ) )
         return KoGlobal::defaultFont().family(); // SubStyleOne<FontFamily, QString>().value1;
-    return static_cast<const SubStyleOne<FontFamily, QString>*>( d->subStyles[FontFamily].data() )->value1;;
+    return static_cast<const SubStyleOne<FontFamily, QString>*>( d->subStyles[FontFamily].data() )->value1;
 }
 
 Style::HAlign Style::halign() const
 {
     if ( !d->subStyles.contains( HorizontalAlignment ) )
         return SubStyleOne<HorizontalAlignment, Style::HAlign>().value1;
-    return static_cast<const SubStyleOne<HorizontalAlignment, Style::HAlign>*>( d->subStyles[HorizontalAlignment].data() )->value1;;
+    return static_cast<const SubStyleOne<HorizontalAlignment, Style::HAlign>*>( d->subStyles[HorizontalAlignment].data() )->value1;
 }
 
 Style::VAlign Style::valign() const
 {
     if ( !d->subStyles.contains( VerticalAlignment ) )
         return SubStyleOne<VerticalAlignment, Style::VAlign>().value1;
-    return static_cast<const SubStyleOne<VerticalAlignment, Style::VAlign>*>( d->subStyles[VerticalAlignment].data() )->value1;;
+    return static_cast<const SubStyleOne<VerticalAlignment, Style::VAlign>*>( d->subStyles[VerticalAlignment].data() )->value1;
 }
 
 Style::FloatFormat Style::floatFormat() const
 {
     if ( !d->subStyles.contains( FloatFormatKey ) )
         return SubStyleOne<FloatFormatKey, FloatFormat>().value1;
-    return static_cast<const SubStyleOne<FloatFormatKey, FloatFormat>*>( d->subStyles[FloatFormatKey].data() )->value1;;
+    return static_cast<const SubStyleOne<FloatFormatKey, FloatFormat>*>( d->subStyles[FloatFormatKey].data() )->value1;
 }
 
 Style::FloatColor Style::floatColor() const
 {
     if ( !d->subStyles.contains( FloatColorKey ) )
         return SubStyleOne<FloatColorKey, FloatColor>().value1;
-    return static_cast<const SubStyleOne<FloatColorKey, FloatColor>*>( d->subStyles[FloatColorKey].data() )->value1;;
+    return static_cast<const SubStyleOne<FloatColorKey, FloatColor>*>( d->subStyles[FloatColorKey].data() )->value1;
 }
 
 Format::Type Style::formatType() const
 {
     if ( !d->subStyles.contains( FormatTypeKey ) )
         return SubStyleOne<FormatTypeKey, Format::Type>().value1;
-    return static_cast<const SubStyleOne<FormatTypeKey, Format::Type>*>( d->subStyles[FormatTypeKey].data() )->value1;;
+    return static_cast<const SubStyleOne<FormatTypeKey, Format::Type>*>( d->subStyles[FormatTypeKey].data() )->value1;
 }
 
 Currency Style::currency() const
 {
     if ( !d->subStyles.contains( CurrencyFormat ) )
         return Currency();
-    return static_cast<const SubStyleOne<CurrencyFormat, Currency>*>( d->subStyles[CurrencyFormat].data() )->value1;;
+    return static_cast<const SubStyleOne<CurrencyFormat, Currency>*>( d->subStyles[CurrencyFormat].data() )->value1;
 }
 
 QFont Style::font() const
@@ -1959,98 +1959,98 @@ bool Style::bold() const
 {
     if ( !d->subStyles.contains( FontBold ) )
         return SubStyleOne<FontBold, bool>().value1;
-    return static_cast<const SubStyleOne<FontBold, bool>*>( d->subStyles[FontBold].data() )->value1;;
+    return static_cast<const SubStyleOne<FontBold, bool>*>( d->subStyles[FontBold].data() )->value1;
 }
 
 bool Style::italic() const
 {
     if ( !d->subStyles.contains( FontItalic ) )
         return SubStyleOne<FontItalic, bool>().value1;
-    return static_cast<const SubStyleOne<FontItalic, bool>*>( d->subStyles[FontItalic].data() )->value1;;
+    return static_cast<const SubStyleOne<FontItalic, bool>*>( d->subStyles[FontItalic].data() )->value1;
 }
 
 bool Style::underline() const
 {
     if ( !d->subStyles.contains( FontUnderline ) )
         return SubStyleOne<FontUnderline, bool>().value1;
-    return static_cast<const SubStyleOne<FontUnderline, bool>*>( d->subStyles[FontUnderline].data() )->value1;;
+    return static_cast<const SubStyleOne<FontUnderline, bool>*>( d->subStyles[FontUnderline].data() )->value1;
 }
 
 bool Style::strikeOut() const
 {
     if ( !d->subStyles.contains( FontStrike ) )
         return SubStyleOne<FontStrike, bool>().value1;
-    return static_cast<const SubStyleOne<FontStrike, bool>*>( d->subStyles[FontStrike].data() )->value1;;
+    return static_cast<const SubStyleOne<FontStrike, bool>*>( d->subStyles[FontStrike].data() )->value1;
 }
 
 int Style::fontSize() const
 {
     if ( !d->subStyles.contains( FontSize ) )
         return KoGlobal::defaultFont().pointSize(); //SubStyleOne<FontSize, int>().value1;
-    return static_cast<const SubStyleOne<FontSize, int>*>( d->subStyles[FontSize].data() )->value1;;
+    return static_cast<const SubStyleOne<FontSize, int>*>( d->subStyles[FontSize].data() )->value1;
 }
 
 int Style::precision() const
 {
     if ( !d->subStyles.contains( Precision ) )
         return -1; //SubStyleOne<Precision, int>().value1;
-    return static_cast<const SubStyleOne<Precision, int>*>( d->subStyles[Precision].data() )->value1;;
+    return static_cast<const SubStyleOne<Precision, int>*>( d->subStyles[Precision].data() )->value1;
 }
 
 int Style::angle() const
 {
     if ( !d->subStyles.contains( Angle ) )
         return SubStyleOne<Angle, int>().value1;
-    return static_cast<const SubStyleOne<Angle, int>*>( d->subStyles[Angle].data() )->value1;;
+    return static_cast<const SubStyleOne<Angle, int>*>( d->subStyles[Angle].data() )->value1;
 }
 
 double Style::indentation() const
 {
     if ( !d->subStyles.contains( Indentation ) )
         return SubStyleOne<Indentation, int>().value1;
-    return static_cast<const SubStyleOne<Indentation, int>*>( d->subStyles[Indentation].data() )->value1;;
+    return static_cast<const SubStyleOne<Indentation, int>*>( d->subStyles[Indentation].data() )->value1;
 }
 
 bool Style::verticalText() const
 {
     if ( !d->subStyles.contains( VerticalText ) )
         return SubStyleOne<VerticalText, bool>().value1;
-    return static_cast<const SubStyleOne<VerticalText, bool>*>( d->subStyles[VerticalText].data() )->value1;;
+    return static_cast<const SubStyleOne<VerticalText, bool>*>( d->subStyles[VerticalText].data() )->value1;
 }
 
 bool Style::wrapText() const
 {
     if ( !d->subStyles.contains( MultiRow ) )
         return SubStyleOne<MultiRow, bool>().value1;
-    return static_cast<const SubStyleOne<MultiRow, bool>*>( d->subStyles[MultiRow].data() )->value1;;
+    return static_cast<const SubStyleOne<MultiRow, bool>*>( d->subStyles[MultiRow].data() )->value1;
 }
 
 bool Style::printText() const
 {
     if ( !d->subStyles.contains( DontPrintText ) )
         return !SubStyleOne<DontPrintText, bool>().value1;
-    return !static_cast<const SubStyleOne<DontPrintText, bool>*>( d->subStyles[DontPrintText].data() )->value1;;
+    return !static_cast<const SubStyleOne<DontPrintText, bool>*>( d->subStyles[DontPrintText].data() )->value1;
 }
 
 bool Style::hideAll() const
 {
     if ( !d->subStyles.contains( HideAll ) )
         return SubStyleOne<HideAll, bool>().value1;
-    return static_cast<const SubStyleOne<HideAll, bool>*>( d->subStyles[HideAll].data() )->value1;;
+    return static_cast<const SubStyleOne<HideAll, bool>*>( d->subStyles[HideAll].data() )->value1;
 }
 
 bool Style::hideFormula() const
 {
     if ( !d->subStyles.contains( HideFormula ) )
         return SubStyleOne<HideFormula, bool>().value1;
-    return static_cast<const SubStyleOne<HideFormula, bool>*>( d->subStyles[HideFormula].data() )->value1;;
+    return static_cast<const SubStyleOne<HideFormula, bool>*>( d->subStyles[HideFormula].data() )->value1;
 }
 
 bool Style::notProtected() const
 {
     if ( !d->subStyles.contains( NotProtected ) )
         return SubStyleOne<NotProtected, bool>().value1;
-    return static_cast<const SubStyleOne<NotProtected, bool>*>( d->subStyles[NotProtected].data() )->value1;;
+    return static_cast<const SubStyleOne<NotProtected, bool>*>( d->subStyles[NotProtected].data() )->value1;
 }
 
 bool Style::isDefault() const
