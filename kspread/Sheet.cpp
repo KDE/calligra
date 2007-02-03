@@ -4135,7 +4135,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         xmlWriter.endElement();
 
-        kDebug(36003) << "Sheet::saveOasisColRowCell: column " << i << ' '
+        kDebug(36003) << "Sheet::saveOasisColRowCell: column " << i << " "
                   << "repeated " << repeated << " time(s)" << endl;
         i += repeated;
     }
@@ -4165,9 +4165,9 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         // empty row?
         if ( !d->cellStorage->firstInRow( i ) && styleStorage()->intersects( QRect( 1, i, KS_colMax, 1 ) ).isDefault() ) // row is empty
         {
-//               kDebug(36003) << "Sheet::saveOasisColRowCell: first row loop:"
-//                         << " i: " << i
-//                         << " row: " << row->row() << endl;
+//             kDebug(36003) << "Sheet::saveOasisColRowCell: first row loop:"
+//                           << " i: " << i
+//                           << " row: " << row->row() << endl;
             //bool isHidden = row->hidden();
             bool isDefault = row->isDefault() && style.isDefault();
             int j = i + 1;
@@ -4233,7 +4233,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             xmlWriter.startElement( "table:table-cell" );
             xmlWriter.endElement();
 
-            kDebug(36003) << "Sheet::saveOasisColRowCell: empty row " << i << ' '
+            kDebug(36003) << "Sheet::saveOasisColRowCell: empty row " << i << " "
                       << "repeated " << repeated << " time(s)" << endl;
 
             // copy the index for the next row to process
@@ -4254,7 +4254,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             }
             if ( repeated > 1 )
             {
-              kDebug(36003) << "Sheet::saveOasisColRowCell: NON-empty row " << i << ' '
+              kDebug(36003) << "Sheet::saveOasisColRowCell: NON-empty row " << i << " "
                         << "repeated " << repeated << " times" << endl;
 
               xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
@@ -4280,11 +4280,11 @@ void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int
     //   the current cell is not a default one
     // or
     //   we have a further cell in this row
-    while ( !nextCell.isNull() || !style.isDefault() || nextStyleColumnIndex )
+    while ( !cell.isDefault() || !nextCell.isNull() || !style.isDefault() || nextStyleColumnIndex )
     {
 //         kDebug(36003) << "Sheet::saveOasisCells:"
-//                   << " i: " << i
-//                   << " column: " << (cell.isDefault() ? 0 : cell.column()) << endl;
+//                       << " i: " << i
+//                       << " column: " << cell.column() << endl;
         int repeated = 1;
         cell.saveOasis( xmlWriter, mainStyles, row, i, repeated, valStyle );
         i += repeated;
