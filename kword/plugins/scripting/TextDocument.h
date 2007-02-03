@@ -123,7 +123,7 @@ namespace Scripting {
                 v->setValue(value);
                 return true;
             }
-            /** Remove a value. */
+            /** Remove an existing variable. */
             void removeVariable(const QString& variablename) {
                 KoVariableManager* manager = variableManager();
                 if( manager ) manager->remove(variablename);
