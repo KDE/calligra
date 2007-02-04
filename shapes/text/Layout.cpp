@@ -231,9 +231,18 @@ bool Layout::nextParag() {
     layout = m_block.layout();
     QTextOption options = layout->textOption();
     options.setWrapMode(QTextOption::WrapAnywhere);
-    options.setAlignment(m_format.alignment());
-    if(m_isRtl)
+    if(m_isRtl) {
         options.setTextDirection(Qt::RightToLeft);
+        // we have to reverse these as Qt doesn't do this automatically for us.
+        Qt::Alignment alignment = m_format.alignment();
+        if(alignment == Qt::AlignLeft)
+            alignment = Qt::AlignRight;
+        else if(alignment == Qt::AlignRight)
+            alignment = Qt::AlignLeft;
+        options.setAlignment(alignment);
+    }
+    else
+        options.setAlignment(m_format.alignment());
     layout->setTextOption(options);
 
     layout->beginLayout();
@@ -481,7 +490,7 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
             if(blockData) {
                 KoTextBlockBorderData *border = blockData->border();
                 if(blockData->hasCounterData()) {
-                    if(block.layout()->textOption().textDirection() == Qt::RightToLeft)
+                    if(layout->textOption().textDirection() == Qt::RightToLeft)
                         parag.setRight(parag.right() + blockData->counterWidth() + blockData->counterSpacing());
                     else
                         parag.setLeft(blockData->counterPosition().x());

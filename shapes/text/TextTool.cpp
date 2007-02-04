@@ -319,6 +319,11 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             moveOperation = QTextCursor::WordLeft;
         else if(hit(item, KStandardShortcut::ForwardWord))
             moveOperation = QTextCursor::NextWord;
+#ifndef NDEBUG
+        else if(event->key() == Qt::Key_F12) {
+            m_caret.insertText(QString::fromUtf8("װעלט"));
+        }
+#endif
         else if((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {
             event->ignore();
             return;
