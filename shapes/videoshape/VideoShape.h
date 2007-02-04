@@ -36,7 +36,7 @@ using namespace Phonon;
 class VideoShape : public KoShape
 {
 public:
-    VideoShape(const KUrl&url = KUrl());
+    explicit VideoShape(const KUrl&url = KUrl());
     virtual ~VideoShape();
 
     virtual void paint( QPainter& painter, const KoViewConverter& converter );

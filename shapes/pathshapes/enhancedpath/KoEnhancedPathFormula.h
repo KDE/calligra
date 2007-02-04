@@ -133,7 +133,7 @@ public:
      */
     double evaluate( KoEnhancedPathShape * path );
 
-    /// Returns the last occured error
+    /// Returns the last occurred error
     Error error() { return m_error; }
 
 private:
@@ -158,7 +158,7 @@ private:
 
     bool m_valid;    ///< flag that shows if function is valid, i.e the function was compiled successfully
     bool m_compiled; ///< flag that shows if function was compiled
-    Error m_error;   ///< the last occured error
+    Error m_error;   ///< the last occurred error
     QString m_text; ///< the formula text representation
     QList<QVariant> m_constants; ///< constant values
     QList<Opcode> m_codes; ///< the compiled byte code

@@ -28,7 +28,7 @@
 class PictureShape : public KoShape
 {
 public:
-    PictureShape(const KUrl&url = KUrl());
+    explicit PictureShape(const KUrl&url = KUrl());
     virtual ~PictureShape();
 
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
