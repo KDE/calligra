@@ -4,7 +4,6 @@ Type=Service
 Name=OpenOffice.org Writer Import Filter for KWord
 Name[el]=Φίλτρο εισαγωγής OpenOffice.org Writer για το KWord
 Name[fr]=Filtre d'importation OpenOffice.org pour KWord
-Name[ja]=KWord OpenOffice.org Writer インポートフィルタ
 Name[x-test]=xxOpenOffice.org Writer Import Filter for KWordxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/vnd.sun.xml.writer,application/vnd.sun.xml.writer.template,application/vnd.sun.xml.writer.master

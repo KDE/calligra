@@ -5,7 +5,6 @@ Name[x-test]=xxPostgreSQLxx
 Comment=PostgreSQL Migration Driver for Kexi
 Comment[el]=Οδηγός μεταφοράς PostgreSQL του Kexi
 Comment[fr]=Pilote de migration PostgreSQL pour Kexi
-Comment[ja]=Kexi PostgreSQL データ移行ドライバ
 Comment[x-test]=xxPostgreSQL Migration Driver for Kexixx
 X-KDE-Library=keximigrate_pqxx
 ServiceTypes=Kexi/MigrationDriver

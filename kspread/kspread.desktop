@@ -6,7 +6,6 @@ Exec=kspread %u
 GenericName=Spreadsheets
 GenericName[el]=Λογιστικά φύλλα
 GenericName[fr]=Tableurs
-GenericName[ja]=表計算
 GenericName[x-test]=xxSpreadsheetsxx
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/msexcel;text/x-csv;application/x-quattropro
 Type=Application

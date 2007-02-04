@@ -9,7 +9,6 @@ ImportDescription=LATEX
 Name=KWord Latex Import Filter
 Name[el]=Φίλτρο εισαγωγής Latex του KWord
 Name[fr]=Filtre d'importation LaTeX de KWord
-Name[ja]=KWord Latex インポートフィルタ
 Name[x-test]=xxKWord Latex Import Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

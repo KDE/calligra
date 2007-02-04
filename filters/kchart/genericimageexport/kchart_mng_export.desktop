@@ -8,4 +8,3 @@ X-KDE-Library=libkchartgenericimageexport
 ServiceTypes=KOfficeFilter
 Name=KChart MNG Export Filter
 Name[el]=Φίλτρο εξαγωγής MNG του KChart
-Name[ja]=KChart MNG エクスポートフィルタ

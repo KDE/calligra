@@ -4,7 +4,6 @@ Type=Service
 Name=OpenOffice.org Impress Import Filter for KPresenter
 Name[el]=Φίλτρο εισαγωγής OpenOffice.org Impress για το KPresenter
 Name[fr]=Filtre d'importation OpenOffice.org Impress pour KPresenter
-Name[ja]=KPresenter OpenOffice.org Impress インポートフィルタ
 Name[x-test]=xxOpenOffice.org Impress Import Filter for KPresenterxx
 X-KDE-Export=application/x-kpresenter
 X-KDE-Import=application/vnd.sun.xml.impress,application/vnd.sun.xml.impress.template

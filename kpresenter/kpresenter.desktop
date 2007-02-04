@@ -6,7 +6,6 @@ Exec=kpresenter %u
 GenericName=Slide Presentations
 GenericName[el]=Παρουσιάσεις σε σλάιντ
 GenericName[fr]=Présentations par diapositives
-GenericName[ja]=スライドプレゼンテーション
 GenericName[x-test]=xxSlide Presentationsxx
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/mspowerpoint
 Type=Application

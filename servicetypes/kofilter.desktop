@@ -5,7 +5,6 @@ X-KDE-ServiceType=KOfficeFilter
 Comment=KOffice Filter
 Comment[el]=Φίλτρο του KOffice
 Comment[fr]=Filtre KOffice
-Comment[ja]=KOffice フィルタ
 Comment[x-test]=xxKOffice Filterxx
 
 [PropertyDef::X-KDE-Import]

@@ -6,12 +6,10 @@ ServiceTypes=KWord/MailMergePlugin
 Name=Qt-SQL Source (single table)
 Name[el]=Πηγή Qt-SQL (απλός πίνακας)
 Name[fr]=Source Qt-SQL (table simple)
-Name[ja]=Qt-SQL ソース (シングルテーブル)
 Name[x-test]=xxQt-SQL Source (single table)xx
 Comment=This datasource type lets you use SQL database tables stored on a SQL Server. Depending on your system configuration, MySQL, PostgreSQL and UnixODBC are among the supported database backends. There might even be more (Oracle in commercial Qt versions or 3rd party backends).
 Comment[el]=Αυτός ο τύπος πηγής δεδομένων σας επιτρέπει να χρησιμοποιείτε πίνακες βάσεων δεδομένων SQL αποθηκευμένες σε έναν εξυπηρετητή SQL. Ανάλογα με τη ρύθμιση του συστήματος σας, οι MySQL, PostgreSQL και UnixODBC είναι μέσα στις υποστηριζόμενες βάσεις δεδομένων. Μπορεί να υπάρχουν και περισσότερες (Η Oracle σε εμπορικές εκδόσεις της Qt ή άλλες τρίτων κατασκευαστών).
 Comment[fr]=Ce type de source de données vous permet d'utiliser des tables de base de données SQL stockées sur un serveur SQL. Selon votre configuration, ces tables peuvent venir de MySQL, PostgreSQL et UnixODBC, et d'autres encore (comme Oracle, si vous avez la licence commerciale de Qt, par exemple).
-Comment[ja]=このデータソースタイプは SQL サーバに保存されている SQL データベーステーブルを使用します。システム設定によりますが、 MySQL, PostgreSQL, UnixODBC がサポートされているデータベース バックエンドです。他のものも使用可能かも知れません (Qt の商用バージョンでの Oracle や、サードパーティのバックエンドなど)。
 Comment[x-test]=xxThis datasource type lets you use SQL database tables stored on a SQL Server. Depending on your system configuration, MySQL, PostgreSQL and UnixODBC are among the supported database backends. There might even be more (Oracle in commercial Qt versions or 3rd party backends).xx
 
 X-KDE-Library=kwmailmerge_qtsqldb

@@ -6,7 +6,6 @@ Exec=karbon %u
 GenericName=Scalable Graphics
 GenericName[el]=Διανυσματικά γραφικά
 GenericName[fr]=Graphiques vectoriels
-GenericName[ja]=スケーラブルグラフィックス
 GenericName[x-test]=xxScalable Graphicsxx
 MimeType=application/vnd.oasis.opendocument.graphics;application/x-karbon;application/illustrator;image/x-eps;application/postscript
 # kghostview has 6 for application/postscript, we need to be under that...

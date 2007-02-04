@@ -4,7 +4,6 @@ Icon=template_businesscards10
 Name=Business Cards 10
 Name[el]=Κάρτες επιχειρήσεων 10
 Name[fr]=Cartes d'affaires 10
-Name[ja]=名刺 10
 Name[x-test]=xxBusiness Cards 10xx
 Type=Link
 URL=.source/BusinessCards10.kwt

@@ -4,7 +4,6 @@ Icon=template_labelsl16
 Name=Labels L16
 Name[el]=Ετικέτες L16
 Name[fr]=Étiquettes L16
-Name[ja]=ラベル L16
 Name[x-test]=xxLabels L16xx
 Type=Link
 URL=.source/LabelsL16.kwt

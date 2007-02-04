@@ -5,7 +5,6 @@ URL=.source/Worksheet.kst
 Name=Blank Worksheet
 Name[el]=Κενό φύλλο εργασίας
 Name[fr]=Feuille de travail blanche
-Name[ja]=空のワークシート
 Name[x-test]=xxBlank Worksheetxx
 Icon=template_worksheet
 X-KDE-DefaultTemplate=true

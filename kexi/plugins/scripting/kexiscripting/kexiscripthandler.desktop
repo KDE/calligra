@@ -5,11 +5,9 @@ ServiceTypes=Kexi/Handler
 
 GenericName=Scripts
 GenericName[el]=Σενάρια
-GenericName[ja]=スクリプト
 GenericName[x-test]=xxScriptsxx
 Name=Scripts
 Name[el]=Σενάρια
-Name[ja]=スクリプト
 Name[x-test]=xxScriptsxx
 X-KDE-Library=kexihandler_script
 X-KDE-ParentApp=kexi

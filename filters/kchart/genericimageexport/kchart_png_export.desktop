@@ -4,7 +4,6 @@ Type=Service
 Name=KChart PNG Export Filter
 Name[el]=Φίλτρο εξαγωγής PNG του KChart
 Name[fr]=Filtre d'exportation PNG de KChart
-Name[ja]=KChart PNG エクスポートフィルタ
 Name[x-test]=xxKChart PNG Export Filterxx
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/png

@@ -4,7 +4,6 @@ Type=Service
 Name=Kugar KugarXML Import Filter
 Name[el]=Φίλτρο εισαγωγής KugarXML του Kugar
 Name[fr]=Filtre d'importation KugarXML de Kugar
-Name[ja]=Kugar KugarXML インポートフィルタ
 Name[x-test]=xxKugar KugarXML Import Filterxx
 X-KDE-Import=application/x-kugar
 X-KDE-Weight=1

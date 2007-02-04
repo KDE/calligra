@@ -6,7 +6,6 @@ Exec=kivio %u
 GenericName=Flowchart & Diagram Editing
 GenericName[el]=Επεξεργασία διαγραμμάτων ροής & απλών διαγραμμάτων
 GenericName[fr]=Conception de diagrammes et de tableaux
-GenericName[ja]=フローチャート & ダイアグラム編集
 GenericName[x-test]=xxFlowchart & Diagram Editingxx
 MimeType=application/x-kivio
 Type=Application

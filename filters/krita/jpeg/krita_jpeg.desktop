@@ -5,7 +5,6 @@ Exec=krita %u
 GenericName=Application for Drawing and Handling of Images
 GenericName[el]=Εφαρμογή για επεξεργασία και χειρισμό εικόνων
 GenericName[fr]=Application pour dessiner et manipuler des images
-GenericName[ja]=描画と画像操作のためのアプリケーション
 GenericName[x-test]=xxApplication for Drawing and Handling of Imagesxx
 Icon=krita
 MimeType=image/jpeg

@@ -4,7 +4,6 @@ Type=Service
 Name=KPresenter MNG Export Filter
 Name[el]=Φίλτρο εξαγωγής MNG του KPresenter
 Name[fr]=Filtre d'exportation MNG de KPresenter
-Name[ja]=KPresenter MNG エクスポートフィルタ
 Name[x-test]=xxKPresenter MNG Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=video/x-mng

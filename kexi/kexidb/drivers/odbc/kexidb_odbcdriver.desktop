@@ -5,7 +5,6 @@ Name[x-test]=xxODBCxx
 Comment=Kexi Open Database Connectivity Driver
 Comment[el]=Οδηγός σύνδεσης Open Database με το Kexi
 Comment[fr]=Pilote ODBC (connectivité de bases de données ouvertes) de Kexi
-Comment[ja]=Kexi ODBC (Open Database Connectivity) ドライバ
 Comment[x-test]=xxKexi Open Database Connectivity Driverxx
 X-KDE-Library=kexidb_odbcdriver
 ServiceTypes=Kexi/DBDriver

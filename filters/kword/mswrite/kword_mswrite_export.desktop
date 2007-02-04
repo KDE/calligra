@@ -4,7 +4,6 @@ Type=Service
 Name=KWord Microsoft Write Export Filter
 Name[el]=Φίλτρο εξαγωγής Microsoft Write του KWord
 Name[fr]=Filtre d'exportation MS-Write de KWord
-Name[ja]=KWord Microsoft Write エクスポートフィルタ
 Name[x-test]=xxKWord Microsoft Write Export Filterxx
 X-KDE-Export=application/x-mswrite
 X-KDE-Import=application/x-kword

@@ -5,6 +5,5 @@ URL=.source/MenuPlan.kst
 Name=Menu Plan
 Name[el]=Σχέδιο μενού
 Name[fr]=Plan du menu
-Name[ja]=献立表
 Name[x-test]=xxMenu Planxx
 Icon=template_menuplan

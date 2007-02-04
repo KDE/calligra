@@ -9,7 +9,6 @@ ImportDescription=KSpread
 Name=KSpread LATEX Export Filter
 Name[el]=Φίλτρο εξαγωγής LATEX του KSpread
 Name[fr]=Filtre d'exportation LaTeX de Kspread
-Name[ja]=KSpread LATEX エクスポートフィルタ
 Name[x-test]=xxKSpread LATEX Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

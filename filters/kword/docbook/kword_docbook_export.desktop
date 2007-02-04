@@ -4,7 +4,6 @@ Type=Service
 Name=KWord SGML DocBook Export Filter
 Name[el]=Φίλτρο εξαγωγής SGML Docbook του KWord
 Name[fr]=Filtre d'exportation SGML DocBook de KWord
-Name[ja]=KWord SGML DocBook エクスポートフィルタ
 Name[x-test]=xxKWord SGML DocBook Export Filterxx
 X-KDE-Export=text/sgml
 X-KDE-Import=application/x-kword

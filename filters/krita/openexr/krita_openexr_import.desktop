@@ -4,7 +4,6 @@ Type=Service
 Name=Krita OpenEXR Import Filter
 Name[el]=Φίλτρο εισαγωγής OpenEXR του Krita
 Name[fr]=Filtre d'importation OpenEXT de Krita
-Name[ja]=Krita OpenEXR インポートフィルタ
 Name[x-test]=xxKrita OpenEXR Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-exr

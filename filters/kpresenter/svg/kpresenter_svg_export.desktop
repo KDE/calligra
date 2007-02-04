@@ -4,7 +4,6 @@ Type=Service
 Name=KPresenter SVG Export Filter
 Name[el]=Φίλτρο εξαγωγής SVG του KPresenter
 Name[fr]=Filtre d'exportation SVG de KPresenter
-Name[ja]=KPresenter SVG エクスポートフィルタ
 Name[x-test]=xxKPresenter SVG Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/svg+xml

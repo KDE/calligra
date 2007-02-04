@@ -9,7 +9,6 @@ DocPath=kformdesigner/kformdesigner.html
 GenericName=Form Designer
 GenericName[el]=Σχεδιαστής φόρμας
 GenericName[fr]=Concepteur d'interfaces graphiques
-GenericName[ja]=フォームデザイナー
 GenericName[x-test]=xxForm Designerxx
 MimeType=application/x-designer;
 Terminal=false

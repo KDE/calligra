@@ -5,7 +5,6 @@ X-KDE-ServiceType=Kexi/Handler
 Comment=Kexi Project Handlers
 Comment[el]=Χειριστές έργων του Kexi
 Comment[fr]=Gestionnaires de projet Kexi
-Comment[ja]=Kexi プロジェクトハンドラ
 Comment[x-test]=xxKexi Project Handlersxx
 
 [PropertyDef::X-Kexi-PartVersion]

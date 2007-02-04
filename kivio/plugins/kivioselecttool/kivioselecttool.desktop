@@ -4,6 +4,5 @@ X-KDE-Library=libkivioselecttool
 Name=SelectTool for Kivio
 Name[el]=Εργαλείο επιλογής για το Kivio
 Name[fr]=Outil sélection pour Kivio
-Name[ja]=Kivio 選択ツール
 Name[x-test]=xxSelectTool for Kivioxx
 Type=Service

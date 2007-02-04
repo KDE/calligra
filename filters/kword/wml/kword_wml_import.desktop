@@ -4,7 +4,6 @@ Type=Service
 Name=KWord WML Import Filter
 Name[el]=Φίλτρο εισαγωγής WML του KWord
 Name[fr]=Filtre d'importation WML de KWord
-Name[ja]=KWord WML インポートフィルタ
 Name[x-test]=xxKWord WML Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=text/vnd.wap.wml

@@ -12,6 +12,5 @@ X-KDE-ExtraNativeMimeTypes=application/x-kpresenter,application/vnd.oasis.opendo
 GenericName=Slide Presentations
 GenericName[el]=Παρουσιάσεις σε σλάιντ
 GenericName[fr]=Présentations par diapositives
-GenericName[ja]=スライドプレゼンテーション
 GenericName[x-test]=xxSlide Presentationsxx
 Icon=kpresenter

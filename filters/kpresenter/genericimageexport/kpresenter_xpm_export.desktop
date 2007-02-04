@@ -4,7 +4,6 @@ Type=Service
 Name=KPresenter XPM Export Filter
 Name[el]=Φίλτρο εξαγωγής XPM του KPresenter
 Name[fr]=Filtre d'exportation XPM de KPresenter
-Name[ja]=KPresenter XPM エクスポートフィルタ
 Name[x-test]=xxKPresenter XPM Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-xpm

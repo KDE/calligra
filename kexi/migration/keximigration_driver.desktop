@@ -5,7 +5,6 @@ X-KDE-ServiceType=Kexi/MigrationDriver
 Comment=Kexi Data Migration Driver
 Comment[el]=Οδηγός μεταφοράς δεδομένων του Kexi
 Comment[fr]=Pilote de migration de données de Kexi
-Comment[ja]=Kexi データ移行ドライバ
 Comment[x-test]=xxKexi Data Migration Driverxx
 
 [PropertyDef::X-Kexi-FileMigrationDriverMime]

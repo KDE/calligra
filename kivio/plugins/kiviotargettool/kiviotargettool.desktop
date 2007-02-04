@@ -4,6 +4,5 @@ X-KDE-Library=libkiviotargettool
 Name=Target Tool for Kivio
 Name[el]=Εργαλείο προορισμού για το Kivio
 Name[fr]=Outil cible pour Kivio
-Name[ja]=Kivio ターゲットツール
 Name[x-test]=xxTarget Tool for Kivioxx
 Type=Service

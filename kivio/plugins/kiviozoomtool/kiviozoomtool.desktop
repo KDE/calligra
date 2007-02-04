@@ -4,6 +4,5 @@ X-KDE-Library=libkiviozoomtool
 Name=ZoomTool for Kivio
 Name[el]=Εργαλείο εστίασης για το Kivio
 Name[fr]=Outil zoom pour Kivio
-Name[ja]=Kivio ズームツール
 Name[x-test]=xxZoomTool for Kivioxx
 Type=Service

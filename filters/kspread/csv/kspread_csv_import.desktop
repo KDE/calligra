@@ -4,7 +4,6 @@ Type=Service
 Name=CSV Import Filter for KSpread
 Name[el]=Φίλτρο εισαγωγής CSV για το KSpread
 Name[fr]=Filtre d'importation CSV de KSpread
-Name[ja]=KSpread CSV インポートフィルタ
 Name[x-test]=xxCSV Import Filter for KSpreadxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=text/x-csv,text/plain

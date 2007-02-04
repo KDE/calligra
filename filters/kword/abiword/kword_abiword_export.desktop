@@ -4,7 +4,6 @@ Type=Service
 Name=KWord AbiWord Export Filter
 Name[el]=Φίλτρο εξαγωγής Abiword του KWord
 Name[fr]=Filtre d'exportation AbiWord de KWord
-Name[ja]=KWord AbiWord エクスポートフィルタ
 Name[x-test]=xxKWord AbiWord Export Filterxx
 X-KDE-Export=application/x-abiword
 X-KDE-Import=application/x-kword

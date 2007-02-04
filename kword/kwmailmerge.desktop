@@ -5,7 +5,6 @@ X-KDE-ServiceType=KWord/MailMergePlugin
 Comment=KWord mailmerge plugin
 Comment[el]=Πρόσθετο συγχώνευσης αλληλογραφίας του KWord
 Comment[fr]=Module fusion de courrier pour KWord
-Comment[ja]=KWord mailmerge プラグイン
 Comment[x-test]=xxKWord mailmerge pluginxx
 
 [PropertyDef::X-KDE-Capabilities]

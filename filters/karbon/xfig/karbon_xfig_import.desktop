@@ -4,7 +4,6 @@ Type=Service
 Name=Karbon XFig Import Filter
 Name[el]=Φίλτρο εισαγωγής XFig του Karbon
 Name[fr]=Filtre d'importation XFig de Karbon 14
-Name[ja]=Karbon XFig インポートフィルタ
 Name[x-test]=xxKarbon XFig Import Filterxx
 X-KDE-Export=application/x-karbon
 X-KDE-Import=image/x-xfig

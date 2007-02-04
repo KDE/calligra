@@ -4,7 +4,6 @@ Icon=
 Name=Krita PNG Import Filter
 Name[el]=Φίλτρο εισαγωγής PNG του Krita
 Name[fr]=Filtre d'importation PNG de Krita
-Name[ja]=Krita PNG インポートフィルタ
 Name[x-test]=xxKrita PNG Import Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

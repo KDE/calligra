@@ -4,7 +4,6 @@ Type=Service
 Name=GNUmeric Export Filter for KSpread
 Name[el]=Φίλτρο εξαγωγής GNUmeric για το KSpread
 Name[fr]=Filtre d'exportation GNUmeric de KSpread
-Name[ja]=KSpread GNUmeric エクスポートフィルタ
 Name[x-test]=xxGNUmeric Export Filter for KSpreadxx
 X-KDE-Export=application/x-gnumeric
 X-KDE-Import=application/x-kspread

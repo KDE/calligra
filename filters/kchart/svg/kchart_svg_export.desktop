@@ -4,7 +4,6 @@ Type=Service
 Name=KChart SVG Export Filter
 Name[el]=Φίλτρο εξαγωγής SVG του KChart
 Name[fr]=Filtre d'exportation SVG de KChart
-Name[ja]=KChart SVG エクスポートフィルタ
 Name[x-test]=xxKChart SVG Export Filterxx
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/svg+xml

@@ -4,7 +4,6 @@ Type=Service
 Name=HTML Export Filter for KSpread
 Name[el]=Φίλτρο εξαγωγής HTML για το KSpread
 Name[fr]=Filtre d'exportation HTML de KSpread
-Name[ja]=KSpread HTML エクスポートフィルタ
 Name[x-test]=xxHTML Export Filter for KSpreadxx
 X-KDE-Export=text/html
 X-KDE-Import=application/x-kspread

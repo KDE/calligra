@@ -4,7 +4,6 @@ Type=Service
 Name=KPresenter KWord Filter
 Name[el]=KPresenter KWord φίλτρο
 Name[fr]=Filtre KWord pour KPresenter
-Name[ja]=KPresenter KWord フィルタ
 Name[x-test]=xxKPresenter KWord Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Weight=1

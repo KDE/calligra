@@ -4,7 +4,6 @@ Type=Service
 Name=Quattro Pro Import Filter for KSpread
 Name[el]=Φίλτρο εισαγωγής Quattro Pro για το KSpread
 Name[fr]=Filtre d'importation Quattro Pro pour KSpread
-Name[ja]=KSpread Quattro Pro インポートフィルタ
 Name[x-test]=xxQuattro Pro Import Filter for KSpreadxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-quattropro

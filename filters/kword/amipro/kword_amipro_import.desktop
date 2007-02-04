@@ -4,7 +4,6 @@ Type=Service
 Name=KWord AmiPro Import Filter
 Name[el]=Φίλτρο εισαγωγής AmiPro του KWord
 Name[fr]=Filtre d'importation AmiPro de KWord
-Name[ja]=KWord AmiPro インポートフィルタ
 Name[x-test]=xxKWord AmiPro Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/x-amipro

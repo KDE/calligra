@@ -4,7 +4,6 @@ Type=Service
 Name=KWord WordPerfect Import Filter
 Name[el]=Φίλτρο εισαγωγής WordPerfect του KWord
 Name[fr]=Filtre d'importation WordPerfect de KWord
-Name[ja]=KWord WordPerfect インポートフィルタ
 Name[x-test]=xxKWord WordPerfect Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/wordperfect

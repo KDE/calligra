@@ -5,6 +5,5 @@ URL=.source/Connection1.atf
 Name=Connection 01
 Name[el]=Σύνδεση 01
 Name[fr]=Connexion 01
-Name[ja]=接続 01
 Name[x-test]=xxConnection 01xx
 Icon=.icon/Connection1.png

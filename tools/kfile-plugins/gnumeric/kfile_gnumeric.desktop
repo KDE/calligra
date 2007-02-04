@@ -4,7 +4,6 @@ Type=Service
 Name=Gnumeric Info
 Name[el]=Πληροφορίες Gnumeric
 Name[fr]=Informations sur Gnumeric
-Name[ja]=Gnumeric 情報
 Name[x-test]=xxGnumeric Infoxx
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_gnumeric

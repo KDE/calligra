@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Unavailable KOffice Document
 Name[el]=Μη διαθέσιμο έγγραφο του KOffice
 Name[fr]=Document KOffice non disponible
-Name[ja]=利用不可能な KOffice ドキュメント
 Name[x-test]=xxUnavailable KOffice Documentxx
 X-KDE-Library=libkounavailpart
 Type=Service

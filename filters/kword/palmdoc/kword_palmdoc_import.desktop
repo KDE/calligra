@@ -4,7 +4,6 @@ Type=Service
 Name=KWord Palm Doc Import Filter
 Name[el]=Φίλτρο εισαγωγής Palm Doc του KWord
 Name[fr]=Filtre d'importation Palm Doc de KWord
-Name[ja]=KWord Palm Doc インポートフィルタ
 Name[x-test]=xxKWord Palm Doc Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/vnd.palm

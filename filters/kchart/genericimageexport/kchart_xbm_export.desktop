@@ -4,7 +4,6 @@ Type=Service
 Name=KChart XBM Export Filter
 Name[el]=Φίλτρο εξαγωγής XBM του KChart
 Name[fr]=Filtre d'exportation XBM de KChart
-Name[ja]=KChart XBM エクスポートフィルタ
 Name[x-test]=xxKChart XBM Export Filterxx
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/x-xbm

@@ -4,7 +4,6 @@ Type=Service
 Name=KPresenter XBM Export Filter
 Name[el]=Φίλτρο εξαγωγής XBM του KPresenter
 Name[fr]=Filtre d'exportation XBM de KPresenter
-Name[ja]=KPresenter XBM エクスポートフィルタ
 Name[x-test]=xxKPresenter XBM Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-xbm

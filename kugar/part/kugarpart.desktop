@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=KOffice Report Generator Component
 Name[el]=Συστατικό δημιουργίας αναφορών του KOffice
 Name[fr]=Composant générateur de rapports de KOffice
-Name[ja]=KOffice レポート生成コンポーネント
 Name[x-test]=xxKOffice Report Generator Componentxx
 MimeType=application/x-kugar;application/x-vnd.kde.kugar.mixed
 Type=Service
@@ -14,7 +13,6 @@ X-KDE-NativeMimeType=application/x-vnd.kde.kugar.mixed
 GenericName=Report Generator
 GenericName[el]=Δημιουργός αναφορών
 GenericName[fr]=Générateur de rapports
-GenericName[ja]=レポート生成
 GenericName[x-test]=xxReport Generatorxx
 Icon=kugar
 # Not ready for public consumption, so hide it from the menus and from koshell

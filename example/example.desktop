@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=KOffice Example Application
 Name[el]=Παράδειγμα εφαρμογής του KOffice
 Name[fr]=Application-exemple KOffice
-Name[ja]=KOffice サンプルアプリケーション
 Name[x-test]=xxKOffice Example Applicationxx
 Exec=example
 MimeType=application/x-example

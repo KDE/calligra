@@ -3,7 +3,6 @@ Encoding=UTF-8
 Name=Form Designer KDevelop Plugin
 Name[el]=Πρόσθετο σχεδίασης φόρμας του KDevelop
 Name[fr]=Module externe KDevelop de composition d'interfaces graphiques
-Name[ja]=フォームデザイナー Kdevelop プラグイン
 Name[x-test]=xxForm Designer KDevelop Pluginxx
 MimeType=application/x-designer;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart

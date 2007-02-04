@@ -5,7 +5,6 @@ X-KDE-ServiceType=KOfficeGenericFilter
 Comment=KOffice Filter Wrapper
 Comment[el]=Περίβλημα φίλτρου του KOffice
 Comment[fr]=Conteneur de filtre KOffice
-Comment[ja]=KOffice フィルタラッパー
 Comment[x-test]=xxKOffice Filter Wrapperxx
 
 [PropertyDef::X-KDE-Wrapper-Import]

@@ -6,7 +6,6 @@ ServiceTypes=KFormDesigner/WidgetFactory
 Name=Kexi Report Widgets
 Name[el]=Γραφικά συστατικά αναφορών Kexi
 Name[fr]=Éléments de rapport Kexi
-Name[ja]=Kexi レポートウィジェット
 Name[x-test]=xxKexi Report Widgetsxx
 
 X-KDE-Library=kformdesigner_kexireportwidgets

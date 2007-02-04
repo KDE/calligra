@@ -9,7 +9,6 @@ ImportDescription=KFormula
 Name=KFormula SVG Export Filter
 Name[el]=Φίλτρο εξαγωγής SVG του KFormula
 Name[fr]=Filtre d'exportation SVG de KFormula
-Name[ja]=KFormula SVG エクスポートフィルタ
 Name[x-test]=xxKFormula SVG Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

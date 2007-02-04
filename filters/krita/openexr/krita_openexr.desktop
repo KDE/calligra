@@ -6,7 +6,6 @@ Exec=krita %u
 GenericName=Painting and Image Editing Application
 GenericName[el]=Εφαρμογή επεξεργασίας εικόνων
 GenericName[fr]=Application de dessin et de manipulation d'images
-GenericName[ja]=描画と画像編集のためのアプリケーション
 GenericName[x-test]=xxPainting and Image Editing Applicationxx
 MimeType=image/x-exr
 Type=Application
