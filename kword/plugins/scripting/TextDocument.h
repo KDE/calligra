@@ -118,6 +118,8 @@ namespace Scripting {
                 manager->setValue(variablename, value);
                 return true;
             }
+
+            //TODO move that method(s) to TextCursor
             /** Add a new variable with the name \p variablename and insert those
             new variable at the position of the \a cursor . If the variables was
             successful added true is returned else false is returned. */
