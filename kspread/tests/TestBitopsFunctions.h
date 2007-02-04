@@ -35,6 +35,9 @@ class TestBitopsFunctions: public QObject
 private slots:
   void testBITAND();
   void testBITOR();
+  void testBITXOR();
+  void testBITLSHIFT();
+  void testBITRSHIFT();
 private:
   Value evaluate(const QString&, Value& ex);
 };

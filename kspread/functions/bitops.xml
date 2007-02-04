@@ -16,10 +16,46 @@
         <Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The BITAND() function performs a bit-wise AND operation for the two integer parameters. Note that this function is currently restricted to operation on values of 2^31 or less, which is non-confomant to the OpenFormula specification.</Text>
+	<Text>The BITAND() function performs a bit-wise AND operation for the two integer parameters. 
 	<Syntax>BITAND(value; value)</Syntax>
 	<Example>BITAND(12;10) returns 8 (because decimal 12 is binary 1100, and decimal 10 is binary 0100; and 1100 "anded" with 0110 is 0100, which is integer 8).</Example>
-	<Related>BITOR</Related>
+	<Related>BITOR, BITXOR</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BITLSHIFT</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>First number</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Amount to left shift by</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The BITLSHIFT() function performs a bit-wise left shift operation of the first parameter. The number of bits to shift by is specified by the second parameter. Note that a negative number of bits to left shift by becomes a right shift. 
+	<Syntax>BITLSHIFT(value; shift size)</Syntax>
+	<Related>BITLSHIFT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BITRSHIFT</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>First number</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Amount to right shift by</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The BITRSHIFT() function performs a bit-wise right shift operation of the first parameter. The number of bits to shift by is specified by the second parameter. Note that a negative number of bits to right shift by becomes a left shift. 
+	<Syntax>BITRSHIFT(value; shift size)</Syntax>
+	<Related>BITLSHIFT</Related>
       </Help>
     </Function>
 
@@ -35,10 +71,29 @@
         <Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The BITOR() function performs a bit-wise OR operation for the two integer parameters. Note that this function is currently restricted to operation on values of 2^31 or less, which is non-confomant to the OpenFormula specification.</Text>
+	<Text>The BITOR() function performs a bit-wise OR operation for the two integer parameters. 
 	<Syntax>BITOR(value; value)</Syntax>
-	<Example>BITOR(12;10) returns 14 (because decimal 12 is binary 1100, and decimal 10 is binary 0100; and 1100 "ored" with 0110 is 1110, which is integer 14).</Example>
-	<Related>BITAND</Related>
+	<Example>BITOR(12;10) returns 14 (because decimal 12 is binary 1100, and decimal 10 is binary 1010; and 1100 "ored" with 1010 is 1110, which is integer 14).</Example>
+	<Related>BITAND, BITXOR</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BITXOR</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>First number</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Second number</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The BITXOR() function performs a bit-wise exclusive-OR operation for the two integer parameters. 
+	<Syntax>BITXOR(value; value)</Syntax>
+	<Example>BITXOR(12;10) returns 6 (because decimal 12 is binary 1100, and decimal 10 is binary 1100; and 1100 "xored" with 1010 is 0110, which is integer 6).</Example>
+	<Related>BITAND, BITOR</Related>
       </Help>
     </Function>
 
