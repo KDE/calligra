@@ -38,6 +38,12 @@
             interpreter="python"
             file="extensions/sample_actions.py" />
         <script
+            name="pysampleprogressbar"
+            text="Progressbar"
+            comment="This python script demonstrates how to use the progressbar"
+            interpreter="python"
+            file="extensions/sample_progressbar.py" />
+        <script
             name="pysampletext"
             text="Text"
             comment="This python script demonstrates usage of the text engine"
