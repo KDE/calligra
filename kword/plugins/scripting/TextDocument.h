@@ -118,11 +118,10 @@ namespace Scripting {
                 manager->setValue(variablename, value);
                 return true;
             }
-            /** Add a new variable with the name \p variablename with the
-            value \p value and insert those new variable at the position
-            of the \a cursor . If the variables was successful added true
-            is returned else false is returned. */
-            bool addVariable(QObject* cursor, const QString& variablename, const QString& value = QString()) {
+            /** Add a new variable with the name \p variablename and insert those
+            new variable at the position of the \a cursor . If the variables was
+            successful added true is returned else false is returned. */
+            bool addVariable(QObject* cursor, const QString& variablename) {
                 TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
                 if( ! textcursor ) {
                     kDebug()<<"No cursor"<<endl;
@@ -139,7 +138,6 @@ namespace Scripting {
                     kDebug()<<(varmanager ? "No variable" : "No variablemanager")<<endl;
                     return false;
                 }
-                variable->setValue(value);
                 objmanager->insertInlineObject(textcursor->cursor(), variable);
                 return true;
             }
