@@ -51,6 +51,8 @@
   <Action name="showCommentIndicator"/>
   <Separator/>
   <Action name="view_zoom"/>
+  <Separator/>
+  <Action name="inspector"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="menuInserteheet"/>
