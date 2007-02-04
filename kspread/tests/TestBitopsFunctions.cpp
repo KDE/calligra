@@ -50,7 +50,7 @@ Value TestBitopsFunctions::evaluate(const QString& formula, Value& ex)
   return result;
 }
 
-namespace QTest 
+namespace QTest
 {
   template<>
   char *toString(const Value& value)
@@ -74,7 +74,33 @@ void TestBitopsFunctions::testBITAND()
     CHECK_EVAL( "BITAND(4294967289.0; 4294967285.0)", Value( (qint64) 4294967281 ) );
     // test of 32-bit value
     CHECK_EVAL( "BITAND(4294967289; 4294967285)", Value( (qint64) 4294967281 ) );
+    // test of 48 bit value
+    CHECK_EVAL( "BITAND(281474976710649 ; 281474976710645)",  Value( ( qint64 )281474976710641LL ) );
+    // test of 48 bit value
+    CHECK_EVAL( "BITAND(281474976710655; 281474976710655)",  Value( ( qint64 )281474976710655LL ) );
+    // test of 48 bit value
+    CHECK_EVAL( "BITAND(281474976710655; 281474976710655)<>281474976710656", Value( true ) );
+}
 
+
+void TestBitopsFunctions::testBITOR()
+{
+    // basic check of all four bit combinations
+    CHECK_EVAL( "BITOR(12;10)", Value( 14 ) );
+    // test using an all-zero combo
+    CHECK_EVAL( "BITOR(7;0)", Value( 7 ) );
+    // test of 31-bit value
+    CHECK_EVAL( "BITOR(2147483641; 2147483637)", Value( 2147483645 ) );
+    // test of 32-bit value
+    CHECK_EVAL( "BITOR(4294967289.0; 4294967285.0)", Value( (qint64) 4294967293 ) );
+    // test of 32-bit value
+    CHECK_EVAL( "BITOR(4294967289; 4294967285)", Value( (qint64) 4294967293 ) );
+    // test of 48 bit value
+    CHECK_EVAL( "BITOR(281474976710649; 281474976710645)",  Value( ( qint64 )281474976710653LL ) );
+    // test of 48 bit value
+    CHECK_EVAL( "BITOR(281474976710655; 281474976710655)",  Value( ( qint64 )281474976710655LL ) );
+    // test of 48 bit value
+    CHECK_EVAL( "BITOR(281474976710655; 281474976710655)<>281474976710656", Value( true ) );
 }
 
 #include <kaboutdata.h>
