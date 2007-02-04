@@ -35,6 +35,7 @@ namespace Scripting {
         public:
             TextCursor(QObject* parent, const QTextCursor& cursor);
             virtual ~TextCursor();
+            QTextCursor& cursor() { return m_cursor; }
 
         public Q_SLOTS:
 

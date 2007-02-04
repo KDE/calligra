@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
-
+#include <kdebug.h>
 #include <KoVariable.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
@@ -47,18 +47,21 @@ namespace Scripting {
             TextDocument(QObject* parentFrameSet, QTextDocument* doc)
                 : QObject( parentFrameSet ), m_doc( doc )
             {
-                connect(m_doc, SIGNAL(contentsChange(int,int,int)), this, SIGNAL(contentsChange(int,int,int)));
+                connect(m_doc, SIGNAL(contentsChange(int,int,int)), this, SIGNAL(contentsChanged(int,int,int)));
                 connect(m_doc, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SIGNAL(cursorPositionChanged()));
                 connect(m_doc->documentLayout(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SIGNAL(documentSizeChanged()));
                 connect(m_doc->documentLayout(), SIGNAL(pageCountChanged(int)), this, SIGNAL(pageCountChanged()));
             }
             virtual ~TextDocument() {}
 
-            KoVariableManager* variableManager() {
+            KoInlineTextObjectManager* inlineTextObjectManager() {
                 KWTextDocumentLayout* layout = dynamic_cast< KWTextDocumentLayout* >( m_doc->documentLayout() );
-                if( ! layout ) return 0;
-                KoInlineTextObjectManager* textobjmanager = layout->inlineObjectTextManager();
-                return textobjmanager ? textobjmanager->variableManager() : 0;
+                return layout ? layout->inlineObjectTextManager() : 0;
+            }
+
+            KoVariableManager* variableManager() {
+                KoInlineTextObjectManager* objmanager = inlineTextObjectManager();
+                return objmanager ? objmanager->variableManager() : 0;
             }
 
         public Q_SLOTS:
@@ -77,9 +80,9 @@ namespace Scripting {
             /** Return the root \a Frame object of the document. */
             QObject* rootFrame() { return new TextFrame(this, m_doc->rootFrame()); }
 
-            /** Return the first \a Cursior object of the document. */
+            /** Return the first \a Cursor object of the document. */
             QObject* firstCursor() { return new TextCursor(this, QTextCursor(m_doc->begin())); }
-            /** Return the last \a Cursior object of the document. */
+            /** Return the last \a Cursor object of the document. */
             QObject* lastCursor() { return new TextCursor(this, QTextCursor(m_doc->end())); }
 
             //QTextObject * object ( int objectIndex ) const 
@@ -115,12 +118,29 @@ namespace Scripting {
                 manager->setValue(variablename, value);
                 return true;
             }
-            /** Add a new variable. */
-            bool addVariable(const QString& variablename, const QString& value) {
-                KoVariableManager* manager = variableManager();
-                KoVariable* variable = manager ? manager->createVariable(variablename) : 0;
-                if( ! variable ) return false;
+            /** Add a new variable with the name \p variablename with the
+            value \p value and insert those new variable at the position
+            of the \a cursor . If the variables was successful added true
+            is returned else false is returned. */
+            bool addVariable(QObject* cursor, const QString& variablename, const QString& value = QString()) {
+                TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
+                if( ! textcursor ) {
+                    kDebug()<<"No cursor"<<endl;
+                    return false;
+                }
+                KoInlineTextObjectManager* objmanager = inlineTextObjectManager();
+                if( ! objmanager ) {
+                    kDebug()<<"No textobjectmanager"<<endl;
+                    return false;
+                }
+                KoVariableManager* varmanager = variableManager();
+                KoVariable* variable = varmanager ? varmanager->createVariable(variablename) : 0;
+                if( ! variable ) {
+                    kDebug()<<(varmanager ? "No variable" : "No variablemanager")<<endl;
+                    return false;
+                }
                 variable->setValue(value);
+                objmanager->insertInlineObject(textcursor->cursor(), variable);
                 return true;
             }
             /** Remove an existing variable. */
@@ -132,7 +152,7 @@ namespace Scripting {
         signals:
 
             /** This signal is emitted if content changed. */
-            void contentsChange(int position, int charsRemoved, int charsAdded);
+            void contentsChanged(int position, int charsRemoved, int charsAdded);
             /** This signal is emitted if the cursor-position changed. */
             void cursorPositionChanged();
             /** This signal is emitted if the size of the document changed. */
