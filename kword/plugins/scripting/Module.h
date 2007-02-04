@@ -25,8 +25,9 @@
 #include <QStringList>
 #include <QObject>
 
+#include <KoScriptingModule.h>
+
 class KWDocument;
-class KWView;
 
 namespace Scripting {
 
@@ -34,28 +35,17 @@ namespace Scripting {
     * The ScriptingModule class enables access to the KWord
     * functionality from within the scripting backends.
     */
-    class Module : public QObject
+    class Module : public KoScriptingModule
     {
             Q_OBJECT
         public:
             explicit Module();
             virtual ~Module();
 
-            KWDocument* doc();
-            void setView(KWView* view = 0);
+            KWDocument* kwDoc();
+            virtual KoDocument* doc();
 
         public Q_SLOTS:
-
-            /***** Adaptor *****/
-
-            /** Return the \a KoApplicationAdaptor object. */
-            QObject* application();
-            /** Return the \a KoMainWindow object. */
-            QObject* shell();
-            /** Return the \a KMainWindow object. */
-            QObject* mainWindow();
-            /** Return the \a KoDocumentAdaptor object. */
-            QObject* document();
 
             /***** Page *****/
 

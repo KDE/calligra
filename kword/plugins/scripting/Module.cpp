@@ -26,14 +26,14 @@
 
 // qt
 #include <QPointer>
-#include <QApplication>
+//#include <QApplication>
 // kde
 #include <kdebug.h>
-#include <kmainwindow.h>
+//#include <kmainwindow.h>
 // koffice
-#include <KoMainWindow.h>
-#include <KoApplicationAdaptor.h>
-#include <KoDocumentAdaptor.h>
+//#include <KoMainWindow.h>
+//#include <KoApplicationAdaptor.h>
+//#include <KoDocumentAdaptor.h>
 // kword
 #include <KWDocument.h>
 #include <KWView.h>
@@ -57,17 +57,14 @@ namespace Scripting {
     class Module::Private
     {
         public:
-            QPointer<KWView> view;
             QPointer<KWDocument> doc;
     };
 }
 
 Module::Module()
-    : QObject()
+    : KoScriptingModule("KWord")
     , d( new Private() )
 {
-    setObjectName("KWordScriptingModule");
-    d->view = 0;
     d->doc = 0;
 }
 
@@ -76,71 +73,55 @@ Module::~Module()
     delete d;
 }
 
-KWDocument* Module::doc()
+KWDocument* Module::kwDoc()
 {
-    if(! d->doc)
-        d->doc = d->view ? d->view->kwdocument() : new KWDocument(0, this);
+    if(! d->doc) {
+        if( KWView* v = dynamic_cast< KWView* >(view()) )
+            d->doc = v->kwdocument();
+        if( ! d->doc )
+            d->doc = new KWDocument(0, this);
+    }
     return d->doc;
 }
 
-void Module::setView(KWView* view)
+KoDocument* Module::doc()
 {
-    d->view = view;
-}
-
-QObject* Module::application()
-{
-    return qApp->findChild< KoApplicationAdaptor* >();
-}
-
-QObject* Module::shell()
-{
-    return d->view ? d->view->shell() : 0;
-}
-
-QObject* Module::mainWindow()
-{
-    return d->view ? d->view->mainWindow() : 0;
-}
-
-QObject* Module::document()
-{
-    return doc()->findChild< KoDocumentAdaptor* >();
+    return kwDoc();
 }
 
 int Module::pageCount()
 {
-    return doc()->pageCount();
+    return kwDoc()->pageCount();
 }
 
 QObject* Module::page(int pageNumber)
 {
-    KWPage* page = doc()->pageManager()->page(pageNumber);
+    KWPage* page = kwDoc()->pageManager()->page(pageNumber);
     return page ? new Page(this, page) : 0;
 }
 
 QObject* Module::insertPage( int afterPageNum )
 {
-    //TODO check for doc()->pageManager()->onlyAllowAppend()
-    KWPage* page = doc()->insertPage(afterPageNum);
+    //TODO check for kwDoc()->pageManager()->onlyAllowAppend()
+    KWPage* page = kwDoc()->insertPage(afterPageNum);
     return page ? new Page(this, page) : 0;
 }
 
 void Module::removePage( int pageNumber )
 {
     //TODO remove also the wrapper? and what's about pages that are "Spread" (page that represents 2 pagenumbers)?
-    doc()->removePage(pageNumber);
+    kwDoc()->removePage(pageNumber);
 }
 
 int Module::startPage()
 {
-    return doc()->startPage();
+    return kwDoc()->startPage();
 }
 
 void Module::setStartPage(int pageNumber)
 {
      //TODO this is evil since it changes page(int pageNumber) above... we need a more persistent way to deal with pages!
-     doc()->setStartPage(pageNumber);
+     kwDoc()->setStartPage(pageNumber);
 }
 
 QStringList Module::shapeKeys()
@@ -153,12 +134,12 @@ QStringList Module::shapeKeys()
 
 int Module::frameSetCount()
 {
-    return doc()->frameSetCount();
+    return kwDoc()->frameSetCount();
 }
 
 QObject* Module::frameSet(int frameSetNr)
 {
-    KWFrameSet* frameset = (frameSetNr>=0 && frameSetNr<doc()->frameSetCount()) ? doc()->frameSets().at(frameSetNr) : 0;
+    KWFrameSet* frameset = (frameSetNr>=0 && frameSetNr<kwDoc()->frameSetCount()) ? kwDoc()->frameSets().at(frameSetNr) : 0;
     return frameset ? new FrameSet(this, frameset) : 0;
 }
 
@@ -178,10 +159,10 @@ QObject* Module::addTextFrameSet(const QString& framesetname)
     type = KWord::OtherTextFrameSet;
     */
 
-    KWTextFrameSet* frameset = new KWTextFrameSet(doc(), type);
+    KWTextFrameSet* frameset = new KWTextFrameSet(kwDoc(), type);
     frameset->setName(framesetname);
     frameset->setAllowLayout(false);
-    doc()->addFrameSet(frameset);
+    kwDoc()->addFrameSet(frameset);
     return new FrameSet(this, frameset);
 }
 
@@ -189,14 +170,14 @@ QObject* Module::addFrameSet(const QString& framesetname)
 {
     KWFrameSet* frameset = new KWFrameSet();
     frameset->setName(framesetname);
-    doc()->addFrameSet(frameset);
+    kwDoc()->addFrameSet(frameset);
     return new FrameSet(this, frameset);
 }
 
 int Module::frameCount()
 {
     int count = 0;
-    foreach(KWFrameSet* set, doc()->frameSets())
+    foreach(KWFrameSet* set, kwDoc()->frameSets())
         count += set->frames().count();
     return count;
 }
@@ -205,7 +186,7 @@ QObject* Module::frame(int frameNr)
 {
     if(frameNr >= 0) {
         int idx = 0;
-        foreach(KWFrameSet* set, doc()->frameSets()) {
+        foreach(KWFrameSet* set, kwDoc()->frameSets()) {
             const int c = set->frames().count();
             if(frameNr < idx + c)
                 return new Frame(new FrameSet(this, set), set->frames().at(idx));
@@ -234,7 +215,7 @@ QObject* Module::standardPageLayout()
 
 QObject* Module::defaultPageLayout()
 {
-    const KoPageLayout *pagelayout = doc()->pageManager()->defaultPage();
+    const KoPageLayout *pagelayout = kwDoc()->pageManager()->defaultPage();
     return pagelayout ? new PageLayout(this, *pagelayout) : 0;
 }
 
@@ -242,18 +223,18 @@ void Module::setDefaultPageLayout(QObject* pagelayout)
 {
     PageLayout* l = dynamic_cast<PageLayout*>( pagelayout );
     if( l )
-        doc()->setDefaultPageLayout( l->pageLayout() );
+        kwDoc()->setDefaultPageLayout( l->pageLayout() );
 }
 
 QObject* Module::defaultParagraphStyle()
 {
-    KoParagraphStyle* s = doc()->styleManager()->defaultParagraphStyle();
+    KoParagraphStyle* s = kwDoc()->styleManager()->defaultParagraphStyle();
     return s ? new Style(this, s) : 0;
 }
 
 QObject* Module::paragraphStyle(const QString& name)
 {
-    KoParagraphStyle* s = doc()->styleManager()->paragraphStyle(name);
+    KoParagraphStyle* s = kwDoc()->styleManager()->paragraphStyle(name);
     return s ? new Style(this, s) : 0;
 }
 
@@ -261,7 +242,7 @@ QObject* Module::addParagraphStyle(const QString& name)
 {
     KoParagraphStyle* s = new KoParagraphStyle();
     s->setName(name);
-    doc()->styleManager()->add(s);
+    kwDoc()->styleManager()->add(s);
     return new Style(this, s);
 }
 

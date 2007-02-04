@@ -64,7 +64,7 @@ void ScriptingSheetsListView::initialize()
 
     QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
     model->setHorizontalHeaderLabels( QStringList() << i18n("Sheet") << i18n("Range") );
-    KSpread::Doc* doc = m_module->doc();
+    KSpread::Doc* doc = m_module->kspreadDoc();
     if( doc && doc->map() ) {
         foreach(KSpread::Sheet* sheet, doc->map()->sheetList()) {
             QRect area = sheet->usedArea();
@@ -145,7 +145,7 @@ QVariantList ScriptingSheetsListView::sheets()
         bool enabled = nameitem->checkState() == Qt::Checked;
 
         const QString sheetname = nameitem->text();
-        KSpread::Sheet* sheet = m_module->doc()->map()->findSheet(sheetname);
+        KSpread::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
         if( ! sheet )
             continue;
 
@@ -155,7 +155,7 @@ QVariantList ScriptingSheetsListView::sheets()
         QStandardItem* rangeitem = model->item(row,1);
         Q_ASSERT(rangeitem);
         const QString range = rangeitem->text();
-        KSpread::Region region(m_module->doc()->map(), range, sheet);
+        KSpread::Region region(m_module->kspreadDoc()->map(), range, sheet);
         for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
             const QRect rect = (*it)->rect();
             if( ! rect.isNull() )

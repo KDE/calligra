@@ -26,6 +26,7 @@
 #include <QString>
 #include <QStringList>
 #include <QObject>
+#include <KoScriptingModule.h>
 
 namespace KSpread {
 	class Doc;
@@ -39,27 +40,18 @@ namespace KSpread {
 * The ScriptingModule class enables access to the KSpread
 * functionality from within the scripting backends.
 */
-class ScriptingModule : public QObject
+class ScriptingModule : public KoScriptingModule
 {
 		Q_OBJECT
 	public:
 		ScriptingModule();
 		virtual ~ScriptingModule();
 
-		KSpread::Doc* doc();
-		void setView(KSpread::View* view = 0);
+        KSpread::View* kspreadView();
+        KSpread::Doc* kspreadDoc();
+		virtual KoDocument* doc();
 
 	public slots:
-
-		/**
-		* Returns the \a KoApplicationAdaptor object.
-		*/
-		QObject* application();
-
-		/**
-		* Returns the \a KoDocumentAdaptor object.
-		*/
-		QObject* document();
 
 		/**
 		* Returns the \a KSpread::MapAdaptor object.

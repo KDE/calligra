@@ -1,7 +1,9 @@
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kspread 
 	${KOTEXT_INCLUDES} 
-	${KOFFICEUI_INCLUDES} )
+	${KOFFICEUI_INCLUDES}
+	${KOKROSS_INCLUDES}
+	)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
@@ -12,7 +14,7 @@ set(krossmodulekspread_PART_SRCS ScriptingModule.cpp ScriptingFunction.cpp Scrip
 kde4_automoc(${krossmodulekspread_PART_SRCS})
 kde4_add_plugin(krossmodulekspread ${krossmodulekspread_PART_SRCS})
 
-target_link_libraries(krossmodulekspread  ${KDE4_KDECORE_LIBS} kspreadcommon ${KDE4_KROSSCORE_LIBS} )
+target_link_libraries(krossmodulekspread  ${KDE4_KDECORE_LIBS} kspreadcommon ${KDE4_KROSSCORE_LIBS} kokross)
 install(TARGETS krossmodulekspread DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
