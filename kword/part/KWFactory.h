@@ -38,7 +38,7 @@ public:
      * @param parent the parent QObject
      * @param name the name of the object
      */
-    KWFactory( QObject* parent = 0, const char* name = 0 );
+    explicit KWFactory( QObject* parent = 0, const char* name = 0 );
     ~KWFactory();
 
     /// overwritten method from superclass

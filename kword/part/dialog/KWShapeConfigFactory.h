@@ -53,7 +53,7 @@ private:
 class KWFrameConnectSelectorFactory : public KoShapeConfigFactory {
 public:
     /// constructor
-    KWFrameConnectSelectorFactory(FrameConfigSharedState *state) : m_state(state) {}
+    explicit KWFrameConnectSelectorFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWFrameConnectSelectorFactory() {}
 
     /// reimplemented method from superclass
@@ -92,7 +92,7 @@ private:
 class KWFrameRunaroundPropertiesFactory : public KoShapeConfigFactory {
 public:
     /// constructor
-    KWFrameRunaroundPropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
+    explicit KWFrameRunaroundPropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWFrameRunaroundPropertiesFactory() {}
 
     /// reimplemented method from superclass

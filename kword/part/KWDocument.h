@@ -56,7 +56,7 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    KWDocument( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
+    explicit KWDocument( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
     ~KWDocument();
 
     // KoShapeControllerBase interface
@@ -273,7 +273,7 @@ private:
 class PageProcessingQueue : public QObject {
     Q_OBJECT
 public:
-    PageProcessingQueue(KWDocument *parent);
+    explicit PageProcessingQueue(KWDocument *parent);
     void addPage(KWPage *page);
 
 private slots:
