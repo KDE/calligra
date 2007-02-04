@@ -719,5 +719,41 @@ void TestDocumentLayout::testEmptyParag() {
     QVERIFY(qAbs(lay->lineAt(0).position().y() - 14.4) < ROUNDING);
 }
 
+void TestDocumentLayout::testDropCaps() {
+    initForNewTest(loremIpsum);
+
+    KoParagraphStyle style;
+    style.setDropCaps(false);
+    style.setDropCapsLength(1);
+    style.setDropCapsLines(3);
+    style.setDropCapsDistance(9.0);
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+    layout->layout();
+
+    // dummy version, caps is still false.
+    blockLayout = block.layout();
+    QVERIFY(blockLayout->lineCount() > 2);
+    QTextLine line = blockLayout->lineAt(0);
+    QVERIFY(line.textLength() > 3);
+
+    style.setDropCaps(true);
+    style.applyStyle(block);
+    layout->layout();
+
+    // test that the first text line is the dropcaps and the positions are right.
+    //blockLayout = block.layout();
+    QVERIFY(blockLayout->lineCount() > 2);
+    line = blockLayout->lineAt(0);
+    QEXPECT_FAIL("", "Drop caps not implemented yet", Abort);
+    QCOMPARE(line.textLength(), 1);
+    QCOMPARE(line.position(), QPointF(0, 0));
+    double w = line.width();
+
+    line = blockLayout->lineAt(1);
+    QVERIFY(line.textLength() > 2);
+    QCOMPARE(line.position(), QPointF(w + 9.0 ,0));
+}
+
 QTEST_MAIN(TestDocumentLayout)
 #include "TestDocumentLayout.moc"

@@ -70,6 +70,7 @@ private slots:
     void testParagOffset();
     void testParagraphBorders();
     void testBorderData();
+    void testDropCaps();
 
 private:
     void initForNewTest(const QString &initText = QString());
