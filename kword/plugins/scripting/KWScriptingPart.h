@@ -21,35 +21,12 @@
 #ifndef KWSCRIPTINGPART_H
 #define KWSCRIPTINGPART_H
 
-#include <QDockWidget>
 #include <kparts/plugin.h>
-
-class QTreeView;
 
 namespace Kross {
     class Action;
-    class ActionCollectionProxyModel;
     class GUIClient;
 }
-
-/**
-* The KWScriptingDocker class implements a widget
-* displayed in a docker.
-*/
-class KWScriptingDocker : public QDockWidget
-{
-        Q_OBJECT
-    public:
-        KWScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient);
-        virtual ~KWScriptingDocker();
-    private slots:
-        void runScript();
-        void stopScript();
-    private:
-        Kross::GUIClient* m_guiclient;
-        Kross::ActionCollectionProxyModel* m_model;
-        QTreeView* m_view;
-};
 
 /**
 * The KWScriptingPart class implements a KPart component

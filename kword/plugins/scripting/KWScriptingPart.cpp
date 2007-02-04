@@ -21,106 +21,28 @@
 #include "KWScriptingPart.h"
 #include "Module.h"
 
-//#include <QApplication>
-//#include <QFileInfo>
-#include <QToolBar>
-#include <QBoxLayout>
-#include <QTreeView>
-#include <QModelIndex>
-#include <QHeaderView>
+//#include <QToolBar>
+//#include <QBoxLayout>
+//#include <QTreeView>
+//#include <QModelIndex>
+//#include <QHeaderView>
 #include <QDockWidget>
 
 #include <klocale.h>
-#include <kicon.h>
+//#include <kicon.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
-//#include <kcmdlineargs.h>
-//#include <kurl.h>
 
-#include <KoDockFactory.h>
+// kword
 #include <KWView.h>
-
+// koffice/libs/kokross
+#include <KoScriptingDocker.h>
+// kdelibs/kross
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
 #include <kross/core/guiclient.h>
 #include <kross/core/model.h>
-
-/***********************************************************************
- * KWScriptingDocker
- */
-
-KWScriptingDocker::KWScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
-    : QDockWidget(i18n("Scripts"), parent)
-    , m_guiclient(guiclient)
-{
-    QWidget* widget = new QWidget(this);
-    QBoxLayout* layout = new QVBoxLayout(this);
-    layout->setMargin(0);
-    widget->setLayout(layout);
-
-    m_view = new QTreeView(widget);
-    m_view->setRootIsDecorated(false);
-    m_view->header()->hide();
-    m_model = new Kross::ActionCollectionProxyModel(this);
-    m_view->setModel(m_model);
-    layout->addWidget(m_view, 1);
-    m_view->expandAll();
-
-    QToolBar* tb = new QToolBar(widget);
-    layout->addWidget(tb);
-    tb->setMovable(false);
-    //tb->setOrientation(Qt::Vertical);
-    //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tb->addAction(KIcon("player_play"), i18n("Run"), this, SLOT(runScript()) );
-    tb->addAction(KIcon("player_stop"), i18n("Stop"), this, SLOT(stopScript()) );
-
-    setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
-    setWidget(widget);
-
-    connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(runScript()));
-}
-
-KWScriptingDocker::~KWScriptingDocker()
-{
-}
-
-void KWScriptingDocker::runScript()
-{
-    QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
-    if( index.isValid() ) {
-        Kross::Action* action = Kross::ActionCollectionModel::action(index);
-        if( action )
-            action->trigger();
-    }
-}
-
-void KWScriptingDocker::stopScript()
-{
-    QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
-    if( index.isValid() ) {
-        Kross::Action* action = Kross::ActionCollectionModel::action(index);
-        if( action )
-            action->finalize();
-    }
-}
-
-/// \internal factory class to create \a KWScriptingDocker instances.
-class KWScriptingDockerFactory : public KoDockFactory
-{
-    public:
-        KWScriptingDockerFactory(KWView* view, Kross::GUIClient* guiclient) : KoDockFactory(), m_view(view), m_guiclient(guiclient) {}
-        virtual QString dockId() const { return "KWordScripting"; }
-        virtual Qt::DockWidgetArea defaultDockWidgetArea() const { return Qt::RightDockWidgetArea; }
-        virtual QDockWidget* createDockWidget() { return new KWScriptingDocker(m_view, m_guiclient); }
-    private:
-        KWView* m_view;
-        Kross::GUIClient* m_guiclient;
-};
-
-/***********************************************************************
- * KWScriptingPart
- */
 
 typedef KGenericFactory< KWScriptingPart > KWordScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( krossmodulekword, KWordScriptingFactory( "krossmodulekword" ) )
@@ -171,7 +93,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
 
-    KWScriptingDockerFactory factory(d->view, d->guiclient);
+    KoScriptingDockerFactory factory(d->view, d->guiclient);
     QDockWidget* dock = d->view->createDockWidget(&factory);
     Q_UNUSED(dock);
 }
