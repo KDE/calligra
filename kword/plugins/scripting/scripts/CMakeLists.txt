@@ -3,6 +3,7 @@ install(FILES
     insert_docinfos.py
     insert_framelist.py
     insert_shape.py
+    sample_actions.py
     sample_text.py
     sample_lists_html.py
     sample_lists_cursor.py

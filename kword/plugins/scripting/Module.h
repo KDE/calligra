@@ -50,6 +50,10 @@ namespace Scripting {
 
             /** Return the \a KoApplicationAdaptor object. */
             QObject* application();
+            /** Return the \a KoMainWindow object. */
+            QObject* shell();
+            /** Return the \a KMainWindow object. */
+            QObject* mainWindow();
             /** Return the \a KoDocumentAdaptor object. */
             QObject* document();
 

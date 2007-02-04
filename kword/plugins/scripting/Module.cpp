@@ -24,13 +24,17 @@
 #include "FrameSet.h"
 #include "Style.h"
 
+// qt
 #include <QPointer>
 #include <QApplication>
+// kde
 #include <kdebug.h>
-
-#include <KoDocumentAdaptor.h>
+#include <kmainwindow.h>
+// koffice
+#include <KoMainWindow.h>
 #include <KoApplicationAdaptor.h>
-
+#include <KoDocumentAdaptor.h>
+// kword
 #include <KWDocument.h>
 #include <KWView.h>
 #include <KWPage.h>
@@ -87,6 +91,16 @@ void Module::setView(KWView* view)
 QObject* Module::application()
 {
     return qApp->findChild< KoApplicationAdaptor* >();
+}
+
+QObject* Module::shell()
+{
+    return d->view ? d->view->shell() : 0;
+}
+
+QObject* Module::mainWindow()
+{
+    return d->view ? d->view->mainWindow() : 0;
 }
 
 QObject* Module::document()

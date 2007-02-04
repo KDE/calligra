@@ -32,6 +32,12 @@
 
     <collection name="samples" text="Samples">
         <script
+            name="pysampleactions"
+            text="Execute Action..."
+            comment="This python script demonstrates usage of actions"
+            interpreter="python"
+            file="extensions/sample_actions.py" />
+        <script
             name="pysampletext"
             text="Text"
             comment="This python script demonstrates usage of the text engine"
