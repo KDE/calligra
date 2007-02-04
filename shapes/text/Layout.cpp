@@ -32,6 +32,7 @@
 
 #include <kdebug.h>
 #include <QTextList>
+#include <QStyle>
 
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
@@ -231,18 +232,9 @@ bool Layout::nextParag() {
     layout = m_block.layout();
     QTextOption options = layout->textOption();
     options.setWrapMode(QTextOption::WrapAnywhere);
-    if(m_isRtl) {
+    options.setAlignment( QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, m_format.alignment()) );
+    if(m_isRtl)
         options.setTextDirection(Qt::RightToLeft);
-        // we have to reverse these as Qt doesn't do this automatically for us.
-        Qt::Alignment alignment = m_format.alignment();
-        if(alignment == Qt::AlignLeft)
-            alignment = Qt::AlignRight;
-        else if(alignment == Qt::AlignRight)
-            alignment = Qt::AlignLeft;
-        options.setAlignment(alignment);
-    }
-    else
-        options.setAlignment(m_format.alignment());
     layout->setTextOption(options);
 
     layout->beginLayout();
