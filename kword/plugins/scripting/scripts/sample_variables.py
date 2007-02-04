@@ -12,15 +12,11 @@ cursor = doc.rootFrame().lastCursorPosition()
 
 variables = doc.variableNames()
 
-i = 0
-while True:
-    n = "myVar%i" % i
-    if not n in variables:
-        ok = doc.addVariable(cursor,n,"%s" % time.strftime('%H:%M.%S'))
-        print "VARIABLE ADDED =====> variablename=%s ok=%s" % (n,ok)
-        break
-    i += 1
+for n in variables:
+    cursor.insertDefaultBlock()
+    cursor.insertHtml("%s: " % n)
+    ok = doc.addVariable(cursor,n,"%s" % time.strftime('%H:%M.%S'))
+    print "VARIABLE ADDED =====> variablename=%s ok=%s" % (n,ok)
 
 cursor.insertDefaultBlock()
-cursor.insertHtml("<ul>%s</ul>" % "\n".join([ "<li>%s</li>" % v for v in variables ]))
-#doc.setHtml(s)
+cursor.insertHtml("<p><ul>%s</ul></p>" % "".join([ "<li>%s</li>" % v for v in variables ]))
