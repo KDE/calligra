@@ -34,6 +34,7 @@ extern "C" {
 #include <KoDocumentInfo.h>
 
 #include <kio/netaccess.h>
+#include <kio/deletejob.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <kis_doc2.h>
@@ -386,7 +387,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(img->colorSpace());
     if(color_type == JCS_UNKNOWN)
     {
-        KIO::del(uri);
+        KIO::del(uri); // async, but I guess that's ok
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     cinfo.in_color_space = color_type;   // colorspace of input image
@@ -513,7 +514,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
                 }
                 break;
             default:
-                KIO::del(uri);
+                KIO::del(uri); // asynchronous, but I guess that's ok
                 delete [] row_pointer;
                 jpeg_destroy_compress(&cinfo);
                 return KisImageBuilder_RESULT_UNSUPPORTED;

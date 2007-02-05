@@ -34,7 +34,7 @@ kde4_automoc(${BenchmarkRTree_SRCS})
 
 kde4_add_executable(BenchmarkRTree RUN_UNINSTALLED ${BenchmarkRTree_SRCS})
 
-target_link_libraries(BenchmarkRTree kdecore)
+target_link_libraries(BenchmarkRTree ${KDE4_KDECORE_LIBS})
 
 # add_test(R-Tree BenchmarkRTreetest)
 
@@ -46,7 +46,7 @@ kde4_automoc(${TestRTree_SRCS})
 
 kde4_add_executable(TestRTree RUN_UNINSTALLED ${TestRTree_SRCS})
 
-target_link_libraries(TestRTree kdecore ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestRTree ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
 add_test(R-Tree TestRTree)
 

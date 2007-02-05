@@ -31,6 +31,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
+#include <kio/deletejob.h>
 
 #include <KoDocumentInfo.h>
 #include <KoID.h>
@@ -503,14 +504,14 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     png_structp png_ptr =  png_create_write_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
     if (!png_ptr)
     {
-        KIO::del(uri);
+        KIO::del(uri); // async
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
     {
-        KIO::del(uri);
+        KIO::del(uri); // async
         png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
         return (KisImageBuilder_RESULT_FAILURE);
     }
@@ -518,7 +519,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     // If an error occurs during writing, libpng will jump here
     if (setjmp(png_jmpbuf(png_ptr)))
     {
-        KIO::del(uri);
+        KIO::del(uri); // async
         png_destroy_write_struct(&png_ptr, &info_ptr);
         fclose(fp);
         return (KisImageBuilder_RESULT_FAILURE);
@@ -756,7 +757,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
             }
             break;
             default:
-                KIO::del(uri);
+                KIO::del(uri); // async
 #ifdef __GNUC__
 #warning Leaks row_pointers and all rows so far allocated (CID 3087)
 #endif
