@@ -64,7 +64,7 @@ foreach $section (@sections) {
     print "\n". $i++ ."/$totalSteps) Indexing section: '$section' ";
 
     chdir $section;
-    @dirs=`find . -type d | grep -v .svn | grep -v _darcs`;
+    @dirs=`find . -type d | grep -v .svn | grep -v _darcs | grep -v '/old\\b' | grep -v '/obsolete\\b'`;
     print "\n". $i++ ."/$totalSteps) Creating tags ";
     &createConf($section, @dirs);
     system "mkdir -p \"$basedir$section\"";
