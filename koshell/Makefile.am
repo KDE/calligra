@@ -17,8 +17,7 @@ KDE_ICON=AUTO
 rcdir = $(kde_datadir)/koshell
 rc_DATA = koshellui.rc
 
-applnk_DATA = koshell.desktop
-applnkdir = $(kde_appsdir)/Office
+xdg_apps_DATA = koshell.desktop
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc *.cpp -o $(podir)/koshell.pot

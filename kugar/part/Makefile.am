@@ -8,8 +8,7 @@ libkugarpart_la_LIBADD = ../lib/libkugarlib.la $(LIB_KPARTS) $(LIB_KDEPRINT) $(L
 
 libkugarpart_la_METASOURCES = AUTO
 
-appsdir = $(kde_appsdir)/Office
-apps_DATA = kugar.desktop
+xdg_apps_DATA = kugar.desktop
 
 rcdir = $(kde_datadir)/kugar
 rc_DATA = kugarpart.rc
