@@ -100,6 +100,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     if( actioncollection && (actioncollection = actioncollection->collection("variables")) ) {
         foreach(QAction* a, actioncollection->actions()) {
             Kross::Action* action = dynamic_cast< Kross::Action* >(a);
+            Q_ASSERT(action);
             const QString id = action->objectName();
             if( ! id.isEmpty() && ! KoInlineObjectRegistry::instance()->exists(id) ) {
                 kDebug(32010) << "Adding scripting variable with id=" << id << endl;
