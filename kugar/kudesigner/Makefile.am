@@ -36,7 +36,7 @@ EXTRA_DIST = \
 	kudesigner_part.h \
 	kudesigner_view.h \
 	$(rc_DATA) \
-	$(apps_DATA)
+	$(xdg_apps_DATA)
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKPROPERTY_EXPORT=
 

@@ -19,7 +19,7 @@ dtd_DATA = kugartemplate.dtd
 
 EXTRA_DIST = \
 	kugar_part.h \
-	$(apps_DATA) \
+	$(xdg_apps_DATA) \
 	$(rc_DATA) \
 	$(dtd_DATA)
 
