@@ -1110,30 +1110,4 @@ void KWView::selectionChanged()
   m_actionFormatFrameSet->setEnabled( shapeSelected );
 }
 
-void KWView::editUndo() {
-    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if(shape) {
-        // first see if we have a text shape that we are editing and direct undo there.
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
-        if(data && data->document()->isUndoAvailable()) {
-            data->document()->undo();
-            return;
-        }
-    }
-    emit undo();
-}
-
-void KWView::editRedo() {
-    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if(shape) {
-        // first see if we have a text shape that we are editing and direct undo there.
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
-        if(data && data->document()->isRedoAvailable()) {
-            data->document()->redo();
-            return;
-        }
-    }
-    emit redo();
-}
-
 #include "KWView.moc"
