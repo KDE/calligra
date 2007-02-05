@@ -69,7 +69,7 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
     connect( m_tasktree, SIGNAL( itemSelectionChanged() ), SLOT( dispAvailableTasks() ) );
 }
 
-void dispAvailableTasks(){/*
+void PertEditor::dispAvailableTasks(){/*
     QListBox * availableTasksList = new QListBox();
     
     foreach(QTreeWidgetItem * currentItem, m_tasktree->selectedItems()){

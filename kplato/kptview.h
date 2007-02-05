@@ -317,6 +317,7 @@ private:
     bool m_updateResourceview;
     bool m_updateAccountsview;
     bool m_updateResourceAssignmentView;
+    bool m_updatePertEditor;
 
     KStatusBarLabel *m_estlabel;
     QProgressBar *m_progress;

@@ -515,6 +515,7 @@ View::View( Part* part, QWidget* parent )
     m_tab->addWidget( m_perteditor );
     m_perteditor->draw( getProject() );
     connect( m_perteditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    m_updatePertEditor = true;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
     m_ganttview = new GanttView( getPart(), m_tab, part->isReadWrite() );
@@ -1744,6 +1745,7 @@ void View::slotUpdate()
     m_updateResourceview = true;
     m_updateAccountsview = true;
     m_updateResourceAssignmentView = true;
+    m_updatePertEditor = true;
 
     updateView( m_tab->currentWidget() );
 }
@@ -1925,6 +1927,10 @@ void View::updateView( QWidget *widget )
 	if ( m_updateResourceAssignmentView )
             m_resourceAssignmentView->draw( getPart() ->getProject() );
         m_updateResourceAssignmentView = false;
+    } else if ( widget == m_perteditor) {
+        if ( m_updatePertEditor )
+            m_perteditor -> draw( getPart()->getProject() );
+        m_updatePertEditor = false;
     }
     /*    else if (widget == m_reportview)
         {
