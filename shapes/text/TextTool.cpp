@@ -515,9 +515,7 @@ QWidget *TextTool::createOptionWidget() {
 }
 
 void TextTool::addUndoCommand() {
-kDebug() << "addUndoCommand \n";
     if(! m_allowAddUndoCommand) return;
-kDebug() << "  still here\n";
     class UndoTextCommand : public QUndoCommand {
       public:
         UndoTextCommand(QTextDocument *document, TextTool *tool)
@@ -534,7 +532,8 @@ kDebug() << "  still here\n";
                 m_tool->m_allowAddUndoCommand = false;
                  m_document->undo(&m_tool->m_caret);
             }
-            m_document->undo();
+            else
+                m_document->undo();
             if(! m_tool.isNull())
                 m_tool->m_allowAddUndoCommand = true;
         }
@@ -546,7 +545,8 @@ kDebug() << "  still here\n";
                 m_tool->m_allowAddUndoCommand = false;
                  m_document->redo(&m_tool->m_caret);
             }
-            m_document->redo();
+            else
+                m_document->redo();
             if(! m_tool.isNull())
                 m_tool->m_allowAddUndoCommand = true;
         }
