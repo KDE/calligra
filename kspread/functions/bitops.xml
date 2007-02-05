@@ -19,7 +19,7 @@
 	<Text>The BITAND() function performs a bit-wise AND operation for the two integer parameters.</Text>
 	<Syntax>BITAND(value; value)</Syntax>
 	<Example>BITAND(12;10) returns 8 (because decimal 12 is binary 1100, and decimal 10 is binary 0100; and 1100 "anded" with 0110 is 0100, which is integer 8).</Example>
-	<Related>BITOR, BITXOR</Related>
+	<Related>BITOR</Related><Related>BITXOR</Related>
       </Help>
     </Function>
 
@@ -74,7 +74,7 @@
 	<Text>The BITOR() function performs a bit-wise OR operation for the two integer parameters. </Text>
 	<Syntax>BITOR(value; value)</Syntax>
 	<Example>BITOR(12;10) returns 14 (because decimal 12 is binary 1100, and decimal 10 is binary 1010; and 1100 "ored" with 1010 is 1110, which is integer 14).</Example>
-	<Related>BITAND, BITXOR</Related>
+	<Related>BITAND</Related><Related>BITXOR</Related>
       </Help>
     </Function>
 
@@ -93,7 +93,7 @@
 	<Text>The BITXOR() function performs a bit-wise exclusive-OR operation for the two integer parameters. </Text>
 	<Syntax>BITXOR(value; value)</Syntax>
 	<Example>BITXOR(12;10) returns 6 (because decimal 12 is binary 1100, and decimal 10 is binary 1100; and 1100 "xored" with 1010 is 0110, which is integer 6).</Example>
-	<Related>BITAND, BITOR</Related>
+	<Related>BITAND</Related><Related>BITOR</Related>
       </Help>
     </Function>
 
