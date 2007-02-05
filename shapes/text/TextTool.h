@@ -29,6 +29,7 @@
 #include <QAction>
 
 class KoStyleManager;
+class UndoTextCommand; // private class
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -73,6 +74,8 @@ private slots:
     void decreaseIndent();
     void increaseIndent();
 
+    void addUndoCommand();
+
 private:
     void repaintCaret();
     void repaintSelection(int from, int to);
@@ -81,12 +84,16 @@ private:
     void updateSelectionHandler();
     void updateActions();
     void updateStyleManager();
+    void setShapeData(KoTextShapeData *data);
 
 private:
+    friend class UndoTextCommand;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
     QTextCursor m_caret;
     KoTextSelectionHandler m_selectionHandler;
+    bool m_allowActions;
+    bool m_allowAddUndoCommand;
 
     QAction *m_actionFormatBold;
     QAction *m_actionFormatItalic;

@@ -35,6 +35,8 @@
 #include <QTabWidget>
 #include <QTextLayout>
 #include <QAbstractTextDocumentLayout>
+#include <QUndoCommand>
+#include <QPointer>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut) {
     foreach(QKeySequence ks, KStandardShortcut::shortcut(shortcut)) {
@@ -45,9 +47,11 @@ static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut s
 }
 
 TextTool::TextTool(KoCanvasBase *canvas)
-: KoTool(canvas)
-, m_textShape(0)
-, m_textShapeData(0)
+: KoTool(canvas),
+    m_textShape(0),
+    m_textShapeData(0),
+    m_allowActions(true),
+    m_allowAddUndoCommand(true)
 {
     m_actionFormatBold  = new QAction(KIcon("text_bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold );
@@ -210,9 +214,7 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
                     break; // stop looking.
             }
         }
-        m_textShapeData = static_cast<KoTextShapeData*> (m_textShape->userData());
-        // in case its a different doc...
-        m_caret = QTextCursor(m_textShapeData->document());
+        setShapeData(static_cast<KoTextShapeData*> (m_textShape->userData()));
     }
 
     bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
@@ -231,6 +233,18 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
     updateSelectionHandler();
     updateStyleManager();
     updateActions();
+}
+
+void TextTool::setShapeData(KoTextShapeData *data) {
+    bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
+    if(m_textShapeData && docChanged)
+        disconnect(m_textShapeData->document(), SIGNAL(undoAvailable(bool)), this, SLOT(addUndoCommand()));
+    m_textShapeData = data;
+    if(m_textShapeData && docChanged) {
+        connect(m_textShapeData->document(), SIGNAL(undoAvailable(bool)), this, SLOT(addUndoCommand()));
+        m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
+        m_caret = QTextCursor(m_textShapeData->document());
+    }
 }
 
 void TextTool::updateSelectionHandler() {
@@ -356,9 +370,8 @@ void TextTool::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void TextTool::updateActions() {
+    m_allowActions = false;
     QTextCharFormat cf = m_caret.charFormat();
-    bool sigs = signalsBlocked();
-    blockSignals(true);
     m_actionFormatBold->setChecked(cf.fontWeight() > QFont::Normal);
     m_actionFormatItalic->setChecked(cf.fontItalic());
     m_actionFormatUnderline->setChecked(cf.fontUnderline());
@@ -380,14 +393,15 @@ void TextTool::updateActions() {
         case Qt::AlignJustify: m_actionAlignBlock->setChecked(true); break;
     }
     m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
-    blockSignals(sigs);
+    m_allowActions = true;
 
     emit charFormatChanged(cf);
     emit blockFormatChanged(bf);
 }
 
 void TextTool::updateStyleManager() {
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_caret.block().document()->documentLayout());
+    Q_ASSERT(m_textShapeData);
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
     if(lay)
         emit(styleManagerChanged(lay->styleManager()));
     else {
@@ -413,9 +427,7 @@ void TextTool::activate (bool temporary) {
         if(m_textShape == shape) continue;
         selection->deselect(shape);
     }
-    m_textShapeData = static_cast<KoTextShapeData*> (m_textShape->userData());
-    m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
-    m_caret = QTextCursor(m_textShapeData->document());
+    setShapeData(static_cast<KoTextShapeData*> (m_textShape->userData()));
     useCursor(Qt::IBeamCursor, true);
     m_textShape->repaint();
 
@@ -428,7 +440,7 @@ void TextTool::deactivate() {
     m_textShape = 0;
     if(m_textShapeData)
         m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.
-    m_textShapeData = 0;
+    setShapeData(0);
 
     updateSelectionHandler();
 }
@@ -502,56 +514,111 @@ QWidget *TextTool::createOptionWidget() {
     return widget;
 }
 
+void TextTool::addUndoCommand() {
+kDebug() << "addUndoCommand \n";
+    if(! m_allowAddUndoCommand) return;
+kDebug() << "  still here\n";
+    class UndoTextCommand : public QUndoCommand {
+      public:
+        UndoTextCommand(QTextDocument *document, TextTool *tool)
+            : QUndoCommand(i18n("Text")),
+            m_document(document),
+            m_tool(tool)
+        {
+        }
+
+        void undo () {
+            if(m_document.isNull())
+                return;
+            if(! m_tool.isNull()) {
+                m_tool->m_allowAddUndoCommand = false;
+                 m_document->undo(&m_tool->m_caret);
+            }
+            m_document->undo();
+            if(! m_tool.isNull())
+                m_tool->m_allowAddUndoCommand = true;
+        }
+
+        void redo () {
+            if(m_document.isNull())
+                return;
+            if(! m_tool.isNull()) {
+                m_tool->m_allowAddUndoCommand = false;
+                 m_document->redo(&m_tool->m_caret);
+            }
+            m_document->redo();
+            if(! m_tool.isNull())
+                m_tool->m_allowAddUndoCommand = true;
+        }
+
+        QPointer<QTextDocument> m_document;
+        QPointer<TextTool> m_tool;
+    };
+    m_canvas->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
+}
+
 void TextTool::nonbreakingSpace() {
+    if(! m_allowActions) return;
     m_selectionHandler.insert(QString(QChar(0xa0)));
 }
 
 void TextTool::nonbreakingHyphen() {
+    if(! m_allowActions) return;
     m_selectionHandler.insert(QString(QChar(0x2013)));
 }
 
 void TextTool::softHyphen() {
+    if(! m_allowActions) return;
     m_selectionHandler.insert(QString(QChar(0xad)));
 }
 
 void TextTool::lineBreak() {
+    if(! m_allowActions) return;
     m_selectionHandler.insert(QString(QChar('\n')));
 }
 
 void TextTool::alignLeft() {
+    if(! m_allowActions) return;
     m_selectionHandler.setHorizontalTextAlignment(Qt::AlignLeft);
 }
 
 void TextTool::alignRight() {
+    if(! m_allowActions) return;
     m_selectionHandler.setHorizontalTextAlignment(Qt::AlignRight);
 }
 
 void TextTool::alignCenter() {
+    if(! m_allowActions) return;
     m_selectionHandler.setHorizontalTextAlignment(Qt::AlignHCenter);
 }
 
 void TextTool::alignBlock() {
+    if(! m_allowActions) return;
     m_selectionHandler.setHorizontalTextAlignment(Qt::AlignJustify);
 }
 
 void TextTool::superScript(bool on) {
+    if(! m_allowActions) return;
     if(on)
         m_actionFormatSub->setChecked(false);
     m_selectionHandler.setVerticalTextAlignment(on ? Qt::AlignTop : Qt::AlignVCenter);
 }
 
 void TextTool::subScript(bool on) {
+    if(! m_allowActions) return;
     if(on)
         m_actionFormatSuper->setChecked(false);
     m_selectionHandler.setVerticalTextAlignment(on ? Qt::AlignBottom : Qt::AlignVCenter);
 }
 
 void TextTool::increaseIndent() {
+    if(! m_allowActions) return;
     m_selectionHandler.increaseIndent();
     m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
 }
 
 void TextTool::decreaseIndent() {
+    if(! m_allowActions) return;
     m_selectionHandler.decreaseIndent();
     m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
 }
