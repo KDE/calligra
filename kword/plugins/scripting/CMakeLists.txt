@@ -18,6 +18,7 @@ qt4_wrap_cpp(krossmodulekword_PART_SRCS
 	Style.h
 	TextDocument.h TextFrame.h TextList.h TextTable.h
 	Frame.h FrameSet.h
+	Variable.h
 )
 
 kde4_automoc(${krossmodulekword_PART_SRCS})

@@ -20,29 +20,26 @@
 
 #include "KWScriptingPart.h"
 #include "Module.h"
+#include "Variable.h"
 
-//#include <QToolBar>
-//#include <QBoxLayout>
-//#include <QTreeView>
-//#include <QModelIndex>
-//#include <QHeaderView>
+// qt
 #include <QDockWidget>
-
+// kde
 #include <klocale.h>
-//#include <kicon.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
-
-// kword
-#include <KWView.h>
-// koffice/libs/kokross
-#include <KoScriptingDocker.h>
 // kdelibs/kross
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
+#include <kross/core/actioncollection.h>
 #include <kross/core/guiclient.h>
 #include <kross/core/model.h>
+// koffice
+#include <KoInlineObjectRegistry.h>
+#include <KoScriptingDocker.h>
+// kword
+#include <KWView.h>
 
 typedef KGenericFactory< KWScriptingPart > KWordScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( krossmodulekword, KWordScriptingFactory( "krossmodulekword" ) )
@@ -93,9 +90,24 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
 
+    // Add the scripting docker widget
     KoScriptingDockerFactory factory(d->view, d->guiclient);
     QDockWidget* dock = d->view->createDockWidget(&factory);
     Q_UNUSED(dock);
+
+    // Add variables
+    Kross::ActionCollection* actioncollection = Kross::Manager::self().actionCollection();
+    if( actioncollection && (actioncollection = actioncollection->collection("variables")) ) {
+        foreach(QAction* a, actioncollection->actions()) {
+            Kross::Action* action = dynamic_cast< Kross::Action* >(a);
+            const QString id = action->objectName();
+            if( ! id.isEmpty() && ! KoInlineObjectRegistry::instance()->exists(id) ) {
+                kDebug(32010) << "Adding scripting variable with id=" << id << endl;
+                Scripting::VariableFactory* factory = new Scripting::VariableFactory(this, action);
+                KoInlineObjectRegistry::instance()->add(factory);
+            }
+        }
+    }
 }
 
 KWScriptingPart::~KWScriptingPart()

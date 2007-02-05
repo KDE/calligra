@@ -1,4 +1,9 @@
 install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/kword/scripts)
+install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/kword/scripts)
+install(FILES
+    variable_docinfos.py
+    DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/variables)
+
 install(FILES
     sample_actions.py
     sample_progressbar.py

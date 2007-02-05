@@ -1,13 +1,13 @@
 <KrossScripting>
 
-    <!--
-    <script
-        name="pydocstructur"
-        text="Document Structur"
-        comment="Document Structur"
-        interpreter="python"
-        file="extensions/docstructur.py" />
-    //-->
+    <collection name="variables" text="Variables" enabled="false">
+        <script
+            name="pyvariabledocinfos"
+            text="Document Informations"
+            comment="Python script to insert a variable with document informations"
+            interpreter="python"
+            file="variables/variable_docinfos.py" />
+    </collection>
 
     <collection name="samples" text="Samples">
         <script

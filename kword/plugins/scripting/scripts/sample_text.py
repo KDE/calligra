@@ -97,24 +97,24 @@ doc.setHtml(
 html = "<p><b>Framesets:</b></p><ul>"
 for i in range( KWord.frameSetCount() ):
     frameset = KWord.frameSet(i)
-    html2 = "<li>nr=%i name=%s<br><ul>" % (i,frameset.name())
+    html += "<li>frameset nr=%i name=%s<br><ul>" % (i,frameset.name())
     for k in range( frameset.frameCount() ):
         frame = frameset.frame(k)
-        html2 += "<li>nr=%i" % k
-        html2 += " shapeId=%s" % frame.shapeId()
-        html2 += " visible=%s" % frame.isVisible()
-        #html2 += " scaleX=%s" % frame.scaleX()
-        #html2 += " scaleY=%s" % frame.scaleY()
-        #html2 += " rotation=%s" % frame.rotation()
-        #html2 += " shearX=%s" % frame.shearX()
-        #html2 += " shearY=%s" % frame.shearY()
-        #html2 += " width=%s" % frame.width()
-        #html2 += " height=%s" % frame.height()
-        #html2 += " positionX=%s" % frame.positionX()
-        #html2 += " positionY=%s" % frame.positionY()
-        #html2 += " zIndex=%s" % frame.zIndex()
-        html2 += "<br></li>"
-    html += "%s</ul></li>" % html2
+        html += "<li>frame nr=%i" % k
+        html += " shapeId=%s" % frame.shapeId()
+        html += " visible=%s" % frame.isVisible()
+        #html += " scaleX=%s" % frame.scaleX()
+        #html += " scaleY=%s" % frame.scaleY()
+        #html += " rotation=%s" % frame.rotation()
+        #html += " shearX=%s" % frame.shearX()
+        #html += " shearY=%s" % frame.shearY()
+        #html += " width=%s" % frame.width()
+        #html += " height=%s" % frame.height()
+        #html += " positionX=%s" % frame.positionX()
+        #html += " positionY=%s" % frame.positionY()
+        #html += " zIndex=%s" % frame.zIndex()
+        html += "<br></li>"
+    html += "</ul></li>"
 html += "</ul>"
 
 cursor = doc.rootFrame().lastCursorPosition()
