@@ -53,6 +53,7 @@ Plugins:
 Filters:
 --------
 - port the filters to create a document with flake shapes
+- fix the eps and ps filters (maybe using ps2pdf and then use a pdf import filter)
 
 Cleanup:
 --------
