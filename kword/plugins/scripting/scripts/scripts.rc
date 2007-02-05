@@ -9,27 +9,6 @@
         file="extensions/docstructur.py" />
     //-->
 
-    <collection name="insert" text="Insert">
-        <script
-            name="pyinsertdocinfos"
-            text="Document Informations"
-            comment="This python script inserts document informations"
-            interpreter="python"
-            file="extensions/insert_docinfos.py" />
-        <script
-            name="pyinsertframelist"
-            text="Framelist"
-            comment="This python script inserts a list of all frames"
-            interpreter="python"
-            file="extensions/insert_framelist.py" />
-        <script
-            name="pyinsertshape"
-            text="Shape..."
-            comment="This python script inserts a shape"
-            interpreter="python"
-            file="extensions/insert_shape.py" />
-    </collection>
-
     <collection name="samples" text="Samples">
         <script
             name="pysampleactions"
@@ -74,11 +53,11 @@
             interpreter="python"
             file="extensions/sample_variables.py" />
         <script
-            name="pysampleshapes"
-            text="Shapes"
-            comment="This python script demonstrates usage of shapes"
+            name="pysampleinsertshape"
+            text="Insert Shape..."
+            comment="This python script inserts a shape"
             interpreter="python"
-            file="extensions/sample_shapes.py" />
+            file="extensions/sample_insertshape.py" />
         <script
             name="pysampleallshapes"
             text="All Shapes"
