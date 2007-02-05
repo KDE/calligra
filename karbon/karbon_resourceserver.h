@@ -72,7 +72,7 @@ public:
 		return m_gradients;
 	}
 
-	VGradientListItem* addGradient( VGradient* gradient );
+	VGradientListItem* addGradient( QGradient* gradient );
 	void removeGradient( VGradientListItem* gradient );
 
 	int clipartCount()

@@ -20,20 +20,30 @@
 #include "KarbonGradientTool.h"
 #include "KarbonGradientEditStrategy.h"
 
+#include <karbon_factory.h>
+#include <karbon_resourceserver.h>
+#include <vgradienttabwidget.h>
+
 #include <KoShape.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
+#include <KoShapeBackgroundCommand.h>
+
+#include <QGridLayout>
 
 KarbonGradientTool::KarbonGradientTool(KoCanvasBase *canvas)
 : KoTool( canvas )
+, m_gradient( 0 )
 , m_currentStrategy( 0 )
+, m_gradientWidget( 0 )
 {
 }
 
 KarbonGradientTool::~KarbonGradientTool()
 {
+    delete m_gradient;
 }
 
 void KarbonGradientTool::paint( QPainter &painter, KoViewConverter &converter )
@@ -105,6 +115,8 @@ void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
     {
         m_currentStrategy->setEditing( false );
         m_canvas->addCommand( m_currentStrategy->createCommand() );
+        if( m_gradientWidget )
+            m_gradientWidget->setGradient( m_currentStrategy->gradient() );
     }
 }
 
@@ -138,6 +150,19 @@ void KarbonGradientTool::activate( bool temporary )
         return;
     }
 
+    initialize();
+
+    if( m_gradients.count() == 0 )
+    {
+        emit sigDone();
+        return;
+    }
+
+    useCursor(Qt::ArrowCursor, true);
+}
+
+void KarbonGradientTool::initialize()
+{
     m_gradients.clear();
     m_currentStrategy = 0;
 
@@ -165,16 +190,18 @@ void KarbonGradientTool::activate( bool temporary )
     }
 
     if( m_gradients.count() == 0 )
-    {
-        emit sigDone();
         return;
-    }
+
     m_gradients.first()->setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
-    useCursor(Qt::ArrowCursor, true);
+    delete m_gradient;
+    m_gradient = cloneGradient( m_gradients.first()->gradient() );
 }
 
 void KarbonGradientTool::deactivate()
 {
+    delete m_gradient;
+    m_gradient = 0;
+
     foreach( GradientStrategy* strategy, m_gradients )
     {
         strategy->repaint();
@@ -199,6 +226,27 @@ void KarbonGradientTool::resourceChanged( KoCanvasResource::EnumCanvasResource k
         default:
             return;
     }
+}
+
+QWidget * KarbonGradientTool::createOptionWidget()
+{
+    QWidget *optionWidget = new QWidget();
+    QGridLayout* layout = new QGridLayout( optionWidget );
+
+    m_gradientWidget = new VGradientTabWidget( m_gradient, KarbonFactory::rServer(), optionWidget );
+    layout->addWidget( m_gradientWidget );
+
+    connect( m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()) );
+
+    return optionWidget;
+}
+
+void KarbonGradientTool::gradientChanged()
+{
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
+    QBrush newBrush( *m_gradientWidget->gradient() );
+    m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
+    initialize();
 }
 
 #include "KarbonGradientTool.moc"

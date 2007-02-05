@@ -37,27 +37,41 @@ class GradientStrategy
 public:
     /// constructs new strategy on the specified shape
     explicit GradientStrategy( KoShape *shape );
+
     virtual ~GradientStrategy() {};
+
     /// painting of the gradient editing handles
     virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0;
+
     /// selects handle at the given position
     virtual bool selectHandle( const QPointF &mousePos );
+
     /// mouse position handling for moving handles
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+
     /// sets the strategy into editing mode
     void setEditing( bool on );
+
     /// checks if strategy is in editing mode
     bool isEditing() { return m_editing; }
+
     /// create the command for changing the shapes background
     QUndoCommand * createCommand();
+
     /// schedules a repaint of the shape and gradient handles
     void repaint() const;
+
     /// sets the handle radius used for painting the handles
     static void setHandleRadius( int radius ) { m_handleRadius = radius; }
+
     /// returns the actual handle radius
     static int handleRadius() { return m_handleRadius; }
+
     /// returns the gradient handles bounding rect
     QRectF boundingRect();
+
+    /// returns the actual gradient
+    const QGradient * gradient();
 protected:
     /// paints a handle at the given position
     void paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position );

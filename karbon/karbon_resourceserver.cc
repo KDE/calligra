@@ -53,6 +53,7 @@
 #include "shapes/vpolyline.h"
 #include "shapes/vpolygon.h"
 
+#include <math.h>
 
 KarbonResourceServer::KarbonResourceServer()
 {
@@ -236,7 +237,7 @@ KarbonResourceServer::removePattern( VPattern* pattern )
 } // KarbonResourceServer::removePattern
 
 VGradientListItem*
-KarbonResourceServer::addGradient( VGradient* gradient )
+KarbonResourceServer::addGradient( QGradient* gradient )
 {
 	int i = 1;
 	char buffer[ 20 ];
@@ -254,9 +255,10 @@ KarbonResourceServer::addGradient( VGradient* gradient )
 
 	QString filename = KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer;
 
-	saveGradient( gradient, filename );
+    // TODO port 
+	//saveGradient( gradient, filename );
 
-	m_gradients->append( new VGradientListItem( *gradient, filename ) );
+	m_gradients->append( new VGradientListItem( gradient, filename ) );
 
 	return m_gradients->last();
 } // KarbonResourceServer::addGradient
@@ -273,102 +275,116 @@ KarbonResourceServer::removeGradient( VGradientListItem* gradient )
 void
 KarbonResourceServer::loadGradient( const QString& filename )
 {
-	KoGradientManager gradLoader;
-	
-	KoGradient* grad = gradLoader.loadGradient(filename);
-	
-	if( !grad )
-		return;
+    KoGradientManager gradLoader;
 
-	if( grad->colorStops.count() > 1 )
-	{
-		VGradient vgrad;
+    KoGradient* grad = gradLoader.loadGradient(filename);
 
-		vgrad.setOrigin(QPointF(grad->originX, grad->originY));
-		vgrad.setVector(QPointF(grad->vectorX, grad->vectorY));
-		vgrad.setFocalPoint(QPointF(grad->focalpointX, grad->focalpointY));
-		
-		switch(grad->gradientType)
-		{
-			case KoGradientManager::gradient_type_linear:
-				vgrad.setType(VGradient::linear);
-				break;
-			case KoGradientManager::gradient_type_radial:
-				vgrad.setType(VGradient::radial);
-				break;
-			case KoGradientManager::gradient_type_conic:
-				vgrad.setType(VGradient::conic);
-				break;
-			default: return;
-		}
+    if( !grad )
+        return;
 
-		switch(grad->gradientRepeatMethod)
-		{
-			case KoGradientManager::repeat_method_none:
-				vgrad.setRepeatMethod(VGradient::none);
-				break;
-			case KoGradientManager::repeat_method_reflect:
-				vgrad.setRepeatMethod(VGradient::reflect);
-				break;
-			case KoGradientManager::repeat_method_repeat:
-				vgrad.setRepeatMethod(VGradient::repeat);
-				break;
-			default: return;
-		}
+    if( grad->colorStops.count() > 1 )
+    {
+        QGradient * gradient = 0;
 
-		vgrad.clearStops();
+        switch(grad->gradientType)
+        {
+            case KoGradientManager::gradient_type_linear:
+            {
+                QPointF start( grad->originX, grad->originY );
+                QPointF stop( grad->vectorX, grad->vectorY );
+                gradient = new QLinearGradient( start, stop );
+                break;
+            }
+            case KoGradientManager::gradient_type_radial:
+            {
+                QPointF center( grad->originX, grad->originY );
+                QPointF stop( grad->vectorX, grad->vectorY );
+                QPointF focal( grad->focalpointX, grad->focalpointY );
+                QPointF diff = stop-center;
+                double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+                gradient = new QRadialGradient( center, radius, focal );
+                break;
+            }
+            case KoGradientManager::gradient_type_conic:
+            {
+                QPointF center( grad->originX, grad->originY );
+                QPointF stop( grad->vectorX, grad->vectorY );
+                QPointF diff = stop-center;
+                double angle = atan2( center.y(), center.x() ) * 180.0 / M_PI;
+                if( angle < 0.0 )
+                    angle += 360.0;
+                gradient = new QConicalGradient( center, angle );
+                break;
+            }
+            default:
+                delete gradient;
+                return;
+        }
 
-		KoColorStop *colstop;
-		for(colstop = grad->colorStops.first(); colstop; colstop = grad->colorStops.next())
-		{
-			VColor col;
+        switch(grad->gradientRepeatMethod)
+        {
+            case KoGradientManager::repeat_method_none:
+                gradient->setSpread(QGradient::PadSpread);
+                break;
+            case KoGradientManager::repeat_method_reflect:
+                gradient->setSpread(QGradient::ReflectSpread);
+                break;
+            case KoGradientManager::repeat_method_repeat:
+                gradient->setSpread(QGradient::RepeatSpread);
+                break;
+            default:
+                delete gradient;
+                return;
+        }
 
-			switch(colstop->colorType)
-			{
-				case KoGradientManager::color_type_hsv_ccw:
-				case KoGradientManager::color_type_hsv_cw:
-					col.setColorSpace(VColor::hsb, false);
-					col.set(colstop->color1, colstop->color2, colstop->color3);
-					break;
-				case KoGradientManager::color_type_gray:
-					col.setColorSpace(VColor::gray, false);
-					col.set(colstop->color1);
-					break;
-				case KoGradientManager::color_type_cmyk:
-					col.setColorSpace(VColor::cmyk, false);
-					col.set(colstop->color1, colstop->color2, colstop->color3, colstop->color4);
-					break;
-				case KoGradientManager::color_type_rgb:
-				default:
-					col.set(colstop->color1, colstop->color2, colstop->color3);
-			}
-			col.setOpacity(colstop->opacity);
+        KoColorStop *colstop;
+        for(colstop = grad->colorStops.first(); colstop; colstop = grad->colorStops.next())
+        {
+            QColor color;
 
-			vgrad.addStop(col, colstop->offset, colstop->midpoint);
-		}
-		m_gradients->append( new VGradientListItem( vgrad, filename ) );
-	}
+            switch(colstop->colorType)
+            {
+                case KoGradientManager::color_type_hsv_ccw:
+                case KoGradientManager::color_type_hsv_cw:
+                    color.setHsvF( colstop->color1, colstop->color2, colstop->color3 );
+                    break;
+                case KoGradientManager::color_type_gray:
+                    color.setRgbF( colstop->color1, colstop->color1, colstop->color1 );
+                    break;
+                case KoGradientManager::color_type_cmyk:
+                    color.setCmykF( colstop->color1, colstop->color2, colstop->color3, colstop->color4);
+                    break;
+                case KoGradientManager::color_type_rgb:
+                default:
+                    color.setRgbF( colstop->color1, colstop->color2, colstop->color3 );
+            }
+            color.setAlphaF( colstop->opacity );
+
+            gradient->setColorAt( colstop->offset, color );
+        }
+        m_gradients->append( new VGradientListItem( gradient, filename ) );
+    }
 } // KarbonResourceServer::loadGradient
 
 void
 KarbonResourceServer::saveGradient( VGradient* gradient, const QString& filename )
 {
-	QFile file( filename );
-	QDomDocument doc;
-	QDomElement me = doc.createElement( "PREDEFGRADIENT" );
-	doc.appendChild( me );
-	gradient->save( me );
+    QFile file( filename );
+    QDomDocument doc;
+    QDomElement me = doc.createElement( "PREDEFGRADIENT" );
+    doc.appendChild( me );
+    gradient->save( me );
 
-	if( !( file.open( QIODevice::WriteOnly ) ) )
-		return ;
+    if( !( file.open( QIODevice::WriteOnly ) ) )
+        return ;
 
-	QTextStream ts( &file );
+    QTextStream ts( &file );
 
-	doc.save( ts, 2 );
+    doc.save( ts, 2 );
 
-	file.flush();
+    file.flush();
 
-	file.close();
+    file.close();
 } // KarbonResourceServer::saveGradient
 
 VClipartIconItem*

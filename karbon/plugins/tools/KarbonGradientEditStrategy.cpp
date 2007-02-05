@@ -121,6 +121,11 @@ void GradientStrategy::repaint() const
     m_shape->repaint();
 }
 
+const QGradient * GradientStrategy::gradient()
+{
+    return m_shape->background().gradient();
+}
+
 LinearGradientStrategy::LinearGradientStrategy( KoShape *shape, const QLinearGradient *gradient )
 : GradientStrategy( shape )
 {

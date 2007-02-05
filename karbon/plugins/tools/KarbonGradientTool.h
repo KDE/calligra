@@ -21,8 +21,10 @@
 #define _KARBONGRADIENTTOOL_H_
 
 #include <KoTool.h>
+#include <QGradient>
 
 class GradientStrategy;
+class VGradientTabWidget;
 
 /**
  * A tool for editing gradient backgrounds of shapes.
@@ -47,13 +49,18 @@ public:
     void activate (bool temporary=false);
     void deactivate();
 
-private slots:
+protected:
+    virtual QWidget * createOptionWidget();
+
+private Q_SLOTS:
     virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
-
+    void initialize();
+    void gradientChanged();
 private:
-
+    QGradient * m_gradient;
     QList<GradientStrategy*> m_gradients; ///< the list of editing strategies, one for each shape
     GradientStrategy* m_currentStrategy;  ///< the current editing strategy
+    VGradientTabWidget * m_gradientWidget;
 };
 
 #endif // _KARBONGRADIENTTOOL_H_

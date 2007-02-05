@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,26 +43,26 @@ class KarbonResourceServer;
 class VGradientListItem : public Q3ListBoxItem
 {
 public:
-	VGradientListItem( const VGradient& gradient, QString filename );
-	VGradientListItem( const VGradientListItem& );
-	~VGradientListItem();
+    VGradientListItem( const QGradient * gradient, QString filename );
+    VGradientListItem( const VGradientListItem& );
+    ~VGradientListItem();
 
-	QPixmap& pixmap() { return m_pixmap; }
-	const VGradient* gradient() const { return m_gradient; }
-	QString filename() { return m_filename; }
-	bool canDelete() { return m_delete; }
+    QPixmap& pixmap() { return m_pixmap; }
+    const QGradient* gradient() const { return m_gradient; }
+    QString filename() { return m_filename; }
+    bool canDelete() { return m_delete; }
 
-	virtual int height( const Q3ListBox* ) const { return 16; }
-	virtual int width( const Q3ListBox* lb ) const;
+    virtual int height( const Q3ListBox* ) const { return 16; }
+    virtual int width( const Q3ListBox* lb ) const;
 
 protected:
-	virtual void paint( QPainter* p );
+    virtual void paint( QPainter* p );
 
 private:
-	VGradient	*m_gradient;
-	QPixmap		m_pixmap;
-	QString		m_filename;
-	bool		m_delete;
+    const QGradient * m_gradient;
+    QPixmap m_pixmap;
+    QString m_filename;
+    bool m_delete;
 }; // VGradientListItem
 
 class VGradientPreview : public QWidget
@@ -77,58 +78,99 @@ class VGradientPreview : public QWidget
 		double*         m_opacity;
 }; // VGradientPreview
 
+/**
+ * A tab widget for managing gradients.
+ *
+ * It has one tab to edit a selected gradients type, spread method and color stops.
+ * Another tab contains a list with predefined gradients to choose from.
+ */
 class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
 {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		enum VGradientTarget {
-			STROKE,
-			FILL
-		};
-	
-		VGradientTabWidget( VGradient& gradient, KarbonResourceServer* server, QWidget* parent = 0L, const char* name = 0L );
-		~VGradientTabWidget();
+public:
+    enum VGradientTarget {
+        StrokeGradient,
+        FillGradient
+    };
 
-		const VGradient& gradient();
-		void setGradient( VGradient& gradient );
+    /**
+     * Creates a new gradient tab widget with the given selected gradient.
+     *
+     * The predefined gradients are retrived from the fiven resource server.
+     *
+     * @param gradient the gradient to select
+     * @param server the resource server to retrieve predefined gradients from
+     * @param parent the widgets parent
+     * @param name the widgets name
+     */
+    VGradientTabWidget( const QGradient* gradient, KarbonResourceServer* server, QWidget* parent = 0L, const char* name = 0L );
 
-		VGradientTarget target();
-		void setTarget( VGradientTarget target );
+    /// Destroys the widget
+    ~VGradientTabWidget();
 
-		double opacity() const;
-		void setOpacity( double opacity );
+    /**
+     * Returns the actual selected gradient.
+     * @return the actual gradient
+     */
+    const QGradient* gradient();
 
-	public slots:
-		void combosChange( int );
-		void addGradientToPredefs();
-		void changeToPredef( Q3ListBoxItem* );
-		void predefSelected( Q3ListBoxItem* );
-		void deletePredef();
-		void opacityChanged( int );
+    /**
+     * Sets a new gradient to edit.
+     * @param gradient the gradient to edit
+     */
+    void setGradient( const QGradient* gradient );
 
-	protected:
-		void setupUI();
-		void initUI();
-		void setupConnections();
-		
-	private:
-		Q3GroupBox				*m_editGroup;
-		VGradientWidget			*m_gradientWidget;
-		KComboBox				*m_gradientTarget;
-		KComboBox				*m_gradientRepeat;
-		KComboBox				*m_gradientType;
-		VGradientPreview		*m_gradientPreview;
-		KListBox				*m_predefGradientsView;
-		QPushButton				*m_predefDelete;
-		QPushButton				*m_predefImport;
-		QPushButton				*m_addToPredefs;
-		KIntNumInput			*m_opacity;
+    /// Returns the gradient target (fill/stroke)
+    VGradientTarget target();
 
-		VGradient             m_gradient;
-			/** The predefined gradients list. */
-		KarbonResourceServer* m_resourceServer;
-		double                m_gradOpacity;
-}; // VGradientTabWidget
+    /// Sets a new gradient target
+    void setTarget( VGradientTarget target );
+
+    /// Returns the gradient opacity
+    double opacity() const;
+
+    /// Sets the gradients opacity to @p opacity
+    void setOpacity( double opacity );
+
+Q_SIGNALS:
+    /// Is emmited a soon as the gradient changes
+    void changed();
+
+protected Q_SLOTS:
+    void combosChange( int );
+    void addGradientToPredefs();
+    void changeToPredef( Q3ListBoxItem* );
+    void predefSelected( Q3ListBoxItem* );
+    void deletePredef();
+    void opacityChanged( int );
+    void stopsChanged();
+
+protected:
+    void setupUI();
+    void initUI();
+    void setupConnections();
+
+private:
+    QWidget          *m_editTab;
+    VGradientWidget  *m_gradientWidget;
+    KComboBox        *m_gradientTarget;
+    KComboBox        *m_gradientRepeat;
+    KComboBox        *m_gradientType;
+    VGradientPreview *m_gradientPreview;
+    KListBox         *m_predefGradientsView;
+    QPushButton      *m_predefDelete;
+    QPushButton      *m_predefImport;
+    QPushButton      *m_addToPredefs;
+    KIntNumInput     *m_opacity;
+
+    QGradient * m_gradient; /// the actual edited gradient
+    VGradient m_oldGradient;
+    KarbonResourceServer* m_resourceServer; ///< the predefined gradients list.
+    double                m_gradOpacity;    ///< the gradient opacity
+};
+
+/// helper function to clone a gradient
+QGradient * cloneGradient( const QGradient * gradient );
 
 #endif /* _VGRADIENTTABWIDGET_H_ */

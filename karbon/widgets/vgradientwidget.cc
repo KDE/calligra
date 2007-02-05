@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,12 +28,14 @@
 #include <Q3PtrList>
 #include <QPointF>
 #include <QRectF>
+#include <QPainter>
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <klocale.h>
-#include <qpainter.h>
 #include <kiconloader.h>
+
+#include <KoUniColorDialog.h>
 
 #include "vgradientwidget.h"
 #include "vcolordlg.h"
@@ -60,274 +63,239 @@ static unsigned char colorStop_bits[] = {
    0x7c, 0x00, 0xfe, 0x00, 0xfe, 0x00, 0xff, 0x01
 };
 
-VGradientWidget::VGradientWidget( VGradient& gradient, QWidget* parent, const char* name )
-		: QWidget( parent ), m_gradient( &gradient )
+VGradientWidget::VGradientWidget( const QGradientStops & stops, QWidget* parent, const char* name )
+: QWidget( parent ), m_currentStop( -1 )
 {
-	setObjectName(name);
+    m_gradient.setStops( stops );
 
-	QPalette p = palette();
-	p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
-	// TODO: check if this is equivalent with the line underneath. It might need autoFillBackground = true
-	//setBackgroundMode( Qt::NoBackground );
+    setObjectName(name);
 
-	setMinimumSize( 105, 35 );
-} // VGradientWidget::VGradientWidget
+    QPalette p = palette();
+    p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
+    // TODO: check if this is equivalent with the line underneath. It might need autoFillBackground = true
+    //setBackgroundMode( Qt::NoBackground );
+
+    setMinimumSize( 105, 35 );
+}
 
 VGradientWidget::~VGradientWidget()
 {
-} // VGradientWidget::~VGradientWidget
+}
 
-void VGradientWidget::paintColorStop( QPainter& p, int x, VColor& color )
+void VGradientWidget::setStops( const QGradientStops & stops )
 {
-	QBitmap bitmap;
+    m_gradient.setStops( stops );
+}
 
-	// TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true. Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
-	bitmap = QBitmap::fromData( QSize(colorStop_width, colorStop_height), colorStop_bits );
-	bitmap.setMask( bitmap );
-	p.setPen( color );
-	p.drawPixmap( x - 4, 1, bitmap );
+QGradientStops VGradientWidget::stops() const
+{
+    return m_gradient.stops();
+}
 
-	// TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true. Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
-	bitmap = QBitmap::fromData( QSize(colorStopBorder_width, colorStopBorder_height), colorStopBorder_bits );
-	bitmap.setMask( bitmap );
-	p.setPen( QColor( "black" ) );
-	p.drawPixmap( x - 5, 1, bitmap );
-} // VGradientWidget::paintColorStop
+void VGradientWidget::paintColorStop( QPainter& p, int x, QColor& color )
+{
+    QBitmap bitmap;
+
+    // TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true.
+    // Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
+    bitmap = QBitmap::fromData( QSize(colorStop_width, colorStop_height), colorStop_bits );
+    bitmap.setMask( bitmap );
+    p.setPen( color );
+    p.drawPixmap( x - 4, 1, bitmap );
+
+    // TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true.
+    // Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
+    bitmap = QBitmap::fromData( QSize(colorStopBorder_width, colorStopBorder_height), colorStopBorder_bits );
+    bitmap.setMask( bitmap );
+    p.setPen( QColor( "black" ) );
+    p.drawPixmap( x - 5, 1, bitmap );
+}
 
 void VGradientWidget::paintMidPoint( QPainter& p, int x )
 {
-	// TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true. Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
-	QBitmap bitmap = QBitmap::fromData( QSize(midPoint_width, midPoint_height), midPoint_bits );
-	bitmap.setMask( bitmap );
-	p.setPen( QColor( "black" ) );
-	p.drawPixmap( x - 3, 1, bitmap );
-} // VGradientWidget::paintMidPoint
+    // TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true.
+    // Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
+    QBitmap bitmap = QBitmap::fromData( QSize(midPoint_width, midPoint_height), midPoint_bits );
+    bitmap.setMask( bitmap );
+    p.setPen( QColor( "black" ) );
+    p.drawPixmap( x - 3, 1, bitmap );
+}
 
 void VGradientWidget::paintEvent( QPaintEvent* )
 {
-	int w = width() - 4;  // available width for gradient and points
-	int h = height() - 7; // available height for gradient and points
-	int ph = colorStopBorder_height + 2; // point marker height
-	int gh = h - ph;       // gradient area height
+    int w = width() - 4;  // available width for gradient and points
+    int h = height() - 7; // available height for gradient and points
+    int ph = colorStopBorder_height + 2; // point marker height
+    int gh = h - ph;       // gradient area height
 
-	QPixmap pixmap( width(), height() );
-	VQPainter gp( &pixmap, width(), height() );
-	// Port to Qt4:
-	// gp.setRasterOp( Qt::XorROP );
-	VGradient gradient( *m_gradient );
-	gradient.setType( VGradient::linear );
-	gradient.setOrigin( QPointF( 2, 2 ) );
-	gradient.setFocalPoint( QPointF( 2, 2 ) );
-	gradient.setVector( QPointF( 2 + w, 2 ) );
-	VFill fill;
-	KIconLoader il;
-	fill.pattern() = VPattern( il.iconPath( "karbon.png", K3Icon::Small ) );
-	fill.setType( VFill::patt );
-	gp.setBrush( fill );
-	gp.drawRect( QRectF( 2, 2, w, gh ) );
-	fill.gradient() = gradient;
-	fill.setType( VFill::grad );
-	gp.setBrush( fill );
-	gp.drawRect( QRectF( 2, 2, w, gh ) );
-	gp.end();
+    QPixmap pixmap( width(), height() );
+    QPainter painter( this );
 
-	QPainter p( &pixmap );
+    m_gradient.setStart( QPointF( 2, 2 ) );
+    m_gradient.setFinalStop( QPointF( width()-2, 2 ) );
 
-	// TODO: check if this is equivalent with colorGroup().light()
-	p.setPen( palette().light().color() );
+    painter.setBrush( QBrush( SmallIcon( "karbon" ) ) );
+    painter.drawRect( QRectF( 2, 2, w, gh ) );
 
-	// light frame around widget
-/* Needs porting to Qt4
-	p.moveTo( 1, height() - 1 );
-	p.lineTo( 1, 1 );
-	p.lineTo( width() - 1, 1 );
-	p.lineTo( width() - 1, height() - 1 );
-	p.lineTo( 1, height() - 1 );
+    painter.setBrush( QBrush( m_gradient ) );
+    painter.drawRect( QRectF( 2, 2, w, gh ) );
 
-	// light line between gradient and point area
-	p.moveTo( 1, 3 + gh );
-	p.lineTo( width() - 1, 3 + gh );
+    // TODO: check if this is equivalent with colorGroup().light()
+    painter.setBrush( QBrush() );
+    painter.setPen( palette().light().color() );
 
-	p.setPen( colorGroup().dark() );
-	// left-top frame around widget
-	p.moveTo( 0, height() - 1 );
-	p.lineTo( 0, 0 );
-	p.lineTo( width() - 1, 0 );
+    // light frame around widget
+    QRect frame( 1, 1, width()-2, height()-2 );
+    painter.drawRect( frame );
 
-	// right-bottom from around gradient
-	p.moveTo( width() - 2, 2 );
-	p.lineTo( width() - 2, 2 + gh );
-	p.lineTo( 2, 2 + gh );
+    // light line between gradient and point area
+    painter.drawLine( QLine( QPoint( 1, 3 + gh ), QPoint( width() - 1, 3 + gh ) ) );
 
-	// upper line around point area
-	p.moveTo( 1, height() - 3 - ph );
-	p.lineTo( width() - 1, height() - 3 - ph );
+    painter.setPen( colorGroup().dark() );
+    // left-top frame around widget
+    painter.drawLine( QPoint(), QPoint( 0, height() - 1 ) );
+    painter.drawLine( QPoint(), QPoint( width() - 1, 0 ) );
 
-	// right-bottom line around point area
-	p.moveTo( width() - 2, height() - ph - 1 );
-	p.lineTo( width() - 2, height() - 2 );
-	p.lineTo( 2, height() - 2 );
-	
-*/
+    // right-bottom from around gradient
+    painter.drawLine( QPoint( width() - 2, 2 ), QPoint( width() - 2, 2 + gh ) );
+    painter.drawLine( QPoint( width() - 2, 2 + gh ), QPoint( 2, 2 + gh ) );
 
-	m_pntArea.setRect( 2, height() - ph - 2, w, ph );
-	// clear point area
-	// TODO: check if palette().window().color() is equivalent with colorGroup().background()
-	p.fillRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height(), palette().window().color() );
+    // upper line around point area
+    painter.drawLine( QPoint( 1, height() - 3 - ph ), QPoint( width() - 1, height() - 3 - ph ) );
 
-	p.setClipRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height() );
-	p.translate( m_pntArea.x(), m_pntArea.y() );
-	
-	Q3PtrList<VColorStop>& colorStops = m_gradient->m_colorStops;
-	if( colorStops.count() > 1 )
-	{
-		VColorStop* stop, *nextstop;
-		for( stop = colorStops.first(), nextstop = colorStops.next();
-				nextstop; stop = nextstop, nextstop = colorStops.next() )
-		{
-			paintColorStop( p, (int)( stop->rampPoint * m_pntArea.width() ), stop->color );
-			paintMidPoint( p, (int)(( stop->rampPoint + ( nextstop->rampPoint - stop->rampPoint ) * stop->midPoint ) * m_pntArea.width() ) );
-		}
-		paintColorStop( p, int( stop->rampPoint * w ), stop->color );
-	}
-	p.end();
+    // right-bottom line around point area
+    painter.drawLine( QPoint( width() - 2, height() - ph - 1 ), QPoint( width() - 2, height() - 2 ) );
+    painter.drawLine( QPoint( width() - 2, height() - 2 ), QPoint( 2, height() - 2 ) );
 
-	QPainter p2(this);
-	p2.drawPixmap( QPoint(0, 0), pixmap, QRect(0, 0, width(), height()) );
-} // VGradientWidget::paintEvent
+    m_pntArea.setRect( 2, height() - ph - 2, w, ph );
+    // clear point area
+    // TODO: check if palette().window().color() is equivalent with colorGroup().background()
+    painter.fillRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height(), palette().window().color() );
+
+    painter.setClipRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height() );
+    painter.translate( m_pntArea.x(), m_pntArea.y() );
+
+    QGradientStops colorStops = m_gradient.stops();
+    if( colorStops.count() > 1 )
+    {
+        foreach( QGradientStop stop, colorStops )
+            paintColorStop( painter, (int)( stop.first * m_pntArea.width() ), stop.second );
+    }
+}
 
 void VGradientWidget::mousePressEvent( QMouseEvent* e )
 {
-	if( ! m_pntArea.contains( e->x(), e->y() ) )
-		return;
+    if( ! m_pntArea.contains( e->x(), e->y() ) )
+        return;
 
-	Q3PtrList<VColorStop>& colorStops = m_gradient->m_colorStops;
+    QGradientStops colorStops = m_gradient.stops();
 
-	currentPoint = 0;
+    m_currentStop = -1;
 
-	int x = e->x() - m_pntArea.left();
+    int x = e->x() - m_pntArea.left();
 
-	int i = colorStops.count() - 1;
-	VColorStop *stop, *nextstop = 0;
-	for( stop = colorStops.last(); i >= 0; i--, stop = colorStops.prev() )
-	{
-		int r = int( stop->rampPoint * m_pntArea.width() );
-		if( nextstop )
-		{
-			int m = int( ( stop->rampPoint + ( nextstop->rampPoint - stop->rampPoint ) * stop->midPoint ) *  m_pntArea.width() );
-			if( ( x > m - 5 ) && ( x < m + 5 ) )
-			{
-				// found mid point at position
-				currentPoint = 2 * i + 2;
-				if( e->button() == Qt::LeftButton )
-					setCursor( VCursor::horzMove() );
-				return;
-			}
-		}
-		if( ( x > r - 5 ) && ( x < r + 5 ) )
-		{
-			// found ramp point at position
-			currentPoint = 2 * i + 1;
-			if( e->button() == Qt::LeftButton )
-				setCursor( VCursor::horzMove() );
-			return;
-		}
-
-		nextstop = stop;
-	}
-} // VGradientWidget::mousePressEvent
+    for( int i = colorStops.count() - 1; i >= 0; i-- )
+    {
+        int r = int( colorStops[i].first * m_pntArea.width() );
+        if( ( x > r - 5 ) && ( x < r + 5 ) )
+        {
+            // found ramp point at position
+            m_currentStop = i;
+            if( e->button() == Qt::LeftButton )
+                setCursor( VCursor::horzMove() );
+            return;
+        }
+    }
+}
 
 void VGradientWidget::mouseReleaseEvent( QMouseEvent* e )
 {
-	if( e->button() == Qt::RightButton && currentPoint )
-	{
-		if( m_pntArea.contains( e->x(), e->y() ) && ( currentPoint % 2 == 1 ) )
-		{
-			int x = e->x() - m_pntArea.left();
-			// check if we are still above the actual ramp point
-			int r = int( m_gradient->m_colorStops.at( int(0.5 * currentPoint) )->rampPoint * m_pntArea.width() );
-			if( ( x > r - 5 ) && ( x < r + 5 ) )
-			{
-				m_gradient->m_colorStops.remove( int(0.5 * currentPoint) );
-				update();
-				emit changed();
-			}
-		}
-	}
-	setCursor( QCursor( Qt::ArrowCursor ) );
-} // VGradientWidget::mouseReleaseEvent
+    if( e->button() == Qt::RightButton && m_currentStop >= 0 )
+    {
+        if( m_pntArea.contains( e->x(), e->y() ) )
+        {
+            QGradientStops colorStops = m_gradient.stops();
+            int x = e->x() - m_pntArea.left();
+            // check if we are still above the actual ramp point
+            int r = int( colorStops[ m_currentStop ].first * m_pntArea.width() );
+            if( ( x > r - 5 ) && ( x < r + 5 ) )
+            {
+                colorStops.remove( m_currentStop );
+                m_gradient.setStops( colorStops );
+                update();
+                emit changed();
+            }
+        }
+    }
+    setCursor( QCursor( Qt::ArrowCursor ) );
+}
 
 void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 {
-	if( ! m_pntArea.contains( e->x(), e->y() ) )
-		return;
+    if( ! m_pntArea.contains( e->x(), e->y() ) )
+        return;
 
-	if( e->button() != Qt::LeftButton )
-		return;
+    if( e->button() != Qt::LeftButton )
+        return;
 
-	if( currentPoint % 2 == 1 )
-	{
-		// ramp point hit -> change color
-		VColorDlg* d = new VColorDlg( m_gradient->m_colorStops.at( currentPoint / 2 )->color, this->topLevelWidget() );
-		if( d->exec() == QDialog::Accepted )
-		{
-			m_gradient->m_colorStops.at( currentPoint / 2 )->color = d->Color();
-			update();
-			emit changed();
-		}
-		delete d;
-	}
-	else if( currentPoint == 0 )
-	{
-		// now point hit -> create new color stop
-		VColorDlg* d = new VColorDlg( m_gradient->m_colorStops.at( 0 )->color, this->topLevelWidget() );
-		if( d->exec() == QDialog::Accepted )
-		{
-			m_gradient->addStop( d->Color(), (float)( e->x() - 2 ) / ( m_pntArea.width() ), 0.5 );
-			update();
-			emit changed();
-		}
-		delete d;
-	}
-} // VGradientWidget::mouseDoubleClickEvent
+    QGradientStops colorStops = m_gradient.stops();
+
+    if( m_currentStop >= 0 )
+    {
+        // ramp point hit -> change color
+        KoColor oldColor;
+        oldColor.fromQColor( colorStops[m_currentStop].second );
+
+        KoUniColorDialog * d = new KoUniColorDialog( oldColor, this->topLevelWidget() );
+        if( d->exec() == QDialog::Accepted )
+        {
+            colorStops[m_currentStop].second = d->color().toQColor();
+            m_gradient.setStops( colorStops );
+            update();
+            emit changed();
+        }
+        delete d;
+    }
+    else if( m_currentStop == -1 )
+    {
+        KoColor newColor;
+        newColor.fromQColor( colorStops[0].second );
+
+        // no point hit -> create new color stop
+        KoUniColorDialog * d = new KoUniColorDialog( newColor, this->topLevelWidget() );
+        if( d->exec() == QDialog::Accepted )
+        {
+            m_gradient.setColorAt( (float)( e->x()-m_pntArea.left() ) / m_pntArea.width(), d->color().toQColor() );
+            update();
+            emit changed();
+        }
+        delete d;
+    }
+}
 
 void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 {
-	if( e->buttons() & Qt::RightButton )
-		return;
+    if( e->buttons() & Qt::RightButton )
+        return;
 
-	Q3PtrList<VColorStop>& colorStops = m_gradient->m_colorStops;
+    QGradientStops colorStops = m_gradient.stops();
 
-	if( currentPoint >= colorStops.count() * 2 )
-		return;
+    if( m_currentStop < 0 || m_currentStop >= colorStops.count() )
+        return;
 
-	int x = e->x() - m_pntArea.left();
+    double x = (double)( e->x() - m_pntArea.left() ) / (double)m_pntArea.width();
 
-	if( currentPoint % 2 == 1 )
-	{
-		// move ramp point
-		int actRP = int( 0.5 * ( currentPoint - 1 ) );
-		int prevRP = actRP - 1;
-		int nextRP = int( 0.5 * ( currentPoint + 1 ) );
-		// Clip the color stop between to others.
-		x = qMin( x, ( actRP < int( colorStops.count() - 1 ) ) ? int( colorStops.at( nextRP )->rampPoint * m_pntArea.width() ) : m_pntArea.width() );
-		x = qMax( x, ( actRP > 0 ) ? int( colorStops.at( prevRP )->rampPoint * m_pntArea.width() ) : 0 );
-		colorStops.at( actRP )->rampPoint = (float)( x ) / m_pntArea.width();
-		update();
-		emit changed();
-	}
-	else if( currentPoint > 0 )
-	{
-		// move mid point
-		int prevRP = int( 0.5 * ( currentPoint - 1 ) );
-		int nextRP = int( 0.5 * ( currentPoint + 1 ) );
-		// Clip the mid point between to ramp points.
-		x = qMin( x, int( colorStops.at( nextRP )->rampPoint * m_pntArea.width() ) );
-		x = qMax( x, int( colorStops.at( prevRP )->rampPoint * m_pntArea.width() ) );
-		colorStops.at( prevRP )->midPoint = ( (float)( x ) / m_pntArea.width() - ( colorStops.at( prevRP )->rampPoint ) ) / ( colorStops.at( nextRP )->rampPoint - colorStops.at( prevRP )->rampPoint );
-		update();
-		emit changed();
-	}
-} // VGradientWidget::mouseMoveEvent
+    // move ramp point
+    double minX = m_currentStop > 0 ? colorStops[m_currentStop-1].first : 0.0f;
+    double maxX = m_currentStop < colorStops.count()-1 ? colorStops[m_currentStop+1].first : 1.0f;
+
+    // Clip the color stop between to others.
+    x = qMin( x, maxX );
+    x = qMax( x, minX );
+    colorStops[m_currentStop].first = x;
+    m_gradient.setStops( colorStops );
+    update();
+    emit changed();
+}
 
 #include "vgradientwidget.moc"
