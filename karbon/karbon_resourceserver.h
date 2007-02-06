@@ -109,7 +109,7 @@ private:
 class VClipartIconItem : public QTableWidgetItem
 {
 public:
-	VClipartIconItem( const VObject* clipart, double width, double height, QString filename );
+	VClipartIconItem( const VObject* clipart, double width, double height, const QString & filename );
 	VClipartIconItem( const VClipartIconItem& item );
 	~VClipartIconItem();
 

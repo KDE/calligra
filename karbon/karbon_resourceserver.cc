@@ -522,7 +522,7 @@ KarbonResourceServer::cachePixmap( const QString &key, int group_or_size )
 	return result;
 }
 
-VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double height, QString filename )
+VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double height, const QString & filename )
 		: m_filename( filename ), m_width( width ), m_height( height )
 {
 	m_clipart = clipart->clone();
