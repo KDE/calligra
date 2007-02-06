@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -351,8 +351,25 @@ void KexiFormView::updateValuesForSubproperties()
 			for (QMapConstIterator<QString, QVariant> subpropIt = subprops->constBegin(); subpropIt!=subprops->constEnd(); ++subpropIt) {
 				kexipluginsdbg << "KexiFormView::loadForm(): delayed setting of the subproperty: widget="
 					<< it.current()->widget()->name() << " prop=" << subpropIt.key() << " val=" << subpropIt.data() << endl;
-				subwidget->setProperty( subpropIt.key().latin1(), subpropIt.data() );
-			}
+
+				const int count = subwidget->metaObject()->findProperty(subpropIt.key().latin1(), true);
+				const QMetaProperty *meta = count!=-1 ? subwidget->metaObject()->property(count, true) : 0;
+				if (meta) {
+					// Special case: the property value of type enum (set) but is saved as a string list,
+					// not as int, so we need to translate it to int. It's been created as such
+					// by FormIO::readPropertyValue(). Example: "alignment" property.
+					if (meta->isSetType() && subpropIt.data().type()==QVariant::StringList) {
+						QStrList keys;
+						const QStringList list( subpropIt.data().toStringList() );
+						for (QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
+							keys.append((*it).latin1());
+						subwidget->setProperty( subpropIt.key().latin1(), meta->keysToValue(keys) );
+					}
+					else {
+						subwidget->setProperty( subpropIt.key().latin1(), subpropIt.data() );
+					}
+				}
+			}//for
 		}
 	}
 }
@@ -1087,8 +1104,19 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 			continue;
 		}
 //! todo add autolabel using field's caption or name
+		KFormDesigner::Container *targetContainer;
+		QWidget* targetContainerWidget = QApplication::widgetAt(pos, true);
+		while (targetContainerWidget 
+			&& !dynamic_cast<KFormDesigner::Container*>(targetContainerWidget))
+		{
+			targetContainerWidget = targetContainerWidget->parentWidget();
+		}
+		if (dynamic_cast<KFormDesigner::Container*>(targetContainerWidget))
+			targetContainer = dynamic_cast<KFormDesigner::Container*>(targetContainerWidget);
+		else
+			targetContainer = form()->toplevelContainer();
 		KFormDesigner::InsertWidgetCommand *insertCmd
-			= new KFormDesigner::InsertWidgetCommand(form()->toplevelContainer(),
+			= new KFormDesigner::InsertWidgetCommand(targetContainer,
 	//! todo this is hardcoded!
 				"KexiDBAutoField",
 	//! todo this name can be invalid for expressions: if so, fall back to a default class' prefix!

@@ -93,7 +93,8 @@ ObjectTreeItem::addSubproperty(const Q3CString &property, const QVariant& value)
 {
 	if (!m_subprops)
 		m_subprops = new QMap<QString, QVariant>();
-	m_subprops->insert( property, value );
+	if (!m_props.contains(property))
+		m_subprops->insert( property, value );
 }
 
 void

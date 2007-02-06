@@ -790,22 +790,22 @@ void
 WidgetPropertySet::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidget *subwidget)
 {
 	if (!KFormDesigner::FormManager::self()->activeForm() 
-|| !KFormDesigner::FormManager::self()->activeForm()->objectTree())
+	  ||!KFormDesigner::FormManager::self()->activeForm()->objectTree())
 		return;
 
 	QStringList list;
 	QString value;
 	const int alignment = subwidget->property("alignment").toInt();
-	QList<QByteArray> keys( meta.enumerator().valueToKeys(alignment).split('|') );
+	const QList<QByteArray> keys( meta.enumerator().valueToKeys(alignment).split('|') );
 
-	QStringList possibleValues( KexiUtils::enumKeysForProperty(meta) );
+	const QStringList possibleValues( KexiUtils::enumKeysForProperty(meta) );
 	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()
 		->objectTree()->lookup(widget->objectName());
 	const bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(widget);
 
 	if (possibleValues.contains("AlignHCenter"))  {
 		// Create the horizontal alignment property
-		if (keys.contains("AlignHCenter"))
+		if (keys.contains("AlignHCenter") || keys.contains("AlignCenter"))
 			value = "AlignHCenter";
 		else if (keys.contains("AlignRight"))
 			value = "AlignRight";

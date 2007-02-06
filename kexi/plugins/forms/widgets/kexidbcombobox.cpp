@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -67,6 +67,7 @@ class KexiDBComboBox::Private
 	bool buttonPressed : 1;
 	bool mouseOver : 1;
 	bool dataEnteredByHand : 1;
+	bool designMode : 1;
 };
 
 //-------------------------------------
@@ -79,6 +80,7 @@ KexiDBComboBox::KexiDBComboBox(QWidget *parent, const char *name, bool designMod
 	setMouseTracking(true);
 	setFocusPolicy(WheelFocus);
 	installEventFilter(this);
+	d->designMode = designMode;
 	d->paintedCombo = new KComboBox(this);
 	d->paintedCombo->hide();
 	d->paintedCombo->move(0,0);
@@ -238,7 +240,7 @@ QRect KexiDBComboBox::buttonGeometry() const
 
 bool KexiDBComboBox::handleMousePressEvent(QMouseEvent *e)
 {
-	if ( e->button() != Qt::LeftButton )
+	if ( e->button() != Qt::LeftButton || d->designMode )
 		return true;
 /*todo	if ( m_discardNextMousePress ) {
 		d->discardNextMousePress = FALSE;
@@ -464,10 +466,11 @@ QVariant KexiDBComboBox::valueFromInternalEditor()
 
 QPoint KexiDBComboBox::mapFromParentToGlobal(const QPoint& pos) const
 {
-	const KexiFormScrollView* view = KexiUtils::findParentConst<const KexiFormScrollView>(this, "KexiFormScrollView"); 
-	if (!view)
+//	const KexiFormScrollView* view = KexiUtils::findParentConst<const KexiFormScrollView>(this, "KexiFormScrollView"); 
+	if (!parentWidget())
 		return QPoint(-1,-1);
-	return view->viewport()->mapToGlobal(pos);
+	return parentWidget()->mapToGlobal(pos);
+//	return view->viewport()->mapToGlobal(pos);
 }
 
 int KexiDBComboBox::popupWidthHint() const
