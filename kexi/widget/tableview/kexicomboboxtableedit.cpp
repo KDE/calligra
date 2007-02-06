@@ -229,12 +229,12 @@ void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, const QVar
 		w -= (d->button->width() - x);
 	if (!val.isNull()) {
 		KexiTableViewData *relData = column()->relatedData();
-		KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
+		KexiDB::LookupFieldSchema *lookupFieldSchema = 0;
 		if (relData) {
 			int rowToHighlight;
 			txt = valueForString(val.toString(), &rowToHighlight, 0, 1);
 		}
-		else if (lookupFieldSchema) {
+		else if ((lookupFieldSchema = this->lookupFieldSchema())) {
 		/* handled at at KexiTableView level
 			if (popup()) {
 				KexiTableItem *it = popup()->tableView()->selectedItem();

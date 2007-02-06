@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
 #include "kexitableedit.h"
 
 #include <kexidb/lookupfieldschema.h>
+#include <kexidb/expression.h>
+#include <kexidb/parser/sqlparser.h>
 
 #include <kdebug.h>
 
@@ -82,15 +84,18 @@ class KexiComboBoxPopupPrivate
 	public:
 		KexiComboBoxPopupPrivate() 
 		 : int_f(0)
+		 , privateQuery(0)
 		{
 			max_rows = KexiComboBoxPopup::defaultMaxRows;
 		}
 		~KexiComboBoxPopupPrivate() {
 			delete int_f;
+			delete privateQuery;
 		}
 		
 		KexiComboBoxPopup_KexiTableView *tv;
 		KexiDB::Field *int_f; //TODO: remove this -temporary
+		KexiDB::QuerySchema* privateQuery;
 		int max_rows;
 };
 
@@ -154,12 +159,15 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 		setDataInternal( column->relatedData(), false /*!owner*/ );
 		return;
 	}
-
 	// case 2: lookup field
 	KexiDB::LookupFieldSchema *lookupFieldSchema = 0;
 	if (field->table())
 		lookupFieldSchema = field->table()->lookupFieldSchema( *field );
+	delete d->privateQuery;
+	d->privateQuery = 0;
 	if (lookupFieldSchema) {
+		const QValueList<uint> visibleColumns( lookupFieldSchema->visibleColumns() );
+		const bool multipleLookupColumnJoined = visibleColumns.count() > 1;
 //! @todo support more RowSourceType's, not only table and query
 		KexiDB::Cursor *cursor = 0;
 		switch (lookupFieldSchema->rowSource().type()) {
@@ -169,7 +177,14 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 			if (!lookupTable)
 //! @todo errmsg
 				return;
-			cursor = field->table()->connection()->prepareQuery( *lookupTable );
+			if (multipleLookupColumnJoined) {
+				kdDebug() << "--- Orig query: " << endl;
+				lookupTable->query()->debug();
+				d->privateQuery = new KexiDB::QuerySchema(*lookupTable->query());
+			}
+			else {
+				cursor = field->table()->connection()->prepareQuery( *lookupTable );
+			}
 			break;
 		}
 		case KexiDB::LookupFieldSchema::RowSource::Query: {
@@ -178,10 +193,62 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 			if (!lookupQuery)
 //! @todo errmsg
 				return;
-			cursor = field->table()->connection()->prepareQuery( *lookupQuery );
+			if (multipleLookupColumnJoined) {
+				kdDebug() << "--- Orig query: " << endl;
+				lookupQuery->debug();
+				d->privateQuery = new KexiDB::QuerySchema(*lookupQuery);
+			}
+			else {
+				cursor = field->table()->connection()->prepareQuery( *lookupQuery );
+			}
 			break;
 		}
 		default:;
+		}
+		if (d->privateQuery) {
+			// append column computed using multiple columns
+			const KexiDB::QueryColumnInfo::Vector fieldsExpanded( d->privateQuery->fieldsExpanded() );
+			uint fieldsExpandedSize( fieldsExpanded.size() );
+			KexiDB::BaseExpr *expr = 0;
+			int count = visibleColumns.count();
+			for (QValueList<uint>::ConstIterator it( visibleColumns.at(count-1) ); count>0; count--, --it) {
+				KexiDB::QueryColumnInfo *ci = ((*it) < fieldsExpandedSize) ? fieldsExpanded.at( *it ) : 0;
+				if (!ci) {
+					kdWarning() << "KexiComboBoxPopup::setData(): " << *it << " >= fieldsExpandedSize" << endl;
+					continue;
+				}
+				KexiDB::VariableExpr *fieldExpr
+					= new KexiDB::VariableExpr( ci->field->table()->name()+"."+ci->field->name() );
+				fieldExpr->field = ci->field;
+				fieldExpr->tablePositionForField = d->privateQuery->tableBoundToColumn( *it );
+				if (expr) {
+//! @todo " " separator hardcoded...
+//! @todo use SQL sub-parser here...
+					KexiDB::ConstExpr *constExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, " ");
+					expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, constExpr, CONCATENATION, expr);
+					expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, fieldExpr, CONCATENATION, expr);
+				}
+				else
+					expr = fieldExpr;
+			}
+			expr->debug();
+			kdDebug() << expr->toString() << endl;
+
+			KexiDB::Field *f = new KexiDB::Field();
+			f->setExpression( expr );
+			d->privateQuery->addField( f );
+#if 0 //does not work yet
+// <remove later>
+//! @todo temp: improved display by hiding all columns except the computed one
+			const int numColumntoHide = d->privateQuery->fieldsExpanded().count() - 1;
+			for (int i=0; i < numColumntoHide; i++)
+				d->privateQuery->setColumnVisible(i, false);
+// </remove later>
+#endif
+//todo...
+			kdDebug() << "--- Private query: " << endl;
+			d->privateQuery->debug();
+			cursor = field->table()->connection()->prepareQuery( *d->privateQuery );
 		}
 		if (!cursor)
 //! @todo errmsg

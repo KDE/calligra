@@ -179,8 +179,10 @@ void KexiDataSourceComboBox::setDataSource(const QString& mimeType, const QStrin
 	if (i==-1) {
 		if (mimeType.isEmpty())
 			i = findItem("kexi/query", name);
-		if (i==-1)
+		if (i==-1) {
+			setCurrentItem(0);
 			return;
+		}
 	}
 	setCurrentItem(i);
 	slotActivated(i);
