@@ -20,6 +20,10 @@
             <Separator/>
             <ActionList name="accountseditor_edit_list"/>
             <Separator/>
+            <ActionList name="calendareditor_calendar_list"/>
+            <Separator/>
+            <ActionList name="calendareditor_day_list"/>
+            <Separator/>
             <Action name="link_mode"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
@@ -34,7 +38,7 @@
                 <Action name="view_gantt_showCriticalPath"/>
                 <Action name="view_gantt_showCriticalTasks"/>
                 <Action name="view_task_appointments"/>
-<Action name="calculate_schedule"/>
+                <Action name="calculate_schedule"/>
             </Menu>
             <Separator/>
             <!--<Action name="view_pert"/> -->
@@ -81,7 +85,7 @@
         <Separator/>
         <ActionList name="dummy"/> <!-- HACK to get a separator -->
 
-	<Separator/>
+        <Separator/>
         <ActionList name="taskeditor_add_list"/>
         <Separator/>
         <ActionList name="taskeditor_move_list"/>
@@ -91,6 +95,10 @@
         <ActionList name="accountseditor_edit_list"/>
         <Separator/>
         <ActionList name="scheduleeditor_edit_list"/>
+        <Separator/>
+        <ActionList name="calendareditor_calendar_list"/>
+        <Separator/>
+        <ActionList name="calendareditor_day_list"/>
     </ToolBar>
     <Menu name="node_popup">
 <!--        <Action name="edit_cut"/>
@@ -152,5 +160,27 @@
         <Action name="add_account"/>
         <Action name="add_subaccount"/>
         <Action name="delete_account"/>
+    </Menu>
+    <Menu name="calendareditor_calendar_list">
+        <Action name="edit_calendar"/>
+        <Action name="add_subcalendar"/>
+        <Action name="delete_calendar_selection"/>
+    </Menu>
+    <Menu name="calendareditor_day_list">
+        <Action name="delete_day_selection"/>
+        <Action name="add_calendarday"/>
+        <Action name="add_workinterval"/>
+    </Menu>
+    <Menu name="calendareditor_popup">
+        <Action name="add_calendar"/>
+    </Menu>
+    <Menu name="calendareditor_calendar_popup">
+        <Action name="edit_calendar"/>
+        <Action name="delete_calendar_selection"/>
+    </Menu>
+    <Menu name="calendareditor_day_popup">
+        <Action name="add_calendarday"/>
+        <Action name="add_workinterval"/>
+        <Action name="delete_workinterval"/>
     </Menu>
 </kpartgui>

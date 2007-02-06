@@ -558,12 +558,12 @@ void CalendarPanel::setCalendar(Calendar *cal) {
     //kDebug()<<k_funcinfo<<endl;
     table->clear();
     if (cal) {
-        table->setMarkedWeekdays(cal->weekdaysMap());
+        table->setMarkedWeekdays(cal->weekdayStateMap());
         //kDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;
         foreach (CalendarDay *d, cal->days()) {
-            if (d->state() != Map::None) {
+            if (d->state() != CalendarDay::None) {
                 table->addMarkedDate(d->date(), d->state());
-            //kDebug()<<k_funcinfo<<"Added day: "<<d->date().toString()<<"="<<d->state()<<endl;
+                //kDebug()<<k_funcinfo<<"Added day: "<<d->date()<<"="<<d->state()<<endl;
             }
         }
         setEnabled(true);

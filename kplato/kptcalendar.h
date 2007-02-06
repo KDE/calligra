@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2006 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; 
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,12 +20,16 @@
 #ifndef KPTCALENDAR_H
 #define KPTCALENDAR_H
 
-#include "kptmap.h"
 #include "kptduration.h"
 
 #include <qdatetime.h>
 #include <QPair>
 #include <QList>
+#include <QMap>
+#include <QStringList>
+
+#include <kglobal.h>
+#include <klocale.h>
 
 class QDomElement;
 class QDateTime;
@@ -35,10 +39,13 @@ class QString;
 
 namespace KPlato
 {
+class Calendar;
 
+class IntMap;
 class DateTime;
 class Project;
 class Schedule;
+class XMLLoaderObject;
 
 typedef QPair<QTime, QTime> TimeInterval;
 typedef QPair<DateTime, DateTime> DateTimeInterval;
@@ -46,13 +53,17 @@ typedef QPair<DateTime, DateTime> DateTimeInterval;
 class CalendarDay {
 
 public:
+    enum State { Undefined = 0,
+                 None=Undefined, // depreciated
+                 NonWorking=1, Working=2 };
+    
     CalendarDay();
     CalendarDay(int state);
     explicit CalendarDay(const QDate& date, int state=0);
     CalendarDay(CalendarDay *day);
     ~CalendarDay();
 
-    bool load(QDomElement &element);
+    bool load( QDomElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
     const QList<TimeInterval*> &workingIntervals() const { return m_workingIntervals; }
@@ -63,6 +74,10 @@ public:
         m_workingIntervals.clear();
         m_workingIntervals = intervals;
     }
+    void removeInterval( TimeInterval *interval );
+    TimeInterval *intervalAt( int index ) const;
+    int indexOf( const TimeInterval *ti ) const;
+    int numIntervals() const;
     
     QTime startOfDay() const;
     QTime endOfDay() const;
@@ -77,6 +92,7 @@ public:
     bool operator!=(const CalendarDay *day) const;
     bool operator!=(const CalendarDay &day) const;
 
+    Duration workDuration() const;
     /**
      * Returns the amount of 'worktime' that can be done on
      * this day between the times start and end.
@@ -121,7 +137,25 @@ public:
     
     const CalendarDay &copy(const CalendarDay &day);
 
+    static QString stateToString( int st, bool trans = false ) {
+        if ( st == None ) {
+            return trans ? i18n( "Undefined" ) : "Undefined";
+        } else if ( st == NonWorking ) {
+            return trans ? i18n( "Non-working" ) : "Non-working";
+        } else if ( st == Working ) {
+            return trans ?  i18n( "Working" ) : "Working";
+        }
+        return QString();
+    }
+    static QStringList stateList( bool trans = false ) {
+        QStringList lst;
+        return trans
+            ? lst << i18n( "Undefined" ) << i18n( "Non-working" ) << i18n( "Working" )
+            : lst << "Undefined" << "Non-working" << "Working";
+    }
+
 private:
+    Calendar *m_calendar;
     QDate m_date; //NOTE: inValid if used for weekdays
     int m_state;
     QList<TimeInterval*> m_workingIntervals;
@@ -136,29 +170,26 @@ class CalendarWeekdays {
 
 public:
     CalendarWeekdays();
-    CalendarWeekdays(CalendarWeekdays *weekdays);
+    CalendarWeekdays( const CalendarWeekdays *weekdays );
     ~CalendarWeekdays();
 
-    bool load(QDomElement &element);
+    bool load( QDomElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
-    void addWeekday(CalendarDay *day) { m_weekdays.append(day); }
-    const QList<CalendarDay*> &weekdays() const { return m_weekdays; }
+    const QList<CalendarDay*> weekdays() const 
+        { QList<CalendarDay*> lst = m_weekdays.values(); return lst; }
     /**
-     * Returns the pointer to CalendarDay for day or 0 if not defined. 
-     * day is 0..6.
-     * @param day todo : add a comment
+     * Returns the pointer to CalendarDay for day.
+     * @param day The weekday number, must be between 1 (monday) and 7 (sunday)
      */
     CalendarDay *weekday(int day) const;
     CalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()-1); }
-    CalendarDay *replace(int weekday, CalendarDay *day) {
-        CalendarDay *d = m_weekdays.at(weekday);
-        m_weekdays.replace(weekday, day);
-        return d;
-    }
-    IntMap map();
     
-    void setWeekday(IntMap::iterator it, int state) { m_weekdays.at(it.key())->setState(state); }
+    const QMap<int, CalendarDay*> &weekdayMap() const;
+    
+    IntMap stateMap() const;
+    
+//    void setWeekday(IntMap::iterator it, int state) { m_weekdays.at(it.key())->setState(state); }
 
     int state(const QDate &date) const;
     int state(int weekday) const;
@@ -197,9 +228,11 @@ public:
 
     const CalendarWeekdays &copy(const CalendarWeekdays &weekdays);
 
+    int indexOf( const CalendarDay *day ) const;
+    
 private:
-    QList<CalendarDay*> m_weekdays;
-    double m_workHours;
+    Calendar *m_calendar;
+    QMap<int, CalendarDay*> m_weekdays;
 
 #ifndef NDEBUG
 public:
@@ -224,69 +257,78 @@ public:
  *  3. Definitions for groups of resources/individual resources.
  *
  */
-class Calendar {
-
+class Calendar : public QObject
+{
+    Q_OBJECT
 public:
     Calendar();
     Calendar(const QString& name, Calendar *parent=0);
-    explicit Calendar(Calendar *calendar);
+    //Calendar( const Calendar &c ); QObject doesn't allow a copy constructor
     ~Calendar();
 
-    QString name() const { return m_name; }
-    void setName(const QString& name) { m_name = name; }
+    const Calendar &operator=(const Calendar &calendar ) { return copy( calendar ); }
 
-    Calendar *parent() const { return m_parent; }
-    void setParent(Calendar *parent) { m_parent = parent; }
+    QString name() const { return m_name; }
+    void setName(const QString& name);
+
+    Calendar *parentCal() const { return m_parent; }
+    /**
+     * Set parent calendar.
+     * Removes myself from current parent and
+     * inserts myself as child to new parent.
+     */
+    void setParentCal(Calendar *parent);
+    
+    bool isChildOf( const Calendar *cal ) const;
     
     Project *project() const { return m_project; }
     void setProject(Project *project);
 
-    bool isDeleted() const { return m_deleted; }
-    void setDeleted(bool yes);
-
     QString id() const { return m_id; }
-    bool setId(const QString& id);
-    void generateId();
+    void setId(const QString& id);
     
-    bool load(QDomElement &element);
+    const QList<Calendar*> &calendars() const { return m_calendars; }
+    void addCalendar( Calendar *calendar );
+    void takeCalendar( Calendar *calendar );
+    int indexOf( const Calendar *calendar ) const;
+
+    bool load( QDomElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
+
+    void setState( CalendarDay *day, CalendarDay::State state );
+    void addWorkInterval( CalendarDay *day, TimeInterval *ti );
+    void takeWorkInterval( CalendarDay *day, TimeInterval *ti );
+    void setWorkInterval( TimeInterval *ti, const TimeInterval &value );
 
     /**
      * Find the definition for the day date.
      * If skipUndefined=true the day is NOT returned if it has state None (Undefined).
      */
     CalendarDay *findDay(const QDate &date, bool skipUndefined=false) const;
-    void addDay(CalendarDay *day) { m_days.insert(0, day); }
-    void deleteDay(CalendarDay *day) {
-        int i = m_days.indexOf(day);
-        if (i != -1) {
-            m_days.removeAt(i);
-        }
-        delete day;
-    }
-        
-    CalendarDay *takeDay(CalendarDay *day) {
-        int i = m_days.indexOf(day);
-        if (i != -1)
-            m_days.removeAt(i);
-        return day;
-    }
+    void addDay(CalendarDay *day);
+    CalendarDay *takeDay(CalendarDay *day);
     const QList<CalendarDay*> &days() const { return m_days; }
+    QList<QPair<CalendarDay*, CalendarDay*> > consecutiveVacationDays() const;
+    QList<CalendarDay*> workingDays() const;
+    int indexOf( const CalendarDay *day ) const { return m_days.indexOf( const_cast<CalendarDay*>( day ) ); }
+    CalendarDay *dayAt( int index ) { return m_days.value( index ); }
+    int numDays() const { return m_days.count(); }
+    void setDate( CalendarDay *day, const QDate &date );
+    CalendarDay *day( const QDate &date ) const;
     
-    /**
-     * Returns the state of definition for parents day date in it.
-     * Also checks the parents recursively.
-     */
-    int parentDayState(const QDate &date) const;
+    IntMap weekdayStateMap() const;
     
-    IntMap weekdaysMap() { return m_weekdays->map(); }
-    void setWeekday(IntMap::iterator it, int state) { m_weekdays->setWeekday(it, state); }
-    CalendarWeekdays *weekdays() { return m_weekdays; }
+    CalendarWeekdays *weekdays() const { return m_weekdays; }
     CalendarDay *weekday(int day) const { return m_weekdays->weekday(day); }
-
+    int indexOfWeekday( const CalendarDay *day ) const { return m_weekdays->indexOf( day ); }
+    const QList<CalendarDay*> weekdayList() const { return m_weekdays->weekdays(); }
+    int numWeekdays() const { return weekdayList().count(); }
+    
+    /// Sets the weekdays data to the data in day
+    void setWeekday( int weekday, const CalendarDay &day );
+    
     QString parentId() const { return m_parentId; }
     void setParentId(const QString& id) { m_parentId = id; }
-
     bool hasParent(Calendar *cal);
 
     /**
@@ -345,9 +387,29 @@ public:
     bool removeId(const QString &id);
     void insertId(const QString &id);
 
+signals:
+    void changed( Calendar* );
+    void changed( CalendarDay* );
+    void changed( TimeInterval* );
+    
+    void weekdayToBeAdded( CalendarDay *day, int index );
+    void weekdayAdded( CalendarDay *day );
+    void weekdayToBeRemoved( CalendarDay *day );
+    void weekdayRemoved( CalendarDay *day );
+    
+    void dayToBeAdded( CalendarDay *day, int index );
+    void dayAdded( CalendarDay *day );
+    void dayToBeRemoved( CalendarDay *day );
+    void dayRemoved( CalendarDay *day );
+    
+    void workIntervalToBeAdded( CalendarDay*, TimeInterval*, int index );
+    void workIntervalAdded( CalendarDay*, TimeInterval* );
+    void workIntervalToBeRemoved( CalendarDay*, TimeInterval* );
+    void workIntervalRemoved( CalendarDay*, TimeInterval* );
+
 protected:
-    const Calendar &copy(Calendar &calendar);
     void init();
+    const Calendar &copy(const Calendar &calendar);
     
 private:
     QString m_name;
@@ -360,6 +422,8 @@ private:
     QList<CalendarDay*> m_days;
     CalendarWeekdays *m_weekdays;
 
+    QList<Calendar*> m_calendars;
+    
 #ifndef NDEBUG
 public:
     void printDebug(const QString& indent=QString());
@@ -409,7 +473,7 @@ public:
     /// Set the work time of a normal day
     void setDay(double hours) { m_day = Duration((qint64)(hours*60.0*60.0*1000.0)); }
     
-    bool load(QDomElement &element);
+    bool load( QDomElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
     Calendar *calendar() const { return m_calendar; }

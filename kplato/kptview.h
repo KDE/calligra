@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2006 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2007 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -58,12 +58,14 @@ class PertEditor;
 class ResourceView;
 class AccountsEditor;
 class TaskEditor;
+class CalendarEditor;
 class ResourceEditor;
 class ScheduleEditor;
 class ScheduleManager;
 
 class ResourceAssignmentView;
 //class ReportView;
+class Calendar;
 class Part;
 class DocumentChild;
 class Node;
@@ -203,6 +205,8 @@ public slots:
 
 
 
+    void slotViewCalendarEditor();
+    
     void slotViewTaskEditor();
     void slotAddTask();
     void slotAddSubTask();
@@ -237,6 +241,9 @@ protected slots:
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
     void slotCalculateSchedule( Project*, ScheduleManager* );
     void slotProgressChanged( int value );
+    
+    void slotEditCalendar();
+    void slotEditCalendar( Calendar *calendar );
     
     void slotProjectCalendar();
     void slotProjectWorktime();
@@ -284,6 +291,7 @@ protected:
     Node *currentTask();
     Resource *currentResource();
     ResourceGroup *currentResourceGroup();
+    Calendar *currentCalendar();
     void updateView( QWidget *widget );
 
 private slots:
@@ -297,6 +305,7 @@ private:
     AccountsView *m_accountsview;
     AccountsEditor *m_accountseditor;
     TaskEditor *m_taskeditor;
+    CalendarEditor *m_calendareditor;
     ResourceEditor *m_resourceeditor;
     ScheduleEditor *m_scheduleeditor;
     ResourceAssignmentView *m_resourceAssignmentView;
@@ -355,7 +364,7 @@ private:
     // ------ Project
     KAction *actionEditMainProject;
     KAction *actionEditStandardWorktime;
-    KAction *actionEditCalendar;
+    KAction *actionEditCalendarList;
     KAction *actionEditAccounts;
     KAction *actionEditResources;
     KAction *actionChartIndicators;
@@ -381,6 +390,7 @@ private:
     KAction *actionTaskProgress;
     KAction *actionDeleteTask;
     KAction *actionEditResource;
+    KAction *actionEditCalendar;
 
     //Test
     KAction *actNoInformation;

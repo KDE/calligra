@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,12 +24,18 @@
 
 #include <q3ptrlist.h>
 
+#include <kdialog.h>
+
 class QDate;
+
+class KCommand;
 
 namespace KPlato
 {
 
 class Calendar;
+class Part;
+class Project;
 
 class CalendarEdit : public CalendarEditBase {
     Q_OBJECT
@@ -60,6 +66,27 @@ signals:
 private:
     Calendar *m_calendar;
 };
+
+//------------------------------
+class CalendarEditDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    CalendarEditDialog(Project &project, Calendar *calendar, QWidget *parent=0, const char *name=0);
+    ~CalendarEditDialog();
+    
+    KCommand *buildCommand(Part *part);
+
+protected slots:
+    void slotOk();
+    
+private:
+    Project &project;
+    Calendar *original;
+    Calendar *calendar;
+    CalendarEdit *dia;
+};
+
 
 }  //KPlato namespace
 

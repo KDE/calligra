@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,6 +18,7 @@
 */
 
 #include "kptcalendaredit.h"
+#include "kptcommand.h"
 #include "kptproject.h"
 #include "kptcalendar.h"
 #include "kptcalendarpanel.h"
@@ -36,14 +37,10 @@
 #include <qdatetime.h>
 #include <qtabwidget.h>
 #include <q3textbrowser.h>
-
-#include <klocale.h>
-
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
-
 #include <QMap>
 
+#include <kcommand.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -107,7 +104,7 @@ void CalendarEdit::slotAddIntervalClicked() {
     bApply->setEnabled(true);
 }
 
-//NOTE: enum Map::State must match combobox state!
+//NOTE: enum CalendarDay::State must match combobox state!
 void CalendarEdit::slotApplyClicked() {
     //kDebug()<<k_funcinfo<<"("<<m_calendar<<")"<<endl;
     DateMap dates = calendarPanel->selectedDates();
@@ -121,7 +118,7 @@ void CalendarEdit::slotApplyClicked() {
         }
         calDay->setState(state->currentIndex()); //NOTE!!
         calDay->clearIntervals();
-        if (calDay->state() == Map::Working) {
+        if (calDay->state() == CalendarDay::Working) {
             int cnt = intervalList->topLevelItemCount();
             for (int i = 0; i < cnt; ++i) {
                 //kDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
@@ -133,10 +130,10 @@ void CalendarEdit::slotApplyClicked() {
     IntMap weekdays = calendarPanel->selectedWeekdays();
     for(IntMap::iterator it = weekdays.begin(); it != weekdays.end(); ++it) {
         //kDebug()<<k_funcinfo<<"weekday="<<it.key()<<endl;
-        CalendarDay *weekday = m_calendar->weekday(it.key()-1);
+        CalendarDay *weekday = m_calendar->weekday(it.key());
         weekday->setState(state->currentIndex());//NOTE!!
         weekday->clearIntervals();
-        if (weekday->state() == Map::Working) {
+        if (weekday->state() == CalendarDay::Working) {
             int cnt = intervalList->topLevelItemCount();
             for (int i = 0; i < cnt; ++i) {
                 //kDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
@@ -211,12 +208,12 @@ void CalendarEdit::slotDateSelected(const QDate& date) {
             IntervalItem *item = new IntervalItem(intervalList, i->first, i->second);
             intervalList->addTopLevelItem(item);
         }
-        if (calDay->state() == Map::Working) {
+        if (calDay->state() == CalendarDay::Working) {
             //kDebug()<<k_funcinfo<<"("<<date.toString()<<") is workday"<<endl;
             state->setCurrentIndex(2);
             slotStateActivated(2);
             bApply->setEnabled(calDay->workingIntervals().count() > 0);
-        } else if (calDay->state() == Map::NonWorking){
+        } else if (calDay->state() == CalendarDay::NonWorking){
             //kDebug()<<k_funcinfo<<"("<<date.toString()<<") is holiday"<<endl;
             state->setCurrentIndex(1);
             slotStateActivated(1);
@@ -242,7 +239,7 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
     }
     //kDebug()<<k_funcinfo<<"("<<day_<<")"<<endl;
     clearEditPart();
-    CalendarDay *calDay = m_calendar->weekday(day_-1); // 0..6
+    CalendarDay *calDay = m_calendar->weekday(day_);
     if (!calDay) {
         kError()<<k_funcinfo<<"Weekday ("<<day_<<") not defined!"<<endl;
         return;
@@ -256,12 +253,12 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
         intervalList->addTopLevelItem(item);
     }
     state->setEnabled(true);
-    if (calDay->state() == Map::Working) {
+    if (calDay->state() == CalendarDay::Working) {
         //kDebug()<<k_funcinfo<<"("<<day_<<")=workday"<<endl;
         state->setCurrentIndex(2);
         slotStateActivated(2);
         bApply->setEnabled(calDay->workingIntervals().count() > 0);
-    } else if (calDay->state() == Map::NonWorking) {
+    } else if (calDay->state() == CalendarDay::NonWorking) {
         //kDebug()<<k_funcinfo<<"("<<day_<<")=Holiday"<<endl;
         state->setCurrentIndex(1);
         slotStateActivated(1);
@@ -276,6 +273,94 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
 
 void CalendarEdit::slotSelectionCleared() {
     clearEditPart();
+}
+
+//----------------------------------------------------
+CalendarEditDialog::CalendarEditDialog(Project &p, Calendar *cal, QWidget *parent, const char *name)
+    : KDialog( parent),
+      project(p),
+      original( cal ),
+      calendar( new Calendar() )
+{
+    *calendar = *cal;
+    
+    setCaption( i18n("Calendar's Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    showButtonSeparator( true );
+    //kDebug()<<k_funcinfo<<&p<<endl;
+    dia = new CalendarEdit( this );
+    dia->setCalendar( calendar );
+
+    setMainWidget(dia);
+    enableButtonOk(false);
+
+    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+    connect(dia, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
+}
+
+CalendarEditDialog::~CalendarEditDialog()
+{
+    delete calendar;
+}
+
+KCommand *CalendarEditDialog::buildCommand(Part *part) {
+    //kDebug()<<k_funcinfo<<endl;
+    KMacroCommand *macro=0;
+    if (original->name() != calendar->name()) {
+        if (macro == 0) macro = new KMacroCommand("");
+        macro->addCommand(new CalendarModifyNameCmd(part, original, calendar->name()));
+    }
+    //kDebug()<<k_funcinfo<<"Check for days deleted: "<<calendar->name()<<endl;
+    foreach (CalendarDay *day, original->days()) {
+        if (calendar->findDay(day->date()) == 0) {
+            if (macro == 0) macro = new KMacroCommand("");
+            macro->addCommand(new CalendarRemoveDayCmd(part, original, day->date()));
+            //kDebug()<<k_funcinfo<<"Removed day "<<day->date()<<endl;
+        }
+    }
+    //kDebug()<<k_funcinfo<<"Check for days added or modified: "<<calendar->name()<<endl;
+    foreach (CalendarDay *c, calendar->days()) {
+        CalendarDay *day = original->findDay(c->date());
+        if (day == 0) {
+            if (macro == 0) macro = new KMacroCommand("");
+            // added
+            //kDebug()<<k_funcinfo<<"Added day "<<c->date()<<endl;
+            macro->addCommand(new CalendarAddDayCmd(part, original, new CalendarDay(c)));
+        } else if (*day != c) {
+            if (macro == 0) macro = new KMacroCommand("");
+            // modified
+            //kDebug()<<k_funcinfo<<"Modified day "<<c->date()<<endl;
+            macro->addCommand(new CalendarModifyDayCmd(part, original, new CalendarDay(c)));
+        }
+    }
+    //kDebug()<<k_funcinfo<<"Check for weekdays modified: "<<calendar->name()<<endl;
+    CalendarDay *day = 0, *org = 0;
+    for (int i=1; i <= 7; ++i) {
+        day = calendar->weekdays()->weekday(i);
+        org = original->weekdays()->weekday(i);
+        if (day && org) {
+            if (*org != *day) {
+                if (macro == 0) macro = new KMacroCommand("");
+                //kDebug()<<k_funcinfo<<"Weekday["<<i<<"] modified"<<endl;
+                macro->addCommand(new CalendarModifyWeekdayCmd(part, original, i, new CalendarDay(day)));
+            }
+        } else if (day) {
+            // shouldn't happen: hmmm, add day to original??
+            kError()<<k_funcinfo<<"Should always have 7 weekdays"<<endl;
+        } else if (org) {
+            // shouldn't happen: set org to default??
+            kError()<<k_funcinfo<<"Should always have 7 weekdays"<<endl;
+        }
+    }
+    if (macro) {
+        macro->setName(i18n("Modify Calendar"));
+    }
+    return macro;
+}
+
+void CalendarEditDialog::slotOk()
+{
 }
 
 }  //KPlato namespace

@@ -139,12 +139,12 @@ void DateTable::paintWeekday(QPainter *painter, int col) {
     painter->drawRect(0, 0, w, h);
     painter->setPen(KGlobalSettings::textColor());
 
-    if (m_markedWeekdays.state(day) == Map::Working) {
+    if (m_markedWeekdays.state(day) == CalendarDay::Working) {
         painter->setPen(colorBackgroundWorkday);
         painter->setBrush(colorBackgroundWorkday);
         painter->drawRect(0, 0, w, h);
         painter->setPen(colorTextWorkday);
-    } else if (m_markedWeekdays.state(day) == Map::NonWorking) {
+    } else if (m_markedWeekdays.state(day) == CalendarDay::NonWorking) {
         painter->setPen(colorBackgroundHoliday);
         painter->setBrush(colorBackgroundHoliday);
         painter->drawRect(0, 0, w, h);
@@ -209,12 +209,12 @@ void DateTable::paintDay(QPainter *painter, int row, int col) {
     painter->drawRect(0, 0, w, h);
 
     // First paint the dates background
-    if (m_markedDates.state(d) == Map::NonWorking) {
+    if (m_markedDates.state(d) == CalendarDay::NonWorking) {
         //kDebug()<<k_funcinfo<<"Marked date: "<<d<<"  row,col=("<<row<<","<<col<<")=NonWorking"<<endl;
         painter->setPen(colorBackgroundHoliday);
         painter->setBrush(colorBackgroundHoliday);
         painter->drawRect(0, 0, w, h);
-    } else if (m_markedDates.state(d) == Map::Working) {
+    } else if (m_markedDates.state(d) == CalendarDay::Working) {
         //kDebug()<<k_funcinfo<<"Marked date: "<<d<<"  row,col=("<<row<<","<<col<<")=Working"<<endl;
         painter->setPen(colorBackgroundWorkday);
         painter->setBrush(colorBackgroundWorkday);
@@ -228,7 +228,7 @@ void DateTable::paintDay(QPainter *painter, int row, int col) {
     }
     // If weeks or weekdays are selected/marked we draw lines around the date
     QPen pen = painter->pen();
-    if (m_markedWeekdays.state(weekday(col)) == Map::Working) {
+    if (m_markedWeekdays.state(weekday(col)) == CalendarDay::Working) {
         //kDebug()<<k_funcinfo<<"Marked weekday: row,dayCol=("<<row<<","<<dayCol<<")=Working"<<endl;
         pen.setColor(colorBackgroundWorkday);
         painter->setPen(pen);
@@ -403,7 +403,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             // check first downside - then upside, clear all others
             bool select = false;
             for(int i=m_dateStartCol; i < col; ++i) {
-                //kDebug()<<"Down["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
+                kDebug()<<"Down["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
                 if (m_selectedWeekdays.contains(weekday(i))) {
                     select = true; // we have hit a selected day; select the rest
                 } else if (select) {
@@ -413,7 +413,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             bool selected = select;
             select = false;
             for(int i=7; i > col; --i) {
-                //kDebug()<<"Up["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
+                kDebug()<<"Up["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
                 if (m_selectedWeekdays.contains(weekday(i))) {
                     if (selected) m_selectedWeekdays.toggle(weekday(i)); // deselect
                     else select = true;
@@ -434,7 +434,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         updateSelectedCells();
         repaintContents(false);
         if (m_enabled) {
-            //kDebug()<<k_funcinfo<<"emit weekdaySelected("<<day<<")"<<endl;
+            kDebug()<<k_funcinfo<<"emit weekdaySelected("<<day<<")"<<endl;
             emit weekdaySelected(day); // day= 1..7
         }
         return;

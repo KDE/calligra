@@ -37,6 +37,7 @@ class Project;
 class Node;
 class Resource;
 class ResourceGroup;
+class Calendar;
 
 /** 
  ViewBase is the baseclass of all sub-views to View.
@@ -66,6 +67,8 @@ public:
     virtual Resource* currentResource() const { return 0; }
     /// Reimplement if your view handles resource groups
     virtual ResourceGroup* currentResourceGroup() const { return 0; }
+    /// Reimplement if your view handles calendars
+    virtual Calendar* currentCalendar() const { return 0; }
 
     /// Returns the list of action lists that shall be plugged/unplugged
     QStringList actionListNames() const { return m_actionListMap.keys(); }

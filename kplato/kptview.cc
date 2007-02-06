@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2006 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2007 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -70,6 +70,7 @@
 #include "kptviewbase.h"
 #include "kptaccountsview.h"
 #include "kptaccountseditor.h"
+#include "kptcalendareditor.h"
 #include "kptfactory.h"
 #include "kptmilestoneprogressdialog.h"
 #include "kptnode.h"
@@ -495,6 +496,11 @@ View::View( Part* part, QWidget* parent )
     m_accountseditor->draw( getProject() );
     connect( m_accountseditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     
+    m_calendareditor = new CalendarEditor( getPart(), m_tab );
+    m_tab->addWidget( m_calendareditor );
+    m_calendareditor->draw( getProject() );
+    connect( m_calendareditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
     m_resourceeditor = new ResourceEditor( getPart(), m_tab );
     m_tab->addWidget( m_resourceeditor );
     m_resourceeditor->draw( getProject() );
@@ -561,6 +567,7 @@ View::View( Part* part, QWidget* parent )
     QTreeWidgetItem *cat;
     cat = m_viewlist->addCategory( i18n( "Editors" ) );
     m_viewlist->addView( cat, i18n( "Accounts" ), m_accountseditor, getPart(), "accounts_editor" );
+    m_viewlist->addView( cat, i18n( "Calendars" ), m_calendareditor, getPart(), "calendar_editor" );
     m_viewlist->addView( cat, i18n( "Resources" ), m_resourceeditor, getPart(), "resource_editor" );
     m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, getPart(), "task_editor" );
     m_viewlist->addView( cat, i18n( "Schedules" ), m_scheduleeditor, getPart(), "schedule_editor" );
@@ -590,6 +597,7 @@ View::View( Part* part, QWidget* parent )
 
     connect( m_resourceeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
+    connect( m_calendareditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
     // The menu items
     // ------ Edit
@@ -670,9 +678,9 @@ View::View( Part* part, QWidget* parent )
     actionEditStandardWorktime  = new KAction(KIcon( "edit" ), i18n("Edit Standard Worktime..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
-    actionEditCalendar  = new KAction(KIcon( "edit" ), i18n("Edit Calendar..."), this);
-    actionCollection()->addAction("project_calendar", actionEditCalendar );
-    connect( actionEditCalendar, SIGNAL( triggered( bool ) ), SLOT( slotProjectCalendar() ) );
+    actionEditCalendarList  = new KAction(KIcon( "edit" ), i18n("Edit Calendar..."), this);
+    actionCollection()->addAction("project_calendar", actionEditCalendarList );
+    connect( actionEditCalendarList, SIGNAL( triggered( bool ) ), SLOT( slotProjectCalendar() ) );
     actionEditAccounts  = new KAction(KIcon( "edit" ), i18n("Edit Accounts..."), this);
     actionCollection()->addAction("project_accounts", actionEditAccounts );
     connect( actionEditAccounts, SIGNAL( triggered( bool ) ), SLOT( slotProjectAccounts() ) );
@@ -729,6 +737,10 @@ View::View( Part* part, QWidget* parent )
     actionEditResource  = new KAction(KIcon( "edit" ), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
+
+    actionEditCalendar  = new KAction(KIcon( "edit" ), i18n("Edit Calendar..."), this);
+    actionCollection()->addAction("edit_calendar", actionEditCalendar );
+    connect( actionEditCalendar, SIGNAL( triggered( bool ) ), SLOT( slotEditCalendar() ) );
 
     // Viewlist popup
     connect( m_viewlist, SIGNAL( createKofficeDocument( KoDocumentEntry& ) ), SLOT( slotCreateKofficeDocument( KoDocumentEntry& ) ) );
@@ -966,6 +978,12 @@ void View::slotViewTaskEditor()
     m_viewlist->setSelected( m_viewlist->findItem( m_taskeditor ) );
 }
 
+void View::slotViewCalendarEditor()
+{
+    kDebug()<<k_funcinfo<<endl;
+    m_viewlist->setSelected( m_viewlist->findItem( m_calendareditor ) );
+}
+
 void View::slotProjectEdit()
 {
     MainProjectDialog * dia = new MainProjectDialog( getProject() );
@@ -973,6 +991,27 @@ void View::slotProjectEdit()
         KCommand * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             getPart() ->addCommand( cmd );
+        }
+    }
+    delete dia;
+}
+
+void View::slotEditCalendar()
+{
+    slotEditCalendar( currentCalendar() );
+}
+
+void View::slotEditCalendar( Calendar *calendar )
+{
+    if ( calendar == 0 ) {
+        return;
+    }
+    CalendarEditDialog * dia = new CalendarEditDialog( getProject(), calendar );
+    if ( dia->exec()  == QDialog::Accepted) {
+        KCommand * cmd = dia->buildCommand( getPart() );
+        if ( cmd ) {
+            //kDebug()<<k_funcinfo<<"Modifying calendar"<<endl;
+            getPart() ->addCommand( cmd ); //also executes
         }
     }
     delete dia;
@@ -1266,7 +1305,14 @@ void View::slotChartDisplay()
 
 
 
-
+Calendar *View::currentCalendar()
+{
+    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( v == 0 ) {
+        return 0;
+    }
+    return v->currentCalendar();
+}
 
 Node *View::currentTask()
 {
@@ -1952,8 +1998,10 @@ void View::slotRenameNode( Node *node, const QString& name )
 void View::slotPopupMenu( const QString& menuname, const QPoint & pos )
 {
     QMenu * menu = this->popupMenu( menuname );
-    if ( menu )
+    if ( menu ) {
+        kDebug()<<k_funcinfo<<menu<<": "<<menu->actions().count()<<endl;
         menu->exec( pos );
+    }
 }
 
 void View::slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListItem *item )
@@ -1994,6 +2042,8 @@ bool View::setContext( Context &context )
         slotViewAccounts();
     } else if ( context.currentView == "taskeditor" ) {
         slotViewTaskEditor();
+    } else if ( context.currentView == "calendareditor" ) {
+        slotViewCalendarEditor();
     } else {
         slotViewGantt();
     }
@@ -2022,7 +2072,11 @@ void View::getContext( Context &context ) const
     } else if (m_tab->currentWidget() == m_resourceeditor) {
         context.currentView = "resourceeditor";
     } else if (m_tab->currentWidget() == m_resourceAssignmentView){
-	context.currentView = "resourceassignmentview";
+        context.currentView = "resourceassignmentview";
+    } else if (m_tab->currentWidget() == m_calendareditor){
+        context.currentView = "calendareditor";
+    } else if (m_tab->currentWidget() == m_accountseditor){
+        context.currentView = "accountseditor";
     }
 m_ganttview->getContext( context.ganttview );
 //    m_resourceview->getContext( context.resourceview );
@@ -2148,7 +2202,7 @@ void View::slotPrintTestDebug()
     //     QTime t2(10,0,0);
     //     DateTime wdt1(wdate, t1);
     //     DateTime wdt2(wdate, t2);
-    //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
+    //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), CalendarDay::Working);
     //     day->addInterval(TimeInterval(t1, t2));
     //     if (!t->addDay(day)) {
     //         kDebug()<<"Failed to add day"<<endl;
@@ -2209,7 +2263,7 @@ void View::slotPrintTestDebug()
     //     QTime t2(10,0,0);
     //     DateTime wdt1(wdate, t1);
     //     DateTime wdt2(wdate, t2);
-    //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
+    //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), CalendarDay::Working);
     //     day->addInterval(TimeInterval(t1, t2));
     //     if (!p->addDay(day)) {
     //         kDebug()<<"Failed to add day"<<endl;
@@ -2266,14 +2320,14 @@ void View::slotPrintTestDebug()
     //     if (wd1 == 0) {
     //         kDebug()<<"Failed to get weekday"<<endl;
     //     }
-    //     wd1->setState(Map::NonWorking);
+    //     wd1->setState(CalendarDay::NonWorking);
     //
     //     CalendarDay *wd2 = p->weekday(2); // wednesday
     //     if (wd2 == 0) {
     //         kDebug()<<"Failed to get weekday"<<endl;
     //     }
     //     wd2->addInterval(TimeInterval(t1, t2));
-    //     wd2->setState(Map::Working);
+    //     wd2->setState(CalendarDay::Working);
     //
     //     Calendar *t = new Calendar("Test 4");
     //     t->setParent(p);
@@ -2282,7 +2336,7 @@ void View::slotPrintTestDebug()
     //     DateTime after = DateTime(wdate.addDays(4)); // Friday jan 6
     //     DateTime wdt1(wdate, t1);
     //     DateTime wdt2(QDate(2006, 1, 4), t2); // Wednesday
-    //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
+    //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), CalendarDay::Working);
     //     day->addInterval(TimeInterval(t1, t2));
     //     if (!p->addDay(day)) {
     //         kDebug()<<"Failed to add day"<<endl;

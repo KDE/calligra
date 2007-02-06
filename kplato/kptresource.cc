@@ -346,11 +346,8 @@ void Resource::addWorkingHour(QTime from, QTime until) {
 }
 
 Calendar *Resource::calendar(bool local) const {
-    if (!local && project() != 0 && (m_calendar == 0 || m_calendar->isDeleted())) {
+    if (!local && project() != 0 && m_calendar == 0 ) {
         return project()->defaultCalendar();
-    }
-    if (m_calendar && m_calendar->isDeleted()) {
-        return 0;
     }
     return m_calendar;
 }

@@ -37,7 +37,8 @@ namespace Role
         DurationUnit,
         DurationScales,
         Maximum,
-        Minimum
+        Minimum,
+        EditorType
     };
 } //namespace Role
 

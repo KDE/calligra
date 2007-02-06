@@ -37,6 +37,74 @@
 namespace KPlato
 {
 
+// Hmmm, a bit hacky, but this makes it possible to use index specific editors...
+SelectorDelegate::SelectorDelegate( QObject *parent )
+: QItemDelegate( parent )
+{
+}
+
+QWidget *SelectorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex & index ) const
+{
+    switch ( index.model()->data( index, Role::EditorType ).toInt() ) {
+        case Delegate::EnumEditor: {
+            QComboBox *editor = new QComboBox(parent);
+            editor->installEventFilter(const_cast<SelectorDelegate*>(this));
+            return editor;
+        }
+        case Delegate::TimeEditor: {
+            QTimeEdit *editor = new QTimeEdit(parent);
+            editor->installEventFilter(const_cast<SelectorDelegate*>(this));
+            return editor;
+        }
+    }
+    return 0; // FIXME: What to do?
+}
+
+void SelectorDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    switch ( index.model()->data( index, Role::EditorType ).toInt() ) {
+        case Delegate::EnumEditor: {
+            QStringList lst = index.model()->data( index, Role::EnumList ).toStringList();
+            int value = index.model()->data(index, Role::EnumListValue).toInt();
+            QComboBox *box = static_cast<QComboBox*>(editor);
+            box->addItems( lst );
+            box->setCurrentIndex( value );
+            return;
+        }
+        case Delegate::TimeEditor:
+            QTime value = index.model()->data(index, Qt::EditRole).toTime();
+            QTimeEdit *e = static_cast<QTimeEdit*>(editor);
+            e->setMinimumTime( index.model()->data( index, Role::Minimum ).toTime() );
+            e->setMaximumTime( index.model()->data( index, Role::Maximum ).toTime() );
+            e->setTime( value );
+            return;
+    }
+}
+
+void SelectorDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                const QModelIndex &index) const
+{
+    switch ( index.model()->data( index, Role::EditorType ).toInt() ) {
+        case Delegate::EnumEditor: {
+            QComboBox *box = static_cast<QComboBox*>(editor);
+            int value = box->currentIndex();
+            model->setData( index, value, Qt::EditRole );
+            return;
+        }
+        case Delegate::TimeEditor: {
+            QTimeEdit *e = static_cast<QTimeEdit*>(editor);
+            model->setData( index, e->time(), Qt::EditRole );
+            return;
+        }
+    }
+}
+
+void SelectorDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    QRect r = option.rect;
+    editor->setGeometry(r);
+}
+
 EnumDelegate::EnumDelegate( QObject *parent )
 : QItemDelegate( parent )
 {
@@ -223,6 +291,41 @@ void MoneyDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 }
 
 void MoneyDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    QRect r = option.rect;
+    editor->setGeometry(r);
+}
+
+//---------------------------
+TimeDelegate::TimeDelegate( QObject *parent )
+    : QItemDelegate( parent )
+{
+}
+
+QWidget *TimeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+{
+    QTimeEdit *editor = new QTimeEdit(parent);
+    editor->installEventFilter(const_cast<TimeDelegate*>(this));
+    return editor;
+}
+
+void TimeDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    QTime value = index.model()->data(index, Qt::EditRole).toTime();
+    QTimeEdit *e = static_cast<QTimeEdit*>(editor);
+    e->setMinimumTime( index.model()->data( index, Role::Minimum ).toTime() );
+    e->setMaximumTime( index.model()->data( index, Role::Maximum ).toTime() );
+    e->setTime( value );
+}
+
+void TimeDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                const QModelIndex &index) const
+{
+    QTimeEdit *e = static_cast<QTimeEdit*>(editor);
+    model->setData( index, e->time(), Qt::EditRole );
+}
+
+void TimeDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
     QRect r = option.rect;
     editor->setGeometry(r);

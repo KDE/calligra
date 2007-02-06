@@ -27,21 +27,40 @@
 namespace KPlato
 {
 
+namespace Delegate
+{
+    enum EditorType { EnumEditor, TimeEditor };
+}
+
 class Part;
 class Project;
+
+class SelectorDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    SelectorDelegate(QObject *parent = 0);
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+};
 
 class EnumDelegate : public QItemDelegate
 {
     Q_OBJECT
-    public:
-        EnumDelegate(QObject *parent = 0);
+public:
+    EnumDelegate(QObject *parent = 0);
 
-        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-        void setEditorData(QWidget *editor, const QModelIndex &index) const;
-        void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
-        void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 class DurationDelegate : public QItemDelegate
@@ -91,6 +110,20 @@ class MoneyDelegate : public QItemDelegate
     Q_OBJECT
 public:
     MoneyDelegate(QObject *parent = 0);
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+};
+
+class TimeDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    TimeDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 

@@ -53,7 +53,7 @@ public:
     {
         setText(0, name);
         day = new CalendarDay(original);
-        if (day->state() == Map::NonWorking) {
+        if (day->state() == CalendarDay::NonWorking) {
             setHours();
         } else {
             setText(1, KGlobal::locale()->formatNumber(day->duration().toDouble(Duration::Unit_h)));

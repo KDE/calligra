@@ -338,6 +338,7 @@ void Project::initiateCalculationLists( MainSchedule &sch )
 bool Project::load( QDomElement &element, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<"--->"<<endl;
+    QList<Calendar*> cals;
     QString s;
     bool ok = false;
     QString id = element.attribute( "id" );
@@ -366,18 +367,19 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
         m_constraintEndTime = DateTime::fromString( s );
 
     // Load the project children
-    // Must do these first
+    // Do calendars first, they only refrence other calendars
+    //kDebug()<<k_funcinfo<<"Calendars--->"<<endl;
     QDomNodeList list = element.childNodes();
     for ( unsigned int i = 0; i < list.count(); ++i ) {
         if ( list.item( i ).isElement() ) {
             QDomElement e = list.item( i ).toElement();
             if ( e.tagName() == "calendar" ) {
                 // Load the calendar.
-                // References by resources
+                // Referenced by resources
                 Calendar * child = new Calendar();
                 child->setProject( this );
-                if ( child->load( e ) ) {
-                    addCalendar( child );
+                if ( child->load( e, status ) ) {
+                    cals.append( child ); // temporary, reorder later
                 } else {
                     // TODO: Complain about this
                     kError() << k_funcinfo << "Failed to load calendar" << endl;
@@ -386,7 +388,7 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
             } else if ( e.tagName() == "standard-worktime" ) {
                 // Load standard worktime
                 StandardWorktime * child = new StandardWorktime();
-                if ( child->load( e ) ) {
+                if ( child->load( e, status ) ) {
                     setStandardWorktime( child );
                 } else {
                     kError() << k_funcinfo << "Failed to load standard worktime" << endl;
@@ -395,6 +397,36 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
             }
         }
     }
+    // calendars references calendars in arbritary saved order
+    bool added = false;
+    do {
+        added = false;
+        QList<Calendar*> lst;
+        while ( !cals.isEmpty() ) {
+            Calendar *c = cals.takeFirst();
+            if ( c->parentId().isEmpty() ) {
+                addCalendar( c );
+                added = true;
+                kDebug()<<k_funcinfo<<"added to project: "<<c->name()<<endl;
+            } else {
+                Calendar *par = calendar( c->parentId() );
+                if ( par ) {
+                    addCalendar( c, par );
+                    added = true;
+                    kDebug()<<k_funcinfo<<"added: "<<c->name()<<" to parent: "<<par->name()<<endl;
+                } else {
+                    lst.append( c ); // treat later
+                    kDebug()<<k_funcinfo<<"treat later: "<<c->name()<<endl;
+                }
+            }
+        }
+        cals = lst;
+    } while ( added );
+    if ( ! cals.isEmpty() ) {
+        kError()<<k_funcinfo<<"All calendars not saved!"<<endl;
+    }
+    //kDebug()<<k_funcinfo<<"Calendars<---"<<endl;
+    // Resource groups and resources, can reference calendars
     for ( unsigned int i = 0; i < list.count(); ++i ) {
         if ( list.item( i ).isElement() ) {
             QDomElement e = list.item( i ).toElement();
@@ -412,6 +444,7 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
             }
         }
     }
+    // The main stuff
     for ( unsigned int i = 0; i < list.count(); ++i ) {
         if ( list.item( i ).isElement() ) {
             QDomElement e = list.item( i ).toElement();
@@ -505,17 +538,6 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
             }
         }
     }
-    //kDebug()<<k_funcinfo<<"Calendars--->"<<endl;
-    // calendars references calendars in arbritary saved order
-    QListIterator<Calendar*> calit( m_calendars );
-    while ( calit.hasNext() ) {
-        Calendar * c = calit.next();
-        if ( c->id() == c->parentId() ) {
-            kError() << k_funcinfo << "Calendar want itself as parent" << endl;
-            continue;
-        }
-        c->setParent( calendar( c->parentId() ) );
-    }
     //kDebug()<<k_funcinfo<<"Project schedules--->"<<endl;
     foreach ( Schedule * s, m_schedules ) {
         if ( m_constraint == Node::MustFinishOn )
@@ -545,9 +567,8 @@ void Project::save( QDomElement &element ) const
     m_accounts.save( me );
 
     // save calendars
-    QListIterator<Calendar*> calit( m_calendars );
-    while ( calit.hasNext() ) {
-        calit.next() ->save( me );
+    foreach ( Calendar *c, calendarIdDict.values() ) {
+        c->save( me );
     }
     // save standard worktime
     if ( m_standardWorktime )
@@ -1234,10 +1255,40 @@ double Project::actualCostTo( const QDate &date, long id )
     return c;
 }
 
-void Project::addCalendar( Calendar *calendar )
+void Project::addCalendar( Calendar *calendar, Calendar *parent )
 {
-    //kDebug()<<k_funcinfo<<calendar->name()<<endl;
-    m_calendars.append( calendar );
+    Q_ASSERT( calendar != 0 );
+    //kDebug()<<k_funcinfo<<calendar->name()<<", "<<(parent?parent->name():"No parent")<<endl;
+    int row = parent == 0 ? m_calendars.count() : parent->calendars().count();
+    emit calendarToBeAdded( parent, row );
+    if ( parent == 0 ) {
+        calendar->setParentCal( 0 ); // in case
+        m_calendars.append( calendar );
+    } else {
+        calendar->setParentCal( parent );
+    }
+    setCalendarId( calendar );
+    emit calendarAdded( calendar );
+}
+
+void Project::takeCalendar( Calendar *calendar )
+{
+    emit calendarToBeRemoved( calendar );
+    removeCalendarId( calendar->id() );
+    if ( calendar->parentCal() == 0 ) {
+        int i = indexOf( calendar );
+        if ( i != -1 ) {
+            m_calendars.removeAt( i );
+        }
+    } else {
+        calendar->setParentCal( 0 );
+    }
+    emit calendarRemoved( calendar );
+}
+
+int Project::indexOf( const Calendar *calendar ) const
+{
+    return m_calendars.indexOf( const_cast<Calendar*>(calendar) );
 }
 
 Calendar *Project::calendar( const QString& id ) const
@@ -1247,7 +1298,7 @@ Calendar *Project::calendar( const QString& id ) const
 
 Calendar *Project::calendarByName( const QString& name ) const
 {
-    foreach( Calendar *c, calendars() ) {
+    foreach( Calendar *c, calendarIdDict.values() ) {
         if ( c->name() == name ) {
             return c;
         }
@@ -1255,17 +1306,14 @@ Calendar *Project::calendarByName( const QString& name ) const
     return 0;
 }
 
-QList<Calendar*> Project::calendars() const
+const QList<Calendar*> &Project::calendars() const
 {
-    QList<Calendar*> list;
-    QListIterator<Calendar*> it = m_calendars;
-    while ( it.hasNext() ) {
-        Calendar * c = it.next();
-        if ( !c->isDeleted() ) {
-            list.append( c );
-        }
-    }
-    return list;
+    return m_calendars;
+}
+
+QList<Calendar*> Project::allCalendars() const
+{
+    return calendarIdDict.values();
 }
 
 QStringList Project::calendarNames() const
@@ -1275,6 +1323,40 @@ QStringList Project::calendarNames() const
         lst << c->name();
     }
     return lst;
+}
+
+bool Project::setCalendarId( Calendar *calendar )
+{
+    if ( calendar == 0 ) {
+        return false;
+    }
+    if ( ! calendar->id().isEmpty() ) {
+        Calendar *c = findCalendar( calendar->id() );
+        if ( calendar == c ) {
+            return true;
+        } else if ( c == 0 ) {
+            insertCalendarId( calendar->id(), calendar );
+            return true;;
+        }
+    }
+    QString id = uniqueCalendarId();
+    calendar->setId( id );
+    if ( id.isEmpty() ) {
+        return false;
+    }
+    insertCalendarId( id, calendar );
+    return true;
+}
+
+QString Project::uniqueCalendarId() const {
+    QString id;
+    for (int i=1; i<32000 ; ++i) {
+        id = id.setNum(i);
+        if ( ! calendarIdDict.contains( id ) ) {
+            return id;
+        }
+    }
+    return QString();
 }
 
 void Project::setStandardWorktime( StandardWorktime * worktime )
@@ -1521,6 +1603,11 @@ void Project::changed( Resource *resource )
     emit resourceChanged( resource );
 }
 
+void Project::changed( Calendar *cal )
+{
+    emit calendarChanged( cal );
+}
+
 #ifndef NDEBUG
 void Project::printDebug( bool children, const QByteArray& _indent )
 {
@@ -1537,10 +1624,8 @@ void Project::printCalendarDebug( const QByteArray& _indent )
 {
     QByteArray indent = _indent;
     kDebug() << indent << "-------- Calendars debug printout --------" << endl;
-    QListIterator
-    <Calendar*> it = m_calendars;
-    while ( it.hasNext() ) {
-        it.next() ->printDebug( indent + "--" );
+    foreach ( Calendar *c, calendarIdDict.values() ) {
+        c->printDebug( indent + "--" );
         kDebug() << endl;
     }
     if ( m_standardWorktime )

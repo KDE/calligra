@@ -101,60 +101,81 @@ void NamedCommand::addSchDeleted( Schedule *sch )
 }
 
 //-------------------------------------------------
-CalendarAddCmd::CalendarAddCmd( Part *part, Project *project, Calendar *cal, const QString& name )
+CalendarAddCmd::CalendarAddCmd( Part *part, Project *project, Calendar *cal, Calendar *parent, const QString& name )
         : NamedCommand( part, name ),
         m_project( project ),
         m_cal( cal ),
-        m_added( false )
+        m_parent( parent ),
+        m_mine( true )
 {
-    cal->setDeleted( true );
     //kDebug()<<k_funcinfo<<cal->name()<<endl;
+    Q_ASSERT( project != 0 );
 }
-
+CalendarAddCmd::~CalendarAddCmd()
+{
+    if ( m_mine )
+        delete m_cal;
+}
 void CalendarAddCmd::execute()
 {
-    if ( !m_added && m_project ) {
-        m_project->addCalendar( m_cal );
-        m_added = true;
+    if ( m_project ) {
+        m_project->addCalendar( m_cal, m_parent );
+        m_mine = false;
     }
-    m_cal->setDeleted( false );
-
     setCommandType( 0 );
     //kDebug()<<k_funcinfo<<m_cal->name()<<" added to: "<<m_project->name()<<endl;
 }
 
 void CalendarAddCmd::unexecute()
 {
-    m_cal->setDeleted( true );
-
+    if ( m_project ) {
+        m_project->takeCalendar( m_cal );
+        m_mine = true;
+    }
     setCommandType( 0 );
     //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
-CalendarDeleteCmd::CalendarDeleteCmd( Part *part, Calendar *cal, const QString& name )
+CalendarRemoveCmd::CalendarRemoveCmd( Part *part, Project *project, Calendar *cal, const QString& name )
         : NamedCommand( part, name ),
-        m_cal( cal )
+        m_project( project ),
+        m_parent( cal->parentCal() ),
+        m_cal( cal ),
+        m_mine( false ),
+        m_cmd( new KMacroCommand("") )
 {
+    Q_ASSERT( project != 0 );
 
     // TODO check if any resources uses this calendar
-    if ( part ) {
-        foreach ( Schedule * s, part->getProject().schedules() ) {
+    if ( project ) {
+        foreach ( Schedule * s, project->schedules() ) {
             addSchScheduled( s );
         }
     }
+    foreach ( Calendar *c, cal->calendars() ) {
+        m_cmd->addCommand( new CalendarRemoveCmd( part, project, c ) );
+    }
 }
-
-void CalendarDeleteCmd::execute()
+CalendarRemoveCmd::~CalendarRemoveCmd()
 {
-    m_cal->setDeleted( true );
+    delete m_cmd;
+    if ( m_mine )
+        delete m_cal;
+}
+void CalendarRemoveCmd::execute()
+{
     setSchScheduled( false );
+    m_cmd->execute();
+    m_project->takeCalendar( m_cal );
+    m_mine = true;
     setCommandType( 1 );
 }
-
-void CalendarDeleteCmd::unexecute()
+void CalendarRemoveCmd::unexecute()
 {
-    m_cal->setDeleted( false );
+    m_project->addCalendar( m_cal, m_parent );
+    m_cmd->unexecute();
     setSchScheduled();
+    m_mine = false;
     setCommandType( 0 );
 }
 
@@ -180,12 +201,12 @@ void CalendarModifyNameCmd::unexecute()
     //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
-CalendarModifyParentCmd::CalendarModifyParentCmd( Part *part, Calendar *cal, Calendar *newvalue, const QString& name )
+CalendarModifyParentCmd::CalendarModifyParentCmd( Part *part, Project *project, Calendar *cal, Calendar *newvalue, const QString& name )
         : NamedCommand( part, name ),
+        m_project( project ),
         m_cal( cal )
 {
-
-    m_oldvalue = cal->parent();
+    m_oldvalue = cal->parentCal();
     m_newvalue = newvalue;
     //kDebug()<<k_funcinfo<<cal->name()<<endl;
     // TODO check if any resources uses this calendar
@@ -197,13 +218,15 @@ CalendarModifyParentCmd::CalendarModifyParentCmd( Part *part, Calendar *cal, Cal
 }
 void CalendarModifyParentCmd::execute()
 {
-    m_cal->setParent( m_newvalue );
+    m_project->takeCalendar( m_cal );
+    m_project->addCalendar( m_cal, m_newvalue );
     setSchScheduled( false );
     setCommandType( 1 );
 }
 void CalendarModifyParentCmd::unexecute()
 {
-    m_cal->setParent( m_oldvalue );
+    m_project->takeCalendar( m_cal );
+    m_project->addCalendar( m_cal, m_oldvalue );
     setSchScheduled();
     setCommandType( 1 );
 }
@@ -246,6 +269,16 @@ void CalendarAddDayCmd::unexecute()
     setCommandType( 1 );
 }
 
+CalendarRemoveDayCmd::CalendarRemoveDayCmd( Part *part, Calendar *cal,CalendarDay *day, const QString& name )
+        : NamedCommand( part, name ),
+        m_cal( cal ),
+        m_value( day ),
+        m_mine( false )
+{
+    //kDebug()<<k_funcinfo<<cal->name()<<endl;
+    // TODO check if any resources uses this calendar
+    init();
+}
 CalendarRemoveDayCmd::CalendarRemoveDayCmd( Part *part, Calendar *cal, const QDate &day, const QString& name )
         : NamedCommand( part, name ),
         m_cal( cal ),
@@ -255,8 +288,12 @@ CalendarRemoveDayCmd::CalendarRemoveDayCmd( Part *part, Calendar *cal, const QDa
     m_value = cal->findDay( day );
     //kDebug()<<k_funcinfo<<cal->name()<<endl;
     // TODO check if any resources uses this calendar
-    if ( part ) {
-        foreach ( Schedule * s, part->getProject().schedules() ) {
+    init();
+}
+void CalendarRemoveDayCmd::init()
+{
+    if ( m_part ) {
+        foreach ( Schedule * s, m_part->getProject().schedules() ) {
             addSchScheduled( s );
         }
     }
@@ -322,14 +359,112 @@ void CalendarModifyDayCmd::unexecute()
     setCommandType( 1 );
 }
 
+CalendarModifyStateCmd::CalendarModifyStateCmd( Part *part, Calendar *calendar, CalendarDay *day, CalendarDay::State value, const QString& name )
+        : NamedCommand( part, name ),
+        m_calendar( calendar ),
+        m_day( day ),
+        m_cmd( new KMacroCommand( "" ) )
+{
+
+    m_newvalue = value;
+    m_oldvalue = (CalendarDay::State)day->state();
+    if ( value != CalendarDay::Working ) {
+        foreach ( TimeInterval *ti, day->workingIntervals() ) {
+            m_cmd->addCommand( new CalendarRemoveTimeIntervalCmd( part, calendar, day, ti ) );
+        }
+    }
+}
+CalendarModifyStateCmd::~CalendarModifyStateCmd()
+{
+    delete m_cmd;
+}
+void CalendarModifyStateCmd::execute()
+{
+    //kDebug()<<k_funcinfo<<endl;
+    m_cmd->execute();
+    m_calendar->setState( m_day, m_newvalue );
+    setCommandType( 1 );
+}
+void CalendarModifyStateCmd::unexecute()
+{
+    //kDebug()<<k_funcinfo<<endl;
+    m_calendar->setState( m_day, m_oldvalue );
+    m_cmd->unexecute();
+    setCommandType( 0 );
+}
+
+CalendarModifyTimeIntervalCmd::CalendarModifyTimeIntervalCmd( Part *part, Calendar *calendar, TimeInterval &newvalue, TimeInterval *value, const QString& name )
+        : NamedCommand( part, name ),
+        m_calendar( calendar )
+{
+
+    m_value = value; // keep pointer
+    m_oldvalue = *value; // save value
+    m_newvalue = newvalue;
+}
+void CalendarModifyTimeIntervalCmd::execute()
+{
+    //kDebug()<<k_funcinfo<<endl;
+    m_calendar->setWorkInterval( m_value, m_newvalue );
+    setCommandType( 1 );
+}
+void CalendarModifyTimeIntervalCmd::unexecute()
+{
+    //kDebug()<<k_funcinfo<<endl;
+    m_calendar->setWorkInterval( m_value, m_oldvalue );
+    setCommandType( 0 );
+}
+
+CalendarAddTimeIntervalCmd::CalendarAddTimeIntervalCmd( Part *part, Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name )
+    : NamedCommand( part, name ),
+    m_calendar( calendar ),
+    m_day( day ),
+    m_value( value ),
+    m_mine( true )
+{
+}
+CalendarAddTimeIntervalCmd::~CalendarAddTimeIntervalCmd()
+{
+    if ( m_mine )
+        delete m_value;
+}
+void CalendarAddTimeIntervalCmd::execute()
+{
+    //kDebug()<<k_funcinfo<<endl;
+    m_calendar->addWorkInterval( m_day, m_value );
+    m_mine = false;
+    setCommandType( 1 );
+}
+void CalendarAddTimeIntervalCmd::unexecute()
+{
+    //kDebug()<<k_funcinfo<<endl;
+    m_calendar->takeWorkInterval( m_day, m_value );
+    m_mine = true;
+    setCommandType( 0 );
+}
+
+CalendarRemoveTimeIntervalCmd::CalendarRemoveTimeIntervalCmd( Part *part, Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name )
+    : CalendarAddTimeIntervalCmd( part, calendar, day, value, name )
+{
+    m_mine = false ;
+}
+void CalendarRemoveTimeIntervalCmd::execute()
+{
+    CalendarAddTimeIntervalCmd::unexecute();
+}
+void CalendarRemoveTimeIntervalCmd::unexecute()
+{
+    CalendarAddTimeIntervalCmd::execute();
+}
+
 CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd( Part *part, Calendar *cal, int weekday, CalendarDay *value, const QString& name )
         : NamedCommand( part, name ),
         m_weekday( weekday ),
         m_cal( cal ),
-        m_mine( true )
+        m_value( value ),
+        m_orig( *( cal->weekday( weekday ) ) )
 {
 
-    m_value = value;
     //kDebug() << k_funcinfo << cal->name() << " (" << value << ")" << endl;
     // TODO check if any resources uses this calendar
     if ( part ) {
@@ -346,15 +481,43 @@ CalendarModifyWeekdayCmd::~CalendarModifyWeekdayCmd()
 }
 void CalendarModifyWeekdayCmd::execute()
 {
-    m_value = m_cal->weekdays() ->replace( m_weekday, m_value );
+    m_cal->setWeekday( m_weekday, *m_value );
     setSchScheduled( false );
     setCommandType( 1 );
 }
 void CalendarModifyWeekdayCmd::unexecute()
 {
-    m_value = m_cal->weekdays() ->replace( m_weekday, m_value );
+    m_cal->setWeekday( m_weekday, m_orig );
     setSchScheduled();
     setCommandType( 1 );
+}
+
+CalendarModifyDateCmd::CalendarModifyDateCmd( Part *part, Calendar *cal, CalendarDay *day, QDate &value, const QString& name )
+    : NamedCommand( part, name ),
+    m_cal( cal ),
+    m_day( day ),
+    m_newvalue( value ),
+    m_oldvalue( day->date() )
+{
+    //kDebug() << k_funcinfo << cal->name() << " (" << value << ")" << endl;
+    // TODO check if any resources uses this calendar
+    if ( part ) {
+        foreach ( Schedule * s, part->getProject().schedules() ) {
+            addSchScheduled( s );
+        }
+    }
+}
+void CalendarModifyDateCmd::execute()
+{
+    m_cal->setDate( m_day, m_newvalue );
+    setSchScheduled( false );
+    setCommandType( 1 );
+}
+void CalendarModifyDateCmd::unexecute()
+{
+    m_cal->setDate( m_day, m_oldvalue );
+    setSchScheduled();
+    setCommandType( 0 );
 }
 
 NodeDeleteCmd::NodeDeleteCmd( Part *part, Node *node, const QString& name )

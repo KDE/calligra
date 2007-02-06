@@ -164,15 +164,19 @@ public:
     virtual double actualCostTo( const QDate &date, long id = -1  );
 
     Calendar *defaultCalendar() { return m_standardWorktime->calendar(); }
-    QList<Calendar*> calendars() const;
-    void addCalendar( Calendar *calendar );
+    const QList<Calendar*> &calendars() const;
+    void addCalendar( Calendar *calendar, Calendar *parent = 0 );
+    void takeCalendar( Calendar *calendar );
+    int indexOf( const Calendar *calendar ) const;
     /// Returns the calendar with identity id.
     Calendar *calendar( const QString& id ) const;
     /// Returns a list of all calendars
     QStringList calendarNames() const;
     /// Find calendar by name
     Calendar *calendarByName( const QString &name ) const;
-    
+    void changed( Calendar *cal );
+    QList<Calendar*> allCalendars() const;
+
     /**
      * Defines the length of days, weeks, months and years
      * and the standard working week.
@@ -256,6 +260,10 @@ public:
     virtual bool removeCalendarId( const QString &id );
     /// Insert the calendar with identity id
     virtual void insertCalendarId( const QString &id, Calendar *calendar );
+    /// Set and insert a unique id for calendar
+    bool setCalendarId( Calendar *calendar );
+    /// returns a unique calendar id
+    QString uniqueCalendarId() const;
 
     void generateWBS( int count, WBSDefinition &def, const QString& wbs = QString() );
 
@@ -349,6 +357,12 @@ signals:
 
     void currentViewScheduleIdChanged( long id );
     
+    void calendarChanged( Calendar *cal );
+    void calendarToBeAdded( const Calendar *cal, int row );
+    void calendarAdded( const Calendar *cal );
+    void calendarToBeRemoved( const Calendar *cal );
+    void calendarRemoved( const Calendar *cal );
+
 protected:
     /**
      * Calculate the schedule.
@@ -390,7 +404,7 @@ private:
     QHash<QString, ResourceGroup*> resourceGroupIdDict;
     QHash<QString, Resource*> resourceIdDict;
     QHash<QString, Node*> nodeIdDict;
-    QHash<QString, Calendar*> calendarIdDict;
+    QMap<QString, Calendar*> calendarIdDict;
 
     QList<ScheduleManager*> m_managers;
     

@@ -75,25 +75,32 @@ protected:
 class CalendarAddCmd : public NamedCommand
 {
 public:
-    CalendarAddCmd( Part *part, Project *project, Calendar *cal, const QString& name  = QString());
+    CalendarAddCmd( Part *part, Project *project, Calendar *cal, Calendar *parent, const QString& name  = QString());
+    ~CalendarAddCmd();
     void execute();
     void unexecute();
 
 private:
     Project *m_project;
     Calendar *m_cal;
-    bool m_added;
+    Calendar *m_parent;
+    bool m_mine;
 };
 
-class CalendarDeleteCmd : public NamedCommand
+class CalendarRemoveCmd : public NamedCommand
 {
 public:
-    CalendarDeleteCmd( Part *part, Calendar *cal, const QString& name = 0 );
+    CalendarRemoveCmd( Part *part, Project *project, Calendar *cal, const QString& name = QString() );
+    ~CalendarRemoveCmd();
     void execute();
     void unexecute();
 
 private:
+    Project *m_project;
+    Calendar *m_parent;
     Calendar *m_cal;
+    bool m_mine;
+    KMacroCommand *m_cmd;
 };
 
 class CalendarModifyNameCmd : public NamedCommand
@@ -112,12 +119,13 @@ private:
 class CalendarModifyParentCmd : public NamedCommand
 {
 public:
-    CalendarModifyParentCmd( Part *part, Calendar *cal, Calendar *newvalue, const QString& name = QString() );
+    CalendarModifyParentCmd( Part *part, Project *project, Calendar *cal, Calendar *newvalue, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Calendar *m_cal;
+    Project *m_project;
     Calendar *m_newvalue;
     Calendar *m_oldvalue;
 };
@@ -139,6 +147,7 @@ protected:
 class CalendarRemoveDayCmd : public NamedCommand
 {
 public:
+    CalendarRemoveDayCmd( Part *part, Calendar *cal, CalendarDay *day, const QString& name = QString() );
     CalendarRemoveDayCmd( Part *part, Calendar *cal, const QDate &day, const QString& name = QString() );
     void execute();
     void unexecute();
@@ -147,6 +156,9 @@ protected:
     Calendar *m_cal;
     CalendarDay *m_value;
     bool m_mine;
+
+private:
+    void init();
 };
 
 class CalendarModifyDayCmd : public NamedCommand
@@ -164,6 +176,60 @@ private:
     bool m_mine;
 };
 
+class CalendarModifyStateCmd : public NamedCommand
+{
+public:
+    CalendarModifyStateCmd( Part *part, Calendar *calendar, CalendarDay *day, CalendarDay::State value, const QString& name = QString() );
+    ~CalendarModifyStateCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_calendar;
+    CalendarDay *m_day;
+    CalendarDay::State m_newvalue;
+    CalendarDay::State m_oldvalue;
+    KMacroCommand *m_cmd;
+};
+
+class CalendarModifyTimeIntervalCmd : public NamedCommand
+{
+public:
+    CalendarModifyTimeIntervalCmd( Part *part, Calendar *calendar, TimeInterval &newvalue, TimeInterval *value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_calendar;
+    TimeInterval *m_value;
+    TimeInterval m_newvalue;
+    TimeInterval m_oldvalue;
+};
+
+class CalendarAddTimeIntervalCmd : public NamedCommand
+{
+public:
+    CalendarAddTimeIntervalCmd( Part *part, Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name = QString() );
+    ~CalendarAddTimeIntervalCmd();
+    void execute();
+    void unexecute();
+
+protected:
+    Calendar *m_calendar;
+    CalendarDay *m_day;
+    TimeInterval *m_value;
+    bool m_mine;
+};
+
+class CalendarRemoveTimeIntervalCmd : public CalendarAddTimeIntervalCmd
+{
+public:
+    CalendarRemoveTimeIntervalCmd( Part *part, Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name = QString() );
+    
+    void execute();
+    void unexecute();
+};
+
 class CalendarModifyWeekdayCmd : public NamedCommand
 {
 public:
@@ -176,7 +242,20 @@ private:
     int m_weekday;
     Calendar *m_cal;
     CalendarDay *m_value;
-    bool m_mine;
+    CalendarDay m_orig;
+};
+
+class CalendarModifyDateCmd : public NamedCommand
+{
+public:
+    CalendarModifyDateCmd( Part *part, Calendar *cal, CalendarDay *day, QDate &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    CalendarDay *m_day;
+    QDate m_newvalue, m_oldvalue;
 };
 
 

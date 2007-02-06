@@ -11,6 +11,7 @@ include_directories(${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}
 
 
 set(libkplatopart_SRCS
+    kptcalendareditor.cc
     kptdurationspinbox.cc
     kptviewbase.cc
     kptitemmodelbase.cc
