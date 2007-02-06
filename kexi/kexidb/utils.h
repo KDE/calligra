@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -188,6 +188,9 @@ namespace KexiDB
 			//! \return caption (if present) or name of the table/query
 			QString captionOrName() const;
 
+			//! \return number of fields
+			uint fieldCount() const;
+
 			//! \return all columns for the table or the query
 			const QueryColumnInfo::Vector columns(bool unique = false);
 
@@ -346,14 +349,14 @@ namespace KexiDB
 	  <height><number>15</number></height>
 	 \endcode
 	 \return the reference to element created with tag elementName. */
-	QDomElement saveNumberElementToDom(QDomDocument& doc, QDomElement& parentEl, 
+	KEXI_DB_EXPORT QDomElement saveNumberElementToDom(QDomDocument& doc, QDomElement& parentEl, 
 		const QString& elementName, int value);
 
 	/*! Saves boolean element for value \a value to \a doc document within parent element
 	 \a parentEl. Like saveNumberElementToDom() but creates "bool" tags. True/false values will be
 	 saved as "true"/"false" strings. 
 	 \return the reference to element created with tag elementName. */
-	QDomElement saveBooleanElementToDom(QDomDocument& doc, QDomElement& parentEl, 
+	KEXI_DB_EXPORT QDomElement saveBooleanElementToDom(QDomDocument& doc, QDomElement& parentEl, 
 		const QString& elementName, bool value);
 
 	/*! \return an empty value that can be set for a database field of type \a type having 

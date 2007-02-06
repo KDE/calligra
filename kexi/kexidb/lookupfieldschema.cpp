@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -103,7 +103,6 @@ void LookupFieldSchema::RowSource::debug() const
 
 LookupFieldSchema::LookupFieldSchema()
  : m_boundColumn(-1)
- , m_visibleColumn(-1)
  , m_maximumListRows(KEXIDB_LOOKUP_FIELD_DEFAULT_LIST_ROWS)
  , m_displayWidget(KEXIDB_LOOKUP_FIELD_DEFAULT_DISPLAY_WIDGET)
  , m_columnHeadersVisible(KEXIDB_LOOKUP_FIELD_DEFAULT_HEADERS_VISIBLE)
@@ -128,21 +127,25 @@ void LookupFieldSchema::setMaximumListRows(uint rows)
 QString LookupFieldSchema::debugString() const
 {
 	QString columnWidthsStr;
-	bool first=true;
 	foreach (QValueList<int>::ConstIterator, it, m_columnWidths) {
-		if (first)
-			first = false;
-		else
+		if (!columnWidthsStr.isEmpty())
 			columnWidthsStr.append(";");
 		columnWidthsStr.append( QString::number(*it) );
 	}
 
+	QString visibleColumnsString;
+	foreach (QValueList<uint>::ConstIterator, it, m_visibleColumns) {
+		if (!visibleColumnsString.isEmpty())
+			visibleColumnsString.append(";");
+		visibleColumnsString.append(QString::number(*it));
+	}
+
 	return QString("LookupFieldSchema( %1\n"
-		" boundColumn:%2 visibleColumn:%3 maximumListRows:%4 displayWidget:%5\n"
+		" boundColumn:%2 visibleColumns:%3 maximumListRows:%4 displayWidget:%5\n"
 		" columnHeadersVisible:%6 limitToList:%7\n"
 		" columnWidths:%8 )")
 		.arg(m_rowSource.debugString())
-		.arg(m_boundColumn).arg(m_visibleColumn).arg(m_maximumListRows)
+		.arg(m_boundColumn).arg(visibleColumnsString).arg(m_maximumListRows)
 		.arg( m_displayWidget==ComboBox ? "ComboBox" : "ListBox")
 		.arg(m_columnHeadersVisible).arg(m_limitToList)
 		.arg(columnWidthsStr);
@@ -183,17 +186,23 @@ LookupFieldSchema *LookupFieldSchema::loadFromDom(const QDomElement& lookupEl)
 			/* <bound-column>
 			    <number>number</number> #in later implementation there can be more columns
 			   </bound-column> */
-			QVariant val = KexiDB::loadPropertyValueFromDom( el.firstChild() );
+			const QVariant val = KexiDB::loadPropertyValueFromDom( el.firstChild() );
 			if (val.type()==QVariant::Int)
 				lookupFieldSchema->setBoundColumn( val.toInt() );
 		}
 		else if (name=="visible-column") {
 			/* <visible-column> #a column that has to be visible in the combo box
-				<number>number</number> #in later implementation there can be more columns
+				<number>number 1</number>
+				<number>number 2</number>
+				[..]
 			   </visible-column> */
-			QVariant val = KexiDB::loadPropertyValueFromDom( el.firstChild() );
-			if (val.type()==QVariant::Int)
-				lookupFieldSchema->setVisibleColumn( val.toInt() );
+			QValueList<uint> list;
+			for (QDomNode childNode = el.firstChild(); !childNode.isNull(); childNode = childNode.nextSibling()) {
+				const QVariant val = KexiDB::loadPropertyValueFromDom( childNode );
+				if (val.type()==QVariant::Int)
+					list.append( val.toUInt() );
+			}
+			lookupFieldSchema->setVisibleColumns( list );
 		}
 		else if (name=="column-widths") {
 			/* <column-widths> #column widths, -1 means 'default'
@@ -214,7 +223,7 @@ LookupFieldSchema *LookupFieldSchema::loadFromDom(const QDomElement& lookupEl)
 			/* <show-column-headers>
 			    <bool>true/false</bool>
 			   </show-column-headers> */
-			QVariant val = KexiDB::loadPropertyValueFromDom( el.firstChild() );
+			const QVariant val = KexiDB::loadPropertyValueFromDom( el.firstChild() );
 			if (val.type()==QVariant::Bool)
 				lookupFieldSchema->setColumnHeadersVisible( val.toBool() );
 		}
@@ -222,7 +231,7 @@ LookupFieldSchema *LookupFieldSchema::loadFromDom(const QDomElement& lookupEl)
 			/* <list-rows>
 			    <number>1..100</number>
 			   </list-rows> */
-			QVariant val = KexiDB::loadPropertyValueFromDom( el.firstChild() );
+			const QVariant val = KexiDB::loadPropertyValueFromDom( el.firstChild() );
 			if (val.type()==QVariant::Int)
 				lookupFieldSchema->setMaximumListRows( val.toUInt() );
 		}
@@ -230,7 +239,7 @@ LookupFieldSchema *LookupFieldSchema::loadFromDom(const QDomElement& lookupEl)
 			/* <limit-to-list>
 			    <bool>true/false</bool>
 			   </limit-to-list> */
-			QVariant val = KexiDB::loadPropertyValueFromDom( el.firstChild() );
+			const QVariant val = KexiDB::loadPropertyValueFromDom( el.firstChild() );
 			if (val.type()==QVariant::Bool)
 				lookupFieldSchema->setLimitToList( val.toBool() );
 		}
@@ -247,19 +256,22 @@ LookupFieldSchema *LookupFieldSchema::loadFromDom(const QDomElement& lookupEl)
 /* static */
 void LookupFieldSchema::saveToDom(LookupFieldSchema& lookupSchema, QDomDocument& doc, QDomElement& parentEl)
 {
-	QDomElement lookupColumnEl( doc.createElement("lookup-column") );
-	parentEl.appendChild( lookupColumnEl );
+	QDomElement lookupColumnEl, rowSourceEl, rowSourceTypeEl, nameEl;
+	if (!lookupSchema.rowSource().name().isEmpty()) {
+		lookupColumnEl = doc.createElement("lookup-column");
+		parentEl.appendChild( lookupColumnEl );
 
-	QDomElement rowSourceEl( doc.createElement("row-source") );
-	lookupColumnEl.appendChild( rowSourceEl );
+		rowSourceEl = doc.createElement("row-source");
+		lookupColumnEl.appendChild( rowSourceEl );
 
-	QDomElement rowSourceTypeEl( doc.createElement("type") );
-	rowSourceEl.appendChild( rowSourceTypeEl );
-	rowSourceTypeEl.appendChild( doc.createTextNode(lookupSchema.rowSource().typeName()) ); //can be empty
+		rowSourceTypeEl = doc.createElement("type");
+		rowSourceEl.appendChild( rowSourceTypeEl );
+		rowSourceTypeEl.appendChild( doc.createTextNode(lookupSchema.rowSource().typeName()) ); //can be empty
 
-	QDomElement nameEl( doc.createElement("name") );
-	rowSourceEl.appendChild( nameEl );
-	nameEl.appendChild( doc.createTextNode(lookupSchema.rowSource().name()) ); //can be empty
+		nameEl = doc.createElement("name");
+		rowSourceEl.appendChild( nameEl );
+		nameEl.appendChild( doc.createTextNode(lookupSchema.rowSource().name()) );
+	}
 
 	const QStringList& values( lookupSchema.rowSource().values() );
 	if (!values.isEmpty()) {
@@ -274,10 +286,19 @@ void LookupFieldSchema::saveToDom(LookupFieldSchema& lookupSchema, QDomDocument&
 
 	if (lookupSchema.boundColumn()>=0)
 		KexiDB::saveNumberElementToDom(doc, lookupColumnEl, "bound-column", lookupSchema.boundColumn());
-	if (lookupSchema.visibleColumn()>=0)
-		KexiDB::saveNumberElementToDom(doc, lookupColumnEl, "visible-column", lookupSchema.visibleColumn()); //can be -1
 
-	const QValueList<int> columnWidths = lookupSchema.columnWidths();
+	QValueList<uint> visibleColumns(lookupSchema.visibleColumns());
+	if (!visibleColumns.isEmpty()) {
+		QDomElement visibleColumnEl( doc.createElement("visible-column") );
+		lookupColumnEl.appendChild( visibleColumnEl );
+		foreach (QValueList<uint>::ConstIterator, it, visibleColumns) {
+			QDomElement numberEl( doc.createElement("number") );
+			visibleColumnEl.appendChild( numberEl );
+			numberEl.appendChild( doc.createTextNode( QString::number(*it) ) );
+		}
+	}
+
+	const QValueList<int> columnWidths(lookupSchema.columnWidths());
 	if (!columnWidths.isEmpty()) {
 		QDomElement columnWidthsEl( doc.createElement("column-widths") );
 		lookupColumnEl.appendChild( columnWidthsEl );
@@ -301,4 +322,73 @@ void LookupFieldSchema::saveToDom(LookupFieldSchema& lookupSchema, QDomDocument&
 		displayWidgetEl.appendChild( 
 			doc.createTextNode( (lookupSchema.displayWidget()==ListBox) ? "listbox" : "combobox" ) );
 	}
+}
+
+//static
+bool LookupFieldSchema::setProperty( 
+	LookupFieldSchema& lookup, const QCString& propertyName, const QVariant& value )
+{
+	bool ok;
+	if ("rowSource" == propertyName || "rowSourceType" == propertyName || "rowSourceValues" == propertyName) {
+		LookupFieldSchema::RowSource rowSource( lookup.rowSource() );
+		if ("rowSource" == propertyName)
+			rowSource.setName(value.toString());
+		else if ("rowSourceType" == propertyName)
+			rowSource.setTypeByName(value.toString());
+		else if ("rowSourceValues" == propertyName)
+			rowSource.setValues(value.toStringList());
+		lookup.setRowSource(rowSource);
+	}
+	else if ("boundColumn" == propertyName ) {
+		const int ival = value.toInt(&ok);
+		if (!ok)
+			return false;
+		lookup.setBoundColumn( ival );
+	}
+	else if ("visibleColumn" == propertyName ) {
+		QValueList<QVariant> variantList;
+		if (value.type()==QVariant::Int) {
+//! @todo Remove this case: it's for backward compatibility with Kexi's 1.1.2 table designer GUI
+//!       supporting only single lookup column.
+			variantList.append( value.toInt() );
+		}
+		else {
+			variantList = value.toList();
+		}
+		QValueList<uint> visibleColumns;
+		foreach (QValueList<QVariant>::ConstIterator, it, variantList) {
+			const uint ival = (*it).toUInt(&ok);
+			if (!ok)
+				return false;
+			visibleColumns.append( ival );
+		}
+		lookup.setVisibleColumns( visibleColumns );
+	}
+	else if ("columnWidths" == propertyName ) {
+		QValueList<QVariant> variantList( value.toList() );
+		QValueList<int> widths;
+		foreach (QValueList<QVariant>::ConstIterator, it, variantList) {
+			const uint ival = (*it).toInt(&ok);
+			if (!ok)
+				return false;
+			widths.append( ival );
+		}
+		lookup.setColumnWidths( widths );
+	}
+	else if ("showColumnHeaders" == propertyName ) {
+		lookup.setColumnHeadersVisible( value.toBool() );
+	}
+	else if ("listRows" == propertyName ) {
+		lookup.setMaximumListRows( value.toBool() );
+	}
+	else if ("limitToList" == propertyName ) {
+		lookup.setLimitToList( value.toBool() );
+	}
+	else if ("displayWidget" == propertyName ) {
+		const uint ival = value.toUInt(&ok);
+		if (!ok || ival > LookupFieldSchema::ListBox)
+			return false;
+		lookup.setDisplayWidget((LookupFieldSchema::DisplayWidget)ival);
+	}
+	return true;
 }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,18 +35,21 @@ FieldList::FieldList(bool owner)
 	m_autoinc_fields = 0;
 }
 
-FieldList::FieldList(const FieldList& fl)
+FieldList::FieldList(const FieldList& fl, bool deepCopyFields)
  : m_fields_by_name( fl.m_fields_by_name.size() )
 {
 	m_fields.setAutoDelete( fl.m_fields.autoDelete() );
 	m_fields_by_name.setAutoDelete( false );
 	m_autoinc_fields = 0;
 
-	//deep copy for the fields
-	for (Field::ListIterator f_it(fl.m_fields); f_it.current(); ++f_it) {
-		Field *f = new Field( *f_it.current() );
-		f->m_parent = this;
-		addField( f );
+	if (deepCopyFields) {
+		//deep copy for the fields
+		for (Field::ListIterator f_it(fl.m_fields); f_it.current(); ++f_it) {
+			Field *f = f_it.current()->copy();
+			if (f_it.current()->m_parent == &fl)
+				f->m_parent = this;
+			addField( f );
+		}
 	}
 }
 
@@ -149,8 +152,12 @@ void FieldList::debug()
 { \
 	if (fname.isEmpty()) return fl; \
 	f = m_fields_by_name[fname]; \
-	if (!f) { delete fl; return 0; } \
+	if (!f) { KexiDBWarn << subListWarning1(fname) << endl; delete fl; return 0; } \
 	fl->addField(f); \
+}
+
+static QString subListWarning1(const QString& fname) {
+	return QString("FieldList::subList() could not find field \"%1\"").arg(fname);
 }
 
 FieldList* FieldList::subList(const QString& n1, const QString& n2, 
@@ -190,10 +197,26 @@ FieldList* FieldList::subList(const QString& n1, const QString& n2,
 
 FieldList* FieldList::subList(const QStringList& list)
 {
-        Field *f;
+	Field *f;
 	FieldList *fl = new FieldList(false);
 	for(QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it) {
 		_ADD_FIELD( (*it) );
+	}
+	return fl;
+}
+
+FieldList* FieldList::subList(const QValueList<uint>& list)
+{
+	Field *f;
+	FieldList *fl = new FieldList(false);
+	foreach(QValueList<uint>::ConstIterator, it, list) {
+		f = field(*it);
+		if (!f) {
+			KexiDBWarn << QString("FieldList::subList() could not find field at position %1").arg(*it) << endl;
+			delete fl;
+			return 0;
+		}
+		fl->addField(f);
 	}
 	return fl;
 }
@@ -210,30 +233,33 @@ QStringList FieldList::names() const
 	return r;
 }
 
-QString FieldList::sqlFieldsList(Field::List* list, Driver *driver)
+//static
+QString FieldList::sqlFieldsList(Field::List* list, Driver *driver, 
+	const QString& separator, const QString& tableAlias, int drvEscaping)
 {
 	if (!list)
 		return QString::null;
 	QString result;
 	result.reserve(256);
-	Field::ListIterator it( *list );
 	bool start = true;
-	for (; it.current(); ++it) {
+	const QString tableAliasAndDot( tableAlias.isEmpty() ? QString::null : (tableAlias + ".") );
+	for (Field::ListIterator it( *list ); it.current(); ++it) {
 		if (!start)
-			result += ",";
+			result += separator;
 		else
 			start = false;
-		result += driver->escapeIdentifier( it.current()->name() );
+		result += (tableAliasAndDot + driver->escapeIdentifier( it.current()->name(), drvEscaping ));
 	}
 	return result;
 }
 
-QString FieldList::sqlFieldsList(Driver *driver)
+QString FieldList::sqlFieldsList(Driver *driver, 
+	const QString& separator, const QString& tableAlias, int drvEscaping)
 {
 	if (!m_sqlFields.isEmpty())
 		return m_sqlFields;
 
-	m_sqlFields = FieldList::sqlFieldsList( &m_fields, driver );
+	m_sqlFields = FieldList::sqlFieldsList( &m_fields, driver, separator, tableAlias, drvEscaping );
 	return m_sqlFields;
 }
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,8 +45,10 @@ class KEXI_DB_EXPORT FieldList
 		*/
 		FieldList(bool owner = false);
 
-		/*! Copy constructor. */
-		FieldList(const FieldList& fl);
+		/*! Copy constructor. 
+		 If \a deepCopyFields is true, all fields are deeply copied, else only pointer are copied.
+		 Reimplemented in QuerySchema constructor. */
+		FieldList(const FieldList& fl, bool deepCopyFields = true);
 
 		/*! Destroys the list. If the list owns fields (see constructor),
 		 these are also deleted. */
@@ -105,12 +107,13 @@ class KEXI_DB_EXPORT FieldList
 		/*! Shows debug information about all fields in the list. */
 		void debug();
 
-		/*! Creates and returns list that contain fields selected by name.
-		 At least field (exising on this list) should be selected, otherwise NULL is
+		/*! Creates and returns a list that contain fields selected by name.
+		 At least one field (exising on this list) should be selected, otherwise 0 is
 		 returned. Returned FieldList object is not owned by any parent (so you need 
 		 to destroy yourself) and Field objects included in it are not owned by it 
 		 (but still as before, by 'this' object).
 		 Returned list can be usable e.g. as argument for Connection::insertRecord().
+		 0 is returned if at least one name cannot be found.
 		*/
 		FieldList* subList(const QString& n1, const QString& n2 = QString::null, 
 			const QString& n3 = QString::null, const QString& n4 = QString::null,
@@ -125,17 +128,29 @@ class KEXI_DB_EXPORT FieldList
 
 		/*! Like above, but with a QStringList */
 		FieldList* subList(const QStringList& list);
-	
+
+		/*! Like above, but with a list of field indices */
+		FieldList* subList(const QValueList<uint>& list);
+
 		/*! \return a string that is a result of all field names concatenated 
-		 and with "," between. This is usable e.g. as argument like "field1,field2" 
+		 and with \a separator. This is usable e.g. as argument like "field1,field2" 
 		 for "INSERT INTO (xxx) ..". The result of this method is effectively cached,
 		 and it is invalidated when set of fields changes (e.g. using clear() 
 		 or addField()).
+		 \a tableAlias, if provided is prepended to each field, so the resulting 
+		 names will be in form tableAlias.fieldName. This option is used for building 
+		 queries with joins, where fields have to be spicified without ambiguity. 
+		 See @ref Connection::selectStatement() for example use.
+		 \a drvEscaping can be used to alter default escaping type.
 		*/
-		QString sqlFieldsList(Driver *driver);
+		QString sqlFieldsList(Driver *driver, const QString& separator = ",", 
+			const QString& tableAlias = QString::null,
+			int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary);
 
-		/*! Like above, but thsi is convenient static function, so you can pass any \a list here. */
-		static QString sqlFieldsList(Field::List* list, Driver *driver);
+		/*! Like above, but this is convenient static function, so you can pass any \a list here. */
+		static QString sqlFieldsList(Field::List* list, Driver *driver,
+			const QString& separator = ",", const QString& tableAlias = QString::null,
+			int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary);
 
 		/*! @internal Renames field \a oldName to \a newName. 
 		 Do not use this for physical renaming columns. Use AlterTableHandler instead. */

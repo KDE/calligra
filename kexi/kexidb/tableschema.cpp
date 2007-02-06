@@ -365,7 +365,7 @@ QuerySchema* TableSchema::query()
 {
 	if (m_query)
 		return m_query;
-	m_query = new QuerySchema( this ); //it's owned by me
+	m_query = new QuerySchema( *this ); //it's owned by me
 	return m_query;
 }
 

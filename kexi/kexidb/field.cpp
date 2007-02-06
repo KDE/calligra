@@ -110,6 +110,11 @@ Field::~Field()
 	delete m_customProperties;
 }
 
+Field* Field::copy() const
+{
+	return new Field(*this);
+}
+
 void Field::init()
 {
 	m_parent = 0;

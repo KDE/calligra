@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1116,8 +1116,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 - we assume these are valid identifiers for all drivers.
 		*/
 		inline QString escapeIdentifier(const QString& id, 
-			int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const {
-				return m_driver->escapeIdentifier(id, drvEscaping);
+			int escaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const {
+				return m_driver->escapeIdentifier(id, escaping);
 		}
 		
 		/*! Called by TableSchema -- signals destruction to Connection object

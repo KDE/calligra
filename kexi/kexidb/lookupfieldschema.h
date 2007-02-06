@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@
 
 class QDomElement;
 class QDomDocument;
+class QVariant;
 
 namespace KexiDB {
 
@@ -132,14 +133,26 @@ class KEXI_DB_EXPORT LookupFieldSchema
 		/*! Sets bound column number to \a column. @see boundColumn() */
 		void setBoundColumn(int column) { m_boundColumn = column>=0 ? column : -1; }
 
-		/*! @return visible column: an integer specifying a column that has 
+		/*! @return a list of visible column: a list of integers specifying a column that has 
 		 to be visible in the combo box (counted from 0). 
-		 -1 means unspecified value. */
-//! @todo in later implementation there can be more columns
-		int visibleColumn() const { return m_visibleColumn; }
+		 Empty list means unspecified value. */
+		QValueList<uint> visibleColumns() const { return m_visibleColumns; }
 
-		/*! Sets visible column number to \a column. @see visibleColumn() */
-		void setVisibleColumn(int column) { m_visibleColumn = column>=0 ? column : -1; }
+		/*! Sets a list of visible columns to \a list. 
+		 Columns will be separated with a single space character when displayed. */
+		void setVisibleColumns(const QValueList<uint>& list) { m_visibleColumns = list; }
+
+		/*! A helper method.
+		 If visibleColumns() contains one item, this item is returned (a typical case).
+		 If visibleColumns() contains no item, -1 is returned.
+		 If visibleColumns() multiple items, \a fieldsCount - 1 is returned. */
+		inline int visibleColumn(uint fieldsCount) const {
+			if (m_visibleColumns.count()==1)
+				return (m_visibleColumns.first() < fieldsCount) ? m_visibleColumns.first() : -1;
+			if (m_visibleColumns.isEmpty())
+				return -1;
+			return fieldsCount - 1;
+		}
 
 		/*! @return a number of ordered integers specifying column widths;
 		 -1 means 'default width' for a given column. */
@@ -175,8 +188,8 @@ class KEXI_DB_EXPORT LookupFieldSchema
 
 		//! used in displayWidget()
 		enum DisplayWidget {
-			ComboBox, //!< (the default) combobox widget should be displayed in forms for this lookup field
-			ListBox   //!< listbox widget should be displayed in forms for this lookup field
+			ComboBox = 0, //!< (the default) combobox widget should be displayed in forms for this lookup field
+			ListBox = 1   //!< listbox widget should be displayed in forms for this lookup field
 		};
 
 		/*! @return the widget type that should be displayed within 
@@ -201,9 +214,15 @@ class KEXI_DB_EXPORT LookupFieldSchema
 		/*! Saves data of lookup column schema to \a parentEl DOM element of \a doc document. */
 		static void saveToDom(LookupFieldSchema& lookupSchema, QDomDocument& doc, QDomElement& parentEl);
 
+		/*! Sets property of name \a propertyName and value \a value for the lookup schema \a lookup
+		 \return true on successful set and false on failure because of invalid value or invalid property name. */
+		static bool setProperty( 
+			LookupFieldSchema& lookup, const QCString& propertyName, const QVariant& value );
+
 	protected:
 		RowSource m_rowSource;
-		int m_boundColumn, m_visibleColumn;
+		int m_boundColumn;
+		QValueList<uint> m_visibleColumns;
 		QValueList<int> m_columnWidths;
 		uint m_maximumListRows;
 		DisplayWidget m_displayWidget;

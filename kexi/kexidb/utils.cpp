@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "utils.h"
 #include "cursor.h"
 #include "drivermanager.h"
+#include "lookupfieldschema.h"
 
 #include <qmap.h>
 #include <qthread.h>
@@ -242,6 +243,15 @@ TableOrQuerySchema::TableOrQuerySchema(QuerySchema* query)
 {
 	if (!m_query)
 		KexiDBWarn << "TableOrQuery(QuerySchema* query) : no query specified!" << endl;
+}
+
+uint TableOrQuerySchema::fieldCount() const
+{
+	if (m_table)
+		return m_table->fieldCount();
+	if (m_query)
+		return m_query->fieldsExpanded().size();
+	return 0;
 }
 
 const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
@@ -748,9 +758,19 @@ QAsciiDict<char>* KexiDB_extendedProperties = 0;
 bool KexiDB::isExtendedTableFieldProperty( const QCString& propertyName )
 {
 	if (!KexiDB_extendedProperties) {
-		KexiDB_extendedPropertiesDeleter.setObject( KexiDB_extendedProperties, new QAsciiDict<char>(499) );
+		KexiDB_extendedPropertiesDeleter.setObject( KexiDB_extendedProperties, new QAsciiDict<char>(499, false) );
 #define ADD(name) KexiDB_extendedProperties->insert(name, (char*)1)
 		ADD("visibleDecimalPlaces");
+		ADD("rowSource");
+		ADD("rowSourceType");
+		ADD("rowSourceValues");
+		ADD("boundColumn");
+		ADD("visibleColumn");
+		ADD("columnWidths");
+		ADD("showColumnHeaders");
+		ADD("listRows");
+		ADD("limitToList");
+		ADD("displayWidget");
 #undef ADD
 	}
 	return KexiDB_extendedProperties->find( propertyName );
@@ -772,6 +792,7 @@ bool KexiDB::setFieldProperty( Field& field, const QCString& propertyName, const
 			field.method( ival ); \
 			return true; \
 		}
+
 	if (propertyName.isEmpty())
 		return false;
 
@@ -779,8 +800,28 @@ bool KexiDB::setFieldProperty( Field& field, const QCString& propertyName, const
 	if (KexiDB::isExtendedTableFieldProperty(propertyName)) {
 		//a little speedup: identify extended property in O(1)
 		if ( "visibleDecimalPlaces" == propertyName
-		  && KexiDB::supportsVisibleDecimalPlacesProperty(field.type()) )
+			&& KexiDB::supportsVisibleDecimalPlacesProperty(field.type()) )
+		{
 			GET_INT( setVisibleDecimalPlaces );
+		}
+		else {
+			if (!field.table()) {
+				KexiDBWarn << QString("KexiDB::setFieldProperty() Cannot set \"%1\" property - no table assinged for field!")
+					.arg(propertyName) << endl;
+			}
+			else {
+				LookupFieldSchema *lookup = field.table()->lookupFieldSchema(field);
+				const bool hasLookup = lookup != 0;
+				if (!hasLookup)
+					lookup = new LookupFieldSchema();
+				if (LookupFieldSchema::setProperty( *lookup, propertyName, value )) {
+					if (!hasLookup && lookup)
+						field.table()->setLookupFieldSchema( field.name(), lookup );
+					return true;
+				}
+				delete lookup;
+			}
+		}
 	}
 	else {//non-extended
 		if ( "type" == propertyName )
@@ -921,9 +962,10 @@ QDomElement KexiDB::saveBooleanElementToDom(QDomDocument& doc, QDomElement& pare
 {
 	QDomElement el( doc.createElement(elementName) );
 	parentEl.appendChild( el );
-	QDomElement boolEl( doc.createElement("bool") );
-	el.appendChild( boolEl );
-	boolEl.appendChild( doc.createTextNode( value ? "true" : "false" ) );
+	QDomElement numberEl( doc.createElement("bool") );
+	el.appendChild( numberEl );
+	numberEl.appendChild( doc.createTextNode( 
+		value ? QString::fromLatin1("true") : QString::fromLatin1("false") ) );
 	return el;
 }
 
