@@ -359,22 +359,22 @@ protected:
     virtual void remRequiredTask(QString id);
     virtual QList<Node *> requiredTaskIterator() const;
 
-    DateTime getEarlyStartDate();
+    DateTime EarlyStartDate();
     void setEarlyStartDate(DateTime value);
 
-    DateTime getEarlyFinishDate();
+    DateTime EarlyFinishDate();
     void setEarlyFinishDate(DateTime value);
 
-    DateTime getLateStartDate();
+    DateTime LateStartDate();
     void setLateStartDate(DateTime value);
 
-    DateTime getLateFinishDate();
+    DateTime LateFinishDate();
     void setLateFinishDate(DateTime value);
 
-    int getActivitySlack();
+    int ActivitySlack();
     void setActivitySlack(int value);
 
-    int getActivityFreeMargin();
+    int ActivityFreeMargin();
     void setActivityFreeMargin(int value);
 
 private:

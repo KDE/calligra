@@ -2039,7 +2039,7 @@ QList<Node *> Task::requiredTaskIterator() const{
     return m_requiredTasks;
 }
 
-DateTime Task::getEarlyStartDate()
+DateTime Task::EarlyStartDate()
 {
     return m_earlyStartDate;
 }
@@ -2050,7 +2050,7 @@ void Task::setEarlyStartDate(DateTime value)
 }
 
 
-DateTime Task::getEarlyFinishDate()
+DateTime Task::EarlyFinishDate()
 {
     return m_earlyFinishDate;
 }
@@ -2060,7 +2060,7 @@ void Task::setEarlyFinishDate(DateTime value)
     m_earlyFinishDate=value;
 }
 
-DateTime Task::getLateStartDate()
+DateTime Task::LateStartDate()
 {
     return m_lateStartDate;
 }
@@ -2070,7 +2070,7 @@ void Task::setLateStartDate(DateTime value)
     m_lateStartDate=value;
 }
 
-DateTime Task::getLateFinishDate()
+DateTime Task::LateFinishDate()
 {
     return m_lateFinishDate;
 }
@@ -2080,7 +2080,7 @@ void Task::setLateFinishDate(DateTime value)
     m_lateFinishDate=value;
 }
 
-int Task::getActivitySlack()
+int Task::ActivitySlack()
 {
     return(m_activitySlack);
 }
@@ -2090,7 +2090,7 @@ void Task::setActivitySlack(int value)
     m_activitySlack=value;
 }
 
-int Task::getActivityFreeMargin()
+int Task::ActivityFreeMargin()
 {
     return(m_activityFreeMargin);
 }

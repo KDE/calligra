@@ -1640,7 +1640,7 @@ void Project::setProjectSlack(const int& theValue)
     m_projectSlack = theValue;
 }
 
-int Project::getProjectSlack() const
+int Project::ProjectSlack() const
 {
     return m_projectSlack;
 }

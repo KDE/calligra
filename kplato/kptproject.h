@@ -315,7 +315,7 @@ public:
     void sendScheduleToBeRemoved( const MainSchedule *sch );
 
     void setProjectSlack(const int& theValue);
-    int getProjectSlack() const;
+    int ProjectSlack() const;
 
 signals:
     void currentScheduleChanged();
