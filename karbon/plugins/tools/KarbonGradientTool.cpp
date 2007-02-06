@@ -152,12 +152,6 @@ void KarbonGradientTool::activate( bool temporary )
 
     initialize();
 
-    if( m_gradients.count() == 0 )
-    {
-        emit sigDone();
-        return;
-    }
-
     useCursor(Qt::ArrowCursor, true);
 }
 
@@ -190,7 +184,13 @@ void KarbonGradientTool::initialize()
     }
 
     if( m_gradients.count() == 0 )
+    {
+        // create a default gradient
+        m_gradient = new QLinearGradient( QPointF(0,0), QPointF(100,100) );
+        m_gradient->setColorAt( 0.0, Qt::white );
+        m_gradient->setColorAt( 1.0, Qt::green );
         return;
+    }
 
     m_gradients.first()->setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     delete m_gradient;
@@ -233,7 +233,9 @@ QWidget * KarbonGradientTool::createOptionWidget()
     QWidget *optionWidget = new QWidget();
     QGridLayout* layout = new QGridLayout( optionWidget );
 
-    m_gradientWidget = new VGradientTabWidget( m_gradient, KarbonFactory::rServer(), optionWidget );
+    m_gradientWidget = new VGradientTabWidget( optionWidget );
+    m_gradientWidget->setGradient( m_gradient );
+    m_gradientWidget->setResourceServer( KarbonFactory::rServer() );
     layout->addWidget( m_gradientWidget );
 
     connect( m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()) );

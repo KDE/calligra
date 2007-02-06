@@ -19,16 +19,17 @@
 */
 
 #include <QLabel>
-#include <qpainter.h>
+#include <QPainter>
 #include <QLayout>
-#include <q3groupbox.h>
 #include <QPushButton>
-#include <qfileinfo.h>
-#include <qpixmap.h>
+#include <QFileInfo>
 #include <QPaintEvent>
 #include <QGridLayout>
 #include <Q3PtrList>
 #include <QPointF>
+#include <QRadialGradient>
+#include <QLinearGradient>
+#include <QConicalGradient>
 
 #include <knuminput.h>
 #include <kcombobox.h>
@@ -80,7 +81,7 @@ QGradient * cloneGradient( const QGradient * gradient )
     return clone;
 }
 
-VGradientListItem::VGradientListItem( const QGradient * gradient, QString filename )
+VGradientListItem::VGradientListItem( const QGradient * gradient, const QString & filename )
     : Q3ListBoxItem( 0L ), m_gradient( gradient ), m_filename( filename )
 {
     m_pixmap = QPixmap( 200, 16 );
@@ -129,92 +130,97 @@ void VGradientListItem::paint( QPainter* painter )
     painter->drawRect( r );
 }
 
-VGradientPreview::VGradientPreview( VGradient& gradient, double& opacity, QWidget* parent, const char* name )
-		: QWidget( parent ), m_gradient( &gradient ), m_opacity( &opacity )
+VGradientPreview::VGradientPreview( QWidget* parent )
+    : QWidget( parent ), m_gradient( 0 )
 {
-	setObjectName(name);
 
-	QPalette p = palette();
-	p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
-	// TODO: check if this is equivalent with the line below
-	// setBackgroundMode( Qt::NoBackground );
-	setMinimumSize( 70, 70 );
+    QPalette p = palette();
+    p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
+    // TODO: check if this is equivalent with the line below
+    // setBackgroundMode( Qt::NoBackground );
+    setMinimumSize( 70, 70 );
 }
 
 VGradientPreview::~VGradientPreview()
 {
+    delete m_gradient;
+}
+
+void VGradientPreview::setGradient( const QGradient *gradient )
+{
+    delete m_gradient;
+    m_gradient = cloneGradient( gradient );
+
+    switch( m_gradient->type() )
+    {
+        case QGradient::LinearGradient:
+        {
+            QLinearGradient * g = static_cast<QLinearGradient*>( m_gradient );
+            g->setStart( QPointF( 0.0, 0.0 ) );
+            g->setFinalStop( QPointF( width(), 0.0 ) );
+            break;
+        }
+        case QGradient::RadialGradient:
+        {
+            QRadialGradient * g = static_cast<QRadialGradient*>( m_gradient );
+            g->setCenter( QPointF( 0.5 * width(), 0.5 * height() ) );
+            g->setFocalPoint( QPointF( 0.5 * width(), 0.5 * height() ) );
+            g->setRadius( 0.3 * width() );
+            break;
+        }
+        case QGradient::ConicalGradient:
+        {
+            QConicalGradient * g = static_cast<QConicalGradient*>( m_gradient );
+            g->setCenter( QPointF( 0.5 * width(), 0.5 * height() ) );
+            g->setAngle( 0.0 );
+            break;
+        }
+        default:
+            delete m_gradient;
+            m_gradient = 0;
+    }
+
+    update();
 }
 
 void VGradientPreview::paintEvent( QPaintEvent* )
 {
-	QPixmap pixmap( width(), height() );
-	VQPainter gp( &pixmap, width(), height() );
-	// Port to Qt4:
-	// gp.setRasterOp( Qt::XorROP );
-	gp.newPath();
-	VGradient gradient( *m_gradient );
-	if( gradient.type() == VGradient::radial || gradient.type() == VGradient::conic )
-	{
-		gradient.setOrigin( QPointF( width() / 2, height() / 2 ) );
-		gradient.setFocalPoint( QPointF( width() / 2, height() / 2 ) );
-		gradient.setVector( QPointF( width() / 4, height() / 4 ) );
-	}
-	else
-	{
-		gradient.setOrigin( QPointF( width() / 3, 2 * ( height() / 3 ) ) );
-		gradient.setVector( QPointF( 2 * ( width() / 3 ), height() / 3 ) );
-	}
-	VFill fill;
-	KIconLoader il;
-	fill.pattern() = VPattern( il.iconPath( "karbon.png", K3Icon::Small ) );
-	fill.setType( VFill::patt );
-	gp.setBrush( fill );
-	gp.fillPath();
-	fill.gradient() = gradient;
-	fill.setType( VFill::grad );
-	VColor c = fill.color();
-	c.setOpacity( *m_opacity );
-	fill.setColor( c, false );
-	gp.setBrush( fill );
-	/* TODO: Port to Qt4:
-	gp.moveTo( QPointF( 2, 2 ) );
-	gp.lineTo( QPointF( 2, height() - 2 ) );
-	gp.lineTo( QPointF( width() - 2, height() - 2 ) );
-	gp.lineTo( QPointF( width() - 2, 2 ) );
-	gp.lineTo( QPointF( 2, 2 ) );
-	*/
-	gp.fillPath();
-	gp.end();
+    QPainter painter( this );
 
-	QPainter p( &pixmap );
+    // TODO draw a checker board as background?
+    //painter.setBrush( QBrush( SmallIcon( "karbon" ) ) );
+    painter.setBrush( palette().base() );
+    painter.drawRect( QRectF( 0, 0, width(), height() ) );
 
-	p.setPen( palette().light().color() );
-	/* TODO: Port to Qt4:
-	p.moveTo( 1, height() - 1 );
-	p.lineTo( 1, 1 );
-	p.lineTo( width() - 1, 1 );
-	p.lineTo( width() - 1, height() - 1 );
-	p.lineTo( 1, height() - 1 );
-	p.setPen( colorGroup().dark() );
-	p.moveTo( 0, height() - 1 );
-	p.lineTo( 0, 0 );
-	p.lineTo( width() - 1, 0 );
-	p.moveTo( width() - 2, 2 );
-	p.lineTo( width() - 2, height() - 2 );
-	p.lineTo( 2, height() - 2 );*/
+    if( ! m_gradient )
+        return;
 
-	QPainter p2(this);
-	p2.drawPixmap(QPoint(0, 0), pixmap, QRect(0, 0, width(), height()));
+    painter.setBrush( QBrush( *m_gradient ) );
+    painter.drawRect( QRectF( 0, 0, width(), height() ) );
+
+    painter.setPen( palette().light().color() );
+    // light frame around widget
+    QRect frame( 1, 1, width()-2, height()-2 );
+    painter.drawRect( frame );
+
+    painter.setPen( palette().dark().color() );
+    painter.drawLine( QPointF( 0, height() - 1 ), QPointF( 0, 0 ) );
+    painter.drawLine( QPointF( 0, 0 ), QPointF( width() - 1, 0 ) );
+    painter.drawLine( QPointF( width() - 2, 2 ), QPointF( width() - 2, height() - 2 ) );
+    painter.drawLine( QPointF( width() - 2, height() - 2 ), QPointF( 2, height() - 2 ) );
+
 }
 
-VGradientTabWidget::VGradientTabWidget( const QGradient* gradient, KarbonResourceServer* server, QWidget* parent, const char* name )
-    : QTabWidget( parent ), m_gradient( 0 ), m_resourceServer( server )
+VGradientTabWidget::VGradientTabWidget( QWidget* parent )
+    : QTabWidget( parent ), m_gradient( 0 ), m_resourceServer( 0 ), m_gradOpacity( 1.0 )
 {
-    m_gradient = cloneGradient( gradient );
-    setObjectName(name);
+    // create a default gradient
+    m_gradient = new QLinearGradient( QPointF(0,0), QPointF(100,100) );
+    m_gradient->setColorAt( 0.0, Qt::white );
+    m_gradient->setColorAt( 1.0, Qt::green );
+
     setupUI();
     setupConnections();
-    initUI();
 }
 
 VGradientTabWidget::~VGradientTabWidget()
@@ -226,10 +232,6 @@ void VGradientTabWidget::setupUI()
 {
     m_editTab = new QWidget();
     QGridLayout* editLayout = new QGridLayout( m_editTab );
-
-    m_gradientPreview = new VGradientPreview( m_oldGradient, m_gradOpacity, m_editTab );
-    m_gradientPreview->setVisible( false );
-    //editLayout->addWidget( m_gradientPreview, 0, 0, 3, 1 );
 
     editLayout->addWidget( new QLabel( i18n( "Type:" ), m_editTab ), 0, 0 );
     editLayout->addWidget( new QLabel( i18n( "Repeat:" ), m_editTab ), 1, 0 );
@@ -250,9 +252,11 @@ void VGradientTabWidget::setupUI()
     m_gradientTarget = new KComboBox( false, m_editTab );
     m_gradientTarget->insertItem( 0, i18n( "Stroke" ) );
     m_gradientTarget->insertItem( 1, i18n( "Fill" ) );
+    m_gradientTarget->setCurrentIndex( FillGradient );
     editLayout->addWidget( m_gradientTarget, 2, 1 );
 
-    m_gradientWidget = new VGradientWidget( m_gradient->stops(), m_editTab );
+    m_gradientWidget = new VGradientWidget( m_editTab );
+    m_gradientWidget->setStops( m_gradient->stops() );
     editLayout->addWidget( m_gradientWidget, 4, 0, 1, 2 );
 
     editLayout->addWidget( new QLabel( i18n( "Overall opacity:" ), m_editTab ), 5, 0 );
@@ -283,15 +287,14 @@ void VGradientTabWidget::setupUI()
     predefLayout->addWidget( m_predefImport, 2, 1 );
     m_predefImport->setEnabled( false );
 
-    addTab( m_editTab, i18n( "Edit" ) );
-    addTab( predefTab, i18n( "Predefined" ) );
+    addTab( m_editTab, i18n( "Edit Gradient" ) );
+    addTab( predefTab, i18n( "Predefined Gradients" ) );
 }
 
 void VGradientTabWidget::setupConnections()
 {
     connect( m_gradientType, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
     connect( m_gradientRepeat, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
-    connect( m_gradientWidget, SIGNAL( changed() ), m_gradientPreview, SLOT( update() ) );
     connect( m_gradientWidget, SIGNAL( changed() ), this, SLOT( stopsChanged() ) );
     connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
     connect( m_predefGradientsView, SIGNAL( doubleClicked( Q3ListBoxItem *, const QPoint & ) ), this, SLOT( changeToPredef( Q3ListBoxItem* ) ) );
@@ -299,14 +302,20 @@ void VGradientTabWidget::setupConnections()
     connect( m_opacity, SIGNAL( valueChanged( int ) ), this, SLOT( opacityChanged( int ) ) );
 }
 
-void VGradientTabWidget::initUI()
+void VGradientTabWidget::updateUI()
 {
     m_gradientType->setCurrentIndex( m_gradient->type() );
     m_gradientRepeat->setCurrentIndex( m_gradient->spread() );
-    m_gradientTarget->setCurrentIndex( FillGradient );
     m_opacity->setValue( 100 );
+    m_gradientWidget->setStops( m_gradient->stops() );
+}
 
+void VGradientTabWidget::updatePredefGradients()
+{
     m_predefGradientsView->clear();
+    if( ! m_resourceServer )
+        return;
+
     Q3PtrList<VGradientListItem>* gradientList = m_resourceServer->gradients();
     if( gradientList->count() > 0 )
         for( VGradientListItem* g = gradientList->first(); g != NULL; g = gradientList->next() )
@@ -337,7 +346,7 @@ void VGradientTabWidget::setGradient( const QGradient* gradient )
     delete m_gradient;
     m_gradient = cloneGradient( gradient );
 
-    initUI();
+    updateUI();
 }
 
 VGradientTabWidget::VGradientTarget VGradientTabWidget::target()
@@ -348,6 +357,12 @@ VGradientTabWidget::VGradientTarget VGradientTabWidget::target()
 void VGradientTabWidget::setTarget( VGradientTarget target )
 {
     m_gradientTarget->setCurrentIndex( target );
+}
+
+void VGradientTabWidget::setResourceServer( KarbonResourceServer* server )
+{
+    m_resourceServer = server;
+    updatePredefGradients();
 }
 
 void VGradientTabWidget::combosChange( int )
@@ -373,14 +388,21 @@ void VGradientTabWidget::combosChange( int )
     delete m_gradient;
     m_gradient = newGradient;
 
-    m_gradientPreview->update();
     emit changed();
 }
 
 void VGradientTabWidget::opacityChanged( int value )
 {
     m_gradOpacity = value / 100.0;
-    m_gradientPreview->update();
+
+    QGradientStops stops = m_gradient->stops();
+    uint stopCount = stops.count();
+    for( uint i = 0; i < stopCount; ++i )
+        stops[i].second.setAlphaF( m_gradOpacity );
+    m_gradient->setStops( stops );
+
+    m_gradientWidget->setStops( stops );
+
     emit changed();
 }
 
@@ -409,9 +431,7 @@ void VGradientTabWidget::changeToPredef( Q3ListBoxItem* item )
         m_gradientType->setCurrentIndex( m_gradient->type() );
         m_gradientRepeat->setCurrentIndex( m_gradient->spread() );
         m_opacity->setValue( 100 );
-        m_gradientPreview->update();
         m_gradientWidget->setStops( m_gradient->stops() );
-        m_gradientWidget->update();
         setCurrentWidget( m_editTab );
         emit changed();
     }

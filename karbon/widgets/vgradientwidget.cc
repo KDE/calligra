@@ -20,27 +20,20 @@
 */
 
 #include <QLabel>
-#include <q3frame.h>
-#include <qbitmap.h>
+#include <QBitmap>
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QMouseEvent>
-#include <Q3PtrList>
 #include <QPointF>
 #include <QRectF>
 #include <QPainter>
 
-#include <kcolorbutton.h>
-#include <kcombobox.h>
 #include <klocale.h>
 #include <kiconloader.h>
 
 #include <KoUniColorDialog.h>
 
 #include "vgradientwidget.h"
-#include "vcolordlg.h"
-#include "vfill.h"
-#include "vqpainter.h"
 #include "vcursor.h"
 
 #define midPoint_width 7
@@ -63,12 +56,12 @@ static unsigned char colorStop_bits[] = {
    0x7c, 0x00, 0xfe, 0x00, 0xfe, 0x00, 0xff, 0x01
 };
 
-VGradientWidget::VGradientWidget( const QGradientStops & stops, QWidget* parent, const char* name )
+VGradientWidget::VGradientWidget( QWidget* parent )
 : QWidget( parent ), m_currentStop( -1 )
 {
-    m_gradient.setStops( stops );
-
-    setObjectName(name);
+    // initialize the gradient with some sane values
+    m_gradient.setColorAt( 0.0, Qt::white );
+    m_gradient.setColorAt( 1.0, Qt::green );
 
     QPalette p = palette();
     p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
@@ -85,6 +78,7 @@ VGradientWidget::~VGradientWidget()
 void VGradientWidget::setStops( const QGradientStops & stops )
 {
     m_gradient.setStops( stops );
+    update();
 }
 
 QGradientStops VGradientWidget::stops() const
@@ -92,32 +86,24 @@ QGradientStops VGradientWidget::stops() const
     return m_gradient.stops();
 }
 
-void VGradientWidget::paintColorStop( QPainter& p, int x, QColor& color )
+void VGradientWidget::paintColorStop( QPainter& p, int x, const QColor& color )
 {
-    QBitmap bitmap;
-
-    // TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true.
-    // Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
-    bitmap = QBitmap::fromData( QSize(colorStop_width, colorStop_height), colorStop_bits );
+    QBitmap bitmap = QBitmap::fromData( QSize(colorStop_width, colorStop_height), colorStop_bits );
     bitmap.setMask( bitmap );
     p.setPen( color );
     p.drawPixmap( x - 4, 1, bitmap );
 
-    // TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true.
-    // Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
     bitmap = QBitmap::fromData( QSize(colorStopBorder_width, colorStopBorder_height), colorStopBorder_bits );
     bitmap.setMask( bitmap );
-    p.setPen( QColor( "black" ) );
+    p.setPen( Qt::black );
     p.drawPixmap( x - 5, 1, bitmap );
 }
 
 void VGradientWidget::paintMidPoint( QPainter& p, int x )
 {
-    // TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true.
-    // Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
     QBitmap bitmap = QBitmap::fromData( QSize(midPoint_width, midPoint_height), midPoint_bits );
     bitmap.setMask( bitmap );
-    p.setPen( QColor( "black" ) );
+    p.setPen( Qt::black );
     p.drawPixmap( x - 3, 1, bitmap );
 }
 
@@ -128,19 +114,19 @@ void VGradientWidget::paintEvent( QPaintEvent* )
     int ph = colorStopBorder_height + 2; // point marker height
     int gh = h - ph;       // gradient area height
 
-    QPixmap pixmap( width(), height() );
     QPainter painter( this );
 
     m_gradient.setStart( QPointF( 2, 2 ) );
     m_gradient.setFinalStop( QPointF( width()-2, 2 ) );
 
-    painter.setBrush( QBrush( SmallIcon( "karbon" ) ) );
+    // TODO draw a checker board as background?
+    //painter.setBrush( QBrush( SmallIcon( "karbon" ) ) );
+    painter.setBrush( palette().base() );
     painter.drawRect( QRectF( 2, 2, w, gh ) );
 
     painter.setBrush( QBrush( m_gradient ) );
     painter.drawRect( QRectF( 2, 2, w, gh ) );
 
-    // TODO: check if this is equivalent with colorGroup().light()
     painter.setBrush( QBrush() );
     painter.setPen( palette().light().color() );
 
@@ -168,8 +154,6 @@ void VGradientWidget::paintEvent( QPaintEvent* )
     painter.drawLine( QPoint( width() - 2, height() - 2 ), QPoint( 2, height() - 2 ) );
 
     m_pntArea.setRect( 2, height() - ph - 2, w, ph );
-    // clear point area
-    // TODO: check if palette().window().color() is equivalent with colorGroup().background()
     painter.fillRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height(), palette().window().color() );
 
     painter.setClipRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height() );
