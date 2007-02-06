@@ -80,8 +80,8 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 	init();
 }
 
-KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, const QString& caption,
-	const QString& description)
+KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, 
+	const QString& caption, const QString& description)
 : columnInfo(0)
 , visibleLookupColumnInfo(0)
 {
@@ -252,7 +252,7 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 	else
 		m_itemSize = columns.count()+(m_containsROWIDInfo?1:0);
 
-	// 1. Allocate KexiTableViewColumn objects for each visible query column
+	// Allocate KexiTableViewColumn objects for each visible query column
 	const KexiDB::QueryColumnInfo::Vector fields = m_cursor->query()->fieldsExpanded();
 	const uint fieldsCount = fields.count();
 	for (uint i=0;i < fieldsCount;i++) {
@@ -803,7 +803,6 @@ void KexiTableViewData::insertRow(KexiTableItem& item, uint index, bool repaint)
 	emit rowInserted(&item, index, repaint);
 }
 
-//void KexiTableViewData::clear()
 void KexiTableViewData::clearInternal()
 {
 	clearRowEditBuffer();

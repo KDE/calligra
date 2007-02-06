@@ -54,7 +54,7 @@ class KEXICORE_EXPORT KexiFieldDrag : public Q3StoredDrag
 		static bool canDecodeSingle( QMimeSource* e );
 
 		/*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
-		 an be decoded as "kexi/fields" data. If decoding of "kexi/field" 
+		 can be decoded as "kexi/fields" data. If decoding of "kexi/field" 
 		 type is supported, decoding of "kexi/fields" is always supported. 
 		 */
 		static bool canDecodeMultiple( QMimeSource* e );

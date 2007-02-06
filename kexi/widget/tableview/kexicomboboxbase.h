@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -99,6 +99,7 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 		//! the text has been entered by hand (by a user)
 		void setValueOrTextInInternalEditor(const QVariant& value); //QString& text);
 
+		//! \return lookup field schema for this combo box, if present and if is valid (i.e. has defined row source)
 		KexiDB::LookupFieldSchema* lookupFieldSchema() const;
 
 		int rowToHighlightForLookupTable() const;

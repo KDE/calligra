@@ -64,10 +64,10 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		//! (extended information, comparing to field()).
 		inline KexiTableViewColumn *column() const { return m_column; }
 
-		/*! \return displayed field. This is equal field() in typical case but can return a different field
+		/*! \return displayed field. This is equal to field() in typical case but can return a different field
 		 definition if the column contains a lookup field. This distiction is especially used for 
-		 displaying dependent on the type and specifics of the field definition 
-		 (e.g. text type versus integer type). Note that we're computing the editor's value, 
+		 displaying data dependent on the type and specifics of the field definition 
+		 (e.g. text type versus integer type). Note that to compute the editor's value 
 		 we still use field(). */
 		KexiDB::Field *displayedField() const;
 

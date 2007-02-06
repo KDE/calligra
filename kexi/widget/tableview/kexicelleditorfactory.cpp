@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -130,6 +130,22 @@ void KexiCellEditorFactory::registerItem( KexiCellEditorFactoryItem& item, uint 
 	KexiCellEditorFactory_static->registerItem( item, type, subType );
 }
 
+static bool hasEnumType( const KexiTableViewColumn &column )
+{
+	/*not db-aware case*/
+	if (column.relatedData())
+		return true;
+	/*db-aware case*/
+	if (!column.field() || !column.field()->table())
+		return false;
+	KexiDB::LookupFieldSchema *lookupFieldSchema = column.field()->table()->lookupFieldSchema( *column.field() );
+	if (!lookupFieldSchema)
+		return false;
+	if (lookupFieldSchema->rowSource().name().isEmpty())
+		return false;
+	return true;
+}
+
 KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QWidget* parent)
 {
 	init();
@@ -142,9 +158,8 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, 
 	}
 
 	KexiCellEditorFactoryItem *item = 0;
-	if (/*not db-aware case*/column.relatedData() 
-		|| (/*db-aware case*/column.field() && column.field()->table() && column.field()->table()->lookupFieldSchema( *column.field() )))
-	{
+
+	if (hasEnumType(column)) {
 		//--we need to create combo box because of relationship:
 		item = KexiCellEditorFactory::item( KexiDB::Field::Enum );
 	}
