@@ -25,8 +25,6 @@
 
 #include <KoStore.h>
 
-class KoTextZoomHandler;
-
 /**
   *@author Frank Dekervel
   */
@@ -211,7 +209,6 @@ protected:
 	QDomDocument *_doc;
 	QDomDocument *_docinfo;
 	QDomElement _docinfoMain;
-	KoTextZoomHandler *_zoomhandler;
 	int tableNo;
 	bool insidetable;
 	
