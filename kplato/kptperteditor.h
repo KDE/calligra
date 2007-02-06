@@ -51,6 +51,8 @@
 #include <QtGui/QSpinBox>
 #include <QtGui/QLineEdit>
 
+#include <Q3ListBox>
+
 #include <kactionselector.h>
 
 #include "kptpart.h"

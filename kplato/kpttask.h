@@ -352,6 +352,29 @@ protected:
     virtual void addParentProxyRelation(Node *, const Relation *);
     virtual void addChildProxyRelation(Node *, const Relation *);
 
+    // Those method are used by the pert editor to link tasks between each others
+    virtual void addRequiredTask(Node * taskLinked);
+    virtual void remRequiredTask(QString id);
+    virtual QList<Node *> requiredTaskIterator() const;
+
+    DateTime getEarlyStartDate();
+    void setEarlyStartDate(DateTime value);
+
+    DateTime getEarlyFinishDate();
+    void setEarlyFinishDate(DateTime value);
+
+    DateTime getLateStartDate();
+    void setLateStartDate(DateTime value);
+
+    DateTime getLateFinishDate();
+    void setLateFinishDate(DateTime value);
+
+    int getActivitySlack();
+    void setActivitySlack(int value);
+
+    int getActivityFreeMargin();
+    void setActivityFreeMargin(int value);
+
 private:
     DateTime calculateSuccessors(const QList<Relation*> &list, int use);
     DateTime calculatePredeccessors(const QList<Relation*> &list, int use);
@@ -372,7 +395,18 @@ private:
  
     QList<Relation*> m_parentProxyRelations;
     QList<Relation*> m_childProxyRelations;
-      
+    
+    // This list store pointers to linked task
+    QList<Node*> m_requiredTasks;
+
+    // Attributes used for calculation
+    DateTime m_earlyStartDate;
+    DateTime m_earlyFinishDate;
+    DateTime m_lateStartDate;
+    DateTime m_lateFinishDate;
+    int m_activitySlack;
+    int m_activityFreeMargin;
+
     Completion m_completion;
     
 #ifndef NDEBUG

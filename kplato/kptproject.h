@@ -312,6 +312,9 @@ public:
     void sendScheduleRemoved( const MainSchedule *sch );
     void sendScheduleToBeRemoved( const MainSchedule *sch );
 
+    void setProjectSlack(const int& theValue);
+    int getProjectSlack() const;
+
 signals:
     void currentScheduleChanged();
     void sigProgress( int );
@@ -407,11 +410,17 @@ private:
     QMap<QString, Calendar*> calendarIdDict;
 
     QList<ScheduleManager*> m_managers;
+
+    //use in pert to store the project slack
+    int m_projectSlack;
+
     
 #ifndef NDEBUG
 public:
     void printDebug( bool children, const QByteArray& indent );
     void printCalendarDebug( const QByteArray& indent = "" );
+
+	
 #endif
 };
 

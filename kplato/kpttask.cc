@@ -2025,6 +2025,80 @@ void Completion::printDebug(const QByteArray& _indent) const {
     }
 }
 
+
+// Those method are used by the pert editor to link tasks between each others
+void Task::addRequiredTask(Node * taskLinked){
+}
+
+void Task::remRequiredTask(QString id){
+}
+
+QList<Node *> Task::requiredTaskIterator() const{
+    return m_requiredTasks;
+}
+
+DateTime Task::getEarlyStartDate()
+{
+    return m_earlyStartDate;
+}
+
+void Task::setEarlyStartDate(DateTime value)
+{
+    m_earlyStartDate=value;
+}
+
+
+DateTime Task::getEarlyFinishDate()
+{
+    return m_earlyFinishDate;
+}
+
+void Task::setEarlyFinishDate(DateTime value)
+{
+    m_earlyFinishDate=value;
+}
+
+DateTime Task::getLateStartDate()
+{
+    return m_lateStartDate;
+}
+
+void Task::setLateStartDate(DateTime value)
+{
+    m_lateStartDate=value;
+}
+
+DateTime Task::getLateFinishDate()
+{
+    return m_lateFinishDate;
+}
+
+void Task::setLateFinishDate(DateTime value)
+{
+    m_lateFinishDate=value;
+}
+
+int Task::getActivitySlack()
+{
+    return(m_activitySlack);
+}
+
+void Task::setActivitySlack(int value)
+{
+    m_activitySlack=value;
+}
+
+int Task::getActivityFreeMargin()
+{
+    return(m_activityFreeMargin);
+}
+
+void Task::setActivityFreeMargin(int value)
+{
+    m_activityFreeMargin=value;
+}
+
+
 #endif
 
 }  //KPlato namespace

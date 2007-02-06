@@ -1631,6 +1631,17 @@ void Project::printCalendarDebug( const QByteArray& _indent )
     if ( m_standardWorktime )
         m_standardWorktime->printDebug();
 }
+
+//use in pert to have the project slack
+void Project::setProjectSlack(const int& theValue)
+{
+    m_projectSlack = theValue;
+}
+
+int Project::getProjectSlack() const
+{
+    return m_projectSlack;
+}
 #endif
 
 
