@@ -440,9 +440,14 @@ KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, b
 		lookupFieldSchema ? lookupFieldSchema->boundColumn() : -1, i18n("Bound Column")));
 	prop->setVisible(false);
 	
+//! @todo this is backward-compatible code for "single visible column" implementation
+//!       for multiple columns, only the first is displayed, so there is a data loss is GUI is used
+//!       -- special koproperty editor needed
+	int visibleColumn = -1;
+	if (lookupFieldSchema && !lookupFieldSchema->visibleColumns().isEmpty())
+		visibleColumn = lookupFieldSchema->visibleColumns().first();
 	set->addProperty( prop
-		= new KoProperty::Property("visibleColumn", 
-		lookupFieldSchema ? lookupFieldSchema->visibleColumn() : -1, i18n("Visible Column")));
+		= new KoProperty::Property("visibleColumn", visibleColumn, i18n("Visible Column")));
 	prop->setVisible(false);
 
 //! @todo support columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
@@ -1326,7 +1331,14 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 				lookupFieldSchema->rowSource().setTypeByName( (*s)["rowSourceType"].value().toString() );
 				lookupFieldSchema->rowSource().setName( (*s)["rowSource"].value().toString() );
 				lookupFieldSchema->setBoundColumn( (*s)["boundColumn"].value().toInt() );
-				lookupFieldSchema->setVisibleColumn( (*s)["visibleColumn"].value().toInt() );
+//! @todo this is backward-compatible code for "single visible column" implementation
+//!       for multiple columns, only the first is displayed, so there is a data loss is GUI is used
+//!       -- special koproperty editor needed
+				QValueList<uint> visibleColumns;
+				const int visibleColumn = (*s)["visibleColumn"].value().toInt();
+				if (visibleColumn >= 0)
+					visibleColumns.append( (uint)visibleColumn );
+				lookupFieldSchema->setVisibleColumns( visibleColumns );
 //! @todo support columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
 				if (!schema.setLookupFieldSchema(f->name(), lookupFieldSchema)) {
 					kexipluginswarn << 
