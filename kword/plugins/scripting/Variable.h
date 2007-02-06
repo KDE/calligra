@@ -43,7 +43,10 @@ namespace Scripting {
 
             virtual ~Variable() {}
 
-            //virtual void setProperties(const KoProperties *props) { Q_UNUSED(props); }
+            virtual void setProperties(const KoProperties *props) {
+                Q_UNUSED(props);
+                setValue("Some text");
+            }
             //virtual QWidget *createOptionsWidget() { return 0; }
     };
 

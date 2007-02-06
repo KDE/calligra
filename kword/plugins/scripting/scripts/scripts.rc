@@ -1,6 +1,6 @@
 <KrossScripting>
 
-    <collection name="variables" text="Variables" enabled="false">
+    <collection name="variables" text="Variables" comment="Scripting variables" enabled="false">
         <script
             name="pyvariabledocinfos"
             text="Document Informations"
@@ -9,7 +9,7 @@
             file="variables/variable_docinfos.py" />
     </collection>
 
-    <collection name="samples" text="Samples">
+    <collection name="samples" text="Samples" comment="Sample scripts">
         <script
             name="pysampleactions"
             text="Execute Action..."
