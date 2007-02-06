@@ -3541,7 +3541,7 @@ void Canvas::copyOasisObjects()
       QPainter p(&pixmap);
       if ( object->isSelected() )
       {
-          p.drawPixmap( object->geometry().toRect().left() - r.left(), object->geometry().toRect().top() - r.top(), object->toPixmap( 1.0 , 1.0 ) );
+          p.drawPixmap( object->geometry().toRect().left() - r.left(), object->geometry().toRect().top() - r.top(), object->toPixmap() );
       }
       p.end();
       if (!pixmap.isNull())

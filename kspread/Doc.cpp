@@ -1570,16 +1570,11 @@ void Doc::enableRedo( bool _b )
     static_cast<View *>( view )->enableRedo( _b );
 }
 
-void Doc::paintContent( QPainter& painter, const QRect& rect,
-                        bool transparent, double zoomX, double zoomY )
+void Doc::paintContent( QPainter& painter, const QRect& rect)
 {
-    Q_UNUSED( zoomY );
 //     kDebug(36001) << "paintContent() called on " << rect << endl;
 
 //     ElapsedTime et( "Doc::paintContent1" );
-//     kDebug(36001) << "Doc::paintContent m_zoom=" << zoomInPercent()
-//                   << " zoomX=" << zoomX << " zoomY=" << zoomY
-//                   << " transparent=" << transparent << endl;
 
     // choose sheet: the first or the active
     Sheet* sheet = 0;
@@ -1593,14 +1588,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
     // save current zoom
     double oldZoom = m_zoom;
     // set the resolution once
-    setResolution( KoGlobal::dpiX(), KoGlobal::dpiY() );
-
-    // only one zoom is supported
-    double d_zoom = 1.0;
-    setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
-    if ( m_zoomedResolutionX != zoomX )
-        d_zoom *= ( zoomX / m_zoomedResolutionX );
-    setZoom( d_zoom );
+    setZoom( 1.0 / m_zoomedResolutionX);
 
     // KSpread support zoom, therefore no need to scale with worldMatrix
     // Save the translation though.
@@ -1616,25 +1604,20 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
     kDebug(36001)<<"paintContent-------------------------------------\n";
     painter.save();
     painter.setMatrix( matrix );
-    paintContent( painter, prect, transparent, sheet, false );
+    paintContent( painter, prect, sheet, false );
     painter.restore();
 
     // restore zoom
     setZoom( oldZoom );
 }
 
-void Doc::paintContent( QPainter& painter, const QRect& rect, bool transparent,
-                        Sheet* sheet, bool drawCursor )
+void Doc::paintContent( QPainter& painter, const QRect& rect, Sheet* sheet, bool drawCursor )
 {
-    Q_UNUSED( transparent );
     Q_UNUSED( drawCursor );
 
     if ( isLoading() )
         return;
     //    ElapsedTime et( "Doc::paintContent2" );
-
-    // if ( !transparent )
-    // painter.eraseRect( rect );
 
     double xpos;
     double ypos;

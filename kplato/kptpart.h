@@ -55,9 +55,7 @@ public:
           bool singleViewMode = false );
     ~Part();
 
-    virtual void paintContent( QPainter& painter, const QRect& rect,
-                               bool transparent = false,
-                               double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void paintContent( QPainter& painter, const QRect& rect);
 
     /**
      * Edit the settings of the project

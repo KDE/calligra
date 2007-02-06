@@ -488,8 +488,7 @@ KarbonPart::repaintAllViews( const QRectF &rect )
 }
 
 void
-KarbonPart::paintContent( QPainter& painter, const QRect& rect,
-						  bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
+KarbonPart::paintContent( QPainter& painter, const QRect& rect)
 {
 	kDebug(38000) << "**** part->paintContent()" << endl;
 

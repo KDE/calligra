@@ -166,24 +166,9 @@ class EmbeddedObject
     virtual void draw( QPainter *_painter );
 
     /**
-     * Renders the embedded object to a pixmap and returns the result.
-     * This is a convenience function which calculates the necessary x and y zoom factors to render
-     * the pixmap at the given size and calls toPixmap(double,double)
-     *
-     * @param size Specifies the desired size of the returned pixmap.
-     */
-    QPixmap toPixmap( QSize size );
-
-    /**
-     * Renders the embedded object to a pixmap at 100% scale.  Equivalent to calling toPixmap( 1.0, 1.0 )
+     * Renders the embedded object to a pixmap.
      */
     QPixmap toPixmap();
-
-    /**
-     * Renders the embedded object to a pixmap at the specified x and y scale and returns the result.
-     */
-    virtual QPixmap toPixmap( double xZoom , double yZoom );
-
 
     void paintSelection( QPainter *_painter, SelectionMode selectionMode );
     virtual QCursor getCursor( const QPoint &_point, ModifyType &_modType, QRect &geometry ) const;
@@ -257,9 +242,9 @@ class EmbeddedKOfficeObject : public EmbeddedObject
     virtual void draw( QPainter *_painter );
 
     /**
-     * See EmbeddedObject::toPixmap(double,double)
+     * See EmbeddedObject::toPixmap()
      */
-    virtual QPixmap toPixmap(double xZoom , double yZoom);
+    virtual QPixmap toPixmap();
 
     void activate( View *_view, Canvas *_canvas );
     void deactivate();
@@ -332,9 +317,9 @@ class EmbeddedPictureObject : public EmbeddedObject
     virtual void draw( QPainter *_painter );
 
     /**
-     * See EmbeddedObject::toPixmap(double,double)
+     * See EmbeddedObject::toPixmap()
      */
-    virtual QPixmap toPixmap(double xZoom , double yZoom);
+    virtual QPixmap toPixmap();
 
         /**
      * Only used as a default value in the filedialog, in changePicture

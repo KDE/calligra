@@ -185,7 +185,7 @@ void KChartView::paintEvent( QPaintEvent* /*ev*/ )
 
     // Let the document do the drawing
     // This calls KChartPart::paintContent, basically.
-    koDocument()->paintEverything( painter, rect(), false, this );
+    koDocument()->paintEverything( painter, rect(), this );
 }
 
 

@@ -173,10 +173,8 @@ void KudesignerView::paintEvent( QPaintEvent* ev )
     QPainter painter;
     painter.begin( this );
 
-    // ### TODO: Scaling
-
     // Let the document do the drawing
-    koDocument() ->paintEverything( painter, ev->rect(), false, this );
+    koDocument() ->paintEverything( painter, ev->rect(), this );
 
     painter.end();
 }

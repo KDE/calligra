@@ -93,7 +93,7 @@ GenericImageExport::convert(const QByteArray& from, const QByteArray& to)
     {     
     	pixmap = QPixmap(width, height);
 	QPainter  painter(&pixmap);
-    	kchartDoc.paintContent(painter, pixmap.rect(), false);
+    	kchartDoc.paintContent(painter, pixmap.rect());
         if( !saveImage( m_chain->outputFile(),to))
             return KoFilter::CreationError;	
     }

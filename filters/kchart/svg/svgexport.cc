@@ -79,7 +79,7 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
     Q3Picture  picture;
     QPainter  painter(&picture);
     QRect     rect(QPoint(0, 0), QPoint(500, 400));
-    kchartDoc.paintContent(painter, rect, false);
+    kchartDoc.paintContent(painter, rect);
     painter.end();
 
     // Save the image.

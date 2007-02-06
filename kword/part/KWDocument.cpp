@@ -111,7 +111,7 @@ void KWDocument::removeShape (KoShape *shape) {
     }
 }
 
-void KWDocument::paintContent(QPainter&, const QRect&, bool, double, double) {
+void KWDocument::paintContent(QPainter&, const QRect& rect) {
     // TODO
 }
 

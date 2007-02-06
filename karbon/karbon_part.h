@@ -50,8 +50,7 @@ public:
 				QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );
 	virtual ~KarbonPart();
 
-	virtual void paintContent( QPainter& painter, const QRect& rect,
-							   bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
+	virtual void paintContent( QPainter& painter, const QRect& rect);
 
 	/// file-> open calls this method
 	virtual bool loadXML( QIODevice*, const QDomDocument& document );

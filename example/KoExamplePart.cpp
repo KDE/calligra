@@ -65,11 +65,8 @@ bool ExamplePart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return true;
 }
 
-void ExamplePart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/,
-                                double /*zoomX*/, double /*zoomY*/ )
+void ExamplePart::paintContent( QPainter& painter, const QRect& rect)
 {
-    // ####### handle transparency
-
     // Need to draw only the document rectangle described in the parameter rect.
     int left = rect.left() / 20;
     int right = rect.right() / 20 + 1;

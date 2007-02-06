@@ -82,8 +82,7 @@ void KoUnavailPart::setMimeType( const QByteArray& mime )
     m_mimetype = mime;
 }
 
-void KoUnavailPart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/,
-                                double /*zoomX*/, double /*zoomY*/ )
+void KoUnavailPart::paintContent( QPainter& painter, const QRect& rect)
 {
     painter.save();
     painter.setPen( QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
@@ -121,7 +120,7 @@ void KoUnavailView::paintEvent( QPaintEvent* ev )
     // ### TODO: Scaling
 
     // Let the document do the drawing
-    koDocument()->paintEverything( painter, ev->rect(), false, this );
+    koDocument()->paintEverything( painter, ev->rect(), this );
 
     painter.end();
 }

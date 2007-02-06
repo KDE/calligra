@@ -29,12 +29,7 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     //  virtual QDomDocument saveXML();
 
-    virtual void paintContent( QPainter&, const QRect&,
-                               bool /*transparent*/ = false,
-                               double /*zoomX*/ = 1.0, double /*zoomY*/ = 1.0 )
-    {
-        ;
-    }
+    virtual void paintContent( QPainter&, const QRect&) { }
 
     Kugar::MReportEngine *reportEngine()
     {

@@ -68,7 +68,7 @@ public:
 
     // KoDocument interface
     /// reimplemented from KoDocument
-    void paintContent(QPainter&, const QRect&, bool, double, double);
+    void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument
     bool loadXML(QIODevice*, const QDomDocument&);
     /// reimplemented from KoDocument

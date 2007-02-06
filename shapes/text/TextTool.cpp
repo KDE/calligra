@@ -559,7 +559,7 @@ void TextTool::addUndoCommand() {
 
 void TextTool::nonbreakingSpace() {
     if(! m_allowActions) return;
-    m_selectionHandler.insert(QString(QChar(0xa0)));
+    m_selectionHandler.insert(QString(QChar(Qt::Key_nobreakspace)));
 }
 
 void TextTool::nonbreakingHyphen() {
@@ -569,7 +569,7 @@ void TextTool::nonbreakingHyphen() {
 
 void TextTool::softHyphen() {
     if(! m_allowActions) return;
-    m_selectionHandler.insert(QString(QChar(0xad)));
+    m_selectionHandler.insert(QString(QChar(Qt::Key_hyphen)));
 }
 
 void TextTool::lineBreak() {

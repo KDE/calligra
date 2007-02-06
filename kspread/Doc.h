@@ -633,14 +633,12 @@ public:
   /**
    * \ingroup Painting
    */
-  virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false,
-                             double zoomX = 1.0, double zoomY = 1.0 );
+  virtual void paintContent( QPainter & painter, const QRect & rect);
 
   /**
    * \ingroup Painting
    */
-  void paintContent( QPainter & painter, const QRect & rect, bool transparent,
-                     Sheet * sheet, bool drawCursor = true );
+  void paintContent( QPainter & painter, const QRect & rect, Sheet * sheet, bool drawCursor = true );
 
 
 //   virtual DCOPObject* dcopObject();

@@ -41,7 +41,7 @@ public:
 
     ~KudesignerDoc();
 
-    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void paintContent( QPainter& painter, const QRect& rect);
 
     virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );

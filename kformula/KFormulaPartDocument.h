@@ -59,8 +59,7 @@ public:
 
     // KoDocument interface
     /// reimplemented from KoDocument
-    void paintContent( QPainter &painter, const QRect &rect,
-		    bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
+    void paintContent( QPainter &painter, const QRect &rect);
 
     /// reimplemented from KoDocument
     void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);

@@ -167,23 +167,7 @@ void EmbeddedObject::draw( QPainter *_painter )
 
 QPixmap EmbeddedObject::toPixmap()
 {
-	return toPixmap( 1.0 , 1.0 );
-}
-
-QPixmap EmbeddedObject::toPixmap(QSize size)
-{
-	double xZoom;
-	double yZoom;
-
-	calculateRequiredZoom( size , xZoom , yZoom );
-
-	return toPixmap(xZoom,yZoom);
-}
-
-QPixmap EmbeddedObject::toPixmap(double /*xZoom*/ , double /*yZoom*/)
-{
-	return QPixmap();
-
+    return QPixmap();
 }
 
 void EmbeddedObject::calculateRequiredZoom( QSize desiredSize, double& xZoom, double& yZoom)
@@ -468,15 +452,7 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
 
    assert( embeddedObject()->document() != 0 );
 
-   double zoomX, zoomY;
-    doc()->zoom(&zoomX, &zoomY);
-   embeddedObject()->document()->paintEverything( *_painter,
-        zoomedBound,
-        embeddedObject()->isTransparent(),
-        0 /* View isn't known from here - is that a problem? */,
-        zoomX,
-        zoomY );
-
+   embeddedObject()->document()->paintEverything( *_painter, zoomedBound);
 
    embeddedObject()->setGeometry( new_geometry );
   _painter->restore();
@@ -484,17 +460,13 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   EmbeddedObject::draw( _painter );
 }
 
-QPixmap EmbeddedKOfficeObject::toPixmap( double xZoom , double yZoom )
+QPixmap EmbeddedKOfficeObject::toPixmap()
 {
-	QPixmap pixmap( (int)( geometry().width()*xZoom ), (int)( geometry().height()*yZoom ) );
+	QPixmap pixmap( geometry().width(), geometry().height() );
 
 	QPainter painter(&pixmap);
-	QRect  bound( 0,0,(int)( geometry().width()*xZoom ), (int)(geometry().height()*yZoom) );
-	embeddedObject()->document()->paintEverything(painter,bound,
-					embeddedObject()->isTransparent(),
-					0,
-					xZoom,
-					yZoom);
+	QRect  bound( 0,0,geometry().width(), geometry().height() );
+	embeddedObject()->document()->paintEverything(painter,bound );
 	return pixmap;
 }
 
@@ -1192,10 +1164,10 @@ void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* 
 //     _painter->restore();
 }
 
-QPixmap EmbeddedPictureObject::toPixmap( double xZoom , double yZoom )
+QPixmap EmbeddedPictureObject::toPixmap()
 {
  	KoZoomHandler zoomHandler;
- 	zoomHandler.setZoomedResolution( xZoom /* *zoomHandler.resolutionX()*/ , yZoom /* *zoomHandler.resolutionY()*/ );
+ 	zoomHandler.setZoomedResolution( 1.0 , 1.0 );
  	return generatePixmap( &zoomHandler );
 }
 

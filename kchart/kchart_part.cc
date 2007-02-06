@@ -181,9 +181,7 @@ KoView* KChartPart::createViewInstance( QWidget* parent )
 //                              Painting
 
 
-void KChartPart::paintContent( QPainter& painter, const QRect& rect,
-			       bool /*transparent*/,
-			       double /*zoomX*/, double /*zoomY*/ )
+void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 {
     int  numDatasets;
 
@@ -245,11 +243,6 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
     // Ok, we have now created a data set for display, and params with
     // suitable legends and axis labels.  Now start the real painting.
-
-    // Handle transparency.
-    // Wrong: this flickers; better do this as part of the double-buffering.
-    //if ( !transparent )
-    //    painter.eraseRect( rect );
 
     // ## TODO: support zooming
 

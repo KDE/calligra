@@ -28,7 +28,7 @@ class ExamplePart : public KoDocument
 public:
     ExamplePart( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
 
-    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void paintContent( QPainter& painter, const QRect& rect);
 
     virtual bool loadXML( QIODevice *, const KoXmlDocument & );
     virtual QDomDocument saveXML();

@@ -29,6 +29,8 @@
 #include "kptganttview.h"
 #include "KDGanttViewTaskLink.h"
 
+#include <KoZoomHandler.h>
+
 #include <qpainter.h>
 #include <qfileinfo.h>
 #include <QTimer>
@@ -252,9 +254,7 @@ void Part::slotDocumentRestored()
 }
 
 
-void Part::paintContent( QPainter &painter, const QRect &rect,
-                         bool /*transparent*/,
-                         double zoomX, double /*zoomY*/ )
+void Part::paintContent( QPainter &painter, const QRect &rect)
 {
     kDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
     if ( isEmbedded() && m_embeddedGanttView && m_project ) {
@@ -276,20 +276,10 @@ void Part::paintContent( QPainter &painter, const QRect &rect,
             kWarning() << "Don't have any context to set!" << endl;
         }
         painter.setClipRect( rect );
-        // We don't support zoom yet, so use the painters scaling
-        double d_zoom = 1.0;
-//       setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
-//       if ( m_zoomedResolutionX != zoomX ) {
-//           d_zoom *= ( zoomX / m_zoomedResolutionX );
-//           painter.scale( d_zoom, d_zoom );
-//       }
-
         m_embeddedGanttView->clear();
         m_embeddedGanttView->draw( *m_project );
         m_embeddedGanttView->drawOnPainter( &painter, rect );
     }
-    // ####### handle transparency
-
     // Need to draw only the document rectangle described in the parameter rect.
     //     int left = rect.left() / 20;
     //     int right = rect.right() / 20 + 1;

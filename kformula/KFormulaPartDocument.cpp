@@ -128,16 +128,11 @@ bool KFormulaPartDocument::showEmbedInitDialog(QWidget* /*parent*/)
     return true;
 }
 
-void KFormulaPartDocument::paintContent( QPainter& painter, const QRect& rect,
-                                         bool transparent, double zoomX, double zoomY )
+void KFormulaPartDocument::paintContent( QPainter& painter, const QRect& rect)
 {
-    Q_UNUSED( zoomX );
-    Q_UNUSED( zoomY );
-
     //bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
 
-    if ( !transparent )
-        painter.fillRect( rect, Qt::white );
+    painter.fillRect( rect, Qt::white );
     
 //    m_formulaShape->drawFormula( painter, rect );
 }

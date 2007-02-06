@@ -35,9 +35,7 @@ public:
 
     // Methods inherited from KoDocument:
 
-    virtual void  paintContent( QPainter& painter, const QRect& rect,
-				bool transparent = false,
-				double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void  paintContent( QPainter& painter, const QRect& rect);
 
     // Methods unique to KChart, and available in the new interface
     // (see /interfaces/koChart.h.)

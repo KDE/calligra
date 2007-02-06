@@ -91,11 +91,8 @@ bool KudesignerDoc::saveOasis( KoStore*, KoXmlWriter* )
     return false;
 }
 
-void KudesignerDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/,
-                                  double /*zoomX*/, double /*zoomY*/ )
+void KudesignerDoc::paintContent( QPainter& painter, const QRect& rect)
 {
-    // ####### handle transparency
-
     // Need to draw only the document rectangle described in the parameter rect.
 
     canvas() ->drawArea( rect, &painter, true );
