@@ -29,7 +29,6 @@
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
-#include <KoTextZoomHandler.h>
 
 class KoView;
 class KCommandHistory;
@@ -46,7 +45,7 @@ class ResourceGroup;
 class Context;
 class GanttView;
 
-class Part : public KoDocument, public KoTextZoomHandler
+class Part : public KoDocument
 {
     Q_OBJECT
 
