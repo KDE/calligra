@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    Based on nexp.cpp : Parser module of Python-like language
    (C) 2001 Jaroslaw Staniek, MIMUW (www.mimuw.edu.pl)
@@ -72,7 +72,6 @@ BaseExpr::BaseExpr(int token)
  , m_par(0)
  , m_token(token)
 {
-
 }
 
 BaseExpr::~BaseExpr()
@@ -132,8 +131,20 @@ NArgExpr::NArgExpr(int aClass, int token)
 	list.setAutoDelete(true);
 }
 
+NArgExpr::NArgExpr(const NArgExpr& expr)
+ : BaseExpr(expr)
+{
+	foreach_list (BaseExpr::ListIterator, it, expr.list)
+		add( it.current()->copy() );
+}
+
 NArgExpr::~NArgExpr()
 {
+}
+
+NArgExpr* NArgExpr::copy() const
+{
+	return new NArgExpr(*this);
 }
 
 QString NArgExpr::debugString()
@@ -210,9 +221,22 @@ UnaryExpr::UnaryExpr(int token, BaseExpr *arg)
 		m_arg->setParent(this);
 }
 
+UnaryExpr::UnaryExpr(const UnaryExpr& expr)
+ : BaseExpr(expr)
+ , m_arg( expr.m_arg ? expr.m_arg->copy() : 0 )
+{
+	if (m_arg)
+		m_arg->setParent(this);
+}
+
 UnaryExpr::~UnaryExpr()
 {
 	delete m_arg;
+}
+
+UnaryExpr* UnaryExpr::copy() const
+{
+	return new UnaryExpr(*this);
 }
 
 QString UnaryExpr::debugString()
@@ -316,10 +340,22 @@ BinaryExpr::BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *rig
 		m_rarg->setParent(this);
 }
 
+BinaryExpr::BinaryExpr(const BinaryExpr& expr)
+ : BaseExpr(expr)
+ , m_larg( expr.m_larg ? expr.m_larg->copy() : 0 )
+ , m_rarg( expr.m_rarg ? expr.m_rarg->copy() : 0 )
+{
+}
+
 BinaryExpr::~BinaryExpr()
 {
 	delete m_larg;
 	delete m_rarg;
+}
+
+BinaryExpr* BinaryExpr::copy() const
+{
+	return new BinaryExpr(*this);
 }
 
 bool BinaryExpr::validate(ParseInfo& parseInfo)
@@ -442,8 +478,19 @@ ConstExpr::ConstExpr( int token, const QVariant& val)
 	m_cl = KexiDBExpr_Const;
 }
 
+ConstExpr::ConstExpr(const ConstExpr& expr)
+ : BaseExpr(expr)
+ , value(expr.value)
+{
+}
+
 ConstExpr::~ConstExpr()
 {
+}
+
+ConstExpr* ConstExpr::copy() const
+{
+	return new ConstExpr(*this);
 }
 
 Field::Type ConstExpr::type()
@@ -530,8 +577,19 @@ QueryParameterExpr::QueryParameterExpr(const QString& message)
 	m_cl = KexiDBExpr_QueryParameter;
 }
 
+QueryParameterExpr::QueryParameterExpr(const QueryParameterExpr& expr)
+ : ConstExpr(expr)
+ , m_type(expr.m_type)
+{
+}
+
 QueryParameterExpr::~QueryParameterExpr()
 {
+}
+
+QueryParameterExpr* QueryParameterExpr::copy() const
+{
+	return new QueryParameterExpr(*this);
 }
 
 Field::Type QueryParameterExpr::type()
@@ -580,8 +638,22 @@ VariableExpr::VariableExpr(const QString& _name)
 	m_cl = KexiDBExpr_Variable;
 }
 
+VariableExpr::VariableExpr(const VariableExpr& expr)
+ : BaseExpr(expr)
+ , name(expr.name)
+ , field(expr.field)
+ , tablePositionForField(expr.tablePositionForField)
+ , tableForQueryAsterisk(expr.tableForQueryAsterisk)
+{
+}
+
 VariableExpr::~VariableExpr()
 {
+}
+
+VariableExpr* VariableExpr::copy() const
+{
+	return new VariableExpr(*this);
 }
 
 QString VariableExpr::debugString()
@@ -783,9 +855,23 @@ FunctionExpr::FunctionExpr( const QString& _name, NArgExpr* args_ )
 		args->setParent( this );
 }
 
+FunctionExpr::FunctionExpr( const FunctionExpr& expr )
+ : BaseExpr( 0/*undefined*/ )
+ , name(expr.name)
+ , args(expr.args ? args->copy() : 0)
+{
+	if (args)
+		args->setParent( this );
+}
+
 FunctionExpr::~FunctionExpr()
 {
 	delete args;
+}
+
+FunctionExpr* FunctionExpr::copy() const
+{
+	return new FunctionExpr(*this);
 }
 
 QString FunctionExpr::debugString()

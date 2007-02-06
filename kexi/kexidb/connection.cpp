@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1100,7 +1100,10 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	QString s_additional_joins; //additional joins needed for lookup fields
 	QString s_additional_fields; //additional fields to append to the fields list
 	uint internalUniqueTableAliasNumber = 0; //used to build internalUniqueTableAliases
+	uint internalUniqueQueryAliasNumber = 0; //used to build internalUniqueQueryAliases
 	number = 0;
+	QPtrList<QuerySchema> subqueries_for_lookup_data; // subqueries will be added to FROM section
+	QString kexidb_subquery_prefix("__kexidb_subquery_");
 	for (Field::ListIterator it = querySchema.fieldsIterator(); (f = it.current()); ++it, number++) {
 		if (querySchema.isColumnVisible(number)) {
 			if (!sql.isEmpty())
@@ -1139,7 +1142,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 //! @todo add option that allows to omit "AS" keyword
 			}
 			LookupFieldSchema *lookupFieldSchema = f->table() ? f->table()->lookupFieldSchema( *f ) : 0;
-			if (lookupFieldSchema) {
+			if (lookupFieldSchema && lookupFieldSchema->boundColumn()>=0) {
 				// Lookup field schema found
 				// Now we also need to fetch "visible" value from the lookup table, not only the value of binding.
 				// -> build LEFT OUTER JOIN clause for this purpose (LEFT, not INNER because the binding can be broken)
@@ -1147,11 +1150,11 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 				LookupFieldSchema::RowSource& rowSource = lookupFieldSchema->rowSource();
 				if (rowSource.type()==LookupFieldSchema::RowSource::Table) {
 					TableSchema *lookupTable = querySchema.connection()->tableSchema( rowSource.name() );
-					Field *visibleField = 0;
+					FieldList* visibleColumns = 0;
 					Field *boundField = 0;
-					if (lookupTable && lookupFieldSchema->boundColumn()>=0 
+					if (lookupTable
 						&& (uint)lookupFieldSchema->boundColumn() < lookupTable->fieldCount()
-						&& (visibleField = lookupTable->field( lookupFieldSchema->visibleColumn()))
+						&& (visibleColumns = lookupTable->subList( lookupFieldSchema->visibleColumns() ))
 						&& (boundField = lookupTable->field( lookupFieldSchema->boundColumn() )))
 					{
 						//add LEFT OUTER JOIN
@@ -1169,20 +1172,87 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 
 						//add visibleField to the list of SELECTed fields //if it is not yet present there
 //not needed						if (!querySchema.findTableField( visibleField->table()->name()+"."+visibleField->name() )) {
-							if (!querySchema.table( visibleField->table()->name() )) {
+#if 0
+						if (!querySchema.table( visibleField->table()->name() )) {
 /* not true
-								//table should be added after FROM
-								if (!s_from_additional.isEmpty())
-									s_from_additional += QString::fromLatin1(", ");
-								s_from_additional += escapeIdentifier(visibleField->table()->name(), options.identifierEscaping);
-								*/
-							}
-							if (!s_additional_fields.isEmpty())
-								s_additional_fields += QString::fromLatin1(", ");
-							s_additional_fields += (internalUniqueTableAlias + "." //escapeIdentifier(visibleField->table()->name(), options.identifierEscaping) + "."
-								+ escapeIdentifier(visibleField->name(), options.identifierEscaping));
-//not needed						}
+							//table should be added after FROM
+							if (!s_from_additional.isEmpty())
+								s_from_additional += QString::fromLatin1(", ");
+							s_from_additional += escapeIdentifier(visibleField->table()->name(), options.identifierEscaping);
+							*/
+						}
+#endif
+						if (!s_additional_fields.isEmpty())
+							s_additional_fields += QString::fromLatin1(", ");
+//							s_additional_fields += (internalUniqueTableAlias + "." //escapeIdentifier(visibleField->table()->name(), options.identifierEscaping) + "."
+//									escapeIdentifier(visibleField->name(), options.identifierEscaping));
+//! @todo Add lookup schema option for separator other than ' ' or even option for placeholders like "Name ? ?"
+//! @todo Add possibility for joining the values at client side. 
+						s_additional_fields += visibleColumns->sqlFieldsList(
+							driver(), " || ' ' || ", internalUniqueTableAlias, options.identifierEscaping);
 					}
+					delete visibleColumns;
+				}
+				else if (rowSource.type()==LookupFieldSchema::RowSource::Query) {
+					QuerySchema *lookupQuery = querySchema.connection()->querySchema( rowSource.name() );
+					if (!lookupQuery) {
+						KexiDBWarn << "Connection::selectStatement(): !lookupQuery" << endl;
+						return QString::null;
+					}
+					const QueryColumnInfo::Vector fieldsExpanded( lookupQuery->fieldsExpanded() );
+					if ((uint)lookupFieldSchema->boundColumn() >= fieldsExpanded.count()) {
+						KexiDBWarn << "Connection::selectStatement(): (uint)lookupFieldSchema->boundColumn() >= fieldsExpanded.count()" << endl;
+						return QString::null;
+					}
+					QueryColumnInfo *boundColumnInfo = fieldsExpanded.at( lookupFieldSchema->boundColumn() );
+					if (!boundColumnInfo) {
+						KexiDBWarn << "Connection::selectStatement(): !boundColumnInfo" << endl;
+						return QString::null;
+					}
+					Field *boundField = boundColumnInfo->field;
+					if (!boundField) {
+						KexiDBWarn << "Connection::selectStatement(): !boundField" << endl;
+						return QString::null;
+					}
+					//add LEFT OUTER JOIN
+					if (!s_additional_joins.isEmpty())
+						s_additional_joins += QString::fromLatin1(" ");
+					QString internalUniqueQueryAlias( 
+						kexidb_subquery_prefix + lookupQuery->name() + "_"
+						+ QString::number(internalUniqueQueryAliasNumber++) );
+					s_additional_joins += QString("LEFT OUTER JOIN (%1) AS %2 ON %3.%4=%5.%6")
+						.arg(selectStatement( *lookupQuery, params, options ))
+						.arg(internalUniqueQueryAlias)
+						.arg(escapeIdentifier(f->table()->name(), options.identifierEscaping))
+						.arg(escapeIdentifier(f->name(), options.identifierEscaping))
+						.arg(internalUniqueQueryAlias)
+						.arg(escapeIdentifier(boundColumnInfo->aliasOrName(), options.identifierEscaping));
+
+					if (!s_additional_fields.isEmpty())
+						s_additional_fields += QString::fromLatin1(", ");
+					const Q3ValueList<uint> visibleColumns( lookupFieldSchema->visibleColumns() );
+					QString expression;
+					foreach (Q3ValueList<uint>::ConstIterator, visibleColumnsIt, visibleColumns) {
+//! @todo Add lookup schema option for separator other than ' ' or even option for placeholders like "Name ? ?"
+//! @todo Add possibility for joining the values at client side. 
+						if (fieldsExpanded.count() <= (*visibleColumnsIt)) {
+							KexiDBWarn << "Connection::selectStatement(): fieldsExpanded.count() <= (*visibleColumnsIt) : "
+								<< fieldsExpanded.count() << " <= " << *visibleColumnsIt << endl;
+							return QString::null;
+						}
+						if (!expression.isEmpty())
+							expression += " || ' ' || ";
+						expression += (internalUniqueQueryAlias + "." + 
+							escapeIdentifier(fieldsExpanded[*visibleColumnsIt]->aliasOrName(),
+								options.identifierEscaping));
+					}
+					s_additional_fields += expression;
+//subqueries_for_lookup_data.append(lookupQuery);
+				}
+				else {
+					KexiDBWarn << "Connection::selectStatement(): unsupported row source type " 
+						<< rowSource.typeName() << endl;
+					return false;
 				}
 			}
 		}
@@ -1204,26 +1274,40 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 
 	sql.prepend("SELECT ");
 	TableSchema::List* tables = querySchema.tables();
-	if (tables && !tables->isEmpty()) {
+	if ((tables && !tables->isEmpty()) || !subqueries_for_lookup_data.isEmpty()) {
 		sql += QString::fromLatin1(" FROM ");
 		QString s_from;
-		TableSchema *table;
-		number = 0;
-		for (TableSchema::ListIterator it(*tables); (table = it.current());
-			++it, number++)
+		if (tables) {
+			TableSchema *table;
+			number = 0;
+			for (TableSchema::ListIterator it(*tables); (table = it.current());
+				++it, number++)
+			{
+				if (!s_from.isEmpty())
+					s_from += QString::fromLatin1(", ");
+				s_from += escapeIdentifier(table->name(), options.identifierEscaping);
+				QString aliasString = QString(querySchema.tableAlias(number));
+				if (!aliasString.isEmpty())
+					s_from += (QString::fromLatin1(" AS ") + aliasString);
+			}
+	/*unused	if (!s_from_additional.isEmpty()) {//additional tables list needed for lookup fields
+				if (!s_from.isEmpty())
+					s_from += QString::fromLatin1(", ");
+				s_from += s_from_additional;
+			}*/
+		}
+		// add subqueries for lookup data
+		uint subqueries_for_lookup_data_counter = 0;
+		for (Q3PtrListIterator<QuerySchema> it(subqueries_for_lookup_data); 
+			subqueries_for_lookup_data.current();	++it, subqueries_for_lookup_data_counter++)
 		{
 			if (!s_from.isEmpty())
 				s_from += QString::fromLatin1(", ");
-			s_from += escapeIdentifier(table->name(), options.identifierEscaping);
-			QString aliasString = QString(querySchema.tableAlias(number));
-			if (!aliasString.isEmpty())
-				s_from += (QString::fromLatin1(" AS ") + aliasString);
+			s_from += QString::fromLatin1("(");
+			s_from += selectStatement( *it.current(), params, options );
+			s_from += QString::fromLatin1(") AS %1%2")
+				.arg(kexidb_subquery_prefix).arg(subqueries_for_lookup_data_counter);
 		}
-/*unused	if (!s_from_additional.isEmpty()) {//additional tables list needed for lookup fields
-			if (!s_from.isEmpty())
-				s_from += QString::fromLatin1(", ");
-			s_from += s_from_additional;
-		}*/
 		sql += s_from;
 	}
 	QString s_where;
@@ -1283,7 +1367,26 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	//(use wasWhere here)
 	
 	// ORDER BY
-	QString orderByString( querySchema.orderByColumnList().toSQLString(!singleTable/*includeTableName*/) );
+	QString orderByString( 
+		querySchema.orderByColumnList().toSQLString(!singleTable/*includeTableName*/, 
+			driver(), options.identifierEscaping) );
+	const Q3ValueVector<int> pkeyFieldsOrder( querySchema.pkeyFieldsOrder() ); 
+	if (orderByString.isEmpty() && !pkeyFieldsOrder.isEmpty()) {
+		//add automatic ORDER BY if there is no explicity defined (especially helps when there are complex JOINs)
+		OrderByColumnList automaticPKOrderBy;
+		const QueryColumnInfo::Vector fieldsExpanded( querySchema.fieldsExpanded() );
+		foreach (Q3ValueVector<int>::ConstIterator, it, pkeyFieldsOrder) {
+			if ((*it) >= fieldsExpanded.count()) {
+				KexiDBWarn << "Connection::selectStatement(): ORDER BY: (*it) >= fieldsExpanded.count() - " 
+					<< (*it) << " >= " << fieldsExpanded.count() << endl;
+				continue;
+			}
+			QueryColumnInfo *ci = fieldsExpanded[ *it ];
+			automaticPKOrderBy.appendColumn( *ci );
+		}
+		orderByString = automaticPKOrderBy.toSQLString(!singleTable/*includeTableName*/, 
+			driver(), options.identifierEscaping);
+	}
 	if (!orderByString.isEmpty())
 		sql += (" ORDER BY " + orderByString);
 	
@@ -2427,12 +2530,14 @@ static void createExtendedTableSchemaMainElementIfNeeded(
 
 //! Used by addFieldPropertyToExtendedTableSchemaData()
 static void createExtendedTableSchemaFieldElementIfNeeded(QDomDocument& doc, 
-	QDomElement& extendedTableSchemaMainEl, const QString& fieldName, QDomElement& extendedTableSchemaFieldEl)
+	QDomElement& extendedTableSchemaMainEl, const QString& fieldName, QDomElement& extendedTableSchemaFieldEl,
+	bool append = true)
 {
 	if (!extendedTableSchemaFieldEl.isNull())
 		return;
 	extendedTableSchemaFieldEl = doc.createElement("field");
-	extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
+	if (append)
+		extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
 	extendedTableSchemaFieldEl.setAttribute("name", fieldName);
 }
 
@@ -2519,11 +2624,16 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 		// save lookup table specification, if present
 		LookupFieldSchema *lookupFieldSchema = tableSchema.lookupFieldSchema( *f );
 		if (lookupFieldSchema) {
-			createExtendedTableSchemaMainElementIfNeeded(doc, extendedTableSchemaMainEl, 
-				extendedTableSchemaStringIsEmpty);
 			createExtendedTableSchemaFieldElementIfNeeded(
-				doc, extendedTableSchemaMainEl, f->name(), extendedTableSchemaFieldEl);
+				doc, extendedTableSchemaMainEl, f->name(), extendedTableSchemaFieldEl, false/* !append */);
 			LookupFieldSchema::saveToDom(*lookupFieldSchema, doc, extendedTableSchemaFieldEl);
+
+			if (extendedTableSchemaFieldEl.hasChildNodes()) {
+				// this element provides the definition, so let's append it now
+				createExtendedTableSchemaMainElementIfNeeded(doc, extendedTableSchemaMainEl, 
+					extendedTableSchemaStringIsEmpty);
+				extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
+			}
 		}
 	}
 
@@ -2627,6 +2737,8 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 					}
 					else if (propEl.tagName()=="lookup-column") {
 						LookupFieldSchema *lookupFieldSchema = LookupFieldSchema::loadFromDom(propEl);
+						if (lookupFieldSchema)
+							lookupFieldSchema->debug();
 						tableSchema.setLookupFieldSchema( f->name(), lookupFieldSchema );
 					}
 				}

@@ -573,6 +573,9 @@ class KEXI_DB_EXPORT Field
 		/*! @internal Used by constructors. */
 		void init();
 
+		//! \return a deep copy of this object. Used in @ref FieldList(const FieldList& fl).
+		virtual Field* copy() const;
+
 		FieldList *m_parent; //!< In most cases this points to a TableSchema 
 		                     //!< object that field is assigned.
 		QString m_name;

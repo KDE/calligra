@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -76,7 +76,7 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		Q3CString alias;
 
 		/*! \return index of column with visible lookup value within the 'fields expanded' vector.
-		 -1 means no visible lookup value is available because there is no lookup for the column.
+		 -1 means no visible lookup value is available because there is no lookup for the column defined.
 		 Cached for efficiency as we use this information frequently.
 		 @see LookupFieldSchema::visibleVolumn() */
 		inline int indexForVisibleLookupValue() const { return m_indexForVisibleLookupValue; }
@@ -141,8 +141,10 @@ class KEXI_DB_EXPORT OrderByColumn
 
 		/*! \return a string like "name ASC" usable for building a SQL statement. 
 		 If \a includeTableNames is true (the default) field is output in a form 
-		 of "tablename.fieldname" (but only if fieldname is not a name of alias). */
-		QString toSQLString(bool includeTableName = true) const;
+		 of "tablename.fieldname" (but only if fieldname is not a name of alias).
+		 \a drv and \a identifierEscaping are used for escaping the table and field identifiers. */
+		QString toSQLString(bool includeTableName = true, 
+			Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary) const;
 
 	protected:
 		//! Column to sort
@@ -217,8 +219,10 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		
 		/*! \return a string like "name ASC, 2 DESC" usable for building a SQL statement.
 		 If \a includeTableNames is true (the default) fields are output in a form 
-		 of "tablename.fieldname". */
-		QString toSQLString(bool includeTableNames = true) const;
+		 of "tablename.fieldname". 
+		 \a drv and \a identifierEscaping are used for escaping the table and field identifiers. */
+		QString toSQLString(bool includeTableNames = true, 
+			Driver *drv = 0, int identifierEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary) const;
 };
 
 //! @short KexiDB::QuerySchema provides information about database query
@@ -233,7 +237,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! Creates query schema object that is equivalent to "SELECT * FROM table" 
 		 sql command. Schema of \a table is used to contruct this query -- 
-		 it is defined just adding all the fields to the query in natural order.
+		 it is defined by just adding all the fields to the query in natural order.
 		 To avoid problems (e.g. with fields added outside of Kexi using ALTER TABLE) 
 		 we do not use "all-tables query asterisk" (see QueryAsterisk) item to achieve 
 		 this effect. 
@@ -245,8 +249,12 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 in a system table, so query connection is set to NULL
 		 (even if \a tableSchema's connection is not NULL).
 		 Id of the created query is set to 0. */
-		QuerySchema(TableSchema* tableSchema);
-		
+		QuerySchema(TableSchema& tableSchema);
+
+		/*! Copy constructor. Creates deep copy of \a querySchema. 
+		 QueryAsterisk objects are deeply copied while only pointers to Field objects are copied. */
+		QuerySchema(const QuerySchema& querySchema);
+
 		virtual ~QuerySchema();
 		
 		/*! Inserts \a field to the columns list at \a position.
@@ -814,6 +822,9 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		virtual QString debugString();
 
 	protected:
+		//! \return a deep copy of this object. Used in FieldList(const FieldList& fl).
+		virtual Field* copy() const;
+
 		/*! Table schema for this asterisk */
 		TableSchema* m_table;
 

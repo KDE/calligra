@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    Design based on nexp.h : Parser module of Python-like language
    (C) 2001 Jaroslaw Staniek, MIMUW (www.mimuw.edu.pl)
@@ -49,6 +49,10 @@ namespace KexiDB {
 #define KexiDBExpr_TableList 10
 #define KexiDBExpr_QueryParameter 11
 
+//! Custom tokens are not used in parser but used as extension in expression classes.
+//#define KEXIDB_CUSTOM_TOKEN 0x1000
+
+//! \return class name of class \a c
 KEXI_DB_EXPORT QString exprClassName(int c);
 
 class ParseInfo;
@@ -71,7 +75,11 @@ public:
 
 	BaseExpr(int token);
 	virtual ~BaseExpr();
-	
+
+	//! \return a deep copy of this object.
+//! @todo a nonpointer will be returned here when we move to implicit data sharing
+	virtual BaseExpr* copy() const = 0;
+
 	int token() const { return m_token; }
 	
 	virtual Field::Type type();
@@ -126,7 +134,10 @@ class KEXI_DB_EXPORT NArgExpr : public BaseExpr
 {
 public:
 	NArgExpr(int aClass, int token);
+	NArgExpr(const NArgExpr& expr);
 	virtual ~NArgExpr();
+	//! \return a deep copy of this object.
+	virtual NArgExpr* copy() const;
 	void add(BaseExpr *expr);
 	void prepend(BaseExpr *expr);
 	BaseExpr *arg(int n);
@@ -143,7 +154,10 @@ class KEXI_DB_EXPORT UnaryExpr : public BaseExpr
 {
 public:
 	UnaryExpr(int token, BaseExpr *arg);
+	UnaryExpr(const UnaryExpr& expr);
 	virtual ~UnaryExpr();
+	//! \return a deep copy of this object.
+	virtual UnaryExpr* copy() const;
 	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
@@ -166,7 +180,10 @@ class KEXI_DB_EXPORT BinaryExpr : public BaseExpr
 {
 public:
 	BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *right_expr);
+	BinaryExpr(const BinaryExpr& expr);
 	virtual ~BinaryExpr();
+	//! \return a deep copy of this object.
+	virtual BinaryExpr* copy() const;
 	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
@@ -187,7 +204,10 @@ class KEXI_DB_EXPORT ConstExpr : public BaseExpr
 {
 public:
 	ConstExpr(int token, const QVariant& val);
+	ConstExpr(const ConstExpr& expr);
 	virtual ~ConstExpr();
+	//! \return a deep copy of this object.
+	virtual ConstExpr* copy() const;
 	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
@@ -202,7 +222,10 @@ class KEXI_DB_EXPORT QueryParameterExpr : public ConstExpr
 {
 public:
 	QueryParameterExpr(const QString& message);
+	QueryParameterExpr(const QueryParameterExpr& expr);
 	virtual ~QueryParameterExpr();
+	//! \return a deep copy of this object.
+	virtual QueryParameterExpr* copy() const;
 	virtual Field::Type type();
 	/*! Sets expected type of the parameter. The default is String.
 	 This method is called from parent's expression validate().
@@ -226,7 +249,10 @@ class KEXI_DB_EXPORT VariableExpr : public BaseExpr
 {
 public:
 	VariableExpr(const QString& _name);
+	VariableExpr(const VariableExpr& expr);
 	virtual ~VariableExpr();
+	//! \return a deep copy of this object.
+	virtual VariableExpr* copy() const;
 	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
@@ -267,7 +293,10 @@ class KEXI_DB_EXPORT FunctionExpr : public BaseExpr
 {
 public:
 	FunctionExpr(const QString& _name, NArgExpr* args_ = 0);
+	FunctionExpr(const FunctionExpr& expr);
 	virtual ~FunctionExpr();
+	//! \return a deep copy of this object.
+	virtual FunctionExpr* copy() const;
 	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);

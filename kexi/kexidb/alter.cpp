@@ -159,10 +159,32 @@ int AlterTableHandler::alteringTypeForProperty(const Q3CString& propertyName)
 
 		// easier cases follow...
 		I("visibleDecimalPlaces", ExtendedSchemaAlteringRequired);
+
+		// lookup-field-related properties...
+/*moved to KexiDB::isExtendedTableFieldProperty()
+		I("boundColumn", ExtendedSchemaAlteringRequired);
+		I("rowSource", ExtendedSchemaAlteringRequired);
+		I("rowSourceType", ExtendedSchemaAlteringRequired);
+		I("rowSourceValues", ExtendedSchemaAlteringRequired);
+		I("visibleColumn", ExtendedSchemaAlteringRequired);
+		I("columnWidths", ExtendedSchemaAlteringRequired);
+		I("showColumnHeaders", ExtendedSchemaAlteringRequired);
+		I("listRows", ExtendedSchemaAlteringRequired);
+		I("limitToList", ExtendedSchemaAlteringRequired);
+		I("displayWidget", ExtendedSchemaAlteringRequired);*/
+
 		//more to come...
 #undef I
 #undef I2
 	}
+	const int res = (*KexiDB_alteringTypeForProperty)[propertyName.toLower()];
+	if (res == 0) {
+		if (KexiDB::isExtendedTableFieldProperty(propertyName))
+			return (int)ExtendedSchemaAlteringRequired;
+		KexiDBWarn << QString("AlterTableHandler::alteringTypeForProperty(): property \"%1\" not found!")
+			.arg(propertyName) << endl;
+	}
+	return res;
 	return (*KexiDB_alteringTypeForProperty)[propertyName.toLower()]; 
 }
 

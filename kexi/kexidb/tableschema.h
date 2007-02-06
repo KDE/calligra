@@ -154,7 +154,10 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		bool setLookupFieldSchema( const QString& fieldName, LookupFieldSchema *lookupFieldSchema );
 
 		/*! \return lookup field schema for \a field. 
-		 0 is returned if there is no such field in the table or this field has no lookup schema. */
+		 0 is returned if there is no such field in the table or this field has no lookup schema. 
+		 Note that even id non-zero is returned here, you may want to check whether lookup field's
+		 rowSource().name() is empty (if so, the field should behave as there was no lookup field 
+		 defined at all). */
 		LookupFieldSchema *lookupFieldSchema( const Field& field ) const;
 
 		/*! \overload LookupFieldSchema *TableSchema::lookupFieldSchema( Field& field ) const */
