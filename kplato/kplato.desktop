@@ -11,5 +11,6 @@ MimeType=application/x-vnd.kde.kplato
 Type=Application
 Icon=kplato
 X-KDE-NativeMimeType=application/x-vnd.kde.kplato
+DocPath=kplato/index.html
 Categories=Qt;KDE;Office;
 X-KDE-StartupNotify=true
