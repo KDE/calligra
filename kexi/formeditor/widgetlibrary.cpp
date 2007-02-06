@@ -373,6 +373,7 @@ WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const ch
 			widget = wclass->inheritedClass()->factory()->createWidget(
 				wclass->className(), parent, name, c, options);
 	}
+	widget->setAcceptDrops(true);
 	return widget;
 }
 

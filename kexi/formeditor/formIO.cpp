@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -880,18 +880,25 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 	{
 		WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
 		QObject *subobject = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : obj;
-		int count = subobject->metaObject()->findProperty(name.latin1(), true);
+		const int count = subobject->metaObject()->findProperty(name.latin1(), true);
 		const QMetaProperty *meta = count!=-1 ? subobject->metaObject()->property(count, true) : 0;
 
-		if(meta && meta->isSetType())
-		{
-			QStrList keys;
-			QStringList list = QStringList::split("|", text);
-			QStringList::ConstIterator it, end( list.constEnd() );
-			for( it = list.constBegin(); it != end; ++it)
-				keys.append((*it).latin1());
+		if (meta) {
+			if (meta->isSetType()) {
+				QStrList keys;
+				const QStringList list( QStringList::split("|", text) );
+				for (QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
+					keys.append((*it).latin1());
 
-			return QVariant(meta->keysToValue(keys));
+				return meta->keysToValue(keys);
+			}
+		}
+		else {
+			// Metaproperty not found, probably because subwidget is not created.
+			// We will return a string list here with hope that names will 
+			// be resolved and translated into an integer value later when subwidget is created,
+			// e.g. near KexiFormView::updateValuesForSubproperties()
+			return QStringList::split("|", text);
 		}
 	}
 	return QVariant();
@@ -957,6 +964,13 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
 	savePropertyValue(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 
+	// Important: save dataSource property FIRST before properties like "alignment"
+	// - needed when subproperties are defined after subwidget creation, and subwidget is created after setting "dataSource"
+	//   (this is the case for KexiDBAutoField)
+//! @todo more properties like "dataSource" may needed here...
+//	if (-1 != item->widget()->metaObject()->findProperty("dataSource"))
+	//	savePropertyValue(tclass, domDoc, "dataSource", item->widget()->property("dataSource"), item->widget());
+
 	// We don't want to save the geometry if the widget is inside a layout (so parent.tagName() == "grid" for example)
 	if(item && !item->parent()) {
 		// save form widget size, but not its position
@@ -972,22 +986,19 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	if(item->widget()->inherits("QLabel") && ((QLabel*)item->widget())->buddy())
 		savePropertyElement(tclass, domDoc, "property", "buddy", ((QLabel*)item->widget())->buddy()->name());
 
-
 	// We save every property in the modifProp list of the ObjectTreeItem
 	QVariantMap *map = new QVariantMap( *(item->modifiedProperties()) );
 	QMap<QString,QVariant>::ConstIterator endIt = map->constEnd();
 	for(QMap<QString,QVariant>::ConstIterator it = map->constBegin(); it != endIt; ++it)
 	{
-		QString name = it.key();
-		if((name == QString::fromLatin1("hAlign")) || (name == QString::fromLatin1("vAlign")) || (name == QString::fromLatin1("wordbreak")))
-		{
-			if(!savedAlignment) // not tosave it twice
+		const QCString name( it.key().latin1() );
+		if(name == "hAlign" || name == "vAlign" || name == "wordbreak" || name == "alignment") {
+			if(!savedAlignment) // not to save it twice
 			{
 				savePropertyValue(tclass, domDoc, "alignment", item->widget()->property("alignment"), item->widget());
 				savedAlignment = true;
 			}
 		}
-
 		else if(name == "name" || name == "geometry" || name == "layout") {
 			// these have already been saved
 		}
@@ -1332,7 +1343,11 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 			if (node.attribute("subwidget")=="true") {
 				//this is property for subwidget: remember it for delayed setting
 				//because now the subwidget could be not created yet (true e.g. for KexiDBAutoField)
-				item->addSubproperty( name.latin1(), readPropertyValue(node.firstChild(), w, name) );
+				const QVariant val( readPropertyValue(node.firstChild(), w, name) );
+				kdDebug() << val.toStringList() << endl;
+				item->addSubproperty( name.latin1(), val );
+				//subwidget->setProperty(name.latin1(), val);
+				item->addModifiedProperty( name.latin1(), val );
 				continue;
 			}
 
@@ -1341,8 +1356,8 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 				m_buddies->insert(readPropertyValue(node.firstChild(), w, name).toString(), (QLabel*)w);
 			else if(((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")) &&
 			  item->container() && item->container()->layout()) {
-			  	// We load the margin of a Layout
-				 if(name == "margin")  {
+			  // We load the margin of a Layout
+				if(name == "margin")  {
 					int margin = readPropertyValue(node.firstChild(), w, name).toInt();
 					item->container()->setLayoutMargin(margin);
 					item->container()->layout()->setMargin(margin);

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -109,6 +109,10 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 
 		//! Reimplemented to override behaviour of "lineWidth" property.
 		virtual void setLineWidth( int width );
+
+		//! Reimplemented to override behaviour of "paletteBackgroundColor" 
+		//! and "paletteForegroundColor" properties.
+		virtual void setPalette( const QPalette &pal );
 
 		//! Reimplemented to override behaviour of "paletteBackgroundColor" property.
 		virtual void setPaletteBackgroundColor( const QColor & color );
@@ -265,6 +269,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		bool m_paletteBackgroundColorChanged : 1;
 		bool m_paintEventEnabled : 1; //!< used to disable paintEvent()
 		bool m_dropDownButtonVisible : 1;
+		bool m_insideSetPalette : 1;
 };
 
 #endif

@@ -776,24 +776,24 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *widge
 	QStringList list;
 	QString value;
 	const int alignment = subwidget->property("alignment").toInt();
-	QStringList keys = QStringList::fromStrList( meta->valueToKeys(alignment) );
+	const QStringList keys( QStringList::fromStrList( meta->valueToKeys(alignment) ) );
 
 	QStrList *enumKeys = new QStrList(meta->enumKeys());
-	QStringList possibleValues = QStringList::fromStrList(*enumKeys);
+	const QStringList possibleValues( QStringList::fromStrList(*enumKeys) );
 	delete enumKeys;
 
 	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(widget->name());
 	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(widget);
 
-	if(!possibleValues.grep("AlignHCenter").empty())  {
+	if(possibleValues.find("AlignHCenter")!=possibleValues.constEnd())  {
 		// Create the horizontal alignment property
-		if(!keys.grep("AlignHCenter").isEmpty())
+		if(keys.find("AlignHCenter")!=keys.constEnd() || keys.find("AlignCenter")!=keys.constEnd())
 			value = "AlignHCenter";
-		else if(!keys.grep("AlignRight").isEmpty())
+		else if(keys.find("AlignRight")!=keys.constEnd())
 			value = "AlignRight";
-		else if(!keys.grep("AlignLeft").isEmpty())
+		else if(keys.find("AlignLeft")!=keys.constEnd())
 			value = "AlignLeft";
-		else if(!keys.grep("AlignJustify").isEmpty())
+		else if(keys.find("AlignJustify")!=keys.constEnd())
 			value = "AlignJustify";
 		else
 			value = "AlignAuto";
@@ -810,12 +810,12 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *widge
 		list.clear();
 	}
 
-	if(!possibleValues.grep("AlignTop").empty())
+	if(possibleValues.find("AlignTop")!=possibleValues.constEnd())
 	{
 		// Create the ver alignment property
-		if(!keys.grep("AlignTop").empty())
+		if(keys.find("AlignTop")!=keys.constEnd())
 			value = "AlignTop";
-		else if(!keys.grep("AlignBottom").empty())
+		else if(keys.find("AlignBottom")!=keys.constEnd())
 			value = "AlignBottom";
 		else
 			value = "AlignVCenter";
@@ -830,9 +830,8 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *widge
 		}
 		updatePropertyValue(tree, "vAlign");
 	}
-	
 
-	if(!possibleValues.grep("WordBreak").empty()
+	if(possibleValues.find("WordBreak")!=possibleValues.constEnd()
 //		&& isPropertyVisible("wordbreak", false, subwidget->className())
 //	  && !subWidget->inherits("QLineEdit") /* QLineEdit doesn't support 'word break' is this generic enough?*/
 	) {

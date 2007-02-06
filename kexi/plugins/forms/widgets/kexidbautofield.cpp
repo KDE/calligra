@@ -254,7 +254,7 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 		else {
 			d->label->show();
 		}
-		d->layout->addWidget(d->label);
+		d->layout->addWidget(d->label, 0, position == Top ? int(Qt::AlignLeft) : 0);
 		if(position == Left && d->widgetType != Boolean)
 			d->layout->addSpacing(KexiDBAutoField_SPACING);
 		d->layout->addWidget(m_subwidget, 1);

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -71,16 +71,12 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	, m_insideSetData(false)
 	, m_setFocusOnButtonAfterClosingPopup(false)
 	, m_lineWidthChanged(false)
-	, m_paletteBackgroundColorChanged(false)
 	, m_paintEventEnabled(true)
 	, m_dropDownButtonVisible(true)
+	, m_insideSetPalette(false)
 {
 	installEventFilter(this);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-	setBackgroundMode(Qt::NoBackground);
-	setFrameShape(QFrame::Box);
-	setFrameShadow(QFrame::Plain);
-	setFrameColor(Qt::black);
 
 	//setup popup menu
 	m_popupMenu = new KexiImageContextMenu(this);
@@ -97,6 +93,13 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 //		m_chooser->setPalette(qApp->palette());
 //		hlyr->addWidget(m_chooser);
 	}
+
+	setBackgroundMode(Qt::NoBackground);
+	setFrameShape(QFrame::Box);
+	setFrameShadow(QFrame::Plain);
+	setFrameColor(Qt::black);
+	
+	m_paletteBackgroundColorChanged = false; //set this here, not before
 
 	connect(m_popupMenu, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)), 
 		this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
@@ -782,8 +785,20 @@ void KexiDBImageBox::setLineWidth( int width )
 	KexiFrame::setLineWidth(width);
 }
 
+void KexiDBImageBox::setPalette( const QPalette &pal )
+{
+	KexiFrame::setPalette(pal);
+	if (m_insideSetPalette)
+		return;
+	m_insideSetPalette = true;
+	setPaletteBackgroundColor(pal.active().base());
+	setPaletteForegroundColor(pal.active().foreground());
+	m_insideSetPalette = false;
+}
+
 void KexiDBImageBox::setPaletteBackgroundColor( const QColor & color )
 {
+	kexipluginsdbg << "KexiDBImageBox::setPaletteBackgroundColor(): " << color.name() << endl;
 	m_paletteBackgroundColorChanged = true;
 	KexiFrame::setPaletteBackgroundColor(color);
 	if (m_chooser)

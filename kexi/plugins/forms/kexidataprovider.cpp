@@ -293,7 +293,8 @@ void KexiFormDataProvider::invalidateDataSources( const QDict<char>& invalidSour
 				if (visibleColumnInfo) {
 					item->setVisibleColumnInfo( visibleColumnInfo );
 					if (dynamic_cast<KexiComboBoxBase*>(item) && m_mainWidget
-						&& dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()) {
+						&& dynamic_cast<KexiComboBoxBase*>(item)->internalEditor())
+					{
 						// m_mainWidget (dbform) should filter the (just created using setVisibleColumnInfo()) 
 						// combo box' internal editor (actually, only if the combo is in 'editable' mode)
 						dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()->installEventFilter(m_mainWidget);
