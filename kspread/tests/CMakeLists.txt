@@ -146,5 +146,17 @@ target_link_libraries(TestBitopsFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 add_test(BitopsFunctions TestBitopsFunctions)
 
+########### next target ###############
+
+set(TestEngineeringFunctions_SRCS TestEngineeringFunctions.cpp)
+
+kde4_automoc(${TestEngineeringFunctions_SRCS})
+
+kde4_add_executable(TestEngineeringFunctions RUN_UNINSTALLED ${TestEngineeringFunctions_SRCS})
+
+target_link_libraries(TestEngineeringFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(EngineeringFunctions TestEngineeringFunctions)
+
 
 endif(KDE4_BUILD_TESTS)

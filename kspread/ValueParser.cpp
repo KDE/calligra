@@ -15,20 +15,20 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#include "ValueParser.h"
-
-#include "Cell.h"
 #include "Doc.h"
 #include "Localization.h"
 #include "Style.h"
 #include "Value.h"
 
+#include "ValueParser.h"
+
 using namespace KSpread;
 
-ValueParser::ValueParser( Doc* doc ) : m_doc( doc )
+ValueParser::ValueParser( const Doc* doc )
+    : m_doc( doc )
 {
 }
 
@@ -42,58 +42,7 @@ const KLocale* ValueParser::locale() const
   return m_doc->locale();
 }
 
-void ValueParser::parse (const QString& str, Cell *cell)
-{
-  Format::Type format = cell->formatType();
-
-  // If the text is empty, we don't have a value
-  // If the user stated explicitly that he wanted text
-  // (using the format or using a quote),
-  // then we don't parse as a value, but as string.
-  if ( str.isEmpty() || format == Format::Text || str.at(0)=='\'' )
-  {
-    cell->setValue (Value(str));
-    return;
-  }
-
-  QString strStripped = str.trimmed();
-
-  // Try parsing as various datatypes, to find the type of the cell
-
-  // First as number
-  if (tryParseNumber (strStripped, cell))
-    return;
-
-  // Then as bool
-  if (tryParseBool (strStripped, cell))
-    return;
-
-
-  // Test for money number
-  bool ok;
-  double money = m_doc->locale()->readMoney (strStripped, &ok);
-  if (ok)
-  {
-    Style style;
-    style.setPrecision( 2 );
-    cell->setStyle( style );
-    Value val (money);
-    val.setFormat (Value::fmt_Money);
-    cell->setValue (Value(val));
-    return;
-  }
-
-  if (tryParseDate (strStripped, cell))
-    return;
-
-  if (tryParseTime (strStripped, cell))
-    return;
-
-  // Nothing particular found, then this is simply a string
-  cell->setValue (Value (str));
-}
-
-Value ValueParser::parse (const QString &str)
+Value ValueParser::parse( const QString& str ) const
 {
   Value val;
 
@@ -124,7 +73,6 @@ Value ValueParser::parse (const QString &str)
   if (ok)
     return val;
 
-
   // Test for money number
   double money = m_doc->locale()->readMoney (strStripped, &ok);
   if (ok)
@@ -147,44 +95,7 @@ Value ValueParser::parse (const QString &str)
   return val;
 }
 
-bool ValueParser::tryParseBool (const QString& str, Cell *cell)
-{
-  bool ok;
-  Value val = tryParseBool (str, &ok);
-  if (ok)
-    cell->setValue (val);
-  return ok;
-}
-
-bool ValueParser::tryParseNumber (const QString& str, Cell *cell)
-{
-  bool ok;
-  Value val = tryParseNumber (str, &ok);
-  if (ok)
-    cell->setValue (val);
-  return ok;
-}
-
-bool ValueParser::tryParseDate (const QString& str, Cell *cell)
-{
-  bool ok;
-  Value value = tryParseDate (str, &ok);
-  if (ok)
-    cell->setValue (value);
-  return ok;
-}
-
-bool ValueParser::tryParseTime (const QString& str, Cell *cell)
-{
-  bool ok;
-  Value value = tryParseTime (str, &ok);
-  if (ok)
-    cell->setValue (value);
-  return ok;
-}
-
-
-Value ValueParser::tryParseBool (const QString& str, bool *ok)
+Value ValueParser::tryParseBool( const QString& str, bool *ok ) const
 {
   Value val;
   if (ok) *ok = false;
@@ -202,12 +113,11 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
   {
     val = Value( false );
     if (ok) *ok = true;
-    fmtType = Format::Number;    //TODO: really?
   }
   return val;
 }
 
-double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
+double ValueParser::readNumber( const QString& _str, bool *ok, bool *isInt ) const
 {
   QString str = _str.trimmed();
   bool neg = str.indexOf(m_doc->locale()->negativeSign()) == 0;
@@ -218,9 +128,7 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
 	 Example, with 2.34E+23, exponentialPart == "E+23"
   */
   QString exponentialPart;
-  int EPos;
-
-  EPos = str.indexOf('E', 0, Qt::CaseInsensitive);
+  int EPos  = str.indexOf('E', 0, Qt::CaseInsensitive);
 
   if (EPos != -1)
   {
@@ -228,19 +136,25 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
     str = str.left(EPos);
   }
 
-  int pos = str.indexOf(m_doc->locale()->decimalSymbol());
+  int pos;
   QString major;
   QString minor;
-  if ( pos == -1 )
-  {
-    major = str;
-    if (isInt) *isInt = true;
-  }
-  else
+  if ( ( pos = str.indexOf( m_doc->locale()->decimalSymbol() ) ) != -1 )
   {
     major = str.left(pos);
     minor = str.mid(pos + m_doc->locale()->decimalSymbol().length());
     if (isInt) *isInt = false;
+  }
+  else if ( ( pos = str.indexOf( m_doc->locale()->decimalSymbol() ) ) != -1 )
+  {
+    major = str.left(pos);
+    minor = str.mid(pos + m_doc->locale()->decimalSymbol().length());
+    if (isInt) *isInt = false;
+  }
+  else
+  {
+    major = str;
+    if (isInt) *isInt = true;
   }
 
   // Remove thousand separators
@@ -276,69 +190,114 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
   return tot.toDouble(ok);
 }
 
-Value ValueParser::tryParseNumber (const QString& str, bool *ok)
+double ValueParser::readImaginary( const QString& str, bool* ok ) const
 {
-  Value value;
-
-  bool percent = false;
-  QString str2;
-  if( !str.isEmpty() && str.at(str.length()-1)=='%')
-  {
-    str2 = str.left (str.length()-1).trimmed();
-    percent = true;
-  }
-  else
-    str2 = str;
-
-
-  // First try to understand the number using the m_doc->locale()
-  bool isInt;
-  double val = readNumber (str2, ok, &isInt);
-  // If not, try with the '.' as decimal separator
-  if (!(*ok))
-  {
-    val = str2.toDouble(ok);
-    if (str.contains('.'))
-      isInt = false;
-    else
-      isInt = true;
-  }
-
-  if (*ok)
-  {
-    if (percent)
+    if ( str.isEmpty() )
     {
-      //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
-      //    "' successfully parsed as percentage: " << val << '%' << endl;
-      value = Value( val / 100.0 );
-      value.setFormat (Value::fmt_Percent);
-      fmtType = Format::Percentage;
+        if ( ok ) *ok = false;
+        return 0.0;
     }
-    else
-    {
-      //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
-      //    "' successfully parsed as number: " << val << endl;
-	  if (isInt)
-		value = Value( static_cast<qint64>( val ) );
-	  else
-		value = Value( val );
 
-      if ( str2.contains('E') || str2.contains('e') )
-        fmtType = Format::Scientific;
-      else
-      {
-        if (val > 1e+10)
-          fmtType = Format::Scientific;
+    // just the imaginary number?
+    if ( str.length() == 1 && ( str[0] == 'i' || str[0] == 'j' ) )
+    {
+        if ( ok ) *ok = true;
+        return 1.0;
+    }
+
+    double imag = 0.0;
+    if ( str[0] == 'i' || str[0] == 'j' )
+        imag = readNumber( str.mid( 1 ), ok );
+    else if ( str[str.length()-1] == 'i' || str[str.length()-1] == 'j' )
+    {
+        const QString minus( m_doc->locale()->negativeSign() );
+        if ( str.length() == 2 && str[0] == '+' )
+        {
+            if ( ok ) *ok = true;
+            imag = 1.0;
+        }
+        else if ( str.length() == minus.length()+1 && str.left( minus.length() ) == minus )
+        {
+            if ( ok ) *ok = true;
+            imag = -1.0;
+        }
         else
-          fmtType = Format::Number;
-      }
+            imag = readNumber( str.left( str.length()-1 ), ok );
     }
-  }
-
-  return value;
+    else
+        *ok = false;
+    return imag;
 }
 
-Value ValueParser::tryParseDate (const QString& str, bool *ok)
+Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
+{
+    Value value;
+    if ( str.endsWith( '%' ) ) // percentage
+    {
+        const double val = readNumber( str.left( str.length()-1 ).trimmed(), ok );
+        if ( *ok )
+        {
+            //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
+            //    "' successfully parsed as percentage: " << val << '%' << endl;
+            value = Value( val / 100.0 );
+            value.setFormat (Value::fmt_Percent);
+        }
+    }
+    else if ( str.count( 'i' ) == 1 || str.count( 'j' ) == 1 ) // complex number
+    {
+        double real = 0.0;
+        double imag = 0.0;
+        const QString minus( m_doc->locale()->negativeSign() );
+        // both parts, real and imaginary, present?
+        int sepPos;
+        if ( ( sepPos = str.indexOf( '+', 1 ) ) != -1 )
+        {
+            // imaginary part
+            imag = readImaginary( str.mid( sepPos + 1 ).trimmed(), ok );
+            // real part
+            if ( *ok )
+                real = readNumber( str.left( sepPos ).trimmed(), ok );
+        }
+        else if ( ( sepPos = str.indexOf( minus, minus.length() ) ) != -1 )
+        {
+            // imaginary part
+            imag = -readImaginary( str.mid( sepPos + 1 ).trimmed(), ok );
+            // real part
+            if ( *ok )
+                real = readNumber( str.left( sepPos ).trimmed(), ok );
+        }
+        else if ( str.trimmed().count() > 1 )
+        {
+            // imaginary part
+            imag = readImaginary( str.trimmed(), ok );
+            // real part
+            if ( *ok )
+                real = 0.0;
+        }
+        else
+            if ( ok ) *ok = false;
+        if ( *ok )
+            value = Value( complex<double>( real, imag ) );
+    }
+    else // real number
+    {
+        // First try to understand the number using the m_doc->locale()
+        bool isInt = false;
+        double val = readNumber( str, ok, &isInt );
+        if ( *ok )
+        {
+            //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
+            //    "' successfully parsed as number: " << val << endl;
+            if ( isInt )
+                value = Value( static_cast<qint64>( val ) );
+            else
+                value = Value( val );
+        }
+    }
+    return value;
+}
+
+Value ValueParser::tryParseDate( const QString& str, bool *ok ) const
 {
   bool valid = false;
   QDate tmpDate = m_doc->locale()->readDate (str, &valid);
@@ -400,12 +359,6 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
           ( str.count( yearFourDigits ) == 0 ) )
         tmpDate = tmpDate.addYears( -100 );
     }
-
-    //test if it's a short date or text date.
-    if (m_doc->locale()->formatDate (tmpDate, false) == str)
-      fmtType = Format::TextDate;
-    else
-      fmtType = Format::ShortDate;
   }
   if (!valid)
   {
@@ -423,7 +376,7 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
   return Value ( tmpDate, doc() );
 }
 
-Value ValueParser::tryParseTime (const QString& str, bool *ok)
+Value ValueParser::tryParseTime( const QString& str, bool *ok ) const
 {
   if (ok)
     *ok = false;
@@ -466,11 +419,9 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
   }
   if (valid)
   {
-    fmtType = Format::Time;
     if ( duration )
     {
       val = Value( tmpTime, doc() );
-      fmtType = Format::Time7;
     }
     else
       val = Value( tmpTime.time(), doc() );
@@ -482,8 +433,8 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
   return val;
 }
 
-QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
-    bool *ok, bool & duration)
+QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
+                                 bool* ok, bool& duration ) const
 {
   duration = false;
   QString str = intstr.simplified().toLower();
@@ -622,7 +573,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
  * @param pos the position to start at. It will be updated when we parse it.
  * @return the integer read in the string, or -1 if no string
  */
-int ValueParser::readInt (const QString &str, uint &pos)
+int ValueParser::readInt( const QString& str, uint& pos ) const
 {
   if (!str.at(pos).isDigit())
     return -1;

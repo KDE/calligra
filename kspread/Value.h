@@ -15,11 +15,13 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KSPREAD_VALUE_H
 #define KSPREAD_VALUE_H
+
+#include <complex>
 
 #include <QDateTime>
 #include <QSharedDataPointer>
@@ -29,6 +31,8 @@
 #include <kdebug.h>
 
 #include "kspread_export.h"
+
+using namespace std;
 
 namespace KSpread
 {
@@ -53,6 +57,7 @@ class KSPREAD_EXPORT Value
       Boolean,
       Integer,
       Float,
+      Complex,
       String,
       Array,
       CellRange, // not used yet
@@ -119,6 +124,11 @@ class KSPREAD_EXPORT Value
     explicit Value( double f );
 
     /**
+     * Creates a complex number value.
+     */
+    explicit Value( const complex<double>& c );
+
+    /**
      * Create a string value.
      */
     explicit Value( const QString& s );
@@ -179,10 +189,15 @@ class KSPREAD_EXPORT Value
     bool isFloat() const { return type() == Float; }
 
     /**
+     * Returns true, if the type of this value is the complex number type.
+     */
+    bool isComplex() const { return type() == Complex; }
+
+    /**
      * Returns true if the type of this value is either
      * integer or floating-point.
      */
-    bool isNumber() const { return (type() == Integer) || (type() == Float); }
+    bool isNumber() const { return (type() == Integer) || (type() == Float) || (type() == Complex); }
 
     /**
      * Returns true if the type of this value is string.
@@ -227,6 +242,13 @@ class KSPREAD_EXPORT Value
      * Call this function only if isNumber() returns true.
      */
     double asFloat() const;
+
+    /**
+     * Returns the complex number value of this value.
+     *
+     * Call this function only if isNumber() returns true.
+     */
+    complex<double> asComplex() const;
 
     /**
      * Returns the string value of this value.

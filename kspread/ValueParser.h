@@ -15,11 +15,11 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALUEPARSER
-#define KSPREAD_VALUEPARSER
+#ifndef KSPREAD_VALUE_PARSER
+#define KSPREAD_VALUE_PARSER
 
 #include <QDateTime>
 
@@ -29,55 +29,92 @@ class KLocale;
 
 namespace KSpread
 {
-class Cell;
 class Doc;
 class Value;
 
 /**
-The ValueParser parses a text input from the user, generating
-Value in the desired format.
-*/
+ * Generates a Value by parsing an user input text.
+ * Determines the most probable Value type, e.g. integer or date.
+ */
+class ValueParser
+{
+public:
+    /**
+     * Constructor.
+     */
+    explicit ValueParser( const Doc* doc );
 
-class ValueParser {
- public:
-  /** constructor */
-  explicit ValueParser (Doc* doc);
+    /**
+     * Returns the document this ValueFormatter belongs to.
+     */
+    const Doc* doc() const;
 
-  const Doc* doc() const;
-  const KLocale* locale() const;
+    /**
+     * Returns the locale this ValueFormatter uses.
+     */
+    const KLocale* locale() const;
 
-  /** try to parse the text in a given cell and set value accordingly */
-  void parse (const QString& str, Cell *cell);
+    /**
+     * Parses the user input text \p str and tries to determine the correct
+     * value type for it.
+     */
+    Value parse( const QString& str ) const;
 
-  /** try to parse given text, don't set any cell attributes though */
-  Value parse (const QString &str);
+    /**
+     * Tries for boolean type. If \p str can be interpreted as this
+     * type, \p ok is set to \c true and the corresponding value will
+     * be returned.
+     */
+    Value tryParseBool( const QString& str, bool *ok = 0 ) const;
 
-  Value tryParseBool (const QString& str, bool *ok = 0);
-  Value tryParseNumber (const QString& str, bool *ok = 0);
-  Value tryParseDate (const QString& str, bool *ok = 0);
-  Value tryParseTime (const QString& str, bool *ok = 0);
- protected:
+    /**
+     * Tries for floating point, integer, complex (and percentage) type.
+     * If \p str can be interpreted as one of these types, \p ok is set to
+     * \c true and the corresponding value will be returned.
+     */
+    Value tryParseNumber( const QString& str, bool *ok = 0 ) const;
 
-  Doc* m_doc;
+    /**
+     * Tries for date type. If \p str can be interpreted as this
+     * type, \p ok is set to \c true and the corresponding value will
+     * be returned.
+     */
+    Value tryParseDate( const QString& str, bool *ok = 0 ) const;
 
-  // Try to parse the text as a bool/number/date/time/etc.
-  // Helpers for parse.
-  bool tryParseBool (const QString& str, Cell *cell);
-  bool tryParseNumber (const QString& str, Cell *cell);
-  bool tryParseDate (const QString& str, Cell *cell);
-  bool tryParseTime (const QString& str, Cell *cell);
+    /**
+     * Tries for time type. If \p str can be interpreted as this
+     * type, \p ok is set to \c true and the corresponding value will
+     * be returned.
+     */
+    Value tryParseTime( const QString& str, bool *ok = 0 ) const;
 
-  /** converts a string to a date/time value */
-  QDateTime readTime (const QString & intstr, bool withSeconds, bool *ok,
-      bool & duration);
+protected:
+    /**
+     * Converts \p str to a date/time value.
+     */
+    QDateTime readTime( const QString& str, bool withSeconds,
+                        bool *ok, bool& duration ) const;
 
-  /** a helper function to read numbers and distinguish integers and FPs */
-  double readNumber(const QString &_str, bool * ok, bool * isInt);
-  /** a helper function to read integers */
-  int readInt (const QString &str, uint &pos);
-  Format::Type fmtType;
+    /**
+     * A helper function to read numbers and distinguish integers and FPs.
+     */
+    double readNumber( const QString &_str, bool* ok, bool* isInt = 0 ) const;
+
+    /**
+     * A helper function to read the imaginary part of a complex number.
+     */
+    double readImaginary( const QString& str, bool* ok ) const;
+
+    /**
+     * A helper function to read integers.
+     * Used in the parsing process for date and time values.
+     */
+    int readInt( const QString& str, uint& pos ) const;
+
+private:
+    const Doc* m_doc;
 };
 
 }  //namespace KSpread
 
-#endif  //KSPREAD_VALUEPARSER
+#endif  //KSPREAD_VALUE_PARSER

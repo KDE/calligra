@@ -163,16 +163,16 @@ void RegisterEngineeringFunctions()
   f = new Function ("IMCOS",       func_imcos);
   repo->add (f);
   f = new Function ("IMDIV",       func_imdiv);
-  f->setParamCount (1, -1);
+  f->setParamCount (2);
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("IMEXP",       func_imexp);
   repo->add (f);
   f = new Function ("IMLN",        func_imln);
   repo->add (f);
-  f = new Function ("IMLOG2",        func_imlog2);
+  f = new Function ("IMLOG2",      func_imlog2);
   repo->add (f);
-  f = new Function ("IMLOG10",        func_imlog10);
+  f = new Function ("IMLOG10",     func_imlog10);
   repo->add (f);
   f = new Function ("IMPOWER",     func_impower);
   f->setParamCount (2);
@@ -188,7 +188,7 @@ void RegisterEngineeringFunctions()
   f = new Function ("IMSQRT",      func_imsqrt);
   repo->add (f);
   f = new Function ("IMSUB",       func_imsub);
-  f->setParamCount (1, -1);
+  f->setParamCount (2);
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("IMSUM",       func_imsum);
@@ -871,555 +871,180 @@ Value func_convert (valVector args, ValueCalc *calc, FuncExtra *)
 // these may eventually end up being merged into ValueCalc and friends
 // then complex numbers will be handled transparently in most functions
 
-static QString func_create_complex( double real,double imag )
-{
-  QString tmp,tmp2;
-  if(imag ==0)
-        {
-        return KGlobal::locale()->formatNumber( real);
-        }
-  if(real!=0)
-        tmp=KGlobal::locale()->formatNumber(real);
-  else
-    return KGlobal::locale()->formatNumber(imag)+'i';
-  if (imag >0)
-        tmp=tmp+'+'+KGlobal::locale()->formatNumber(imag)+'i';
-  else
-        tmp=tmp+KGlobal::locale()->formatNumber(imag)+'i';
-  return tmp;
-
-}
-
 // Function: COMPLEX
 Value func_complex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  if (calc->isZero (args[1]))
-    return args[0];
-  double re = calc->conv()->asFloat (args[0]).asFloat ();
-  double im = calc->conv()->asFloat (args[1]).asFloat ();
-  QString tmp=func_create_complex (re, im);
-  bool ok;
-  double result = KGlobal::locale()->readNumber(tmp, &ok);
-  if (ok)
-    return Value (result);
-  return Value (tmp);
-}
-
-
-static double imag_complexe(const QString& str, bool &ok)
-{
-QString tmp=str;
-if(tmp.indexOf('i')==-1)
-        {  //not a complex
-        ok=true;
-        return 0;
-        }
-else if( tmp.length()==1)
-        {
-        // i
-        ok=true;
-        return 1;
-        }
-else  if( tmp.length()==2 )
-        {
-        //-i,+i,
-        int pos1;
-        if((pos1=tmp.indexOf('+'))!=-1&& pos1==0)
-                {
-                ok=true;
-                return 1;
-                }
-        else if( (pos1=tmp.indexOf('-'))!=-1 && pos1==0 )
-                {
-                ok=true;
-                return -1;
-                }
-        else if(tmp[0].isDigit())
-                { //5i
-                ok=true;
-                return KGlobal::locale()->readNumber(tmp.left(1));
-                }
-        else
-                {
-                ok=false;
-                return 0;
-                }
-        }
-else
-        {//12+12i
-        int pos1,pos2;
-        if((pos1=tmp.indexOf('i'))!=-1)
-                {
-                double val;
-                QString tmpStr;
-
-                if((pos2=tmp.lastIndexOf('+'))!=-1 && pos2!=0)
-                        {
-                        if((pos1-pos2)==1)
-                                {
-                                 ok=true;
-                                 return 1;
-                                }
-                        else
-                                {
-                                tmpStr=tmp.mid(pos2,(pos1-pos2));
-                                val=KGlobal::locale()->readNumber(tmpStr, &ok);
-                                if(!ok)
-                                        val=0;
-                                return val;
-                                }
-                        }
-                else if( (pos2=tmp.lastIndexOf('-'))!=-1&& pos2!=0)
-                        {
-                        if((pos1-pos2)==1)
-                                {
-                                 ok=true;
-                                 return -1;
-                                }
-                        else
-                                {
-                                tmpStr=tmp.mid(pos2,(pos1-pos2));
-                                val=KGlobal::locale()->readNumber(tmpStr, &ok);
-                                if(!ok)
-                                        val=0;
-                                return val;
-                                }
-                        }
-                else
-                        {//15.55i
-                        tmpStr=tmp.left(pos1);
-                        val=KGlobal::locale()->readNumber(tmpStr, &ok);
-                        if(!ok)
-                                val=0;
-                        return val;
-                        }
-                }
-        }
-ok=false;
-return 0;
+    const double real = calc->conv()->asFloat( args[0] ).asFloat();
+    const double imag = calc->conv()->asFloat( args[1] ).asFloat();
+    return Value( complex<double>( real, imag ) );
 }
 
 // Function: IMAGINARY
 Value func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString ();
-  bool good;
-  double result=imag_complexe(tmp, good);
-  if (good)
-    return Value (result);
-  return Value::errorVALUE();
-}
-
-
-static double real_complexe(const QString& str, bool &ok)
-{
-double val;
-int pos1,pos2;
-QString tmp=str;
-QString tmpStr;
-if((pos1=tmp.indexOf('i'))==-1)
-        { //12.5
-        val=KGlobal::locale()->readNumber(tmp, &ok);
-        if(!ok)
-                val=0;
-        return val;
-        }
-else
-        { //15-xi
-        if((pos2=tmp.lastIndexOf('-'))!=-1 && pos2!=0)
-                {
-                tmpStr=tmp.left(pos2);
-                val=KGlobal::locale()->readNumber(tmpStr, &ok);
-                if(!ok)
-                        val=0;
-                return val;
-                } //15+xi
-        else if((pos2=tmp.lastIndexOf('+'))!=-1)
-                {
-                tmpStr=tmp.left(pos2);
-                val=KGlobal::locale()->readNumber(tmpStr, &ok);
-                if(!ok)
-                        val=0;
-                return val;
-                }
-        else
-                {
-                ok=true;
-                return 0;
-                }
-        }
-
-ok=false;
-return 0;
+    return Value( calc->conv()->asComplex( args[0] ).asComplex().imag() );
 }
 
 // Function: IMREAL
 Value func_complex_real (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString ();
-  bool good;
-  double result=real_complexe(tmp, good);
-  if (good)
-    return Value (result);
-  return Value::errorVALUE();
-}
-
-void ImHelper (ValueCalc *c, Value res, Value val,
-    double &imag, double &real, double &imag1, double &real1)
-{
-  bool ok;
-  imag=imag_complexe(res.asString(), ok);
-  real=real_complexe(res.asString(), ok);
-  if (val.isString())
-  {
-    imag1 = imag_complexe (val.asString(), ok);
-    real1 = real_complexe (val.asString(), ok);
-  } else {
-    imag1=0;
-    real1=c->conv()->asFloat (val).asFloat();
-  }
+    return Value( calc->conv()->asComplex( args[0] ).asComplex().real() );
 }
 
 void awImSum (ValueCalc *c, Value &res, Value val, Value)
 {
-  double imag,real,imag1,real1;
-  ImHelper (c, res, val, imag, real, imag1, real1);
-  res=Value(func_create_complex(real+real1,imag+imag1));
+    const complex<double> c1 = c->conv()->asComplex( res ).asComplex();
+    const complex<double> c2 = c->conv()->asComplex( val ).asComplex();
+    res = Value( c1 + c2 );
 }
 
 void awImSub (ValueCalc *c, Value &res, Value val, Value)
 {
-  double imag,real,imag1,real1;
-  ImHelper (c, res, val, imag, real, imag1, real1);
-  res=Value(func_create_complex(real-real1,imag-imag1));
+    const complex<double> c1 = c->conv()->asComplex( res ).asComplex();
+    const complex<double> c2 = c->conv()->asComplex( val ).asComplex();
+    res = Value( c1 - c2 );
 }
 
 void awImMul (ValueCalc *c, Value &res, Value val, Value)
 {
-  double imag,real,imag1,real1;
-  ImHelper (c, res, val, imag, real, imag1, real1);
-  res=Value(func_create_complex(real*real1+(imag*imag1)*-1,real*imag1+real1*imag));
+    const complex<double> c1 = c->conv()->asComplex( res ).asComplex();
+    const complex<double> c2 = c->conv()->asComplex( val ).asComplex();
+    res = Value( c1 * c2 );
 }
 
 void awImDiv (ValueCalc *c, Value &res, Value val, Value)
 {
-  double imag,real,imag1,real1;
-  ImHelper (c, res, val, imag, real, imag1, real1);
-  res=Value(func_create_complex((real*real1+imag*imag1)/(real1*real1+imag1*imag1),
-      (real1*imag-real*imag1)/(real1*real1+imag1*imag1)));
+    const complex<double> c1 = c->conv()->asComplex( res ).asComplex();
+    const complex<double> c2 = c->conv()->asComplex( val ).asComplex();
+    res = Value( c1 / c2 );
 }
 
 // Function: IMSUM
 Value func_imsum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value result;
-  calc->arrayWalk (args, result, awImSum, Value(0));
-
-  bool ok;
-  QString res = calc->conv()->asString (result).asString();
-  double val=KGlobal::locale()->readNumber(res, &ok);
-  if (ok)
-    return Value (val);
-  return Value (result);
+    Value result;
+    calc->arrayWalk( args, result, awImSum, Value(0) );
+    return result;
 }
 
 // Function: IMSUB
 Value func_imsub (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value result;
-  calc->arrayWalk (args, result, awImSub, Value(0));
-
-  bool ok;
-  QString res = calc->conv()->asString (result).asString();
-  double val=KGlobal::locale()->readNumber(res, &ok);
-  if (ok)
-    return Value (val);
-  return Value (result);
+    Value result;
+    if ( args.count() == 1 )
+        awImSub( calc, result, args[0], Value(0) );
+    else
+    {
+        result = args[0];
+        valVector vector = args.mid( 1 );
+        calc->arrayWalk( vector, result, awImSub, Value(0) );
+    }
+    return result;
 }
 
 // Function: IMPRODUCT
 Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value result;
-  calc->arrayWalk (args, result, awImMul, Value(0));
-
-  bool ok;
-  QString res = calc->conv()->asString (result).asString();
-  double val=KGlobal::locale()->readNumber(res, &ok);
-  if (ok)
-    return Value (val);
-  return Value (result);
+    Value result;
+    if ( args.count() == 1 )
+    {
+        result = Value( complex<double>( 1.0, 0.0 ) );
+        awImMul( calc, result, args[0], Value(0) );
+    }
+    else
+    {
+        result = args[0];
+        valVector vector = args.mid( 1 );
+        calc->arrayWalk( vector, result, awImMul, Value(0) );
+    }
+    return result;
 }
 
 // Function: IMDIV
 Value func_imdiv (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value result;
-  calc->arrayWalk (args, result, awImDiv, Value(0));
-
-  bool ok;
-  QString res = calc->conv()->asString (result).asString();
-  double val=KGlobal::locale()->readNumber(res, &ok);
-  if (ok)
-    return Value (val);
-  return Value (result);
+    Value result;
+    if ( args.count() == 1 )
+    {
+        result = Value( complex<double>( 1.0, 0.0 ) );
+        awImDiv( calc, result, args[0], Value(0) );
+    }
+    else
+    {
+        result = args[0];
+        valVector vector = args.mid( 1 );
+        calc->arrayWalk( vector, result, awImDiv, Value(0) );
+    }
+    return result;
 }
 
 // Function: IMCONJUGATE
 Value func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if (!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-
-  tmp=func_create_complex(real,-imag);
-
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-  if(ok)
-    return Value (result);
-
-  return Value (tmp);
+    return Value( std::conj( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 // Function: IMARGUMENT
 Value func_imargument (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if (!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if (!ok)
-    return Value::errorVALUE();
-  if(imag==0)
-    return Value::errorDIV0();
-  double arg=atan2(imag,real);
-
-  return Value (arg);
+    return Value( std::arg( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 // Function: IMABS
 Value func_imabs (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double arg=sqrt(pow(imag,2)+pow(real,2));
-
-  return Value (arg);
+    return Value( std::abs( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 // Function: IMCOS
 Value func_imcos (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag_res=sin(real)*sinh(imag);
-  double real_res=cos(real)*cosh(imag);
-
-
-  tmp=func_create_complex(real_res,-imag_res);
-
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-  if(ok)
-    return Value (result);
-
-  return Value (tmp);
+    return Value( std::cos( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 // Function: IMSIN
 Value func_imsin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag_res=cos(real)*sinh(imag);
-  double real_res=sin(real)*cosh(imag);
-
-
-  tmp=func_create_complex(real_res,imag_res);
-
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-  if(ok)
-    return Value (result);
-
-  return Value (tmp);
+    return Value( std::sin( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 // Function: IMLN
 Value func_imln (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-
-  double arg=sqrt(pow(imag,2)+pow(real,2));
-  double real_res=log(arg);
-  double imag_res=atan(imag/real);
-  tmp=func_create_complex(real_res,imag_res);
-
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-  if(ok)
-    return Value (result);
-
-  return Value (tmp);
+    return Value( std::log( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 // Function: IMLOG2
 Value func_imlog2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-
-  double arg=sqrt(pow(imag,2)+pow(real,2));
-  double real_res=log(arg) / M_LN2l;
-  double imag_res=atan(imag/real) / M_LN2l;
-
-  tmp=func_create_complex(real_res,imag_res);
-
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-
-  if(ok)
-    return Value (result);
-
-  return Value (tmp);
+    const complex<double> z = calc->conv()->asComplex( args[0] ).asComplex();
+    return Value( std::log( z ) / std::log( complex<double>( 2.0, 0.0 ) ) );
 }
 
 // Function: IMLOG10
 Value func_imlog10 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-
-  double arg=sqrt(pow(imag,2)+pow(real,2));
-  double real_res=log(arg) / M_LN10l;
-  double imag_res=atan(imag/real) / M_LN10l;
-
-  tmp=func_create_complex(real_res,imag_res);
-
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-  if(ok)
-    return Value (result);
-
-  return Value (tmp);
+    return Value( std::log10( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 
 // Function: IMEXP
 Value func_imexp (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag_res=exp(real)*sin(imag);
-  double real_res=exp(real)*cos(imag);
-
-
-  tmp=func_create_complex(real_res,imag_res);
-
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-  if(ok)
-    return Value (result);
-
-  return Value (tmp);
+    return Value( std::exp( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 // Function: IMSQRT
 Value func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double arg=sqrt(sqrt(pow(imag,2)+pow(real,2)));
-  double angle=atan(imag/real);
-
-  double real_res=arg*cos((angle/2));
-  double imag_res=arg*sin((angle/2));
-
-  tmp=func_create_complex(real_res,imag_res);
-
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-  if(ok)
-    return Value (result);
-
-  return Value (tmp);
+    return Value( std::sqrt( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 // Function: IMPOWER
 Value func_impower (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString tmp = calc->conv()->asString (args[0]).asString();
-  double val2 = calc->conv()->asFloat (args[1]).asFloat();
-  bool ok;
-  double real=real_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-  double imag=imag_complexe(tmp,ok);
-  if(!ok)
-    return Value::errorVALUE();
-
-  double arg=::pow(sqrt(pow(imag,2)+pow(real,2)),val2);
-  double angle=atan(imag/real);
-
-  double real_res=arg*cos(angle*val2);
-  double imag_res=arg*sin(angle*val2);
-
-  tmp=func_create_complex(real_res,imag_res);
-
-  double result=KGlobal::locale()->readNumber(tmp, &ok);
-  if(ok)
-    return Value (result);
-
-  return Value (tmp);
+    return Value( std::pow( calc->conv()->asComplex( args[0] ).asComplex(),
+                            calc->conv()->asComplex( args[1] ).asComplex() ) );
 }
 
 // Function: DELTA

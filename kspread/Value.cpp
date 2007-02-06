@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "Value.h"
@@ -43,11 +43,12 @@ class Value::Private : public QSharedData
     Value::Type type:4;
     Value::Format format:4;
 
-    union
+    union // 64 bits at max!
     {
       bool b;
       qint64 i;
       double f;
+      complex<double>* pc;
       QString* ps;
       ValueArray* pa;
     };
@@ -74,6 +75,9 @@ class Value::Private : public QSharedData
                 break;
             case Value::Float:
                 f = o.f;
+                break;
+            case Value::Complex:
+                pc = new complex<double>( *o.pc );
                 break;
             case Value::String:
             case Value::Error:
@@ -103,9 +107,10 @@ class Value::Private : public QSharedData
     /** Deletes all data. */
     void clear()
     {
-        if ( type == Value::Array )  delete pa;
-        if ( type == Value::Error )  delete ps;
-        if ( type == Value::String ) delete ps;
+        if ( type == Value::Array )   delete pa;
+        if ( type == Value::Complex ) delete pc;
+        if ( type == Value::Error )   delete ps;
+        if ( type == Value::String )  delete ps;
     }
 
     /** set most probable formatting based on the type */
@@ -125,9 +130,8 @@ void Value::Private::setFormatByType ()
       format = Value::fmt_Boolean;
     break;
     case Value::Integer:
-      format = Value::fmt_Number;
-    break;
     case Value::Float:
+    case Value::Complex:
       format = Value::fmt_Number;
     break;
     case Value::String:
@@ -204,6 +208,7 @@ bool Value::operator==( const Value& o ) const
     case Boolean: return o.d->b == d->b;
     case Integer: return o.d->i == d->i;
     case Float:   return compare( o.d->f, d->f ) == 0;
+    case Complex: return ( !d->pc && !o.d->pc ) || ( ( d->pc && o.d->pc ) && ( *o.d->pc == *d->pc ) );
     case String:  return ( !d->ps && !o.d->ps ) || ( ( d->ps && o.d->ps ) && ( *o.d->ps == *d->ps ) );
     case Array:   return ( !d->pa && !o.d->pa ) || ( ( d->pa && o.d->pa ) && ( *o.d->pa == *d->pa ) );
     case Error:   return ( !d->ps && !o.d->ps ) || ( ( d->ps && o.d->ps ) && ( *o.d->ps == *d->ps ) );
@@ -246,6 +251,15 @@ Value::Value( double f )
 {
     d->type = Float;
     d->f = f;
+    d->format = fmt_Number;
+}
+
+// create a complex number value
+Value::Value( const complex<double>& c )
+    : d( Private::null() )
+{
+    d->type = Complex;
+    d->pc = new complex<double>( c );
     d->format = fmt_Number;
 }
 
@@ -332,29 +346,40 @@ bool Value::asBoolean() const
 // get the value as integer
 qint64 Value::asInteger() const
 {
-  qint64 result = 0;
-
-  if( type() == Value::Integer )
-    result = d->i;
-
-  if( type() == Value::Float )
-    result = static_cast<qint64>( floor( d->f ) );
-
-  return result;
+    qint64 result = 0;
+    if ( type() == Integer )
+        result = d->i;
+    else if ( type() == Float )
+        result = static_cast<qint64>( floor( d->f ) );
+    else if ( type() == Complex )
+        result = static_cast<qint64>( floor( d->pc->real() ) );
+    return result;
 }
 
 // get the value as floating-point
 double Value::asFloat() const
 {
-  double result = 0.0;
+    double result = 0.0;
+    if ( type() == Float )
+        result = d->f;
+    else if ( type() == Integer )
+        result = static_cast<double>(d->i);
+    else if ( type() == Complex )
+        result = d->pc->real();
+    return result;
+}
 
-  if( type() == Value::Float )
-    result = d->f;
-
-  if( type() == Value::Integer )
-    result = static_cast<double>(d->i);
-
-  return result;
+// get the value as complex number
+complex<double> Value::asComplex() const
+{
+    complex<double> result( 0.0, 0.0 );
+    if ( type() == Complex )
+        result = *d->pc;
+    else if ( type() == Float )
+        result = d->f;
+    else if ( type() == Integer )
+        result = static_cast<double>(d->i);
+    return result;
 }
 
 // get the value as string
@@ -606,10 +631,16 @@ bool Value::allowComparison( const Value& v ) const
   if( ( t1 == Float ) && ( t2 == Float ) ) return true;
   if( ( t1 == Float ) && ( t2 == String ) ) return true;
 
+  if( ( t1 == Complex ) && ( t2 == Boolean ) ) return true;
+  if( ( t1 == Complex ) && ( t2 == Integer ) ) return true;
+  if( ( t1 == Complex ) && ( t2 == Float ) ) return true;
+  if( ( t1 == Complex ) && ( t2 == String ) ) return true;
+
   if( ( t1 == String ) && ( t2 == Empty ) ) return true;
   if( ( t1 == String ) && ( t2 == Boolean ) ) return true;
   if( ( t1 == String ) && ( t2 == Integer ) ) return true;
   if( ( t1 == String ) && ( t2 == Float ) ) return true;
+  if( ( t1 == String ) && ( t2 == Complex ) ) return true;
   if( ( t1 == String ) && ( t2 == String ) ) return true;
 
   // errors can be compared too ...
@@ -700,6 +731,8 @@ int Value::compare( const Value& v ) const
   if( ( t1 == Float ) && ( t2 == String ) )
     return -1;
 
+  // TODO Stefan: Complex
+
   // string is always greater than empty value
   // (except when the string is empty)
   if( ( t1 == String ) && ( t2 == Empty ) )
@@ -751,6 +784,7 @@ QTextStream& operator<<( QTextStream& ts, Value::Type type )
     case Value::Boolean: ts << "Boolean"; break;
     case Value::Integer: ts << "Integer"; break;
     case Value::Float:   ts << "Float"; break;
+    case Value::Complex: ts << "Complex"; break;
     case Value::String:  ts << "String"; break;
     case Value::Array:   ts << "Array"; break;
     case Value::Error:   ts << "Error"; break;
@@ -776,6 +810,16 @@ QTextStream& operator<<( QTextStream& ts, Value value )
 
     case Value::Float:
       ts << ": " << value.asFloat(); break;
+
+    case Value::Complex:
+    {
+      const complex<double> complex( value.asComplex() );
+      ts << ": " << complex.real();
+      if ( complex.imag() >= 0.0 )
+          ts << '+';
+      ts << complex.imag() << 'i';
+      break;
+    }
 
     case Value::String:
       ts << ": " << value.asString(); break;

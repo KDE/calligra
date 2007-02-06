@@ -14,73 +14,125 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALUEFORMATTER
-#define KSPREAD_VALUEFORMATTER
+#ifndef KSPREAD_VALUE_FORMATTER
+#define KSPREAD_VALUE_FORMATTER
+
+#include <QDateTime>
 
 #include "Global.h"
 #include "Style.h"
 
-#include <QDateTime>
-
 namespace KSpread
 {
 class Cell;
+class Doc;
 class Value;
 class ValueConverter;
 
 /**
-The ValueFormatter class generates a textual representation of
-data stored in a Value, with a given formatting.
-*/
+ * Generates a textual representation of a Value with a given formatting.
+ */
+class ValueFormatter
+{
+public:
+    /**
+     * Constructor.
+     */
+    explicit ValueFormatter( const ValueConverter* converter );
 
-class ValueFormatter {
- public:
-  /** copnstructor */
-  explicit ValueFormatter (ValueConverter *converter);
+    /**
+     * Returns the document this ValueFormatter belongs to.
+     */
+    const Doc* doc() const;
 
-  /** create a text representation of data in this cell */
-  QString formatText (const Cell *cell, Format::Type fmtType);
+    /**
+     * Creates a textual representation of the Value in \p cell with \p formatType
+     * as formatting.
+     * \param formatType the value format, e.g. number, date
+     */
+    QString formatText ( const Cell* cell, Format::Type formatType );
 
-  /** create a text representation of data in this Value */
-  QString formatText (const Value &value,
-      Format::Type fmtType, int precision = -1,
-      Style::FloatFormat floatFormat = Style::OnlyNegSigned,
-      const QString &prefix = QString::null,
-      const QString &postfix = QString::null,
-      const QString &currencySymbol = QString::null);
+    /**
+     * Creates a textual representation of \p value with the explicit given
+     * formattings.
+     * \param formatType the value format, e.g. number, date
+     * \param precision the number of decimals
+     * \param floatFormat the number format, i.e. signed/unsigned information
+     * \param prefix the preceding text
+     * \param postfix the subsequent text
+     * \param currencySymbol the currency symbol
+     */
+    QString formatText( const Value& value,
+                        Format::Type formatType, int precision = -1,
+                        Style::FloatFormat floatFormat = Style::OnlyNegSigned,
+                        const QString& prefix = QString::null,
+                        const QString& postfix = QString::null,
+                        const QString& currencySymbol = QString::null );
 
-  /** create a date format */
-  QString dateFormat (const QDate &_date, Format::Type fmtType);
+    /**
+     * Creates a date format.
+     * \param formatType the value format, e.g. number, date
+     */
+    QString dateFormat( const QDate& date, Format::Type formatType );
 
-  /** create a time format */
-  QString timeFormat (const QDateTime &_time, Format::Type fmtType);
+    /**
+     * Creates a time format.
+     * \param formatType the value format, e.g. number, date
+     */
+    QString timeFormat( const QDateTime& time, Format::Type formatType );
 
- protected:
+protected:
+    /**
+     * Determines the formatting type that should be used to format this value
+     * in a cell with a given format type
+     * \param formatType the value format, e.g. number, date
+     */
+    Format::Type determineFormatting( const Value& value, Format::Type formatType );
 
-  ValueConverter* converter;
+    /**
+     * Creates a number format.
+     * \param precision the number of decimals
+     * \param formatType the value format, e.g. number, date
+     * \param floatFormat the number format, i.e. signed/unsigned information
+     * \param currencySymbol the currency symbol
+     */
+    QString createNumberFormat( double value, int precision,
+                                Format::Type formatType,
+                                Style::FloatFormat floatFormat,
+                                const QString& currencySymbol );
 
-  /** determine the formatting type that should be used to format this value
-  in a cell with a given format type */
-  Format::Type determineFormatting (const Value &value,
-      Format::Type fmtType);
+    /**
+     * Creates a fraction format.
+     * \param formatType the value format, e.g. number, date
+     */
+    QString fractionFormat( double value, Format::Type formatType );
 
-  /** create a number format */
-  QString createNumberFormat (double value, int precision, Format::Type fmt,
-      bool alwaysSigned, const QString& currencySymbol);
+    /**
+     * Creates a complex number format.
+     * \param precision the number of decimals
+     * \param formatType the value format, e.g. number, date
+     * \param floatFormat the number format, i.e. signed/unsigned information
+     * \param currencySymbol the currency symbol
+     */
+    QString complexFormat( const Value& value, int precision,
+                           Format::Type formatType,
+                           Style::FloatFormat floatFormat,
+                           const QString& currencySymbol );
 
-  /** create a fraction format */
-  QString fractionFormat (double value, Format::Type fmtType);
+    /**
+     * Removes the trailing zeros and the decimal symbol \p decimalSymbol in
+     * \p string , if necessary.
+     * \return the truncated string
+     */
+    QString removeTrailingZeros( const QString& string, const QString& decimalSymbol );
 
-  /** Remove trailing zeros and the decimal point if necessary
-  unless the number has no decimal point */
-  void removeTrailingZeros (QString &str, QChar decimal_point);
+private:
+    const ValueConverter* m_converter;
 };
-
 
 }  //namespace KSpread
 
-
-#endif  //KSPREAD_VALUEFORMATTER
+#endif  //KSPREAD_VALUE_FORMATTER
