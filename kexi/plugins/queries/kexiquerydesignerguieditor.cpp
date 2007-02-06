@@ -1427,6 +1427,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		if (newValue.isNull()) {
 			d->data->updateRowEditBuffer(item, COLUMN_ID_TABLE, QVariant(), false/*!allowSignals*/);
 			d->data->updateRowEditBuffer(item, COLUMN_ID_VISIBLE, QVariant(false,1));//invisible
+			d->data->updateRowEditBuffer(item, COLUMN_ID_SORTING, QVariant());
 #ifndef KEXI_NO_QUERY_TOTALS
 			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant());//remove totals
 #endif

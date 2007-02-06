@@ -229,9 +229,7 @@ KexiLookupColumnPage::~KexiLookupColumnPage()
 void KexiLookupColumnPage::setProject(KexiProject *prj)
 {
 	d->rowSourceCombo->setProject(prj,
-		true/*showTables*/, 
-//! @todo show queries when supported
-		false/*showQueries*/
+		true/*showTables*/, true/*showQueries*/
 	);
 	d->boundColumnCombo->setProject(prj);
 	d->visibleColumnCombo->setProject(prj);
