@@ -1036,3 +1036,20 @@ Form/TV Shortcuts:
        -- we should generate the SQL in a different way for the Query Designer)
 - fix horizontal scrollbar hiding in the "Available fields" list box (a problem with layouts?)
 - display a message when connection is lost...
+
+
+TODO:
+add this to all container widgets
+		connect(m_dbform, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)), 
+		this, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
+		connect(m_dbform, SIGNAL(handleDropEvent(QDropEvent*)), 
+		this, SLOT(slotHandleDropEvent(QDropEvent*)));
+
+- clicking on combo box contents in the design view does not select it
+- fix crashes when table schema referenced by a combo box changes
+- replace QDate{Time}Edit in koproperty with KLineEdit, similar to the one in KexiTableView
+
+TODO: "Database "z3" created but could not be closed after creation." err. on win32 after creating a pgsql db
+TODO: PqxxMigrate::drv_copyTable():  we've switched from BLOBs to LongText
+  ==KexiDB::Field::LongText part shoud be removed; add other backward-copatibility code (how?)
+       if (fieldsExpanded.at(index)->field->type()==KexiDB::Field::BLOB || fieldsExpanded.at(index)->field->type()==KexiDB::Field::LongText)

@@ -15,10 +15,47 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
-TODO: "Database "z3" created but could not be closed after creation." err. on win32 after creating a pgsql db
-TODO: PqxxMigrate::drv_copyTable():  we've switched from BLOBs to LongText
-  ==KexiDB::Field::LongText part shoud be removed; add other backward-copatibility code (how?)
-       if (fieldsExpanded.at(index)->field->type()==KexiDB::Field::BLOB || fieldsExpanded.at(index)->field->type()==KexiDB::Field::LongText)
+~~~~~~~~~~~~~~~~ 1.1.2 bugfix release (with KOffice 1.6.2)  ~~~~~~~~~~~~~~~~
+
+2007-02-06
+KexiDB
+- queries are supported as row source for lookup fields
+- sort query results by primary key fields if there is no explicit sorting specified
+  (especially useful when there are complex joins)
+2.0: merged
+
+2007-02-05
+Query Designer
+- fixed crash if column being removed has sorting set up
+2.0: merged
+
+2007-01-26..2007-02-05
+Table Designer
+- added support for multiple visible columns in the combo box editor
+   (the same for forms)
+- on altering table, remove old lookup field schema objects;
+   make sure you do not save empty type/name fields to XML
+- fixed updating "lookup column" tab's contents
+2.0: merged
+
+2007-01-24..25
+Table Designer
+- fixed altering table schema when lookup column has been changed
+2.0: merged
+Forms
+- align autofield's label to left if it is on the top
+- do not show popup after clicking on combo box
+- fixed popup position of combo boxes inside a container
+- fixed saving property values of type "enum" for subwidgets
+2.0: merged
+
+2007-01-23
+Table Designer
+- fixed crash on saving design with lookup columns defined
+2.0: merged
+Forms
+- fixed handling "align" property for image boxes when scaling is off
+2.0: merged
 
 2007-01-09
 Table Designer
@@ -187,6 +224,7 @@ KexiDB
  LEFT OUTER JOIN persons AS persons1 ON service.emploee=persons1.id 
  LEFT OUTER JOIN persons AS persons2 ON service.service_man=persons2.id;
 2.0: merged
+
 ~~~~~~~~~~~~~~~~ 1.1.1 bugfix release (with KOffice 1.6.1)  ~~~~~~~~~~~~~~~~
 Query Designer
 - propery initialize newly appended rows
