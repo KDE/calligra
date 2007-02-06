@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KSPREAD_INSPECTOR
@@ -40,8 +40,6 @@ private:
     Private * const d;
 };
 
-}
+} // namespace KSpread
 
 #endif // KSPREAD_INSPECTOR
-
- 

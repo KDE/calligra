@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "inspector.h"
@@ -49,13 +49,11 @@ public:
   Sheet* sheet;
 
   Q3ListView *cellView;
-  Q3ListView *formatView;
   Q3ListView *sheetView;
   Q3ListView *styleView;
   Q3ListView* depView;
 
   void handleCell();
-  void handleFormat();
   void handleSheet();
   void handleStyle();
   void handleDep();
@@ -120,36 +118,18 @@ void Inspector::Private::handleCell()
   new Q3ListViewItem( cellView, "Height", QString::number( cell.height() ) );
 }
 
-void Inspector::Private::handleFormat()
-{
-  formatView->clear();
-
-  new Q3ListViewItem( formatView, "Angle", QString::number( style.angle() ) );
-  new Q3ListViewItem( formatView, "Multirow", boolAsString( style.wrapText() ) );
-  new Q3ListViewItem( formatView, "Protected", boolAsString( !style.notProtected() ) );
-  new Q3ListViewItem( formatView, "Vertical Text", boolAsString( style.verticalText() ) );
-
-  new Q3ListViewItem( formatView, "Currency symbol", style.currency().symbol() );
-  new Q3ListViewItem( formatView, "Currency code", style.currency().code() );
-
-  Q3ListViewItem* flags = new Q3ListViewItem( formatView, "Flags" );
-  new Q3ListViewItem( flags, "Border (left)",
-                     boolAsString( style.hasAttribute(Style::LeftPen) ) );
-  new Q3ListViewItem( flags, "Border (right)",
-                     boolAsString( style.hasAttribute(Style::RightPen) ) );
-  new Q3ListViewItem( flags, "Border (top)",
-                     boolAsString( style.hasAttribute(Style::TopPen) ) );
-  new Q3ListViewItem( flags, "Border (bottom)",
-                     boolAsString( style.hasAttribute(Style::BottomPen) ) );
-
-  new Q3ListViewItem( formatView, "Border pen width (bottom)",
-                     QString::number( style.bottomBorderPen().width() ) );
-}
-
 void Inspector::Private::handleStyle() // direct style access
 {
   styleView->clear();
   const Style style = cell.style();
+
+  new Q3ListViewItem( styleView, "Angle", QString::number( style.angle() ) );
+  new Q3ListViewItem( styleView, "Multirow", boolAsString( style.wrapText() ) );
+  new Q3ListViewItem( styleView, "Protected", boolAsString( !style.notProtected() ) );
+  new Q3ListViewItem( styleView, "Vertical Text", boolAsString( style.verticalText() ) );
+
+  new Q3ListViewItem( styleView, "Currency symbol", style.currency().symbol() );
+  new Q3ListViewItem( styleView, "Currency code", style.currency().code() );
 
   Q3ListViewItem* flags = new Q3ListViewItem( styleView, "Flags" );
   new Q3ListViewItem( flags, "Border (left)",
@@ -219,16 +199,6 @@ Inspector::Inspector( const Cell& cell )
   d->cellView->addColumn( "Key", 150 );
   d->cellView->addColumn( "Value" );
 
-  QFrame* formatPage = new QFrame();
-  addPage(formatPage,  QString("Format") );
-  QVBoxLayout* formatLayout = new QVBoxLayout( formatPage );
-  formatLayout->setMargin(KDialog::marginHint());
-  formatLayout->setSpacing(KDialog::spacingHint());
-  d->formatView = new Q3ListView( formatPage );
-  formatLayout->addWidget( d->formatView );
-  d->formatView->addColumn( "Key", 150 );
-  d->formatView->addColumn( "Value" );
-
   QFrame* stylePage = new QFrame();
   addPage(stylePage, QString("Style") );
   QVBoxLayout* styleLayout = new QVBoxLayout( stylePage );
@@ -258,7 +228,6 @@ Inspector::Inspector( const Cell& cell )
   d->depView->addColumn( "Content" );
 
   d->handleCell();
-  d->handleFormat();
   d->handleSheet();
   d->handleStyle();
   d->handleDep();
