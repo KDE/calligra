@@ -658,6 +658,7 @@ bool Calendar::isChildOf( const Calendar *cal ) const
             return true;
         }
     }
+    return false;
 }
 
 void Calendar::setProject(Project *project) { 
