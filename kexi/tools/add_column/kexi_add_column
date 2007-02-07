@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 #   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 #
@@ -39,19 +39,22 @@ Example: to append a column 'photo' of type BLOB to the table 'cars', type
 }
 
 function exit_with_error {
-	rm "$temp_db"
+	rm -f "$temp_db"
+	echo $*
 	echo "Error."
 	exit 1
 }
 
+function check {
+	[ -n "$*" ] && exit_with_error "$*"
+}
+
+ksqlite="ksqlite -noheader"
 
 if [ $# -lt 4 ] ; then
 	usage
 	exit 0
 fi
-
-ksqlite="ksqlite -noheader"
-
 database_name=$1
 table_name=$2
 new_column_name=$3
@@ -76,13 +79,15 @@ case $new_column_type in
  *) echo "Unknown type name '$new_column_type'"; exit 1;;
 esac
 
-temp_db=`mktemp "$database_name"XXXXXXXX`
-cp $database_name $temp_db || exit_with_error
-echo "DROP TABLE '$table_name';" | $ksqlite "$temp_db" || exit_with_error
+temp_db=`mktemp "$database_name"XXXXXXXX` || exit_with_error
+cp "$database_name" "$temp_db" || exit_with_error
+msg=`echo "DROP TABLE '$table_name';" | $ksqlite "$temp_db"`
+check "$msg"
 
 # 1. Receate table with a new field appended
-echo ".schema '$table_name';" | $ksqlite "$database_name" | grep "^CREATE TABLE $table_name " | \
- sed -e "s/);/, $new_column_name $new_column_type);/g" | $ksqlite "$temp_db" || exit_with_error
+msg=`echo ".schema '$table_name';" | $ksqlite "$database_name" | grep "^CREATE TABLE $table_name " | \
+ sed -e "s/);/, $new_column_name $new_column_type);/g" | $ksqlite "$temp_db"`
+check "$msg"
 
 # 2.1. Get table's ID
 table_id=`echo "SELECT o_id FROM kexi__objects WHERE o_type=1 AND o_name='$table_name';" | \
@@ -92,11 +97,16 @@ table_id=`echo "SELECT o_id FROM kexi__objects WHERE o_type=1 AND o_name='$table
 order=`echo "SELECT MAX(f_order)+1 FROM kexi__fields WHERE t_id=$table_id;" | $ksqlite "$temp_db" || exit_with_error`
 
 # 2.3. Add the new column information to kexi__fields metadata table
-echo "INSERT INTO kexi__fields (t_id, f_type, f_name, f_length, f_precision, f_constraints, f_options, f_default, f_order, f_caption, f_help) VALUES ($table_id, $typenum, '$new_column_name', 0, 0, 0, 0, NULL, $order, '$new_column_caption', NULL);" | $ksqlite "$temp_db" || exit_with_error
+msg=`echo "INSERT INTO kexi__fields (t_id, f_type, f_name, f_length, f_precision, f_constraints, \
+ f_options, f_default, f_order, f_caption, f_help) \
+ VALUES ($table_id, $typenum, '$new_column_name', \
+ 0, 0, 0, 0, NULL, $order, '$new_column_caption', NULL);" | $ksqlite "$temp_db"`
+check "$msg"
 
 # 3. Copy the old data
-echo ".dump '$table_name';" | $ksqlite "$database_name" | grep -v "^CREATE TABLE " | \
- sed -e "s/\(^INSERT.*\));$/\\1, NULL);/g" | $ksqlite "$temp_db" || exit_with_error
+msg=`echo ".dump '$table_name';" | $ksqlite "$database_name" | grep -v "^CREATE TABLE " | \
+ sed -e "s/\(^INSERT.*\));$/\\1, NULL);/g" | $ksqlite "$temp_db"`
+check "$msg"
 
 # 4. Copy the original database file to .old file and replace the original with the new one
 cp "$database_name" "$database_name.old" || exit_with_error
