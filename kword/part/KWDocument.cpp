@@ -123,10 +123,18 @@ bool KWDocument::saveOasis(KoStore*, KoXmlWriter*) {
 KoView* KWDocument::createViewInstance(QWidget* parent) {
     KWView *view = new KWView(m_viewMode, this, parent);
     foreach(KWFrameSet *fs, m_frameSets) {
-        foreach(KWFrame *frame, fs->frames()) {
+        if(fs->frameCount() == 0)
+            continue;
+        foreach(KWFrame *frame, fs->frames())
             view->kwcanvas()->shapeManager()->add(frame->shape());
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if(tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet) {
+            KoSelection *selection = view->kwcanvas()->shapeManager()->selection();
+            selection->select(fs->frames().first()->shape());
+            KoToolManager::instance()->switchToolRequested(
+                    KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
         }
-    }
+   }
 
     return view;
 }
