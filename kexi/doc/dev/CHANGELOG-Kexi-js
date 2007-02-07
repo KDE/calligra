@@ -17,6 +17,12 @@ Legend:
 
 ~~~~~~~~~~~~~~~~ 1.1.2 bugfix release (with KOffice 1.6.2)  ~~~~~~~~~~~~~~~~
 
+2007-02-07
+KexiDB
+= fixed possible crash when running a query without primary key included
+   (encountered e.g. when a form contain static images)
+2.0: merged
+
 2007-02-06
 KexiDB
 - queries are supported as row source for lookup fields
