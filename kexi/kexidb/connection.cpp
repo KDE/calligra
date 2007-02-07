@@ -1376,7 +1376,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		OrderByColumnList automaticPKOrderBy;
 		const QueryColumnInfo::Vector fieldsExpanded( querySchema.fieldsExpanded() );
 		foreach (Q3ValueVector<int>::ConstIterator, it, pkeyFieldsOrder) {
-			if ((*it) >= fieldsExpanded.count()) {
+			if ((*it) >= (int)fieldsExpanded.count()) {
 				KexiDBWarn << "Connection::selectStatement(): ORDER BY: (*it) >= fieldsExpanded.count() - " 
 					<< (*it) << " >= " << fieldsExpanded.count() << endl;
 				continue;

@@ -445,7 +445,7 @@ GUIClient::GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient, c
     + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString())).toLatin1() )
  , KXMLGUIClient(win)
 {
-	if(!win->project()->final())
+	if(!win->project()->data()->userMode())
 		setXMLFile(QString::fromLatin1("kexi")+part->info()->objectName()
 			+"part"+(partInstanceClient?"inst":"")+"ui.rc");
 
