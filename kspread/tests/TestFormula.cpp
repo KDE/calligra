@@ -192,6 +192,9 @@ void TestFormula::testTokenizer()
 
   // empty parameter
   CHECK_TOKENIZE( "IF(A1;A2;)", "xococoo" );
+
+  // other strange behaviour
+  CHECK_TOKENIZE( "SUM(ABS(-1);ABS(-1))", "xoxooiooxooioo" );
 }
 
 void TestFormula::testConstant()
@@ -275,8 +278,14 @@ void TestFormula::testFunction()
   CHECK_EVAL ("SIN(0)", Value(0));
   CHECK_EVAL ("2+sin(\"2\"-\"2\")", Value(2));
   CHECK_EVAL ("\"1\"+sin(\"0\")", Value(1));
+
+  // other strange behaviour
+  CHECK_EVAL( "SUM(ABS( 1);ABS( 1))", Value(2) );
+  CHECK_EVAL( "SUM(ABS( 1);ABS(-1))", Value(2) );
+  CHECK_EVAL( "SUM(ABS(-1);ABS( 1))", Value(2) );
+  CHECK_EVAL( "SUM(ABS(-1);ABS(-1))", Value(2) );
 }
-  
+
 void TestFormula::testInlineArrays()
 {
 #ifdef KSPREAD_INLINE_ARRAYS
