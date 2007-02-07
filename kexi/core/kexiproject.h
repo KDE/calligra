@@ -240,11 +240,6 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 		KexiDB::Parser* sqlParser();
 
-		/*! \return true if the project is started in final mode */
-		bool final() const;
-
-		void setFinal(bool set);
-
 		/*! Shows dialog for creating new blank project,
 		 ans creates one. Dialog is not shown if option for automatic creation 
 		 is checked or Kexi::startupHandler().projectData() was provided from command line.

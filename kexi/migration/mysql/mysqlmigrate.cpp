@@ -249,7 +249,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 			MYSQL_ROW row;
 			const KexiDB::QueryColumnInfo::Vector fieldsExpanded( dstTable->query()->fieldsExpanded() );
 			while ((row = mysql_fetch_row(res)) != NULL) {
-				const int numFields = QMIN((int)fieldsExpanded.count(), mysql_num_fields(res));
+				const int numFields = QMIN((int)fieldsExpanded.count(), (int)mysql_num_fields(res));
 				QValueList<QVariant> vals;
 				unsigned long *lengths = mysql_fetch_lengths(res);
 				if (!lengths) {

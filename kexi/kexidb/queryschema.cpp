@@ -1532,7 +1532,6 @@ void QuerySchema::computeFieldsExpanded()
 			if (!boundField)
 				continue;
 			const QValueList<uint> visibleColumns( lookupFieldSchema->visibleColumns() );
-			bool ok = true;
 			Field *visibleColumn = 0;
 			// for single visible column, just add it as-is
 			if (visibleColumns.count() == 1) {
@@ -1588,7 +1587,6 @@ QValueVector<int> QuerySchema::pkeyFieldsOrder()
 	d->pkeyFieldsCount = 0;
 	for (uint i = 0; i<fCount; i++) {
 		QueryColumnInfo *fi = d->fieldsExpanded->at(i);
-		Field *fffffff = pkey->field(0);
 		const int fieldIndex = fi->field->table()==tbl ? pkey->indexOf(fi->field) : -1;
 		if (fieldIndex!=-1/* field found in PK */ 
 			&& d->pkeyFieldsOrder->at(fieldIndex)==-1 /* first time */)

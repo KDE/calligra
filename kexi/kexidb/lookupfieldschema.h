@@ -148,7 +148,8 @@ class KEXI_DB_EXPORT LookupFieldSchema
 		 If visibleColumns() multiple items, \a fieldsCount - 1 is returned. */
 		inline int visibleColumn(uint fieldsCount) const {
 			if (m_visibleColumns.count()==1)
-				return (m_visibleColumns.first() < fieldsCount) ? m_visibleColumns.first() : -1;
+				return (m_visibleColumns.first() < fieldsCount) 
+					? (int)m_visibleColumns.first() : -1;
 			if (m_visibleColumns.isEmpty())
 				return -1;
 			return fieldsCount - 1;

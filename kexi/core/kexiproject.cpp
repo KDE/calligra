@@ -62,7 +62,6 @@ class KexiProject::Private
 		 , sqlParser(0)
 		 , versionMajor(0)
 		 , versionMinor(0)
-		 , final(false)
 		{
 			itemDictsCache.setAutoDelete(true);
 			unstoredItems.setAutoDelete(true);
@@ -88,7 +87,6 @@ class KexiProject::Private
 
 		int versionMajor;
 		int versionMinor;
-		bool final : 1;
 };
 
 //---------------------------
@@ -151,16 +149,6 @@ KexiDB::Connection *KexiProject::dbConnection() const
 KexiProjectData* KexiProject::data() const
 {
 	return d->data;
-}
-
-bool KexiProject::final() const
-{
-	return d->final;
-}
-
-void KexiProject::setFinal(bool set)
-{
-	d->final = set;
 }
 
 int KexiProject::versionMajor() const
