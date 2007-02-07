@@ -193,7 +193,7 @@ void TestFormula::testTokenizer()
   // empty parameter
   CHECK_TOKENIZE( "IF(A1;A2;)", "xococoo" );
 
-  // other strange behaviour
+  // function cascade
   CHECK_TOKENIZE( "SUM(ABS(-1);ABS(-1))", "xoxooiooxooioo" );
 }
 
@@ -279,11 +279,12 @@ void TestFormula::testFunction()
   CHECK_EVAL ("2+sin(\"2\"-\"2\")", Value(2));
   CHECK_EVAL ("\"1\"+sin(\"0\")", Value(1));
 
-  // other strange behaviour
+  // function cascades
   CHECK_EVAL( "SUM(ABS( 1);ABS( 1))", Value(2) );
   CHECK_EVAL( "SUM(ABS( 1);ABS(-1))", Value(2) );
   CHECK_EVAL( "SUM(ABS(-1);ABS( 1))", Value(2) );
   CHECK_EVAL( "SUM(ABS(-1);ABS(-1))", Value(2) );
+  CHECK_EVAL( "SUM(SUM(-2;-2;-2);SUM(-2;-2;-2;-2);SUM(-2;-2;-2;-2;-2))", Value(-24) );
 }
 
 void TestFormula::testInlineArrays()

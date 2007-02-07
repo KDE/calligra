@@ -1035,6 +1035,7 @@ void Formula::compile( const Tokens& tokens ) const
             syntaxStack.pop();
             syntaxStack.push( arg );
             d->codes.append( Opcode( Opcode::Function, argCount ) );
+            // FIXME Stefan: breaks on function cascades
             argCount = argStack.empty() ? 0 : argStack.pop();
           }
         }
