@@ -124,7 +124,7 @@ void TestEngineeringFunctions::testIMARGUMENT()
 void TestEngineeringFunctions::testIMCONJUGATE()
 {
     CHECK_EVAL( "=IMABS(IMSUB(IMCONJUGATE(COMPLEX( 3; 4));COMPLEX( 3;-4)))", 0.0 );
-    CHECK_EVAL( "=IMABS(IMSUB(IMCONJUGATE(COMPLEX(-3;-4));COMPLEX(-3; 4)))", 0.0 );
+    CHECK_EVAL( "=IMABS(IMSUB(IMCONJUGATE(COMPLEX(-3;-4));COMPLEX(-3;4)))", 0.0 );
 }
 
 void TestEngineeringFunctions::testIMCOS()

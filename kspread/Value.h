@@ -119,7 +119,7 @@ class KSPREAD_EXPORT Value
     explicit Value( int i );
 
     /**
-     * Create a floating-point value.
+     * Creates a floating-point value.
      */
     explicit Value( double f );
 
@@ -129,10 +129,13 @@ class KSPREAD_EXPORT Value
     explicit Value( const complex<double>& c );
 
     /**
-     * Create a string value.
+     * Creates a string value.
      */
     explicit Value( const QString& s );
 
+    /**
+     * Creates a string value.
+     */
     explicit Value (const char *s);
 
     /**
@@ -141,7 +144,7 @@ class KSPREAD_EXPORT Value
     explicit Value( const ValueStorage& array );
 
     /**
-     * Create a floating-point value from date/time.
+     * Creates a floating-point value from date/time.
      *
      * Internally date/time is represented as serial-number, i.e number of
      * elapsed day since reference date. Day 61 is defined as March 1, 1900.
@@ -149,13 +152,13 @@ class KSPREAD_EXPORT Value
     Value( const QDateTime& dt, const Doc* doc );
 
     /**
-     * Create a floating-point value from time.
+     * Creates a floating-point value from time.
      * See also note above.
      */
     Value( const QTime& time, const Doc* doc );
 
     /**
-     * Create a floating-point value from date.
+     * Creates a floating-point value from date.
      * See also note above.
      */
     Value( const QDate& date, const Doc* doc );
@@ -165,8 +168,15 @@ class KSPREAD_EXPORT Value
      */
     Type type() const;
 
-    /** Returns the format of the value (i.e. how should it be interpreted) */
+    /**
+     * Returns the format of the value, i.e. how should it be interpreted.
+     */
     Format format() const;
+
+    /**
+     * Sets format information for this value.
+     */
+    void setFormat( Format fmt );
 
     /**
      * Returns true if empty.
@@ -174,17 +184,17 @@ class KSPREAD_EXPORT Value
     bool isEmpty() const { return type() == Empty; }
 
     /**
-     * Returns true if the type of this value is Boolean.
+     * Returns true, if the type of this value is Boolean.
      */
     bool isBoolean() const { return type() == Boolean; }
 
     /**
-     * Returns true if the type of this value is integer.
+     * Returns true, if the type of this value is integer.
      */
     bool isInteger() const { return type() == Integer; }
 
     /**
-     * Returns true if the type of this value is floating-point.
+     * Returns true, if the type of this value is floating-point.
      */
     bool isFloat() const { return type() == Float; }
 
@@ -194,23 +204,23 @@ class KSPREAD_EXPORT Value
     bool isComplex() const { return type() == Complex; }
 
     /**
-     * Returns true if the type of this value is either
-     * integer or floating-point.
+     * Returns true, if the type of this value is either
+     * integer, floating-point or complex number.
      */
     bool isNumber() const { return (type() == Integer) || (type() == Float) || (type() == Complex); }
 
     /**
-     * Returns true if the type of this value is string.
+     * Returns true, if the type of this value is string.
      */
     bool isString() const { return type() == String; }
 
     /**
-     * Returns true if the type of this value is array.
+     * Returns true, if the type of this value is array.
      */
     bool isArray() const { return type() == Array; }
 
     /**
-     * Returns true if this value holds error information.
+     * Returns true, if this value holds error information.
      */
     bool isError() const { return type() == Error; }
 
@@ -218,9 +228,6 @@ class KSPREAD_EXPORT Value
      * Sets this value to hold error message.
      */
     void setError( const QString& msg );
-
-    /** Sets format information for this value. */
-    void setFormat (Format fmt);
 
     /**
      * Returns the boolean value of this value.
@@ -273,12 +280,12 @@ class KSPREAD_EXPORT Value
     QTime asTime( const Doc* doc ) const;
 
     /**
-     * Return an element in the array value.
+     * Returns an element in the array value.
      */
     Value element( unsigned column, unsigned row ) const;
 
     /**
-     * Return an array element given by its index denoting its position in the
+     * Returns an array element given by its index denoting its position in the
      * row-wise sorted list of non-empty values.
      * Usable to iterate over the array.
      * \see count()
@@ -292,13 +299,13 @@ class KSPREAD_EXPORT Value
 
     /**
      * If this value is an array, return the number of columns.
-     * Returns 1 if isArray() returns false.
+     * Returns 1, if isArray() returns false.
      */
     unsigned columns() const;
 
     /**
      * If this value is an array, return the number of rows.
-     * Returns 1 if isArray() returns false.
+     * Returns 1, if isArray() returns false.
      */
     unsigned rows() const;
 

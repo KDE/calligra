@@ -36,10 +36,6 @@
 #define M_LN2l 0.6931471805599453094172321214581766L
 #endif
 
-#ifndef M_LN10l
-#define M_LN10l 2.3025850929940456840179914546843642L
-#endif
-
 using namespace KSpread;
 
 // prototypes (sort alphabetically)
@@ -1017,8 +1013,7 @@ Value func_imln (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: IMLOG2
 Value func_imlog2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    const complex<double> z = calc->conv()->asComplex( args[0] ).asComplex();
-    return Value( std::log( z ) / std::log( complex<double>( 2.0, 0.0 ) ) );
+    return Value( std::log( calc->conv()->asComplex( args[0] ).asComplex() ) / static_cast<double>( M_LN2l ) );
 }
 
 // Function: IMLOG10

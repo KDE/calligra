@@ -98,7 +98,7 @@ public:
     Value asTime( const Value& value ) const;
 
 private:
-   const ValueParser* m_parser;
+    const ValueParser* m_parser;
 };
 
 }  //KSpread namespace

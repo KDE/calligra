@@ -198,13 +198,6 @@ double ValueParser::readImaginary( const QString& str, bool* ok ) const
         return 0.0;
     }
 
-    // just the imaginary number?
-    if ( str.length() == 1 && ( str[0] == 'i' || str[0] == 'j' ) )
-    {
-        if ( ok ) *ok = true;
-        return 1.0;
-    }
-
     double imag = 0.0;
     if ( str[0] == 'i' || str[0] == 'j' )
         imag = readNumber( str.mid( 1 ), ok );
