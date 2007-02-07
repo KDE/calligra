@@ -46,8 +46,9 @@ bcwpPoints.push_back(QPointF(600,40));
 
 void ChartWidget::paintEvent(QPaintEvent * ev)
 {
+this->updateGeometry();
 QPainter painter(this);
-kDebug() << "Print it PLease :D";
+kDebug() << "Print it PLease :D UPDATE"<<maximumHeight()<<" UPDATE :"<<maximumWidth()<<" UPDATE PAINTEVENT !!!!!!!!!!!!!";
 /* CHANGE COLORS !! */
 painter.setPen(QColor(Qt::blue));
 
@@ -87,6 +88,7 @@ if(is_acwp_draw==true)
 	
 
 }// end PaintEvent();
+
 
 void ChartWidget::drawBCWP(){
 	is_bcwp_draw=true;
@@ -135,7 +137,7 @@ void ChartWidget::setPointsACPW(QVector<QPointF> vec)
 
 const int ChartWidget::getMaximumWidth()
 {
-	return(this->maximumWidth());
+	return(baseSize().width() + sizeIncrement().width());
 }
 const int ChartWidget::getMaximumHeight()
 {

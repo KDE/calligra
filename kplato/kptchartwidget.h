@@ -46,6 +46,7 @@ public:
     ChartWidget(QWidget *parent=0, const char *name=0);
 
     void paintEvent(QPaintEvent * ev);
+
     void drawBCWP();
     void undrawBCWP();
     void drawBCWS();

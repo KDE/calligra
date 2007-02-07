@@ -46,11 +46,20 @@ is_bcwp_draw=false;
 is_bcws_draw=false;
 is_acwp_draw=false;
 }
-    
+   
 ChartPanel::~ChartPanel()
 {
 	delete chart;
 }
+
+void ChartPanel::resizeEvent(QResizeEvent* ev)
+{
+	kDebug()<<"RESIZAGEEEEEEEEEEEEEEEE"<<(ev->size()).width()<<"    "<<(ev->size()).height();
+	chart->setMaximumWidth((ev->size()).width());
+	chart->setMaximumHeight((ev->size()).height());
+}
+
+
 
 void ChartPanel::slotBCPW()
 {
@@ -64,7 +73,6 @@ void ChartPanel::slotBCPW()
 		chart->undrawBCWP();
 		is_bcwp_draw=false;
 	}
-
 }
 void ChartPanel::slotBCPS()
 {

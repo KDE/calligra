@@ -22,7 +22,7 @@
 
 #include "ui_kptchartpanelbase.h"
 #include "kptchartwidget.h"
-
+#include <qevent.h>
 #include <QList>
 #include <QHash>
 
@@ -62,6 +62,7 @@ bool is_acwp_draw;
 public:
     ChartPanel(QWidget *parent=0);
     ~ChartPanel();    
+void resizeEvent(QResizeEvent* ev);
 public slots:
     void slotBCPW();
     void slotBCPS();
