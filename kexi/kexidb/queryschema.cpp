@@ -1335,7 +1335,10 @@ void QuerySchema::computeFieldsExpanded()
 				const Q3ValueList<uint> visibleColumns( lookupFieldSchema->visibleColumns() );
 				bool ok = true;
 				// all indices in visibleColumns should be in [0..lookupQueryFieldsExpanded.size()-1]
-				foreach (Q3ValueList<uint>::ConstIterator, visibleColumnsIt, visibleColumns) {
+				for (Q3ValueList<uint>::ConstIterator
+					visibleColumnsIt(visibleColumns.constBegin());
+					visibleColumnsIt!=visibleColumns.constEnd(); ++visibleColumnsIt)
+				{
 					if ((*visibleColumnsIt) >= lookupQueryFieldsExpanded.count()) {
 						ok = false;
 						break;

@@ -209,7 +209,9 @@ FieldList* FieldList::subList(const Q3ValueList<uint>& list)
 {
 	Field *f;
 	FieldList *fl = new FieldList(false);
-	foreach(Q3ValueList<uint>::ConstIterator, it, list) {
+	for (Q3ValueList<uint>::ConstIterator it(list.constBegin());
+		it!=list.constEnd(); ++it)
+	{
 		f = field(*it);
 		if (!f) {
 			KexiDBWarn << QString("FieldList::subList() could not find field at position %1").arg(*it) << endl;
@@ -241,10 +243,9 @@ QString FieldList::sqlFieldsList(Field::List* list, Driver *driver,
 		return QString();
 	QString result;
 	result.reserve(256);
+	bool start = true;
 	const QString tableAliasAndDot( tableAlias.isEmpty() ? QString() : (tableAlias + ".") );
 	for (Field::ListIterator it( *list ); it.current(); ++it) {
-	bool start = true;
-	for (; it.current(); ++it) {
 		if (!start)
 			result += separator;
 		else

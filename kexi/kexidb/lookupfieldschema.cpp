@@ -138,10 +138,10 @@ QString LookupFieldSchema::debugString() const
 	}
 
 	QString visibleColumnsString;
-	foreach (Q3ValueList<uint>::ConstIterator, it, m_visibleColumns) {
+	foreach (uint visibleColumn, m_visibleColumns) {
 		if (!visibleColumnsString.isEmpty())
 			visibleColumnsString.append(";");
-		visibleColumnsString.append(QString::number(*it));
+		visibleColumnsString.append(QString::number(visibleColumn));
 	}
 
 	return QString("LookupFieldSchema( %1\n"
@@ -295,10 +295,10 @@ void LookupFieldSchema::saveToDom(LookupFieldSchema& lookupSchema, QDomDocument&
 	if (!visibleColumns.isEmpty()) {
 		QDomElement visibleColumnEl( doc.createElement("visible-column") );
 		lookupColumnEl.appendChild( visibleColumnEl );
-		foreach (Q3ValueList<uint>::ConstIterator, it, visibleColumns) {
+		foreach (uint visibleColumn, visibleColumns) {
 			QDomElement numberEl( doc.createElement("number") );
 			visibleColumnEl.appendChild( numberEl );
-			numberEl.appendChild( doc.createTextNode( QString::number(*it) ) );
+			numberEl.appendChild( doc.createTextNode( QString::number(visibleColumn) ) );
 		}
 	}
 
@@ -306,10 +306,10 @@ void LookupFieldSchema::saveToDom(LookupFieldSchema& lookupSchema, QDomDocument&
 	if (!columnWidths.isEmpty()) {
 		QDomElement columnWidthsEl( doc.createElement("column-widths") );
 		lookupColumnEl.appendChild( columnWidthsEl );
-		for (Q3ValueList<int>::ConstIterator it = columnWidths.constBegin(); it!=columnWidths.constEnd(); ++it) {
+		foreach (int columnWidth, columnWidths) {
 			QDomElement columnWidthEl( doc.createElement("number") );
 			columnWidthsEl.appendChild( columnWidthEl );
-			columnWidthEl.appendChild( doc.createTextNode( QString::number(*it) ) );
+			columnWidthEl.appendChild( doc.createTextNode( QString::number(columnWidth) ) );
 		}
 	}
 
@@ -330,10 +330,13 @@ void LookupFieldSchema::saveToDom(LookupFieldSchema& lookupSchema, QDomDocument&
 
 //static
 bool LookupFieldSchema::setProperty( 
-	LookupFieldSchema& lookup, const Q3CString& propertyName, const QVariant& value )
+	LookupFieldSchema& lookup, const QByteArray& propertyName, const QVariant& value )
 {
 	bool ok;
-	if ("rowSource" == propertyName || "rowSourceType" == propertyName || "rowSourceValues" == propertyName) {
+	if ("rowSource" == propertyName 
+		|| "rowSourceType" == propertyName 
+		|| "rowSourceValues" == propertyName)
+	{
 		LookupFieldSchema::RowSource rowSource( lookup.rowSource() );
 		if ("rowSource" == propertyName)
 			rowSource.setName(value.toString());
@@ -360,8 +363,8 @@ bool LookupFieldSchema::setProperty(
 			variantList = value.toList();
 		}
 		Q3ValueList<uint> visibleColumns;
-		foreach (Q3ValueList<QVariant>::ConstIterator, it, variantList) {
-			const uint ival = (*it).toUInt(&ok);
+		foreach (const QVariant& variant, variantList) {
+			const uint ival = variant.toUInt(&ok);
 			if (!ok)
 				return false;
 			visibleColumns.append( ival );
@@ -371,8 +374,8 @@ bool LookupFieldSchema::setProperty(
 	else if ("columnWidths" == propertyName ) {
 		Q3ValueList<QVariant> variantList( value.toList() );
 		Q3ValueList<int> widths;
-		foreach (Q3ValueList<QVariant>::ConstIterator, it, variantList) {
-			const uint ival = (*it).toInt(&ok);
+		foreach (const QVariant& variant, variantList) {
+			const uint ival = variant.toInt(&ok);
 			if (!ok)
 				return false;
 			widths.append( ival );

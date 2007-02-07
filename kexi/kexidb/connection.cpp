@@ -1102,7 +1102,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	uint internalUniqueTableAliasNumber = 0; //used to build internalUniqueTableAliases
 	uint internalUniqueQueryAliasNumber = 0; //used to build internalUniqueQueryAliases
 	number = 0;
-	QPtrList<QuerySchema> subqueries_for_lookup_data; // subqueries will be added to FROM section
+	QList<QuerySchema*> subqueries_for_lookup_data; // subqueries will be added to FROM section
 	QString kexidb_subquery_prefix("__kexidb_subquery_");
 	for (Field::ListIterator it = querySchema.fieldsIterator(); (f = it.current()); ++it, number++) {
 		if (querySchema.isColumnVisible(number)) {
@@ -1232,7 +1232,10 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 						s_additional_fields += QString::fromLatin1(", ");
 					const Q3ValueList<uint> visibleColumns( lookupFieldSchema->visibleColumns() );
 					QString expression;
-					foreach (Q3ValueList<uint>::ConstIterator, visibleColumnsIt, visibleColumns) {
+					for (Q3ValueList<uint>::ConstIterator visibleColumnsIt 
+						= visibleColumns.constBegin(); 
+						visibleColumnsIt!=visibleColumns.constEnd(); ++visibleColumnsIt)
+					{
 //! @todo Add lookup schema option for separator other than ' ' or even option for placeholders like "Name ? ?"
 //! @todo Add possibility for joining the values at client side. 
 						if (fieldsExpanded.count() <= (*visibleColumnsIt)) {
@@ -1298,15 +1301,13 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		}
 		// add subqueries for lookup data
 		uint subqueries_for_lookup_data_counter = 0;
-		for (Q3PtrListIterator<QuerySchema> it(subqueries_for_lookup_data); 
-			subqueries_for_lookup_data.current();	++it, subqueries_for_lookup_data_counter++)
-		{
+		foreach (QuerySchema* subQuery, subqueries_for_lookup_data) {
 			if (!s_from.isEmpty())
 				s_from += QString::fromLatin1(", ");
 			s_from += QString::fromLatin1("(");
-			s_from += selectStatement( *it.current(), params, options );
+			s_from += selectStatement( *subQuery, params, options );
 			s_from += QString::fromLatin1(") AS %1%2")
-				.arg(kexidb_subquery_prefix).arg(subqueries_for_lookup_data_counter);
+				.arg(kexidb_subquery_prefix).arg(subqueries_for_lookup_data_counter++);
 		}
 		sql += s_from;
 	}
@@ -1375,7 +1376,9 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		//add automatic ORDER BY if there is no explicity defined (especially helps when there are complex JOINs)
 		OrderByColumnList automaticPKOrderBy;
 		const QueryColumnInfo::Vector fieldsExpanded( querySchema.fieldsExpanded() );
-		foreach (Q3ValueVector<int>::ConstIterator, it, pkeyFieldsOrder) {
+		for (Q3ValueVector<int>::ConstIterator it = pkeyFieldsOrder.constBegin();
+			it!=pkeyFieldsOrder.constEnd(); ++it)
+		{
 			if ((*it) >= (int)fieldsExpanded.count()) {
 				KexiDBWarn << "Connection::selectStatement(): ORDER BY: (*it) >= fieldsExpanded.count() - " 
 					<< (*it) << " >= " << fieldsExpanded.count() << endl;

@@ -218,7 +218,8 @@ class KEXI_DB_EXPORT LookupFieldSchema
 		/*! Sets property of name \a propertyName and value \a value for the lookup schema \a lookup
 		 \return true on successful set and false on failure because of invalid value or invalid property name. */
 		static bool setProperty( 
-			LookupFieldSchema& lookup, const Q3CString& propertyName, const QVariant& value );
+			LookupFieldSchema& lookup, const QByteArray& propertyName, 
+			const QVariant& value );
 
 	protected:
 		RowSource m_rowSource;
