@@ -1379,6 +1379,8 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		for (Q3ValueVector<int>::ConstIterator it = pkeyFieldsOrder.constBegin();
 			it!=pkeyFieldsOrder.constEnd(); ++it)
 		{
+			if ((*it) < 0) // no field mentioned in this query
+				continue;
 			if ((*it) >= (int)fieldsExpanded.count()) {
 				KexiDBWarn << "Connection::selectStatement(): ORDER BY: (*it) >= fieldsExpanded.count() - " 
 					<< (*it) << " >= " << fieldsExpanded.count() << endl;
@@ -3193,7 +3195,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			m_driver->valueToSQL(it.key()->field, it.value()));
 	}
 	if (pkey) {
-		Q3ValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
+		const Q3ValueVector<int> pkeyFieldsOrder( query.pkeyFieldsOrder() );
 		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
@@ -3287,7 +3289,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			return false;
 		}
 		if (pkey) {
-			Q3ValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
+			const Q3ValueVector<int> pkeyFieldsOrder( query.pkeyFieldsOrder() );
 //			KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 			if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 				KexiDBWarn << "NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
@@ -3414,7 +3416,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 	sqlwhere.reserve(1024);
 
 	if (pkey) {
-		Q3ValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
+		const Q3ValueVector<int> pkeyFieldsOrder( query.pkeyFieldsOrder() );
 		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
