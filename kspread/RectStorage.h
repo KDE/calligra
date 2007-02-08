@@ -395,12 +395,12 @@ void RectStorage<T>::regionChanged( const QRect& rect )
 }
 
 template<typename T>
-void RectStorage<T>::invalidateCache( const QRect& rect )
+void RectStorage<T>::invalidateCache( const QRect& invRect )
 {
-//     kDebug(36006) << "StyleStorage: Invalidating " << rect << endl;
-    const QRegion region = m_cachedArea.intersected( rect );
-    m_cachedArea = m_cachedArea.subtracted( rect );
-    foreach ( const QRect& rect, region.rects() )
+//     kDebug(36006) << "StyleStorage: Invalidating " << invRect << endl;
+    const QVector<QRect> rects = m_cachedArea.intersected( invRect ).rects();
+    m_cachedArea = m_cachedArea.subtracted( invRect );
+    foreach ( const QRect& rect, rects )
     {
         for ( int col = rect.left(); col <= rect.right(); ++col )
         {

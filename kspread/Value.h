@@ -52,7 +52,7 @@ class KSPREAD_EXPORT Value
 
   public:
 
-    typedef enum {
+    enum Type {
       Empty,
       Boolean,
       Integer,
@@ -62,9 +62,9 @@ class KSPREAD_EXPORT Value
       Array,
       CellRange, // not used yet
       Error
-    } Type;
+    };
 
-    typedef enum {
+    enum Format {
       fmt_None,
       fmt_Boolean,
       fmt_Number,
@@ -74,7 +74,7 @@ class KSPREAD_EXPORT Value
       fmt_Date,
       fmt_Time,
       fmt_String
-    } Format;
+    };
     /**
      * Creates an empty value, i.e holds nothing.
      */
