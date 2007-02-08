@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-#include <QGridLayout>
+#include <QVBoxLayout>
 
 KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     : QDockWidget( parent )
@@ -31,13 +31,20 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     setWindowTitle( i18n( "Style Preview" ) );
 
     QWidget *mainWidget = new QWidget( this );
-    QGridLayout* layout = new QGridLayout( mainWidget );
+    QVBoxLayout * layout = new QVBoxLayout( mainWidget );
 
     m_preview = new VStrokeFillPreview( mainWidget );
-    layout->addWidget( m_preview, 0, 0 );
+    layout->addWidget( m_preview );
 
-    //m_buttons = new VTypeButtonBox(0,0);
-    //layout->addWidget( m_buttons, 1, 0 );
+    m_buttons = new VTypeButtonBox( mainWidget );
+    layout->addWidget( m_buttons );
+
+    layout->addStretch( 1 );
+    layout->setMargin( 1 );
+    layout->setSpacing( 1 );
+
+    connect( m_preview, SIGNAL(fillSelected()), m_buttons, SLOT(setFill()) );
+    connect( m_preview, SIGNAL(strokeSelected()), m_buttons, SLOT(setStroke()) );
 
     setWidget( mainWidget );
 }

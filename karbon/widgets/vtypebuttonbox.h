@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
+   Copyright (C) 2003 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,36 +21,33 @@
 #ifndef __VTYPEBUTTONBOX_H__
 #define __VTYPEBUTTONBOX_H__
 
-#include <Q3HButtonGroup>
+#include <QGroupBox>
 
-class KarbonPart;
-
-class VTypeButtonBox : public Q3HButtonGroup
+class VTypeButtonBox : public QGroupBox
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	enum buttonType {
-		none     = 0,
-		solid    = 1,
-		gradient = 2,
-		pattern  = 3
- 	};
+    enum ButtonType {
+        None     = 0,
+        Solid    = 1,
+        Gradient = 2,
+        Pattern  = 3
+    };
 
-	VTypeButtonBox( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
-	bool isStrokeManipulator() { return m_isStrokeManipulator; }
+    VTypeButtonBox( QWidget* parent = 0L );
+    bool isStrokeManipulator() const;
 
 public slots:
-	void slotButtonPressed( int id );
-	void setFill();
-	void setStroke();
+    void slotButtonPressed( int id );
+    void setFill();
+    void setStroke();
 
 private:
-	KarbonPart  *m_part;
-	bool         m_isStrokeManipulator;
+    void manipulateFills( int id );
+    void manipulateStrokes( int id );
 
-	void manipulateFills( int id );
-	void manipulateStrokes( int id );
+    bool m_isStrokeManipulator; ///< are we manipulating stroke or fill ?
 };
 
 #endif

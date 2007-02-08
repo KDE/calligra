@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
+   Copyright (C) 2003 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+   Copyright (C) 2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -206,123 +208,149 @@ static const char* const buttonpattern[]={
 #include <qpixmap.h>
 #include <qtoolbutton.h>
 #include <QToolTip>
+#include <QButtonGroup>
+#include <QGridLayout>
 
 #include <klocale.h>
 
-#include "karbon_part.h"
-#include "vfillcmd.h"
-#include "vselection.h"
-#include "vstrokecmd.h"
+#include <KoCanvasController.h>
+#include <KoToolManager.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+#include <KoShapeBackgroundCommand.h>
+#include <KoShapeBorderCommand.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoShapeBorderModel.h>
+#include <KoLineBorder.h>
+#include <KoColor.h>
 
+#include "karbon_part.h"
 #include "vtypebuttonbox.h"
 
-VTypeButtonBox::VTypeButtonBox( KarbonPart *part, QWidget* parent, const char* name )
-	: Q3HButtonGroup( parent, name ),
-	  m_part( part ), m_isStrokeManipulator( false )
+VTypeButtonBox::VTypeButtonBox( QWidget* parent )
+    : QGroupBox( parent ), m_isStrokeManipulator( false )
 {
-	setMaximumWidth( parent->width() - 2 );
+    QGridLayout * layout = new QGridLayout( this );
+    QButtonGroup * group = new QButtonGroup( this );
 
-	// The button for no fill
-	QToolButton* button = new QToolButton( this );
-	button->setIcon( QPixmap( (const char **) buttonnone ) );
-	button->setMaximumWidth( 14 );
-	button->setMaximumHeight( 14 );
-	button->setToolTip( i18n( "None" ) );
-	insert( button, none );
+    // The button for no fill
+    QToolButton* button = new QToolButton( this );
+    button->setIcon( QPixmap( (const char **) buttonnone ) );
+    button->setMinimumSize( 14, 14 );
+    button->setToolTip( i18n( "None" ) );
+    group->addButton( button, None );
+    layout->addWidget( button, 0, 0 );
 
-	// The button for solid fill
-	button = new QToolButton( this );
-	button->setIcon( QPixmap( (const char **) buttonsolid ) );
-	button->setMaximumWidth( 14 );
-	button->setMaximumHeight( 14 );
-	button->setToolTip( i18n( "Solid" ) );
-	insert( button, solid );
+    // The button for solid fill
+    button = new QToolButton( this );
+    button->setIcon( QPixmap( (const char **) buttonsolid ) );
+    button->setMinimumSize( 14, 14 );
+    button->setToolTip( i18n( "Solid" ) );
+    group->addButton( button, Solid );
+    layout->addWidget( button, 0, 1 );
 
-	// The button for gradient fill
-	button = new QToolButton( this );
-	button->setIcon( QPixmap( (const char **) buttongradient ) );
-	button->setMaximumWidth( 14 );
-	button->setMaximumHeight( 14 );
-	button->setToolTip( i18n( "Gradient" ) );
-	insert( button, gradient );
+    // The button for gradient fill
+    button = new QToolButton( this );
+    button->setIcon( QPixmap( (const char **) buttongradient ) );
+    button->setMinimumSize( 14, 14 );
+    button->setToolTip( i18n( "Gradient" ) );
+    group->addButton( button, Gradient );
+    layout->addWidget( button, 1, 0 );
 
-	// The button for pattern fill
-	button = new QToolButton( this );
-	button->setIcon( QPixmap( (const char **) buttonpattern ) );
-	button->setMaximumWidth( 14 );
-	button->setMaximumHeight( 14 );
-	button->setToolTip( i18n( "Pattern" ) );
-	insert( button, pattern );
+    // The button for pattern fill
+    button = new QToolButton( this );
+    button->setIcon( QPixmap( (const char **) buttonpattern ) );
+    button->setMinimumSize( 14, 14 );
+    button->setToolTip( i18n( "Pattern" ) );
+    group->addButton( button, Pattern );
+    layout->addWidget( button, 1, 1 );
 
-	setInsideMargin( 1 );
-	setInsideSpacing( 1 );
-	connect( this, SIGNAL( clicked( int ) ),
-			 this, SLOT( slotButtonPressed( int ) ) );
+    layout->setMargin( 1 );
+    layout->setSpacing( 1 );
+    layout->setColumnStretch( 0, 1 );
+    layout->setColumnStretch( 1, 1 );
+
+    connect( group, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonPressed( int ) ) );
 }
 
-void
-VTypeButtonBox::slotButtonPressed( int id )
+void VTypeButtonBox::slotButtonPressed( int id )
 {
-	if( m_part && m_part->document().selection()->objects().count() > 0 ) {
-		if ( m_isStrokeManipulator )
-			manipulateStrokes( id );
-		else
-			manipulateFills( id );
-	}
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if( ! selection || ! selection->count() )
+        return;
+
+    if ( m_isStrokeManipulator )
+        manipulateStrokes( id );
+    else
+        manipulateFills( id );
 }
 
-void
-VTypeButtonBox::setStroke()
+void VTypeButtonBox::setStroke()
 {
-	m_isStrokeManipulator = true;
+    m_isStrokeManipulator = true;
 }
 
-void
-VTypeButtonBox::setFill()
+void VTypeButtonBox::setFill()
 {
-	m_isStrokeManipulator = false;
+    m_isStrokeManipulator = false;
 }
 
-void
-VTypeButtonBox::manipulateFills( int id )
+bool VTypeButtonBox::isStrokeManipulator() const
 {
-	VFill m_fill;
-	m_fill = *m_part->document().selection()->objects().getFirst()->fill();
-	switch( id ){
-	case none:
-		m_fill.setType( VFill::none );
-		break;
-	case solid:
-		m_fill.setType( VFill::solid );
-		break;
-	case gradient:
-		m_fill.setType( VFill::grad );
-		break;
-	case pattern:
-		m_fill.setType( VFill::patt );
-	}
-	m_part->addCommand( new VFillCmd( &m_part->document(), m_fill ), true );
+    return m_isStrokeManipulator;
 }
 
-void
-VTypeButtonBox::manipulateStrokes( int id )
+void VTypeButtonBox::manipulateFills( int id )
 {
-	VStroke m_stroke;
-	m_stroke = *m_part->document().selection()->objects().getFirst()->stroke();
-	switch( id ){
-	case none:
-		m_stroke.setType( VStroke::none );
-		break;
-	case solid:
-		m_stroke.setType( VStroke::solid );
-		break;
-	case gradient:
-		m_stroke.setType( VStroke::grad );
-		break;
-	case pattern:
-		m_stroke.setType( VStroke::patt );
-	}
-	m_part->addCommand( new VStrokeCmd( &m_part->document(), &m_stroke ), true );
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+
+    // TODO get the actual background from the ResourceProvider
+    QBrush fill;
+
+    switch( id )
+    {
+        case None:
+            fill = QBrush();
+            break;
+        case Solid:
+            fill = QBrush( canvasController->canvas()->resourceProvider()->backgroundColor().toQColor() );
+            break;
+        case Gradient:
+            //m_fill.setType( VFill::grad );
+            break;
+        case Pattern:
+            //m_fill.setType( VFill::patt );
+            break;
+    }
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    canvasController->canvas()->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), fill ) );
+}
+
+void VTypeButtonBox::manipulateStrokes( int id )
+{
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    // TODO get the actual border stroke from the ResourceProvider
+    KoShapeBorderModel * border = 0;
+    switch( id )
+    {
+        case None:
+        break;
+        case Solid:
+        {
+            QColor color = canvasController->canvas()->resourceProvider()->backgroundColor().toQColor();
+            border = new KoLineBorder( 1.0, color );
+            break;
+        }
+        case Gradient:
+            //m_stroke.setType( VStroke::grad );
+            break;
+        case Pattern:
+            //m_stroke.setType( VStroke::patt );
+            break;
+    }
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    canvasController->canvas()->addCommand( new KoShapeBorderCommand( selection->selectedShapes(), border ) );
 }
 
 #include "vtypebuttonbox.moc"
