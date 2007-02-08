@@ -457,6 +457,21 @@
     </Function>
 
     <Function>
+        <Name>IMCOSH</Name>
+        <Type>String</Type>
+        <Parameter>
+            <Comment>Complex number</Comment>
+            <Type>String</Type>
+        </Parameter>
+        <Help>
+            <Text>The IMCOSH(string) returns the hyperbolic cosine of a complex number.</Text>
+            <Syntax>IMCOSH(string)</Syntax>
+            <Example>IMCOSH("1+i") returns "0.83373+0.988898i"</Example>
+            <Example>IMCOSH("12i") returns 0.84358 </Example>
+        </Help>
+    </Function>
+
+    <Function>
       <Name>IMSIN</Name>
       <Type>String</Type>
       <Parameter>
@@ -469,6 +484,51 @@
 	<Example>IMSIN("1+i") returns "1.29846+0.634964i"</Example>
 	<Example>IMSIN("1.2") returns -0.536573 </Example>
       </Help>
+    </Function>
+
+    <Function>
+        <Name>IMSINH</Name>
+        <Type>String</Type>
+        <Parameter>
+            <Comment>Complex number</Comment>
+            <Type>String</Type>
+        </Parameter>
+        <Help>
+            <Text>The IMSINH(string) function returns the hyperbolic sine of a complex number.</Text>
+            <Syntax>IMSINH(string)</Syntax>
+            <Example>IMSINH("1+i") returns "0.63496+1.29846i"</Example>
+            <Example>IMSINH("1.2") returns 1.50946 </Example>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>IMTAN</Name>
+        <Type>String</Type>
+        <Parameter>
+            <Comment>Complex number</Comment>
+            <Type>String</Type>
+        </Parameter>
+        <Help>
+            <Text>The IMTAN(string) function returns the tangent of a complex number.</Text>
+            <Syntax>IMTAN(string)</Syntax>
+            <Example>IMTAN("1+i") returns "0.27175+1.08392i"</Example>
+            <Example>IMTAN("1.2") returns 2.57215</Example>
+        </Help>
+    </Function>
+
+    <Function>
+        <Name>IMTANH</Name>
+        <Type>String</Type>
+        <Parameter>
+            <Comment>Complex number</Comment>
+            <Type>String</Type>
+        </Parameter>
+        <Help>
+            <Text>The IMTANH(string) function returns the hyperbolic tangent of a complex number.</Text>
+            <Syntax>IMTANH(string)</Syntax>
+            <Example>IMTANH("1+i") returns "1.08392+0.27175i"</Example>
+            <Example>IMTANH("1.2") returns 0.83365</Example>
+        </Help>
     </Function>
 
     <Function>

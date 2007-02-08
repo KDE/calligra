@@ -40,6 +40,7 @@ private slots:
   void testIMARGUMENT();
   void testIMCONJUGATE();
   void testIMCOS();
+  void testIMCOSH();
   void testIMDIV();
   void testIMEXP();
   void testIMLN();
@@ -49,9 +50,12 @@ private slots:
   void testIMPRODUCT();
   void testIMREAL();
   void testIMSIN();
+  void testIMSINH();
   void testIMSQRT();
   void testIMSUB();
   void testIMSUM();
+  void testIMTAN();
+  void testIMTANH();
 
 private:
   Value evaluate(const QString&);

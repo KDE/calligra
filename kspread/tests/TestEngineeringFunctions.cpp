@@ -129,8 +129,14 @@ void TestEngineeringFunctions::testIMCONJUGATE()
 
 void TestEngineeringFunctions::testIMCOS()
 {
-    CHECK_EVAL( "=IMREAL( IMCOS(COMPLEX(1;1)) )",     0.833730025131149 );
+    CHECK_EVAL( "=IMREAL   ( IMCOS(COMPLEX(1;1)) )",  0.833730025131149 );
     CHECK_EVAL( "=IMAGINARY( IMCOS(COMPLEX(1;1)) )", -0.988897705762865 );
+}
+
+void TestEngineeringFunctions::testIMCOSH()
+{
+    CHECK_EVAL( "=IMREAL   ( IMCOSH(COMPLEX(1;1)) )", 0.833730025131149 );
+    CHECK_EVAL( "=IMAGINARY( IMCOSH(COMPLEX(1;1)) )", 0.988897705762865 );
 }
 
 void TestEngineeringFunctions::testIMDIV()
@@ -182,13 +188,19 @@ void TestEngineeringFunctions::testIMREAL()
 
 void TestEngineeringFunctions::testIMSIN()
 {
-    CHECK_EVAL( "=IMREAL( IMSIN(COMPLEX(1;1)) )",    1.29845758141598 );
+    CHECK_EVAL( "=IMREAL   ( IMSIN(COMPLEX(1;1)) )", 1.298457581415980 );
     CHECK_EVAL( "=IMAGINARY( IMSIN(COMPLEX(1;1)) )", 0.634963914784736 );
+}
+
+void TestEngineeringFunctions::testIMSINH()
+{
+    CHECK_EVAL( "=IMREAL   ( IMSINH(COMPLEX(1;1)) )", 0.634963914784736 );
+    CHECK_EVAL( "=IMAGINARY( IMSINH(COMPLEX(1;1)) )", 1.298457581415980 );
 }
 
 void TestEngineeringFunctions::testIMSQRT()
 {
-    CHECK_EVAL( "=IMREAL(IMSQRT(COMPLEX(1;-2)))",     1.27201964951407 );
+    CHECK_EVAL( "=IMREAL(IMSQRT(COMPLEX(1;-2)))",     1.272019649514070 );
     CHECK_EVAL( "=IMAGINARY(IMSQRT(COMPLEX(1;-2)))", -0.786151377757423 );
 }
 
@@ -206,6 +218,18 @@ void TestEngineeringFunctions::testIMSUM()
     CHECK_EVAL( "=IMAGINARY(IMSUM( COMPLEX(1;2); COMPLEX(2;3) ))", 5.0 );
 //     CHECK_EVAL( "=IMREAL( IMSUM(COMPLEX(1;2);B4:B5))", 6.0 );
 //     CHECK_EVAL( "=IMAGINARY( IMSUM(COMPLEX(1;2);B4:B5))", 9.0 );
+}
+
+void TestEngineeringFunctions::testIMTAN()
+{
+    CHECK_EVAL( "=IMREAL   ( IMTAN(COMPLEX(1;1)) )", 0.271752585319512 );
+    CHECK_EVAL( "=IMAGINARY( IMTAN(COMPLEX(1;1)) )", 1.083923327338690 );
+}
+
+void TestEngineeringFunctions::testIMTANH()
+{
+    CHECK_EVAL( "=IMREAL   ( IMTANH(COMPLEX(1;1)) )", 1.083923327338690 );
+    CHECK_EVAL( "=IMAGINARY( IMTANH(COMPLEX(1;1)) )", 0.271752585319512 );
 }
 
 #include <QtTest/QtTest>

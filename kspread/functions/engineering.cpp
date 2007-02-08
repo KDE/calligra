@@ -66,6 +66,7 @@ Value func_imabs (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imargument (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imcos (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imcosh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imdiv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imexp (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imln (valVector args, ValueCalc *calc, FuncExtra *);
@@ -74,9 +75,12 @@ Value func_imlog10 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_impower (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imsin (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imsinh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imsub (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imsum (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imtan (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imtanh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *);
@@ -158,6 +162,8 @@ void RegisterEngineeringFunctions()
   repo->add (f);
   f = new Function ("IMCOS",       func_imcos);
   repo->add (f);
+  f = new Function ("IMCOSH",      func_imcosh);
+  repo->add (f);
   f = new Function ("IMDIV",       func_imdiv);
   f->setParamCount (2);
   f->setAcceptArray ();
@@ -181,6 +187,8 @@ void RegisterEngineeringFunctions()
   repo->add (f);
   f = new Function ("IMSIN",       func_imsin);
   repo->add (f);
+  f = new Function ("IMSINH",      func_imsinh);
+  repo->add (f);
   f = new Function ("IMSQRT",      func_imsqrt);
   repo->add (f);
   f = new Function ("IMSUB",       func_imsub);
@@ -190,6 +198,10 @@ void RegisterEngineeringFunctions()
   f = new Function ("IMSUM",       func_imsum);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("IMTAN",       func_imtan);
+  repo->add (f);
+  f = new Function ("IMTANH",      func_imtanh);
   repo->add (f);
   f = new Function ("OCT2BIN",     func_oct2bin);
   f->setParamCount (1, 2);
@@ -1002,6 +1014,30 @@ Value func_imcos (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_imsin (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::sin( calc->conv()->asComplex( args[0] ).asComplex() ) );
+}
+
+// Function: IMTAN
+Value func_imtan( valVector args, ValueCalc *calc, FuncExtra* )
+{
+    return Value( std::tan( calc->conv()->asComplex( args[0] ).asComplex() ) );
+}
+
+// Function: IMCOSH
+Value func_imcosh( valVector args, ValueCalc *calc, FuncExtra* )
+{
+    return Value( std::cosh( calc->conv()->asComplex( args[0] ).asComplex() ) );
+}
+
+// Function: IMSINH
+Value func_imsinh( valVector args, ValueCalc *calc, FuncExtra* )
+{
+    return Value( std::sinh( calc->conv()->asComplex( args[0] ).asComplex() ) );
+}
+
+// Function: IMTANH
+Value func_imtanh( valVector args, ValueCalc *calc, FuncExtra* )
+{
+    return Value( std::tanh( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
 // Function: IMLN
