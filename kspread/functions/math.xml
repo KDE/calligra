@@ -84,28 +84,6 @@
     </Function>
 
     <Function>
-      <Name>LCD</Name>
-      <Type>Int</Type>
-      <Parameter>
-        <Comment>First number</Comment>
-        <Type range="true">Int</Type>
-      </Parameter>
-      <Parameter>
-        <Comment>Second number</Comment>
-        <Type range="true">Int</Type>
-      </Parameter>
-      <Parameter>
-        <Comment>Third number</Comment>
-        <Type range="true">Int</Type>
-      </Parameter>
-      <Help>
-	<Text>The LCD() function returns the largest common denominator for two or more integer values.</Text>
-        <Text>This function is obsolete and will be removed in a later version of KSpread. It is provided only for compatibility. Please use the GCD function instead.</Text>
-	<Syntax>LCD(value; value)</Syntax>
-      </Help>
-    </Function>
-
-    <Function>
       <Name>EPS</Name>
       <Type>Float</Type>
       <Help>
