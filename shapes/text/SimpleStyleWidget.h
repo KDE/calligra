@@ -28,7 +28,7 @@ class TextTool;
 class SimpleStyleWidget : public QWidget {
     Q_OBJECT
 public:
-    SimpleStyleWidget(TextTool *tool, QWidget *parent = 0);
+    explicit SimpleStyleWidget(TextTool *tool, QWidget *parent = 0);
 
 private:
     Ui::SimpleStyleWidget widget;

@@ -35,7 +35,7 @@ class StylesWidget : public QWidget {
 public:
     enum Type { CharacterStyle, ParagraphStyle };
 
-    StylesWidget(Type type, QWidget *parent = 0);
+    explicit StylesWidget(Type type, QWidget *parent = 0);
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
