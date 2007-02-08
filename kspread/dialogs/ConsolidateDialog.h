@@ -50,7 +50,7 @@ class ConsolidateDialog : public KDialog
   Q_OBJECT
 public:
   ConsolidateDialog( View* parent, const char* name );
-  ~ConsolidateDialog();
+  virtual ~ConsolidateDialog();
   QStringList refs();
 
 public slots:
@@ -63,8 +63,6 @@ public slots:
   void slotReturnPressed();
 
 protected:
-  virtual void closeEvent ( QCloseEvent * );
-
   View* m_pView;
   QLineEdit* m_pRef;
   Q3ListBox* m_pRefs;

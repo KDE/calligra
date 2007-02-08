@@ -69,6 +69,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   setCaption( i18n("Consolidate") );
   setObjectName( name );
   setModal( false );
+  setAttribute( Qt::WA_DeleteOnClose );
   setButtons( Ok|Cancel);
   m_pView = parent;
 
@@ -609,14 +610,12 @@ void ConsolidateDialog::slotOk()
   }
   m_pView->updateEditWidget();
   m_pView->slotUpdateView( m_pView->activeSheet() );
-  accept();
-  delete this;
+  done( QDialog::Accepted );
 }
 
 void ConsolidateDialog::slotCancel()
 {
-  reject();
-  delete this;
+  done( QDialog::Rejected );
 }
 
 void ConsolidateDialog::slotAdd()
@@ -676,11 +675,6 @@ void ConsolidateDialog::slotReturnPressed()
     m_pRefs->insertItem( txt );
     enableButton( Ok, true );
   }
-}
-
-void ConsolidateDialog::closeEvent ( QCloseEvent * )
-{
-    delete this;
 }
 
 QString ConsolidateDialog::evaluate( const QString& formula, Sheet* sheet )
