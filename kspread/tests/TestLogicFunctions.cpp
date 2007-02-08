@@ -87,6 +87,45 @@ void TestLogicFunctions::testAND()
     CHECK_EVAL( "AND(FALSE())", Value( false ) );
 }
 
+void TestLogicFunctions::testFALSE()
+{
+    CHECK_EVAL( "FALSE()", Value( false ) );
+    // Applications that implement logical values as 0/1 must map FALSE() to 0
+    CHECK_EVAL( "IF(ISNUMBER(FALSE());FALSE()=0;FALSE())", Value( false ) );
+    // note that kspread distinguishes between boolean and math
+    CHECK_EVAL( "FALSE()=0", Value( false ) );
+    CHECK_EVAL( "FALSE()=1", Value( false ) );
+    // False converts to 0 in Number context
+    CHECK_EVAL( "2+FALSE()", Value( 2 ) );
+}
+
+void TestLogicFunctions::testIF()
+{
+    CHECK_EVAL( "IF(FALSE();7;8)", Value( 8 ) );
+    CHECK_EVAL( "IF(TRUE();7;8)", Value( 7 ) );
+    CHECK_EVAL( "IF(FALSE();7.1;8.2)", Value( 8.2 ) );
+    CHECK_EVAL( "IF(TRUE();7.1;8.2)", Value( 7.1 ) );
+    CHECK_EVAL( "IF(TRUE();\"HI\";8)", Value( "HI" ) );
+    CHECK_EVAL( "IF(1;7;8)", Value( 7 ) );
+    CHECK_EVAL( "IF(5;7;8)", Value( 7 ) );
+    CHECK_EVAL( "IF(0;7;8)", Value( 8 ) );
+    // there are a couple of indirect references in the spec test
+    // vectors here. Sorry
+    CHECK_EVAL( "IF(\"x\";7;8)", Value::errorNA() );
+    CHECK_EVAL( "IF(\"1\";7;8)", Value::errorNA() );
+    CHECK_EVAL( "IF(\"\";7;8)", Value::errorNA() );
+    CHECK_EVAL( "IF(FALSE();7)", Value ( false ) );
+    CHECK_EVAL( "IF(FALSE();7;)", Value ( 0 ) );
+    CHECK_EVAL( "IF(TRUE();4;1/0)", Value ( 4 ) );
+    CHECK_EVAL( "IF(FALSE();1/0;5)", Value ( 5 ) );
+}
+
+void TestLogicFunctions::testNOT()
+{
+    CHECK_EVAL( "NOT(FALSE())", Value ( true ) );
+    CHECK_EVAL( "NOT(TRUE())", Value ( false ) );
+    CHECK_EVAL( "NOT(1/0)", Value::errorNA() );
+}
 
 void TestLogicFunctions::testOR()
 {
@@ -114,6 +153,18 @@ void TestLogicFunctions::testOR()
     // single parameter
     CHECK_EVAL( "OR(TRUE())", Value( true ) );
     CHECK_EVAL( "OR(FALSE())", Value( false ) );
+}
+
+void TestLogicFunctions::testTRUE()
+{
+    CHECK_EVAL( "TRUE()", Value( true ) );
+    // Applications that implement logical values as 0/1 must map TRUE() to 1
+    CHECK_EVAL( "IF(ISNUMBER(TRUE());TRUE()=0;TRUE())", Value( true ) );
+    // note that kspread distinguishes between boolean and math
+    CHECK_EVAL( "TRUE()=1", Value( false ) );
+    CHECK_EVAL( "TRUE()=0", Value( false ) );
+    // False converts to 0 in Number context
+    CHECK_EVAL( "2+TRUE()", Value( 3 ) );
 }
 
 void TestLogicFunctions::testXOR()

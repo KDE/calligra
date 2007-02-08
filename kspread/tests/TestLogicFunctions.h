@@ -34,7 +34,11 @@ class TestLogicFunctions: public QObject
 
 private slots:
   void testAND();
+  void testFALSE();
+  void testIF();
+  void testNOT();
   void testOR();
+  void testTRUE();
   void testXOR();
 private:
   Value evaluate(const QString&, Value& ex);
