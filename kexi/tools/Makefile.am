@@ -1,0 +1,1 @@
+SUBDIRS=add_column delete_column
