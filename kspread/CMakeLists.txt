@@ -147,8 +147,7 @@ kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 target_link_libraries(kspreadcommon
 	${QT_QTSQL_LIBRARY}
 	kofficecore kofficeui kochart
-	${KDE4_KDE3SUPPORT_LIBS}
-	${KDE4_KSPELL2_LIBS} )
+	${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(kspreadcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kspreadcommon  DESTINATION ${LIB_INSTALL_DIR})
