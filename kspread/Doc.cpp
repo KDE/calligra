@@ -270,6 +270,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->useRegularExpressions    = true;
   d->refYear = 1930;
   d->refDate = QDate( 1899, 12, 30 );
+  d->precision = 8;
 }
 
 Doc::~Doc()
