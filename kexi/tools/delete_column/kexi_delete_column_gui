@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+#   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 #
 #   This program is free software; you can redistribute it and/or
 #   modify it under the terms of the GNU General Public
@@ -27,7 +27,7 @@ function setup_messages {
 	
 	IFS=:
 	for dir in `kde-config --expandvars --path locale` ; do
-		transl_file="$dir"$lang"/LC_MESSAGES/kexi_add_column_gui_transl_$lang.sh";
+		transl_file="$dir"$lang"/LC_MESSAGES/kexi_delete_column_gui_transl_$lang.sh";
 		if [ -f "$transl_file" ] ; then
 			source "$transl_file"
 			break
@@ -37,8 +37,8 @@ function setup_messages {
 	done
 	IFS=" "
 	if [ -z "$transl_file" ] ; then
-		transl_file="$basedir/kexi_add_column_gui_transl_$lang.sh";
-		if [ ! -f "$transl_file" ] ; then	source "$transl_file"; else transl_file=; fi
+		transl_file="$basedir/kexi_delete_column_gui_transl_$lang.sh";
+		if [ -f "$transl_file" ] ; then	source "$transl_file"; else transl_file=; fi
 	fi
 echo 	$transl_file
 	if  [ -z "$transl_file" ] ; then
@@ -46,52 +46,35 @@ echo 	$transl_file
 		msg_filters="*.kexi|Kexi Project stored in a file
 *.*|All files"
 		msg_select_db_file="Select database file"
-		msg_enter_table_name="Table name (without spaces):"
-		msg_enter_new_column_name="New column's name (without spaces):"
-		msg_enter_new_column_type="New column's type:"
-		msg_byte="Byte"
-		msg_short_integer="Short integer"
-		msg_integer="Integer"
-		msg_big_integer="Big integer"
-		msg_yes_no="Yes/No"
-		msg_date="Date"
-		msg_date_time="Date/Time"
-		msg_time="Time"
-		msg_float="Single precision number"
-		msg_double="Double precision number"
-		msg_text="Text"
-		msg_long_text="Long text"
-		msg_object="Object (image)"
-		msg_enter_new_column_caption="New column's caption (optional):"
+		msg_enter_table_name="Table name (not caption):"
+		msg_enter_column_name="Column name (not caption):"
 	fi
 } # /setup_messages
 
 setup_messages
 
+ksqlite="ksqlite -noheader"
+
 database_name=`kdialog --title "$msg_select_db_file" --getopenfilename . "$msg_filters"` || exit 1
 
 table_name=`kdialog --inputbox "$msg_enter_table_name"` || exit 1
 
-new_column_name=`kdialog --inputbox "$msg_enter_new_column_name"` || exit 1
+# show list of columns and ask for one
 
-new_column_type=`kdialog --radiolist "$msg_enter_new_column_type                         " \
-Byte "$msg_byte" off \
-ShortInteger "$msg_short_integer" off \
-Integer "$msg_integer" off \
-BigInteger "$msg_big_integer" off \
-Boolean "$msg_yes_no" off \
-Date "$msg_date" off \
-DateTime "$msg_date_time" off \
-Time "$msg_time" off \
-Float "$msg_float" off \
-Double "$msg_double" off \
-Text "$msg_text" off \
-LongText "$msg_long_text" off \
-BLOB "$msg_object" off ` || exit 1
-new_column_caption=`kdialog --inputbox "$msg_enter_new_column_caption"`
+msg=`$ksqlite "$database_name" "SELECT f_name FROM kexi__objects o, kexi__fields f WHERE o.o_id=f.t_id AND o.o_name='$table_name' AND o_type=1 ORDER BY f_order;" || exit 1`
 
-msg=`sh kexi_add_column "$database_name" "$table_name" "$new_column_name" \
-	"$new_column_type" "$new_column_caption" 2>&1`
+command_file=`mktemp "$database_name"XXXXXXXX`".sh"
+echo -n "kdialog --radiolist \"$msg_enter_column_name\"" > $command_file
+echo $msg | while read f ; do
+	echo -n " $f $f off" >> $command_file
+done
+
+column_name=`source $command_file || exit 1`
+rm -f $command_file
+
+# call the command line tool
+
+msg=`sh kexi_delete_column "$database_name" "$table_name" "$column_name" 2>&1`
 
 [ -z "$msg" ] && exit 0
 

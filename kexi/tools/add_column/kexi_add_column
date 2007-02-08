@@ -26,6 +26,7 @@ Usage:
  $0 database_name table_name new_column_name new_column_type 
     [new_column_caption]
 
+- {database_name}.old backup file is created before proceeding
 - database_name and table_name must exist
 - new_column_name must not exist and should be valid idetifier
 - new_column_type must be one of:
@@ -84,7 +85,7 @@ cp "$database_name" "$temp_db" || exit_with_error
 msg=`echo "DROP TABLE '$table_name';" | $ksqlite "$temp_db"`
 check "$msg"
 
-# 1. Receate table with a new field appended
+# 1. Recreate table with new field appended
 msg=`echo ".schema '$table_name';" | $ksqlite "$database_name" | grep "^CREATE TABLE $table_name " | \
  sed -e "s/);/, $new_column_name $new_column_type);/g" | $ksqlite "$temp_db"`
 check "$msg"
@@ -93,7 +94,7 @@ check "$msg"
 table_id=`echo "SELECT o_id FROM kexi__objects WHERE o_type=1 AND o_name='$table_name';" | \
  $ksqlite "$temp_db" || exit_with_error`
 
-# 2.2. Get new field's order
+# 2.2. Get the new field's order
 order=`echo "SELECT MAX(f_order)+1 FROM kexi__fields WHERE t_id=$table_id;" | $ksqlite "$temp_db" || exit_with_error`
 
 # 2.3. Add the new column information to kexi__fields metadata table
