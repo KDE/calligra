@@ -2359,19 +2359,29 @@ AddScheduleManagerCmd::AddScheduleManagerCmd( Part *part, Project &node, Schedul
     : NamedCommand( part, name ),
     m_node( node ),
     m_sm( sm ),
+    m_exp( sm->expected() ),
+    m_opt( sm->optimistic() ),
+    m_pess( sm->pessimistic() ),
     m_mine( true)
 {
 }
 
 AddScheduleManagerCmd::~AddScheduleManagerCmd()
 {
-    if ( m_mine )
+    if ( m_mine ) {
         delete m_sm;
+        delete m_exp;
+        delete m_opt;
+        delete m_pess;
+    }
 }
 
 void AddScheduleManagerCmd::execute()
 {
     m_node.addScheduleManager( m_sm );
+    m_sm->setExpected( m_exp );
+    m_sm->setOptimistic( m_opt );
+    m_sm->setPessimistic( m_pess );
     m_sm->setDeleted( false );
     m_mine = false;
 }
@@ -2380,12 +2390,16 @@ void AddScheduleManagerCmd::unexecute()
 {
     m_node.takeScheduleManager( m_sm );
     m_sm->setDeleted( true );
+    m_sm->setExpected( 0 );
+    m_sm->setOptimistic( 0 );
+    m_sm->setPessimistic( 0 );
     m_mine = true;
 }
 
 DeleteScheduleManagerCmd::DeleteScheduleManagerCmd( Part *part, Project &node, ScheduleManager *sm, const QString& name )
     : AddScheduleManagerCmd( part, node, sm, name )
 {
+    m_mine = false;
 }
 
 void DeleteScheduleManagerCmd::execute()

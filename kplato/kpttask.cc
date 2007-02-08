@@ -605,7 +605,7 @@ double Task::costPerformanceIndex(const QDate &date, bool *error) {
 }
 
 void Task::initiateCalculation(MainSchedule &sch) {
-    //kDebug()<<k_funcinfo<<m_name<<" schedule: "<<(sch?sch->name():"None")<<" id="<<(sch?sch->id():-1)<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" schedule: "<<sch.name()<<" id="<<sch.id()<<endl;
     m_visitedForward = false;
     m_visitedBackward = false;
     m_currentSchedule = createSchedule(&sch);
@@ -1110,7 +1110,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
 }
 
 DateTime Task::scheduleFromStartTime(int use) {
-    //kDebug()<<k_funcinfo<<m_name<<" earliest="<<earliest<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<endl;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1342,7 +1342,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
 }
 
 DateTime Task::scheduleFromEndTime(int use) {
-    //kDebug()<<k_funcinfo<<m_name<<": latest="<<latest<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<endl;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1903,8 +1903,7 @@ void Completion::setFinishTime( const QDateTime &dt )
 void Completion::addEntry( const QDate &date, Entry *entry )
 {
      m_entries.insert( date, entry );
-     kDebug()<<k_funcinfo<<m_entries.count()<<" added: "<<date<<endl;
-     printDebug("");
+     //kDebug()<<k_funcinfo<<m_entries.count()<<" added: "<<date<<endl;
 }
     
 QDate Completion::entryDate() const

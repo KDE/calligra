@@ -786,12 +786,11 @@ View::View( Part* part, QWidget* parent )
         //addStatusBarItem( m_progress, 0, true );
         //m_progress->hide();
     }
-    connect( &getProject(), SIGNAL( currentViewScheduleIdChanged( long ) ), SLOT( slotCurrentScheduleChanged( long ) ) );
+    connect( &getProject(), SIGNAL( scheduleChanged( MainSchedule* ) ), SLOT( slotScheduleChanged( MainSchedule* ) ) );
+    connect( &getProject(), SIGNAL( scheduleAdded( MainSchedule* ) ), SLOT( slotScheduleAdded( MainSchedule* ) ) );
+    connect( &getProject(), SIGNAL( scheduleRemoved( MainSchedule* ) ), SLOT( slotScheduleRmoved( MainSchedule* ) ) );
     slotPlugScheduleActions();
-    connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotPlugScheduleActions() ) );
     
-    setScheduleActionsEnabled();
-
     m_viewlist->setSelected( m_viewlist->findItem( m_taskeditor ) );
     //kDebug()<<k_funcinfo<<" end "<<endl;
 }
@@ -1069,41 +1068,100 @@ void View::slotProjectResources()
     delete dia;
 }
 
-void View::slotCurrentScheduleChanged( long id )
+void View::slotScheduleRemoved( MainSchedule *sch )
 {
-    kDebug()<<k_funcinfo<<endl;
-    // hmmm, find a better way. Maybe a "current view schedule"?
-    Schedule *sch = getProject().findSchedule( id );
-    foreach ( QAction *act, m_scheduleActions.keys() ) {
-        if ( m_scheduleActions[ act ] == sch ) {
-            act->setChecked( true );
+    QAction *a = 0;
+    QAction *checked = m_scheduleActionGroup->checkedAction();
+    QMapIterator<QAction*, Schedule*> i( m_scheduleActions );
+    while (i.hasNext()) {
+        i.next();
+        if ( i.value() == sch ) {
+            a = i.key();
             break;
         }
     }
-    m_accountsview->draw(); // TODO
+    if ( a ) {
+        unplugActionList( "view_schedule_list" );
+        delete a;
+        plugActionList( "view_schedule_list", m_scheduleActions.keys() );
+        if ( checked && checked != a ) {
+            checked->setChecked( true );
+        } else if ( ! m_scheduleActions.isEmpty() ) {
+            m_scheduleActions.keys().first()->setChecked( true );
+        }
+    }
     setLabel();
-    
+}
+
+void View::slotScheduleAdded( MainSchedule *sch )
+{
+    kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
+    QAction *checked = m_scheduleActionGroup->checkedAction();
+    if ( ! sch->isDeleted() && sch->isScheduled() ) {
+        unplugActionList( "view_schedule_list" );
+        QAction *act = addScheduleAction( sch );
+        plugActionList( "view_schedule_list", m_scheduleActions.keys() );
+        if ( checked ) {
+            checked->setChecked( true );
+            kDebug()<<"set checked "<<checked<<endl;
+        } else if ( act ) {
+            act->setChecked( true );
+            kDebug()<<"set act checked "<<act<<endl;
+        } else if ( ! m_scheduleActions.isEmpty() ) {
+            m_scheduleActions.keys().first()->setChecked( true );
+        }
+    }
+    setLabel();
+}
+
+void View::slotScheduleChanged( MainSchedule *sch )
+{
+    kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
+    if ( sch->isDeleted() || ! sch->isScheduled() ) {
+        slotScheduleRemoved( sch );
+        return;
+    }
+    if ( m_scheduleActions.values().contains( sch ) ) {
+        slotScheduleRemoved( sch ); // hmmm, how to avoid this?
+    }
+    slotScheduleAdded( sch );
+}
+
+QAction *View::addScheduleAction( Schedule *sch )
+{
+    QAction *act = 0;
+    if ( ! sch->isDeleted() ) {
+        QString n = sch->name() + " (" + sch->typeToString( true ) + ')';
+        QAction *act = new KToggleAction( n, this);
+        actionCollection()->addAction(n, act );
+        m_scheduleActions.insert( act, sch );
+        m_scheduleActionGroup->addAction( act );
+        //kDebug()<<k_funcinfo<<"Add: "<<n<<endl;
+        connect( act, SIGNAL(destroyed( QObject* ) ), SLOT( slotActionDestroyed( QObject* ) ) );
+    }
+    return act;
 }
 
 void View::slotViewSchedule( QAction *act )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     Schedule *sch = m_scheduleActions.value( act, 0 );
-    // hmmm, find a better way. Maybe a "current view schedule"?
     if ( sch->id() != getProject().currentViewScheduleId() ) {
         getProject().setCurrentViewScheduleId( sch->id() );
+        //kDebug()<<k_funcinfo<<sch->id()<<endl;
     }
+    setLabel();
 }
 
 void View::slotActionDestroyed( QObject *o )
 {
-    kDebug()<<k_funcinfo<<o->name()<<endl;
+    //kDebug()<<k_funcinfo<<o->name()<<endl;
     m_scheduleActions.remove( static_cast<QAction*>( o ) );
 }
 
 void View::slotPlugScheduleActions()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     unplugActionList( "view_schedule_list" );
     foreach( QAction *act, m_scheduleActions.keys() ) {
         m_scheduleActionGroup->removeAction( act );
@@ -1113,17 +1171,11 @@ void View::slotPlugScheduleActions()
     Schedule *cs = getProject().currentSchedule();
     QAction *ca = 0;
     foreach( Schedule *sch, getProject().schedules().values() ) {
-        if ( ! sch->isDeleted() ) {
-            QString n = sch->name() + " (" + sch->typeToString( true ) + ')';
-            QAction *act = new KToggleAction( n, this);
-            actionCollection()->addAction(n, act );
-            m_scheduleActions.insert( act, sch );
-            m_scheduleActionGroup->addAction( act );
+        QAction *act = addScheduleAction( sch );
+        if ( act ) {
             if ( ca == 0 && cs == sch ) {
                 ca = act;
             }
-            kDebug()<<k_funcinfo<<"Add: "<<act->name()<<endl;
-            connect( act, SIGNAL(destroyed( QObject* ) ), SLOT( slotActionDestroyed( QObject* ) ) );
         }
     }
     plugActionList( "view_schedule_list", m_scheduleActions.keys() );
@@ -2087,34 +2139,18 @@ m_ganttview->getContext( context.ganttview );
 void View::setLabel()
 {
     kDebug()<<k_funcinfo<<endl;
-    Schedule *s = getProject().findSchedule( getProject().currentViewScheduleId() );
-    if ( s == 0 || getProject().notScheduled() ) {
-        m_estlabel->setText( i18n( "Not scheduled" ) );
-    } else {
-        m_estlabel->setText( s->name() + " ("+ s->typeToString( true ) + ')'  );
+    foreach ( QAction *a, m_scheduleActions.keys() ) {
+        if ( a->isChecked() ) {
+            Schedule *s = m_scheduleActions[ a ];
+            kDebug()<<k_funcinfo<<a->objectName()<<" - "<<s->name()<<", "<<s->isScheduled()<<endl;
+            if ( s && s->isScheduled() ) {
+                m_estlabel->setText( s->name() + " ("+ s->typeToString( true ) + ')'  );
+                return;
+            }
+        }
     }
+    m_estlabel->setText( i18n( "Not scheduled" ) );
 }
-
-void View::setScheduleActionsEnabled()
-{
-/*    actionViewExpected->setEnabled( getProject().findSchedule( Schedule::Expected ) );
-    actionViewOptimistic->setEnabled( getProject().findSchedule( Schedule::Optimistic ) );
-    actionViewPessimistic->setEnabled( getProject().findSchedule( Schedule::Pessimistic ) );*/
-    if ( getProject().notScheduled() ) {
-        setLabel();
-        return ;
-    }
-    Schedule *ns = getProject().currentSchedule();
-    if ( ns->type() == Schedule::Expected ) {
-//        actionViewExpected->setChecked( true );
-    } else if ( ns->type() == Schedule::Optimistic ) {
-//        actionViewOptimistic->setChecked( true );
-    } else if ( ns->type() == Schedule::Pessimistic ) {
-//        actionViewPessimistic->setChecked( true );
-    }
-    setLabel();
-}
-
 
 #ifndef NDEBUG
 void View::slotPrintDebug()

@@ -101,7 +101,7 @@ void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manag
 
 void ScheduleItemModel::slotScheduleToBeInserted( const ScheduleManager *manager, int row )
 {
-    kDebug()<<k_funcinfo<<manager->name()<<" row="<<row<<endl;
+    //kDebug()<<k_funcinfo<<manager->name()<<" row="<<row<<endl;
     Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(manager);
     beginInsertRows( index( manager ), row, row );
@@ -109,7 +109,7 @@ void ScheduleItemModel::slotScheduleToBeInserted( const ScheduleManager *manager
 
 void ScheduleItemModel::slotScheduleInserted( const MainSchedule *schedule )
 {
-    kDebug()<<k_funcinfo<<schedule<<"<--"<<schedule->manager()<<endl;
+    //kDebug()<<k_funcinfo<<schedule<<"<--"<<schedule->manager()<<endl;
     Q_ASSERT( schedule->manager() == m_manager );
     endInsertRows();
     m_manager = 0;
@@ -143,7 +143,7 @@ void ScheduleItemModel::setProject( Project *project )
     
         disconnect( m_project, SIGNAL( scheduleManagerAdded( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
     
-        disconnect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerRemoved( const ScheduleManager* ) ) );
     
         disconnect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
         
@@ -182,7 +182,7 @@ void ScheduleItemModel::setProject( Project *project )
 void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
 {
     int r = m_project->indexOf( sch );
-    kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
+    //kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
     emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );
 }
 
@@ -193,7 +193,7 @@ void ScheduleItemModel::slotScheduleChanged( MainSchedule *sch )
         return;
     }
     int r = sch->manager()->indexOf( sch );
-    kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
+    //kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
     emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );
 }
 
@@ -633,9 +633,9 @@ void ScheduleTreeView::headerContextMenuRequested( const QPoint &pos )
 
 void ScheduleTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
-    kDebug()<<k_funcinfo<<sel.indexes().count()<<endl;
+    //kDebug()<<k_funcinfo<<sel.indexes().count()<<endl;
     foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
-        kDebug()<<k_funcinfo<<i.row()<<", "<<i.column()<<endl;
+        //kDebug()<<k_funcinfo<<i.row()<<", "<<i.column()<<endl;
     }
     QTreeView::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
@@ -643,7 +643,7 @@ void ScheduleTreeView::selectionChanged( const QItemSelection &sel, const QItemS
 
 void ScheduleTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    kDebug()<<k_funcinfo<<current.row()<<", "<<current.column()<<endl;
+    //kDebug()<<k_funcinfo<<current.row()<<", "<<current.column()<<endl;
     QTreeView::currentChanged( current, previous );
     emit currentChanged( current );
     selectionModel()->select( current, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );

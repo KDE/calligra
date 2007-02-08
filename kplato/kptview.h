@@ -168,8 +168,6 @@ public:
     virtual bool setContext( Context &context );
     virtual void getContext( Context &context ) const;
 
-    void setScheduleActionsEnabled();
-
     QWidget *canvas() const;
 
     //virtual QDockWidget *createToolBox();
@@ -235,7 +233,9 @@ protected slots:
     void slotViewActivated( ViewListItem*, ViewListItem* );
     void slotPlugScheduleActions();
     void slotViewSchedule( QAction *act );
-    void slotCurrentScheduleChanged( long id );
+    void slotScheduleChanged( MainSchedule* );
+    void slotScheduleAdded( MainSchedule * );
+    void slotScheduleRemoved( MainSchedule * );
     
     void slotAddScheduleManager( Project *project );
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
@@ -287,6 +287,7 @@ protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
     virtual void updateReadWrite( bool readwrite );
     
+    QAction *addScheduleAction( Schedule *sch );
     void setLabel(); 
     Node *currentTask();
     Resource *currentResource();

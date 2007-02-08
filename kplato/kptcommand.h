@@ -1154,9 +1154,10 @@ public:
     void execute();
     void unexecute();
 
-private:
+protected:
     Project &m_node;
     ScheduleManager *m_sm;
+    MainSchedule *m_exp, *m_opt, *m_pess;
     bool m_mine;
 };
 
