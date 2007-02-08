@@ -99,7 +99,7 @@ bool KWGui::horizontalScrollBarVisible() {
 }
 
 void KWGui::setToolOptionDocker(KoToolDocker *docker) {
-    m_canvasController->setToolOptionDocker(docker);
+    connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), docker, SLOT(newOptionWidget(QWidget*)));
 }
 
 void KWGui::pageSetupChanged() {

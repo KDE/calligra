@@ -244,7 +244,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 		KoToolDockerFactory toolDockerFactory;
 		KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
-		m_canvasView->setToolOptionDocker( toolDocker );
+		connect(m_canvasView, SIGNAL(toolOptionWidgetChanged(QWidget*)), toolDocker, SLOT(newOptionWidget(QWidget*)));
+
 	//	m_typeButtonBox = new VTypeButtonBox( part(), m_toolbox );
 
 		//connect( m_strokeFillPreview, SIGNAL( fillSelected() ), m_typeButtonBox, SLOT( setFill() ) );
