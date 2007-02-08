@@ -38,50 +38,27 @@ except:
 try:
     import odf.opendocument
 except:
-    raise "Failed to import the ODFPY python module."
+    raise "<qt>Failed to import the ODFPY python module.<br><br>To use this odfpyexport.py python script to export to OpenDocument you need to install the <a href=\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python module.</qt>"
 
 class OdfExporter:
 
-    class OpenDocumentText:
-        filtername = "OpenDocument Text"
-        filtermask = "*.odt"
+    class _OpenDocumentInterface_:
+        def __init__(self, kspread, doc):
+            self.kspread = kspread
+            self.doc = doc
 
-        def __init__(self, kspread, exportSheets, writeOdfFile):
-            print "OdfExporter: OpenDocumentText"
-            print "Read from OpenDocument File: %s" % kspread.document().url()
-            print "Export Sheets: %s" % exportSheets
-            print "Write to OpenDocument File: %s" % writeOdfFile
-
-            print "#####################################################################"
-
-            # Import the needed modules
-            import odf.opendocument, odf.style, odf.text
-
-            # Create the OpenDocument Text object
-            self.doc = odf.opendocument.OpenDocumentText()
-
-            self.h1style = odf.style.Style(name="Heading 1", family="paragraph")
-            self.h1style.addElement(odf.style.TextProperties(attributes={'fontsize':"24pt",'fontweight':"bold" }))
-            self.doc.styles.addElement(self.h1style)
-
-            # Create a style for the table content
-            self.tablecontents = odf.style.Style(name="Table Contents", family="paragraph")
-            self.tablecontents.addElement(odf.style.ParagraphProperties(numberlines="false", linenumber="0"))
-            self.doc.styles.addElement(self.tablecontents)
-
-            # Process the sheets
-            for sheetlist in exportSheets:
-                sheetname = sheetlist[0]
-                enabled = sheetlist[1]
-                if enabled:
-                    sheet = kspread.sheetByName(sheetname)
-                    ranges = self.getRanges(sheet, sheetlist[2:])
-                    self.writeSheet(sheet, ranges)
-
-            # Finally write the document to a file
-            self.doc.save(writeOdfFile)
-
-            print "#####################################################################"
+        def getMaxColumn(self, ranges):
+            maxcolumn = 0
+            for r in ranges:
+                if r[2] > maxcolumn:
+                    maxcolumn = r[2]
+            if maxcolumn < 1:
+                raise "Failed to determinate number of columns."
+            #mincolumn = maxcolumn
+            #for r in ranges:
+            #    if r[0] < mincolumn:
+            #        mincolumn = r[0]
+            return maxcolumn
 
         def getRanges(self, sheet, ranges):
             (lastRow, lastColumn) = (sheet.lastRow(), sheet.lastColumn())
@@ -100,6 +77,33 @@ class OdfExporter:
                 rangeList.append( (1, 1, lastColumn, lastRow) )
             return rangeList
 
+    class OpenDocumentText(_OpenDocumentInterface_):
+        filtername = "OpenDocument Text"
+        filtermask = "*.odt"
+
+        def __init__(self, kspread, exportSheets, writeOdfFile):
+            import odf.opendocument, odf.style, odf.text
+            OdfExporter._OpenDocumentInterface_.__init__(self, kspread, odf.opendocument.OpenDocumentText())
+
+            # Create the heading style
+            self.h1style = odf.style.Style(name="Heading 1", family="paragraph")
+            self.h1style.addElement(odf.style.TextProperties(attributes={'fontsize':"24pt",'fontweight':"bold" }))
+            self.doc.styles.addElement(self.h1style)
+
+            # Create a style for the table content
+            self.tablestyle = odf.style.Style(name="Table Contents", family="paragraph")
+            self.tablestyle.addElement(odf.style.ParagraphProperties(numberlines="false", linenumber="0"))
+            self.doc.styles.addElement(self.tablestyle)
+
+            # Process the sheets
+            for sheetlist in exportSheets:
+                if sheetlist[1]: # if sheet is enabled for export
+                    sheet = kspread.sheetByName( sheetlist[0] )
+                    self.writeSheet(sheet, self.getRanges(sheet, sheetlist[2:]))
+
+            # Finally write the document to a file
+            self.doc.save(writeOdfFile)
+
         def writeSheet(self, sheet, ranges):
             import odf.text, odf.table
 
@@ -108,22 +112,9 @@ class OdfExporter:
             self.doc.text.addElement(header)
 
             # Create the table
-            table = odf.table.Table()
-
+            table = odf.table.Table(name=sheet.sheetName())
             # Add the columns
-            maxcolumn = 0
-            for r in ranges:
-                if r[2] > maxcolumn:
-                    maxcolumn = r[2]
-            if maxcolumn < 1:
-                raise "Failed to determinate number of columns."
-            #mincolumn = maxcolumn
-            #for r in ranges:
-            #    if r[0] < mincolumn:
-            #        mincolumn = r[0]
-            #for i in range(mincolumn,maxcolumn):
-            #    table.addElement(odf.table.TableColumn())
-            for i in range(maxcolumn):
+            for i in range( self.getMaxColumn(ranges) ):
                 table.addElement(odf.table.TableColumn())
 
             # Add the rows to the table
@@ -136,12 +127,75 @@ class OdfExporter:
                         tr.addElement(td)
                         #value = "%s" % sheet.value(row,col)
                         value = "%s" % sheet.text(col,row)
-                        print "row=%i col=%i value=%s" % (row,col,value)
-                        p = odf.text.P(stylename=self.tablecontents, text=value)
+                        #print "row=%i col=%i value=%s" % (row,col,value)
+                        p = odf.text.P(stylename=self.tablestyle, text=value)
                         td.addElement(p)
 
             # Add the table to the document
             self.doc.text.addElement(table)
+
+    class OpenDocumentSpreadsheet(_OpenDocumentInterface_):
+        filtername = "OpenDocument Spreadsheet"
+        filtermask = "*.ods"
+
+        def __init__(self, kspread, exportSheets, writeOdfFile):
+            import odf.opendocument, odf.style, odf.table
+            OdfExporter._OpenDocumentInterface_.__init__(self, kspread, odf.opendocument.OpenDocumentSpreadsheet())
+
+            # Create a style for the table content
+            self.tablestyle = odf.style.Style(name="Table Contents", family="paragraph")
+            self.tablestyle.addElement(odf.style.ParagraphProperties(numberlines="false", linenumber="0"))
+            self.doc.styles.addElement(self.tablestyle)
+
+            # Create automatic styles for the column widths. We want two different widths, one in inches, the other one in metric. ODF Standard section 15.9.1
+            #widthshort = Style(name="Wshort", family="table-column")
+            #widthshort.addElement(TableColumnProperties(columnwidth="1.7cm"))
+            #doc.automaticstyles.addElement(widthshort)
+            #widthwide = Style(name="Wwide", family="table-column")
+            #widthwide.addElement(TableColumnProperties(columnwidth="1.5in"))
+            #doc.automaticstyles.addElement(widthwide)
+
+            # Process the sheets
+            for sheetlist in exportSheets:
+                if sheetlist[1]: # if sheet is enabled for export
+                    sheet = kspread.sheetByName( sheetlist[0] )
+                    self.writeSheet(sheet, self.getRanges(sheet, sheetlist[2:]))
+
+            # Finally write the document to a file
+            self.doc.save(writeOdfFile)
+
+        def writeSheet(self, sheet, ranges):
+            import odf.text, odf.table
+
+            # Create the table
+            table = odf.table.Table(name=sheet.sheetName())
+            # Add the columns
+            for i in range( self.getMaxColumn(ranges) ):
+                table.addElement(odf.table.TableColumn())
+
+            # Add the rows to the table
+            for r in ranges:
+                for row in range(r[1],r[3]+1):
+                    tr = odf.table.TableRow()
+                    table.addElement(tr)
+                    for col in range(r[0],r[2]+1):
+                        td = odf.table.TableCell()
+                        tr.addElement(td)
+                        #value = "%s" % sheet.value(row,col)
+                        value = "%s" % sheet.text(col,row)
+                        #print "row=%i col=%i value=%s" % (row,col,value)
+                        p = odf.text.P(stylename=self.tablestyle, text=value)
+                        td.addElement(p)
+
+            # Add the table to the document
+            self.doc.spreadsheet.addElement(table)
+
+    #class OpenDocumentPresentation(_OpenDocumentInterface_):
+        #filtername = "OpenDocument Presentation"
+        #filtermask = "*.odp"
+        #def __init__(self, kspread, exportSheets, writeOdfFile):
+            #import odf.opendocument, odf.style
+            #_OpenDocumentInterface_.__init__(self, kspread, odf.opendocument.OpenDocumentPresentation())
 
 class OdfPyExport:
 
@@ -168,9 +222,10 @@ class OdfPyExport:
         global OdfExporter
         self.exporterClasses = []
         for d in dir(OdfExporter):
-            f = getattr(OdfExporter,d)
-            if hasattr(f,"filtername") and hasattr(f,"filtermask"):
-                self.exporterClasses.append(f)
+            if not d.startswith('_'):
+                f = getattr(OdfExporter,d)
+                if hasattr(f,"filtername") and hasattr(f,"filtermask"):
+                    self.exporterClasses.append(f)
 
         self.scriptaction = scriptaction
 
@@ -227,6 +282,11 @@ class OdfPyExport:
                 odfExporterClass = self.getOdfExporterClassForFile(writeOdfFile)
                 if not odfExporterClass:
                     raise "Failed to determinate the OdfExporter class for the file \"%s\"." % writeOdfFile
+
+        print "OdfExporter: %s" % odfExporterClass
+        print "Read from OpenDocument File: %s" % self.kspread.document().url()
+        print "Export Sheets: %s" % exportSheets
+        print "Write to OpenDocument File: %s" % writeOdfFile
 
         odfExporterClass(self.kspread, exportSheets, writeOdfFile)
 
