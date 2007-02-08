@@ -22,7 +22,6 @@
 
 #include <QColor>
 #include <QPaintEvent>
-#include <QFrame>
 #include <QMouseEvent>
 #include <QEvent>
 #include <QPoint>
@@ -30,15 +29,11 @@
 #include <QPainter>
 #include <QBrush>
 #include <QGradient>
-#include <QDockWidget>
-
-#include <kdebug.h>
 
 #include <KoPathShape.h>
 #include <KoShapeBorderModel.h>
 #include <KoZoomHandler.h>
 
-#include "vcolordlg.h"
 #include "vstrokefillpreview.h"
 
 #define PANEL_SIZEX 50.0
@@ -51,6 +46,7 @@ VStrokeFillPreview::VStrokeFillPreview( QWidget * parent )
     setFocusPolicy( Qt::NoFocus );
 
     setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
+    setMaximumHeight( PANEL_SIZEY );
 
     installEventFilter( this );
     m_pixmap = QPixmap( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
@@ -70,6 +66,21 @@ void VStrokeFillPreview::paintEvent( QPaintEvent* event )
                   m_pixmap, QRect(0, 0, (int)PANEL_SIZEX, (int)PANEL_SIZEY ));
 
     QFrame::paintEvent( event );
+}
+
+QSize VStrokeFillPreview::sizeHint() const
+{
+    return QSize( PANEL_SIZEX, PANEL_SIZEY );
+}
+
+QSize VStrokeFillPreview::minimumSizeHint() const
+{
+    return QSize( PANEL_SIZEX, PANEL_SIZEY );
+}
+
+QSizePolicy VStrokeFillPreview::sizePolicy() const
+{
+    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 }
 
 bool VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
@@ -110,35 +121,6 @@ bool VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
         update( m_stroke, m_fill );
     }
 
-    if( event && event->type() == QEvent::MouseButtonDblClick )
-    {
-        if( m_fillRect.contains( QPointF( ex, ey ) ) )
-        {
-            //VColorDlg* dialog = new VColorDlg( m_fill->color(), this );
-#if 0
-// needs porting:
-// error: no matching function for call to `VFill::setColor(Qt::GlobalColor)'
-
-            if( dialog->exec() == QDialog::Accepted )
-            {
-                if( m_part && m_part->document().selection() ) m_part->addCommand( new VFillCmd( &m_part->document(), VFill( dialog->Color() ) ), true );
-            }
-#endif
-            //delete dialog;
-        }
-        else if( m_strokeRect.contains( QPointF( ex, ey ) ) )
-        {
-            //VColorDlg* dialog = new VColorDlg( m_stroke->color(), this );
-#if 0
-// needs porting:
-            if( dialog->exec() == QDialog::Accepted )
-            {
-                if( m_part && m_part->document().selection() ) m_part->addCommand( new VStrokeCmd( &m_part->document(), dialog->Color() ), true );
-            }
-#endif
-            //delete dialog;
-        }
-    }
     return false;
 }
 
@@ -288,28 +270,33 @@ void VStrokeFillPreview::drawStroke( const KoShapeBorderModel * stroke )
         painter.restore();
     }
 
-    // show 3D outline of stroke part
-    painter.setBrush( Qt::NoBrush );
+    // only draw th 3D ouline when no stroke is set
+    // which looks better for thin strokes
+    if( ! stroke )
+    {
+        // show 3D outline of stroke part
+        painter.setBrush( Qt::NoBrush );
 
-    painter.setPen( Qt::white );
-    painter.drawLine( QPointF( m_strokeRect.right() + 1, m_strokeRect.top() - 1 ),
-                      QPointF( m_strokeRect.left() - 1, m_strokeRect.top() - 1 ) );
-    painter.drawLine( QPointF( m_strokeRect.left() - 1, m_strokeRect.top() - 1 ),
-                      QPointF( m_strokeRect.left() - 1, m_strokeRect.bottom() + 1 ) );
+        painter.setPen( Qt::white );
+        painter.drawLine( QPointF( m_strokeRect.right() + 1, m_strokeRect.top() - 1 ),
+                        QPointF( m_strokeRect.left() - 1, m_strokeRect.top() - 1 ) );
+        painter.drawLine( QPointF( m_strokeRect.left() - 1, m_strokeRect.top() - 1 ),
+                        QPointF( m_strokeRect.left() - 1, m_strokeRect.bottom() + 1 ) );
 
-    painter.setPen( QColor( 127, 127, 127 ) );
-    painter.drawLine( QPointF( m_strokeRect.right() + 1, m_strokeRect.top() - 1 ),
-                      QPointF( m_strokeRect.right() + 1, m_strokeRect.bottom() + 1 ) );
-    painter.drawLine( QPointF( m_strokeRect.right() + 1, m_strokeRect.bottom() + 1 ),
-                      QPointF( m_strokeRect.left() - 1, m_strokeRect.bottom() + 1 ) );
+        painter.setPen( QColor( 127, 127, 127 ) );
+        painter.drawLine( QPointF( m_strokeRect.right() + 1, m_strokeRect.top() - 1 ),
+                        QPointF( m_strokeRect.right() + 1, m_strokeRect.bottom() + 1 ) );
+        painter.drawLine( QPointF( m_strokeRect.right() + 1, m_strokeRect.bottom() + 1 ),
+                        QPointF( m_strokeRect.left() - 1, m_strokeRect.bottom() + 1 ) );
 
-    painter.setPen( Qt::black );
-    painter.drawLine( innerRect.topRight(), innerRect.topLeft() );
-    painter.drawLine( innerRect.topLeft(), innerRect.bottomLeft() );
+        painter.setPen( Qt::black );
+        painter.drawLine( innerRect.topRight(), innerRect.topLeft() );
+        painter.drawLine( innerRect.topLeft(), innerRect.bottomLeft() );
 
-    painter.setPen( Qt::white );
-    painter.drawLine( innerRect.topRight(), innerRect.bottomRight() );
-    painter.drawLine( innerRect.bottomRight(), innerRect.bottomLeft() );
+        painter.setPen( Qt::white );
+        painter.drawLine( innerRect.topRight(), innerRect.bottomRight() );
+        painter.drawLine( innerRect.bottomRight(), innerRect.bottomLeft() );
+    }
 
     if( ! stroke )
     {

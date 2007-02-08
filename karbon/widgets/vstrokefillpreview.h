@@ -26,8 +26,6 @@
 #include <QFrame>
 #include <QPixmap>
 
-#include <KoDockFactory.h>
-
 class QEvent;
 class QPaintEvent;
 class QBrush;
@@ -45,12 +43,9 @@ public:
     /// Destroys the preview widget
     ~VStrokeFillPreview();
 
-    virtual QSize sizeHint() const
-        { return QSize( 50, 50 ); }
-    virtual QSize minimumSizeHint() const
-        { return QSize( 20, 20 ); }
-    virtual QSizePolicy sizePolicy() const
-        { return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ); }
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual QSizePolicy sizePolicy() const;
 
     /**
      * Updates the preview with the given fill and stroke
