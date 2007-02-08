@@ -148,6 +148,18 @@ add_test(BitopsFunctions TestBitopsFunctions)
 
 ########### next target ###############
 
+set(TestInformationFunctions_SRCS TestInformationFunctions.cpp)
+
+kde4_automoc(${TestInformationFunctions_SRCS})
+
+kde4_add_executable(TestInformationFunctions RUN_UNINSTALLED ${TestInformationFunctions_SRCS})
+
+target_link_libraries(TestInformationFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(InformationFunctions TestInformationFunctions)
+
+########### next target ###############
+
 set(TestEngineeringFunctions_SRCS TestEngineeringFunctions.cpp)
 
 kde4_automoc(${TestEngineeringFunctions_SRCS})
