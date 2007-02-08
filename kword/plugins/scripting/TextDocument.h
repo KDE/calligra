@@ -104,7 +104,7 @@ namespace Scripting {
             /** Return a list of all variablenames. */
             QStringList variableNames() {
                 KoVariableManager* manager = variableManager();
-                return manager ? manager->variables() : QStringList();
+                return manager ? QStringList(manager->variables()) : QStringList();
             }
             /** Return the value of a variable. */
             QString variableValue(const QString& variablename) {
