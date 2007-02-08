@@ -95,6 +95,7 @@
 #include "vstyledocker.h"
 #include "vtransformdocker.h"
 #include "vlayerdocker.h"
+#include "KarbonStylePreviewDocker.h"
 #include <KoToolDocker.h>
 #include <KoToolDockerFactory.h>
 // ToolBars
@@ -113,7 +114,6 @@
 #include "vcomposite.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
-#include "vstrokefillpreview.h"
 #include "vtypebuttonbox.h"
 #include "vstatebutton.h"
 #include "vcanvas.h"
@@ -167,7 +167,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	initActions();
 
 	m_DocumentTab = 0L;
-	m_strokeFillPreview = 0L;
+    m_stylePreview = 0L;
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
 	m_styleDocker = 0L;
@@ -239,23 +239,19 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		KoShapeSelectorFactory shapeSelectorFactory;
 		createDockWidget( &shapeSelectorFactory );
 
-		m_strokeFillPreview = new VStrokeFillPreview( part() );
-        //createDock(i18n("Stroke/Fills"), m_strokeFillPreview);
+        KarbonStylePreviewDockerFactory styleFactory;
+        m_stylePreview = dynamic_cast<KarbonStylePreviewDocker*>( createDockWidget( &styleFactory ) );
 
 		KoToolDockerFactory toolDockerFactory;
 		KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
 		connect(m_canvasView, SIGNAL(toolOptionWidgetChanged(QWidget*)), toolDocker, SLOT(newOptionWidget(QWidget*)));
 
-	//	m_typeButtonBox = new VTypeButtonBox( part(), m_toolbox );
 
-		//connect( m_strokeFillPreview, SIGNAL( fillSelected() ), m_typeButtonBox, SLOT( setFill() ) );
-		//connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_typeButtonBox, SLOT( setStroke() ) );
+		//connect( m_stylePreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( slotStrokeChanged( const VStroke & ) ) );
+		//connect( m_stylePreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( slotFillChanged( const VFill & ) ) );
 
-		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( slotStrokeChanged( const VStroke & ) ) );
-		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( slotFillChanged( const VFill & ) ) );
-
-		connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
-		connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
+		//connect( m_stylePreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
+		//connect( m_stylePreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 
 			//create toolbars
 // 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
@@ -338,7 +334,7 @@ KarbonView::dropEvent( QDropEvent *e )
 		realcolor.set( r, g, b );
 
 		if( part() )
-			if( m_strokeFillPreview->strokeIsSelected() )
+			if( m_stylePreview->strokeIsSelected() )
 				part()->addCommand( new VStrokeCmd( &part()->document(), realcolor ), true );
 			else
 				part()->addCommand( new VFillCmd( &part()->document(), realcolor ), true );
@@ -1539,13 +1535,30 @@ KarbonView::selectionChanged()
 	{
 		KoShape *shape = *selection->selectedShapes().begin();
 		if( shape )
+        {
 			m_strokeDocker->setStroke( shape->border() );
-		/** TODO needs porting to flake
+            if ( shell() ) {
+                //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
+                    m_stylePreview->updateStyle( shape->border(), &shape->background() );
+                    //m_smallPreview->update( *obj->stroke(), *obj->fill() );
+                //}
+            }
+        }
+        else
+        {
+            if ( shell() ) {
+                //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
+                    m_stylePreview->updateStyle( 0, 0 );
+                    //m_smallPreview->update( *obj->stroke(), *obj->fill() );
+                //}
+            }
+        }
+        /** TODO needs porting to flake
 		VObject *obj = part()->document().selection()->objects().getFirst();
 
 		if ( shell() ) {
 			//if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
-				m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
+				m_stylePreview->update( *obj->stroke(), *obj->fill() );
 				m_smallPreview->update( *obj->stroke(), *obj->fill() );
 			//}
 		}
@@ -1595,10 +1608,12 @@ KarbonView::selectionChanged()
 	}
 	else
 	{
+        /*
 		if ( shell() )
-			//if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_strokeFillPreview )
-			m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
+			//if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_stylePreview )
+			m_stylePreview->update( *( part()->document().selection()->stroke() ),
 									 *( part()->document().selection()->fill() ) );
+        */
 		// TODO: activate the line below when KoLineStyleAction is ported.
 		// m_lineStyleAction->setEnabled( false );
 	}

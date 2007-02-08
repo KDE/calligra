@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 - 2005, The Karbon Developers
+   Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
+   Copyright (C) 2002,2003,2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,411 +28,297 @@
 #include <QPoint>
 #include <QRect>
 #include <QPainter>
+#include <QBrush>
+#include <QGradient>
+#include <QDockWidget>
 
 #include <kdebug.h>
 
-#include "karbon_part.h"
+#include <KoPathShape.h>
+#include <KoShapeBorderModel.h>
+#include <KoZoomHandler.h>
+
 #include "vcolordlg.h"
-#include "vfill.h"
-#include "vfillcmd.h"
-#include "vqpainter.h"
-#include "vselection.h"
-#include "vstroke.h"
-#include "vstrokecmd.h"
 #include "vstrokefillpreview.h"
 
-#define PANEL_SIZEX		50.0
-#define PANEL_SIZEY		50.0
+#define PANEL_SIZEX 50.0
+#define PANEL_SIZEY 50.0
 
-#define FILL_TOPX		15.0
-#define FILL_TOPY		15.0
-#define FILL_BOTTOMX		45.0
-#define FILL_BOTTOMY		45.0
-
-#define STROKE_TOPX		5.0
-#define STROKE_TOPY		5.0
-#define STROKE_BOTTOMX		35.0
-#define STROKE_BOTTOMY		35.0
-
-#define STROKE_TOPX_INNER	STROKE_TOPX + 4
-#define STROKE_TOPY_INNER	STROKE_TOPY + 4
-#define STROKE_BOTTOMX_INNER	STROKE_BOTTOMX - 4
-#define STROKE_BOTTOMY_INNER	STROKE_BOTTOMY - 4
-
-
-VStrokeFillPreview::VStrokeFillPreview(
-	KarbonPart *part, QWidget* parent, const char* name )
-		: QFrame( parent), m_part( part )
+VStrokeFillPreview::VStrokeFillPreview( QWidget * parent )
+    : QFrame( parent ), m_strokeWidget( false ), m_fill( 0 ), m_stroke( 0 )
+    , m_strokeRect( 5.0, 5.0, 30.0, 30.0 ), m_fillRect(15.0, 15.0, 30.0, 30.0 )
 {
-	m_strokeWidget = false;
-	setFocusPolicy( Qt::NoFocus );
+    setFocusPolicy( Qt::NoFocus );
 
-	setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
+    setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
 
-	installEventFilter( this );
-	m_pixmap = QPixmap( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
-	m_painter = new VQPainter( &m_pixmap, uint( PANEL_SIZEX ), uint( PANEL_SIZEY ) );
+    installEventFilter( this );
+    m_pixmap = QPixmap( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
+
+    update( m_stroke, m_fill );
 }
 
 VStrokeFillPreview::~VStrokeFillPreview()
 {
-	delete( m_painter );
 }
 
-void
-VStrokeFillPreview::paintEvent( QPaintEvent* event )
+void VStrokeFillPreview::paintEvent( QPaintEvent* event )
 {
-	QPainter p(this);
-	p.drawPixmap(QPoint((int)( width() - PANEL_SIZEX ) / 2, (int)( height() - PANEL_SIZEY ) / 2), m_pixmap, QRect(0, 0, (int)PANEL_SIZEX, (int)PANEL_SIZEY ));
+    QPainter p(this);
+    p.drawPixmap( QPoint((int)( width() - PANEL_SIZEX ) / 2,
+                  (int)( height() - PANEL_SIZEY ) / 2),
+                  m_pixmap, QRect(0, 0, (int)PANEL_SIZEX, (int)PANEL_SIZEY ));
 
-	QFrame::paintEvent( event );
+    QFrame::paintEvent( event );
 }
 
-bool
-VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
+bool VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 {
-	QMouseEvent* e = static_cast<QMouseEvent *>( event );
+    QMouseEvent* e = static_cast<QMouseEvent *>( event );
 
-	int ex = e->x() - int( ( width() - PANEL_SIZEX ) / 2 );
-	int ey = e->y() - int( ( height() - PANEL_SIZEY ) / 2 );
+    int ex = e->x() - int( ( width() - PANEL_SIZEX ) / 2 );
+    int ey = e->y() - int( ( height() - PANEL_SIZEY ) / 2 );
 
-	if( event && event->type() == QEvent::MouseButtonPress )
-	{
-		if ( m_strokeWidget )
-		{
-			if(
-				ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX &&
-				ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
-			{
-				m_strokeWidget = true;
-				emit strokeSelected();
-			}
-			else if(
-				ex >= FILL_TOPX && ex <= FILL_BOTTOMX &&
-				ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
-			{
-				m_strokeWidget = false;
-				emit fillSelected();
-			}
-		}
-		else
-		{
-			if(
-				ex >= FILL_TOPX && ex <= FILL_BOTTOMX &&
-				ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
-			{
-				m_strokeWidget = false;
-				emit fillSelected();
-			}
-			else if(
-				ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX &&
-				ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
-			{
-				m_strokeWidget = true;
-				emit strokeSelected();
-			}
-		}
-		update( *m_stroke, *m_fill );
-	}
+    if( event && event->type() == QEvent::MouseButtonPress )
+    {
+        if ( m_strokeWidget )
+        {
+            if( m_strokeRect.contains( QPointF( ex, ey ) ) )
+            {
+                m_strokeWidget = true;
+                emit strokeSelected();
+            }
+            else if( m_fillRect.contains( QPointF( ex, ey ) ) )
+            {
+                m_strokeWidget = false;
+                emit fillSelected();
+            }
+        }
+        else
+        {
+            if( m_fillRect.contains( QPointF( ex, ey ) ) )
+            {
+                m_strokeWidget = false;
+                emit fillSelected();
+            }
+            else if( m_strokeRect.contains( QPointF( ex, ey ) ) )
+            {
+                m_strokeWidget = true;
+                emit strokeSelected();
+            }
+        }
+        update( m_stroke, m_fill );
+    }
 
-	if( event && event->type() == QEvent::MouseButtonDblClick )
-	{
-		if(
-			ex >= FILL_TOPX && ex <= FILL_BOTTOMX &&
-			ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
-		{
-			VColorDlg* dialog = new VColorDlg( m_fill->color(), this );
+    if( event && event->type() == QEvent::MouseButtonDblClick )
+    {
+        if( m_fillRect.contains( QPointF( ex, ey ) ) )
+        {
+            //VColorDlg* dialog = new VColorDlg( m_fill->color(), this );
 #if 0
 // needs porting:
 // error: no matching function for call to `VFill::setColor(Qt::GlobalColor)'
 
-			if( dialog->exec() == QDialog::Accepted )
-			{
-				if( m_part && m_part->document().selection() ) m_part->addCommand( new VFillCmd( &m_part->document(), VFill( dialog->Color() ) ), true );
-			}
+            if( dialog->exec() == QDialog::Accepted )
+            {
+                if( m_part && m_part->document().selection() ) m_part->addCommand( new VFillCmd( &m_part->document(), VFill( dialog->Color() ) ), true );
+            }
 #endif
-			delete dialog;
-		}
-		else if(
-			ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX
-			&& ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
-		{
-			VColorDlg* dialog = new VColorDlg( m_stroke->color(), this );
+            //delete dialog;
+        }
+        else if( m_strokeRect.contains( QPointF( ex, ey ) ) )
+        {
+            //VColorDlg* dialog = new VColorDlg( m_stroke->color(), this );
 #if 0
 // needs porting:
-			if( dialog->exec() == QDialog::Accepted )
-			{
-				if( m_part && m_part->document().selection() ) m_part->addCommand( new VStrokeCmd( &m_part->document(), dialog->Color() ), true );
-			}
+            if( dialog->exec() == QDialog::Accepted )
+            {
+                if( m_part && m_part->document().selection() ) m_part->addCommand( new VStrokeCmd( &m_part->document(), dialog->Color() ), true );
+            }
 #endif
-			delete dialog;
-		}
-	}
-	return false;
+            //delete dialog;
+        }
+    }
+    return false;
 }
 
-void
-VStrokeFillPreview::update( const VStroke &s, const VFill &f )
+void VStrokeFillPreview::update( const KoShapeBorderModel * stroke, const QBrush * fill )
 {
-	m_painter->begin();
-	m_fill = &f;
-	m_stroke = &s;
+    m_fill = fill;
+    m_stroke = stroke;
 
-	// draw checkerboard
-	VFill fill;
-	m_painter->setPen( Qt::NoPen );
+    QPainter painter( &m_pixmap );
 
-	for( unsigned char y = 0; y < PANEL_SIZEY; y += 10 )
-		for( unsigned char x = 0; x < PANEL_SIZEX; x += 10 )
-		{
-			fill.setColor( ( ( ( x + y ) % 20 ) == 0 ) ? QColor( 180, 180, 180 ) : QColor( 100, 100, 100 ) );
-			m_painter->setBrush( fill );
-			m_painter->drawRect( x, y, 10, 10 );
-		}
+    // the checker board colors
+    QColor dark( 100, 100, 100 );
+    QColor light( 180, 180, 180 );
 
-	if ( m_strokeWidget )
-	{
-		drawFill( f );
-		drawStroke( s );
-	}
-	else
-	{
- 		drawStroke( s );
-		drawFill( f );
-	}
+    // draw checkerboard
+    painter.setPen( Qt::NoPen );
+    for( unsigned char y = 0; y < PANEL_SIZEY; y += 10 )
+        for( unsigned char x = 0; x < PANEL_SIZEX; x += 10 )
+        {
+            painter.setBrush( ( ( ( x + y ) % 20 ) == 0 ) ? light : dark );
+            painter.drawRect( x, y, 10, 10 );
+        }
 
-	m_painter->end();
+    if ( m_strokeWidget )
+    {
+        drawFill( m_fill );
+        drawStroke( m_stroke );
+    }
+    else
+    {
+        drawStroke( m_stroke );
+        drawFill( m_fill );
+    }
 
-	repaint();
+    QFrame::update();
 }
 
-void
-VStrokeFillPreview::drawFill( const VFill &f )
+void VStrokeFillPreview::drawFill( const QBrush * fill )
 {
-	VStroke stroke;
+    QPainter painter( &m_pixmap );
 
-	if( f.type() != VFill::none )
-	{
-		if( f.type() != VFill::solid )
-		{
-			VFill fill;
-			fill = f;
+    QBrush brush( Qt::white );
 
-			if( f.type() == VFill::grad )
-			{
-				if( f.gradient().type() == VGradient::linear )
-				{
-					fill.gradient().setOrigin( QPointF( 30, 20 ) );
-					fill.gradient().setVector( QPointF( 30, 50 ) );
-				}
-				else if( f.gradient().type() == VGradient::radial ||
-						 f.gradient().type() == VGradient::conic )
-				{
-					fill.gradient().setOrigin( QPointF( 30, 35 ) );
-					fill.gradient().setFocalPoint( QPointF( 30, 35 ) );
-					fill.gradient().setVector( QPointF( 30, 50 ) );
-				}
-			}
-			if( f.type() == VFill::patt )
-			{
-				fill.pattern() = f.pattern();
-				fill.pattern().setOrigin( QPointF( 20, 10 ) );
-				fill.pattern().setVector( QPointF( 30, 10 ) );
-				fill.setType( VFill::patt );
-			}
+    if( fill && fill->style() != Qt::NoBrush )
+    {
+        switch( fill->style() )
+        {
+            case Qt::LinearGradientPattern:
+            {
+                QLinearGradient g;
+                g.setStart( QPointF( 30, 20 ) );
+                g.setFinalStop( QPointF( 30, 50 ) );
+                g.setStops( fill->gradient()->stops() );
+                brush = QBrush( g );
+                break;
+            }
+            case Qt::RadialGradientPattern:
+            {
+                QRadialGradient g;
+                g.setCenter( m_fillRect.center() );
+                g.setFocalPoint( m_fillRect.center() );
+                g.setRadius( 15.0 );
+                g.setStops( fill->gradient()->stops() );
+                brush = QBrush( g );
+                break;
+            }
+            case Qt::ConicalGradientPattern:
+            {
+                QConicalGradient g;
+                g.setCenter( m_fillRect.center() );
+                g.setAngle( 0.0 );
+                g.setStops( fill->gradient()->stops() );
+                brush = QBrush( g );
+                break;
+            }
+            default:
+                brush = *fill;
+                break;
+        }
+    }
 
-			m_painter->setBrush( fill );
-		}
-		else
-			m_painter->setBrush( f );
-		m_painter->setPen( Qt::NoPen );
-		m_painter->drawRect( QRectF( FILL_TOPX, FILL_TOPY, FILL_BOTTOMX - FILL_TOPX, FILL_BOTTOMY - FILL_TOPY ) );
-	}
-	else
-	{
-		VFill fill;
-		fill.setColor( QColor( "white" ) );
-		m_painter->setBrush( fill );
-		m_painter->setPen( Qt::NoPen );
+    painter.setBrush( brush );
+    painter.setPen( Qt::NoPen );
+    painter.drawRect( m_fillRect );
 
-		m_painter->drawRect( QRectF(	FILL_TOPX, FILL_TOPY,
-										FILL_BOTTOMX - FILL_TOPX,
-										FILL_BOTTOMY - FILL_TOPY ) );
-	}
+    // show 3D outline of fill part
+    painter.setBrush( Qt::NoBrush );
 
-	// show 3D outline of fill part
-	VColor color;
+    painter.setPen( Qt::white );
+    painter.drawLine( m_fillRect.topRight(), m_fillRect.topLeft() );
+    painter.drawLine( m_fillRect.topLeft(), m_fillRect.bottomLeft() );
 
-	m_painter->setBrush( Qt::NoBrush );
-	color.set( 1.0, 1.0, 1.0 );
-	stroke.setColor( color );
-	m_painter->setPen( stroke );
+    painter.setPen( QColor( 127, 127, 127 ) );
+    painter.drawLine( m_fillRect.topRight(), m_fillRect.bottomRight() );
+    painter.drawLine( m_fillRect.bottomRight(), m_fillRect.bottomLeft() );
 
-	m_painter->newPath();
-	m_painter->moveTo( QPointF( FILL_BOTTOMX, FILL_TOPY ) );
-	m_painter->lineTo( QPointF( FILL_TOPX, FILL_TOPY ) );
-	m_painter->lineTo( QPointF( FILL_TOPX, FILL_BOTTOMY ) );
-	m_painter->strokePath();
-
-	color.set( 0.5, 0.5, 0.5 );
-	stroke.setColor( color );
-	m_painter->setPen( stroke );
-
-	m_painter->newPath();
-	m_painter->moveTo( QPointF( FILL_BOTTOMX, FILL_TOPY ) );
-	m_painter->lineTo( QPointF( FILL_BOTTOMX, FILL_BOTTOMY ) );
-	m_painter->lineTo( QPointF( FILL_TOPX, FILL_BOTTOMY ) );
-	m_painter->strokePath();
-
-	if( f.type() == VFill::none )
-	{
-		stroke.setColor( QColor( "red" ) );
-		m_painter->setPen( stroke );
-		m_painter->newPath();
-		m_painter->moveTo( QPointF( FILL_BOTTOMX, FILL_TOPY ) );
-		m_painter->lineTo( QPointF( FILL_TOPX, FILL_BOTTOMY ) );
-		m_painter->strokePath();
-	}
+    if( ! fill || ( fill && fill->style() == Qt::NoBrush ) )
+    {
+        QPen pen( Qt::red );
+        pen.setWidth( 2 );
+        painter.setPen( pen );
+        painter.setRenderHint( QPainter::Antialiasing, true );
+        painter.drawLine( m_fillRect.topRight(), m_fillRect.bottomLeft() );
+    }
 }
 
-void
-VStrokeFillPreview::drawStroke( const VStroke &s )
+void VStrokeFillPreview::drawStroke( const KoShapeBorderModel * stroke )
 {
-	VStroke stroke;
-	stroke.setLineWidth( 2.0 );
+    QPainter painter( &m_pixmap );
 
-	m_painter->setPen( Qt::NoPen );
+    QRectF innerRect = m_strokeRect.adjusted( 5, 5, -5, -5 );
+    QRectF outerRect = m_strokeRect.adjusted( 0, 0, 1, 1 );
 
-	if( s.type() != VStroke::none )
-	{
-		VFill fill;
+    QRegion clipRegion = QRegion( outerRect.toRect() ).subtracted( QRegion( innerRect.toRect() ) );
 
-		if( s.type() != VStroke::solid )
-		{
-			if( s.type() == VStroke::grad )
-			{
-				fill.gradient() = s.gradient();
+    if( stroke )
+    {
+        KoPathShape path;
 
-				if( s.gradient().type() == VGradient::linear )
-				{
-					fill.gradient().setOrigin( QPointF( FILL_TOPX, 10 ) );
-					fill.gradient().setVector( QPointF( FILL_TOPX, 40 ) );
-				}
-				else if( s.gradient().type() == VGradient::radial ||
-						 s.gradient().type() == VGradient::conic )
-				{
-					fill.gradient().setOrigin( QPointF( FILL_TOPX, 25 ) );
-					fill.gradient().setFocalPoint( QPointF( FILL_TOPX, 25 ) );
-					fill.gradient().setVector( QPointF( FILL_TOPX, 40 ) );
-				}
+        QRectF middleRect = m_strokeRect.adjusted( 2., 2., -2., -2. );
+        KoZoomHandler zoomHandler;
 
-				fill.setType( VFill::grad );
-			}
-			if( s.type() == VStroke::patt )
-			{
-				fill.pattern() = s.pattern();
-				fill.pattern().setOrigin( QPointF( FILL_TOPX, 10 ) );
-				fill.pattern().setVector( QPointF( FILL_TOPX, 40 ) );
-				fill.setType( VFill::patt );
-			}
-		}
-		else
-			fill.setColor( s.color() );
+        middleRect = zoomHandler.viewToDocument( middleRect );
 
-		m_painter->setFillRule( evenOdd );
+        path.moveTo( middleRect.topLeft() );
+        path.lineTo( middleRect.bottomLeft() );
+        path.lineTo( middleRect.bottomRight() );
+        path.lineTo( middleRect.topRight() );
+        path.close();
 
-		m_painter->setBrush( fill );
+        QPainter painter( &m_pixmap );
 
-		m_painter->newPath();
-		m_painter->moveTo( QPointF( STROKE_TOPX, STROKE_TOPY ) );
-		m_painter->lineTo( QPointF( STROKE_BOTTOMX, STROKE_TOPY ) );
-		m_painter->lineTo( QPointF( STROKE_BOTTOMX, STROKE_BOTTOMY ) );
-		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_BOTTOMY ) );
-		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_TOPY ) );
+        KoShapeBorderModel * border = const_cast<KoShapeBorderModel *>( stroke );
+        painter.save();
+        painter.setRenderHint( QPainter::Antialiasing, true );
+        painter.setClipRegion( clipRegion );
+        border->paintBorder( &path, painter, zoomHandler );
+        painter.restore();
+    }
+    else
+    {
+        painter.save();
+        painter.setClipRegion( clipRegion );
+        painter.setBrush( Qt::white );
+        painter.setPen( Qt::NoPen );
+        painter.drawRect( outerRect );
+        painter.restore();
+    }
 
-		m_painter->moveTo( QPointF( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER, STROKE_BOTTOMY_INNER ) );
-		m_painter->lineTo( QPointF( STROKE_TOPX_INNER, STROKE_BOTTOMY_INNER ) );
-		m_painter->lineTo( QPointF( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->fillPath();
-	}
-	else
-	{
-		VFill fill;
-		m_painter->setFillRule( evenOdd );
-		fill.setColor( QColor( "white" ) );
+    // show 3D outline of stroke part
+    painter.setBrush( Qt::NoBrush );
 
-		m_painter->setBrush( fill );
-		m_painter->setPen( Qt::NoPen );
+    painter.setPen( Qt::white );
+    painter.drawLine( QPointF( m_strokeRect.right() + 1, m_strokeRect.top() - 1 ),
+                      QPointF( m_strokeRect.left() - 1, m_strokeRect.top() - 1 ) );
+    painter.drawLine( QPointF( m_strokeRect.left() - 1, m_strokeRect.top() - 1 ),
+                      QPointF( m_strokeRect.left() - 1, m_strokeRect.bottom() + 1 ) );
 
-		m_painter->newPath();
-		m_painter->moveTo( QPointF( STROKE_TOPX, STROKE_TOPY ) );
-		m_painter->lineTo( QPointF( STROKE_BOTTOMX, STROKE_TOPY ) );
-		m_painter->lineTo( QPointF( STROKE_BOTTOMX, STROKE_BOTTOMY ) );
-		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_BOTTOMY ) );
-		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_TOPY ) );
+    painter.setPen( QColor( 127, 127, 127 ) );
+    painter.drawLine( QPointF( m_strokeRect.right() + 1, m_strokeRect.top() - 1 ),
+                      QPointF( m_strokeRect.right() + 1, m_strokeRect.bottom() + 1 ) );
+    painter.drawLine( QPointF( m_strokeRect.right() + 1, m_strokeRect.bottom() + 1 ),
+                      QPointF( m_strokeRect.left() - 1, m_strokeRect.bottom() + 1 ) );
 
-		m_painter->moveTo( QPointF( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER, STROKE_BOTTOMY_INNER ) );
-		m_painter->lineTo( QPointF( STROKE_TOPX_INNER, STROKE_BOTTOMY_INNER ) );
-		m_painter->lineTo( QPointF( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->fillPath();
-	}
+    painter.setPen( Qt::black );
+    painter.drawLine( innerRect.topRight(), innerRect.topLeft() );
+    painter.drawLine( innerRect.topLeft(), innerRect.bottomLeft() );
 
-	// show 3D outline of stroke part
-	VColor color;
+    painter.setPen( Qt::white );
+    painter.drawLine( innerRect.topRight(), innerRect.bottomRight() );
+    painter.drawLine( innerRect.bottomRight(), innerRect.bottomLeft() );
 
-	color.set( 1.0, 1.0, 1.0 );
-	stroke.setColor( color );
-	m_painter->setBrush( Qt::NoBrush );
-	m_painter->setPen( stroke );
-
-	m_painter->newPath();
-	m_painter->moveTo( QPointF( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
-	m_painter->lineTo( QPointF( STROKE_TOPX - 1, STROKE_TOPY - 1 ) );
-	m_painter->lineTo( QPointF( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
-	m_painter->strokePath();
-
-	color.set( 0.5, 0.5, 0.5 );
-	stroke.setColor( color );
-	m_painter->setPen( stroke );
-
-	m_painter->newPath();
-	m_painter->moveTo( QPointF( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
-	m_painter->lineTo( QPointF( STROKE_BOTTOMX + 1, STROKE_BOTTOMY + 1 ) );
-	m_painter->lineTo( QPointF( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
-	m_painter->strokePath();
-
-	stroke.setColor( QColor( "black" ) );
-	m_painter->setPen( stroke );
-	m_painter->newPath();
-	m_painter->moveTo( QPointF( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
-	m_painter->lineTo( QPointF( STROKE_TOPX_INNER + 1, STROKE_TOPY_INNER + 1 ) );
-	m_painter->lineTo( QPointF( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
-	m_painter->strokePath();
-
-	color.set( 1.0, 1.0, 1.0 );
-	stroke.setColor( color );
-	m_painter->setPen( stroke );
-
-	m_painter->newPath();
-	m_painter->moveTo( QPointF( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
-	m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER - 1, STROKE_BOTTOMY_INNER - 1 ) );
-	m_painter->lineTo( QPointF( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
-	m_painter->strokePath();
-
-	if( s.type() == VStroke::none )
-	{
-		stroke.setColor( QColor( "red" ) );
-		m_painter->setPen( stroke );
-
-		m_painter->newPath();
-		m_painter->moveTo( QPointF( STROKE_BOTTOMX, STROKE_TOPY ) );
-		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_BOTTOMY ) );
-		m_painter->strokePath();
-	}
+    if( ! stroke )
+    {
+        QPen pen( Qt::red );
+        pen.setWidth( 2 );
+        painter.setPen( pen );
+        painter.setRenderHint( QPainter::Antialiasing, true );
+        painter.drawLine( m_strokeRect.topRight(), m_strokeRect.bottomLeft() );
+    }
 }
 
 #include "vstrokefillpreview.moc"

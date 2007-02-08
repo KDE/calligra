@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
+   Copyright (C) 2002-2003 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,55 +23,72 @@
 #ifndef __VSTROKEFILLPREVIEW_H__
 #define __VSTROKEFILLPREVIEW_H__
 
-#include <qframe.h>
-#include <qpixmap.h>
-#include <QPaintEvent>
-#include <QEvent>
+#include <QFrame>
+#include <QPixmap>
 
-class VQPainter;
-class VFill;
-class VStroke;
-class KarbonPart;
+#include <KoDockFactory.h>
 
+class QEvent;
+class QPaintEvent;
+class QBrush;
+class KoShapeBorderModel;
+
+/// A widget to preview stroke and fill of a shape
 class VStrokeFillPreview : public QFrame
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	VStrokeFillPreview( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
-	~VStrokeFillPreview();
+    /// Constructs preview widget with given parent
+    explicit VStrokeFillPreview( QWidget* parent = 0L );
 
-	virtual QSize sizeHint() const
-		{ return QSize( 50, 50 ); }
-	virtual QSize minimumSizeHint() const
-		{ return QSize( 20, 20 ); }
-	virtual QSizePolicy sizePolicy() const
-		{ return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ); }
+    /// Destroys the preview widget
+    ~VStrokeFillPreview();
 
-	void update( const VStroke &, const VFill & );
+    virtual QSize sizeHint() const
+        { return QSize( 50, 50 ); }
+    virtual QSize minimumSizeHint() const
+        { return QSize( 20, 20 ); }
+    virtual QSizePolicy sizePolicy() const
+        { return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ); }
 
-	virtual bool eventFilter( QObject* object, QEvent* event );
+    /**
+     * Updates the preview with the given fill and stroke
+     * @param stroke the stroke to preview
+     * @param fill the fill to preview
+     */
+    void update( const KoShapeBorderModel * stroke, const QBrush * fill );
 
-	bool strokeIsSelected() const { return m_strokeWidget; }
+    virtual bool eventFilter( QObject* object, QEvent* event );
+
+    /**
+     * Returns whether the stroke (true) or the fill (false) is selected.
+     */
+    bool strokeIsSelected() const { return m_strokeWidget; }
 
 signals:
-	void strokeChanged( const VStroke & );
-	void fillChanged( const VFill& );
-	void fillSelected();
-	void strokeSelected();
+    /// Is emitted as soon as the stroke was changed
+    void strokeChanged( const KoShapeBorderModel & );
+    /// Is emitted as soon as the fill was changed
+    void fillChanged( const QBrush& );
+    /// Is emitted as soon as the fill is selected
+    void fillSelected();
+    /// Is emitted as soon as the stroke is selected
+    void strokeSelected();
 
 protected:
-	virtual void paintEvent( QPaintEvent* event );
+    virtual void paintEvent( QPaintEvent* event );
 
 private:
-	VQPainter* m_painter;
-	void drawFill( const VFill & );
-	void drawStroke( const VStroke & );
-	QPixmap m_pixmap;
-	KarbonPart *m_part;
-	bool m_strokeWidget;
-	const VFill *m_fill;
-	const VStroke *m_stroke;
+    void drawFill( const QBrush* );
+    void drawStroke( const KoShapeBorderModel* );
+
+    QPixmap m_pixmap; ///< the pixmap used for caching
+    bool m_strokeWidget; ///< shows if stroke or fill is selected
+    const QBrush * m_fill; ///< the fill to preview
+    const KoShapeBorderModel * m_stroke; ///< the stroke to preview
+    QRectF m_strokeRect;
+    QRectF m_fillRect;
 };
 
 #endif

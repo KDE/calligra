@@ -7,6 +7,7 @@ set(karbondockers_SRCS
     vstyledocker.cc
     vtransformdocker.cc
     vlayerdocker.cpp
+    KarbonStylePreviewDocker.cpp
     )
 
 kde4_automoc(${karbondockers_SRCS})

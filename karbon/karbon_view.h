@@ -64,9 +64,8 @@ class VSelectToolBar;
 class VSmallPreview;
 class VStateButton;
 class VStroke;
-class VStrokeFillPreview;
 class KarbonCanvas;
-class VStrokeFillPreview;
+class KarbonStylePreviewDocker;
 class VTypeButtonBox;
 
 class VTool;
@@ -116,9 +115,6 @@ public:
 	void setZoomAt( double zoom, const QPointF & = QPointF() );
 
 	VToolController *toolController();
-
-	VStrokeFillPreview* strokeFillPreview()
-		{ return m_strokeFillPreview; }
 
 public slots:
 	// editing:
@@ -232,7 +228,7 @@ private:
 	KoRuler			*m_vertRuler;
 
 	VPainterFactory		*m_painterFactory;
-	VStrokeFillPreview	*m_strokeFillPreview;
+    KarbonStylePreviewDocker * m_stylePreview;
 	VTypeButtonBox		*m_typeButtonBox;
 
 	KAction			*m_groupObjects;
