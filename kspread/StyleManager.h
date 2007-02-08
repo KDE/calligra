@@ -34,6 +34,7 @@ class KoOasisStyles;
 
 namespace KSpread
 {
+class Doc;
 class Sheet;
 class StyleDialog;
 class View;
@@ -55,7 +56,7 @@ class KSPREAD_EXPORT StyleManager
   bool loadXML( KoXmlElement const & styles );
 
   void saveOasis( KoGenStyles &mainStyles );
-  void loadOasisStyleTemplate(  KoOasisStyles& oasisStyles );
+  void loadOasisStyleTemplate(  KoOasisStyles& oasisStyles, Doc* doc = 0 );
 
   CustomStyle * defaultStyle() const { return m_defaultStyle; }
 

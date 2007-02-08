@@ -803,6 +803,23 @@ public:
      */
     QDate referenceDate() const;
 
+    /**
+     * Sets the default decimal precision.
+     * It is used to format decimal numbers, if the cell style does not define
+     * one.
+     *
+     * \param precision the default decimal precision
+     */
+    void setDefaultDecimalPrecision( int precision );
+
+    /**
+     * Returns the default decimal precision, which is used, if the cell style
+     * does not define one.
+     *
+     * \return the default decimal precision
+     */
+    int defaultDecimalPrecision() const;
+
 public slots:
   void refreshInterface();
   void flushDamages();

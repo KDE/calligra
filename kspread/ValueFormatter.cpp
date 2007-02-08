@@ -228,10 +228,9 @@ QString ValueFormatter::removeTrailingZeros( const QString& str, const QString& 
 QString ValueFormatter::createNumberFormat ( double value, int precision,
     Format::Type fmt, Style::FloatFormat floatFormat, const QString& currencySymbol)
 {
-  // if precision is -1, ask for a huge number of decimals, we'll remove
-  // the zeros later. Is 8 ok ?
-  // Stefan: No. Use maximum possible decimal precision (DBL_DIG) instead.
-  int p = (precision == -1) ? 8 : precision;
+    // NOTE: If precision (obtained from the cell style) is -1 (arbitrary),
+    //       use the document default decimal precision.
+    int p = (precision == -1) ? doc()->defaultDecimalPrecision() : precision;
   QString localizedNumber;
   int pos = 0;
 

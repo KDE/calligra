@@ -60,7 +60,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     }
 }
 
-void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
+void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc )
 {
     // reset the map of OpenDocument Styles
     m_oasisStyles.clear();
@@ -72,6 +72,32 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
       kDebug(36003) << "StyleManager: Loading default cell style" << endl;
       defaultStyle()->loadOasis( oasisStyles, *defStyle, "Default" );
       defaultStyle()->setType( Style::BUILTIN );
+        if ( doc )
+        {
+            // Load the default precision to be used, if the (default) cell style
+            // is set to arbitrary precision.
+            QDomNode n = defStyle->firstChild();
+            while ( !n.isNull() )
+            {
+                if ( n.isElement() &&
+                     n.namespaceURI() == KoXmlNS::style &&
+                     n.localName() == "table-cell-properties" )
+                {
+                    QDomElement e = n.toElement();
+                    if ( n.toElement().hasAttributeNS( KoXmlNS::style, "decimal-places" ) )
+                    {
+                        bool ok;
+                        const int precision = n.toElement().attributeNS( KoXmlNS::style, "decimal-places" ).toInt( &ok );
+                        if ( ok && precision > -1 )
+                        {
+                            kDebug(36003) << "Default decimal precision: " << precision << endl;
+                            doc->setDefaultDecimalPrecision( precision );
+                        }
+                    }
+                }
+                n = n.nextSibling();
+            }
+        }
     }
     else
       resetDefaultStyle();

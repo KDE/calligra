@@ -176,6 +176,9 @@ public:
   bool useRegularExpressions    : 1;
   int refYear; // the reference year two-digit years are relative to
   QDate refDate; // the reference date all dates are relative to
+  // The precision used for decimal numbers, if the default cell style's
+  // precision is set to arbitrary.
+  int precision;
 };
 
 /*****************************************************************************
@@ -939,7 +942,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
     KoOasisLoadingContext context( this, oasisStyles, store );
 
     //load in first
-    styleManager()->loadOasisStyleTemplate( oasisStyles );
+    styleManager()->loadOasisStyleTemplate( oasisStyles, this );
 
     // load default column style
     const KoXmlElement* defaultColumnStyle = oasisStyles.defaultStyle( "table-column" );
@@ -2325,6 +2328,16 @@ void Doc::setReferenceDate( const QDate& date )
 QDate Doc::referenceDate() const
 {
     return d->refDate;
+}
+
+void Doc::setDefaultDecimalPrecision( int precision )
+{
+    d->precision = ( precision < 0 ) ? 8 : precision;
+}
+
+int Doc::defaultDecimalPrecision() const
+{
+    return d->precision;
 }
 
 void Doc::insertPixmapKey( KoPictureKey key )
