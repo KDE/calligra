@@ -35,9 +35,11 @@ kDebug()<<"Chart Panel : constructeur!!";
 chart = new ChartWidget(horizontalLayout_2,"MyChartWidget");
 hboxLayout->addWidget(chart,1,0);
 
+horizontalLayout_2->setMinimumSize(610, 350);
 horizontalLayout_2->setGeometry(QRect(10, 10, 600, 350));
-verticalLayout->setGeometry(QRect(10, 365, 600, 80));
 
+verticalLayout->setGeometry(QRect(10, 365, 600, 80));
+verticalLayout->setMinimumSize(610,80);
 chart->update();
 connect(curve2,SIGNAL(clicked()),SLOT(slotBCPW()));
 connect(curve1,SIGNAL(clicked()),SLOT(slotBCPS()));
@@ -55,11 +57,17 @@ ChartPanel::~ChartPanel()
 void ChartPanel::resizeEvent(QResizeEvent* ev)
 {
 	kDebug()<<"RESIZAGEEEEEEEEEEEEEEEE"<<(ev->size()).width()<<"    "<<(ev->size()).height();
-	chart->setMaximumWidth((ev->size()).width());
-	chart->setMaximumHeight((ev->size()).height());
+
+	chart->setMaximumWidth((ev->size()).width()-6);
+	chart->setMaximumHeight((ev->size()).height()-100);
+	horizontalLayout_2->setGeometry(QRect(10, 10, (ev->size()).width()-6, (ev->size()).height()-100));
+	verticalLayout->setGeometry(QRect(10, (ev->size()).height()-86, 600, 80));
+
+	horizontalLayout_2->setMaximumWidth((ev->size()).width()-6);
+	horizontalLayout_2->setMaximumHeight((ev->size()).height()-92);
+
+	verticalLayout->setMaximumWidth((ev->size()).width()-6);
 }
-
-
 
 void ChartPanel::slotBCPW()
 {

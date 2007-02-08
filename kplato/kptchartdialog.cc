@@ -33,11 +33,9 @@ ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
     m_panel = new ChartPanel(this);
     setMainWidget(m_panel);
     m_panel->show();
-
     resize(610,550);
+    setMinimumSize(610,550);
 
-   // connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonClose(bool)));
-   // connect(this,SIGNAL(CloseClicked()),this,SLOT(slotClose()));
 }
 
 ChartDialog::~ChartDialog()
@@ -45,16 +43,11 @@ ChartDialog::~ChartDialog()
 	delete m_panel;
 }
 
-KCommand *ChartDialog::buildCommand(Part *part) {
-	kDebug()<< "Chart Dialog : buildCommand";
-    //return m_panel->buildCommand(part);
-    return 0;
-}
-
-void ChartDialog::slotClose() {
-    kDebug()<< "Chart Dialog : slotClose";
-    //m_panel->slotClose();
-
+void ChartDialog::resizeEvent(QResizeEvent* ev)
+{
+	kDebug()<<"RESIZAGEE"<<(ev->size()).width()<<"         "<<(ev->size()).height()<<" <<== DIALOG";
+	m_panel->setMaximumWidth((ev->size()).width()-10);
+	m_panel->setMaximumHeight((ev->size()).height()-100);
 }
 
 } //namespace KPlato

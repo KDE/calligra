@@ -66,6 +66,7 @@ painter.drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,maximumHeight()-1
 if(is_bcwp_draw==true)
 {
     painter.setPen(QColor(Qt::red));    
+    bcwpPoints[0].setY(maximumHeight()-15);
     painter.drawPolyline(QPolygonF(bcwpPoints));
    // painter.drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,32));
     is_bcwp_draw=true;
