@@ -30,9 +30,15 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoShapeBackgroundCommand.h>
+#include <KoShapeBorderCommand.h>
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoLineBorder.h>
+#include <KoColor.h>
+#include <KoShape.h>
 
+#include "Karbon.h"
 #include "vcolordocker.h"
 
 #include <kdebug.h>
@@ -62,17 +68,15 @@ QDockWidget* VColorDockerFactory::createDockWidget()
 VColorDocker::VColorDocker()
 : m_isStrokeDocker( false )
 {
-	setWindowTitle( i18n( "Color Chooser" ) );
+    setWindowTitle( i18n( "Color Chooser" ) );
 
-	m_colorChooser = new KoUniColorChooser( this, true );
-	setWidget( m_colorChooser );
-	//setMaximumHeight( 174 );
-	setMinimumWidth( 194 );
-	
-	connect( m_colorChooser, SIGNAL( sigColorChanged( const KoColor &) ), this, SLOT( updateColor( const KoColor &) ) );
-	//connect( m_colorChooser, SIGNAL( sigColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
-	connect(this, SIGNAL(colorChanged(const KoColor &)), m_colorChooser, SLOT(setColor(const KoColor &)));
-	//connect(this, SIGNAL(bgColorChanged(const QColor &)), mHSVWidget, SLOT(setBgColor(const QColor &)));
+    m_colorChooser = new KoUniColorChooser( this, true );
+    setWidget( m_colorChooser );
+    //setMaximumHeight( 174 );
+    setMinimumWidth( 194 );
+
+    connect( m_colorChooser, SIGNAL( sigColorChanged( const KoColor &) ), this, SLOT( updateColor( const KoColor &) ) );
+    connect(this, SIGNAL(colorChanged(const KoColor &)), m_colorChooser, SLOT(setColor(const KoColor &)));
 }
 
 VColorDocker::~VColorDocker()
@@ -81,143 +85,71 @@ VColorDocker::~VColorDocker()
 
 void VColorDocker::updateColor( const KoColor &c )
 {
-	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-	if( ! selection )
-		return;
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if( ! selection )
+        return;
 
-	QColor color;
-	quint8 opacity;
-	c.toQColor(&color, &opacity);
-	color.setAlpha(opacity);
+    QColor color;
+    quint8 opacity;
+    c.toQColor(&color, &opacity);
+    color.setAlpha(opacity);
 
-	KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ) );
-	canvasController->canvas()->addCommand( cmd );
-}
+    KoCanvasResourceProvider * provider = canvasController->canvas()->resourceProvider();
+    int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
-void VColorDocker::updateFgColor(const KoColor &c)
-{
-	m_colorChooser->blockSignals(true);
-
-	m_oldColor = m_color;
-
-	m_color = c;
-	/*
-	VColor v = VColor(c);
-	v.setOpacity( m_opacity );
-
-	VCommandHistory* history = m_part->commandHistory();
-	const Q3PtrList<VCommand>* commandList = history->commands();
-	VStrokeCmd* command = dynamic_cast<VStrokeCmd*>(commandList->getLast());
-
-	if(command == 0 || m_strokeCmd == 0)
-	{
-		m_strokeCmd = new VStrokeCmd( &m_part->document(), v );
-		m_part->addCommand( m_strokeCmd, true );
-	}
-	else
-	{
-
-		Q3PtrList<VObject> VOldObjectList = command->getSelection()->objects();
-		Q3PtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
-
-		if( VOldObjectList == VNewObjectList )
-		{
-			m_strokeCmd->changeStroke(v);
-			m_part->repaintAllViews();
-		}
-		else
-		{
-			m_strokeCmd = new VStrokeCmd( &m_part->document(), v );
-			m_part->addCommand( m_strokeCmd, true );
-		}
-	}
-	*/
-	emit colorChanged( c );
-
-	m_colorChooser->blockSignals(false);
-}
-
-void VColorDocker::updateBgColor(const KoColor &c)
-{
-	m_colorChooser->blockSignals(true);
-
-	m_oldColor = m_color;
-
-	m_color = c;
-
-	/*
-	VColor v = VColor(c);
-	v.setOpacity( m_opacity );
-
-	VCommandHistory* history = m_part->commandHistory();
-	const Q3PtrList<VCommand>* commandList = history->commands();
-	VFillCmd* command = dynamic_cast<VFillCmd*>(commandList->getLast());
-
-	if(command == 0 || m_fillCmd == 0)
-	{
-		m_fillCmd = new VFillCmd( &m_part->document(), VFill(v) );
-		m_part->addCommand( m_fillCmd, true );
-	}
-	else
-	{
-
-		Q3PtrList<VObject> VOldObjectList = command->getSelection()->objects();
-		Q3PtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
-
-		if( VOldObjectList == VNewObjectList )
-		{
-			m_fillCmd->changeFill(VFill(v));
-			m_part->repaintAllViews();
-		}
-		else
-		{
-			m_fillCmd = new VFillCmd( &m_part->document(), VFill(v) );
-			m_part->addCommand( m_fillCmd, true );
-		}
-	}
-	*/
-	emit colorChanged( c );
-
-	m_colorChooser->blockSignals(false);
-}
-
-void
-VColorDocker::mouseReleaseEvent( QMouseEvent * )
-{
-	//changeColor();
+    if( activeStyle == Karbon::Foreground )
+    {
+        KoLineBorder * border = new KoLineBorder( 1.0, color );
+        KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selection->selectedShapes(), border );
+        canvasController->canvas()->addCommand( cmd );
+        canvasController->canvas()->resourceProvider()->setForegroundColor( c );
+    }
+    else
+    {
+        KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ) );
+        canvasController->canvas()->addCommand( cmd );
+        canvasController->canvas()->resourceProvider()->setBackgroundColor( c );
+    }
 }
 
 void VColorDocker::setFillDocker()
 {
-	m_isStrokeDocker = false;
+    m_isStrokeDocker = false;
 }
 
 void VColorDocker::setStrokeDocker()
 {
-	m_isStrokeDocker = true;
+    m_isStrokeDocker = true;
 }
 
 void VColorDocker::update()
 {
-	/*
-	mHSVWidget->blockSignals(true);
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if( ! selection || ! selection->count() )
+        return;
 
-	int objCnt = m_part->document().selection()->objects().count();
+    KoShape * shape = selection->firstSelectedShape();
+    KoCanvasResourceProvider * provider = canvasController->canvas()->resourceProvider();
+    int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
-	if( objCnt > 0 )
-	{
-		VObject *obj = m_part->document().selection()->objects().getFirst();
-
-		QColor fgColor = QColor(obj->stroke()->color());
-		QColor bgColor = QColor(obj->fill()->color());
-
-		//mHSVWidget->setFgColor(fgColor);
-		//mHSVWidget->setBgColor(bgColor);
-	}
-
-	mHSVWidget->blockSignals(false);
-	*/
+    if( activeStyle == Karbon::Foreground )
+    {
+        KoLineBorder * border = dynamic_cast<KoLineBorder*>( shape->border() );
+        if( border )
+        {
+            KoColor c;
+            c.fromQColor( border->color() );
+            m_colorChooser->setColor( c );
+        }
+    }
+    else
+    {
+        KoColor c;
+        c.fromQColor( shape->background().color() );
+        m_colorChooser->setColor( c );
+    }
 }
 
 #include "vcolordocker.moc"

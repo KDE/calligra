@@ -37,6 +37,9 @@ public:
 
     bool strokeIsSelected() const;
     void updateStyle( const KoShapeBorderModel * stroke, const QBrush * fill );
+private slots:
+    void fillSelected();
+    void strokeSelected();
 private:
     VStrokeFillPreview * m_preview;
     VTypeButtonBox * m_buttons;

@@ -20,6 +20,11 @@
 #include "KarbonStylePreviewDocker.h"
 #include "vstrokefillpreview.h"
 #include "vtypebuttonbox.h"
+#include "Karbon.h"
+
+#include <KoToolManager.h>
+#include <KoCanvasController.h>
+#include <KoCanvasResourceProvider.h>
 
 #include <klocale.h>
 
@@ -43,8 +48,8 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     layout->setMargin( 1 );
     layout->setSpacing( 1 );
 
-    connect( m_preview, SIGNAL(fillSelected()), m_buttons, SLOT(setFill()) );
-    connect( m_preview, SIGNAL(strokeSelected()), m_buttons, SLOT(setStroke()) );
+    connect( m_preview, SIGNAL(fillSelected()), this, SLOT(fillSelected()) );
+    connect( m_preview, SIGNAL(strokeSelected()), this, SLOT(strokeSelected()) );
 
     setWidget( mainWidget );
 }
@@ -61,6 +66,20 @@ bool KarbonStylePreviewDocker::strokeIsSelected() const
 void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, const QBrush * fill )
 {
     m_preview->update( stroke, fill );
+}
+
+void KarbonStylePreviewDocker::fillSelected()
+{
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    canvasController->canvas()->resourceProvider()->setResource( Karbon::ActiveStyle, Karbon::Background );
+    m_buttons->setFill();
+}
+
+void KarbonStylePreviewDocker::strokeSelected()
+{
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    canvasController->canvas()->resourceProvider()->setResource( Karbon::ActiveStyle, Karbon::Foreground );
+    m_buttons->setStroke();
 }
 
 KarbonStylePreviewDockerFactory::KarbonStylePreviewDockerFactory()

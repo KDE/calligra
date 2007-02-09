@@ -42,37 +42,34 @@ public:
 
 class VColorDocker : public QDockWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	 VColorDocker();
-	 virtual ~VColorDocker();
+    VColorDocker();
+    virtual ~VColorDocker();
 
-	 virtual bool isStrokeDocker() { return m_isStrokeDocker; };
-	 KoColor color() { return m_color; }
+    virtual bool isStrokeDocker() { return m_isStrokeDocker; };
+    KoColor color() { return m_color; }
 
 public slots:
-	virtual void setFillDocker();
-	virtual void setStrokeDocker();
-	virtual void update();
+    virtual void setFillDocker();
+    virtual void setStrokeDocker();
+    virtual void update();
 
 signals:
-	void colorChanged( const KoColor &c );
-	//void fgColorChanged( const QColor &c );
-	//void bgColorChanged( const QColor &c );
+    void colorChanged( const KoColor &c );
+    //void fgColorChanged( const QColor &c );
+    //void bgColorChanged( const QColor &c );
 
 private slots:
-	void updateColor( const KoColor &c );
-	void updateFgColor(const KoColor &c);
-	void updateBgColor(const KoColor &c);
+    void updateColor( const KoColor &c );
 
 private:
-	virtual void mouseReleaseEvent( QMouseEvent *e );
 
-	KoUniColorChooser *m_colorChooser;
-	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
-	KoColor m_color;
-	KoColor m_oldColor;
+    KoUniColorChooser *m_colorChooser;
+    bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
+    KoColor m_color;
+    KoColor m_oldColor;
 };
 
 #endif

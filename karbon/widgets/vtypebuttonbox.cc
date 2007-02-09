@@ -338,7 +338,7 @@ void VTypeButtonBox::manipulateStrokes( int id )
         break;
         case Solid:
         {
-            QColor color = canvasController->canvas()->resourceProvider()->backgroundColor().toQColor();
+            QColor color = canvasController->canvas()->resourceProvider()->foregroundColor().toQColor();
             border = new KoLineBorder( 1.0, color );
             break;
         }
