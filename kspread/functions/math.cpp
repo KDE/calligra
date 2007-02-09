@@ -922,7 +922,7 @@ static Value func_gcd_helper(const Value &val, ValueCalc *calc)
       Value v = val.element (col, row);
       if (v.isArray ())
         v = func_gcd_helper (v, calc);
-      res = calc->gcd (res, v);
+      res = calc->gcd (res, calc->roundDown( v ));
     }
   return res;
 }
@@ -932,10 +932,23 @@ Value func_gcd (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result = Value(0);
   for (int i = 0; i < args.count(); ++i)
+  {
     if (args[i].isArray())
+    {
       result = calc->gcd (result, func_gcd_helper (args[i], calc));
+    }
     else
-      result = calc->gcd (result, args[i]);
+    {
+      if ( args[i].isNumber() && args[i].asInteger() >= 0 )
+      {
+        result = calc->gcd (result, calc->roundDown( args[i] ));
+      }
+      else
+      {
+        return Value::errorNUM();
+      }
+    }
+  }
   return result;
 }
 
@@ -950,7 +963,7 @@ static Value func_lcm_helper(const Value &val, ValueCalc *calc)
       Value v = val.element (col, row);
       if (v.isArray ())
         v = func_lcm_helper (v, calc);
-      res = calc->lcm (res, v);
+      res = calc->lcm (res, calc->roundDown( v ) );
     }
   return res;
 }
@@ -960,10 +973,35 @@ Value func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result = Value(0);
   for (int i = 0; i < args.count(); ++i)
+  {
     if (args[i].isArray())
+    {
       result = calc->lcm (result, func_lcm_helper (args[i], calc));
+    }
     else
-      result = calc->lcm (result, args[i]);
+    {
+      if ( args[i].isNumber() == false )
+      {
+        return Value::errorNUM();
+      }
+      else
+      {
+        // its a number
+        if ( args[i].asInteger() < 0 )
+        {
+          return Value::errorNUM();
+        }
+        else if ( args[i].asInteger() == 0 )
+        {
+          return Value( 0 );
+        }
+        else // number > 0
+        {
+          result = calc->lcm (result, calc->roundDown(args[i]));
+        }
+      }
+    }
+  }
   return result;
 }
 

@@ -165,7 +165,6 @@ void TestMathFunctions::testCEILING()
   CHECK_EVAL( "CEILING(1; -2)", Value::errorNUM() );
 }
 
-
 void TestMathFunctions::testFACT()
 {
   CHECK_EVAL( "FACT(0)", 1 );
@@ -211,6 +210,38 @@ void TestMathFunctions::testFIB()
   CHECK_EVAL( "FIB(0)", Value::errorNUM() );
   CHECK_EVAL( "FIB(-1)", Value::errorNUM() );
   CHECK_EVAL( "FIB(\"text\")", Value::errorVALUE() );
+}
+
+void TestMathFunctions::testGCD()
+{
+  CHECK_EVAL( "GCD(5;15;25)", 5 );
+  CHECK_EVAL( "GCD(2;3)", 1 );
+  CHECK_EVAL( "GCD(18;24)", 6 );
+  CHECK_EVAL( "GCD(18.1;24.1)", 6 );
+  CHECK_EVAL( "GCD(1.1;2.2)", 1 );
+  CHECK_EVAL( "GCD(18.9;24.9)", 6 );
+  CHECK_EVAL( "GCD(7)",  7 );
+  CHECK_EVAL( "GCD(5;0)", 5 );
+  CHECK_EVAL( "GCD(0;0)", 0 );
+  CHECK_EVAL( "GCD(-2;3)", Value::errorNUM() );
+  CHECK_EVAL( "GCD(2;-4)", Value::errorNUM() );
+  CHECK_EVAL( "GCD(-2;-4)", Value::errorNUM() );
+}
+
+void TestMathFunctions::testLCM()
+{
+  CHECK_EVAL( "LCM(5;15;25)", 75 );
+  CHECK_EVAL( "LCM(2;3)", 6 );
+  CHECK_EVAL( "LCM(18;12)", 36 );
+  CHECK_EVAL( "LCM(12;18)", 36 );
+  CHECK_EVAL( "LCM(12.1;18.1)", 36 );
+  CHECK_EVAL( "LCM(18.1;12.1)", 36 );
+  CHECK_EVAL( "LCM(18.9;12.9)", 36 );
+  CHECK_EVAL( "LCM(7)", 7 );
+  CHECK_EVAL( "LCM(5;0)", 0 );
+  CHECK_EVAL( "LCM(-2;4)", Value::errorNUM() );
+  CHECK_EVAL( "LCM(2;-4)", Value::errorNUM() );
+  CHECK_EVAL( "LCM(-2;-4)", Value::errorNUM() );
 }
 
 void TestMathFunctions::testLOG()

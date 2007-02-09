@@ -39,6 +39,8 @@ private slots:
   void testFACT();
   void testFACTDOUBLE();
   void testFIB();
+  void testGCD();
+  void testLCM();
   void testLOG();
 
 private:
