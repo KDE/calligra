@@ -41,6 +41,8 @@ public:
 
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter);
+    /// reimplemented
+    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
 
     /// helper method.
     QPointF convertScreenPos(const QPointF &point);

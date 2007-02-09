@@ -31,6 +31,7 @@
 
 // koffice libs includes
 #include <KoShape.h>
+#include <KoText.h>
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -47,6 +48,7 @@
 #include <KoTextSelectionHandler.h>
 #include <KoInlineObjectRegistry.h>
 #include <KoToolProxy.h>
+#include <KoCanvasResourceProvider.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -202,6 +204,16 @@ void KWView::setupActions() {
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
+    QAction *action = new QAction( i18n( "Frame Borders" ), this);
+    action->setToolTip( i18n( "Turns the border display on and off" ) );
+    action->setCheckable(true);
+    actionCollection()->addAction("view_frameborders", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
+
+    // how do I port setWhatsThis ?
+    //action->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
+
+
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
 This saves problems with finding out which we missed near the end.
@@ -295,12 +307,6 @@ This saves problems with finding out which we missed near the end.
             actionCollection(), "view_formattingchars" );
     m_actionViewFormattingChars->setToolTip( i18n( "Toggle the display of non-printing characters" ) );
     m_actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters." ) );
-
-    m_actionViewFrameBorders = new KToggleAction( i18n( "Frame Borders" ), 0,
-            this, SLOT( slotViewFrameBorders() ),
-            actionCollection(), "view_frameborders" );
-    m_actionViewFrameBorders->setToolTip( i18n( "Turns the border display on and off" ) );
-    m_actionViewFrameBorders->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
 
     // -------------- Insert menu
     m_actionInsertSpecialChar = new KAction( i18n( "Special Character..." ), "char",
@@ -1098,6 +1104,11 @@ void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType d
         kwcanvas()->shapeManager(), direction);
     if(cmd)
         m_document->addCommand(cmd);
+}
+
+void KWView::toggleViewFrameBorders(bool on) {
+    kwcanvas()->resourceProvider()->setResource(KoText::ShowTextFrames, on);
+    kwcanvas()->update();
 }
 
 // end of actions

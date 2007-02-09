@@ -23,12 +23,19 @@
 
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoViewConverter.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoShapeManager.h>
+#include <KoText.h>
+#include <KoSelection.h>
 
 #include <QTextLayout>
 #include <QFont>
+#include <QPen>
+#include <QPainter>
 #include <QAbstractTextDocumentLayout>
 #include <kdebug.h>
-#include <KoViewConverter.h>
 
 
 TextShape::TextShape()
@@ -80,3 +87,33 @@ void TextShape::shapeChanged(ChangeType type) {
         m_textShapeData->fireResizeEvent();
     }
 }
+
+void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
+    applyConversion(painter, converter);
+
+    bool showTextFrames = canvas->resourceProvider()->boolProperty(KoText::ShowTextFrames);
+    if(showTextFrames) {
+        painter.save();
+        if(qAbs(rotation()) > 1)
+            painter.setRenderHint(QPainter::Antialiasing);
+
+        QPen pen(Qt::red);
+        QPointF onePixel = converter.viewToDocument( QPointF(1.0, 1.0));
+        pen.setWidthF( onePixel.y() );
+        painter.setPen(pen);
+
+        QPointF tl(0.0, 0.0);
+        QRectF rect(tl, size());
+        painter.drawLine(tl, rect.topRight());
+        painter.drawLine(rect.bottomLeft(), rect.bottomRight());
+
+        pen.setWidthF( onePixel.x() );
+        painter.setPen(pen);
+        painter.drawLine(rect.topRight(), rect.bottomRight());
+        painter.drawLine(tl, rect.bottomLeft());
+        painter.restore();
+    }
+
+    // draw a '+' bottom right if there is more text, and this is the last one.
+}
+
