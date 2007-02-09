@@ -34,8 +34,8 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter) {
     m_original->paint(painter, converter);
 }
 
-void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected) {
-    m_original->paintDecorations(painter, converter, selected);
+void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
+    m_original->paintDecorations(painter, converter, canvas);
 }
 
 const QPainterPath KWCopyShape::outline() const {
