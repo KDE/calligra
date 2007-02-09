@@ -36,7 +36,10 @@ private slots:
   void testABS();
   void testCEIL();
   void testCEILING();
+  void testFACT();
+  void testFACTDOUBLE();
   void testFIB();
+  void testLOG();
 
 private:
   Value evaluate(const QString&);

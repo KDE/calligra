@@ -54,7 +54,7 @@ static Value RoundNumber(const Value& v)
     return Value( QString::number(d, 'g', 15) );
   }
   else
-    return v;  
+    return v;
 }
 
 Value TestMathFunctions::evaluate(const QString& formula)
@@ -73,7 +73,7 @@ Value TestMathFunctions::evaluate(const QString& formula)
 
   return RoundNumber(result);
 }
-namespace QTest 
+namespace QTest
 {
   template<>
   char *toString(const Value& value)
@@ -82,7 +82,7 @@ namespace QTest
     QTextStream ts( &message, QIODevice::WriteOnly );
     if( value.isFloat() )
       ts << QString::number(value.asFloat(), 'g', 20);
-    else  
+    else
       ts << value;
     return qstrdup(message.toLatin1());
   }
@@ -99,7 +99,7 @@ void TestMathFunctions::testABS()
   CHECK_EVAL( "ABS(2)", 2 );
   CHECK_EVAL( "ABS(3)", 3 );
   CHECK_EVAL( "ABS(4)", 4 );
-  
+
   CHECK_EVAL( "ABS(1/0)", Value::errorDIV0() );
 
 }
@@ -107,7 +107,7 @@ void TestMathFunctions::testABS()
 void TestMathFunctions::testCEIL()
 {
   CHECK_EVAL( "CEIL(0)", 0 );
-  
+
   CHECK_EVAL( "CEIL(0.1)", 1 );
   CHECK_EVAL( "CEIL(0.01)", 1 );
   CHECK_EVAL( "CEIL(0.001)", 1 );
@@ -115,7 +115,7 @@ void TestMathFunctions::testCEIL()
   CHECK_EVAL( "CEIL(0.00001)", 1 );
   CHECK_EVAL( "CEIL(0.000001)", 1 );
   CHECK_EVAL( "CEIL(0.0000001)", 1 );
-  
+
   CHECK_EVAL( "CEIL(1.1)", 2 );
   CHECK_EVAL( "CEIL(1.01)", 2 );
   CHECK_EVAL( "CEIL(1.001)", 2 );
@@ -131,7 +131,7 @@ void TestMathFunctions::testCEIL()
   CHECK_EVAL( "CEIL(-0.00001)", 0 );
   CHECK_EVAL( "CEIL(-0.000001)", 0 );
   CHECK_EVAL( "CEIL(-0.0000001)", 0 );
-  
+
 
   CHECK_EVAL( "CEIL(-1.1)", -1 );
   CHECK_EVAL( "CEIL(-1.01)", -1 );
@@ -156,13 +156,34 @@ void TestMathFunctions::testCEILING()
   // because can't divide by 0
   CHECK_EVAL( "CEILING(1; 0)", Value::errorDIV0() );
   CHECK_EVAL( "CEILING(2; 0)", Value::errorDIV0() );
-  
+
   // but this one should be just fine !
   CHECK_EVAL( "CEILING(0; 0)", 0 );
-  
+
   // different sign does not make sense
   CHECK_EVAL( "CEILING(-1; 2)", Value::errorNUM() );
   CHECK_EVAL( "CEILING(1; -2)", Value::errorNUM() );
+}
+
+
+void TestMathFunctions::testFACT()
+{
+  CHECK_EVAL( "FACT(0)", 1 );
+  CHECK_EVAL( "FACT(1)", 1 );
+  CHECK_EVAL( "FACT(2)", 2 );
+  CHECK_EVAL( "FACT(3)", 6 );
+  CHECK_EVAL( "FACT(-1)", Value::errorNUM() );
+  CHECK_EVAL( "FACT(\"xyzzy\")", Value::errorNUM() );
+}
+
+void TestMathFunctions::testFACTDOUBLE()
+{
+  CHECK_EVAL( "FACTDOUBLE(0)", 1 );
+  CHECK_EVAL( "FACTDOUBLE(1)", 1 );
+  CHECK_EVAL( "FACTDOUBLE(7)", 105 );
+  CHECK_EVAL( "FACTDOUBLE(6)", 48 );
+  CHECK_EVAL( "FACTDOUBLE(-1)", Value::errorNUM() );
+  CHECK_EVAL( "FACTDOUBLE(\"xyzzy\")", Value::errorNUM() );
 }
 
 void TestMathFunctions::testFIB()
@@ -177,7 +198,7 @@ void TestMathFunctions::testFIB()
   CHECK_EVAL( "FIB(8)", 21 );
   CHECK_EVAL( "FIB(9)", 34 );
   CHECK_EVAL( "FIB(10)", 55 );
-  
+
   // large number
   CHECK_EVAL( "FIB(100)", 3.54224848179263E+20 );
   CHECK_EVAL( "FIB(200)", 2.80571172992512E+41 );
@@ -185,13 +206,28 @@ void TestMathFunctions::testFIB()
   CHECK_EVAL( "FIB(400)", 1.76023680645016E+83 );
   CHECK_EVAL( "FIB(500)", 1.394232245617E+104 );
   CHECK_EVAL( "FIB(600)", 1.10433070572954E+125 );
-  
-  // invalid   
+
+  // invalid
   CHECK_EVAL( "FIB(0)", Value::errorNUM() );
   CHECK_EVAL( "FIB(-1)", Value::errorNUM() );
   CHECK_EVAL( "FIB(\"text\")", Value::errorVALUE() );
 }
 
+void TestMathFunctions::testLOG()
+{
+  CHECK_EVAL( "LOG(1;10)", 0 );
+  CHECK_EVAL( "LOG(1;EXP(1))", 0 );
+  CHECK_EVAL( "LOG(10;10)", 1 );
+  CHECK_EVAL( "LOG(EXP(1);EXP(1))", 1 );
+  CHECK_EVAL( "LOG(10)", 1 );
+  CHECK_EVAL( "LOG(8*8*8;8)", 3 );
+  CHECK_EVAL( "LOG(0;10)", Value::errorNUM() );
+  CHECK_EVAL( "LOG(\"foo\";10)", Value::errorNUM() );
+  CHECK_EVAL( "LOG(2;\"foo\")", Value::errorNUM() );
+  CHECK_EVAL( "LOG(NA();10)", Value::errorNA() );
+  CHECK_EVAL( "LOG(10;NA())", Value::errorNA() );
+  CHECK_EVAL( "LOG(NA();NA())", Value::errorNA() );
+}
 
 #include <QtTest/QtTest>
 #include <kaboutdata.h>

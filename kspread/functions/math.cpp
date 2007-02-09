@@ -376,11 +376,11 @@ Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
     res = args[1];
   else
     res = calc->gequal (number, Value(0.0)) ? Value(1.0) : Value(-1.0);
-    
+
   // short-circuit, and allow CEILING(0;0) to give 0 (which is correct)
-  // instead of DIV0 error  
+  // instead of DIV0 error
   if(calc->isZero(number))
-    return Value(0.0);  
+    return Value(0.0);
 
   if (calc->isZero(res))
     return Value::errorDIV0();
@@ -437,8 +437,18 @@ Value func_ln (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: LOGn
 Value func_logn (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  if ( args [0].isError() )
+    return args [0];
+  if ( ( args [0].isNumber() == false ) || ( args[0].asFloat() <= 0 ) )
+    return Value::errorNUM();
   if ( args.count() == 2 )
+  {
+    if ( args [1].isError() )
+      return args [1];
+    if ( args [1].isNumber() == false )
+        return Value::errorNUM();
     return calc->log (args[0], args[1]);
+  }
   else
     return calc->log( args[0] );
 }
@@ -714,13 +724,19 @@ Value func_mod (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: fact
 Value func_fact (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->fact (args[0]);
+  if ( args[0].isInteger() || args[0].asInteger() > 0 )
+    return calc->fact (args[0]);
+  else
+    return Value::errorNUM();
 }
 
 // Function: FACTDOUBLE
 Value func_factdouble (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->factDouble (args[0]);
+  if ( args[0].isInteger() || args[0].asInteger() > 0 )
+    return calc->factDouble (args[0]);
+  else
+    return Value::errorNUM();
 }
 
 // Function: MULTINOMIAL
@@ -881,7 +897,7 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
   Value n = args[0];
   if(!n.isNumber())
     return Value::errorVALUE();
-    
+
   if ( !calc->greater( n, Value( 0.0 ) ) )
     return Value::errorNUM();
 
