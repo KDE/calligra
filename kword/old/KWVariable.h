@@ -130,7 +130,7 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual void loadOasis( const QDomElement &footNoteTag, KoOasisContext& context );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const;
 
 
     virtual QString text(bool realValue=false);

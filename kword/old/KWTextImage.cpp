@@ -157,7 +157,7 @@ KoPictureKey KWTextImage::getKey( void ) const
     return m_image.getKey();
 }
 
-void KWTextImage::saveOasis( KoXmlWriter&, KoSavingContext& ) const
+void KWTextImage::saveOasis( KoXmlWriter&, KoTextSavingContext& ) const
 {
     // Not implemented
 }

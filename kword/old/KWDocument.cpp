@@ -2760,7 +2760,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     m_syntaxVersion = CURRENT_SYNTAX_VERSION; // ### clean this up once we remove the old format
 
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles, m_varColl->variableSetting(), m_pageColumns.columns > 1, KoSavingContext::Store );
+    KoTextSavingContext savingContext( mainStyles, m_varColl->variableSetting(), m_pageColumns.columns > 1, KoTextSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
     m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
@@ -2986,7 +2986,7 @@ Q3DragObject* KWDocument::dragSelectedPrivate( QWidget *parent, const Q3ValueLis
 return 0;
 }
 
-void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoSavingContext& savingContext, Q3ValueList<KoPictureKey>& pictureList, const Q3ValueList<KWFrameView*> &selectedFrames, QString* plainText ) const {
+void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoTextSavingContext& savingContext, Q3ValueList<KoPictureKey>& pictureList, const Q3ValueList<KWFrameView*> &selectedFrames, QString* plainText ) const {
     Q3PtrList<KoDocumentChild> embeddedObjects;
     Q3ValueListConstIterator<KWFrameView*> framesIterator = selectedFrames.begin();
     for(; framesIterator != selectedFrames.end(); ++framesIterator) {
@@ -3053,7 +3053,7 @@ void KWDocument::saveOasisSettings( KoXmlWriter& settingsWriter ) const
     settingsWriter.endDocument();
 }
 
-void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag, const QByteArray& headerFooterContent ) const
+void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoTextSavingContext& savingContext, SaveFlag saveFlag, const QByteArray& headerFooterContent ) const
 {
 #if 0
     if ( saveFlag == SaveAll )
@@ -3290,7 +3290,7 @@ void KWDocument::saveOasisCustomFied( KoXmlWriter &writer )const
         writer.endElement();
 }
 
-void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWDocument::saveOasisBody( KoXmlWriter& writer, KoTextSavingContext& context ) const
 {
 #if 0
     saveOasisCustomFied( writer );

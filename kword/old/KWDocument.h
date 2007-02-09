@@ -24,7 +24,7 @@
 
 class KWFrameView;
 class Q3DragObject;
-class KoSavingContext;
+class KoTextSavingContext;
 class KoGenStyles;
 class KWDocument;
 class KPrinter;
@@ -310,7 +310,7 @@ public:
     void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset );
     void completePasting();
     void completeOasisPasting();
-    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag, const QByteArray& headerFooterContent ) const;
+    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoTextSavingContext& savingContext, SaveFlag saveFlag, const QByteArray& headerFooterContent ) const;
 
     KoStyleCollection * styleCollection()const  { return m_styleColl;}
     KWFrameStyleCollection * frameStyleCollection()const  { return m_frameStyleColl;}
@@ -851,7 +851,7 @@ protected:
     void loadDefaultTableTemplates();
     bool loadMasterPageStyle( const QString& masterPageName, KoOasisContext& context );
 
-    void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
+    void saveOasisBody( KoXmlWriter& writer, KoTextSavingContext& context ) const;
     void saveOasisCustomFied( KoXmlWriter &writer )const;
 
     Q3ValueList<KoPictureKey> savePictureList();
@@ -880,7 +880,7 @@ protected:
 
     void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
     void saveSelectedFrames( KoXmlWriter& bodyWriter,
-                             KoSavingContext& savingContext, Q3ValueList<KoPictureKey>& pictureList,
+                             KoTextSavingContext& savingContext, Q3ValueList<KoPictureKey>& pictureList,
                              const Q3ValueList<KWFrameView*> &selectedFrames, QString* plainText ) const;
 
     // inherited from KoDocument

@@ -2400,7 +2400,7 @@ Q3DragObject * KPrTextView::newDrag( QWidget * parent )
     doc->recalcVariables( VT_STATISTIC );
 
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles, 0, false, KoSavingContext::Store );
+    KoTextSavingContext savingContext( mainStyles, 0, false, KoTextSavingContext::Store );
 
     doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
 

@@ -38,7 +38,7 @@ public:
     TestFrameSet( KWDocument* doc = 0 ) : KWFrameSet(doc) {
     }
     QDomElement save(QDomElement&, bool) { return QDomElement(); }
-    void saveOasis( KoXmlWriter&, KoSavingContext&, bool) const { };
+    void saveOasis( KoXmlWriter&, KoTextSavingContext&, bool) const { };
     void setProtectContent(bool) { }
     bool protectContent() const { return true; }
 };
@@ -49,7 +49,7 @@ public:
         m_doc = doc;
     }
     QDomElement save(QDomElement&, bool) { return QDomElement(); }
-    void saveOasis( KoXmlWriter&, KoSavingContext&, bool) const { };
+    void saveOasis( KoXmlWriter&, KoTextSavingContext&, bool) const { };
     void setProtectContent(bool) { }
     bool protectContent() const { return true; }
     void updateFrames( int flags = 0xff ) {

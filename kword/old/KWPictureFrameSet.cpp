@@ -144,7 +144,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
     }
 }
 
-void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool /*saveFrames*/ ) const
+void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context, bool /*saveFrames*/ ) const
 {
     if( m_frames.isEmpty() ) // Deleted frameset -> don't save
         return;
@@ -154,7 +154,7 @@ void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context
     writer.addAttribute( "xlink:type", "simple" );
     writer.addAttribute( "xlink:show", "embed" );
     writer.addAttribute( "xlink:actuate", "onLoad" );
-    if ( context.savingMode() == KoSavingContext::Store )
+    if ( context.savingMode() == KoTextSavingContext::Store )
         writer.addAttribute( "xlink:href", m_doc->pictureCollection()->getOasisFileName(m_picture) );
     else {
         writer.startElement( "office:binary-data" );

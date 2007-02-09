@@ -45,7 +45,7 @@
 #include "KPrBrush.h"
 #include <KoPen.h>
 
-class KoSavingContext;
+class KoTextSavingContext;
 class QPainter;
 class KPrObjectAdaptor;
 class QDomDocumentFragment;
@@ -143,7 +143,7 @@ public:
 
     struct KPOasisSaveContext
     {
-        KPOasisSaveContext( KoXmlWriter &_xmlWriter, KoSavingContext &_context,
+        KPOasisSaveContext( KoXmlWriter &_xmlWriter, KoTextSavingContext &_context,
                             int &_indexObj, int &_partIndexObj, bool _onMaster )
             : xmlWriter( _xmlWriter )
             , context( _context )
@@ -152,7 +152,7 @@ public:
             , onMaster( _onMaster ) {};
 
         KoXmlWriter &xmlWriter;
-        KoSavingContext &context;
+        KoTextSavingContext &context;
         int &indexObj;
         int &partIndexObj;
         bool onMaster;

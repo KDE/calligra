@@ -56,7 +56,7 @@ public:
 
     // Save to XML
     virtual void save( QDomElement & formatElem );
-    virtual void saveOasis( KoXmlWriter&, KoSavingContext& ) const;
+    virtual void saveOasis( KoXmlWriter&, KoTextSavingContext& ) const;
     virtual int typeId() const { return 2; }
 
     void load( QDomElement & formatElem );

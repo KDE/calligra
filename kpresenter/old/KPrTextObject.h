@@ -38,7 +38,7 @@
 
 class Q3DragObject;
 
-class KoSavingContext;
+class KoTextSavingContext;
 class KPrView;
 class KPrDocument;
 class QDomElement;

@@ -842,7 +842,7 @@ void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& co
     }
 }
 
-void KWTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
+void KWTextParag::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
                              int from, int to, bool saveAnchorsFramesets ) const
 {
     // Special case for inline tables that are alone in their paragraph:

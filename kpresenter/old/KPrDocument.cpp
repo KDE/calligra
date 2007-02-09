@@ -1014,7 +1014,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     recalcVariables( VT_TIME );
     recalcVariables( VT_STATISTIC );
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles, 0, false, KoSavingContext::Store );
+    KoTextSavingContext savingContext( mainStyles, 0, false, KoTextSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
     m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
@@ -1198,7 +1198,7 @@ void KPrDocument::loadOasisIgnoreList( const KoOasisSettings& settings )
     }
 }
 
-void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context, bool stylesDotXml )
+void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoTextSavingContext& context, bool stylesDotXml )
 {
     context.writeFontFaces( contentWriter );
     if ( !stylesDotXml )
@@ -1472,7 +1472,7 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
 }
 
 void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles,
-                                           KoSavingContext & savingContext, SaveFlag saveFlag ) const
+                                           KoTextSavingContext & savingContext, SaveFlag saveFlag ) const
 {
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );

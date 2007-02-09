@@ -82,7 +82,7 @@ public:
     static KoParagLayout loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
 
     virtual void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context,
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context,
                             int from, int to, bool saveAnchorsFramesets = false ) const;
 
     virtual void join( KoTextParag *parag );

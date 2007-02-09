@@ -51,7 +51,7 @@ public:
     virtual ~KWFormulaFrameSet();
 
     QDomElement save( QDomElement &parentElem, bool saveFrames = true ) {};
-    void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const {};
+    void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context, bool saveFrames ) const {};
     void setProtectContent ( bool protect ) {};
     bool protectContent() const {};
 };

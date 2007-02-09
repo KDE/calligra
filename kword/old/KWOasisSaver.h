@@ -26,7 +26,7 @@
 #include <KoOasisStore.h>
 
 class KWDocument;
-class KoSavingContext;
+class KoTextSavingContext;
 class KoXmlWriter;
 class KoTextParag;
 class KoStore;
@@ -54,7 +54,7 @@ public:
     /// Another way to save paragraphs is to use KoTextObject::saveOasisContent
     /// It needs a body writer and a saving context.
     KoXmlWriter& bodyWriter() { return *m_oasisStore->bodyWriter(); }
-    KoSavingContext& savingContext() { return *m_savingContext; }
+    KoTextSavingContext& savingContext() { return *m_savingContext; }
 
     /// You MUST call this after saving the paragraphs and before calling data()
     /// Return true on success
@@ -73,7 +73,7 @@ private:
     KoStore* m_store;
     KoOasisStore* m_oasisStore;
     KoGenStyles m_mainStyles;
-    KoSavingContext* m_savingContext;
+    KoTextSavingContext* m_savingContext;
     KWDocument* m_doc;
 };
 

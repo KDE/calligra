@@ -130,7 +130,7 @@ KPrPageAdaptor* KPrPage::dbusObject()
 }
 */
 
-void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter ) const
+void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoTextSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter ) const
 {
     Q_UNUSED( store );
     Q_UNUSED( manifestWriter );
@@ -533,7 +533,7 @@ QString KPrPage::oasisNamePage( int posPage ) const
     return  ( m_manualTitle.isEmpty() ?  QString( "page%1" ).arg( posPage ) : m_manualTitle );
 }
 
-bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context,
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoTextSavingContext& context,
                              int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter, QMap<QString, int> &pageNames ) const
 {
     if ( isMasterPage() )

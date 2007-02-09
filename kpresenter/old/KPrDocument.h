@@ -48,7 +48,7 @@ class KoOasisContext;
 class KoOasisSettings;
 class KoXmlWriter;
 class QFile;
-class KoSavingContext;
+class KoTextSavingContext;
 class KCommandHistory;
 class QMimeSource;
 
@@ -142,7 +142,7 @@ class KPrDocument : public KoDocument
 
     enum SaveFlag { SaveAll, SaveSelected, SavePage };
     void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles,
-                                  KoSavingContext & savingContext, SaveFlag saveFlag = SaveAll ) const;
+                                  KoTextSavingContext & savingContext, SaveFlag saveFlag = SaveAll ) const;
     enum { STYLE_BACKGROUNDPAGE = 20, STYLE_BACKGROUNDPAGEAUTO, STYLE_GRADIENT,STYLE_OBJECTANIMATION, STYLE_STROKE, STYLE_MARKER, STYLE_PICTURE, STYLE_PRESENTATIONSTICKYOBJECT };
 
     // load
@@ -523,7 +523,7 @@ public slots:
 
     void slotRepaintChanged( KPrTextObject * );
 
-    static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context, bool stylesDotXml );
+    static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoTextSavingContext& context, bool stylesDotXml );
 
     void slotGuideLinesChanged( KoView *view );
 

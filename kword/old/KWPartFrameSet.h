@@ -62,7 +62,7 @@ public:
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoTextSavingContext& context, bool saveFrames ) const;
 
 
     /**

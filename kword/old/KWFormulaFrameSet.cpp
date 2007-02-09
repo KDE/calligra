@@ -232,7 +232,7 @@ QDomElement KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
     return framesetElem;
 }
 
-void KWFormulaFrameSet::saveOasis(KoXmlWriter&, KoSavingContext&, bool) const
+void KWFormulaFrameSet::saveOasis(KoXmlWriter&, KoTextSavingContext&, bool) const
 {
     // TODO
 }

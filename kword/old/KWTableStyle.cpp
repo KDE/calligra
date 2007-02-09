@@ -37,7 +37,7 @@ KWTableStyleCollection::KWTableStyleCollection()
 {
 }
 
-void KWTableStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
+void KWTableStyleCollection::saveOasis( KoGenStyles& mainStyles, KoTextSavingContext& savingContext ) const
 {
     if ( !isDefault() ) {
         for ( QList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
@@ -170,7 +170,7 @@ KWTableStyle *KWTableStyle::loadStyle( QDomElement & parentElem, KWDocument *_do
     return new KWTableStyle( parentElem, _doc, docVersion );
 }
 
-void KWTableStyle::saveOasis( KoGenStyles& mainStyles, KoSavingContext& /*savingContext*/ ) const
+void KWTableStyle::saveOasis( KoGenStyles& mainStyles, KoTextSavingContext& /*savingContext*/ ) const
 {
     KoGenStyle tableCellStyle( KWDocument::STYLE_TABLE_CELL_USER, "table-cell" );
     tableCellStyle.addAttribute( "style:display-name", displayName() );

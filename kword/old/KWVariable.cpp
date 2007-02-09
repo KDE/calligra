@@ -341,7 +341,7 @@ void KWFootNoteVariable::loadOasis( const QDomElement& footNoteTag, KoOasisConte
 #endif
 }
 
-void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const
 {
 #if 0
     if(! m_frameset) return; // see bug #126007

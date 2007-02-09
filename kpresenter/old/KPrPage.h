@@ -36,7 +36,7 @@
 #include <KoPictureCollection.h>
 
 class KMacroCommand;
-class KoSavingContext;
+class KoTextSavingContext;
 class KUrl;
 class KPrTextView;
 class KPrObject;
@@ -541,7 +541,7 @@ public:
 
     QDomElement save( QDomDocument &doc );
 
-    bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context,
+    bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoTextSavingContext& context,
                        int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter, QMap<QString, int> &pageNames ) const;
     QString saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const;
     QString saveOasisPageEffect() const;
@@ -565,7 +565,7 @@ private:
     void makeUsedPixmapListForGroupObject( KPrObject *_obj );
     void completeLoadingForGroupObject( KPrObject *_obj );
     bool objectNameExists( KPrObject *object, Q3PtrList<KPrObject> &list );
-    void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter ) const;
+    void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoTextSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter ) const;
 
 
     // list of objects

@@ -280,7 +280,7 @@ void KWAnchor::save( QDomElement &parentElem )
     anchorElem.setAttribute( "instance", m_frameset->name() );
 }
 
-void KWAnchor::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWAnchor::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context ) const
 {
     if ( m_frameset->canBeSavedAsInlineCharacter() )
         m_frameset->saveOasis( writer, context, true );

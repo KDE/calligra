@@ -69,7 +69,7 @@ public:
     /// save (old xml format)
     void saveTableStyle( QDomElement & parentElem );
     /// save (new oasis xml format)
-    void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
+    void saveOasis( KoGenStyles& mainStyles, KoTextSavingContext& savingContext ) const;
 
     /// load (old xml format)
     static KWTableStyle *loadStyle( QDomElement & parentElem, KWDocument *_doc, int docVersion=2 );
@@ -124,7 +124,7 @@ public:
         return static_cast<KWTableStyle*>( m_styleList[i] );
     }
 
-    void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
+    void saveOasis( KoGenStyles& mainStyles, KoTextSavingContext& savingContext ) const;
     int loadOasisStyles( KoOasisContext& context, const KoStyleCollection& paragraphStyles, const KWFrameStyleCollection& frameStyles );
 };
 

@@ -29,7 +29,7 @@
 
 class QDomElement;
 class KoOasisContext;
-class KoSavingContext;
+class KoTextSavingContext;
 class KoGenStyles;
 class KWFrameStyle;
 class KWFrame;
@@ -78,7 +78,7 @@ public:
     /// save (old xml format)
     void saveFrameStyle( QDomElement & parentElem );
     /// save (new oasis xml format)
-    void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
+    void saveOasis( KoGenStyles& mainStyles, KoTextSavingContext& savingContext ) const;
 
     /// load (old xml format)
     static KWFrameStyle *loadStyle( QDomElement & parentElem, int docVersion=2 );
@@ -132,7 +132,7 @@ public:
         return static_cast<KWFrameStyle*>( m_styleList[i] );
     }
 
-    void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
+    void saveOasis( KoGenStyles& mainStyles, KoTextSavingContext& savingContext ) const;
     int loadOasisStyles( KoOasisContext& context );
 };
 

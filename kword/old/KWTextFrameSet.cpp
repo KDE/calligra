@@ -1765,7 +1765,7 @@ static void finishTOC( KoXmlWriter& writer )
     writer.endElement(); // text:index-body
 }
 
-void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoTextSavingContext& context ) const
 {
     // TODO save protectContent
 
@@ -1800,7 +1800,7 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
 
 
         // I want Qt4's QMap/QHash::value()!
-        KoSavingContext::BookmarkPositions bookmarkStarts, bookmarkEnds;
+        KoTextSavingContext::BookmarkPositions bookmarkStarts, bookmarkEnds;
         QMap<const KoTextParag*, KoTextBookmarkList>::const_iterator bkit = bookmarksPerParagraph.find( parag );
         if ( bkit != bookmarksPerParagraph.end() ) {
             // Massage a bit the bookmarks data; KoTextParag wants it ordered by position, for speed.
@@ -1809,11 +1809,11 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
             {
                 const KoTextBookmark& bk = *it;
                 if ( bk.startParag() == parag )
-                    bookmarkStarts.append( KoSavingContext::BookmarkPosition(
+                    bookmarkStarts.append( KoTextSavingContext::BookmarkPosition(
                                                bk.bookmarkName(), bk.bookmarkStartIndex(),
                                                bk.isSimple() ) );
                 if ( bk.endParag() == parag && !bk.isSimple() )
-                    bookmarkEnds.append( KoSavingContext::BookmarkPosition( bk.bookmarkName(),
+                    bookmarkEnds.append( KoTextSavingContext::BookmarkPosition( bk.bookmarkName(),
                                                                             bk.bookmarkEndIndex(), false ) );
             }
             qHeapSort( bookmarkStarts );
@@ -1835,7 +1835,7 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
         finishTOC( writer );
 }
 
-void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const
+void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoTextSavingContext& context, bool saveFrames ) const
 {
     // Save first frame with the whole contents
     KWFrame* frame = m_frames.getFirst();

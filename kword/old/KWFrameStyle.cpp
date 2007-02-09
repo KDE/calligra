@@ -38,7 +38,7 @@ KWFrameStyleCollection::KWFrameStyleCollection()
 {
 }
 
-void KWFrameStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
+void KWFrameStyleCollection::saveOasis( KoGenStyles& mainStyles, KoTextSavingContext& savingContext ) const
 {
     if ( !isDefault() ) {
         for ( QList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
@@ -221,7 +221,7 @@ KWFrameStyle *KWFrameStyle::loadStyle( QDomElement & parentElem, int docVersion 
     return new KWFrameStyle( parentElem, docVersion );
 }
 
-void KWFrameStyle::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
+void KWFrameStyle::saveOasis( KoGenStyles& mainStyles, KoTextSavingContext& savingContext ) const
 {
     Q_UNUSED( savingContext );
 
