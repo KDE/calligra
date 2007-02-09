@@ -46,6 +46,7 @@ bcwpPoints.push_back(QPointF(600,40));
 
 void ChartWidget::paintEvent(QPaintEvent * ev)
 {
+int j,k=0;
 this->updateGeometry();
 QPainter painter(this);
 kDebug() << "Print it PLease :D UPDATE"<<maximumHeight()<<" UPDATE :"<<maximumWidth()<<" UPDATE PAINTEVENT !!!!!!!!!!!!!";
@@ -60,8 +61,26 @@ painter.drawText(200,150,"I am a Chart!");
 painter.drawText(2, 10,"Budget");
 //painter.drawText(maximumWidth()-15, maximumHeight()-20,"Time");
 painter.drawText(maximumWidth()-70,maximumHeight() ,"Time");
-painter.drawLine(QLine(10,15,10,maximumHeight()-15));
-painter.drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,maximumHeight()-15));
+
+
+
+painter.drawLine(QLine(10,15,10,maximumHeight()-15)); //Y
+
+int MarginY =(maximumHeight()-30)/10;
+while(j<=(maximumHeight()-15))
+{
+	painter.drawLine(QLine(8,j+15,10,j+15));
+	j+=MarginY;
+}
+
+painter.drawLine(QLine(10,maximumHeight()-15,maximumWidth()-10,maximumHeight()-15)); //X
+
+int MarginX=(maximumWidth()-20)/10;
+while(k<=(maximumWidth()-10))
+{
+	painter.drawLine(QLine(k+10,maximumHeight()-15,k+10,maximumHeight()-13));
+	k+=MarginX;
+}
 
 if(is_bcwp_draw==true)
 {
@@ -89,7 +108,6 @@ if(is_acwp_draw==true)
 	
 
 }// end PaintEvent();
-
 
 void ChartWidget::drawBCWP(){
 	is_bcwp_draw=true;
@@ -134,15 +152,6 @@ void ChartWidget::setPointsBCPS(QVector<QPointF> vec)
 void ChartWidget::setPointsACPW(QVector<QPointF> vec)
 {
 	this->acwpPoints = vec;
-}
-
-const int ChartWidget::getMaximumWidth()
-{
-	return(baseSize().width() + sizeIncrement().width());
-}
-const int ChartWidget::getMaximumHeight()
-{
-	return(this->maximumHeight());
 }
 
 

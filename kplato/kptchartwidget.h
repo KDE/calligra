@@ -46,7 +46,6 @@ public:
     ChartWidget(QWidget *parent=0, const char *name=0);
 
     void paintEvent(QPaintEvent * ev);
-
     void drawBCWP();
     void undrawBCWP();
     void drawBCWS();
@@ -56,8 +55,6 @@ public:
     void setPointsBCPW(QVector<QPointF> );
     void setPointsBCPS(QVector<QPointF> );
     void setPointsACPW(QVector<QPointF> );
-    const int getMaximumWidth();
-    const int getMaximumHeight();
 };
 
 } //namespace KPlato
