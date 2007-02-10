@@ -1101,6 +1101,28 @@
     </Function>
 
     <Function>
+        <Name>FREQUENCY</Name>
+        <Type>Float</Type>
+        <Parameter>
+            <Comment>Floating point values, that should be counted.</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Floating point values, representing the upper boundaries of the intervals.</Comment>
+            <Type range="true">Float</Type>
+        </Parameter>
+        <Help>
+            <Text>Counts the number of values for each interval given by the border values in the second parameter.</Text>
+            <Text>The values in the second parameter determine the upper boundaries of the intervals.
+                The intervals include the upper boundaries.
+                The returned array is a column vector and has one more element than the second parameter;
+                the last element represents the number of all elements greater than the last value in second parameter.
+                If the second parameter is empty, all values in the first parameter are counted.</Text>
+            <Syntax>FREQUENCY(Range data; Range bins)</Syntax>
+        </Help>
+    </Function>
+
+    <Function>
       <Name>NORMDIST</Name>
       <Type>Float</Type>
       <Parameter>

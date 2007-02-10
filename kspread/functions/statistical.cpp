@@ -50,6 +50,7 @@ Value func_expondist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisher (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_frequency (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammadist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammaln (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gauss (valVector args, ValueCalc *calc, FuncExtra *);
@@ -154,6 +155,10 @@ void RegisterStatisticalFunctions()
   f = new Function ("FISHER", func_fisher);
   repo->add (f);
   f = new Function ("FISHERINV", func_fisherinv);
+  repo->add (f);
+  f = new Function ("FREQUENCY", func_frequency);
+  f->setParamCount(2);
+  f->setAcceptArray();
   repo->add (f);
   f = new Function ("GAMMADIST", func_gammadist);
   f->setParamCount (4);
@@ -950,6 +955,49 @@ Value func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *) {
   // (exp (2.0 * fVal) - 1.0) / (exp (2.0 * fVal) + 1.0)
   Value ex = calc->exp (calc->mul (fVal, 2.0));
   return calc->div (calc->sub (ex, 1.0), calc->add (ex, 1.0));
+}
+
+// Function: FREQUENCY
+Value func_frequency( valVector args, ValueCalc*, FuncExtra* )
+{
+    const Value bins = args[1];
+    if ( bins.columns() != 1 )
+        return Value::errorVALUE();
+
+    // create a data vector
+    QVector<double> data;
+    for ( int v = 0; v < args[0].count(); ++v )
+    {
+        if ( args[0].element( v ).isNumber() )
+            data.append( args[0].element( v ).asFloat() );
+    }
+
+    // no intervals given?
+    if ( bins.isEmpty() )
+        return Value( data.count() );
+
+    // sort the data
+    qStableSort( data );
+
+    Value result( Value::Array );
+    QVector<double>::ConstIterator begin = data.constBegin();
+    QVector<double>::ConstIterator it = data.constBegin();
+    for ( int v = 0; v < bins.count(); ++v )
+    {
+        if ( !bins.element( v ).isNumber() )
+            continue;
+        it = qUpperBound( begin, data.constEnd(), bins.element( v ).asFloat() );
+        // exact match?
+        if ( *it == bins.element( v ).asFloat() )
+            ++it;
+        // add the number of values in this interval to the result
+        result.setElement( 0, v, Value( static_cast<qint64>( it - begin ) ) );
+        begin = it;
+    }
+    // the remaining values
+    result.setElement( 0, bins.count(), Value( static_cast<qint64>( data.constEnd() - begin ) ) );
+
+    return result;
 }
 
 // Function: normdist
