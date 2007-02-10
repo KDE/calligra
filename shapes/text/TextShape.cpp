@@ -89,15 +89,15 @@ void TextShape::shapeChanged(ChangeType type) {
 }
 
 void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
-    applyConversion(painter, converter);
-
     bool showTextFrames = canvas->resourceProvider()->boolProperty(KoText::ShowTextFrames);
+
     if(showTextFrames) {
         painter.save();
+        applyConversion(painter, converter);
         if(qAbs(rotation()) > 1)
             painter.setRenderHint(QPainter::Antialiasing);
 
-        QPen pen(Qt::red);
+        QPen pen(QColor(210, 210, 210));
         QPointF onePixel = converter.viewToDocument( QPointF(1.0, 1.0));
         pen.setWidthF( onePixel.y() );
         painter.setPen(pen);
@@ -114,6 +114,55 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
         painter.restore();
     }
 
-    // draw a '+' bottom right if there is more text, and this is the last one.
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+    if(showTextFrames && lay) {
+        QList< KoShape * > shapes = lay->shapes();
+        if(shapes.count() <= 1 || shapes.last() == this) {
+            // this shape is the last in the set.  Now get the bottom of the text.
+            bool moreText = false;
+            double max = m_textShapeData->documentOffset()+size().height();
+            double bottom = 0.0;
+            QTextBlock block = m_textShapeData->document()->begin();
+            while(block.isValid()) {
+                QTextLayout *tl = block.layout();
+                if(tl == 0) {
+                    moreText = true;
+                    break;
+                }
+                else if(tl->lineCount() == 0) {
+                    moreText = true;
+                    break;
+                }
+                else {
+                    QTextLine line = tl->lineAt(tl->lineCount()-1);
+                    bottom = qMax(bottom, line.position().y() + line.height());
+                    if(bottom > max) {
+                        moreText = true;
+                        break;
+                    }
+                }
+                block = block.next();
+            }
+
+            if(moreText) { // there is invisible text left.
+                QPoint bottomRight = converter.documentToView(QPointF(size().width(), size().height())).toPoint();
+                QPen pen(Qt::red); // TODO make configurable?
+                painter.setPen(pen);
+                QPoint topLeft = bottomRight - QPoint(15,15);
+                painter.drawRect(QRect(topLeft, QSize(13, 13)));
+                pen.setWidth(2);
+                painter.setPen(pen);
+                painter.drawLine(topLeft.x() + 7, topLeft.y() + 3, topLeft.x() + 7, bottomRight.y() - 4);
+                painter.drawLine(topLeft.x() + 3, topLeft.y() + 7, bottomRight.x() - 4, topLeft.y() + 7);
+            }
+            else { // draw bottom of text.  Makes it easier to see where the 
+                QPen pen(Qt::blue); // TODO make configurable?
+                painter.setPen(pen);
+
+                QPointF endPoint = converter.documentToView(QPointF(size().width(), bottom - m_textShapeData->documentOffset()));
+                painter.drawLine(QPointF(0, endPoint.y()), endPoint); // thats 5 pixels. Not pt.
+            }
+        }
+    }
 }
 
