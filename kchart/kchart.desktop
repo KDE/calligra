@@ -8,6 +8,7 @@ GenericName[fr]=Diagramme
 GenericName[x-test]=xxChartxx
 Comment=Create graphics and charts
 Comment[el]=Δημιουργία γραφικών και γραφημάτων
+Comment[fr]=Créer des graphiques et des diagrammes
 Exec=kchart %u
 Type=Application
 Icon=kchart

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=Krita PDF Import Filter
 Name[el]=Φίλτρο εισαγωγής PDF του Krita
+Name[fr]=Filtre d'importation PDF de Krita
 Comment=
 ServiceTypes=KOfficeFilter
 X-KDE-Available=
