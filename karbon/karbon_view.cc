@@ -73,7 +73,8 @@
 #include <KoZoomAction.h>
 #include <KoShapeSelector.h>
 #include <KoPathShape.h>
-#include <KoPathCommand.h>
+#include <KoPathCombineCommand.h>
+#include <KoPathSeparateCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeSelectorFactory.h>
 #include <KoShapeController.h>
