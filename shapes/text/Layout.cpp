@@ -263,7 +263,6 @@ void Layout::nextShape() {
     m_newShape = true;
 
     if(m_data) {
-// TODO add weduwen wezen algoritm here. May require me to relayout a parag..
         Q_ASSERT(m_data->endPosition() >= m_data->position());
         m_y = m_data->documentOffset() + shape->size().height() + 10.0;
         m_data->wipe();

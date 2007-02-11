@@ -30,6 +30,9 @@ class KoStyleManager;
 class KoTextBlockData;
 class KoTextShapeData;
 
+/**
+ * The document layouter for KoText style docs.
+ */
 class Layout : public KoTextDocumentLayout::LayoutState {
 public:
     explicit Layout(KoTextDocumentLayout *parent);
