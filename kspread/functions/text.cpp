@@ -158,7 +158,10 @@ void RegisterTextFunctions()
 Value func_char (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int val = calc->conv()->asInteger (args[0]).asInteger ();
-  return Value (QString (QChar (val)));
+  if ( val >= 0 )
+    return Value (QString (QChar (val)));
+  else
+    return Value::errorNUM();
 }
 
 // Function: CLEAN

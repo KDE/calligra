@@ -194,5 +194,18 @@ target_link_libraries(TestStatisticalFunctions kspreadcommon ${QT_QTTEST_LIBRARY
 
 add_test(kspread-StatisticalFunctions TestStatisticalFunctions)
 
+########### next target ###############
+
+set(TestTextFunctions_SRCS TestTextFunctions.cpp)
+
+kde4_automoc(${TestTextFunctions_SRCS})
+
+kde4_add_executable(TestTextFunctions RUN_UNINSTALLED ${TestTextFunctions_SRCS})
+
+target_link_libraries(TestTextFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(kspread-TextFunctions TestTextFunctions)
+
+
 
 endif(KDE4_BUILD_TESTS)
