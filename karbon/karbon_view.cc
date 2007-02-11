@@ -65,7 +65,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
 #include <KoShapeDeleteCommand.h>
-#include <KoUngroupShapesCommand.h>
+#include <KoShapeUngroupCommand.h>
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
@@ -792,7 +792,7 @@ KarbonView::groupSelection()
     group->setParent( groupedShapes.first()->parent() );
 	QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
 	new KoShapeCreateCommand( m_part, group, cmd );
-	new KoGroupShapesCommand( group, groupedShapes, cmd );
+	new KoShapeGroupCommand( group, groupedShapes, cmd );
 	part()->KoDocument::addCommand( cmd );
 }
 
@@ -824,7 +824,7 @@ KarbonView::ungroupSelection()
 		KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
 		if( container )
         {
-			new KoUngroupShapesCommand( container, container->iterator(), cmd );
+			new KoShapeUngroupCommand( container, container->iterator(), cmd );
             new KoShapeDeleteCommand( m_part, container, cmd );
         }
 	}
