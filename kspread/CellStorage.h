@@ -101,12 +101,6 @@ public:
     void setFormula( int column, int row, const Formula& formula );
 
     /**
-     * \return the user input associated with the Cell at \p column , \p row .
-     */
-    QString userInput( int column, int row ) const;
-    void setUserInput( int column, int row, const QString& input );
-
-    /**
      * \return the hyperlink associated with the Cell at \p column , \p row .
      */
     QString link( int column, int row ) const;
@@ -122,6 +116,12 @@ public:
      */
     Style style( const QRect& rect ) const;
     void setStyle( const Region& region, const Style& style );
+
+    /**
+     * \return the user input associated with the Cell at \p column , \p row .
+     */
+    QString userInput( int column, int row ) const;
+    void setUserInput( int column, int row, const QString& input );
 
     /**
      * \return the validity checks associated with the Cell at \p column , \p row .

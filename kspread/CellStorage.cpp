@@ -189,29 +189,6 @@ void CellStorage::setFormula( int column, int row, const Formula& formula )
         d->undoData->formulas << qMakePair( QPoint( column, row ), old );
 }
 
-QString CellStorage::userInput( int column, int row ) const
-{
-    if ( column == 0 || row == 0 )
-        return QString();
-    return d->userInputStorage->lookup( column, row );
-}
-
-void CellStorage::setUserInput( int column, int row, const QString& userInput )
-{
-    if ( column == 0 || row == 0 )
-        return;
-
-    QString old;
-    if ( userInput.isEmpty() )
-        old = d->userInputStorage->take( column, row );
-    else
-        old = d->userInputStorage->insert( column, row, userInput );
-
-    // recording undo?
-    if ( d->undoData && userInput != old )
-        d->undoData->userInputs << qMakePair( QPoint( column, row ), old );
-}
-
 QString CellStorage::link( int column, int row ) const
 {
     if ( column == 0 || row == 0 )
@@ -248,6 +225,29 @@ Style CellStorage::style( const QRect& rect ) const
 void CellStorage::setStyle( const Region& region, const Style& style )
 {
     d->styleStorage->insert( region, style );
+}
+
+QString CellStorage::userInput( int column, int row ) const
+{
+    if ( column == 0 || row == 0 )
+        return QString();
+    return d->userInputStorage->lookup( column, row );
+}
+
+void CellStorage::setUserInput( int column, int row, const QString& userInput )
+{
+    if ( column == 0 || row == 0 )
+        return;
+
+    QString old;
+    if ( userInput.isEmpty() )
+        old = d->userInputStorage->take( column, row );
+    else
+        old = d->userInputStorage->insert( column, row, userInput );
+
+    // recording undo?
+    if ( d->undoData && userInput != old )
+        d->undoData->userInputs << qMakePair( QPoint( column, row ), old );
 }
 
 Validity CellStorage::validity( int column, int row ) const
