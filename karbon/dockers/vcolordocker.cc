@@ -71,6 +71,8 @@ VColorDocker::VColorDocker()
     setWindowTitle( i18n( "Color Chooser" ) );
 
     m_colorChooser = new KoUniColorChooser( this, true );
+    m_colorChooser->changeLayout( KoUniColorChooser::SimpleLayout );
+
     setWidget( m_colorChooser );
     //setMaximumHeight( 174 );
     setMinimumWidth( 194 );
