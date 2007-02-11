@@ -30,6 +30,7 @@
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 #include <KoListStyle.h>
+#include <KoTextShapeData.h>
 
 // KDE + Qt includes
 #include <QDomDocument>
@@ -936,6 +937,19 @@ void KWDLoader::fill(KWFrame *frame, QDomElement frameElem) {
         frame->setRunAroundSide(KWord::RightRunAroundSide);
 
     frame->shape()->setZIndex(frameElem.attribute("z-index", "1").toInt());
+
+    KWTextFrame *tf = dynamic_cast<KWTextFrame*> (frame);
+    if(tf) {
+        KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+        Q_ASSERT(textShapeData);
+        KoInsets margins;
+        margins.left = frameElem.attribute("bleftpt", "0.0").toDouble();
+        margins.right = frameElem.attribute("brightpt", "0.0").toDouble();
+        margins.top = frameElem.attribute("btoppt", "0.0").toDouble();
+        margins.bottom = frameElem.attribute("bbottompt", "0.0").toDouble();
+
+        textShapeData->setShapeMargins(margins);
+    }
 }
 
 void KWDLoader::loadStyleTemplates( const QDomElement &stylesElem ) {
