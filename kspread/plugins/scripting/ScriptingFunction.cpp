@@ -23,8 +23,6 @@
 #include <QDomDocument>
 #include <QPointer>
 
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <klocale.h>
 
 //#include <Doc.h>

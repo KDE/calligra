@@ -22,7 +22,10 @@
 
 // qt
 #include <QObject>
+//kde
+#include <kdebug.h>
 // koffice
+#include <KoInlineObjectRegistry.h>
 #include <KoInlineObjectFactory.h>
 #include <KoVariable.h>
 #include <KoProperties.h>
@@ -31,50 +34,121 @@
 
 namespace Scripting {
 
-    class Variable : public QObject, public KoVariable
+    class Variable : public KoVariable
     {
-            Q_OBJECT
         public:
-            explicit Variable(const KoProperties* properties)
-                : QObject(), KoVariable()
+            explicit Variable(Kross::Action* action, const KoProperties* props = 0)
+                : KoVariable(), m_action(action), m_props(props)
             {
-                setProperties(properties);
             }
 
             virtual ~Variable() {}
 
-            virtual void setProperties(const KoProperties *props) {
-                Q_UNUSED(props);
-                setValue("Some text");
+            Kross::Action* action() const { return m_action; }
+
+            virtual void setProperties(const KoProperties* props)
+            {
+                Q_ASSERT(props);
+                const QString function = m_props->property("getValue").toString();
+                kDebug(32010) << "Scripting::Variable::setProperties: function=" << function << endl;
+                if( ! function.isEmpty() ) {
+                    QVariantList args;
+                    args << m_props->property("id").toString();
+                    QVariant result = m_action->callFunction(function, args);
+                    kDebug(32010) << "Scripting::Variable::setProperties: Calling function.name=" << function << " result.value=" << result.toString() << " result.type=" << result.typeName() << endl;
+                    if( result.isValid() ) {
+                        setValue( result.toString() );
+                        return;
+                    }
+                }
+                QString value = props->property("value").toString();
+                setValue(value);
             }
-            //virtual QWidget *createOptionsWidget() { return 0; }
+
+            virtual QWidget* createOptionsWidget()
+            {
+                kDebug(32010) << "Scripting::Variable::createOptionsWidget" << endl;
+                QWidget* resultwidget = 0;
+                //m_action->setProperty("PropertyName", m_action->objectName());
+                const QString function = m_props->property("createOptionsWidget").toString();
+                if( ! function.isEmpty() ) {
+                    QVariantList args;
+                    args << m_props->property("id").toString();
+                    QVariant result = m_action->callFunction(function, args);
+                    kDebug(32010) << "Scripting::Variable::createOptionsWidget: Calling function.name=" << function << " result.value=" << result.toString() << " result.type=" << result.typeName() << endl;
+                    if( result.isValid() ) {
+                        if( qVariantCanConvert< QWidget* >(result) )
+                            resultwidget = qvariant_cast< QWidget* >(result);
+                        else if( qVariantCanConvert< QObject* >(result) )
+                            resultwidget = dynamic_cast< QWidget* >( qvariant_cast< QObject* >(result) );
+                    }
+                }
+
+                //m_action->trigger();
+                //QString widgetname = m_action->property("OptionsWidget");
+                if( value().isNull() && m_props )
+                    setProperties(m_props);
+
+                return resultwidget;
+            }
+        private:
+            Kross::Action* m_action;
+            const KoProperties* m_props;
     };
 
     class VariableFactory : public KoInlineObjectFactory
     {
-        public:
-            VariableFactory(QObject* parent, Kross::Action* action)
-                : KoInlineObjectFactory(parent, action->objectName())
+        protected:
+            explicit VariableFactory(Kross::Action* action)
+                : KoInlineObjectFactory(action, action->objectName()), m_action(action)
             {
                 KoInlineObjectTemplate var;
                 var.id = action->objectName();
                 var.name = action->text();
                 KoProperties *props = new KoProperties();
-                //props->setProperty("id", DateVariable::Fixed);
-                //props->setProperty("definition", "dd/MM/yy");
+                props->setProperty("id", action->objectName());
+                foreach(QString propname, action->propertyNames()) {
+                    const QString value = action->property(propname);
+                    props->setProperty(propname, value);
+                }
                 var.properties = props;
                 addTemplate(var);
             }
 
+        public:
             virtual ~VariableFactory() {}
 
-            KoInlineObject *createInlineObject(const KoProperties* properties) const {
-                return new Variable(properties);
+            Kross::Action* action() const { return m_action; }
+
+            virtual KoInlineObject *createInlineObject(const KoProperties* props) const
+            {
+                Q_ASSERT(props);
+                return new Variable(m_action, props);
             }
 
-            virtual ObjectType type() const {
+            virtual ObjectType type() const
+            {
                 return TextVariable;
             }
+
+            static VariableFactory* create(Kross::Action* action)
+            {
+                Q_ASSERT(action);
+                if( action->objectName().isEmpty() ) {
+                    kDebug(32010) << "Scripting::VariableFactory::create: Action has empty objectName" << endl;
+                    return 0;
+                }
+                if( KoInlineObjectRegistry::instance()->exists(action->objectName()) ) {
+                    kDebug(32010) << "Scripting::VariableFactory::create: Action \"" << action->objectName() << "\" already exist" << endl;
+                    return 0;
+                }
+                VariableFactory* factory = new VariableFactory(action);
+                KoInlineObjectRegistry::instance()->add(factory);
+                return factory;
+            }
+
+        private:
+            Kross::Action* m_action;
     };
 
 }

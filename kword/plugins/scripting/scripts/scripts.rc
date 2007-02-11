@@ -1,15 +1,58 @@
 <KrossScripting>
 
-    <collection name="variables" text="Variables" comment="Scripting variables" enabled="false">
+    <!--
+        The "variables" collection provides scripting variables to KWord. Those
+        scripting variables are displayed in the Insert=>Variable menu and
+        they are able to map functions like to get the variable content or to
+        create an options widget for a variable from within scripts.
+    //-->
+    <collection name="variables" text="Variables" comment="Scripting variables for KWord" enabled="false">
+
+        <!--
+            This script reads the value of a variable from an external file.
+        //-->
         <script
-            name="pyvariabledocinfos"
-            text="Document Informations"
-            comment="Python script to insert a variable with document informations"
+            name="pyvariablereadfile"
+            text="Read From File..."
+            comment="Python script to read a variable from a file"
             interpreter="python"
-            file="variables/variable_docinfos.py" />
+            file="variables/variable_readfile.py">
+
+            <!--
+                This is the default value the variable has.
+            //-->
+            <property name="value">The Value</property>
+
+            <!--
+                Map a getValue-request to a scripting function.
+            //-->
+            <property name="getValue">callbackGetValue</property>
+
+            <!--
+                Map a createOptionsWidget-request to a scripting function.
+            //-->
+            <property name="createOptionsWidget">callbackCreateOptionsWidget</property>
+        </script>
+
     </collection>
 
-    <collection name="samples" text="Samples" comment="Sample scripts">
+    <!--
+        The "samples" collection provides misc example scripts to demonstrate
+        parts of the KWord scripting functionality.
+    //-->
+    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KWord">
+        <script
+            name="pysampleimportfile"
+            text="Import File..."
+            comment="This python script imports content from a file"
+            interpreter="python"
+            file="extensions/sample_importfile.py" />
+        <script
+            name="pysampleexportfile"
+            text="Export File..."
+            comment="This python script exports content to a file"
+            interpreter="python"
+            file="extensions/sample_exportfile.py" />
         <script
             name="pysampleactions"
             text="Execute Action..."

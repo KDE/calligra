@@ -36,7 +36,6 @@
 #include <kross/core/guiclient.h>
 #include <kross/core/model.h>
 // koffice
-#include <KoInlineObjectRegistry.h>
 #include <KoScriptingDocker.h>
 // kword
 #include <KWView.h>
@@ -98,15 +97,11 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     // Add variables
     Kross::ActionCollection* actioncollection = Kross::Manager::self().actionCollection();
     if( actioncollection && (actioncollection = actioncollection->collection("variables")) ) {
-        foreach(QAction* a, actioncollection->actions()) {
-            Kross::Action* action = dynamic_cast< Kross::Action* >(a);
+        foreach(Kross::Action* action, actioncollection->actions()) {
             Q_ASSERT(action);
-            const QString id = action->objectName();
-            if( ! id.isEmpty() && ! KoInlineObjectRegistry::instance()->exists(id) ) {
-                kDebug(32010) << "Adding scripting variable with id=" << id << endl;
-                Scripting::VariableFactory* factory = new Scripting::VariableFactory(this, action);
-                KoInlineObjectRegistry::instance()->add(factory);
-            }
+            Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
+            if( ! factory ) continue;
+            kDebug(32010) << "Adding scripting variable with id=" << factory->id().id() << " and name=" << factory->id().name() << endl;
         }
     }
 }

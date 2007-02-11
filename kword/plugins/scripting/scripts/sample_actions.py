@@ -15,13 +15,20 @@ class Actions:
         self.dialog.minimumWidth = 500
         self.dialog.minimumHeight = 360
         self.dialog.setButtons("Ok|Cancel")
-        #self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
+        self.dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
 
-        #koapplicationadaptor = KWord.application()
-        #kmainWindow = KWord.mainWindow()
-        #kodocumentadaptor = KWord.document()
-        self.komainwindow = KWord.shell()
-        self.actions = [ s for s in dir(self.komainwindow) if s.startswith('slot') ]
+        self.objects = [
+            ('application', KWord.application()),
+            ('shell',       KWord.shell()),
+            ('mainwindow',  KWord.mainWindow()),
+            ('document',    KWord.document()),
+        ]
+
+        self.actions = []
+        for obj in self.objects:
+            for s in dir(obj[1]):
+                if s.startswith('slot'):
+                    self.actions.append( "%s.%s" % (obj[0],s) )
 
         page = self.dialog.addPage("", "")
         widget = self.forms.createWidgetFromUI(page,
@@ -52,7 +59,20 @@ class Actions:
         import KWord, traceback
         try:
             actionName = self.actions[ self.widgetlist.currentRow ]
-            getattr(self.komainwindow,actionName)()
+            (objectName,methodName) = actionName.split('.',1)
+            object = None
+            for obj in self.objects:
+                if obj[0] == objectName:
+                    object = obj[1]
+                    break
+            if not object:
+                raise "Failed to find object for action \"%s\"" % actionName
+
+            attr = getattr(object,methodName)
+            if not attr:
+                raise "Failed to find method for action \"%s\"" % actionName
+            attr()
+
         except:
             message = "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
             self.forms.showMessageBox("Error", "Error", "%s" % message)
