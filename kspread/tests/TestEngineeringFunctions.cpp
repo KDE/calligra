@@ -18,16 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <math.h>
-
-#include "qtest_kde.h"
-
-#include <Formula.h>
-#include <Value.h>
+#include "TestKspreadCommon.h"
 
 #include "TestEngineeringFunctions.h"
-
-using namespace KSpread;
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
 // to get one "true correct" expected values for the functions due to:
@@ -76,21 +69,6 @@ Value TestEngineeringFunctions::evaluate(const QString& formula)
 #endif
 
   return RoundNumber(result);
-}
-
-namespace QTest 
-{
-  template<>
-  char *toString(const Value& value)
-  {
-    QString message;
-    QTextStream ts( &message, QIODevice::WriteOnly );
-    if( value.isFloat() )
-      ts << QString::number(value.asFloat(), 'g', 20);
-    else  
-      ts << value;
-    return qstrdup(message.toLatin1());
-  }
 }
 
 void TestEngineeringFunctions::testCOMPLEX()
@@ -232,24 +210,6 @@ void TestEngineeringFunctions::testIMTANH()
     CHECK_EVAL( "=IMAGINARY( IMTANH(COMPLEX(1;1)) )", 0.271752585319512 );
 }
 
-#include <QtTest/QtTest>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-
-#define KSPREAD_TEST(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    setenv("LC_ALL", "C", 1); \
-    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
-    KAboutData aboutData( "qttest", "qttest", "version" );  \
-    KCmdLineArgs::init(&aboutData); \
-    KApplication app; \
-    TestObject tc; \
-    return QTest::qExec( &tc, argc, argv ); \
-}
-
 KSPREAD_TEST(TestEngineeringFunctions)
-//QTEST_KDEMAIN(TestEngineeringFunctions, GUI)
 
 #include "TestEngineeringFunctions.moc"

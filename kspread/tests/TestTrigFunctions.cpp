@@ -17,18 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <math.h>
-
-#include "qtest_kde.h"
-
-#include <Formula.h>
-#include <Value.h>
+#include "TestKspreadCommon.h"
 
 #include "TestTrigFunctions.h"
-
-#include <float.h> // DBL_EPSILON
-
-using namespace KSpread;
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
 // to get one "true correct" expected values for the functions due to:
@@ -54,7 +45,7 @@ static Value RoundNumber(const Value& v)
     return Value( QString::number(d, 'g', 15) );
   }
   else
-    return v;  
+    return v;
 }
 
 Value TestTrigFunctions::evaluate(const QString& formula)
@@ -73,20 +64,6 @@ Value TestTrigFunctions::evaluate(const QString& formula)
 
   return RoundNumber(result);
 }
-namespace QTest 
-{
-  template<>
-  char *toString(const Value& value)
-  {
-    QString message;
-    QTextStream ts( &message, QIODevice::WriteOnly );
-    if( value.isFloat() )
-      ts << QString::number(value.asFloat(), 'g', 20);
-    else  
-      ts << value;
-    return qstrdup(message.toLatin1());
-  }
-}
 
 void TestTrigFunctions::testCOS()
 {
@@ -95,7 +72,7 @@ void TestTrigFunctions::testCOS()
   CHECK_EVAL( "COS(PI()/2)", 0);
   CHECK_EVAL( "COS(PI())", -1);
   CHECK_EVAL( "COS(-PI()/2)", 0);
-  
+
   // 128 points in a circle
   CHECK_EVAL( "COS(   0*2*PI()/128 )", 1.000000000000000 );
   CHECK_EVAL( "COS(   1*2*PI()/128 )", 0.998795456205172 );
@@ -314,7 +291,7 @@ void TestTrigFunctions::testSIN()
   CHECK_EVAL( "SIN(PI()/2)", 1);
   CHECK_EVAL( "SIN(PI())", 0);
   CHECK_EVAL( "SIN(-PI()/2)", -1);
-  
+
   // 128 points in a circle
   CHECK_EVAL( "SIN(   0*2*PI()/128 )", 0.000000000000000 );
   CHECK_EVAL( "SIN(   1*2*PI()/128 )", 0.049067674327418 );
@@ -522,7 +499,7 @@ void TestTrigFunctions::testTAN()
   CHECK_EVAL( "TAN(PI()/4)", 1);
   CHECK_EVAL( "TAN(PI())", 0);
   CHECK_EVAL( "TAN(-PI()/4)", -1);
-  
+
   // 128 points in a circle, except where the result is infinity
   CHECK_EVAL( "TAN(   0*2*PI()/128 )", 0.000000000000000 );
   CHECK_EVAL( "TAN(   1*2*PI()/128 )", 0.0491268497694673 );
@@ -652,24 +629,6 @@ void TestTrigFunctions::testTAN()
   CHECK_EVAL( "TAN( 127*2*PI()/128 )", -0.0491268497694673 );
 }
 
-#include <QtTest/QtTest>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-
-#define KSPREAD_TEST(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    setenv("LC_ALL", "C", 1); \
-    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
-    KAboutData aboutData( "qttest", "qttest", "version" );  \
-    KCmdLineArgs::init(&aboutData); \
-    KApplication app; \
-    TestObject tc; \
-    return QTest::qExec( &tc, argc, argv ); \
-}
-
 KSPREAD_TEST(TestTrigFunctions)
-//QTEST_KDEMAIN(TestTrigFunctions, GUI)
 
 #include "TestTrigFunctions.moc"

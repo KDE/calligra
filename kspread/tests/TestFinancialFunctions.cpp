@@ -17,16 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <math.h>
-
-#include "qtest_kde.h"
-
-#include <Formula.h>
-#include <Value.h>
+#include "TestKspreadCommon.h"
 
 #include "TestFinancialFunctions.h"
-
-using namespace KSpread;
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
 // to get one "true correct" expected values for the functions due to:
@@ -47,7 +40,7 @@ static Value RoundNumber(const Value& v)
   if(v.isNumber())
     return Value( QString::number(v.asFloat(), 'g', 15) );
   else
-    return v;  
+    return v;
 }
 
 Value TestFinancialFunctions::evaluate(const QString& formula)
@@ -67,21 +60,6 @@ Value TestFinancialFunctions::evaluate(const QString& formula)
   return RoundNumber(result);
 }
 
-namespace QTest 
-{
-  template<>
-  char *toString(const Value& value)
-  {
-    QString message;
-    QTextStream ts( &message, QIODevice::WriteOnly );
-    if( value.isFloat() )
-      ts << QString::number(value.asFloat(), 'g', 20);
-    else  
-      ts << value;
-    return qstrdup(message.toLatin1());
-  }
-}
-
 // Fixed-declining balance depreciation
 // DB(cost, salvage, life, period, month)
 void TestFinancialFunctions::testDB()
@@ -94,7 +72,7 @@ void TestFinancialFunctions::testDB()
 	CHECK_EVAL( "DB(1000000; 100000; 6; 5; 7)", 81999.64278418274 ) ;
 	CHECK_EVAL( "DB(1000000; 100000; 6; 6; 7)", 55841.75673602846 ) ;
 	CHECK_EVAL( "DB(1000000; 100000; 6; 7; 7)", 15845.09847384807 ) ;
-	
+
 	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/dbEx1.html
   CHECK_EVAL( "DB(2500; 500; 3; 1; 6)",  518.750000000000 );
   CHECK_EVAL( "DB(2500; 500; 3; 2; 6)",  822.218750000000 );
@@ -121,7 +99,7 @@ void TestFinancialFunctions::testDDB()
 	CHECK_EVAL( "DDB(2400; 300; 10; 1; 2)", 480.0 ) ;
 	CHECK_EVAL( "DDB(2400; 300; 10; 2; 1.5)", 306 ) ;
 	CHECK_EVAL( "DDB(2400; 300; 10; 10; 2)", 22.1225472000002 ) ;
-	
+
 	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/ddbEx1.html
   CHECK_EVAL( "DDB(2500; 500; 24; 1; 2)",  208.333333333333 );
   CHECK_EVAL( "DDB(2500; 500; 24; 2; 2)",  190.972222222222 );
@@ -147,7 +125,7 @@ void TestFinancialFunctions::testDDB()
   CHECK_EVAL( "DDB(2500; 500; 24; 22; 2)",  0 );
   CHECK_EVAL( "DDB(2500; 500; 24; 23; 2)",  0 );
   CHECK_EVAL( "DDB(2500; 500; 24; 24; 2)",  0 );
-  
+
   // test cases in OpenFormula specification
   CHECK_EVAL( "DDB(4000; 500; 4; 2; 2)", 1000 ) ;
   CHECK_EVAL( "DDB(4000; 500; 4; 2)", 1000 ) ;
@@ -159,12 +137,12 @@ void TestFinancialFunctions::testDDB()
   CHECK_EVAL( "DDB(2500; 500; 24; 22)",  0 );
   CHECK_EVAL( "DDB(2500; 500; 24; 23)",  0 );
   CHECK_EVAL( "DDB(2500; 500; 24; 24)",  0 );
-  
+
   // factor > life
   CHECK_EVAL( "DDB(2400; 300; 10; 0.8; 20)", 2100 );
   CHECK_EVAL( "DDB(2400; 300; 10; 1.0; 20)", 2100 );
   CHECK_EVAL( "DDB(2400; 300; 10; 1.2; 20)", 0 );
-  
+
   // factor is fraction
   CHECK_EVAL( "DDB(2400; 300; 10; 2; 2.5)", 450 );
   CHECK_EVAL( "DDB(2400; 300; 10; 2; 1.5)", 306 );
@@ -191,8 +169,8 @@ void TestFinancialFunctions::testEURO()
   CHECK_EVAL( "EURO(\"LUX\")", 40.3399 );
   CHECK_EVAL( "EURO(\"NLG\")", 2.20371 );
   CHECK_EVAL( "EURO(\"PTE\")", 200.482 );
-  
-  // should still work with lowercase 
+
+  // should still work with lowercase
   CHECK_EVAL( "EURO(\"ats\")", 13.7603 );
   CHECK_EVAL( "EURO(\"bef\")", 40.3399 );
   CHECK_EVAL( "EURO(\"dem\")", 1.95583 );
@@ -243,7 +221,7 @@ void TestFinancialFunctions::testEUROCONVERT()
   CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"LUX\")", 40.3399 );
   CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"NLG\")", 2.20371 );
   CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"PTE\")", 200.482 );
-  
+
   // identity
   CHECK_EVAL( "EUROCONVERT(1;\"BEF\";\"bef\")", 1.0 );
   CHECK_EVAL( "EUROCONVERT(1;\"DEM\";\"dem\")", 1.0 );
@@ -257,7 +235,7 @@ void TestFinancialFunctions::testEUROCONVERT()
   CHECK_EVAL( "EUROCONVERT(1;\"LUX\";\"lux\")", 1.0 );
   CHECK_EVAL( "EUROCONVERT(1;\"NLG\";\"nlg\")", 1.0 );
   CHECK_EVAL( "EUROCONVERT(1;\"PTE\";\"pte\")", 1.0 );
-  
+
   // all other combinations
   CHECK_EVAL( "EUROCONVERT(   2; \"ATS\"; \"bef\" )", 2*40.3399/13.7603 );
   CHECK_EVAL( "EUROCONVERT(   3; \"ATS\"; \"dem\" )", 3*1.95583/13.7603 );
@@ -438,7 +416,7 @@ void TestFinancialFunctions::testNOMINAL()
   CHECK_EVAL( "NOMINAL(25%; 4)",  0.2294850537622564 );
   CHECK_EVAL( "NOMINAL(20%; 12)",  0.1837136459967743 );
   CHECK_EVAL( "NOMINAL(10%; 12)",  0.0956896851468452 );
-  
+
   // rate must be positive
   CHECK_EVAL( "NOMINAL(0; 12)", Value::errorVALUE());
 
@@ -446,7 +424,7 @@ void TestFinancialFunctions::testNOMINAL()
   CHECK_EVAL( "NOMINAL(10%; 0)", Value::errorDIV0());
   CHECK_EVAL( "NOMINAL(10%; -1)", Value::errorVALUE());
   CHECK_EVAL( "NOMINAL(10%; -2)", Value::errorVALUE());
-  
+
   // test cases in OpenFormula specification
   CHECK_EVAL( "NOMINAL(8%;4)", 0.0777061876330940 );
   CHECK_EVAL( "NOMINAL(12.5%;12)", 0.118362966638538 );
@@ -460,13 +438,13 @@ void TestFinancialFunctions::testSLN()
 {
 	// Excel example: http://office.microsoft.com/en-us/excel/HP100623811033.aspx
 	CHECK_EVAL( "SLN(30000; 7500; 10)", 2250.0 ) ;
-	
+
 	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/slnEx1.html
 	CHECK_EVAL( "SLN(2500; 500; 24)", 83.3333333333333 ) ;
-	
+
 	// http://www.gnome.org/projects/gnumeric/doc/gnumeric-SLN.shtml
 	CHECK_EVAL( "SLN(10000; 700; 10)", 930 );
-	
+
 	// test cases in OpenFormula specification
 	CHECK_EVAL( "SLN(4000;500;4)", 875);
 }
@@ -478,13 +456,13 @@ void TestFinancialFunctions::testSYD()
 	// Excel example: http://office.microsoft.com/en-us/excel/HP100623821033.aspx
 	CHECK_EVAL( "SYD(30000; 7500; 10; 1)",  4090.909090909090 ) ;
 	CHECK_EVAL( "SYD(30000; 7500; 10; 10)", 409.0909090909090 ) ;
-	
+
 	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/sydEx1.html
 	CHECK_EVAL( "SYD(25000; 5000; 15; 14)", 333.3333333333333 ) ;
-	
+
 	// http://www.gnome.org/projects/gnumeric/doc/gnumeric-SYD.shtml
 	CHECK_EVAL( "SYD(5000; 200; 5; 2)", 1280 );
-	
+
 	// test cases in OpenFormula specification
 	CHECK_EVAL( "SYD(4000;500;4;2)", 1050 );
 }
@@ -499,24 +477,7 @@ void TestFinancialFunctions::testZEROCOUPON()
   CHECK_EVAL( "ZERO_COUPON(1000;.25;1)",  800 );
 }
 
-#include <QtTest/QtTest>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-
-#define KSPREAD_TEST(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    setenv("LC_ALL", "C", 1); \
-    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
-    KAboutData aboutData( "qttest", "qttest", "version" );  \
-    KCmdLineArgs::init(&aboutData); \
-    KApplication app; \
-    TestObject tc; \
-    return QTest::qExec( &tc, argc, argv ); \
-}
 
 KSPREAD_TEST(TestFinancialFunctions)
-//QTEST_KDEMAIN(TestFinancialFunctions, GUI)
 
 #include "TestFinancialFunctions.moc"

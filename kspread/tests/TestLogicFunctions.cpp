@@ -17,17 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "qtest_kde.h"
-
-#include <Formula.h>
-#include <Value.h>
+#include "TestKspreadCommon.h"
 
 #include "TestLogicFunctions.h"
-
-#include <float.h> // DBL_EPSILON
-#include <math.h>
-
-using namespace KSpread;
 
 
 // because we may need to promote expected value from integer to float
@@ -48,18 +40,6 @@ Value TestLogicFunctions::evaluate(const QString& formula, Value& ex)
     result = Value(result.asFloat());
 
   return result;
-}
-
-namespace QTest
-{
-  template<>
-  char *toString(const Value& value)
-  {
-    QString message;
-    QTextStream ts( &message, QIODevice::WriteOnly );
-    ts << value;
-    return qstrdup(message.toLatin1());
-  }
 }
 
 void TestLogicFunctions::testAND()
@@ -200,22 +180,6 @@ void TestLogicFunctions::testXOR()
     // single parameter
     CHECK_EVAL( "XOR(TRUE())", Value( true ) );
     CHECK_EVAL( "XOR(FALSE())", Value( false ) );
-}
-
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-
-#define KSPREAD_TEST(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    setenv("LC_ALL", "C", 1); \
-    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
-    KAboutData aboutData( "qttest", "qttest", "version" );  \
-    KCmdLineArgs::init(&aboutData); \
-    KApplication app; \
-    TestObject tc; \
-    return QTest::qExec( &tc, argc, argv ); \
 }
 
 KSPREAD_TEST(TestLogicFunctions)

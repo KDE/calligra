@@ -19,14 +19,9 @@
 
 #include <klocale.h>
 
-#include "qtest_kde.h"
-
-#include <Formula.h>
-#include <Value.h>
+#include "TestKspreadCommon.h"
 
 #include "TestFormula.h"
-
-using namespace KSpread;
 
 
 static char encodeTokenType( const Token& token )
@@ -111,18 +106,6 @@ Value TestFormula::evaluate(const QString& formula, Value& ex)
   return result;
 }
 
-namespace QTest 
-{
-  template<>
-  char *toString(const Value& value)
-  {
-    QString message;
-    QTextStream ts( &message, QIODevice::WriteOnly );
-    ts << value;
-    return qstrdup(message.toLatin1());
-  }
-}
-
 void TestFormula::testTokenizer()
 {
   // simple, single-token formulas
@@ -149,7 +132,7 @@ void TestFormula::testTokenizer()
   CHECK_TOKENIZE( "Sheet1!A1:B100", "r" );
   CHECK_TOKENIZE( "'Sheet One'!A1:B100", "r" );
   CHECK_TOKENIZE( "SIN", "x" );
-  
+
   // log2 and log10 are cell references and function identifiers
   CHECK_TOKENIZE( "LOG2", "c" );
   CHECK_TOKENIZE( "LOG10:11", "r" );
@@ -237,7 +220,7 @@ void TestFormula::testBinary()
   // simple binary operation
   CHECK_EVAL( "0+0", Value(0) );
   CHECK_EVAL( "1+1", Value(2) );
-  
+
   // power operator is left associative
   CHECK_EVAL( "2^3", Value(8) );
   CHECK_EVAL( "2^3^2", Value(64) );
@@ -292,7 +275,7 @@ void TestFormula::testInlineArrays()
 #ifdef KSPREAD_INLINE_ARRAYS
   // inline arrays
   CHECK_TOKENIZE( "{1;2|3;4}", "oioioioio" );
-  
+
   Value array( Value::Array );
   array.setElement(0,0,Value((int)1));
   array.setElement(1,0,Value((int)2));
@@ -302,28 +285,10 @@ void TestFormula::testInlineArrays()
 
   array.setElement(1,0,Value(0.0));
   CHECK_EVAL( "={1;SIN(0)|3;4}", array ); // "dynamic"
-  CHECK_EVAL( "=SUM({1;2|3;4})", Value(10) );  
+  CHECK_EVAL( "=SUM({1;2|3;4})", Value(10) );
 #endif
 }
 
-#include <QtTest/QtTest>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-
-#define KSPREAD_TEST(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    setenv("LC_ALL", "C", 1); \
-    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
-    KAboutData aboutData( "qttest", "qttest", "version" );  \
-    KCmdLineArgs::init(&aboutData); \
-    KApplication app; \
-    TestObject tc; \
-    return QTest::qExec( &tc, argc, argv ); \
-}
-
 KSPREAD_TEST(TestFormula)
-//QTEST_KDEMAIN(TestFormula, GUI)
 
 #include "TestFormula.moc"

@@ -18,16 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <math.h>
-
-#include "qtest_kde.h"
+#include "TestKspreadCommon.h"
 
 #include <Doc.h>
-#include <Value.h>
 
 #include "TestValue.h"
 
-using namespace KSpread;
 
 void TestValue::testEmpty()
 {
@@ -367,24 +363,6 @@ void TestValue::testAssignment()
   delete v2;
 }
 
-#include <QtTest/QtTest>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-
-#define KSPREAD_TEST(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    setenv("LC_ALL", "C", 1); \
-    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
-    KAboutData aboutData( "qttest", "qttest", "version" );  \
-    KCmdLineArgs::init(&aboutData); \
-    KApplication app; \
-    TestObject tc; \
-    return QTest::qExec( &tc, argc, argv ); \
-}
-
 KSPREAD_TEST(TestValue)
-//QTEST_KDEMAIN(TestValue, GUI)
 
 #include "TestValue.moc"

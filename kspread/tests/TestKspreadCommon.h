@@ -1,0 +1,58 @@
+/* This file is part of the KDE project
+   Copyright 2007 Brad Hards <bradh@frogmouth.net>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; only
+   version 2 of the License.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "qtest_kde.h"
+
+#include <Formula.h>
+#include <Value.h>
+
+#include <float.h> // DBL_EPSILON
+#include <math.h>
+
+using namespace KSpread;
+
+
+namespace QTest
+{
+  template<>
+  char *toString(const Value& value)
+  {
+    QString message;
+    QTextStream ts( &message, QIODevice::WriteOnly );
+    ts << value;
+    return qstrdup(message.toLatin1());
+  }
+}
+
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
+
+#define KSPREAD_TEST(TestObject) \
+int main(int argc, char *argv[]) \
+{ \
+    setenv("LC_ALL", "C", 1); \
+    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
+    KAboutData aboutData( "qttest", "qttest", "version" );  \
+    KCmdLineArgs::init(&aboutData); \
+    KApplication app; \
+    TestObject tc; \
+    return QTest::qExec( &tc, argc, argv ); \
+}
+
