@@ -12,7 +12,7 @@ kde4_add_executable(TestFormula RUN_UNINSTALLED ${TestFormula_SRCS})
 
 target_link_libraries(TestFormula kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(Formula TestFormula)
+add_test(kspread-Formula TestFormula)
 
 ########### next target ###############
 
@@ -24,7 +24,7 @@ kde4_add_executable(TestOpenFormula RUN_UNINSTALLED ${TestOpenFormula_SRCS})
 
 target_link_libraries(TestOpenFormula kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(OpenFormula TestOpenFormula)
+add_test(kspread-OpenFormula TestOpenFormula)
 
 ########### next target ###############
 
@@ -36,7 +36,7 @@ kde4_add_executable(BenchmarkRTree RUN_UNINSTALLED ${BenchmarkRTree_SRCS})
 
 target_link_libraries(BenchmarkRTree ${KDE4_KDECORE_LIBS})
 
-# add_test(R-Tree BenchmarkRTreetest)
+# add_test(kspread-BenchmarkRTree BenchmarkRTreetest)
 
 ########### next target ###############
 
@@ -48,7 +48,7 @@ kde4_add_executable(TestRTree RUN_UNINSTALLED ${TestRTree_SRCS})
 
 target_link_libraries(TestRTree ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
-add_test(R-Tree TestRTree)
+add_test(kpsread-RTree TestRTree)
 
 ########### next target ###############
 
@@ -60,7 +60,7 @@ kde4_add_executable(TestValue RUN_UNINSTALLED ${TestValue_SRCS})
 
 target_link_libraries(TestValue kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(Value TestValue)
+add_test(kspread-Value TestValue)
 
 ########### next target ###############
 
@@ -72,7 +72,7 @@ kde4_add_executable(TestMathFunctions RUN_UNINSTALLED ${TestMathFunctions_SRCS})
 
 target_link_libraries(TestMathFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(MathFunctions TestMathFunctions)
+add_test(kspread-MathFunctions TestMathFunctions)
 
 ########### next target ###############
 
@@ -84,7 +84,7 @@ kde4_add_executable(TestFinancialFunctions RUN_UNINSTALLED ${TestFinancialFuncti
 
 target_link_libraries(TestFinancialFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(FinancialFunctions TestFinancialFunctions)
+add_test(kspread-FinancialFunctions TestFinancialFunctions)
 
 ########### next target ###############
 
@@ -96,7 +96,7 @@ kde4_add_executable(TestTrigFunctions RUN_UNINSTALLED ${TestTrigFunctions_SRCS})
 
 target_link_libraries(TestTrigFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(TrigFunctions TestTrigFunctions)
+add_test(kspread-TrigFunctions TestTrigFunctions)
 
 ########### next target ###############
 
@@ -108,7 +108,7 @@ kde4_add_executable(BenchmarkCluster RUN_UNINSTALLED ${BenchmarkCluster_SRCS})
 
 target_link_libraries(BenchmarkCluster kspreadcommon ${QT_QTTEST_LIBRARY})
 
-#add_test(Cluster BenchmarkCluster)
+#add_test(kspread-BenchmarkCluster BenchmarkCluster)
 
 ########### next target ###############
 
@@ -120,7 +120,7 @@ kde4_add_executable(BenchmarkPointStorage RUN_UNINSTALLED ${BenchmarkPointStorag
 
 target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY})
 
-# add_test(PointStorage BenchmarkPointStoragetest)
+# add_test(kspread-BenchmarkPointStorage BenchmarkPointStoragetest)
 
 ########### next target ###############
 
@@ -132,7 +132,7 @@ kde4_add_executable(TestPointStorage RUN_UNINSTALLED ${TestPointStorage_SRCS})
 
 target_link_libraries(TestPointStorage kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(PointStorage TestPointStorage)
+add_test(kspread-PointStorage TestPointStorage)
 
 ########### next target ###############
 
@@ -144,7 +144,7 @@ kde4_add_executable(TestBitopsFunctions RUN_UNINSTALLED ${TestBitopsFunctions_SR
 
 target_link_libraries(TestBitopsFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(BitopsFunctions TestBitopsFunctions)
+add_test(kspread-BitopsFunctions TestBitopsFunctions)
 
 ########### next target ###############
 
@@ -156,7 +156,7 @@ kde4_add_executable(TestInformationFunctions RUN_UNINSTALLED ${TestInformationFu
 
 target_link_libraries(TestInformationFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(InformationFunctions TestInformationFunctions)
+add_test(kspread-InformationFunctions TestInformationFunctions)
 
 ########### next target ###############
 
@@ -168,7 +168,7 @@ kde4_add_executable(TestEngineeringFunctions RUN_UNINSTALLED ${TestEngineeringFu
 
 target_link_libraries(TestEngineeringFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(EngineeringFunctions TestEngineeringFunctions)
+add_test(kspread-EngineeringFunctions TestEngineeringFunctions)
 
 ########### next target ###############
 
@@ -180,7 +180,7 @@ kde4_add_executable(TestLogicFunctions RUN_UNINSTALLED ${TestLogicFunctions_SRCS
 
 target_link_libraries(TestLogicFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(LogicFunctions TestLogicFunctions)
+add_test(kspread-LogicFunctions TestLogicFunctions)
 
 ########### next target ###############
 
@@ -192,7 +192,7 @@ kde4_add_executable(TestStatisticalFunctions RUN_UNINSTALLED ${TestStatisticalFu
 
 target_link_libraries(TestStatisticalFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(StatisticalFunctions TestStatisticalFunctions)
+add_test(kspread-StatisticalFunctions TestStatisticalFunctions)
 
 
 endif(KDE4_BUILD_TESTS)

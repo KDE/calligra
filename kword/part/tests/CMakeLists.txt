@@ -12,7 +12,7 @@ set(TestPageManager_test_SRCS TestPageManager.cpp)
 kde4_automoc(${TestPageManager_test_SRCS})
 kde4_add_executable(TestPageManager RUN_UNINSTALLED ${TestPageManager_test_SRCS})
 target_link_libraries(TestPageManager kwordprivate ${QT_QTTEST_LIBRARY})
-add_test(kword-TestPageManager ${EXECUTABLE_OUTPUT_PATH}/TestPageManager)
+add_test(kword-part-TestPageManager ${EXECUTABLE_OUTPUT_PATH}/TestPageManager)
 
 ########### next target ###############
 
