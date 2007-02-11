@@ -265,7 +265,7 @@ QWidget * KarbonPencilTool::createOptionWidget()
     QVBoxLayout * curveLayout = new QVBoxLayout( curveBox );
     QCheckBox * optimizeCurve = new QCheckBox( i18n( "Optimize" ), curveBox );
     KDoubleNumInput * fittingError = new KDoubleNumInput( 0.0, 400.0, m_fittingError, curveBox, 0.50, 3 );
-    fittingError->setLabel( i18n( "Exactness:" ) );
+    fittingError->setLabel( i18n( "Exactness:" ), Qt::AlignLeft|Qt::AlignVCenter );
     curveLayout->addWidget( optimizeCurve );
     curveLayout->addWidget( fittingError );
 
@@ -273,13 +273,14 @@ QWidget * KarbonPencilTool::createOptionWidget()
     QVBoxLayout * straightLayout = new QVBoxLayout( straightBox );
     KDoubleNumInput * combineAngle = new KDoubleNumInput( 0.0, 360.0, m_combineAngle, straightBox, 0.50, 3 );
     combineAngle->setSuffix( " deg" );
-    combineAngle->setLabel( i18n( "Combine angle:" ) );
+    combineAngle->setLabel( i18n( "Combine angle:" ), Qt::AlignLeft|Qt::AlignVCenter );
     straightLayout->addWidget( combineAngle );
 
     stackedWidget->addWidget( rawBox );
     stackedWidget->addWidget( curveBox );
     stackedWidget->addWidget( straightBox );
     layout->addWidget( stackedWidget, 1 );
+    layout->addStretch( 1 );
 
     connect( modeBox, SIGNAL(activated(int)), stackedWidget, SLOT(setCurrentIndex(int)));
     connect( modeBox, SIGNAL(activated(int)), this, SLOT(selectMode(int)));
