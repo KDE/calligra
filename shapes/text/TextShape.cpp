@@ -117,51 +117,52 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
     if(showTextFrames && lay) {
         QList< KoShape * > shapes = lay->shapes();
-        if(shapes.count() <= 1 || shapes.last() == this) {
-            // this shape is the last in the set.  Now get the bottom of the text.
-            bool moreText = false;
-            double max = m_textShapeData->documentOffset()+size().height();
-            double bottom = 0.0;
-            QTextBlock block = m_textShapeData->document()->begin();
-            while(block.isValid()) {
-                QTextLayout *tl = block.layout();
-                if(tl == 0) {
+        // this shape is the last in the set.  Now get the bottom of the text.
+        bool moreText = false;
+        double max = m_textShapeData->documentOffset()+size().height();
+        double bottom = 0.0;
+        QTextBlock block = m_textShapeData->document()->begin();
+        while(block.isValid()) {
+            QTextLayout *tl = block.layout();
+            if(tl == 0) {
+                moreText = true;
+                break;
+            }
+            else if(tl->lineCount() == 0) {
+                moreText = true;
+                break;
+            }
+            else {
+                QTextLine line = tl->lineAt(tl->lineCount()-1);
+                bottom = qMax(bottom, line.position().y() + line.height());
+                if(bottom > max) {
                     moreText = true;
                     break;
                 }
-                else if(tl->lineCount() == 0) {
-                    moreText = true;
-                    break;
-                }
-                else {
-                    QTextLine line = tl->lineAt(tl->lineCount()-1);
-                    bottom = qMax(bottom, line.position().y() + line.height());
-                    if(bottom > max) {
-                        moreText = true;
-                        break;
-                    }
-                }
-                block = block.next();
             }
+            block = block.next();
+        }
 
-            if(moreText) { // there is invisible text left.
-                QPoint bottomRight = converter.documentToView(QPointF(size().width(), size().height())).toPoint();
-                QPen pen(Qt::red); // TODO make configurable?
-                painter.setPen(pen);
-                QPoint topLeft = bottomRight - QPoint(15,15);
-                painter.drawRect(QRect(topLeft, QSize(13, 13)));
-                pen.setWidth(2);
-                painter.setPen(pen);
-                painter.drawLine(topLeft.x() + 7, topLeft.y() + 3, topLeft.x() + 7, bottomRight.y() - 4);
-                painter.drawLine(topLeft.x() + 3, topLeft.y() + 7, bottomRight.x() - 4, topLeft.y() + 7);
-            }
-            else { // draw bottom of text.  Makes it easier to see where the 
-                QPen pen(Qt::blue); // TODO make configurable?
-                painter.setPen(pen);
+        if(! moreText) { // draw bottom of text.  Makes it easier to see where the text ends
+            QPen pen(Qt::blue); // TODO make configurable?
+            painter.setPen(pen);
 
-                QPointF endPoint = converter.documentToView(QPointF(size().width(), bottom - m_textShapeData->documentOffset()));
-                painter.drawLine(QPointF(0, endPoint.y()), endPoint); // thats 5 pixels. Not pt.
-            }
+            QPointF endPoint = converter.documentToView(QPointF(size().width(),
+                        bottom - m_textShapeData->documentOffset()));
+            endPoint.setX(endPoint.x() -1);
+            if(endPoint.y() > 0)
+                painter.drawLine(QPointF(0, endPoint.y()), endPoint);
+        }
+        else if(shapes.count() <= 1 || shapes.last() == this) { // there is invisible text left.
+            QPoint bottomRight = converter.documentToView(QPointF(size().width(), size().height())).toPoint();
+            QPen pen(Qt::red); // TODO make configurable?
+            painter.setPen(pen);
+            QPoint topLeft = bottomRight - QPoint(15,15);
+            painter.drawRect(QRect(topLeft, QSize(13, 13)));
+            pen.setWidth(2);
+            painter.setPen(pen);
+            painter.drawLine(topLeft.x() + 7, topLeft.y() + 3, topLeft.x() + 7, bottomRight.y() - 4);
+            painter.drawLine(topLeft.x() + 3, topLeft.y() + 7, bottomRight.x() - 4, topLeft.y() + 7);
         }
     }
 }
