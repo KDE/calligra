@@ -397,10 +397,11 @@ void Layout::resetPrivate() {
 }
 
 void Layout::updateBorders() {
-    m_borderInsets.top = m_format.doubleProperty(KoParagraphStyle::TopPadding);
-    m_borderInsets.left = m_format.doubleProperty(KoParagraphStyle::LeftPadding);
-    m_borderInsets.bottom = m_format.doubleProperty(KoParagraphStyle::BottomPadding);
-    m_borderInsets.right = m_format.doubleProperty(KoParagraphStyle::RightPadding);
+    m_borderInsets = m_data->shapeMargins();
+    m_borderInsets.top += m_format.doubleProperty(KoParagraphStyle::TopPadding);
+    m_borderInsets.left += m_format.doubleProperty(KoParagraphStyle::LeftPadding);
+    m_borderInsets.bottom += m_format.doubleProperty(KoParagraphStyle::BottomPadding);
+    m_borderInsets.right += m_format.doubleProperty(KoParagraphStyle::RightPadding);
 
     KoTextBlockBorderData border(QRectF(this->x() - listIndent(), m_y + m_borderInsets.top + topMargin(), width(), 1.));
     border.setEdge(border.Left, m_format, KoParagraphStyle::LeftBorderStyle,
