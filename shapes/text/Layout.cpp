@@ -181,7 +181,11 @@ bool Layout::nextParag() {
         QTextBlock block = m_block.previous(); // last correct one.
         m_data->setEndPosition(block.position() + block.length());
 
-        // cleanupShapes();
+        // repaint till end of shape.
+        const double offsetInShape = m_y - m_data->documentOffset();
+        shape->repaint(QRectF(0.0, offsetInShape, shape->size().width(), shape->size().width() - offsetInShape));
+        // cleanup and repaint rest of shapes.
+        cleanupShapes();
         return false;
     }
     m_format = m_block.blockFormat();
@@ -299,10 +303,13 @@ void Layout::cleanupShapes() {
 
 void Layout::cleanupShape(KoShape *daShape) {
     KoTextShapeData *textData = dynamic_cast<KoTextShapeData*> (daShape->userData());
-    if(textData) {
-        textData->setPosition(-1);
-        textData->wipe();
-    }
+    if(textData == 0)
+        return;
+    if(textData->position() == -1)
+        return;
+    textData->setPosition(-1);
+    textData->setDocumentOffset(m_y + 10);
+    textData->wipe();
     daShape->repaint();
 }
 
