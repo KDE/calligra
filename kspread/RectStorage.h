@@ -454,6 +454,19 @@ protected Q_SLOTS:
 
 
 
+class MatrixStorage : public QObject, public RectStorage<bool>
+{
+    Q_OBJECT
+public:
+    explicit MatrixStorage( Sheet* sheet ) : RectStorage<bool>( sheet ) {}
+
+protected Q_SLOTS:
+    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
+    virtual void garbageCollection() { RectStorage<bool>::garbageCollection(); }
+};
+
+
+
 class ValidityStorage : public QObject, public RectStorage<Validity>
 {
     Q_OBJECT

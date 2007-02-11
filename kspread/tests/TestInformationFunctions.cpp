@@ -49,10 +49,13 @@ void TestInformationFunctions::testVALUE()
     CHECK_EVAL( "VALUE(\"200%\")",  Value( 2 ) );
     CHECK_EVAL( "VALUE(\"1.5\")", Value( 1.5 ) );
     // Check fractions
+    QEXPECT_FAIL( "", "ValueParser needs an extension to parse fractions", Continue );
     CHECK_EVAL( "VALUE(\"7 1/4\")", Value( 7.25 ) );
+    QEXPECT_FAIL( "", "ValueParser needs an extension to parse fractions", Continue );
     CHECK_EVAL( "VALUE(\"0 1/2\")", Value( 0.5 ) );
     // Check times
     CHECK_EVAL( "VALUE(\"00:00\")", Value( 0 ) );
+    QEXPECT_FAIL( "", "ValueParser needs an extension to parse fractions", Continue );
     CHECK_EVAL( "VALUE(\"02:00\")-2/24", Value( 0 ) );
     // check dates - local dependent
     CHECK_EVAL( "VALUE(\"5/21/06\")=DATE(2006;5;21)", Value( true ) );

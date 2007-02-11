@@ -345,7 +345,7 @@ QString Cell::inputText() const
     const Formula formula = this->formula();
     if ( !formula.expression().isEmpty() )
         return formula.expression();
-    return doc()->converter()->asString( value() ).asString();
+    return sheet()->cellStorage()->userInput( d->column, d->row );
 }
 
 void Cell::setInputText( const QString& string )
@@ -356,15 +356,15 @@ void Cell::setInputText( const QString& string )
         Formula formula( sheet(), *this );
         formula.setExpression( string );
         setFormula( formula );
-        // remove an existing value
-//         sheet()->cellStorage()->setValue( d->column, d->row, Value() );
+        // remove an existing user input (the non-formula one)
+        sheet()->cellStorage()->setUserInput( d->column, d->row, QString() );
     }
     else
     {
         // remove an existing formula
         setFormula( Formula() );
         // set the value
-        sheet()->cellStorage()->setValue( d->column, d->row, Value( string ) );
+        sheet()->cellStorage()->setUserInput( d->column, d->row, string );
     }
 }
 
@@ -502,7 +502,12 @@ void Cell::copyContent( const Cell& cell )
         setFormula( formula );
     }
     else
-        sheet()->cellStorage()->setValue( d->column, d->row, cell.value() );
+    {
+        // copy the user input
+        sheet()->cellStorage()->setUserInput( d->column, d->row, cell.inputText() );
+    }
+    // copy the value in both cases
+    sheet()->cellStorage()->setValue( d->column, d->row, cell.value() );
 }
 
 
@@ -1018,6 +1023,7 @@ void Cell::setCellText( const QString& text )
 
     // keep the old formula and value for the case, that validation fails
     const Formula oldFormula = formula();
+    const QString oldUserInput = inputText();
     const Value oldValue = value();
 
     // here, the new value is not a formula anymore; clear an existing one
@@ -1049,6 +1055,7 @@ void Cell::setCellText( const QString& text )
     }
     // set the new value
     setFormula( Formula() );
+    setInputText( text );
     setValue( value );
 
     // validation
@@ -1060,6 +1067,7 @@ void Cell::setCellText( const QString& text )
             kDebug() << "Validation failed" << endl;
             //reapply old value if action == stop
             setFormula( oldFormula );
+            setInputText( oldUserInput );
             setValue( oldValue );
         }
     }

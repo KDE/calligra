@@ -62,10 +62,14 @@ class KSPREAD_EXPORT CellStorage
 public:
     /**
      * Constructor.
-     * Creates an empty storage. Actually, does nothing.
+     * Creates an empty storage.
      */
     CellStorage( Sheet* sheet );
 
+    /**
+     * Copy constructor.
+     * \note Take care: does not perform a deep copy!
+     */
     CellStorage( const CellStorage& other );
 
     /**
@@ -95,6 +99,12 @@ public:
      */
     Formula formula( int column, int row ) const;
     void setFormula( int column, int row, const Formula& formula );
+
+    /**
+     * \return the user input associated with the Cell at \p column , \p row .
+     */
+    QString userInput( int column, int row ) const;
+    void setUserInput( int column, int row, const QString& input );
 
     /**
      * \return the hyperlink associated with the Cell at \p column , \p row .
@@ -308,6 +318,16 @@ public:
     FormulaStorage& operator=( const PointStorage<Formula>& o )
     {
         PointStorage<Formula>::operator=( o );
+        return *this;
+    }
+};
+
+class UserInputStorage : public PointStorage<QString>
+{
+public:
+    UserInputStorage& operator=( const PointStorage<QString>& o )
+    {
+        PointStorage<QString>::operator=( o );
         return *this;
     }
 };
