@@ -224,6 +224,9 @@ Things not in bugzilla
 	support GnuMP.  The conversion step shall be done as a part
 	of converting to the new parser.
 
+  + Damage concept						      1 ----
+    - Split the damage processing: document and view related.		----
+
   + code cleanups						      3 ----
     - Merge Cell::checkForNamedAreas() into Oasis::decodeFormula().	----
       Caution: also used by OpenCalc filter

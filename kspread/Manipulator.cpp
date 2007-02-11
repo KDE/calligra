@@ -519,7 +519,7 @@ bool CommentManipulator::process( Element* element )
     {
         // create undo
         if ( m_firstrun )
-            m_undoData += m_sheet->commentStorage()->undoData( element->rect() );
+            m_undoData += m_sheet->commentStorage()->undoData( Region(element->rect()) );
         m_sheet->cellStorage()->setComment( Region(element->rect()), m_comment );
     }
     return true;
@@ -561,7 +561,7 @@ bool ConditionalManipulator::process( Element* element )
     {
         // create undo
         if ( m_firstrun )
-            m_undoData += m_sheet->conditionsStorage()->undoData( element->rect() );
+            m_undoData += m_sheet->conditionsStorage()->undoData( Region(element->rect()) );
         m_sheet->cellStorage()->setConditions( Region(element->rect()), m_conditions );
     }
     return true;
@@ -603,7 +603,7 @@ bool ValidityManipulator::process( Element* element )
     {
         // create undo
         if ( m_firstrun )
-            m_undoData += m_sheet->validityStorage()->undoData( element->rect() );
+            m_undoData += m_sheet->validityStorage()->undoData( Region(element->rect()) );
         m_sheet->cellStorage()->setValidity( Region(element->rect()), m_validity );
     }
     return true;

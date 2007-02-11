@@ -153,6 +153,10 @@ QString CellStorage::comment( int column, int row ) const
 
 void CellStorage::setComment( const Region& region, const QString& comment )
 {
+    // recording undo?
+    if ( d->undoData )
+        d->undoData->comments << d->commentStorage->undoData( region );
+
     d->commentStorage->insert( region, comment );
 }
 
@@ -163,6 +167,10 @@ Conditions CellStorage::conditions( int column, int row ) const
 
 void CellStorage::setConditions( const Region& region, Conditions conditions )
 {
+    // recording undo?
+    if ( d->undoData )
+        d->undoData->conditions << d->conditionsStorage->undoData( region );
+
     d->conditionsStorage->insert( region, conditions );
 }
 
@@ -224,6 +232,10 @@ Style CellStorage::style( const QRect& rect ) const
 
 void CellStorage::setStyle( const Region& region, const Style& style )
 {
+    // recording undo?
+    if ( d->undoData )
+        d->undoData->styles << d->styleStorage->undoData( region );
+
     d->styleStorage->insert( region, style );
 }
 
@@ -257,6 +269,10 @@ Validity CellStorage::validity( int column, int row ) const
 
 void CellStorage::setValidity( const Region& region, Validity validity )
 {
+    // recording undo?
+    if ( d->undoData )
+        d->undoData->validities << d->validityStorage->undoData( region );
+
     d->validityStorage->insert( region, validity );
 }
 

@@ -65,7 +65,7 @@ public:
     /**
      *
      */
-    QList< QPair<QRectF,SharedSubStyle> > undoData(const QRect& rect) const;
+    QList< QPair<QRectF,SharedSubStyle> > undoData(const Region& rect) const;
 
     /**
      * Returns the area, which got a style attached.

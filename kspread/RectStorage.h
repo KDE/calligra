@@ -75,7 +75,7 @@ public:
      */
     QPair<QRectF, T> containedPair(const QPoint& point) const;
 
-    QList< QPair<QRectF, T> > undoData(const QRect& rect) const;
+    QList< QPair<QRectF, T> > undoData(const Region& region) const;
 
     /**
      * Returns the area, which got data attached.
@@ -200,13 +200,20 @@ QPair<QRectF, T> RectStorage<T>::containedPair(const QPoint& point) const
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RectStorage<T>::undoData(const QRect& rect) const
+QList< QPair<QRectF,T> > RectStorage<T>::undoData(const Region& region) const
 {
-    QList< QPair<QRectF,T> > result = m_tree.intersectingPairs(rect);
-    for ( int i = 0; i < result.count(); ++i )
+    QList< QPair<QRectF,T> > result;
+    Region::ConstIterator end = region.constEnd();
+    for ( Region::ConstIterator it = region.constBegin(); it != end; ++it )
     {
-        // trim the rects
-        result[i].first = result[i].first.intersected( rect );
+        const QRect rect = (*it)->rect();
+        QList< QPair<QRectF,T> > pairs = m_tree.intersectingPairs(rect);
+        for ( int i = 0; i < pairs.count(); ++i )
+        {
+            // trim the rects
+            pairs[i].first = pairs[i].first.intersected( rect );
+        }
+        result << pairs;
     }
     return result;
 }

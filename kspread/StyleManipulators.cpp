@@ -48,7 +48,7 @@ bool StyleManipulator::process(Element* element)
         if ( m_firstrun )
         {
             const QList< QPair<QRectF,SharedSubStyle> > rawUndoData
-                    = m_sheet->styleStorage()->undoData( element->rect() );
+                    = m_sheet->styleStorage()->undoData( Region(element->rect()) );
             for ( int i = 0; i < rawUndoData.count(); ++i )
             {
 //                 if ( m_style->hasAttribute( rawUndoData[i].second->type() ) ||
@@ -159,7 +159,7 @@ IncreaseIndentManipulator::IncreaseIndentManipulator()
 
 bool IncreaseIndentManipulator::process( Element* element )
 {
-    QList< QPair<QRectF,SharedSubStyle> > indentationPairs = m_sheet->styleStorage()->undoData( element->rect() );
+    QList< QPair<QRectF,SharedSubStyle> > indentationPairs = m_sheet->styleStorage()->undoData( Region(element->rect()) );
     for ( int i = 0; i < indentationPairs.count(); ++i )
     {
         if ( indentationPairs[i].second->type() != Style::Indentation )
@@ -231,10 +231,10 @@ bool BorderColorManipulator::preProcessing()
 {
     if ( m_firstrun )
     {
+        QList< QPair<QRectF,SharedSubStyle> > undoData = m_sheet->styleStorage()->undoData( *this );
         ConstIterator endOfList = constEnd();
         for (ConstIterator it = constBegin(); it != endOfList; ++it)
         {
-            QList< QPair<QRectF,SharedSubStyle> > undoData = m_sheet->styleStorage()->undoData( (*it)->rect() );
             for ( int i = 0; i < undoData.count(); ++i )
             {
                 if ( undoData[i].second->type() != Style::LeftPen ||
@@ -334,7 +334,7 @@ IncreasePrecisionManipulator::IncreasePrecisionManipulator()
 
 bool IncreasePrecisionManipulator::process( Element* element )
 {
-    QList< QPair<QRectF,SharedSubStyle> > precisionPairs = m_sheet->styleStorage()->undoData( element->rect() );
+    QList< QPair<QRectF,SharedSubStyle> > precisionPairs = m_sheet->styleStorage()->undoData( Region(element->rect()) );
     for ( int i = 0; i < precisionPairs.count(); ++i )
     {
         if ( precisionPairs[i].second->type() != Style::Precision )
