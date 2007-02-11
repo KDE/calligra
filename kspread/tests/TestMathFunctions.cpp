@@ -237,6 +237,6 @@ void TestMathFunctions::testLOG()
   CHECK_EVAL( "LOG(NA();NA())", Value::errorNA() );
 }
 
-KSPREAD_TEST(TestMathFunctions)
+QTEST_KDEMAIN(TestMathFunctions, GUI)
 
 #include "TestMathFunctions.moc"

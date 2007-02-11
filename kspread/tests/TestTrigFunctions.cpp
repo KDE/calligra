@@ -629,6 +629,7 @@ void TestTrigFunctions::testTAN()
   CHECK_EVAL( "TAN( 127*2*PI()/128 )", -0.0491268497694673 );
 }
 
-KSPREAD_TEST(TestTrigFunctions)
+QTEST_KDEMAIN(TestTrigFunctions, GUI)
+
 
 #include "TestTrigFunctions.moc"

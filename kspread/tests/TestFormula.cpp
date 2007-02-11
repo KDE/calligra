@@ -289,6 +289,6 @@ void TestFormula::testInlineArrays()
 #endif
 }
 
-KSPREAD_TEST(TestFormula)
+QTEST_KDEMAIN(TestFormula, GUI)
 
 #include "TestFormula.moc"

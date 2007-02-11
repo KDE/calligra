@@ -130,6 +130,6 @@ void TestBitopsFunctions::testBITRSHIFT()
     CHECK_EVAL( "BITRSHIFT(281474976710649 ; 0)", Value( 281474976710649LL ) );
 }
 
-KSPREAD_TEST(TestBitopsFunctions)
+QTEST_KDEMAIN( TestBitopsFunctions, GUI )
 
 #include "TestBitopsFunctions.moc"

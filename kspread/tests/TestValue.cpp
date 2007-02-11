@@ -363,6 +363,6 @@ void TestValue::testAssignment()
   delete v2;
 }
 
-KSPREAD_TEST(TestValue)
+QTEST_KDEMAIN(TestValue, GUI)
 
 #include "TestValue.moc"

@@ -478,6 +478,6 @@ void TestFinancialFunctions::testZEROCOUPON()
 }
 
 
-KSPREAD_TEST(TestFinancialFunctions)
+QTEST_KDEMAIN(TestFinancialFunctions, GUI)
 
 #include "TestFinancialFunctions.moc"

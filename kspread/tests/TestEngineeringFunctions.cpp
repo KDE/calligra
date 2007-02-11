@@ -210,6 +210,6 @@ void TestEngineeringFunctions::testIMTANH()
     CHECK_EVAL( "=IMAGINARY( IMTANH(COMPLEX(1;1)) )", 0.271752585319512 );
 }
 
-KSPREAD_TEST(TestEngineeringFunctions)
+QTEST_KDEMAIN(TestEngineeringFunctions, GUI)
 
 #include "TestEngineeringFunctions.moc"

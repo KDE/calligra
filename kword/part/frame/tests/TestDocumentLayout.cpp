@@ -56,22 +56,6 @@ void TestDocumentLayout::initForNewTest(const QString &initText) {
     blockLayout = block.layout();
 }
 
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-
-#define KOFFICE_TEST(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    setenv("LC_ALL", "C", 1); \
-    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
-    KAboutData aboutData( "qttest", "qttest", "version" );  \
-    KCmdLineArgs::init(&aboutData); \
-    KApplication app; \
-    TestObject tc; \
-    return QTest::qExec( &tc, argc, argv ); \
-}
-
-KOFFICE_TEST(TestDocumentLayout)
+QTEST_KDEMAIN(TestDocumentLayout, GUI)
 
 #include "TestDocumentLayout.moc"

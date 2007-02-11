@@ -60,6 +60,6 @@ void TestInformationFunctions::testVALUE()
 }
 
 
-KSPREAD_TEST(TestInformationFunctions)
+QTEST_KDEMAIN(TestInformationFunctions, GUI)
 
 #include "TestInformationFunctions.moc"

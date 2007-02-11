@@ -182,6 +182,6 @@ void TestLogicFunctions::testXOR()
     CHECK_EVAL( "XOR(FALSE())", Value( false ) );
 }
 
-KSPREAD_TEST(TestLogicFunctions)
+QTEST_KDEMAIN(TestLogicFunctions, GUI)
 
 #include "TestLogicFunctions.moc"

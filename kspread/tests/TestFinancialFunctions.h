@@ -21,7 +21,7 @@
 #define KSPREAD_TEST_FINANCIAL_FUNCTIONS
 
 #include <QtGui>
-#include <QtTest/QtTest>
+#include <qtest_kde.h>
 
 #include <Value.h>
 
