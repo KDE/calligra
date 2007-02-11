@@ -76,8 +76,6 @@ private:
     void initForNewTest(const QString &initText = QString());
 
 private:
-    QApplication *m_app;
-
     MockTextShape *shape1;
     QTextDocument *doc;
     KoTextDocumentLayout *layout;

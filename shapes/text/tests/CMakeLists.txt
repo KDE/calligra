@@ -13,6 +13,6 @@ set(TestDocumentLayout_test_SRCS
 kde4_automoc(${TestDocumentLayout_test_SRCS})
 kde4_add_executable(TestDocumentLayout RUN_UNINSTALLED ${TestDocumentLayout_test_SRCS})
 target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
-add_test(TestDocumentLayout ${EXECUTABLE_OUTPUT_PATH}/TestDocumentLayout)
+add_test(shapes-text-TestDocumentLayout ${EXECUTABLE_OUTPUT_PATH}/TestDocumentLayout)
 
 endif(KDE4_BUILD_TESTS)

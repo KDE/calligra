@@ -28,8 +28,6 @@ private:
     void initForNewTest(const QString &initText = QString());
 
 private:
-    QApplication *m_app;
-
     KWTextFrameSet *frameSet;
     MockTextShape *shape1;
     QTextDocument *doc;
