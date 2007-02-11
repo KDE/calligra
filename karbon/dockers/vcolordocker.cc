@@ -89,7 +89,7 @@ void VColorDocker::updateColor( const KoColor &c )
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    if( ! selection )
+    if( ! selection || ! selection->count() )
         return;
 
     QColor color;
@@ -102,7 +102,14 @@ void VColorDocker::updateColor( const KoColor &c )
 
     if( activeStyle == Karbon::Foreground )
     {
+        KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
         KoLineBorder * border = new KoLineBorder( 1.0, color );
+        if( oldBorder )
+        {
+            // use the properties of the old border if it is a line border
+            *border = *oldBorder;
+            border->setColor( color );
+        }
         KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selection->selectedShapes(), border );
         canvasController->canvas()->addCommand( cmd );
         canvasController->canvas()->resourceProvider()->setForegroundColor( c );

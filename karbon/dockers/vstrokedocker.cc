@@ -161,19 +161,22 @@ VStrokeDocker::VStrokeDocker()
 
 void VStrokeDocker::updateCanvas()
 {
-	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-	if( ! selection )
-		return;
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if( ! selection || ! selection->count() )
+        return;
 
-	KoLineBorder *newBorder = new KoLineBorder();
-	newBorder->setLineWidth( m_border.lineWidth() );
-	newBorder->setCapStyle( m_border.capStyle() );
-	newBorder->setJoinStyle( m_border.joinStyle() );
-	newBorder->setMiterLimit( m_border.miterLimit() );
+    KoLineBorder * newBorder = new KoLineBorder();
+    newBorder->setLineWidth( m_border.lineWidth() );
+    newBorder->setCapStyle( m_border.capStyle() );
+    newBorder->setJoinStyle( m_border.joinStyle() );
+    newBorder->setMiterLimit( m_border.miterLimit() );
+    KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
+    if( oldBorder )
+        newBorder->setColor( oldBorder->color() );
 
-	KoShapeBorderCommand *cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
-	canvasController->canvas()->addCommand( cmd );
+    KoShapeBorderCommand *cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
+    canvasController->canvas()->addCommand( cmd );
 }
 
 void VStrokeDocker::slotCapChanged( int ID )
