@@ -182,6 +182,7 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 	plugSharedAction("tablepart_toggle_pkey", this, SLOT(slotTogglePrimaryKey()));
 	d->action_toggle_pkey = static_cast<KToggleAction*>( sharedAction("tablepart_toggle_pkey") );
 	d->action_toggle_pkey->plug(d->view->contextMenu(), 1); //add at the beginning
+	d->view->contextMenu()->insertSeparator(2);
 	setAvailable("tablepart_toggle_pkey", !conn->isReadOnly());
 
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
