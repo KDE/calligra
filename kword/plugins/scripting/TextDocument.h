@@ -28,7 +28,7 @@
 #include <KoVariable.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
-#include <KWTextDocumentLayout.h>
+#include <KoTextDocumentLayout.h>
 
 #include "TextFrame.h"
 #include "TextTable.h"
@@ -55,7 +55,7 @@ namespace Scripting {
             virtual ~TextDocument() {}
 
             KoInlineTextObjectManager* inlineTextObjectManager() {
-                KWTextDocumentLayout* layout = dynamic_cast< KWTextDocumentLayout* >( m_doc->documentLayout() );
+                KoTextDocumentLayout* layout = dynamic_cast< KoTextDocumentLayout* >( m_doc->documentLayout() );
                 return layout ? layout->inlineObjectTextManager() : 0;
             }
 
