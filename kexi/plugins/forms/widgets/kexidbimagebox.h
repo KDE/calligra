@@ -30,9 +30,9 @@
 #include <Q3CString>
 #include <QPaintEvent>
 #include <kexiblobbuffer.h>
-#include <widget/utils/kexiimagecontextmenu.h>
 
 class KexiDropDownButton;
+class KexiImageContextMenu;
 
 //! @short A data-aware, editable image box.
 /*! Can also act as a normal static image box.

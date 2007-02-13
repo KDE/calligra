@@ -44,8 +44,10 @@
 #include <kguiitem.h>
 
 #include <widget/utils/kexidropdownbutton.h>
+#include <widget/utils/kexicontextmenuutils.h>
 #include <kexiutils/utils.h>
 #include <kexidb/field.h>
+#include <kexidb/utils.h>
 #include <kexidb/queryschema.h>
 #include <formeditor/widgetlibrary.h>
 

@@ -38,6 +38,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/field.h>
+#include <kexiutils/utils.h>
 
 #include <form.h>
 #include <formIO.h>
@@ -96,7 +97,7 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	m_newObjectsAreDirty = true;
 
 	// Only create form manager if it's not yet created.
-	// KexiReportPart could have created is already.
+	// KexiReportPart could have created it already.
 	KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
 	if (!formManager)
 		formManager = new KexiFormManager(this, "kexi_form_and_report_manager");
@@ -108,6 +109,8 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	static_formsLibrary = KFormDesigner::FormManager::createWidgetLibrary(
 		formManager, supportedFactoryGroups);
 	static_formsLibrary->setAdvancedPropertiesVisible(false);
+	connect(static_formsLibrary, SIGNAL(widgetCreated(QWidget*)),
+		this, SLOT(slotWidgetCreatedByFormsLibrary(QWidget*)));
 
 	connect(KFormDesigner::FormManager::self()->propertySet(), SIGNAL(widgetPropertyChanged(QWidget *, const Q3CString &, const QVariant&)),
 		this, SLOT(slotPropertyChanged(QWidget *, const Q3CString &, const QVariant&)));
@@ -505,6 +508,34 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow*
 
 	tab->addTab( d->objectTreeView, KIcon("widgets"), "");
 	tab->setTabToolTip( d->objectTreeView, i18n("Widgets"));
+}
+
+void KexiFormPart::slotWidgetCreatedByFormsLibrary(QWidget* widget)
+{
+	QStrList signalNames(widget->metaObject()->signalNames());
+	if (!signalNames.isEmpty()) {
+		const char *handleDragMoveEventSignal = "handleDragMoveEvent(QDragMoveEvent*)";
+		const char *handleDropEventSignal = "handleDropEvent(QDropEvent*)";
+
+		for (QStrListIterator it(signalNames); it.current(); ++it) {
+			if (0==qstrcmp(it.current(), handleDragMoveEventSignal)) {
+				kDebug() << it.current() <<  endl;
+				KexiFormView *formView = KexiUtils::findParent<KexiFormView>(widget, "KexiFormView");
+				if (formView) {
+					connect(widget, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)), 
+						formView, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
+				}
+			}
+			else if (0==qstrcmp(it.current(), handleDropEventSignal)) {
+				kDebug() << it.current() <<  endl;
+				KexiFormView *formView = KexiUtils::findParent<KexiFormView>(widget, "KexiFormView");
+				if (formView) {
+					connect(widget, SIGNAL(handleDropEvent(QDropEvent*)), 
+						formView, SLOT(slotHandleDropEvent(QDropEvent*)));
+				}
+			}
+		}
+	}
 }
 
 //----------------

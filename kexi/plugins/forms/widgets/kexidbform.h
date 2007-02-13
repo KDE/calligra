@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -135,7 +135,10 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 		//! no effect
 		virtual void setValueInternal(const QVariant&, bool) {}
 
+		//! Used to emit handleDragMoveEvent() signal needed to control dragging over the container's surface
 		virtual void dragMoveEvent( QDragMoveEvent *e );
+
+		//! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
 		virtual void dropEvent( QDropEvent *e );
 
 		//! called from KexiFormScrollView::initDataContents()

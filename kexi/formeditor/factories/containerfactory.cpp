@@ -1,12 +1,23 @@
-/***************************************************************************
- *   Copyright (C) 2003 by Lucijan Busch          lucijan@kde.org          *
- *   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>            *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 2 of the    *
- *   License, or (at your option) any later version.                       *
- ***************************************************************************/
+/* This file is part of the KDE project
+   Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
 
 #include <q3widgetstack.h>
 #include <q3frame.h>
@@ -101,6 +112,66 @@ KFDTabWidget::~KFDTabWidget()
 {
 }
 
+ContainerWidget::ContainerWidget(QWidget *parent, const char *name)
+ : QWidget(parent, name)
+{
+}
+
+ContainerWidget::~ContainerWidget()
+{
+}
+
+QSize ContainerWidget::sizeHint() const
+{
+	return QSize(30,30); //default
+}
+
+void ContainerWidget::dragMoveEvent( QDragMoveEvent *e )
+{
+	QWidget::dragMoveEvent(e);
+	emit handleDragMoveEvent(e);
+}
+
+void ContainerWidget::dropEvent( QDropEvent *e )
+{
+	QWidget::dropEvent(e);
+	emit handleDropEvent(e);
+}
+
+////////////////////////
+
+GroupBox::GroupBox(const QString & title, QWidget *parent)
+ : Q3GroupBox(title, parent)
+{
+}
+
+GroupBox::~GroupBox()
+{
+}
+
+void GroupBox::dragMoveEvent( QDragMoveEvent *e )
+{
+	Q3GroupBox::dragMoveEvent(e);
+	emit handleDragMoveEvent(e);
+}
+
+void GroupBox::dropEvent( QDropEvent *e )
+{
+	Q3GroupBox::dropEvent(e);
+	emit handleDropEvent(e);
+}
+
+////////////////////////
+
+KFDTabWidget::KFDTabWidget(QWidget *parent, const char *name)
+ : TabWidgetBase(parent, name)
+{
+}
+
+KFDTabWidget::~KFDTabWidget()
+{
+}
+
 QSize
 KFDTabWidget::sizeHint() const
 {
@@ -111,6 +182,21 @@ KFDTabWidget::sizeHint() const
 	return s + QSize(10/*margin*/, tabBar()->height() + 20/*margin*/);
 }
 
+void KFDTabWidget::dragMoveEvent( QDragMoveEvent *e )
+{
+	TabWidgetBase::dragMoveEvent( e );
+	if (dynamic_cast<ContainerWidget*>(currentPage()))
+		emit dynamic_cast<ContainerWidget*>(currentPage())->handleDragMoveEvent(e);
+	emit handleDragMoveEvent(e);
+}
+
+void KFDTabWidget::dropEvent( QDropEvent *e ) 
+{
+	TabWidgetBase::dropEvent( e );
+	if (dynamic_cast<ContainerWidget*>(currentPage()))
+		emit dynamic_cast<ContainerWidget*>(currentPage())->handleDropEvent(e);
+	emit handleDropEvent(e);
+}
 
 /// Various layout widgets /////////////////:
 
@@ -235,8 +321,9 @@ InsertPageCommand::execute()
 			/*!numberSuffixRequired*/false);
 	}
 
-	QWidget *page = new QWidget(parent, m_name.latin1());
-	new KFormDesigner::Container(container, page, parent);
+	QWidget *page = container->form()->library()->createWidget("QWidget", parent, m_name.latin1(), container);
+//	QWidget *page = new ContainerWidget(parent, m_name.latin1());
+//	new KFormDesigner::Container(container, page, parent);
 
 	Q3CString classname = parent->className();
 	if(classname == "KFDTabWidget")
@@ -326,7 +413,7 @@ SubForm::setFormName(const QString &name)
 	// we create the container widget
 	delete m_widget;
 	m_widget = new QWidget(viewport(), "subform_widget");
-	m_widget->show();
+//	m_widget->show();
 	addChild(m_widget);
 	m_form = new KFormDesigner::Form(
 		KFormDesigner::FormManager::self()->activeForm()->library(), this->name());
@@ -371,6 +458,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QStringList &)
 	KFormDesigner::WidgetInfo *wWidget = new KFormDesigner::WidgetInfo(this);
 	wWidget->setPixmap("frame");
 	wWidget->setClassName("QWidget");
+	wWidget->addAlternateClassName("ContainerWidget");
 	wWidget->setName(i18n("Basic container"));
 	wWidget->setNamePrefix(
 		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "container"));
@@ -525,14 +613,15 @@ ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 	}
 	else if(c == "QWidget")
 	{
-		w = new QWidget(p);
+		w = new ContainerWidget(p);
 		w->setObjectName(n);
 		new KFormDesigner::Container(container, w, p);
 	}
 	else if(c == "QGroupBox")
 	{
 		QString text = container->form()->library()->textForWidgetName(n, c);
-		w = new Q3GroupBox(/*i18n("Group Box")*/text, p, n);
+		w = new GroupBox(text, p);
+		w->setObjectName(n);
 		new KFormDesigner::Container(container, w, container);
 	}
 	else if(c == "QFrame")

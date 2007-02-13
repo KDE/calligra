@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,9 +57,22 @@ class KEXIFORMUTILS_EXPORT KexiFrame : public Q3Frame
 		void setFrameShadow( KexiFrame::Shadow shadow );
 #endif
 
+		//! Used to emit handleDragMoveEvent() signal needed to control dragging over the container's surface
+		virtual void dragMoveEvent( QDragMoveEvent *e );
+
+		//! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
+		virtual void dropEvent( QDropEvent *e );
+
 	public slots:
 		virtual void setPalette( const QPalette &pal );
 		virtual void setFrameColor(const QColor& color);
+
+	signals:
+		//! Needed to control dragging over the container's surface
+		void handleDragMoveEvent(QDragMoveEvent *e);
+
+		//! Needed to control dropping on the container's surface
+		void handleDropEvent(QDropEvent *e);
 
 	protected:
 		virtual void drawFrame( QPainter * );

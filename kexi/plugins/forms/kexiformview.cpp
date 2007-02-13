@@ -1048,18 +1048,24 @@ KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 void
 KexiFormView::slotHandleDropEvent(QDropEvent* e)
 {
-	if (KexiFieldDrag::canDecodeMultiple( e )) {
+	const QWidget *targetContainerWidget = dynamic_cast<const QWidget*>(sender());
+	KFormDesigner::ObjectTreeItem *targetContainerWidgetItem = targetContainerWidget 
+		? form()->objectTree()->lookup( targetContainerWidget->name() ) : 0; 
+	if (targetContainerWidgetItem && targetContainerWidgetItem->container() 
+		&& KexiFieldDrag::canDecodeMultiple( e ))
+	{
 		QString sourceMimeType, sourceName;
 		QStringList fields;
 		if (!KexiFieldDrag::decodeMultiple( e, sourceMimeType, sourceName, fields ))
 			return;
-		insertAutoFields(sourceMimeType, sourceName, fields, e->pos());
+		insertAutoFields(sourceMimeType, sourceName, fields, 
+			targetContainerWidgetItem->container(), e->pos());
 	}
 }
 
 void
 KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
-	const QStringList& fields, const QPoint& _pos)
+	const QStringList& fields, KFormDesigner::Container* targetContainer, const QPoint& _pos)
 {
 	if (fields.isEmpty())
 		return;
@@ -1104,8 +1110,8 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 			continue;
 		}
 //! todo add autolabel using field's caption or name
-		KFormDesigner::Container *targetContainer;
-		QWidget* targetContainerWidget = QApplication::widgetAt(pos, true);
+		//KFormDesigner::Container *targetContainer;
+/*		QWidget* targetContainerWidget = QApplication::widgetAt(pos, true);
 		while (targetContainerWidget 
 			&& !dynamic_cast<KFormDesigner::Container*>(targetContainerWidget))
 		{
@@ -1114,7 +1120,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 		if (dynamic_cast<KFormDesigner::Container*>(targetContainerWidget))
 			targetContainer = dynamic_cast<KFormDesigner::Container*>(targetContainerWidget);
 		else
-			targetContainer = form()->toplevelContainer();
+			targetContainer = form()->toplevelContainer();*/
 		KFormDesigner::InsertWidgetCommand *insertCmd
 			= new KFormDesigner::InsertWidgetCommand(targetContainer,
 	//! todo this is hardcoded!

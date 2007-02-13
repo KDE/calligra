@@ -40,6 +40,10 @@ class KexiTableItem;
 class KexiTableViewData;
 class KexiFormScrollView;
 namespace KexiDB { class Cursor; }
+namespace KFormDesigner
+{
+	class Container;
+}
 
 //! The KexiFormView lass provides a data-driven (record-based) form view .
 /*! The KexiFormView can display data provided "by hand"
@@ -110,7 +114,8 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		 - slotHandleDropEvent() when field(s) are dropped from the data source pane onto the form
 		 - KexiFormManager is a used clicked "Insert fields" button on the data source pane. */
 		void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
-			const QStringList& fields, const QPoint& pos = QPoint(-1,-1));
+			const QStringList& fields, KFormDesigner::Container* targetContainerWidget, 
+			const QPoint& pos = QPoint(-1,-1));
 
 	protected slots:
 		void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false, 
