@@ -77,7 +77,7 @@ KarbonResourceServer::KarbonResourceServer()
 	{
 		format = *it;
 		QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
-							"kis_pattern", format, false, true );
+							"kis_pattern", format, KStandardDirs::NoDuplicates);
 		lst += l;
 	}
 
@@ -106,7 +106,7 @@ KarbonResourceServer::KarbonResourceServer()
 	{
 		format = *it;
 		QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
-							"karbon_gradient", format, false, true );
+							"karbon_gradient", format, KStandardDirs::NoDuplicates);
 		lst += l;
 	}
 
@@ -135,7 +135,7 @@ KarbonResourceServer::KarbonResourceServer()
 	{
 		format = *it;
 		QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
-							"karbon_clipart", format, false, true );
+							"karbon_clipart", format, KStandardDirs::NoDuplicates);
 		lst += l;
 	}
 
