@@ -31,7 +31,7 @@
 
 class KComboBox;
 class VGradientWidget;
-class KListBox;
+class K3ListBox;
 class KIntNumInput;
 class QPushButton;
 class Q3GroupBox;
@@ -187,7 +187,7 @@ private:
     KComboBox        *m_gradientTarget;
     KComboBox        *m_gradientRepeat;
     KComboBox        *m_gradientType;
-    KListBox         *m_predefGradientsView;
+    K3ListBox         *m_predefGradientsView;
     QPushButton      *m_predefDelete;
     QPushButton      *m_predefImport;
     QPushButton      *m_addToPredefs;

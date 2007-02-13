@@ -35,7 +35,7 @@
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <klocale.h>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <kiconloader.h>
 
 #include "vgradientwidget.h"
@@ -278,7 +278,7 @@ void VGradientTabWidget::setupUI()
     predefLayout->setSpacing( 3 );
     predefLayout->setMargin( 6 );
     predefLayout->setRowMinimumHeight( 0, 12 );
-    m_predefGradientsView = new KListBox( predefTab );
+    m_predefGradientsView = new K3ListBox( predefTab );
     predefLayout->addWidget( m_predefGradientsView, 0, 0, 1, 2 );
 
     m_predefDelete = new QPushButton( i18n( "&Delete" ), predefTab );
