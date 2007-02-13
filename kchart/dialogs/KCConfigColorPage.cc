@@ -26,7 +26,7 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <kdebug.h>
 #include <kvbox.h>
 #include <kdialog.h>
@@ -160,7 +160,7 @@ KCConfigColorPage::KCConfigColorPage( KChartParams* params,
 
     KHBox* dataColorHB = new KHBox( gb );
     grid->addMultiCellWidget( dataColorHB,  0, 7, 2, 2 );
-    _dataColorLB = new KListBox(dataColorHB);
+    _dataColorLB = new K3ListBox(dataColorHB);
     _dataColorCB = new KColorButton( dataColorHB);
     wtstr = i18n( "Choose a row/column in the list on the left and change its color using this button.");
     _dataColorCB->setWhatsThis( wtstr );

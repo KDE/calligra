@@ -27,7 +27,7 @@
 #include "koChart.h"
 #include "kchartcolorarray.h"
 
-class KListBox;
+class K3ListBox;
 
 
 namespace KChart
@@ -99,7 +99,7 @@ private:
 #endif
     //KColorButton* _edgeCB;
 //    KColorButton* _dataCB[NUMDATACOLORS];
-    KListBox* _dataColorLB;
+    K3ListBox* _dataColorLB;
     KColorButton* _dataColorCB;
     KChartColorArray extColor;
     uint index;
