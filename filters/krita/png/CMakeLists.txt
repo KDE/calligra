@@ -2,7 +2,6 @@
 
 set(kritapngimport_PART_SRCS
     kis_png_import.cc
-    kis_png_converter.cc
     )
 
 kde4_automoc(${kritapngimport_PART_SRCS})
@@ -21,7 +20,6 @@ install(TARGETS kritapngimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kritapngexport_PART_SRCS
     kis_png_export.cc
-    kis_png_converter.cc
     )
 
 kde4_automoc(${kritapngexport_PART_SRCS})

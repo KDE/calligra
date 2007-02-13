@@ -20,7 +20,17 @@
 #ifndef _KIS_PNG_EXPORT_H_
 #define _KIS_PNG_EXPORT_H_
 
+#include "ui_kis_wdg_options_png.h"
+
 #include <KoFilter.h>
+
+class KisWdgOptionsPNG : public QWidget, public Ui::KisWdgOptionsPNG
+{
+    Q_OBJECT
+
+    public:
+        KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 class KisPNGExport : public KoFilter {
     Q_OBJECT
