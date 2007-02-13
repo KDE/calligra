@@ -8,8 +8,8 @@
 # ksqlite is needed on the $PATH.
 
 KEXISQL3PATH=../3rdparty/kexisql3/src/.libs/
-PATH=$PATH:$KEXISQL3PATH
-LD_LIBRARY_PATH=$KEXISQL3PATH:$KEXISQL3PATH
+export PATH=$PATH:$KEXISQL3PATH
+export LD_LIBRARY_PATH=$KEXISQL3PATH:$LD_LIBRARY_PATH
 which ksqlite > /dev/null || exit 1
 
 [ $# -lt 1 ] && echo "Missing .sql filename." && exit 1
