@@ -84,7 +84,7 @@ XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QByteArray &format, QWidge
 
 	QString filenames = QString("xsltfilter") + QDir::separator() + QString("export") +
 			QDir::separator() + appName + QDir::separator() + "*/*.xsl";
-	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, true);
+	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, KStandardDirs::Recursive);
 	kDebug() << "There are " << commonFilesList.size() << " entries like  " << filenames << endl;
 
 	QStringList tempList;
