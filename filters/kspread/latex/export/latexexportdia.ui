@@ -407,7 +407,7 @@
                             <string>Add</string>
                         </property>
                     </widget>
-                    <widget class="KListBox">
+                    <widget class="K3ListBox">
                         <property name="name">
                             <cstring>langUsedList</cstring>
                         </property>
@@ -420,7 +420,7 @@
                             </rect>
                         </property>
                     </widget>
-                    <widget class="KListBox">
+                    <widget class="K3ListBox">
                         <property name="name">
                             <cstring>languagesList</cstring>
                         </property>
@@ -671,6 +671,6 @@
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>klistbox.h</includehint>
+    <includehint>k3listbox.h</includehint>
 </includehints>
 </UI>
