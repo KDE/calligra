@@ -30,6 +30,7 @@
 
 class KoStyleManager;
 class UndoTextCommand; // private class
+class KoTextEditingPlugin;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -112,6 +113,8 @@ private:
     QAction *m_actionFormatSub;
     QAction *m_actionFormatIncreaseIndent;
     QAction *m_actionFormatDecreaseIndent;
+
+    QList<KoTextEditingPlugin*> m_textEditingPlugins;
 };
 
 #endif

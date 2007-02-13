@@ -25,7 +25,11 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+
 #include <KoTextDocumentLayout.h>
+#include <KoTextEditingPlugin.h>
+#include <KoTextEditingRegistry.h>
+#include <KoTextEditingFactory.h>
 
 // #include <kdebug.h>
 #include <kstandardshortcut.h>
@@ -155,9 +159,16 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
     action->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
     connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( selectFont() ));
+
+    foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
+        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->get(key);
+        Q_ASSERT(factory);
+        m_textEditingPlugins.append(factory->create());
+    }
 }
 
 TextTool::~TextTool() {
+    qDeleteAll(m_textEditingPlugins);
 }
 
 void TextTool::paint( QPainter &painter, KoViewConverter &converter) {
@@ -640,6 +651,7 @@ void TextTool::editingPluginEvents() {
 
     QTextBlock block = m_caret.block();
     if(! block.contains(m_prevCursorPosition)) {
+        finishedWord();
         finishedParagraph();
         m_prevCursorPosition = -1;
     }
@@ -657,11 +669,13 @@ void TextTool::editingPluginEvents() {
 }
 
 void TextTool::finishedWord() {
-    kDebug() << "finishedWord\n";
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
+        plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::finishedParagraph() {
-    kDebug() << "finishedParagraph\n";
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
+        plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 #include "TextTool.moc"
