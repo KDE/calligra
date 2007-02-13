@@ -78,7 +78,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		  The QVariant is the old value (ie first value) of the property whose name is the QString. */
 		const QVariantMap* modifiedProperties() const { return &m_props;}
 
-		//! \return the widget's Container, or 0if the widget is not a Container.
+		//! \return the widget's Container, or 0 if the widget is not a Container.
 		Container* container() const { return m_container;}
 
 		void setWidget(QWidget *w) { m_widget = w; }

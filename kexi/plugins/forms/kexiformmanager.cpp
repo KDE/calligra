@@ -188,9 +188,10 @@ void KexiFormManager::insertAutoFields(const QString& sourceMimeType, const QStr
 	const QStringList& fields)
 {
 	KexiFormView* formViewWidget = activeFormViewWidget();
-	if (!formViewWidget)
+	if (!formViewWidget || !formViewWidget->form() || !formViewWidget->form()->activeContainer())
 		return;
-	formViewWidget->insertAutoFields(sourceMimeType, sourceName, fields);
+	formViewWidget->insertAutoFields(sourceMimeType, sourceName, fields, 
+		formViewWidget->form()->activeContainer());
 }
 
 void KexiFormManager::slotHistoryCommandExecuted()

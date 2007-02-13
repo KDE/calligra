@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 */
 
 #include <qdom.h>
+#include <qstrlist.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -372,8 +373,11 @@ WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const ch
 		if (wclass->inheritedClass())
 			widget = wclass->inheritedClass()->factory()->createWidget(
 				wclass->className(), parent, name, c, options);
+		if (!widget)
+			return 0;
 	}
 	widget->setAcceptDrops(true);
+	emit widgetCreated(widget);
 	return widget;
 }
 

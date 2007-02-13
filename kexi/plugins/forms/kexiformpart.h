@@ -91,6 +91,7 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 		void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
 		void slotAssignAction();
 		void slotPropertyChanged(QWidget *widget, const QCString &name, const QVariant &value);
+		void slotWidgetCreatedByFormsLibrary(QWidget* widget);
 
 	private:
 		class Private;

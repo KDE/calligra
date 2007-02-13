@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -630,11 +630,13 @@ bool KexiDBForm::preview() const {
 
 void KexiDBForm::dragMoveEvent( QDragMoveEvent *e )
 {
+	KexiDBFormBase::dragMoveEvent( e );
 	emit handleDragMoveEvent(e);
 }
 
 void KexiDBForm::dropEvent( QDropEvent *e ) 
 {
+	KexiDBFormBase::dropEvent( e );
 	emit handleDropEvent(e);
 }
 

@@ -16,6 +16,7 @@ kexihandler_form_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
 kformdesigner_kexidbwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module -no-undefined
 kformdesigner_kexidbwidgets_la_SOURCES = kexidbfactory.cpp
 kformdesigner_kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
+	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
 	./libkexiformutils.la
 
 lib_LTLIBRARIES = libkexiformutils.la

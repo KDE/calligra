@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
+   Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -66,9 +68,9 @@ class KFORMEDITOR_EXPORT HBox : public QFrame
 
 	public:
 		HBox(QWidget *parent, const char *name);
-		~HBox(){;}
+		virtual ~HBox(){;}
 		void setPreviewMode() {m_preview = true;}
-		void paintEvent(QPaintEvent *ev);
+		virtual void paintEvent(QPaintEvent *ev);
 
 	protected:
 		bool  m_preview;
@@ -81,9 +83,9 @@ class KFORMEDITOR_EXPORT VBox : public QFrame
 
 	public:
 		VBox(QWidget *parent, const char *name);
-		~VBox(){;}
+		virtual ~VBox(){;}
 		void setPreviewMode() {m_preview = true;}
-		void paintEvent(QPaintEvent *ev);
+		virtual void paintEvent(QPaintEvent *ev);
 
 	protected:
 		bool  m_preview;
@@ -96,9 +98,9 @@ class KFORMEDITOR_EXPORT Grid : public QFrame
 
 	public:
 		Grid(QWidget *parent, const char *name);
-		~Grid(){;}
+		virtual ~Grid(){;}
 		void setPreviewMode() {m_preview = true;}
-		void paintEvent(QPaintEvent *ev);
+		virtual void paintEvent(QPaintEvent *ev);
 
 	protected:
 		bool  m_preview;
@@ -111,9 +113,9 @@ class KFORMEDITOR_EXPORT HFlow : public QFrame
 
 	public:
 		HFlow(QWidget *parent, const char *name);
-		~HFlow(){;}
+		virtual ~HFlow(){;}
 		void setPreviewMode() {m_preview = true;}
-		void paintEvent(QPaintEvent *ev);
+		virtual void paintEvent(QPaintEvent *ev);
 
 	protected:
 		bool  m_preview;
@@ -126,26 +128,88 @@ class KFORMEDITOR_EXPORT VFlow : public QFrame
 
 	public:
 		VFlow(QWidget *parent, const char *name);
-		~VFlow(){;}
+		virtual ~VFlow(){;}
 		void setPreviewMode() {m_preview = true;}
-		void paintEvent(QPaintEvent *ev);
-		QSize  sizeHint() const;
+		virtual void paintEvent(QPaintEvent *ev);
+		virtual QSize sizeHint() const;
 
 	protected:
 		bool  m_preview;
 };
 
+//! A simple container widget
+class KFORMEDITOR_EXPORT ContainerWidget : public QWidget
+{
+	Q_OBJECT
+
+	friend class KFDTabWidget;
+
+	public:
+		ContainerWidget(QWidget *parent, const char *name);
+		virtual ~ContainerWidget();
+
+		virtual QSize sizeHint() const;
+
+		//! Used to emit handleDragMoveEvent() signal needed to control dragging over the container's surface
+		virtual void dragMoveEvent( QDragMoveEvent *e );
+
+		//! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
+		virtual void dropEvent( QDropEvent *e );
+
+	signals:
+		//! Needed to control dragging over the container's surface
+		void handleDragMoveEvent(QDragMoveEvent *e);
+
+		//! Needed to control dropping on the container's surface
+		void handleDropEvent(QDropEvent *e);
+};
+
+//! A tab widget
 class KFORMEDITOR_EXPORT KFDTabWidget : public TabWidgetBase
 {
 	Q_OBJECT
 
 	public:
-		KFDTabWidget(QWidget *parent, const char *name)
-		 : TabWidgetBase(parent, name)
-		{}
-		~KFDTabWidget() {;}
+		KFDTabWidget(QWidget *parent, const char *name);
+		virtual ~KFDTabWidget();
 
 		virtual QSize sizeHint() const;
+
+		//! Used to emit handleDragMoveEvent() signal needed to control dragging over the container's surface
+		virtual void dragMoveEvent( QDragMoveEvent *e );
+
+		//! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
+		virtual void dropEvent( QDropEvent *e );
+
+	signals:
+		//! Needed to control dragging over the container's surface
+		void handleDragMoveEvent(QDragMoveEvent *e);
+
+		//! Needed to control dropping on the container's surface
+		void handleDropEvent(QDropEvent *e);
+};
+
+//! A group box widget
+class KFORMEDITOR_EXPORT GroupBox : public QGroupBox
+{
+	Q_OBJECT
+
+	public:
+		GroupBox(const QString & title, QWidget *parent, const char *name);
+		virtual ~GroupBox();
+
+		//! Used to emit handleDragMoveEvent() signal needed to control dragging over the container's surface
+		virtual void dragMoveEvent( QDragMoveEvent *e );
+
+		//! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
+		virtual void dropEvent( QDropEvent *e );
+
+	signals:
+		//! Needed to control dragging over the container's surface
+		void handleDragMoveEvent(QDragMoveEvent *e);
+
+		//! Needed to control dropping on the container's surface
+		void handleDropEvent(QDropEvent *e);
 };
 
 //! A form embedded as a widget inside other form
@@ -176,7 +240,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 
 	public:
 		ContainerFactory(QObject *parent, const char *name, const QStringList &args);
-		~ContainerFactory();
+		virtual ~ContainerFactory();
 
 		virtual QWidget *createWidget(const QCString & classname, QWidget *parent, const char *name, KFormDesigner::Container *container,
 			int options = DefaultOptions);
