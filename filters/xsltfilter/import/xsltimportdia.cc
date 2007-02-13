@@ -79,7 +79,7 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* pa
 	
 	QString filenames = QString("xsltfilter") + QDir::separator() + QString("import") +
 			QDir::separator() + appName + QDir::separator() + "*/*.xsl";
-	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, true);
+	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, KStandardDirs::Recursive);
 	kDebug() << "There are " << commonFilesList.size() << " entries like  " << filenames << endl;
 	
 	QStringList tempList;
