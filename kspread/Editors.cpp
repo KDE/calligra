@@ -34,7 +34,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kicon.h>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <ktextedit.h>
 #include <klocale.h>
 
@@ -310,7 +310,7 @@ class FunctionCompletion::Private
 public:
   CellEditor* editor;
   QFrame *completionPopup;
-  KListBox *completionListBox;
+  K3ListBox *completionListBox;
   QLabel* hintLabel;
 };
 
@@ -330,7 +330,7 @@ FunctionCompletion::FunctionCompletion( CellEditor* editor )
   layout->setMargin( 0 );
   layout->setSpacing( 0 );
 
-  d->completionListBox = new KListBox( d->completionPopup );
+  d->completionListBox = new K3ListBox( d->completionPopup );
   d->completionPopup->setFocusProxy( d->completionListBox );
   d->completionListBox->setFrameStyle( QFrame::NoFrame );
   d->completionListBox->setVariableWidth( true );
