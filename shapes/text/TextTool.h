@@ -86,6 +86,10 @@ private:
     void updateStyleManager();
     void setShapeData(KoTextShapeData *data);
 
+    void editingPluginEvents();
+    void finishedWord();
+    void finishedParagraph();
+
 private:
     friend class UndoTextCommand;
     TextShape *m_textShape;
@@ -94,6 +98,7 @@ private:
     KoTextSelectionHandler m_selectionHandler;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
+    int m_prevCursorPosition; /// used by editingPluginEvents
 
     QAction *m_actionFormatBold;
     QAction *m_actionFormatItalic;

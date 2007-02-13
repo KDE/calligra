@@ -51,7 +51,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_textShape(0),
     m_textShapeData(0),
     m_allowActions(true),
-    m_allowAddUndoCommand(true)
+    m_allowAddUndoCommand(true),
+    m_prevCursorPosition(-1)
 {
     m_actionFormatBold  = new QAction(KIcon("text_bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold );
@@ -284,6 +285,7 @@ void TextTool::mouseMoveEvent( KoPointerEvent *event ) {
 
 void TextTool::mouseReleaseEvent( KoPointerEvent *event ) {
     event->ignore();
+    editingPluginEvents();
 }
 
 void TextTool::keyPressEvent(QKeyEvent *event) {
@@ -293,12 +295,14 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
 //           m_caret.deletePreviousWord();
 //       else
             m_caret.deletePreviousChar();
+        editingPluginEvents();
     }
     else if(event->key() == Qt::Key_Delete) {
 //       if(event->modifiers() & Qt::ControlModifier)
 //           m_caret.deleteWord();
 //       else
             m_caret.deleteChar();
+        editingPluginEvents();
     }
     else if((event->key() == Qt::Key_Left) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
         moveOperation = QTextCursor::Left;
@@ -342,7 +346,11 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             event->ignore();
             return;
         }
-        m_caret.insertText(event->text());
+        else {
+            m_prevCursorPosition = m_caret.position();
+            m_caret.insertText(event->text());
+            editingPluginEvents();
+        }
     }
     if(moveOperation != QTextCursor::NoMove) {
         useCursor(Qt::BlankCursor);
@@ -360,6 +368,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         else
             repaintCaret();
         updateActions();
+        editingPluginEvents();
     }
 
     updateSelectionHandler();
@@ -621,6 +630,38 @@ void TextTool::decreaseIndent() {
     if(! m_allowActions) return;
     m_selectionHandler.decreaseIndent();
     m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
+}
+
+
+// ---------- editing plugins methods.
+void TextTool::editingPluginEvents() {
+    if(m_prevCursorPosition == -1 || m_prevCursorPosition == m_caret.position())
+        return;
+
+    QTextBlock block = m_caret.block();
+    if(! block.contains(m_prevCursorPosition)) {
+        finishedParagraph();
+        m_prevCursorPosition = -1;
+    }
+    else {
+        int from = m_prevCursorPosition;
+        int to = m_caret.position();
+        if(from > to)
+            qSwap(from, to);
+        QString section = block.text().mid(from, to - from);
+        if(section.contains(' ')) {
+            finishedWord();
+            m_prevCursorPosition = -1;
+        }
+    }
+}
+
+void TextTool::finishedWord() {
+    kDebug() << "finishedWord\n";
+}
+
+void TextTool::finishedParagraph() {
+    kDebug() << "finishedParagraph\n";
 }
 
 #include "TextTool.moc"
