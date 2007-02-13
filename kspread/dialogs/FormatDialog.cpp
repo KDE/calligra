@@ -79,7 +79,7 @@ FormatDialog::FormatDialog( View* view, const char* name )
     vbox->addWidget( m_label );
 
 
-    QStringList lst = Factory::global().dirs()->findAllResources( "sheet-styles", "*.ksts", true );
+    QStringList lst = Factory::global().dirs()->findAllResources( "sheet-styles", "*.ksts", KStandardDirs::Recursive );
 
     int index = 0;
     QStringList::Iterator it = lst.begin();
