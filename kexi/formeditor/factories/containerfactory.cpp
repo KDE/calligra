@@ -103,17 +103,8 @@ class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 		QPointer<QObject>   m_container;
 };*/
 
-KFDTabWidget::KFDTabWidget(QWidget *parent)
- :  TabWidgetBase(parent)
-{
-}
-
-KFDTabWidget::~KFDTabWidget()
-{
-}
-
-ContainerWidget::ContainerWidget(QWidget *parent, const char *name)
- : QWidget(parent, name)
+ContainerWidget::ContainerWidget(QWidget *parent)
+ : QWidget(parent)
 {
 }
 
@@ -163,8 +154,8 @@ void GroupBox::dropEvent( QDropEvent *e )
 
 ////////////////////////
 
-KFDTabWidget::KFDTabWidget(QWidget *parent, const char *name)
- : TabWidgetBase(parent, name)
+KFDTabWidget::KFDTabWidget(QWidget *parent)
+ : TabWidgetBase(parent)
 {
 }
 
@@ -586,6 +577,7 @@ ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 		QString text = container->form()->library()->textForWidgetName(n, c);
 		Q3ButtonGroup *group = new Q3ButtonGroup(/*i18n("Button Group")*/text, p);
 		w = group;
+		w->setObjectName(n);
 		new KFormDesigner::Container(container, group, container);
 	}
 	else if(c == "KFDTabWidget")
@@ -593,6 +585,7 @@ ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 		//MyTabWidget *tab = new MyTabWidget(p, n, container);
 		KFDTabWidget *tab = new KFDTabWidget(p);
 		w = tab;
+		w->setObjectName(n);
 #if defined(USE_KTabWidget)
 		tab->setTabReorderingEnabled(true);
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));

@@ -151,7 +151,7 @@ class KFORMEDITOR_EXPORT ContainerWidget : public QWidget
 	friend class KFDTabWidget;
 
 	public:
-		ContainerWidget(QWidget *parent, const char *name);
+		ContainerWidget(QWidget *parent);
 		virtual ~ContainerWidget();
 
 		virtual QSize sizeHint() const;
