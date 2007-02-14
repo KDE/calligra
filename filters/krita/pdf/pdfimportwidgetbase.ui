@@ -59,7 +59,7 @@
      </widget>
     </item>
     <item>
-     <widget class="KListBox" name="listPages" >
+     <widget class="K3ListBox" name="listPages" >
       <property name="selectionMode" >
        <enum>Q3ListBox::Multi</enum>
       </property>
@@ -295,9 +295,9 @@
    <header>q3listbox.h</header>
   </customwidget>
   <customwidget>
-   <class>KListBox</class>
+   <class>K3ListBox</class>
    <extends>Q3ListBox</extends>
-   <header>klistbox.h</header>
+   <header>k3listbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

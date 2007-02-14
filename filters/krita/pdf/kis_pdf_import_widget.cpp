@@ -28,7 +28,7 @@
 
 // KDE's headers
 #include <kdebug.h>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <knuminput.h>
 
 KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent, const char * name)
