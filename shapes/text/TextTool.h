@@ -41,40 +41,67 @@ public:
     explicit TextTool(KoCanvasBase *canvas);
     ~TextTool();
 
+    /// reimplemented from superclass
     void paint( QPainter &painter, KoViewConverter &converter );
 
+    /// reimplemented from superclass
     void mousePressEvent( KoPointerEvent *event ) ;
+    /// reimplemented from superclass
     void mouseDoubleClickEvent( KoPointerEvent *event );
+    /// reimplemented from superclass
     void mouseMoveEvent( KoPointerEvent *event );
+    /// reimplemented from superclass
     void mouseReleaseEvent( KoPointerEvent *event );
+    /// reimplemented from superclass
     void keyPressEvent(QKeyEvent *event);
+    /// reimplemented from superclass
     void keyReleaseEvent(QKeyEvent *event);
 
+    /// reimplemented from superclass
     void activate (bool temporary=false);
+    /// reimplemented from superclass
     void deactivate();
 
+    /// reimplemented from superclass
     KoToolSelection* selection();
+    /// reimplemented from superclass
     QWidget *createOptionWidget();
 
 signals:
+    /// emitted every time a different styleManager is set.
     void styleManagerChanged(KoStyleManager *manager);
+    /// emitted every time a caret move leads to a different character format being under the caret
     void charFormatChanged(const QTextCharFormat &format);
+    /// emitted every time a caret move leads to a different paragraph format being under the caret
     void blockFormatChanged(const QTextBlockFormat &format);
 
 private slots:
+    /// insert a non breaking space at the caret position
     void nonbreakingSpace();
+    /// insert a non breaking hyphen at the caret position
     void nonbreakingHyphen();
+    /// insert a soft hyphen at the caret position
     void softHyphen();
+    /// insert a linebreak at the caret position
     void lineBreak();
+    /// align all of the selected text left
     void alignLeft();
+    /// align all of the selected text right
     void alignRight();
+    /// align all of the selected text centered
     void alignCenter();
+    /// align all of the selected text block-justified
     void alignBlock();
+    /// make the selected text switch to be super-script
     void superScript(bool);
+    /// make the selected text switch to be sub-script
     void subScript(bool);
+    /// move the paragraph indent of the selected text to be less (left on LtR text)
     void decreaseIndent();
+    /// move the paragraph indent of the selected text to be more (right on LtR text)
     void increaseIndent();
 
+    /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();
 
 private:
