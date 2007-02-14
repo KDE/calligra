@@ -143,13 +143,13 @@ class KEXI_DB_EXPORT FieldList
 		 See @ref Connection::selectStatement() for example use.
 		 \a drvEscaping can be used to alter default escaping type.
 		*/
-		QString sqlFieldsList(Driver *driver, const QString& separator = ",", 
+		QString sqlFieldsList(Driver *driver, const QString& separator = QString::fromLatin1(","), 
 			const QString& tableAlias = QString::null,
 			int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary);
 
 		/*! Like above, but this is convenient static function, so you can pass any \a list here. */
 		static QString sqlFieldsList(Field::List* list, Driver *driver,
-			const QString& separator = ",", const QString& tableAlias = QString::null,
+			const QString& separator = QString::fromLatin1(","), const QString& tableAlias = QString::null,
 			int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary);
 
 		/*! @internal Renames field \a oldName to \a newName. 
