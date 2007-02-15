@@ -42,8 +42,6 @@
 #include <KoToolBox.h>
 #include <KoTextShapeData.h>
 #include <KoShapeSelector.h>
-#include <KoToolBoxFactory.h>
-#include <KoToolDockerFactory.h>
 #include <KoShapeSelectorFactory.h>
 #include <KoTextSelectionHandler.h>
 #include <KoInlineObjectRegistry.h>
@@ -81,13 +79,8 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
 
     setupActions();
 
-    KoToolBoxFactory toolBoxFactory( "KWord" );
-    createDockWidget( &toolBoxFactory );
     KoShapeSelectorFactory shapeSelectorFactory;
     createDockWidget( &shapeSelectorFactory );
-    KoToolDockerFactory toolDockerFactory;
-    KoToolDocker *d =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
-    m_gui->setToolOptionDocker( d );
 
     connect( kwcanvas()->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 }

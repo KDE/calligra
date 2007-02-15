@@ -77,11 +77,6 @@ public:
      */
     void updateRulers() const;
 
-    /**
-     * Set the tool option dock widget.
-     */
-    void setToolOptionDocker(KoToolDocker *docker);
-
 private slots:
     void pageSetupChanged();
     void updateMousePos(const QPoint &point);

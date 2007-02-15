@@ -33,6 +33,8 @@
 #include <KoSelection.h>
 #include <KoToolDocker.h>
 #include <KoRuler.h>
+#include <KoToolBoxFactory.h>
+#include <KoToolDockerFactory.h>
 
 #include <QGridLayout>
 
@@ -57,6 +59,13 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     m_canvasController->setCanvas(m_canvas);
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(m_view->actionCollection(), m_canvasController);
+
+    KoToolBoxFactory toolBoxFactory(m_canvasController, "KWord");
+    m_view->createDockWidget( &toolBoxFactory );
+
+    KoToolDockerFactory toolDockerFactory;
+    KoToolDocker *td =  dynamic_cast<KoToolDocker*>( m_view->createDockWidget( &toolDockerFactory ) );
+    connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), td, SLOT(newOptionWidget(QWidget*)));
 
     gridLayout->addWidget(m_horizontalRuler, 0, 1);
     gridLayout->addWidget(m_verticalRuler, 1, 0);
@@ -96,10 +105,6 @@ QSize KWGui::viewportSize() const {
 bool KWGui::horizontalScrollBarVisible() {
     return m_canvasController->horizontalScrollBar() &&
         m_canvasController->horizontalScrollBar()->isVisible();
-}
-
-void KWGui::setToolOptionDocker(KoToolDocker *docker) {
-    connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), docker, SLOT(newOptionWidget(QWidget*)));
 }
 
 void KWGui::pageSetupChanged() {
