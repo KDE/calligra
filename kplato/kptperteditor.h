@@ -104,12 +104,17 @@ public:
     PertEditor( Part *part, QWidget *parent );
     void draw( Project &project);
     void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);
+    void loadRequiredTasksList(Node * taskNode);
+
+private slots:
     void dispAvailableTasks();
+
 
 private:
     QTreeWidget * m_tasktree;
     KActionSelector * m_assignList;
-    
+    Part * m_part;
+
     Ui::PertEditor widget;
 };
 

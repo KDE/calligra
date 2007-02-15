@@ -354,10 +354,12 @@ protected:
     virtual void addParentProxyRelation(Node *, const Relation *);
     virtual void addChildProxyRelation(Node *, const Relation *);
 
+public:
     // Those method are used by the pert editor to link tasks between each others
+
     virtual void addRequiredTask(Node * taskLinked);
-    virtual void remRequiredTask(QString id);
-    virtual QList<Node *> requiredTaskIterator() const;
+    virtual void remRequiredTask(Node * taskLinked);
+    const QList<Node *> &requiredTaskIterator() const {return m_requiredTasks;}
 
     DateTime earlyStartDate();
     void setEarlyStartDate(DateTime value);

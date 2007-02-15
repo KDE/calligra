@@ -63,19 +63,39 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
 
     m_tasktree = widget.tableTaskWidget;
     m_assignList = widget.assignList;
-
-    draw( part->getProject() );
+    m_part = part;
+    
+    draw( m_part->getProject() );
 
     connect( m_tasktree, SIGNAL( itemSelectionChanged() ), SLOT( dispAvailableTasks() ) );
+    //connect( m_assignList, SIGNAL( added( QListWidgetItem *) ) ,SLOT (showsTasksInGray()));
 }
 
 void PertEditor::dispAvailableTasks(){
-    
-    foreach(QTreeWidgetItem * currentItem, m_tasktree->selectedItems()){
-        m_assignList->setAvailableLabel(currentItem->text(0));
-    }
-    
+    m_assignList->availableListWidget()->clear();
+    // TODO load the required task list for the selected task
+    //loadRequiredTasksList(m_tasktree->selectedItem());
 
+    foreach(Node * currentNode, m_part->getProject().projectNode()->childNodeIterator() ){
+        // Checks if the curent node is not a milestone 
+        // and if it isn't the same as the selected task in the m_tasktree
+        if (currentNode->type()!=4
+        and currentNode->name()!=(m_tasktree->selectedItems().first()->text(0))){
+            m_assignList->availableListWidget()->addItem(currentNode->name());
+        }
+    }
+    // TODO save the required task list for the task just unselected
+}
+
+
+
+void PertEditor::loadRequiredTasksList(Node * taskNode){
+    // Display the required task list into the rigth side of m_assignList
+    m_assignList->selectedListWidget()->clear();
+
+    foreach(Node * currentNode, ((Task *)taskNode)->requiredTaskIterator()){
+        m_assignList->selectedListWidget()->addItem(currentNode->name());
+    }
 }
 
 

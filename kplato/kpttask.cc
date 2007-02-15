@@ -2029,14 +2029,22 @@ void Completion::printDebug(const QByteArray& _indent) const {
 
 // Those method are used by the pert editor to link tasks between each others
 void Task::addRequiredTask(Node * taskLinked){
+    m_requiredTasks.append(taskLinked);
 }
 
-void Task::remRequiredTask(QString id){
+void Task::remRequiredTask(Node * taskLinked){
+    int taskIndex;
+    // Do nothing if the taskLinked is wrong
+    taskIndex = m_requiredTasks.indexOf(taskLinked);
+    if (taskIndex!=-1)
+        m_requiredTasks.removeAt(taskIndex);
+    else
+        kDebug()<<"Task not found!"<<endl;
 }
 
-QList<Node *> Task::requiredTaskIterator() const{
+/*QList<Node *> Task::requiredTaskIterator() const{
     return m_requiredTasks;
-}
+}*/
 
 DateTime Task::earlyStartDate()
 {
