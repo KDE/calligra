@@ -159,6 +159,7 @@ QPointF KWViewModeNormal::viewToDocument( const QPointF & point ) const {
             break;
         pageNumber++;
     }
+    translated = canvas()->viewConverter()->viewToDocument(point);
     KWPage *page = pageManager->page(pageNumber -1 + pageManager->startPage());
     double xOffset = translated.x();
     if(page && m_pageSpreadMode && page->pageSide() == KWPage::Right &&
