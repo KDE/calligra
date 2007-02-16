@@ -453,14 +453,6 @@ public:
   QPoint pos() const { return m_point; }
   Cell cell() const;
 
-  bool operator<(const Point& other) const
-  {
-    if (m_point == other.m_point)
-      return m_sheet < other.m_sheet; // pointers!
-    if (m_point.y() < other.m_point.y())
-      return true;
-    return ((m_point.y() == other.m_point.y()) && (m_point.x() < other.m_point.x()));
-  }
   bool operator==(const Point& other)
   {
     return ((m_point == other.m_point) && (m_sheet == other.m_sheet));

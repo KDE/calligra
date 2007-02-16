@@ -72,7 +72,7 @@ public:
      * \param movedRegion the region, that was moved
      * \param destination the new upper left corner of the region
      */
-    void regionMoved( const Region& movedRegion, const Region::Point& destination );
+    void regionMoved( const Region& movedRegion, const Cell& destination );
 
 protected:
     /**

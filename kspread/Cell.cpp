@@ -2547,6 +2547,15 @@ Cell& Cell::operator=( const Cell& other )
     return *this;
 }
 
+bool Cell::operator<( const Cell& other ) const
+{
+    if ( sheet() != other.sheet() )
+        return sheet() < other.sheet(); // pointers!
+    if ( row() < other.row() )
+        return true;
+    return ( ( row() == other.row() ) && ( column() < other.column() ) );
+}
+
 bool Cell::operator==( const Cell& other ) const
 {
     return ( row() == other.row() && column() == other.column() && sheet() == other.sheet() );

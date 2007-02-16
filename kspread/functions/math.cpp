@@ -74,6 +74,7 @@ Value func_mod (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mround (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mult (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_multinomial (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_munit( valVector args, ValueCalc* calc, FuncExtra* );
 Value func_odd (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pow (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_quotient (valVector args, ValueCalc *calc, FuncExtra *);
@@ -285,6 +286,9 @@ void RegisterMathFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
+  f = new Function( "MUNIT",         func_munit );
+  f->setParamCount( 1 );
+  repo->add( f );
   f = new Function ("PRODUCT",       func_product);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
@@ -1075,6 +1079,19 @@ Value func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
       res.setElement (col, row, val);
     }
   return res;
+}
+
+// Function: MUNIT
+Value func_munit( valVector args, ValueCalc* calc, FuncExtra* )
+{
+    const int dim = calc->conv()->asInteger( args[0] ).asInteger();
+    if ( dim < 1 )
+        return Value::errorVALUE();
+    Value result( Value::Array );
+    for ( int row = 0; row < dim; ++row )
+        for ( int col = 0; col < dim; ++col )
+            result.setElement( col, row, Value( col == row ? 1 : 0 ) );
+    return result;
 }
 
 // Function: SUBTOTAL

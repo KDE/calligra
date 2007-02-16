@@ -118,9 +118,9 @@ public:
     // stores providing regions ordered by their consuming cell locations
     QHash<Cell, Region> providers;
     // stores consuming cell locations ordered by their providing regions
-    class PointTree :public KoRTree<Region::Point>
-    { public: PointTree() : KoRTree<Region::Point>(8,4) {} };
-    QHash<Sheet*, PointTree*> consumers; // FIXME Stefan: Why is a QHash<Sheet*, PointTree> crashing?
+    class CellTree : public KoRTree<Cell>
+    { public: CellTree() : KoRTree<Cell>(8,4) {} };
+    QHash<Sheet*, CellTree*> consumers; // FIXME Stefan: Why is a QHash<Sheet*, CellTree> crashing?
     // list of cells referencing a given named area
     QHash<QString, QHash<Cell, bool> > areaDeps;
     /*
@@ -163,7 +163,7 @@ void DependencyManager::Private::dump() const
     foreach (Sheet* sheet, consumers.keys())
     {
         QList<QRectF> keys = consumers[sheet]->keys();
-        QList<Region::Point> values = consumers[sheet]->values();
+        QList<Cell> values = consumers[sheet]->values();
         QHash<QString, QString> table;
         for (int i = 0; i < keys.count(); ++i)
         {
@@ -286,9 +286,9 @@ KSpread::Region DependencyManager::consumingRegion(const Cell& cell) const
     return d->consumingRegion(cell);
 }
 
-void DependencyManager::regionMoved( const Region& movedRegion, const Region::Point& destination )
+void DependencyManager::regionMoved( const Region& movedRegion, const Cell& destination )
 {
-    Region::Point locationOffset( destination.pos() - movedRegion.boundingRect().topLeft() );
+    Region::Point locationOffset( destination.cellPosition() - movedRegion.boundingRect().topLeft() );
 
     Region::ConstIterator end( movedRegion.constEnd() );
     for ( Region::ConstIterator it( movedRegion.constBegin() ); it != end; ++it )
@@ -300,12 +300,11 @@ void DependencyManager::regionMoved( const Region& movedRegion, const Region::Po
         if ( d->consumers.contains( sheet ) )
         {
             const QRectF rangeF = QRectF( range ).adjusted( 0, 0, -0.1, -0.1 );
-            QList<Region::Point> dependentLocations = d->consumers[sheet]->intersects( rangeF );
+            QList<Cell> dependentLocations = d->consumers[sheet]->intersects( rangeF );
 
             for ( int i = 0; i < dependentLocations.count(); ++i )
             {
-                const Region::Point location = dependentLocations[i];
-                const Cell cell( location.sheet(), location.pos() );
+                const Cell cell = dependentLocations[i];
                 updateFormula( cell, (*it), locationOffset );
             }
         }
@@ -381,12 +380,12 @@ KSpread::Region DependencyManager::Private::consumingRegion(const Cell& cell) co
         return Region();
     }
 
-    const KoRTree<Region::Point>* tree = consumers.value(sheet);
-    const QList<Region::Point> providers = tree->contains(cell.cellPosition());
+    const KoRTree<Cell>* tree = consumers.value(sheet);
+    const QList<Cell> providers = tree->contains(cell.cellPosition());
 
     Region region;
-    foreach (const Region::Point& point, providers)
-        region.add(point.pos(), point.sheet());
+    foreach ( const Cell& cell, providers )
+        region.add( cell.cellPosition(), cell.sheet() );
     return region;
 }
 
@@ -414,9 +413,6 @@ void DependencyManager::Private::addDependencies(const Cell& cell, const Region&
     // NOTE Stefan: Also store cells without dependencies to avoid an
     //              iteration over all cells in a map/sheet on recalculation.
 
-    Region::Point point(QPoint(cell.column(), cell.row()));
-    point.setSheet(cell.sheet());
-
     // empty region will be created automatically, if necessary
     providers[cell].add(region);
 
@@ -426,16 +422,13 @@ void DependencyManager::Private::addDependencies(const Cell& cell, const Region&
         Sheet* sheet = (*it)->sheet();
         QRectF range = QRectF((*it)->rect()).adjusted(0, 0, -0.1, -0.1);
 
-        if (!consumers.contains(sheet)) consumers.insert(sheet, new PointTree);
-        consumers[sheet]->insert(range, point);
+        if ( !consumers.contains( sheet ) ) consumers.insert( sheet, new CellTree() );
+        consumers[sheet]->insert( range, cell );
     }
 }
 
 void DependencyManager::Private::removeDependencies(const Cell& cell)
 {
-    Region::Point point(QPoint(cell.column(), cell.row()));
-    point.setSheet(cell.sheet());
-
     // look if the cell has any providers
     if ( !providers.contains( cell ) )
         return;  //it doesn't - nothing more to do
@@ -450,7 +443,7 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
 
         if (consumers.contains(sheet))
         {
-            consumers[sheet]->remove(point);
+            consumers[sheet]->remove( cell );
         }
     }
 

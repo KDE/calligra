@@ -651,7 +651,15 @@ public:
     Cell& operator=( const Cell& other );
 
     /**
+     * Tests wether this cell's location is less than the \p other 's.
+     * (QMap support)
+     * \note Does not compare the cell attributes/data.
+     */
+    bool operator<( const Cell& other ) const;
+
+    /**
      * Tests for equality with \p other 's location only.
+     * (QHash support)
      * \note Does not compare the cell attributes/data.
      */
     bool operator==( const Cell& other ) const;

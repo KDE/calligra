@@ -1796,8 +1796,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
     const Region cutRegion( map(), root.attribute( "cut" ), this );
     if ( cutRegion.isValid() )
     {
-      Region::Point destination( pasteArea.topLeft() );
-      destination.setSheet( this );
+      Cell destination( this, pasteArea.topLeft() );
       map()->dependencyManager()->regionMoved( cutRegion, destination );
     }
   }
