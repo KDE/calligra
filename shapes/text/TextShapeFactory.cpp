@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,7 +18,6 @@
  */
 #include "TextShapeFactory.h"
 #include "TextShape.h"
-//#include "TextToolFactory.h"
 
 #include <klocale.h>
 
@@ -34,11 +33,11 @@ TextShapeFactory::TextShapeFactory(QObject *parent)
     setToolTip(i18n("A Shape That Shows Text"));
 
     KoShapeTemplate t;
-    t.name = i18n("Simple text");
-    t.toolTip = i18n("Text Shape With Some Text");
+    t.name = i18n("Text");
+    t.toolTip = i18n("Text Shape");
     KoProperties *props = new KoProperties();
     t.properties = props;
-    props->setProperty("text", "<b>Koffie</b>, koffie... Querelanten\ndrinken geen KOffice maar groene thee.<br>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.");
+    props->setProperty("demo", true);
     addTemplate(t);
 }
 
@@ -49,8 +48,7 @@ KoShape *TextShapeFactory::createDefaultShape() const {
 
 KoShape *TextShapeFactory::createShape(const KoProperties * params) const {
     TextShape *shape = new TextShape();
-    KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
-    data->document()->setHtml( params->stringProperty("text") );
+    shape->setDemoText( params->boolProperty("demo") );
     return shape;
 }
 

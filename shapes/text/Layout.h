@@ -85,6 +85,9 @@ private:
     KoInsets m_borderInsets;
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
+
+    // demoText feature
+    bool m_demoText, m_endOfDemoText;
 };
 
 #endif

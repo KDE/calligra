@@ -254,8 +254,13 @@ void TextTool::setShapeData(KoTextShapeData *data) {
     m_textShapeData = data;
     if(m_textShapeData && docChanged) {
         connect(m_textShapeData->document(), SIGNAL(undoAvailable(bool)), this, SLOT(addUndoCommand()));
-        m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
         m_caret = QTextCursor(m_textShapeData->document());
+
+        if(m_textShape->demoText()) {
+            m_textShapeData->document()->setUndoRedoEnabled(false); // removes undo history
+            m_textShape->setDemoText(false); // remove demo text
+        }
+        m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
     }
 }
 

@@ -19,6 +19,7 @@
 
 #include "Layout.h"
 #include "ListItemsHelper.h"
+#include "TextShape.h"
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
@@ -40,7 +41,9 @@ Layout::Layout(KoTextDocumentLayout *parent)
     m_blockData(0),
     m_data(0),
     m_reset(true),
-    m_isRtl(false)
+    m_isRtl(false),
+    m_demoText(false),
+    m_endOfDemoText(false)
 {
     m_parent = parent;
     layout = 0;
@@ -127,6 +130,12 @@ bool Layout::addLine(QTextLine &line) {
         nextShape();
         if(m_data)
             m_data->setPosition(m_block.position() + line.textStart());
+
+        // the demo-text feature means we have exactly the same amount of text as we have frame-space
+        if(m_demoText) {
+            m_endOfDemoText = true;
+            return false;
+        }
         return true;
     }
 
@@ -159,6 +168,11 @@ bool Layout::nextParag() {
     if(layout) { // guard against first time
         layout->endLayout();
         m_block = m_block.next();
+        if(m_endOfDemoText) {
+            layout = 0;
+            m_blockData = 0;
+            return false;
+        }
         double borderBottom = m_y;
         if(!m_newShape) { // only add bottom of prev parag if we did not go to a new shape for this parag.
             if(m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysAfter ||
@@ -291,6 +305,7 @@ void Layout::nextShape() {
     m_data->faul(); // make dirty since this one needs relayout at this point.
     m_shapeBorder = shape->borderInsets();
     m_y += m_shapeBorder.top;
+    m_demoText = (static_cast<TextShape*> (shape))->demoText();
 }
 
 // and the end of text, make sure the rest of the frames have something sane to show.

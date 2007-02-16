@@ -47,10 +47,15 @@ public:
     /// helper method.
     QPointF convertScreenPos(const QPointF &point);
 
+    void setDemoText(bool on);
+    bool demoText() const { return m_demoText; }
+
 private:
     void shapeChanged(ChangeType type);
 
     KoTextShapeData *m_textShapeData;
+
+    bool m_demoText;
 };
 
 #endif
