@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=PostgreSQL
 Name[hi]=पोस्टग्रे-एसक्यूएल
+Name[ne]=पोस्ट ग्रे एसक्यूएल
 X-KDE-Library=kexidb_pqxxsqldriver
 ServiceTypes=Kexi/DBDriver
 Type=Service

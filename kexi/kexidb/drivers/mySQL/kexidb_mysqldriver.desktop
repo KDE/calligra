@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=MySQL
+Name[ne]=मेरो एसक्यूएल
 Name[sk]=mySQL
 X-KDE-Library=kexidb_mysqldriver
 ServiceTypes=Kexi/DBDriver

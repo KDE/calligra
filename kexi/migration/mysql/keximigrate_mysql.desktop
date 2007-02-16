@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=MySQL
+Name[ne]=मेरो एसक्यूएल
 Name[sk]=mySQL
 Comment=MySQL Migration Driver for Kexi
 Comment[ca]=Controlador de migració de MySQL per a Kexi
@@ -24,6 +25,7 @@ Comment[lv]=MySQL datu migrācijas draiveris priekš Kexi
 Comment[ms]=Pemacu Migrasi MySQL bagi Kexi
 Comment[nb]=Kexi-programmodul for migrering av MySQL-drivere
 Comment[nds]=MySQL-Datenutlagerndriever för Kexi
+Comment[ne]=केक्सीका लागि MySQL माइग्रेसन ड्राइभर
 Comment[nl]=MySQL-migratiestuurprogramma voor Kexi
 Comment[nn]=Kexi-programmodul for migrering av MySQL-drivarar
 Comment[pl]=Wtyczka migracji danych z serwera MySQL dla Kexi
