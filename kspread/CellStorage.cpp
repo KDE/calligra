@@ -17,6 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "klocale.h"
+#include "kpassivepopup.h"
+
+#include "Damages.h"
+#include "Doc.h"
+#include "Map.h"
+#include "RecalcManager.h"
 #include "RectStorage.h"
 #include "StyleStorage.h"
 
@@ -110,12 +117,14 @@ public:
 };
 
 CellStorage::CellStorage( Sheet* sheet )
-    : d( new Private( sheet ) )
+    : QObject( sheet )
+    , d( new Private( sheet ) )
 {
 }
 
 CellStorage::CellStorage( const CellStorage& other )
-    : d( new Private( *other.d ) )
+    : QObject( other.d->sheet )
+    , d( new Private( *other.d ) )
 {
 }
 
@@ -192,9 +201,22 @@ void CellStorage::setFormula( int column, int row, const Formula& formula )
     else
         old = d->formulaStorage->insert( column, row, formula );
 
-    // recording undo?
-    if ( d->undoData && formula != old )
-        d->undoData->formulas << qMakePair( QPoint( column, row ), old );
+    // formula changed?
+    if ( formula != old )
+    {
+        // trigger an update of the dependencies and a recalculation
+        d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), CellDamage::Formula | CellDamage::Value ) );
+        // recording undo?
+        if ( d->undoData )
+        {
+            d->undoData->formulas << qMakePair( QPoint( column, row ), old );
+            // Also store the old value, if there wasn't a formula before,
+            // because the new value is calculated later by the damage
+            // processing and is not recorded for undoing.
+            if ( old == Formula() )
+                d->undoData->values << qMakePair( QPoint( column, row ), value( column, row ) );
+        }
+    }
 }
 
 QString CellStorage::link( int column, int row ) const
@@ -293,39 +315,36 @@ void CellStorage::setValue( int column, int row, const Value& value )
 {
     if ( column == 0 || row == 0 )
         return;
+    if ( isLocked( column, row ) )
+    {
+        KPassivePopup::message( i18n( "The cell is currently locked as element of a matrix." ), 0 );
+        emit inform( i18n( "The cell is currently locked as element of a matrix." ) );
+        return;
+    }
+
+    // release any lock
+    unlockCells( column, row );
 
     Value old;
     if ( value.isEmpty() )
         old = d->valueStorage->take( column, row );
     else
-    {
-#if 0
-        // a matrix?
-        if ( value.isArray() && ( value.columns() > 1 || value.rows() > 1 ) )
-        {
-            // lock its range
-            d->matrixStorage->insert( Region( column, row, value.columns(), value.rows() ), true );
-            // fill it in
-            for ( int r = 0; r < value.rows(); ++r )
-            {
-                for ( int c = 0; c < value.columns(); ++c )
-                {
-                    // unset formula, link
-                    setFormula( column + c, row + r, Formula() );
-                    setLink( column + c, row + r, QString() );
-                    // set the matrix element
-                    setValue( column + c, row + r, value.element( c, r ) );
-                }
-            }
-        }
-        else
-#endif
-            old = d->valueStorage->insert( column, row, value );
-    }
+        old = d->valueStorage->insert( column, row, value );
 
-    // recording undo?
-    if ( d->undoData && value != old )
-        d->undoData->values << qMakePair( QPoint( column, row ), old );
+    // value changed?
+    if ( value != old )
+    {
+        // Always trigger a repainting.
+        CellDamage::Changes changes = CellDamage::Appearance;
+        // Trigger a recalculation of the consuming cells, only if we are not
+        // already in a recalculation process.
+        if ( !d->sheet->map()->recalcManager()->isActive() )
+            changes |= CellDamage::Value;
+        d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), changes ) );
+        // recording undo?
+        if ( d->undoData )
+            d->undoData->values << qMakePair( QPoint( column, row ), old );
+    }
 }
 
 bool CellStorage::doesMergeCells( int column, int row ) const
@@ -395,6 +414,79 @@ int CellStorage::mergedYCells( int column, int row ) const
     if ( pair.first.topLeft() != QPoint( column, row ) )
         return 0;
     return pair.first.toRect().height() - 1;
+}
+
+bool CellStorage::locksCells( int column, int row ) const
+{
+    const QPair<QRectF,bool> pair = d->matrixStorage->containedPair( QPoint( column, row ) );
+    if ( pair.first.isNull() )
+        return false;
+    if ( pair.second == false )
+        return false;
+    // master cell?
+    if ( pair.first.toRect().topLeft() != QPoint( column, row ) )
+        return false;
+    return true;
+}
+
+bool CellStorage::isLocked( int column, int row ) const
+{
+    const QPair<QRectF,bool> pair = d->matrixStorage->containedPair( QPoint( column, row ) );
+    if ( pair.first.isNull() )
+        return false;
+    if ( pair.second == false )
+        return false;
+    // master cell?
+    if ( pair.first.toRect().topLeft() == QPoint( column, row ) )
+        return false;
+    return true;
+}
+
+void CellStorage::lockCells( const QRect& rect )
+{
+    kDebug() << k_funcinfo << endl;
+    // Start by unlocking the cells that we lock right now
+    const QPair<QRectF,bool> pair = d->matrixStorage->containedPair( rect.topLeft() ); // FIXME
+    if ( !pair.first.isNull() )
+        d->matrixStorage->insert( Region( pair.first.toRect() ), false );
+    // Lock the cells
+    if ( rect.width() > 1 || rect.height() > 1 )
+        d->matrixStorage->insert( Region( rect ), true );
+}
+
+void CellStorage::unlockCells( int column, int row )
+{
+    kDebug() << k_funcinfo << endl;
+    const QPair<QRectF,bool> pair = d->matrixStorage->containedPair( QPoint( column, row ) );
+    if ( pair.first.isNull() )
+        return;
+    if ( pair.second == false )
+        return;
+    if ( pair.first.toRect().topLeft() != QPoint( column, row ) )
+        return;
+    const QRect rect = pair.first.toRect();
+    d->matrixStorage->insert( Region( rect ), false );
+    // clear the values
+    for ( int r = rect.top(); r <= rect.bottom(); ++r )
+    {
+        for ( int c = rect.left(); c <= rect.right(); ++c )
+        {
+            if ( r != rect.top() || c != rect.left() )
+                setValue( c, r, Value() );
+        }
+    }
+}
+
+QRect CellStorage::lockedCells( int column, int row ) const
+{
+    const QPair<QRectF,bool> pair = d->matrixStorage->containedPair( QPoint( column, row ) );
+    if ( pair.first.isNull() )
+        return QRect( column, row, 1, 1 );
+    if ( pair.second == false )
+        return QRect( column, row, 1, 1 );
+    if ( pair.first.toRect().topLeft() != QPoint( column, row ) )
+        return QRect( column, row, 1, 1 );
+    return pair.first.toRect();
 }
 
 void CellStorage::insertColumns( int position, int number )
@@ -809,13 +901,16 @@ const ValueStorage* CellStorage::valueStorage() const
 void CellStorage::startUndoRecording()
 {
     // If undoData is not null, the recording wasn't stopped.
-    // Should actually not happen, hence this assertion.
+    // Should not happen, hence this assertion.
     Q_ASSERT( d->undoData == 0 );
     d->undoData = new CellStorageUndoData();
 }
 
 CellStorageUndoData* CellStorage::stopUndoRecording()
 {
+    // If undoData is null, the recording wasn't started.
+    // Should not happen, hence this assertion.
+    Q_ASSERT( d->undoData != 0 );
     CellStorageUndoData* undoData = d->undoData;
     d->undoData = 0;
     // do not store an object unnecessarily
@@ -832,21 +927,23 @@ void CellStorage::undo( CellStorageUndoData* data )
     if ( !data ) // nothing to do?
         return;
     for ( int i = 0; i < data->formulas.count(); ++i )
-        d->formulaStorage->insert( data->formulas[i].first.x(), data->formulas[i].first.y(), data->formulas[i].second );
+        setFormula( data->formulas[i].first.x(), data->formulas[i].first.y(), data->formulas[i].second );
     for ( int i = 0; i < data->values.count(); ++i )
-        d->valueStorage->insert( data->values[i].first.x(), data->values[i].first.y(), data->values[i].second );
+        setValue( data->values[i].first.x(), data->values[i].first.y(), data->values[i].second );
     for ( int i = 0; i < data->userInputs.count(); ++i )
-        d->userInputStorage->insert( data->userInputs[i].first.x(), data->userInputs[i].first.y(), data->userInputs[i].second );
+        setUserInput( data->userInputs[i].first.x(), data->userInputs[i].first.y(), data->userInputs[i].second );
     for ( int i = 0; i < data->links.count(); ++i )
-        d->linkStorage->insert( data->links[i].first.x(), data->links[i].first.y(), data->links[i].second );
+        setLink( data->links[i].first.x(), data->links[i].first.y(), data->links[i].second );
     for ( int i = 0; i < data->fusions.count(); ++i )
         d->fusionStorage->insert( Region(data->fusions[i].first.toRect()), data->fusions[i].second );
     for ( int i = 0; i < data->styles.count(); ++i )
         d->styleStorage->insert( data->styles[i].first.toRect(), data->styles[i].second );
     for ( int i = 0; i < data->comments.count(); ++i )
-        d->commentStorage->insert( Region(data->comments[i].first.toRect()), data->comments[i].second );
+        setComment( Region(data->comments[i].first.toRect()), data->comments[i].second );
     for ( int i = 0; i < data->conditions.count(); ++i )
-        d->conditionsStorage->insert( Region(data->conditions[i].first.toRect()), data->conditions[i].second );
+        setConditions( Region(data->conditions[i].first.toRect()), data->conditions[i].second );
     for ( int i = 0; i < data->validities.count(); ++i )
-        d->validityStorage->insert( Region(data->validities[i].first.toRect()), data->validities[i].second );
+        setValidity( Region(data->validities[i].first.toRect()), data->validities[i].second );
 }
+
+#include "CellStorage.moc"

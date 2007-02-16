@@ -822,16 +822,6 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
     emit sig_updateView( this, Region( _column, _row, this ) );
 }
 
-void Sheet::setArrayFormula (Selection *selection, const QString &_text)
-{
-  // create and call the manipulator
-  ArrayFormulaManipulator *afm = new ArrayFormulaManipulator;
-  afm->setSheet (this);
-  afm->setText (_text);
-  afm->add (*selection);
-  afm->execute ();
-}
-
 void Sheet::recalc( bool force )
 {
   ElapsedTime et( "Recalculating " + d->name, ElapsedTime::PrintOnlyTime );

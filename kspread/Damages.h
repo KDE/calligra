@@ -23,9 +23,12 @@
 
 #include "QFlags"
 
+#include "kdebug.h"
+
 namespace KSpread
 {
 class Cell;
+class Map;
 class Sheet;
 class Region;
 

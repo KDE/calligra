@@ -83,6 +83,12 @@ public:
   void recalcMap();
 
   /**
+   * Returns the recalculation state.
+   * \return \c true, if recalculations are in progress
+   */
+  bool isActive() const;
+
+  /**
    * Prints out the cell depths in the current recalculation event.
    */
   void dump() const;

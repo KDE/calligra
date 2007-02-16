@@ -29,26 +29,21 @@
 
 #include <QStringList>
 
-namespace KSpread {
-
+namespace KSpread
+{
 class CellStorageUndoData;
 
 /**
- * AbstractDataManipulator - provides storage of old cell data (for undo)
- * and has an abstract method for the actual setting of new values
+ * Provides an abstract method for the actual setting of new values.
  */
-
-struct ADMStorage {
-  Value val;
-  QString text;
-  Format::Type format;
-};
-
-class AbstractDataManipulator : public Manipulator {
+class AbstractDataManipulator : public Manipulator
+{
   public:
     AbstractDataManipulator ();
     virtual ~AbstractDataManipulator ();
+
     virtual bool process (Element* element);
+
   protected:
     /** Return new value. row/col are relative to sheet, not element.
     If the function sets *parse to true, the value will be treated as an
@@ -64,19 +59,25 @@ class AbstractDataManipulator : public Manipulator {
       return true;
     };
 
-    /** return value stored at given coordinates */
-    Value stored (int col, int row, bool *parse);
+    /**
+     * Starts the undo recording.
+     */
+    virtual bool preProcessing();
 
-    /** preProcessing will store the old cell's data */
-    virtual bool preProcessing ();
-    QMap<int, QMap<int, ADMStorage> > oldData;
+    /**
+     * Stops the undo recording and stores the old data.
+     */
+    virtual bool postProcessing();
+
+private:
+    CellStorageUndoData* m_undoData;
 };
 
 /**
-AbstractDFManipulator: AbstractDataManipulator with the option of copying
-entire cell formats.
+ * Extends AbstractDataManipulator with the option of copying cell styles.
 */
-class AbstractDFManipulator : public AbstractDataManipulator {
+class AbstractDFManipulator : public AbstractDataManipulator
+{
   public:
     AbstractDFManipulator ();
     virtual ~AbstractDFManipulator ();
@@ -90,11 +91,7 @@ class AbstractDFManipulator : public AbstractDataManipulator {
     /** this method should return new format for a given cell */
     virtual Style newFormat (Element *element, int col, int row) = 0;
 
-    /** preProcessing will store the old cell's data */
-    virtual bool preProcessing ();
-
-    QMap<int, QMap<int, Style> > formats;
-    bool m_changeformat;
+    bool m_changeformat : 1;
 };
 
 
@@ -102,24 +99,27 @@ class AbstractDFManipulator : public AbstractDataManipulator {
  * DataManipulator - allows setting values on one range.
  * If multiple ranges are selected, they all get set to the same values
  */
-
 class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator {
   public:
     DataManipulator ();
     virtual ~DataManipulator ();
-    void setParsing (bool val) { m_parsing = val; };
+    void setParsing (bool val) { m_parsing = val; }
+    void setExpandMatrix( bool expand ) { m_expandMatrix = expand; }
     /** set the values for the range. Can be either a single value, or
     a value array */
-    void setValue (Value val) { data = val; };
+    void setValue (Value val) { m_data = val; }
     /** If set, all cells shall be switched to this format. If parsing is
     true, the resulting value may end up being different. */
-    void setFormat (Format::Type fmtType) { m_format = fmtType; };
+    void setFormat (Format::Type fmtType) { m_format = fmtType; }
   protected:
+    virtual bool preProcessing();
+    virtual bool process( Element* element );
     virtual Value newValue (Element *element, int col, int row, bool *, Format::Type *);
 
-    Value data;
+    Value m_data;
     Format::Type m_format;
     bool m_parsing : 1;
+    bool m_expandMatrix : 1;
 };
 
 class KSPREAD_EXPORT SeriesManipulator : public AbstractDataManipulator {
@@ -140,17 +140,6 @@ class KSPREAD_EXPORT SeriesManipulator : public AbstractDataManipulator {
     Series m_type;
     Value m_start, m_step, m_prev;
     int m_last;
-};
-
-class KSPREAD_EXPORT ArrayFormulaManipulator : public AbstractDataManipulator {
-  public:
-    ArrayFormulaManipulator ();
-    virtual ~ArrayFormulaManipulator ();
-    void setText (const QString text) { m_text = text; };
-  protected:
-    virtual Value newValue (Element *element, int col, int row, bool *,
-        Format::Type *);
-    QString cellRef, m_text;
 };
 
 /** the FillManipulator is used in the Fill operation */

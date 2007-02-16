@@ -768,8 +768,6 @@ public:
     //BEGIN Methods related to manipulations of selected cells
     //
 
-    void setArrayFormula (Selection* selection, const QString &_text);
-
     /**
      * @param selection the selection of cells to work on
      * @param undo create undo entry, if @c true

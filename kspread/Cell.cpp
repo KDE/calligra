@@ -53,7 +53,7 @@
 #include "CellStorage.h"
 #include "Canvas.h"
 #include "Condition.h"
-#include "Damages.h"
+// #include "Damages.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
 #include "Global.h"
@@ -408,8 +408,6 @@ const Value Cell::value() const
 void Cell::setValue( const Value& value, bool triggerRecalc )
 {
 //   kDebug() << k_funcinfo << endl;
-  if (!value.isError())
-    clearAllErrors();
 
   //If the value has not changed then we don't need to do anything
   //(ie. no need to relayout, update dependent cells etc.),
@@ -513,8 +511,10 @@ void Cell::copyContent( const Cell& cell )
 
 void Cell::move( int col, int row )
 {
+#if 0
     // For the old position (the new is handled in valueChanged() at the end):
     doc()->addDamage( new CellDamage( *this, CellDamage::Appearance | CellDamage::Value ) );
+#endif
 
     // Unmerge cells
     mergeCells( d->column, d->row, 0, 0 );
@@ -659,9 +659,9 @@ QString Cell::encodeFormula( bool _era, int _col, int _row ) const
                     /* or if we're parsing a number, this could just be the
                        exponential part of it  (1.23E4) */
                     if ( pos < length &&
-                         ( inputText[pos] == '!' ) ||
+                         ( ( inputText[pos] == '!' ) ||
                          inputText[pos].isLetter() ||
-                         onNumber )
+                         onNumber ) )
                     {
                         erg += tmp;
                         fix1 = fix2 = false;
@@ -807,10 +807,12 @@ void Cell::valueChanged( bool triggerRecalc )
     //              for the change that triggers recalculation. Or vice versa.
     updateChart( true );
 
+#if 0
     CellDamage::Changes changes = CellDamage::Appearance;
     if ( triggerRecalc )
         changes |= CellDamage::Value;
     doc()->addDamage( new CellDamage( *this, changes ) );
+#endif
 }
 
 
@@ -831,12 +833,14 @@ bool Cell::makeFormula()
     // parse the formula and check for errors
     if ( !formula().isValid() )
     {
+#if 0
         // Update the dependencies.
         if ( !sheet()->isLoading() )
         {
             kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
             doc()->addDamage( new CellDamage( *this, CellDamage::Formula ) );
         }
+#endif
 
         if (doc()->showMessageError())
         {
@@ -848,8 +852,10 @@ bool Cell::makeFormula()
         return false;
     }
 
+#if 0
     // Update the dependencies and recalculate.
     doc()->addDamage( new CellDamage( *this, CellDamage::Formula | CellDamage::Value ) );
+#endif
 
     return true;
 }
@@ -980,12 +986,14 @@ void Cell::setCellText( const QString& text )
 {
 //   kDebug() << k_funcinfo << endl;
 
+#if 0
     // Enqueues a dependency update, if the old value is a formula.
     if ( isFormula() && !sheet()->isLoading() )
     {
         kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
         doc()->addDamage( new CellDamage( *this, CellDamage::Formula ) );
     }
+#endif
 
     // empty string?
     if ( text.isEmpty() )
@@ -1015,8 +1023,10 @@ void Cell::setCellText( const QString& text )
             return;
         }
 
+#if 0
         // Update the dependencies and recalculate.
         doc()->addDamage( new CellDamage( *this, CellDamage::Formula | CellDamage::Value ) );
+#endif
 
         return;
     }
@@ -1028,8 +1038,6 @@ void Cell::setCellText( const QString& text )
 
     // here, the new value is not a formula anymore; clear an existing one
     setFormula( Formula() );
-
-    clearAllErrors();
 
     Value value;
     if ( style().formatType() == Format::Text )
@@ -1141,6 +1149,16 @@ int Cell::mergedXCells() const
 int Cell::mergedYCells() const
 {
     return sheet()->cellStorage()->mergedYCells( d->column, d->row );
+}
+
+bool Cell::isLocked() const
+{
+    return sheet()->cellStorage()->isLocked( d->column, d->row );
+}
+
+QRect Cell::lockedCells() const
+{
+    return sheet()->cellStorage()->lockedCells( d->column, d->row );
 }
 
 
@@ -1835,9 +1853,11 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     if ( !frame.isNull() )
       loadOasisObjects( frame, oasisContext );
 
+#if 0
     if (isFormula)   // formulas must be recalculated
       doc()->addDamage( new CellDamage( *this, CellDamage::Formula |
                                                                  CellDamage::Value ) );
+#endif
 
     return true;
 }
@@ -2207,8 +2227,6 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
     t = decodeFormula( t, d->column, d->row );
     setCellText (pasteOperation( t, inputText(), op ));
 
-    clearAllErrors();
-
     makeFormula();
   }
   // rich text ?
@@ -2284,7 +2302,6 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
     if ( newStyleLoading )
     {
       sheet()->cellStorage()->setValue( d->column, d->row, Value() );
-      clearAllErrors();
 
       // boolean ?
       if( dataType == "Bool" )
@@ -2482,7 +2499,6 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
         }
 
         sheet()->setRegionPaintDirty( Region( cellPosition() ) );
-        clearAllErrors();
 
         return tmp_op;
     }
@@ -2509,14 +2525,12 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
 
         tmp_op = decodeFormula( tmp_op, d->column, d->row );
         sheet()->setRegionPaintDirty( Region( cellPosition() ) );
-        clearAllErrors();
 
         return tmp_op;
     }
 
     tmp = decodeFormula( new_text, d->column, d->row );
     sheet()->setRegionPaintDirty( Region( cellPosition() ) );
-    clearAllErrors();
 
     return tmp;
 }
@@ -2578,17 +2592,6 @@ QPoint Cell::cellPosition() const
     Q_ASSERT( !isNull() );
     return QPoint( column(), row() );
 }
-
-void Cell::clearAllErrors()
-{
-    if ( value().isError() )
-    {
-//         kDebug(36002) << "\tClearing all errors..." << endl;
-        sheet()->cellStorage()->setValue( d->column, d->row, Value() );
-        valueChanged();
-    }
-}
-
 
 void Cell::checkForNamedAreas( QString & formula ) const
 {

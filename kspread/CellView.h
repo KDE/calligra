@@ -354,6 +354,14 @@ private:
    * @see paintCell()
    * @internal
    */
+  void paintMatrixElementIndicator( QPainter& painter, const QRectF &cellRect, const Cell& cell );
+
+  /**
+   * \ingroup Painting
+   * helper function for paintCell() function
+   * @see paintCell()
+   * @internal
+   */
   void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect );
 
     /**

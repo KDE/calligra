@@ -77,7 +77,7 @@ public:
      */
     QMap<int, Cell> cells;
     const Map* map;
-    bool busy;
+    bool active;
 };
 
 void RecalcManager::Private::cellsToCalculate( const Region& region )
@@ -164,7 +164,7 @@ RecalcManager::RecalcManager( const Map* map )
   : d(new Private)
 {
   d->map  = map;
-  d->busy = false;
+  d->active = false;
 }
 
 RecalcManager::~RecalcManager()
@@ -174,36 +174,41 @@ RecalcManager::~RecalcManager()
 
 void RecalcManager::regionChanged(const Region& region)
 {
-    if (d->busy || region.isEmpty())
+    if (d->active || region.isEmpty())
         return;
-    d->busy = true;
+    d->active = true;
     kDebug(36002) << "RecalcManager::regionChanged " << region.name() << endl;
     ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
     d->cellsToCalculate( region );
     recalc();
-    d->busy = false;
+    d->active = false;
 }
 
 void RecalcManager::recalcSheet(Sheet* const sheet)
 {
-    if (d->busy)
+    if (d->active)
         return;
-    d->busy = true;
+    d->active = true;
     ElapsedTime et( "Overall sheet recalculation", ElapsedTime::PrintOnlyTime );
     d->cellsToCalculate( sheet );
     recalc();
-    d->busy = false;
+    d->active = false;
 }
 
 void RecalcManager::recalcMap()
 {
-    if (d->busy)
+    if (d->active)
         return;
-    d->busy = true;
+    d->active = true;
     ElapsedTime et( "Overall map recalculation", ElapsedTime::PrintOnlyTime );
     d->cellsToCalculate();
     recalc();
-    d->busy = false;
+    d->active = false;
+}
+
+bool RecalcManager::isActive() const
+{
+    return d->active;
 }
 
 void RecalcManager::recalc()
@@ -222,7 +227,23 @@ void RecalcManager::recalc()
 
         // evaluate the formula and set the result
         Value result = cells.value( c ).formula().eval();
-        Cell( cells.value( c ) ).setValue( result, false );
+        if ( result.isArray() && ( result.columns() > 1 || result.rows() > 1 ) )
+        {
+            const QRect rect = cells.value( c ).lockedCells();
+            kDebug() << rect << endl;
+            for ( int row = rect.top(); row <= rect.bottom(); ++row )
+            {
+                for ( int col = rect.left(); col <= rect.right(); ++col )
+                {
+                    kDebug() << result.element( col - rect.left(), row - rect.top() ) << endl;
+                    Cell( cells.value( c ).sheet(), col, row ).setValue( result.element( col - rect.left(), row - rect.top() ), false );
+                }
+            }
+            // relock
+            cells.value( c ).sheet()->cellStorage()->lockCells( rect );
+        }
+        else
+            Cell( cells.value( c ) ).setValue( result, false );
     }
 //     dump();
     d->cells.clear();

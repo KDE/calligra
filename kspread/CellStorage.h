@@ -57,8 +57,9 @@ class ValueStorage;
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  */
-class KSPREAD_EXPORT CellStorage
+class KSPREAD_EXPORT CellStorage : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Constructor.
@@ -148,6 +149,15 @@ public:
     Cell masterCell( int column, int row ) const;
     int mergedXCells( int column, int row ) const;
     int mergedYCells( int column, int row ) const;
+
+    /**
+     * \return \c true, if the cell's value is a matrix and obscures other cells
+     */
+    bool locksCells( int column, int row ) const;
+    bool isLocked( int column, int row ) const;
+    void lockCells( const QRect& rect );
+    void unlockCells( int column, int row );
+    QRect lockedCells( int column, int row ) const;
 
     /**
      * Insert \p number columns at \p position .
@@ -302,6 +312,9 @@ public:
      * \see stopUndoRecording
      */
     void undo( CellStorageUndoData* undoData );
+
+Q_SIGNALS:
+    void inform( const QString& message );
 
 private:
     // do not allow assignment

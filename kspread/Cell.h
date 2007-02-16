@@ -558,6 +558,17 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
+    //BEGIN Matrix locking
+    //
+
+    bool isLocked() const;
+    QRect lockedCells() const;
+
+    //
+    //END Matrix locking
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
     //BEGIN Cut & paste
     //
 
@@ -600,11 +611,6 @@ public:
     //
     //BEGIN
     //
-
-    /**
-     * Clear all error flags from the cell.
-     */
-    void clearAllErrors();
 
     /**
      * Parses the formula.

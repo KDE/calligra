@@ -39,7 +39,6 @@ AbstractDataManipulator::AbstractDataManipulator ()
 
 AbstractDataManipulator::~AbstractDataManipulator ()
 {
-  oldData.clear ();
 }
 
 bool AbstractDataManipulator::process (Element* element)
@@ -53,19 +52,14 @@ bool AbstractDataManipulator::process (Element* element)
       int rowidx = row - range.top();
       bool parse = false;
       Format::Type fmtType = Format::None;
-      
+
       // do nothing if we don't want a change here
       if (!wantChange (element, col, row))
         continue;
-      
+
       if (m_reverse) {
         // reverse - use the stored value
-        if (oldData.contains (colidx) && oldData[colidx].contains (rowidx)) {
-          val = oldData[colidx][rowidx].val;
-          text = oldData[colidx][rowidx].text;
-          fmtType = oldData[colidx][rowidx].format;
-          parse = (!text.isEmpty());   // parse if text not empty
-        }
+        m_sheet->cellStorage()->undo( m_undoData );
       } else {
         val = newValue (element, col, row, &parse, &fmtType);
         if (parse)
@@ -83,56 +77,31 @@ bool AbstractDataManipulator::process (Element* element)
         }
         cell.setCellText (text);
       } else {
-        Cell cell( m_sheet, col, row );
-        if (!(val.isEmpty()))
-        // nothing if value and cell both empty
+        if ( !val.isEmpty() )
         {
-          Cell cell = Cell( m_sheet, col, row);
-          cell.setCellValue (val, fmtType, text);
+          Cell( m_sheet, col, row ).setCellValue( val, fmtType );
         }
       }
     }
   return true;
 }
 
-Value AbstractDataManipulator::stored (int col, int row, bool *parse)
+bool AbstractDataManipulator::preProcessing()
 {
-  Value val = oldData[col][row].val;
-  QString text = oldData[col][row].text;
-  *parse = false;
-  if (!text.isEmpty()) {
-    val = Value (text);
-    *parse = true;
-  }
-  return val;
+    // not the first run - data already stored ...
+    if ( !m_firstrun )
+        return true;
+    m_sheet->cellStorage()->startUndoRecording();
+    return true;
 }
 
-bool AbstractDataManipulator::preProcessing ()
+bool AbstractDataManipulator::postProcessing()
 {
-  // not the first run - data already stored ...
-  if (!m_firstrun) return true;
-
-  Region::Iterator endOfList(cells().end());
-  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
-  {
-    QRect range = (*it)->rect();
-    for (int col = range.left(); col <= range.right(); ++col)
-      for (int row = range.top(); row <= range.bottom(); ++row)
-      {
-        Cell cell = Cell( m_sheet, col, row);
-          ADMStorage st;
-
-          int colidx = col - range.left();
-          int rowidx = row - range.top();
-
-          if (cell.isFormula())
-            st.text = cell.inputText();
-          st.val = cell.value();
-          st.format = cell.formatType();
-          oldData[colidx][rowidx] = st;
-      }
-  }
-  return true;
+    // not the first run - data already stored ...
+    if ( !m_firstrun )
+        return true;
+    m_undoData = m_sheet->cellStorage()->stopUndoRecording();
+    return true;
 }
 
 AbstractDFManipulator::AbstractDFManipulator ()
@@ -142,8 +111,6 @@ AbstractDFManipulator::AbstractDFManipulator ()
 
 AbstractDFManipulator::~AbstractDFManipulator ()
 {
-  // delete all stored formats ...
-  formats.clear();
 }
 
 bool AbstractDFManipulator::process (Element* element)
@@ -151,8 +118,9 @@ bool AbstractDFManipulator::process (Element* element)
   // let parent class process it first
   AbstractDataManipulator::process (element);
 
-  // don't continue if we have to change formatting
+  // don't continue if we don't have to change formatting
   if (!m_changeformat) return true;
+  if (m_reverse) return true; // undo done by AbstractDataManipulator
 
   QRect range = element->rect();
   for (int col = range.left(); col <= range.right(); ++col)
@@ -161,40 +129,18 @@ bool AbstractDFManipulator::process (Element* element)
       Cell cell( m_sheet, col, row );
       int colidx = col - range.left();
       int rowidx = row - range.top();
-        Style style = m_reverse ? formats[colidx][rowidx] : newFormat (element, col, row);
+        Style style = newFormat (element, col, row);
         cell.setStyle( style );
     }
   }
   return true;
 }
 
-bool AbstractDFManipulator::preProcessing ()
-{
-  // not the first run - data already stored ...
-  if (!m_firstrun) return true;
 
-  AbstractDataManipulator::preProcessing ();
-
-  Region::Iterator endOfList(cells().end());
-  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
-  {
-    QRect range = (*it)->rect();
-    for (int col = range.left(); col <= range.right(); ++col)
-      for (int row = range.top(); row <= range.bottom(); ++row)
-      {
-        Cell cell = Cell( m_sheet, col, row);
-          int colidx = col - range.left();
-          int rowidx = row - range.top();
-          Style style = cell.style();
-          formats[colidx][rowidx] = style;
-      }
-  }
-  return true;
-}
-
-DataManipulator::DataManipulator ()
-  : m_format (Format::None),
-  m_parsing (false)
+DataManipulator::DataManipulator()
+    : m_format( Format::None )
+    , m_parsing( false )
+    , m_expandMatrix( false )
 {
   // default name for DataManipulator, can be changed using setName
   m_name = i18n ("Change Value");
@@ -204,22 +150,94 @@ DataManipulator::~DataManipulator ()
 {
 }
 
-Value DataManipulator::newValue (Element *element, int col, int row,
-    bool *parsing, Format::Type *formatType)
+bool DataManipulator::preProcessing()
 {
-  *parsing = m_parsing;
-  if (m_format != Format::None)
-    *formatType = m_format;
-  QRect range = element->rect();
-  int colidx = col - range.left();
-  int rowidx = row - range.top();
-  return data.element (colidx, rowidx);
+    // extend a singular region to the matrix size, if applicable
+    if ( m_firstrun && m_parsing && m_expandMatrix && Region::isSingular() )
+    {
+        const QString expression = m_data.asString();
+        if ( !expression.isEmpty() && expression[0] == '=' )
+        {
+            Formula formula( m_sheet );
+            formula.setExpression( expression );
+            if ( formula.isValid() )
+            {
+                const Value result = formula.eval();
+                if ( result.columns() > 1 || result.rows() > 1 )
+                {
+                    const QPoint point = cells()[0]->rect().topLeft();
+                    Region::add( QRect( point.x(), point.y(), result.columns(), result.rows() ), m_sheet );
+                }
+            }
+        }
+        else if ( !m_data.isArray() )
+        {
+            // not a formula; not a matrix: unset m_expandMatrix
+            m_expandMatrix = false;
+        }
+    }
+    return AbstractDataManipulator::preProcessing();
 }
+
+bool DataManipulator::process( Element* element )
+{
+    bool success = AbstractDataManipulator::process( element );
+    if ( !success )
+        return false;
+    if ( m_expandMatrix )
+    {
+        if ( !m_reverse )
+            m_sheet->cellStorage()->lockCells( element->rect() );
+        else
+            m_sheet->cellStorage()->unlockCells( element->rect().left(), element->rect().top() );
+    }
+    return true;
+}
+
+Value DataManipulator::newValue( Element *element, int col, int row,
+                                 bool *parsing, Format::Type *formatType )
+{
+    *parsing = m_parsing;
+    if (m_format != Format::None)
+        *formatType = m_format;
+    QRect range = element->rect();
+    int colidx = col - range.left();
+    int rowidx = row - range.top();
+    if ( m_parsing && m_expandMatrix )
+    {
+        if ( !colidx && !rowidx )
+        {
+            const QString expression = m_data.asString();
+            if ( !expression.isEmpty() && expression[0] == '=' )
+            {
+                Formula formula( m_sheet, Cell( m_sheet, col, row ) );
+                formula.setExpression( expression );
+                if ( formula.isValid() )
+                {
+                    const Value result = formula.eval();
+                    if ( result.columns() > 1 || result.rows() > 1 )
+                    {
+                        *parsing = false;
+                        m_sheet->cellStorage()->setFormula( col, row, formula );
+                        return result;
+                    }
+                }
+            }
+        }
+        else
+        {
+            *parsing = false;
+            return Cell( m_sheet, range.topLeft() ).value().element( colidx, rowidx );
+        }
+    }
+    return m_data.element( colidx, rowidx );
+}
+
 
 SeriesManipulator::SeriesManipulator ()
 {
   setName (i18n ("Insert Series"));
-  
+
   m_type = Linear;
   m_last = -2;
 }
@@ -288,39 +306,11 @@ Value SeriesManipulator::newValue (Element *element, int col, int row,
   // store last value
   m_prev = val;
   m_last = which;
-  
+
   // return the computed value
   return val;
 }
 
-ArrayFormulaManipulator::ArrayFormulaManipulator ()
-{
-  setName (i18n ("Set Array Formula"));
-}
-
-ArrayFormulaManipulator::~ArrayFormulaManipulator ()
-{
-}
-
-Value ArrayFormulaManipulator::newValue (Element *element, int col, int row,
-                                 bool *parsing, Format::Type *)
-{
-  *parsing = true;
-  QRect range = element->rect();
-  int colidx = col - range.left();
-  int rowidx = row - range.top();
-
-  // fill in the cells ... top-left one gets the formula, the rest gets =INDEX
-  // TODO: also fill in information about cells being a part of a range for GUI
-  if (colidx || rowidx) {
-    return Value(cellRef + QString::number (rowidx+1) + ';' +
-        QString::number (colidx+1) + ')');
-  } else {
-    Cell cell = Cell( m_sheet, col, row);
-    cellRef = "=INDEX(" + cell.name() + ';';
-    return Value(m_text);
-  }
-}
 
 FillManipulator::FillManipulator ()
 {
@@ -336,35 +326,28 @@ FillManipulator::~FillManipulator ()
 Value FillManipulator::newValue (Element *element, int col, int row,
     bool *parse, Format::Type *fmtType)
 {
-  Q_UNUSED(fmtType)
-  QRect range = element->rect();
-  int colidx = col - range.left();
-  int rowidx = row - range.top();
-  int rows = element->rect().bottom() - element->rect().top() + 1;
-  int cols = element->rect().right() - element->rect().left() + 1;
-  switch (m_dir) {
-    case Up: rowidx = rows - 1; break;
-    case Down: rowidx = 0; break;
-    case Left: colidx = cols - 1; break;
-    case Right: colidx = 0; break;
-  };
-  return stored (colidx, rowidx, parse);
+    Q_UNUSED(parse);
+    Q_UNUSED(fmtType);
+    switch ( m_dir )
+    {
+        case Up:    row = element->rect().bottom(); break;
+        case Down:  row = element->rect().top();    break;
+        case Left:  col = element->rect().right();  break;
+        case Right: col = element->rect().left();   break;
+    };
+    return Cell( m_sheet, col, row ).value();
 }
 
 Style FillManipulator::newFormat (Element *element, int col, int row)
 {
-  QRect range = element->rect();
-  int colidx = col - range.left();
-  int rowidx = row - range.top();
-  int rows = element->rect().bottom() - element->rect().top() + 1;
-  int cols = element->rect().right() - element->rect().left() + 1;
-  switch (m_dir) {
-    case Up: rowidx = rows - 1; break;
-    case Down: rowidx = 0; break;
-    case Left: colidx = cols - 1; break;
-    case Right: colidx = 0; break;
-  };
-  return formats[colidx][rowidx];
+    switch ( m_dir )
+    {
+        case Up:    row = element->rect().bottom(); break;
+        case Down:  row = element->rect().top();    break;
+        case Left:  col = element->rect().right();  break;
+        case Right: col = element->rect().left();   break;
+    };
+    return Cell( m_sheet, col, row ).style();
 }
 
 CaseManipulator::CaseManipulator ()

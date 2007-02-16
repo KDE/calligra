@@ -29,7 +29,9 @@
 
 using namespace KSpread;
 
-SortManipulator::SortManipulator ()
+SortManipulator::SortManipulator()
+    : AbstractDFManipulator()
+    , m_cellStorage( 0 )
 {
   m_changeformat = false;
   m_rows = true;
@@ -47,17 +49,52 @@ SortManipulator::~SortManipulator ()
 bool SortManipulator::process (Element* element)
 {
   // process one element - rectangular range
-  
+
   // here we perform the actual sorting, remember the new ordering and
   // let AbstractDFManipulator::process do the rest of the work
   // the new ordering is used in newValue and newFormat to return proper
   // values
-  
+
   // sort
   sort (element);
 
   // set values
   return AbstractDFManipulator::process (element);
+}
+
+bool SortManipulator::preProcessing()
+{
+    // Only on sorting we need to temporarily store the old data.
+    // On restoring (undo) we return immediately.
+    if ( m_reverse )
+        return AbstractDFManipulator::preProcessing();
+
+    m_cellStorage = new CellStorage( m_sheet->cellStorage()->subStorage( *this ) );
+
+    Region::Iterator endOfList(cells().end());
+    for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
+    {
+        QRect range = (*it)->rect();
+        for (int col = range.left(); col <= range.right(); ++col)
+            for (int row = range.top(); row <= range.bottom(); ++row)
+            {
+                Cell cell = Cell( m_sheet, col, row );
+                m_styles.insert( cell, cell.style() );
+            }
+    }
+
+    // to start undo recording
+    return AbstractDFManipulator::preProcessing();
+}
+
+bool SortManipulator::postProcessing()
+{
+    delete m_cellStorage;
+    m_cellStorage = 0;
+    m_styles.clear();
+
+    // to stop undo recording
+    return AbstractDFManipulator::postProcessing();
 }
 
 void SortManipulator::addSortBy (int v, bool asc)
@@ -84,7 +121,7 @@ Value SortManipulator::newValue (Element *element, int col, int row,
     colidx = sorted[colidx];
 
   // have to return stored value, to avoid earlier calls disrupting latter ones
-  return stored (colidx, rowidx, parse);
+  return m_cellStorage->value( colidx + range.left(), rowidx + range.top() );
 }
 
 Style SortManipulator::newFormat (Element *element, int col, int row)
@@ -98,9 +135,9 @@ Style SortManipulator::newFormat (Element *element, int col, int row)
     else
       colidx = sorted[colidx];
   }
- 
+
   // have to return stored format, to avoid earlier calls disrupting latter ones
-  return formats[colidx][rowidx];
+  return m_styles.value( Cell( m_sheet, colidx + range.left(), rowidx + range.top() ) );
 }
 
 void SortManipulator::sort (Element *element)
@@ -180,7 +217,7 @@ bool SortManipulator::shouldReorder (Element *element, int first, int second)
         // both are in the list, not the same
         return (pos1 > pos2);
     }
-    
+
     if (calc->naturalGreater (val1, val2, m_cs))
       // first one greater - must reorder if ascending, don't reorder if not
       return ascending;

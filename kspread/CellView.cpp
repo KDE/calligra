@@ -289,7 +289,10 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     // 2. Paint possible formula indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
             || cell.sheet()->print()->printFormulaIndicator() )
+    {
         paintFormulaIndicator( painter, cellRect, cell );
+        paintMatrixElementIndicator( painter, cellRect, cell );
+    }
 
     // 3. Paint possible indicator for clipped text.
     paintMoreTextIndicator( painter, cellRect );
@@ -899,6 +902,48 @@ void CellView::paintFormulaIndicator( QPainter& painter,
       polygon << QPointF( cellRect.x(), cellRect.bottom() - 6.0 );
       polygon << QPointF( cellRect.x(), cellRect.bottom() );
       polygon << QPointF( cellRect.x() + 6.0, cellRect.bottom() );
+    }
+
+    // ...and draw it.
+    painter.setBrush( QBrush( penColor ) );
+    painter.setPen( Qt::NoPen );
+    painter.drawPolygon( polygon );
+  }
+}
+
+
+// Paint a small rectangle if this cell is an element of a matrix.
+//
+void CellView::paintMatrixElementIndicator( QPainter& painter,
+                                            const QRectF &cellRect,
+                                            const Cell& cell )
+{
+  if ( cell.isLocked() &&
+       cell.sheet()->getShowFormulaIndicator() &&
+       cellRect.width()  > 10.0 &&
+       cellRect.height() > 10.0 )
+  {
+    QColor penColor = Qt::blue;
+    // If background has high blue part, switch to red.
+    if ( qRed( d->style.backgroundColor().rgb() ) < 80 &&
+         qGreen( d->style.backgroundColor().rgb() ) < 80 &&
+         qBlue( d->style.backgroundColor().rgb() ) > 127 )
+    {
+      penColor = Qt::red;
+    }
+
+    // Get the triangle...
+    QPolygonF polygon( 3 );
+    polygon.clear();
+    if ( d->layoutDirection == Sheet::RightToLeft ) {
+      polygon << QPointF( cellRect.right() - 6.0, cellRect.top() );
+      polygon << QPointF( cellRect.right(), cellRect.top() );
+      polygon << QPointF( cellRect.right(), cellRect.top() + 6.0 );
+    }
+    else {
+      polygon << QPointF( cellRect.x(), cellRect.top() + 6.0 );
+      polygon << QPointF( cellRect.x(), cellRect.top() );
+      polygon << QPointF( cellRect.x() + 6.0, cellRect.top() );
     }
 
     // ...and draw it.

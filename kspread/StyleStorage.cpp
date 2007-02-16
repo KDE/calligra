@@ -414,6 +414,9 @@ void StyleStorage::invalidateCache( const QRect& rect )
 
 Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
 {
+    if ( subStyles.isEmpty() )
+        return *styleManager()->defaultStyle();
+
     Style style;
     for ( int i = 0; i < subStyles.count(); ++i )
     {

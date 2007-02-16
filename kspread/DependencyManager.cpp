@@ -20,7 +20,6 @@
 
 #include <QHash>
 #include <QLinkedList>
-#include <QMap>
 
 #include <KoRTree.h>
 
@@ -117,13 +116,13 @@ public:
 
     const Map* map;
     // stores providing regions ordered by their consuming cell locations
-    QMap<Region::Point, Region> providers;
+    QHash<Cell, Region> providers;
     // stores consuming cell locations ordered by their providing regions
     class PointTree :public KoRTree<Region::Point>
     { public: PointTree() : KoRTree<Region::Point>(8,4) {} };
     QHash<Sheet*, PointTree*> consumers; // FIXME Stefan: Why is a QHash<Sheet*, PointTree> crashing?
     // list of cells referencing a given named area
-    QMap<QString, QMap<Region::Point, bool> > areaDeps;
+    QHash<QString, QHash<Cell, bool> > areaDeps;
     /*
      * Stores cells with its reference depth.
      * Depth means the maximum depth of all cells this cell depends on plus one,
@@ -146,10 +145,10 @@ public:
 // gdb or from debug output to check that everything is set up ok.
 void DependencyManager::Private::dump() const
 {
-    QMap<Region::Point, Region>::ConstIterator mend(providers.end());
-    for ( QMap<Region::Point, Region>::ConstIterator mit(providers.begin()); mit != mend; ++mit )
+    QHash<Cell, Region>::ConstIterator mend(providers.end());
+    for ( QHash<Cell, Region>::ConstIterator mit(providers.begin()); mit != mend; ++mit )
     {
-        Region::Point p = mit.key();
+        Cell cell = mit.key();
 
         QStringList debugStr;
         Region::ConstIterator rend((*mit).constEnd());
@@ -158,7 +157,7 @@ void DependencyManager::Private::dump() const
             debugStr << (*rit)->name();
         }
 
-        kDebug(36002) << p.name() << " consumes values of: " << debugStr.join(", ") << endl;
+        kDebug(36002) << cell.name() << " consumes values of: " << debugStr.join(", ") << endl;
     }
 
     foreach (Sheet* sheet, consumers.keys())
@@ -400,10 +399,10 @@ void DependencyManager::Private::areaModified (const QString &name)
     if (!areaDeps.contains (name))
         return;
 
-    QMap<Region::Point, bool>::iterator it;
+    QHash<Cell, bool>::iterator it;
     for (it = areaDeps[name].begin(); it != areaDeps[name].end(); ++it)
     {
-        Cell cell( it.key().sheet(), it.key().pos() );
+        Cell cell = it.key();
         // this forces the cell to regenerate everything - new range dependencies
         // and so on
         cell.setValue (cell.value ());
@@ -419,7 +418,7 @@ void DependencyManager::Private::addDependencies(const Cell& cell, const Region&
     point.setSheet(cell.sheet());
 
     // empty region will be created automatically, if necessary
-    providers[point].add(region);
+    providers[cell].add(region);
 
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
@@ -438,11 +437,11 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     point.setSheet(cell.sheet());
 
     // look if the cell has any providers
-    if (!providers.contains (point))
+    if ( !providers.contains( cell ) )
         return;  //it doesn't - nothing more to do
 
     // first this cell is no longer a provider for all providers
-    Region region = providers[point];
+    Region region = providers[cell];
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
     {
@@ -456,20 +455,18 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     }
 
     // remove information about named area dependencies
-    QMap<QString, QMap<Region::Point, bool> >::iterator itr;
+    QHash<QString, QHash<Cell, bool> >::iterator itr;
     for (itr = areaDeps.begin(); itr != areaDeps.end(); ++itr) {
-        if (itr.value().contains (point))
-            itr.value().remove (point);
+        if ( itr.value().contains( cell ) )
+            itr.value().remove( cell );
     }
 
     // clear the circular dependency flags
-//   if ( cell.value() == Value::errorCIRCLE() )
-    {
-        removeCircularDependencyFlags(providers.value(point));
-    }
+    removeCircularDependencyFlags( providers.value( cell ) );
+    removeCircularDependencyFlags( consumingRegion( cell ) );
 
     // finally, remove the entry about this cell
-    providers.remove(point);
+    providers.remove( cell );
 }
 
 void DependencyManager::Private::generateDependencies(const Cell& cell, const Formula& formula)
@@ -516,12 +513,7 @@ void DependencyManager::Private::generateDepths(const Region& region)
                 if ( processedCells.contains( cell ) || cell.value() == Value::errorCIRCLE() )
                 {
                     kDebug(36002) << "Circular dependency at " << cell.fullName() << endl;
-                    // don't set anything if the cell already has all these things set
-                    // this prevents endless loop for inter-sheet curcular dependencies,
-                    // where the usual mechanisms fail doe to having multiple dependency
-                    // managers ...
-                    if ( cell.value() != Value::errorCIRCLE() )
-                        cell.setValue( Value::errorCIRCLE() );
+                    cell.setValue( Value::errorCIRCLE() );
                     depths.insert(cell, 0);
                     // clear the compute reference depth flag
                     processedCells.remove( cell );
@@ -556,12 +548,7 @@ int DependencyManager::Private::computeDepth(Cell cell) const
     if ( processedCells.contains( cell ) || cell.value() == Value::errorCIRCLE() )
     {
         kDebug(36002) << "Circular dependency at " << cell.fullName() << endl;
-        // don't set anything if the cell already has all these things set
-        // this prevents endless loop for inter-sheet curcular dependencies,
-        // where the usual mechanisms fail doe to having multiple dependency
-        // managers ...
-        if ( cell.value() != Value::errorCIRCLE() )
-            cell.setValue( Value::errorCIRCLE() );
+        cell.setValue( Value::errorCIRCLE() );
         //clear the compute reference depth flag
         processedCells.remove( cell );
         return 0;
@@ -572,9 +559,7 @@ int DependencyManager::Private::computeDepth(Cell cell) const
 
     int depth = 0;
 
-    Region::Point point(cell.column(), cell.row());
-    point.setSheet(cell.sheet());
-    const Region region = providers.value(point);
+    const Region region = providers.value( cell );
 
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
@@ -587,9 +572,8 @@ int DependencyManager::Private::computeDepth(Cell cell) const
         {
             for (int row = range.top(); row <= bottom; ++row)
             {
-                Region::Point referencedPoint(col, row);
-                referencedPoint.setSheet(sheet);
-                if (!providers.contains(referencedPoint))
+                Cell referencedCell = Cell( sheet, col, row );
+                if ( !providers.contains( referencedCell ) )
                 {
                     // no further references
                     // depth is one at least
@@ -597,7 +581,6 @@ int DependencyManager::Private::computeDepth(Cell cell) const
                     continue;
                 }
 
-                Cell referencedCell = Cell( sheet,col, row);
                 if (depths.contains(referencedCell))
                 {
                     // the referenced cell depth was already computed
@@ -671,9 +654,8 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
                 if ( cell.value() == Value::errorCIRCLE() )
                     cell.setValue( Value::empty() );
 
-                Region::Point point(col, row);
-                point.setSheet(cell.sheet());
-                removeCircularDependencyFlags(providers.value(point));
+                removeCircularDependencyFlags( providers.value( cell ) );
+                removeCircularDependencyFlags( consumingRegion( cell ) );
 
                 processedCells.remove( cell );
             }

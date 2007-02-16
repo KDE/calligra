@@ -17,24 +17,24 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KSPREAD_MANIPULATOR_SORT
 #define KSPREAD_MANIPULATOR_SORT
 
-
-
+#include "CellStorage.h"
 #include "DataManipulators.h"
 
-namespace KSpread {
+namespace KSpread
+{
+class CellStorage;
 
-
-/** SortManipulator - sorts the range that it gets, using various criteria */
-
+/**
+ * Sorts the range that it gets, using various criteria.
+ */
 class KSPREAD_EXPORT SortManipulator : public AbstractDFManipulator {
   public:
     SortManipulator ();
     virtual ~SortManipulator ();
-    
+
     virtual bool process (Element* element);
 
     /** true if rows are to be sorted, false if columns are */
@@ -54,8 +54,10 @@ class KSPREAD_EXPORT SortManipulator : public AbstractDFManipulator {
     in which they're added. */
     void addSortBy (int v, bool asc);
     void clearSortOrder ();
-  
+
   protected:
+    virtual bool preProcessing();
+    virtual bool postProcessing();
     virtual Value newValue (Element *element, int col, int row,
         bool *parse, Format::Type *fmtType);
     virtual Style newFormat (Element *element, int col, int row);
@@ -68,9 +70,12 @@ class KSPREAD_EXPORT SortManipulator : public AbstractDFManipulator {
     QStringList m_customlist;
     QList<int> m_sortby;
     QList<bool> m_sortorder;
-    
+
     /** sorted order - which row/column will move to where */
     QMap<int, int> sorted;
+
+    CellStorage* m_cellStorage; // temporary
+    QHash<Cell, Style> m_styles; // temporary
 };
 
 } // namespace KSpread

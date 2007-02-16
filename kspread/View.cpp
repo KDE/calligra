@@ -6612,27 +6612,22 @@ void View::slotRename()
   }
 }
 
-void View::setText (const QString & _text, bool array)
+void View::setText( const QString& text, bool expandMatrix )
 {
-  if ( d->activeSheet == 0 )
-    return;
+    DataManipulator* manipulator = new DataManipulator();
+    manipulator->setSheet( activeSheet() );
+    manipulator->setValue( Value( text ) );
+    manipulator->setParsing( true );
+    manipulator->setExpandMatrix( expandMatrix );
+    manipulator->add( *selection() );
+    manipulator->execute();
 
-  if (array) {
-    // array version
-    d->activeSheet->setArrayFormula (d->selection, _text);
-  }
-  else
-  {
-    // non-array version
-    int x = d->canvas->markerColumn();
-    int y = d->canvas->markerRow();
+    if ( expandMatrix && selection()->isSingular() )
+        selection()->initialize( *manipulator );
 
-    d->activeSheet->setText( y, x, _text );
-
-    Cell cell = Cell( d->activeSheet, x, y );
-    if ( cell.value().isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell.isFormula() )
-      doc()->addStringCompletion( _text );
-  }
+    Cell cell = Cell( activeSheet(), selection()->marker() );
+    if ( cell.value().isString() && !text.isEmpty() && !text.at(0).isDigit() && !cell.isFormula() )
+        doc()->addStringCompletion( text );
 }
 
 //------------------------------------------------
