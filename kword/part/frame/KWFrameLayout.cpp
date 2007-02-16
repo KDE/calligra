@@ -199,7 +199,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
 }
 
 void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
-//kDebug() << "KWFrameLayout::layoutFramesOnPage" << endl;
+kDebug() << "KWFrameLayout::layoutFramesOnPage" << endl;
 /* assumes all frames are there and will do layouting of all the frames
     - headers/footers/main FS are positioned
     - normal frames are clipped to page */
@@ -323,18 +323,31 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
     // actually move / size the frames.
     if(main[0]) {
         const double columnWidth = textWidth / columns;
+        QPointF *points = new QPointF[columns];
+        for (int i=columns-1; i >= 0; i--)
+            points[i] = QPointF(left + layout.ptLeft + columnWidth * i, resultingPositions[3]);
+        for (int i=0; i < columns; i++) {
+            for(int f=0; f < columns; f++) {
+                if(f==i) continue;
+                if(qAbs(main[f]->shape()->position().x() - points[i].x()) < 10.0) {
+                    qSwap(main[f], main[i]);
+                    break;
+                }
+            }
+        }
+
         bool first=true;
         for (int i=columns-1; i >= 0; i--) {
             main[i]->setFrameBehavior(KWord::AutoCreateNewFrameBehavior);
             main[i]->setNewFrameBehavior(KWord::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
-            shape->setPosition(
-                    QPointF(left + layout.ptLeft + columnWidth * i, resultingPositions[3]));
+            shape->setPosition(points[i]);
             shape->resize( QSizeF(columnWidth -
                         (first?0:m_pageSettings->columns().ptColumnSpacing),
                         resultingPositions[4] - resultingPositions[3]));
             first = false;
         }
+        delete[] points;
     }
 #ifdef __GNUC__
 #warning can never reach that code as footnote is a constant 0
