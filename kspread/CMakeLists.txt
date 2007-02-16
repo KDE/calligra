@@ -1,5 +1,8 @@
 project(kspread)
 
+find_package(Eigen REQUIRED)
+macro_log_feature(EIGEN_FOUND "Eigen" "Eigen is needed by KSpread" "http://eigen.tuxfamily.org" TRUE "1.0.1")
+
 add_subdirectory( flake )
 add_subdirectory( dialogs )
 add_subdirectory( tests )

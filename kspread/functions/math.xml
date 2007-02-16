@@ -1176,6 +1176,53 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>MINVERSE</Name>
+      <Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Matrix</Comment>
+        <Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+        <Text>Calculates the inverse of the matrix.</Text>
+        <Text>The matrix multiplied with its inverse results in the unity matrix of the same dimension.</Text>
+        <Text>Invertible matrices have a non-zero determinant.</Text>
+        <Syntax>MINVERSE(matrix)</Syntax>
+        <Example>MINVERSE(A1:C3)</Example>
+        <Related>MDETERM</Related>
+        <Related>MUNIT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>MUNIT</Name>
+      <Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Dimension</Comment>
+        <Type>Integer</Type>
+      </Parameter>
+      <Help>
+        <Text>Creates the unity matrix of the given dimension.</Text>
+        <Syntax>MUNIT(dimension)</Syntax>
+        <Example>MUNIT(3) creates a 3x3 unity matrix</Example>
+        <Related>MINVERSE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TRANSPOSE</Name>
+      <Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Matrix</Comment>
+        <Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+        <Text>Returns the transpose of a matrix, i.e. rows and columns of the matrix are exchanged.</Text>
+        <Syntax>TRANSPOSE(matrix)</Syntax>
+        <Example>TRANSPOSE(A1:C3)</Example>
+      </Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>

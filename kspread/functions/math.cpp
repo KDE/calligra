@@ -34,6 +34,9 @@
 // needed for RANDBINOM and so
 #include <math.h>
 
+// needed by MDETERM and MINVERSE
+#include <eigen/matrix.h>
+
 using namespace KSpread;
 
 // RANDBINOM and RANDNEGBINOM won't support arbitrary precision
@@ -69,6 +72,7 @@ Value func_maxa (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mdeterm (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_min (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mina (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_minverse( valVector args, ValueCalc* calc, FuncExtra* );
 Value func_mmult (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mod (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mround (valVector args, ValueCalc *calc, FuncExtra *);
@@ -278,6 +282,10 @@ void RegisterMathFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
+  f = new Function( "MINVERSE",         func_minverse );
+  f->setParamCount( 1 );
+  f->setAcceptArray();
+  repo->add( f );
   f = new Function ("MMULT",          func_mmult);
   f->setParamCount (2);
   f->setAcceptArray ();
@@ -1009,49 +1017,60 @@ Value func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
   return result;
 }
 
-Value determinant (ValueCalc *calc, Value matrix)
+static Eigen::MatrixX<double> convert( const Value& matrix, ValueCalc *calc )
 {
-  // this is a --- SLOOOW --- recursive function
-  // using this for something bigger than 10x10 or so = suicide :P
-  // but I'm too lazy to adjust gnumeric's code - remains as a TODO then
-  // as a note, gnumeric uses LUP decomposition to compute this
-
-  // take first row, generate smaller matrices, recursion, multiply
-  Value res = Value(0.0);
-  int n = matrix.columns();
-  if (n == 1) return matrix.element (0, 0);
-  if (n == 2) return calc->sub (
-      calc->mul (matrix.element (1,1), matrix.element (0,0)),
-      calc->mul (matrix.element (1,0), matrix.element (0,1)));
-
-  // n >= 3
-  for (int i = 0; i < n; ++i) {
-    Value smaller( Value::Array );
-    int col = 0;
-    for (int c = 0; c < n; ++c)
-      if (c != i) {
-        // copy column c to column col in new matrix
-        for (int r = 1; r < n; r++)
-          smaller.setElement (col, r-1, matrix.element (c, r));
-        col++;
-      }
-    Value minor = determinant (calc, smaller);
-    if (i % 2 == 1) minor = calc->mul (minor, -1);
-    res = calc->add (res, calc->mul (minor, matrix.element (i, 0)));
-  }
-  return res;
+    const int dim = matrix.rows();
+    Eigen::MatrixX<double> eMatrix( dim );
+    for ( int row = 0; row < dim; ++row )
+    {
+        for ( int col = 0; col < dim; ++col )
+        {
+            eMatrix( row, col ) = calc->conv()->asFloat( matrix.element( col, row ) ).asFloat();
+        }
+    }
+    return eMatrix;
 }
 
-// Function: mdeterm
-Value func_mdeterm (valVector args, ValueCalc *calc, FuncExtra *)
+static Value convert( const Eigen::MatrixX<double>& eMatrix )
 {
-  Value m = args[0];
-  unsigned r = m.rows ();
-  unsigned c = m.columns ();
-  if (r != c)   // must be a square matrix
-    return Value::errorVALUE();
+    const int dim = eMatrix.size();
+    Value matrix( Value::Array );
+    for ( int row = 0; row < dim; ++row )
+    {
+        for ( int col = 0; col < dim; ++col )
+        {
+            matrix.setElement( col, row, Value( eMatrix(row,col) ) );
+        }
+    }
+    return matrix;
+}
 
-  return determinant (calc, args[0]);
+// Function: MDETERM
+Value func_mdeterm( valVector args, ValueCalc* calc, FuncExtra* )
+{
+    Value matrix = args[0];
+    if ( matrix.columns() != matrix.rows() )
+        return Value::errorVALUE();
+
+    const Eigen::MatrixX<double> eMatrix = convert( matrix, calc );
+
+    return Value( eMatrix.determinant() );
+}
+
+// Function: MINVERSE
+Value func_minverse( valVector args, ValueCalc* calc, FuncExtra* )
+{
+    Value matrix = args[0];
+    if ( matrix.columns() != matrix.rows() )
+        return Value::errorVALUE();
+
+    const Eigen::MatrixX<double> eMatrix = convert( matrix, calc );
+
+    // not invertable?
+    if ( eMatrix.determinant() == 0.0 )
+        return Value::errorDIV0();
+
+    return convert( eMatrix.inverse() );
 }
 
 // Function: mmult
@@ -1178,7 +1197,7 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
 }
 
 // Function: TRANSPOSE
-Value func_transpose (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_transpose (valVector args, ValueCalc *, FuncExtra *)
 {
     Value matrix = args[0];
     const int cols = matrix.columns();
