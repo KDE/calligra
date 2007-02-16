@@ -1,19 +1,19 @@
 <ui version="4.0" >
- <class>Form</class>
- <widget class="QWidget" name="Form" >
+ <class>PertResult</class>
+ <widget class="QWidget" name="PertResult" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>802</width>
-    <height>694</height>
+    <width>850</width>
+    <height>724</height>
    </rect>
   </property>
   <property name="contextMenuPolicy" >
    <enum>Qt::NoContextMenu</enum>
   </property>
   <property name="windowTitle" >
-   <string>Form</string>
+   <string>PertResult</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -84,66 +84,6 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1" >
-    <widget class="QGroupBox" name="taskGroupBoxDetail" >
-     <property name="title" >
-      <string>Task details </string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QTableWidget" name="tableTaskResult" >
-        <property name="contextMenuPolicy" >
-         <enum>Qt::CustomContextMenu</enum>
-        </property>
-        <property name="layoutDirection" >
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <column>
-         <property name="text" >
-          <string>Task</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Early start date</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Early finish date</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Late start date</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Late finish date</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Slack</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Free Margin</string>
-         </property>
-        </column>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="0" column="1" >
     <widget class="QGroupBox" name="projectGroupBox" >
      <property name="title" >
@@ -197,9 +137,9 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="QLabel" name="labelProjectSlack" >
+           <widget class="QLabel" name="labelProjectFloat" >
             <property name="text" >
-             <string>Project Slack :</string>
+             <string>Project Float :</string>
             </property>
            </widget>
           </item>
@@ -213,6 +153,68 @@
          </layout>
         </item>
        </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QGroupBox" name="taskGroupBoxDetail" >
+     <property name="title" >
+      <string>Task details </string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QTreeWidget" name="treeWidgetTaskResult" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>7</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <column>
+         <property name="text" >
+          <string>Task</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Early start date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Early finish date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Late finish date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Late finish date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Float</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Free Margin</string>
+         </property>
+        </column>
+       </widget>
       </item>
      </layout>
     </widget>

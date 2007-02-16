@@ -55,6 +55,7 @@ class ViewListWidget;
 class AccountsView;
 class GanttView;
 class PertEditor;
+class PertResult;
 class ResourceView;
 class AccountsEditor;
 class TaskEditor;
@@ -311,6 +312,7 @@ private:
     ScheduleEditor *m_scheduleeditor;
     ResourceAssignmentView *m_resourceAssignmentView;
     PertEditor *m_perteditor;
+    PertResult *m_pertresult;
     //    ReportView *m_reportview;
     //    Q3PtrList<QString> m_reportTemplateFiles;
 
@@ -328,6 +330,7 @@ private:
     bool m_updateAccountsview;
     bool m_updateResourceAssignmentView;
     bool m_updatePertEditor;
+    bool m_updatePertResult;
 
     KStatusBarLabel *m_estlabel;
     QProgressBar *m_progress;

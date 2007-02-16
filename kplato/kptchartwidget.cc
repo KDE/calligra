@@ -62,8 +62,6 @@ painter.drawText(2, 10,"Budget");
 //painter.drawText(maximumWidth()-15, maximumHeight()-20,"Time");
 painter.drawText(maximumWidth()-70,maximumHeight() ,"Time");
 
-
-
 painter.drawLine(QLine(10,15,10,maximumHeight()-15)); //Y
 
 int MarginY =(maximumHeight()-30)/10;

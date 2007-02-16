@@ -85,6 +85,7 @@
 //#include "kptreportview.h"
 #include "kpttaskeditor.h"
 #include "kptperteditor.h"
+#include "kptpertresult.h"
 #include "kptdatetime.h"
 #include "kptcommand.h"
 #include "kptrelation.h"
@@ -561,6 +562,12 @@ View::View( Part* part, QWidget* parent )
     m_updateResourceAssignmentView = true;
     m_resourceAssignmentView->draw( getProject() );
 
+    m_pertresult = new PertResult( getPart(), m_tab );
+    m_tab->addWidget( m_pertresult );
+    m_pertresult->draw( getProject() );
+    connect( m_pertresult, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    m_updatePertResult = true;
+
     //m_reportview = new ReportView(this, m_tab);
     //m_tab->addWidget(m_reportview);
 
@@ -577,6 +584,7 @@ View::View( Part* part, QWidget* parent )
     m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, getPart(), "gantt_chart" );
     m_viewlist->addView( cat, i18n( "Resources" ), m_resourceview, getPart(), "resources" );
     m_viewlist->addView( cat, i18n( "Accounts" ), m_accountsview, getPart(), "accounts" );
+    m_viewlist->addView( cat, i18n( "Pert Result" ), m_pertresult , getPart(), "pert result" );
     m_viewlist->addView( cat, i18n( "Tasks by resources" ), m_resourceAssignmentView , getPart(), "resource_assignment" );
 
     connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );

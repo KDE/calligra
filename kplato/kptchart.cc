@@ -128,6 +128,7 @@ namespace KPlato
 			{
 				//sinon on ajoute le cout a la date en cours
 				cost+=currentNode->actualCost(day);
+				break;
 			}
 		}
 		return (cost);

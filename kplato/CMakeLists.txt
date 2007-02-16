@@ -17,6 +17,7 @@ set(libkplatopart_SRCS
     kptitemmodelbase.cc
     kptaccountseditor.cc
     kptperteditor.cc
+    kptpertresult.cc
     kpttaskeditor.cc
     kptresourceeditor.cc
     kptscheduleeditor.cc
@@ -104,6 +105,7 @@ kde4_add_ui_files(libkplatopart_SRCS
     kpttaskprogresspanelbase.ui
     kptconfigtaskpanelbase.ui
     kptperteditor.ui
+    kptpertresult.ui
     kptchartpanelbase.ui 
 )
 
