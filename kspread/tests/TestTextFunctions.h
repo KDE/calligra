@@ -35,6 +35,12 @@ class TestTextFunctions: public QObject
 private slots:
     void testCHAR();
     void testCLEAN();
+    void testCODE();
+    void testCONCATENATE();
+    void testEXACT();
+    void testFIND();
+    void testFIXED();
+    void testLEFT();
 private:
     Value evaluate(const QString&, Value& ex);
 };

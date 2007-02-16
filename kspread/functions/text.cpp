@@ -296,11 +296,22 @@ Value func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
   // uses double, hence won't support big precision
 
   int decimals = 2;
+  bool decimalsIsNegative = false;
   bool no_commas = false;
 
   double number = calc->conv()->asFloat (args[0]).asFloat();
   if (args.count() > 1)
-    decimals = calc->conv()->asInteger (args[1]).asInteger();
+  {
+    if ( args[1].less( Value( 0 ) ) )
+    {
+      decimalsIsNegative = true;
+      decimals = -1 * ( ( calc->roundUp( args[1]) ).asInteger() );
+    }
+    else
+    {
+      decimals = calc->conv()->asInteger (args[1]).asInteger();
+    }
+  }
   if (args.count() == 3)
     no_commas = calc->conv()->asBoolean (args[2]).asBoolean();
 
@@ -311,9 +322,8 @@ Value func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
   // * if decimals < 0, number is rounded
   // * if no_commas is true, thousand separators shouldn't show up
 
-  if( decimals < 0 )
+  if( decimalsIsNegative )
   {
-    decimals = -decimals;
     number = floor( number/pow(10.0,decimals)+0.5 ) * pow(10.0,decimals);
     decimals = 0;
   }

@@ -62,6 +62,76 @@ void TestTextFunctions::testCLEAN()
     CHECK_EVAL( "CLEAN(\"Hi there\")", Value( "Hi there" ) );
 }
 
+void TestTextFunctions::testCODE()
+{
+    CHECK_EVAL( "CODE(\"A\")", Value(65) );
+    CHECK_EVAL( "CODE(\"0\")>0", Value( true ) );
+    CHECK_EVAL( "CODE(\"Text\")=CODE(\"T\")", Value( true ) );
+}
+
+void TestTextFunctions::testCONCATENATE()
+{
+    CHECK_EVAL( "CONCATENATE(\"Hi \"; \"there\")", Value( "Hi there" ) );
+    CHECK_EVAL( "CONCATENATE(\"A\"; \"B\"; \"C\")", Value( "ABC" ) );
+    CHECK_EVAL( "CONCATENATE(2;3)", Value( "23" ) );
+    CHECK_EVAL( "CONCATENATE(23)", Value( "23" ) );
+}
+
+void TestTextFunctions::testEXACT()
+{
+    CHECK_EVAL( "EXACT(\"A\";\"A\")",  Value( true ) );
+    CHECK_EVAL( "EXACT(\"A\";\"a\")",  Value( false ) );
+    CHECK_EVAL( "EXACT(1;1)",  Value( true ) );
+    CHECK_EVAL( "EXACT((1/3)*3;1)",  Value( true ) );
+    CHECK_EVAL( "EXACT(TRUE();TRUE())",  Value( true ) );
+    CHECK_EVAL( "EXACT(\"1\";2)",  Value( false ) );
+    CHECK_EVAL( "EXACT(\"h\";1)",  Value( false ) );
+    CHECK_EVAL( "EXACT(\"1\";1)",  Value( true ) );
+    CHECK_EVAL( "EXACT(\" 1\";1)",  Value( false ) );
+}
+
+void TestTextFunctions::testFIND()
+{
+    CHECK_EVAL( "FIND(\"b\";\"abcabc\")", Value( 2 ) );
+    CHECK_EVAL( "FIND(\"b\";\"abcabcabc\"; 3)", Value( 5 ) );
+    CHECK_EVAL( "FIND(\"b\";\"ABC\";1)", Value::errorNA() );
+    CHECK_EVAL( "FIND(\"b\";\"bbbb\")", Value( 1 ) );
+    CHECK_EVAL( "FIND(\"b\";\"bbbb\";2)", Value( 2 ) );
+    CHECK_EVAL( "FIND(\"b\";\"bbbb\";2.9)", Value( 2 ) );
+    CHECK_EVAL( "FIND(\"b\";\"bbbb\";0)", Value::errorVALUE() );
+    CHECK_EVAL( "FIND(\"b\";\"bbbb\";0.9)", Value::errorVALUE() );
+}
+
+void TestTextFunctions::testFIXED()
+{
+    CHECK_EVAL( "FIXED(12345;3)", Value( "12,345.000" ) );
+    CHECK_EVAL( "ISTEXT(FIXED(12345;3))", Value( true ) );
+    CHECK_EVAL( "FIXED(12345;3;FALSE())", Value( "12,345.000" ) );
+    CHECK_EVAL( "FIXED(12345;3.95;FALSE())", Value( "12,345.000" ) );
+    CHECK_EVAL( "FIXED(12345;4;TRUE())", Value( "12345.0000" ) );
+    CHECK_EVAL( "FIXED(123.45;1)", Value( "123.5" ) );
+    CHECK_EVAL( "FIXED(125.45; -1)", Value( "130" ) );
+    CHECK_EVAL( "FIXED(125.45; -1.1)", Value( "130" ) );
+    CHECK_EVAL( "FIXED(125.45; -1.9)", Value( "130" ) );
+    CHECK_EVAL( "FIXED(125.45; -2)", Value( "100" ) );
+    CHECK_EVAL( "FIXED(125.45; -2.87)", Value( "100" ) );
+    CHECK_EVAL( "FIXED(125.45; -3)", Value( "0" ) );
+    CHECK_EVAL( "FIXED(125.45; -4)", Value( "0" ) );
+    CHECK_EVAL( "FIXED(125.45; -5)", Value( "0" ) );
+}
+
+void TestTextFunctions::testLEFT()
+{
+    CHECK_EVAL( "LEFT(\"Hello\";2)", Value( "He" ) );
+    CHECK_EVAL( "LEFT(\"Hello\")", Value( "H" ) );
+    CHECK_EVAL( "LEFT(\"Hello\";20)", Value( "Hello" ) );
+    CHECK_EVAL( "LEFT(\"Hello\";0)", Value( "" ) );
+    CHECK_EVAL( "LEFT(\"\";4)", Value( "" ) );
+    CHECK_EVAL( "LEFT(\"xxx\";-0.1)", Value::errorVALUE() );
+    CHECK_EVAL( "LEFT(\"Hello\";2^15-1)", Value( "Hello" ) );
+    CHECK_EVAL( "LEFT(\"Hello\";2.9)", Value( "He" ) );
+}
+
 QTEST_KDEMAIN(TestTextFunctions, GUI)
 
 #include "TestTextFunctions.moc"
