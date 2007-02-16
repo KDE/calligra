@@ -173,20 +173,21 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     week->setValue(m_week);
     day->setRange(1.0, 24.0, 0.1, 1);
     day->setValue(m_day);
-    weekdayList->setHeaderLabel(i18n("Weekday"));
+    QStringList lst; lst << i18n("Weekday") << i18n("Hours");
+    weekdayList->setHeaderLabels( lst );
     weekdayList->setSortingEnabled(false);
     weekdayList->header()->setStretchLastSection(true);
     const KCalendarSystem * cs = KGlobal::locale()->calendar();
     Calendar *cal = m_std->calendar();
     if (cal) {
         WeekdayListItem *item = 0;
-        for (int i = 0; i < 7; ++i) {
+        for (int i = 1; i <= 7; ++i) {
             CalendarDay *day = cal->weekday(i);
             if (day == 0) {
                 continue;
             }
-            kDebug()<<k_funcinfo<<"Add day: "<<cs->weekDayName(i+1)<<endl;
-            item = new WeekdayListItem(cal, i, weekdayList, cs->weekDayName(i+1), item);
+            kDebug()<<k_funcinfo<<"Add day: "<<cs->weekDayName(i)<<endl;
+            item = new WeekdayListItem(cal, i, weekdayList, cs->weekDayName(i), item);
             weekdayList->addTopLevelItem(item);
         }
     }
@@ -198,7 +199,7 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
 
     connect(m_intervalEdit, SIGNAL(changed()), SLOT(slotIntervalChanged()));
     connect(bApply, SIGNAL(clicked()), SLOT(slotApplyClicked()));
-    connect(weekdayList, SIGNAL(selectionChanged()), SLOT(slotWeekdaySelected()));
+    connect(weekdayList, SIGNAL(itemSelectionChanged()), SLOT(slotWeekdaySelected()));
     connect(state, SIGNAL(activated(int)), SLOT(slotStateChanged(int)));
     
     if (weekdayList->topLevelItemCount() > 0) {
@@ -259,7 +260,7 @@ void StandardWorktimeDialogImpl::slotIntervalChanged() {
 }
 
 void StandardWorktimeDialogImpl::slotApplyClicked() {
-    //kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
+    kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
     int c = weekdayList->topLevelItemCount();
     for (int i=0; i < c; ++i) {
         QTreeWidgetItem *item = weekdayList->topLevelItem(i);
@@ -278,7 +279,7 @@ void StandardWorktimeDialogImpl::slotApplyClicked() {
 }
 
 void StandardWorktimeDialogImpl::slotWeekdaySelected() {
-    //kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
+    kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
     
     QList<QTreeWidgetItem *> lst = weekdayList->selectedItems();
     if (lst.count() == 0) {
