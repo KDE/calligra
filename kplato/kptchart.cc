@@ -21,7 +21,7 @@
 #include "kptchartpanel.h"
 
 #include <klocale.h>
-
+#include <cmath>
 #include <kdebug.h>
 
 
@@ -34,17 +34,16 @@ namespace KPlato
 	void Chart::reCalculateY(QVector<QPoint> *vect, int topMargin, int bottomMargin, int n_curve, float maximumHeight, int maxYPercent)
 	{
 			
-		float r_tmp; /* temporary result */
 		float inverse;
-
+		int tmp;
 		if(maximumHeight != sizeSave[n_curve][0])
 		{
 			QVector<QPoint>::iterator it= vect->begin();
 			while (it != vect->end())
 			{
 				inverse = maxYPercent - it->y(); /* A MODIFIER :D */
-				r_tmp=(maximumHeight - bottomMargin - topMargin)*inverse/100;
-				it->setY(r_tmp+topMargin);
+				tmp=(int) floor((maximumHeight - bottomMargin - topMargin)*inverse/100);
+				it->setY(tmp+topMargin);
 				it++;
 			}
 		}		
@@ -54,15 +53,15 @@ namespace KPlato
 	/* Calculate the new value of X-axis when the window had been re-sized */
 	void Chart::reCalculateX(QVector<QPoint> *vect, int leftMargin, int rightMargin, int n_curve, float maximumWidth)
 	{			
-		float r_tmp; /* temporary result */
+		int tmp; /* temporary result */
 
 		if(maximumWidth != sizeSave[n_curve][1])
 		{
 			QVector<QPoint>::iterator it= vect->begin();
 			while (it != vect->end())
 			{
-				r_tmp=(maximumWidth - rightMargin - leftMargin)*it->x()/100;
-				it->setX(r_tmp+leftMargin);
+				tmp=(int) floor((maximumWidth - rightMargin - leftMargin)*it->x()/100);
+				it->setX(tmp+leftMargin);
 				it++;
 			}
 		}		
@@ -88,13 +87,13 @@ namespace KPlato
 	/* Calculate the percentage of the cost and replace the result in the vector */
 	void Chart::CostToPercent(QVector<QPoint> * vect)
 	{
-		float c_tmp;
+		int tmp;
 		
 		QVector<QPoint>::iterator it= vect->begin();
 		while(it != vect->end())
 		{
-			c_tmp=it->y()*100/totalBudget;
-			it->setY(c_tmp);
+			tmp=(int) floor(it->y()*100/totalBudget);
+			it->setY(tmp);
 			it++;
 		}
 	}
@@ -102,13 +101,13 @@ namespace KPlato
 	/* Calculate the percentage of the time and replace the result in the vector */
 	void Chart::TimeToPercent(QVector<QPoint> * vect)
 	{
-		float t_tmp;
+		int tmp;
 		
 		QVector<QPoint>::iterator it= vect->begin();
 		while(it != vect->end())
 		{
-			t_tmp=it->x()*100/totalWeek;
-			it->setX(t_tmp);
+			tmp=(int) floor(it->x()*100/totalWeek);
+			it->setX(tmp);
 			it++;
 		}
 	}
@@ -119,7 +118,7 @@ namespace KPlato
 		float cost=0;
 		foreach(Node * currentNode, p.projectNode()->childNodeIterator()){
         		//Si le jour pour lequel on veux le budget est > a la date de fin de la tachz
-			if (day > ((QDate)currentNode->workEndTime()))
+			if (DateTime(day) > (currentNode->workEndTime())  )
 			{
 				//on ajoute le cout total de la tache
 				cost+=currentNode->actualCost();

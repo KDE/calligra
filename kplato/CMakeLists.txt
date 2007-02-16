@@ -83,6 +83,7 @@ set(libkplatopart_SRCS
     kptchartdialog.cc
     kptchartpanel.cc
     kptchartwidget.cc
+    kptchart.cc
 )
 kde4_add_ui_files(libkplatopart_SRCS
     kptdurationwidget.ui

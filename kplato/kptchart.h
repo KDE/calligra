@@ -24,9 +24,9 @@
 #include <klocale.h>
 
 #include <kdebug.h>
-
+#include <QDateTime>
 #include <QVector>
-
+#include "kptproject.h"
 
 namespace KPlato
 {

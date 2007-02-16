@@ -37,9 +37,6 @@ class KMacroCommand;
 namespace KPlato
 {
 
-class Part;
-class Project;
-
 class ChartPanelBase : public QWidget, public Ui::ChartPanelBase
 {
 
