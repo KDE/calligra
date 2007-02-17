@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 1999-2001,2003 David Faure <faure@kde.org>
@@ -566,10 +565,6 @@ private:
   class Private;
   Private * const d;
 };
-
-
-
-
 
 } // namespace KSpread
 

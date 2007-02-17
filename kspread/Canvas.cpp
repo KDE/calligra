@@ -1,8 +1,7 @@
 /* This file is part of the KDE project
-
+   Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2006 Robert Knight <robertknight@gmail.com>
    Copyright 2006 Inge Wallin <inge@lysator.liu.se>
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 1999-2004 David Faure <faure@kde.org>
@@ -4200,6 +4199,5 @@ void Canvas::showToolTip( const QPoint& p )
     }
 
 }
-
 
 #include "Canvas.moc"
