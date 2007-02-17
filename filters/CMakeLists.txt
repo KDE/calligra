@@ -16,11 +16,15 @@ set(liboofilter_SRCS
 add_subdirectory( generic_wrapper )
 add_subdirectory( libdialogfilter )
 add_subdirectory( liboofilter )
-add_subdirectory(kspread)
 add_subdirectory(kchart)
 add_subdirectory(kword)
 add_subdirectory(kpresenter)
 #add_subdirectory(kformula)
+
+if(SHOULD_BUILD_KSPREAD)
+    add_subdirectory(kspread)
+endif(SHOULD_BUILD_KSPREAD)
+
 if(SHOULD_BUILD_KARBON)
   #add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
