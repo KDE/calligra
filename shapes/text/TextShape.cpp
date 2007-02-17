@@ -41,7 +41,7 @@
 
 
 TextShape::TextShape()
-    : m_demoText(0)
+    : m_demoText(false)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
