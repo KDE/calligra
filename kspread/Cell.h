@@ -428,15 +428,6 @@ public:
     double height() const;
 
     /**
-     * \return a QRect for this cell (i.e., a 1x1 rect).
-     * \see zoomedCellRect
-     * \note does NOT take merged cells into account
-     * \todo replace by a position method
-     * \deprecated
-     */
-    KDE_DEPRECATED QRect cellRect() const;
-
-    /**
      * \return the position of this cell
      */
     QPoint cellPosition() const;
