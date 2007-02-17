@@ -29,6 +29,8 @@
 #include <KoShapeManager.h>
 #include <KoText.h>
 #include <KoSelection.h>
+#include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
 
 #include <QTextLayout>
 #include <QFont>
@@ -62,8 +64,14 @@ void TextShape::setDemoText(bool on) {
         for (int i=0; i < 10; i ++)
             cursor.insertText("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.\n");
     }
-    else if(m_demoText)
+    else if(m_demoText) {
         m_textShapeData->document()->clear();
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+        if(lay && lay->styleManager()) {
+            QTextBlock block = m_textShapeData->document()->begin();
+            lay->styleManager()->defaultParagraphStyle()->applyStyle(block);
+        }
+    }
     m_demoText = on;
 }
 

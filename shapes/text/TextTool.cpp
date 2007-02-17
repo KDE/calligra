@@ -362,6 +362,11 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             event->ignore();
             return;
         }
+        else if(event->text().at(0) == '\r') {
+            m_selectionHandler.nextParagraph();
+            updateActions();
+            editingPluginEvents();
+        }
         else {
             m_prevCursorPosition = m_caret.position();
             m_caret.insertText(event->text());
