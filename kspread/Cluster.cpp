@@ -29,6 +29,7 @@
 
 using namespace KSpread;
 
+#if 0
 /****************************************************
  *
  * Cluster
@@ -832,6 +833,7 @@ Cell* Cluster::getNextCellRight(int col, int row) const
   }
   return 0;
 }
+#endif
 
 /****************************************************
  *

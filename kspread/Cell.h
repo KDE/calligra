@@ -301,42 +301,10 @@ public:
     void setCellText( const QString& text );
 
     /**
-     * \return the previous cell in the cell cluster
-     * \see Cluster
-     */
-    Cell* previousCell() const;
-
-    /**
-     * \return the next cell in the cell cluster
-     * \see Cluster
-     */
-    Cell* nextCell() const;
-
-    /**
-     * Sets \p cell as the previous cell in the cell cluster.
-     * \see Cluster
-     */
-    void setPreviousCell( Cell* cell );
-
-    /**
-     * Sets \p cell as the next cell in the cell cluster.
-     * \see Cluster
-     */
-    void setNextCell( Cell* cell );
-
-    /**
      * Moves around the cell. It cares about obscured and obscuring cells and
      * forces, relayout, calculation and redrawing of the cell.
      */
     void move( int column, int row );
-
-    /**
-     * This method notifies the cell that the parent sheet is being deleted.
-     */
-    // Note:  This used to remove any links from this cell to other cells.  However, this caused a problem
-    // in other parts of the code which relied upon walking from one cell to the next using
-    // nextCell().
-    void sheetDies();
 
     /**
      * \ingroup NativeFormat

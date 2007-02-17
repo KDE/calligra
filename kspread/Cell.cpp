@@ -134,10 +134,6 @@ Cell::Cell( const Cell& other )
 
 Cell::~Cell()
 {
-//     if ( d->nextCell )
-//         d->nextCell.setPreviousCell( d->previousCell );
-//     if ( d->previousCell )
-//         d->previousCell->setNextCell( d->nextCell );
 }
 
 // Return the sheet that this cell belongs to.
@@ -443,26 +439,6 @@ void Cell::setCellValue (const Value &value, Format::Type fmtType, const QString
 
 // FIXME: Continue commenting and cleaning here (ingwa)
 
-
-Cell* Cell::previousCell() const
-{
-    return 0;//d->previousCell;
-}
-
-Cell* Cell::nextCell() const
-{
-    return 0;//d->nextCell;
-}
-
-void Cell::setPreviousCell( Cell* cell )
-{
-//     d->previousCell = cell;
-}
-
-void Cell::setNextCell( Cell* cell )
-{
-//     d->nextCell = cell;
-}
 
 void Cell::copyFormat( const Cell& cell )
 {
@@ -2527,12 +2503,6 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
     sheet()->setRegionPaintDirty( Region( cellPosition() ) );
 
     return tmp;
-}
-
-void Cell::sheetDies()
-{
-    //d->nextCell = 0;
-    //d->previousCell = 0;
 }
 
 Cell& Cell::operator=( const Cell& other )

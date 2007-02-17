@@ -100,13 +100,13 @@ add_test(kspread-TrigFunctions TestTrigFunctions)
 
 ########### next target ###############
 
-set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility
-
-kde4_automoc(${BenchmarkCluster_SRCS})
-
-kde4_add_executable(BenchmarkCluster RUN_UNINSTALLED ${BenchmarkCluster_SRCS})
-
-target_link_libraries(BenchmarkCluster kspreadcommon ${QT_QTTEST_LIBRARY})
+# set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility
+# 
+# kde4_automoc(${BenchmarkCluster_SRCS})
+# 
+# kde4_add_executable(BenchmarkCluster RUN_UNINSTALLED ${BenchmarkCluster_SRCS})
+# 
+# target_link_libraries(BenchmarkCluster kspreadcommon ${QT_QTTEST_LIBRARY})
 
 #add_test(kspread-BenchmarkCluster BenchmarkCluster)
 
