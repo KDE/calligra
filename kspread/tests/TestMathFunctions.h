@@ -42,6 +42,10 @@ private slots:
   void testGCD();
   void testLCM();
   void testLOG();
+  void testMDETERM();
+  void testMINVERSE();
+  void testMMULT();
+  void testMUNIT();
 
 private:
   Value evaluate(const QString&);

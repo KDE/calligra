@@ -237,6 +237,51 @@ void TestMathFunctions::testLOG()
   CHECK_EVAL( "LOG(NA();NA())", Value::errorNA() );
 }
 
+void TestMathFunctions::testMDETERM()
+{
+    CHECK_EVAL( "MDETERM({2;4|3;5})", -2 );
+    CHECK_EVAL( "MDETERM({2;4})", Value::errorVALUE() );
+    CHECK_EVAL( "MDETERM({2;4|3;6})", 0 );
+    CHECK_EVAL( "MDETERM(2)", 2 );
+}
+
+void TestMathFunctions::testMINVERSE()
+{
+    Value value( Value::Array );
+    value.setElement( 0, 0, Value( -2.5 ) );
+    value.setElement( 1, 0, Value(  2.0 ) );
+    value.setElement( 0, 1, Value(  1.5 ) );
+    value.setElement( 1, 1, Value( -1.0 ) );
+    QEXPECT_FAIL( "", "evaluation needs array support", Continue );
+    CHECK_EVAL( "MINVERSE({2;4|3;5})", value );
+    value.setElement( 0, 0, Value(  5.0 ) );
+    value.setElement( 1, 0, Value(  1.0 ) );
+    value.setElement( 2, 0, Value( -2.0 ) );
+    value.setElement( 0, 1, Value( -1.0 ) );
+    value.setElement( 1, 1, Value( -1.0 ) );
+    value.setElement( 2, 1, Value(  1.0 ) );
+    value.setElement( 0, 1, Value( -2.0 ) );
+    value.setElement( 1, 1, Value(  1.0 ) );
+    value.setElement( 2, 1, Value(  0.0 ) );
+    QEXPECT_FAIL( "", "evaluation needs array support", Continue );
+    CHECK_EVAL( "MINVERSE({1;2;1|2;4;3|3;7;4}", value );
+    CHECK_EVAL( "MINVERSE({2;4})", Value::errorVALUE() );
+    CHECK_EVAL( "MINVERSE({2;4|3;6})", Value::errorDIV0() );
+    QEXPECT_FAIL( "", "evaluation needs array support", Continue );
+    CHECK_EVAL( "MINVERSE(2)", 0.5 );
+}
+
+void TestMathFunctions::testMMULT()
+{
+    CHECK_EVAL( "MMULT({2;4|3;5};{2;4|3;5})", evaluate( "{16;28|21;37}" ) );
+}
+
+void TestMathFunctions::testMUNIT()
+{
+    CHECK_EVAL( "MUNIT(2)", evaluate( "{1;0|0;1}" ) );
+    CHECK_EVAL( "MUNIT(3)", evaluate( "{1;0;0|0;1;0|0;0;1}" ) );
+}
+
 QTEST_KDEMAIN(TestMathFunctions, GUI)
 
 #include "TestMathFunctions.moc"
