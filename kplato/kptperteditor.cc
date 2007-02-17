@@ -57,7 +57,8 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertEditor ----------------" << endl;
     widget.setupUi(this);
-    widget.assignList->setSelectedLabel(i18n("Required"));
+    widget.assignList->setSelectedLabel(i18n("Required Tasks :"));
+    widget.assignList->setAvailableLabel(i18n("Available Tasks :"));
     widget.assignList->setShowUpDownButtons(false);
     widget.assignList->layout()->setMargin(0);
 
@@ -68,32 +69,59 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
     draw( m_part->getProject() );
 
     connect( m_tasktree, SIGNAL( itemSelectionChanged() ), SLOT( dispAvailableTasks() ) );
-    //connect( m_assignList, SIGNAL( added( QListWidgetItem *) ) ,SLOT (showsTasksInGray()));
+    connect( m_assignList, SIGNAL(added(QListWidgetItem *)), this, SLOT(addTaskInRequiredList(QListWidgetItem * )) );
+    connect( m_assignList, SIGNAL(removed(QListWidgetItem *)), this, SLOT(removeTaskFromRequiredList(QListWidgetItem * )) );
 }
 
 void PertEditor::dispAvailableTasks(){
+    QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
+
     m_assignList->availableListWidget()->clear();
-    // TODO load the required task list for the selected task
-    //loadRequiredTasksList(m_tasktree->selectedItem());
+    m_assignList->selectedListWidget()->clear();
+
+    loadRequiredTasksList(itemToNode(selectedTaskName));
 
     foreach(Node * currentNode, m_part->getProject().projectNode()->childNodeIterator() ){
-        // Checks if the curent node is not a milestone 
+        // Checks if the curent node is not a milestone
         // and if it isn't the same as the selected task in the m_tasktree
-        if (currentNode->type()!=4
-        and currentNode->name()!=(m_tasktree->selectedItems().first()->text(0))){
+        if ( currentNode->type() != 4 and currentNode->name() != selectedTaskName
+               and (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty()){
             m_assignList->availableListWidget()->addItem(currentNode->name());
         }
     }
-    // TODO save the required task list for the task just unselected
 }
 
+Node * PertEditor::itemToNode(QString itemName){
+    Node * result;
+    foreach(Node * currentNode, m_part->getProject().projectNode()->childNodeIterator() ){
+        if (currentNode->name() == itemName) {
+            result=currentNode;
+        }
+    }
+    return result;
+}
 
+void PertEditor::addTaskInRequiredList(QListWidgetItem * currentItem){
+    // add the selected task to the RequiredTasksList 
+    QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
+
+    static_cast<Task *>(itemToNode(selectedTaskName))->addRequiredTask(itemToNode(currentItem->text()));
+
+}
+
+void PertEditor::removeTaskFromRequiredList(QListWidgetItem * currentItem){
+    // remove the selected task from the RequiredTasksList
+    QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
+
+    static_cast<Task *>(itemToNode(selectedTaskName))->remRequiredTask(itemToNode(currentItem->text()));
+
+}
 
 void PertEditor::loadRequiredTasksList(Node * taskNode){
     // Display the required task list into the rigth side of m_assignList
     m_assignList->selectedListWidget()->clear();
 
-    foreach(Node * currentNode, ((Task *)taskNode)->requiredTaskIterator()){
+    foreach(Node * currentNode, static_cast<Task *>(taskNode)->requiredTaskIterator()){
         m_assignList->selectedListWidget()->addItem(currentNode->name());
     }
 }

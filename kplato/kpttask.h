@@ -359,7 +359,7 @@ public:
 
     virtual void addRequiredTask(Node * taskLinked);
     virtual void remRequiredTask(Node * taskLinked);
-    const QList<Node *> &requiredTaskIterator() const {return m_requiredTasks;}
+    QList<Node *> &requiredTaskIterator() {return m_requiredTasks;}
 
     DateTime earlyStartDate();
     void setEarlyStartDate(DateTime value);

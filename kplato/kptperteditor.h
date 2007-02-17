@@ -51,7 +51,7 @@
 #include <QtGui/QSpinBox>
 #include <QtGui/QLineEdit>
 
-#include <Q3ListBox>
+#include <qwidget.h>
 
 #include <kactionselector.h>
 
@@ -105,10 +105,12 @@ public:
     void draw( Project &project);
     void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);
     void loadRequiredTasksList(Node * taskNode);
+    Node * itemToNode(QString itemName);
 
 private slots:
     void dispAvailableTasks();
-
+    void addTaskInRequiredList(QListWidgetItem * currentItem);
+    void removeTaskFromRequiredList(QListWidgetItem * currentItem);
 
 private:
     QTreeWidget * m_tasktree;
