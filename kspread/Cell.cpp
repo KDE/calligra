@@ -879,10 +879,8 @@ int Cell::defineAlignX()
     return align;
 }
 
-double Cell::width( int _col ) const
+double Cell::width() const
 {
-    if ( _col < 0 )
-        _col = d->column;
     const int rightCol = d->column + mergedXCells();
     double width = 0.0;
     for ( int col = d->column; col <= rightCol; ++col )
@@ -890,13 +888,11 @@ double Cell::width( int _col ) const
     return width;
 }
 
-double Cell::height( int _row ) const
+double Cell::height() const
 {
-    if ( _row < 0 )
-        _row = d->row;
-    const int bottomRow = _row + mergedYCells();
+    const int bottomRow = d->row + mergedYCells();
     double height = 0.0;
-    for ( int row = _row; row <= bottomRow; ++row )
+    for ( int row = d->row; row <= bottomRow; ++row )
         height += sheet()->rowFormat( row )->height();
     return height;
 }

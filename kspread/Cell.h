@@ -418,20 +418,14 @@ public:
     void copyAll( const Cell& cell);
 
     /**
-     * @param _col the column this cell is assumed to be in.
-     *             This parameter defaults to the return value of column().
-     *
      * @return the width of this cell as double
      */
-    double width( int _col = -1 ) const;
+    double width() const;
 
     /**
-     * @param _row the row this cell is assumed to be in.
-     *             This parameter defaults to the return value of row().
-     *
      * @return the height of this cell as double
      */
-    double height( int _row = -1 ) const;
+    double height() const;
 
     /**
      * \return a QRect for this cell (i.e., a 1x1 rect).

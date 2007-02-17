@@ -177,10 +177,10 @@ CellView::CellView( SheetView* sheetView, int col, int row )
             d->style.merge( *style );
     }
 
-    if ( cell.width( col ) != sheetView->sheet()->columnFormat( 0 )->width() )
-        d->width = cell.width( col );
-    if ( cell.height( row ) != sheetView->sheet()->rowFormat( 0 )->height() )
-        d->height = cell.height( row );
+    if ( cell.width() != sheetView->sheet()->columnFormat( 0 )->width() )
+        d->width = cell.width();
+    if ( cell.height() != sheetView->sheet()->rowFormat( 0 )->height() )
+        d->height = cell.height();
 
     // do not touch the other Private members, just return here.
     if ( cell.isDefault() ) return;
@@ -2257,7 +2257,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell& masterC
 
             if ( nextCell.isEmpty() )
             {
-                extraWidth += nextCell.width( col + 1 ) - 1;
+                extraWidth += nextCell.width() - 1;
                 col += 1 + nextCell.mergedXCells();
 
                 // Enough space?
@@ -2330,7 +2330,7 @@ void CellView::obscureVerticalCells( SheetView* sheetView, const Cell& masterCel
 
             if ( nextCell.isEmpty() )
             {
-                extraHeight += nextCell.height( row + 1 ) - 1.0;
+                extraHeight += nextCell.height() - 1.0;
                 row += 1 + nextCell.mergedYCells();
 
                 // Enough space ?

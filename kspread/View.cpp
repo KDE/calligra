@@ -5667,7 +5667,7 @@ void View::slotListChoosePopupMenu( )
   const RowFormat * rl = d->activeSheet->rowFormat( d->canvas->markerRow());
   double tx = d->activeSheet->columnPosition( d->canvas->markerColumn() );
   double ty = d->activeSheet->rowPosition( d->canvas->markerRow() );
-  double h = cell.height( d->canvas->markerRow() );
+  double h = cell.height();
   const CellView cellView = sheetView( d->activeSheet )->cellView( d->canvas->markerColumn(), d->canvas->markerRow() );
   if ( cellView.obscuresCells() )
       h = cellView.cellHeight();

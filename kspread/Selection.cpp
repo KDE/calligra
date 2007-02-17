@@ -695,8 +695,8 @@ QRectF Selection::selectionHandleArea() const
 
   double xpos = d->view->activeSheet()->columnPosition( column );
   double ypos = d->view->activeSheet()->rowPosition( row );
-  double width = cell.width( column );
-  double height = cell.height( row );
+  double width = cell.width();
+  double height = cell.height();
 
   const double unzoomedXPixel = d->view->doc()->unzoomItX( 1.0 );
   const double unzoomedYPixel = d->view->doc()->unzoomItY( 1.0 );

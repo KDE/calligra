@@ -437,8 +437,8 @@ void Canvas::validateSelection()
             if ( !d->validationInfo )
                 d->validationInfo = new QLabel(  this );
             kDebug(36001)<<" display info validation\n";
-            double u = cell.width( col );
-            double v = cell.height( row );
+            double u = cell.width();
+            double v = cell.height();
             double xpos = sheet->columnPosition( markerColumn() ) - xOffset();
             double ypos = sheet->rowPosition( markerRow() ) - yOffset();
             // Special treatment for obscured cells.
@@ -449,8 +449,8 @@ void Canvas::validateSelection()
                 int moveY = cell.row();
 
                 // Use the obscuring cells dimensions
-                u = cell.width( moveX );
-                v = cell.height( moveY );
+                u = cell.width();
+                v = cell.height();
                 xpos = sheet->columnPosition( moveX );
                 ypos = sheet->rowPosition( moveY );
             }
@@ -3396,10 +3396,10 @@ bool Canvas::createEditor( bool clear,  bool focus )
         d->editWidget->setEditMode( true );
         d->cellEditor = new KSpread::CellEditor( cell, this, doc()->captureAllArrowKeys() );
 
-        double w = cell.width( markerColumn() );
-        double h = cell.height( markerRow() );
-        double min_w = cell.width( markerColumn() );
-        double min_h = cell.height( markerRow() );
+        double w = cell.width();
+        double h = cell.height();
+        double min_w = cell.width();
+        double min_h = cell.height();
 
         double xpos = sheet->columnPosition( markerColumn() ) - xOffset();
 
@@ -4119,8 +4119,8 @@ void Canvas::showToolTip( const QPoint& p )
         tipText = tipText.left(maxLen).append("...");
 
     // Determine position and width of the current cell.
-    double u = cell.width( col );
-    double v = cell.height( row );
+    double u = cell.width();
+    double v = cell.height();
 
     // Special treatment for obscured cells.
     if ( cell.isPartOfMerged() )
@@ -4130,8 +4130,8 @@ void Canvas::showToolTip( const QPoint& p )
       const int moveY = cell.row();
 
       // Use the obscuring cells dimensions
-      u = cell.width( moveX );
-      v = cell.height( moveY );
+      u = cell.width();
+      v = cell.height();
       xpos = sheet->columnPosition( moveX );
       ypos = sheet->rowPosition( moveY );
     }
