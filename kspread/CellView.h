@@ -54,9 +54,10 @@ class Style;
 class View;
 
 /**
- * \class CellView
- * The CellView class is responsible for the painting of the cell.
- * For each visible Cell exists a CellView.
+ * Responsible for the painting of Cell.
+ * For each visible Cell exists a CellView, which is cached in the
+ * corresponding SheetView. If the content of a Cell has changed, the CellView
+ * will be destroyed and a new one will be created.
  */
 class KSPREAD_EXPORT CellView
 {

@@ -75,14 +75,10 @@ class Value;
 class View;
 
 /**
- * For every cell in the spread sheet there is a Cell object.
- *
- * Cell contains format information and algorithm and it
- * contains the calculation algorithm.
- *
- * However, all empty cells are represented by one instace, called the
- * default cell. @ref #isDefault can be used to determine whether or not a Cell object represents
- * the default one.
+ * An accessor to the actual cell data.
+ * The Cell object acts as accessor to the actual data stored in the separate
+ * storages in CellStorage. It provides methods to alter and retrieve this data
+ * and methods related to loading and saving the contents.
  */
 class KSPREAD_EXPORT Cell
 {
@@ -90,6 +86,7 @@ public:
     /**
      * Constructor.
      * Creates the null cell.
+     * \note Accessing the sheet(), column() or row() of this cell will fail.
      */
     Cell();
 

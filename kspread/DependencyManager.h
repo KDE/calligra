@@ -31,7 +31,8 @@ class Region;
 class Sheet;
 
 /**
- * This class manages cell dependencies.
+ * Manages the dependencies between cells caused by references in formulas.
+ * This dependency information is used for the recalculation of the cells.
  */
 class KSPREAD_EXPORT DependencyManager
 {
