@@ -2613,8 +2613,8 @@ void View::updateEditWidgetOnPress()
     if (!d->activeSheet)
       return;
 
-    int column = d->canvas->markerColumn();
-    int row    = d->canvas->markerRow();
+    int column = selection()->marker().x();
+    int row    = selection()->marker().y();
 
     Cell cell = Cell( d->activeSheet, column, row );
     if ( !cell )
@@ -2638,8 +2638,8 @@ void View::updateEditWidget()
     if (!d->activeSheet)
       return;
 
-    const int column = d->canvas->markerColumn();
-    const int row    = d->canvas->markerRow();
+    const int column = selection()->marker().x();
+    const int row    = selection()->marker().y();
 
     const Cell cell = Cell( d->activeSheet, column, row );
     const Style style = cell.style();
@@ -3276,8 +3276,8 @@ void View::bold( bool b )
 
     if ( d->canvas->editor() )
     {
-        int col = d->canvas->markerColumn();
-        int row = d->canvas->markerRow();
+        int col = selection()->marker().x();
+        int row = selection()->marker().y();
         Cell cell = Cell( d->activeSheet, col, row );
         d->canvas->editor()->setEditorFont( cell.style().font(), true );
     }
@@ -3297,8 +3297,8 @@ void View::underline( bool b )
 
     if ( d->canvas->editor() )
     {
-        int col = d->canvas->markerColumn();
-        int row = d->canvas->markerRow();
+        int col = selection()->marker().x();
+        int row = selection()->marker().y();
         Cell cell = Cell( d->activeSheet, col, row );
         d->canvas->editor()->setEditorFont( cell.style().font(), true );
     }
@@ -3318,8 +3318,8 @@ void View::strikeOut( bool b )
 
     if ( d->canvas->editor() )
     {
-        int col = d->canvas->markerColumn();
-        int row = d->canvas->markerRow();
+        int col = selection()->marker().x();
+        int row = selection()->marker().y();
         Cell cell = Cell( d->activeSheet, col, row );
         d->canvas->editor()->setEditorFont( cell.style().font(), true );
     }
@@ -3340,8 +3340,8 @@ void View::italic( bool b )
 
     if ( d->canvas->editor() )
     {
-        int col = d->canvas->markerColumn();
-        int row = d->canvas->markerRow();
+        int col = selection()->marker().x();
+        int row = selection()->marker().y();
         Cell cell = Cell( d->activeSheet, col, row );
         d->canvas->editor()->setEditorFont( cell.style().font(), true );
     }
@@ -4184,8 +4184,8 @@ void View::goalSeek()
   }
 
   GoalSeekDialog * dlg
-    = new GoalSeekDialog( this, QPoint( d->canvas->markerColumn(),
-                                            d->canvas->markerRow() ),
+    = new GoalSeekDialog( this, QPoint( selection()->marker().x(),
+                                            selection()->marker().y() ),
                               "GoalSeekDialog" );
   dlg->show();
   /* dialog autodeletes itself */
@@ -4544,8 +4544,7 @@ void View::replace()
 #if 0
     // Refresh the editWidget
     // TODO - after a replacement only?
-    Cell cell = Cell( activeSheet(), canvasWidget()->markerColumn(),
-                                               canvasWidget()->markerRow() );
+    Cell cell = Cell( activeSheet(), selection()->marker() );
     if ( cell.inputText() != 0 )
         d->editWidget->setText( cell.inputText() );
     else
@@ -4597,7 +4596,7 @@ void View::validity()
 void View::insertSeries()
 {
     d->canvas->closeEditor();
-    SeriesDlg dlg( this, "Series", QPoint( d->canvas->markerColumn(), d->canvas->markerRow() ) );
+    SeriesDlg dlg( this, "Series", QPoint( selection()->marker().x(), selection()->marker().y() ) );
     dlg.exec();
 }
 
@@ -5140,8 +5139,8 @@ void View::addModifyComment()
     return;
 
   CommentDialog dlg( this, "comment",
-                     QPoint( d->canvas->markerColumn(),
-                             d->canvas->markerRow() ) );
+                     QPoint( selection()->marker().x(),
+                             selection()->marker().y() ) );
   if ( dlg.exec() )
     updateEditWidget();
 }
@@ -5615,19 +5614,19 @@ void View::slotListChoosePopupMenu( )
   delete d->popupListChoose;
 
   d->popupListChoose = new QMenu();
-  QRect selection( d->selection->selection() );
+  QRect lastRange( d->selection->lastRange() );
   Cell cell( d->activeSheet, d->selection->marker() );
   QString tmp = cell.inputText();
   QStringList itemList;
 
-  for ( int col = selection.left(); col <= selection.right(); ++col )
+  for ( int col = lastRange.left(); col <= lastRange.right(); ++col )
   {
     Cell cell = d->activeSheet->cellStorage()->firstInColumn( col );
     while ( !cell.isNull() )
     {
       if ( !cell.isPartOfMerged()
-           && !( col == d->canvas->markerColumn()
-                 && cell.row() == d->canvas->markerRow()) )
+           && !( col == selection()->marker().x()
+                 && cell.row() == selection()->marker().y()) )
       {
         if ( cell.value().isString() && cell.inputText() != tmp && !cell.inputText().isEmpty() )
         {
@@ -5645,7 +5644,7 @@ void View::slotListChoosePopupMenu( )
    {
      int col = cell.column();
      if ( selection.left() <= col && selection.right() >= col
-    &&!cell.isPartOfMerged()&& !(col==d->canvas->markerColumn()&& cell.row()==d->canvas->markerRow()))
+    &&!cell.isPartOfMerged()&& !(col==selection()->marker().x()&& cell.row()==selection()->marker().y()))
        {
    if (cell.isString() && cell.text()!=tmp && !cell.text().isEmpty())
      {
@@ -5664,11 +5663,11 @@ void View::slotListChoosePopupMenu( )
 
   if ( itemList.isEmpty() )
     return;
-  const RowFormat * rl = d->activeSheet->rowFormat( d->canvas->markerRow());
-  double tx = d->activeSheet->columnPosition( d->canvas->markerColumn() );
-  double ty = d->activeSheet->rowPosition( d->canvas->markerRow() );
+  const RowFormat * rl = d->activeSheet->rowFormat( selection()->marker().y() );
+  double tx = d->activeSheet->columnPosition( selection()->marker().x() );
+  double ty = d->activeSheet->rowPosition( selection()->marker().y() );
   double h = cell.height();
-  const CellView cellView = sheetView( d->activeSheet )->cellView( d->canvas->markerColumn(), d->canvas->markerRow() );
+  const CellView cellView = sheetView( d->activeSheet )->cellView( selection()->marker().x(), selection()->marker().y() );
   if ( cellView.obscuresCells() )
       h = cellView.cellHeight();
   ty += h;
@@ -5695,8 +5694,8 @@ void View::slotListChoosePopupMenu( )
 void View::slotItemSelected( QAction* action )
 {
   QString tmp = action->text();
-  int x = d->canvas->markerColumn();
-  int y = d->canvas->markerRow();
+  int x = selection()->marker().x();
+  int y = selection()->marker().y();
   Cell cell( d->activeSheet, x, y );
   if (tmp == cell.inputText())
     return;
@@ -5733,7 +5732,7 @@ void View::openPopupMenu( const QPoint & _point )
       return;
     }
 
-    Cell cell = Cell( d->activeSheet, d->canvas->markerColumn(), d->canvas->markerRow() );
+    Cell cell = Cell( d->activeSheet, selection()->marker().x(), selection()->marker().y() );
 
     bool isProtected = d->activeSheet->isProtected();
     if ( cell.style().notProtected() && d->selection->isSingular() )
@@ -6052,7 +6051,7 @@ void View::slotInsertCellCopy()
 
 void View::setAreaName()
 {
-  AreaDialog dlg( this, "Area Name",QPoint(d->canvas->markerColumn(), d->canvas->markerRow()) );
+  AreaDialog dlg( this, "Area Name",QPoint(selection()->marker().x(), selection()->marker().y()) );
   dlg.exec();
 }
 

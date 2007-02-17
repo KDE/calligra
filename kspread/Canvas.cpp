@@ -308,21 +308,6 @@ Selection* Canvas::choice() const
   return d->view->choice();
 }
 
-QPoint Canvas::marker() const
-{
-    return d->view->selection()->marker();
-}
-
-int Canvas::markerColumn() const
-{
-    return d->view->selection()->marker().x();
-}
-
-int Canvas::markerRow() const
-{
-    return d->view->selection()->marker().y();
-}
-
 double Canvas::zoom() const
 {
   return d->view->zoom();
@@ -439,8 +424,8 @@ void Canvas::validateSelection()
             kDebug(36001)<<" display info validation\n";
             double u = cell.width();
             double v = cell.height();
-            double xpos = sheet->columnPosition( markerColumn() ) - xOffset();
-            double ypos = sheet->rowPosition( markerRow() ) - yOffset();
+            double xpos = sheet->columnPosition( selection()->marker().x() ) - xOffset();
+            double ypos = sheet->rowPosition( selection()->marker().y() ) - yOffset();
             // Special treatment for obscured cells.
             if ( cell.isPartOfMerged() )
             {
@@ -2179,7 +2164,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
     int col = 1;
 
     cell = sheet->cellStorage()->lastInRow(marker.y());
-    while (!cell.isNull() && cell.column() > markerColumn() && cell.isEmpty())
+    while (!cell.isNull() && cell.column() > selection()->marker().x() && cell.isEmpty())
     {
       cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row());
     }
@@ -2693,8 +2678,8 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
 
   d->view->doc()->emitBeginOperation(false);
   if ( _ev->key() == KGlobalSettings::contextMenuKey() ) {
-    int row = markerRow();
-    int col = markerColumn();
+    int row = selection()->marker().y();
+    int col = selection()->marker().x();
     QPoint p(sheet->columnPos(col), sheet->rowPos(row));
     p = mapToGlobal(p);
     d->view->openPopupMenu( p );
@@ -3383,7 +3368,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
     if (!sheet)
         return false;
 
-    Cell cell( sheet, marker().x(), marker().y() );
+    Cell cell( sheet, selection()->marker() );
 
     if ( sheet->isProtected() && !cell.style().notProtected() )
         return false;
@@ -3401,7 +3386,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
         double min_w = cell.width();
         double min_h = cell.height();
 
-        double xpos = sheet->columnPosition( markerColumn() ) - xOffset();
+        double xpos = sheet->columnPosition( selection()->marker().x() ) - xOffset();
 
         Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
         bool rtlText = cell.displayText().isRightToLeft();
@@ -3420,7 +3405,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
             xpos = dwidth - w2 - xpos;
         }
 
-        double ypos = sheet->rowPosition( markerRow() ) - yOffset();
+        double ypos = sheet->rowPosition( selection()->marker().y() ) - yOffset();
         QPalette editorPalette( d->cellEditor->palette() );
 
         QColor color = cell.style().fontColor();
@@ -3429,7 +3414,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
             color = palette().text().color();
         editorPalette.setColor( QPalette::Text, color );
 
-        color = Cell( sheet, marker() ).style().backgroundColor(); // FIXME effective!
+        color = Cell( sheet, selection()->marker() ).style().backgroundColor(); // FIXME effective!
         if ( !color.isValid() )
             color = editorPalette.base().color();
         editorPalette.setColor( QPalette::Background, color );
@@ -3599,13 +3584,13 @@ void Canvas::updatePosWidget()
     {
         if (sheet->getLcMode())
         {
-            buffer = 'L' + QString::number( markerRow() ) +
-		'C' + QString::number( markerColumn() );
+            buffer = 'L' + QString::number( selection()->marker().y() ) +
+		'C' + QString::number( selection()->marker().x() );
         }
         else
         {
-            buffer = Cell::columnName( markerColumn() ) +
-		QString::number( markerRow() );
+            buffer = Cell::columnName( selection()->marker().x() ) +
+		QString::number( selection()->marker().y() );
         }
     }
     else

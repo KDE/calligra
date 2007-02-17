@@ -557,8 +557,8 @@ CellEditor::CellEditor( const Cell& _cell, Canvas* _parent, bool captureAllKeyEv
 // connect( d->textEdit, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
 
   // A choose should always start at the edited cell
-//  canvas()->setChooseMarkerRow( canvas()->markerRow() );
-//  canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
+//  canvas()->setChooseMarkerRow( canvas()->selection()->marker().y() );
+//  canvas()->setChooseMarkerColumn( canvas()->selection()->marker().x() );
 
   // set font size according to zoom factor
   QFont font( _cell.style().font() );
@@ -1418,8 +1418,8 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     // Escape pressed, restore original value
     case Qt::Key_Escape:
         if ( m_pView->selection()->isSingular() ) {
-            setText( Cell::columnName( m_pView->canvasWidget()->markerColumn() )
-                     + QString::number( m_pView->canvasWidget()->markerRow() ) );
+            setText( Cell::columnName( m_pView->selection()->marker().x() )
+                     + QString::number( m_pView->selection()->marker().y() ) );
         } else {
             setText( Cell::columnName( m_pView->selection()->lastRange().left() )
                      + QString::number( m_pView->selection()->lastRange().top() )

@@ -38,6 +38,7 @@
 #include "GenValidationStyle.h"
 #include "Localization.h"
 #include "RecalcManager.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "StyleManager.h"
 #include "View.h"
@@ -294,8 +295,8 @@ QDomElement Map::save( QDomDocument& doc )
   {
     Canvas * canvas = view->canvasWidget();
     mymap.setAttribute( "activeTable",  canvas->activeSheet()->sheetName() );
-    mymap.setAttribute( "markerColumn", canvas->markerColumn() );
-    mymap.setAttribute( "markerRow",    canvas->markerRow() );
+    mymap.setAttribute( "markerColumn", view->selection()->marker().x() );
+    mymap.setAttribute( "markerRow",    view->selection()->marker().y() );
     mymap.setAttribute( "xOffset",      canvas->xOffset() );
     mymap.setAttribute( "yOffset",      canvas->yOffset() );
   }

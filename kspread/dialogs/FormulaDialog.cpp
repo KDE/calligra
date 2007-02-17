@@ -216,8 +216,8 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     // Save the cells current text.
     QString tmp_oldText = m_pView->canvasWidget()->editor()->text();
     // Position of the cell.
-    m_column = m_pView->canvasWidget()->markerColumn();
-    m_row = m_pView->canvasWidget()->markerRow();
+    m_column = m_pView->selection()->marker().x();
+    m_row = m_pView->selection()->marker().y();
 
     if( tmp_oldText.isEmpty() )
         result->setText("=");

@@ -139,27 +139,6 @@ public:
     Selection* choice() const;
 
     /**
-     * convenience function.
-     * @return selection's marker
-     * @see Selection::marker()
-     */
-    QPoint marker() const;
-
-    /**
-     * convenience function.
-     * @return selection's marker's column
-     * @see Selection::marker()
-     */
-    int markerColumn() const;
-
-    /**
-     * convenience function.
-     * @return selection's marker's row
-     * @see Selection::marker()
-     */
-    int markerRow() const;
-
-    /**
      * @return the pen, the default grid is painted with (light gray)
      */
     const QPen& defaultGridPen() const;
