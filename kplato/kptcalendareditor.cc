@@ -53,7 +53,8 @@
 #include <kprinter.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
-
+#include <ksystemtimezone.h>
+#include <ktimezones.h>
 #include <kabc/addressee.h>
 #include <kabc/vcardconverter.h>
 
@@ -181,7 +182,16 @@ Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
     }
     if ( calendar ( index ) ) {
         switch ( index.column() ) {
-            default: flags |= Qt::ItemIsEditable;
+            case 1: 
+                if ( parent( index ).isValid() ) {
+                    flags &= ~Qt::ItemIsEditable;
+                } else {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            default: 
+                flags |= Qt::ItemIsEditable;
+                break;
         }
     }
     return flags;
@@ -264,7 +274,7 @@ QModelIndex CalendarItemModel::index( const Calendar *calendar) const
 
 int CalendarItemModel::columnCount( const QModelIndex &parent ) const
 {
-    return 1;
+    return 2;
 }
 
 int CalendarItemModel::rowCount( const QModelIndex &parent ) const
@@ -319,6 +329,56 @@ bool CalendarItemModel::setName( Calendar *a, const QVariant &value, int role )
     return false;
 }
 
+QVariant CalendarItemModel::timeZone( const Calendar *a, int role ) const
+{
+    //kDebug()<<k_funcinfo<<res->name()<<", "<<role<<endl;
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return i18n( a->timeZone()->name().toUtf8() );
+        case Role::EnumList: {
+            QStringList lst;
+            foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
+                lst << i18n( s.toUtf8() );
+            }
+            lst.sort();
+            return lst;
+        }
+        case Role::EnumListValue: {
+            QStringList lst = timeZone( a, Role::EnumList ).toStringList();
+            return lst.indexOf( i18n ( a->timeZone()->name().toUtf8() ) );
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole: {
+            QStringList lst = timeZone( a, Role::EnumList ).toStringList();
+            QString name = lst.value( value.toInt() );
+            const KTimeZone *tz = 0;
+            foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
+                if ( name == i18n( s.toUtf8() ) ) {
+                    tz = KSystemTimeZones::zone( s );
+                    break;
+                }
+            }
+            if ( tz == 0 ) {
+                return false;
+            }
+            m_part->addCommand( new CalendarModifyTimeZoneCmd( m_part, a, tz, "Modify Calendar Timezone" ) );
+            return true;
+        }
+    }
+    return false;
+}
+
 QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
@@ -328,6 +388,7 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
     }
     switch ( index.column() ) {
         case 0: result = name( a, role ); break;
+        case 1: result = timeZone( a, role ); break;
         default:
             kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
             return QVariant();
@@ -352,6 +413,7 @@ bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value
     Calendar *a = calendar( index );
     switch (index.column()) {
         case 0: return setName( a, value, role );
+        case 1: return setTimeZone( a, value, role );
         default:
             kWarning()<<"data: invalid display value column "<<index.column()<<endl;
             return false;
@@ -365,6 +427,7 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
         if ( role == Qt::DisplayRole ) {
             switch ( section ) {
                 case 0: return i18n( "Name" );
+                case 1: return i18n( "Timezone" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -1396,6 +1459,8 @@ CalendarTreeView::CalendarTreeView( Part *part, QWidget *parent )
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionModel( new QItemSelectionModel( model() ) );
 
+    setItemDelegateForColumn( 1, new EnumDelegate( this ) ); // timezone
+    
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 

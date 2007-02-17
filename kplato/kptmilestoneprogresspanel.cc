@@ -42,7 +42,7 @@ MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, cons
 {
     kDebug()<<k_funcinfo<<endl;
     finished->setChecked(m_completion.finished());
-    finishTime->setDateTime(m_completion.finishTime());
+    finishTime->setDateTime(m_completion.finishTime().dateTime());
     enableWidgets();
     finished->setFocus();
 }
@@ -60,7 +60,7 @@ KCommand *MilestoneProgressPanel::buildCommand(Part *part) {
         if ( cmd == 0 ) cmd = new KMacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_completion, finished->isChecked()) );
     }
-    if ( m_completion.finishTime() != finishTime->dateTime() ) {
+    if ( m_completion.finishTime().dateTime() != finishTime->dateTime() ) {
         if ( cmd == 0 ) cmd = new KMacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishTimeCmd(part, m_completion, finishTime->dateTime() ) );
     }

@@ -163,7 +163,7 @@ bool Schedule::allowOverbooking() const
     return false;
 }
 
-TimeInterval Schedule::available( const QDate &date, const TimeInterval &interval ) const
+TimeInterval Schedule::available( const DateTime &date, const TimeInterval &interval ) const
 {
     return TimeInterval( interval.first, interval.second );
 }
@@ -187,7 +187,7 @@ void Schedule::calcResourceOverbooked()
 {
     resourceOverbooked = false;
     foreach( Appointment *a, m_appointments ) {
-        if ( a->resource() ->isOverbooked( a->startTime(), a->endTime() ) ) {
+        if ( a->resource() ->isOverbooked( a->startTime().dateTime(), a->endTime().dateTime() ) ) {
             resourceOverbooked = true;
             break;
         }
@@ -198,7 +198,7 @@ QStringList Schedule::overbookedResources() const
 {
     QStringList rl;
     foreach( Appointment *a, m_appointments ) {
-        if ( a->resource() ->isOverbooked( a->startTime(), a->endTime() ) ) {
+        if ( a->resource() ->isOverbooked( a->startTime().dateTime(), a->endTime().dateTime() ) ) {
             rl += a->resource() ->resource() ->name();
         }
     }
@@ -603,29 +603,29 @@ void NodeSchedule::setDeleted( bool on )
     }
 }
 
-bool NodeSchedule::loadXML( const QDomElement &sch )
+bool NodeSchedule::loadXML( const QDomElement &sch, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<endl;
     QString s;
     Schedule::loadXML( sch );
     s = sch.attribute( "earlieststart" );
     if ( !s.isEmpty() )
-        earliestStart = DateTime::fromString( s );
+        earliestStart = DateTime::fromString( s, status.projectSpec() );
     s = sch.attribute( "latestfinish" );
     if ( !s.isEmpty() )
-        latestFinish = DateTime::fromString( s );
+        latestFinish = DateTime::fromString( s, status.projectSpec() );
     s = sch.attribute( "start" );
     if ( !s.isEmpty() )
-        startTime = DateTime::fromString( s );
+        startTime = DateTime::fromString( s, status.projectSpec() );
     s = sch.attribute( "end" );
     if ( !s.isEmpty() )
-        endTime = DateTime::fromString( s );
+        endTime = DateTime::fromString( s, status.projectSpec() );
     s = sch.attribute( "start-work" );
     if ( !s.isEmpty() )
-        workStartTime = DateTime::fromString( s );
+        workStartTime = DateTime::fromString( s, status.projectSpec() );
     s = sch.attribute( "end-work" );
     if ( !s.isEmpty() )
-        workEndTime = DateTime::fromString( s );
+        workEndTime = DateTime::fromString( s, status.projectSpec() );
     duration = Duration::fromString( sch.attribute( "duration" ) );
 
     inCriticalPath = sch.attribute( "in-critical-path", "0" ).toInt();
@@ -652,17 +652,17 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     saveCommonXML( sch );
 
     if ( earliestStart.isValid() )
-        sch.setAttribute( "earlieststart", earliestStart.toString( Qt::ISODate ) );
+        sch.setAttribute( "earlieststart", earliestStart.toString( KDateTime::ISODate ) );
     if ( latestFinish.isValid() )
-        sch.setAttribute( "latestfinish", latestFinish.toString( Qt::ISODate ) );
+        sch.setAttribute( "latestfinish", latestFinish.toString( KDateTime::ISODate ) );
     if ( startTime.isValid() )
-        sch.setAttribute( "start", startTime.toString( Qt::ISODate ) );
+        sch.setAttribute( "start", startTime.toString( KDateTime::ISODate ) );
     if ( endTime.isValid() )
-        sch.setAttribute( "end", endTime.toString( Qt::ISODate ) );
+        sch.setAttribute( "end", endTime.toString( KDateTime::KDateTime::ISODate ) );
     if ( workStartTime.isValid() )
-        sch.setAttribute( "start-work", workStartTime.toString( Qt::ISODate ) );
+        sch.setAttribute( "start-work", workStartTime.toString( KDateTime::ISODate ) );
     if ( workEndTime.isValid() )
-        sch.setAttribute( "end-work", workEndTime.toString( Qt::ISODate ) );
+        sch.setAttribute( "end-work", workEndTime.toString( KDateTime::ISODate ) );
 
     sch.setAttribute( "duration", duration.toString() );
 
@@ -807,9 +807,9 @@ double ResourceSchedule::normalRatePrHour() const
     return m_resource ? m_resource->normalRate() : 0.0;
 }
 
-TimeInterval ResourceSchedule::available( const QDate &date, const TimeInterval &i ) const
+TimeInterval ResourceSchedule::available( const DateTime &date, const TimeInterval &i ) const
 {
-    DateTimeInterval dti = available( DateTimeInterval( DateTime( date, i.first ), DateTime( date, i.second ) ) );
+    DateTimeInterval dti = available( DateTimeInterval( DateTime( date.date(), i.first ), DateTime( date.date(), i.second ) ) );
     return TimeInterval( dti.first.time(), dti.second.time() );
 }
 
@@ -880,7 +880,7 @@ bool MainSchedule::allowOverbooking() const
     return m_manager == 0 ? false : m_manager->allowOverbooking();
 }
 
-bool MainSchedule::loadXML( const QDomElement &sch, Project &project )
+bool MainSchedule::loadXML( const QDomElement &sch, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<endl;
     QString s;
@@ -888,10 +888,10 @@ bool MainSchedule::loadXML( const QDomElement &sch, Project &project )
 
     s = sch.attribute( "start" );
     if ( !s.isEmpty() )
-        startTime = DateTime::fromString( s );
+        startTime = DateTime::fromString( s, status.projectSpec() );
     s = sch.attribute( "end" );
     if ( !s.isEmpty() )
-        endTime = DateTime::fromString( s );
+        endTime = DateTime::fromString( s, status.projectSpec() );
 
     QDomNodeList al = sch.childNodes();
     //kDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;
@@ -902,7 +902,7 @@ bool MainSchedule::loadXML( const QDomElement &sch, Project &project )
                 // Load the appointments.
                 // Resources and tasks must already be loaded
                 Appointment * child = new Appointment();
-                if ( !child->loadXML( app, project, *this ) ) {
+                if ( !child->loadXML( app, status, *this ) ) {
                     // TODO: Complain about this
                     kError() << k_funcinfo << "Failed to load appointment" << endl;
                     delete child;
@@ -917,8 +917,8 @@ void MainSchedule::saveXML( QDomElement &element ) const
 {
     saveCommonXML( element );
 
-    element.setAttribute( "start", startTime.toString( Qt::ISODate ) );
-    element.setAttribute( "end", endTime.toString( Qt::ISODate ) );
+    element.setAttribute( "start", startTime.toString( KDateTime::ISODate ) );
+    element.setAttribute( "end", endTime.toString( KDateTime::ISODate ) );
 }
 
 DateTime MainSchedule::calculateForward( int use )
@@ -1197,7 +1197,7 @@ bool ScheduleManager::loadXML( QDomElement &element, XMLLoaderObject &status )
 
 MainSchedule *ScheduleManager::loadMainSchedule( QDomElement &element, XMLLoaderObject &status ) {
     MainSchedule *sch = new MainSchedule();
-    if ( sch->loadXML( element, status.project() ) ) {
+    if ( sch->loadXML( element, status ) ) {
         status.project().addSchedule( sch );
         sch->setNode( &(status.project()) );
         status.project().setParentSchedule( sch );

@@ -47,7 +47,7 @@ class Calendar;
 class ResourceRequestCollection;
 class EffortCostMap;
 class Schedule;
-
+class XMLLoaderObject;
 
 
 class AppointmentInterval {
@@ -62,9 +62,9 @@ public:
     
     Duration effort() const { return (m_end - m_start) * m_load / 100; }
     Duration effort(const DateTime &start, const DateTime end) const;
-    Duration effort(const DateTime &time, bool upto) const;
+    Duration effort(const QDate &time, bool upto) const;
     
-    bool loadXML(QDomElement &element);
+    bool loadXML(QDomElement &element, XMLLoaderObject &status);
     void saveXML(QDomElement &element) const;
     
     const DateTime &startTime() const { return m_start; }
@@ -153,7 +153,7 @@ public:
     
     const AppointmentIntervalList &intervals() const { return m_intervals; }
 
-    bool loadXML(QDomElement &element, Project &project, Schedule &sch);
+    bool loadXML(QDomElement &element, XMLLoaderObject &status, Schedule &sch);
     void saveXML(QDomElement &element) const;
 
     /**
@@ -167,7 +167,7 @@ public:
     /// Returns the planned effort from start for the duration
     Duration effort(const DateTime &start, const Duration &duration) const;
     /// Returns the planned effort from time onwards
-    Duration effortFrom(const DateTime &time) const;
+    Duration effortFrom(const QDate &time) const;
     
     /// Returns the total planned effort for this appointment
     Duration plannedEffort() const;
@@ -201,7 +201,7 @@ public:
     Appointment &operator+=(const Appointment &app);
     Appointment operator+(const Appointment &app);
     
-    void addActualEffort(const QDate& date, Duration effort, bool overtime=false);
+    void addActualEffort(const DateTime& date, Duration effort, bool overtime=false);
     
     void setCalculationMode( int mode ) { m_calculationMode = mode; }
     int calculationMode() const { return m_calculationMode; }
@@ -223,12 +223,12 @@ private:
     
     class UsedEffortItem {
     public:
-        UsedEffortItem(const QDate& date, Duration effort, bool overtime=false);
-        QDate date();
+        UsedEffortItem(const DateTime& date, Duration effort, bool overtime=false);
+        DateTime date();
         Duration effort();
         bool isOvertime();
     private:
-        QDate m_date;
+        DateTime m_date;
         Duration m_effort;
         bool m_overtime;
     };
@@ -236,14 +236,14 @@ private:
     public:
         UsedEffort();
         ~UsedEffort();
-        void inSort(const QDate& date, Duration effort, bool overtime=false);
+        void inSort(const DateTime& date, Duration effort, bool overtime=false);
         Duration usedEffort(bool includeOvertime=true) const;
         Duration usedEffort(const QDate &date, bool includeOvertime=true) const;
         Duration usedEffortTo(const QDate &date, bool includeOvertime=true) const;
         Duration usedOvertime() const;
         Duration usedOvertime(const QDate &date) const;
         Duration usedOvertimeTo(const QDate &date) const;
-        bool load(QDomElement &element);
+        bool load(QDomElement &element, XMLLoaderObject &status);
         void save(QDomElement &element) const;
     };
     

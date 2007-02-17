@@ -49,12 +49,18 @@ void Config::load() {
     }*/
     if( config->hasGroup("Task defaults"))
     {
+        //TODO: make this default stuff timezone neutral, use LocalZone for now
         config->setGroup("Task defaults");
         m_taskDefaults.setLeader(config->readEntry("Leader"));
         m_taskDefaults.setDescription(config->readEntry("Description"));
         m_taskDefaults.setConstraint((Node::ConstraintType)config->readEntry("ConstraintType",0));
-        m_taskDefaults.setConstraintStartTime(config->readEntry("ConstraintStartTime",QDateTime()));
-        m_taskDefaults.setConstraintEndTime(config->readEntry("ConstraintEndTime",QDateTime()));
+        
+        QDateTime dt = config->readEntry("ConstraintStartTime",QDateTime());
+        m_taskDefaults.setConstraintStartTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
+        
+        dt = config->readEntry("ConstraintEndTime",QDateTime());
+        m_taskDefaults.setConstraintEndTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
+        
         m_taskDefaults.effort()->setType((Effort::Type)config->readEntry("EffortType",0));
         m_taskDefaults.effort()->set(Duration((qint64)(config->readEntry("ExpectedEffort",0))*1000)); //FIXME
         m_taskDefaults.effort()->setPessimisticRatio(config->readEntry("PessimisticEffort",0));
@@ -77,8 +83,8 @@ void Config::save() {
     config->writeEntry("Leader", m_taskDefaults.leader());
     config->writeEntry("Description", m_taskDefaults.description());
     config->writeEntry("ConstraintType", (int)m_taskDefaults.constraint());
-    config->writeEntry("ConstraintStartTime", (QDateTime)m_taskDefaults.constraintStartTime());
-    config->writeEntry("ConstraintEndTime", (QDateTime)m_taskDefaults.constraintEndTime());
+    config->writeEntry("ConstraintStartTime", m_taskDefaults.constraintStartTime().dateTime());
+    config->writeEntry("ConstraintEndTime", m_taskDefaults.constraintEndTime().dateTime());
     config->writeEntry("EffortType", (int)m_taskDefaults.effort()->type());
     config->writeEntry("ExpectedEffort", m_taskDefaults.effort()->expected().seconds()); //FIXME
     config->writeEntry("PessimisticEffort", m_taskDefaults.effort()->pessimisticRatio());

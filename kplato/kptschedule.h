@@ -92,7 +92,7 @@ public:
     void saveCommonXML( QDomElement &element ) const;
     void saveAppointments( QDomElement &element ) const;
 
-    virtual TimeInterval available( const QDate &date, const TimeInterval &interval ) const;
+    virtual TimeInterval available( const DateTime &date, const TimeInterval &interval ) const;
     virtual DateTimeInterval available( const DateTimeInterval &interval ) const;
 
     enum CalculationMode { Scheduling, CalculateForward, CalculateBackward };
@@ -118,7 +118,7 @@ public:
     virtual Appointment appointmentIntervals( int which = Scheduling ) const;
 
     virtual bool isOverbooked() const { return false; }
-    virtual bool isOverbooked( const DateTime & /*start*/, const DateTime & /*end*/ ) const { return false; }
+    virtual bool isOverbooked( const QDateTime & /*start*/, const QDateTime & /*end*/ ) const { return false; }
     virtual QStringList overbookedResources() const;
 
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end ) const;
@@ -279,7 +279,7 @@ public:
     { return m_parent == 0 ? true : m_parent->isDeleted(); }
     void setDeleted( bool on );
 
-    virtual bool loadXML( const QDomElement &element );
+    virtual bool loadXML( const QDomElement &element, XMLLoaderObject &status );
     virtual void saveXML( QDomElement &element ) const;
 
     // tasks------------>
@@ -324,7 +324,7 @@ public:
     virtual Resource *resource() const { return m_resource; }
     virtual double normalRatePrHour() const;
 
-    virtual TimeInterval available( const QDate &date, const TimeInterval &interval ) const;
+    virtual TimeInterval available( const DateTime &date, const TimeInterval &interval ) const;
     virtual DateTimeInterval available( const DateTimeInterval &interval ) const;
     
 private:
@@ -352,7 +352,7 @@ public:
     virtual bool allowOverbooking() const;
     virtual bool usePert() const;
 
-    virtual bool loadXML( const QDomElement &element, Project &project );
+    virtual bool loadXML( const QDomElement &element, XMLLoaderObject &status );
     virtual void saveXML( QDomElement &element ) const;
 
     void setManager( ScheduleManager *sm ) { m_manager = sm; }

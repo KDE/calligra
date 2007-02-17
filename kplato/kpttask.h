@@ -24,10 +24,10 @@
 #define KPTTASK_H
 
 #include "kptnode.h"
+#include "kptdatetime.h"
 #include "kptduration.h"
 #include "kptresource.h"
 
-#include <QDateTime>
 #include <QList>
 #include <QMap>
 
@@ -78,9 +78,9 @@ public:
     bool finished() const { return m_finished; }
     void setFinished( bool on );
     DateTime startTime() const { return m_startTime; }
-    void setStartTime( const QDateTime &dt );
+    void setStartTime( const DateTime &dt );
     DateTime finishTime() const { return m_finishTime; }
-    void setFinishTime( const QDateTime &dt );
+    void setFinishTime( const DateTime &dt );
     
     const EntryList &entries() const { return m_entries; }
     void addEntry( const QDate &date, Entry *entry );

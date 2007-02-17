@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2006 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #define XMLLOADEROBJECT_H
 
 #include "kptproject.h"
+#include "kptdatetime.h"
 
 #include <qdatetime.h>
 #include <QString>
@@ -46,6 +47,9 @@ public:
     
     QString version() const { return m_version; }
     void setVersion( const QString ver ) { m_version = ver; }
+    
+    const KDateTime::Spec &projectSpec() const { return m_projectSpec; }
+    void setProjectSpec( const KDateTime::Spec &spec ) { m_projectSpec = spec; }
     
     void startLoad() {
         m_timer.start();
@@ -102,6 +106,7 @@ protected:
     QTime m_timer;
     int m_elapsed;
     QString m_version;
+    KDateTime::Spec m_projectSpec;
 };
 
 } //namespace KPlato

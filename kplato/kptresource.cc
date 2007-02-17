@@ -31,6 +31,9 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <ksystemtimezone.h>
+#include <ktimezones.h>
+
 //Added by qt3to4:
 #include <QList>
 
@@ -205,7 +208,7 @@ bool ResourceGroup::removeId(const QString &id) {
 }
 
 void ResourceGroup::insertId(const QString &id) { 
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_project)
         m_project->insertResourceGroupId(id, this);
 }
@@ -227,7 +230,7 @@ Resource::Resource()
     m_type = Type_Work;
     m_units = 100; // %
 
-    m_availableFrom = DateTime(QDate::currentDate());
+    m_availableFrom = DateTime(KDateTime::currentLocalDateTime());
     m_availableUntil = m_availableFrom.addYears(2);
 
     cost.normalRate = 100;
@@ -376,10 +379,10 @@ bool Resource::load(QDomElement &element, XMLLoaderObject &status) {
     m_units = element.attribute("units", "100").toInt();
     s = element.attribute("available-from");
     if (!s.isEmpty())
-        m_availableFrom = DateTime::fromString(s);
+        m_availableFrom = DateTime::fromString(s, timeSpec());
     s = element.attribute("available-until");
     if (!s.isEmpty())
-        m_availableUntil = DateTime::fromString(s);
+        m_availableUntil = DateTime::fromString(s, timeSpec());
         
     cost.normalRate = KGlobal::locale()->readMoney(element.attribute("normal-rate"));
     cost.overtimeRate = KGlobal::locale()->readMoney(element.attribute("overtime-rate"));
@@ -399,8 +402,8 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("email", m_email);
     me.setAttribute("type", typeToString());
     me.setAttribute("units", m_units);
-    me.setAttribute("available-from", m_availableFrom.toString(Qt::ISODate));
-    me.setAttribute("available-until", m_availableUntil.toString(Qt::ISODate));
+    me.setAttribute("available-from", m_availableFrom.toString( KDateTime::ISODate ));
+    me.setAttribute("available-until", m_availableUntil.toString( KDateTime::ISODate ));
     me.setAttribute("normal-rate", KGlobal::locale()->formatMoney(cost.normalRate));
     me.setAttribute("overtime-rate", KGlobal::locale()->formatMoney(cost.overtimeRate));
 }
@@ -498,6 +501,18 @@ ResourceSchedule *Resource::createSchedule(Schedule *parent) {
     return sch;
 }
 
+KDateTime::Spec Resource::timeSpec() const
+{
+    Calendar *cal = calendar();
+    if ( cal ) {
+        return cal->timeSpec();
+    }
+    if ( m_project ) {
+        return m_project->timeSpec();
+    }
+    return KDateTime::Spec::LocalZone();
+}
+
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end) {
     //kDebug()<<k_funcinfo<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<" "<<from<<" - "<<end<<endl;
     if (!from.isValid() || !end.isValid()) {
@@ -523,7 +538,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
         }
         DateTimeInterval i = cal->firstInterval(time, end, m_currentSchedule);
         if (!i.second.isValid()) {
-            kWarning()<<k_funcinfo<<"Invalid interval: "<<time<<", "<<end<<endl;
+            kWarning()<<k_funcinfo<<"Invalid interval: "<<time.toString()<<", "<<end.toString()<<endl;
             return;
         }
         if (time == i.second)
@@ -574,13 +589,13 @@ void Resource::makeAppointment(Schedule *node) {
     DateTime end = node->endTime;
     time = availableAfter(time, end);
     if (!time.isValid()) {
-        kWarning()<<k_funcinfo<<m_name<<": Resource not available (after="<<node->startTime<<", "<<end<<")"<<endl;
+        kWarning()<<k_funcinfo<<m_name<<": Resource not available (after="<<node->startTime.toString()<<", "<<end.toString()<<")"<<endl;
         node->resourceNotAvailable = true;
         return;
     }
     end = availableBefore(end, time);
     if (!end.isValid()) {
-        kWarning()<<k_funcinfo<<m_name<<": Resource not available (before="<<node->endTime<<", "<<time<<")"<<endl;
+        kWarning()<<k_funcinfo<<m_name<<": Resource not available (before="<<node->endTime.toString()<<", "<<time.toString()<<")"<<endl;
         node->resourceNotAvailable = true;
         return;
     }
@@ -655,7 +670,7 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Sc
     }
     t = m_availableFrom > time ? m_availableFrom : time;
     t = cal->firstAvailableAfter(t, lmt, sch);
-    //kDebug()<<k_funcinfo<<m_currentSchedule<<" "<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns: "<<time<<"="<<t<<" "<<lmt<<endl;
+    //kDebug()<<k_funcinfo<<m_currentSchedule<<" "<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns: "<<time.toString()<<"="<<t.toString()<<" "<<lmt.toString()<<endl;
     return t;
 }
 
@@ -701,7 +716,7 @@ bool Resource::removeId(const QString &id) {
 }
 
 void Resource::insertId(const QString &id) { 
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_project)
         m_project->insertResourceId(id, this); 
 }
@@ -711,14 +726,14 @@ Calendar *Resource::findCalendar(const QString &id) const {
 }
 
 bool Resource::isOverbooked() const {
-    return isOverbooked(DateTime(), DateTime());
+    return isOverbooked(QDateTime(), QDateTime());
 }
 
 bool Resource::isOverbooked(const QDate &date) const {
-    return isOverbooked(DateTime(date), DateTime(date.addDays(1)));
+    return isOverbooked(QDateTime(date), QDateTime(date.addDays(1)));
 }
 
-bool Resource::isOverbooked(const DateTime &start, const DateTime &end) const {
+bool Resource::isOverbooked(const QDateTime &start, const QDateTime &end) const {
     //kDebug()<<k_funcinfo<<m_name<<": "<<start.toString()<<" - "<<end.toString()<<" cs=("<<m_currentSchedule<<")"<<endl;
     return m_currentSchedule ? m_currentSchedule->isOverbooked(start, end) : false;
 }
@@ -853,13 +868,13 @@ void ResourceRequest::makeAppointment( Schedule *ns )
 ResourceGroupRequest::ResourceGroupRequest(ResourceGroup *group, int units)
     : m_group(group), m_units(units), m_parent(0) {
 
-    kDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
+    //kDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
     if (group)
         group->registerRequest(this);
 }
 
 ResourceGroupRequest::~ResourceGroupRequest() {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_group)
         m_group->unregisterRequest(this);
 
@@ -869,7 +884,7 @@ ResourceGroupRequest::~ResourceGroupRequest() {
 }
 
 void ResourceGroupRequest::addResourceRequest(ResourceRequest *request) {
-    kDebug()<<k_funcinfo<<"("<<request<<") to Group: "<<(void*)m_group<<endl;
+    //kDebug()<<k_funcinfo<<"("<<request<<") to Group: "<<(void*)m_group<<endl;
     request->setParent(this);
     m_resourceRequests.append(request);
     request->registerRequest();
@@ -1112,7 +1127,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
     if (!match) {
-        kError()<<k_funcinfo<<(task()?task()->name():"No task")<<" "<<time<<": Could not match effort."<<" Want: "<<_effort.toString(Duration::Format_Day)<<" got: "<<e.toString(Duration::Format_Day)<<" sts="<<sts<<endl;
+        kError()<<k_funcinfo<<(task()?task()->name():"No task")<<" "<<time.toString()<<": Could not match effort."<<" Want: "<<_effort.toString(Duration::Format_Day)<<" got: "<<e.toString(Duration::Format_Day)<<" sts="<<sts<<endl;
     }
     DateTime t;
     if (e != Duration::zeroDuration) {
@@ -1203,11 +1218,11 @@ void ResourceGroupRequest::changed()
 /////////
 ResourceRequestCollection::ResourceRequestCollection(Task &task)
     : m_task(task) {
-    kDebug()<<k_funcinfo<<this<<(void*)(&task)<<endl;
+    //kDebug()<<k_funcinfo<<this<<(void*)(&task)<<endl;
 }
 
 ResourceRequestCollection::~ResourceRequestCollection() {
-    kDebug()<<k_funcinfo<<this<<endl;
+    //kDebug()<<k_funcinfo<<this<<endl;
     while (!m_requests.empty()) {
         delete m_requests.takeFirst();
     }
@@ -1389,7 +1404,7 @@ bool ResourceRequestCollection::isEmpty() const {
 
 void ResourceRequestCollection::changed()
 {
-    kDebug()<<k_funcinfo<<(void*)(&m_task)<<endl;
+    //kDebug()<<k_funcinfo<<(void*)(&m_task)<<endl;
     m_task.changed();
 }
 

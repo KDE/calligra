@@ -24,16 +24,19 @@
 namespace KPlato
 {
 
-DateTime::DateTime() : QDateTime() {
+DateTime::DateTime() : KDateTime() {
 }
 
-DateTime::DateTime(const QDateTime &dt) : QDateTime(dt.date(), dt.time()) {
+DateTime::DateTime(const QDateTime &dt, const KDateTime::Spec &spec) : KDateTime(dt, spec) {
 }
 
-DateTime::DateTime(const QDate &date) : QDateTime(date) {
+DateTime::DateTime(const KDateTime &dt) : KDateTime( dt ) {
 }
 
-DateTime::DateTime(const QDate &date, const QTime &time) : QDateTime(date, time) {
+DateTime::DateTime(const QDate &date, const KDateTime::Spec &spec) : KDateTime(date, spec) {
+}
+
+DateTime::DateTime(const QDate &date, const QTime &time, const KDateTime::Spec &spec) : KDateTime(date, time, spec ) {
 }
 
 void DateTime::add(const Duration &duration) {
@@ -82,6 +85,25 @@ DateTime DateTime::operator-(const Duration &duration) const {
 DateTime& DateTime::operator-=(const Duration &duration) {
     subtract(duration);
     return *this;
+}
+
+DateTime DateTime::fromString( const QString dts, const KDateTime::Spec &spec )
+{
+    if (dts.isEmpty()) {
+        return DateTime();
+    }
+    KDateTime dt = KDateTime::fromString(dts);
+    if ( ! dt.isValid() ) {
+        // try to parse in qt default format (used in early version)
+        return DateTime( QDateTime::fromString(dts), spec );
+    }
+    if ( dt.isClockTime() ) {
+        // timezone offset missing, set to spec
+        return DateTime( dt.dateTime(), spec );
+    }
+    DateTime t = DateTime( dt.toTimeSpec( spec ) );
+    kDebug()<<k_funcinfo<<dt<<" -> "<<t.toString()<<endl;
+    return t;
 }
 
 }  //KPlato namespace

@@ -50,8 +50,8 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
     kDebug()<<k_funcinfo<<endl;
     started->setChecked(m_completion.started());
     finished->setChecked(m_completion.finished());
-    startTime->setDateTime(m_completion.startTime());
-    finishTime->setDateTime(m_completion.finishTime());
+    startTime->setDateTime(m_completion.startTime().dateTime());
+    finishTime->setDateTime(m_completion.finishTime().dateTime());
     
     if ( m_completion.entryDate() < QDate::currentDate() ) {
         dateEdit->setDate( QDate::currentDate() );
@@ -78,8 +78,8 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
     actualEffort->setFieldUnit(1, i18nc("hour", "h"));
     actualEffort->setFieldUnit(2, i18nc("minute", "m"));
     
-    scheduledStart->setDateTime(task.startTime());
-    scheduledFinish->setDateTime(task.endTime());
+    scheduledStart->setDateTime(task.startTime().dateTime());
+    scheduledFinish->setDateTime(task.endTime().dateTime());
     scheduledEffort->setValue(task.effort()->expected());
     scheduledEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     scheduledEffort->setFieldUnit(0, i18nc("day", "d"));
@@ -108,11 +108,11 @@ KCommand *TaskProgressPanel::buildCommand(Part *part) {
         if ( cmd == 0 ) cmd = new KMacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_completion, finished->isChecked() ) );
     }
-    if ( m_completion.startTime() != startTime->dateTime() ) {
+    if ( m_completion.startTime().dateTime() != startTime->dateTime() ) {
         if ( cmd == 0 ) cmd = new KMacroCommand( c );
         cmd->addCommand( new ModifyCompletionStartTimeCmd(part, m_completion, startTime->dateTime() ) );
     }
-    if ( m_completion.finishTime() != finishTime->dateTime() ) {
+    if ( m_completion.finishTime().dateTime() != finishTime->dateTime() ) {
         if ( cmd == 0 ) cmd = new KMacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishTimeCmd(part, m_completion, finishTime->dateTime() ) );
     }

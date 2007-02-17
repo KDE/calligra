@@ -36,7 +36,8 @@ class Part;
 class Task;
 class StandardWorktime;
 class DurationWidget;
-
+class DateTime;
+        
 class TaskGeneralPanelImpl : public QWidget, public Ui_TaskGeneralPanelBase
 {
     Q_OBJECT

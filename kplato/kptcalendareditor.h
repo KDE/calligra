@@ -125,6 +125,8 @@ protected slots:
 protected:
     QVariant name( const Calendar *calendar, int role ) const;
     bool setName( Calendar *calendar, const QVariant &value, int role );
+    QVariant timeZone( const Calendar *calendar, int role ) const;
+    bool setTimeZone( Calendar *calendar, const QVariant &value, int role );
     
     QList<Calendar*> calendarList( QDataStream &stream ) const;
 

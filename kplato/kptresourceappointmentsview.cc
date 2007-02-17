@@ -127,8 +127,8 @@ void ResourceAppointmentsView::slotUpdate() {
     KLocale *locale = KGlobal::locale();
     const KCalendarSystem *cal = locale->calendar();
     const Calendar *resCal = m_resource->calendar();
-    const QDateTime availFrom = m_resource->availableFrom();
-    const QDateTime availUntil = m_resource->availableUntil();
+    const DateTime availFrom = m_resource->availableFrom();
+    const DateTime availUntil = m_resource->availableUntil();
     // Add columns for selected period/periods
     //kDebug()<<k_funcinfo<<start<<" - "<<end<<endl;
     QStringList df;
@@ -150,8 +150,8 @@ void ResourceAppointmentsView::slotUpdate() {
         int col=0;
         for (QDate d=m_start; d <= m_end; d = cal->addDays(d, 1), ++col) {
             if (item == m_availItem && resCal) {
-                QDateTime f(d);
-                QDateTime u(d, QTime(23, 59, 59, 999));
+                DateTime f(d, resCal->timeSpec());
+                DateTime u(d, QTime(23, 59, 59, 999), f.timeSpec());
                 if (f >= availUntil || u <= availFrom) {
                     avail = 0.0;
                 } else {

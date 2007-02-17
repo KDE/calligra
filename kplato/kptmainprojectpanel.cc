@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -51,8 +51,8 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     descriptionfield->setText(project.description());
     wbs->setText(project.wbs());
 
-    QDateTime st = project.constraintStartTime();
-    QDateTime et = project.constraintEndTime();
+    DateTime st = project.constraintStartTime();
+    DateTime et = project.constraintEndTime();
     QString s = i18n("Scheduling");
     Schedule *sch = project.currentSchedule();
     if (sch) {
@@ -118,11 +118,11 @@ KCommand *MainProjectPanel::buildCommand(Part *part) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustFinishOn));
     }
-    if (bStartDate->isChecked() && startDateTime() != project.constraintStartTime()) {
+    if (bStartDate->isChecked() && startDateTime() != project.constraintStartTime().dateTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyStartTimeCmd(part, project, startDateTime()));
     }
-    if (bEndDate->isChecked() && endDateTime() != project.constraintEndTime()) {
+    if (bEndDate->isChecked() && endDateTime() != project.constraintEndTime().dateTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(part, project, endDateTime()));
     }

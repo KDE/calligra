@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
     Copyright (C) 1997 Tim D. Gilman (tdgilman@best.org)
               (C) 1998-2001 Mirko Boehm (mirko@kde.org)
-              (C) 2004 Dag Andersen <danders@get2net.dk>
+              (C) 2004-2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

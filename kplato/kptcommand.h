@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2004, 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -120,6 +120,7 @@ class CalendarModifyParentCmd : public NamedCommand
 {
 public:
     CalendarModifyParentCmd( Part *part, Project *project, Calendar *cal, Calendar *newvalue, const QString& name = QString() );
+    ~CalendarModifyParentCmd();
     void execute();
     void unexecute();
 
@@ -128,6 +129,22 @@ private:
     Project *m_project;
     Calendar *m_newvalue;
     Calendar *m_oldvalue;
+    KMacroCommand *m_cmd;
+};
+
+class CalendarModifyTimeZoneCmd : public NamedCommand
+{
+public:
+    CalendarModifyTimeZoneCmd( Part *part, Calendar *cal, const KTimeZone *value, const QString& name = QString() );
+    ~CalendarModifyTimeZoneCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    const KTimeZone *m_newvalue;
+    const KTimeZone *m_oldvalue;
+    KMacroCommand *m_cmd;
 };
 
 class CalendarAddDayCmd : public NamedCommand
@@ -372,8 +389,8 @@ public:
 private:
     Node &m_node;
     QDateTime newTime;
-    QDateTime oldTime;
-
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
 };
 class NodeModifyConstraintEndTimeCmd : public NamedCommand
 {
@@ -385,8 +402,8 @@ public:
 private:
     Node &m_node;
     QDateTime newTime;
-    QDateTime oldTime;
-
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
 };
 class NodeModifyStartTimeCmd : public NamedCommand
 {
@@ -398,7 +415,8 @@ public:
 private:
     Node &m_node;
     QDateTime newTime;
-    QDateTime oldTime;
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
 };
 class NodeModifyEndTimeCmd : public NamedCommand
 {
@@ -410,7 +428,8 @@ public:
 private:
     Node &m_node;
     QDateTime newTime;
-    QDateTime oldTime;
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
 };
 class NodeModifyIdCmd : public NamedCommand
 {
@@ -785,26 +804,28 @@ private:
 class ModifyResourceAvailableFromCmd : public NamedCommand
 {
 public:
-    ModifyResourceAvailableFromCmd( Part *part, Resource *resource, const DateTime& value, const QString& name = QString() );
+    ModifyResourceAvailableFromCmd( Part *part, Resource *resource, const QDateTime& value, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_resource;
-    DateTime m_newvalue;
+    QDateTime m_newvalue;
     DateTime m_oldvalue;
+    KDateTime::Spec m_spec;
 };
 class ModifyResourceAvailableUntilCmd : public NamedCommand
 {
 public:
-    ModifyResourceAvailableUntilCmd( Part *part, Resource *resource, const DateTime& value, const QString& name = QString() );
+    ModifyResourceAvailableUntilCmd( Part *part, Resource *resource, const QDateTime& value, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_resource;
-    DateTime m_newvalue;
+    QDateTime m_newvalue;
     DateTime m_oldvalue;
+    KDateTime::Spec m_spec;
 };
 
 class ModifyResourceNormalRateCmd : public NamedCommand
@@ -930,8 +951,9 @@ public:
 
 private:
     Completion &m_completion;
-    QDateTime oldvalue;
+    DateTime oldvalue;
     QDateTime newvalue;
+    KDateTime::Spec m_spec;
 };
 
 class ModifyCompletionFinishTimeCmd : public NamedCommand
@@ -943,8 +965,9 @@ public:
 
 private:
     Completion &m_completion;
-    QDateTime oldvalue;
+    DateTime oldvalue;
     QDateTime newvalue;
+    KDateTime::Spec m_spec;
 };
 
 class AddCompletionEntryCmd : public NamedCommand
@@ -1127,8 +1150,8 @@ public:
 private:
     Project &m_node;
     QDateTime newTime;
-    QDateTime oldTime;
-
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
 };
 
 class ProjectModifyEndTimeCmd : public NamedCommand
@@ -1141,8 +1164,8 @@ public:
 private:
     Project &m_node;
     QDateTime newTime;
-    QDateTime oldTime;
-
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
 };
 
 

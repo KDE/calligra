@@ -136,8 +136,8 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     dia->emailEdit->setText(resource->email());
     dia->type->setCurrentIndex((int)resource->type()); // NOTE: must match enum
     dia->units->setValue(resource->units());
-    dia->availableFrom->setDateTime(resource->availableFrom());
-    dia->availableUntil->setDateTime(resource->availableUntil());
+    dia->availableFrom->setDateTime(resource->availableFrom().dateTime());
+    dia->availableUntil->setDateTime(resource->availableUntil().dateTime());
     dia->rateEdit->setText(KGlobal::locale()->formatMoney(resource->normalRate()));
     dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource->overtimeRate()));
 
@@ -220,11 +220,11 @@ KCommand *ResourceDialog::buildCommand(Resource *original, Resource &resource, P
     }
     if (resource.availableFrom() != original->availableFrom()) {
         if (!m) m = new KMacroCommand(n);
-        m->addCommand(new ModifyResourceAvailableFromCmd(part, original, resource.availableFrom()));
+        m->addCommand(new ModifyResourceAvailableFromCmd(part, original, resource.availableFrom().dateTime()));
     }
     if (resource.availableUntil() != original->availableUntil()) {
         if (!m) m = new KMacroCommand(n);
-        m->addCommand(new ModifyResourceAvailableUntilCmd(part, original, resource.availableUntil()));
+        m->addCommand(new ModifyResourceAvailableUntilCmd(part, original, resource.availableUntil().dateTime()));
     }
     if (resource.normalRate() != original->normalRate()) {
         if (!m) m = new KMacroCommand(n);

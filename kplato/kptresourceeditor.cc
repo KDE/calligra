@@ -571,13 +571,13 @@ QVariant ResourceItemModel::availableFrom( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableFrom() );
+            return KGlobal::locale()->formatDateTime( res->availableFrom().dateTime() );
         case Qt::EditRole:
-            return res->availableFrom();
+            return res->availableFrom().dateTime();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDateTime( res->availableFrom() );
+            return KGlobal::locale()->formatDateTime( res->availableFrom().dateTime() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -599,13 +599,13 @@ QVariant ResourceItemModel::availableUntil( const Resource *res, int role ) cons
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableUntil() );
+            return KGlobal::locale()->formatDateTime( res->availableUntil().dateTime() );
         case Qt::EditRole:
-            return res->availableUntil();
+            return res->availableUntil().dateTime();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDateTime( res->availableUntil() );
+            return KGlobal::locale()->formatDateTime( res->availableUntil().dateTime() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

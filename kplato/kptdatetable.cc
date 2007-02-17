@@ -392,6 +392,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         m_selectedDates.clear();
         updateSelectedCells();
         repaintContents(false);
+        emit selectionCleared();
         return;
     }
     if (row==0 && col>0) { // the user clicked on weekdays
@@ -403,7 +404,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             // check first downside - then upside, clear all others
             bool select = false;
             for(int i=m_dateStartCol; i < col; ++i) {
-                kDebug()<<"Down["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
+                //kDebug()<<"Down["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
                 if (m_selectedWeekdays.contains(weekday(i))) {
                     select = true; // we have hit a selected day; select the rest
                 } else if (select) {
@@ -413,7 +414,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             bool selected = select;
             select = false;
             for(int i=7; i > col; --i) {
-                kDebug()<<"Up["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
+                //kDebug()<<"Up["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
                 if (m_selectedWeekdays.contains(weekday(i))) {
                     if (selected) m_selectedWeekdays.toggle(weekday(i)); // deselect
                     else select = true;
@@ -434,8 +435,11 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         updateSelectedCells();
         repaintContents(false);
         if (m_enabled) {
-            kDebug()<<k_funcinfo<<"emit weekdaySelected("<<day<<")"<<endl;
+            //kDebug()<<k_funcinfo<<"emit weekdaySelected("<<day<<")"<<endl;
             emit weekdaySelected(day); // day= 1..7
+        }
+        if ( m_selectedWeekdays.isEmpty() ) {
+            emit selectionCleared();
         }
         return;
     }
@@ -479,6 +483,9 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             m_selectedDates.clear();
             m_selectedDates.toggleClear(date);
             //kDebug()<<k_funcinfo<<"toggleClear date: "<<date.toString()<<" state="<<m_selectedDates.state(date)<<endl;
+        }
+        if ( m_selectedDates.isEmpty() ) {
+            emit selectionCleared();
         }
     }
     repaintContents(false);

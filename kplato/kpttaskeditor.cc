@@ -506,19 +506,19 @@ QVariant NodeItemModel::constraintStartTime( const Node *node, int role ) const
             if ( ! ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) ) {
                 return " "; //HACK to show focus
             }
-            return KGlobal::locale()->formatDateTime( node->constraintStartTime() );
+            return KGlobal::locale()->formatDateTime( node->constraintStartTime().dateTime() );
         }
         case Qt::ToolTipRole: {
             int c = node->constraint();
             if ( ! ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) ) {
                 return QVariant();
             }
-            return KGlobal::locale()->formatDateTime( node->constraintStartTime() );
+            return KGlobal::locale()->formatDateTime( node->constraintStartTime().dateTime() );
         }
         case Qt::EditRole: {
             int c = node->constraint();
             if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) {
-                return node->constraintStartTime();
+                return node->constraintStartTime().dateTime();
             }
             break;
         }
@@ -547,19 +547,19 @@ QVariant NodeItemModel::constraintEndTime( const Node *node, int role ) const
             if ( ! ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) ) {
                 return " "; //HACK to show focus
             }
-            return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+            return KGlobal::locale()->formatDateTime( node->constraintEndTime().dateTime() );
         }
         case Qt::ToolTipRole: {
             int c = node->constraint();
             if ( ! ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) ) {
                 return QVariant();
             }
-            return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+            return KGlobal::locale()->formatDateTime( node->constraintEndTime().dateTime() );
         }
         case Qt::EditRole: {
             int c = node->constraint();
             if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
-                return node->constraintEndTime();
+                return node->constraintEndTime().dateTime();
             }
             break;
         }

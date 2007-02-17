@@ -65,7 +65,8 @@ public:
     Q3TimeEdit* endTime;
     QPushButton* bClear;
     QPushButton* bAddInterval;
-
+    QComboBox *timezone;
+    
 protected:
     Q3HBoxLayout* CalendarEditBaseLayout;
     Q3GridLayout* groupBox2Layout;

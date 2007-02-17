@@ -28,6 +28,7 @@ class KMacroCommand;
 namespace KPlato
 {
 
+class DateTime;
 class Part;
 class Task;
 class StandardWorktime;

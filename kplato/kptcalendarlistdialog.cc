@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 - 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -63,11 +63,20 @@ public:
 
     void setState(State s) { state |= s; }
 
-    Calendar *baseCalendar() {
+    bool hasParent() const {
+        return (bool)base;
+    }
+    QString timeZone() const {
+        if ( hasParent() ) {
+            return base->timeZone();
+        }
+        return calendar->timeZone()->name();
+    }
+    Calendar *baseCalendar() const {
         if (state & Deleted) return 0;
         return original ? original : calendar;
     }
-    bool hasBaseCalendar(CalendarListViewItem *item) {
+    bool hasBaseCalendar(CalendarListViewItem *item) const {
         if (!base) return false;
         return base == item || base->hasBaseCalendar(item);
     }
@@ -134,6 +143,10 @@ public:
                     kError()<<k_funcinfo<<"Should always have 7 weekdays"<<endl;
                 }
             }
+            if ( original->timeZone() != calendar->timeZone() ) {
+                if (macro == 0) macro = new KMacroCommand("");
+                macro->addCommand( new CalendarModifyTimeZoneCmd( part, original, calendar->timeZone() ) );
+            }
         }
         return macro;
     }
@@ -183,7 +196,7 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
         f->setSelected(true);
     }
     //kDebug()<<"size="<<size().width()<<"x"<<size().height()<<" hint="<<sizeHint().width()<<"x"<<sizeHint().height()<<endl;
-    resize(QSize(725, 388).expandedTo(minimumSizeHint()));
+    resize(QSize(725, 450).expandedTo(minimumSizeHint()));
 
     setMainWidget(dia);
     enableButtonOk(false);
@@ -240,7 +253,8 @@ CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent)
 
     connect(calendar, SIGNAL(obligatedFieldsFilled(bool)), SLOT(slotEnableButtonOk(bool)));
     connect(calendar, SIGNAL(applyClicked()), SLOT(slotCalendarModified()));
-
+    connect(calendar, SIGNAL(timeZoneChanged()), SLOT(slotCalendarModified()));
+    
     connect(bDelete, SIGNAL(clicked()), SLOT(slotDeleteClicked()));
     connect(bAdd, SIGNAL(clicked()), SLOT(slotAddClicked()));
     //connect(editName, SIGNAL(returnPressed()), SLOT(slotAddClicked()));
@@ -313,7 +327,7 @@ void CalendarListDialogImpl::slotSelectionChanged(QTreeWidgetItem *listItem) {
     baseCalendar->setEnabled(false);
     CalendarListViewItem *cal = dynamic_cast<CalendarListViewItem *>(listItem);
     if (cal) {
-        setCalendar(cal->calendar);
+        setCalendar(cal->calendar, cal->timeZone(), cal->hasParent());
         baseCalendar->addItem(i18n("None"));
         baseCalendarList.append(0);
         int me = 0, i = 0;
@@ -336,8 +350,8 @@ void CalendarListDialogImpl::slotSelectionChanged(QTreeWidgetItem *listItem) {
     }
     calendar->clear();
 }
-void CalendarListDialogImpl::setCalendar(Calendar *cal) {
-    calendar->setCalendar(cal);
+void CalendarListDialogImpl::setCalendar(Calendar *cal, const QString &tz, bool disable) {
+    calendar->setCalendar(cal, tz, disable);
     calendar->setEnabled(true);
 }
 

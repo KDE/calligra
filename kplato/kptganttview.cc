@@ -205,7 +205,7 @@ void GanttView::draw()
         drawRelations();
     
         if ( m_firstTime ) {
-            m_gantt->centerTimelineAfterShow( m_project->startTime( m_project->currentViewScheduleId() ).addDays( -1 ) );
+            m_gantt->centerTimelineAfterShow( m_project->startTime( m_project->currentViewScheduleId() ).dateTime().addDays( -1 ) );
             m_firstTime = false;
         }
         currentItemChanged( m_gantt->firstChild() ); //hmmm
@@ -501,8 +501,8 @@ void GanttView::modifyProject( KDGanttViewItem *item, Node *node )
     item->setListViewText( node->name() );
     item->setListViewText( 1, node->wbs() );
     
-    item->setStartTime( node->startTime( m_id ) );
-    item->setEndTime( node->endTime( m_id ) );
+    item->setStartTime( node->startTime( m_id ).dateTime() );
+    item->setEndTime( node->endTime( m_id ).dateTime() );
     //item->setOpen(true);
     setDrawn( item, true );
 
@@ -516,13 +516,13 @@ void GanttView::modifySummaryTask( KDGanttViewItem *item, Task *task )
     //kDebug()<<k_funcinfo<<task->name()<<": "<<task->currentSchedule()<<", "<<task->notScheduled()<<", "<<(m_project ? m_project->notScheduled() : false)<<endl;
     if ( task->findSchedule( m_id ) == 0 ) {
         item->setShowNoInformation( m_showNoInformation );
-        item->setStartTime( task->projectNode() ->startTime( m_id ) );
+        item->setStartTime( task->projectNode() ->startTime( m_id ).dateTime() );
         item->setEndTime( item->startTime().addDays( 1 ) );
     } else {
         bool noinf = m_showNoInformation && ( task->notScheduled( m_id ) || ( m_project ? m_project->notScheduled( m_id ) : false /*hmmm, no project?*/ ) );
         item->setShowNoInformation( noinf );
-        item->setStartTime( task->startTime( m_id ) );
-        item->setEndTime( task->endTime( m_id ) );
+        item->setStartTime( task->startTime( m_id ).dateTime() );
+        item->setEndTime( task->endTime( m_id ).dateTime() );
     }
     item->setListViewText( task->name() );
     item->setListViewText( 1, task->wbs() );
@@ -567,13 +567,13 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
     item->setListViewText( 1, task->wbs() );
     if ( task->findSchedule( m_id ) == 0 ) {
         item->setShowNoInformation( m_showNoInformation );
-        item->setStartTime( task->projectNode() ->startTime( m_id ) );
+        item->setStartTime( task->projectNode() ->startTime( m_id ).dateTime() );
         item->setEndTime( item->startTime().addDays( 1 ) );
     } else {
         bool noinf = m_showNoInformation && ( task->notScheduled( m_id ) || ( m_project ? m_project->notScheduled( m_id ) : false /*hmmm, no project?*/ ) );
         item->setShowNoInformation( noinf );
-        item->setStartTime( task->startTime( m_id ) );
-        item->setEndTime( task->endTime( m_id ) );
+        item->setStartTime( task->startTime( m_id ).dateTime() );
+        item->setEndTime( task->endTime( m_id ).dateTime() );
     }
     //item->setOpen(true);
     QString text;
@@ -603,9 +603,9 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
         item->setProgress( 0 );
     }
     if ( m_showPositiveFloat ) {
-        QDateTime t = task->endTime( m_id ) + task->positiveFloat( m_id );
+        DateTime t = task->endTime( m_id ) + task->positiveFloat( m_id );
         if ( t.isValid() && t > task->endTime( m_id ) ) {
-            item->setFloatEndTime( t );
+            item->setFloatEndTime( t.dateTime() );
         } else {
             item->setFloatEndTime( QDateTime() );
         }
@@ -691,11 +691,11 @@ void GanttView::modifyMilestone( KDGanttViewItem *item, Task *task )
     //kDebug()<<k_funcinfo<<task->name()<<": "<<task->currentSchedule()<<", "<<task->notScheduled()<<", "<<(m_project ? m_project->notScheduled() : false)<<endl;
     if ( task->findSchedule( m_id ) == 0 ) {
         item->setShowNoInformation( m_showNoInformation );
-        item->setStartTime( task->projectNode() ->startTime( m_id ) );
+        item->setStartTime( task->projectNode() ->startTime( m_id ).dateTime() );
     } else {
         bool noinf = m_showNoInformation && ( task->notScheduled( m_id ) || ( m_project ? m_project->notScheduled( m_id ) : false /*hmmm, no project?*/ ) );
         item->setShowNoInformation( noinf );
-        item->setStartTime( task->startTime( m_id ) );
+        item->setStartTime( task->startTime( m_id ).dateTime() );
     }
     item->setListViewText( task->name() );
     item->setListViewText( 1, task->wbs() );
@@ -709,7 +709,7 @@ void GanttView::modifyMilestone( KDGanttViewItem *item, Task *task )
         DateTime t = task->startTime( m_id ) + task->positiveFloat( m_id );
         //kDebug()<<k_funcinfo<<task->name()<<" float: "<<t.toString()<<endl;
         if ( t.isValid() && t > task->startTime( m_id ) ) {
-            item->setFloatEndTime( t );
+            item->setFloatEndTime( t.dateTime() );
         } else {
             item->setFloatEndTime( QDateTime() );
         }

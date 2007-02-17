@@ -79,13 +79,13 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
 
     setSchedulingType(task.constraint());
     if (task.constraintStartTime().isValid()) {
-        setStartDateTime(task.constraintStartTime());
+        setStartDateTime(task.constraintStartTime().dateTime());
     } else {
         QDate date = QDate::currentDate();
         setStartDateTime(QDateTime(date, QTime()));
     }
     if (task.constraintEndTime().isValid()) {
-        setEndDateTime(task.constraintEndTime());
+        setEndDateTime(task.constraintEndTime().dateTime());
     } else {
         setEndDateTime(QDateTime(startDate().addDays(1), QTime()));
     }
@@ -116,12 +116,12 @@ KMacroCommand *TaskDefaultPanel::buildCommand(Part *part) {
         cmd->addCommand(new NodeModifyConstraintCmd(part, m_task, c));
         modified = true;
     }
-    if (startDateTime() != m_task.constraintStartTime() &&
+    if (startDateTime() != m_task.constraintStartTime().dateTime() &&
         (c == Node::FixedInterval || c == Node::StartNotEarlier || c == Node::MustStartOn)) {
         cmd->addCommand(new NodeModifyConstraintStartTimeCmd(part, m_task, startDateTime()));
         modified = true;
     }
-    if (endDateTime() != m_task.constraintEndTime() &&
+    if (endDateTime() != m_task.constraintEndTime().dateTime() &&
         (c == Node::FinishNotLater || c == Node::FixedInterval || c == Node::MustFinishOn)) {
         cmd->addCommand(new NodeModifyConstraintEndTimeCmd(part, m_task, endDateTime()));
         modified = true;

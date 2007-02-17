@@ -37,6 +37,8 @@
 
 #include <klocale.h>
 
+class KTimeZone;
+
 namespace KPlato
 {
 
@@ -50,6 +52,18 @@ class XMLLoaderObject;
  * Project is the main node in a project, it contains child nodes and
  * possibly sub-projects. A sub-project is just another instantion of this
  * node however.
+ *
+ * A note on timezones:
+ * To be able to handle resources working in diffierent timezones and
+ * to facilitate data exchange with other applications like PIMs or
+ * and groupware servers, the project has a timezone that is used for 
+ * all datetimes in nodes and schedules.
+ * By default the local timezone is used.
+ *
+ * A resources timezone is defined by the associated calendar.
+ *
+ * Note that a projects datetimes are always displayed/modified in the timezone
+ * it was originally created, not necessarly in your current local timezone.
  */
 class Project : public Node
 {
@@ -317,6 +331,13 @@ public:
     void setProjectSlack(const int& theValue);
     int projectSlack() const;
 
+    /// Return the time spec used in this project
+    const KDateTime::Spec &timeSpec() const { return m_spec; }
+    /// Return the time zone used in this project
+    const KTimeZone *timeZone() const { return m_spec.timeZone(); }
+    /// Set the time zone to be used in this project
+    void setTimeZone( const KTimeZone *tz ) { m_spec = KDateTime::Spec( tz ); }
+    
 signals:
     void currentScheduleChanged();
     void sigProgress( int );
@@ -412,7 +433,8 @@ private:
     QMap<QString, Calendar*> calendarIdDict;
 
     QList<ScheduleManager*> m_managers;
-
+    KDateTime::Spec m_spec;
+    
     //use in pert to store the project slack
     int m_projectSlack;
 

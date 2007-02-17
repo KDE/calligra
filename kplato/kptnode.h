@@ -202,9 +202,9 @@ public:
     QString constraintToString( bool trans=false ) const;
     static QStringList constraintList( bool trans );
     
-    virtual void setConstraintStartTime(QDateTime time) 
+    virtual void setConstraintStartTime(DateTime time) 
         { m_constraintStartTime = time; changed( this ); }
-    virtual void setConstraintEndTime(QDateTime time) 
+    virtual void setConstraintEndTime(DateTime time) 
         { m_constraintEndTime = time; changed( this ); }
 
     virtual DateTime constraintStartTime() const { return m_constraintStartTime; }

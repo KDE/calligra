@@ -19,7 +19,8 @@
 #ifndef KPTDATETIME_H
 #define KPTDATETIME_H
 
-#include <qdatetime.h>
+#include <kdatetime.h>
+
 #include "kptduration.h"
 
 namespace KPlato
@@ -28,15 +29,22 @@ namespace KPlato
 class Duration;
 
 /**
- * DateTime is a @ref QDateTime which knows about @ref Duration
+ * DateTime is a @ref KDateTime which knows about @ref Duration
+ * Note that in KPlato all datetimes are really in the time zone specified
+ * in the project.
+ * Exception to this is the calendar related dates and times which has
+ * their own time zone specification.
  */
-class DateTime : public QDateTime {
+class DateTime : public KDateTime {
 
 public:
     DateTime();
-    DateTime(const QDateTime &dt);
-    explicit DateTime(const QDate &date);
-    DateTime(const QDate &date, const QTime &time);
+    /// Create a datetime in the specified time zone
+    DateTime(const QDateTime &dt, const KDateTime::Spec &spec);
+    /// Create a copy of dt (same time, same time zone).
+    DateTime(const KDateTime &dt);
+    explicit DateTime(const QDate &date, const KDateTime::Spec &spec);
+    DateTime(const QDate &date, const QTime &time, const KDateTime::Spec &spec=KDateTime::Spec(LocalZone));
 
     /**
      * Adds the duration @param duration to the datetime
@@ -55,15 +63,10 @@ public:
     DateTime &operator+=(const Duration &duration);
     DateTime &operator-=(const Duration &duration);
 
-    static DateTime fromString(const QString dts) {
-        QDateTime dt;
-        if (dts.isEmpty())
-            return DateTime();
-        dt = QDateTime::fromString(dts, Qt::ISODate);
-        if (dt.isValid())
-            return DateTime(dt);
-        return DateTime(QDateTime::fromString(dts));
-    }
+    /**
+     * Parse a datetime string and return a DateTime.
+     */
+    static DateTime fromString(const QString dts, const KDateTime::Spec &spec=LocalZone);
 private:
 
     Duration duration(const DateTime &dt) const;

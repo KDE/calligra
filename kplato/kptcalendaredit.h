@@ -43,7 +43,7 @@ public:
     CalendarEdit (QWidget *parent=0, const char *name=0);
 
     Calendar *getCalendar() { return m_calendar; }
-    void setCalendar(Calendar *cal);
+    void setCalendar(Calendar *cal, const QString &tz, bool disable);
 
     void clear();
     void clearPanel();
@@ -58,13 +58,17 @@ private slots:
     void slotAddIntervalClicked();
     void slotApplyClicked();
     void slotSelectionCleared();
+    void slotTimeZoneChanged( int );
 
 signals:
-    void obligatedFieldsFilled(bool yes);
     void applyClicked();
+    void obligatedFieldsFilled(bool yes);
+    void changed();
+    void timeZoneChanged();
 
 private:
     Calendar *m_calendar;
+    bool m_changed;
 };
 
 //------------------------------

@@ -25,6 +25,7 @@
 #include "kptcalendar.h"
 #include "kpteffortcostmap.h"
 #include "kptschedule.h"
+#include "kptxmlloaderobject.h"
 
 #include <kdebug.h>
 
@@ -62,31 +63,32 @@ Duration AppointmentInterval::effort(const DateTime &start, const DateTime end) 
     return (e - s) * m_load / 100;
 }
 
-Duration AppointmentInterval::effort(const DateTime &time, bool upto) const {
+Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
+    DateTime t( DateTime( time, m_start.timeSpec() ) );
     if (upto) {
-        if (time <= m_start) {
+        if (t <= m_start) {
             return Duration::zeroDuration;
         }
-        DateTime e = (time < m_end ? time : m_end);
+        DateTime e = (t < m_end ? t : m_end);
         return (e - m_start) * m_load / 100;
     }
     // from time till end
-    if (time >= m_end) {
+    if (t >= m_end) {
         return Duration::zeroDuration;
     }
-    DateTime s = (time > m_start ? time : m_start);
+    DateTime s = (t > m_start ? t : m_start);
     return (m_end - s) * m_load / 100;
 }
 
-bool AppointmentInterval::loadXML(QDomElement &element) {
+bool AppointmentInterval::loadXML(QDomElement &element, XMLLoaderObject &status) {
     //kDebug()<<k_funcinfo<<endl;
     bool ok;
     QString s = element.attribute("start");
     if (!s.isEmpty())
-        m_start = DateTime::fromString(s);
+        m_start = DateTime::fromString(s, status.projectSpec());
     s = element.attribute("end");
     if (!s.isEmpty())
-        m_end = DateTime::fromString(s);
+        m_end = DateTime::fromString(s, status.projectSpec());
     m_load = element.attribute("load", "100").toDouble(&ok);
     if (!ok) m_load = 100;
     return m_start.isValid() && m_end.isValid();
@@ -96,8 +98,8 @@ void AppointmentInterval::saveXML(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("interval");
     element.appendChild(me);
 
-    me.setAttribute("start", m_start.toString(Qt::ISODate));
-    me.setAttribute("end", m_end.toString(Qt::ISODate));
+    me.setAttribute("start", m_start.toString( KDateTime::ISODate ));
+    me.setAttribute("end", m_end.toString( KDateTime::ISODate ));
     me.setAttribute("load", m_load);
 }
 
@@ -157,17 +159,17 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
 void AppointmentIntervalList::inSort(AppointmentInterval *a)
 {
     Q_ASSERT( a->startTime() < a->endTime() );
-    insert( a->startTime().toString(Qt::ISODate) + a->endTime().toString(Qt::ISODate), a );
+    insert( a->startTime().toString( KDateTime::ISODate ) + a->endTime().toString( KDateTime::ISODate ), a );
 }
 
 //////
 
-Appointment::UsedEffortItem::UsedEffortItem(const QDate& date, Duration effort, bool overtime) {
+Appointment::UsedEffortItem::UsedEffortItem(const DateTime& date, Duration effort, bool overtime) {
     m_date = date;
     m_effort = effort;
     m_overtime = overtime;
 }
-QDate Appointment::UsedEffortItem::date() {
+DateTime Appointment::UsedEffortItem::date() {
     return m_date;
 }
 Duration Appointment::UsedEffortItem::effort() {
@@ -185,7 +187,7 @@ Appointment::UsedEffort::~UsedEffort() {
         delete takeFirst();
 }
 
-void Appointment::UsedEffort::inSort(const QDate& date, Duration effort, bool overtime) {
+void Appointment::UsedEffort::inSort(const DateTime& date, Duration effort, bool overtime) {
     UsedEffortItem *item = new UsedEffortItem(date, effort, overtime);
     this->append(item);
 //TODO    qSort(*this);
@@ -209,7 +211,7 @@ Duration Appointment::UsedEffort::usedEffort(const QDate &date, bool includeOver
     while (it.hasNext()) {
         UsedEffortItem *i = it.next();
         if ((includeOvertime || !i->isOvertime()) &&
-            i->date() == date) {
+            i->date().date() == date) {
             eff += i->effort();
         }
     }
@@ -222,7 +224,7 @@ Duration Appointment::UsedEffort::usedEffortTo(const QDate &date, bool includeOv
     while (it.hasNext()) {
         UsedEffortItem *i = it.next();
         if ((includeOvertime || !i->isOvertime()) &&
-            i->date() <= date) {
+            i->date().date() <= date) {
             eff += i->effort();
         }
     }
@@ -233,7 +235,7 @@ Duration Appointment::UsedEffort::usedOvertime() const {
     if (isEmpty()) {
         return Duration::zeroDuration;
     }
-    return usedOvertime(first()->date());
+    return usedOvertime(first()->date().date());
 }
 
 Duration Appointment::UsedEffort::usedOvertime(const QDate &date) const {
@@ -241,7 +243,7 @@ Duration Appointment::UsedEffort::usedOvertime(const QDate &date) const {
     QListIterator<UsedEffortItem*> it(*this);
     while (it.hasNext()) {
         UsedEffortItem *i = it.next();
-        if (i->isOvertime() && i->date() == date) {
+        if (i->isOvertime() && i->date().date() == date) {
             eff += i->effort();
         }
     }
@@ -253,24 +255,21 @@ Duration Appointment::UsedEffort::usedOvertimeTo(const QDate &date) const {
     QListIterator<UsedEffortItem*> it(*this);
     while (it.hasNext()) {
         UsedEffortItem *i = it.next();
-        if (i->isOvertime() && i->date() <= date) {
+        if (i->isOvertime() && i->date().date() <= date) {
             eff += i->effort();
         }
     }
     return eff;
 }
 
-bool Appointment::UsedEffort::load(QDomElement &element) {
+bool Appointment::UsedEffort::load(QDomElement &element, XMLLoaderObject &status) {
     QString s;
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "actual-effort") {
-                QDate date;
-                s = e.attribute("date");
-                if (!s.isEmpty())
-                    date = QDate::fromString(s, Qt::ISODate);
+                DateTime date = DateTime::fromString(e.attribute("date"), status.projectSpec());
                 Duration eff = Duration::fromString(e.attribute("effort"));
                 bool ot = e.attribute("overtime", "0").toInt();
                 if (date.isValid()) {
@@ -291,7 +290,7 @@ void Appointment::UsedEffort::save(QDomElement &element) const {
         UsedEffortItem *i = it.next();
         QDomElement me = element.ownerDocument().createElement("actual-effort");
         element.appendChild(me);
-        me.setAttribute("date",i->date().toString(Qt::ISODate));
+        me.setAttribute("date",i->date().toString( KDateTime::ISODate ));
         me.setAttribute("effort",i->effort().toString());
         me.setAttribute("overtime",i->isOvertime());
     }
@@ -396,14 +395,14 @@ bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
     return false;
 }
 
-bool Appointment::loadXML(QDomElement &element, Project &project, Schedule &sch) {
+bool Appointment::loadXML(QDomElement &element, XMLLoaderObject &status, Schedule &sch) {
     //kDebug()<<k_funcinfo<<project.name()<<endl;
-    Node *node = project.findNode(element.attribute("task-id"));
+    Node *node = status.project().findNode(element.attribute("task-id"));
     if (node == 0) {
         kError()<<k_funcinfo<<"The referenced task does not exists: "<<element.attribute("task-id")<<endl;
         return false;
     }
-    Resource *res = project.resource(element.attribute("resource-id"));
+    Resource *res = status.project().resource(element.attribute("resource-id"));
     if (res == 0) {
         kError()<<k_funcinfo<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id")<<endl;
         return false;
@@ -424,7 +423,7 @@ bool Appointment::loadXML(QDomElement &element, Project &project, Schedule &sch)
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "interval") {
             AppointmentInterval *a = new AppointmentInterval();
-                if (a->loadXML(e)) {
+                if (a->loadXML(e, status)) {
                     addInterval(a);
                 } else {
                     kError()<<k_funcinfo<<"Could not load interval"<<endl;
@@ -436,7 +435,7 @@ bool Appointment::loadXML(QDomElement &element, Project &project, Schedule &sch)
     if (isEmpty()) {
         return false;
     }
-    m_actualEffort.load(element);
+    m_actualEffort.load(element, status);
     return true;
 }
 
@@ -476,10 +475,10 @@ Duration Appointment::plannedEffort() const {
 // Returns the planned effort on the date
 Duration Appointment::plannedEffort(const QDate &date) const {
     Duration d;
-    DateTime s(date);
-    DateTime e(date.addDays(1));
+    QDate s(date);
+    QDate e(date.addDays(1));
     foreach (AppointmentInterval *i, m_intervals.values() ) {
-        d += i->effort(s, e);
+        d += i->effort(DateTime(s, i->startTime().timeSpec()), DateTime(e, i->startTime().timeSpec()));
     }
     return d;
 }
@@ -487,7 +486,7 @@ Duration Appointment::plannedEffort(const QDate &date) const {
 // Returns the planned effort upto and including the date
 Duration Appointment::plannedEffortTo(const QDate& date) const {
     Duration d;
-    DateTime e(date.addDays(1));
+    QDate e(date.addDays(1));
     foreach (AppointmentInterval *i, m_intervals.values() ) {
         d += i->effort(e, true);
     }
@@ -500,22 +499,22 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
     //kDebug()<<k_funcinfo<<m_node->id()<<", "<<m_resource->id()<<endl;
     EffortCostMap ec;
     Duration eff;
-    DateTime dt(start);
-    DateTime ndt(dt.addDays(1));
+    QDate dt(start);
+    QDate ndt(dt.addDays(1));
     double rate = m_resource->normalRatePrHour();
     foreach (AppointmentInterval *i, m_intervals.values() ) {
         DateTime st = i->startTime();
         DateTime e = i->endTime();
         if (end < st.date())
             break;
-        if (dt.date() < st.date()) {
-            dt.setDate(st.date());
+        if (dt < st.date()) {
+            dt = st.date();
         }
         ndt = dt.addDays(1);
-        while (dt.date() <= e.date()) {
-            eff = i->effort(dt, ndt);
-            ec.add(dt.date(), eff, eff.toDouble(Duration::Unit_h) * rate);
-            if (dt.date() < e.date()) {
+        while (dt <= e.date()) {
+            eff = i->effort(DateTime(dt, st.timeSpec()), DateTime(ndt, st.timeSpec()));
+            ec.add(dt, eff, eff.toDouble(Duration::Unit_h) * rate);
+            if (dt < e.date()) {
                 // loop trough the interval (it spans dates)
                 dt = ndt;
                 ndt = ndt.addDays(1);
@@ -591,7 +590,7 @@ double Appointment::actualCostTo(const QDate &date) {
     return 0.0;
 }
 
-void Appointment::addActualEffort(const QDate& date, Duration effort, bool overtime) {
+void Appointment::addActualEffort(const DateTime& date, Duration effort, bool overtime) {
     //kDebug()<<k_funcinfo<<endl;
     m_actualEffort.inSort(date, effort, overtime);
 }
@@ -635,7 +634,7 @@ Duration Appointment::effort(const DateTime &start, const Duration &duration) co
     return d;
 }
 // Returns the effort upto time / from time
-Duration Appointment::effortFrom(const DateTime &time) const {
+Duration Appointment::effortFrom(const QDate &time) const {
     Duration d;
     foreach (AppointmentInterval *i, m_intervals.values() ) {
         d += i->effort(time, false);
@@ -757,7 +756,7 @@ void Appointment::printDebug(const QString& _indent)
     }
     indent += "  + ";
     foreach (AppointmentInterval *i, m_intervals.values() ) {
-        kDebug()<<indent<<"----"<<i->startTime()<<" - "<<i->endTime()<<" load="<<i->load()<<endl;
+        kDebug()<<indent<<"----"<<i->startTime().toString()<<" - "<<i->endTime().toString()<<" load="<<i->load()<<endl;
     }
 }
 #endif

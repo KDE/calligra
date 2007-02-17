@@ -60,8 +60,10 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, Qt::WFlags fl )
     groupBox2Layout = new Q3GridLayout( groupBox2->layout() );
     groupBox2Layout->setAlignment( Qt::AlignTop );
 
+    timezone = new QComboBox( groupBox2 );
+    groupBox2Layout->addWidget( timezone, 0, 0 );
+    
     calendarPanel = new CalendarPanel( groupBox2, "calendarPanel" );
-
     groupBox2Layout->addWidget( calendarPanel, 1, 0 );
 
     day = new Q3ButtonGroup( groupBox2, "day" );
@@ -112,7 +114,7 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, Qt::WFlags fl )
     groupBox4Layout->addLayout( layout5 );
     dayLayout->addWidget( groupBox4 );
 
-    groupBox2Layout->addWidget( day, 1, 1 );
+    groupBox2Layout->addWidget( day, 0, 1, 2, 1 );
     CalendarEditBaseLayout->addWidget( groupBox2 );
     languageChange();
     resize( QSize(540, 340).expandedTo(minimumSizeHint()) );

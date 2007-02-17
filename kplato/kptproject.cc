@@ -37,8 +37,10 @@
 #include <q3canvas.h>
 #include <QList>
 
-#include <kdatetimewidget.h>
+#include <kdatetime.h>
 #include <kdebug.h>
+#include <ksystemtimezone.h>
+#include <ktimezones.h>
 
 namespace KPlato
 {
@@ -56,9 +58,10 @@ Project::Project( Node *parent )
 
 void Project::init()
 {
+    m_spec = KDateTime::Spec::LocalZone();
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent
-        m_constraintStartTime = QDateTime( QDate::currentDate(), QTime() );
+        m_constraintStartTime = DateTime( QDate::currentDate(), QTime(), m_spec );
         m_constraintEndTime = m_constraintStartTime.addDays( 1 );
     }
 }
@@ -350,7 +353,12 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
     m_name = element.attribute( "name" );
     m_leader = element.attribute( "leader" );
     m_description = element.attribute( "description" );
-
+    const KTimeZone *tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
+    if ( tz ) {
+        m_spec = KDateTime::Spec( tz );
+    } else kWarning()<<k_funcinfo<<"No timezone specified, use default (local)"<<endl;
+    status.setProjectSpec( m_spec );
+    
     // Allow for both numeric and text
     s = element.attribute( "scheduling", "0" );
     m_constraint = ( Node::ConstraintType ) s.toInt( &ok );
@@ -363,10 +371,10 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
     }
     s = element.attribute( "start-time" );
     if ( !s.isEmpty() )
-        m_constraintStartTime = DateTime::fromString( s );
+        m_constraintStartTime = DateTime::fromString( s, m_spec );
     s = element.attribute( "end-time" );
     if ( !s.isEmpty() )
-        m_constraintEndTime = DateTime::fromString( s );
+        m_constraintEndTime = DateTime::fromString( s, m_spec );
 
     // Load the project children
     // Do calendars first, they only refrence other calendars
@@ -409,16 +417,16 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
             if ( c->parentId().isEmpty() ) {
                 addCalendar( c );
                 added = true;
-                kDebug()<<k_funcinfo<<"added to project: "<<c->name()<<endl;
+                //kDebug()<<k_funcinfo<<"added to project: "<<c->name()<<endl;
             } else {
                 Calendar *par = calendar( c->parentId() );
                 if ( par ) {
                     addCalendar( c, par );
                     added = true;
-                    kDebug()<<k_funcinfo<<"added: "<<c->name()<<" to parent: "<<par->name()<<endl;
+                    //kDebug()<<k_funcinfo<<"added: "<<c->name()<<" to parent: "<<par->name()<<endl;
                 } else {
                     lst.append( c ); // treat later
-                    kDebug()<<k_funcinfo<<"treat later: "<<c->name()<<endl;
+                    //kDebug()<<k_funcinfo<<"treat later: "<<c->name()<<endl;
                 }
             }
         }
@@ -561,10 +569,11 @@ void Project::save( QDomElement &element ) const
     me.setAttribute( "leader", m_leader );
     me.setAttribute( "id", m_id );
     me.setAttribute( "description", m_description );
-
+    me.setAttribute( "timezone", m_spec.timeZone()->name() );
+    
     me.setAttribute( "scheduling", constraintToString() );
-    me.setAttribute( "start-time", m_constraintStartTime.toString( Qt::ISODate ) );
-    me.setAttribute( "end-time", m_constraintEndTime.toString( Qt::ISODate ) );
+    me.setAttribute( "start-time", m_constraintStartTime.toString( KDateTime::ISODate ) );
+    me.setAttribute( "end-time", m_constraintEndTime.toString( KDateTime::ISODate ) );
 
     m_accounts.save( me );
 
@@ -752,7 +761,7 @@ void Project::delTask( Node *node )
 
 bool Project::canMoveTask( Node* node, Node *newParent )
 {
-    kDebug()<<k_funcinfo<<node->name()<<" to "<<newParent->name()<<endl;
+    //kDebug()<<k_funcinfo<<node->name()<<" to "<<newParent->name()<<endl;
     Node *p = newParent;
     while ( p && p != this ) {
         if ( ! node->canMoveTo( p ) ) {
@@ -1566,7 +1575,7 @@ void Project::changed( Node *node )
 
 void Project::changed( ResourceGroup *group )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     emit resourceGroupChanged( group );
 }
 

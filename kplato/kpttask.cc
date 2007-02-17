@@ -117,7 +117,7 @@ void Task::addRequest(ResourceGroup *group, int numResources) {
 }
 
 void Task::addRequest(ResourceGroupRequest *request) {
-    kDebug()<<k_funcinfo<<request<<endl;
+    //kDebug()<<k_funcinfo<<request<<endl;
     if (!m_requests) {
         m_requests = new ResourceRequestCollection(*this);
     }
@@ -125,7 +125,7 @@ void Task::addRequest(ResourceGroupRequest *request) {
 }
 
 void Task::takeRequest(ResourceGroupRequest *request) {
-    kDebug()<<k_funcinfo<<request<<endl;
+    //kDebug()<<k_funcinfo<<request<<endl;
     if (m_requests) {
         m_requests->takeRequest(request);
     }
@@ -207,10 +207,10 @@ bool Task::load(QDomElement &element, XMLLoaderObject &status ) {
 
     s = element.attribute("constraint-starttime");
     if (!s.isEmpty())
-        m_constraintStartTime = DateTime::fromString(s);
+        m_constraintStartTime = DateTime::fromString(s, status.projectSpec());
     s = element.attribute("constraint-endtime");
     if (!s.isEmpty())
-        m_constraintEndTime = DateTime::fromString(s);
+        m_constraintEndTime = DateTime::fromString(s, status.projectSpec());
     
     m_startupCost = element.attribute("startup-cost", "0.0").toDouble();
     m_shutdownCost = element.attribute("shutdown-cost", "0.0").toDouble();
@@ -268,7 +268,7 @@ bool Task::load(QDomElement &element, XMLLoaderObject &status ) {
                         QDomElement el = lst.item(i).toElement();
                         if (el.tagName() == "schedule") {
                             NodeSchedule *sch = new NodeSchedule();
-                            if (sch->loadXML(el)) {
+                            if (sch->loadXML(el, status)) {
                                 sch->setNode(this);
                                 addSchedule(sch);
                             } else {
@@ -295,8 +295,8 @@ void Task::save(QDomElement &element)  const {
     me.setAttribute("description", m_description);
 
     me.setAttribute("scheduling",constraintToString());
-    me.setAttribute("constraint-starttime",m_constraintStartTime.toString(Qt::ISODate));
-    me.setAttribute("constraint-endtime",m_constraintEndTime.toString(Qt::ISODate));    
+    me.setAttribute("constraint-starttime",m_constraintStartTime.toString( KDateTime::ISODate ));
+    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( KDateTime::ISODate ));    
 
     me.setAttribute("startup-cost", m_startupCost);
     me.setAttribute("shutdown-cost", m_shutdownCost);
@@ -1890,12 +1890,12 @@ void Completion::setFinished( bool on )
      m_finished = on;
 }
 
-void Completion::setStartTime( const QDateTime &dt )
+void Completion::setStartTime( const DateTime &dt )
 {
      m_startTime = dt;
 }
 
-void Completion::setFinishTime( const QDateTime &dt )
+void Completion::setFinishTime( const DateTime &dt )
 {
      m_finishTime = dt;
 }
@@ -1934,11 +1934,11 @@ bool Completion::loadXML( QDomElement &element, XMLLoaderObject &status )
     m_finished = (bool)element.attribute("finished", "0").toInt();
     s = element.attribute("startTime");
     if (!s.isEmpty()) {
-        m_startTime = DateTime::fromString(s);
+        m_startTime = DateTime::fromString(s, status.projectSpec());
     }
     s = element.attribute("finishTime");
     if (!s.isEmpty()) {
-        m_finishTime = DateTime::fromString(s);
+        m_finishTime = DateTime::fromString(s, status.projectSpec());
     }
     if (status.version() < "0.6") {
         if ( m_started ) {
@@ -1980,8 +1980,8 @@ void Completion::saveXML(QDomElement &element)  const
     element.appendChild(el);
     el.setAttribute("started", m_started);
     el.setAttribute("finished", m_finished);
-    el.setAttribute("startTime", m_startTime.toString(Qt::ISODate));
-    el.setAttribute("finishTime", m_finishTime.toString(Qt::ISODate));
+    el.setAttribute("startTime", m_startTime.toString( KDateTime::ISODate ));
+    el.setAttribute("finishTime", m_finishTime.toString( KDateTime::ISODate ));
     foreach( QDate date, m_entries.uniqueKeys() ) {
         QDomElement elm = el.ownerDocument().createElement("completion-entry");
         el.appendChild(elm);
@@ -2014,8 +2014,8 @@ void Completion::printDebug(const QByteArray& _indent) const {
     QByteArray indent = _indent;
     kDebug()<<indent<<"+ Completion: ("<<m_entries.count()<<" entries)"<<endl;
     indent += "!  ";
-    kDebug()<<indent<<"Started: "<<m_started<<"  "<<m_startTime<<endl;
-    kDebug()<<indent<<"Finished: "<<m_finished<<"  "<<m_finishTime<<endl;
+    kDebug()<<indent<<"Started: "<<m_started<<"  "<<m_startTime.toString()<<endl;
+    kDebug()<<indent<<"Finished: "<<m_finished<<"  "<<m_finishTime.toString()<<endl;
     indent += "  ";
     foreach( QDate d, m_entries.keys() ) {
         Entry *e = m_entries[ d ];

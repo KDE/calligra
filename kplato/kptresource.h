@@ -34,6 +34,8 @@
 
 class QTime;
 
+class KTimeZone;
+
 namespace KPlato
 {
 
@@ -237,11 +239,15 @@ public:
     ResourceGroup *parentGroup() const { return qobject_cast<ResourceGroup*>( parent() ); }
     
     /// Set the time from when the resource is available to this project
-    void setAvailableFrom( const QDateTime &af ) {m_availableFrom = af;}
+    void setAvailableFrom( const QDateTime &af ) {m_availableFrom.setDateTime( af );}
+    /// Set the time from when the resource is available to this project
+    void setAvailableFrom( const DateTime &af ) {m_availableFrom = af;}
     /// Return the time when the resource is available to this project
     const DateTime &availableFrom() const { return m_availableFrom;}
     /// Set the time when the resource is no longer available to this project
-    void setAvailableUntil( const QDateTime au ) {m_availableUntil = au;}
+    void setAvailableUntil( const QDateTime &au ) {m_availableUntil.setDateTime( au );}
+    /// Set the time when the resource is no longer available to this project
+    void setAvailableUntil( const DateTime &au ) {m_availableUntil = au;}
     /// Return the time when the resource is no longer available to this project.
     const DateTime &availableUntil() const { return m_availableUntil;}
 
@@ -272,8 +278,10 @@ public:
     void makeAppointment( Schedule *schedule );
 
     bool isOverbooked() const;
+    /// check if overbooked on date.
     bool isOverbooked( const QDate &date ) const;
-    bool isOverbooked( const DateTime &start, const DateTime &end ) const;
+    /// check if overbooked within the interval start, end.
+    bool isOverbooked( const QDateTime &start, const QDateTime &end ) const;
 
     double normalRate() const { return cost.normalRate; }
     void setNormalRate( double rate ) { cost.normalRate = rate; }
@@ -290,7 +298,9 @@ public:
     void setUnits( int units ) { m_units = units; }
 
     Project *project() const { return m_project; }
-
+    /// Return the resources timespec. Defaults to local.
+    KDateTime::Spec timeSpec() const;
+    
     /**
      * Get the calendar for this resource. 
      * If local=false, check if there is a default calendar.

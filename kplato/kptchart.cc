@@ -118,7 +118,7 @@ namespace KPlato
 		float cost=0;
 		foreach(Node * currentNode, p.projectNode()->childNodeIterator()){
         		//Si le jour pour lequel on veux le budget est > a la date de fin de la tachz
-			if (DateTime(day) > (currentNode->workEndTime())  )
+			if (day > (currentNode->workEndTime().dateTime().date())  )
 			{
 				//on ajoute le cout total de la tache
 				cost+=currentNode->actualCost();

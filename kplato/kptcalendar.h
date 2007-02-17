@@ -20,9 +20,9 @@
 #ifndef KPTCALENDAR_H
 #define KPTCALENDAR_H
 
+#include <kptdatetime.h>
 #include "kptduration.h"
 
-#include <qdatetime.h>
 #include <QPair>
 #include <QList>
 #include <QMap>
@@ -30,6 +30,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <ktimezones.h>
 
 class QDomElement;
 class QDateTime;
@@ -97,26 +98,26 @@ public:
      * Returns the amount of 'worktime' that can be done on
      * this day between the times start and end.
      */
-    Duration effort(const QTime &start, const QTime &end, Schedule *sch=0);
+    Duration effort(const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0);
     /**
      * Returns the amount of 'worktime' that can be done on
      * this day between the times start and end.
      */
-    Duration effort(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0);
+    Duration effort(const QDate &date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0);
 
     /**
      * Returns the actual 'work interval' for the interval start to end.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QTime &start, const QTime &end, Schedule *sch=0) const;
+    TimeInterval interval(const QTime &start, const QTime &end, const KDateTime::Spec &spec,  Schedule *sch=0) const;
     
     /**
      * Returns the actual 'work interval' for the interval start to end.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QDate date, const QTime &start, const QTime &end, Schedule *sch=0) const;
+    TimeInterval interval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0) const;
     
     bool hasInterval() const;
 
@@ -124,14 +125,14 @@ public:
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval start to end.
      */
-    bool hasInterval(const QTime &start, const QTime &end, Schedule *sch=0) const;
+    bool hasInterval(const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0) const;
     
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval start to end.
      * Assumes this day is date. (Used by weekday hasInterval().)
      */
-    bool hasInterval(const QDate date, const QTime &start, const QTime &end, Schedule *sch=0) const;
+    bool hasInterval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0) const;
     
     Duration duration() const;
     
@@ -202,7 +203,7 @@ public:
     bool operator==(const CalendarWeekdays *weekdays) const;
     bool operator!=(const CalendarWeekdays *weekdays) const;
 
-    Duration effort(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0);
+    Duration effort(const QDate &date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0);
     
     /**
      * Returns the actual 'work interval' on the weekday defined by date
@@ -210,12 +211,12 @@ public:
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QDate date, const QTime &start, const QTime &end, Schedule *sch) const;
+    TimeInterval interval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const;
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * on the weekday defined by date for the interval start to end.
      */
-    bool hasInterval(const QDate date, const QTime &start, const QTime &end, Schedule *sch) const;
+    bool hasInterval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const;
     bool hasInterval() const;
 
     Duration duration() const;
@@ -244,17 +245,21 @@ public:
  * Calendar defines the working and nonworking days and hours.
  * A day can have the three states None (Undefined), NonWorking, or Working.
  * A calendar can have a parent calendar that defines the days that are 
- * undefined in this calendar. If a day is still undefined, it defaults
- * to Nonworking.
+ * undefined in this calendar. 
+ * If a calendar have no parent an undefined day defaults to Nonworking.
  * A Working day has one or more work intervals to define the work hours.
  *
  * The definition can consist of two parts: Weekdays and Day.
  * Day has highest priority.
- * 
- * A typical calendar hierarchy could include calendars on three levels:
+ *
+ * A typical calendar hierarchy could include calendars on 4 levels:
  *  1. Definition of normal weekdays and national holidays/vacation days.
  *  2. Definition of the company's special workdays/-time and vacation days.
- *  3. Definitions for groups of resources/individual resources.
+ *  3. Definitions for groups of resources.
+ *  4. Definitions for individual resources.
+ *
+ * A calendar can define a timezone different from the projects.
+ * This enables planning with resources that does not recide in the same place.
  *
  */
 class Calendar : public QObject
@@ -334,6 +339,7 @@ public:
     /**
      * Returns the amount of 'worktime' that can be done on
      * the date  date between the times  start and  end.
+     * The date and times are in timespecification spec.
      */
     Duration effort(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0) const;
     /**
@@ -355,6 +361,7 @@ public:
      * starting at start and ending at end.
      * If no 'work interval' exists, returns an interval with first==second.
      * You can also use @ref hasInterval() to check if a 'work interval' exists.
+     * The date and times are in timespecification spec.
      */
     TimeInterval firstInterval(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0) const;
     
@@ -387,6 +394,10 @@ public:
     bool removeId(const QString &id);
     void insertId(const QString &id);
 
+    const KDateTime::Spec &timeSpec() const { return m_spec; }
+    const KTimeZone *timeZone() const { return m_spec.timeZone(); }
+    void setTimeZone( const KTimeZone *tz );
+    
 signals:
     void changed( Calendar* );
     void changed( CalendarDay* );
@@ -423,6 +434,8 @@ private:
     CalendarWeekdays *m_weekdays;
 
     QList<Calendar*> m_calendars;
+    
+    KDateTime::Spec m_spec;
     
 #ifndef NDEBUG
 public:
@@ -477,6 +490,7 @@ public:
     void save(QDomElement &element) const;
 
     Calendar *calendar() const { return m_calendar; }
+    
     
 protected:
     void init();

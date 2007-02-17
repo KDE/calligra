@@ -204,10 +204,14 @@ void CalendarModifyNameCmd::unexecute()
 CalendarModifyParentCmd::CalendarModifyParentCmd( Part *part, Project *project, Calendar *cal, Calendar *newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_project( project ),
-        m_cal( cal )
+        m_cal( cal ),
+        m_cmd( new KMacroCommand( "" ) )
 {
     m_oldvalue = cal->parentCal();
     m_newvalue = newvalue;
+    if ( newvalue ) {
+        m_cmd->addCommand( new CalendarModifyTimeZoneCmd( part, cal, newvalue->timeZone() ) );
+    }
     //kDebug()<<k_funcinfo<<cal->name()<<endl;
     // TODO check if any resources uses this calendar
     if ( part ) {
@@ -216,17 +220,60 @@ CalendarModifyParentCmd::CalendarModifyParentCmd( Part *part, Project *project, 
         }
     }
 }
+CalendarModifyParentCmd::~CalendarModifyParentCmd()
+{
+    delete m_cmd;
+}
 void CalendarModifyParentCmd::execute()
 {
     m_project->takeCalendar( m_cal );
     m_project->addCalendar( m_cal, m_newvalue );
+    m_cmd->execute();
     setSchScheduled( false );
     setCommandType( 1 );
 }
 void CalendarModifyParentCmd::unexecute()
 {
+    m_cmd->unexecute();
     m_project->takeCalendar( m_cal );
     m_project->addCalendar( m_cal, m_oldvalue );
+    setSchScheduled();
+    setCommandType( 1 );
+}
+
+CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Part *part, Calendar *cal, const KTimeZone *value, const QString& name )
+        : NamedCommand( part, name ),
+        m_cal( cal ),
+        m_newvalue( value ),
+        m_cmd( new KMacroCommand( "" ) )
+{
+    m_oldvalue = cal->timeZone();
+    foreach ( Calendar *c, cal->calendars() ) {
+        m_cmd->addCommand( new CalendarModifyTimeZoneCmd( part, c, value ) );
+    }
+    //kDebug()<<k_funcinfo<<cal->name()<<endl;
+    // TODO check if any resources uses this calendar
+    if ( part ) {
+        foreach ( Schedule * s, part->getProject().schedules() ) {
+            addSchScheduled( s );
+        }
+    }
+}
+CalendarModifyTimeZoneCmd::~CalendarModifyTimeZoneCmd()
+{
+    delete m_cmd;
+}
+void CalendarModifyTimeZoneCmd::execute()
+{
+    m_cmd->execute();
+    m_cal->setTimeZone( m_newvalue );
+    setSchScheduled( false );
+    setCommandType( 1 );
+}
+void CalendarModifyTimeZoneCmd::unexecute()
+{
+    m_cal->setTimeZone( m_oldvalue );
+    m_cmd->unexecute();
     setSchScheduled();
     setCommandType( 1 );
 }
@@ -784,14 +831,14 @@ NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd( Part *part, 
         newTime( dt ),
         oldTime( node.constraintStartTime() )
 {
-
+    m_spec = part->getProject().timeSpec();
     foreach ( Schedule * s, node.schedules() ) {
         addSchScheduled( s );
     }
 }
 void NodeModifyConstraintStartTimeCmd::execute()
 {
-    m_node.setConstraintStartTime( newTime );
+    m_node.setConstraintStartTime( DateTime( newTime, m_spec ) );
     setSchScheduled( false );
     setCommandType( 1 );
 }
@@ -808,14 +855,14 @@ NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd( Part *part, Node
         newTime( dt ),
         oldTime( node.constraintEndTime() )
 {
-
+    m_spec = part->getProject().timeSpec();
     foreach ( Schedule * s, node.schedules() ) {
         addSchScheduled( s );
     }
 }
 void NodeModifyConstraintEndTimeCmd::execute()
 {
-    m_node.setConstraintEndTime( newTime );
+    m_node.setConstraintEndTime( DateTime( newTime, m_spec ) );
     setSchScheduled( false );
     setCommandType( 1 );
 }
@@ -832,10 +879,11 @@ NodeModifyStartTimeCmd::NodeModifyStartTimeCmd( Part *part, Node &node, const QD
         newTime( dt ),
         oldTime( node.startTime() )
 {
+    m_spec = part->getProject().timeSpec();
 }
 void NodeModifyStartTimeCmd::execute()
 {
-    m_node.setStartTime( newTime );
+    m_node.setStartTime( DateTime( newTime, m_spec ) );
 
     setCommandType( 1 );
 }
@@ -852,10 +900,11 @@ NodeModifyEndTimeCmd::NodeModifyEndTimeCmd( Part *part, Node &node, const QDateT
         newTime( dt ),
         oldTime( node.endTime() )
 {
+    m_spec = part->getProject().timeSpec();
 }
 void NodeModifyEndTimeCmd::execute()
 {
-    m_node.setEndTime( newTime );
+    m_node.setEndTime( DateTime( newTime, m_spec ) );
 
     setCommandType( 1 );
 }
@@ -1656,16 +1705,17 @@ void ModifyResourceUnitsCmd::unexecute()
     setCommandType( 1 );
 }
 
-ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Part *part, Resource *resource, const DateTime& value, const QString& name )
+ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Part *part, Resource *resource, const QDateTime& value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
 {
     m_oldvalue = resource->availableFrom();
-
+    m_spec = resource->timeSpec();
+    DateTime v = DateTime( value, m_spec );
     if ( resource->project() ) {
-        QDateTime s;
-        QDateTime e;
+        DateTime s;
+        DateTime e;
         foreach ( Schedule * rs, resource->schedules() ) {
             Schedule * sch = resource->project() ->findSchedule( rs->id() );
             if ( sch ) {
@@ -1673,7 +1723,7 @@ ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Part *part, Reso
                 e = sch->end();
                 //kDebug() << k_funcinfo << "old=" << m_oldvalue << " new=" << value << " s=" << s << " e=" << e << endl;
             }
-            if ( !s.isValid() || !e.isValid() || ( ( m_oldvalue > s || value > s ) && ( m_oldvalue < e || value < e ) ) ) {
+            if ( !s.isValid() || !e.isValid() || ( ( m_oldvalue > s || v > s ) && ( m_oldvalue < e || v < e ) ) ) {
                 addSchScheduled( rs );
             }
         }
@@ -1681,7 +1731,7 @@ ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Part *part, Reso
 }
 void ModifyResourceAvailableFromCmd::execute()
 {
-    m_resource->setAvailableFrom( m_newvalue );
+    m_resource->setAvailableFrom( DateTime( m_newvalue, m_spec ) );
     setSchScheduled( false );
     setCommandType( 1 ); //FIXME
 }
@@ -1692,16 +1742,17 @@ void ModifyResourceAvailableFromCmd::unexecute()
     setCommandType( 1 ); //FIXME
 }
 
-ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Part *part, Resource *resource, const DateTime& value, const QString& name )
+ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Part *part, Resource *resource, const QDateTime& value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
 {
     m_oldvalue = resource->availableUntil();
-
+    m_spec = resource->timeSpec();
+    DateTime v = DateTime( value, m_spec );
     if ( resource->project() ) {
-        QDateTime s;
-        QDateTime e;
+        DateTime s;
+        DateTime e;
         foreach ( Schedule * rs, resource->schedules() ) {
             Schedule * sch = resource->project() ->findSchedule( rs->id() );
             if ( sch ) {
@@ -1709,7 +1760,7 @@ ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Part *part, Re
                 e = sch->end();
                 //kDebug() << k_funcinfo << "old=" << m_oldvalue << " new=" << value << " s=" << s << " e=" << e << endl;
             }
-            if ( !s.isValid() || !e.isValid() || ( ( m_oldvalue > s || value > s ) && ( m_oldvalue < e || value < e ) ) ) {
+            if ( !s.isValid() || !e.isValid() || ( ( m_oldvalue > s || v > s ) && ( m_oldvalue < e || v < e ) ) ) {
                 addSchScheduled( rs );
             }
         }
@@ -1717,7 +1768,7 @@ ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Part *part, Re
 }
 void ModifyResourceAvailableUntilCmd::execute()
 {
-    m_resource->setAvailableUntil( m_newvalue );
+    m_resource->setAvailableUntil( DateTime( m_newvalue, m_spec ) );
     setSchScheduled( false );
     setCommandType( 1 ); //FIXME
 }
@@ -1941,10 +1992,11 @@ ModifyCompletionStartTimeCmd::ModifyCompletionStartTimeCmd( Part *part, Completi
         oldvalue( m_completion.startTime() ),
         newvalue( value )
 {
+    m_spec = part->getProject().timeSpec();
 }
 void ModifyCompletionStartTimeCmd::execute()
 {
-    m_completion.setStartTime( newvalue );
+    m_completion.setStartTime( DateTime( newvalue, m_spec ) );
 
     setCommandType( 0 );
 }
@@ -1961,10 +2013,11 @@ ModifyCompletionFinishTimeCmd::ModifyCompletionFinishTimeCmd( Part *part, Comple
         oldvalue( m_completion.finishTime() ),
         newvalue( value )
 {
+    m_spec = part->getProject().timeSpec();
 }
 void ModifyCompletionFinishTimeCmd::execute()
 {
-    m_completion.setFinishTime( newvalue );
+    m_completion.setFinishTime( DateTime( newvalue, m_spec ) );
 
     setCommandType( 0 );
 }
@@ -2310,7 +2363,7 @@ ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd( Part *part, Project &node,
         newTime( dt ),
         oldTime( node.startTime() )
 {
-
+    m_spec = node.timeSpec();
     foreach ( Schedule * s, node.schedules() ) {
         addSchScheduled( s );
     }
@@ -2318,7 +2371,7 @@ ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd( Part *part, Project &node,
 
 void ProjectModifyStartTimeCmd::execute()
 {
-    m_node.setConstraintStartTime( newTime );
+    m_node.setConstraintStartTime( DateTime( newTime, m_spec ) );
     setSchScheduled( false );
     setCommandType( 1 );
 }
@@ -2335,15 +2388,15 @@ ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd( Part *part, Project &node, con
         newTime( dt ),
         oldTime( node.endTime() )
 {
-
+    m_spec = node.timeSpec();
     foreach ( Schedule * s, node.schedules() ) {
         addSchScheduled( s );
     }
 }
 void ProjectModifyEndTimeCmd::execute()
 {
-    m_node.setEndTime( newTime );
-    m_node.setConstraintEndTime( newTime );
+    m_node.setEndTime( DateTime( newTime, m_spec ) );
+    m_node.setConstraintEndTime( DateTime( newTime, m_spec ) );
     setSchScheduled( false );
     setCommandType( 1 );
 }

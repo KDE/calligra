@@ -42,13 +42,16 @@
 #include <kcommand.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <ksystemtimezone.h>
+#include <ktimezones.h>
 
 namespace KPlato
 {
 
 CalendarEdit::CalendarEdit (QWidget *parent, const char */*name*/)
     : CalendarEditBase(parent),
-      m_calendar(0)
+      m_calendar(0),
+      m_changed( false )
  {
 
     clear();
@@ -65,6 +68,29 @@ CalendarEdit::CalendarEdit (QWidget *parent, const char */*name*/)
     connect (bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
 
     connect (bApply, SIGNAL(clicked()), SLOT(slotApplyClicked()));
+    connect (timezone, SIGNAL( activated( int ) ), SLOT( slotTimeZoneChanged( int ) ) );
+}
+
+void CalendarEdit::slotTimeZoneChanged( int )
+{
+    //kDebug()<<k_funcinfo<<endl;
+    QStringList lst;
+    QString name = timezone->currentText();
+    const KTimeZone *tz = 0;
+    foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
+        if ( name == i18n( s.toUtf8() ) ) {
+            if ( s != m_calendar->timeZone()->name() ) {
+                tz = KSystemTimeZones::zone( s );
+            }
+            break;
+        }
+    }
+    if ( tz ) {
+        m_calendar->setTimeZone( tz );
+        m_changed = true;
+        emit timeZoneChanged();
+        slotCheckAllFieldsFilled();
+    }
 }
 
 void CalendarEdit::slotStateActivated(int id) {
@@ -143,17 +169,22 @@ void CalendarEdit::slotApplyClicked() {
     }
 
     calendarPanel->markSelected(state->currentIndex()); //NOTE!!
+    m_changed = true;
     emit applyClicked();
     slotCheckAllFieldsFilled();
 }
 
 void CalendarEdit::slotCheckAllFieldsFilled() {
     //kDebug()<<k_funcinfo<<endl;
+    if ( calendarPanel->selectedDates().isEmpty() && calendarPanel->selectedWeekdays().isEmpty() ) {
+        emit obligatedFieldsFilled(m_changed);
+        return;
+    }
     if (state->currentItem() == 0 /*undefined*/ ||
         state->currentIndex() == 1 /*Non-working*/||
         (state->currentItem() == 2 /*Working*/ && intervalList->topLevelItemCount() > 0))
     {
-        emit obligatedFieldsFilled(true);
+        emit obligatedFieldsFilled(m_changed);
     }
     else if (state->currentIndex() == 2 && !intervalList->topLevelItemCount() > 0)
     {
@@ -161,13 +192,26 @@ void CalendarEdit::slotCheckAllFieldsFilled() {
     }
 }
 
-void CalendarEdit::setCalendar(Calendar *cal) {
+void CalendarEdit::setCalendar(Calendar *cal, const QString &tz, bool disable)
+{
     m_calendar = cal;
     clear();
+    if ( disable ) {
+        timezone->addItem( i18n( tz.toUtf8() ) );
+    } else {
+        QStringList lst;
+        foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
+            lst << i18n( s.toUtf8() );
+        }
+        lst.sort();
+        timezone->addItems( lst );
+        timezone->setCurrentIndex( lst.indexOf( i18n( tz.toUtf8() ) ) );
+    }
     calendarPanel->setCalendar(cal);
 }
 
 void CalendarEdit::clear() {
+    timezone->clear();
     clearPanel();
     clearEditPart();
 }
@@ -269,10 +313,12 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
         slotStateActivated(0);
         bApply->setEnabled(true);
     }
+    slotCheckAllFieldsFilled();
 }
 
 void CalendarEdit::slotSelectionCleared() {
     clearEditPart();
+    slotCheckAllFieldsFilled();
 }
 
 //----------------------------------------------------
@@ -290,8 +336,7 @@ CalendarEditDialog::CalendarEditDialog(Project &p, Calendar *cal, QWidget *paren
     showButtonSeparator( true );
     //kDebug()<<k_funcinfo<<&p<<endl;
     dia = new CalendarEdit( this );
-    dia->setCalendar( calendar );
-
+    dia->setCalendar( calendar, cal->timeZone()->name(), (bool)cal->parentCal() );
     setMainWidget(dia);
     enableButtonOk(false);
 
@@ -352,6 +397,11 @@ KCommand *CalendarEditDialog::buildCommand(Part *part) {
             // shouldn't happen: set org to default??
             kError()<<k_funcinfo<<"Should always have 7 weekdays"<<endl;
         }
+    }
+    // timezone
+    if ( original->timeZone() != calendar->timeZone() ) {
+        if (macro == 0) macro = new KMacroCommand("");
+        macro->addCommand( new CalendarModifyTimeZoneCmd( part, original, calendar->timeZone() ) );
     }
     if (macro) {
         macro->setName(i18n("Modify Calendar"));
