@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2004 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -14,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KSPREAD_DEPENDENCY_MANAGER

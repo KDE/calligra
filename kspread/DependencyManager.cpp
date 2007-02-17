@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-             2004 Tomas Mecir <mecirt@gmail.com>
+   Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2004 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

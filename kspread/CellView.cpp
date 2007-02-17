@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2004-2005 Tomas Mecir <mecirt@gmail.com>
    Copyright 2004-2006 Inge Wallin <inge@lysator.liu.se>

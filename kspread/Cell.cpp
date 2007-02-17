@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2004-2005 Tomas Mecir <mecirt@gmail.com>
    Copyright 2004-2006 Inge Wallin <inge@lysator.liu.se>
@@ -23,7 +22,6 @@
    Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    Copyright 1998-1999 Reginald Stadlbauer <reggie@kde.org>
 
-
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -37,7 +35,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <stdlib.h>

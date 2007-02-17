@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2004 Tomas Mecir <mecirt@gmail.com>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002,2004 Ariya Hidayat <ariya@kde.org>
@@ -29,7 +28,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KSPREAD_CELL
