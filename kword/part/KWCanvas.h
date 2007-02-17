@@ -102,7 +102,8 @@ protected:
     void tabletEvent( QTabletEvent *e );
     /// reimplemented method from superclass
     void wheelEvent( QWheelEvent *e );
-
+    /// reimplemented method from superclass
+    bool event(QEvent *event);
 
 private slots:
     /// Called whenever there was a page added/removed or simply resized.
