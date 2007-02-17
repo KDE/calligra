@@ -114,7 +114,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     KisImageBuilder_Result res;
 
 
-    if ( (res = kpc.buildFile(url, l, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
+    if ( (res = kpc.buildFile(url, l->paintDevice(), beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
         kDebug(41008) << "success !" << endl;
         return KoFilter::OK;
     }
