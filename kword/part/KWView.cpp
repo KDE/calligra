@@ -126,7 +126,7 @@ void KWView::setupActions() {
     QAction *print  = new KAction("MyPrint", this);
     actionCollection()->addAction("file_my_print", print );
     connect(print, SIGNAL(triggered()), this, SLOT(print()));
-    m_actionInsertFrameBreak  = new KAction(QString::null, this);
+    m_actionInsertFrameBreak  = new KAction(QString(), this);
     actionCollection()->addAction("insert_framebreak", m_actionInsertFrameBreak );
     m_actionInsertFrameBreak->setShortcut( KShortcut( Qt::CTRL + Qt::Key_Return));
     connect(m_actionInsertFrameBreak, SIGNAL(triggered()), this, SLOT( insertFrameBreak() ));

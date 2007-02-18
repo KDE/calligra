@@ -199,7 +199,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
 }
 
 void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
-kDebug() << "KWFrameLayout::layoutFramesOnPage" << endl;
+//kDebug() << "KWFrameLayout::layoutFramesOnPage" << endl;
 /* assumes all frames are there and will do layouting of all the frames
     - headers/footers/main FS are positioned
     - normal frames are clipped to page */
