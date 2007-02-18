@@ -259,7 +259,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
     Validity validity;
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
-        QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString::null );
+        QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString() );
         kDebug(36003)<<" element.attribute( table:condition ) "<<valExpression<<endl;
         //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
@@ -371,7 +371,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
     if ( element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" ) )
     {
         kDebug(36003)<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" )<<endl;
-        setAllowEmptyCell( ( ( element.attributeNS( KoXmlNS::table, "allow-empty-cell", QString::null )=="true" ) ? true : false ) );
+        setAllowEmptyCell( ( ( element.attributeNS( KoXmlNS::table, "allow-empty-cell", QString() )=="true" ) ? true : false ) );
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "base-cell-address" ) )
     {
@@ -383,13 +383,13 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
     {
         if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
         {
-            kDebug(36003)<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString::null )<<endl;
-            setTitleInfo( help.attributeNS( KoXmlNS::table, "title", QString::null ) );
+            kDebug(36003)<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString() )<<endl;
+            setTitleInfo( help.attributeNS( KoXmlNS::table, "title", QString() ) );
         }
         if ( help.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kDebug(36003)<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
-            setDisplayValidationInformation( ( ( help.attributeNS( KoXmlNS::table, "display", QString::null )=="true" ) ? true : false ) );
+            kDebug(36003)<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString() )<<endl;
+            setDisplayValidationInformation( ( ( help.attributeNS( KoXmlNS::table, "display", QString() )=="true" ) ? true : false ) );
         }
         KoXmlElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
@@ -403,10 +403,10 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
     if ( !error.isNull() )
     {
         if ( error.hasAttributeNS( KoXmlNS::table, "title" ) )
-            setTitle( error.attributeNS( KoXmlNS::table, "title", QString::null ) );
+            setTitle( error.attributeNS( KoXmlNS::table, "title", QString() ) );
         if ( error.hasAttributeNS( KoXmlNS::table, "message-type" ) )
         {
-            QString str = error.attributeNS( KoXmlNS::table, "message-type", QString::null );
+            QString str = error.attributeNS( KoXmlNS::table, "message-type", QString() );
             if ( str == "warning" )
               setAction( Validity::Warning );
             else if ( str == "information" )
@@ -419,8 +419,8 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
 
         if ( error.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kDebug(36003)<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
-            setDisplayMessage( (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true") );
+            kDebug(36003)<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString() )<<endl;
+            setDisplayMessage( (error.attributeNS( KoXmlNS::table, "display", QString() )=="true") );
         }
         KoXmlElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )

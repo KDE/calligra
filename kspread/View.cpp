@@ -1896,7 +1896,7 @@ void View::initView()
 
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);
-    d->calcLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
+    d->calcLabel = sb ? new KStatusBarLabel( QString(), 0, sb ) : 0;
     addStatusBarItem( d->calcLabel, 0 );
     if (d->calcLabel)
         connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
@@ -4619,7 +4619,7 @@ void View::removeHyperlink()
     if( !cell ) return;
     if( cell.link().isEmpty() ) return;
 
-    LinkCommand* command = new LinkCommand( cell, QString::null, QString::null );
+    LinkCommand* command = new LinkCommand( cell, QString(), QString() );
     doc()->addCommand( command );
     command->execute();
 

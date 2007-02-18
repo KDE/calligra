@@ -716,7 +716,7 @@ public:
   KDE_DEPRECATED static int getAttribute(const KoXmlElement &element, const char *attributeName, int defaultValue)
   {
     QString value;
-    if ( ( value = element.attribute( attributeName ) ) != QString::null )
+    if ( ( value = element.attribute( attributeName ) ) != QString() )
 	return value.toInt();
     else
 	return defaultValue;
@@ -728,7 +728,7 @@ public:
   KDE_DEPRECATED static double getAttribute(const KoXmlElement &element, const char *attributeName, double defaultValue)
   {
     QString value;
-      if ( ( value = element.attribute( attributeName ) ) != QString::null )
+      if ( ( value = element.attribute( attributeName ) ) != QString() )
 	return value.toDouble();
       else
 	return defaultValue;

@@ -109,7 +109,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
         if ( !styleElem ) continue;
 
         // assume the name assigned by the application
-        const QString oasisName = styleElem->attributeNS( KoXmlNS::style, "name", QString::null );
+        const QString oasisName = styleElem->attributeNS( KoXmlNS::style, "name", QString() );
 
         // then replace by user-visible one (if any)
         const QString name = styleElem->attributeNS( KoXmlNS::style, "display-name", oasisName );
@@ -392,14 +392,14 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
     {
         if ( element->hasAttributeNS( KoXmlNS::style , "name" ) )
         {
-            QString name = element->attributeNS( KoXmlNS::style , "name" , QString::null );
+            QString name = element->attributeNS( KoXmlNS::style , "name" , QString() );
             kDebug(36003) << "StyleManager: Preloading automatic cell style: " << name << endl;
             autoStyles.remove( name );
             autoStyles[name].loadOasisStyle( oasisStyles, *(element) );
 
             if ( element->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
             {
-                const QString parentOasisName = element->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
+                const QString parentOasisName = element->attributeNS( KoXmlNS::style, "parent-style-name", QString() );
                 const CustomStyle* parentStyle = m_oasisStyles.value( parentOasisName );
                 if ( !parentStyle )
                 {

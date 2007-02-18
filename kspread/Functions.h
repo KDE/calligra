@@ -150,7 +150,7 @@ public:
   FunctionDescription *functionInfo (const QString& name);
 
   /** return functions within a group, or all if no group given */
-  QStringList functionNames (const QString& group = QString::null);
+  QStringList functionNames (const QString& group = QString());
 
   const QStringList &groups () const;
   void addGroup(const QString& groupname);

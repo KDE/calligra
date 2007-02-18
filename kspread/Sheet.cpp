@@ -2986,7 +2986,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     setLayoutDirection (LeftToRight);
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
+        QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString() );
         //kDebug(36003)<<" style of table :"<<stylename<<endl;
         const KoXmlElement *style = oasisContext.oasisStyles().findStyle( stylename, "table" );
         Q_ASSERT( style );
@@ -2998,13 +2998,13 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
             {
                 if ( properties.hasAttributeNS( KoXmlNS::table, "display" ) )
                 {
-                    bool visible = (properties.attributeNS( KoXmlNS::table, "display", QString::null ) == "true" ? true : false );
+                    bool visible = (properties.attributeNS( KoXmlNS::table, "display", QString() ) == "true" ? true : false );
                     setHidden (!visible);
                 }
             }
             if ( style->hasAttributeNS( KoXmlNS::style, "master-page-name" ) )
             {
-                QString masterPageStyleName = style->attributeNS( KoXmlNS::style, "master-page-name", QString::null );
+                QString masterPageStyleName = style->attributeNS( KoXmlNS::style, "master-page-name", QString() );
                 //kDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
                 KoXmlElement *masterStyle = oasisContext.oasisStyles().masterPages()[masterPageStyleName];
                 //kDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
@@ -3013,7 +3013,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     loadSheetStyleFormat( masterStyle );
                     if ( masterStyle->hasAttributeNS( KoXmlNS::style, "page-layout-name" ) )
                     {
-                        QString masterPageLayoutStyleName = masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString::null );
+                        QString masterPageLayoutStyleName = masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString() );
                         //kDebug(36003)<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
                         const KoXmlElement *masterLayoutStyle = oasisContext.oasisStyles().findStyle( masterPageLayoutStyleName );
                       if ( masterLayoutStyle )
@@ -3112,7 +3112,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
     {
         // e.g.: Sheet4.A1:Sheet4.E28
-        QString range = sheetElement.attributeNS( KoXmlNS::table, "print-ranges", QString::null );
+        QString range = sheetElement.attributeNS( KoXmlNS::table, "print-ranges", QString() );
         range = Oasis::decodeFormula( range );
         Range p( range );
         if ( sheetName() == p.sheetName() )
@@ -3120,12 +3120,12 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     }
 
 
-    if ( sheetElement.attributeNS( KoXmlNS::table, "protected", QString::null ) == "true" )
+    if ( sheetElement.attributeNS( KoXmlNS::table, "protected", QString() ) == "true" )
     {
         QByteArray passwd( "" );
         if ( sheetElement.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
-            QString p = sheetElement.attributeNS( KoXmlNS::table, "protection-key", QString::null );
+            QString p = sheetElement.attributeNS( KoXmlNS::table, "protection-key", QString() );
             QByteArray str( p.toLatin1() );
             kDebug(30518) << "Decoding password: " << str << endl;
             passwd = KCodecs::base64Decode( str );
@@ -3150,7 +3150,7 @@ void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext&
           KoXmlNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
           if ( !object.isNull() )
           {
-            if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null).isNull() )
+            if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString()).isNull() )
                 obj = new EmbeddedChart( doc(), this );
             else
                 obj = new EmbeddedKOfficeObject( doc(), this );
@@ -3333,7 +3333,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
     {
         bool ok = true;
-        int n = column.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
+        int n = column.attributeNS( KoXmlNS::table, "number-columns-repeated", QString() ).toInt( &ok );
         if ( ok )
           // Some spreadsheet programs may support more rows than KSpread so
           // limit the number of repeated rows.
@@ -3344,7 +3344,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
 
     if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
-      const QString styleName = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
+      const QString styleName = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString() );
       if ( !styleName.isEmpty() )
       {
           columnStyleRegions[styleName] += QRect( indexCol, 1, number, KS_rowMax );
@@ -3354,7 +3354,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     bool collapsed = false;
     if ( column.hasAttributeNS( KoXmlNS::table, "visibility" ) )
     {
-      const QString visibility = column.attributeNS( KoXmlNS::table, "visibility", QString::null );
+      const QString visibility = column.attributeNS( KoXmlNS::table, "visibility", QString() );
       if ( visibility == "visible" )
         collapsed = false;
       else if ( visibility == "collapse" )
@@ -3367,7 +3367,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     KoStyleStack styleStack;
     if ( column.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-      QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
+      QString str = column.attributeNS( KoXmlNS::table, "style-name", QString() );
       const KoXmlElement *style = oasisStyles.findStyle( str, "table-column" );
       if ( style )
       {
@@ -3475,7 +3475,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     KoStyleStack styleStack;
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-      QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
+      QString str = row.attributeNS( KoXmlNS::table, "style-name", QString() );
       const KoXmlElement *style = oasisContext.oasisStyles().findStyle( str, "table-row" );
       if ( style )
       {
@@ -3489,7 +3489,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     if ( row.hasAttributeNS( KoXmlNS::table, "number-rows-repeated" ) )
     {
         bool ok = true;
-        int n = row.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt( &ok );
+        int n = row.attributeNS( KoXmlNS::table, "number-rows-repeated", QString() ).toInt( &ok );
         if ( ok )
             // Some spreadsheet programs may support more rows than KSpread so
             // limit the number of repeated rows.
@@ -3499,7 +3499,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
 
     if ( row.hasAttributeNS( KoXmlNS::table,"default-cell-style-name" ) )
     {
-      const QString styleName = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
+      const QString styleName = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString() );
       if ( !styleName.isEmpty() )
       {
           rowStyleRegions[styleName] += QRect( 1, rowIndex, KS_colMax, number );
@@ -3517,7 +3517,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     bool collapse = false;
     if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
     {
-      const QString visibility = row.attributeNS( KoXmlNS::table, "visibility", QString::null );
+      const QString visibility = row.attributeNS( KoXmlNS::table, "visibility", QString() );
       if ( visibility == "visible" )
         collapse = false;
       else if ( visibility == "collapse" )
@@ -3581,7 +3581,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                 //kDebug(36003) << "Loading cell #" << cellCount << endl;
 
                 const bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
-                const QString styleName = cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null );
+                const QString styleName = cellElement.attributeNS( KoXmlNS::table , "style-name" , QString() );
                 if ( cellHasStyle && !styleName.isEmpty())
                     cellStyleRegions[styleName] += QRect( columnIndex, backupRow, 1, 1 );
 
@@ -3595,7 +3595,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                 if ( (number > 1) || cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
-                    int n = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
+                    int n = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString() ).toInt( &ok );
 
                     if (ok)
                         // Some spreadsheet programs may support more columns than

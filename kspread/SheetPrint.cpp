@@ -77,8 +77,8 @@ SheetPrint::SheetPrint( Sheet* sheet )
     m_paperWidth = MM_TO_POINT( KoPageFormat::width( m_paperFormat, m_orientation ) );
     m_paperHeight = MM_TO_POINT( KoPageFormat::height( m_paperFormat, m_orientation ) );
     m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) );
-    m_lnewPageListX.append( 1 );
-    m_lnewPageListY.append( 1 );
+    m_lnewPageListX.append( PrintNewPageEntry( 1 ) );
+    m_lnewPageListY.append( PrintNewPageEntry( 1 ) );
     m_maxCheckedNewPageX = 1;
     m_maxCheckedNewPageY = 1;
     m_dPrintRepeatColumnsWidth = 0.0;
@@ -632,7 +632,7 @@ bool SheetPrint::isOnNewPageX( int _column )
     }
 
     //Now check if we find the column already in the list
-    if ( m_lnewPageListX.indexOf( _column ) != -1 )
+    if ( m_lnewPageListX.indexOf( PrintNewPageEntry( _column ) ) != -1 )
     {
         if( _column > m_maxCheckedNewPageX )
             m_maxCheckedNewPageX = _column;
@@ -669,7 +669,7 @@ void SheetPrint::updateNewPageX( int _column )
 
     //If we start, then add the left printrange
     if ( m_lnewPageListX.empty() )
-        m_lnewPageListX.append( m_printRange.left() ); //Add the first entry
+        m_lnewPageListX.append( PrintNewPageEntry( m_printRange.left() ) ); //Add the first entry
 
     //If _column is greater than the last entry, we need to calculate the result
     if ( _column > m_lnewPageListX.last().startItem() &&
@@ -691,7 +691,7 @@ void SheetPrint::updateNewPageX( int _column )
             if ( x > prinsheetWidthPts() ) //end of page?
             {
                 //We found a new page, so add it to the list
-                m_lnewPageListX.append( col );
+                m_lnewPageListX.append( PrintNewPageEntry( col ) );
 
                 //Now store into the previous entry the enditem and the width
                 QList<PrintNewPageEntry>::iterator it;
@@ -747,7 +747,7 @@ bool SheetPrint::isOnNewPageY( int _row )
     }
 
     //Now check if we find the row already in the list
-    if ( m_lnewPageListY.indexOf( _row ) != -1 )
+    if ( m_lnewPageListY.indexOf( PrintNewPageEntry( _row ) ) != -1 )
     {
         if( _row > m_maxCheckedNewPageY )
             m_maxCheckedNewPageY = _row;
@@ -785,7 +785,7 @@ void SheetPrint::updateNewPageY( int _row )
 
     //If we start, then add the top printrange
     if ( m_lnewPageListY.empty() )
-        m_lnewPageListY.append( m_printRange.top() ); //Add the first entry
+        m_lnewPageListY.append( PrintNewPageEntry( m_printRange.top() ) ); //Add the first entry
 
     //If _column is greater than the last entry, we need to calculate the result
     if ( _row > m_lnewPageListY.last().startItem() &&
@@ -807,7 +807,7 @@ void SheetPrint::updateNewPageY( int _row )
             if ( y > prinsheetHeightPts() )
             {
                 //We found a new page, so add it to the list
-                m_lnewPageListY.append( row );
+                m_lnewPageListY.append( PrintNewPageEntry( row ) );
 
                 //Now store into the previous entry the enditem and the width
                 QList<PrintNewPageEntry>::iterator it;
@@ -853,18 +853,18 @@ void SheetPrint::updateNewPageListX( int _col )
     {
         m_lnewPageListX.clear();
         m_maxCheckedNewPageX = m_printRange.left();
-        m_lnewPageListX.append( m_printRange.left() );
+        m_lnewPageListX.append( PrintNewPageEntry( m_printRange.left() ) );
         return;
     }
 
     if ( _col < m_lnewPageListX.last().startItem() )
     {
         //Find the page entry for this column
-        int index = m_lnewPageListX.indexOf( _col );
+        int index = m_lnewPageListX.indexOf( PrintNewPageEntry( _col ) );
         while ( ( index == -1 ) && _col > 0 )
         {
             _col--;
-            index = m_lnewPageListX.indexOf( _col );
+            index = m_lnewPageListX.indexOf( PrintNewPageEntry( _col ) );
         }
 
         //Remove later pages
@@ -873,7 +873,7 @@ void SheetPrint::updateNewPageListX( int _col )
 
         //Add default page when list is now empty
         if ( m_lnewPageListX.empty() )
-            m_lnewPageListX.append( m_printRange.left() );
+            m_lnewPageListX.append( PrintNewPageEntry( m_printRange.left() ) );
     }
 
     m_maxCheckedNewPageX = _col;
@@ -887,18 +887,18 @@ void SheetPrint::updateNewPageListY( int _row )
     {
         m_lnewPageListY.clear();
         m_maxCheckedNewPageY = m_printRange.top();
-        m_lnewPageListY.append( m_printRange.top() );
+        m_lnewPageListY.append( PrintNewPageEntry( m_printRange.top() ) );
         return;
     }
 
     if ( _row < m_lnewPageListY.last().startItem() )
     {
         //Find the page entry for this row
-        int index = m_lnewPageListY.indexOf( _row );
+        int index = m_lnewPageListY.indexOf( PrintNewPageEntry( _row ) );
         while ( ( index == -1 ) && _row > 0 )
         {
             _row--;
-            index = m_lnewPageListY.indexOf( _row );
+            index = m_lnewPageListY.indexOf( PrintNewPageEntry( _row ) );
         }
 
         //Remove later pages
@@ -907,7 +907,7 @@ void SheetPrint::updateNewPageListY( int _row )
 
         //Add default page when list is now empty
         if ( m_lnewPageListY.empty() )
-            m_lnewPageListY.append( m_printRange.top() );
+            m_lnewPageListY.append( PrintNewPageEntry( m_printRange.top() ) );
     }
 
     m_maxCheckedNewPageY = _row;

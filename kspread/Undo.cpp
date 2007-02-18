@@ -1094,7 +1094,7 @@ UndoChangeAngle::UndoChangeAngle( Doc * _doc,
   UndoAction( _doc )
 {
   name = i18n("Change Angle");
-  m_layoutUndo = new UndoCellFormat( _doc, _sheet, _selection, QString::null );
+  m_layoutUndo = new UndoCellFormat( _doc, _sheet, _selection, QString() );
   m_resizeUndo = new UndoResizeColRow( _doc, _sheet, _selection );
 }
 

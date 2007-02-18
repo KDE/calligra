@@ -90,7 +90,7 @@ class KSPREAD_EXPORT Token
     /**
      * Creates a token.
      */
-    explicit Token( Type type = Unknown, const QString& text = QString::null, int pos = -1 );
+    explicit Token( Type type = Unknown, const QString& text = QString(), int pos = -1 );
 
     static const Token null;
 
@@ -178,7 +178,7 @@ class KSPREAD_EXPORT Token
 
     /**
      * Returns string value for a string token.
-     * For any other type of token, it returns QString::null.
+     * For any other type of token, it returns QString().
      *
      * Note that token text for a string token still has leading and trailing
      * double-quotes, i.e for "KOffice", text() return "KOffice"
@@ -195,7 +195,7 @@ class KSPREAD_EXPORT Token
 
     /**
      * Returns sheet name in a cell reference token.
-     * For any other type of token, it returns QString::null.
+     * For any other type of token, it returns QString().
      *
      * If the cell reference doesn't specify sheet name, an empty string
      * is returned. As example, for "Sheet1!B3" , sheetName() returns

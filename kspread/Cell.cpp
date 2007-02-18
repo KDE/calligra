@@ -1557,10 +1557,10 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
 
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        kDebug(36003)<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
+        kDebug(36003)<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString() )<<endl;
         oasisContext.fillStyleStack( element, KoXmlNS::table, "style-name", "table-cell" );
 
-        QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
+        QString str = element.attributeNS( KoXmlNS::table, "style-name", QString() );
         const KoXmlElement* cellStyle = oasisContext.oasisStyles().findStyle( str, "table-cell" );
 
         if ( cellStyle )
@@ -1576,9 +1576,9 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     bool isFormula = false;
     if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
     {
-        kDebug(36003)<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString::null )<<endl;
+        kDebug(36003)<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString() )<<endl;
         isFormula = true;
-        QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString::null ) );
+        QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString() ) );
         //necessary to remove it to load formula from oocalc2.0 (use namespace)
         if (oasisFormula.startsWith( "oooc:" ) )
             oasisFormula= oasisFormula.mid( 5 );
@@ -1597,9 +1597,9 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     //
     if ( element.hasAttributeNS( KoXmlNS::table, "validation-name" ) )
     {
-        kDebug(36003)<<" validation-name: "<<element.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
+        kDebug(36003)<<" validation-name: "<<element.attributeNS( KoXmlNS::table, "validation-name", QString() )<<endl;
         Validity validity;
-        validity.loadOasisValidation( this, element.attributeNS( KoXmlNS::table, "validation-name", QString::null ) );
+        validity.loadOasisValidation( this, element.attributeNS( KoXmlNS::table, "validation-name", QString() ) );
         if ( !validity.isEmpty() )
             setValidity( validity );
     }
@@ -1609,11 +1609,11 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     //
     if( element.hasAttributeNS( KoXmlNS::office, "value-type" ) )
     {
-        QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString::null );
+        QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString() );
         kDebug(36003)<<"  value-type: " << valuetype << endl;
         if( valuetype == "boolean" )
         {
-          QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString::null ).toLower();
+          QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString() ).toLower();
             if( ( val == "true" ) || ( val == "false" ) )
             {
                 bool value = val == "true";
@@ -1625,7 +1625,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         else if( valuetype == "float" )
         {
             bool ok = false;
-            double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
+            double value = element.attributeNS( KoXmlNS::office, "value", QString() ).toDouble( &ok );
             if( ok )
                 setCellValue( Value(value) );
 
@@ -1640,14 +1640,14 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         else if( valuetype == "currency" )
         {
             bool ok = false;
-            double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
+            double value = element.attributeNS( KoXmlNS::office, "value", QString() ).toDouble( &ok );
             if( ok )
             {
                 setCellValue( Value(value), Format::Money );
 
                 if (element.hasAttributeNS( KoXmlNS::office, "currency" ) )
                 {
-                  Currency currency(element.attributeNS( KoXmlNS::office, "currency", QString::null ) );
+                  Currency currency(element.attributeNS( KoXmlNS::office, "currency", QString() ) );
                   Style style;
                   style.setCurrency( currency );
                   setStyle( style );
@@ -1657,7 +1657,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         else if( valuetype == "percentage" )
         {
             bool ok = false;
-            double percent = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
+            double percent = element.attributeNS( KoXmlNS::office, "value", QString() ).toDouble( &ok );
             if( ok )
             {
                 Value value( percent );
@@ -1676,9 +1676,9 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         }
         else if ( valuetype == "date" )
         {
-            QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
+            QString value = element.attributeNS( KoXmlNS::office, "value", QString() );
             if ( value.isEmpty() )
-                value = element.attributeNS( KoXmlNS::office, "date-value", QString::null );
+                value = element.attributeNS( KoXmlNS::office, "date-value", QString() );
             kDebug(36003) << "Type: date, value: " << value << endl;
 
             // "1980-10-15"
@@ -1715,9 +1715,9 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         }
         else if ( valuetype == "time" )
         {
-            QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
+            QString value = element.attributeNS( KoXmlNS::office, "value", QString() );
             if ( value.isEmpty() )
-                value = element.attributeNS( KoXmlNS::office, "time-value", QString::null );
+                value = element.attributeNS( KoXmlNS::office, "time-value", QString() );
             kDebug(36003) << "Type: time: " << value << endl;
             // "PT15H10M12S"
             int hours = 0, minutes = 0, seconds = 0;
@@ -1760,11 +1760,11 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         }
         else if( valuetype == "string" )
         {
-            QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
+            QString value = element.attributeNS( KoXmlNS::office, "value", QString() );
             if ( value.isEmpty() && element.hasAttributeNS( KoXmlNS::office, "string-value" ))
             {
                 //if there is not string-value entry don't overwrite value stored into <text:p>
-                value = element.attributeNS( KoXmlNS::office, "string-value", QString::null );
+                value = element.attributeNS( KoXmlNS::office, "string-value", QString() );
                 setCellValue( Value(value) );
             }
             Style style;
@@ -1783,13 +1783,13 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     if ( element.hasAttributeNS( KoXmlNS::table, "number-columns-spanned" ) )
     {
         bool ok = false;
-        int span = element.attributeNS( KoXmlNS::table, "number-columns-spanned", QString::null ).toInt( &ok );
+        int span = element.attributeNS( KoXmlNS::table, "number-columns-spanned", QString() ).toInt( &ok );
         if( ok ) colSpan = span;
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "number-rows-spanned" ) )
     {
         bool ok = false;
-        int span = element.attributeNS( KoXmlNS::table, "number-rows-spanned", QString::null ).toInt( &ok );
+        int span = element.attributeNS( KoXmlNS::table, "number-rows-spanned", QString() ).toInt( &ok );
         if( ok ) rowSpan = span;
     }
     if ( colSpan > 1 || rowSpan > 1 )
@@ -1859,7 +1859,7 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
             {
                 if ( textA.hasAttributeNS( KoXmlNS::xlink, "href" ) )
                 {
-                    QString link = textA.attributeNS( KoXmlNS::xlink, "href", QString::null );
+                    QString link = textA.attributeNS( KoXmlNS::xlink, "href", QString() );
                     cellText = textA.text();
                     setCellText( cellText );
                     setValue( Value(cellText) );
@@ -1896,7 +1896,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
           KoXmlNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
           if ( !object.isNull() )
           {
-            if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null).isNull() )
+            if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString()).isNull() )
               obj = new EmbeddedChart( doc(), sheet() );
             else
               obj = new EmbeddedKOfficeObject( doc(), sheet() );
@@ -1915,7 +1915,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
             obj->loadOasis( e, oasisContext );
             doc()->insertObject( obj );
 
-            QString ref = e.attributeNS( KoXmlNS::table, "end-cell-address", QString::null );
+            QString ref = e.attributeNS( KoXmlNS::table, "end-cell-address", QString() );
             if ( ref.isNull() )
               continue;
 
@@ -1928,14 +1928,14 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
             geometry.setLeft( geometry.left() + sheet()->columnPos( d->column ) );
             geometry.setTop( geometry.top() + sheet()->rowPos( d->row ) );
 
-            QString str = e.attributeNS( KoXmlNS::table, "end-x", QString::null );
+            QString str = e.attributeNS( KoXmlNS::table, "end-x", QString() );
             if ( !str.isNull() )
             {
               uint end_x = (uint) KoUnit::parseValue( str );
               geometry.setRight( sheet()->columnPos( point.column() ) + end_x );
             }
 
-            str = e.attributeNS( KoXmlNS::table, "end-y", QString::null );
+            str = e.attributeNS( KoXmlNS::table, "end-y", QString() );
             if ( !str.isNull() )
             {
               uint end_y = (uint) KoUnit::parseValue( str );

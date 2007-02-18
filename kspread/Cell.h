@@ -288,7 +288,7 @@ public:
      * \note Calls setValue() after setting the formatting and input text.
      */
     void setCellValue (const Value& value, Format::Type fmtType = Format::None,
-                       const QString& inputText = QString::null);
+                       const QString& inputText = QString());
 
     /**
      * Parses \p text and sets the appropriate formatting.

@@ -329,7 +329,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
         QByteArray passwd( "" );
         if ( body.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
-            QString p = body.attributeNS( KoXmlNS::table, "protection-key", QString::null );
+            QString p = body.attributeNS( KoXmlNS::table, "protection-key", QString() );
             QByteArray str( p.toLatin1() );
             passwd = KCodecs::base64Decode( str );
         }
@@ -354,10 +354,10 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
 
             if( sheetElement.nodeName() == "table:table" )
             {
-                if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
+                if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString() ).isEmpty() )
                 {
                     Sheet* sheet = addNewSheet();
-                    sheet->setSheetName( sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
+                    sheet->setSheetName( sheetElement.attributeNS( KoXmlNS::table, "name", QString() ), true, false );
                     d->overallRowCount += KoXml::childNodesCount(sheetElement);
                 }
             }
@@ -384,9 +384,9 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
             //kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName()<<endl;
             if( sheetElement.nodeName() == "table:table" )
             {
-                if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
+                if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString() ).isEmpty() )
                 {
-                    QString name = sheetElement.attributeNS( KoXmlNS::table, "name", QString::null );
+                    QString name = sheetElement.attributeNS( KoXmlNS::table, "name", QString() );
                     Sheet* sheet = findSheet( name );
                     if( sheet )
                     {

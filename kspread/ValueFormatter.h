@@ -68,9 +68,9 @@ public:
     QString formatText( const Value& value,
                         Format::Type formatType, int precision = -1,
                         Style::FloatFormat floatFormat = Style::OnlyNegSigned,
-                        const QString& prefix = QString::null,
-                        const QString& postfix = QString::null,
-                        const QString& currencySymbol = QString::null );
+                        const QString& prefix = QString(),
+                        const QString& postfix = QString(),
+                        const QString& currencySymbol = QString() );
 
     /**
      * Creates a date format.

@@ -472,13 +472,13 @@ void Conditions::loadOasisConditions( const StyleManager* styleManager, const Ko
         if ( elementItem.tagName()== "map" && elementItem.namespaceURI() == KoXmlNS::style  )
         {
             bool ok = true;
-            kDebug(36003) << "\tcondition: "<< elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
+            kDebug(36003) << "\tcondition: "<< elementItem.attributeNS( KoXmlNS::style, "condition", QString() )<<endl;
             Conditional newCondition;
-            loadOasisConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString::null ), newCondition );
+            loadOasisConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString() ), newCondition );
             if ( elementItem.hasAttributeNS( KoXmlNS::style, "apply-style-name" ) )
             {
-                kDebug(36003)<<"\tstyle: "<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
-                newCondition.styleName = new QString( elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null ) );
+                kDebug(36003)<<"\tstyle: "<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString() )<<endl;
+                newCondition.styleName = new QString( elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString() ) );
                 newCondition.style = styleManager->style( *newCondition.styleName );
                 if ( !newCondition.style )
                     ok = false;

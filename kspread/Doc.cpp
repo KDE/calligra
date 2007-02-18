@@ -1821,8 +1821,8 @@ void Doc::loadOasisCellValidation( const KoXmlElement&body )
                 KoXmlElement element = n.toElement();
                 //kDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName()<<endl;
                 if ( element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table ) {
-                    d->loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString::null ), element );
-                    kDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString::null )<<endl;
+                    d->loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString() ), element );
+                    kDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString() )<<endl;
                 }
                 else {
                     kDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
@@ -1955,8 +1955,8 @@ void Doc::loadOasisAreaName( const KoXmlElement& body )
                 }
 
                 // TODO: what is: sheet:base-cell-address
-                QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
-                QString range = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
+                QString name  = e.attributeNS( KoXmlNS::table, "name", QString() );
+                QString range = e.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
                 d->loadingInfo->addWordInAreaList( name );
                 kDebug(36003) << "Reading in named area, name: " << name << ", area: " << range << endl;
 

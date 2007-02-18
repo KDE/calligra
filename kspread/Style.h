@@ -167,7 +167,7 @@ public:
     /**
      * Saves an OASIS automatic style.
      * Reimplemented by CustomStyle for OASIS user styles.
-     * @return always QString::null
+     * @return always QString()
      */
     virtual QString saveOasis( KoGenStyle& style, KoGenStyles& mainStyles) const;
 

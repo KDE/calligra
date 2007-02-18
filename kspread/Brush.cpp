@@ -174,14 +174,14 @@ void KSpreadBrush::loadOasisFillStyle( KoOasisContext &context, const char * pro
 
             if ( draw )
             {
-                setGColor1( draw->attributeNS( KoXmlNS::draw, "start-color", QString::null ) );
-                setGColor2( draw->attributeNS( KoXmlNS::draw, "end-color", QString::null ) );
+                setGColor1( draw->attributeNS( KoXmlNS::draw, "start-color", QString() ) );
+                setGColor2( draw->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
 
-                QString type = draw->attributeNS( KoXmlNS::draw, "style", QString::null );
+                QString type = draw->attributeNS( KoXmlNS::draw, "style", QString() );
                 kDebug()<<" type :"<<type<<endl;
                 if ( type == "linear" )
                 {
-                    int angle = draw->attributeNS( KoXmlNS::draw, "angle", QString::null ).toInt() / 10;
+                    int angle = draw->attributeNS( KoXmlNS::draw, "angle", QString() ).toInt() / 10;
 
                     // make sure the angle is between 0 and 359
                     angle = abs( angle );
@@ -223,12 +223,12 @@ void KSpreadBrush::loadOasisFillStyle( KoOasisContext &context, const char * pro
                 // and (un-)balanced settings of kpresenter. Let's try it.
                 int x, y;
                 if ( draw->hasAttributeNS( KoXmlNS::draw, "cx" ) )
-                    x = draw->attributeNS( KoXmlNS::draw, "cx", QString::null ).remove( '%' ).toInt();
+                    x = draw->attributeNS( KoXmlNS::draw, "cx", QString() ).remove( '%' ).toInt();
                 else
                     x = 50;
 
                 if ( draw->hasAttributeNS( KoXmlNS::draw, "cy" ) )
-                    y = draw->attributeNS( KoXmlNS::draw, "cy", QString::null ).remove( '%' ).toInt();
+                    y = draw->attributeNS( KoXmlNS::draw, "cy", QString() ).remove( '%' ).toInt();
                 else
                     y = 50;
 

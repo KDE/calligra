@@ -1591,9 +1591,9 @@ void CellFormatPageFloat::makeformat()
   ValueFormatter *fmt = dlg->getDoc()->formatter();
   tmp = fmt->formatText(dlg->value, newFormatType, precision->value(),
                         floatFormat,
-                        prefix->isEnabled() ? prefix->text() : QString::null,
-                        postfix->isEnabled() ? postfix->text() : QString::null,
-                        newFormatType == Format::Money ? dlg->m_currency.symbol() : QString::null);
+                        prefix->isEnabled() ? prefix->text() : QString(),
+                        postfix->isEnabled() ? postfix->text() : QString(),
+                        newFormatType == Format::Money ? dlg->m_currency.symbol() : QString());
   if (tmp.length() > 50)
     tmp = tmp.left (50);
   exampleLabel->setText(tmp.prepend("<font color=" + color.name() + '>').append("</font>"));
