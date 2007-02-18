@@ -39,7 +39,7 @@ class KSPREAD_EXPORT ToolBox : public QFrame
 {
     Q_OBJECT
 public:
-    ToolBox( QWidget* parent = 0, const char* name = 0 );
+    explicit ToolBox( QWidget* parent = 0, const char* name = 0 );
 
 public slots:
     void setEnabled( bool enable );

@@ -31,7 +31,7 @@ class Sheet;
 class TableShape : public KoShape
 {
 public:
-    TableShape( int columns = 2, int rows = 8 );
+    explicit TableShape( int columns = 2, int rows = 8 );
     virtual ~TableShape();
 
     void setColumns( int columns );

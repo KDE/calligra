@@ -112,7 +112,7 @@ public:
    * @param parent the parent object
    * @param singleViewMode enables single view mode, if @c true
    */
-  Doc( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
+  explicit Doc( QWidget* parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
 
   /**
    * Destroys the document.

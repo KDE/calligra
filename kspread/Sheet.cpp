@@ -4558,7 +4558,7 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
             QString tagName=e.tagName();
             if ( tagName == "cell" )
             {
-                Cell cell = Cell( this, 1, 1 ); // col, row will get overriden in all cases
+                Cell cell = Cell( this, 1, 1 ); // col, row will get overridden in all cases
                 if ( !cell.load( e, 0, 0 ) && cell.column() != 0 && cell.row() != 0 )
                     d->cellStorage->take( cell.column(), cell.row() );
             }

@@ -64,7 +64,11 @@ class FindDlg : public KFindDialog
   Q_OBJECT
 
  public:
-    FindDlg( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), bool hasSelection = false );
+    explicit FindDlg( QWidget *parent = 0,
+                      const char *name = 0,
+                      long options = 0,
+                      const QStringList &findStrings = QStringList(),
+                      bool hasSelection = false );
     ~FindDlg();
     bool searchInAllSheet() const;
     FindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }

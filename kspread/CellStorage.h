@@ -299,7 +299,7 @@ public:
 
     /**
      * Stops the undo recording and return the undo data object.
-     * If no undo data occured, it returns null.
+     * If no undo data occurred, it returns null.
      * \see startUndoRecording
      * \see undo
      * \return the undo object

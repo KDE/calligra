@@ -47,7 +47,7 @@ class PropertyEditor : public Q3TabDialog
     Q_OBJECT
 
 public:
-    PropertyEditor( QWidget *parent = 0, const char *name = 0, Sheet *page = 0, Doc *doc = 0 );
+    explicit PropertyEditor( QWidget *parent = 0, const char *name = 0, Sheet *page = 0, Doc *doc = 0 );
     ~PropertyEditor();
 
     KCommand * getCommand();

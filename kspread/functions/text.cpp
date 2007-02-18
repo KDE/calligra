@@ -572,12 +572,12 @@ Value func_sleek (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: SUBSTITUTE
 Value func_substitute (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int occurence = 1;
+  int occurrence = 1;
   bool all = true;
 
   if (args.count() == 4)
   {
-    occurence = calc->conv()->asInteger (args[3]).asInteger();
+    occurrence = calc->conv()->asInteger (args[3]).asInteger();
     all = false;
   }
 
@@ -585,7 +585,7 @@ Value func_substitute (valVector args, ValueCalc *calc, FuncExtra *)
   QString old_text = calc->conv()->asString (args[1]).asString();
   QString new_text = calc->conv()->asString (args[2]).asString();
 
-  if( occurence <= 0 ) return Value::errorVALUE();
+  if( occurrence <= 0 ) return Value::errorVALUE();
   if (old_text.length() == 0) return Value (text);
 
   QString result = text;
@@ -598,7 +598,7 @@ Value func_substitute (valVector args, ValueCalc *calc, FuncExtra *)
   {
     // We are only looking to modify a single value, by position.
     int position = 0;
-    for ( int i = 0; i < occurence; ++i )
+    for ( int i = 0; i < occurrence; ++i )
     {
       position = result.indexOf( old_text, position + 1 );
     }

@@ -680,10 +680,14 @@ public:
         m_iStartItem( 0 ), m_iEndItem( 0 ), m_dSize( 0 ),
         m_dOffset( 0 ){}
 
-    PrintNewPageEntry( int startItem, int endItem = 0, double size = 0,
-                              double offset = 0 ) :
-        m_iStartItem( startItem ), m_iEndItem( endItem ), m_dSize( size ),
-        m_dOffset( offset ) {}
+    explicit PrintNewPageEntry( int startItem,
+                                int endItem = 0,
+                                double size = 0,
+                                double offset = 0 )
+        : m_iStartItem( startItem )
+        , m_iEndItem( endItem )
+        , m_dSize( size )
+        , m_dOffset( offset ) {}
 
     int startItem() const { return m_iStartItem; }
     void setStartItem( int startItem ) { m_iStartItem = startItem; }

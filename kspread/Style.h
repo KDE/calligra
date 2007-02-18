@@ -361,7 +361,7 @@ public:
      * \param name The name of this style.
      * \param parent The style whose attributes are inherited - the parent style.
      */
-    CustomStyle( QString const & name, CustomStyle * parent = 0 );
+    explicit CustomStyle( const QString& name, CustomStyle* parent = 0 );
     virtual ~CustomStyle();
 
     virtual StyleType type() const;

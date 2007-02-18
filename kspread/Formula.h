@@ -90,7 +90,7 @@ class KSPREAD_EXPORT Token
     /**
      * Creates a token.
      */
-    Token( Type type = Unknown, const QString& text = QString::null, int pos = -1 );
+    explicit Token( Type type = Unknown, const QString& text = QString::null, int pos = -1 );
 
     static const Token null;
 

@@ -39,7 +39,7 @@ class StyleWidget : public QWidget
   Q_OBJECT
 
  public:
-  StyleWidget( QWidget* parent = 0, Qt::WFlags fl = 0 );
+  explicit StyleWidget( QWidget* parent = 0, Qt::WFlags fl = 0 );
   ~StyleWidget();
 
   K3ListView * m_styleList;

@@ -57,7 +57,7 @@ class ResizeColumn: public KDialog
   Q_OBJECT
 
 public:
-  ResizeColumn( View* parent, const char* name = 0 );
+  explicit ResizeColumn( View* parent, const char* name = 0 );
   double columnWidth;
 
 protected slots:
