@@ -338,6 +338,22 @@ public:
     /// Set the time zone to be used in this project
     void setTimeZone( const KTimeZone *tz ) { m_spec = KDateTime::Spec( tz ); }
     
+    /**
+     * Add a relation between the nodes specified in the relation rel.
+     * Emits signals relationToBeAdded() before the relation is added,
+     * and relationAdded() after it has been added.
+     * @parem rel The relation to be added.
+     * @parem check If true, the relation is checked for validity
+     * @Return true if successfull.
+     */
+    bool addRelation( Relation *rel, bool check=true );
+    /**
+     * Removes the relation without deleting it.
+     * Emits signals relationToBeRemoved() before the relation is removed,
+     * and relationRemoved() after it has been removed.
+     */
+    void takeRelation( Relation *rel );
+    
 signals:
     void currentScheduleChanged();
     void sigProgress( int );
@@ -389,6 +405,15 @@ signals:
     void calendarToBeRemoved( const Calendar *cal );
     void calendarRemoved( const Calendar *cal );
 
+    /// Emitted when the relation rel is about to be added.
+    void relationToBeAdded( Relation *rel, int parentIndex, int childIndex );
+    /// Emitted when the relation rel has been added.
+    void relationAdded( Relation *rel );
+    /// Emitted when the relation rel is about to be removed.
+    void relationToBeRemoved( Relation *rel );
+    /// Emitted when the relation rel has been removed.
+    void relationRemoved( Relation *rel );
+    
 protected:
     /**
      * Calculate the schedule.

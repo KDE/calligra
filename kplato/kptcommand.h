@@ -527,6 +527,7 @@ public:
 
 private:
     Relation *m_rel;
+    Project &m_project;
     bool m_taken;
 
 };
@@ -541,6 +542,7 @@ public:
 
 private:
     Relation *m_rel;
+    Project &m_project;
     bool m_taken;
 
 };

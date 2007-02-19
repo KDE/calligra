@@ -1382,7 +1382,7 @@ bool Project::legalToLink( Node *par, Node *child )
 {
     //kDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents) "<<child.name()<<" ("<<child.numDependChildNodes()<<" children)"<<endl;
 
-    if ( !child || par->isDependChildOf( child ) ) {
+    if ( par == 0 || child == 0 || par->isDependChildOf( child ) ) {
         return false;
     }
     bool legal = true;
@@ -1617,6 +1617,29 @@ void Project::changed( Resource *resource )
 void Project::changed( Calendar *cal )
 {
     emit calendarChanged( cal );
+}
+
+bool Project::addRelation( Relation *rel, bool check )
+{
+    if ( rel->parent() == 0 || rel->child() == 0 ) {
+        return false;
+    }
+    if ( check && !legalToLink( rel->parent(), rel->child() ) ) {
+        return false;
+    }
+    emit relationToBeAdded( rel, rel->parent()->numDependChildNodes(), rel->child()->numDependParentNodes() );
+    rel->parent()->addDependChildNode( rel );
+    rel->child()->addDependParentNode( rel );
+    emit relationAdded( rel );
+    return true;
+}
+
+void Project::takeRelation( Relation *rel )
+{
+    emit relationToBeRemoved( rel );
+    rel->parent() ->takeDependChildNode( rel );
+    rel->child() ->takeDependParentNode( rel );
+    emit relationRemoved( rel );
 }
 
 #ifndef NDEBUG

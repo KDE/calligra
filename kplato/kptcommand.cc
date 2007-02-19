@@ -1113,9 +1113,9 @@ void NodeMoveCmd::unexecute()
 
 AddRelationCmd::AddRelationCmd( Part *part, Relation *rel, const QString& name )
         : NamedCommand( part, name ),
-        m_rel( rel )
+        m_rel( rel ),
+        m_project( part->getProject() )
 {
-
     m_taken = true;
     Node *p = rel->parent() ->projectNode();
     if ( p ) {
@@ -1133,23 +1133,22 @@ void AddRelationCmd::execute()
 {
     //kDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
     m_taken = false;
-    m_rel->parent() ->addDependChildNode( m_rel );
-    m_rel->child() ->addDependParentNode( m_rel );
+    m_project.addRelation( m_rel, false );
     setSchScheduled( false );
     setCommandType( 1 );
 }
 void AddRelationCmd::unexecute()
 {
     m_taken = true;
-    m_rel->parent() ->takeDependChildNode( m_rel );
-    m_rel->child() ->takeDependParentNode( m_rel );
+    m_project.takeRelation( m_rel );
     setSchScheduled();
     setCommandType( 1 );
 }
 
 DeleteRelationCmd::DeleteRelationCmd( Part *part, Relation *rel, const QString& name )
         : NamedCommand( part, name ),
-        m_rel( rel )
+        m_rel( rel ),
+        m_project( part->getProject() )
 {
 
     m_taken = false;
@@ -1169,16 +1168,14 @@ void DeleteRelationCmd::execute()
 {
     //kDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
     m_taken = true;
-    m_rel->parent() ->takeDependChildNode( m_rel );
-    m_rel->child() ->takeDependParentNode( m_rel );
+    m_project.takeRelation( m_rel );
     setSchScheduled( false );
     setCommandType( 1 );
 }
 void DeleteRelationCmd::unexecute()
 {
     m_taken = false;
-    m_rel->parent() ->addDependChildNode( m_rel );
-    m_rel->child() ->addDependParentNode( m_rel );
+    m_project.addRelation( m_rel, false );
     setSchScheduled();
     setCommandType( 1 );
 }
