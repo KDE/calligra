@@ -58,6 +58,7 @@ Project::Project( Node *parent )
 
 void Project::init()
 {
+    m_currentViewScheduleId = -1;
     m_spec = KDateTime::Spec::LocalZone();
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent
@@ -1586,6 +1587,7 @@ void Project::changed( ScheduleManager *sm )
 
 void Project::changed( MainSchedule *sch )
 {
+    //kDebug()<<k_funcinfo<<sch->id()<<endl;
     emit scheduleChanged( sch );
 }
 
@@ -1596,6 +1598,7 @@ void Project::sendScheduleToBeAdded( const ScheduleManager *sm, int row )
 
 void Project::sendScheduleAdded( const MainSchedule *sch )
 {
+    //kDebug()<<k_funcinfo<<sch->id()<<endl;
     emit scheduleAdded( sch );
 }
 
@@ -1606,6 +1609,7 @@ void Project::sendScheduleToBeRemoved( const MainSchedule *sch )
 
 void Project::sendScheduleRemoved( const MainSchedule *sch )
 {
+    //kDebug()<<k_funcinfo<<sch->id()<<endl;
     emit scheduleRemoved( sch );
 }
 

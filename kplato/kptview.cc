@@ -254,7 +254,7 @@ void ViewListTreeWidget::drawRow( QPainter *painter, const QStyleOptionViewItem 
 
 void ViewListTreeWidget::handleMousePress( QTreeWidgetItem *item )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if ( item == 0 )
         return ;
 
@@ -307,9 +307,9 @@ ViewListWidget::~ViewListWidget()
 
 void ViewListWidget::slotActionTriggered()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QString servName = sender()->objectName();
-    kDebug()<<k_funcinfo<<servName<<endl;
+    //kDebug()<<k_funcinfo<<servName<<endl;
     KService::Ptr serv = KService::serviceByName( servName );
     KoDocumentEntry entry = KoDocumentEntry( serv );
     emit createKofficeDocument( entry );
@@ -317,7 +317,7 @@ void ViewListWidget::slotActionTriggered()
 
 void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if ( item == 0 || item->type() == ViewListWidget::Category ) {
         return ;
     }
@@ -361,12 +361,12 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString&
 
 void ViewListWidget::setSelected( QTreeWidgetItem *item )
 {
-    kDebug()<<k_funcinfo<<item<<", "<<m_viewlist->currentItem()<<endl;
+    //kDebug()<<k_funcinfo<<item<<", "<<m_viewlist->currentItem()<<endl;
     if ( item == 0 ) {
         return;
     }
     m_viewlist->setCurrentItem( item );
-    kDebug()<<k_funcinfo<<item<<", "<<m_viewlist->currentItem()<<endl;
+    //kDebug()<<k_funcinfo<<item<<", "<<m_viewlist->currentItem()<<endl;
 }
 
 ViewListItem *ViewListWidget::findItem(  KoView *view, QTreeWidgetItem *parent )
@@ -377,7 +377,7 @@ ViewListItem *ViewListWidget::findItem(  KoView *view, QTreeWidgetItem *parent )
     for (int i = 0; i < parent->childCount(); ++i ) {
         ViewListItem * ch = static_cast<ViewListItem*>( parent->child( i ) );
         if ( ch->view() == view ) {
-            kDebug()<<k_funcinfo<<ch<<", "<<view<<endl;
+            //kDebug()<<k_funcinfo<<ch<<", "<<view<<endl;
             return ch;
         }
         ch = findItem( view, ch );
@@ -933,7 +933,7 @@ void View::slotViewGanttCriticalPath()
 
 void View::slotViewGanttNoInformation()
 {
-    kDebug() << k_funcinfo << m_ganttview->showNoInformation() << endl;
+    //kDebug() << k_funcinfo << m_ganttview->showNoInformation() << endl;
     m_ganttview->setShowNoInformation( !m_ganttview->showNoInformation() ); //Toggle
     if ( m_tab->currentWidget() == m_ganttview )
         slotUpdate();
@@ -956,7 +956,7 @@ void View::slotViewSelector( bool show )
 
 void View::slotViewGantt()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_viewlist->setSelected( m_viewlist->findItem( m_ganttview ) );
     //m_tab->setCurrentWidget( m_ganttview );
 }
@@ -981,13 +981,13 @@ void View::slotViewAccounts()
 
 void View::slotViewTaskEditor()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_viewlist->setSelected( m_viewlist->findItem( m_taskeditor ) );
 }
 
 void View::slotViewCalendarEditor()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_viewlist->setSelected( m_viewlist->findItem( m_calendareditor ) );
 }
 
@@ -1098,13 +1098,13 @@ void View::slotScheduleRemoved( const MainSchedule *sch )
             m_scheduleActions.keys().first()->setChecked( true );
         }
     }
-    setLabel();
+    slotViewSchedule( m_scheduleActionGroup->checkedAction() );
 }
 
 void View::slotScheduleAdded( const MainSchedule *sch )
 {
     MainSchedule *s = const_cast<MainSchedule*>( sch ); // FIXME
-    kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
+    //kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
     QAction *checked = m_scheduleActionGroup->checkedAction();
     if ( ! sch->isDeleted() && sch->isScheduled() ) {
         unplugActionList( "view_schedule_list" );
@@ -1112,20 +1112,18 @@ void View::slotScheduleAdded( const MainSchedule *sch )
         plugActionList( "view_schedule_list", m_scheduleActions.keys() );
         if ( checked ) {
             checked->setChecked( true );
-            kDebug()<<"set checked "<<checked<<endl;
         } else if ( act ) {
             act->setChecked( true );
-            kDebug()<<"set act checked "<<act<<endl;
         } else if ( ! m_scheduleActions.isEmpty() ) {
             m_scheduleActions.keys().first()->setChecked( true );
         }
     }
-    setLabel();
+    slotViewSchedule( m_scheduleActionGroup->checkedAction() );
 }
 
 void View::slotScheduleChanged( MainSchedule *sch )
 {
-    kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
+    //kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
     if ( sch->isDeleted() || ! sch->isScheduled() ) {
         slotScheduleRemoved( sch );
         return;
@@ -1154,10 +1152,12 @@ QAction *View::addScheduleAction( Schedule *sch )
 void View::slotViewSchedule( QAction *act )
 {
     //kDebug()<<k_funcinfo<<endl;
-    Schedule *sch = m_scheduleActions.value( act, 0 );
-    if ( sch->id() != getProject().currentViewScheduleId() ) {
-        getProject().setCurrentViewScheduleId( sch->id() );
-        //kDebug()<<k_funcinfo<<sch->id()<<endl;
+    if ( act != 0 ) {
+        Schedule *sch = m_scheduleActions.value( act, 0 );
+        if ( sch->id() != getProject().currentViewScheduleId() ) {
+            getProject().setCurrentViewScheduleId( sch->id() );
+            //kDebug()<<k_funcinfo<<sch->id()<<endl;
+        }
     }
     setLabel();
 }
@@ -1166,6 +1166,7 @@ void View::slotActionDestroyed( QObject *o )
 {
     //kDebug()<<k_funcinfo<<o->name()<<endl;
     m_scheduleActions.remove( static_cast<QAction*>( o ) );
+    slotViewSchedule( m_scheduleActionGroup->checkedAction() );
 }
 
 void View::slotPlugScheduleActions()
@@ -1193,9 +1194,8 @@ void View::slotPlugScheduleActions()
     }
     if ( ca ) {
         ca->setChecked( true );
-        slotViewSchedule( ca );
     }
-    setLabel();
+    slotViewSchedule( ca );
 }
 
 void View::slotProgressChanged( int value )
@@ -1729,7 +1729,7 @@ void View::slotExportGantt()
 
 void View::slotAddResource( ResourceGroup *group )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if ( group == 0 ) {
         return;
     }
@@ -1778,7 +1778,7 @@ void View::slotDeleteResourceGroup( ResourceGroup *group )
 
 void View::slotDeleteResourceObjects( QObjectList lst )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if ( lst.count() == 1 ) {
         Resource *r = qobject_cast<Resource*>( lst.first() );
         if ( r ) {
@@ -1861,12 +1861,12 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
 {
     if ( activate ) {
         foreach( QString name, view->actionListNames() ) {
-            kDebug()<<k_funcinfo<<"activate "<<name<<", "<<view->actionList( name ).count()<<endl;
+            //kDebug()<<k_funcinfo<<"activate "<<name<<", "<<view->actionList( name ).count()<<endl;
             plugActionList( name, view->actionList( name ) );
         }
     } else {
         foreach( QString name, view->actionListNames() ) {
-            kDebug()<<k_funcinfo<<"deactivate "<<name<<endl;
+            //kDebug()<<k_funcinfo<<"deactivate "<<name<<endl;
             unplugActionList( name );
         }
     }
@@ -1874,7 +1874,7 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    kDebug()<<k_funcinfo<<ev->activated()<<endl;
+    //kDebug()<<k_funcinfo<<ev->activated()<<endl;
     KoView::guiActivateEvent( ev );
     if ( ev->activated() ) {
         // plug my own actionlists, they may be gone
@@ -1950,23 +1950,23 @@ void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
     ViewListItem *i = m_viewlist->addView( cat, title, v, ch );
     i->setIcon( 0, KIcon( entry.service()->icon() ) );
     m_tab->addWidget( v );
-    kDebug()<<k_funcinfo<<"Added: "<<v<<endl;
+    //kDebug()<<k_funcinfo<<"Added: "<<v<<endl;
     m_viewlist->setSelected( i );
 }
 
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
-    kDebug() << k_funcinfo << "item=" << item << ", "<<prev<<endl;
+    //kDebug() << k_funcinfo << "item=" << item << ", "<<prev<<endl;
     if ( prev && prev->type() != ViewListWidget::ChildDocument ) {
         // Remove sub-view specific gui
-        kDebug()<<k_funcinfo<<"Deactivate: "<<prev<<endl;
+        //kDebug()<<k_funcinfo<<"Deactivate: "<<prev<<endl;
         ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
         if ( v ) {
             v->setGuiActive( false );
         }
     }
     if ( item->type() == ViewListWidget::SubView ) {
-        kDebug()<<k_funcinfo<<"Activate: "<<item<<endl;
+        //kDebug()<<k_funcinfo<<"Activate: "<<item<<endl;
         m_tab->setCurrentWidget( item->view() );
         if (  prev && prev->type() != ViewListWidget::SubView ) {
             // Put back my own gui (removed when (if) viewing different doc)
@@ -1980,7 +1980,7 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         return;
     } 
     if ( item->type() == ViewListWidget::ChildDocument ) {
-        kDebug()<<k_funcinfo<<"Activated: "<<item->view()<<endl;
+        //kDebug()<<k_funcinfo<<"Activated: "<<item->view()<<endl;
         // changing doc also takes care of all gui
         m_tab->setCurrentWidget( item->view() );
         item->documentChild()->activate( item->view() );
@@ -1999,7 +1999,7 @@ void View::slotCurrentChanged( int index )
     
     KoView *currentview = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
     if ( currentview ) {
-        kDebug()<<k_funcinfo<<"ViewBase: "<<currentview<<endl;
+        //kDebug()<<k_funcinfo<<"ViewBase: "<<currentview<<endl;
         updateView( currentview );
         return;
     }
@@ -2011,7 +2011,7 @@ void View::updateView( QWidget *widget )
     //setScheduleActionsEnabled();
     mainWindow() ->toolBar( "report" ) ->hide();
     if ( widget == m_ganttview ) {
-        kDebug()<<k_funcinfo<<"draw gantt"<<endl;
+        //kDebug()<<k_funcinfo<<"draw gantt"<<endl;
         if ( m_updateGanttview )
             m_ganttview->drawChanges( getProject() );
         //setTaskActionsEnabled( widget, true );
@@ -2060,14 +2060,14 @@ void View::slotPopupMenu( const QString& menuname, const QPoint & pos )
 {
     QMenu * menu = this->popupMenu( menuname );
     if ( menu ) {
-        kDebug()<<k_funcinfo<<menu<<": "<<menu->actions().count()<<endl;
+        //kDebug()<<k_funcinfo<<menu<<": "<<menu->actions().count()<<endl;
         menu->exec( pos );
     }
 }
 
 void View::slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListItem *item )
 {
-    kDebug()<<k_funcinfo<<menuname<<endl;
+    //kDebug()<<k_funcinfo<<menuname<<endl;
     m_viewlistItem = item;
     slotPopupMenu( menuname, pos );
 }
@@ -2147,16 +2147,12 @@ m_ganttview->getContext( context.ganttview );
 
 void View::setLabel()
 {
-    kDebug()<<k_funcinfo<<endl;
-    foreach ( QAction *a, m_scheduleActions.keys() ) {
-        if ( a->isChecked() ) {
-            Schedule *s = m_scheduleActions[ a ];
-            kDebug()<<k_funcinfo<<a->objectName()<<" - "<<s->name()<<", "<<s->isScheduled()<<endl;
-            if ( s && s->isScheduled() ) {
-                m_estlabel->setText( s->name() + " ("+ s->typeToString( true ) + ')'  );
-                return;
-            }
-        }
+    //kDebug()<<k_funcinfo<<endl;
+    long id = getProject().currentViewScheduleId();
+    Schedule *s = id == -1 ? getProject().currentSchedule() : getProject().findSchedule( id );
+    if ( s && !s->isDeleted() && s->isScheduled() ) {
+        m_estlabel->setText( s->name() + " ("+ s->typeToString( true ) + ')'  );
+        return;
     }
     m_estlabel->setText( i18n( "Not scheduled" ) );
 }

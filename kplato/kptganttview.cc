@@ -174,18 +174,47 @@ void GanttView::setProject( Project *project )
 {
     if ( m_project && project != m_project ) {
         disconnect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotScheduleIdChanged( long ) ) );
+        disconnect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotRedraw() ) );
+        disconnect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotRedraw() ) );
+        disconnect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotRedraw() ) );
+        disconnect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( slotRedraw() ) );
+        disconnect( m_project, SIGNAL( relationRemoved( Relation* ) ), this, SLOT( slotRedraw() ) );
+        
         clear();
     }
     if ( project && project != m_project ) {
         m_project = project;
         connect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotScheduleIdChanged( long ) ) );
+        connect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotRedraw( const MainSchedule* ) ) );
+        connect( m_project, SIGNAL( scheduleAdded( const MainSchedule* ) ), this, SLOT( slotRedraw( const MainSchedule* ) ) );
+        connect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotRedraw( const MainSchedule* ) ) );
+        connect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( slotRedraw() ) );
+        connect( m_project, SIGNAL( relationRemoved( Relation* ) ), this, SLOT( slotRedraw() ) );
+        
         draw();
     }
 }
 
 void GanttView::slotScheduleIdChanged( long id )
 {
+    //kDebug()<<k_funcinfo<<id<<endl;
     m_id = id;
+    drawChanges();
+}
+
+// FIXME: When we upgrade to fresh kdgantt, this redraw stuff must be reviewed
+void GanttView::slotRedraw()
+{
+    //kDebug()<<k_funcinfo<<"("<<m_id<<")"<<endl;
+    drawChanges();
+}
+
+void GanttView::slotRedraw( const MainSchedule* sch )
+{
+    //kDebug()<<k_funcinfo<<"("<<m_id<<", "<<sch->id()<<")"<<endl;
+    if ( m_id != sch->id() ) {
+        return;
+    }
     drawChanges();
 }
 

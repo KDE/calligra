@@ -54,6 +54,7 @@ class Task;
 class Part;
 class Project;
 class Relation;
+class MainSchedule;
 
 class GanttView : public ViewBase
 {
@@ -130,6 +131,11 @@ public slots:
     void setShowCriticalPath( bool on ) { m_showCriticalPath = on; }
     void setShowNoInformation( bool on ) { m_showNoInformation = on; }
     void setShowAppointments( bool on ) { m_showAppointments = on; }
+
+    /// Redraw current project
+    void slotRedraw();
+    /// Redraw current project if current schedule is sch
+    void slotRedraw( const MainSchedule *sch );
 
 private slots:
     void currentItemChanged( KDGanttViewItem * );
