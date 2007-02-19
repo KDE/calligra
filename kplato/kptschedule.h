@@ -181,13 +181,16 @@ public:
     virtual void insertEndNode( Node * ) {}
     virtual void insertSummaryTask( Node * ) {}
 
-    void setScheduled( bool on ) { notScheduled = !on; }
+    void setScheduled( bool on );
     bool isScheduled() const { return !notScheduled; }
 
     DateTime start() const { return startTime; }
     DateTime end() const { return endTime; }
 
     QStringList state() const;
+    
+protected:
+    virtual void changed( Schedule */*sch*/ ) {}
     
 protected:
     QString m_name;
@@ -385,6 +388,9 @@ public:
     virtual void insertSummaryTask( Node *node ) { m_summarytasks.append( node ); }
     QList<Node*> summaryTasks() const { return m_summarytasks; }
     
+protected:
+    virtual void changed( Schedule *sch );
+
 private:
     ScheduleManager *m_manager;
     QList<Node*> m_hardconstraints;
@@ -444,6 +450,8 @@ public:
 
     bool loadXML( QDomElement &element, XMLLoaderObject &status );
     void saveXML( QDomElement &element ) const;
+    
+    void scheduleChanged( MainSchedule *sch );
     
 protected:
     MainSchedule *loadMainSchedule( QDomElement &element, XMLLoaderObject &status );

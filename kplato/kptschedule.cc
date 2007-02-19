@@ -88,6 +88,7 @@ void Schedule::setDeleted( bool on )
 {
     //kDebug()<<k_funcinfo<<"deleted="<<on<<endl;
     m_deleted = on;
+    //changed( this ); don't do this!
 }
 
 bool Schedule::isDeleted() const
@@ -161,6 +162,12 @@ bool Schedule::allowOverbooking() const
         return m_parent->allowOverbooking();
     }
     return false;
+}
+
+void Schedule::setScheduled( bool on )
+{
+    notScheduled = !on;
+    changed( this );
 }
 
 TimeInterval Schedule::available( const DateTime &date, const TimeInterval &interval ) const
@@ -880,6 +887,13 @@ bool MainSchedule::allowOverbooking() const
     return m_manager == 0 ? false : m_manager->allowOverbooking();
 }
 
+void MainSchedule::changed( Schedule *sch )
+{
+    if ( m_manager ) {
+        m_manager->scheduleChanged( static_cast<MainSchedule*>( sch ) );
+    }
+}
+
 bool MainSchedule::loadXML( const QDomElement &sch, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<endl;
@@ -1027,6 +1041,11 @@ bool ScheduleManager::allowOverbooking() const
     return m_allowOverbooking;
 }
 
+void ScheduleManager::scheduleChanged( MainSchedule *sch )
+{
+    m_project.changed( sch );
+    m_project.changed( this ); //hmmm, due to aggregated info
+}
 
 void ScheduleManager::setUsePert( bool on )
 {
@@ -1044,16 +1063,14 @@ void ScheduleManager::setDeleted( bool on )
 {
     if ( m_expected ) {
         m_expected->setDeleted( on );
-        m_project.changed( m_expected );
     }
     if ( m_optimistic ) {
         m_optimistic->setDeleted( on );
-        m_project.changed( m_optimistic );
     }
     if ( m_pessimistic ) {
         m_pessimistic->setDeleted( on );
-        m_project.changed( m_pessimistic );
     }
+    m_project.changed( this );
 }
 
 void ScheduleManager::setExpected( MainSchedule *sch )
@@ -1062,6 +1079,7 @@ void ScheduleManager::setExpected( MainSchedule *sch )
     if ( m_expected ) {
         int i = m_schedules.indexOf( m_expected );
         m_project.sendScheduleToBeRemoved( m_expected );
+        m_expected->setDeleted( true );
         m_schedules.removeAt( i );
         m_project.sendScheduleRemoved( m_expected );
     }
@@ -1070,9 +1088,11 @@ void ScheduleManager::setExpected( MainSchedule *sch )
         m_project.sendScheduleToBeAdded( this, 0 );
         sch->setManager( this );
         m_schedules.insert( 0, sch );
+        m_expected->setDeleted( false );
         m_project.sendScheduleAdded( sch );
     }
     Q_ASSERT( m_schedules.count() <= 3 );
+    m_project.changed( this );
 }
 
 void ScheduleManager::setOptimistic( MainSchedule *sch )
@@ -1080,6 +1100,7 @@ void ScheduleManager::setOptimistic( MainSchedule *sch )
     if ( m_optimistic ) {
         int i = m_schedules.indexOf( m_optimistic );
         m_project.sendScheduleToBeRemoved( m_optimistic );
+        m_optimistic->setDeleted( true );
         m_schedules.removeAt( i );
         m_project.sendScheduleRemoved( m_optimistic );
     }
@@ -1089,9 +1110,11 @@ void ScheduleManager::setOptimistic( MainSchedule *sch )
         m_project.sendScheduleToBeAdded( this, i );
         sch->setManager( this );
         m_schedules.insert( i, sch );
+        m_optimistic->setDeleted( false );
         m_project.sendScheduleAdded( sch );
     }
     Q_ASSERT( m_schedules.count() <= 3 );
+    m_project.changed( this );
 }
 
 void ScheduleManager::setPessimistic( MainSchedule *sch )
@@ -1099,6 +1122,7 @@ void ScheduleManager::setPessimistic( MainSchedule *sch )
     if ( m_pessimistic ) {
         int i = m_schedules.indexOf( m_pessimistic );
         m_project.sendScheduleToBeRemoved( m_pessimistic );
+        m_pessimistic->setDeleted( true );
         m_schedules.removeAt( i );
         m_project.sendScheduleRemoved( m_pessimistic );
     }
@@ -1108,9 +1132,11 @@ void ScheduleManager::setPessimistic( MainSchedule *sch )
         m_project.sendScheduleToBeAdded( this, i );
         sch->setManager( this );
         m_schedules.insert( i, sch );
+        m_pessimistic->setDeleted( false );
         m_project.sendScheduleAdded( sch );
     }
     Q_ASSERT( m_schedules.count() <= 3 );
+    m_project.changed( this );
 }
 
 QStringList ScheduleManager::state() const

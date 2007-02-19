@@ -117,16 +117,16 @@ void ScheduleItemModel::slotScheduleInserted( const MainSchedule *schedule )
 
 void ScheduleItemModel::slotScheduleToBeRemoved( const MainSchedule *schedule )
 {
-    //kDebug()<<k_funcinfo<<schedule->name()<<endl;
     Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(schedule->manager());
     int row = index( schedule ).row();
+    kDebug()<<k_funcinfo<<schedule->name()<<", "<<row<<" man="<<index( schedule->manager() ).row()<<endl;
     beginRemoveRows( index( schedule->manager() ), row, row );
 }
 
 void ScheduleItemModel::slotScheduleRemoved( const MainSchedule *schedule )
 {
-    //kDebug()<<k_funcinfo<<schedule->name()<<endl;
+    kDebug()<<k_funcinfo<<schedule->name()<<endl;
     Q_ASSERT( schedule->manager() == m_manager );
     endRemoveRows();
     m_manager = 0;
@@ -182,7 +182,7 @@ void ScheduleItemModel::setProject( Project *project )
 void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
 {
     int r = m_project->indexOf( sch );
-    //kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
+    kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
     emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );
 }
 
@@ -193,7 +193,7 @@ void ScheduleItemModel::slotScheduleChanged( MainSchedule *sch )
         return;
     }
     int r = sch->manager()->indexOf( sch );
-    //kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
+    kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
     emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );
 }
 

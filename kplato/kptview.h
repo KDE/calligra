@@ -235,8 +235,8 @@ protected slots:
     void slotPlugScheduleActions();
     void slotViewSchedule( QAction *act );
     void slotScheduleChanged( MainSchedule* );
-    void slotScheduleAdded( MainSchedule * );
-    void slotScheduleRemoved( MainSchedule * );
+    void slotScheduleAdded( const MainSchedule * );
+    void slotScheduleRemoved( const MainSchedule * );
     
     void slotAddScheduleManager( Project *project );
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );

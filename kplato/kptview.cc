@@ -795,8 +795,8 @@ View::View( Part* part, QWidget* parent )
         //m_progress->hide();
     }
     connect( &getProject(), SIGNAL( scheduleChanged( MainSchedule* ) ), SLOT( slotScheduleChanged( MainSchedule* ) ) );
-    connect( &getProject(), SIGNAL( scheduleAdded( MainSchedule* ) ), SLOT( slotScheduleAdded( MainSchedule* ) ) );
-    connect( &getProject(), SIGNAL( scheduleRemoved( MainSchedule* ) ), SLOT( slotScheduleRmoved( MainSchedule* ) ) );
+    connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotScheduleAdded( const MainSchedule* ) ) );
+    connect( &getProject(), SIGNAL( scheduleRemoved( const MainSchedule* ) ), SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     slotPlugScheduleActions();
     
     m_viewlist->setSelected( m_viewlist->findItem( m_taskeditor ) );
@@ -1076,7 +1076,7 @@ void View::slotProjectResources()
     delete dia;
 }
 
-void View::slotScheduleRemoved( MainSchedule *sch )
+void View::slotScheduleRemoved( const MainSchedule *sch )
 {
     QAction *a = 0;
     QAction *checked = m_scheduleActionGroup->checkedAction();
@@ -1101,13 +1101,14 @@ void View::slotScheduleRemoved( MainSchedule *sch )
     setLabel();
 }
 
-void View::slotScheduleAdded( MainSchedule *sch )
+void View::slotScheduleAdded( const MainSchedule *sch )
 {
+    MainSchedule *s = const_cast<MainSchedule*>( sch ); // FIXME
     kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
     QAction *checked = m_scheduleActionGroup->checkedAction();
     if ( ! sch->isDeleted() && sch->isScheduled() ) {
         unplugActionList( "view_schedule_list" );
-        QAction *act = addScheduleAction( sch );
+        QAction *act = addScheduleAction( s );
         plugActionList( "view_schedule_list", m_scheduleActions.keys() );
         if ( checked ) {
             checked->setChecked( true );

@@ -2432,14 +2432,12 @@ void AddScheduleManagerCmd::execute()
     m_sm->setExpected( m_exp );
     m_sm->setOptimistic( m_opt );
     m_sm->setPessimistic( m_pess );
-    m_sm->setDeleted( false );
     m_mine = false;
 }
 
 void AddScheduleManagerCmd::unexecute()
 {
     m_node.takeScheduleManager( m_sm );
-    m_sm->setDeleted( true );
     m_sm->setExpected( 0 );
     m_sm->setOptimistic( 0 );
     m_sm->setPessimistic( 0 );
@@ -2546,13 +2544,10 @@ CalculateScheduleCmd::CalculateScheduleCmd( Part *part, Project &node, ScheduleM
     m_newoptimistic( 0 ),
     m_newpessimistic( 0 )
 {
- 
 }
 
 void CalculateScheduleCmd::execute()
 {
-    m_sm.setDeleted( true );
-    
     if ( m_first ) {
         m_first = false;
         m_node.calculate( m_sm );
@@ -2564,19 +2559,13 @@ void CalculateScheduleCmd::execute()
     m_sm.setExpected( m_newexpected );
     m_sm.setOptimistic( m_newoptimistic );
     m_sm.setPessimistic( m_newpessimistic );
-    m_sm.setDeleted( false );
-    
 }
 
 void CalculateScheduleCmd::unexecute()
 {
-    m_sm.setDeleted( true );
-    
     m_sm.setExpected( m_oldexpected );
     m_sm.setOptimistic( m_oldoptimistic );
     m_sm.setPessimistic( m_oldpessimistic );
-    
-    m_sm.setDeleted( false );
 }
 
 //------------------------
