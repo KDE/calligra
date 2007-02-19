@@ -85,7 +85,12 @@ class SearchDlg : public KReplaceDialog
   Q_OBJECT
 
  public:
-    SearchDlg( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), const QStringList &replaceStrings = QStringList(), bool hasSelection = false );
+    explicit SearchDlg( QWidget *parent = 0,
+                        const char *name = 0,
+                        long options = 0,
+                        const QStringList &findStrings = QStringList(),
+                        const QStringList &replaceStrings = QStringList(),
+                        bool hasSelection = false );
     ~SearchDlg();
     bool searchInAllSheet() const;
     FindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }

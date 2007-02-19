@@ -60,7 +60,9 @@ class KSPREAD_EXPORT KoTransformToolBox : public ToolBox
 {
     Q_OBJECT
 public:
-    KoTransformToolBox( KoDocumentChild* child, QWidget* parent = 0, const char* name = 0 );
+    explicit KoTransformToolBox( KoDocumentChild* child,
+                                 QWidget* parent = 0,
+                                 const char* name = 0 );
 
     double rotation() const;
     double scaling() const;
