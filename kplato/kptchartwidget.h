@@ -21,6 +21,7 @@
 #ifndef KPTCHARTWIDGET_H
 #define KPTCHARTWIDGET_H
 
+#include "kptchart.h"
 #include <QWidget>
 #include <QPainter>
 #include <QBrush>
@@ -42,7 +43,17 @@ QVector<QPointF> bcwpPoints;
 QVector<QPointF> bcwsPoints;
 QVector<QPointF> acwpPoints;
 
+Chart chartEngine;
 public:
+static const int TOPMARGIN = 15;
+static const int LEFTMARGIN = 10;
+static const int BOTTOMMARGIN = 15;
+static const int RIGHTMARGIN = 10;
+
+static const int BCWP = 1;
+static const int BCWS = 2;
+static const int ACWP = 3;
+
     ChartWidget(QWidget *parent=0, const char *name=0);
 
     void paintEvent(QPaintEvent * ev);

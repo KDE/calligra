@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "kptchart.h"
-
 #include "kptchartpanel.h"
 
 #include <klocale.h>
@@ -30,122 +29,133 @@ namespace KPlato
 {
 
 
-	/* Calculate the new value of every Y-axis when the window hab been re-sized */
-	void Chart::reCalculateY(QVector<QPoint> *vect, int topMargin, int bottomMargin, int n_curve, float maximumHeight, int maxYPercent)
-	{
-			
-		float inverse;
-		int tmp;
-		if(maximumHeight != sizeSave[n_curve][0])
-		{
-			QVector<QPoint>::iterator it= vect->begin();
-			while (it != vect->end())
-			{
-				inverse = maxYPercent - it->y(); /* A MODIFIER :D */
-				tmp=(int) floor((maximumHeight - bottomMargin - topMargin)*inverse/100);
-				it->setY(tmp+topMargin);
-				it++;
-			}
-		}		
-		
-	}
+    Chart::Chart()
+    {
+        for(int i=0;i<6;i++)
+        {
+              for(int j=0;j<6;j++)
+                    sizeSave[i][j]=0;
+        }
+	//init totalBudget
+    }
 
-	/* Calculate the new value of X-axis when the window had been re-sized */
-	void Chart::reCalculateX(QVector<QPoint> *vect, int leftMargin, int rightMargin, int n_curve, float maximumWidth)
-	{			
-		int tmp; /* temporary result */
+    /* Calculate the new value of every Y-axis when the window hab been re-sized */
+    void Chart::reCalculateY(QVector<QPointF> & vect,const int n_curve, int maximumHeight)
+    {    
+        float inverse;
+        float tmp;
+	int i=0;
+	kDebug()<<"ReCalculateY ! : ";
+	
+        if(maximumHeight != sizeSave[n_curve][1])
+        {
+	    QVector<QPointF>::iterator it= vect.begin();
+            while (i<vect.size())
+            {
+                inverse = maxYPercent - it->y(); /* A MODIFIER :D */
 
-		if(maximumWidth != sizeSave[n_curve][1])
-		{
-			QVector<QPoint>::iterator it= vect->begin();
-			while (it != vect->end())
-			{
-				tmp=(int) floor((maximumWidth - rightMargin - leftMargin)*it->x()/100);
-				it->setX(tmp+leftMargin);
-				it++;
-			}
-		}		
-		
-	}
+                tmp=(maximumHeight - ChartWidget::BOTTOMMARGIN - ChartWidget::TOPMARGIN)*inverse/100;
+                it->setY(tmp+ChartWidget::TOPMARGIN);
 
-	/* Calculate the maximum of a curve */
-	int Chart::maxVector(QVector<QPoint> vect)
-	{
-		int max_tmp=0;
-		
-		QVector<QPoint>::iterator it= vect.begin();
-		for(vect.begin();vect.end();it++)
-		{
-			if(it->y() > max_tmp)
-			{
-				max_tmp=it->y();
-			}
-		}
-		return (max_tmp);
-	}
+                it++;i++;
+            }
+		sizeSave[n_curve][1]=maximumHeight;
+		// Save to not doing all the work next time if the data are already the same
+        }
+    }
 
-	/* Calculate the percentage of the cost and replace the result in the vector */
-	void Chart::CostToPercent(QVector<QPoint> * vect)
-	{
-		int tmp;
-		
-		QVector<QPoint>::iterator it= vect->begin();
-		while(it != vect->end())
-		{
-			tmp=(int) floor(it->y()*100/totalBudget);
-			it->setY(tmp);
-			it++;
-		}
-	}
+    /* Calculate the new value of X-axis when the window had been re-sized */
+    void Chart::reCalculateX(QVector<QPointF> & vect,const int n_curve, int maximumWidth)
+    {
+        float tmp; /* temporary result */
 
-	/* Calculate the percentage of the time and replace the result in the vector */
-	void Chart::TimeToPercent(QVector<QPoint> * vect)
-	{
-		int tmp;
-		
-		QVector<QPoint>::iterator it= vect->begin();
-		while(it != vect->end())
-		{
-			tmp=(int) floor(it->x()*100/totalWeek);
-			it->setX(tmp);
-			it++;
-		}
-	}
+        if(maximumWidth != sizeSave[n_curve][0])
+        {
+            QVector<QPointF>::iterator it= vect.begin();
+            while (it != vect.end())
+            {
+                tmp= (maximumWidth - ChartWidget::RIGHTMARGIN - ChartWidget::LEFTMARGIN)*it->x()/100;
+                it->setX(tmp+ChartWidget::LEFTMARGIN);
+                it++;
+            }
+		sizeSave[n_curve][0]=maximumWidth;
+        }
+    }
 
-	/*Caculate the actual cost of the project at the d day passed in parameter*/
-	float Chart::calculateActualCost(Project &p, QDate day)
-	{
-		float cost=0;
-		foreach(Node * currentNode, p.projectNode()->childNodeIterator()){
-        		//Si le jour pour lequel on veux le budget est > a la date de fin de la tachz
-			if (day > (currentNode->workEndTime().dateTime().date())  )
-			{
-				//on ajoute le cout total de la tache
-				cost+=currentNode->actualCost();
-        		}
-			else
-			{
-				//sinon on ajoute le cout a la date en cours
-				cost+=currentNode->actualCost(day);
-				break;
-			}
-		}
-		return (cost);
-	}
+    /* Calculate the maximum of a curve */
+//FIX ME !      Bug : When the second and following exec  of the method, data are not any more % but coordinate!!
+    void Chart::setMaxVector(QVector<QPointF> vect)
+    {
+        float max_tmp=0;
+        QVector<QPointF>::iterator it= vect.begin();
+	int i=0;
+        while(i<vect.size())
+        {
+            if(it->y() > max_tmp)
+            {
+                max_tmp=it->y();
+            }
+            it++;i++;
+        }
+	maxYPercent=max_tmp;
+    }
 
-	/*Caculate the planned cost of the project at the d day passed in parameter*/
+    /* Calculate the percentage of the cost and replace the result in the vector */
+    void Chart::CostToPercent(QVector<QPointF> & vect)
+    {
+        QVector<QPointF>::iterator it= vect.begin();
+        while(it != vect.end())
+        {
+            it->setY(it->y()*100/totalBudget);
+            it++;
+        }
+    }
+
+    /* Calculate the percentage of the time and replace the result in the vector */
+    void Chart::TimeToPercent(QVector<QPointF> & vect)
+    {
+        QVector<QPointF>::iterator it= vect.begin();
+        while(it != vect.end())
+        {
+            it->setX(it->x()*100/totalWeek);
+            it++;
+        }
+    }
+
+    /*Caculate the actual cost of the project at the d day passed in parameter*/
+    float Chart::calculateActualCost(Project &p, QDate day)
+    {
+        float cost=0;
+        foreach(Node * currentNode, p.projectNode()->childNodeIterator()){
+                //Si le jour pour lequel on veux le budget est > a la date de fin de la tachz
+            if (day > (currentNode->workEndTime().dateTime().date())  )
+            {
+                //on ajoute le cout total de la tache
+                cost+=currentNode->actualCost();
+                }
+            else
+            {
+                //sinon on ajoute le cout a la date en cours
+                cost+=currentNode->actualCost(day);
+                break;
+            }
+        }
+        return (cost);
+    }
+
+    /*Caculate the planned cost of the project at the d day passed in parameter*/
 //MODIFIER ICI PAREIL QU'AU DESSUS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	float Chart::calculatePlannedCost(Project &p, QDate day)
-	{
-		float cost=0;
-		foreach(Node * currentNode, p.projectNode()->childNodeIterator()){
-        		cost+=currentNode->plannedCost(day);
-        	}
-		return (cost);
-	}
+    float Chart::calculatePlannedCost(Project &p, QDate day)
+    {
+        float cost=0;
+        foreach(Node * currentNode, p.projectNode()->childNodeIterator()){
+                cost+=currentNode->plannedCost(day);
+            }
+        return (cost);
+    }
 
-	void calculateValueOfBCWS(Project &, QVector<QPoint>*)
-	{
-		
-	}
+    void calculateValueOfBCWS(Project &, QVector<QPoint>*)
+    {
+        
+    }
 }

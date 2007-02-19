@@ -19,7 +19,7 @@
 #ifndef KPTCHART_H
 #define KPTCHART_H
 
-#include "kptchartpanel.h"
+//#include "kptchartpanel.h"
 
 #include <klocale.h>
 
@@ -32,31 +32,31 @@ namespace KPlato
 {
 
 
-	class Chart
-	{
-		private:
-			float sizeSave[3][2];
-			float totalBudget;	
-			int totalWeek;
-			
-		public:
-			void reCalculateY(QVector<QPoint> *,int,int,int,float,int);
-			void reCalculateX(QVector<QPoint> *,int,int,int,float);			
-			int maxVector(QVector<QPoint>);
-			void CostToPercent(QVector<QPoint>*);
-			void TimeToPercent(QVector<QPoint>*);
-			//think to add a parameter to the function (date)
-			float calculateActualCost(Project &, QDate);
-			//think to add a parameter to the function (date)
-			float calculatePlannedCost(Project &, QDate);
-			//For latter but not to forget to do it :D
-			void calculateValueOfBCWS(Project &, QVector<QPoint>*);
-			/*void calculateValueOfBCWP(Project &, QVector<QPoint>*);
-			void calculateValueOfACWP(Project &, QVector<QPoint>*);*/
-			
+    class Chart
+    {
+        private:
+            float sizeSave[3][2];
+            float totalBudget;
+		 float maxYPercent;
+		 float maxXPercent;
+            int totalWeek;
+        public:
 
-			
-	};
+            Chart();
+            void reCalculateY(QVector<QPointF> &,const int,int);
+            void reCalculateX(QVector<QPointF> &,const int,int);    
+            void setMaxVector(QVector<QPointF>);
+            void CostToPercent(QVector<QPointF>&);
+            void TimeToPercent(QVector<QPointF>&);
+            //think to add a parameter to the function (date)
+            float calculateActualCost(Project &, QDate);
+            //think to add a parameter to the function (date)
+            float calculatePlannedCost(Project &, QDate);
+            //For latter but not to forget to do it :D
+            void calculateValueOfBCWS(Project &, QVector<QPoint>*);
+            /*void calculateValueOfBCWP(Project &, QVector<QPoint>*);
+            void calculateValueOfACWP(Project &, QVector<QPoint>*);*/    
+    };
 
 } //namespace KPlato
 
