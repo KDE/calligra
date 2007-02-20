@@ -96,6 +96,7 @@ double Layout::y() {
 }
 
 double Layout::docOffsetInShape() const {
+    Q_ASSERT(m_data);
     return m_data->documentOffset();
 }
 
@@ -124,7 +125,6 @@ bool Layout::addLine(QTextLine &line) {
     }
 
     if(m_data->documentOffset() + shape->size().height() < m_y + height + m_shapeBorder.bottom) {
-//kDebug() << "   NEXT shape" << endl;
         // line does not fit.
         m_data->setEndPosition(m_block.position() + line.textStart()-1);
         nextShape();
@@ -132,10 +132,8 @@ bool Layout::addLine(QTextLine &line) {
             m_data->setPosition(m_block.position() + line.textStart());
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
-        if(m_demoText) {
+        if(m_demoText)
             m_endOfDemoText = true;
-            return false;
-        }
         return true;
     }
 
@@ -305,7 +303,6 @@ void Layout::nextShape() {
     m_data->faul(); // make dirty since this one needs relayout at this point.
     m_shapeBorder = shape->borderInsets();
     m_y += m_shapeBorder.top;
-    m_demoText = (static_cast<TextShape*> (shape))->demoText();
 }
 
 // and the end of text, make sure the rest of the frames have something sane to show.
@@ -337,6 +334,8 @@ double Layout::listIndent() {
 }
 
 void Layout::resetPrivate() {
+    m_demoText = false;
+    m_endOfDemoText = false;
     m_y = 0;
     m_data = 0;
     shape =0;
@@ -402,6 +401,7 @@ void Layout::resetPrivate() {
     if(shapes.count() == 0)
         return;
     shape = shapes[shapeNumber];
+    m_demoText = (static_cast<TextShape*> (shape))->demoText();
     m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
     m_shapeBorder = shape->borderInsets();
     if(m_y == 0)
@@ -649,4 +649,17 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
     }
 }
 
+bool Layout::setFollowupShape(KoShape *followupShape) {
+    if(m_demoText)
+        return false;
+    Q_ASSERT(shape == 0);
+    Q_ASSERT(followupShape);
+    m_newShape = false;
 
+    shape = followupShape;
+    m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
+
+    m_data->setDocumentOffset(m_y);
+    m_shapeBorder = shape->borderInsets();
+    return true;
+}

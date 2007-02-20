@@ -87,7 +87,7 @@ protected:
      * Call this to make it know that the text we want to layout needs more space to be shown fully.
      * This will resize the frame, or emit a moreFramesNeeded signal based on the settings.
      */
-    void requestMoreFrames();
+    void requestMoreFrames(double textHeight);
     void framesEmpty(int framesInUse);
     /**
      * Schedules a followup schedule run.

@@ -50,9 +50,10 @@ public:
 
 private:
     KWTextFrameSet *m_frameSet;
+    class DummyShape;
+    DummyShape * const m_dummyShape;
 
     int m_lastKnownFrameCount;
-    bool m_moreFramesRequested;
 };
 
 #endif

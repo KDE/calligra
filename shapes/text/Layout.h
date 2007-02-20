@@ -53,6 +53,7 @@ public:
     /// prepare for next paragraph; return false if there is no next parag.
     bool nextParag();
     double documentOffsetInShape();
+    bool setFollowupShape(KoShape *shape);
 
     /// paint the document
     void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext & context);

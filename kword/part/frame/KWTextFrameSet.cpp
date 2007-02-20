@@ -112,6 +112,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
     }
     else {
         data->setDocument(m_document, false);
+        data->setEndPosition(-1);
         data->faul();
         updateLayout();
     }
@@ -168,21 +169,22 @@ void KWTextFrameSet::relayout() {
         lay->layout();
 }
 
-void KWTextFrameSet::requestMoreFrames() {
+void KWTextFrameSet::requestMoreFrames(double textHeight) {
+kDebug() << "KWTextFrameSet::requestMoreFrames " << textHeight << endl;
     if(frameCount() == 0)
         return; // there is no way we can get more frames anyway.
     KWFrame *lastFrame = frames()[frameCount()-1];
-    switch(lastFrame->frameBehavior()) {
-        case KWord::IgnoreContentFrameBehavior:
-            return;
-        case KWord::AutoCreateNewFrameBehavior:
-            if(lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
-                emit moreFramesNeeded(this);
-            break;
-        case KWord::AutoExtendFrameBehavior:
-                // TODO emit a request for more space, but not until we know how
-                //      much (vertical) space we actually need.
-            break;
+    if(textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
+        if(lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
+            emit moreFramesNeeded(this);
+    }
+    else if(lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior) {
+        // enlarge last shape
+        KoShape *shape = lastFrame->shape();
+        // TODO make the following work for rotated / skewed frames as well.  The position should be updated.
+        QSizeF size = shape->size();
+        shape->resize(QSizeF(size.width(), size.height() + textHeight));
+        shape->repaint(QRectF(0.0, size.height(), size.width(), textHeight));
     }
 }
 

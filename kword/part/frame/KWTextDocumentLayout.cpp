@@ -21,11 +21,68 @@
 #include "KWTextFrameSet.h"
 #include "KWTextFrame.h"
 #include "KWDocument.h"
+#include "KWPage.h"
 
 #include <KoTextShapeData.h>
 
 #include <QList>
 #include <QPainterPath>
+
+// helper methods
+static double xAtY(const QLineF &line, double y) {
+    if(line.dx() == 0)
+        return line.x1();
+    return line.x1() +  (y - line.y1()) / line.dy() * line.dx();
+}
+
+static double yAtX(const QLineF &line, double x) {
+    if(line.dy() == 0)
+        return line.y1();
+    return line.y1() +  (x - line.x1()) / line.dx() * line.dy();
+}
+
+/// Returns 0, one or two points where the line intersects with the rectangle.
+static QList<QPointF> intersect(const QRectF &rect, const QLineF &line) {
+    QList<QPointF> answer;
+    QPointF startOfLine = line.p1();
+    QPointF endOfLine = line.p2();
+    // top edge
+    if(startOfLine.y() <= rect.top() && endOfLine.y() >= rect.top() ||
+            startOfLine.y() >= rect.top() && endOfLine.y() <= rect.top()) {
+        double x = xAtY(line, rect.top());
+        if(x >= rect.left() && x <= rect.right() && x)
+            answer.append(QPointF(x, rect.top()));
+    }
+
+    // left
+    if(startOfLine.x() <= rect.left() && endOfLine.x() >= rect.left() ||
+            startOfLine.x() >= rect.left() && endOfLine.x() <= rect.left()) {
+        double y = yAtX(line, rect.left());
+        if(y >= rect.top() && y <= rect.bottom())
+            answer.append(QPointF(rect.left(), y));
+    }
+
+    // bottom edge
+    if(startOfLine.y() <= rect.bottom() && endOfLine.y() >= rect.bottom() ||
+            startOfLine.y() >= rect.bottom() && endOfLine.y() <= rect.bottom()) {
+        double x = xAtY(line, rect.bottom());
+        if(x >= rect.left() && x <= rect.right())
+            answer.append(QPointF(x, rect.bottom()));
+    }
+
+    // right
+    if(startOfLine.x() <= rect.right() && endOfLine.x() >= rect.right() ||
+            startOfLine.x() >= rect.right() && endOfLine.x() <= rect.right()) {
+        double y = yAtX(line, rect.right());
+        if(y >= rect.top() && y <= rect.bottom())
+            answer.append(QPointF(rect.right(), y));
+    }
+
+    return answer;
+}
+// TODO  can we replace the above?
+// Qt 4.3 has something like the above already.
+// QPolygonF is a QVector<QPointF>, it has a constructor that takes a QRectF and it has a QPolygonF intersected(const QPolygonF &) method
 
 // ----------------- Class that allows us with the runaround of QPainterPaths ----------------
 class Outline {
@@ -118,13 +175,6 @@ public:
     KWFrame *frame() { return m_frame; }
 
 private:
-    double xAtY(const QLineF &line, double y) const {
-        if(line.dx() == 0)
-            return line.x1();
-        return line.x1() +  (y - line.y1()) / line.dy() * line.dx();
-    }
-
-private:
     enum Side { None, Left, Right };
     Side m_side;
     QMultiMap<double, QLineF> m_edges; //sorted with y-coord
@@ -132,10 +182,25 @@ private:
     KWFrame *m_frame;
 };
 
+class KWTextDocumentLayout::DummyShape : public KoShape {
+public:
+    DummyShape(QTextDocument *doc) : textShapeData(new KoTextShapeData())
+    {
+        textShapeData->setDocument(doc, false);
+        setUserData(textShapeData);
+        //setPosition(QPointF(10E6, 10E6));
+    }
+
+    KoTextShapeData * const textShapeData; // will be deleted by KoShape
+
+private:
+    void paint(QPainter&, const KoViewConverter&) {}
+};
 
 KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
     : KoTextDocumentLayout(frameSet->document()),
     m_frameSet(frameSet),
+    m_dummyShape(new DummyShape(frameSet->document())),
     m_lastKnownFrameCount(0)
 {
     if(m_frameSet->frameCount()) {
@@ -149,6 +214,7 @@ KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
 
 KWTextDocumentLayout::~KWTextDocumentLayout() {
     m_frameSet = 0;
+    delete m_dummyShape;
 }
 
 QList<KoShape*> KWTextDocumentLayout::shapes() const {
@@ -182,6 +248,7 @@ void KWTextDocumentLayout::layout() {
         return;
     double endPos = m_state->y() + 1000;
     bool newParagraph = true;
+    bool requestFrameResize = false;
     KoShape *currentShape = 0;
     while(m_state->shape) {
         class Line {
@@ -262,11 +329,12 @@ void KWTextDocumentLayout::layout() {
 
             if(! moreText) {
                 const int frameCount = m_frameSet->frameCount();
-//               const int framesInUse = m_state->frameNumber+1;
-//               if(framesInUse < frameCount && framesInUse != m_lastKnownFrameCount)
-//                   m_frameSet->framesEmpty(framesInUse);
+                const int framesInUse = m_state->shapeNumber+1;
+                if(framesInUse < frameCount && framesInUse != m_lastKnownFrameCount)
+                    m_frameSet->framesEmpty(frameCount - framesInUse);
                 m_lastKnownFrameCount = frameCount;
-                m_moreFramesRequested = false;
+                if(requestFrameResize) // text ran out while placing it in the dummy shape.
+                    m_frameSet->requestMoreFrames(m_state->y() - m_dummyShape->textShapeData->documentOffset());
 
                 return; // done!
             }
@@ -285,11 +353,50 @@ void KWTextDocumentLayout::layout() {
         while(m_state->addLine(line.line)) {
             if(m_state->shape == 0) { // no more shapes to put the text in!
                 line.line.setPosition(QPointF(0, m_state->y()+20));
-                if(! m_moreFramesRequested) {
-                    m_frameSet->requestMoreFrames();
-                    m_moreFramesRequested = true;
+
+                if(requestFrameResize) { // plenty more text, but first lets resize the shape.
+                    m_frameSet->requestMoreFrames(m_dummyShape->size().height());
+                    m_frameSet->requestMoreFrames(0);
+                    return; // done!
                 }
-                return; // done!
+
+                KWFrame *lastFrame = m_frameSet->frames().last();
+                if(lastFrame->frameBehavior() != KWord::AutoExtendFrameBehavior)
+                    return; // done!
+
+                // find out the maximum size this frame can be extended to while still
+                // fitting in the page.  We'll continue doing layout and see if there is text till end of page.
+                KWPage *page = m_frameSet->pageManager()->page(lastFrame->shape());
+                QRectF pageRect = page->rect();
+                pageRect.adjust(page->leftMargin(), page->topMargin(), -page->rightMargin(), -page->bottomMargin());
+
+                QLineF top(QPointF(0, 0), QPointF(lastFrame->shape()->size().width(), 0));
+                top = lastFrame->shape()->transformationMatrix(0).map(top);
+                const double multiplier = qMax(pageRect.height(), pageRect.width()) / top.length();
+                QLineF down(top.p1(), QPointF( top.p1().x() - top.dy() * multiplier,
+                            top.p1().y() + top.dx() * multiplier));
+                QLineF down2(top.p2(), QPointF( top.p2().x() - top.dy() * multiplier,
+                            top.p2().y() + top.dx() * multiplier));
+
+                QList<QPointF> list = intersect(pageRect, down);
+                if(list.count() > 0)
+                    down = QLineF(down.p1(), list.last());
+                list = intersect(pageRect, down2);
+                if(list.count() > 0)
+                    down2 = QLineF(down2.p1(), list.last());
+                const double maxFrameLength = qMin(down.length(), down2.length());
+                if(maxFrameLength <= currentShape->size().height()) {
+                    m_frameSet->requestMoreFrames(0); // new page, please.
+                    return;
+                }
+                KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (lastFrame->shape()->userData());
+                Q_ASSERT(data);
+
+                m_dummyShape->resize(QSizeF(currentShape->size().width(), maxFrameLength - currentShape->size().height()));
+                m_dummyShape->textShapeData->setShapeMargins(data->shapeMargins());
+                if(! m_state->setFollowupShape(m_dummyShape))
+                    return;
+                requestFrameResize = true;
             }
             line.tryFit();
         }
@@ -300,7 +407,6 @@ void KWTextDocumentLayout::layout() {
         repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
         m_state->shape->repaint(repaintRect);
     }
-    // finished normally. Meaning that amount of frames is perfect for this text.
-    m_moreFramesRequested = false;
-    m_lastKnownFrameCount = m_frameSet->frameCount();
+    if(requestFrameResize)
+        m_frameSet->requestMoreFrames(m_dummyShape->size().height());
 }
