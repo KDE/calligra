@@ -36,39 +36,48 @@ namespace KPlato
               for(int j=0;j<6;j++)
                     sizeSave[i][j]=0;
         }
-	//init totalBudget
+    //init totalBudget
     }
 
+
+    void Chart::api(QVector<QPointF> & BCWP, QVector<QPointF> & BCWS, QVector<QPointF> & ACWP ,const int n_curve, int maximumHeight, int maximumWidth)
+    {
+        if(n_curve==ChartWidget::BCWP)
+        {
+            //calculatePlannedCost();
+	    costToPercent(BCWP);
+            reCalculateY(BCWP,ChartWidget::BCWP,maximumHeight);
+            reCalculateX(BCWP,ChartWidget::BCWP,maximumWidth);
+        }
+    }
+
+
     /* Calculate the new value of every Y-axis when the window hab been re-sized */
-    void Chart::reCalculateY(QVector<QPointF> & vect,const int n_curve, int maximumHeight)
+    void Chart::reCalculateY(QVector<QPointF> & vect,const int n_curve, int maximumHeight)// WORKS, TESTED
     {    
         float inverse;
         float tmp;
-	int i=0;
-	kDebug()<<"ReCalculateY ! : ";
-	
+        kDebug()<<"ReCalculateY ! : ";
+    
         if(maximumHeight != sizeSave[n_curve][1])
         {
-	    QVector<QPointF>::iterator it= vect.begin();
-            while (i<vect.size())
+            QVector<QPointF>::iterator it= vect.begin();
+            while (it != vect.end())
             {
-                inverse = maxYPercent - it->y(); /* A MODIFIER :D */
-
+                inverse = totalYPercent - it->y(); 
                 tmp=(maximumHeight - ChartWidget::BOTTOMMARGIN - ChartWidget::TOPMARGIN)*inverse/100;
                 it->setY(tmp+ChartWidget::TOPMARGIN);
-
-                it++;i++;
+                it++;
             }
-		sizeSave[n_curve][1]=maximumHeight;
-		// Save to not doing all the work next time if the data are already the same
+            sizeSave[n_curve][1]=maximumHeight;
+        // Save to not doing all the work next time if the data are already the same
         }
     }
 
     /* Calculate the new value of X-axis when the window had been re-sized */
-    void Chart::reCalculateX(QVector<QPointF> & vect,const int n_curve, int maximumWidth)
+    void Chart::reCalculateX(QVector<QPointF> & vect,const int n_curve, int maximumWidth)// WORKS, TESTED
     {
         float tmp; /* temporary result */
-
         if(maximumWidth != sizeSave[n_curve][0])
         {
             QVector<QPointF>::iterator it= vect.begin();
@@ -78,41 +87,56 @@ namespace KPlato
                 it->setX(tmp+ChartWidget::LEFTMARGIN);
                 it++;
             }
-		sizeSave[n_curve][0]=maximumWidth;
+        sizeSave[n_curve][0]=maximumWidth;
         }
     }
 
-    /* Calculate the maximum of a curve */
-//FIX ME !      Bug : When the second and following exec  of the method, data are not any more % but coordinate!!
-    void Chart::setMaxVector(QVector<QPointF> vect)
+    // Set a variable to know how much is the higher percent of Y 
+    void Chart::setMaxPercent(QVector<QPointF> BCWP, QVector<QPointF> BCWS, QVector<QPointF> ACWP )// WORKS, TESTED
     {
-        float max_tmp=0;
-        QVector<QPointF>::iterator it= vect.begin();
-	int i=0;
-        while(i<vect.size())
+        if(   (BCWP.last()).y() <=  (BCWS.last()).y() )
         {
-            if(it->y() > max_tmp)
+        
+            if(   (BCWS.last()).y() <=  (ACWP.last()).y() )
             {
-                max_tmp=it->y();
+                totalYPercent=(ACWP.last()).y();
             }
-            it++;i++;
+            else
+            {
+                totalYPercent=(BCWS.last()).y();
+            }
         }
-	maxYPercent=max_tmp;
+        else
+        {
+            if(   (BCWP.last()).y() <=  (ACWP.last()).y() )
+            {
+                totalYPercent=(ACWP.last()).y();
+            }
+            else
+            {
+                totalYPercent=(BCWP.last()).y();
+            }
+        }
+    }
+
+    void Chart::setMaxCost(QVector<QPointF> BCWP)
+    {
+        totalCostPlanned=BCWP.last().y();
     }
 
     /* Calculate the percentage of the cost and replace the result in the vector */
-    void Chart::CostToPercent(QVector<QPointF> & vect)
+    void Chart::costToPercent(QVector<QPointF> & vect)
     {
         QVector<QPointF>::iterator it= vect.begin();
         while(it != vect.end())
         {
-            it->setY(it->y()*100/totalBudget);
+            it->setY(it->y()*100/totalCostPlanned);
             it++;
         }
     }
 
     /* Calculate the percentage of the time and replace the result in the vector */
-    void Chart::TimeToPercent(QVector<QPointF> & vect)
+    void Chart::timeToPercent(QVector<QPointF> & vect)
     {
         QVector<QPointF>::iterator it= vect.begin();
         while(it != vect.end())

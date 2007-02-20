@@ -36,18 +36,19 @@ namespace KPlato
     {
         private:
             float sizeSave[3][2];
-            float totalBudget;
-		 float maxYPercent;
-		 float maxXPercent;
+            float totalYPercent;
+            float totalCostPlanned;
             int totalWeek;
         public:
 
             Chart();
+            void api(QVector<QPointF>& , QVector<QPointF>& , QVector<QPointF>& ,const int , int , int );
             void reCalculateY(QVector<QPointF> &,const int,int);
-            void reCalculateX(QVector<QPointF> &,const int,int);    
-            void setMaxVector(QVector<QPointF>);
-            void CostToPercent(QVector<QPointF>&);
-            void TimeToPercent(QVector<QPointF>&);
+            void reCalculateX(QVector<QPointF> &,const int,int);
+            void setMaxCost(QVector<QPointF>);
+            void setMaxPercent(QVector<QPointF>, QVector<QPointF>, QVector<QPointF>);
+            void costToPercent(QVector<QPointF>&);
+            void timeToPercent(QVector<QPointF>&);
             //think to add a parameter to the function (date)
             float calculateActualCost(Project &, QDate);
             //think to add a parameter to the function (date)

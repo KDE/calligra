@@ -44,6 +44,7 @@ QVector<QPointF> bcwsPoints;
 QVector<QPointF> acwpPoints;
 
 Chart chartEngine;
+
 public:
 static const int TOPMARGIN = 15;
 static const int LEFTMARGIN = 10;
@@ -55,7 +56,7 @@ static const int BCWS = 2;
 static const int ACWP = 3;
 
     ChartWidget(QWidget *parent=0, const char *name=0);
-
+    ~ChartWidget();
     void paintEvent(QPaintEvent * ev);
     void drawBCWP();
     void undrawBCWP();
