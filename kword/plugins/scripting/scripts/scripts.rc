@@ -41,6 +41,7 @@
         parts of the KWord scripting functionality.
     //-->
     <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KWord">
+
         <script
             name="pysampleimportfile"
             text="Import File..."
@@ -53,12 +54,28 @@
             comment="This python script exports content to a file"
             interpreter="python"
             file="extensions/sample_exportfile.py" />
+
+        <script
+            name="pysampleinsertshape"
+            text="Insert Shape..."
+            comment="This python script inserts a shape"
+            interpreter="python"
+            file="extensions/sample_insertshape.py" />
+
+        <script
+            name="rbsampledoctree"
+            text="Document Tree"
+            comment="This ruby script uses QtRuby to display the document structur within a treeview"
+            interpreter="ruby"
+            file="extensions/sample_doctree.rb" />
+
         <script
             name="pysampleactions"
             text="Execute Action..."
             comment="This python script demonstrates usage of actions"
             interpreter="python"
             file="extensions/sample_actions.py" />
+
         <script
             name="pysampleprogressbar"
             text="Progressbar"
@@ -96,17 +113,12 @@
             interpreter="python"
             file="extensions/sample_variables.py" />
         <script
-            name="pysampleinsertshape"
-            text="Insert Shape..."
-            comment="This python script inserts a shape"
-            interpreter="python"
-            file="extensions/sample_insertshape.py" />
-        <script
             name="pysampleallshapes"
             text="All Shapes"
             comment="This python script adds all shapes"
             interpreter="python"
             file="extensions/sample_allshapes.py" />
+
     </collection>
 
 </KrossScripting>
