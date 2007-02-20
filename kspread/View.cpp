@@ -1997,36 +1997,33 @@ SheetView* View::sheetView( const Sheet* sheet ) const
 void View::initConfig()
 {
     KSharedConfigPtr config = Factory::global().config();
-    if ( config->hasGroup("Parameters" ))
+    const KConfigGroup parameterGroup = config->group( "Parameters" );
+    const bool configFromDoc = doc()->configLoadFromFile();
+    if ( !configFromDoc )
     {
-        const bool configFromDoc = doc()->configLoadFromFile();
-        config->setGroup( "Parameters" );
-        if ( !configFromDoc )
-        {
-            doc()->setShowHorizontalScrollBar(config->readEntry("Horiz ScrollBar",true));
-            doc()->setShowVerticalScrollBar(config->readEntry("Vert ScrollBar",true));
-        }
-        doc()->setShowColumnHeader(config->readEntry("Column Header",true));
-        doc()->setShowRowHeader(config->readEntry("Row Header",true));
-        if ( !configFromDoc )
-            doc()->setCompletionMode((KGlobalSettings::Completion)config->readEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
-        doc()->setMoveToValue((KSpread::MoveTo)config->readEntry("Move",(int)(Bottom)));
-        doc()->setIndentValue( config->readEntry( "Indent", 10.0 ) );
-        doc()->setTypeOfCalc((MethodOfCalc)config->readEntry("Method of Calc",(int)(SumOfNumber)));
-        if ( !configFromDoc )
-            doc()->setShowTabBar(config->readEntry("Tabbar",true));
-
-        doc()->setShowMessageError(config->readEntry( "Msg error" ,false) );
-
-        doc()->setShowFormulaBar(config->readEntry("Formula bar",true));
-        doc()->setShowStatusBar(config->readEntry("Status bar",true));
-
-        changeNbOfRecentFiles(config->readEntry("NbRecentFile",10));
-        //autosave value is stored as a minute.
-        //but default value is stored as seconde.
-        doc()->setAutoSave(config->readEntry("AutoSave",KoDocument::defaultAutoSave()/60)*60);
-        doc()->setBackupFile( config->readEntry("BackupFile",true));
+        doc()->setShowHorizontalScrollBar(parameterGroup.readEntry("Horiz ScrollBar",true));
+        doc()->setShowVerticalScrollBar(parameterGroup.readEntry("Vert ScrollBar",true));
     }
+    doc()->setShowColumnHeader(parameterGroup.readEntry("Column Header",true));
+    doc()->setShowRowHeader(parameterGroup.readEntry("Row Header",true));
+    if ( !configFromDoc )
+        doc()->setCompletionMode((KGlobalSettings::Completion)parameterGroup.readEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
+    doc()->setMoveToValue((KSpread::MoveTo)parameterGroup.readEntry("Move",(int)(Bottom)));
+    doc()->setIndentValue( parameterGroup.readEntry( "Indent", 10.0 ) );
+    doc()->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc",(int)(SumOfNumber)));
+    if ( !configFromDoc )
+        doc()->setShowTabBar(parameterGroup.readEntry("Tabbar",true));
+
+    doc()->setShowMessageError(parameterGroup.readEntry( "Msg error" ,false) );
+
+    doc()->setShowFormulaBar(parameterGroup.readEntry("Formula bar",true));
+    doc()->setShowStatusBar(parameterGroup.readEntry("Status bar",true));
+
+    changeNbOfRecentFiles(parameterGroup.readEntry("NbRecentFile",10));
+    //autosave value is stored as a minute.
+    //but default value is stored as seconde.
+    doc()->setAutoSave(parameterGroup.readEntry("AutoSave",KoDocument::defaultAutoSave()/60)*60);
+    doc()->setBackupFile( parameterGroup.readEntry("BackupFile",true));
 
     const KConfigGroup colorGroup = config->group( "KSpread Color" );
     doc()->setGridColor( colorGroup.readEntry( "GridColor", Qt::lightGray ) );
@@ -2034,16 +2031,13 @@ void View::initConfig()
 
 // Do we need a Page Layout in the congiguration file? Isn't this already in the template? Philipp
 /*
-    if ( config->hasGroup("KSpread Page Layout" ) )
-    {
-    config->setGroup( "KSpread Page Layout" );
+    const KConfigGroup pageLayoutGroup = config->group( "KSpread Page Layout" );
     if ( d->activeSheet->isEmpty())
     {
-    d->activeSheet->setPaperFormat((KoFormat)config->readEntry("Default size page",1));
+    d->activeSheet->setPaperFormat((KoFormat)pageLayoutGroup.readEntry("Default size page",1));
 
-    d->activeSheet->setPaperOrientation((KoOrientation)config->readEntry("Default orientation page",0));
-    d->activeSheet->setPaperUnit((KoUnit)config->readEntry("Default unit page",0));
-}
+    d->activeSheet->setPaperOrientation((KoOrientation)pageLayoutGroup.readEntry("Default orientation page",0));
+    d->activeSheet->setPaperUnit((KoUnit)pageLayoutGroup.readEntry("Default unit page",0));
 }
 */
     doc()->setCaptureAllArrowKeys( config->group( "Editor" ).readEntry( "CaptureAllArrowKeys", true ) );

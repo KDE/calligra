@@ -829,16 +829,10 @@ void configureLayoutPage::slotDefault()
 
 void configureLayoutPage::initCombo()
 {
-    paper=1;
-    orientation=0;
-    unit=0;
-    if( config->hasGroup("KSpread Page Layout" ))
-    {
-        config->setGroup( "KSpread Page Layout" );
-        paper=config->readEntry( "Default size page" ,1);
-        orientation=config->readEntry( "Default orientation page" ,0);
-        unit=config->readEntry( "Default unit page" ,0);
-    }
+    const KConfigGroup pageLayoutGroup = config->group( "KSpread Page Layout" );
+    paper = pageLayoutGroup.readEntry( "Default size page", 1 );
+    orientation = pageLayoutGroup.readEntry( "Default orientation page", 0 );
+    unit = pageLayoutGroup.readEntry( "Default unit page", 0 );
 
     defaultUnit->setCurrentIndex(m_pView->doc()->unit().indexInList());
     defaultSizePage->setCurrentIndex(paper);
@@ -848,25 +842,25 @@ void configureLayoutPage::initCombo()
 
 void configureLayoutPage::apply()
 {
-  m_pView->doc()->emitBeginOperation( false );
-  config->setGroup( "KSpread Page Layout" );
+    m_pView->doc()->emitBeginOperation( false );
+    KConfigGroup pageLayoutGroup = config->group( "KSpread Page Layout" );
 
   if( paper != defaultSizePage->currentIndex() )
   {
      unsigned int sizePage = defaultSizePage->currentIndex();
-     config->writeEntry( "Default size page", sizePage );
+     pageLayoutGroup.writeEntry( "Default size page", sizePage );
      m_pView->activeSheet()->print()->setPaperFormat( (KoFormat)sizePage );
   }
   if( orientation != defaultOrientationPage->currentIndex() )
   {
      unsigned int orientationPage = defaultOrientationPage->currentIndex();
-     config->writeEntry( "Default orientation page", orientationPage );
+     pageLayoutGroup.writeEntry( "Default orientation page", orientationPage );
      m_pView->activeSheet()->print()->setPaperOrientation( (KoOrientation)orientationPage );
   }
   if( unit != defaultUnit->currentIndex() )
   {
      unsigned int unitPage = defaultUnit->currentIndex();
-     config->writeEntry( "Default unit page", unitPage );
+     pageLayoutGroup.writeEntry( "Default unit page", unitPage );
      m_pView->doc()->setUnit( KoUnit((KoUnit::Unit)unitPage) );
   }
   m_pView->slotUpdateView( m_pView->activeSheet() );
@@ -894,13 +888,9 @@ configureSpellPage::configureSpellPage( View* _view,KVBox *box , char * /*name*/
   QWidget* spacer = new QWidget( box );
   spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
-    if( config->hasGroup("KSpell kspread") )
-    {
-        config->setGroup( "KSpell kspread" );
-
-        dontCheckUpperWord->setChecked(config->readEntry("KSpell_dont_check_upper_word",false));
-        dontCheckTitleCase->setChecked(config->readEntry("KSpell_dont_check_title_case",false));
-    }
+    const KConfigGroup spellGroup = config->group( "KSpell kspread" );
+    dontCheckUpperWord->setChecked(spellGroup.readEntry("KSpell_dont_check_upper_word",false));
+    dontCheckTitleCase->setChecked(spellGroup.readEntry("KSpell_dont_check_title_case",false));
     //m_spellConfigWidget->addIgnoreList( m_pView->doc()->spellListIgnoreAll() );
 }
 
@@ -911,30 +901,30 @@ void configureSpellPage::apply()
 #warning TODO KDE4 port to sonnet
 #endif
 #if 0
-  m_pView->doc()->emitBeginOperation( false );
-  KSpellConfig *_spellConfig = m_spellConfigWidget;
-  config->setGroup( "KSpell kspread" );
-  config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
-  config->writeEntry ("KSpell_RunTogether", (int) _spellConfig->runTogether ());
-  config->writeEntry ("KSpell_Dictionary", _spellConfig->dictionary ());
-  config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
-  config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
-  config->writeEntry ("KSpell_Client",  _spellConfig->client());
-//  m_spellConfigWidget->saveDictionary();
-  Doc* doc = m_pView->doc();
-  doc->setKSpellConfig(*_spellConfig);
+    m_pView->doc()->emitBeginOperation( false );
+    KSpellConfig *_spellConfig = m_spellConfigWidget;
+    const KConfigGroup spellGroup = config->group( "KSpell kspread" );
+    spellGroup.writeEntry("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
+    spellGroup.writeEntry("KSpell_RunTogether", (int) _spellConfig->runTogether ());
+    spellGroup.writeEntry("KSpell_Dictionary", _spellConfig->dictionary ());
+    spellGroup.writeEntry("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
+    spellGroup.writeEntry("KSpell_Encoding", (int)  _spellConfig->encoding());
+    spellGroup.writeEntry("KSpell_Client",  _spellConfig->client());
+    //m_spellConfigWidget->saveDictionary();
+    Doc* doc = m_pView->doc();
+    doc->setKSpellConfig(*_spellConfig);
 
     bool state=dontCheckUpperWord->isChecked();
-  config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
-  doc->setDontCheckUpperWord(state);
+    spellGroup.writeEntry("KSpell_dont_check_upper_word",(int)state);
+    doc->setDontCheckUpperWord(state);
 
-  state=dontCheckTitleCase->isChecked();
-  config->writeEntry("KSpell_dont_check_title_case",(int)state);
-  doc->setDontCheckTitleCase(state);
+    state=dontCheckTitleCase->isChecked();
+    config->writeEntry("KSpell_dont_check_title_case",(int)state);
+    doc->setDontCheckTitleCase(state);
 
-  //m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
+    //m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
 
-  m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_pView->slotUpdateView( m_pView->activeSheet() );
 #endif
 }
 

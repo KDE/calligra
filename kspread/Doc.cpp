@@ -1404,23 +1404,21 @@ K3SpellConfig * Doc::getKSpellConfig()
 #if 0
     if (!d->spellConfig)
     {
-      K3SpellConfig ksconfig;
+        K3SpellConfig ksconfig;
 
-      KSharedConfigPtr config = Factory::global().config();
-      if( config->hasGroup("KSpell kspread" ) )
-      {
-          config->setGroup( "KSpell kspread" );
-          ksconfig.setNoRootAffix(config->readEntry ("KSpell_NoRootAffix", 0));
-          ksconfig.setRunTogether(config->readEntry ("KSpell_RunTogether", 0));
-          ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-          ksconfig.setDictFromList(config->readEntry ("KSpell_DictFromList", false));
-          ksconfig.setEncoding(config->readEntry ("KSpell_Encoding", int(KS_E_ASCII)));
-          ksconfig.setClient(config->readEntry ("KSpell_Client", int(KS_CLIENT_ISPELL)));
-          setKSpellConfig(ksconfig);
+        KSharedConfigPtr config = Factory::global().config();
+        const KConfigGroup spellGroup = config->group( "KSpell kspread" );
 
-          setDontCheckUpperWord(config->readEntry("KSpell_IgnoreUppercaseWords", false));
-          setDontCheckTitleCase(config->readEntry("KSpell_IgnoreTitleCaseWords", false));
-      }
+        ksconfig.setNoRootAffix(spellGroup.readEntry("KSpell_NoRootAffix", 0));
+        ksconfig.setRunTogether(spellGroup.readEntry("KSpell_RunTogether", 0));
+        ksconfig.setDictionary(spellGroup.readEntry("KSpell_Dictionary", ""));
+        ksconfig.setDictFromList(spellGroup.readEntry("KSpell_DictFromList", false));
+        ksconfig.setEncoding(spellGroup.readEntry("KSpell_Encoding", int(KS_E_ASCII)));
+        ksconfig.setClient(spellGroup.readEntry("KSpell_Client", int(KS_CLIENT_ISPELL)));
+        setKSpellConfig(ksconfig);
+
+        setDontCheckUpperWord(spellGroup.readEntry("KSpell_IgnoreUppercaseWords", false));
+        setDontCheckTitleCase(spellGroup.readEntry("KSpell_IgnoreTitleCaseWords", false));
     }
 #endif
   return d->spellConfig;
