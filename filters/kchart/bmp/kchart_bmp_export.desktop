@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KChart BMP Export Filter
 Name[ar]=مِرْشَح تصدير BMP  لدى Karbon14
+Name[bg]=Филтър за експортиране от KChart в BMP
 Name[br]=Sil ezporzh BMP evit KChart
 Name[ca]=Filtre d'exportació BMP per a KChart
 Name[da]=KChart BMP-eksportfilter

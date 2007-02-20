@@ -2,6 +2,7 @@
 Encoding=UTF-8
 X-KDE-Library=libkiviosmlconnector
 Name=SML Based ConnectorTool for Kivio
+Name[bg]=Инструмент базиран на SML за свързване за Kivio
 Name[ca]=Eina de connexió per a Kivio basada en SML
 Name[cs]=Spojovací nástroj pro Kivio (SML)
 Name[cy]=ErfynCysylltu i Kivio, wedi'i Seilio ar SML

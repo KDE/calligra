@@ -5,6 +5,7 @@ MimeType=application/x-kexi-connectiondata
 Icon=kexi_connectiondata
 Patterns=*.kexic
 Comment=Data for Database Server Connection
+Comment[bg]=Данни за връзка към СУБД
 Comment[ca]=Dades per a la connexió a servidor de bases de dades
 Comment[cy]=Data ar gyfer Cysylltiad Gweinydd Cronfa Ddata
 Comment[da]=Data for forbindelse til databaseserver

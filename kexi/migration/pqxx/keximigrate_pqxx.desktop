@@ -4,6 +4,7 @@ Name=PostgreSQL
 Name[hi]=पोस्टग्रे-एसक्यूएल
 Name[ne]=पोस्ट ग्रे एसक्यूएल
 Comment=PostgreSQL Migration Driver for Kexi
+Comment[bg]=Драйвер за мигриране от PostgreSQL към Kexi
 Comment[ca]=Controlador de migració de PostgreSQL per a Kexi
 Comment[cy]=Gyrrydd Mudo PostgreSQL ar gyfer Kexi
 Comment[da]=PostgreSQL Migrationsdriver for Kexi

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Word Processing Component
+Name[bg]=Компонент за текстообработка в KOffice
 Name[ca]=Component de processament de text de KOffice
 Name[cy]=Cydran Brosesu Geiriau KOffice 
 Name[da]=KOffice tekstbehandlingskomponent
@@ -51,6 +52,7 @@ MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocum
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 GenericName=Text Documents
 GenericName[ar]=مُستندات نصيّة
+GenericName[bg]=Текстови документи
 GenericName[br]=Teulioù skrid
 GenericName[ca]=Documents de text
 GenericName[cy]=Dogfennau Testun

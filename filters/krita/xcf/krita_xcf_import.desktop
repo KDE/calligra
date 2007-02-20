@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita XCF Import Filter
+Name[bg]=Филтър за импортиране от XCF в Krita
 Name[br]=Sil enporzh XCF evit Krita
 Name[ca]=Filtre d'importació XCF per a Krita
 Name[cy]=Hidl Mewnforio XCF Krita

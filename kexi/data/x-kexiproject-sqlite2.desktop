@@ -6,6 +6,7 @@ Icon=kexiproject_sqlite2
 Patterns=*.kexi
 X-KDE-IsAlso=application/x-sqlite2
 Comment=Kexi Database File-Based Project
+Comment[bg]=Проект на Kexi, базиран на файлове на СУБД
 Comment[ca]=Projecte Kexi en una base de dades basada en fitxers
 Comment[cy]=Cywaith Ffeil ar gyfer Cronfa Ddata Kexi
 Comment[da]=Kexi database filbaseret projekt

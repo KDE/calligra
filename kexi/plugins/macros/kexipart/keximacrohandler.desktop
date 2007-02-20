@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Macros
+GenericName[bg]=Макроси
 GenericName[br]=Makroù
 GenericName[da]=Makroer
 GenericName[de]=Makros
@@ -33,6 +34,7 @@ GenericName[uz]=Макрос
 GenericName[zh_TW]=巨集
 
 Name=Macros
+Name[bg]=Макроси
 Name[br]=Makroù
 Name[da]=Makroer
 Name[de]=Makros

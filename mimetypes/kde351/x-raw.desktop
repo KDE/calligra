@@ -5,6 +5,7 @@ MimeType=image/x-raw
 Icon=image
 Patterns=*.raw;*.RAW;*.dcr;*.DCR;*.dng;*.DNG;*.crw;*.CRW;*.cr2,*.CR2;*.nef;*.NEF;*.mrw;*.MRW;
 Comment=RAW Camera Image
+Comment[bg]=RAW изображение от камера
 Comment[ca]=Imatge de Càmera RAW
 Comment[da]=Ubehandlet kamerabillede
 Comment[de]=Kamera RAW-Bild

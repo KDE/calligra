@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KChart XBM Export Filter
 Name[ar]=مرشح تصدير XBM لدى KChart 
+Name[bg]=Филтър за експортиране от KChart в XBM
 Name[br]=Sil ezporzh XBM evit KChart
 Name[ca]=Filtre d'exportació XBM per a KChart
 Name[da]=KChart XBM-eksportfilter

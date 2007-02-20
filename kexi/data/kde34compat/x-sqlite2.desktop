@@ -5,6 +5,7 @@ MimeType=application/x-sqlite2
 Icon=empty
 Patterns=
 Comment=SQLite2 Database File
+Comment[bg]=Файл на SQLite2
 Comment[br]=Restr stlennvon SQLite2
 Comment[ca]=Fitxer de base de dades de SQLite2
 Comment[cy]=Ffeil Gronfa DdataSQLite2

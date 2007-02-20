@@ -15,6 +15,7 @@ Icon=kformdesigner
 Type=Application
 DocPath=kformdesigner/kformdesigner.html
 GenericName=Form Designer
+GenericName[bg]=Проектиране на форми
 GenericName[ca]=Dissenyador de formulari
 GenericName[cy]=Dylunydd Ffurflenni
 GenericName[de]=Formular-Designer

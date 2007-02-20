@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita PDF Import Filter
+Name[bg]=Филтър за импортиране от PDF в Krita
 Name[br]=Sil enporzh PDF evit Krita
 Name[ca]=Filtre d'importació PDF per a Krita
 Name[da]=Krita PDF-importfilter
