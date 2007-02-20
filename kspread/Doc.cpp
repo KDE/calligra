@@ -317,14 +317,9 @@ void Doc::openTemplate (const KUrl& url)
 void Doc::initEmpty()
 {
     KSharedConfigPtr config = Factory::global().config();
-    int _page=1;
-    if( config->hasGroup("Parameters" ))
-    {
-        config->setGroup( "Parameters" );
-        _page=config->readEntry( "NbPage",1 ) ;
-    }
+    const int page = config->group( "Parameters" ).readEntry( "NbPage", 1 );
 
-    for( int i=0; i<_page; i++ )
+    for ( int i = 0; i < page; ++i )
         map()->addNewSheet();
 
     resetURL();
@@ -394,36 +389,20 @@ void Doc::saveConfig()
     if ( isEmbedded() ||!isReadWrite())
         return;
     KSharedConfigPtr config = Factory::global().config();
-    config->setGroup( "Parameters" );
-    config->writeEntry( "Zoom", zoomInPercent() );
-
+    config->group( "Parameters" ).writeEntry( "Zoom", zoomInPercent() );
 }
 
 void Doc::initConfig()
 {
     KSharedConfigPtr config = Factory::global().config();
-    int zoom = 100;
 
-    if( config->hasGroup("KSpread Page Layout" ))
-    {
-      config->setGroup( "KSpread Page Layout" );
-      setUnit( KoUnit((KoUnit::Unit)config->readEntry( "Default unit page" ,0)));
-    }
-    if( config->hasGroup("Parameters" ))
-    {
-        config->setGroup( "Parameters" );
-        zoom = config->readEntry( "Zoom", 100 );
-    }
+    const int page = config->group( "KSpread Page Layout" ).readEntry( "Default unit page", 0 );
+    setUnit( KoUnit( (KoUnit::Unit) page ) );
 
-    int undo=30;
-    if(config->hasGroup("Misc" ) )
-    {
-        config->setGroup( "Misc" );
-        undo=config->readEntry("UndoRedo",-1);
-    }
-    if(undo!=-1)
-        setUndoRedoLimit(undo);
+    const int undo = config->group( "Misc" ).readEntry( "UndoRedo", 30 );
+    setUndoRedoLimit( undo );
 
+    const int zoom = config->group( "Parameters" ).readEntry( "Zoom", 100 );
     setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 

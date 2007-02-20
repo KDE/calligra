@@ -147,8 +147,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const Cell& cell )
         {
             // other=new QStringList();
             KSharedConfigPtr config = Factory::global().config();
-            config->setGroup( "Parameters" );
-            other=new QStringList(config->readEntry("Other list", QStringList()));
+            other=new QStringList(config->group( "Parameters" ).readEntry("Other list", QStringList()));
         }
 
         if ( month->contains( m_String ) )

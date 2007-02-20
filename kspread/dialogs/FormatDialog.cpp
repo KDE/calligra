@@ -85,18 +85,17 @@ FormatDialog::FormatDialog( View* view, const char* name )
     QStringList::Iterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
-	KConfig cfg( *it, KConfig::OnlyLocal);
-	cfg.setGroup( "Sheet-Style" );
+        const KConfigGroup sheetStyleGroup = KConfig( *it, KConfig::OnlyLocal ).group( "Sheet-Style" );
 
-	Entry e;
-	e.config = *it;
-	e.xml = cfg.readEntry( "XML" );
-	e.image = cfg.readEntry( "Image" );
-	e.name = cfg.readEntry( "Name" );
+        Entry e;
+        e.config = *it;
+        e.xml = sheetStyleGroup.readEntry( "XML" );
+        e.image = sheetStyleGroup.readEntry( "Image" );
+        e.name = sheetStyleGroup.readEntry( "Name" );
 
-	m_entries.append( e );
+        m_entries.append( e );
 
-	m_combo->insertItem( index++, e.name );
+        m_combo->insertItem( index++, e.name );
     }
 
     slotActivated( 0 );

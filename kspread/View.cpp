@@ -2028,17 +2028,9 @@ void View::initConfig()
         doc()->setBackupFile( config->readEntry("BackupFile",true));
     }
 
-    if (  config->hasGroup("KSpread Color" ) )
-    {
-        config->setGroup( "KSpread Color" );
-        QColor _col(Qt::lightGray);
-        _col = config->readEntry("GridColor", _col);
-        doc()->setGridColor(_col);
-
-        QColor _pbCol(Qt::red);
-        _pbCol = config->readEntry("PageBorderColor", _pbCol);
-        doc()->changePageBorderColor(_pbCol);
-    }
+    const KConfigGroup colorGroup = config->group( "KSpread Color" );
+    doc()->setGridColor( colorGroup.readEntry( "GridColor", Qt::lightGray ) );
+    doc()->changePageBorderColor( colorGroup.readEntry( "PageBorderColor", Qt::red ) );
 
 // Do we need a Page Layout in the congiguration file? Isn't this already in the template? Philipp
 /*
@@ -2054,11 +2046,7 @@ void View::initConfig()
 }
 }
 */
-    if ( config->hasGroup("Editor" ) )
-    {
-        config->setGroup( "Editor" );
-        doc()->setCaptureAllArrowKeys( config->readEntry("CaptureAllArrowKeys", true ) );
-    }
+    doc()->setCaptureAllArrowKeys( config->group( "Editor" ).readEntry( "CaptureAllArrowKeys", true ) );
 
     initCalcMenu();
     calcStatusBarOp();

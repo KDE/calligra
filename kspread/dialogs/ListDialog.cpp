@@ -168,8 +168,7 @@ void ListDialog::init()
     lst.append(sday);
 
     config = Factory::global().config();
-    config->setGroup( "Parameters" );
-    QStringList other=config->readEntry("Other list", QStringList());
+    QStringList other=config->group( "Parameters" ).readEntry("Other list", QStringList());
     QString tmp;
     for ( QStringList::Iterator it = other.begin(); it != other.end();++it )
     {
@@ -278,8 +277,7 @@ void ListDialog::slotOk()
                 result += "\\";
             }
         }
-        config->setGroup( "Parameters" );
-        config->writeEntry("Other list",result);
+        config->group( "Parameters" ).writeEntry("Other list",result);
         //todo refresh AutoFillSequenceItem::other
         // I don't know how to do for the moment
         if(AutoFillSequenceItem::other!=0)
