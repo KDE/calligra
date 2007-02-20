@@ -221,21 +221,19 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
   oldRecent=10;
   oldAutoSaveValue=KoDocument::defaultAutoSave()/60;
 
-  if( config->hasGroup("Parameters" ))
-        {
-        config->setGroup( "Parameters" );
-        _page=config->readEntry( "NbPage" ,1) ;
-        horizontal=config->readEntry("Horiz ScrollBar",true);
-        vertical=config->readEntry("Vert ScrollBar",true);
-        colHeader=config->readEntry("Column Header",true);
-        rowHeader=config->readEntry("Row Header",true);
-	tabbar=config->readEntry("Tabbar",true);
-	formulaBar=config->readEntry("Formula bar",true);
-        statusBar=config->readEntry("Status bar",true);
-        oldRecent=config->readEntry( "NbRecentFile" ,10);
-        oldAutoSaveValue=config->readEntry("AutoSave",KoDocument::defaultAutoSave()/60);
-        m_oldBackupFile=config->readEntry("BackupFile",m_oldBackupFile);
-        }
+    const KConfigGroup parameterGroup = config->group( "Parameters" );
+    _page = parameterGroup.readEntry( "NbPage" ,1) ;
+    horizontal = parameterGroup.readEntry("Horiz ScrollBar",true);
+    vertical = parameterGroup.readEntry("Vert ScrollBar",true);
+    colHeader = parameterGroup.readEntry("Column Header",true);
+    rowHeader = parameterGroup.readEntry("Row Header",true);
+    tabbar = parameterGroup.readEntry("Tabbar",true);
+    formulaBar = parameterGroup.readEntry("Formula bar",true);
+    statusBar = parameterGroup.readEntry("Status bar",true);
+    oldRecent = parameterGroup.readEntry( "NbRecentFile" ,10);
+    oldAutoSaveValue = parameterGroup.readEntry("AutoSave",KoDocument::defaultAutoSave()/60);
+    m_oldBackupFile = parameterGroup.readEntry("BackupFile",m_oldBackupFile);
+
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
   nbPage->setLabel(i18n("Number of sheets open at the &beginning:"));
@@ -308,14 +306,14 @@ void configure::slotDefault()
 void configure::apply()
 {
     m_pView->doc()->emitBeginOperation( false );
-    config->setGroup( "Parameters" );
-    config->writeEntry( "NbPage", nbPage->value());
+    KConfigGroup parameterGroup = config->group( "Parameters" );
+    parameterGroup.writeEntry( "NbPage", nbPage->value());
     Doc *doc =m_pView->doc();
     bool active=true;
     active=showHScrollBar->isChecked();
     if( m_pView->horzScrollBar()->isVisible()!=active)
     {
-        config->writeEntry( "Horiz ScrollBar",active);
+        parameterGroup.writeEntry( "Horiz ScrollBar",active);
         if( active)
             m_pView->horzScrollBar()->show();
         else
@@ -325,7 +323,7 @@ void configure::apply()
     active=showVScrollBar->isChecked();
     if( m_pView->vertScrollBar()->isVisible()!=active)
     {
-        config->writeEntry( "Vert ScrollBar", active);
+        parameterGroup.writeEntry( "Vert ScrollBar", active);
         if(active)
             m_pView->vertScrollBar()->show();
         else
@@ -336,7 +334,7 @@ void configure::apply()
     active=showColHeader->isChecked();
     if( m_pView->hBorderWidget()->isVisible()!=active)
     {
-        config->writeEntry( "Column Header", active);
+        parameterGroup.writeEntry( "Column Header", active);
         if( active)
             m_pView->hBorderWidget()->show();
         else
@@ -347,7 +345,7 @@ void configure::apply()
     active=showRowHeader->isChecked();
     if( m_pView->vBorderWidget()->isVisible()!=active)
     {
-        config->writeEntry( "Row Header", active);
+        parameterGroup.writeEntry( "Row Header", active);
         if( active)
             m_pView->vBorderWidget()->show();
         else
@@ -358,7 +356,7 @@ void configure::apply()
     active=showTabBar->isChecked();
     if(m_pView->tabBar()->isVisible()!=active)
     {
-        config->writeEntry( "Tabbar", active);
+        parameterGroup.writeEntry( "Tabbar", active);
         if(active)
             m_pView->tabBar()->show();
         else
@@ -369,7 +367,7 @@ void configure::apply()
     active=showFormulaBar->isChecked();
     if(m_pView->posWidget()->isVisible()!=active)
     {
-        config->writeEntry( "Formula bar",active);
+        parameterGroup.writeEntry( "Formula bar",active);
         m_pView->editWidget()->showEditWidget(active);
         if(active)
             m_pView->posWidget()->show();
@@ -379,26 +377,26 @@ void configure::apply()
     }
 
     active=showStatusBar->isChecked();
-    config->writeEntry( "Status bar",active);
+    parameterGroup.writeEntry( "Status bar",active);
     m_pView->showStatusBar( active );
 
     int val=nbRecentFile->value();
     if( oldRecent!= val)
     {
-       config->writeEntry( "NbRecentFile",val);
+       parameterGroup.writeEntry( "NbRecentFile",val);
        m_pView->changeNbOfRecentFiles(val);
     }
     val=autoSaveDelay->value();
     if(val!=oldAutoSaveValue)
     {
-        config->writeEntry( "AutoSave", val );
+        parameterGroup.writeEntry( "AutoSave", val );
         doc->setAutoSave(val*60);
     }
 
     bool state =m_createBackupFile->isChecked();
     if(state!=m_oldBackupFile)
     {
-        config->writeEntry( "BackupFile", state );
+        parameterGroup.writeEntry( "BackupFile", state );
         doc->setBackupFile( state);
         m_oldBackupFile=state;
     }
@@ -418,20 +416,11 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
 
   config = Factory::global().config();
   indentUnit = _view->doc()->unit();
-  double _indent = KoUnit::toUserValue( 10.0, indentUnit);
-  bool m_bMsgError=false;
-  if( config->hasGroup("Parameters" ))
-        {
-        config->setGroup( "Parameters" );
-        _indent = config->readEntry( "Indent" , _indent ) ;
-        m_bMsgError=config->readEntry( "Msg error" ,false) ;
-        }
+    const KConfigGroup parameterGroup = config->group( "Parameters" );
+    double _indent = parameterGroup.readEntry( "Indent" , KoUnit::toUserValue( 10.0, indentUnit ) );
+    bool bMsgError = parameterGroup.readEntry( "Msg error" ,false );
 
-  if( config->hasGroup("Misc") )
-  {
-   config->setGroup( "Misc" );
-   m_oldNbRedo=config->readEntry("UndoRedo",m_oldNbRedo);
-  }
+    m_oldNbRedo = config->group( "Misc" ).readEntry( "UndoRedo", m_oldNbRedo );
 
   m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
   m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
@@ -494,7 +483,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
   valIndent->setLabel(i18n("&Indentation step (%1):", KoUnit::unitName(indentUnit)));
 
   msgError= new QCheckBox(i18n("&Show error message for invalid formulae"),tmpQGroupBox);
-  msgError->setChecked(m_bMsgError);
+  msgError->setChecked( bMsgError );
   msgError->setWhatsThis( i18n( "If this box is checked a message box will pop up when what you have entered into a cell cannot be understood by KSpread." ) );
 
   box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
@@ -509,13 +498,10 @@ void miscParameters::slotTextComboChanged(const QString &)
 
 void miscParameters::initComboBox()
 {
-  KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionAuto;
-  if( config->hasGroup("Parameters" ))
-    {
-      config->setGroup( "Parameters" );
-      tmpCompletion=( KGlobalSettings::Completion)config->readEntry( "Completion Mode" ,int(KGlobalSettings::CompletionAuto)) ;
-      config->writeEntry( "Completion Mode", (int)tmpCompletion);
-    }
+    KGlobalSettings::Completion tmpCompletion = KGlobalSettings::CompletionAuto;
+    tmpCompletion = ( KGlobalSettings::Completion )config->group( "Parameters" ).readEntry( "Completion Mode" ,int(KGlobalSettings::CompletionAuto)) ;
+    config->group( "Parameters" ).writeEntry( "Completion Mode", (int)tmpCompletion);
+
 switch(tmpCompletion )
         {
         case  KGlobalSettings::CompletionNone:
@@ -604,18 +590,16 @@ void miscParameters::apply()
 {
     kDebug() << "Applying misc preferences" << endl;
 
-    config->setGroup( "Misc" );
     int const newUndo=m_undoRedoLimit->value();
     if( newUndo!=m_oldNbRedo )
     {
-        config->writeEntry("UndoRedo",newUndo);
+        config->group( "Misc" ).writeEntry( "UndoRedo", newUndo );
         m_pView->doc()->setUndoRedoLimit(newUndo);
         m_oldNbRedo=newUndo;
     }
 
-    config->setGroup( "Parameters" );
+    KConfigGroup parameterGroup = config->group( "Parameters" );
     KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
-
     switch(typeCompletion->currentIndex())
     {
         case 0:
@@ -639,7 +623,7 @@ void miscParameters::apply()
     if(comboChanged)
     {
         m_pView->doc()->setCompletionMode(tmpCompletion);
-        config->writeEntry( "Completion Mode", (int)tmpCompletion);
+        parameterGroup.writeEntry( "Completion Mode", (int)tmpCompletion);
     }
 
     KSpread::MoveTo tmpMoveTo=Bottom;
@@ -664,7 +648,7 @@ void miscParameters::apply()
     if(tmpMoveTo!=m_pView->doc()->moveToValue())
     {
         m_pView->doc()->setMoveToValue(tmpMoveTo);
-        config->writeEntry( "Move", (int)tmpMoveTo);
+        parameterGroup.writeEntry( "Move", (int)tmpMoveTo);
     }
 
     MethodOfCalc tmpMethodCalc=SumOfNumber;
@@ -696,7 +680,7 @@ void miscParameters::apply()
     if(tmpMethodCalc!=m_pView->doc()->getTypeOfCalc())
     {
         m_pView->doc()->setTypeOfCalc(tmpMethodCalc);
-        config->writeEntry( "Method of Calc", (int)tmpMethodCalc);
+        parameterGroup.writeEntry( "Method of Calc", (int)tmpMethodCalc);
         m_pView->calcStatusBarOp();
         m_pView->initCalcMenu();
     }
@@ -708,14 +692,14 @@ void miscParameters::apply()
         m_pView->doc()->setUnit(indentUnit);
         m_pView->doc()->setIndentValue( val );
         m_pView->doc()->setUnit(oldUnit);
-        config->writeEntry( "Indent", KoUnit::fromUserValue( val, indentUnit ) );
+        parameterGroup.writeEntry( "Indent", KoUnit::fromUserValue( val, indentUnit ) );
     }
 
     bool active=msgError->isChecked();
     if(active!=m_pView->doc()->showMessageError())
     {
         m_pView->doc()->setShowMessageError( active);
-        config->writeEntry( "Msg error" ,(int)active);
+        parameterGroup.writeEntry( "Msg error" ,(int)active);
     }
 }
 
@@ -727,13 +711,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
   m_pView = _view;
   config = Factory::global().config();
 
-  QColor _gridColor(Qt::lightGray);
-
-  if ( config->hasGroup("KSpread Color" ) )
-  {
-    config->setGroup( "KSpread Color" );
-    _gridColor = config->readEntry("GridColor",_gridColor);
-  }
+    QColor _gridColor = config->group( "KSpread Color" ).readEntry( "GridColor", Qt::lightGray );
 
 //   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box );
   KVBox* tmpQGroupBox = box;
@@ -746,12 +724,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
   gridColor->setWhatsThis( i18n( "Click here to change the grid color ie the color of the borders of each cell." ) );
   label->setBuddy(gridColor);
 
-  QColor _pbColor(Qt::red);
-  if ( config->hasGroup("KSpread Color" ) )
-  {
-    config->setGroup( "KSpread Color" );
-    _pbColor = config->readEntry("PageBorderColor", _pbColor);
-  }
+    QColor _pbColor = config->group( "KSpread Color" ).readEntry( "PageBorderColor", Qt::red );
 
   QLabel * label2 = new QLabel( i18n("&Page borders:"), tmpQGroupBox );
 
@@ -771,16 +744,14 @@ void colorParameters::apply()
   if ( m_pView->doc()->gridColor() != _col )
   {
     m_pView->doc()->setGridColor( _col );
-    config->setGroup( "KSpread Color" );
-    config->writeEntry( "GridColor", _col );
+    config->group( "KSpread Color" ).writeEntry( "GridColor", _col );
   }
 
   QColor _pbColor = pageBorderColor->color();
   if ( m_pView->doc()->pageBorderColor() != _pbColor )
   {
     m_pView->doc()->changePageBorderColor( _pbColor );
-    config->setGroup( "KSpread Color" );
-    config->writeEntry( "PageBorderColor", _pbColor );
+    config->group( "KSpread Color" ).writeEntry( "PageBorderColor", _pbColor );
   }
 }
 
