@@ -35,7 +35,7 @@
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <ksimpleconfig.h>
+#include <kconfig.h>
 
 #include "Cell.h"
 #include "CellStorage.h"
@@ -85,7 +85,7 @@ FormatDialog::FormatDialog( View* view, const char* name )
     QStringList::Iterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
-	KSimpleConfig cfg( *it, true );
+	KConfig cfg( *it, KConfig::OnlyLocal);
 	cfg.setGroup( "Sheet-Style" );
 
 	Entry e;

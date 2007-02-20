@@ -191,7 +191,7 @@ void KCConfigBackgroundPage::loadWallpaperFilesList()
    QStringList files;
    for (QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it)
    {
-      KSimpleConfig fileConfig(*it);
+      KConfig fileConfig(*it, KConfig::OnlyLocal);
       fileConfig.setGroup("Wallpaper");
 
       QString imageCaption = fileConfig.readEntry("Name");
