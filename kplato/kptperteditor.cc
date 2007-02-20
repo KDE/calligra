@@ -65,8 +65,8 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
     m_tasktree = widget.tableTaskWidget;
     m_assignList = widget.assignList;
     m_part = part;
-    
-    draw( m_part->getProject() );
+    m_node = m_part->getProject().projectNode();
+    draw( part->getProject() );
 
     connect( m_tasktree, SIGNAL( itemSelectionChanged() ), SLOT( dispAvailableTasks() ) );
     connect( m_assignList, SIGNAL(added(QListWidgetItem *)), this, SLOT(addTaskInRequiredList(QListWidgetItem * )) );
@@ -74,14 +74,15 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
 }
 
 void PertEditor::dispAvailableTasks(){
+    
     QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
 
     m_assignList->availableListWidget()->clear();
     m_assignList->selectedListWidget()->clear();
 
-    loadRequiredTasksList(itemToNode(selectedTaskName));
+    loadRequiredTasksList(itemToNode(selectedTaskName, m_node));
 
-    foreach(Node * currentNode, m_part->getProject().projectNode()->childNodeIterator() ){
+    foreach(Node * currentNode, m_node->childNodeIterator() ){
         // Checks if the curent node is not a milestone
         // and if it isn't the same as the selected task in the m_tasktree
         if ( currentNode->type() != 4 and currentNode->name() != selectedTaskName
@@ -89,41 +90,47 @@ void PertEditor::dispAvailableTasks(){
             m_assignList->availableListWidget()->addItem(currentNode->name());
         }
     }
+
 }
 
-Node * PertEditor::itemToNode(QString itemName){
+Node * PertEditor::itemToNode(QString itemName, Node * startNode){
     Node * result;
-    foreach(Node * currentNode, m_part->getProject().projectNode()->childNodeIterator() ){
-        if (currentNode->name() == itemName) {
-            result=currentNode;
+    if (startNode->numChildren() > 0){
+        foreach(Node * currentNode, startNode->childNodeIterator() ){
+            if (currentNode->name() == itemName) {
+                return currentNode;
+            } else {
+                result=itemToNode(itemName, currentNode);
+            }
         }
     }
     return result;
 }
 
 void PertEditor::addTaskInRequiredList(QListWidgetItem * currentItem){
-    // add the selected task to the RequiredTasksList 
+
     QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
-
-    static_cast<Task *>(itemToNode(selectedTaskName))->addRequiredTask(itemToNode(currentItem->text()));
-
+    Relation* m_rel=new Relation (itemToNode(currentItem->text(), m_node),itemToNode(selectedTaskName, m_node));
+    AddRelationCmd * c= new AddRelationCmd(m_part,m_rel,currentItem->text());
+    c->execute();
 }
 
 void PertEditor::removeTaskFromRequiredList(QListWidgetItem * currentItem){
     // remove the selected task from the RequiredTasksList
     QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
 
-    static_cast<Task *>(itemToNode(selectedTaskName))->remRequiredTask(itemToNode(currentItem->text()));
+    Relation* m_rel = itemToNode(selectedTaskName, m_node)->findParentRelation(itemToNode(currentItem->text(), m_node));
+    DeleteRelationCmd * d= new DeleteRelationCmd(m_part,m_rel,currentItem->text());
+    d->execute();
 
 }
 
 void PertEditor::loadRequiredTasksList(Node * taskNode){
     // Display the required task list into the rigth side of m_assignList
     m_assignList->selectedListWidget()->clear();
-
-    foreach(Node * currentNode, static_cast<Task *>(taskNode)->requiredTaskIterator()){
-        m_assignList->selectedListWidget()->addItem(currentNode->name());
-    }
+    foreach(Relation * currentRelation, taskNode->dependParentNodes()){
+            m_assignList->selectedListWidget()->addItem(currentRelation->parent()->name());
+        }
 }
 
 

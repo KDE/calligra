@@ -38,7 +38,7 @@
        <item>
         <widget class="QLabel" name="label" >
          <property name="text" >
-          <string>Tasks:</string>
+          <string>Tasks :</string>
          </property>
         </widget>
        </item>

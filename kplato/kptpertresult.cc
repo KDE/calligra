@@ -34,16 +34,7 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
     widget.setupUi(this);
-    /*widget.assignList->setSelectedLabel(i18n("Required"));
-    widget.assignList->setShowUpDownButtons(false);
-    widget.assignList->layout()->setMargin(0);
-
-    m_tasktree = widget.tableTaskWidget;
-    m_assignList = widget.assignList;
-    m_part = part;*/
-    
-    //draw( m_part->getProject() );
-
+    QHeaderView *header=widget.treeWidgetTaskResult->header();
 }
 
 

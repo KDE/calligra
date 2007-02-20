@@ -61,7 +61,7 @@
 #include "kpttaskeditor.h"
 #include <ui_kptperteditor.h>
 
-//#include "kptcommand.h"
+#include "kptcommand.h"
 //#include "kptitemmodelbase.h"
 //#include "kptcalendar.h"
 //#include "kptduration.h"
@@ -105,7 +105,7 @@ public:
     void draw( Project &project);
     void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);
     void loadRequiredTasksList(Node * taskNode);
-    Node * itemToNode(QString itemName);
+    Node * itemToNode(QString itemName, Node * startNode);
 
 private slots:
     void dispAvailableTasks();
@@ -116,6 +116,7 @@ private:
     QTreeWidget * m_tasktree;
     KActionSelector * m_assignList;
     Part * m_part;
+    Node * m_node;
 
     Ui::PertEditor widget;
 };

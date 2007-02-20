@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
-    <height>724</height>
+    <width>958</width>
+    <height>639</height>
    </rect>
   </property>
   <property name="contextMenuPolicy" >
@@ -22,69 +22,64 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="2" column="1" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="taskGroupBoxDetail" >
+     <property name="title" >
+      <string>Task details </string>
      </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="printButton" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Print</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType" >
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="closeButton" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="layoutDirection" >
-        <enum>Qt::RightToLeft</enum>
-       </property>
-       <property name="autoFillBackground" >
-        <bool>false</bool>
-       </property>
-       <property name="text" >
-        <string>Close</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QTreeWidget" name="treeWidgetTaskResult" >
+        <property name="horizontalScrollBarPolicy" >
+         <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+        <column>
+         <property name="text" >
+          <string>Task</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Early start date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Early finish date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Late finish date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Late finish date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Float</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Free Margin</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
-   <item row="0" column="1" >
+   <item row="0" column="0" >
     <widget class="QGroupBox" name="projectGroupBox" >
      <property name="title" >
       <string>Project</string>
@@ -153,68 +148,6 @@
          </layout>
         </item>
        </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="QGroupBox" name="taskGroupBoxDetail" >
-     <property name="title" >
-      <string>Task details </string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QTreeWidget" name="treeWidgetTaskResult" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>7</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <column>
-         <property name="text" >
-          <string>Task</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Early start date</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Early finish date</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Late finish date</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Late finish date</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Float</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Free Margin</string>
-         </property>
-        </column>
-       </widget>
       </item>
      </layout>
     </widget>
