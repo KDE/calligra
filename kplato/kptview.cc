@@ -1354,7 +1354,7 @@ void View::slotConfigure()
 
 void View::slotChartDisplay()
 {
-    ChartDialog * dia = new ChartDialog();
+    ChartDialog * dia = new ChartDialog(getProject());
     if ( dia->exec()  == QDialog::Accepted) {
        // KCommand * cmd = dia->buildCommand( getPart() );
       //  if ( cmd ) {

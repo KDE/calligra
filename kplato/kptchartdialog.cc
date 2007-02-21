@@ -24,7 +24,7 @@
 namespace KPlato
 {
 
-ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
+ChartDialog::ChartDialog(Project &p, QWidget *parent, const char *n) : KDialog(parent)
 {
     setCaption( i18n("Project Charts Indicators") );
     setButtons( KDialog::Ok );
@@ -35,12 +35,11 @@ ChartDialog::ChartDialog(QWidget *p, const char *n) : KDialog(p)
     m_panel->show();
     resize(610,550);
     setMinimumSize(610,550);
-
 }
 
 ChartDialog::~ChartDialog()
 {
-	delete m_panel;
+	//delete m_panel;
 }
 
 void ChartDialog::resizeEvent(QResizeEvent* ev)

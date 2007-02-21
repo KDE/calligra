@@ -25,88 +25,80 @@
 namespace KPlato
 {
 
-
-
-
 ChartPanel::ChartPanel(QWidget *p) : ChartPanelBase(p)
 {
+    chart = new ChartWidget(horizontalLayout_2,"MyChartWidget");
+    hboxLayout->addWidget(chart,1,0);
 
-kDebug()<<"Chart Panel : constructeur!!";
-chart = new ChartWidget(horizontalLayout_2,"MyChartWidget");
-hboxLayout->addWidget(chart,1,0);
+    horizontalLayout_2->setMinimumSize(610, 350);
+    horizontalLayout_2->setGeometry(QRect(10, 10, 600, 350));
 
-horizontalLayout_2->setMinimumSize(610, 350);
-horizontalLayout_2->setGeometry(QRect(10, 10, 600, 350));
-
-verticalLayout->setGeometry(QRect(10, 365, 600, 80));
-verticalLayout->setMinimumSize(610,80);
-chart->update();
-connect(curve2,SIGNAL(clicked()),SLOT(slotBCPW()));
-connect(curve1,SIGNAL(clicked()),SLOT(slotBCPS()));
-connect(curve3,SIGNAL(clicked()),SLOT(slotACPW()));
-is_bcwp_draw=false;
-is_bcws_draw=false;
-is_acwp_draw=false;
+    verticalLayout->setGeometry(QRect(10, 365, 600, 80));
+    verticalLayout->setMinimumSize(610,80);
+    chart->update();
+    connect(curve2,SIGNAL(clicked()),SLOT(slotBCPW()));
+    connect(curve1,SIGNAL(clicked()),SLOT(slotBCPS()));
+    connect(curve3,SIGNAL(clicked()),SLOT(slotACPW()));
+    is_bcwp_draw=false;
+    is_bcws_draw=false;
+    is_acwp_draw=false;
 }
    
 ChartPanel::~ChartPanel()
 {
-	delete chart;
+    
 }
 
 void ChartPanel::resizeEvent(QResizeEvent* ev)
 {
-	kDebug()<<"RESIZAGEEEEEEEEEEEEEEEE"<<(ev->size()).width()<<"    "<<(ev->size()).height();
+    chart->setMaximumWidth((ev->size()).width()-6);
+    chart->setMaximumHeight((ev->size()).height()-100);
+    horizontalLayout_2->setGeometry(QRect(10, 10, (ev->size()).width()-6, (ev->size()).height()-100));
+    verticalLayout->setGeometry(QRect(10, (ev->size()).height()-86, 600, 80));
 
-	chart->setMaximumWidth((ev->size()).width()-6);
-	chart->setMaximumHeight((ev->size()).height()-100);
-	horizontalLayout_2->setGeometry(QRect(10, 10, (ev->size()).width()-6, (ev->size()).height()-100));
-	verticalLayout->setGeometry(QRect(10, (ev->size()).height()-86, 600, 80));
+    horizontalLayout_2->setMaximumWidth((ev->size()).width()-6);
+    horizontalLayout_2->setMaximumHeight((ev->size()).height()-92);
 
-	horizontalLayout_2->setMaximumWidth((ev->size()).width()-6);
-	horizontalLayout_2->setMaximumHeight((ev->size()).height()-92);
-
-	verticalLayout->setMaximumWidth((ev->size()).width()-6);
-	
+    verticalLayout->setMaximumWidth((ev->size()).width()-6);    
 }
 
 void ChartPanel::slotBCPW()
 {
-	if(is_bcwp_draw==false)
-	{
-		chart->drawBCWP();
-		is_bcwp_draw=true;
-	}
-	else
-	{
-		chart->undrawBCWP();
-		is_bcwp_draw=false;
-	}
+    if(is_bcwp_draw==false)
+    {
+        chart->drawBCWP();
+        is_bcwp_draw=true;
+    }
+    else
+    {
+        chart->undrawBCWP();
+        is_bcwp_draw=false;
+    }
 }
 void ChartPanel::slotBCPS()
 {
-	if(is_bcws_draw==false)
-	{
-		chart->drawBCWS();
-		is_bcws_draw=true;
-	}
-	else
-	{
-		chart->undrawBCWS();
-		is_bcws_draw=false;
-	}
+    if(is_bcws_draw==false)
+    {
+        chart->drawBCWS();
+        is_bcws_draw=true;
+    }
+    else
+    {
+        chart->undrawBCWS();
+        is_bcws_draw=false;
+    }
 }
 void ChartPanel::slotACPW()
 {
-	if(is_acwp_draw==false){
-		chart->drawACWP();
-		is_acwp_draw=true;
-	}
-	else
-	{
-		chart->undrawACWP();
-		is_acwp_draw=false;
-	}
+    if(is_acwp_draw==false){
+        chart->drawACWP();
+        is_acwp_draw=true;
+    }
+    else
+    {
+        chart->undrawACWP();
+        is_acwp_draw=false;
+    }
 }   
 
 

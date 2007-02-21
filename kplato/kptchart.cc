@@ -36,18 +36,40 @@ namespace KPlato
               for(int j=0;j<6;j++)
                     sizeSave[i][j]=0;
         }
+	//currentProject = View::getProject();
     //init totalBudget
     }
 
+    Chart::~Chart()
+    {
+	delete[] sizeSave;
+    }
 
     void Chart::api(QVector<QPointF> & BCWP, QVector<QPointF> & BCWS, QVector<QPointF> & ACWP ,const int n_curve, int maximumHeight, int maximumWidth)
     {
         if(n_curve==ChartWidget::BCWP)
         {
             //calculatePlannedCost();
-	    costToPercent(BCWP);
+            costToPercent(BCWP);
             reCalculateY(BCWP,ChartWidget::BCWP,maximumHeight);
+			//timeToPercent(BCWP);
             reCalculateX(BCWP,ChartWidget::BCWP,maximumWidth);
+        }
+	if(n_curve==ChartWidget::BCWS)
+        {
+            //calculatePlannedCost();
+            costToPercent(BCWS);
+            reCalculateY(BCWS,ChartWidget::BCWS,maximumHeight);
+			//timeToPercent(BCWS);
+            reCalculateX(BCWS,ChartWidget::BCWS,maximumWidth);
+        }
+        if(n_curve==ChartWidget::ACWP)
+        {
+            //calculatePlannedCost();
+            costToPercent(ACWP);
+            reCalculateY(ACWP,ChartWidget::ACWP,maximumHeight);
+			//timeToPercent(ACWP);
+            reCalculateX(ACWP,ChartWidget::ACWP,maximumWidth);
         }
     }
 
@@ -57,8 +79,7 @@ namespace KPlato
     {    
         float inverse;
         float tmp;
-        kDebug()<<"ReCalculateY ! : ";
-    
+   
         if(maximumHeight != sizeSave[n_curve][1])
         {
             QVector<QPointF>::iterator it= vect.begin();
@@ -87,42 +108,104 @@ namespace KPlato
                 it->setX(tmp+ChartWidget::LEFTMARGIN);
                 it++;
             }
-        sizeSave[n_curve][0]=maximumWidth;
+        	sizeSave[n_curve][0]=maximumWidth;
         }
     }
 
     // Set a variable to know how much is the higher percent of Y 
-    void Chart::setMaxPercent(QVector<QPointF> BCWP, QVector<QPointF> BCWS, QVector<QPointF> ACWP )// WORKS, TESTED
+    float Chart::setMaxYPercent(QVector<QPointF> BCWP, QVector<QPointF> BCWS, QVector<QPointF> ACWP )// WORKS, TESTED
     {
-        if(   (BCWP.last()).y() <=  (BCWS.last()).y() )
+        if( !BCWP.isEmpty())
         {
-        
-            if(   (BCWS.last()).y() <=  (ACWP.last()).y() )
+            if( !BCWS.isEmpty() )
             {
-                totalYPercent=(ACWP.last()).y();
+                if( (BCWP.last()).y() <=  BCWS.last().y() )
+                {
+		
+                    if( !ACWP.isEmpty() )
+                    {
+                            if(   (BCWS.last()).y() <=  (ACWP.last()).y() )
+                            {
+                                totalYPercent=(ACWP.last()).y();
+                            }
+                            else
+                            {
+                                totalYPercent=(BCWS.last()).y();
+                            }
+                    }
+                    else
+                    {
+                        totalYPercent=(BCWS.last()).y();
+                    }
+                }
+                else
+                {
+                    if( !ACWP.isEmpty() )
+                    {
+                            if( (BCWP.last()).y()  <= (ACWP.last()).y() )
+                            {
+                                totalYPercent=(ACWP.last()).y();
+                            }
+                            else
+                            {
+                                totalYPercent=(BCWP.last()).y();
+                            }
+                    }
+                    else
+                    {
+                        totalYPercent=(BCWP.last()).y();
+                    }
+                }
+            }
+            else
+            {
+                if( !ACWP.isEmpty() )
+                {
+                        if( (BCWP.last()).y()  <= (ACWP.last()).y() )
+                        {
+                            totalYPercent=(ACWP.last()).y();
+                        }
+                        else
+                        {
+                            totalYPercent=(BCWP.last()).y();
+                        }
+                }
+                else
+                {
+                    totalYPercent=(BCWP.last()).y();
+                }
+            }
+        }
+        else
+        {
+            if( !ACWP.isEmpty() )
+            {
+                    if(   (BCWS.last()).y() <=  (ACWP.last()).y() )
+                    {
+                        totalYPercent=(ACWP.last()).y();
+                    }
+                    else
+                    {
+                        totalYPercent=(BCWS.last()).y();
+                    }
             }
             else
             {
                 totalYPercent=(BCWS.last()).y();
             }
         }
-        else
-        {
-            if(   (BCWP.last()).y() <=  (ACWP.last()).y() )
-            {
-                totalYPercent=(ACWP.last()).y();
-            }
-            else
-            {
-                totalYPercent=(BCWP.last()).y();
-            }
-        }
+	return(totalYPercent);
     }
 
     void Chart::setMaxCost(QVector<QPointF> BCWP)
     {
         totalCostPlanned=BCWP.last().y();
     }
+
+ /*   void Chart::setMaxTime(QVector<QPointF> weeks)
+    {
+        totalTimePlanned=weeks.last();
+    }*/
 
     /* Calculate the percentage of the cost and replace the result in the vector */
     void Chart::costToPercent(QVector<QPointF> & vect)
@@ -147,7 +230,7 @@ namespace KPlato
     }
 
     /*Caculate the actual cost of the project at the d day passed in parameter*/
-    float Chart::calculateActualCost(Project &p, QDate day)
+    /*float Chart::calculateActualCost(Project &p, QDate day)
     {
         float cost=0;
         foreach(Node * currentNode, p.projectNode()->childNodeIterator()){
@@ -169,17 +252,17 @@ namespace KPlato
 
     /*Caculate the planned cost of the project at the d day passed in parameter*/
 //MODIFIER ICI PAREIL QU'AU DESSUS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    float Chart::calculatePlannedCost(Project &p, QDate day)
+   /* float Chart::calculatePlannedCost(Project &p, QDate day)
     {
         float cost=0;
         foreach(Node * currentNode, p.projectNode()->childNodeIterator()){
                 cost+=currentNode->plannedCost(day);
             }
         return (cost);
-    }
+    }*/
 
     void calculateValueOfBCWS(Project &, QVector<QPoint>*)
     {
-        
+
     }
 }

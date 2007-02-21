@@ -27,6 +27,8 @@
 #include <QDateTime>
 #include <QVector>
 #include "kptproject.h"
+#include "kptview.h"
+
 
 namespace KPlato
 {
@@ -38,21 +40,25 @@ namespace KPlato
             float sizeSave[3][2];
             float totalYPercent;
             float totalCostPlanned;
+            float totalTimePlanned;
             int totalWeek;
+	    Project currentProject;
         public:
 
             Chart();
+            ~Chart();
             void api(QVector<QPointF>& , QVector<QPointF>& , QVector<QPointF>& ,const int , int , int );
             void reCalculateY(QVector<QPointF> &,const int,int);
             void reCalculateX(QVector<QPointF> &,const int,int);
             void setMaxCost(QVector<QPointF>);
-            void setMaxPercent(QVector<QPointF>, QVector<QPointF>, QVector<QPointF>);
+           // void setMaxTime(QVector<QPointF> BCWP);
+            float setMaxYPercent(QVector<QPointF>, QVector<QPointF>, QVector<QPointF>);
             void costToPercent(QVector<QPointF>&);
             void timeToPercent(QVector<QPointF>&);
             //think to add a parameter to the function (date)
-            float calculateActualCost(Project &, QDate);
+            //float calculateActualCost(Project &, QDate);
             //think to add a parameter to the function (date)
-            float calculatePlannedCost(Project &, QDate);
+            //float calculatePlannedCost(Project &, QDate);
             //For latter but not to forget to do it :D
             void calculateValueOfBCWS(Project &, QVector<QPoint>*);
             /*void calculateValueOfBCWP(Project &, QVector<QPoint>*);

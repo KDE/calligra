@@ -35,7 +35,7 @@ class Part;
 class ChartDialog : public KDialog {
     Q_OBJECT
 public:
-    explicit ChartDialog(QWidget *parent=0, const char *name=0);
+    explicit ChartDialog(Project &p,QWidget *parent=0, const char *name=0);
    ~ChartDialog();
     void resizeEvent(QResizeEvent* ev);
     ChartPanel * m_panel;
