@@ -156,7 +156,7 @@ QDragObject *KivioIconView::dragObject()
 
   QIconDragItem id;
   QString full;
-  full = item->spawner()->set()->dir() + "/" + item->spawner()->info()->title();
+  full = item->spawner()->set()->dir() + '/' + item->spawner()->info()->title();
   id.setData( QCString(full.ascii()));
 
   drag->append( id,

@@ -140,7 +140,7 @@ namespace Kivio {
         continue;
       }
 
-      currentDir->copyTo(installDir + "/" + currentDir->name());
+      currentDir->copyTo(installDir + '/' + currentDir->name());
     }
 
     return ok;

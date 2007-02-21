@@ -324,7 +324,7 @@ void KivioOptionsDialog::setMaxVertSnap(double v)
 
 void KivioOptionsDialog::setFontText(const QFont& f)
 {
-  QString txt = f.family() + " " + QString::number(f.pointSize());
+  QString txt = f.family() + ' ' + QString::number(f.pointSize());
   m_fontTxtLbl->setText(txt);
 }
 

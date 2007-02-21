@@ -205,7 +205,7 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     return ok;
   } else if ( ret == KoTemplateChooseDia::Template ) {
     QFileInfo fileInfo( f );
-    QString fileName( fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kft" );
+    QString fileName( fileInfo.dirPath(true) + '/' + fileInfo.baseName() + ".kft" );
     resetURL();
     bool ok = loadNativeFormat( fileName );
     if ( !ok )
@@ -791,7 +791,7 @@ void KivioDoc::addSpawnerSetDuringLoad(const QString& dirName, bool hidden)
   QStringList files = set->files();
 
   for(it = files.begin(); it != files.end(); ++it) {
-    QString fileName = set->dir() + "/" + (*it);
+    QString fileName = set->dir() + '/' + (*it);
     set->loadFile(fileName);
   }
 
@@ -1001,7 +1001,7 @@ void KivioDoc::updateProtectPanelCheckBox()
 void KivioDoc::loadStencil()
 {
   KivioStencilSpawnerSet* set = m_stencilSetLoadQueue.first();
-  QString fileName = set->dir() + "/" + set->files()[m_currentFile];
+  QString fileName = set->dir() + '/' + set->files()[m_currentFile];
   set->loadFile(fileName);
   m_currentFile++;
   emit progress(qRound(((float)m_currentFile / (float)set->files().count()) * 100.0));

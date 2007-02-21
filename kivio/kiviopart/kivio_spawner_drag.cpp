@@ -76,7 +76,7 @@ void KivioSpawnerDrag::append( const QIconDragItem &item, const QRect &pr,
 {
     QIconDrag::append( item, pr, tr );
 
-    QString full = spawner.set()->dir() + "/" + spawner.info()->title();
+    QString full = spawner.set()->dir() + '/' + spawner.info()->title();
     
     kDebug(43000) << "KivioSpawnerDrag::append() - Adding " << full << endl;
 

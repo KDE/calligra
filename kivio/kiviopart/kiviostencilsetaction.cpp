@@ -227,7 +227,7 @@ void KivioStencilSetAction::loadCollections( const QString& rootDirStr )
         ch = m_collectionMenuList[index];
       }
     
-      loadSet( ch, rootDirStr + "/" + colFInfo->fileName() );
+      loadSet( ch, rootDirStr + '/' + colFInfo->fileName() );
     }
     
     ++colIt;
@@ -251,7 +251,7 @@ void KivioStencilSetAction::loadSet( KMenu* menu, const QString& rootDirStr )
     {
       menu->insertItem(QIcon(dirtPixmap(setFInfo->absoluteFilePath())),
         KivioStencilSpawnerSet::readTitle(setFInfo->absoluteFilePath()),m_ssId);
-      m_pathList.insert( m_ssId, new QString(rootDirStr + "/" + setFInfo->fileName()) );
+      m_pathList.insert( m_ssId, new QString(rootDirStr + '/' + setFInfo->fileName()) );
       m_ssId++;
     }
     ++setIt;
