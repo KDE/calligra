@@ -102,6 +102,7 @@ void VColorDocker::updateColor( const KoColor &c )
 
     if( activeStyle == Karbon::Foreground )
     {
+#if 0
         KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
         KoLineBorder * border = new KoLineBorder( 1.0, color );
         if( oldBorder )
@@ -113,6 +114,7 @@ void VColorDocker::updateColor( const KoColor &c )
         KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selection->selectedShapes(), border );
         canvasController->canvas()->addCommand( cmd );
         canvasController->canvas()->resourceProvider()->setForegroundColor( c );
+#endif
     }
     else
     {
