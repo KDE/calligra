@@ -40,6 +40,8 @@ QPainter painter;
 bool is_bcwp_draw;
 bool is_bcws_draw;
 bool is_acwp_draw;
+float maxYPercent;
+float maxXPercent;
 
 QVector<QPointF> bcwpPoints;
 QVector<QPointF> bcwsPoints;

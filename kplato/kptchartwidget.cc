@@ -43,10 +43,12 @@ ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,nam
     bcwpPoints.push_back(QPointF(40,20));
     bcwpPoints.push_back(QPointF(70,40));
     bcwpPoints.push_back(QPointF(100,70));
-    kDebug() << "ChartWidget :: Constructor Ended";
 
+    maxYPercent=chartEngine.setMaxYPercent(bcwpPoints,bcwsPoints,acwpPoints);
+    maxXPercent=chartEngine.setMaxYPercent(bcwpPoints,bcwsPoints,acwpPoints);
     //chartEngine.setMaxPercent(bcwpPoints,bcwsPoints,acwpPoints);
     //chartEngine.setMaxCost(bcwpPoints);
+    kDebug() << "ChartWidget :: Constructor Ended"<<endl;
 }
 
 
@@ -62,11 +64,9 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     int k=0;
     float Xpercent=0;
     float Ypercent=0;
-    float MaxXPercent=100;
-//chartEngine.setMaxXPercent(bcwpPoints,bcwsPoints,acwpPoints);
-    float MaxYPercent=chartEngine.setMaxYPercent(bcwpPoints,bcwsPoints,acwpPoints);
-    char * Xchar="";
-    char * Ychar="";
+    maxXPercent=100;
+    char Xchar[30];
+    char Ychar[30];
 
     //this->updateGeometry();
     QPainter painter(this);
@@ -80,35 +80,34 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     //painter.drawText(maximumWidth()-15, maximumHeight()-20,"Time");
     painter.drawText(maximumWidth()-70,maximumHeight() ,"Time");
 
-
     //Y
     painter.drawLine(QLine(LEFTMARGIN,TOPMARGIN,LEFTMARGIN,maximumHeight()-BOTTOMMARGIN));
     
 //float MarginY =(maximumHeight()-30)/10; // 10 : Number of division
 //float MaxCost=chartEngine.setMaxYPercent()/10;
 //while(j<=(maximumHeight()-(TOPMARGIN+BOTTOMMARGIN)))
-    while (Ypercent<=MaxYPercent)
+    while (Ypercent<=maxYPercent)
     {
 	
 	int n=sprintf(Ychar,"%f",Ypercent);
-	Ychar=strcat(Ychar,"%");
-	painter.drawText(2,maximumHeight()-BOTTOMMARGIN-Ypercent,Ychar);
-	Ypercent+=20;
-
+	char * Yaffichage =strcat(Ychar,"%");
+	painter.drawText(2,maximumHeight()-BOTTOMMARGIN-Ypercent,Yaffichage);
         painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
         j+=10;
 	painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
         j+=10;
+
+	Ypercent+=20;
 	char * Ychar="";
     }
 
     //X
     painter.drawLine(QLine(LEFTMARGIN,maximumHeight()-BOTTOMMARGIN,maximumWidth()-RIGHTMARGIN,maximumHeight()-BOTTOMMARGIN));
-
+/*
 //float MarginX=(maximumWidth()-(RIGHTMARGIN+LEFTMARGIN))/10;
 //float MaxPercent=chartEngine.setMaxXPercent()/10;
 //while(k<=(maximumWidth()-RIGHTMARGIN))
-    while (Xpercent<=MaxXPercent)
+    while (Xpercent<=maxXPercent)
     {
 	int n=sprintf(Xchar,"%f",Xpercent);
 	Xchar=strcat(Xchar,"%");
@@ -121,13 +120,13 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
 	painter.drawLine(QLine(k+LEFTMARGIN,maximumHeight()-TOPMARGIN,k+LEFTMARGIN,maximumHeight()-13));
         k+=10;
 	char * Xchar="";
-    }
+    }*/
 
     if(is_bcwp_draw==true)
     {
         painter.setPen(QColor(Qt::red));
        //	chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,BCWP,maximumHeight(),maximumWidth());
-        painter.drawPolyline(QPolygonF(bcwpPoints));
+      //  painter.drawPolyline(QPolygonF(bcwpPoints));
         is_bcwp_draw=true;
     }
 
