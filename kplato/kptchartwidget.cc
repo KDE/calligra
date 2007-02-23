@@ -62,8 +62,8 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
 {
     int j=0;
     int k=0;
-    float Xpercent=0;
-    float Ypercent=0;
+    int Xpercent=0;
+    int Ypercent=0;
     maxXPercent=100;
     char Xchar[30];
     char Ychar[30];
@@ -89,38 +89,38 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     while (Ypercent<=maxYPercent)
     {
 	
-	int n=sprintf(Ychar,"%f",Ypercent);
+	int n=sprintf(Ychar,"%d",Ypercent);
 	char * Yaffichage =strcat(Ychar,"%");
 	painter.drawText(2,maximumHeight()-BOTTOMMARGIN-Ypercent,Yaffichage);
         painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
-        j+=10;
+        j+=10;// FIX IT , it MUST BE COORDINATE , NOT % !!!!
 	painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
         j+=10;
 
 	Ypercent+=20;
-	char * Ychar="";
+	strcpy(Ychar,"");
     }
 
     //X
     painter.drawLine(QLine(LEFTMARGIN,maximumHeight()-BOTTOMMARGIN,maximumWidth()-RIGHTMARGIN,maximumHeight()-BOTTOMMARGIN));
-/*
+
 //float MarginX=(maximumWidth()-(RIGHTMARGIN+LEFTMARGIN))/10;
 //float MaxPercent=chartEngine.setMaxXPercent()/10;
-//while(k<=(maximumWidth()-RIGHTMARGIN))
+//while(k<=(maximumWidth()-RIGHTMARGIN))/*
     while (Xpercent<=maxXPercent)
     {
-	int n=sprintf(Xchar,"%f",Xpercent);
-	Xchar=strcat(Xchar,"%");
+	int n=sprintf(Xchar,"%d",Xpercent);
+	char * Xaffichage =strcat(Xchar,"%");
 
-	painter.drawText(Xpercent+LEFTMARGIN,maximumHeight(),Xchar);
+	painter.drawText(Xpercent+LEFTMARGIN,maximumHeight(),Xaffichage);
 	Xpercent+=20;
 	
 	painter.drawLine(QLine(k+LEFTMARGIN,maximumHeight()-TOPMARGIN,k+LEFTMARGIN,maximumHeight()-13));
         k+=10;
 	painter.drawLine(QLine(k+LEFTMARGIN,maximumHeight()-TOPMARGIN,k+LEFTMARGIN,maximumHeight()-13));
         k+=10;
-	char * Xchar="";
-    }*/
+	strcpy(Xchar,"");
+    }
 
     if(is_bcwp_draw==true)
     {
