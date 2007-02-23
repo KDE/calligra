@@ -102,9 +102,10 @@ def callbackCreateOptionsWidget(*args):
     print "=====> callbackCreateOptionsWidget args=%s" % args
 
     try:
-        global OptionsWidget, __main__
+        #global OptionsWidget, __main__
+        global OptionsWidget
         optionswidget = OptionsWidget()
-        __main__._variableReadFileOptionsWidget_ = optionswidget
+        #__main__._variableReadFileOptionsWidget_ = optionswidget
         return optionswidget.widget
     except:
         import traceback

@@ -4,7 +4,7 @@
 begin
     require 'Qt'
 rescue LoadError
-    raise "Failed to load the required QtRuby module. Please install QtRuby."
+    raise "Failed to load the required QtRuby module. Please install Qt4-QtRuby."
 end
 
 # Load the KWord scripting module.
@@ -31,11 +31,12 @@ end
 #########################################################################
 # Pages - Each item is able to provide different pages
 
+# The Page interface class.
 class Page
     def initialize(label)
         @label = label
     end
-    def label()
+    def label
         return @label
     end
     def createWidget(parent)
@@ -43,6 +44,7 @@ class Page
     end
 end
 
+# The PropertyPage class implements properties displayed within a table.
 class PropertyPage < Page
 
     class Property
@@ -58,36 +60,38 @@ class PropertyPage < Page
         end
     end
 
-    def initialize(properties = [])
-        super("Properties")
+    def initialize(label, properties = [])
+        super(label)
         @properties = properties
     end
 
     def createWidget(parent)
         table = Qt::TableWidget.new(parent)
         table.setColumnCount(2)
-        #table.setHorizontalHeaderLabels( QStringList() << i18n("Name") << i18n("Value") );
         table.setHorizontalHeaderLabels( ["Name","Value"] )
-        table.verticalHeader().hide()
+        table.verticalHeader().hide
         table.alternatingRowColors = true
         #table.horizontalHeader().resizeSections( Qt::HeaderView::ResizeToContents )
         table.horizontalHeader().setStretchLastSection(true)
         #table.setEditTriggers( Qt::AbstractItemView::AllEditTriggers )
         table.setEditTriggers( Qt::AbstractItemView::NoEditTriggers )
         #@table.setSortingEnabled(true)
-
         for property in @properties
-            rows = table.rowCount()
+            rows = table.rowCount
             table.insertRow(rows)
             table.setItem(rows, 0, Qt::TableWidgetItem.new( property.name ))
             table.setItem(rows, 1, Qt::TableWidgetItem.new( property.value ))
         end
-
         return table
+    end
+
+    def addProperty(property)
+        @properties.push(property)
     end
 
 end
 
+# The TextEditPage class implements a simple texteditor.
 class TextEditPage < Page
 
     def initialize(label, text = "")
@@ -107,8 +111,9 @@ class TextEditPage < Page
 end
 
 #########################################################################
-# Item - Interface class for all items within the TreeModel.
+# Items displayed within the TreeModel.
 
+# Item is the interface class for all items.
 class Item
 
     def initialize(parentitem = nil, data = nil)
@@ -127,7 +132,7 @@ class Item
     end
 
     def childCount
-        return @childitems.length()
+        return @childitems.length
     end
 
     def row
@@ -142,37 +147,37 @@ class Item
     end
 
     def pageCount
-        return @pages.length()
+        return @pages.length
     end
 
 end
 
-#########################################################################
-# FrameItem - Item for KWord Frame objects.
-
+# FrameItem for KWord Frame objects.
 class FrameItem < Item
 
     class TextDocumentItem < Item
         def initialize(frameitem, textdoc)
             super(frameitem, textdoc)
-            #textdoc.rootFrame()
+
             @pages.push(
-                PropertyPage.new( [
-                    PropertyPage::Property.new("width", @data.width()),
-                    PropertyPage::Property.new("height", @data.height()),
-                    PropertyPage::Property.new("pageCount", @data.pageCount()),
-                    PropertyPage::Property.new("isModified", @data.isModified()),
+                PropertyPage.new("Properties", [
+                    PropertyPage::Property.new("width", @data.width),
+                    PropertyPage::Property.new("height", @data.height),
+                    PropertyPage::Property.new("pageCount", @data.pageCount),
+                    PropertyPage::Property.new("isModified", @data.isModified),
                 ] )
             )
-            @pages.push( TextEditPage.new("Text", @data.toText()) )
-            @pages.push( TextEditPage.new("HTML", @data.toHtml()) )
-            @pages.push( TextEditPage.new("Style", @data.defaultStyleSheet()) )
+            @pages.push( TextEditPage.new("Text", @data.toText) )
+            @pages.push( TextEditPage.new("HTML", @data.toHtml) )
+            @pages.push( TextEditPage.new("Style", @data.defaultStyleSheet) )
 
-            vars = ""
-            for n in @data.variableNames()
-                vars += "#{n}=%s\n" % @data.variableValue(n)
+            varpage = PropertyPage.new("Variables")
+            for n in @data.variableNames
+                varpage.addProperty( PropertyPage::Property.new(n, @data.variableValue(n)) )
             end
-            @pages.push( TextEditPage.new("Variables", vars) )
+            @pages.push(varpage)
+
+            #textdoc.rootFrame
         end
         def data(column)
             return Qt::Variant.new("Document")
@@ -181,39 +186,37 @@ class FrameItem < Item
 
     def initialize(framesetitem, frame)
         super(framesetitem, frame)
-        frameset = frame.frameSet()
-        textdoc = frameset.textDocument()
+        frameset = frame.frameSet
+        textdoc = frameset.textDocument
         if textdoc != 0
             @childitems.push( TextDocumentItem.new(self, textdoc) )
         end
         @pages.push(
-            PropertyPage.new( [
-                PropertyPage::Property.new("width", @data.width()),
-                PropertyPage::Property.new("shapeId", @data.shapeId()),
-                PropertyPage::Property.new("visible", @data.isVisible()),
-                PropertyPage::Property.new("scaleX", @data.scaleX()),
-                PropertyPage::Property.new("scaleY", @data.scaleY()),
-                PropertyPage::Property.new("rotation", @data.rotation()),
-                PropertyPage::Property.new("shearX", @data.shearX()),
-                PropertyPage::Property.new("shearY", @data.shearY()),
-                PropertyPage::Property.new("width", @data.width()),
-                PropertyPage::Property.new("height", @data.height()),
-                PropertyPage::Property.new("positionX", @data.positionX()),
-                PropertyPage::Property.new("positionY", @data.positionY()),
-                PropertyPage::Property.new("zIndex", @data.zIndex()),
+            PropertyPage.new("Properties", [
+                PropertyPage::Property.new("width", @data.width),
+                PropertyPage::Property.new("shapeId", @data.shapeId),
+                PropertyPage::Property.new("visible", @data.isVisible),
+                PropertyPage::Property.new("scaleX", @data.scaleX),
+                PropertyPage::Property.new("scaleY", @data.scaleY),
+                PropertyPage::Property.new("rotation", @data.rotation),
+                PropertyPage::Property.new("shearX", @data.shearX),
+                PropertyPage::Property.new("shearY", @data.shearY),
+                PropertyPage::Property.new("width", @data.width),
+                PropertyPage::Property.new("height", @data.height),
+                PropertyPage::Property.new("positionX", @data.positionX),
+                PropertyPage::Property.new("positionY", @data.positionY),
+                PropertyPage::Property.new("zIndex", @data.zIndex),
             ] )
         )
     end
 
     def data(column)
-        return Qt::Variant.new( @data.shapeId().to_s() )
+        return Qt::Variant.new( @data.shapeId().to_s )
     end
 
 end
 
-#########################################################################
-# FramesetItem - Item for KWord FrameSet objects.
-
+# FramesetItem for KWord FrameSet objects.
 class FramesetItem < Item
 
     def initialize(rootitem, frameset)
@@ -222,27 +225,25 @@ class FramesetItem < Item
             @childitems.push( FrameItem.new(self, frameset.frame(i)) )
         end
         @pages.push(
-            PropertyPage.new( [
-                PropertyPage::Property.new("name", @data.name()),
-                PropertyPage::Property.new("frameCount", @data.frameCount()),
-                PropertyPage::Property.new("isText", @data.textDocument() != 0),
+            PropertyPage.new("Properties", [
+                PropertyPage::Property.new("name", @data.name),
+                PropertyPage::Property.new("frameCount", @data.frameCount),
+                PropertyPage::Property.new("isText", @data.textDocument != 0),
             ] )
         )
 
     end
 
     def data(column)
-        return Qt::Variant.new( @data.name().to_s() )
+        return Qt::Variant.new( @data.name().to_s )
     end
 
 end
 
-#########################################################################
-# RootItem - Rootitem within the TreeModel.
-
+# Rootitem within the TreeModel.
 class RootItem < Item
 
-    def initialize()
+    def initialize
         super(nil, nil)
         for i in 0..(KWord.frameSetCount() - 1)
             @childitems.push( FramesetItem.new(self, KWord.frameSet(i)) )
@@ -276,18 +277,11 @@ class TreeModel < Qt::AbstractItemModel
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable
     end
 
-    #def headerData(section, orientation, role)
-    #    if orientation == Qt::Horizontal && role == Qt::DisplayRole
-    #        return Qt::Variant.new(@rootItem.data(section))
-    #    end
-    #    return Qt::Variant.new
-    #end
-
     def index(row, column, parent)
         if !parent.valid?
             parentItem = @rootItem
         else
-            parentItem = parent.internalPointer()
+            parentItem = parent.internalPointer
         end
         childItem = parentItem.child(row)
         if !childItem.nil?
@@ -298,10 +292,9 @@ class TreeModel < Qt::AbstractItemModel
 
     def parent(index)
         if index.valid?
-            childItem = index.internalPointer()
-            parentItem = childItem.parent()
+            parentItem = index.internalPointer.parent
             if parentItem != @rootItem
-                return createIndex(parentItem.row(), 0, parentItem)
+                return createIndex(parentItem.row, 0, parentItem)
             end
         end
         return Qt::ModelIndex.new
@@ -324,7 +317,7 @@ class TreeModel < Qt::AbstractItemModel
         else
             parentItem = parent.internalPointer
         end
-        return parentItem.childCount()
+        return parentItem.childCount
     end
 
 end
@@ -336,7 +329,7 @@ class Dialog < Qt::Dialog
 
     slots 'slotCurrentChanged(const QModelIndex&, const QModelIndex&)'
 
-    def initialize()
+    def initialize
         super()
         self.windowTitle = 'Document Tree'
 
@@ -349,8 +342,8 @@ class Dialog < Qt::Dialog
         @view.header().setVisible(false)
         @view.model = TreeModel.new(self)
         @view.selectionModel = Qt::ItemSelectionModel.new(@view.model)
-        @view.expandAll()
-        @view.show()
+        @view.expandAll
+        @view.show
         splitter.addWidget(@view)
 
         editorwidget = Qt::Widget.new(self)
@@ -364,14 +357,14 @@ class Dialog < Qt::Dialog
         #layout.addSpacing(10)
         #layout.addStretch(1)
         splitter.addWidget(editorwidget)
-        editorwidget.resize( Qt::Size.new(360, 400).expandedTo( editorwidget.minimumSizeHint() ) )
+        editorwidget.resize( Qt::Size.new(360, 400).expandedTo( editorwidget.minimumSizeHint ) )
 
         connect(@view.selectionModel, SIGNAL('currentChanged(const QModelIndex&, const QModelIndex&)'), self, SLOT('slotCurrentChanged(const QModelIndex&, const QModelIndex&)'))
-        resize( Qt::Size.new(700, 520).expandedTo( minimumSizeHint() ) );
+        resize( Qt::Size.new(700, 520).expandedTo( minimumSizeHint ) );
     end
 
     def slotCurrentChanged(current, prev)
-        while @tab.count() > 0; @tab.removeTab(0); end
+        while @tab.count > 0; @tab.removeTab(0); end
         if current.valid?
             #@label.text = @view.model().data(current, Qt::DisplayRole)
             for i in 0..(current.internalPointer.pageCount() - 1)
@@ -387,4 +380,4 @@ class Dialog < Qt::Dialog
 end
 
 dialog = Dialog.new
-dialog.exec()
+dialog.exec
