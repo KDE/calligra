@@ -993,7 +993,7 @@ void Node::setRunningAccount(Account *acc)
 
 void Node::changed(Node *node) {
     if (m_parent)
-        m_parent->changed(this);
+        m_parent->changed(node);
 }
 
 
