@@ -104,12 +104,11 @@ void ChartWidget::drawBasicChart(QPainter & painter)
 {
     int j=0;
     int k=0;
-    int Xpercent=0;
     int Ypercent=0;
+    int Xpercent=0;
     maxXPercent=100;
     char Xchar[30];
     char Ychar[30];
-
 
 /* CHANGE COLORS !! */
     painter.setPen(QColor(Qt::blue));
@@ -123,43 +122,35 @@ void ChartWidget::drawBasicChart(QPainter & painter)
     //Y
     painter.drawLine(QLine(LEFTMARGIN,TOPMARGIN,LEFTMARGIN,size().height()-BOTTOMMARGIN));
     
-//float MarginY =(size().height()-30)/10; // 10 : Number of division
-//float MaxCost=chartEngine.setMaxYPercent()/10;
-//while(j<=(size().height()-(TOPMARGIN+BOTTOMMARGIN)))
-    while (Ypercent<=maxYPercent)
+    float MarginY =(size().height()-(TOPMARGIN+BOTTOMMARGIN))/(maxYPercent/10);// Number of division : 10% to 10%
+    while(MarginY<=(size().height()-(TOPMARGIN+BOTTOMMARGIN)))
     {
-    int n=sprintf(Ychar,"%d",Ypercent);
-    char * Yaffichage =strcat(Ychar,"%");
-    painter.drawText(2,size().height()-BOTTOMMARGIN-Ypercent,Yaffichage);
-        painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
-        j+=10;// FIX IT , it MUST BE COORDINATE , NOT % !!!!
-    painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
-        j+=10;
-
-    Ypercent+=20;
-    strcpy(Ychar,"");
+            int n=sprintf(Ychar,"%d",Ypercent);
+            char * Yaffichage =strcat(Ychar,"%");
+            //error first time FIX ME
+            painter.drawText(2,size().height()-BOTTOMMARGIN+MarginY,Yaffichage);
+            Ypercent+=20;
+            painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
+            MarginY+=MarginY;// FIX IT , it MUST BE COORDINATE , NOT % !!!!
+            painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
+            MarginY+=MarginY;
+            strcpy(Ychar,"");
     }
-
     //X
     painter.drawLine(QLine(LEFTMARGIN,size().height()-BOTTOMMARGIN,size().width()-RIGHTMARGIN,size().height()-BOTTOMMARGIN));
 
-//float MarginX=(size().width()-(RIGHTMARGIN+LEFTMARGIN))/10;
-//float MaxPercent=chartEngine.setMaxXPercent()/10;
-//while(k<=(size().width()-RIGHTMARGIN))/*
-    while (Xpercent<=maxXPercent)
-    {
-    int n=sprintf(Xchar,"%d",Xpercent);
-    char * Xaffichage =strcat(Xchar,"%");
+   float MarginX=(size().width()-(RIGHTMARGIN+LEFTMARGIN))/weeks.size();
+   QVector<QPointF>::iterator it_time = bcwpPoints.begin();
+   while(MarginX<=(size().width()-(RIGHTMARGIN-LEFTMARGIN)))
+   {
+        int n=sprintf(Xchar,"%d",it_time->x());
+        char * Xaffichage =strcat(Xchar,"%");
+        painter.drawText(MarginX+LEFTMARGIN,size().height(),Xaffichage);
 
-    painter.drawText(Xpercent+LEFTMARGIN,size().height(),Xaffichage);
-    Xpercent+=20;
-    
-    painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
-        k+=10;
-    painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
-        k+=10;
-    strcpy(Xchar,"");
-    }
+        painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
+        MarginX+=MarginX;
+        strcpy(Xchar,"");
+   }
 }
 
 void ChartWidget::drawBCWP(){
