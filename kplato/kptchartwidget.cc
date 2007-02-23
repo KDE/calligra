@@ -33,8 +33,8 @@ ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,nam
     kDebug() << "ChartWidget :: Constructor";
     setMaximumSize(600,350);
 
-    is_bcwp_draw=false;
-    is_bcws_draw=false;
+    is_bcwp_draw=true;
+    is_bcws_draw=true;
     is_acwp_draw=false;
 
     /* TEST */
@@ -42,7 +42,7 @@ ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,nam
     bcwpPoints.push_back(QPointF(10,10));
     bcwpPoints.push_back(QPointF(40,20));
     bcwpPoints.push_back(QPointF(70,40));
-    bcwpPoints.push_back(QPointF(100,70));
+    bcwpPoints.push_back(QPointF(100,100));
 
     maxYPercent=chartEngine.setMaxYPercent(bcwpPoints,bcwsPoints,acwpPoints);
     maxXPercent=chartEngine.setMaxYPercent(bcwpPoints,bcwsPoints,acwpPoints);
@@ -60,6 +60,40 @@ ChartWidget::~ChartWidget()
 
 void ChartWidget::paintEvent(QPaintEvent * ev)
 {
+   
+    //this->updateGeometry();
+    QPainter painter(this);
+
+    drawBasicChart(painter);
+
+    if(is_bcwp_draw==true)
+    {
+        painter.setPen(QColor(Qt::red));
+   	chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,BCWP,size().height(),size().width());
+        painter.drawPolyline(QPolygonF(bcwpPoints));
+        is_bcwp_draw=true;
+    }
+
+    if(is_bcws_draw==true){
+        painter.setPen(QColor(Qt::yellow));
+        //painter.drawPolyline(QPolygonF(bcwsPoints));
+        painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,150));
+        is_bcws_draw=true;
+    }
+
+    if(is_acwp_draw==true)
+    {
+        painter.setPen(QColor(Qt::green));
+        //painter.drawPolyline(QPolygonF(acwpPoints));
+        painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,100));
+        is_acwp_draw=true;
+    }
+
+}// end PaintEvent();
+
+
+void ChartWidget::drawBasicChart(QPainter & painter)
+{
     int j=0;
     int k=0;
     int Xpercent=0;
@@ -68,10 +102,8 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     char Xchar[30];
     char Ychar[30];
 
-    //this->updateGeometry();
-    QPainter painter(this);
 
-    /* CHANGE COLORS !! */
+/* CHANGE COLORS !! */
     painter.setPen(QColor(Qt::blue));
     painter.drawText(200,150,"I am a Chart!");
 
@@ -88,7 +120,6 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
 //while(j<=(size().height()-(TOPMARGIN+BOTTOMMARGIN)))
     while (Ypercent<=maxYPercent)
     {
-	
 	int n=sprintf(Ychar,"%d",Ypercent);
 	char * Yaffichage =strcat(Ychar,"%");
 	painter.drawText(2,size().height()-BOTTOMMARGIN-Ypercent,Yaffichage);
@@ -121,32 +152,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
         k+=10;
 	strcpy(Xchar,"");
     }
-
-    if(is_bcwp_draw==true)
-    {
-        painter.setPen(QColor(Qt::red));
-       //	chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,BCWP,size().height(),size().width());
-      //  painter.drawPolyline(QPolygonF(bcwpPoints));
-        is_bcwp_draw=true;
-    }
-
-    if(is_bcws_draw==true){
-        painter.setPen(QColor(Qt::yellow));
-        painter.drawPolyline(QPolygonF(bcwsPoints));
-        painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,150));
-        is_bcws_draw=true;
-    }
-
-    if(is_acwp_draw==true)
-    {
-        painter.setPen(QColor(Qt::green));
-        //painter.drawPolyline(QPolygonF(acwpPoints));
-        painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,100));
-        is_acwp_draw=true;
-    }
-    
-
-}// end PaintEvent();
+}
 
 void ChartWidget::drawBCWP(){
     is_bcwp_draw=true;

@@ -39,9 +39,12 @@ ChartPanel::ChartPanel(QWidget *p) : ChartPanelBase(p)
     connect(curve2,SIGNAL(clicked()),SLOT(slotBCPW()));
     connect(curve1,SIGNAL(clicked()),SLOT(slotBCPS()));
     connect(curve3,SIGNAL(clicked()),SLOT(slotACPW()));
-    is_bcwp_draw=false;
-    is_bcws_draw=false;
+    is_bcwp_draw=true;
+    is_bcws_draw=true;
+    curve1->setChecked(true);
+    curve2->setChecked(true);
     is_acwp_draw=false;
+
 }
    
 ChartPanel::~ChartPanel()
@@ -55,7 +58,6 @@ void ChartPanel::resizeEvent(QResizeEvent* ev)
     chart->setMaximumHeight((ev->size()).height()-100);
     horizontalLayout_2->setGeometry(QRect(10, 10, (ev->size()).width()-6, (ev->size()).height()-100));
     verticalLayout->setGeometry(QRect(10, (ev->size()).height()-86, 600, 80));
-
 }
 
 void ChartPanel::slotBCPW()

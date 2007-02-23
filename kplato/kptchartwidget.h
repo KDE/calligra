@@ -36,7 +36,6 @@ class ChartWidget : public QWidget{
 
 private:
 int curve_draw;
-QPainter painter;
 bool is_bcwp_draw;
 bool is_bcws_draw;
 bool is_acwp_draw;
@@ -61,6 +60,7 @@ static const int ACWP = 3;
 
     ChartWidget(QWidget *parent=0, const char *name=0);
     ~ChartWidget();
+    void drawBasicChart(QPainter & painter);
     void paintEvent(QPaintEvent * ev);
     void drawBCWP();
     void undrawBCWP();

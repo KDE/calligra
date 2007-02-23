@@ -36,13 +36,12 @@ namespace KPlato
               for(int j=0;j<6;j++)
                     sizeSave[i][j]=0;
         }
-	//currentProject = View::getProject();
-    //init totalBudget
+        //init totalBudget
     }
 
     Chart::~Chart()
     {
-	delete[] sizeSave;
+        delete[] sizeSave;
     }
 
     void Chart::api(QVector<QPointF> & BCWP, QVector<QPointF> & BCWS, QVector<QPointF> & ACWP ,const int n_curve, int maximumHeight, int maximumWidth)
@@ -50,17 +49,17 @@ namespace KPlato
         if(n_curve==ChartWidget::BCWP)
         {
             //calculatePlannedCost();
-            costToPercent(BCWP);
+            //costToPercent(BCWP);
             reCalculateY(BCWP,ChartWidget::BCWP,maximumHeight);
-			//timeToPercent(BCWP);
+            //timeToPercent(BCWP);
             reCalculateX(BCWP,ChartWidget::BCWP,maximumWidth);
         }
-	if(n_curve==ChartWidget::BCWS)
+    if(n_curve==ChartWidget::BCWS)
         {
             //calculatePlannedCost();
             costToPercent(BCWS);
             reCalculateY(BCWS,ChartWidget::BCWS,maximumHeight);
-			//timeToPercent(BCWS);
+            //timeToPercent(BCWS);
             reCalculateX(BCWS,ChartWidget::BCWS,maximumWidth);
         }
         if(n_curve==ChartWidget::ACWP)
@@ -68,7 +67,7 @@ namespace KPlato
             //calculatePlannedCost();
             costToPercent(ACWP);
             reCalculateY(ACWP,ChartWidget::ACWP,maximumHeight);
-			//timeToPercent(ACWP);
+            //timeToPercent(ACWP);
             reCalculateX(ACWP,ChartWidget::ACWP,maximumWidth);
         }
     }
@@ -108,7 +107,7 @@ namespace KPlato
                 it->setX(tmp+ChartWidget::LEFTMARGIN);
                 it++;
             }
-        	sizeSave[n_curve][0]=maximumWidth;
+            sizeSave[n_curve][0]=maximumWidth;
         }
     }
 
@@ -121,7 +120,7 @@ namespace KPlato
             {
                 if( (BCWP.last()).y() <=  BCWS.last().y() )
                 {
-		
+        
                     if( !ACWP.isEmpty() )
                     {
                             if(   (BCWS.last()).y() <=  (ACWP.last()).y() )
@@ -194,7 +193,7 @@ namespace KPlato
                 totalYPercent=(BCWS.last()).y();
             }
         }
-	return(totalYPercent);
+    return(totalYPercent);
     }
 
     void Chart::setMaxCost(QVector<QPointF> BCWP)
