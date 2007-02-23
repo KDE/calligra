@@ -41,7 +41,11 @@
 namespace KPlato
 {
 
-Task::Task(Node *parent) : Node(parent), m_resource() {
+Task::Task(Node *parent) 
+    : Node(parent),
+      m_resource(),
+      m_completion( this )
+{
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     Duration d(1, 0, 0);
     m_effort = new Effort(d);
@@ -55,7 +59,9 @@ Task::Task(Node *parent) : Node(parent), m_resource() {
 
 Task::Task(Task &task, Node *parent) 
     : Node(task, parent), 
-      m_resource() {
+      m_resource(),
+      m_completion( this )
+{
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_requests = 0;
     
@@ -1854,10 +1860,38 @@ bool Task::effortMetError( long id ) const {
     return s->plannedEffort() < effort()->effort(static_cast<Effort::Use>(s->type()),  s->usePert());
 }
 
+uint Task::state( long id ) const
+{
+    int st = Node::State_None;
+    if ( m_completion.isFinished() ) {
+        st |= Node::State_Finished;
+        if ( m_completion.finishTime() > endTime( id ) ) {
+            st |= State_FinishedLate;
+        }
+        if ( m_completion.finishTime() < endTime( id ) ) {
+            st |= State_FinishedEarly;
+        }
+    } else if ( m_completion.isStarted() ) {
+        if ( m_completion.percentFinished() == 0 ) {
+            st |= Node::State_Started;
+            if ( m_completion.startTime() > startTime( id ) ) {
+                st |= State_StartedLate;
+            }
+            if ( m_completion.startTime() < startTime( id ) ) {
+                st |= State_StartedEarly;
+            }
+        } else {
+            st |= State_Running;
+        }
+    }
+    return st;
+}
+
 //------------------------------------------
 
-Completion::Completion()
-    : m_started( false ),
+Completion::Completion( Node *node )
+    : m_node( node ),
+      m_started( false ),
       m_finished( false )
 {}
 
@@ -1868,42 +1902,55 @@ Completion::~Completion()
     
 bool Completion::operator==( const Completion &p )
 {
-    return m_started == p.started() && m_finished == p.finished() &&
+    return m_started == p.isStarted() && m_finished == p.isFinished() &&
             m_startTime == p.startTime() && m_finishTime == p.finishTime() &&
             m_entries == p.entries();
 }
 Completion &Completion::operator=( const Completion &p )
 {
-    m_started = p.started(); m_finished = p.finished();
+    m_node = p.node();
+    m_started = p.isStarted(); m_finished = p.isFinished();
     m_startTime = p.startTime(); m_finishTime = p.finishTime();
     m_entries = p.entries();
     return *this;
 }
-    
+
+void Completion::changed()
+{
+    if ( m_node ) {
+        m_node->changed();
+    }
+}
+
 void Completion::setStarted( bool on )
 {
      m_started = on;
+     changed();
 }
 
 void Completion::setFinished( bool on )
 {
      m_finished = on;
+     changed();
 }
 
 void Completion::setStartTime( const DateTime &dt )
 {
      m_startTime = dt;
+     changed();
 }
 
 void Completion::setFinishTime( const DateTime &dt )
 {
      m_finishTime = dt;
+     changed();
 }
     
 void Completion::addEntry( const QDate &date, Entry *entry )
 {
      m_entries.insert( date, entry );
      //kDebug()<<k_funcinfo<<m_entries.count()<<" added: "<<date<<endl;
+     changed();
 }
     
 QDate Completion::entryDate() const
@@ -1926,6 +1973,19 @@ Duration Completion::totalPerformed() const
      return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->totalPerformed;
 }
 
+QString Completion::note() const
+{
+    return m_entries.isEmpty() ? QString() : m_entries.values().last()->note;
+}
+
+void Completion::setNote( const QString &str )
+{
+    if ( ! m_entries.isEmpty() ) {
+        m_entries.values().last()->note = str;
+        changed();
+    }
+}
+
 bool Completion::loadXML( QDomElement &element, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<endl;
@@ -1943,6 +2003,7 @@ bool Completion::loadXML( QDomElement &element, XMLLoaderObject &status )
     if (status.version() < "0.6") {
         if ( m_started ) {
             Entry *entry = new Entry( element.attribute("percent-finished", "0").toInt(), Duration::fromString(element.attribute("remaining-effort")),  Duration::fromString(element.attribute("performed-effort")) );
+            entry->note = element.attribute("note");
             QDate date = m_startTime.date();
             if ( m_finished ) {
                 date = m_finishTime.date();
@@ -1990,6 +2051,7 @@ void Completion::saveXML(QDomElement &element)  const
         elm.setAttribute( "percent-finished", e->percentFinished );
         elm.setAttribute( "remaining-effort", e->remainingEffort.toString() );
         elm.setAttribute( "performed-effort", e->totalPerformed.toString() );
+        elm.setAttribute( "note", e->note );
     }
 }
 

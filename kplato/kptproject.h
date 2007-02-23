@@ -207,6 +207,8 @@ public:
     bool legalToLink( Node *par, Node *child );
 
     virtual const QHash<QString, Node*> &nodeDict() { return nodeIdDict; }
+    /// Return a list of all nodes in the project
+    QList<Node*> allNodes();
 
     /// Find the node with identity id
     virtual Node *findNode( const QString &id ) const

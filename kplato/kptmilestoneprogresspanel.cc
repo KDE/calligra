@@ -41,7 +41,7 @@ MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, cons
 
 {
     kDebug()<<k_funcinfo<<endl;
-    finished->setChecked(m_completion.finished());
+    finished->setChecked(m_completion.isFinished());
     finishTime->setDateTime(m_completion.finishTime().dateTime());
     enableWidgets();
     finished->setFocus();
@@ -56,7 +56,7 @@ KCommand *MilestoneProgressPanel::buildCommand(Part *part) {
     KMacroCommand *cmd = 0;
     QString c = i18n("Modify milestone completion");
     
-    if ( m_completion.finished() != finished->isChecked() ) {
+    if ( m_completion.isFinished() != finished->isChecked() ) {
         if ( cmd == 0 ) cmd = new KMacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_completion, finished->isChecked()) );
     }

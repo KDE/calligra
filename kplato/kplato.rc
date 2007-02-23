@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="8">
+<kpartgui name="KPlato" version="9">
     <MenuBar>
         <Menu name="edit"><text>&amp;Edit</text>
             <Action name="edit_undo"/>
@@ -138,6 +138,9 @@
         <Action name="unindent_task"/>
         <Action name="move_task_up"/>
         <Action name="move_task_down"/>
+    </Menu>
+    <Menu name="taskstatus_popup">
+        <Action name="task_progress"/>
     </Menu>
     <Menu name="resourceview_popup">
         <Action name="edit_resource"/>

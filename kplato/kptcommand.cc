@@ -1946,7 +1946,7 @@ void ModifyResourceGroupTypeCmd::unexecute()
 ModifyCompletionStartedCmd::ModifyCompletionStartedCmd( Part *part, Completion &completion, bool value, const QString& name )
         : NamedCommand( part, name ),
         m_completion( completion ),
-        oldvalue( m_completion.started() ),
+        oldvalue( m_completion.isStarted() ),
         newvalue( value )
 {
 }
@@ -1966,7 +1966,7 @@ void ModifyCompletionStartedCmd::unexecute()
 ModifyCompletionFinishedCmd::ModifyCompletionFinishedCmd( Part *part, Completion &completion, bool value, const QString& name )
         : NamedCommand( part, name ),
         m_completion( completion ),
-        oldvalue( m_completion.finished() ),
+        oldvalue( m_completion.isFinished() ),
         newvalue( value )
 {
 }

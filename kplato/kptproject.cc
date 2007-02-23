@@ -70,6 +70,7 @@ void Project::init()
 
 Project::~Project()
 {
+    disconnect(); // NOTE: my be a problem if sombody uses the destroyd() signal
     delete m_standardWorktime;
     while ( !m_resourceGroups.isEmpty() )
         delete m_resourceGroups.takeFirst();
@@ -988,6 +989,16 @@ bool Project::registerNodeId( Node *node )
     return true;
 }
 
+QList<Node*> Project::allNodes()
+{
+    QList<Node*> lst = nodeIdDict.values();
+    int me = lst.indexOf( this );
+    if ( me != -1 ) {
+        lst.removeAt( me );
+    }
+    return lst;
+}
+    
 bool Project::setResourceGroupId( ResourceGroup *group )
 {
     if ( group == 0 ) {

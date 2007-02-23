@@ -58,10 +58,11 @@ public:
             int percentFinished;
             Duration remainingEffort;
             Duration totalPerformed;
+            QString note;
     };
     typedef QMap<QDate, Entry*> EntryList;
 
-    explicit Completion();
+    explicit Completion( Node *node = 0 );
     ~Completion();
     
     bool operator==(const Completion &p);
@@ -73,9 +74,9 @@ public:
     /// Save to document
     void saveXML(QDomElement &element) const;
     
-    bool started() const { return m_started; }
+    bool isStarted() const { return m_started; }
     void setStarted( bool on );
-    bool finished() const { return m_finished; }
+    bool isFinished() const { return m_finished; }
     void setFinished( bool on );
     DateTime startTime() const { return m_startTime; }
     void setStartTime( const DateTime &dt );
@@ -91,8 +92,14 @@ public:
     int percentFinished() const;
     Duration remainingEffort() const;
     Duration totalPerformed() const;
+    QString note() const;
+    void setNote( const QString &str );
+    
+    void changed();
+    Node *node() const { return m_node; }
     
 private:
+    Node *m_node;
     bool m_started, m_finished;
     DateTime m_startTime, m_finishTime;
     EntryList m_entries;
@@ -247,9 +254,16 @@ public:
     virtual bool effortMetError( long id = -1 ) const;
     
     Completion &completion() { return m_completion; }
+    const Completion &completion() const { return m_completion; }
     
     ResourceRequestCollection *requests() const { return m_requests; }
     
+    /**
+     * Returns the state of the task
+     * @param id The identity of the schedule used when calculating the state
+     */
+    virtual uint state( long id = -1 ) const;
+
 protected:
     /// Check if this node has any dependent child nodes
     virtual bool isEndNode() const;

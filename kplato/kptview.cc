@@ -104,6 +104,7 @@
 #include "kptaccountsdialog.h"
 #include "kptchartdialog.h"
 #include "kptresourceassignmentview.h"
+#include "kpttaskstatusview.h"
 
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
@@ -541,6 +542,11 @@ View::View( Part* part, QWidget* parent )
     m_tab->addWidget( m_accountsview );
     connect( m_accountsview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
+    m_taskstatusview = new TaskStatusView( getPart(), m_tab );
+    m_tab->addWidget( m_taskstatusview );
+    connect( m_taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+
     connect( m_taskeditor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
     connect( m_taskeditor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
     connect( m_taskeditor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
@@ -581,12 +587,13 @@ View::View( Part* part, QWidget* parent )
     m_viewlist->addView( cat, i18n( "Pert" ), m_perteditor, getPart(), "task_editor" );
 
     cat = m_viewlist->addCategory( i18n( "Views" ) );
+    m_viewlist->addView( cat, i18n( "Task Status" ), m_taskstatusview, getPart(), "status_view" );
     m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, getPart(), "gantt_chart" );
     m_viewlist->addView( cat, i18n( "Resources" ), m_resourceview, getPart(), "resources" );
     m_viewlist->addView( cat, i18n( "Accounts" ), m_accountsview, getPart(), "accounts" );
     m_viewlist->addView( cat, i18n( "Pert Result" ), m_pertresult , getPart(), "accounts" );
     m_viewlist->addView( cat, i18n( "Tasks by resources" ), m_resourceAssignmentView , getPart(), "resource_assignment" );
-
+    
     connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
     connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
 
@@ -606,6 +613,8 @@ View::View( Part* part, QWidget* parent )
     connect( m_resourceeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
     connect( m_calendareditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    connect( m_taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
     // The menu items
     // ------ Edit
@@ -990,6 +999,13 @@ void View::slotViewCalendarEditor()
     //kDebug()<<k_funcinfo<<endl;
     m_viewlist->setSelected( m_viewlist->findItem( m_calendareditor ) );
 }
+
+void View::slotViewTaskStatusView()
+{
+    //kDebug()<<k_funcinfo<<endl;
+    m_viewlist->setSelected( m_viewlist->findItem( m_taskstatusview ) );
+}
+
 
 void View::slotProjectEdit()
 {
@@ -2038,6 +2054,8 @@ void View::updateView( QWidget *widget )
         if ( m_updatePertEditor )
             m_perteditor -> draw( getPart()->getProject() );
         m_updatePertEditor = false;
+    } else if ( widget == m_taskstatusview ) {
+        m_taskstatusview -> draw( getPart()->getProject() );
     }
     /*    else if (widget == m_reportview)
         {

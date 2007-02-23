@@ -53,6 +53,9 @@ public slots:
     void slotStartedChanged(bool state);
     void slotFinishedChanged(bool state);
     void slotPercentFinishedChanged(int value);
+    
+protected slots:
+    void slotCalculateEffort();
 };
 
 class TaskProgressPanel : public TaskProgressPanelImpl {

@@ -48,8 +48,8 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
       m_dayLength(24)
 {
     kDebug()<<k_funcinfo<<endl;
-    started->setChecked(m_completion.started());
-    finished->setChecked(m_completion.finished());
+    started->setChecked(m_completion.isStarted());
+    finished->setChecked(m_completion.isFinished());
     startTime->setDateTime(m_completion.startTime().dateTime());
     finishTime->setDateTime(m_completion.finishTime().dateTime());
     
@@ -65,7 +65,8 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
         m_dayLength = workTime->durationDay().hours();
         setEstimateScales(m_dayLength);
     }
-    remainingEffort->setValue(m_completion.remainingEffort());
+    m_remainingEffort = m_completion.remainingEffort();
+    remainingEffort->setValue(m_remainingEffort);
     remainingEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     remainingEffort->setFieldUnit(0, i18nc("day", "d"));
     remainingEffort->setFieldUnit(1, i18nc("hour", "h"));
@@ -80,7 +81,8 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
     
     scheduledStart->setDateTime(task.startTime().dateTime());
     scheduledFinish->setDateTime(task.endTime().dateTime());
-    scheduledEffort->setValue(task.effort()->expected());
+    m_scheduledEffort = task.effort()->expected();
+    scheduledEffort->setValue(m_scheduledEffort);
     scheduledEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     scheduledEffort->setFieldUnit(0, i18nc("day", "d"));
     scheduledEffort->setFieldUnit(1, i18nc("hour", "h"));
@@ -100,11 +102,11 @@ KCommand *TaskProgressPanel::buildCommand(Part *part) {
     KMacroCommand *cmd = 0;
     QString c = i18n("Modify task completion");
     
-    if ( m_completion.started() != started->isChecked() ) {
+    if ( m_completion.isStarted() != started->isChecked() ) {
         if ( cmd == 0 ) cmd = new KMacroCommand( c );
         cmd->addCommand( new ModifyCompletionStartedCmd(part, m_completion, started->isChecked() ) );
     }
-    if ( m_completion.finished() != finished->isChecked() ) {
+    if ( m_completion.isFinished() != finished->isChecked() ) {
         if ( cmd == 0 ) cmd = new KMacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_completion, finished->isChecked() ) );
     }
@@ -186,6 +188,7 @@ void TaskProgressPanelImpl::slotStartedChanged(bool state) {
     if (state) {
         startTime->setDateTime(QDateTime::currentDateTime());
         percentFinished->setValue(0);
+        slotCalculateEffort();
     }
     enableWidgets();
 }
@@ -197,6 +200,7 @@ void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
         if (!finishTime->dateTime().isValid()) {
             finishTime->setDateTime(QDateTime::currentDateTime());
         }
+        slotCalculateEffort();
     }   
     enableWidgets();
 }
@@ -216,9 +220,13 @@ void TaskProgressPanelImpl::enableWidgets() {
 
 
 void TaskProgressPanelImpl::slotPercentFinishedChanged( int value ) {
-    if (value == 100) {
-        //remainingEffort->setValue(Duration::zeroDuration); //FIXME
-    }
+    slotCalculateEffort();
+}
+
+void TaskProgressPanelImpl::slotCalculateEffort()
+{
+    remainingEffort->setValue(scheduledEffort->value() * ( 100.0 - (double)percentFinished->value() ) / 100.0 );
+    actualEffort->setValue( scheduledEffort->value() - remainingEffort->value() );
 }
 
 

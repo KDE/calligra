@@ -57,6 +57,19 @@ class Node : public QObject
 public:
     enum ConstraintType { ASAP, ALAP, MustStartOn, MustFinishOn, StartNotEarlier, FinishNotLater, FixedInterval };
 
+    enum State { 
+        State_None = 0,
+        State_Started = 1,
+        State_StartedLate = 2,
+        State_StartedEarly = 4,
+        State_Finished = 8,
+        State_FinishedLate = 16,
+        State_FinishedEarly = 32,
+        State_Running = 64,
+        State_RunningLate = 128,
+        State_RuningEarly = 256
+    };
+
     Node(Node *parent = 0);
     Node(Node &node, Node *parent = 0);
 
@@ -399,6 +412,8 @@ public:
     virtual void setParentSchedule(Schedule *sch);
     
     virtual ResourceRequestCollection *requests() const { return 0; }
+    
+    virtual uint state( long ) const { return State_None; }
     
 public:
     // These shouldn't be available to other than those who inherits

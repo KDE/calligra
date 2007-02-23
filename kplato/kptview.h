@@ -65,6 +65,7 @@ class ScheduleEditor;
 class ScheduleManager;
 
 class ResourceAssignmentView;
+class TaskStatusView;
 //class ReportView;
 class Calendar;
 class Part;
@@ -202,8 +203,6 @@ public slots:
     
     void slotChartDisplay();
 
-
-
     void slotViewCalendarEditor();
     
     void slotViewTaskEditor();
@@ -214,6 +213,7 @@ public slots:
     void slotDefineWBS();
     void slotGenerateWBS();
     
+    void slotViewTaskStatusView();
     void slotCreateKofficeDocument( KoDocumentEntry& );
     
     void slotConfigure();
@@ -313,6 +313,7 @@ private:
     ResourceAssignmentView *m_resourceAssignmentView;
     PertEditor *m_perteditor;
     PertResult *m_pertresult;
+    TaskStatusView *m_taskstatusview;
     //    ReportView *m_reportview;
     //    Q3PtrList<QString> m_reportTemplateFiles;
 
