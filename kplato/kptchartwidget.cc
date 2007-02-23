@@ -77,21 +77,21 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
 
    /* attributes :  chartEngine1er : par rapport au coté, 2eme : par rapport au haut !  */
     painter.drawText(2, 10,"Budget");
-    //painter.drawText(maximumWidth()-15, maximumHeight()-20,"Time");
-    painter.drawText(maximumWidth()-70,maximumHeight() ,"Time");
+    //painter.drawText(size().width()-15, size().height()-20,"Time");
+    painter.drawText(size().width()-70,size().height() ,"Time");
 
     //Y
-    painter.drawLine(QLine(LEFTMARGIN,TOPMARGIN,LEFTMARGIN,maximumHeight()-BOTTOMMARGIN));
+    painter.drawLine(QLine(LEFTMARGIN,TOPMARGIN,LEFTMARGIN,size().height()-BOTTOMMARGIN));
     
-//float MarginY =(maximumHeight()-30)/10; // 10 : Number of division
+//float MarginY =(size().height()-30)/10; // 10 : Number of division
 //float MaxCost=chartEngine.setMaxYPercent()/10;
-//while(j<=(maximumHeight()-(TOPMARGIN+BOTTOMMARGIN)))
+//while(j<=(size().height()-(TOPMARGIN+BOTTOMMARGIN)))
     while (Ypercent<=maxYPercent)
     {
 	
 	int n=sprintf(Ychar,"%d",Ypercent);
 	char * Yaffichage =strcat(Ychar,"%");
-	painter.drawText(2,maximumHeight()-BOTTOMMARGIN-Ypercent,Yaffichage);
+	painter.drawText(2,size().height()-BOTTOMMARGIN-Ypercent,Yaffichage);
         painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
         j+=10;// FIX IT , it MUST BE COORDINATE , NOT % !!!!
 	painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
@@ -102,22 +102,22 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     }
 
     //X
-    painter.drawLine(QLine(LEFTMARGIN,maximumHeight()-BOTTOMMARGIN,maximumWidth()-RIGHTMARGIN,maximumHeight()-BOTTOMMARGIN));
+    painter.drawLine(QLine(LEFTMARGIN,size().height()-BOTTOMMARGIN,size().width()-RIGHTMARGIN,size().height()-BOTTOMMARGIN));
 
-//float MarginX=(maximumWidth()-(RIGHTMARGIN+LEFTMARGIN))/10;
+//float MarginX=(size().width()-(RIGHTMARGIN+LEFTMARGIN))/10;
 //float MaxPercent=chartEngine.setMaxXPercent()/10;
-//while(k<=(maximumWidth()-RIGHTMARGIN))/*
+//while(k<=(size().width()-RIGHTMARGIN))/*
     while (Xpercent<=maxXPercent)
     {
 	int n=sprintf(Xchar,"%d",Xpercent);
 	char * Xaffichage =strcat(Xchar,"%");
 
-	painter.drawText(Xpercent+LEFTMARGIN,maximumHeight(),Xaffichage);
+	painter.drawText(Xpercent+LEFTMARGIN,size().height(),Xaffichage);
 	Xpercent+=20;
 	
-	painter.drawLine(QLine(k+LEFTMARGIN,maximumHeight()-TOPMARGIN,k+LEFTMARGIN,maximumHeight()-13));
+	painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
         k+=10;
-	painter.drawLine(QLine(k+LEFTMARGIN,maximumHeight()-TOPMARGIN,k+LEFTMARGIN,maximumHeight()-13));
+	painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
         k+=10;
 	strcpy(Xchar,"");
     }
@@ -125,7 +125,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     if(is_bcwp_draw==true)
     {
         painter.setPen(QColor(Qt::red));
-       //	chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,BCWP,maximumHeight(),maximumWidth());
+       //	chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,BCWP,size().height(),size().width());
       //  painter.drawPolyline(QPolygonF(bcwpPoints));
         is_bcwp_draw=true;
     }
@@ -133,7 +133,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     if(is_bcws_draw==true){
         painter.setPen(QColor(Qt::yellow));
         painter.drawPolyline(QPolygonF(bcwsPoints));
-        painter.drawLine(QLine(LEFTMARGIN,maximumHeight()-TOPMARGIN,maximumWidth()-10,150));
+        painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,150));
         is_bcws_draw=true;
     }
 
@@ -141,7 +141,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     {
         painter.setPen(QColor(Qt::green));
         //painter.drawPolyline(QPolygonF(acwpPoints));
-        painter.drawLine(QLine(LEFTMARGIN,maximumHeight()-TOPMARGIN,maximumWidth()-10,100));
+        painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,100));
         is_acwp_draw=true;
     }
     

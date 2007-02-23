@@ -44,7 +44,6 @@ ChartDialog::~ChartDialog()
 
 void ChartDialog::resizeEvent(QResizeEvent* ev)
 {
-	kDebug()<<"RESIZAGEE"<<(ev->size()).width()<<"         "<<(ev->size()).height()<<" <<== DIALOG";
 	m_panel->setMaximumWidth((ev->size()).width()-10);
 	m_panel->setMaximumHeight((ev->size()).height()-100);
 }

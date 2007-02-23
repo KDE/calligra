@@ -56,10 +56,6 @@ void ChartPanel::resizeEvent(QResizeEvent* ev)
     horizontalLayout_2->setGeometry(QRect(10, 10, (ev->size()).width()-6, (ev->size()).height()-100));
     verticalLayout->setGeometry(QRect(10, (ev->size()).height()-86, 600, 80));
 
-    horizontalLayout_2->setMaximumWidth((ev->size()).width()-6);
-    horizontalLayout_2->setMaximumHeight((ev->size()).height()-92);
-
-    verticalLayout->setMaximumWidth((ev->size()).width()-6);    
 }
 
 void ChartPanel::slotBCPW()
