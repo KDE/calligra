@@ -65,14 +65,12 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
         m_dayLength = workTime->durationDay().hours();
         setEstimateScales(m_dayLength);
     }
-    m_remainingEffort = m_completion.remainingEffort();
-    remainingEffort->setValue(m_remainingEffort);
+    remainingEffort->setValue(m_completion.remainingEffort());
     remainingEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     remainingEffort->setFieldUnit(0, i18nc("day", "d"));
     remainingEffort->setFieldUnit(1, i18nc("hour", "h"));
     remainingEffort->setFieldUnit(2, i18nc("minute", "m"));
 
-    m_completion.totalPerformed() = task.actualEffort(); //FIXME
     actualEffort->setValue(m_completion.totalPerformed());
     actualEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     actualEffort->setFieldUnit(0, i18nc("day", "d"));
@@ -81,8 +79,7 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
     
     scheduledStart->setDateTime(task.startTime().dateTime());
     scheduledFinish->setDateTime(task.endTime().dateTime());
-    m_scheduledEffort = task.effort()->expected();
-    scheduledEffort->setValue(m_scheduledEffort);
+    scheduledEffort->setValue(task.effort()->expected());
     scheduledEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     scheduledEffort->setFieldUnit(0, i18nc("day", "d"));
     scheduledEffort->setFieldUnit(1, i18nc("hour", "h"));
