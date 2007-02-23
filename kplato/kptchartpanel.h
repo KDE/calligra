@@ -57,7 +57,7 @@ private:
     bool is_acwp_draw;
 
 public:
-    ChartPanel(QWidget *parent=0);
+    ChartPanel(Project &, QWidget *parent=0);
     ~ChartPanel();
     void resizeEvent(QResizeEvent* ev);
 public slots:

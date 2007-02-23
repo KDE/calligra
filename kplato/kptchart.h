@@ -26,9 +26,9 @@
 #include <kdebug.h>
 #include <QDateTime>
 #include <QVector>
+#include <QDate>
 #include "kptproject.h"
 #include "kptview.h"
-
 
 namespace KPlato
 {
@@ -42,7 +42,6 @@ namespace KPlato
             float totalCostPlanned;
             float totalTimePlanned;
             int totalWeek;
-	    Project currentProject;
         public:
 
             Chart();
@@ -53,16 +52,16 @@ namespace KPlato
             void setMaxCost(QVector<QPointF>);
            // void setMaxTime(QVector<QPointF> BCWP);
             float setMaxYPercent(QVector<QPointF>, QVector<QPointF>, QVector<QPointF>);
+
             void costToPercent(QVector<QPointF>&);
             void timeToPercent(QVector<QPointF>&);
-            //think to add a parameter to the function (date)
-            //float calculateActualCost(Project &, QDate);
-            //think to add a parameter to the function (date)
-            //float calculatePlannedCost(Project &, QDate);
-            //For latter but not to forget to do it :D
-            void calculateValueOfBCWS(Project &, QVector<QPoint>*);
-            /*void calculateValueOfBCWP(Project &, QVector<QPoint>*);
-            void calculateValueOfACWP(Project &, QVector<QPoint>*);*/    
+
+            void calculatePlannedCost(QVector<QPointF> &,QVector<QDate> ,Project &);
+            void calculateActualCost(QVector<QPointF> &,QVector<QDate> ,Project &);
+
+            void initXCurvesVectors(QVector<QDate> ,QVector<QPointF> & , QVector<QPointF> & , QVector<QPointF> & );
+            void calculateWeeks(QVector<QDate> & ,Project & );
+
     };
 
 } //namespace KPlato

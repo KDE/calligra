@@ -23,8 +23,6 @@
 #include <cmath>
 #include <kdebug.h>
 
-
-
 namespace KPlato
 {
 
@@ -46,20 +44,22 @@ namespace KPlato
 
     void Chart::api(QVector<QPointF> & BCWP, QVector<QPointF> & BCWS, QVector<QPointF> & ACWP ,const int n_curve, int maximumHeight, int maximumWidth)
     {
+    
         if(n_curve==ChartWidget::BCWP)
         {
-            //calculatePlannedCost();
-            //costToPercent(BCWP);
+
+            costToPercent(BCWP);
+            timeToPercent(BCWP);
+
             reCalculateY(BCWP,ChartWidget::BCWP,maximumHeight);
-            //timeToPercent(BCWP);
             reCalculateX(BCWP,ChartWidget::BCWP,maximumWidth);
         }
-    if(n_curve==ChartWidget::BCWS)
+        if(n_curve==ChartWidget::BCWS)
         {
-            //calculatePlannedCost();
             costToPercent(BCWS);
+            timeToPercent(BCWS);
+
             reCalculateY(BCWS,ChartWidget::BCWS,maximumHeight);
-            //timeToPercent(BCWS);
             reCalculateX(BCWS,ChartWidget::BCWS,maximumWidth);
         }
         if(n_curve==ChartWidget::ACWP)
@@ -78,13 +78,14 @@ namespace KPlato
     {    
         float inverse;
         float tmp;
-   
+        
         if(maximumHeight != sizeSave[n_curve][1])
         {
+    
             QVector<QPointF>::iterator it= vect.begin();
             while (it != vect.end())
             {
-                inverse = totalYPercent - it->y(); 
+                inverse = totalYPercent - it->y();
                 tmp=(maximumHeight - ChartWidget::BOTTOMMARGIN - ChartWidget::TOPMARGIN)*inverse/100;
                 it->setY(tmp+ChartWidget::TOPMARGIN);
                 it++;
@@ -97,7 +98,7 @@ namespace KPlato
     /* Calculate the new value of X-axis when the window had been re-sized */
     void Chart::reCalculateX(QVector<QPointF> & vect,const int n_curve, int maximumWidth)// WORKS, TESTED
     {
-        float tmp; /* temporary result */
+        float tmp; 
         if(maximumWidth != sizeSave[n_curve][0])
         {
             QVector<QPointF>::iterator it= vect.begin();
@@ -108,6 +109,7 @@ namespace KPlato
                 it++;
             }
             sizeSave[n_curve][0]=maximumWidth;
+
         }
     }
 
@@ -223,10 +225,62 @@ namespace KPlato
         QVector<QPointF>::iterator it= vect.begin();
         while(it != vect.end())
         {
-            it->setX(it->x()*100/totalWeek);
+            it->setX(it->x()*100/vect.size());
             it++;
         }
     }
+
+    void Chart::calculatePlannedCost(QVector<QPointF> & vect,QVector<QDate> weeks,Project & p)
+    {
+        QVector<QPointF>::iterator it= vect.begin();
+        QVector<QDate>::iterator it_weeks = weeks.begin();
+            while(it != vect.end())
+            {
+                it->setX((float)p.plannedCostTo(*it_weeks));
+                it++;
+                it_weeks++;
+                kDebug()<<"Planned cost"<<endl;
+            }
+    }
+
+    void Chart::calculateActualCost(QVector<QPointF> & vect,QVector<QDate> weeks,Project & p)
+    {
+        QVector<QPointF>::iterator it= vect.begin();
+        QVector<QDate>::iterator it_weeks = weeks.begin();
+            while(it != vect.end())
+            {
+                it->setX((float)p.actualCostTo(*it_weeks));
+                it++;
+                it_weeks++;
+                kDebug()<<"Acutal cost"<<endl;
+            }
+    }
+
+    void Chart::initXCurvesVectors(QVector<QDate> weeks,QVector<QPointF> & BCWP, QVector<QPointF> & BCWS, QVector<QPointF> & ACWP )
+    {
+            for(int i=0;i<weeks.size();i++)
+            {
+                BCWP.push_back(QPointF(i,0));
+                BCWS.push_back(QPointF(i,0));
+                ACWP.push_back(QPointF(i,0));
+                kDebug()<<"Init"<<endl;
+            }
+    }
+
+    void Chart::calculateWeeks(QVector<QDate> & weeks,Project & p)
+    {
+            QDate myDate = p.startTime().date();
+            while(myDate < p.endTime().date())
+            {
+                weeks.push_back(myDate);
+                myDate=myDate.addDays(7);
+                kDebug()<<"Calcul weeks"<<endl;
+            }
+            weeks.push_back(p.endTime().date());
+    }
+
+// function : Time : vect.pushback();
+
 
     /*Caculate the actual cost of the project at the d day passed in parameter*/
     /*float Chart::calculateActualCost(Project &p, QDate day)
@@ -259,9 +313,4 @@ namespace KPlato
             }
         return (cost);
     }*/
-
-    void calculateValueOfBCWS(Project &, QVector<QPoint>*)
-    {
-
-    }
 }

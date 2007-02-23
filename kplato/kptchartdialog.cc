@@ -30,7 +30,7 @@ ChartDialog::ChartDialog(Project &p, QWidget *parent, const char *n) : KDialog(p
     setButtons( KDialog::Ok );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    m_panel = new ChartPanel(this);
+    m_panel = new ChartPanel(p,this);
     setMainWidget(m_panel);
     m_panel->show();
     resize(610,550);

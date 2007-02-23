@@ -39,7 +39,6 @@ public:
    ~ChartDialog();
     void resizeEvent(QResizeEvent* ev);
     ChartPanel * m_panel;
-
     
 };
 

@@ -28,7 +28,7 @@ namespace KPlato
 {
 
 
-ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,name)
+ChartWidget::ChartWidget(Project &p, QWidget *parent, const char *name) : QWidget(parent,name)
 {
     kDebug() << "ChartWidget :: Constructor";
     setMaximumSize(600,350);
@@ -49,6 +49,14 @@ ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,nam
     //chartEngine.setMaxPercent(bcwpPoints,bcwsPoints,acwpPoints);
     //chartEngine.setMaxCost(bcwpPoints);
     kDebug() << "ChartWidget :: Constructor Ended"<<endl;
+
+    //Calculer ici les indicateurs relatifs au projet!!!
+    kDebug() << "ChartWidget :: Endtime : "<<p.startTime().date()<<endl;
+
+    chartEngine.calculateWeeks(weeks,p);
+    chartEngine.initXCurvesVectors(weeks,bcwpPoints,bcwsPoints,acwpPoints);
+    chartEngine.calculateActualCost(bcwpPoints, weeks,p);
+    chartEngine.calculatePlannedCost(bcwpPoints, weeks,p);
 }
 
 
@@ -69,7 +77,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     if(is_bcwp_draw==true)
     {
         painter.setPen(QColor(Qt::red));
-   	chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,BCWP,size().height(),size().width());
+        chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,BCWP,size().height(),size().width());
         painter.drawPolyline(QPolygonF(bcwpPoints));
         is_bcwp_draw=true;
     }
@@ -120,16 +128,16 @@ void ChartWidget::drawBasicChart(QPainter & painter)
 //while(j<=(size().height()-(TOPMARGIN+BOTTOMMARGIN)))
     while (Ypercent<=maxYPercent)
     {
-	int n=sprintf(Ychar,"%d",Ypercent);
-	char * Yaffichage =strcat(Ychar,"%");
-	painter.drawText(2,size().height()-BOTTOMMARGIN-Ypercent,Yaffichage);
+    int n=sprintf(Ychar,"%d",Ypercent);
+    char * Yaffichage =strcat(Ychar,"%");
+    painter.drawText(2,size().height()-BOTTOMMARGIN-Ypercent,Yaffichage);
         painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
         j+=10;// FIX IT , it MUST BE COORDINATE , NOT % !!!!
-	painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
+    painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
         j+=10;
 
-	Ypercent+=20;
-	strcpy(Ychar,"");
+    Ypercent+=20;
+    strcpy(Ychar,"");
     }
 
     //X
@@ -140,17 +148,17 @@ void ChartWidget::drawBasicChart(QPainter & painter)
 //while(k<=(size().width()-RIGHTMARGIN))/*
     while (Xpercent<=maxXPercent)
     {
-	int n=sprintf(Xchar,"%d",Xpercent);
-	char * Xaffichage =strcat(Xchar,"%");
+    int n=sprintf(Xchar,"%d",Xpercent);
+    char * Xaffichage =strcat(Xchar,"%");
 
-	painter.drawText(Xpercent+LEFTMARGIN,size().height(),Xaffichage);
-	Xpercent+=20;
-	
-	painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
+    painter.drawText(Xpercent+LEFTMARGIN,size().height(),Xaffichage);
+    Xpercent+=20;
+    
+    painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
         k+=10;
-	painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
+    painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
         k+=10;
-	strcpy(Xchar,"");
+    strcpy(Xchar,"");
     }
 }
 

@@ -45,7 +45,8 @@ float maxXPercent;
 QVector<QPointF> bcwpPoints;
 QVector<QPointF> bcwsPoints;
 QVector<QPointF> acwpPoints;
-
+QVector<QDate> weeks;
+QVector<int> nbWeeks;
 Chart chartEngine;
 
 public:
@@ -58,7 +59,7 @@ static const int BCWP = 1;
 static const int BCWS = 2;
 static const int ACWP = 3;
 
-    ChartWidget(QWidget *parent=0, const char *name=0);
+    ChartWidget(Project &, QWidget *parent=0, const char *name=0);
     ~ChartWidget();
     void drawBasicChart(QPainter & painter);
     void paintEvent(QPaintEvent * ev);

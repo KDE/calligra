@@ -25,9 +25,9 @@
 namespace KPlato
 {
 
-ChartPanel::ChartPanel(QWidget *p) : ChartPanelBase(p)
+ChartPanel::ChartPanel(Project &p, QWidget *parent) : ChartPanelBase(parent)
 {
-    chart = new ChartWidget(horizontalLayout_2,"MyChartWidget");
+    chart = new ChartWidget(p,horizontalLayout_2,"MyChartWidget");
     hboxLayout->addWidget(chart,1,0);
 
     horizontalLayout_2->setMinimumSize(610, 350);
