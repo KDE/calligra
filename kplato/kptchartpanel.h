@@ -58,7 +58,7 @@ private:
 
 public:
     ChartPanel(Project &, QWidget *parent=0);
-    ~ChartPanel();
+
     void resizeEvent(QResizeEvent* ev);
 public slots:
     void slotBCPW();

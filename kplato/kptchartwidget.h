@@ -35,32 +35,31 @@ namespace KPlato
 class ChartWidget : public QWidget{
 
 private:
-int curve_draw;
-bool is_bcwp_draw;
-bool is_bcws_draw;
-bool is_acwp_draw;
-float maxYPercent;
-float maxXPercent;
-
-QVector<QPointF> bcwpPoints;
-QVector<QPointF> bcwsPoints;
-QVector<QPointF> acwpPoints;
-QVector<QDate> weeks;
-QVector<int> nbWeeks;
-Chart chartEngine;
+    int curve_draw;
+    bool is_bcwp_draw;
+    bool is_bcws_draw;
+    bool is_acwp_draw;
+    float maxYPercent;
+    float maxXPercent;
+    
+    QVector<QPointF> bcwpPoints;
+    QVector<QPointF> bcwsPoints;
+    QVector<QPointF> acwpPoints;
+    QVector<QDate> weeks;
+    Chart chartEngine;
 
 public:
-static const int TOPMARGIN = 15;
-static const int LEFTMARGIN = 10;
-static const int BOTTOMMARGIN = 15;
-static const int RIGHTMARGIN = 10;
+    static const int TOPMARGIN = 15;
+    static const int LEFTMARGIN = 10;
+    static const int BOTTOMMARGIN = 15;
+    static const int RIGHTMARGIN = 10;
 
-static const int BCWP = 1;
-static const int BCWS = 2;
-static const int ACWP = 3;
+    static const int BCWP = 1;
+    static const int BCWS = 2;
+    static const int ACWP = 3;
 
     ChartWidget(Project &, QWidget *parent=0, const char *name=0);
-    ~ChartWidget();
+  
     void drawBasicChart(QPainter & painter);
     void paintEvent(QPaintEvent * ev);
     void drawBCWP();

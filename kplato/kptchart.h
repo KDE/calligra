@@ -45,7 +45,7 @@ namespace KPlato
         public:
 
             Chart();
-            ~Chart();
+          
             void api(QVector<QPointF>& , QVector<QPointF>& , QVector<QPointF>& ,const int , int , int );
             void reCalculateY(QVector<QPointF> &,const int,int);
             void reCalculateX(QVector<QPointF> &,const int,int);

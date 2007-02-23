@@ -29,17 +29,12 @@ namespace KPlato
 
     Chart::Chart()
     {
-        for(int i=0;i<6;i++)
+        for(int i=0;i<3;i++)
         {
-              for(int j=0;j<6;j++)
-                    sizeSave[i][j]=0;
+              for(int j=0;j<2;j++)
+                    sizeSave[i][j]=0; // CRASH KPLATO
         }
         //init totalBudget
-    }
-
-    Chart::~Chart()
-    {
-        delete[] sizeSave;
     }
 
     void Chart::api(QVector<QPointF> & BCWP, QVector<QPointF> & BCWS, QVector<QPointF> & ACWP ,const int n_curve, int maximumHeight, int maximumWidth)

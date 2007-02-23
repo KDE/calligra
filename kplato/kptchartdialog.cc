@@ -39,7 +39,7 @@ ChartDialog::ChartDialog(Project &p, QWidget *parent, const char *n) : KDialog(p
 
 ChartDialog::~ChartDialog()
 {
-	//delete m_panel;
+	delete m_panel;
 }
 
 void ChartDialog::resizeEvent(QResizeEvent* ev)

@@ -35,7 +35,7 @@ ChartPanel::ChartPanel(Project &p, QWidget *parent) : ChartPanelBase(parent)
 
     verticalLayout->setGeometry(QRect(10, 365, 600, 80));
     verticalLayout->setMinimumSize(610,80);
-    chart->update();
+    //chart->update();
     connect(curve2,SIGNAL(clicked()),SLOT(slotBCPW()));
     connect(curve1,SIGNAL(clicked()),SLOT(slotBCPS()));
     connect(curve3,SIGNAL(clicked()),SLOT(slotACPW()));
@@ -45,11 +45,6 @@ ChartPanel::ChartPanel(Project &p, QWidget *parent) : ChartPanelBase(parent)
     curve2->setChecked(true);
     is_acwp_draw=false;
 
-}
-   
-ChartPanel::~ChartPanel()
-{
-    
 }
 
 void ChartPanel::resizeEvent(QResizeEvent* ev)
