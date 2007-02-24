@@ -598,7 +598,7 @@ QuerySchema::QuerySchema(const QuerySchema& querySchema)
 		Field *f;
 		if (dynamic_cast<QueryAsterisk*>( f_it.current() )) {
 			f = f_it.current()->copy();
-			if (f_it.current()->m_parent == &querySchema)
+			if (static_cast<const KexiDB::FieldList *>(f_it.current()->m_parent) == &querySchema)
 				f->m_parent = this;
 		}
 		else

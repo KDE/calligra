@@ -1250,7 +1250,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 				else {
 					KexiDBWarn << "Connection::selectStatement(): unsupported row source type " 
 						<< rowSource.typeName() << endl;
-					return false;
+					return QString();
 				}
 			}
 		}
