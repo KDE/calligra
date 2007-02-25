@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C)  2006 Peter Simonsson <peter.simonsson@gmail.com>
-   Copyright (C)  2007 Thorsten Zachmann <zachmann@kde.okde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,37 +14,20 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+ * Boston, MA 02110-1301, USA.
 */
 
-#include "KivioDocument.h"
+#ifndef KOPASTYLES_H
+#define KOPASTYLES_H
 
-#include <kdebug.h>
-#include <klocale.h>
-
-#include "KivioView.h"
-#include "KivioFactory.h"
-
-KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
-  : KoPADocument(parentWidget, parent, singleViewMode)
+/**
+ * This namespace contains style types needed for kopageapp
+ */
+namespace KoPAStyles
 {
-    setComponentData(KivioFactory::componentData(), false);
-    setTemplateType("kivio_template");
+    enum { 
+        STYLE_PAGE = 20 /// style for drawing-page see ODF 14.13.2 Drawing Page Style
+    };
 }
 
-KivioDocument::~KivioDocument()
-{
-}
-
-KoView* KivioDocument::createViewInstance(QWidget* parent)
-{
-    return new KivioView(this, parent);
-}
-
-const char * KivioDocument::odfTagName()
-{
-    return "office:drawing";
-}
-
-
-#include "KivioDocument.moc"
+#endif // KOPASTYLES_H

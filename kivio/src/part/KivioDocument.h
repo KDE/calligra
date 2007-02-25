@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2006 Peter Simonsson <peter.simonsson@gmail.com>
+   Copyright (C)  2007 Thorsten Zachmann <zachmann@kde.okde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,6 +38,7 @@ class KivioDocument : public KoPADocument
     protected:
         /// Creates a KivioView instance and returns it
         virtual KoView* createViewInstance(QWidget* parent);
+        const char *odfTagName();
 };
 
 #endif

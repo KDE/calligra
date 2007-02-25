@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,10 +19,16 @@
 
 #include "KoPAPage.h"
 
+#include <KoShapeSavingContext.h>
+#include <KoShapeLayer.h>
+#include <KoXmlWriter.h>
+
 #include "KoPAMasterPage.h"
+#include "KoPASavingContext.h"
 
 KoPAPage::KoPAPage( KoPAMasterPage * masterPage )
-: KoPAPageBase(), m_masterPage( masterPage )
+: KoPAPageBase()
+, m_masterPage( masterPage )
 {
 }
 
@@ -33,4 +39,10 @@ KoPAPage::~KoPAPage()
 KoPageLayout & KoPAPage::pageLayout()
 {
     return m_masterPage->pageLayout();
+}
+
+void KoPAPage::createOdfPageTag( KoPASavingContext &paContext ) const
+{
+    paContext.xmlWriter().startElement( "draw:page" );
+    paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
 }

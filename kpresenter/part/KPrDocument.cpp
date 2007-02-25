@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,14 +50,14 @@ bool KPrDocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyl
     return true;
 }
 
-bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
-{
-    return true;
-}
-
 KoView * KPrDocument::createViewInstance( QWidget *parent )
 {
     return new KPrView( this, parent );
+}
+
+const char * KPrDocument::odfTagName()
+{
+    return "office:presentation";
 }
 
 #include "KPrDocument.moc"
