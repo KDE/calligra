@@ -27,6 +27,7 @@
 #include <KoOasisStyles.h>
 #include <KoXmlNS.h>
 
+#include "Condition.h"
 #include "Doc.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -70,7 +71,8 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
     if ( defStyle )
     {
       kDebug(36003) << "StyleManager: Loading default cell style" << endl;
-      defaultStyle()->loadOasis( oasisStyles, *defStyle, "Default" );
+      Conditions conditions;
+      defaultStyle()->loadOasis( oasisStyles, *defStyle, "Default", conditions, this );
       defaultStyle()->setType( Style::BUILTIN );
         if ( doc )
         {
@@ -121,8 +123,9 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
             // After all styles are loaded the pointer to the parent is set.
             CustomStyle * style = new CustomStyle( name );
 
-            //fixme test return;
-            style->loadOasis( oasisStyles, *styleElem, name );
+            Conditions conditions;
+            style->loadOasis( oasisStyles, *styleElem, name, conditions, this );
+            // TODO Stefan: conditions
             insertStyle (style);
             // insert it into the the map sorted the OpenDocument name
             m_oasisStyles[oasisName] = style;
@@ -385,7 +388,7 @@ QStringList StyleManager::styleNames() const
   return list;
 }
 
-Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
+Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles, QHash<QString, Conditions>& conditionalStyles )
 {
     Styles autoStyles;
     foreach ( KoXmlElement* element, oasisStyles.autoStyles("table-cell") )
@@ -395,7 +398,13 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
             QString name = element->attributeNS( KoXmlNS::style , "name" , QString() );
             kDebug(36003) << "StyleManager: Preloading automatic cell style: " << name << endl;
             autoStyles.remove( name );
-            autoStyles[name].loadOasisStyle( oasisStyles, *(element) );
+            Conditions conditions;
+            autoStyles[name].loadOasisStyle( oasisStyles, *(element), conditions, this );
+            if ( !conditions.isEmpty() )
+            {
+                kDebug() << "\t\tCONDITIONS" << endl;
+                conditionalStyles[name] = conditions;
+            }
 
             if ( element->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
             {

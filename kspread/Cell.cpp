@@ -1529,43 +1529,9 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
   };
 }
 
-void Cell::loadOasisConditional( const KoXmlElement* style )
-{
-    if ( style )//safe
-    {
-        // search for at least one condition
-        KoXmlElement e;
-        forEachElement( e, style->toElement() )
-        {
-            if ( e.localName() == "map" && e.namespaceURI() == KoXmlNS::style )
-            {
-                Conditions conditions;
-                conditions.loadOasisConditions( doc()->styleManager(), e );
-                if ( !conditions.isEmpty() )
-                    setConditions( conditions );
-                // break here
-                // Conditions::loadOasisConditions finishes the iteration
-                break;
-            }
-        }
-    }
-}
-
 bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext )
 {
     kDebug(36003) << "*** Loading cell properties ***** at " << column() << ", " << row () << endl;
-
-    if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
-    {
-        kDebug(36003)<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString() )<<endl;
-        oasisContext.fillStyleStack( element, KoXmlNS::table, "style-name", "table-cell" );
-
-        QString str = element.attributeNS( KoXmlNS::table, "style-name", QString() );
-        const KoXmlElement* cellStyle = oasisContext.oasisStyles().findStyle( str, "table-cell" );
-
-        if ( cellStyle )
-            loadOasisConditional( cellStyle );
-    }
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
     loadOasisCellText( element );

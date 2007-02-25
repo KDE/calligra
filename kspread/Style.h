@@ -36,18 +36,11 @@ class KoStyleStack;
 
 namespace KSpread
 {
-
-// sizeof(void*) = 8
-// sizeof(QVariant) = 4
-// sizeof(QVariant::Private) = 12
-// sizeof(QPen) = 4
-// sizeof(QPenPrivate) >= 64
-// sizeof(QHash) = 4
-// sizeof(QHashData) >= 64
-
+class Conditions;
 class CustomStyle;
 class SharedSubStyle;
 class Style;
+class StyleManager;
 class StyleManipulator;
 class SubStyle;
 
@@ -163,7 +156,8 @@ public:
 
     bool loadXML( KoXmlElement& format, Paste::Mode pm = Paste::Normal, bool paste = false );
     void saveXML( QDomDocument& doc, QDomElement& format, bool force = false, bool copy = false ) const;
-    void loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement & element );
+    void loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element,
+                         Conditions& conditions, const StyleManager* styleManager );
     /**
      * Saves an OASIS automatic style.
      * Reimplemented by CustomStyle for OASIS user styles.
@@ -382,7 +376,9 @@ public:
      * @param style the DOM element defining the style
      * @param name the style's new name
      */
-    void loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement & style, const QString & name );
+    void loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& style,
+                    const QString& name, Conditions& conditions,
+                    const StyleManager* styleManager );
 
     /**
      * @reimp

@@ -2981,7 +2981,8 @@ QString Sheet::getPart( const KoXmlNode & part )
 
 bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                        KoOasisLoadingContext& oasisContext,
-                       const Styles& autoStyles )
+                       const Styles& autoStyles,
+                       const QHash<QString, Conditions>& conditionalStyles )
 {
     setLayoutDirection (LeftToRight);
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
@@ -3075,14 +3076,16 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     // NOTE Handle header rows as ordinary ones
                     //      as long as they're not supported.
                     loadRowFormat( headerRowNode.toElement(), rowIndex,
-                                   oasisContext, /*rowNode.isNull() ,*/ rowStyleRegions, cellStyleRegions );
+                                   oasisContext, rowStyleRegions,
+                                   cellStyleRegions );
                     headerRowNode = headerRowNode.nextSibling();
                   }
                 }
                 else if( rowElement.localName() == "table-row" )
                 {
                     kDebug(36003)<<" table-row found :index row before "<<rowIndex<<endl;
-                    loadRowFormat( rowElement, rowIndex, oasisContext, /*rowNode.isNull() ,*/ rowStyleRegions, cellStyleRegions );
+                    loadRowFormat( rowElement, rowIndex, oasisContext,
+                                   rowStyleRegions, cellStyleRegions );
                     kDebug(36003)<<" table-row found :index row after "<<rowIndex<<endl;
                 }
                 else if ( rowElement.localName() == "shapes" )
@@ -3098,11 +3101,14 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     }
 
     // insert the styles into the storage (column defaults)
-    loadOasisInsertStyles( autoStyles, columnStyleRegions, QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+    loadOasisInsertStyles( autoStyles, columnStyleRegions, conditionalStyles,
+                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
     // insert the styles into the storage (row defaults)
-    loadOasisInsertStyles( autoStyles, rowStyleRegions, QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+    loadOasisInsertStyles( autoStyles, rowStyleRegions, conditionalStyles,
+                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
     // insert the styles into the storage
-    loadOasisInsertStyles( autoStyles, cellStyleRegions, QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+    loadOasisInsertStyles( autoStyles, cellStyleRegions, conditionalStyles,
+                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
 
     // initialize the scrollbars' values
     const QRect usedArea = this->usedArea();
@@ -3427,6 +3433,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
 
 void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
                                    const QHash<QString, QRegion>& styleRegions,
+                                   const QHash<QString, Conditions>& conditionalStyles,
                                    const QRect& usedArea )
 {
     kDebug(36003) << "Inserting styles ..." << endl;
@@ -3438,6 +3445,7 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
             kWarning(36003) << "\t" << styleNames[i] << " not used" << endl;
             continue;
         }
+        const bool hasConditions = conditionalStyles.contains( styleNames[i] );
         const QRegion styleRegion = styleRegions[styleNames[i]] & QRegion( usedArea );
         foreach ( const QRect& rect, styleRegion.rects() )
         {
@@ -3458,6 +3466,8 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
                 style.merge( *namedStyle );
                 cellStorage()->setStyle( Region(rect), style );
             }
+            if ( hasConditions )
+                cellStorage()->setConditions( Region(rect), conditionalStyles[styleNames[i]] );
         }
     }
 }

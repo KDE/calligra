@@ -369,7 +369,8 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
     }
 
     //pre-load auto styles
-    Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles( oasisContext.oasisStyles() );
+    QHash<QString, Conditions> conditionalStyles;
+    Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles( oasisContext.oasisStyles(), conditionalStyles );
 
     // load the sheet
     sheetNode = body.firstChild();
@@ -390,7 +391,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
                     Sheet* sheet = findSheet( name );
                     if( sheet )
                     {
-                        sheet->loadOasis( sheetElement, oasisContext, autoStyles );
+                        sheet->loadOasis( sheetElement, oasisContext, autoStyles, conditionalStyles );
                     }
                 }
             }

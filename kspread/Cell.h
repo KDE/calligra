@@ -649,11 +649,6 @@ protected:
      */
     void saveOasisAnnotation( KoXmlWriter &xmlwriter );
 
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOasisConditional( const KoXmlElement* style );
-
 private:
     class Private;
     QSharedDataPointer<Private> d;

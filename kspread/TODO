@@ -267,14 +267,14 @@ Things not in bugzilla
     - Support datetimes.						----
 
   + Matrix operations						      2 ----
-    - Determinant							----
+    - Determinant							done
     - Dimension								----
-    - Inverse								----
+    - Inverse								done
     - Minima/Maxima elements						----
-    - Multiply								----
+    - Multiply								done
     - Norm								----
     - Rank								----
-    - Transpose								----
+    - Transpose								done
 
   + Locked areas (for formulas with a matrix as result)		      2 TOMA
 

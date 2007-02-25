@@ -34,6 +34,7 @@ class KoOasisStyles;
 
 namespace KSpread
 {
+class Conditions;
 class Doc;
 class Sheet;
 class StyleDialog;
@@ -91,7 +92,7 @@ class KSPREAD_EXPORT StyleManager
    * @param oasisStyles repository of styles
    * @return a hash of styles with the OpenDocument internal name as key
    */
-  Styles loadOasisAutoStyles( KoOasisStyles& oasisStyles );
+  Styles loadOasisAutoStyles( KoOasisStyles& oasisStyles, QHash<QString, Conditions>& conditionalStyles );
 
   /**
    * Releases unused auto styles.

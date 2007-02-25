@@ -372,7 +372,8 @@ public:
      */
     bool loadOasis( const KoXmlElement& sheet,
                     KoOasisLoadingContext& oasisContext,
-                    const Styles& autoStyles );
+                    const Styles& autoStyles,
+                    const QHash<QString, Conditions>& conditionalStyles );
 
     /**
      * \ingroup OpenDocument
@@ -1239,6 +1240,7 @@ protected:
      */
     void loadOasisInsertStyles( const Styles& autoStyles,
                                 const QHash<QString, QRegion>& styleRegions,
+                                const QHash<QString, Conditions>& conditionalStyles,
                                 const QRect& usedArea );
 
     /**

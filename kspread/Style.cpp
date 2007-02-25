@@ -33,6 +33,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include "Condition.h"
 #include "Doc.h"
 #include "Global.h"
 #include "Util.h"
@@ -203,7 +204,8 @@ void Style::loadAttributes( const QList<SharedSubStyle>& subStyles )
     }
 }
 
-void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement & element )
+void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element,
+                            Conditions& conditions, const StyleManager* styleManager )
 {
     // NOTE Stefan: Don't fill the style stack with the parent styles!
     KoStyleStack styleStack;
@@ -214,6 +216,13 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement & ele
     loadOasisTextProperties( oasisStyles, styleStack );
     styleStack.setTypeProperties( "paragraph" );
     loadOasisParagraphProperties( oasisStyles, styleStack );
+
+    KoXmlElement e;
+    forEachElement( e, element )
+    {
+        if ( e.namespaceURI() == KoXmlNS::style && e.localName() == "map" )
+            conditions.loadOasisConditions( styleManager, e );
+    }
 
     loadOasisDataStyle( oasisStyles, element );
 }
@@ -2637,7 +2646,9 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles ) con
         return mainStyles.lookup( style, "custom-style" );
 }
 
-void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& style, const QString & name )
+void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& style,
+                             const QString& name, Conditions& conditions,
+                             const StyleManager* styleManager )
 {
     setName (name);
     if ( style.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
@@ -2645,7 +2656,7 @@ void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& sty
 
     setType (CUSTOM);
 
-    Style::loadOasisStyle( oasisStyles, style );
+    Style::loadOasisStyle( oasisStyles, style, conditions, styleManager );
 }
 
 void CustomStyle::save( QDomDocument & doc, QDomElement & styles )
