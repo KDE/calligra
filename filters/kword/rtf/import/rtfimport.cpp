@@ -1347,7 +1347,7 @@ void RTFImport::parseFontTable( RTFProperty * )
 	    qFont.setStyleHint( font.styleHint );
 	    for(;!qFont.exactMatch();)
 	    {
-		int space=font.name.findRev(' ', font.name.length());
+		int space=font.name.lastIndexOf(' ', font.name.length());
 		if(space==-1)
 		    break;
 		font.name.truncate(space);
@@ -1712,7 +1712,7 @@ void RTFImport::parseField( RTFProperty * )
             kDebug(30515) << "Field: " << list << endl;
 	    uint i;
 
-            QString fieldName ( list[0].upper() );
+            QString fieldName ( list[0].toUpper() );
             fieldName.remove('\\'); // Remove \, especialy leading ones in OOWriter RTF files
 	    node.clear(7);
 

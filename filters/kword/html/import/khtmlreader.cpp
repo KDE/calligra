@@ -391,7 +391,7 @@ static const QColor parsecolor(const QString& colorstring) {
             colorstring.mid(5,2).toInt(0,16)
             );
       } else {
-            QString colorlower=colorstring.lower();
+            QString colorlower=colorstring.toLower();
             // Grays
             if (colorlower=="black")
                   color.setRgb(0,0,0);
