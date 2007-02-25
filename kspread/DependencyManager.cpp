@@ -104,10 +104,11 @@ public:
      */
     Region computeDependencies(const Cell& cell, const Formula& formula) const;
 
+    enum Direction { Forward, Backward };
     /**
      * Removes the circular dependency flag from \p region and all their dependencies.
      */
-    void removeCircularDependencyFlags(const Region& region);
+    void removeCircularDependencyFlags( const Region& region, Direction direction );
 
     /**
      * For debugging/testing purposes.
@@ -455,8 +456,8 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     }
 
     // clear the circular dependency flags
-    removeCircularDependencyFlags( providers.value( cell ) );
-    removeCircularDependencyFlags( consumingRegion( cell ) );
+    removeCircularDependencyFlags( providers.value( cell ), Backward );
+    removeCircularDependencyFlags( consumingRegion( cell ), Forward );
 
     // finally, remove the entry about this cell
     providers.remove( cell );
@@ -624,7 +625,7 @@ KSpread::Region DependencyManager::Private::computeDependencies( const Cell& cel
     return region;
 }
 
-void DependencyManager::Private::removeCircularDependencyFlags(const Region& region)
+void DependencyManager::Private::removeCircularDependencyFlags( const Region& region, Direction direction )
 {
     // a set of cells, which circular dependency flag is currently removed
     static QSet<Cell> processedCells;
@@ -647,8 +648,10 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
                 if ( cell.value() == Value::errorCIRCLE() )
                     cell.setValue( Value::empty() );
 
-                removeCircularDependencyFlags( providers.value( cell ) );
-                removeCircularDependencyFlags( consumingRegion( cell ) );
+                if ( direction == Backward )
+                    removeCircularDependencyFlags( providers.value( cell ), Backward );
+                else // Forward
+                    removeCircularDependencyFlags( consumingRegion( cell ), Forward );
 
                 processedCells.remove( cell );
             }
