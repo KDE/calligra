@@ -200,7 +200,15 @@ double ValueParser::readImaginary( const QString& str, bool* ok ) const
 
     double imag = 0.0;
     if ( str[0] == 'i' || str[0] == 'j' )
-        imag = readNumber( str.mid( 1 ), ok );
+    {
+        if ( str.length() == 1 )
+        {
+            if ( ok ) *ok = true;
+            imag = 1.0;
+        }
+        else
+            imag = readNumber( str.mid( 1 ), ok );
+    }
     else if ( str[str.length()-1] == 'i' || str[str.length()-1] == 'j' )
     {
         const QString minus( m_doc->locale()->negativeSign() );
@@ -259,7 +267,7 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
             if ( *ok )
                 real = readNumber( str.left( sepPos ).trimmed(), ok );
         }
-        else if ( str.trimmed().count() > 1 )
+        else
         {
             // imaginary part
             imag = readImaginary( str.trimmed(), ok );
@@ -267,8 +275,6 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
             if ( *ok )
                 real = 0.0;
         }
-        else
-            if ( ok ) *ok = false;
         if ( *ok )
             value = Value( complex<double>( real, imag ) );
     }
