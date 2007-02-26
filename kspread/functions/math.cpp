@@ -1065,22 +1065,12 @@ Value func_minverse( valVector args, ValueCalc* calc, FuncExtra* )
     if ( matrix.columns() != matrix.rows() )
         return Value::errorVALUE();
 
-    Eigen::MatrixXd eMatrix = convert( matrix, calc );
-
-    // now we want to do two separate things with eMatrix, both requiring
-    // a LU decomposition of eMatrix: checking invertibility, and actually
-    // inverting. Hence it is better to compute the LU
-    // decomposition once and for all, and then proceed from it. This way
-    // the LU decomposition of eMatrix is computed once, not twice.
-
-    // Note: for matrices of small sizes, this is not the fastest approach.
-    // If we're going to often invert matrices of size <= 5, a direct
-    // computation is faster than a LU decomposition.
-
-    Eigen::LUDecompositionXd luDecomp(eMatrix);
-
-    if( luDecomp.isInvertible() )
-        return convert( luDecomp.inverse() );
+    Eigen::MatrixXd eMatrix = convert( matrix, calc ),
+                    eMatrixInverse( matrix.rows() );
+    bool invertible;
+    eMatrix.computeInverseSafely( & eMatrixInverse, & invertible );
+    if( invertible )
+        return convert( eMatrixInverse );
     else
         return Value::errorDIV0();
 }
