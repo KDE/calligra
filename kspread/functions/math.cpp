@@ -36,6 +36,7 @@
 
 // needed by MDETERM and MINVERSE
 #include <eigen/matrix.h>
+#include <eigen/ludecomposition.h>
 
 using namespace KSpread;
 
@@ -1052,7 +1053,7 @@ Value func_mdeterm( valVector args, ValueCalc* calc, FuncExtra* )
     if ( matrix.columns() != matrix.rows() )
         return Value::errorVALUE();
 
-    const Eigen::MatrixX<double> eMatrix = convert( matrix, calc );
+    const Eigen::MatrixXd eMatrix = convert( matrix, calc );
 
     return Value( eMatrix.determinant() );
 }
@@ -1064,13 +1065,24 @@ Value func_minverse( valVector args, ValueCalc* calc, FuncExtra* )
     if ( matrix.columns() != matrix.rows() )
         return Value::errorVALUE();
 
-    const Eigen::MatrixX<double> eMatrix = convert( matrix, calc );
+    Eigen::MatrixXd eMatrix = convert( matrix, calc );
 
-    // not invertable?
-    if ( eMatrix.determinant() == 0.0 )
+    // now we want to do two separate things with eMatrix, both requiring
+    // a LU decomposition of eMatrix: checking invertibility, and actually
+    // inverting. Hence it is better to compute the LU
+    // decomposition once and for all, and then proceed from it. This way
+    // the LU decomposition of eMatrix is computed once, not twice.
+
+    // Note: for matrices of small sizes, this is not the fastest approach.
+    // If we're going to often invert matrices of size <= 5, a direct
+    // computation is faster than a LU decomposition.
+
+    Eigen::LUDecompositionXd luDecomp(eMatrix);
+
+    if( luDecomp.isInvertible() )
+        return convert( luDecomp.inverse() );
+    else
         return Value::errorDIV0();
-
-    return convert( eMatrix.inverse() );
 }
 
 // Function: mmult
