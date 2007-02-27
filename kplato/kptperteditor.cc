@@ -108,21 +108,21 @@ Node * PertEditor::itemToNode(QString itemName, Node * startNode){
 }
 
 void PertEditor::addTaskInRequiredList(QListWidgetItem * currentItem){
-
+    // add the relation between the selected task and the current task
     QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
+
     Relation* m_rel=new Relation (itemToNode(currentItem->text(), m_node),itemToNode(selectedTaskName, m_node));
-    AddRelationCmd * c= new AddRelationCmd(m_part,m_rel,currentItem->text());
-    c->execute();
+    AddRelationCmd * addCmd= new AddRelationCmd(m_part,m_rel,currentItem->text());
+    m_part->addCommand( addCmd );
 }
 
 void PertEditor::removeTaskFromRequiredList(QListWidgetItem * currentItem){
-    // remove the selected task from the RequiredTasksList
+    // remove the relation between the selected task and the current task
     QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
 
     Relation* m_rel = itemToNode(selectedTaskName, m_node)->findParentRelation(itemToNode(currentItem->text(), m_node));
-    DeleteRelationCmd * d= new DeleteRelationCmd(m_part,m_rel,currentItem->text());
-    d->execute();
-
+    DeleteRelationCmd * delCmd= new DeleteRelationCmd(m_part,m_rel,currentItem->text());
+    m_part->addCommand( delCmd );
 }
 
 void PertEditor::loadRequiredTasksList(Node * taskNode){
