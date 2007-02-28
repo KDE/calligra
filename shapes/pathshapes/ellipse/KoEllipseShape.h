@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -76,11 +76,16 @@ public:
     double endAngle() const;
 
 protected:
+    const char * odfTagName() const;
+
+    bool saveOdfData( KoShapeSavingContext & context ) const;
+
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
     void createPath( const QSizeF &size );
 
 private:
+    double sweepAngle() const;
 
     void updateKindHandle();
 

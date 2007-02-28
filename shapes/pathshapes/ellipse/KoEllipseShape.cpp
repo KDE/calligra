@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -24,6 +24,9 @@
 #include <QPainter>
 #include <math.h>
 
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+
 KoEllipseShape::KoEllipseShape()
 : m_startAngle( 0 )
 , m_endAngle( 0 )
@@ -41,6 +44,39 @@ KoEllipseShape::KoEllipseShape()
 
 KoEllipseShape::~KoEllipseShape()
 {
+}
+
+bool KoEllipseShape::saveOdfData( KoShapeSavingContext & context ) const
+{
+    saveOdfSizeAndPosition( context );
+
+    char * kind = "full";
+    switch ( m_type )
+    {
+        case Arc:
+            if ( sweepAngle() != 360 )
+            {
+                kind = "arc";
+            }
+            break;
+        case Pie:
+            kind = "section";
+            break;
+        case Chord:
+            kind = "cut";
+            break;
+    }
+    context.xmlWriter().addAttribute( "draw:kind", kind );
+
+    context.xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
+    context.xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
+
+    return true;
+}
+
+const char * KoEllipseShape::odfTagName() const
+{
+    return "draw:ellipse";
 }
 
 void KoEllipseShape::resize( const QSizeF &newSize )
@@ -127,15 +163,8 @@ void KoEllipseShape::updatePath( const QSizeF &size )
     QPointF startpoint( m_handles[0] );
 
     QPointF curvePoints[12];
-    double sweepAngle =  m_endAngle - m_startAngle;
-    // treat also as full circle
-    if ( sweepAngle == 0 || sweepAngle == -360 )
-        sweepAngle = 360;
-    if ( m_startAngle > m_endAngle )
-    {
-        sweepAngle = 360 - m_startAngle + m_endAngle;
-    }
-    int pointCnt = arcToCurve( m_radii.x(), m_radii.y(), m_startAngle, sweepAngle , startpoint, curvePoints );
+
+    int pointCnt = arcToCurve( m_radii.x(), m_radii.y(), m_startAngle, sweepAngle() , startpoint, curvePoints );
 
     int cp = 0;
     m_points[cp]->setPoint( startpoint );
@@ -207,6 +236,19 @@ void KoEllipseShape::updateKindHandle()
            m_handles[2] = ( m_handles[0] + m_handles[1] ) / 2.0;
            break;
    }
+}
+
+double KoEllipseShape::sweepAngle() const
+{
+    double sAngle =  m_endAngle - m_startAngle;
+    // treat also as full circle
+    if ( sAngle == 0 || sAngle == -360 )
+        sAngle = 360;
+    if ( m_startAngle > m_endAngle )
+    {
+        sAngle = 360 - m_startAngle + m_endAngle;
+    }
+    return sAngle;
 }
 
 void KoEllipseShape::setType( KoEllipseType type )
