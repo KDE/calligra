@@ -1006,7 +1006,9 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
     return false;
   }
 
-  d->syntaxVersion = Doc::getAttribute( spread, "syntaxVersion", 0 );
+    bool ok = false;
+    int version = spread.attribute( "syntaxVersion" ).toInt( &ok );
+    d->syntaxVersion = ok ? version : 0;
   if ( d->syntaxVersion > CURRENT_SYNTAX_VERSION )
   {
       int ret = KMessageBox::warningContinueCancel(
@@ -1030,7 +1032,6 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
   KoXmlElement defaults = spread.namedItem( "defaults" ).toElement();
   if ( !defaults.isNull() )
   {
-    bool ok = false;
     double dim = defaults.attribute( "row-height" ).toDouble( &ok );
     if ( !ok )
       return false;
