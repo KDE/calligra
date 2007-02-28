@@ -494,7 +494,7 @@ void VBorder::paintSizeIndicator( int mouseY )
 
     QString tmpSize;
     if ( m_iResizePos != y )
-        tmpSize = i18n("Height: %1 %2", KoUnit::toUserValue( m_pCanvas->doc()->unzoomItY( m_iResizePos - y ), m_pView->doc()->unit() ) , m_pView->doc()->unitName() );
+        tmpSize = i18n("Height: %1 %2", KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItY( m_iResizePos - y ), m_pView->doc()->unit() ) ) , m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Row" );
 
