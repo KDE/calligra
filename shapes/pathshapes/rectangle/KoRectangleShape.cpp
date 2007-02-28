@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -23,6 +23,9 @@
 #include <QDebug>
 #include <QPainter>
 
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+
 KoRectangleShape::KoRectangleShape()
 : m_cornerRadiusX( 0 )
 , m_cornerRadiusY( 0 )
@@ -37,6 +40,19 @@ KoRectangleShape::KoRectangleShape()
 
 KoRectangleShape::~KoRectangleShape()
 {
+}
+
+bool KoRectangleShape::saveOdfData( KoShapeSavingContext & context ) const
+{
+    saveOdfSizeAndPosition( context );
+    // TODO save rectange specific stuff
+
+    return true;
+}
+
+const char * KoRectangleShape::odfTagName() const
+{
+    return "draw:rect";
 }
 
 void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
