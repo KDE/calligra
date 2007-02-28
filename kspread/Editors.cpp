@@ -1372,7 +1372,7 @@ bool LocationEditWidget::activateItem()
         }
         if ( !region.isValid() && validName)
         {
-            QRect rect( m_pView->selection()->selection() );
+            QRect rect( m_pView->selection()->lastRange() );
             Sheet * t = m_pView->activeSheet();
             // set area name on current selection/cell
 

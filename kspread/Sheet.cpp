@@ -1276,7 +1276,7 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
   Selection* selection = canvas->view()->selection();
 
     // Identify the region of interest.
-    QRect region( selection->selection() );
+    QRect region( selection->lastRange() );
     QPoint marker( selection->marker() );
 
     if (options & KReplaceDialog::SelectedText)
@@ -1607,7 +1607,7 @@ QString Sheet::copyAsText( Selection* selection )
         return cell.displayText();
     }
 
-    QRect lastRange( selection->selection() );
+    QRect lastRange( selection->lastRange() );
 
     // Find area
     int top = lastRange.bottom();

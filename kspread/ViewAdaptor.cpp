@@ -295,7 +295,7 @@ void ViewAdaptor::setSelection(QRect selection)
 
 QRect ViewAdaptor::selection()
 {
-  return m_view->selection()->selection();
+  return m_view->selection()->lastRange();
 }
 
 void ViewAdaptor::setSelectionMoneyFormat( bool b )

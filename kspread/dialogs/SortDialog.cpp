@@ -270,7 +270,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
 QRect SortDialog::sourceArea()
 {
-    return m_pView->selection()->selection();
+    return m_pView->selection()->lastRange();
 }
 
 SortDialog::Orientation SortDialog::guessDataOrientation()

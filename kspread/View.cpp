@@ -2120,7 +2120,7 @@ void View::extraSpelling()
   d->spell.firstSpellSheet    = d->activeSheet;
   d->spell.currentSpellSheet  = d->spell.firstSpellSheet;
 
-  QRect selection = d->selection->selection();
+  QRect selection = d->selection->lastRange();
 
   // if nothing is selected, check every cell
   if (d->selection->isSingular())
@@ -2748,7 +2748,7 @@ void View::autoSum()
   //this behaviour??)
   Range rg;
   //rg.sheet=activeSheet();
-  QRect sel = d->selection->selection(false);
+  QRect sel = d->selection->lastRange();
 
   if (sel.height() > 1)
   {
@@ -3344,7 +3344,7 @@ void View::sortInc()
   sm->setSheet (activeSheet());
 
   // Entire row(s) selected ? Or just one row ? Sort by columns if yes.
-  QRect range = d->selection->selection();
+  QRect range = d->selection->lastRange();
   bool sortCols = d->selection->isRowSelected();
   sortCols = sortCols || (range.top() == range.bottom());
   sm->setSortRows (!sortCols);
@@ -3367,7 +3367,7 @@ void View::sortDec()
   sm->setSheet (activeSheet());
 
   // Entire row(s) selected ? Or just one row ? Sort by rows if yes.
-  QRect range = d->selection->selection();
+  QRect range = d->selection->lastRange();
   bool sortCols = d->selection->isRowSelected();
   sortCols = sortCols || (range.top() == range.bottom());
   sm->setSortRows (!sortCols);
@@ -4038,7 +4038,7 @@ void View::paste()
   doc()->emitBeginOperation( false );
   if ( !d->canvas->editor() )
   {
-      //kDebug(36005) << "Pasting. Rect= " << d->selection->selection(false) << " bytes" << endl;
+      //kDebug(36005) << "Pasting. Rect= " << d->selection->lastRange() << " bytes" << endl;
     d->activeSheet->paste( d->selection->lastRange(), true,
                            Paste::Normal, Paste::OverWrite,
                            false, 0, true );
@@ -4178,7 +4178,7 @@ void View::subtotals()
   if (!activeSheet())
     return;
 
-  QRect selection( d->selection->selection() );
+  QRect selection( d->selection->lastRange() );
   if ( ( selection.width() < 2 ) || ( selection.height() < 2 ) )
   {
     KMessageBox::error( this, i18n("You must select multiple cells.") );
@@ -4212,7 +4212,7 @@ void View::textToColumns()
 
   d->canvas->closeEditor();
 
-  QRect area=d->selection->selection();
+  QRect area=d->selection->lastRange();
 
   //Only use the first column
   area.setRight(area.left());
@@ -4298,7 +4298,7 @@ void View::initFindReplace()
     Sheet* currentSheet = d->searchInSheets.currentSheet;
 
     QRect region = ( d->findOptions & KFind::SelectedText )
-                   ? d->selection->selection()
+                   ? d->selection->lastRange()
                    : QRect( 1, 1, currentSheet->maxColumn(), currentSheet->maxRow() ); // All cells
 
     int colStart = !bck ? region.left() : region.right();
@@ -4651,7 +4651,7 @@ void View::insertFromDatabase()
 #ifndef QT_NO_SQL
     d->canvas->closeEditor();
 
-    QRect rect = d->selection->selection();
+    QRect rect = d->selection->lastRange();
 
   QStringList str = QSqlDatabase::drivers();
   if ( str.isEmpty() )
@@ -4672,7 +4672,7 @@ void View::insertFromTextfile()
     d->canvas->closeEditor();
     //KMessageBox::information( this, "Not implemented yet, work in progress...");
 
-    CSVDialog dialog( this, d->selection->selection(), CSVDialog::File );
+    CSVDialog dialog( this, d->selection->lastRange(), CSVDialog::File );
     if( !dialog.canceled() )
       dialog.exec();
 }
@@ -4681,7 +4681,7 @@ void View::insertFromClipboard()
 {
     d->canvas->closeEditor();
 
-    CSVDialog dialog( this, d->selection->selection(), CSVDialog::Clipboard );
+    CSVDialog dialog( this, d->selection->lastRange(), CSVDialog::Clipboard );
     if( !dialog.canceled() )
       dialog.exec();
 }
@@ -4842,7 +4842,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
       return;
     }
     else
-      cmd = new InsertObjectCommand( unzoomedRect, _e, d->selection->selection(), d->canvas  );
+      cmd = new InsertObjectCommand( unzoomedRect, _e, d->selection->lastRange(), d->canvas  );
 
     doc()->addCommand( cmd );
     cmd->execute();
@@ -5992,14 +5992,14 @@ void View::setDefaultStyle()
 
 void View::slotInsert()
 {
-  QRect r( d->selection->selection() );
+  QRect r( d->selection->lastRange() );
   InsertDialog dlg( this, "InsertDialog", r, InsertDialog::Insert );
   dlg.exec();
 }
 
 void View::slotRemove()
 {
-  QRect r( d->selection->selection() );
+  QRect r( d->selection->lastRange() );
   InsertDialog dlg( this, "Remove", r, InsertDialog::Remove );
   dlg.exec();
 }
@@ -6018,7 +6018,7 @@ void View::slotInsertCellCopy()
   }
   else
   {
-    PasteInsertDialog dlg( this, "Remove", d->selection->selection() );
+    PasteInsertDialog dlg( this, "Remove", d->selection->lastRange() );
     dlg.exec();
   }
 

@@ -82,7 +82,7 @@ void AreaDialog::slotOk()
   {
     tmp = tmp.toLower();
 
-    QRect rect( m_pView->selection()->selection() );
+    QRect rect( m_pView->selection()->lastRange() );
     bool newName = true;
     QList<Reference>::Iterator it;
     QList<Reference> area = m_pView->doc()->listArea();

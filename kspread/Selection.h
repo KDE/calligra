@@ -246,14 +246,6 @@ public:
 
   const QList<QColor>& colors() const;
 
-  /**
-   * \return the last range
-   * \deprecated
-   * \todo TODO Stefan: Port the code using this method to non-contiguous selections,
-   * or, if not feasible, use lastRange().
-   */
-  KDE_DEPRECATED QRect selection(bool extend = true) const;
-
 signals:
   /**
    * Emitted when the Selection was changed.

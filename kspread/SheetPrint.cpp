@@ -919,7 +919,7 @@ void SheetPrint::definePrintRange( Selection* selection )
     {
         KCommand* command = new DefinePrintRangeCommand( m_pSheet );
         m_pDoc->addCommand( command );
-        setPrintRange( selection->selection() );
+        setPrintRange( selection->lastRange() );
     }
 }
 

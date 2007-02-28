@@ -72,7 +72,7 @@ ResizeRow::ResizeRow( View* parent, const char* name )
     vLay->setSpacing(KDialog::spacingHint());
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
-    QRect selection( m_pView->selection()->selection() );
+    QRect selection( m_pView->selection()->lastRange() );
     const RowFormat* rl = m_pView->activeSheet()->rowFormat( selection.top() );
     rowHeight = rl->height();
 
@@ -146,7 +146,7 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
     vLay->setSpacing(KDialog::spacingHint());
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
-    QRect selection( m_pView->selection()->selection() );
+    QRect selection( m_pView->selection()->lastRange() );
     const ColumnFormat* cl = m_pView->activeSheet()->columnFormat( selection.left() );
     columnWidth = cl->width();
 

@@ -159,7 +159,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
   Q_ASSERT(selection_info);
 
-  QPoint selection = selection_info->selection().topLeft();
+  QPoint selection = selection_info->lastRange().topLeft();
 
   Sheet* sheet = m_kspreadView->activeSheet();
 

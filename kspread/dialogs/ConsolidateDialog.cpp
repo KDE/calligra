@@ -159,8 +159,8 @@ void ConsolidateDialog::slotOk()
   Map *map = m_pView->doc()->map();
 
   Sheet* sheet = m_pView->activeSheet();
-  int dx = m_pView->selection()->selection().left();
-  int dy = m_pView->selection()->selection().top();
+  int dx = m_pView->selection()->lastRange().left();
+  int dy = m_pView->selection()->lastRange().top();
 
   QString function;
 

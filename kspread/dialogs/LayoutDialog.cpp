@@ -341,7 +341,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   isRowSelected    = _view->selection()->isRowSelected();
   isColumnSelected = _view->selection()->isColumnSelected();
 
-  QRect range = _view->selection()->selection();
+  QRect range = _view->selection()->lastRange();
   left = range.left();
   top = range.top();
   right = range.right();

@@ -849,12 +849,6 @@ QRect Selection::lastRange() const
   return cells().isEmpty() ? QRect(1,1,1,1) : cells().last()->rect();
 }
 
-QRect Selection::selection(bool extend) const
-{
-  QRect selection = QRect(d->anchor, d->marker);
-  return extend ? extendToMergedAreas(selection) : selection;
-}
-
 QRect Selection::extendToMergedAreas(QRect area) const
 {
   if (!d->view->activeSheet())

@@ -324,7 +324,7 @@ void VBorder::equalizeRow( double resize )
   if (!sheet)
     return;
 
-  QRect selection( m_pView->selection()->selection() );
+  QRect selection( m_pView->selection()->lastRange() );
   if ( !m_pView->doc()->undoLocked() )
   {
      UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(selection) );
@@ -971,7 +971,7 @@ void HBorder::equalizeColumn( double resize )
   register Sheet * const sheet = m_pView->activeSheet();
   Q_ASSERT( sheet );
 
-  QRect selection( m_pView->selection()->selection() );
+  QRect selection( m_pView->selection()->lastRange() );
   if ( !m_pView->doc()->undoLocked() )
   {
       UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(selection) );

@@ -66,7 +66,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
     m_restored( true ),
     m_anchor( m_pView->selection()->anchor() ),
     m_marker( m_pView->selection()->marker() ),
-    m_selection( m_pView->selection()->selection() )
+    m_selection( m_pView->selection()->lastRange() )
 {
   Q_UNUSED(marker)
   //setWFlags( Qt::WDestructiveClose );
