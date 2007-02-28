@@ -559,6 +559,8 @@ private:
    */
   void showToolTip( const QPoint& point );
 
+    int metric( PaintDeviceMetric metric ) const;
+
 private:
     Q_DISABLE_COPY( Canvas )
 

@@ -494,9 +494,9 @@ bool AdjustColumnRowManipulator::preProcessing()
 double AdjustColumnRowManipulator::adjustColumnHelper( const Cell& cell )
 {
   double long_max = 0.0;
-  SheetView sheetView( cell.sheet() );
+  SheetView sheetView( cell.sheet(), 0 );
   CellView cellView( &sheetView, cell.column(), cell.row() ); // FIXME
-  cellView.calculateTextParameters( cell );
+  cellView.calculateTextParameters( &sheetView, cell );
   if ( cellView.textWidth() > long_max )
   {
     double indent = 0.0;
@@ -538,9 +538,9 @@ double AdjustColumnRowManipulator::adjustRowHelper( const Cell& cell )
 {
   double long_max = 0.0;
 
-  SheetView sheetView( cell.sheet() );
+  SheetView sheetView( cell.sheet(), 0 );
   CellView cellView( &sheetView, cell.column(), cell.row() ); // FIXME
-  cellView.calculateTextParameters( cell );
+  cellView.calculateTextParameters( &sheetView, cell );
   if ( cellView.textHeight() > long_max )
   {
     long_max = cellView.textHeight()

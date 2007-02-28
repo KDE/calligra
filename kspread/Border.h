@@ -59,6 +59,8 @@ protected:
     virtual void resizeEvent( QResizeEvent * _ev );
     void paintSizeIndicator( int mouseX );
 
+    void drawText( QPainter& painter, const QFont& font, const QPointF& location, const QString& text, double width ) const;
+
 private:
     Canvas *m_pCanvas;
     View *m_pView;
@@ -110,8 +112,6 @@ private:
     bool m_bMousePressed;
 
     QRubberBand* m_rubberband;
-
-private:
 };
 
 
@@ -142,6 +142,8 @@ protected:
     virtual void wheelEvent( QWheelEvent* );
     virtual void focusOutEvent( QFocusEvent* ev );
     void paintSizeIndicator( int mouseY );
+
+    void drawText( QPainter& painter, const QFont& font, const QPointF& location, const QString& text ) const;
 
 private:
     Canvas *m_pCanvas;

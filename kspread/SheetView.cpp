@@ -36,16 +36,18 @@ class SheetView::Private
 {
 public:
     const Sheet* sheet;
+    const View* view;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
     QRegion cachedArea;
     CellView* defaultCellView;
 };
 
-SheetView::SheetView( const Sheet* sheet )
+SheetView::SheetView( const Sheet* sheet, const View* view )
     : d( new Private )
 {
     d->sheet = sheet;
+    d->view = view;
     d->visibleRect = QRect(1,1,0,0);
     d->cache.setMaxCost( 10000 );
     d->defaultCellView = new CellView( this );
@@ -60,6 +62,11 @@ SheetView::~SheetView()
 const Sheet* SheetView::sheet() const
 {
     return d->sheet;
+}
+
+const View* SheetView::view() const
+{
+    return d->view;
 }
 
 CellView SheetView::cellView( int col, int row )

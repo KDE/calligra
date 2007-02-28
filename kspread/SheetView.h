@@ -46,7 +46,7 @@ public:
     /**
      * Constructor.
      */
-    explicit SheetView( const Sheet* sheet );
+    explicit SheetView( const Sheet* sheet, const View* view = 0 );
 
     /**
      * Destructor.
@@ -57,6 +57,11 @@ public:
      * \return the Sheet
      */
     const Sheet* sheet() const;
+
+    /**
+     * \return the View
+     */
+    const View* view() const;
 
     /**
      * Looks up a CellView for the position \p col , \p row in the cache.

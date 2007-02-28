@@ -4200,4 +4200,19 @@ void Canvas::showToolTip( const QPoint& p )
 
 }
 
+int Canvas::metric( PaintDeviceMetric metric ) const
+{
+    switch( metric )
+    {
+        case QPaintDevice::PdmDpiX:
+        case QPaintDevice::PdmDpiY:
+        case QPaintDevice::PdmPhysicalDpiX:
+        case QPaintDevice::PdmPhysicalDpiY:
+            return 72;
+        default:
+            break;
+    }
+    return QWidget::metric( metric );
+}
+
 #include "Canvas.moc"

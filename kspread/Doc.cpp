@@ -1697,7 +1697,7 @@ void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
         topLeft = QPointF( sheet->columnPosition( cellRegion.left() ) - view->canvasWidget()->xOffset(),
                            sheet->rowPosition( cellRegion.top() ) - view->canvasWidget()->yOffset() );
 
-    SheetView sheetView( sheet ); // FIXME Stefan: make member, otherwise cache lost
+    SheetView sheetView( sheet, 0 ); // FIXME Stefan: make member, otherwise cache lost
     sheetView.setPaintCellRange( cellRegion );
     sheetView.paintCells( view, painter, viewRegionF, topLeft );
 }

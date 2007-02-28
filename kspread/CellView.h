@@ -150,7 +150,7 @@ public:
    * Calculates the text dimensions and the offset
    * for the current displayed text.
    */
-  void calculateTextParameters( const Cell& cell );
+  void calculateTextParameters( SheetView* sheetView, const Cell& cell );
 
   /**
    * \return width of the text
@@ -278,7 +278,7 @@ private:
    *
    * \internal
    */
-  QFont effectiveFont( const Cell& cell ) const;
+  QFont effectiveFont( const View* view ) const;
 
   /**
    * \ingroup Painting
@@ -322,7 +322,7 @@ private:
    * @internal
    */
   void paintText( QPainter& painter, const QRectF &cellRect,
-                  const QPoint &cellRef, const Cell& cell );
+                  const QPoint &cellRef, View* view, const Cell& cell );
 
   /**
    * \ingroup Painting
@@ -339,7 +339,7 @@ private:
    * @internal
    */
   void paintCommentIndicator( QPainter& painter, const QRectF &cellRect,
-                              const QPoint &cellRef, const Cell& cell );
+                              const Cell& cell );
 
   /**
    * \ingroup Painting
@@ -373,6 +373,10 @@ private:
      * \internal
      */
     void obscure( int col, int row );
+
+    void drawText( QPainter& painter, const QFont& font,
+                   const QPointF& location, const QString& text,
+                   const Cell& cell ) const;
 
     /**
      * Default CellView used by SheetView.

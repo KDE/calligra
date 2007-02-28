@@ -43,7 +43,7 @@
 #include <QColor>
 #include <QPainter>
 #include <QRectF>
-
+#include <QTextLayout>
 
 // KSpread
 #include "Canvas.h"
@@ -284,7 +284,7 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     // 1. Paint possible comment indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
             || cell.sheet()->print()->printCommentIndicator() )
-        paintCommentIndicator( painter, cellRect, cellRef, cell );
+        paintCommentIndicator( painter, cellRect, cell );
 
     // 2. Paint possible formula indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
@@ -314,7 +314,7 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
             && !( cell.sheet()->isProtected()
             && style().hideAll() ) )
     {
-        paintText( painter, cellRect, cellRef, cell );
+        paintText( painter, cellRect, cellRef, view, cell );
     }
 }
 
@@ -827,7 +827,6 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 //
 void CellView::paintCommentIndicator( QPainter& painter,
                                       const QRectF &cellRect,
-                                      const QPoint &cellRef,
                                       const Cell& cell )
 {
     // Point the little corner if there is a comment attached
@@ -1000,7 +999,7 @@ void CellView::paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect
 //
 void CellView::paintText( QPainter& painter,
                           const QRectF &cellRect,
-                          const QPoint &cellRef, const Cell& cell )
+                          const QPoint &cellRef, View* view, const Cell& cell )
 {
   Q_UNUSED( cellRef );
 
@@ -1016,8 +1015,8 @@ void CellView::paintText( QPainter& painter,
 
   QPen tmpPen( textColorPrint );
 
-  // Set the font according to the current zoom.
-  painter.setFont( effectiveFont( cell ) );
+    // Set the font according to the current zoom.
+    QFont font = effectiveFont( view );
 
     // Check for red font color for negative values.
     if ( cell.value().isNumber()
@@ -1029,13 +1028,12 @@ void CellView::paintText( QPainter& painter,
             tmpPen.setColor( Qt::red );
     }
 
-  // Check for blue color, for hyperlink.
-  if ( !cell.link().isEmpty() ) {
-    tmpPen.setColor( QApplication::palette().link().color() );
-    QFont font = painter.font();
-    font.setUnderline( true );
-    painter.setFont( font );
-  }
+    // Check for blue color, for hyperlink.
+    if ( !cell.link().isEmpty() )
+    {
+        tmpPen.setColor( QApplication::palette().link().color() );
+        font.setUnderline( true );
+    }
 
 #if 0
 /****
@@ -1080,11 +1078,11 @@ void CellView::paintText( QPainter& painter,
   if ( hAlign == Style::Right && !cell.isEmpty() && !d->fittingWidth )
     offsetCellTooShort = 4;
 
-  const QFontMetrics fm2 = painter.fontMetrics();
+  const QFontMetrics fontMetrics( font );
   double offsetFont = 0.0;
 
   if ( style().valign() == Style::Bottom && style().underline() )
-    offsetFont = fm2.underlinePos() + 1;
+    offsetFont = fontMetrics.underlinePos() + 1;
 
     const int tmpAngle = d->style.angle();
     const bool tmpVerticalText = d->style.verticalText();
@@ -1102,13 +1100,12 @@ void CellView::paintText( QPainter& painter,
 
     const QPointF position( indent + cellRect.x() + d->textX - offsetCellTooShort,
                             cellRect.y() + d->textY - offsetFont );
-    painter.drawText( position, d->displayText );
+    drawText( painter, effectiveFont( view ), position, d->displayText, cell );
   }
   else if ( tmpAngle != 0 ) {
     // Case 2: an angle.
 
     const int angle = tmpAngle;
-    const QFontMetrics fm = painter.fontMetrics();
 
     painter.rotate( angle );
     double x;
@@ -1116,7 +1113,7 @@ void CellView::paintText( QPainter& painter,
       x = indent + cellRect.x() + d->textX;
     else
       x = indent + cellRect.x() + d->textX
-          - ( fm.descent() + fm.ascent() ) * sin( angle * M_PI / 180 );
+          - ( fontMetrics.descent() + fontMetrics.ascent() ) * sin( angle * M_PI / 180 );
     double y;
     if ( angle > 0 )
       y = cellRect.y() + d->textY;
@@ -1124,7 +1121,7 @@ void CellView::paintText( QPainter& painter,
       y = cellRect.y() + d->textY + d->textHeight;
     const QPointF position( x * cos( angle * M_PI / 180 ) + y * sin( angle * M_PI / 180 ),
                            -x * sin( angle * M_PI / 180 ) + y * cos( angle * M_PI / 180 ) );
-    painter.drawText( position, d->displayText );
+    drawText( painter, effectiveFont( view ), position, d->displayText, cell );
     painter.rotate( -angle );
   }
   else if ( tmpMultiRow && !tmpVerticalText ) {
@@ -1134,7 +1131,7 @@ void CellView::paintText( QPainter& painter,
     int i;
     int pos = 0;
     double dy = 0.0;
-    const QFontMetrics fm = painter.fontMetrics();
+
     do {
       i = d->displayText.indexOf( "\n", pos );
       if ( i == -1 )
@@ -1157,17 +1154,17 @@ void CellView::paintText( QPainter& painter,
           break;
 
         case Style::Right:
-          d->textX = cellRect.width() - s_borderSpace - fm.width( text )
+          d->textX = cellRect.width() - s_borderSpace - fontMetrics.width( text )
                    - d->style.rightBorderPen().width();
           break;
 
         case Style::Center:
-          d->textX = ( cellRect.width() - fm.width( text ) ) / 2;
+          d->textX = ( cellRect.width() - fontMetrics.width( text ) ) / 2;
       }
 
       const QPointF position( indent + cellRect.x() + d->textX, cellRect.y() + d->textY + dy );
-      painter.drawText( position, text );
-      dy += fm.descent() + fm.ascent();
+      drawText( painter, effectiveFont( view ), position, text, cell );
+      dy += fontMetrics.descent() + fontMetrics.ascent();
     } while ( i != -1 );
   }
   else if ( tmpVerticalText && !d->displayText.isEmpty() ) {
@@ -1177,14 +1174,14 @@ void CellView::paintText( QPainter& painter,
     int i = 0;
     int len = 0;
     double dy = 0.0;
-    const QFontMetrics fm = painter.fontMetrics();
+
     do {
       len = d->displayText.length();
       text = d->displayText.at( i );
       const QPointF position( indent + cellRect.x() + d->textX,
                               cellRect.y() + d->textY + dy );
-      painter.drawText( position, text );
-      dy += fm.descent() + fm.ascent();
+      drawText( painter, effectiveFont( view ), position, text, cell );
+      dy += fontMetrics.descent() + fontMetrics.ascent();
       i++;
     } while ( i != len );
   }
@@ -1786,9 +1783,9 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell& cell )
 //
 // Used in makeLayout() and calculateTextParameters().
 //
-QFont CellView::effectiveFont( const Cell& cell ) const
+QFont CellView::effectiveFont( const View* view ) const
 {
-    QFont tmpFont( d->style.font() );
+    QFont tmpFont = view ? QFont( d->style.font(), view->canvasWidget() ) : d->style.font();
     // Scale the font size according to the current zoom.
 //     tmpFont.setPointSizeF( tmpFont.pointSizeF() / cell.doc()->resolutionY() );
     return tmpFont;
@@ -1833,7 +1830,7 @@ void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
   //
   // First, Determine the correct font with zoom taken into account.
   // Then calculate text dimensions, i.e. d->textWidth and d->textHeight.
-  const QFontMetrics fontMetrics( effectiveFont( cell ) );
+  const QFontMetrics fontMetrics( effectiveFont( sheetView->view() ) );
   textSize( fontMetrics );
 
   // Calculate the size of the cell.
@@ -1898,10 +1895,10 @@ void CellView::calculateCellDimension( const Cell& cell )
 
 
 //used in Sheet::adjustColumnHelper and Sheet::adjustRow
-void CellView::calculateTextParameters( const Cell& cell )
+void CellView::calculateTextParameters( SheetView* sheetView, const Cell& cell )
 {
   // Get the font metrics for the effective font.
-  const QFontMetrics fontMetrics( effectiveFont( cell ) );
+  const QFontMetrics fontMetrics( effectiveFont( sheetView->view() ) );
 
   // Recalculate text dimensions, i.e. d->textWidth and d->textHeight
   textSize( fontMetrics );
@@ -2359,6 +2356,25 @@ void CellView::obscureVerticalCells( SheetView* sheetView, const Cell& masterCel
         else
             d->fittingHeight = false;
     }
+}
+
+void CellView::drawText( QPainter& painter, const QFont& font,
+                         const QPointF& location, const QString& text,
+                         const Cell& cell ) const
+{
+    const double width = cell.doc()->zoomItX( d->width );
+    QTextLayout textLayout( text, font );
+    textLayout.beginLayout();
+    forever
+    {
+        QTextLine line = textLayout.createLine();
+        if ( !line.isValid() )
+            break;
+        line.setLineWidth( width );
+    }
+    textLayout.endLayout();
+    QPointF loc( location.x(), location.y() - font.pointSizeF() );
+    textLayout.draw( &painter, loc );
 }
 
 void CellView::obscure( int col, int row )

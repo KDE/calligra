@@ -48,6 +48,7 @@
 #include <QScrollBar>
 #include <QPainter>
 #include <QRubberBand>
+#include <QTextLayout>
 #include <QToolTip>
 
 // KDE
@@ -120,8 +121,8 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
     m_pView->enableAutoScroll();
   }
 
-  double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
-  double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
+  double ev_PosY = m_pView->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
+  double dHeight = m_pView->doc()->unzoomItY( height() );
   m_bResize = false;
   m_bSelection = false;
 
@@ -223,7 +224,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
     if (!sheet)
 	    return;
 
-    double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
+    double ev_PosY = m_pView->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
 
     if ( m_bResize )
     {
@@ -257,14 +258,14 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
         if ( !sheet->isProtected() )
         {
-          if ( !m_pCanvas->d->view->doc()->undoLocked() )
+          if ( !m_pView->doc()->undoLocked() )
           {
             //just resize
             if ( height != 0.0 )
             {
               // TODO Stefan: replace this
-              UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(rect) );
-                m_pCanvas->d->view->doc()->addCommand( undo );
+              UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(rect) );
+                m_pView->doc()->addCommand( undo );
             }
           }
 
@@ -324,10 +325,10 @@ void VBorder::equalizeRow( double resize )
     return;
 
   QRect selection( m_pView->selection()->selection() );
-  if ( !m_pCanvas->d->view->doc()->undoLocked() )
+  if ( !m_pView->doc()->undoLocked() )
   {
-     UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(selection) );
-     m_pCanvas->d->view->doc()->addCommand( undo );
+     UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(selection) );
+     m_pView->doc()->addCommand( undo );
   }
   RowFormat *rl;
   for ( int i = selection.top(); i <= selection.bottom(); i++ )
@@ -360,8 +361,8 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
   if (!sheet)
     return;
 
-  double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
-  double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
+  double ev_PosY = m_pView->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
+  double dHeight = m_pView->doc()->unzoomItY( height() );
 
   // The button is pressed and we are resizing ?
   if ( m_bResize )
@@ -400,7 +401,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
 
      //What is the internal size of 1 pixel
-    const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItY( 1.0 );
+    const double unzoomedPixel = m_pView->doc()->unzoomItY( 1.0 );
     double y;
     int tmpRow = sheet->topRow( m_pCanvas->yOffset(), y );
 
@@ -479,7 +480,7 @@ void VBorder::paintSizeIndicator( int mouseY )
     m_iResizePos = mouseY;
 
     // Dont make the row have a height < 2 pixel.
-    double y = m_pCanvas->d->view->doc()->zoomItY( sheet->rowPosition( m_iResizedRow ) - m_pCanvas->yOffset() );
+    double y = m_pView->doc()->zoomItY( sheet->rowPosition( m_iResizedRow ) - m_pCanvas->yOffset() );
     if ( m_iResizePos < y + 2 )
         m_iResizePos = (int) y;
 
@@ -542,16 +543,16 @@ void VBorder::paintEvent( QPaintEvent* event )
   // kDebug(36004) << event->rect() << endl;
 
   // painting rectangle
-  const QRectF paintRect = m_pCanvas->d->view->doc()->viewToDocument( event->rect() );
+  const QRectF paintRect = m_pView->doc()->viewToDocument( event->rect() );
 
   // the painter
   QPainter painter( this );
-  painter.scale( m_pCanvas->d->view->doc()->zoomedResolutionX(), m_pCanvas->d->view->doc()->zoomedResolutionY() );
+  painter.scale( m_pView->doc()->zoomedResolutionX(), m_pView->doc()->zoomedResolutionY() );
   painter.setRenderHint( QPainter::TextAntialiasing );
 
   // fonts
-  QFont normalFont( painter.font() );
-  QFont boldFont( normalFont );
+  QFont normalFont( painter.font(), m_pCanvas );
+  QFont boldFont( normalFont, m_pCanvas );
   boldFont.setBold( true );
 
   // background brush/color
@@ -608,10 +609,11 @@ void VBorder::paintEvent( QPaintEvent* event )
 
     double len = painter.fontMetrics().width( rowText );
     if (!rowFormat->hidden())
-        painter.drawText( QPointF( ( width - len ) / 2,
-                                   yPos + ( height + painter.fontMetrics().ascent()
-                                                   - painter.fontMetrics().descent() ) / 2 ),
-                          rowText );
+        drawText( painter,
+                  normalFont,
+                  QPointF( ( width - len ) / 2,
+                           yPos + ( height + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
+                  rowText );
 
     yPos += rowFormat->height();
     y++;
@@ -625,6 +627,27 @@ void VBorder::focusOutEvent( QFocusEvent* )
 //     if ( m_scrollTimer->isActive() )
 //         m_scrollTimer->stop();
     m_bMousePressed = false;
+}
+
+void VBorder::drawText( QPainter& painter, const QFont& font,
+                        const QPointF& location, const QString& text ) const
+{
+    register Sheet * const sheet = m_pView->activeSheet();
+    if ( !sheet )
+        return;
+
+    QTextLayout textLayout( text, font );
+    textLayout.beginLayout();
+    forever
+    {
+        QTextLine line = textLayout.createLine();
+        if ( !line.isValid() )
+            break;
+        line.setLineWidth( width() );
+    }
+    textLayout.endLayout();
+    QPointF loc( location.x(), location.y() - font.pointSizeF() );
+    textLayout.draw( &painter, loc );
 }
 
 
@@ -685,18 +708,18 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
 //   m_scrollTimer->start( 50 );
 
   double ev_PosX;
-  double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
+  double dWidth = m_pView->doc()->unzoomItX( width() );
   if ( sheet->layoutDirection() == Sheet::RightToLeft )
-    ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+    ev_PosX = dWidth - m_pView->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   else
-    ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+    ev_PosX = m_pView->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   m_bResize = false;
   m_bSelection = false;
 
   // Find the first visible column and the x position of this column.
   double x;
 
-  const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItX( 1.0 );
+  const double unzoomedPixel = m_pView->doc()->unzoomItX( 1.0 );
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
@@ -842,7 +865,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
     if ( m_bResize )
     {
-        double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
+        double dWidth = m_pView->doc()->unzoomItX( width() );
         double ev_PosX;
 
         // Remove size indicator painted by paintSizeIndicator
@@ -870,9 +893,9 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
         double x;
 
         if ( sheet->layoutDirection()==Sheet::RightToLeft )
-          ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+          ev_PosX = dWidth - m_pView->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
         else
-          ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+          ev_PosX = m_pView->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
 
         x = sheet->columnPosition( m_iResizedColumn );
 
@@ -883,14 +906,14 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
         if ( !sheet->isProtected() )
         {
-          if ( !m_pCanvas->d->view->doc()->undoLocked() )
+          if ( !m_pView->doc()->undoLocked() )
           {
             //just resize
             if ( width != 0.0 )
             {
               // TODO Stefan: replace this
-                UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(rect) );
-                m_pCanvas->d->view->doc()->addCommand( undo );
+                UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(rect) );
+                m_pView->doc()->addCommand( undo );
             }
           }
 
@@ -949,10 +972,10 @@ void HBorder::equalizeColumn( double resize )
   Q_ASSERT( sheet );
 
   QRect selection( m_pView->selection()->selection() );
-  if ( !m_pCanvas->d->view->doc()->undoLocked() )
+  if ( !m_pView->doc()->undoLocked() )
   {
-      UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(selection) );
-      m_pCanvas->d->view->doc()->addCommand( undo );
+      UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(selection) );
+      m_pView->doc()->addCommand( undo );
   }
   ColumnFormat *cl;
   for ( int i = selection.left(); i <= selection.right(); i++ )
@@ -986,12 +1009,12 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
   if (!sheet)
     return;
 
-  double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
+  double dWidth = m_pView->doc()->unzoomItX( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
-    ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+    ev_PosX = dWidth - m_pView->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   else
-    ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+    ev_PosX = m_pView->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
 
   // The button is pressed and we are resizing ?
   if ( m_bResize )
@@ -1024,7 +1047,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
                                               - (int) ( ( ev_PosX + cl->width() ) - dWidth ) );
       }
       else if ( _ev->pos().x() > width() )
-        m_pCanvas->horzScrollBar()->setValue( (int) ( m_pCanvas->horzScrollBar()->maximum() - ( ev_PosX - dWidth + m_pCanvas->d->view->doc()->unzoomItX( m_pCanvas->width() ) ) ) );
+        m_pCanvas->horzScrollBar()->setValue( (int) ( m_pCanvas->horzScrollBar()->maximum() - ( ev_PosX - dWidth + m_pView->doc()->unzoomItX( m_pCanvas->width() ) ) ) );
     }
     else
     {
@@ -1046,7 +1069,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
   else
   {
      //What is the internal size of 1 pixel
-    const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItX( 1.0 );
+    const double unzoomedPixel = m_pView->doc()->unzoomItX( 1.0 );
     double x;
 
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
@@ -1075,7 +1098,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
     {
       int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
 
-      while ( x < m_pCanvas->d->view->doc()->unzoomItY( width() ) + m_pCanvas->xOffset() )
+      while ( x < m_pView->doc()->unzoomItY( width() ) + m_pCanvas->xOffset() )
       {
         double w = sheet->columnFormat( tmpCol )->width();
         //if col is hide and it's the first column
@@ -1174,7 +1197,7 @@ void HBorder::paintSizeIndicator( int mouseX )
       m_iResizePos = mouseX;
 
     // Dont make the column have a width < 2 pixels.
-    double x = m_pCanvas->d->view->doc()->zoomItX( sheet->columnPosition( m_iResizedColumn ) - m_pCanvas->xOffset() );
+    double x = m_pView->doc()->zoomItX( sheet->columnPosition( m_iResizedColumn ) - m_pCanvas->xOffset() );
 
     if ( sheet->layoutDirection() == Sheet::RightToLeft )
     {
@@ -1252,12 +1275,12 @@ void HBorder::paintEvent( QPaintEvent* event )
 
   // the painter
   QPainter painter( this );
-  painter.scale( m_pCanvas->d->view->doc()->zoomedResolutionX(), m_pCanvas->d->view->doc()->zoomedResolutionY() );
+  painter.scale( m_pView->doc()->zoomedResolutionX(), m_pView->doc()->zoomedResolutionY() );
   painter.setRenderHint( QPainter::TextAntialiasing );
 
   // fonts
-  QFont normalFont( painter.font() );
-  QFont boldFont( normalFont );
+  QFont normalFont( painter.font(), m_pCanvas );
+  QFont boldFont( normalFont, m_pCanvas );
   boldFont.setBold( true );
 
   // background brush/color
@@ -1277,9 +1300,9 @@ void HBorder::paintEvent( QPaintEvent* event )
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     //Get the left column and the current x-position
-    x = sheet->leftColumn( int( m_pCanvas->d->view->doc()->unzoomItX( width() ) - paintRect.x() + m_pCanvas->xOffset() ), xPos );
+    x = sheet->leftColumn( int( m_pView->doc()->unzoomItX( width() ) - paintRect.x() + m_pCanvas->xOffset() ), xPos );
     //Align to the offset
-    xPos = m_pCanvas->d->view->doc()->unzoomItX( width() ) - xPos + m_pCanvas->xOffset();
+    xPos = m_pView->doc()->unzoomItX( width() ) - xPos + m_pCanvas->xOffset();
   }
   else
   {
@@ -1329,31 +1352,22 @@ void HBorder::paintEvent( QPaintEvent* event )
         painter.setPen( palette().highlightedText().color() );
       else if ( highlighted )
         painter.setFont( boldFont );
-      if ( !sheet->getShowColumnNumber() )
-      {
-        QString colText = Cell::columnName( x );
+
+        QString colText = sheet->getShowColumnNumber() ? QString::number( x ) : Cell::columnName( x );
         double len = painter.fontMetrics().width( colText );
         if ( !col_lay->hidden() )
-          painter.drawText( QPointF( xPos + ( width - len ) / 2,
-                                     ( height + painter.fontMetrics().ascent() -
-                                                painter.fontMetrics().descent() ) / 2 ),
-                            colText );
-      }
-      else
-      {
-        QString tmp;
-        double len = painter.fontMetrics().width( tmp.setNum(x) );
-        if (!col_lay->hidden())
-          painter.drawText( QPointF( xPos + ( width - len ) / 2,
-                                     ( height + painter.fontMetrics().ascent() -
-                                                painter.fontMetrics().descent() ) / 2 ),
-                            tmp.setNum(x) );
-      }
+          drawText( painter,
+                    normalFont,
+                    QPointF( xPos + ( width - len ) / 2,
+                             ( height + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
+                    colText,
+                    width );
+
       xPos += col_lay->width();
       --x;
     }
   }
-  else
+  else // if ( sheet->layoutDirection()==Sheet::LeftToRight )
   {
     const QSet<int> selectedColumns = m_pView->selection()->columnsSelected();
     const QSet<int> affectedColumns = m_pView->selection()->columnsAffected();
@@ -1388,26 +1402,17 @@ void HBorder::paintEvent( QPaintEvent* event )
         painter.setPen( palette().highlightedText().color() );
       else if ( highlighted )
         painter.setFont( boldFont );
-      if ( !sheet->getShowColumnNumber() )
-      {
-        QString colText = Cell::columnName( x );
+
+        QString colText = sheet->getShowColumnNumber() ? QString::number( x ) : Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
         if (!col_lay->hidden())
-          painter.drawText( QPointF( xPos + ( width - len ) / 2,
-                                     ( height + painter.fontMetrics().ascent() -
-                                                painter.fontMetrics().descent() ) / 2 ),
-                            colText );
-      }
-      else
-      {
-        QString tmp;
-        int len = painter.fontMetrics().width( tmp.setNum(x) );
-        if (!col_lay->hidden())
-          painter.drawText( QPointF( xPos + ( width - len ) / 2,
-                                     ( height + painter.fontMetrics().ascent() -
-                                                painter.fontMetrics().descent() ) / 2 ),
-                            tmp.setNum(x) );
-      }
+          drawText( painter,
+                    normalFont,
+                    QPointF( xPos + ( width - len ) / 2,
+                             ( height + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
+                    colText,
+                    width );
+
       xPos += col_lay->width();
       ++x;
     }
@@ -1422,6 +1427,28 @@ void HBorder::focusOutEvent( QFocusEvent* )
     kDebug() << "HBorder::focusOutEvent(" << endl;
     m_pView->disableAutoScroll();
     m_bMousePressed = false;
+}
+
+void HBorder::drawText( QPainter& painter, const QFont& font,
+                        const QPointF& location, const QString& text,
+                        double width ) const
+{
+    register Sheet * const sheet = m_pView->activeSheet();
+    if ( !sheet )
+        return;
+
+    QTextLayout textLayout( text, font );
+    textLayout.beginLayout();
+    forever
+    {
+        QTextLine line = textLayout.createLine();
+        if ( !line.isValid() )
+            break;
+        line.setLineWidth( width );
+    }
+    textLayout.endLayout();
+    QPointF loc( location.x(), location.y() - font.pointSizeF() );
+    textLayout.draw( &painter, loc );
 }
 
 
