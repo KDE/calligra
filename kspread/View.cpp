@@ -304,7 +304,7 @@ public:
 
     void initActions();
     void adjustActions( bool mode );
-    void adjustActions( Cell cell, int column, int row );
+    void adjustActions( Cell cell );
     void adjustWorkbookActions( bool mode );
     QAbstractButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0 );
 
@@ -558,43 +558,56 @@ void View::Private::initActions()
       ac, "textColor",true );
   actions->textColor->setDefaultColor(QColor());
 
-  QActionGroup* groupAlign = new QActionGroup( view );
-  actions->alignLeft  = new KToggleAction(KIcon("text_left"), i18n("Align Left"), view);
-  ac->addAction("left", actions->alignLeft );
-  connect( actions->alignLeft, SIGNAL( toggled( bool ) ),
-                    view, SLOT( alignLeft( bool ) ) );
-  actions->alignLeft->setToolTip(i18n("Left justify the cell contents"));
 
-  actions->alignCenter  = new KToggleAction(KIcon("text_center"), i18n("Align Center"), view);
-  ac->addAction("center", actions->alignCenter );
-  connect( actions->alignCenter, SIGNAL( toggled( bool ) ),
-                    view, SLOT( alignCenter( bool ) ) );
-  actions->alignCenter->setToolTip(i18n("Center the cell contents"));
+    // -- horizontal alignment --
+    //
+    QActionGroup* groupAlign = new QActionGroup( view );
+    actions->alignLeft  = new KToggleAction(KIcon("text_left"), i18n("Align Left"), view);
+    ac->addAction("left", actions->alignLeft );
+    connect( actions->alignLeft, SIGNAL( toggled( bool ) ),
+             view, SLOT( alignLeft( bool ) ) );
+    actions->alignLeft->setToolTip(i18n("Left justify the cell contents"));
+    actions->alignLeft->setActionGroup( groupAlign );
 
-  actions->alignRight  = new KToggleAction(KIcon("text_right"), i18n("Align Right"), view);
-  ac->addAction("right", actions->alignRight );
-  connect( actions->alignRight, SIGNAL( toggled( bool ) ),
-                    view, SLOT( alignRight( bool ) ) );
-  actions->alignRight->setToolTip(i18n("Right justify the cell contents"));
+    actions->alignCenter  = new KToggleAction(KIcon("text_center"), i18n("Align Center"), view);
+    ac->addAction("center", actions->alignCenter );
+    connect( actions->alignCenter, SIGNAL( toggled( bool ) ),
+             view, SLOT( alignCenter( bool ) ) );
+    actions->alignCenter->setToolTip(i18n("Center the cell contents"));
+    actions->alignCenter->setActionGroup( groupAlign );
 
-  QActionGroup* groupPos = new QActionGroup( view );
-  actions->alignTop  = new KToggleAction(KIcon("text_top"), i18n("Align Top"), view);
-  ac->addAction("top", actions->alignTop );
-  connect( actions->alignTop, SIGNAL( toggled( bool ) ),
-                    view, SLOT( alignTop( bool ) ) );
-  actions->alignTop->setToolTip(i18n("Align cell contents along the top of the cell"));
+    actions->alignRight  = new KToggleAction(KIcon("text_right"), i18n("Align Right"), view);
+    ac->addAction("right", actions->alignRight );
+    connect( actions->alignRight, SIGNAL( toggled( bool ) ),
+             view, SLOT( alignRight( bool ) ) );
+    actions->alignRight->setToolTip(i18n("Right justify the cell contents"));
+    actions->alignRight->setActionGroup( groupAlign );
 
-  actions->alignMiddle  = new KToggleAction(KIcon("middle"), i18n("Align Middle"), view);
-  ac->addAction("middle", actions->alignMiddle );
-  connect( actions->alignMiddle, SIGNAL( toggled( bool ) ),
-                    view, SLOT( alignMiddle( bool ) ) );
-  actions->alignMiddle->setToolTip(i18n("Align cell contents centered in the cell"));
 
-  actions->alignBottom  = new KToggleAction(KIcon("text_bottom"), i18n("Align Bottom"), view);
-  ac->addAction("bottom", actions->alignBottom );
-  connect( actions->alignBottom, SIGNAL( toggled( bool ) ),
-                    view, SLOT( alignBottom( bool ) ) );
-  actions->alignBottom->setToolTip(i18n("Align cell contents along the bottom of the cell"));
+    // -- vertical alignment --
+    //
+    QActionGroup* groupPos = new QActionGroup( view );
+    actions->alignTop  = new KToggleAction(KIcon("text_top"), i18n("Align Top"), view);
+    ac->addAction("top", actions->alignTop );
+    connect( actions->alignTop, SIGNAL( toggled( bool ) ),
+             view, SLOT( alignTop( bool ) ) );
+    actions->alignTop->setToolTip(i18n("Align cell contents along the top of the cell"));
+    actions->alignTop->setActionGroup( groupPos );
+
+    actions->alignMiddle  = new KToggleAction(KIcon("middle"), i18n("Align Middle"), view);
+    ac->addAction("middle", actions->alignMiddle );
+    connect( actions->alignMiddle, SIGNAL( toggled( bool ) ),
+             view, SLOT( alignMiddle( bool ) ) );
+    actions->alignMiddle->setToolTip(i18n("Align cell contents centered in the cell"));
+    actions->alignMiddle->setActionGroup( groupPos );
+
+    actions->alignBottom  = new KToggleAction(KIcon("text_bottom"), i18n("Align Bottom"), view);
+    ac->addAction("bottom", actions->alignBottom );
+    connect( actions->alignBottom, SIGNAL( toggled( bool ) ),
+             view, SLOT( alignBottom( bool ) ) );
+    actions->alignBottom->setToolTip(i18n("Align cell contents along the bottom of the cell"));
+    actions->alignBottom->setActionGroup( groupPos );
+
 
   actions->wrapText  = new KToggleAction(KIcon( "multirow" ), i18n("Wrap Text"), view);
   ac->addAction("multiRow", actions->wrapText );
@@ -1299,60 +1312,69 @@ void View::Private::initActions()
   connect(actions->preference, SIGNAL(triggered(bool)), view, SLOT( preference() ));
   actions->preference->setToolTip(i18n("Set various KSpread options"));
 
-  // -- running calculation actions --
 
-  QActionGroup* groupCalc = new QActionGroup( view );
-  actions->calcNone  = new KToggleAction(i18n("None"), view);
-  ac->addAction("menu_none", actions->calcNone );
-  connect( actions->calcNone, SIGNAL( toggled( bool ) ),
-      view, SLOT( menuCalc( bool ) ) );
-  actions->calcNone->setToolTip(i18n("No calculation"));
+    // -- calculation actions --
+    //
+    QActionGroup* groupCalc = new QActionGroup( view );
+    actions->calcNone  = new KToggleAction(i18n("None"), view);
+    ac->addAction("menu_none", actions->calcNone );
+    connect( actions->calcNone, SIGNAL( toggled( bool ) ),
+             view, SLOT( menuCalc( bool ) ) );
+    actions->calcNone->setToolTip(i18n("No calculation"));
+    actions->calcNone->setActionGroup( groupCalc );
 
-  actions->calcSum  = new KToggleAction(i18n("Sum"), view);
-  ac->addAction("menu_sum", actions->calcSum );
-  connect( actions->calcSum, SIGNAL( toggled( bool ) ),
-      view, SLOT( menuCalc( bool ) ) );
-  actions->calcSum->setToolTip(i18n("Calculate using sum"));
+    actions->calcSum  = new KToggleAction(i18n("Sum"), view);
+    ac->addAction("menu_sum", actions->calcSum );
+    connect( actions->calcSum, SIGNAL( toggled( bool ) ),
+             view, SLOT( menuCalc( bool ) ) );
+    actions->calcSum->setToolTip(i18n("Calculate using sum"));
+    actions->calcSum->setActionGroup( groupCalc );
 
-  actions->calcMin  = new KToggleAction(i18n("Min"), view);
-  ac->addAction("menu_min", actions->calcMin );
-  connect( actions->calcMin, SIGNAL( toggled( bool ) ),
-      view, SLOT( menuCalc( bool ) ) );
-  actions->calcMin->setToolTip(i18n("Calculate using minimum"));
+    actions->calcMin  = new KToggleAction(i18n("Min"), view);
+    ac->addAction("menu_min", actions->calcMin );
+    connect( actions->calcMin, SIGNAL( toggled( bool ) ),
+             view, SLOT( menuCalc( bool ) ) );
+    actions->calcMin->setToolTip(i18n("Calculate using minimum"));
+    actions->calcMin->setActionGroup( groupCalc );
 
-  actions->calcMax  = new KToggleAction(i18n("Max"), view);
-  ac->addAction("menu_max", actions->calcMax );
-  connect( actions->calcMax, SIGNAL( toggled( bool ) ),
-      view, SLOT( menuCalc( bool ) ) );
-  actions->calcMax->setToolTip(i18n("Calculate using maximum"));
+    actions->calcMax  = new KToggleAction(i18n("Max"), view);
+    ac->addAction("menu_max", actions->calcMax );
+    connect( actions->calcMax, SIGNAL( toggled( bool ) ),
+             view, SLOT( menuCalc( bool ) ) );
+    actions->calcMax->setToolTip(i18n("Calculate using maximum"));
+    actions->calcMax->setActionGroup( groupCalc );
 
-  actions->calcAverage  = new KToggleAction(i18n("Average"), view);
-  ac->addAction("menu_average", actions->calcAverage );
-  connect( actions->calcAverage, SIGNAL( toggled( bool ) ),
-      view, SLOT( menuCalc( bool ) ) );
-  actions->calcAverage->setToolTip(i18n("Calculate using average"));
+    actions->calcAverage  = new KToggleAction(i18n("Average"), view);
+    ac->addAction("menu_average", actions->calcAverage );
+    connect( actions->calcAverage, SIGNAL( toggled( bool ) ),
+             view, SLOT( menuCalc( bool ) ) );
+    actions->calcAverage->setToolTip(i18n("Calculate using average"));
+    actions->calcAverage->setActionGroup( groupCalc );
 
-  actions->calcCount  = new KToggleAction(i18n("Count"), view);
-  ac->addAction("menu_count", actions->calcCount );
-  connect( actions->calcCount, SIGNAL( toggled( bool ) ),
-      view, SLOT( menuCalc( bool ) ) );
-  actions->calcCount->setToolTip(i18n("Calculate using the count"));
+    actions->calcCount  = new KToggleAction(i18n("Count"), view);
+    ac->addAction("menu_count", actions->calcCount );
+    connect( actions->calcCount, SIGNAL( toggled( bool ) ),
+             view, SLOT( menuCalc( bool ) ) );
+    actions->calcCount->setToolTip(i18n("Calculate using the count"));
+    actions->calcCount->setActionGroup( groupCalc );
 
-  actions->calcCountA  = new KToggleAction(i18n("CountA"), view);
-  ac->addAction("menu_counta", actions->calcCountA );
-  connect( actions->calcCountA, SIGNAL( toggled( bool ) ),
-      view, SLOT( menuCalc( bool ) ) );
-  actions->calcCountA->setToolTip(i18n("Calculate using the countA"));
-
-  // -- special action, only for developers --
-
-  actions->inspector  = new KAction(KIcon( "inspector" ), i18n("Run Inspector..."), view);
-  ac->addAction("inspector", actions->inspector );
-  actions->inspector->setShortcut( QKeySequence( Qt::CTRL+ Qt::SHIFT + Qt::Key_I));
-  connect(actions->inspector, SIGNAL(triggered(bool)), view, SLOT( runInspector() ));
+    actions->calcCountA  = new KToggleAction(i18n("CountA"), view);
+    ac->addAction("menu_counta", actions->calcCountA );
+    connect( actions->calcCountA, SIGNAL( toggled( bool ) ),
+             view, SLOT( menuCalc( bool ) ) );
+    actions->calcCountA->setToolTip(i18n("Calculate using the countA"));
+    actions->calcCountA->setActionGroup( groupCalc );
 
 
-  m_propertyEditor = 0;
+    // -- special action, only for developers --
+    //
+    actions->inspector  = new KAction(KIcon( "inspector" ), i18n("Run Inspector..."), view);
+    ac->addAction("inspector", actions->inspector );
+    actions->inspector->setShortcut( QKeySequence( Qt::CTRL+ Qt::SHIFT + Qt::Key_I));
+    connect(actions->inspector, SIGNAL(triggered(bool)), view, SLOT( runInspector() ));
+
+
+    m_propertyEditor = 0;
 }
 
 void View::Private::adjustActions( bool mode )
@@ -1497,7 +1519,7 @@ void View::Private::adjustActions( bool mode )
   }
 }
 
-void View::Private::adjustActions( Cell cell, int column, int row )
+void View::Private::adjustActions( Cell cell )
 {
   toolbarLock = true;
 
@@ -2612,7 +2634,7 @@ void View::updateEditWidgetOnPress()
     else
         d->editWidget->setText( cell.inputText() );
 
-    d->adjustActions(cell, column, row);
+    d->adjustActions( cell );
 }
 
 void View::updateEditWidget()
@@ -2653,7 +2675,7 @@ void View::updateEditWidget()
       d->canvas->editor()->setFocus();
     }
 
-    d->adjustActions(cell, column, row);
+    d->adjustActions( cell );
 }
 
 void View::activateFormulaEditor()
@@ -5645,7 +5667,6 @@ void View::slotListChoosePopupMenu( )
 
   if ( itemList.isEmpty() )
     return;
-  const RowFormat * rl = d->activeSheet->rowFormat( selection()->marker().y() );
   double tx = d->activeSheet->columnPosition( selection()->marker().x() );
   double ty = d->activeSheet->rowPosition( selection()->marker().y() );
   double h = cell.height();
