@@ -53,7 +53,7 @@ ChartWidget::ChartWidget(Project &p, QWidget *parent, const char *name) : QWidge
 
     chartEngine.calculateWeeks(weeks,p);
     chartEngine.initXCurvesVectors(weeks,bcwpPoints,bcwsPoints,acwpPoints);
-    chartEngine.setMaxTime(weeks);
+//    chartEngine.setMaxTime(weeks);
     chartEngine.calculateActualCost(bcwpPoints, weeks,p);
     chartEngine.calculatePlannedCost(bcwpPoints, weeks,p);
 }
