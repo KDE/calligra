@@ -82,33 +82,42 @@ void PertEditor::dispAvailableTasks(){
 	list_nodeNotView.removeFirst();
 
     list_nodeNotView.begin();
-    QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
-
-    m_assignList->availableListWidget()->clear();
-    m_assignList->selectedListWidget()->clear();
-
-    loadRequiredTasksList(itemToNode(selectedTaskName, m_node));
+    QList<QTreeWidgetItem*> selectedItemList=m_tasktree->selectedItems();
     
-    listNodeNotView(itemToNode(selectedTaskName, m_node));
-    
-    foreach(Node * currentNode, m_node->childNodeIterator() )
+    if(!(selectedItemList.count()<1))
     {
-        // Checks if the curent node is not a milestone
-        // and if it isn't the same as the selected task in the m_tasktree
+	QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
+	m_assignList->availableListWidget()->clear();
+	m_assignList->selectedListWidget()->clear();
 	
-	if ( currentNode->type() != 4 and currentNode->name() != selectedTaskName
-	       and  !list_nodeNotView.contains(currentNode) 	
-               and (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty())
+	loadRequiredTasksList(itemToNode(selectedTaskName, m_node));
+	
+	listNodeNotView(itemToNode(selectedTaskName, m_node));
+	
+	foreach(Node * currentNode, m_node->childNodeIterator() )
 	{
-            m_assignList->availableListWidget()->addItem(currentNode->name());
-        }
+		// Checks if the curent node is not a milestone
+		// and if it isn't the same as the selected task in the m_tasktree
+		
+		if ( currentNode->type() != 4 and currentNode->name() != selectedTaskName
+		and  !list_nodeNotView.contains(currentNode) 	
+		and (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty())
+		{
+		m_assignList->availableListWidget()->addItem(currentNode->name());
+		}
+	}
+	//remove all nodes from list_nodeParent
+	for (int i=0;i< list_nodeNotView.size();i++)
+	{
+		list_nodeNotView.removeFirst();
+	}
+	list_nodeNotView.begin();
     }
-    //remove all nodes from list_nodeParent
-    for (int i=0;i< list_nodeNotView.size();i++)
+    else
     {
-	list_nodeNotView.removeFirst();
+        m_assignList->availableListWidget()->clear();
+	m_assignList->selectedListWidget()->clear();
     }
-    list_nodeNotView.begin();
 }
 
 
