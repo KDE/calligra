@@ -66,8 +66,11 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
     m_assignList = widget.assignList;
     m_part = part;
     m_node = m_part->getProject().projectNode();
-    draw( part->getProject() );
-
+    
+    draw( part->getProject() );  
+    for (int i=0;i< list_nodeNotView.size();i++)
+	list_nodeNotView.removeFirst();
+	
     connect( m_tasktree, SIGNAL( itemSelectionChanged() ), SLOT( dispAvailableTasks() ) );
     connect( m_assignList, SIGNAL(added(QListWidgetItem *)), this, SLOT(addTaskInRequiredList(QListWidgetItem * )) );
     connect( m_assignList, SIGNAL(removed(QListWidgetItem *)), this, SLOT(removeTaskFromRequiredList(QListWidgetItem * )) );
@@ -75,23 +78,58 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
 
 void PertEditor::dispAvailableTasks(){
     
+    for (int i=0;i< list_nodeNotView.size();i++)
+	list_nodeNotView.removeFirst();
+
+    list_nodeNotView.begin();
     QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
 
     m_assignList->availableListWidget()->clear();
     m_assignList->selectedListWidget()->clear();
 
     loadRequiredTasksList(itemToNode(selectedTaskName, m_node));
-
-    foreach(Node * currentNode, m_node->childNodeIterator() ){
+    
+    listNodeNotView(itemToNode(selectedTaskName, m_node));
+    
+    foreach(Node * currentNode, m_node->childNodeIterator() )
+    {
         // Checks if the curent node is not a milestone
         // and if it isn't the same as the selected task in the m_tasktree
-        if ( currentNode->type() != 4 and currentNode->name() != selectedTaskName
-               and (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty()){
+	
+	if ( currentNode->type() != 4 and currentNode->name() != selectedTaskName
+	       and  !list_nodeNotView.contains(currentNode) 	
+               and (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty())
+	{
             m_assignList->availableListWidget()->addItem(currentNode->name());
         }
     }
-
+    //remove all nodes from list_nodeParent
+    for (int i=0;i< list_nodeNotView.size();i++)
+    {
+	list_nodeNotView.removeFirst();
+    }
+    list_nodeNotView.begin();
 }
+
+
+
+
+//return parents of the node
+QList<Node*> PertEditor::listNodeNotView(Node * node)
+{
+    list_nodeNotView = node->getParentNodes();
+    foreach(Node* currentNode,m_node->childNodeIterator())
+    {
+        if (currentNode->isDependChildOf(node))
+        {
+            list_nodeNotView.append(currentNode);	
+        }
+    }
+    return list_nodeNotView;
+}
+
+
+
 
 Node * PertEditor::itemToNode(QString itemName, Node * startNode){
     Node * result;

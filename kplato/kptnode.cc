@@ -355,6 +355,18 @@ bool Node::isDependChildOf(Node *node) {
 	return false;
 }
 
+ QList<Node*> Node::getParentNodes()
+{
+    foreach(Relation * currentRelation, this->dependParentNodes())
+    {
+        if (!this->m_parentNodes.contains(currentRelation->parent())) 
+        {
+            this->m_parentNodes.append(currentRelation->parent());
+        }
+    }
+    return this->m_parentNodes;
+}
+
 bool Node::canMoveTo( Node *newParent )
 {
     if ( m_parent == newParent ) {

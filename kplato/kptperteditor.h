@@ -106,6 +106,8 @@ public:
     void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);
     void loadRequiredTasksList(Node * taskNode);
     Node * itemToNode(QString itemName, Node * startNode);
+    QList<Node*> listNodeNotView(Node * node);
+
 
 private slots:
     void dispAvailableTasks();
@@ -117,7 +119,7 @@ private:
     KActionSelector * m_assignList;
     Part * m_part;
     Node * m_node;
-
+    QList<Node *> list_nodeNotView;
     Ui::PertEditor widget;
 };
 

@@ -165,7 +165,7 @@ public:
         return m_dependParentNodes.at(number);
     }
     QList<Relation*> &dependParentNodes() { return m_dependParentNodes; }
-
+    QList<Node*> getParentNodes();
     bool isParentOf(Node *node);
     bool isDependChildOf(Node *node);
     virtual bool canMoveTo( Node *newParent );
@@ -503,6 +503,7 @@ protected:
     QList<Node*> m_nodes;
     QList<Relation*> m_dependChildNodes;
     QList<Relation*> m_dependParentNodes;
+    QList<Node*>m_parentNodes;
     Node *m_parent;
 
     QString m_id; // unique id
