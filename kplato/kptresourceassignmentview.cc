@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2003 - 2006 Frederic BECQUIER <frederic.becquier@gmail.com>
+  Copyright (C) 2006 - 2007 Frederic BECQUIER <frederic.becquier@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -75,12 +75,14 @@ void ResourceAssignmentView::draw( Project &project )
 
 }
 
-
+/*This function is called for the left panel*/
 void ResourceAssignmentView::drawResourcesName( QTreeWidgetItem *parent, ResourceGroup *group )
 {
+    /*for each resource*/
     foreach ( Resource * res, group->resources() ) {
         QTreeWidgetItem * item = new QTreeWidgetItem( parent );
 
+        /*Determine the name and the type of the resource*/
         switch ( res->type() ) {
             case Resource::Type_Work:
                 item->setText( 0, res->name() );
@@ -97,7 +99,7 @@ void ResourceAssignmentView::drawResourcesName( QTreeWidgetItem *parent, Resourc
 }
 
 
-
+/*Constructor*/
 ResourceAssignmentView::ResourceAssignmentView( Part *part, QWidget *parent): ViewBase( part, parent )
 {
 kDebug() << " ---------------- KPlato: Creating ResourceAssignmentView ----------------" << endl;
@@ -118,7 +120,7 @@ kDebug() << " ---------------- KPlato: Creating ResourceAssignmentView ---------
     m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
 
     QStringList sl2;
-    sl2 << i18n( "Task" );
+    sl2 << i18n( "Task" ) /*<< i18n( "Completed" )*/;
     m_taskList->setHeaderLabels( sl2 );
 
     m_selectedItem = 0;
@@ -128,10 +130,11 @@ kDebug() << " ---------------- KPlato: Creating ResourceAssignmentView ---------
     draw(m_part->getProject());
 
     connect( m_resList, SIGNAL( itemSelectionChanged() ), SLOT( resSelectionChanged() ) );
+    connect( m_taskList, SIGNAL( contextMenuRequested( Node* , const QPoint& ) ), this, SLOT( slotContextMenuRequested( Node* , const QPoint& ) ) );
 
 }
 
-
+/*Store the selected item*/
 void ResourceAssignmentView::resSelectionChanged()
 {
     QTreeWidgetItem * item = 0;
@@ -141,7 +144,7 @@ void ResourceAssignmentView::resSelectionChanged()
     resSelectionChanged( item );
 }
 
-
+/*Update tasks attributed to the selected item*/
 void ResourceAssignmentView::resSelectionChanged( QTreeWidgetItem *item )
 {
     QTreeWidgetItem * resItem =  item;
@@ -154,6 +157,7 @@ void ResourceAssignmentView::resSelectionChanged( QTreeWidgetItem *item )
     updateTasks();
 }
 
+/**/
 void ResourceAssignmentView::updateTasks()
 {
     /*Find Selected Item*/
@@ -214,22 +218,77 @@ void ResourceAssignmentView::updateTasks()
 void ResourceAssignmentView::drawTasksAttributedToAResource (Resource *res, QTreeWidgetItem *parent)
 {
     QString taskName;
+    Task *currentTask;
 
+    /*Differents state regrouping tasks*/
+    QTreeWidgetItem *notStarted;
+    QTreeWidgetItem *started;
+    QTreeWidgetItem *finished;
+
+    /*Task node*/
+    QTreeWidgetItem * item;
+
+    /*Put the name of the resource on the node*/
     parent->setText( 0, res->name() );
 
+    /*Case: the resource has no task attributed*/
     if((res->requests()).isEmpty())
     {
         QTreeWidgetItem * item = new QTreeWidgetItem( parent );
         item->setText( 0, i18n( "No task attributed" ) );
     }
     else
+    /*Case: the resource has tasks attributed*/
     {
+
+    /*Creation of 3 categories of task*/
+    notStarted = new QTreeWidgetItem( parent );
+    started = new QTreeWidgetItem( parent );
+    finished = new QTreeWidgetItem( parent );
+
+    /*Set names of categories*/
+    notStarted->setText( 0, i18n( "Not Started" ) );
+    started->setText( 0, i18n( "Started" ) );
+    finished->setText( 0, i18n( "Finished" ) );
+
+    /*For each task attibuted to the current resource*/
     foreach ( ResourceRequest * rr , res->requests() ){
 
-        taskName = ((rr->parent())->task())->name();
+        /*get name*/
+        currentTask = (rr->parent())->task();
+        taskName = currentTask->name();	
 
-        QTreeWidgetItem * item = new QTreeWidgetItem( parent );
+        /*get status*/
+        /*State: started*/
+        if ((((rr->parent())->task())->completion().isStarted()) && !(((rr->parent())->task())->completion().isFinished()))
+        {
+        kDebug() << "[void KPlato::ResourceAssignmentView::drawTasksAttributedToAResource()] task started";
+        /*adding to the tree*/
+        item = new QTreeWidgetItem( started );
         item->setText( 0, taskName );
+
+        /*Determine the task's advance*/
+        int percent = ((rr->parent())->task())->completion().percentFinished();
+        kDebug() << "[void KPlato::ResourceAssignmentView::drawTasksAttributedToAResource()] " << percent;
+        //QString advance = percent + "%";
+        //item->setText( 1, advance );
+        }
+        /*State: Finished*/
+        else if (((rr->parent())->task())->completion().isFinished())
+        {
+        /*adding to the tree*/
+        kDebug() << "[void KPlato::ResourceAssignmentView::drawTasksAttributedToAResource()] task finished";
+        item = new QTreeWidgetItem( finished );
+        item->setText( 0, taskName );
+        }
+        /*State not started*/
+        else
+        {
+        /*adding to the tree*/
+        kDebug() << "[void KPlato::ResourceAssignmentView::drawTasksAttributedToAResource()] task not started";
+        item = new QTreeWidgetItem( notStarted );
+        item->setText( 0, taskName );
+        }
     }
     }
 }
@@ -251,9 +310,27 @@ void ResourceAssignmentView::drawTasksAttributedToAGroup (ResourceGroup *group, 
             drawTasksAttributedToAResource(res,groupnode);
         }
     }
-	
 }
 
+/*
+foreach( Node* n, m_project->allNodes() ) {
+        if ( n->type() != Node::Type_Task ) {
+            continue;
+        }
+*/
+/*
+void ResourceAssignmentView::contextMenuEvent ( QContextMenuEvent * event )
+{
+    kDebug()<<k_funcinfo<<endl;
+    foreach( Node* n, m_part->getProject() ->allNodes() ) {
+        if ( n->type() == Node::Type_Task ) {
+            if ( n->name() == m_selectedItem) {
+                emit contextMenuRequested( n , event->globalPos() );
+            }
+        }
+    }
+}
+*/
 }  //KPlato namespace
 
 #include "kptresourceassignmentview.moc"
