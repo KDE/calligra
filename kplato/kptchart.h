@@ -50,7 +50,7 @@ namespace KPlato
             void reCalculateY(QVector<QPointF> &,const int,int);
             void reCalculateX(QVector<QPointF> &,const int,int);
             void setMaxCost(QVector<QPointF>);
-           // void setMaxTime(QVector<QPointF> BCWP);
+            //void setMaxTime(QVector<QDate>);
             float setMaxYPercent(QVector<QPointF>, QVector<QPointF>, QVector<QPointF>);
 
             void costToPercent(QVector<QPointF>&);

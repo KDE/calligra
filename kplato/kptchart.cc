@@ -198,7 +198,7 @@ namespace KPlato
         totalCostPlanned=BCWP.last().y();
     }
 
- /*   void Chart::setMaxTime(QVector<QPointF> weeks)
+  /*  void Chart::setMaxTime(QVector<QPointF> weeks)
     {
         totalTimePlanned=weeks.last();
     }*/
