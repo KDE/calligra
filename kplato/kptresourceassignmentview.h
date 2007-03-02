@@ -16,7 +16,7 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * Boston, MA 02110-1301, USA.
 */
-/*
+
 #ifndef KPTRESOURCEASSIGNMENTVIEW_H
 #define KPTRESOURCEASSIGNMENTVIEW_H
 
@@ -24,13 +24,7 @@
 #include "kptcontext.h"
 
 #include <q3ptrlist.h>
-#include <QTreeWidget>*/
-
-#ifndef KPTPERTEDITOR_H
-#define KPTPERTEDITOR_H
-
-#include <kptviewbase.h>
-#include <kptitemmodelbase.h>
+#include <QTreeWidget>
 
 #include <QMenu>
 #include <QPainter>
@@ -60,6 +54,7 @@
 #include <QtGui/QLineEdit>
 
 #include <qwidget.h>
+#include <kptitemmodelbase.h>
 
 #include <kactionselector.h>
 
@@ -67,21 +62,8 @@
 #include "kpttask.h"
 #include "kptcontext.h"
 #include "kpttaskeditor.h"
-#include <ui_kptresourceassignmentview.h>
 
 #include "kptcommand.h"
-//#include "kptitemmodelbase.h"
-//#include "kptcalendar.h"
-//#include "kptduration.h"
-//#include "kptfactory.h"
-//#include "kptresourceappointmentsview.h"
-#include "kptview.h"
-//#include "kptnode.h"
-//#include "kptproject.h"
-//#include "kpttask.h"
-//#include "kptschedule.h"
-//#include "kptdatetime.h"
-//#include "kptcontext.h"
 
 #include <kicon.h>
 #include <kglobal.h>
@@ -91,6 +73,8 @@
 #include <kactioncollection.h>
 
 #include <kdebug.h>
+
+//#include "ui_kptresourceassignmentview.h"
 
 
 
@@ -108,10 +92,11 @@ class QTreeWidgetItem;
 class KAction;
 class KPrinter;
 
+ 
 namespace KPlato
 {
     class ResourcesList;
-
+    
     class ResourceItemPrivate;
 
     class ResourcesList : public QTreeWidget
@@ -140,10 +125,8 @@ namespace KPlato
             ResourcesList *m_taskList;
             QTreeWidgetItem *m_selectedItem;
             QTreeWidgetItem *m_tasktreeroot;
-
             Part *m_part;
-
-    	    Ui::PertEditor widget;
+    	    //Ui::ResourceAssignmentView widget;
 
             void updateTasks();
 
