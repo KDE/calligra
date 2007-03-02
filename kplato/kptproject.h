@@ -145,6 +145,8 @@ public:
     /// Returns the resource with matching name, 0 if no match is found.
     Resource *resourceByName( const QString& name ) const;
     QStringList resourceNameList() const;
+    /// Returns a list of all resources
+    QList<Resource*> resourceList() const { return resourceIdDict.values(); }
 
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
 
@@ -179,7 +181,8 @@ public:
     /// Actual cost up to and including date
     virtual double actualCostTo( const QDate &date, long id = -1  );
 
-    Calendar *defaultCalendar() { return m_standardWorktime->calendar(); }
+    Calendar *defaultCalendar() const { return m_defaultCalendar; }
+    Calendar *setDefaultCalendar( Calendar *cal );
     const QList<Calendar*> &calendars() const;
     void addCalendar( Calendar *calendar, Calendar *parent = 0 );
     void takeCalendar( Calendar *calendar );
@@ -201,7 +204,6 @@ public:
      */
     StandardWorktime *standardWorktime() { return m_standardWorktime; }
     void setStandardWorktime( StandardWorktime * worktime );
-    void setDefaultCalendar( Calendar *cal );
 
     /// Check if node par can be linked to node child.
     bool legalToLink( Node *par, Node *child );
@@ -407,6 +409,12 @@ signals:
     void calendarToBeRemoved( const Calendar *cal );
     void calendarRemoved( const Calendar *cal );
 
+    /**
+     * Emitted when the the default calendar pointer has changed
+     * @parem cal The new default calendar. May be 0.
+     */
+    void defaultCalendarChanged( Calendar *cal );
+    
     /// Emitted when the relation rel is about to be added.
     void relationToBeAdded( Relation *rel, int parentIndex, int childIndex );
     /// Emitted when the relation rel has been added.
@@ -435,9 +443,10 @@ protected:
     QList<ResourceGroup*> m_resourceGroups;
 
     QList<Calendar*> m_calendars;
+    Calendar * m_defaultCalendar;
 
     StandardWorktime *m_standardWorktime;
-
+    
     DateTime calculateForward( int use );
     DateTime calculateBackward( int use );
     DateTime scheduleForward( const DateTime &earliest, int use );

@@ -307,7 +307,7 @@ public:
      */
     Calendar *calendar( bool local = false ) const;
     Calendar *calendar( const QString& id ) const;
-    void setCalendar( Calendar *calendar ) { m_calendar = calendar; }
+    void setCalendar( Calendar *calendar ) { m_calendar = calendar; changed(); }
 
     /**
      * Used to clean up requests when the resource is deleted.

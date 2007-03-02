@@ -38,8 +38,9 @@ public:
       m_errors(0),
       m_warnings(0),
       m_logLevel(Diagnostics),
-      m_log() {
-    }
+      m_log(),
+      m_baseCalendar( 0 )
+    {}
     ~XMLLoaderObject() {}
     
     void setProject(Project *proj) { m_project = proj; }
@@ -96,6 +97,10 @@ public:
     int warnings() const { return m_warnings; }
     bool warning() const { return m_warnings > 0; }
 
+    // help to handle version < 0.6
+    void setBaseCalendar( Calendar *cal ) { m_baseCalendar = cal; }
+    Calendar *baseCalendar() const { return m_baseCalendar; }
+    
 protected:
     Project *m_project;
     int m_errors;
@@ -107,6 +112,8 @@ protected:
     int m_elapsed;
     QString m_version;
     KDateTime::Spec m_projectSpec;
+    
+    Calendar *m_baseCalendar; // help to handle version < 0.6
 };
 
 } //namespace KPlato

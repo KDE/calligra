@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -57,11 +57,7 @@ private slots:
     void slotMonthChanged(double);
     void slotWeekChanged(double);
     void slotDayChanged(double);
-    void slotIntervalChanged();
-    void slotApplyClicked();
-    void slotEnableButtonApply(bool);
-    void slotWeekdaySelected();
-    void slotStateChanged(int);
+
 signals:
     void obligatedFieldsFilled(bool yes);
     void enableButtonOk(bool);
@@ -72,7 +68,6 @@ private:
     double m_month;
     double m_week;
     double m_day;
-    IntervalEditImpl *m_intervalEdit;
 };
 
 class StandardWorktimeDialog : public KDialog {

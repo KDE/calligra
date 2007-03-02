@@ -275,6 +275,18 @@ private:
     QDate m_newvalue, m_oldvalue;
 };
 
+class ProjectModifyDefaultCalendarCmd : public NamedCommand
+{
+public:
+    ProjectModifyDefaultCalendarCmd( Part *part, Project *project, Calendar *cal, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Calendar *m_newvalue, *m_oldvalue;
+};
+
 
 class NodeDeleteCmd : public NamedCommand
 {

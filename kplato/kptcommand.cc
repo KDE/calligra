@@ -146,11 +146,17 @@ CalendarRemoveCmd::CalendarRemoveCmd( Part *part, Project *project, Calendar *ca
 {
     Q_ASSERT( project != 0 );
 
-    // TODO check if any resources uses this calendar
-    if ( project ) {
-        foreach ( Schedule * s, project->schedules() ) {
-            addSchScheduled( s );
+    foreach ( Schedule * s, project->schedules() ) {
+        addSchScheduled( s );
+    }
+    foreach ( Resource *r, project->resourceList() ) {
+        if ( r->calendar( true ) == cal ) {
+            m_cmd->addCommand( new ModifyResourceCalendarCmd( part, r, 0 ) );
+            break;
         }
+    }
+    if ( project->defaultCalendar() == cal ) {
+        m_cmd->addCommand( new ProjectModifyDefaultCalendarCmd( part, project, 0 ) );
     }
     foreach ( Calendar *c, cal->calendars() ) {
         m_cmd->addCommand( new CalendarRemoveCmd( part, project, c ) );
@@ -564,6 +570,25 @@ void CalendarModifyDateCmd::unexecute()
 {
     m_cal->setDate( m_day, m_oldvalue );
     setSchScheduled();
+    setCommandType( 0 );
+}
+
+ProjectModifyDefaultCalendarCmd::ProjectModifyDefaultCalendarCmd( Part *part, Project *project, Calendar *cal, const QString& name )
+    : NamedCommand( part, name ),
+    m_project( project ),
+    m_newvalue( cal ),
+    m_oldvalue( project->defaultCalendar() )
+{
+    //kDebug() << k_funcinfo << cal->name() << " (" << value << ")" << endl;
+}
+void ProjectModifyDefaultCalendarCmd::execute()
+{
+    m_project->setDefaultCalendar( m_newvalue );
+    setCommandType( 1 );
+}
+void ProjectModifyDefaultCalendarCmd::unexecute()
+{
+    m_project->setDefaultCalendar( m_oldvalue );
     setCommandType( 0 );
 }
 

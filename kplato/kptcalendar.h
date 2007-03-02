@@ -398,6 +398,9 @@ public:
     const KTimeZone *timeZone() const { return m_spec.timeZone(); }
     void setTimeZone( const KTimeZone *tz );
     
+    void setDefault( bool on ) { m_default = on; }
+    bool isDefault() const { return m_default; }
+    
 signals:
     void changed( Calendar* );
     void changed( CalendarDay* );
@@ -436,6 +439,7 @@ private:
     QList<Calendar*> m_calendars;
     
     KDateTime::Spec m_spec;
+    bool m_default; // this is the default calendar, only used for save/load
     
 #ifndef NDEBUG
 public:
@@ -484,13 +488,11 @@ public:
     /// Set the work time of a normal day
     void setDay(const Duration day) { m_day = day; }
     /// Set the work time of a normal day
-    void setDay(double hours) { m_day = Duration((qint64)(hours*60.0*60.0*1000.0)); }
+    void setDay(double hours) { m_day = Duration(hours, Duration::Unit_h); }
     
     bool load( QDomElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
-    Calendar *calendar() const { return m_calendar; }
-    
     
 protected:
     void init();
@@ -500,8 +502,6 @@ private:
     Duration m_month;
     Duration m_week;
     Duration m_day;
-    
-    Calendar *m_calendar;
     
 #ifndef NDEBUG
 public:

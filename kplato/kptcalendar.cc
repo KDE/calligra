@@ -592,7 +592,8 @@ int CalendarWeekdays::indexOf( const CalendarDay *day ) const
 Calendar::Calendar()
     : QObject( 0 ), // don't use parent
       m_parent(0),
-      m_project(0)
+      m_project(0),
+      m_default( false )
 {
     init();
 }
@@ -602,7 +603,8 @@ Calendar::Calendar(const QString& name, Calendar *parent)
       m_name(name),
       m_parent(parent),
       m_project(0),
-      m_days()
+      m_days(),
+      m_default( false )
 {
     init();
 }
@@ -719,7 +721,10 @@ bool Calendar::load( QDomElement &element, XMLLoaderObject &status ) {
     if ( tz ) {
         setTimeZone( tz );
     } else kWarning()<<k_funcinfo<<"No timezone specified, use default (local)"<<endl;
-    
+    bool m_default = (bool)element.attribute("default","0").toInt();
+    if ( m_default ) {
+        status.project().setDefaultCalendar( this );
+    }
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
@@ -763,6 +768,9 @@ void Calendar::save(QDomElement &element) const {
     }
     me.setAttribute("name", m_name);
     me.setAttribute("id", m_id);
+    if ( m_default ) {
+        me.setAttribute("default", m_default);
+    }
     me.setAttribute("timezone", m_spec.timeZone()->name() );
     m_weekdays->save(me);
     foreach (CalendarDay *d, m_days) {
@@ -906,9 +914,7 @@ Duration Calendar::effort(const QDate &date, const QTime &start, const QTime &en
     if (m_parent) {
         return m_parent->effort(date, start, end, sch);
     }
-    // Check default calendar
-    //TODO: change this, parentCal must be explicitly set.
-    return project()->defaultCalendar()->effort(date, start, end, sch);
+    return Duration::zeroDuration;
 }
 
 Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *sch) const {
@@ -958,8 +964,7 @@ TimeInterval Calendar::firstInterval(const QDate &date, const QTime &startTime, 
     if (m_parent) {
         return m_parent->firstInterval(date, startTime, endTime, sch);
     }
-    //TODO: change this, parentCal must be explicitly set.
-    return project()->defaultCalendar()->firstInterval(date, startTime, endTime, sch);
+    return TimeInterval(QTime(), QTime());
 }
 
 DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &end, Schedule *sch) const {
@@ -1020,8 +1025,7 @@ bool Calendar::hasInterval(const QDate &date, const QTime &startTime, const QTim
     if (m_parent) {
         return m_parent->hasInterval(date, startTime, endTime, sch);
     }
-    //TODO: change this, parentCal must be explicitly set.
-    return project()->defaultCalendar()->hasInterval(date, startTime, endTime, sch);
+    return false;
 }
 
 bool Calendar::hasInterval(const DateTime &start, const DateTime &end, Schedule *sch) const {
@@ -1188,8 +1192,6 @@ StandardWorktime::StandardWorktime(StandardWorktime *worktime) {
         m_month = worktime->durationMonth();
         m_week = worktime->durationWeek();
         m_day = worktime->durationDay();
-        m_calendar = new Calendar();
-        *m_calendar = *(worktime->calendar());
     } else {
         init();
     }
@@ -1205,15 +1207,6 @@ void StandardWorktime::init() {
     m_month = Duration(0, 176, 0);
     m_week = Duration(0, 40, 0);
     m_day = Duration(0, 8, 0);
-    m_calendar = new Calendar;
-    m_calendar->setName(i18n("Base"));
-    TimeInterval t = TimeInterval(QTime(8,0,0), QTime(16,0,0));
-    for (int i=1; i < 6; ++i) {
-        m_calendar->weekday(i)->addInterval(t);
-        m_calendar->weekday(i)->setState(CalendarDay::Working);
-    }
-    m_calendar->weekday(6)->setState(CalendarDay::NonWorking);
-    m_calendar->weekday(7)->setState(CalendarDay::NonWorking);
 }
 
 bool StandardWorktime::load( QDomElement &element, XMLLoaderObject &status ) {
@@ -1228,9 +1221,22 @@ bool StandardWorktime::load( QDomElement &element, XMLLoaderObject &status ) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "calendar") {
-                delete m_calendar;
-                m_calendar = new Calendar;
-                m_calendar->load( e, status );
+                // pre 0.6 version stored base calendar in standard worktime
+                if ( status.version() >= "0.6" ) {
+                    kWarning()<<k_funcinfo<<"Old format, calendar in standard worktime"<<endl;
+                    kWarning()<<k_funcinfo<<"Tries to load anyway"<<endl;
+                }
+                // try to load anyway
+                Calendar *calendar = new Calendar;
+                if ( calendar->load( e, status ) ) {
+                    status.project().addCalendar( calendar );
+                    calendar->setDefault( true );
+                    status.project().setDefaultCalendar( calendar ); // hmmm
+                    status.setBaseCalendar( calendar );
+                } else {
+                    delete calendar;
+                    kError()<<k_funcinfo<<"Failed to load calendar"<<endl;
+                }
             }
         }
     }
@@ -1246,7 +1252,6 @@ void StandardWorktime::save(QDomElement &element) const {
     me.setAttribute("week", m_week.toString(Duration::Format_Hour));
     me.setAttribute("day", m_day.toString(Duration::Format_Hour));
     
-    m_calendar->save(me);
 }
 
 #ifndef NDEBUG

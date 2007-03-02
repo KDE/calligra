@@ -606,7 +606,7 @@ void CalendarItemModel::removeCalendar( Calendar *calendar )
     if ( calendar == 0 ) {
         return;
     }
-    m_part->addCommand( new CalendarRemoveCmd( m_part, m_project, calendar ) );
+    m_part->addCommand( new CalendarRemoveCmd( m_part, m_project, calendar, i18n( "Delete Calendar" ) ) );
 }
 
 

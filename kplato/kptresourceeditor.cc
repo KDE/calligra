@@ -162,6 +162,7 @@ void ResourceItemModel::setProject( Project *project )
         
         disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
         
+        disconnect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
     }
     m_project = project;
     if ( m_project ) {
@@ -183,6 +184,8 @@ void ResourceItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
         
         connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+    
+        connect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
     }
 }
 
@@ -502,16 +505,35 @@ bool ResourceItemModel::setEmail( Resource *res, const QVariant &value, int role
 
 QVariant ResourceItemModel::calendar( const Resource *res, int role ) const
 {
-    Calendar *cal = res->calendar( true ); // don't check for default calendar
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return cal == 0 ? i18n( "None" ) : cal->name();
-        case Role::EnumList: 
-            return QStringList() << i18n( "None" ) << m_project->calendarNames();
-        case Role::EnumListValue: 
-            return cal == 0 ? 0 : m_project->calendarNames().indexOf( cal->name() );
+        case Qt::ToolTipRole: {
+            QString s = i18n( "None" );
+            Calendar *cal = res->calendar( true ); // don't check for default calendar
+            if ( cal == 0 ) {
+                // Do we get a default calendar
+                cal = res->calendar();
+                if ( cal ) {
+                    s = i18nc( "Default (calendar name)", "Default (%1)", cal->name() );
+                }
+            } else {
+                s = cal->name();
+            }
+            return s;
+        }
+        case Role::EnumList: {
+            Calendar *cal = m_project->defaultCalendar();
+            QString s = i18n( "None" );
+            if ( cal ) {
+                s = i18nc( "Default (calendar name)", "Default (%1)", cal->name() );
+            }
+            return QStringList() << s << m_project->calendarNames();
+        }
+        case Role::EnumListValue: {
+            Calendar *cal = res->calendar( true ); // don't check for default calendar
+            return cal == 0 ? 0 : m_project->calendarNames().indexOf( cal->name() ) + 1;
+        }
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
@@ -854,6 +876,15 @@ QObject *ResourceItemModel::object( const QModelIndex &index ) const
     return o;
 }
 
+void ResourceItemModel::slotCalendarChanged( const Calendar* cal )
+{
+    foreach ( Resource *r, m_project->resourceList() ) {
+        if ( r->calendar( true ) == 0 ) {
+            slotResourceChanged( r );
+        }
+    }
+}
+
 void ResourceItemModel::slotResourceChanged( Resource *res )
 {
     QObject *par = res->parent();
@@ -895,7 +926,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
     if (column > 0) {
         return false;
     }
-    kDebug()<<k_funcinfo<<row<<" p:"<<parent.row()<<endl;
+    //kDebug()<<k_funcinfo<<row<<" p:"<<parent.row()<<endl;
     
     if ( !parent.isValid() ) {
         return false;
@@ -904,7 +935,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
     if ( g == 0 ) {
         return false;
     }
-    kDebug()<<data->formats()<<endl;
+    //kDebug()<<data->formats()<<endl;
     KMacroCommand *m = 0;
     if ( data->hasFormat( "text/x-vcard" ) ) {
         QByteArray vcard = data->data( "text/x-vcard" );
@@ -926,7 +957,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
 
 QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_part->addCommand( new AddResourceGroupCmd( m_part, m_project, g, i18n( "Add resource group" ) ) );
     int row = m_project->resourceGroups().indexOf( g );
     if ( row != -1 ) {
@@ -937,7 +968,7 @@ QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 
 QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource */*after*/ )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_part->addCommand( new AddResourceCmd( m_part, g, r, i18n( "Add resource" ) ) );
     int row = g->indexOf( r );
     if ( row != -1 ) {
@@ -986,17 +1017,14 @@ void ResourceTreeView::contextMenuEvent ( QContextMenuEvent *event )
 
 void ResourceTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
-    kDebug()<<k_funcinfo<<sel.indexes().count()<<endl;
-    foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
-        kDebug()<<k_funcinfo<<i.row()<<", "<<i.column()<<endl;
-    }
+    //kDebug()<<k_funcinfo<<sel.indexes().count()<<endl;
     TreeViewBase::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
 }
 
 void ResourceTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     TreeViewBase::currentChanged( current, previous );
     emit currentChanged( current );
 }
@@ -1082,7 +1110,7 @@ void ResourceEditor::setGuiActive( bool activate )
 
 void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    kDebug()<<k_funcinfo<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
+    //kDebug()<<k_funcinfo<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
     QString name;
     if ( index.isValid() ) {
         QObject *obj = m_view->itemModel()->object( index );
@@ -1096,7 +1124,6 @@ void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
             }
         }
     }
-    kDebug()<<k_funcinfo<<name<<endl;
     emit requestPopupMenu( name, pos );
 }
 
@@ -1112,13 +1139,13 @@ ResourceGroup *ResourceEditor::currentResourceGroup() const
 
 void ResourceEditor::slotCurrentChanged(  const QModelIndex &curr )
 {
-    kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
+    //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
 //    slotEnableActions();
 }
 
 void ResourceEditor::slotSelectionChanged( const QModelIndexList list)
 {
-    kDebug()<<k_funcinfo<<list.count()<<endl;
+    //kDebug()<<k_funcinfo<<list.count()<<endl;
     updateActionsEnabled();
 }
 
@@ -1143,7 +1170,7 @@ void ResourceEditor::updateActionsEnabled(  bool on )
     bool any = !nogroup || !noresource;
     
     actionAddResource->setEnabled( o && ( (group  && noresource) || (resource && nogroup) ) );
-    actionAddGroup->setEnabled( o && ( group && noresource ) );
+    actionAddGroup->setEnabled( o );
     actionDeleteSelection->setEnabled( o && any );
 }
 
@@ -1174,7 +1201,7 @@ void ResourceEditor::setupGui()
 
 void ResourceEditor::slotAddResource()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QList<ResourceGroup*> gl = m_view->selectedGroups();
     if ( gl.count() > 1 ) {
         return;
@@ -1203,7 +1230,7 @@ void ResourceEditor::slotAddResource()
 
 void ResourceEditor::slotAddGroup()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->itemModel()->insertGroup( g );
     if ( i.isValid() ) {
@@ -1215,7 +1242,7 @@ void ResourceEditor::slotAddGroup()
 void ResourceEditor::slotDeleteSelection()
 {
     QObjectList lst = m_view->selectedObjects();
-    kDebug()<<k_funcinfo<<lst.count()<<" objects"<<endl;
+    //kDebug()<<k_funcinfo<<lst.count()<<" objects"<<endl;
     if ( ! lst.isEmpty() ) {
         emit deleteObjectList( lst );
     }

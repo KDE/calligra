@@ -48,7 +48,8 @@ namespace KPlato
 
 Project::Project( Node *parent )
         : Node( parent ),
-        m_accounts( *this )
+        m_accounts( *this ),
+        m_defaultCalendar( 0 )
 {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_constraint = Node::MustStartOn;
@@ -70,7 +71,7 @@ void Project::init()
 
 Project::~Project()
 {
-    disconnect(); // NOTE: my be a problem if sombody uses the destroyd() signal
+    disconnect(); // NOTE: may be a problem if sombody uses the destroyd() signal
     delete m_standardWorktime;
     while ( !m_resourceGroups.isEmpty() )
         delete m_resourceGroups.takeFirst();
@@ -358,7 +359,7 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
     const KTimeZone *tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
     if ( tz ) {
         m_spec = KDateTime::Spec( tz );
-    } else kWarning()<<k_funcinfo<<"No timezone specified, use default (local)"<<endl;
+    } else kWarning()<<k_funcinfo<<"No timezone specified, using default (local)"<<endl;
     status.setProjectSpec( m_spec );
     
     // Allow for both numeric and text
@@ -417,7 +418,7 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
         while ( !cals.isEmpty() ) {
             Calendar *c = cals.takeFirst();
             if ( c->parentId().isEmpty() ) {
-                addCalendar( c );
+                addCalendar( c, status.baseCalendar() ); // handle pre 0.6 version
                 added = true;
                 //kDebug()<<k_funcinfo<<"added to project: "<<c->name()<<endl;
             } else {
@@ -1290,6 +1291,9 @@ void Project::addCalendar( Calendar *calendar, Calendar *parent )
     } else {
         calendar->setParentCal( parent );
     }
+    if ( calendar->isDefault() ) {
+        setDefaultCalendar( calendar );
+    }
     setCalendarId( calendar );
     emit calendarAdded( calendar );
 }
@@ -1298,6 +1302,9 @@ void Project::takeCalendar( Calendar *calendar )
 {
     emit calendarToBeRemoved( calendar );
     removeCalendarId( calendar->id() );
+    if ( calendar == m_defaultCalendar ) {
+        m_defaultCalendar = 0;
+    }
     if ( calendar->parentCal() == 0 ) {
         int i = indexOf( calendar );
         if ( i != -1 ) {
@@ -1342,7 +1349,7 @@ QList<Calendar*> Project::allCalendars() const
 QStringList Project::calendarNames() const
 {
     QStringList lst;
-    foreach( Calendar *c, calendars() ) {
+    foreach( Calendar *c, calendarIdDict.values() ) {
         lst << c->name();
     }
     return lst;
@@ -1380,6 +1387,18 @@ QString Project::uniqueCalendarId() const {
         }
     }
     return QString();
+}
+
+Calendar *Project::setDefaultCalendar( Calendar *cal )
+{
+    if ( m_defaultCalendar ) {
+        m_defaultCalendar->setDefault( false );
+    }
+    m_defaultCalendar = cal;
+    if ( cal ) {
+        cal->setDefault( true );
+    }
+    emit defaultCalendarChanged( cal );
 }
 
 void Project::setStandardWorktime( StandardWorktime * worktime )

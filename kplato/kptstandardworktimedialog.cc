@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -128,14 +128,6 @@ KMacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
         if (cmd == 0) cmd = new KMacroCommand(n);
         cmd->addCommand(new ModifyStandardWorktimeDayCmd(part, m_original, m_original->day(), dia->inDay()));
     }
-    int cnt = dia->weekdayList->topLevelItemCount();
-    for (int i=0; i < cnt; ++i) {
-        KCommand *c = static_cast<WeekdayListItem*>(dia->weekdayList->topLevelItem(i))->save(part);
-        if (c) {
-            if (cmd == 0) cmd = new KMacroCommand(n);
-            cmd->addCommand(c);
-        }
-    }
     return cmd;
 
 }
@@ -153,12 +145,6 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     if (!std) {
         m_std = new StandardWorktime();
     }
-    QBoxLayout *l = new QVBoxLayout(intervalBox);
-    m_intervalEdit = new IntervalEdit(intervalBox);
-    l->addWidget(m_intervalEdit);
-    
-    weekdayList->setRootIsDecorated(false);
-    
     m_year = m_std->year();
     m_month = m_std->month();
     m_week = m_std->week();
@@ -173,45 +159,14 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     week->setValue(m_week);
     day->setRange(1.0, 24.0, 0.1, 1);
     day->setValue(m_day);
-    QStringList lst; lst << i18n("Weekday") << i18n("Hours");
-    weekdayList->setHeaderLabels( lst );
-    weekdayList->setSortingEnabled(false);
-    weekdayList->header()->setStretchLastSection(true);
-    const KCalendarSystem * cs = KGlobal::locale()->calendar();
-    Calendar *cal = m_std->calendar();
-    if (cal) {
-        WeekdayListItem *item = 0;
-        for (int i = 1; i <= 7; ++i) {
-            CalendarDay *day = cal->weekday(i);
-            if (day == 0) {
-                continue;
-            }
-            kDebug()<<k_funcinfo<<"Add day: "<<cs->weekDayName(i)<<endl;
-            item = new WeekdayListItem(cal, i, weekdayList, cs->weekDayName(i), item);
-            weekdayList->addTopLevelItem(item);
-        }
-    }
-
+    
     connect(year, SIGNAL(valueChanged(double)), SLOT(slotYearChanged(double)));
     connect(month, SIGNAL(valueChanged(double)), SLOT(slotMonthChanged(double)));
     connect(week, SIGNAL(valueChanged(double)), SLOT(slotWeekChanged(double)));
     connect(day, SIGNAL(valueChanged(double)), SLOT(slotDayChanged(double)));
 
-    connect(m_intervalEdit, SIGNAL(changed()), SLOT(slotIntervalChanged()));
-    connect(bApply, SIGNAL(clicked()), SLOT(slotApplyClicked()));
-    connect(weekdayList, SIGNAL(itemSelectionChanged()), SLOT(slotWeekdaySelected()));
-    connect(state, SIGNAL(activated(int)), SLOT(slotStateChanged(int)));
-    
-    if (weekdayList->topLevelItemCount() > 0) {
-        weekdayList->topLevelItem(0)->setSelected(true);
-        weekdayList->setCurrentItem(weekdayList->topLevelItem(0));
-    }
 }
 
-
-void StandardWorktimeDialogImpl::slotEnableButtonApply(bool on) {
-    bApply->setEnabled(on);
-}
 
 void StandardWorktimeDialogImpl::slotEnableButtonOk(bool on) {
     emit enableButtonOk(on);
@@ -254,51 +209,6 @@ void StandardWorktimeDialogImpl::slotDayChanged(double value) {
     slotEnableButtonOk(true);
 }
 
-void StandardWorktimeDialogImpl::slotIntervalChanged() {
-    //kDebug()<<k_funcinfo<<endl;
-    slotEnableButtonApply(true);
-}
-
-void StandardWorktimeDialogImpl::slotApplyClicked() {
-    kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
-    int c = weekdayList->topLevelItemCount();
-    for (int i=0; i < c; ++i) {
-        QTreeWidgetItem *item = weekdayList->topLevelItem(i);
-        if (item->isSelected()) {
-            //kDebug()<<k_funcinfo<<item->text(0)<<" selected"<<endl;
-            WeekdayListItem *wd = static_cast<WeekdayListItem*>(item);
-            wd->setState(state->currentItem());
-            if (state->currentItem() == 0) {
-                wd->setHours();
-            } else {
-                wd->setIntervals(m_intervalEdit->intervals());
-            }
-            slotEnableButtonOk(true);
-        }
-    }
-}
-
-void StandardWorktimeDialogImpl::slotWeekdaySelected() {
-    kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
-    
-    QList<QTreeWidgetItem *> lst = weekdayList->selectedItems();
-    if (lst.count() == 0) {
-        editBox->setEnabled(false);
-        return;
-    }
-    //kDebug()<<k_funcinfo<<item->text(0)<<" selected"<<endl;
-    WeekdayListItem *wd = static_cast<WeekdayListItem*>(lst[0]);
-    state->setCurrentIndex(wd->day->state()-1);
-    m_intervalEdit->setIntervals(wd->day->workingIntervals());
-    slotStateChanged(state->currentItem());
-    editBox->setEnabled(true);
-}
-
-void StandardWorktimeDialogImpl::slotStateChanged(int st) {
-    //kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
-    intervalBox->setEnabled(st == 1); //Working
-    slotEnableButtonApply(st == 0);
-}
 
 }  //KPlato namespace
 
