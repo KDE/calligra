@@ -567,6 +567,7 @@ View::View( Part* part, QWidget* parent )
     m_tab->addWidget( m_resourceAssignmentView );
     m_updateResourceAssignmentView = true;
     m_resourceAssignmentView->draw( getProject() );
+    connect( m_resourceAssignmentView, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     m_pertresult = new PertResult( getPart(), m_tab );
     m_tab->addWidget( m_pertresult );
@@ -615,6 +616,8 @@ View::View( Part* part, QWidget* parent )
     connect( m_calendareditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
     connect( m_taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    connect( m_resourceAssignmentView, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
     // The menu items
     // ------ Edit

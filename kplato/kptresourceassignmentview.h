@@ -51,6 +51,7 @@ namespace KPlato
 
     public:
         ResourcesList( QWidget * parent = 0 );
+
     };
 
     class ResourceAssignmentView : public ViewBase
@@ -76,9 +77,19 @@ namespace KPlato
 
             void updateTasks();
 
+	signals:
+        void requestPopupMenu( QString s, const QPoint&);
+
         protected slots:
             void resSelectionChanged();
             void resSelectionChanged( QTreeWidgetItem *item );
+
+        private slots:
+            void slotRequestPopupMenu( const QPoint &p );
+
+        public slots:
+            /// Activate/deactivate the gui
+            virtual void setGuiActive( bool activate );
 
     };
 

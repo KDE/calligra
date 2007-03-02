@@ -44,6 +44,7 @@
 #include <QStringList>
 #include <QTabWidget>
 #include <QPainter>
+#include <QCursor>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -57,6 +58,13 @@ ResourcesList::ResourcesList( QWidget * parent )
         : QTreeWidget( parent )
 {
     setContextMenuPolicy( Qt::CustomContextMenu );
+    //connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotContextMenuRequested( const QPoint& ) ) );
+}
+
+void ResourceAssignmentView::slotRequestPopupMenu( const QPoint &p )
+{
+    kDebug() << k_funcinfo << p << endl;
+    emit requestPopupMenu( "resourceassigment_popup", QCursor::pos() );
 }
 
 void ResourceAssignmentView::draw( Project &project )
@@ -130,8 +138,7 @@ kDebug() << " ---------------- KPlato: Creating ResourceAssignmentView ---------
     draw(m_part->getProject());
 
     connect( m_resList, SIGNAL( itemSelectionChanged() ), SLOT( resSelectionChanged() ) );
-    connect( m_taskList, SIGNAL( contextMenuRequested( Node* , const QPoint& ) ), this, SLOT( slotContextMenuRequested( Node* , const QPoint& ) ) );
-
+    connect( m_taskList, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotRequestPopupMenu( const QPoint& ) ) );
 }
 
 /*Store the selected item*/
@@ -312,25 +319,13 @@ void ResourceAssignmentView::drawTasksAttributedToAGroup (ResourceGroup *group, 
     }
 }
 
-/*
-foreach( Node* n, m_project->allNodes() ) {
-        if ( n->type() != Node::Type_Task ) {
-            continue;
-        }
-*/
-/*
-void ResourceAssignmentView::contextMenuEvent ( QContextMenuEvent * event )
+void ResourceAssignmentView::setGuiActive( bool activate )
 {
-    kDebug()<<k_funcinfo<<endl;
-    foreach( Node* n, m_part->getProject() ->allNodes() ) {
-        if ( n->type() == Node::Type_Task ) {
-            if ( n->name() == m_selectedItem) {
-                emit contextMenuRequested( n , event->globalPos() );
-            }
-        }
-    }
+    kDebug()<<k_funcinfo<<activate<<endl;
+//    updateActionsEnabled( true );
+    ViewBase::setGuiActive( activate );
 }
-*/
+
 }  //KPlato namespace
 
 #include "kptresourceassignmentview.moc"

@@ -142,6 +142,9 @@
     <Menu name="taskstatus_popup">
         <Action name="task_progress"/>
     </Menu>
+    <Menu name="resourceassigment_popup">
+	    <Action name="task_progress"/>
+    </Menu>
     <Menu name="resourceview_popup">
         <Action name="edit_resource"/>
         <!--        <Separator/>
