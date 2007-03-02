@@ -253,16 +253,16 @@ public:
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id = -1 ) const=0;
         
     /// Returns the total planned effort for this task (or subtasks) 
-    virtual Duration plannedEffort( long id = -1 ) { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration plannedEffort( long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual Duration plannedEffort(const QDate &, long id = -1 ) { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration plannedEffort(const QDate &, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo(const QDate &, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     
     /// Returns the total actual effort for this task (or subtasks) 
-    virtual Duration actualEffort( long id = -1 ) { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration actualEffort( long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual Duration actualEffort(const QDate &/*date*/, long id = -1 ) { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration actualEffort(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) up to and including date
     virtual Duration actualEffortTo(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     
@@ -270,29 +270,29 @@ public:
      * Planned cost is the sum total of all resources and other costs
      * planned for this node.
      */
-    virtual double plannedCost( long id = -1 ) { Q_UNUSED(id); return 0; }
+    virtual double plannedCost( long id = -1 ) const { Q_UNUSED(id); return 0; }
     
     /// Planned cost on date
-    virtual double plannedCost(const QDate &/*date*/, long id = -1 ) { Q_UNUSED(id); return 0; }
+    virtual double plannedCost(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0; }
     /**
      * Planned cost from start of activity up to and including date
      * is the sum of all resource costs and other costs planned for this node.
      */
-    virtual double plannedCostTo(const QDate &/*date*/, long id = -1 ) { Q_UNUSED(id); return 0; }
+    virtual double plannedCostTo(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0; }
     /**
      * Actual cost is the sum total of the reported costs actually used
      * for this node.
      */
-    virtual double actualCost( long id = -1 ) { Q_UNUSED(id); return 0; }
+    virtual double actualCost( long id = -1 ) const { Q_UNUSED(id); return 0; }
     /// Actual cost on date
-    virtual double actualCost(const QDate &/*date*/, long id = -1 ) { Q_UNUSED(id); return 0; }
+    virtual double actualCost(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0; }
     /// Actual cost up to and including date
-    virtual double actualCostTo(const QDate &/*date*/, long id = -1 ) { Q_UNUSED(id); return 0; }
+    virtual double actualCostTo(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0; }
     
     /// Effort based performance index
-    double effortPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) { return 0.0; }
+    double effortPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) const { return 0.0; }
     /// Cost performance index
-    double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) { return 0.0; }
+    double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) const { return 0.0; }
     
     virtual void initiateCalculationLists(MainSchedule &sch) = 0;
     virtual DateTime calculateForward(int /*use*/) = 0;

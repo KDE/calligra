@@ -1131,7 +1131,7 @@ EffortCostMap Project::plannedEffortCostPrDay( const QDate & /*start*/, const QD
 }
 
 // Returns the total planned effort for this project (or subproject)
-Duration Project::plannedEffort( long id )
+Duration Project::plannedEffort( long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
@@ -1143,7 +1143,7 @@ Duration Project::plannedEffort( long id )
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-Duration Project::plannedEffort( const QDate &date, long id )
+Duration Project::plannedEffort( const QDate &date, long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
@@ -1155,7 +1155,7 @@ Duration Project::plannedEffort( const QDate &date, long id )
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-Duration Project::plannedEffortTo( const QDate &date, long id )
+Duration Project::plannedEffortTo( const QDate &date, long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
@@ -1167,7 +1167,7 @@ Duration Project::plannedEffortTo( const QDate &date, long id )
 }
 
 // Returns the total actual effort for this project (or subproject)
-Duration Project::actualEffort( long id )
+Duration Project::actualEffort( long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
@@ -1179,7 +1179,7 @@ Duration Project::actualEffort( long id )
 }
 
 // Returns the total actual effort for this project (or subproject) on date
-Duration Project::actualEffort( const QDate &date, long id )
+Duration Project::actualEffort( const QDate &date, long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
@@ -1191,7 +1191,7 @@ Duration Project::actualEffort( const QDate &date, long id )
 }
 
 // Returns the total actual effort for this project (or subproject) upto and including date
-Duration Project::actualEffortTo( const QDate &date, long id )
+Duration Project::actualEffortTo( const QDate &date, long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
@@ -1203,7 +1203,7 @@ Duration Project::actualEffortTo( const QDate &date, long id )
     return eff;
 }
 
-double Project::plannedCost( long id )
+double Project::plannedCost( long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
@@ -1216,7 +1216,7 @@ double Project::plannedCost( long id )
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-double Project::plannedCost( const QDate &date, long id )
+double Project::plannedCost( const QDate &date, long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
@@ -1229,7 +1229,7 @@ double Project::plannedCost( const QDate &date, long id )
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-double Project::plannedCostTo( const QDate &date, long id )
+double Project::plannedCostTo( const QDate &date, long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
@@ -1241,7 +1241,7 @@ double Project::plannedCostTo( const QDate &date, long id )
     return c;
 }
 
-double Project::actualCost( long id )
+double Project::actualCost( long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
@@ -1254,7 +1254,7 @@ double Project::actualCost( long id )
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-double Project::actualCost( const QDate &date, long id )
+double Project::actualCost( const QDate &date, long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
@@ -1267,7 +1267,7 @@ double Project::actualCost( const QDate &date, long id )
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-double Project::actualCostTo( const QDate &date, long id )
+double Project::actualCostTo( const QDate &date, long id ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;

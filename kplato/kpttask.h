@@ -170,41 +170,41 @@ public:
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end,  long id = -1 ) const;
     
     /// Returns the total planned effort for this task (or subtasks) 
-    virtual Duration plannedEffort( long id = -1 );
+    virtual Duration plannedEffort( long id = -1 ) const;
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual Duration plannedEffort(const QDate &date, long id = -1 );
+    virtual Duration plannedEffort(const QDate &date, long id = -1 ) const;
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo(const QDate &date, long id = -1 ) const;
     
     /// Returns the total actual effort for this task (or subtasks) 
-    virtual Duration actualEffort( long id = -1 );
+    virtual Duration actualEffort( long id = -1 ) const;
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual Duration actualEffort(const QDate &date, long id = -1 );
+    virtual Duration actualEffort(const QDate &date, long id = -1 ) const;
     /// Returns the actual effort up to and including date
     virtual Duration actualEffortTo(const QDate &date, long id = -1 ) const;
     
     /**
      * Returns the total planned cost for this task (or subtasks)
      */
-    virtual double plannedCost( long id = -1 );
+    virtual double plannedCost( long id = -1 ) const;
     /// Planned cost on date
-    virtual double plannedCost(const QDate &/*date*/, long id = -1 );
+    virtual double plannedCost(const QDate &/*date*/, long id = -1 ) const;
     /// Planned cost up to and including date
-    virtual double plannedCostTo(const QDate &/*date*/, long id = -1 );
+    virtual double plannedCostTo(const QDate &/*date*/, long id = -1 ) const;
     
     /**
      * Returns the actaually reported cost for this task (or subtasks)
      */
-    virtual double actualCost( long id = -1 );
+    virtual double actualCost( long id = -1 ) const;
     /// Actual cost on date
-    virtual double actualCost(const QDate &/*date*/, long id = -1 );
+    virtual double actualCost(const QDate &/*date*/, long id = -1 ) const;
     /// Actual cost up to and including date
-    virtual double actualCostTo(const QDate &/*date*/, long id = -1 );
+    virtual double actualCostTo(const QDate &/*date*/, long id = -1 ) const;
 
     /// Effort based performance index
-    double effortPerformanceIndex(const QDate &date, bool *error=0);
+    double effortPerformanceIndex(const QDate &date, bool *error=0) const;
     /// Cost performance index
-    double costPerformanceIndex(const QDate &date, bool *error=0);
+    double costPerformanceIndex(const QDate &date, bool *error=0) const;
     
     /**
      * Return the duration that an activity's start can be delayed 

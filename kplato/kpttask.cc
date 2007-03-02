@@ -354,7 +354,7 @@ EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end,
 }
 
 // Returns the total planned effort for this task (or subtasks) 
-Duration Task::plannedEffort( long id ) {
+Duration Task::plannedEffort( long id ) const {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -374,7 +374,7 @@ Duration Task::plannedEffort( long id ) {
 }
 
 // Returns the total planned effort for this task (or subtasks) on date
-Duration Task::plannedEffort(const QDate &date, long id ) {
+Duration Task::plannedEffort(const QDate &date, long id ) const {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -414,7 +414,7 @@ Duration Task::plannedEffortTo(const QDate &date, long id) const {
 }
 
 // Returns the total planned effort for this task (or subtasks) 
-Duration Task::actualEffort( long id ) {
+Duration Task::actualEffort( long id ) const {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -432,7 +432,7 @@ Duration Task::actualEffort( long id ) {
 }
 
 // Returns the total actual effort for this task (or subtasks) on date
-Duration Task::actualEffort(const QDate &date, long id) {
+Duration Task::actualEffort(const QDate &date, long id) const {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -472,7 +472,7 @@ Duration Task::actualEffortTo(const QDate &date, long id) const {
     return eff;
 }
 
-double Task::plannedCost( long id ) {
+double Task::plannedCost( long id ) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
@@ -491,7 +491,7 @@ double Task::plannedCost( long id ) {
     return c;
 }
 
-double Task::plannedCost(const QDate &date, long id) {
+double Task::plannedCost(const QDate &date, long id) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
@@ -509,7 +509,7 @@ double Task::plannedCost(const QDate &date, long id) {
     return c;
 }
 
-double Task::plannedCostTo(const QDate &date, long id) {
+double Task::plannedCostTo(const QDate &date, long id) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
@@ -527,7 +527,7 @@ double Task::plannedCostTo(const QDate &date, long id) {
     return c;
 }
 
-double Task::actualCost( long id ) {
+double Task::actualCost( long id ) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
@@ -545,7 +545,7 @@ double Task::actualCost( long id ) {
     return c;
 }
 
-double Task::actualCost(const QDate &date, long id) {
+double Task::actualCost(const QDate &date, long id) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
@@ -563,7 +563,7 @@ double Task::actualCost(const QDate &date, long id) {
     return c;
 }
 
-double Task::actualCostTo(const QDate &date, long id) {
+double Task::actualCostTo(const QDate &date, long id) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
@@ -582,7 +582,7 @@ double Task::actualCostTo(const QDate &date, long id) {
 }
 
 //FIXME Handle summarytasks
-double Task::effortPerformanceIndex(const QDate &date, bool *error) {
+double Task::effortPerformanceIndex(const QDate &date, bool *error) const {
     double res = 0.0;
     Duration ae = actualEffortTo(date);
     
@@ -597,7 +597,7 @@ double Task::effortPerformanceIndex(const QDate &date, bool *error) {
 }
 
 //FIXME Handle summarytasks
-double Task::costPerformanceIndex(const QDate &date, bool *error) {
+double Task::costPerformanceIndex(const QDate &date, bool *error) const {
     double res = 0.0;
     double ac = actualCostTo(date);
     
