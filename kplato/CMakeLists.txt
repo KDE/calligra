@@ -108,7 +108,8 @@ kde4_add_ui_files(libkplatopart_SRCS
     kptconfigtaskpanelbase.ui
     kptperteditor.ui
     kptpertresult.ui
-    kptchartpanelbase.ui 
+    kptchartpanelbase.ui
+    kptresourceassignmentview.ui 
 )
 
 

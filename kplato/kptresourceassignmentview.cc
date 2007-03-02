@@ -110,9 +110,11 @@ void ResourceAssignmentView::drawResourcesName( QTreeWidgetItem *parent, Resourc
 /*Constructor*/
 ResourceAssignmentView::ResourceAssignmentView( Part *part, QWidget *parent): ViewBase( part, parent )
 {
-kDebug() << " ---------------- KPlato: Creating ResourceAssignmentView ----------------" << endl;
+    kDebug() << " ---------------- KPlato: Creating ResourceAssignmentView ----------------" << endl;
 
-    QVBoxLayout *l = new QVBoxLayout( this );
+    widget.setupUi(this);
+    
+   /* QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_splitter = new QSplitter( this );
     l->addWidget( m_splitter );
@@ -129,7 +131,7 @@ kDebug() << " ---------------- KPlato: Creating ResourceAssignmentView ---------
 
     QStringList sl2;
     sl2 << i18n( "Task" ) /*<< i18n( "Completed" )*/;
-    m_taskList->setHeaderLabels( sl2 );
+    m_taskList->setHeaderLabels( sl2 );*/
 
     m_selectedItem = 0;
 
