@@ -60,7 +60,9 @@ namespace KPlato
 
 TaskStatusItemModel::TaskStatusItemModel( Part *part, QObject *parent )
     : ItemModelBase( part, parent ),
-    m_node( 0 )
+    m_node( 0 ),
+    m_now( QDate::currentDate() ),
+    m_period( 7 )
 {
     m_topNames << i18n( "Not Started" );
     m_top.append(&m_notstarted );
@@ -70,6 +72,9 @@ TaskStatusItemModel::TaskStatusItemModel( Part *part, QObject *parent )
     
     m_topNames << i18n( "Finished" );
     m_top.append(&m_finished );
+    
+    m_topNames << i18n( "Next Period" );
+    m_top.append(&m_upcomming );
     
 /*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
     connect( this, SIGNAL( modelReset() ), SLOT( slotReset() ) );*/
@@ -170,8 +175,8 @@ void TaskStatusItemModel::refresh()
     if ( m_project == 0 ) {
         return;
     }
-    QDate now = QDate::currentDate(); //FIXME
-    QDate begin = now.addDays( -7 ); // week
+    QDate begin = m_now.addDays( m_period );
+    QDate end = m_now.addDays( m_period );
     
     m_id = m_project->currentViewScheduleId();
     
@@ -183,16 +188,17 @@ void TaskStatusItemModel::refresh()
         uint st = t->state( m_id );
         const Completion &c = t->completion();
         if ( c.isFinished() ) {
-            if ( c.finishTime().date() > begin && c.finishTime().date() <= now ) {
+            if ( c.finishTime().date() > begin && c.finishTime().date() <= m_now ) {
                 m_finished.append( t );
             }
         } else if ( c.isStarted() ) {
             m_running.append( t );
-        } else {
-            if ( t->startTime( m_id ).date() < now ) {
-                // should have been started
-                m_notstarted.append( t );
-            }
+        } else if ( t->startTime( m_id ).date() < m_now ) {
+            // should have been started
+            m_notstarted.append( t );
+        } else if ( t->startTime( m_id ).date() <= end ) {
+            // start next period
+            m_upcomming.append( t );
         }
     }
     foreach ( NodeList *l, m_top ) {
@@ -365,8 +371,6 @@ QVariant TaskStatusItemModel::status( const Node *node, int role ) const
             return i18n( "Not started" );
             break;
         }
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -404,6 +408,36 @@ QVariant TaskStatusItemModel::endTime( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant TaskStatusItemModel::plannedEffortTo( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return KGlobal::locale()->formatNumber( node->plannedEffortTo( m_now, m_id ).toDouble( Duration::Unit_h ), 1 );
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant TaskStatusItemModel::actualEffortTo( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return KGlobal::locale()->formatNumber( node->actualEffortTo( m_now, m_id ).toDouble( Duration::Unit_h ), 1 );
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant TaskStatusItemModel::note( const Node *node, int role ) const
 {
     switch ( role ) {
@@ -428,6 +462,9 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
     if ( ! index.isValid() ) {
         return result;
     }
+    if ( role == Qt::TextAlignmentRole ) {
+        return alignment( index.column() );
+    }
     Node *n = node( index );
     if ( n == 0 ) {
         switch ( index.column() ) {
@@ -442,9 +479,11 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
             case 0: result = name( t, role ); break;
             case 1: result = status( t, role ); break;
             case 2: result = completed( t, role ); break;
-            case 3: result = startTime( t, role ); break;
-            case 4: result = endTime( t, role ); break;
-            case 5: result = note( t, role ); break;
+            case 3: result = plannedEffortTo( t, role ); break;
+            case 4: result = actualEffortTo( t, role ); break;
+            case 5: result = startTime( t, role ); break;
+            case 6: result = endTime( t, role ); break;
+            case 7: result = note( t, role ); break;
             default:
                 kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
                 return QVariant();
@@ -462,21 +501,6 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
 
 bool TaskStatusItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
-    if ( ( flags(index) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
-        return false;
-    }
-    Node *n = node( index );
-    switch (index.column()) {
-        case 0: return false;
-        case 1: return false;
-        case 2: return false;
-        case 3: return false;
-        case 4: return false;
-        case 5: return false;
-        default:
-            qWarning("data: invalid display value column %d", index.column());
-            return false;
-    }
     return false;
 }
 
@@ -487,17 +511,16 @@ QVariant TaskStatusItemModel::headerData( int section, Qt::Orientation orientati
             switch ( section ) {
                 case 0: return i18n( "Name" );
                 case 1: return i18n( "Status" );
-                case 2: return i18n( "Completed" );
-                case 3: return i18n( "Start" );
-                case 4: return i18n( "End" );
-                case 5: return i18n( "Status Note" );
+                case 2: return i18n( "% Completed" );
+                case 3: return i18n( "Planned Effort" );
+                case 4: return i18n( "Actual Effort" );
+                case 5: return i18n( "Start" );
+                case 6: return i18n( "End" );
+                case 7: return i18n( "Status Note" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
-            switch (section) {
-                case 1: return Qt::AlignCenter;
-                default: return QVariant();
-            }
+            return alignment( section );
         }
     }
     if ( role == Qt::ToolTipRole ) {
@@ -513,6 +536,15 @@ QVariant TaskStatusItemModel::headerData( int section, Qt::Orientation orientati
     return ItemModelBase::headerData(section, orientation, role);
 }
 
+QVariant TaskStatusItemModel::alignment( int column ) const
+{
+    switch ( column ) {
+        case 0: return QVariant(); // use default
+        default: return Qt::AlignCenter;
+    }
+    return QVariant();
+}
+
 QItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
@@ -523,7 +555,7 @@ QItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget *parent 
 
 int TaskStatusItemModel::columnCount( const QModelIndex &parent ) const
 {
-    return 6;
+    return 8;
 }
 
 int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const

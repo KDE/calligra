@@ -394,7 +394,7 @@ Duration Task::plannedEffort(const QDate &date, long id ) {
 }
 
 // Returns the total planned effort for this task (or subtasks) upto and including date
-Duration Task::plannedEffortTo(const QDate &date, long id) {
+Duration Task::plannedEffortTo(const QDate &date, long id) const {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -452,7 +452,7 @@ Duration Task::actualEffort(const QDate &date, long id) {
 }
 
 // Returns the total actual effort for this task (or subtasks) to date
-Duration Task::actualEffortTo(const QDate &date, long id) {
+Duration Task::actualEffortTo(const QDate &date, long id) const {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
@@ -461,13 +461,14 @@ Duration Task::actualEffortTo(const QDate &date, long id) {
         }
         return eff;
     }
-    Schedule *s = m_currentSchedule;
+    return m_completion.actualEffortTo( date );
+/*    Schedule *s = m_currentSchedule;
     if ( id != -1 ) {
         s = findSchedule( id );
     }
     if ( s ) {
         eff = s->actualEffortTo(date);
-    }
+    }*/
     return eff;
 }
 
@@ -1971,6 +1972,18 @@ Duration Completion::remainingEffort() const
 Duration Completion::totalPerformed() const
 {
      return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->totalPerformed;
+}
+
+Duration Completion::actualEffortTo( const QDate &date ) const
+{
+    Duration eff;
+    foreach ( QDate d, m_entries.keys() ) {
+        if ( d > date ) {
+            break;
+        }
+        eff = m_entries[ d ]->totalPerformed;
+    }
+    return eff;
 }
 
 QString Completion::note() const

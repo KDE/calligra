@@ -92,6 +92,7 @@ public:
     int percentFinished() const;
     Duration remainingEffort() const;
     Duration totalPerformed() const;
+    Duration actualEffortTo( const QDate &date ) const;
     QString note() const;
     void setNote( const QString &str );
     
@@ -173,14 +174,14 @@ public:
     /// Returns the total planned effort for this task (or subtasks) on date
     virtual Duration plannedEffort(const QDate &date, long id = -1 );
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo(const QDate &date, long id = -1 );
+    virtual Duration plannedEffortTo(const QDate &date, long id = -1 ) const;
     
     /// Returns the total actual effort for this task (or subtasks) 
     virtual Duration actualEffort( long id = -1 );
     /// Returns the total actual effort for this task (or subtasks) on date
     virtual Duration actualEffort(const QDate &date, long id = -1 );
     /// Returns the actual effort up to and including date
-    virtual Duration actualEffortTo(const QDate &date, long id = -1 );
+    virtual Duration actualEffortTo(const QDate &date, long id = -1 ) const;
     
     /**
      * Returns the total planned cost for this task (or subtasks)

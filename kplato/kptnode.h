@@ -257,14 +257,14 @@ public:
     /// Returns the total planned effort for this task (or subtasks) on date
     virtual Duration plannedEffort(const QDate &, long id = -1 ) { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo(const QDate &, long id = -1 ) { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration plannedEffortTo(const QDate &, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     
     /// Returns the total actual effort for this task (or subtasks) 
     virtual Duration actualEffort( long id = -1 ) { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) on date
     virtual Duration actualEffort(const QDate &/*date*/, long id = -1 ) { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) up to and including date
-    virtual Duration actualEffortTo(const QDate &/*date*/, long id = -1 ) { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration actualEffortTo(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     
     /**
      * Planned cost is the sum total of all resources and other costs

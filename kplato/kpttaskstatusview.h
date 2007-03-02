@@ -78,6 +78,9 @@ public:
     void clear();
     void refresh();
     
+    void setNow( const QDate &date ) { m_now = date; }
+    void setPeriod( int days ) { m_period = days; }
+    
 protected slots:
     void slotAboutToBeReset();
     void slotReset();
@@ -89,12 +92,16 @@ protected slots:
     void slotNodeRemoved( Node *node );
 
 protected:
+    QVariant alignment( int column ) const;
+    
     QVariant name( int row, int role ) const;
     QVariant name( const Node *node, int role ) const;
     QVariant status( const Node *node, int role ) const;
     QVariant completed( const Task *node, int role ) const;
     QVariant startTime( const Node *node, int role ) const;
     QVariant endTime( const Node *node, int role ) const;
+    QVariant plannedEffortTo( const Node *node, int role ) const;
+    QVariant actualEffortTo( const Node *node, int role ) const;
     QVariant note( const Node *node, int role ) const;
 
 private:
@@ -104,8 +111,11 @@ private:
     NodeList m_notstarted;
     NodeList m_running;
     NodeList m_finished;
+    NodeList m_upcomming;
     
     long m_id; // schedule id
+    QDate m_now;
+    int m_period;
 };
 
 
