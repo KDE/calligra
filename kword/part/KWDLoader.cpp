@@ -576,7 +576,12 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                     }
                 }
             }
-            cursor.insertText( paragraph.firstChildElement("TEXT").text() );
+            QString text = paragraph.firstChildElement("TEXT").text();
+            if(text.count() && text.right(1) == "\n") {
+                // Work around buggy input text, there is an illegal linefeed in the parag text.
+                text.chop(1);
+            }
+            cursor.insertText( text );
 
             // re-apply char format after we added the text
             KoCharacterStyle *style = m_document->styleManager()->characterStyle(
