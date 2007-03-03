@@ -285,9 +285,9 @@ void TextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
 }
 
 void TextTool::mouseMoveEvent( KoPointerEvent *event ) {
-    useCursor(Qt::IBeamCursor);
     if(event->buttons() == Qt::NoButton)
         return;
+    useCursor(Qt::IBeamCursor);
     int position = pointToPosition(event->point);
     if(position >= 0) {
         repaintCaret();
@@ -503,10 +503,14 @@ QRectF TextTool::textRect(int startPosition, int endPosition) {
         qSwap(startPosition, endPosition);
     QTextBlock block = m_textShapeData->document()->findBlock(startPosition);
     QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
+    if(! line1.isValid())
+        return QRectF();
     double startX = line1.cursorToX(startPosition - block.position());
 
     block = m_textShapeData->document()->findBlock(endPosition);
     QTextLine line2 = block.layout()->lineForTextPosition(endPosition - block.position());
+    if(! line2.isValid())
+        return QRectF();
     double endX = line2.cursorToX(endPosition - block.position());
 
     if(line1.textStart() == line2.textStart())
