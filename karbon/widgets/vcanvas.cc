@@ -83,8 +83,9 @@ KarbonCanvas::~KarbonCanvas()
 void KarbonCanvas::paintEvent(QPaintEvent * ev)
 {
     QPainter gc( this );
+    gc.translate(-m_documentOffset);
     gc.setRenderHint(QPainter::Antialiasing);
-    gc.setClipRect(ev->rect());
+    gc.setClipRect(ev->rect().translated(m_documentOffset));
 
     gc.translate( m_origin.x(), m_origin.y() );
     gc.setPen( Qt::black );
@@ -161,22 +162,22 @@ void KarbonCanvas::paintMargins( QPainter &painter, const KoViewConverter &conve
 
 void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseMoveEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
+    m_toolProxy->mouseMoveEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
 }
 
 void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
-    m_toolProxy->mousePressEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
+    m_toolProxy->mousePressEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
 }
 
 void KarbonCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseDoubleClickEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
+    m_toolProxy->mouseDoubleClickEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
 }
 
 void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseReleaseEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
+    m_toolProxy->mouseReleaseEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
 }
 
 void KarbonCanvas::keyReleaseEvent (QKeyEvent *e) {
@@ -189,12 +190,12 @@ void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
 
 void KarbonCanvas::tabletEvent( QTabletEvent *e )
 {
-    m_toolProxy->tabletEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
+    m_toolProxy->tabletEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
 }
 
 void KarbonCanvas::wheelEvent( QWheelEvent *e )
 {
-    m_toolProxy->wheelEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
+    m_toolProxy->wheelEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
 }
 
 void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
@@ -216,6 +217,7 @@ void KarbonCanvas::addCommand(QUndoCommand *command) {
 void KarbonCanvas::updateCanvas(const QRectF& rc) {
     QRect clipRect( viewToWidget( m_zoomHandler.documentToView(rc).toRect() ) );
     clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
+    clipRect.moveTopLeft( clipRect.topLeft() - m_documentOffset);
     update(clipRect);
 }
 
@@ -271,11 +273,17 @@ void KarbonCanvas::adjustSize() {
     else
         m_marginY = defaultMargin;
 
-    setMinimumSize( zoomedRect.width() + 2 * m_marginX, zoomedRect.height() + 2 * m_marginY );
+
+    QSize newSize(zoomedRect.width() + 2 * m_marginX, zoomedRect.height() + 2 * m_marginY);
+    emit documentSizeChanged(newSize);
 
     m_origin.setX( m_marginX - zoomedRect.left() );
     m_origin.setY( m_marginY - zoomedRect.top() );
     emit documentOriginChanged( m_origin );
+}
+
+void KarbonCanvas::setDocumentOffset(const QPoint &offset) {
+    m_documentOffset = offset;
 }
 
 QPoint KarbonCanvas::widgetToView( const QPoint& p ) const {

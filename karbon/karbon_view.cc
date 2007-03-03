@@ -214,6 +214,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     connect(m_canvasView, SIGNAL(canvasMousePositionChanged(const QPoint &)),
             this, SLOT(mousePositionChanged(const QPoint&)));
 
+    connect(m_canvas, SIGNAL(documentSizeChanged(const QSize&)), m_canvasView, SLOT(setDocumentSize(const QSize&)));
+    connect(m_canvasView, SIGNAL(moveDocumentOffset(const QPoint&)),
+            m_canvas, SLOT(setDocumentOffset(const QPoint&)));
+
     updateRuler();
 // 
 	// set up factory

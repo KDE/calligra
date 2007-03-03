@@ -100,8 +100,10 @@ public slots:
      * by setVisibleSize, the visible size is used as the new size.
      */
     void adjustSize();
+    void setDocumentOffset(const QPoint &offset);
 
 signals:
+    void documentSizeChanged(const QSize &size);
     void documentOriginChanged( const QPoint &origin );
 protected:
     void paintEvent(QPaintEvent * ev);
@@ -143,6 +145,7 @@ private:
     int m_fitMarginX;      ///< x-margin used when zoom fitting to page or width
     int m_fitMarginY;      ///< y-margin used when zoom fitting to page or width
     bool m_showMargins;    ///< should page margins be shown
+    QPoint m_documentOffset;
 };
 
 #endif
