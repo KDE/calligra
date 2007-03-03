@@ -1399,6 +1399,8 @@ Calendar *Project::setDefaultCalendar( Calendar *cal )
         cal->setDefault( true );
     }
     emit defaultCalendarChanged( cal );
+
+    return m_defaultCalendar;
 }
 
 void Project::setStandardWorktime( StandardWorktime * worktime )
