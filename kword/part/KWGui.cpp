@@ -81,6 +81,10 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     connect(m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint &)),
             this, SLOT(updateMousePos(const QPoint&)));
 
+    connect(m_canvas, SIGNAL(documentSize(const QSize&)), m_canvasController, SLOT(setDocumentSize(const QSize&)));
+    connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
+            m_canvas, SLOT(setDocumentOffset(const QPoint&)));
+
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
     pageSetupChanged();

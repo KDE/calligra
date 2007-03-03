@@ -71,7 +71,11 @@ void KWCanvas::pageSetupChanged() {
 
 void KWCanvas::updateSize() {
     QSize size = m_viewMode->contentsSize();
-    setMinimumSize(size.width(), size.height());
+    emit documentSize(size);
+}
+
+void KWCanvas::setDocumentOffset(const QPoint &offset) {
+    m_documentOffset = offset;
 }
 
 void KWCanvas::gridSize(double *horizontal, double *vertical) const {
@@ -88,6 +92,7 @@ void KWCanvas::addCommand(QUndoCommand *command) {
 }
 
 void KWCanvas::updateCanvas(const QRectF& rc) {
+kDebug() << "KWCanvas::updateCanvas\n";
     QRectF zoomedRect = m_viewMode->documentToView(rc);
     QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(zoomedRect.toRect());
     foreach(KWViewMode::ViewMap vm, map) {
@@ -104,19 +109,19 @@ KoViewConverter *KWCanvas::viewConverter() {
 }
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e) {
-    m_toolProxy->mouseMoveEvent( e, m_viewMode->viewToDocument(e->pos()) );
+    m_toolProxy->mouseMoveEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
 void KWCanvas::mousePressEvent(QMouseEvent *e) {
-    m_toolProxy->mousePressEvent( e, m_viewMode->viewToDocument(e->pos()) );
+    m_toolProxy->mousePressEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e) {
-    m_toolProxy->mouseReleaseEvent( e, m_viewMode->viewToDocument(e->pos()) );
+    m_toolProxy->mouseReleaseEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
 void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e) {
-    m_toolProxy->mouseDoubleClickEvent( e, m_viewMode->viewToDocument(e->pos()) );
+    m_toolProxy->mouseDoubleClickEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
 void KWCanvas::keyPressEvent( QKeyEvent *e ) {
@@ -161,12 +166,12 @@ void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
 
 void KWCanvas::tabletEvent( QTabletEvent *e )
 {
-    m_toolProxy->tabletEvent( e, m_viewMode->viewToDocument(e->pos()) );
+    m_toolProxy->tabletEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
 void KWCanvas::wheelEvent( QWheelEvent *e )
 {
-    m_toolProxy->wheelEvent( e, m_viewMode->viewToDocument(e->pos()) );
+    m_toolProxy->wheelEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
 bool KWCanvas::event (QEvent *event) {
@@ -189,10 +194,12 @@ bool KWCanvas::event (QEvent *event) {
 # include <stdlib.h>
 #endif
 void KWCanvas::paintEvent(QPaintEvent * ev) {
+kDebug() << "KWCanvas::paintEvent\n";
     QPainter painter( this );
+    painter.translate(-m_documentOffset);
 
     if(m_viewMode->hasPages()) {
-        QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(ev->rect());
+        QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(ev->rect().translated(m_documentOffset));
         foreach(KWViewMode::ViewMap vm, map) {
             painter.save();
             painter.translate(vm.distance.x(), vm.distance.y());

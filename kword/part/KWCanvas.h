@@ -83,6 +83,12 @@ public:
     /// return the viewMode currently associated with this canvas
     KWViewMode *viewMode() const { return m_viewMode; }
 
+public slots:
+    void setDocumentOffset(const QPoint &offset);
+
+signals:
+    void documentSize(const QSize &size);
+
 protected:
     /// reimplemented method from superclass
     void keyPressEvent( QKeyEvent *e );
@@ -115,6 +121,7 @@ private:
     KoToolProxy * m_toolProxy;
     KWView *m_view;
     KWViewMode *m_viewMode;
+    QPoint m_documentOffset;
 };
 
 #endif
