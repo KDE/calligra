@@ -94,6 +94,7 @@ void KWCanvas::addCommand(QUndoCommand *command) {
 
 void KWCanvas::updateCanvas(const QRectF& rc) {
     QRectF zoomedRect = m_viewMode->documentToView(rc);
+    zoomedRect.moveTopLeft( zoomedRect.topLeft() - m_documentOffset);
     QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(zoomedRect.toRect());
     foreach(KWViewMode::ViewMap vm, map) {
         vm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
