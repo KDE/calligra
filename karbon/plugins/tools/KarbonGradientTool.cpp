@@ -231,12 +231,14 @@ void KarbonGradientTool::resourceChanged( KoCanvasResource::EnumCanvasResource k
 QWidget * KarbonGradientTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
-    QGridLayout* layout = new QGridLayout( optionWidget );
+    QVBoxLayout* layout = new QVBoxLayout( optionWidget );
+    layout->setMargin(6);
 
     m_gradientWidget = new VGradientTabWidget( optionWidget );
     m_gradientWidget->setGradient( m_gradient );
     m_gradientWidget->setResourceServer( KarbonFactory::rServer() );
     layout->addWidget( m_gradientWidget );
+    layout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
 
     connect( m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()) );
 
