@@ -54,6 +54,7 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
     connect(document, SIGNAL(pageRemoved(KWPage*)), this, SLOT(pageSetupChanged()));
 
     m_toolProxy = KoToolManager::instance()->createToolProxy(this);
+    setAttribute(Qt::WA_OpaquePaintEvent, true);
 }
 
 KWCanvas::~KWCanvas()
@@ -92,7 +93,6 @@ void KWCanvas::addCommand(QUndoCommand *command) {
 }
 
 void KWCanvas::updateCanvas(const QRectF& rc) {
-kDebug() << "KWCanvas::updateCanvas\n";
     QRectF zoomedRect = m_viewMode->documentToView(rc);
     QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(zoomedRect.toRect());
     foreach(KWViewMode::ViewMap vm, map) {
@@ -194,7 +194,6 @@ bool KWCanvas::event (QEvent *event) {
 # include <stdlib.h>
 #endif
 void KWCanvas::paintEvent(QPaintEvent * ev) {
-kDebug() << "KWCanvas::paintEvent\n";
     QPainter painter( this );
     painter.translate(-m_documentOffset);
 
