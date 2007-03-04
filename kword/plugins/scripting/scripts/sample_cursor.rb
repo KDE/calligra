@@ -251,6 +251,6 @@ end
 
 dialog = Dialog.new
 dialog.exec
-#puts "setActiveCursor ...............1"
-#KWord.setActiveCursor( dialog.cursor )
-#puts "setActiveCursor ...............2"
+puts "setActiveCursor ...............1"
+KWord.setActiveCursor( dialog.cursor )
+puts "setActiveCursor ...............2"
