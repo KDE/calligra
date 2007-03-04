@@ -21,6 +21,7 @@
 #define SCRIPTING_TEXTFRAME_H
 
 #include <QObject>
+#include <QPointer>
 #include <QTextFrame>
 
 #include "TextCursor.h"
@@ -60,8 +61,18 @@ namespace Scripting {
                 return new TextCursor(this, m_frame->lastCursorPosition());
             }
 
+            /** Return a child \a TextFrame object with the defined \p index . */
+            QObject* childFrame(int index) {
+                return (index >= 0 && index < m_frame->childFrames().count()) ? m_frame->childFrames().at(index) : 0;
+            }
+
+            /** Return the number of \a TextCursor objects. */
+            int childFrameCount() const {
+                return m_frame->childFrames().count();
+            }
+
         private:
-            QTextFrame* m_frame;
+            QPointer<QTextFrame> m_frame;
     };
 
 }

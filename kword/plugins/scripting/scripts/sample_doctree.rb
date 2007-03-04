@@ -93,12 +93,10 @@ end
 
 # The TextEditPage class implements a simple texteditor.
 class TextEditPage < Page
-
     def initialize(label, text = "")
         super(label)
         @text = text
     end
-
     def createWidget(parent)
         edit = Qt::TextEdit.new(parent)
         if @text
@@ -107,7 +105,22 @@ class TextEditPage < Page
         edit.readOnly = true
         return edit
     end
+end
 
+# The TextBrowserPage class implements a simple browser.
+class TextBrowserPage < Page
+    def initialize(label, text = "")
+        super(label)
+        @text = text
+    end
+    def createWidget(parent)
+        edit = Qt::TextBrowser.new(parent)
+        if @text
+            edit.html = @text.to_s
+        end
+        edit.readOnly = true
+        return edit
+    end
 end
 
 #########################################################################
@@ -155,6 +168,23 @@ end
 # FrameItem for KWord Frame objects.
 class FrameItem < Item
 
+    class TextFrameItem < Item
+        def initialize(parentitem, textframe)
+            super(parentitem, textframe)
+            #cursor = textframe.firstCursorPosition()
+            for i in 0..(textframe.childFrameCount() - 1)
+                f = textframe.childFrame(i)
+                if f
+                    puts "TextFrameItem %s" % f.to_s
+                    @childitems.push( TextFrameItem.new(self, f) )
+                end
+            end
+        end
+        def data(column)
+            return Qt::Variant.new( "TextFrame %i-%i" % [@data.firstPosition(),@data.lastPosition()] )
+        end
+    end
+
     class TextDocumentItem < Item
         def initialize(frameitem, textdoc)
             super(frameitem, textdoc)
@@ -167,9 +197,6 @@ class FrameItem < Item
                     PropertyPage::Property.new("isModified", @data.isModified),
                 ] )
             )
-            @pages.push( TextEditPage.new("Text", @data.toText) )
-            @pages.push( TextEditPage.new("HTML", @data.toHtml) )
-            @pages.push( TextEditPage.new("Style", @data.defaultStyleSheet) )
 
             varpage = PropertyPage.new("Variables")
             for n in @data.variableNames
@@ -177,7 +204,16 @@ class FrameItem < Item
             end
             @pages.push(varpage)
 
-            #textdoc.rootFrame
+            @pages.push( TextEditPage.new("Text", @data.toText) )
+            @pages.push( TextEditPage.new("HTML", @data.toHtml) )
+            @pages.push( TextEditPage.new("Style", @data.defaultStyleSheet) )
+            @pages.push( TextBrowserPage.new("Preview", @data.toHtml) )
+
+            roottextframe = textdoc.rootFrame
+            @childitems.push( TextFrameItem.new(self, roottextframe) )
+
+            cursor = roottextframe.firstCursorPosition()
+            #@childitems.push( TextCursorItem.new(self, ) )
         end
         def data(column)
             return Qt::Variant.new("Document")
@@ -222,7 +258,11 @@ class FramesetItem < Item
     def initialize(rootitem, frameset)
         super(rootitem, frameset)
         for i in 0..(frameset.frameCount() - 1)
-            @childitems.push( FrameItem.new(self, frameset.frame(i)) )
+            f = frameset.frame(i)
+            if f
+                puts "FramesetItem frame=%s" % f.to_s
+                @childitems.push( FrameItem.new(self, f) )
+            end
         end
         @pages.push(
             PropertyPage.new("Properties", [
@@ -246,7 +286,11 @@ class RootItem < Item
     def initialize
         super(nil, nil)
         for i in 0..(KWord.frameSetCount() - 1)
-            @childitems.push( FramesetItem.new(self, KWord.frameSet(i)) )
+            f = KWord.frameSet(i)
+            if f
+                puts "RootItem %s" % f.to_s
+                @childitems.push( FramesetItem.new(self, f) )
+            end
         end
     end
 
