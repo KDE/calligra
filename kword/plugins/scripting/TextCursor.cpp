@@ -26,59 +26,77 @@
 #include <QTextCursor>
 #include <QTextTableFormat>
 #include <QTextListFormat>
+#include <QTextDocumentFragment>
 
 using namespace Scripting;
 
 TextCursor::TextCursor(QObject* parent, const QTextCursor& cursor)
-    : QObject( parent ), m_cursor( cursor )
-{
-}
+    : QObject( parent ), m_cursor( cursor ) {}
 
-TextCursor::~TextCursor()
-{
-}
+TextCursor::~TextCursor() {}
 
-int TextCursor::position() const
-{
+int TextCursor::position() const {
     return m_cursor.position();
 }
 
-void TextCursor::setPosition(int pos)
-{
-    m_cursor.setPosition(pos);
+void TextCursor::setPosition(int pos, bool moveAnchor) {
+    m_cursor.setPosition(pos, moveAnchor ? QTextCursor::MoveAnchor : QTextCursor::KeepAnchor);
 }
 
-void TextCursor::insertText(const QString& text)
-{
+bool TextCursor::movePosition(int operation, bool moveAnchor) {
+    return m_cursor.movePosition((QTextCursor::MoveOperation)operation, moveAnchor ? QTextCursor::MoveAnchor : QTextCursor::KeepAnchor);
+}
+
+int TextCursor::anchor() const {
+    return m_cursor.anchor();
+}
+
+bool TextCursor::hasSelection() const {
+    return m_cursor.hasSelection();
+}
+
+int TextCursor::selectionStart() const {
+    return m_cursor.selectionStart();
+}
+
+int TextCursor::selectionEnd() const {
+    return m_cursor.selectionEnd();
+}
+
+QString TextCursor::selectedText() const {
+    //return m_cursor.selectedText();
+    return m_cursor.selection().toPlainText();
+}
+
+QString TextCursor::selectedHtml() const {
+    return m_cursor.selection().toHtml();
+}
+
+void TextCursor::insertText(const QString& text) {
     m_cursor.insertText(text);
 }
 
-void TextCursor::insertHtml(const QString& html)
-{
+void TextCursor::insertHtml(const QString& html) {
     m_cursor.insertHtml(html);
 }
 
-void TextCursor::insertBlock()
-{
+void TextCursor::insertBlock() {
     m_cursor.insertBlock();
 }
 
-void TextCursor::insertDefaultBlock()
-{
+void TextCursor::insertDefaultBlock() {
     QTextBlockFormat bf;
     QTextCharFormat cf;
     m_cursor.insertBlock(bf, cf);
 }
 
-QObject* TextCursor::insertFrame()
-{
+QObject* TextCursor::insertFrame() {
     QTextFrameFormat f;
     QTextFrame* frame = m_cursor.insertFrame(f);
     return frame ? new TextFrame(this, frame) : 0;
 }
 
-QObject* TextCursor::insertList()
-{
+QObject* TextCursor::insertList() {
     QTextListFormat f;
 
     //testcase
@@ -89,27 +107,26 @@ QObject* TextCursor::insertList()
     return l ? new TextList(this, l) : 0;
 }
 
-QObject* TextCursor::insertTable(int rows, int columns)
-{
+QObject* TextCursor::insertTable(int rows, int columns) {
     QTextTableFormat format;
     //format.setColumns(columns);
     //format.setHeaderRowCount(1);
     format.setBackground(QColor("#e0e0e0"));
     //format.setCellPadding(1); format.setCellSpacing(1); //testcase
 
-QVector<QTextLength> constraints;
-constraints << QTextLength(QTextLength::PercentageLength, 16);
-constraints << QTextLength(QTextLength::PercentageLength, 28);
-constraints << QTextLength(QTextLength::PercentageLength, 28);
-constraints << QTextLength(QTextLength::PercentageLength, 28);
-format.setColumnWidthConstraints(constraints);
+    QVector<QTextLength> constraints;
+    constraints << QTextLength(QTextLength::PercentageLength, 16);
+    constraints << QTextLength(QTextLength::PercentageLength, 28);
+    constraints << QTextLength(QTextLength::PercentageLength, 28);
+    constraints << QTextLength(QTextLength::PercentageLength, 28);
+    format.setColumnWidthConstraints(constraints);
 
     QTextTable* table = m_cursor.insertTable(rows, columns, format);
     //QTextTable* t = m_cursor.insertTable(rows, columns);
 
-QTextTableCell cell = table->cellAt(0, 0);
-cell.firstCursorPosition().insertText(tr("aaa") /*, QTextCharFormat::charFormat*/);
-table->cellAt(0, 1).firstCursorPosition().insertText(tr("bbb"));
+    QTextTableCell cell = table->cellAt(0, 0);
+    cell.firstCursorPosition().insertText(tr("aaa") /*, QTextCharFormat::charFormat*/);
+    table->cellAt(0, 1).firstCursorPosition().insertText(tr("bbb"));
 
     return table ? new TextTable(this, table) : 0;
 }

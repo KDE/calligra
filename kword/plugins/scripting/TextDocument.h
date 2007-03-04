@@ -80,6 +80,8 @@ namespace Scripting {
             /** Return the root \a Frame object of the document. */
             QObject* rootFrame() { return new TextFrame(this, m_doc->rootFrame()); }
 
+            /** Return the \a Cursor object for the document. */
+            QObject* cursor() { return new TextCursor(this, QTextCursor(m_doc)); }
             /** Return the first \a Cursor object of the document. */
             QObject* firstCursor() { return new TextCursor(this, QTextCursor(m_doc->begin())); }
             /** Return the last \a Cursor object of the document. */

@@ -32,23 +32,61 @@ namespace Scripting {
     class TextCursor : public QObject
     {
             Q_OBJECT
+            Q_ENUMS(MoveOperation)
         public:
             TextCursor(QObject* parent, const QTextCursor& cursor);
             virtual ~TextCursor();
             QTextCursor& cursor() { return m_cursor; }
 
+            enum MoveOperation {
+                Start = QTextCursor::Start, //!< Move to the start of the document.
+                End = QTextCursor::End, //!< Move to the end of the document.
+
+                StartOfLine = QTextCursor::StartOfLine, //!< Move to the start of the current line.
+                EndOfLine = QTextCursor::EndOfLine, //!< Move to the end of the current line.
+
+                StartOfBlock = QTextCursor::StartOfBlock, //!< Move to the start of the current block.
+                EndOfBlock = QTextCursor::EndOfBlock, //!< Move to the end of the current block.
+                PreviousBlock = QTextCursor::PreviousBlock, //!< Move to the start of the previous block.
+                NextBlock = QTextCursor::NextBlock, //!< Move to the beginning of the next block.
+
+                StartOfWord = QTextCursor::StartOfWord, //!< Move to the start of the current word.
+                EndOfWord = QTextCursor::EndOfWord, //!< Move to the end of the current word.
+                PreviousWord = QTextCursor::PreviousWord, //!< Move to the beginning of the previous word.
+                NextWord = QTextCursor::NextWord, //!< Move to the next word.
+                WordLeft = QTextCursor::WordLeft, //!< Move left one word.
+
+                PreviousCharacter = QTextCursor::PreviousCharacter, //!< Move to the previous character.
+                NextCharacter = QTextCursor::NextCharacter, //!< Move to the next character.
+                Up = QTextCursor::Up, //!< Move up one line.
+                Down = QTextCursor::Down, //!< Move down one line.
+                Left = QTextCursor::Left, //!< Move left one character.
+                Right = QTextCursor::Right //!< Move right one character.
+            };
+
         public Q_SLOTS:
 
             /** Return the position the cursor is on. */
             int position() const;
+            /** Return the position of the anchor. */
+            int anchor() const;
             /** Set the position the cursor is on. */
-            void setPosition(int pos);
+            void setPosition(int pos, bool moveAnchor = true);
+            /** Moves to the defined position. The \p operation defines
+            the \a MoveOperation that should be performed while \p moveAnchor
+            defines if the anchor should be moved too to the new position. */
+            bool movePosition(int operation, bool moveAnchor = true);
 
-            //int selectionStart () const
-            //int selectionEnd () const
-            //QString selectedText () const
-            //QString selectionToHtml(const QString& encoding = QString()) const
-            //QString selectionToPlainText() const
+            /** Returns true if the cursor knows about a selection. */
+            bool hasSelection() const;
+            /** Return the position where the selection starts. */
+            int selectionStart() const;
+            /** Return the position where the selection ends. */
+            int selectionEnd() const;
+            /** Return the selected plain text. */
+            QString selectedText() const;
+            /** Return the selected HTML. */
+            QString selectedHtml() const;
 
             /** Insert the \p text plain-text at the current cursor position. */
             void insertText(const QString& text);

@@ -41,6 +41,11 @@ namespace Scripting {
 
         public Q_SLOTS:
 
+            /** Return the \a TextCursor object for this frame. */
+            QObject* cursor() {
+                return new TextCursor(this, QTextCursor(m_frame));
+            }
+
             /** Return the first position in the frame. */
             int firstPosition() const {
                 return m_frame->firstPosition();

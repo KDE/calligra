@@ -7,6 +7,8 @@ install(FILES
 install(FILES
     sample_importfile.py
     sample_exportfile.py
+    sample_doctree.rb
+    sample_cursor.rb
     sample_actions.py
     sample_progressbar.py
     sample_text.py
@@ -16,5 +18,4 @@ install(FILES
     sample_variables.py
     sample_insertshape.py
     sample_allshapes.py
-    sample_doctree.rb
     DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/extensions)
