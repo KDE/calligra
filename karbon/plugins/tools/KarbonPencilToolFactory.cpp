@@ -32,6 +32,7 @@ KarbonPencilToolFactory::KarbonPencilToolFactory(QObject *parent)
     setToolType( mainToolType() );
     setIcon( "14_pencil" );
     setPriority( 3 );
+    setActivationShapeId("flake/always");
 }
 
 KarbonPencilToolFactory::~KarbonPencilToolFactory() {
