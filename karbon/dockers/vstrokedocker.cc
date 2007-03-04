@@ -30,6 +30,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <KoToolManager.h>
+#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoDockFactory.h>
 #include <KoUnitWidgets.h>

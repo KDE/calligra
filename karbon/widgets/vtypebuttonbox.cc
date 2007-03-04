@@ -213,6 +213,7 @@ static const char* const buttonpattern[]={
 
 #include <klocale.h>
 
+#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 #include <KoSelection.h>

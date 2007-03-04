@@ -32,6 +32,7 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeBorderCommand.h>
 #include <KoToolManager.h>
+#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoLineBorder.h>

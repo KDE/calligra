@@ -23,6 +23,7 @@
 #include "Karbon.h"
 
 #include <KoToolManager.h>
+#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
 

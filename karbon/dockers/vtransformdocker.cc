@@ -35,6 +35,7 @@
 #include <KoUnitWidgets.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 #include <KoShapeMoveCommand.h>

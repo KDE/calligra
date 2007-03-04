@@ -35,6 +35,7 @@
 #include <KoFilterManager.h>
 #include <KoShapeLayer.h>
 #include <KoToolManager.h>
+#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <kfiledialog.h>
