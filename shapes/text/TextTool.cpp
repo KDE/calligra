@@ -186,6 +186,7 @@ void TextTool::paint( QPainter &painter, KoViewConverter &converter) {
     double zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
+    Q_ASSERT(m_textShapeData);
     painter.translate(0, -m_textShapeData->documentOffset());
 
     if(m_textShapeData && m_caret.hasSelection()) {
