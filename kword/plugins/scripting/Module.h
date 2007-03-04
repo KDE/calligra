@@ -115,6 +115,13 @@ namespace Scripting {
             /** Add and return a new paragraph \a Style object. */
             QObject* addParagraphStyle(const QString& name);
 
+            /***** Active *****/
+
+            /** Return the active/current \a TextCursor object. */
+            QObject* activeCursor();
+            /** Set the active/current \a TextCursor object. */
+            bool setActiveCursor(QObject* cursor);
+
         private:
             /// \internal d-pointer class.
             class Private;
