@@ -53,6 +53,8 @@ TextShape::TextShape()
 
     lay->setInlineObjectTextManager(new KoInlineTextObjectManager(lay));
     setCollisionDetection(true);
+
+    lay->connect(m_textShapeData, SIGNAL(relayout()), SLOT(relayout()));
 }
 
 TextShape::~TextShape() {
@@ -104,6 +106,9 @@ QPointF TextShape::convertScreenPos(const QPointF &point) {
 void TextShape::shapeChanged(ChangeType type) {
     if(type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->faul();
+        KoTextDocumentLayout *data = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+        if(data)
+            data->interruptLayout();
         m_textShapeData->fireResizeEvent();
     }
 }
