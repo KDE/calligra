@@ -422,46 +422,56 @@ class Dialog < Qt::Dialog
         doc = fs.textDocument()
 
         puts "doc.cursor() ............................"
-        @cursor = doc.cursor()
-        puts "position=%s" % @cursor.position()
-        puts "selectedText=%s" % @cursor.selectedText()
-        puts "hasSelection=%s" % @cursor.hasSelection()
-        puts "selectedText=%s" % @cursor.selectedText()
+        cursor = doc.cursor()
+        puts "position=%s" % cursor.position()
+        puts "anchor=%s" % cursor.anchor()
+        puts "hasSelection=%s" % cursor.hasSelection()
+        puts "selectedText=%s" % cursor.selectedText()
 
         puts "doc.firstCursor() ............................"
         cursor = doc.firstCursor()
         puts "position=%s" % cursor.position()
-        puts "selectedText=%s" % cursor.selectedText()
+        puts "anchor=%s" % cursor.anchor()
         puts "hasSelection=%s" % cursor.hasSelection()
         puts "selectedText=%s" % cursor.selectedText()
 
         puts "doc.lastCursor() ............................"
         cursor = doc.lastCursor()
         puts "position=%s" % cursor.position()
-        puts "selectedText=%s" % cursor.selectedText()
+        puts "anchor=%s" % cursor.anchor()
         puts "hasSelection=%s" % cursor.hasSelection()
         puts "selectedText=%s" % cursor.selectedText()
 
         puts "doc.rootFrame().cursor() ............................"
         cursor = doc.rootFrame().cursor()
         puts "position=%s" % cursor.position()
-        puts "selectedText=%s" % cursor.selectedText()
+        puts "anchor=%s" % cursor.anchor()
         puts "hasSelection=%s" % cursor.hasSelection()
         puts "selectedText=%s" % cursor.selectedText()
 
         puts "doc.rootFrame().firstCursorPosition() ............................"
         cursor = doc.rootFrame().firstCursorPosition()
         puts "position=%s" % cursor.position()
-        puts "selectedText=%s" % cursor.selectedText()
+        puts "anchor=%s" % cursor.anchor()
         puts "hasSelection=%s" % cursor.hasSelection()
         puts "selectedText=%s" % cursor.selectedText()
 
         puts "doc.rootFrame().lastCursorPosition() ............................"
         cursor = doc.rootFrame().lastCursorPosition()
         puts "position=%s" % cursor.position()
-        puts "selectedText=%s" % cursor.selectedText()
+        puts "anchor=%s" % cursor.anchor()
         puts "hasSelection=%s" % cursor.hasSelection()
         puts "selectedText=%s" % cursor.selectedText()
+
+        puts "fs.frame(0).cursor() ............................"
+        puts "fs.frame(0).position=%s" % fs.frame(0).position()
+        puts "fs.frame(0).endPosition=%s" % fs.frame(0).endPosition()
+        cursor = fs.frame(0).cursor()
+        puts "cursor.position=%s" % cursor.position()
+        puts "cursor.anchor=%s" % cursor.anchor()
+        puts "cursor.hasSelection=%s" % cursor.hasSelection()
+        puts "cursor.selectedText=%s" % cursor.selectedText()
+        @cursor = cursor
 
         layout = Qt::VBoxLayout.new
         setLayout(layout)
