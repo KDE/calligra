@@ -30,7 +30,7 @@ TextToolFactory::TextToolFactory(QObject *parent)
     setToolType (dynamicToolType());
     setIcon ("edittext");
     setPriority (1);
-    setActivationShapeID (TextShape_SHAPEID);
+    setActivationShapeId (TextShape_SHAPEID);
 }
 
 TextToolFactory::~TextToolFactory() {

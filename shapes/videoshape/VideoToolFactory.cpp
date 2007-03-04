@@ -31,7 +31,7 @@ VideoToolFactory::VideoToolFactory( QObject* parent, const QStringList& )
     setIcon( "videoshape" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
-    setActivationShapeID( VideoShapeId );
+    setActivationShapeId( VideoShapeId );
 }
 
 VideoToolFactory::~VideoToolFactory()

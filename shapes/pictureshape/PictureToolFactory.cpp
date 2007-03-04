@@ -31,7 +31,7 @@ PictureToolFactory::PictureToolFactory( QObject* parent, const QStringList& )
     setIcon( "pictureshape" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
-    setActivationShapeID( PictureShapeId );
+    setActivationShapeId( PictureShapeId );
 }
 
 PictureToolFactory::~PictureToolFactory()
