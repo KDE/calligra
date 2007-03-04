@@ -181,7 +181,7 @@ void KoEnhancedPathShapeFactory::addArrow()
     t.id = KoPathShapeId;
     t.name = i18n("Enhanced Path");
     t.toolTip = i18n("An arrow");
-    t.icon = "arrow";
+    t.icon = "arrow-right";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
 
     addTemplate(t);
