@@ -22,6 +22,8 @@
 
 #define TextShape_SHAPEID "TextShapeID"
 
+#include <KoCanvasResourceProvider.h>
+
 /// The kword-global namespace for all KWord related things.
 class KWord {
 public:
@@ -104,6 +106,14 @@ public:
         FootNoteSeparatorLeft, ///< Left of page
         FootNoteSeparatorCenter, ///< Centered on page
         FootNoteSeparatorRight  ///< Right of page
+    };
+
+    /// Specifies the KWord specific resources that you can put and get from the KoCanvasResourceProvider
+    enum KWordCanvasResources {
+        // lets try to put Current in front of everything for ease of reading.
+        CurrentTextCursor = KoCanvasResource::KWordStart + 1, ///< The text cursor with position and selection
+        CurrentFrame,
+        CurrentFrameSet
     };
 };
 
