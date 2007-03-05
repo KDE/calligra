@@ -48,7 +48,12 @@ KoShape *TextShapeFactory::createDefaultShape() const {
 
 KoShape *TextShapeFactory::createShape(const KoProperties * params) const {
     TextShape *shape = new TextShape();
+shape->resize(QSizeF(300, 200));
     shape->setDemoText( params->boolProperty("demo") );
+shape->addConnectionPoint(QPointF(0, 0));
+shape->addConnectionPoint(QPointF(150, 100));
+shape->addConnectionPoint(QPointF(0, 200));
+shape->addConnectionPoint(QPointF(300, 200));
     return shape;
 }
 
