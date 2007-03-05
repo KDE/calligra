@@ -33,7 +33,7 @@ TableToolFactory::TableToolFactory( QObject* parent )
     setIcon( "tableshape" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
-    setActivationShapeID( TableShapeId );
+    setActivationShapeId( TableShapeId );
 }
 
 TableToolFactory::~TableToolFactory()
