@@ -20,6 +20,8 @@
 #ifndef KEXIDB_CONNECTION_DATA_H
 #define KEXIDB_CONNECTION_DATA_H
 
+#include <kexidb/kexidb_export.h>
+
 #include <qobject.h>
 #include <qstring.h>
 #include <qptrlist.h>
