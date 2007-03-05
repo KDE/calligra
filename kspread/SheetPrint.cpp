@@ -73,7 +73,7 @@ SheetPrint::SheetPrint( Sheet* sheet )
     m_bottomBorder = 20.0;
 
     m_paperFormat = KoPageFormat::defaultFormat();
-    m_orientation = PG_PORTRAIT;
+    m_orientation = KoPageFormat::Portrait;
     m_paperWidth = MM_TO_POINT( KoPageFormat::width( m_paperFormat, m_orientation ) );
     m_paperHeight = MM_TO_POINT( KoPageFormat::height( m_paperFormat, m_orientation ) );
     m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) );
@@ -103,7 +103,7 @@ QString SheetPrint::saveOasisSheetStyleLayout( KoGenStyles &mainStyles )
     //pageLayout.addAttribute( "style:page-usage", "all" ); FIXME
     pageLayout.addPropertyPt( "fo:page-width", MM_TO_POINT( paperWidth() ) );
     pageLayout.addPropertyPt( "fo:page-height", MM_TO_POINT( paperHeight() ) );
-    pageLayout.addProperty( "style:print-orientation", orientation() == PG_LANDSCAPE ? "landscape" : "portrait" );
+    pageLayout.addProperty( "style:print-orientation", orientation() == KoPageFormat::Landscape ? "landscape" : "portrait" );
     pageLayout.addPropertyPt( "fo:margin-left", MM_TO_POINT(leftBorder() ) );
     pageLayout.addPropertyPt( "fo:margin-top", MM_TO_POINT(topBorder() ) );
     pageLayout.addPropertyPt( "fo:margin-right", MM_TO_POINT(rightBorder() ) );
@@ -1014,7 +1014,7 @@ void SheetPrint::setHeadFootLine( const QString &_headl, const QString &_headm, 
     m_pDoc->setModified( true );
 }
 
-void SheetPrint::setPaperOrientation( KoOrientation _orient )
+void SheetPrint::setPaperOrientation( KoPageFormat::Orientation _orient )
 {
     if ( m_pSheet->isProtected() )
         NO_MODIFICATION_POSSIBLE;
@@ -1036,20 +1036,20 @@ KoPageLayout SheetPrint::paperLayout() const
     KoPageLayout pl;
     pl.format = m_paperFormat;
     pl.orientation = m_orientation;
-    pl.ptWidth  =  m_paperWidth;
-    pl.ptHeight =  m_paperHeight;
-    pl.ptLeft   =  m_leftBorder;
-    pl.ptRight  =  m_rightBorder;
-    pl.ptTop    =  m_topBorder;
-    pl.ptBottom =  m_bottomBorder;
+    pl.width  =  m_paperWidth;
+    pl.height =  m_paperHeight;
+    pl.left   =  m_leftBorder;
+    pl.right  =  m_rightBorder;
+    pl.top    =  m_topBorder;
+    pl.bottom =  m_bottomBorder;
     return pl;
 }
 
 
 void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
                                         float _rightBorder, float _bottomBorder,
-                                        KoFormat _paper,
-                                        KoOrientation _orientation )
+                                        KoPageFormat::Format _paper,
+                                        KoPageFormat::Orientation _orientation )
 {
     if ( m_pSheet->isProtected() )
         NO_MODIFICATION_POSSIBLE;
@@ -1085,13 +1085,13 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
     if ( m_pSheet->isProtected() )
         NO_MODIFICATION_POSSIBLE;
 
-    KoFormat f = paperFormat();
-    KoOrientation newOrientation = orientation();
+    KoPageFormat::Format f = paperFormat();
+    KoPageFormat::Orientation newOrientation = orientation();
 
     if ( _orientation == "Portrait" )
-        newOrientation = PG_PORTRAIT;
+        newOrientation = KoPageFormat::Portrait;
     else if ( _orientation == "Landscape" )
-        newOrientation = PG_LANDSCAPE;
+        newOrientation = KoPageFormat::Landscape;
 
 
     QString paper( _paper );
@@ -1101,32 +1101,32 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
         if ( i < 0 )
         {
             // We have nothing useful, so assume ISO A4
-            f = PG_DIN_A4;
+            f = KoPageFormat::IsoA4Size;
         }
         else
         {
-            f = PG_CUSTOM;
+            f = KoPageFormat::CustomSize;
             m_paperWidth  = paper.left(i).toFloat();
             m_paperHeight = paper.mid(i+1).toFloat();
             if ( m_paperWidth < 10.0 )
-                m_paperWidth = KoPageFormat::width( PG_DIN_A4, newOrientation );
+                m_paperWidth = KoPageFormat::width( KoPageFormat::IsoA4Size, newOrientation );
             if ( m_paperHeight < 10.0 )
-                m_paperHeight = KoPageFormat::height( PG_DIN_A4, newOrientation );
+                m_paperHeight = KoPageFormat::height( KoPageFormat::IsoA4Size, newOrientation );
         }
     }
     else
     {
         f = KoPageFormat::formatFromString( paper );
-        if ( f == PG_CUSTOM )
+        if ( f == KoPageFormat::CustomSize )
             // We have no idea about height or width, therefore assume ISO A4
-            f = PG_DIN_A4;
+            f = KoPageFormat::IsoA4Size;
     }
     setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, newOrientation );
 }
 
 void SheetPrint::calcPaperSize()
 {
-    if ( m_paperFormat != PG_CUSTOM )
+    if ( m_paperFormat != KoPageFormat::CustomSize )
     {
         m_paperWidth = KoPageFormat::width( m_paperFormat, m_orientation );
         m_paperHeight = KoPageFormat::height( m_paperFormat, m_orientation );
@@ -1160,7 +1160,7 @@ QList<PrintNewPageEntry>::iterator SheetPrint::findNewPageRow( int row )
 
 QString SheetPrint::paperFormatString()const
 {
-    if ( m_paperFormat == PG_CUSTOM )
+    if ( m_paperFormat == KoPageFormat::CustomSize )
     {
         QString tmp;
         tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );

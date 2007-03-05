@@ -56,5 +56,5 @@ void KWPageSettings::clear() {
     m_headers = KWord::HFTypeEvenOdd;
     m_footers = KWord::HFTypeSameAsFirst;
     m_columns.columns = 1;
-    m_columns.ptColumnSpacing = 6;
+    m_columns.columnSpacing = 6;
 }

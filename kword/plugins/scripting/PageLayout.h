@@ -47,56 +47,56 @@ namespace Scripting {
             /** Return page orientation */
             QString orientation() {
                 switch( m_pagelayout.orientation ) {
-                    case PG_PORTRAIT: return "Portrait";
-                    case PG_LANDSCAPE: return "Landscape";
+                    case KoPageFormat::Portrait: return "Portrait";
+                    case KoPageFormat::Landscape: return "Landscape";
                 }
                 return QString();
             }
             /** Set page orientation */
             void setOrientation(const QString& orientation) {
-                if(orientation == "Portrait") m_pagelayout.orientation = PG_PORTRAIT;
-                else if(orientation == "Landscape") m_pagelayout.orientation = PG_LANDSCAPE;
+                if(orientation == "Portrait") m_pagelayout.orientation = KoPageFormat::Portrait;
+                else if(orientation == "Landscape") m_pagelayout.orientation = KoPageFormat::Landscape;
             }
 
             /** Return page width in pt */
-            double width() { return m_pagelayout.ptWidth; }
+            double width() { return m_pagelayout.width; }
             /** Set page width in pt */
-            void setWidth(double width) { m_pagelayout.ptWidth = width; }
+            void setWidth(double width) { m_pagelayout.width = width; }
 
             /** Return page height in pt */
-            double height() { return m_pagelayout.ptHeight; }
+            double height() { return m_pagelayout.height; }
             /** Set page height in pt */
-            void setHeight(double height) { m_pagelayout.ptHeight = height; }
+            void setHeight(double height) { m_pagelayout.height = height; }
 
             /** Return left margin in pt */
-            double left() { return m_pagelayout.ptLeft; }
+            double left() { return m_pagelayout.left; }
             /** Set left margin in pt */
-            void setLeft(double left) { m_pagelayout.ptLeft = left; }
+            void setLeft(double left) { m_pagelayout.left = left; }
 
             /** Return right margin in pt */
-            double right() { return m_pagelayout.ptRight; }
+            double right() { return m_pagelayout.right; }
             /** Set right margin in pt */
-            void setRight(double right) { m_pagelayout.ptRight = right; }
+            void setRight(double right) { m_pagelayout.right = right; }
 
             /** Return top margin in pt */
-            double top() { return m_pagelayout.ptTop; }
+            double top() { return m_pagelayout.top; }
             /** Set top margin in pt */
-            void setTop(double top) { m_pagelayout.ptTop = top; }
+            void setTop(double top) { m_pagelayout.top = top; }
 
             /** Return bottom margin in pt */
-            double bottom() { return m_pagelayout.ptBottom; }
+            double bottom() { return m_pagelayout.bottom; }
             /** Set bottom margin in pt */
-            void setBottom(double bottom) { m_pagelayout.ptBottom = bottom; }
+            void setBottom(double bottom) { m_pagelayout.bottom = bottom; }
 
             /** Return margin on page edge in pt */
-            double pageEdge() { return m_pagelayout.ptPageEdge; }
+            double pageEdge() { return m_pagelayout.pageEdge; }
             /** Set margin on page edge in pt */
-            void setPageEdge(double edge) { m_pagelayout.ptPageEdge = edge; }
+            void setPageEdge(double edge) { m_pagelayout.pageEdge = edge; }
 
             /** Return margin on page-binding edge in pt */
-            double bindingSide() { return m_pagelayout.ptBindingSide; }
+            double bindingSide() { return m_pagelayout.bindingSide; }
             /** Set margin on page-binding edge in pt */
-            void setBindingSide(double side) { m_pagelayout.ptBindingSide = side; }
+            void setBindingSide(double side) { m_pagelayout.bindingSide = side; }
 
         private:
             KoPageLayout m_pagelayout;

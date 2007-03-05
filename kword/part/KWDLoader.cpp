@@ -76,24 +76,24 @@ bool KWDLoader::load(QDomElement &root) {
     QDomElement paper = root.firstChildElement("PAPER");
     if ( !paper.isNull() )
     {
-        pgLayout.format = static_cast<KoFormat>( paper.attribute("format").toInt() );
-        pgLayout.orientation = static_cast<KoOrientation>( paper.attribute("orientation").toInt() );
-        pgLayout.ptWidth = paper.attribute("width").toDouble();
-        pgLayout.ptHeight = paper.attribute("height").toDouble();
-        kDebug(32001) << " ptWidth=" << pgLayout.ptWidth << endl;
-        kDebug(32001) << " ptHeight=" << pgLayout.ptHeight << endl;
-        if ( pgLayout.ptWidth <= 0 || pgLayout.ptHeight <= 0 )
+        pgLayout.format = static_cast<KoPageFormat::Format>( paper.attribute("format").toInt() );
+        pgLayout.orientation = static_cast<KoPageFormat::Orientation>( paper.attribute("orientation").toInt() );
+        pgLayout.width = paper.attribute("width").toDouble();
+        pgLayout.height = paper.attribute("height").toDouble();
+        kDebug(32001) << " width=" << pgLayout.width << endl;
+        kDebug(32001) << " height=" << pgLayout.height << endl;
+        if ( pgLayout.width <= 0 || pgLayout.height <= 0 )
         {
             // Old document?
-            pgLayout.ptWidth = paper.attribute("ptWidth").toDouble();
-            pgLayout.ptHeight = paper.attribute("ptHeight").toDouble();
-            kDebug(32001) << " ptWidth2=" << pgLayout.ptWidth << endl;
-            kDebug(32001) << " ptHeight2=" << pgLayout.ptHeight << endl;
+            pgLayout.width = paper.attribute("width").toDouble();
+            pgLayout.height = paper.attribute("height").toDouble();
+            kDebug(32001) << " width2=" << pgLayout.width << endl;
+            kDebug(32001) << " height2=" << pgLayout.height << endl;
 
             // Still wrong?
-            if ( pgLayout.ptWidth <= 0 || pgLayout.ptHeight <= 0 )
+            if ( pgLayout.width <= 0 || pgLayout.height <= 0 )
             {
-                m_document->setErrorMessage( i18n( "Invalid document. Paper size: %1x%2", pgLayout.ptWidth, pgLayout.ptHeight ) );
+                m_document->setErrorMessage( i18n( "Invalid document. Paper size: %1x%2", pgLayout.width, pgLayout.height ) );
                 return false;
             }
         }
@@ -128,10 +128,10 @@ bool KWDLoader::load(QDomElement &root) {
         }
         m_pageSettings->setHeaderDistance(paper.attribute("spHeadBody").toDouble());
         if(m_pageSettings->headerDistance() == 0.0) // fallback for kde2 version.
-            m_pageSettings->setHeaderDistance(paper.attribute("ptHeadBody").toDouble());
+            m_pageSettings->setHeaderDistance(paper.attribute("headBody").toDouble());
         m_pageSettings->setFooterDistance(paper.attribute("spFootBody").toDouble());
         if(m_pageSettings->footerDistance() == 0.0) // fallback for kde2 version
-            m_pageSettings->setFooterDistance(paper.attribute("ptFootBody").toDouble());
+            m_pageSettings->setFooterDistance(paper.attribute("footBody").toDouble());
 
         m_pageSettings->setFootnoteDistance(paper.attribute("spFootNoteBody", "10.0").toDouble());
         if ( paper.hasAttribute( "slFootNoteLength" ) )
@@ -166,29 +166,29 @@ bool KWDLoader::load(QDomElement &root) {
         if(paper.hasAttribute("columns"))
             columns.columns = paper.attribute("columns").toInt();
         if(paper.hasAttribute("columnspacing"))
-            columns.ptColumnSpacing = paper.attribute("columnspacing").toDouble();
-        else if(paper.hasAttribute("ptColumnspc")) // fallback for kde2 version
-            columns.ptColumnSpacing = paper.attribute("ptColumnspc").toDouble();
+            columns.columnSpacing = paper.attribute("columnspacing").toDouble();
+        else if(paper.hasAttribute("columnspc")) // fallback for kde2 version
+            columns.columnSpacing = paper.attribute("columnspc").toDouble();
         m_pageSettings->setColumns(columns);
 
         // <PAPERBORDERS>
         QDomElement paperborders = paper.namedItem( "PAPERBORDERS" ).toElement();
         if ( !paperborders.isNull() )
         {
-            pgLayout.ptLeft = paperborders.attribute("left").toDouble();
-            pgLayout.ptTop = paperborders.attribute("top").toDouble();
-            pgLayout.ptRight = paperborders.attribute("right").toDouble();
-            pgLayout.ptBottom = paperborders.attribute("bottom").toDouble();
+            pgLayout.left = paperborders.attribute("left").toDouble();
+            pgLayout.top = paperborders.attribute("top").toDouble();
+            pgLayout.right = paperborders.attribute("right").toDouble();
+            pgLayout.bottom = paperborders.attribute("bottom").toDouble();
 
             // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
-            if ( pgLayout.ptLeft == 0.0 )
-                pgLayout.ptLeft = paperborders.attribute("ptLeft").toDouble();
-            if ( pgLayout.ptTop == 0.0 )
-                pgLayout.ptTop = paperborders.attribute("ptTop").toDouble();
-            if ( pgLayout.ptRight == 0.0 )
-                pgLayout.ptRight = paperborders.attribute("ptRight").toDouble();
-            if ( pgLayout.ptBottom == 0.0 )
-                pgLayout.ptBottom = paperborders.attribute("ptBottom").toDouble();
+            if ( pgLayout.left == 0.0 )
+                pgLayout.left = paperborders.attribute("left").toDouble();
+            if ( pgLayout.top == 0.0 )
+                pgLayout.top = paperborders.attribute("top").toDouble();
+            if ( pgLayout.right == 0.0 )
+                pgLayout.right = paperborders.attribute("right").toDouble();
+            if ( pgLayout.bottom == 0.0 )
+                pgLayout.bottom = paperborders.attribute("bottom").toDouble();
         }
         else
             kWarning() << "No <PAPERBORDERS> tag!" << endl;
@@ -904,7 +904,7 @@ void KWDLoader::fill(KWFrame *frame, QDomElement frameElem) {
             frameElem.attribute("bottom").toDouble() - origin.y() );
 
     // increase offset of each frame to account for the padding.
-    double pageHeight = m_pageManager->defaultPage()->ptHeight;
+    double pageHeight = m_pageManager->defaultPage()->height;
     Q_ASSERT(pageHeight); // can not be 0
     double offset =  (int) (origin.y() / pageHeight) * (m_pageManager->padding().top + m_pageManager->padding().bottom);
     origin.setY(origin.y() + offset);

@@ -207,6 +207,9 @@ public:
 
     KoInlineTextObjectManager *inlineTextObjectManager() const { return m_inlineTextObjectManager; }
 
+    /// reimplemented from super
+    QWidget* createCustomDocumentWidget(QWidget *parent);
+
 #ifndef NDEBUG
     /// Use a log of kDebug calls to print out the internal state of the document and its members
     void printDebug();

@@ -434,8 +434,8 @@ void PaperLayoutCommand::execute()
     if( !sheet ) return;
     SheetPrint* print = sheet->print();
 
-    print->setPaperLayout( plRedo.ptLeft,  plRedo.ptTop,
-                           plRedo.ptRight, plRedo.ptBottom,
+    print->setPaperLayout( plRedo.left,  plRedo.top,
+                           plRedo.right, plRedo.bottom,
                            plRedo.format, plRedo.orientation );
 
     print->setHeadFootLine( hfRedo.headLeft, hfRedo.headMid, hfRedo.headRight,
@@ -463,8 +463,8 @@ void PaperLayoutCommand::unexecute()
     if( !sheet ) return;
     SheetPrint* print = sheet->print();
     plRedo = print->paperLayout();
-    print->setPaperLayout( pl.ptLeft,  pl.ptTop,
-                           pl.ptRight, pl.ptBottom,
+    print->setPaperLayout( pl.left,  pl.top,
+                           pl.right, pl.bottom,
                            pl.format,  pl.orientation );
 
     hfRedo = print->headFootLine();

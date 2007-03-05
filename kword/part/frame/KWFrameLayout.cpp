@@ -206,7 +206,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
 
     KWPage *page = m_pageManager->page(pageNumber);
     /* +-----------------+
-       |  0              | <- m_pageSettings->pageLayout()->ptTop
+       |  0              | <- m_pageSettings->pageLayout()->top
        |  1  [ header ]  |
        |  2              | <- m_pageSettings->headerDistance()
        |  3  [ maintxt ] |
@@ -216,7 +216,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
        |  7 [ footnote ] |
        |  8              | <- m_pageSettings->footerDistance()
        |  9  [ footer ]  |
-       | 10               | <- m_pageSettings->pageLayout()->ptBottom
+       | 10               | <- m_pageSettings->pageLayout()->bottom
        +-----------------+ */
 
     // Create some data structures used for the layouting of the frames later
@@ -235,12 +235,12 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
         width /= 2;
         if(page->pageNumber() != pageNumber) { // doing the 'right' one
             left = width;
-            double x = layout.ptLeft; // swap margins
-            layout.ptLeft = layout.ptRight;
-            layout.ptRight = x;
+            double x = layout.left; // swap margins
+            layout.left = layout.right;
+            layout.right = x;
         }
     }
-    double textWidth = width - layout.ptLeft - layout.ptRight;
+    double textWidth = width - layout.left - layout.right;
 
     const int columns = m_pageSettings->columns().columns/* *
         (page->pageSide() == KWPage::PageSpread ? 2: 1)*/;
@@ -325,7 +325,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
         const double columnWidth = textWidth / columns;
         QPointF *points = new QPointF[columns];
         for (int i=columns-1; i >= 0; i--)
-            points[i] = QPointF(left + layout.ptLeft + columnWidth * i, resultingPositions[3]);
+            points[i] = QPointF(left + layout.left + columnWidth * i, resultingPositions[3]);
         for (int i=0; i < columns; i++) {
             for(int f=0; f < columns; f++) {
                 if(f==i) continue;
@@ -343,7 +343,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
             KoShape *shape = main[i]->shape();
             shape->setPosition(points[i]);
             shape->resize( QSizeF(columnWidth -
-                        (first?0:m_pageSettings->columns().ptColumnSpacing),
+                        (first?0:m_pageSettings->columns().columnSpacing),
                         resultingPositions[4] - resultingPositions[3]));
             first = false;
         }
@@ -354,22 +354,22 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
 #endif
     if(footnote) {
         footnote->shape()->setPosition(
-                QPointF(left + layout.ptLeft, resultingPositions[7]));
+                QPointF(left + layout.left, resultingPositions[7]));
         footnote->shape()->resize(QSizeF(textWidth, resultingPositions[8] - resultingPositions[7]));
     }
     if(endnote) {
         endnote->shape()->setPosition(
-                QPointF(left + layout.ptLeft, resultingPositions[5]));
+                QPointF(left + layout.left, resultingPositions[5]));
         endnote->shape()->resize( QSizeF(textWidth, resultingPositions[6] - resultingPositions[5]));
     }
     if(header) {
         header->shape()->setPosition(
-                QPointF(left + layout.ptLeft, resultingPositions[1]));
+                QPointF(left + layout.left, resultingPositions[1]));
         header->shape()->resize( QSizeF(textWidth, resultingPositions[2] - resultingPositions[1]));
     }
     if(footer) {
         footer->shape()->setPosition(
-                QPointF(left + layout.ptLeft, resultingPositions[9]));
+                QPointF(left + layout.left, resultingPositions[9]));
         footer->shape()->resize( QSizeF(textWidth, resultingPositions[10] - resultingPositions[9]));
     }
     delete [] main;

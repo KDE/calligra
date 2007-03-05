@@ -49,8 +49,8 @@ int KWPageManager::pageNumber(const QPointF &point) const {
 int KWPageManager::pageNumber(const KoShape *shape) const {
     return pageNumber(shape->absolutePosition());
 }
-int KWPageManager::pageNumber(const double ptY) const {
-    return pageNumber(QPointF(0, ptY));
+int KWPageManager::pageNumber(const double y) const {
+    return pageNumber(QPointF(0, y));
 }
 int KWPageManager::pageCount() const {
     if(m_pageList.isEmpty())
@@ -78,8 +78,8 @@ KWPage* KWPageManager::page(const KoShape *shape) const {
 KWPage* KWPageManager::page(const QPointF &point) const {
     return page(pageNumber(point));
 }
-KWPage* KWPageManager::page(double ptY) const {
-    return page(pageNumber(ptY));
+KWPage* KWPageManager::page(double y) const {
+    return page(pageNumber(y));
 }
 
 void KWPageManager::setStartPage(int startPage) {
@@ -121,12 +121,12 @@ const KoPageLayout KWPageManager::pageLayout(int pageNumber) const {
     KoPageLayout lay = m_defaultPageLayout;
     if(pageNumber >= m_firstPage && pageNumber <= lastPageNumber()) {
         KWPage *page = this->page(pageNumber);
-        lay.ptHeight = page->height();
-        lay.ptWidth = page->width();
-        lay.ptTop = page->topMargin();
-        lay.ptLeft = page->leftMargin();
-        lay.ptBottom = page->bottomMargin();
-        lay.ptRight = page->rightMargin();
+        lay.height = page->height();
+        lay.width = page->width();
+        lay.top = page->topMargin();
+        lay.left = page->leftMargin();
+        lay.bottom = page->bottomMargin();
+        lay.right = page->rightMargin();
     }
     return lay;
 }
@@ -173,16 +173,16 @@ void KWPageManager::removePage(KWPage *page) {
 void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
     m_defaultPageLayout = layout;
     // make sure we have 1 default, either pageBound or left/right bound.
-    if(m_defaultPageLayout.ptLeft < 0 || m_defaultPageLayout.ptRight < 0) {
-        m_defaultPageLayout.ptLeft = -1;
-        m_defaultPageLayout.ptRight = -1;
+    if(m_defaultPageLayout.left < 0 || m_defaultPageLayout.right < 0) {
+        m_defaultPageLayout.left = -1;
+        m_defaultPageLayout.right = -1;
     } else {
-        m_defaultPageLayout.ptPageEdge = -1;
-        m_defaultPageLayout.ptBindingSide = -1;
-        m_defaultPageLayout.ptLeft = qMax(m_defaultPageLayout.ptLeft, 0.0);
-        m_defaultPageLayout.ptRight = qMax(m_defaultPageLayout.ptRight, 0.0);
+        m_defaultPageLayout.pageEdge = -1;
+        m_defaultPageLayout.bindingSide = -1;
+        m_defaultPageLayout.left = qMax(m_defaultPageLayout.left, 0.0);
+        m_defaultPageLayout.right = qMax(m_defaultPageLayout.right, 0.0);
     }
-    //kDebug(32001) << "setDefaultPage l:" << m_defaultPageLayout.ptLeft << ", r: " << m_defaultPageLayout.ptRight << ", a: " << m_defaultPageLayout.ptPageEdge << ", b: " << m_defaultPageLayout.ptBindingSide << endl;
+    //kDebug(32001) << "setDefaultPage l:" << m_defaultPageLayout.left << ", r: " << m_defaultPageLayout.right << ", a: " << m_defaultPageLayout.pageEdge << ", b: " << m_defaultPageLayout.bindingSide << endl;
 }
 
 QPointF KWPageManager::clipToDocument(const QPointF &point) {

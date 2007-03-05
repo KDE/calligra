@@ -491,13 +491,13 @@ void PaperLayout::slotOk()
       sheet->doc()->setModified( true );
 
       if ( pl.format == PG_CUSTOM )
-      {
-        print->setPaperWidth( qRound( POINT_TO_MM( pl.ptWidth ) *1000 ) / 1000 );
-        print->setPaperHeight( qRound( POINT_TO_MM( pl.ptHeight ) *1000 ) / 1000 );
+    {
+        print->setPaperWidth( qRound( POINT_TO_MM( pl.width ) *1000 ) / 1000 );
+        print->setPaperHeight( qRound( POINT_TO_MM( pl.height ) *1000 ) / 1000 );
       }
 
-      print->setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop),
-                             POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom),
+      print->setPaperLayout( POINT_TO_MM(pl.left), POINT_TO_MM(pl.top),
+                             POINT_TO_MM(pl.right), POINT_TO_MM(pl.bottom),
                              pl.format, pl.orientation );
 
       print->setHeadFootLine( print->delocalizeHeadFootLine( hf.headLeft  ),

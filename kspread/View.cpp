@@ -148,7 +148,7 @@
 #include "dialogs/LayoutDialog.h"
 #include "dialogs/ListDialog.h"
 //#include "dialogs/multipleopDialog.h"
-#include "dialogs/PaperLayoutDialog.h"
+//#include "dialogs/PaperLayoutDialog.h"
 #include "dialogs/PasteInsertDialog.h"
 #include "dialogs/PreferenceDialog.h"
 #include "dialogs/ReferenceDialog.h"
@@ -2056,9 +2056,9 @@ void View::initConfig()
     const KConfigGroup pageLayoutGroup = config->group( "KSpread Page Layout" );
     if ( d->activeSheet->isEmpty())
     {
-    d->activeSheet->setPaperFormat((KoFormat)pageLayoutGroup.readEntry("Default size page",1));
+    d->activeSheet->setPaperFormat((KoPageFormat::Format)pageLayoutGroup.readEntry("Default size page",1));
 
-    d->activeSheet->setPaperOrientation((KoOrientation)pageLayoutGroup.readEntry("Default orientation page",0));
+    d->activeSheet->setPaperOrientation((KoPageFormat::Orientation)pageLayoutGroup.readEntry("Default orientation page",0));
     d->activeSheet->setPaperUnit((KoUnit)pageLayoutGroup.readEntry("Default unit page",0));
 }
 */
@@ -4716,11 +4716,11 @@ void View::setupPrinter( KPrinter &prt )
     SheetPrint* print = d->activeSheet->print();
 
     //apply page layout parameters
-    KoFormat pageFormat = print->paperFormat();
+    KoPageFormat::Format pageFormat = print->paperFormat();
 
     prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
 
-    if ( print->orientation() == PG_LANDSCAPE || pageFormat == PG_SCREEN )
+    if ( print->orientation() == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );
@@ -4804,16 +4804,16 @@ void View::print( KPrinter &prt )
         doc()->setZoomAndResolution( int( print->zoom() * 100 ), dpiX, dpiY );
 
         //store the current setting in a temporary variable
-        KoOrientation _orient = print->orientation();
+        KoPageFormat::Orientation _orient = print->orientation();
 
         //use the current orientation from print dialog
         if ( prt.orientation() == KPrinter::Landscape )
         {
-            print->setPaperOrientation( PG_LANDSCAPE );
+            print->setPaperOrientation( KoPageFormat::Landscape );
         }
         else
         {
-            print->setPaperOrientation( PG_PORTRAIT );
+            print->setPaperOrientation( KoPageFormat::Portrait );
         }
 
         bool result = print->print( painter, &prt );
@@ -6201,12 +6201,12 @@ void View::paperLayoutDlg()
   pl.format = print->paperFormat();
   pl.orientation = print->orientation();
 
-  pl.ptWidth =  MM_TO_POINT( print->paperWidth() );
-  pl.ptHeight = MM_TO_POINT( print->paperHeight() );
-  pl.ptLeft =   MM_TO_POINT( print->leftBorder() );
-  pl.ptRight =  MM_TO_POINT( print->rightBorder() );
-  pl.ptTop =    MM_TO_POINT( print->topBorder() );
-  pl.ptBottom = MM_TO_POINT( print->bottomBorder() );
+  pl.width =  MM_TO_POINT( print->paperWidth() );
+  pl.height = MM_TO_POINT( print->paperHeight() );
+  pl.left =   MM_TO_POINT( print->leftBorder() );
+  pl.right =  MM_TO_POINT( print->rightBorder() );
+  pl.top =    MM_TO_POINT( print->topBorder() );
+  pl.bottom = MM_TO_POINT( print->bottomBorder() );
 
   KoHeadFoot hf;
   hf.headLeft  = print->localizeHeadFootLine( print->headLeft()  );
@@ -6218,12 +6218,15 @@ void View::paperLayoutDlg()
 
   KoUnit unit = doc()->unit();
 
+// TODO create a nice dialog with only the properties that KSpread needs
+#if 0
   PaperLayout * dlg
     = new PaperLayout( this, "PageLayout", pl, hf,
                               FORMAT_AND_BORDERS | HEADER_AND_FOOTER,
                               unit, d->activeSheet, this );
   dlg->show();
   // dlg destroys itself
+#endif
 }
 
 void View::definePrintRange()

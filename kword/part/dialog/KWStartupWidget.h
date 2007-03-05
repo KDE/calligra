@@ -1,10 +1,11 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; version 2.
-
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -15,22 +16,25 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef kw_startup_widget_h
-#define kw_startup_widget_h
+#ifndef KW_STARTUP_WIDGET_H
+#define KW_STARTUP_WIDGET_H
 
-#include <KWStartupWidgetBase.h>
+#include <ui_KWStartupWidget.h>
+
 #include <KoPageLayout.h>
 
-class KoPageLayoutSize;
-class KoPageLayoutColumns;
+#include <QWidget>
+
 class KWDocument;
+class KWPageLayout;
+class KWDocumentColumns;
 
 /**
  * The 'Custom Document' widget in the KWord startup widget.
  * This class embeds the page size/columns tabs to allow the user to select the document
  * markup for his new empty document.
  */
-class KWStartupWidget : public KWStartupWidgetBase {
+class KWStartupWidget : public QWidget {
     Q_OBJECT
 public:
     /**
@@ -42,7 +46,7 @@ public:
     KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns);
 
 private slots:
-    void sizeUpdated(KoPageLayout &layout);
+    void sizeUpdated(const KoPageLayout &layout);
     void columnsUpdated(KoColumns &columns);
     void buttonClicked();
 
@@ -51,12 +55,13 @@ signals:
     void documentSelected();
 
 private:
-    KoPageLayoutSize *m_sizeWidget;
-    KoPageLayoutColumns *m_columnsWidget;
+    KWPageLayout *m_sizeWidget;
+    KWDocumentColumns *m_columnsWidget;
 
     KoPageLayout m_layout;
     KoColumns m_columns;
     KWDocument *m_doc;
+    Ui::KWStartupWidget widget;
 };
 
 #endif

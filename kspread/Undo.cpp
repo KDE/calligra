@@ -703,8 +703,8 @@ void UndoPaperLayout::undo()
     doc()->setUndoLocked( true );
 
     m_plRedo = print->paperLayout();
-    print->setPaperLayout( m_pl.ptLeft,  m_pl.ptTop,
-                           m_pl.ptRight, m_pl.ptBottom,
+    print->setPaperLayout( m_pl.left,  m_pl.top,
+                           m_pl.right, m_pl.bottom,
                            m_pl.format,  m_pl.orientation );
 
     m_hfRedo = print->headFootLine();
@@ -752,8 +752,8 @@ void UndoPaperLayout::redo()
     SheetPrint* print = sheet->print();
 
     doc()->setUndoLocked( true );
-    print->setPaperLayout( m_plRedo.ptLeft,  m_plRedo.ptTop,
-                           m_plRedo.ptRight, m_plRedo.ptBottom,
+    print->setPaperLayout( m_plRedo.left,  m_plRedo.top,
+                           m_plRedo.right, m_plRedo.bottom,
                            m_plRedo.format, m_plRedo.orientation );
 
     print->setHeadFootLine( m_hfRedo.headLeft, m_hfRedo.headMid, m_hfRedo.headRight,

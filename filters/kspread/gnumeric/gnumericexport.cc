@@ -1098,7 +1098,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     int indexActiveTable=0;
     foreach(Sheet* table, ksdoc->map()->sheetList())
     {
-        if ( table->print()->paperFormat()==PG_CUSTOM )
+        if ( table->print()->paperFormat()== KoPageFormat::CustomSize )
         {
             customSize = gnumeric_doc.createElement( "gmr:Geometry" );
             customSize.setAttribute( "Width", POINT_TO_MM ( table->print()->paperWidth() ));
@@ -1177,7 +1177,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
         sheet.appendChild(tmp);
 
         orientation = gnumeric_doc.createElement( "gmr:orientation" );
-        QString orientString = table->print()->orientation() == PG_LANDSCAPE ? "landscape" : "portrait";
+        QString orientString = table->print()->orientation() == KoPageFormat::Landscape ? "landscape" : "portrait";
         orientation.appendChild( gnumeric_doc.createTextNode(orientString) );
         tmp.appendChild( orientation );
 

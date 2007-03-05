@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <KWEFUtil.h>
+#include <KoPageFormat.h>
 #include <KWEFBaseWorker.h>
 
 #include "ExportFilter.h"
@@ -606,34 +606,25 @@ void HtmlCssWorker::closeSpan(const FormatData& formatOrigin, const FormatData& 
     *m_streamOut << "</span>";
 }
 
-bool HtmlCssWorker::doFullPaperFormat(const int format,
-            const double width, const double height, const int orientation)
+bool HtmlCssWorker::doFullPaperFormat(const int f,
+            const double width, const double height, const int o)
 {
-    QString strWidth, strHeight, strUnits;
-    KWEFUtil::GetNativePaperFormat(format, strWidth, strHeight, strUnits);
+    KoPageFormat::Format format = static_cast<KoPageFormat::Format> (f);
+    KoPageFormat::Orientation orientation = static_cast<KoPageFormat::Orientation> (o);
 
-    if ((strWidth.isEmpty())||(strHeight.isEmpty())||(strUnits.isEmpty()))
-    {
-        // page format is unknown, so we need the size information
-        strUnits="pt";
-        strWidth=QString::number(width);
-        strHeight=QString::number(height);
-    }
-    if (orientation==1)
-    {
-        // Landscape, so we must swap the sizes
-        QString strTemp(strWidth);
-        strWidth=strHeight;
-        strHeight=strTemp;
+    double definedWidth = KoPageFormat::width(format, orientation);
+    double definedHeight = KoPageFormat::height(format, orientation);
+
+    if(definedHeight < 0 || definedWidth < 0) {
+        definedWidth = width;
+        definedHeight = height;
     }
 
     m_strPageSize="size: ";
-    m_strPageSize+=strWidth;
-    m_strPageSize+=strUnits;
-    m_strPageSize+=' ';
-    m_strPageSize+=strHeight;
-    m_strPageSize+=strUnits;
-    m_strPageSize+=';';
+    m_strPageSize+=QString::number(width);
+    m_strPageSize+="pt ";
+    m_strPageSize+=QString::number(height);
+    m_strPageSize+="pt;";
     return true;
 }
 

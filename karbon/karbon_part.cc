@@ -80,11 +80,11 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 
 	// set as default paper
 	m_pageLayout.format = KoPageFormat::defaultFormat();
-	m_pageLayout.orientation = PG_PORTRAIT;
-	m_pageLayout.ptWidth = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
-	m_pageLayout.ptHeight = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
-	m_doc.setWidth( m_pageLayout.ptWidth );
-	m_doc.setHeight( m_pageLayout.ptHeight );
+	m_pageLayout.orientation = KoPageFormat::Portrait;
+    m_pageLayout.width = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
+    m_pageLayout.height = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
+    m_doc.setWidth( m_pageLayout.width );
+    m_doc.setHeight( m_pageLayout.height );
 	// enable selection drawing
 	m_doc.selection()->showHandle();
 	m_doc.selection()->setSelectObjects();
@@ -101,8 +101,8 @@ KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit _unit )
 {
 	m_pageLayout = layout;
 	m_doc.setUnit( _unit );
-	m_doc.setWidth( m_pageLayout.ptWidth );
-	m_doc.setHeight( m_pageLayout.ptHeight );
+    m_doc.setWidth( m_pageLayout.width );
+    m_doc.setHeight( m_pageLayout.height );
 }
 
 KoView*
@@ -158,39 +158,39 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 	QDomElement paper = doc.namedItem( "PAPER" ).toElement();
 	if ( !paper.isNull() )
 	{
-		m_pageLayout.format = static_cast<KoFormat>( getAttribute( paper, "format", 0 ) );
-		m_pageLayout.orientation = static_cast<KoOrientation>( getAttribute( paper, "orientation", 0 ) );
+        m_pageLayout.format = static_cast<KoPageFormat::Format>( getAttribute( paper, "format", 0 ) );
+        m_pageLayout.orientation = static_cast<KoPageFormat::Orientation>( getAttribute( paper, "orientation", 0 ) );
 
-		if( m_pageLayout.format == PG_CUSTOM )
+		if( m_pageLayout.format == KoPageFormat::CustomSize )
 		{
-			m_pageLayout.ptWidth	= m_doc.width();
-			m_pageLayout.ptHeight	= m_doc.height();
+            m_pageLayout.width	= m_doc.width();
+            m_pageLayout.height	= m_doc.height();
 		}
 		else
 		{
-			m_pageLayout.ptWidth = getAttribute( paper, "width", 0.0 );
-			m_pageLayout.ptHeight = getAttribute( paper, "height", 0.0 );
+            m_pageLayout.width = getAttribute( paper, "width", 0.0 );
+            m_pageLayout.height = getAttribute( paper, "height", 0.0 );
 		}
 	}
 	else
 	{
-		m_pageLayout.ptWidth = getAttribute( doc, "width", 595.277);
-		m_pageLayout.ptHeight = getAttribute( doc, "height", 841.891 );
+        m_pageLayout.width = getAttribute( doc, "width", 595.277);
+        m_pageLayout.height = getAttribute( doc, "height", 841.891 );
 	}
 
-	kDebug() << " ptWidth=" << m_pageLayout.ptWidth << endl;
-	kDebug() << " ptHeight=" << m_pageLayout.ptHeight << endl;
+    kDebug() << " width=" << m_pageLayout.width << endl;
+    kDebug() << " height=" << m_pageLayout.height << endl;
         QDomElement borders = paper.namedItem( "PAPERBORDERS" ).toElement();
         if( !borders.isNull() )
-       	{
-            if( borders.hasAttribute( "ptLeft" ) )
-                m_pageLayout.ptLeft = borders.attribute( "ptLeft" ).toDouble();
-            if( borders.hasAttribute( "ptTop" ) )
-                m_pageLayout.ptTop = borders.attribute( "ptTop" ).toDouble();
-            if( borders.hasAttribute( "ptRight" ) )
-                m_pageLayout.ptRight = borders.attribute( "ptRight" ).toDouble();
-            if( borders.hasAttribute( "ptBottom" ) )
-                m_pageLayout.ptBottom = borders.attribute( "ptBottom" ).toDouble();
+    {
+        if( borders.hasAttribute( "left" ) )
+            m_pageLayout.left = borders.attribute( "left" ).toDouble();
+        if( borders.hasAttribute( "top" ) )
+            m_pageLayout.top = borders.attribute( "top" ).toDouble();
+        if( borders.hasAttribute( "right" ) )
+            m_pageLayout.right = borders.attribute( "right" ).toDouble();
+        if( borders.hasAttribute( "bottom" ) )
+            m_pageLayout.bottom = borders.attribute( "bottom" ).toDouble();
 	}
 
 	setUnit( m_doc.unit() );
@@ -207,15 +207,15 @@ KarbonPart::saveXML()
 	me.appendChild( paper );
 	paper.setAttribute( "format", static_cast<int>( m_pageLayout.format ) );
 	paper.setAttribute( "pages", pageCount() );
-	paper.setAttribute( "width", m_pageLayout.ptWidth );
-	paper.setAttribute( "height", m_pageLayout.ptHeight );
+    paper.setAttribute( "width", m_pageLayout.width );
+    paper.setAttribute( "height", m_pageLayout.height );
 	paper.setAttribute( "orientation", static_cast<int>( m_pageLayout.orientation ) );
 
 	QDomElement paperBorders = doc.createElement( "PAPERBORDERS" );
-	paperBorders.setAttribute( "ptLeft", m_pageLayout.ptLeft );
-	paperBorders.setAttribute( "ptTop", m_pageLayout.ptTop );
-	paperBorders.setAttribute( "ptRight", m_pageLayout.ptRight );
-	paperBorders.setAttribute( "ptBottom", m_pageLayout.ptBottom );
+    paperBorders.setAttribute( "left", m_pageLayout.left );
+    paperBorders.setAttribute( "top", m_pageLayout.top );
+    paperBorders.setAttribute( "right", m_pageLayout.right );
+    paperBorders.setAttribute( "bottom", m_pageLayout.bottom );
 	paper.appendChild(paperBorders);
 
 	return doc;
@@ -266,8 +266,8 @@ KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
 	if( style )
 	{
 		m_pageLayout.loadOasis( *style );
-		m_doc.setWidth( m_pageLayout.ptWidth );
-		m_doc.setHeight( m_pageLayout.ptHeight );
+        m_doc.setWidth( m_pageLayout.width );
+        m_doc.setHeight( m_pageLayout.height );
 	}
 	else
 		return false;

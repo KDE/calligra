@@ -150,7 +150,7 @@ void KarbonCanvas::paintMargins( QPainter &painter, const KoViewConverter &conve
 
     KoPageLayout pl = m_part->pageLayout();
 
-    QRectF marginRect( pl.ptLeft, pl.ptTop, m_doc->width()-pl.ptLeft-pl.ptRight, m_doc->height()-pl.ptTop-pl.ptBottom );
+    QRectF marginRect( pl.left, pl.top, m_doc->width()-pl.left-pl.right, m_doc->height()-pl.top-pl.bottom );
 
     QPen pen( Qt::blue );
     QVector<qreal> pattern;

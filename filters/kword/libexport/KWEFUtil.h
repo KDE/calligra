@@ -27,8 +27,6 @@ namespace KWEFUtil
 
 KWORD_LIBEXPORT_EXPORT QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
     const bool quot = false, const bool apos = false );
-KWORD_LIBEXPORT_EXPORT void GetNativePaperFormat(const int format,
-    QString& width, QString& height, QString& units);
 }
 
 // Deprecated! Use KWEFUtil::EscapeSgmlText

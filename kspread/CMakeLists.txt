@@ -35,7 +35,7 @@ SET (dialogs_DIR_SRCS
 	dialogs/LayoutDialog.cpp
 	dialogs/LinkDialog.cpp
 	dialogs/ListDialog.cpp
-	dialogs/PaperLayoutDialog.cpp
+	#dialogs/PaperLayoutDialog.cpp
 	dialogs/PasteInsertDialog.cpp
 	dialogs/PreferenceDialog.cpp
 	dialogs/ReferenceDialog.cpp

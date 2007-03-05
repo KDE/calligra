@@ -130,7 +130,7 @@ public:
     /**
      * @return the orientation of the paper.
      */
-    KoOrientation orientation()const { return m_orientation; }
+    KoPageFormat::Orientation orientation()const { return m_orientation; }
     /**
      * @return the ascii name of the paper orientation ( like Portrait, Landscape )
      */
@@ -139,15 +139,15 @@ public:
     /**
      * @return the paper format.
      */
-    KoFormat paperFormat()const { return m_paperFormat; }
+    KoPageFormat::Format paperFormat()const { return m_paperFormat; }
     /**
      * @return the ascii name of the paper format ( like A4, Letter etc. )
      */
     QString paperFormatString()const;
 
-    void setPaperFormat(KoFormat format) { m_paperFormat = format; }
+    void setPaperFormat(KoPageFormat::Format format) { m_paperFormat = format; }
 
-    void setPaperOrientation(KoOrientation _orient);
+    void setPaperOrientation(KoPageFormat::Orientation _orient);
 
     /**
      * Returns the page layout
@@ -158,7 +158,7 @@ public:
      * Changes the paper layout and repaints the currently displayed Sheet.
      */
     void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
-                         KoFormat _paper, KoOrientation orientation );
+                         KoPageFormat::Format _paper, KoPageFormat::Orientation orientation );
     /**
      * A convenience function using a QString as paper format and orientation.
      */
@@ -512,11 +512,11 @@ private:
     /**
      * The orientation of the paper.
      */
-    KoOrientation m_orientation;
+    KoPageFormat::Orientation m_orientation;
     /**
      * Tells about the currently seleced paper size.
      */
-    KoFormat m_paperFormat;
+    KoPageFormat::Format m_paperFormat;
     /**
      * The paper width in millimeters. Dont change this value, it is calculated by
      * @ref #calcPaperSize from the value @ref #m_paperFormat.

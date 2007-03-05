@@ -32,6 +32,7 @@
 #include "frame/KWFrameLayout.h"
 #include "frame/KWTextDocumentLayout.h"
 #include "dialog/KWFrameDialog.h"
+#include "dialog/KWStartupWidget.h"
 
 // koffice libs includes
 #include <KoShapeManager.h>
@@ -318,7 +319,7 @@ void KWDocument::clear() {
     // document defaults
     m_pageSettings.clear();
     KoColumns columns = m_pageSettings.columns();
-    columns.ptColumnSpacing = m_defaultColumnSpacing; // TODO load this value on demand
+    columns.columnSpacing = m_defaultColumnSpacing; // TODO load this value on demand
     m_pageSettings.setColumns(columns);
     m_tabStop = MM_TO_POINT(15);
     m_hasTOC = false;
@@ -551,6 +552,12 @@ void KWDocument::printDebug() {
 }
 #endif
 
+QWidget* KWDocument::createCustomDocumentWidget(QWidget *parent) {
+    KoColumns columns;
+    columns.columns = 1;
+    columns.columnSpacing = m_defaultColumnSpacing;
+    return new KWStartupWidget(parent, this, columns);
+}
 
 // ************* PageProcessingQueue ************
 PageProcessingQueue::PageProcessingQueue(KWDocument *parent) {

@@ -197,9 +197,9 @@ void TestPageManager::removePages() {
 void TestPageManager::pageInfo() {
     KWPageManager *pageManager = new KWPageManager();
     KoPageLayout layout;
-    layout.ptWidth = 300;
-    layout.ptHeight = 600;
-    layout.format = PG_DIN_A4;
+    layout.width = 300;
+    layout.height = 600;
+    layout.format = KoPageFormat::IsoA4Size;
     pageManager->setDefaultPage(layout);
     pageManager->setStartPage(1);
     KWPage *page1 = pageManager->appendPage();
@@ -212,18 +212,18 @@ void TestPageManager::pageInfo() {
 
     QCOMPARE(pageManager->topOfPage(3), 300.0);
     QCOMPARE(pageManager->bottomOfPage(3), 900.0);
-    layout.ptHeight = 500;
+    layout.height = 500;
     pageManager->setDefaultPage(layout);
     QCOMPARE(pageManager->bottomOfPage(3), 800.0);
     page2->setHeight(-1);
     QCOMPARE(pageManager->bottomOfPage(3), 1200.0);
 
-    layout.ptTop = 5;
-    layout.ptLeft = 6;
-    layout.ptBottom = 7;
-    layout.ptRight = 8;
-    layout.ptBindingSide = -1;
-    layout.ptPageEdge = -1;
+    layout.top = 5;
+    layout.left = 6;
+    layout.bottom = 7;
+    layout.right = 8;
+    layout.bindingSide = -1;
+    layout.pageEdge = -1;
     pageManager->setDefaultPage(layout);
     page2->setTopMargin(9);
     page2->setLeftMargin(10);
@@ -231,22 +231,22 @@ void TestPageManager::pageInfo() {
     page2->setRightMargin(12);
 
     KoPageLayout lay = pageManager->pageLayout(2);
-    QCOMPARE(lay.ptHeight, 500.0);
-    QCOMPARE(lay.ptWidth, 50.0);
-    QCOMPARE(lay.ptTop, 9.0);
-    QCOMPARE(lay.ptLeft, 10.0);
-    QCOMPARE(lay.ptBottom, 11.0);
-    QCOMPARE(lay.ptRight, 12.0);
+    QCOMPARE(lay.height, 500.0);
+    QCOMPARE(lay.width, 50.0);
+    QCOMPARE(lay.top, 9.0);
+    QCOMPARE(lay.left, 10.0);
+    QCOMPARE(lay.bottom, 11.0);
+    QCOMPARE(lay.right, 12.0);
 
     lay = pageManager->pageLayout(3);
-    QCOMPARE(lay.ptHeight, 500.0);
-    QCOMPARE(lay.ptWidth, 300.0);
-    QCOMPARE(lay.ptTop, 5.0);
-    QCOMPARE(lay.ptLeft, 6.0);
-    QCOMPARE(lay.ptBottom, 7.0);
-    QCOMPARE(lay.ptRight, 8.0);
+    QCOMPARE(lay.height, 500.0);
+    QCOMPARE(lay.width, 300.0);
+    QCOMPARE(lay.top, 5.0);
+    QCOMPARE(lay.left, 6.0);
+    QCOMPARE(lay.bottom, 7.0);
+    QCOMPARE(lay.right, 8.0);
 
-    lay.ptRight = 90; // should have no effect, since its a copy
+    lay.right = 90; // should have no effect, since its a copy
     QCOMPARE(page3->rightMargin(), 8.0);
 
 
@@ -277,9 +277,9 @@ void TestPageManager::pageInfo() {
 void TestPageManager::testClipToDocument() {
     KWPageManager *pageManager = new KWPageManager();
     KoPageLayout lay;
-    lay.ptWidth = 300;
-    lay.ptHeight = 600;
-    lay.format = PG_DIN_A4;
+    lay.width = 300;
+    lay.height = 600;
+    lay.format = KoPageFormat::IsoA4Size;
     pageManager->setDefaultPage(lay);
     KWPage *page1 = pageManager->appendPage();
     page1->setWidth(100);

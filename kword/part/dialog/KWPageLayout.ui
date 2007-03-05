@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>615</width>
-    <height>426</height>
+    <width>332</width>
+    <height>324</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -19,270 +19,34 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="0" column="0" colspan="2" >
-    <widget class="QWidget" native="1" name="unitBox" >
-     <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="unitLabel" >
-          <property name="text" >
-           <string>Unit:</string>
-          </property>
-          <property name="buddy" >
-           <cstring>unitCombo</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="unitCombo" />
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>461</width>
-            <height>27</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="pageSizeGB" >
-     <property name="title" >
-      <string>Page Size</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="sizeLabel" >
-        <property name="text" >
-         <string>Size:</string>
-        </property>
-        <property name="buddy" >
-         <cstring>sizeCombo</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="4" >
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QComboBox" name="sizeCombo" >
-          <property name="accessibleName" >
-           <string>size list</string>
-          </property>
-          <property name="accessibleDescription" >
-           <string>All paper sizes</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="widthLabel" >
-        <property name="text" >
-         <string>Width:</string>
-        </property>
-        <property name="buddy" >
-         <cstring>widthLabel</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <widget class="QLabel" name="heightLabel" >
-        <property name="text" >
-         <string>Height:</string>
-        </property>
-        <property name="buddy" >
-         <cstring>heightLabel</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="widthUSB" >
-        <property name="accessibleName" >
-         <string>width</string>
-        </property>
-        <property name="accessibleDescription" >
-         <string>Width of the page</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3" >
-       <widget class="KoUnitDoubleSpinBox" name="heightUSB" >
-        <property name="accessibleName" >
-         <string>height</string>
-        </property>
-        <property name="accessibleDescription" >
-         <string>Height of the page</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item rowspan="3" row="1" column="1" >
-    <widget class="QGroupBox" name="previewPane" >
-     <property name="title" >
-      <string>Page Preview</string>
+   <item row="3" column="4" >
+    <widget class="QRadioButton" name="landscape" >
+     <property name="text" >
+      <string>Landscape</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="QGroupBox" name="pageSetupGB" >
-     <property name="title" >
-      <string>Page Setup</string>
+   <item row="4" column="4" >
+    <widget class="QRadioButton" name="facingPages" >
+     <property name="text" >
+      <string>Facing pages</string>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="facingPagesCB" >
-        <property name="toolTip" >
-         <string>Combines two pages into one area</string>
-        </property>
-        <property name="whatsThis" >
-         <string>For documents that are printed to be placed side by side its usefull to use pagespreads in order to allow frames to be placed on two pages instead of being cut of ad the page edge.</string>
-        </property>
-        <property name="accessibleName" >
-         <string>Facing pages</string>
-        </property>
-        <property name="accessibleDescription" >
-         <string>Enable to have a combined page with the size of two pages</string>
-        </property>
-        <property name="text" >
-         <string>Facing pages (page spread)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QGroupBox" name="orientationGB" >
-        <property name="title" >
-         <string>Orientation</string>
-        </property>
-        <layout class="QGridLayout" >
-         <property name="margin" >
-          <number>9</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item row="0" column="0" >
-          <widget class="QLabel" name="portraitIconLabel" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>5</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text" >
-            <string>[]</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" >
-          <widget class="QRadioButton" name="portraitRB" >
-           <property name="text" >
-            <string>Portrait</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2" >
-          <widget class="QLabel" name="landscapeIconLabel" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>5</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text" >
-            <string>[]</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3" >
-          <widget class="QRadioButton" name="landscapeRB" >
-           <property name="text" >
-            <string>Landscape</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <widget class="QGroupBox" name="marginGB" >
-     <property name="whatsThis" >
-      <string>Margins are used for spacing between the page edge and the text frame.</string>
+   <item rowspan="5" row="1" column="5" >
+    <widget class="QWidget" native="1" name="previewPane" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="5" >
+    <widget class="QGroupBox" name="margins" >
      <property name="title" >
       <string>Margins</string>
      </property>
@@ -293,79 +57,241 @@
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="0" column="0" colspan="3" >
-       <widget class="QCheckBox" name="edgeBasedCB" >
-        <property name="toolTip" >
-         <string>Toggles between margins left and right or margins for pageedge and bindingedge</string>
+      <item rowspan="4" row="0" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="whatsThis" >
-         <string>If you enable this feature then the left and right margins will be switched based on the pagenumber being even or odd. The left margin will be used on each page binding edge and the right on the page edge.</string>
+        <property name="sizeType" >
+         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
-        <property name="accessibleName" >
-         <string>paperedge margins</string>
+        <property name="sizeHint" >
+         <size>
+          <width>10</width>
+          <height>10</height>
+         </size>
         </property>
-        <property name="accessibleDescription" >
-         <string>Toggles between margins left and right or margins for pageedge and bindingedge</string>
-        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="rightLabel" >
         <property name="text" >
-         <string>Margins based on paper edge</string>
+         <string>Page Edge:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>pageEdgeMargin</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="leftLabel" >
+        <property name="text" >
+         <string>Binding Edge:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>bindingEdgeMargin</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="label_12" >
+        <property name="text" >
+         <string>Bottom:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>bottomMargin</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="pageEdgeMargin" />
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label_9" >
+        <property name="text" >
+         <string>Top:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>topMargin</cstring>
         </property>
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="topUSB" >
-        <property name="toolTip" >
-         <string>Top Margin</string>
-        </property>
-        <property name="accessibleName" >
-         <string>Top Margin</string>
-        </property>
-        <property name="accessibleDescription" >
-         <string>the space between the top of the page and the top of the text</string>
-        </property>
-       </widget>
+       <widget class="KoUnitDoubleSpinBox" name="bindingEdgeMargin" />
       </item>
-      <item row="2" column="0" >
-       <widget class="KoUnitDoubleSpinBox" name="leftUSB" >
-        <property name="toolTip" >
-         <string>Left Margin</string>
-        </property>
-        <property name="accessibleName" >
-         <string>Left Margin</string>
-        </property>
-        <property name="accessibleDescription" >
-         <string>the space between the edge of the page and the left text</string>
-        </property>
-       </widget>
+      <item row="0" column="1" >
+       <widget class="KoUnitDoubleSpinBox" name="topMargin" />
       </item>
       <item row="3" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="bottomUSB" >
-        <property name="statusTip" >
-         <string>Bottom Margin</string>
-        </property>
-        <property name="accessibleName" >
-         <string>Bottom Margin</string>
-        </property>
-        <property name="accessibleDescription" >
-         <string>the space between the bottom of the page and the bottom of the text</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2" >
-       <widget class="KoUnitDoubleSpinBox" name="rightUSB" >
-        <property name="toolTip" >
-         <string>Right Margin</string>
-        </property>
-        <property name="accessibleName" >
-         <string>right margin</string>
-        </property>
-        <property name="accessibleDescription" >
-         <string>the space between the edge of the page and the right text</string>
-        </property>
-       </widget>
+       <widget class="KoUnitDoubleSpinBox" name="bottomMargin" />
       </item>
      </layout>
     </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Unit:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>units</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Size:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>sizes</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label_3" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Width:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>width</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3" >
+    <widget class="QLabel" name="facingPagesIcon" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QLabel" name="label_5" >
+     <property name="text" >
+      <string>Orientation:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2" >
+    <widget class="QRadioButton" name="portrait" >
+     <property name="text" >
+      <string>Portrait</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" >
+    <widget class="QRadioButton" name="singleSided" >
+     <property name="text" >
+      <string>Single sides</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3" >
+    <widget class="QLabel" name="landscapeIcon" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="4" >
+    <widget class="QComboBox" name="sizes" />
+   </item>
+   <item row="4" column="0" >
+    <widget class="QLabel" name="label_6" >
+     <property name="text" >
+      <string>Facing Pages:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="4" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="KoUnitDoubleSpinBox" name="width" />
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Height:</string>
+       </property>
+       <property name="buddy" >
+        <cstring>height</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KoUnitDoubleSpinBox" name="height" />
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QLabel" name="portraitIcon" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QLabel" name="singleSidedIcon" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="4" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QComboBox" name="units" />
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>10</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -376,6 +302,20 @@
    <header>KoUnitWidgets.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>units</tabstop>
+  <tabstop>sizes</tabstop>
+  <tabstop>width</tabstop>
+  <tabstop>height</tabstop>
+  <tabstop>portrait</tabstop>
+  <tabstop>landscape</tabstop>
+  <tabstop>singleSided</tabstop>
+  <tabstop>facingPages</tabstop>
+  <tabstop>topMargin</tabstop>
+  <tabstop>bindingEdgeMargin</tabstop>
+  <tabstop>pageEdgeMargin</tabstop>
+  <tabstop>bottomMargin</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

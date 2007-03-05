@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>618</width>
-    <height>480</height>
+    <width>191</width>
+    <height>169</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -19,130 +19,77 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="0" column="0" colspan="2" >
-    <widget class="QWidget" native="1" name="unitBox" >
-     <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="unitLabel" >
-          <property name="text" >
-           <string>Unit:</string>
-          </property>
-          <property name="buddy" >
-           <cstring>unitCombo</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="unitCombo" />
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>461</width>
-            <height>27</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="columnsLabel" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>5</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Columns:</string>
-       </property>
-       <property name="buddy" >
-        <cstring>columnsSB</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <widget class="QSpinBox" name="columnsSB" >
-       <property name="minimum" >
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="spacingLabel" >
-       <property name="text" >
-        <string>Column spacing:</string>
-       </property>
-       <property name="buddy" >
-        <cstring>spacingUSB</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1" >
-      <widget class="KoUnitDoubleSpinBox" name="spacingUSB" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>13</hsizetype>
-         <vsizetype>13</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item rowspan="2" row="1" column="1" >
-    <widget class="QGroupBox" name="previewPane" >
-     <property name="title" >
-      <string>Page Preview</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" >
+   <item row="2" column="0" colspan="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>297</width>
-       <height>341</height>
+       <width>121</width>
+       <height>61</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item rowspan="3" row="0" column="2" >
+    <widget class="QWidget" native="1" name="previewPane" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="KoUnitDoubleSpinBox" name="spacing" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>13</hsizetype>
+       <vsizetype>13</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QSpinBox" name="columns" >
+     <property name="minimum" >
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="columnsLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Columns:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>columns</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="spacingLabel" >
+     <property name="text" >
+      <string>Column spacing:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>spacing</cstring>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

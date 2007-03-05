@@ -1,0 +1,95 @@
+<ui version="4.0" >
+ <class>KWStartupWidget</class>
+ <widget class="QWidget" name="KWStartupWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>367</width>
+    <height>263</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" colspan="2" >
+    <widget class="QCheckBox" name="mainText" >
+     <property name="whatsThis" >
+      <string>&lt;p>&lt;b>Check this option to have a text area created automatically for each page.&lt;/b>&lt;br>
+For letters and notes with one main text, possibly on several pages, you should keep this checked. You should only uncheck it if you want to define completely where each text frame should be positioned.&lt;/p></string>
+     </property>
+     <property name="text" >
+      <string>Provide main text area</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QTabWidget" name="tabs" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="sizeTab" >
+      <attribute name="title" >
+       <string>Page Size &amp;&amp; Margins</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="columnsTab" >
+      <attribute name="title" >
+       <string>Columns</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QPushButton" name="createButton" >
+     <property name="text" >
+      <string>Create</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

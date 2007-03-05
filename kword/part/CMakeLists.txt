@@ -38,6 +38,7 @@ set(kwordprivate_LIB_SRCS
     dialog/KWDocumentColumns.cpp
     dialog/KWPagePreview.cpp
     dialog/KWPageLayout.cpp
+    dialog/KWStartupWidget.cpp
 )
 
 kde4_add_ui_files(kwordprivate_LIB_SRCS
@@ -47,6 +48,7 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
     dialog/KWGeneralFrameProperties.ui
     dialog/KWDocumentColumns.ui
     dialog/KWPageLayout.ui
+    dialog/KWStartupWidget.ui
 )
 
 kde4_automoc(${kwordprivate_LIB_SRCS})

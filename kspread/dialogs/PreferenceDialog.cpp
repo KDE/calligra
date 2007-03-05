@@ -849,13 +849,13 @@ void configureLayoutPage::apply()
   {
      unsigned int sizePage = defaultSizePage->currentIndex();
      pageLayoutGroup.writeEntry( "Default size page", sizePage );
-     m_pView->activeSheet()->print()->setPaperFormat( (KoFormat)sizePage );
+     m_pView->activeSheet()->print()->setPaperFormat( (KoPageFormat::Format)sizePage );
   }
   if( orientation != defaultOrientationPage->currentIndex() )
   {
      unsigned int orientationPage = defaultOrientationPage->currentIndex();
      pageLayoutGroup.writeEntry( "Default orientation page", orientationPage );
-     m_pView->activeSheet()->print()->setPaperOrientation( (KoOrientation)orientationPage );
+     m_pView->activeSheet()->print()->setPaperOrientation( (KoPageFormat::Orientation)orientationPage );
   }
   if( unit != defaultUnit->currentIndex() )
   {

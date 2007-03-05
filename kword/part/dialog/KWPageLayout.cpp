@@ -1,11 +1,10 @@
 /* This file is part of the KDE project
- * Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
- * Copyright (C) 2005 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Gary Cramblitt <garycramblitt@kde.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; version 2.
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,245 +16,145 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-// Qt includes.
-#include <QPixmap>
-
-// KDE includes.
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-
-// KOffice includes.
-#include <KoUnitWidgets.h>
-
-// KWord includes.
-#include "KWPagePreview.h"
 #include "KWPageLayout.h"
 
-KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout& layout, KoUnit unit,const KoColumns& columns, bool enableUnitChooser, bool enableBorders)
-    : QWidget(parent), m_layout(layout), m_unit(unit), m_blockSignals(false), m_haveBorders(enableBorders)
+#include <klocale.h>
+
+KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout, const KoColumns &columns)
+    : QWidget(parent)
 {
-    setupUi(this);
+    widget.setupUi(this);
 
-    // -------------- page preview --------------
-    m_pagePreview = new KWPagePreview(previewPane, layout);
+    m_orientationGroup = new QButtonGroup();
+    m_orientationGroup->addButton(widget.portrait, KoPageFormat::Portrait);
+    m_orientationGroup->addButton(widget.landscape, KoPageFormat::Landscape);
 
-    // -------------- unit ----------------------
-    unitCombo->addItems(KoUnit::listOfUnitName());
-    unitCombo->setCurrentIndex(unit.indexInList());
+    QButtonGroup *group2 = new QButtonGroup(this);
+    group2->addButton(widget.singleSided);
+    group2->addButton(widget.facingPages);
+    // the two sets of labels we use might have different lengths; make sure this does not create a 'jumping' ui
+    widget.singleSided->setChecked(true);
+    facingPagesChanged();
+    int width = qMax(widget.leftLabel->width(), widget.rightLabel->width());
+    widget.facingPages->setChecked(true);
+    facingPagesChanged();
+    width = qMax(width, qMax(widget.leftLabel->width(), widget.rightLabel->width()));
+    widget.leftLabel->setMinimumSize(QSize(width, 5));
 
-    // -------------- page size -----------------
-    sizeCombo->addItems(KoPageFormat::allFormats());
+    widget.units->addItems( KoUnit::listOfUnitName() );
+    widget.sizes->addItems(KoPageFormat::allFormats());
 
-    widthUSB->setEnabled(m_layout.format != PG_CUSTOM);
+    connect(widget.sizes, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)));
+    connect(widget.units, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)));
+    connect(group2, SIGNAL(buttonClicked (int)), this, SLOT(facingPagesChanged()));
+    connect(m_orientationGroup, SIGNAL(buttonClicked (int)), this, SLOT(optionsChanged()));
+    connect(widget.width, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
+    connect(widget.height, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
+    connect(widget.topMargin, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
+    connect(widget.bottomMargin, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
+    connect(widget.bindingEdgeMargin, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
+    connect(widget.pageEdgeMargin, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
 
-    heightUSB->setEnabled(m_layout.format != PG_CUSTOM);
-
-    // --------------- orientation ---------------
-    QPixmap portraitIcon = QPixmap(UserIcon("koPortrait"));
-    portraitIconLabel->setPixmap(portraitIcon);
-    portraitIconLabel->setMaximumWidth(portraitIcon.width());
-
-    QPixmap landscapeIcon = QPixmap(UserIcon("koLandscape"));
-    landscapeIconLabel->setPixmap(landscapeIcon);
-    landscapeIconLabel->setMaximumWidth(landscapeIcon.width());
-
-    // Display layout settings in GUI.
-    setGuiValues();
-
-    // Connect signals.
-    connect(unitCombo, SIGNAL(activated(int)), this, SLOT(setUnitInt(int)));
-    connect(sizeCombo, SIGNAL(activated(int)), this, SLOT(formatChanged(int)));
-    connect(widthUSB, SIGNAL(valueChangedPt(double)), this,  SLOT(widthChanged(double)));
-    connect(heightUSB, SIGNAL(valueChangedPt(double)), this, SLOT(heightChanged(double)));
-    connect(portraitRB, SIGNAL(toggled(bool)), this, SLOT(orientationChanged()));
-    connect(landscapeRB, SIGNAL(toggled(bool)), this, SLOT(orientationChanged()));
-    connect(leftUSB, SIGNAL(valueChangedPt(double)), this, SLOT(leftChanged(double)));
-    connect(rightUSB, SIGNAL(valueChangedPt(double)), this, SLOT(rightChanged(double)));
-    connect(topUSB, SIGNAL(valueChangedPt(double)), this, SLOT(topChanged(double)));
-    connect(bottomUSB, SIGNAL(valueChangedPt(double)), this, SLOT(bottomChanged(double)));
-
-    updatePreview();
-    m_pagePreview->setPageColumns(columns);
-
-    unitBox->setEnabled(enableUnitChooser);
-    marginGB->setEnabled(enableBorders);
+    setUnit(KoUnit(KoUnit::Millimeter));
+    setPageLayout(layout);
 }
 
-void KWPageLayout::setEnableBorders(bool on) {
-    m_haveBorders = on;
-    marginGB->setEnabled(on);
+void KWPageLayout::sizeChanged(int row) {
+    m_pageLayout.format = static_cast<KoPageFormat::Format> (row);
+    bool enable =  m_pageLayout.format == KoPageFormat::CustomSize;
+    widget.width->setEnabled( enable );
+    widget.height->setEnabled( enable );
 
-    // update m_layout
-    m_layout.ptLeft = on?leftUSB->value():0;
-    m_layout.ptRight = on?rightUSB->value():0;
-    m_layout.ptTop = on?topUSB->value():0;
-    m_layout.ptBottom = on?bottomUSB->value():0;
+    if ( m_pageLayout.format != KoPageFormat::CustomSize ) {
+        m_pageLayout.width = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
+        m_pageLayout.height = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
+    }
 
-    // use updated m_layout
-    updatePreview();
-    emit propertyChange(m_layout);
+    widget.width->changeValue( m_pageLayout.width );
+    widget.height->changeValue( m_pageLayout.height );
+
+    emit layoutChanged(m_pageLayout);
 }
 
-void KWPageLayout::updatePreview() {
-    m_pagePreview->setPageLayout( m_layout );
+void KWPageLayout::unitChanged(int row) {
+    setUnit(KoUnit(static_cast<KoUnit::Unit> (row)));
 }
 
-void KWPageLayout::setGuiValues() {
-    // page size
-    sizeCombo->setCurrentIndex(m_layout.format);
-    // orientation
-    if (m_layout.orientation == PG_PORTRAIT)
-        portraitRB->setChecked(true);
-    else
-        landscapeRB->setChecked(true);
-    // Units and margins.
-    setUnit(m_unit);
-    updatePreview();
-}
-
-void KWPageLayout::setUnit(KoUnit unit) {
+void KWPageLayout::setUnit(const KoUnit &unit) {
     m_unit = unit;
-    m_blockSignals = true; // due to non-atomic changes the propertyChange emits should be blocked
 
-    widthUSB->setUnit(m_unit);
-    widthUSB->setMinMaxStep(0, KoUnit::fromUserValue(9999, m_unit), KoUnit::fromUserValue(0.01, m_unit));
-    widthUSB->changeValue(m_layout.ptWidth);
+    widget.width->setUnit(m_unit);
+    widget.height->setUnit(m_unit);
+    widget.topMargin->setUnit(m_unit);
+    widget.bottomMargin->setUnit(m_unit);
+    widget.bindingEdgeMargin->setUnit(m_unit);
+    widget.pageEdgeMargin->setUnit(m_unit);
 
-    heightUSB->setUnit(m_unit);
-    heightUSB->setMinMaxStep(0, KoUnit::fromUserValue(9999, m_unit), KoUnit::fromUserValue(0.01, m_unit));
-    heightUSB->changeValue(m_layout.ptHeight);
-
-    double dStep = KoUnit::fromUserValue(0.2, m_unit);
-
-    leftUSB->setUnit(m_unit);
-    leftUSB->changeValue(m_layout.ptLeft);
-    leftUSB->setMinMaxStep(0, m_layout.ptWidth, dStep);
-
-    rightUSB->setUnit(m_unit);
-    rightUSB->changeValue(m_layout.ptRight);
-    rightUSB->setMinMaxStep(0, m_layout.ptWidth, dStep);
-
-    topUSB->setUnit(m_unit);
-    topUSB->changeValue(m_layout.ptTop);
-    topUSB->setMinMaxStep(0, m_layout.ptHeight, dStep);
-
-    bottomUSB->setUnit(m_unit);
-    bottomUSB->changeValue(m_layout.ptBottom);
-    bottomUSB->setMinMaxStep(0, m_layout.ptHeight, dStep);
-
-    m_blockSignals = false;
+    // TODO set combobox
 }
 
-void KWPageLayout::setUnitInt(int unit) {
-    setUnit(KoUnit((KoUnit::Unit)unit));
-}
-
-void KWPageLayout::formatChanged(int format) {
-    if ((KoFormat)format == m_layout.format)
-        return;
-    m_layout.format = (KoFormat)format;
-    bool enable = ((KoFormat)format == PG_CUSTOM);
-    widthUSB->setEnabled(enable);
-    heightUSB->setEnabled(enable);
-
-    if (m_layout.format != PG_CUSTOM) {
-        m_layout.ptWidth = MM_TO_POINT(KoPageFormat::width(
-            m_layout.format, m_layout.orientation));
-        m_layout.ptHeight = MM_TO_POINT(KoPageFormat::height(
-            m_layout.format, m_layout.orientation));
+void KWPageLayout::setPageLayout(const KoPageLayout &layout) {
+    m_pageLayout = layout;
+    widget.sizes->setCurrentIndex(layout.format);
+    m_orientationGroup->button( layout.orientation )->setChecked( true );
+    if(layout.left < 0 || layout.right < 0) {
+        widget.facingPages->setChecked(true);
+        widget.bindingEdgeMargin->changeValue(layout.bindingSide);
+        widget.pageEdgeMargin->changeValue(layout.pageEdge);
     }
-
-    widthUSB->changeValue(m_layout.ptWidth);
-    heightUSB->changeValue(m_layout.ptHeight);
-
-    updatePreview();
-    emit propertyChange(m_layout);
-}
-
-void KWPageLayout::orientationChanged() {
-    m_layout.orientation = (portraitRB->isChecked() ? PG_PORTRAIT : PG_LANDSCAPE);
-
-    // swap dimension
-    double val = widthUSB->value();
-    widthUSB->changeValue(heightUSB->value());
-    heightUSB->changeValue(val);
-    // and adjust margins
-    m_blockSignals = true;
-    val = topUSB->value();
-    if(m_layout.orientation == PG_PORTRAIT) { // clockwise
-        topUSB->changeValue(rightUSB->value());
-        rightUSB->changeValue(bottomUSB->value());
-        bottomUSB->changeValue(leftUSB->value());
-        leftUSB->changeValue(val);
-    } else { // counter clockwise
-        topUSB->changeValue(leftUSB->value());
-        leftUSB->changeValue(bottomUSB->value());
-        bottomUSB->changeValue(rightUSB->value());
-        rightUSB->changeValue(val);
+    else {
+        widget.singleSided->setChecked(true);
+        widget.bindingEdgeMargin->changeValue(layout.left);
+        widget.pageEdgeMargin->changeValue(layout.right);
     }
-    m_blockSignals = false;
+    facingPagesChanged();
 
-    setEnableBorders(m_haveBorders); // will update preview+emit
-}
-
-void KWPageLayout::widthChanged(double width) {
-    if(m_blockSignals) return;
-    m_layout.ptWidth = width;
-    updatePreview();
-    emit propertyChange(m_layout);
-}
-void KWPageLayout::heightChanged(double height) {
-    if(m_blockSignals) return;
-    m_layout.ptHeight = height;
-    updatePreview();
-    emit propertyChange(m_layout);
-}
-void KWPageLayout::leftChanged( double left ) {
-    if(m_blockSignals) return;
-    m_layout.ptLeft = left;
-    updatePreview();
-    emit propertyChange(m_layout);
-}
-void KWPageLayout::rightChanged(double right) {
-    if(m_blockSignals) return;
-    m_layout.ptRight = right;
-    updatePreview();
-    emit propertyChange(m_layout);
-}
-void KWPageLayout::topChanged(double top) {
-    if(m_blockSignals) return;
-    m_layout.ptTop = top;
-    updatePreview();
-    emit propertyChange(m_layout);
-}
-void KWPageLayout::bottomChanged(double bottom) {
-    if(m_blockSignals) return;
-    m_layout.ptBottom = bottom;
-    updatePreview();
-    emit propertyChange(m_layout);
+    widget.topMargin->changeValue(layout.top);
+    widget.bottomMargin->changeValue(layout.bottom);
 }
 
-bool KWPageLayout::queryClose() {
-    if (m_layout.ptLeft + m_layout.ptRight > m_layout.ptWidth) {
-        KMessageBox::error(this,
-            i18n("The page width is smaller than the left and right margins."),
-            i18n("Page Layout Problem"));
-        return false;
+void KWPageLayout::facingPagesChanged() {
+    m_pageLayout.left = -1;
+    m_pageLayout.right = -1;
+    m_pageLayout.bindingSide = -1;
+    m_pageLayout.pageEdge = -1;
+    if(widget.singleSided->isChecked()) {
+        m_pageLayout.left = m_marginsEnabled?widget.bindingEdgeMargin->value():0;
+        m_pageLayout.right = m_marginsEnabled?widget.pageEdgeMargin->value():0;
+        widget.leftLabel->setText(i18n("Left Edge:"));
+        widget.rightLabel->setText(i18n("Right Edge:"));
     }
-    if (m_layout.ptTop + m_layout.ptBottom > m_layout.ptHeight) {
-        KMessageBox::error(this,
-            i18n("The page height is smaller than the top and bottom margins."),
-            i18n("Page Layout Problem") );
-        return false;
+    else {
+        m_pageLayout.bindingSide = m_marginsEnabled?widget.bindingEdgeMargin->value():0;
+        m_pageLayout.pageEdge = m_marginsEnabled?widget.pageEdgeMargin->value():0;
+        widget.leftLabel->setText(i18n("Binding Edge:"));
+        widget.rightLabel->setText(i18n("Page Edge:"));
     }
-    return true;
+    emit layoutChanged(m_pageLayout);
 }
 
-void KWPageLayout::setColumns(KoColumns &columns) {
-    m_pagePreview->setPageColumns(columns);
+void KWPageLayout::setTextAreaAvailable(bool available) {
+    m_marginsEnabled = available;
+    widget.margins->setEnabled(available);
+    if(available)
+        optionsChanged();
+    else {
+        m_pageLayout.top = 0;
+        m_pageLayout.bottom = 0;
+        m_pageLayout.width = 0;
+        m_pageLayout.height = 0;
+    }
+    facingPagesChanged();
+}
+
+void KWPageLayout::optionsChanged() {
+    if(m_marginsEnabled) {
+        m_pageLayout.top = widget.topMargin->value();
+        m_pageLayout.bottom = widget.topMargin->value();
+    }
+    m_pageLayout.orientation = widget.landscape->isChecked() ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+
+    emit layoutChanged(m_pageLayout);
 }
 
 #include <KWPageLayout.moc>

@@ -374,9 +374,9 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
 
     kDebug(30518) << "writePageLayout " << masterPageName << endl;
     QDomElement elementPaper = mainDocument.createElement("PAPER");
-    KoOrientation orientation;
+    KoPageFormat::Orientation orientation;
     double width, height;
-    KoFormat paperFormat;
+    KoPageFormat::Format paperFormat;
     double marginLeft, marginTop, marginRight, marginBottom;
     bool hasEvenOddHeader = false;
     bool hasEvenOddFooter = false;
@@ -390,12 +390,12 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
     {
         QDomElement properties( KoDom::namedItemNS( *style, ooNS::style, "properties" ) );
         Q_ASSERT( !properties.isNull() );
-        orientation = ( (properties.attributeNS( ooNS::style, "print-orientation", QString::null) != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
+        orientation = ( (properties.attributeNS( ooNS::style, "print-orientation", QString::null) != "portrait") ? KoPageFormat::Landscape : KoPageFormat::Portrait );
         width = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-width", QString::null));
         height = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-height", QString::null));
         kDebug(30518) << "width=" << width << " height=" << height << endl;
         // guessFormat takes millimeters
-        if ( orientation == PG_LANDSCAPE )
+        if ( orientation == KoPageFormat::Landscape )
             paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );
         else
             paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(width), POINT_TO_MM(height) );
@@ -452,8 +452,8 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
     {
         // We have no master page! We need defaults.
         kWarning(30518) << "NO MASTER PAGE" << endl;
-        orientation=PG_PORTRAIT;
-        paperFormat=PG_DIN_A4;
+        orientation=KoPageFormat::Portrait;
+        paperFormat=KoPageFormat::IsoA4Size;
         width=MM_TO_POINT(KoPageFormat::width(paperFormat, orientation));
         height=MM_TO_POINT(KoPageFormat::height(paperFormat, orientation));
         // ### TODO: better defaults for margins?

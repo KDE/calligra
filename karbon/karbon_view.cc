@@ -56,7 +56,7 @@
 #include <kstandardaction.h>
 #include <KoContextHelp.h>
 #include <KoUnitWidgets.h>
-#include <KoPageLayoutDia.h>
+// #include <KoPageLayoutDia.h>
 #include <KoRuler.h>
 #include <Kolinestyleaction.h>
 #include <KoToolManager.h>
@@ -1503,6 +1503,8 @@ KarbonView::pageLayout()
 {
 	debugView("KarbonView::pageLayout()");
 
+// TODO show a simple page layout dialog without all the whistels and bells of the kword one.
+#if 0
 	KoHeadFoot hf;
 	KoPageLayout layout = part()->pageLayout();
 	KoUnit unit = part()->unit();
@@ -1511,13 +1513,14 @@ KarbonView::pageLayout()
 		part()->setPageLayout( layout, unit );
 		m_horizRuler->setUnit( unit );
 		m_vertRuler->setUnit( unit );
-		m_canvas->canvasWidget()->resize( int( ( part()->pageLayout().ptWidth + 300 ) * zoom() ),
-								  int( ( part()->pageLayout().ptHeight + 460 ) * zoom() ) );
+		m_canvas->canvasWidget()->resize( int( ( part()->pageLayout().width + 300 ) * zoom() ),
+								  int( ( part()->pageLayout().height + 460 ) * zoom() ) );
         m_canvas->adjustSize();
 		part()->repaintAllViews();
 
 		emit pageLayoutChanged();
 	}
+#endif
 }
 
 void

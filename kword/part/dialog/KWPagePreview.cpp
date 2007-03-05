@@ -60,8 +60,8 @@ void KWPagePreview::updateZoomedSize()
     double resolutionX = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiX()) );
     double resolutionY = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiY()) );
 
-    m_pageWidth = m_layout.ptWidth * resolutionX;
-    m_pageHeight = m_layout.ptHeight * resolutionY;
+    m_pageWidth = m_layout.width * resolutionX;
+    m_pageHeight = m_layout.height * resolutionY;
 
     QRect cr = contentsRect();
 
@@ -72,10 +72,10 @@ void KWPagePreview::updateZoomedSize()
     m_pageWidth *= z;
     m_pageHeight *= z;
 
-    m_textFrameX = m_layout.ptLeft * resolutionX * z;
-    m_textFrameY = m_layout.ptTop * resolutionY * z;
-    m_textFrameWidth = m_pageWidth - ( m_layout.ptLeft + m_layout.ptRight ) * resolutionX * z;
-    m_textFrameHeight = m_pageHeight - ( m_layout.ptTop + m_layout.ptBottom ) * resolutionY * z;
+    m_textFrameX = m_layout.left * resolutionX * z;
+    m_textFrameY = m_layout.top * resolutionY * z;
+    m_textFrameWidth = m_pageWidth - ( m_layout.left + m_layout.right ) * resolutionX * z;
+    m_textFrameHeight = m_pageHeight - ( m_layout.top + m_layout.bottom ) * resolutionY * z;
 }
 
 /*=================== Set columns =================================*/
