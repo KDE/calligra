@@ -1389,7 +1389,7 @@ QString Project::uniqueCalendarId() const {
     return QString();
 }
 
-Calendar *Project::setDefaultCalendar( Calendar *cal )
+void Project::setDefaultCalendar( Calendar *cal )
 {
     if ( m_defaultCalendar ) {
         m_defaultCalendar->setDefault( false );
@@ -1399,8 +1399,6 @@ Calendar *Project::setDefaultCalendar( Calendar *cal )
         cal->setDefault( true );
     }
     emit defaultCalendarChanged( cal );
-
-    return m_defaultCalendar;
 }
 
 void Project::setStandardWorktime( StandardWorktime * worktime )

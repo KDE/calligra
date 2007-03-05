@@ -182,7 +182,7 @@ public:
     virtual double actualCostTo( const QDate &date, long id = -1  ) const;
 
     Calendar *defaultCalendar() const { return m_defaultCalendar; }
-    Calendar *setDefaultCalendar( Calendar *cal );
+    void setDefaultCalendar( Calendar *cal );
     const QList<Calendar*> &calendars() const;
     void addCalendar( Calendar *calendar, Calendar *parent = 0 );
     void takeCalendar( Calendar *calendar );
