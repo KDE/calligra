@@ -29,12 +29,13 @@
 class KWPageLayout : public QWidget {
     Q_OBJECT
 public:
-    explicit KWPageLayout(QWidget *parent, const KoPageLayout &layout, const KoColumns &columns);
+    KWPageLayout(QWidget *parent, const KoPageLayout &layout);
 
     void setUnit(const KoUnit &unit);
 
 signals:
     void layoutChanged(const KoPageLayout &layout);
+    void unitChanged(const KoUnit &unit);
 
 public slots:
     void setPageLayout(const KoPageLayout &layout);

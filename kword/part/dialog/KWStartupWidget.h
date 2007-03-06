@@ -47,7 +47,7 @@ public:
 
 private slots:
     void sizeUpdated(const KoPageLayout &layout);
-    void columnsUpdated(KoColumns &columns);
+    void columnsUpdated(const KoColumns &columns);
     void buttonClicked();
 
 signals:

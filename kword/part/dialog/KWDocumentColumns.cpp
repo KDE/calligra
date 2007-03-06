@@ -18,11 +18,45 @@
  */
 
 #include "KWDocumentColumns.h"
+#include "KWPagePreview.h"
 
-KWDocumentColumns::KWDocumentColumns(QWidget *parent)
+KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
     : QWidget(parent)
 {
     widget.setupUi(this);
+
+    setColumns(columns);
+    setUnit(KoUnit(KoUnit::Millimeter));
+
+    connect(widget.columns, SIGNAL(valueChanged(int)), this, SLOT(optionsChanged()));
+    connect(widget.spacing, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
+}
+
+void KWDocumentColumns::setColumns(const KoColumns &columns) {
+    m_columns = columns;
+    widget.columns->setValue(columns.columns);
+    widget.spacing->changeValue(columns.columnSpacing);
+}
+
+void KWDocumentColumns::setTextAreaAvailable(bool available) {
+    widget.columns->setEnabled(available);
+    widget.spacing->setEnabled(available);
+    if(available)
+        optionsChanged();
+    else {
+        m_columns.columns = 1;
+        emit columnsChanged(m_columns);
+    }
+}
+
+void KWDocumentColumns::setUnit(const KoUnit &unit) {
+    widget.spacing->setUnit(unit);
+}
+
+void KWDocumentColumns::optionsChanged() {
+    m_columns.columns = widget.columns->value();
+    m_columns.columnSpacing = widget.spacing->value();
+    emit columnsChanged(m_columns);
 }
 
 #include <KWDocumentColumns.moc>

@@ -21,13 +21,7 @@
 #include <KWDocument.h>
 #include "KWPageLayout.h"
 #include "KWDocumentColumns.h"
-//
-//   #include <kdebug.h>
-//   #include <QPushButton>
-//   #include <QCheckBox>
-//   #include <QLayout>
-//   //Added by qt3to4:
-//   #include <Q3VBoxLayout>
+#include "KWPagePreview.h"
 
 KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns)
     : QWidget(parent)
@@ -35,44 +29,58 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     widget.setupUi(this);
     m_columns = columns;
     m_layout = KoPageLayout::standardLayout();
+    m_layout.left = MM_TO_POINT(30);
+    m_layout.right = MM_TO_POINT(30);
+    m_layout.top = MM_TO_POINT(25);
+    m_layout.bottom = MM_TO_POINT(25);
     m_doc = doc;
 
     setFocusProxy(widget.createButton);
 
     QVBoxLayout *lay = new QVBoxLayout(widget.sizeTab);
-    m_sizeWidget = new KWPageLayout(widget.sizeTab, m_layout, m_columns);
+    m_sizeWidget = new KWPageLayout(widget.sizeTab, m_layout);
     lay->addWidget(m_sizeWidget);
     lay->setMargin(0);
 
     lay = new QVBoxLayout(widget.columnsTab);
-    m_columnsWidget = new KWDocumentColumns(); // widget.columnsTab, m_columns, KoUnit::Millimeter, m_layout);
+    m_columnsWidget = new KWDocumentColumns(widget.columnsTab, m_columns);
     lay->addWidget(m_columnsWidget);
     lay->setMargin(0);
 
-    connect (m_columnsWidget, SIGNAL( propertyChange(KoColumns&)),
-            this, SLOT (columnsUpdated( KoColumns&)));
+    lay = new QVBoxLayout(widget.previewPane);
+    widget.previewPane->setLayout(lay);
+    lay->setMargin(0);
+    KWPagePreview *prev = new KWPagePreview(widget.previewPane);
+    lay->addWidget(prev);
+    prev->setColumns(columns);
+    prev->setPageLayout(m_layout);
 
-    connect (m_sizeWidget, SIGNAL( layoutChanged(const KoPageLayout&)),
-            this, SLOT (sizeUpdated( const KoPageLayout&)));
-
+    connect (m_sizeWidget, SIGNAL( layoutChanged(const KoPageLayout&)), this, SLOT(sizeUpdated(const KoPageLayout&)));
     connect (widget.createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
-
     connect (widget.mainText, SIGNAL(toggled(bool)), m_sizeWidget, SLOT(setTextAreaAvailable(bool)));
-    connect (widget.mainText, SIGNAL(toggled(bool)), m_columnsWidget, SLOT(setEnableColumns(bool)));
+    connect (widget.mainText, SIGNAL(toggled(bool)), m_columnsWidget, SLOT(setTextAreaAvailable(bool)));
+    connect (m_sizeWidget, SIGNAL(unitChanged(const KoUnit&)), m_columnsWidget, SLOT(setUnit(const KoUnit&)));
+    connect (m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), prev, SLOT(setColumns(const KoColumns&)));
+    connect (m_sizeWidget, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
 }
 
 void KWStartupWidget::sizeUpdated(const KoPageLayout &layout) {
     m_layout = layout;
-    //m_columnsWidget->setLayout(layout);
 }
 
-void KWStartupWidget::columnsUpdated(KoColumns &columns) {
-    m_columns.columns = columns.columns;
-    m_columns.columnSpacing = columns.columnSpacing;
-    //m_sizeWidget->setColumns(columns);
+void KWStartupWidget::columnsUpdated(const KoColumns &columns) {
+    m_columns = columns;
 }
 
 void KWStartupWidget::buttonClicked() {
+    m_doc->clear();
+
+    m_doc->setDefaultPageLayout(m_layout);
+    KWPageSettings settings;
+    settings.setColumns(m_columns);
+    m_doc->setPageSettings(settings);
+
+    m_doc->appendPage();
 /*
     if(widget.mainText->isChecked())
         m_doc->initEmpty();

@@ -20,18 +20,31 @@
 #ifndef KWDOCUMENTCOLUMNS_H
 #define KWDOCUMENTCOLUMNS_H
 
-#include <QWidget>
-
 #include <ui_KWDocumentColumns.h>
+
+#include <KoPageLayout.h>
+
+#include <QWidget>
 
 class KWDocumentColumns : public QWidget {
     Q_OBJECT
 public:
-    explicit KWDocumentColumns(QWidget *parent = 0);
+    KWDocumentColumns(QWidget *parent, const KoColumns &columns);
 
+signals:
+    void columnsChanged(const KoColumns &columns);
+
+public slots:
+    void setTextAreaAvailable(bool available);
+    void setColumns(const KoColumns &columns);
+    void setUnit(const KoUnit &unit);
+
+private slots:
+    void optionsChanged();
 
 private:
     Ui::KWDocumentColumns widget;
+    KoColumns m_columns;
 };
 
 #endif
