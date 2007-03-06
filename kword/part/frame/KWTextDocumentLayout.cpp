@@ -361,7 +361,7 @@ void KWTextDocumentLayout::layout() {
                 }
 
                 KWFrame *lastFrame = m_frameSet->frames().last();
-                if(lastFrame->frameBehavior() != KWord::AutoExtendFrameBehavior)
+                if(lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior)
                     return; // done!
 
                 // find out the maximum size this frame can be extended to while still
