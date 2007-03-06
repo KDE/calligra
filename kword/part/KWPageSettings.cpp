@@ -52,9 +52,9 @@ void KWPageSettings::clear() {
     m_footNoteDistance = 10;
     m_endNoteDistance = 10;
     m_firstHeader = KWord::HFTypeNone;
-    m_firstFooter = KWord::HFTypeEvenOdd;
-    m_headers = KWord::HFTypeEvenOdd;
-    m_footers = KWord::HFTypeSameAsFirst;
+    m_firstFooter = KWord::HFTypeNone;
+    m_headers = KWord::HFTypeNone;
+    m_footers = KWord::HFTypeNone;
     m_columns.columns = 1;
-    m_columns.columnSpacing = 6;
+    m_columns.columnSpacing = 17; // ~ 6mm
 }
