@@ -522,10 +522,10 @@ void KPrView::setupPrinter( KPrinter &prt )
     prt.setOption( "kde-margin-bottom", QString::number(layout.ptBottom) );
     prt.setOption( "kde-margin-left", QString::number(layout.ptLeft) );
     prt.setOption( "kde-margin-right", QString::number(layout.ptRight) );
-    KoFormat pageFormat = layout.format;
+    KoPageFormat::Format pageFormat = layout.format;
     prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
 
-    if ( m_pKPresenterDoc->pageLayout().orientation == PG_LANDSCAPE || pageFormat == PG_SCREEN )
+    if ( m_pKPresenterDoc->pageLayout().orientation == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );
@@ -567,7 +567,7 @@ void KPrView::print( KPrinter &prt )
     }
 
     unZoomDocument(dpiX,dpiY);
-    if ( m_pKPresenterDoc->pageLayout().format == PG_SCREEN )
+    if ( m_pKPresenterDoc->pageLayout().format == KoPageFormat::ScreenSize )
     {
         left_margin = 28.5;
         top_margin = 15.0;

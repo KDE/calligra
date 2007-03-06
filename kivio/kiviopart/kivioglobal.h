@@ -51,12 +51,13 @@ namespace Kivio
   KoUnit convToKoUnit(int tkUnit);
   /**
    * Return an approperiate string for the orientation
+   * TODO move this to KoPageFormat
    */
-  QString orientationString(KoOrientation o);
+  QString orientationString(KoPageFormat::Orientation o);
   /**
    * Return the orientation based on the string
    */
-  KoOrientation orientationFromString(const QString& s);
+  KoPageFormat::Orientation orientationFromString(const QString& s);
   void setFormatOrientation(KoPageLayout& layout);
 
   /**

@@ -42,7 +42,7 @@ namespace Scripting {
         public Q_SLOTS:
 
             /** Page format */
-            //KoFormat format;
+            //KoPageFormat::Format format;
 
             /** Return page orientation */
             QString orientation() {

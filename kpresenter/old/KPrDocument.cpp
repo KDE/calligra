@@ -1697,7 +1697,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         {
             __pgLayout.loadOasis( *style );
             kDebug()<<"Page size __pgLayout.ptWidth :"<<__pgLayout.ptWidth<<" __pgLayout.ptHeight :"<<__pgLayout.ptHeight<<endl;
-            kDebug()<<"Page orientation :"<<(( __pgLayout.orientation== PG_LANDSCAPE )? " landscape " : " portrait ")<<endl;
+            kDebug()<<"Page orientation :"<<(( __pgLayout.orientation== KoPageFormat::Landscape )? " landscape " : " portrait ")<<endl;
 
             kDebug()<<" margin right:"<< __pgLayout.ptRight <<" __pgLayout.ptBottom :"<<__pgLayout.ptBottom<<" __pgLayout.ptLeft :"<<__pgLayout.ptLeft<<" __pgLayout.ptTop :"<<__pgLayout.ptTop<<endl;
         }
@@ -2461,7 +2461,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
             if(elem.hasAttribute("format"))
                 __pgLayout.format=static_cast<KoFormat>(elem.attribute("format").toInt());
             if(elem.hasAttribute("orientation"))
-                __pgLayout.orientation=static_cast<KoOrientation>(elem.attribute("orientation").toInt());
+                __pgLayout.orientation=static_cast<KoPageFormat::Orientation>(elem.attribute("orientation").toInt());
             if(elem.hasAttribute("ptWidth"))
                 __pgLayout.ptWidth = elem.attribute("ptWidth").toDouble();
             else if(elem.hasAttribute("inchWidth"))  //compatibility

@@ -1762,7 +1762,7 @@ void KivioView::setupPrinter(KPrinter &p)
   KoPageLayout pl = activePage()->paperLayout();
   p.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pl.format ) ) );
 
-  if ( pl.orientation == PG_LANDSCAPE || pl.format == PG_SCREEN ) {
+  if ( pl.orientation == KoPageFormat::Lansdscape || pl.format == KoPageFormat::ScreenSize ) {
     p.setOrientation( KPrinter::Landscape );
   } else {
     p.setOrientation( KPrinter::Portrait );

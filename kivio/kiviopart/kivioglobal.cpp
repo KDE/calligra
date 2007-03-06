@@ -114,22 +114,22 @@ KoUnit Kivio::convToKoUnit(int tkUnit)
   return KoUnit::Point;
 }
 
-QString Kivio::orientationString(KoOrientation o)
+QString Kivio::orientationString(KoPageFormat::Orientation o)
 {
-  if(o == PG_LANDSCAPE) {
+  if(o == KoPageFormat::Landscape) {
     return "Landscape";
   }
 
   return "Portrait";
 }
 
-KoOrientation Kivio::orientationFromString(const QString& s)
+KoPageFormat::Orientation Kivio::orientationFromString(const QString& s)
 {
   if(s == "Landscape") {
-    return PG_LANDSCAPE;
+    return KoPageFormat::Landscape;
   }
 
-  return PG_PORTRAIT;
+  return KoPageFormat::Portrait;
 }
 
 void Kivio::setFormatOrientation(KoPageLayout& layout)
@@ -166,8 +166,8 @@ void Kivio::setFormatOrientation(KoPageLayout& layout)
   PaperSizeDef sizeDef = PapersTable[0];
   bool found = false;
   float width, height;
-  layout.format = PG_CUSTOM;
-  layout.orientation = PG_PORTRAIT;
+  layout.format = KoPageFormat::CustomSize;
+  layout.orientation = KoPageFormat::Portrait;
 
   while((sizeDef.unit != -2) && !found) {
     width = KoUnit::fromUserValue(sizeDef.width, static_cast<KoUnit>(sizeDef.unit));
@@ -175,11 +175,11 @@ void Kivio::setFormatOrientation(KoPageLayout& layout)
 
     if((layout.ptWidth == width) && (layout.ptHeight == height)) {
       layout.format = KoPageFormat::formatFromString(sizeDef.title);
-      layout.orientation = PG_PORTRAIT;
+      layout.orientation = KoPageFormat::Portrait;
       found = true;
     } else if((layout.ptWidth == height) && (layout.ptHeight == width)) {
       layout.format = KoPageFormat::formatFromString(sizeDef.title);
-      layout.orientation = PG_LANDSCAPE;
+      layout.orientation = KoPageFormat::Landscape;
       found = true;
     }
 

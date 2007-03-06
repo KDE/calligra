@@ -265,10 +265,10 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
     // guessFormat takes millimeters
     width = POINT_TO_MM( width );
     height = POINT_TO_MM( height );
-    KoFormat paperFormat = KoPageFormat::guessFormat( landscape ? height : width, landscape ? width : height );
+    KoPageFormat::Format  paperFormat = KoPageFormat::guessFormat( landscape ? height : width, landscape ? width : height );
     elementPaper.setAttribute("format",paperFormat);
 
-    elementPaper.setAttribute("orientation", landscape ? PG_LANDSCAPE : PG_PORTRAIT );
+    elementPaper.setAttribute("orientation", landscape ? KoPageFormat::Landscape : KoPageFormat::Portrait );
     elementPaper.setAttribute("columns", sep->ccolM1 + 1 );
     elementPaper.setAttribute("columnspacing", (double)sep->dxaColumns / 20.0);
     elementPaper.setAttribute("spHeadBody", (double)sep->dyaHdrTop / 20.0);

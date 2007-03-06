@@ -205,9 +205,9 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
   // orientation
   fin.getline (buf, 255);
   if (::strcmp (buf, "Landscape") == 0)
-      layout.orientation = PG_LANDSCAPE;
+      layout.orientation = KoPageFormat::Landscape;
   else if (::strcmp (buf, "Portrait") == 0)
-      layout.orientation = PG_PORTRAIT;
+      layout.orientation = KoPageFormat::Portrait;
   else
       kDebug() << "ERROR: invalid orientation" << endl;
 
