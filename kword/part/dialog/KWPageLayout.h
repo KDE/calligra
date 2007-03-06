@@ -45,6 +45,7 @@ private slots:
     void unitChanged(int row);
     void facingPagesChanged();
     void optionsChanged();
+    void marginsChanged();
 
 private:
     Ui::KWPageLayout widget;

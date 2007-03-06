@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KWPageLayout.h"
+#include "KWPagePreview.h"
 
 #include <klocale.h>
 
@@ -44,16 +45,25 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout, const Ko
     widget.units->addItems( KoUnit::listOfUnitName() );
     widget.sizes->addItems(KoPageFormat::allFormats());
 
+    QVBoxLayout *lay = new QVBoxLayout(widget.previewPane);
+    widget.previewPane->setLayout(lay);
+    lay->setMargin(0);
+    KWPagePreview *prev = new KWPagePreview(widget.previewPane);
+    lay->addWidget(prev);
+    prev->setColumns(columns);
+
     connect(widget.sizes, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)));
     connect(widget.units, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)));
     connect(group2, SIGNAL(buttonClicked (int)), this, SLOT(facingPagesChanged()));
     connect(m_orientationGroup, SIGNAL(buttonClicked (int)), this, SLOT(optionsChanged()));
     connect(widget.width, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
     connect(widget.height, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
-    connect(widget.topMargin, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
-    connect(widget.bottomMargin, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
-    connect(widget.bindingEdgeMargin, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
-    connect(widget.pageEdgeMargin, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
+    connect(widget.topMargin, SIGNAL(valueChangedPt(double)), this, SLOT(marginsChanged()));
+    connect(widget.bottomMargin, SIGNAL(valueChangedPt(double)), this, SLOT(marginsChanged()));
+    connect(widget.bindingEdgeMargin, SIGNAL(valueChangedPt(double)), this, SLOT(marginsChanged()));
+    connect(widget.pageEdgeMargin, SIGNAL(valueChangedPt(double)), this, SLOT(marginsChanged()));
+
+    connect(this, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
 
     setUnit(KoUnit(KoUnit::Millimeter));
     setPageLayout(layout);
@@ -114,6 +124,18 @@ void KWPageLayout::setPageLayout(const KoPageLayout &layout) {
 }
 
 void KWPageLayout::facingPagesChanged() {
+    if(widget.singleSided->isChecked()) {
+        widget.leftLabel->setText(i18n("Left Edge:"));
+        widget.rightLabel->setText(i18n("Right Edge:"));
+    }
+    else {
+        widget.leftLabel->setText(i18n("Binding Edge:"));
+        widget.rightLabel->setText(i18n("Page Edge:"));
+    }
+    marginsChanged();
+}
+
+void KWPageLayout::marginsChanged() {
     m_pageLayout.left = -1;
     m_pageLayout.right = -1;
     m_pageLayout.bindingSide = -1;
@@ -121,37 +143,23 @@ void KWPageLayout::facingPagesChanged() {
     if(widget.singleSided->isChecked()) {
         m_pageLayout.left = m_marginsEnabled?widget.bindingEdgeMargin->value():0;
         m_pageLayout.right = m_marginsEnabled?widget.pageEdgeMargin->value():0;
-        widget.leftLabel->setText(i18n("Left Edge:"));
-        widget.rightLabel->setText(i18n("Right Edge:"));
     }
     else {
         m_pageLayout.bindingSide = m_marginsEnabled?widget.bindingEdgeMargin->value():0;
         m_pageLayout.pageEdge = m_marginsEnabled?widget.pageEdgeMargin->value():0;
-        widget.leftLabel->setText(i18n("Binding Edge:"));
-        widget.rightLabel->setText(i18n("Page Edge:"));
     }
+    m_pageLayout.top = m_marginsEnabled?widget.topMargin->value():0;
+    m_pageLayout.bottom = m_marginsEnabled?widget.bottomMargin->value():0;
     emit layoutChanged(m_pageLayout);
 }
 
 void KWPageLayout::setTextAreaAvailable(bool available) {
     m_marginsEnabled = available;
     widget.margins->setEnabled(available);
-    if(available)
-        optionsChanged();
-    else {
-        m_pageLayout.top = 0;
-        m_pageLayout.bottom = 0;
-        m_pageLayout.width = 0;
-        m_pageLayout.height = 0;
-    }
-    facingPagesChanged();
+    marginsChanged();
 }
 
 void KWPageLayout::optionsChanged() {
-    if(m_marginsEnabled) {
-        m_pageLayout.top = widget.topMargin->value();
-        m_pageLayout.bottom = widget.topMargin->value();
-    }
     m_pageLayout.orientation = widget.landscape->isChecked() ? KoPageFormat::Landscape : KoPageFormat::Portrait;
 
     emit layoutChanged(m_pageLayout);
