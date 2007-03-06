@@ -1684,7 +1684,7 @@ QString * OpenCalcImport::loadFormat( KoXmlElement * element,
   int precision = 0;
   int leadingZ  = 1;
 #ifdef __GNUC__
-#warning (coverity) what's the purpose of this constant?
+#warning (coverity) what is the purpose of this constant?
 #endif
   bool thousandsSep = false;
   bool negRed = false;
