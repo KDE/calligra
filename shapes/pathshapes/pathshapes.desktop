@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Path Shapes
+Name[x-test]=xxPath Shapesxx
 ServiceTypes=KOffice/Shape
 Type=Service
 X-Flake-Version=1
