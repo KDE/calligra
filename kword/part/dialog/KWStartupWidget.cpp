@@ -78,26 +78,10 @@ void KWStartupWidget::buttonClicked() {
     m_doc->setDefaultPageLayout(m_layout);
     KWPageSettings settings;
     settings.setColumns(m_columns);
+    settings.setMainTextFrame(widget.mainText->isChecked());
     m_doc->setPageSettings(settings);
 
     m_doc->appendPage();
-/*
-    if(widget.mainText->isChecked())
-        m_doc->initEmpty();
-    else {
-        m_doc->m_processingType = KWDocument::DTP;
-        m_doc->clear();
-    }
-    KoKWHeaderFooter hf;
-    hf.header = HF_SAME;
-    hf.footer = HF_SAME;
-    hf.ptHeaderBodySpacing = 10.0;
-    hf.ptFooterBodySpacing = 10.0;
-    hf.ptFootNoteBodySpacing = 10.0;
-    m_doc->setPageLayout( m_layout, m_columns, hf, false );
-    m_doc->delayedRecalcFrames(1);
-
-*/
     emit documentSelected();
 }
 
