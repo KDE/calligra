@@ -497,7 +497,7 @@ about &kde; or &koffice;.
 
 <itemizedlist>
 <listitem>
-<para><ulink url="http://koffice.kde.org">The &koffice;
+<para><ulink url="http://koffice.org">The &koffice;
 homepage</ulink>. Here you can find information on how to get and
 install &koffice;, news about &koffice; development, screenshots &etc;
 </para></listitem>
@@ -713,7 +713,7 @@ can be found by following this link:
 </para> 
 
 <note><para> Please see the <ulink
-url="http://koffice.kde.org">&koffice; homepage</ulink> for further
+url="http://koffice.org">&koffice; homepage</ulink> for further
 details. That is where you can always find the most up-to-date
 information on both source and binary distributions!  </para></note>
 
@@ -728,8 +728,8 @@ You can download the most current binaries from:
 </para>
 
 <para>
-<ulink url="http://koffice.kde.org/releases/1.4.0-release.php">
-http://koffice.kde.org/releases/1.4.0-release.php</ulink>
+<ulink url="http://koffice.org/download/">
+http://koffice.org/download</ulink>
 </para>
 
 <para>
@@ -803,7 +803,7 @@ with it.  </para></note>
 
 <para>
 You can download the current source code from:
-<ulink url="http://koffice.kde.org/">http://koffice.kde.org/</ulink>
+<ulink url="http://koffice.org/">http://koffice.org/</ulink>
 or from one of many mirror sites. The current list of mirror sites
 can be found at:
 </para>

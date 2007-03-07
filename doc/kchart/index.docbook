@@ -569,7 +569,7 @@ help you here.
 <sect2>
 <title>Getting started</title>
 <para>
-Run &kchart; and select the <guilabel>Blank Worksheeet</guilabel>.
+Run &kchart; and select the <guilabel>Blank Worksheet</guilabel>.
 </para>
 <screenshot>
 <screeninfo>Starting with a blank chart</screeninfo>
