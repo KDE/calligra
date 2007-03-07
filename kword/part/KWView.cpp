@@ -28,6 +28,7 @@
 #include "KWFactory.h"
 #include "frame/KWFrame.h"
 #include "dialog/KWFrameDialog.h"
+#include "dialog/KWPageSettingsDialog.h"
 
 // koffice libs includes
 #include <KoShape.h>
@@ -130,15 +131,9 @@ void KWView::setupActions() {
     actionCollection()->addAction("insert_framebreak", m_actionInsertFrameBreak );
     m_actionInsertFrameBreak->setShortcut( KShortcut( Qt::CTRL + Qt::Key_Return));
     connect(m_actionInsertFrameBreak, SIGNAL(triggered()), this, SLOT( insertFrameBreak() ));
-    //if ( m_document->processingType() == KWDocument::WP ) {
-        m_actionInsertFrameBreak->setText( i18n( "Page Break" ) );
-        m_actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next page" ) );
-        m_actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next page." ) );
-    /*} else {
-        m_actionInsertFrameBreak->setText( i18n( "Hard Frame Break" ) );
-        m_actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next frame" ) );
-        m_actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
-    } */
+    m_actionInsertFrameBreak->setText( i18n( "Page Break" ) );
+    m_actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next page" ) );
+    m_actionInsertFrameBreak->setWhatsThis( i18n( "All text after this point will be moved into the next page." ) );
 
     m_actionEditDelFrame  = new KAction(i18n("Delete Frame"), this);
     actionCollection()->addAction("edit_delframe", m_actionEditDelFrame );
@@ -202,10 +197,14 @@ void KWView::setupActions() {
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
-
     // how do I port setWhatsThis ?
     //action->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
 
+    action = new QAction(i18n("Page Layout..."), this);
+    actionCollection()->addAction("format_page", action );
+    action->setToolTip( i18n( "Change properties of entire page" ) );
+    //action->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
+    connect(action, SIGNAL(triggered()), this, SLOT( formatPage() ));
 
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
@@ -401,12 +400,6 @@ This saves problems with finding out which we missed near the end.
             actionCollection(), "format_frameset" );
     m_actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties" ) );
     m_actionFormatFrameSet->setWhatsThis( i18n( "Alter frameset properties.<p>Currently you can change the frame background." ) );
-
-    m_actionFormatPage = new KAction( i18n( "Page Layout..." ), 0,
-            this, SLOT( formatPage() ),
-            actionCollection(), "format_page" );
-    m_actionFormatPage->setToolTip( i18n( "Change properties of entire page" ) );
-    m_actionFormatPage->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
 
 
     m_actionFormatFrameStylist = new KAction( i18n( "Frame Style Manager" ), 0,
@@ -1102,6 +1095,13 @@ void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType d
 void KWView::toggleViewFrameBorders(bool on) {
     kwcanvas()->resourceProvider()->setResource(KoText::ShowTextFrames, on);
     kwcanvas()->update();
+}
+
+void KWView::formatPage() {
+    if(m_currentPage == 0)
+        return;
+    KWPageSettingsDialog *dia = new KWPageSettingsDialog(this, m_currentPage);
+    dia->show();
 }
 
 // end of actions

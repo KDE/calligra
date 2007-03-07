@@ -16,46 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPAGELAYOUT_H
-#define KWPAGELAYOUT_H
+#ifndef KWPAGESETTINGSDIALOG_H
+#define KWPAGESETTINGSDIALOG_H
 
-#include "ui_KWPageLayout.h"
+#include "KWPage.h"
 
 #include <KoPageLayout.h>
-#include <KoUnit.h>
 
-#include <QWidget>
+#include <kdialog.h>
 
-class KWPageLayout : public QWidget {
+class KWPageSettingsDialog : public KDialog {
     Q_OBJECT
 public:
-    KWPageLayout(QWidget *parent, const KoPageLayout &layout);
-
-    void setUnit(const KoUnit &unit);
-    void showUnitchooser(bool on);
-
-signals:
-    void layoutChanged(const KoPageLayout &layout);
-    void unitChanged(const KoUnit &unit);
-
-public slots:
-    void setPageLayout(const KoPageLayout &layout);
-    void setTextAreaAvailable(bool available);
+    explicit KWPageSettingsDialog(QWidget *parent, KWPage *page);
 
 private slots:
-    void sizeChanged(int row);
-    void unitChanged(int row);
-    void facingPagesChanged();
-    void optionsChanged();
-    void marginsChanged();
+    void setPageLayout(const KoPageLayout &layout);
 
 private:
-    Ui::KWPageLayout widget;
-    KoPageLayout m_pageLayout;
-    KoUnit m_unit;
+    void accept();
+    void reject();
 
-    QButtonGroup *m_orientationGroup;
-    bool m_marginsEnabled;
+private:
+    KWPage *m_page;
+    KoPageLayout m_layout;
 };
 
 #endif

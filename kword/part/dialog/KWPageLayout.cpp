@@ -172,4 +172,9 @@ void KWPageLayout::optionsChanged() {
     marginsChanged();
 }
 
+void KWPageLayout::showUnitchooser(bool on) {
+    widget.units->setVisible(on);
+    widget.unitsLabel->setVisible(on);
+}
+
 #include <KWPageLayout.moc>

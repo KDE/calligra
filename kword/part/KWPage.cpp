@@ -137,3 +137,7 @@ QRectF KWPage::rect(int pageNumber) const {
         return QRectF(width()/2, offsetInDocument(), width()/2, height());
     return QRectF(0, offsetInDocument(), width(), height());
 }
+
+const KoPageLayout KWPage::pageLayout() const {
+    return m_parent->pageLayout(pageNumber());
+}

@@ -123,6 +123,7 @@ private slots:
     /** Move the selected frame(s) to be behind all other frames */
     void sendToBack() { adjustZOrderOfSelectedFrames(KoShapeReorderCommand::SendToBack); }
     void toggleViewFrameBorders(bool on);
+    void formatPage();
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods

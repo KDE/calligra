@@ -246,7 +246,7 @@ void KWDocument::setPageSettings(const KWPageSettings &newPageSettings) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
         if(tfs == 0) continue;
         if(tfs->textFrameSetType() == KWord::OtherTextFrameSet) continue;
-        // we switch to the interaction tool to avoid crashes if the use was editing a frame.
+        // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
         KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
         foreach(KWFrame *frame, tfs->frames()) {
             foreach(KoView *view, views()) {

@@ -24,9 +24,12 @@
 #include "KWPagePreview.h"
 
 KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns)
-    : QWidget(parent)
+    : QWidget(parent),
+    m_unit(KoUnit::Millimeter)
 {
     widget.setupUi(this);
+    // TODO get unit from config and set it on m_unit
+
     m_columns = columns;
     m_layout = KoPageLayout::standardLayout();
     m_layout.left = MM_TO_POINT(30);
@@ -39,11 +42,13 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 
     QVBoxLayout *lay = new QVBoxLayout(widget.sizeTab);
     m_sizeWidget = new KWPageLayout(widget.sizeTab, m_layout);
+    m_sizeWidget->setUnit(m_unit);
     lay->addWidget(m_sizeWidget);
     lay->setMargin(0);
 
     lay = new QVBoxLayout(widget.columnsTab);
     m_columnsWidget = new KWDocumentColumns(widget.columnsTab, m_columns);
+    m_columnsWidget->setUnit(m_unit);
     lay->addWidget(m_columnsWidget);
     lay->setMargin(0);
 
@@ -64,6 +69,10 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     connect (m_sizeWidget, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
 }
 
+void KWStartupWidget::unitChanged(const KoUnit &unit) {
+    m_unit = unit;
+}
+
 void KWStartupWidget::sizeUpdated(const KoPageLayout &layout) {
     m_layout = layout;
 }
@@ -80,6 +89,7 @@ void KWStartupWidget::buttonClicked() {
     settings.setColumns(m_columns);
     settings.setMainTextFrame(widget.mainText->isChecked());
     m_doc->setPageSettings(settings);
+    m_doc->setUnit(m_unit);
 
     m_doc->appendPage();
     emit documentSelected();

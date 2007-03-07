@@ -21,6 +21,7 @@
 
 #include <ui_KWStartupWidget.h>
 
+#include <KoUnit.h>
 #include <KoPageLayout.h>
 
 #include <QWidget>
@@ -49,6 +50,7 @@ private slots:
     void sizeUpdated(const KoPageLayout &layout);
     void columnsUpdated(const KoColumns &columns);
     void buttonClicked();
+    void unitChanged(const KoUnit &unit);
 
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
@@ -62,6 +64,7 @@ private:
     KoColumns m_columns;
     KWDocument *m_doc;
     Ui::KWStartupWidget widget;
+    KoUnit m_unit;
 };
 
 #endif

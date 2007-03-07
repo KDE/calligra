@@ -122,6 +122,9 @@ public:
     /// returns the number of this page as it will be shown to the user.
     int pageNumber() const { return m_pageNum; }
 
+    /// return the effective pageLayout combining the default and the page specific ones
+    const KoPageLayout pageLayout() const;
+
 private:
     /** private constructor, only for our friends
      * @param parent the KWPageManager that we belong to.
