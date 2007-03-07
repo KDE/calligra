@@ -107,6 +107,7 @@ private slots:
 private:
     void repaintCaret();
     void repaintSelection(int from, int to);
+    void ensureCursorVisible();
     QRectF textRect(int startPosition, int endPosition);
     int pointToPosition(const QPointF & point) const;
     void updateSelectionHandler();

@@ -368,9 +368,11 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             m_selectionHandler.nextParagraph();
             updateActions();
             editingPluginEvents();
+            ensureCursorVisible();
         }
         else {
             m_prevCursorPosition = m_caret.position();
+            ensureCursorVisible();
             m_caret.insertText(event->text());
             editingPluginEvents();
         }
@@ -392,9 +394,15 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             repaintCaret();
         updateActions();
         editingPluginEvents();
+        ensureCursorVisible();
     }
 
     updateSelectionHandler();
+}
+
+void TextTool::ensureCursorVisible() {
+    QRectF cursorPos = textRect(m_caret.position(), m_caret.position());
+    m_canvas->ensureVisible(m_textShape->transformationMatrix(0).mapRect(cursorPos));
 }
 
 void TextTool::keyReleaseEvent(QKeyEvent *event) {
@@ -508,6 +516,8 @@ QRectF TextTool::textRect(int startPosition, int endPosition) {
     if(! line1.isValid())
         return QRectF();
     double startX = line1.cursorToX(startPosition - block.position());
+    if(startPosition == endPosition)
+        return QRectF(startX, line1.y(), 1, line1.height());
 
     QTextBlock block2 = m_textShapeData->document()->findBlock(endPosition);
     QTextLine line2 = block2.layout()->lineForTextPosition(endPosition - block2.position());
