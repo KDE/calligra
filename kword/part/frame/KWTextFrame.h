@@ -61,12 +61,17 @@ public:
      */
     void setSortingId(int id) { m_sortingId = id; }
 
+    bool canAutoGrow();
+    void allowToGrow();
+    void autoShrink(double requestedHeight);
+
 private:
     /* TODO
-    int m_minimumFrameHeight;
     bool m_drawFootNoteLine; */
 
     int m_sortingId;
+    double m_lastHeight, m_minimumFrameHeight;
+    bool m_canGrow;
 };
 
 #endif

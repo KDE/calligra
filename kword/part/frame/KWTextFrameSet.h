@@ -88,6 +88,7 @@ protected:
      * This will resize the frame, or emit a moreFramesNeeded signal based on the settings.
      */
     void requestMoreFrames(double textHeight);
+    void spaceLeft(double excessHeight);
     void framesEmpty(int framesInUse);
     /**
      * Schedules a followup schedule run.

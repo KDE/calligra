@@ -247,6 +247,7 @@ void KWTextDocumentLayout::layout() {
     if(! m_state->start())
         return;
     double endPos = m_state->y() + 1000;
+    double bottomOfText = 0.0;
     bool newParagraph = true;
     bool requestFrameResize = false;
     KoShape *currentShape = 0;
@@ -335,6 +336,15 @@ void KWTextDocumentLayout::layout() {
                 m_lastKnownFrameCount = frameCount;
                 if(requestFrameResize) // text ran out while placing it in the dummy shape.
                     m_frameSet->requestMoreFrames(m_state->y() - m_dummyShape->textShapeData->documentOffset());
+                else {
+                    // if there is more space in the shape then there is text. Reset the no-grow bool.
+                    KWTextFrame *lastFrame = static_cast<KWTextFrame*> (m_frameSet->frames().last());
+                    KoTextShapeData *data = static_cast<KoTextShapeData*> (lastFrame->shape()->userData());
+                    double spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
+                    if(spaceLeft > 0)
+                        m_frameSet->spaceLeft(spaceLeft);
+                    lastFrame->allowToGrow();
+                }
 
                 return; // done!
             }
@@ -349,6 +359,7 @@ void KWTextDocumentLayout::layout() {
         newParagraph = false;
         line.setOutlines(outlines);
         line.tryFit();
+        bottomOfText = line.line.y() + line.line.height();
 
         while(m_state->addLine(line.line)) {
             if(m_state->shape == 0) { // no more shapes to put the text in!

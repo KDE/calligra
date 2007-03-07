@@ -31,9 +31,39 @@
 
 KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent)
     : KWFrame(shape, parent),
-    m_sortingId( -1 )
+    m_sortingId( -1 ),
+    m_lastHeight(shape->size().height()),
+    m_minimumFrameHeight(m_lastHeight),
+    m_canGrow(true)
 {
 }
 
 KWTextFrame::~KWTextFrame() {
 }
+
+bool KWTextFrame::canAutoGrow() {
+    if(!m_canGrow)
+        return false;
+    if(shape()->size().height() - m_lastHeight < -0.2) { // shape shrunk!
+        m_canGrow = false;
+        m_minimumFrameHeight = shape()->size().height();
+    }
+    return m_canGrow;
+}
+
+void KWTextFrame::allowToGrow() {
+    m_canGrow = true;
+    m_lastHeight = shape()->size().height();
+}
+
+void KWTextFrame::autoShrink(double requestedHeight) {
+    QSizeF size = shape()->size();
+    if( qAbs(m_lastHeight - size.height()) > 1E-6) { // if not equal
+        m_minimumFrameHeight = size.height();
+        m_lastHeight = size.height();
+        return;
+    }
+    // TODO make the following work for rotated / skewed frames as well.  The position should be updated.
+    shape()->resize(QSizeF(size.width(), qMax(requestedHeight, m_minimumFrameHeight)));
+}
+
