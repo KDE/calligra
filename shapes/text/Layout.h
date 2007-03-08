@@ -61,6 +61,9 @@ public:
     void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
     KoStyleManager *styleManager() const { return m_styleManager; }
 
+    /// reimplemented from superclass
+    void clearTillEnd();
+
 private:
     void updateBorders();
     double topMargin();

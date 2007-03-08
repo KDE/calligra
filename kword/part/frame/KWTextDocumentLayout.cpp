@@ -349,6 +349,13 @@ void KWTextDocumentLayout::layout() {
 
                 return; // done!
             }
+            else if(m_state->shape == 0) {
+                // encountered a 'end of page' break but we don't have any more pages(/shapes)
+                m_state->clearTillEnd();
+                m_frameSet->requestMoreFrames(0); // new page, please.
+                currentShape->repaint();
+                return;
+            }
             newParagraph = true;
             continue;
         }
@@ -373,8 +380,10 @@ void KWTextDocumentLayout::layout() {
                 }
 
                 KWFrame *lastFrame = m_frameSet->frames().last();
-                if(lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior)
+                if(lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior) {
+                    m_state->clearTillEnd();
                     return; // done!
+                }
 
                 // find out the maximum size this frame can be extended to while still
                 // fitting in the page.  We'll continue doing layout and see if there is text till end of page.
@@ -398,6 +407,7 @@ void KWTextDocumentLayout::layout() {
                     down2 = QLineF(down2.p1(), list.last());
                 const double maxFrameLength = qMin(down.length(), down2.length());
                 if(maxFrameLength <= currentShape->size().height()) {
+                    m_state->clearTillEnd();
                     m_frameSet->requestMoreFrames(0); // new page, please.
                     return;
                 }
@@ -406,7 +416,8 @@ void KWTextDocumentLayout::layout() {
 
                 m_dummyShape->resize(QSizeF(currentShape->size().width(), maxFrameLength - currentShape->size().height()));
                 m_dummyShape->textShapeData->setShapeMargins(data->shapeMargins());
-                if(! m_state->setFollowupShape(m_dummyShape))
+                if(! m_state->setFollowupShape(m_dummyShape)) // if I can't render into a dummy shape
+                    m_state->clearTillEnd();
                     return;
                 requestFrameResize = true;
             }

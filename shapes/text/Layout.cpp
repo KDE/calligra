@@ -668,3 +668,15 @@ bool Layout::setFollowupShape(KoShape *followupShape) {
     m_shapeBorder = shape->borderInsets();
     return true;
 }
+
+void Layout::clearTillEnd() {
+    QTextBlock block = m_block.next();
+    while(block.isValid()) {
+        if(block.layout()->lineCount() == 0)
+            return;
+        // erase the layouted lines
+        block.layout()->beginLayout();
+        block.layout()->endLayout();
+        block = block.next();
+    }
+}
