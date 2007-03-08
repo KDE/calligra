@@ -344,6 +344,7 @@ void KWTextDocumentLayout::layout() {
                     if(spaceLeft > 0)
                         m_frameSet->spaceLeft(spaceLeft);
                     lastFrame->allowToGrow();
+                    data->wipe();
                 }
 
                 return; // done!
