@@ -1185,7 +1185,6 @@ QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
 
     // Draw background
     paint.setPen( Qt::NoPen );
-    paint.setBrush( getBrush() );
 
     QRect rect( (int)( penw ), (int)( penw ),
                  (int)( _zoomHandler->zoomItXOld( /*ext*/m_geometry.width() ) - 2.0 * penw ),

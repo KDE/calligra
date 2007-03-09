@@ -186,10 +186,6 @@ class EmbeddedObject
     virtual void decCmdRef()
         { cmds--; doDelete(); }
 
-    //TEMP:
-    virtual QBrush getBrush() const { return m_brush.getBrush(); }
-
-
   protected:
     /**
      * Get the element name for saving the object
@@ -221,7 +217,6 @@ class EmbeddedObject
     float angle;
 
     QPen pen;
-    KoBrush m_brush;
 };
 
 /**
