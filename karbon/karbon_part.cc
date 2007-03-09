@@ -121,20 +121,20 @@ KarbonPart::removeView( KoView *view )
 
 double getAttribute(QDomElement &element, const char *attributeName, double defaultValue)
 {
-	QString value;
-	if ( ( value = element.attribute( attributeName ) ) != QString::null )
-		return value.toDouble();
-	else
-		return defaultValue;
+    QString value = element.attribute( attributeName );
+    if( ! value.isEmpty() )
+        return value.toDouble();
+    else
+        return defaultValue;
 }
 
 int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)
 {
-	QString value;
-	if ( ( value = element.attribute( attributeName ) ) != QString::null )
-		return value.toInt();
-	else
-		return defaultValue;
+    QString value = element.attribute( attributeName );
+    if( ! value.isEmpty() )
+        return value.toInt();
+    else
+        return defaultValue;
 }
 
 bool
@@ -262,7 +262,7 @@ KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
 	if ( !master ) //last test...
 		master = oasisStyles.masterPages()[ "Default" ];
 	Q_ASSERT( master );
-	const QDomElement *style = master ? oasisStyles.findStyle( master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
+	const QDomElement *style = master ? oasisStyles.findStyle( master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
 	if( style )
 	{
 		m_pageLayout.loadOasis( *style );
