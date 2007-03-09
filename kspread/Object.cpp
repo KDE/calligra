@@ -664,7 +664,7 @@ EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const QRectF& _geom
    : EmbeddedObject( _sheet, _geometry )
 {
     imageCollection = _imageCollection;
-    pen = KoPen( Qt::black, 1.0, Qt::NoPen );
+    pen = QPen(Qt::black, 1.0, Qt::NoPen);
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
@@ -683,7 +683,7 @@ EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const QRectF& _geom
     imageCollection = _imageCollection;
 
     //ext = KoSize(); // invalid size means unset
-    pen = KoPen( Qt::black, 1.0, Qt::NoPen );
+    pen = QPen(Qt::black, 1.0, Qt::NoPen);
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
@@ -703,7 +703,7 @@ EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, KoPictureCollection
   imageCollection = _imageCollection;
 
   //ext = KoSize(); // invalid size means unset
-  pen = KoPen( Qt::black, 1.0, Qt::NoPen );
+    pen = QPen(Qt::black, 1.0, Qt::NoPen);
   mirrorType = PM_NORMAL;
   depth = 0;
   swapRGB = false;

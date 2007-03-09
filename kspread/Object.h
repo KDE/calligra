@@ -27,15 +27,19 @@
 #include <KoChild.h>
 #include <KoDom.h>
 #include <KoOasisLoadingContext.h>
-#include <KoPen.h>
 #include <KoPictureCollection.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlReader.h>
+
+#include <QPen>
+
 //Added by qt3to4:
 #include <QPixmap>
+
+class KoZoomHandler;
 
 namespace KoChart
 {
@@ -216,7 +220,7 @@ class EmbeddedObject
     int cmds;
     float angle;
 
-    KoPen pen;
+    QPen pen;
     KoBrush m_brush;
 };
 

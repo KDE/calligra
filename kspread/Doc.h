@@ -58,6 +58,7 @@ class KoPictureCollection;
 class KoPictureKey;
 class KoStore;
 class KoXmlWriter;
+class KoZoomHandler;
 
 #define MIME_TYPE "application/x-kspread"
 
