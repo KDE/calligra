@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter XBM Export Filter
+Name[bg]=Филтър за експортиране от KPresenter в BMP
 Name[br]=Sil ezporzh XBM evit KPresenter
 Name[ca]=Filtre d'exportació XBM per a KPresenter
 Name[da]=KPresenter XBM-eksportfilter

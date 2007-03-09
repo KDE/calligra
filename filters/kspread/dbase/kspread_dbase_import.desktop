@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KSpread dBASE Import Filter
+Name[bg]=Филтър за импортиране от dBASE в KSpread
 Name[br]=Sil enporzh dBASE evit KSpread
 Name[ca]=Filtre d'importació bBASE per a KSpread
 Name[cs]=Importní filtr dBASE pro KSpread

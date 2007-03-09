@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Writer Import Filter for KWord
+Name[bg]=Филтър за импортиране от OpenOffice.org Writer в KWord
 Name[br]=Sil enporzh OpenOffice.org Writer evit KWord
 Name[ca]=Filtre d'importació OpenOffice.org Writer per a KWord
 Name[cs]=Importní filtr formátu OpenOffice.org Writer pro KWord

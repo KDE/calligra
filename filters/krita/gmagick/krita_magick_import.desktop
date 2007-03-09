@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita Magick Import Filter
+Name[bg]=Филтър за импортиране от Magick в Krita
 Name[br]=Sil enporzh Magick evit Krita
 Name[ca]=Filtre d'importació Magick per a Krita
 Name[cs]=Importní filtr formátu Magick pro Kritu

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/PriceQuotation.kst
 Name=Price Quotation
+Name[bg]=Ценова листа
 Name[ca]=Cita de preus
 Name[cs]=Cenová nabídka
 Name[cy]=Datganiad Pris

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_classroom
 Name=Classroom
+Name[bg]=Класна стая
 Name[ca]=Aula
 Name[de]=Klassenraum
 Name[el]=Σχολική τάξη
@@ -33,6 +34,7 @@ Name[uz]=Синф хонаси
 Name[x-test]=xxClassroomxx
 Name[zh_TW]=教室
 Comment=Classroom by dannya
+Comment[bg]=Класна стая на dannya
 Comment[ca]=Aula per dannya
 Comment[da]=Klasseværelse af dannya
 Comment[de]=Klassenraum von dannya

@@ -7,6 +7,7 @@ X-KDE-Weight=1
 X-KDE-Library=libkchartgenericimageexport
 ServiceTypes=KOfficeFilter
 Name=KChart MNG Export Filter
+Name[bg]=Филтър за експортиране от KChart в MNG
 Name[ca]=Filtre d'exportació MNG per a KChart
 Name[da]=KChart MNG-eksportfilter
 Name[de]=KChart MNG-Exportfilter

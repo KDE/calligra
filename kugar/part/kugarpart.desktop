@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Report Generator Component
+Name[bg]=Компонент за генератор на отчети в KOffice
 Name[ca]=Component generador d'informes de KOffice
 Name[cy]=Cydran Gynhyrchydd Adroddiad KOffice
 Name[da]=Koffice rapportgeneratorkomponent
@@ -49,6 +50,7 @@ X-KDE-NativeMimeType=application/x-vnd.kde.kugar.mixed
 GenericName=Report Generator
 GenericName[af]=Raporteer Genereerder
 GenericName[ar]=مُوَلِّد التَّقارير
+GenericName[bg]=Генератор на отчети
 GenericName[ca]=Generador d'informes
 GenericName[cs]=Generátor reportů
 GenericName[cy]=Cynhyrchydd Adroddiad

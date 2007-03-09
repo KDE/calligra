@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Spreadsheet Component
+Name[bg]=Компонент за електронна таблица за KOffice
 Name[ca]=Component de full de càlcul de KOffice
 Name[cy]=Cydran Taenlen KOffice 
 Name[da]=KOffice regnearkkomponent
@@ -50,6 +51,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-templa
 GenericName=Spreadsheets
 GenericName[af]=Spreiblad
 GenericName[ar]=وريقات حساب
+GenericName[bg]=Електронна таблица
 GenericName[br]=Logerioù
 GenericName[ca]=Full de càlcul
 GenericName[cs]=Tabulky

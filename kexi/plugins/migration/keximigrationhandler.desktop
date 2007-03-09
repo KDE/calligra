@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Migration Plugin
+GenericName[bg]=Приставка за мигриране
 GenericName[ca]=Connector de migració
 GenericName[cy]=Ategyn Mudo
 GenericName[da]=Migrationsplugin
@@ -44,6 +45,7 @@ GenericName[uz]=Миграция плагини
 GenericName[x-test]=xxMigration Pluginxx
 GenericName[zh_TW]=轉移外掛程式
 Name=Migration Plugin
+Name[bg]=Приставка за мигриране
 Name[ca]=Connector de migració
 Name[cy]=Ategyn Mudo
 Name[da]=Migrationsplugin

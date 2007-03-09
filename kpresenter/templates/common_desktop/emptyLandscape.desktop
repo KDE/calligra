@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_emptylandscape
 Name=Empty
+Name[bg]=Празен документ
 Name[br]=Goullonderiñ
 Name[ca]=Buit
 Name[cs]=Prázdné
@@ -48,6 +49,7 @@ Name[uz]=Бўш
 Name[x-test]=xxEmptyxx
 Name[zh_TW]=空白
 Comment=Empty presentation
+Comment[bg]=Празна презентация
 Comment[ca]=Presentació buida
 Comment[cy]=Cyflwyniad gwag
 Comment[da]=Tom præsentation

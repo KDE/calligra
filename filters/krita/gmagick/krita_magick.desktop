@@ -7,6 +7,7 @@ Name[ne]=क्रिता
 Name[x-test]=xxKritaxx
 Exec=krita %u
 GenericName=Painting and Image Editing Application
+GenericName[bg]=Редактор на графични изображения
 GenericName[ca]=Programa de dibuix i manipulació d'imatges
 GenericName[cs]=Malování a úpravy obrázků
 GenericName[cy]=Cymhwysiad Peintio Golygu Delweddau

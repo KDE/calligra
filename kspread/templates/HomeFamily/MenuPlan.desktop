@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/MenuPlan.kst
 Name=Menu Plan
+Name[bg]=Меню-лист
 Name[ca]=Plà de menú
 Name[cs]=Jídelníček
 Name[cy]=Cynllun Bwydlen

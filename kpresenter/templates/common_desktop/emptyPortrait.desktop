@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_emptyportrait
 Name=Empty Portrait
+Name[bg]=Празен документ, портрет
 Name[br]=Poltred goullo
 Name[ca]=Buit vertical
 Name[cs]=Portrét, prázdný
@@ -46,6 +47,7 @@ Name[uz]=Бўйига бўш
 Name[x-test]=xxEmpty Portraitxx
 Name[zh_TW]=空白縱向
 Comment=Empty presentation (portrait-oriented)
+Comment[bg]=Празна презентация (вертикална ориентация)
 Comment[ca]=Presentació buida (orientada a retrats)
 Comment[cy]=Cyflwyniad gwag (cyfeiriadaeth ddarlun)
 Comment[da]=Tom præsentation (stående format)

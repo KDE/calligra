@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=Kexi/DBDriver
 Comment=Kexi SQL-Driver plugin
 Comment[ar]=ملحق سوّاقة SQL لدى Kexi
+Comment[bg]=Приставка на Kexi за SQL драйвери
 Comment[br]=Lugent SQL-Driver evit Kexi
 Comment[ca]=Extensió del controlador SQL de Kexi
 Comment[cy]=Ategyn Gyrrydd-SQL Kexi

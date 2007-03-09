@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=CSV Export Filter for KSpread
 Name[af]=Cvs Voer uit Filter vir Kspread
+Name[bg]=Филтър за експортиране от KSpread в CSV
 Name[br]=Sil ezporzh CSV evit KSpread
 Name[ca]=Filtre d'exportació CSV per a KSpread
 Name[cs]=CSV exportní filtr pro KSpread

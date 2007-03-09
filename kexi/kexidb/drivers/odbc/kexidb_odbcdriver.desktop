@@ -4,6 +4,7 @@ Name=ODBC
 Name[ta]=B0
 Name[x-test]=xxODBCxx
 Comment=Kexi Open Database Connectivity Driver
+Comment[bg]=Драйвер ODBC за Kexi
 Comment[ca]=Controlador ODBC per Kexi
 Comment[cy]=Gyrrydd Cysylltedd Cronfa Ddata Agored Kexi
 Comment[da]=Kexi-driver for åben databaseforbindelse

@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Scripts
+GenericName[bg]=Скриптове
 GenericName[br]=Urzhiaouegoù
 GenericName[ca]=Seqüències
 GenericName[cs]=Skripty
@@ -44,6 +45,7 @@ GenericName[uz]=Скриптлар
 GenericName[x-test]=xxScriptsxx
 GenericName[zh_TW]=命令稿
 Name=Scripts
+Name[bg]=Скриптове
 Name[br]=Urzhiaouegoù
 Name[ca]=Seqüències
 Name[cs]=Skripty

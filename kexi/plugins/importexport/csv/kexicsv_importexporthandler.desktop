@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 Name=Kexi CSV Data Import/Export Plugin
+Name[bg]=Приставка за импортиране/експортиране от CSV в Kexi
 Name[ca]=Connector d'importació/Exportació de dades CVS per a Kexi
 Name[da]=Kexi CSV data-import/eksport plugin
 Name[de]=Kexi CSV-Daten Import/Export-Plugin

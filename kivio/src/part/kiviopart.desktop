@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Flowchart & Diagram Editing Component
+Name[bg]=Компонент за диаграми и схеми в KOffice
 Name[ca]=Component editor de diagrames de fluxos i diagrames de KOffice
 Name[cy]=Cydran Golygu Siartiau Llif & Diagram KOffice
 Name[da]=Koffice flydediagrammer & diagramredigeringskomponent
@@ -48,6 +49,7 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 Categories=Qt;KDE;Office;
 GenericName=Flowchart & Diagram
+GenericName[bg]=Диаграми и схеми
 GenericName[ca]=Editor de diagrames de fluxos i diagrames
 GenericName[cy]=Siart Llif & Diagram
 GenericName[da]=Flydediagrammer & diagrammer

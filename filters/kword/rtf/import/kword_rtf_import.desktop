@@ -4,6 +4,7 @@ Type=Service
 Name=KWord RTF Import Filter
 Name[af]=Kword Rtf In voer Filter
 Name[ar]=مِرْشَح استيراد RTF لدى KWord
+Name[bg]=Филтър за импортиране от RTF в KWord
 Name[br]=Sil enporzh RTF evit KWord
 Name[ca]=Filtre d'exportació RTF per a KWord
 Name[cs]=Dialog exportního filtru RTF pro KWord

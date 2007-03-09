@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Relationships
+GenericName[bg]=Релации
 GenericName[ca]=Relacions
 GenericName[cs]=Vztahy
 GenericName[cy]=Perthnasau
@@ -47,6 +48,7 @@ GenericName[uz]=Алоқалар
 GenericName[x-test]=xxRelationshipsxx
 GenericName[zh_TW]=關係
 Name=Relationships
+Name[bg]=Релации
 Name[ca]=Relacions
 Name[cs]=Vztahy
 Name[cy]=Perthnasau

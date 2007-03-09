@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Project Management Component
+Name[bg]=Компонент за управление на компоненти в KOffice
 Name[ca]=Component de gestió de projectes de KOffice
 Name[cy]=Cydran Rheoli Cywaith KOffice 
 Name[da]=KOffice projekthåndteringskomponent
@@ -46,6 +47,7 @@ Type=Service
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-vnd.kde.kplato
 GenericName=Project Management
+GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù
 GenericName[ca]=Gestió de projectes
 GenericName[cy]=Rheoli Cywaith

@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Queries
+GenericName[bg]=Заявки
 GenericName[ca]=Consultes
 GenericName[cs]=Dotazy
 GenericName[cy]=Ymholiadau
@@ -47,6 +48,7 @@ GenericName[uz]=Сўровлар
 GenericName[x-test]=xxQueriesxx
 GenericName[zh_TW]=查詢
 Name=Queries
+Name[bg]=Заявки
 Name[ca]=Consultes
 Name[cs]=Dotazy
 Name[cy]=Ymholiadau

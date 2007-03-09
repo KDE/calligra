@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Chart Component
+Name[bg]=Компонент за диаграми в KOffice
 Name[ca]=Component KChart de KOffice
 Name[cs]=Komponenta grafu KOffice
 Name[cy]=Cydran Siart KOffice 
@@ -54,6 +55,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.chart,application/
 GenericName=Chart
 GenericName[af]=Kaart
 GenericName[ar]=رسم بيانيّ
+GenericName[bg]=Редактор на графики
 GenericName[br]=Treser grafoù
 GenericName[ca]=Diagrames
 GenericName[cs]=Graf

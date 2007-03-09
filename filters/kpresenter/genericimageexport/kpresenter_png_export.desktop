@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter PNG Export Filter
+Name[bg]=Филтър за експортиране от Kpresenter в PNG
 Name[br]=Sil ezporzh PNG evit KPresenter
 Name[ca]=Filtre d'exportació PNG per a KPresenter
 Name[cy]=Hidlen Allforio PNG KPresenter

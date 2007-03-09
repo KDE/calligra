@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ArrowDown.atf
 Name=Arrow Down
+Name[bg]=Стрелка надолу
 Name[ca]=Fletxa a baix
 Name[cy]=Saeth i Lawr
 Name[da]=Pil ned

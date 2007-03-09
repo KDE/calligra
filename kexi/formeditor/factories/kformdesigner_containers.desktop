@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Container Widgets
+Name[bg]=Контейнери
 Name[ca]=Estris contenidors
 Name[cy]=Celfigion Cynhwysydd
 Name[da]=Container-kontroller

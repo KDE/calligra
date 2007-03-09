@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Tables
+GenericName[bg]=Таблици
 GenericName[br]=Taolennoù
 GenericName[ca]=Taules
 GenericName[cs]=Tabulky
@@ -49,6 +50,7 @@ GenericName[uz]=Жадваллар
 GenericName[x-test]=xxTablesxx
 GenericName[zh_TW]=表格
 Name=Tables
+Name[bg]=Таблици
 Name[br]=Taolennoù
 Name[ca]=Taules
 Name[cs]=Tabulky

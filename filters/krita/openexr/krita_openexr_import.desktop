@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita OpenEXR Import Filter
+Name[bg]=Филтър за импортиране от OpenEXR в Krita
 Name[br]=Sil enporzh OpenEXR evit Krita
 Name[ca]=Filtre d'importació OpenEXR per a Krita
 Name[cy]=Hidl Mewnforio OpenEXR Krita

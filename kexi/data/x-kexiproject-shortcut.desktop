@@ -5,6 +5,7 @@ MimeType=application/x-kexiproject-shortcut
 Icon=kexiproject_shortcut
 Patterns=*.kexis
 Comment=Shortcut to Kexi Project on Database Server
+Comment[bg]=Връзка към проект на Kexi за СУБД
 Comment[ca]=Drecera a un projecte Kexi en un servidor de bases de dades
 Comment[cy]=Byrlwybr i Gywaith Kexi ar Weinydd Cronfa Ddata
 Comment[da]=Genvej til Kexi projekt på databaseserver

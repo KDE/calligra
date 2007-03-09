@@ -9,6 +9,7 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kexiproject-sqlite
 X-KDE-NOTKoDocumentEmbeddable=true
 GenericName=Database Creator
+GenericName[bg]=Създаване на бази данни
 GenericName[br]=Aozer ar stlennvon
 GenericName[ca]=Creador de bases de dades
 GenericName[cs]=Tvůrce databází
