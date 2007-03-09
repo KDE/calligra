@@ -717,7 +717,7 @@ void OutlineObjectItem::setObject( KPrObject* object )
         setPixmap( 0, KPBarIcon( "mini_circle" ) );
         break;
     case OT_TEXT:
-        setPixmap( 0, KPBarIcon( "frame_text" ) );
+        setPixmap( 0, KPBarIcon( "insert-object" ) );
         break;
     case OT_AUTOFORM:
         setPixmap( 0, KPBarIcon( "mini_autoform" ) );

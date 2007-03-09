@@ -190,7 +190,7 @@ void KudesignerView::initActions()
     copyAction = KStandardAction::copy( this, SLOT( copy() ), actionCollection() );
     pasteAction = KStandardAction::paste( this, SLOT( paste() ), actionCollection() );
     selectAllAction = KStandardAction::selectAll( this, SLOT( selectAll() ), actionCollection() );
-    deleteAction  = new KAction(KIcon("editdelete"), i18n("Delete"), this);
+    deleteAction  = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
     actionCollection()->addAction("edit_delete", deleteAction );
     connect(deleteAction, SIGNAL(triggered(bool) ), SLOT( deleteItems() ));
     cutAction->setEnabled( false );
@@ -220,11 +220,11 @@ void KudesignerView::initActions()
     actionCollection()->addAction("dfooter", sectionsDetailFooter );
     connect(sectionsDetailFooter, SIGNAL(triggered(bool) ), SLOT( slotAddDetailFooter() ));
 
-    itemsNothing  = new KToggleAction(KIcon("frame_edit"), i18n("Clear Selection"), this);
+    itemsNothing  = new KToggleAction(KIcon("frame-edit"), i18n("Clear Selection"), this);
     actionCollection()->addAction("nothing", itemsNothing );
     connect(itemsNothing, SIGNAL(triggered(bool)), SLOT( slotAddItemNothing() ));
     itemsNothing->setChecked( true );
-    itemsLabel  = new KToggleAction(KIcon("frame_text"), i18n("Label"), this);
+    itemsLabel  = new KToggleAction(KIcon("insert-object"), i18n("Label"), this);
     actionCollection()->addAction("label", itemsLabel );
     connect(itemsLabel, SIGNAL(triggered(bool)), SLOT( slotAddItemLabel() ));
     itemsField  = new KToggleAction(KIcon("frame_field"), i18n("Field"), this);

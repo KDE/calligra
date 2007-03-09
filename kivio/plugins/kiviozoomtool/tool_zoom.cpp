@@ -40,7 +40,7 @@
 
 ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Tool")
 {
-  m_zoomAction = new KRadioAction(i18n("&Zoom"), "viewmag", CTRL + ALT + Qt::Key_Z, actionCollection(), "zoom");
+  m_zoomAction = new KRadioAction(i18n("&Zoom"), "zoom-original", CTRL + ALT + Qt::Key_Z, actionCollection(), "zoom");
   m_zoomAction->setWhatsThis(i18n("By pressing this button you can zoom in on a specific area."));
   m_panAction = new KRadioAction(i18n("&Pan Document"), "kivio_zoom_hand", CTRL + ALT + Qt::Key_H, actionCollection(), "pan");
   m_panAction->setWhatsThis(i18n("You can drag the document by using the mouse."));
@@ -51,7 +51,7 @@ ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Too
   connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   connect(m_panAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
-  KoZoomAction* viewZoom = new KoZoomAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "viewZoom" );
+  KoZoomAction* viewZoom = new KoZoomAction(i18n("Zoom &Level"), "zoom-original", 0, actionCollection(), "viewZoom" );
   viewZoom->setWhatsThis(i18n("This allows you to zoom in or out of a document. You can either choose one of the predefined zoomfactors or enter a new zoomfactor (in percent)."));
   connect(viewZoom, SIGNAL(zoomChanged(const QString&)), parent, SLOT(viewZoom(const QString&)));
   connect(parent, SIGNAL(zoomChanged(int)), viewZoom, SLOT(setZoom(int)));

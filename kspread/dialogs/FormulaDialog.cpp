@@ -115,7 +115,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
 
     selectFunction = new QPushButton( page );
     selectFunction->setToolTip( i18n("Insert function") );
-    selectFunction->setIcon( BarIcon( "down", K3Icon::SizeSmall ) );
+    selectFunction->setIcon( BarIcon( "go-down", K3Icon::SizeSmall ) );
     grid1->addWidget( selectFunction, 3, 0 );
 
     result = new QLineEdit( page );

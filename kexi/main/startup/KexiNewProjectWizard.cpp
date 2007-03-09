@@ -91,7 +91,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 , d(new KexiNewProjectWizardPrivate() )
 {
 	d->msgHandler = new KexiGUIMessageHandler(this);
-	setIcon( DesktopIcon("filenew") );
+	setIcon( DesktopIcon("document-new") );
 	setCaption( i18n("Creating New Project") );
 	finishButton()->setText(i18n("Create"));
 
@@ -114,7 +114,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	d->lvi_file->setMultiLinesEnabled( true );
 	d->lvi_server = new K3ListViewItem( m_prjtype_sel->lv_types, d->lvi_file, 
 		i18n("New Project Stored on Database Server") );
-	d->lvi_server->setPixmap(0, DesktopIcon("network") );
+	d->lvi_server->setPixmap(0, DesktopIcon("network-wired") );
 	d->lvi_server->setMultiLinesEnabled( true );
 //	m_prjtype_sel->lv_types->resize(d->m_prjtype_sel->lv_types->width(), d->lvi_file->height()*3);
 	m_prjtype_sel->lv_types->setFocus();

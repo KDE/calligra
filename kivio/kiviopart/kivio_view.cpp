@@ -429,13 +429,13 @@ void KivioView::setupActions()
   m_setTextColor = new TKSelectColorAction( i18n("Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
   connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );
 
-  m_setBold = new KToggleAction( i18n("Toggle Bold Text"), "text_bold", 0, actionCollection(), "setFontBold" );
+  m_setBold = new KToggleAction( i18n("Toggle Bold Text"), "format-text-bold", 0, actionCollection(), "setFontBold" );
   connect( m_setBold, SIGNAL(toggled(bool)), SLOT(toggleFontBold(bool)) );
 
-  m_setItalics = new KToggleAction( i18n("Toggle Italics Text"), "text_italic", 0, actionCollection(), "setFontItalics" );
+  m_setItalics = new KToggleAction( i18n("Toggle Italics Text"), "format-text-italic", 0, actionCollection(), "setFontItalics" );
   connect( m_setItalics, SIGNAL(toggled(bool)), SLOT(toggleFontItalics(bool)) );
 
-  m_setUnderline = new KToggleAction( i18n("Toggle Underline Text"), "text_under", 0, actionCollection(), "setFontUnderline" );
+  m_setUnderline = new KToggleAction( i18n("Toggle Underline Text"), "format-text-underline", 0, actionCollection(), "setFontUnderline" );
   connect( m_setUnderline, SIGNAL(toggled(bool)), SLOT(toggleFontUnderline(bool)));
 
   m_textAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", CTRL + Qt::Key_L,
@@ -511,7 +511,7 @@ void KivioView::setupActions()
   (void) new KAction(i18n("Install Stencil Set..."), 0, this,
     SLOT(installStencilSet()), actionCollection(), "installStencilSet");
 
-  m_editDelete = new KAction(i18n("Delete"), "editdelete", Qt::Key_Delete,
+  m_editDelete = new KAction(i18n("Delete"), "edit-delete", Qt::Key_Delete,
     this, SLOT(deleteObject()), actionCollection(), "deleteObject");
 }
 
@@ -795,7 +795,7 @@ void KivioView::removePage()
     return;
   }
   QApplication::beep();
-  int ret = KMessageBox::warningContinueCancel(this,i18n("You are going to remove the active page.\nDo you want to continue?"),i18n("Remove Page"),KGuiItem(i18n("&Delete"),"editdelete"));
+  int ret = KMessageBox::warningContinueCancel(this,i18n("You are going to remove the active page.\nDo you want to continue?"),i18n("Remove Page"),KGuiItem(i18n("&Delete"),"edit-delete"));
 
   if ( ret == KMessageBox::Continue ) {
       KivioPage* tbl = m_pActivePage;

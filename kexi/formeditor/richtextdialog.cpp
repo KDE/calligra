@@ -63,11 +63,11 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 	m_colorComboAction = m_toolbar->addWidget(/*js: TBColor, 30,*/ m_colorCombo);
 	connect(m_colorCombo, SIGNAL(activated(const QColor&)), this, SLOT(changeColor(const QColor&)));
 
-	m_boldTextAction = m_toolbar->addAction(KIcon("text_bold"), i18n("Bold"));
+	m_boldTextAction = m_toolbar->addAction(KIcon("format-text-bold"), i18n("Bold"));
 	m_boldTextAction->setCheckable(true);
-	m_italicTextAction = m_toolbar->addAction(KIcon("text_italic"), i18n("Italic"));
+	m_italicTextAction = m_toolbar->addAction(KIcon("format-text-italic"), i18n("Italic"));
 	m_italicTextAction->setCheckable(true);
-	m_underlineTextAction = m_toolbar->addAction(KIcon("text_under"), i18n("Underline"));
+	m_underlineTextAction = m_toolbar->addAction(KIcon("format-text-underline"), i18n("Underline"));
 	m_underlineTextAction->setCheckable(true);
 	m_toolbar->addSeparator();
 
@@ -87,7 +87,7 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 	m_alignRightAction = m_toolbar->addAction(KIcon("text_right"), i18n("Right Align"));
 	m_alignRightAction->setCheckable(true);
 	m_alignActionGroup->addAction(m_alignRightAction);
-	m_alignJustifyAction = m_toolbar->addAction(KIcon("text_block"), i18n("Justified"));
+	m_alignJustifyAction = m_toolbar->addAction(KIcon("format-justify-fill"), i18n("Justified"));
 	m_alignJustifyAction->setCheckable(true);
 	m_alignActionGroup->addAction(m_alignJustifyAction);
 

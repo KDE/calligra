@@ -610,7 +610,7 @@ void KWView::setupActions()
     m_actionViewFooter->setToolTip( i18n( "Shows and hides footer display" ) );
     m_actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
 
-    m_actionViewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
+    m_actionViewZoom = new KSelectAction( i18n( "Zoom" ), "zoom-original", 0,
                                         actionCollection(), "view_zoom" );
 
     connect( m_actionViewZoom, SIGNAL( triggered( const QString & ) ),
@@ -717,7 +717,7 @@ void KWView::setupActions()
 
     QActionGroup* toolsActionGroup = new QActionGroup( this );
     toolsActionGroup->setExclusive( true );
-    m_actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Qt::Key_F10 /*same as kpr*/,
+    m_actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "insert-object", Qt::Key_F10 /*same as kpr*/,
                                                this, SLOT( toolsCreateText() ),
                                                actionCollection(), "tools_createtext" );
     m_actionToolsCreateText->setToolTip( i18n( "Create a new text frame" ) );
@@ -824,16 +824,16 @@ void KWView::setupActions()
 
     // ----------------------- More format actions, for the toolbar only
 
-    m_actionFormatBold = new KToggleAction( i18n( "&Bold" ), "text_bold", Qt::CTRL + Qt::Key_B,
+    m_actionFormatBold = new KToggleAction( i18n( "&Bold" ), "format-text-bold", Qt::CTRL + Qt::Key_B,
                                            this, SLOT( textBold() ),
                                            actionCollection(), "format_bold" );
-    m_actionFormatItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", Qt::CTRL + Qt::Key_I,
+    m_actionFormatItalic = new KToggleAction( i18n( "&Italic" ), "format-text-italic", Qt::CTRL + Qt::Key_I,
                                            this, SLOT( textItalic() ),
                                            actionCollection(), "format_italic" );
-    m_actionFormatUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", Qt::CTRL + Qt::Key_U,
+    m_actionFormatUnderline = new KToggleAction( i18n( "&Underline" ), "format-text-underline", Qt::CTRL + Qt::Key_U,
                                            this, SLOT( textUnderline() ),
                                            actionCollection(), "format_underline" );
-    m_actionFormatStrikeOut = new KToggleAction( i18n( "&Strike Out" ), "text_strike", 0 ,
+    m_actionFormatStrikeOut = new KToggleAction( i18n( "&Strike Out" ), "format-text-strikethrough", 0 ,
                                            this, SLOT( textStrikeOut() ),
                                            actionCollection(), "format_strike" );
 
@@ -852,7 +852,7 @@ void KWView::setupActions()
                                         this, SLOT( textAlignRight() ),
                                         actionCollection(), "format_alignright" );
     m_actionFormatAlignRight->setActionGroup( alignActionGroup );
-    m_actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", Qt::CTRL + Qt::Key_J,
+    m_actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "format-justify-fill", Qt::CTRL + Qt::Key_J,
                                         this, SLOT( textAlignBlock() ),
                                         actionCollection(), "format_alignblock" );
     m_actionFormatAlignBlock->setActionGroup( alignActionGroup );
@@ -2705,7 +2705,7 @@ void KWView::deleteFrame( bool warning )
                 this,
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
-                KGuiItem(i18n("&Delete"),"editdelete"),
+                KGuiItem(i18n("&Delete"),"edit-delete"),
                 "DeleteLastFrameConfirmation" );
             if (result != KMessageBox::Continue)
                 return;
@@ -2721,7 +2721,7 @@ void KWView::deleteFrame( bool warning )
                 this,
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
-                KGuiItem(i18n("&Delete"),"editdelete"),
+                KGuiItem(i18n("&Delete"),"edit-delete"),
                 "DeleteLastFrameConfirmation" );
             if (result != KMessageBox::Continue)
                 return;

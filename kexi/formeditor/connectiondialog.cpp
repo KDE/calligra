@@ -103,11 +103,11 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 
 	//// Setup the icon toolbar /////////////////
 	QVBoxLayout *vlayout = new QVBoxLayout(layout, 3);
-	m_addButton = new KPushButton(KIcon("filenew"), i18n("&New Connection"), frame);
+	m_addButton = new KPushButton(KIcon("document-new"), i18n("&New Connection"), frame);
 	vlayout->addWidget(m_addButton);
 	connect(m_addButton, SIGNAL(clicked()), this, SLOT(newItem()));
 
-	m_removeButton = new KPushButton(KIcon("editdelete"), i18n("&Remove Connection"), frame);
+	m_removeButton = new KPushButton(KIcon("edit-delete"), i18n("&Remove Connection"), frame);
 	vlayout->addWidget(m_removeButton);
 	connect(m_removeButton, SIGNAL(clicked()), this, SLOT(removeItem()));
 
@@ -263,7 +263,7 @@ ConnectionDialog::updateTableData()
 void
 ConnectionDialog::setStatusOk(KexiTableItem *item)
 {
-	m_pixmapLabel->setPixmap( DesktopIcon("button_ok") );
+	m_pixmapLabel->setPixmap( DesktopIcon("dialog-ok") );
 	m_textLabel->setText("<qt><h2>The connection is OK.</h2></qt>");
 
 #ifdef __GNUC__
@@ -276,7 +276,7 @@ ConnectionDialog::setStatusOk(KexiTableItem *item)
 		item = 0;
 
 	if (item)
-		(*item)[0] = "button_ok";
+		(*item)[0] = "dialog-ok";
 	else {
 		m_pixmapLabel->setPixmap( QPixmap() );
 		m_textLabel->setText(QString::null);
@@ -287,7 +287,7 @@ ConnectionDialog::setStatusOk(KexiTableItem *item)
 void
 ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 {
-	m_pixmapLabel->setPixmap( DesktopIcon("button_cancel") );
+	m_pixmapLabel->setPixmap( DesktopIcon("dialog-cancel") );
 	m_textLabel->setText("<qt><h2>The connection is invalid.</h2></qt>" + msg);
 
 #ifdef __GNUC__
@@ -300,7 +300,7 @@ ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 		item = 0;
 
 	if (item)
-		(*item)[0] = "button_cancel";
+		(*item)[0] = "dialog-cancel";
 	else {
 		m_pixmapLabel->setPixmap( QPixmap() );
 		m_textLabel->setText(QString::null);

@@ -43,7 +43,7 @@ KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent, const 
 	m_history->setAutoDelete(true);
 
 	m_popup = new KMenu(this);
-	m_popup->insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
+	m_popup->insertItem(SmallIcon("edit-copy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
 }
 
 KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
@@ -164,13 +164,13 @@ KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *)
 {
 	KMenu p(this);
-	p.insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
+	p.insertItem(SmallIcon("edit-copy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
 	
 
 #ifndef KEXI_NO_UNFINISHED
 	p.insertSeparator();
 	p.insertItem(SmallIcon("edit"), i18n("Edit"), this, SLOT(slotEdit()));
-	p.insertItem(SmallIcon("reload"), i18n("Requery"));
+	p.insertItem(SmallIcon("view-refresh"), i18n("Requery"));
 #endif
 
 	p.exec(pos);
@@ -237,9 +237,9 @@ HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
 	p->setPen(QColor(0, 0, 0));
 
 	if(m_succeed)
-		p->drawPixmap(4, 4, SmallIcon("button_ok"));
+		p->drawPixmap(4, 4, SmallIcon("dialog-ok"));
 	else
-		p->drawPixmap(4, 4, SmallIcon("button_cancel"));
+		p->drawPixmap(4, 4, SmallIcon("dialog-cancel"));
 
 	p->drawText(22, 2, 180, 20, Qt::AlignLeft | Qt::AlignVCenter, m_execTime.toString());
 	p->setPen(QColor(200, 200, 200));

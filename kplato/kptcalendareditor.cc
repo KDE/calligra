@@ -1841,17 +1841,17 @@ void CalendarEditor::setupGui()
     KActionCollection *coll = actionCollection();
     QString name = "calendareditor_calendar_list";
     
-    actionAddCalendar   = new KAction(KIcon( "filenew" ), i18n("Add Calendar"), this);
+    actionAddCalendar   = new KAction(KIcon( "document-new" ), i18n("Add Calendar"), this);
     coll->addAction("add_calendar", actionAddCalendar  );
     actionAddCalendar ->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddCalendar () ) );
     
-    actionAddSubCalendar   = new KAction(KIcon( "filenew" ), i18n("Add Subcalendar"), this);
+    actionAddSubCalendar   = new KAction(KIcon( "document-new" ), i18n("Add Subcalendar"), this);
     coll->addAction("add_subcalendar", actionAddSubCalendar  );
     actionAddSubCalendar ->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddSubCalendar () ) );
     
-    actionDeleteSelection  = new KAction(KIcon( "editdelete" ), i18n("Delete Selected Calendar"), this);
+    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Calendar"), this);
     coll->addAction("delete_calendar_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteCalendar() ) );
@@ -1862,15 +1862,15 @@ void CalendarEditor::setupGui()
     
     name = "calendareditor_day_list";
     
-    actionAddDay   = new KAction(KIcon( "filenew" ), i18n("Add Calendar Day"), this);
+    actionAddDay   = new KAction(KIcon( "document-new" ), i18n("Add Calendar Day"), this);
     coll->addAction("add_calendarday", actionAddDay  );
     connect( actionAddDay , SIGNAL( triggered( bool ) ), SLOT( slotAddDay() ) );
     
-    actionAddWorkInterval   = new KAction(KIcon( "filenew" ), i18n("Add Work Interval"), this);
+    actionAddWorkInterval   = new KAction(KIcon( "document-new" ), i18n("Add Work Interval"), this);
     coll->addAction("add_workinterval", actionAddWorkInterval  );
     connect( actionAddWorkInterval , SIGNAL( triggered( bool ) ), SLOT( slotAddInterval() ) );
     
-    actionDeleteDaySelection  = new KAction(KIcon( "editdelete" ), i18n("Delete Selected Item"), this);
+    actionDeleteDaySelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Item"), this);
     coll->addAction("delete_day_selection", actionDeleteDaySelection );
     connect( actionDeleteDaySelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteDaySelection() ) );
     

@@ -205,7 +205,7 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 			+ i18n("The file is probably already open on this or another computer.") + " "
 			+ i18n("Could not gain exclusive access for writing the file."),
 			KMessageBox::WarningContinueCancel, KMessageBox::Continue, 
-			KGuiItem(i18n("Open As Read-Only"), "fileopen"), KStandardGuiItem::cancel(),
+			KGuiItem(i18n("Open As Read-Only"), "document-open"), KStandardGuiItem::cancel(),
 			"askBeforeOpeningFileReadOnly", KMessageBox::Notify, msgHandler ))
 		{
 			clearError();

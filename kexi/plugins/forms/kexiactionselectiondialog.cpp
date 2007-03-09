@@ -270,16 +270,16 @@ class ActionToExecuteListView : public ActionsListViewBase
 			const QPixmap noIcon( KexiUtils::emptyIcon(KIcon::Small) );
 			if (supportedViewModes & Kexi::DataViewMode) {
 				item = new ActionSelectorDialogListItem("open", this, i18n("Open in Data View"));
-				item->setPixmap(0, SmallIcon("fileopen"));
+				item->setPixmap(0, SmallIcon("document-open"));
 			}
 			if (part->info()->isExecuteSupported()) {
 				item = new ActionSelectorDialogListItem("execute", this, i18n("Execute"));
-				item->setPixmap(0, SmallIcon("player_play"));
+				item->setPixmap(0, SmallIcon("media-playback-start"));
 			}
 			if (part->info()->isPrintingSupported()) {
 				ActionSelectorDialogListItem *printItem = new ActionSelectorDialogListItem(
 					"print", this, i18n("Print"));
-				printItem->setPixmap(0, SmallIcon("fileprint"));
+				printItem->setPixmap(0, SmallIcon("document-print"));
 				KAction *a = KStandardAction::printPreview(0, 0, 0);
 				item = new ActionSelectorDialogListItem("printPreview", printItem, 
 					a->text().replace("&", "").replace("...", ""));
@@ -305,7 +305,7 @@ class ActionToExecuteListView : public ActionsListViewBase
 				exportItem->setExpandable(false);
 			}
 			item = new ActionSelectorDialogListItem("new", this, i18n("Create New Object"));
-			item->setPixmap(0, SmallIcon("filenew"));
+			item->setPixmap(0, SmallIcon("document-new"));
 			if (supportedViewModes & Kexi::DesignViewMode) {
 				item = new ActionSelectorDialogListItem("design", this, i18n("Open in Design View"));
 				item->setPixmap(0, SmallIcon("edit"));
@@ -315,7 +315,7 @@ class ActionToExecuteListView : public ActionsListViewBase
 				item->setPixmap(0, noIcon);
 			}
 			item = new ActionSelectorDialogListItem("close", this, i18n("Close View"));
-			item->setPixmap(0, SmallIcon("fileclose"));
+			item->setPixmap(0, SmallIcon("window-close"));
 			updateWidth();
 		}
 
@@ -406,7 +406,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 {
 	d->mainWin = mainWin;
 	d->actionWidgetName = actionWidgetName;
-	setButtonOK( KGuiItem(i18n("Assign action", "&Assign"), "button_ok", i18n("Assign action")) );
+	setButtonOK( KGuiItem(i18n("Assign action", "&Assign"), "dialog-ok", i18n("Assign action")) );
 
 	QWidget *mainWidget = new QWidget( this );
 	mainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

@@ -752,7 +752,7 @@ WidgetFactory::CreateWidgetOptions WidgetLibrary::showOrientationSelectionPopup(
 	QAction* horizAction = popup->addAction(iconHorizontal, textHorizontal);
 	QAction* vertAction = popup->addAction(iconVertical, textVertical);
 	popup->addSeparator();
-	popup->addAction(SmallIcon("button_cancel"), i18n("Cancel"));
+	popup->addAction(SmallIcon("dialog-cancel"), i18n("Cancel"));
 	WidgetFactory::CreateWidgetOptions result;
 	QAction *a = popup->exec(pos);
 	if (a==horizAction)

@@ -721,7 +721,7 @@ void KPrView::updateSideBarMenu()
 void KPrView::editDelPage()
 {
     if ( KMessageBox::warningContinueCancel( this,
-                                     i18n( "Do you want to remove the current slide?"),i18n("Remove Slide"),KGuiItem(i18n("&Delete"),"editdelete") )
+                                     i18n( "Do you want to remove the current slide?"),i18n("Remove Slide"),KGuiItem(i18n("&Delete"),"edit-delete") )
          != KMessageBox::Continue )
         return;
     m_canvas->exitEditMode();
@@ -2352,12 +2352,12 @@ void KPrView::setupActions()
              actionEditPaste, SLOT( setEnabled( bool ) ) );
     m_pKPresenterDoc->clipboardDataChanged(); // set paste's initial state
 
-    actionEditDelete = new KAction(KIcon("editdelete"),  i18n( "&Delete" ), actionCollection(), "edit_delete" );
+    actionEditDelete = new KAction(KIcon("edit-delete"),  i18n( "&Delete" ), actionCollection(), "edit_delete" );
     connect(actionEditDelete, SIGNAL(triggered(bool) ), SLOT( editDelete() ));
     actionEditDelete->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete));
     actionEditSelectAll = KStandardAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditDeSelectAll= KStandardAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
-    actionEditCopyPage = new KAction(KIcon("editcopy"),  i18n( "Copy Slide" ), actionCollection(), "edit_copypage" );
+    actionEditCopyPage = new KAction(KIcon("edit-copy"),  i18n( "Copy Slide" ), actionCollection(), "edit_copypage" );
     connect(actionEditCopyPage, SIGNAL(triggered(bool) ), SLOT( editCopyPage() ));
     actionEditDuplicatePage = new KAction(KIcon("newslide"),  i18n( "Duplicate Slide" ), actionCollection(), "edit_duplicatepage" );
     connect(actionEditDuplicatePage, SIGNAL(triggered(bool) ), SLOT( editDuplicatePage() ));
@@ -2431,7 +2431,7 @@ void KPrView::setupActions()
     connect(actionToolsRotate, SIGNAL(triggered(bool)), SLOT( toolsRotate() ));
     actionToolsRotate->setActionGroup( toolsGroup );
 
-    actionToolsZoom = new KToggleAction(KIcon("viewmag"),  i18n( "&Zoom" ), actionCollection(), "tools_zoom" );
+    actionToolsZoom = new KToggleAction(KIcon("zoom-original"),  i18n( "&Zoom" ), actionCollection(), "tools_zoom" );
     connect(actionToolsZoom, SIGNAL(triggered(bool)), SLOT( toolsZoom() ));
     actionToolsZoom->setActionGroup( toolsGroup );
 
@@ -2452,7 +2452,7 @@ void KPrView::setupActions()
     connect(actionToolsPie, SIGNAL(triggered(bool)), SLOT( toolsPie() ));
     actionToolsPie->setActionGroup( toolsGroup );
 
-    actionToolsText = new KToggleAction(KIcon("frame_text"), i18n( "&Text" ), actionCollection(), "tools_text" );
+    actionToolsText = new KToggleAction(KIcon("insert-object"), i18n( "&Text" ), actionCollection(), "tools_text" );
     connect(actionToolsText, SIGNAL(triggered(bool)), SLOT( toolsText() ));
     actionToolsText->setShortcut(QKeySequence(Qt::Key_F10)); // same shortcut as KWord this
     actionToolsText->setActionGroup( toolsGroup );
@@ -2548,19 +2548,19 @@ void KPrView::setupActions()
     connect( actionTextFontFamily , SIGNAL( triggered(const QString &) ),
              this, SLOT( fontSelected(const QString &) ) );
 
-    actionTextBold = new KToggleAction(KIcon("text_bold"),  i18n( "&Bold" ), actionCollection(), "text_bold" );
+    actionTextBold = new KToggleAction(KIcon("format-text-bold"),  i18n( "&Bold" ), actionCollection(), "text_bold" );
     connect(actionTextBold, SIGNAL(triggered(bool)), SLOT( textBold() ));
     actionTextBold->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 
-    actionTextItalic = new KToggleAction(KIcon("text_italic"),  i18n( "&Italic" ), actionCollection(), "text_italic" );
+    actionTextItalic = new KToggleAction(KIcon("format-text-italic"),  i18n( "&Italic" ), actionCollection(), "text_italic" );
     connect(actionTextItalic, SIGNAL(triggered(bool)), SLOT( textItalic() ));
     actionTextItalic->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
 
-    actionTextUnderline = new KToggleAction(KIcon("text_under"),  i18n( "&Underline" ), actionCollection(), "text_underline" );
+    actionTextUnderline = new KToggleAction(KIcon("format-text-underline"),  i18n( "&Underline" ), actionCollection(), "text_underline" );
     connect(actionTextUnderline, SIGNAL(triggered(bool)), SLOT( textUnderline() ));
     actionTextUnderline->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
 
-    actionFormatStrikeOut = new KToggleAction(KIcon("text_strike"),  i18n( "&Strike Out" ), actionCollection(), "format_strike" );
+    actionFormatStrikeOut = new KToggleAction(KIcon("format-text-strikethrough"),  i18n( "&Strike Out" ), actionCollection(), "format_strike" );
     connect(actionFormatStrikeOut, SIGNAL(triggered(bool)), SLOT( textStrikeOut() ));
 
     actionTextColor = new TKSelectColorAction( i18n( "&Color..." ), TKSelectColorAction::TextColor,
@@ -2586,7 +2586,7 @@ void KPrView::setupActions()
     actionTextAlignRight->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
     actionTextAlignRight->setActionGroup( alignGroup );
 
-    actionTextAlignBlock = new KToggleAction(KIcon("text_block"),  i18n( "Align &Block" ), actionCollection(), "text_alignblock" );
+    actionTextAlignBlock = new KToggleAction(KIcon("format-justify-fill"),  i18n( "Align &Block" ), actionCollection(), "text_alignblock" );
     connect(actionTextAlignBlock, SIGNAL(triggered(bool)), SLOT( textAlignBlock() ));
     actionTextAlignBlock->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
     actionTextAlignBlock->setActionGroup( alignGroup );
@@ -2658,7 +2658,7 @@ void KPrView::setupActions()
 
 
 
-    actionExtraRotate = new KAction(KIcon("rotate_cw"),  i18n( "R&otate Objects..." ), actionCollection(), "extra_rotate" );
+    actionExtraRotate = new KAction(KIcon("object-rotate-left"),  i18n( "R&otate Objects..." ), actionCollection(), "extra_rotate" );
     connect(actionExtraRotate, SIGNAL(triggered(bool) ), SLOT( extraRotate() ));
 
     actionExtraShadow = new KAction(KIcon("shadow"),  i18n( "&Shadow Objects..." ), actionCollection(), "extra_shadow" );
@@ -2761,28 +2761,28 @@ void KPrView::setupActions()
     connect(actionScreenTransEffect, SIGNAL(triggered(bool) ), SLOT( screenTransEffect() ));
 
 
-    actionScreenStart = new KAction(KIcon("2rightarrow"),  i18n( "&Start" ), actionCollection(), "screen_start" );
+    actionScreenStart = new KAction(KIcon("arrow-right-double"),  i18n( "&Start" ), actionCollection(), "screen_start" );
     connect(actionScreenStart, SIGNAL(triggered(bool) ), SLOT( screenStart() ));
     actionScreenStart->setShortcut(QKeySequence(Qt::Key_F12));
 
-    actionScreenStartFromFirst = new KAction(KIcon("1rightarrow"),  i18n( "Start From &First Slide" ), actionCollection(), "screen_startfromfirst" );
+    actionScreenStartFromFirst = new KAction(KIcon("arrow-right"),  i18n( "Start From &First Slide" ), actionCollection(), "screen_startfromfirst" );
     connect(actionScreenStartFromFirst, SIGNAL(triggered(bool) ), SLOT( screenStartFromFirst() ));
 
-    actionScreenFirst = new KAction(KIcon("start"),  i18n( "&Go to Start" ), actionCollection(), "screen_first" );
+    actionScreenFirst = new KAction(KIcon("go-first"),  i18n( "&Go to Start" ), actionCollection(), "screen_first" );
     connect(actionScreenFirst, SIGNAL(triggered(bool) ), SLOT( screenFirst() ));
 
-    actionScreenPrev = new KAction(KIcon("back"),  i18n( "&Previous Slide" ), actionCollection(), "screen_prev" );
+    actionScreenPrev = new KAction(KIcon("go-previous"),  i18n( "&Previous Slide" ), actionCollection(), "screen_prev" );
     connect(actionScreenPrev, SIGNAL(triggered(bool) ), SLOT( screenPrev() ));
     actionScreenPrev->setShortcut(QKeySequence(Qt::Key_PageUp));
 
-    actionScreenNext = new KAction(KIcon("forward"),  i18n( "&Next Slide" ), actionCollection(), "screen_next" );
+    actionScreenNext = new KAction(KIcon("go-next"),  i18n( "&Next Slide" ), actionCollection(), "screen_next" );
     connect(actionScreenNext, SIGNAL(triggered(bool) ), SLOT( screenNext() ));
     actionScreenNext->setShortcut(QKeySequence(Qt::Key_PageDown));
 
-    actionScreenLast = new KAction(KIcon("finish"),  i18n( "Go to &End" ), actionCollection(), "screen_last" );
+    actionScreenLast = new KAction(KIcon("go-last"),  i18n( "Go to &End" ), actionCollection(), "screen_last" );
     connect(actionScreenLast, SIGNAL(triggered(bool) ), SLOT( screenLast() ));
 
-    actionScreenSkip = new KAction(KIcon("goto"),  i18n( "Goto &Slide..." ), actionCollection(), "screen_skip" );
+    actionScreenSkip = new KAction(KIcon("goto-page"),  i18n( "Goto &Slide..." ), actionCollection(), "screen_skip" );
     connect(actionScreenSkip, SIGNAL(triggered(bool) ), SLOT( screenSkip() ));
 
     // ----------------- colorbar(Brush and Pen) action
@@ -2916,7 +2916,7 @@ void KPrView::setupActions()
     actionChangeCase = new KAction( i18n( "Change Case..." ), actionCollection(), "change_case" );
     connect(actionChangeCase, SIGNAL(triggered(bool)), SLOT( changeCaseOfText() ));
 
-    actionViewZoom = new KSelectAction( KIcon("viewmag"), i18n( "Zoom" ), actionCollection(), "view_zoom" );
+    actionViewZoom = new KSelectAction( KIcon("zoom-original"), i18n( "Zoom" ), actionCollection(), "view_zoom" );
     connect( actionViewZoom, SIGNAL( triggered( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
     actionViewZoom->setEditable(true);
@@ -2984,16 +2984,16 @@ void KPrView::setupActions()
     actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), actionCollection(), "configure_completion" );
     connect(actionConfigureCompletion, SIGNAL(triggered(bool)), SLOT( configureCompletion() ));
 
-    actionZoomMinus = new KAction(KIcon("viewmag-"),  i18n( "Zoom Out" ), actionCollection(), "zoom_minus" );
+    actionZoomMinus = new KAction(KIcon("zoom-out"),  i18n( "Zoom Out" ), actionCollection(), "zoom_minus" );
     connect(actionZoomMinus, SIGNAL(triggered(bool) ), SLOT( zoomMinus() ));
-    actionZoomPlus = new KAction(KIcon("viewmag+"),  i18n( "Zoom In" ), actionCollection(), "zoom_plus" );
+    actionZoomPlus = new KAction(KIcon("zoom-in"),  i18n( "Zoom In" ), actionCollection(), "zoom_plus" );
     connect(actionZoomPlus, SIGNAL(triggered(bool) ), SLOT( zoomPlus() ));
     actionZoomEntirePage = new KAction( i18n( "Zoom Entire Slide" ), actionCollection(), "zoom_entire_page" );
     connect(actionZoomEntirePage, SIGNAL(triggered(bool)), SLOT( zoomEntirePage() ));
 
     actionZoomMinus = new KAction( i18n( "Zoom Slide Width" ), actionCollection(), "zoom_page_width" );
     connect(actionZoomMinus, SIGNAL(triggered(bool)), SLOT( zoomPageWidth() ));
-    actionZoomSelectedObject = new KAction(KIcon("viewmagfit"),  i18n( "Zoom Selected Objects" ), actionCollection(), "zoom_selected_object" );
+    actionZoomSelectedObject = new KAction(KIcon("zoom-best-fit"),  i18n( "Zoom Selected Objects" ), actionCollection(), "zoom_selected_object" );
     connect(actionZoomSelectedObject, SIGNAL(triggered(bool) ), SLOT( zoomSelectedObject() ));
     actionZoomPageHeight = new KAction( i18n( "Zoom Slide Height" ), actionCollection(), "zoom_page_height" );
     connect(actionZoomPageHeight, SIGNAL(triggered(bool)), SLOT( zoomPageHeight() ));

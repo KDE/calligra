@@ -62,7 +62,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 	setName("KexiImageContextMenu");
 	insertTitle(QString::null);
 
-	d->insertFromFileAction = new KAction(i18n("Insert From &File..."), KIcon("fileopen"), 0,
+	d->insertFromFileAction = new KAction(i18n("Insert From &File..."), KIcon("document-open"), 0,
 			this, SLOT(insertFromFile()), &d->actionCollection, "insert");
 	d->insertFromFileAction->plug(this);
 	d->saveAsAction = KStandardAction::saveAs(this, SLOT(saveAs()), &d->actionCollection);
@@ -75,7 +75,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 	d->copyAction->plug(this);
 	d->pasteAction = KStandardAction::paste(this, SLOT(paste()), &d->actionCollection);
 	d->pasteAction->plug(this);
-	d->deleteAction = new KAction(i18n("&Clear"), KIcon("editdelete"), 0,
+	d->deleteAction = new KAction(i18n("&Clear"), KIcon("edit-delete"), 0,
 		this, SLOT(clear()), &d->actionCollection, "delete");
 	d->deleteAction->plug(this);
 #ifdef KEXI_NO_UNFINISHED 

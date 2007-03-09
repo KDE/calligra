@@ -58,25 +58,25 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_allowAddUndoCommand(true),
     m_prevCursorPosition(-1)
 {
-    m_actionFormatBold  = new QAction(KIcon("text_bold"), i18n("Bold"), this);
+    m_actionFormatBold  = new QAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold );
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
     connect( m_actionFormatBold, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(bold(bool)) );
 
-    m_actionFormatItalic  = new QAction(KIcon("text_italic"), i18n("Italic"), this);
+    m_actionFormatItalic  = new QAction(KIcon("format-text-italic"), i18n("Italic"), this);
     addAction("format_italic", m_actionFormatItalic );
     m_actionFormatItalic->setShortcut( Qt::CTRL + Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
     connect( m_actionFormatItalic, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(italic(bool)) );
 
-    m_actionFormatUnderline  = new QAction(KIcon("text_under"), i18n("Underline"), this);
+    m_actionFormatUnderline  = new QAction(KIcon("format-text-underline"), i18n("Underline"), this);
     addAction("format_underline", m_actionFormatUnderline );
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
     connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(underline(bool)) );
 
-    m_actionFormatStrikeOut  = new QAction(KIcon("text_strike"), i18n("Strike Out"), this);
+    m_actionFormatStrikeOut  = new QAction(KIcon("format-text-strikethrough"), i18n("Strike Out"), this);
     addAction("format_strike", m_actionFormatStrikeOut );
     m_actionFormatStrikeOut->setCheckable(true);
     connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(strikeOut(bool)) );

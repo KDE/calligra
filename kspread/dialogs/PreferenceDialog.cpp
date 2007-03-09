@@ -70,7 +70,7 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
   connect(this, SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
   KVBox *page2 = new KVBox();
   p2 = addPage(page2, i18n("Locale Settings"));
-  p2->setIcon( KIcon( BarIcon("gohome",K3Icon::SizeMedium) ) );
+  p2->setIcon( KIcon( BarIcon("go-home",K3Icon::SizeMedium) ) );
  _localePage=new parameterLocale(parent,page2 );
 
   KVBox *page3 = new KVBox();
@@ -95,7 +95,7 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   KVBox *page7 = new KVBox();
   p7 = addPage(page7,  i18n("Spelling") );
-  p7->setIcon( KIcon( BarIcon("spellcheck",K3Icon::SizeMedium) ) );
+  p7->setIcon( KIcon( BarIcon("tools-check-spelling",K3Icon::SizeMedium) ) );
   p7->setHeader( i18n("Spell Checker Behavior") );
   _spellPage=new configureSpellPage(parent,page7);
 

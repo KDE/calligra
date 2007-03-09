@@ -1207,7 +1207,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
 	case AskDelete:
 		if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(dynamic_cast<QWidget*>(this), 
 			i18n("Do you want to delete selected row?"), 0, 
-			KGuiItem(i18n("&Delete Row"),"editdelete"),
+			KGuiItem(i18n("&Delete Row"),"edit-delete"),
 			"dontAskBeforeDeleteRow"/*config entry*/,
 			KMessageBox::Notify|KMessageBox::Dangerous))
 			return;

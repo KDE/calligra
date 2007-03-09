@@ -116,7 +116,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_dataSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_dataSourceLabel);
 
-	m_gotoButton = new KexiSmallToolButton(contents, QString::null, "goto", "gotoButton");
+	m_gotoButton = new KexiSmallToolButton(contents, QString::null, "goto-page", "gotoButton");
 	m_gotoButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
 	m_gotoButton->setToolTip( i18n("Go to selected form's data source"));
 	hlyr->addWidget(m_gotoButton);

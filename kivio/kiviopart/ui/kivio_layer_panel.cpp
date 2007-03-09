@@ -78,8 +78,8 @@ KivioLayerPanel::KivioLayerPanel(KivioView* view, QWidget* parent, const char* n
   actNew = new KAction( i18n("New Layer"), BarIcon("layer_add",KivioFactory::global()), 0, this, SLOT(addItem()), this);
   actDel = new KAction( i18n("Remove Layer"), BarIcon("layer_remove",KivioFactory::global()), 0, this, SLOT(removeItem()), this);
   actRename = new KAction( i18n("Rename Layer"), BarIcon("item_rename",KivioFactory::global()), 0, this, SLOT(renameItem()), this);
-  actUp = new KAction( i18n("Move Layer Up"), "up", 0, this, SLOT(upItem()), this);
-  actDown = new KAction( i18n("Move Layer Down"), "down", 0, this, SLOT(downItem()), this);
+  actUp = new KAction( i18n("Move Layer Up"), "go-up", 0, this, SLOT(upItem()), this);
+  actDown = new KAction( i18n("Move Layer Down"), "go-down", 0, this, SLOT(downItem()), this);
 
   actNew->plug(bar);
   actDel->plug(bar);

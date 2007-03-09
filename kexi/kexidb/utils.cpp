@@ -1034,7 +1034,7 @@ QVariant KexiDB::notEmptyValueForType( KexiDB::Field::Type type )
 				QByteArray ba;
 				QBuffer buffer( &ba );
 				buffer.open( IO_WriteOnly );
-				QPixmap pm(SmallIcon("filenew"));
+				QPixmap pm(SmallIcon("document-new"));
 				pm.save( &buffer, "PNG"/*! @todo default? */ );
 				ADD(i, ba);
 				continue;

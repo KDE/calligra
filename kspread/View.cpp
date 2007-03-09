@@ -511,25 +511,25 @@ void View::Private::initActions()
 
   actions->defaultFormat->setToolTip( i18n("Resets to the default format") );
 
-  actions->bold  = new KToggleAction(KIcon( "text_bold" ), i18n("Bold"), view);
+  actions->bold  = new KToggleAction(KIcon( "format-text-bold" ), i18n("Bold"), view);
   ac->addAction("bold", actions->bold );
   actions->bold->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_B));
   connect( actions->bold, SIGNAL( toggled( bool) ),
                     view, SLOT( bold( bool ) ) );
 
-  actions->italic  = new KToggleAction(KIcon( "text_italic" ), i18n("Italic"), view);
+  actions->italic  = new KToggleAction(KIcon( "format-text-italic" ), i18n("Italic"), view);
   ac->addAction("italic", actions->italic );
   actions->italic->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_I));
   connect( actions->italic, SIGNAL( toggled( bool) ),
                     view, SLOT( italic( bool ) ) );
 
-  actions->underline  = new KToggleAction(KIcon( "text_under" ), i18n("Underline"), view);
+  actions->underline  = new KToggleAction(KIcon( "format-text-underline" ), i18n("Underline"), view);
   ac->addAction("underline", actions->underline );
   actions->underline->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_U));
   connect( actions->underline, SIGNAL( toggled( bool) ),
                     view, SLOT( underline( bool ) ) );
 
-  actions->strikeOut  = new KToggleAction(KIcon( "text_strike" ), i18n("Strike Out"), view);
+  actions->strikeOut  = new KToggleAction(KIcon( "format-text-strikethrough" ), i18n("Strike Out"), view);
   ac->addAction("strikeout", actions->strikeOut );
   connect( actions->strikeOut, SIGNAL( toggled( bool) ),
                     view, SLOT( strikeOut( bool ) ) );
@@ -1207,7 +1207,7 @@ void View::Private::initActions()
       view, SLOT( formulaSelection( const QString& ) ) );
 
   actions->viewZoom = new KoZoomAction(KoZoomMode::ZOOM_CONSTANT, i18n( "Zoom" ),
-                                        "viewmag", KShortcut(), ac, "view_zoom" );
+                                        "zoom-original", KShortcut(), ac, "view_zoom" );
   connect( actions->viewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, int ) ),
       view, SLOT( viewZoom( KoZoomMode::Mode, int ) ) );
 
@@ -1253,32 +1253,32 @@ void View::Private::initActions()
 
   // -- navigation actions --
 
-  actions->gotoCell = new KAction(KIcon("goto" ), i18n("Goto Cell..."), view);
+  actions->gotoCell = new KAction(KIcon("goto-page" ), i18n("Goto Cell..."), view);
   ac->addAction("gotoCell", actions->gotoCell );
   connect(actions->gotoCell, SIGNAL(triggered(bool)), view, SLOT( gotoCell() ));
   actions->gotoCell->setToolTip(i18n("Move to a particular cell"));
 
-  actions->nextSheet  = new KAction(KIcon( "forward" ), i18n("Next Sheet"), view);
+  actions->nextSheet  = new KAction(KIcon( "go-next" ), i18n("Next Sheet"), view);
   ac->addAction("nextSheet", actions->nextSheet );
   actions->nextSheet->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_PageDown));
   connect(actions->nextSheet, SIGNAL(triggered(bool)), view, SLOT( nextSheet() ));
 
   actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
 
-  actions->prevSheet  = new KAction(KIcon( "back" ), i18n("Previous Sheet"), view);
+  actions->prevSheet  = new KAction(KIcon( "go-previous" ), i18n("Previous Sheet"), view);
   ac->addAction("previousSheet", actions->prevSheet );
   actions->prevSheet->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_PageUp));
   connect(actions->prevSheet, SIGNAL(triggered(bool)), view, SLOT( previousSheet() ));
 
   actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
 
-  actions->firstSheet  = new KAction(KIcon( "start" ), i18n("First Sheet"), view);
+  actions->firstSheet  = new KAction(KIcon( "go-first" ), i18n("First Sheet"), view);
   ac->addAction("firstSheet", actions->firstSheet );
   connect(actions->firstSheet, SIGNAL(triggered(bool)), view, SLOT( firstSheet() ));
 
   actions->firstSheet->setToolTip(i18n("Move to the first sheet"));
 
-  actions->lastSheet  = new KAction(KIcon( "finish" ), i18n("Last Sheet"), view);
+  actions->lastSheet  = new KAction(KIcon( "go-last" ), i18n("Last Sheet"), view);
   ac->addAction("lastSheet", actions->lastSheet );
   connect(actions->lastSheet, SIGNAL(triggered(bool)), view, SLOT( lastSheet() ));
 
@@ -5423,7 +5423,7 @@ void View::slotPopupDeleteChild()
     // a) It is annoying from a user's persepective
     // b) The behaviour should be consistant with other KOffice apps
 
-    /*int ret = KMessageBox::warningContinueCancel(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"),KGuiItem(i18n("&Delete"),"editdelete"));
+    /*int ret = KMessageBox::warningContinueCancel(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"),KGuiItem(i18n("&Delete"),"edit-delete"));
     if ( ret == KMessageBox::Continue )
     {
 
@@ -6525,7 +6525,7 @@ void View::removeSheet()
     return;
   }
   int ret = KMessageBox::warningContinueCancel( this, i18n( "You are about to remove the active sheet.\nDo you want to continue?" ),
-                                       i18n( "Remove Sheet" ),KGuiItem(i18n("&Delete"),"editdelete") );
+                                       i18n( "Remove Sheet" ),KGuiItem(i18n("&Delete"),"edit-delete") );
 
   if ( ret == KMessageBox::Continue )
   {

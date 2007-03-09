@@ -243,7 +243,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const cha
 #endif
 	Ok | Cancel, Ok, parent, name, true/*modal*/, false/*sep*/ )
 {
-	setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), "fileopen", i18n("Open Database Connection")));
+	setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), "document-open", i18n("Open Database Connection")));
 	assert(cdata);
 	if (!cdata)
 		return;

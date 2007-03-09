@@ -620,19 +620,19 @@ void AccountsEditor::setupGui()
     KActionCollection *coll = actionCollection();
     QString name = "accountseditor_edit_list";
     
-    actionAddSubAccount  = new KAction(KIcon( "filenew" ), i18n("Add Subaccount"), this);
+    actionAddSubAccount  = new KAction(KIcon( "document-new" ), i18n("Add Subaccount"), this);
     actionCollection()->addAction("add_subaccount", actionAddSubAccount );
     actionAddSubAccount->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubAccount, SIGNAL( triggered( bool ) ), SLOT( slotAddSubAccount() ) );
     addAction( name, actionAddSubAccount );
     
-    actionAddAccount  = new KAction(KIcon( "filenew" ), i18n("Add Account"), this);
+    actionAddAccount  = new KAction(KIcon( "document-new" ), i18n("Add Account"), this);
     actionCollection()->addAction("add_account", actionAddAccount );
     actionAddAccount->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddAccount, SIGNAL( triggered( bool ) ), SLOT( slotAddAccount() ) );
     addAction( name, actionAddAccount );
     
-    actionDeleteSelection  = new KAction(KIcon( "editdelete" ), i18n("Delete Selected Accounts"), this);
+    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Accounts"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );

@@ -85,7 +85,7 @@ KoShellWindow::KoShellWindow()
   m_tabCloseButton = new QToolButton( m_pFrame );
   connect( m_tabCloseButton, SIGNAL( clicked() ),
            this, SLOT( slotFileClose() ) );
-  m_tabCloseButton->setIcon( KIcon( "tab_remove" ) );
+  m_tabCloseButton->setIcon( KIcon( "tab-remove" ) );
   m_tabCloseButton->adjustSize();
   m_tabCloseButton->setToolTip( i18n("Close"));
   m_pFrame->setCornerWidget( m_tabCloseButton, Qt::BottomRight );
@@ -659,8 +659,8 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
 {
   KMenu menu;
   KIconLoader il;
-  QAction *mnuSave = menu.addAction( il.loadIconSet( "filesave", K3Icon::Small ), i18n("Save") );
-  QAction *mnuClose = menu.addAction( il.loadIcon( "fileclose", K3Icon::Small ), i18n("Close") );
+  QAction *mnuSave = menu.addAction( il.loadIconSet( "document-save", K3Icon::Small ), i18n("Save") );
+  QAction *mnuClose = menu.addAction( il.loadIcon( "window-close", K3Icon::Small ), i18n("Close") );
   
   int tabnr = m_pFrame->indexOf( w );
   Page page = m_lstPages[tabnr];
@@ -721,7 +721,7 @@ KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
   window->mnuSaveAll = new KAction( i18n("Save All"), actionCollection(), "save_all" );
   QObject::connect(window->mnuSaveAll, SIGNAL(triggered(bool)), window, SLOT( saveAll() ));
   window->mnuSaveAll->setEnabled(false);
-  window->partSpecificHelpAction = new KAction(KIcon("contents"), i18n("Part Handbook"), actionCollection(), "partSpecificHelp");
+  window->partSpecificHelpAction = new KAction(KIcon("help-contents"), i18n("Part Handbook"), actionCollection(), "partSpecificHelp");
   QObject::connect(window->partSpecificHelpAction, SIGNAL(triggered(bool) ), window, SLOT(showPartSpecificHelp()));
   window->partSpecificHelpAction->setEnabled(false);
 }

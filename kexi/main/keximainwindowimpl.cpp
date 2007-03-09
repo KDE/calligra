@@ -363,7 +363,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		closeButton->setAutoRaise( true );
 		closeButton->setPixmap( QPixmap( kde2_closebutton ) );
 		closeButton->setPaletteBackgroundColor(closeButton->palette().active().background()); 
-//		closeButton->setIconSet(KIcon("tab_remove"));
+//		closeButton->setIconSet(KIcon("tab-remove"));
 		tabWidget()->setCornerWidget( closeButton, Qt::TopRightCorner );
 		closeButton->hide(); // hide until it's needed to avoid problems in "user mode" 
 		                     // when initially the main window is empty
@@ -524,7 +524,7 @@ void KexiMainWindowImpl::initActions()
 //	connect(d->actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
 
 	// PROJECT MENU
-	KAction *action = new KAction(i18n("&New..."), "filenew", KStdAccel::shortcut(KStdAccel::New),
+	KAction *action = new KAction(i18n("&New..."), "document-new", KStdAccel::shortcut(KStdAccel::New),
 		this, SLOT(slotProjectNew()), actionCollection(), "project_new");
 	action->setToolTip(i18n("Create a new project"));
 	action->setWhatsThis(i18n("Creates a new project. Currently opened project is not affected."));
@@ -563,26 +563,26 @@ void KexiMainWindowImpl::initActions()
 
 	d->action_save = KStandardAction::save( 
 		this, SLOT( slotProjectSave() ), actionCollection(), "project_save" );
-//	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save),
+//	d->action_save = new KAction(i18n("&Save"), "document-save", KStdAccel::shortcut(KStdAccel::Save),
 //		this, SLOT(slotProjectSave()), actionCollection(), "project_save");
 	d->action_save->setToolTip(i18n("Save object changes"));
 	d->action_save->setWhatsThis(i18n("Saves object changes from currently selected window."));
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-	d->action_save_as = new KAction(i18n("Save &As..."), "filesaveas", 0,
+	d->action_save_as = new KAction(i18n("Save &As..."), "document-save-as", 0,
 		this, SLOT(slotProjectSaveAs()), actionCollection(), "project_saveas");
 	d->action_save_as->setToolTip(i18n("Save object as"));
 	d->action_save_as->setWhatsThis(
 		i18n("Saves object changes from currently selected window under a new name (within the same project)."));
 
-	d->action_project_properties = new KAction(i18n("Project Properties"), "info", 0,
+	d->action_project_properties = new KAction(i18n("Project Properties"), "document-properties", 0,
 		this, SLOT(slotProjectProperties()), actionCollection(), "project_properties");
 #else
 	d->action_save_as = d->dummy_action;
 	d->action_project_properties = d->dummy_action;
 #endif
 
-	d->action_close = new KAction(i18n("&Close Project"), "fileclose", 0,
+	d->action_close = new KAction(i18n("&Close Project"), "window-close", 0,
 		this, SLOT(slotProjectClose()), actionCollection(), "project_close" );
 	d->action_close->setToolTip(i18n("Close the current project"));
 	d->action_close->setWhatsThis(i18n("Closes the current project."));
@@ -633,7 +633,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_project_export_data_table->setWhatsThis(
 		i18n("Exports data from the active table or query data to a file."));
 
-//TODO	new KAction(i18n("From File..."), "fileopen", 0,
+//TODO	new KAction(i18n("From File..."), "document-open", 0,
 //TODO		this, SLOT(slotImportFile()), actionCollection(), "project_import_file");
 //TODO	new KAction(i18n("From Server..."), "server", 0,
 //TODO		this, SLOT(slotImportServer()), actionCollection(), "project_import_server");
@@ -694,7 +694,7 @@ void KexiMainWindowImpl::initActions()
 
 	d->action_edit_select_all =  createSharedAction( KStandardAction::SelectAll, "edit_select_all");
 
-	d->action_edit_delete = createSharedAction(i18n("&Delete"), "editdelete",
+	d->action_edit_delete = createSharedAction(i18n("&Delete"), "edit-delete",
 		0/*Qt::Key_Delete*/, "edit_delete");
 	d->action_edit_delete->setToolTip(i18n("Delete selected object"));
 	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
@@ -779,24 +779,24 @@ void KexiMainWindowImpl::initActions()
 		d->action_view_propeditor = 0;
 
 	//DATA MENU
-	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", 
+	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "dialog-ok", 
 		Qt::SHIFT | Qt::Key_Return, "data_save_row");
 	d->action_data_save_row->setToolTip(i18n("Save changes made to the current row"));
 	d->action_data_save_row->setWhatsThis(i18n("Saves changes made to the current row."));
 //temp. disable because of problems with volatile actions	setActionVolatile( d->action_data_save_row, true );
 
 	d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Row Changes"), 
-		"button_cancel", 0 , "data_cancel_row_changes");
+		"dialog-cancel", 0 , "data_cancel_row_changes");
 	d->action_data_cancel_row_changes->setToolTip(i18n("Cancel changes made to the current row"));
 	d->action_data_cancel_row_changes->setWhatsThis(i18n("Cancels changes made to the current row."));
 //temp. disable because of problems with volatile actions	setActionVolatile( d->action_data_cancel_row_changes, true );
 
-	d->action_data_execute = createSharedAction(i18n("&Execute"), "player_play", 0 , "data_execute");
+	d->action_data_execute = createSharedAction(i18n("&Execute"), "media-playback-start", 0 , "data_execute");
 	//d->action_data_execute->setToolTip(i18n("")); //TODO
 	//d->action_data_execute->setWhatsThis(i18n("")); //TODO
 
 #ifndef KEXI_NO_UNFINISHED
-	action = createSharedAction(i18n("&Filter"), "filter", 0, "data_filter");
+	action = createSharedAction(i18n("&Filter"), "search-filter", 0, "data_filter");
 	setActionVolatile( action, true );
 #endif
 //	action->setToolTip(i18n("")); //todo
@@ -910,14 +910,14 @@ void KexiMainWindowImpl::initActions()
 		->setWhatsThis(i18n("This shows useful tips on the use of this application."));
 #endif
 #if 0 //we don't have a time for updating info text for each new version
-	new KAction(i18n("Important Information"), "messagebox_info", 0,
+	new KAction(i18n("Important Information"), "dialog-information", 0,
 		this, SLOT(slotImportantInfo()), actionCollection(), "help_show_important_info");
 #endif
 //TODO: UNCOMMENT TO REMOVE MDI MODES SETTING	m_pMdiModeMenu->hide();
 
 #ifndef KEXI_NO_FEEDBACK_AGENT
 #ifdef FEEDBACK_CLASS
-	new KAction(i18n("Give Feedback..."), "messagebox_info", 0,
+	new KAction(i18n("Give Feedback..."), "dialog-information", 0,
 		this, SLOT(slotStartFeedbackAgent()), actionCollection(), "help_start_feedback_agent");
 #endif
 #endif
@@ -3690,7 +3690,7 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 			"%1\n"
 			"If you click Yes, you will not be able to undo the deletion.")
 				.arg( "</p><p>"+part->instanceCaption()+" \""+ item->name() + "\"?</p>" ),
-			0, KGuiItem(i18n("Delete"), "editdelete"), KStdGuiItem::no()))
+			0, KGuiItem(i18n("Delete"), "edit-delete"), KStdGuiItem::no()))
 			return cancelled;
 	}
 

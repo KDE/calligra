@@ -1179,19 +1179,19 @@ void ResourceEditor::setupGui()
     KActionCollection *coll = actionCollection();
     
     QString name = "resourceeditor_edit_list";
-    actionAddResource  = new KAction(KIcon( "filenew" ), i18n("Add Resource..."), this);
+    actionAddResource  = new KAction(KIcon( "document-new" ), i18n("Add Resource..."), this);
     actionCollection()->addAction("add_resource", actionAddResource );
     actionAddResource->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionAddResource, SIGNAL( triggered( bool ) ), SLOT( slotAddResource() ) );
     addAction( name, actionAddResource );
     
-    actionAddGroup  = new KAction(KIcon( "filenew" ), i18n("Add Resource Group..."), this);
+    actionAddGroup  = new KAction(KIcon( "document-new" ), i18n("Add Resource Group..."), this);
     actionCollection()->addAction("add_group", actionAddGroup );
     actionAddGroup->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddGroup, SIGNAL( triggered( bool ) ), SLOT( slotAddGroup() ) );
     addAction( name, actionAddGroup );
     
-    actionDeleteSelection  = new KAction(KIcon( "editdelete" ), i18n("Delete Selected Items"), this);
+    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Items"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );

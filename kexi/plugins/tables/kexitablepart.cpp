@@ -83,7 +83,7 @@ void KexiTablePart::initPartActions()
 
 void KexiTablePart::initInstanceActions()
 {
-//moved to main window	createSharedAction(Kexi::DataViewMode, i18n("Filter"), "filter", 0, "tablepart_filter");
+//moved to main window	createSharedAction(Kexi::DataViewMode, i18n("Filter"), "search-filter", 0, "tablepart_filter");
 
 	KAction *a = createSharedToggleAction(
 		Kexi::DesignViewMode, i18n("Primary Key"), "key", 0, "tablepart_toggle_pkey");
@@ -188,7 +188,7 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(QWidget *parent, Ke
 	int r = KMessageBox::questionYesNo(parent, 
 		"<p>"+msg+"</p><p>"+openedObjectsStr+"</p><p>"
 		+i18n("Do you want to close all windows for these objects?"), 
-		QString::null, KGuiItem(i18n("Close windows"),"fileclose"), KStdGuiItem::cancel());
+		QString::null, KGuiItem(i18n("Close windows"),"window-close"), KStdGuiItem::cancel());
 	tristate res;
 	if (r == KMessageBox::Yes) {
 		//try to close every window

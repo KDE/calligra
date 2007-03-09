@@ -29,7 +29,7 @@
 #include <kexipartinfo.h>
 
 KexiSimplePrintingPart::KexiSimplePrintingPart()
- : KexiPart::StaticPart("kexi/simpleprinting", "fileprint", i18n("Printing"))
+ : KexiPart::StaticPart("kexi/simpleprinting", "document-print", i18n("Printing"))
 {
 	// REGISTERED ID:
 //??	m_registeredPartID = (int)KexiPart::QueryObjectType;

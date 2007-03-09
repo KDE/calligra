@@ -85,7 +85,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //TODO    d->keepLocation = false;
 //TODO    d->operationMode = Opening;
     setMode(KFile::File | KFile::ExistingOnly); //(js) default: open action
-    setIcon( KGlobal::iconLoader()->loadIcon("fileopen", K3Icon::Desktop) );
+    setIcon( KGlobal::iconLoader()->loadIcon("document-open", K3Icon::Desktop) );
 		setDir(QDir(startDir));
 //TODO    d->hasDefaultFilter = false;
 //TODO    d->hasView = false;
@@ -388,7 +388,7 @@ void KexiStartupFileDialogBase::setOperationMode( KFileDialog::OperationMode mod
   //  d->keepLocation = (mode == Saving);
     if (mode == KFileDialog::Saving) {
       setMode( KFile::File );
-      setIcon( KGlobal::iconLoader()->loadIcon("filesave", K3Icon::Desktop) );
+      setIcon( KGlobal::iconLoader()->loadIcon("document-save", K3Icon::Desktop) );
     }
 //(js)    filterWidget->setEditable( !d->hasDefaultFilter || mode != Saving );
 //(js)    d->okButton->setGuiItem( (mode == Saving) ? KStdGuiItem::save() : KStdGuiItem::ok() );

@@ -146,7 +146,7 @@ void KexiDataTable::reloadActions()
 //warning FIXME Move this to the table part
 /*
 	kDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
-	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
+	new KAction(i18n("Filter"), "search-filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
 	setXMLFile("kexidatatableui.rc");
 */
 	m_view->popup()->clear();

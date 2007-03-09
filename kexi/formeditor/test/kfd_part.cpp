@@ -215,9 +215,9 @@ KFormDesignerPart::setupActions()
 	KStandardAction::undo(KFormDesigner::FormManager::self(), SLOT(undo()), actionCollection());
 	KStandardAction::redo(KFormDesigner::FormManager::self(), SLOT(redo()), actionCollection());
 	KStandardAction::selectAll(KFormDesigner::FormManager::self(), SLOT(selectAll()), actionCollection());
-	new KAction(i18n("Clear Widget Contents"), "editclear", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(clearWidgetContent()), actionCollection(), "clear_contents");
-	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(deleteWidget()), actionCollection(), "edit_delete");
-	new KAction(i18n("Preview Form"), "filequickprint", Qt::CTRL+Qt::Key_T, this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
+	new KAction(i18n("Clear Widget Contents"), "edit-clear", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(clearWidgetContent()), actionCollection(), "clear_contents");
+	new KAction(i18n("Delete Widget"), "edit-delete", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(deleteWidget()), actionCollection(), "edit_delete");
+	new KAction(i18n("Preview Form"), "document-print-preview", Qt::CTRL+Qt::Key_T, this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
 	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), actionCollection(), "taborder");
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
 	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editConnections()), actionCollection(), "form_connections");

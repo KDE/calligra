@@ -161,7 +161,7 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 //	m_pagesCount = INT_MAX;
 
 	setCaption(i18n("%1 - Print Preview - %2").arg(previewName).arg(KEXI_APP_NAME));
-	setIcon(DesktopIcon("filequickprint"));
+	setIcon(DesktopIcon("document-print-preview"));
 	Q3VBoxLayout *lyr = new Q3VBoxLayout(this, 6);
 
 	int id;
@@ -183,11 +183,11 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 
 #ifndef KEXI_NO_UNFINISHED 
 //! @todo unfinished
-	id = m_toolbar->insertWidget( -1, 0, new KPushButton(KIcon("viewmag+"), i18n("Zoom In"), m_toolbar));
+	id = m_toolbar->insertWidget( -1, 0, new KPushButton(KIcon("zoom-in"), i18n("Zoom In"), m_toolbar));
 	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotZoomInClicked()));
 	m_toolbar->insertSeparator();
 
-	id = m_toolbar->insertWidget( -1, 0, new KPushButton(KIcon("viewmag-"), i18n("Zoom Out"), m_toolbar));
+	id = m_toolbar->insertWidget( -1, 0, new KPushButton(KIcon("zoom-out"), i18n("Zoom Out"), m_toolbar));
 	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotZoomOutClicked()));
 	m_toolbar->insertSeparator();
 #endif
@@ -209,22 +209,22 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 	m_navToolbar->setIconText(KToolBar::IconTextRight);
 	lyr->addWidget(m_navToolbar);
 
-	m_idFirst = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("start"), i18n("First Page"), m_navToolbar));
+	m_idFirst = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("go-first"), i18n("First Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idFirst, SIGNAL(clicked()), this, SLOT(slotFirstClicked()));
 	m_navToolbar->insertSeparator();
 
-	m_idPrevious = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("previous"), i18n("Previous Page"), m_navToolbar));
+	m_idPrevious = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("find-previous"), i18n("Previous Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idPrevious, SIGNAL(clicked()), this, SLOT(slotPreviousClicked()));
 	m_navToolbar->insertSeparator();
 
 	m_idPageNumberLabel = m_navToolbar->insertWidget( -1, 0, new QLabel(m_navToolbar));
 	m_navToolbar->insertSeparator();
 
-	m_idNext = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("next"), i18n("Next Page"), m_navToolbar));
+	m_idNext = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("find-next"), i18n("Next Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idNext, SIGNAL(clicked()), this, SLOT(slotNextClicked()));
 	m_navToolbar->insertSeparator();
 
-	m_idLast = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("finish"), i18n("Last Page"), m_navToolbar));
+	m_idLast = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("go-last"), i18n("Last Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idLast, SIGNAL(clicked()), this, SLOT(slotLastClicked()));
 	m_navToolbar->insertSeparator();
 

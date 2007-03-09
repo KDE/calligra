@@ -122,7 +122,7 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 
 	KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, QString::null,
 		i18n("Additional information about the field"));
-	col->setIcon( KexiUtils::colorizeIconToTextColor( SmallIcon("info"), d->view->palette() ) );
+	col->setIcon( KexiUtils::colorizeIconToTextColor( SmallIcon("document-properties"), d->view->palette() ) );
 	col->setHeaderTextVisible(false);
 	col->field()->setSubType("KIcon");
 	col->setReadOnly(true);

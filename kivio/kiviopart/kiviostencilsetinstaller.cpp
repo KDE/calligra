@@ -49,7 +49,7 @@ namespace Kivio {
 
     m_url = new KUrlRequester(page);
 
-    setButtonOK(KGuiItem(i18n("&Install"), "button_ok"));
+    setButtonOK(KGuiItem(i18n("&Install"), "dialog-ok"));
     resize(400, 10);
     connect( m_url->lineEdit(), SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotUrlChanged( const QString & ) ) );
     slotUrlChanged( m_url->lineEdit()->text() );

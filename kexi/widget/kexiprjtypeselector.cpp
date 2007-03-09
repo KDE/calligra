@@ -33,7 +33,7 @@ KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent )
 		)
 	);
 	icon_file->setFixedSize(icon_file->pixmap()->size()/2);
-	icon_server->setPixmap( DesktopIcon("network", 48) );
+	icon_server->setPixmap( DesktopIcon("network-wired", 48) );
 	icon_server->setFixedSize(icon_server->pixmap()->size()/2);
 }
 

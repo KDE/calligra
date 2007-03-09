@@ -148,7 +148,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	d->rowSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(d->rowSourceLabel);
 
-	d->gotoRowSourceButton = new KexiSmallToolButton(contents, QString::null, "goto", "gotoRowSourceButton");
+	d->gotoRowSourceButton = new KexiSmallToolButton(contents, QString::null, "goto-page", "gotoRowSourceButton");
 	d->gotoRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
 	QToolTip::add(d->gotoRowSourceButton, i18n("Go to selected row source"));
 	hlyr->addWidget(d->gotoRowSourceButton);

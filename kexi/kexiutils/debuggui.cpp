@@ -46,7 +46,7 @@ QWidget *KexiUtils::createDebugWindow(QWidget *parent)
 	debugWindowTab = new KTabWidget(debugWindow, "debugWindowTab");
 	lyr->addWidget( debugWindowTab );
 	debugWindow->resize(900, 600);
-	debugWindow->setIcon( DesktopIcon("info") );
+	debugWindow->setIcon( DesktopIcon("document-properties") );
 	debugWindow->setCaption("Kexi Internal Debugger");
 	debugWindow->show();
 	return debugWindow;
@@ -97,7 +97,7 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 		QHBoxLayout *hbox = new QHBoxLayout(page);
 		vbox->addLayout(hbox);
 		hbox->addStretch(1);
-		KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", "filesave"), page);
+		KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", "document-save"), page);
 		btn_exec->setName("executeRealAlterTable");
 		hbox->addWidget(btn_exec);
 		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);

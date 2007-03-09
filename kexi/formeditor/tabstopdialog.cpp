@@ -67,12 +67,12 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 
 	Q3VBoxLayout *vbox = new Q3VBoxLayout();
 	l->addLayout(vbox, 0, 1);
-	m_btnUp = new KPushButton(KIcon("1uparrow"), i18n("Move Up"), frame);
+	m_btnUp = new KPushButton(KIcon("arrow-up"), i18n("Move Up"), frame);
 	m_btnUp->setToolTip( i18n("Move widget up") );
 	vbox->addWidget(m_btnUp);
 	connect(m_btnUp, SIGNAL(clicked()), this, SLOT(moveItemUp()));
 
-	m_btnDown = new KPushButton(KIcon("1downarrow"), i18n("Move Down"), frame);
+	m_btnDown = new KPushButton(KIcon("arrow-down"), i18n("Move Down"), frame);
 	m_btnDown->setToolTip( i18n("Move widget down") );
 	vbox->addWidget(m_btnDown);
 	connect(m_btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));

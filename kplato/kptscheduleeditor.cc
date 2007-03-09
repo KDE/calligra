@@ -743,12 +743,12 @@ void ScheduleEditor::setupGui()
     connect( actionCalculateSchedule, SIGNAL( triggered( bool ) ), SLOT( slotCalculateSchedule() ) );
     addAction( name, actionCalculateSchedule );
     
-    actionAddSchedule  = new KAction(KIcon( "filenew" ), i18n("Add Schedule..."), this);
+    actionAddSchedule  = new KAction(KIcon( "document-new" ), i18n("Add Schedule..."), this);
     actionCollection()->addAction("add_schedule", actionAddSchedule );
     connect( actionAddSchedule, SIGNAL( triggered( bool ) ), SLOT( slotAddSchedule() ) );
     addAction( name, actionAddSchedule );
     
-    actionDeleteSelection  = new KAction(KIcon( "editdelete" ), i18n("Delete Selected Schedules"), this);
+    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Schedules"), this);
     actionCollection()->addAction("schedule_delete_selection", actionDeleteSelection );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
     addAction( name, actionDeleteSelection );

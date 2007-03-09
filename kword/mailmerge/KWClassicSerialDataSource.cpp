@@ -350,12 +350,12 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
     KHBox *toolbar = new KHBox( back );
 
     first = new QToolButton( toolbar );
-    first->setIconSet( KIcon( "start" ) );
+    first->setIconSet( KIcon( "go-first" ) );
     first->setFixedSize( first->sizeHint() );
     connect(first, SIGNAL(clicked()), this, SLOT(firstRecord()));
 
     back_ = new QToolButton( toolbar );
-    back_->setIconSet( KIcon( "back" ) );
+    back_->setIconSet( KIcon( "go-previous" ) );
     back_->setFixedSize( back_->sizeHint() );
     connect(back_, SIGNAL(clicked()), this, SLOT(prevRecord()));
 
@@ -365,12 +365,12 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
              this, SLOT( changeRecord( int ) ) );
 
     forward = new QToolButton( toolbar );
-    forward->setIconSet( KIcon( "forward" ) );
+    forward->setIconSet( KIcon( "go-next" ) );
     forward->setFixedSize( forward->sizeHint() );
     connect(forward, SIGNAL(clicked()), this, SLOT(nextRecord()));
 
     finish = new QToolButton( toolbar );
-    finish->setIconSet( KIcon( "finish" ) );
+    finish->setIconSet( KIcon( "go-last" ) );
     finish->setFixedSize( finish->sizeHint() );
     connect(finish, SIGNAL(clicked()), this, SLOT(lastRecord()));
 

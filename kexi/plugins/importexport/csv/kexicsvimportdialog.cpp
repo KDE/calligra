@@ -365,7 +365,7 @@ if ( m_mode == Clipboard )
 	}
 
 	if (m_mode==Clipboard) {
-		m_infoLbl->setIcon("editpaste");
+		m_infoLbl->setIcon("edit-paste");
 	}
 	//updateRowCountInfo();
 

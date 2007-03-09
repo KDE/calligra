@@ -60,9 +60,9 @@ class KexiQueryDesignerSQLView::Private
 		Private() :
 		   history(0)
 		 , historyHead(0)
-		 , statusPixmapOk( DesktopIcon("button_ok") )
-		 , statusPixmapErr( DesktopIcon("button_cancel") )
-		 , statusPixmapInfo( DesktopIcon("messagebox_info") )
+		 , statusPixmapOk( DesktopIcon("dialog-ok") )
+		 , statusPixmapErr( DesktopIcon("dialog-cancel") )
+		 , statusPixmapInfo( DesktopIcon("dialog-information") )
 		 , parsedQuery(0)
 		 , heightForStatusMode(-1)
 		 , heightForHistoryMode(-1)
@@ -147,9 +147,9 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	static const QString msg_back = i18n("Back to Selected Query");
 	static const QString msg_clear = i18n("Clear History");
 	d->historyHead->addButton("select_item", msg_back, this, SLOT(slotSelectQuery()));
-	d->historyHead->addButton("editclear", msg_clear, d->history, SLOT(clear()));
+	d->historyHead->addButton("edit-clear", msg_clear, d->history, SLOT(clear()));
 	d->history->popupMenu()->insertItem(SmallIcon("select_item"), msg_back, this, SLOT(slotSelectQuery()));
-	d->history->popupMenu()->insertItem(SmallIcon("editclear"), msg_clear, d->history, SLOT(clear()));
+	d->history->popupMenu()->insertItem(SmallIcon("edit-clear"), msg_clear, d->history, SLOT(clear()));
 	connect(d->history, SIGNAL(currentItemDoubleClicked()), this, SLOT(slotSelectQuery()));
 
 	d->heightForHistoryMode = -1; //height() / 2;

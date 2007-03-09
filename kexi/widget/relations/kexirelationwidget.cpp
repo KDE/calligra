@@ -88,7 +88,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 
 	m_areaPopup = new KMenu(this, "m_areaPopup");
 	
-	m_openSelectedTableAction = new KAction(i18n("&Open Table"), SmallIcon("fileopen"), KShortcut(),
+	m_openSelectedTableAction = new KAction(i18n("&Open Table"), SmallIcon("document-open"), KShortcut(),
 		this, SLOT(openSelectedTable()), this, "relationsview_openTable");
 	m_openSelectedTableAction->plug( m_tableQueryPopup );
 	m_designSelectedTableAction = new KAction(i18n("&Design Table"), SmallIcon("edit"), KShortcut(),

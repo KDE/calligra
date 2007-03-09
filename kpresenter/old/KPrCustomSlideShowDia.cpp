@@ -359,10 +359,10 @@ void KPrDefineCustomSlideShow::init()
   connect( listSlide, SIGNAL( clicked ( Q3ListBoxItem * ) ), this, SLOT( updateButton() ) );
   connect( listSlide, SIGNAL( doubleClicked ( Q3ListBoxItem * ) ), this, SLOT( slotMoveInsertSlide() ) );
   connect( listSlideShow, SIGNAL( doubleClicked( Q3ListBoxItem * ) ), this, SLOT( slotMoveRemoveSlide() ) );
-  m_insertSlide->setIconSet( KIcon( ( QApplication::isRightToLeft() ? "back" : "forward" ) ) );
-  m_removeSlide->setIconSet( KIcon( ( QApplication::isRightToLeft() ? "forward" : "back") ) );
-  m_moveUpSlide->setIconSet( KIcon( "up" ) );
-  m_moveDownSlide->setIconSet( KIcon( "down" ) );
+  m_insertSlide->setIconSet( KIcon( ( QApplication::isRightToLeft() ? "go-previous" : "go-next" ) ) );
+  m_removeSlide->setIconSet( KIcon( ( QApplication::isRightToLeft() ? "go-next" : "go-previous") ) );
+  m_moveUpSlide->setIconSet( KIcon( "go-up" ) );
+  m_moveDownSlide->setIconSet( KIcon( "go-down" ) );
 
   slideNameChanged( m_name->text() );
   updateButton();

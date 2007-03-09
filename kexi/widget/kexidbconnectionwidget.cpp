@@ -71,7 +71,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
  : KexiDBConnectionWidgetBase( parent, name )
  , d(new Private())
 {
-	iconLabel->setPixmap(DesktopIcon("network"));
+	iconLabel->setPixmap(DesktopIcon("network-wired"));
 
 	Q3VBoxLayout *driversComboLyr = new Q3VBoxLayout(frmEngine);
 	m_driversCombo = new KexiDBDriverComboBox(frmEngine, Kexi::driverManager().driversInfo(), 
@@ -83,14 +83,14 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 #ifdef NO_LOAD_DB_LIST
 	btnLoadDBList->hide();
 #endif
-	btnLoadDBList->setIconSet(KIcon("reload"));
+	btnLoadDBList->setIconSet(KIcon("view-refresh"));
 	btnLoadDBList->setToolTip( i18n("Load database list from the server"));
 	Q3WhatsThis::add(btnLoadDBList, 
 		i18n("Loads database list from the server, so you can select one using the \"Name\" combo box."));
 
 	Q3HBoxLayout *hbox = new Q3HBoxLayout(frmBottom);
 	hbox->addStretch(2);
-	d->btnSaveChanges = new KPushButton(KGuiItem(i18n("Save Changes"), "filesave", 
+	d->btnSaveChanges = new KPushButton(KGuiItem(i18n("Save Changes"), "document-save", 
 		i18n("Save all changes made to this connection information"),
 		i18n("Save all changes made to this connection information. You can later reuse this information.")), 
 		frmBottom, "savechanges");
@@ -344,7 +344,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(const KexiProjectData& data,
 	KDialogBase::User1|KDialogBase::Cancel|KDialogBase::Help,
 	KDialogBase::User1, false, 
 	acceptButtonGuiItem.text().isEmpty() 
-		? KGuiItem(i18n("&Open"), "fileopen", i18n("Open Database Connection")) 
+		? KGuiItem(i18n("&Open"), "document-open", i18n("Open Database Connection")) 
 		: acceptButtonGuiItem
 	)
 {
@@ -359,7 +359,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(const KexiDB::ConnectionData& dat
 	KDialogBase::User1|KDialogBase::Cancel|KDialogBase::Help,
 	KDialogBase::User1, false, 
 	acceptButtonGuiItem.text().isEmpty() 
-		? KGuiItem(i18n("&Open"), "fileopen", i18n("Open Database Connection"))
+		? KGuiItem(i18n("&Open"), "document-open", i18n("Open Database Connection"))
 		: acceptButtonGuiItem
 	)
 {

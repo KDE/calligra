@@ -130,7 +130,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 	}
 
 	// actions
-	m_openAction = new KAction(i18n("&Open"), "fileopen", 0/*Qt::Key_Enter conflict!*/, this, 
+	m_openAction = new KAction(i18n("&Open"), "document-open", 0/*Qt::Key_Enter conflict!*/, this, 
 		SLOT(slotOpenObject()), this, "open_object");
 	m_openAction->setToolTip(i18n("Open object"));
 	m_openAction->setWhatsThis(i18n("Opens object selected in the list"));
@@ -152,7 +152,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 		m_newObjectPopup = 0;
 	}
 	else {
-		m_deleteAction = new KAction(i18n("&Delete"), "editdelete", 0/*Qt::Key_Delete*/, 
+		m_deleteAction = new KAction(i18n("&Delete"), "edit-delete", 0/*Qt::Key_Delete*/, 
 			this, SLOT(slotRemove()), m_actions, "edit_delete");
 	//! @todo 1.1: just add "Delete" tooltip and what's this
 		m_deleteAction->setToolTip(i18n("&Delete").replace("&",""));
@@ -179,7 +179,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 		m_editTextAction->setToolTip(i18n("Open object in text view"));
 		m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in text view"));
 
-		m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
+		m_newObjectAction = new KAction("", "document-new", 0, this, SLOT(slotNewObject()), this, "new_object");
 		if (m_features & Toolbar) {
 			m_newObjectToolButton = new KexiSmallToolButton(this, "", QIcon(), "new_object");
 			m_newObjectPopup = new KMenu(this, "newObjectPopup");
@@ -197,7 +197,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 		}
 	}
 
-	m_executeAction = new KAction(i18n("Execute"), "player_play", 0, this,
+	m_executeAction = new KAction(i18n("Execute"), "media-playback-start", 0, this,
 		SLOT(slotExecuteObject()), this, "data_execute");
 
 	m_exportActionMenu = new KActionMenu(i18n("Export"));
@@ -207,7 +207,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 		i18n("Exports data from the currently selected table or query data to a file."));
 	m_exportActionMenu->insert( m_dataExportAction );
 
-	m_printAction = new KAction(i18n("&Print..."), "fileprint", 0, this, 
+	m_printAction = new KAction(i18n("&Print..."), "document-print", 0, this, 
 		SLOT(slotPrintItem()), this, "printItem");
 	m_printAction->setWhatsThis(
 		i18n("Prints data from the currently selected table or query."));
@@ -543,10 +543,10 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 		} else {
 			if (m_newObjectAction) {
 				m_newObjectAction->setText(i18n("&Create Object..."));
-	//			m_newObjectToolbarAction->setIconSet( KIcon("filenew") );
+	//			m_newObjectToolbarAction->setIconSet( KIcon("document-new") );
 	//			m_newObjectToolbarAction->setText(m_newObjectAction->text());
 				if (m_features & Toolbar) {
-					m_newObjectToolButton->setIconSet( "filenew" );
+					m_newObjectToolButton->setIconSet( "document-new" );
 					QToolTip::add(m_newObjectToolButton, i18n("Create object"));
 					Q3WhatsThis::add(m_newObjectToolButton, i18n("Creates a new object"));
 				}

@@ -136,16 +136,16 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	globalLyr->addWidget(d->stack);
 
 //	m_file = new KexiOpenExistingFile( this, "KexiOpenExistingFile");
-//	m_file->btn_advanced->setIconSet( KIcon("1downarrow") );
+//	m_file->btn_advanced->setIconSet( KIcon("arrow-down") );
 	m_fileDlg = 0;
 		
 //	addWidget(m_file);
 //	connect(m_file->btn_advanced,SIGNAL(clicked()),this,SLOT(showAdvancedConn()));
 
 	m_remote = new KexiConnSelectorBase(d->stack, "conn_sel");
-	m_remote->icon->setPixmap( DesktopIcon("network") );
+	m_remote->icon->setPixmap( DesktopIcon("network-wired") );
 	m_remote->icon->setFixedSize( m_remote->icon->pixmap()->size() );
-//	m_remote->btn_back->setIconSet( KIcon("1uparrow") );
+//	m_remote->btn_back->setIconSet( KIcon("arrow-up") );
 	connect(m_remote->btn_add, SIGNAL(clicked()), this, SLOT(slotRemoteAddBtnClicked()));
 	connect(m_remote->btn_edit, SIGNAL(clicked()), this, SLOT(slotRemoteEditBtnClicked()));
 	connect(m_remote->btn_remove, SIGNAL(clicked()), this, SLOT(slotRemoteRemoveBtnClicked()));
@@ -363,7 +363,7 @@ void KexiConnSelectorWidget::slotRemoteAddBtnClicked()
 {
 	KexiDB::ConnectionData data;
 	KexiDBConnectionDialog dlg(data, QString::null,
-		KGuiItem(i18n("&Add"), "button_ok", i18n("Add database connection")) );
+		KGuiItem(i18n("&Add"), "dialog-ok", i18n("Add database connection")) );
 	dlg.setCaption(i18n("Add New Database Connection"));
 	if (QDialog::Accepted!=dlg.exec())
 		return;
@@ -388,7 +388,7 @@ void KexiConnSelectorWidget::slotRemoteEditBtnClicked()
 	if (!item)
 		return;
 	KexiDBConnectionDialog dlg(*item->data(), QString::null,
-		KGuiItem(i18n("&Save"), "filesave", i18n("Save changes made to this database connection")) );
+		KGuiItem(i18n("&Save"), "document-save", i18n("Save changes made to this database connection")) );
 	dlg.setCaption(i18n("Edit Database Connection"));
 	if (QDialog::Accepted!=dlg.exec())
 		return;

@@ -72,7 +72,7 @@ KexiDSWelcome::setUseWizard(bool use)
 	else
 	{
 		if(useIcons)
-			m_wiz->nextButton()->setIconSet(KIcon("apply"));
+			m_wiz->nextButton()->setIconSet(KIcon("dialog-apply"));
 
 		m_wiz->nextButton()->setText(i18n("&Finish"));
 	}

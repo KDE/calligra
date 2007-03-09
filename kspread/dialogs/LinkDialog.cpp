@@ -88,7 +88,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for e-mail
     d->mailPage = new QWidget();
     d->p2 = addPage( d->mailPage, i18n( "Mail" ) );
-    d->p2->setIcon( KIcon( BarIcon( "mail_generic",K3Icon::SizeMedium ) ) );
+    d->p2->setIcon( KIcon( BarIcon( "mail",K3Icon::SizeMedium ) ) );
     QVBoxLayout* mLayout = new QVBoxLayout( d->mailPage );
     mLayout->setMargin( marginHint() );
     mLayout->setSpacing( spacingHint() );
@@ -105,7 +105,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for external file
     d->filePage = new QWidget();
     d->p3 = addPage( d->filePage, i18n( "File" ) );
-    d->p3->setIcon( KIcon( BarIcon( "filenew",K3Icon::SizeMedium ) ) );
+    d->p3->setIcon( KIcon( BarIcon( "document-new",K3Icon::SizeMedium ) ) );
     QVBoxLayout* fLayout = new QVBoxLayout( d->filePage );
     fLayout->setMargin( marginHint() );
     fLayout->setSpacing( spacingHint() );

@@ -32,7 +32,7 @@ KexiContextHelp::KexiContextHelp(KexiMainWindow *view, QWidget *parent)
 {
 	kDebug()<<"KexiContextHelp::KexiContextHelp()"<<endl;
 	setCaption(i18n("Context Help"));
-	setIcon(SmallIcon("help"));
+	setIcon(SmallIcon("help-contents"));
 	connect(this,SIGNAL(linkClicked( const QString& )),
 		this,SLOT(linkClickedInternal( const QString& )));
 }

@@ -96,19 +96,19 @@ QWidget * VideoTool::createOptionWidget()
     QToolButton *button = 0;
 
     button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("previous") );
+    button->setIcon( SmallIcon("find-previous") );
     button->setToolTip( i18n( "Previous" ) );
     layout->addWidget( button, 0, 0 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotPrevious() ) );
 
     button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("start") );
+    button->setIcon( SmallIcon("go-first") );
     button->setToolTip( i18n( "Play" ) );
     layout->addWidget( button, 0, 1 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotPlay() ) );
 
     button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("stop") );
+    button->setIcon( SmallIcon("process-stop") );
     button->setToolTip( i18n( "Stop" ) );
     layout->addWidget( button, 0, 2 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotStop() ) );
@@ -121,7 +121,7 @@ QWidget * VideoTool::createOptionWidget()
  
 
     button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("next") );
+    button->setIcon( SmallIcon("find-next") );
     button->setToolTip( i18n( "Next" ) );
     layout->addWidget( button, 0, 4 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotNext() ) );

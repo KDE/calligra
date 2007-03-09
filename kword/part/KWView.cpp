@@ -463,7 +463,7 @@ This saves problems with finding out which we missed near the end.
             this, SLOT( textAlignRight() ),
             actionCollection(), "format_alignright" );
     m_actionFormatAlignRight->setActionGroup( alignActionGroup );
-    m_actionFormatAlignBlock = new KToggleAction( i18n( "Align Block" ), "text_block", Qt::CTRL + Qt::Key_J,
+    m_actionFormatAlignBlock = new KToggleAction( i18n( "Align Block" ), "format-justify-fill", Qt::CTRL + Qt::Key_J,
             this, SLOT( textAlignBlock() ),
             actionCollection(), "format_alignblock" );
     m_actionFormatAlignBlock->setActionGroup( alignActionGroup );

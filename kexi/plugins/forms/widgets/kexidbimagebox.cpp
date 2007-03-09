@@ -748,7 +748,7 @@ bool KexiDBImageBox::setProperty( const char * name, const QVariant & value )
 {
 	const bool ret = QLabel::setProperty(name, value);
 	if (p_shadowEnabled) {
-		if (0==qstrcmp("indent", name) || 0==qstrcmp("font", name) || 0==qstrcmp("margin", name)
+		if (0==qstrcmp("format-indent-more", name) || 0==qstrcmp("font", name) || 0==qstrcmp("margin", name)
 			|| 0==qstrcmp("frameShadow", name) || 0==qstrcmp("frameShape", name)
 			|| 0==qstrcmp("frameStyle", name) || 0==qstrcmp("midLineWidth", name)
 			|| 0==qstrcmp("lineWidth", name)) {

@@ -137,7 +137,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 		m_exportOptionsPage
 	);
 	if (m_options.mode==KexiCSVExport::Clipboard)
-		m_infoLblTo->setIcon("editpaste");
+		m_infoLblTo->setIcon("edit-paste");
 	exportOptionsLyr->addMultiCellWidget(m_infoLblTo, 1, 1, 0, 2);
 
 	m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), "configure"), 

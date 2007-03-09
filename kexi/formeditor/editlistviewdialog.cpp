@@ -63,7 +63,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	connect(newRow, SIGNAL(clicked()), this, SLOT(newRow()));
 
 	QToolButton *newChild = new QToolButton(m_contentsPageItem->widget());
-	newChild->setIconSet(KIcon("1rightarrow"));
+	newChild->setIconSet(KIcon("arrow-right"));
 	newChild->setTextLabel(i18n("New &Subitem"), true);
 	vlayout->addWidget(newChild);
 	m_buttons.insert(BNewChild, newChild);
@@ -77,14 +77,14 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	connect(delRow, SIGNAL(clicked()), this, SLOT(removeRow()));
 
 	QToolButton *rowUp = new QToolButton(m_contentsPageItem->widget());
-	rowUp->setIconSet(KIcon("1uparrow"));
+	rowUp->setIconSet(KIcon("arrow-up"));
 	rowUp->setTextLabel(i18n("Move Item &Up"), true);
 	vlayout->addWidget(rowUp);
 	m_buttons.insert(BRowUp, rowUp);
 	connect(rowUp, SIGNAL(clicked()), this, SLOT(MoveRowUp()));
 
 	QToolButton *rowDown = new QToolButton(m_contentsPageItem->widget());
-	rowDown->setIconSet(KIcon("1downarrow"));
+	rowDown->setIconSet(KIcon("arrow-down"));
 	rowDown->setTextLabel(i18n("Move Item &Down"), true);
 	vlayout->addWidget(rowDown);
 	m_buttons.insert(BRowDown, rowDown);
@@ -140,14 +140,14 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	connect(remove, SIGNAL(clicked()), this, SLOT(removeItem()));
 
 	QToolButton *up = new QToolButton(m_columnsPageItem->widget());
-	up->setIconSet(KIcon("1uparrow"));
+	up->setIconSet(KIcon("arrow-up"));
 	up->setTextLabel(i18n("Move Item &Up"), true);
 	vbox->addWidget(up);
 	m_buttons.insert(BColUp, up);
 	connect(up, SIGNAL(clicked()), this, SLOT(MoveItemUp()));
 
 	QToolButton *down = new QToolButton(m_columnsPageItem->widget());
-	down->setIconSet(KIcon("1downarrow"));
+	down->setIconSet(KIcon("arrow-down"));
 	down->setTextLabel(i18n("Move Item &Down"), true);
 	vbox->addWidget(down);
 	m_buttons.insert(BColDown, down);

@@ -48,15 +48,15 @@ SheetSelectPage::SheetSelectPage( QWidget *parent )
   gui->ListViewSelected->setSorting(-1);
 
   //setup icons
-  gui->ButtonSelectAll->setIcon(KIcon("2rightarrow"));
-  gui->ButtonSelect->setIcon(KIcon("1rightarrow"));
-  gui->ButtonRemove->setIcon(KIcon("1leftarrow"));
-  gui->ButtonRemoveAll->setIcon(KIcon("2leftarrow"));
+  gui->ButtonSelectAll->setIcon(KIcon("arrow-right-double"));
+  gui->ButtonSelect->setIcon(KIcon("arrow-right"));
+  gui->ButtonRemove->setIcon(KIcon("arrow-left"));
+  gui->ButtonRemoveAll->setIcon(KIcon("arrow-left-double"));
 
-  gui->ButtonMoveTop->setIcon(KIcon("2uparrow"));
-  gui->ButtonMoveUp->setIcon(KIcon("1uparrow"));
-  gui->ButtonMoveDown->setIcon(KIcon("1downarrow"));
-  gui->ButtonMoveBottom->setIcon(KIcon("2downarrow"));
+  gui->ButtonMoveTop->setIcon(KIcon("arrow-up-double"));
+  gui->ButtonMoveUp->setIcon(KIcon("arrow-up"));
+  gui->ButtonMoveDown->setIcon(KIcon("arrow-down"));
+  gui->ButtonMoveBottom->setIcon(KIcon("arrow-down-double"));
 
   //connect buttons
   connect(gui->ButtonSelectAll,SIGNAL(clicked()),this,SLOT(selectAll()));

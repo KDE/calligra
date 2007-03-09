@@ -43,9 +43,9 @@ StencilTextEditor::StencilTextEditor(const QString& caption, QWidget *parent, co
   m_mainWidget = new StencilTextEditorUI(this);
   setMainWidget(m_mainWidget);
 
-  m_mainWidget->m_boldButton->setIconSet(KIcon("text_bold", 16));
-  m_mainWidget->m_italicsButton->setIconSet(KIcon("text_italic", 16));
-  m_mainWidget->m_underLineButton->setIconSet(KIcon("text_under", 16));
+  m_mainWidget->m_boldButton->setIconSet(KIcon("format-text-bold", 16));
+  m_mainWidget->m_italicsButton->setIconSet(KIcon("format-text-italic", 16));
+  m_mainWidget->m_underLineButton->setIconSet(KIcon("format-text-underline", 16));
 
   QPopupMenu* menu = new QPopupMenu(m_mainWidget->m_hAlignButton, "hAlignMenu");
   menu->setCheckable(true);

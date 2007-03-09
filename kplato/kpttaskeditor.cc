@@ -1586,7 +1586,7 @@ void TaskEditor::setupGui()
     connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
     addAction( name, actionAddMilestone );
     
-    actionDeleteTask  = new KAction(KIcon( "editdelete" ), i18n("Delete Task"), this);
+    actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
     addAction( name, actionDeleteTask );

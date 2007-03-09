@@ -411,14 +411,14 @@ void ViewListWidget::setupContextMenus()
         m_parts.append( action );
     }
     // no item actions
-    //action = new QAction( KIcon( "filenew" ), i18n( "New Category..." ), this );
+    //action = new QAction( KIcon( "document-new" ), i18n( "New Category..." ), this );
     //m_noitem.append( action );
     
     // Category actions
 /*    action = new QAction( KIcon( "rename" ), i18n( "Rename Category" ), this );
     m_category.append( action );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( renameCategory() ) );*/
-    //action = new QAction( KIcon( "remove" ), i18n( "Remove Category" ), this );
+    //action = new QAction( KIcon( "list-remove" ), i18n( "Remove Category" ), this );
     //m_category.append( action );
     
     // view actions
@@ -427,7 +427,7 @@ void ViewListWidget::setupContextMenus()
     // document actions
     //action = new QAction( KIcon( "show" ), i18n( "Show" ), this );
     //m_document.append( action );
-/*    action = new QAction( KIcon( "info" ), i18n( "Document information" ), this );
+/*    action = new QAction( KIcon( "document-properties" ), i18n( "Document information" ), this );
     m_document.append( action );*/
 }
 
@@ -750,7 +750,7 @@ View::View( Part* part, QWidget* parent )
     actionTaskProgress  = new KAction(KIcon( "edit" ), i18n("Progress..."), this);
     actionCollection()->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
-    actionDeleteTask  = new KAction(KIcon( "editdelete" ), i18n("Delete Task"), this);
+    actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
 

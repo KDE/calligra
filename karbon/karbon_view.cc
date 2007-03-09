@@ -1182,7 +1182,7 @@ KarbonView::initActions()
     actionCollection()->addAction("file_import", actionImportGraphic );
 	connect(actionImportGraphic, SIGNAL(triggered()), this, SLOT(fileImportGraphic()));
 
-    m_deleteSelectionAction  = new KAction(KIcon("editdelete"), i18n("D&elete"), this);
+    m_deleteSelectionAction  = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", m_deleteSelectionAction );
 	m_deleteSelectionAction->setShortcut(QKeySequence("Del"));
 	connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));

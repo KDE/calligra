@@ -227,7 +227,7 @@ KexiStartupDialog::KexiStartupDialog(
  	d->singlePage = dlgSinglePage(dialogType);
 
 	if (dialogType==OpenExisting) {//this dialog has "open" tab only!
-		setIcon(DesktopIcon("fileopen"));
+		setIcon(DesktopIcon("document-open"));
 	} else {
 		setIcon(d->kexi_sqlite_icon);
 	}
@@ -402,7 +402,7 @@ void KexiStartupDialog::setupPageTemplates()
 	d->templatesSectionID_custom1 = itemID++;
 /*later
 	templPageFrame = d->templatesWidget->addPage (
-		i18n("Personal Databases"), i18n("New Personal Database Project Templates"), DesktopIcon("folder_home") );
+		i18n("Personal Databases"), i18n("New Personal Database Project Templates"), DesktopIcon("user-home") );
 	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 	d->viewPersonalTempl = new TemplatesPage( Vertical, templPageFrame, "personal_page" );
 	tmplyr->addWidget( d->viewPersonalTempl );
@@ -458,7 +458,7 @@ void KexiStartupDialog::templatesPageShown(QWidget *page)
 			//add items (on demand):
 			d->viewBusinessTempl->addItem("address_book", i18n("Address Book"),
 				i18n("A database that offers you a contact information"),
-				DesktopIcon("contents"));
+				DesktopIcon("help-contents"));
 		}
 	}
 #endif

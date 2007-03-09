@@ -42,7 +42,7 @@ ExampleView::ExampleView( ExamplePart* part, QWidget* parent )
     actionCollection()->addAction(KStandardAction::Copy,  "copy", this, SLOT( copy() ));
     actionCollection()->addAction(KStandardAction::Cut,  "cut", this, SLOT( cut() ));
     // Note: Prefer KStandardAction::* to any custom action if possible.
-    //m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
+    //m_cut = new KAction( i18n("&Cut"), "edit-cut", 0, this, SLOT( cut() ),
     //                   actionCollection(), "cut");
 }
 

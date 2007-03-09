@@ -113,7 +113,7 @@ KWConfig::KWConfig( KWView* parent )
   KVBox *page = new KVBox();
   pageItem = new KPageWidgetItem( page, i18n("Spelling") );
   pageItem->setHeader( i18n("Spell Checker Behavior") );
-  pageItem->setIcon( loadIcon("spellcheck") );
+  pageItem->setIcon( loadIcon("tools-check-spelling") );
   addPage( pageItem );
 
   m_spellPage = new ConfigureSpellPage(parent, page);

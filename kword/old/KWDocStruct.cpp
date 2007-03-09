@@ -674,7 +674,7 @@ KWDocStructRootItem::KWDocStructRootItem(Q3ListView* parent, const QString& text
             setPixmap( 0, KGlobal::iconLoader()->loadIcon( "tree_arrange", K3Icon::Small ) );
         } break;
         case TextFrames: {
-            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_text", K3Icon::Small ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "insert-object", K3Icon::Small ) );
         } break;
         case FormulaFrames: {
             setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_formula", K3Icon::Small ) );

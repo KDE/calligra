@@ -43,7 +43,7 @@ KWDeleteDia::KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType typ
 
     setupTab1();
     setButtonGuiItem( Ok, KGuiItem(
-        i18n("&Delete"), "editdelete", type == deleteRow ?
+        i18n("&Delete"), "edit-delete", type == deleteRow ?
         i18n("Delete the row from the table.") :
         i18n("Delete the column from the table.")) );
 }

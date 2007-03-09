@@ -166,7 +166,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
 			this, SLOT(slotShowConnectionDetails()) );
 		setButtonText(KDialogBase::User1, i18n("&Details")+ " >>");
 	}
-	setButtonOK(KGuiItem(i18n("&Open"), "fileopen"));
+	setButtonOK(KGuiItem(i18n("&Open"), "document-open"));
 }
 
 KexiDBPasswordDialog::~KexiDBPasswordDialog()

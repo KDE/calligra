@@ -247,7 +247,7 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 	//// Setup the icon toolbar /////////////////
 	Q3VBoxLayout *vlayout = new Q3VBoxLayout(l, 3);
 	QToolButton *newItemPath = new QToolButton(frame);
-	newItemPath->setIconSet(KIcon("fileopen"));
+	newItemPath->setIconSet(KIcon("document-open"));
 	newItemPath->setTextLabel(i18n("&Add File"), true);
 	vlayout->addWidget(newItemPath);
 	m_buttons.insert(BNewItemPath, newItemPath);
@@ -372,7 +372,7 @@ PixmapCollectionEditor::displayMenu(Q3IconViewItem *it, const QPoint &p)
 	if(!it) return;
 	KMenu *menu = new KMenu();
 	menu->insertItem(KIcon("edit"), i18n("Rename Item"), this, SLOT(renameItem()));
-	menu->insertItem(KIcon("remove"), i18n("Remove Item"), this, SLOT(removeItem()));
+	menu->insertItem(KIcon("list-remove"), i18n("Remove Item"), this, SLOT(removeItem()));
 	menu->exec(p);
 }
 

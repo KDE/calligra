@@ -2337,7 +2337,7 @@ void KPrCanvas::setupMenus()
     m_presMenu->insertItem( i18n( "&Continue" ), this, SLOT( setSwitchingMode() ) );
     PM_DM = m_presMenu->insertItem( i18n( "&Drawing Mode" ), this, SLOT( setDrawingMode() ) );
     m_presMenu->insertSeparator();
-    m_presMenu->insertItem( SmallIcon("goto"), i18n( "&Goto Slide..." ), this, SLOT( slotGotoPage() ) );
+    m_presMenu->insertItem( SmallIcon("goto-page"), i18n( "&Goto Slide..." ), this, SLOT( slotGotoPage() ) );
     m_presMenu->insertSeparator();
     m_presMenu->insertItem( i18n( "&End" ), this, SLOT( slotExitPres() ) );
     m_presMenu->setItemChecked( PM_DM, false );
