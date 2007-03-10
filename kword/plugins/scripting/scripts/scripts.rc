@@ -45,79 +45,79 @@
         <script
             name="pysampleimportfile"
             text="Import File..."
-            comment="This python script imports content from a file"
+            comment="Python script to import content from a file"
             interpreter="python"
             file="extensions/sample_importfile.py" />
         <script
             name="pysampleexportfile"
             text="Export File..."
-            comment="This python script exports content to a file"
+            comment="Python script to export content to a file"
             interpreter="python"
             file="extensions/sample_exportfile.py" />
         <script
             name="pysampleinsertshape"
             text="Insert Shape..."
-            comment="This python script inserts a shape"
+            comment="Python script to insert a shape"
             interpreter="python"
             file="extensions/sample_insertshape.py" />
         <script
             name="rbsampledoctree"
             text="Document Tree..."
-            comment="This ruby script uses QtRuby to display the document structur within a treeview"
+            comment="QtRuby script that displays the document structur within a treeview"
             interpreter="ruby"
             file="extensions/sample_doctree.rb" />
         <script
             name="rbsamplecursor"
             text="Control Cursor..."
-            comment="This ruby script demonstrates how to control the cursor."
+            comment="Ruby script that demonstrates how to control the cursor"
             interpreter="ruby"
             file="extensions/sample_cursor.rb" />
         <script
             name="pysampleactions"
             text="Execute Action..."
-            comment="This python script demonstrates usage of actions"
+            comment="Python script that demonstrates usage of actions"
             interpreter="python"
             file="extensions/sample_actions.py" />
         <script
             name="pysampleprogressbar"
             text="Progressbar"
-            comment="This python script demonstrates how to use the progressbar"
+            comment="Python script that demonstrates how to use the progressbar"
             interpreter="python"
             file="extensions/sample_progressbar.py" />
         <script
             name="pysampletext"
             text="Text"
-            comment="This python script demonstrates usage of the text engine"
+            comment="Python script that demonstrates usage of the text engine"
             interpreter="python"
             file="extensions/sample_text.py" />
         <script
             name="pysamplelisthtml"
             text="Lists with HTML"
-            comment="This python script demonstrates how to deal with lists"
+            comment="Python script that demonstrates how to create lists with HTML"
             interpreter="python"
             file="extensions/sample_lists_html.py" />
         <script
             name="pysamplelistcursor"
             text="Lists with Cursor"
-            comment="This python script demonstrates how to deal with lists"
+            comment="Python script that demonstrates how to create lists with a cursor"
             interpreter="python"
             file="extensions/sample_lists_cursor.py" />
         <script
             name="pysampletables"
             text="Tables"
-            comment="This python script demonstrates how to deal with tables"
+            comment="Python script that demonstrates how to deal with tables"
             interpreter="python"
             file="extensions/sample_tables.py" />
         <script
             name="pysamplevariables"
             text="Variables"
-            comment="This python script demonstrates how to handle variables"
+            comment="Python script that demonstrates how to handle variables"
             interpreter="python"
             file="extensions/sample_variables.py" />
         <script
             name="pysampleallshapes"
             text="All Shapes"
-            comment="This python script adds all shapes"
+            comment="Python script adds all shapes"
             interpreter="python"
             file="extensions/sample_allshapes.py" />
 

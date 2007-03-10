@@ -41,6 +41,11 @@ namespace Scripting {
 
         public Q_SLOTS:
 
+            /** Return the frame content as plain text. */
+            QString text() const {
+                return QTextCursor(m_frame).block().text();
+            }
+
             /** Return the \a TextCursor object for this frame. */
             QObject* cursor() {
                 return new TextCursor(this, QTextCursor(m_frame));

@@ -183,15 +183,22 @@ class FrameItem < Item
                     @childitems.push( TextFrameItem.new(self, f) )
                 end
             end
+            if @data.text
+                @pages.push( TextEditPage.new("Text", @data.text) )
+            end
         end
         def data(column)
-            return Qt::Variant.new( "TextFrame %i-%i" % [@data.firstPosition(),@data.lastPosition()] )
+            #return Qt::Variant.new( "TextFrame %i-%i" % [@data.firstPosition(),@data.lastPosition()] )
+            return Qt::Variant.new( "TextFrame" )
         end
     end
 
     class TextListItem < Item
         def initialize(parentitem, textlist)
             super(parentitem, textlist)
+            if @data.text
+                @pages.push( TextEditPage.new("Text", @data.text) )
+            end
         end
         def data(column)
             return Qt::Variant.new( "TextList" )
@@ -201,6 +208,9 @@ class FrameItem < Item
     class TextTableItem < Item
         def initialize(parentitem, texttable)
             super(parentitem, texttable)
+            if @data.text
+                @pages.push( TextEditPage.new("Text", @data.text) )
+            end
         end
         def data(column)
             return Qt::Variant.new( "TextTable" )

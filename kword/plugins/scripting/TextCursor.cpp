@@ -61,6 +61,10 @@ bool TextCursor::atEnd() const {
 }
 */
 
+QString TextCursor::text() const {
+    return m_cursor.block().text();
+}
+
 bool TextCursor::hasSelection() const {
     return m_cursor.hasSelection();
 }

@@ -69,6 +69,20 @@ namespace Scripting {
             }
 #endif
 
+            QString itemText(int index) {
+                QTextBlock block = m_list->item(index);
+                return block.isValid() ? m_list->itemText(block) : QString();
+            }
+            QString text() {
+                QString result;
+                for(int i = 0; i < m_list->count(); ++i) {
+                    const QString s = m_list->itemText( m_list->item(i) );
+                    if( ! s.isNull() )
+                        result += QString("%1\n").arg(s);
+                }
+                return result;
+            }
+
             /** Remove the item at position \p index . */
             void removeItem(int index) {
                 m_list->removeItem(index);

@@ -82,6 +82,9 @@ namespace Scripting {
             /** Return true if the cursor is at the end of the document. */
             //bool atEnd() const;
 
+            /** Return the block content as plain text. */
+            QString text() const;
+
             /** Returns true if the cursor knows about a selection. */
             bool hasSelection() const;
             /** Return the position where the selection starts. */
