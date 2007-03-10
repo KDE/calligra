@@ -100,7 +100,7 @@ namespace Scripting {
             //void removeFrame(KWFrame *frame);
 
             /** Return the \a TextDocument object or NULL if this frameset does not have a \a TextDocument object. */
-            QObject* textDocument() {
+            QObject* document() {
                 KWTextFrameSet* textframeset = dynamic_cast< KWTextFrameSet* >( (KWFrameSet*)m_frameset );
                 return textframeset ? new TextDocument(this, textframeset->document()) : 0;
             }

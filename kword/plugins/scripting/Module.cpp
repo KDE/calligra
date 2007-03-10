@@ -146,6 +146,12 @@ QObject* Module::frameSet(int frameSetNr)
     return frameset ? new FrameSet(this, frameset) : 0;
 }
 
+QObject* Module::frameSetByName(const QString& name)
+{
+    KWFrameSet* frameset = kwDoc()->frameSetByName(name);
+    return frameset ? new FrameSet(this, frameset) : 0;
+}
+
 QObject* Module::addTextFrameSet(const QString& framesetname)
 {
     KWord::TextFrameSetType type = KWord::OtherTextFrameSet;
@@ -209,6 +215,17 @@ QObject* Module::addFrame(const QString& framesetname, const QString& shapeId)
 {
     FrameSet* set = dynamic_cast< FrameSet* >( addFrameSet(framesetname) );
     return set ? set->addFrame(shapeId) : 0;
+}
+
+QObject* Module::findFrameSet(KWord::TextFrameSetType type)
+{
+    foreach(KWFrameSet* set, kwDoc()->frameSets()) {
+        KWTextFrameSet* textframeset = dynamic_cast< KWTextFrameSet* >(set);
+        if( textframeset )
+            if( textframeset->textFrameSetType() == type)
+                return new FrameSet(this, textframeset);
+    }
+    return 0;
 }
 
 QObject* Module::standardPageLayout()

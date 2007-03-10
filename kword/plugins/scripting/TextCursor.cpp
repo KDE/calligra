@@ -72,6 +72,21 @@ QString TextCursor::selectedHtml() const {
     return m_cursor.selection().toHtml();
 }
 
+QObject* TextCursor::currentFrame() {
+    QTextFrame* frame = m_cursor.currentFrame();
+    return frame ? new TextFrame(this, frame) : 0;
+}
+
+QObject* TextCursor::currentList() {
+    QTextList* list = m_cursor.currentList();
+    return list ? new TextList(this, list) : 0;
+}
+
+QObject* TextCursor::currentTable() {
+    QTextTable* table = m_cursor.currentTable();
+    return table ? new TextTable(this, table) : 0;
+}
+
 void TextCursor::insertText(const QString& text) {
     m_cursor.insertText(text);
 }

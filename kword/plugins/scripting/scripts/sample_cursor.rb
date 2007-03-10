@@ -22,10 +22,10 @@ rescue LoadError
     # (maybe openURL was renamed to openUrl meanwhile ;)
     mytextframeset1 = KWord.addTextFrameSet("myFirstTextFrame")
     mytextframeset1.addTextFrame()
-    mytextframeset1.textDocument().setHtml("<h1>First Header</h1><p>Some text</p><p>Some more text with <b>bold</b> and <i>italic</i> and <u>underline</u> to test the stuff.</p>")
+    mytextframeset1.document().setHtml("<h1>First Header</h1><p>Some text</p><p>Some more text with <b>bold</b> and <i>italic</i> and <u>underline</u> to test the stuff.</p>")
     mytextframeset2 = KWord.addTextFrameSet("mySecondTextFrame")
     mytextframeset2.addTextFrame()
-    mytextframeset2.textDocument().setHtml("<h1>Second Header</h1><h2>First Sub Header</h2><p>Some text.</p><h2>Second Sub Header</h2><p>Some text.</p>")
+    mytextframeset2.document().setHtml("<h1>Second Header</h1><h2>First Sub Header</h2><p>Some text.</p><h2>Second Sub Header</h2><p>Some text.</p>")
 end
 
 class Dialog < Qt::Dialog
@@ -43,7 +43,7 @@ class Dialog < Qt::Dialog
         setLayout(layout)
 
 #         fs = KWord.frameSet(0)
-#         doc = fs.textDocument()
+#         doc = fs.document()
 #         puts "doc.c() ............................"
 #         c = doc.c()
 #         puts "position=%s" % c.position()
@@ -92,8 +92,7 @@ class Dialog < Qt::Dialog
 
         @cursor = KWord.activeCursor()
         if not @cursor
-            fs = KWord.frameSet(0)
-            doc = fs.textDocument
+            doc = KWord.mainFrameSet().document()
             @cursor = doc.cursor
             if not @cursor
                 raise "Failed to get the KWord cursor."

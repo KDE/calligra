@@ -2,10 +2,10 @@
 
 import KWord, time, sys, os
 
-#KWord.insertPage( KWord.pageCount() )
 #if KWord.pageCount() < 1: KWord.insertPage(0)
-fs = KWord.frameSet(0)
-doc = fs.textDocument()
+#doc = KWord.frameSet(0).document()
+
+doc = KWord.mainFrameSet().document()
 
 # Set the default cascading stylesheet.
 doc.setDefaultStyleSheet(

@@ -88,12 +88,20 @@ namespace Scripting {
             /** Return the selected HTML. */
             QString selectedHtml() const;
 
+            /** Return the current \a TextFrame object if valid. */
+            QObject* currentFrame();
+            /** Return the current \a TextList object if valid. */
+            QObject* currentList();
+            /** Return the current \a TextTable object if valid. */
+            QObject* currentTable();
+
             /** Insert the \p text plain-text at the current cursor position. */
             void insertText(const QString& text);
             /** Insert the \p html html-text at the current cursor position. */
             void insertHtml(const QString& html);
             /** Insert a block element at the current cursor position. */
             void insertBlock();
+            /** Insert a default block element at the current cursor position. */
             void insertDefaultBlock();
             /** Insert and return a new \a TextFrame object at the current cursor position. */
             QObject* insertFrame();

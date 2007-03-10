@@ -12,8 +12,7 @@ class Reader:
         filtermask = "*.txt"
         def __init__(self, file):
             import KWord
-            fs = KWord.frameSet(0)
-            doc = fs.textDocument()
+            doc = KWord.mainFrameSet().document()
 
             f = open(file, "r")
             doc.setText( ''.join(f.readlines()) )
@@ -24,8 +23,8 @@ class Reader:
         filtermask = "*.htm *.html"
         def __init__(self, file):
             import KWord
-            fs = KWord.frameSet(0)
-            doc = fs.textDocument()
+            doc = KWord.mainFrameSet().document()
+
             #cursor = doc.rootFrame().lastCursorPosition()
             #cursor = doc.lastCursor()
             #cursor.insertDefaultBlock()
@@ -86,10 +85,12 @@ class ImportFile:
 
                 readerClazz(file)
 
-        except:
+        except e:
             import traceback
+            #list = traceback.format_tb(sys.exc_info()[2], None)
+            #s = traceback.format_exception_only(sys.exc_info()[0], sys.exc_info()[1])
             tb = "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
-            forms.showMessageBox("Error","Error",tb)
+            forms.showMessageBox("Error","Error","%s" % e,tb)
 
     def __del__(self):
         self.dialog.delayedDestruct()

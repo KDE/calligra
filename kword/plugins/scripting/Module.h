@@ -26,14 +26,47 @@
 #include <QObject>
 
 #include <KoScriptingModule.h>
+#include <KWord.h>
 
 class KWDocument;
 
 namespace Scripting {
 
     /**
-    * The ScriptingModule class enables access to the KWord
-    * functionality from within the scripting backends.
+    * The Module class enables access to the KWord functionality
+    * from within the scripting backends.
+    *
+    * KWord provides as top-level containers the \a FrameSet
+    * objects. Each such frameset is then able to contain
+    * multiple \a Frame objects. The frameset also allows to
+    * access the \a TextDocument object to deals with the actual
+    * content within a text document.
+    *
+    * Python example to set the content of the main text document;
+    * \code
+    * import KWord
+    * doc = KWord.mainFrameSet().document()
+    * doc.setHtml("<b>Hello World</b>")
+    * \endcode
+    *
+    * Python example to append content to the main text document
+    * and set the page header and footer;
+    * \code
+    * import KWord
+    * doc = KWord.mainFrameSet().document()
+    * doc.lastCursor().insertHtml("Even more <b>Hello World</b>")
+    * KWord.firstPageHeaderFrameSet().document().setText("Header")
+    * KWord.firstPageFooterFrameSet().document().setText("Footer")
+    * \endcode
+    *
+    * Python example that prints the documents Url and some other
+    * meta informations;
+    * \code
+    * import KWord
+    * print KWord.document().url()
+    * print KWord.document().documentInfoTitle()
+    * print KWord.document().documentInfoAuthorName()
+    * \endcode
     */
     class Module : public KoScriptingModule
     {
@@ -44,6 +77,7 @@ namespace Scripting {
 
             KWDocument* kwDoc();
             virtual KoDocument* doc();
+            QObject* findFrameSet(KWord::TextFrameSetType type);
 
         public Q_SLOTS:
 
@@ -51,7 +85,15 @@ namespace Scripting {
 
             /** Return total number of pages the document has. */
             int pageCount();
-            /** Return the \a Page of the specific page number. */
+
+            /** Return the \a Page of the specific page number.
+            Python example that iterates over all pages;
+            \code
+            import KWord
+            for i in range( KWord.pageCount() ):
+                page = KWord.page(i)
+                print "width=%s height=%s" % (page.width(),page.height())
+            \endcode */
             QObject* page(int pageNumber);
 
             /** Insert a new page and returns the new \a Page object.
@@ -69,18 +111,36 @@ namespace Scripting {
             /** Set a new startpage for this document.  */
             void setStartPage(int pageNumber);
 
-            /***** Shapes *****/
-
-            /** Return a list of shapeId names. Such a shapeId name could then be
-            used for example with the \a addFrame() method to create a new frame. */
-            QStringList shapeKeys();
-
             /***** FrameSet *****/
 
             /** Return the amount of framesets this document holds. */
             int frameSetCount();
             /** Return the \a FrameSet object identified by the index frameSetNr. */
             QObject* frameSet(int frameSetNr);
+            /** Return the \a FrameSet object which has the name \p name . */
+            QObject* frameSetByName(const QString& name);
+
+            /** Return the \a FrameSet that holds the header for the first page */
+            QObject* firstPageHeaderFrameSet() { return findFrameSet(KWord::FirstPageHeaderTextFrameSet); }
+            /** Return the \a FrameSet that holds the headers for the odd pages */
+            QObject* oddPagesHeaderFrameSet() { return findFrameSet(KWord::OddPagesHeaderTextFrameSet); }
+            /** Return the \a FrameSet that holds the headers for the even pages */
+            QObject* evenPagesHeaderFrameSet() { return findFrameSet(KWord::EvenPagesHeaderTextFrameSet); }
+            /** Return the \a FrameSet that holds the footer for the first page */
+            QObject* firstPageFooterFrameSet() { return findFrameSet(KWord::FirstPageFooterTextFrameSet); }
+            /** Return the \a FrameSet that holds the footers for the odd pages */
+            QObject* oddPagesFooterFrameSet() { return findFrameSet(KWord::OddPagesFooterTextFrameSet); }
+            /** Return the \a FrameSet that holds the footers for the even pages */
+            QObject* evenPagesFooterFrameSet() { return findFrameSet(KWord::EvenPagesFooterTextFrameSet); }
+
+            /** Return the \a FrameSet that holds all the frames for the main text area */
+            QObject* mainFrameSet() { return findFrameSet(KWord::MainTextFrameSet); }
+
+            /** Return a \a FrameSet that holds a footnote */
+            QObject* footNoteFrameSet() { return findFrameSet(KWord::FootNoteTextFrameSet); }
+            /** Return any other \a FrameSet not managed by the auto-frame layout */
+            QObject* otherFrameSet() { return findFrameSet(KWord::OtherTextFrameSet); }
+
             /** Add and return a new \a FrameSet object for text handled with \a TextDocument . */
             QObject* addTextFrameSet(const QString& framesetname);
             /** Add and return a new \a FrameSet object. */
@@ -88,16 +148,21 @@ namespace Scripting {
 
             /***** Frame *****/
 
+            /** Return a list of shapeId names. Such a shapeId name could then be
+            used for example with the \a addFrame() method to create a new frame. */
+            QStringList shapeKeys();
+
             /** Return the amount of frames this document holds. */
             int frameCount();
             /** Return a the \a Frame object identified by the index frameNr. */
             QObject* frame(int frameNr);
+
             /** Add and return a new \a FrameSet object for text handled with \a TextDocument . */
             QObject* addTextFrame(const QString& framesetname);
             /** Add and return a new \a FrameSet object. */
             QObject* addFrame(const QString& framesetname, const QString& shapeId);
 
-            /***** Layout *****/
+            /***** Page Layout *****/
 
             /** Return the standard page layout. */
             QObject* standardPageLayout();

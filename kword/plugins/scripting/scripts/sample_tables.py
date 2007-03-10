@@ -4,8 +4,8 @@ import KWord
 
 #KWord.insertPage( KWord.pageCount() )
 #if KWord.pageCount() < 1: KWord.insertPage(0)
-fs = KWord.frameSet(0)
-doc = fs.textDocument()
+
+doc = KWord.mainFrameSet().document()
 
 doc.setHtml(
     (

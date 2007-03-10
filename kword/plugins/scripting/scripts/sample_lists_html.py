@@ -3,15 +3,8 @@
 # Import the KWord module.
 import KWord
 
-# Get the first frameset which contains the main textdocument.
-fs = KWord.frameSet(0)
-if fs == None:
-    raise "No first frameset"
-
-# Get the main textdocument.
-doc = fs.textDocument()
-if doc == None:
-    raise "No textdocument within the first frameset"
+# Get the TextDocument.
+doc = KWord.mainFrameSet().document()
 
 # Set the default cascading stylesheet.
 doc.setDefaultStyleSheet(

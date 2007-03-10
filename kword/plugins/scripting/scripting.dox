@@ -10,11 +10,12 @@
 * functionality from within the scripting backends.
 *
 * \see http://www.koffice.org/kword
+* \see http://wiki.koffice.org/index.php?title=KWord/Scripting
 * \see http://kross.dipe.org
 *
 * @section Legal
 *
-* @li Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
+* @li Copyright (c) 2006-2007 Sebastian Sauer <mail@dipe.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public

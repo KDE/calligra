@@ -22,10 +22,10 @@ rescue LoadError
     # (maybe openURL was renamed to openUrl meanwhile ;)
     mytextframeset1 = KWord.addTextFrameSet("myFirstTextFrame")
     mytextframeset1.addTextFrame()
-    mytextframeset1.textDocument().setHtml("<h1>First Header</h1><p>Some text</p><p>Some more text with <b>bold</b> and <i>italic</i> and <u>underline</u> to test the stuff.</p>")
+    mytextframeset1.document().setHtml("<h1>First Header</h1><p>Some text</p><p>Some more text with <b>bold</b> and <i>italic</i> and <u>underline</u> to test the stuff.</p>")
     mytextframeset2 = KWord.addTextFrameSet("mySecondTextFrame")
     mytextframeset2.addTextFrame()
-    mytextframeset2.textDocument().setHtml("<h1>Second Header</h1><h2>First Sub Header</h2><p>Some text.</p><h2>Second Sub Header</h2><p>Some text.</p>")
+    mytextframeset2.document().setHtml("<h1>Second Header</h1><h2>First Sub Header</h2><p>Some text.</p><h2>Second Sub Header</h2><p>Some text.</p>")
 end
 
 #########################################################################
@@ -223,7 +223,7 @@ class FrameItem < Item
     def initialize(framesetitem, frame)
         super(framesetitem, frame)
         frameset = frame.frameSet
-        textdoc = frameset.textDocument
+        textdoc = frameset.document
         if textdoc != 0
             @childitems.push( TextDocumentItem.new(self, textdoc) )
         end
@@ -268,7 +268,7 @@ class FramesetItem < Item
             PropertyPage.new("Properties", [
                 PropertyPage::Property.new("name", @data.name),
                 PropertyPage::Property.new("frameCount", @data.frameCount),
-                PropertyPage::Property.new("isText", @data.textDocument != 0),
+                PropertyPage::Property.new("isText", @data.document != 0),
             ] )
         )
 

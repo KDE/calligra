@@ -12,8 +12,7 @@ class Writer:
         filtermask = "*.txt"
         def __init__(self, file):
             import KWord
-            fs = KWord.frameSet(0)
-            doc = fs.textDocument()
+            doc = KWord.mainFrameSet().document()
 
             f = open(file, "w")
             f.write( doc.toText() )
@@ -24,8 +23,7 @@ class Writer:
         filtermask = "*.htm *.html"
         def __init__(self, file):
             import KWord
-            fs = KWord.frameSet(0)
-            doc = fs.textDocument()
+            doc = KWord.mainFrameSet().document()
 
             f = open(file, "w")
             f.write( doc.toHtml() )

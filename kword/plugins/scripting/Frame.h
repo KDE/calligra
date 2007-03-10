@@ -63,19 +63,20 @@ namespace Scripting {
             /** Return the parent \a FrameSet object this \a Frame object is child of. */
             QObject* frameSet() { return parent(); }
 
-//testcases
-QObject* cursor() {
-    KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
-    return frame ? new TextCursor(this, QTextCursor(frame->document())) : 0;
-}
-int position() {
-    KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
-    return frame ? frame->position() : 0;
-}
-int endPosition() {
-    KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
-    return frame ? frame->endPosition() : 0;
-}
+            /*testcases
+            QObject* cursor() {
+                KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
+                return frame ? new TextCursor(this, QTextCursor(frame->document())) : 0;
+            }
+            int position() {
+                KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
+                return frame ? frame->position() : 0;
+            }
+            int endPosition() {
+                KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
+                return frame ? frame->endPosition() : 0;
+            }
+            */
 
             /** This property what should happen when the frame is full. */
             int frameBehavior() const { return m_frame->frameBehavior(); }
