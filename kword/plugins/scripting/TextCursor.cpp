@@ -39,6 +39,10 @@ int TextCursor::position() const {
     return m_cursor.position();
 }
 
+int TextCursor::anchor() const {
+    return m_cursor.anchor();
+}
+
 void TextCursor::setPosition(int pos, bool moveAnchor) {
     m_cursor.setPosition(pos, moveAnchor ? QTextCursor::MoveAnchor : QTextCursor::KeepAnchor);
 }
@@ -47,9 +51,15 @@ bool TextCursor::movePosition(int operation, bool moveAnchor) {
     return m_cursor.movePosition((QTextCursor::MoveOperation)operation, moveAnchor ? QTextCursor::MoveAnchor : QTextCursor::KeepAnchor);
 }
 
-int TextCursor::anchor() const {
-    return m_cursor.anchor();
+/*
+bool TextCursor::atStart() const {
+    return m_cursor.atStart();
 }
+
+bool TextCursor::atEnd() const {
+    return m_cursor.atEnd();
+}
+*/
 
 bool TextCursor::hasSelection() const {
     return m_cursor.hasSelection();

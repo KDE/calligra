@@ -140,6 +140,10 @@ class Item
         return @parentitem
     end
 
+    def hasChildren
+        return @childitems.length > 0
+    end
+
     def child(row)
         return @childitems[row]
     end
@@ -185,6 +189,24 @@ class FrameItem < Item
         end
     end
 
+    class TextListItem < Item
+        def initialize(parentitem, textlist)
+            super(parentitem, textlist)
+        end
+        def data(column)
+            return Qt::Variant.new( "TextList" )
+        end
+    end
+
+    class TextTableItem < Item
+        def initialize(parentitem, texttable)
+            super(parentitem, texttable)
+        end
+        def data(column)
+            return Qt::Variant.new( "TextTable" )
+        end
+    end
+
     class TextDocumentItem < Item
         def initialize(frameitem, textdoc)
             super(frameitem, textdoc)
@@ -209,14 +231,43 @@ class FrameItem < Item
             @pages.push( TextEditPage.new("Style", @data.defaultStyleSheet) )
             @pages.push( TextBrowserPage.new("Preview", @data.toHtml) )
 
-            roottextframe = textdoc.rootFrame
-            @childitems.push( TextFrameItem.new(self, roottextframe) )
+            @rootframe = textdoc.rootFrame
+        end
 
-            cursor = roottextframe.firstCursorPosition()
-            #@childitems.push( TextCursorItem.new(self, ) )
+        def hasChildren
+            return true
+        end
+        def child(row)
+            if @childitems.length <= 0
+                lazyLoadChildren()
+            end
+            return @childitems[row]
+        end
+        def childCount
+            if @childitems.length <= 0
+                lazyLoadChildren()
+            end
+            return @childitems.length
         end
         def data(column)
             return Qt::Variant.new("Document")
+        end
+
+        def lazyLoadChildren
+            textcursor = @rootframe.firstCursorPosition()
+            addCurrentBlock(textcursor)
+            while textcursor.movePosition( textcursor.NextBlock )
+                addCurrentBlock(textcursor)
+            end
+        end
+        def addCurrentBlock(textcursor)
+            if textcursor.currentTable()
+                @childitems.push( TextTableItem.new(self, textcursor.currentTable()) )
+            elsif textcursor.currentList()
+                @childitems.push( TextListItem.new(self, textcursor.currentList()) )
+            elsif textcursor.currentFrame()
+                @childitems.push( TextFrameItem.new(self, textcursor.currentFrame()) )
+            end
         end
     end
 
@@ -364,6 +415,15 @@ class TreeModel < Qt::AbstractItemModel
         return parentItem.childCount
     end
 
+    def hasChildren(parent)
+        if !parent.valid?
+            parentItem = @rootItem
+        else
+            parentItem = parent.internalPointer
+        end
+        return parentItem.hasChildren
+    end
+
 end
 
 #########################################################################
@@ -372,6 +432,17 @@ end
 class Dialog < Qt::Dialog
 
     slots 'slotCurrentChanged(const QModelIndex&, const QModelIndex&)'
+
+    def recursiveExpand(level, modelindex)
+        level += 1
+        for i in 0..(@view.model.rowCount(modelindex) - 1)
+            idx = @view.model().index(i,0,modelindex)
+            if level <= 2
+                @view.expand( idx )
+                recursiveExpand(level, idx)
+            end
+        end
+    end
 
     def initialize
         super()
@@ -386,7 +457,8 @@ class Dialog < Qt::Dialog
         @view.header().setVisible(false)
         @view.model = TreeModel.new(self)
         @view.selectionModel = Qt::ItemSelectionModel.new(@view.model)
-        @view.expandAll
+        recursiveExpand(0, Qt::ModelIndex.new)
+        #@view.expandAll
         @view.show
         splitter.addWidget(@view)
 

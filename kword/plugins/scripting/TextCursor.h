@@ -77,6 +77,11 @@ namespace Scripting {
             defines if the anchor should be moved too to the new position. */
             bool movePosition(int operation, bool moveAnchor = true);
 
+            /** Return true if the cursor is at the beginning of the document. */
+            //bool atStart() const;
+            /** Return true if the cursor is at the end of the document. */
+            //bool atEnd() const;
+
             /** Returns true if the cursor knows about a selection. */
             bool hasSelection() const;
             /** Return the position where the selection starts. */
