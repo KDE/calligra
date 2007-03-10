@@ -23,7 +23,6 @@
 #include "Sheet.h"
 
 #include <klocale.h>
-#include <KoBrush.h>
 #include <KoChild.h>
 #include <KoDom.h>
 #include <KoOasisLoadingContext.h>
