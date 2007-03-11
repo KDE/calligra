@@ -180,12 +180,11 @@ namespace Scripting {
             /** Add and return a new paragraph \a Style object. */
             QObject* addParagraphStyle(const QString& name);
 
-            /***** Active *****/
+            /***** Active selection *****/
 
-            /** Return the active/current \a TextCursor object. */
-            QObject* activeCursor();
-            /** Set the active/current \a TextCursor object. */
-            bool setActiveCursor(QObject* cursor);
+            /** Return a \a Tool object that provides access to functionality
+            like handling for example current/active selections. */
+            QObject* tool();
 
         private:
             /// \internal d-pointer class.

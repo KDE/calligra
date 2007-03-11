@@ -10,6 +10,7 @@ install(FILES
     sample_doctree.rb
     sample_cursor.rb
     sample_actions.py
+    sample_toolactions.py
     sample_progressbar.py
     sample_text.py
     sample_lists_html.py

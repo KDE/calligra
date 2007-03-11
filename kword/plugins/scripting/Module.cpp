@@ -23,26 +23,18 @@
 #include "PageLayout.h"
 #include "FrameSet.h"
 #include "Style.h"
+#include "Tool.h"
 
 // qt
 #include <QPointer>
-//#include <QApplication>
 // kde
 #include <kdebug.h>
-//#include <kmainwindow.h>
-// koffice
-//#include <KoMainWindow.h>
-//#include <KoApplicationAdaptor.h>
-//#include <KoDocumentAdaptor.h>
-#include <KoToolProxy.h>
-#include <KoTextSelectionHandler.h>
 // kword
 #include <KWDocument.h>
 #include <KWView.h>
 #include <KWPage.h>
 #include <KWFrameSet.h>
 #include <KWFrame.h>
-#include <KWCanvas.h>
 
 extern "C"
 {
@@ -266,38 +258,9 @@ QObject* Module::addParagraphStyle(const QString& name)
     return new Style(this, s);
 }
 
-QObject* Module::activeCursor()
+QObject* Module::tool()
 {
-    KWView* v = dynamic_cast< KWView* >( view() );
-    KWCanvas* c = v ? v->kwcanvas() : 0;
-    KoToolProxy* t = c ? c->toolProxy() : 0;
-    KoToolSelection* s = t ? t->selection() : 0;
-    KoTextSelectionHandler* h = dynamic_cast< KoTextSelectionHandler* >(s);
-    if( ! h ) {
-        kDebug() << "Scripting::Module::currentCursor() Failed to determinate the active selection" << endl;
-        return 0;
-    }
-    return new TextCursor(this, h->caret());
-}
-
-bool Module::setActiveCursor(QObject* cursor)
-{
-    TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
-    if( ! textcursor ) {
-        kDebug() << "Scripting::Module::setActiveCursor() Invalid TextCursor argument passed" << endl;
-        return false;
-    }
-    KWView* v = dynamic_cast< KWView* >( view() );
-    KWCanvas* c = v ? v->kwcanvas() : 0;
-    KoCanvasResourceProvider* r = c ? c->resourceProvider() : 0;
-    if( ! r ) {
-        kDebug() << "Scripting::Module::setActiveCursor() Failed to determinate the active selection" << endl;
-        return false;
-    }
-    QVariant variant;
-    variant.setValue( (QObject*) &textcursor->cursor() );
-    r->setResource(KWord::CurrentTextCursor, variant);
-    return true;
+    return new Tool(this);
 }
 
 #include "Module.moc"

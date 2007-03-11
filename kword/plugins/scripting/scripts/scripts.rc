@@ -79,6 +79,12 @@
             interpreter="python"
             file="extensions/sample_actions.py" />
         <script
+            name="pysampletoolactions"
+            text="Tool Actions..."
+            comment="Python script that demonstrates usage of tool actions"
+            interpreter="python"
+            file="extensions/sample_toolactions.py" />
+        <script
             name="pysampleprogressbar"
             text="Progressbar"
             comment="Python script that demonstrates how to use the progressbar"
