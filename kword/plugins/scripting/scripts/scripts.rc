@@ -126,6 +126,12 @@
             comment="Python script adds all shapes"
             interpreter="python"
             file="extensions/sample_allshapes.py" />
+        <script
+            name="pysampleonlinehelp"
+            text="Online Help..."
+            comment="Python script that uses the KHTML Part to display the KWord Scripting online help"
+            interpreter="python"
+            file="extensions/sample_onlinehelp.py" />
 
     </collection>
 

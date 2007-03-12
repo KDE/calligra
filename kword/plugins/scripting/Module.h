@@ -157,7 +157,12 @@ namespace Scripting {
             /** Return a the \a Frame object identified by the index frameNr. */
             QObject* frame(int frameNr);
 
-            /** Add and return a new \a FrameSet object for text handled with \a TextDocument . */
+            /** Add and return a new \a FrameSet object for text handled with \a TextDocument .
+            \code
+                import KWord
+                textshape = KWord.addTextFrame("MyTextShape")
+                textshape.document().setText("Some text")
+            \endcode */
             QObject* addTextFrame(const QString& framesetname);
             /** Add and return a new \a FrameSet object. */
             QObject* addFrame(const QString& framesetname, const QString& shapeId);

@@ -19,4 +19,5 @@ install(FILES
     sample_variables.py
     sample_insertshape.py
     sample_allshapes.py
+    sample_onlinehelp.py
     DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/extensions)

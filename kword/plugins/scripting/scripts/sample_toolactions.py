@@ -42,7 +42,8 @@ class ToolActions:
         self.widgetlist = widget["List"]
 
         if self.dialog.exec_loop():
-            self.execAction()
+            if len(self.actions) > 0:
+                self.execAction()
 
     def __del__(self):
         self.dialog.delayedDestruct()

@@ -28,6 +28,7 @@
 #include <QPointer>
 #include <QSignalMapper>
 
+#include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoTextSelectionHandler.h>
 #include <KoTextSelectionHandler.h>
@@ -62,6 +63,8 @@ namespace Scripting {
                     m_signalMapper->setMapping( it.value() , it.key() );
                 }
                 connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SIGNAL(actionTriggered(const QString&)));
+
+                connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)), this, SIGNAL(changedTool()));
             }
             virtual ~Tool() {}
 
@@ -114,12 +117,12 @@ namespace Scripting {
             QStringList actionNames() {
                 return QStringList( actions().keys() );
             }
-            /** Return the text the action with \p name has. */
+            /** Return the text the action with \p actionname has. */
             QString actionText(const QString& actionname) {
                 QAction* a = actions()[ actionname ];
                 return a ? a->text() : QString();
             }
-            /** Trigger the action with \p name . */
+            /** Trigger the action with \p actionname . */
             void triggerAction(const QString& actionname) {
                 QAction* a = actions()[ actionname ];
                 if( a ) a->trigger();
@@ -129,6 +132,9 @@ namespace Scripting {
 
             /** This signal got emitted if an action was triggered. */
             void actionTriggered(const QString& actionname);
+
+            /** This signal got emitted if the tool changed. */
+            void changedTool();
 
         private:
             Module* m_module;
