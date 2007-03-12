@@ -82,19 +82,19 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & /*doc*/ )
                 }
             }
             if ( !ok )
-                KMessageBox::sorry( 0, i18n( "Invalid data file %1" , m_file ) );
+                KMessageBox::sorry( 0, i18n( "Invalid data file %1" , localFilePath() ) );
         }
         else
         {
             ok = false;
-            KMessageBox::sorry( 0, i18n( "The zero sized data file %1 cannot be rendered" , m_file ) );
+            KMessageBox::sorry( 0, i18n( "The zero sized data file %1 cannot be rendered" , localFilePath() ) );
         }
 
     }
     else
     {
         ok = false;
-        KMessageBox::sorry( 0, i18n( "Unable to open data file: %1" , m_file ) );
+        KMessageBox::sorry( 0, i18n( "Unable to open data file: %1" , localFilePath() ) );
     }
 
     return ok;

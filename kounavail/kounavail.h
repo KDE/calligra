@@ -57,9 +57,9 @@ public:
      * Note the trick: we directly modify the URL of the document,
      * the one returned by KPart's url()
      */
-    void setRealURL( const QString& u ) { m_url = u; }
+    void setRealURL( const QString& u ) { ReadWritePart::setUrl(u); }
     // stupid moc again
-    QString realURL() const { return m_url.url(); }
+    QString realURL() const { return url().url(); }
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent);
