@@ -62,6 +62,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
+#include "kis_undo_adapter.h"
 
 typedef KGenericFactory<KisRawImport> KisRawImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_raw_import, KisRawImportFactory("kofficefilters"))
