@@ -46,6 +46,7 @@
 #include "kis_annotation.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_iterators_pixel.h"
+#include "kis_undo_adapter.h"
 // #include "kis_rgb_f32_colorspace.h"
 // #include "kis_rgb_f16half_colorspace.h"
 
