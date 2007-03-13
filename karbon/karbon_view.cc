@@ -34,6 +34,7 @@
 #include <QGridLayout>
 #include <QToolBar>
 #include <QTimer>
+#include <QLabel>
 
 #include <kaction.h>
 #include <kcolormimedata.h>
@@ -154,11 +155,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 
 	// set up status bar message
-    m_status = new QLabel( QString(), 0, statusBar() );
+    m_status = new QLabel( QString(), statusBar() );
 	m_status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 	m_status->setMinimumWidth( 300 );
 	addStatusBarItem( m_status, 1 );
-    m_cursorCoords = new QLabel( QString(), 0, statusBar() );
+    m_cursorCoords = new QLabel( QString(), statusBar() );
 	m_cursorCoords->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 	m_cursorCoords->setMinimumWidth( 50 );
 	addStatusBarItem( m_cursorCoords, 0 );
