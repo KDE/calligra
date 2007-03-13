@@ -31,6 +31,7 @@ class KOfficePlugin: public KFilePlugin
 
 public:
     KOfficePlugin( QObject *parent, const QStringList& args );
+    virtual ~KOfficePlugin() {}
 
     virtual bool readInfo( KFileMetaInfo& info, uint what);
 
