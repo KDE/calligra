@@ -1,11 +1,12 @@
+include_directories( ${KOFFICECORE_INCLUDES})
 
 ########### next target ###############
 
-set(clipartthumbnail_PART_SRCS clipartcreator.cpp )
+set(clipartthumbnail_SRCS clipartcreator.cpp )
 
-kde4_automoc(${clipartthumbnail_PART_SRCS})
+kde4_automoc(${clipartthumbnail_SRCS})
 
-kde4_add_plugin(clipartthumbnail ${clipartthumbnail_PART_SRCS})
+kde4_add_plugin(clipartthumbnail ${clipartthumbnail_SRCS})
 
 
 
@@ -16,11 +17,11 @@ install(TARGETS clipartthumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kofficethumbnail_PART_SRCS kofficecreator.cpp )
+set(kofficethumbnail_SRCS kofficecreator.cpp )
 
-kde4_automoc(${kofficethumbnail_PART_SRCS})
+kde4_automoc(${kofficethumbnail_SRCS})
 
-kde4_add_plugin(kofficethumbnail ${kofficethumbnail_PART_SRCS})
+kde4_add_plugin(kofficethumbnail ${kofficethumbnail_SRCS})
 
 
 

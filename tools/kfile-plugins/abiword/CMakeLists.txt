@@ -1,9 +1,10 @@
+include_directories( ${KOFFICECORE_INCLUDES})
 
-set(kfile_abiword_PART_SRCS kfile_abiword.cpp )
+set(kfile_abiword_SRCS kfile_abiword.cpp )
 
-kde4_automoc(${kfile_abiword_PART_SRCS})
+kde4_automoc(${kfile_abiword_SRCS})
 
-kde4_add_plugin(kfile_abiword ${kfile_abiword_PART_SRCS})
+kde4_add_plugin(kfile_abiword ${kfile_abiword_SRCS})
 
 
 

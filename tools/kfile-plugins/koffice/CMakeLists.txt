@@ -1,9 +1,10 @@
+include_directories( ${KOFFICECORE_INCLUDES})
 
-set(kfile_koffice_PART_SRCS kfile_koffice.cpp )
+set(kfile_koffice_SRCS kfile_koffice.cpp )
 
-kde4_automoc(${kfile_koffice_PART_SRCS})
+kde4_automoc(${kfile_koffice_SRCS})
 
-kde4_add_plugin(kfile_koffice ${kfile_koffice_PART_SRCS})
+kde4_add_plugin(kfile_koffice ${kfile_koffice_SRCS})
 
 
 

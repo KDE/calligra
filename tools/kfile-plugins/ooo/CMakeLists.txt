@@ -1,9 +1,10 @@
+include_directories( ${KOFFICECORE_INCLUDES})
 
-set(kfile_ooo_PART_SRCS kfile_ooo.cpp )
+set(kfile_ooo_SRCS kfile_ooo.cpp )
 
-kde4_automoc(${kfile_ooo_PART_SRCS})
+kde4_automoc(${kfile_ooo_SRCS})
 
-kde4_add_plugin(kfile_ooo ${kfile_ooo_PART_SRCS})
+kde4_add_plugin(kfile_ooo ${kfile_ooo_SRCS})
 
 
 

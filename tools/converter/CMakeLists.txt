@@ -1,3 +1,4 @@
+include_directories( ${KOFFICECORE_INCLUDES})
 
 set(koconverter_SRCS koconverter.cpp )
 
