@@ -28,9 +28,10 @@ class Dialog:
 
         #print self.part
         #print dir(self.part)
-
-    def exec_loop(self):
         self.dialog.exec_loop()
+
+    def __del__(self):
+        self.dialog.delayedDestruct()
 
     def popupMenu(self, url, point):
         print "===> popupMenu url=%s point=%s" % (url,point)
@@ -42,4 +43,4 @@ class Dialog:
         print "===> formSubmitNotification action=%s url=%s formdata=%s target=%s contenttype=%s boundary=%s" % (action, url, formdata, target, contenttype, boundary)
 
 dialog = Dialog()
-dialog.exec_loop()
+dialog.__del__()
