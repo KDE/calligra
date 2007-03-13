@@ -235,7 +235,7 @@ void KCConfigBackgroundPage::loadWallpaperFilesList()
          QString imageCaption;
 
          if (metaInfo.isValid() && metaInfo.item("Comment").isValid())
-            imageCaption = metaInfo.item("Comment").string().section('\n', 0, 0);
+            imageCaption = metaInfo.item("Comment").value().toString().section('\n', 0, 0);
 
          if (imageCaption.isEmpty())
          {
