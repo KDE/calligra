@@ -40,7 +40,7 @@ class KAction;
 class KActionMenu;
 class KSelectAction;
 class KToggleAction;
-class KStatusBarLabel;
+class QLabel;
 class KSeparatorAction;
 
 class KoView;
@@ -333,7 +333,7 @@ private:
     bool m_updatePertEditor;
     bool m_updatePertResult;
 
-    KStatusBarLabel *m_estlabel;
+    QLabel *m_estlabel;
     QProgressBar *m_progress;
     
     ViewAdaptor* m_dbus;

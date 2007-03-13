@@ -66,7 +66,6 @@ class DCOPObject;
 class KoRuler;
 class KoZoomHandler;
 class KoUnitDoubleSpinBox;
-class KStatusBarLabel;
 class KoLineWidthAction;
 class KoLineStyleAction;
 
@@ -356,9 +355,9 @@ class KIVIO_EXPORT KivioView : public KoView
 
     KoZoomHandler* m_zoomHandler;
 
-    KStatusBarLabel* m_coordSLbl;
-    KStatusBarLabel* m_pageCountSLbl;
-    KStatusBarLabel* m_infoSLbl;
+    QLabel* m_coordSLbl;
+    QLabel* m_pageCountSLbl;
+    QLabel* m_infoSLbl;
 
     Kivio::PluginManager* m_pluginManager;
 

@@ -201,7 +201,7 @@ public:
     QScrollBar *horzScrollBar;
     QScrollBar *vertScrollBar;
     KoTabBar *tabBar;
-    KStatusBarLabel* calcLabel;
+    QLabel* calcLabel;
 
     // formulabar, consists of:
     QHBoxLayout* formulaBarLayout;
@@ -1918,7 +1918,7 @@ void View::initView()
 
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);
-    d->calcLabel = sb ? new KStatusBarLabel( QString(), 0, sb ) : 0;
+    d->calcLabel = sb ? new QLabel( QString(), 0, sb ) : 0;
     addStatusBarItem( d->calcLabel, 0 );
     if (d->calcLabel)
         connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));

@@ -799,7 +799,7 @@ View::View( Part* part, QWidget* parent )
 #endif
 
     m_progress = 0;
-    m_estlabel = new KStatusBarLabel( "", 0 );
+    m_estlabel = new QLabel( "", 0 );
     if ( statusBar() ) {
         addStatusBarItem( m_estlabel, 0, true );
         //m_progress = new QProgressBar();
