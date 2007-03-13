@@ -26,6 +26,7 @@
 #include <string>
 #include <map>
 #include <stdio.h> // memcpy
+#include <stdlib.h>
 
 #include "pole.h"
 #include "swinder.h"
