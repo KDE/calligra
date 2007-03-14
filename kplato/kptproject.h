@@ -165,20 +165,39 @@ public:
     virtual Duration actualEffortTo( const QDate &date, long id = -1  ) const;
     /**
      * Returns the total planned cost for this project
+     * @param id Identity of the schedule to be used
      */
     virtual double plannedCost( long id = -1 ) const;
-    /// Planned cost on date
+    /**
+     * Planned cost on date
+     * @param date The cost is calulated for this date (only)
+     * @param id Identity of the schedule to be used
+     */
     virtual double plannedCost( const QDate &date, long id = -1  ) const;
-    /// Planned cost up to and including date
+    /**
+     * Planned cost up to and including date
+     * @param date The cost is calculated from the start of the project upto including date.
+     * @param id Identity of the schedule to be used.
+     */
     virtual double plannedCostTo( const QDate &date, long id = -1  ) const;
 
     /**
      * Returns the actually reported cost for this project
+     * @param date The cost is calulated for this date (only)
+     * @param id Identity of the schedule to be used
      */
     virtual double actualCost( long id = -1 ) const;
-    /// Actual cost on date
+    /**
+     *  Actual cost on date
+     * @param date The cost is calulated for this date (only)
+     * @param id Identity of the schedule to be used
+     */
     virtual double actualCost( const QDate &date, long id = -1  ) const;
-    /// Actual cost up to and including date
+    /**
+     * Actual cost up to and including date
+     * @param date The cost is calculated from the start of the project upto including date.
+     * @param id Identity of the schedule to be used.
+     */
     virtual double actualCostTo( const QDate &date, long id = -1  ) const;
 
     Calendar *defaultCalendar() const { return m_defaultCalendar; }
