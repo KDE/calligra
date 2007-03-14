@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/kthesaurus.pot
+$XGETTEXT *.cc -o $podir/kthesaurus.pot
