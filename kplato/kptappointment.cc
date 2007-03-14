@@ -698,7 +698,7 @@ void Appointment::merge(const Appointment &app) {
             i1 = lst1[index1];
             if (!from.isValid() || from < i1->startTime())
                 from = i1->startTime();
-            result.append(new AppointmentInterval(from, i1->endTime(), i2->load()));
+            result.append(new AppointmentInterval(from, i1->endTime(), i1->load()));
             //kDebug()<<"Interval+ (i1): "<<from<<" - "<<i1->endTime()<<endl;
             from = i1->endTime();
             ++index1;
