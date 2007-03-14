@@ -659,11 +659,13 @@ bool Layout::setFollowupShape(KoShape *followupShape) {
         return false;
     Q_ASSERT(shape == 0);
     Q_ASSERT(followupShape);
+
+    m_data = dynamic_cast<KoTextShapeData*> (followupShape->userData());
+    if(m_data == 0)
+        return false;
+
     m_newShape = false;
-
     shape = followupShape;
-    m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
-
     m_data->setDocumentOffset(m_y);
     m_shapeBorder = shape->borderInsets();
     return true;
