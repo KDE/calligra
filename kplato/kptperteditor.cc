@@ -141,7 +141,7 @@ QList<Node*> PertEditor::listNodeNotView(Node * node)
 
 
 Node * PertEditor::itemToNode(QString itemName, Node * startNode){
-    Node * result;
+    Node * result = 0;
     if (startNode->numChildren() > 0){
         foreach(Node * currentNode, startNode->childNodeIterator() ){
             if (currentNode->name() == itemName) {
