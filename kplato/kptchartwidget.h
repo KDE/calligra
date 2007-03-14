@@ -54,9 +54,9 @@ public:
     static const int BOTTOMMARGIN = 15;
     static const int RIGHTMARGIN = 10;
 
-    static const int BCWP = 1;
-    static const int BCWS = 2;
-    static const int ACWP = 3;
+    static const int BCWP = 0;
+    static const int BCWS = 1;
+    static const int ACWP = 2;
 
     ChartWidget(Project &, QWidget *parent=0, const char *name=0);
   
