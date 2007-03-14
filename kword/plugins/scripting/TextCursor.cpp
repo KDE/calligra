@@ -157,7 +157,7 @@ QObject* TextCursor::insertTable(int rows, int columns) {
     cell.firstCursorPosition().insertText(tr("aaa") /*, QTextCharFormat::charFormat*/);
     table->cellAt(0, 1).firstCursorPosition().insertText(tr("bbb"));
 
-    return table ? new TextTable(this, table) : 0;
+    return new TextTable(this, table);
 }
 
 #include "TextCursor.moc"
