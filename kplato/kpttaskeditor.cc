@@ -146,7 +146,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case 7: // pessimisticRatio
             {
                 Node *n = node( index );
-                if ( n && n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                if ( n && (n->type() == Node::Type_Task || n->type() == Node::Type_Milestone )) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -185,7 +185,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case 15: // shutdown account
             case 16: { // shutdown cost
                 Node *n = node( index );
-                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                if ( n && (n->type() == Node::Type_Task || n->type() == Node::Type_Milestone) ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
