@@ -828,7 +828,7 @@ TaskStatusView::TaskStatusView( Part *part, QWidget *parent )
 Node *TaskStatusView::currentNode() const 
 {
     Node * n = m_view->itemModel()->node( m_view->currentIndex() );
-    if ( n->type() != Node::Type_Task ) {
+    if ( n && n->type() != Node::Type_Task ) {
         return 0;
     }
     return n;
