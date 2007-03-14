@@ -170,12 +170,13 @@ void ResourceAssignmentView::resSelectionChanged( QTreeWidgetItem *item )
         return ;
     }
     m_selectedItem = 0;
-    updateTasks();
+    // updateTasks();  that method uses m_selectedItem, so this will always crash... CID 3206
 }
 
 /**/
 void ResourceAssignmentView::updateTasks()
 {
+    Q_ASSERT(m_selectedItem);
     /*Find Selected Item*/
     Resource* ItemRes;
     ResourceGroup* ItemGrp;
