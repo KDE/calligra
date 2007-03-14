@@ -487,6 +487,7 @@ QPointF *FitCubic(const QList<QPointF> &points,int first,int last,FitVector tHat
 	if (maxError < iterationError) {
 		for (i = 0; i < maxIterations; i++) {
 			uPrime = Reparameterize(points, first, last, u, curve);
+			delete[] curve;
 			curve = GenerateBezier(points, first, last, uPrime, tHat1, tHat2);
 			maxError = ComputeMaxError(points, first, last,
 					curve, uPrime, &splitPoint);
