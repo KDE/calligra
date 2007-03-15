@@ -711,7 +711,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
   m_pView = _view;
   config = Factory::global().config();
 
-    QColor _gridColor = config->group( "KSpread Color" ).readEntry( "GridColor", Qt::lightGray );
+    QColor _gridColor = config->group( "KSpread Color" ).readEntry( "GridColor", QColor(Qt::lightGray) );
 
 //   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box );
   KVBox* tmpQGroupBox = box;
@@ -724,7 +724,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
   gridColor->setWhatsThis( i18n( "Click here to change the grid color ie the color of the borders of each cell." ) );
   label->setBuddy(gridColor);
 
-    QColor _pbColor = config->group( "KSpread Color" ).readEntry( "PageBorderColor", Qt::red );
+    QColor _pbColor = config->group( "KSpread Color" ).readEntry( "PageBorderColor", QColor(Qt::red) );
 
   QLabel * label2 = new QLabel( i18n("&Page borders:"), tmpQGroupBox );
 

@@ -2048,8 +2048,8 @@ void View::initConfig()
     doc()->setBackupFile( parameterGroup.readEntry("BackupFile",true));
 
     const KConfigGroup colorGroup = config->group( "KSpread Color" );
-    doc()->setGridColor( colorGroup.readEntry( "GridColor", Qt::lightGray ) );
-    doc()->changePageBorderColor( colorGroup.readEntry( "PageBorderColor", Qt::red ) );
+    doc()->setGridColor( colorGroup.readEntry( "GridColor", QColor(Qt::lightGray) ) );
+    doc()->changePageBorderColor( colorGroup.readEntry( "PageBorderColor", QColor(Qt::red) ) );
 
 // Do we need a Page Layout in the congiguration file? Isn't this already in the template? Philipp
 /*
