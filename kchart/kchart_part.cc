@@ -684,49 +684,49 @@ void KChartPart::setChartDefaults()
 
 
 
-void KChartPart::loadConfig( KConfig *conf )
+void KChartPart::loadConfig( KConfig *config )
 {
-    conf->setGroup("ChartParameters");
+    KConfigGroup conf = config->group("ChartParameters");
 
     // TODO: the fonts
     // PENDING(kalle) Put the applicable ones of these back in
     //   QFont tempfont;
-    //   tempfont = conf->readFontEntry("titlefont", &titlefont);
+    //   tempfont = conf.readFontEntry("titlefont", &titlefont);
     //   setTitleFont(tempfont);
-    //   tempfont = conf->readFontEntry("ytitlefont", &ytitlefont);
+    //   tempfont = conf.readFontEntry("ytitlefont", &ytitlefont);
     //   setYTitleFont(tempfont);
-    //   tempfont = conf->readFontEntry("xtitlefont", &xtitlefont);
+    //   tempfont = conf.readFontEntry("xtitlefont", &xtitlefont);
     //   setXTitleFont(tempfont);
-    //   tempfont = conf->readFontEntry("yaxisfont", &yaxisfont);
+    //   tempfont = conf.readFontEntry("yaxisfont", &yaxisfont);
     //   setYAxisFont(tempfont);
-    //   tempfont = conf->readFontEntry("xaxisfont", &xaxisfont);
+    //   tempfont = conf.readFontEntry("xaxisfont", &xaxisfont);
     //   setXAxisFont(tempfont);
-    //   tempfont = conf->readFontEntry("labelfont", &labelfont);
+    //   tempfont = conf.readFontEntry("labelfont", &labelfont);
     //   setLabelFont(tempfont);
-    //   tempfont = conf->readFontEntry("annotationfont", &annotationfont);
+    //   tempfont = conf.readFontEntry("annotationfont", &annotationfont);
     //   setAnnotationFont(tempfont);
 
-    //   ylabel_fmt = conf->readEntry("ylabel_fmt", ylabel_fmt );
-    //   ylabel2_fmt = conf->readEntry("ylabel2_fmt", ylabel2_fmt);
-    //   xlabel_spacing = conf->readEntry("xlabel_spacing");
-    //   ylabel_density = conf->readEntry("ylabel_density", ylabel_density);
-    //   requested_ymin = conf->readEntry("requested_ymin", requested_ymin);
-    //   requested_ymax = conf->readEntry("requested_ymax", requested_ymax );
-    //   requested_yinterval = conf->readEntry("requested_yinterval",
+    //   ylabel_fmt = conf.readEntry("ylabel_fmt", ylabel_fmt );
+    //   ylabel2_fmt = conf.readEntry("ylabel2_fmt", ylabel2_fmt);
+    //   xlabel_spacing = conf.readEntry("xlabel_spacing");
+    //   ylabel_density = conf.readEntry("ylabel_density", ylabel_density);
+    //   requested_ymin = conf.readEntry("requested_ymin", requested_ymin);
+    //   requested_ymax = conf.readEntry("requested_ymax", requested_ymax );
+    //   requested_yinterval = conf.readEntry("requested_yinterval",
     // 					   requested_yinterval);
-    //   shelf = conf->readEntry("shelf", shelf);
-    //   grid = conf->readEntry("grid", grid);
-    //   xaxis = conf->readEntry("xaxis", xaxis);
-    //   yaxis = conf->readEntry("yaxis", yaxis);
-    //   yaxis2 = conf->readEntry("yaxis2", yaxis);
-    //   llabel = conf->readEntry("llabel", llabel);
-    //   yval_style = conf->readEntry("yval_style", yval_style);
-    //   stack_type = (KChartStackType)conf->readEntry("stack_type", stack_type);
-    m_params->setLineMarker(conf->readEntry("lineMarker",
+    //   shelf = conf.readEntry("shelf", shelf);
+    //   grid = conf.readEntry("grid", grid);
+    //   xaxis = conf.readEntry("xaxis", xaxis);
+    //   yaxis = conf.readEntry("yaxis", yaxis);
+    //   yaxis2 = conf.readEntry("yaxis2", yaxis);
+    //   llabel = conf.readEntry("llabel", llabel);
+    //   yval_style = conf.readEntry("yval_style", yval_style);
+    //   stack_type = (KChartStackType)conf.readEntry("stack_type", stack_type);
+    m_params->setLineMarker(conf.readEntry("lineMarker",
 						m_params->lineMarker()));
-    m_params->setThreeDBarDepth( conf->readEntry("_3d_depth",
+    m_params->setThreeDBarDepth( conf.readEntry("_3d_depth",
 							  m_params->threeDBarDepth() ) );
-    m_params->setThreeDBarAngle( conf->readEntry( "_3d_angle",
+    m_params->setThreeDBarAngle( conf.readEntry( "_3d_angle",
 						     m_params->threeDBarAngle() ) );
 
     KDChartAxisParams  leftparams;
@@ -736,14 +736,14 @@ void KChartPart::loadConfig( KConfig *conf )
     KDChartAxisParams  bottomparams;
     bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
-    bottomparams.setAxisLineColor( conf->readEntry( "XTitleColor", Qt::black ) );
-    leftparams.setAxisLineColor( conf->readEntry( "YTitleColor", Qt::black ) );
-    rightparams.setAxisLineColor( conf->readEntry( "YTitle2Color", Qt::black ) );
-    bottomparams.setAxisLabelsColor( conf->readEntry( "XLabelColor", Qt::black ) );
-    leftparams.setAxisLabelsColor( conf->readEntry( "YLabelColor", Qt::black ) );
-    rightparams.setAxisLabelsColor( conf->readEntry( "YLabel2Color", Qt::black ) );
-    leftparams.setAxisGridColor( conf->readEntry( "GridColor", Qt::black ) );
-    m_params->setOutlineDataColor( conf->readEntry( "LineColor", Qt::black ) );
+    bottomparams.setAxisLineColor( conf.readEntry( "XTitleColor", Qt::black ) );
+    leftparams.setAxisLineColor( conf.readEntry( "YTitleColor", Qt::black ) );
+    rightparams.setAxisLineColor( conf.readEntry( "YTitle2Color", Qt::black ) );
+    bottomparams.setAxisLabelsColor( conf.readEntry( "XLabelColor", Qt::black ) );
+    leftparams.setAxisLabelsColor( conf.readEntry( "YLabelColor", Qt::black ) );
+    rightparams.setAxisLabelsColor( conf.readEntry( "YLabel2Color", Qt::black ) );
+    leftparams.setAxisGridColor( conf.readEntry( "GridColor", Qt::black ) );
+    m_params->setOutlineDataColor( conf.readEntry( "LineColor", Qt::black ) );
     m_params->setAxisParams( KDChartAxisParams::AxisPosLeft,
                             leftparams );
     m_params->setAxisParams( KDChartAxisParams::AxisPosRight,
@@ -751,39 +751,39 @@ void KChartPart::loadConfig( KConfig *conf )
     m_params->setAxisParams( KDChartAxisParams::AxisPosBottom,
                             bottomparams );
 
-    //   hlc_style = (KChartHLCStyle)conf->readEntry("hlc_style", hlc_style);
-    //   hlc_cap_width = conf->readEntry("hlc_cap_width", hlc_cap_width);
+    //   hlc_style = (KChartHLCStyle)conf.readEntry("hlc_style", hlc_style);
+    //   hlc_cap_width = conf.readEntry("hlc_cap_width", hlc_cap_width);
     //   // TODO: Annotation font
-    //   num_scatter_pts = conf->readEntry("num_scatter_pts", num_scatter_pts);
+    //   num_scatter_pts = conf.readEntry("num_scatter_pts", num_scatter_pts);
     //   // TODO: Scatter type
-    //   thumbnail = conf->readEntry("thumbnail", thumbnail);
-    //   thumblabel = conf->readEntry("thumblabel", thumblabel);
-    //   border = conf->readEntry("border", border);
-    //   BGColor = conf->readColorEntry("BGColor", &BGColor);
-    //   PlotColor = conf->readColorEntry("PlotColor", &PlotColor);
-    //   VolColor = conf->readColorEntry("VolColor", &VolColor);
-    //   EdgeColor = conf->readColorEntry("EdgeColor", &EdgeColor);
+    //   thumbnail = conf.readEntry("thumbnail", thumbnail);
+    //   thumblabel = conf.readEntry("thumblabel", thumblabel);
+    //   border = conf.readEntry("border", border);
+    //   BGColor = conf.readColorEntry("BGColor", &BGColor);
+    //   PlotColor = conf.readColorEntry("PlotColor", &PlotColor);
+    //   VolColor = conf.readColorEntry("VolColor", &VolColor);
+    //   EdgeColor = conf.readColorEntry("EdgeColor", &EdgeColor);
     //   loadColorArray(conf, &SetColor, "SetColor");
     //   loadColorArray(conf, &ExtColor, "ExtColor");
     //   loadColorArray(conf, &ExtVolColor, "ExtVolColor");
-    //   transparent_bg = conf->readEntry("transparent_bg", transparent_bg);
+    //   transparent_bg = conf.readEntry("transparent_bg", transparent_bg);
     //   // TODO: explode, missing
-    //   percent_labels = (KChartPercentType)conf->readEntry("percent_labels",
+    //   percent_labels = (KChartPercentType)conf.readEntry("percent_labels",
     // 							 percent_labels);
-    //   label_dist = conf->readEntry("label_dist", label_dist);
-    //   label_line = conf->readEntry("label_line", label_line);
-    m_params->setChartType( (KChartParams::ChartType)conf->readEntry( "type", int(m_params->chartType() )) );
-    //   other_threshold = conf->readEntry("other_threshold", other_threshold);
+    //   label_dist = conf.readEntry("label_dist", label_dist);
+    //   label_line = conf.readEntry("label_line", label_line);
+    m_params->setChartType( (KChartParams::ChartType)conf.readEntry( "type", int(m_params->chartType() )) );
+    //   other_threshold = conf.readEntry("other_threshold", other_threshold);
 
-    //   backgroundPixmapName = conf->readPathEntry( "backgroundPixmapName" );
+    //   backgroundPixmapName = conf.readPathEntry( "backgroundPixmapName" );
     //   if( !backgroundPixmapName.isNull() ) {
     //     backgroundPixmap.load( KStandardDirs::locate( "wallpaper", backgroundPixmapName ));
     //     backgroundPixmapIsDirty = true;
     //   } else
     //     backgroundPixmapIsDirty = false;
-    //   backgroundPixmapScaled = conf->readEntry( "backgroundPixmapScaled", true );
-    //   backgroundPixmapCentered = conf->readEntry( "backgroundPixmapCentered", true );
-    //   backgroundPixmapIntensity = conf->readEntry( "backgroundPixmapIntensity", 0.25 );
+    //   backgroundPixmapScaled = conf.readEntry( "backgroundPixmapScaled", true );
+    //   backgroundPixmapCentered = conf.readEntry( "backgroundPixmapCentered", true );
+    //   backgroundPixmapIntensity = conf.readEntry( "backgroundPixmapIntensity", 0.25 );
 }
 
 
@@ -795,38 +795,38 @@ void KChartPart::defaultConfig(  )
 }
 
 
-void KChartPart::saveConfig( KConfig *conf )
+void KChartPart::saveConfig( KConfig *config )
 {
-    conf->setGroup("ChartParameters");
+    KConfigGroup conf = config->group("ChartParameters");
 
     // PENDING(kalle) Put some of these back in
     // the fonts
-    //   conf->writeEntry("titlefont", titlefont);
-    //   conf->writeEntry("ytitlefont", ytitlefont);
-    //   conf->writeEntry("xtitlefont", xtitlefont);
-    //   conf->writeEntry("yaxisfont", yaxisfont);
-    //   conf->writeEntry("xaxisfont", xaxisfont);
-    //   conf->writeEntry("labelfont", labelfont);
+    //   conf.writeEntry("titlefont", titlefont);
+    //   conf.writeEntry("ytitlefont", ytitlefont);
+    //   conf.writeEntry("xtitlefont", xtitlefont);
+    //   conf.writeEntry("yaxisfont", yaxisfont);
+    //   conf.writeEntry("xaxisfont", xaxisfont);
+    //   conf.writeEntry("labelfont", labelfont);
 
-    //   conf->writeEntry("ylabel_fmt", ylabel_fmt);
-    //   conf->writeEntry("ylabel2_fmt", ylabel2_fmt);
-    //   conf->writeEntry("xlabel_spacing", xlabel_spacing);
-    //   conf->writeEntry("ylabel_density", ylabel_density);
-    //   conf->writeEntry("requested_ymin", requested_ymin);
-    //   conf->writeEntry("requested_ymax", requested_ymax);
-    //   conf->writeEntry("requested_yinterval", requested_yinterval);
+    //   conf.writeEntry("ylabel_fmt", ylabel_fmt);
+    //   conf.writeEntry("ylabel2_fmt", ylabel2_fmt);
+    //   conf.writeEntry("xlabel_spacing", xlabel_spacing);
+    //   conf.writeEntry("ylabel_density", ylabel_density);
+    //   conf.writeEntry("requested_ymin", requested_ymin);
+    //   conf.writeEntry("requested_ymax", requested_ymax);
+    //   conf.writeEntry("requested_yinterval", requested_yinterval);
 
-    //   conf->writeEntry("shelf", shelf);
-    //   conf->writeEntry("grid", grid );
-    //   conf->writeEntry("xaxis", xaxis);
-    //   conf->writeEntry("yaxis", yaxis);
-    //   conf->writeEntry("yaxis2", yaxis2);
-    //   conf->writeEntry("llabel", llabel);
-    //   conf->writeEntry("yval_style", yval_style );
-    //   conf->writeEntry("stack_type", (int)stack_type);
+    //   conf.writeEntry("shelf", shelf);
+    //   conf.writeEntry("grid", grid );
+    //   conf.writeEntry("xaxis", xaxis);
+    //   conf.writeEntry("yaxis", yaxis);
+    //   conf.writeEntry("yaxis2", yaxis2);
+    //   conf.writeEntry("llabel", llabel);
+    //   conf.writeEntry("yval_style", yval_style );
+    //   conf.writeEntry("stack_type", (int)stack_type);
 
-    conf->writeEntry( "_3d_depth", m_params->threeDBarDepth() );
-    conf->writeEntry( "_3d_angle", m_params->threeDBarAngle() );
+    conf.writeEntry( "_3d_depth", m_params->threeDBarDepth() );
+    conf.writeEntry( "_3d_angle", m_params->threeDBarAngle() );
 
     KDChartAxisParams leftparams;
     leftparams   = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
@@ -834,50 +834,50 @@ void KChartPart::saveConfig( KConfig *conf )
     rightparams  = m_params->axisParams( KDChartAxisParams::AxisPosRight );
     KDChartAxisParams bottomparams;
     bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
-    conf->writeEntry( "LineColor",    m_params->outlineDataColor() );
-    conf->writeEntry( "XTitleColor",  bottomparams.axisLineColor() );
-    conf->writeEntry( "YTitleColor",  leftparams.axisLineColor() );
-    conf->writeEntry( "YTitle2Color", rightparams.axisLineColor() );
-    conf->writeEntry( "XLabelColor",  bottomparams.axisLabelsColor() );
-    conf->writeEntry( "YLabelColor",  leftparams.axisLabelsColor() );
-    conf->writeEntry( "YLabel2Color", rightparams.axisLabelsColor() );
-    conf->writeEntry( "GridColor",    leftparams.axisGridColor() );
+    conf.writeEntry( "LineColor",    m_params->outlineDataColor() );
+    conf.writeEntry( "XTitleColor",  bottomparams.axisLineColor() );
+    conf.writeEntry( "YTitleColor",  leftparams.axisLineColor() );
+    conf.writeEntry( "YTitle2Color", rightparams.axisLineColor() );
+    conf.writeEntry( "XLabelColor",  bottomparams.axisLabelsColor() );
+    conf.writeEntry( "YLabelColor",  leftparams.axisLabelsColor() );
+    conf.writeEntry( "YLabel2Color", rightparams.axisLabelsColor() );
+    conf.writeEntry( "GridColor",    leftparams.axisGridColor() );
 
-    //   conf->writeEntry("hlc_style", (int)hlc_style);
-    //   conf->writeEntry("hlc_cap_width", hlc_cap_width );
+    //   conf.writeEntry("hlc_style", (int)hlc_style);
+    //   conf.writeEntry("hlc_cap_width", hlc_cap_width );
     //   // TODO: Annotation type!!!
-    //   conf->writeEntry("annotationfont", annotationfont);
-    //   conf->writeEntry("num_scatter_pts", num_scatter_pts);
+    //   conf.writeEntry("annotationfont", annotationfont);
+    //   conf.writeEntry("num_scatter_pts", num_scatter_pts);
     //   // TODO: Scatter type!!!
-    //   conf->writeEntry("thumbnail", thumbnail);
-    //   conf->writeEntry("thumblabel", thumblabel);
-    //   conf->writeEntry("thumbval", thumbval);
-    //   conf->writeEntry("border", border);
-    //   conf->writeEntry("BGColor", BGColor);
-    //   conf->writeEntry("PlotColor", PlotColor);
-    //   conf->writeEntry("VolColor", VolColor);
-    //   conf->writeEntry("EdgeColor", EdgeColor);
+    //   conf.writeEntry("thumbnail", thumbnail);
+    //   conf.writeEntry("thumblabel", thumblabel);
+    //   conf.writeEntry("thumbval", thumbval);
+    //   conf.writeEntry("border", border);
+    //   conf.writeEntry("BGColor", BGColor);
+    //   conf.writeEntry("PlotColor", PlotColor);
+    //   conf.writeEntry("VolColor", VolColor);
+    //   conf.writeEntry("EdgeColor", EdgeColor);
     //   saveColorArray(conf, &SetColor, "SetColor");
     //   saveColorArray(conf, &ExtColor, "ExtColor");
     //   saveColorArray(conf, &ExtVolColor, "ExtVolColor");
 
 
-    //   conf->writeEntry("transparent_bg", transparent_bg);
+    //   conf.writeEntry("transparent_bg", transparent_bg);
     //   // TODO: explode, missing
-    //   conf->writeEntry("percent_labels",(int) percent_labels );
-    //   conf->writeEntry("label_dist", label_dist);
-    //   conf->writeEntry("label_line", label_line);
-    conf->writeEntry( "type", (int) m_params->chartType() );
-    //   conf->writeEntry("other_threshold", other_threshold);
+    //   conf.writeEntry("percent_labels",(int) percent_labels );
+    //   conf.writeEntry("label_dist", label_dist);
+    //   conf.writeEntry("label_line", label_line);
+    conf.writeEntry( "type", (int) m_params->chartType() );
+    //   conf.writeEntry("other_threshold", other_threshold);
 
     // background pixmap stuff
     //   if( !backgroundPixmapName.isNull() )
-    // 	conf->writePathEntry( "backgroundPixmapName", backgroundPixmapName );
-    //   conf->writeEntry( "backgroundPixmapIsDirty", backgroundPixmapIsDirty );
-    //   conf->writeEntry( "backgroundPixmapScaled", backgroundPixmapScaled );
-    //   conf->writeEntry( "backgroundPixmapCentered", backgroundPixmapCentered );
-    //   conf->writeEntry( "backgroundPixmapIntensity", backgroundPixmapIntensity );
-    conf->writeEntry( "lineMarker", (int) m_params->lineMarker());
+    // 	conf.writePathEntry( "backgroundPixmapName", backgroundPixmapName );
+    //   conf.writeEntry( "backgroundPixmapIsDirty", backgroundPixmapIsDirty );
+    //   conf.writeEntry( "backgroundPixmapScaled", backgroundPixmapScaled );
+    //   conf.writeEntry( "backgroundPixmapCentered", backgroundPixmapCentered );
+    //   conf.writeEntry( "backgroundPixmapIntensity", backgroundPixmapIntensity );
+    conf.writeEntry( "lineMarker", (int) m_params->lineMarker());
 }
 
 
