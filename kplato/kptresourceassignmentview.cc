@@ -112,10 +112,10 @@ ResourceAssignmentView::ResourceAssignmentView( Part *part, QWidget *parent): Vi
 {
     kDebug() << " ---------------- KPlato: Creating ResourceAssignmentView ----------------" << endl;
 
-    //widget.setupUi(this);
+    widget.setupUi(this);
     
     
-    QVBoxLayout *l = new QVBoxLayout( this );
+   /* QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_splitter = new QSplitter( this );
     l->addWidget( m_splitter );
@@ -131,18 +131,21 @@ ResourceAssignmentView::ResourceAssignmentView( Part *part, QWidget *parent): Vi
     m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
 
     QStringList sl2;
-    sl2 << i18n( "Task" ); /*<< i18n( "Completed" );*/
-    m_taskList->setHeaderLabels( sl2 );
+    sl2 << i18n( "Task" ); << i18n( "Completed" );
+    m_taskList->setHeaderLabels( sl2 );*/
     
-    /*
-    m_resList = widget.assign( m_resList );
+    
+   /* m_resList = widget.assign( m_resList );
     m_taskList = widget.assign( m_taskList );
-    m_tasktreeroot = widget.assign( m_tasktreeroot );
-    */
+    m_tasktreeroot = widget.assign( m_tasktreeroot );*/
+    
 
     m_selectedItem = 0;
-
+    m_splitter = widget.m_splitter;
+    m_resList = (ResourcesList *)widget.m_resList;
+    m_taskList = (ResourcesList *)widget.m_taskList;
     m_part = part;
+    m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
 
     draw(m_part->getProject());
 
