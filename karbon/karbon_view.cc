@@ -132,7 +132,7 @@
 #define KARBON_DEBUG_VIEW
 
 #ifdef KARBON_DEBUG_VIEW
-#define debugView(text) kDebug() << "KARBON_DEBUG_VIEW: " << text << endl
+#define debugView(text) kDebug(38000) << "KARBON_DEBUG_VIEW: " << text << endl
 #else
 #define debugView(text)
 #endif
@@ -1153,8 +1153,8 @@ KarbonView::initActions()
 
 	m_zoomAction = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT|KoZoomMode::ZOOM_PAGE|KoZoomMode::ZOOM_WIDTH,
 	i18n("Zoom"), KIcon("14_zoom"), KShortcut(), actionCollection(), "view_zoom");
-	connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
-          this, SLOT(zoomChanged(KoZoomMode::Mode, int)));
+    connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
+            this, SLOT(zoomChanged(KoZoomMode::Mode, int)));
 
     QToolBar *tbar = new QToolBar( statusBar() );
     statusBar()->insertWidget( 2, tbar);
@@ -1738,5 +1738,10 @@ KarbonView::toolController()
 	return m_toolController;
 }
 
+void KarbonView::updateReadWrite( bool readwrite )
+{
+    debugView("KarbonView::updateReadWrite( bool )");
+    kDebug(38000) << "writable state = " << readwrite << endl;
+}
 #include "karbon_view.moc"
 

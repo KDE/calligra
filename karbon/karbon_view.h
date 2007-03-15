@@ -202,7 +202,7 @@ signals:
 	void pageLayoutChanged();
 
 protected:
-	virtual void updateReadWrite( bool ) {}
+	virtual void updateReadWrite( bool readwrite );
 	virtual void resizeEvent( QResizeEvent* event );
 
 	void createDocumentTabDock();
