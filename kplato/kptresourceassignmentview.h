@@ -74,7 +74,7 @@
 
 #include <kdebug.h>
 
-//#include "ui_kptresourceassignmentview.h"
+#include "ui_kptresourceassignmentview.h"
 
 
 
@@ -126,7 +126,7 @@ namespace KPlato
             QTreeWidgetItem *m_selectedItem;
             QTreeWidgetItem *m_tasktreeroot;
             Part *m_part;
-    	    //Ui::ResourceAssignmentView widget;
+    	    ::Ui::ResourceAssignmentView widget;
 
             void updateTasks();
 
