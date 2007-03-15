@@ -1,3 +1,10 @@
+2007-03-15  Inge Wallin  <inge@lysator.liu.se>
+
+	EBN fixes:
+	* kchart_factory.h (KChartFactory): explicit
+	* kchart_part.h (KChartPart): explicit
+	* dialogs/KCPrinterDialog.h (KCPrinterDialog): explicit
+
 2007-01-01  Inge Wallin  <inge@lysator.liu.se>
 
 	Import KDChart 2.0 sources.

@@ -22,7 +22,7 @@ class KCHART_EXPORT KChartFactory : public KoFactory
 {
     Q_OBJECT
 public:
-    KChartFactory( QObject* parent = 0, const char* name = 0 );
+    explicit KChartFactory( QObject* parent = 0, const char* name = 0 );
     virtual ~KChartFactory();
 
     virtual KParts::Part  *createPartObject( QWidget* = 0,

@@ -36,7 +36,7 @@ class KCPrinterDialog : public KPrintDialogPage
   Q_OBJECT
   public:
 	/// Getting the common arguments.
-    KCPrinterDialog( QWidget *parent = 0, const char *name = 0 );
+    explicit KCPrinterDialog( QWidget *parent = 0, const char *name = 0 );
 
 	/// Reimplemented.
     void getOptions( QMap<QString, QString>& opts, bool include_def = false );

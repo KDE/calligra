@@ -28,9 +28,9 @@ class KCHART_EXPORT KChartPart : public KoChart::Part
     Q_OBJECT
 
 public:
-    KChartPart( QWidget *parentWidget = 0,
-		QObject* parent = 0,
-		bool singleViewMode = false );
+    explicit KChartPart( QWidget *parentWidget = 0,
+			 QObject* parent = 0,
+			 bool singleViewMode = false );
     ~KChartPart();
 
     // Methods inherited from KoDocument:
