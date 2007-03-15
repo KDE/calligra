@@ -241,6 +241,7 @@ private slots:
 private:
     friend class PageProcessingQueue;
     friend class KWDLoader;
+    friend class KWOpenDocumentLoader;
     friend class KWStartupWidget;
     QString renameFrameSet( const QString& prefix , const QString& base );
     /// post process loading after either oasis or oldxml loading finished

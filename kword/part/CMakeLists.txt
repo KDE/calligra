@@ -19,6 +19,7 @@ set(kwordprivate_LIB_SRCS
     KWViewMode.cpp
     KWViewModeNormal.cpp
     KWViewModePreview.cpp
+    KWOpenDocumentLoader.cpp
     KWDLoader.cpp
 
     frame/KWTextDocumentLayout.cpp

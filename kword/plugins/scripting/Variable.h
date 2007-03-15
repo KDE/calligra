@@ -34,20 +34,25 @@
 
 namespace Scripting {
 
-    class Variable : public KoVariable
+    class Variable : public QObject, public KoVariable
     {
+            Q_OBJECT
         public:
             explicit Variable(Kross::Action* action, const KoProperties* props = 0)
-                : KoVariable(), m_action(action), m_props(props)
-            {
-            }
-
-            virtual ~Variable() {}
-
+                : KoVariable(), m_action(action), m_props(props), m_optionswidget(0) {}
+            virtual ~Variable() { setOptionsWidget(); }
             Kross::Action* action() const { return m_action; }
 
             virtual void setProperties(const KoProperties* props)
             {
+                kDebug(32010) << "Scripting::Variable::setProperties" << endl;
+                //Q_ASSERT(props);
+                //QString value = props->property("value").toString();
+                //setValue(value);
+
+                m_props = props;
+                emit propertiesUpdated();
+#if 0
                 Q_ASSERT(props);
                 const QString function = m_props->property("getValue").toString();
                 kDebug(32010) << "Scripting::Variable::setProperties: function=" << function << endl;
@@ -63,11 +68,16 @@ namespace Scripting {
                 }
                 QString value = props->property("value").toString();
                 setValue(value);
+#endif
             }
 
             virtual QWidget* createOptionsWidget()
             {
                 kDebug(32010) << "Scripting::Variable::createOptionsWidget" << endl;
+                emit optionsWidgetRequest();
+                return m_optionswidget;
+
+#if 0
                 QWidget* resultwidget = 0;
                 //m_action->setProperty("PropertyName", m_action->objectName());
                 const QString function = m_props->property("createOptionsWidget").toString();
@@ -83,17 +93,37 @@ namespace Scripting {
                             resultwidget = dynamic_cast< QWidget* >( qvariant_cast< QObject* >(result) );
                     }
                 }
-
                 //m_action->trigger();
                 //QString widgetname = m_action->property("OptionsWidget");
                 if( value().isNull() && m_props )
                     setProperties(m_props);
-
                 return resultwidget;
+#endif
             }
+
+        public Q_SLOTS:
+
+            QString value() const {
+                return KoVariable::value();
+            }
+
+            void setValue(const QString& value) {
+                KoVariable::setValue(value);
+            }
+
+            void setOptionsWidget(QWidget* optionswidget = 0) {
+                //delete m_optionswidget;
+                m_optionswidget = optionswidget;
+            }
+
+        Q_SIGNALS:
+            void propertiesUpdated();
+            void optionsWidgetRequest();
+
         private:
             Kross::Action* m_action;
             const KoProperties* m_props;
+            QWidget* m_optionswidget;
     };
 
     class VariableFactory : public KoInlineObjectFactory
@@ -107,10 +137,12 @@ namespace Scripting {
                 var.name = action->text();
                 KoProperties *props = new KoProperties();
                 props->setProperty("id", action->objectName());
+                /*
                 foreach(QString propname, action->propertyNames()) {
                     const QString value = action->property(propname);
                     props->setProperty(propname, value);
                 }
+                */
                 var.properties = props;
                 addTemplate(var);
             }

@@ -25,6 +25,7 @@
 #include "KWCanvas.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWOpenDocumentLoader.h"
 #include "KWDLoader.h"
 #include "frame/KWFrameSet.h"
 #include "frame/KWTextFrameSet.h"
@@ -340,9 +341,13 @@ void KWDocument::clear() {
     m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
-bool KWDocument::loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*) {
-    // TODO
-    return false;
+bool KWDocument::loadOasis(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store) {
+    clear();
+    KWOpenDocumentLoader loader(this);
+    bool rc = loader.load(doc, styles, settings, store);
+    if (rc)
+        endOfLoading();
+    return rc;
 }
 
 bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc ) {
