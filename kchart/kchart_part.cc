@@ -736,14 +736,14 @@ void KChartPart::loadConfig( KConfig *config )
     KDChartAxisParams  bottomparams;
     bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
-    bottomparams.setAxisLineColor( conf.readEntry( "XTitleColor", Qt::black ) );
-    leftparams.setAxisLineColor( conf.readEntry( "YTitleColor", Qt::black ) );
-    rightparams.setAxisLineColor( conf.readEntry( "YTitle2Color", Qt::black ) );
-    bottomparams.setAxisLabelsColor( conf.readEntry( "XLabelColor", Qt::black ) );
-    leftparams.setAxisLabelsColor( conf.readEntry( "YLabelColor", Qt::black ) );
-    rightparams.setAxisLabelsColor( conf.readEntry( "YLabel2Color", Qt::black ) );
-    leftparams.setAxisGridColor( conf.readEntry( "GridColor", Qt::black ) );
-    m_params->setOutlineDataColor( conf.readEntry( "LineColor", Qt::black ) );
+    bottomparams.setAxisLineColor( conf.readEntry( "XTitleColor", QColor(Qt::black) ) );
+    leftparams.setAxisLineColor( conf.readEntry( "YTitleColor", QColor(Qt::black) ) );
+    rightparams.setAxisLineColor( conf.readEntry( "YTitle2Color", QColor(Qt::black) ) );
+    bottomparams.setAxisLabelsColor( conf.readEntry( "XLabelColor", QColor(Qt::black) ) );
+    leftparams.setAxisLabelsColor( conf.readEntry( "YLabelColor", QColor(Qt::black) ) );
+    rightparams.setAxisLabelsColor( conf.readEntry( "YLabel2Color", QColor(Qt::black) ) );
+    leftparams.setAxisGridColor( conf.readEntry( "GridColor", QColor(Qt::black) ) );
+    m_params->setOutlineDataColor( conf.readEntry( "LineColor", QColor(Qt::black) ) );
     m_params->setAxisParams( KDChartAxisParams::AxisPosLeft,
                             leftparams );
     m_params->setAxisParams( KDChartAxisParams::AxisPosRight,
