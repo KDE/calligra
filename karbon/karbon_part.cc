@@ -554,48 +554,48 @@ KarbonPart::setUndoRedoLimit( int undos )
 void
 KarbonPart::initConfig()
 {
-	KSharedConfigPtr config = KarbonPart::componentData().config();
+    KSharedConfigPtr config = KarbonPart::componentData().config();
 
     // disable grid by default
     gridData().setShowGrid( false );
 
-	if( config->hasGroup( "Interface" ) )
-	{
-		config->setGroup( "Interface" );
-		setAutoSave( config->readEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
-		m_maxRecentFiles = config->readEntry( "NbRecentFile", 10 );
-		setShowStatusBar( config->readEntry( "ShowStatusBar" , true ) );
-		setBackupFile( config->readEntry( "BackupFile", true ) );
-		m_doc.saveAsPath( config->readEntry( "SaveAsPath", true ) );
-	}
-	int undos = 30;
-	if( config->hasGroup( "Misc" ) )
-	{
-		config->setGroup( "Misc" );
-		undos = config->readEntry( "UndoRedo", -1 );
-		QString defaultUnit = "cm";
+    if( config->hasGroup( "Interface" ) )
+    {
+        KConfigGroup interfaceGroup = config->group( "Interface" );
+        setAutoSave( interfaceGroup.readEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
+        m_maxRecentFiles = interfaceGroup.readEntry( "NbRecentFile", 10 );
+        setShowStatusBar( interfaceGroup.readEntry( "ShowStatusBar" , true ) );
+        setBackupFile( interfaceGroup.readEntry( "BackupFile", true ) );
+        m_doc.saveAsPath( interfaceGroup.readEntry( "SaveAsPath", false ) );
+    }
+    int undos = 30;
+    if( config->hasGroup( "Misc" ) )
+    {
+        KConfigGroup miscGroup = config->group( "Misc" );
+        undos = miscGroup.readEntry( "UndoRedo", -1 );
+        QString defaultUnit = "cm";
 
-		if( KGlobal::locale()->measureSystem() == KLocale::Imperial )
-			defaultUnit = "in";
+        if( KGlobal::locale()->measureSystem() == KLocale::Imperial )
+            defaultUnit = "in";
 
-		setUnit( KoUnit::unit( config->readEntry( "Units", defaultUnit ) ) );
-		m_doc.setUnit( unit() );
-	}
-	if( config->hasGroup( "Grid" ) )
-	{
-		KoGridData defGrid;
-		config->setGroup( "Grid" );
-		double spacingX = config->readEntry<double>( "SpacingX", defGrid.gridX() );
-		double spacingY = config->readEntry<double>( "SpacingY", defGrid.gridY() );
-		gridData().setGrid( spacingX, spacingY );
-		//double snapX = config->readEntry<double>( "SnapX", defGrid.snapX() );
-		//double snapY = config->readEntry<double>( "SnapY", defGrid.snapY() );
-		//m_doc.grid().setSnap( snapX, snapY );
-		QColor color = config->readEntry<QColor>( "Color", defGrid.gridColor() );
-		gridData().setGridColor( color );
-	}
-	if( undos != -1 )
-		setUndoRedoLimit( undos );
+        setUnit( KoUnit::unit( miscGroup.readEntry( "Units", defaultUnit ) ) );
+        m_doc.setUnit( unit() );
+    }
+    if( config->hasGroup( "Grid" ) )
+    {
+        KoGridData defGrid;
+        KConfigGroup gridGroup = config->group( "Grid" );
+        double spacingX = gridGroup.readEntry<double>( "SpacingX", defGrid.gridX() );
+        double spacingY = gridGroup.readEntry<double>( "SpacingY", defGrid.gridY() );
+        gridData().setGrid( spacingX, spacingY );
+        //double snapX = gridGroup.readEntry<double>( "SnapX", defGrid.snapX() );
+        //double snapY = gridGroup.readEntry<double>( "SnapY", defGrid.snapY() );
+        //m_doc.grid().setSnap( snapX, snapY );
+        QColor color = gridGroup.readEntry( "Color", defGrid.gridColor() );
+        gridData().setGridColor( color );
+    }
+    if( undos != -1 )
+        setUndoRedoLimit( undos );
 }
 
 bool

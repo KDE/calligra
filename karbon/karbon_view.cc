@@ -483,7 +483,7 @@ KarbonView::editPaste()
 		return;
 
 	// Paste with a small offset.
-	double copyOffset = part()->componentData().config()->readEntry( "CopyOffset", 10 );
+    double copyOffset = part()->componentData().config()->group("").readEntry( "CopyOffset", 10 );
 	part()->addCommand( new VInsertCmd( &part()->document(),
 										objects.count() == 1
 											? i18n( "Paste Object" )
@@ -725,7 +725,7 @@ KarbonView::selectionDuplicate()
 	}
 
 	// Paste with a small offset.
-	double copyOffset = part()->componentData().config()->readEntry( "CopyOffset", 10 );
+    double copyOffset = part()->componentData().config()->group("").readEntry( "CopyOffset", 10 );
 	part()->addCommand( new VInsertCmd( &part()->document(),
 										objects.count() == 1
 											? i18n( "Duplicate Object" )

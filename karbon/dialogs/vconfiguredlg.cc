@@ -115,20 +115,17 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view, char* name )
 
 	QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Interface" ), this );
 
-	m_config->setGroup( "" );
+    KConfigGroup emptyGroup = m_config->group( "" );
+    m_oldDockerFontSize = emptyGroup.readEntry( "palettefontsize", m_oldDockerFontSize );
 
-	m_oldDockerFontSize = m_config->readEntry( "palettefontsize", m_oldDockerFontSize );
+    if( m_config->hasGroup( "Interface" ) )
+    {
+        KConfigGroup interfaceGroup = m_config->group( "Interface" );
 
-	if( m_config->hasGroup( "Interface" ) )
-	{
-		m_config->setGroup( "Interface" );
-
-		m_oldRecentFiles = m_config->readEntry("NbRecentFile", m_oldRecentFiles);
-
-		oldShowStatusBar = m_config->readEntry("ShowStatusBar", true);
-
-		m_oldCopyOffset = m_config->readEntry("CopyOffset", m_oldCopyOffset);
-	}
+        m_oldRecentFiles = interfaceGroup.readEntry("NbRecentFile", m_oldRecentFiles);
+        oldShowStatusBar = interfaceGroup.readEntry("ShowStatusBar", true);
+        m_oldCopyOffset = interfaceGroup.readEntry("CopyOffset", m_oldCopyOffset);
+    }
 
 	QVBoxLayout *grpLayout = new QVBoxLayout( tmpQGroupBox );
 
@@ -159,13 +156,13 @@ void VConfigInterfacePage::apply()
 
 	KarbonPart* part = m_view->part();
 
-	m_config->setGroup( "Interface" );
+    KConfigGroup interfaceGroup = m_config->group( "Interface" );
 
 	int recent = m_recentFiles->value();
 
 	if( recent != m_oldRecentFiles )
 	{
-		m_config->writeEntry( "NbRecentFile", recent );
+        interfaceGroup.writeEntry( "NbRecentFile", recent );
 		m_view->setNumberOfRecentFiles( recent );
 		m_oldRecentFiles = recent;
 	}
@@ -174,7 +171,7 @@ void VConfigInterfacePage::apply()
 
 	if( copyOffset != m_oldCopyOffset )
 	{
-		m_config->writeEntry( "CopyOffset", copyOffset );
+        interfaceGroup.writeEntry( "CopyOffset", copyOffset );
 		m_oldCopyOffset = copyOffset;
 	}
 
@@ -182,18 +179,16 @@ void VConfigInterfacePage::apply()
 
 	if( showStatusBar != part->showStatusBar() )
 	{
-		m_config->writeEntry( "ShowStatusBar", showStatusBar );
+        interfaceGroup.writeEntry( "ShowStatusBar", showStatusBar );
 		part->setShowStatusBar( showStatusBar );
 		refreshGUI = true;
 	}
-
-	m_config->setGroup( "" );
 
 	int dockerFontSize = m_dockerFontSize->value();
 
 	if( dockerFontSize != m_oldDockerFontSize )
 	{
-		m_config->writeEntry( "palettefontsize", dockerFontSize );
+        m_config->group( "" ).writeEntry( "palettefontsize", dockerFontSize );
 		m_oldDockerFontSize = dockerFontSize;
 		refreshGUI = true;
 	}
@@ -235,8 +230,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, char* name )
 
     if( m_config->hasGroup( "Misc" ) )
     {
-        m_config->setGroup( "Misc" );
-        m_oldUndoRedo = m_config->readEntry( "UndoRedo", m_oldUndoRedo );
+        m_oldUndoRedo = m_config->group( "Misc" ).readEntry( "UndoRedo", m_oldUndoRedo );
     }
 
     m_undoRedo = new KIntNumInput( m_oldUndoRedo, tmpQGroupBox );
@@ -264,21 +258,22 @@ void VConfigMiscPage::apply()
 {
     KarbonPart * part = m_view->part();
 
-    m_config->setGroup( "Misc" );
+    KConfigGroup miscGroup = m_config->group( "Misc" );
 
-    if( m_oldUnit.indexInList() != m_unit->currentIndex() )
+    int currentUnit = m_unit->currentIndex();
+    if( currentUnit >= 0 && m_oldUnit.indexInList() != static_cast<uint>( currentUnit ) )
     {
-        m_oldUnit = KoUnit((KoUnit::Unit)m_unit->currentIndex());
-        part->setUnit( static_cast<KoUnit>( m_oldUnit ) );
+        m_oldUnit = KoUnit((KoUnit::Unit)currentUnit);
+        part->setUnit( m_oldUnit );
         part->document().setUnit(part->unit());
-        m_config->writeEntry( "Units", KoUnit::unitName( part->unit() ) );
+        miscGroup.writeEntry( "Units", KoUnit::unitName( part->unit() ) );
     }
 
     int newUndo = m_undoRedo->value();
 
     if( newUndo != m_oldUndoRedo )
     {
-        m_config->writeEntry( "UndoRedo", newUndo );
+        miscGroup.writeEntry( "UndoRedo", newUndo );
         part->setUndoRedoLimit( newUndo );
         m_oldUndoRedo = newUndo;
     }
@@ -361,12 +356,12 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	connect( m_spaceVertUSpin, SIGNAL( valueChangedPt( double ) ), SLOT( setMaxVertSnap( double ) ) ) ;
 }
 
-void VConfigGridPage::setMaxHorizSnap( double v )
+void VConfigGridPage::setMaxHorizSnap( double /*v*/ )
 {
 	//m_snapHorizUSpin->setMaximum( v );
 }
 
-void VConfigGridPage::setMaxVertSnap( double v )
+void VConfigGridPage::setMaxVertSnap( double /*v*/ )
 {
 	//m_snapVertUSpin->setMaximum( v );
 }
@@ -390,12 +385,12 @@ void VConfigGridPage::apply()
 	gd.setGridColor( m_gridColorBtn->color() );
 	m_view->repaintAll();
 
-	m_config->setGroup( "Grid" );
-	m_config->writeEntry( "SpacingX", gd.gridX() );
-	m_config->writeEntry( "SpacingY", gd.gridY() );
-	//m_config->writeEntry( "SnapX", gd.snapX() );
-	//m_config->writeEntry( "SnapY", gd.snapY() );
-	m_config->writeEntry( "Color", gd.gridColor() );
+    KConfigGroup gridGroup = m_config->group( "Grid" );
+    gridGroup.writeEntry( "SpacingX", gd.gridX() );
+    gridGroup.writeEntry( "SpacingY", gd.gridY() );
+    //gridGroup.writeEntry( "SnapX", gd.snapX() );
+    //gridGroup.writeEntry( "SnapY", gd.snapY() );
+    gridGroup.writeEntry( "Color", gd.gridColor() );
 }
 
 void VConfigGridPage::slotDefault()
@@ -448,10 +443,10 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view, char* name )
 
     if( m_config->hasGroup( "Interface" ) )
     {
-        m_config->setGroup( "Interface" );
-        m_oldAutoSave = m_config->readEntry( "AutoSave", m_oldAutoSave );
-        m_oldBackupFile = m_config->readEntry( "BackupFile", m_oldBackupFile );
-        m_oldSaveAsPath = m_config->readEntry( "SaveAsPath", m_oldSaveAsPath );
+        KConfigGroup interfaceGroup = m_config->group( "Interface" );
+        m_oldAutoSave = interfaceGroup.readEntry( "AutoSave", m_oldAutoSave );
+        m_oldBackupFile = interfaceGroup.readEntry( "BackupFile", m_oldBackupFile );
+        m_oldSaveAsPath = interfaceGroup.readEntry( "SaveAsPath", m_oldSaveAsPath );
     }
 
     m_autoSave = new KIntNumInput( m_oldAutoSave, gbDocumentSettings );
@@ -473,15 +468,13 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view, char* name )
 
 void VConfigDefaultPage::apply()
 {
-	m_config->setGroup( "Document defaults" );
-
-	m_config->setGroup( "Interface" );
+    KConfigGroup interfaceGroup = m_config->group( "Interface" );
 
 	int autoSave = m_autoSave->value();
 
 	if( autoSave != m_oldAutoSave )
 	{
-		m_config->writeEntry( "AutoSave", autoSave );
+        interfaceGroup.writeEntry( "AutoSave", autoSave );
 		m_view->part()->setAutoSave( autoSave * 60 );
 		m_oldAutoSave = autoSave;
 	}
@@ -490,7 +483,7 @@ void VConfigDefaultPage::apply()
 
 	if( state != m_oldBackupFile )
 	{
-		m_config->writeEntry( "BackupFile", state );
+        interfaceGroup.writeEntry( "BackupFile", state );
 		m_view->part()->setBackupFile( state );
 		m_oldBackupFile = state;
 	}
@@ -499,7 +492,7 @@ void VConfigDefaultPage::apply()
 
 	//if( state != m_oldSaveAsPath )
 	//{
-		m_config->writeEntry( "SaveAsPath", state );
+        interfaceGroup.writeEntry( "SaveAsPath", state );
 		m_view->part()->document().saveAsPath( state );
 		m_oldSaveAsPath = state;
 	//}
