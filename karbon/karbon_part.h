@@ -32,8 +32,6 @@ class QRectF;
 class QRect;
 class VCommand;
 class VDocument;
-class KCommand;
-class KCommandHistory;
 
 /**
  * Keeps track of visual per document properties.
@@ -80,8 +78,6 @@ public:
 	/// at this time only the status bar is handled
 	void reorganizeGUI();
 
-	void setUndoRedoLimit( int undos );
-
 	void initConfig();
 	unsigned int maxRecentFiles() const { return m_maxRecentFiles; }
 
@@ -98,7 +94,6 @@ public slots:
 	void repaintAllViews( bool repaint = true );
 	void repaintAllViews( const QRectF& );
 	void slotDocumentRestored();
-	void slotCommandExecuted( KCommand * );
 	void slotUnitChanged( KoUnit unit );
 
 protected:

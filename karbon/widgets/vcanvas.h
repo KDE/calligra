@@ -46,8 +46,6 @@ class QRectF;
 class KoViewConverter;
 class KoShapeManager;
 class KoToolProxy;
-class KCommand;
-class KCommandHistory;
 class VDocument;
 class KarbonPart;
 

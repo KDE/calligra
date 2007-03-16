@@ -29,7 +29,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktemporaryfile.h>
-#include <kcommand.h>
 #include <KoStoreDevice.h>
 #include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>
@@ -454,17 +453,6 @@ KarbonPart::slotDocumentRestored()
 }
 
 void
-KarbonPart::slotCommandExecuted( KCommand *command )
-{
-	setModified( true );
-	if( command )
-	{
-		foreach ( KoView* view, views() )
-			static_cast<KarbonView*>( view )->selectionChanged();
-	}
-}
-
-void
 KarbonPart::clearHistory()
 {
 // TODO needs porting
@@ -544,14 +532,6 @@ KarbonPart::reorganizeGUI()
 }
 
 void
-KarbonPart::setUndoRedoLimit( int undos )
-{
-// TODO needs porting
-/*	m_commandHistory->setUndoLimit( undos );
-	m_commandHistory->setRedoLimit( undos );*/
-}
-
-void
 KarbonPart::initConfig()
 {
     KSharedConfigPtr config = KarbonPart::componentData().config();
@@ -594,8 +574,6 @@ KarbonPart::initConfig()
         QColor color = gridGroup.readEntry( "Color", defGrid.gridColor() );
         gridData().setGridColor( color );
     }
-    if( undos != -1 )
-        setUndoRedoLimit( undos );
 }
 
 bool

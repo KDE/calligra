@@ -81,8 +81,6 @@ private:
 	KarbonView* m_view;
 	KSharedConfigPtr m_config;
 
-	KIntNumInput* m_undoRedo;
-	int m_oldUndoRedo;
 	KoUnit m_oldUnit;
 	QComboBox *m_unit;
 };

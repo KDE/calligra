@@ -221,29 +221,16 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, char* name )
     grid->setSpacing(KDialog::spacingHint());
     grid->setMargin(KDialog::marginHint());
 
-    m_oldUndoRedo = 30;
-
     QString unitType = KoUnit::unitName( unit );
     //#################"laurent
     //don't load unitType from config file because unit is
     //depend from kword file => unit can be different from config file
 
-    if( m_config->hasGroup( "Misc" ) )
-    {
-        m_oldUndoRedo = m_config->group( "Misc" ).readEntry( "UndoRedo", m_oldUndoRedo );
-    }
-
-    m_undoRedo = new KIntNumInput( m_oldUndoRedo, tmpQGroupBox );
-    m_undoRedo->setLabel( i18n( "Undo/redo limit:" ) );
-    m_undoRedo->setRange( 10, 60, 1 );
-
-    grid->addWidget( m_undoRedo, 0, 0, 1, 2 );
-
-    grid->addWidget( new QLabel(  i18n(  "Units:" ), tmpQGroupBox ), 1, 0 );
+    grid->addWidget( new QLabel(  i18n(  "Units:" ), tmpQGroupBox ), 0, 0 );
 
     m_unit = new QComboBox( tmpQGroupBox );
     m_unit->addItems( KoUnit::listOfUnitName() );
-    grid->addWidget( m_unit, 1, 1 );
+    grid->addWidget( m_unit, 0, 1 );
     m_oldUnit = KoUnit::unit( unitType );
     m_unit->setCurrentIndex( m_oldUnit.indexInList() );
 
@@ -268,20 +255,10 @@ void VConfigMiscPage::apply()
         part->document().setUnit(part->unit());
         miscGroup.writeEntry( "Units", KoUnit::unitName( part->unit() ) );
     }
-
-    int newUndo = m_undoRedo->value();
-
-    if( newUndo != m_oldUndoRedo )
-    {
-        miscGroup.writeEntry( "UndoRedo", newUndo );
-        part->setUndoRedoLimit( newUndo );
-        m_oldUndoRedo = newUndo;
-    }
 }
 
 void VConfigMiscPage::slotDefault()
 {
-    m_undoRedo->setValue( 30 );
     m_unit->setCurrentIndex( 0 );
 }
 

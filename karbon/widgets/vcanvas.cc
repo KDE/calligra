@@ -40,7 +40,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcolormimedata.h>
-#include <kcommand.h>
 
 #include "vdocument.h"
 #include "karbon_part.h"
