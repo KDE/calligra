@@ -862,7 +862,6 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& headerFooter
     const QString localName = headerFooter.localName();
     bool isHeader = localName.startsWith( "header" );
 
-//kDebug()<<"##########################################################################"<<endl;
     kDebug()<<"KWOpenDocumentLoader::loadOasisHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<endl;
 
 #if 0
@@ -937,6 +936,11 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& headerFooter
     KWTextFrame *frame = new KWTextFrame(shape, fs);
     frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
 
+    QTextCursor( fs->document() ).insertText(headerType); //TESTCASE
+
+    //TODO let the view know, that we like to display the header+footer
+    //d->document->m_frameLayout.cleanupHeadersFooters();
+    //KWTextDocumentLayout *lay = dynamic_cast< KWTextDocumentLayout* >( fs->document()->documentLayout() );
 #endif
 }
 
