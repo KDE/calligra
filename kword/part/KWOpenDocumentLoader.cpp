@@ -25,11 +25,11 @@
 #include "frame/KWTextFrame.h"
 
 // koffice
+#include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
+#include <KoOasisSettings.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
-#include <KoOasisLoadingContext.h>
-
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoStyleManager.h>
@@ -37,6 +37,7 @@
 #include <KoCharacterStyle.h>
 //#include <KoListStyle.h>
 //#include <KoTextShapeData.h>
+#include <KoPageLayout.h>
 
 // KDE + Qt includes
 #include <QDomDocument>
@@ -125,6 +126,9 @@ class KWOpenDocumentLoader::Private
 
         /// Current master-page name (OASIS loading)
         QString currentMasterPage;
+
+        /// Structure for columns defined in KoPageLayout.h
+        KoColumns columns;
 };
 
 KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *parent)
@@ -146,7 +150,6 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     emit sigProgress( 0 );
 
     kDebug(32001) << "========================> KWOpenDocumentLoader::load START" << endl;
-    //clear();
 
     QDomElement content = doc.documentElement();
     QDomElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
@@ -178,11 +181,8 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     //KoOasisLoadingContext context( this, *m_varColl, styles, store );
     KoOasisLoadingContext context( d->document, styles, store );
 
-#if 0
-    //m_loadingInfo = new KWLoadingInfo();
-    //m_loadingInfo->columns.ptColumnSpacing = m_defaultColumnSpacing;
-    createLoadingInfo();
-#endif
+    d->columns.columns = 1;
+    d->columns.columnSpacing = d->document->m_defaultColumnSpacing;
 
     // In theory the page format is the style:master-page-name of the first paragraph...
     // But, hmm, in a doc with only a table there was no reference to the master page at all...
@@ -219,18 +219,15 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         m_varColl->variableSetting()->setDisplayFieldCode(false);
 #endif
 
-#if 0
     // Load all styles before the corresponding paragraphs try to use them!
-    m_styleColl->loadOasisStyles( context );
+    loadOasisStyles( context );
+
+#if 0
     if ( m_frameStyleColl->loadOasisStyles( context ) == 0 ) {
          // no styles loaded -> load default styles
         loadDefaultFrameStyleTemplates();
     }
-#else
-    loadOasisStyles( context );
-#endif
 
-#if 0
     if ( m_tableStyleColl->loadOasisStyles( context, *m_styleColl, *m_frameStyleColl ) == 0 ) {
         // no styles loaded -> load default styles
         loadDefaultTableStyleTemplates();
@@ -349,24 +346,50 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         m_initialEditing->m_initialCursorParag = context.cursorTextParagraph()->paragId();
         m_initialEditing->m_initialCursorIndex = context.cursorTextIndex();
     }
+#endif
 
-    if ( !settings.isNull() )
-    {
-        oasisLoader.loadOasisSettings( settings );
-    }
+    loadOasisSettings( settings );
 
-    kDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
-    endOfLoading();
-
+#if 0
     // This sets the columns and header/footer flags, and calls recalcFrames,
     // so it must be done last.
     setPageLayout( m_pageLayout, m_loadingInfo->columns, m_loadingInfo->hf, false );
-    //printDebug();
 #endif
 
     kDebug(32001) << "========================> KWOpenDocumentLoader::load END" << endl;
+    kDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
     emit sigProgress(100);
     return true;
+}
+
+void KWOpenDocumentLoader::loadOasisSettings(const QDomDocument& settingsDoc)
+{
+    if ( settingsDoc.isNull() )
+    {
+        return;
+    }
+
+    KoOasisSettings settings( settingsDoc );
+    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
+    if ( !viewSettings.isNull() )
+    {
+        d->document->setUnit( KoUnit::unit(viewSettings.parseConfigItemString("unit")) );
+    }
+
+    //KWOasisLoader::loadOasisIgnoreList
+    KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
+    if ( !configurationSettings.isNull() )
+    {
+        const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
+        kDebug(32001) << "Ignorelist: " << ignorelist << endl;
+#if 0
+        d->document->setSpellCheckIgnoreList( QStringList::split( ',', ignorelist ) );
+#endif
+    }
+
+#if 0
+    d->document->variableCollection()->variableSetting()->loadOasis( settings );
+#endif
 }
 
 //KoStyleCollection::loadOasisStyles
@@ -481,11 +504,8 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
             charstyle->setFontWeight( 95 );
         */
 
-        if(name.startsWith("Head")) {
-//charstyle->setFontPointSize(pointSize);
-//charstyle->setFontItalic(true);
-
-            //charstyle->setFontPointSize(20.0);
+        if(name.startsWith("Head")) { //TESTCASE
+            charstyle->setFontPointSize(20.0);
             //style->setBreakAfter(true);
             //style->setLeftPadding(20.0);
             //style->setLeftMargin(20.0);
@@ -541,12 +561,12 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
         else if ( isTextNS && localName == "span" ) // text:span
         {
             kDebug() << "  localName=" << localName << " is span" << endl;
-            //context.styleStack().save();
-            //context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
+            context.styleStack().save();
+            context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
 
             loadOasisSpan( ts, context, cursor ); // recurse
 
-            //context.styleStack().restore();
+            context.styleStack().restore();
         }
         else if ( isTextNS && localName == "s" ) // text:s
         {
@@ -621,26 +641,9 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
     cursor.insertBlock(emptyTbf, emptyCf);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 bool KWOpenDocumentLoader::loadOasisPageLayout(const QString& masterPageName, KoOasisLoadingContext& context)
 {
-#if 0
-    KoColumns& columns = m_loadingInfo->columns;
-    const KoOasisStyles& styles = context.styles();
+    const KoOasisStyles& styles = context.oasisStyles();
     Q_ASSERT( styles.masterPages().contains(masterPageName) );
     const QDomElement* masterPage = styles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
@@ -648,9 +651,9 @@ bool KWOpenDocumentLoader::loadOasisPageLayout(const QString& masterPageName, Ko
     Q_ASSERT( masterPageStyle );
     if ( masterPageStyle )
     {
+#if 0
         m_pageLayout.loadOasis( *masterPageStyle );
         pageManager()->setDefaultPage(m_pageLayout);
-
         const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
         const QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
         if ( !footnoteSep.isNull() ) {
@@ -712,12 +715,19 @@ bool KWOpenDocumentLoader::loadOasisPageLayout(const QString& masterPageName, Ko
         // TODO spHeadBody (where is this in OOo?)
         // TODO spFootBody (where is this in OOo?)
         // Answer: margins of the <style:header-footer> element
+#else
+        const KoPageLayout* pageLayout = d->document->m_pageManager.defaultPage();
+        Q_ASSERT(pageLayout);
+        const_cast<KoPageLayout*>(pageLayout)->loadOasis( *masterPageStyle ); //FIXME const_cast seems to be wrong here
+        d->document->setDefaultPageLayout(*pageLayout);
+#endif
     }
+#if 0
     else // this doesn't happen with normal documents, but it can happen if copying something,
          // pasting into konq as foo.odt, then opening that...
     {
-        columns.columns = 1;
-        columns.ptColumnSpacing = 2;
+        d->columns.columns = 1;
+        d->columns.columnSpacing = 2;
         m_headerVisible = false;
         m_footerVisible = false;
         m_pageLayout = KoPageLayout::standardLayout();
@@ -729,14 +739,14 @@ bool KWOpenDocumentLoader::loadOasisPageLayout(const QString& masterPageName, Ko
 
 bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, KoOasisLoadingContext& context)
 {
-#if 0
-    const KoOasisStyles& styles = context.styles();
+    const KoOasisStyles& styles = context.oasisStyles();
     Q_ASSERT( styles.masterPages().contains(masterPageName) );
     const QDomElement* masterPage = styles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
     const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
     Q_ASSERT( masterPageStyle );
 
+#if 0
     // This check is done here and not in loadOasisPageLayout in case the Standard master-page
     // has no page information but the first paragraph points to a master-page that does (#129585)
     if ( m_pageLayout.ptWidth <= 1e-13 || m_pageLayout.ptHeight <= 1e-13 )
