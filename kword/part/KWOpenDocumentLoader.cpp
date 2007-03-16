@@ -129,8 +129,6 @@ class KWOpenDocumentLoader::Private
         QString currentMasterPage;
         /// Structure for columns defined in KoPageLayout.h
         KoColumns columns;
-        /// Structure for header-footer defined in KoPageLayout.h
-        KoHeadFoot hf;
 };
 
 KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *parent)
@@ -771,66 +769,18 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, Ko
     if ( masterPageStyle )
     {
         // Load headers
-
         QDomElement headerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "header-style" );
         QDomElement headerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header-left" );
         QDomElement headerFirstElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header-first" ); // hack, not oasis compliant
-        const bool hasFirstHeader = !headerFirstElem.isNull();
-        bool hasEvenOddHeader = false;
-        if ( !headerLeftElem.isNull() )
-        {
-            hasEvenOddHeader = true;
-#if 0
-            d->hf.header = hasFirstHeader ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
-#endif
-            loadOasisHeaderFooter( headerLeftElem, hasEvenOddHeader, headerStyle, context );
-        }
-        else
-        {
-#if 0
-            d->hf.header = hasFirstHeader ? HF_FIRST_DIFF : HF_SAME;
-#endif
-        }
-        if ( hasFirstHeader )
-        {
-            loadOasisHeaderFooter( headerFirstElem, hasEvenOddHeader, headerStyle, context );
-        }
         QDomElement headerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header" );
-        if ( !headerElem.isNull() )
-        {
-            loadOasisHeaderFooter( headerElem, hasEvenOddHeader, headerStyle, context );
-        }
+        loadOasisHeaderFooter(headerElem, headerStyle, headerLeftElem, headerFirstElem);
 
         // Load footers
-
         QDomElement footerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "footer-style" );
         QDomElement footerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer-left" );
         QDomElement footerFirstElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer-first" ); // hack, not oasis compliant
-        const bool hasFirstFooter = !footerFirstElem.isNull();
-        bool hasEvenOddFooter = false;
-        if ( !footerLeftElem.isNull() )
-        {
-            hasEvenOddFooter = true;
-#if 0
-            d->hf.footer = hasFirstFooter ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
-#endif
-            loadOasisHeaderFooter( footerLeftElem, hasEvenOddFooter, footerStyle, context );
-        }
-        else
-        {
-#if 0
-            d->hf.footer = hasFirstFooter ? HF_FIRST_DIFF : HF_SAME;
-#endif
-        }
-        if ( hasFirstFooter )
-        {
-            loadOasisHeaderFooter( footerFirstElem, hasEvenOddFooter, footerStyle, context );
-        }
         QDomElement footerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer" );
-        if ( !footerElem.isNull() )
-        {
-            loadOasisHeaderFooter( footerElem, hasEvenOddFooter, footerStyle, context );
-        }
+        loadOasisHeaderFooter(footerElem, footerStyle, footerLeftElem, footerFirstElem);
 
 #if 0
         // The bottom margin of headers is what we call headerBodySpacing
@@ -857,12 +807,62 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, Ko
 }
 
 //KWOasisLoader::loadOasisHeaderFooter
-void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisLoadingContext& context)
+void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& elem, const QDomElement& style, const QDomElement& leftElem, const QDomElement& firstElem)
 {
-    const QString localName = headerFooter.localName();
-    bool isHeader = localName.startsWith( "header" );
+    const bool hasFirst = !firstElem.isNull();
+    if ( !hasFirst && elem.isNull() )
+    {
+        return; // no header/footer
+    }
 
-    kDebug()<<"KWOpenDocumentLoader::loadOasisHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<endl;
+    const QString localName = elem.localName();
+    bool isHeader = localName.startsWith( "header" );
+    kDebug()<<"KWOpenDocumentLoader::loadOasisHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst<<endl;
+
+    bool hasEvenOdd = false;
+    if ( !leftElem.isNull() )
+    {
+        bool hasEvenOdd = true;
+#if 0
+        d->hf.header = hasFirst ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
+#else
+        /*
+        //todo: same for footer!
+        if( hasFirst )
+            d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+        else
+            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeEvenOdd);
+        */
+#endif
+    }
+    else
+    {
+#if 0
+        d->hf.header = hasFirst ? HF_FIRST_DIFF : HF_SAME;
+#else
+        /*
+        if( hasFirst )
+            d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+        else
+            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeSameAsFirst);
+        */
+#endif
+    }
+
+    /*
+    enum HeaderFooterType {//KWord2
+        HFTypeNone,       ///< Don't show the frames
+        HFTypeEvenOdd,    ///< Show different content for even and odd pages
+        HFTypeUniform,    ///< Show the same content for each page
+        HFTypeSameAsFirst ///< Show the same content for each page, including the first page
+    };
+    enum KoHFType { //KWord1.6
+        HF_SAME = 0,            ///< 0: Header/Footer is the same on all pages
+        HF_FIRST_EO_DIFF = 1,   ///< 1: Header/Footer is different on first, even and odd pages (2&3)
+        HF_FIRST_DIFF = 2,      ///< 2: Header/Footer for the first page differs
+        HF_EO_DIFF = 3          ///< 3: Header/Footer for even - odd pages are different
+    };
+    */
 
 #if 0
     KWTextFrameSet *fs = new KWTextFrameSet( m_doc, headerTypeToFramesetName( localName, hasEvenOdd ) );
@@ -893,40 +893,40 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& headerFooter
         m_doc->m_footerVisible = true;
 #else
 
-    QString headerType;
-    KWord::TextFrameSetType type = KWord::OtherTextFrameSet;
+    QString fsTypeName;
+    KWord::TextFrameSetType fsType = KWord::OtherTextFrameSet;
     if ( localName == "header" ) {
-        type = KWord::OddPagesHeaderTextFrameSet;
-        headerType = hasEvenOdd ? i18n("Odd Pages Header") : i18n( "Header" );
+        fsType = KWord::OddPagesHeaderTextFrameSet;
+        fsTypeName = hasEvenOdd ? i18n("Odd Pages Header") : i18n( "Header" );
     }
     else if ( localName == "header-left" ) {
-        type = KWord::EvenPagesHeaderTextFrameSet;
-        headerType = i18n("Even Pages Header");
+        fsType = KWord::EvenPagesHeaderTextFrameSet;
+        fsTypeName = i18n("Even Pages Header");
     }
     else if ( localName == "footer" ) {
-        type = KWord::OddPagesFooterTextFrameSet;
-        headerType = hasEvenOdd ? i18n("Odd Pages Footer") : i18n( "Footer" );
+        fsType = KWord::OddPagesFooterTextFrameSet;
+        fsTypeName = hasEvenOdd ? i18n("Odd Pages Footer") : i18n( "Footer" );
     }
     else if ( localName == "footer-left" ) {
-        type = KWord::EvenPagesFooterTextFrameSet;
-        headerType = i18n("Even Pages Footer");
+        fsType = KWord::EvenPagesFooterTextFrameSet;
+        fsTypeName = i18n("Even Pages Footer");
     }
     else if ( localName == "header-first" ) { // NOT OASIS COMPLIANT
-        type = KWord::FirstPageHeaderTextFrameSet;
-        headerType = i18n("First Page Header");
+        fsType = KWord::FirstPageHeaderTextFrameSet;
+        fsTypeName = i18n("First Page Header");
     }
     else if ( localName == "footer-first" ) { // NOT OASIS COMPLIANT
-        type = KWord::FirstPageFooterTextFrameSet;
-        headerType = i18n("First Page Footer");
+        fsType = KWord::FirstPageFooterTextFrameSet;
+        fsTypeName = i18n("First Page Footer");
     }
     else {
         kWarning(32001) << "Unknown tag in KWOpenDocumentLoader::loadOasisHeaderFooter: " << localName << endl;
         return;
     }
 
-    KWTextFrameSet *fs = new KWTextFrameSet( d->document, type );
+    KWTextFrameSet *fs = new KWTextFrameSet( d->document, fsType );
     fs->setAllowLayout(false);
-    fs->setName(headerType);
+    fs->setName(fsTypeName);
     d->document->addFrameSet(fs);
 
     KoShapeFactory *factory = KoShapeRegistry::instance()->get(TextShape_SHAPEID);
@@ -936,11 +936,12 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& headerFooter
     KWTextFrame *frame = new KWTextFrame(shape, fs);
     frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
 
-    QTextCursor( fs->document() ).insertText(headerType); //TESTCASE
+    QTextCursor( fs->document() ).insertText(fsTypeName); //TESTCASE
 
     //TODO let the view know, that we like to display the header+footer
     //d->document->m_frameLayout.cleanupHeadersFooters();
     //KWTextDocumentLayout *lay = dynamic_cast< KWTextDocumentLayout* >( fs->document()->documentLayout() );
+
 #endif
 }
 
