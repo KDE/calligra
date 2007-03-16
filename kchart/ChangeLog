@@ -1,5 +1,21 @@
 2007-03-15  Inge Wallin  <inge@lysator.liu.se>
 
+	Qt3 -> Qt4 changes
+	* dialogs/KCConfigAxesPage.cc
+	* dialogs/KCConfigFontPage.cc
+	* dialogs/KCConfigHeaderFooterPage.cc
+	* dialogs/KCConfigDataPage.cc
+	* dialogs/KCConfigSubtypePage.cc
+	* dialogs/KCConfigLegendPage.cc
+	* dialogs/KCConfigLegendPage.h
+	* dialogs/KCConfigSubtypeLinePage.cc
+	* dialogs/KCConfigColorPage.cc
+	* dialogs/KCConfigBackgroundPage.cc
+	* dialogs/KCConfigSubtypeBarPage.cc
+	Q3VBoxLayout -> QVBoxLayout
+	Q3HBoxLayout -> QHBoxLayout
+	Q3GridLayout -> QGridLayout
+
 	EBN fixes:
 	* kchart_factory.h (KChartFactory): explicit
 	* kchart_part.h (KChartPart): explicit

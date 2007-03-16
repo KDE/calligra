@@ -30,7 +30,6 @@
 
 
 //Added by qt3to4:
-#include <Q3HBoxLayout>
 #include <Q3VButtonGroup>
 #include <kvbox.h>
 
@@ -47,7 +46,7 @@ KChartHiloSubTypeChartPage::KChartHiloSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
     KCConfigSubtypePage(  params, parent )
 {
-    Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
+    QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
     subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
     toplevel->addWidget( subtypeBG, Qt::AlignCenter| Qt::AlignVCenter );
@@ -126,7 +125,7 @@ KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
     KCConfigSubtypePage(  params, parent )
 {
-    Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
+    QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
     subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
     toplevel->addWidget( subtypeBG, Qt::AlignCenter| Qt::AlignVCenter );
@@ -206,7 +205,7 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
                                                       QWidget* parent ) :
     KCConfigSubtypePage( params, parent )
 {
-    Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
+    QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
     KVBox       *left = new KVBox( this );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), left );
     subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
@@ -300,7 +299,7 @@ KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
     KCConfigSubtypePage(  params, parent )
 {
-    Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
+    QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
     subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
     toplevel->addWidget( subtypeBG, Qt::AlignCenter| Qt::AlignVCenter );
@@ -379,7 +378,7 @@ KChartPolarSubTypeChartPage::KChartPolarSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
     KCConfigSubtypePage(  params, parent )
 {
-    Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
+    QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
     subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
     toplevel->addWidget( subtypeBG, Qt::AlignCenter| Qt::AlignVCenter );

@@ -24,8 +24,6 @@
 
 
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3GridLayout>
 #include <k3listbox.h>
 #include <kdebug.h>
 #include <kvbox.h>
@@ -52,13 +50,13 @@ KCConfigColorPage::KCConfigColorPage( KChartParams* params,
                                  "part of the chart can be assigned a "
                                  "different color." ) );
 
-    Q3VBoxLayout* toplevel = new Q3VBoxLayout( this, 10 );
+    QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
     Q3ButtonGroup* gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Colors"), this );
     gb->layout()->setSpacing(KDialog::spacingHint());
     gb->layout()->setMargin(KDialog::marginHint());
     toplevel->addWidget( gb);
     QString wtstr;
-    Q3GridLayout* grid = new Q3GridLayout( gb->layout(), 8, 3 );
+    QGridLayout* grid = new QGridLayout( gb->layout(), 8, 3 );
 
     QLabel* lineLA = new QLabel( i18n( "&Line color:" ), gb );
     lineLA->setAlignment( Qt::AlignRight | Qt::AlignVCenter );

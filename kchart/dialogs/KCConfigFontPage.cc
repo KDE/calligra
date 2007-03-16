@@ -27,9 +27,6 @@
 #include <QPushButton>
 #include <qpainter.h>
 
-//Added by qt3to4:
-#include <Q3GridLayout>
-
 #include <klocale.h>
 #include <kcolorbutton.h>
 #include <kdebug.h>
@@ -84,7 +81,9 @@ KCConfigFontPage::KCConfigFontPage( KChartParams* params,
 				    KDChartTableData *dat) :
     QWidget( parent ), m_params( params ), data(dat)
 {
-    Q3GridLayout *grid = new Q3GridLayout(this,4,3,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid = new QGridLayout( this, 4, 3, 
+					 KDialog::marginHint(), 
+					 KDialog::spacingHint() );
 
     // The listbox
     m_list = new Q3ListBox(this);

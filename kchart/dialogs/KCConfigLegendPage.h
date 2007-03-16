@@ -25,7 +25,6 @@
 #include <q3button.h>
 #include <QLayout>
 //Added by qt3to4:
-#include <Q3GridLayout>
 #include <Q3ButtonGroup>
 
 class QRadioButton;
@@ -62,7 +61,7 @@ private:
     QPushButton *titleLegendFontButton, *textLegendFontButton;
 	Qt::CheckState titleLegendIsRelative, textLegendIsRelative;
 
-    QPushButton* addButton( Q3GridLayout* layout, Q3ButtonGroup* gb,
+    QPushButton* addButton( QGridLayout* layout, Q3ButtonGroup* gb,
                             const QString &toolTipText, const QString &icon,
                             int posY, int posX );
 };

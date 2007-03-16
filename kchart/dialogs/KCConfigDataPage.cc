@@ -36,7 +36,7 @@
 #include <qpainter.h>
 
 //Added by qt3to4:
-#include <Q3GridLayout>
+//#include <Q3GridLayout>
 
 #include <kfontdialog.h>
 #include <kvbox.h>
@@ -57,8 +57,8 @@ KCConfigDataPage::KCConfigDataPage( KChartParams* params,
 				    KDChartTableData *dat) 
     : QWidget( parent ), m_params( params ), data(dat)
 {
-    Q3GridLayout *grid1 = new Q3GridLayout(this, 4, 1, KDialog::marginHint(),
-					   KDialog::spacingHint());
+    QGridLayout *grid1 = new QGridLayout( this, 4, 1, KDialog::marginHint(),
+					  KDialog::spacingHint() );
 
     // The Data Area
     Q3ButtonGroup *gb1 = new Q3VButtonGroup( i18n( "Data Area" ), this );

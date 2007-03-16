@@ -25,10 +25,6 @@
 #include <QSpinBox>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kfontdialog.h>
@@ -43,18 +39,18 @@ namespace KChart
 {
 
 KCConfigAxesPage::KCConfigAxesPage( KChartParams* params,
-                                                      QWidget* parent ) :
+				    QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    Q3VBoxLayout* toplevel = new Q3VBoxLayout( this, 10 );
+    QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
 
-    Q3GridLayout* layout = new Q3GridLayout( 1, 3 );
+    QGridLayout* layout = new QGridLayout( 1, 3 );
     toplevel->addLayout( layout );
 
     Q3ButtonGroup* gb1 = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Parameters"), this );
     gb1->layout()->setSpacing(KDialog::spacingHint());
     gb1->layout()->setMargin(KDialog::marginHint());
-    Q3GridLayout *grid1 = new Q3GridLayout(gb1->layout(),9,1);
+    QGridLayout *grid1 = new QGridLayout( gb1->layout(), 9, 1 );
 
     grid = new QCheckBox( i18n( "Grid" ), gb1 );
     grid->setWhatsThis( i18n("If this is checked, the grid is shown. If you uncheck this option, the grid will not be displayed anymore."));
@@ -91,9 +87,9 @@ KCConfigAxesPage::KCConfigAxesPage( KChartParams* params,
                       i18n("Settings"), this );
     gb2->layout()->setSpacing(KDialog::spacingHint());
     gb2->layout()->setMargin(KDialog::marginHint());
-    Q3GridLayout *grid2 = new Q3GridLayout(gb2->layout(),8,1);
+    QGridLayout *grid2 = new QGridLayout(gb2->layout(),8,1);
 
-    Q3HBoxLayout * top = new Q3HBoxLayout( this );
+    QHBoxLayout * top = new QHBoxLayout( this );
     // The X axis title
     QLabel *tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
     top->addWidget(tmpLabel);
@@ -101,11 +97,11 @@ KCConfigAxesPage::KCConfigAxesPage( KChartParams* params,
     tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
     top->addWidget(tmpLabel);
 
-    Q3HBoxLayout * bottom = new Q3HBoxLayout( this );
+    QHBoxLayout * bottom = new QHBoxLayout( this );
     xtitle= new QLineEdit( gb2 );
     xtitle->setWhatsThis( i18n("Write the title for the X-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
     bottom->addWidget(xtitle);
-    Q3BoxLayout * l = new Q3VBoxLayout( this );
+    QBoxLayout * l = new QVBoxLayout( this );
     ytitle= new QLineEdit( gb2 );
     ytitle->setWhatsThis( i18n("Write the title for the Y-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
     bottom->addWidget(ytitle);

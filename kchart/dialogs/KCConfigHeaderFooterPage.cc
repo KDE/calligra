@@ -22,8 +22,6 @@
 #include <QLineEdit>
 #include <q3buttongroup.h>
 
-//Added by qt3to4:
-#include <Q3GridLayout>
 #include <kfontdialog.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -39,7 +37,7 @@ KCConfigHeaderFooterPage::KCConfigHeaderFooterPage( KChartParams* params,
 						    QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    Q3GridLayout* layout = new Q3GridLayout( this, 4, 3 );
+    QGridLayout* layout = new QGridLayout( this );
     layout->setSpacing( KDialog::spacingHint() );
     layout->setMargin( KDialog::marginHint() );
 

@@ -22,9 +22,6 @@
 #include <QCheckBox>
 #include <q3buttongroup.h>
 
-//Added by qt3to4:
-#include <Q3GridLayout>
-
 #include <klocale.h>
 #include <kdialog.h>
 
@@ -39,7 +36,7 @@ KCConfigSubtypeLinePage::KCConfigSubtypeLinePage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-  Q3GridLayout *grid1 = new Q3GridLayout(this,8,3,KDialog::marginHint(), KDialog::spacingHint());
+  QGridLayout *grid1 = new QGridLayout(this,8,3,KDialog::marginHint(), KDialog::spacingHint());
 
 #if 0
   // The 3D line on/off button.

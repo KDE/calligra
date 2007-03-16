@@ -22,9 +22,6 @@
 #include <QCheckBox>
 #include <q3buttongroup.h>
 
-//Added by qt3to4:
-#include <Q3GridLayout>
-
 #include <kdialog.h>
 #include <klocale.h>
 
@@ -39,7 +36,7 @@ KCConfigSubtypeBarPage::KCConfigSubtypeBarPage( KChartParams* params,
 						QWidget* parent ) :
     QWidget( parent ),m_params( params )
 {
-  Q3GridLayout* layout = new Q3GridLayout(this, 2, 2,KDialog::marginHint(),KDialog::spacingHint());
+  QGridLayout* layout = new QGridLayout(this, 2, 2,KDialog::marginHint(),KDialog::spacingHint());
 
 
   Q3ButtonGroup* gb = new Q3ButtonGroup( 0, Qt::Vertical, 
@@ -48,7 +45,7 @@ KCConfigSubtypeBarPage::KCConfigSubtypeBarPage( KChartParams* params,
   gb->layout()->setMargin(KDialog::marginHint());
 
   // The grid layout inside the buttongroup.
-  Q3GridLayout *grid1 = new Q3GridLayout(gb->layout(), 5, 3);
+  QGridLayout *grid1 = new QGridLayout(gb->layout(), 5, 3);
   layout->addWidget(gb,0,0);
 
   // The main on/off checkbox.

@@ -31,8 +31,7 @@
 #include <q3listbox.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+
 #include <kcolorbutton.h>
 #include <kvbox.h>
 #include <klocale.h>
@@ -61,7 +60,7 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
                            "stretched or scaled or centered or used as "
                            "background tiles." ) );
 
-    Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
+    QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
 
 #if 0
     Q3VBoxLayout* left=new Q3VBoxLayout(10);
@@ -70,7 +69,7 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
     left->addWidget(regionList);
 #endif
 
-    Q3VBoxLayout* center = new Q3VBoxLayout( 10 );
+    QVBoxLayout* center = new QVBoxLayout( 10 );
     toplevel->addLayout( center, 2 );
 
 

@@ -23,9 +23,6 @@
 #include <QLineEdit>
 #include <QToolTip> 
 
-//Added by qt3to4:
-#include <Q3GridLayout>
-
 #include <klocale.h>
 #include <kcolorbutton.h>
 #include <kfontdialog.h>
@@ -45,7 +42,9 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
     QWidget( parent ),_params( params )
 {
   //Layout for 4 blocks
-  Q3GridLayout* layout = new Q3GridLayout( this, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
+  QGridLayout* layout = new QGridLayout( this, 2, 2, 
+					 KDialog::marginHint(),
+					 KDialog::spacingHint() );
 
   //1. Block: General settings
   Q3ButtonGroup* gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("General"), this );
@@ -53,7 +52,7 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
   gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 0, 0 );
 
-  Q3GridLayout *grid2 = new Q3GridLayout( gb->layout(), 4, 2 );
+  QGridLayout *grid2 = new QGridLayout( gb->layout(), 4, 2 );
 
   QLabel* lab = new QLabel( i18n("Title:"), gb );
   lab->setWhatsThis( i18n("Write here the title of the legend, which is displayed at the top of the legend box."));
@@ -69,7 +68,7 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
   gb->layout()->setMargin(KDialog::marginHint());
   gb->setExclusive( true );
 
-  Q3GridLayout *grid1 = new Q3GridLayout( gb->layout(), 3, 3 );
+  QGridLayout *grid1 = new QGridLayout( gb->layout(), 3, 3 );
 
   lTopLeft  = addButton( grid1, gb, i18n("Top-Left"),  "chart_legend_topleft",  0, 0 );
   lTop      = addButton( grid1, gb, i18n("Top"),       "chart_legend_top",      0, 1 );
@@ -93,7 +92,7 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
   gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 0, 1 );
 
-  Q3GridLayout *grid4 = new Q3GridLayout( gb->layout(), 4, 2 );
+  QGridLayout *grid4 = new QGridLayout( gb->layout(), 4, 2 );
   titleLegendFontButton = new QPushButton( gb );
 
   lab = new QLabel( i18n("Legend title font:"), gb );
@@ -122,7 +121,7 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
   gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 1, 1 );
 
-  Q3GridLayout *grid3 = new Q3GridLayout( gb->layout(), 4, 2 );
+  QGridLayout *grid3 = new QGridLayout( gb->layout(), 4, 2 );
 
   lab = new QLabel( i18n("Legend title color:"), gb );
   grid3->addWidget( lab, 0, 0 );
@@ -250,12 +249,12 @@ void KCConfigLegendPage::apply()
         _params->setLegendFontRelSize(textLegend.pointSize());
 }
 
-QPushButton* KCConfigLegendPage::addButton( Q3GridLayout* layout,
-                                                Q3ButtonGroup* gb,
-                                                const QString &toolTipText,
-                                                const QString &icon,
-                                                int posY,
-                                                int posX )
+QPushButton* KCConfigLegendPage::addButton( QGridLayout* layout,
+					    Q3ButtonGroup* gb,
+					    const QString &toolTipText,
+					    const QString &icon,
+					    int posY,
+					    int posX )
 {
   QPushButton* button = new QPushButton( gb );
   button->setToggleButton( true );
