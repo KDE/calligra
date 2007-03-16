@@ -73,6 +73,9 @@ private:
     void loadOasisStyles(KoOasisLoadingContext& context);
     bool loadOasisPageLayout(const QString& masterPageName, KoOasisLoadingContext& context);
     bool loadMasterPageStyle(const QString& masterPageName, KoOasisLoadingContext& context);
+
+    void loadOasisHeaderFooter(const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisLoadingContext& context);
+
     void loadOasisSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
 
 private:
