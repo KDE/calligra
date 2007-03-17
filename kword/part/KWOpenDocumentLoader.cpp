@@ -589,12 +589,12 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
             QTextCharFormat emptyCf;
             cursor.insertBlock(emptyTbf, emptyCf);
         }
-#if 0
         else if ( isTextNS && localName == "number" ) // text:number
         {
             // This is the number in front of a numbered paragraph,
             // written out to help export filters. We can ignore it.
         }
+#if 0
 #ifdef KOXML_USE_QDOM
         else if ( node.isProcessingInstruction() )
         {
@@ -880,18 +880,6 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, 
         return;
     }
 
-    // Add the frameset and the shape for the header/footer to the document.
-    KWTextFrameSet *fs = new KWTextFrameSet( d->document, fsType );
-    fs->setAllowLayout(false);
-    fs->setName(fsTypeName);
-    d->document->addFrameSet(fs);
-    KoShapeFactory *factory = KoShapeRegistry::instance()->get(TextShape_SHAPEID);
-    Q_ASSERT(factory);
-    KoShape *shape = factory->createDefaultShape();
-    //shape->setZIndex(123);
-    KWTextFrame *frame = new KWTextFrame(shape, fs);
-    frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
-
     // Set the type of the header/footer in the KWPageSettings instance of our document.
     /*
         enum HeaderFooterType {//KWord2
@@ -907,30 +895,42 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, 
             HF_EO_DIFF = 3          ///< 3: Header/Footer for even - odd pages are different
         };
     */
-/*
     if ( !leftElem.isNull() ) {
         //d->hf.header = hasFirst ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
-        if( isHeader )
+        if( isHeader ) {
             d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeEvenOdd);
-        else
+            //d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+        }
+        else {
             d->document->m_pageSettings.setFooterPolicy(KWord::HFTypeEvenOdd);
+            //d->document->m_pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
+        }
     }
     else {
         //d->hf.header = hasFirst ? HF_FIRST_DIFF : HF_SAME;
-        if( isHeader )
-            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeUniform);
-        else
-            d->document->m_pageSettings.setFooterPolicy(KWord::HFTypeEvenOdd);
+        if( isHeader ) {
+            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeSameAsFirst);
+            d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+        }
+        else {
+            d->document->m_pageSettings.setFooterPolicy(KWord::HFTypeSameAsFirst);
+            d->document->m_pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
+        }
     }
-    //TODO d->document->m_pageSettings.setFirstHeaderPolicy
-    //TODO d->document->m_pageSettings.setFirstFooterPolicy
-*/
+
+    // Add the frameset and the shape for the header/footer to the document.
+    KWTextFrameSet *fs = new KWTextFrameSet( d->document, fsType );
+    fs->setAllowLayout(false);
+    fs->setName(fsTypeName);
+    d->document->addFrameSet(fs);
+    KoShapeFactory *factory = KoShapeRegistry::instance()->get(TextShape_SHAPEID);
+    Q_ASSERT(factory);
+    KoShape *shape = factory->createDefaultShape();
+    //shape->setZIndex(123);
+    KWTextFrame *frame = new KWTextFrame(shape, fs);
+    frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
 
     QTextCursor( fs->document() ).insertText(fsTypeName); //TESTCASE
-
-    //TODO let the view know, that we like to display the header+footer
-    //d->document->m_frameLayout.cleanupHeadersFooters();
-    //KWTextDocumentLayout *lay = dynamic_cast< KWTextDocumentLayout* >( fs->document()->documentLayout() );
 
 #endif
 }
