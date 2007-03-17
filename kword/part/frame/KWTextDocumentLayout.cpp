@@ -340,6 +340,7 @@ void KWTextDocumentLayout::layout() {
                     // if there is more space in the shape then there is text. Reset the no-grow bool.
                     KWTextFrame *lastFrame = static_cast<KWTextFrame*> (m_frameSet->frames().last());
                     KoTextShapeData *data = static_cast<KoTextShapeData*> (lastFrame->shape()->userData());
+                    Q_ASSERT( data );
                     double spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
                     if(spaceLeft > 0)
                         m_frameSet->spaceLeft(spaceLeft);
