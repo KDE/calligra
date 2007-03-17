@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, 2002, 2003 The Karbon Developers
-   Copyright (C) 2005-2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,11 +21,11 @@
 #include "karbon_view.h"
 
 #include <q3dragobject.h>
-#include <qicon.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QIcon>
+#include <QApplication>
+#include <QClipboard>
 #include <q3popupmenu.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <QResizeEvent>
 #include <QPixmap>
 #include <Q3ValueList>
@@ -110,7 +110,6 @@
 #include "karbon_part.h"
 #include "vglobal.h"
 #include "vselection.h"
-#include "vtool.h"
 #include "vtoolcontroller.h"
 #include "vcomposite.h"
 #include "vpainterfactory.h"
@@ -250,9 +249,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
 		connect(m_canvasView, SIGNAL(toolOptionWidgetChanged(QWidget*)), toolDocker, SLOT(newOptionWidget(QWidget*)));
 
-
-		//connect( m_stylePreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( slotStrokeChanged( const VStroke & ) ) );
-		//connect( m_stylePreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( slotFillChanged( const VFill & ) ) );
 
 		//connect( m_stylePreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
 		//connect( m_stylePreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
@@ -1101,24 +1097,6 @@ KarbonView::setLineStyle( int style )
 		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 12 << 2 << 2 << 2 ), true );
 	else if( style == Qt::DashDotDotLine )
 		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 12 << 2 << 2 << 2 << 2 << 2 ), true );
-}
-
-void
-KarbonView::slotStrokeChanged( const VStroke &c )
-{
-	debugView("KarbonView::slotStrokeChanged(VStroke)");
-
-	part()->document().selection()->setStroke( c );
-	selectionChanged();
-}
-
-void
-KarbonView::slotFillChanged( const VFill &f )
-{
-	debugView("KarbonView::slotFillChanged(VFill)");
-
-	part()->document().selection()->setFill( f );
-	selectionChanged();
 }
 
 void

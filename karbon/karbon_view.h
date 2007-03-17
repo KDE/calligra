@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, 2002, 2003 The Karbon Developers
-   Copyright (C) 2005-2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,32 +23,28 @@
 
 #include <KoView.h>
 #include <QPointF>
-#include <ksharedptr.h>
 #include <kxmlguibuilder.h>
 #include <KoUnit.h>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
 #include <KoZoomMode.h>
 #include <karbon_export.h>
-//Added by qt3to4:
-#include <QDropEvent>
-#include <QResizeEvent>
-#include <QLabel>
-#include <QEvent>
 
 class QLabel;
+class QDropEvent;
+class QResizeEvent;
+class QRectF;
 
 class KAction;
 class KarbonPart;
 class KSelectAction;
 class KToggleAction;
+
 class KoContextHelpAction;
 class KoLineStyleAction;
 class KoCanvasController;
 class KoZoomAction;
-
 class KoUnitDoubleSpinComboBox;
-class QRectF;
 class KoRuler;
 
 class VDocumentTab;
@@ -58,16 +54,13 @@ class VStyleDocker;
 class VTransformDocker;
 class VLayerDocker;
 
-class VFill;
 class VPainterFactory;
 class VSelectToolBar;
 class VSmallPreview;
-class VStroke;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
 class VTypeButtonBox;
 
-class VTool;
 class VToolController;
 
 class KARBONCOMMON_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
@@ -183,10 +176,6 @@ protected slots:
 	void viewModeChanged();
 	void zoomChanged( const QPointF & = QPointF() );
 	void setLineStyle( int );
-
-	// Toolbox dialogs.
-	void slotStrokeChanged( const VStroke& );
-	void slotFillChanged( const VFill & );
 
 	/// Called by the zoom action to set the zoom
 	void zoomChanged( KoZoomMode::Mode mode, int zoom );
