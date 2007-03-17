@@ -116,7 +116,6 @@
 #include "vpainterfactory.h"
 #include "vqpainter.h"
 #include "vtypebuttonbox.h"
-#include "vstatebutton.h"
 #include "vcanvas.h"
 #include "KoCanvasController.h"
 #include "karbon_drag.h"

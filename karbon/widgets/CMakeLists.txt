@@ -5,12 +5,9 @@ set(karbonwidgets_SRCS
     vcolorslider.cc
     vgradientwidget.cc
     vgradienttabwidget.cc
-    vreference.cc
     vstrokefillpreview.cc
-    vtranslate.cc
     vselecttoolbar.cc
     vsmallpreview.cc
-    vstatebutton.cc
     vtypebuttonbox.cc
     )
 

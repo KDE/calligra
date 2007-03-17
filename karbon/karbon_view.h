@@ -62,7 +62,6 @@ class VFill;
 class VPainterFactory;
 class VSelectToolBar;
 class VSmallPreview;
-class VStateButton;
 class VStroke;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
