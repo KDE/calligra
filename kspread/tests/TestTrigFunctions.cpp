@@ -28,13 +28,13 @@
 //  - accuracy problem due to propagated error in the implementation
 #define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber(y))
 
-// round to get at most 15-digits number
+// round to get at most 10-digits number
 static Value RoundNumber(double f)
 {
-  return Value( QString::number(f, 'g', 15) );
+  return Value( QString::number(f, 'g', 10) );
 }
 
-// round to get at most 15-digits number
+// round to get at most 10-digits number
 static Value RoundNumber(const Value& v)
 {
   if(v.isNumber())
@@ -42,7 +42,7 @@ static Value RoundNumber(const Value& v)
     double d = v.asFloat();
     if(fabs(d) < DBL_EPSILON)
       d = 0.0;
-    return Value( QString::number(d, 'g', 15) );
+    return Value( QString::number(d, 'g', 10) );
   }
   else
     return v;
