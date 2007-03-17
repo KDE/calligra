@@ -281,6 +281,7 @@ void KCConfigBackgroundPage::loadWallpaperFilesList()
 
 void KCConfigBackgroundPage::init()
 {
+#warning "Background image doesn't work at all right now due to the port to Qt4."
 #if 0
     QStringList lst;
     lst.append(i18n( "Outermost Region" ));

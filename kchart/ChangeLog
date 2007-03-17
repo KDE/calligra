@@ -1,5 +1,10 @@
 2007-03-17  Inge Wallin  <inge@lysator.liu.se>
 	
+	Remove some warnings for qwidget:
+	* kchart_view.cc (KChartView): Don't call setBackgroundMode()
+	* dialogs/KCConfigBackgroundPage.cc (init): Warn about background
+	images not working.
+	
 	Remove warnings for qpixmap:
 	* kchart_part.cc
 	* dialogs/KCConfigBackgroundPage.cc

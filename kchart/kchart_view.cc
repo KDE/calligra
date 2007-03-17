@@ -59,10 +59,6 @@ namespace KChart
 KChartView::KChartView( KChartPart* part, QWidget* parent )
     : KoView( part, parent )
 {
-
-    // No flicker
-    setBackgroundMode( Qt::NoBackground );
-
     setComponentData( KChartFactory::global() );
     if ( koDocument()->isReadWrite() )
         setXMLFile( "kchart.rc" );

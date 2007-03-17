@@ -25,6 +25,8 @@ Item								   Prio Status
 
 * Port to Qt4
   + Get rid of all Qt3 support widgets				      1	----
+  + Remove code that does double buffering.
+  + Get rid of warnings from deprecated calls 			      1	----
     - Fix layouts							--
     - Fix spinboxes							done
     - Fix qpixmap							done
@@ -34,7 +36,6 @@ Item								   Prio Status
     - Fix qstringlist							done
     - Fix qcombobox							done
     - Fix qwidget							--
-  + Get rid of warnings from deprecated calls 			      1	----
 
 * Port to KDE4
   + Fix changed calls
