@@ -61,9 +61,9 @@ public:
 
     void resizeEvent(QResizeEvent* ev);
 public slots:
-    void slotBCPW();
-    void slotBCPS();
-    void slotACPW();
+    void slotBCWP();
+    void slotBCWS();
+    void slotACWP();
 };
 
 } //namespace KPlato

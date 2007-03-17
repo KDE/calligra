@@ -43,14 +43,19 @@ private:
     float maxXPercent;
     
     QVector<QPointF> bcwpPoints;
+    QVector<QPointF> bcwpPoints_display;
+
     QVector<QPointF> bcwsPoints;
+    QVector<QPointF> bcwsPoints_display;
+
     QVector<QPointF> acwpPoints;
+    QVector<QPointF> acwpPoints_display;
     QVector<QDate> weeks;
     Chart chartEngine;
 
 public:
-    static const int TOPMARGIN = 15;
-    static const int LEFTMARGIN = 10;
+    static const int TOPMARGIN = 21;
+    static const int LEFTMARGIN = 38;
     static const int BOTTOMMARGIN = 15;
     static const int RIGHTMARGIN = 10;
 

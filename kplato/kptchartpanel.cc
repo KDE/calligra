@@ -28,34 +28,37 @@ namespace KPlato
 ChartPanel::ChartPanel(Project &p, QWidget *parent) : ChartPanelBase(parent)
 {
     chart = new ChartWidget(p,horizontalLayout_2,"MyChartWidget");
+    hboxLayout->setMargin(0);
+    hboxLayout->setSpacing(0);
     hboxLayout->addWidget(chart,1,0);
 
     horizontalLayout_2->setMinimumSize(610, 350);
-    horizontalLayout_2->setGeometry(QRect(10, 10, 600, 350));
+    horizontalLayout_2->setGeometry(QRect(0, 0, 610, 350));
 
-    verticalLayout->setGeometry(QRect(10, 365, 600, 80));
+    verticalLayout->setGeometry(QRect(0, 365, 610, 80));
     verticalLayout->setMinimumSize(610,80);
+
     //chart->update();
-    connect(curve2,SIGNAL(clicked()),SLOT(slotBCPW()));
-    connect(curve1,SIGNAL(clicked()),SLOT(slotBCPS()));
-    connect(curve3,SIGNAL(clicked()),SLOT(slotACPW()));
-    is_bcwp_draw=true;
+    connect(curve2,SIGNAL(clicked()),SLOT(slotBCWP()));
+    connect(curve1,SIGNAL(clicked()),SLOT(slotBCWS()));
+    connect(curve3,SIGNAL(clicked()),SLOT(slotACWP()));
+    is_bcwp_draw=false;
     is_bcws_draw=true;
     curve1->setChecked(true);
-    curve2->setChecked(true);
-    is_acwp_draw=false;
+    curve3->setChecked(true);
+    is_acwp_draw=true;
 
 }
 
 void ChartPanel::resizeEvent(QResizeEvent* ev)
 {
-    chart->setMaximumWidth((ev->size()).width()-6);
+    chart->setMaximumWidth((ev->size()).width());
     chart->setMaximumHeight((ev->size()).height()-100);
-    horizontalLayout_2->setGeometry(QRect(10, 10, (ev->size()).width()-6, (ev->size()).height()-100));
-    verticalLayout->setGeometry(QRect(10, (ev->size()).height()-86, 600, 80));
+    horizontalLayout_2->setGeometry(QRect(0, 0, (ev->size()).width(), (ev->size()).height()-100));
+    verticalLayout->setGeometry(QRect(10, (ev->size()).height()-80, 610, 80));
 }
 
-void ChartPanel::slotBCPW()
+void ChartPanel::slotBCWP()
 {
     if(is_bcwp_draw==false)
     {
@@ -68,7 +71,7 @@ void ChartPanel::slotBCPW()
         is_bcwp_draw=false;
     }
 }
-void ChartPanel::slotBCPS()
+void ChartPanel::slotBCWS()
 {
     if(is_bcws_draw==false)
     {
@@ -81,7 +84,7 @@ void ChartPanel::slotBCPS()
         is_bcws_draw=false;
     }
 }
-void ChartPanel::slotACPW()
+void ChartPanel::slotACWP()
 {
     if(is_acwp_draw==false){
         chart->drawACWP();

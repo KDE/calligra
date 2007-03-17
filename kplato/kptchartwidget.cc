@@ -30,36 +30,39 @@ namespace KPlato
 
 ChartWidget::ChartWidget(Project &p, QWidget *parent, const char *name) : QWidget(parent,name)
 {
-    kDebug() << "ChartWidget :: Constructor";
-    setMaximumSize(600,350);
+    kDebug() << "ChartWidget :: Constructor"<<endl;
+    setMaximumSize(610,350);
 
     is_bcwp_draw=true;
     is_bcws_draw=true;
     is_acwp_draw=false;
 
-    /* TEST */
-    bcwpPoints.push_back(QPointF(0,0));
-    bcwpPoints.push_back(QPointF(10,10));
-    bcwpPoints.push_back(QPointF(40,20));
-    bcwpPoints.push_back(QPointF(70,40));
-    bcwpPoints.push_back(QPointF(100,100));
 
-    maxYPercent=chartEngine.setMaxYPercent(bcwpPoints,bcwsPoints,acwpPoints);
-    maxXPercent=chartEngine.setMaxYPercent(bcwpPoints,bcwsPoints,acwpPoints);
-    chartEngine.setMaxCost(bcwpPoints);
     kDebug() << "ChartWidget :: Constructor Ended"<<endl;
 
     //Calculer ici les indicateurs relatifs au projet!!!
 
     chartEngine.calculateWeeks(weeks,p);
     chartEngine.initXCurvesVectors(weeks,bcwpPoints,bcwsPoints,acwpPoints);
-//    chartEngine.setMaxTime(weeks);
-    chartEngine.calculateActualCost(bcwpPoints, weeks,p);
-    chartEngine.calculatePlannedCost(bcwpPoints, weeks,p);
+
+    chartEngine.calculateActualCost(acwpPoints,weeks,p);
+    chartEngine.calculatePlannedCost(bcwsPoints,weeks,p);
+    
+    chartEngine.setMaxCost(bcwsPoints);
+
+    chartEngine.costToPercent(acwpPoints);
+    chartEngine.costToPercent(bcwsPoints);
+
+    //chartEngine.costToPercent(bcwpPoints);
+
+    maxYPercent=chartEngine.setMaxYPercent(bcwpPoints,bcwsPoints,acwpPoints);
+
+    //chartEngine.timeToPercent(bcwpPoints);
+    chartEngine.timeToPercent(acwpPoints);
+    chartEngine.timeToPercent(bcwsPoints);
+
+    chartEngine.init_display(bcwpPoints_display,bcwsPoints_display,acwpPoints_display,weeks.size());
 }
-
-
-
 
 void ChartWidget::paintEvent(QPaintEvent * ev)
 {
@@ -72,23 +75,26 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
     if(is_bcwp_draw==true)
     {
         painter.setPen(QColor(Qt::red));
-        chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,BCWP,size().height(),size().width());
-        painter.drawPolyline(QPolygonF(bcwpPoints));
+        chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,bcwpPoints_display,bcwsPoints_display,acwpPoints_display,BCWP,size().height(),size().width());
+        painter.drawPolyline(QPolygonF(bcwpPoints_display));
         is_bcwp_draw=true;
     }
 
     if(is_bcws_draw==true){
         painter.setPen(QColor(Qt::yellow));
-        //painter.drawPolyline(QPolygonF(bcwsPoints));
-        painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,150));
+        kDebug()<<" Height : "<<size().height()<<" Width : "<<size().width()<<endl;
+        chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,bcwpPoints_display,bcwsPoints_display,acwpPoints_display,BCWS,size().height(),size().width());
+        painter.drawPolyline(QPolygonF(bcwsPoints_display));
+        //painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,150));
         is_bcws_draw=true;
     }
 
     if(is_acwp_draw==true)
     {
         painter.setPen(QColor(Qt::green));
-        //painter.drawPolyline(QPolygonF(acwpPoints));
-        painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,100));
+        chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,bcwpPoints_display,bcwsPoints_display,acwpPoints_display,ACWP,size().height(),size().width());
+        painter.drawPolyline(QPolygonF(acwpPoints_display));
+        //painter.drawLine(QLine(LEFTMARGIN,size().height()-TOPMARGIN,size().width()-10,100));
         is_acwp_draw=true;
     }
 
@@ -96,6 +102,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
 
 
 void ChartWidget::drawBasicChart(QPainter & painter)
+    /* Calculate the percentage of the cost and replace the result in the vector */
 {
     int j=0;
     int k=0;
@@ -104,7 +111,7 @@ void ChartWidget::drawBasicChart(QPainter & painter)
     maxXPercent=100;
     char Xchar[30];
     char Ychar[30];
-
+    
 /* CHANGE COLORS !! */
     painter.setPen(QColor(Qt::blue));
     painter.drawText(200,150,"I am a Chart!");
@@ -116,35 +123,44 @@ void ChartWidget::drawBasicChart(QPainter & painter)
 
     //Y
     painter.drawLine(QLine(LEFTMARGIN,TOPMARGIN,LEFTMARGIN,size().height()-BOTTOMMARGIN));
-    
-    float MarginY =(size().height()-(TOPMARGIN+BOTTOMMARGIN))/(maxYPercent/10);// Number of division : 10% to 10%
-    while(MarginY<=(size().height()-(TOPMARGIN+BOTTOMMARGIN)))
+    kDebug()<<"BITOOOOOOOOOOOOCULLLLLLLL maxYpercent: "<<maxYPercent<<endl;
+    float MarginY_base =(size().height()-(TOPMARGIN+BOTTOMMARGIN))/(maxYPercent/10);// Number of division : 10% to 10%
+    float MarginY=0;
+    kDebug()<<"BITOOOOOOOOOOOO MarginY : "<<MarginY<<endl;
+    while(Ypercent<=maxYPercent)
     {
             int n=sprintf(Ychar,"%d",Ypercent);
             char * Yaffichage =strcat(Ychar,"%");
             //error first time FIX ME
-            painter.drawText(2,size().height()-BOTTOMMARGIN+MarginY,Yaffichage);
+            kDebug()<<"BITOOOOOOOOOOOO3 Yaffichage : "<<Yaffichage<<endl;
+            painter.drawText(2,size().height()-BOTTOMMARGIN-MarginY,QString(Yaffichage));
             Ypercent+=20;
-            painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
-            MarginY+=MarginY;// FIX IT , it MUST BE COORDINATE , NOT % !!!!
-            painter.drawLine(QLine(8,j+TOPMARGIN,LEFTMARGIN,j+TOPMARGIN));
-            MarginY+=MarginY;
+            //painter.drawLine(QLine(LEFTMARGIN-5,size().height()-(BOTTOMMARGIN)+MarginY,LEFTMARGIN,size().height()-(BOTTOMMARGIN)+MarginY));
+            painter.drawLine(QLine(LEFTMARGIN-4,size().height()-(BOTTOMMARGIN)-MarginY,LEFTMARGIN,size().height()-(BOTTOMMARGIN)-MarginY));
+            MarginY+=MarginY_base;// FIX IT , it MUST BE COORDINATE , NOT % !!!!
+            painter.drawLine(QLine(LEFTMARGIN-4,size().height()-(BOTTOMMARGIN)-MarginY,LEFTMARGIN,size().height()-(BOTTOMMARGIN)-MarginY));
+            MarginY+=MarginY_base;
             strcpy(Ychar,"");
     }
     //X
     painter.drawLine(QLine(LEFTMARGIN,size().height()-BOTTOMMARGIN,size().width()-RIGHTMARGIN,size().height()-BOTTOMMARGIN));
 
-   float MarginX=(size().width()-(RIGHTMARGIN+LEFTMARGIN))/weeks.size();
-   QVector<QPointF>::iterator it_time = bcwpPoints.begin();
-   while(MarginX<=(size().width()-(RIGHTMARGIN-LEFTMARGIN)))
+   float MarginX_base=(size().width()-(RIGHTMARGIN+LEFTMARGIN))/(weeks.size()-1);
+   float MarginX=0;
+   QVector<QPointF>::iterator it_time = bcwsPoints.begin();
+   int i=0;
+   while(i<weeks.size())
    {
-        int n=sprintf(Xchar,"%d",it_time->x());
+        int n=sprintf(Xchar,"%d",(int)it_time->x());
         char * Xaffichage =strcat(Xchar,"%");
+        kDebug()<<"BITOOOOOOOOOOOO3 TIME % : "<<it_time->x()<<endl;
         painter.drawText(MarginX+LEFTMARGIN,size().height(),Xaffichage);
-
-        painter.drawLine(QLine(k+LEFTMARGIN,size().height()-TOPMARGIN,k+LEFTMARGIN,size().height()-13));
-        MarginX+=MarginX;
+         kDebug()<<"BITOOOOOOOOOOOO3 Xaffichage : "<<Xaffichage<<endl;
+        painter.drawLine(QLine(MarginX+LEFTMARGIN,size().height()-TOPMARGIN,MarginX+LEFTMARGIN,size().height()-TOPMARGIN+4));
+        MarginX+=MarginX_base;
         strcpy(Xchar,"");
+        i++;
+        it_time++;
    }
 }
 

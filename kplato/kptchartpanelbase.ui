@@ -79,9 +79,9 @@ p, li { white-space: pre-wrap; }
   <widget class="QWidget" name="horizontalLayout_2" >
    <property name="geometry" >
     <rect>
-     <x>20</x>
+     <x>0</x>
      <y>20</y>
-     <width>561</width>
+     <width>601</width>
      <height>271</height>
     </rect>
    </property>
@@ -95,6 +95,8 @@ p, li { white-space: pre-wrap; }
    </layout>
   </widget>
  </widget>
+ <layoutdefault spacing="0" margin="0" />
+ <includes/>
  <resources/>
  <connections/>
 </ui>

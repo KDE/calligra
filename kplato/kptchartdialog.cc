@@ -29,6 +29,7 @@ ChartDialog::ChartDialog(Project &p, QWidget *parent, const char *n) : KDialog(p
     setCaption( i18n("Project Charts Indicators") );
     setButtons( KDialog::Ok );
     setDefaultButton( Ok );
+    setContentsMargins(0,0,0,0);
     showButtonSeparator( true );
     m_panel = new ChartPanel(p,this);
     setMainWidget(m_panel);
