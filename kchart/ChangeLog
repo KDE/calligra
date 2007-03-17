@@ -1,3 +1,28 @@
+2007-03-17  Inge Wallin  <inge@lysator.liu.se>
+	
+	Qt3 -> Qt4 changes
+	* dialogs/KCWizardAxesPage.h
+	* dialogs/KCWizardCharttype.cc
+	* dialogs/KCConfigDataPage.cc
+	* dialogs/KCPrinterDialog.cc
+	* dialogs/KCWizardSubtypePage.cc
+	* dialogs/KCConfigSubtypePiePage.cc
+	* dialogs/KCConfigSubtypePolarPage.cc
+	* dialogs/KCWizardAxesPage.cc
+	* dialogs/KCWizardCharttype.h
+	* dialogs/KCWizardDataPage.cc
+	* dialogs/KCWizardLabelsLegendPage.cc
+	* kchartDataEditor.cc
+	Q3VBoxLayout -> QVBoxLayout
+	Q3HBoxLayout -> QHBoxLayout
+	Q3GridLayout -> QGridLayout
+
+	Remove obsolete files
+	* kchartPieConfigPage.h
+	* kchartPieConfigPage.cc
+	* kchartComboConfigPage.h
+	* kchartComboConfigPage.cc
+	
 2007-03-15  Inge Wallin  <inge@lysator.liu.se>
 
 	Qt3 -> Qt4 changes
