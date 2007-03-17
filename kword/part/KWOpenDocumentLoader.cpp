@@ -938,6 +938,7 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, 
     QTextCursor cursor( fs->document() );
     //cursor.insertText(fsTypeName); //TESTCASE
 
+    //TODO I am pretty sure that is wrong somehow
     if ( !leftElem.isNull() )
         loadOasisText(leftElem, context, cursor);
     else if( hasFirst )
