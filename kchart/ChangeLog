@@ -1,5 +1,10 @@
 2007-03-17  Inge Wallin  <inge@lysator.liu.se>
 	
+	Remove warnings for qpixmap:
+	* kchart_part.cc
+	* dialogs/KCConfigBackgroundPage.cc
+	Replace deprecated calls.
+	
 	Remove warnings for qcombobox, qstringlist:
 	* dialogs/KCConfigBackgroundPage.cc
 	Replace deprecated calls.

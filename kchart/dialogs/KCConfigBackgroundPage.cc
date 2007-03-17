@@ -486,7 +486,7 @@ bool KCConfigBackgroundPage::loadWallPaper()
 {
     int i = wallCB->currentIndex();
     if ( i == -1 || i == 0 ) {  // 0 is 'None'
-	wallPixmap.resize(0,0);
+	wallPixmap = QPixmap( 0, 0 );
 	wallFile = "";
     } else {
         for(QMap<QString,int>::ConstIterator it = m_wallpaper.begin();
@@ -502,7 +502,7 @@ bool KCConfigBackgroundPage::loadWallPaper()
         QString file = KStandardDirs::locate("wallpaper", wallFile);
 	if( file.isEmpty() ) {
             kWarning(35001) << "Couldn't locate wallpaper " << wallFile << endl;
-            wallPixmap.resize(0,0);
+            wallPixmap = QPixmap( 0, 0 );
             wallFile = "";
             return false;
 	} else {

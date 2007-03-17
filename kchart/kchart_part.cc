@@ -250,7 +250,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
     if ( m_bufferPixmap.width() < rect.width()
 	 || m_bufferPixmap.height() < rect.height() )
     {
-    	m_bufferPixmap.resize( rect.size() );
+    	m_bufferPixmap = QPixmap( rect.size() );
     }
 
     QPainter bufferPainter( &m_bufferPixmap );

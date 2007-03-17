@@ -27,7 +27,7 @@ Item								   Prio Status
   + Get rid of all Qt3 support widgets				      1	----
     - Fix layouts							--
     - Fix spinboxes							done
-    - Fix qpixmap							--
+    - Fix qpixmap							done
     - Fix qfont								done
     - Fix qobject							done
     - Fix qabstractbutton						done
