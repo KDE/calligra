@@ -252,8 +252,7 @@ void TestMathFunctions::testMINVERSE()
     value.setElement( 1, 0, Value(  2.0 ) );
     value.setElement( 0, 1, Value(  1.5 ) );
     value.setElement( 1, 1, Value( -1.0 ) );
-    // QEXPECT_FAIL( "", "evaluation needs array support", Continue );
-    CHECK_EVAL( "MINVERSE({2;4|3;5})", value );
+    CHECK_EVAL( "MINVERSE({2;4|3;5})", value );              // simply invertible
     value.setElement( 0, 0, Value(  5.0 ) );
     value.setElement( 1, 0, Value(  1.0 ) );
     value.setElement( 2, 0, Value( -2.0 ) );
@@ -263,12 +262,10 @@ void TestMathFunctions::testMINVERSE()
     value.setElement( 0, 1, Value( -2.0 ) );
     value.setElement( 1, 1, Value(  1.0 ) );
     value.setElement( 2, 1, Value(  0.0 ) );
-    QEXPECT_FAIL( "", "evaluation needs array support", Continue );
-    CHECK_EVAL( "MINVERSE({1;2;1|2;4;3|3;7;4}", value );
-    CHECK_EVAL( "MINVERSE({2;4})", Value::errorVALUE() );
-    CHECK_EVAL( "MINVERSE({2;4|3;6})", Value::errorDIV0() );
-    QEXPECT_FAIL( "", "evaluation needs array support", Continue );
-    CHECK_EVAL( "MINVERSE(2)", Value( 0.5 ) );
+    CHECK_EVAL( "MINVERSE({1;2;1|2;4;3|3;7;4}", value );     // fails without pivoting
+    CHECK_EVAL( "MINVERSE({2;4})", Value::errorVALUE() );    // non-square matrix
+    CHECK_EVAL( "MINVERSE({2;4|3;6})", Value::errorDIV0() ); // singular matrix
+    CHECK_EVAL( "MINVERSE(2)", Value( 0.5 ) );               // one elementary matrix
 }
 
 void TestMathFunctions::testMMULT()
