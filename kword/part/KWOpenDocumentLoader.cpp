@@ -304,30 +304,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
 
     QTextCursor cursor( fs->document() );
-
-    KoXmlElement tag;
-    forEachElement(tag, body) //KoTextDocument::loadOasisText
-    {
-        const QString localName = tag.localName();
-        const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
-
-        if ( isTextNS && localName == "p" ) {  // text paragraph
-            //kDebug()<<"==> PARAGRAPH <=="<<endl;
-            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
-            loadOasisSpan(tag, context, cursor);
-        }
-        else if ( isTextNS && localName == "h" ) // heading
-        {
-            //kDebug()<<"==> HEADING <=="<<endl;
-            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
-
-            //int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
-            //context.pushOutlineListLevelStyle( level );
-
-            loadOasisSpan(tag, context, cursor);
-        }
-
-    }
+    loadOasisText(body, context, cursor);
 
 #endif
 
@@ -359,6 +336,34 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     kDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
     emit sigProgress(100);
     return true;
+}
+
+//KoTextDocument::loadOasisText
+void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLoadingContext& context, QTextCursor& cursor)
+{
+    KoXmlElement tag;
+    forEachElement(tag, bodyElem)
+    {
+        const QString localName = tag.localName();
+        const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
+
+        if ( isTextNS && localName == "p" ) {  // text paragraph
+            //kDebug()<<"==> PARAGRAPH <=="<<endl;
+            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
+            loadOasisSpan(tag, context, cursor);
+        }
+        else if ( isTextNS && localName == "h" ) // heading
+        {
+            //kDebug()<<"==> HEADING <=="<<endl;
+            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
+
+            //int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
+            //context.pushOutlineListLevelStyle( level );
+
+            loadOasisSpan(tag, context, cursor);
+        }
+        //TODO else...
+    }
 }
 
 void KWOpenDocumentLoader::loadOasisSettings(const QDomDocument& settingsDoc)
@@ -769,9 +774,9 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, Ko
     if ( masterPageStyle )
     {
         // Load headers
-        loadOasisHeaderFooter(*masterPage, *masterPageStyle, true);
+        loadOasisHeaderFooter(*masterPage, *masterPageStyle, context, true);
         // Load footers
-        loadOasisHeaderFooter(*masterPage, *masterPageStyle, false);
+        loadOasisHeaderFooter(*masterPage, *masterPageStyle, context, false);
 
 #if 0
         // The bottom margin of headers is what we call headerBodySpacing
@@ -798,7 +803,7 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, Ko
 }
 
 //KWOasisLoader::loadOasisHeaderFooter
-void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader)
+void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, const QDomElement& masterPageStyle, KoOasisLoadingContext& context, bool isHeader)
 {
     // Not OpenDocument compliant element to define the first header/footer.
     QDomElement firstElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
@@ -818,35 +823,6 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, 
     // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
     // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
     QDomElement leftElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
-
-#if 0
-    KWTextFrameSet *fs = new KWTextFrameSet( m_doc, headerTypeToFramesetName( localName, hasEvenOdd ) );
-    fs->setFrameSetInfo( headerTypeToFrameInfo( localName, hasEvenOdd ) );
-    m_doc->addFrameSet( fs, false );
-
-    if ( !style.isNull() )
-        context.styleStack().push( style );
-    KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
-    frame->loadCommonOasisProperties( context, fs, "header-footer" );
-    const QString minHeight = context.styleStack().attributeNS( KoXmlNS::fo, "min-height" );
-    if ( !minHeight.isEmpty() )
-        frame->setMinimumFrameHeight( KoUnit::parseValue( minHeight ) );
-
-    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
-    frame->setNewFrameBehavior( KWFrame::Copy );
-    fs->addFrame( frame );
-    if ( !style.isNull() )
-        context.styleStack().pop(); // don't let it be active when parsing the text
-
-    context.setUseStylesAutoStyles( true ); // use auto-styles from styles.xml, not those from content.xml
-    fs->loadOasisContent( headerFooter, context );
-    context.setUseStylesAutoStyles( false );
-
-    if ( isHeader )
-        m_doc->m_headerVisible = true;
-    else
-        m_doc->m_footerVisible = true;
-#else
 
     // Determinate the type of the frameset used for the header/footer.
     QString fsTypeName;
@@ -918,6 +894,35 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, 
         }
     }
 
+#if 0
+    KWTextFrameSet *fs = new KWTextFrameSet( m_doc, headerTypeToFramesetName( localName, hasEvenOdd ) );
+    fs->setFrameSetInfo( headerTypeToFrameInfo( localName, hasEvenOdd ) );
+    m_doc->addFrameSet( fs, false );
+
+    if ( !style.isNull() )
+        context.styleStack().push( style );
+    KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
+    frame->loadCommonOasisProperties( context, fs, "header-footer" );
+    const QString minHeight = context.styleStack().attributeNS( KoXmlNS::fo, "min-height" );
+    if ( !minHeight.isEmpty() )
+        frame->setMinimumFrameHeight( KoUnit::parseValue( minHeight ) );
+
+    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
+    frame->setNewFrameBehavior( KWFrame::Copy );
+    fs->addFrame( frame );
+    if ( !style.isNull() )
+        context.styleStack().pop(); // don't let it be active when parsing the text
+
+    context.setUseStylesAutoStyles( true ); // use auto-styles from styles.xml, not those from content.xml
+    fs->loadOasisContent( headerFooter, context );
+    context.setUseStylesAutoStyles( false );
+
+    if ( isHeader )
+        m_doc->m_headerVisible = true;
+    else
+        m_doc->m_footerVisible = true;
+#else
+
     // Add the frameset and the shape for the header/footer to the document.
     KWTextFrameSet *fs = new KWTextFrameSet( d->document, fsType );
     fs->setAllowLayout(false);
@@ -930,7 +935,15 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, 
     KWTextFrame *frame = new KWTextFrame(shape, fs);
     frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
 
-    QTextCursor( fs->document() ).insertText(fsTypeName); //TESTCASE
+    QTextCursor cursor( fs->document() );
+    //cursor.insertText(fsTypeName); //TESTCASE
+
+    if ( !leftElem.isNull() )
+        loadOasisText(leftElem, context, cursor);
+    else if( hasFirst )
+        loadOasisText(firstElem, context, cursor);
+    else
+        loadOasisText(elem, context, cursor);
 
 #endif
 }
