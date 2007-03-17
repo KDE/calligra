@@ -23,6 +23,24 @@ Before release of KOffice 2.0.0
 Item								   Prio Status
 ------------------------------------------------------------------------------
 
+* Port to Qt4
+  + Get rid of all Qt3 support widgets				      1	----
+    - Fix layouts							--
+    - Fix spinboxes							done
+    - Fix linkedlist 							--
+    - Fix qpixmap							--
+    - Fix qwidget							--
+    - Fix qfont								--
+    - Fix qobject							--
+    - Fix qabstractbutton						--
+    - Fix qstringlist							--
+    - Fix qcombobox							--
+  + Get rid of warnings from deprecated calls 			      1	----
+
+* Port to KDE4
+  + Fix changed calls
+    - Fix KConfig							--
+
 * OpenDocument Support -- read and write all tags and attributes
 
   Item							Load	Save
