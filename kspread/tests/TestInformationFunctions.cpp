@@ -49,14 +49,24 @@ void TestInformationFunctions::testVALUE()
     CHECK_EVAL( "VALUE(\"200%\")",  Value( 2 ) );
     CHECK_EVAL( "VALUE(\"1.5\")", Value( 1.5 ) );
     // Check fractions
-    QEXPECT_FAIL( "", "ValueParser needs an extension to parse fractions", Continue );
     CHECK_EVAL( "VALUE(\"7 1/4\")", Value( 7.25 ) );
-    QEXPECT_FAIL( "", "ValueParser needs an extension to parse fractions", Continue );
     CHECK_EVAL( "VALUE(\"0 1/2\")", Value( 0.5 ) );
+    CHECK_EVAL( "VALUE(\"0 7/2\")", Value( 3.5 ) );
+    CHECK_EVAL( "VALUE(\"-7 1/5\")", Value( -7.2 ) );
+    CHECK_EVAL( "VALUE(\"-7 10/50\")", Value( -7.2 ) );
+    CHECK_EVAL( "VALUE(\"-7 10/500\")", Value( -7.02 ) );
+    CHECK_EVAL( "VALUE(\"-7 4/2\")", Value( -9 ) );
+    CHECK_EVAL( "VALUE(\"-7 40/20\")", Value( -9 ) );
     // Check times
     CHECK_EVAL( "VALUE(\"00:00\")", Value( 0 ) );
-    QEXPECT_FAIL( "", "ValueParser needs an extension to parse fractions", Continue );
+    CHECK_EVAL( "VALUE(\"00:00:00\")", Value( 0 ) );
     CHECK_EVAL( "VALUE(\"02:00\")-2/24", Value( 0 ) );
+    CHECK_EVAL( "VALUE(\"02:00:00\")-2/24", Value( 0 ) );
+    CHECK_EVAL( "VALUE(\"02:00:00.0\")-2/24", Value( 0 ) );
+    CHECK_EVAL( "VALUE(\"02:00:00.00\")-2/24", Value( 0 ) );
+    CHECK_EVAL( "VALUE(\"02:00:00.000\")-2/24", Value( 0 ) );
+    CHECK_EVAL( "VALUE(\"2:03:05\") -2/24-3/(24*60) -5/(24*60*60)", Value( 0 ) );
+    CHECK_EVAL( "VALUE(\"2:03\")-(2/24)-(3/(24*60))", Value( 0 ) );
     // check dates - local dependent
     CHECK_EVAL( "VALUE(\"5/21/06\")=DATE(2006;5;21)", Value( true ) );
     CHECK_EVAL( "VALUE(\"1/2/2005\")=DATE(2005;1;2)", Value( true ) );
