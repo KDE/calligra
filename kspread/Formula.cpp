@@ -1325,25 +1325,9 @@ Value Formula::eval() const
   QString c;
   QVector<Value> args;
 
-  Doc *doc = 0;
-  Sheet *sheet = 0;
-  ValueParser* parser = 0;
-  ValueConverter* converter = 0;
-  ValueCalc* calc = 0;
-
-  if (d->sheet)
-  {
-    sheet = d->sheet;
-    converter = sheet->doc()->converter();
-    calc = sheet->doc()->calc();
-  }
-  else
-  {
-    doc = new Doc();
-    parser = new ValueParser( doc );
-    converter = new ValueConverter( parser );
-    calc = new ValueCalc( converter );
-  }
+  const Doc *doc = d->sheet ? d->sheet->doc() : new Doc();
+  const ValueConverter* converter = doc->converter();
+  ValueCalc* calc = doc->calc();
 
   Function* function;
   FuncExtra fe;
@@ -1514,12 +1498,12 @@ Value Formula::eval() const
         c = d->constants[index].asString();
         val1 = Value::empty();
         entry.reset();
-        if (sheet)
+        if (d->sheet)
         {
-          Point point(c, sheet->map(), sheet);
+          Point point(c, d->sheet->map(), d->sheet);
           if (point.isValid())
           {
-            val1 = Cell( sheet, point.pos() ).value();
+            val1 = Cell( d->sheet, point.pos() ).value();
             // store the reference, so we can use it within functions
             entry.col1 = entry.col2 = point.column();
             entry.row1 = entry.row2 = point.row();
@@ -1533,9 +1517,9 @@ Value Formula::eval() const
         c = d->constants[index].asString();
         val1 = Value::empty();
         entry.reset();
-        if (sheet)
+        if (d->sheet)
         {
-          Range range (c, sheet->map(), sheet);
+          Range range (c, d->sheet->map(), d->sheet);
           if (range.isValid())
           {
             val1 = range.sheet()->cellStorage()->valueRegion( Region( range.range() ) );
@@ -1567,7 +1551,7 @@ Value Formula::eval() const
         args.clear();
         fe.ranges.clear ();
         fe.ranges.resize (index);
-        fe.sheet = sheet;
+        fe.sheet = d->sheet;
         for( ; index; index-- )
         {
           stackEntry e = stack.pop();
@@ -1624,12 +1608,8 @@ Value Formula::eval() const
     }
   }
 
-  if (!d->sheet) {
+  if ( !d->sheet )
     delete doc;
-    delete parser;
-    delete converter;
-    delete calc;
-  }
 
   // more than one value in stack ? unsuccessful execution...
   if( stack.count() != 1 )
