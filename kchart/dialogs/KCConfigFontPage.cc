@@ -81,9 +81,9 @@ KCConfigFontPage::KCConfigFontPage( KChartParams* params,
 				    KDChartTableData *dat) :
     QWidget( parent ), m_params( params ), data(dat)
 {
-    QGridLayout *grid = new QGridLayout( this, 4, 3, 
-					 KDialog::marginHint(), 
-					 KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( this );
+    grid->setMargin( KDialog::marginHint() );
+    grid->setSpacing( KDialog::spacingHint() );
 
     // The listbox
     m_list = new Q3ListBox(this);

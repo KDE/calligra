@@ -42,9 +42,10 @@ KCConfigAxesPage::KCConfigAxesPage( KChartParams* params,
 				    QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
+    QVBoxLayout* toplevel = new QVBoxLayout( this );
+    toplevel->setMargin( 10 );
 
-    QGridLayout* layout = new QGridLayout( 1, 3 );
+    QGridLayout* layout = new QGridLayout( );
     toplevel->addLayout( layout );
 
     Q3ButtonGroup* gb1 = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Parameters"), this );

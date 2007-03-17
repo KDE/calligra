@@ -40,7 +40,9 @@ KCConfigSubtypePiePage::KCConfigSubtypePiePage( KChartParams* params,
 						QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    QVBoxLayout  *toplevel = new QVBoxLayout( this, 10 );
+    QVBoxLayout  *toplevel = new QVBoxLayout( this );
+    toplevel->setMargin( 10 );
+
     QVBoxLayout  *grid1    = new QVBoxLayout(this);
     toplevel->addLayout( grid1 );
 

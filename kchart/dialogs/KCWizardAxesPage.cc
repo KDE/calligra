@@ -32,17 +32,17 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
 {
     chart3d=true;
 
-    QGridLayout *grid1 = new QGridLayout( this, 2, 2,
-					  KDialog::marginHint(), 
-					  KDialog::spacingHint());
+    QGridLayout *grid1 = new QGridLayout( this );
+    grid1->setMargin( KDialog::marginHint() );
+    grid1->setSpacing( KDialog::spacingHint() );
 
     Q3GroupBox* tmpQGroupBox;
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
     //tmpQGroupBox->setFrameStyle( 49 );
 
-    QGridLayout *grid2 = new QGridLayout( tmpQGroupBox, 3, 2,
-					  KDialog::marginHint(), 
-					  KDialog::spacingHint() );
+    QGridLayout *grid2 = new QGridLayout( tmpQGroupBox );
+    grid2->setMargin( KDialog::marginHint() );
+    grid2->setSpacing( KDialog::spacingHint() );
 
     
     //grid = new QCheckBox( i18n( "Has grid:" ), tmpQGroupBox  );
@@ -80,9 +80,9 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_2" );
     //tmpQGroupBox->setFrameStyle( 49 );
 
-    grid2 = new QGridLayout( tmpQGroupBox, 3, 2,
-			     KDialog::marginHint(),
-			     KDialog::spacingHint() );
+    grid2 = new QGridLayout( tmpQGroupBox );
+    grid2->setMargin( KDialog::marginHint() );
+    grid2->setSpacing( KDialog::spacingHint() );
 
     QLabel *tmpLabel;
     tmpLabel=new QLabel(tmpQGroupBox);
@@ -113,9 +113,9 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
     //tmpQGroupBox->setFrameStyle( 49 );
 
-    grid2 = new QGridLayout( tmpQGroupBox, 3, 2,
-			     KDialog::marginHint(),
-			     KDialog::spacingHint() );
+    grid2 = new QGridLayout( tmpQGroupBox );
+    grid2->setMargin( KDialog::marginHint() );
+    grid2->setSpacing( KDialog::spacingHint() );
 
     tmpLabel=new QLabel(tmpQGroupBox);
     tmpLabel->setText(i18n("Y interval:"));
@@ -155,9 +155,9 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
     //tmpQGroupBox->setFrameStyle( 49 );
 
-    grid2 = new QGridLayout( tmpQGroupBox, 3, 2,
-			     KDialog::marginHint(), 
-			     KDialog::spacingHint() );
+    grid2 = new QGridLayout( tmpQGroupBox );
+    grid2->setMargin( KDialog::marginHint() );
+    grid2->setSpacing( KDialog::spacingHint() );
 
     tmpLabel=new QLabel(tmpQGroupBox);
     tmpLabel->setText(i18n("Y-label format:"));

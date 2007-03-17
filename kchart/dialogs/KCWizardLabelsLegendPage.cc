@@ -36,15 +36,17 @@ KCWizardLabelsLegendPage::KCWizardLabelsLegendPage( QWidget* parent, KChartPart*
     xlabel=bottomparams.axisLabelsFont();
     ylabel=leftparams.axisLabelsFont();
 
-    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid1 = new QGridLayout( this );
+    grid1->setMargin( KDialog::marginHint() );
+    grid1->setSpacing( KDialog::spacingHint() );
 
     Q3GroupBox* tmpQGroupBox;
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
     //tmpQGroupBox->setFrameStyle( 49 );
 
-    QGridLayout *grid2 = new QGridLayout( tmpQGroupBox, 4, 4,
-					  KDialog::marginHint(), 
-					  KDialog::spacingHint() );
+  QGridLayout *grid2 = new QGridLayout( tmpQGroupBox );
+  grid2->setMargin( KDialog::marginHint() );
+  grid2->setSpacing( KDialog::spacingHint() );
 
     QLabel* titleLA = new QLabel( i18n( "Title:" ),tmpQGroupBox );
     grid2->addWidget(titleLA,0,0);

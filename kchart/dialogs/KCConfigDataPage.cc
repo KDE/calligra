@@ -54,8 +54,9 @@ KCConfigDataPage::KCConfigDataPage( KChartParams* params,
 				    KDChartTableData *dat) 
     : QWidget( parent ), m_params( params ), data(dat)
 {
-    QGridLayout *grid1 = new QGridLayout( this, 4, 1, KDialog::marginHint(),
-					  KDialog::spacingHint() );
+    QGridLayout *grid1 = new QGridLayout( this );
+    grid1->setMargin( KDialog::marginHint() );
+    grid1->setSpacing( KDialog::spacingHint() );
 
     // The Data Area
     Q3ButtonGroup *gb1 = new Q3VButtonGroup( i18n( "Data Area" ), this );

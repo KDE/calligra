@@ -55,7 +55,9 @@ KCPageLayout::KCPageLayout( KChartParams* _params, QWidget* parent)
     // capabilities of the groupbox instead..
     setButtonText( KDialog::User1, i18n("&Reset") );
 
-    QGridLayout *grid = new QGridLayout(page, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid = new QGridLayout( page );
+    grid->setMargin( KDialog::marginHint() );
+    grid->setSpacing( KDialog::spacingHint() );
 
     QLabel *lab=new QLabel(i18n("Left:"),page);
     grid->addWidget(lab,0,0);

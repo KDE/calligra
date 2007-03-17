@@ -36,7 +36,9 @@ KCConfigSubtypeLinePage::KCConfigSubtypeLinePage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-  QGridLayout *grid1 = new QGridLayout(this,8,3,KDialog::marginHint(), KDialog::spacingHint());
+  QGridLayout *grid1 = new QGridLayout( this );
+  grid1->setMargin( KDialog::marginHint() );
+  grid1->setSpacing( KDialog::spacingHint() );
 
 #if 0
   // The 3D line on/off button.

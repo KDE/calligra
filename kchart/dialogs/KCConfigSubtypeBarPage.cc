@@ -36,7 +36,9 @@ KCConfigSubtypeBarPage::KCConfigSubtypeBarPage( KChartParams* params,
 						QWidget* parent ) :
     QWidget( parent ),m_params( params )
 {
-  QGridLayout* layout = new QGridLayout(this, 2, 2,KDialog::marginHint(),KDialog::spacingHint());
+  QGridLayout* layout = new QGridLayout( this );
+  layout->setMargin( KDialog::marginHint() );
+  layout->setSpacing( KDialog::spacingHint() );
 
 
   Q3ButtonGroup* gb = new Q3ButtonGroup( 0, Qt::Vertical, 
@@ -45,8 +47,8 @@ KCConfigSubtypeBarPage::KCConfigSubtypeBarPage( KChartParams* params,
   gb->layout()->setMargin(KDialog::marginHint());
 
   // The grid layout inside the buttongroup.
-  QGridLayout *grid1 = new QGridLayout(gb->layout(), 5, 3);
-  layout->addWidget(gb,0,0);
+  QGridLayout *grid1 = new QGridLayout( gb->layout() );
+  layout->addWidget( gb, 0, 0 );
 
   // The main on/off checkbox.
   bar3d=new QCheckBox(i18n("3D bar"),gb);

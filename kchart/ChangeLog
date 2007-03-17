@@ -1,5 +1,25 @@
 2007-03-17  Inge Wallin  <inge@lysator.liu.se>
 	
+	Remove warnings for layouts
+	* dialogs/KCConfigAxesPage.cc
+	* dialogs/KCConfigFontPage.cc
+	* dialogs/KCConfigDataPage.cc
+	* dialogs/KCWizardSubtypePage.cc
+	* dialogs/KCConfigSubtypePiePage.cc
+	* dialogs/KCConfigSubtypePage.cc
+	* dialogs/KCWizardAxesPage.cc
+	* dialogs/KCConfigLegendPage.cc
+	* dialogs/KCConfigDialog.cc
+	* dialogs/KCConfigSubtypeLinePage.cc
+	* dialogs/KCWizardDataPage.cc
+	* dialogs/KCWizardLabelsLegendPage.cc
+	* dialogs/KCConfigColorPage.cc
+	* dialogs/KCConfigBackgroundPage.cc
+	* dialogs/KCConfigSubtypeBarPage.cc
+	* dialogs/KCPageLayout.cc
+	Replace deprecated calls, mostly to constructors.
+	* kchartDataEditor.cc: Don't compare signed and unsigned ints
+	
 	Qt3 -> Qt4 changes
 	* dialogs/KCWizardAxesPage.h
 	* dialogs/KCWizardCharttype.cc

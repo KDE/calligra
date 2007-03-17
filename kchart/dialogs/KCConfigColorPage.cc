@@ -50,7 +50,9 @@ KCConfigColorPage::KCConfigColorPage( KChartParams* params,
                                  "part of the chart can be assigned a "
                                  "different color." ) );
 
-    QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
+    QVBoxLayout* toplevel = new QVBoxLayout( this );
+    toplevel->setMargin( 10 );
+
     Q3ButtonGroup* gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Colors"), this );
     gb->layout()->setSpacing(KDialog::spacingHint());
     gb->layout()->setMargin(KDialog::marginHint());

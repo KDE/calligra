@@ -453,7 +453,7 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 	rowHeader->setLabel(row, rowLabels[row]);
     }
 #endif
-    int max = m_table->numRows() - headerRows();
+    unsigned int max = m_table->numRows() - headerRows();
     for (unsigned int i=0; i < max; i++) {
         m_table->setText(i + headerRows(), 0, rowLabels[i] );
     }
@@ -512,9 +512,8 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 	colHeader->setLabel(col, colLabels[col]);
     }
 #endif
-    int max = m_table->numRows() - headerCols();
-    for (unsigned int i = 0; i < max; i++)
-    {
+    unsigned int max = m_table->numRows() - headerCols();
+    for (unsigned int i = 0; i < max; i++) {
         m_table->setText(0,i+headerCols(),colLabels[i]);
     }
     updateColHeaders();

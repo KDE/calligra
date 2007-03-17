@@ -42,9 +42,9 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
     QWidget( parent ),_params( params )
 {
   //Layout for 4 blocks
-  QGridLayout* layout = new QGridLayout( this, 2, 2, 
-					 KDialog::marginHint(),
-					 KDialog::spacingHint() );
+  QGridLayout* layout = new QGridLayout( this );
+  layout->setMargin( KDialog::marginHint() );
+  layout->setSpacing( KDialog::spacingHint() );
 
   //1. Block: General settings
   Q3ButtonGroup* gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("General"), this );

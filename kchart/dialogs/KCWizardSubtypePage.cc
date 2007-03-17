@@ -33,8 +33,9 @@ KCWizardSubtypePage::KCWizardSubtypePage( QWidget* parent, KChartPart* chart )
     m_charttype  = (KChartParams::ChartType) m_chart->params()->chartType();
     chartSubType = true;
 
-    QGridLayout *grid1 = new QGridLayout( this, 3, 2, KDialog::marginHint(), 
-					  KDialog::spacingHint() );
+    QGridLayout *grid1 = new QGridLayout( this );
+    grid1->setMargin( KDialog::marginHint() );
+    grid1->setSpacing( KDialog::spacingHint() );
 
     QVBoxLayout *lay1 = new QVBoxLayout(  );
     lay1->setMargin( KDialog::marginHint() );
