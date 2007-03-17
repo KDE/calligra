@@ -1,5 +1,9 @@
 2007-03-17  Inge Wallin  <inge@lysator.liu.se>
 	
+	Remove warnings for qcombobox, qstringlist:
+	* dialogs/KCConfigBackgroundPage.cc
+	Replace deprecated calls.
+	
 	Remove warnings for qfont, qabstractbutton, qobject:
 	* kchart_params.cc
 	* dialogs/KCWizardCharttype.cc

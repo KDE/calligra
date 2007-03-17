@@ -231,7 +231,7 @@ void KCConfigBackgroundPage::loadWallpaperFilesList()
    lst =  KGlobal::dirs()->findAllResources("wallpaper", "*", KStandardDirs::NoDuplicates);
    for (QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it)
    {
-      if ( !(*it).endsWith(".desktop") && files.grep(*it).empty() ) {
+      if ( !(*it).endsWith(".desktop") && files.filter(*it).empty() ) {
          // First try to see if we have a comment describing the image.  If we do
          // just use the first line of said comment.
          KFileMetaInfo metaInfo(*it);
@@ -439,7 +439,7 @@ void KCConfigBackgroundPage::showSettings( const QString& fileName )
          imageCaption = fileName.mid(slash, endDot - slash);
       else
          imageCaption = fileName.mid(slash);
-      if (wallCB->text(i-1) == imageCaption)
+      if (wallCB->itemText(i-1) == imageCaption)
       {
          i--;
          wallCB->removeItem(i);

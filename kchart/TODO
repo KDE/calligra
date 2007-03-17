@@ -31,8 +31,8 @@ Item								   Prio Status
     - Fix qfont								done
     - Fix qobject							done
     - Fix qabstractbutton						done
-    - Fix qstringlist							--
-    - Fix qcombobox							--
+    - Fix qstringlist							done
+    - Fix qcombobox							done
     - Fix qwidget							--
   + Get rid of warnings from deprecated calls 			      1	----
 
