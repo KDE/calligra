@@ -65,8 +65,8 @@ kchartDataTable::~kchartDataTable()
 
 bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
 {
-    if (ev->type() == QEvent::KeyPress && strcmp(obj->name(), 
-						 "qt_tableeditor")==0 ) {
+    if ( ev->type() == QEvent::KeyPress 
+	 && obj->objectName() == "qt_tableeditor" ) {
         QKeyEvent *e = (QKeyEvent *)ev;
 
         switch ( e->key() ) {

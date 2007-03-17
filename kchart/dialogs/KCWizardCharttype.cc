@@ -27,8 +27,8 @@ KChartButton::KChartButton(QWidget *parent, const QString & _text, const QPixmap
 {
   // The button
   m_button = new QPushButton(this);
-  m_button->setPixmap(_pixmap);
-  m_button->setToggleButton( true );
+  m_button->setIcon( QIcon( _pixmap ) );
+  m_button->setCheckable( true );
 
   // The text
   QLabel *label = new QLabel(_text, this);
@@ -76,7 +76,7 @@ KCWizardCharttype::KCWizardCharttype( QWidget* parent,
 
     QPushButton *current = ((QPushButton*)m_typeBG->find( m_chart->params()->chartType() ));
     if (current != NULL) {
-	current->setOn( true );
+	current->setChecked( true );
     }
   
     m_type = m_chart->params()->chartType();

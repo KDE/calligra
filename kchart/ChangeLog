@@ -1,5 +1,12 @@
 2007-03-17  Inge Wallin  <inge@lysator.liu.se>
 	
+	Remove warnings for qfont, qabstractbutton, qobject:
+	* kchart_params.cc
+	* dialogs/KCWizardCharttype.cc
+	* dialogs/KCConfigLegendPage.cc
+	* kchartDataEditor.cc
+	Replace deprecated calls.
+	
 	Remove warnings for spinboxes:
 	* dialogs/KCConfigAxesPage.cc
 	* dialogs/KCConfigSubtypePiePage.cc

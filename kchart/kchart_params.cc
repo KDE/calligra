@@ -199,7 +199,7 @@ void KChartParams::loadOasisFont( KoOasisLoadingContext& context, QFont& font, Q
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) ) { // 3.10.14
         double pointSize = styleStack.fontSize();
-        font.setPointSizeFloat( pointSize );
+        font.setPointSizeF( pointSize );
         kDebug(35001) << "font size: " << pointSize << endl;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24

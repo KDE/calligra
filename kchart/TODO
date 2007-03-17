@@ -27,14 +27,13 @@ Item								   Prio Status
   + Get rid of all Qt3 support widgets				      1	----
     - Fix layouts							--
     - Fix spinboxes							done
-    - Fix linkedlist 							--
     - Fix qpixmap							--
-    - Fix qwidget							--
-    - Fix qfont								--
-    - Fix qobject							--
-    - Fix qabstractbutton						--
+    - Fix qfont								done
+    - Fix qobject							done
+    - Fix qabstractbutton						done
     - Fix qstringlist							--
     - Fix qcombobox							--
+    - Fix qwidget							--
   + Get rid of warnings from deprecated calls 			      1	----
 
 * Port to KDE4

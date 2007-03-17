@@ -149,34 +149,34 @@ void KCConfigLegendPage::init()
     switch( _params->legendPosition())
     {
     case KDChartParams::NoLegend:
-        noLegend->setOn( true );
+        noLegend->setChecked( true );
         break;
     case KDChartParams::LegendTop:
-        lTop->setOn( true );
+        lTop->setChecked( true );
         break;
     case KDChartParams::LegendBottom:
-        lBottom->setOn( true );
+        lBottom->setChecked( true );
         break;
     case KDChartParams::LegendLeft:
-        lLeft->setOn( true );
+        lLeft->setChecked( true );
         break;
     case KDChartParams::LegendRight:
-        lRight->setOn( true );
+        lRight->setChecked( true );
         break;
     case KDChartParams::LegendTopLeft:
-        lTopLeft->setOn( true );
+        lTopLeft->setChecked( true );
         break;
     case KDChartParams::LegendTopRight:
-        lTopRight->setOn( true );
+        lTopRight->setChecked( true );
         break;
     case KDChartParams::LegendBottomRight:
-        lBottomRight->setOn( true );
+        lBottomRight->setChecked( true );
         break;
     case  KDChartParams::LegendBottomLeft:
-        lBottomLeft->setOn( true );
+        lBottomLeft->setChecked( true );
         break;
     default:
-        lRight->setOn( true );
+        lRight->setChecked( true );
         break;
     }
     title->setText(_params->legendTitleText());
@@ -216,23 +216,23 @@ void KCConfigLegendPage::changeTextLegendFont()
 
 void KCConfigLegendPage::apply()
 {
-    if( noLegend->isOn() )
+    if( noLegend->isChecked() )
         _params->setLegendPosition( KDChartParams::NoLegend );
-    else if( lTop->isOn() )
+    else if( lTop->isChecked() )
         _params->setLegendPosition( KDChartParams::LegendTop );
-    else if( lBottom->isOn() )
+    else if( lBottom->isChecked() )
         _params->setLegendPosition( KDChartParams::LegendBottom );
-    else if( lLeft->isOn() )
+    else if( lLeft->isChecked() )
         _params->setLegendPosition( KDChartParams::LegendLeft );
-    else if( lRight->isOn() )
+    else if( lRight->isChecked() )
         _params->setLegendPosition( KDChartParams::LegendRight );
-    else if( lTopLeft->isOn() )
+    else if( lTopLeft->isChecked() )
         _params->setLegendPosition( KDChartParams::LegendTopLeft );
-    else if( lTopRight->isOn() )
+    else if( lTopRight->isChecked() )
         _params->setLegendPosition( KDChartParams::LegendTopRight );
-    else if( lBottomRight->isOn() )
+    else if( lBottomRight->isChecked() )
         _params->setLegendPosition( KDChartParams::LegendBottomRight );
-    else if( lBottomLeft->isOn() )
+    else if( lBottomLeft->isChecked() )
         _params->setLegendPosition( KDChartParams::LegendBottomLeft );
     else
         _params->setLegendPosition( KDChartParams::LegendRight );
@@ -257,10 +257,10 @@ QPushButton* KCConfigLegendPage::addButton( QGridLayout* layout,
 					    int posX )
 {
   QPushButton* button = new QPushButton( gb );
-  button->setToggleButton( true );
-  button->setPixmap( BarIcon( icon,
-                              K3Icon::SizeMedium,
-                              K3Icon::DefaultState ) );
+  button->setCheckable( true );
+  button->setIcon( BarIcon( icon,
+			    K3Icon::SizeMedium,
+			    K3Icon::DefaultState ) );
   button->setToolTip( toolTipText );
   layout->addWidget( button, posY, posX );
   return button;
