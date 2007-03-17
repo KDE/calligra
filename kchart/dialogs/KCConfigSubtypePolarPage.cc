@@ -25,9 +25,6 @@
 #include <qradiobutton.h>
 #include <QSpinBox>
 
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
@@ -43,7 +40,7 @@ KCConfigSubtypePolarPage::KCConfigSubtypePolarPage( KChartParams* params,
 						    QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    Q3VBoxLayout *grid1 = new Q3VBoxLayout(this);
+    QVBoxLayout *grid1 = new QVBoxLayout(this);
     Q3VButtonGroup* gb = new Q3VButtonGroup( i18n( "Parameter" ), this );
     grid1->addWidget(gb);
 

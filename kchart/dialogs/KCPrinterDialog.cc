@@ -16,14 +16,12 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+* Boston, MA 02110-1301, USA.
 *
 */
 
 // Qt includes
 #include <QLayout>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 #include <QLabel>
 
 // KDE includes
@@ -43,14 +41,16 @@ KCPrinterDialog::KCPrinterDialog( QWidget *parent, const char *name )
   Q_UNUSED( name );
 
   setTitle( i18n( "KChart Options" ) );
-  Q3VBoxLayout *layout = new Q3VBoxLayout( this );
+  QVBoxLayout *layout = new QVBoxLayout( this );
   layout->setMargin( KDialog::marginHint() );
   layout->setSpacing( KDialog::spacingHint() );
+
   txtSizex = new KIntNumInput(this );
   txtSizex->setSuffix("%");
   txtSizex->setMinimum(1);
   txtSizex->setMaximum(100);
   txtSizex->setValue(100);
+
   txtSizey = new KIntNumInput(this );
   txtSizey->setSuffix("%");
   txtSizey->setMinimum(1);

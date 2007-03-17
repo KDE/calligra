@@ -14,8 +14,6 @@
 #include <qradiobutton.h>
 #include <QLineEdit>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -33,7 +31,7 @@ KCWizardDataPage::KCWizardDataPage( QWidget* parent, KChartPart* chart )
   : QWidget( parent ),
     m_chart( chart )
 {
-    Q3GridLayout *grid1 = new Q3GridLayout(this, 6, 1, KDialog::marginHint(),
+    QGridLayout *grid1 = new QGridLayout(this, 6, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
 
     // The Data Area

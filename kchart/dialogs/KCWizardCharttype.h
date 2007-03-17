@@ -1,18 +1,19 @@
 #ifndef _KCWIZARDCHARTTYPEPAGE_H
 #define _KCWIZARDCHARTTYPEPAGE_H
 
-#include <QLayout>
 
 #include <QWidget>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3GridLayout>
+
 #include <kvbox.h>
 
 #include "kchart_params.h"
 
+class QGridLayout;
 class QPushButton;
 class Q3ButtonGroup;
+
 
 namespace KChart
 {
@@ -59,8 +60,8 @@ private:
 private:
   KChartPart    *m_chart;
 
-  Q3ButtonGroup  *m_typeBG;
-  Q3GridLayout   *m_layout;
+  Q3ButtonGroup *m_typeBG;
+  QGridLayout   *m_layout;
 
   // column and row position (used by addButton() to know where to put
   // the new button)

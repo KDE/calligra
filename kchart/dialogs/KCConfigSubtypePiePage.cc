@@ -25,9 +25,6 @@
 #include <qradiobutton.h>
 #include <QSpinBox>
 
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
@@ -43,8 +40,8 @@ KCConfigSubtypePiePage::KCConfigSubtypePiePage( KChartParams* params,
 						QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    Q3VBoxLayout  *toplevel = new Q3VBoxLayout( this, 10 );
-    Q3VBoxLayout  *grid1 = new Q3VBoxLayout(this);
+    QVBoxLayout  *toplevel = new QVBoxLayout( this, 10 );
+    QVBoxLayout  *grid1    = new QVBoxLayout(this);
     toplevel->addLayout( grid1 );
 
     Q3VButtonGroup* gb = new Q3VButtonGroup( i18n( "Parameter" ), this );

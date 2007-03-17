@@ -11,8 +11,6 @@
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include <kinputdialog.h>
 #include <klocale.h>
@@ -22,7 +20,6 @@
 #include "KDChartAxisParams.h"
 
 #include "kchart_params.h"
-
 #include "kchartDataEditor.h"
 #include "kchartDataEditor.moc"
 
@@ -181,11 +178,10 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
         
   
     // Start the layout.  The buttons are at the top.
-    Q3VBoxLayout  *topLayout = new Q3VBoxLayout( page );
+    QVBoxLayout  *topLayout = new QVBoxLayout( page );
     
-    Q3HBoxLayout* insertRemoveLayout = new Q3HBoxLayout( );
-   
-    insertRemoveLayout->setSpacing(5);
+    QHBoxLayout* insertRemoveLayout = new QHBoxLayout( );
+       insertRemoveLayout->setSpacing(5);
     insertRemoveLayout->addWidget(m_insertRowButton);
     insertRemoveLayout->addWidget(m_insertColButton);
     insertRemoveLayout->addWidget(m_removeRowButton);
@@ -199,7 +195,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     topLayout->addWidget(m_table);
 
     // Then, a horizontal layer with the rows and columns settings
-    Q3HBoxLayout  *hbl1 = new Q3HBoxLayout(  );
+    QHBoxLayout  *hbl1 = new QHBoxLayout(  );
     hbl1->addWidget(m_rowsLA);
     hbl1->addWidget(m_rowsSB);
     hbl1->addSpacing(20);
@@ -211,7 +207,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
 #if 1
     // Last, the checkboxes with "First row/column as label"
-    Q3HBoxLayout  *hbl2 = new Q3HBoxLayout(  );
+    QHBoxLayout  *hbl2 = new QHBoxLayout(  );
     hbl2->addWidget(m_firstRowAsLabel);
     hbl2->addWidget(m_firstColAsLabel);
     hbl2->addStretch(1);

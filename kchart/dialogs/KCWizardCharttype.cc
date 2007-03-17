@@ -6,13 +6,13 @@
 #include "kchart_factory.h"
 #include "kchart_part.h"
 
+#include <QLayout>
 #include <q3buttongroup.h>
 #include <q3frame.h>
 #include <QPushButton>
 #include <QLabel>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -56,7 +56,7 @@ KCWizardCharttype::KCWizardCharttype( QWidget* parent,
 
     m_colPos=0;
     m_rowPos=0;
-    m_layout = new Q3GridLayout(this, 3, 3, 5);
+    m_layout = new QGridLayout(this, 3, 3, 5);
     m_layout->setRowStretch(0, 0);
     m_layout->setRowStretch(1, 0);
     m_layout->setRowStretch(2, 0);

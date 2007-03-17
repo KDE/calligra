@@ -4,6 +4,7 @@
 #include <QWidget>
 //Added by qt3to4:
 #include <QPaintEvent>
+
 #include <kcolorbutton.h>
 
 class QColor;

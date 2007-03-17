@@ -6,14 +6,13 @@
 #include <QLineEdit>
 #include <qradiobutton.h>
 #include <QLabel>
-//Added by qt3to4:
-#include <Q3GridLayout>
 #include <QPaintEvent>
-#include <klocale.h>
-#include <kfontdialog.h>
 #include <QLayout>
 #include <QPushButton>
 #include <QColor>
+
+#include <klocale.h>
+#include <kfontdialog.h>
 
 #include "kchart_params.h"
 
@@ -37,13 +36,15 @@ KCWizardLabelsLegendPage::KCWizardLabelsLegendPage( QWidget* parent, KChartPart*
     xlabel=bottomparams.axisLabelsFont();
     ylabel=leftparams.axisLabelsFont();
 
-    Q3GridLayout *grid1 = new Q3GridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
 
     Q3GroupBox* tmpQGroupBox;
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
     //tmpQGroupBox->setFrameStyle( 49 );
 
-    Q3GridLayout *grid2 = new Q3GridLayout(tmpQGroupBox,4,4,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid2 = new QGridLayout( tmpQGroupBox, 4, 4,
+					  KDialog::marginHint(), 
+					  KDialog::spacingHint() );
 
     QLabel* titleLA = new QLabel( i18n( "Title:" ),tmpQGroupBox );
     grid2->addWidget(titleLA,0,0);

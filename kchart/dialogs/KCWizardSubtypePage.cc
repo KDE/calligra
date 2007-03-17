@@ -12,10 +12,6 @@
 #include <qobject.h>
 #include <QLayout>
 
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3GridLayout>
-
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kglobal.h>
@@ -37,10 +33,10 @@ KCWizardSubtypePage::KCWizardSubtypePage( QWidget* parent, KChartPart* chart )
     m_charttype  = (KChartParams::ChartType) m_chart->params()->chartType();
     chartSubType = true;
 
-    Q3GridLayout *grid1 = new Q3GridLayout(this, 3, 2, KDialog::marginHint(), 
-					 KDialog::spacingHint());
+    QGridLayout *grid1 = new QGridLayout( this, 3, 2, KDialog::marginHint(), 
+					  KDialog::spacingHint() );
 
-    Q3VBoxLayout *lay1 = new Q3VBoxLayout(  );
+    QVBoxLayout *lay1 = new QVBoxLayout(  );
     lay1->setMargin( KDialog::marginHint() );
     lay1->setSpacing( KDialog::spacingHint() );
 
