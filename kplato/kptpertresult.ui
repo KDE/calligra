@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>958</width>
+    <width>814</width>
     <height>639</height>
    </rect>
   </property>
@@ -39,6 +39,9 @@
         <property name="horizontalScrollBarPolicy" >
          <enum>Qt::ScrollBarAsNeeded</enum>
         </property>
+        <property name="itemsExpandable" >
+         <bool>false</bool>
+        </property>
         <column>
          <property name="text" >
           <string>Task</string>
@@ -56,7 +59,7 @@
         </column>
         <column>
          <property name="text" >
-          <string>Late finish date</string>
+          <string>Late start date</string>
          </property>
         </column>
         <column>
@@ -139,7 +142,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="labelResultProjectSlack" >
+           <widget class="QLabel" name="labelResultProjectFloat" >
             <property name="text" >
              <string>...</string>
             </property>

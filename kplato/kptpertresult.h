@@ -24,9 +24,6 @@
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
 
-#include <QMenu>
-#include <QPainter>
-#include <QStyle>
 #include <QList>
 #include <QHeaderView>
 #include <QObject>
@@ -35,60 +32,22 @@
 #include <QVBoxLayout>
 #include <QTreeWidget>
 
-#include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QListWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QTableWidget>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
-#include <QtGui/QSpinBox>
-#include <QtGui/QLineEdit>
+#include <QtGui>
 
-#include <Q3ListBox>
 
-#include <kactionselector.h>
+
 
 #include "kptpart.h"
 #include "kpttask.h"
-#include "kptcontext.h"
-#include "kpttaskeditor.h"
+
 #include <ui_kptpertresult.h>
 
-//#include "kptcommand.h"
-//#include "kptitemmodelbase.h"
-//#include "kptcalendar.h"
-//#include "kptduration.h"
-//#include "kptfactory.h"
-//#include "kptresourceappointmentsview.h"
-#include "kptview.h"
 #include "kptnode.h"
-//#include "kptproject.h"
-//#include "kpttask.h"
-//#include "kptschedule.h"
-//#include "kptdatetime.h"
-//#include "kptcontext.h"
 
-#include <kicon.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kprinter.h>
-#include <kxmlguifactory.h>
-#include <kactioncollection.h>
 
 #include <kdebug.h>
-class QPoint;
-class QTreeWidgetItem;
-class QSplitter;
 
-class KToggleAction;
-class KPrinter;
+class QTreeWidgetItem;
 
 namespace KPlato
 {
@@ -103,6 +62,13 @@ public:
 
     PertResult( Part *part, QWidget *parent );
     void draw( Project &project);
+    QString & getStartEarlyDate(Node * currentNode);
+    QString & getFinishEarlyDate(Node * currentNode);
+    QString & getStartLateDate(Node * currentNode);
+    QString & getFinishLateDate(Node * currentNode);
+    QString getProjectFloat(Project &project);
+    QString & getFreeMargin(Node * currentNode);
+    QString & getTaskFloat(Node * currentNode);
 
 
 private:

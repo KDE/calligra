@@ -24,10 +24,58 @@ namespace KPlato
 
 void PertResult::draw( Project &project)
 {
+    widget.treeWidgetTaskResult->clear();
+    foreach(Node * currentNode, project.projectNode()->childNodeIterator()){
+        if (currentNode->type()!=4){
 
+            QTreeWidgetItem * item = new QTreeWidgetItem(widget.treeWidgetTaskResult );
+            item->setText(0, currentNode->name());
+	    item->setText(1,getStartEarlyDate(currentNode));
+	    item->setText(2,getFinishEarlyDate(currentNode));
+	    item->setText(3,getStartLateDate(currentNode));
+	    item->setText(4,getFinishLateDate(currentNode));
+	    item->setText(5,getFreeMargin(currentNode));
+	    item->setText(6,getFreeMargin(currentNode));
+        }
+	widget.labelResultProjectFloat->setText(getProjectFloat(project));
+    }
 }
 
+QString & PertResult::getStartEarlyDate(Node * currentNode)
+{
+ return currentNode->name();
+}
 
+QString & PertResult::getFinishEarlyDate(Node * currentNode)
+{
+ return currentNode->name();
+}
+
+QString & PertResult::getStartLateDate(Node * currentNode)
+{
+ return currentNode->name();
+}
+
+QString & PertResult::getFinishLateDate(Node * currentNode)
+{
+ return currentNode->name();
+}
+
+QString PertResult::getProjectFloat(Project &project)
+{
+    QString p_float="Project Float";
+    return p_float;
+}
+
+QString & PertResult::getFreeMargin(Node * currentNode)
+{
+ return currentNode->name();
+}
+
+QString & PertResult::getTaskFloat(Node * currentNode)
+{
+ return currentNode->name();
+}
 
 //-----------------------------------
 PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
@@ -35,6 +83,17 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
     widget.setupUi(this);
     QHeaderView *header=widget.treeWidgetTaskResult->header();
+    
+    (*header).resizeSection(0,200);
+    (*header).resizeSection(1,78);
+    (*header).resizeSection(2,78);
+    (*header).resizeSection(3,78);
+    (*header).resizeSection(4,78);
+    (*header).resizeSection(5,78);
+    (*header).resizeSection(5,78);
+    draw( part->getProject() );
+
+
 }
 
 

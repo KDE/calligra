@@ -525,6 +525,12 @@ View::View( Part* part, QWidget* parent )
     connect( m_perteditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     m_updatePertEditor = true;
 
+    m_pertresult = new PertResult( getPart(), m_tab );
+    m_tab->addWidget( m_pertresult );
+    m_pertresult->draw( getProject() );
+    connect( m_pertresult, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    m_updatePertResult = true;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
     m_ganttview = new GanttView( getPart(), m_tab, part->isReadWrite() );
     m_tab->addWidget( m_ganttview );
@@ -569,11 +575,6 @@ View::View( Part* part, QWidget* parent )
     m_resourceAssignmentView->draw( getProject() );
     connect( m_resourceAssignmentView, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
-    m_pertresult = new PertResult( getPart(), m_tab );
-    m_tab->addWidget( m_pertresult );
-    m_pertresult->draw( getProject() );
-    connect( m_pertresult, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    m_updatePertResult = true;
 
     //m_reportview = new ReportView(this, m_tab);
     //m_tab->addWidget(m_reportview);
@@ -2059,6 +2060,9 @@ void View::updateView( QWidget *widget )
         m_updatePertEditor = false;
     } else if ( widget == m_taskstatusview ) {
         m_taskstatusview -> draw( getPart()->getProject() );
+    }else if ( widget == m_pertresult) {        
+            m_pertresult -> draw( getPart()->getProject() );
+            m_updatePertResult = false;
     }
     /*    else if (widget == m_reportview)
         {
