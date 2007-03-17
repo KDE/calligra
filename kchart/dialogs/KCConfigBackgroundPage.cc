@@ -131,7 +131,9 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
     QLabel* intensityLA = new QLabel(
       // xgettext:no-c-format
       i18n( "&Intensity in %:" ), intensityHB );
-    intensitySB = new QSpinBox( 1, 100, 1, intensityHB );
+    intensitySB = new QSpinBox( intensityHB );
+    intensitySB->setMinimum( 1 );
+    intensitySB->setMaximum( 100 );
     intensityLA->setBuddy( intensitySB );
     // xgettext:no-c-format
     QString ttstr = i18n( "Here you can select how much the image should be "

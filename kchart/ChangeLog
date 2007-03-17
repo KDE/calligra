@@ -1,5 +1,14 @@
 2007-03-17  Inge Wallin  <inge@lysator.liu.se>
 	
+	Remove warnings for spinboxes:
+	* dialogs/KCConfigAxesPage.cc
+	* dialogs/KCConfigSubtypePiePage.cc
+	* dialogs/KCConfigSubtypePolarPage.cc
+	* dialogs/KCWizardAxesPage.cc
+	* dialogs/KCConfigBackgroundPage.cc
+	* kchartDataEditor.cc
+	Replace deprecated calls, mostly to constructors.
+	
 	Remove warnings for layouts
 	* dialogs/KCConfigAxesPage.cc
 	* dialogs/KCConfigFontPage.cc

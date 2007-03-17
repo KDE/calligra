@@ -50,7 +50,9 @@ KCConfigSubtypePolarPage::KCConfigSubtypePolarPage( KChartParams* params,
     showCircularLabel->setWhatsThis( i18n("Toggle the circular label display."));
 
     QLabel *label = new QLabel( i18n( "Zero degree position:" ), gb );
-    angle = new QSpinBox(-359, 359, 1, gb);
+    angle = new QSpinBox( gb );
+    angle->setMinimum( -359 );
+    angle->setMaximum(  359 );
     angle->setWhatsThis( i18n("Set the position for the X axis (horizontal) from -359 to 359. Default is 0."));
 
     label=new QLabel(i18n("Line width:"), gb);

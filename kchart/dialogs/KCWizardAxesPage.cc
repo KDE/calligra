@@ -88,14 +88,18 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
     tmpLabel=new QLabel(tmpQGroupBox);
     tmpLabel->setText(i18n("Angle 3D:"));
     grid2->addWidget(tmpLabel,0,0);
-    angle = new QSpinBox(1, 90, 1,tmpQGroupBox );
+    angle = new QSpinBox( tmpQGroupBox );
+    angle->setMinimum( 1 );
+    angle->setMaximum( 90 );
     angle->setValue( _chart->params()->threeDBarAngle() );
     grid2->addWidget(angle,0,1);
 
     tmpLabel=new QLabel(tmpQGroupBox);
     tmpLabel->setText(i18n("Depth 3D:"));
     grid2->addWidget(tmpLabel,1,0);
-    depth = new QSpinBox(1, 40, 1, tmpQGroupBox);
+    depth = new QSpinBox( tmpQGroupBox );
+    depth->setMinimum( 1 );
+    depth->setMaximum( 40 );
     depth->setValue( static_cast<int>( _chart->params()->threeDBarDepth() ) );
     grid2->addWidget(depth,1,1);
 

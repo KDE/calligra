@@ -129,7 +129,9 @@ KCConfigAxesPage::KCConfigAxesPage( KChartParams* params,
     max->setWhatsThis( i18n("This sets the Y-axis precision. For example, if you choose a precision of 2, the value 5 will be displayed as 5.00 alongside the Y-axis."));
     connect(automatic_precision, SIGNAL(toggled(bool)), this,
             SLOT(automatic_precision_toggled(bool)) );
-    maximum_length = new QSpinBox(0, 15, 1, precision );
+    maximum_length = new QSpinBox( precision );
+    maximum_length->setMinimum( 0 );
+    maximum_length->setMaximum( 15 );
     maximum_length->setWhatsThis( i18n("Set the precision you want to display for the Y-axis, if you choose Decimal precision. The range is 0 to 15; 2 being the default."));
     maximum_length->setValue(2);
 

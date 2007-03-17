@@ -55,15 +55,22 @@ KCConfigSubtypePiePage::KCConfigSubtypePiePage( KChartParams* params,
     drawShadowColor->setWhatsThis( i18n("Uncheck this option if you do not want a shadow color on a 3D pie."));
 
     QLabel *label = new QLabel( i18n( "Explode factor (%):" ), gb );
-    explode = new QSpinBox(0, 100, 1, gb);
+    //explode = new QSpinBox(0, 100, 1, gb);
+    explode = new QSpinBox( gb );
+    explode->setMinimum( 0 );
+    explode->setMaximum( 100 );
     explode->setWhatsThis( i18n("This will place gaps between the segments of your pie. Default is 0 which means the pie is a whole."));
 
     label = new QLabel( i18n( "Start angle:" ), gb );
-    angle = new QSpinBox(0, 90, 1, gb);
+    angle = new QSpinBox( gb );
+    angle->setMinimum( 0 );
+    angle->setMaximum( 90 );
     angle->setWhatsThis( i18n("This will set the orientation of your pie. Default is 0."));
 
     label = new QLabel( i18n( "3D-depth:" ), gb );
-    depth = new QSpinBox(0, 40, 1, gb);
+    depth = new QSpinBox( gb );
+    depth->setMinimum( 0 );
+    depth->setMaximum( 40 );
     depth->setWhatsThis( i18n("Set the depth from 0 to 40 of the 3D effect, if you have checked Pie 3D. Default is 20."));
 
     grid1->activate();

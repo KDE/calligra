@@ -144,14 +144,14 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_rowsLA->resize( m_rowsLA->sizeHint() );
     m_rowsSB = new kchartDataSpinBox( page );
     m_rowsSB->resize( m_rowsSB->sizeHint() );
-    m_rowsSB->setMinValue(1);
+    m_rowsSB->setMinimum( 1 );
 
     // Create the columns setting
     m_colsLA = new QLabel( i18n("# Columns:" ), page );
     m_colsLA->resize( m_colsLA->sizeHint() );
     m_colsSB = new kchartDataSpinBox( page );
     m_colsSB->resize( m_colsSB->sizeHint() );
-    m_colsSB->setMinValue(1);
+    m_colsSB->setMinimum( 1 );
     
 #if 1
     // The row/column as label checkboxes. 
