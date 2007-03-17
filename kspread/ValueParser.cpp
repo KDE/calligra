@@ -137,6 +137,7 @@ double ValueParser::readNumber( const QString& _str, bool *ok, bool *isInt ) con
   }
 
   int pos;
+  int fracPos;
   QString major;
   QString minor;
   if ( ( pos = str.indexOf( m_doc->locale()->decimalSymbol() ) ) != -1 )
@@ -150,6 +151,22 @@ double ValueParser::readNumber( const QString& _str, bool *ok, bool *isInt ) con
     major = str.left(pos);
     minor = str.mid(pos + m_doc->locale()->decimalSymbol().length());
     if (isInt) *isInt = false;
+  } else if ( ( ( pos = str.indexOf( ' ' ) ) != -1 ) &&
+              ( ( fracPos = str.indexOf( '/' ) ) != -1 ) ) {
+    // try to parse fractions of this form:
+    // [0-9]+ [0-9]+/[1-9][0-9]?
+    major = str.left(pos);
+    QString numerator = str.mid( pos+1, ( fracPos - pos - 1 ) );
+    QString denominator = str.mid( fracPos+1 );
+    double minorVal = numerator.toDouble() / denominator.toDouble();
+    if ( minorVal > 1 ) {
+      // assume major is just a plain number
+      double wholePart = floor( minorVal );
+      minorVal -= wholePart;
+      major = QString( "%1" ).arg( major.toInt() + ( int )wholePart );
+    }
+    minor = QString::number( minorVal, 'f' ).mid( 2 ); // chop off the "0." part
+    // kDebug() << "fraction:" << major << "." << minor << endl;
   }
   else
   {
@@ -277,6 +294,31 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
         }
         if ( *ok )
             value = Value( complex<double>( real, imag ) );
+    }
+    else if ( ( str.count( ':' ) == 1 ) || ( str.count( ':' ) == 2 ) )
+    {
+        // perhaps a time?
+        QStringList sections = str.split( ':' );
+        double hours = sections[0].toDouble(ok);
+        if ( !( *ok ) ) {
+            return Value::errorVALUE();
+        }
+        double minutes = sections[1].toDouble(ok);
+        if ( !( *ok ) ) {
+            return Value::errorVALUE();
+        }
+        double seconds = 0.0;
+        if ( sections.count() == 3 ) {
+            seconds = sections[2].toDouble(ok);
+            if ( !( *ok ) ) {
+                return Value::errorVALUE();
+            }
+            minutes += ( seconds/60.0 );
+        }
+        hours += ( minutes / 60.0 );
+        double val = hours / 24.0;
+        // kDebug( 37000) << "val: " << val << endl;
+        value = Value( val );
     }
     else // real number
     {
