@@ -32,8 +32,6 @@ set(kchartcommon_LIB_SRCS
    dialogs/KCConfigSubtypeLinePage.cc
    dialogs/KCConfigSubtypePiePage.cc
    dialogs/KCConfigSubtypePolarPage.cc
-   #kchartComboConfigPage.cc 
-   #kchartPieConfigPage.cc 
    dialogs/KCConfigHeaderFooterPage.cc 
    dialogs/KCConfigLegendPage.cc 
    dialogs/KCConfigAxesPage.cc 
