@@ -766,13 +766,14 @@ public:
      */
     int defaultDecimalPrecision() const;
 
-public slots:
-  void refreshInterface();
-  void flushDamages();
+public Q_SLOTS:
+    void refreshInterface();
+    void flushDamages();
+    void handleDamages( const QList<Damage*>& damages );
 
-  virtual void initEmpty();
+    virtual void initEmpty();
 
-signals:
+Q_SIGNALS:
   /**
    * Emitted if all views have to be updated.
    */

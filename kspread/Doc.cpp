@@ -63,12 +63,14 @@
 
 #include "Canvas.h"
 #include "Damages.h"
+#include "DependencyManager.h"
 #include "Formula.h"
 #include "Functions.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Object.h"
+#include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -266,6 +268,9 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->refYear = 1930;
   d->refDate = QDate( 1899, 12, 30 );
   d->precision = 8;
+
+    connect( this, SIGNAL( damagesFlushed( const QList<Damage*>& ) ),
+             this, SLOT( handleDamages( const QList<Damage*>& ) ) );
 }
 
 Doc::~Doc()
@@ -2143,6 +2148,82 @@ void Doc::flushDamages()
     d->damages.clear();
     emit damagesFlushed( damages );
     qDeleteAll( damages );
+}
+
+void Doc::handleDamages( const QList<Damage*>& damages )
+{
+    Region formulaChangedRegion;
+    Region valueChangedRegion;
+    WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
+
+    QList<Damage*>::ConstIterator end(damages.end());
+    for( QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it )
+    {
+        Damage* damage = *it;
+        if( !damage ) continue;
+
+        if( damage->type() == Damage::Cell )
+        {
+            CellDamage* cellDamage = static_cast<CellDamage*>( damage );
+            kDebug(36007) << "Processing\t " << *cellDamage << endl;
+            Sheet* const damagedSheet = cellDamage->sheet();
+            const Region region = cellDamage->region();
+
+            if ( ( cellDamage->changes() & CellDamage::Formula ) &&
+                 !workbookChanges.testFlag( WorkbookDamage::Formula ) )
+            {
+                formulaChangedRegion.add( region, damagedSheet );
+            }
+            if ( ( cellDamage->changes() & CellDamage::Value ) &&
+                 !workbookChanges.testFlag( WorkbookDamage::Value ) )
+            {
+                valueChangedRegion.add( region, damagedSheet );
+            }
+            continue;
+        }
+
+        if( damage->type() == Damage::Sheet )
+        {
+            SheetDamage* sheetDamage = static_cast<SheetDamage*>( damage );
+            kDebug(36007) << "Processing\t " << *sheetDamage << endl;
+            Sheet* damagedSheet = sheetDamage->sheet();
+
+            if ( sheetDamage->changes() & SheetDamage::PropertiesChanged )
+            {
+                foreach ( CellBinding* binding, damagedSheet->cellBindings() )
+                {
+                     binding->cellChanged( Cell() );
+                }
+            }
+            continue;
+        }
+
+        if( damage->type() == Damage::Workbook )
+        {
+            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>( damage );
+            kDebug(36007) << "Processing\t " << *damage << endl;
+
+            workbookChanges |= workbookDamage->changes();
+            if ( workbookDamage->changes() & WorkbookDamage::Formula )
+                formulaChangedRegion.clear();
+            if ( workbookDamage->changes() & WorkbookDamage::Value )
+                valueChangedRegion.clear();
+            continue;
+        }
+
+        kDebug(36007) << "Unhandled\t " << *damage << endl;
+    }
+
+    // First, update the dependencies.
+    if ( !formulaChangedRegion.isEmpty() )
+        map()->dependencyManager()->regionChanged( formulaChangedRegion );
+    // Tell the RecalcManager which cells have had a value change.
+    if ( !valueChangedRegion.isEmpty() )
+        map()->recalcManager()->regionChanged( valueChangedRegion );
+    if ( workbookChanges.testFlag( WorkbookDamage::Formula ) )
+        map()->dependencyManager()->updateAllDependencies( map() );
+    if ( workbookChanges.testFlag( WorkbookDamage::Value ) )
+        map()->recalcManager()->recalcMap();
 }
 
 void Doc::loadConfigFromFile()

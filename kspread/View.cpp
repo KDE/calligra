@@ -7159,15 +7159,8 @@ void View::saveCurrentSheetSelection()
 void View::handleDamages( const QList<Damage*>& damages )
 {
     bool refreshView = false;
-    Region formulaChangedRegion;
-    Region layoutChangedRegion;
-    Region textFormatChagedRegion;
-    Region valueChangedRegion;
     QRegion paintRegion;
     bool paintClipped = true;
-    WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
-
-//     ElapsedTime et( "Damage processing", ElapsedTime::PrintOnlyTime );
 
     QList<Damage*>::ConstIterator end(damages.end());
     for( QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it )
@@ -7187,24 +7180,6 @@ void View::handleDamages( const QList<Damage*>& damages )
                 sheetView( damagedSheet )->invalidateRegion( region );
                 paintClipped = false;
             }
-            if ( ( cellDamage->changes() & CellDamage::Formula ) &&
-                 !workbookChanges.testFlag( WorkbookDamage::Formula ) )
-            {
-                formulaChangedRegion.add( region, damagedSheet );
-            }
-            if ( cellDamage->changes() & CellDamage::Layout )
-            {
-                layoutChangedRegion.add( region, damagedSheet );
-            }
-            if ( cellDamage->changes() & CellDamage::TextFormat )
-            {
-                textFormatChagedRegion.add( region, damagedSheet );
-            }
-            if ( ( cellDamage->changes() & CellDamage::Value ) &&
-                 !workbookChanges.testFlag( WorkbookDamage::Value ) )
-            {
-                valueChangedRegion.add( region, damagedSheet );
-            }
             continue;
         }
 
@@ -7212,31 +7187,12 @@ void View::handleDamages( const QList<Damage*>& damages )
         {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>( damage );
             kDebug(36007) << "Processing\t " << *sheetDamage << endl;
-            Sheet* damagedSheet = sheetDamage->sheet();
 
             if ( sheetDamage->changes() & SheetDamage::PropertiesChanged )
             {
-                foreach ( CellBinding* binding, damagedSheet->cellBindings() )
-                {
-                     binding->cellChanged( Cell() );
-                }
-
                 d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
                 refreshView = true;
             }
-            continue;
-        }
-
-        if( damage->type() == Damage::Workbook )
-        {
-            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>( damage );
-            kDebug(36007) << "Processing\t " << *damage << endl;
-
-            workbookChanges |= workbookDamage->changes();
-            if ( workbookDamage->changes() & WorkbookDamage::Formula )
-                formulaChangedRegion.clear();
-            if ( workbookDamage->changes() & WorkbookDamage::Value )
-                valueChangedRegion.clear();
             continue;
         }
 
@@ -7257,14 +7213,6 @@ void View::handleDamages( const QList<Damage*>& damages )
         kDebug(36007) << "Unhandled\t " << *damage << endl;
     }
 
-    // First, update the dependencies.
-    if ( !formulaChangedRegion.isEmpty() )
-        doc()->map()->dependencyManager()->regionChanged( formulaChangedRegion );
-    // Tell the RecalcManager which cells have had a value change.
-    if ( !valueChangedRegion.isEmpty() )
-        doc()->map()->recalcManager()->regionChanged( valueChangedRegion );
-    // TODO Stefan: handle text format changes
-    // TODO Stefan: handle layout changes
     // At last repaint the dirty cells.
     if ( paintClipped )
         canvas()->update( paintRegion );
@@ -7272,10 +7220,6 @@ void View::handleDamages( const QList<Damage*>& damages )
         canvas()->update();
     if ( refreshView )
         this->refreshView();
-    if ( workbookChanges.testFlag( WorkbookDamage::Formula ) )
-        doc()->map()->dependencyManager()->updateAllDependencies( doc()->map() );
-    if ( workbookChanges.testFlag( WorkbookDamage::Value ) )
-        doc()->map()->recalcManager()->recalcMap();
 }
 
 void View::runInspector()

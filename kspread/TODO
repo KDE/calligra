@@ -225,7 +225,7 @@ Things not in bugzilla
 	of converting to the new parser.
 
   + Damage concept						      1 ----
-    - Split the damage processing: document and view related.		----
+    - Split the damage processing: document and view related.		done
 
   + code cleanups						      3 ----
     - Merge Cell::checkForNamedAreas() into Oasis::decodeFormula().	----
