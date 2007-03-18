@@ -710,7 +710,6 @@ public:
   bool captureAllArrowKeys() const;
 
   // repaint (update) all views
-  void repaint( const QRect& );
   void repaint( EmbeddedObject* );
   void repaint( const QRectF& );
 

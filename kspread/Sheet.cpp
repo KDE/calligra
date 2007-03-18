@@ -2737,10 +2737,10 @@ QUndoCommand* Sheet::moveObject(View *_view, double diffx, double diffy)
             _objects.append( object );
             QRectF geometry = object->geometry();
             geometry.translate( -canvas->xOffset(), -canvas->yOffset() );
-            QRect br = doc()->zoomRectOld( geometry/*object->geometry()*/ );
-            br.translate( doc()->zoomItXOld( diffx ), doc()->zoomItYOld( diffy ) );
-            br.translate( doc()->zoomItXOld( -canvas->xOffset() ), doc()->zoomItYOld( -canvas->yOffset() ) );
-            canvas->repaint( br ); // Previous position
+            QRectF br = doc()->documentToView( geometry/*object->geometry()*/ );
+            br.translate( doc()->zoomItX( diffx ), doc()->zoomItY( diffy ) );
+            br.translate( doc()->zoomItX( -canvas->xOffset() ), doc()->zoomItY( -canvas->yOffset() ) );
+            canvas->repaint( br.toRect() ); // Previous position
             canvas->repaintObject( object ); // New position
             createCommand=true;
         }
@@ -2765,7 +2765,7 @@ QUndoCommand* Sheet::moveObject(View *_view,const QPointF &_move,bool key)
 
             QRectF geometry = object->geometry();
             geometry.translate( -canvas->xOffset(), -canvas->yOffset() );
-            QRect oldBoundingRect = doc()->zoomRectOld( geometry );
+            QRectF oldBoundingRect = doc()->documentToView( geometry );
 
 
             QRectF r = object->geometry();
@@ -2774,7 +2774,7 @@ QUndoCommand* Sheet::moveObject(View *_view,const QPointF &_move,bool key)
             object->setGeometry( r );
             _objects.append( object );
 
-            canvas->repaint( oldBoundingRect );
+            canvas->repaint( oldBoundingRect.toRect() );
             canvas->repaintObject( object );
         }
     }

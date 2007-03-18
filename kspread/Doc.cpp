@@ -466,7 +466,7 @@ QDomDocument Doc::saveXML()
             static_cast<View *>( view )->deleteEditor( true );
     }
 
-    QDomDocument doc = createDomDocument( "spreadsheet", CURRENT_DTD_VERSION );
+    QDomDocument doc = KoDocument::createDomDocument( "kspread", "spreadsheet", CURRENT_DTD_VERSION );
     QDomElement spread = doc.documentElement();
     spread.setAttribute( "editor", "KSpread" );
     spread.setAttribute( "mime", "application/x-kspread" );
@@ -1569,10 +1569,10 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, Sheet* sheet, bool
 
     double xpos;
     double ypos;
-    int left_col   = sheet->leftColumn( unzoomItXOld( rect.x() ), xpos );
-    int right_col  = sheet->rightColumn( unzoomItXOld( rect.right() ) );
-    int top_row    = sheet->topRow( unzoomItYOld( rect.y() ), ypos );
-    int bottom_row = sheet->bottomRow( unzoomItYOld( rect.bottom() ) );
+    int left_col   = sheet->leftColumn( unzoomItX( rect.x() ), xpos );
+    int right_col  = sheet->rightColumn( unzoomItX( rect.right() ) );
+    int top_row    = sheet->topRow( unzoomItY( rect.y() ), ypos );
+    int bottom_row = sheet->bottomRow( unzoomItY( rect.bottom() ) );
 
     QPen pen;
     pen.setWidth( 1 );
@@ -1633,7 +1633,7 @@ void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
     Region::ConstIterator endOfList(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
     {
-        paintRegion(painter, unzoomRectOldF( viewRect ), view,(*it)->rect(), (*it)->sheet());
+        paintRegion(painter, viewToDocument( viewRect ), view,(*it)->rect(), (*it)->sheet());
     }
 }
 
@@ -2272,19 +2272,6 @@ KoPictureCollection *Doc::pictureCollection()
   return &d->m_pictureCollection;
 }
 
-void Doc::repaint( const QRect& rect )
-{
-  QRect r;
-  foreach ( KoView* view, views() )
-  {
-    r = rect;
-    Canvas* canvas = static_cast<View*>( view )->canvasWidget();
-    r.moveTopLeft( QPoint( r.x() - (int) canvas->xOffset(),
-                           r.y() - (int) canvas->yOffset() ) );
-    canvas->update( r );
-  }
-}
-
 void Doc::repaint( EmbeddedObject *obj )
 {
   foreach ( KoView* view, views() )
@@ -2297,16 +2284,16 @@ void Doc::repaint( EmbeddedObject *obj )
 
 void Doc::repaint( const QRectF& rect )
 {
-  QRect r;
-  foreach ( KoView* view, views() )
-  {
-    Canvas* canvas = static_cast<View*>( view )->canvasWidget();
+    QRectF r;
+    foreach ( KoView* view, views() )
+    {
+        Canvas* canvas = static_cast<View*>( view )->canvasWidget();
 
-    r = zoomRectOld( rect );
-    r.translate( (int)( -canvas->xOffset()*zoomedResolutionX() ) ,
-                        (int)( -canvas->yOffset() *zoomedResolutionY()) );
-    canvas->update( r );
-  }
+        r = documentToView( rect );
+        r.translate( -canvas->xOffset() * zoomedResolutionX(),
+                     -canvas->yOffset() * zoomedResolutionY() );
+        canvas->update( r.toRect() );
+    }
 }
 
 
