@@ -399,7 +399,7 @@ const Value Cell::value() const
 // In addition to this, it calculates the outstring and sets the dirty
 // flags so that a redraw is forced.
 //
-void Cell::setValue( const Value& value, bool triggerRecalc )
+void Cell::setValue( const Value& value )
 {
 //   kDebug() << k_funcinfo << endl;
 
@@ -415,7 +415,7 @@ void Cell::setValue( const Value& value, bool triggerRecalc )
     sheet()->cellStorage()->setValue( d->column, d->row, value );
 
     // Value of the cell has changed - trigger necessary actions
-    valueChanged( triggerRecalc );
+    valueChanged();
 }
 
 void Cell::setCellValue (const Value &value, Format::Type fmtType, const QString &txt)
@@ -772,7 +772,7 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
 }
 
 
-void Cell::valueChanged( bool triggerRecalc )
+void Cell::valueChanged()
 {
     // TODO Stefan: Use a Damage for this.
     //              Not the same CellDamage change as for recalculation:

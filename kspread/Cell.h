@@ -269,9 +269,8 @@ public:
      * In addition to this, it calculates the outstring and sets the dirty
      * flags so that a redraw is forced.
      * \param value the new value
-     * \param triggerRecalc if \c true ,triggers a recalculation event
      */
-    void setValue( const Value& value, bool triggerRecalc = true );
+    void setValue( const Value& value );
 
     /**
      * Sets the value for this cell and its formatting and input text, if
@@ -655,9 +654,8 @@ private:
 
     /**
      * Triggers the events, that are necessary after a value change.
-     * \param triggerRecalc if \c true ,triggers a recalculation event
      */
-    void valueChanged( bool triggerRecalc = true );
+    void valueChanged();
 
     /**
      * \ingroup NativeFormat

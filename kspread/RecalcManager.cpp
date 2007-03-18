@@ -236,14 +236,14 @@ void RecalcManager::recalc()
                 for ( int col = rect.left(); col <= rect.right(); ++col )
                 {
                     kDebug() << result.element( col - rect.left(), row - rect.top() ) << endl;
-                    Cell( cells.value( c ).sheet(), col, row ).setValue( result.element( col - rect.left(), row - rect.top() ), false );
+                    Cell( cells.value( c ).sheet(), col, row ).setValue( result.element( col - rect.left(), row - rect.top() ) );
                 }
             }
             // relock
             cells.value( c ).sheet()->cellStorage()->lockCells( rect );
         }
         else
-            Cell( cells.value( c ) ).setValue( result, false );
+            Cell( cells.value( c ) ).setValue( result );
     }
 //     dump();
     d->cells.clear();
