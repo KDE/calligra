@@ -62,8 +62,8 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
   QVBoxLayout *vbox = new QVBoxLayout( );
   vbox->setSpacing(KDialog::spacingHint());
   vbox->setMargin(KDialog::marginHint());
-  vbox->addWidget( lab, 0, 0 );
-  vbox->addWidget( title, 1, 0 );
+  vbox->addWidget( lab );
+  vbox->addWidget( title );
   vbox->addStretch( 1 );
   
   gb1->setLayout( vbox );

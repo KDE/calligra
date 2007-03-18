@@ -23,13 +23,14 @@
 #include <QWidget>
 #include <qpixmap.h>
 #include <QMap>
+
+class QGroupBox;
 class QSpinBox;
 class QRadioButton;
 class QComboBox;
 class QPixmap;
 class Q3ListBox;
 class KColorButton;
-class Q3GroupBox;
 
 namespace KChart
 {
@@ -57,7 +58,7 @@ private:
     KChartParams* _params;
     QComboBox* wallCB;
     QWidget* wallWidget;
-    QSpinBox* intensitySB;
+    QSpinBox       *m_intensitySB;
     QRadioButton* stretchedRB;
     QRadioButton* scaledRB;
     QRadioButton* centeredRB;
@@ -67,9 +68,9 @@ private:
 #if 0
     Q3ListBox *regionList;
 #endif
-    KColorButton* _backgroundCB;
-    Q3GroupBox* right;
-	QMap<QString,int> m_wallpaper;
+    KColorButton      *_backgroundCB;
+    QGroupBox         *right;
+    QMap<QString,int>  m_wallpaper;
 };
 
 }  //KChart namespace

@@ -19,11 +19,12 @@
 
 #include "KCConfigBackgroundPage.h"
 
+#include <QLayout>
+#include <QGroupBox>
 #include <QComboBox>
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
 #include <QSpinBox>
-#include <QLayout>
 
 #include <QPushButton>
 #include <QLabel>
@@ -50,7 +51,7 @@ namespace KChart
 {
 
 KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* parent )
-    : QWidget( parent, "KCConfigBackgroundPage" ),
+    : QWidget( parent ),
       _params( params )
 {
     this->setWhatsThis(
@@ -102,7 +103,7 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
     center->addWidget( wallCB );
     wallCB->addItem( i18n("None") );
 
-	loadWallpaperFilesList();
+    loadWallpaperFilesList();
     QPushButton* browsePB = new QPushButton( i18n("&Browse..."), this );
     browsePB->setWhatsThis( i18n( "Click this button to select a background "
                                      "image not yet present in the list above. " ) );
@@ -120,21 +121,30 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
     connect( wallCB, SIGNAL( activated( int ) ),
              this, SLOT( slotWallPaperChanged( int ) ) );
 
-    right = new Q3GroupBox(1, Qt::Horizontal, i18n( "Wallpaper Configuration" ), this );
+    // 3. The right side: Wallpaper configuration
+    right = new QGroupBox(i18n( "Wallpaper Configuration" ) );
     right->setWhatsThis( i18n( "In this box, you can set various settings "
                                   "that control how the background image is "
                                   "displayed." ) );
     toplevel->addWidget( right );
 
+    QVBoxLayout *vbox = new QVBoxLayout( );
+    vbox->setSpacing(KDialog::spacingHint());
+    vbox->setMargin(KDialog::marginHint());
+    
+    // 3a. The intensity spinbox
     KHBox* intensityHB = new KHBox( right );
     intensityHB->setSpacing( 10 );
+    vbox->addWidget( intensityHB );
+
     QLabel* intensityLA = new QLabel(
       // xgettext:no-c-format
       i18n( "&Intensity in %:" ), intensityHB );
-    intensitySB = new QSpinBox( intensityHB );
-    intensitySB->setMinimum( 1 );
-    intensitySB->setMaximum( 100 );
-    intensityLA->setBuddy( intensitySB );
+
+    m_intensitySB = new QSpinBox( intensityHB );
+    m_intensitySB->setMinimum( 1 );
+    m_intensitySB->setMaximum( 100 );
+    intensityLA->setBuddy( m_intensitySB );
     // xgettext:no-c-format
     QString ttstr = i18n( "Here you can select how much the image should be "
                           "brightened up so that it does not disturb the "
@@ -142,27 +152,32 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
                           "different settings, but 25% is a good value to start "
                           "with." );
     intensityLA->setWhatsThis( ttstr );
-    intensitySB->setWhatsThis( ttstr );
+    m_intensitySB->setWhatsThis( ttstr );
 
-
-    stretchedRB = new QRadioButton( i18n( "Stretched" ), right );
+    // 3b. The radio buttons
+    stretchedRB = new QRadioButton( i18n( "Stretched" ) );
     stretchedRB->setWhatsThis(
                      i18n( "If you check this box, the selected image will "
                            "be scaled to fit the total size of the selected "
                            "area. Image ratio will be adjusted to match "
                            "the area size and height if necessary." ) );
-    stretchedRB->setChecked( true );
-    scaledRB = new QRadioButton( i18n( "Scaled" ), right );
+    vbox->addWidget( stretchedRB );
+
+    scaledRB = new QRadioButton( i18n( "Scaled" ) );
     scaledRB->setWhatsThis(
                      i18n( "If you check this box, the selected image will "
                            "be scaled to match the height or width of the "
                            "selected area - whichever is reached first." ) );
+    vbox->addWidget( scaledRB );
+
     centeredRB = new QRadioButton( i18n( "Centered" ), right );
     centeredRB->setWhatsThis(
                      i18n( "If you check this box, the selected image will "
                            "be centered over the selected area. If the image "
                            "is larger then the area, you will only see the "
                            "middle part of it." ) );
+    vbox->addWidget( centeredRB );
+    stretchedRB->setChecked( true );
 
 //     tiledRB = new QRadioButton( i18n( "Tiled" ), right );
 //     QWhatsThis::add( tiledRB,
@@ -170,15 +185,17 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
 //                            "be used as a background tile. If the image is "
 //                            "larger then the selected area, you will only see "
 //                            "the upper left part of it." ) );
-    Q3ButtonGroup* alignmentBG;
-    alignmentBG = new Q3ButtonGroup( right, "GroupBox_Alignment" );
-    //alignmentBG->setFrameStyle( QFrame::NoFrame );
-    alignmentBG->insert( stretchedRB );
-    alignmentBG->insert( scaledRB );
-    alignmentBG->insert( centeredRB );
+#warning "this doesn't work yet, and doc.trolltech is down right now"
+    QButtonGroup *alignmentBG = new QButtonGroup( right );
+    alignmentBG->setExclusive( true );
+    alignmentBG->addButton( stretchedRB );
+    alignmentBG->addButton( scaledRB );
+    alignmentBG->addButton( centeredRB );
 //     alignmentBG->insert( tiledRB );
 
-    intensitySB->hide(); //the property doesn't work atm
+    vbox->addStretch( 1 );
+    right->setLayout( vbox );
+    //m_intensitySB->hide(); //the property doesn't work atm
 }
 
 //Code from kcontrol/background/bgdialog.cc

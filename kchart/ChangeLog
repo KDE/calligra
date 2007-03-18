@@ -1,4 +1,12 @@
-2007-03-17  Inge Wallin  <inge@lysator.liu.se>
+2007-03-18  Inge Wallin  <inge@lysator.liu.se>
+
+	Do some more conversion Q3Support -> Qt4
+	* dialogs/KCConfigBackgroundPage.cc (KCConfigBackgroundPage):
+	Don't call deprecated constructor for parent.
+	(KCConfigBackgroundPage): Convert from Q3GroupBox to QGroupBox and
+	fix layout.
+	* dialogs/KCConfigLegendPage.cc (KCConfigLegendPage): GridLayouts
+	have coordinates, but VBoxLayouts don't.
 	
 	Remove some warnings for qgridlayout, and port to qgroupbox
 	* dialogs/KCWizardCharttype.cc (constructor): Fix call to QGridLayout
@@ -9,6 +17,8 @@
 	* kchart_view.cc (KChartView): Don't call setBackgroundMode()
 	* dialogs/KCConfigBackgroundPage.cc (init): Warn about background
 	images not working.
+	
+2007-03-17  Inge Wallin  <inge@lysator.liu.se>
 	
 	Remove warnings for qpixmap:
 	* kchart_part.cc
