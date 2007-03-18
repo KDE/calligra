@@ -53,10 +53,12 @@
 #include "SortDialog.h"
 #include "Doc.h"
 #include "Map.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "View.h"
-#include "SortManipulator.h"
-#include "Selection.h"
+
+// commands
+#include "commands/SortManipulator.h"
 
 using namespace KSpread;
 

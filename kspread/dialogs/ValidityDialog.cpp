@@ -40,10 +40,12 @@
 #include "Canvas.h"
 #include "Doc.h"
 #include "Localization.h"
-#include "Manipulator.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "View.h"
+
+// commands
+#include "commands/Manipulator.h"
 
 #include "ValidityDialog.h"
 

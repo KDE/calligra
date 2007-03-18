@@ -67,7 +67,6 @@
 #include "Cluster.h"
 #include "Condition.h"
 #include "Damages.h"
-#include "DataManipulators.h"
 #include "DependencyManager.h"
 #include "Doc.h"
 #include "Global.h"
@@ -77,7 +76,6 @@
 #include "Object.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
-#include "RowColumnManipulators.h"
 #include "Selection.h"
 #include "SheetPrint.h"
 #include "SheetView.h"
@@ -91,7 +89,9 @@
 #include "View.h"
 
 // commands
+#include "commands/DataManipulators.h"
 #include "commands/EmbeddedObjectCommands.h"
+#include "commands/RowColumnManipulators.h"
 
 
 #include "SheetAdaptor.h"

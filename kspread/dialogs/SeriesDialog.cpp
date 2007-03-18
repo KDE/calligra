@@ -29,7 +29,8 @@
 #include "Editors.h"
 #include "Sheet.h"
 #include "View.h"
-#include "DataManipulators.h"
+
+#include "commands/DataManipulators.h"
 
 #include <QGroupBox>
 #include <QHBoxLayout>

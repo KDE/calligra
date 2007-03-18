@@ -68,12 +68,13 @@
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
-#include "StyleManipulators.h"
 #include "StyleStorage.h"
 #include "Undo.h"
-#include "RowColumnManipulators.h"
 #include "Selection.h"
 #include "ValueFormatter.h"
+
+#include "commands/StyleManipulators.h"
+#include "commands/RowColumnManipulators.h"
 
 using namespace KSpread;
 

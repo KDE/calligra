@@ -20,17 +20,19 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "DataManipulators.h"
 #include "Doc.h"
 #include "Global.h"
 #include "Localization.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
-#include "RowColumnManipulators.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "Style.h"
 #include "StyleManager.h"
+
+// commands
+#include "commands/DataManipulators.h"
+#include "commands/RowColumnManipulators.h"
 
 #include "Undo.h"
 //Added by qt3to4:

@@ -98,7 +98,6 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetView.h"
-#include "StyleManipulators.h"
 #include "Undo.h"
 #include "Util.h"
 #include "Validity.h"
@@ -106,6 +105,7 @@
 
 // commands
 #include "commands/EmbeddedObjectCommands.h"
+#include "commands/StyleManipulators.h"
 
 #include "Border.h"
 #include "CanvasPrivate.h"

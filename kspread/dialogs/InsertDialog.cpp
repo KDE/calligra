@@ -34,11 +34,13 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "DataManipulators.h"
 #include "Doc.h"
-#include "RowColumnManipulators.h"
 #include "Sheet.h"
 #include "View.h"
+
+// commands
+#include "commands/DataManipulators.h"
+#include "commands/RowColumnManipulators.h"
 
 #include "InsertDialog.h"
 

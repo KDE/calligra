@@ -30,12 +30,14 @@
 
 #include <kdebug.h>
 
-#include "DataManipulators.h"
 #include "Doc.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "Region.h"
-#include "RowColumnManipulators.h"
+
+// commands
+#include "commands/DataManipulators.h"
+#include "commands/RowColumnManipulators.h"
 
 #include "SheetAdaptor.h"
 

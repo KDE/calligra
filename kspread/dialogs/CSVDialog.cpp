@@ -31,12 +31,13 @@
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 
-#include <Cell.h>
+#include "Cell.h"
 #include "CellStorage.h"
-#include <DataManipulators.h>
-#include <Doc.h>
-#include <Sheet.h>
-#include <View.h>
+#include "Doc.h"
+#include "Sheet.h"
+#include "View.h"
+
+#include "commands/DataManipulators.h"
 
 #include "CSVDialog.h"
 

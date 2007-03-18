@@ -31,10 +31,12 @@
 #include <kmessagebox.h>
 
 // KSpread
-#include "DataManipulators.h"
 #include "Sheet.h"
 #include "View.h"
 #include "Doc.h"
+
+// commands
+#include "commands/DataManipulators.h"
 
 #include "SubtotalDialog.h"
 

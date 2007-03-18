@@ -27,12 +27,14 @@
 #include "Canvas.h"
 #include "Cell.h"
 #include "Doc.h"
-#include "Manipulator.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "View.h"
+
+// commands
+#include "commands/Manipulator.h"
 
 #include <kcombobox.h>
 #include <kdebug.h>

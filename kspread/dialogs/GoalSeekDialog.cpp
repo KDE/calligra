@@ -33,7 +33,9 @@
 #include "Sheet.h"
 #include "Util.h"
 #include "View.h"
-#include "DataManipulators.h"
+
+// commands
+#include "commands/DataManipulators.h"
 
 #include <kdebug.h>
 #include <klocale.h>

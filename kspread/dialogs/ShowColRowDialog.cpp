@@ -34,9 +34,11 @@
 #include "Doc.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
-#include "RowColumnManipulators.h"
 #include "Sheet.h"
 #include "View.h"
+
+// commands
+#include "commands/RowColumnManipulators.h"
 
 // Local
 #include "ShowColRowDialog.h"

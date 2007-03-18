@@ -19,11 +19,16 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/inter
 
 ########### next target ###############
 SET (commands_DIR_SRCS
+	commands/DataManipulators.cpp
 	commands/DefinePrintRangeCommand.cpp
 	commands/EmbeddedObjectCommands.cpp
 	commands/LinkCommand.cpp
+	commands/Manipulator.cpp
 	commands/PaperLayoutCommand.cpp
+	commands/RowColumnManipulators.cpp
 	commands/SheetCommands.cpp
+	commands/SortManipulator.cpp
+	commands/StyleManipulators.cpp
 	commands/UndoWrapperCommand.cpp
 	)
 
@@ -100,7 +105,6 @@ SET (kspreadcommon_LIB_SRCS
 	Condition.cpp
 	Currency.cpp
 	Damages.cpp
-	DataManipulators.cpp
 	DependencyManager.cpp
 	Digest.cpp
 	Doc.cpp
@@ -114,7 +118,6 @@ SET (kspreadcommon_LIB_SRCS
 	GenValidationStyle.cpp
 	Handler.cpp
 	Localization.cpp
-	Manipulator.cpp
 	Map.cpp
 	MapAdaptor.cpp
 # 	Numformat.cpp
@@ -123,17 +126,14 @@ SET (kspreadcommon_LIB_SRCS
 	RecalcManager.cpp
 	Region.cpp
 	RowColumnFormat.cpp
-	RowColumnManipulators.cpp
 	Selection.cpp
 	Sheet.cpp
 	SheetAdaptor.cpp
 	SheetPrint.cpp
 	SheetView.cpp
-	SortManipulator.cpp
 	RectStorage.cpp
 	Style.cpp
 	StyleManager.cpp
-	StyleManipulators.cpp
 	StyleStorage.cpp
 	Toolbox.cpp
 	Undo.cpp
