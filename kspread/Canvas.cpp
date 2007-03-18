@@ -1000,7 +1000,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
         QPointF move( objectRect( false ).topLeft() - d->m_moveStartPosMouse );
         if ( move != QPointF( 0, 0 ) )
         {
-          KCommand *cmd= sheet->moveObject( view(), move.x(), move.y() );
+          QUndoCommand *cmd= sheet->moveObject( view(), move.x(), move.y() );
           if(cmd)
             doc()->addCommand( cmd );
         } else

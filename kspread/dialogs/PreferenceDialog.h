@@ -120,7 +120,9 @@ protected:
   QComboBox *typeCalc;
   QComboBox *typeOfMove;
   QCheckBox *msgError;
+#if 0
   KIntNumInput* m_undoRedoLimit;
+#endif
   bool comboChanged;
   int m_oldNbRedo;
 } ;

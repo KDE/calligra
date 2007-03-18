@@ -24,12 +24,11 @@
 #include <QList>
 #include <QRect>
 #include <QString>
+#include <QUndoCommand>
 
 #include <KoPageLayout.h>
 #include <KoQueryTrader.h>
 #include <KoUnit.h>
-
-#include <kcommand.h>
 
 #include "Object.h"
 #include "Sheet.h" // for Sheet::LayoutDirection
@@ -47,25 +46,23 @@ class UndoAction;
 
 To implement undo and redo functionality, every possible action
 by the user for editing and manipulating the document is encapsulated
-in a command (based on KCommand).
+in a command (based on QUndoCommand).
 There is one command class (which will be instantiated) for every unique
-action. You need to reimplement the execute() and unexecute() methods
-of KCommand.
+action. You need to reimplement the redo() and undo() methods
+of QUndoCommand.
 
 Each command is created from the user interface, and then added
-to the command history (see Doc::commandHistory) using
-Doc::addCommand method. Because the command is not immediately
-executed, you also need to call the execute() method of that command.
+to the command history using Doc::addCommand method. The command is
+immediately executed, if you add it.
 This is an example of typical use of command:
 
 \code
-KCommand* command = new RenameSheetCommand( sheet, name );
+QUndoCommand* command = new RenameSheetCommand( sheet, name );
 doc->addCommand( command );
-command->execute();
 \endcode
 
 Then whenever the user triggers an "undo", the corresponding
-unexecute() method of the command is called by the undo action,
+undo() method of the command is called by the undo action,
 thereby reverting the previously executed command. Similar thing
 happens for the "redo".
 
@@ -79,22 +76,21 @@ Alphabetical list of commands:
 
 
 \sa Doc::addCommand
-\sa KoCommandHistory
 
 */
 
 /**
  * Class UndoWrapperCommand is used to help migration from custom
- * UndoAction to KCommand-based system.
+ * UndoAction to QUndoCommand-based system.
  * See Doc::addCommand for more information.
  */
-class UndoWrapperCommand : public KCommand
+class UndoWrapperCommand : public QUndoCommand
 {
 public:
   explicit UndoWrapperCommand( UndoAction* undoAction );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -107,13 +103,13 @@ protected:
  * into one cell.
  * \deprecated Use MergeManipulator
  */
-class KDE_DEPRECATED MergeCellCommand : public KCommand
+class KDE_DEPRECATED MergeCellCommand : public QUndoCommand
 {
 public:
   MergeCellCommand( const Cell& cell, int colSpan, int rowSpan );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -130,13 +126,13 @@ protected:
  * Class DissociateCellCommand implements a command for breaking merged cells.
  * \deprecated Use MergeManipulator
  */
-class KDE_DEPRECATED DissociateCellCommand : public KCommand
+class KDE_DEPRECATED DissociateCellCommand : public QUndoCommand
 {
 public:
   explicit DissociateCellCommand( const Cell& cell );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -152,13 +148,13 @@ protected:
  * \sa Sheet::setSheetName
  */
 
-class RenameSheetCommand : public KCommand
+class RenameSheetCommand : public QUndoCommand
 {
 public:
   RenameSheetCommand( Sheet* sheet, const QString &name );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -167,13 +163,13 @@ protected:
   QString newName;
 };
 
-class HideSheetCommand : public KCommand
+class HideSheetCommand : public QUndoCommand
 {
 public:
   explicit HideSheetCommand( Sheet* sheet );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -181,13 +177,13 @@ protected:
   QString sheetName;
 };
 
-class ShowSheetCommand : public KCommand
+class ShowSheetCommand : public QUndoCommand
 {
 public:
   explicit ShowSheetCommand( Sheet* sheet );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -196,13 +192,13 @@ protected:
 };
 
 
-class AddSheetCommand : public KCommand
+class AddSheetCommand : public QUndoCommand
 {
 public:
   explicit AddSheetCommand( Sheet* sheet );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -211,13 +207,13 @@ protected:
 };
 
 
-class RemoveSheetCommand : public KCommand
+class RemoveSheetCommand : public QUndoCommand
 {
 public:
   explicit RemoveSheetCommand( Sheet* sheet );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -230,7 +226,7 @@ protected:
  * Class SheetPropertiesCommand implements a command for changing sheet properties.
  */
 
-class SheetPropertiesCommand : public KCommand
+class SheetPropertiesCommand : public QUndoCommand
 {
 public:
   SheetPropertiesCommand( Doc* doc, Sheet* sheet );
@@ -246,8 +242,8 @@ public:
   void setLcMode( bool b );
   void setCapitalizeFirstLetter( bool b );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -267,13 +263,13 @@ protected:
 };
 
 
-class DefinePrintRangeCommand : public KCommand
+class DefinePrintRangeCommand : public QUndoCommand
 {
 public:
   explicit DefinePrintRangeCommand( Sheet* sheet );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -283,13 +279,13 @@ protected:
 };
 
 
-class PaperLayoutCommand : public KCommand
+class PaperLayoutCommand : public QUndoCommand
 {
 public:
   explicit PaperLayoutCommand( Sheet* sheet );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -322,13 +318,13 @@ protected:
 
 };
 
-class LinkCommand : public KCommand
+class LinkCommand : public QUndoCommand
 {
 public:
   LinkCommand( const Cell& cell, const QString& text, const QString& link );
 
-  virtual void execute();
-  virtual void unexecute();
+  virtual void redo();
+  virtual void undo();
   virtual QString name() const;
 
 protected:
@@ -341,14 +337,14 @@ protected:
 };
 
 
-class ChangeObjectGeometryCommand : public KCommand
+class ChangeObjectGeometryCommand : public QUndoCommand
 {
   public:
     ChangeObjectGeometryCommand( EmbeddedObject *_obj, const QPointF &_m_diff, const QSizeF &_r_diff );
     ~ChangeObjectGeometryCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    virtual void redo();
+    virtual void undo();
     virtual QString name() const;
 
   protected:
@@ -358,14 +354,14 @@ class ChangeObjectGeometryCommand : public KCommand
     Doc *doc;
 };
 
-class RemoveObjectCommand : public KCommand
+class RemoveObjectCommand : public QUndoCommand
 {
   public:
     explicit RemoveObjectCommand( EmbeddedObject *_obj, bool _cut = false );
     ~RemoveObjectCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    virtual void redo();
+    virtual void undo();
     virtual QString name() const;
 
   protected:
@@ -375,7 +371,7 @@ class RemoveObjectCommand : public KCommand
     bool cut;
 };
 
-class InsertObjectCommand : public KCommand
+class InsertObjectCommand : public QUndoCommand
 {
   public:
     InsertObjectCommand( const QRectF& _geometry, KoDocumentEntry&, Canvas *_canvas ); //child
@@ -383,8 +379,8 @@ class InsertObjectCommand : public KCommand
     InsertObjectCommand( const QRectF& _geometry, KUrl& _file, Canvas *_canvas ); //picture
     ~InsertObjectCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    virtual void redo();
+    virtual void undo();
     virtual QString name() const;
 
   protected:
@@ -398,13 +394,13 @@ class InsertObjectCommand : public KCommand
     EmbeddedObject *obj;
 };
 
-class RenameNameObjectCommand : public KNamedCommand
+class RenameNameObjectCommand : public QUndoCommand
 {
 public:
     RenameNameObjectCommand( const QString &_name, const QString &_objectName, EmbeddedObject *_obj, Doc *_doc );
     ~RenameNameObjectCommand();
-    void execute();
-    void unexecute();
+    void redo();
+    void undo();
 protected:
     QString oldObjectName, newObjectName;
     EmbeddedObject *object;
@@ -413,7 +409,7 @@ protected:
 };
 
 
-class GeometryPropertiesCommand : public KNamedCommand
+class GeometryPropertiesCommand : public QUndoCommand
 {
 public:
     enum KgpType { ProtectSize, KeepRatio};
@@ -423,8 +419,8 @@ public:
                                   bool newValue, KgpType type, Doc *_doc );
     ~GeometryPropertiesCommand();
 
-    virtual void execute();
-    virtual void unexecute();
+    virtual void redo();
+    virtual void undo();
 
 protected:
     QList<bool> m_oldValue;
@@ -434,15 +430,15 @@ protected:
     Doc *m_doc;
 };
 
-class MoveObjectByCmd : public KNamedCommand
+class MoveObjectByCmd : public QUndoCommand
 {
 public:
     MoveObjectByCmd( const QString &_name, const QPointF &_diff, QList<EmbeddedObject*> &_objects,
                Doc *_doc, Sheet *m_page );
     ~MoveObjectByCmd();
 
-    virtual void execute();
-    virtual void unexecute();
+    virtual void redo();
+    virtual void undo();
 
 protected:
 

@@ -25,8 +25,6 @@
 
 #include <GeneralProperty.h>
 
-class KCommand;
-
 namespace KSpread
 {
 
@@ -50,7 +48,7 @@ public:
     explicit PropertyEditor( QWidget *parent = 0, const char *name = 0, Sheet *page = 0, Doc *doc = 0 );
     ~PropertyEditor();
 
-    KCommand * getCommand();
+    void executeCommand();
 
 private slots:
     void slotDone();

@@ -25,8 +25,8 @@
 #include <QLinkedList>
 #include <QRect>
 #include <QString>
+#include <QUndoCommand>
 
-#include <kcommand.h>
 #include <klocale.h>
 
 #include "kspread_export.h"
@@ -46,7 +46,7 @@ class Sheet;
  * \class Manipulator
  * \brief Abstract base class for all region related operations.
  */
-class Manipulator : public Region, public KCommand
+class Manipulator : public Region, public QUndoCommand
 {
 public:
   Manipulator();
@@ -71,20 +71,25 @@ public:
   void setCreation(bool creation) { m_creation = creation; }
 
   /**
+   * Executes the actual operation and adds the manipulator to the undo history,
+   * if desired.
+   */
+  void execute();
+  /**
    * Executes the actual operation.
    */
-  virtual void execute();
+  virtual void redo();
   /**
    * Executes the actual operation in reverse order.
    */
-  virtual void unexecute();
+  virtual void undo();
 
   virtual void setArgument(const QString& /*arg*/, const QString& /*val*/) {};
 
   /**
    * Sets reverse mode to \b reverse .
-   * \see execute
-   * \see unexecute
+   * \see redo
+   * \see undo
    */
   virtual void setReverse(bool reverse) { m_reverse = reverse; }
   /**
@@ -150,8 +155,8 @@ private:
  * */
 class KSPREAD_EXPORT MacroManipulator : public Manipulator {
   public:
-    void execute ();
-    void unexecute ();
+    void redo ();
+    void undo ();
     void add (Manipulator *manipulator);
   protected:
     QList<Manipulator *> manipulators;

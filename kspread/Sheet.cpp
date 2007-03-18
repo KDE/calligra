@@ -2732,7 +2732,7 @@ QRectF Sheet::getRealRect( bool all )
 }
 
 // move object for releasemouseevent
-KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
+QUndoCommand* Sheet::moveObject(View *_view, double diffx, double diffy)
 {
     bool createCommand=false;
     MoveObjectByCmd *moveByCmd=0;
@@ -2762,7 +2762,7 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
     return moveByCmd;
 }
 
-KCommand *Sheet::moveObject(View *_view,const QPointF &_move,bool key)
+QUndoCommand* Sheet::moveObject(View *_view,const QPointF &_move,bool key)
 {
     QList<EmbeddedObject*> _objects;
     MoveObjectByCmd *moveByCmd=0;

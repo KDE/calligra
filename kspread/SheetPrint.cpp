@@ -917,7 +917,7 @@ void SheetPrint::definePrintRange( Selection* selection )
 {
     if ( !selection->isSingular() )
     {
-        KCommand* command = new DefinePrintRangeCommand( m_pSheet );
+        QUndoCommand* command = new DefinePrintRangeCommand( m_pSheet );
         m_pDoc->addCommand( command );
         setPrintRange( selection->lastRange() );
     }
@@ -925,7 +925,7 @@ void SheetPrint::definePrintRange( Selection* selection )
 
 void SheetPrint::resetPrintRange ()
 {
-    KCommand* command = new DefinePrintRangeCommand( m_pSheet );
+    QUndoCommand* command = new DefinePrintRangeCommand( m_pSheet );
     m_pDoc->addCommand( command );
     setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
 }

@@ -40,9 +40,11 @@
 #include "Style.h"
 #include "Global.h"
 
-class QWidget;
-class QPainter;
 class QDomElement;
+class QPainter;
+class QUndoCommand;
+class QWidget;
+
 class KPrinter;
 class KoDocumentEntry;
 class KoStyleStack;
@@ -50,7 +52,6 @@ class KoGenStyles;
 class KoOasisLoadingContext;
 class KoOasisSettings;
 class KoOasisStyles;
-class KCommand;
 class KoPicture;
 class KoXmlWriter;
 
@@ -445,14 +446,14 @@ public:
      * Moves the selected object.
      * \return command for undo
      */
-    KCommand *moveObject(View *_view, double diffx, double diffy);
+    QUndoCommand *moveObject(View *_view, double diffx, double diffy);
 
     /**
      * \ingroup Embedding
      * Moves the selected object.
      * \return command for undo
      */
-    KCommand *moveObject(View *m_view,const QPointF &_move,bool key);
+    QUndoCommand *moveObject(View *m_view,const QPointF &_move,bool key);
 
     /**
      * \ingroup Embedding

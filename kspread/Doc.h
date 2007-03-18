@@ -45,9 +45,6 @@ class QDomDocument;
 class QObject;
 class QPainter;
 
-// class DCOPObject;
-class KCommand;
-class KCommandHistory;
 class KCompletion;
 class K3SpellConfig;
 
@@ -104,7 +101,9 @@ class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( bool showStatusBar READ showStatusBar WRITE setShowStatusBar )
   Q_PROPERTY( bool showFormulaBar READ showFormulaBar WRITE setShowFormulaBar )
   Q_PROPERTY( bool showTabBar READ showTabBar WRITE setShowTabBar )
+#if 0 // UNDOREDOLIMIT
   Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
+#endif
 
 public:
   /**
@@ -214,29 +213,17 @@ public:
    * would not be executed.
    * @param command the command which will be added
    */
-  void addCommand( KCommand* command );
+  void addCommand( QUndoCommand* command );
 
   /**
    * \ingroup Operations
    * Adds an undo object @p command . This is the same as addCommand, except
    * that it accepts Undo instance. Once every undo object
-   * is converted to KCommand, this function will be obsoleted.
+   * is converted to QUndoCommand, this function will be obsoleted.
    * @param command the action which will be added
-   * @see addCommand(KCommand*)
+   * @see addCommand(QUndoCommand*)
    */
   void addCommand( UndoAction* command );
-
-  /**
-   * \ingroup Operations
-   * Undoes the last operation.
-   */
-  void undo();
-
-  /**
-   * \ingroup Operations
-   * Redoes the last undo.
-   */
-  void redo();
 
   /**
    * \ingroup Operations
@@ -250,17 +237,6 @@ public:
    * Returns true if undo buffer is locked.
    */
   bool undoLocked() const;
-
-  /**
-   * \ingroup Operations
-   * @return the command history for the document. This is used
-   * in View for updating the actions (i.e through
-   * signal KCommandHistory::commandExecuted)
-   * @see addCommand
-   * @see undo
-   * @see redo
-   */
-  KCommandHistory* commandHistory();
 
   /**
    * \ingroup Operations
@@ -738,10 +714,10 @@ public:
   void repaint( EmbeddedObject* );
   void repaint( const QRectF& );
 
-  virtual void addShell( KoMainWindow *shell );
-
+#if 0 // UNDOREDOLIMIT
   int undoRedoLimit() const;
   void setUndoRedoLimit(int _val);
+#endif
 
     /**
      * Sets the reference year.
@@ -818,9 +794,6 @@ signals:
   void damagesFlushed( const QList<Damage*>& damages );
 
 protected slots:
-  void commandExecuted();
-  void documentRestored();
-
   virtual void openTemplate( const KUrl& url );
 
 protected:

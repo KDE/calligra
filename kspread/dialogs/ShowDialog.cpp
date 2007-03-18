@@ -22,19 +22,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QLayout>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <klocale.h>
-#include <q3listbox.h>
 #include <QLabel>
+#include <QLayout>
+#include <QUndoCommand>
+#include <QVBoxLayout>
+//Added by qt3to4:
+#include <q3listbox.h>
 
-#include <kcommand.h>
+#include <klocale.h>
 
-#include "View.h"
+#include "Commands.h"
 #include "Doc.h"
 #include "Map.h"
-#include "Commands.h"
+#include "View.h"
 
 #include "ShowDialog.h"
 
@@ -105,17 +105,15 @@ void ShowDialog::slotOk()
         return;
 
     Sheet *sheet;
-    KMacroCommand *macroUndo=new KMacroCommand( i18n("Show Sheet") );
+    m_pView->doc()->beginMacro( i18n("Show Sheet") );
     for ( QStringList::Iterator it = listSheet.begin(); it != listSheet.end(); ++it )
     {
         sheet=m_pView->doc()->map()->findSheet( *it );
         if (!sheet)
             continue;
-        KCommand* command = new ShowSheetCommand( sheet );
-        macroUndo->addCommand( command );
+        m_pView->doc()->addCommand( new ShowSheetCommand( sheet ) );
     }
-    m_pView->doc()->addCommand( macroUndo );
-    macroUndo->execute();
+    m_pView->doc()->endMacro();
     m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }

@@ -591,12 +591,6 @@ public slots:
     void spellCheckerReplaceAll( const QString &,  const QString &);
     void startKSpell();
 
-    /**
-     * Updates the view and the action. This is typically connected
-     * to KoCommandHistory::commandExecuted() signal.
-     */
-    void commandExecuted();
-
     virtual int leftBorder() const;
     virtual int rightBorder() const;
     virtual int topBorder() const;

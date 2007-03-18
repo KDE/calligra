@@ -422,9 +422,11 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
 
     m_oldNbRedo = config->group( "Misc" ).readEntry( "UndoRedo", m_oldNbRedo );
 
+#if 0 // UNDOREDOLIMIT
   m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
   m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
   m_undoRedoLimit->setRange(10, 60, 1);
+#endif
 
 
   QLabel *label=new QLabel(i18n("&Completion mode:"), tmpQGroupBox);
@@ -577,7 +579,9 @@ switch( m_pView->doc()->getTypeOfCalc())
 
 void miscParameters::slotDefault()
 {
+#if 0 // UNDOREDOLIMIT
   m_undoRedoLimit->setValue(30);
+#endif
   valIndent->setValue( KoUnit::toUserValue( 10.0, indentUnit) );
   typeCompletion->setCurrentIndex(3);
   typeOfMove->setCurrentIndex(0);
@@ -590,6 +594,7 @@ void miscParameters::apply()
 {
     kDebug() << "Applying misc preferences" << endl;
 
+#if 0 // UNDOREDOLIMIT
     int const newUndo=m_undoRedoLimit->value();
     if( newUndo!=m_oldNbRedo )
     {
@@ -597,6 +602,7 @@ void miscParameters::apply()
         m_pView->doc()->setUndoRedoLimit(newUndo);
         m_oldNbRedo=newUndo;
     }
+#endif
 
     KConfigGroup parameterGroup = config->group( "Parameters" );
     KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;

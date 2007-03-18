@@ -125,7 +125,6 @@ public:
 
   // for undo/redo
   int undoLocked;
-  KCommandHistory* commandHistory;
 
   // true if loading is in process, otherwise false.
   // This flag is used to avoid updates etc. during loading.
@@ -224,15 +223,10 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   setComponentData( Factory::global(), false );
   setTemplateType( "kspread_template" );
 
-//   d->dcop = 0;
   d->isLoading = false;
   d->numOperations = 1; // don't start repainting before the GUI is done...
 
   d->undoLocked = 0;
-
-  d->commandHistory = new KCommandHistory( actionCollection() );
-  connect( d->commandHistory, SIGNAL( commandExecuted(KCommand *) ), SLOT( commandExecuted() ) );
-  connect( d->commandHistory, SIGNAL( documentRestored() ), SLOT( documentRestored() ) );
 
 
   // Make us scriptable if the document has a name
@@ -278,11 +272,6 @@ Doc::~Doc()
   //don't save config when kword is embedded into konqueror
   if(isReadWrite())
     saveConfig();
-
-//   delete d->dcop;
-//   d->s_docs.removeAll( this );
-
-  delete d->commandHistory;
 
   delete d->spellConfig;
 
@@ -399,8 +388,10 @@ void Doc::initConfig()
     const int page = config->group( "KSpread Page Layout" ).readEntry( "Default unit page", 0 );
     setUnit( KoUnit( (KoUnit::Unit) page ) );
 
+#if 0 // UNDOREDOLIMIT
     const int undo = config->group( "Misc" ).readEntry( "UndoRedo", 30 );
     setUndoRedoLimit( undo );
+#endif
 
     const int zoom = config->group( "Parameters" ).readEntry( "Zoom", 100 );
     setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
@@ -1485,12 +1476,10 @@ void Doc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
     }
 }
 
-void Doc::addCommand( KCommand* command )
+void Doc::addCommand( QUndoCommand* command )
 {
-  if (undoLocked()) return;
-
-  d->commandHistory->addCommand( command, false );
-  setModified( true );
+    if (undoLocked()) return;
+    KoDocument::addCommand( command );
 }
 
 void Doc::addCommand( UndoAction* undo )
@@ -1501,30 +1490,6 @@ void Doc::addCommand( UndoAction* undo )
   setModified( true );
 }
 
-void Doc::undo()
-{
-  setUndoLocked( true );
-  d->commandHistory->undo();
-  setUndoLocked( false );
-}
-
-void Doc::redo()
-{
-  setUndoLocked( true );
-  d->commandHistory->redo();
-  setUndoLocked( false );
-}
-
-void Doc::commandExecuted()
-{
-  setModified( true );
-}
-
-void Doc::documentRestored()
-{
-  setModified( false );
-}
-
 void Doc::setUndoLocked( bool lock )
 {
   lock ? d->undoLocked++ : d->undoLocked--;
@@ -1533,11 +1498,6 @@ void Doc::setUndoLocked( bool lock )
 bool Doc::undoLocked() const
 {
   return (d->undoLocked > 0);
-}
-
-KCommandHistory* Doc::commandHistory()
-{
-  return d->commandHistory;
 }
 
 void Doc::enableUndo( bool _b )
@@ -2268,12 +2228,7 @@ void Doc::repaint( const QRectF& rect )
 }
 
 
-void Doc::addShell( KoMainWindow *shell )
-{
-  connect( shell, SIGNAL( documentSaved() ), d->commandHistory, SLOT( documentSaved() ) );
-  KoDocument::addShell( shell );
-}
-
+#if 0 // UNDOREDOLIMIT
 int Doc::undoRedoLimit() const
 {
   return d->commandHistory->undoLimit();
@@ -2284,6 +2239,7 @@ void Doc::setUndoRedoLimit(int val)
   d->commandHistory->setUndoLimit(val);
   d->commandHistory->setRedoLimit(val);
 }
+#endif
 
 void Doc::setReferenceYear( int year )
 {

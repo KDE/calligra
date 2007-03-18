@@ -72,9 +72,9 @@ PropertyEditor::~PropertyEditor()
 }
 
 
-KCommand * PropertyEditor::getCommand()
+void PropertyEditor::executeCommand()
 {
-    KMacroCommand *macro = 0;
+    m_doc->beginMacro( i18n( "Apply Styles" ) );
 
 //     if ( m_penProperty )
 //     {
@@ -85,12 +85,7 @@ KCommand * PropertyEditor::getCommand()
 //
 //             KoPenCmd *cmd = new KoPenCmd( i18n( "Apply Styles" ), m_objects, pen, m_doc, m_page, change );
 //
-//             if ( !macro )
-//             {
-//                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
-//             }
-//
-//             macro->addCommand( cmd );
+//             m_doc->addCommand( cmd );
 //         }
 //     }
 //
@@ -103,12 +98,7 @@ KCommand * PropertyEditor::getCommand()
 //
 //             KPrBrushCmd *cmd = new KPrBrushCmd( i18n( "Apply Styles" ), m_objects, brush, m_doc, m_page, change );
 //
-//             if ( !macro )
-//             {
-//                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
-//             }
-//
-//             macro->addCommand( cmd );
+//             m_doc->addCommand( cmd );
 //         }
 //     }
 //
@@ -122,12 +112,7 @@ KCommand * PropertyEditor::getCommand()
 //
 //             KPrRectValueCmd *cmd = new KPrRectValueCmd( i18n( "Apply Styles" ), m_objects, rectValue, m_doc, m_page, change );
 //
-//             if ( !macro )
-//             {
-//                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
-//             }
-//
-//             macro->addCommand( cmd );
+//             m_doc->addCommand( cmd );
 //         }
 //     }
 //
@@ -142,12 +127,7 @@ KCommand * PropertyEditor::getCommand()
 //             KPrPolygonSettingCmd *cmd = new KPrPolygonSettingCmd( i18n("Apply Styles"), polygonSettings,
 //                                                             m_objects, m_doc, m_page, change );
 //
-//             if ( !macro )
-//             {
-//                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
-//             }
-//
-//             macro->addCommand( cmd );
+//             m_doc->addCommand( cmd );
 //         }
 //     }
 //
@@ -159,12 +139,7 @@ KCommand * PropertyEditor::getCommand()
 //         {
 //             KPrPieValueCmd *cmd = new KPrPieValueCmd( i18n("Apply Styles"), m_pieProperty->getPieValues(),
 //                                                 m_objects, m_doc, m_page, change );
-//             if ( !macro )
-//             {
-//                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
-//             }
-//
-//             macro->addCommand( cmd );
+//             m_doc->addCommand( cmd );
 //         }
 //     }
 //
@@ -176,12 +151,7 @@ KCommand * PropertyEditor::getCommand()
 //         {
 //             KPrPictureSettingCmd *cmd = new KPrPictureSettingCmd( i18n("Apply Styles"), m_pictureProperty->getPictureSettings(),
 //                                                             m_objects, m_doc, m_page, change );
-//             if ( !macro )
-//             {
-//                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
-//             }
-//
-//             macro->addCommand( cmd );
+//             m_doc->addCommand( cmd );
 //         }
 //     }
 //
@@ -196,12 +166,7 @@ KCommand * PropertyEditor::getCommand()
 //                 KPrProtectContentCommand * cmd = new KPrProtectContentCommand( i18n( "Apply Styles" ), m_objects,
 //                                                                                m_textProperty->getProtectContent(),
 //                                                                                m_doc );
-//                 if ( !macro )
-//                 {
-//                     macro = new KMacroCommand( i18n( "Apply Properties" ) );
-//                 }
-//
-//                 macro->addCommand( cmd );
+//                 m_doc->addCommand( cmd );
 //             }
 //
 //             if ( change & KPrTextProperty::Margins )
@@ -210,12 +175,7 @@ KCommand * PropertyEditor::getCommand()
 //                                                                           m_textProperty->getMarginsStruct(),
 //                                                                           m_doc, m_page );
 //
-//                 if ( !macro )
-//                 {
-//                     macro = new KMacroCommand( i18n( "Apply Properties" ) );
-//                 }
-//
-//                 macro->addCommand( cmd );
+//                 m_doc->addCommand( cmd );
 //             }
 //         }
 //     }
@@ -230,42 +190,27 @@ KCommand * PropertyEditor::getCommand()
 
             if ( change & GeneralProperty::Name )
             {
-                KCommand *cmd = new RenameNameObjectCommand( i18n( "Name Object" ), generalValue.m_name,
+                QUndoCommand *cmd = new RenameNameObjectCommand( i18n( "Name Object" ), generalValue.m_name,
                                                           m_objects.at( 0 ), m_doc );
 
-                if ( !macro )
-                {
-                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
-                }
-
-                macro->addCommand( cmd );
+                m_doc->addCommand( cmd );
             }
 
             if ( change & GeneralProperty::Protect )
             {
-                KCommand *cmd= new GeometryPropertiesCommand( i18n( "Protect Object" ), m_objects,
+                QUndoCommand *cmd= new GeometryPropertiesCommand( i18n( "Protect Object" ), m_objects,
                                                                  generalValue.m_protect == STATE_ON,
                                                                  GeometryPropertiesCommand::ProtectSize,m_doc );
 
-                if ( !macro )
-                {
-                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
-                }
-
-                macro->addCommand( cmd );
+                m_doc->addCommand( cmd );
             }
 
             if ( change & GeneralProperty::KeepRatio )
             {
-                KCommand *cmd= new GeometryPropertiesCommand( i18n( "Keep Ratio" ), m_objects,
+                QUndoCommand *cmd= new GeometryPropertiesCommand( i18n( "Keep Ratio" ), m_objects,
                                                                  generalValue.m_keepRatio == STATE_ON,
                                                                  GeometryPropertiesCommand::KeepRatio,m_doc );
-                if ( !macro )
-                {
-                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
-                }
-
-                macro->addCommand( cmd );
+                m_doc->addCommand( cmd );
             }
 
             if ( change & GeneralProperty::Left
@@ -273,11 +218,6 @@ KCommand * PropertyEditor::getCommand()
                  || change & GeneralProperty::Width
                  || change & GeneralProperty::Height )
             {
-                if ( !macro )
-                {
-                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
-                }
-
                 foreach ( EmbeddedObject* object, m_objects )
                 {
                     QRectF oldRect = object->geometry()/*getRect()*/;
@@ -295,16 +235,16 @@ KCommand * PropertyEditor::getCommand()
                     if ( change & GeneralProperty::Height )
                         newRect.setHeight( generalValue.m_rect.height() );
 
-                    KCommand *cmd = new ChangeObjectGeometryCommand(   object,  newRect.topLeft() - oldRect.topLeft(),
+                    QUndoCommand *cmd = new ChangeObjectGeometryCommand(   object,  newRect.topLeft() - oldRect.topLeft(),
                                                     newRect.size() - oldRect.size() );
 
-                    macro->addCommand( cmd );
+                    m_doc->addCommand( cmd );
                 }
             }
         }
     }
 
-    return macro;
+    m_doc->endMacro();
 }
 
 

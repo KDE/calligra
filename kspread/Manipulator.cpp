@@ -60,7 +60,7 @@ using namespace KSpread;
 
 Manipulator::Manipulator()
   : Region(),
-    KCommand(),
+    QUndoCommand(),
     m_sheet(0),
     m_creation(true),
     m_reverse(false),
@@ -76,9 +76,20 @@ Manipulator::~Manipulator()
 
 void Manipulator::execute()
 {
+    if ( !m_firstrun )
+        return;
+    // registering in undo history?
+    if ( m_register )
+        m_sheet->doc()->addCommand( this );
+    else
+        redo();
+}
+
+void Manipulator::redo()
+{
   if (!m_sheet)
   {
-    kWarning() << "Manipulator::execute(): No explicit m_sheet is set. "
+    kWarning() << "Manipulator::redo(): No explicit m_sheet is set. "
                 << "Manipulating all sheets of the region." << endl;
   }
 
@@ -95,16 +106,15 @@ void Manipulator::execute()
       return;
     }
   }
-  
+
   bool successfully = true;
   successfully = preProcessing();
   if (!successfully)
   {
-    kWarning() << "Manipulator::execute(): preprocessing was not successful!" << endl;
+    kWarning() << "Manipulator::redo(): preprocessing was not successful!" << endl;
     return;   // do nothing if pre-processing fails
   }
 
-  m_sheet->doc()->setModified(true);
   m_sheet->doc()->setUndoLocked(true);
   m_sheet->doc()->emitBeginOperation();
   m_sheet->setRegionPaintDirty( *this );
@@ -113,34 +123,27 @@ void Manipulator::execute()
   successfully = mainProcessing();
   if (!successfully)
   {
-    kWarning() << "Manipulator::execute(): processing was not successful!" << endl;
+    kWarning() << "Manipulator::redo(): processing was not successful!" << endl;
   }
 
   successfully = true;
   successfully = postProcessing();
   if (!successfully)
   {
-    kWarning() << "Manipulator::execute(): postprocessing was not successful!" << endl;
+    kWarning() << "Manipulator::redo(): postprocessing was not successful!" << endl;
   }
 
   m_sheet->doc()->emitEndOperation();
   m_sheet->doc()->setUndoLocked(false);
 
-  // add me to undo if needed
-  if (m_firstrun && m_register)
-  {
-    // addCommand itself checks for undo lock
-    m_sheet->doc()->addCommand (this);
-    // if we add something to undo, then the document surely is modified ...
-    m_sheet->doc()->setModified (true);
-  }
   m_firstrun = false;
 }
 
-void Manipulator::unexecute()
+void Manipulator::undo()
 {
+    kDebug() << k_funcinfo << " " << m_name << endl;
   m_reverse = !m_reverse;
-  execute();
+  redo();
   m_reverse = !m_reverse;
 }
 
@@ -194,25 +197,25 @@ bool Manipulator::mainProcessing()
   class MacroManipulator
 ****************************************************************************/
 
-void MacroManipulator::execute ()
+void MacroManipulator::redo ()
 {
   QList<Manipulator *>::iterator it;
   for (it = manipulators.begin(); it != manipulators.end(); ++it)
-    (*it)->execute ();
-  // add me to undo if needed - same as in Manipulator::execute
+    (*it)->redo ();
+  // add me to undo if needed - same as in Manipulator::redo
   if (m_firstrun && m_register)
   {
+    m_register = false;
     m_sheet->doc()->addCommand (this);
-    m_sheet->doc()->setModified (true);
   }
   m_firstrun = false;
 }
 
-void MacroManipulator::unexecute ()
+void MacroManipulator::undo ()
 {
   QList<Manipulator *>::iterator it;
   for (it = manipulators.begin(); it != manipulators.end(); ++it)
-    (*it)->unexecute ();
+    (*it)->undo ();
 }
 
 void MacroManipulator::add (Manipulator *manipulator)
@@ -467,7 +470,7 @@ bool MergeManipulator::preProcessing()
       // processing each region element.
       if (!m_mergeHorizontal && !m_mergeVertical)
       {
-        m_unmerger->execute();
+        m_unmerger->redo();
       }
     }
   }
@@ -483,11 +486,11 @@ bool MergeManipulator::postProcessing()
       // restore the old merge status
       if (m_mergeHorizontal || m_mergeVertical)
       {
-        m_unmerger->execute();
+        m_unmerger->redo();
       }
       else
       {
-        m_unmerger->unexecute();
+        m_unmerger->undo();
       }
     }
   }

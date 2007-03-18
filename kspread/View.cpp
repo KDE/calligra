@@ -1700,12 +1700,6 @@ View::View( QWidget *_parent, Doc *_doc )
     else
       setXMLFile( "kspread_readonly.rc" );
 
-    // build the DCOP object
-//     dcopObject();
-
-    connect( doc()->commandHistory(), SIGNAL( commandExecuted(KCommand *) ),
-        this, SLOT( commandExecuted() ) );
-
     // GUI Initializations
     initView();
 
@@ -3820,7 +3814,6 @@ void View::sheetProperties()
         command->setLcMode( dlg->lcMode() );
         command->setCapitalizeFirstLetter( dlg->capitalizeFirstLetter() );
         doc()->addCommand( command );
-        command->execute();
     }
 
     delete dlg;
@@ -3845,7 +3838,7 @@ void View::insertSheet()
   doc()->emitBeginOperation( false );
   d->canvas->closeEditor();
   Sheet * t = doc()->map()->createSheet();
-  KCommand* command = new AddSheetCommand( t );
+  QUndoCommand* command = new AddSheetCommand( t );
   doc()->addCommand( command );
   updateEditWidget();
   setActiveSheet( t );
@@ -3877,9 +3870,8 @@ void View::hideSheet()
 
   doc()->emitBeginOperation(false);
 
-  KCommand* command = new HideSheetCommand( activeSheet() );
+  QUndoCommand* command = new HideSheetCommand( activeSheet() );
   doc()->addCommand( command );
-  command->execute();
 
   doc()->emitEndOperation( d->canvas->visibleCells() );
 
@@ -3926,50 +3918,44 @@ void View::copyAsText()
 
 void View::cutSelection()
 {
-  if ( !d->activeSheet )
-    return;
-  //don't used this function when we edit a cell.
-  doc()->emitBeginOperation(false);
+    if ( !d->activeSheet )
+        return;
+    //don't used this function when we edit a cell.
+    doc()->emitBeginOperation(false);
 
-  if ( canvasWidget()->isObjectSelected() )
-  {
-    canvasWidget()->copyOasisObjects();
+    if ( canvasWidget()->isObjectSelected() )
+    {
+        canvasWidget()->copyOasisObjects();
+        markSelectionAsDirty();
+        doc()->emitEndOperation();
+
+        doc()->beginMacro( i18n( "Cut Objects" ) );
+        foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
+        {
+            if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
+            {
+                RemoveObjectCommand *cmd = new RemoveObjectCommand( object, true );
+                doc()->addCommand( cmd );
+            }
+        }
+        canvasWidget()->setMouseSelectedObject( false );
+        doc()->endMacro();
+
+        return;
+    }
+    if ( !d->canvas->editor() )
+    {
+        d->activeSheet->cutSelection( selection() );
+        calcStatusBarOp();
+        updateEditWidget();
+    }
+    else
+    {
+        d->canvas->editor()->cut();
+    }
+
     markSelectionAsDirty();
     doc()->emitEndOperation();
-
-    KMacroCommand * macroCommand = 0;
-    foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
-    {
-      if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
-      {
-        if( !macroCommand )
-          macroCommand = new KMacroCommand( i18n( "Cut Objects" ) );
-        RemoveObjectCommand *cmd = new RemoveObjectCommand( object, true );
-        macroCommand->addCommand( cmd );
-      }
-    }
-    if ( macroCommand )
-    {
-      doc()->addCommand( macroCommand );
-      canvasWidget()->setMouseSelectedObject( false );
-      macroCommand->execute();
-    }
-
-    return;
-  }
-  if ( !d->canvas->editor())
-  {
-    d->activeSheet->cutSelection( selection() );
-    calcStatusBarOp();
-    updateEditWidget();
-  }
-  else
-  {
-    d->canvas->editor()->cut();
-  }
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
 }
 
 void View::paste()
@@ -4115,19 +4101,22 @@ void View::changeAngle()
 
 void View::setSelectionAngle( int angle )
 {
+    doc()->beginMacro( i18n("Change Angle") );
+
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
-    manipulator->setName( i18n("Change Angle") );
     manipulator->setAngle( angle );
     manipulator->add( *selection() );
-    manipulator->execute();
+    doc()->addCommand( manipulator );
 
     AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator();
     manipulator2->setSheet( d->activeSheet );
     manipulator2->setAdjustColumn(true);
     manipulator2->setAdjustRow(true);
     manipulator2->add( *selection() );
-    manipulator2->execute();
+    doc()->addCommand( manipulator2 );
+
+    doc()->endMacro();
 }
 
 void View::mergeCell()
@@ -4625,7 +4614,6 @@ void View::removeHyperlink()
 
     LinkCommand* command = new LinkCommand( cell, QString(), QString() );
     doc()->addCommand( command );
-    command->execute();
 
   canvasWidget()->setFocus();
   d->editWidget->setText( cell.inputText() );
@@ -4659,7 +4647,6 @@ void View::insertHyperlink()
 
         LinkCommand* command = new LinkCommand( cell, dlg->text(), dlg->link() );
         doc()->addCommand( command );
-        command->execute();
 
         //refresh editWidget
       canvasWidget()->setFocus();
@@ -4854,7 +4841,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
       return;
 
     // Transform the view coordinates to document coordinates
-    QRectF unzoomedRect = doc()->unzoomRectOldF( _geometry );
+    QRectF unzoomedRect = doc()->viewToDocument( _geometry );
     unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
 
     InsertObjectCommand *cmd = 0;
@@ -4867,7 +4854,6 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
       cmd = new InsertObjectCommand( unzoomedRect, _e, d->selection->lastRange(), d->canvas  );
 
     doc()->addCommand( cmd );
-    cmd->execute();
 }
 
 void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
@@ -4876,12 +4862,11 @@ void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
     return;
 
   // Transform the view coordinates to document coordinates
-  QRectF unzoomedRect = doc()->unzoomRectOldF( _geometry );
+  QRectF unzoomedRect = doc()->viewToDocument( _geometry );
   unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
 
   InsertObjectCommand *cmd = new InsertObjectCommand( unzoomedRect, _e, d->canvas );
   doc()->addCommand( cmd );
-  cmd->execute();
 }
 
 QPointF View::markerDocumentPosition()
@@ -4911,7 +4896,6 @@ void View::insertPicture()
 
   InsertObjectCommand *cmd = new InsertObjectCommand( QRectF(markerDocumentPosition(),QSizeF(0,0)) , file, d->canvas );
   doc()->addCommand( cmd );
-  cmd->execute();
 }
 
 void View::slotUpdateChildGeometry( EmbeddedKOfficeObject */*_child*/ )
@@ -5867,24 +5851,17 @@ void View::deleteSelection()
 
 void View::deleteSelectedObjects()
 {
-  KMacroCommand * macroCommand = 0;
-  foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
-  {
-    if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
+    doc()->beginMacro( i18n( "Remove Object" ) );
+    foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
-     // d->activeSheet->setRegionPaintDirty( it.
-      if( !macroCommand )
-        macroCommand = new KMacroCommand( i18n( "Remove Object" ) );
-      RemoveObjectCommand *cmd = new RemoveObjectCommand( object );
-      macroCommand->addCommand( cmd );
+        if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
+        {
+            RemoveObjectCommand *cmd = new RemoveObjectCommand( object );
+            doc()->addCommand( cmd );
+        }
     }
-  }
-  if ( macroCommand )
-  {
-    doc()->addCommand( macroCommand );
     canvasWidget()->setMouseSelectedObject( false );
-    macroCommand->execute();
-  }
+    doc()->endMacro();
 }
 
 void View::adjust()
@@ -6166,13 +6143,7 @@ void View::extraProperties()
 
 void View::propertiesOk()
 {
-    KCommand *cmd = d->m_propertyEditor->getCommand();
-
-    if ( cmd )
-    {
-        cmd->execute();
-        doc()->addCommand( cmd );
-    }
+    d->m_propertyEditor->executeCommand();
 }
 
 void View::styleDialog()
@@ -6536,9 +6507,8 @@ void View::removeSheet()
     }
     doc()->setModified( true );
     Sheet * tbl = activeSheet();
-    KCommand* command = new RemoveSheetCommand( tbl );
+    QUndoCommand* command = new RemoveSheetCommand( tbl );
     doc()->addCommand( command );
-    command->execute();
 
 
 #if 0
@@ -6604,9 +6574,8 @@ void View::slotRename()
       return;
     }
 
-    KCommand* command = new RenameSheetCommand( sheet, newName );
+    QUndoCommand* command = new RenameSheetCommand( sheet, newName );
     doc()->addCommand( command );
-    command->execute();
 
     //sheet->setSheetName( newName );
 
@@ -7143,12 +7112,6 @@ void View::paintUpdates()
      endOperation
   */
   d->canvas->update();
-}
-
-void View::commandExecuted()
-{
-  updateEditWidget();
-  calcStatusBarOp();
 }
 
 void View::initialiseMarkerFromSheet( Sheet* sheet, const QPoint& point )

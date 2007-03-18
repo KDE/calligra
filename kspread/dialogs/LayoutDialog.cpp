@@ -877,10 +877,10 @@ void CellFormatDialog::slotApply()
   }
 
   // (Tomas) TODO: this will be slow !!!
-  // We need to create a manipulator that would act as KMacroCommand,
+  // We need to create a manipulator that would act as macro,
   // but which would also ensure that updates are not painted until everything
   // is updated properly ...
-  KMacroCommand* macroCommand = new KMacroCommand( i18n("Change Format") );
+  m_doc->beginMacro( "Change Format" );
 
   if ( isMerged != positionPage->getMergedCellState() )
   {
@@ -888,9 +888,8 @@ void CellFormatDialog::slotApply()
     {
       Manipulator* manipulator = new MergeManipulator();
       manipulator->setSheet(m_pView->activeSheet());
-      manipulator->setRegisterUndo(false);
       manipulator->add(*m_pView->selection());
-      macroCommand->addCommand( manipulator );
+      m_doc->addCommand( manipulator );
     }
     else
     {
@@ -898,15 +897,13 @@ void CellFormatDialog::slotApply()
       Manipulator* manipulator = new MergeManipulator();
       manipulator->setSheet(m_pView->activeSheet());
       manipulator->setReverse(true);
-      manipulator->setRegisterUndo(false);
       manipulator->add(*m_pView->selection());
-      macroCommand->addCommand( manipulator );
+      m_doc->addCommand( manipulator );
     }
   }
 
   StyleManipulator* manipulator = new StyleManipulator();
   manipulator->setSheet(m_pView->activeSheet());
-  manipulator->setRegisterUndo(false);
   manipulator->add(*m_pView->selection());
   borderPage->apply(manipulator);
   floatPage->apply(manipulator);
@@ -917,7 +914,7 @@ void CellFormatDialog::slotApply()
 
   if (!manipulator->isEmpty())
   {
-    macroCommand->addCommand( manipulator );
+    m_doc->addCommand( manipulator );
   }
   else
   {
@@ -932,7 +929,7 @@ void CellFormatDialog::slotApply()
     // TODO Stefan:
     manipulator->setOldSize(heightSize);
     manipulator->add(*m_pView->selection());
-    macroCommand->addCommand( manipulator );
+    m_doc->addCommand( manipulator );
   }
   if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
   {
@@ -942,11 +939,10 @@ void CellFormatDialog::slotApply()
     // TODO Stefan:
     manipulator->setOldSize(widthSize);
     manipulator->add(*m_pView->selection());
-    macroCommand->addCommand( manipulator );
+    m_doc->addCommand( manipulator );
   }
 
-  macroCommand->execute();
-  m_doc->addCommand( macroCommand );
+  m_doc->endMacro();
 
   // Update the toolbar (bold/italic/font...)
   m_pView->updateEditWidget();

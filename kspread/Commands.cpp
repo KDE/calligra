@@ -38,14 +38,14 @@ UndoWrapperCommand::UndoWrapperCommand( UndoAction* ua )
   undoAction = ua;
 }
 
-void UndoWrapperCommand::execute()
+void UndoWrapperCommand::redo()
 {
   // This is not really safe and functional, but UndoWrapperCommand
   // is a workaround anyway. So leave it as it it (Ariya)
   undoAction->redo();
 }
 
-void UndoWrapperCommand::unexecute()
+void UndoWrapperCommand::undo()
 {
   undoAction->undo();
 }
@@ -80,14 +80,14 @@ QString MergeCellCommand::name() const
     return i18n("Merge Cells %1", rangeName );
 }
 
-void MergeCellCommand::execute()
+void MergeCellCommand::redo()
 {
   Sheet* sheet = cell.sheet();
   if( !sheet ) return;
   sheet->changeMergedCell( cell.column(), cell.row(), colSpan, rowSpan);
 }
 
-void MergeCellCommand::unexecute()
+void MergeCellCommand::undo()
 {
   Sheet* sheet = cell.sheet();
   if( !sheet ) return;
@@ -108,14 +108,14 @@ QString DissociateCellCommand::name() const
   return i18n("Dissociate Cell");
 }
 
-void DissociateCellCommand::execute()
+void DissociateCellCommand::redo()
 {
   Sheet* sheet = cell.sheet();
   if( !sheet ) return;
   sheet->changeMergedCell( cell.column(), cell.row(), 0, 0 );
 }
 
-void DissociateCellCommand::unexecute()
+void DissociateCellCommand::undo()
 {
   Sheet* sheet = cell.sheet();
   if( !sheet ) return;
@@ -137,13 +137,13 @@ QString RenameSheetCommand::name() const
   return i18n("Rename Sheet");
 }
 
-void RenameSheetCommand::execute()
+void RenameSheetCommand::redo()
 {
   if( sheet )
     sheet->setSheetName( newName );
 }
 
-void RenameSheetCommand::unexecute()
+void RenameSheetCommand::undo()
 {
   if( sheet )
     sheet->setSheetName( oldName );
@@ -157,7 +157,7 @@ HideSheetCommand::HideSheetCommand( Sheet* sheet )
   sheetName = sheet->sheetName();
 }
 
-void HideSheetCommand::execute()
+void HideSheetCommand::redo()
 {
   Sheet* sheet = doc->map()->findSheet( sheetName );
   if( !sheet ) return;
@@ -165,7 +165,7 @@ void HideSheetCommand::execute()
   sheet->hideSheet( true );
 }
 
-void HideSheetCommand::unexecute()
+void HideSheetCommand::undo()
 {
   Sheet* sheet = doc->map()->findSheet( sheetName );
   if( !sheet ) return;
@@ -188,7 +188,7 @@ ShowSheetCommand::ShowSheetCommand( Sheet* sheet )
   sheetName = sheet->sheetName();
 }
 
-void ShowSheetCommand::execute()
+void ShowSheetCommand::redo()
 {
   Sheet* sheet = doc->map()->findSheet( sheetName );
   if( !sheet ) return;
@@ -196,7 +196,7 @@ void ShowSheetCommand::execute()
   sheet->hideSheet( false );
 }
 
-void ShowSheetCommand::unexecute()
+void ShowSheetCommand::undo()
 {
   Sheet* sheet = doc->map()->findSheet( sheetName );
   if( !sheet ) return;
@@ -221,13 +221,13 @@ AddSheetCommand::AddSheetCommand( Sheet* s )
     doc->map()->addSheet( s );
 }
 
-void AddSheetCommand::execute()
+void AddSheetCommand::redo()
 {
     sheet->map()->insertSheet( sheet );
     doc->insertSheet( sheet );
 }
 
-void AddSheetCommand::unexecute()
+void AddSheetCommand::undo()
 {
     sheet->map()->takeSheet( sheet );
     doc->takeSheet( sheet );
@@ -247,13 +247,13 @@ RemoveSheetCommand::RemoveSheetCommand( Sheet* s )
     doc = sheet->doc();
 }
 
-void RemoveSheetCommand::execute()
+void RemoveSheetCommand::redo()
 {
     sheet->map()->takeSheet( sheet );
     doc->takeSheet( sheet );
 }
 
-void RemoveSheetCommand::unexecute()
+void RemoveSheetCommand::undo()
 {
     sheet->map()->insertSheet( sheet );
     doc->insertSheet( sheet );
@@ -343,7 +343,7 @@ void SheetPropertiesCommand::setCapitalizeFirstLetter( bool b )
     newCapitalizeFirstLetter = b;
 }
 
-void SheetPropertiesCommand::execute()
+void SheetPropertiesCommand::redo()
 {
     sheet->setLayoutDirection( newDirection );
     sheet->setAutoCalc( newAutoCalc );
@@ -359,7 +359,7 @@ void SheetPropertiesCommand::execute()
     doc->addDamage( new SheetDamage( sheet, SheetDamage::PropertiesChanged ) );
 }
 
-void SheetPropertiesCommand::unexecute()
+void SheetPropertiesCommand::undo()
 {
     sheet->setLayoutDirection( oldDirection );
     sheet->setAutoCalc( oldAutoCalc );
@@ -386,7 +386,7 @@ DefinePrintRangeCommand::DefinePrintRangeCommand( Sheet *s )
   printRange = s->print()->printRange();
 }
 
-void DefinePrintRangeCommand::execute()
+void DefinePrintRangeCommand::redo()
 {
     Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
@@ -394,7 +394,7 @@ void DefinePrintRangeCommand::execute()
 
 }
 
-void DefinePrintRangeCommand::unexecute()
+void DefinePrintRangeCommand::undo()
 {
     Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
@@ -428,7 +428,7 @@ PaperLayoutCommand::PaperLayoutCommand( Sheet *s )
   pageLimitY = s->print()->pageLimitY();
 }
 
-void PaperLayoutCommand::execute()
+void PaperLayoutCommand::redo()
 {
     Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
@@ -457,7 +457,7 @@ void PaperLayoutCommand::execute()
     print->setPageLimitY( pageLimitY );
 }
 
-void PaperLayoutCommand::unexecute()
+void PaperLayoutCommand::undo()
 {
     Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
@@ -520,7 +520,7 @@ LinkCommand::LinkCommand( const Cell& c, const QString& text, const QString& lin
   if( s ) doc = s->doc();
 }
 
-void LinkCommand::execute()
+void LinkCommand::redo()
 {
   if( !cell ) return;
 
@@ -531,7 +531,7 @@ void LinkCommand::execute()
   doc->addDamage( new CellDamage( cell, CellDamage::Appearance ) );
 }
 
-void LinkCommand::unexecute()
+void LinkCommand::undo()
 {
   if( !cell ) return;
 
@@ -559,7 +559,7 @@ ChangeObjectGeometryCommand::~ChangeObjectGeometryCommand()
   obj->decCmdRef();
 }
 
-void ChangeObjectGeometryCommand::execute()
+void ChangeObjectGeometryCommand::redo()
 {
     doc->repaint( obj->geometry() );
 
@@ -574,7 +574,7 @@ void ChangeObjectGeometryCommand::execute()
     doc->repaint( obj );
 }
 
-void ChangeObjectGeometryCommand::unexecute()
+void ChangeObjectGeometryCommand::undo()
 {
   doc->repaint( obj->geometry() );
 
@@ -619,7 +619,7 @@ RemoveObjectCommand::~RemoveObjectCommand()
   delete obj;
 }
 
-void RemoveObjectCommand::execute()
+void RemoveObjectCommand::redo()
 {
 
 //  I don't think we need this:
@@ -642,7 +642,7 @@ void RemoveObjectCommand::execute()
   executed = true;
 }
 
-void RemoveObjectCommand::unexecute()
+void RemoveObjectCommand::undo()
 {
   doc->embeddedObjects().append( obj );
   if ( obj->getType() == OBJECT_CHART ||  obj->getType()== OBJECT_KOFFICE_PART)
@@ -707,9 +707,9 @@ InsertObjectCommand::~InsertObjectCommand()
   delete obj;
 }
 
-void InsertObjectCommand::execute()
+void InsertObjectCommand::redo()
 {
-  if ( obj ) //restore the object which was removed from the object list in InsertObjectCommand::unexecute()
+  if ( obj ) //restore the object which was removed from the object list in InsertObjectCommand::undo()
   {
     canvas->doc()->embeddedObjects().append( obj );
     canvas->doc()->repaint( obj );
@@ -748,7 +748,7 @@ void InsertObjectCommand::execute()
   executed = true;
 }
 
-void InsertObjectCommand::unexecute()
+void InsertObjectCommand::undo()
 {
   if ( !obj )
     return;
@@ -767,7 +767,7 @@ QString InsertObjectCommand::name() const
 
 RenameNameObjectCommand::RenameNameObjectCommand( const QString &_name, const QString &_objectName,
                                             EmbeddedObject *_obj, Doc *_doc ):
-    KNamedCommand( _name ),
+    QUndoCommand( _name ),
     newObjectName( _objectName ),
     object( _obj ),
     doc( _doc )
@@ -781,7 +781,7 @@ RenameNameObjectCommand::~RenameNameObjectCommand()
 {
 }
 
-void RenameNameObjectCommand::execute()
+void RenameNameObjectCommand::redo()
 {
     object->setObjectName( newObjectName );
     m_page->unifyObjectName( object );
@@ -789,7 +789,7 @@ void RenameNameObjectCommand::execute()
 //     doc->updateSideBarItem( m_page );
 }
 
-void RenameNameObjectCommand::unexecute()
+void RenameNameObjectCommand::undo()
 {
     object->setObjectName( oldObjectName );
 
@@ -798,7 +798,7 @@ void RenameNameObjectCommand::unexecute()
 
 GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QList<EmbeddedObject*> &objects,
                                                             bool newValue, KgpType type, Doc *_doc )
-: KNamedCommand( name )
+: QUndoCommand( name )
 , m_objects( objects )
 , m_newValue( newValue )
 , m_type( type )
@@ -817,7 +817,7 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QList
 GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QList<bool> &lst,
                                                             QList<EmbeddedObject*> &objects, bool newValue,
                                                             KgpType type, Doc *_doc)
-: KNamedCommand( name )
+: QUndoCommand( name )
 , m_oldValue( lst )
 , m_objects( objects )
 , m_newValue( newValue )
@@ -834,7 +834,7 @@ GeometryPropertiesCommand::~GeometryPropertiesCommand()
         object->decCmdRef();
 }
 
-void GeometryPropertiesCommand::execute()
+void GeometryPropertiesCommand::redo()
 {
     foreach ( EmbeddedObject* object, m_objects )
     {
@@ -849,7 +849,7 @@ void GeometryPropertiesCommand::execute()
     }
 }
 
-void GeometryPropertiesCommand::unexecute()
+void GeometryPropertiesCommand::undo()
 {
     EmbeddedObject *obj = 0;
     for ( int i = 0; i < m_objects.count(); ++i ) {
@@ -868,7 +868,7 @@ void GeometryPropertiesCommand::unexecute()
 MoveObjectByCmd::MoveObjectByCmd( const QString &_name, const QPointF &_diff,
                                   QList<EmbeddedObject*> &_objects,
                                   Doc *_doc, Sheet *_page )
-    : KNamedCommand( _name ), diff( _diff ), objects( _objects )
+    : QUndoCommand( _name ), diff( _diff ), objects( _objects )
 {
     doc = _doc;
     m_page=_page;
@@ -884,7 +884,7 @@ MoveObjectByCmd::~MoveObjectByCmd()
         object->decCmdRef();
 }
 
-void MoveObjectByCmd::execute()
+void MoveObjectByCmd::redo()
 {
     QRect oldRect;
 
@@ -899,7 +899,7 @@ void MoveObjectByCmd::execute()
     }
 }
 
-void MoveObjectByCmd::unexecute()
+void MoveObjectByCmd::undo()
 {
     QRect oldRect;
 
