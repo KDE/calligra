@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QLayout> 
+#include <QGroupBox> 
 #include <QLabel>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
@@ -41,25 +43,30 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
 					QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
+  Q3ButtonGroup *gb;
+
   //Layout for 4 blocks
   QGridLayout* layout = new QGridLayout( this );
   layout->setMargin( KDialog::marginHint() );
   layout->setSpacing( KDialog::spacingHint() );
 
-  //1. Block: General settings
-  Q3ButtonGroup* gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("General"), this );
-  gb->layout()->setSpacing(KDialog::spacingHint());
-  gb->layout()->setMargin(KDialog::marginHint());
-  layout->addWidget( gb, 0, 0 );
+  // 1. Block: General settings
+  QGroupBox* gb1 = new QGroupBox( i18n("General") );
+  layout->addWidget( gb1, 0, 0 );
 
-  QGridLayout *grid2 = new QGridLayout( gb->layout(), 4, 2 );
-
-  QLabel* lab = new QLabel( i18n("Title:"), gb );
+  QLabel* lab = new QLabel( i18n("Title:") );
   lab->setWhatsThis( i18n("Write here the title of the legend, which is displayed at the top of the legend box."));
-  grid2->addWidget( lab, 0, 0 );
 
-  title = new QLineEdit( gb );
-  grid2->addWidget( title, 1, 0 );
+  title = new QLineEdit( );
+
+  QVBoxLayout *vbox = new QVBoxLayout( );
+  vbox->setSpacing(KDialog::spacingHint());
+  vbox->setMargin(KDialog::marginHint());
+  vbox->addWidget( lab, 0, 0 );
+  vbox->addWidget( title, 1, 0 );
+  vbox->addStretch( 1 );
+  
+  gb1->setLayout( vbox );
 
   // 2. Block: Legend position
   gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Legend Position"), this );

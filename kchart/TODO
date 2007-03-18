@@ -25,7 +25,9 @@ Item								   Prio Status
 
 * Port to Qt4
   + Get rid of all Qt3 support widgets				      1	----
-  + Remove code that does double buffering.
+    - Q3*Layout								--
+    - Q3ButtonGroup							--
+  + Remove code that does double buffering.			      1	----
   + Get rid of warnings from deprecated calls 			      1	----
     - Fix layouts							--
     - Fix spinboxes							done
