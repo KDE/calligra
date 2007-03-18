@@ -29,7 +29,7 @@ Item								   Prio Status
     - Q3ButtonGroup							--
   + Remove code that does double buffering.			      1	----
   + Get rid of warnings from deprecated calls 			      1	----
-    - Fix layouts							--
+    - Fix layouts							done
     - Fix spinboxes							done
     - Fix qpixmap							done
     - Fix qfont								done
