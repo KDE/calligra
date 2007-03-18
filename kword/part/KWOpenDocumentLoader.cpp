@@ -55,7 +55,6 @@ public:
     KWLoadingInfo() {
         columns.columns = 1;
         // columns.ptColumnSpacing must be initialized by KWDocument
-
         hf.header = HF_SAME;
         hf.footer = HF_SAME;
         hf.ptHeaderBodySpacing = 10.0;
@@ -63,13 +62,10 @@ public:
         hf.ptFootNoteBodySpacing = 10.0;
     }
     ~KWLoadingInfo() {}
-
     /// Current master-page name (OASIS loading)
     QString m_currentMasterPage;
-
     /// Bookmarks (kword-1.3 XML: they need all framesets to be loaded first)
-    struct BookMark
-    {
+    struct BookMark {
         QString bookname;
         int paragStartIndex;
         int paragEndIndex;
@@ -77,10 +73,8 @@ public:
         int cursorStartIndex;
         int cursorEndIndex;
     };
-
     typedef QValueList<BookMark> BookMarkList;
     BookMarkList bookMarkList;
-
     /// Bookmarks (OASIS XML). Only need to store bookmark starts, until hitting bookmark ends
     struct BookmarkStart {
         BookmarkStart() {} // for stupid QValueList
@@ -92,30 +86,21 @@ public:
     };
     typedef QMap<QString, BookmarkStart> BookmarkStartsMap;
     BookmarkStartsMap m_bookmarkStarts;
-
     // Text frame chains; see KWTextFrameSet::loadOasisText
-
     void storeNextFrame( KWFrame* thisFrame, const QString& chainNextName ) {
         m_nextFrameDict.insert( chainNextName, thisFrame );
     }
     KWFrame* chainPrevFrame( const QString& frameName ) const {
         return m_nextFrameDict[frameName]; // returns 0 if not found
     }
-
     void storeFrameName( KWFrame* frame, const QString& name ) {
         m_frameNameDict.insert( name, frame );
     }
     KWFrame* frameByName( const QString& name ) const {
         return m_frameNameDict[name]; // returns 0 if not found
     }
-
     KoColumns columns;
     KoKWHeaderFooter hf;
-
-private:
-    // Ignore warnings about operator delete from those dicts; we don't use it here...
-    QDict<KWFrame> m_nextFrameDict;
-    QDict<KWFrame> m_frameNameDict;
 };
 #endif
 
@@ -335,7 +320,7 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
         const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
 
         if ( isTextNS && localName == "p" ) {  // text paragraph
-            //kDebug()<<"==> PARAGRAPH <=="<<endl;
+            kDebug()<<"==> PARAGRAPH <=="<<endl;
             context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
 #if 0
             KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
@@ -343,8 +328,8 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
 #else
             //KWTextParag::loadOasis
             const QString styleName = tag.attributeNS( KoXmlNS::text, "style-name", QString::null );
-            //if ( !styleName.isEmpty() )
-            //{
+            if ( !styleName.isEmpty() )
+            {
                 const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
                 QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
                 if ( masterPageName.isEmpty() )
@@ -356,7 +341,7 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
                 context.styleStack().restore();
 
                 loadOasisPageLayout( masterPageName, context ); // page layout
-            //}
+            }
 
             loadOasisSpan(tag, context, cursor);
 
@@ -367,7 +352,7 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
         }
         else if ( isTextNS && localName == "h" ) // heading
         {
-            //kDebug()<<"==> HEADING <=="<<endl;
+            kDebug()<<"==> HEADING <=="<<endl;
             context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
 #if 0
             int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
@@ -645,6 +630,32 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
         const QString localName( ts.localName() );
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
 
+        // allow loadSpanTag to modify the stylestack
+        context.styleStack().save();
+
+
+
+//TODO why does this not work?
+        //KWTextParag::loadOasis
+        const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString::null );
+        if ( !textStyleName.isEmpty() )
+        {
+            kDebug(32001) << "KWOpenDocumentLoader::loadOasisSpan textStyleName=" << textStyleName << endl;
+            const QDomElement* textStyle = context.oasisStyles().findStyle( textStyleName, "text"/*"paragraph"*/ );
+            if ( textStyle ) {
+                kDebug(32001) << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+                //QString masterPageName = textStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null );
+                //if ( masterPageName.isEmpty() ) masterPageName = "Standard";
+                context.styleStack().save();
+                context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
+                context.addStyles( textStyle, "text"/*"paragraph"*/ );
+                context.styleStack().restore();
+                //loadOasisPageLayout( masterPageName, context ); // page layout
+            }
+        }
+
+
+
         if ( node.isText() )
         {
             QString text = node.toText().data();
@@ -738,6 +749,9 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
             kDebug() << "  Node localName=" << localName << " is UNHANDLED" << endl;
 #endif
         }
+
+        // restore the propably by loadSpanTag modified stylestack
+        context.styleStack().restore();
     }
 }
 
