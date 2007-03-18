@@ -185,7 +185,6 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
 //                            "be used as a background tile. If the image is "
 //                            "larger then the selected area, you will only see "
 //                            "the upper left part of it." ) );
-#warning "this doesn't work yet, and doc.trolltech is down right now"
     QButtonGroup *alignmentBG = new QButtonGroup( right );
     alignmentBG->setExclusive( true );
     alignmentBG->addButton( stretchedRB );
