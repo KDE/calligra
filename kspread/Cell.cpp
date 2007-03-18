@@ -1891,21 +1891,21 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
               continue;
 
             QRectF geometry = obj->geometry();
-            geometry.setLeft( geometry.left() + sheet()->columnPos( d->column ) );
-            geometry.setTop( geometry.top() + sheet()->rowPos( d->row ) );
+            geometry.setLeft( geometry.left() + sheet()->columnPosition( d->column ) );
+            geometry.setTop( geometry.top() + sheet()->rowPosition( d->row ) );
 
             QString str = e.attributeNS( KoXmlNS::table, "end-x", QString() );
             if ( !str.isNull() )
             {
               uint end_x = (uint) KoUnit::parseValue( str );
-              geometry.setRight( sheet()->columnPos( point.column() ) + end_x );
+              geometry.setRight( sheet()->columnPosition( point.column() ) + end_x );
             }
 
             str = e.attributeNS( KoXmlNS::table, "end-y", QString() );
             if ( !str.isNull() )
             {
               uint end_y = (uint) KoUnit::parseValue( str );
-              geometry.setBottom( sheet()->rowPos( point.row() ) + end_y );
+              geometry.setBottom( sheet()->rowPosition( point.row() ) + end_y );
             }
 
             obj->setGeometry( geometry );

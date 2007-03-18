@@ -2681,7 +2681,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
   if ( _ev->key() == KGlobalSettings::contextMenuKey() ) {
     int row = selection()->marker().y();
     int col = selection()->marker().x();
-    QPoint p(sheet->columnPos(col), sheet->rowPos(row));
+    QPoint p( sheet->columnPosition(col), sheet->rowPosition(row) );
     p = mapToGlobal(p);
     d->view->openPopupMenu( p );
   }

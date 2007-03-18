@@ -170,8 +170,6 @@ class KSPREAD_EXPORT Sheet : public QObject
     Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )
 
 public:
-    enum Direction       { Right, Left, Up, Down };
-    enum SortingOrder    { Increase, Decrease };
     enum ChangeRef       { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType        { Text, Validity, Comment, ConditionalCellAttribute };
     enum LayoutDirection { LeftToRight, RightToLeft };
@@ -684,24 +682,12 @@ public:
     int rightColumn( double _xpos ) const;
 
     /**
-     * @return the left corner of the column as int.
-     * @param col the column's index
-     */
-    int columnPos( int col ) const;
-
-    /**
      * @return the left corner of the column as double.
      * Use this method, when you later calculate other positions depending on this one
      * to avoid rounding problems
      * @param col the column's index
      */
     double columnPosition( int col ) const;
-
-    /**
-     * @return the top corner of the row as int.
-     * @param _row the row's index
-     */
-    int rowPos( int _row ) const;
 
     /**
      * @return the top corner of the row as double.

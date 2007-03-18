@@ -730,11 +730,6 @@ double Sheet::columnPosition( int _col ) const
     return x;
 }
 
-int Sheet::columnPos( int _col ) const
-{
-    return (int)columnPosition( _col );
-}
-
 
 double Sheet::rowPosition( int _row ) const
 {
@@ -753,11 +748,6 @@ double Sheet::rowPosition( int _row ) const
     }
 
     return y;
-}
-
-int Sheet::rowPos( int _row ) const
-{
-    return (int)rowPosition( _row );
 }
 
 
