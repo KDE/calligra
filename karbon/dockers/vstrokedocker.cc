@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
    Copyright (C) 2002-2005 The Karbon Developers
-   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,6 +38,8 @@
 #include <KoShapeBorderCommand.h>
 #include <KoShapeBorderModel.h>
 #include <KoSelection.h>
+
+#include "KarbonLineStyleSelector.h"
 
 #include "vstrokedocker.h"
 
@@ -150,7 +152,14 @@ VStrokeDocker::VStrokeDocker()
 	mainLayout->addWidget( m_miterLimit, 3, 1, 1, 3 );
 	connect( m_miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
 
-	mainLayout->setRowStretch( 4, 1 );
+    QLabel * styleLabel = new QLabel( i18n( "Style:" ), mainWidget );
+    mainLayout->addWidget( styleLabel, 4, 0 );
+    m_lineStyle = new KarbonLineStyleSelector( mainWidget );
+    mainLayout->addWidget( m_lineStyle, 4, 1, 1, 3 );
+
+    connect( m_lineStyle, SIGNAL(currentIndexChanged( int ) ), this, SLOT( styleChanged() ) );
+
+    mainLayout->setRowStretch( 5, 1 );
 	mainLayout->setColumnStretch( 1, 1 );
 	mainLayout->setColumnStretch( 2, 1 );
 	mainLayout->setColumnStretch( 3, 1 );
@@ -172,6 +181,7 @@ void VStrokeDocker::updateCanvas()
     newBorder->setCapStyle( m_border.capStyle() );
     newBorder->setJoinStyle( m_border.joinStyle() );
     newBorder->setMiterLimit( m_border.miterLimit() );
+    newBorder->setLineStyle( m_border.lineStyle(), m_border.lineDashes() );
     KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
     if( oldBorder )
         newBorder->setColor( oldBorder->color() );
@@ -198,16 +208,19 @@ void VStrokeDocker::updateDocker()
 	disconnect( m_capGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	disconnect( m_joinGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 	disconnect( m_miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
+    disconnect( m_lineStyle, SIGNAL(currentIndexChanged( int ) ), this, SLOT( styleChanged() ) );
 
 	m_capGroup->button( m_border.capStyle() )->setChecked( true );
 	m_joinGroup->button( m_border.joinStyle() )->setChecked( true );
 	m_setLineWidth->changeValue( m_border.lineWidth() );
 	m_miterLimit->changeValue( m_border.miterLimit() );
+    m_lineStyle->setLineStyle( m_border.lineStyle(), m_border.lineDashes() );
 	
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	connect( m_capGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	connect( m_joinGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 	connect( m_miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
+    connect( m_lineStyle, SIGNAL(currentIndexChanged( int ) ), this, SLOT( styleChanged() ) );
 }
 
 void VStrokeDocker::widthChanged()
@@ -222,6 +235,12 @@ void VStrokeDocker::miterLimitChanged()
 	updateCanvas();
 }
 
+void VStrokeDocker::styleChanged()
+{
+    m_border.setLineStyle( m_lineStyle->lineStyle(), m_lineStyle->lineDashes() );
+    updateCanvas();
+}
+
 void VStrokeDocker::setStroke( const KoShapeBorderModel *border )
 {
 	const KoLineBorder *lineBorder = dynamic_cast<const KoLineBorder*>( border );
@@ -231,6 +250,7 @@ void VStrokeDocker::setStroke( const KoShapeBorderModel *border )
 		m_border.setCapStyle( lineBorder->capStyle() );
 		m_border.setJoinStyle( lineBorder->joinStyle() );
 		m_border.setMiterLimit( lineBorder->miterLimit() );
+        m_border.setLineStyle( lineBorder->lineStyle(), lineBorder->lineDashes() );
 	}
 	else
 	{
@@ -238,6 +258,7 @@ void VStrokeDocker::setStroke( const KoShapeBorderModel *border )
 		m_border.setCapStyle( Qt::FlatCap );
 		m_border.setJoinStyle( Qt::MiterJoin );
 		m_border.setMiterLimit( 0.0 );
+        m_border.setLineStyle( Qt::NoPen, QVector<qreal>() );
 	}
 	updateDocker();
 }
@@ -256,5 +277,6 @@ void VStrokeDocker::setUnit( KoUnit unit )
 	connect( m_joinGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 	connect( m_miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
 }
+
 #include "vstrokedocker.moc"
 

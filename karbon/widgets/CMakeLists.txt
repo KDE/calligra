@@ -9,15 +9,14 @@ set(karbonwidgets_SRCS
     vselecttoolbar.cc
     vsmallpreview.cc
     vtypebuttonbox.cc
+    KarbonLineStyleSelector.cpp
     )
 
 kde4_automoc(${karbonwidgets_SRCS})
 
 kde4_add_library(karbonwidgets ${karbonwidgets_SRCS})
 
-
-
-target_link_libraries(karbonwidgets flake) 
+target_link_libraries(karbonwidgets flake)
 
 install(TARGETS karbonwidgets  DESTINATION ${LIB_INSTALL_DIR})
 

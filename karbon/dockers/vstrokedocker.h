@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
    Copyright (C) 2002-2005 The Karbon Developers
-   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@ class QButtonGroup;
 class KoUnitDoubleSpinBox;
 class KoDockFactory;
 class KoShapeBorderModel;
+class KarbonLineStyleSelector;
 
 class VStrokeDockerFactory : public KoDockFactory
 {
@@ -56,7 +57,7 @@ private:
 	QButtonGroup *m_joinGroup;
 	KoUnitDoubleSpinBox *m_setLineWidth;
 	KoUnitDoubleSpinBox *m_miterLimit;
-
+    KarbonLineStyleSelector * m_lineStyle;
 private slots:
 	void slotCapChanged( int ID );
 	void slotJoinChanged( int ID );
@@ -64,6 +65,7 @@ private slots:
 	void updateDocker();
 	void widthChanged();
 	void miterLimitChanged();
+    void styleChanged();
 
 protected:
 	KoLineBorder m_border;
