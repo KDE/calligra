@@ -1,5 +1,10 @@
 2007-03-18  Inge Wallin  <inge@lysator.liu.se>
 
+	More Q3Support -> Qt4 conversions.
+	* dialogs/KCConfigSubtypeBarPage.cc (KCConfigSubtypeBarPage): Fix
+	layout, and port to Qt4. This file produces no warnings now and
+	uses no q3support classes.
+	
 	Do some more conversion Q3Support -> Qt4
 	* dialogs/KCConfigBackgroundPage.cc (KCConfigBackgroundPage):
 	Don't call deprecated constructor for parent.

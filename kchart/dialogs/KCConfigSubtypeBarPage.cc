@@ -18,9 +18,9 @@
 */
 
 #include <QLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QCheckBox>
-#include <q3buttongroup.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -36,57 +36,58 @@ KCConfigSubtypeBarPage::KCConfigSubtypeBarPage( KChartParams* params,
 						QWidget* parent ) :
     QWidget( parent ),m_params( params )
 {
-  QGridLayout* layout = new QGridLayout( this );
-  layout->setMargin( KDialog::marginHint() );
-  layout->setSpacing( KDialog::spacingHint() );
+  // The outer layout that will only contain the groupbox.
+  QVBoxLayout* layout0 = new QVBoxLayout( this );
+  layout0->setMargin( KDialog::marginHint() );
+  layout0->setSpacing( KDialog::spacingHint() );
 
+  QGroupBox* gb = new QGroupBox( i18n("3D Parameters") );
+  layout0->addWidget( gb );
 
-  Q3ButtonGroup* gb = new Q3ButtonGroup( 0, Qt::Vertical, 
-				       i18n("3D Parameters"), this );
-  gb->layout()->setSpacing(KDialog::spacingHint());
-  gb->layout()->setMargin(KDialog::marginHint());
-
-  // The grid layout inside the buttongroup.
-  QGridLayout *grid1 = new QGridLayout( gb->layout() );
-  layout->addWidget( gb, 0, 0 );
+  // The inner layout that will layout the actual contents of the widgets.
+  QGridLayout* layout = new QGridLayout( );
+  layout->setSpacing(KDialog::spacingHint());
+  layout->setMargin(KDialog::marginHint());
 
   // The main on/off checkbox.
-  bar3d=new QCheckBox(i18n("3D bar"),gb);
+  bar3d = new QCheckBox( i18n("3D bar") );
   bar3d->setWhatsThis( i18n("If checked, this will enable 3D mode for viewing the bars. You can then add a shadow and set the angle and depth for 3D."));
-  grid1->addWidget(bar3d,0,0);
+  layout->addWidget( bar3d, 0, 0, 1, 2);
 
   connect(bar3d, SIGNAL(toggled ( bool )),
 	  this,  SLOT(slotChange3DParameter(bool)));
 
   // Checkbox for shadows
-  drawShadowColor=new QCheckBox(i18n("Draw dark shadow"),gb);
+  drawShadowColor = new QCheckBox( i18n("Draw dark shadow") );
   drawShadowColor->setWhatsThis( i18n("If checked, this will add a dark shadow on the 3D bars."));
-  grid1->addWidget(drawShadowColor,1,0);
+  layout->addWidget( drawShadowColor, 1, 0, 1, 2);
 
-  QLabel *tmpLabel = new QLabel( i18n( "Angle:" ), gb );
-  tmpLabel->resize( tmpLabel->sizeHint() );
-  grid1->addWidget(tmpLabel,2,0);
+  QLabel *tmpLabel = new QLabel( i18n( "Angle:" ) );
+  tmpLabel->resize( tmpLabel->sizeHint() );  // FIXME: Why?
+  layout->addWidget( tmpLabel, 2, 0 );
 
-  angle3d=new KIntNumInput(0, gb, 10);
-  angle3d->setWhatsThis( i18n("You can set here the angle for the 3D effect from 0 to 90. 90 will give you flat bars without any 3D effect.\nDefault is 45."));
-  grid1->addWidget(angle3d,2,1);
+  angle3d = new KIntNumInput( 0, gb, 10 );
   angle3d->setRange(0, 90, 1);
+  angle3d->setWhatsThis( i18n("You can set here the angle for the 3D effect from 0 to 90. 90 will give you flat bars without any 3D effect.\nDefault is 45."));
+  layout->addWidget( angle3d, 2, 1 );
 
-  tmpLabel = new QLabel( i18n( "Depth:" ), gb );
+  tmpLabel = new QLabel( i18n( "Depth:" ) );
   tmpLabel->resize( tmpLabel->sizeHint() );
-  grid1->addWidget(tmpLabel,3,0);
+  layout->addWidget( tmpLabel, 3, 0 );
 
-  depth=new KDoubleNumInput(gb);
-  depth->setWhatsThis( i18n("You can set here the depth of the 3D effect from 0 to 2. 0 will give you no depth at all.\nDefault is 1."));
-  depth->resize(100,depth->sizeHint().height());
-  grid1->addWidget(depth,3,1);
+  depth = new KDoubleNumInput( gb );
   depth->setRange(0, 2.0, 0.1);
+  depth->setWhatsThis( i18n("You can set here the depth of the 3D effect from 0 to 2. 0 will give you no depth at all.\nDefault is 1."));
+  depth->resize( 100, depth->sizeHint().height() );
+  layout->addWidget( depth, 3, 1 );
   
   gb->setAlignment(Qt::AlignLeft);
-  grid1->addItem( new QSpacerItem(depth->width(), 0 ), 0, 0 );
-  grid1->addItem( new QSpacerItem(angle3d->width(), 0 ), 0, 0 );
-  grid1->setColumnStretch(2,1);
-  grid1->setRowStretch(4,1);
+  //layout->addItem( new QSpacerItem(depth->width(), 0 ), 0, 0 );
+  //layout->addItem( new QSpacerItem(angle3d->width(), 0 ), 0, 0 );
+  layout->setColumnStretch(2,1);
+  layout->setRowStretch(4,1);
+
+  gb->setLayout( layout );
 
   //it's not good but I don't know how
   //to reduce space
