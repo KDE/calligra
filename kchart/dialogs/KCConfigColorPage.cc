@@ -19,12 +19,12 @@
 
 
 #include <QLayout>
+#include <QGroupBox>
 #include <QLabel>
-#include <q3buttongroup.h>
-
 
 //Added by qt3to4:
 #include <k3listbox.h>
+
 #include <kdebug.h>
 #include <kvbox.h>
 #include <kdialog.h>
@@ -53,12 +53,14 @@ KCConfigColorPage::KCConfigColorPage( KChartParams* params,
     QVBoxLayout* toplevel = new QVBoxLayout( this );
     toplevel->setMargin( 10 );
 
-    Q3ButtonGroup* gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Colors"), this );
-    gb->layout()->setSpacing(KDialog::spacingHint());
-    gb->layout()->setMargin(KDialog::marginHint());
-    toplevel->addWidget( gb);
+    QGroupBox* gb = new QGroupBox( i18n("Colors") );
+    toplevel->addWidget( gb );
+
     QString wtstr;
-    QGridLayout* grid = new QGridLayout( gb->layout(), 8, 3 );
+    QGridLayout *grid = new QGridLayout( );
+    grid->setSpacing( KDialog::spacingHint() );
+    grid->setMargin( KDialog::marginHint() );
+    gb->setLayout( grid );
 
     QLabel* lineLA = new QLabel( i18n( "&Line color:" ), gb );
     lineLA->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -159,7 +161,7 @@ KCConfigColorPage::KCConfigColorPage( KChartParams* params,
 #endif
 
     KHBox* dataColorHB = new KHBox( gb );
-    grid->addMultiCellWidget( dataColorHB,  0, 7, 2, 2 );
+    grid->addWidget( dataColorHB, 0, 2, 7, 1 );
     _dataColorLB = new K3ListBox(dataColorHB);
     _dataColorCB = new KColorButton( dataColorHB);
     wtstr = i18n( "Choose a row/column in the list on the left and change its color using this button.");
