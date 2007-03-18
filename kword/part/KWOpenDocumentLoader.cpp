@@ -286,9 +286,6 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         }
     }
 #else
-    //KoPageLayout pgLayout = KoPageLayout::standardLayout();
-    //d->document->m_pageManager.setDefaultPage( pgLayout );
-
     KWord::TextFrameSetType type = KWord::MainTextFrameSet;
     KWTextFrameSet *fs = new KWTextFrameSet( d->document, type );
     fs->setAllowLayout(false);
@@ -386,7 +383,51 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
                 context.listStyleStack().pop();
             }
 #else
-            //TODO see KWTextParag::loadOasis
+            //KWTextParag::loadOasis
+            const QString styleName = tag.attributeNS( KoXmlNS::text, "style-name", QString::null );
+            if ( !styleName.isEmpty() )
+            {
+                const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
+                QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
+                kDebug(32001) << "KWOpenDocumentLoader::loadOasisText styleName=" << styleName << " masterPageName=" << masterPageName << endl;
+
+#if 0
+                // In KWord we don't support sections so the first paragraph is the one that determines the page layout.
+                if ( prev() == 0 ) {
+                    if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
+                    currentMasterPageRef = masterPageName; // do this first to avoid recursion
+                    context.styleStack().save();
+                    context.styleStack().setTypeProperties( "paragraph" );
+                    context.addStyles( paragraphStyle, "paragraph" );
+                    // This is quite ugly... OOo stores the starting page-number in the first paragraph style...
+                    QString pageNumber = context.styleStack().attributeNS( KoXmlNS::style, "page-number" );
+                    if ( !pageNumber.isEmpty() ) doc->variableCollection()->variableSetting()->setStartingPageNumber( pageNumber.toInt() );
+                    context.styleStack().restore();
+                    doc->loadOasisPageLayout( masterPageName, context ); // page layout
+                }
+                else if ( !masterPageName.isEmpty() // empty means no change
+                        && masterPageName != currentMasterPageRef )
+                {
+                    // Detected a change in the master page -> this means we have to use a new page layout
+                    // and insert a frame break if not on the first paragraph.
+                    kdDebug(32001) << "KWTextParag::loadOasis: change of master page detected: from " << currentMasterPageRef << " to " << masterPageName << " -> inserting page break" << endl;
+                    currentMasterPageRef = masterPageName;
+                    // [see also KoParagLayout for the 'normal' way to insert page breaks]
+                    m_layout.pageBreaking |= KoParagLayout::HardFrameBreakBefore;
+                    // We have no way to load/use the new page layout, KWord doesn't have "sections".
+                }
+#else
+                if ( masterPageName.isEmpty() )
+                    masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
+
+                context.styleStack().save();
+                context.styleStack().setTypeProperties( "paragraph" );
+                context.addStyles( paragraphStyle, "paragraph" );
+                context.styleStack().restore();
+
+                loadOasisPageLayout( masterPageName, context ); // page layout
+#endif
+            }
 
             loadOasisSpan(tag, context, cursor);
 
@@ -535,26 +576,38 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
     Q_ASSERT( defaultStyle() );
     return stylesLoaded;
 #else
-    kDebug()<<"############################### KWOpenDocumentLoader::loadOasisStyles"<<endl;
-    //foreach(QDomElement e, context.oasisStyles().userStyles()) kDebug()<<"userStyle tagName="<< e.tagName() <<endl;
+    kDebug(32001)<<"############################### KWOpenDocumentLoader::loadOasisStyles"<<endl;
 
     QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
     foreach(KoXmlElement* styleElem, userStyles) {
         if ( !styleElem ) continue;
         Q_ASSERT( !styleElem->isNull() );
 
-        // KoParagStyle::loadStyle
+        //KoParagStyle::loadStyle
         QString name = styleElem->attributeNS( KoXmlNS::style, "name", QString::null );
         QString displayName = styleElem->attributeNS( KoXmlNS::style, "display-name", QString::null );
         if ( displayName.isEmpty() )
             displayName = name;
+
+        // OOo hack:
+        //m_bOutline = name.startsWith( "Heading" );
+        // real OASIS solution:
+        bool m_bOutline = styleElem->hasAttributeNS( KoXmlNS::style, "default-outline-level" );
+
+        context.styleStack().save();
+        context.addStyles( styleElem, "paragraph" ); // Load all parents - only because we don't support inheritance.
+
+#if 0
+        //KoParagLayout::loadOasisParagLayout
+        context.styleStack().setTypeProperties( "paragraph" );
+#endif
 
         KoParagraphStyle *parastyle = new KoParagraphStyle();
         parastyle->setName(name);
         //parastyle->setParent( d->document->styleManager()->defaultParagraphStyle() );
         d->document->styleManager()->add(parastyle);
 
-        kDebug()<<"Style name="<<name<<" displayName="<<displayName<<endl;
+        //kDebug()<<"KWOpenDocumentLoader::loadOasisStyles name="<<name<<" displayName="<<displayName<<endl;
 
         KoCharacterStyle *charstyle = parastyle->characterStyle();
         //charstyle->setFontFamily();
@@ -567,20 +620,8 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
 
         //KoTextFormat::load
         KoStyleStack& styleStack = context.styleStack();
+        styleStack.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
 
-        //TODO why the styles are not there?
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) );
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::style, "font-weight" ) );
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) );
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::style, "color" ) );
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) );
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::style, "font-size" ) );
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) );
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::style, "font-family" ) );
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::fo, "font-name") );
-        Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::style, "font-name") );
-
-        /*
         if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24
             QString fontWeight = styleStack.attributeNS( KoXmlNS::fo, "font-weight" );
             int boldness;
@@ -596,18 +637,16 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         }
         else
             charstyle->setFontWeight( 95 );
-        */
 
-        if(name.startsWith("Head")) { //TESTCASE
-            //charstyle->setFontPointSize(20.0);
-            //style->setBreakAfter(true);
-            //style->setLeftPadding(20.0);
-            //style->setLeftMargin(20.0);
-            //parastyle->setAlignment(Qt::AlignCenter | Qt::AlignAbsolute);
+        if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) ) // 3.10.19
+        if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ||
+             styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
+            charstyle->setFontItalic( true );
         }
-        else {
-            //parastyle->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
-        }
+
+        //TODO handle also the other formats defined in KoTextFormat::load
+
+context.styleStack().restore();
     }
 #endif
 }
@@ -620,10 +659,6 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
 
     kDebug(32001) << "KWOpenDocumentLoader::loadOasisSpan styleName=" << styleName << " styleFound=" << (style != 0) << " style->alignment="<<(style ? int(style->alignment()) : -1)<<endl;
 
-    //QTextCursor cursor(fs->document()->end());
-    //QTextCursor cursor(fs->document());
-    //cursor.movePosition(QTextCursor::EndOfBlock);
-
     for (KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
         KoXmlElement ts = node.toElement();
@@ -634,18 +669,6 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
         {
             QString text = node.toText().data();
             kDebug() << "  localName=" << localName << " parent.localName="<<parent.localName()<<" text=" << text << endl;
-
-            //TODO why the styles are not there?
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::fo, "font-weight" ) );
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::style, "font-weight" ) );
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::fo, "color" ) );
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::style, "color" ) );
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::fo, "font-size" ) );
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::style, "font-size" ) );
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::fo, "font-family" ) );
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::style, "font-family" ) );
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::fo, "font-name") );
-            Q_ASSERT( ! context.styleStack().hasAttributeNS( KoXmlNS::style, "font-name") );
 
             QTextBlock block = cursor.block();
             style->applyStyle(block);
@@ -658,7 +681,6 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
                 QTextBlock block = cursor.block();
                 charstyle->applyStyle(block);
             }
-            //cursor.insertBlock();
         }
         else if ( isTextNS && localName == "span" ) // text:span
         {
@@ -1027,8 +1049,9 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, 
     else // else the content is within the elem
         loadOasisText(elem, context, cursor);
 
-    // restore auto-styles from content.xml, not those from styles.xml
+    // restore use of auto-styles from content.xml, not those from styles.xml
     context.setUseStylesAutoStyles( false );
+
     //TODO handle style, seems to be similar to what is done at KoPageLayout::loadOasis
 #endif
 }
