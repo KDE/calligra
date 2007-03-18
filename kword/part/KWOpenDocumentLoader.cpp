@@ -286,8 +286,8 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         }
     }
 #else
-    KoPageLayout pgLayout = KoPageLayout::standardLayout();
-    d->document->m_pageManager.setDefaultPage(pgLayout);
+    //KoPageLayout pgLayout = KoPageLayout::standardLayout();
+    //d->document->m_pageManager.setDefaultPage( pgLayout );
 
     KWord::TextFrameSetType type = KWord::MainTextFrameSet;
     KWTextFrameSet *fs = new KWTextFrameSet( d->document, type );
@@ -340,11 +340,20 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
         if ( isTextNS && localName == "p" ) {  // text paragraph
             //kDebug()<<"==> PARAGRAPH <=="<<endl;
             context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
+
+#if 0
+            KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
+            parag->loadOasis( tag, context, styleColl, pos );
+#else
+            //TODO see KWTextParag::loadOasis
+
             loadOasisSpan(tag, context, cursor);
 
             QTextBlockFormat emptyTbf;
             QTextCharFormat emptyCf;
             cursor.insertBlock(emptyTbf, emptyCf);
+#endif
+
         }
         else if ( isTextNS && localName == "h" ) // heading
         {
@@ -377,6 +386,8 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
                 context.listStyleStack().pop();
             }
 #else
+            //TODO see KWTextParag::loadOasis
+
             loadOasisSpan(tag, context, cursor);
 
             QTextBlockFormat emptyTbf;
@@ -471,7 +482,7 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
     for (unsigned int item = 0; item < nStyles; item++) {
         KoXmlElement* styleElem = userStyles[item];
         if ( !styleElem ) continue;
-	Q_ASSERT( !styleElem->isNull() );
+        Q_ASSERT( !styleElem->isNull() );
 
         if( !defaultStyleDeleted ) { // we are going to import at least one style.
             KoParagStyle *s = defaultStyle();
@@ -524,6 +535,9 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
     Q_ASSERT( defaultStyle() );
     return stylesLoaded;
 #else
+    kDebug()<<"############################### KWOpenDocumentLoader::loadOasisStyles"<<endl;
+    //foreach(QDomElement e, context.oasisStyles().userStyles()) kDebug()<<"userStyle tagName="<< e.tagName() <<endl;
+
     QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
     foreach(KoXmlElement* styleElem, userStyles) {
         if ( !styleElem ) continue;
@@ -553,7 +567,6 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
 
         //KoTextFormat::load
         KoStyleStack& styleStack = context.styleStack();
-        //KoTextFormat::load
 
         //TODO why the styles are not there?
         Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) );
@@ -566,7 +579,6 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::style, "font-family" ) );
         Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::fo, "font-name") );
         Q_ASSERT( ! styleStack.hasAttributeNS( KoXmlNS::style, "font-name") );
-
 
         /*
         if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24
@@ -586,10 +598,6 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
             charstyle->setFontWeight( 95 );
         */
 
-
-
-
-
         if(name.startsWith("Head")) { //TESTCASE
             //charstyle->setFontPointSize(20.0);
             //style->setBreakAfter(true);
@@ -600,9 +608,6 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         else {
             //parastyle->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
         }
-
-        //bool isOutline = styleElem.hasAttributeNS( KoXmlNS::style, "default-outline-level" );
-        //int level = styleElem.attributeNS( KoXmlNS::style, "default-level", "1" ).toInt(); // 1-based
     }
 #endif
 }
@@ -998,6 +1003,8 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, 
     }
     // TODO ptFootNoteBodySpacing
 #else
+    // use auto-styles from styles.xml, not those from content.xml
+    context.setUseStylesAutoStyles( true );
 
     // Add the frameset and the shape for the header/footer to the document.
     KWTextFrameSet *fs = new KWTextFrameSet( d->document, fsType );
@@ -1020,6 +1027,8 @@ void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, 
     else // else the content is within the elem
         loadOasisText(elem, context, cursor);
 
+    // restore auto-styles from content.xml, not those from styles.xml
+    context.setUseStylesAutoStyles( false );
     //TODO handle style, seems to be similar to what is done at KoPageLayout::loadOasis
 #endif
 }
