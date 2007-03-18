@@ -19,8 +19,8 @@
 
 #include <QLayout> 
 #include <QGroupBox> 
+#include <QButtonGroup> 
 #include <QLabel>
-#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <QLineEdit>
 #include <QToolTip> 
@@ -43,78 +43,82 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
 					QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-  Q3ButtonGroup *gb;
-
   //Layout for 4 blocks
   QGridLayout* layout = new QGridLayout( this );
   layout->setMargin( KDialog::marginHint() );
   layout->setSpacing( KDialog::spacingHint() );
 
   // 1. Block: General settings
-  QGroupBox* gb1 = new QGroupBox( i18n("General") );
-  layout->addWidget( gb1, 0, 0 );
-
-  QLabel* lab = new QLabel( i18n("Title:") );
-  lab->setWhatsThis( i18n("Write here the title of the legend, which is displayed at the top of the legend box."));
-
-  title = new QLineEdit( );
+  QGroupBox* gb = new QGroupBox( i18n("General") );
+  layout->addWidget( gb, 0, 0 );
 
   QVBoxLayout *vbox = new QVBoxLayout( );
   vbox->setSpacing(KDialog::spacingHint());
   vbox->setMargin(KDialog::marginHint());
+  gb->setLayout( vbox );
+
+  QLabel* lab = new QLabel( i18n("Title:") );
+  lab->setWhatsThis( i18n("Write here the title of the legend, which is displayed at the top of the legend box."));
   vbox->addWidget( lab );
+
+  title = new QLineEdit( );
   vbox->addWidget( title );
   vbox->addStretch( 1 );
-  
-  gb1->setLayout( vbox );
 
   // 2. Block: Legend position
-  gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Legend Position"), this );
+  gb = new QGroupBox( i18n("Legend Position") );
   gb->setWhatsThis( i18n("<qt>Choose the location of the legend on the chart by clicking a location button.\nUse the central button to <b>hide</b> the legend.</qt>"));
-  gb->layout()->setSpacing(KDialog::spacingHint());
-  gb->layout()->setMargin(KDialog::marginHint());
-  gb->setExclusive( true );
-
-  QGridLayout *grid1 = new QGridLayout( gb->layout(), 3, 3 );
-
-  lTopLeft  = addButton( grid1, gb, i18n("Top-Left"),  "chart_legend_topleft",  0, 0 );
-  lTop      = addButton( grid1, gb, i18n("Top"),       "chart_legend_top",      0, 1 );
-  lTopRight = addButton( grid1, gb, i18n("Top-Right"), "chart_legend_topright", 0, 2 );
-
-  lLeft    = addButton( grid1, gb, i18n("Left"),      "chart_legend_left",     1, 0 );
-  noLegend = addButton( grid1, gb, i18n("No Legend"), "chart_legend_nolegend", 1, 1 );
-  lRight   = addButton( grid1, gb, i18n("Right"),     "chart_legend_right",    1, 2 );
-
-  lBottomLeft  = addButton( grid1, gb, i18n("Bottom-Left"),  "chart_legend_bottomleft",  2, 0 );
-  lBottom      = addButton( grid1, gb, i18n("Bottom"),       "chart_legend_bottom",      2, 1 );
-  lBottomRight = addButton( grid1, gb, i18n("Bottom-Right"), "chart_legend_bottomright", 2, 2 );
-
-  gb->setAlignment( Qt::AlignLeft );
   layout->addWidget( gb, 1, 0 );
 
+  QGridLayout *grid1 = new QGridLayout( );
+  grid1->setSpacing( 3 );
+  grid1->setMargin( KDialog::marginHint() );
+  gb->setLayout( grid1 );
+
+  QButtonGroup *bg = new QButtonGroup( );
+  bg->setExclusive( true );
+
+  lTopLeft  = addButton( grid1, bg, i18n("Top-Left"),  "chart_legend_topleft",  0, 0 );
+  lTop      = addButton( grid1, bg, i18n("Top"),       "chart_legend_top",      0, 1 );
+  lTopRight = addButton( grid1, bg, i18n("Top-Right"), "chart_legend_topright", 0, 2 );
+
+  lLeft     = addButton( grid1, bg, i18n("Left"),      "chart_legend_left",     1, 0 );
+  noLegend  = addButton( grid1, bg, i18n("No Legend"), "chart_legend_nolegend", 1, 1 );
+  lRight    = addButton( grid1, bg, i18n("Right"),     "chart_legend_right",    1, 2 );
+
+  lBottomLeft  = addButton( grid1, bg, i18n("Bottom-Left"),  "chart_legend_bottomleft",  2, 0 );
+  lBottom      = addButton( grid1, bg, i18n("Bottom"),       "chart_legend_bottom",      2, 1 );
+  lBottomRight = addButton( grid1, bg, i18n("Bottom-Right"), "chart_legend_bottomright", 2, 2 );
+
+  gb->setAlignment( Qt::AlignLeft );
+
   // 3. Block: Font
-  gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Font"), this );
+  gb = new QGroupBox( i18n("Font") );
   gb->setWhatsThis( i18n("This Font box can be used to set different fonts for the legend title and the individual entries."));
-  gb->layout()->setSpacing(KDialog::spacingHint());
-  gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 0, 1 );
 
-  QGridLayout *grid4 = new QGridLayout( gb->layout(), 4, 2 );
-  titleLegendFontButton = new QPushButton( gb );
+  vbox = new QVBoxLayout( );
+  vbox->setSpacing( KDialog::spacingHint() );
+  vbox->setMargin( KDialog::marginHint() );
+  gb->setLayout( vbox );
 
-  lab = new QLabel( i18n("Legend title font:"), gb );
-  grid4->addWidget( lab, 0 ,0 );
+  lab = new QLabel( i18n("Legend title font:") );
+  vbox->addWidget( lab );
 
+  titleLegendFontButton = new QPushButton( );
   titleLegendFontButton->setText( i18n("Select Font...") );
   titleLegendFontButton->setWhatsThis( i18n("Click here to display the KDE font chooser dialog. You will be able to change the font family, style and size for the legend title."));
-  grid4->addWidget( titleLegendFontButton, 1, 0 );
+  vbox->addWidget( titleLegendFontButton );
 
-  lab = new QLabel( i18n("Legend text font:"), gb );
-  grid4->addWidget( lab, 2, 0 );
-  textLegendFontButton = new QPushButton( gb );
+  lab = new QLabel( i18n("Legend text font:") );
+  vbox->addWidget( lab );
+
+  textLegendFontButton = new QPushButton( );
   textLegendFontButton->setText( i18n("Select Font...") );
   textLegendFontButton->setWhatsThis( i18n("Click here to display the KDE font chooser dialog. You will be able to change the font family, style and size for the legend text."));
-  grid4->addWidget( textLegendFontButton, 3, 0 );
+  vbox->addWidget( textLegendFontButton );
+
+  vbox->addStretch( 1 );
 
   connect( titleLegendFontButton, SIGNAL(clicked()), 
 	   this, SLOT(changeTitleLegendFont()));
@@ -122,29 +126,30 @@ KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
 	   this, SLOT(changeTextLegendFont()));
 
   // 4. Block: Text Colors
-  gb = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Color"), this );
+  gb = new QGroupBox( i18n("Color") );
   gb->setWhatsThis( i18n("This Color box can be used to set different colors for the legend title and text."));
-  gb->layout()->setSpacing(KDialog::spacingHint());
-  gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 1, 1 );
 
-  QGridLayout *grid3 = new QGridLayout( gb->layout(), 4, 2 );
+  vbox = new QVBoxLayout( );
+  vbox->setSpacing( KDialog::spacingHint() );
+  vbox->setMargin( KDialog::marginHint() );
+  gb->setLayout( vbox );
 
-  lab = new QLabel( i18n("Legend title color:"), gb );
-  grid3->addWidget( lab, 0, 0 );
+  lab = new QLabel( i18n("Legend title color:") );
+  vbox->addWidget( lab );
 
-  legendTitleColor = new KColorButton( gb );
+  legendTitleColor = new KColorButton( );
   legendTitleColor->setWhatsThis( i18n("Click here to display the KDE Select Color dialog. You will be able to change the color for the legend title."));
-  grid3->addWidget( legendTitleColor, 1, 0 );
+  vbox->addWidget( legendTitleColor );
 
+  lab = new QLabel( i18n("Legend text color:") );
+  vbox->addWidget( lab );
 
-  lab = new QLabel( i18n("Legend text color:"), gb );
-  grid3->addWidget( lab, 2, 0 );
-
-  legendTextColor = new KColorButton( gb );
+  legendTextColor = new KColorButton( );
   legendTextColor->setWhatsThis( i18n("Click here to display the KDE Select Color dialog. You will be able to change the color for the legend text."));
+  vbox->addWidget( legendTextColor );
 
-  grid3->addWidget( legendTextColor, 3, 0 );
+  vbox->addStretch( 1 );
 
   //it's not good but I don't know how
   //to reduce space
@@ -257,19 +262,21 @@ void KCConfigLegendPage::apply()
 }
 
 QPushButton* KCConfigLegendPage::addButton( QGridLayout* layout,
-					    Q3ButtonGroup* gb,
+					    QButtonGroup *bg,
 					    const QString &toolTipText,
 					    const QString &icon,
 					    int posY,
 					    int posX )
 {
-  QPushButton* button = new QPushButton( gb );
+  QPushButton* button = new QPushButton( );
   button->setCheckable( true );
+  bg->addButton( button );
   button->setIcon( BarIcon( icon,
 			    K3Icon::SizeMedium,
 			    K3Icon::DefaultState ) );
   button->setToolTip( toolTipText );
   layout->addWidget( button, posY, posX );
+
   return button;
 }
 

@@ -1,13 +1,22 @@
+2007-03-18  Inge Wallin  <ingwa@dhcp-254-139.lkpg.cendio.se>
+
+
+
 2007-03-18  Inge Wallin  <inge@lysator.liu.se>
 
 	More Q3Support -> Qt4 conversions.
-	* dialogs/KCConfigColorPage.cc (KCConfigColorPage): Fix layout and
-	port to Qt4. This file produces no warnings now and uses no
+	* dialogs/KCConfigLegendPage.cc (KCConfigLegendPage): Fix layout
+	and port to Qt4. This file produces no warnings now and uses no
 	q3support classes.
 
 	More Q3Support -> Qt4 conversions.
-	* dialogs/KCConfigAxesPage.cc (KCConfigAxesPage): Fix layout and
+	* dialogs/KCConfigColorPage.cc (KCConfigColorPage): Fix layout and
 	port to Qt4. This file produces no warnings now.
+
+	More Q3Support -> Qt4 conversions.
+	* dialogs/KCConfigAxesPage.cc (KCConfigAxesPage): Fix layout and
+	port to Qt4. This file produces no warnings now and uses no
+	q3support classes.
 
 	More Q3Support -> Qt4 conversions.
 	* dialogs/KCConfigSubtypeBarPage.cc (KCConfigSubtypeBarPage): Fix

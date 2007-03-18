@@ -22,11 +22,9 @@
 #define __KCCONFIGLEGENDPAGE_H__
 
 #include <QWidget>
-#include <q3button.h>
 #include <QLayout>
-//Added by qt3to4:
-#include <Q3ButtonGroup>
 
+class QButtonGroup;
 class QRadioButton;
 class QLineEdit;
 class KColorButton;
@@ -61,7 +59,8 @@ private:
     QPushButton *titleLegendFontButton, *textLegendFontButton;
 	Qt::CheckState titleLegendIsRelative, textLegendIsRelative;
 
-    QPushButton* addButton( QGridLayout* layout, Q3ButtonGroup* gb,
+    QPushButton* addButton( QGridLayout* layout,
+			    QButtonGroup *bg,
                             const QString &toolTipText, const QString &icon,
                             int posY, int posX );
 };
