@@ -337,12 +337,26 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
         if ( isTextNS && localName == "p" ) {  // text paragraph
             //kDebug()<<"==> PARAGRAPH <=="<<endl;
             context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
-
 #if 0
             KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
             parag->loadOasis( tag, context, styleColl, pos );
 #else
-            //TODO see KWTextParag::loadOasis
+            //KWTextParag::loadOasis
+            const QString styleName = tag.attributeNS( KoXmlNS::text, "style-name", QString::null );
+            //if ( !styleName.isEmpty() )
+            //{
+                const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
+                QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
+                if ( masterPageName.isEmpty() )
+                    masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
+
+                context.styleStack().save();
+                context.styleStack().setTypeProperties( "paragraph" );
+                context.addStyles( paragraphStyle, "paragraph" );
+                context.styleStack().restore();
+
+                loadOasisPageLayout( masterPageName, context ); // page layout
+            //}
 
             loadOasisSpan(tag, context, cursor);
 
@@ -350,7 +364,6 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
             QTextCharFormat emptyCf;
             cursor.insertBlock(emptyTbf, emptyCf);
 #endif
-
         }
         else if ( isTextNS && localName == "h" ) // heading
         {
@@ -589,14 +602,14 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         if ( displayName.isEmpty() )
             displayName = name;
 
+#if 0
         // OOo hack:
         //m_bOutline = name.startsWith( "Heading" );
         // real OASIS solution:
         bool m_bOutline = styleElem->hasAttributeNS( KoXmlNS::style, "default-outline-level" );
-
+#endif
         context.styleStack().save();
         context.addStyles( styleElem, "paragraph" ); // Load all parents - only because we don't support inheritance.
-
 #if 0
         //KoParagLayout::loadOasisParagLayout
         context.styleStack().setTypeProperties( "paragraph" );
@@ -606,47 +619,14 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         parastyle->setName(name);
         //parastyle->setParent( d->document->styleManager()->defaultParagraphStyle() );
         d->document->styleManager()->add(parastyle);
-
-        //kDebug()<<"KWOpenDocumentLoader::loadOasisStyles name="<<name<<" displayName="<<displayName<<endl;
-
         KoCharacterStyle *charstyle = parastyle->characterStyle();
-        //charstyle->setFontFamily();
-        //charstyle->setFontPointSize();
-        //charstyle->setFontWeight();
-        //charstyle->setFontItalic();
-        //charstyle->setFontOverline();
-        //charstyle->setFontStrikeOut();
-        //charstyle->setFontFixedPitch();
 
         //KoTextFormat::load
         KoStyleStack& styleStack = context.styleStack();
         styleStack.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
+        charstyle->loadOasis(styleStack); // load the KoCharacterStyle from the stylestack
 
-        if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24
-            QString fontWeight = styleStack.attributeNS( KoXmlNS::fo, "font-weight" );
-            int boldness;
-            if ( fontWeight == "normal" )
-                boldness = 50;
-            else if ( fontWeight == "bold" )
-                boldness = 75;
-            else
-                // XSL/CSS has 100,200,300...900. Not the same scale as Qt!
-                // See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#font-weight
-                boldness = fontWeight.toInt() / 10;
-            charstyle->setFontWeight( boldness );
-        }
-        else
-            charstyle->setFontWeight( 95 );
-
-        if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) ) // 3.10.19
-        if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ||
-             styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
-            charstyle->setFontItalic( true );
-        }
-
-        //TODO handle also the other formats defined in KoTextFormat::load
-
-context.styleStack().restore();
+        context.styleStack().restore();
     }
 #endif
 }
