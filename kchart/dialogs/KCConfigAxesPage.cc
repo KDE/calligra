@@ -19,11 +19,11 @@
 
 
 #include <QLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QSpinBox>
-#include <q3buttongroup.h>
 #include <qradiobutton.h>
 
 #include <klocale.h>
@@ -42,91 +42,108 @@ KCConfigAxesPage::KCConfigAxesPage( KChartParams* params,
 				    QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
+    QVBoxLayout *vbox;
+
     QVBoxLayout* toplevel = new QVBoxLayout( this );
     toplevel->setMargin( 10 );
 
-    QGridLayout* layout = new QGridLayout( );
+    QHBoxLayout* layout = new QHBoxLayout( );
     toplevel->addLayout( layout );
 
-    Q3ButtonGroup* gb1 = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Parameters"), this );
-    gb1->layout()->setSpacing(KDialog::spacingHint());
-    gb1->layout()->setMargin(KDialog::marginHint());
-    QGridLayout *grid1 = new QGridLayout( gb1->layout(), 9, 1 );
+    // The first groupbox to the left.
+    QGroupBox* gb1 = new QGroupBox( i18n("Parameters") );
+
+    vbox = new QVBoxLayout( );
+    vbox->setSpacing(KDialog::spacingHint());
+    vbox->setMargin(KDialog::marginHint());
+    gb1->setLayout( vbox );
 
     grid = new QCheckBox( i18n( "Grid" ), gb1 );
     grid->setWhatsThis( i18n("If this is checked, the grid is shown. If you uncheck this option, the grid will not be displayed anymore."));
-    grid1->addWidget(grid, 0, 0);
+    vbox->addWidget( grid );
 
     yaxis = new QCheckBox( i18n( "Y-axis" ), gb1);
     yaxis->setWhatsThis( i18n("If this is checked, the Y-axis is shown. If you uncheck this option, the Y-axis and the Y grid lines will not be displayed anymore."));
     connect( yaxis, SIGNAL( clicked() ), this, SLOT( axisChanged() ) );
-    grid1->addWidget(yaxis, 1, 0);
+    vbox->addWidget( yaxis );
 
     xaxis = new QCheckBox( i18n( "X-axis" ), gb1 );
     xaxis->setWhatsThis( i18n("If this is checked, the X-axis is shown. If you uncheck this option, the X-axis and the X grid lines will not be displayed anymore."));
     connect( xaxis, SIGNAL( clicked() ), this, SLOT( axisChanged() ) );
-    grid1->addWidget(xaxis, 2, 0);
+    vbox->addWidget( xaxis );
 
 #if 0
     xlabel = new QCheckBox( i18n( "Has X-label" ), gb1 );
-    grid1->addWidget(xlabel,3,0);
+    vbox->addWidget( xlabel );
 
     yaxis2 = new QCheckBox( i18n( "Y-axis 2" ), gb1 );
-    grid1->addWidget(yaxis2,4,0);
+    vbox->addWidget( yaxis2 );
 #endif
+    vbox->addStretch( 1 );
 
-#if 0 // Moved to the Line page
-    lineMarker = new QCheckBox( i18n( "Line marker" ), gb1 );
-    grid1->addWidget(lineMarker, 4, 0);
-#endif
 #if 0
     llabel = new QCheckBox( i18n( "Legend" ), gb1 );
     grid1->addWidget(llabel,6,0);
 #endif
 
-    Q3ButtonGroup* gb2 = new Q3ButtonGroup( 0, Qt::Vertical, 
-                      i18n("Settings"), this );
-    gb2->layout()->setSpacing(KDialog::spacingHint());
-    gb2->layout()->setMargin(KDialog::marginHint());
-    QGridLayout *grid2 = new QGridLayout(gb2->layout(),8,1);
+    // The second groupbox to the right.
+    QGroupBox* gb2 = new QGroupBox( i18n("Settings") );
 
-    QHBoxLayout * top = new QHBoxLayout( this );
+    QGridLayout *grid2 = new QGridLayout( );
+    grid2->setSpacing( KDialog::spacingHint() );
+    grid2->setMargin( KDialog::marginHint() );
+    gb2->setLayout( grid2 );
+
     // The X axis title
-    QLabel *tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
-    top->addWidget(tmpLabel);
+    QLabel *tmpLabel = new QLabel( i18n( "X-title:" ) );
+    grid2->addWidget( tmpLabel, 0, 0 );
+
     // The Y axis title
-    tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
-    top->addWidget(tmpLabel);
+    tmpLabel = new QLabel( i18n( "Y-title:" ) );
+    grid2->addWidget( tmpLabel, 0, 1 );
 
-    QHBoxLayout * bottom = new QHBoxLayout( this );
-    xtitle= new QLineEdit( gb2 );
+    xtitle = new QLineEdit( );
     xtitle->setWhatsThis( i18n("Write the title for the X-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
-    bottom->addWidget(xtitle);
-    QBoxLayout * l = new QVBoxLayout( this );
-    ytitle= new QLineEdit( gb2 );
-    ytitle->setWhatsThis( i18n("Write the title for the Y-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
-    bottom->addWidget(ytitle);
+    grid2->addWidget( xtitle, 1, 0 );
 
-    l->addLayout(top);
-    l->addLayout(bottom);
-    grid2->addLayout(l, 0, 0);
+    ytitle = new QLineEdit( );
+    ytitle->setWhatsThis( i18n("Write the title for the Y-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
+    grid2->addWidget( ytitle, 1, 1 );
 
     // Linear or logarithmic scale
-    Q3VButtonGroup *scaletype = new Q3VButtonGroup(i18n("Scale Types"), gb2);
+    QGroupBox *scaletype = new QGroupBox( i18n("Scale Types") );
+    grid2->addWidget(scaletype, 2, 0, 1, 2 );
+    vbox = new QVBoxLayout( );
+    vbox->setSpacing(KDialog::spacingHint());
+    vbox->setMargin(KDialog::marginHint());
+    scaletype->setLayout( vbox );
+
     lin = new QRadioButton( i18n("Linear scale"), scaletype);
     lin->setWhatsThis( i18n("This sets the Y-axis to be linear. This is default."));
+    vbox->addWidget( lin );
     log = new QRadioButton( i18n("Logarithmic scale"), scaletype);
     log->setWhatsThis( i18n("This sets the Y-axis to be logarithmic."));
-    grid2->addWidget(scaletype, 1, 0);
+    vbox->addWidget( log );
 
     // Decimal precision
-    Q3VButtonGroup *precision = new Q3VButtonGroup(i18n("Precision for Numerical Left Axis"), gb2);
-    grid2->addWidget(precision, 2, 0);
+    QGroupBox *precision = new QGroupBox(i18n("Precision for Numerical Left Axis"), gb2);
+    grid2->addWidget(precision, 3, 0, 1, 2 );
+    // FIXME: Use grid instead?
+    vbox = new QVBoxLayout( );
+    vbox = new QVBoxLayout( );
+    vbox->setSpacing(KDialog::spacingHint());
+    vbox->setMargin(KDialog::marginHint());
+    precision->setLayout( vbox );
+
     QRadioButton * automatic_precision = new QRadioButton( i18n("Automatic precision"), precision);
     automatic_precision->setWhatsThis( i18n("This sets the precision as automatic which means that KChart decides what precision to apply."));
     automatic_precision->setChecked(true);
+    vbox->addWidget( automatic_precision );
+
     max = new QRadioButton( i18n("Decimal precision:"), precision);
     max->setWhatsThis( i18n("This sets the Y-axis precision. For example, if you choose a precision of 2, the value 5 will be displayed as 5.00 alongside the Y-axis."));
+    vbox->addWidget( max );
+
     connect(automatic_precision, SIGNAL(toggled(bool)), this,
             SLOT(automatic_precision_toggled(bool)) );
     maximum_length = new QSpinBox( precision );
@@ -134,6 +151,7 @@ KCConfigAxesPage::KCConfigAxesPage( KChartParams* params,
     maximum_length->setMaximum( 15 );
     maximum_length->setWhatsThis( i18n("Set the precision you want to display for the Y-axis, if you choose Decimal precision. The range is 0 to 15; 2 being the default."));
     maximum_length->setValue(2);
+    vbox->addWidget( maximum_length );
 
 #if 0
     tmpLabel = new QLabel( i18n( "Y-label format:" ), gb2 );
@@ -158,8 +176,8 @@ KCConfigAxesPage::KCConfigAxesPage( KChartParams* params,
     ylabel2_fmt->setMaximumWidth(130);
     grid2->addWidget(ylabel2_fmt,5,1);
 #endif
-    layout->addWidget(gb1,0,0);
-    layout->addWidget(gb2,0,1);
+    layout->addWidget( gb1 );
+    layout->addWidget( gb2 );
 
 #if 0
     grid1->activate();
