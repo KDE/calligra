@@ -62,13 +62,13 @@
 #include <KoXmlWriter.h>
 
 #include "Canvas.h"
-#include "Commands.h"
 #include "Damages.h"
 #include "Formula.h"
 #include "Functions.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "Map.h"
+#include "Object.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -83,7 +83,8 @@
 #include "ValueParser.h"
 #include "View.h"
 
-// #include "KSpreadDocIface.h"
+// commands
+#include "commands/UndoWrapperCommand.h"
 
 #include "Doc.h"
 

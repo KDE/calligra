@@ -19,14 +19,16 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Commands.h"
 #include "Doc.h"
 #include "Localization.h"
+#include "Object.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetView.h"
 #include "Selection.h"
 #include "Undo.h"
+
+#include "commands/DefinePrintRangeCommand.h"
 
 #include "SheetPrint.h"
 

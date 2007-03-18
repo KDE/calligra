@@ -16,6 +16,42 @@
  */
 
 /**
+\page commands Commands
+
+To implement undo and redo functionality, every possible action
+by the user for editing and manipulating the document is encapsulated
+in a command (based on QUndoCommand).
+There is one command class (which will be instantiated) for every unique
+action. You need to reimplement the redo() and undo() methods
+of QUndoCommand.
+
+Each command is created from the user interface, and then added
+to the command history using Doc::addCommand method. The command is
+immediately executed, if you add it.
+This is an example of typical use of command:
+
+\code
+QUndoCommand* command = new RenameSheetCommand( sheet, name );
+doc->addCommand( command );
+\endcode
+
+Then whenever the user triggers an "undo", the corresponding
+undo() method of the command is called by the undo action,
+thereby reverting the previously executed command. Similar thing
+happens for the "redo".
+
+Alphabetical list of commands:
+
+\li AddSheetCommand
+\li DissociateCellCommand
+\li MergeCellCommand
+\li RemoveSheetCommand
+\li RenameSheetCommand
+
+\sa Doc::addCommand
+*/
+
+/**
  * \page design Design Notes
  * \htmlinclude DESIGN.html
  */

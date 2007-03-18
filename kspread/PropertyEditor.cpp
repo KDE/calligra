@@ -23,7 +23,6 @@
 #include "Sheet.h"
 #include "Doc.h"
 // #include "KPrUtils.h"
-#include "Commands.h"
 // #include "KPrPenStyleWidget.h"
 // #include "KPrBrushProperty.h"
 // #include "KPrRectProperty.h"
@@ -32,6 +31,9 @@
 // #include "KPrPictureProperty.h"
 // #include "KPrTextProperty.h"
 // #include "KPrObjectProperties.h"
+
+// commands
+#include "commands/EmbeddedObjectCommands.h"
 
 #include <klocale.h>
 #include <kguiitem.h>

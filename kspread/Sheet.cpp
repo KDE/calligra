@@ -63,13 +63,12 @@
 #include <KoXmlWriter.h>
 
 #include "CellStorage.h"
-#include "Commands.h"
-#include "Damages.h"
-#include "DataManipulators.h"
-#include "DependencyManager.h"
 #include "Canvas.h"
 #include "Cluster.h"
 #include "Condition.h"
+#include "Damages.h"
+#include "DataManipulators.h"
+#include "DependencyManager.h"
 #include "Doc.h"
 #include "Global.h"
 #include "LoadingInfo.h"
@@ -90,6 +89,9 @@
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
+
+// commands
+#include "commands/EmbeddedObjectCommands.h"
 
 
 #include "SheetAdaptor.h"

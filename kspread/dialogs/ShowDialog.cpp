@@ -31,10 +31,12 @@
 
 #include <klocale.h>
 
-#include "Commands.h"
 #include "Doc.h"
 #include "Map.h"
 #include "View.h"
+
+// commands
+#include "commands/SheetCommands.h"
 
 #include "ShowDialog.h"
 

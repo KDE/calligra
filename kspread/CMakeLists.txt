@@ -18,6 +18,15 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/inter
 
 
 ########### next target ###############
+SET (commands_DIR_SRCS
+	commands/DefinePrintRangeCommand.cpp
+	commands/EmbeddedObjectCommands.cpp
+	commands/LinkCommand.cpp
+	commands/PaperLayoutCommand.cpp
+	commands/SheetCommands.cpp
+	commands/UndoWrapperCommand.cpp
+	)
+
 SET (dialogs_DIR_SRCS
 	dialogs/AngleDialog.cpp
 	dialogs/AreaDialog.cpp
@@ -88,7 +97,6 @@ SET (kspreadcommon_LIB_SRCS
 	CellStorage.cpp
 	CellView.cpp
 	Cluster.cpp
-	Commands.cpp
 	Condition.cpp
 	Currency.cpp
 	Damages.cpp
@@ -139,6 +147,7 @@ SET (kspreadcommon_LIB_SRCS
 	View.cpp
 	ViewAdaptor.cpp
 	tests/inspector.cc
+	${commands_DIR_SRCS}
 	${dialogs_DIR_SRCS}
 	${functions_DIR_SRCS}
 	)

@@ -89,7 +89,6 @@
 // KSpread
 #include "CellStorage.h"
 #include "CellView.h"
-#include "Commands.h"
 #include "Doc.h"
 #include "Editors.h"
 #include "Global.h"
@@ -104,6 +103,9 @@
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
+
+// commands
+#include "commands/EmbeddedObjectCommands.h"
 
 #include "Border.h"
 #include "CanvasPrivate.h"

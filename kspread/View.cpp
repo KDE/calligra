@@ -103,7 +103,6 @@
 
 // KSpread includes
 #include "CellStorage.h"
-#include "Commands.h"
 #include "Damages.h"
 #include "DataManipulators.h"
 #include "DependencyManager.h"
@@ -118,6 +117,7 @@
 #include "Handler.h"
 #include "Localization.h"
 #include "Map.h"
+#include "Object.h"
 #include "RecalcManager.h"
 #include "RowColumnManipulators.h"
 #include "Selection.h"
@@ -131,6 +131,11 @@
 #include "Util.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+
+// commands
+#include "commands/EmbeddedObjectCommands.h"
+#include "commands/LinkCommand.h"
+#include "commands/SheetCommands.h"
 
 // dialogs
 #include "dialogs/AngleDialog.h"
