@@ -548,73 +548,61 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
         if ( node.isText() )
         {
             QString text = node.toText().data();
-            kDebug() << "  localName=" << localName << " parent.localName="<<parent.localName()<<" text=" << text << endl;
-
-            //KoTextParag::loadOasisSpan => KoTextFormat::load
-            //context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
-            //context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
-            //context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
-
-            // apply first the block style
-//QTextBlock block = cursor.block();
-//style->applyStyle(block);
-
-            // apply style to the selection
-            //if( cursor.hasSelection() ) kDebug(32001) << "  selectionStart=" << cursor.selectionStart() << " selectionEnd=" << cursor.selectionEnd() << endl;
-
-            //KoCharacterStyle *charstyle1 = d->document->styleManager()->characterStyle( cursor.charFormat().intProperty(KoCharacterStyle::StyleId) );
-            //if(charstyle1) charstyle1->loadOasis( context.styleStack() );
+            kDebug() << "  <text> localName=" << localName << " parent.localName="<<parent.localName()<<" text=" << text << endl;
 
             int prevpos = cursor.position();
-            KoCharacterStyle *charstyle1 = d->document->styleManager()->characterStyle( cursor.charFormat().intProperty(KoCharacterStyle::StyleId) );
-            //if( charstyle1 ) charstyle1->applyStyle(&cursor);
-            if(!charstyle1) {QTextBlock b1=cursor.block();style->applyStyle(b1);}
+            //context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
+            context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
+            //const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString::null );
+            const QString textStyleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+            const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "text"/*"paragraph"*/ );
+            KoCharacterStyle *charstyle1 = 0;
+            if( textStyleElem ) {
+                kDebug()<<"textStyleName="<<textStyleName<<endl;
+                context.addStyles( textStyleElem, "text"/*"paragraph"*/ );
+                //style->applyStyle(cursor);
+                charstyle1 = d->document->styleManager()->characterStyle(textStyleName);
+                if( ! charstyle1 ) {
+                    charstyle1 = new KoCharacterStyle();
+                    charstyle1->loadOasis( context.styleStack() );
+                    d->document->styleManager()->add(charstyle1);
+                }
+                charstyle1->applyStyle(&cursor);
+            } //else {QTextBlock block = cursor.block();style->applyStyle(block);}
 
             cursor.insertText( text.replace('\n', QChar(0x2028)) );
 
+            int currentpos = cursor.position();
+            cursor.setPosition(prevpos, QTextCursor::MoveAnchor);
+            cursor.setPosition(currentpos, QTextCursor::KeepAnchor);
             if( charstyle1 ) {
-                int currentpos = cursor.position();
-                cursor.setPosition(prevpos, QTextCursor::MoveAnchor);
-                cursor.setPosition(currentpos, QTextCursor::KeepAnchor);
+                kDebug()<<"  5 => ///////////////////////////////////////////////////////"<<endl;
+                kDebug()<<"  selectionStart="<<cursor.selectionStart()<<" selectionEnd="<<cursor.selectionEnd()<<" selectedText="<<cursor.selectedText()<<endl;
                 charstyle1->applyStyle(&cursor);
-                cursor.setPosition(currentpos, QTextCursor::MoveAnchor);
+            } else {
+                kDebug()<<"  6 => ///////////////////////////////////////////////////////"<<endl;
+                /*KoCharacterStyle *charstyle2 = d->document->styleManager()->characterStyle( cursor.blockCharFormat().intProperty(KoCharacterStyle::StyleId) );
+                if(charstyle2) {
+                    QTextBlock block = cursor.block();
+                    charstyle2->applyStyle(block);
+                }*/
+                //QTextBlock block = cursor.block();
+                style->characterStyle()->applyStyle(&cursor);
             }
-
-            //KoCharacterStyle *charstyle2 = d->document->styleManager()->characterStyle( cursor.charFormat().intProperty(KoCharacterStyle::StyleId) );
-            //Q_ASSERT( ! charstyle2 );
-
-            /*
-            // re-apply char format after we added the text
-            KoCharacterStyle *charstyle2 = d->document->styleManager()->characterStyle( cursor.blockCharFormat().intProperty(KoCharacterStyle::StyleId) );
-            if(charstyle2) {
-                //context.styleStack().save();
-                //context.styleStack().setTypeProperties( "text" );
-                //charstyle2->loadOasis( context.styleStack() );
-                //context.styleStack().restore();
-                QTextBlock block = cursor.block();
-                charstyle2->applyStyle(block);
-            }
-            */
+            cursor.setPosition(currentpos, QTextCursor::MoveAnchor);
         }
         else if ( isTextNS && localName == "span" ) // text:span
         {
-            kDebug() << "  localName=" << localName << " is span" << endl;
+            kDebug() << "  <span> localName=" << localName << endl;
             context.styleStack().save();
             context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
             //context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
-
-//int prevpos = 0;
+#if 0
             const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString::null );
             const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "text"/*"paragraph"*/ );
             if ( textStyleElem ) {
-                kDebug(32001) << "KWOpenDocumentLoader::loadOasisSpan textStyleName=" << textStyleName << endl;
-                kDebug(32001) << "1 ==> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
                 context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
                 context.addStyles( textStyleElem, "text"/*"paragraph"*/ );
-                //style->applyStyle(cursor);
-                Q_ASSERT( ! d->document->styleManager()->characterStyle(textStyleName) );
-//prevpos = cursor.position();
-
                 KoCharacterStyle *charstyle = d->document->styleManager()->characterStyle(textStyleName);
                 if( ! charstyle ) {
                     charstyle = new KoCharacterStyle();
@@ -623,26 +611,8 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
                 }
                 charstyle->applyStyle(&cursor);
             }
-
+#endif
             loadOasisSpan( ts, context, cursor ); // recurse
-
-/*
-            if( textStyleElem ) {
-                KoCharacterStyle *charstyle = d->document->styleManager()->characterStyle(textStyleName);
-                if( ! charstyle ) {
-                    charstyle = new KoCharacterStyle();
-                    charstyle->loadOasis( context.styleStack() );
-                    d->document->styleManager()->add(charstyle);
-                }
-int currentpos = cursor.position();
-cursor.setPosition(prevpos, QTextCursor::MoveAnchor);
-cursor.setPosition(currentpos, QTextCursor::KeepAnchor);
-
-                charstyle->applyStyle(&cursor);
-
-cursor.setPosition(currentpos, QTextCursor::MoveAnchor);
-            }
-*/
 
             context.styleStack().restore();
         }
@@ -661,7 +631,7 @@ cursor.setPosition(currentpos, QTextCursor::MoveAnchor);
 #endif
         else if ( isTextNS && localName == "line-break" ) // text:line-break
         {
-            kDebug() << "  Node localName=" << localName << " is line-break" << endl;
+            kDebug() << "  <line-break> Node localName=" << localName << endl;
             QTextBlockFormat emptyTbf;
             QTextCharFormat emptyCf;
             cursor.insertBlock(emptyTbf, emptyCf);
