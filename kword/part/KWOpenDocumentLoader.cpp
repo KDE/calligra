@@ -541,10 +541,13 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
 
     kDebug(32001) << "KWOpenDocumentLoader::loadOasisSpan styleName=" << styleName << " styleFound=" << (style != 0) << " style->alignment="<<(style ? int(style->alignment()) : -1)<<endl;
 
+//TODO get right of this dirty hack
+if(parent.localName()!="span") {
     context.styleStack().setTypeProperties( "paragraph" );
     style->loadOasis( context.styleStack() );
     QTextBlock block = cursor.block();
     style->applyStyle(block);
+}
 
     for (KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
@@ -609,6 +612,7 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
         else if ( isTextNS && localName == "span" ) // text:span
         {
             kDebug() << "  <span> localName=" << localName << endl;
+
             context.styleStack().save();
             context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
             //context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
