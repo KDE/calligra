@@ -552,12 +552,13 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
 
             //KoTextParag::loadOasisSpan => KoTextFormat::load
             //context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
-//context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
-//context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
+            //context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
+            //context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
 
             // apply first the block style
-            QTextBlock block = cursor.block();
-            style->applyStyle(block);
+//QTextBlock block = cursor.block();
+//style->applyStyle(block);
+
             // apply style to the selection
             if( cursor.hasSelection() ) {
                 kDebug(32001) << "  selectionStart=" << cursor.selectionStart() << " selectionEnd=" << cursor.selectionEnd() << endl;
@@ -590,19 +591,28 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
             //context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
 
             const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString::null );
-            if ( !textStyleName.isEmpty() ) {
+            const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "text"/*"paragraph"*/ );
+            if ( textStyleElem ) {
                 kDebug(32001) << "KWOpenDocumentLoader::loadOasisSpan textStyleName=" << textStyleName << endl;
-                const QDomElement* textStyle = context.oasisStyles().findStyle( textStyleName, "text"/*"paragraph"*/ );
-                if ( textStyle ) {
-                    kDebug(32001) << "1 ==> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-                    context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
-                    context.addStyles( textStyle, "text"/*"paragraph"*/ );
-                    //style->applyStyle(cursor);
-                }
+                kDebug(32001) << "1 ==> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+                context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
+                context.addStyles( textStyleElem, "text"/*"paragraph"*/ );
+                //style->applyStyle(cursor);
                 Q_ASSERT( ! d->document->styleManager()->characterStyle(textStyleName) );
             }
 
             loadOasisSpan( ts, context, cursor ); // recurse
+
+            if( textStyleElem ) {
+                KoCharacterStyle *charstyle = d->document->styleManager()->characterStyle(textStyleName);
+                if( ! charstyle ) {
+                    charstyle = new KoCharacterStyle();
+                    charstyle->loadOasis( context.styleStack() );
+                    d->document->styleManager()->add(charstyle);
+                }
+                charstyle->applyStyle(&cursor);
+            }
+
             context.styleStack().restore();
         }
         else if ( isTextNS && localName == "s" ) // text:s
