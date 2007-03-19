@@ -31,7 +31,6 @@
 #include "../../Sheet.h"
 
 #include <kcalendarsystem.h>
-#include <kcalendarsystemfactory.h>
 #include <kaboutdata.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -186,7 +185,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
     }
   }
 
-  KCalendarSystem* cs = KCalendarSystemFactory::create();
+  KCalendarSystem* cs = KCalendarSystem::create();
 
   Q_ASSERT(cs);
 
