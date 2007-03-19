@@ -217,9 +217,9 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->configLoadFromFile = false;
   d->captureAllArrowKeys = true;
 
-  QFontMetricsF fontMetrics( KoGlobal::defaultFont() );
-  d->defaultRowFormat->setHeight( fontMetrics.height() );
-  d->defaultColumnFormat->setWidth( fontMetrics.height() * 5 );
+  QFont font( KoGlobal::defaultFont() );
+  d->defaultRowFormat->setHeight( font.pointSizeF() + 3 );
+  d->defaultColumnFormat->setWidth( ( font.pointSizeF() + 3 ) * 5 );
 
   documents().append( this );
 
