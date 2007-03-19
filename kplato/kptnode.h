@@ -494,6 +494,7 @@ public:
     virtual Duration calcDuration(const DateTime &/*time*/, const Duration &/*effort*/, bool /*backward*/) { return Duration::zeroDuration;}
 
     virtual void changed() { changed( this ); }
+    Duration getmDurationForward(){ return this->m_durationForward;}
     
 protected:
     // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
@@ -505,6 +506,7 @@ protected:
     QList<Relation*> m_dependParentNodes;
     QList<Node*>m_parentNodes;
     Node *m_parent;
+    
 
     QString m_id; // unique id
     QString m_name;        // Name of this node

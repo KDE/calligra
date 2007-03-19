@@ -62,6 +62,10 @@ public:
 
     PertResult( Part *part, QWidget *parent );
     void draw( Project &project);
+
+    void updateDurationForward();
+    QList<Node*> criticalPath(Node*);
+
     QString & getStartEarlyDate(Node * currentNode);
     QString & getFinishEarlyDate(Node * currentNode);
     QString & getStartLateDate(Node * currentNode);
@@ -73,6 +77,9 @@ public:
 
 private:
     Ui::PertResult widget;
+    Node * m_node;
+    Part * m_part;
+    QList<Node *> m_criticalPath;
 };
 
 }  //KPlato namespace

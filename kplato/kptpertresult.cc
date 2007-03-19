@@ -83,7 +83,11 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
     widget.setupUi(this);
     QHeaderView *header=widget.treeWidgetTaskResult->header();
-    
+
+    m_part = part;
+    m_node = m_part->getProject().projectNode();
+	
+
     (*header).resizeSection(0,200);
     (*header).resizeSection(1,78);
     (*header).resizeSection(2,78);
@@ -93,8 +97,38 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     (*header).resizeSection(5,78);
     draw( part->getProject() );
 
-
 }
+
+void PertResult::updateDurationForward()
+{
+Duration duree;
+    foreach(Node * currentNode, m_node->childNodeIterator() )
+    {
+	for (QList<Relation*>::iterator it=currentNode->dependParentNodes().begin();it!=currentNode->dependParentNodes().end();it++) 
+   	{
+		duree=(*it)->getmParent()->getmDurationForward() +((*it)->getmLag());
+		if (duree>(currentNode->getmDurationForward()))
+		{
+			currentNode->getmDurationForward()=duree;
+		}
+
+  	}
+    }
+}
+
+QList<Node*> PertResult::criticalPath(Node * currentNode)
+{
+    //Node * currentNode = m_node->chilNodeIterator().end(); 
+    for(QList<Relation*>::iterator it=currentNode->dependParentNodes().end();it!=currentNode->dependParentNodes().begin();it--)
+    {
+	 if((currentNode->getmDurationForward() -((*it)->getmLag()))==((*it)->getmParent()->getmDurationForward()))
+         {
+		criticalPath((*it)->getmParent());
+		m_criticalPath.push_back((*it)->getmParent());
+         }
+    }
+}
+
 
 
 } // namespace KPlato

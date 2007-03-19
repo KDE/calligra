@@ -82,7 +82,10 @@ public:
 
     bool load(QDomElement &element, Project &project);
     void save(QDomElement &element) const;
-    
+
+    Node * getmParent(){ return this->m_parent; }
+    Node * getmChild(){ return this->m_child; }
+    Duration getmLag(){ return this->m_lag; }
 protected: // variables
     Node *m_parent;
     Node *m_child;
