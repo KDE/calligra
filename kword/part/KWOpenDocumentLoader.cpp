@@ -509,15 +509,19 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         //KoParagLayout::loadOasisParagLayout
         context.styleStack().setTypeProperties( "paragraph" );
 #endif
+        KoStyleStack& styleStack = context.styleStack();
 
         KoParagraphStyle *parastyle = new KoParagraphStyle();
         parastyle->setName(name);
         //parastyle->setParent( d->document->styleManager()->defaultParagraphStyle() );
         d->document->styleManager()->add(parastyle);
-        KoCharacterStyle *charstyle = parastyle->characterStyle();
+
+        //KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
+        styleStack.setTypeProperties( "paragraph" );
+        parastyle->loadOasis(styleStack);
 
         //KoTextFormat::load
-        KoStyleStack& styleStack = context.styleStack();
+        KoCharacterStyle *charstyle = parastyle->characterStyle();
         styleStack.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
         charstyle->loadOasis(styleStack); // load the KoCharacterStyle from the stylestack
 
@@ -531,10 +535,16 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
 {
     QString styleName = context.styleStack().userStyleName( "paragraph" );
     KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
-    if ( !style )
+    if ( !style ) {
         style = d->document->styleManager()->defaultParagraphStyle();
+    }
 
     kDebug(32001) << "KWOpenDocumentLoader::loadOasisSpan styleName=" << styleName << " styleFound=" << (style != 0) << " style->alignment="<<(style ? int(style->alignment()) : -1)<<endl;
+
+    context.styleStack().setTypeProperties( "paragraph" );
+    style->loadOasis( context.styleStack() );
+    QTextBlock block = cursor.block();
+    style->applyStyle(block);
 
     for (KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
@@ -569,8 +579,10 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
                     d->document->styleManager()->add(charstyle1);
                 }
                 charstyle1->applyStyle(&cursor);
-            } //else {QTextBlock block = cursor.block();style->applyStyle(block);}
-            //else {style->characterStyle()->applyStyle(&cursor);}
+            }
+            else {
+                //style->characterStyle()->applyStyle(&cursor);
+            }
 
             cursor.insertText( text.replace('\n', QChar(0x2028)) );
 
