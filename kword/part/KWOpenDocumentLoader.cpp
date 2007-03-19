@@ -560,15 +560,28 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
 //style->applyStyle(block);
 
             // apply style to the selection
-            if( cursor.hasSelection() ) {
-                kDebug(32001) << "  selectionStart=" << cursor.selectionStart() << " selectionEnd=" << cursor.selectionEnd() << endl;
-                Q_ASSERT(false);
-            }
+            //if( cursor.hasSelection() ) kDebug(32001) << "  selectionStart=" << cursor.selectionStart() << " selectionEnd=" << cursor.selectionEnd() << endl;
 
             //KoCharacterStyle *charstyle1 = d->document->styleManager()->characterStyle( cursor.charFormat().intProperty(KoCharacterStyle::StyleId) );
             //if(charstyle1) charstyle1->loadOasis( context.styleStack() );
 
+            int prevpos = cursor.position();
+            KoCharacterStyle *charstyle1 = d->document->styleManager()->characterStyle( cursor.charFormat().intProperty(KoCharacterStyle::StyleId) );
+            //if( charstyle1 ) charstyle1->applyStyle(&cursor);
+            if(!charstyle1) {QTextBlock b1=cursor.block();style->applyStyle(b1);}
+
             cursor.insertText( text.replace('\n', QChar(0x2028)) );
+
+            if( charstyle1 ) {
+                int currentpos = cursor.position();
+                cursor.setPosition(prevpos, QTextCursor::MoveAnchor);
+                cursor.setPosition(currentpos, QTextCursor::KeepAnchor);
+                charstyle1->applyStyle(&cursor);
+                cursor.setPosition(currentpos, QTextCursor::MoveAnchor);
+            }
+
+            //KoCharacterStyle *charstyle2 = d->document->styleManager()->characterStyle( cursor.charFormat().intProperty(KoCharacterStyle::StyleId) );
+            //Q_ASSERT( ! charstyle2 );
 
             /*
             // re-apply char format after we added the text
@@ -590,6 +603,7 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
             context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
             //context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
 
+//int prevpos = 0;
             const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString::null );
             const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "text"/*"paragraph"*/ );
             if ( textStyleElem ) {
@@ -599,11 +613,8 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
                 context.addStyles( textStyleElem, "text"/*"paragraph"*/ );
                 //style->applyStyle(cursor);
                 Q_ASSERT( ! d->document->styleManager()->characterStyle(textStyleName) );
-            }
+//prevpos = cursor.position();
 
-            loadOasisSpan( ts, context, cursor ); // recurse
-
-            if( textStyleElem ) {
                 KoCharacterStyle *charstyle = d->document->styleManager()->characterStyle(textStyleName);
                 if( ! charstyle ) {
                     charstyle = new KoCharacterStyle();
@@ -612,6 +623,26 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
                 }
                 charstyle->applyStyle(&cursor);
             }
+
+            loadOasisSpan( ts, context, cursor ); // recurse
+
+/*
+            if( textStyleElem ) {
+                KoCharacterStyle *charstyle = d->document->styleManager()->characterStyle(textStyleName);
+                if( ! charstyle ) {
+                    charstyle = new KoCharacterStyle();
+                    charstyle->loadOasis( context.styleStack() );
+                    d->document->styleManager()->add(charstyle);
+                }
+int currentpos = cursor.position();
+cursor.setPosition(prevpos, QTextCursor::MoveAnchor);
+cursor.setPosition(currentpos, QTextCursor::KeepAnchor);
+
+                charstyle->applyStyle(&cursor);
+
+cursor.setPosition(currentpos, QTextCursor::MoveAnchor);
+            }
+*/
 
             context.styleStack().restore();
         }
