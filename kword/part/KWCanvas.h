@@ -59,23 +59,25 @@ public:
 
     // KoCanvasBase interface methods.
     /// reimplemented method from superclass
-    void gridSize(double *horizontal, double *vertical) const;
+    virtual void gridSize(double *horizontal, double *vertical) const;
     /// reimplemented method from superclass
-    bool snapToGrid() const;
+    virtual bool snapToGrid() const;
     /// reimplemented method from superclass
-    void addCommand(QUndoCommand *command);
+    virtual void addCommand(QUndoCommand *command);
     /// reimplemented method from superclass
-    KoShapeManager *shapeManager() const { return m_shapeManager; }
+    virtual KoShapeManager *shapeManager() const { return m_shapeManager; }
     /// reimplemented method from superclass
-    void updateCanvas(const QRectF& rc);
+    virtual void updateCanvas(const QRectF& rc);
     /// reimplemented method from superclass
-    KoViewConverter *viewConverter();
+    virtual KoViewConverter *viewConverter();
     /// reimplemented method from superclass
-    QWidget* canvasWidget() { return this; }
+    virtual QWidget* canvasWidget() { return this; }
     /// reimplemented method from superclass
-    KoUnit unit() { return document()->unit(); }
+    virtual KoUnit unit() { return document()->unit(); }
     /// reimplemented method from superclass
-    KoToolProxy * toolProxy() { return m_toolProxy; }
+    virtual KoToolProxy * toolProxy() { return m_toolProxy; }
+    /// reimplemented method from superclass
+    virtual void clipToDocument(KoShape *shape, QPointF &move) const;
     // getters
     /// return the document that this canvas works on
     KWDocument *document() const { return m_document; }
@@ -91,25 +93,25 @@ signals:
 
 protected:
     /// reimplemented method from superclass
-    void keyPressEvent( QKeyEvent *e );
+    virtual void keyPressEvent( QKeyEvent *e );
     /// reimplemented method from superclass
-    void mouseMoveEvent(QMouseEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *e);
     /// reimplemented method from superclass
-    void mousePressEvent(QMouseEvent *e);
+    virtual void mousePressEvent(QMouseEvent *e);
     /// reimplemented method from superclass
-    void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
     /// reimplemented method from superclass
-    void mouseDoubleClickEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
     /// reimplemented method from superclass
-    void keyReleaseEvent (QKeyEvent *e);
+    virtual void keyReleaseEvent (QKeyEvent *e);
     /// reimplemented method from superclass
-    void paintEvent(QPaintEvent * ev);
+    virtual void paintEvent(QPaintEvent * ev);
     /// reimplemented method from superclass
-    void tabletEvent( QTabletEvent *e );
+    virtual void tabletEvent( QTabletEvent *e );
     /// reimplemented method from superclass
-    void wheelEvent( QWheelEvent *e );
+    virtual void wheelEvent( QWheelEvent *e );
     /// reimplemented method from superclass
-    bool event(QEvent *event);
+    virtual bool event(QEvent *event);
 
 private slots:
     /// Called whenever there was a page added/removed or simply resized.

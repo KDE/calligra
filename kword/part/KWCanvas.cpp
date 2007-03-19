@@ -23,6 +23,7 @@
 #include "KWGui.h"
 #include "KWView.h"
 #include "KWViewMode.h"
+#include "KWPage.h"
 
 // koffice libs includes
 #include "KoShapeManager.h"
@@ -35,6 +36,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <QSize>
+#include <QPainterPath>
 
 // #define DEBUG_REPAINT
 
@@ -106,6 +108,26 @@ void KWCanvas::updateCanvas(const QRectF& rc) {
 
 KoViewConverter *KWCanvas::viewConverter() {
     return m_view->viewConverter();
+}
+
+void KWCanvas::clipToDocument(KoShape *shape, QPointF &move) const {
+    Q_ASSERT(shape);
+    QPointF absPos = shape->absolutePosition();
+    double y = qMax(0.1, absPos.y() + move.y());
+    KWPage *page = m_document->pageManager()->page(QPointF(absPos.x(), y));
+    Q_ASSERT(page);
+    QRectF pageRect (page->rect().adjusted(5, 5, -5, -5));
+    QRectF movedRect = pageRect;
+    QPainterPath path (shape->transformationMatrix(0).map(shape->outline()));
+
+    movedRect.moveLeft(pageRect.x() - move.x());
+    if(! path.intersects(movedRect))
+        move.setX(0);
+    movedRect.moveTopLeft(pageRect.topLeft() - move);
+    if(path.intersects(movedRect))
+        return;
+
+    move.setY(0);
 }
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e) {
