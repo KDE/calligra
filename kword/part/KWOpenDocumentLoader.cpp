@@ -315,13 +315,13 @@ void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLo
             const QString styleName = tag.attributeNS( KoXmlNS::text, "style-name", QString::null );
             if ( !styleName.isEmpty() ) {
                 const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
-                QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
-                if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
+                //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
+                //if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
                 context.styleStack().save();
                 context.styleStack().setTypeProperties( "paragraph" );
                 context.addStyles( paragraphStyle, "paragraph" );
                 context.styleStack().restore();
-                loadOasisPageLayout( masterPageName, context ); // page layout
+                //loadOasisPageLayout( masterPageName, context ); // page layout
             }
             */
 
@@ -564,11 +564,13 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
                 charstyle1 = d->document->styleManager()->characterStyle(textStyleName);
                 if( ! charstyle1 ) {
                     charstyle1 = new KoCharacterStyle();
+                    charstyle1->setName(textStyleName);
                     charstyle1->loadOasis( context.styleStack() );
                     d->document->styleManager()->add(charstyle1);
                 }
                 charstyle1->applyStyle(&cursor);
             } //else {QTextBlock block = cursor.block();style->applyStyle(block);}
+            //else {style->characterStyle()->applyStyle(&cursor);}
 
             cursor.insertText( text.replace('\n', QChar(0x2028)) );
 
@@ -590,6 +592,7 @@ void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoad
                 style->characterStyle()->applyStyle(&cursor);
             }
             cursor.setPosition(currentpos, QTextCursor::MoveAnchor);
+
         }
         else if ( isTextNS && localName == "span" ) // text:span
         {
