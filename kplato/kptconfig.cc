@@ -73,22 +73,21 @@ void Config::save() {
     if (!m_readWrite)
         return;
 
-    KSharedConfigPtr config = Factory::global().config();
+    KConfigGroup config = Factory::global().config()->group("Task defaults");
 
 //     config->setGroup( "Behavior" );
 //     config->writeEntry("CalculationMode",m_behavior.calculationMode);
 //     config->writeEntry("AllowOverbooking",m_behavior.allowOverbooking);
 
-    config->setGroup("Task defaults");
-    config->writeEntry("Leader", m_taskDefaults.leader());
-    config->writeEntry("Description", m_taskDefaults.description());
-    config->writeEntry("ConstraintType", (int)m_taskDefaults.constraint());
-    config->writeEntry("ConstraintStartTime", m_taskDefaults.constraintStartTime().dateTime());
-    config->writeEntry("ConstraintEndTime", m_taskDefaults.constraintEndTime().dateTime());
-    config->writeEntry("EffortType", (int)m_taskDefaults.effort()->type());
-    config->writeEntry("ExpectedEffort", m_taskDefaults.effort()->expected().seconds()); //FIXME
-    config->writeEntry("PessimisticEffort", m_taskDefaults.effort()->pessimisticRatio());
-    config->writeEntry("OptimisticEffort", m_taskDefaults.effort()->optimisticRatio());
+    config.writeEntry("Leader", m_taskDefaults.leader());
+    config.writeEntry("Description", m_taskDefaults.description());
+    config.writeEntry("ConstraintType", (int)m_taskDefaults.constraint());
+    config.writeEntry("ConstraintStartTime", m_taskDefaults.constraintStartTime().dateTime());
+    config.writeEntry("ConstraintEndTime", m_taskDefaults.constraintEndTime().dateTime());
+    config.writeEntry("EffortType", (int)m_taskDefaults.effort()->type());
+    config.writeEntry("ExpectedEffort", m_taskDefaults.effort()->expected().seconds()); //FIXME
+    config.writeEntry("PessimisticEffort", m_taskDefaults.effort()->pessimisticRatio());
+    config.writeEntry("OptimisticEffort", m_taskDefaults.effort()->optimisticRatio());
 }
 
 }  //KPlato namespace
