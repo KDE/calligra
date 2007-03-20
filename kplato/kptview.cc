@@ -2055,7 +2055,7 @@ void View::updateView( QWidget *widget )
             m_resourceAssignmentView->draw( getPart() ->getProject() );
         m_updateResourceAssignmentView = false;
     } else if ( widget == m_perteditor) {
-        if ( m_updatePertEditor )
+        //if ( m_updatePertEditor )
             m_perteditor -> draw( getPart()->getProject() );
         m_updatePertEditor = false;
     } else if ( widget == m_taskstatusview ) {

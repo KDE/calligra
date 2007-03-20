@@ -61,10 +61,12 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
     widget.assignList->setAvailableLabel(i18n("Available Tasks :"));
     widget.assignList->setShowUpDownButtons(false);
     widget.assignList->layout()->setMargin(0);
+    widget.assignList->setMoveOnDoubleClick(false);
 
     m_tasktree = widget.tableTaskWidget;
     m_assignList = widget.assignList;
     m_part = part;
+    m_project = &m_part->getProject();
     m_node = m_part->getProject().projectNode();
     
     draw( part->getProject() );  
@@ -72,56 +74,78 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
 	list_nodeNotView.removeFirst();
 	
     connect( m_tasktree, SIGNAL( itemSelectionChanged() ), SLOT( dispAvailableTasks() ) );
+    connect( this, SIGNAL( refreshAvailableTaskList() ), SLOT( dispAvailableTasks() ) );
     connect( m_assignList, SIGNAL(added(QListWidgetItem *)), this, SLOT(addTaskInRequiredList(QListWidgetItem * )) );
     connect( m_assignList, SIGNAL(removed(QListWidgetItem *)), this, SLOT(removeTaskFromRequiredList(QListWidgetItem * )) );
+
+    // connects used to refresh the kactionselector after an undo/redo
+    connect( m_project, SIGNAL( relationRemoved(Relation *) ), SLOT( dispAvailableTasks(Relation *) ) );
+    connect( m_project, SIGNAL( relationAdded(Relation *) ), SLOT( dispAvailableTasks(Relation *) ) );}
+
+
+void PertEditor::dispAvailableTasks( Relation *rel ){
+    dispAvailableTasks();
 }
 
+
 void PertEditor::dispAvailableTasks(){
-    
-    for (int i=0;i< list_nodeNotView.size();i++)
-	list_nodeNotView.removeFirst();
+    /*for (int i=0;i< list_nodeNotView.size();i++)
+	list_nodeNotView.removeFirst();*/
+    list_nodeNotView.clear();
 
     list_nodeNotView.begin();
+
     QList<QTreeWidgetItem*> selectedItemList=m_tasktree->selectedItems();
     
     if(!(selectedItemList.count()<1))
     {
-	QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
-	m_assignList->availableListWidget()->clear();
-	m_assignList->selectedListWidget()->clear();
-	
-	loadRequiredTasksList(itemToNode(selectedTaskName, m_node));
-	
-	listNodeNotView(itemToNode(selectedTaskName, m_node));
-	
-	foreach(Node * currentNode, m_node->childNodeIterator() )
-	{
-		// Checks if the curent node is not a milestone
-		// and if it isn't the same as the selected task in the m_tasktree
-		
-		if ( currentNode->type() != 4 and currentNode->name() != selectedTaskName
-		and  !list_nodeNotView.contains(currentNode) 	
-		and (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty())
-		{
-		m_assignList->availableListWidget()->addItem(currentNode->name());
-		}
-	}
-	//remove all nodes from list_nodeParent
-	for (int i=0;i< list_nodeNotView.size();i++)
-	{
-		list_nodeNotView.removeFirst();
-	}
-	list_nodeNotView.begin();
+        QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
+        m_assignList->availableListWidget()->clear();
+        m_assignList->selectedListWidget()->clear();
+        
+        loadRequiredTasksList(itemToNode(selectedTaskName, m_node));
+        
+        listNodeNotView(itemToNode(selectedTaskName, m_node));
+        
+        foreach(Node * currentNode, m_node->childNodeIterator() )
+        {
+            // Checks if the curent node is not a milestone
+            // and if it isn't the same as the selected task in the m_tasktree
+            if ( currentNode->type() != Node::Type_Milestone and currentNode->name() != selectedTaskName
+                and  !list_nodeNotView.contains(currentNode)
+                and (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty())
+            {
+                m_assignList->availableListWidget()->addItem(currentNode->name());
+            }
+            else
+            {
+                QFont* fakeItemFont = new QFont();
+                QBrush* fakeItemBrush = new QBrush();
+                    fakeItemFont->setItalic(true);
+                    fakeItemBrush->setColor(QColor ( Qt::lightGray));
+                QListWidgetItem* fakeItem = new QListWidgetItem();
+                    fakeItem->setText(currentNode->name());
+                    fakeItem->setFont(*fakeItemFont);
+                    fakeItem->setForeground(*fakeItemBrush);
+                    fakeItem->setFlags(Qt::ItemIsEnabled);
+                m_assignList->availableListWidget()->addItem(fakeItem);
+                
+            }
+        }
+        //remove all nodes from list_nodeParent
+        /*for (int i=0;i< list_nodeNotView.size();i++)
+        {
+            list_nodeNotView.removeFirst();
+        }
+        list_nodeNotView.begin();*/
+        list_nodeNotView.clear();
     }
     else
     {
         m_assignList->availableListWidget()->clear();
-	m_assignList->selectedListWidget()->clear();
+        m_assignList->selectedListWidget()->clear();
     }
 }
-
-
-
 
 //return parents of the node
 QList<Node*> PertEditor::listNodeNotView(Node * node)
@@ -131,7 +155,7 @@ QList<Node*> PertEditor::listNodeNotView(Node * node)
     {
         if (currentNode->isDependChildOf(node))
         {
-            list_nodeNotView.append(currentNode);	
+            list_nodeNotView.append(currentNode);
         }
     }
     return list_nodeNotView;
@@ -161,15 +185,20 @@ void PertEditor::addTaskInRequiredList(QListWidgetItem * currentItem){
     Relation* m_rel=new Relation (itemToNode(currentItem->text(), m_node),itemToNode(selectedTaskName, m_node));
     AddRelationCmd * addCmd= new AddRelationCmd(m_part,m_rel,currentItem->text());
     m_part->addCommand( addCmd );
+
+    //emit refreshAvailableTaskList();
 }
 
 void PertEditor::removeTaskFromRequiredList(QListWidgetItem * currentItem){
     // remove the relation between the selected task and the current task
     QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
 
+    // remove the relation
     Relation* m_rel = itemToNode(selectedTaskName, m_node)->findParentRelation(itemToNode(currentItem->text(), m_node));
     DeleteRelationCmd * delCmd= new DeleteRelationCmd(m_part,m_rel,currentItem->text());
     m_part->addCommand( delCmd );
+
+    emit refreshAvailableTaskList();
 }
 
 void PertEditor::loadRequiredTasksList(Node * taskNode){

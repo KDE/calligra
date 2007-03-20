@@ -34,22 +34,10 @@
 #include <QStringList>
 #include <QVBoxLayout>
 #include <QTreeWidget>
+#include <QFont>
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QListWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QTableWidget>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
-#include <QtGui/QSpinBox>
-#include <QtGui/QLineEdit>
+#include <QtGui>
 
 #include <qwidget.h>
 
@@ -62,18 +50,9 @@
 #include <ui_kptperteditor.h>
 
 #include "kptcommand.h"
-//#include "kptitemmodelbase.h"
-//#include "kptcalendar.h"
-//#include "kptduration.h"
-//#include "kptfactory.h"
-//#include "kptresourceappointmentsview.h"
+
 #include "kptview.h"
 #include "kptnode.h"
-//#include "kptproject.h"
-//#include "kpttask.h"
-//#include "kptschedule.h"
-//#include "kptdatetime.h"
-//#include "kptcontext.h"
 
 #include <kicon.h>
 #include <kglobal.h>
@@ -108,17 +87,23 @@ public:
     Node * itemToNode(QString itemName, Node * startNode);
     QList<Node*> listNodeNotView(Node * node);
 
+signals:
+    void refreshAvailableTaskList();
 
 private slots:
     void dispAvailableTasks();
+    void dispAvailableTasks( Relation *rel );
     void addTaskInRequiredList(QListWidgetItem * currentItem);
     void removeTaskFromRequiredList(QListWidgetItem * currentItem);
+
+
 
 private:
     QTreeWidget * m_tasktree;
     KActionSelector * m_assignList;
     Part * m_part;
     Node * m_node;
+    Project * m_project;
     QList<Node *> list_nodeNotView;
     Ui::PertEditor widget;
 };

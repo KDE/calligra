@@ -357,6 +357,7 @@ bool Node::isDependChildOf(Node *node) {
 
  QList<Node*> Node::getParentNodes()
 {
+    this->m_parentNodes.clear();
     foreach(Relation * currentRelation, this->dependParentNodes())
     {
         if (!this->m_parentNodes.contains(currentRelation->parent())) 
