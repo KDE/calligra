@@ -195,7 +195,6 @@ void ResourceAssignmentView::updateTasks()
 
 
     m_taskList->clear();
-    m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
 
     /*Find tasks attributed to the selected item*/
 
@@ -244,17 +243,17 @@ void ResourceAssignmentView::drawTasksAttributedToAResource (Resource *res, QTre
     QTreeWidgetItem *notStarted;
     QTreeWidgetItem *started;
     QTreeWidgetItem *finished;
+    QString advance ;
 
     /*Task node*/
     QTreeWidgetItem * item;
 
     /*Put the name of the resource on the node*/
-    parent->setText( 0, res->name() );
 
     /*Case: the resource has no task attributed*/
     if((res->requests()).isEmpty())
     {
-        QTreeWidgetItem * item = new QTreeWidgetItem( parent );
+        QTreeWidgetItem * item = new QTreeWidgetItem( m_taskList );
         item->setText( 0, i18n( "No task attributed" ) );
     }
     else
@@ -262,9 +261,9 @@ void ResourceAssignmentView::drawTasksAttributedToAResource (Resource *res, QTre
     {
 
     /*Creation of 3 categories of task*/
-    notStarted = new QTreeWidgetItem( parent );
-    started = new QTreeWidgetItem( parent );
-    finished = new QTreeWidgetItem( parent );
+    notStarted = new QTreeWidgetItem( m_taskList );
+    started = new QTreeWidgetItem( m_taskList );
+    finished = new QTreeWidgetItem( m_taskList );
 
     /*Set names of categories*/
     notStarted->setText( 0, i18n( "Not Started" ) );
@@ -289,9 +288,10 @@ void ResourceAssignmentView::drawTasksAttributedToAResource (Resource *res, QTre
 
         /*Determine the task's advance*/
         int percent = ((rr->parent())->task())->completion().percentFinished();
-        kDebug() << "[void KPlato::ResourceAssignmentView::drawTasksAttributedToAResource()] " << percent;
-        //QString advance = percent + "%";
-        //item->setText( 1, advance );
+        //kDebug() << "[void KPlato::ResourceAssignmentView::drawTasksAttributedToAResource()] " << percent << "\n";
+        advance.setNum(percent);
+	advance += "%";
+        item->setText( 1, advance );
         }
         /*State: Finished*/
         else if (((rr->parent())->task())->completion().isFinished())
@@ -315,7 +315,20 @@ void ResourceAssignmentView::drawTasksAttributedToAResource (Resource *res, QTre
 
 void ResourceAssignmentView::drawTasksAttributedToAGroup (ResourceGroup *group, QTreeWidgetItem *parent)
 {
-    parent->setText( 0, group->name() );
+    QString taskName;
+    Task *currentTask;
+
+    bool alreadyStored;
+
+    /*Task node*/
+    QTreeWidgetItem * item;
+
+    /*Differents state regrouping tasks*/
+    QTreeWidgetItem *notStarted;
+    QTreeWidgetItem *started;
+    QTreeWidgetItem *finished;
+    QString advance ;
+
 
     if((group->resources()).isEmpty())
     {
@@ -324,10 +337,76 @@ void ResourceAssignmentView::drawTasksAttributedToAGroup (ResourceGroup *group, 
     }
     else
     {
-        foreach ( Resource * res, group->resources() ) 
-        {
-            QTreeWidgetItem * groupnode = new QTreeWidgetItem( parent );
-            drawTasksAttributedToAResource(res,groupnode);
+
+        /*Creation of 3 categories of task*/
+        notStarted = new QTreeWidgetItem( m_taskList );
+        started = new QTreeWidgetItem( m_taskList );
+        finished = new QTreeWidgetItem( m_taskList );
+
+        /*Set names of categories*/
+        notStarted->setText( 0, i18n( "Not Started" ) );
+        started->setText( 0, i18n( "Started" ) );
+        finished->setText( 0, i18n( "Finished" ) );
+
+	foreach ( Resource * res, group->resources() ) {
+	    foreach ( ResourceRequest * rr , res->requests() ) {
+
+                /*get name*/
+                currentTask = (rr->parent())->task();
+                taskName = currentTask->name();
+
+                alreadyStored = false; 
+
+                /*store tasks in the tree*/
+                if ((((rr->parent())->task())->completion().isStarted()) && !(((rr->parent())->task())->completion().isFinished()))
+                {
+                    for (int i = 0; i < started->childCount();i++)
+                    {
+                        if (started->child(i)->text(0) == taskName)
+                        { alreadyStored = true ;}
+                    }
+
+                    if ( !alreadyStored )
+                    {
+                    item = new QTreeWidgetItem( started );
+                    item->setText( 0, taskName );
+
+                    /*Determine the task's advance*/
+                    int percent = ((rr->parent())->task())->completion().percentFinished();
+                    advance.setNum(percent);
+	            advance += "%";
+                    item->setText( 1, advance );
+                    }
+	        }
+	        else if (((rr->parent())->task())->completion().isFinished())
+                {
+                    for (int i = 0; i < finished->childCount();i++)
+                    {
+                        if (finished->child(i)->text(0) == taskName)
+                        { alreadyStored = true ;}
+                    }
+
+                    if ( !alreadyStored )
+                    {
+                    item = new QTreeWidgetItem( finished );
+                    item->setText( 0, taskName );
+                    }
+	        }
+                else 
+                {
+                    for (int i = 0; i < notStarted->childCount();i++)
+                    {
+                        if (notStarted->child(i)->text(0) == taskName)
+                        { alreadyStored = true ;}
+                    }
+
+                    if ( !alreadyStored )
+                    {
+                    item = new QTreeWidgetItem( notStarted );
+                    item->setText( 0, taskName );
+                    }
+                }
+	    }
         }
     }
 }

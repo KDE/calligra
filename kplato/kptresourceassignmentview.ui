@@ -42,6 +42,11 @@
         <string>Tasks</string>
        </property>
       </column>
+      <column>
+       <property name="text" >
+        <string>Advance</string>
+       </property>
+      </column>
      </widget>
     </widget>
    </item>
