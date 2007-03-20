@@ -21,9 +21,9 @@
 
 #include <QLayout>
 #include <QGroupBox>
+#include <QButtonGroup>
 #include <QComboBox>
 #include <qradiobutton.h>
-#include <q3buttongroup.h>
 #include <QSpinBox>
 
 #include <QPushButton>
@@ -65,7 +65,7 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
     toplevel->setMargin( 10 );
 
 #if 0
-    Q3VBoxLayout* left=new Q3VBoxLayout(10);
+    QVBoxLayout* left=new QVBoxLayout(10);
     toplevel->addLayout(left,2);
     regionList=new Q3ListBox(this);
     left->addWidget(regionList);
