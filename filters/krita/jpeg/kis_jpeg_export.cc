@@ -129,7 +129,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     KUrl url;
     url.setPath(filename);
 
-    KisImageSP img = output->currentImage();
+    KisImageSP img = output->image();
     Q_CHECK_PTR(img);
 
     KisJPEGConverter kpc(output, output->undoAdapter());

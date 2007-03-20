@@ -42,7 +42,7 @@ MagickExport::~MagickExport()
 KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "magick export! From: " << from << ", To: " << to << "\n";
-    
+
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
@@ -50,22 +50,22 @@ KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const Q
 
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
-    
+
     if (!output)
         return KoFilter::CreationError;
-    
+
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
 
-    KisImageSP img = output->currentImage();
+    KisImageSP img = output->image();
 
     KisImageMagickConverter ib(output, output->undoAdapter());
 
     KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
     KisPaintLayerSP l = new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd);
-    
+
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     if (ib.buildFile(url, l, beginIt, endIt) == KisImageBuilder_RESULT_OK) {

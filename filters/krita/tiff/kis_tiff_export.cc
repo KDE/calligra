@@ -56,14 +56,14 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    
+
     KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
- 
+
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     if (!output)
         return KoFilter::CreationError;
 
-    KoColorSpace* cs = output->currentImage()->colorSpace();
+    KoColorSpace* cs = output->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
     if( type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32)
     {
@@ -71,7 +71,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     } else {
       kdb->optionswdg->kComboBoxPredictor->removeItem(2);
     }
-    
+
     if(kdb->exec() == QDialog::Rejected)
     {
         return KoFilter::UserCancelled;
@@ -84,7 +84,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
       options.predictor = 3;
     }
     delete kdb;
-    
+
     QString filename = m_chain->outputFile();
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
@@ -96,12 +96,12 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     if(options.flatten)
     {
-        img = new KisImage(0, output->currentImage()->width(), output->currentImage()->height(), output->currentImage()->colorSpace(), "");
-        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*output->currentImage()->projection()));
+        img = new KisImage(0, output->image()->width(), output->image()->height(), output->image()->colorSpace(), "");
+        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*output->image()->projection()));
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
         img->addLayer(KisLayerSP(l.data()), img->rootLayer(), KisLayerSP(0));
     } else {
-        img = output->currentImage();
+        img = output->image();
     }
 
 
