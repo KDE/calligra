@@ -25,9 +25,6 @@
 #include <qpaintdevice.h>
 #include <QRect>
 #include <QWidget>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3GridLayout>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -72,15 +69,10 @@ void ExportSizeDia::setupGUI()
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-#if 0
-    Q3BoxLayout* mainLayout = new Q3VBoxLayout( page,
-					      KDialog::marginHint(),
-					      KDialog::spacingHint() );
-#else
-    Q3GridLayout *mainLayout = new Q3GridLayout( page, 5, 2,
-					       KDialog::marginHint(),
-					       KDialog::spacingHint() );
-#endif
+    QGridLayout *mainLayout = new QGridLayout( page );
+    mainLayout->setMargin( KDialog::marginHint() );
+    mainLayout->setSpacing( KDialog::spacingHint() );
+
     m_proportional = new QCheckBox( page );
     m_proportional->setObjectName( "proportional" );
     m_proportional->setText( i18n( "Keep ratio" ) );
