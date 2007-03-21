@@ -123,19 +123,12 @@ public:
 
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end ) const;
 
-    /// Returns the total planned effort for this task (or subtasks)
+    /// Returns the total planned effort for this schedule
     virtual Duration plannedEffort() const;
-    /// Returns the total planned effort for this task (or subtasks) on date
+    /// Returns the total planned effort for this schedule on date
     virtual Duration plannedEffort( const QDate &date ) const;
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo( const QDate &date ) const;
-
-    /// Returns the total actual effort for this task (or subtasks)
-    virtual Duration actualEffort() const;
-    /// Returns the total actual effort for this task (or subtasks) on date
-    virtual Duration actualEffort( const QDate &date ) const;
-    /// Returns the total actual effort for this task (or subtasks) up to and including date
-    virtual Duration actualEffortTo( const QDate &date ) const;
 
     /**
      * Planned cost is the sum total of all resources and other costs
@@ -147,24 +140,10 @@ public:
     virtual double plannedCost( const QDate &date ) const;
     /**
      * Planned cost from start of activity up to and including date
-     * is the sum of all resource costs and other costs planned for this node.
+     * is the sum of all resource costs and other costs planned for this schedule.
      */
     virtual double plannedCostTo( const QDate &date ) const;
-    /**
-     * Actual cost is the sum total of the reported costs actually used
-     * for this node.
-     */
-    virtual double actualCost() const;
-    /// Actual cost on date
-    virtual double actualCost( const QDate &date ) const;
-    /// Actual cost up to and including date
-    virtual double actualCostTo( const QDate &date ) const;
-
-    /// Effort based performance index
-    double effortPerformanceIndex( const QDate & /*date*/, bool * /*error=0*/ ) { return 0.0; }
-    /// Cost performance index
-    double costPerformanceIndex( const QDate & /*date*/, bool * /*error=0*/ ) { return 0.0; }
-
+    
     virtual double normalRatePrHour() const { return 0.0; }
 
     void setEarliestStart( DateTime &dt ) { earliestStart = dt; }

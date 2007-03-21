@@ -433,39 +433,6 @@ Duration Schedule::plannedEffortTo( const QDate &date ) const
     return eff;
 }
 
-Duration Schedule::actualEffort() const
-{
-    //kDebug()<<k_funcinfo<<endl;
-    Duration eff;
-    QListIterator<Appointment*> it( m_appointments );
-    while ( it.hasNext() ) {
-        eff += it.next() ->actualEffort();
-    }
-    return eff;
-}
-
-Duration Schedule::actualEffort( const QDate &date ) const
-{
-    //kDebug()<<k_funcinfo<<endl;
-    Duration eff;
-    QListIterator<Appointment*> it( m_appointments );
-    while ( it.hasNext() ) {
-        eff += it.next() ->actualEffort( date );
-    }
-    return eff;
-}
-
-Duration Schedule::actualEffortTo( const QDate &date ) const
-{
-    //kDebug()<<k_funcinfo<<endl;
-    Duration eff;
-    QListIterator<Appointment*> it( m_appointments );
-    while ( it.hasNext() ) {
-        eff += it.next() ->actualEffortTo( date );
-    }
-    return eff;
-}
-
 double Schedule::plannedCost() const
 {
     //kDebug()<<k_funcinfo<<endl;
@@ -495,39 +462,6 @@ double Schedule::plannedCostTo( const QDate &date ) const
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
         c += it.next() ->plannedCostTo( date );
-    }
-    return c;
-}
-
-double Schedule::actualCost() const
-{
-    //kDebug()<<k_funcinfo<<endl;
-    double c = 0;
-    QListIterator<Appointment*> it( m_appointments );
-    while ( it.hasNext() ) {
-        c += it.next() ->actualCost();
-    }
-    return c;
-}
-
-double Schedule::actualCost( const QDate &date ) const
-{
-    //kDebug()<<k_funcinfo<<endl;
-    double c = 0;
-    QListIterator<Appointment*> it( m_appointments );
-    while ( it.hasNext() ) {
-        c += it.next() ->actualCost( date );
-    }
-    return c;
-}
-
-double Schedule::actualCostTo( const QDate &date ) const
-{
-    //kDebug()<<k_funcinfo<<endl;
-    double c = 0;
-    QListIterator<Appointment*> it( m_appointments );
-    while ( it.hasNext() ) {
-        c += it.next() ->actualCostTo( date );
     }
     return c;
 }

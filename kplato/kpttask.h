@@ -160,6 +160,8 @@ public:
     Duration remainingEffort() const;
     /// Returns the total actual effort
     Duration actualEffort() const;
+    /// Returns the total actual effort on @ date
+    Duration actualEffort( const QDate &date ) const;
     /// Returns the total actual effort upto and including @p date
     Duration actualEffortTo( const QDate &date ) const;
     /// TODO

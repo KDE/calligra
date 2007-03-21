@@ -162,140 +162,6 @@ void AppointmentIntervalList::inSort(AppointmentInterval *a)
     insert( a->startTime().toString( KDateTime::ISODate ) + a->endTime().toString( KDateTime::ISODate ), a );
 }
 
-//////
-
-Appointment::UsedEffortItem::UsedEffortItem(const DateTime& date, Duration effort, bool overtime) {
-    m_date = date;
-    m_effort = effort;
-    m_overtime = overtime;
-}
-DateTime Appointment::UsedEffortItem::date() {
-    return m_date;
-}
-Duration Appointment::UsedEffortItem::effort() {
-    return m_effort;
-}
-bool Appointment::UsedEffortItem::isOvertime() {
-    return m_overtime;
-}
-
-Appointment::UsedEffort::UsedEffort() {
-}
-
-Appointment::UsedEffort::~UsedEffort() {
-    while (!isEmpty())
-        delete takeFirst();
-}
-
-void Appointment::UsedEffort::inSort(const DateTime& date, Duration effort, bool overtime) {
-    UsedEffortItem *item = new UsedEffortItem(date, effort, overtime);
-    this->append(item);
-//TODO    qSort(*this);
-}
-
-Duration Appointment::UsedEffort::usedEffort(bool includeOvertime) const {
-    Duration eff;
-    QListIterator<UsedEffortItem*> it(*this);
-    while (it.hasNext()) {
-        UsedEffortItem *i = it.next();
-        if (includeOvertime || !i->isOvertime()) {
-            eff += i->effort();
-        }
-    }
-    return eff;
-}
-
-Duration Appointment::UsedEffort::usedEffort(const QDate &date, bool includeOvertime) const {
-    Duration eff;
-    QListIterator<UsedEffortItem*> it(*this);
-    while (it.hasNext()) {
-        UsedEffortItem *i = it.next();
-        if ((includeOvertime || !i->isOvertime()) &&
-            i->date().date() == date) {
-            eff += i->effort();
-        }
-    }
-    return eff;
-}
-
-Duration Appointment::UsedEffort::usedEffortTo(const QDate &date, bool includeOvertime) const {
-    Duration eff;
-    QListIterator<UsedEffortItem*> it(*this);
-    while (it.hasNext()) {
-        UsedEffortItem *i = it.next();
-        if ((includeOvertime || !i->isOvertime()) &&
-            i->date().date() <= date) {
-            eff += i->effort();
-        }
-    }
-    return eff;
-}
-
-Duration Appointment::UsedEffort::usedOvertime() const {
-    if (isEmpty()) {
-        return Duration::zeroDuration;
-    }
-    return usedOvertime(first()->date().date());
-}
-
-Duration Appointment::UsedEffort::usedOvertime(const QDate &date) const {
-    Duration eff;
-    QListIterator<UsedEffortItem*> it(*this);
-    while (it.hasNext()) {
-        UsedEffortItem *i = it.next();
-        if (i->isOvertime() && i->date().date() == date) {
-            eff += i->effort();
-        }
-    }
-    return eff;
-}
-
-Duration Appointment::UsedEffort::usedOvertimeTo(const QDate &date) const {
-    Duration eff;
-    QListIterator<UsedEffortItem*> it(*this);
-    while (it.hasNext()) {
-        UsedEffortItem *i = it.next();
-        if (i->isOvertime() && i->date().date() <= date) {
-            eff += i->effort();
-        }
-    }
-    return eff;
-}
-
-bool Appointment::UsedEffort::load(QDomElement &element, XMLLoaderObject &status) {
-    QString s;
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "actual-effort") {
-                DateTime date = DateTime::fromString(e.attribute("date"), status.projectSpec());
-                Duration eff = Duration::fromString(e.attribute("effort"));
-                bool ot = e.attribute("overtime", "0").toInt();
-                if (date.isValid()) {
-                    inSort(date, eff, ot);
-                } else {
-                    kError()<<k_funcinfo<<"Load failed, illegal date: "<<e.attribute("date")<<endl;
-                }
-            }
-        }
-    }
-    return true;
-}
-
-void Appointment::UsedEffort::save(QDomElement &element) const {
-    if (isEmpty()) return;
-    QListIterator<UsedEffortItem*> it = *this;
-    while (it.hasNext()) {
-        UsedEffortItem *i = it.next();
-        QDomElement me = element.ownerDocument().createElement("actual-effort");
-        element.appendChild(me);
-        me.setAttribute("date",i->date().toString( KDateTime::ISODate ));
-        me.setAttribute("effort",i->effort().toString());
-        me.setAttribute("overtime",i->isOvertime());
-    }
-}
-
 ////
 Appointment::Appointment()
     : m_extraRepeats(), m_skipRepeats() {
@@ -435,7 +301,6 @@ bool Appointment::loadXML(QDomElement &element, XMLLoaderObject &status, Schedul
     if (isEmpty()) {
         return false;
     }
-    m_actualEffort.load(element, status);
     return true;
 }
 
@@ -460,10 +325,9 @@ void Appointment::saveXML(QDomElement &element) const {
     foreach (AppointmentInterval *i, m_intervals.values() ) {
         i->saveXML(me);
     }
-    m_actualEffort.save(me);
 }
 
-// Returns the total actual effort for this appointment
+// Returns the total planned effort for this appointment
 Duration Appointment::plannedEffort() const {
     Duration d;
     foreach (AppointmentInterval *i, m_intervals.values() ) {
@@ -527,21 +391,6 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
 }
 
 
-// Returns the total actual effort for this appointment
-Duration Appointment::actualEffort() const {
-    return m_actualEffort.usedEffort();
-}
-
-// Returns the actual effort on the date
-Duration Appointment::actualEffort(const QDate &date) const {
-    return m_actualEffort.usedEffort(date);
-}
-
-// Returns the actual effort upto and including date
-Duration Appointment::actualEffortTo(const QDate &date) const {
-    return m_actualEffort.usedEffortTo(date);
-}
-
 double Appointment::plannedCost() {
     if (m_resource && m_resource->resource()) {
         return plannedEffort().toDouble(Duration::Unit_h) * m_resource->resource()->normalRate(); //FIXME overtime
@@ -563,36 +412,6 @@ double Appointment::plannedCostTo(const QDate &date) {
         return plannedEffortTo(date).toDouble(Duration::Unit_h) * m_resource->resource()->normalRate(); //FIXME overtime
     }
     return 0.0;
-}
-
-// Calculates the total actual cost for this appointment
-double Appointment::actualCost() {
-    //kDebug()<<k_funcinfo<<m_actualEffort.usedEffort(false /*ex. overtime*/).toDouble(Duration::Unit_h)<<endl;
-    if (m_resource && m_resource->resource()) {
-        return (m_actualEffort.usedEffort(false /*ex. overtime*/).toDouble(Duration::Unit_h)*m_resource->resource()->normalRate()) + (m_actualEffort.usedOvertime().toDouble(Duration::Unit_h)*m_resource->resource()->overtimeRate());
-    }
-    return 0.0;
-}
-
-// Calculates the actual cost on date
-double Appointment::actualCost(const QDate &date) {
-    if (m_resource && m_resource->resource()) {
-        return (m_actualEffort.usedEffort(date, false /*ex. overtime*/).toDouble(Duration::Unit_h)*m_resource->resource()->normalRate()) + (m_actualEffort.usedOvertime(date).toDouble(Duration::Unit_h)*m_resource->resource()->overtimeRate());
-    }
-    return 0.0;
-}
-
-// Calculates the actual cost upto and including date
-double Appointment::actualCostTo(const QDate &date) {
-    if (m_resource && m_resource->resource()) {
-        return (m_actualEffort.usedEffortTo(date, false /*ex. overtime*/).toDouble(Duration::Unit_h)*m_resource->resource()->normalRate()) + (m_actualEffort.usedOvertimeTo(date).toDouble(Duration::Unit_h)*m_resource->resource()->overtimeRate());
-    }
-    return 0.0;
-}
-
-void Appointment::addActualEffort(const DateTime& date, Duration effort, bool overtime) {
-    //kDebug()<<k_funcinfo<<endl;
-    m_actualEffort.inSort(date, effort, overtime);
 }
 
 bool Appointment::attach() {

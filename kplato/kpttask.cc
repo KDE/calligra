@@ -413,7 +413,7 @@ Duration Task::plannedEffortTo(const QDate &date, long id) const {
     return eff;
 }
 
-// Returns the total planned effort for this task (or subtasks) 
+// Returns the total actual effort for this task (or subtasks) 
 Duration Task::actualEffort( long id ) const {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
@@ -421,14 +421,8 @@ Duration Task::actualEffort( long id ) const {
         foreach (Node *n, childNodeIterator()) {
             eff += n->actualEffort(id);
         }
-    } else {
-        eff = m_completion.actualEffort();
     }
-    /* If we want to register pr resource...
-    } else if (m_currentSchedule) {
-        eff = m_currentSchedule->actualEffort();
-    }*/
-    return eff;
+    return m_completion.actualEffort();
 }
 
 // Returns the total actual effort for this task (or subtasks) on date
@@ -441,13 +435,7 @@ Duration Task::actualEffort(const QDate &date, long id) const {
         }
         return eff;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
-    if ( s ) {
-        eff = s->actualEffort(date);
-    }
+    m_completion.actualEffort( date );
     return eff;
 }
 
@@ -462,14 +450,6 @@ Duration Task::actualEffortTo(const QDate &date, long id) const {
         return eff;
     }
     return m_completion.actualEffortTo( date );
-/*    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
-    if ( s ) {
-        eff = s->actualEffortTo(date);
-    }*/
-    return eff;
 }
 
 double Task::plannedCost( long id ) const {
@@ -1976,6 +1956,17 @@ Duration Completion::actualEffort() const
     foreach( UsedEffort *ue, m_usedEffort.values() ) {
         foreach ( QDate d, ue->actualEffortMap().keys() ) {
             eff += ue->actualEffortMap()[ d ]->effort();
+        }
+    }
+    return eff;
+}
+
+Duration Completion::actualEffort( const QDate &date ) const
+{
+    Duration eff;
+    foreach( UsedEffort *ue, m_usedEffort.values() ) {
+        if ( ue && ue->actualEffortMap().contains( date ) ) {
+            eff += ue->actualEffortMap().value( date )->effort();
         }
     }
     return eff;

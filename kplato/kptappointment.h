@@ -176,13 +176,6 @@ public:
     /// Returns the planned effort upto and including date
     Duration plannedEffortTo(const QDate &date) const;
 
-    /// Returns the total actual effort for this appointment
-    Duration actualEffort() const;
-    /// Returns the actual effort on the date
-    Duration actualEffort(const QDate &date) const;
-    /// Returns the actual effort on the date
-    Duration actualEffortTo(const QDate &date) const;
-
      /// Calculates the total planned cost for this appointment
     double plannedCost();
     /// Calculates the planned cost on date
@@ -190,18 +183,9 @@ public:
     /// Calculates the planned cost upto and including date
     double plannedCostTo(const QDate &date);
 
-     /// Calculates the total actual cost for this appointment
-    double actualCost();
-     /// Calculates the actual cost on date
-    double actualCost(const QDate &date);
-    /// Calculates the actual cost upto and including date
-    double actualCostTo(const QDate &date);
-
     Appointment &operator=(const Appointment &app);
     Appointment &operator+=(const Appointment &app);
     Appointment operator+(const Appointment &app);
-    
-    void addActualEffort(const DateTime& date, Duration effort, bool overtime=false);
     
     void setCalculationMode( int mode ) { m_calculationMode = mode; }
     int calculationMode() const { return m_calculationMode; }
@@ -221,33 +205,6 @@ private:
 
     AppointmentIntervalList m_intervals;
     
-    class UsedEffortItem {
-    public:
-        UsedEffortItem(const DateTime& date, Duration effort, bool overtime=false);
-        DateTime date();
-        Duration effort();
-        bool isOvertime();
-    private:
-        DateTime m_date;
-        Duration m_effort;
-        bool m_overtime;
-    };
-    class UsedEffort : QList<UsedEffortItem*> {
-    public:
-        UsedEffort();
-        ~UsedEffort();
-        void inSort(const DateTime& date, Duration effort, bool overtime=false);
-        Duration usedEffort(bool includeOvertime=true) const;
-        Duration usedEffort(const QDate &date, bool includeOvertime=true) const;
-        Duration usedEffortTo(const QDate &date, bool includeOvertime=true) const;
-        Duration usedOvertime() const;
-        Duration usedOvertime(const QDate &date) const;
-        Duration usedOvertimeTo(const QDate &date) const;
-        bool load(QDomElement &element, XMLLoaderObject &status);
-        void save(QDomElement &element) const;
-    };
-    
-    UsedEffort m_actualEffort;
 
 #ifndef NDEBUG
 public:
