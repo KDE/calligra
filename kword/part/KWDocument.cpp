@@ -60,6 +60,7 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     m_zoom(100),
     m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
 {
+    m_hasTOC = false;
     m_frameLayout.setDocument(this);
     m_styleManager = new KoStyleManager(this);
     m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
@@ -150,7 +151,14 @@ KWPage* KWDocument::insertPage( int afterPageNum ) {
 }
 
 KWPage* KWDocument::appendPage() {
-    return insertPage( m_pageManager.lastPageNumber() );
+    KWPage *page = insertPage( m_pageManager.lastPageNumber() );
+    if(page->pageNumber() % 2 == 0) { // even page.
+        if(m_pageManager.defaultPage()->left < 0) { // is a pageSpread
+            page->setPageSide(KWPage::PageSpread);
+            m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
+        }
+    }
+    return page;
 }
 
 void KWDocument::removePage(int pageNumber) {

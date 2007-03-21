@@ -49,6 +49,7 @@ KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFra
 
 // pageNumber is a real page number, not a zero-based index
 void KWFrameLayout::createNewFramesForPage(int pageNumber) {
+//kDebug() << "createNewFramesForPage " << pageNumber << endl;
     m_setup=false; // force reindexing of types
     KWPage *page = m_pageManager->page(pageNumber);
 
@@ -93,8 +94,12 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
             PageSpreadShapeFactory(KWFrameLayout *parent) {
                 m_parent = parent;
             }
-            void create(KWPage *page, KWFrameSet *fs) {
-                KWFrame* frame = m_parent->createCopyFrame(fs, page);
+            void create(KWPage *page, KWTextFrameSet *fs) {
+                KWFrame* frame;
+                if(fs->textFrameSetType() == KWord::MainTextFrameSet)
+                    frame = new KWFrame(m_parent->createTextShape(page), fs);
+                else
+                    frame = m_parent->createCopyFrame(fs, page);
                 KoShape *shape = frame->shape();
                 shape->setPosition(QPointF(page->width()/2+1, shape->position().y()));
             }
