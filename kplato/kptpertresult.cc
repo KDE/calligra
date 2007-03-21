@@ -122,7 +122,14 @@ DateTime PertResult::getFinishLateDate(Node * currentNode)
 
 Duration PertResult::getProjectFloat(Project &project)
 {
-    return Duration();
+    Duration duree;
+    foreach(Node * currentNode, project.projectNode()->childNodeIterator() )
+    {
+	duree=duree+getTaskFloat(currentNode);
+        kDebug() << "FLOAT PROJECT" << endl;
+        kDebug() << duree.toString() << endl;
+    }
+    return duree;
 }
 
 Duration PertResult::getFreeMargin(Node * currentNode)
