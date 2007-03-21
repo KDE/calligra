@@ -57,6 +57,7 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     m_canvas = new KWCanvas( viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this );
     m_canvasController = new KoCanvasController(this);
     m_canvasController->setCanvas(m_canvas);
+    m_canvasController->centerCanvas(false);
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(m_view->actionCollection(), m_canvasController);
 
