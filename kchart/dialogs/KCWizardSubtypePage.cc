@@ -3,14 +3,14 @@
 #include "kchart_view.h"
 #include "kchart_part.h"
 
-#include <q3buttongroup.h>
-#include <QPushButton>
-#include <qradiobutton.h>
+#include <QObject>
+#include <QLayout>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QRadioButton>
 #include <QSpinBox>
 #include <QLabel>
 #include <q3ptrcollection.h>
-#include <qobject.h>
-#include <QLayout>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -33,25 +33,32 @@ KCWizardSubtypePage::KCWizardSubtypePage( QWidget* parent, KChartPart* chart )
     m_charttype  = (KChartParams::ChartType) m_chart->params()->chartType();
     chartSubType = true;
 
-    QGridLayout *grid1 = new QGridLayout( this );
-    grid1->setMargin( KDialog::marginHint() );
-    grid1->setSpacing( KDialog::spacingHint() );
-
-    QVBoxLayout *lay1 = new QVBoxLayout(  );
+    QVBoxLayout *lay1 = new QVBoxLayout( this );
     lay1->setMargin( KDialog::marginHint() );
     lay1->setSpacing( KDialog::spacingHint() );
 
-    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, 
-					  i18n( "Chart Sub Type" ), this );
-    grp->setRadioButtonExclusive( true );
-    grp->layout();
-    lay1->addWidget(grp);
-    m_normal  = new QRadioButton( i18n( "Normal" ),  grp );
-    m_stacked = new QRadioButton( i18n( "Stacked" ), grp );
-    m_percent = new QRadioButton( i18n( "Percent" ), grp );
+    QGroupBox *box = new QGroupBox( i18n( "Chart Sub Type" ) );
+    lay1->addWidget( box );
 
+    QVBoxLayout  *lay2 = new QVBoxLayout( );
+    box->setLayout( lay2 );
+
+    QButtonGroup *grp = new QButtonGroup( );
+    grp->setExclusive( true );
+
+    m_normal  = new QRadioButton( i18n( "Normal" ),  box );
+    lay2->addWidget( m_normal );
+    grp->addButton( m_normal );
+    m_stacked = new QRadioButton( i18n( "Stacked" ), box );
+    lay2->addWidget( m_stacked );
+    grp->addButton( m_stacked );
+    m_percent = new QRadioButton( i18n( "Percent" ), box );
+    lay2->addWidget( m_percent );
+    grp->addButton( m_percent );
+
+    // The Number of lines.
     KHBox   *hbox = new KHBox( this );
-    /*QLabel  *lbl  =*/ new QLabel( i18n( "Number of lines: "), hbox );
+    (void) new QLabel( i18n( "Number of lines: "), hbox );
     m_numLines    = new QSpinBox( hbox );
 
     if( ( m_chart->chartType() == KChartParams::Bar &&
@@ -99,10 +106,9 @@ KCWizardSubtypePage::KCWizardSubtypePage( QWidget* parent, KChartPart* chart )
 
     changeSubTypeName( m_chart->chartType());
     if(!chartSubType)
-        grp->setEnabled(false);
+        box->setEnabled(false);
 
-    grid1->addWidget(grp,  0, 0);
-    grid1->addWidget(hbox, 1, 0);
+    lay1->addWidget( hbox );
 }
 
 

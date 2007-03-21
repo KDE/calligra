@@ -1,3 +1,9 @@
+2007-03-21  Inge Wallin  <inge@lysator.liu.se>
+
+	More Q3Support -> Qt4 conversions.
+	* dialogs/KCWizardSubtypePage.cc (KCWizardSubtypePage):
+	Q3ButtonGroup -> QGroupBox, some smaller cleanup
+
 2007-03-18  Inge Wallin  <inge@lysator.liu.se>
 
 	More Q3Support -> Qt4 conversions.
