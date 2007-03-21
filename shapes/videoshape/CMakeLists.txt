@@ -12,7 +12,7 @@ SET (videoshape_LIB_SRCS
 kde4_automoc(${videoshape_LIB_SRCS})
 kde4_add_plugin(videoshape ${videoshape_LIB_SRCS})
 
-target_link_libraries(videoshape flake kofficeui phononui)
+target_link_libraries(videoshape flake kofficeui ${KDE4_PHONONUI_LIBS})
 install(TARGETS videoshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
