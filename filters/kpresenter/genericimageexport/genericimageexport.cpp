@@ -63,12 +63,12 @@ GenericImageExport::convert(const QByteArray& from, const QByteArray& to)
 
     // Check for proper conversion.
     if ( from != "application/x-kpresenter" || 
-		    (to != "image/x-bmp" && 
+		    (to != "image/bmp" && 
 		     to != "image/jpeg" && 
 		     to != "video/x-mng" && 
 		     to != "image/png" && 
-		     to !="image/x-xbm" && 
-		     to!="image/x-xpm" ))
+		     to !="image/x-xbitmap" && 
+		     to!="image/x-xpixmap" ))
     {
         kWarning() << "Invalid mimetypes " << to << " " << from << endl;
         return KoFilter::NotImplemented;
@@ -116,7 +116,7 @@ GenericImageExport::convert(const QByteArray& from, const QByteArray& to)
 bool GenericImageExport::saveImage(const QString& fileName, const QByteArray& to )
 {
     const char * format = NULL;
-    if(to=="image/x-bmp")
+    if(to=="image/bmp")
       format="XBM";
     else if(to=="image/jpeg")
       format="JPEG";
@@ -124,9 +124,9 @@ bool GenericImageExport::saveImage(const QString& fileName, const QByteArray& to
       format="MNG";
     else if(to=="image/png")
       format="PNG";
-    else if(to=="image/x-xbm")
+    else if(to=="image/x-xbitmap")
       format="XBM";
-    else if(to=="image/x-xpm")
+    else if(to=="image/x-xpixmap")
       format="XPM";
     bool ret = pixmap.save( fileName, format );
     // Save the image.

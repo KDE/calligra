@@ -82,7 +82,7 @@ bool AbiwordPlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
         // Compressed with bzip2
-        strMime="application/x-bzip2";
+        strMime="application/x-bzip";
         kDebug() << "Compression: bzip2" << endl;
     }
 

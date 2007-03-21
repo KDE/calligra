@@ -78,7 +78,7 @@ static inline unsigned long readU16( const void* p )
 
 KoFilter::ConversionStatus HancomWordImport::convert( const QByteArray& from, const QByteArray& to )
 {
-  if ( from != "application/x-hancomword" )
+  if ( from != "application/x-hwp" )
     return KoFilter::NotImplemented;
 
   if ( to != "application/vnd.oasis.opendocument.text" )

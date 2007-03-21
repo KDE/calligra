@@ -791,7 +791,7 @@ tristate KexiStartupHandler::detectActionForFile(
 	//! @todo rather check this using migration drivers' 
 	//! X-KexiSupportedMimeTypes [strlist] property
 	if (ptr.data()) {
-		if (mimename=="application/x-msaccess") {
+		if (mimename=="application/vnd.ms-access") {
 			if ((options & SkipMessages) || KMessageBox::Yes != KMessageBox::questionYesNo(
 				parent, i18n("\"%1\" is an external file of type:\n\"%2\".\n"
 				"Do you want to import the file as a Kexi project?")

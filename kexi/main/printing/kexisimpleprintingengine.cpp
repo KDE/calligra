@@ -70,7 +70,7 @@ KexiSimplePrintingSettings KexiSimplePrintingSettings::load()
 	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup("Simple Printing");
 	if (config->hasKey("pageTitleFont"))
-		settings.pageTitleFont = config->readFontEntry("pageTitleFont");
+		settings.pageTitleFont = config->readEntry("pageTitleFont", QFont());
 //! @todo system default?
 	if (config->hasKey("pageFormat"))
 		settings.pageLayout.format = KoPageFormat::formatFromString( 

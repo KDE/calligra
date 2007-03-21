@@ -167,7 +167,7 @@ void KexiStartupFileDialog::updateFilters()
 
 //! @todo hardcoded for MSA:
 	if (normalOpeningMode) {
-		mime = KMimeType::mimeType("application/x-msaccess");
+		mime = KMimeType::mimeType("application/vnd.ms-access");
 		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();

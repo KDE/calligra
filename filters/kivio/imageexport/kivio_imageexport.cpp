@@ -66,7 +66,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
     format = "PNG";
   } else if(to == "image/jpeg") {
     format = "JPEG";
-  } else if(to == "image/x-bmp") {
+  } else if(to == "image/bmp") {
     format = "BMP";
   } else if(to == "image/x-eps") {
     format = "EPS";
@@ -78,9 +78,9 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
     format = "PPM";
   } else if(to == "image/x-rgb") {
     format = "RGB";
-  } else if(to == "image/x-xpm") {
+  } else if(to == "image/x-xpixmap") {
     format = "XPM";
-  } else if(to == "image/jp2") {
+  } else if(to == "image/jpeg2000") {
     format = "JP2";
   } else {
     return KoFilter::BadMimeType;

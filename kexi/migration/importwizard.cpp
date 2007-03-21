@@ -435,7 +435,7 @@ void ImportWizard::arriveSrcConnPage()
 	/* moved
 			if (m_srcTypeCombo->currentText().contains("Access")) {
 	//! @todo tmp: hardcoded!
-				additionalMimeTypes << "application/x-msaccess";
+				additionalMimeTypes << "application/vnd.ms-access";
 			}*/
 			m_srcConn->m_fileDlg->setMode(KexiStartupFileDialog::Opening);
 			m_srcConn->m_fileDlg->setAdditionalFilters(additionalMimeTypes);

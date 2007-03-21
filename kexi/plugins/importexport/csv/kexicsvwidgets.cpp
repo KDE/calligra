@@ -230,7 +230,7 @@ void KexiCSVInfoLabel::setCommentText( const QString& text )
 QStringList csvMimeTypes()
 {
 	QStringList mimetypes;
-	mimetypes << "text/x-csv" << "text/plain" << "all/allfiles";
+	mimetypes << "text/csv" << "text/plain" /*<< "all/allfiles"*/; // use application/octet-stream if you want all files, but then the others are not necessary
 	return mimetypes;
 }
 

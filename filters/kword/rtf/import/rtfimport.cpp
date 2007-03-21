@@ -314,7 +314,7 @@ RTFImport::RTFImport( QObject* parent, const QStringList& )
 KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QByteArray& to )
 {
     // This filter only supports RTF to KWord conversion
-    if ((from != "text/rtf") || (to != "application/x-kword"))
+    if ((from != "application/rtf") || (to != "application/x-kword"))
         return KoFilter::NotImplemented;
 
     QTime debugTime;
