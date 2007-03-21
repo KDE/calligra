@@ -169,9 +169,13 @@ public:
     
     /// Returns the total actual cost
     double actualCost() const;
+    /// Returns the actual cost on @p date
+    double actualCost( const QDate &date ) const;
     /// Returns the total actual cost for @p resource
     double actualCost( const Resource *resource ) const;
-
+    /// Returns the total actual cost upto and including @p date
+    double actualCostTo( const QDate &date ) const;
+    
     void addUsedEffort( const Resource *resource, UsedEffort *value = 0 );
     UsedEffort *takeUsedEffort( const Resource *r ) { return m_usedEffort.take( const_cast<Resource*>( r ) ); changed(); }
     UsedEffort *usedEffort( const Resource *r ) const { return m_usedEffort.value( const_cast<Resource*>( r ) ); }

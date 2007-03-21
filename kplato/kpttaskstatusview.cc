@@ -438,6 +438,36 @@ QVariant TaskStatusItemModel::actualEffortTo( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant TaskStatusItemModel::plannedCostTo( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return KGlobal::locale()->formatMoney( node->plannedCostTo( m_now ) );
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant TaskStatusItemModel::actualCostTo( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return KGlobal::locale()->formatMoney( node->actualCostTo( m_now ) );
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant TaskStatusItemModel::note( const Node *node, int role ) const
 {
     switch ( role ) {
@@ -481,9 +511,11 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
             case 2: result = completed( t, role ); break;
             case 3: result = plannedEffortTo( t, role ); break;
             case 4: result = actualEffortTo( t, role ); break;
-            case 5: result = startTime( t, role ); break;
-            case 6: result = endTime( t, role ); break;
-            case 7: result = note( t, role ); break;
+            case 5: result = plannedCostTo( t, role ); break;
+            case 6: result = actualCostTo( t, role ); break;
+            case 7: result = startTime( t, role ); break;
+            case 8: result = endTime( t, role ); break;
+            case 9: result = note( t, role ); break;
             default:
                 kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
                 return QVariant();
@@ -514,9 +546,11 @@ QVariant TaskStatusItemModel::headerData( int section, Qt::Orientation orientati
                 case 2: return i18n( "% Completed" );
                 case 3: return i18n( "Planned Effort" );
                 case 4: return i18n( "Actual Effort" );
-                case 5: return i18n( "Start" );
-                case 6: return i18n( "End" );
-                case 7: return i18n( "Status Note" );
+                case 5: return i18n( "Planned Cost" );
+                case 6: return i18n( "Actual Cost" );
+                case 7: return i18n( "Start" );
+                case 8: return i18n( "End" );
+                case 9: return i18n( "Status Note" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -525,11 +559,6 @@ QVariant TaskStatusItemModel::headerData( int section, Qt::Orientation orientati
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-/*            case 0: return ToolTip::TaskStatusName;
-            case 1: return ToolTip::TaskStatus;
-            case 2: return ToolTip::TaskStatusStart;
-            case 3: return ToolTip::TaskStatusEnd;
-            case 4: return ToolTip::TaskStatusNote;*/
             default: return QVariant();
         }
     }
@@ -555,21 +584,21 @@ QItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget *parent 
 
 int TaskStatusItemModel::columnCount( const QModelIndex &parent ) const
 {
-    return 8;
+    return 10;
 }
 
 int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        kDebug()<<k_funcinfo<<"top="<<m_top.count()<<endl;
+        //kDebug()<<k_funcinfo<<"top="<<m_top.count()<<endl;
         return m_top.count();
     }
     NodeList *l = list( parent );
     if ( l ) {
-        kDebug()<<k_funcinfo<<"list "<<parent.row()<<": "<<l->count()<<endl;
+        //kDebug()<<k_funcinfo<<"list "<<parent.row()<<": "<<l->count()<<endl;
         return l->count();
     }
-    kDebug()<<k_funcinfo<<"node "<<parent.row()<<endl;
+    //kDebug()<<k_funcinfo<<"node "<<parent.row()<<endl;
     return 0; // nodes don't have children
 }
 

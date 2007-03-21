@@ -538,14 +538,7 @@ double Task::actualCost( long id ) const {
         }
         return c;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
-    if ( s ) {
-        c = s->actualCost();
-    }
-    return c;
+    return m_completion.actualCost();
 }
 
 double Task::actualCost(const QDate &date, long id) const {
@@ -557,14 +550,7 @@ double Task::actualCost(const QDate &date, long id) const {
         }
         return c;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
-    if ( s ) {
-        c = s->actualCost(date);
-    }
-    return c;
+    return m_completion.actualCost( date );
 }
 
 double Task::actualCostTo(const QDate &date, long id) const {
@@ -576,14 +562,7 @@ double Task::actualCostTo(const QDate &date, long id) const {
         }
         return c;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
-    if ( s ) {
-        c = s->actualCostTo(date);
-    }
-    return c;
+    return m_completion.actualCostTo( date );
 }
 
 //FIXME Handle summarytasks
@@ -1993,21 +1972,25 @@ Duration Completion::remainingEffort() const
 
 Duration Completion::actualEffort() const
 {
-    Duration tot;
+    Duration eff;
     foreach( UsedEffort *ue, m_usedEffort.values() ) {
-        tot += ue->effort();
+        foreach ( QDate d, ue->actualEffortMap().keys() ) {
+            eff += ue->actualEffortMap()[ d ]->effort();
+        }
     }
-    return tot;
+    return eff;
 }
 
 Duration Completion::actualEffortTo( const QDate &date ) const
 {
     Duration eff;
-    foreach ( QDate d, m_entries.keys() ) {
-        if ( d > date ) {
-            break;
+    foreach( UsedEffort *ue, m_usedEffort.values() ) {
+        foreach ( QDate d, ue->actualEffortMap().keys() ) {
+            if ( d > date ) {
+                break;
+            }
+            eff += ue->actualEffortMap()[ d ]->effort();
         }
-        eff = m_entries[ d ]->totalPerformed;
     }
     return eff;
 }
@@ -2037,6 +2020,20 @@ void Completion::setNote( const QString &str )
     }
 }
 
+double Completion::actualCost( const QDate &date ) const
+{
+    //kDebug()<<k_funcinfo<<date<<endl;
+    double c = 0.0;
+    foreach ( const Resource *r, m_usedEffort.keys() ) {
+        double nc = r->normalRate();
+        double oc = r->overtimeRate();
+        UsedEffort::ActualEffort *a = m_usedEffort[ r ]->effort( date );
+        c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
+        c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+    }
+    return c;
+}
+
 double Completion::actualCost() const
 {
     double c = 0.0;
@@ -2054,6 +2051,27 @@ double Completion::actualCost( const Resource *resource ) const
     foreach ( UsedEffort::ActualEffort *a, m_usedEffort.value( const_cast<Resource*>( resource )  )->actualEffortMap().values() ) {
         c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
         c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+    }
+    return c;
+}
+
+double Completion::actualCostTo( const QDate &date ) const
+{
+    //kDebug()<<k_funcinfo<<date<<endl;
+    double c = 0.0;
+    foreach ( const Resource *r, m_usedEffort.keys() ) {
+        double nc = r->normalRate();
+        double oc = r->overtimeRate();
+        foreach ( QDate d, m_usedEffort[ r ]->actualEffortMap().keys() ) {
+            if ( d > date ) {
+                break;
+            }
+            UsedEffort::ActualEffort *a = m_usedEffort[ r ]->actualEffortMap()[ d ];
+            if ( a ) {
+                c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
+                c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+            }
+        }
     }
     return c;
 }
