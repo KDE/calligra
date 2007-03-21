@@ -113,7 +113,7 @@
           <item>
            <widget class="QLabel" name="labelCriticalPath" >
             <property name="text" >
-             <string>Critical Path :</string>
+             <string>Critical Path (Task Id) :</string>
             </property>
            </widget>
           </item>

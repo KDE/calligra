@@ -27,33 +27,46 @@ void PertResult::draw( Project &project)
 {
     widget.treeWidgetTaskResult->clear();
     KLocale * locale = KGlobal::locale();
-    updateDurationForward();
+    QList<Node*> list;
+    QString res;
+
     foreach(Node * currentNode, project.projectNode()->childNodeIterator()){
         if (currentNode->type()!=4){
-
+ 
             QTreeWidgetItem * item = new QTreeWidgetItem(widget.treeWidgetTaskResult );
             item->setText(0, currentNode->name());
 	    item->setText(1,locale->formatDateTime(getStartEarlyDate(currentNode)));
 	    item->setText(2,locale->formatDateTime(getFinishEarlyDate(currentNode)));
 	    item->setText(3,locale->formatDateTime(getStartLateDate(currentNode)));
 	    item->setText(4,locale->formatDateTime(getFinishLateDate(currentNode)));
-	    item->setText(5,getFreeMargin(currentNode).toString());
-	    item->setText(6,getFreeMargin(currentNode).toString());
+	    item->setText(5,res.number(getTaskFloat(currentNode).days()));
+	    item->setText(6,res.number(getFreeMargin(currentNode).days()));
         }
-	widget.labelResultProjectFloat->setText(getProjectFloat(project).toString());
+	widget.labelResultProjectFloat->setText(res.number(getProjectFloat(project).days()));
+
     }
+    list=criticalPath();
+    QList<Node*>::iterator it=list.begin();
+    while(it!=list.end()) 
+    {
+	 res+=(*it)->id();
+	 it++;
+	 if(it!=list.end()) res+=" - ";
+    }
+    widget.labelResultCriticalPath->setText(res);
 }
 
 DateTime PertResult::getStartEarlyDate(Node * currentNode)
 {
-    DateTime duree;
+    DateTime duration;
     Task * t;
     //if the task has no parent so the early date start is 0
     if(currentNode->dependParentNodes().size()==0)
     {
         t=static_cast<Task *>(currentNode);
-        duree=t->startTime();
-        return duree;
+        duration=t->startTime();
+        duration.setDateOnly(true);
+        return duration;
     }
     else
     {
@@ -63,11 +76,12 @@ DateTime PertResult::getStartEarlyDate(Node * currentNode)
             t=static_cast<Task *>((*it)->parent ());
             if(it==currentNode->dependParentNodes().begin())
 	    {
-	        duree=t->startTime( );
+	        duration=t->startTime( );
 	    }
-	duree+=(t->endTime()-t->startTime());
+	duration+=(t->endTime()-t->startTime());
     	}
-    return duree;
+    duration.setDateOnly(true);
+    return duration;
     }
 }
 
@@ -81,81 +95,94 @@ DateTime PertResult::getFinishEarlyDate(Node * currentNode)
  
 DateTime PertResult::getStartLateDate(Node * currentNode)
 {
-    DateTime duree;
     Task * t;
+    t=static_cast<Task *>(currentNode);
+    return (getFinishLateDate(currentNode)-=(t->endTime()-t->startTime()));
+
+}
+
+
+DateTime PertResult::getFinishLateDate(Node * currentNode)
+{
+    DateTime duration;
+    Task * t;
+    QList<DateTime> l;
     if(currentNode->dependChildNodes().size()==0)
     {
         t=static_cast<Task *>(currentNode);
-        duree=getStartEarlyDate(currentNode);
-        return duree;
+        duration=getStartEarlyDate(currentNode);
+	duration.setDateOnly(true);
+        return duration;
     }
     else
     {
     	for (QList<Relation*>::iterator it=currentNode->dependChildNodes().begin();it!=currentNode->dependChildNodes().end();it++)
     	{
             t=static_cast<Task *>((*it)->child ());
-            if(it==currentNode->dependChildNodes().begin())
-	    {
-		duree=getStartLateDate((*it)->child ());
-	    }
-	    if(duree>getStartLateDate((*it)->child ()))
-	    {
-	        duree=getStartLateDate((*it)->child ());
-		kDebug() << "BOUCLE" << endl;
-		kDebug() << duree.toString() << endl;
-	    }
-	    kDebug() << "FIN BOUCLE" << endl;
-	    kDebug() << duree.toString() << endl;
+	    duration=getFinishLateDate((*it)->child ());
+            duration-=((*it)->child ()->endTime()-(*it)->child ()->startTime());
+	    l.push_back(duration);
     	}
-    return duree-=(currentNode->endTime()-currentNode->startTime());
+    
+    	for (QList<DateTime>::iterator it=l.begin();it!=l.end();it++)
+    	{
+	    if(it==l.begin())
+	    {
+	    	duration=(*it);
+	    }
+	    if((*it)<duration)
+	    {
+		duration=(*it);
+	    }
+	}
+    duration.setDateOnly(true);
+    return duration;
     }
-}
-
-
-DateTime PertResult::getFinishLateDate(Node * currentNode)
-{
- //it's the late start date + duration of the task
-    Task * t;
-    t=static_cast<Task *>(currentNode);
-    return (getStartLateDate(currentNode)+=(t->endTime()-t->startTime()));
 }
 
 Duration PertResult::getProjectFloat(Project &project)
 {
-    Duration duree;
+    Duration duration;
     foreach(Node * currentNode, project.projectNode()->childNodeIterator() )
     {
-	duree=duree+getTaskFloat(currentNode);
-        kDebug() << "FLOAT PROJECT" << endl;
-        kDebug() << duree.toString() << endl;
+	duration=duration+getTaskFloat(currentNode);
     }
-    return duree;
+    //duration.setDayOnly(true);
+    return duration;
 }
 
 Duration PertResult::getFreeMargin(Node * currentNode)
 {
     //search the small duration of the nextest task
     Task * t;
-    DateTime duree;
+    DateTime duration;
     for (QList<Relation*>::iterator it=currentNode->dependChildNodes().begin();it!=currentNode->dependChildNodes().end();it++)
-    	{
-            if(it==currentNode->dependChildNodes().begin())
-	    {
-		duree=getStartEarlyDate((*it)->child());
-	    }
-	    t=static_cast<Task *>((*it)->child ());
-            if(getStartEarlyDate((*it)->child ())<duree)
-	    {
-	        duree=getStartEarlyDate((*it)->child ());
-	    }
-    	}
+    {
+        if(it==currentNode->dependChildNodes().begin())
+        {
+	    duration=getStartEarlyDate((*it)->child());
+	}
+	t=static_cast<Task *>((*it)->child ());
+        if(getStartEarlyDate((*it)->child ())<duration)
+	{
+	    duration=getStartEarlyDate((*it)->child ());
+	}
+    }
     t=static_cast<Task *>(currentNode);
-    return duree-(getStartEarlyDate(currentNode)+=(t->endTime()-t->startTime())); 
+    duration.setDateOnly(true);
+    return duration-(getStartEarlyDate(currentNode)+=(t->endTime()-t->startTime())); 
 }
 
 Duration PertResult::getTaskFloat(Node * currentNode)
 {
- return getStartLateDate(currentNode)-getStartEarlyDate(currentNode);
+    if(currentNode->dependChildNodes().size()==0)
+    {
+         return getFinishLateDate(currentNode)-getStartEarlyDate(currentNode);
+    }
+    else
+    {
+        return getFinishLateDate(currentNode)-getFinishEarlyDate(currentNode);
+    }
 }
 
 //-----------------------------------
@@ -181,36 +208,24 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
 
 }
 
-void PertResult::updateDurationForward()
+QList<Node*> PertResult::criticalPath()
 {
-Duration duree;
+    QList<Node*> list;
     foreach(Node * currentNode, m_node->childNodeIterator() )
     {
-	
-	for (QList<Relation*>::iterator it=currentNode->dependParentNodes().begin();it!=currentNode->dependParentNodes().end();it++) 
-   	{
-		duree=(*it)->getmParent()->getmDurationForward() +((*it)->getmLag());
-		if (duree>(currentNode->getmDurationForward()))
-		{
-			currentNode->getmDurationForward()=duree;
-		}		
-		//kDebug() <<duree.toString()<<endl;
-
-  	}
+	if(currentNode->dependChildNodes().size()==0 && getFinishLateDate(currentNode)==getStartEarlyDate(currentNode))
+    	{
+          list.push_back(currentNode) ;
+    	}
+	else
+	{
+	   if(getFinishLateDate(currentNode)==getFinishEarlyDate(currentNode))
+	   {
+               list.push_back(currentNode) ;
+	   }
+	}
     }
-}
-
-QList<Node*> PertResult::criticalPath(Node * currentNode)
-{
-    //Node * currentNode = m_node->chilNodeIterator().end(); 
-    for(QList<Relation*>::iterator it=currentNode->dependParentNodes().end();it!=currentNode->dependParentNodes().begin();it--)
-    {
-	 if((currentNode->getmDurationForward() -((*it)->getmLag()))==((*it)->getmParent()->getmDurationForward()))
-         {
-		criticalPath((*it)->getmParent());
-		m_criticalPath.push_back((*it)->getmParent());
-         }
-    }
+    return list;
 }
 
 

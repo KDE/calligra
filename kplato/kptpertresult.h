@@ -63,8 +63,7 @@ public:
     PertResult( Part *part, QWidget *parent );
     void draw( Project &project);
 
-    void updateDurationForward();
-    QList<Node*> criticalPath(Node*);
+    QList<Node*> criticalPath();
 
     DateTime getStartEarlyDate(Node * currentNode);
     DateTime getFinishEarlyDate(Node * currentNode);
