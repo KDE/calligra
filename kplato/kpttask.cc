@@ -435,8 +435,7 @@ Duration Task::actualEffort(const QDate &date, long id) const {
         }
         return eff;
     }
-    m_completion.actualEffort( date );
-    return eff;
+    return m_completion.actualEffort( date );
 }
 
 // Returns the total actual effort for this task (or subtasks) to date
@@ -2013,14 +2012,16 @@ void Completion::setNote( const QString &str )
 
 double Completion::actualCost( const QDate &date ) const
 {
-    //kDebug()<<k_funcinfo<<date<<endl;
+    kDebug()<<k_funcinfo<<date<<endl;
     double c = 0.0;
     foreach ( const Resource *r, m_usedEffort.keys() ) {
         double nc = r->normalRate();
         double oc = r->overtimeRate();
-        UsedEffort::ActualEffort *a = m_usedEffort[ r ]->effort( date );
-        c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
-        c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+        if ( m_usedEffort[ r ]->actualEffortMap().contains( date ) ) {
+            UsedEffort::ActualEffort *a = m_usedEffort[ r ]->effort( date );
+            c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
+            c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+        }
     }
     return c;
 }
