@@ -66,13 +66,13 @@ public:
     void updateDurationForward();
     QList<Node*> criticalPath(Node*);
 
-    QString & getStartEarlyDate(Node * currentNode);
-    QString & getFinishEarlyDate(Node * currentNode);
-    QString & getStartLateDate(Node * currentNode);
-    QString & getFinishLateDate(Node * currentNode);
-    QString getProjectFloat(Project &project);
-    QString & getFreeMargin(Node * currentNode);
-    QString & getTaskFloat(Node * currentNode);
+    DateTime getStartEarlyDate(Node * currentNode);
+    DateTime getFinishEarlyDate(Node * currentNode);
+    DateTime getStartLateDate(Node * currentNode);
+    DateTime getFinishLateDate(Node * currentNode);
+    Duration getProjectFloat(Project &project);
+    Duration getFreeMargin(Node * currentNode);
+    Duration getTaskFloat(Node * currentNode);
 
 
 private:

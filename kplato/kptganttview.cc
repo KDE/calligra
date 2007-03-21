@@ -710,6 +710,7 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
 
     item->setTooltipText( w );
     setDrawn( item, true );
+	
 }
 
 void GanttView::modifyMilestone( KDGanttViewItem *item, Task *task )
