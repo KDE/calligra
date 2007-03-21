@@ -29,6 +29,8 @@ namespace KPlato
 
     Chart::Chart()
     {
+        totalYPercent = 0.0;
+        
         for(int i=0;i<3;i++)
         {
               for(int j=0;j<2;j++)
@@ -123,6 +125,7 @@ namespace KPlato
     // Set a variable to know how much is the higher percent of Y 
     float Chart::setMaxYPercent(QVector<QPointF> BCWP, QVector<QPointF> BCWS, QVector<QPointF> ACWP )// WORKS, TESTED
     {
+        totalYPercent = 0.0;
         if( !BCWP.isEmpty())
         {
             if( !BCWS.isEmpty() )
@@ -253,7 +256,7 @@ namespace KPlato
         it++;
         while(it != vect.end())
         {
-            sum+=(float)p.plannedCostTo(*it_weeks);
+            sum+=(float)p.plannedCost(*it_weeks);
             it->setY(sum);
             kDebug()<<"Planned cost : "<<it->y()<<"iciiiiiiiiii"<<endl;
             it++;
@@ -271,7 +274,7 @@ namespace KPlato
         it++;
         while(it != vect.end())
         {
-            sum+=(float)p.actualCostTo(*it_weeks);
+            sum+=(float)p.actualCost(*it_weeks);
             it->setY(sum);
             kDebug()<<"Acutal cost : "<<it->y()<<endl;
             it++;
