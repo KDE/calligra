@@ -40,10 +40,10 @@ Duration::Duration() {
 
 Duration::Duration( double value, Duration::Unit unit ) {
     if (unit == Unit_ms) m_ms = (qint64)value;
-    else if (unit == Unit_s) m_ms = (qint64)value * 1000;
-    else if (unit == Unit_m) m_ms = (qint64)value * ( 1000 * 60 );
-    else if (unit == Unit_h) m_ms = (qint64)value * ( 1000 * 60 * 60 );
-    else if (unit == Unit_d) m_ms = (qint64)value * ( 1000 * 60 * 60 * 24 );
+    else if (unit == Unit_s) m_ms = (qint64)(value * 1000);
+    else if (unit == Unit_m) m_ms = (qint64)(value * ( 1000 * 60 ));
+    else if (unit == Unit_h) m_ms = (qint64)(value * ( 1000 * 60 * 60 ));
+    else if (unit == Unit_d) m_ms = (qint64)(value * ( 1000 * 60 * 60 * 24 ));
 }
 
 Duration::Duration(const Duration &d) {
