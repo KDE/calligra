@@ -263,6 +263,44 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionVi
 }
 
 //---------------------------
+DoubleSpinBoxDelegate::DoubleSpinBoxDelegate( QObject *parent )
+    : QItemDelegate( parent )
+{
+}
+
+QWidget *DoubleSpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+{
+    QDoubleSpinBox *editor = new QDoubleSpinBox(parent);
+    editor->installEventFilter(const_cast<DoubleSpinBoxDelegate*>(this));
+    return editor;
+}
+
+void DoubleSpinBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    double value = index.model()->data(index, Qt::EditRole).toDouble();
+    double min = 0.0;//index.model()->data(index, Role::Minimum).toInt();
+    double max = 24.0;//index.model()->data(index, Role::Maximum).toInt();
+
+    QDoubleSpinBox *box = static_cast<QDoubleSpinBox*>(editor);
+    box->setDecimals( 1 );
+    box->setRange( min, max );
+    box->setValue( value );
+}
+
+void DoubleSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                const QModelIndex &index) const
+{
+    QDoubleSpinBox *box = static_cast<QDoubleSpinBox*>(editor);
+    model->setData( index, box->value(), Qt::EditRole );
+}
+
+void DoubleSpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    QRect r = option.rect;
+    editor->setGeometry(r);
+}
+
+//---------------------------
 MoneyDelegate::MoneyDelegate( QObject *parent )
     : QItemDelegate( parent )
 {

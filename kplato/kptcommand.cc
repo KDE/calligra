@@ -2054,17 +2054,27 @@ AddCompletionEntryCmd::AddCompletionEntryCmd( Part *part, Completion &completion
         : NamedCommand( part, name ),
         m_completion( completion ),
         m_date( date ),
-        newvalue( value )
+        newvalue( value ),
+        m_newmine( true ),
+        m_oldmine( false)
 {
     oldvalue = m_completion.entry( date );
+}
+AddCompletionEntryCmd::~AddCompletionEntryCmd()
+{
+    if ( m_oldmine )
+        delete oldvalue;
+    if ( m_newmine )
+        delete newvalue;
 }
 void AddCompletionEntryCmd::execute()
 {
     if ( oldvalue ) {
         m_completion.takeEntry( m_date );
+        m_oldmine = true;
     }
     m_completion.addEntry( m_date, newvalue );
-
+    m_newmine = false;
     setCommandType( 0 );
 }
 void AddCompletionEntryCmd::unexecute()
@@ -2073,9 +2083,86 @@ void AddCompletionEntryCmd::unexecute()
     if ( oldvalue ) {
         m_completion.addEntry( m_date, oldvalue );
     }
+    m_newmine = true;
+    m_oldmine = false;
     setCommandType( 0 );
 }
 
+AddCompletionUsedEffortCmd::AddCompletionUsedEffortCmd( Part *part, Completion &completion, const Resource *resource, Completion::UsedEffort *value, const QString& name )
+        : NamedCommand( part, name ),
+        m_completion( completion ),
+        m_resource( resource ),
+        newvalue( value ),
+        m_newmine( true ),
+        m_oldmine( false)
+{
+    oldvalue = m_completion.usedEffort( resource );
+}
+AddCompletionUsedEffortCmd::~AddCompletionUsedEffortCmd()
+{
+    if ( m_oldmine )
+        delete oldvalue;
+    if ( m_newmine )
+        delete newvalue;
+}
+void AddCompletionUsedEffortCmd::execute()
+{
+    if ( oldvalue ) {
+        m_completion.takeUsedEffort( m_resource );
+        m_oldmine = true;
+    }
+    m_completion.addUsedEffort( m_resource, newvalue );
+    m_newmine = false;
+    setCommandType( 0 );
+}
+void AddCompletionUsedEffortCmd::unexecute()
+{
+    m_completion.takeUsedEffort( m_resource );
+    if ( oldvalue ) {
+        m_completion.addUsedEffort( m_resource, oldvalue );
+    }
+    m_newmine = true;
+    m_oldmine = false;
+    setCommandType( 0 );
+}
+
+AddCompletionActualEffortCmd::AddCompletionActualEffortCmd( Part *part, Completion::UsedEffort &ue, const QDate &date, Completion::UsedEffort::ActualEffort *value, const QString& name )
+        : NamedCommand( part, name ),
+        m_usedEffort( ue ),
+        m_date( date ),
+        newvalue( value ),
+        m_newmine( true ),
+        m_oldmine( false)
+{
+    oldvalue = ue.effort( date );
+}
+AddCompletionActualEffortCmd::~AddCompletionActualEffortCmd()
+{
+    if ( m_oldmine )
+        delete oldvalue;
+    if ( m_newmine )
+        delete newvalue;
+}
+void AddCompletionActualEffortCmd::execute()
+{
+    if ( oldvalue ) {
+        m_usedEffort.takeEffort( m_date );
+        m_oldmine = true;
+    }
+    m_usedEffort.setEffort( m_date, newvalue );
+    m_newmine = false;
+    setCommandType( 0 );
+}
+void AddCompletionActualEffortCmd::unexecute()
+{
+    m_usedEffort.takeEffort( m_date );
+    if ( oldvalue ) {
+        m_usedEffort.setEffort( m_date, oldvalue );
+    }
+    m_newmine = true;
+    m_oldmine = false;
+    setCommandType( 0 );
+}
 
 AddAccountCmd::AddAccountCmd( Part *part, Project &project, Account *account, const QString& parent, const QString& name )
         : NamedCommand( part, name ),

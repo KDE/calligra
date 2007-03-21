@@ -30,6 +30,7 @@
 
 #include <QList>
 #include <QMap>
+#include <QPair>
 
 namespace KPlato
 {
@@ -41,6 +42,51 @@ class Completion
 {
     
 public:
+    class UsedEffort
+    {
+        public:
+            class ActualEffort : public QPair<Duration, Duration>
+            {
+                public:
+                    ActualEffort( const Duration &ne = Duration::zeroDuration, const Duration oe = Duration::zeroDuration )
+                        : QPair<Duration, Duration>( ne, oe )
+                    {}
+                    ActualEffort( const ActualEffort &e )
+                        : QPair<Duration, Duration>( e.first, e.second )
+                    {}
+                    ~ActualEffort() {}
+                    Duration normalEffort() const { return first; }
+                    void setNormalEffort( const Duration &e ) { first = e; }
+                    Duration overtimeEffort() const { return second; }
+                    void setOvertimeEffort( const Duration &e ) { second = e; }
+                    /// Returns the sum of normalEffort + overtimeEffort
+                    Duration effort() const { return first + second; }
+                    void setEffort( const Duration &ne, const Duration &oe = Duration::zeroDuration ) { first = ne; second = oe; }
+            };
+            UsedEffort();
+            UsedEffort( const UsedEffort &e );
+            ~UsedEffort();
+            bool operator==( const UsedEffort &e ) const;
+            bool operator!=( const UsedEffort &e ) const { return !operator==( e ); }
+            void mergeEffort( const UsedEffort &value );
+            void setEffort( const QDate &date, ActualEffort *value );
+            /// Returns the total effort on @p date
+            ActualEffort *effort( const QDate &date ) const { return m_actual.value( date ); }
+            ActualEffort *takeEffort( const QDate &date ) { return m_actual.take( date ); }
+            /// Returns the total effort for all registered dates
+            Duration effort() const;
+            const QMap<QDate, ActualEffort*> &actualEffortMap() const { return m_actual; }
+            
+            /// Load from document
+            bool loadXML(QDomElement &element, XMLLoaderObject &status );
+            /// Save to document
+            void saveXML(QDomElement &element) const;
+        
+        private:
+            QMap<QDate, ActualEffort*> m_actual;
+    };
+    typedef QMap<QDate, UsedEffort::ActualEffort*> DateUsedEffortMap;
+    
     class Entry
     {
         public:
@@ -54,15 +100,33 @@ public:
               remainingEffort( remaining ),
               totalPerformed( performed )
             {}
+            Entry( const Entry &e ) { copy( e ); }
+            bool operator==( const Entry &e ) const {
+                return percentFinished == e.percentFinished
+                    && remainingEffort == e.remainingEffort
+                    && totalPerformed == e.totalPerformed
+                    && note == e.note;
+            }
+            Entry &operator=(const Entry &e ) { copy( e ); return *this; }
             
             int percentFinished;
             Duration remainingEffort;
             Duration totalPerformed;
             QString note;
+        protected:
+            void copy( const Entry &e ) {
+                percentFinished = e.percentFinished;
+                remainingEffort = e.remainingEffort;
+                totalPerformed = e.totalPerformed;
+                note = e.note;
+            }
     };
     typedef QMap<QDate, Entry*> EntryList;
 
+    typedef QMap<const Resource*, UsedEffort*> ResourceUsedEffortMap;
+    
     explicit Completion( Node *node = 0 );
+    Completion( const Completion &copy );
     ~Completion();
     
     bool operator==(const Completion &p);
@@ -85,26 +149,47 @@ public:
     
     const EntryList &entries() const { return m_entries; }
     void addEntry( const QDate &date, Entry *entry );
-    Entry *takeEntry( const QDate &date ) { return m_entries.take( date ); }
+    Entry *takeEntry( const QDate &date ) { return m_entries.take( date ); changed(); }
     Entry *entry( const QDate &date ) const { return m_entries[ date ]; }
     
+    /// Returns the date of the latest entry
     QDate entryDate() const;
+    /// Returns the percentFinished of the latest entry
     int percentFinished() const;
+    /// Returns the estimated remaining effort
     Duration remainingEffort() const;
-    Duration totalPerformed() const;
+    /// Returns the total actual effort
+    Duration actualEffort() const;
+    /// Returns the total actual effort upto and including @p date
     Duration actualEffortTo( const QDate &date ) const;
+    /// TODO
     QString note() const;
+    /// TODO
     void setNote( const QString &str );
+    
+    /// Returns the total actual cost
+    double actualCost() const;
+    /// Returns the total actual cost for @p resource
+    double actualCost( const Resource *resource ) const;
+
+    void addUsedEffort( const Resource *resource, UsedEffort *value = 0 );
+    UsedEffort *takeUsedEffort( const Resource *r ) { return m_usedEffort.take( const_cast<Resource*>( r ) ); changed(); }
+    UsedEffort *usedEffort( const Resource *r ) const { return m_usedEffort.value( const_cast<Resource*>( r ) ); }
+    const ResourceUsedEffortMap &usedEffortMap() const { return m_usedEffort; }
     
     void changed();
     Node *node() const { return m_node; }
+    
+protected:
+    void copy( const Completion &copy);
     
 private:
     Node *m_node;
     bool m_started, m_finished;
     DateTime m_startTime, m_finishTime;
     EntryList m_entries;
-
+    ResourceUsedEffortMap m_usedEffort;
+    
 #ifndef NDEBUG
 public:
     void printDebug( const QByteArray &ident ) const;

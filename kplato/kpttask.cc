@@ -422,7 +422,7 @@ Duration Task::actualEffort( long id ) const {
             eff += n->actualEffort(id);
         }
     } else {
-        eff = m_completion.totalPerformed();
+        eff = m_completion.actualEffort();
     }
     /* If we want to register pr resource...
     } else if (m_currentSchedule) {
@@ -498,6 +498,7 @@ double Task::plannedCost(const QDate &date, long id) const {
         foreach (Node *n, childNodeIterator()) {
             c += n->plannedCost(date, id);
         }
+        return c;
     }
     Schedule *s = m_currentSchedule;
     if ( id != -1 ) {
@@ -516,6 +517,7 @@ double Task::plannedCostTo(const QDate &date, long id) const {
         foreach (Node *n, childNodeIterator()) {
             c += n->plannedCostTo(date, id);
         }
+        return c;
     }
     Schedule *s = m_currentSchedule;
     if ( id != -1 ) {
@@ -534,6 +536,7 @@ double Task::actualCost( long id ) const {
         foreach (Node *n, childNodeIterator()) {
             c += n->actualCost( id );
         }
+        return c;
     }
     Schedule *s = m_currentSchedule;
     if ( id != -1 ) {
@@ -552,6 +555,7 @@ double Task::actualCost(const QDate &date, long id) const {
         foreach (Node *n, childNodeIterator()) {
             c += n->actualCost(date, id);
         }
+        return c;
     }
     Schedule *s = m_currentSchedule;
     if ( id != -1 ) {
@@ -570,6 +574,7 @@ double Task::actualCostTo(const QDate &date, long id) const {
         foreach (Node *n, childNodeIterator()) {
             c += n->actualCostTo(date, id);
         }
+        return c;
     }
     Schedule *s = m_currentSchedule;
     if ( id != -1 ) {
@@ -1896,23 +1901,40 @@ Completion::Completion( Node *node )
       m_finished( false )
 {}
 
+Completion::Completion( const Completion &c )
+{
+    copy( c );
+}
+
 Completion::~Completion()
 { 
     qDeleteAll( m_entries );
+    qDeleteAll( m_usedEffort );
 }
     
+void Completion::copy( const Completion &p )
+{
+    m_node = 0; //NOTE
+    m_started = p.isStarted(); m_finished = p.isFinished();
+    m_startTime = p.startTime(); m_finishTime = p.finishTime();
+    foreach ( QDate d, p.entries().keys() ) {
+        addEntry( d, new Entry( *(p.entries()[ d ]) ) );
+    }
+    foreach ( const Resource *r, p.usedEffortMap().keys() ) {
+        addUsedEffort( r, new UsedEffort( *( p.usedEffortMap()[ r ] ) ) );
+    }
+}
+
 bool Completion::operator==( const Completion &p )
 {
     return m_started == p.isStarted() && m_finished == p.isFinished() &&
             m_startTime == p.startTime() && m_finishTime == p.finishTime() &&
-            m_entries == p.entries();
+            m_entries == p.entries() &&
+            m_usedEffort == p.usedEffortMap();
 }
 Completion &Completion::operator=( const Completion &p )
 {
-    m_node = p.node();
-    m_started = p.isStarted(); m_finished = p.isFinished();
-    m_startTime = p.startTime(); m_finishTime = p.finishTime();
-    m_entries = p.entries();
+    copy( p );
     return *this;
 }
 
@@ -1969,9 +1991,13 @@ Duration Completion::remainingEffort() const
      return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->remainingEffort;
 }
 
-Duration Completion::totalPerformed() const
+Duration Completion::actualEffort() const
 {
-     return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->totalPerformed;
+    Duration tot;
+    foreach( UsedEffort *ue, m_usedEffort.values() ) {
+        tot += ue->effort();
+    }
+    return tot;
 }
 
 Duration Completion::actualEffortTo( const QDate &date ) const
@@ -1986,6 +2012,18 @@ Duration Completion::actualEffortTo( const QDate &date ) const
     return eff;
 }
 
+void Completion::addUsedEffort( const Resource *resource, Completion::UsedEffort *value )
+{
+    UsedEffort *v = value == 0 ? new UsedEffort() : value;
+    if ( m_usedEffort.contains( resource ) ) {
+        m_usedEffort[ resource ]->mergeEffort( *v );
+        delete v;
+    } else {
+        m_usedEffort.insert( resource, v );
+    }
+    changed();
+}
+
 QString Completion::note() const
 {
     return m_entries.isEmpty() ? QString() : m_entries.values().last()->note;
@@ -1997,6 +2035,27 @@ void Completion::setNote( const QString &str )
         m_entries.values().last()->note = str;
         changed();
     }
+}
+
+double Completion::actualCost() const
+{
+    double c = 0.0;
+    foreach ( const Resource *r, m_usedEffort.keys() ) {
+        c += actualCost( r );
+    }
+    return c;
+}
+
+double Completion::actualCost( const Resource *resource ) const
+{
+    double c = 0.0;
+    double nc = resource->normalRate();
+    double oc = resource->overtimeRate();
+    foreach ( UsedEffort::ActualEffort *a, m_usedEffort.value( const_cast<Resource*>( resource )  )->actualEffortMap().values() ) {
+        c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
+        c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+    }
+    return c;
 }
 
 bool Completion::loadXML( QDomElement &element, XMLLoaderObject &status )
@@ -2041,6 +2100,24 @@ bool Completion::loadXML( QDomElement &element, XMLLoaderObject &status )
                     }
                     Entry *entry = new Entry( e.attribute("percent-finished", "0").toInt(), Duration::fromString(e.attribute("remaining-effort")),  Duration::fromString(e.attribute("performed-effort")) );
                     addEntry( date, entry );
+                } else if (e.tagName() == "used-effort") {
+                    QDomNodeList list = e.childNodes();
+                    for (unsigned int n=0; n<list.count(); ++n) {
+                        if (list.item(n).isElement()) {
+                            QDomElement el = list.item(n).toElement();
+                            if (el.tagName() == "resource") {
+                                QString id = el.attribute( "id" );
+                                Resource *r = status.project().resource( id );
+                                if ( r == 0 ) {
+                                    kWarning()<<k_funcinfo<<"Cannot find resource, id="<<id<<endl;
+                                    continue;
+                                }
+                                UsedEffort *ue = new UsedEffort();
+                                addUsedEffort( r, ue );
+                                ue->loadXML( el, status );
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -2048,7 +2125,7 @@ bool Completion::loadXML( QDomElement &element, XMLLoaderObject &status )
     return true;
 }
 
-void Completion::saveXML(QDomElement &element)  const
+void Completion::saveXML(QDomElement &element )  const
 {
     QDomElement el = element.ownerDocument().createElement("progress");
     element.appendChild(el);
@@ -2065,6 +2142,100 @@ void Completion::saveXML(QDomElement &element)  const
         elm.setAttribute( "remaining-effort", e->remainingEffort.toString() );
         elm.setAttribute( "performed-effort", e->totalPerformed.toString() );
         elm.setAttribute( "note", e->note );
+    }
+    if ( ! m_usedEffort.isEmpty() ) {
+        QDomElement elm = el.ownerDocument().createElement("used-effort");
+        el.appendChild(elm);
+        ResourceUsedEffortMap::ConstIterator i = m_usedEffort.constBegin();
+        for ( ; i != m_usedEffort.constEnd(); ++i ) {
+            if ( i.value() == 0 ) {
+                continue;
+            }
+            QDomElement e = elm.ownerDocument().createElement("resource");
+            elm.appendChild(e);
+            e.setAttribute( "id", i.key()->id() );
+            i.value()->saveXML( e );
+        }
+    }
+}
+
+//--------------
+Completion::UsedEffort::UsedEffort()
+{
+}
+
+Completion::UsedEffort::UsedEffort( const UsedEffort &e )
+{
+    mergeEffort( e );
+}
+
+Completion::UsedEffort::~UsedEffort()
+{
+    qDeleteAll( m_actual );
+}
+
+void Completion::UsedEffort::mergeEffort( const Completion::UsedEffort &value )
+{
+    foreach ( QDate d, value.actualEffortMap().keys() ) {
+        setEffort( d, new ActualEffort( *( value.actualEffortMap()[ d ] ) ) );
+    }
+}
+
+void Completion::UsedEffort::setEffort( const QDate &date, ActualEffort *value )
+{
+    m_actual.insert( date, value );
+}
+
+Duration Completion::UsedEffort::effort() const
+{
+    Duration eff;
+    foreach ( ActualEffort *e, m_actual.values() ) {
+        eff += e->effort();
+    }
+    return eff;
+}
+
+bool Completion::UsedEffort::operator==( const Completion::UsedEffort &e ) const
+{
+    return m_actual == e.actualEffortMap();
+}
+
+bool Completion::UsedEffort::loadXML(QDomElement &element, XMLLoaderObject & )
+{
+    //kDebug()<<k_funcinfo<<endl;
+    QDomNodeList list = element.childNodes();
+    for (unsigned int i=0; i<list.count(); ++i) {
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+            if (e.tagName() == "actual-effort") {
+                QDate date = QDate::fromString( e.attribute("date"), Qt::ISODate );
+                if ( date.isValid() ) {
+                    ActualEffort *a = new ActualEffort();
+                    a->setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
+                    a->setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
+                    setEffort( date, a );
+                }
+            }
+        }
+    }
+    return true;
+}
+
+void Completion::UsedEffort::saveXML(QDomElement &element ) const
+{
+    if ( m_actual.isEmpty() ) {
+        return;
+    }
+    DateUsedEffortMap::ConstIterator i = m_actual.constBegin();
+    for ( ; i != m_actual.constEnd(); ++i ) {
+        if ( i.value() == 0 ) {
+            continue;
+        }
+        QDomElement el = element.ownerDocument().createElement("actual-effort");
+        element.appendChild( el );
+        el.setAttribute( "overtime-effort", i.value()->overtimeEffort().toString() );
+        el.setAttribute( "normal-effort", i.value()->normalEffort().toString() );
+        el.setAttribute( "date", i.key().toString( Qt::ISODate ) );
     }
 }
 

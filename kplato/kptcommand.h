@@ -125,8 +125,8 @@ public:
     void unexecute();
 
 private:
-    Calendar *m_cal;
     Project *m_project;
+    Calendar *m_cal;
     Calendar *m_newvalue;
     Calendar *m_oldvalue;
     KMacroCommand *m_cmd;
@@ -988,6 +988,7 @@ class AddCompletionEntryCmd : public NamedCommand
 {
 public:
     AddCompletionEntryCmd( Part *part, Completion &completion, const QDate &date, Completion::Entry *value, const QString& name = QString() );
+    ~AddCompletionEntryCmd();
     void execute();
     void unexecute();
 
@@ -996,6 +997,39 @@ private:
     QDate m_date;
     Completion::Entry *oldvalue;
     Completion::Entry *newvalue;
+    bool m_newmine, m_oldmine;
+};
+
+class AddCompletionUsedEffortCmd : public NamedCommand
+{
+public:
+    AddCompletionUsedEffortCmd( Part *part, Completion &completion, const Resource *resource, Completion::UsedEffort *value, const QString& name = QString() );
+    ~AddCompletionUsedEffortCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    const Resource *m_resource;
+    Completion::UsedEffort *oldvalue;
+    Completion::UsedEffort *newvalue;
+    bool m_newmine, m_oldmine;
+};
+
+class AddCompletionActualEffortCmd : public NamedCommand
+{
+public:
+    AddCompletionActualEffortCmd( Part *part, Completion::UsedEffort &ue, const QDate &date, Completion::UsedEffort::ActualEffort *value, const QString& name = QString() );
+    ~AddCompletionActualEffortCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Completion::UsedEffort &m_usedEffort;
+    QDate m_date;
+    Completion::UsedEffort::ActualEffort *oldvalue;
+    Completion::UsedEffort::ActualEffort *newvalue;
+    bool m_newmine, m_oldmine;
 };
 
 
