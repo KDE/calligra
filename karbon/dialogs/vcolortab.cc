@@ -24,7 +24,6 @@
 #include <QGridLayout>
 
 #include <kcolordialog.h>
-#include <khuesaturationselect.h>
 #include <klocale.h>
 #include <knuminput.h>
 
