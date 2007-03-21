@@ -27,6 +27,11 @@ Item								   Prio Status
   + Get rid of all Qt3 support widgets				      1	----
     - Q3*Layout								done
     - Q3ButtonGroup							--
+    - Q3ListBox / Q3ListBoxText						--
+    - Q3TabDialog							--
+    - Q3GroupBox							--
+    - Q3Wizard								--
+    - Q3Table								--
   + Remove code that does double buffering.			      1	----
   + Get rid of warnings from deprecated calls 			      1	----
     - Fix layouts							done
