@@ -78,6 +78,7 @@
 #include <KoToolBoxFactory.h>
 #include <KoShapeSelectorFactory.h>
 #include <KoShapeController.h>
+#include <KoZoomController.h>
 
 // Commands.
 #include "vclipartcmd.h"
@@ -163,7 +164,25 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	m_smallPreview = new VSmallPreview( this );
 	addStatusBarItem( m_smallPreview );
 
-	initActions();
+    m_canvas = new KarbonCanvas( p );
+    m_canvas->setParent( this );
+
+    connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+
+    m_canvasView = new KoCanvasController(this);
+    m_canvasView->setCanvas(m_canvas);
+    m_canvasView->centerCanvas( false );
+    m_canvasView->show();
+
+    // layout:
+    QGridLayout *layout = new QGridLayout();
+    layout->setMargin(0);
+    layout->addWidget(m_canvasView, 1, 1);
+
+    m_zoomController = new KoZoomController( m_canvasView, dynamic_cast<KoZoomHandler*>(m_canvas->viewConverter()), actionCollection() );
+    m_zoomController->setPageSize( QSizeF(m_part->document().width(), m_part->document().height() ) );
+
+    initActions();
 
 	m_DocumentTab = 0L;
     m_stylePreview = 0L;
@@ -178,22 +197,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
     connect( p, SIGNAL( unitChanged( KoUnit ) ), this, SLOT( setUnit( KoUnit ) ) );
 
-	// layout:
-	QGridLayout *layout = new QGridLayout();
-	layout->setMargin(0);
-
 	// widgets:
-    m_canvas = new KarbonCanvas( p );
-    m_canvas->setParent( this );
-
-    connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
-
-    m_canvasView = new KoCanvasController(this);
-    m_canvasView->setCanvas(m_canvas);
-    m_canvasView->centerCanvas( false );
-    layout->addWidget(m_canvasView, 1, 1);
-    m_canvasView->show();
-
     m_horizRuler = new KoRuler( this, Qt::Horizontal, m_canvas->viewConverter() );
     m_horizRuler->setShowMousePosition(true);
     m_horizRuler->setUnit(p->unit());
@@ -910,17 +914,17 @@ KarbonView::setZoomAt( double zoom, const QPointF &p )
 	debugView(QString("KarbonView::setZoomAt(%1, QPointF(%2, %3)").arg(zoom).arg(p.x()).arg(p.y()));
 
 	QString zoomText = QString( "%1%" ).arg( zoom * 100.0, 0, 'f', 2 );
-	QStringList stl = m_zoomAction->items();
+	QStringList stl = m_zoomController->zoomAction()->items();
 	if( stl.first() == "25%" )
 	{
 		stl.prepend( zoomText.toLatin1() );
-		m_zoomAction->setItems( stl );
-		m_zoomAction->setCurrentItem( 0 );
+		m_zoomController->zoomAction()->setItems( stl );
+		m_zoomController->zoomAction()->setCurrentItem( 0 );
 	}
 	else
 	{
-		m_zoomAction->setCurrentItem( 0 );
-		m_zoomAction->changeItem( m_zoomAction->currentItem(), zoomText.toLatin1() );
+		m_zoomController->zoomAction()->setCurrentItem( 0 );
+		m_zoomController->zoomAction()->changeItem( m_zoomController->zoomAction()->currentItem(), zoomText.toLatin1() );
 	}
 	zoomChanged( p );
 }
@@ -942,10 +946,11 @@ KarbonView::viewZoomOut()
 }
 
 void
-KarbonView::zoomChanged( KoZoomMode::Mode mode, int zoom )
+KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
 {
 	debugView(QString("KarbonView::zoomChanged( mode = %1, zoom = %2) )").arg(mode).arg(zoom));
 
+    /*
 	KoZoomHandler *zoomHandler = (KoZoomHandler*)m_canvas->viewConverter();
 
 	if( mode == KoZoomMode::ZOOM_CONSTANT )
@@ -960,6 +965,8 @@ KarbonView::zoomChanged( KoZoomMode::Mode mode, int zoom )
 	m_canvas->adjustSize();
 	if( mode == KoZoomMode::ZOOM_PAGE || mode == KoZoomMode::ZOOM_WIDTH )
 		QTimer::singleShot(500, this, SLOT(centerCanvas()));
+    */
+    m_canvas->update();
 }
 
 void
@@ -973,9 +980,10 @@ KarbonView::zoomChanged( const QPointF &p )
 {
 	debugView(QString("KarbonView::zoomChanged( QPointF(%1, %2) )").arg(p.x()).arg(p.y()));
 
+    /*
 	if( m_canvas )
 	{
-		double zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
+		double zoomFactor = m_zoomController->zoomAction()->currentText().remove( '%' ).toDouble() / 100.0;
 		if( zoomFactor == 0.0 ) return;
 
 		KoZoomHandler *zoomHandler = (KoZoomHandler*)m_canvas->viewConverter();
@@ -985,98 +993,7 @@ KarbonView::zoomChanged( const QPointF &p )
 	}
 	else
 		KoView::setZoom( 1.0 );
-
-// TODO: this should be done by the cavasview and the canvas itself
-
-	/*double centerX;
-	double centerY;
-	double zoomFactor;
-
-	if( !p.isNull() )
-	{
-		centerX = ( ( p.x() ) * zoom() + m_canvasView->canvasOffsetX() ) / double( m_canvas->canvasWidget()->width() );
-		centerY = 1 - ( ( p.y() ) * zoom() + m_canvasView->canvasOffsetY() ) / double( m_canvas->canvasWidget()->height() );
-		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
-	}
-	else if( m_zoomAction->currentText() == i18n("Zoom Width") )
-	{
-		centerX = 0.5;
-		centerY = double( m_canvas->canvasWidget()->y() + 0.5 * m_canvas->visibleHeight() ) / double( m_canvas->contentsHeight() );
-		zoomFactor = double( m_canvas->canvasWidget()->x() ) / double( part()->document().width() );
-	}
-	else if( m_zoomAction->currentText() == i18n("Whole Page") )
-	{
-		centerX = 0.5;
-		centerY = 0.5;
-		double zoomFactorX = double( m_canvas->visibleWidth() ) / double( part()->document().width() );
-		double zoomFactorY = double( m_canvas->visibleHeight() ) / double( part()->document().height() );
-
-		if(zoomFactorX < 0 && zoomFactorY > 0)
-			zoomFactor = zoomFactorY;
-		else if(zoomFactorX > 0 && zoomFactorY < 0)
-			zoomFactor = zoomFactorX;
-		else if(zoomFactorX < 0 && zoomFactorY < 0)
-			zoomFactor = 0.0001;
-		else
-			zoomFactor = qMin( zoomFactorX, zoomFactorY );
-	}
-	else
-	{
-		if( m_canvas->contentsWidth() > m_canvas->visibleWidth() )
-			centerX = double( m_canvas->contentsX() + 0.5 * m_canvas->visibleWidth() ) / double( m_canvas->contentsWidth() );
-		else
-			centerX = 0.5;
-		if( m_canvas->contentsHeight() > m_canvas->visibleHeight() )
-			centerY = double( m_canvas->contentsY() + 0.5 * m_canvas->visibleHeight() ) / double( m_canvas->contentsHeight() );
-		else
-			centerY = 0.5;
-		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
-	}
-	kDebug(38000) << "centerX : " << centerX << endl;
-	kDebug(38000) << "centerY : " << centerY << endl;
-	kDebug(38000) << "zoomFactor : " << zoomFactor << endl;
-	if( zoomFactor == 0.0 ) return;
-
-	// above 2000% probably doesn't make sense... (Rob)
-	if( zoomFactor > 20 )
-	{
-		zoomFactor = 20;
-		m_zoomAction->changeItem( m_zoomAction->currentItem(), " 2000%" );
-	}
-
-	KoZoomHandler *zoomHandler = (KoZoomHandler*)m_canvas->viewConverter();
-	zoomHandler->setZoom( zoomFactor );
-	KoView::setZoom( zoomFactor );
-
-	m_canvas->viewport()->setUpdatesEnabled( false );
-
-	m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoomFactor ),
-							  int( ( part()->pageLayout().ptHeight + 460 ) * zoomFactor ) );
-
-
-	VPainter *painter = painterFactory()->editpainter();
-	painter->setZoomFactor( zoomFactor );
-
-	m_canvas->setViewport( centerX, centerY );
-	m_canvas->repaintAll();
-	m_canvas->viewport()->setUpdatesEnabled( true );
-
-
-	if( shell() && m_showRulerAction->isChecked() )
-	{
-		m_horizRuler->setZoom( zoomFactor );
-		m_vertRuler->setZoom( zoomFactor );
-		m_canvas->setGeometry( rulerWidth, rulerHeight, width() - rulerWidth, height() - rulerHeight );
-		updateRuler();
-	}
-	else
-	{
-		m_horizRuler->hide();
-		m_vertRuler->hide();
-	}
-	m_canvas->viewport()->setFocus();
-
-	emit zoomChanged( zoomFactor );*/
+    */
 }
 
 void
@@ -1127,14 +1044,9 @@ KarbonView::initActions()
     actionCollection()->addAction("view_mode", m_viewAction );
 	connect(m_viewAction, SIGNAL(triggered()), this, SLOT(viewModeChanged()));
 
-	m_zoomAction = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT|KoZoomMode::ZOOM_PAGE|KoZoomMode::ZOOM_WIDTH,
-	i18n("Zoom"), KIcon("14_zoom"), KShortcut(), actionCollection(), "view_zoom");
-    connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
-            this, SLOT(zoomChanged(KoZoomMode::Mode, int)));
-
     QToolBar *tbar = new QToolBar( statusBar() );
     statusBar()->insertWidget( 2, tbar);
-    tbar->addAction(m_zoomAction);
+    tbar->addAction( m_zoomController->zoomAction() );
 
     actionCollection()->addAction(KStandardAction::ZoomIn,  "view_zoom_in", this, SLOT( viewZoomIn() ));
     actionCollection()->addAction(KStandardAction::ZoomOut,  "view_zoom_out", this, SLOT( viewZoomOut() ));

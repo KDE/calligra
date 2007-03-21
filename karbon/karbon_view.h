@@ -43,9 +43,9 @@ class KToggleAction;
 class KoContextHelpAction;
 class KoLineStyleAction;
 class KoCanvasController;
-class KoZoomAction;
 class KoUnitDoubleSpinComboBox;
 class KoRuler;
+class KoZoomController;
 
 class VDocumentTab;
 class VStrokeDocker;
@@ -178,7 +178,7 @@ protected slots:
 	void setLineStyle( int );
 
 	/// Called by the zoom action to set the zoom
-	void zoomChanged( KoZoomMode::Mode mode, int zoom );
+	void zoomChanged( KoZoomMode::Mode mode, double zoom );
 
 	void centerCanvas();
     void mousePositionChanged( const QPoint &position );
@@ -227,7 +227,6 @@ private:
 	KAction			*m_separatePath;
 
 	// actions:
-	KoZoomAction		*m_zoomAction;
 	KSelectAction		*m_viewAction;
 	KAction				*m_configureAction;
 	KToggleAction		*m_showRulerAction;
@@ -255,6 +254,8 @@ private:
 	QLabel				*m_cursorCoords; // Cursor coordinates
 	VSmallPreview		*m_smallPreview; // Stroke and Fill
 	VToolController	*m_toolController;
+
+    KoZoomController * m_zoomController;
 };
 
 #endif
