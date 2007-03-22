@@ -1,5 +1,10 @@
 project(kpresenter)
 
+include(CheckPrototypeExists)
+
+check_prototype_exists(DPMSCapable "X11/Xlib.h;X11/extensions/dpms.h" HAVE_DPMSCAPABLE_PROTO)
+macro_bool_to_01(X11_dpms_FOUND HAVE_DPMS) # kpresenter
+
 add_subdirectory( part )
 
 

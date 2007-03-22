@@ -2,6 +2,21 @@
 find_package(GraphicsMagick)
 macro_optional_find_package(LibXml2)
 macro_optional_find_package(LibXslt)
+# for xsltfilter:
+check_include_files(unistd.h HAVE_UNISTD_H)
+check_include_files(sys/stat.h HAVE_SYS_STAT_H)
+check_include_files(stdlib.h HAVE_STDLIB_H)
+# for xpdf:
+check_include_files(ndir.h HAVE_NDIR_H)
+check_include_files(sys/dir.h HAVE_SYS_DIR_H)
+check_include_files(sys/ndir.h HAVE_SYS_NDIR_H)
+check_include_files(dirent.h HAVE_DIRENT_H)
+# others:
+check_include_files(ieeefp.h HAVE_IEEEFP_H)
+check_include_files(dirent.h HAVE_DIRENT_H)
+check_include_files(string.h HAVE_STRING_H)
+check_include_files(strings.h HAVE_STRINGS_H)
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-filters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-filters.h )
 
 set(libdialogfilter_SRCS 

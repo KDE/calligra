@@ -26,9 +26,6 @@
 /* Define to 1 if you have the `mkstemp' function. */
 #cmakedefine HAVE_MKSTEMP 1
 
-/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
-#cmakedefine HAVE_NDIR_H 1
-
 /* GetMagickInfoList has different number of arguments with versions >= 6.1.3
    */
 /* #undef HAVE_OLD_GETMAGICKINFOLIST */
@@ -55,4 +52,10 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #cmakedefine HAVE_STRING_H 1
+
+/* for xpdf: */
+#cmakedefine HAVE_SYS_DIR_H 1
+#cmakedefine HAVE_SYS_NDIR_H 1
+/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
+#cmakedefine HAVE_NDIR_H 1
 
