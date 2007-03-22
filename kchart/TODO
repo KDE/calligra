@@ -32,7 +32,7 @@ Item								   Prio Status
     - Q3GroupBox							--
     - Q3Wizard								--
     - Q3Table								--
-  + Remove code that does double buffering.			      1	----
+  + Remove code that does double buffering.			      1	DONE
   + Get rid of warnings from deprecated calls 			      1	----
     - Fix layouts							done
     - Fix spinboxes							done

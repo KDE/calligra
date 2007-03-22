@@ -1,3 +1,9 @@
+2007-03-22  Inge Wallin  <inge@lysator.liu.se>
+
+	More Qt3 -> Qt4 conversions.
+	* kchart_part.cc (paintContent): Remove special code for double
+	buffering since Qt4 does that by itself.
+
 2007-03-21  Inge Wallin  <inge@lysator.liu.se>
 
 	More Q3Support -> Qt4 conversions.

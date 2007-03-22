@@ -246,25 +246,8 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 
     // ## TODO: support zooming
 
-    // Double-buffering
-    if ( m_bufferPixmap.width() < rect.width()
-	 || m_bufferPixmap.height() < rect.height() )
-    {
-    	m_bufferPixmap = QPixmap( rect.size() );
-    }
-
-    QPainter bufferPainter( &m_bufferPixmap );
-
     // We only need to draw the document rectangle "rect".
-    KDChart::paint( &bufferPainter, m_params, &m_displayData, 0, &rect );
-
-    // This is always the empty rect...
-    // Shouldn't creating a QPainter in a paintEvent set up clipping automatically?
-    // I thought it did (DF)
-    //const QRect clipRect = painter.clipRegion().boundingRect();
-    //painter.drawPixmap( clipRect.topLeft(), m_bufferPixmap, clipRect );
-
-    painter.drawPixmap( 0, 0, m_bufferPixmap );
+    KDChart::paint( &painter, m_params, &m_displayData, 0, &rect );
 }
 
 
