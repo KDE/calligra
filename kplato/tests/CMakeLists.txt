@@ -1,4 +1,17 @@
 
+if (KDE4_BUILD_TESTS)
+
+include_directories(${KPLATO_INCLUDES} ${KDE4_INCLUDES})
+
+set(tutorial1_SRCS tutorial1.cc )
+ 
+kde4_automoc(${tutorial1_SRCS})
+ 
+kde4_add_executable(tutorial1 NOGUI RUN_UNINSTALLED ${tutorial1_SRCS})
+ 
+target_link_libraries(tutorial1  ${KDE4_KDECORE_LIBS} kplatopart ${QT_QTTEST_LIBRARY})
+ 
+add_test(kplato-tutorial1  ${EXECUTABLE_OUTPUT_PATH}/tutorial1)
 
 
 
@@ -41,3 +54,5 @@
 #check: 
 #	kunittestmodrunner
 #
+
+endif(KDE4_BUILD_TESTS)
