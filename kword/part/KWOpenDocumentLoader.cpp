@@ -47,63 +47,6 @@
 #include <QTextBlock>
 #include <klocale.h>
 
-#if 0
-/// Temporary information used only during loading
-class KWLoadingInfo
-{
-public:
-    KWLoadingInfo() {
-        columns.columns = 1;
-        // columns.ptColumnSpacing must be initialized by KWDocument
-        hf.header = HF_SAME;
-        hf.footer = HF_SAME;
-        hf.ptHeaderBodySpacing = 10.0;
-        hf.ptFooterBodySpacing = 10.0;
-        hf.ptFootNoteBodySpacing = 10.0;
-    }
-    ~KWLoadingInfo() {}
-    /// Current master-page name (OASIS loading)
-    QString m_currentMasterPage;
-    /// Bookmarks (kword-1.3 XML: they need all framesets to be loaded first)
-    struct BookMark {
-        QString bookname;
-        int paragStartIndex;
-        int paragEndIndex;
-        QString frameSetName;
-        int cursorStartIndex;
-        int cursorEndIndex;
-    };
-    typedef QValueList<BookMark> BookMarkList;
-    BookMarkList bookMarkList;
-    /// Bookmarks (OASIS XML). Only need to store bookmark starts, until hitting bookmark ends
-    struct BookmarkStart {
-        BookmarkStart() {} // for stupid QValueList
-        BookmarkStart( KWTextDocument* _doc, KoTextParag* par, int ind )
-            : doc( _doc ), parag( par ), pos( ind ) {}
-        KWTextDocument* doc;
-        KoTextParag* parag;
-        int pos;
-    };
-    typedef QMap<QString, BookmarkStart> BookmarkStartsMap;
-    BookmarkStartsMap m_bookmarkStarts;
-    // Text frame chains; see KWTextFrameSet::loadOasisText
-    void storeNextFrame( KWFrame* thisFrame, const QString& chainNextName ) {
-        m_nextFrameDict.insert( chainNextName, thisFrame );
-    }
-    KWFrame* chainPrevFrame( const QString& frameName ) const {
-        return m_nextFrameDict[frameName]; // returns 0 if not found
-    }
-    void storeFrameName( KWFrame* frame, const QString& name ) {
-        m_frameNameDict.insert( name, frame );
-    }
-    KWFrame* frameByName( const QString& name ) const {
-        return m_frameNameDict[name]; // returns 0 if not found
-    }
-    KoColumns columns;
-    KoKWHeaderFooter hf;
-};
-#endif
-
 /// \internal d-pointer class.
 class KWOpenDocumentLoader::Private
 {
@@ -112,8 +55,6 @@ class KWOpenDocumentLoader::Private
         KWDocument *document;
         /// Current master-page name (OASIS loading)
         QString currentMasterPage;
-        /// Structure for columns defined in KoPageLayout.h
-        KoColumns columns;
 };
 
 KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *parent)
@@ -165,8 +106,9 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
 
     KoOasisLoadingContext context( d->document, styles, store );
 
-    d->columns.columns = 1;
-    d->columns.columnSpacing = d->document->m_defaultColumnSpacing;
+    KoColumns columns;
+    columns.columns = 1;
+    columns.columnSpacing = d->document->m_defaultColumnSpacing;
 
     // In theory the page format is the style:master-page-name of the first paragraph...
     // But, hmm, in a doc with only a table there was no reference to the master page at all...
@@ -235,8 +177,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         fs->renumberFootNotes( false /*no repaint*/ );
     } else { // DTP mode: the items in the body are page-sequence and then frames
         QDomElement tag;
-        forEachElement( tag, body )
-        {
+        forEachElement( tag, body ) {
             context.styleStack().save();
             const QString localName = tag.localName();
             if ( localName == "page-sequence" && tag.namespaceURI() == KoXmlNS::text ) {
@@ -270,7 +211,6 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
 
     QTextCursor cursor( fs->document() );
     loadOasisText(body, context, cursor);
-
 #endif
 
     if ( !loadMasterPageStyle( d->currentMasterPage, context ) )
@@ -283,7 +223,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     // so it must be done last.
     setPageLayout( m_pageLayout, m_loadingInfo->columns, m_loadingInfo->hf, false );
 #else
-    d->document->m_pageSettings.setColumns( d->columns );
+    d->document->m_pageSettings.setColumns( columns );
 #endif
 
     kDebug(32001) << "========================> KWOpenDocumentLoader::load END" << endl;
@@ -497,6 +437,8 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         if ( displayName.isEmpty() )
             displayName = name;
 
+        kDebug(32001)<<"KWOpenDocumentLoader::loadOasisStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
+
 #if 0
         // OOo hack:
         //m_bOutline = name.startsWith( "Heading" );
@@ -517,8 +459,8 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         d->document->styleManager()->add(parastyle);
 
         //KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
-        styleStack.setTypeProperties( "paragraph" );
-        parastyle->loadOasis(styleStack);
+        styleStack.setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
+        parastyle->loadOasis(styleStack); // load the KoParagraphStyle from the stylestack
 
         //KoTextFormat::load
         KoCharacterStyle *charstyle = parastyle->characterStyle();
@@ -528,6 +470,48 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         context.styleStack().restore();
     }
 #endif
+}
+
+// we cannot use QString::simplifyWhiteSpace() because it removes
+// leading and trailing whitespace, but such whitespace is significant
+// in ODF -- so we use this function to compress sequences of space characters
+// into single spaces
+static QString normalizeWhitespace( const QString& in, bool leadingSpace )
+{
+    QString text = in;
+    int r, w = 0;
+    int len = text.length();
+
+    for ( r = 0; r < len; ++r )
+    {
+        QCharRef ch = text[r];
+
+        // check for space, tab, line feed, carriage return
+        if ( ch == ' ' || ch == '\t' ||ch == '\r' ||  ch == '\n')
+        {
+            // if we were lead by whitespace in some parent or previous sibling element,
+            // we completely collapse this space
+            if ( r != 0 || !leadingSpace )
+                text[w++] = QChar( ' ' );
+
+            // find the end of the whitespace run
+            while ( r < len && text[r].isSpace() )
+                ++r;
+
+            // and then record the next non-whitespace character
+            if ( r < len )
+               text[w++] = text[r];
+        }
+        else
+        {
+            text[w++] = ch;
+        }
+    }
+
+    // and now trim off the unused part of the string
+    text.truncate(w);
+
+    return text;
 }
 
 //KoTextParag::loadOasisSpan
@@ -587,7 +571,8 @@ if(parent.localName()!="span") {
                 //style->characterStyle()->applyStyle(&cursor);
             }
 
-            cursor.insertText( text.replace('\n', QChar(0x2028)) );
+            bool stripLeadingSpace = true;
+            cursor.insertText( normalizeWhitespace(text.replace('\n', QChar(0x2028)), stripLeadingSpace) );
 
             int currentpos = cursor.position();
             cursor.setPosition(prevpos, QTextCursor::MoveAnchor);
