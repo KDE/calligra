@@ -263,9 +263,11 @@ namespace KPlato
         it++;
         while(it != vect.end())
         {
-            sum+=(float)p.plannedCost(*it_weeks);
+            for (int i = 0; i < 7; ++i ) {
+                sum+=(float)p.plannedCost((*it_weeks).addDays(i), p.currentViewScheduleId());
+            }
             it->setY(sum);
-            kDebug()<<"Planned cost pour la tache : "<<(float)p.plannedCost(*it_weeks)<<endl;
+            kDebug()<<"Aggregated planned cost this week : "<<it->y()<<endl;
             it++;
             it_weeks++;
         }
@@ -280,9 +282,11 @@ namespace KPlato
         it++;
         while(it != vect.end())
         {
-            sum+=(float)p.actualCost(*it_weeks);
+            for (int i = 0; i < 7; ++i) {
+                sum+=(float)p.actualCost((*it_weeks).addDays(i));
+            }
             it->setY(sum);
-            kDebug()<<"Acutal cost : "<<it->y()<<endl;
+            kDebug()<<"Aggregated actual cost : "<<it->y()<<endl;
             it++;
             it_weeks++;
         }
