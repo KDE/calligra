@@ -360,7 +360,6 @@ void VConfigGridPage::apply()
 	gd.setShowGrid( m_gridChBox->isChecked() );
 	//gd.setSnapping( m_snapChBox->isChecked() );
 	gd.setGridColor( m_gridColorBtn->color() );
-	m_view->repaintAll();
 
     KConfigGroup gridGroup = m_config->group( "Grid" );
     gridGroup.writeEntry( "SpacingX", gd.gridX() );

@@ -79,6 +79,7 @@
 #include <KoShapeSelectorFactory.h>
 #include <KoShapeController.h>
 #include <KoZoomController.h>
+#include <KoParameterShape.h>
 
 // Commands.
 #include "vclipartcmd.h"
@@ -101,7 +102,6 @@
 #include <KoToolDocker.h>
 #include <KoToolDockerFactory.h>
 // ToolBars
-//#include "vselecttoolbar.h"
 
 // Statusbar
 #include "vsmallpreview.h"
@@ -257,9 +257,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		//connect( m_stylePreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
 		//connect( m_stylePreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 
-			//create toolbars
-// 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
-// 			mainWindow()->addToolBar( m_selectToolBar );
 
 		if( m_showRulerAction->isChecked() )
 		{
@@ -275,7 +272,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 	setLayout(layout);
 
-	zoomChanged();
 	reorganizeGUI();
 }
 
@@ -294,14 +290,6 @@ KarbonView::~KarbonView()
 	delete m_toolController;
 }
 
-QWidget*
-KarbonView::canvas() const
-{
-	debugView("KarbonView::canvas()");
-
-	return m_canvas;
-}
-
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 {
@@ -315,7 +303,6 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 
 	QSize maxSize = m_canvasView->maximumViewportSize();
 	m_canvas->setVisibleSize( maxSize.width(), maxSize.height() );
-	zoomChanged();
 	reorganizeGUI();
 }
 
@@ -909,32 +896,11 @@ KarbonView::viewModeChanged()
 }
 
 void
-KarbonView::setZoomAt( double zoom, const QPointF &p )
-{
-	debugView(QString("KarbonView::setZoomAt(%1, QPointF(%2, %3)").arg(zoom).arg(p.x()).arg(p.y()));
-
-	QString zoomText = QString( "%1%" ).arg( zoom * 100.0, 0, 'f', 2 );
-	QStringList stl = m_zoomController->zoomAction()->items();
-	if( stl.first() == "25%" )
-	{
-		stl.prepend( zoomText.toLatin1() );
-		m_zoomController->zoomAction()->setItems( stl );
-		m_zoomController->zoomAction()->setCurrentItem( 0 );
-	}
-	else
-	{
-		m_zoomController->zoomAction()->setCurrentItem( 0 );
-		m_zoomController->zoomAction()->changeItem( m_zoomController->zoomAction()->currentItem(), zoomText.toLatin1() );
-	}
-	zoomChanged( p );
-}
-
-void
 KarbonView::viewZoomIn()
 {
 	debugView("KarbonView::viewZoomIn()");
 
-	setZoomAt( zoom() * 1.50 );
+	//setZoomAt( zoom() * 1.50 );
 }
 
 void
@@ -942,7 +908,7 @@ KarbonView::viewZoomOut()
 {
 	debugView("KarbonView::viewZoomOut()");
 
-	setZoomAt( zoom() * 0.75 );
+	//setZoomAt( zoom() * 0.75 );
 }
 
 void
@@ -973,65 +939,6 @@ void
 KarbonView::centerCanvas()
 {
 	m_canvasView->ensureVisible( QRectF(0,0,part()->document().width(),part()->document().height() ) );
-}
-
-void
-KarbonView::zoomChanged( const QPointF &p )
-{
-	debugView(QString("KarbonView::zoomChanged( QPointF(%1, %2) )").arg(p.x()).arg(p.y()));
-
-    /*
-	if( m_canvas )
-	{
-		double zoomFactor = m_zoomController->zoomAction()->currentText().remove( '%' ).toDouble() / 100.0;
-		if( zoomFactor == 0.0 ) return;
-
-		KoZoomHandler *zoomHandler = (KoZoomHandler*)m_canvas->viewConverter();
-		zoomHandler->setZoom( zoomFactor );
-		KoView::setZoom( zoomFactor );
-		m_canvas->adjustSize();
-	}
-	else
-		KoView::setZoom( 1.0 );
-    */
-}
-
-void
-KarbonView::setLineStyle( int style )
-{
-	debugView(QString("KarbonView::setLineStyle(%1)").arg(style));
-
-	Q3ValueList<float> dashes;
-	if( style == Qt::NoPen )
-		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 0 << 20 ), true );
-	else if( style == Qt::SolidLine )
-		part()->addCommand( new VStrokeCmd( &part()->document(), dashes ), true );
-	else if( style == Qt::DashLine )
-		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 12 << 6 ), true );
-	else if( style == Qt::DotLine )
-		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 2 << 2 ), true );
-	else if( style == Qt::DashDotLine )
-		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 12 << 2 << 2 << 2 ), true );
-	else if( style == Qt::DashDotDotLine )
-		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 12 << 2 << 2 << 2 << 2 << 2 ), true );
-}
-
-void
-KarbonView::setLineWidth()
-{
-	debugView("KarbonView::setLineWidth()");
-
-	setLineWidth( m_setLineWidth->value() );
-	selectionChanged();
-}
-
-//necessary for dcop call !
-void
-KarbonView::setLineWidth( double val )
-{
-	debugView(QString("KarbonView::setLineWidth(%1)").arg(val));
-
-	part()->addCommand( new VStrokeCmd( &part()->document(), val ), true );
 }
 
 void
@@ -1214,27 +1121,6 @@ KarbonView::initActions()
 	connect(m_separatePath, SIGNAL(triggered()), this, SLOT(separatePath()));
 	// path <-----
 
-	// line style (dashes)
-	// TODO: KoLineStyleAction isn't ported yet.
-	//m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", this, SLOT(setLineStyle(int)), actionCollection(), "setLineStyle");
-
-	// line width
-	m_setLineWidth = new KoUnitDoubleSpinComboBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit(KoUnit::Point), 1 );
-	/* TODO: port
-new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
-*/
-	m_setLineWidth->insertItem( 0.25 );
-	m_setLineWidth->insertItem( 0.5 );
-	m_setLineWidth->insertItem( 0.75 );
-	m_setLineWidth->insertItem( 1.0 );
-	m_setLineWidth->insertItem( 2.0 );
-	m_setLineWidth->insertItem( 3.0 );
-	m_setLineWidth->insertItem( 4.0 );
-	m_setLineWidth->insertItem( 5.0 );
-	m_setLineWidth->insertItem( 10.0 );
-	m_setLineWidth->insertItem( 20.0 );
-	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( setLineWidth() ) );
-
     m_configureAction  = new KAction(KIcon("configure"), i18n("Configure Karbon..."), this);
     actionCollection()->addAction("configure", m_configureAction );
 	connect(m_configureAction, SIGNAL(triggered()), this, SLOT(configure()));
@@ -1244,12 +1130,6 @@ new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setL
 	connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(pageLayout()));
 
 	m_contextHelpAction = new KoContextHelpAction( actionCollection(), this );
-}
-
-void
-KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/, bool /*transparent*/ )
-{
-	debugView("KarbonView::paintEverything(...)");
 }
 
 void
@@ -1305,16 +1185,6 @@ KarbonView::showRuler()
 		m_horizRuler->hide();
 		m_vertRuler->hide();
 	}
-
-	zoomChanged();
-}
-
-bool
-KarbonView::showPageMargins()
-{
-	debugView("KarbonView::showPageMargins()");
-
-	return ((KToggleAction*)actionCollection()->action("view_show_margins"))->isChecked();
 }
 
 void
@@ -1415,25 +1285,25 @@ KarbonView::pageLayout()
 void
 KarbonView::selectionChanged()
 {
-	debugView("KarbonView::selectionChanged()");
+    debugView("KarbonView::selectionChanged()");
 
-	KoSelection *selection = m_canvas->shapeManager()->selection();
-	int count = selection->selectedShapes( KoFlake::TopLevelSelection ).count();
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    int count = selection->selectedShapes( KoFlake::TopLevelSelection ).count();
 
-	m_groupObjects->setEnabled( count > 1 );
-	m_ungroupObjects->setEnabled( false );
-	m_closePath->setEnabled( false );
-	m_combinePath->setEnabled( false );
-	m_deleteSelectionAction->setEnabled( count > 0 );
+    m_groupObjects->setEnabled( count > 1 );
+    m_ungroupObjects->setEnabled( false );
+    m_closePath->setEnabled( false );
+    m_combinePath->setEnabled( false );
+    m_deleteSelectionAction->setEnabled( count > 0 );
 
-	kDebug(38000) << count << " shapes selected" << endl;
+    kDebug(38000) << count << " shapes selected" << endl;
 
-	if( count > 0 )
-	{
-		KoShape *shape = *selection->selectedShapes().begin();
-		if( shape )
+    if( count > 0 )
+    {
+        KoShape *shape = *selection->selectedShapes().begin();
+        if( shape )
         {
-			m_strokeDocker->setStroke( shape->border() );
+            m_strokeDocker->setStroke( shape->border() );
             if ( shell() ) {
                 //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
                     m_stylePreview->updateStyle( shape->border(), &shape->background() );
@@ -1450,71 +1320,37 @@ KarbonView::selectionChanged()
                 //}
             }
         }
-        /** TODO needs porting to flake
-		VObject *obj = part()->document().selection()->objects().getFirst();
 
-		if ( shell() ) {
-			//if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
-				m_stylePreview->update( *obj->stroke(), *obj->fill() );
-				m_smallPreview->update( *obj->stroke(), *obj->fill() );
-			//}
-		}
-		m_strokeDocker->setStroke( *( obj->stroke() ) );
-
-		if( count == 1 )
-		{
-			VPath *path = dynamic_cast<VPath *>( part()->document().selection()->objects().getFirst() );
-			m_closePath->setEnabled( path && !path->isClosed() );
-		}
-
-		part()->document().selection()->setStroke( *obj->stroke() );
-		part()->document().selection()->setFill( *obj->fill() );
-		m_setLineWidth->setEnabled( true );
-		m_setLineWidth->updateValue( obj->stroke()->lineWidth() );
-		// dashes
-  		m_lineStyleAction->setEnabled( true );
-		if( obj->stroke()->dashPattern().array().isEmpty() )
-  			m_lineStyleAction->setCurrentSelection( Qt::SolidLine );
-		else if( obj->stroke()->dashPattern().array()[ 0 ] == 0. )
-  			m_lineStyleAction->setCurrentSelection( Qt::NoPen );
-		else if( obj->stroke()->dashPattern().array()[ 0 ]  == 2. )
-  			m_lineStyleAction->setCurrentSelection( Qt::DotLine );
-		else if( obj->stroke()->dashPattern().array().count() == 2 )
-  			m_lineStyleAction->setCurrentSelection( Qt::DashLine );
-		else if( obj->stroke()->dashPattern().array().count() == 4 )
-  			m_lineStyleAction->setCurrentSelection( Qt::DashDotLine );
-		else if( obj->stroke()->dashPattern().array().count() == 6 )
-  			m_lineStyleAction->setCurrentSelection( Qt::DashDotDotLine );
-		*/
-
-		uint selectedPaths = 0;
-		uint selectedGroups = 0;
-		// check for different shape types for enabling specific actions
-		foreach( KoShape* shape, selection->selectedShapes() )
-		{
-			if( dynamic_cast<KoShapeGroup*>( shape->parent() ) )
-				selectedGroups++;
-			if( dynamic_cast<KoPathShape*>( shape ) )
-				selectedPaths++;
-		}
-		m_ungroupObjects->setEnabled( selectedGroups > 0 );
-		//TODO enable action when the ClosePath command is ported
-		//m_closePath->setEnabled( selectedPaths > 0 );
-		m_combinePath->setEnabled( selectedPaths > 1 );
-		m_separatePath->setEnabled( selectedPaths > 0 );
-	}
-	else
-	{
-        /*
-		if ( shell() )
-			//if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_stylePreview )
-			m_stylePreview->update( *( part()->document().selection()->stroke() ),
-									 *( part()->document().selection()->fill() ) );
-        */
-		// TODO: activate the line below when KoLineStyleAction is ported.
-		// m_lineStyleAction->setEnabled( false );
-	}
-	emit selectionChange();
+        uint selectedPaths = 0;
+        uint selectedGroups = 0;
+        uint selectedParametrics = 0;
+        // check for different shape types for enabling specific actions
+        foreach( KoShape* shape, selection->selectedShapes() )
+        {
+            if( dynamic_cast<KoShapeGroup*>( shape->parent() ) )
+                selectedGroups++;
+            else if( dynamic_cast<KoPathShape*>( shape ) )
+            {
+                KoParameterShape * ps = dynamic_cast<KoParameterShape*>( shape );
+                if( ps && ps->isParametricShape() )
+                    selectedParametrics++;
+                else
+                    selectedPaths++;
+            }
+        }
+        m_ungroupObjects->setEnabled( selectedGroups > 0 );
+        //TODO enable action when the ClosePath command is ported
+        //m_closePath->setEnabled( selectedPaths > 0 );
+        m_combinePath->setEnabled( selectedPaths > 1 );
+        m_separatePath->setEnabled( selectedPaths > 0 );
+    }
+    else
+    {
+        if ( shell() )
+            //if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_stylePreview )
+            m_stylePreview->updateStyle( 0, 0 );
+    }
+    emit selectionChange();
 }
 void
 KarbonView::setCursor( const QCursor &c )
@@ -1522,43 +1358,6 @@ KarbonView::setCursor( const QCursor &c )
 	debugView("KarbonView::setCursor(QCursor)");
 
 	m_canvas->setCursor( c );
-}
-
-void
-KarbonView::repaintAll( const QRectF &r )
-{
-	debugView(QString("KarbonView::repaintAll(QRectF(%1, %2, %3, %4))").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height()));
-
-	m_canvas->updateCanvas( r );
-}
-
-void
-KarbonView::repaintAll( bool repaint )
-{
-	debugView(QString("KarbonView::repaintAll(%1)").arg(repaint));
-
-	m_canvas->updateCanvas(m_canvas->canvasWidget()->rect());
-}
-void
-KarbonView::setPos( const QPointF& p )
-{
-	debugView(QString("KarbonView::setPos(QPointF(%1, %2))").arg(p.x()).arg(p.y()));
-
-	// TODO: port: m_canvas->setPos( p );
-}
-
-void
-KarbonView::setViewportRect( const QRectF &rect )
-{
-	debugView(QString("KarbonView::setViewportRect(QRectF(%1, %2, %3, %4))").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
-
-	// TODO: port: m_canvas->setViewportRect( rect );
-}
-
-void
-KarbonView::setUnit( KoUnit /*_unit*/ )
-{
-	debugView("KarbonView::setUnit(KoUnit)");
 }
 
 void KarbonView::createDocumentTabDock()

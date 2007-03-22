@@ -41,9 +41,7 @@ class KSelectAction;
 class KToggleAction;
 
 class KoContextHelpAction;
-class KoLineStyleAction;
 class KoCanvasController;
-class KoUnitDoubleSpinComboBox;
 class KoRuler;
 class KoZoomController;
 
@@ -55,11 +53,9 @@ class VTransformDocker;
 class VLayerDocker;
 
 class VPainterFactory;
-class VSelectToolBar;
 class VSmallPreview;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
-class VTypeButtonBox;
 
 class VToolController;
 
@@ -73,11 +69,7 @@ public:
 
 	KarbonPart *part() const { return m_part; }
 
-	virtual void paintEverything( QPainter &p, const QRect &rect, bool transparent = false );
-
 	void dropEvent( QDropEvent *e );
-
-	virtual QWidget* canvas() const;
 
 	KarbonCanvas* canvasWidget() const { return m_canvas; }
 
@@ -92,19 +84,10 @@ public:
 
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( unsigned int number );
-	void setLineWidth( double val );
 
 	QLabel* statusMessage() const { return m_status; }
 
 	void setCursor( const QCursor & );
-
-	void repaintAll( const QRectF & );
-	void repaintAll( bool = true );
-
-	void setPos( const QPointF& p );
-
-	void setViewportRect( const QRectF &rect );
-	void setZoomAt( double zoom, const QPointF & = QPointF() );
 
 	VToolController *toolController();
 
@@ -152,19 +135,15 @@ public slots:
 	void viewZoomIn();
 	void viewZoomOut();
 
-	void setUnit( KoUnit _unit );
-
 	void configure();
 
 	void pageLayout();
 
-	void setLineWidth();
 	void selectionChanged();
 
 	void togglePageMargins(bool);
 	void showRuler();
 	void showGrid();
-	bool showPageMargins();
 	void snapToGrid();
 
 	void showSelectionPopupMenu( const QPoint &pos );
@@ -174,8 +153,6 @@ protected slots:
 
 	// View.
 	void viewModeChanged();
-	void zoomChanged( const QPointF & = QPointF() );
-	void setLineStyle( int );
 
 	/// Called by the zoom action to set the zoom
 	void zoomChanged( KoZoomMode::Mode mode, double zoom );
@@ -185,7 +162,6 @@ protected slots:
     void pageOffsetChanged();
 
 signals:
-	void zoomChanged( double );
 	void selectionChange();
 	void pageLayoutChanged();
 
@@ -217,7 +193,6 @@ private:
 
 	VPainterFactory		*m_painterFactory;
     KarbonStylePreviewDocker * m_stylePreview;
-	VTypeButtonBox		*m_typeButtonBox;
 
 	KAction			*m_groupObjects;
 	KAction			*m_ungroupObjects;
@@ -235,9 +210,6 @@ private:
 	KToggleAction		*m_showPageMargins;
 	KoContextHelpAction	*m_contextHelpAction;
 	KAction				*m_deleteSelectionAction;
-	// line width
-	KoUnitDoubleSpinComboBox *m_setLineWidth;
-	KoLineStyleAction	*m_lineStyleAction;
 
 	//dockers
 	VDocumentTab		*m_DocumentTab;
@@ -246,8 +218,6 @@ private:
 	VStyleDocker		*m_styleDocker;
 	VTransformDocker	*m_TransformDocker;
 	VLayerDocker		*m_layerDocker;
-
-	VSelectToolBar		*m_selectToolBar;
 
 	//Status Bar
 	QLabel				*m_status;       // Ordinary status

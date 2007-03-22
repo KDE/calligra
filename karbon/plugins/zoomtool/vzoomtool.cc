@@ -111,13 +111,13 @@ VZoomTool::mouseButtonPress()
 void 
 VZoomTool::rightMouseButtonRelease()
 {
-	view()->setZoomAt( view()->zoom() * 0.75, last() );
+	//view()->setZoomAt( view()->zoom() * 0.75, last() );
 }
 
 void
 VZoomTool::mouseButtonRelease()
 {
-	view()->setZoomAt( view()->zoom() * 1.5, last() );
+	//view()->setZoomAt( view()->zoom() * 1.5, last() );
 }
 
 void
@@ -135,7 +135,7 @@ VZoomTool::mouseDragRelease()
 {
 	QRectF rect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() );
 	rect = rect.normalized();
-	view()->setViewportRect( rect );
+	//view()->setViewportRect( rect );
 }
 
 bool
@@ -149,7 +149,7 @@ VZoomTool::keyReleased( Qt::Key key )
 
 	if( zoomChange != 0 )
 	{
-		view()->setZoomAt( view()->zoom() * zoomChange );
+		//view()->setZoomAt( view()->zoom() * zoomChange );
 		return true;
 	}
 	return false;

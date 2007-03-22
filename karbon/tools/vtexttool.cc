@@ -682,8 +682,8 @@ VTextTool::drawPathCreation()
 void
 VTextTool::drawEditedText()
 {
-	if( m_editedText ) 
-		view()->repaintAll( m_editedText->boundingBox() );
+	//if( m_editedText ) 
+	//	view()->repaintAll( m_editedText->boundingBox() );
 }
 
 void
@@ -821,10 +821,10 @@ VTextTool::textChanged()
 	{
 		// hide the original text if we are changing it
 		m_text->setState( VObject::hidden );
-		view()->repaintAll( m_text->boundingBox() );
+		//view()->repaintAll( m_text->boundingBox() );
 	}
 	else
-		view()->repaintAll( m_editedText->boundingBox() );
+		//view()->repaintAll( m_editedText->boundingBox() );
 
 	m_editedText->setText( m_optionsWidget->text() );
 	m_editedText->setFont( m_optionsWidget->font() );
@@ -890,7 +890,7 @@ VTextTool::cancel()
 	{
 		// show original text if we canceled changing it
 		m_text->setState( VObject::selected );
-		view()->repaintAll( m_text->boundingBox() );
+		//view()->repaintAll( m_text->boundingBox() );
 	}
 	else
 		drawPathCreation();
