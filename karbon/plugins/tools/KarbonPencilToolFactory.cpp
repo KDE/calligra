@@ -30,7 +30,7 @@ KarbonPencilToolFactory::KarbonPencilToolFactory(QObject *parent)
 {
     setToolTip( i18n("Freehand Drawing Tool") );
     setToolType( mainToolType() );
-    setIcon( "14_pencil" );
+    setIcon( "pencil" );
     setPriority( 3 );
     setActivationShapeId("flake/always");
 }

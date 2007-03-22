@@ -30,7 +30,7 @@ KarbonGradientToolFactory::KarbonGradientToolFactory(QObject *parent)
 {
     setToolTip( i18n("Gradient Editing Tool") );
     setToolType( mainToolType() );
-    setIcon( "gradient" );
+    setIcon( "color-fill" );
     setPriority( 3 );
 }
 
