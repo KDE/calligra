@@ -92,7 +92,7 @@ namespace KPlato
             {
                 inverse = totalYPercent - it->y();
                 tmp=(maximumHeight - ChartWidget::BOTTOMMARGIN - ChartWidget::TOPMARGIN)*inverse/100;
-                kDebug()<<"TTTTTMMMMMMMMMMMMMPPPPPPPPPPPPPPPP Y:"<<tmp<<endl;
+                kDebug()<<"reCalculateY Y:"<<tmp<<endl;
                 it_display->setY(tmp+ChartWidget::TOPMARGIN);
                 it++;it_display++;
             }
@@ -111,10 +111,9 @@ namespace KPlato
             while (it != vect.end())
             {
                 
-                kDebug()<<"TTTTTMMMMMMMMMMMMMPPPPPPPPPPPPPPPP MaximumWidth:"<<maximumWidth<<endl;
-                kDebug()<<"TTTTTMMMMMMMMMMMMMPPPPPPPPPPPPPPPP IT X :"<<it->x()<<endl;
+     
                 tmp= (maximumWidth - ChartWidget::RIGHTMARGIN - ChartWidget::LEFTMARGIN)*it->x()/100;
-                kDebug()<<"TTTTTMMMMMMMMMMMMMPPPPPPPPPPPPPPPP X:"<<tmp<<endl;
+                kDebug()<<"reCalculateX X:"<<tmp<<endl;
                 it_display->setX(tmp+ChartWidget::LEFTMARGIN);
                 it++;it_display++;
             }
@@ -205,7 +204,7 @@ namespace KPlato
                 totalYPercent=(BCWS.last()).y();
             }
         }
-    kDebug()<<"HEY MON AMI : TOTALyPERCENT : "<<totalYPercent<<endl;
+    kDebug()<<"TOTALyPERCENT : "<<totalYPercent<<endl;
     return(totalYPercent);
     }
 
@@ -258,10 +257,9 @@ namespace KPlato
         {
             sum+=(float)p.plannedCost(*it_weeks);
             it->setY(sum);
-            kDebug()<<"Planned cost : "<<it->y()<<"iciiiiiiiiii"<<endl;
+            kDebug()<<"Planned cost pour la tache : "<<(float)p.plannedCost(*it_weeks)<<endl;
             it++;
             it_weeks++;
-            
         }
     }
 
@@ -306,6 +304,4 @@ namespace KPlato
             weeks.push_back(p.endTime().date());
             kDebug()<<"Calcul weeks fin : "<<p.endTime().date()<<endl;
     }
-
-
 }

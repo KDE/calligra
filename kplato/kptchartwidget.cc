@@ -33,7 +33,7 @@ ChartWidget::ChartWidget(Project &p, QWidget *parent, const char *name) : QWidge
     kDebug() << "ChartWidget :: Constructor"<<endl;
     setMaximumSize(610,350);
 
-    is_bcwp_draw=true;
+    is_bcwp_draw=false;
     is_bcws_draw=true;
     is_acwp_draw=false;
 
@@ -74,14 +74,14 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
 
     if(is_bcwp_draw==true)
     {
-        painter.setPen(QColor(Qt::red));
+        painter.setPen(QColor(Qt::black));
         chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,bcwpPoints_display,bcwsPoints_display,acwpPoints_display,BCWP,size().height(),size().width());
         painter.drawPolyline(QPolygonF(bcwpPoints_display));
         is_bcwp_draw=true;
     }
 
     if(is_bcws_draw==true){
-        painter.setPen(QColor(Qt::yellow));
+        painter.setPen(QColor(Qt::red));
         kDebug()<<" Height : "<<size().height()<<" Width : "<<size().width()<<endl;
         chartEngine.api(bcwpPoints,bcwsPoints,acwpPoints,bcwpPoints_display,bcwsPoints_display,acwpPoints_display,BCWS,size().height(),size().width());
         painter.drawPolyline(QPolygonF(bcwsPoints_display));
@@ -119,20 +119,18 @@ void ChartWidget::drawBasicChart(QPainter & painter)
    /* attributes :  chartEngine1er : par rapport au coté, 2eme : par rapport au haut !  */
     painter.drawText(2, 10,"Budget");
     //painter.drawText(size().width()-15, size().height()-20,"Time");
-    painter.drawText(size().width()-70,size().height() ,"Time");
+    painter.drawText(size().width()-70,size().height(),"Time");
 
     //Y
     painter.drawLine(QLine(LEFTMARGIN,TOPMARGIN,LEFTMARGIN,size().height()-BOTTOMMARGIN));
-    kDebug()<<"BITOOOOOOOOOOOOCULLLLLLLL maxYpercent: "<<maxYPercent<<endl;
+    kDebug()<<"maxYpercent: "<<maxYPercent<<endl;
     float MarginY_base =(size().height()-(TOPMARGIN+BOTTOMMARGIN))/(maxYPercent/10);// Number of division : 10% to 10%
     float MarginY=0;
-    kDebug()<<"BITOOOOOOOOOOOO MarginY : "<<MarginY<<endl;
     while(Ypercent<=maxYPercent)
     {
             int n=sprintf(Ychar,"%d",Ypercent);
             char * Yaffichage =strcat(Ychar,"%");
             //error first time FIX ME
-            kDebug()<<"BITOOOOOOOOOOOO3 Yaffichage : "<<Yaffichage<<endl;
             painter.drawText(2,size().height()-BOTTOMMARGIN-MarginY,QString(Yaffichage));
             Ypercent+=20;
             //painter.drawLine(QLine(LEFTMARGIN-5,size().height()-(BOTTOMMARGIN)+MarginY,LEFTMARGIN,size().height()-(BOTTOMMARGIN)+MarginY));
@@ -144,7 +142,6 @@ void ChartWidget::drawBasicChart(QPainter & painter)
     }
     //X
     painter.drawLine(QLine(LEFTMARGIN,size().height()-BOTTOMMARGIN,size().width()-RIGHTMARGIN,size().height()-BOTTOMMARGIN));
-
    float MarginX_base=(size().width()-(RIGHTMARGIN+LEFTMARGIN))/(weeks.size()-1);
    float MarginX=0;
    QVector<QPointF>::iterator it_time = bcwsPoints.begin();
@@ -153,10 +150,8 @@ void ChartWidget::drawBasicChart(QPainter & painter)
    {
         int n=sprintf(Xchar,"%d",(int)it_time->x());
         char * Xaffichage =strcat(Xchar,"%");
-        kDebug()<<"BITOOOOOOOOOOOO3 TIME % : "<<it_time->x()<<endl;
-        painter.drawText(MarginX+LEFTMARGIN,size().height(),Xaffichage);
-         kDebug()<<"BITOOOOOOOOOOOO3 Xaffichage : "<<Xaffichage<<endl;
-        painter.drawLine(QLine(MarginX+LEFTMARGIN,size().height()-TOPMARGIN,MarginX+LEFTMARGIN,size().height()-TOPMARGIN+4));
+        painter.drawText(MarginX+LEFTMARGIN,size().height()-BOTTOMMARGIN+19,Xaffichage);
+        painter.drawLine(QLine(MarginX+LEFTMARGIN,size().height()-BOTTOMMARGIN,MarginX+LEFTMARGIN,size().height()-BOTTOMMARGIN+4));
         MarginX+=MarginX_base;
         strcpy(Xchar,"");
         i++;

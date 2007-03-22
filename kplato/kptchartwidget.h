@@ -55,9 +55,9 @@ private:
 
 public:
     static const int TOPMARGIN = 21;
-    static const int LEFTMARGIN = 38;
-    static const int BOTTOMMARGIN = 15;
-    static const int RIGHTMARGIN = 10;
+    static const int LEFTMARGIN = 35;
+    static const int BOTTOMMARGIN = 35;
+    static const int RIGHTMARGIN = 48;
 
     static const int BCWP = 0;
     static const int BCWS = 1;

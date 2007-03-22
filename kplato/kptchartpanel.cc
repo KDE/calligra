@@ -45,9 +45,7 @@ ChartPanel::ChartPanel(Project &p, QWidget *parent) : ChartPanelBase(parent)
     is_bcwp_draw=false;
     is_bcws_draw=true;
     curve1->setChecked(true);
-    curve3->setChecked(true);
-    is_acwp_draw=true;
-
+    is_acwp_draw=false;
 }
 
 void ChartPanel::resizeEvent(QResizeEvent* ev)
