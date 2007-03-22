@@ -19,6 +19,7 @@
 
 #include "KWFrameRunaroundProperties.h"
 #include "KWFrameDialog.h"
+#include "KWDocument.h"
 #include "frame/KWFrame.h"
 
 KWFrameRunaroundProperties::KWFrameRunaroundProperties(FrameConfigSharedState *state)
@@ -42,6 +43,8 @@ KWFrameRunaroundProperties::KWFrameRunaroundProperties(FrameConfigSharedState *s
     m_runAround->setId(widget.runAround, KWord::RunAround);
     m_runAround->addButton(widget.noRunaround);
     m_runAround->setId(widget.noRunaround, KWord::NoRunAround);
+
+    widget.distance->setUnit(state->document()->unit());
 }
 
 KWFrameRunaroundProperties::~KWFrameRunaroundProperties() {
@@ -85,7 +88,7 @@ void KWFrameRunaroundProperties::open(KoShape *shape) {
     m_shape = shape;
     widget.runAround->setChecked(true);
     widget.longest->setChecked(true);
-    widget.distance->setValue(MM_TO_POINT(1));
+    widget.distance->setValue(MM_TO_POINT(3));
 }
 
 void KWFrameRunaroundProperties::save() {
