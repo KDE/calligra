@@ -114,7 +114,6 @@ void ChartWidget::drawBasicChart(QPainter & painter)
     
 /* CHANGE COLORS !! */
     painter.setPen(QColor(Qt::blue));
-    painter.drawText(200,150,"I am a Chart!");
 
    /* attributes :  chartEngine1er : par rapport au coté, 2eme : par rapport au haut !  */
     painter.drawText(2, 10,"Budget");

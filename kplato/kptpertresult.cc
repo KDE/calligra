@@ -29,18 +29,19 @@ void PertResult::draw( Project &project)
     KLocale * locale = KGlobal::locale();
     QList<Node*> list;
     QString res;
-
+    testComplexGraph();
     foreach(Node * currentNode, project.projectNode()->childNodeIterator()){
         if (currentNode->type()!=4){
  
             QTreeWidgetItem * item = new QTreeWidgetItem(widget.treeWidgetTaskResult );
-            item->setText(0, currentNode->name());
-	    item->setText(1,locale->formatDateTime(getStartEarlyDate(currentNode)));
-	    item->setText(2,locale->formatDateTime(getFinishEarlyDate(currentNode)));
-	    item->setText(3,locale->formatDateTime(getStartLateDate(currentNode)));
-	    item->setText(4,locale->formatDateTime(getFinishLateDate(currentNode)));
-	    item->setText(5,res.number(getTaskFloat(currentNode).days()));
-	    item->setText(6,res.number(getFreeMargin(currentNode).days()));
+	    item->setText(0, currentNode->id());
+            item->setText(1, currentNode->name());
+	    item->setText(2,locale->formatDateTime(getStartEarlyDate(currentNode)));
+	    item->setText(3,locale->formatDateTime(getFinishEarlyDate(currentNode)));
+	    item->setText(4,locale->formatDateTime(getStartLateDate(currentNode)));
+	    item->setText(5,locale->formatDateTime(getFinishLateDate(currentNode)));
+	    item->setText(6,res.number(getTaskFloat(currentNode).days()));
+	    item->setText(7,res.number(getFreeMargin(currentNode).days()));
         }
 	widget.labelResultProjectFloat->setText(res.number(getProjectFloat(project).days()));
 
@@ -110,7 +111,14 @@ DateTime PertResult::getFinishLateDate(Node * currentNode)
     if(currentNode->dependChildNodes().size()==0)
     {
         t=static_cast<Task *>(currentNode);
-        duration=getStartEarlyDate(currentNode);
+        if(complexGraph!=true)
+        {
+            duration=getFinishEarlyDate(currentNode);
+        }
+        else
+	{
+	    duration=getStartEarlyDate(currentNode);
+	}
 	duration.setDateOnly(true);
         return duration;
     }
@@ -175,7 +183,7 @@ Duration PertResult::getFreeMargin(Node * currentNode)
 
 Duration PertResult::getTaskFloat(Node * currentNode)
 {
-    if(currentNode->dependChildNodes().size()==0)
+    if(currentNode->dependChildNodes().size()==0  && complexGraph==true)
     {
          return getFinishLateDate(currentNode)-getStartEarlyDate(currentNode);
     }
@@ -195,14 +203,14 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     m_part = part;
     m_node = m_part->getProject().projectNode();
 	
-
-    (*header).resizeSection(0,120);
-    (*header).resizeSection(1,110);
+    (*header).resizeSection(0,60);
+    (*header).resizeSection(1,120);
     (*header).resizeSection(2,110);
     (*header).resizeSection(3,110);
     (*header).resizeSection(4,110);
-    (*header).resizeSection(5,80);
-    (*header).resizeSection(5,80);
+    (*header).resizeSection(5,110);
+    (*header).resizeSection(6,80);
+    (*header).resizeSection(7,80);
     draw( part->getProject() );
 
 
@@ -227,8 +235,17 @@ QList<Node*> PertResult::criticalPath()
     }
     return list;
 }
-
-
+void PertResult::testComplexGraph()
+{
+    complexGraph=false;
+    foreach(Node * currentNode, m_node->childNodeIterator() )
+    {
+	if(currentNode->dependParentNodes().size()>1)
+	{
+	    complexGraph=true;
+	}
+    } 
+}
 
 } // namespace KPlato
 

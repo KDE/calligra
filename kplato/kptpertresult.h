@@ -72,12 +72,14 @@ public:
     Duration getProjectFloat(Project &project);
     Duration getFreeMargin(Node * currentNode);
     Duration getTaskFloat(Node * currentNode);
+    void testComplexGraph();
 
 
 private:
     Ui::PertResult widget;
     Node * m_node;
     Part * m_part;
+    bool complexGraph;
     QList<Node *> m_criticalPath;
 };
 
