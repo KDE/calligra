@@ -221,9 +221,13 @@ namespace KPlato
         QVector<QPointF>::iterator it= vect.begin();
         while(it != vect.end())
         {
-            kDebug()<<"itY avant"<<it->y()<<endl;
-            it->setY(it->y()*100/totalCostPlanned);
-            kDebug()<<"cost apres %"<<it->y()<<endl;
+            kDebug()<<"itY before"<<it->y()<<endl;
+            if (totalCostPlanned > 0.0) { // avoid devide by 0
+                it->setY(it->y()*100/totalCostPlanned);
+            } else {
+                it->setY(0);
+            }
+            kDebug()<<"cost after %"<<it->y()<<endl;
             it++;
         }
     }
@@ -234,9 +238,13 @@ namespace KPlato
         QVector<QPointF>::iterator it= vect.begin();
         while(it != vect.end())
         {
-            kDebug()<<"itx avant"<<it->x()<<endl;
-            it->setX(it->x()*100/(vect.size()-1));
-            kDebug()<<"time apres %"<<it->x()<<endl;
+            kDebug()<<"itx before"<<it->x()<<endl;
+            if (vect.size() > 1 ) { // avoid devide by 0
+                it->setX(it->x()*100/(vect.size()-1));
+            } else {
+                it->setX(0);
+            }
+            kDebug()<<"time after %"<<it->x()<<endl;
             it++;
         }
     }
