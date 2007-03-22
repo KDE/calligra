@@ -64,7 +64,7 @@ Duration AppointmentInterval::effort(const DateTime &start, const DateTime end) 
 }
 
 Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
-    DateTime t( DateTime( time, m_start.timeSpec() ) );
+    DateTime t( DateTime( QDateTime( time ), m_start.timeSpec() ) );
     if (upto) {
         if (t <= m_start) {
             return Duration::zeroDuration;
@@ -339,8 +339,8 @@ Duration Appointment::plannedEffort() const {
 // Returns the planned effort on the date
 Duration Appointment::plannedEffort(const QDate &date) const {
     Duration d;
-    QDate s(date);
-    QDate e(date.addDays(1));
+    QDateTime s(date);
+    QDateTime e(date.addDays(1));
     foreach (AppointmentInterval *i, m_intervals.values() ) {
         d += i->effort(DateTime(s, i->startTime().timeSpec()), DateTime(e, i->startTime().timeSpec()));
     }
