@@ -1062,7 +1062,7 @@ void CellView::paintText( QPainter& painter,
   if ( hAlign == Style::Right && !cell.isEmpty() && !d->fittingWidth )
     offsetCellTooShort = 4;
 
-  const QFontMetrics fontMetrics( font );
+  const QFontMetrics fontMetrics( font, view ? view->canvasWidget() : 0 );
   double offsetFont = 0.0;
 
   if ( style().valign() == Style::Bottom && style().underline() )
@@ -1814,7 +1814,8 @@ void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
   //
   // First, Determine the correct font with zoom taken into account.
   // Then calculate text dimensions, i.e. d->textWidth and d->textHeight.
-  const QFontMetrics fontMetrics( effectiveFont( sheetView->view() ) );
+  const QFontMetrics fontMetrics( effectiveFont( sheetView->view() ),
+                                  sheetView->view() ? sheetView->view()->canvasWidget() : 0 );
   textSize( fontMetrics );
 
   // Calculate the size of the cell.

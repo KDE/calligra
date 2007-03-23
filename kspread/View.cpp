@@ -2009,7 +2009,7 @@ SheetView* View::sheetView( const Sheet* sheet ) const
     if ( !d->sheetViews.contains( sheet ) )
     {
         kDebug(36004) << "View: Creating SheetView for " << sheet->sheetName() << endl;
-        d->sheetViews.insert( sheet, new SheetView( sheet ) );
+        d->sheetViews.insert( sheet, new SheetView( sheet, this ) );
     }
     return d->sheetViews[ sheet ];
 }
