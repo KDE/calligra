@@ -312,6 +312,15 @@ Style Cell::style() const
     return sheet()->cellStorage()->style( d->column, d->row );
 }
 
+Style Cell::effectiveStyle() const
+{
+    Style style = sheet()->cellStorage()->style( d->column, d->row );
+    // use conditional formatting attributes
+    if ( Style* conditialStyle = conditions().testConditions( *this ) )
+        style.merge( *conditialStyle );
+    return style;
+}
+
 void Cell::setStyle( const Style& style )
 {
     sheet()->cellStorage()->setStyle( Region(cellPosition()), style );
@@ -509,7 +518,7 @@ bool Cell::needsPrinting() const
     if ( !inputText().trimmed().isEmpty() )
         return true;
 
-    const Style style = this->style();
+    const Style style = effectiveStyle();
 
     // Cell borders?
     if ( style.hasAttribute( Style::TopPen ) ||

@@ -248,6 +248,12 @@ public:
      */
     Style style() const;
 
+    /**
+     * The effective style takes conditional style attributes into account.
+     * \return the effective Style associated with this Cell
+     */
+    Style effectiveStyle() const;
+
     void setStyle( const Style& style );
 
     /**

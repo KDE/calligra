@@ -17,15 +17,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "RowColumnManipulators.h"
-
 #include <float.h>
+
+#include <QFontMetricsF>
+#include <QWidget>
 
 #include "CellStorage.h"
 #include "CellView.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetView.h"
+
+#include "RowColumnManipulators.h"
 
 using namespace KSpread;
 
@@ -491,73 +494,112 @@ bool AdjustColumnRowManipulator::preProcessing()
   return true;
 }
 
+class DummyWidget : public QWidget
+{
+    int metric( PaintDeviceMetric metric ) const
+    {
+        switch( metric )
+        {
+            case QPaintDevice::PdmDpiX:
+            case QPaintDevice::PdmDpiY:
+            case QPaintDevice::PdmPhysicalDpiX:
+            case QPaintDevice::PdmPhysicalDpiY:
+                return 72;
+            default:
+                break;
+        }
+        return QWidget::metric( metric );
+    }
+};
+
+QSizeF AdjustColumnRowManipulator::textSize( const QString& text, const Style& style ) const
+{
+    QSizeF size;
+    DummyWidget dummyWiget;
+    const QFontMetricsF fontMetrics( style.font(), &dummyWiget );
+
+    // Set size to correct values according to
+    // if the text is horizontal, vertical or rotated.
+    if ( !style.verticalText() && !style.angle() )
+    {
+        // Horizontal text.
+
+        size = fontMetrics.size( 0, text );
+        double offsetFont = 0.0;
+        if ( ( style.valign() == Style::Bottom ) && style.underline() )
+            offsetFont = fontMetrics.underlinePos() + 1;
+
+        size.setHeight( ( fontMetrics.ascent() + fontMetrics.descent() + offsetFont )
+                        * ( text.count( '\n' ) + 1 ) );
+    }
+    else if ( style.angle() != 0 )
+    {
+        // Rotated text.
+
+        const double height = fontMetrics.ascent() + fontMetrics.descent();
+        const double width  = fontMetrics.width( text );
+        size.setHeight( height * cos( style.angle() * M_PI / 180 )
+                        + qAbs( width * sin( style.angle() * M_PI / 180 ) ) );
+        size.setWidth( qAbs( height * sin( style.angle() * M_PI / 180 ) )
+                       + width * cos( style.angle() * M_PI / 180 ) );
+    }
+    else
+    {
+        // Vertical text.
+
+        double width = 0.0;
+        for ( int i = 0; i < text.length(); i++ )
+            width = qMax( width, fontMetrics.width( text.at( i ) ) );
+
+        size.setWidth( width );
+        size.setHeight( ( fontMetrics.ascent() + fontMetrics.descent() )
+                        * text.length() );
+    }
+    return size;
+}
+
 double AdjustColumnRowManipulator::adjustColumnHelper( const Cell& cell )
 {
-  double long_max = 0.0;
-  SheetView sheetView( cell.sheet(), 0 );
-  CellView cellView( &sheetView, cell.column(), cell.row() ); // FIXME
-  cellView.calculateTextParameters( &sheetView, cell );
-  if ( cellView.textWidth() > long_max )
-  {
-    double indent = 0.0;
-    Style::HAlign alignment = cell.style().halign();
-    if (alignment == Style::HAlignUndefined)
+    double long_max = 0.0;
+    const Style style = cell.effectiveStyle();
+    const QSizeF size = textSize( cell.displayText(), style );
+    if ( size.width() > long_max )
     {
-      if (cell.value().isNumber() || cell.isDate() || cell.isTime())
-      {
-        alignment = Style::Right;
-      }
-      else
-      {
-        alignment = Style::Left;
-      }
+        double indent = 0.0;
+        Style::HAlign alignment = style.halign();
+        if ( alignment == Style::HAlignUndefined )
+        {
+            if ( cell.value().isNumber() || cell.isDate() || cell.isTime() )
+                alignment = Style::Right;
+            else
+                alignment = Style::Left;
+        }
+        if ( alignment == Style::Left )
+            indent = cell.style().indentation();
+        long_max = indent + size.width()
+                 + style.leftBorderPen().width() + style.rightBorderPen().width();
     }
-
-    if (alignment == Style::Left)
-    {
-      indent = cell.style().indentation();
-    }
-    long_max = indent + cellView.textWidth()
-        + cell.style().leftBorderPen().width()
-        + cell.style().rightBorderPen().width();
-  }
-
-  // add 4 because long_max is the length of the text
-  // but column has borders
-  if ( long_max == 0.0 )
-  {
-    return -1.0;
-  }
-  else
-  {
-    return long_max + 4;
-  }
+    // add 4 because long_max is the length of the text
+    // but column has borders
+    if ( long_max == 0.0 )
+        return -1.0;
+    else
+        return long_max + 4.0;
 }
 
 double AdjustColumnRowManipulator::adjustRowHelper( const Cell& cell )
 {
-  double long_max = 0.0;
-
-  SheetView sheetView( cell.sheet(), 0 );
-  CellView cellView( &sheetView, cell.column(), cell.row() ); // FIXME
-  cellView.calculateTextParameters( &sheetView, cell );
-  if ( cellView.textHeight() > long_max )
-  {
-    long_max = cellView.textHeight()
-        + cell.style().topBorderPen().width()
-        + cell.style().bottomBorderPen().width();
-  }
-
-  //  add 1 because long_max is the height of the text
-  //  but row has borders
-  if ( long_max == 0.0 )
-  {
-    return -1.0;
-  }
-  else
-  {
-    return long_max + 1;
-  }
+    double long_max = 0.0;
+    const Style style = cell.effectiveStyle();
+    const QSizeF size = textSize( cell.displayText(), style );
+    if ( size.height() > long_max )
+        long_max = size.height() + style.topBorderPen().width() + style.bottomBorderPen().width();
+    //  add 1 because long_max is the height of the text
+    //  but row has borders
+    if ( long_max == 0.0 )
+        return -1.0;
+    else
+        return long_max + 1.0;
 }
 
 QString AdjustColumnRowManipulator::name() const

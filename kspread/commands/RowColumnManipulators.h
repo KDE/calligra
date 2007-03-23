@@ -94,6 +94,7 @@ class AdjustColumnRowManipulator : public Manipulator
   protected:
     virtual QString name() const;
 
+    QSizeF textSize( const QString& text, const Style& style ) const;
     double adjustColumnHelper( const Cell& cell );
     double adjustRowHelper( const Cell& cell );
 
