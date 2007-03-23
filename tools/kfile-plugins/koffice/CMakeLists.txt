@@ -1,18 +1,15 @@
 include_directories( ${KOFFICECORE_INCLUDES})
 
-set(kfile_koffice_SRCS kfile_koffice.cpp )
+# build the analyzer as a module
+kde4_add_library(koffice MODULE kofficethroughanalyzer.cpp)
 
-kde4_automoc(${kfile_koffice_SRCS})
+# link with the required libraries
+target_link_libraries(koffice ${STREAMANALYZER_LIBRARY} ${KDE4_KIO_LIBS})
 
-kde4_add_plugin(kfile_koffice ${kfile_koffice_SRCS})
+# adjust the name so the module is recognized as a strigi plugin
+set_target_properties(koffice PROPERTIES
+    PREFIX strigita_)
 
+# install the module in the right directory so it is picked up
+install(TARGETS koffice LIBRARY DESTINATION ${LIB_INSTALL_DIR}/strigi)
 
-
-target_link_libraries(kfile_koffice  ${KDE4_KDECORE_LIBS} kofficecore )
-
-install(TARGETS kfile_koffice  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kfile_koffice.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
