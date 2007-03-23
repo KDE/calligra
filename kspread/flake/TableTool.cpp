@@ -17,13 +17,20 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <QGridLayout>
+#include <QLabel>
 #include <QPainter>
+#include <QSpinBox>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <KoCanvasBase.h>
+#include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+
+#include "Global.h"
 
 #include "TableShape.h"
 
@@ -70,7 +77,6 @@ void TableTool::mouseReleaseEvent( KoPointerEvent* )
 void TableTool::activate( bool temporary )
 {
     Q_UNUSED( temporary );
-    kDebug() << k_funcinfo << endl;
 
     KoSelection* selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
@@ -92,3 +98,53 @@ void TableTool::deactivate()
 {
     d->tableShape = 0;
 }
+
+void TableTool::changeColumns( int num )
+{
+    d->tableShape->setColumns( num );
+    d->tableShape->repaint();
+}
+
+void TableTool::changeRows( int num )
+{
+    d->tableShape->setRows( num );
+    d->tableShape->repaint();
+}
+
+QWidget* TableTool::createOptionWidget()
+{
+    QWidget* optionWidget = new QWidget();
+    QGridLayout* layout = new QGridLayout( optionWidget );
+
+    QLabel* label = 0;
+    QSpinBox* spinBox = 0;
+
+    spinBox = new QSpinBox( optionWidget );
+    spinBox->setRange( 1, KS_colMax );
+    spinBox->setValue( d->tableShape->columns() );
+    layout->addWidget( spinBox, 0, 1 );
+    connect( spinBox, SIGNAL( valueChanged(int) ), this, SLOT( changeColumns(int) ) );
+
+    label = new QLabel( i18n( "Columns:" ), optionWidget );
+    label->setBuddy( spinBox );
+    label->setToolTip( i18n( "Number of columns" ) );
+    layout->addWidget( label, 0, 0 );
+
+    spinBox = new QSpinBox( optionWidget );
+    spinBox->setRange( 1, KS_rowMax );
+    spinBox->setValue( d->tableShape->rows() );
+    layout->addWidget( spinBox, 1, 1 );
+    connect( spinBox, SIGNAL( valueChanged(int) ), this, SLOT( changeRows(int) ) );
+
+    label = new QLabel( i18n( "Rows:" ), optionWidget );
+    label->setBuddy( spinBox );
+    label->setToolTip( i18n( "Number of rows" ) );
+    layout->addWidget( label, 1, 0 );
+
+    layout->setColumnStretch( 1, 1 );
+    layout->setRowStretch( 2, 1 );
+
+    return optionWidget;
+}
+
+#include "TableTool.moc"

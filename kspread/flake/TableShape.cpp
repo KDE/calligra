@@ -63,6 +63,16 @@ TableShape::~TableShape()
     delete d;
 }
 
+int TableShape::columns() const
+{
+    return d->columns;
+}
+
+int TableShape::rows() const
+{
+    return d->rows;
+}
+
 void TableShape::setColumns( int columns )
 {
     Q_ASSERT( columns > 0 );

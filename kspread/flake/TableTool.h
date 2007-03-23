@@ -27,18 +27,27 @@ namespace KSpread
 
 class TableTool : public KoTool
 {
+    Q_OBJECT
+
 public:
-  explicit TableTool( KoCanvasBase* canvas );
-  ~TableTool();
+    explicit TableTool( KoCanvasBase* canvas );
+    ~TableTool();
 
-  virtual void paint( QPainter& painter, KoViewConverter& converter );
+    virtual void paint( QPainter& painter, KoViewConverter& converter );
 
-  virtual void mousePressEvent( KoPointerEvent* event ) ;
-  virtual void mouseMoveEvent( KoPointerEvent* event );
-  virtual void mouseReleaseEvent( KoPointerEvent* event );
+    virtual void mousePressEvent( KoPointerEvent* event ) ;
+    virtual void mouseMoveEvent( KoPointerEvent* event );
+    virtual void mouseReleaseEvent( KoPointerEvent* event );
 
-  virtual void activate( bool temporary = false );
-  virtual void deactivate();
+    virtual void activate( bool temporary = false );
+    virtual void deactivate();
+
+private Q_SLOTS:
+    void changeColumns( int num );
+    void changeRows( int num );
+
+private:
+    virtual QWidget* createOptionWidget();
 
 private:
     Q_DISABLE_COPY( TableTool )

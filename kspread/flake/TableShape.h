@@ -34,6 +34,8 @@ public:
     explicit TableShape( int columns = 2, int rows = 8 );
     virtual ~TableShape();
 
+    int columns() const;
+    int rows() const;
     void setColumns( int columns );
     void setRows( int rows );
 
