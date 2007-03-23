@@ -1,7 +1,7 @@
 
 if (KDE4_BUILD_TESTS)
 
-include_directories(${KPLATO_INCLUDES})
+include_directories( .. ${KPLATO_INCLUDES})
 
 ########### next target ###############
 

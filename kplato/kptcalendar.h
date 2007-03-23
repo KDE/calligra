@@ -22,6 +22,7 @@
 
 #include <kptdatetime.h>
 #include "kptduration.h"
+#include "kplato_export.h"
 
 #include <QPair>
 #include <QList>
@@ -51,7 +52,7 @@ class XMLLoaderObject;
 typedef QPair<QTime, QTime> TimeInterval;
 typedef QPair<DateTime, DateTime> DateTimeInterval;
         
-class CalendarDay {
+class KPLATO_TEST_EXPORT CalendarDay {
 
 public:
     enum State { Undefined = 0,
@@ -167,7 +168,7 @@ public:
 #endif
 };
 
-class CalendarWeekdays {
+class KPLATO_TEST_EXPORT CalendarWeekdays {
 
 public:
     CalendarWeekdays();
@@ -262,7 +263,7 @@ public:
  * This enables planning with resources that does not recide in the same place.
  *
  */
-class Calendar : public QObject
+class KPLATO_TEST_EXPORT Calendar : public QObject
 {
     Q_OBJECT
 public:

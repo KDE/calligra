@@ -26,9 +26,9 @@ void DurationTester::testArithmetic() {
     Duration d1(0, 2, 0);
     Duration d2(1, 0, 0);
     
-    QQVERIFY((d1+d1).toString() == Duration(0, 4, 0).toString());
-    QQVERIFY((d1-d1).toString() == Duration(0, 0, 0).toString());
-    QQVERIFY((d1/2).toString() == Duration(0, 1, 0).toString());
+    QVERIFY((d1+d1).toString() == Duration(0, 4, 0).toString());
+    QVERIFY((d1-d1).toString() == Duration(0, 0, 0).toString());
+    QVERIFY((d1/2).toString() == Duration(0, 1, 0).toString());
     
     QVERIFY(d1==d1);
     QVERIFY(d1<=d1);

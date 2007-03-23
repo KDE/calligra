@@ -1,6 +1,11 @@
 
 project(kplato)
 
+if(KDE4_BUILD_TESTS)
+    # only with this definition will the KPLATO_TEST_EXPORT macro do something
+    add_definitions(-DCOMPILING_TESTS)
+endif(KDE4_BUILD_TESTS)
+
 set( KPLATO_INCLUDES
     ${KOFFICEUI_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kdgantt
@@ -10,7 +15,7 @@ add_subdirectory( templates )
 add_subdirectory( pics )
 add_subdirectory( reports )
 add_subdirectory( toolbar )
-#add_subdirectory( tests )
+add_subdirectory( tests )
 
 
 include_directories(${KPLATO_INCLUDES})

@@ -21,6 +21,8 @@
 #ifndef KPTDURATION_H
 #define KPTDURATION_H
 
+#include "kplato_export.h"
+
 #include <qglobal.h>
 #include <QString>
 
@@ -31,7 +33,7 @@ namespace KPlato
  * The duration class can be used to store a timespan in a convenient format.
  * The timespan can be in length in many many hours down to miliseconds.
  */
-class Duration {
+class KPLATO_TEST_EXPORT Duration {
     public:
         /**
          * DayTime  = d hh:mm:ss.sss
