@@ -450,7 +450,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     paintRect.setBottomRight( bottomRight );
 
     m_pSheetView->setPaintCellRange( printRect );
-    m_pSheetView->paintCells( 0 /*view*/, painter, paintRect, topLeft );
+    m_pSheetView->paintCells( 0 /*paintDevice*/, painter, paintRect, topLeft );
 
 #if 0
     RowFormat *row_lay;

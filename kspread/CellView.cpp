@@ -56,7 +56,6 @@
 #include "SheetView.h"
 #include "StyleManager.h"
 #include "Value.h"
-#include "View.h"
 
 // Local
 #include "CellView.h"
@@ -239,11 +238,10 @@ QString CellView::testAnchor( const Cell& cell, double x, double y ) const
 //              coordinates.
 //
 void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
-                                  View* view, const QPointF& coordinate,
+                                  QPaintDevice* paintDevice, const QPointF& coordinate,
                                   const QPoint& cellRef,
                                   QLinkedList<QPoint> &mergedCellsPainted, const Cell& cell )
 {
-    Q_UNUSED( view );
     Q_UNUSED( mergedCellsPainted );
 
     if ( d->hidden )
@@ -298,7 +296,7 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
             && !( cell.sheet()->isProtected()
             && style().hideAll() ) )
     {
-        paintText( painter, cellRect, cellRef, view, cell );
+        paintText( painter, cellRect, cellRef, paintDevice, cell );
     }
 }
 
@@ -983,7 +981,7 @@ void CellView::paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect
 //
 void CellView::paintText( QPainter& painter,
                           const QRectF &cellRect,
-                          const QPoint &cellRef, View* view, const Cell& cell )
+                          const QPoint &cellRef, QPaintDevice* paintDevice, const Cell& cell )
 {
   Q_UNUSED( cellRef );
 
@@ -1000,7 +998,7 @@ void CellView::paintText( QPainter& painter,
   QPen tmpPen( textColorPrint );
 
     // Set the font according to the current zoom.
-    QFont font = effectiveFont( view );
+    QFont font = effectiveFont( paintDevice );
 
     // Check for red font color for negative values.
     if ( cell.value().isNumber()
@@ -1062,7 +1060,7 @@ void CellView::paintText( QPainter& painter,
   if ( hAlign == Style::Right && !cell.isEmpty() && !d->fittingWidth )
     offsetCellTooShort = 4;
 
-  const QFontMetrics fontMetrics( font, view ? view->canvasWidget() : 0 );
+  const QFontMetrics fontMetrics( font, paintDevice );
   double offsetFont = 0.0;
 
   if ( style().valign() == Style::Bottom && style().underline() )
@@ -1084,7 +1082,7 @@ void CellView::paintText( QPainter& painter,
 
     const QPointF position( indent + cellRect.x() + d->textX - offsetCellTooShort,
                             cellRect.y() + d->textY - offsetFont );
-    drawText( painter, effectiveFont( view ), position, d->displayText, cell );
+    drawText( painter, effectiveFont( paintDevice ), position, d->displayText, cell );
   }
   else if ( tmpAngle != 0 ) {
     // Case 2: an angle.
@@ -1105,7 +1103,7 @@ void CellView::paintText( QPainter& painter,
       y = cellRect.y() + d->textY + d->textHeight;
     const QPointF position( x * cos( angle * M_PI / 180 ) + y * sin( angle * M_PI / 180 ),
                            -x * sin( angle * M_PI / 180 ) + y * cos( angle * M_PI / 180 ) );
-    drawText( painter, effectiveFont( view ), position, d->displayText, cell );
+    drawText( painter, effectiveFont( paintDevice ), position, d->displayText, cell );
     painter.rotate( -angle );
   }
   else if ( tmpMultiRow && !tmpVerticalText ) {
@@ -1147,7 +1145,7 @@ void CellView::paintText( QPainter& painter,
       }
 
       const QPointF position( indent + cellRect.x() + d->textX, cellRect.y() + d->textY + dy );
-      drawText( painter, effectiveFont( view ), position, text, cell );
+      drawText( painter, effectiveFont( paintDevice ), position, text, cell );
       dy += fontMetrics.descent() + fontMetrics.ascent();
     } while ( i != -1 );
   }
@@ -1164,7 +1162,7 @@ void CellView::paintText( QPainter& painter,
       text = d->displayText.at( i );
       const QPointF position( indent + cellRect.x() + d->textX,
                               cellRect.y() + d->textY + dy );
-      drawText( painter, effectiveFont( view ), position, text, cell );
+      drawText( painter, effectiveFont( paintDevice ), position, text, cell );
       dy += fontMetrics.descent() + fontMetrics.ascent();
       i++;
     } while ( i != len );
@@ -1767,9 +1765,9 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell& cell )
 //
 // Used in makeLayout().
 //
-QFont CellView::effectiveFont( const View* view ) const
+QFont CellView::effectiveFont( QPaintDevice* paintDevice ) const
 {
-    QFont tmpFont = view ? QFont( d->style.font(), view->canvasWidget() ) : d->style.font();
+    QFont tmpFont = paintDevice ? QFont( d->style.font(), paintDevice ) : d->style.font();
     // Scale the font size according to the current zoom.
 //     tmpFont.setPointSizeF( tmpFont.pointSizeF() / cell.doc()->resolutionY() );
     return tmpFont;
@@ -1814,8 +1812,8 @@ void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
   //
   // First, Determine the correct font with zoom taken into account.
   // Then calculate text dimensions, i.e. d->textWidth and d->textHeight.
-  const QFontMetrics fontMetrics( effectiveFont( sheetView->view() ),
-                                  sheetView->view() ? sheetView->view()->canvasWidget() : 0 );
+  const QFontMetrics fontMetrics( effectiveFont( sheetView->paintDevice() ),
+                                  sheetView->paintDevice() );
   textSize( fontMetrics );
 
   // Calculate the size of the cell.

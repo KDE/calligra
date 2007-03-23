@@ -1499,7 +1499,7 @@ void Canvas::paintEvent( QPaintEvent* event )
     const QPointF topLeft( sheet->columnPosition(visibleRect.left()) - xOffset(),
                            sheet->rowPosition(visibleRect.top()) - yOffset() );
     view()->sheetView( sheet )->setPaintCellRange( visibleRect );
-    view()->sheetView( sheet )->paintCells( d->view, painter, paintRect, topLeft );
+    view()->sheetView( sheet )->paintCells( this, painter, paintRect, topLeft );
 
     /* now paint the selection */
     paintHighlightedRanges(painter, paintRect);

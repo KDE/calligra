@@ -22,6 +22,7 @@
 
 #include "CellView.h"
 
+class QPaintDevice;
 class QPainter;
 class QPointF;
 class QRect;
@@ -29,10 +30,8 @@ class QRectF;
 
 namespace KSpread
 {
-class Canvas;
 class Region;
 class Sheet;
-class View;
 
 /**
  * The SheetView controls the painting of the sheets' cells.
@@ -46,7 +45,7 @@ public:
     /**
      * Constructor.
      */
-    explicit SheetView( const Sheet* sheet, const View* view = 0 );
+    explicit SheetView( const Sheet* sheet, QPaintDevice* paintDevice = 0 );
 
     /**
      * Destructor.
@@ -59,9 +58,9 @@ public:
     const Sheet* sheet() const;
 
     /**
-     * \return the View
+     * \return the paint device on which the Sheet is painted
      */
-    const View* view() const;
+    QPaintDevice* paintDevice() const;
 
     /**
      * Looks up a CellView for the position \p col , \p row in the cache.
@@ -90,7 +89,8 @@ public:
     /**
      * Paints the cells.
      */
-    void paintCells( View* view, QPainter& painter, const QRectF& paintRect, const QPointF& topLeft );
+    void paintCells( QPaintDevice* paintDevice, QPainter& painter, const QRectF& paintRect,
+                     const QPointF& topLeft );
 
 private:
     /**

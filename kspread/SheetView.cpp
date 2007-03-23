@@ -25,7 +25,6 @@
 #include "Region.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
-#include "View.h"
 
 #include "SheetView.h"
 #include "RectStorage.h"
@@ -36,18 +35,18 @@ class SheetView::Private
 {
 public:
     const Sheet* sheet;
-    const View* view;
+    QPaintDevice* paintDevice;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
     QRegion cachedArea;
     CellView* defaultCellView;
 };
 
-SheetView::SheetView( const Sheet* sheet, const View* view )
+SheetView::SheetView( const Sheet* sheet, QPaintDevice* paintDevice )
     : d( new Private )
 {
     d->sheet = sheet;
-    d->view = view;
+    d->paintDevice = paintDevice;
     d->visibleRect = QRect(1,1,0,0);
     d->cache.setMaxCost( 10000 );
     d->defaultCellView = new CellView( this );
@@ -64,9 +63,9 @@ const Sheet* SheetView::sheet() const
     return d->sheet;
 }
 
-const View* SheetView::view() const
+QPaintDevice* SheetView::paintDevice() const
 {
-    return d->view;
+    return d->paintDevice;
 }
 
 CellView SheetView::cellView( int col, int row )
@@ -110,7 +109,7 @@ void SheetView::invalidate()
     d->cachedArea = QRegion();
 }
 
-void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRect,
+void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const QRectF& paintRect,
                             const QPointF& topLeft )
 {
     // NOTE Stefan: The painting is splitted into several steps. In each of these all cells in
@@ -161,7 +160,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
-            cellView.paintCellContents( paintRect, painter, view, offset,
+            cellView.paintCellContents( paintRect, painter, paintDevice, offset,
                                         QPoint( col, row ), mergedCellsPainted,
                                         Cell( sheet(), col, row ) );
             offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );

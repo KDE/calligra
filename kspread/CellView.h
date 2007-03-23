@@ -42,6 +42,7 @@
 #include "Global.h"
 #include "Style.h"
 
+class QPaintDevice;
 class QRectF;
 
 namespace KSpread
@@ -51,7 +52,6 @@ class Conditions;
 class Sheet;
 class SheetView;
 class Style;
-class View;
 
 /**
  * Responsible for the painting of Cell.
@@ -96,17 +96,17 @@ public:
    * Paints the cell.
    * \param paintRegion the portion of the canvas that is actually in view
    * \param painter the used painter
-   * \param view the view of this data.  Used for:
+   * \param paintDevice the paintDevice of this data.  Used for:
    *        \li layout direction (should become obsolete),
    *        \li painting obscured cells (should become obsolete)
-   *        \li (was used for selection painting, which is now in Canvas)
+   *        \li (was used for selection painting, which is now in QPaintDevice)
    * \param paintCoordinate the top left coordinate (scroll offset dependent)
    * \param cellCoordinate the cell position (should be removed!)
    * \param mergedCellsPainted a list of merged cells already painted
    * \param cell the Cell (should be removed!)
    */
   void paintCellContents( const QRectF& paintRegion, QPainter& painter,
-                          View * view, const QPointF& paintCoordinate,
+                          QPaintDevice* paintDevice, const QPointF& paintCoordinate,
                           const QPoint & cellCoordinate,
                           QLinkedList<QPoint> &mergedCellsPainted, const Cell& cell );
 
@@ -271,7 +271,7 @@ private:
    *
    * \internal
    */
-  QFont effectiveFont( const View* view ) const;
+  QFont effectiveFont( QPaintDevice* paintDevice ) const;
 
   /**
    * \ingroup Painting
@@ -315,7 +315,7 @@ private:
    * @internal
    */
   void paintText( QPainter& painter, const QRectF &cellRect,
-                  const QPoint &cellRef, View* view, const Cell& cell );
+                  const QPoint &cellRef, QPaintDevice* paintDevice, const Cell& cell );
 
   /**
    * \ingroup Painting
