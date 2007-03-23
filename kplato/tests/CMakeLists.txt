@@ -29,5 +29,17 @@ add_test(KPlato-DurationTester  ${EXECUTABLE_OUTPUT_PATH}/DurationTester)
 
 ########### next target ###############
 
+set(CalendarTester_SRCS CalendarTester.cpp )
+ 
+kde4_automoc(${CalendarTester_SRCS})
+ 
+kde4_add_executable(CalendarTester NOGUI RUN_UNINSTALLED ${CalendarTester_SRCS})
+ 
+target_link_libraries(CalendarTester  ${KDE4_KDECORE_LIBS} kplatoprivate ${QT_QTTEST_LIBRARY})
+ 
+add_test(KPlato-CalendarTester  ${EXECUTABLE_OUTPUT_PATH}/CalendarTester)
+
+########### next target ###############
+
 
 endif(KDE4_BUILD_TESTS)
