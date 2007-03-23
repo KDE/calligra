@@ -1,16 +1,23 @@
 
 project(kplato)
 
+set( KPLATO_INCLUDES
+    ${KOFFICEUI_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/kdgantt
+)
+
 add_subdirectory( templates )
 add_subdirectory( pics )
 add_subdirectory( reports )
 add_subdirectory( toolbar )
-add_subdirectory( tests )
-
-include_directories(${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/kdgantt ${CMAKE_SOURCE_DIR}/kugar/lib   )
+#add_subdirectory( tests )
 
 
-set(libkplatopart_SRCS
+include_directories(${KPLATO_INCLUDES})
+
+########### KPlato private library ###############
+
+set(kplatoprivate_LIB_SRCS
     kptusedefforteditor.cc
     kpttaskstatusview.cc
     kptcalendareditor.cc
@@ -87,7 +94,7 @@ set(libkplatopart_SRCS
     kptchartwidget.cc
     kptchart.cc
 )
-kde4_add_ui_files(libkplatopart_SRCS
+kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kptdurationwidget.ui
     standardworktimedialogbase.ui
     kptwbsdefinitionpanelbase.ui
@@ -113,23 +120,30 @@ kde4_add_ui_files(libkplatopart_SRCS
     kptresourceassignmentview.ui 
 )
 
+kde4_automoc(${kplatoprivate_LIB_SRCS})
 
-########### next target ###############
+kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS})
 
-set(kplatopart_PART_SRCS kptfactoryinit.cc ${libkdgantt_SRCS} ${libkplatopart_SRCS} )
+target_link_libraries(kplatoprivate  ${KDE4_KDECORE_LIBS} kofficeui)
+
+set_target_properties(kplatoprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+
+install(TARGETS kplatoprivate DESTINATION ${LIB_INSTALL_DIR})
+
+########### KPlato part ###############
+
+set(kplatopart_PART_SRCS kptfactoryinit.cc )
 
 kde4_automoc(${kplatopart_PART_SRCS})
 
 kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
+target_link_libraries(kplatopart ${KDE4_KDEUI_LIBS} kplatoprivate)
+
+install(TARGETS kplatopart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
-target_link_libraries(kplatopart kofficeui ${KDE4_KDEUI_LIBS} ${QT_QTXML_LIBRARY}  )
-
-install(TARGETS kplatopart  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### next target ###############
+########### KPlato executable ###############
 
 set(kplato_KDEINIT_SRCS main.cc )
 

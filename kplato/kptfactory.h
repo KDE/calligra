@@ -20,6 +20,8 @@
 #ifndef KPLATO_FACTORY_H
 #define KPLATO_FACTORY_H
 
+#include "kplato_export.h"
+
 #include <KoFactory.h>
 
 class KAboutData;
@@ -27,7 +29,7 @@ class KAboutData;
 namespace KPlato
 {
 
-class Factory : public KoFactory
+class KPLATO_EXPORT Factory : public KoFactory
 {
     Q_OBJECT
 public:
