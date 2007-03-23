@@ -567,21 +567,21 @@ void View::Private::initActions()
     // -- horizontal alignment --
     //
     QActionGroup* groupAlign = new QActionGroup( view );
-    actions->alignLeft  = new KToggleAction(KIcon("text_left"), i18n("Align Left"), view);
+    actions->alignLeft  = new KToggleAction(KIcon("leftjust"), i18n("Align Left"), view);
     ac->addAction("left", actions->alignLeft );
     connect( actions->alignLeft, SIGNAL( toggled( bool ) ),
              view, SLOT( alignLeft( bool ) ) );
     actions->alignLeft->setToolTip(i18n("Left justify the cell contents"));
     actions->alignLeft->setActionGroup( groupAlign );
 
-    actions->alignCenter  = new KToggleAction(KIcon("text_center"), i18n("Align Center"), view);
+    actions->alignCenter  = new KToggleAction(KIcon("centrejust"), i18n("Align Center"), view);
     ac->addAction("center", actions->alignCenter );
     connect( actions->alignCenter, SIGNAL( toggled( bool ) ),
              view, SLOT( alignCenter( bool ) ) );
     actions->alignCenter->setToolTip(i18n("Center the cell contents"));
     actions->alignCenter->setActionGroup( groupAlign );
 
-    actions->alignRight  = new KToggleAction(KIcon("text_right"), i18n("Align Right"), view);
+    actions->alignRight  = new KToggleAction(KIcon("rightjust"), i18n("Align Right"), view);
     ac->addAction("right", actions->alignRight );
     connect( actions->alignRight, SIGNAL( toggled( bool ) ),
              view, SLOT( alignRight( bool ) ) );
