@@ -60,6 +60,7 @@ GenericName[uz]=Матн процессори
 GenericName[x-test]=xxWord Processingxx
 GenericName[zh_TW]=文書處理
 Comment=Write text documents
+Comment[uk]=Текстові документи
 Comment[x-test]=xxWrite text documentsxx
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
 Icon=kword

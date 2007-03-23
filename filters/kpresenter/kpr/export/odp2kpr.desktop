@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter Old File Format Filter
+Name[uk]=Фільтр старого формату файлів KPresenter
 Name[x-test]=xxKPresenter Old File Format Filterxx
 X-KDE-Export=application/x-kpresenter
 X-KDE-Weight=1
