@@ -146,13 +146,6 @@ public:
                             const Cell& cell, SheetView* sheetView );
 
   /**
-   * \ingroup Layout
-   * Calculates the text dimensions and the offset
-   * for the current displayed text.
-   */
-  void calculateTextParameters( SheetView* sheetView, const Cell& cell );
-
-  /**
    * \return width of the text
    */
   double textWidth() const;
@@ -204,7 +197,7 @@ private:
    * There's a special treatment for bottom aligned, underlined text. For
    * all other combinations of these two variables the dimension is the same.
    *
-   * \internal Called from makeLayout() and calculateTextParameters().
+   * \internal Called from makeLayout().
    */
   void textSize( const QFontMetrics& fontMetrics );
 
@@ -222,7 +215,7 @@ private:
    * \li cell width and height, including obscured cells
    * \li thickness of the border pens
    *
-   * \internal Called from makeLayout() and calculateTextParameters().
+   * \internal Called from makeLayout().
    */
   void textOffset( const QFontMetrics& fontMetrics, const Cell& cell );
 

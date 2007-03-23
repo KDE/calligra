@@ -1765,7 +1765,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, const Cell& cell )
 
 // Get the effective font.
 //
-// Used in makeLayout() and calculateTextParameters().
+// Used in makeLayout().
 //
 QFont CellView::effectiveFont( const View* view ) const
 {
@@ -1878,22 +1878,9 @@ void CellView::calculateCellDimension( const Cell& cell )
 }
 
 
-//used in Sheet::adjustColumnHelper and Sheet::adjustRow
-void CellView::calculateTextParameters( SheetView* sheetView, const Cell& cell )
-{
-  // Get the font metrics for the effective font.
-  const QFontMetrics fontMetrics( effectiveFont( sheetView->view() ) );
-
-  // Recalculate text dimensions, i.e. d->textWidth and d->textHeight
-  textSize( fontMetrics );
-
-  // Recalculate text offset, i.e. d->textX and d->textY.
-  textOffset( fontMetrics, cell );
-}
-
 // Recalculate d->textX and d->textY.
 //
-// Used in makeLayout() and calculateTextParameters().
+// Used in makeLayout().
 //
 void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
 {
@@ -2074,7 +2061,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
 // Recalculate the current text dimensions, i.e. d->textWidth and
 // d->textHeight.
 //
-// Used in makeLayout() and calculateTextParameters().
+// Used in makeLayout().
 //
 void CellView::textSize( const QFontMetrics& fm )
 {
