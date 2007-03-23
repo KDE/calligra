@@ -39,16 +39,55 @@ public:
     int         rows;
     Doc*        doc;
     SheetView*  sheetView;
+
+public:
+    Sheet* sheet() const;
+    void adjustColumnDimensions( double factor );
+    void adjustRowDimensions( double factor );
 };
+
+
+Sheet* TableShape::Private::sheet() const
+{
+    return doc->map()->sheet( 0 );
+}
+
+void TableShape::Private::adjustColumnDimensions( double factor )
+{
+    doc->setDefaultColumnWidth( doc->defaultColumnFormat()->width() * factor );
+    for ( ColumnFormat* columnFormat = sheet()->firstCol(); columnFormat; columnFormat->next() )
+    {
+        if ( columnFormat->column() > columns )
+            break;
+        columnFormat->setWidth( columnFormat->width() * factor );
+    }
+}
+
+void TableShape::Private::adjustRowDimensions( double factor )
+{
+    doc->setDefaultRowHeight( doc->defaultRowFormat()->height() * factor );
+    for ( RowFormat* rowFormat = sheet()->firstRow(); rowFormat; rowFormat->next() )
+    {
+        if ( rowFormat->row() > rows )
+            break;
+        rowFormat->setHeight( rowFormat->height() * factor );
+    }
+}
+
+
 
 TableShape::TableShape( int columns, int rows )
     : d( new Private )
 {
-    d->columns  = 0;
-    d->rows     = 0;
+    d->columns  = 1;
+    d->rows     = 1;
     d->doc      = new Doc();
     d->doc->map()->addNewSheet();
     d->sheetView = new SheetView( sheet() );
+
+    // initialize the default column width / row height
+    d->doc->setDefaultColumnWidth( size().width() );
+    d->doc->setDefaultRowHeight( size().height() );
 
     setColumns( columns );
     setRows( rows );
@@ -76,15 +115,19 @@ int TableShape::rows() const
 void TableShape::setColumns( int columns )
 {
     Q_ASSERT( columns > 0 );
-//     ColumnFormat::setGlobalColWidth( size().width() / columns );
+    const double factor = (double) d->columns / columns;
     d->columns = columns;
+    d->adjustColumnDimensions( factor );
+    d->sheetView->invalidateDefaultCellView();
 }
 
 void TableShape::setRows( int rows )
 {
     Q_ASSERT( rows > 0 );
-//     RowFormat::setGlobalRowHeight( size().height() / rows );
+    const double factor = (double) d->rows / rows;
     d->rows = rows;
+    d->adjustRowDimensions( factor );
+    d->sheetView->invalidateDefaultCellView();
 }
 
 void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
@@ -99,7 +142,20 @@ void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
     d->sheetView->paintCells( 0 /*view*/, painter, paintRect, QPointF( 0.0, 0.0 ) );
 }
 
+void TableShape::resize( const QSizeF& newSize )
+{
+    if ( size() == newSize )
+        return;
+
+    // adjust the column widths / row heights
+    d->adjustColumnDimensions( newSize.width() / size().width() );
+    d->adjustRowDimensions( newSize.height() / size().height() );
+    d->sheetView->invalidateDefaultCellView();
+
+    KoShape::resize( newSize );
+}
+
 Sheet* TableShape::sheet() const
 {
-    return d->doc->map()->sheet( 0 );
+    return d->sheet();
 }

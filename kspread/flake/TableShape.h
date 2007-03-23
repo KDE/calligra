@@ -40,6 +40,7 @@ public:
     void setRows( int rows );
 
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void resize( const QSizeF &size );
 
 protected:
     /**

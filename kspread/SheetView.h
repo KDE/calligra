@@ -83,6 +83,11 @@ public:
     void invalidateRegion( const Region& region );
 
     /**
+     * Invalidates the default CellView.
+     */
+    void invalidateDefaultCellView();
+
+    /**
      * Paints the cells.
      */
     void paintCells( View* view, QPainter& painter, const QRectF& paintRect, const QPointF& topLeft );

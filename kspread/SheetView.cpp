@@ -102,6 +102,12 @@ void SheetView::invalidateRegion( const Region& region )
         invalidateRange( rects[i] );
 }
 
+void SheetView::invalidateDefaultCellView()
+{
+    delete d->defaultCellView;
+    d->defaultCellView = new CellView( this );
+}
+
 void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRect, const QPointF& topLeft )
 {
     QLinkedList<QPoint> mergedCellsPainted;
