@@ -83,9 +83,9 @@ public:
     void invalidateRegion( const Region& region );
 
     /**
-     * Invalidates the default CellView.
+     * Invalidates all CellViews, the cached and the default.
      */
-    void invalidateDefaultCellView();
+    void invalidate();
 
     /**
      * Paints the cells.
@@ -105,6 +105,12 @@ private:
      * Used by CellView.
      */
     void obscureCells( const QRect& range, const QPoint& position );
+
+    /**
+     * Returns the default CellView.
+     * Used by CellView.
+     */
+    const CellView& defaultCellView() const;
 
     Q_DISABLE_COPY( SheetView )
 

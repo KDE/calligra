@@ -86,8 +86,6 @@ public:
         , layoutDirection( Sheet::LeftToRight ) {}
     ~Private()
     {
-        if ( s_empty == this )
-            s_empty = 0;
     }
 
     Style style;
@@ -124,32 +122,18 @@ public:
     // as the user input, e.g. Cell::inputText()="1" and displayText="1.00".
     // Also holds the value, that we got from calculation.
     QString displayText;
-
-    // static empty data to be shared
-    static Private* empty( const Sheet* sheet )
-    {
-        if ( !s_empty )
-            s_empty = new Private( sheet->doc()->styleManager()->defaultStyle(),
-                                   sheet->columnFormat( 0 )->width(),
-                                   sheet->rowFormat( 0 )->height() );
-        return s_empty;
-    }
-
-private:
-    static Private* s_empty;
 };
-
-// create static pointer
-CellView::Private* CellView::Private::s_empty = 0;
 
 
 CellView::CellView( SheetView* sheetView )
-    : d( Private::empty( sheetView->sheet() ) )
+    : d( new Private( sheetView->sheet()->doc()->styleManager()->defaultStyle(),
+                      sheetView->sheet()->doc()->defaultColumnFormat()->width(),
+                      sheetView->sheet()->doc()->defaultRowFormat()->height() ) )
 {
 }
 
 CellView::CellView( SheetView* sheetView, int col, int row )
-    : d( Private::empty( sheetView->sheet() ) )
+    : d( sheetView->defaultCellView().d )
 {
     Q_ASSERT( 1 <= col && col <= KS_colMax );
     Q_ASSERT( 1 <= row && row <= KS_rowMax );

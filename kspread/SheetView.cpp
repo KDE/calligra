@@ -102,14 +102,21 @@ void SheetView::invalidateRegion( const Region& region )
         invalidateRange( rects[i] );
 }
 
-void SheetView::invalidateDefaultCellView()
+void SheetView::invalidate()
 {
     delete d->defaultCellView;
     d->defaultCellView = new CellView( this );
+    d->cache.clear();
+    d->cachedArea = QRegion();
 }
 
-void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRect, const QPointF& topLeft )
+void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRect,
+                            const QPointF& topLeft )
 {
+    // NOTE Stefan: The painting is splitted into several steps. In each of these all cells in
+    //              d->visibleRect are traversed. This may appear suboptimal at the first look, but
+    //              ensures that the borders are not erased by the background of adjacent cells.
+
     QLinkedList<QPoint> mergedCellsPainted;
 // kDebug() << "paintRect: " << paintRect << endl;
 // kDebug() << "topLeft: " << topLeft << endl;
@@ -246,4 +253,9 @@ void SheetView::obscureCells( const QRect& range, const QPoint& position )
             d->cache.object( QPoint(col,row) )->obscure( position.x(), position.y() );
         }
     }
+}
+
+const CellView& SheetView::defaultCellView() const
+{
+    return *d->defaultCellView;
 }

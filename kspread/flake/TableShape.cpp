@@ -118,7 +118,7 @@ void TableShape::setColumns( int columns )
     const double factor = (double) d->columns / columns;
     d->columns = columns;
     d->adjustColumnDimensions( factor );
-    d->sheetView->invalidateDefaultCellView();
+    d->sheetView->invalidate();
 }
 
 void TableShape::setRows( int rows )
@@ -127,7 +127,7 @@ void TableShape::setRows( int rows )
     const double factor = (double) d->rows / rows;
     d->rows = rows;
     d->adjustRowDimensions( factor );
-    d->sheetView->invalidateDefaultCellView();
+    d->sheetView->invalidate();
 }
 
 void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
@@ -150,7 +150,7 @@ void TableShape::resize( const QSizeF& newSize )
     // adjust the column widths / row heights
     d->adjustColumnDimensions( newSize.width() / size().width() );
     d->adjustRowDimensions( newSize.height() / size().height() );
-    d->sheetView->invalidateDefaultCellView();
+    d->sheetView->invalidate();
 
     KoShape::resize( newSize );
 }

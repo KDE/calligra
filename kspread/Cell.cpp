@@ -535,8 +535,8 @@ bool Cell::needsPrinting() const
         kDebug(36004) << "needsPrinting: Has background color" << endl;
         QColor backgroundColor = style.backgroundColor();
 
-        // We don't need to print anything if the background is white
-        if (backgroundColor != Qt::white)
+        // We don't need to print anything, if the background is white opaque or fully transparent.
+        if ( !( backgroundColor == Qt::white || backgroundColor.alpha() == 0 ) )
             return true;
     }
 
