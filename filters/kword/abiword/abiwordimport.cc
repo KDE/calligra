@@ -144,7 +144,7 @@ bool StructureParser::StartElementC(StackItem* stackItem, StackItem* stackCurren
     if ((stackCurrent->elementType==ElementTypeParagraph)||(stackCurrent->elementType==ElementTypeContent))
     {
         // Contents can have styles, however KWord cannot have character style.
-        // Therefore we use the style if it exist, but we do not create it if not.
+        // Therefore we use the style if it exists, but we do not create it if not.
         QString strStyleProps;
         QString strStyleName=attributes.value("style").trimmed();
         if (!strStyleName.isEmpty())
@@ -200,7 +200,7 @@ bool charactersElementC (StackItem* stackItem, QDomDocument& mainDocument, const
     {
         // Add characters to the link name
         stackItem->strTemp2+=ch;
-        // TODO: how can we care about the text format?
+        // TODO: how can we take care about the text format?
     }
     else
     {
@@ -328,7 +328,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     int level;
     if (strLevel.isEmpty())
     {
-        // We have not "level" attribute, so we must use the style's level.
+        // We have no "level" attribute, so we must use the style's level.
         level=it.value().m_level;
     }
     else
@@ -405,7 +405,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
 
         if (!ProcessField(mainDocument, variableElement, strType, attributes))
         {
-            // The field type was not recognised,
+            // The field type is currently not supported by this filter,
             //   therefore write the field type in red as normal text
             kWarning(30506) << "Unknown <field> type: " << strType << endl;
             QDomElement formatElement=mainDocument.createElement("FORMAT");
@@ -601,7 +601,7 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
 
     if (strMime.isEmpty())
     {
-        // Old AbiWord files had no mime types for images but the data were base64-coded PNG
+        // Old AbiWord files had no mime type for images but the data were base64-coded PNG
         strMime="image/png";
         strBase64="yes";
     }
@@ -609,14 +609,14 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
     stackItem->fontName=strName;        // Store the data name as font name.
     stackItem->bold=(strBase64=="yes"); // Store base64-coded as bold
     stackItem->strTemp1=strMime;        // Mime type
-    stackItem->strTemp2.clear();  // Image data
+    stackItem->strTemp2.clear();        // Image data
 
     return true;
 }
 
 static bool CharactersElementD (StackItem* stackItem, QDomDocument& /*mainDocument*/, const QString & ch)
 {
-    // As we have no guarantee to have the whole stream in one call, we must store the data.
+    // As we have no guarantee to have the whole stream in a single call, we must store the data.
     stackItem->strTemp2+=ch;
     return true;
 }
@@ -684,7 +684,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
         return false;
     }
 
-    if (stackItem->bold) // Is base64-coded?
+    if (stackItem->bold) // Is it base64-coded?
     {
         kDebug(30506) << "Decode and write base64 stream: " << stackItem->fontName << endl;
         // We need to decode the base64 stream
@@ -731,7 +731,7 @@ static bool StartElementM(StackItem* stackItem, StackItem* /*stackCurrent*/,
 
 static bool CharactersElementM (StackItem* stackItem, const QString & ch)
 {
-    // As we have no guarantee to have the whole data in one call, we must store the data.
+    // As we have no guarantee to have the whole data in a single call, we must store the data.
     stackItem->strTemp2+=ch;
     return true;
 }
@@ -751,7 +751,7 @@ bool StructureParser::EndElementM (StackItem* stackItem)
         return false;
     }
 
-    // Just add it to the metadata map, we do not do something special with the values.
+    // Just add it to the metadata map. We do not do something special with the values.
     m_metadataMap[stackItem->strTemp1]=stackItem->strTemp2;
 
     return true;
@@ -885,7 +885,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
 
     QString strPageType=attributes.value("pagetype").trimmed();
 
-    // Do we know the page size or do we need to measure?
+    // Do we know the page size or do we need to use the measures?
     // For page formats that KWord knows, use our own values in case the values in the file would be wrong.
 
     KoPageFormat::Format kwordFormat = KoPageFormat::formatFromString(strPageType);
@@ -1189,7 +1189,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     AbiPropsMap abiPropsMap;
     abiPropsMap.splitAndAddAbiProps(attributes.value("props")); // Do not check PROPS
 
-    // We abuse the attach number to know the row and col numbers.
+    // ### HACK: We abuse the attach number to know the row and col numbers.
     const uint row=abiPropsMap["top-attach"].getValue().toUInt();
     const uint col=abiPropsMap["left-attach"].getValue().toUInt();
 
@@ -1813,7 +1813,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
         delete in;
         if (!handler.wasFatalError())
         {
-            // As the parsing was stopped for something else than a fatal error, we have not yet get an error message. (Can it really happen?)
+            // As the parsing was stopped for something else than a fatal error, the user has not get an error message yet. (Can it really happen?)
             KMessageBox::error(NULL, i18n("An error occurred during the load of the AbiWord file: %1",QString(from)),
                 i18n("AbiWord Import Filter"),0);
         }
@@ -1835,7 +1835,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
 
     //Write the document information!
     strOut=handler.getDocInfo().toByteArray(); // UTF-8
-    // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
+    // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end. (### TODO: check for Qt4)
     out->write(strOut,strOut.length());
 
     kDebug(30506) << "Creating maindoc.xml" << endl;
@@ -1849,7 +1849,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
 
     //Write the document!
     strOut=handler.getDocument().toByteArray(); // UTF-8
-    // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
+    // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end. (### TODO: check for Qt4)
     out->write(strOut,strOut.length());
 
 #if 0

@@ -220,7 +220,7 @@ bool AbiWordWorker::doOpenDocument(void)
     // Make the file header
 
     // First the XML header in UTF-8 version
-    // (AbiWord and QT handle UTF-8 well, so we stay with this encoding!)
+    // (AbiWord and Qt handle UTF-8 well, so we stay with this encoding!)
     *m_streamOut << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
     // NOTE: AbiWord CVS 2002-02-?? has a new DOCTYPE
@@ -283,7 +283,7 @@ void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& 
 
         QByteArray base64=KCodecs::base64Encode(image,true);
 
-        *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream
+        *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream (### TODO: check that in Qt4 it is still the case)
 
         *m_streamOut << "</d>\n";
     }
@@ -487,7 +487,7 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
 bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
 {
 #if 0
-    *m_streamOut << "</p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
+    *m_streamOut << "</p>\n"; // Close previous paragraph ### TODO: do it correctly like in HTML filter
     *m_streamOut << "<table>\n";
 #endif
 
@@ -516,7 +516,7 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
     }
 #if 0
     *m_streamOut << "</table>\n";
-    *m_streamOut << "<p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
+    *m_streamOut << "<p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like in the HTML filter
 #endif
     return true;
 }
@@ -607,7 +607,7 @@ void AbiWordWorker::processVariable ( const QString&,
     }
     else if (4==formatData.variable.m_type)
     {
-        // As AbiWord's field is inflexible, we cannot make the time custom
+        // As AbiWord's field is inflexible, we cannot make anything custom
         QString strFieldType;
         if (formatData.variable.isPageNumber())
         {
@@ -676,7 +676,7 @@ void AbiWordWorker::processAnchor ( const QString&,
     const TextFormatting& /*formatLayout*/, //TODO
     const FormatData& formatData)
 {
-    // We have an image or a table
+    // We have a picture or a table
     if ( (2==formatData.frameAnchor.type) // <IMAGE> or <PICTURE>
         || (5==formatData.frameAnchor.type) ) // <CLIPART>
     {
@@ -1000,7 +1000,7 @@ bool AbiWordWorker::doFullPaperFormat(const int f,
         case KoPageFormat::IsoB5Size: // ISO B5
         case KoPageFormat::IsoB6Size: // ISO B6
             units = "cm";
-            // intentional fall through
+            // intentional fall through (a.k.a. "no break")
         // American formats
         case KoPageFormat::UsLetterSize: // US Letter
         case KoPageFormat::UsLegalSize:  // US Legal
@@ -1045,7 +1045,7 @@ bool AbiWordWorker::doFullPaperFormat(const int f,
                 outputText += "pagetype=\"A4\" width=\"21.0\" height=\"29.7\" units=\"cm\" ";
             }
             else
-            {   // We prefer to use inches, as to limit rounding errors (page size is in points!)
+            {   // We prefer to use inches, as it limits rounding errors. (The page size is in points!)
                 outputText += QString("pagetype=\"Custom\" width=\"%1\" height=\"%2\" units=\"inch\" ").arg(width/72.0).arg(height/72.0);
             }
             break;
@@ -1116,6 +1116,7 @@ bool AbiWordWorker::doFullSpellCheckIgnoreWord (const QString& ignoreword)
 }
 
 // Similar to QDateTime::toString, but guaranteed *not* to be translated
+// ### TODO: can Qt4 not do it by itself nowadays?
 QString AbiWordWorker::transformToTextDate(const QDateTime& dt)
 {
     if (dt.isValid())
@@ -1172,7 +1173,7 @@ QString AbiWordWorker::transformToTextDate(const QDateTime& dt)
     }
     else
     {
-        // Invalid, so give back 1970-01-01
+        // Invalid, so give back the epoch: 1970-01-01
         return "Thu Jan 01 00:00:00 1970";
     }
 }
@@ -1183,7 +1184,6 @@ bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 
     *m_streamOut << "<metadata>\n";
 
-    // First all Dublin Core data
     *m_streamOut << "<m key=\"dc.format\">application/x-abiword</m>\n";
     if (!m_docInfo.title.isEmpty())
     {
@@ -1203,12 +1203,13 @@ bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
         *m_streamOut << "<m key=\"dc.subject\">" << escapeAbiWordText(m_docInfo.subject) << "</m>\n";
     }
 
-    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
+    // Say who we are (with the SVN revision number) in case we have a bug in our filter output!
+    // ### TODO: as SVN does not mark a branch in the revision number, we would need another way to tell the branch
     *m_streamOut << "<m key=\"abiword.generator\">KWord Export Filter";
 
     QString strVersion("$Revision$");
     // Remove the dollar signs
-    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
+    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS or SVN storage.)
     *m_streamOut << strVersion.mid(10).remove('$');
 
     *m_streamOut << "</m>\n";
@@ -1236,8 +1237,6 @@ KoFilter::ConversionStatus ABIWORDExport::convert( const QByteArray& from, const
     {
         return KoFilter::NotImplemented;
     }
-
-    // We need KimageIO's help in AbiWordWorker::convertUnknownImage
 
 
     AbiWordWorker* worker=new AbiWordWorker();

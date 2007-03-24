@@ -75,7 +75,7 @@ void StyleDataMap::defineNewStyle(const QString& strName, const int level,
     const QString& strProps)
 {
     // Despite its name, this method can be called multiple times
-    // We must take care that KWord just gets it only one time.
+    // We must take care that KWord just gets one style only one time.
     StyleDataMap::Iterator it=find(strName);
     if (it==end())
     {

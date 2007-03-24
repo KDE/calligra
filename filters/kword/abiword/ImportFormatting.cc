@@ -40,7 +40,7 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
     if (allowInit)
     {
         // Initialize the QStrings with the previous values of the properties
-        // TODO: any others needed?
+        // TODO: any other needed?
         if (stackItem->italic)
         {
             abiPropsMap.setProperty("font-style","italic");
@@ -63,7 +63,7 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
     // Style goes first
     kDebug(30506)<< "===== from style=\"" << strStyleProps << "\"" << endl;
     abiPropsMap.splitAndAddAbiProps(strStyleProps);
-    // Treat the props attributes in the two available flavors: lower case and upper case.
+    // Treat the props attributes in the two available spellings: lower case and upper case.
     kDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
     abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
     abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
@@ -201,7 +201,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     if ((strFollowing.isEmpty())
         || (strFollowing=="Current Settings")) // "Current Settings" is only a pseudo-style!
     {
-        // We have no idea what style follows
+        // We have no idea which style follows
         if (isStyle)
         {
             // We are a style, so we need a default

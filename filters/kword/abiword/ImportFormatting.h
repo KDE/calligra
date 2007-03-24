@@ -105,7 +105,7 @@ public:
                            */
     /**
      * for tables (\<table\>, \<cell\>): defines the widths of the columns.
-     * Be careful: we are using the shallow copy mechanism of Qt. Use QMemArray::detach when needed to avoid modifying the parents
+     * Be careful: we are using the shallow copy mechanism of Qt3. Use QMemArray::detach when needed to avoid modifying the parents
      */
     Q3MemArray<double> m_doubleArray;
 };
