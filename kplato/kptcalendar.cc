@@ -937,9 +937,9 @@ Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *
     // Now get all the rest of the days
     for (date = date.addDays(1); date <= e.date(); date = date.addDays(1)) {
         if (date < e.date()) {
-             eff += effort(date, QTime(), endTime, sch); // whole days
+             eff += effort(date, QTime(0, 0, 0), endTime, sch); // whole days
         } else {
-             eff += effort(date, QTime(), e.time(), sch); // last day
+             eff += effort(date, QTime(0, 0, 0), e.time(), sch); // last day
         }
         //kDebug()<<k_funcinfo<<": eff now="<<eff.toString(Duration::Format_Day)<<endl;
     }
@@ -990,7 +990,7 @@ DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &
         else
             endTime = e.time();
         if (date > start.date())
-            startTime = QTime();
+            startTime = QTime(0, 0, 0);
         else 
             startTime = s.time();
             
@@ -1047,7 +1047,7 @@ bool Calendar::hasInterval(const DateTime &start, const DateTime &end, Schedule 
         else
             endTime = e.time();
         if (date > s.date())
-            startTime = QTime();
+            startTime = QTime(0, 0, 0);
         else 
             startTime = s.time();
 
