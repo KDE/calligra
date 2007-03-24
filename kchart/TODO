@@ -26,10 +26,10 @@ Item								   Prio Status
 * Port to Qt4
   + Get rid of all Qt3 support widgets				      1	----
     - Q3*Layout								done
-    - Q3ButtonGroup							done
+    - Q3ButtonGroup							--
     - Q3ListBox / Q3ListBoxText						--
     - Q3TabDialog							--
-    - Q3GroupBox							--
+    - Q3GroupBox							done
     - Q3Wizard								--
     - Q3Table								--
   + Remove code that does double buffering.			      1	DONE
@@ -61,6 +61,7 @@ Item								   Prio Status
   + Data Series						----	----
 
 * Bugs
+  + Polar charts config for subtype doesn't work		      1 ----
   + The chart title is not included in the chart from the wizard      1 DONE
   + The Data Editor shows wrong when first row/column is checked      1 ----
   + The title is miniscule					      2 ---- 

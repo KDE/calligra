@@ -58,16 +58,21 @@ KChartHiloSubTypeChartPage::KChartHiloSubTypeChartPage( KChartParams* params,
     subtypeBG->insert( stacked, KDChartParams::AreaStacked );
     percent = new QRadioButton( i18n("HiLoOpenClose"), subtypeBG );
     subtypeBG->insert( percent, KDChartParams::AreaPercent );
+
     subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
 
-    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    QGroupBox* exampleGB = new QGroupBox(i18n( "Example" ) );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
+
+    QHBoxLayout *layout2 = new QHBoxLayout( exampleGB );
+    layout2->setMargin( 10 );
+
     exampleLA = new QLabel( exampleGB );
     exampleLA->setAlignment( Qt::AlignCenter | Qt::AlignVCenter );
-    // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
+    layout2->addWidget( exampleLA );
 }
 
 void KChartHiloSubTypeChartPage::init()
@@ -143,12 +148,16 @@ KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KChartParams* params,
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
 
-    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    QGroupBox* exampleGB = new QGroupBox( i18n( "Example" ), this );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
+
+    QHBoxLayout *layout2 = new QHBoxLayout( exampleGB );
+    layout2->setMargin( 10 );
+
     exampleLA = new QLabel( exampleGB );
     exampleLA->setAlignment( Qt::AlignCenter | Qt::AlignVCenter );
-    // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
+    layout2->addWidget( exampleLA );
 }
 
 
@@ -236,11 +245,16 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
     new QLabel( "", left);
     left->setStretchFactor( left, 1 );
 
-    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    QGroupBox* exampleGB = new QGroupBox( i18n( "Example" ) );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
+
+    QHBoxLayout *layout2 = new QHBoxLayout( exampleGB );
+    layout2->setMargin( 10 );
+
     exampleLA = new QLabel( exampleGB );
     exampleLA->setAlignment( Qt::AlignCenter | Qt::AlignVCenter );
+    layout2->addWidget( exampleLA );
 }
 
 void KChartBarSubTypeChartPage::init()
@@ -321,12 +335,16 @@ KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
 
-    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    QGroupBox* exampleGB = new QGroupBox( i18n( "Example" ) );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
+
+    QHBoxLayout *layout2 = new QHBoxLayout( exampleGB );
+    layout2->setMargin( 10 );
+
     exampleLA = new QLabel( exampleGB );
     exampleLA->setAlignment( Qt::AlignCenter | Qt::AlignVCenter );
-    // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
+    layout2->addWidget( exampleLA );
 }
 
 void KChartLineSubTypeChartPage::init()
@@ -402,12 +420,16 @@ KChartPolarSubTypeChartPage::KChartPolarSubTypeChartPage( KChartParams* params,
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
 
-    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    QGroupBox* exampleGB = new QGroupBox( i18n( "Example" ) );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
+
+    QHBoxLayout *layout2 = new QHBoxLayout( exampleGB );
+    layout2->setMargin( 10 );
+
     exampleLA = new QLabel( exampleGB );
     exampleLA->setAlignment( Qt::AlignCenter | Qt::AlignVCenter );
-    // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
+    layout2->addWidget( exampleLA );
 }
 
 void KChartPolarSubTypeChartPage::init()
