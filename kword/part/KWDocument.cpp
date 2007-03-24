@@ -554,11 +554,15 @@ void KWDocument::printDebug() {
         KWPage *page = pageManager()->page(pgnum);
         pgnum = page->pageNumber(); // in case the last one was a pagespread.
         QString side = "[Left] ";
+        QString num = QString::number(pgnum);
         if(page->pageSide() == KWPage::Right)
             side = "[Right]";
-        else if(page->pageSide() == KWPage::PageSpread)
+        else if(page->pageSide() == KWPage::PageSpread) {
             side = "[PageSpread]";
-        kDebug(32001) << "Page " << pgnum << side << " width=" << page->width() << " height=" << page->height() << endl;
+            pgnum++;
+            num += "-" + QString::number(pgnum);
+        }
+        kDebug(32001) << "Page " << num << side << " width=" << page->width() << " height=" << page->height() << endl;
     }
     kDebug(32001) << "  The height of the doc (in pt) is: " << pageManager()->
         bottomOfPage(lastPage()) << endl;
