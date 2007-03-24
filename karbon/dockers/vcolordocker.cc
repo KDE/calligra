@@ -101,21 +101,24 @@ void VColorDocker::updateColor( const KoColor &c )
     KoCanvasResourceProvider * provider = canvasController->canvas()->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
+    // check which color to set foreground == border, background == fill
     if( activeStyle == Karbon::Foreground )
     {
-#if 0
+        // get the border of the first selected shape and check if it is a line border
         KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
-        KoLineBorder * border = new KoLineBorder( 1.0, color );
+        KoLineBorder * newBorder = 0;
         if( oldBorder )
         {
-            // use the properties of the old border if it is a line border
-            *border = *oldBorder;
-            border->setColor( color );
+            // preserve the properties of the old border if it is a line border
+            newBorder = new KoLineBorder( *oldBorder );
+            newBorder->setColor( color );
         }
-        KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selection->selectedShapes(), border );
+        else
+            newBorder = new KoLineBorder( 1.0, color );
+
+        KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
         canvasController->canvas()->addCommand( cmd );
         canvasController->canvas()->resourceProvider()->setForegroundColor( c );
-#endif
     }
     else
     {
