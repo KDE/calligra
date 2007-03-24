@@ -115,7 +115,6 @@ void RegisterInformationFunctions()
 // Function: ERROR.TYPE
 Value func_errortype (valVector args, ValueCalc *, FuncExtra *)
 {
-  kDebug() << "eror.type" << endl;
   if ( ! args[0].isError() ) {
     // its an error if the argument isn't an error...
     return Value::errorVALUE();
