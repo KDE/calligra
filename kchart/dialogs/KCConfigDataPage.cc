@@ -26,10 +26,12 @@
 
 
 #include <QLayout>
+#include <QGroupBox>
+#include <QButtonGroup>
 #include <QLabel>
 #include <QLineEdit>
 #include <q3listbox.h>
-#include <q3buttongroup.h>
+//#include <q3buttongroup.h>
 #include <QPushButton>
 #include <qradiobutton.h>
 #include <QCheckBox>
@@ -54,46 +56,65 @@ KCConfigDataPage::KCConfigDataPage( KChartParams* params,
 				    KDChartTableData *dat) 
     : QWidget( parent ), m_params( params ), data(dat)
 {
-    QGridLayout *grid1 = new QGridLayout( this );
-    grid1->setMargin( KDialog::marginHint() );
-    grid1->setSpacing( KDialog::spacingHint() );
+    QVBoxLayout  * layout2;
+
+    QVBoxLayout  *layout = new QVBoxLayout( );
+    layout->setMargin( KDialog::marginHint() );
+    layout->setSpacing( KDialog::spacingHint() );
+    this->setLayout( layout );
 
     // The Data Area
-    Q3ButtonGroup *gb1 = new Q3VButtonGroup( i18n( "Data Area" ), this );
+    QGroupBox *gb1 = new QGroupBox( i18n( "Data Area" ) );
+    layout->addWidget( gb1 );
 
-    // ================================================================
-    // This code is copied from kchartWizardSelectDataFormatPage.cc
+    layout2 = new QVBoxLayout( );
+    layout2->setMargin( KDialog::marginHint() );
+    layout2->setSpacing( KDialog::spacingHint() );
+    gb1->setLayout( layout2 );
+
     KHBox   *hbox = new KHBox( gb1 );
     (void) new QLabel( i18n("Area: "), hbox);
     m_dataArea = new QLineEdit( hbox );
-    //grid1->addWidget(gb1, 0, 0);
+    layout2->addWidget( hbox );
 
     // The row/column as label checkboxes. 
-    m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), gb1);
-    m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), gb1);
+    m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ) );
+    layout2->addWidget( m_firstRowAsLabel );
+    m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ) );
+    layout2->addWidget( m_firstColAsLabel );
 
-    grid1->addWidget(gb1, 0, 0);
+    layout2->addStretch( 1 );
 
-    // The Data Format button group
-    Q3ButtonGroup *gb = new Q3VButtonGroup( i18n( "Data Format" ), this );
+    // The Data Format groupbox
+    QGroupBox *gb2 = new QGroupBox( i18n( "Data Format" ) );
+    layout->addWidget( gb2 );
 
-    m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb );
-    m_rowMajor->resize( m_rowMajor->sizeHint() );
+    layout2 = new QVBoxLayout( );
+    layout2->setMargin( KDialog::marginHint() );
+    layout2->setSpacing( KDialog::spacingHint() );
+    gb2->setLayout( layout2 );
 
-    m_colMajor = new QRadioButton( i18n( "Data in columns" ), gb );
+    QButtonGroup *bg = new QButtonGroup( );
+    bg->setExclusive( true );
+
+    m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb2 );
+    //m_rowMajor->resize( m_rowMajor->sizeHint() );
+    layout2->addWidget( m_rowMajor );
+    bg->addButton( m_rowMajor );
+
+    m_colMajor = new QRadioButton( i18n( "Data in columns" ), gb2 );
     m_colMajor->resize( m_colMajor->sizeHint() );
+    layout2->addWidget( m_colMajor );
+    bg->addButton( m_colMajor );
 
-    grid1->addWidget(gb, 2, 0);
+    layout2->addStretch( 1 );
 
     this->setWhatsThis( i18n("This configuration page can be used to swap the interpretation of rows and columns."));
     m_rowMajor->setWhatsThis( i18n("By default one row is considered to be a data set and each column holds the individual values of the data series. This sets the data in rows on your chart."));
 
     m_colMajor->setWhatsThis( i18n("Here you can choose to have each column hold one data set. Note that the values are not really swapped but only their interpretation."));
     m_colMajor->resize( m_colMajor->sizeHint() );
-    grid1->addWidget(gb, 1, 0);
-    grid1->setColumnStretch(3, 0);
-
-    grid1->activate();
+    //layout->setColumnStretch(2, 0);
 }
 
 

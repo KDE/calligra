@@ -1,6 +1,8 @@
-2007-03-24  Inge Wallin  <ingwa@c83-252-238-97.bredband.comhem.se>
-
 2007-03-24  Inge Wallin  <inge@lysator.liu.se>
+
+	Qt3 -> Qt4 conversion.
+	* dialogs/KCConfigDataPage.cc (KCConfigDataPage): Port from
+	Q3ButtonGroup to QGroupBox and QButtonGroup.
 
 	Qt3 -> Qt4 conversion.
 	* dialogs/KCWizardCharttype.{h,cc} (KCWizardCharttype): Port from
