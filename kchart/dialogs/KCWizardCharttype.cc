@@ -7,11 +7,10 @@
 #include "kchart_part.h"
 
 #include <QLayout>
-#include <q3buttongroup.h>
+#include <QButtonGroup>
 #include <q3frame.h>
-#include <QPushButton>
 #include <QLabel>
-//Added by qt3to4:
+#include <QPushButton>
 #include <QPixmap>
 
 #include <klocale.h>
@@ -49,10 +48,9 @@ KCWizardCharttype::KCWizardCharttype( QWidget* parent,
   : QWidget( parent ),
     m_chart( chart )
 {
-    m_typeBG = new Q3ButtonGroup( this );
+    m_typeBG = new QButtonGroup( this );
     m_typeBG->setExclusive( true );
-    m_typeBG->hide();
-    //  m_typeBG->resize
+    //m_typeBG->hide();
 
     m_colPos=0;
     m_rowPos=0;
@@ -74,17 +72,15 @@ KCWizardCharttype::KCWizardCharttype( QWidget* parent,
     addButton( i18n( "Ring" ),           "chart_ring",   KChartParams::Ring );
     addButton( i18n( "Polar" ),          "chart_polar",  KChartParams::Polar);
 
-    QPushButton *current = ((QPushButton*)m_typeBG->find( m_chart->params()->chartType() ));
+    // Make the button for the current type selected.
+    QPushButton *current = ((QPushButton*)m_typeBG->button( m_chart->params()->chartType() ));
     if (current != NULL) {
 	current->setChecked( true );
     }
   
     m_type = m_chart->params()->chartType();
     connect( m_typeBG, SIGNAL( clicked( int ) ),
-	     this, SLOT( chartTypeSelected( int ) ) );
-
-    ////  parent->resize( 425, 256 );
-    //     parent->resize(xstep*5+50, ystep*4 + 100);
+	     this,     SLOT( chartTypeSelected( int ) ) );
 }
 
 
@@ -97,7 +93,7 @@ void KCWizardCharttype::addButton(const QString &name,
 						      K3Icon::SizeMedium,
 						      K3Icon::DefaultState ) );
     m_layout->addWidget(button, m_rowPos, m_colPos);
-    m_typeBG->insert( button->button(), type );
+    m_typeBG->addButton( button->button(), type );
 
     incPos();
 }

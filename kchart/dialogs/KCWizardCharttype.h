@@ -3,7 +3,6 @@
 
 
 #include <QWidget>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include <kvbox.h>
@@ -12,7 +11,7 @@
 
 class QGridLayout;
 class QPushButton;
-class Q3ButtonGroup;
+class QButtonGroup;
 
 
 namespace KChart
@@ -60,7 +59,7 @@ private:
 private:
   KChartPart    *m_chart;
 
-  Q3ButtonGroup *m_typeBG;
+  QButtonGroup  *m_typeBG;
   QGridLayout   *m_layout;
 
   // column and row position (used by addButton() to know where to put

@@ -1,4 +1,10 @@
+2007-03-24  Inge Wallin  <ingwa@c83-252-238-97.bredband.comhem.se>
+
 2007-03-24  Inge Wallin  <inge@lysator.liu.se>
+
+	Qt3 -> Qt4 conversion.
+	* dialogs/KCWizardCharttype.{h,cc} (KCWizardCharttype): Port from
+	Q3ButtonGroup to QButtonGroup.
 
 	* dialogs/KCConfigBackgroundPage.{h,cc}: remove all traces of
 	class Q3ListBox.
