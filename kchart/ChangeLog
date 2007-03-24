@@ -1,5 +1,10 @@
 2007-03-24  Inge Wallin  <inge@lysator.liu.se>
 
+	Qt3 -> Qt4: Remove Q3GroupBox from the Wizard
+	* dialogs/KCWizardAxesPage.cc (KCWizardAxesPage): 
+	* dialogs/KCWizardLabelsLegendPage.cc (KCWizardLabelsLegendPage):
+	Q3GroupBox -> QGroupBox
+
 	Qt3 -> Qt4 conversion.
 	* dialogs/KCWizardDataPage.cc (KCWizardDataPage): Port from
 	Q3ButtonGroup to QGroupBox and QButtonGroup.

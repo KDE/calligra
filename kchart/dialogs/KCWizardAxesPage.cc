@@ -30,15 +30,15 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
   : QWidget( parent ),
     _chart( chart )
 {
+    QGroupBox* tmpQGroupBox;
+
     chart3d=true;
 
     QGridLayout *grid1 = new QGridLayout( this );
     grid1->setMargin( KDialog::marginHint() );
     grid1->setSpacing( KDialog::spacingHint() );
 
-    Q3GroupBox* tmpQGroupBox;
-    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
-    //tmpQGroupBox->setFrameStyle( 49 );
+    tmpQGroupBox = new QGroupBox( this );
 
     QGridLayout *grid2 = new QGridLayout( tmpQGroupBox );
     grid2->setMargin( KDialog::marginHint() );
@@ -77,7 +77,7 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
     grid1->addWidget(tmpQGroupBox,0,0);
 
 
-    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_2" );
+    tmpQGroupBox = new QGroupBox( this );
     //tmpQGroupBox->setFrameStyle( 49 );
 
     grid2 = new QGridLayout( tmpQGroupBox );
@@ -114,8 +114,7 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
 
     grid1->addWidget(tmpQGroupBox,0,1);
 
-    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
-    //tmpQGroupBox->setFrameStyle( 49 );
+    tmpQGroupBox = new QGroupBox( this );
 
     grid2 = new QGridLayout( tmpQGroupBox );
     grid2->setMargin( KDialog::marginHint() );
@@ -156,8 +155,7 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
     grid1->addWidget(tmpQGroupBox,1,0);
     tmpQGroupBox->setEnabled(false);
 
-    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
-    //tmpQGroupBox->setFrameStyle( 49 );
+    tmpQGroupBox = new QGroupBox( this );
 
     grid2 = new QGridLayout( tmpQGroupBox );
     grid2->setMargin( KDialog::marginHint() );
@@ -202,10 +200,7 @@ KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
     tmpQGroupBox->setEnabled(false);
     grid1->addWidget(tmpQGroupBox,1,1);
 
-
-
     connect(ylabelFont,SIGNAL(clicked()),this,SLOT(changeLabelFont()));
-
 
     connect(ylabelColor,SIGNAL(changed( const QColor & )),
             this,SLOT(changeLabelColor(const QColor &)));

@@ -2,12 +2,12 @@
 #include "kchart_view.h"
 #include "kchart_part.h"
 
-#include <q3buttongroup.h>
+#include <QLayout>
+#include <QGroupBox>
 #include <QLineEdit>
 #include <qradiobutton.h>
 #include <QLabel>
 #include <QPaintEvent>
-#include <QLayout>
 #include <QPushButton>
 #include <QColor>
 
@@ -40,13 +40,12 @@ KCWizardLabelsLegendPage::KCWizardLabelsLegendPage( QWidget* parent, KChartPart*
     grid1->setMargin( KDialog::marginHint() );
     grid1->setSpacing( KDialog::spacingHint() );
 
-    Q3GroupBox* tmpQGroupBox;
-    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
+    QGroupBox* tmpQGroupBox = new QGroupBox( this );
     //tmpQGroupBox->setFrameStyle( 49 );
 
-  QGridLayout *grid2 = new QGridLayout( tmpQGroupBox );
-  grid2->setMargin( KDialog::marginHint() );
-  grid2->setSpacing( KDialog::spacingHint() );
+    QGridLayout *grid2 = new QGridLayout( tmpQGroupBox );
+    grid2->setMargin( KDialog::marginHint() );
+    grid2->setSpacing( KDialog::spacingHint() );
 
     QLabel* titleLA = new QLabel( i18n( "Title:" ),tmpQGroupBox );
     grid2->addWidget(titleLA,0,0);
