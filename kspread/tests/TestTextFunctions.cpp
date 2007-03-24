@@ -41,6 +41,12 @@ Value TestTextFunctions::evaluate(const QString& formula, Value& ex)
     return result;
 }
 
+void TestTextFunctions::testASC()
+{
+    CHECK_EVAL( "ASC(\"ＡＢＣ\")", Value( "ABC" ) );
+    CHECK_EVAL( "ASC(\"アイウ\")", Value( "ｧｨｩ" ) );
+}
+
 void TestTextFunctions::testCHAR()
 {
     CHECK_EVAL( "CHAR(65)", Value( "A" ) );
@@ -120,6 +126,12 @@ void TestTextFunctions::testFIXED()
     CHECK_EVAL( "FIXED(125.45; -5)", Value( "0" ) );
 }
 
+void TestTextFunctions::testJIS()
+{
+    CHECK_EVAL( "JIS(\"ABC\")", Value( "ＡＢＣ") );
+    CHECK_EVAL( "JIS(\"ｧｨｩ\")", Value( "アイウ" ) );
+}
+
 void TestTextFunctions::testLEFT()
 {
     CHECK_EVAL( "LEFT(\"Hello\";2)", Value( "He" ) );
@@ -130,6 +142,34 @@ void TestTextFunctions::testLEFT()
     CHECK_EVAL( "LEFT(\"xxx\";-0.1)", Value::errorVALUE() );
     CHECK_EVAL( "LEFT(\"Hello\";2^15-1)", Value( "Hello" ) );
     CHECK_EVAL( "LEFT(\"Hello\";2.9)", Value( "He" ) );
+}
+
+void TestTextFunctions::testRIGHT()
+{
+    CHECK_EVAL( "RIGHT(\"Hello\";2)", Value( "lo" ) );
+    CHECK_EVAL( "RIGHT(\"Hello\")", Value( "o" ) );
+    CHECK_EVAL( "RIGHT(\"Hello\";20)", Value( "Hello" ) );
+    CHECK_EVAL( "RIGHT(\"Hello\";0)", Value( "" ) );
+    CHECK_EVAL( "RIGHT(\"\";4)", Value( "" ) );
+    CHECK_EVAL( "RIGHT(\"xxx\";-1)", Value::errorVALUE() );
+    CHECK_EVAL( "RIGHT(\"xxx\";-0.1)", Value::errorVALUE() );
+    CHECK_EVAL( "RIGHT(\"Hello\";2^15-1)", Value( "Hello" ) );
+    CHECK_EVAL( "RIGHT(\"Hello\";2.9)", Value( "lo" ) );
+}
+
+void TestTextFunctions::testUNICHAR()
+{
+    CHECK_EVAL( "UNICHAR(65)", Value( "A" ) );
+    CHECK_EVAL( "UNICHAR(8364)", Value( "€" ) );
+}
+
+
+void TestTextFunctions::testUNICODE()
+{
+    CHECK_EVAL( "UNICODE(\"A\")", Value( 65 ) );
+    CHECK_EVAL( "UNICODE(\"AB€C\")", Value( 65 ) );
+    CHECK_EVAL( "UNICODE(\"€\")", Value( 8364 ) );
+    CHECK_EVAL( "UNICODE(\"€F\")", Value( 8364 ) );
 }
 
 QTEST_KDEMAIN(TestTextFunctions, GUI)

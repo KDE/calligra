@@ -37,6 +37,7 @@ using namespace KSpread;
 // support arbitrary precision, when it will be introduced.
 
 // prototypes
+Value func_asc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_char (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_clean (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_code (valVector args, ValueCalc *calc, FuncExtra *);
@@ -46,6 +47,7 @@ Value func_dollar (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_exact (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_find (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fixed (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_jis (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_left (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_len (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lower (valVector args, ValueCalc *calc, FuncExtra *);
@@ -64,6 +66,8 @@ Value func_t (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_text (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_toggle (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_trim (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_unichar (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_unicode (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_upper (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_value (valVector args, ValueCalc *calc, FuncExtra *);
 
@@ -74,11 +78,15 @@ void RegisterTextFunctions()
   Function *f;
 
   // one-parameter functions
+  f = new Function ("ASC", func_asc);
+  repo->add (f);
   f = new Function ("CHAR", func_char);
   repo->add (f);
   f = new Function ("CLEAN", func_clean);
   repo->add (f);
   f = new Function ("CODE", func_code);
+  repo->add (f);
+  f = new Function ("JIS", func_jis);
   repo->add (f);
   f = new Function ("LEN", func_len);
   repo->add (f);
@@ -95,6 +103,10 @@ void RegisterTextFunctions()
   f = new Function ("TOGGLE", func_toggle);
   repo->add (f);
   f = new Function ("TRIM", func_trim);
+  repo->add (f);
+  f = new Function ("UNICHAR", func_unichar);
+  repo->add (f);
+  f = new Function ("UNICODE", func_unicode);
   repo->add (f);
   f = new Function ("UPPER", func_upper);
   repo->add (f);
@@ -153,6 +165,12 @@ void RegisterTextFunctions()
   repo->add (f);
 }
 
+
+// Function: ASC
+Value func_asc (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  return Value( QString( "FIXME ASC()" ) );
+}
 
 // Function: CHAR
 Value func_char (valVector args, ValueCalc *calc, FuncExtra *)
@@ -344,6 +362,12 @@ Value func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (result);
 }
 
+// Function: JIS
+Value func_jis (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  return Value( QString( "FIXME JIS()" ) );
+}
+
 // Function: LEFT
 Value func_left (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -509,6 +533,9 @@ Value func_right (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() == 2)
     nb = calc->conv()->asInteger (args[1]).asInteger();
 
+  if ( nb < 0 )
+    return Value::errorVALUE();
+
   return Value (str.right (nb));
 }
 
@@ -651,6 +678,29 @@ Value func_trim (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return Value (
       calc->conv()->asString (args[0]).asString().simplified());
+}
+
+// Function: UNICHAR
+Value func_unichar (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  ushort val = calc->conv()->asInteger (args[0]).asInteger ();
+  if ( val > 0 ) {
+      QString str;
+      str.setUtf16( &val, 1 );
+      return Value ( str );
+  }
+  else
+    return Value::errorNUM();
+}
+
+// Function: UNICODE
+Value func_unicode (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QString str (calc->conv()->asString (args[0]).asString());
+  if (str.length() <= 0)
+     return Value::errorVALUE();
+
+  return Value ( ( int )str.toUcs4().at(0) );
 }
 
 // Function: UPPER

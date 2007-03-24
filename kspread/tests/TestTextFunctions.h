@@ -33,6 +33,7 @@ class TestTextFunctions: public QObject
     Q_OBJECT
 
 private slots:
+    void testASC();
     void testCHAR();
     void testCLEAN();
     void testCODE();
@@ -40,7 +41,12 @@ private slots:
     void testEXACT();
     void testFIND();
     void testFIXED();
+    void testJIS();
     void testLEFT();
+    void testRIGHT();
+    void testUNICHAR();
+    void testUNICODE();
+
 private:
     Value evaluate(const QString&, Value& ex);
 };

@@ -588,6 +588,66 @@
       </Help> 
     </Function>
 
+    <Function>
+      <Name>UNICODE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Text</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The UNICODE() function returns a unicode code point for the first character in a text string.</Text>
+	<Syntax>UNICODE(text)</Syntax>
+	<Example>UNICODE("KDE") returns 75</Example>
+        <Related>UNICHAR</Related>
+        <Related>CODE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>UNICHAR</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Character code</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The UNICHAR() function returns the character specified by a unicode code point.</Text>
+	<Syntax>UNICHAR(code)</Syntax>
+	<Example>UNICHAR(65) returns "A"</Example>
+        <Related>UNICODE</Related>
+        <Related>CHAR</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ASC</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Full width characters</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The ASC() function returns the half-width characters corresponding to the full-width argument.</Text>
+	<Syntax>ASC(text)</Syntax>
+        <Related>JIS</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>JIS</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Half-width characters</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The JIS() function returns the full-width characters corresponding to the half-width argument.</Text>
+	<Syntax>JIS(text)</Syntax>
+        <Related>ASC</Related>
+      </Help>
+    </Function>
+
 
   </Group>
 
