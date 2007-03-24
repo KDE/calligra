@@ -276,12 +276,6 @@
    <Function>
       <Name>TYPE</Name>
       <Type>Int</Type>
-   <Function>
-      <Name>TYPE</Name>
-      <Type>Int</Type>
-   <Function>
-      <Name>TYPE</Name>
-      <Type>Int</Type>
       <Parameter>
 	<Comment>Any value</Comment>
 	<Type>Any</Type>
