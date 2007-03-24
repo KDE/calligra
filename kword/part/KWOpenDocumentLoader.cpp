@@ -685,21 +685,18 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
     parag->loadOasis( tag, context, styleColl, pos );
 #endif
     QString userStyleName = context.styleStack().userStyleName( "paragraph" );
-    const QDomElement* userStyle1 = context.oasisStyles().findStyle( userStyleName, "paragraph" );
-    KoParagraphStyle *userStyle2 = d->document->styleManager()->paragraphStyle(userStyleName);
-    //if( ! userStyle ) {
-        //userStyle = d->document->styleManager()->defaultParagraphStyle();
-        //d->document->styleManager()->add( userStyle );
-        //context.styleStack().addStyle(userStyle);
-    //}
-    //context.styleStack().setTypeProperties( "paragraph" );
-    //if( userStyle ) {
-    //    context.addStyles( userStyle, "paragraph" );
-    //}
+    KoParagraphStyle *userStyle = d->document->styleManager()->paragraphStyle(userStyleName);
+    //if( ! userStyle ) userStyle = d->document->styleManager()->defaultParagraphStyle();
+    if( userStyle ) {
+        context.styleStack().setTypeProperties( "paragraph" );
+        userStyle->loadOasis( context.styleStack() );
+        QTextBlock block = cursor.block();
+        userStyle->applyStyle(block);
+    }
 
     //KWTextParag::loadOasis
     QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
-    kDebug()<<"==> PARAGRAPH styleName="<<styleName<<" userStyleName="<<userStyleName<<" userStyle1="<<(userStyle1?"YES":"NULL")<<" userStyle2="<<(userStyle2?"YES":"NULL")<<endl;
+    kDebug()<<"==> PARAGRAPH styleName="<<styleName<<" userStyleName="<<userStyleName<<" userStyle="<<(userStyle?"YES":"NULL")<<endl;
     if ( !styleName.isEmpty() ) {
         const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
         QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
