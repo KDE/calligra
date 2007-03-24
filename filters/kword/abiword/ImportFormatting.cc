@@ -244,7 +244,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     {
         kwordDepth=level-1;
         kwordNumberingType=1;
-        kwordType=1; // PROVISORY
+        kwordType=1; // ### TEMPORARY
         kwordRightText=".";
     }
 
