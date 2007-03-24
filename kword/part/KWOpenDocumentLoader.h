@@ -69,15 +69,19 @@ signals:
     void sigProgress(int percent);
 
 private:
-    void loadOasisSettings(const QDomDocument& settings);
-    void loadOasisStyles(KoOasisLoadingContext& context);
-    bool loadOasisPageLayout(const QString& masterPageName, KoOasisLoadingContext& context);
+    void loadSettings(const QDomDocument& settings);
+    bool loadPageLayout(const QString& masterPageName, KoOasisLoadingContext& context);
     bool loadMasterPageStyle(const QString& masterPageName, KoOasisLoadingContext& context);
+    void loadStyles(KoOasisLoadingContext& context);
 
-    void loadOasisHeaderFooter(const QDomElement& masterPage, const QDomElement& masterPageStyle, KoOasisLoadingContext& context, bool isHeader);
+    void loadHeaderFooter(const QDomElement& masterPage, const QDomElement& masterPageStyle, KoOasisLoadingContext& context, bool isHeader);
 
-    void loadOasisText(const QDomElement& bodyElem, KoOasisLoadingContext& context, QTextCursor& cursor);
-    void loadOasisSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
+    void loadBody(const QDomElement& bodyElem, KoOasisLoadingContext& context, QTextCursor& cursor);
+    void loadParagraph(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
+    void loadHeading(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
+    void loadList(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
+    void loadSection(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
+    void loadSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
 
 private:
     /// \internal d-pointer class.

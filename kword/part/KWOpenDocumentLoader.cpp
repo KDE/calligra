@@ -70,11 +70,11 @@ KWOpenDocumentLoader::~KWOpenDocumentLoader() {
     delete d;
 }
 
+//KWDocument::loadOasis
 bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store) {
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
-
     kDebug(32001) << "========================> KWOpenDocumentLoader::load START" << endl;
 
     QDomElement content = doc.documentElement();
@@ -115,7 +115,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     // So we load the standard page layout to start with, and in KWTextParag
     // we might overwrite it with another one.
     d->currentMasterPage = "Standard";
-    if ( !loadOasisPageLayout( d->currentMasterPage, context ) )
+    if ( !loadPageLayout( d->currentMasterPage, context ) )
         return false;
 
 #if 0
@@ -138,10 +138,18 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     // By default display real variable value
     if ( !isReadWrite())
         m_varColl->variableSetting()->setDisplayFieldCode(false);
+#else
+    /*
+    const QDomElement* defaultParagStyle = styles.defaultStyle( "paragraph" );
+    if ( defaultParagStyle ) {
+        context.styleStack().push( *defaultParagStyle );
+        context.styleStack().setTypeProperties( "paragraph" );
+    }
+    */
 #endif
 
     // Load all styles before the corresponding paragraphs try to use them!
-    loadOasisStyles( context );
+    loadStyles( context );
 
 #if 0
     if ( m_frameStyleColl->loadOasisStyles( context ) == 0 ) {
@@ -154,6 +162,33 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     }
     static_cast<KWVariableSettings *>( m_varColl->variableSetting() )->loadNoteConfiguration( styles.officeStyle() );
     loadDefaultTableTemplates();
+#else
+    // We always needs at least one valid default paragraph style
+    KoParagraphStyle *defaultParagraphStyle = d->document->styleManager()->defaultParagraphStyle();
+    context.styleStack().setTypeProperties( "paragraph" );
+    defaultParagraphStyle->loadOasis( context.styleStack() );
+    context.styleStack().setTypeProperties( "text" );
+    defaultParagraphStyle->characterStyle()->loadOasis( context.styleStack() );
+    kDebug()<<"defaultParagraphStyle.name="<<defaultParagraphStyle->name()<<endl;
+
+    /*
+    //const KoXmlElement* defaultParagraphStyle = context.oasisStyles().defaultStyle("paragraph");
+    //Q_ASSERT(defaultParagraphStyle);
+    //if( ! defaultParagraphStyle ) {
+        KoParagraphStyle *parastyle = new KoParagraphStyle();
+        parastyle->setName("Standard");
+        d->document->styleManager()->add(parastyle);
+
+        context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
+        parastyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
+
+        KoCharacterStyle *charstyle = parastyle->characterStyle();
+        context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
+        charstyle->loadOasis(context.styleStack()); // load the KoCharacterStyle from the stylestack
+
+    //}
+    //Q_ASSERT( context.oasisStyles().defaultStyle("paragraph") );
+    */
 #endif
 
 #if 0
@@ -210,17 +245,16 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
 
     QTextCursor cursor( fs->document() );
-    loadOasisText(body, context, cursor);
+    loadBody(body, context, cursor);
 #endif
 
     if ( !loadMasterPageStyle( d->currentMasterPage, context ) )
         return false;
 
-    loadOasisSettings( settings );
+    loadSettings( settings );
 
 #if 0
-    // This sets the columns and header/footer flags, and calls recalcFrames,
-    // so it must be done last.
+    // This sets the columns and header/footer flags, and calls recalcFrames, so it must be done last.
     setPageLayout( m_pageLayout, m_loadingInfo->columns, m_loadingInfo->hf, false );
 #else
     d->document->m_pageSettings.setColumns( columns );
@@ -232,128 +266,16 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     return true;
 }
 
-//KoTextDocument::loadOasisText
-void KWOpenDocumentLoader::loadOasisText( const QDomElement& bodyElem, KoOasisLoadingContext& context, QTextCursor& cursor)
+void KWOpenDocumentLoader::loadSettings(const QDomDocument& settingsDoc)
 {
-    KoXmlElement tag;
-    forEachElement(tag, bodyElem)
-    {
-        context.styleStack().save();
-
-        const QString localName = tag.localName();
-        const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
-
-        if ( isTextNS && localName == "p" ) {  // text paragraph
-            kDebug()<<"==> PARAGRAPH <=="<<endl;
-            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
-#if 0
-            KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
-            parag->loadOasis( tag, context, styleColl, pos );
-#else
-            /*
-            //KWTextParag::loadOasis
-            const QString styleName = tag.attributeNS( KoXmlNS::text, "style-name", QString::null );
-            if ( !styleName.isEmpty() ) {
-                const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
-                //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
-                //if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
-                context.styleStack().save();
-                context.styleStack().setTypeProperties( "paragraph" );
-                context.addStyles( paragraphStyle, "paragraph" );
-                context.styleStack().restore();
-                //loadOasisPageLayout( masterPageName, context ); // page layout
-            }
-            */
-
-            loadOasisSpan(tag, context, cursor);
-
-            QTextBlockFormat emptyTbf;
-            QTextCharFormat emptyCf;
-            cursor.insertBlock(emptyTbf, emptyCf);
-#endif
-        }
-        else if ( isTextNS && localName == "h" ) // heading
-        {
-            kDebug()<<"==> HEADING <=="<<endl;
-            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
-#if 0
-            int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
-            bool listOK = false;
-            // When a heading is inside a list, it seems that the list prevails.
-            // Example:
-            //    <text:list text:style-name="Numbering 1">
-            //      <text:list-item text:start-value="5">
-            //        <text:h text:style-name="P2" text:level="4">The header</text:h>
-            // where P2 has list-style-name="something else"
-            // Result: the numbering of the header follows "Numbering 1".
-            // So we use the style for the outline level only if we're not inside a list:
-            //if ( !context.atStartOfListItem() )
-            // === The new method for this is that we simply override it after loading.
-            listOK = context.pushOutlineListLevelStyle( level );
-            int restartNumbering = -1;
-            if ( tag.hasAttributeNS( KoXmlNS::text, "start-value" ) )
-                // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-                restartNumbering = tag.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
-            KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
-            parag->loadOasis( tag, context, styleColl, pos );
-            if ( !lastParagraph ) setFirstParag( parag ); // First parag
-            lastParagraph = parag;
-            if ( listOK ) {
-                parag->applyListStyle( context, restartNumbering, true /*ordered*/, true /*heading*/, level );
-                context.listStyleStack().pop();
-            }
-#else
-            //KWTextParag::loadOasis
-            const QString styleName = tag.attributeNS( KoXmlNS::text, "style-name", QString::null );
-            if ( !styleName.isEmpty() )
-            {
-                const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
-                //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
-                //if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
-                kDebug(32001) << "KWOpenDocumentLoader::loadOasisText styleName=" << styleName << endl;
-                context.styleStack().save();
-                context.styleStack().setTypeProperties( "paragraph" );
-                context.addStyles( paragraphStyle, "paragraph" );
-                context.styleStack().restore();
-                //loadOasisPageLayout( masterPageName, context ); // page layout
-#endif
-            }
-
-            loadOasisSpan(tag, context, cursor);
-
-            QTextBlockFormat emptyTbf;
-            QTextCharFormat emptyCf;
-            cursor.insertBlock(emptyTbf, emptyCf);
-        }
-#if 0
-        else if ( isTextNS &&
-                  ( localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
-                    || localName == "list" || localName == "numbered-paragraph" ) )  // OASIS
-        {
-            lastParagraph = loadList( tag, context, lastParagraph, styleColl, nextParagraph );
-        }
-        else if ( isTextNS && localName == "section" ) // Temporary support (###TODO)
-        {
-            kdDebug(32500) << "Section found!" << endl;
-            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "section" );
-            lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl, nextParagraph );
-        }
-#endif
-        context.styleStack().restore(); // remove the styles added by the paragraph or list
-    }
-}
-
-void KWOpenDocumentLoader::loadOasisSettings(const QDomDocument& settingsDoc)
-{
-    if ( settingsDoc.isNull() ) {
+    if ( settingsDoc.isNull() )
         return;
-    }
 
+    kDebug(32001)<<"KWOpenDocumentLoader::loadSettings"<<endl;
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
-    if ( !viewSettings.isNull() ) {
+    if ( !viewSettings.isNull() )
         d->document->setUnit( KoUnit::unit(viewSettings.parseConfigItemString("unit")) );
-    }
 
     //KWOasisLoader::loadOasisIgnoreList
     KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
@@ -370,9 +292,112 @@ void KWOpenDocumentLoader::loadOasisSettings(const QDomDocument& settingsDoc)
 #endif
 }
 
-//KoStyleCollection::loadOasisStyles
-void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
+bool KWOpenDocumentLoader::loadPageLayout(const QString& masterPageName, KoOasisLoadingContext& context)
 {
+    kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout"<<endl;
+    const KoOasisStyles& styles = context.oasisStyles();
+    Q_ASSERT( styles.masterPages().contains(masterPageName) );
+    const QDomElement* masterPage = styles.masterPages()[ masterPageName ];
+    Q_ASSERT( masterPage );
+    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
+    Q_ASSERT( masterPageStyle );
+    if ( masterPageStyle ) {
+        KoPageLayout pageLayout = KoPageLayout::standardLayout();
+        pageLayout.loadOasis( *masterPageStyle );
+        d->document->m_pageManager.setDefaultPage(pageLayout);
+#if 0
+        const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+        const QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
+        if ( !footnoteSep.isNull() ) {
+            // style:width="0.018cm" style:distance-before-sep="0.101cm"
+            // style:distance-after-sep="0.101cm" style:adjustment="left"
+            // style:rel-width="25%" style:color="#000000"
+            const QString width = footnoteSep.attributeNS( KoXmlNS::style, "width", QString::null );
+            if ( !width.isEmpty() ) m_footNoteSeparatorLineWidth = KoUnit::parseValue( width );
+            QString pageWidth = footnoteSep.attributeNS( KoXmlNS::style, "rel-width", QString::null );
+            if ( pageWidth.endsWith( "%" ) ) {
+                pageWidth.truncate( pageWidth.length() - 1 ); // remove '%'
+                m_iFootNoteSeparatorLineLength = qRound( pageWidth.toDouble() );
+            }
+            // Not in KWord: color, distance before and after separator
+            const QString style = footnoteSep.attributeNS( KoXmlNS::style, "line-style", QString::null );
+            if ( style == "solid" || style.isEmpty() ) m_footNoteSeparatorLineType = SLT_SOLID;
+            else if ( style == "dash" ) m_footNoteSeparatorLineType = SLT_DASH;
+            else if ( style == "dotted" ) m_footNoteSeparatorLineType = SLT_DOT;
+            else if ( style == "dot-dash" ) m_footNoteSeparatorLineType = SLT_DASH_DOT;
+            else if ( style == "dot-dot-dash" ) m_footNoteSeparatorLineType = SLT_DASH_DOT_DOT;
+            else kdDebug() << "Unknown value for m_footNoteSeparatorLineType: " << style << endl;
+            const QString pos = footnoteSep.attributeNS( KoXmlNS::style, "adjustment", QString::null );
+            if ( pos == "centered" ) m_footNoteSeparatorLinePos = SLP_CENTERED;
+            else if ( pos == "right") m_footNoteSeparatorLinePos = SLP_RIGHT;
+            else // if ( pos == "left" ) m_footNoteSeparatorLinePos = SLP_LEFT;
+        }
+        const QDomElement columnsElem = KoDom::namedItemNS( properties, KoXmlNS::style, "columns" );
+        if ( !columnsElem.isNull() ) {
+            columns.columns = columnsElem.attributeNS( KoXmlNS::fo, "column-count", QString::null ).toInt();
+            if ( columns.columns == 0 ) columns.columns = 1;
+            // TODO OASIS OpenDocument supports columns of different sizes, using <style:column style:rel-width="...">
+            // (with fo:start-indent/fo:end-indent for per-column spacing)
+            // But well, it also allows us to specify a single gap.
+            if ( columnsElem.hasAttributeNS( KoXmlNS::fo, "column-gap" ) ) columns.ptColumnSpacing = KoUnit::parseValue( columnsElem.attributeNS( KoXmlNS::fo, "column-gap", QString::null ) );
+            // It also supports drawing a vertical line as a separator...
+        }
+        // TODO spHeadBody (where is this in OOo?)
+        // TODO spFootBody (where is this in OOo?)
+        // Answer: margins of the <style:header-footer> element
+#endif
+    }
+#if 0
+    else // this doesn't happen with normal documents, but it can happen if copying something,
+         // pasting into konq as foo.odt, then opening that...
+    {
+        d->columns.columns = 1;
+        d->columns.columnSpacing = 2;
+        m_headerVisible = false;
+        m_footerVisible = false;
+        m_pageLayout = KoPageLayout::standardLayout();
+        pageManager()->setDefaultPage(m_pageLayout);
+    }
+#endif
+    return true;
+}
+
+bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, KoOasisLoadingContext& context)
+{
+    kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle"<<endl;
+    const KoOasisStyles& styles = context.oasisStyles();
+    Q_ASSERT( styles.masterPages().contains(masterPageName) );
+    const QDomElement *masterPage = styles.masterPages()[ masterPageName ];
+    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
+#if 0
+    // This check is done here and not in loadOasisPageLayout in case the Standard master-page
+    // has no page information but the first paragraph points to a master-page that does (#129585)
+    if ( m_pageLayout.ptWidth <= 1e-13 || m_pageLayout.ptHeight <= 1e-13 ) {
+        // Loading page layout failed, try to see why.
+        QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+        //if ( properties.isNull() )
+        //    setErrorMessage( i18n( "Invalid document. No page layout properties were found. The application which produced this document isn't OASIS-compliant." ) );
+        //else if ( properties.hasAttributeNS( KoXmlNS::fo, "page-width" ) )
+        //    setErrorMessage( i18n( "Invalid document. Page layout has no page width. The application which produced this document isn't OASIS-compliant." ) );
+        //else
+        if ( properties.hasAttributeNS( "http://www.w3.org/1999/XSL/Format", "page-width" ) )
+            setErrorMessage( i18n( "Invalid document. 'fo' has the wrong namespace. The application which produced this document is not OASIS-compliant." ) );
+        else
+            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
+        return false;
+    }
+#endif
+    if ( masterPageStyle ) {
+        loadHeaderFooter(*masterPage, *masterPageStyle, context, true); // Load headers
+        loadHeaderFooter(*masterPage, *masterPageStyle, context, false); // Load footers
+    }
+    return true;
+}
+
+//KoStyleCollection::loadOasisStyles
+void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context)
+{
+    kDebug(32001)<<"KWOpenDocumentLoader::loadStyles"<<endl;
 #if 0
     QStringList followingStyles;
     QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
@@ -386,8 +411,7 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         if( !defaultStyleDeleted ) { // we are going to import at least one style.
             KoParagStyle *s = defaultStyle();
             //kDebug() << "loadOasisStyles looking for Standard, to delete it. Found " << s << endl;
-            if(s) // delete the standard style.
-                removeStyle(s);
+            if(s) removeStyle(s); // delete the standard style.
             defaultStyleDeleted = true;
         }
         KoParagStyle *sty = new KoParagStyle( QString::null );
@@ -406,26 +430,21 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         }
         else kWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
-    if( followingStyles.count() != styleList().count() ) {
-        kDebug() << "Ouch, " << followingStyles.count() << " following-styles, but "
-                       << styleList().count() << " styles in styleList" << endl;
-    }
+    if( followingStyles.count() != styleList().count() )
+        kDebug() << "Ouch, " << followingStyles.count() << " following-styles, but " << styleList().count() << " styles in styleList" << endl;
     unsigned int i = 0;
     QString tmpString;
     foreach( tmpString, followingStyles ) {
         const QString followingStyleName = tmpString;
         if ( !followingStyleName.isEmpty() ) {
             KoParagStyle * style = findStyle( followingStyleName );
-            if ( style )
-                styleAt(i)->setFollowingStyle( style );
+            if ( style ) styleAt(i)->setFollowingStyle( style );
         }
     }
     // TODO the same thing for style inheritance (style:parent-style-name) and setParentStyle()
     Q_ASSERT( defaultStyle() );
     return stylesLoaded;
 #else
-    kDebug(32001)<<"############################### KWOpenDocumentLoader::loadOasisStyles"<<endl;
-
     QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
     foreach(KoXmlElement* styleElem, userStyles) {
         if ( !styleElem ) continue;
@@ -437,8 +456,7 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         if ( displayName.isEmpty() )
             displayName = name;
 
-        kDebug(32001)<<"KWOpenDocumentLoader::loadOasisStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
-
+        kDebug(32001)<<"KWOpenDocumentLoader::loadStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
 #if 0
         // OOo hack:
         //m_bOutline = name.startsWith( "Heading" );
@@ -470,6 +488,343 @@ void KWOpenDocumentLoader::loadOasisStyles(KoOasisLoadingContext& context)
         context.styleStack().restore();
     }
 #endif
+}
+
+//KWOasisLoader::loadOasisHeaderFooter
+void KWOpenDocumentLoader::loadHeaderFooter(const QDomElement& masterPage, const QDomElement& masterPageStyle, KoOasisLoadingContext& context, bool isHeader)
+{
+    // Not OpenDocument compliant element to define the first header/footer.
+    QDomElement firstElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
+    // The actual content of the header/footer.
+    QDomElement elem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header" : "footer" );
+
+    const bool hasFirst = !firstElem.isNull();
+    if ( !hasFirst && elem.isNull() )
+        return; // no header/footer
+
+    const QString localName = elem.localName();
+    kDebug()<<"KWOpenDocumentLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst<<endl;
+
+    // Formatting properties for headers and footers on a page.
+    QDomElement styleElem = KoDom::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
+
+    // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
+    // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
+    QDomElement leftElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
+
+    // Determinate the type of the frameset used for the header/footer.
+    QString fsTypeName;
+    KWord::TextFrameSetType fsType = KWord::OtherTextFrameSet;
+    if ( localName == "header" ) {
+        fsType = KWord::OddPagesHeaderTextFrameSet;
+        fsTypeName = leftElem.isNull() ? i18n( "Header" ) : i18n("Odd Pages Header");
+    }
+    else if ( localName == "header-left" ) {
+        fsType = KWord::EvenPagesHeaderTextFrameSet;
+        fsTypeName = i18n("Even Pages Header");
+    }
+    else if ( localName == "footer" ) {
+        fsType = KWord::OddPagesFooterTextFrameSet;
+        fsTypeName = leftElem.isNull() ? i18n( "Footer" ) : i18n("Odd Pages Footer");
+    }
+    else if ( localName == "footer-left" ) {
+        fsType = KWord::EvenPagesFooterTextFrameSet;
+        fsTypeName = i18n("Even Pages Footer");
+    }
+    else if ( localName == "header-first" ) { // NOT OASIS COMPLIANT
+        fsType = KWord::FirstPageHeaderTextFrameSet;
+        fsTypeName = i18n("First Page Header");
+    }
+    else if ( localName == "footer-first" ) { // NOT OASIS COMPLIANT
+        fsType = KWord::FirstPageFooterTextFrameSet;
+        fsTypeName = i18n("First Page Footer");
+    }
+    else {
+        kWarning(32001) << "Unknown tag in KWOpenDocumentLoader::loadHeaderFooter: " << localName << endl;
+        return;
+    }
+
+    // Set the type of the header/footer in the KWPageSettings instance of our document.
+    if ( !leftElem.isNull() ) {
+        //d->hf.header = hasFirst ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
+        if( isHeader ) {
+            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeEvenOdd);
+            //d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+        }
+        else {
+            d->document->m_pageSettings.setFooterPolicy(KWord::HFTypeEvenOdd);
+            //d->document->m_pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
+        }
+    }
+    else {
+        //d->hf.header = hasFirst ? HF_FIRST_DIFF : HF_SAME;
+        if( isHeader ) {
+            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeSameAsFirst);
+            d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+        }
+        else {
+            d->document->m_pageSettings.setFooterPolicy(KWord::HFTypeSameAsFirst);
+            d->document->m_pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
+        }
+    }
+
+#if 0
+    KWTextFrameSet *fs = new KWTextFrameSet( m_doc, headerTypeToFramesetName( localName, hasEvenOdd ) );
+    fs->setFrameSetInfo( headerTypeToFrameInfo( localName, hasEvenOdd ) );
+    m_doc->addFrameSet( fs, false );
+    if ( !style.isNull() ) context.styleStack().push( style );
+    KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
+    frame->loadCommonOasisProperties( context, fs, "header-footer" );
+    const QString minHeight = context.styleStack().attributeNS( KoXmlNS::fo, "min-height" );
+    if ( !minHeight.isEmpty() ) frame->setMinimumFrameHeight( KoUnit::parseValue( minHeight ) );
+    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
+    frame->setNewFrameBehavior( KWFrame::Copy );
+    fs->addFrame( frame );
+    if ( !style.isNull() ) context.styleStack().pop(); // don't let it be active when parsing the text
+    context.setUseStylesAutoStyles( true ); // use auto-styles from styles.xml, not those from content.xml
+    fs->loadOasisContent( headerFooter, context );
+    context.setUseStylesAutoStyles( false );
+    if ( isHeader ) m_doc->m_headerVisible = true; else m_doc->m_footerVisible = true;
+    if ( !headerStyle.isNull() ) { // The bottom margin of headers is what we call headerBodySpacing
+        context.styleStack().push( headerStyle );
+        context.styleStack().setTypeProperties( "header-footer" );
+        d->hf.ptHeaderBodySpacing = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-bottom" ) );
+        context.styleStack().pop();
+    }
+    if ( !footerStyle.isNull() ) { // The top margin of footers is what we call footerBodySpacing
+        context.styleStack().push( footerStyle );
+        context.styleStack().setTypeProperties( "header-footer" );
+        d->hf.ptFooterBodySpacing = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-top" ) );
+        context.styleStack().pop();
+    }
+    // TODO ptFootNoteBodySpacing
+#else
+    // use auto-styles from styles.xml, not those from content.xml
+    context.setUseStylesAutoStyles( true );
+
+    // Add the frameset and the shape for the header/footer to the document.
+    KWTextFrameSet *fs = new KWTextFrameSet( d->document, fsType );
+    fs->setAllowLayout(false);
+    fs->setName(fsTypeName);
+    d->document->addFrameSet(fs);
+    KoShapeFactory *factory = KoShapeRegistry::instance()->get(TextShape_SHAPEID);
+    Q_ASSERT(factory);
+    KoShape *shape = factory->createDefaultShape();
+    KWTextFrame *frame = new KWTextFrame(shape, fs);
+    frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
+
+    QTextCursor cursor( fs->document() );
+    //cursor.insertText(fsTypeName); //TESTCASE
+
+    if ( !leftElem.isNull() ) // if "header-left" or "footer-left" was defined, the content is within the leftElem
+        loadBody(leftElem, context, cursor);
+    else if( hasFirst ) // if there was a "header-first" or "footer-first" defined, the content is within the firstElem
+        loadBody(firstElem, context, cursor);
+    else // else the content is within the elem
+        loadBody(elem, context, cursor);
+
+    // restore use of auto-styles from content.xml, not those from styles.xml
+    context.setUseStylesAutoStyles( false );
+
+    //TODO handle style, seems to be similar to what is done at KoPageLayout::loadOasis
+#endif
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//KoTextDocument::loadOasisText
+void KWOpenDocumentLoader::loadBody( const QDomElement& bodyElem, KoOasisLoadingContext& context, QTextCursor& cursor)
+{
+    kDebug(32001)<<"KWOpenDocumentLoader::loadBody"<<endl;
+    KoXmlElement tag;
+    forEachElement(tag, bodyElem) {
+        context.styleStack().save();
+        const QString localName = tag.localName();
+        const bool isTextNS = ( tag.namespaceURI() == KoXmlNS::text );
+
+        if ( isTextNS && localName == "p" ) {  // text paragraph
+            loadParagraph(tag, context, cursor);
+        }
+        else if ( isTextNS && localName == "h" ) { // heading
+            loadHeading(tag, context, cursor);
+        }
+        else if ( isTextNS &&
+                  ( localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
+                    || localName == "list" || localName == "numbered-paragraph" ) ) { // OASIS
+            loadList(tag, context, cursor);
+        }
+        else if ( isTextNS && localName == "section" ) { // Temporary support (###TODO)
+            loadSection(tag, context, cursor);
+        }
+
+        context.styleStack().restore(); // remove the styles added by the paragraph or list
+    }
+}
+
+//KoTextDocument::loadOasisText
+void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor)
+{
+    kDebug(32001)<<"KWOpenDocumentLoader::loadParagraph"<<endl;
+    context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
+#if 0
+    KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
+    parag->loadOasis( tag, context, styleColl, pos );
+#endif
+    QString userStyleName = context.styleStack().userStyleName( "paragraph" );
+    const QDomElement* userStyle1 = context.oasisStyles().findStyle( userStyleName, "paragraph" );
+    KoParagraphStyle *userStyle2 = d->document->styleManager()->paragraphStyle(userStyleName);
+    //if( ! userStyle ) {
+        //userStyle = d->document->styleManager()->defaultParagraphStyle();
+        //d->document->styleManager()->add( userStyle );
+        //context.styleStack().addStyle(userStyle);
+    //}
+    //context.styleStack().setTypeProperties( "paragraph" );
+    //if( userStyle ) {
+    //    context.addStyles( userStyle, "paragraph" );
+    //}
+
+    //KWTextParag::loadOasis
+    QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+    kDebug()<<"==> PARAGRAPH styleName="<<styleName<<" userStyleName="<<userStyleName<<" userStyle1="<<(userStyle1?"YES":"NULL")<<" userStyle2="<<(userStyle2?"YES":"NULL")<<endl;
+    if ( !styleName.isEmpty() ) {
+        const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
+        QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
+        if ( masterPageName.isEmpty() )
+            masterPageName = "Standard";
+
+        kDebug(32001) << "KWOpenDocumentLoader::loadSpan paragraphStyle.localName=" << (paragraphStyle ? paragraphStyle->localName() : "NULL") << " masterPageName=" << masterPageName << endl;
+
+        /*
+        QString styleName = context.styleStack().userStyleName( "paragraph" );
+        KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
+        if ( !style ) {
+            kDebug(32001) << "KWOpenDocumentLoader::loadSpan: Unknown style. Using default!" << endl;
+            style = d->document->styleManager()->defaultParagraphStyle();
+        }
+        */
+
+        //d->currentMasterPage = masterPageName; // do this first to avoid recursion
+        context.styleStack().save();
+        context.styleStack().setTypeProperties( "paragraph" );
+        context.addStyles( paragraphStyle, "paragraph" );
+
+        KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
+        if ( style ) {
+            style->loadOasis( context.styleStack() );
+            QTextBlock block = cursor.block();
+            style->applyStyle(block);
+        }
+
+#if 0
+        // This is quite ugly... OOo stores the starting page-number in the first paragraph style...
+        QString pageNumber = context.styleStack().attributeNS( KoXmlNS::style, "page-number" );
+        if ( !pageNumber.isEmpty() )
+            doc->variableCollection()->variableSetting()->setStartingPageNumber( pageNumber.toInt() );
+#endif
+        context.styleStack().restore();
+        loadPageLayout( masterPageName, context ); // page layout
+    }
+
+    //KoTextParag::loadOasisSpan
+    loadSpan(parent, context, cursor);
+
+    QTextBlockFormat emptyTbf;
+    QTextCharFormat emptyCf;
+    cursor.insertBlock(emptyTbf, emptyCf);
+}
+
+//KoTextDocument::loadOasisText
+void KWOpenDocumentLoader::loadHeading(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor)
+{
+    kDebug(32001)<<"KWOpenDocumentLoader::loadHeading"<<endl;
+    context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
+#if 0
+    int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
+    bool listOK = false;
+    // When a heading is inside a list, it seems that the list prevails.
+    // Example:
+    //    <text:list text:style-name="Numbering 1">
+    //      <text:list-item text:start-value="5">
+    //        <text:h text:style-name="P2" text:level="4">The header</text:h>
+    // where P2 has list-style-name="something else"
+    // Result: the numbering of the header follows "Numbering 1".
+    // So we use the style for the outline level only if we're not inside a list:
+    //if ( !context.atStartOfListItem() )
+    // === The new method for this is that we simply override it after loading.
+    listOK = context.pushOutlineListLevelStyle( level );
+    int restartNumbering = -1;
+    if ( tag.hasAttributeNS( KoXmlNS::text, "start-value" ) )
+        // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
+        restartNumbering = tag.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
+    KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
+    parag->loadOasis( tag, context, styleColl, pos );
+    if ( !lastParagraph ) setFirstParag( parag ); // First parag
+    lastParagraph = parag;
+    if ( listOK ) {
+        parag->applyListStyle( context, restartNumbering, true /*ordered*/, true /*heading*/, level );
+        context.listStyleStack().pop();
+    }
+#else
+    //KWTextParag::loadOasis
+    const QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+    kDebug()<<"==> HEADING styleName="<<styleName<<endl;
+    if ( !styleName.isEmpty() ) {
+        const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
+        //QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
+        //if ( masterPageName.isEmpty() ) masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
+        kDebug(32001) << "KWOpenDocumentLoader::loadBody styleName=" << styleName << endl;
+        context.styleStack().save();
+        context.styleStack().setTypeProperties( "paragraph" );
+        context.addStyles( paragraphStyle, "paragraph" );
+        context.styleStack().restore();
+        //loadPageLayout( masterPageName, context ); // page layout
+    }
+#endif
+
+    //KoTextParag::loadOasisSpan
+    loadSpan(parent, context, cursor);
+
+    QTextBlockFormat emptyTbf;
+    QTextCharFormat emptyCf;
+    cursor.insertBlock(emptyTbf, emptyCf);
+}
+
+//KoTextDocument::loadOasisText
+void KWOpenDocumentLoader::loadList(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor)
+{
+    kDebug(32001)<<"KWOpenDocumentLoader::loadList"<<endl;
+    //TODO
+    //lastParagraph = loadList( tag, context, lastParagraph, styleColl, nextParagraph );
+    Q_UNUSED(parent);
+    Q_UNUSED(context);
+    Q_UNUSED(cursor);
+}
+
+//KoTextDocument::loadOasisText
+void KWOpenDocumentLoader::loadSection(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor)
+{
+    kDebug(32001)<<"KWOpenDocumentLoader::loadSection"<<endl;
+    //TODO
+    //kdDebug(32500) << "Section found!" << endl;
+    //context.fillStyleStack( tag, KoXmlNS::text, "style-name", "section" );
+    //lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl, nextParagraph );
+    Q_UNUSED(parent);
+    Q_UNUSED(context);
+    Q_UNUSED(cursor);
 }
 
 // we cannot use QString::simplifyWhiteSpace() because it removes
@@ -515,16 +870,17 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
 }
 
 //KoTextParag::loadOasisSpan
-void KWOpenDocumentLoader::loadOasisSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor)
+void KWOpenDocumentLoader::loadSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor)
 {
     QString styleName = context.styleStack().userStyleName( "paragraph" );
+    kDebug(32001) << "KWOpenDocumentLoader::loadSpan styleName=" << styleName << endl;
     KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
     if ( !style ) {
+        kDebug(32001) << "KWOpenDocumentLoader::loadSpan: Unknown style. Using default!" << endl;
         style = d->document->styleManager()->defaultParagraphStyle();
     }
 
-    kDebug(32001) << "KWOpenDocumentLoader::loadOasisSpan styleName=" << styleName << " styleFound=" << (style != 0) << " style->alignment="<<(style ? int(style->alignment()) : -1)<<endl;
-
+#if 0
 //TODO get right of this dirty hack
 if(parent.localName()!="span") {
     context.styleStack().setTypeProperties( "paragraph" );
@@ -532,6 +888,7 @@ if(parent.localName()!="span") {
     QTextBlock block = cursor.block();
     style->applyStyle(block);
 }
+#endif
 
     for (KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
@@ -578,11 +935,11 @@ if(parent.localName()!="span") {
             cursor.setPosition(prevpos, QTextCursor::MoveAnchor);
             cursor.setPosition(currentpos, QTextCursor::KeepAnchor);
             if( charstyle1 ) {
-                kDebug()<<"  5 => ///////////////////////////////////////////////////////"<<endl;
+                kDebug()<<"  5 => ///"<<endl;
                 kDebug()<<"  selectionStart="<<cursor.selectionStart()<<" selectionEnd="<<cursor.selectionEnd()<<" selectedText="<<cursor.selectedText()<<endl;
                 charstyle1->applyStyle(&cursor);
             } else {
-                kDebug()<<"  6 => ///////////////////////////////////////////////////////"<<endl;
+                kDebug()<<"  6 => ///"<<endl;
                 /*KoCharacterStyle *charstyle2 = d->document->styleManager()->characterStyle( cursor.blockCharFormat().intProperty(KoCharacterStyle::StyleId) );
                 if(charstyle2) {
                     QTextBlock block = cursor.block();
@@ -616,7 +973,7 @@ if(parent.localName()!="span") {
                 charstyle->applyStyle(&cursor);
             }
 #endif
-            loadOasisSpan( ts, context, cursor ); // recurse
+            loadSpan( ts, context, cursor ); // recurse
 
             context.styleStack().restore();
         }
@@ -684,287 +1041,6 @@ if(parent.localName()!="span") {
         // restore the propably by loadSpanTag modified stylestack
         context.styleStack().restore();
     }
-}
-
-bool KWOpenDocumentLoader::loadOasisPageLayout(const QString& masterPageName, KoOasisLoadingContext& context)
-{
-    const KoOasisStyles& styles = context.oasisStyles();
-    Q_ASSERT( styles.masterPages().contains(masterPageName) );
-    const QDomElement* masterPage = styles.masterPages()[ masterPageName ];
-    Q_ASSERT( masterPage );
-    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
-    Q_ASSERT( masterPageStyle );
-    if ( masterPageStyle ) {
-        KoPageLayout pageLayout = KoPageLayout::standardLayout();
-        pageLayout.loadOasis( *masterPageStyle );
-        d->document->m_pageManager.setDefaultPage(pageLayout);
-
-#if 0
-        const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
-        const QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
-        if ( !footnoteSep.isNull() ) {
-            // style:width="0.018cm" style:distance-before-sep="0.101cm"
-            // style:distance-after-sep="0.101cm" style:adjustment="left"
-            // style:rel-width="25%" style:color="#000000"
-            const QString width = footnoteSep.attributeNS( KoXmlNS::style, "width", QString::null );
-            if ( !width.isEmpty() ) {
-                m_footNoteSeparatorLineWidth = KoUnit::parseValue( width );
-            }
-            QString pageWidth = footnoteSep.attributeNS( KoXmlNS::style, "rel-width", QString::null );
-            if ( pageWidth.endsWith( "%" ) ) {
-                pageWidth.truncate( pageWidth.length() - 1 ); // remove '%'
-                m_iFootNoteSeparatorLineLength = qRound( pageWidth.toDouble() );
-            }
-            // Not in KWord: color, distance before and after separator
-            const QString style = footnoteSep.attributeNS( KoXmlNS::style, "line-style", QString::null );
-            if ( style == "solid" || style.isEmpty() )
-                m_footNoteSeparatorLineType = SLT_SOLID;
-            else if ( style == "dash" )
-                m_footNoteSeparatorLineType = SLT_DASH;
-            else if ( style == "dotted" )
-                m_footNoteSeparatorLineType = SLT_DOT;
-            else if ( style == "dot-dash" )
-                m_footNoteSeparatorLineType = SLT_DASH_DOT;
-            else if ( style == "dot-dot-dash" )
-                m_footNoteSeparatorLineType = SLT_DASH_DOT_DOT;
-            else
-                kdDebug() << "Unknown value for m_footNoteSeparatorLineType: " << style << endl;
-            const QString pos = footnoteSep.attributeNS( KoXmlNS::style, "adjustment", QString::null );
-            if ( pos == "centered" )
-                m_footNoteSeparatorLinePos = SLP_CENTERED;
-            else if ( pos == "right")
-                m_footNoteSeparatorLinePos = SLP_RIGHT;
-            else // if ( pos == "left" )
-                m_footNoteSeparatorLinePos = SLP_LEFT;
-        }
-        const QDomElement columnsElem = KoDom::namedItemNS( properties, KoXmlNS::style, "columns" );
-        if ( !columnsElem.isNull() ) {
-            columns.columns = columnsElem.attributeNS( KoXmlNS::fo, "column-count", QString::null ).toInt();
-            if ( columns.columns == 0 )
-                columns.columns = 1;
-            // TODO OASIS OpenDocument supports columns of different sizes, using <style:column style:rel-width="...">
-            // (with fo:start-indent/fo:end-indent for per-column spacing)
-            // But well, it also allows us to specify a single gap.
-            if ( columnsElem.hasAttributeNS( KoXmlNS::fo, "column-gap" ) )
-                columns.ptColumnSpacing = KoUnit::parseValue( columnsElem.attributeNS( KoXmlNS::fo, "column-gap", QString::null ) );
-            // It also supports drawing a vertical line as a separator...
-        }
-        // TODO spHeadBody (where is this in OOo?)
-        // TODO spFootBody (where is this in OOo?)
-        // Answer: margins of the <style:header-footer> element
-#endif
-    }
-#if 0
-    else // this doesn't happen with normal documents, but it can happen if copying something,
-         // pasting into konq as foo.odt, then opening that...
-    {
-        d->columns.columns = 1;
-        d->columns.columnSpacing = 2;
-        m_headerVisible = false;
-        m_footerVisible = false;
-        m_pageLayout = KoPageLayout::standardLayout();
-        pageManager()->setDefaultPage(m_pageLayout);
-    }
-#endif
-    return true;
-}
-
-bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, KoOasisLoadingContext& context)
-{
-    const KoOasisStyles& styles = context.oasisStyles();
-    Q_ASSERT( styles.masterPages().contains(masterPageName) );
-    const QDomElement *masterPage = styles.masterPages()[ masterPageName ];
-    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
-
-#if 0
-    // This check is done here and not in loadOasisPageLayout in case the Standard master-page
-    // has no page information but the first paragraph points to a master-page that does (#129585)
-    if ( m_pageLayout.ptWidth <= 1e-13 || m_pageLayout.ptHeight <= 1e-13 ) {
-        // Loading page layout failed, try to see why.
-        QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
-        //if ( properties.isNull() )
-        //    setErrorMessage( i18n( "Invalid document. No page layout properties were found. The application which produced this document isn't OASIS-compliant." ) );
-        //else if ( properties.hasAttributeNS( KoXmlNS::fo, "page-width" ) )
-        //    setErrorMessage( i18n( "Invalid document. Page layout has no page width. The application which produced this document isn't OASIS-compliant." ) );
-        //else
-        if ( properties.hasAttributeNS( "http://www.w3.org/1999/XSL/Format", "page-width" ) )
-            setErrorMessage( i18n( "Invalid document. 'fo' has the wrong namespace. The application which produced this document is not OASIS-compliant." ) );
-        else
-            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
-        return false;
-    }
-#endif
-
-    if ( masterPageStyle ) {
-        // Load headers
-        loadOasisHeaderFooter(*masterPage, *masterPageStyle, context, true);
-        // Load footers
-        loadOasisHeaderFooter(*masterPage, *masterPageStyle, context, false);
-    }
-
-    return true;
-}
-
-//KWOasisLoader::loadOasisHeaderFooter
-void KWOpenDocumentLoader::loadOasisHeaderFooter(const QDomElement& masterPage, const QDomElement& masterPageStyle, KoOasisLoadingContext& context, bool isHeader)
-{
-    // Not OpenDocument compliant element to define the first header/footer.
-    QDomElement firstElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
-    // The actual content of the header/footer.
-    QDomElement elem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header" : "footer" );
-
-    const bool hasFirst = !firstElem.isNull();
-    if ( !hasFirst && elem.isNull() )
-        return; // no header/footer
-
-    const QString localName = elem.localName();
-    kDebug()<<"KWOpenDocumentLoader::loadOasisHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst<<endl;
-
-    // Formatting properties for headers and footers on a page.
-    QDomElement styleElem = KoDom::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
-
-    // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
-    // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
-    QDomElement leftElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
-
-    // Determinate the type of the frameset used for the header/footer.
-    QString fsTypeName;
-    KWord::TextFrameSetType fsType = KWord::OtherTextFrameSet;
-    if ( localName == "header" ) {
-        fsType = KWord::OddPagesHeaderTextFrameSet;
-        fsTypeName = leftElem.isNull() ? i18n( "Header" ) : i18n("Odd Pages Header");
-    }
-    else if ( localName == "header-left" ) {
-        fsType = KWord::EvenPagesHeaderTextFrameSet;
-        fsTypeName = i18n("Even Pages Header");
-    }
-    else if ( localName == "footer" ) {
-        fsType = KWord::OddPagesFooterTextFrameSet;
-        fsTypeName = leftElem.isNull() ? i18n( "Footer" ) : i18n("Odd Pages Footer");
-    }
-    else if ( localName == "footer-left" ) {
-        fsType = KWord::EvenPagesFooterTextFrameSet;
-        fsTypeName = i18n("Even Pages Footer");
-    }
-    else if ( localName == "header-first" ) { // NOT OASIS COMPLIANT
-        fsType = KWord::FirstPageHeaderTextFrameSet;
-        fsTypeName = i18n("First Page Header");
-    }
-    else if ( localName == "footer-first" ) { // NOT OASIS COMPLIANT
-        fsType = KWord::FirstPageFooterTextFrameSet;
-        fsTypeName = i18n("First Page Footer");
-    }
-    else {
-        kWarning(32001) << "Unknown tag in KWOpenDocumentLoader::loadOasisHeaderFooter: " << localName << endl;
-        return;
-    }
-
-    // Set the type of the header/footer in the KWPageSettings instance of our document.
-    /*
-        enum HeaderFooterType {//KWord2
-            HFTypeNone,       ///< Don't show the frames
-            HFTypeEvenOdd,    ///< Show different content for even and odd pages
-            HFTypeUniform,    ///< Show the same content for each page
-            HFTypeSameAsFirst ///< Show the same content for each page, including the first page
-        };
-        enum KoHFType { //KWord1.6
-            HF_SAME = 0,            ///< 0: Header/Footer is the same on all pages
-            HF_FIRST_EO_DIFF = 1,   ///< 1: Header/Footer is different on first, even and odd pages (2&3)
-            HF_FIRST_DIFF = 2,      ///< 2: Header/Footer for the first page differs
-            HF_EO_DIFF = 3          ///< 3: Header/Footer for even - odd pages are different
-        };
-    */
-    if ( !leftElem.isNull() ) {
-        //d->hf.header = hasFirst ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
-        if( isHeader ) {
-            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeEvenOdd);
-            //d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
-        }
-        else {
-            d->document->m_pageSettings.setFooterPolicy(KWord::HFTypeEvenOdd);
-            //d->document->m_pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
-        }
-    }
-    else {
-        //d->hf.header = hasFirst ? HF_FIRST_DIFF : HF_SAME;
-        if( isHeader ) {
-            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeSameAsFirst);
-            d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
-        }
-        else {
-            d->document->m_pageSettings.setFooterPolicy(KWord::HFTypeSameAsFirst);
-            d->document->m_pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
-        }
-    }
-
-#if 0
-    KWTextFrameSet *fs = new KWTextFrameSet( m_doc, headerTypeToFramesetName( localName, hasEvenOdd ) );
-    fs->setFrameSetInfo( headerTypeToFrameInfo( localName, hasEvenOdd ) );
-    m_doc->addFrameSet( fs, false );
-    if ( !style.isNull() )
-        context.styleStack().push( style );
-    KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
-    frame->loadCommonOasisProperties( context, fs, "header-footer" );
-    const QString minHeight = context.styleStack().attributeNS( KoXmlNS::fo, "min-height" );
-    if ( !minHeight.isEmpty() )
-        frame->setMinimumFrameHeight( KoUnit::parseValue( minHeight ) );
-    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
-    frame->setNewFrameBehavior( KWFrame::Copy );
-    fs->addFrame( frame );
-    if ( !style.isNull() )
-        context.styleStack().pop(); // don't let it be active when parsing the text
-    context.setUseStylesAutoStyles( true ); // use auto-styles from styles.xml, not those from content.xml
-    fs->loadOasisContent( headerFooter, context );
-    context.setUseStylesAutoStyles( false );
-    if ( isHeader )
-        m_doc->m_headerVisible = true;
-    else
-        m_doc->m_footerVisible = true;
-    // The bottom margin of headers is what we call headerBodySpacing
-    if ( !headerStyle.isNull() ) {
-        context.styleStack().push( headerStyle );
-        context.styleStack().setTypeProperties( "header-footer" );
-        d->hf.ptHeaderBodySpacing = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-bottom" ) );
-        context.styleStack().pop();
-    }
-    // The top margin of footers is what we call footerBodySpacing
-    if ( !footerStyle.isNull() ) {
-        context.styleStack().push( footerStyle );
-        context.styleStack().setTypeProperties( "header-footer" );
-        d->hf.ptFooterBodySpacing = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-top" ) );
-        context.styleStack().pop();
-    }
-    // TODO ptFootNoteBodySpacing
-#else
-    // use auto-styles from styles.xml, not those from content.xml
-    context.setUseStylesAutoStyles( true );
-
-    // Add the frameset and the shape for the header/footer to the document.
-    KWTextFrameSet *fs = new KWTextFrameSet( d->document, fsType );
-    fs->setAllowLayout(false);
-    fs->setName(fsTypeName);
-    d->document->addFrameSet(fs);
-    KoShapeFactory *factory = KoShapeRegistry::instance()->get(TextShape_SHAPEID);
-    Q_ASSERT(factory);
-    KoShape *shape = factory->createDefaultShape();
-    KWTextFrame *frame = new KWTextFrame(shape, fs);
-    frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
-
-    QTextCursor cursor( fs->document() );
-    //cursor.insertText(fsTypeName); //TESTCASE
-
-    if ( !leftElem.isNull() ) // if "header-left" or "footer-left" was defined, the content is within the leftElem
-        loadOasisText(leftElem, context, cursor);
-    else if( hasFirst ) // if there was a "header-first" or "footer-first" defined, the content is within the firstElem
-        loadOasisText(firstElem, context, cursor);
-    else // else the content is within the elem
-        loadOasisText(elem, context, cursor);
-
-    // restore use of auto-styles from content.xml, not those from styles.xml
-    context.setUseStylesAutoStyles( false );
-
-    //TODO handle style, seems to be similar to what is done at KoPageLayout::loadOasis
-#endif
 }
 
 #include "KWOpenDocumentLoader.moc"
