@@ -102,6 +102,7 @@ protected:
 	void saveOasisSettings( KoXmlWriter &/*settingsWriter*/ );
 	void loadOasisSettings( const QDomDocument&settingsDoc );
 
+    void updateDocumentSize();
 private:
 	VDocument m_doc;					/// store non-visual doc info
 

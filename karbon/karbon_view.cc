@@ -171,7 +171,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
     m_canvasView = new KoCanvasController(this);
     m_canvasView->setCanvas(m_canvas);
-    m_canvasView->centerCanvas( false );
+    m_canvasView->centerCanvas( true );
     m_canvasView->show();
 
     // layout:
@@ -917,6 +917,10 @@ void
 KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
 {
 	debugView(QString("KarbonView::zoomChanged( mode = %1, zoom = %2) )").arg(mode).arg(zoom));
+
+    // set the new zoomed document size
+    QRectF documentRect = m_canvas->viewConverter()->documentToView( m_part->document().boundingRect() );
+    m_canvasView->setDocumentSize( documentRect.size().toSize() );
 
     /*
 	KoZoomHandler *zoomHandler = (KoZoomHandler*)m_canvas->viewConverter();

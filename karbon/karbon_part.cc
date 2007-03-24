@@ -279,6 +279,8 @@ KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
 
 	loadOasisSettings( settings );
 
+    updateDocumentSize();
+
 	return true;
 }
 
@@ -626,6 +628,8 @@ KarbonPart::addShape( KoShape* shape )
             canvas->update();
         }
     }
+
+    updateDocumentSize();
     setModified( true );
 }
 
@@ -647,7 +651,16 @@ KarbonPart::removeShape( KoShape* shape )
             canvas->update();
         }
     }
+    updateDocumentSize();
     setModified( true );
+}
+
+void KarbonPart::updateDocumentSize()
+{
+    KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
+    KoViewConverter * viewConverter = canvasController->canvas()->viewConverter();
+    QSize documentSize = viewConverter->documentToView( m_doc.boundingRect() ).size().toSize();
+    canvasController->setDocumentSize( documentSize );
 }
 
 #include "karbon_part.moc"
