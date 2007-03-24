@@ -29,8 +29,6 @@
 #include <QPushButton>
 #include <QLabel>
 
-#include <q3listbox.h>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include <kcolorbutton.h>
@@ -63,13 +61,6 @@ KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* p
 
     QHBoxLayout* toplevel = new QHBoxLayout( this );
     toplevel->setMargin( 10 );
-
-#if 0
-    QVBoxLayout* left=new QVBoxLayout(10);
-    toplevel->addLayout(left,2);
-    regionList=new Q3ListBox(this);
-    left->addWidget(regionList);
-#endif
 
     QVBoxLayout* center = new QVBoxLayout( );
     center->setMargin( 10 );

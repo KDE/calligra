@@ -1,3 +1,8 @@
+2007-03-24  Inge Wallin  <inge@lysator.liu.se>
+
+	* dialogs/KCConfigBackgroundPage.{h,cc}: remove all traces of
+	class Q3ListBox.
+
 2007-03-22  Inge Wallin  <inge@lysator.liu.se>
 
 	More Qt3 -> Qt4 conversions.
