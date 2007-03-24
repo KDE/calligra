@@ -26,7 +26,7 @@ Item								   Prio Status
 * Port to Qt4
   + Get rid of all Qt3 support widgets				      1	----
     - Q3*Layout								done
-    - Q3ButtonGroup							--
+    - Q3ButtonGroup							done
     - Q3ListBox / Q3ListBoxText						--
     - Q3TabDialog							--
     - Q3GroupBox							--

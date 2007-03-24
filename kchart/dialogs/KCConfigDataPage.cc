@@ -98,7 +98,6 @@ KCConfigDataPage::KCConfigDataPage( KChartParams* params,
     bg->setExclusive( true );
 
     m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb2 );
-    //m_rowMajor->resize( m_rowMajor->sizeHint() );
     layout2->addWidget( m_rowMajor );
     bg->addButton( m_rowMajor );
 
@@ -114,7 +113,6 @@ KCConfigDataPage::KCConfigDataPage( KChartParams* params,
 
     m_colMajor->setWhatsThis( i18n("Here you can choose to have each column hold one data set. Note that the values are not really swapped but only their interpretation."));
     m_colMajor->resize( m_colMajor->sizeHint() );
-    //layout->setColumnStretch(2, 0);
 }
 
 
