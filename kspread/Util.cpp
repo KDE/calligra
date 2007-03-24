@@ -1154,10 +1154,21 @@ QString KSpread::Oasis::encodeFormula( const QString& expr, const KLocale* local
                 result.append( tokenText );
             break;
         }
+        case Token::Identifier:
+        {
+            if ( tokenText == "ERRORTYPE" ) {
+                // need to replace this
+                result.append( "ERROR.TYPE" );
+            } else {
+                // dump it out unchanged
+                result.append( tokenText );
+            }
+            break;
+
+        }
         case Token::Boolean:
         case Token::Integer:
         case Token::String:
-        case Token::Identifier:
         default:
             result.append( tokenText );
             break;
