@@ -2349,7 +2349,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
             parseInsideOfTable( doc, e, currentFramesetElement, tableName, columnLefts, row, column);
             row++;
         }
-        else if ( localName == "table-header-rows" ) // Provisory (###TODO)
+        else if ( localName == "table-header-rows" ) // Temporary (### TODO)
         {
             parseInsideOfTable( doc, e, currentFramesetElement, tableName, columnLefts, row, column);
         }

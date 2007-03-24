@@ -65,7 +65,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
         declareLayout( (*it).m_layout );
         for ( KWord13Format* format = (*it).m_formats.first(); format; format = (*it).m_formats.next() )
         {
-            // ### Provisory, as it does not handle id != 1
+            // ### Temporary, as it does not handle id != 1
             KWord13FormatOneData* data = format->getFormatOneData();
             if ( data )
             {

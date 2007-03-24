@@ -206,7 +206,7 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     }
     else
     {
-        // ### TODO: provisory
+        // ### TODO: Temporary
         stackItem->elementType = KWord13TypeIgnore;
         m_currentFormat = new KWord13Format;
         if ( ok )

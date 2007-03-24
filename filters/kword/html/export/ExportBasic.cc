@@ -36,7 +36,7 @@ HtmlBasicWorker::HtmlBasicWorker( const QString &cssURL )
 }
 
 QString HtmlBasicWorker::textFormatToCss(const TextFormatting& formatData) const
-{// PROVISORY
+{// ### TEMPORARY
     QString strElement;
 
     // Font name
