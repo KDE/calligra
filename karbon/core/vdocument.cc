@@ -201,6 +201,9 @@ VDocument::loadXML( const QDomElement& doc )
 
 	loadDocumentContent( doc );
 
+    if( m_layers.isEmpty() )
+        insertLayer( new KoShapeLayer() );
+
 	return true;
 }
 
