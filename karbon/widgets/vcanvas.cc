@@ -149,7 +149,8 @@ void KarbonCanvas::paintMargins( QPainter &painter, const KoViewConverter &conve
 
     KoPageLayout pl = m_part->pageLayout();
 
-    QRectF marginRect( pl.left, pl.top, m_doc->width()-pl.left-pl.right, m_doc->height()-pl.top-pl.bottom );
+    QSizeF pageSize = m_doc->pageSize();
+    QRectF marginRect( pl.left, pl.top, pageSize.width()-pl.left-pl.right, pageSize.height()-pl.top-pl.bottom );
 
     QPen pen( Qt::blue );
     QVector<qreal> pattern;
@@ -233,7 +234,7 @@ void KarbonCanvas::setFitMargin( int fitMarginX, int fitMarginY ) {
 
 void KarbonCanvas::adjustSize() {
     m_contentRect = m_doc->boundingRect();
-    m_documentRect.setRect( 0.0, 0.0, m_doc->width(), m_doc->height() );
+    m_documentRect = QRectF( QPointF(0.0, 0.0), m_doc->pageSize() );
 
     if( m_zoomHandler.zoomMode() == KoZoomMode::ZOOM_PAGE )
     {

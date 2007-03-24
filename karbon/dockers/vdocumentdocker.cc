@@ -85,19 +85,21 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 	double scaleFactor;
 	double xoffset = 0.;
 	double yoffset = 0.;
-	if ( ( height() - 4 ) / m_document->height() > ( width() - 4 ) / m_document->width() )
+
+    QSizeF pageSize = m_document->pageSize();
+	if ( ( height() - 4 ) / pageSize.height() > ( width() - 4 ) / pageSize.width() )
 	{
-		scaleFactor = ( width() - 4 ) / m_document->width();
-		yoffset = ( ( height() - 4 ) / scaleFactor - m_document->height() ) / 2;
+        scaleFactor = ( width() - 4 ) / pageSize.width();
+        yoffset = ( ( height() - 4 ) / scaleFactor - pageSize.height() ) / 2;
 	}
 	else
 	{
-		scaleFactor = ( height() - 4 ) / m_document->height();
-		xoffset = ( ( width() - 4 ) / scaleFactor - m_document->width() ) / 2;
+        scaleFactor = ( height() - 4 ) / pageSize.height();
+        xoffset = ( ( width() - 4 ) / scaleFactor - pageSize.width() ) / 2;
 	}
 	// TODO: needs porting
 	// QRectF rect = m_view->canvasWidget()->boundingBox();
-QRectF rect = QRectF();
+    QRectF rect = QRectF();
 
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 	if( event->type() == QEvent::MouseButtonPress )
@@ -157,16 +159,18 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 	double xoffset = 0.;
 	double yoffset = 0.;
 	double scaleFactor;
-	if ( ( height() - 4 ) / m_document->height() > ( width() - 4 ) / m_document->width() )
-	{
-		scaleFactor = ( width() - 4 ) / m_document->width();
-		yoffset = ( ( height() - 4 ) / scaleFactor - m_document->height() ) / 2;
-	}
-	else
-	{
-		scaleFactor = ( height() - 4 ) / m_document->height();
-		xoffset = ( ( width() - 4 ) / scaleFactor - m_document->width() ) / 2;
-	}
+
+    QSizeF pageSize = m_document->pageSize();
+    if ( ( height() - 4 ) / pageSize.height() > ( width() - 4 ) / pageSize.width() )
+    {
+        scaleFactor = ( width() - 4 ) / pageSize.width();
+        yoffset = ( ( height() - 4 ) / scaleFactor - pageSize.height() ) / 2;
+    }
+    else
+    {
+        scaleFactor = ( height() - 4 ) / pageSize.height();
+        xoffset = ( ( width() - 4 ) / scaleFactor - pageSize.width() ) / 2;
+    }
 	xoffset += 2 / scaleFactor;
 	yoffset += 2 / scaleFactor;
 	if( !m_docpixmap || m_docpixmap->width() != width() || m_docpixmap->height() != height() )
@@ -177,13 +181,13 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		p.clear( QColor( 195, 194, 193 ) );
 		p.setMatrix( QMatrix( 1, 0, 0, -1, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
 		p.setZoomFactor( scaleFactor );
-		QRectF rect( -xoffset, -yoffset, m_document->width() + xoffset, m_document->height() + yoffset );
+        QRectF rect( -xoffset, -yoffset, pageSize.width() + xoffset, pageSize.height() + yoffset );
 		// draw doc outline
 		VColor c( Qt::black );
 		VStroke stroke( c, 0L, 1.0 / scaleFactor );
 		p.setPen( stroke );
 		p.setBrush( Qt::white );
-		p.drawRect( QRectF( 2, 2, m_document->width() - 2, m_document->height() - 2 ) );
+        p.drawRect( QRectF( 2, 2, pageSize.width() - 2, pageSize.height() - 2 ) );
 		m_document->draw( &p, &rect );
 		p.end();
 	}
@@ -274,9 +278,10 @@ VDocumentTab::~VDocumentTab()
 void
 VDocumentTab::updateDocumentInfo()
 {
-	m_width->setText( KoUnit::toUserStringValue( m_view->part()->document().width(), m_view->part()->unit() ) + m_view->part()->unitName() );
-	m_height->setText( KoUnit::toUserStringValue( m_view->part()->document().height(), m_view->part()->unit() ) + m_view->part()->unitName() );
-	m_layers->setText( QString::number( m_view->part()->document().layers().count() ) );
+    QSizeF pageSize = m_view->part()->document().pageSize();
+    m_width->setText( KoUnit::toUserStringValue( pageSize.width(), m_view->part()->unit() ) + m_view->part()->unitName() );
+    m_height->setText( KoUnit::toUserStringValue( pageSize.height(), m_view->part()->unit() ) + m_view->part()->unitName() );
+    m_layers->setText( QString::number( m_view->part()->document().layers().count() ) );
 } // VDocumentTab::updateDocumentInfo
 
 void

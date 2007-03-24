@@ -112,7 +112,7 @@ VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles, 
 
 	QMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( 0, -document()->height() );
+    mat.translate( 0, -document()->pageSize().height() );
 
 	KoGenStyle styleobjectauto( VDocument::STYLE_GRAPHICAUTO, "graphic" );
 	saveOasisFill( mainStyles, styleobjectauto );
@@ -136,7 +136,7 @@ VObject::saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesobjectauto ) 
 	{
 		QMatrix mat;
 		mat.scale( 1, -1 );
-		mat.translate( 0, -document()->height() );
+        mat.translate( 0, -document()->pageSize().height() );
 
 		// mirror fill before saving
 		VFill fill( *m_fill );

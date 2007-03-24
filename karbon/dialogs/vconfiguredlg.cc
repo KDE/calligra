@@ -271,8 +271,7 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	m_view = view;
 	KoUnit unit = view->part()->document().unit();
 	KoGridData &gd = view->part()->gridData();
-	double pgw = view->part()->document().width();
-	double pgh = view->part()->document().height();
+    QSizeF pageSize = view->part()->document().pageSize();
 
 	QGroupBox* generalGrp = new QGroupBox( i18n("Grid"), this );
 	QGridLayout *layoutGeneral = new QGridLayout( generalGrp );
@@ -291,10 +290,10 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), this );
 	QGridLayout* layoutSpacingGrp = new QGridLayout( spacingGrp );
 	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ) );
-	m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, gd.gridX(), unit );
+    m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pageSize.width(), 0.1, gd.gridX(), unit );
 	spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
 	QLabel* spaceVertLbl = new QLabel( i18n( "&Vertical:" ) );
-	m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgh, 0.1, gd.gridY(), unit );
+    m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pageSize.height(), 0.1, gd.gridY(), unit );
 	spaceVertLbl->setBuddy( m_spaceVertUSpin );
 	layoutSpacingGrp->addWidget(spaceHorizLbl, 0, 0);
 	layoutSpacingGrp->addWidget(m_spaceHorizUSpin, 0, 1);
@@ -377,13 +376,12 @@ void VConfigGridPage::slotDefault()
 
 void VConfigGridPage::setValuesFromGrid( const KoGridData &grid )
 {
-	double docW = m_view->part()->document().width();
-	double docH = m_view->part()->document().height();
+    QSizeF pageSize = m_view->part()->document().pageSize();
 
-	m_spaceHorizUSpin->setMaximum( docW );
+    m_spaceHorizUSpin->setMaximum( pageSize.width() );
 	m_spaceHorizUSpin->changeValue( grid.gridX() );
 
-	m_spaceVertUSpin->setMaximum( docH );
+    m_spaceVertUSpin->setMaximum( pageSize.height() );
 	m_spaceVertUSpin->changeValue( grid.gridY() );
 
     /*

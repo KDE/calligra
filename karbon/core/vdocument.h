@@ -77,34 +77,6 @@ public:
 	virtual ~VDocument();
 
 	/**
-	 * Returns document width.
-	 *
-	 * @return the document's width
-	 */
-	double width() const { return m_width; }
-
-	/**
-	 * Returns document height.
-	 *
-	 * @return the document's height
-	 */
-	double height() const { return m_height; }
-
-	/**
-	 * Sets document width.
-	 *
-	 * @param width the new document width
-	 */
-	void setWidth( double width ) { m_width = width; m_boundingBox.setWidth( width ); }
-
-	/**
-	 * Sets document height.
-	 *
-	 * @param height the new document height
-	 */
-	void setHeight( double height ) { m_height = height; m_boundingBox.setHeight( height ); }
-
-	/**
 	 * Returns document unit.
 	 *
 	 * @return the document's unit
@@ -273,12 +245,18 @@ public:
 	bool saveAsPath() const { return m_saveAsPath; }
 	void saveAsPath( bool b ) { m_saveAsPath = b; }
 
-    QRectF boundingRect();
+    /// Returns the bounding rectangle of the documents content
+    QRectF boundingRect() const;
+
+    /// Returns the documents page size
+    QSizeF pageSize() const;
+
+    /// Sets the documents page size
+    void setPageSize( QSizeF pageSize );
 
 private:
 
-    double m_width;  ///< the document width
-    double m_height; ///< the document height
+    QSizeF m_pageSize; ///< the documents page size
 
     QList<KoShape*> m_objects;   ///< The list of all object of the document.
     VLayerList m_layers;         ///< The layers in this document.
@@ -293,35 +271,6 @@ private:
 	// TODO this flag is used nowhere, can we remove it?
 	bool m_saveAsPath;
 };
-
-/*
-class KARBONBASE_EXPORT KarbonDocument : public QObject, public KoShapeControllerInterface
-{
-    Q_OBJECT
-
-public:
-    FlakeDocument();
-    virtual ~FlakeDocument();
-    /// returns the list of objects
-    const QList<KoShape *> & objects() const { return m_objects; }
-
-    // inherited from KoShapeControllerInterface
-    virtual void addShape( KoShape* shape );
-    virtual void removeShape( KoShape* shape );
-
-    /// add a new view
-    void addView( KoCanvasBase* view );
-    /// remove a connected view
-    void removeView( KoCanvasBase* view );
-
-    KoShape* createShape(const QRectF &rect) const;
-
-private:
-    /// the list of the documents objects
-    QList<KoShape *> m_objects;
-    /// the list of the connected views
-    QList<KoCanvasBase*> m_views;
-};*/
 
 #endif
 

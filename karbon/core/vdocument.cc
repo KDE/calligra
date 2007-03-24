@@ -34,8 +34,7 @@
 
 VDocument::VDocument()
 : VObject( 0L )
-, m_width(0.)
-, m_height(0.)
+, m_pageSize(0.0, 0.0)
 , m_selectionMode( VDocument::ActiveLayer )
 , m_unit( KoUnit::Millimeter )
 , m_saveAsPath(true)
@@ -46,7 +45,7 @@ VDocument::VDocument()
 }
 
 VDocument::VDocument( const VDocument& document )
-	: VObject( document ), m_width(0), m_height(0)
+    : VObject( document ), m_pageSize(0.0, 0.0)
 {
 	m_selection = new VSelection( this );
 	m_layers = document.m_layers;
@@ -155,10 +154,10 @@ VDocument::save( QDomElement& me ) const
 	me.setAttribute( "version", "0.1" );
 	me.setAttribute( "editor", "Karbon14" );
 	me.setAttribute( "syntaxVersion", "0.1" );
-	if( m_width > 0. )
-			me.setAttribute( "width", m_width );
-	if( m_height > 0. )
-			me.setAttribute( "height", m_height );
+    if( m_pageSize.width() > 0.0 )
+        me.setAttribute( "width", m_pageSize.width() );
+    if( m_pageSize.height() > 0. )
+        me.setAttribute( "height", m_pageSize.height() );
 	me.setAttribute( "unit", KoUnit::unitName( m_unit ) );
 
 	// save objects:
@@ -194,8 +193,8 @@ VDocument::loadXML( const QDomElement& doc )
 	qDeleteAll(m_layers);
 	m_layers.clear();
 
-	m_width  = doc.attribute( "width", "800.0" ).toDouble();
-	m_height = doc.attribute( "height", "550.0" ).toDouble();
+    m_pageSize.setWidth( doc.attribute( "width", "800.0" ).toDouble() );
+    m_pageSize.setHeight( doc.attribute( "height", "550.0" ).toDouble() );
 
 	m_unit = KoUnit::unit( doc.attribute( "unit", KoUnit::unitName( m_unit ) ) );
 
@@ -255,20 +254,29 @@ VDocument::setObjectName( const KoShape *shape, const QString &name )
     m_objectNames.insert( shape, name );
 }
 
-QRectF 
-VDocument::boundingRect()
+QRectF VDocument::boundingRect() const
 {
-	QRectF bb( 0, 0, m_width, m_height );
-	foreach( KoShape* layer, m_layers )
-	{
-		bb = bb.unite(  layer->boundingRect() );
-	}
+    // initialize bounding rect with page size
+    QRectF bb( QPointF(0.0, 0.0), m_pageSize );
+    foreach( KoShape* layer, m_layers )
+    {
+        bb = bb.unite(  layer->boundingRect() );
+    }
 
-	return bb;
+    return bb;
 }
 
-const QList<KoShape*>
-VDocument::shapes() const
+QSizeF VDocument::pageSize() const
+{
+    return m_pageSize;
+}
+
+void VDocument::setPageSize( QSizeF pageSize )
+{
+    m_pageSize = pageSize;
+}
+
+const QList<KoShape*> VDocument::shapes() const
 {
     return m_objects;
 }

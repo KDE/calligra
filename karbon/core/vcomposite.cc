@@ -387,7 +387,7 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 
 		QMatrix tmpMat;
 		tmpMat.scale( 1, -1 );
-		tmpMat.translate( 0, -document()->height() );
+		tmpMat.translate( 0, -document()->pageSize().height() );
 	
 		QString transform = buildOasisTransform( tmpMat );
 		if( !transform.isEmpty() )
@@ -404,7 +404,7 @@ VPath::saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesobjectauto ) co
 	{
 		QMatrix mat;
 		mat.scale( 1, -1 );
-		mat.translate( 0, -document()->height() );
+		mat.translate( 0, -document()->pageSize().height() );
 
 		// mirror fill before saving
 		VFill fill( *m_fill );

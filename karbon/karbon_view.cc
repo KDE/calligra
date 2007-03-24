@@ -180,7 +180,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     layout->addWidget(m_canvasView, 1, 1);
 
     m_zoomController = new KoZoomController( m_canvasView, dynamic_cast<KoZoomHandler*>(m_canvas->viewConverter()), actionCollection() );
-    m_zoomController->setPageSize( QSizeF(m_part->document().width(), m_part->document().height() ) );
+    m_zoomController->setPageSize( m_part->document().pageSize() );
 
     initActions();
 
@@ -353,24 +353,25 @@ KarbonView::print( KPrinter &printer )
 	// TODO : ultimately use plain QPainter here as that is better suited to print system
 	//kDebug(38000) << "KarbonView::print" << endl;
 
+    /*
+
 	printer.setFullPage( true );
 
 	// we are using 72 dpi internally
 	double zoom = printer.logicalDpiX() / 72.0;
 
+    QSizeF pageSize = part()->document().pageSize();
+
 	QMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( 0, -part()->document().height()*zoom );
+    mat.translate( 0, -pageSize().height()*zoom );
 
-	double w = zoom*part()->document().width();
-	double h = zoom*part()->document().height();
+    QRectF rect( QPointF(0, 0), pageSize );
 
-	QRectF rect( 0, 0, w, h );
-
-	QPixmap img( static_cast<int>( w ), static_cast<int>( h ) );
+    QPixmap img( pageSize.toSize() );
 
 	// first use the painter to draw into the pixmap
-	VQPainter kop( ( QPaintDevice * )&img, static_cast<int>( w ), static_cast<int>( h ) );
+	VQPainter kop( ( QPaintDevice * )&img, static_cast<int>( pageSize.width() ), static_cast<int>( pageSize.height() ) );
 
 	kop.setZoomFactor( zoom );
 	kop.setMatrix( mat );
@@ -389,6 +390,7 @@ KarbonView::print( KPrinter &printer )
 	p.begin( &printer );
 	p.drawPixmap( 0, 0, img );
 	p.end();
+    */
 }
 
 void
@@ -938,7 +940,7 @@ KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
 void
 KarbonView::centerCanvas()
 {
-	m_canvasView->ensureVisible( QRectF(0,0,part()->document().width(),part()->document().height() ) );
+    m_canvasView->ensureVisible( QRectF(QPointF(0,0), part()->document().pageSize() ) );
 }
 
 void
@@ -1207,8 +1209,8 @@ KarbonView::pageOffsetChanged()
 void
 KarbonView::updateRuler()
 {
-    m_horizRuler->setRulerLength( part()->document().width() );
-    m_vertRuler->setRulerLength( part()->document().height() );
+    m_horizRuler->setRulerLength( part()->document().pageSize().width() );
+    m_vertRuler->setRulerLength( part()->document().pageSize().height() );
 }
 
 void

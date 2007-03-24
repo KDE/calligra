@@ -82,8 +82,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 	m_pageLayout.orientation = KoPageFormat::Portrait;
     m_pageLayout.width = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
     m_pageLayout.height = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
-    m_doc.setWidth( m_pageLayout.width );
-    m_doc.setHeight( m_pageLayout.height );
+    m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
 	// enable selection drawing
 	m_doc.selection()->showHandle();
 	m_doc.selection()->setSelectObjects();
@@ -100,8 +99,7 @@ KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit _unit )
 {
 	m_pageLayout = layout;
 	m_doc.setUnit( _unit );
-    m_doc.setWidth( m_pageLayout.width );
-    m_doc.setHeight( m_pageLayout.height );
+    m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
 }
 
 KoView*
@@ -162,8 +160,8 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 
 		if( m_pageLayout.format == KoPageFormat::CustomSize )
 		{
-            m_pageLayout.width	= m_doc.width();
-            m_pageLayout.height	= m_doc.height();
+            m_pageLayout.width	= m_doc.pageSize().width();
+            m_pageLayout.height	= m_doc.pageSize().height();
 		}
 		else
 		{
@@ -265,8 +263,7 @@ KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
 	if( style )
 	{
 		m_pageLayout.loadOasis( *style );
-        m_doc.setWidth( m_pageLayout.width );
-        m_doc.setHeight( m_pageLayout.height );
+        m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
 	}
 	else
 		return false;
@@ -276,7 +273,7 @@ KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
 	// do y-mirroring here
 	QMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( 0, -m_doc.height() );
+    mat.translate( 0, -m_doc.pageSize().height() );
 	VTransformCmd trafo( 0L, mat );
 	trafo.visit( m_doc );
 
@@ -481,8 +478,8 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect)
 	kDebug(38000) << "**** part->paintContent()" << endl;
 
 	QRectF r = rect;
-	double zoomFactorX = double( r.width() ) / double( document().width() );
-	double zoomFactorY = double( r.height() ) / double( document().height() );
+	double zoomFactorX = double( r.width() ) / double( document().pageSize().width() );
+	double zoomFactorY = double( r.height() ) / double( document().pageSize().height() );
 	double zoomFactor = qMin( zoomFactorX, zoomFactorY );
 
 	painter.eraseRect( rect );

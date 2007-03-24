@@ -188,7 +188,7 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 
 	QMatrix tmpMat;
 	tmpMat.scale( 1, -1 );
-	tmpMat.translate( 0, -document()->height() );
+	tmpMat.translate( 0, -document()->pageSize().height() );
 	
 	QString transform = buildOasisTransform( m_matrix*tmpMat );
 	if( !transform.isEmpty() )
