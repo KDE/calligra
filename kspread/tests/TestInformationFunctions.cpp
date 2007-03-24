@@ -41,6 +41,12 @@ Value TestInformationFunctions::evaluate(const QString& formula, Value& ex)
   return result;
 }
 
+void TestInformationFunctions::testERRORTYPE()
+{
+    CHECK_EVAL( "ERRORTYPE(0)", Value::errorVALUE() );
+    CHECK_EVAL( "ERRORTYPE(NA())", Value( 7 ) );
+    CHECK_EVAL( "ERRORTYPE(1/0)", Value( 2 ) );
+}
 
 void TestInformationFunctions::testVALUE()
 {

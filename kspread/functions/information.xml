@@ -5,6 +5,21 @@
     <GroupName>Information</GroupName>
 
     <Function>
+      <Name>ERRORTYPE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Error</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ERRORTYPE() function converts a error to a number. If the value is not an error, an error is returned. Otherwise, a numerical code is returned. Error codes are modelled on Excel.</Text>
+	<Syntax>ERRORTYPE(value)</Syntax>
+	<Example>ERRORTYPE(NA()) returns 7</Example>
+	<Example>ERRORTYPE(0) returns an error</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>N</Name>
       <Type>Int</Type>
       <Parameter>

@@ -37,6 +37,7 @@
 using namespace KSpread;
 
 // prototypes (sorted alphabetically)
+Value func_errortype (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_filename (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_info (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isblank (valVector args, ValueCalc *calc, FuncExtra *);
@@ -63,6 +64,8 @@ void RegisterInformationFunctions()
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
 
+  f = new Function ("ERRORTYPE", func_errortype);
+  repo->add (f);
   f = new Function ("FILENAME", func_filename);
   f->setParamCount (0);
   repo->add (f);
@@ -109,6 +112,44 @@ void RegisterInformationFunctions()
   repo->add (f);
 }
 
+// Function: ERROR.TYPE
+Value func_errortype (valVector args, ValueCalc *, FuncExtra *)
+{
+  kDebug() << "eror.type" << endl;
+  if ( ! args[0].isError() ) {
+    // its an error if the argument isn't an error...
+    return Value::errorVALUE();
+  }
+
+  if ( args[0] == Value::errorNULL() ) {
+    return Value( 1 );
+  } else if ( args[0] == Value::errorDIV0() ) {
+    return Value( 2 );
+  } else if ( args[0] == Value::errorVALUE() ) {
+    return Value( 3 );
+  } else if ( args[0] == Value::errorREF() ) {
+    return Value( 4 );
+  } else if ( args[0] == Value::errorNAME() ) {
+    return Value( 5 );
+  } else if ( args[0] == Value::errorNUM() ) {
+    return Value( 6 );
+  } else if ( args[0] == Value::errorNA() ) {
+    return Value( 7 );
+  } else if ( args[0] == Value::errorCIRCLE() ) {
+    // non-standard error type
+    return Value( 101 );
+  } else if ( args[0] == Value::errorDEPEND() ) {
+    // non-standard error type
+    return Value( 102 );
+  } else if ( args[0] == Value::errorPARSE() ) {
+    // non-standard error type
+    return Value( 103 );
+  } else {
+      // something I didn't think of...
+    kDebug() << "Unexpected error type" << endl;
+    return Value( 0 );
+  }
+}
 // Function: INFO
 Value func_info (valVector args, ValueCalc *calc, FuncExtra *)
 {

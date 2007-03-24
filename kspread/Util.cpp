@@ -895,8 +895,8 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
 
   if ((!ex.isEmpty()) && (ex[0] == '='))
   {
-	result='=';
-	++i;
+    result='=';
+    ++i;
   }
 
   // main loop
@@ -1059,7 +1059,14 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
     }
     case InIdentifier:
     {
-       // consume as long as alpha, dollar sign, underscore, or digit
+      // handle problematic functions
+      if ( ex.mid(i ).startsWith( "ERROR.TYPE" ) ) {
+        // replace it
+        result.append( "ERRORTYPE" );
+        i+=10; // number of characters in "ERROR.TYPE"
+      }
+
+      // consume as long as alpha, dollar sign, underscore, or digit
       if( isIdentifier( ch )  || ch.isDigit() )
         result.append( ex[i++] );
        // we're done
