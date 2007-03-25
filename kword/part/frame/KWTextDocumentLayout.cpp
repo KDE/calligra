@@ -417,9 +417,10 @@ void KWTextDocumentLayout::layout() {
 
                 m_dummyShape->resize(QSizeF(currentShape->size().width(), maxFrameLength - currentShape->size().height()));
                 m_dummyShape->textShapeData->setShapeMargins(data->shapeMargins());
-                if(! m_state->setFollowupShape(m_dummyShape)) // if I can't render into a dummy shape
+                if(! m_state->setFollowupShape(m_dummyShape)) { // if I can't render into a dummy shape
                     m_state->clearTillEnd();
                     return;
+                }
                 requestFrameResize = true;
             }
             line.tryFit();

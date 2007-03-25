@@ -181,9 +181,14 @@ void KWTextFrameSet::requestMoreFrames(double textHeight) {
     else if(lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior && lastFrame->canAutoGrow()) {
         // enlarge last shape
         KoShape *shape = lastFrame->shape();
-        // TODO make the following work for rotated / skewed frames as well.  The position should be updated.
+        if(shape->isLocked()) { // don't alter a locked shape.
+            requestMoreFrames(0);
+            return;
+        }
         QSizeF size = shape->size();
+        QPointF orig = shape->absolutePosition(KoFlake::TopLeftCorner);
         shape->resize(QSizeF(size.width(), size.height() + textHeight));
+        shape->setAbsolutePosition(orig, KoFlake::TopLeftCorner);
         shape->repaint(QRectF(0.0, size.height(), size.width(), textHeight));
     }
 }
