@@ -158,7 +158,7 @@ void RegisterMathFunctions()
   repo->add (f);
   f = new Function ("LOG2",          func_log2);
   repo->add (f);
-  f = new Function ("LOG10",         func_log10);   // same as LOG
+  f = new Function ("LOG10",         func_log10);
   repo->add (f);
   f = new Function ("LOGN",          func_logn);
   f->setParamCount (2);
@@ -475,6 +475,10 @@ Value func_log2 (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: LOG10
 Value func_log10 (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  if ( args [0].isError() )
+    return args [0];
+  if ( ( args [0].isNumber() == false ) || ( args[0].asFloat() <= 0 ) )
+    return Value::errorNUM();
   return calc->log (args[0]);
 }
 

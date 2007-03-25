@@ -237,6 +237,16 @@ void TestMathFunctions::testLOG()
   CHECK_EVAL( "LOG(NA();NA())", Value::errorNA() );
 }
 
+void TestMathFunctions::testLOG10()
+{
+    CHECK_EVAL( "LOG10(1)",  0 );
+    CHECK_EVAL( "LOG10(10)",  1 );
+    CHECK_EVAL( "LOG10(100)", 2 );
+    CHECK_EVAL( "LOG10(0)", Value::errorNUM() );
+    CHECK_EVAL( "LOG10(\"H\")", Value::errorNUM() );
+    CHECK_EVAL( "LOG10(-2)",  Value::errorNUM() );
+}
+
 void TestMathFunctions::testMDETERM()
 {
     CHECK_EVAL( "MDETERM({2;4|3;5})", -2 );

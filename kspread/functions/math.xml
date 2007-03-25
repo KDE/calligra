@@ -733,14 +733,14 @@
       <Name>LOG10</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>A floating point value</Comment>
+	<Comment>A positive floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The LOG10() function returns the base-10 logarithm of x.</Text>
+	<Text>The LOG10() function returns the base-10 logarithm of the argument.</Text>
 	<Syntax>LOG10(x)</Syntax>
-	<Example>LOG10(0.8) equals -0.09691001</Example>
-	<Example>LOG10(0) equals -inf.</Example>
+	<Example>LOG10(10) equals 1.</Example>
+	<Example>LOG10(0) is an error.</Example>
 	<Related>LN</Related>
   <Related>LOGN</Related>
   <Related>LOG</Related>

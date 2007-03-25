@@ -42,6 +42,7 @@ private slots:
   void testGCD();
   void testLCM();
   void testLOG();
+  void testLOG10();
   void testMDETERM();
   void testMINVERSE();
   void testMMULT();
