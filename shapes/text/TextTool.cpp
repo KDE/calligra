@@ -401,6 +401,21 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
 }
 
 void TextTool::ensureCursorVisible() {
+    if(m_textShapeData->endPosition() < m_caret.position() || m_textShapeData->position() > m_caret.position()) {
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+        Q_ASSERT(lay);
+        foreach(KoShape* shape, lay->shapes()) {
+            TextShape *textShape = dynamic_cast<TextShape*> (shape);
+            Q_ASSERT(textShape);
+            KoTextShapeData *d = static_cast<KoTextShapeData*> (textShape->userData());
+            if(m_caret.position() >= d->position() && m_caret.position() <= d->endPosition()) {
+                m_textShapeData = d;
+                m_textShape = textShape;
+                break;
+            }
+        }
+    }
+
     QRectF cursorPos = textRect(m_caret.position(), m_caret.position());
     cursorPos.moveTop(cursorPos.top() - m_textShapeData->documentOffset());
     m_canvas->ensureVisible(m_textShape->transformationMatrix(0).mapRect(cursorPos));
