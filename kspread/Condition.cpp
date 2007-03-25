@@ -67,22 +67,35 @@ Conditional::~Conditional()
     delete styleName;
 }
 
-Conditional::Conditional( const Conditional& c )
+Conditional::Conditional( const Conditional& o )
 {
-    operator=( c );
+    strVal1 = o.strVal1 ? new QString( *o.strVal1 ) : 0;
+    strVal2 = o.strVal2 ? new QString( *o.strVal2 ) : 0;
+    styleName = o.styleName ? new QString( *o.styleName ) : 0;
+    fontcond = o.fontcond ? new QFont( *o.fontcond ) : 0;
+    colorcond = o.colorcond ? new QColor( *o.colorcond ) : 0;
+    val1  = o.val1;
+    val2  = o.val2;
+    style = o.style;
+    cond  = o.cond;
 }
 
-Conditional& Conditional::operator=( const Conditional& d )
+Conditional& Conditional::operator=( const Conditional& o )
 {
-    strVal1 = d.strVal1 ? new QString( *d.strVal1 ) : 0;
-    strVal2 = d.strVal2 ? new QString( *d.strVal2 ) : 0;
-    styleName = d.styleName ? new QString( *d.styleName ) : 0;
-    fontcond = d.fontcond ? new QFont( *d.fontcond ) : 0;
-    colorcond = d.colorcond ? new QColor( *d.colorcond ) : 0;
-    val1  = d.val1;
-    val2  = d.val2;
-    style = d.style;
-    cond  = d.cond;
+    delete strVal1;
+    delete strVal2;
+    delete styleName;
+    delete fontcond;
+    delete colorcond;
+    strVal1 = o.strVal1 ? new QString( *o.strVal1 ) : 0;
+    strVal2 = o.strVal2 ? new QString( *o.strVal2 ) : 0;
+    styleName = o.styleName ? new QString( *o.styleName ) : 0;
+    fontcond = o.fontcond ? new QFont( *o.fontcond ) : 0;
+    colorcond = o.colorcond ? new QColor( *o.colorcond ) : 0;
+    val1  = o.val1;
+    val2  = o.val2;
+    style = o.style;
+    cond  = o.cond;
 
     return *this;
 }

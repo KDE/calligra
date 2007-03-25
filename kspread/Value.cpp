@@ -116,7 +116,9 @@ class Value::Private : public QSharedData
     /** set most probable formatting based on the type */
     void setFormatByType ();
 
-  private:
+private:
+    void operator=( const Value::Private& o );
+
     static Private* s_null;
 };
 
