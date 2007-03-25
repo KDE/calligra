@@ -1,8 +1,14 @@
-2007-03-25  Inge Wallin  <ingwa@c83-252-238-97.bredband.comhem.se>
+2007-03-25  Inge Wallin  <inge@lysator.liu.se>
 
 	Qt3 -> Qt4
+	* dialogs/KCConfigSubtypePage.cc (KChartBarSubTypeChartPage)
+	(KChartLineSubTypeChartPage)
+	(KChartAreaSubTypeChartPage)
+	Q3VButtonGroup -> QGroupBox, QButtonGroup
+	
+	Qt3 -> Qt4
 	* dialogs/KCConfigSubtypePage.cc (KChartHiloSubTypeChartPage): 
-	Q3ButtonGroup -> QGroupBox, QButtonGroup
+	Q3VButtonGroup -> QGroupBox, QButtonGroup
 
 	Qt3 -> Qt4
 	* dialogs/KCConfigSubtypePiePage.cc (KCConfigSubtypePiePage): 

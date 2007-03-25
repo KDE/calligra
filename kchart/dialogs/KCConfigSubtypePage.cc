@@ -31,9 +31,9 @@
 
 #include <QLayout>
 #include <QButtonGroup>
+#include <QGroupBox>
 //Added by qt3to4:
 #include <Q3VButtonGroup>
-#include <kvbox.h>
 
 #include "kchart_params.h"
 #include "kchart_factory.h"
@@ -154,18 +154,34 @@ KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KChartParams* params,
     QHBoxLayout* toplevel = new QHBoxLayout( this );
     toplevel->setMargin( 10 );
 
-    Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
-    subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
-    toplevel->addWidget( subtypeBG, Qt::AlignCenter| Qt::AlignVCenter );
-    normal = new QRadioButton( i18n( "Normal" ), subtypeBG );
-    subtypeBG->insert( normal, KDChartParams::AreaNormal );
-    stacked = new QRadioButton( i18n( "Stacked" ), subtypeBG );
-    subtypeBG->insert( stacked, KDChartParams::AreaStacked );
-    percent = new QRadioButton( i18n( "Percent" ), subtypeBG );
-    subtypeBG->insert( percent, KDChartParams::AreaPercent );
-    subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
-    connect( subtypeBG, SIGNAL( clicked( int ) ),
-             this, SLOT( slotChangeSubType( int ) ) );
+    QGroupBox* box = new QGroupBox( i18n( "Sub-type" ) );
+    box->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
+    toplevel->addWidget( box );
+
+    QVBoxLayout  *layout = new QVBoxLayout( box );
+    layout->setMargin( 10 );
+
+    QButtonGroup* subtypeBG = new QButtonGroup( );
+    subtypeBG->setExclusive( true );
+
+    normal = new QRadioButton( i18n( "Normal" ), box );
+    layout->addWidget( normal );
+    subtypeBG->addButton( normal, KDChartParams::AreaNormal );
+
+    stacked = new QRadioButton( i18n( "Stacked" ), box );
+    layout->addWidget( stacked );
+    subtypeBG->addButton( stacked, KDChartParams::AreaStacked );
+
+    percent = new QRadioButton( i18n( "Percent" ), box );
+    layout->addWidget( percent );
+    subtypeBG->addButton( percent, KDChartParams::AreaPercent );
+
+    layout->addStretch( 1 );
+    box->setFixedWidth( box->sizeHint().width() );
+
+    // Notify when the user clicks one of the radio buttons.
+    connect( subtypeBG, SIGNAL( buttonClicked( int ) ),
+             this,      SLOT( slotChangeSubType( int ) ) );
 
     QGroupBox* exampleGB = new QGroupBox( i18n( "Example" ), this );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
@@ -240,30 +256,47 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
     QHBoxLayout* toplevel = new QHBoxLayout( this );
     toplevel->setMargin( 10 );
 
-    KVBox       *left = new KVBox( this );
-    Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), left );
-    subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
-    //toplevel->addWidget( subtypeBG, AlignCenter );
-    toplevel->addWidget( left, Qt::AlignCenter );
+    // The left side including the subtype and number of lines.
+    //
+    // NOTE: This uses a layout directly in a layout (leftLayout as
+    //       the leftmost element of toplevel.
+    QVBoxLayout  *leftLayout = new QVBoxLayout( );
+    toplevel->addLayout( leftLayout );
 
-    normal = new QRadioButton( i18n( "Normal" ), subtypeBG );
-    subtypeBG->insert( normal, KDChartParams::BarNormal );
-    stacked = new QRadioButton( i18n( "Stacked" ), subtypeBG );
-    subtypeBG->insert( stacked, KDChartParams::BarStacked );
-    percent = new QRadioButton( i18n( "Percent" ), subtypeBG );
-    subtypeBG->insert( percent, KDChartParams::BarPercent );
+    QGroupBox *box = new QGroupBox( i18n( "Sub-type" ) );
+    box->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
+    leftLayout->addWidget( box );
 
-    subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
-    connect( subtypeBG, SIGNAL( clicked( int ) ),
-             this, SLOT( slotChangeSubType( int ) ) );
+    QVBoxLayout  *boxLayout = new QVBoxLayout( box );
+    boxLayout->setMargin( 10 );
 
-    //QHBox   *hbox = new QHBox( this );
-    new QLabel( i18n( "Number of lines: "), left );
-    m_numLines    = new QSpinBox( left );
-    // FIXME: Use a grid layout instead
-    new QLabel( "", left);
-    left->setStretchFactor( left, 1 );
+    QButtonGroup* subtypeBG = new QButtonGroup( );
+    subtypeBG->setExclusive( true );
 
+    normal = new QRadioButton( i18n( "Normal" ), box );
+    boxLayout->addWidget( normal );
+    subtypeBG->addButton( normal, KDChartParams::BarNormal );
+
+    stacked = new QRadioButton( i18n( "Stacked" ), box );
+    boxLayout->addWidget( stacked );
+    subtypeBG->addButton( stacked, KDChartParams::BarStacked );
+
+    percent = new QRadioButton( i18n( "Percent" ), box );
+    boxLayout->addWidget( percent );
+    subtypeBG->addButton( percent, KDChartParams::BarPercent );
+
+    // Notify when the user clicks one of the radio buttons.
+    connect( subtypeBG, SIGNAL( buttonClicked( int ) ),
+             this,      SLOT( slotChangeSubType( int ) ) );
+
+    QLabel  *lbl = new QLabel( i18n( "Number of lines: ") );
+    leftLayout->addWidget( lbl );
+    m_numLines    = new QSpinBox( );
+    leftLayout->addWidget( m_numLines );
+    leftLayout->addStretch( 1 );
+
+    // ------------------------------------
+    // The right side with the example icon
     QGroupBox* exampleGB = new QGroupBox( i18n( "Example" ) );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
@@ -341,18 +374,34 @@ KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,
     QHBoxLayout* toplevel = new QHBoxLayout( this );
     toplevel->setMargin( 10 );
 
-    Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
-    subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
-    toplevel->addWidget( subtypeBG, Qt::AlignCenter| Qt::AlignVCenter );
-    normal = new QRadioButton( i18n( "Normal" ), subtypeBG );
-    subtypeBG->insert( normal, KDChartParams::AreaNormal );
-    stacked = new QRadioButton( i18n( "Stacked" ), subtypeBG );
-    subtypeBG->insert( stacked, KDChartParams::AreaStacked );
-    percent = new QRadioButton( i18n( "Percent" ), subtypeBG );
-    subtypeBG->insert( percent, KDChartParams::AreaPercent );
-    subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
-    connect( subtypeBG, SIGNAL( clicked( int ) ),
-             this, SLOT( slotChangeSubType( int ) ) );
+    QGroupBox* box = new QGroupBox( i18n( "Sub-type" ) );
+    box->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
+    toplevel->addWidget( box );
+
+    QVBoxLayout  *layout = new QVBoxLayout( box );
+    layout->setMargin( 10 );
+
+    QButtonGroup* subtypeBG = new QButtonGroup( );
+    subtypeBG->setExclusive( true );
+
+    normal = new QRadioButton( i18n( "Normal" ), box );
+    layout->addWidget( normal );
+    subtypeBG->addButton( normal, KDChartParams::LineNormal );
+
+    stacked = new QRadioButton( i18n( "Stacked" ), box );
+    layout->addWidget( stacked );
+    subtypeBG->addButton( stacked, KDChartParams::LineStacked );
+
+    percent = new QRadioButton( i18n( "Percent" ), box );
+    layout->addWidget( percent );
+    subtypeBG->addButton( percent, KDChartParams::LinePercent );
+
+    layout->addStretch( 1 );
+    box->setFixedWidth( box->sizeHint().width() );
+
+    // Notify when the user clicks one of the radio buttons.
+    connect( subtypeBG, SIGNAL( buttonClicked( int ) ),
+             this,      SLOT( slotChangeSubType( int ) ) );
 
     QGroupBox* exampleGB = new QGroupBox( i18n( "Example" ) );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
