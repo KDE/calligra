@@ -29,6 +29,8 @@
 #include <kdebug.h>
 
 
+#include <QLayout>
+#include <QButtonGroup>
 //Added by qt3to4:
 #include <Q3VButtonGroup>
 #include <kvbox.h>
@@ -49,20 +51,37 @@ KChartHiloSubTypeChartPage::KChartHiloSubTypeChartPage( KChartParams* params,
     QHBoxLayout* toplevel = new QHBoxLayout( this );
     toplevel->setMargin( 10 );
 
-    Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
-    subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
-    toplevel->addWidget( subtypeBG, Qt::AlignCenter| Qt::AlignVCenter );
-    normal = new QRadioButton( i18n( "Normal" ), subtypeBG );
-    subtypeBG->insert( normal, KDChartParams::AreaNormal );
-    stacked = new QRadioButton(i18n("HiLoClose"), subtypeBG );
-    subtypeBG->insert( stacked, KDChartParams::AreaStacked );
-    percent = new QRadioButton( i18n("HiLoOpenClose"), subtypeBG );
-    subtypeBG->insert( percent, KDChartParams::AreaPercent );
+    // The left side: The radio buttons
+    QGroupBox* subtypeGB = new QGroupBox( i18n( "Sub-type" ) );
+    subtypeGB->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
+    toplevel->addWidget( subtypeGB );
 
-    subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
-    connect( subtypeBG, SIGNAL( clicked( int ) ),
-             this, SLOT( slotChangeSubType( int ) ) );
+    QVBoxLayout  *layout = new QVBoxLayout( subtypeGB );
+    layout->setMargin( 10 );
 
+    QButtonGroup* subtypeBG = new QButtonGroup( );
+    subtypeBG->setExclusive( true );
+
+    normal = new QRadioButton( i18n( "Normal" ), subtypeGB );
+    layout->addWidget( normal );
+    subtypeBG->addButton( normal, KDChartParams::HiLoNormal );
+
+    stacked = new QRadioButton(i18n("HiLoClose"), subtypeGB );
+    layout->addWidget( stacked );
+    subtypeBG->addButton( stacked, KDChartParams::HiLoClose );
+
+    percent = new QRadioButton( i18n("HiLoOpenClose"), subtypeGB );
+    layout->addWidget( percent );
+    subtypeBG->addButton( percent, KDChartParams::HiLoOpenClose );
+
+    layout->addStretch( 1 );
+    subtypeGB->setFixedWidth( subtypeGB->sizeHint().width() );
+
+    // Notify when the user clicks one of the radio buttons.
+    connect( subtypeBG, SIGNAL( buttonClicked( int ) ),
+             this,      SLOT( slotChangeSubType( int ) ) );
+
+    // The right side: The example icon.
     QGroupBox* exampleGB = new QGroupBox(i18n( "Example" ) );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
