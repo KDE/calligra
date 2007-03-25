@@ -282,7 +282,15 @@ int TextTool::pointToPosition(const QPointF & point) const {
 }
 
 void TextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
-    // TODO select whole word, or when clicking in between two words select 2 words.
+    Q_UNUSED(event); // all positioning has ben done by the first click
+    m_caret.clearSelection();
+    int pos = m_caret.position();
+    m_caret.movePosition(QTextCursor::WordLeft);
+    m_caret.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+    if(qAbs(pos - m_caret.position()) <= 1) // clicked between two words
+        m_caret.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+
+    repaintSelection(m_caret.anchor(), m_caret.position());
 }
 
 void TextTool::mouseMoveEvent( KoPointerEvent *event ) {
@@ -332,7 +340,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         moveOperation = QTextCursor::Down;
     else {
         // check for shortcuts.
-        QKeySequence item(event->key() | event->modifiers());
+        QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
         if(hit(item, KStandardShortcut::Home))
             // Goto beginning of the document. Default: Ctrl-Home
             moveOperation = QTextCursor::StartOfLine; // TODO
