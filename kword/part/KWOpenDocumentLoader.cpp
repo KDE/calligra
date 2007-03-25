@@ -720,6 +720,10 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
         context.addStyles( paragraphStyle, "paragraph" );
 
         KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
+        if( ! style ) {
+            style = d->document->styleManager()->defaultParagraphStyle();
+            kDebug(32001) << "KWOpenDocumentLoader::loadSpan using default style!" << endl;
+        }
         if ( style ) {
             style->loadOasis( context.styleStack() );
             QTextBlock block = cursor.block();
@@ -790,6 +794,13 @@ void KWOpenDocumentLoader::loadHeading(const KoXmlElement& parent, KoOasisLoadin
         context.addStyles( paragraphStyle, "paragraph" );
         context.styleStack().restore();
         //loadPageLayout( masterPageName, context ); // page layout
+
+        KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
+        if ( style ) {
+            style->loadOasis( context.styleStack() );
+            QTextBlock block = cursor.block();
+            style->applyStyle(block);
+        }
     }
 #endif
 
