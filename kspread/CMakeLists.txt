@@ -14,7 +14,7 @@ add_subdirectory( functions )
 add_subdirectory( sheetstyles )
 add_subdirectory( templates )
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart1 ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart1 ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} ${EIGEN_INCLUDE_DIR} )
 
 
 ########### next target ###############
