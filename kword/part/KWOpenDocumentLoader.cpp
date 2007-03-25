@@ -737,7 +737,8 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
     }
 
     //KoTextParag::loadOasisSpan
-    loadSpan(parent, context, cursor);
+    bool stripLeadingSpace = true;
+    loadSpan(parent, context, cursor, &stripLeadingSpace);
 
     QTextBlockFormat emptyTbf;
     QTextCharFormat emptyCf;
@@ -793,7 +794,8 @@ void KWOpenDocumentLoader::loadHeading(const KoXmlElement& parent, KoOasisLoadin
 #endif
 
     //KoTextParag::loadOasisSpan
-    loadSpan(parent, context, cursor);
+    bool stripLeadingSpace = true;
+    loadSpan(parent, context, cursor, &stripLeadingSpace);
 
     QTextBlockFormat emptyTbf;
     QTextCharFormat emptyCf;
@@ -867,8 +869,9 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
 }
 
 //KoTextParag::loadOasisSpan
-void KWOpenDocumentLoader::loadSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor)
+void KWOpenDocumentLoader::loadSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor, bool* stripLeadingSpace)
 {
+    Q_ASSERT( stripLeadingSpace );
     QString styleName = context.styleStack().userStyleName( "paragraph" );
     kDebug(32001) << "KWOpenDocumentLoader::loadSpan styleName=" << styleName << endl;
     KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
@@ -925,8 +928,10 @@ if(parent.localName()!="span") {
                 //style->characterStyle()->applyStyle(&cursor);
             }
 
-            bool stripLeadingSpace = true;
-            cursor.insertText( normalizeWhitespace(text.replace('\n', QChar(0x2028)), stripLeadingSpace) );
+            text = normalizeWhitespace(text.replace('\n', QChar(0x2028)), *stripLeadingSpace);
+            *stripLeadingSpace = text[text.length() - 1].isSpace();
+
+            cursor.insertText( text );
 
             int currentpos = cursor.position();
             cursor.setPosition(prevpos, QTextCursor::MoveAnchor);
@@ -970,7 +975,7 @@ if(parent.localName()!="span") {
                 charstyle->applyStyle(&cursor);
             }
 #endif
-            loadSpan( ts, context, cursor ); // recurse
+            loadSpan( ts, context, cursor, stripLeadingSpace ); // recurse
 
             context.styleStack().restore();
         }
