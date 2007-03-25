@@ -289,6 +289,17 @@ void TestMathFunctions::testMUNIT()
     CHECK_EVAL( "MUNIT(3)", evaluate( "{1;0;0|0;1;0|0;0;1}" ) );
 }
 
+void TestMathFunctions::testODD()
+{
+    CHECK_EVAL( "ODD(5)", 5 );
+    CHECK_EVAL( "ODD(-5)", -5 );
+    CHECK_EVAL( "ODD(2)",  3 );
+    CHECK_EVAL( "ODD(0.3)", 1 );
+    CHECK_EVAL( "ODD(-2)",  -3 );
+    CHECK_EVAL( "ODD(-0.3)",  -1 );
+    CHECK_EVAL( "ODD(0)", 1 );
+}
+
 QTEST_KDEMAIN(TestMathFunctions, GUI)
 
 #include "TestMathFunctions.moc"

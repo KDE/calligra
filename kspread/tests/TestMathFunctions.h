@@ -47,6 +47,7 @@ private slots:
   void testMINVERSE();
   void testMMULT();
   void testMUNIT();
+  void testODD();
 
 private:
   Value evaluate(const QString&);

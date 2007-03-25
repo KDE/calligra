@@ -182,10 +182,11 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The ODD() function returns the number rounded up to the nearest odd integer.</Text>
+	<Text>The ODD() function returns the number rounded up (or down, for negative values) to the nearest odd integer. By definition, ODD(0) is 1.</Text>
 	<Syntax>ODD(value)</Syntax>
 	<Example>ODD(1.2) returns 3</Example>
 	<Example>ODD(2) returns 3</Example>
+	<Example>ODD(-2) returns -3</Example>
 	<Related>EVEN</Related>
       </Help>
     </Function>
