@@ -54,7 +54,6 @@ class Sheet;
  * garbage collection, caching, used area tracking, etc.
  *
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
- * \since 2.0
  *
  * \note For data assigned to points use PointStorage.
  */

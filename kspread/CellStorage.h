@@ -51,9 +51,10 @@ class ValueStorage;
  * The cell storage.
  * A wrapper around a couple of storages, which hold the cell data.
  * Provides methods to iterate over the non-empty cells.
+ * Emits Damages on changes.
+ * Capable of recording the old data for undoing.
  *
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
- * \since 2.0
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  */
