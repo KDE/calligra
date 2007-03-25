@@ -402,6 +402,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
 
 void TextTool::ensureCursorVisible() {
     QRectF cursorPos = textRect(m_caret.position(), m_caret.position());
+    cursorPos.moveTop(cursorPos.top() - m_textShapeData->documentOffset());
     m_canvas->ensureVisible(m_textShape->transformationMatrix(0).mapRect(cursorPos));
 }
 
