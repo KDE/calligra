@@ -205,7 +205,7 @@ void HTMLExport::openPage( Sheet *sheet, KoDocument *document, QString &str )
   str += "<title>" + title + "</title>\n";
   str += "</head>\n";
   str += QString("<body bgcolor=\"#FFFFFF\" dir=\"%1\">\n").arg(
-      (sheet->layoutDirection() == Sheet::RightToLeft) ? "rtl" : "ltr" );
+      (sheet->layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr" );
 
   str += "<a name=\"__top\">\n";
 }
@@ -237,7 +237,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
     int i=1;
 
     str += '<' + html_table_tag + html_table_options.arg( m_dialog->useBorders() ? "1" : "0" ).arg( m_dialog->pixelsBetweenCells() ) +
-        QString("dir=\"%1\">\n").arg( (sheet->layoutDirection() == Sheet::RightToLeft ) ? "rtl" : "ltr" );
+        QString("dir=\"%1\">\n").arg( (sheet->layoutDirection() == Qt::RightToLeft ) ? "rtl" : "ltr" );
 
     unsigned int nonempty_cells_prev=0;
 
@@ -299,7 +299,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
                    + cell.postfix(currentrow, currentcolumn);
 #endif
             line += "  <" + html_cell_tag + html_cell_options;
-	    if (text.isRightToLeft() != (sheet->layoutDirection() == Sheet::RightToLeft))
+	    if (text.isRightToLeft() != (sheet->layoutDirection() == Qt::RightToLeft))
                 line += QString(" dir=\"%1\" ").arg(text.isRightToLeft()?"rtl":"ltr");
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
