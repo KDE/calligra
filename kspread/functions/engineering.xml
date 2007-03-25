@@ -158,7 +158,7 @@
         <Type>Float</Type>
       </Parameter>
       <Help>
-        <Text>The ERF() function returns the error function.</Text>
+        <Text>The ERF() function returns the error function. With a single argument, ERF() returns the error function between 0 and that argument.</Text>
         <Syntax>ERF(Lower limit; Upper limit)</Syntax>
         <Example>ERF(0.4) equals 0.42839236</Example>
         <Related>ERFC</Related>

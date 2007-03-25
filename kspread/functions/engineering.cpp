@@ -136,7 +136,7 @@ void RegisterEngineeringFunctions()
   f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("ERF",         func_erf);
-  f->setParamCount (2);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("ERFC",        func_erfc);
   f->setParamCount (1, 2);

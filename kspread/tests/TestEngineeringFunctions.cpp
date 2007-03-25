@@ -29,27 +29,27 @@
 //  - accuracy problem due to propagated error in the implementation
 #define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber(y))
 
-// round to get at most 15-digits number
+// round to get at most 10-digits number
 static Value RoundNumber(double f)
 {
-  return Value( QString::number(f, 'g', 15) );
+  return Value( QString::number(f, 'g', 10) );
 }
 
-// round to get at most 15-digits number
+// round to get at most 10-digits number
 static Value RoundNumber(const Value& v)
 {
   if ( v.isComplex() )
   {
       const double imag = v.asComplex().imag();
-      QString complex = QString::number( v.asComplex().real(), 'g', 15);
+      QString complex = QString::number( v.asComplex().real(), 'g', 10);
       if ( imag >= 0.0 )
           complex += '+';
-      complex += QString::number( imag, 'g', 15);
+      complex += QString::number( imag, 'g', 10);
       complex += 'i';
       return Value( complex );
   }
   else if ( v.isNumber() )
-    return Value( QString::number(v.asFloat(), 'g', 15) );
+    return Value( QString::number(v.asFloat(), 'g', 10) );
   else
     return v;
 }
@@ -76,6 +76,21 @@ void TestEngineeringFunctions::testCOMPLEX()
     CHECK_EVAL( "=IMREAL(COMPLEX(1;-3))", 1.0 );
     CHECK_EVAL( "=IMAGINARY(COMPLEX(0;-2))", -2.0 );
 //     CHECK_EVAL( "=IMAGINARY(COMPLEX(0;-2;\"i\"))", -2.0 );
+}
+
+void TestEngineeringFunctions::testERF()
+{
+    CHECK_EVAL( "ERF(0.5)", Value( 0.52049987781 ) );
+    CHECK_EVAL( "ERF(0.1)", Value( 0.1124629160 ) );
+    CHECK_EVAL( "ABS(ERF(0.1; 0.5) - 0.40803696174) < 1e-6", Value ( true ) );
+    CHECK_EVAL( "ABS(ERF(0.1) - ERF(0.5) + 0.40803696174) < 1e-6", Value ( true ) );
+    CHECK_EVAL( "ABS(ERF(0.5; 0.1) + 0.40803696174) < 1e-6", Value ( true ) );
+}
+
+void TestEngineeringFunctions::testERFC()
+{
+    CHECK_EVAL( "ERFC(3)", Value( 0.000022090497 ) );
+    CHECK_EVAL( "ABS(ERFC(0.1)-(1-ERF(0.1))) < 1e-6", Value( true ) );
 }
 
 void TestEngineeringFunctions::testIMABS()

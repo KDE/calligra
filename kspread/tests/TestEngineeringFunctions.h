@@ -35,6 +35,8 @@ class TestEngineeringFunctions: public QObject
 
 private slots:
   void testCOMPLEX();
+  void testERF();
+  void testERFC();
   void testIMABS();
   void testIMAGINARY();
   void testIMARGUMENT();
