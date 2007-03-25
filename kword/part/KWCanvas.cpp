@@ -95,12 +95,11 @@ void KWCanvas::addCommand(QUndoCommand *command) {
 
 void KWCanvas::updateCanvas(const QRectF& rc) {
     QRectF zoomedRect = m_viewMode->documentToView(rc);
-    zoomedRect.moveTopLeft( zoomedRect.topLeft() - m_documentOffset);
     QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(zoomedRect.toRect());
     foreach(KWViewMode::ViewMap vm, map) {
         vm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
-        QRect finalClip((int)(vm.clipRect.x() + vm.distance.x()),
-                (int)(vm.clipRect.y() + vm.distance.y()),
+        QRect finalClip((int)(vm.clipRect.x() + vm.distance.x() - m_documentOffset.x()),
+                (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
                 vm.clipRect.width(), vm.clipRect.height());
         update(finalClip);
     }
@@ -218,6 +217,7 @@ bool KWCanvas::event (QEvent *event) {
 void KWCanvas::paintEvent(QPaintEvent * ev) {
     QPainter painter( this );
     painter.translate(-m_documentOffset);
+    painter.eraseRect(ev->rect());
 
     if(m_viewMode->hasPages()) {
         QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(ev->rect().translated(m_documentOffset));
