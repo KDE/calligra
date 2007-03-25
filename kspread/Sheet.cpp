@@ -222,7 +222,7 @@ public:
   QString name;
   int id;
 
-  Sheet::LayoutDirection layoutDirection;
+  Qt::LayoutDirection layoutDirection;
 
   // true if sheet is hidden
   bool hide;
@@ -311,7 +311,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->id = s_id++;
   s_mapSheets->insert( d->id, this );
 
-  d->layoutDirection = LeftToRight;
+  d->layoutDirection = Qt::LeftToRight;
 
   d->emptyPen.setStyle( Qt::NoPen );
   d->name = sheetName;
@@ -369,12 +369,12 @@ Doc* Sheet::doc() const
   return d->workbook->doc();
 }
 
-Sheet::LayoutDirection Sheet::layoutDirection() const
+Qt::LayoutDirection Sheet::layoutDirection() const
 {
   return d->layoutDirection;
 }
 
-void Sheet::setLayoutDirection( LayoutDirection dir )
+void Sheet::setLayoutDirection( Qt::LayoutDirection dir )
 {
   d->layoutDirection = dir;
 }
@@ -2465,7 +2465,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     sheet.setAttribute( "name", sheetName() );
 
     //Laurent: for oasis format I think that we must use style:direction...
-    sheet.setAttribute( "layoutDirection", (layoutDirection() == RightToLeft) ? "rtl" : "ltr" );
+    sheet.setAttribute( "layoutDirection", (layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr" );
     sheet.setAttribute( "columnnumber", (int)getShowColumnNumber());
     sheet.setAttribute( "borders", (int)isShowPageBorders());
     sheet.setAttribute( "hide", (int)isHidden());
@@ -2828,9 +2828,9 @@ void Sheet::checkContentDirection( QString const & name )
 {
   /* set sheet's direction to RTL if sheet name is an RTL string */
   if ( (name.isRightToLeft()) )
-    setLayoutDirection( RightToLeft );
+    setLayoutDirection( Qt::RightToLeft );
   else
-    setLayoutDirection( LeftToRight );
+    setLayoutDirection( Qt::LeftToRight );
 
   emit sig_refreshView();
 }
@@ -2976,7 +2976,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                        const Styles& autoStyles,
                        const QHash<QString, Conditions>& conditionalStyles )
 {
-    setLayoutDirection (LeftToRight);
+    setLayoutDirection( Qt::LeftToRight );
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString() );
@@ -3215,7 +3215,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" ) )
     {
         kDebug(36003)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" )<<endl;
-        setLayoutDirection (( styleStack.attributeNS( KoXmlNS::style, "writing-mode" )=="lr-tb" ) ? LeftToRight : RightToLeft);
+        setLayoutDirection (( styleStack.attributeNS( KoXmlNS::style, "writing-mode" )=="lr-tb" ) ? Qt::LeftToRight : Qt::RightToLeft);
         //TODO
         //<value>lr-tb</value>
         //<value>rl-tb</value>
@@ -4311,19 +4311,19 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
     }
 
     bool detectDirection = true;
-    setLayoutDirection (LeftToRight);
+    setLayoutDirection( Qt::LeftToRight );
     QString layoutDir = sheet.attribute( "layoutDirection" );
     if( !layoutDir.isEmpty() )
     {
         if( layoutDir == "rtl" )
         {
             detectDirection = false;
-            setLayoutDirection (RightToLeft);
+            setLayoutDirection( Qt::RightToLeft );
         }
         else if( layoutDir == "ltr" )
         {
             detectDirection = false;
-            setLayoutDirection (LeftToRight);
+            setLayoutDirection( Qt::LeftToRight );
         }
         else
             kDebug()<<" Direction not implemented : "<<layoutDir<<endl;

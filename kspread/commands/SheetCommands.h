@@ -24,8 +24,6 @@
 #include <QString>
 #include <QUndoCommand>
 
-#include "Sheet.h" // for Sheet::LayoutDirection
-
 /**
  * The KSpread namespace.
  */
@@ -121,7 +119,7 @@ class SheetPropertiesCommand : public QUndoCommand
 {
 public:
   SheetPropertiesCommand( Doc* doc, Sheet* sheet );
-  void setLayoutDirection( Sheet::LayoutDirection direction );
+  void setLayoutDirection( Qt::LayoutDirection direction );
   void setAutoCalc( bool b );
   void setShowGrid( bool b );
   void setShowPageBorders( bool b );
@@ -140,7 +138,7 @@ public:
 protected:
   Sheet* sheet;
   Doc* doc;
-  Sheet::LayoutDirection oldDirection, newDirection;
+  Qt::LayoutDirection oldDirection, newDirection;
   bool oldAutoCalc, newAutoCalc;
   bool oldShowGrid, newShowGrid;
   bool oldShowPageBorders, newShowPageBorders;

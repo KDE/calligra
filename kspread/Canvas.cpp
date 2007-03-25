@@ -532,7 +532,7 @@ void Canvas::scrollToCell(QPoint location) const
     // Do we need to scroll left?
     if ( xpos < minX )
     {
-        if ( sheet->layoutDirection() == Sheet::LeftToRight )
+        if ( sheet->layoutDirection() == Qt::LeftToRight )
             horzScrollBar()->setValue( (int) (xOffset() + xpos - minX ) );
         else
             horzScrollBar()->setValue( (int) ( horzScrollBar()->maximum() - (xOffset() + xpos - minX ) ) );
@@ -548,7 +548,7 @@ void Canvas::scrollToCell(QPoint location) const
       if ( horzScrollBarValue > horzScrollBarValueMax )
         horzScrollBarValue = horzScrollBarValueMax;
 
-        if ( sheet->layoutDirection() == Sheet::LeftToRight )
+        if ( sheet->layoutDirection() == Qt::LeftToRight )
             horzScrollBar()->setValue( (int) horzScrollBarValue );
         else
             horzScrollBar()->setValue( (int) ( horzScrollBar()->maximum() - horzScrollBarValue ) );
@@ -594,7 +594,7 @@ void Canvas::slotScrollHorz( int _value )
     kDebug(36005) << "slotScrollHorz: value = " << _value << endl;
     //kDebug(36005) << kBacktrace() << endl;
 
-    if ( sheet->layoutDirection() == Sheet::RightToLeft )
+    if ( sheet->layoutDirection() == Qt::RightToLeft )
         _value = horzScrollBar()->maximum() - _value;
 
     if ( _value < 0 ) {
@@ -621,7 +621,7 @@ void Canvas::slotScrollHorz( int _value )
         d->xOffset = 0.0;
 
     // scrolling the widgets in the right direction
-    if ( sheet->layoutDirection() == Sheet::RightToLeft )
+    if ( sheet->layoutDirection() == Qt::RightToLeft )
         dx = -dx;
     scroll( dx, 0 );
     hBorderWidget()->scroll( dx, 0 );
@@ -680,7 +680,7 @@ void Canvas::slotMaxColumn( int _max_column )
 
   horzScrollBar()->setRange( 0, (int) ( xpos + xOffset() ) );
 
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
+  if ( sheet->layoutDirection() == Qt::RightToLeft )
     horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
 }
 
@@ -849,7 +849,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
   double dwidth = d->view->doc()->unzoomItXOld( width() );
   double ev_PosX;
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
+  if ( sheet->layoutDirection() == Qt::RightToLeft )
   {
     ev_PosX = dwidth - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   }
@@ -885,7 +885,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   //shape to a resize arrow
   if (highlightRangeSizeGripAt(ev_PosX,ev_PosY))
   {
-    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    if ( sheet->layoutDirection() == Qt::RightToLeft )
       setCursor( Qt::SizeBDiagCursor );
     else
       setCursor( Qt::SizeFDiagCursor );
@@ -916,7 +916,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   {
     Cell cell = Cell( sheet, col, row ).masterCell();
     QString anchor;
-    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    if ( sheet->layoutDirection() == Qt::RightToLeft )
     {
         CellView cellView = view()->sheetView( sheet )->cellView( col, row );
         anchor = cellView.testAnchor( cell, cell.width() - ev_PosX + xpos, ev_PosY - ypos );
@@ -945,7 +945,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
     if ( !sheet->isProtected() )
     {
-      if ( sheet->layoutDirection()==Sheet::RightToLeft )
+      if ( sheet->layoutDirection() == Qt::RightToLeft )
         setCursor( Qt::SizeBDiagCursor );
       else
         setCursor( Qt::SizeFDiagCursor );
@@ -1201,7 +1201,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   // in ::mouseMoveEvent, needs to be separated into one function
   double dwidth = d->view->doc()->unzoomItXOld( width() );
   double ev_PosX;
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
+  if ( sheet->layoutDirection() == Qt::RightToLeft )
   {
     ev_PosX = dwidth - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   }
@@ -1620,7 +1620,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
 
   // determine the current position
   double eventPosX;
-  if (sheet->layoutDirection()==Sheet::RightToLeft)
+  if (sheet->layoutDirection() == Qt::RightToLeft)
   {
     eventPosX = this->width() - d->view->doc()->unzoomItXOld( event->pos().x() ) + xOffset();
   }
@@ -1675,7 +1675,7 @@ void Canvas::dropEvent( QDropEvent * _ev )
   const QRectF noGoArea( xpos - 1, ypos - 1, width + 3, height + 3 );
 
   double ev_PosX;
-  if ( sheet->layoutDirection() == Sheet::RightToLeft )
+  if ( sheet->layoutDirection() == Qt::RightToLeft )
     ev_PosX = this->width() - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   else
     ev_PosX = d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
@@ -1757,7 +1757,7 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         if ( ( xOffset() + ev_Width ) > sheet->sizeMaxX() )
         {
           horzScrollBar()->setRange( 0, (int) ( sheet->sizeMaxX() - ev_Width ) );
-          if ( sheet->layoutDirection() == Sheet::RightToLeft )
+          if ( sheet->layoutDirection() == Qt::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
     }
@@ -1769,7 +1769,7 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         if ( horzScrollBar()->maximum() == int( sheet->sizeMaxX() - ev_Width ) )
         {
           horzScrollBar()->setRange( 0, (int) (sheet->sizeMaxX() - ev_Width ) );
-          if ( sheet->layoutDirection() == Sheet::RightToLeft )
+          if ( sheet->layoutDirection() == Qt::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
     }
@@ -1978,13 +1978,13 @@ void Canvas::processArrowKey( QKeyEvent *event)
     direction = Top;
     break;
   case Qt::Key_Left:
-    if (sheet->layoutDirection()==Sheet::RightToLeft)
+    if (sheet->layoutDirection() == Qt::RightToLeft)
       direction = Right;
     else
       direction = Left;
     break;
   case Qt::Key_Right:
-    if (sheet->layoutDirection()==Sheet::RightToLeft)
+    if (sheet->layoutDirection() == Qt::RightToLeft)
       direction = Left;
     else
       direction = Right;
@@ -2446,7 +2446,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   //Ctrl+Qt::Key_Left
   case Qt::Key_Left:
 
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
+  if ( sheet->layoutDirection() == Qt::RightToLeft )
   {
     cell = Cell( sheet, marker.x(), marker.y() );
     if ( (!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != KS_colMax))
@@ -2540,7 +2540,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   //Ctrl+Qt::Key_Right
   case Qt::Key_Right:
 
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
+  if ( sheet->layoutDirection() == Qt::RightToLeft )
   {
     cell = Cell( sheet, marker.x(), marker.y() );
     if ( (!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != 1))
@@ -3389,17 +3389,17 @@ bool Canvas::createEditor( bool clear,  bool focus )
 
         double xpos = sheet->columnPosition( selection()->marker().x() ) - xOffset();
 
-        Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
+        Qt::LayoutDirection sheetDir = sheet->layoutDirection();
         bool rtlText = cell.displayText().isRightToLeft();
 
         // if sheet and cell direction don't match, then the editor's location
         // needs to be shifted backwards so that it's right above the cell's text
-        if ( w > 0 && ( ( sheetDir == Sheet::RightToLeft && !rtlText ) ||
-             ( sheetDir == Sheet::LeftToRight && rtlText  ) ) )
+        if ( w > 0 && ( ( sheetDir == Qt::RightToLeft && !rtlText ) ||
+             ( sheetDir == Qt::LeftToRight && rtlText  ) ) )
             xpos -= w - min_w;
 
         // paint editor above correct cell if sheet direction is RTL
-        if ( sheetDir == Sheet::RightToLeft )
+        if ( sheetDir == Qt::RightToLeft )
         {
             double dwidth = d->view->doc()->unzoomItXOld( width() );
             double w2 = qMax( w, min_w );
@@ -3893,7 +3893,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
             line = QLineF( left, top, right, top );
             painter.drawLine( line );
         }
-        if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
+        if ( activeSheet()->layoutDirection() == Qt::RightToLeft )
         {
             if ( paintRight )
             {
@@ -3924,7 +3924,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
                 }
             }
         }
-        else // activeSheet()->layoutDirection()==Sheet::LeftToRight
+        else // activeSheet()->layoutDirection() == Qt::LeftToRight
         {
             if ( paintLeft )
             {
@@ -3988,7 +3988,7 @@ QRectF Canvas::cellCoordinatesToView( const QRect& cellRange ) const
     // convert it to view coordinates
     rect = doc()->documentToView( rect );
     // apply layout direction
-    if ( sheet->layoutDirection() == Sheet::RightToLeft )
+    if ( sheet->layoutDirection() == Qt::RightToLeft )
     {
         const double left = rect.left();
         const double right = rect.right();
@@ -4011,7 +4011,7 @@ void Canvas::retrieveMarkerInfo( const QRect &cellRange,
     double top = visibleRect.top();
     double right = visibleRect.right();
     double bottom = visibleRect.bottom();
-    if ( sheet->layoutDirection() == Sheet::RightToLeft )
+    if ( sheet->layoutDirection() == Qt::RightToLeft )
     {
         const double docWidth = d->view->doc()->unzoomItX( width() );
         left = docWidth - visibleRect.right();
@@ -4057,7 +4057,7 @@ void Canvas::showToolTip( const QPoint& p )
     double ypos, xpos;
     double dwidth = doc()->unzoomItXOld( width() );
     int col;
-    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    if ( sheet->layoutDirection() == Qt::RightToLeft )
       col = sheet->leftColumn( (dwidth - doc()->unzoomItXOld( p.x() ) +
                                               xOffset()), xpos );
     else
@@ -4125,7 +4125,7 @@ void Canvas::showToolTip( const QPoint& p )
     // Get the cell dimensions
     QRectF marker;
     bool insideMarker = false;
-    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    if ( sheet->layoutDirection() == Qt::RightToLeft )
     {
       QRectF unzoomedMarker( dwidth - u - xpos + xOffset(),
                              ypos - yOffset(),

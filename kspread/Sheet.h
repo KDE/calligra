@@ -172,7 +172,6 @@ class KSPREAD_EXPORT Sheet : public QObject
 public:
     enum ChangeRef       { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType        { Text, Validity, Comment, ConditionalCellAttribute };
-    enum LayoutDirection { LeftToRight, RightToLeft };
 
     /**
      * Creates a sheet in \p map with the name \p sheetName . The internal
@@ -237,13 +236,13 @@ public:
     /**
      * Returns the layout direction of the sheet.
      */
-    LayoutDirection layoutDirection() const;
+    Qt::LayoutDirection layoutDirection() const;
 
     /**
      * Sets the layout direction of the sheet. For example, for Arabic or Hebrew
      * documents, it is possibly to layout the sheet from right to left.
      */
-    void setLayoutDirection( LayoutDirection dir );
+    void setLayoutDirection( Qt::LayoutDirection dir );
 
     /**
      * Returns, if the grid shall be shown on the screen

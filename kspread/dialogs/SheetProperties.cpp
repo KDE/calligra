@@ -52,7 +52,7 @@ SheetPropertiesDialog::~SheetPropertiesDialog()
 
 void SheetPropertiesDialog::slotDefault()
 {
-  setLayoutDirection( Sheet::LeftToRight );
+  setLayoutDirection( Qt::LeftToRight );
   setAutoCalc( true );
   setShowGrid( true );
   setShowFormula( false );
@@ -65,26 +65,26 @@ void SheetPropertiesDialog::slotDefault()
   setCapitalizeFirstLetter( false );
 }
 
-Sheet::LayoutDirection SheetPropertiesDialog::layoutDirection() const
+Qt::LayoutDirection SheetPropertiesDialog::layoutDirection() const
 {
   if( m_widget->directionComboBox->currentText() == i18n( "Left to Right" ) )
-    return Sheet::LeftToRight;
+    return Qt::LeftToRight;
 
   if( m_widget->directionComboBox->currentText() == i18n( "Right to Left" ) )
-    return Sheet::RightToLeft;
+    return Qt::RightToLeft;
 
   // fallback
-  return Sheet::LeftToRight;
+  return Qt::LeftToRight;
 }
 
-void SheetPropertiesDialog::setLayoutDirection( Sheet::LayoutDirection dir )
+void SheetPropertiesDialog::setLayoutDirection( Qt::LayoutDirection dir )
 {
   switch( dir )
   {
-    case Sheet::LeftToRight:
+    case Qt::LeftToRight:
       m_widget->directionComboBox->setItemText( m_widget->directionComboBox->currentIndex(), i18n( "Left to Right" ) );
       break;
-    case Sheet::RightToLeft:
+    case Qt::RightToLeft:
       m_widget->directionComboBox->setItemText( m_widget->directionComboBox->currentIndex(), i18n( "Right to Left" ) );
       break;
     default: break;

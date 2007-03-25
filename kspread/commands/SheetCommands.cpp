@@ -193,7 +193,7 @@ QString SheetPropertiesCommand::name() const
     return i18n("Change Sheet Properties");
 }
 
-void SheetPropertiesCommand::setLayoutDirection( Sheet::LayoutDirection dir )
+void SheetPropertiesCommand::setLayoutDirection( Qt::LayoutDirection dir )
 {
     newDirection = dir;
 }

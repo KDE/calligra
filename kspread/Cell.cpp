@@ -259,7 +259,7 @@ QString Cell::columnName() const
 // static
 QString Cell::columnName( uint column )
 {
-    if ( column > KS_colMax )
+    if ( column < 1 || column > KS_colMax )
         return QString("@@@");
 
     QString   str;

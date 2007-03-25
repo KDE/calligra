@@ -24,7 +24,6 @@
 
 #include <kdialog.h>
 
-#include "Sheet.h"
 #include "ui_SheetPropertiesWidget.h"
 
 namespace KSpread
@@ -48,9 +47,9 @@ public:
 
     virtual void slotDefault();
 
-    Sheet::LayoutDirection layoutDirection() const;
+    Qt::LayoutDirection layoutDirection() const;
 
-    void setLayoutDirection( Sheet::LayoutDirection dir );
+    void setLayoutDirection( Qt::LayoutDirection dir );
 
     bool autoCalc() const;
 

@@ -3424,7 +3424,7 @@ void View::borderRight()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+    if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
         manipulator->setLeftBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
     else
         manipulator->setRightBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
@@ -3437,7 +3437,7 @@ void View::setSelectionRightBorderColor( const QColor & color )
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+    if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
         manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
     else
         manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
@@ -3450,7 +3450,7 @@ void View::borderLeft()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+    if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
         manipulator->setRightBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
     else
         manipulator->setLeftBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
@@ -3463,7 +3463,7 @@ void View::setSelectionLeftBorderColor( const QColor & color )
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+    if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
         manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
     else
         manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
@@ -3666,7 +3666,7 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
     return;
   }
 
-  if ( oldSheet && oldSheet->layoutDirection()==Sheet::RightToLeft != d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+  if ( oldSheet && oldSheet->layoutDirection() == Qt::RightToLeft != d->activeSheet->layoutDirection() == Qt::RightToLeft )
     refreshView();
 
   doc()->setDisplaySheet( d->activeSheet );
@@ -5360,12 +5360,12 @@ void View::refreshView()
   d->selectAllButton->setMinimumHeight( qRound( doc()->zoomItY( font.pointSizeF() + 3 ) ) );
   d->selectAllButton->setMinimumWidth( qRound( doc()->zoomItX( YBORDER_WIDTH ) ) );
 
-  Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
+  Qt::LayoutDirection sheetDir = sheet->layoutDirection();
   bool interfaceIsRTL = QApplication::isRightToLeft();
 
-//   kDebug(36004)<<" sheetDir == Sheet::LeftToRight :"<<( sheetDir == Sheet::LeftToRight )<<endl;
-  if ((sheetDir == Sheet::LeftToRight && !interfaceIsRTL) ||
-      (sheetDir == Sheet::RightToLeft && interfaceIsRTL))
+//   kDebug(36004)<<" sheetDir == Qt::LeftToRight :"<<( sheetDir == Qt::LeftToRight )<<endl;
+  if ((sheetDir == Qt::LeftToRight && !interfaceIsRTL) ||
+      (sheetDir == Qt::RightToLeft && interfaceIsRTL))
   {
     d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
     d->viewLayout->setOriginCorner( Qt::TopLeftCorner );
@@ -5663,7 +5663,7 @@ void View::slotListChoosePopupMenu( )
       h = cellView.cellHeight();
   ty += h;
 
-  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+  if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
   {
     tx = canvasWidget()->width() - tx;
   }
@@ -5671,7 +5671,7 @@ void View::slotListChoosePopupMenu( )
   QPoint p( (int)tx, (int)ty );
   QPoint p2 = d->canvas->mapToGlobal( p );
 
-  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+  if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
   {
     p2.setX( p2.x() - d->popupListChoose->sizeHint().width() + 1 );
   }

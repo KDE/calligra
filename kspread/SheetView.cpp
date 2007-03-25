@@ -129,7 +129,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     // sheet's direction is RTL. We do this only if paintingObscured is 0,
     // otherwise the cell's painting location will flip back and forth in
     // consecutive calls to paintCell when painting obscured cells.
-    const bool rightToLeft = sheet()->layoutDirection() == Sheet::RightToLeft;
+    const bool rightToLeft = sheet()->layoutDirection() == Qt::RightToLeft;
     QPointF offset( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     int right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )

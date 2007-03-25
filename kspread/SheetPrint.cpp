@@ -465,7 +465,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
         for ( int x = regionLeft; x <= regionRight; ++x )
         {
             col_lay = m_pSheet->columnFormat( x );
-            double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) ?
+            double effXPos = ( m_pSheet->layoutDirection()==Qt::RightToLeft ) ?
                              view.width() - xpos - col_lay->width() : xpos;
             CellView tmpCellView( m_pSheet, x, y );
             CellView* cellView = &tmpCellView;
@@ -489,7 +489,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
         for ( int x = regionLeft; x <= regionRight; ++x )
         {
             col_lay = m_pSheet->columnFormat( x );
-            double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
+            double effXPos = ( m_pSheet->layoutDirection()==Qt::RightToLeft )
                              ? view.width() - xpos - col_lay->width() : xpos;
             CellView tmpCellView( m_pSheet, x, y );
             CellView* cellView = &tmpCellView;

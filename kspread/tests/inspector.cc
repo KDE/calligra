@@ -76,13 +76,13 @@ static QString longAsHexstring( long l )
 }
 #endif
 
-static QString dirAsString( Sheet::LayoutDirection dir )
+static QString dirAsString( Qt::LayoutDirection dir )
 {
   QString str;
   switch( dir )
   {
-    case Sheet::LeftToRight: str = "Left to Right"; break;
-    case Sheet::RightToLeft: str = "Right to Left"; break;
+    case Qt::LeftToRight: str = "Left to Right"; break;
+    case Qt::RightToLeft: str = "Right to Left"; break;
     default: str = "Unknown"; break;
   }
   return str;
