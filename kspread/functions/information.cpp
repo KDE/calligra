@@ -272,6 +272,8 @@ Value func_isodd (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ISEVEN
 Value func_iseven (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  if ( args[0].isError() )
+    return args[0];
   return Value (calc->isEven(args[0]));
 }
 

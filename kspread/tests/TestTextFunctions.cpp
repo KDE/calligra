@@ -144,6 +144,18 @@ void TestTextFunctions::testLEFT()
     CHECK_EVAL( "LEFT(\"Hello\";2.9)", Value( "He" ) );
 }
 
+void TestTextFunctions::testREPT()
+{
+    CHECK_EVAL( "REPT(\"X\";3)",  Value( "XXX" ) );
+    CHECK_EVAL( "REPT(\"XY\";2)",  Value( "XYXY" ) );
+    CHECK_EVAL( "REPT(\"X\";2.9)",  Value( "XX" ) );
+    CHECK_EVAL( "REPT(\"XY\";2.9)",  Value( "XYXY" ) );
+    CHECK_EVAL( "REPT(\"X\";0)",  Value( "" ) );
+    CHECK_EVAL( "REPT(\"XYZ\";0)",  Value( "" ) );
+    CHECK_EVAL( "REPT(\"X\";-1)",  Value::errorVALUE() );
+    CHECK_EVAL( "REPT(\"XYZ\";-0.1)",  Value::errorVALUE() );
+}
+
 void TestTextFunctions::testRIGHT()
 {
     CHECK_EVAL( "RIGHT(\"Hello\";2)", Value( "lo" ) );

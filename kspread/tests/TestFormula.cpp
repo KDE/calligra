@@ -289,6 +289,22 @@ void TestFormula::testInlineArrays()
 #endif
 }
 
+void TestFormula::testEquality()
+{
+    CHECK_EVAL( "=1=1", Value( true ) );
+    CHECK_EVAL( "=1=0", Value( false ) );
+    CHECK_EVAL( "=3=3.0001", Value( false ) );
+    CHECK_EVAL( "=\"Hi\"=\"Bye\"", Value( false ) );
+    CHECK_EVAL( "=TRUE()=FALSE()", Value( false ) );
+    CHECK_EVAL( "=TRUE()=TRUE()", Value( true ) );
+    CHECK_EVAL( "=FALSE()=FALSE()", Value( true ) );
+    CHECK_EVAL( "=\"5\"=5", Value( false ) );
+    CHECK_EVAL( "=NA()=NA()", Value::errorNA() );
+    // This is required by openformula spec, but looks like
+    // rubbish to me
+    // CHECK_EVAL( "=\"Hi\"=\"HI\"", Value( true ) );
+}
+
 QTEST_KDEMAIN(TestFormula, GUI)
 
 #include "TestFormula.moc"

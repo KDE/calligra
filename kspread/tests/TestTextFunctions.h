@@ -43,6 +43,7 @@ private slots:
     void testFIXED();
     void testJIS();
     void testLEFT();
+    void testREPT();
     void testRIGHT();
     void testUNICHAR();
     void testUNICODE();

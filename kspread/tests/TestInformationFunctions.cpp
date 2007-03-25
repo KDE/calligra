@@ -48,6 +48,23 @@ void TestInformationFunctions::testERRORTYPE()
     CHECK_EVAL( "ERRORTYPE(1/0)", Value( 2 ) );
 }
 
+void TestInformationFunctions::testISEVEN()
+{
+    CHECK_EVAL( "ISEVEN(2)", Value( true ) );
+    CHECK_EVAL( "ISEVEN(6)", Value( true ) );
+    CHECK_EVAL( "ISEVEN(2.1)", Value( true ) );
+    CHECK_EVAL( "ISEVEN(2.9)", Value( true ) );
+    CHECK_EVAL( "ISEVEN(3)", Value( false ) );
+    CHECK_EVAL( "ISEVEN(3.9)", Value( false ) );
+    CHECK_EVAL( "ISEVEN(-2)", Value( true ) );
+    CHECK_EVAL( "ISEVEN(-2.1)", Value( true ) );
+    CHECK_EVAL( "ISEVEN(-2.5)", Value( true ) );
+    CHECK_EVAL( "ISEVEN(-2.9)", Value( true ) );
+    CHECK_EVAL( "ISEVEN(-3)", Value( false ) );
+    CHECK_EVAL( "ISEVEN(NA())", Value::errorNA() );
+    CHECK_EVAL( "ISEVEN(0)", Value( true ) );
+}
+
 void TestInformationFunctions::testVALUE()
 {
     CHECK_EVAL( "VALUE(\"6\")", Value( 6 ) );

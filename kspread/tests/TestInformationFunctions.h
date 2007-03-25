@@ -34,6 +34,7 @@ class TestInformationFunctions: public QObject
 
 private slots:
     void testERRORTYPE();
+    void testISEVEN();
     void testVALUE();
 private:
     Value evaluate(const QString&, Value& ex);

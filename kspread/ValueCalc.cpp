@@ -409,7 +409,11 @@ bool ValueCalc::isZero (const Value &a)
 bool ValueCalc::isEven (const Value &a)
 {
   if (a.isError()) return false;
-  return ((converter->asInteger (a).asInteger() % 2) == 0);
+  if (gequal(a, Value( 0 ) ) ) {
+      return ((converter->asInteger (roundDown(a) ).asInteger() % 2) == 0);
+  } else {
+      return ((converter->asInteger (roundUp(a) ).asInteger() % 2) == 0);
+  }
 }
 
 bool ValueCalc::equal (const Value &a, const Value &b)

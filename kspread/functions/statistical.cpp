@@ -221,7 +221,15 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("NORMSDIST", func_stdnormdist);
   repo->add (f);
+  // this is meant to be a copy of the function above.
+  // required for OpenFormula compliance.
+  f = new Function ("LEGACYNORMSDIST", func_stdnormdist);
+  repo->add (f);
   f = new Function ("NORMSINV", func_normsinv);
+  repo->add (f);
+  // this is meant to be a copy of the function above.
+  // required for OpenFormula compliance.
+  f = new Function ("LEGACYNORMSINV", func_normsinv);
   repo->add (f);
   f = new Function ("PEARSON", func_correl_pop);
   f->setParamCount (2);

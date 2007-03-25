@@ -390,9 +390,10 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The REPT() function repeats the first parameter as often as told by the second parameter.</Text>
+	<Text>The REPT() function repeats the first parameter as many times as by the second parameter. The second parameter must not be negative, and this function will return an empty string if the second parameter is zero (or rounds down to zero).</Text>
 	<Syntax>REPT(text;count)</Syntax>
 	<Example>REPT("KSpread";3) returns "KSpreadKSpreadKSpread"</Example>
+	<Example>REPT("KSpread";0) returns ""</Example>
       </Help>
     </Function>
 

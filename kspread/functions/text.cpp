@@ -520,6 +520,9 @@ Value func_rept (valVector args, ValueCalc *calc, FuncExtra *)
   QString s = calc->conv()->asString (args[0]).asString();
   int nb = calc->conv()->asInteger (args[1]).asInteger();
 
+  if ( nb < 0 )
+    return Value::errorVALUE();
+
   QString result;
   for (int i = 0; i < nb; i++) result += s;
   return Value (result);

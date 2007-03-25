@@ -1064,7 +1064,16 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
         // replace it
         result.append( "ERRORTYPE" );
         i+=10; // number of characters in "ERROR.TYPE"
+      } else if ( ex.mid(i ).startsWith( "LEGACY.NORMSDIST" ) ) {
+        // replace it
+        result.append( "LEGACYNORMSDIST" );
+        i+=16; // number of characters in "LEGACY.NORMSDIST"
+      } else if ( ex.mid(i ).startsWith( "LEGACY.NORMSINV" ) ) {
+        // replace it
+        result.append( "LEGACYNORMSINV" );
+        i+=15; // number of characters in "LEGACY.NORMSINV"
       }
+
 
       // consume as long as alpha, dollar sign, underscore, or digit
       if( isIdentifier( ch )  || ch.isDigit() )
@@ -1159,6 +1168,10 @@ QString KSpread::Oasis::encodeFormula( const QString& expr, const KLocale* local
             if ( tokenText == "ERRORTYPE" ) {
                 // need to replace this
                 result.append( "ERROR.TYPE" );
+            } else if ( tokenText == "LEGACYNORMSDIST" ) {
+                result.append( "LEGACY.NORMSDIST" );
+            } else if ( tokenText == "LEGACYNORMSINV" ) {
+                result.append( "LEGACY.NORMSINV" );
             } else {
                 // dump it out unchanged
                 result.append( tokenText );

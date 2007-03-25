@@ -39,6 +39,7 @@ private Q_SLOTS:
   void testString();
   void testFunction();
   void testInlineArrays();
+  void testEquality();
 
 private:
   Value evaluate(const QString&, Value&);
