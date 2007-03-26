@@ -126,6 +126,7 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
 )
 
 kde4_automoc(${kplatoprivate_LIB_SRCS})
+kde4_automoc(${libkdgantt_SRCS})
 
 kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS})
 
