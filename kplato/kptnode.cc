@@ -37,7 +37,7 @@ namespace KPlato
 {
 
 Node::Node(Node *parent) 
-    : QObject(),
+    : QObject( 0 ), // We don't use qobjects parent
       m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_parent = parent;
@@ -160,7 +160,7 @@ void Node::takeChildNode( Node *node) {
     if ( i != -1 ) {
         m_nodes.removeAt(i);
     }
-    node->setParent(0);
+    node->setParentNode(0);
 }
 
 void Node::takeChildNode( int number ) {
@@ -168,7 +168,7 @@ void Node::takeChildNode( int number ) {
         Node *n = m_nodes.takeAt(number);
         //kDebug()<<k_funcinfo<<(n?n->id():"null")<<" : "<<(n?n->name():"")<<endl;
         if (n) {
-            n->setParent(0);
+            n->setParentNode( 0 );
         }
     }
 }
@@ -178,18 +178,18 @@ void Node::insertChildNode( int index, Node *node ) {
         m_nodes.append(node);
     else
         m_nodes.insert(index,node);
-    node->setParent(this);
+    node->setParentNode( this );
 }
 
 void Node::addChildNode( Node *node, Node *after) {
     int index = m_nodes.indexOf(after);
     if (index == -1) {
         m_nodes.append(node);
-        node->setParent(this);
+        node->setParentNode( this );
         return;
     }
     m_nodes.insert(index+1, node);
-    node->setParent(this);
+    node->setParentNode(this);
 }
 
 int Node::findChildNode( Node* node )
@@ -662,8 +662,8 @@ void Node::resetVisited() {
 
 Node *Node::siblingBefore() {
     //kDebug()<<k_funcinfo<<endl;
-    if (getParent())
-        return getParent()->childBefore(this);
+    if (parentNode())
+        return parentNode()->childBefore(this);
     return 0;
 }
 
@@ -678,8 +678,8 @@ Node *Node::childBefore(Node *node) {
 
 Node *Node::siblingAfter() {
     //kDebug()<<k_funcinfo<<endl;
-    if (getParent())
-        return getParent()->childAfter(this);
+    if (parentNode())
+        return parentNode()->childAfter(this);
     return 0;
 }
 
@@ -947,7 +947,7 @@ void Node::calcFreeFloat() {
 }
 
 int Node::level() {
-    Node *n = getParent();
+    Node *n = parentNode();
     return n ? n->level() + 1 : 0;
 }
 

@@ -77,8 +77,8 @@ void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
 
 void NodeItemModel::slotNodeInserted( Node *node )
 {
-    //kDebug()<<k_funcinfo<<node->getParent->name()<<"-->"<<node->name()<<endl;
-    Q_ASSERT( node->getParent() == m_node );
+    //kDebug()<<k_funcinfo<<node->parentNode->name()<<"-->"<<node->name()<<endl;
+    Q_ASSERT( node->parentNode() == m_node );
     endInsertRows();
     m_node = 0;
 }
@@ -89,7 +89,7 @@ void NodeItemModel::slotNodeToBeRemoved( Node *node )
     Q_ASSERT( m_node == 0 );
     m_node = node;
     int row = index( node ).row();
-    beginRemoveRows( index( node->getParent() ), row, row );
+    beginRemoveRows( index( node->parentNode() ), row, row );
 }
 
 void NodeItemModel::slotNodeRemoved( Node *node )
@@ -203,11 +203,11 @@ QModelIndex NodeItemModel::parent( const QModelIndex &index ) const
         return QModelIndex();
     }
     //kDebug()<<k_funcinfo<<index.internalPointer()<<": "<<index.row()<<", "<<index.column()<<endl;
-    Node *p = node( index )->getParent();
+    Node *p = node( index )->parentNode();
     if ( p == 0 || p->type() == Node::Type_Project ) {
         return QModelIndex();
     }
-    int row = p->getParent()->findChildNode( p );
+    int row = p->parentNode()->findChildNode( p );
     return createIndex( row, 0, p );
 }
 
@@ -237,7 +237,7 @@ QModelIndex NodeItemModel::index( const Node *node ) const
     if ( m_project == 0 || node == 0 ) {
         return QModelIndex();
     }
-    Node *par = node->getParent();
+    Node *par = node->parentNode();
     if ( par ) {
         kDebug()<<k_funcinfo<<par<<"-->"<<node<<endl;
         return createIndex( par->indexOf( node ), 0, const_cast<Node*>(node) );
@@ -1291,7 +1291,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
     if ( node == 0 || node->type() == Node::Type_Project ) {
         return;
     }
-    int row = node->getParent()->findChildNode( node );
+    int row = node->parentNode()->findChildNode( node );
     emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
 }
 
@@ -1299,8 +1299,8 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 {
     m_part->addCommand( new TaskAddCmd( m_part, m_project, node, after, i18n( "Add Task") ) );
     int row = -1;
-    if ( node->getParent() ) {
-        row = node->getParent()->indexOf( node );
+    if ( node->parentNode() ) {
+        row = node->parentNode()->indexOf( node );
     }
     if ( row != -1 ) {
         //kDebug()<<k_funcinfo<<"Inserted: "<<account->name()<<endl;
@@ -1314,8 +1314,8 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 {
     m_part->addCommand( new SubtaskAddCmd( m_part, m_project, node, parent, i18n( "Add Subtask" ) ) );
     int row = -1;
-    if ( node->getParent() ) {
-        row = node->getParent()->indexOf( node );
+    if ( node->parentNode() ) {
+        row = node->parentNode()->indexOf( node );
     }
     if ( row != -1 ) {
         //kDebug()<<k_funcinfo<<"Inserted: "<<account->name()<<endl;
@@ -1414,7 +1414,7 @@ void NodeTreeView::dragMoveEvent(QDragMoveEvent *event)
         case AboveItem:
         case BelowItem:
             //dn == sibling
-            if ( itemModel()->dropAllowed( dn->getParent(), event->mimeData() ) ) {
+            if ( itemModel()->dropAllowed( dn->parentNode(), event->mimeData() ) ) {
                 event->accept();
             }
             break;
@@ -1621,14 +1621,14 @@ void TaskEditor::slotAddTask()
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
         Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
-        edit( m_view->itemModel()->insertSubtask( t, t->getParent() ) );
+        edit( m_view->itemModel()->insertSubtask( t, t->parentNode() ) );
         return;
     }
     Node *sib = selectedNode();
     if ( sib == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), sib->getParent() );
+    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), sib->parentNode() );
     edit( m_view->itemModel()->insertTask( t, sib ) );
 }
 
@@ -1639,14 +1639,14 @@ void TaskEditor::slotAddMilestone()
         // insert under main project
         Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
         t->effort()->set( Duration::zeroDuration );
-        edit( m_view->itemModel()->insertSubtask( t, t->getParent() ) );
+        edit( m_view->itemModel()->insertSubtask( t, t->parentNode() ) );
         return;
     }
     Node *sib = selectedNode(); // sibling
     if ( sib == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), sib->getParent() );
+    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), sib->parentNode() );
     t->effort()->set( Duration::zeroDuration );
     edit( m_view->itemModel()->insertTask( t, sib ) );
 }

@@ -34,6 +34,7 @@ class KoView;
 class KCommandHistory;
 class KCommand;
 
+/// The main namespace.
 namespace KPlato
 {
 

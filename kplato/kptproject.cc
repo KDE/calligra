@@ -710,7 +710,7 @@ bool Project::addTask( Node* task, Node* position )
     }
     // find the position
     // we have to tell the parent that we want to delete one of its children
-    Node* parentNode = position->getParent();
+    Node* parentNode = position->parentNode();
     if ( !parentNode ) {
         kDebug() << k_funcinfo << "parent node not found???" << endl;
         return false;
@@ -751,7 +751,7 @@ bool Project::addSubTask( Node* task, int index, Node* parent )
 
 void Project::delTask( Node *node )
 {
-    Node * parent = node->getParent();
+    Node * parent = node->parentNode();
     if ( parent == 0 ) {
         kDebug() << k_funcinfo << "Node must have a parent!" << endl;
         return ;
@@ -770,7 +770,7 @@ bool Project::canMoveTask( Node* node, Node *newParent )
         if ( ! node->canMoveTo( p ) ) {
             return false;
         }
-        p = p->getParent();
+        p = p->parentNode();
     }
     return true;
 }
@@ -800,7 +800,7 @@ bool Project::canIndentTask( Node* node )
         return false;
     }
     // we have to find the parent of task to manipulate its list of children
-    Node* parentNode = node->getParent();
+    Node* parentNode = node->parentNode();
     if ( !parentNode ) {
         return false;
     }
@@ -845,11 +845,11 @@ bool Project::canUnindentTask( Node* node )
     }
     // we have to find the parent of task to manipulate its list of children
     // and we need the parent's parent too
-    Node* parentNode = node->getParent();
+    Node* parentNode = node->parentNode();
     if ( !parentNode ) {
         return false;
     }
-    Node* grandParentNode = parentNode->getParent();
+    Node* grandParentNode = parentNode->parentNode();
     if ( !grandParentNode ) {
         //kDebug()<<k_funcinfo<<"This node already is at the top level"<<endl;
         return false;
@@ -865,8 +865,8 @@ bool Project::canUnindentTask( Node* node )
 bool Project::unindentTask( Node* node )
 {
     if ( canUnindentTask( node ) ) {
-        Node * parentNode = node->getParent();
-        Node *grandParentNode = parentNode->getParent();
+        Node * parentNode = node->parentNode();
+        Node *grandParentNode = parentNode->parentNode();
         int i = grandParentNode->indexOf( parentNode ) + 1;
         if ( i == 0 )  {
             i = grandParentNode->numChildren();
@@ -883,7 +883,7 @@ bool Project::canMoveTaskUp( Node* node )
     if ( node == 0 )
         return false; // safety
     // we have to find the parent of task to manipulate its list of children
-    Node* parentNode = node->getParent();
+    Node* parentNode = node->parentNode();
     if ( !parentNode ) {
         //kDebug()<<k_funcinfo<<"No parent found"<<endl;
         return false;
@@ -901,7 +901,7 @@ bool Project::canMoveTaskUp( Node* node )
 bool Project::moveTaskUp( Node* node )
 {
     if ( canMoveTaskUp( node ) ) {
-        moveTask( node, node->getParent(), node->getParent()->indexOf( node ) - 1 );
+        moveTask( node, node->parentNode(), node->parentNode()->indexOf( node ) - 1 );
         return true;
     }
     return false;
@@ -912,7 +912,7 @@ bool Project::canMoveTaskDown( Node* node )
     if ( node == 0 )
         return false; // safety
     // we have to find the parent of task to manipulate its list of children
-    Node* parentNode = node->getParent();
+    Node* parentNode = node->parentNode();
     if ( !parentNode ) {
         return false;
     }
@@ -929,7 +929,7 @@ bool Project::canMoveTaskDown( Node* node )
 bool Project::moveTaskDown( Node* node )
 {
     if ( canMoveTaskDown( node ) ) {
-        moveTask( node, node->getParent(), node->getParent()->indexOf( node ) + 1 );
+        moveTask( node, node->parentNode(), node->parentNode()->indexOf( node ) + 1 );
         return true;
     }
     return false;

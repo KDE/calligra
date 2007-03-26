@@ -451,7 +451,7 @@ void GanttView::correctPosition( KDGanttViewItem *item, Node *node )
 
 KDGanttViewItem *GanttView::correctParent( KDGanttViewItem *item, Node *node )
 {
-    KDGanttViewItem * p = findItem( node->getParent() );
+    KDGanttViewItem * p = findItem( node->parentNode() );
     if ( p == item->parent() ) {
         return item;
     }
@@ -474,7 +474,7 @@ void GanttView::updateNode( Node *node )
     //kDebug()<<k_funcinfo<<node->name()<<endl;
     KDGanttViewItem * item = findItem( node );
     if ( !item ) {
-        item = addNode( findItem( node->getParent() ), node, findItem( node->siblingBefore() ) );
+        item = addNode( findItem( node->parentNode() ), node, findItem( node->siblingBefore() ) );
         if ( item && node->type() == Node::Type_Summarytask )
             updateChildren( node );
         return ;

@@ -598,12 +598,12 @@ NodeDeleteCmd::NodeDeleteCmd( Part *part, Node *node, const QString& name )
         m_index( -1 )
 {
 
-    m_parent = node->getParent();
+    m_parent = node->parentNode();
     m_mine = false;
-
+    
     m_project = static_cast<Project*>( node->projectNode() );
     if ( m_project ) {
-        foreach ( Schedule * s, part->getProject().schedules() ) {
+        foreach ( Schedule * s, m_project->schedules() ) {
             if ( s && s->isScheduled() ) {
                 // Only invalidate schedules this node is part of
                 addSchScheduled( s );
@@ -675,8 +675,8 @@ TaskAddCmd::TaskAddCmd( Part *part, Project *project, Node *node, Node *after, c
 {
 
     // set some reasonable defaults for normally calculated values
-    if ( after && after->getParent() && after->getParent() != project ) {
-        node->setStartTime( after->getParent() ->startTime() );
+    if ( after && after->parentNode() && after->parentNode() != project ) {
+        node->setStartTime( after->parentNode() ->startTime() );
         node->setEndTime( node->startTime() + node->duration() );
     } else {
         if ( project->constraint() == Node::MustFinishOn ) {
@@ -974,11 +974,11 @@ NodeIndentCmd::~NodeIndentCmd()
 }
 void NodeIndentCmd::execute()
 {
-    m_oldparent = m_node.getParent();
+    m_oldparent = m_node.parentNode();
     m_oldindex = m_oldparent->findChildNode( &m_node );
     Project *p = dynamic_cast<Project *>( m_node.projectNode() );
     if ( p && p->indentTask( &m_node, m_newindex ) ) {
-        m_newparent = m_node.getParent();
+        m_newparent = m_node.parentNode();
         m_newindex = m_newparent->findChildNode( &m_node );
         // Summarytasks can't have resources, so remove resource requests from the new parent
         if ( m_cmd == 0 ) {
@@ -1018,11 +1018,11 @@ NodeUnindentCmd::NodeUnindentCmd( Part *part, Node &node, const QString& name )
 {}
 void NodeUnindentCmd::execute()
 {
-    m_oldparent = m_node.getParent();
+    m_oldparent = m_node.parentNode();
     m_oldindex = m_oldparent->findChildNode( &m_node );
     Project *p = dynamic_cast<Project *>( m_node.projectNode() );
     if ( p && p->unindentTask( &m_node ) ) {
-        m_newparent = m_node.getParent();
+        m_newparent = m_node.parentNode();
         m_newindex = m_newparent->findChildNode( &m_node );
     }
 
@@ -1096,7 +1096,7 @@ NodeMoveCmd::NodeMoveCmd( Part *part, Project *project, Node *node, Node *newPar
     m_moved( false ),
     m_cmd( 0 )
 {
-    m_oldparent = node->getParent();
+    m_oldparent = node->parentNode();
     Q_ASSERT( m_oldparent );
     m_oldpos = m_oldparent->indexOf( node );
     

@@ -39,6 +39,7 @@
 
 class KTimeZone;
 
+/// The main namespace.
 namespace KPlato
 {
 
@@ -65,7 +66,7 @@ class XMLLoaderObject;
  * Note that a projects datetimes are always displayed/modified in the timezone
  * it was originally created, not necessarly in your current local timezone.
  */
-class Project : public Node
+class KPLATO_TEST_EXPORT Project : public Node
 {
     Q_OBJECT
 public:
@@ -95,9 +96,22 @@ public:
     virtual bool load( QDomElement &element, XMLLoaderObject &status );
     virtual void save( QDomElement &element ) const;
 
+    /**
+     * Add the node @p task to the project, after node @p position
+     */
     bool addTask( Node* task, Node* position );
+    /**
+     * Add the node @p task to the parent of @p position
+     */
     bool addSubTask( Node* task, Node* position );
+    /**
+     * Add the node @p task to @p parent, in position @p index
+     */
     bool addSubTask( Node* task, int index, Node* parent );
+    /**
+     * Remove the @p node.
+     * The node is not deleted.
+     */
     void delTask( Node *node );
     bool canMoveTask( Node* node, Node *newParent );
     bool moveTask( Node* node, Node *newParent, int newPos );
@@ -109,14 +123,22 @@ public:
     bool moveTaskUp( Node* node );
     bool canMoveTaskDown( Node* node );
     bool moveTaskDown( Node* node );
+    /**
+     * Create a task with a unique id with its parent set to @p parent.
+     * The task is not added to the parent. Do this with addSubTask().
+     */
     Task *createTask( Node* parent );
+    /**
+     * Create a copy of @p def with a unique id with its parent set to @p parent.
+     * The task is not added to the parent. Do this with addSubTask().
+     */
     Task *createTask( Task &def, Node* parent );
 
     QList<ResourceGroup*> &resourceGroups();
     /// Adds the resource group to the project.
     virtual void addResourceGroup( ResourceGroup *resource, int index = -1 );
     /**
-     * Removes the resource group from the project.
+     * Removes the resource group @p resource from the project.
      * The resource group is not deleted.
      */
     ResourceGroup *takeResourceGroup( ResourceGroup *resource );

@@ -72,7 +72,7 @@ protected:
     Part *m_part;
 };
 
-class CalendarAddCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarAddCmd : public NamedCommand
 {
 public:
     CalendarAddCmd( Part *part, Project *project, Calendar *cal, Calendar *parent, const QString& name  = QString());
@@ -87,7 +87,7 @@ private:
     bool m_mine;
 };
 
-class CalendarRemoveCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarRemoveCmd : public NamedCommand
 {
 public:
     CalendarRemoveCmd( Part *part, Project *project, Calendar *cal, const QString& name = QString() );
@@ -103,7 +103,7 @@ private:
     KMacroCommand *m_cmd;
 };
 
-class CalendarModifyNameCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarModifyNameCmd : public NamedCommand
 {
 public:
     CalendarModifyNameCmd( Part *part, Calendar *cal, const QString& newvalue, const QString& name = QString() );
@@ -116,7 +116,7 @@ private:
     QString m_oldvalue;
 };
 
-class CalendarModifyParentCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarModifyParentCmd : public NamedCommand
 {
 public:
     CalendarModifyParentCmd( Part *part, Project *project, Calendar *cal, Calendar *newvalue, const QString& name = QString() );
@@ -132,7 +132,7 @@ private:
     KMacroCommand *m_cmd;
 };
 
-class CalendarModifyTimeZoneCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarModifyTimeZoneCmd : public NamedCommand
 {
 public:
     CalendarModifyTimeZoneCmd( Part *part, Calendar *cal, const KTimeZone *value, const QString& name = QString() );
@@ -147,7 +147,7 @@ private:
     KMacroCommand *m_cmd;
 };
 
-class CalendarAddDayCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarAddDayCmd : public NamedCommand
 {
 public:
     CalendarAddDayCmd( Part *part, Calendar *cal, CalendarDay *newvalue, const QString& name = QString() );
@@ -161,7 +161,7 @@ protected:
     bool m_mine;
 };
 
-class CalendarRemoveDayCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarRemoveDayCmd : public NamedCommand
 {
 public:
     CalendarRemoveDayCmd( Part *part, Calendar *cal, CalendarDay *day, const QString& name = QString() );
@@ -178,7 +178,7 @@ private:
     void init();
 };
 
-class CalendarModifyDayCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarModifyDayCmd : public NamedCommand
 {
 public:
     CalendarModifyDayCmd( Part *part, Calendar *cal, CalendarDay *value, const QString& name = QString() );
@@ -193,7 +193,7 @@ private:
     bool m_mine;
 };
 
-class CalendarModifyStateCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarModifyStateCmd : public NamedCommand
 {
 public:
     CalendarModifyStateCmd( Part *part, Calendar *calendar, CalendarDay *day, CalendarDay::State value, const QString& name = QString() );
@@ -209,7 +209,7 @@ private:
     KMacroCommand *m_cmd;
 };
 
-class CalendarModifyTimeIntervalCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarModifyTimeIntervalCmd : public NamedCommand
 {
 public:
     CalendarModifyTimeIntervalCmd( Part *part, Calendar *calendar, TimeInterval &newvalue, TimeInterval *value, const QString& name = QString() );
@@ -223,7 +223,7 @@ private:
     TimeInterval m_oldvalue;
 };
 
-class CalendarAddTimeIntervalCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarAddTimeIntervalCmd : public NamedCommand
 {
 public:
     CalendarAddTimeIntervalCmd( Part *part, Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name = QString() );
@@ -238,7 +238,7 @@ protected:
     bool m_mine;
 };
 
-class CalendarRemoveTimeIntervalCmd : public CalendarAddTimeIntervalCmd
+class KPLATO_TEST_EXPORT CalendarRemoveTimeIntervalCmd : public CalendarAddTimeIntervalCmd
 {
 public:
     CalendarRemoveTimeIntervalCmd( Part *part, Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name = QString() );
@@ -247,7 +247,7 @@ public:
     void unexecute();
 };
 
-class CalendarModifyWeekdayCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarModifyWeekdayCmd : public NamedCommand
 {
 public:
     CalendarModifyWeekdayCmd( Part *part, Calendar *cal, int weekday, CalendarDay *value, const QString& name = QString() );
@@ -262,7 +262,7 @@ private:
     CalendarDay m_orig;
 };
 
-class CalendarModifyDateCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalendarModifyDateCmd : public NamedCommand
 {
 public:
     CalendarModifyDateCmd( Part *part, Calendar *cal, CalendarDay *day, QDate &value, const QString& name = QString() );
@@ -275,7 +275,7 @@ private:
     QDate m_newvalue, m_oldvalue;
 };
 
-class ProjectModifyDefaultCalendarCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ProjectModifyDefaultCalendarCmd : public NamedCommand
 {
 public:
     ProjectModifyDefaultCalendarCmd( Part *part, Project *project, Calendar *cal, const QString& name = QString() );
@@ -288,7 +288,7 @@ private:
 };
 
 
-class NodeDeleteCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeDeleteCmd : public NamedCommand
 {
 public:
     NodeDeleteCmd( Part *part, Node *node, const QString& name = QString() );
@@ -306,7 +306,7 @@ private:
     KMacroCommand *m_cmd;
 };
 
-class TaskAddCmd : public NamedCommand
+class KPLATO_TEST_EXPORT TaskAddCmd : public NamedCommand
 {
 public:
     TaskAddCmd( Part *part, Project *project, Node *node, Node *after, const QString& name = QString() );
@@ -321,7 +321,7 @@ private:
     bool m_added;
 };
 
-class SubtaskAddCmd : public NamedCommand
+class KPLATO_TEST_EXPORT SubtaskAddCmd : public NamedCommand
 {
 public:
     SubtaskAddCmd( Part *part, Project *project, Node *node, Node *parent, const QString& name = QString() );
@@ -338,7 +338,7 @@ private:
 };
 
 
-class NodeModifyNameCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyNameCmd : public NamedCommand
 {
 public:
     NodeModifyNameCmd( Part *part, Node &node, const QString& nodename, const QString& name = QString() );
@@ -351,7 +351,7 @@ private:
     QString oldName;
 };
 
-class NodeModifyLeaderCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyLeaderCmd : public NamedCommand
 {
 public:
     NodeModifyLeaderCmd( Part *part, Node &node, const QString& leader, const QString& name = QString() );
@@ -364,7 +364,7 @@ private:
     QString oldLeader;
 };
 
-class NodeModifyDescriptionCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyDescriptionCmd : public NamedCommand
 {
 public:
     NodeModifyDescriptionCmd( Part *part, Node &node, const QString& description, const QString& name = QString() );
@@ -377,7 +377,7 @@ private:
     QString oldDescription;
 };
 
-class NodeModifyConstraintCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyConstraintCmd : public NamedCommand
 {
 public:
     NodeModifyConstraintCmd( Part *part, Node &node, Node::ConstraintType c, const QString& name = QString() );
@@ -391,7 +391,7 @@ private:
 
 };
 
-class NodeModifyConstraintStartTimeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyConstraintStartTimeCmd : public NamedCommand
 {
 public:
     NodeModifyConstraintStartTimeCmd( Part *part, Node &node, const QDateTime& dt, const QString& name = QString() );
@@ -404,7 +404,7 @@ private:
     DateTime oldTime;
     KDateTime::Spec m_spec;
 };
-class NodeModifyConstraintEndTimeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyConstraintEndTimeCmd : public NamedCommand
 {
 public:
     NodeModifyConstraintEndTimeCmd( Part *part, Node &node, const QDateTime& dt, const QString& name = QString() );
@@ -417,7 +417,7 @@ private:
     DateTime oldTime;
     KDateTime::Spec m_spec;
 };
-class NodeModifyStartTimeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyStartTimeCmd : public NamedCommand
 {
 public:
     NodeModifyStartTimeCmd( Part *part, Node &node, const QDateTime& dt, const QString& name = QString() );
@@ -430,7 +430,7 @@ private:
     DateTime oldTime;
     KDateTime::Spec m_spec;
 };
-class NodeModifyEndTimeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyEndTimeCmd : public NamedCommand
 {
 public:
     NodeModifyEndTimeCmd( Part *part, Node &node, const QDateTime& dt, const QString& name = QString() );
@@ -443,7 +443,7 @@ private:
     DateTime oldTime;
     KDateTime::Spec m_spec;
 };
-class NodeModifyIdCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyIdCmd : public NamedCommand
 {
 public:
     NodeModifyIdCmd( Part *part, Node &node, const QString& id, const QString& name = QString() );
@@ -456,7 +456,7 @@ private:
     QString oldId;
 };
 
-class NodeIndentCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeIndentCmd : public NamedCommand
 {
 public:
     NodeIndentCmd( Part *part, Node &node, const QString& name = QString() );
@@ -471,7 +471,7 @@ private:
     KMacroCommand *m_cmd;
 };
 
-class NodeUnindentCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeUnindentCmd : public NamedCommand
 {
 public:
     NodeUnindentCmd( Part *part, Node &node, const QString& name = QString() );
@@ -484,7 +484,7 @@ private:
     int m_oldindex, m_newindex;
 };
 
-class NodeMoveUpCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeMoveUpCmd : public NamedCommand
 {
 public:
     NodeMoveUpCmd( Part *part, Node &node, const QString& name = QString() );
@@ -497,7 +497,7 @@ private:
     bool m_moved;
 };
 
-class NodeMoveDownCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeMoveDownCmd : public NamedCommand
 {
 public:
     NodeMoveDownCmd( Part *part, Node &node, const QString& name = QString() );
@@ -510,7 +510,7 @@ private:
     bool m_moved;
 };
 
-class NodeMoveCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeMoveCmd : public NamedCommand
 {
 public:
     NodeMoveCmd( Part *part, Project *project, Node *node, Node *newParent, int newPos, const QString& name = QString() );
@@ -529,7 +529,7 @@ private:
     KMacroCommand *m_cmd;
 };
 
-class AddRelationCmd : public NamedCommand
+class KPLATO_TEST_EXPORT AddRelationCmd : public NamedCommand
 {
 public:
     AddRelationCmd( Part *part, Relation *rel, const QString& name = QString() );
@@ -544,7 +544,7 @@ private:
 
 };
 
-class DeleteRelationCmd : public NamedCommand
+class KPLATO_TEST_EXPORT DeleteRelationCmd : public NamedCommand
 {
 public:
     DeleteRelationCmd( Part *part, Relation *rel, const QString& name = QString() );
@@ -559,7 +559,7 @@ private:
 
 };
 
-class ModifyRelationTypeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyRelationTypeCmd : public NamedCommand
 {
 public:
     ModifyRelationTypeCmd( Part *part, Relation *rel, Relation::Type type, const QString& name = QString() );
@@ -573,7 +573,7 @@ private:
 
 };
 
-class ModifyRelationLagCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyRelationLagCmd : public NamedCommand
 {
 public:
     ModifyRelationLagCmd( Part *part, Relation *rel, Duration lag, const QString& name = QString() );
@@ -587,7 +587,7 @@ private:
 
 };
 
-class AddResourceRequestCmd : public NamedCommand
+class KPLATO_TEST_EXPORT AddResourceRequestCmd : public NamedCommand
 {
 public:
     AddResourceRequestCmd( Part *part, ResourceGroupRequest *group, ResourceRequest *request, const QString& name = QString() );
@@ -602,7 +602,7 @@ private:
 
 };
 
-class RemoveResourceRequestCmd : public NamedCommand
+class KPLATO_TEST_EXPORT RemoveResourceRequestCmd : public NamedCommand
 {
 public:
     RemoveResourceRequestCmd( Part *part, ResourceGroupRequest *group, ResourceRequest *request, const QString& name = QString() );
@@ -617,7 +617,7 @@ private:
 
 };
 
-class ModifyEffortCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyEffortCmd : public NamedCommand
 {
 public:
     ModifyEffortCmd( Part *part, Node &node, Duration oldvalue, Duration newvalue, const QString& name = QString() );
@@ -632,7 +632,7 @@ private:
 
 };
 
-class EffortModifyOptimisticRatioCmd : public NamedCommand
+class KPLATO_TEST_EXPORT EffortModifyOptimisticRatioCmd : public NamedCommand
 {
 public:
     EffortModifyOptimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
@@ -645,7 +645,7 @@ private:
 
 };
 
-class EffortModifyPessimisticRatioCmd : public NamedCommand
+class KPLATO_TEST_EXPORT EffortModifyPessimisticRatioCmd : public NamedCommand
 {
 public:
     EffortModifyPessimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
@@ -658,7 +658,7 @@ private:
 
 };
 
-class ModifyEffortTypeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyEffortTypeCmd : public NamedCommand
 {
 public:
     ModifyEffortTypeCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
@@ -671,7 +671,7 @@ private:
 
 };
 
-class ModifyEffortUnitCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyEffortUnitCmd : public NamedCommand
 {
 public:
     ModifyEffortUnitCmd( Part *part, Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name = QString() );
@@ -683,7 +683,7 @@ private:
     Duration::Unit m_oldvalue, m_newvalue;
 };
 
-class EffortModifyRiskCmd : public NamedCommand
+class KPLATO_TEST_EXPORT EffortModifyRiskCmd : public NamedCommand
 {
 public:
     EffortModifyRiskCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
@@ -696,7 +696,7 @@ private:
 
 };
 
-class AddResourceGroupRequestCmd : public NamedCommand
+class KPLATO_TEST_EXPORT AddResourceGroupRequestCmd : public NamedCommand
 {
 public:
     AddResourceGroupRequestCmd( Part *part, Task &task, ResourceGroupRequest *request, const QString& name = QString() );
@@ -709,7 +709,7 @@ private:
     bool m_mine;
 };
 
-class RemoveResourceGroupRequestCmd : public NamedCommand
+class KPLATO_TEST_EXPORT RemoveResourceGroupRequestCmd : public NamedCommand
 {
 public:
     RemoveResourceGroupRequestCmd( Part *part, ResourceGroupRequest *request, const QString& name = QString() );
@@ -723,7 +723,7 @@ private:
     bool m_mine;
 };
 
-class AddResourceCmd : public NamedCommand
+class KPLATO_TEST_EXPORT AddResourceCmd : public NamedCommand
 {
 public:
     AddResourceCmd( Part *part, ResourceGroup *group, Resource *resource, const QString& name = QString() );
@@ -739,7 +739,7 @@ protected:
     bool m_mine;
 };
 
-class RemoveResourceCmd : public AddResourceCmd
+class KPLATO_TEST_EXPORT RemoveResourceCmd : public AddResourceCmd
 {
 public:
     RemoveResourceCmd( Part *part, ResourceGroup *group, Resource *resource, const QString& name = QString() );
@@ -752,7 +752,7 @@ private:
     QList<Appointment*> m_appointments;
 };
 
-class ModifyResourceNameCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceNameCmd : public NamedCommand
 {
 public:
     ModifyResourceNameCmd( Part *part, Resource *resource, const QString& value, const QString& name = QString() );
@@ -765,7 +765,7 @@ private:
     QString m_newvalue;
     QString m_oldvalue;
 };
-class ModifyResourceInitialsCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceInitialsCmd : public NamedCommand
 {
 public:
     ModifyResourceInitialsCmd( Part *part, Resource *resource, const QString& value, const QString& name = QString() );
@@ -777,7 +777,7 @@ private:
     QString m_newvalue;
     QString m_oldvalue;
 };
-class ModifyResourceEmailCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceEmailCmd : public NamedCommand
 {
 public:
     ModifyResourceEmailCmd( Part *part, Resource *resource, const QString& value, const QString& name = QString() );
@@ -789,7 +789,7 @@ private:
     QString m_newvalue;
     QString m_oldvalue;
 };
-class ModifyResourceTypeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceTypeCmd : public NamedCommand
 {
 public:
     ModifyResourceTypeCmd( Part *part, Resource *resource, int value, const QString& name = QString() );
@@ -802,7 +802,7 @@ private:
     int m_oldvalue;
 };
 
-class ModifyResourceUnitsCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceUnitsCmd : public NamedCommand
 {
 public:
     ModifyResourceUnitsCmd( Part *part, Resource *resource, int value, const QString& name = QString() );
@@ -815,7 +815,7 @@ private:
     int m_oldvalue;
 };
 
-class ModifyResourceAvailableFromCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceAvailableFromCmd : public NamedCommand
 {
 public:
     ModifyResourceAvailableFromCmd( Part *part, Resource *resource, const QDateTime& value, const QString& name = QString() );
@@ -828,7 +828,7 @@ private:
     DateTime m_oldvalue;
     KDateTime::Spec m_spec;
 };
-class ModifyResourceAvailableUntilCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceAvailableUntilCmd : public NamedCommand
 {
 public:
     ModifyResourceAvailableUntilCmd( Part *part, Resource *resource, const QDateTime& value, const QString& name = QString() );
@@ -842,7 +842,7 @@ private:
     KDateTime::Spec m_spec;
 };
 
-class ModifyResourceNormalRateCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceNormalRateCmd : public NamedCommand
 {
 public:
     ModifyResourceNormalRateCmd( Part *part, Resource *resource, double value, const QString& name = QString() );
@@ -854,7 +854,7 @@ private:
     double m_newvalue;
     double m_oldvalue;
 };
-class ModifyResourceOvertimeRateCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceOvertimeRateCmd : public NamedCommand
 {
 public:
     ModifyResourceOvertimeRateCmd( Part *part, Resource *resource, double value, const QString& name = QString() );
@@ -866,7 +866,7 @@ private:
     double m_newvalue;
     double m_oldvalue;
 };
-class ModifyResourceCalendarCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceCalendarCmd : public NamedCommand
 {
 public:
     ModifyResourceCalendarCmd( Part *part, Resource *resource, Calendar *value, const QString& name = QString() );
@@ -879,7 +879,7 @@ private:
     Calendar *m_oldvalue;
 };
 
-class RemoveResourceGroupCmd : public NamedCommand
+class KPLATO_TEST_EXPORT RemoveResourceGroupCmd : public NamedCommand
 {
 public:
     RemoveResourceGroupCmd( Part *part, Project *project, ResourceGroup *group, const QString& name = QString() );
@@ -896,7 +896,7 @@ protected:
     KMacroCommand *m_cmd;
 };
 
-class AddResourceGroupCmd : public RemoveResourceGroupCmd
+class KPLATO_TEST_EXPORT AddResourceGroupCmd : public RemoveResourceGroupCmd
 {
 public:
     AddResourceGroupCmd( Part *part, Project *project, ResourceGroup *group, const QString& name = QString() );
@@ -904,7 +904,7 @@ public:
     void unexecute();
 };
 
-class ModifyResourceGroupNameCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceGroupNameCmd : public NamedCommand
 {
 public:
     ModifyResourceGroupNameCmd( Part *part, ResourceGroup *group, const QString& value, const QString& name = QString() );
@@ -917,7 +917,7 @@ private:
     QString m_oldvalue;
 };
 
-class ModifyResourceGroupTypeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyResourceGroupTypeCmd : public NamedCommand
 {
     public:
         ModifyResourceGroupTypeCmd( Part *part, ResourceGroup *group, int value, const QString& name = QString() );
@@ -930,7 +930,7 @@ class ModifyResourceGroupTypeCmd : public NamedCommand
         int m_oldvalue;
 };
 
-class ModifyCompletionStartedCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyCompletionStartedCmd : public NamedCommand
 {
 public:
     ModifyCompletionStartedCmd( Part *part, Completion &completion, bool value, const QString& name = QString() );
@@ -943,7 +943,7 @@ private:
     bool newvalue;
 };
 
-class ModifyCompletionFinishedCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyCompletionFinishedCmd : public NamedCommand
 {
 public:
     ModifyCompletionFinishedCmd( Part *part, Completion &completion, bool value, const QString& name = QString() );
@@ -956,7 +956,7 @@ private:
     bool newvalue;
 };
 
-class ModifyCompletionStartTimeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyCompletionStartTimeCmd : public NamedCommand
 {
 public:
     ModifyCompletionStartTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name = QString() );
@@ -970,7 +970,7 @@ private:
     KDateTime::Spec m_spec;
 };
 
-class ModifyCompletionFinishTimeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyCompletionFinishTimeCmd : public NamedCommand
 {
 public:
     ModifyCompletionFinishTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name = QString() );
@@ -984,7 +984,7 @@ private:
     KDateTime::Spec m_spec;
 };
 
-class AddCompletionEntryCmd : public NamedCommand
+class KPLATO_TEST_EXPORT AddCompletionEntryCmd : public NamedCommand
 {
 public:
     AddCompletionEntryCmd( Part *part, Completion &completion, const QDate &date, Completion::Entry *value, const QString& name = QString() );
@@ -1000,7 +1000,7 @@ private:
     bool m_newmine, m_oldmine;
 };
 
-class AddCompletionUsedEffortCmd : public NamedCommand
+class KPLATO_TEST_EXPORT AddCompletionUsedEffortCmd : public NamedCommand
 {
 public:
     AddCompletionUsedEffortCmd( Part *part, Completion &completion, const Resource *resource, Completion::UsedEffort *value, const QString& name = QString() );
@@ -1016,7 +1016,7 @@ private:
     bool m_newmine, m_oldmine;
 };
 
-class AddCompletionActualEffortCmd : public NamedCommand
+class KPLATO_TEST_EXPORT AddCompletionActualEffortCmd : public NamedCommand
 {
 public:
     AddCompletionActualEffortCmd( Part *part, Completion::UsedEffort &ue, const QDate &date, Completion::UsedEffort::ActualEffort *value, const QString& name = QString() );
@@ -1033,7 +1033,7 @@ private:
 };
 
 
-class AddAccountCmd : public NamedCommand
+class KPLATO_TEST_EXPORT AddAccountCmd : public NamedCommand
 {
 public:
     AddAccountCmd( Part *part, Project &project, Account *account, Account *parent = 0, const QString& name = QString() );
@@ -1052,7 +1052,7 @@ private:
     QString m_parentName;
 };
 
-class RemoveAccountCmd : public NamedCommand
+class KPLATO_TEST_EXPORT RemoveAccountCmd : public NamedCommand
 {
 public:
     RemoveAccountCmd( Part *part, Project &project, Account *account, const QString& name = QString() );
@@ -1070,7 +1070,7 @@ private:
 
 };
 
-class RenameAccountCmd : public NamedCommand
+class KPLATO_TEST_EXPORT RenameAccountCmd : public NamedCommand
 {
 public:
     RenameAccountCmd( Part *part, Account *account, const QString& value, const QString& name = QString() );
@@ -1083,7 +1083,7 @@ private:
     QString m_newvalue;
 };
 
-class ModifyAccountDescriptionCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyAccountDescriptionCmd : public NamedCommand
 {
 public:
     ModifyAccountDescriptionCmd( Part *part, Account *account, const QString& value, const QString& name = QString() );
@@ -1096,7 +1096,7 @@ private:
     QString m_newvalue;
 };
 
-class NodeModifyStartupCostCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyStartupCostCmd : public NamedCommand
 {
 public:
     NodeModifyStartupCostCmd( Part *part, Node &node, double value, const QString& name = QString() );
@@ -1109,7 +1109,7 @@ private:
     double m_newvalue;
 };
 
-class NodeModifyShutdownCostCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyShutdownCostCmd : public NamedCommand
 {
 public:
     NodeModifyShutdownCostCmd( Part *part, Node &node, double value, const QString& name = QString() );
@@ -1122,7 +1122,7 @@ private:
     double m_newvalue;
 };
 
-class NodeModifyRunningAccountCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyRunningAccountCmd : public NamedCommand
 {
 public:
     NodeModifyRunningAccountCmd( Part *part, Node &node, Account *oldvalue, Account *newvalue, const QString& name = QString() );
@@ -1135,7 +1135,7 @@ private:
     Account *m_newvalue;
 };
 
-class NodeModifyStartupAccountCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyStartupAccountCmd : public NamedCommand
 {
 public:
     NodeModifyStartupAccountCmd( Part *part, Node &node, Account *oldvalue, Account *newvalue, const QString& name = QString() );
@@ -1148,7 +1148,7 @@ private:
     Account *m_newvalue;
 };
 
-class NodeModifyShutdownAccountCmd : public NamedCommand
+class KPLATO_TEST_EXPORT NodeModifyShutdownAccountCmd : public NamedCommand
 {
 public:
     NodeModifyShutdownAccountCmd( Part *part, Node &node, Account *oldvalue, Account *newvalue, const QString& name = QString() );
@@ -1161,7 +1161,7 @@ private:
     Account *m_newvalue;
 };
 
-class ModifyDefaultAccountCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyDefaultAccountCmd : public NamedCommand
 {
 public:
     ModifyDefaultAccountCmd( Part *part, Accounts &acc, Account *oldvalue, Account *newvalue, const QString& name = QString() );
@@ -1174,7 +1174,7 @@ private:
     Account *m_newvalue;
 };
 
-class ProjectModifyConstraintCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ProjectModifyConstraintCmd : public NamedCommand
 {
 public:
     ProjectModifyConstraintCmd( Part *part, Project &node, Node::ConstraintType c, const QString& name = QString() );
@@ -1188,7 +1188,7 @@ private:
 
 };
 
-class ProjectModifyStartTimeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ProjectModifyStartTimeCmd : public NamedCommand
 {
 public:
     ProjectModifyStartTimeCmd( Part *part, Project &node, const QDateTime& dt, const QString& name = QString() );
@@ -1202,7 +1202,7 @@ private:
     KDateTime::Spec m_spec;
 };
 
-class ProjectModifyEndTimeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ProjectModifyEndTimeCmd : public NamedCommand
 {
 public:
     ProjectModifyEndTimeCmd( Part *part, Project &project, const QDateTime& dt, const QString& name = QString() );
@@ -1217,7 +1217,7 @@ private:
 };
 
 
-class AddScheduleManagerCmd : public NamedCommand
+class KPLATO_TEST_EXPORT AddScheduleManagerCmd : public NamedCommand
 {
 public:
     AddScheduleManagerCmd( Part *part, Project &project, ScheduleManager *sm, const QString& name = 0 );
@@ -1232,7 +1232,7 @@ protected:
     bool m_mine;
 };
 
-class DeleteScheduleManagerCmd : public AddScheduleManagerCmd
+class KPLATO_TEST_EXPORT DeleteScheduleManagerCmd : public AddScheduleManagerCmd
 {
 public:
     DeleteScheduleManagerCmd( Part *part, Project &project, ScheduleManager *sm, const QString& name = 0 );
@@ -1240,7 +1240,7 @@ public:
     void unexecute();
 };
 
-class ModifyScheduleManagerNameCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyScheduleManagerNameCmd : public NamedCommand
 {
 public:
     ModifyScheduleManagerNameCmd( Part *part,ScheduleManager &sm, const QString& value, const QString& name = 0 );
@@ -1252,7 +1252,7 @@ private:
     QString oldvalue, newvalue;
 };
 
-class ModifyScheduleManagerAllowOverbookingCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyScheduleManagerAllowOverbookingCmd : public NamedCommand
 {
 public:
     ModifyScheduleManagerAllowOverbookingCmd( Part *part,ScheduleManager &sm, bool value, const QString& name = 0 );
@@ -1264,7 +1264,7 @@ private:
     bool oldvalue, newvalue;
 };
 
-class ModifyScheduleManagerDistributionCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyScheduleManagerDistributionCmd : public NamedCommand
 {
 public:
     ModifyScheduleManagerDistributionCmd( Part *part,ScheduleManager &sm, bool value, const QString& name = 0 );
@@ -1276,7 +1276,7 @@ private:
     bool oldvalue, newvalue;
 };
 
-class ModifyScheduleManagerCalculateAllCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyScheduleManagerCalculateAllCmd : public NamedCommand
 {
 public:
     ModifyScheduleManagerCalculateAllCmd( Part *part,ScheduleManager &sm, bool value, const QString& name = 0 );
@@ -1288,7 +1288,7 @@ private:
     bool oldvalue, newvalue;
 };
 
-class CalculateScheduleCmd : public NamedCommand
+class KPLATO_TEST_EXPORT CalculateScheduleCmd : public NamedCommand
 {
 public:
     CalculateScheduleCmd( Part *part, Project &project, ScheduleManager &sm, const QString& name = 0 );
@@ -1307,7 +1307,7 @@ private:
     MainSchedule *m_newpessimistic;
 };
 
-class ModifyStandardWorktimeYearCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyStandardWorktimeYearCmd : public NamedCommand
 {
 public:
     ModifyStandardWorktimeYearCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
@@ -1319,7 +1319,7 @@ private:
     double m_newvalue;
 };
 
-class ModifyStandardWorktimeMonthCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyStandardWorktimeMonthCmd : public NamedCommand
 {
 public:
     ModifyStandardWorktimeMonthCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
@@ -1331,7 +1331,7 @@ private:
     double m_newvalue;
 };
 
-class ModifyStandardWorktimeWeekCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyStandardWorktimeWeekCmd : public NamedCommand
 {
 public:
     ModifyStandardWorktimeWeekCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
@@ -1343,7 +1343,7 @@ private:
     double m_newvalue;
 };
 
-class ModifyStandardWorktimeDayCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyStandardWorktimeDayCmd : public NamedCommand
 {
 public:
     ModifyStandardWorktimeDayCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );

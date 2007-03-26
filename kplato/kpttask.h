@@ -32,6 +32,7 @@
 #include <QMap>
 #include <QPair>
 
+/// The main namespace.
 namespace KPlato
 {
 
@@ -208,7 +209,7 @@ public:
   * can be anything from 'build house' to 'drill hole' It will always mean
   * an activity.
   */
-class Task : public Node {
+class KPLATO_TEST_EXPORT Task : public Node {
 public:
     Task(Node *parent = 0);
     Task(Task &task, Node *parent = 0);

@@ -1563,7 +1563,7 @@ void View::slotDeleteTask( QList<Node*> lst )
     KMacroCommand *cmd = new KMacroCommand( i18n( "Delete Tasks" ) );
     while ( !lst.isEmpty() ) {
         Node *node = lst.takeFirst();
-        if ( node == 0 || node->getParent() == 0 ) {
+        if ( node == 0 || node->parentNode() == 0 ) {
             kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
             continue;
         }
@@ -1590,7 +1590,7 @@ void View::slotDeleteTask( QList<Node*> lst )
 void View::slotDeleteTask( Node *node )
 {
     //kDebug()<<k_funcinfo<<endl;
-    if ( node == 0 || node->getParent() == 0 ) {
+    if ( node == 0 || node->parentNode() == 0 ) {
         kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
         return ;
     }
@@ -1608,7 +1608,7 @@ void View::slotIndentTask()
 {
     //kDebug()<<k_funcinfo<<endl;
     Node * node = currentTask();
-    if ( node == 0 || node->getParent() == 0 ) {
+    if ( node == 0 || node->parentNode() == 0 ) {
         kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
         return ;
     }
@@ -1622,7 +1622,7 @@ void View::slotUnindentTask()
 {
     //kDebug()<<k_funcinfo<<endl;
     Node * node = currentTask();
-    if ( node == 0 || node->getParent() == 0 ) {
+    if ( node == 0 || node->parentNode() == 0 ) {
         kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
         return ;
     }

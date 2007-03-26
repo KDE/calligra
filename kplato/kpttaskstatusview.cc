@@ -107,7 +107,7 @@ void TaskStatusItemModel::slotNodeToBeInserted( Node *parent, int row )
 void TaskStatusItemModel::slotNodeInserted( Node *node )
 {
     //kDebug()<<k_funcinfo<<node->getParent->name()<<"-->"<<node->name()<<endl;
-    Q_ASSERT( node->getParent() == m_node );
+    Q_ASSERT( node->parentNode() == m_node );
     endInsertRows();
     m_node = 0;
 }
@@ -118,7 +118,7 @@ void TaskStatusItemModel::slotNodeToBeRemoved( Node *node )
     Q_ASSERT( m_node == 0 );
     m_node = node;
     int row = index( node ).row();
-    beginRemoveRows( index( node->getParent() ), row, row );
+    beginRemoveRows( index( node->parentNode() ), row, row );
 }
 
 void TaskStatusItemModel::slotNodeRemoved( Node *node )
@@ -821,7 +821,7 @@ void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent *event)
         case AboveItem:
         case BelowItem:
             //dn == sibling
-            if ( itemModel()->dropAllowed( dn->getParent(), event->mimeData() ) ) {
+            if ( itemModel()->dropAllowed( dn->parentNode(), event->mimeData() ) ) {
                 event->accept();
             }
             break;

@@ -41,7 +41,7 @@ namespace KPlato
 {
 
 ResourceGroup::ResourceGroup()
-    : QObject() 
+    : QObject( 0 ) 
 {
     m_project = 0;
     m_type = Type_Work;
@@ -111,7 +111,7 @@ void ResourceGroup::setProject( Project *project )
 
 void ResourceGroup::addResource(int index, Resource* resource, Risk*) {
     int i = index == -1 ? m_resources.count() : index;
-    resource->setParent( this );
+    resource->setParentGroup( this );
     resource->setProject( m_project );
     m_resources.insert(i, resource );
 }
@@ -121,7 +121,7 @@ Resource *ResourceGroup::takeResource(Resource *resource) {
     int i = m_resources.indexOf(resource);
     if (i != -1) {
         r = m_resources.takeAt(i);
-        r->setParent( 0 );
+        r->setParentGroup( 0 );
         r->setProject( 0 );
     }
     return r;
@@ -222,8 +222,9 @@ Appointment ResourceGroup::appointmentIntervals() const {
 }
 
 Resource::Resource()
-    : QObject(),
+    : QObject( 0 ), // atm QObject is only for casting
     m_project(0),
+    m_parent( 0 ),
     m_schedules(), 
     m_workingHours() 
 {
@@ -242,7 +243,10 @@ Resource::Resource()
 }
 
 Resource::Resource(Resource *resource)
-    : QObject() { 
+    : QObject( 0 ), // atm QObject is only for casting
+    m_project( 0 ),
+    m_parent( 0 )
+{
     //kDebug()<<k_funcinfo<<"("<<this<<") from ("<<resource<<")"<<endl;
     copy(resource); 
 }

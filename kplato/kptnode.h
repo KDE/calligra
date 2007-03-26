@@ -33,6 +33,7 @@
 
 class QDomElement;
 
+/// The main namespace.
 namespace KPlato
 {
 
@@ -110,8 +111,8 @@ public:
     // Child nodes are things like subtasks, basically a task can exists of
     // several sub-tasks. Creating a table has 4 subtasks, 1) measuring
     // 2) cutting 3) building 4) painting.
-    Node *getParent() const { return m_parent; }
-    void setParent( Node* newParent ) { m_parent = newParent;}
+    Node *parentNode() const { return m_parent; }
+    void setParentNode( Node* newParent ) { m_parent = newParent;}
     const QList<Node*> &childNodeIterator() const { return m_nodes; }
     int numChildren() const { return m_nodes.count(); }
     virtual void addChildNode(Node *node, Node *after=0);

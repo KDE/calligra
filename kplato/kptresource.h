@@ -36,6 +36,7 @@ class QTime;
 
 class KTimeZone;
 
+/// The main namespace.
 namespace KPlato
 {
 
@@ -69,10 +70,7 @@ class XMLLoaderObject;
  *  (Thomas Zander mrt-2003 by suggestion of Shaheed)
  */
  
-// FIXME Atm we use both QObject parent/child AND handles resources via m_resources!
-// The QObject parent/child is only used for accessing the parent ResourceGroup from Resource.
-// We need these to be QObject also for safe casting.
-class ResourceGroup : public QObject
+class KPLATO_TEST_EXPORT ResourceGroup : public QObject
 {
     Q_OBJECT
 public:
@@ -206,7 +204,7 @@ private:
   * See also @ref ResourceGroup
   */
 
-class Resource : public QObject
+class KPLATO_TEST_EXPORT Resource : public QObject
 {
     Q_OBJECT
 public:
@@ -236,18 +234,19 @@ public:
 
     void copy( Resource *resource );
     
-    ResourceGroup *parentGroup() const { return qobject_cast<ResourceGroup*>( parent() ); }
+    void setParentGroup( ResourceGroup *parent ) { m_parent = parent; }
+    ResourceGroup *parentGroup() const { return m_parent; }
     
     /// Set the time from when the resource is available to this project
-    void setAvailableFrom( const QDateTime &af ) {m_availableFrom.setDateTime( af );}
+    void setAvailableFrom( const QDateTime &af ) { m_availableFrom.setDateTime( af ); changed();}
     /// Set the time from when the resource is available to this project
-    void setAvailableFrom( const DateTime &af ) {m_availableFrom = af;}
+    void setAvailableFrom( const DateTime &af ) { m_availableFrom = af; changed(); }
     /// Return the time when the resource is available to this project
     const DateTime &availableFrom() const { return m_availableFrom;}
     /// Set the time when the resource is no longer available to this project
-    void setAvailableUntil( const QDateTime &au ) {m_availableUntil.setDateTime( au );}
+    void setAvailableUntil( const QDateTime &au ) { m_availableUntil.setDateTime( au ); changed(); }
     /// Set the time when the resource is no longer available to this project
-    void setAvailableUntil( const DateTime &au ) {m_availableUntil = au;}
+    void setAvailableUntil( const DateTime &au ) { m_availableUntil = au; changed(); }
     /// Return the time when the resource is no longer available to this project.
     const DateTime &availableUntil() const { return m_availableUntil;}
 
@@ -284,9 +283,9 @@ public:
     bool isOverbooked( const QDateTime &start, const QDateTime &end ) const;
 
     double normalRate() const { return cost.normalRate; }
-    void setNormalRate( double rate ) { cost.normalRate = rate; }
+    void setNormalRate( double rate ) { cost.normalRate = rate; changed(); }
     double overtimeRate() const { return cost.overtimeRate; }
-    void setOvertimeRate( double rate ) { cost.overtimeRate = rate; }
+    void setOvertimeRate( double rate ) { cost.overtimeRate = rate; changed(); }
 
     /**
      * Return available units in percent
@@ -295,7 +294,7 @@ public:
     /**
      * Set available units in percent
      */
-    void setUnits( int units ) { m_units = units; }
+    void setUnits( int units ) { m_units = units; changed(); }
 
     Project *project() const { return m_project; }
     /// Return the resources timespec. Defaults to local.
@@ -391,6 +390,7 @@ protected:
 
 private:
     Project *m_project;
+    ResourceGroup *m_parent;
     QHash<long, Schedule*> m_schedules;
     QString m_id; // unique id
     QString m_name;

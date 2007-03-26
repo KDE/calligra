@@ -226,14 +226,12 @@ QModelIndex ResourceItemModel::parent( const QModelIndex &index ) const
         return QModelIndex();
     }
     //kDebug()<<k_funcinfo<<index.internalPointer()<<": "<<index.row()<<", "<<index.column()<<endl;
-    QObject *p = object( index )->parent();
-    if ( p == 0 ) {
-        return QModelIndex();
-    }
-    ResourceGroup *g = qobject_cast<ResourceGroup*>( p );
-    if ( g ) {
-        int row = m_project->indexOf(  g );
-        return createIndex( row, 0, g );
+
+    Resource *r = qobject_cast<Resource*>( object( index ) );
+    if ( r && r->parentGroup() ) {
+        // only resources have parent
+        int row = m_project->indexOf(  r->parentGroup() );
+        return createIndex( row, 0, r->parentGroup() );
     }
     
     return QModelIndex();
@@ -245,11 +243,10 @@ bool ResourceItemModel::hasChildren( const QModelIndex &parent ) const
     if ( m_project == 0 ) {
         return false;
     }
-    QObject *p = object( parent );
-    if ( p == 0 ) {
+    if ( ! parent.isValid() ) {
         return m_project->numResourceGroups() > 0;
     }
-    ResourceGroup *g = qobject_cast<ResourceGroup*>( p );
+    ResourceGroup *g = qobject_cast<ResourceGroup*>( object( parent ) );
     if ( g ) {
         return g->numResources() > 0;
     }
@@ -261,13 +258,13 @@ QModelIndex ResourceItemModel::index( int row, int column, const QModelIndex &pa
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         return QModelIndex();
     }
-    QObject *p = object( parent );
-    if ( p == 0 ) {
+    if ( ! parent.isValid() ) {
         if ( row < m_project->numResourceGroups() ) {
             return createIndex( row, column, m_project->resourceGroupAt( row ) );
         }
         return QModelIndex();
     }
+    QObject *p = object( parent );
     ResourceGroup *g = qobject_cast<ResourceGroup*>( p );
     if ( g ) {
         if ( row < g->numResources() ) {
@@ -304,7 +301,7 @@ QModelIndex ResourceItemModel::index( const ResourceGroup *group ) const
 
 }
 
-int ResourceItemModel::columnCount( const QModelIndex &parent ) const
+int ResourceItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
     return 10;
 }
@@ -314,10 +311,10 @@ int ResourceItemModel::rowCount( const QModelIndex &parent ) const
     if ( m_project == 0 ) {
         return 0;
     }
-    QObject *p = object( parent );
-    if ( p == 0 ) {
+    if ( ! parent.isValid() ) {
         return m_project->numResourceGroups();
     }
+    QObject *p = object( parent );
     ResourceGroup *g = qobject_cast<ResourceGroup*>( p );
     if ( g ) {
         return g->numResources();
@@ -887,14 +884,11 @@ void ResourceItemModel::slotCalendarChanged( const Calendar* cal )
 
 void ResourceItemModel::slotResourceChanged( Resource *res )
 {
-    QObject *par = res->parent();
-    if ( par ) {
-        ResourceGroup *g = qobject_cast<ResourceGroup*>( par );
-        if ( g ) {
-            int row = g->indexOf( res );
-            emit dataChanged( createIndex( row, 0, res ), createIndex( row, columnCount() - 1, res ) );
-            return;
-        }
+    ResourceGroup *g = res->parentGroup();
+    if ( g ) {
+        int row = g->indexOf( res );
+        emit dataChanged( createIndex( row, 0, res ), createIndex( row, columnCount() - 1, res ) );
+        return;
     }
 }
 
