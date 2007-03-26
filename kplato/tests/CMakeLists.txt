@@ -41,5 +41,17 @@ add_test(KPlato-CalendarTester  ${EXECUTABLE_OUTPUT_PATH}/CalendarTester)
 
 ########### next target ###############
 
+set(ProjectTester_SRCS ProjectTester.cpp )
+ 
+kde4_automoc(${ProjectTester_SRCS})
+ 
+kde4_add_executable(ProjectTester NOGUI RUN_UNINSTALLED ${ProjectTester_SRCS})
+ 
+target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} kplatoprivate ${QT_QTTEST_LIBRARY})
+ 
+add_test(KPlato-ProjectTester  ${EXECUTABLE_OUTPUT_PATH}/ProjectTester)
+
+########### next target ###############
+
 
 endif(KDE4_BUILD_TESTS)
