@@ -169,7 +169,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
     foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->get(key);
         Q_ASSERT(factory);
-        m_textEditingPlugins.append(factory->create());
+        if(m_textEditingPlugins.contains(factory->objectId())) {
+            kWarning(32500) << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->objectId() << ")\n";
+            continue;
+        }
+        m_textEditingPlugins.insert(factory->objectId(), factory->create());
     }
 }
 
@@ -261,7 +265,29 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
         QMenu menu(m_canvas->canvasWidget());
         menu.addAction(action("text_default"));
         menu.addAction(action("format_font"));
-        menu.exec(event->globalPos());
+
+        foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
+            KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->get(key);
+            if(factory->showInMenu()) {
+                QAction *action = new QAction(factory->title(), &menu);
+                action->setData(factory->objectId());
+                menu.addAction(action);
+            }
+        }
+
+        QAction * action = menu.exec(event->globalPos());
+        KoTextEditingPlugin *plugin = m_textEditingPlugins.value(qvariant_cast<QString>(action->data()));
+        if(plugin) {
+            if(m_caret.hasSelection()) {
+                int from = m_caret.position();
+                int to = m_caret.anchor();
+                if(from > to) // make sure we call the plugin consistently
+                    qSwap(from, to);
+                plugin->checkSection(m_textShapeData->document(), from, to);
+            }
+            else
+                plugin->finishedWord(m_textShapeData->document(), m_caret.position());
+        }
     }
 }
 
@@ -743,12 +769,12 @@ void TextTool::editingPluginEvents() {
 }
 
 void TextTool::finishedWord() {
-    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values())
         plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::finishedParagraph() {
-    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values())
         plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
 }
 

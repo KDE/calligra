@@ -27,6 +27,7 @@
 
 #include <QTextCursor>
 #include <QAction>
+#include <QHash>
 
 class KoStyleManager;
 class UndoTextCommand; // private class
@@ -144,7 +145,7 @@ private:
     QAction *m_actionFormatIncreaseIndent;
     QAction *m_actionFormatDecreaseIndent;
 
-    QList<KoTextEditingPlugin*> m_textEditingPlugins;
+    QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
 };
 
 #endif
