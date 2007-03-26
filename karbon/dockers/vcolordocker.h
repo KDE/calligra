@@ -1,7 +1,13 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2002 - 2005, The Karbon Developers
-   Copyright (C) 2006 Jan Hambecht <jaham@gmx.net>
+   Copyright (C) 2002,2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+   Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
+   Copyright (C) 2004 Laurent Montel <montel@kde.org>
+   Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
+   Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
