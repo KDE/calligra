@@ -26,12 +26,13 @@
 #include <qglobal.h>
 #include <QString>
 
+/// The main namespace.
 namespace KPlato
 {
 
 /**
- * The duration class can be used to store a timespan in a convenient format.
- * The timespan can be in length in many many hours down to miliseconds.
+ * The Duration class can be used to store a timespan in a convenient format.
+ * The timespan can be in length in many many hours down to milliseconds.
  */
 class KPLATO_TEST_EXPORT Duration {
     public:
@@ -54,36 +55,42 @@ class KPLATO_TEST_EXPORT Duration {
         ~Duration();
 
         /**
-         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
+         * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
          */
         void addMilliseconds(qint64 delta)  { add(delta); }
 
         /**
-         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
+         * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
          */
         void addSeconds(qint64 delta) { addMilliseconds(delta * 1000); }
 
         /**
-         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
+         * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
          */
         void addMinutes(qint64 delta) { addSeconds(delta * 60); }
 
         /**
-         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
+         * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
          */
         void addHours(qint64 delta) { addMinutes(delta * 60); }
 
         /**
-         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
+         * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
          */
         void addDays(qint64 delta) { addHours(delta * 24); }
 
         //FIXME: overflow problem
+        /// Convert duration to milliseconds
         qint64 milliseconds() const { return m_ms; }
+        /// Return duration in whole seconds
         qint64 seconds() const { return m_ms / 1000; }
+        /// Return duration in whole minutes
         qint64 minutes() const { return seconds() / 60; }
+        /// Return duration in whole hours
         unsigned hours() const { return minutes() / 60; }
+        /// Return duration in whole days
         unsigned days() const { return hours() / 24; }
+        /// Convert duration into @p days, @p hours, @p minutes, @p seconds and @p milliseconds
         void get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds=0, unsigned *milliseconds=0) const;
 
         bool   operator==( const Duration &d ) const { return m_ms == d.m_ms; }
@@ -101,20 +108,29 @@ class KPLATO_TEST_EXPORT Duration {
         Duration &operator=(const Duration &d ) { m_ms = d.m_ms; return *this;}
         Duration operator*(int unit) const; 
         Duration operator*(const double value) const;
+        /// Divide duration with the integer @p unit
         Duration operator/(int unit) const;
+        /// Divide duration with the duration @p d
         double operator/(const Duration &d) const;
-        
+        /// Add duration with duration @p d
         Duration operator+(const Duration &d) const
             {Duration dur(*this); dur.add(d); return dur; }
+        /// Add duration with duration @p d
         Duration &operator+=(const Duration &d) {add(d); return *this; }
-        
+        /// Subtract duration with duration @p d
         Duration operator-(const Duration &d) const
             {Duration dur(*this); dur.subtract(d); return dur; }
+        /// Subtract duration with duration @p d
         Duration &operator-=(const Duration &d) {subtract(d); return *this; }
 
+        /// Convert duration to a string with @p format
         QString toString(Format format = Format_DayTime) const;
+        /// Create a duration from string @p s with @p format
         static Duration fromString(const QString &s, Format format = Format_DayTime, bool *ok=0);
         
+        /**
+         * Converts Duration into a double and scales it to unit @p u
+         */
         double toDouble(Unit u=Unit_ms) const { 
             if (u == Unit_ms) return (double)m_ms;
             else if (u == Unit_s) return (double)m_ms/1000.0;

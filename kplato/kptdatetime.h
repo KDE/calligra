@@ -24,13 +24,14 @@
 #include "kplato_export.h"
 #include "kptduration.h"
 
+/// The main namespace.
 namespace KPlato
 {
 
 class Duration;
 
 /**
- * DateTime is a @ref KDateTime which knows about @ref Duration
+ * DateTime is a KDateTime which knows about Duration
  * Note that in KPlato all datetimes are really in the time zone specified
  * in the project.
  * Exception to this is the calendar related dates and times which has
@@ -39,29 +40,36 @@ class Duration;
 class KPLATO_TEST_EXPORT DateTime : public KDateTime {
 
 public:
+    /// Create a DateTime.
     DateTime();
     /// Create a datetime in the specified time zone
     DateTime(const QDateTime &dt, const KDateTime::Spec &spec);
-    /// Create a copy of dt (same time, same time zone).
+    /// Create a copy of @p dt (same time, same time zone).
     DateTime(const KDateTime &dt);
+    /// Create a date-only DateTime.
     explicit DateTime(const QDate &date, const KDateTime::Spec &spec);
+    /// Create a DateTime.
     DateTime(const QDate &date, const QTime &time, const KDateTime::Spec &spec=KDateTime::Spec(LocalZone));
 
     /**
-     * Adds the duration @param duration to the datetime
+     * Adds the duration @p duration to the datetime
      */
     DateTime operator+(const Duration &duration) const;
     /**
-     * Subtracts the duration @param duration from the datetime
+     * Subtracts the duration @p duration from the datetime
      */
     DateTime operator-(const Duration &duration) const ;
     /**
      * Returns the absolute duration between the two datetimes
      */
     Duration operator-(const DateTime &dt) const { return duration(dt); }
+    /**
+     * Returns the absolute duration between the two datetimes
+     */
     Duration operator-(const DateTime &dt) { return duration(dt); }
-
+    /// Add @p duration to this datetime.
     DateTime &operator+=(const Duration &duration);
+    /// Subtract the @p duration from this datetime.
     DateTime &operator-=(const Duration &duration);
 
     /**
