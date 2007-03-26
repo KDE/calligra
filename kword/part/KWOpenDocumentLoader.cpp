@@ -117,6 +117,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     d->currentMasterPage = "Standard";
     if ( !loadPageLayout( d->currentMasterPage, context ) )
         return false;
+    Q_ASSERT( context.oasisStyles().masterPages().contains( d->currentMasterPage ) );
 
 #if 0
     KWOasisLoader oasisLoader( this );
@@ -138,14 +139,6 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     // By default display real variable value
     if ( !isReadWrite())
         m_varColl->variableSetting()->setDisplayFieldCode(false);
-#else
-    /*
-    const QDomElement* defaultParagStyle = styles.defaultStyle( "paragraph" );
-    if ( defaultParagStyle ) {
-        context.styleStack().push( *defaultParagStyle );
-        context.styleStack().setTypeProperties( "paragraph" );
-    }
-    */
 #endif
 
     // Load all styles before the corresponding paragraphs try to use them!
@@ -163,31 +156,24 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     static_cast<KWVariableSettings *>( m_varColl->variableSetting() )->loadNoteConfiguration( styles.officeStyle() );
     loadDefaultTableTemplates();
 #else
-    // We always needs at least one valid default paragraph style
-    KoParagraphStyle *defaultParagraphStyle = d->document->styleManager()->defaultParagraphStyle();
-    context.styleStack().setTypeProperties( "paragraph" );
-    defaultParagraphStyle->loadOasis( context.styleStack() );
-    context.styleStack().setTypeProperties( "text" );
-    defaultParagraphStyle->characterStyle()->loadOasis( context.styleStack() );
-    kDebug()<<"defaultParagraphStyle.name="<<defaultParagraphStyle->name()<<endl;
 
+    // We always needs at least one valid default paragraph style
+    //Q_ASSERT( ! context.oasisStyles().defaultStyle("paragraph") );
+    //Q_ASSERT( ! context.oasisStyles().defaultStyle("text") );
+    //Q_ASSERT( ! styles.defaultStyle( "paragraph" ) );
     /*
+    KoParagraphStyle *defaultParagraphStyle = d->document->styleManager()->defaultParagraphStyle();
     //const KoXmlElement* defaultParagraphStyle = context.oasisStyles().defaultStyle("paragraph");
-    //Q_ASSERT(defaultParagraphStyle);
     //if( ! defaultParagraphStyle ) {
         KoParagraphStyle *parastyle = new KoParagraphStyle();
         parastyle->setName("Standard");
         d->document->styleManager()->add(parastyle);
-
         context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
         parastyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
-
         KoCharacterStyle *charstyle = parastyle->characterStyle();
         context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
         charstyle->loadOasis(context.styleStack()); // load the KoCharacterStyle from the stylestack
-
     //}
-    //Q_ASSERT( context.oasisStyles().defaultStyle("paragraph") );
     */
 #endif
 
@@ -258,6 +244,8 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     setPageLayout( m_pageLayout, m_loadingInfo->columns, m_loadingInfo->hf, false );
 #else
     d->document->m_pageSettings.setColumns( columns );
+    //KoPageLayout pageLayout = KoPageLayout::standardLayout();
+    //d->document->setDefaultPageLayout( pageLayout );
 #endif
 
     kDebug(32001) << "========================> KWOpenDocumentLoader::load END" << endl;
@@ -294,7 +282,7 @@ void KWOpenDocumentLoader::loadSettings(const QDomDocument& settingsDoc)
 
 bool KWOpenDocumentLoader::loadPageLayout(const QString& masterPageName, KoOasisLoadingContext& context)
 {
-    kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout"<<endl;
+    kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName<<endl;
     const KoOasisStyles& styles = context.oasisStyles();
     Q_ASSERT( styles.masterPages().contains(masterPageName) );
     const QDomElement* masterPage = styles.masterPages()[ masterPageName ];
@@ -304,7 +292,8 @@ bool KWOpenDocumentLoader::loadPageLayout(const QString& masterPageName, KoOasis
     if ( masterPageStyle ) {
         KoPageLayout pageLayout = KoPageLayout::standardLayout();
         pageLayout.loadOasis( *masterPageStyle );
-        d->document->m_pageManager.setDefaultPage(pageLayout);
+        //d->document->m_pageManager.setDefaultPage(pageLayout);
+        d->document->setDefaultPageLayout(pageLayout);
 #if 0
         const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
         const QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
@@ -364,7 +353,7 @@ bool KWOpenDocumentLoader::loadPageLayout(const QString& masterPageName, KoOasis
 
 bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, KoOasisLoadingContext& context)
 {
-    kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle"<<endl;
+    kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle masterPageName="<<masterPageName<<endl;
     const KoOasisStyles& styles = context.oasisStyles();
     Q_ASSERT( styles.masterPages().contains(masterPageName) );
     const QDomElement *masterPage = styles.masterPages()[ masterPageName ];
@@ -445,9 +434,35 @@ void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context)
     Q_ASSERT( defaultStyle() );
     return stylesLoaded;
 #else
+
+    //TODO following both loop are doing the same. Is there a d iff between automatic and custom styles here?
+
+    foreach(KoXmlElement* styleElem, context.oasisStyles().autoStyles("paragraph").values()) {
+        Q_ASSERT( styleElem );
+        Q_ASSERT( !styleElem->isNull() );
+        QString name = styleElem->attributeNS( KoXmlNS::style, "name", QString::null );
+        QString displayName = styleElem->attributeNS( KoXmlNS::style, "display-name", QString::null );
+        if ( displayName.isEmpty() )
+            displayName = name;
+        kDebug(32001)<<"KWOpenDocumentLoader::loadStyles autoStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
+        context.styleStack().save();
+        context.addStyles( styleElem, "paragraph" ); // Load all parents - only because we don't support inheritance.
+        KoStyleStack& styleStack = context.styleStack();
+        KoParagraphStyle *parastyle = new KoParagraphStyle();
+        parastyle->setName(name);
+        d->document->styleManager()->add(parastyle);
+        styleStack.setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
+        parastyle->loadOasis(styleStack); // load the KoParagraphStyle from the stylestack
+        KoCharacterStyle *charstyle = parastyle->characterStyle();
+        styleStack.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
+        charstyle->loadOasis(styleStack); // load the KoCharacterStyle from the stylestack
+        context.styleStack().restore();
+    }
+
+
     QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
     foreach(KoXmlElement* styleElem, userStyles) {
-        if ( !styleElem ) continue;
+        Q_ASSERT( styleElem );
         Q_ASSERT( !styleElem->isNull() );
 
         //KoParagStyle::loadStyle
@@ -456,7 +471,7 @@ void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context)
         if ( displayName.isEmpty() )
             displayName = name;
 
-        kDebug(32001)<<"KWOpenDocumentLoader::loadStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
+        kDebug(32001)<<"KWOpenDocumentLoader::loadStyles customStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
 #if 0
         // OOo hack:
         //m_bOutline = name.startsWith( "Heading" );
