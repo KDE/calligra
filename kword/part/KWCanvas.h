@@ -86,9 +86,18 @@ public:
     KWViewMode *viewMode() const { return m_viewMode; }
 
 public slots:
+    /**
+     * sets the document offset in the scrollArea
+     * @param offset the offset, in pixels.
+     */
     void setDocumentOffset(const QPoint &offset);
 
 signals:
+    /**
+     * emitted when the contentsSize changes.
+     * @see KWViewMode::contentsSize
+     * @param size the content area size, in pixels.
+     */
     void documentSize(const QSize &size);
 
 protected:

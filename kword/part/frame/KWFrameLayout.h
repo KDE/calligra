@@ -88,6 +88,7 @@ public:
      */
     void createNewFrameForPage(KWTextFrameSet *fs, int pageNumber);
 
+    /// Set the document to be passed to new instances of the KWTextFrameSet
     void setDocument(KWDocument *document) { m_document = document; }
 
 signals:

@@ -61,8 +61,11 @@ public:
      */
     void setSortingId(int id) { m_sortingId = id; }
 
+    /// A layout property. Return if the frame can autogrow. @see allowToGrow
     bool canAutoGrow();
+    /// A layout property. Marks the frame able to get bigger when there is more text to fit.
     void allowToGrow();
+    /// A layout option.  Asks the frame to shrink to a maximum of requestedHeight because there is no more text.
     void autoShrink(double requestedHeight);
 
 private:

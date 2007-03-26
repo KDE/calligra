@@ -38,6 +38,7 @@ public:
     explicit KWTextFrameSet(const KWDocument *document);
     /**
      * Constructor with a type of text specified
+     * @param document the document this frameset belongs to.
      * @param type the type of frameSet; this can indicate headers, footers etc.
      */
     KWTextFrameSet(const KWDocument *document, KWord::TextFrameSetType type);
@@ -63,8 +64,14 @@ public:
      *  schedule a layout.
      */
     void setAllowLayout(bool allow);
+    /**
+     * Set the page manager used by this frameset.
+     * If we can't get rid of the dependency on KWDocument, we should remove this variable.
+     */
     void setPageManager(const KWPageManager *pageMager) { m_pageManager = pageMager; }
+    /// return the pageManager for this frameSet
     const KWPageManager* pageManager() const { return m_pageManager; }
+    /// return the document for this frameset
     const KWDocument *kwordDocument() const { return m_kwordDocument; }
 
 #ifndef NDEBUG
@@ -88,7 +95,9 @@ protected:
      * This will resize the frame, or emit a moreFramesNeeded signal based on the settings.
      */
     void requestMoreFrames(double textHeight);
+    /// called by the KWTextDocumentLayout to mark that the frame is bigger then the text in it.
     void spaceLeft(double excessHeight);
+    /// called by the KWTextDocumentLayout to mark that there are frames not in use because the text is too short.
     void framesEmpty(int framesInUse);
     /**
      * Schedules a followup schedule run.

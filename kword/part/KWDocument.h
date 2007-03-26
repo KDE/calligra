@@ -205,6 +205,7 @@ public:
      */
     const KoStyleManager *styleManager() const { return m_styleManager; }
 
+    /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const { return m_inlineTextObjectManager; }
 
     /// reimplemented from super

@@ -440,33 +440,7 @@ This saves problems with finding out which we missed near the end.
             this, SLOT( textStyleSelected( int ) ) );
     updateStyleList();
 
-    m_actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
-            this, SLOT( textDefaultFormat() ),
-            actionCollection(), "text_default" );
-    m_actionFormatDefault->setToolTip( i18n( "Change font and paragraph attributes to their default values" ) );
-    m_actionFormatDefault->setWhatsThis( i18n( "Change font and paragraph attributes to their default values." ) );
-
     // ----------------------- More format actions, for the toolbar only
-
-    QActionGroup* alignActionGroup = new QActionGroup( this );
-    alignActionGroup->setExclusive( true );
-    m_actionFormatAlignLeft = new KToggleAction( i18n( "Align Left" ), "text_left", Qt::CTRL + Qt::Key_L,
-            this, SLOT( textAlignLeft() ),
-            actionCollection(), "format_alignleft" );
-    m_actionFormatAlignLeft->setActionGroup( alignActionGroup );
-    m_actionFormatAlignLeft->setChecked( true );
-    m_actionFormatAlignCenter = new KToggleAction( i18n( "Align Center" ), "text_center", Qt::CTRL + Qt::ALT + Qt::Key_C,
-            this, SLOT( textAlignCenter() ),
-            actionCollection(), "format_aligncenter" );
-    m_actionFormatAlignCenter->setActionGroup( alignActionGroup );
-    m_actionFormatAlignRight = new KToggleAction( i18n( "Align Right" ), "text_right", Qt::CTRL + Qt::ALT + Qt::Key_R,
-            this, SLOT( textAlignRight() ),
-            actionCollection(), "format_alignright" );
-    m_actionFormatAlignRight->setActionGroup( alignActionGroup );
-    m_actionFormatAlignBlock = new KToggleAction( i18n( "Align Block" ), "format-justify-fill", Qt::CTRL + Qt::Key_J,
-            this, SLOT( textAlignBlock() ),
-            actionCollection(), "format_alignblock" );
-    m_actionFormatAlignBlock->setActionGroup( alignActionGroup );
 
     QActionGroup* spacingActionGroup = new QActionGroup( this );
     spacingActionGroup->setExclusive( true );
