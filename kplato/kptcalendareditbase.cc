@@ -139,10 +139,10 @@ CalendarEditBase::~CalendarEditBase()
 void CalendarEditBase::languageChange()
 {
     setCaption( tr2i18n( "CalendarEditBase" ) );
-    groupBox2->setTitle( QString::null );
-    day->setTitle( QString::null );
+    groupBox2->setTitle( QString() );
+    day->setTitle( QString() );
     bApply->setText( tr2i18n( "Apply" ) );
-    groupBox4->setTitle( QString::null );
+    groupBox4->setTitle( QString() );
     intervalList->headerItem()->setText( 0, tr2i18n( "Work Interval" ) );
     bClear->setText( tr2i18n( "Clear" ) );
     bAddInterval->setText( tr2i18n( "Add Interval" ) );

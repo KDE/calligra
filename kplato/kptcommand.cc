@@ -2008,7 +2008,7 @@ void ModifyCompletionFinishedCmd::unexecute()
     setCommandType( 0 );
 }
 
-ModifyCompletionStartTimeCmd::ModifyCompletionStartTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name )
+ModifyCompletionStartTimeCmd::ModifyCompletionStartTimeCmd( Part *part, Completion &completion, const QDateTime &value, const QString& name )
         : NamedCommand( part, name ),
         m_completion( completion ),
         oldvalue( m_completion.startTime() ),
@@ -2029,7 +2029,7 @@ void ModifyCompletionStartTimeCmd::unexecute()
     setCommandType( 0 );
 }
 
-ModifyCompletionFinishTimeCmd::ModifyCompletionFinishTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name )
+ModifyCompletionFinishTimeCmd::ModifyCompletionFinishTimeCmd( Part *part, Completion &completion, const QDateTime &value, const QString& name )
         : NamedCommand( part, name ),
         m_completion( completion ),
         oldvalue( m_completion.finishTime() ),

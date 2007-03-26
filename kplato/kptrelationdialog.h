@@ -53,7 +53,7 @@ class AddRelationDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AddRelationDialog(Relation *rel, QWidget *p, const QString& caption=QString::null, ButtonCodes buttons=Ok|Cancel, const char *n=0);
+    AddRelationDialog(Relation *rel, QWidget *p, const QString& caption=QString(), ButtonCodes buttons=Ok|Cancel, const char *n=0);
 
     virtual KCommand *buildCommand(Part *part);
     int selectedRelationType() const;

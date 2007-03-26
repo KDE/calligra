@@ -391,7 +391,7 @@ public:
      * and relationAdded() after it has been added.
      * @parem rel The relation to be added.
      * @parem check If true, the relation is checked for validity
-     * @Return true if successfull.
+     * @Return true if successful.
      */
     bool addRelation( Relation *rel, bool check=true );
     /**

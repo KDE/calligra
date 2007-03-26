@@ -142,7 +142,7 @@ bool Part::loadXML( QIODevice *, const QDomDocument &document )
     QDomElement plan = document.documentElement();
 
     // Check if this is the right app
-    value = plan.attribute( "mime", QString::null );
+    value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
         kError() << "No mime type specified!" << endl;
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );

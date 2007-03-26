@@ -959,7 +959,7 @@ private:
 class KPLATO_TEST_EXPORT ModifyCompletionStartTimeCmd : public NamedCommand
 {
 public:
-    ModifyCompletionStartTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name = QString() );
+    ModifyCompletionStartTimeCmd( Part *part, Completion &completion, const QDateTime &value, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -973,7 +973,7 @@ private:
 class KPLATO_TEST_EXPORT ModifyCompletionFinishTimeCmd : public NamedCommand
 {
 public:
-    ModifyCompletionFinishTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name = QString() );
+    ModifyCompletionFinishTimeCmd( Part *part, Completion &completion, const QDateTime &value, const QString& name = QString() );
     void execute();
     void unexecute();
 

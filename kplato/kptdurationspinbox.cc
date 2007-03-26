@@ -83,7 +83,7 @@ void DurationSpinBox::stepUnitUp()
     //kDebug()<<k_funcinfo<<m_unit<<" > "<<Duration::Unit_d<<endl;
     if ( m_unit > Duration::Unit_d ) {
         setUnit( static_cast<Duration::Unit>(m_unit - 1) );
-        // line may change lenght, make sure cursor stays within unit
+        // line may change length, make sure cursor stays within unit
         lineEdit()->setCursorPosition( lineEdit()->displayText().length() );
     }
 }
@@ -93,7 +93,7 @@ void DurationSpinBox::stepUnitDown()
     //kDebug()<<k_funcinfo<<m_unit<<" < "<<Duration::Unit_ms<<endl;
     if ( m_unit < Duration::Unit_ms ) {
         setUnit( static_cast<Duration::Unit>(m_unit + 1) );
-        // line may change lenght, make sure cursor stays within unit
+        // line may change length, make sure cursor stays within unit
         lineEdit()->setCursorPosition( lineEdit()->displayText().length() );
     }
 }
