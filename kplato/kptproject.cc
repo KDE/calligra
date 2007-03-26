@@ -699,8 +699,7 @@ bool Project::addTask( Node* task, Node* position )
     // we want to add a task at the given position. => the new node will
     // become next sibling right after position.
     if ( 0 == position ) {
-        kError() << k_funcinfo << "position=0, could not add task: " << task->name() << endl;
-        return false;
+        return addSubTask( task, this );
     }
     //kDebug()<<k_funcinfo<<"Add "<<task->name()<<" after "<<position->name()<<endl;
     // in case we want to add to the main project, we make it child element
@@ -726,35 +725,35 @@ bool Project::addTask( Node* task, Node* position )
 
 bool Project::addSubTask( Node* task, Node* parent )
 {
-    // we want to add a subtask to the node "position". It will become
-    // position's last child.
+    // append task to parent
     return addSubTask( task, -1, parent );
 }
 
 bool Project::addSubTask( Node* task, int index, Node* parent )
 {
     // we want to add a subtask to the node "parent" at the given index.
-    if ( 0 == parent ) {
-        kError() << k_funcinfo << "No parent, can not add subtask: " << task->name() << endl;
-        return false;
+    // If parent is 0, add to this
+    Node *p = parent;
+    if ( 0 == p ) {
+        p = this;
     }
     if ( !registerNodeId( task ) ) {
         kError() << k_funcinfo << "Failed to register node id, can not add subtask: " << task->name() << endl;
         return false;
     }
-    int i = index == -1 ? parent->numChildren() : index;
-    emit nodeToBeAdded( parent, i );
-    parent->insertChildNode( i, task );
+    int i = index == -1 ? p->numChildren() : index;
+    emit nodeToBeAdded( p, i );
+    p->insertChildNode( i, task );
     emit nodeAdded( task );
     return true;
 }
 
-void Project::delTask( Node *node )
+void Project::takeTask( Node *node )
 {
     Node * parent = node->parentNode();
     if ( parent == 0 ) {
         kDebug() << k_funcinfo << "Node must have a parent!" << endl;
-        return ;
+        return;
     }
     removeId( node->id() );
     emit nodeToBeRemoved( node );
@@ -782,7 +781,7 @@ bool Project::moveTask( Node* node, Node *newParent, int newPos )
         return false;
     }
     const Node *before = newParent->childNode( newPos );
-    delTask( node );
+    takeTask( node );
     int i = before == 0 ? newParent->numChildren() : newParent->indexOf( before );
     addSubTask( node, i, newParent );
     return true;

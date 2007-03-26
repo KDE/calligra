@@ -643,7 +643,7 @@ void NodeDeleteCmd::execute()
         if ( m_cmd ) {
             m_cmd->execute();
         }
-        m_project->delTask( m_node );
+        m_project->takeTask( m_node );
         m_mine = true;
         setSchScheduled( false );
         setCommandType( 1 );
@@ -707,7 +707,7 @@ void TaskAddCmd::execute()
 }
 void TaskAddCmd::unexecute()
 {
-    m_project->delTask( m_node );
+    m_project->takeTask( m_node );
     m_added = false;
 
     setCommandType( 1 );
@@ -757,7 +757,7 @@ void SubtaskAddCmd::execute()
 }
 void SubtaskAddCmd::unexecute()
 {
-    m_project->delTask( m_node );
+    m_project->takeTask( m_node );
     if ( m_cmd ) {
         m_cmd->unexecute();
     }

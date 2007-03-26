@@ -98,21 +98,23 @@ public:
 
     /**
      * Add the node @p task to the project, after node @p position
+     * If @p postition is zero, it will be added to this project.
      */
     bool addTask( Node* task, Node* position );
     /**
-     * Add the node @p task to the parent of @p position
+     * Add the node @p task to the @p parent
      */
-    bool addSubTask( Node* task, Node* position );
+    bool addSubTask( Node* task, Node* parent );
     /**
      * Add the node @p task to @p parent, in position @p index
+     * If @p parent is zero, it will be added to this project.
      */
     bool addSubTask( Node* task, int index, Node* parent );
     /**
      * Remove the @p node.
      * The node is not deleted.
      */
-    void delTask( Node *node );
+    void takeTask( Node *node );
     bool canMoveTask( Node* node, Node *newParent );
     bool moveTask( Node* node, Node *newParent, int newPos );
     bool canIndentTask( Node* node );
