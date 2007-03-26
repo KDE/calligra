@@ -100,6 +100,8 @@ private slots:
     void decreaseIndent();
     /// move the paragraph indent of the selected text to be more (right on LtR text)
     void increaseIndent();
+    /// Default Format
+    void textDefaultFormat();
 
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();

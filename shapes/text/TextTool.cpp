@@ -41,6 +41,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <QUndoCommand>
 #include <QPointer>
+#include <QMenu>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut) {
     foreach(QKeySequence ks, KStandardShortcut::shortcut(shortcut)) {
@@ -160,6 +161,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
     connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( selectFont() ));
 
+    action = new QAction(i18n("Default Format"), this);
+    addAction("text_default", action);
+    action->setToolTip( i18n( "Change font and paragraph attributes to their default values" ) );
+    connect(action, SIGNAL(triggered()), this, SLOT( textDefaultFormat() ));
+
     foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->get(key);
         Q_ASSERT(factory);
@@ -216,7 +222,9 @@ void TextTool::paint( QPainter &painter, KoViewConverter &converter) {
 }
 
 void TextTool::mousePressEvent( KoPointerEvent *event ) {
-    if(! m_textShape->boundingRect().contains(event->point)) {
+    const bool canMoveCaret = !m_caret.hasSelection() || event->button() !=  Qt::RightButton;
+
+    if(canMoveCaret && ! m_textShape->boundingRect().contains(event->point)) {
         QRectF area(event->point, QSizeF(1,1));
         foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
             TextShape *textShape = dynamic_cast<TextShape*> (shape);
@@ -230,22 +238,31 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
         setShapeData(static_cast<KoTextShapeData*> (m_textShape->userData()));
     }
 
-    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
-    if(m_caret.hasSelection() && !shiftPressed)
-        repaintSelection(m_caret.position(), m_caret.anchor()); // will erase selection
-    else if(! m_caret.hasSelection())
-        repaintCaret();
-    int prevPosition = m_caret.position();
-    int position = pointToPosition(event->point);
-    m_caret.setPosition(position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
-    if(shiftPressed) // altered selection.
-        repaintSelection(prevPosition, m_caret.position());
-    else
-        repaintCaret();
+    if(canMoveCaret) {
+        bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+        if(m_caret.hasSelection() && !shiftPressed)
+            repaintSelection(m_caret.position(), m_caret.anchor()); // will erase selection
+        else if(! m_caret.hasSelection())
+            repaintCaret();
+        int prevPosition = m_caret.position();
+        int position = pointToPosition(event->point);
+        m_caret.setPosition(position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        if(shiftPressed) // altered selection.
+            repaintSelection(prevPosition, m_caret.position());
+        else
+            repaintCaret();
 
-    updateSelectionHandler();
-    updateStyleManager();
+        updateSelectionHandler();
+        updateStyleManager();
+    }
     updateActions();
+
+    if(event->button() ==  Qt::RightButton) {
+        QMenu menu(m_canvas->canvasWidget());
+        menu.addAction(action("text_default"));
+        menu.addAction(action("format_font"));
+        menu.exec(event->globalPos());
+    }
 }
 
 void TextTool::setShapeData(KoTextShapeData *data) {
@@ -458,6 +475,8 @@ void TextTool::updateActions() {
     }
     m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
     m_allowActions = true;
+
+    //action("text_default")->setEnabled(m_caret.hasSelection());
 
     emit charFormatChanged(cf);
     emit blockFormatChanged(bf);
@@ -691,6 +710,11 @@ void TextTool::decreaseIndent() {
     if(! m_allowActions) return;
     m_selectionHandler.decreaseIndent();
     m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
+}
+
+void TextTool::textDefaultFormat() {
+    // TODO
+    kDebug() << "TextTool::textDefaultFormat\n";
 }
 
 
