@@ -45,6 +45,7 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QTextBlock>
+#include <QTextList>
 #include <klocale.h>
 
 /// \internal d-pointer class.
@@ -92,9 +93,8 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         kError(32001) << "No office:text found!" << endl;
         QDomElement childElem;
         QString localName;
-        forEachElement( childElem, realBody ) {
+        forEachElement( childElem, realBody )
             localName = childElem.localName();
-        }
         if ( localName.isEmpty() )
             d->document->setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
         else
@@ -142,7 +142,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
 #endif
 
     // Load all styles before the corresponding paragraphs try to use them!
-    loadStyles( context );
+    loadAllStyles( context );
 
 #if 0
     if ( m_frameStyleColl->loadOasisStyles( context ) == 0 ) {
@@ -384,9 +384,8 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, Ko
 }
 
 //KoStyleCollection::loadOasisStyles
-void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context)
+void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context, QList<KoXmlElement*> styleElements)
 {
-    kDebug(32001)<<"KWOpenDocumentLoader::loadStyles"<<endl;
 #if 0
     QStringList followingStyles;
     QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
@@ -419,8 +418,7 @@ void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context)
         }
         else kWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
-    if( followingStyles.count() != styleList().count() )
-        kDebug() << "Ouch, " << followingStyles.count() << " following-styles, but " << styleList().count() << " styles in styleList" << endl;
+    if( followingStyles.count() != styleList().count() ) kDebug() << "Ouch, " << followingStyles.count() << " following-styles, but " << styleList().count() << " styles in styleList" << endl;
     unsigned int i = 0;
     QString tmpString;
     foreach( tmpString, followingStyles ) {
@@ -433,35 +431,9 @@ void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context)
     // TODO the same thing for style inheritance (style:parent-style-name) and setParentStyle()
     Q_ASSERT( defaultStyle() );
     return stylesLoaded;
-#else
+#endif
 
-    //TODO following both loop are doing the same. Is there a d iff between automatic and custom styles here?
-
-    foreach(KoXmlElement* styleElem, context.oasisStyles().autoStyles("paragraph").values()) {
-        Q_ASSERT( styleElem );
-        Q_ASSERT( !styleElem->isNull() );
-        QString name = styleElem->attributeNS( KoXmlNS::style, "name", QString::null );
-        QString displayName = styleElem->attributeNS( KoXmlNS::style, "display-name", QString::null );
-        if ( displayName.isEmpty() )
-            displayName = name;
-        kDebug(32001)<<"KWOpenDocumentLoader::loadStyles autoStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
-        context.styleStack().save();
-        context.addStyles( styleElem, "paragraph" ); // Load all parents - only because we don't support inheritance.
-        KoStyleStack& styleStack = context.styleStack();
-        KoParagraphStyle *parastyle = new KoParagraphStyle();
-        parastyle->setName(name);
-        d->document->styleManager()->add(parastyle);
-        styleStack.setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
-        parastyle->loadOasis(styleStack); // load the KoParagraphStyle from the stylestack
-        KoCharacterStyle *charstyle = parastyle->characterStyle();
-        styleStack.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
-        charstyle->loadOasis(styleStack); // load the KoCharacterStyle from the stylestack
-        context.styleStack().restore();
-    }
-
-
-    QList<KoXmlElement*> userStyles = context.oasisStyles().customStyles( "paragraph" ).values();
-    foreach(KoXmlElement* styleElem, userStyles) {
+    foreach(KoXmlElement* styleElem, styleElements) {
         Q_ASSERT( styleElem );
         Q_ASSERT( !styleElem->isNull() );
 
@@ -471,7 +443,7 @@ void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context)
         if ( displayName.isEmpty() )
             displayName = name;
 
-        kDebug(32001)<<"KWOpenDocumentLoader::loadStyles customStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
+        kDebug(32001)<<"KWOpenDocumentLoader::loadStyles styleName="<<name<<" styleDisplayName="<<displayName<<endl;
 #if 0
         // OOo hack:
         //m_bOutline = name.startsWith( "Heading" );
@@ -480,11 +452,6 @@ void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context)
 #endif
         context.styleStack().save();
         context.addStyles( styleElem, "paragraph" ); // Load all parents - only because we don't support inheritance.
-#if 0
-        //KoParagLayout::loadOasisParagLayout
-        context.styleStack().setTypeProperties( "paragraph" );
-#endif
-        KoStyleStack& styleStack = context.styleStack();
 
         KoParagraphStyle *parastyle = new KoParagraphStyle();
         parastyle->setName(name);
@@ -492,17 +459,27 @@ void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context)
         d->document->styleManager()->add(parastyle);
 
         //KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
-        styleStack.setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
-        parastyle->loadOasis(styleStack); // load the KoParagraphStyle from the stylestack
+        context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
+        parastyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
 
         //KoTextFormat::load
         KoCharacterStyle *charstyle = parastyle->characterStyle();
-        styleStack.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
-        charstyle->loadOasis(styleStack); // load the KoCharacterStyle from the stylestack
+        context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
+        charstyle->loadOasis(context.styleStack()); // load the KoCharacterStyle from the stylestack
 
         context.styleStack().restore();
     }
-#endif
+}
+
+//KoStyleCollection::loadOasisStyles
+void KWOpenDocumentLoader::loadAllStyles(KoOasisLoadingContext& context)
+{
+    kDebug(32001)<<"KWOpenDocumentLoader::loadAllStyles"<<endl;
+    // User styles are named and appear in the gui while automatic styles are just a way to
+    // save formatting changes done by the user. There is no real tech diff between them
+    // except how we present them to the user.
+    loadStyles(context, context.oasisStyles().autoStyles("paragraph").values());
+    loadStyles(context, context.oasisStyles().customStyles("paragraph").values());
 }
 
 //KWOasisLoader::loadOasisHeaderFooter
@@ -828,15 +805,84 @@ void KWOpenDocumentLoader::loadHeading(const KoXmlElement& parent, KoOasisLoadin
     cursor.insertBlock(emptyTbf, emptyCf);
 }
 
-//KoTextDocument::loadOasisText
+//KoTextDocument::loadList
 void KWOpenDocumentLoader::loadList(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor)
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadList"<<endl;
-    //TODO
-    //lastParagraph = loadList( tag, context, lastParagraph, styleColl, nextParagraph );
-    Q_UNUSED(parent);
-    Q_UNUSED(context);
-    Q_UNUSED(cursor);
+#if 0
+    const QString oldListStyleName = context.currentListStyleName();
+    if ( list.hasAttributeNS( KoXmlNS::text, "style-name" ) ) context.setCurrentListStyleName( list.attributeNS( KoXmlNS::text, "style-name", QString::null ) );
+    bool listOK = !context.currentListStyleName().isEmpty();
+    int level = ( list.localName() == "numbered-paragraph" ) ? list.attributeNS( KoXmlNS::text, "level", "1" ).toInt() : context.listStyleStack().level() + 1;
+    if ( listOK ) listOK = context.pushListLevelStyle( context.currentListStyleName(), level );
+    const QDomElement listStyle = context.listStyleStack().currentListStyle();
+    // The tag is either list-level-style-number or list-level-style-bullet
+    const bool orderedList = listStyle.localName() == "list-level-style-number";
+    if ( list.localName() == "numbered-paragraph" ) {
+        // A numbered-paragraph contains paragraphs directly (it's both a list and a list-item)
+        int restartNumbering = -1;
+        if ( list.hasAttributeNS( KoXmlNS::text, "start-value" ) ) restartNumbering = list.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
+        KoTextParag* oldLast = lastParagraph;
+        lastParagraph = loadOasisText( list, context, lastParagraph, styleColl, nextParagraph );
+        KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
+        // Apply list style to first paragraph inside numbered-parag - there's only one anyway
+        // Keep the "is outline" property though
+        bool isOutline = firstListItem->counter() && firstListItem->counter()->numbering() == KoParagCounter::NUM_CHAPTER;
+        firstListItem->applyListStyle( context, restartNumbering, orderedList, isOutline, level );
+    } else {
+        for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() ) {
+            QDomElement listItem = n.toElement();
+            int restartNumbering = -1;
+            if ( listItem.hasAttributeNS( KoXmlNS::text, "start-value" ) ) restartNumbering = listItem.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
+            bool isListHeader = listItem.localName() == "list-header" || listItem.attributeNS( KoXmlNS::text, "is-list-header", QString::null ) == "is-list-header";
+            KoTextParag* oldLast = lastParagraph;
+            lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl, nextParagraph );
+            KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
+            KoTextParag* p = firstListItem;
+            // It's either list-header (normal text on top of list) or list-item
+            if ( !isListHeader && firstListItem ) {
+                // Apply list style to first paragraph inside list-item
+                bool isOutline = firstListItem->counter() && firstListItem->counter()->numbering() == KoParagCounter::NUM_CHAPTER;
+                firstListItem->applyListStyle( context, restartNumbering, orderedList, isOutline, level );
+                p = p->next();
+            }
+            // Make text:h inside list-item (as non first child) unnumbered.
+            while ( p && p != lastParagraph->next() ) {
+                if ( p->counter() ) p->counter()->setNumbering( KoParagCounter::NUM_NONE );
+                p = p->next();
+            }
+        }
+    }
+    if ( listOK ) context.listStyleStack().pop();
+    context.setCurrentListStyleName( oldListStyleName );
+    return lastParagraph;
+#else
+
+    //TESTCASE
+    QTextListFormat listformat;
+    listformat.setIndent(2);
+    listformat.setStyle( QTextListFormat::ListDisc );
+    QTextList* list = cursor.insertList(listformat);
+
+    // Iterate over list items
+    for(QDomNode n = parent.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        //cursor.insertBlock();
+        //QTextBlockFormat emptyTbf;
+        //QTextCharFormat emptyCf;
+        //cursor.insertBlock(emptyTbf, emptyCf);
+        //list->add(cursor.block());
+
+        //QTextBlock prev = cursor.block();
+        QDomElement listItem = n.toElement();
+        loadBody(listItem, context, cursor);
+        //QTextBlock current = cursor.block();
+        //for(QTextBlock b = prev; b.isValid() && b != current; b = b.next()) list->add(b);
+    }
+
+    QTextBlockFormat emptyTbf;
+    QTextCharFormat emptyCf;
+    cursor.insertBlock(emptyTbf, emptyCf);
+#endif
 }
 
 //KoTextDocument::loadOasisText

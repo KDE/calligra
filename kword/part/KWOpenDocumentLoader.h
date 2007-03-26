@@ -72,7 +72,9 @@ private:
     void loadSettings(const QDomDocument& settings);
     bool loadPageLayout(const QString& masterPageName, KoOasisLoadingContext& context);
     bool loadMasterPageStyle(const QString& masterPageName, KoOasisLoadingContext& context);
-    void loadStyles(KoOasisLoadingContext& context);
+
+    void loadStyles(KoOasisLoadingContext& context, QList<KoXmlElement*> styleElements);
+    void loadAllStyles(KoOasisLoadingContext& context);
 
     void loadHeaderFooter(const QDomElement& masterPage, const QDomElement& masterPageStyle, KoOasisLoadingContext& context, bool isHeader);
 
