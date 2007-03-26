@@ -77,7 +77,7 @@ public:
     /// reimplemented method from superclass
     virtual KoToolProxy * toolProxy() { return m_toolProxy; }
     /// reimplemented method from superclass
-    virtual void clipToDocument(KoShape *shape, QPointF &move) const;
+    virtual void clipToDocument(const KoShape *shape, QPointF &move) const;
     // getters
     /// return the document that this canvas works on
     KWDocument *document() const { return m_document; }
