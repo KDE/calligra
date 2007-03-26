@@ -8,10 +8,7 @@ add_subdirectory( forms )
 add_subdirectory( importexport )
 
 # disabled for now till ported to Kross2
-#if(KOFFICE_ENABLE_SCRIPTING)
-#    add_subdirectory(scripting)
-#endif(KOFFICE_ENABLE_SCRIPTING)
-
+#add_subdirectory(scripting)
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(REPORTS)")
 
