@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
     Copyright (C) 1997 Tim D. Gilman (tdgilman@best.org)
               (C) 1998-2001 Mirko Boehm (mirko@kde.org)
-              (C) 2004-2006 Dag Andersen <danders@get2net.dk>
+              (C) 2004-2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -62,7 +62,7 @@ public slots:
 signals:
   void closeMe(int);
 public:
-  DateInternalWeekSelector(int fontsize,
+  explicit DateInternalWeekSelector(int fontsize,
 			    QWidget* parent=0,
 			    const char* name=0);
   int getWeek() const;
@@ -163,7 +163,7 @@ public slots:
 signals:
   void closeMe(int);
 public:
-  DateInternalYearSelector(int fontsize,
+  explicit DateInternalYearSelector(int fontsize,
 			    QWidget* parent=0,
 			    const char* name=0);
   int getYear() const;
@@ -205,7 +205,7 @@ public:
   /**
    * The contructor. Creates a dialog without buttons.
    */
-  PopupFrame(QWidget* parent=0, const char*  name=0);
+  explicit PopupFrame(QWidget* parent=0, const char*  name=0);
   /**
    * Set the main widget. You cannot set the main widget from the constructor,
    * since it must be a child of the frame itselfes.
@@ -248,7 +248,7 @@ private:
 class DateValidator : public QValidator
 {
 public:
-    DateValidator(QWidget* parent=0, const char* name=0);
+    explicit DateValidator(QWidget* parent=0, const char* name=0);
     virtual State validate(QString&, int&) const;
     virtual void fixup ( QString & input ) const;
     State date(const QString&, QDate&) const;
@@ -262,7 +262,7 @@ public:
     /**
      * The constructor.
      */
-    DateTable(QWidget *parent=0, const QDate& date=QDate::currentDate(),
+    explicit DateTable(QWidget *parent=0, const QDate& date=QDate::currentDate(),
                  const char* name="DateTable", Qt::WFlags f=0);
 
     /**

@@ -40,7 +40,7 @@ class Duration;
 class TaskProgressPanelImpl : public QWidget, public Ui_TaskProgressPanelBase {
     Q_OBJECT
 public:
-    TaskProgressPanelImpl(QWidget *parent=0, const char *name=0);
+    explicit TaskProgressPanelImpl(QWidget *parent=0, const char *name=0);
     
     void enableWidgets();
 
@@ -71,7 +71,7 @@ protected:
 class TaskProgressPanel : public TaskProgressPanelImpl {
     Q_OBJECT
 public:
-    TaskProgressPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    explicit TaskProgressPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
     KCommand *buildCommand(Part *part);
     

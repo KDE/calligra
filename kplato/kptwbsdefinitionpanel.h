@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005-2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -55,7 +55,7 @@ private:
 class WBSDefinitionPanel : public QWidget, public Ui_WBSDefinitionPanelBase {
     Q_OBJECT
 public:
-    WBSDefinitionPanel(WBSDefinition &def, QWidget *parent=0, const char *name=0);
+    explicit WBSDefinitionPanel(WBSDefinition &def, QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand(Part *part);
 

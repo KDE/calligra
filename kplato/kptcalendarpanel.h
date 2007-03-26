@@ -56,7 +56,7 @@ public:
     /** The usual constructor.  The given date will be displayed
     * initially.
     **/
-    CalendarPanel(QWidget *parent=0, const QDate& date =QDate::currentDate(), const char *name=0, Qt::WFlags f=0);
+    explicit CalendarPanel(QWidget *parent=0, const QDate& date =QDate::currentDate(), const char *name=0, Qt::WFlags f=0);
     
     /**
     * Standard qt widget constructor. The initial date will be the

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  Copyright (C) 2001 Thomas Zander zander@kde.org
- Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -457,7 +457,7 @@ private:
 class ResourceRequest
 {
 public:
-    ResourceRequest( Resource *resource = 0, int units = 1 );
+    explicit ResourceRequest( Resource *resource = 0, int units = 1 );
 
     ~ResourceRequest();
 
@@ -515,7 +515,7 @@ public:
 class ResourceGroupRequest
 {
 public:
-    ResourceGroupRequest( ResourceGroup *group = 0, int units = 0 );
+    explicit ResourceGroupRequest( ResourceGroup *group = 0, int units = 0 );
     ~ResourceGroupRequest();
 
     void setParent( ResourceRequestCollection *parent ) { m_parent = parent;}

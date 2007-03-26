@@ -151,7 +151,7 @@ class ItemModelBase : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    ItemModelBase( Part *part, QObject *parent = 0 );
+    explicit ItemModelBase( Part *part, QObject *parent = 0 );
     ~ItemModelBase();
 
     Project *project() const { return m_project; }

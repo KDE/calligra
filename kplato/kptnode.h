@@ -569,9 +569,9 @@ public:
   */
 class Effort {
 public:
-    Effort ( Duration e = Duration::zeroDuration, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
+    explicit Effort ( Duration e = Duration::zeroDuration, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
 
-    Effort ( double e, double p = 0, double o = 0);
+    explicit Effort ( double e, double p = 0, double o = 0);
     
     Effort (const Effort &effort);
     ~Effort();

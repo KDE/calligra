@@ -40,7 +40,7 @@ class Project;
 class CalendarEdit : public CalendarEditBase {
     Q_OBJECT
 public:
-    CalendarEdit (QWidget *parent=0, const char *name=0);
+    explicit CalendarEdit (QWidget *parent=0, const char *name=0);
 
     Calendar *getCalendar() { return m_calendar; }
     void setCalendar(Calendar *cal, const QString &tz, bool disable);

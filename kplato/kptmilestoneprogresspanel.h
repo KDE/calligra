@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005-2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -34,7 +34,7 @@ class StandardWorktime;
 class MilestoneProgressPanelImpl : public QWidget, public Ui_MilestoneProgressPanelBase {
     Q_OBJECT
 public:
-    MilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0);
+    explicit MilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0);
     
     void enableWidgets();
 
@@ -49,7 +49,7 @@ public slots:
 class MilestoneProgressPanel : public MilestoneProgressPanelImpl {
     Q_OBJECT
 public:
-    MilestoneProgressPanel(Task &task, QWidget *parent=0, const char *name=0);
+    explicit MilestoneProgressPanel(Task &task, QWidget *parent=0, const char *name=0);
 
     KCommand *buildCommand(Part *part);
     

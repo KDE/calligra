@@ -37,7 +37,7 @@ class Part;
 class MainProjectPanelImpl : public QWidget, public Ui_MainProjectPanelBase {
     Q_OBJECT
 public:
-    MainProjectPanelImpl(QWidget *parent=0, const char *name=0);
+    explicit MainProjectPanelImpl(QWidget *parent=0, const char *name=0);
 
     virtual QDateTime startDateTime();
     virtual QDateTime endDateTime();
@@ -58,7 +58,7 @@ signals:
 class MainProjectPanel : public MainProjectPanelImpl {
     Q_OBJECT
 public:
-    MainProjectPanel(Project &project, QWidget *parent=0, const char *name=0);
+    explicit MainProjectPanel(Project &project, QWidget *parent=0, const char *name=0);
 
     KCommand *buildCommand(Part *part);
     
