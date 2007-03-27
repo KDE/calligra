@@ -267,7 +267,7 @@ void Part::paintContent( QPainter &painter, const QRect &rect)
             //            m_embeddedContext->ganttview.taskviewsize = 0;  //TODO this doesn't have any effect?! (bug?)
             m_embeddedContext->ganttview.showTaskName = true;  //since task view is not shown(?), show name in the gantt itself
 
-            m_embeddedGanttView->setContext( m_embeddedContext->ganttview, *m_project );
+            m_embeddedGanttView->setContext( *m_embeddedContext );
 
             m_embeddedContext->ganttview.ganttviewsize = ganttsize;
             m_embeddedContext->ganttview.taskviewsize = tasksize;

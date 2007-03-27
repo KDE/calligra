@@ -69,8 +69,8 @@ public:
     virtual void draw();
     void print( KPrinter &printer );
 
-    virtual bool setContext( Context::Accountsview &context );
-    virtual void getContext( Context::Accountsview &context ) const;
+    virtual bool setContext( const Context &context );
+    virtual void getContext( Context &context ) const;
 
 signals:
     void configChanged();
@@ -84,7 +84,7 @@ protected slots:
     
 protected:
     void getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const;
-    void setContextClosedItems( Context::Accountsview &context );
+    void setContextClosedItems( const Context::Accountsview &context );
 
 private:
     class AccountItem : public DoubleListViewBase::MasterListItem

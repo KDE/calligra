@@ -1220,10 +1220,11 @@ void GanttView::slotModifyLink( KDGanttViewTaskLink* link )
         emit modifyRelation( rel );
 }
 
-bool GanttView::setContext( Context::Ganttview &context, Project& /*project*/ )
+bool GanttView::setContext( const Context &c )
 {
     //kDebug()<<k_funcinfo<<endl;
-
+    const Context::Ganttview &context = c.ganttview;
+    
     Q3ValueList<int> list = m_splitter->sizes();
     list[ 0 ] = context.ganttviewsize;
     list[ 1 ] = context.taskviewsize;
@@ -1244,7 +1245,7 @@ bool GanttView::setContext( Context::Ganttview &context, Project& /*project*/ )
     //TODO this does not work yet!
     //     getContextClosedNodes(context, m_gantt->firstChild());
     //     for (QStringList::ConstIterator it = context.closedNodes.begin(); it != context.closedNodes.end(); ++it) {
-    //         KDGanttViewItem *item = findItem(project.findNode(*it));
+    //         KDGanttViewItem *item = findItem(m_project->findNode(*it));
     //         if (item) {
     //             item->setOpen(false);
     //         }
@@ -1252,8 +1253,10 @@ bool GanttView::setContext( Context::Ganttview &context, Project& /*project*/ )
     return true;
 }
 
-void GanttView::getContext( Context::Ganttview &context ) const
+void GanttView::getContext( Context &c ) const
 {
+    Context::Ganttview &context = c.ganttview;
+
     //kDebug()<<k_funcinfo<<endl;
     context.ganttviewsize = m_splitter->sizes() [ 0 ];
     context.taskviewsize = m_splitter->sizes() [ 1 ];

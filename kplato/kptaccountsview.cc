@@ -402,9 +402,11 @@ void AccountsView::print( KPrinter &printer )
     p.end();
 }
 
-bool AccountsView::setContext( Context::Accountsview &context )
+bool AccountsView::setContext( const Context &c )
 {
     //kDebug()<<k_funcinfo<<"---->"<<endl;
+    const Context::Accountsview &context = c.accountsview;
+    
     QList<int> list;
     list << context.accountsviewsize << context.periodviewsize;
     //m_dlv->setSizes(list); //NOTE: Doesn't always work!
@@ -418,7 +420,7 @@ bool AccountsView::setContext( Context::Accountsview &context )
     return true;
 }
 
-void AccountsView::setContextClosedItems( Context::Accountsview &context )
+void AccountsView::setContextClosedItems( const Context::Accountsview &context )
 {
     for ( QStringList::ConstIterator it = context.closedItems.begin(); it != context.closedItems.end(); ++it ) {
         /*        if (m_accounts.findAccount(*it)) {
@@ -433,9 +435,11 @@ void AccountsView::setContextClosedItems( Context::Accountsview &context )
     }
 }
 
-void AccountsView::getContext( Context::Accountsview &context ) const
+void AccountsView::getContext( Context &c ) const
 {
     //kDebug()<<k_funcinfo<<endl;
+    Context::Accountsview &context = c.accountsview;
+    
     context.accountsviewsize = m_dlv->sizes() [ 0 ];
     context.periodviewsize = m_dlv->sizes() [ 1 ];
     context.date = m_date;

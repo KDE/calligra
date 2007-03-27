@@ -88,8 +88,8 @@ public:
 
     bool exportGantt( QIODevice* device ); // testing
 
-    virtual bool setContext( Context::Ganttview &context, Project &project );
-    virtual void getContext( Context::Ganttview &context ) const;
+    virtual bool setContext( const Context &context );
+    virtual void getContext( Context &context ) const;
 
     void setReadWriteMode( bool on );
     bool isReadWriteMode() const { return m_readWrite; }

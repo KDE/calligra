@@ -39,6 +39,7 @@ class Node;
 class Resource;
 class ResourceGroup;
 class Calendar;
+class Context;
 
 /** 
  ViewBase is the baseclass of all sub-views to View.
@@ -82,6 +83,11 @@ public:
     QList<QAction*> actionList( const QString name ) const { return m_actionListMap[name]; }
     /// Add an action to the specified action list
     void addAction( const QString list, QAction *action ) { m_actionListMap[list].append( action ); }
+    
+    /// Sets context info to this view. Reimplement.
+    virtual bool setContext( const Context &/*context*/ ) { return false; }
+    /// Gets context info from this view. Reimplement.
+    virtual void getContext( Context &/*context*/ ) const {}
     
 public slots:
     /// Activate/deactivate the gui

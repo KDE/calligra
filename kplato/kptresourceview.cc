@@ -649,13 +649,14 @@ void ResourceView::print( KPrinter &printer )
 #endif
 }
 
-bool ResourceView::setContext( Context::Resourceview & /*context*/ )
+bool ResourceView::setContext( const Context &/*context*/ )
 {
     //kDebug()<<k_funcinfo<<endl;
+    //const Context::Resourceview &context = c.resourceview;
     return true;
 }
 
-void ResourceView::getContext( Context::Resourceview & /*context*/ ) const
+void ResourceView::getContext( Context & /*context*/ ) const
 {
     //kDebug()<<k_funcinfo<<endl;
 }

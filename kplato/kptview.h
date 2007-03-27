@@ -169,7 +169,7 @@ public:
 
     virtual ViewAdaptor* dbusObject();
 
-    virtual bool setContext( Context &context );
+    virtual bool setContext( const Context &context );
     virtual void getContext( Context &context ) const;
 
     QWidget *canvas() const;

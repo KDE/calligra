@@ -96,8 +96,8 @@ public:
     QList<int> listOffsets( int pageHeight ) const;
     void print( KPrinter &printer );
 
-    virtual bool setContext( Context::Resourceview &context );
-    virtual void getContext( Context::Resourceview &context ) const;
+    virtual bool setContext( const Context &context );
+    virtual void getContext( Context &context ) const;
 
     virtual QSize sizeHint() const;
 

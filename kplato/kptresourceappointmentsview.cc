@@ -189,9 +189,9 @@ void ResourceAppointmentsView::print(KPrinter &/*printer*/) {
     kDebug()<<k_funcinfo<<endl;
 }
 
-// bool ResourceAppointmentsView::setContext(Context::ResourceAppointmentsView &context) {
+// bool ResourceAppointmentsView::setContext(const Context &context) {
 //     //kDebug()<<k_funcinfo<<endl;
-//     
+//     const Context::ResourceAppointmentsView &context = c.resourceAppointmentsView;
 //     QValueList<int> list;
 //     list << context.accountsviewsize << context.periodviewsize;
 //     m_dlv->setSizes(list);
@@ -204,8 +204,10 @@ void ResourceAppointmentsView::print(KPrinter &/*printer*/) {
 //     return true;
 // }
 // 
-// void ResourceAppointmentsView::getContext(Context::ResourceAppointmentsView &context) const {
+// void ResourceAppointmentsView::getContext(Context &c) const {
 //     //kDebug()<<k_funcinfo<<endl;
+//     Context::ResourceAppointmentsView &context = c.resourceAppointmentsView;
+//
 //     context.accountsviewsize = m_dlv->sizes()[0];
 //     context.periodviewsize = m_dlv->sizes()[1];
 //     context.date = m_date;

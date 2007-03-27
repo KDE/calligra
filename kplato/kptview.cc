@@ -195,7 +195,8 @@ ViewListItem::ViewListItem( QTreeWidget *parent, const QString &tag, const QStri
 }
 
 ViewListItem::ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type )
-    : QTreeWidgetItem( parent, strings, type )
+    : QTreeWidgetItem( parent, strings, type ),
+    m_tag( tag )
 {
 }
 
@@ -2213,16 +2214,19 @@ void View::slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListIt
     slotPopupMenu( menuname, pos );
 }
 
-bool View::setContext( Context &context )
+bool View::setContext( const Context &context )
 {
     //kDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = context.currentEstimateType;
     
     getProject().setCurrentViewScheduleId( context.currentSchedule );
 
-    GanttView *gv = dynamic_cast<GanttView*>( m_viewlist->findView( "GanttView" ) );
-    if ( gv ) {
-        gv->setContext( context.ganttview, getProject() );
+    // set context for each subview
+    for ( int i = 0; i < m_tab->count(); ++i ) {
+        ViewBase *v = dynamic_cast<ViewBase*>( m_tab->widget( i ) );
+        if ( v ) {
+            v->setContext( context );
+        }
     }
     // hmmm, can't decide if these should be here or actions moved to ganttview
     actionViewGanttResources->setChecked( context.ganttview.showResources );
@@ -2251,8 +2255,15 @@ void View::getContext( Context &context ) const
     ViewListItem *item = m_viewlist->findItem( m_tab->currentWidget() );
     if ( item ) {
         context.currentView = item->tag();
+        kDebug()<<k_funcinfo<<"Context currentview: "<<context.currentView<<", "<<item->text( 0 )<<endl;
     }
-    // TODO view specific context
+    // get context for each subview
+    for ( int i = 0; i < m_tab->count(); ++i ) {
+        ViewBase *v = dynamic_cast<ViewBase*>( m_tab->widget( i ) );
+        if ( v ) {
+            v->getContext( context );
+        }
+    }
 }
 
 void View::setLabel()

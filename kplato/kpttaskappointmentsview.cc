@@ -147,9 +147,9 @@ void TaskAppointmentsView::print( KPrinter & /*printer*/ )
     kDebug() << k_funcinfo << endl;
 }
 
-// bool TaskAppointmentsView::setContext(Context::TaskAppointmentsView &context) {
+// bool TaskAppointmentsView::setContext(const Context::TaskAppointmentsView &c) {
 //     //kDebug()<<k_funcinfo<<endl;
-//
+//     const Context::TaskAppointmentsView &context = c.taskAppointmentsView;
 //     QValueList<int> list;
 //     list << context.accountsviewsize << context.periodviewsize;
 //     m_dlv->setSizes(list);
@@ -162,8 +162,9 @@ void TaskAppointmentsView::print( KPrinter & /*printer*/ )
 //     return true;
 // }
 //
-// void TaskAppointmentsView::getContext(Context::TaskAppointmentsView &context) const {
+// void TaskAppointmentsView::getContext(Context::TaskAppointmentsView &c) const {
 //     //kDebug()<<k_funcinfo<<endl;
+//     Context::TaskAppointmentsView &context = c.taskAppointmentsView;
 //     context.accountsviewsize = m_dlv->sizes()[0];
 //     context.periodviewsize = m_dlv->sizes()[1];
 //     context.date = m_date;

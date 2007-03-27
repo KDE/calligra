@@ -66,8 +66,8 @@ public:
     void print(KPrinter &printer);
     void clear();
     
-    //virtual bool setContext(Context::ResourceAppointmentsView &context);
-    //virtual void getContext(Context::ResourceAppointmentsView &context) const;
+    //virtual bool setContext(const Context &context);
+    //virtual void getContext(Context &context) const;
 
     virtual void createSlaveItems();
     
