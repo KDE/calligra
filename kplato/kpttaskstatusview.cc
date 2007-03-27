@@ -60,7 +60,6 @@ namespace KPlato
 
 TaskStatusItemModel::TaskStatusItemModel( Part *part, QObject *parent )
     : ItemModelBase( part, parent ),
-    m_node( 0 ),
     m_now( QDate::currentDate() ),
     m_period( 7 )
 {
@@ -99,40 +98,33 @@ void TaskStatusItemModel::slotReset()
 void TaskStatusItemModel::slotNodeToBeInserted( Node *parent, int row )
 {
     //kDebug()<<k_funcinfo<<node->name()<<endl;
-    Q_ASSERT( m_node == 0 );
-    m_node = parent;
-    beginInsertRows( index( parent ), row, row );
+    clear();
 }
 
 void TaskStatusItemModel::slotNodeInserted( Node *node )
 {
     //kDebug()<<k_funcinfo<<node->getParent->name()<<"-->"<<node->name()<<endl;
-    Q_ASSERT( node->parentNode() == m_node );
-    endInsertRows();
-    m_node = 0;
+    refresh();
 }
 
 void TaskStatusItemModel::slotNodeToBeRemoved( Node *node )
 {
-    kDebug()<<k_funcinfo<<node->name()<<endl;
-    Q_ASSERT( m_node == 0 );
-    m_node = node;
-    int row = index( node ).row();
-    beginRemoveRows( index( node->parentNode() ), row, row );
+    //kDebug()<<k_funcinfo<<node->name()<<endl;
+    clear();
 }
 
 void TaskStatusItemModel::slotNodeRemoved( Node *node )
 {
     //kDebug()<<k_funcinfo<<node->name()<<endl;
-    Q_ASSERT( node == m_node );
-    endRemoveRows();
-    m_node = 0;
+    refresh();
 }
 
 void TaskStatusItemModel::setProject( Project *project )
 {
     clear();
     if ( m_project ) {
+        disconnect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotReset() ) );
+        
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -144,6 +136,8 @@ void TaskStatusItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( project ) {
+        connect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotReset() ) );
+        
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -162,6 +156,9 @@ void TaskStatusItemModel::clear()
     foreach ( NodeList *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
+            //FIXME: gives error msg:
+            // Can't select indexes from different model or with different parents
+            QModelIndex i = index( l );
             beginRemoveRows( index( l ), 0, c );
             l->clear();
             endRemoveRows();

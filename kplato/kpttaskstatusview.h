@@ -107,7 +107,6 @@ protected:
     QVariant note( const Node *node, int role ) const;
 
 private:
-    Node *m_node; // for sanety check
     QStringList m_topNames;
     QList<NodeList*> m_top;
     NodeList m_notstarted;
