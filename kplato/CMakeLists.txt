@@ -122,7 +122,7 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kptperteditor.ui
     kptpertresult.ui
     kptchartpanelbase.ui
-    kptresourceassignmentview.ui 
+    kptresourceassignmentview.ui
 )
 
 kde4_automoc(${kplatoprivate_LIB_SRCS})
@@ -130,7 +130,7 @@ kde4_automoc(${libkdgantt_SRCS})
 
 kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS})
 
-target_link_libraries(kplatoprivate  ${KDE4_KDECORE_LIBS} kofficeui)
+target_link_libraries(kplatoprivate kofficeui)
 
 set_target_properties(kplatoprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
@@ -144,7 +144,7 @@ kde4_automoc(${kplatopart_PART_SRCS})
 
 kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
-target_link_libraries(kplatopart ${KDE4_KDEUI_LIBS} kplatoprivate)
+target_link_libraries(kplatopart kplatoprivate)
 
 install(TARGETS kplatopart DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -157,7 +157,7 @@ kde4_automoc(${kplato_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kplato  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kdeinit_kplato kofficecore )
 
 install(TARGETS kdeinit_kplato  DESTINATION ${LIB_INSTALL_DIR})
 

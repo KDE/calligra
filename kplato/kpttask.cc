@@ -2367,3 +2367,5 @@ void Task::setActivityFreeMargin(int value)
 #endif
 
 }  //KPlato namespace
+
+#include "kpttask.moc"

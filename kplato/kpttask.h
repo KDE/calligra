@@ -210,6 +210,7 @@ public:
   * an activity.
   */
 class KPLATO_TEST_EXPORT Task : public Node {
+    Q_OBJECT
 public:
     Task(Node *parent = 0);
     Task(Task &task, Node *parent = 0);
