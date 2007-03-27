@@ -70,7 +70,6 @@
 #include <kmessagebox.h>
 #include <knewpassworddialog.h>
 #include <kpassworddialog.h>
-#include <kprocio.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
 #include <k3spell.h>
