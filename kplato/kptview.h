@@ -85,7 +85,7 @@ class ViewListTreeWidget : public QTreeWidget
     Q_OBJECT
 public:
     explicit ViewListTreeWidget( QWidget *parent );
-    QTreeWidgetItem *findCategory( const QString cat );
+    ViewListItem *findCategory( const QString &cat );
 
 protected:
     void drawRow( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
@@ -107,11 +107,13 @@ public:
     ViewListWidget( QWidget *parent );//QString name, KMainWindow *parent );
     ~ViewListWidget();
     
-    QTreeWidgetItem *addCategory( const QString& name );
-    ViewListItem *addView(QTreeWidgetItem *category, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString() );
-    ViewListItem *addView( QTreeWidgetItem *category, const QString& name, KoView *view, DocumentChild *ch, const QString& icon = QString() );
+    ViewListItem *addCategory( const QString &tag, const QString& name );
+    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString() );
+    ViewListItem *addView( QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon = QString() );
     void setSelected( QTreeWidgetItem *item );
-    ViewListItem *findItem( KoView *view, QTreeWidgetItem* parent = 0 );
+    KoView *findView( const QString &tag );
+    ViewListItem *findItem( const QString &tag, QTreeWidgetItem* parent = 0 );
+    ViewListItem *findItem( const QWidget *view, QTreeWidgetItem* parent = 0 );
     
 signals:
     void activated( ViewListItem*, ViewListItem* );
@@ -300,22 +302,22 @@ private slots:
     void slotActionDestroyed( QObject *o );
     
 private:
+    void createTaskeditor( ViewListItem *cat );
+    void createResourceditor( ViewListItem *cat );
+    void createAccountsEditor( ViewListItem *cat );
+    void createCalendarEditor( ViewListItem *cat );
+    void createScheduleEditor( ViewListItem *cat );
+    void createDependencyEditor( ViewListItem *cat );
+    void createPertResultView( ViewListItem *cat );
+    void createTaskStatusView( ViewListItem *cat );
+    void createGanttView( ViewListItem *cat );
+    void createResourceView( ViewListItem *cat );
+    void createAccountsView( ViewListItem *cat );
+    void createResourceAssignmentView( ViewListItem *cat );
+
+private:
     QSplitter *m_sp;
     QStackedWidget *m_tab;
-    GanttView *m_ganttview;
-    ResourceView *m_resourceview;
-    AccountsView *m_accountsview;
-    AccountsEditor *m_accountseditor;
-    TaskEditor *m_taskeditor;
-    CalendarEditor *m_calendareditor;
-    ResourceEditor *m_resourceeditor;
-    ScheduleEditor *m_scheduleeditor;
-    ResourceAssignmentView *m_resourceAssignmentView;
-    PertEditor *m_perteditor;
-    PertResult *m_pertresult;
-    TaskStatusView *m_taskstatusview;
-    //    ReportView *m_reportview;
-    //    Q3PtrList<QString> m_reportTemplateFiles;
 
     ViewListWidget *m_viewlist;
     ViewListItem *m_viewlistItem; // requested popupmenu item
@@ -346,8 +348,6 @@ private:
     QAction *actionPaste;
 
     // ------ View
-    KAction *actionViewGantt;
-
     KToggleAction *actionViewSelector;
 
     KToggleAction *actionViewGanttResources;
@@ -360,9 +360,7 @@ private:
     KToggleAction *actionViewGanttNotScheduled;
     KToggleAction *actionViewTaskAppointments;
 
-    KAction *actionViewResources;
     KToggleAction *actionViewResourceAppointments;
-    KAction *actionViewAccounts;
 
     // ------ Insert
 

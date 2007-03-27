@@ -28,6 +28,7 @@ class KXMLGUIFactory;
 
 class QWidget;
 
+/// The main namespace
 namespace KPlato
 {
 
@@ -47,18 +48,23 @@ class ViewBase : public KoView
 {
     Q_OBJECT
 public:
+    /// Contructor
     ViewBase(Part *doc, QWidget *parent);
-
-    virtual ~ViewBase() {}
-
+    /// Destructor
+    virtual ~ViewBase() {};
+    /// Return the part (document) this view handles
     Part *part() const;
     
     virtual void setZoom(double /*zoom*/) {}
+    /// Set the project this view shall handle.
     virtual void setProject( Project */*project*/ ) {}
+    /// Draw data from current part / project
     virtual void draw() {}
+    /// Draw data from project.
     virtual void draw(Project &/*project*/) {}
+    /// Draw changed data from project.
     virtual void drawChanges(Project &project) { draw(project); }
-
+    /// Set readWrite mode
     virtual void updateReadWrite( bool );
 
     /// Reimplement if your view handles nodes
@@ -86,6 +92,7 @@ signals:
     void guiActivated( ViewBase*, bool );
     
 protected:
+    /// List of all menu/toolbar actions (used for plug/unplug)
     QMap<QString, QList<QAction*> > m_actionListMap;
 
 };

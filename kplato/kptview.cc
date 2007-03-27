@@ -174,22 +174,27 @@ void ViewCategoryDelegate::paint( QPainter * painter, const QStyleOptionViewItem
 class ViewListItem : public QTreeWidgetItem
 {
 public:
-    ViewListItem( QTreeWidget *parent, const QStringList &strings, int type = Type );
-    ViewListItem( QTreeWidgetItem *parent, const QStringList &strings, int type = Type );
+    ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type = Type );
+    ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type = Type );
     void setView( KoView *view );
     KoView *view() const;
     void setDocumentChild( DocumentChild *child );
     DocumentChild *documentChild() const;
     void setDocument( KoDocument *doc );
     KoDocument *document() const;
+
+    QString tag() const { return m_tag; }
+private:
+    QString m_tag;
 };
 
-ViewListItem::ViewListItem( QTreeWidget *parent, const QStringList &strings, int type )
-    : QTreeWidgetItem( parent, strings, type )
+ViewListItem::ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type )
+    : QTreeWidgetItem( parent, strings, type ),
+    m_tag( tag )
 {
 }
 
-ViewListItem::ViewListItem( QTreeWidgetItem *parent, const QStringList &strings, int type )
+ViewListItem::ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type )
     : QTreeWidgetItem( parent, strings, type )
 {
 }
@@ -275,14 +280,14 @@ void ViewListTreeWidget::mousePressEvent ( QMouseEvent *event )
 
 // </Code mostly nicked from qt designer ;)>
 
-QTreeWidgetItem *ViewListTreeWidget::findCategory( const QString cat )
+ViewListItem *ViewListTreeWidget::findCategory( const QString &cat )
 {
     QTreeWidgetItem * item;
     int cnt = topLevelItemCount();
     for ( int i = 0; i < cnt; ++i ) {
         item = topLevelItem( i );
-        if ( item->text( 0 ) == cat )
-            return item;
+        if ( static_cast<ViewListItem*>(item)->tag() == cat )
+            return static_cast<ViewListItem*>(item);
     }
     return 0;
 }
@@ -325,21 +330,21 @@ void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev
     emit activated( static_cast<ViewListItem*>( item ), static_cast<ViewListItem*>( prev ) );
 }
 
-QTreeWidgetItem *ViewListWidget::addCategory( const QString& name )
+ViewListItem *ViewListWidget::addCategory( const QString &tag, const QString& name )
 {
     //kDebug() << k_funcinfo << endl;
-    QTreeWidgetItem *item = m_viewlist->findCategory( name );
+    ViewListItem *item = m_viewlist->findCategory( tag );
     if ( item == 0 ) {
-        item = new ViewListItem( m_viewlist, QStringList( name ), ViewListWidget::Category );
+        item = new ViewListItem( m_viewlist, tag, QStringList( name ), ViewListWidget::Category );
         item->setExpanded( true );
         item->setFlags( item->flags() | Qt::ItemIsEditable );
     }
     return item;
 }
 
-ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& name, KoView *view, KoDocument *doc, const QString& icon )
+ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon )
 {
-    ViewListItem * item = new ViewListItem( category, QStringList( name ), ViewListWidget::SubView );
+    ViewListItem * item = new ViewListItem( category, tag, QStringList( name ), ViewListWidget::SubView );
     item->setView( view );
     item->setDocument( doc );
     if ( !icon.isEmpty() )
@@ -348,14 +353,15 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString&
     return item;
 }
 
-ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& name, KoView *view, DocumentChild *ch, const QString& icon )
+ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon )
 {
-    ViewListItem * item = new ViewListItem( category, QStringList( name ), ViewListWidget::ChildDocument );
+    ViewListItem * item = new ViewListItem( category, tag, QStringList( name ), ViewListWidget::ChildDocument );
     item->setView( view );
     item->setDocument( ch->document() );
     item->setDocumentChild( ch );
-    if ( !icon.isEmpty() )
+    if ( !icon.isEmpty() ) {
         item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
+    }
     //kDebug() << k_funcinfo << "added: " << item << endl;
     return item;
 }
@@ -370,7 +376,35 @@ void ViewListWidget::setSelected( QTreeWidgetItem *item )
     //kDebug()<<k_funcinfo<<item<<", "<<m_viewlist->currentItem()<<endl;
 }
 
-ViewListItem *ViewListWidget::findItem(  KoView *view, QTreeWidgetItem *parent )
+KoView *ViewListWidget::findView( const QString &tag )
+{
+    ViewListItem *i = findItem( tag );
+    if ( i == 0 ) {
+        return 0; 
+    }
+    return i->view();
+}
+
+ViewListItem *ViewListWidget::findItem( const QString &tag, QTreeWidgetItem *parent )
+{
+    if ( parent == 0 ) {
+        return findItem( tag, m_viewlist->invisibleRootItem() );
+    }
+    for (int i = 0; i < parent->childCount(); ++i ) {
+        ViewListItem * ch = static_cast<ViewListItem*>( parent->child( i ) );
+        if ( ch->tag() == tag ) {
+            //kDebug()<<k_funcinfo<<ch<<", "<<view<<endl;
+            return ch;
+        }
+        ch = findItem( tag, ch );
+        if ( ch ) {
+            return ch;
+        }
+    }
+    return 0;
+}
+
+ViewListItem *ViewListWidget::findItem(  const QWidget *view, QTreeWidgetItem *parent )
 {
     if ( parent == 0 ) {
         return findItem( view, m_viewlist->invisibleRootItem() );
@@ -468,7 +502,6 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
 //-------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
-        m_ganttview( 0 ),
         m_currentEstimateType( Effort::Use_Expected )
 {
     //kDebug()<<k_funcinfo<<endl;
@@ -493,132 +526,27 @@ View::View( Part* part, QWidget* parent )
     // to the right
     m_tab = new QStackedWidget( m_sp );
     
-    m_accountseditor = new AccountsEditor( getPart(), m_tab );
-    m_tab->addWidget( m_accountseditor );
-    m_accountseditor->draw( getProject() );
-    connect( m_accountseditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ViewListItem *cat;
+    cat = m_viewlist->addCategory( "Editors", i18n( "Editors" ) );
+    createCalendarEditor( cat );
+    createAccountsEditor( cat );
+    createResourceditor( cat );
+    createTaskeditor( cat );
+    createScheduleEditor( cat );
+    createDependencyEditor( cat );
     
-    m_calendareditor = new CalendarEditor( getPart(), m_tab );
-    m_tab->addWidget( m_calendareditor );
-    m_calendareditor->draw( getProject() );
-    connect( m_calendareditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-
-    m_resourceeditor = new ResourceEditor( getPart(), m_tab );
-    m_tab->addWidget( m_resourceeditor );
-    m_resourceeditor->draw( getProject() );
-    connect( m_resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-
-    m_taskeditor = new TaskEditor( getPart(), m_tab );
-    m_tab->addWidget( m_taskeditor );
-    m_taskeditor->draw( getProject() );
-    connect( m_taskeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    
-    m_scheduleeditor = new ScheduleEditor( getPart(), m_tab );
-    m_tab->addWidget( m_scheduleeditor );
-    m_scheduleeditor->draw( getProject() );
-    connect( m_scheduleeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    m_perteditor = new PertEditor( getPart(), m_tab );
-    m_tab->addWidget( m_perteditor );
-    m_perteditor->draw( getProject() );
-    connect( m_perteditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    m_updatePertEditor = true;
-
-    m_pertresult = new PertResult( getPart(), m_tab );
-    m_tab->addWidget( m_pertresult );
-    m_pertresult->draw( getProject() );
-    connect( m_pertresult, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    m_updatePertResult = true;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-    m_ganttview = new GanttView( getPart(), m_tab, part->isReadWrite() );
-    m_tab->addWidget( m_ganttview );
-    m_updateGanttview = false;
-    m_ganttview->draw( getProject() );
-    connect( m_ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-
-    m_resourceview = new ResourceView( getPart(), m_tab );
-    m_updateResourceview = true;
-    m_tab->addWidget( m_resourceview );
-    connect( m_resourceview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-
-    m_accountsview = new AccountsView( &getProject(), getPart(), m_tab );
-    m_updateAccountsview = true;
-    m_tab->addWidget( m_accountsview );
-    connect( m_accountsview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-
-    m_taskstatusview = new TaskStatusView( getPart(), m_tab );
-    m_tab->addWidget( m_taskstatusview );
-    connect( m_taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-
-
-    connect( m_taskeditor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
-    connect( m_taskeditor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
-    connect( m_taskeditor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
-    connect( m_taskeditor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
-    connect( m_taskeditor, SIGNAL( moveTaskUp() ), SLOT( slotMoveTaskUp() ) );
-    connect( m_taskeditor, SIGNAL( moveTaskDown() ), SLOT( slotMoveTaskDown() ) );
-    connect( m_taskeditor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
-    connect( m_taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
-
-    connect( m_resourceeditor, SIGNAL( addResource( ResourceGroup* ) ), SLOT( slotAddResource( ResourceGroup* ) ) );
-    connect( m_resourceeditor, SIGNAL( deleteObjectList( QObjectList ) ), SLOT( slotDeleteResourceObjects( QObjectList ) ) );
-
-    connect( m_scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
-    connect( m_scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
-    connect( m_scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
-
-    m_resourceAssignmentView = new ResourceAssignmentView( getPart(), m_tab );
-    m_tab->addWidget( m_resourceAssignmentView );
-    m_updateResourceAssignmentView = true;
-    m_resourceAssignmentView->draw( getProject() );
-    connect( m_resourceAssignmentView, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-
-
-    //m_reportview = new ReportView(this, m_tab);
-    //m_tab->addWidget(m_reportview);
-
-    QTreeWidgetItem *cat;
-    cat = m_viewlist->addCategory( i18n( "Editors" ) );
-    m_viewlist->addView( cat, i18n( "Accounts" ), m_accountseditor, getPart(), "accounts_editor" );
-    m_viewlist->addView( cat, i18n( "Calendars" ), m_calendareditor, getPart(), "calendar_editor" );
-    m_viewlist->addView( cat, i18n( "Resources" ), m_resourceeditor, getPart(), "resource_editor" );
-    m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, getPart(), "task_editor" );
-    m_viewlist->addView( cat, i18n( "Schedules" ), m_scheduleeditor, getPart(), "schedule_editor" );
-    m_viewlist->addView( cat, i18n( "Pert" ), m_perteditor, getPart(), "task_editor" );
-
-    cat = m_viewlist->addCategory( i18n( "Views" ) );
-    m_viewlist->addView( cat, i18n( "Task Status" ), m_taskstatusview, getPart(), "status_view" );
-    m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, getPart(), "gantt_chart" );
-    m_viewlist->addView( cat, i18n( "Resources" ), m_resourceview, getPart(), "resources" );
-    m_viewlist->addView( cat, i18n( "Accounts" ), m_accountsview, getPart(), "accounts" );
-    m_viewlist->addView( cat, i18n( "Pert Result" ), m_pertresult , getPart(), "accounts" );
-    m_viewlist->addView( cat, i18n( "Tasks by resources" ), m_resourceAssignmentView , getPart(), "resource_assignment" );
+    cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
+    createTaskStatusView( cat );
+    createGanttView( cat );
+    createResourceView( cat );
+    createAccountsView( cat );
+    createPertResultView( cat );
+    createResourceAssignmentView( cat );
     
     connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
     connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
-
-    connect( m_ganttview, SIGNAL( enableActions( bool ) ), SLOT( setTaskActionsEnabled( bool ) ) );
-    connect( m_ganttview, SIGNAL( addRelation( Node*, Node*, int ) ), SLOT( slotAddRelation( Node*, Node*, int ) ) );
-    connect( m_ganttview, SIGNAL( modifyRelation( Relation*, int ) ), SLOT( slotModifyRelation( Relation*, int ) ) );
-    connect( m_ganttview, SIGNAL( modifyRelation( Relation* ) ), SLOT( slotModifyRelation( Relation* ) ) );
-    connect( m_ganttview, SIGNAL( itemDoubleClicked() ), SLOT( slotOpenNode() ) );
-    connect( m_ganttview, SIGNAL( itemRenamed( Node*, const QString& ) ), this, SLOT( slotRenameNode( Node*, const QString& ) ) );
-    connect( m_ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-    
-    connect( m_resourceview, SIGNAL( itemDoubleClicked() ), SLOT( slotEditResource() ) );
-    connect( m_resourceview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-
-    connect( m_taskeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-
-    connect( m_resourceeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-
-    connect( m_calendareditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-
-    connect( m_taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-
-    connect( m_resourceAssignmentView, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
     // The menu items
     // ------ Edit
@@ -627,9 +555,6 @@ View::View( Part* part, QWidget* parent )
     actionPaste = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( slotEditPaste() ));
 
     // ------ View
-    actionViewGantt  = new KAction(KIcon( "gantt_chart" ), i18n("Gantt"), this);
-    actionCollection()->addAction("view_gantt", actionViewGantt );
-    connect( actionViewGantt, SIGNAL( triggered( bool ) ), SLOT( slotViewGantt() ) );
 
     actionViewSelector  = new KToggleAction(i18n("Show Selector"), this);
     actionCollection()->addAction("view_show_selector", actionViewSelector );
@@ -669,21 +594,9 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("view_task_appointments", actionViewTaskAppointments );
     connect( actionViewTaskAppointments, SIGNAL( triggered( bool ) ), SLOT( slotViewTaskAppointments() ) );
 
-    actionViewResources  = new KAction(KIcon( "resources" ), i18n("Resources"), this);
-    actionCollection()->addAction("view_resources", actionViewResources );
-    connect( actionViewResources, SIGNAL( triggered( bool ) ), SLOT( slotViewResources() ) );
-
     actionViewResourceAppointments  = new KToggleAction(i18n("Show allocations"), this);
     actionCollection()->addAction("view_resource_appointments", actionViewResourceAppointments );
     connect( actionViewResourceAppointments, SIGNAL( triggered( bool ) ), SLOT( slotViewResourceAppointments() ) );
-
-    actionViewAccounts  = new KAction(KIcon( "accounts" ), i18n("Accounts"), this);
-    actionCollection()->addAction("view_accounts", actionViewAccounts );
-    connect( actionViewAccounts, SIGNAL( triggered( bool ) ), SLOT( slotViewAccounts() ) );
-
-    //actionViewReports  = new KAction(i18n("Reports"), "reports"), this);
-    // actionCollection()->addAction("view_reports", actionViewReports );
-    // connect( actionViewReports, SIGNAL( triggered( bool ) ), SLOT( slotViewReports() ) );
 
     // ------ Insert
 
@@ -812,7 +725,7 @@ View::View( Part* part, QWidget* parent )
     connect( &getProject(), SIGNAL( scheduleRemoved( const MainSchedule* ) ), SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     slotPlugScheduleActions();
     
-    m_viewlist->setSelected( m_viewlist->findItem( m_taskeditor ) );
+    m_viewlist->setSelected( m_viewlist->findItem( "TaskEditor" ) );
     //kDebug()<<k_funcinfo<<" end "<<endl;
 }
 
@@ -826,6 +739,189 @@ View::~View()
 ViewAdaptor* View::dbusObject()
 {
     return m_dbus;
+}
+
+void View::createResourceditor( ViewListItem *cat )
+{
+    ResourceEditor *resourceeditor = new ResourceEditor( getPart(), m_tab );
+    m_tab->addWidget( resourceeditor );
+    resourceeditor->draw( getProject() );
+    
+    m_viewlist->addView( cat, "ResourceEditor", i18n( "Resources" ), resourceeditor, getPart(), "resource_editor" );
+    
+    connect( resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( resourceeditor, SIGNAL( addResource( ResourceGroup* ) ), SLOT( slotAddResource( ResourceGroup* ) ) );
+    connect( resourceeditor, SIGNAL( deleteObjectList( QObjectList ) ), SLOT( slotDeleteResourceObjects( QObjectList ) ) );
+
+    connect( resourceeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+}
+
+void View::createTaskeditor( ViewListItem *cat )
+{
+    TaskEditor *taskeditor = new TaskEditor( getPart(), m_tab );
+    m_tab->addWidget( taskeditor );
+    
+    m_viewlist->addView( cat, "taskeditor", i18n( "Tasks" ), taskeditor, getPart(), "task_editor" );
+
+    taskeditor->draw( getProject() );
+    
+    connect( taskeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    
+    connect( taskeditor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
+    connect( taskeditor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
+    connect( taskeditor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
+    connect( taskeditor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
+    connect( taskeditor, SIGNAL( moveTaskUp() ), SLOT( slotMoveTaskUp() ) );
+    connect( taskeditor, SIGNAL( moveTaskDown() ), SLOT( slotMoveTaskDown() ) );
+    connect( taskeditor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
+    connect( taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
+
+
+    connect( taskeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+}
+
+void View::createAccountsEditor( ViewListItem *cat )
+{
+    AccountsEditor *ae = new AccountsEditor( getPart(), m_tab );
+    m_tab->addWidget( ae );
+    
+    m_viewlist->addView( cat, "AccountEditor", i18n( "Accounts" ), ae, getPart(), "accounts_editor" );
+
+    ae->draw( getProject() );
+    
+    connect( ae, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    
+}
+
+void View::createCalendarEditor( ViewListItem *cat )
+{
+    CalendarEditor *calendareditor = new CalendarEditor( getPart(), m_tab );
+    m_tab->addWidget( calendareditor );
+    
+    m_viewlist->addView( cat, "CalendarEditor", i18n( "Work & Vacation" ), calendareditor, getPart(), "calendar_editor" );
+    
+    calendareditor->draw( getProject() );
+
+    connect( calendareditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( calendareditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+}
+
+void View::createScheduleEditor( ViewListItem *cat )
+{
+    ScheduleEditor *scheduleeditor = new ScheduleEditor( getPart(), m_tab );
+    m_tab->addWidget( scheduleeditor );
+    
+    m_viewlist->addView( cat, "ScheduleEditor", i18n( "Schedules" ), scheduleeditor, getPart(), "schedule_editor" );
+    
+    scheduleeditor->draw( getProject() );
+    
+    connect( scheduleeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
+    connect( scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
+    connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
+
+}
+
+void View::createDependencyEditor( ViewListItem *cat )
+{
+    PertEditor *perteditor = new PertEditor( getPart(), m_tab );
+    m_tab->addWidget( perteditor );
+    perteditor->draw( getProject() );
+    connect( perteditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    m_updatePertEditor = true;
+
+    m_viewlist->addView( cat, "PertEditor", i18n( "Pert" ), perteditor, getPart(), "task_editor" );
+
+
+}
+void View::createPertResultView( ViewListItem *cat )
+{
+    PertResult *pertresult = new PertResult( getPart(), m_tab );
+    m_tab->addWidget( pertresult );
+    
+    m_viewlist->addView( cat, "PertResultView", i18n( "Pert Result" ), pertresult , getPart(), "pert_result" );
+    
+    pertresult->draw( getProject() );
+    
+    connect( pertresult, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+}
+
+void View::createTaskStatusView( ViewListItem *cat )
+{
+    TaskStatusView *taskstatusview = new TaskStatusView( getPart(), m_tab );
+    m_tab->addWidget( taskstatusview );
+    connect( taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    
+    m_viewlist->addView( cat, "TaskStatusView", i18n( "Task Status" ), taskstatusview, getPart(), "status_view" );
+    
+    connect( taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+}
+
+void View::createGanttView( ViewListItem *cat )
+{
+    GanttView *ganttview = new GanttView( getPart(), m_tab, getPart()->isReadWrite() );
+    m_tab->addWidget( ganttview );
+    m_updateGanttview = false;
+    m_viewlist->addView( cat, "GanttView", i18n( "Gantt" ), ganttview, getPart(), "gantt_chart" );
+    ganttview->draw( getProject() );
+    connect( ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( ganttview, SIGNAL( enableActions( bool ) ), SLOT( setTaskActionsEnabled( bool ) ) );
+    connect( ganttview, SIGNAL( addRelation( Node*, Node*, int ) ), SLOT( slotAddRelation( Node*, Node*, int ) ) );
+    connect( ganttview, SIGNAL( modifyRelation( Relation*, int ) ), SLOT( slotModifyRelation( Relation*, int ) ) );
+    connect( ganttview, SIGNAL( modifyRelation( Relation* ) ), SLOT( slotModifyRelation( Relation* ) ) );
+    connect( ganttview, SIGNAL( itemDoubleClicked() ), SLOT( slotOpenNode() ) );
+    connect( ganttview, SIGNAL( itemRenamed( Node*, const QString& ) ), this, SLOT( slotRenameNode( Node*, const QString& ) ) );
+    connect( ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    
+    
+}
+
+void View::createResourceView( ViewListItem *cat )
+{
+    ResourceView *resourceview = new ResourceView( getPart(), m_tab );
+    m_updateResourceview = true;
+    m_tab->addWidget( resourceview );
+    m_viewlist->addView( cat, "ResourceView", i18n( "Resources" ), resourceview, getPart(), "resources" );
+    
+    connect( resourceview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( resourceview, SIGNAL( itemDoubleClicked() ), SLOT( slotEditResource() ) );
+    connect( resourceview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+}
+
+void View::createAccountsView( ViewListItem *cat )
+{
+    AccountsView *accountsview = new AccountsView( &getProject(), getPart(), m_tab );
+    m_updateAccountsview = true;
+    m_tab->addWidget( accountsview );
+    m_viewlist->addView( cat, "AccountsView", i18n( "Accounts" ), accountsview, getPart(), "accounts" );
+    connect( accountsview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+}
+
+void View::createResourceAssignmentView( ViewListItem *cat )
+{
+    ResourceAssignmentView *resourceAssignmentView = new ResourceAssignmentView( getPart(), m_tab );
+    m_tab->addWidget( resourceAssignmentView );
+    m_updateResourceAssignmentView = true;
+    
+    m_viewlist->addView( cat, "ResourceAssignmentView", i18n( "Tasks by resources" ), resourceAssignmentView, getPart(), "resource_assignment" );
+    
+    resourceAssignmentView->draw( getProject() );
+    
+    connect( resourceAssignmentView, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    
+    connect( resourceAssignmentView, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
 }
 
 // TODO
@@ -842,7 +938,7 @@ Project& View::getProject() const
 
 void View::setZoom( double zoom )
 {
-    m_ganttview->setZoom( zoom );
+    //TODO
 }
 
 void View::setupPrinter( KPrinter & /*printer*/ )
@@ -859,13 +955,14 @@ void View::print( KPrinter &printer )
             return ;
         }
     }
-    if ( m_tab->currentWidget() == m_ganttview ) {
-        m_ganttview->print( printer );
+/* TODO
+    if ( m_tab->currentWidget() == ganttview ) {
+        ganttview->print( printer );
     } else if ( m_tab->currentWidget() == m_resourceview ) {
         m_resourceview->print( printer );
     } else if ( m_tab->currentWidget() == m_accountsview ) {
         m_accountsview->print( printer );
-    }
+    }*/
     // 	else if (m_tab->currentWidget() == m_reportview)
     // 	{
     //         m_reportview->print(printer);
@@ -891,73 +988,109 @@ void View::slotEditPaste()
 void View::slotViewGanttResources()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_ganttview->setShowResources( actionViewGanttResources->isChecked() );
-    if ( m_tab->currentWidget() == m_ganttview )
+    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( v == 0 ) {
+        return;
+    }
+    v->setShowResources( actionViewGanttResources->isChecked() );
+    if ( m_tab->currentWidget() == v )
         slotUpdate();
 }
 
 void View::slotViewGanttTaskName()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_ganttview->setShowTaskName( actionViewGanttTaskName->isChecked() );
-    if ( m_tab->currentWidget() == m_ganttview )
+    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( v == 0 ) {
+        return;
+    }
+    v->setShowTaskName( actionViewGanttTaskName->isChecked() );
+    if ( m_tab->currentWidget() == v )
         slotUpdate();
 }
 
 void View::slotViewGanttTaskLinks()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_ganttview->setShowTaskLinks( actionViewGanttTaskLinks->isChecked() );
-    if ( m_tab->currentWidget() == m_ganttview )
+    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( v == 0 ) {
+        return;
+    }
+    v->setShowTaskLinks( actionViewGanttTaskLinks->isChecked() );
+    if ( m_tab->currentWidget() == v )
         slotUpdate();
 }
 
 void View::slotViewGanttProgress()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_ganttview->setShowProgress( actionViewGanttProgress->isChecked() );
-    if ( m_tab->currentWidget() == m_ganttview )
+    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( v == 0 ) {
+        return;
+    }
+    v->setShowProgress( actionViewGanttProgress->isChecked() );
+    if ( m_tab->currentWidget() == v )
         slotUpdate();
 }
 
 void View::slotViewGanttFloat()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_ganttview->setShowPositiveFloat( actionViewGanttFloat->isChecked() );
-    if ( m_tab->currentWidget() == m_ganttview )
+    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( v == 0 ) {
+        return;
+    }
+    v->setShowPositiveFloat( actionViewGanttFloat->isChecked() );
+    if ( m_tab->currentWidget() == v )
         slotUpdate();
 }
 
 void View::slotViewGanttCriticalTasks()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_ganttview->setShowCriticalTasks( actionViewGanttCriticalTasks->isChecked() );
-    if ( m_tab->currentWidget() == m_ganttview )
+    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( v == 0 ) {
+        return;
+    }
+    v->setShowCriticalTasks( actionViewGanttCriticalTasks->isChecked() );
+    if ( m_tab->currentWidget() == v )
         slotUpdate();
 }
 
 void View::slotViewGanttCriticalPath()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_ganttview->setShowCriticalPath( actionViewGanttCriticalPath->isChecked() );
-    if ( m_tab->currentWidget() == m_ganttview )
+    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( v == 0 ) {
+        return;
+    }
+    v->setShowCriticalPath( actionViewGanttCriticalPath->isChecked() );
+    if ( m_tab->currentWidget() == v )
         slotUpdate();
 }
 
 void View::slotViewGanttNoInformation()
 {
-    //kDebug() << k_funcinfo << m_ganttview->showNoInformation() << endl;
-    m_ganttview->setShowNoInformation( !m_ganttview->showNoInformation() ); //Toggle
-    if ( m_tab->currentWidget() == m_ganttview )
+    //kDebug() << k_funcinfo << ganttview->showNoInformation() << endl;
+    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( v == 0 ) {
+        return;
+    }
+    v->setShowNoInformation( !v->showNoInformation() ); //Toggle
+    if ( m_tab->currentWidget() == v )
         slotUpdate();
 }
 
 void View::slotViewTaskAppointments()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_ganttview->setShowAppointments( actionViewTaskAppointments->isChecked() );
+    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( v == 0 ) {
+        return;
+    }
+    v->setShowAppointments( actionViewTaskAppointments->isChecked() );
     m_updateGanttview = true;
-    if ( m_tab->currentWidget() == m_ganttview )
+    if ( m_tab->currentWidget() == v )
         slotUpdate();
 }
 
@@ -970,14 +1103,13 @@ void View::slotViewSelector( bool show )
 void View::slotViewGantt()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_viewlist->setSelected( m_viewlist->findItem( m_ganttview ) );
-    //m_tab->setCurrentWidget( m_ganttview );
+    m_viewlist->setSelected( m_viewlist->findItem( "Ganttview" ) );
 }
 
 void View::slotViewResources()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_viewlist->setSelected( m_viewlist->findItem( m_resourceview ) );
+    m_viewlist->setSelected( m_viewlist->findItem( "ResourceView" ) );
 }
 
 void View::slotViewResourceAppointments()
@@ -989,25 +1121,25 @@ void View::slotViewResourceAppointments()
 void View::slotViewAccounts()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_viewlist->setSelected( m_viewlist->findItem( m_accountsview ) );
+    m_viewlist->setSelected( m_viewlist->findItem( "AccountsView" ) );
 }
 
 void View::slotViewTaskEditor()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_viewlist->setSelected( m_viewlist->findItem( m_taskeditor ) );
+    m_viewlist->setSelected( m_viewlist->findItem( "TaskEditor" ) );
 }
 
 void View::slotViewCalendarEditor()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_viewlist->setSelected( m_viewlist->findItem( m_calendareditor ) );
+    m_viewlist->setSelected( m_viewlist->findItem( "CalendarEditor" ) );
 }
 
 void View::slotViewTaskStatusView()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_viewlist->setSelected( m_viewlist->findItem( m_taskstatusview ) );
+    m_viewlist->setSelected( m_viewlist->findItem( "TaskStatusView" ) );
 }
 
 
@@ -1384,8 +1516,6 @@ void View::slotChartDisplay()
     delete dia;
 }
 
-
-
 Calendar *View::currentCalendar()
 {
     ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
@@ -1736,14 +1866,14 @@ void View::slotModifyRelation( Relation *rel, int linkType )
 void View::slotExportGantt()
 {
     //kDebug()<<k_funcinfo<<endl;
-    if ( !m_ganttview ) {
+    GanttView *gv = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
+    if ( gv == 0 ) {
         return ;
     }
-    QString fn = KFileDialog::getSaveFileName( KUrl(),
-                 QString(), this );
+    QString fn = KFileDialog::getSaveFileName( KUrl(), QString(), this );
     if ( !fn.isEmpty() ) {
         QFile f( fn );
-        m_ganttview->exportGantt( &f );
+        gv->exportGantt( &f );
     }
 }
 
@@ -1849,7 +1979,7 @@ Part *View::getPart() const
 void View::slotConnectNode()
 {
     //kDebug()<<k_funcinfo<<endl;
-    /*    NodeItem *curr = m_ganttview->currentItem();
+    /*    NodeItem *curr = ganttview->currentItem();
         if (curr) {
             kDebug()<<k_funcinfo<<"node="<<curr->getNode().name()<<endl;
         }*/
@@ -1954,7 +2084,7 @@ void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
     }
     DocumentChild *ch = getPart()->createChild( doc, geometry() );
     
-    QTreeWidgetItem *cat = m_viewlist->addCategory( i18n( "Documents" ) );
+    QTreeWidgetItem *cat = m_viewlist->addCategory( "Documents", i18n( "Documents" ) );
     cat->setIcon( 0, KIcon( "koshell" ) );
     QString title;
     if ( doc->documentInfo() ) {
@@ -1967,7 +2097,7 @@ void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
         title = "Untitled";
     }
     KoView *v = doc->createView( this );
-    ViewListItem *i = m_viewlist->addView( cat, title, v, ch );
+    ViewListItem *i = m_viewlist->addView( cat, doc->objectName(), title, v, ch );
     i->setIcon( 0, KIcon( entry.service()->icon() ) );
     m_tab->addWidget( v );
     //kDebug()<<k_funcinfo<<"Added: "<<v<<endl;
@@ -2030,45 +2160,31 @@ void View::updateView( QWidget *widget )
     QApplication::setOverrideCursor( Qt::WaitCursor );
     //setScheduleActionsEnabled();
     mainWindow() ->toolBar( "report" ) ->hide();
-    if ( widget == m_ganttview ) {
+    if ( widget == m_viewlist->findView( "GanttView" ) ) {
         //kDebug()<<k_funcinfo<<"draw gantt"<<endl;
         if ( m_updateGanttview )
-            m_ganttview->drawChanges( getProject() );
+            static_cast<ViewBase*>( widget ) ->drawChanges( getProject() );
         //setTaskActionsEnabled( widget, true );
         m_updateGanttview = false;
-    } else if ( widget == m_resourceview ) {
+    } else if ( widget == m_viewlist->findView( "ResourceView" ) ) {
         //kDebug()<<k_funcinfo<<"draw resourceview"<<endl;
         if ( m_updateResourceview )
-            m_resourceview->draw( getPart() ->getProject() );
+            static_cast<ViewBase*>( widget ) ->draw( getPart() ->getProject() );
         m_updateResourceview = false;
-    } else if ( widget == m_accountsview ) {
+    } else if ( widget == m_viewlist->findView( "AccountsView" ) ) {
         //kDebug()<<k_funcinfo<<"draw accountsview"<<endl;
         if ( m_updateAccountsview )
-            m_accountsview->draw();
+            static_cast<ViewBase*>( widget ) ->draw();
         m_updateAccountsview = false;
-    } else if ( widget == m_taskeditor ) {
-        //kDebug()<<k_funcinfo<<"draw taskeditor"<<endl;
-    } else if ( widget == m_resourceview ) {
-        //kDebug()<<k_funcinfo<<"draw resourceeditor"<<endl;
-    } else if ( widget == m_resourceAssignmentView ) {
-	if ( m_updateResourceAssignmentView )
-            m_resourceAssignmentView->draw( getPart() ->getProject() );
+    } else if ( widget == m_viewlist->findView( "ResourceAssignmentView" ) ) {
+        if ( m_updateResourceAssignmentView )
+            static_cast<ViewBase*>( widget ) ->draw( getProject() );
         m_updateResourceAssignmentView = false;
-    } else if ( widget == m_perteditor) {
-        //if ( m_updatePertEditor )
-            m_perteditor -> draw( getPart()->getProject() );
-        m_updatePertEditor = false;
-    } else if ( widget == m_taskstatusview ) {
-        m_taskstatusview -> draw( getPart()->getProject() );
-    }else if ( widget == m_pertresult) {        
-            m_pertresult -> draw( getPart()->getProject() );
-            m_updatePertResult = false;
+    } else if ( widget == m_viewlist->findView( "DependencyEditor" ) ) {
+        static_cast<ViewBase*>( widget ) -> draw( getProject() );
+    }else if ( widget == m_viewlist->findView( "PertResultView" ) ) {
+        static_cast<ViewBase*>( widget ) -> draw( getProject() );
     }
-    /*    else if (widget == m_reportview)
-        {
-            mainWindow()->toolBar("report")->show();
-            m_reportview->enableNavigationBtn();
-        }*/
     QApplication::restoreOverrideCursor();
 }
 
@@ -2101,12 +2217,13 @@ bool View::setContext( Context &context )
 {
     //kDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = context.currentEstimateType;
-    getProject().setCurrentSchedule( context.currentSchedule );
-//     actionViewExpected->setChecked( context.actionViewExpected );
-//     ationViewOptimistic->setChecked( context.actionViewOptimistic );
-//     actionViewPessimistic->setChecked( context.actionViewPessimistic );
+    
+    getProject().setCurrentViewScheduleId( context.currentSchedule );
 
-    m_ganttview->setContext( context.ganttview, getProject() );
+    GanttView *gv = dynamic_cast<GanttView*>( m_viewlist->findView( "GanttView" ) );
+    if ( gv ) {
+        gv->setContext( context.ganttview, getProject() );
+    }
     // hmmm, can't decide if these should be here or actions moved to ganttview
     actionViewGanttResources->setChecked( context.ganttview.showResources );
     actionViewGanttTaskName->setChecked( context.ganttview.showTaskName );
@@ -2116,23 +2233,11 @@ bool View::setContext( Context &context )
     actionViewGanttCriticalTasks->setChecked( context.ganttview.showCriticalTasks );
     actionViewGanttCriticalPath->setChecked( context.ganttview.showCriticalPath );
 
+    /* TODO
     m_resourceview->setContext( context.resourceview );
-    m_accountsview->setContext( context.accountsview );
-    //    m_reportview->setContext(context.reportview);
-
-    if ( context.currentView == "ganttview" ) {
-        slotViewGantt();
-    } else if ( context.currentView == "resourceview" ) {
-        slotViewResources();
-    } else if ( context.currentView == "accountsview" ) {
-        slotViewAccounts();
-    } else if ( context.currentView == "taskeditor" ) {
-        slotViewTaskEditor();
-    } else if ( context.currentView == "calendareditor" ) {
-        slotViewCalendarEditor();
-    } else {
-        slotViewGantt();
-    }
+    m_accountsview->setContext( context.accountsview );*/
+    
+    m_viewlist->setSelected( m_viewlist->findItem( context.currentView ) );
     slotUpdate();
     return true;
 }
@@ -2141,33 +2246,13 @@ void View::getContext( Context &context ) const
 {
     //kDebug()<<k_funcinfo<<endl;
     context.currentEstimateType = m_currentEstimateType;
-    if ( getProject().currentSchedule() )
-        context.currentSchedule = getProject().currentSchedule() ->id();
-//     context.actionViewExpected = actionViewExpected->isChecked();
-//     context.actionViewOptimistic = actionViewOptimistic->isChecked();
-//     context.actionViewPessimistic = actionViewPessimistic->isChecked();
-
-    if ( m_tab->currentWidget() == m_ganttview ) {
-        context.currentView = "ganttview";
-    } else if ( m_tab->currentWidget() == m_resourceview ) {
-        context.currentView = "resourceview";
-    } else if ( m_tab->currentWidget() == m_accountsview ) {
-        context.currentView = "accountsview";
-    } else if (m_tab->currentWidget() == m_taskeditor) {
-        context.currentView = "taskeditor";
-    } else if (m_tab->currentWidget() == m_resourceeditor) {
-        context.currentView = "resourceeditor";
-    } else if (m_tab->currentWidget() == m_resourceAssignmentView){
-        context.currentView = "resourceassignmentview";
-    } else if (m_tab->currentWidget() == m_calendareditor){
-        context.currentView = "calendareditor";
-    } else if (m_tab->currentWidget() == m_accountseditor){
-        context.currentView = "accountseditor";
+        
+    context.currentSchedule = getProject().currentViewScheduleId();
+    ViewListItem *item = m_viewlist->findItem( m_tab->currentWidget() );
+    if ( item ) {
+        context.currentView = item->tag();
     }
-m_ganttview->getContext( context.ganttview );
-//    m_resourceview->getContext( context.resourceview );
-    m_accountsview->getContext( context.accountsview );
-    //    m_reportview->getContext(context.reportview);
+    // TODO view specific context
 }
 
 void View::setLabel()
@@ -2186,7 +2271,7 @@ void View::setLabel()
 void View::slotPrintDebug()
 {
     kDebug() << "-------- Debug printout: Node list" << endl;
-    /*    Node *curr = m_ganttview->currentNode();
+    /*    Node *curr = ganttview->currentNode();
         if (curr) {
             curr->printDebug(true,"");
         } else*/
@@ -2194,34 +2279,35 @@ void View::slotPrintDebug()
 }
 void View::slotPrintSelectedDebug()
 {
-    if ( m_tab->currentWidget() == m_ganttview ) {
-        Node * curr = m_ganttview->currentNode();
+/*TODO
+    if ( m_tab->currentWidget() == ganttview ) {
+        Node * curr = ganttview->currentNode();
         if ( curr ) {
             kDebug() << "-------- Debug printout: Selected node" << endl;
             curr->printDebug( true, "" );
         } else
             slotPrintDebug();
         return;
-    } else if ( m_tab->currentWidget() == m_resourceeditor ) {
-        Resource *r = m_resourceeditor->currentResource();
+    } else if ( m_tab->currentWidget() == m_viewlist->findView( "ResourceEditor" ) ) {
+        Resource *r = static_cast<ViewBase*>( m_tab->currentWidget() )->currentResource();
         if ( r ) {
             kDebug() <<"-------- Debug printout: Selected resource"<<endl;
             r->printDebug("  !");
             return;
         }
-        ResourceGroup *g = m_resourceeditor->currentResourceGroup();
+        ResourceGroup *g = static_cast<ViewBase*>( m_tab->currentWidget() )->currentResourceGroup();
         if ( g ) {
             kDebug() <<"-------- Debug printout: Selected group"<<endl;
             g->printDebug("  !");
             return;
         }
     }
-    slotPrintDebug();
+    slotPrintDebug();*/
 }
 void View::slotPrintCalendarDebug()
 {
     //kDebug() << "-------- Debug printout: Calendars" << endl;
-    /*    Node *curr = m_ganttview->currentNode();
+    /*    Node *curr = ganttview->currentNode();
         if (curr) {
             curr->printDebug(true,"");
         } else*/
