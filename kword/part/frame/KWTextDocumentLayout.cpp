@@ -292,9 +292,10 @@ void KWTextDocumentLayout::layout() {
             const QList<Outline*> *m_outlines;
         };
 
-        if(m_state->shape != currentShape) { // next shape; refresh the outlines cache.
+        if(m_state->shape != currentShape) { // next shape
             currentShape = m_state->shape;
             if(m_frameSet->kwordDocument()) {
+                // refresh the outlines cache.
                 qDeleteAll(outlines);
                 outlines.clear();
                 QRectF bounds = m_state->shape->boundingRect();
@@ -317,6 +318,10 @@ void KWTextDocumentLayout::layout() {
                         outlines.append(new Outline(frame, matrix));
                     }
                 }
+
+                // set the page number of the shape.
+                KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (currentShape->userData());
+                data->setPageNumber( m_frameSet->pageManager()->pageNumber(currentShape));
             }
         }
 
