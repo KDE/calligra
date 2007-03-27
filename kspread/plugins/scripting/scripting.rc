@@ -3,10 +3,8 @@
 <MenuBar>
 	<Menu name="tools"><text>&amp;Tools</text>
 		<Separator/>
-		<!--
-		<Action name="executefile"/>
-		//-->
-		<Action name="configurescripts"/>
+		<Action name="executescriptfile"/>
 		<Action name="scripts"/>
+		<Action name="configurescripts"/>
 	</Menu>
 </MenuBar>
