@@ -33,7 +33,7 @@ class WdgRawImport : public QWidget, public Ui::WdgRawImport
         WdgRawImport(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
-class KProcess;
+class K3Process;
 class KDialog;
 class WdgRawImport;
 class KoColorProfile;
@@ -55,8 +55,8 @@ private slots:
     void slotUpdatePreview();
     void slotFillCmbProfiles();
     void slotProcessDone();
-    void slotReceivedStdout(KProcess *proc, char *buffer, int buflen);
-    void slotReceivedStderr(KProcess *proc, char *buffer, int buflen);
+    void slotReceivedStdout(K3Process *proc, char *buffer, int buflen);
+    void slotReceivedStderr(K3Process *proc, char *buffer, int buflen);
     void incrementProgress();
 
 private:
@@ -72,7 +72,7 @@ private:
     KDialog * m_dialog;
     WdgRawImport * m_page;
     KoColorProfile * m_monitorProfile;
-    KProcess * m_process;
+    K3Process * m_process;
     QProgressDialog* m_progress;
 };
 

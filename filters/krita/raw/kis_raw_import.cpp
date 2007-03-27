@@ -42,7 +42,7 @@
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kprocess.h>
+#include <k3process.h>
 
 #include <KoDocument.h>
 #include <KoFilterChain.h>
@@ -400,7 +400,7 @@ void KisRawImport::getImageData( QStringList arguments )
     delete m_data;
 
     kDebug(41008) << "getImageData " << arguments.join(" ") << "\n";
-    KProcess process (this);
+    K3Process process (this);
     m_data = new QByteArray(0);
 
     for (QStringList::iterator it = arguments.begin(); it != arguments.end(); ++it) {
@@ -408,14 +408,14 @@ void KisRawImport::getImageData( QStringList arguments )
     }
 
     process.setUseShell(true);
-    connect(&process, SIGNAL(receivedStdout(KProcess *, char *, int)), this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
-    connect(&process, SIGNAL(receivedStderr(KProcess *, char *, int)), this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
-    connect(&process, SIGNAL(processExited(KProcess *)), this, SLOT(slotProcessDone()));
+    connect(&process, SIGNAL(receivedStdout(K3Process *, char *, int)), this, SLOT(slotReceivedStdout(K3Process *, char *, int)));
+    connect(&process, SIGNAL(receivedStderr(K3Process *, char *, int)), this, SLOT(slotReceivedStderr(K3Process *, char *, int)));
+    connect(&process, SIGNAL(processExited(K3Process *)), this, SLOT(slotProcessDone()));
 
 
     kDebug(41008) << "Starting process\n";
 
-    if (!process.start(KProcess::NotifyOnExit, KProcess::AllOutput)) {
+    if (!process.start(K3Process::NotifyOnExit, K3Process::AllOutput)) {
         KMessageBox::error( 0, i18n("Cannot convert RAW files because the dcraw executable could not be started."));
     }
     while (process.isRunning()) {
@@ -439,7 +439,7 @@ void KisRawImport::slotProcessDone()
     kDebug(41008) << "process done!\n";
 }
 
-void KisRawImport::slotReceivedStdout(KProcess *, char *buffer, int buflen)
+void KisRawImport::slotReceivedStdout(K3Process *, char *buffer, int buflen)
 {
     //kDebug(41008) << "stdout received " << buflen << " bytes on stdout.\n";
     //kDebug(41008) << QString::fromAscii(buffer, buflen) << "\n";
@@ -448,7 +448,7 @@ void KisRawImport::slotReceivedStdout(KProcess *, char *buffer, int buflen)
     memcpy(m_data->data() + oldSize, buffer, buflen);
 }
 
-void KisRawImport::slotReceivedStderr(KProcess *, char *buffer, int buflen)
+void KisRawImport::slotReceivedStderr(K3Process *, char *buffer, int buflen)
 {
     QByteArray b(buflen);
     memcpy(b.data(), buffer, buflen);

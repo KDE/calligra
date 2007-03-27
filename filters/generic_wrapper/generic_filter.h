@@ -23,7 +23,7 @@
 #include <q3cstring.h>
 #include <QStringList>
 
-#include <kprocess.h>
+#include <k3process.h>
 #include <KoFilter.h>
 #include <KoStore.h>
 
