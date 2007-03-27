@@ -103,6 +103,8 @@ private slots:
     void increaseIndent();
     /// Default Format
     void textDefaultFormat();
+    /// see KoTextSelectionHandler::insertIndexMarker
+    void insertIndexMarker();
 
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();

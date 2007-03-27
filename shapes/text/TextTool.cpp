@@ -144,6 +144,10 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setShortcut( Qt::CTRL+Qt::SHIFT+Qt::Key_Minus);
     connect(action, SIGNAL(triggered()), this, SLOT( nonbreakingHyphen() ));
 
+    action  = new QAction(i18n("Insert Index"), this);
+    addAction("insert_index", action );
+    connect(action, SIGNAL(triggered()), this, SLOT( insertIndexMarker() ));
+
     action  = new QAction(i18n("Insert Soft Hyphen"), this);
     addAction("soft_hyphen", action );
     //action->setShortcut( Qt::CTRL+Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
@@ -741,6 +745,11 @@ void TextTool::decreaseIndent() {
 void TextTool::textDefaultFormat() {
     // TODO
     kDebug() << "TextTool::textDefaultFormat\n";
+}
+
+void TextTool::insertIndexMarker() {
+    // TODO handle result when we figure out how to report errors from a tool.
+    m_selectionHandler.insertIndexMarker();
 }
 
 
