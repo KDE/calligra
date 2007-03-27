@@ -53,7 +53,7 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kpushbutton.h>
 #include <krun.h>
 #include <kstandarddirs.h>
@@ -90,13 +90,13 @@ protected slots:
     void slotBack();
     void slotForward();
 
-    void thesExited(KProcess *proc);
-    void receivedThesStdout(KProcess *proc, char *result, int len);
-    void receivedThesStderr(KProcess *proc, char *result, int len);
+    void thesExited(K3Process *proc);
+    void receivedThesStdout(K3Process *proc, char *result, int len);
+    void receivedThesStderr(K3Process *proc, char *result, int len);
 
-    void wnExited(KProcess *proc);
-    void receivedWnStdout(KProcess *proc, char *result, int len);
-    void receivedWnStderr(KProcess *proc, char *result, int len);
+    void wnExited(K3Process *proc);
+    void receivedWnStdout(K3Process *proc, char *result, int len);
+    void receivedWnStderr(K3Process *proc, char *result, int len);
 
 protected:
     enum Mode {grep, other};
@@ -121,11 +121,11 @@ protected:
 
     KConfig *m_config;
 
-    KProcess *m_thesproc;
+    K3Process *m_thesproc;
     QString m_thesproc_stdout;
     QString m_thesproc_stderr;
 
-    KProcess *m_wnproc;
+    K3Process *m_wnproc;
     QString m_wnproc_stdout;
     QString m_wnproc_stderr;
 

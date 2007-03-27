@@ -231,20 +231,20 @@ Thesaurus::Thesaurus(QObject* parent, const QStringList &)
     //
 
     // calling the 'wn' binary
-    m_wnproc = new KProcess;
-    connect(m_wnproc, SIGNAL(processExited(KProcess*)), this, SLOT(wnExited(KProcess*)));
-    connect(m_wnproc, SIGNAL(receivedStdout(KProcess*,char*,int)),
-        this, SLOT(receivedWnStdout(KProcess*, char*, int)));
-    connect(m_wnproc, SIGNAL(receivedStderr(KProcess*,char*,int)),
-        this, SLOT(receivedWnStderr(KProcess*, char*, int)));
+    m_wnproc = new K3Process;
+    connect(m_wnproc, SIGNAL(processExited(K3Process*)), this, SLOT(wnExited(K3Process*)));
+    connect(m_wnproc, SIGNAL(receivedStdout(K3Process*,char*,int)),
+        this, SLOT(receivedWnStdout(K3Process*, char*, int)));
+    connect(m_wnproc, SIGNAL(receivedStderr(K3Process*,char*,int)),
+        this, SLOT(receivedWnStderr(K3Process*, char*, int)));
 
     // grep'ing the text file
-    m_thesproc = new KProcess;
-    connect(m_thesproc, SIGNAL(processExited(KProcess*)), this, SLOT(thesExited(KProcess*)));
-    connect(m_thesproc, SIGNAL(receivedStdout(KProcess*,char*,int)),
-        this, SLOT(receivedThesStdout(KProcess*, char*, int)));
-    connect(m_thesproc, SIGNAL(receivedStderr(KProcess*,char*,int)),
-        this, SLOT(receivedThesStderr(KProcess*, char*, int)));
+    m_thesproc = new K3Process;
+    connect(m_thesproc, SIGNAL(processExited(K3Process*)), this, SLOT(thesExited(K3Process*)));
+    connect(m_thesproc, SIGNAL(receivedStdout(K3Process*,char*,int)),
+        this, SLOT(receivedThesStdout(K3Process*, char*, int)));
+    connect(m_thesproc, SIGNAL(receivedStderr(K3Process*,char*,int)),
+        this, SLOT(receivedThesStderr(K3Process*, char*, int)));
 
 }
 
@@ -476,7 +476,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
     *m_thesproc << "grep" << "-i" << term_tmp;
     *m_thesproc << m_data_file;
 
-    if( !m_thesproc->start(KProcess::NotifyOnExit, KProcess::AllOutput) ) {
+    if( !m_thesproc->start(K3Process::NotifyOnExit, K3Process::AllOutput) ) {
         KMessageBox::error(0, i18n("Failed to execute grep."));
         QApplication::restoreOverrideCursor();
         return;
@@ -485,7 +485,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
 
 // The external process has ended, so we parse its result and put it in
 // the list box.
-void Thesaurus::thesExited(KProcess *)
+void Thesaurus::thesExited(K3Process *)
 {
 
     if( !m_thesproc_stderr.isEmpty() ) {
@@ -572,12 +572,12 @@ void Thesaurus::thesExited(KProcess *)
     QApplication::restoreOverrideCursor();
 }
 
-void Thesaurus::receivedThesStdout(KProcess *, char *result, int len)
+void Thesaurus::receivedThesStdout(K3Process *, char *result, int len)
 {
     m_thesproc_stdout += QString::fromLocal8Bit( QByteArray(result, len+1) );
 }
 
-void Thesaurus::receivedThesStderr(KProcess *, char *result, int len)
+void Thesaurus::receivedThesStderr(K3Process *, char *result, int len)
 {
     m_thesproc_stderr += QString::fromLocal8Bit( QByteArray(result, len+1) );
 }
@@ -689,7 +689,7 @@ void Thesaurus::findTermWordnet(const QString &term)
         return;
     }
 
-    if( !m_wnproc->start(KProcess::NotifyOnExit, KProcess::AllOutput) ) {
+    if( !m_wnproc->start(K3Process::NotifyOnExit, K3Process::AllOutput) ) {
         m_resultbox->setHtml(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
             "WordNet has to be installed on your computer if you want to use it, "
             "and 'wn' has to be in your PATH. "
@@ -704,7 +704,7 @@ void Thesaurus::findTermWordnet(const QString &term)
 }
 
 // The process has ended, so parse its result and display it as Qt richtext.
-void Thesaurus::wnExited(KProcess *)
+void Thesaurus::wnExited(K3Process *)
 {
 
     if( !m_wnproc_stderr.isEmpty() ) {
@@ -760,12 +760,12 @@ void Thesaurus::wnExited(KProcess *)
     QApplication::restoreOverrideCursor();
 }
 
-void Thesaurus::receivedWnStdout(KProcess *, char *result, int len)
+void Thesaurus::receivedWnStdout(K3Process *, char *result, int len)
 {
     m_wnproc_stdout += QString::fromLocal8Bit( QByteArray(result, len+1) );
 }
 
-void Thesaurus::receivedWnStderr(KProcess *, char *result, int len)
+void Thesaurus::receivedWnStderr(K3Process *, char *result, int len)
 {
     m_wnproc_stderr += QString::fromLocal8Bit( QByteArray(result, len+1) );
 }
