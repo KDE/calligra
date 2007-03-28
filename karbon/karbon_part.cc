@@ -436,13 +436,6 @@ KarbonPart::addCommand( VCommand* cmd, bool repaint )
 {
 	kDebug(38000) << "KarbonPart::addCommand: please port to new command handling" << endl;
         delete cmd;
-	/* 
-	m_commandHistory->addCommand( cmd );
-	setModified( true );
-
-	if( repaint )
-		repaintAllViews();
-	*/
 }
 
 void
@@ -452,26 +445,12 @@ KarbonPart::slotDocumentRestored()
 }
 
 void
-KarbonPart::clearHistory()
-{
-// TODO needs porting
-// 	m_commandHistory->clear();
-}
-
-void
-KarbonPart::repaintAllViews( bool repaint )
+KarbonPart::repaintAllViews( bool /*repaint*/ )
 {
 // TODO: needs porting
 /*
 	foreach ( KoView* view, views() )
 		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( repaint );*/
-}
-
-void
-KarbonPart::repaintAllViews( const QRectF &rect )
-{
-	foreach ( KoView* view, views() )
-		static_cast<KarbonView*>( view )->canvasWidget()->updateCanvas( rect );
 }
 
 void
@@ -584,17 +563,6 @@ KarbonPart::mergeNativeFormat( const QString &file )
 		showLoadingErrorDialog();
 	m_merge = false;
 	return result;
-}
-
-void
-KarbonPart::slotUnitChanged( KoUnit /*unit*/ )
-{
-#if 0
-	// VDocument has its own storage of the unit...
-	m_doc.setUnit( unit );
-	if( m_toolController->activeTool() )
-		m_toolController->activeTool()->refreshUnit();
-#endif
 }
 
 void

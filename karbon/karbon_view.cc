@@ -221,11 +221,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     updateRuler();
-// 
-	// set up factory
+
+    // set up factory
 	m_painterFactory = new VPainterFactory;
-	//m_painterFactory->setPainter( m_canvas->pixmap(), m_canvas->contentsWidth(), m_canvas->contentsHeight() );
-	//m_painterFactory->setEditPainter( m_canvas->canvasWidget(), m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height() );
 
 	if( shell() )
 	{
@@ -253,11 +251,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
 		connect(m_canvasView, SIGNAL(toolOptionWidgetChanged(QWidget*)), toolDocker, SLOT(newOptionWidget(QWidget*)));
 
-
-		//connect( m_stylePreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
-		//connect( m_stylePreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
-
-
 		if( m_showRulerAction->isChecked() )
 		{
 			m_horizRuler->show();
@@ -277,7 +270,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 KarbonView::~KarbonView()
 {
-	//kDebug(38000) << "Handling KarbonView dtor" << endl;
 	debugView("KarbonView::~KarbonView()");
 
 	// widgets:

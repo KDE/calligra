@@ -65,9 +65,6 @@ public:
 	// access static document:
 	VDocument& document() { return m_doc; }
 
-	// Clear history.
-	void clearHistory();
-
 	bool showStatusBar() const
 	{
 		return m_bShowStatusBar;
@@ -92,9 +89,7 @@ public:
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool repaint = true );
-	void repaintAllViews( const QRectF& );
 	void slotDocumentRestored();
-	void slotUnitChanged( KoUnit unit );
 
 protected:
 	virtual KoView* createViewInstance( QWidget* parent );
