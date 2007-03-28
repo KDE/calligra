@@ -748,7 +748,8 @@ void View::createResourceditor( ViewListItem *cat )
     m_tab->addWidget( resourceeditor );
     resourceeditor->draw( getProject() );
     
-    m_viewlist->addView( cat, "ResourceEditor", i18n( "Resources" ), resourceeditor, getPart(), "resource_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, "ResourceEditor", i18n( "Resources" ), resourceeditor, getPart(), "resource_editor" );
+    i->setToolTip( 0, i18n( "Resource breakdown structure." ) );
     
     connect( resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -764,8 +765,9 @@ void View::createTaskeditor( ViewListItem *cat )
     TaskEditor *taskeditor = new TaskEditor( getPart(), m_tab );
     m_tab->addWidget( taskeditor );
     
-    m_viewlist->addView( cat, "taskeditor", i18n( "Tasks" ), taskeditor, getPart(), "task_editor" );
-
+    ViewListItem *i = m_viewlist->addView( cat, "taskeditor", i18n( "Tasks" ), taskeditor, getPart(), "task_editor" );
+    i->setToolTip( 0, i18n( "Work breakdown structure." ) );
+    
     taskeditor->draw( getProject() );
     
     connect( taskeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
@@ -789,8 +791,9 @@ void View::createAccountsEditor( ViewListItem *cat )
     AccountsEditor *ae = new AccountsEditor( getPart(), m_tab );
     m_tab->addWidget( ae );
     
-    m_viewlist->addView( cat, "AccountEditor", i18n( "Accounts" ), ae, getPart(), "accounts_editor" );
-
+    ViewListItem *i = m_viewlist->addView( cat, "AccountEditor", i18n( "Accounts" ), ae, getPart(), "accounts_editor" );
+    i->setToolTip( 0, i18n( "Cost breakdown structure." ) );
+    
     ae->draw( getProject() );
     
     connect( ae, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
@@ -802,7 +805,8 @@ void View::createCalendarEditor( ViewListItem *cat )
     CalendarEditor *calendareditor = new CalendarEditor( getPart(), m_tab );
     m_tab->addWidget( calendareditor );
     
-    m_viewlist->addView( cat, "CalendarEditor", i18n( "Work & Vacation" ), calendareditor, getPart(), "calendar_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, "CalendarEditor", i18n( "Work & Vacation" ), calendareditor, getPart(), "calendar_editor" );
+    i->setToolTip( 0, i18n( "Edit working- and vacation days for resources" ) );
     
     calendareditor->draw( getProject() );
 
@@ -817,7 +821,8 @@ void View::createScheduleEditor( ViewListItem *cat )
     ScheduleEditor *scheduleeditor = new ScheduleEditor( getPart(), m_tab );
     m_tab->addWidget( scheduleeditor );
     
-    m_viewlist->addView( cat, "ScheduleEditor", i18n( "Schedules" ), scheduleeditor, getPart(), "schedule_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, "ScheduleEditor", i18n( "Schedules" ), scheduleeditor, getPart(), "schedule_editor" );
+    i->setToolTip( 0, i18n( "Calculate project schedules" ) );
     
     scheduleeditor->draw( getProject() );
     
@@ -833,12 +838,14 @@ void View::createDependencyEditor( ViewListItem *cat )
 {
     PertEditor *perteditor = new PertEditor( getPart(), m_tab );
     m_tab->addWidget( perteditor );
+
+    ViewListItem *i = m_viewlist->addView( cat, "PertEditor", i18n( "Pert" ), perteditor, getPart(), "task_editor" );
+    i->setToolTip( 0, i18n( "Edit task dependenies" ) );
+    
     perteditor->draw( getProject() );
+    
     connect( perteditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     m_updatePertEditor = true;
-
-    m_viewlist->addView( cat, "PertEditor", i18n( "Pert" ), perteditor, getPart(), "task_editor" );
-
 
 }
 void View::createPertResultView( ViewListItem *cat )
@@ -846,7 +853,8 @@ void View::createPertResultView( ViewListItem *cat )
     PertResult *pertresult = new PertResult( getPart(), m_tab );
     m_tab->addWidget( pertresult );
     
-    m_viewlist->addView( cat, "PertResultView", i18n( "Pert Result" ), pertresult , getPart(), "pert_result" );
+    ViewListItem *i = m_viewlist->addView( cat, "PertResultView", i18n( "Pert Result" ), pertresult , getPart(), "pert_result" );
+    i->setToolTip( 0, i18n( "PERT/CPM analizes" ) );
     
     pertresult->draw( getProject() );
     
@@ -857,9 +865,11 @@ void View::createTaskStatusView( ViewListItem *cat )
 {
     TaskStatusView *taskstatusview = new TaskStatusView( getPart(), m_tab );
     m_tab->addWidget( taskstatusview );
-    connect( taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     
-    m_viewlist->addView( cat, "TaskStatusView", i18n( "Task Status" ), taskstatusview, getPart(), "status_view" );
+    ViewListItem *i = m_viewlist->addView( cat, "TaskStatusView", i18n( "Task Status" ), taskstatusview, getPart(), "status_view" );
+    i->setToolTip( 0, i18n( "View task progress information" ) );
+    
+    connect( taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     
     connect( taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
@@ -870,8 +880,12 @@ void View::createGanttView( ViewListItem *cat )
     GanttView *ganttview = new GanttView( getPart(), m_tab, getPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
     m_updateGanttview = false;
-    m_viewlist->addView( cat, "GanttView", i18n( "Gantt" ), ganttview, getPart(), "gantt_chart" );
+    
+    ViewListItem *i = m_viewlist->addView( cat, "GanttView", i18n( "Gantt" ), ganttview, getPart(), "gantt_chart" );
+    i->setToolTip( 0, i18n( "View gantt chart" ) );
+    
     ganttview->draw( getProject() );
+    
     connect( ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( ganttview, SIGNAL( enableActions( bool ) ), SLOT( setTaskActionsEnabled( bool ) ) );
@@ -890,7 +904,9 @@ void View::createResourceView( ViewListItem *cat )
     ResourceView *resourceview = new ResourceView( getPart(), m_tab );
     m_updateResourceview = true;
     m_tab->addWidget( resourceview );
-    m_viewlist->addView( cat, "ResourceView", i18n( "Resources" ), resourceview, getPart(), "resources" );
+    
+    ViewListItem *i = m_viewlist->addView( cat, "ResourceView", i18n( "Resources" ), resourceview, getPart(), "resources" );
+    i->setToolTip( 0, i18n( "View resource information" ) );
     
     connect( resourceview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -904,7 +920,10 @@ void View::createAccountsView( ViewListItem *cat )
     AccountsView *accountsview = new AccountsView( &getProject(), getPart(), m_tab );
     m_updateAccountsview = true;
     m_tab->addWidget( accountsview );
-    m_viewlist->addView( cat, "AccountsView", i18n( "Accounts" ), accountsview, getPart(), "accounts" );
+    
+    ViewListItem *i = m_viewlist->addView( cat, "AccountsView", i18n( "Accounts" ), accountsview, getPart(), "accounts" );
+    i->setToolTip( 0, i18n( "View planned cost" ) );
+    
     connect( accountsview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
 }
@@ -915,7 +934,8 @@ void View::createResourceAssignmentView( ViewListItem *cat )
     m_tab->addWidget( resourceAssignmentView );
     m_updateResourceAssignmentView = true;
     
-    m_viewlist->addView( cat, "ResourceAssignmentView", i18n( "Tasks by resources" ), resourceAssignmentView, getPart(), "resource_assignment" );
+    ViewListItem *i = m_viewlist->addView( cat, "ResourceAssignmentView", i18n( "Tasks by resources" ), resourceAssignmentView, getPart(), "resource_assignment" );
+    i->setToolTip( 0, i18n( "View task status per resource" ) );
     
     resourceAssignmentView->draw( getProject() );
     
