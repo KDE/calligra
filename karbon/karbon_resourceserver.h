@@ -1,10 +1,19 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    Original work :
    kis_resourceserver.h - part of KImageShop
 
    Copyright (c) 1999 Matthias Elter <elter@kde.org>
+   Copyright (C) 2002-2004 Rob Buis <buis@kde.org>
+   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2005-2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
+   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 Dirk Mueller <mueller@kde.org>
+   Copyright (C) 2007 David Faure <faure@kde.org>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

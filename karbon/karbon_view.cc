@@ -1,6 +1,31 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
+   Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2001-2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2002-2003,2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+   Copyright (C) 2002-2003,2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2002-2006 Stephan Binner <binner@kde.org>
+   Copyright (C) 2002,2005 David Faure <faure@kde.org>
+   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002,2005-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2003 Dirk Mueller <mueller@kde.org>
+   Copyright (C) 2003,2006 Stephan Kulow <coolo@kde.org>
+   Copyright (C) 2004 Brad Hards <bradh@frogmouth.net>
+   Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
+   Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
+   Copyright (C) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2005-2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 Martin Ellis <martin.ellis@kdemail.net>
+   Copyright (C) 2006 Adriaan de Groot <groot@kde.org>
+   Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
+   Copyright (C) 2006 Andreas Hartmetz <ahartmetz@gmail.com>
+   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright (C) 2006-2007 Aaron J. Seigo <aseigo@kde.org>
+   Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
