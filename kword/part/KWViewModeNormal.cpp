@@ -145,6 +145,7 @@ QPointF KWViewModeNormal::documentToView( const QPointF & point ) const {
     }
 
     QPointF offsetInPage(point.x(),  + point.y() - page->offsetInDocument());
+    Q_ASSERT( m_pageTops.contains(pageIndex) );
     QPointF translated(x, m_pageTops[pageIndex]);
     return canvas()->viewConverter()->documentToView(translated + offsetInPage);
 }
