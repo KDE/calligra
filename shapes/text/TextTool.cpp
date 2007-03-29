@@ -145,6 +145,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     connect(action, SIGNAL(triggered()), this, SLOT( nonbreakingHyphen() ));
 
     action  = new QAction(i18n("Insert Index"), this);
+action->setShortcut( Qt::CTRL+ Qt::Key_T);
     addAction("insert_index", action );
     connect(action, SIGNAL(triggered()), this, SLOT( insertIndexMarker() ));
 
@@ -280,7 +281,9 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
         }
 
         QAction * action = menu.exec(event->globalPos());
-        KoTextEditingPlugin *plugin = m_textEditingPlugins.value(qvariant_cast<QString>(action->data()));
+        KoTextEditingPlugin *plugin = 0;
+        if(action)
+           plugin = m_textEditingPlugins.value(qvariant_cast<QString>(action->data()));
         if(plugin) {
             if(m_caret.hasSelection()) {
                 int from = m_caret.position();
