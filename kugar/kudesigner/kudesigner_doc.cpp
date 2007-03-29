@@ -20,7 +20,6 @@
 #include "kudesigner_factory.h"
 #include "kudesigner_view.h"
 
-#include <KoTemplateChooseDia.h>
 #include <kparts/componentfactory.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -137,7 +136,7 @@ bool KudesignerDoc::saveToStream( QIODevice * dev )
 void KudesignerDoc::loadPlugin( const QString &name )
 {
     kDebug() << "Trying to load plugin: " << name << endl;
-    KuDesignerPlugin *plug = KLibLoader::createInstance<KuDesignerPlugin>( name.utf8(), this );
+    KuDesignerPlugin *plug = KLibLoader::createInstance<KuDesignerPlugin>( name.toUtf8(), this );
     m_plugin = plug;
     if ( m_plugin )
         kDebug() << "plugin has been loaded" << endl;
