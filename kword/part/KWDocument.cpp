@@ -147,6 +147,15 @@ KWPage* KWDocument::insertPage( int afterPageNum ) {
     PageProcessingQueue *ppq = new PageProcessingQueue(this);
     ppq->addPage(page);
     m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
+
+    QRectF rect = page->rect();
+    foreach(KWFrameSet *fs, frameSets()) {
+        foreach(KWFrame *frame, fs->frames()) {
+            if(frame->shape()->position().y() > rect.top()) // frame should be moved down
+                frame->shape()->setPosition( frame->shape()->position() + QPointF(0, rect.height()) );
+        }
+    }
+
     return page;
 }
 
@@ -240,11 +249,7 @@ int KWDocument::lastPage() const {
 }
 
 void KWDocument::markPageChanged(KWPage *page) {
-kDebug() << "PageChanged: " << page->pageNumber() << "\n";
-    if(page->pageNumber() % 2 == 1 && page->pageSide() == KWPage::PageSpread) {
-kDebug() << "  have to insert an empty page.\n";
-        insertPage(page->pageNumber() -1);
-    }
+    m_frameLayout.layoutFramesOnPage(page->pageNumber());
     emit pageChanged(page);
 }
 

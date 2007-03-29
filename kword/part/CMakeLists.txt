@@ -41,6 +41,8 @@ set(kwordprivate_LIB_SRCS
     dialog/KWPageLayout.cpp
     dialog/KWStartupWidget.cpp
     dialog/KWPageSettingsDialog.cpp
+
+    commands/KWPagePropertiesCommand.cpp
 )
 
 kde4_add_ui_files(kwordprivate_LIB_SRCS

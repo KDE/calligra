@@ -21,8 +21,9 @@
 #include "KWPageLayout.h"
 #include "KWPagePreview.h"
 #include "KWDocument.h"
+#include "commands/KWPagePropertiesCommand.h"
 
-//#include <kdebug.h>
+//#include <KDebug>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, KWPage *page)
     : KDialog(parent),
@@ -52,34 +53,15 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
 }
 
 void KWPageSettingsDialog::setPageLayout(const KoPageLayout &layout) {
-kDebug() << " setPageLayout " << endl;
     m_layout = layout;
 }
 
 void KWPageSettingsDialog::accept() {
-    double w = m_layout.width;
-    double h = m_layout.height;
     if(m_layout.orientation == KoPageFormat::Landscape)
-        qSwap(w, h);
+        qSwap(m_layout.width, m_layout.height);
 
-    bool pageSpread = m_layout.left < 0;
-    m_page->setWidth(w * (pageSpread?2:1));
-    m_page->setHeight(h);
-    m_page->setTopMargin(m_layout.top);
-    m_page->setBottomMargin(m_layout.bottom);
-    m_page->setPageEdgeMargin(m_layout.pageEdge);
-    m_page->setMarginClosestBinding(m_layout.bindingSide);
-    m_page->setLeftMargin(m_layout.left);
-    m_page->setRightMargin(m_layout.right);
-
-kDebug() << "page: " << m_page->width() << ", " << m_page->height() << "\n";
-
-    if(pageSpread)
-        m_page->setPageSide(KWPage::PageSpread);
-    else
-        m_page->setPageSide( m_page->pageNumber()%2==0 ? KWPage::Left : KWPage::Right);
-
-    m_document->markPageChanged(m_page);
+    KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page, m_layout);
+    m_document->addCommand(cmd);
 
     QDialog::accept();
     deleteLater();
