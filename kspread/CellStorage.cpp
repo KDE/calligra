@@ -317,7 +317,7 @@ void CellStorage::setValue( int column, int row, const Value& value )
         return;
     if ( isLocked( column, row ) )
     {
-        KPassivePopup::message( i18n( "The cell is currently locked as element of a matrix." ), 0 );
+        KPassivePopup::message( i18n( "The cell is currently locked as element of a matrix." ), (QWidget*)0 );
         emit inform( i18n( "The cell is currently locked as element of a matrix." ) );
         return;
     }

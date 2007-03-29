@@ -34,7 +34,6 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
-    virtual bool initDoc(InitDocFlags, QWidget* = 0) { return true; }
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
     virtual bool saveOasis(KoStore*, KoXmlWriter*);
 
