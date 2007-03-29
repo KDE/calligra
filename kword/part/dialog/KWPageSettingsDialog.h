@@ -23,12 +23,14 @@
 
 #include <KoPageLayout.h>
 
-#include <kdialog.h>
+#include <KDialog>
+
+class KWDocument;
 
 class KWPageSettingsDialog : public KDialog {
     Q_OBJECT
 public:
-    explicit KWPageSettingsDialog(QWidget *parent, KWPage *page);
+    explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, KWPage *page);
 
 private slots:
     void setPageLayout(const KoPageLayout &layout);
@@ -38,6 +40,7 @@ private:
     void reject();
 
 private:
+    KWDocument *m_document;
     KWPage *m_page;
     KoPageLayout m_layout;
 };

@@ -54,6 +54,7 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
 
     connect(document, SIGNAL(pageAdded(KWPage*)), this, SLOT(pageSetupChanged()));
     connect(document, SIGNAL(pageRemoved(KWPage*)), this, SLOT(pageSetupChanged()));
+    connect(document, SIGNAL(pageChanged(KWPage*)), this, SLOT(pageSetupChanged()));
 
     m_toolProxy = new KoToolProxy(this, this);
     setAttribute(Qt::WA_OpaquePaintEvent, true);

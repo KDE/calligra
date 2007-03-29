@@ -1074,7 +1074,7 @@ void KWView::toggleViewFrameBorders(bool on) {
 void KWView::formatPage() {
     if(m_currentPage == 0)
         return;
-    KWPageSettingsDialog *dia = new KWPageSettingsDialog(this, m_currentPage);
+    KWPageSettingsDialog *dia = new KWPageSettingsDialog(this, m_document, m_currentPage);
     dia->show();
 }
 

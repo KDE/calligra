@@ -177,4 +177,15 @@ void KWPageLayout::showUnitchooser(bool on) {
     widget.unitsLabel->setVisible(on);
 }
 
+void KWPageLayout::forSinglePage(bool single) {
+    if(single) {
+        widget.facingPageLabel->setText(i18n("Page Layout:"));
+        widget.facingPages->setText(i18n("Page spread"));
+    }
+    else {
+        widget.facingPageLabel->setText(i18n("Facing Pages:"));
+        widget.facingPages->setText(i18n("Facing pages"));
+    }
+}
+
 #include <KWPageLayout.moc>

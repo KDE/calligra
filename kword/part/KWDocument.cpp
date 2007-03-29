@@ -239,6 +239,15 @@ int KWDocument::lastPage() const {
     return pageManager()->lastPageNumber();
 }
 
+void KWDocument::markPageChanged(KWPage *page) {
+kDebug() << "PageChanged: " << page->pageNumber() << "\n";
+    if(page->pageNumber() % 2 == 1 && page->pageSide() == KWPage::PageSpread) {
+kDebug() << "  have to insert an empty page.\n";
+        insertPage(page->pageNumber() -1);
+    }
+    emit pageChanged(page);
+}
+
 void KWDocument::addFrame(KWFrame *frame) {
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();

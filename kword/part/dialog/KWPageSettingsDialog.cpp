@@ -20,13 +20,16 @@
 #include "KWPageSettingsDialog.h"
 #include "KWPageLayout.h"
 #include "KWPagePreview.h"
+#include "KWDocument.h"
 
 //#include <kdebug.h>
 
-KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWPage *page)
+KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, KWPage *page)
     : KDialog(parent),
+    m_document(document),
     m_page(page)
 {
+    Q_ASSERT(document);
     Q_ASSERT(page);
     m_layout = m_page->pageLayout();
     QWidget *widget = new QWidget(this);
@@ -37,17 +40,19 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWPage *page)
 
     KWPageLayout *pageLayout = new KWPageLayout(widget, m_layout);
     pageLayout->showUnitchooser(false);
+    pageLayout->forSinglePage(true);
     lay->addWidget(pageLayout);
 
     KWPagePreview *prev = new KWPagePreview(widget);
     prev->setPageLayout(m_layout);
     lay->addWidget(prev);
 
-    connect (widget, SIGNAL(layoutChanged(const KoPageLayout&)), this, SLOT(setPageLayout(const KoPageLayout&)));
     connect (pageLayout, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
+    connect (pageLayout, SIGNAL(layoutChanged(const KoPageLayout&)), this, SLOT(setPageLayout(const KoPageLayout&)));
 }
 
 void KWPageSettingsDialog::setPageLayout(const KoPageLayout &layout) {
+kDebug() << " setPageLayout " << endl;
     m_layout = layout;
 }
 
@@ -56,7 +61,9 @@ void KWPageSettingsDialog::accept() {
     double h = m_layout.height;
     if(m_layout.orientation == KoPageFormat::Landscape)
         qSwap(w, h);
-    m_page->setWidth(w);
+
+    bool pageSpread = m_layout.left < 0;
+    m_page->setWidth(w * (pageSpread?2:1));
     m_page->setHeight(h);
     m_page->setTopMargin(m_layout.top);
     m_page->setBottomMargin(m_layout.bottom);
@@ -65,12 +72,14 @@ void KWPageSettingsDialog::accept() {
     m_page->setLeftMargin(m_layout.left);
     m_page->setRightMargin(m_layout.right);
 
-/*
-    if(m_layout.left < 0)
-        m_page->setPageSide(PageSpread);
+kDebug() << "page: " << m_page->width() << ", " << m_page->height() << "\n";
+
+    if(pageSpread)
+        m_page->setPageSide(KWPage::PageSpread);
     else
-        m_page
-*/
+        m_page->setPageSide( m_page->pageNumber()%2==0 ? KWPage::Left : KWPage::Right);
+
+    m_document->markPageChanged(m_page);
 
     QDialog::accept();
     deleteLater();

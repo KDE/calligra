@@ -26,6 +26,7 @@
 
 #include <QWidget>
 
+/// the widget that shows the size/margins and other page settings.
 class KWPageLayout : public QWidget {
     Q_OBJECT
 public:
@@ -33,6 +34,7 @@ public:
 
     void setUnit(const KoUnit &unit);
     void showUnitchooser(bool on);
+    void forSinglePage(bool single);
 
 signals:
     void layoutChanged(const KoPageLayout &layout);

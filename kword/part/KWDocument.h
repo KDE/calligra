@@ -181,6 +181,8 @@ public:
      */
     void setDefaultPageLayout(const KoPageLayout &layout);
 
+    void markPageChanged(KWPage *page);
+
     /// return the amount of framesets this document holds
     int frameSetCount() const { return m_frameSets.count(); }
     /// return a list of all the framesets this document holds
@@ -225,6 +227,8 @@ signals:
     void pageAdded(KWPage *page);
     /// signal emitted when a page has been removed
     void pageRemoved(KWPage *page);
+    /// signal emitted when a page has been changed
+    void pageChanged(KWPage *page);
 
     /// signal emitted when a frameSet has been added
     void frameSetAdded(KWFrameSet*);
