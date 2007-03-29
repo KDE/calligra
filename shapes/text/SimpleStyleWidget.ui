@@ -13,10 +13,22 @@
    <string>SimpleStyleWidget</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>4</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>4</number>
+   </property>
+   <property name="rightMargin" >
+    <number>4</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>4</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>6</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>6</number>
    </property>
    <item row="3" column="0" colspan="2" >
@@ -25,10 +37,19 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" >
-      <property name="margin" >
+      <property name="spacing" >
        <number>0</number>
       </property>
-      <property name="spacing" >
+      <property name="leftMargin" >
+       <number>0</number>
+      </property>
+      <property name="topMargin" >
+       <number>0</number>
+      </property>
+      <property name="rightMargin" >
+       <number>0</number>
+      </property>
+      <property name="bottomMargin" >
        <number>0</number>
       </property>
       <item>
@@ -100,9 +121,7 @@
    <item row="0" column="0" >
     <widget class="QFrame" name="buttonFrame1" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>0</hsizetype>
-       <vsizetype>5</vsizetype>
+      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -111,10 +130,22 @@
       <enum>QFrame::NoFrame</enum>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>0</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>0</number>
+      </property>
+      <property name="rightMargin" >
+       <number>0</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>0</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing" >
        <number>0</number>
       </property>
       <item row="1" column="3" >
@@ -192,6 +223,21 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>alignLeft</tabstop>
+  <tabstop>alignCenter</tabstop>
+  <tabstop>alignRight</tabstop>
+  <tabstop>alignBlock</tabstop>
+  <tabstop>bold</tabstop>
+  <tabstop>italic</tabstop>
+  <tabstop>underline</tabstop>
+  <tabstop>strikeOut</tabstop>
+  <tabstop>superscript</tabstop>
+  <tabstop>subscript</tabstop>
+  <tabstop>listType</tabstop>
+  <tabstop>decreaseIndent</tabstop>
+  <tabstop>increaseIndent</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
