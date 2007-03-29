@@ -73,7 +73,6 @@
 #include <kiconloader.h>
 #include <khelpmenu.h>
 #include <kconfig.h>
-#include <KoTemplateChooseDia.h>
 #include <KoFilterManager.h>
 #include <KoStoreDevice.h>
 #include "KIvioDocIface.h"
@@ -170,56 +169,6 @@ QPtrList<KivioDoc>& KivioDoc::documents()
   }
 
   return *s_docs;
-}
-
-bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
-{
-  KivioPage *t = createPage();
-  m_pMap->addPage( t );
-  m_docOpened = false; // Used to for a hack that make kivio not crash if you cancel startup dialog.
-
-  if(flags == KoDocument::InitDocEmpty) {
-    setEmpty();
-    m_docOpened = true; // Used to for a hack that make kivio not crash if you cancel startup dialog.
-    return true;
-  }
-
-  QString f;
-  KoTemplateChooseDia::ReturnType ret;
-  KoTemplateChooseDia::DialogType dlgtype;
-
-  if(flags != KoDocument::InitDocFileNew) {
-    dlgtype = KoTemplateChooseDia::Everything;
-    initConfig();
-  } else {
-    dlgtype = KoTemplateChooseDia::OnlyTemplates;
-  }
-
-  ret = KoTemplateChooseDia::choose( KivioFactory::global(), f,
-                                     dlgtype, "kivio_template", parentWidget );
-
-  if( ret == KoTemplateChooseDia::File ) {
-    KUrl url(f);
-    bool ok = openURL(url);
-    m_docOpened = ok; // Used to for a hack that make kivio not crash if you cancel startup dialog.
-    return ok;
-  } else if ( ret == KoTemplateChooseDia::Template ) {
-    QFileInfo fileInfo( f );
-    QString fileName( fileInfo.dirPath(true) + '/' + fileInfo.baseName() + ".kft" );
-    resetURL();
-    bool ok = loadNativeFormat( fileName );
-    if ( !ok )
-        showLoadingErrorDialog();
-    setEmpty();
-    m_docOpened = ok; // Used to for a hack that make kivio not crash if you cancel startup dialog.
-    return ok;
-  } else if ( ret == KoTemplateChooseDia::Empty ) {
-    setEmpty();
-    m_docOpened = true; // Used to for a hack that make kivio not crash if you cancel startup dialog.
-    return true;
-  } else {
-    return false;
-  }
 }
 
 void KivioDoc::openExistingFile( const QString& file )
