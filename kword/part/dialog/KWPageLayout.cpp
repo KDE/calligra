@@ -18,6 +18,8 @@
  */
 #include "KWPageLayout.h"
 
+#include <KDebug>
+
 KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
     : QWidget(parent),
     m_pageLayout(layout),
@@ -43,6 +45,7 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
 
     widget.units->addItems( KoUnit::listOfUnitName() );
     widget.sizes->addItems(KoPageFormat::allFormats());
+    forSinglePage(false);
 
     connect(widget.sizes, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)));
     connect(widget.units, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)));
@@ -182,11 +185,28 @@ void KWPageLayout::forSinglePage(bool single) {
     if(single) {
         widget.facingPageLabel->setText(i18n("Page Layout:"));
         widget.facingPages->setText(i18n("Page spread"));
+        widget.wholeDocument->setCheckState(Qt::Unchecked);
     }
     else {
         widget.facingPageLabel->setText(i18n("Facing Pages:"));
         widget.facingPages->setText(i18n("Facing pages"));
+        widget.wholeDocument->setCheckState(Qt::Checked);
     }
+    widget.wholeDocument->setVisible(single);
+    widget.wholeDocumentLabel->setVisible(single);
 }
+
+void KWPageLayout::setStartPageNumber(int pageNumber) {
+    widget.firstPage->setValue(pageNumber);
+}
+
+int KWPageLayout::startPageNumber() const {
+    return widget.firstPage->value();
+}
+
+bool KWPageLayout::marginsForDocument() const {
+    return widget.wholeDocument->checkState() == Qt::Checked;
+}
+
 
 #include <KWPageLayout.moc>

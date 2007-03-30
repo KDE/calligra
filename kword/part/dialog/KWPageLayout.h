@@ -35,6 +35,10 @@ public:
     void setUnit(const KoUnit &unit);
     void showUnitchooser(bool on);
     void forSinglePage(bool single);
+    void setStartPageNumber(int pageNumber);
+
+    int startPageNumber() const;
+    bool marginsForDocument() const;
 
 signals:
     void layoutChanged(const KoPageLayout &layout);

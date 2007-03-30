@@ -90,6 +90,7 @@ void KWStartupWidget::buttonClicked() {
     settings.setMainTextFrame(widget.mainText->isChecked());
     m_doc->setPageSettings(settings);
     m_doc->setUnit(m_unit);
+    m_doc->setStartPage(m_sizeWidget->startPageNumber());
 
     m_doc->appendPage();
     emit documentSelected();

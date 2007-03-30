@@ -26,7 +26,9 @@
 #include <KDialog>
 
 class KWDocument;
+class KWPageLayout;
 
+/// A dialog to show the settings for one page and apply them afterwards.
 class KWPageSettingsDialog : public KDialog {
     Q_OBJECT
 public:
@@ -43,6 +45,7 @@ private:
     KWDocument *m_document;
     KWPage *m_page;
     KoPageLayout m_layout;
+    KWPageLayout *m_pageLayoutWidget;
 };
 
 #endif
