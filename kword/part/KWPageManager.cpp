@@ -97,15 +97,26 @@ int KWPageManager::lastPageNumber() const {
     return pageCount() + m_firstPage - 1;
 }
 
-KWPage* KWPageManager::insertPage(int index) {
+KWPage* KWPageManager::insertPage(int pageNumber) {
     if(m_onlyAllowAppend)
         return appendPage();
-    // increase the pagenumbers of pages following the index
+    // increase the pagenumbers of pages following the pageNumber
     foreach(KWPage *page, m_pageList) {
-        if(page->pageNumber() >= index)
+        if(page->pageNumber() >= pageNumber)
             page->m_pageNum++;
     }
-    KWPage *page = new KWPage(this, qMin( qMax(index, m_firstPage), lastPageNumber()+1 ));
+    KWPage *page = new KWPage(this, qMin( qMax(pageNumber, m_firstPage), lastPageNumber()+1 ));
+    m_pageList.append(page);
+    qSort(m_pageList.begin(), m_pageList.end(), compareItems);
+    return page;
+}
+
+KWPage* KWPageManager::insertPage(KWPage *page) {
+    const int increase = page->pageSide() == KWPage::PageSpread ? 2 : 1;
+    foreach(KWPage *page, m_pageList) { // increase the pagenumbers of pages following the pageNumber
+        if(page->pageNumber() >= page->pageNumber())
+            page->m_pageNum += increase;
+    }
     m_pageList.append(page);
     qSort(m_pageList.begin(), m_pageList.end(), compareItems);
     return page;

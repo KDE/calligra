@@ -101,6 +101,12 @@ public:
      * @param pageNumber page number of the new page
      */
     KWPage* insertPage(int pageNumber);
+    /**
+     * Insert the page instance at the specified position in the document. Note that it is preferred
+     * to use the insertPage(int) method which creates a new page.
+     * @param page the page that will be inserted.
+     */
+    KWPage* insertPage(KWPage *page);
     /// Append a new page at the end of the document
     KWPage* appendPage();
 

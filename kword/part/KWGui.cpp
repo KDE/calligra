@@ -74,8 +74,7 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
 
     connect(m_view->kwdocument(), SIGNAL(unitChanged(KoUnit)), m_horizontalRuler, SLOT(setUnit(KoUnit)));
     connect(m_view->kwdocument(), SIGNAL(unitChanged(KoUnit)), m_verticalRuler, SLOT(setUnit(KoUnit)));
-    connect(m_view->kwdocument(), SIGNAL(pageAdded(KWPage*)), this, SLOT(pageSetupChanged()));
-    connect(m_view->kwdocument(), SIGNAL(pageRemoved(KWPage*)), this, SLOT(pageSetupChanged()));
+    connect(m_view->kwdocument(), SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
 
     connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)), m_horizontalRuler, SLOT(setOffset(int)));
     connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)), m_verticalRuler, SLOT(setOffset(int)));

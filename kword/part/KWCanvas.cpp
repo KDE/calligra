@@ -52,9 +52,7 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
     m_viewMode = KWViewMode::create(viewMode, this);
     setFocusPolicy(Qt::StrongFocus);
 
-    connect(document, SIGNAL(pageAdded(KWPage*)), this, SLOT(pageSetupChanged()));
-    connect(document, SIGNAL(pageRemoved(KWPage*)), this, SLOT(pageSetupChanged()));
-    connect(document, SIGNAL(pageChanged(KWPage*)), this, SLOT(pageSetupChanged()));
+    connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
 
     m_toolProxy = new KoToolProxy(this, this);
     setAttribute(Qt::WA_OpaquePaintEvent, true);

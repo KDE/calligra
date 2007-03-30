@@ -220,16 +220,11 @@ public slots:
     /// Register new frameset
     void addFrameSet( KWFrameSet *f );
 
-    void markPageChanged(KWPage* page);
-
+    void firePageSetupChanged();
 
 signals:
     /// signal emitted when a page has been added
-    void pageAdded(KWPage *page);
-    /// signal emitted when a page has been removed
-    void pageRemoved(KWPage *page);
-    /// signal emitted when a page has been changed
-    void pageChanged(KWPage *page);
+    void pageSetupChanged();
 
     /// signal emitted when a frameSet has been added
     void frameSetAdded(KWFrameSet*);
@@ -249,6 +244,8 @@ private:
     friend class KWDLoader;
     friend class KWOpenDocumentLoader;
     friend class KWStartupWidget;
+    friend class KWPagePropertiesCommand;
+    friend class KWPageInsertCommand;
     QString renameFrameSet( const QString& prefix , const QString& base );
     /// post process loading after either oasis or oldxml loading finished
     void endOfLoading();

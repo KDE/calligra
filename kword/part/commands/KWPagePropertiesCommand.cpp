@@ -22,57 +22,76 @@
 #include "KWPage.h"
 #include "frame/KWFrame.h"
 #include "frame/KWTextFrameSet.h"
+#include "frame/KWFrameLayout.h"
+#include "commands/KWPageInsertCommand.h"
 
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeMoveCommand.h>
 
+#include <KLocale>
+
 KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *page, const KoPageLayout &newLayout, QUndoCommand *parent)
-    : QUndoCommand(parent),
+    : QUndoCommand(i18n("Page Properties"), parent),
     m_document(document),
     m_page(page),
     m_oldLayout( page->pageLayout() ),
     m_newLayout(newLayout)
 {
-    if(page->pageNumber() % 2 == 1 && newLayout.left < 0) {
-        //kDebug() << "  have to insert an empty page.\n";
-    }
-
     // move
     QList<KoShape *> shapes;
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
 
     QRectF rect = page->rect();
+    QRectF newRect(0, rect.top(), m_newLayout.width * (m_newLayout.left < 0 ? 2:1), m_newLayout.height);
     const double bottom = rect.bottom();
+    const double sizeDifference = m_newLayout.height - m_oldLayout.height;
     foreach(KWFrameSet *fs, document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
         bool remove = tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet;
         foreach(KWFrame *frame, fs->frames()) {
             KoShape *shape = frame->shape();
             if(remove && shape->boundingRect().intersects(page->rect())) {
-                new KoShapeDeleteCommand(document, shape, this);
+                if(m_oldLayout.left < 0 && m_newLayout.left >= 0 &&
+                        shape->position().x() >= rect.center().x()) // before it was a pageSpread.
+                    new KoShapeDeleteCommand(document, shape, this);
             }
-            else if(shape->position().y() > bottom) { // frame should be moved down
+            else if(shape->position().y() > bottom) { // shape should be moved down
                 shapes.append(shape);
                 previousPositions.append(shape->position());
-                newPositions.append(shape->position() + QPointF(0, rect.height()) );
+                newPositions.append(shape->position() + QPointF(0, sizeDifference) );
             }
-            else if(shape->position().y() > rect.top()) { // Let see if the frame needs to be moved to fit in the page
-                // TODO
+            else if(shape->position().y() > rect.top()) { // Let see if the shape needs to be moved to fit in the page
+                QRectF br = shape->boundingRect();
+                if(! newRect.contains(br)) {
+                    shapes.append(shape);
+                    previousPositions.append(shape->position());
+                    QPointF newPos = shape->position() - rect.bottomRight() + newRect.bottomRight();
+                    newPositions.append(QPointF(qMax(0.0, newPos.x()) , qMax(newRect.y(), newPos.y())));
+                }
             }
         }
     }
-    new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
+    if(shapes.count() > 0)
+        new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
+
+    if(page->pageNumber() % 2 == 1 && newLayout.left < 0)
+        new KWPageInsertCommand(m_document, page->pageNumber()-1, this);
 }
 
 void KWPagePropertiesCommand::redo() {
+    QUndoCommand::redo();
     setLayout(m_newLayout);
-    m_document->markPageChanged(m_page);
+    m_document->firePageSetupChanged();
+    m_document->m_frameLayout.layoutFramesOnPage(m_page->pageNumber());
 }
 
 void KWPagePropertiesCommand::undo() {
+    QUndoCommand::undo();
+    setLayout(m_newLayout);
     setLayout(m_oldLayout);
-    m_document->markPageChanged(m_page);
+    m_document->firePageSetupChanged();
+    m_document->m_frameLayout.layoutFramesOnPage(m_page->pageNumber());
 }
 
 void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout) {
@@ -86,5 +105,8 @@ void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout) {
     m_page->setLeftMargin(layout.left);
     m_page->setRightMargin(layout.right);
 
-    // if pagespread; set side
+    if(pageSpread)
+        m_page->setPageSide(KWPage::PageSpread);
+    else
+        m_page->setPageSide( m_page->pageNumber()%2==0 ? KWPage::Left : KWPage::Right);
 }

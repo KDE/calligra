@@ -43,6 +43,7 @@ set(kwordprivate_LIB_SRCS
     dialog/KWPageSettingsDialog.cpp
 
     commands/KWPagePropertiesCommand.cpp
+    commands/KWPageInsertCommand.cpp
 )
 
 kde4_add_ui_files(kwordprivate_LIB_SRCS

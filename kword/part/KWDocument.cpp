@@ -34,6 +34,7 @@
 #include "frame/KWTextDocumentLayout.h"
 #include "dialog/KWFrameDialog.h"
 #include "dialog/KWStartupWidget.h"
+#include "commands/KWPageInsertCommand.h"
 
 // koffice libs includes
 #include <KoShapeManager.h>
@@ -142,32 +143,15 @@ KoView* KWDocument::createViewInstance(QWidget* parent) {
     return view;
 }
 
-KWPage* KWDocument::insertPage( int afterPageNum ) {
-    KWPage *page = m_pageManager.insertPage(afterPageNum+1);
-    PageProcessingQueue *ppq = new PageProcessingQueue(this);
-    ppq->addPage(page);
-    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
-
-    QRectF rect = page->rect();
-    foreach(KWFrameSet *fs, frameSets()) {
-        foreach(KWFrame *frame, fs->frames()) {
-            if(frame->shape()->position().y() > rect.top()) // frame should be moved down
-                frame->shape()->setPosition( frame->shape()->position() + QPointF(0, rect.height()) );
-        }
-    }
-
-    return page;
+KWPage* KWDocument::insertPage( int afterPageNum) {
+    KWPageInsertCommand *cmd = new KWPageInsertCommand(this, afterPageNum);
+    addCommand(cmd);
+    Q_ASSERT(cmd->page());
+    return cmd->page();
 }
 
 KWPage* KWDocument::appendPage() {
-    KWPage *page = insertPage( m_pageManager.lastPageNumber() );
-    if(page->pageNumber() % 2 == 0) { // even page.
-        if(m_pageManager.defaultPage()->left < 0) { // is a pageSpread
-            page->setPageSide(KWPage::PageSpread);
-            m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
-        }
-    }
-    return page;
+    return insertPage(m_pageManager.lastPageNumber());
 }
 
 void KWDocument::removePage(int pageNumber) {
@@ -177,9 +161,14 @@ void KWDocument::removePage(int pageNumber) {
         kWarning() << "remove page requested for a non exiting page!\n";
         return;
     }
-    emit pageRemoved(page);
+    emit pageSetupChanged();
     m_pageManager.removePage(page);
     m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
+}
+
+void KWDocument::firePageSetupChanged() {
+    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
+    emit pageSetupChanged();
 }
 
 void KWDocument::setStartPage(int pagenumber) {
@@ -246,11 +235,6 @@ int KWDocument::startPage() const {
 
 int KWDocument::lastPage() const {
     return pageManager()->lastPageNumber();
-}
-
-void KWDocument::markPageChanged(KWPage *page) {
-    m_frameLayout.layoutFramesOnPage(page->pageNumber());
-    emit pageChanged(page);
 }
 
 void KWDocument::addFrame(KWFrame *frame) {
@@ -392,9 +376,11 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     }
     KWPage *last = pageManager()->page(lastPage());
     double docHeight = last?(last->offsetInDocument() + last->height()):0.0;
+    PageProcessingQueue *ppq = new PageProcessingQueue(this);
     while(docHeight <= maxBottom) {
         kDebug(32001) << "KWDocument::endOfLoading appends a page\n";
-        last = appendPage();
+        last = m_pageManager.insertPage(m_pageManager.lastPageNumber());
+        ppq->addPage(last);
         docHeight += last->height();
     }
 
@@ -493,6 +479,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     // Note that more stuff will happen in completeLoading
 
+    firePageSetupChanged();
     setModified(false);
 }
 
@@ -605,7 +592,7 @@ void PageProcessingQueue::addPage(KWPage *page) {
 
 void PageProcessingQueue::process() {
     foreach(KWPage *page, m_pages) {
-        emit m_document->pageAdded(page);
+        emit m_document->pageSetupChanged();
         m_document->m_frameLayout.createNewFramesForPage(page->pageNumber());
     }
     m_pages.clear();

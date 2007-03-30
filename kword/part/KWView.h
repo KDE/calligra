@@ -98,7 +98,6 @@ private:
     /// Update the menu to have the choices the current viewmode provide.
     void changeZoomMenu();
     void updateZoomControls();
-    KWPage *currentPage();
 
 private slots:
     void viewZoom( KoZoomMode::Mode mode, int zoom );

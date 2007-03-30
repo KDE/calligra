@@ -1083,9 +1083,10 @@ void KWView::formatPage() {
 
 void KWView::selectionChanged()
 {
-  bool shapeSelected = kwcanvas()->shapeManager()->selection()->count() > 0;
-
-  m_actionFormatFrameSet->setEnabled( shapeSelected );
+    KoShape *shape = kwcanvas()->shapeManager()->selection()-> firstSelectedShape();
+    m_actionFormatFrameSet->setEnabled( shape != 0 );
+    if(shape)
+        m_currentPage = m_document->pageManager()->page(shape);
 }
 
 #include "KWView.moc"

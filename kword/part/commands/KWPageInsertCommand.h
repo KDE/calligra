@@ -17,32 +17,37 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWPAGEPROPERTIESCOMMAND_H
-#define KWPAGEPROPERTIESCOMMAND_H
-
-#include <KoPageLayout.h>
+#ifndef KWPAGEINSERTCOMMAND_H
+#define KWPAGEINSERTCOMMAND_H
 
 #include <QUndoCommand>
 
-class KWDocument;
 class KWPage;
+class KWPageManager;
+class KWDocument;
+class KoShapeMoveCommand;
 
-/// The undo / redo command for changing the properties of a KWPage
-class KWPagePropertiesCommand : public QUndoCommand
+/// The undo / redo command for inserting a new page in a kword document.
+class KWPageInsertCommand : public QUndoCommand
 {
 public:
-    explicit KWPagePropertiesCommand( KWDocument *document, KWPage *page, const KoPageLayout &newLayout, QUndoCommand *parent = 0 );
+    explicit KWPageInsertCommand( KWDocument *document, int afterPageNum, QUndoCommand *parent = 0 );
+    ~KWPageInsertCommand();
 
     /// redo the command
     void redo();
     /// revert the actions done in redo
     void undo();
-private:
-    void setLayout(const KoPageLayout &layout);
 
+    /// return the page created.  Note that the result is 0 before the first redo()
+    KWPage *page() const { return m_page; }
+
+private:
     KWDocument *m_document;
     KWPage *m_page;
-    KoPageLayout m_oldLayout, m_newLayout;
+    bool m_deletePage;
+    int m_afterPageNum;
+    KoShapeMoveCommand *m_shapeMoveCommand;
 };
 
 #endif
