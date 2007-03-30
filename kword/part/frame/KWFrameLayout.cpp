@@ -97,7 +97,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
             void create(KWPage *page, KWTextFrameSet *fs) {
                 KWFrame* frame;
                 if(fs->textFrameSetType() == KWord::MainTextFrameSet)
-                    frame = new KWFrame(m_parent->createTextShape(page), fs);
+                    frame = new KWTextFrame(m_parent->createTextShape(page), fs);
                 else
                     frame = m_parent->createCopyFrame(fs, page);
                 KoShape *shape = frame->shape();
