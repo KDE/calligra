@@ -20,6 +20,7 @@
 
 KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
     : QWidget(parent),
+    m_pageLayout(layout),
     m_marginsEnabled(true)
 {
     widget.setupUi(this);

@@ -30,6 +30,7 @@ KWPagePreview::KWPagePreview(QWidget *parent)
 :QWidget(parent)
 {
     m_columns.columns = 1;
+    m_columns.columnSpacing = 0;
     m_pageLayout = KoPageLayout::standardLayout();
     setMinimumSize( 100, 100 );
 }
