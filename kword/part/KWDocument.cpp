@@ -492,6 +492,8 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
     KWFrame *lastFrame = fs->frames()[ fs->frameCount()-1 ];
     KWPage *page = m_pageManager.page(lastFrame->shape());
     int pageDiff =  m_pageManager.lastPageNumber() - page->pageNumber();
+    if(page->pageSide() == KWPage::PageSpread)
+        pageDiff--;
     if(pageDiff >= (lastFrame->frameOnBothSheets() ? 1 : 2)) {
         // its enough to just create a new frame.
         m_frameLayout.createNewFrameForPage(fs, page->pageNumber() +
