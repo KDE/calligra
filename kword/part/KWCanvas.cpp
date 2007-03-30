@@ -215,8 +215,8 @@ bool KWCanvas::event (QEvent *event) {
 #endif
 void KWCanvas::paintEvent(QPaintEvent * ev) {
     QPainter painter( this );
-    painter.translate(-m_documentOffset);
     painter.eraseRect(ev->rect());
+    painter.translate(-m_documentOffset);
 
     if(m_viewMode->hasPages()) {
         QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(ev->rect().translated(m_documentOffset));
