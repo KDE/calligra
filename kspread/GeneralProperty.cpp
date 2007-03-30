@@ -102,9 +102,9 @@ int GeneralProperty::getGeneralPropertyChange() const
             if ( m_generalValue.m_rect.top() != rect.top() )
                 flags |= Top;
             // this has to be done as the rect cahnges width/hight if left or top is changed
-            if ( QABS( m_generalValue.m_rect.width() - rect.width() ) > 1e-6 )
+            if ( qAbs( m_generalValue.m_rect.width() - rect.width() ) > 1e-6 )
                 flags |= Width;
-            if ( QABS( m_generalValue.m_rect.height() - rect.height() ) > 1e-6 )
+            if ( qAbs( m_generalValue.m_rect.height() - rect.height() ) > 1e-6 )
                 flags |= Height;
         }
     }

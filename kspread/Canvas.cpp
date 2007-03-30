@@ -148,7 +148,6 @@ Canvas::Canvas(View *view)
   d->view = view;
   // m_eAction = DefaultAction;
   d->mouseAction = NoAction;
-  d->rubberBandStarted = false;
   // m_bEditDirtyFlag = false;
 
   //Now built afterwards(David)
@@ -3330,6 +3329,7 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
   d->editWidget->setEditMode( false );
 
   QString t = d->cellEditor->text();
+  d->cellEditor->hide();
   // Delete the cell editor first and after that update the document.
   // That means we get a synchronous repaint after the cell editor
   // widget is gone. Otherwise we may get painting errors.
@@ -3343,7 +3343,7 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
           //a formula
           int openParenthese = t.count( '(' );
           int closeParenthese = t.count( ')' );
-          int diff = QABS( openParenthese - closeParenthese );
+          int diff = qAbs( openParenthese - closeParenthese );
           if ( openParenthese > closeParenthese )
           {
               for (int i=0; i < diff;i++)

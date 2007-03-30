@@ -102,6 +102,7 @@
 
 // KSpread includes
 #include "CellStorage.h"
+#include "CellView.h"
 #include "Damages.h"
 #include "DependencyManager.h"
 #include "Digest.h"

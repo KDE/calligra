@@ -88,21 +88,12 @@ public:
     QPoint dragStart;
     bool dragging;
 
-    // Used to indicate whether the user started drawing a rubber band rectangle
-    bool rubberBandStarted;
-    QPoint rubberBandStart;
-    QPoint rubberBandEnd;
-
     // If the mouse is over some anchor ( in the sense of HTML anchors )
     QString anchor;
 
     bool mouseSelectedObject;
     bool drawContour;
     ModifyType modType;
-    /**
-     * Saves the last mouse position during mouse move events.
-     */
-    QPoint m_savedMousePos;
 
     //---- stuff needed for resizing ----
     /// object which gets resized

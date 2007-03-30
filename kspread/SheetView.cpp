@@ -22,12 +22,13 @@
 #include <QRect>
 
 #include "Canvas.h"
+#include "CellView.h"
 #include "Region.h"
+#include "RectStorage.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 
 #include "SheetView.h"
-#include "RectStorage.h"
 
 using namespace KSpread;
 
@@ -68,7 +69,7 @@ QPaintDevice* SheetView::paintDevice() const
     return d->paintDevice;
 }
 
-CellView SheetView::cellView( int col, int row )
+const CellView& SheetView::cellView( int col, int row )
 {
     Q_ASSERT( 1 <= col && col <= KS_colMax );
     Q_ASSERT( 1 <= row && col <= KS_rowMax );

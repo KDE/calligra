@@ -20,8 +20,6 @@
 #ifndef KSPREAD_SHEET_VIEW
 #define KSPREAD_SHEET_VIEW
 
-#include "CellView.h"
-
 class QPaintDevice;
 class QPainter;
 class QPointF;
@@ -30,6 +28,7 @@ class QRectF;
 
 namespace KSpread
 {
+class CellView;
 class Region;
 class Sheet;
 
@@ -68,7 +67,7 @@ public:
      *
      * \return the CellView for the position
      */
-    CellView cellView( int col, int row );
+    const CellView& cellView( int col, int row );
 
     /**
      * Set the cell range, that should be painted to \p rect .
