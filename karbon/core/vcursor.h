@@ -68,7 +68,7 @@ public:
 
 private:
 	// prevent instantiation
-	VCursor() {};
+	VCursor() {}
 };
 
 #endif

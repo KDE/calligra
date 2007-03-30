@@ -39,9 +39,9 @@ class VColorStop
 {
 	public:
 		VColorStop( double r, double m, VColor c )
-			{ rampPoint = r; midPoint = m; color = c; };
+			{ rampPoint = r; midPoint = m; color = c; }
 		VColorStop( const VColorStop& colorStop )
-			{ rampPoint = colorStop.rampPoint; midPoint = colorStop.midPoint; color = colorStop.color; };
+			{ rampPoint = colorStop.rampPoint; midPoint = colorStop.midPoint; color = colorStop.color; }
 
 		VColor color;
 
@@ -53,7 +53,7 @@ class VColorStop
 		float midPoint;
 
 		friend inline bool operator== ( VColorStop& s1, VColorStop& s2 )
-				{ return s1.rampPoint == s2.rampPoint; };
+				{ return s1.rampPoint == s2.rampPoint; }
 }; // VColorStop
 
 class KARBONBASE_EXPORT VGradient

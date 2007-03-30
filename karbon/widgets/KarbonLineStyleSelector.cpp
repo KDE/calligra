@@ -32,7 +32,7 @@ class KarbonLineStyleModel : public QAbstractListModel
 {
 public:
     KarbonLineStyleModel( QObject * parent = 0 );
-    virtual ~KarbonLineStyleModel() {};
+    virtual ~KarbonLineStyleModel() {}
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
@@ -52,7 +52,7 @@ class KarbonLineStyleItemDelegate : public QAbstractItemDelegate
 {
 public:
     KarbonLineStyleItemDelegate( QObject * parent = 0 );
-    ~KarbonLineStyleItemDelegate() {};
+    ~KarbonLineStyleItemDelegate() {}
     void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };

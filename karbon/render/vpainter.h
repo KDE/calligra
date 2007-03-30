@@ -43,8 +43,8 @@ class QPointF;
 class VPainter
 {
 public:
-	VPainter( QPaintDevice *, unsigned int /*w*/ = 0, unsigned int /*h*/ = 0 ) {};
-	virtual ~VPainter() {};
+	VPainter( QPaintDevice *, unsigned int /*w*/ = 0, unsigned int /*h*/ = 0 ) {}
+	virtual ~VPainter() {}
 
 	//
 	virtual void resize( unsigned int w, unsigned int h ) = 0;

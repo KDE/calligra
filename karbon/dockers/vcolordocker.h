@@ -54,7 +54,7 @@ public:
     VColorDocker();
     virtual ~VColorDocker();
 
-    virtual bool isStrokeDocker() { return m_isStrokeDocker; };
+    virtual bool isStrokeDocker() { return m_isStrokeDocker; }
     KoColor color() { return m_color; }
 
 public slots:
