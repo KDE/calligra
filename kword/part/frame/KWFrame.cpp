@@ -21,8 +21,6 @@
 #include "KWFrame.h"
 #include "KWFrameSet.h"
 
-#include <KDebug>
-
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
       // Initialize member vars here. This ensures they are all initialized, since it's
       // easier to compare this list with the member vars list (compiler ensures order).
@@ -44,7 +42,6 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
 }
 
 KWFrame::~KWFrame() {
-kDebug() << "~KWFrame()  " << kBacktrace();
     m_shape = 0; // no delete is needed as the shape deletes us.
     if(m_frameSet && m_frameSet->frameCount() == 1) { // just me
         m_frameSet->removeFrame(this); // so the FS won't delete us.

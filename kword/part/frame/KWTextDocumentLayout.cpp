@@ -231,7 +231,6 @@ void KWTextDocumentLayout::relayout() {
     if(! m_frameSet->allowLayout())
         return;
 
-/*
     const QList<KWFrame*> frames = m_frameSet->frames();
     QList<KWFrame*> dirtyFrames = frames;
     bool foundADirtyOne = false;
@@ -259,7 +258,6 @@ void KWTextDocumentLayout::relayout() {
             }
         }
     }
-*/
 
     layout();
 }
