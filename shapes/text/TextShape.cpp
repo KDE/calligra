@@ -54,7 +54,7 @@ TextShape::TextShape()
     lay->setInlineObjectTextManager(new KoInlineTextObjectManager(lay));
     setCollisionDetection(true);
 
-    lay->connect(m_textShapeData, SIGNAL(relayout()), SLOT(relayout()));
+    lay->connect(m_textShapeData, SIGNAL(relayout()), SLOT(scheduleLayout()));
 }
 
 TextShape::~TextShape() {

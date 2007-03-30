@@ -64,6 +64,7 @@ public:
      *  schedule a layout.
      */
     void setAllowLayout(bool allow);
+    bool allowLayout() const;
     /**
      * Set the page manager used by this frameset.
      * If we can't get rid of the dependency on KWDocument, we should remove this variable.
@@ -107,17 +108,7 @@ protected:
     void scheduleLayout();
 
 private slots:
-    /**
-     * calling this will do a layout run.  This slot is only called from requestLayout()
-     * @see KWTextDocumentLayout::layout()
-     */
-    void relayout();
-    /**
-     * Call this slot in order to schedule a new layout run.
-     * @param if reset is false, then the current run will continue. If true, start from the start.
-     * Calling this multiple times will make sure the relayout() is only called ones.
-     */
-    void updateLayout(bool reset = true);
+    void updateTextLayout();
 
 private:
     QTextDocument *m_document;

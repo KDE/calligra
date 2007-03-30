@@ -45,8 +45,8 @@ public:
     /// reimplemented from KoTextDocumentLayout::shapes()
     QList<KoShape*> shapes() const;
 
-    /// reimplemented from KoTextDocumentLayout::scheduleLayout()
-    void scheduleLayout();
+    /// reimplemented from KoTextDocumentLayout::relayout()
+    virtual void relayout();
 
 private:
     KWTextFrameSet *m_frameSet;

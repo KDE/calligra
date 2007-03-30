@@ -227,8 +227,41 @@ QList<KoShape*> KWTextDocumentLayout::shapes() const {
     return answer;
 }
 
-void KWTextDocumentLayout::scheduleLayout() {
-    m_frameSet->scheduleLayout();
+void KWTextDocumentLayout::relayout() {
+    if(! m_frameSet->allowLayout())
+        return;
+
+/*
+    const QList<KWFrame*> frames = m_frameSet->frames();
+    QList<KWFrame*> dirtyFrames = frames;
+    bool foundADirtyOne = false;
+    KWFrame *firstDirtyFrame = 0;
+    foreach(KWFrame *frame, frames) {
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+        if(!firstDirtyFrame && data && data->isDirty())
+            firstDirtyFrame = frame;
+        if(! firstDirtyFrame)
+            dirtyFrames.removeAll(frame);
+    }
+
+    qSort(m_frameSet->m_frames.begin(), m_frameSet->m_frames.end(), KWTextFrameSet::sortTextFrames); // make sure the ordering is proper
+
+    if(foundADirtyOne) {
+        // if the dirty frame has been resorted to no longer be the first one, then we should
+        // mark dirty any frame that were previously later in the flow, but are now before it.
+        foreach(KWFrame *frame, frames) {
+            if(frame == firstDirtyFrame)
+                break;
+            if(dirtyFrames.contains(frame)) {
+                static_cast<KoTextShapeData*> (frame->shape()->userData())->faul();
+                // just the first is enough.
+                break;
+            }
+        }
+    }
+*/
+
+    layout();
 }
 
 void KWTextDocumentLayout::layout() {
@@ -367,7 +400,7 @@ void KWTextDocumentLayout::layout() {
         }
         if(m_state->interrupted() || newParagraph && m_state->y() > endPos) {
             // enough for now. Try again later.
-            m_frameSet->scheduleLayout();
+            scheduleLayout();
             return;
         }
         newParagraph = false;

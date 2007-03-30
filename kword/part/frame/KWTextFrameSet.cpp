@@ -94,6 +94,9 @@ KWTextFrameSet::~KWTextFrameSet() {
 }
 
 void KWTextFrameSet::setupFrame(KWFrame *frame) {
+KWTextFrame *tf = dynamic_cast<KWTextFrame*> (frame);
+if(tf) int i = tf->sortingId();
+
     if(m_textFrameSetType != KWord::OtherTextFrameSet)
         frame->shape()->setLocked(true);
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
@@ -114,59 +117,17 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
         data->setDocument(m_document, false);
         data->setEndPosition(-1);
         data->faul();
-        updateLayout();
+        updateTextLayout();
     }
-    connect (data, SIGNAL(relayout()), this, SLOT(updateLayout()));
+    connect (data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
 }
 
-void KWTextFrameSet::updateLayout(bool reset) {
+void KWTextFrameSet::updateTextLayout() {
     if(! m_allowLayoutRequests)
         return;
-    if(! m_layoutTriggered) {
-        QTimer::singleShot(0, this, SLOT(relayout()));
-        if( reset ) {
-            KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>( m_document->documentLayout() );
-            if(lay)
-                lay->interruptLayout();
-        }
-    }
-    m_layoutTriggered = true;
-}
-
-void KWTextFrameSet::scheduleLayout() {
-    updateLayout(false);
-}
-
-void KWTextFrameSet::relayout() {
-    m_layoutTriggered = false;
-    QList<KWFrame*> dirtyFrames = m_frames;
-    bool foundADirtyOne = false;
-    KWFrame *firstDirtyFrame = 0;
-    foreach(KWFrame *frame, m_frames) {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
-        if(!firstDirtyFrame && data && data->isDirty())
-            firstDirtyFrame = frame;
-        if(! firstDirtyFrame)
-            dirtyFrames.removeAll(frame);
-    }
-    qSort(m_frames.begin(), m_frames.end(), sortTextFrames); // make sure the ordering is proper
-    if(foundADirtyOne) {
-        // if the dirty frame has been resorted to no longer be the first one, then we should
-        // mark dirty any frame that were previously later in the flow, but are now before it.
-        foreach(KWFrame *frame, m_frames) {
-            if(frame == firstDirtyFrame)
-                break;
-            if(dirtyFrames.contains(frame)) {
-                static_cast<KoTextShapeData*> (frame->shape()->userData())->faul();
-                // just the first is enough.
-                break;
-            }
-        }
-    }
-
     KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>( m_document->documentLayout() );
     if(lay)
-        lay->layout();
+        lay->scheduleLayout();
 }
 
 void KWTextFrameSet::requestMoreFrames(double textHeight) {
@@ -210,8 +171,15 @@ void KWTextFrameSet::setAllowLayout(bool allow) {
     if(allow == m_allowLayoutRequests)
         return;
     m_allowLayoutRequests = allow;
-    if(m_allowLayoutRequests)
-        updateLayout(false);
+    if(m_allowLayoutRequests) {
+        KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>( m_document->documentLayout() );
+        if(lay)
+            lay->scheduleLayout();
+    }
+}
+
+bool KWTextFrameSet::allowLayout() const {
+    return m_allowLayoutRequests;
 }
 
 // static

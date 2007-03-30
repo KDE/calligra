@@ -24,8 +24,8 @@
 #include "frame/KWTextFrameSet.h"
 #include "frame/KWFrameLayout.h"
 #include "commands/KWPageInsertCommand.h"
+#include "commands/KWFrameDeleteCommand.h"
 
-#include <KoShapeDeleteCommand.h>
 #include <KoShapeMoveCommand.h>
 
 #include <KLocale>
@@ -52,9 +52,9 @@ KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *
         foreach(KWFrame *frame, fs->frames()) {
             KoShape *shape = frame->shape();
             if(remove && shape->boundingRect().intersects(page->rect())) {
-                if(m_oldLayout.left < 0 && m_newLayout.left >= 0 &&
-                        shape->position().x() >= rect.center().x()) // before it was a pageSpread.
-                    new KoShapeDeleteCommand(document, shape, this);
+               if(m_oldLayout.left < 0 && m_newLayout.left >= 0 &&
+                       shape->position().x() >= rect.center().x()) // before it was a pageSpread.
+                    new KWFrameDeleteCommand(document, frame, this);
             }
             else if(shape->position().y() > bottom) { // shape should be moved down
                 shapes.append(shape);
@@ -82,16 +82,16 @@ KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *
 void KWPagePropertiesCommand::redo() {
     QUndoCommand::redo();
     setLayout(m_newLayout);
+    m_document->m_frameLayout.createNewFramesForPage(m_page->pageNumber());
     m_document->firePageSetupChanged();
-    m_document->m_frameLayout.layoutFramesOnPage(m_page->pageNumber());
 }
 
 void KWPagePropertiesCommand::undo() {
     QUndoCommand::undo();
     setLayout(m_newLayout);
     setLayout(m_oldLayout);
+    m_document->m_frameLayout.createNewFramesForPage(m_page->pageNumber());
     m_document->firePageSetupChanged();
-    m_document->m_frameLayout.layoutFramesOnPage(m_page->pageNumber());
 }
 
 void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout) {
