@@ -97,9 +97,8 @@ QObject* Module::page(int pageNumber)
 
 QObject* Module::insertPage( int afterPageNum )
 {
-    //TODO check for kwDoc()->pageManager()->onlyAllowAppend()
     KWPage* page = kwDoc()->insertPage(afterPageNum);
-    return page ? new Page(this, page) : 0;
+    return new Page(this, page);
 }
 
 void Module::removePage( int pageNumber )
