@@ -591,6 +591,9 @@ public slots:
     void spellCheckerReplaceAll( const QString &,  const QString &);
     void startKSpell();
 
+    void notify( const QString& message );
+
+public:
     virtual int leftBorder() const;
     virtual int rightBorder() const;
     virtual int topBorder() const;

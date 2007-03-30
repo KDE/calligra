@@ -69,6 +69,7 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <knewpassworddialog.h>
+#include <kpassivepopup.h>
 #include <kpassworddialog.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
@@ -2010,6 +2011,8 @@ SheetView* View::sheetView( const Sheet* sheet ) const
     {
         kDebug(36004) << "View: Creating SheetView for " << sheet->sheetName() << endl;
         d->sheetViews.insert( sheet, new SheetView( sheet, canvasWidget() ) );
+        connect( sheet->cellStorage(), SIGNAL( inform( const QString& ) ),
+                 this, SLOT( notify( const QString& ) ) );
     }
     return d->sheetViews[ sheet ];
 }
@@ -2519,6 +2522,11 @@ void View::spellCheckerFinished()
     configDlg.openPage( PreferenceDialog::KS_SPELLING);
     configDlg.exec();
   }
+}
+
+void View::notify( const QString& message )
+{
+    KPassivePopup::message( message, vBorderWidget() );
 }
 
 void View::initialPosition()
