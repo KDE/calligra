@@ -111,6 +111,12 @@ void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KarbonPencilTool::keyPressEvent(QKeyEvent *event)
 {
+    if ( m_shape ) {
+        event->accept();
+    }
+    else {
+        event->ignore();
+    }
 }
 
 void KarbonPencilTool::activate( bool temporary )
