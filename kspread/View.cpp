@@ -130,13 +130,17 @@
 #include "ValueConverter.h"
 
 // commands
+#include "commands/CommentCommand.h"
+#include "commands/ConditionCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/EmbeddedObjectCommands.h"
 #include "commands/LinkCommand.h"
+#include "commands/MacroCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/SheetCommands.h"
 #include "commands/SortManipulator.h"
 #include "commands/StyleManipulators.h"
+#include "commands/ValidityCommand.h"
 
 // dialogs
 #include "dialogs/AngleDialog.h"
@@ -283,7 +287,7 @@ public:
       Sheet *  firstSpellSheet;
       Sheet *  currentSpellSheet;
       int      currentCellIndex;
-      MacroManipulator *macroCmdSpellCheck;
+      MacroCommand *macroCmdSpellCheck;
       unsigned int    spellCurrCellX;
       unsigned int    spellCurrCellY;
       unsigned int    spellStartCellX;
@@ -2439,7 +2443,7 @@ void View::spellCheckerCorrected( const QString & old, const QString & corr, uns
   // put all manipulators into one macro action, which will undo everything
   // at once
   if (!d->spell.macroCmdSpellCheck) {
-    MacroManipulator *mm = new MacroManipulator;
+    MacroCommand *mm = new MacroCommand;
     mm->setName (i18n("Correct Misspelled Word"));
     mm->setSheet (d->activeSheet);
     mm->setRegisterUndo (false);
@@ -5147,7 +5151,7 @@ void View::addModifyComment()
 
 void View::setSelectionComment( const QString& comment )
 {
-    CommentManipulator* manipulator = new CommentManipulator();
+    CommentCommand* manipulator = new CommentCommand();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n( "Add Comment" ) );
     manipulator->setComment( comment.trimmed() );
@@ -5909,7 +5913,7 @@ void View::clearCommentSelection()
     if ( d->activeSheet->areaIsEmpty( *selection(), Sheet::Comment ) )
         return;
 
-    CommentManipulator* manipulator = new CommentManipulator();
+    CommentCommand* manipulator = new CommentCommand();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n( "Remove Comment" ) );
     manipulator->setComment( QString() );
@@ -5923,7 +5927,7 @@ void View::clearValiditySelection()
   if ( d->activeSheet->areaIsEmpty( *selection(), Sheet::Validity ) )
     return;
 
-  ValidityManipulator* manipulator = new ValidityManipulator();
+  ValidityCommand* manipulator = new ValidityCommand();
   manipulator->setSheet( d->activeSheet );
   manipulator->setValidity( Validity() ); // empty object removes validity
   manipulator->add( *selection() );
@@ -5936,7 +5940,7 @@ void View::clearConditionalSelection()
   if ( d->activeSheet->areaIsEmpty( *selection(), Sheet::ConditionalCellAttribute ) )
     return;
 
-  ConditionalManipulator* manipulator = new ConditionalManipulator();
+  CondtionCommand* manipulator = new CondtionCommand();
   manipulator->setSheet( d->activeSheet );
   manipulator->setConditionList( QLinkedList<Conditional>() );
   manipulator->add( *selection() );

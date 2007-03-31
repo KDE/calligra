@@ -192,7 +192,7 @@ bool HideShowManipulator::preProcessing()
     add(region);
   }
 
-  return Manipulator::preProcessing(); // for protection check
+  return AbstractRegionCommand::preProcessing(); // for protection check
 }
 
 bool HideShowManipulator::postProcessing()
@@ -240,7 +240,7 @@ QString HideShowManipulator::name() const
 ****************************************************************************/
 
 AdjustColumnRowManipulator::AdjustColumnRowManipulator()
-  : Manipulator(),
+  : AbstractRegionCommand(),
     m_adjustColumn(false),
     m_adjustRow(false)
 {
@@ -364,7 +364,7 @@ bool AdjustColumnRowManipulator::preProcessing()
   {
     if (!m_newHeights.isEmpty() || !m_newWidths.isEmpty())
     {
-      return Manipulator::preProcessing(); // for protection check
+      return AbstractRegionCommand::preProcessing(); // for protection check
     }
 //     createUndo();
 
@@ -491,7 +491,7 @@ bool AdjustColumnRowManipulator::preProcessing()
       }
     }
   }
-  return Manipulator::preProcessing();
+  return AbstractRegionCommand::preProcessing();
 }
 
 class DummyWidget : public QWidget
@@ -623,7 +623,7 @@ QString AdjustColumnRowManipulator::name() const
 ****************************************************************************/
 
 InsertDeleteColumnManipulator::InsertDeleteColumnManipulator()
-    : Manipulator()
+    : AbstractRegionCommand()
     , m_mode( Insert )
 {
 }
@@ -687,7 +687,7 @@ QString InsertDeleteColumnManipulator::name() const
 ****************************************************************************/
 
 InsertDeleteRowManipulator::InsertDeleteRowManipulator()
-    : Manipulator()
+    : AbstractRegionCommand()
     , m_mode( Insert )
 {
 }

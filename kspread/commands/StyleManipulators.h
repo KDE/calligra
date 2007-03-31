@@ -20,7 +20,9 @@
 #ifndef KSPREAD_STYLE_MANIPULATOR
 #define KSPREAD_STYLE_MANIPULATOR
 
-#include "Manipulator.h"
+#include <klocale.h>
+
+#include "AbstractRegionCommand.h"
 
 namespace KSpread
 {
@@ -31,7 +33,7 @@ class Style;
  * \class StyleManipulator
  * \brief Manipulates the style of a cell region.
  */
-class StyleManipulator : public Manipulator
+class StyleManipulator : public AbstractRegionCommand
 {
 public:
     StyleManipulator();
@@ -101,7 +103,7 @@ private:
 
 
 
-class BorderColorManipulator : public Manipulator
+class BorderColorManipulator : public AbstractRegionCommand
 {
 public:
     BorderColorManipulator();
@@ -120,7 +122,7 @@ private:
 
 
 
-class IncreaseIndentManipulator : public Manipulator
+class IncreaseIndentManipulator : public AbstractRegionCommand
 {
 public:
     IncreaseIndentManipulator();
@@ -133,7 +135,7 @@ protected:
 
 
 
-class IncreasePrecisionManipulator : public Manipulator
+class IncreasePrecisionManipulator : public AbstractRegionCommand
 {
 public:
     IncreasePrecisionManipulator();

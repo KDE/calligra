@@ -131,7 +131,7 @@ bool StyleManipulator::mainProcessing()
             m_sheet->styleStorage()->insert( m_undoData[i].first.toRect(), m_undoData[i].second );
         }
     }
-    return Manipulator::mainProcessing();
+    return AbstractRegionCommand::mainProcessing();
 }
 
 bool StyleManipulator::postProcessing()
@@ -154,7 +154,7 @@ QString StyleManipulator::name() const
 ****************************************************************************/
 
 IncreaseIndentManipulator::IncreaseIndentManipulator()
-  : Manipulator()
+  : AbstractRegionCommand()
 {
 }
 
@@ -224,7 +224,7 @@ QString IncreaseIndentManipulator::name() const
 ****************************************************************************/
 
 BorderColorManipulator::BorderColorManipulator()
-  : Manipulator()
+  : AbstractRegionCommand()
 {
 }
 
@@ -251,7 +251,7 @@ bool BorderColorManipulator::preProcessing()
             m_undoData += undoData;
         }
     }
-    return Manipulator::preProcessing(); // for protection check
+    return AbstractRegionCommand::preProcessing(); // for protection check
 }
 
 bool BorderColorManipulator::mainProcessing()
@@ -329,7 +329,7 @@ bool BorderColorManipulator::postProcessing()
 ****************************************************************************/
 
 IncreasePrecisionManipulator::IncreasePrecisionManipulator()
-  : Manipulator()
+  : AbstractRegionCommand()
 {
 }
 

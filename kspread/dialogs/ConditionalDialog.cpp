@@ -34,7 +34,7 @@
 #include "View.h"
 
 // commands
-#include "commands/Manipulator.h"
+#include "commands/ConditionCommand.h"
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -665,7 +665,7 @@ void ConditionalDialog::slotOk()
     newList.append( newCondition );
 
   kDebug() << "Setting conditional list" << endl;
-  ConditionalManipulator* manipulator = new ConditionalManipulator();
+  CondtionCommand* manipulator = new CondtionCommand();
   manipulator->setSheet( m_view->activeSheet() );
   manipulator->setConditionList( newList );
   manipulator->add( *m_view->selection() );

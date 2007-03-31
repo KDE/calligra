@@ -45,7 +45,7 @@
 #include "View.h"
 
 // commands
-#include "commands/Manipulator.h"
+#include "commands/ValidityCommand.h"
 
 #include "ValidityDialog.h"
 
@@ -827,7 +827,7 @@ void DlgValidity::OkPressed()
   validity.setMessageInfo( messageHelp->toPlainText() );
   validity.setTitleInfo( titleHelp->text() );
 
-  ValidityManipulator* manipulator = new ValidityManipulator();
+  ValidityCommand* manipulator = new ValidityCommand();
   manipulator->setSheet( m_pView->activeSheet() );
   manipulator->setValidity( validity );
   manipulator->add( *m_pView->selection() );

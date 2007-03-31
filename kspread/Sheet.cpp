@@ -91,6 +91,7 @@
 // commands
 #include "commands/DataManipulators.h"
 #include "commands/EmbeddedObjectCommands.h"
+#include "commands/MergeCommand.h"
 #include "commands/RowColumnManipulators.h"
 
 
@@ -2273,7 +2274,7 @@ void Sheet::mergeCells(const Region& region, bool hor, bool ver)
   if( map()->isProtected() )
     return;
 
-  MergeManipulator* manipulator = new MergeManipulator();
+  MergeCommand* manipulator = new MergeCommand();
   manipulator->setSheet(this);
   manipulator->setHorizontalMerge(hor);
   manipulator->setVerticalMerge(ver);
@@ -2289,7 +2290,7 @@ void Sheet::dissociateCells(const Region& region)
   if( map()->isProtected() )
     return;
 
-  Manipulator* manipulator = new MergeManipulator();
+  MergeCommand* manipulator = new MergeCommand();
   manipulator->setSheet(this);
   manipulator->setReverse(true);
   manipulator->add(region);

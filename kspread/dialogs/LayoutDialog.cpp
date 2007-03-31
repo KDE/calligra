@@ -73,6 +73,7 @@
 #include "Selection.h"
 #include "ValueFormatter.h"
 
+#include "commands/MergeCommand.h"
 #include "commands/StyleManipulators.h"
 #include "commands/RowColumnManipulators.h"
 
@@ -887,7 +888,7 @@ void CellFormatDialog::slotApply()
   {
     if ( positionPage->getMergedCellState() )
     {
-      Manipulator* manipulator = new MergeManipulator();
+      MergeCommand* manipulator = new MergeCommand();
       manipulator->setSheet(m_pView->activeSheet());
       manipulator->add(*m_pView->selection());
       m_doc->addCommand( manipulator );
@@ -895,7 +896,7 @@ void CellFormatDialog::slotApply()
     else
     {
       //dissociate cells
-      Manipulator* manipulator = new MergeManipulator();
+      MergeCommand* manipulator = new MergeCommand();
       manipulator->setSheet(m_pView->activeSheet());
       manipulator->setReverse(true);
       manipulator->add(*m_pView->selection());

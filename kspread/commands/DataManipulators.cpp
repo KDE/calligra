@@ -92,7 +92,7 @@ bool AbstractDataManipulator::preProcessing()
     if ( !m_firstrun )
         return true;
     // protection check
-    if ( !Manipulator::preProcessing() )
+    if ( !AbstractRegionCommand::preProcessing() )
         return false;
     m_sheet->cellStorage()->startUndoRecording();
     return true;
@@ -401,7 +401,7 @@ bool CaseManipulator::wantChange (Element *element, int col, int row)
 
 
 ShiftManipulator::ShiftManipulator()
-    : Manipulator()
+    : AbstractRegionCommand()
     , m_mode( Insert )
 {
 }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2005,2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,44 +17,37 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_MANIPULATOR
-#define KSPREAD_MANIPULATOR
+#ifndef KSPREAD_ABSTRACT_REGION_COMMAND
+#define KSPREAD_ABSTRACT_REGION_COMMAND
 
-#include <QLinkedList>
-#include <QRect>
 #include <QString>
 #include <QUndoCommand>
 
-#include <klocale.h>
-
-#include "kspread_export.h"
-
 #include "Region.h"
-#include "Validity.h"
 
 namespace KSpread
 {
 class Sheet;
 
 /**
- * \class Manipulator
+ * \class AbstractRegionCommand
  * \brief Abstract base class for all region related operations.
  */
-class Manipulator : public Region, public QUndoCommand
+class AbstractRegionCommand : public Region, public QUndoCommand
 {
 public:
     /**
      * Constructor.
      */
-    Manipulator();
+    AbstractRegionCommand();
 
     /**
      * Destructor.
      */
-    virtual ~Manipulator();
+    virtual ~AbstractRegionCommand();
 
     /**
-     * \return the Sheet this Manipulator works on
+     * \return the Sheet this AbstractRegionCommand works on
      */
     Sheet* sheet() const { return m_sheet; }
 
@@ -138,112 +131,6 @@ protected:
     bool    m_success   : 1;
 };
 
-/**
- * The macro manipulator holds a set of manipulators and calls them all at once.
- * Each of the manipulators has its own range, MacroManipulator does not take
- * care of that.
- */
-class KSPREAD_EXPORT MacroManipulator : public Manipulator {
-  public:
-    void redo ();
-    void undo ();
-    void add (Manipulator *manipulator);
-  protected:
-    QList<Manipulator *> manipulators;
-};
-
-
-/**
- * \class MergeManipulator
- * \brief Merges and splits the cells of a cell region.
- */
-class MergeManipulator : public Manipulator
-{
-public:
-  MergeManipulator();
-  virtual ~MergeManipulator();
-
-  virtual bool preProcessing();
-
-  virtual void setReverse(bool reverse) { m_merge = !reverse; }
-  void setHorizontalMerge(bool state) { m_mergeHorizontal = state; }
-  void setVerticalMerge(bool state) { m_mergeVertical = state; }
-
-protected:
-  virtual bool process(Element*);
-
-  virtual bool postProcessing();
-
-  virtual QString name() const;
-
-  bool m_merge;
-private:
-  bool m_mergeHorizontal : 1;
-  bool m_mergeVertical   : 1;
-  Manipulator* m_unmerger; // to restore old merging
-};
-
-
-/**
- * \class CommentManipulator
- * \brief Adds/Removes comments to/of a cell region.
- */
-class CommentManipulator : public Manipulator
-{
-public:
-    CommentManipulator();
-    void setComment( const QString& comment ) { m_comment = comment; }
-
-protected:
-    virtual bool process(Element* element);
-    virtual bool mainProcessing();
-    virtual QString name() const;
-
-private:
-    QString m_comment;
-    QList< QPair<QRectF, QString> > m_undoData;
-};
-
-/**
- * \class ConditionalManipulator
- * \brief Adds/Removes condtional formatting to/of a cell region.
- */
-class ConditionalManipulator : public Manipulator
-{
-public:
-    ConditionalManipulator();
-    void setConditionList( const QLinkedList<Conditional>& list ) { m_conditions.setConditionList( list ); }
-
-protected:
-    virtual bool process(Element* element);
-    virtual bool mainProcessing();
-    virtual QString name() const;
-
-private:
-    Conditions m_conditions;
-    QList< QPair<QRectF, Conditions> > m_undoData;
-};
-
-/**
- * \class ValidityManipulator
- * \brief Adds/Removes validity checks to/of a cell region.
- */
-class ValidityManipulator : public Manipulator
-{
-public:
-    ValidityManipulator();
-    void setValidity( Validity validity ) { m_validity = validity; }
-
-protected:
-    virtual bool process(Element* element);
-    virtual bool mainProcessing();
-    virtual QString name() const;
-
-private:
-    Validity m_validity;
-    QList< QPair<QRectF, Validity> > m_undoData;
-};
-
 } // namespace KSpread
 
-#endif // KSPREAD_MANIPULATOR
+#endif // KSPREAD_ABSTRACT_REGION_COMMAND

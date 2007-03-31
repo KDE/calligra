@@ -33,7 +33,6 @@
 namespace KSpread
 {
 class Cell;
-class Manipulator;
 class Map;
 class Sheet;
 

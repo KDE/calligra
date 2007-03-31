@@ -21,7 +21,7 @@
 #ifndef KSPREAD_MANIPULATOR_DATA
 #define KSPREAD_MANIPULATOR_DATA
 
-#include "Manipulator.h"
+#include "AbstractRegionCommand.h"
 #include "Global.h"
 #include "Style.h"
 #include "Value.h"
@@ -36,7 +36,7 @@ class CellStorageUndoData;
 /**
  * Provides an abstract method for the actual setting of new values.
  */
-class AbstractDataManipulator : public Manipulator
+class AbstractDataManipulator : public AbstractRegionCommand
 {
   public:
     AbstractDataManipulator ();
@@ -184,7 +184,7 @@ class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator {
 
 
 
-class ShiftManipulator : public Manipulator
+class ShiftManipulator : public AbstractRegionCommand
 {
 public:
     enum Direction { ShiftRight, ShiftBottom };

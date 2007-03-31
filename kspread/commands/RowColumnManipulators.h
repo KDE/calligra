@@ -20,7 +20,9 @@
 #ifndef KSPREAD_MANIPULATOR_ROWCOL
 #define KSPREAD_MANIPULATOR_ROWCOL
 
-#include "Manipulator.h"
+#include <klocale.h>
+
+#include "AbstractRegionCommand.h"
 
 namespace KSpread
 {
@@ -30,7 +32,7 @@ class CellStorageUndoData;
    * \class ResizeColumnManipulator
    * \brief Resize column operation.
  */
-  class ResizeColumnManipulator : public Manipulator
+  class ResizeColumnManipulator : public AbstractRegionCommand
   {
     public:
       ResizeColumnManipulator();
@@ -55,7 +57,7 @@ class CellStorageUndoData;
    * \class ResizeRowManipulator
    * \brief Resize row operation.
  */
-class ResizeRowManipulator : public Manipulator
+class ResizeRowManipulator : public AbstractRegionCommand
 {
   public:
     ResizeRowManipulator();
@@ -79,7 +81,7 @@ class ResizeRowManipulator : public Manipulator
  * \class AdjustColumnRowManipulator
  * \brief Optimizes the height and the width of rows and columns, respectively.
  */
-class AdjustColumnRowManipulator : public Manipulator
+class AdjustColumnRowManipulator : public AbstractRegionCommand
 {
   public:
     AdjustColumnRowManipulator();
@@ -113,7 +115,7 @@ class AdjustColumnRowManipulator : public Manipulator
  * \class HideShowManipulator
  * \brief Hides and shows columns and rows.
  */
-class HideShowManipulator : public Manipulator
+class HideShowManipulator : public AbstractRegionCommand
 {
   public:
     HideShowManipulator();
@@ -140,7 +142,7 @@ class HideShowManipulator : public Manipulator
  * \class InsertDeleteColumnManipulator
  * \brief Inserts and deletes rows.
  */
-class InsertDeleteColumnManipulator : public Manipulator
+class InsertDeleteColumnManipulator : public AbstractRegionCommand
 {
 public:
     InsertDeleteColumnManipulator();
@@ -165,7 +167,7 @@ private:
  * \class InsertDeleteRowManipulator
  * \brief Inserts and deletes rows.
  */
-class InsertDeleteRowManipulator : public Manipulator
+class InsertDeleteRowManipulator : public AbstractRegionCommand
 {
 public:
     InsertDeleteRowManipulator();
