@@ -94,9 +94,6 @@ KWTextFrameSet::~KWTextFrameSet() {
 }
 
 void KWTextFrameSet::setupFrame(KWFrame *frame) {
-KWTextFrame *tf = dynamic_cast<KWTextFrame*> (frame);
-if(tf) int i = tf->sortingId();
-
     if(m_textFrameSetType != KWord::OtherTextFrameSet)
         frame->shape()->setLocked(true);
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
