@@ -23,7 +23,7 @@
 
 #include "KWPageSettings.h"
 #include "KWPageManager.h"
-#include "frame/KWFrameLayout.h"
+#include "frames/KWFrameLayout.h"
 
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>

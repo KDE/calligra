@@ -18,7 +18,7 @@
  */
 #include "KWFrameGeometry.h"
 #include "KWDocument.h"
-#include "frame/KWFrame.h"
+#include "frames/KWFrame.h"
 
 #include <kdebug.h>
 

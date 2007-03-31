@@ -22,8 +22,8 @@
 #include "KWOpenDocumentLoader.h"
 #include "KWDocument.h"
 //#include "KWPageSettings.h"
-#include "frame/KWTextFrameSet.h"
-#include "frame/KWTextFrame.h"
+#include "frames/KWTextFrameSet.h"
+#include "frames/KWTextFrame.h"
 
 // koffice
 #include <KoOasisLoadingContext.h>

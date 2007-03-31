@@ -20,7 +20,7 @@
 #include "KWFrameRunaroundProperties.h"
 #include "KWFrameDialog.h"
 #include "KWDocument.h"
-#include "frame/KWFrame.h"
+#include "frames/KWFrame.h"
 
 KWFrameRunaroundProperties::KWFrameRunaroundProperties(FrameConfigSharedState *state)
     : m_state(state),

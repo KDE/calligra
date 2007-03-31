@@ -1,6 +1,6 @@
 project(kwordpart)
 
-add_subdirectory( frame/tests )
+add_subdirectory( frames/tests )
 add_subdirectory( tests )
 
 include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
@@ -22,13 +22,13 @@ set(kwordprivate_LIB_SRCS
     KWOpenDocumentLoader.cpp
     KWDLoader.cpp
 
-    frame/KWTextDocumentLayout.cpp
-    frame/KWFrameLayout.cpp
-    frame/KWFrame.cpp
-    frame/KWFrameSet.cpp
-    frame/KWTextFrame.cpp
-    frame/KWTextFrameSet.cpp
-    frame/KWCopyShape.cpp
+    frames/KWTextDocumentLayout.cpp
+    frames/KWFrameLayout.cpp
+    frames/KWFrame.cpp
+    frames/KWFrameSet.cpp
+    frames/KWTextFrame.cpp
+    frames/KWTextFrameSet.cpp
+    frames/KWCopyShape.cpp
 
     dialog/KWFrameConnectSelector.cpp
     dialog/KWFrameGeometry.cpp

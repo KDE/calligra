@@ -23,8 +23,8 @@
 #include "KWFrameConnectSelector.h"
 #include "KWFrameGeometry.h"
 #include <KWCanvas.h>
-#include <frame/KWFrame.h>
-#include <frame/KWFrameSet.h>
+#include <frames/KWFrame.h>
+#include <frames/KWFrameSet.h>
 
 #include <klocale.h>
 

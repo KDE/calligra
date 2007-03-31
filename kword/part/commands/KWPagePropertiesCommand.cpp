@@ -20,9 +20,9 @@
 #include "KWPagePropertiesCommand.h"
 #include "KWDocument.h"
 #include "KWPage.h"
-#include "frame/KWFrame.h"
-#include "frame/KWTextFrameSet.h"
-#include "frame/KWFrameLayout.h"
+#include "frames/KWFrame.h"
+#include "frames/KWTextFrameSet.h"
+#include "frames/KWFrameLayout.h"
 #include "commands/KWPageInsertCommand.h"
 #include "commands/KWFrameDeleteCommand.h"
 

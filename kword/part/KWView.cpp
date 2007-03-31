@@ -26,7 +26,7 @@
 #include "KWPage.h"
 #include "KWViewMode.h"
 #include "KWFactory.h"
-#include "frame/KWFrame.h"
+#include "frames/KWFrame.h"
 #include "dialog/KWFrameDialog.h"
 #include "dialog/KWPageSettingsDialog.h"
 

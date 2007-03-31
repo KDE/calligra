@@ -19,8 +19,8 @@
 
 #include "KWGeneralFrameProperties.h"
 #include "KWFrameDialog.h"
-#include "frame/KWFrame.h"
-#include "frame/KWTextFrameSet.h"
+#include "frames/KWFrame.h"
+#include "frames/KWTextFrameSet.h"
 
 KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state)
     : m_state(state),

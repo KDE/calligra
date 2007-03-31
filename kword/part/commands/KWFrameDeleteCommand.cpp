@@ -18,8 +18,8 @@
  */
 
 #include "KWFrameDeleteCommand.h"
-#include "frame/KWFrame.h"
-#include "frame/KWFrameSet.h"
+#include "frames/KWFrame.h"
+#include "frames/KWFrameSet.h"
 
 #include <KoShapeDeleteCommand.h>
 

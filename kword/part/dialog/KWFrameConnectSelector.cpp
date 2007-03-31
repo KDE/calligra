@@ -19,8 +19,8 @@
 
 #include "KWFrameConnectSelector.h"
 #include "KWDocument.h"
-#include "frame/KWTextFrameSet.h"
-#include "frame/KWTextFrame.h"
+#include "frames/KWTextFrameSet.h"
+#include "frames/KWTextFrame.h"
 
 #include <QHeaderView>
 

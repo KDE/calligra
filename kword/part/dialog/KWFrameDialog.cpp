@@ -23,7 +23,7 @@
 #include "KWFrameConnectSelector.h"
 #include "KWFrameRunaroundProperties.h"
 #include "KWGeneralFrameProperties.h"
-#include "frame/KWFrame.h"
+#include "frames/KWFrame.h"
 
 #include "KoShapeGeometry.h"
 

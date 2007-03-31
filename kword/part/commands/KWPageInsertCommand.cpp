@@ -20,8 +20,8 @@
 #include "KWPageInsertCommand.h"
 #include "KWDocument.h"
 #include "KWPage.h"
-#include "frame/KWFrameSet.h"
-#include "frame/KWFrame.h"
+#include "frames/KWFrameSet.h"
+#include "frames/KWFrame.h"
 
 #include <KoShapeMoveCommand.h>
 
