@@ -48,8 +48,8 @@ bool AbstractDataManipulator::process (Element* element)
     for (int row = range.top(); row <= range.bottom(); ++row) {
       Value val;
       QString text;
-      int colidx = col - range.left();
-      int rowidx = row - range.top();
+//       int colidx = col - range.left();
+//       int rowidx = row - range.top();
       bool parse = false;
       Format::Type fmtType = Format::None;
 
@@ -127,8 +127,8 @@ bool AbstractDFManipulator::process (Element* element)
   {
     for (int row = range.top(); row <= range.bottom(); ++row) {
       Cell cell( m_sheet, col, row );
-      int colidx = col - range.left();
-      int rowidx = row - range.top();
+//       int colidx = col - range.left();
+//       int rowidx = row - range.top();
         Style style = newFormat (element, col, row);
         cell.setStyle( style );
     }
@@ -188,8 +188,8 @@ bool DataManipulator::process( Element* element )
     {
         if ( !m_reverse )
             m_sheet->cellStorage()->lockCells( element->rect() );
-        else
-            m_sheet->cellStorage()->unlockCells( element->rect().left(), element->rect().top() );
+//         else
+//             m_sheet->cellStorage()->unlockCells( element->rect().left(), element->rect().top() );
     }
     return true;
 }

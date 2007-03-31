@@ -184,16 +184,11 @@ void CellStorage::setConditions( const Region& region, Conditions conditions )
 
 Formula CellStorage::formula( int column, int row ) const
 {
-    if ( column == 0 || row == 0 )
-        return Formula();
     return d->formulaStorage->lookup( column, row );
 }
 
 void CellStorage::setFormula( int column, int row, const Formula& formula )
 {
-    if ( column == 0 || row == 0 )
-        return;
-
     Formula old;
     if ( formula.expression().isEmpty() )
         old = d->formulaStorage->take( column, row );
@@ -220,16 +215,11 @@ void CellStorage::setFormula( int column, int row, const Formula& formula )
 
 QString CellStorage::link( int column, int row ) const
 {
-    if ( column == 0 || row == 0 )
-        return QString();
     return d->linkStorage->lookup( column, row );
 }
 
 void CellStorage::setLink( int column, int row, const QString& link )
 {
-    if ( column == 0 || row == 0 )
-        return;
-
     QString old;
     if ( link.isEmpty() )
         old = d->linkStorage->take( column, row );
@@ -262,16 +252,11 @@ void CellStorage::setStyle( const Region& region, const Style& style )
 
 QString CellStorage::userInput( int column, int row ) const
 {
-    if ( column == 0 || row == 0 )
-        return QString();
     return d->userInputStorage->lookup( column, row );
 }
 
 void CellStorage::setUserInput( int column, int row, const QString& userInput )
 {
-    if ( column == 0 || row == 0 )
-        return;
-
     QString old;
     if ( userInput.isEmpty() )
         old = d->userInputStorage->take( column, row );
@@ -299,8 +284,6 @@ void CellStorage::setValidity( const Region& region, Validity validity )
 
 Value CellStorage::value( int column, int row ) const
 {
-    if ( column == 0 || row == 0 )
-        return Value();
     return d->valueStorage->lookup( column, row );
 }
 
@@ -312,8 +295,6 @@ Value CellStorage::valueRegion( const Region& region ) const
 
 void CellStorage::setValue( int column, int row, const Value& value )
 {
-    if ( column == 0 || row == 0 )
-        return;
     if ( isLocked( column, row ) )
     {
         emit inform( i18n( "The cell is currently locked as element of a matrix." ) );
@@ -454,7 +435,6 @@ void CellStorage::lockCells( const QRect& rect )
 
 void CellStorage::unlockCells( int column, int row )
 {
-    kDebug() << k_funcinfo << endl;
     const QPair<QRectF,bool> pair = d->matrixStorage->containedPair( QPoint( column, row ) );
     if ( pair.first.isNull() )
         return;
@@ -473,6 +453,9 @@ void CellStorage::unlockCells( int column, int row )
                 setValue( c, r, Value() );
         }
     }
+    // recording undo?
+    if ( d->undoData )
+        d->undoData->matrices << pair;
 }
 
 QRect CellStorage::lockedCells( int column, int row ) const
@@ -934,6 +917,8 @@ void CellStorage::undo( CellStorageUndoData* data )
         setLink( data->links[i].first.x(), data->links[i].first.y(), data->links[i].second );
     for ( int i = 0; i < data->fusions.count(); ++i )
         d->fusionStorage->insert( Region(data->fusions[i].first.toRect()), data->fusions[i].second );
+    for ( int i = 0; i < data->matrices.count(); ++i )
+        d->matrixStorage->insert( Region(data->matrices[i].first.toRect()), data->matrices[i].second );
     for ( int i = 0; i < data->styles.count(); ++i )
         d->styleStorage->insert( data->styles[i].first.toRect(), data->styles[i].second );
     for ( int i = 0; i < data->comments.count(); ++i )
