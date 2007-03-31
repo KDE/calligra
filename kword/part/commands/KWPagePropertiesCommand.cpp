@@ -95,8 +95,7 @@ void KWPagePropertiesCommand::undo() {
 }
 
 void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout) {
-    bool pageSpread = layout.left < 0;
-    m_page->setWidth(layout.width * (pageSpread?2:1));
+    m_page->setWidth(layout.width);
     m_page->setHeight(layout.height);
     m_page->setTopMargin(layout.top);
     m_page->setBottomMargin(layout.bottom);
@@ -104,8 +103,9 @@ void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout) {
     m_page->setMarginClosestBinding(layout.bindingSide);
     m_page->setLeftMargin(layout.left);
     m_page->setRightMargin(layout.right);
+    m_page->setOrientationHint(layout.orientation);
 
-    if(pageSpread)
+    if(layout.pageEdge >= 0.0) // assumption based on the KWPageLayout widget.
         m_page->setPageSide(KWPage::PageSpread);
     else
         m_page->setPageSide( m_page->pageNumber()%2==0 ? KWPage::Left : KWPage::Right);

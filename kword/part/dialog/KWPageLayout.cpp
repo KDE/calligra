@@ -17,13 +17,15 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KWPageLayout.h"
+#include "KWPage.h"
 
 #include <KDebug>
 
 KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
     : QWidget(parent),
     m_pageLayout(layout),
-    m_marginsEnabled(true)
+    m_marginsEnabled(true),
+    m_allowSignals(false)
 {
     widget.setupUi(this);
 
@@ -45,12 +47,12 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
 
     widget.units->addItems( KoUnit::listOfUnitName() );
     widget.sizes->addItems(KoPageFormat::allFormats());
-    forSinglePage(false);
+    forSinglePage(0);
 
     connect(widget.sizes, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)));
     connect(widget.units, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)));
     connect(group2, SIGNAL(buttonClicked (int)), this, SLOT(facingPagesChanged()));
-    connect(m_orientationGroup, SIGNAL(buttonClicked (int)), this, SLOT(optionsChanged()));
+    connect(m_orientationGroup, SIGNAL(buttonClicked (int)), this, SLOT(orientationChanged()));
     connect(widget.width, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
     connect(widget.height, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
     connect(widget.topMargin, SIGNAL(valueChangedPt(double)), this, SLOT(marginsChanged()));
@@ -61,22 +63,26 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
     connect(widget.height, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
 
     setUnit(KoUnit(KoUnit::Millimeter));
+    m_allowSignals = true;
     setPageLayout(layout);
 }
 
 void KWPageLayout::sizeChanged(int row) {
     m_pageLayout.format = static_cast<KoPageFormat::Format> (row);
-    bool enable =  m_pageLayout.format == KoPageFormat::CustomSize;
-    widget.width->setEnabled( enable );
-    widget.height->setEnabled( enable );
+    bool custom =  m_pageLayout.format == KoPageFormat::CustomSize;
+    bool pageSpread = widget.facingPages->isChecked();
+    widget.width->setEnabled( custom );
+    widget.height->setEnabled( custom );
 
-    if ( m_pageLayout.format != KoPageFormat::CustomSize ) {
+    if ( !custom ) {
         m_pageLayout.width = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
         m_pageLayout.height = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
+        if(pageSpread)
+            m_pageLayout.width *= 2;
     }
 
-    widget.width->changeValue( m_pageLayout.width );
     widget.height->changeValue( m_pageLayout.height );
+    widget.width->changeValue( m_pageLayout.width / (pageSpread?2:1) );
 
     emit layoutChanged(m_pageLayout);
 }
@@ -100,10 +106,15 @@ void KWPageLayout::setUnit(const KoUnit &unit) {
 }
 
 void KWPageLayout::setPageLayout(const KoPageLayout &layout) {
+    if(! m_allowSignals) return;
+    m_allowSignals = false;
     m_pageLayout = layout;
     widget.sizes->setCurrentIndex(layout.format);
+    widget.width->changeValue( layout.width );
+    widget.height->changeValue( layout.height );
+
     m_orientationGroup->button( layout.orientation )->setChecked( true );
-    if(layout.left < 0 || layout.right < 0) {
+    if(layout.bindingSide >= 0 && layout.pageEdge >= 0) {
         widget.facingPages->setChecked(true);
         widget.bindingEdgeMargin->changeValue(layout.bindingSide);
         widget.pageEdgeMargin->changeValue(layout.pageEdge);
@@ -117,9 +128,12 @@ void KWPageLayout::setPageLayout(const KoPageLayout &layout) {
 
     widget.topMargin->changeValue(layout.top);
     widget.bottomMargin->changeValue(layout.bottom);
+    m_allowSignals = true;
 }
 
 void KWPageLayout::facingPagesChanged() {
+    if(! m_allowSignals) return;
+    m_allowSignals = false;
     if(widget.singleSided->isChecked()) {
         widget.leftLabel->setText(i18n("Left Edge:"));
         widget.rightLabel->setText(i18n("Right Edge:"));
@@ -128,10 +142,14 @@ void KWPageLayout::facingPagesChanged() {
         widget.leftLabel->setText(i18n("Binding Edge:"));
         widget.rightLabel->setText(i18n("Page Edge:"));
     }
+    m_allowSignals = true;
     marginsChanged();
+    sizeChanged(widget.sizes->currentIndex());
 }
 
 void KWPageLayout::marginsChanged() {
+    if(! m_allowSignals) return;
+    m_allowSignals = false;
     m_pageLayout.left = -1;
     m_pageLayout.right = -1;
     m_pageLayout.bindingSide = -1;
@@ -158,6 +176,7 @@ void KWPageLayout::marginsChanged() {
     // kDebug() << "  " << m_pageLayout.left << "|"<< m_pageLayout.bindingSide << ", " <<
     //    m_pageLayout.right << "|"<< m_pageLayout.pageEdge << endl;
     emit layoutChanged(m_pageLayout);
+    m_allowSignals = true;
 }
 
 void KWPageLayout::setTextAreaAvailable(bool available) {
@@ -167,13 +186,26 @@ void KWPageLayout::setTextAreaAvailable(bool available) {
 }
 
 void KWPageLayout::optionsChanged() {
+    if(! m_allowSignals) return;
+    m_allowSignals = false;
     m_pageLayout.orientation = widget.landscape->isChecked() ? KoPageFormat::Landscape : KoPageFormat::Portrait;
     if(widget.sizes->currentIndex() == KoPageFormat::CustomSize) {
         m_pageLayout.width = widget.width->value();
         m_pageLayout.height = widget.height->value();
     }
 
+    m_allowSignals = true;
     marginsChanged();
+}
+
+void KWPageLayout::orientationChanged() {
+    if(! m_allowSignals) return;
+    m_allowSignals = false;
+    qSwap(m_pageLayout.width, m_pageLayout.height);
+    widget.width->changeValue( m_pageLayout.width );
+    widget.height->changeValue( m_pageLayout.height );
+    m_allowSignals = true;
+    optionsChanged();
 }
 
 void KWPageLayout::showUnitchooser(bool on) {
@@ -181,19 +213,25 @@ void KWPageLayout::showUnitchooser(bool on) {
     widget.unitsLabel->setVisible(on);
 }
 
-void KWPageLayout::forSinglePage(bool single) {
-    if(single) {
+void KWPageLayout::forSinglePage(KWPage *page) {
+    if(page) {
         widget.facingPageLabel->setText(i18n("Page Layout:"));
         widget.facingPages->setText(i18n("Page spread"));
         widget.wholeDocument->setCheckState(Qt::Unchecked);
+        if(page->pageSide() == KWPage::PageSpread) {
+            widget.facingPages->setChecked(true);
+            widget.width->changeValue( m_pageLayout.width / 2.0);
+        }
+        else
+            widget.singleSided->setChecked(true);
     }
     else {
         widget.facingPageLabel->setText(i18n("Facing Pages:"));
         widget.facingPages->setText(i18n("Facing pages"));
         widget.wholeDocument->setCheckState(Qt::Checked);
     }
-    widget.wholeDocument->setVisible(single);
-    widget.wholeDocumentLabel->setVisible(single);
+    widget.wholeDocument->setVisible(page);
+    widget.wholeDocumentLabel->setVisible(page);
 }
 
 void KWPageLayout::setStartPageNumber(int pageNumber) {
@@ -207,6 +245,5 @@ int KWPageLayout::startPageNumber() const {
 bool KWPageLayout::marginsForDocument() const {
     return widget.wholeDocument->checkState() == Qt::Checked;
 }
-
 
 #include <KWPageLayout.moc>

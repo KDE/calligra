@@ -138,6 +138,17 @@ const KoPageLayout KWPageManager::pageLayout(int pageNumber) const {
         lay.left = page->leftMargin();
         lay.bottom = page->bottomMargin();
         lay.right = page->rightMargin();
+        lay.bindingSide = page->marginClosestBinding();
+        lay.pageEdge = page->pageEdgeMargin();
+
+        lay.orientation = page->orientationHint();
+        double w = lay.width;
+        if(page->pageSide() == KWPage::PageSpread)
+            w /= 2.0;
+        double h = lay.height;
+        if(lay.orientation == KoPageFormat::Landscape)
+            qSwap(w, h);
+        lay.format = KoPageFormat::guessFormat(POINT_TO_MM(w), POINT_TO_MM(h));
     }
     return lay;
 }

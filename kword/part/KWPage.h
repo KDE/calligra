@@ -125,6 +125,9 @@ public:
     /// return the effective pageLayout combining the default and the page specific ones
     const KoPageLayout pageLayout() const;
 
+    void setOrientationHint(KoPageFormat::Orientation orientation);
+    KoPageFormat::Orientation orientationHint() const;
+
 private:
     /** private constructor, only for our friends
      * @param parent the KWPageManager that we belong to.
@@ -138,7 +141,7 @@ private:
 
     KWPageManager *m_parent;
 
-friend class KWPageManager;
+    friend class KWPageManager;
 };
 
 #endif

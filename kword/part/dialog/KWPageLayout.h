@@ -26,6 +26,8 @@
 
 #include <QWidget>
 
+class KWPage;
+
 /// the widget that shows the size/margins and other page settings.
 class KWPageLayout : public QWidget {
     Q_OBJECT
@@ -34,7 +36,7 @@ public:
 
     void setUnit(const KoUnit &unit);
     void showUnitchooser(bool on);
-    void forSinglePage(bool single);
+    void forSinglePage(KWPage *page);
     void setStartPageNumber(int pageNumber);
 
     int startPageNumber() const;
@@ -54,6 +56,7 @@ private slots:
     void facingPagesChanged();
     void optionsChanged();
     void marginsChanged();
+    void orientationChanged();
 
 private:
     Ui::KWPageLayout widget;
@@ -61,7 +64,7 @@ private:
     KoUnit m_unit;
 
     QButtonGroup *m_orientationGroup;
-    bool m_marginsEnabled;
+    bool m_marginsEnabled, m_allowSignals;
 };
 
 #endif

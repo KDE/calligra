@@ -41,7 +41,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
 
     m_pageLayoutWidget = new KWPageLayout(widget, m_layout);
     m_pageLayoutWidget->showUnitchooser(false);
-    m_pageLayoutWidget->forSinglePage(true);
+    m_pageLayoutWidget->forSinglePage(m_page);
     m_pageLayoutWidget->setStartPageNumber(m_document->startPage());
     m_pageLayoutWidget->layout()->setMargin(0);
     lay->addWidget(m_pageLayoutWidget);
@@ -61,9 +61,6 @@ void KWPageSettingsDialog::setPageLayout(const KoPageLayout &layout) {
 }
 
 void KWPageSettingsDialog::accept() {
-    if(m_layout.orientation == KoPageFormat::Landscape)
-        qSwap(m_layout.width, m_layout.height);
-
     if(m_pageLayoutWidget->marginsForDocument()) {
         // TODO
     }

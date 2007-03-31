@@ -33,6 +33,7 @@ KWPage::KWPage(KWPageManager *parent, int pageNum) {
     m_pageLayout.top = -1.0;
     m_pageLayout.pageEdge = -1.0;
     m_pageLayout.bindingSide = -1.0;
+    m_pageLayout.orientation = KoPageFormat::Portrait;
     m_pageSide = pageNum%2==0 ? Left : Right;
 }
 
@@ -62,27 +63,39 @@ void KWPage::setBottomMargin(const double &b) {
 }
 void KWPage::setPageEdgeMargin(const double &m) {
     m_pageLayout.pageEdge = m == m_parent->m_defaultPageLayout.pageEdge ? -1 : m;
-    m_pageLayout.left = -1;
-    m_pageLayout.right = -1;
+    if(m != -1) {
+        m_pageLayout.left = -1;
+        m_pageLayout.right = -1;
+        if(marginClosestBinding() == -1)
+            m_pageLayout.bindingSide = 0; // never leave this object in an illegal state
+    }
 }
 void KWPage::setMarginClosestBinding(const double &m) {
     m_pageLayout.bindingSide = m == m_parent->m_defaultPageLayout.bindingSide ? -1 : m;
-    m_pageLayout.left = -1;
-    m_pageLayout.right = -1;
+    if(m != -1) {
+        m_pageLayout.left = -1;
+        m_pageLayout.right = -1;
+        if(pageEdgeMargin() == -1)
+            m_pageLayout.pageEdge = 0; // never leave this object in an illegal state
+    }
 }
 void KWPage::setLeftMargin(const double &l) {
     m_pageLayout.left = l == m_parent->m_defaultPageLayout.left ? -1 : l;
-    m_pageLayout.bindingSide = -1;
-    m_pageLayout.pageEdge = -1;
-    if(rightMargin() == -1)
-        m_pageLayout.right = 0; // never leave this object in an illegal state
+    if(l != -1) {
+        m_pageLayout.bindingSide = -1;
+        m_pageLayout.pageEdge = -1;
+        if(rightMargin() == -1)
+            m_pageLayout.right = 0; // never leave this object in an illegal state
+    }
 }
 void KWPage::setRightMargin(const double &r) {
     m_pageLayout.right = r == m_parent->m_defaultPageLayout.right ? -1 : r;
-    m_pageLayout.bindingSide = -1;
-    m_pageLayout.pageEdge = -1;
-    if(leftMargin() == -1)
-        m_pageLayout.left = 0; // never leave this object in an illegal state
+    if(r != -1) {
+        m_pageLayout.bindingSide = -1;
+        m_pageLayout.pageEdge = -1;
+        if(leftMargin() == -1)
+            m_pageLayout.left = 0; // never leave this object in an illegal state
+    }
 }
 
 double KWPage::topMargin() const {
@@ -141,3 +154,12 @@ QRectF KWPage::rect(int pageNumber) const {
 const KoPageLayout KWPage::pageLayout() const {
     return m_parent->pageLayout(pageNumber());
 }
+
+void KWPage::setOrientationHint(KoPageFormat::Orientation orientation) {
+    m_pageLayout.orientation = orientation;
+}
+
+KoPageFormat::Orientation KWPage::orientationHint() const {
+    return m_pageLayout.orientation;
+}
+

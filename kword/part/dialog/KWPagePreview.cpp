@@ -42,27 +42,27 @@ void KWPagePreview::paintEvent(QPaintEvent *event) {
 
     double pageWidth = m_pageLayout.width * resolutionX;
     double pageHeight = m_pageLayout.height * resolutionY;
-    if(m_pageLayout.orientation == KoPageFormat::Landscape)
-        qSwap(pageHeight, pageWidth);
 
-    const bool pageSpread = (m_pageLayout.left < 0 || m_pageLayout.right < 0);
+    const bool pageSpread = (m_pageLayout.bindingSide >= 0 && m_pageLayout.pageEdge >= 0);
+    double sheetWidth = pageWidth / (pageSpread?2:1);
 
     double zoomH = (height() * 90 / 100) / pageHeight;
-    double zoomW = (width() * 90 / 100) / (pageWidth * (pageSpread?2:1));
+    double zoomW = (width() * 90 / 100) / pageWidth;
     double zoom = qMin( zoomW, zoomH );
 
     pageWidth *= zoom;
+    sheetWidth *= zoom;
     pageHeight *= zoom;
     QPainter painter( this );
 
-    QRect page = QRectF((width() - pageWidth * (pageSpread?2:1)) / 2.0,
-            (height() - pageHeight) / 2.0, pageWidth, pageHeight).toRect();
+    QRect page = QRectF((width() - pageWidth) / 2.0,
+            (height() - pageHeight) / 2.0, sheetWidth, pageHeight).toRect();
 
     painter.save();
     drawPage(painter, zoom, page, true);
     painter.restore();
     if(pageSpread) {
-        page.moveLeft(page.left() + (int) (pageWidth));
+        page.moveLeft(page.left() + (int) (sheetWidth));
         painter.save();
         drawPage(painter, zoom, page, false);
         painter.restore();
