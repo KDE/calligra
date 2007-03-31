@@ -33,7 +33,7 @@ KWPage::KWPage(KWPageManager *parent, int pageNum) {
     m_pageLayout.top = -1.0;
     m_pageLayout.pageEdge = -1.0;
     m_pageLayout.bindingSide = -1.0;
-    m_pageLayout.orientation = KoPageFormat::Portrait;
+    m_pageLayout.orientation = parent->m_defaultPageLayout.orientation;
     m_pageSide = pageNum%2==0 ? Left : Right;
 }
 

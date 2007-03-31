@@ -22,11 +22,15 @@
 #include <KoShape.h>
 #include <KoUnit.h>
 
+#include <KDebug>
+
 //#define DEBUG_PAGES
 
-KWPageManager::KWPageManager() {
-    m_firstPage = 1;
-    m_onlyAllowAppend = false;
+KWPageManager::KWPageManager()
+    : m_firstPage(-1),
+    m_onlyAllowAppend(false),
+    m_preferPageSpread(false)
+{
     m_defaultPageLayout = KoPageLayout::standardLayout();
 }
 

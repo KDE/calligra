@@ -84,6 +84,10 @@ void KWStartupWidget::columnsUpdated(const KoColumns &columns) {
 void KWStartupWidget::buttonClicked() {
     m_doc->clear();
 
+    if(m_layout.left < 0) {
+        m_layout.width /= 2.0;
+        m_doc->m_pageManager.setPreferPageSpread(true);
+    }
     m_doc->setDefaultPageLayout(m_layout);
     KWPageSettings settings;
     settings.setColumns(m_columns);

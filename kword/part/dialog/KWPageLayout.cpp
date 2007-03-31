@@ -68,6 +68,8 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
 }
 
 void KWPageLayout::sizeChanged(int row) {
+    if(! m_allowSignals) return;
+    m_allowSignals = false;
     m_pageLayout.format = static_cast<KoPageFormat::Format> (row);
     bool custom =  m_pageLayout.format == KoPageFormat::CustomSize;
     bool pageSpread = widget.facingPages->isChecked();
@@ -81,10 +83,11 @@ void KWPageLayout::sizeChanged(int row) {
             m_pageLayout.width *= 2;
     }
 
-    widget.height->changeValue( m_pageLayout.height );
     widget.width->changeValue( m_pageLayout.width / (pageSpread?2:1) );
+    widget.height->changeValue( m_pageLayout.height );
 
     emit layoutChanged(m_pageLayout);
+    m_allowSignals = true;
 }
 
 void KWPageLayout::unitChanged(int row) {
@@ -107,22 +110,24 @@ void KWPageLayout::setUnit(const KoUnit &unit) {
 
 void KWPageLayout::setPageLayout(const KoPageLayout &layout) {
     if(! m_allowSignals) return;
+    widget.sizes->setCurrentIndex(layout.format); // calls sizeChanged()
     m_allowSignals = false;
     m_pageLayout = layout;
-    widget.sizes->setCurrentIndex(layout.format);
-    widget.width->changeValue( layout.width );
-    widget.height->changeValue( layout.height );
 
     m_orientationGroup->button( layout.orientation )->setChecked( true );
     if(layout.bindingSide >= 0 && layout.pageEdge >= 0) {
         widget.facingPages->setChecked(true);
         widget.bindingEdgeMargin->changeValue(layout.bindingSide);
         widget.pageEdgeMargin->changeValue(layout.pageEdge);
+        m_pageLayout.left = -1;
+        m_pageLayout.right = -1;
     }
     else {
         widget.singleSided->setChecked(true);
         widget.bindingEdgeMargin->changeValue(layout.left);
         widget.pageEdgeMargin->changeValue(layout.right);
+        m_pageLayout.pageEdge = -1;
+        m_pageLayout.bindingSide = -1;
     }
     facingPagesChanged();
 
@@ -187,23 +192,24 @@ void KWPageLayout::setTextAreaAvailable(bool available) {
 
 void KWPageLayout::optionsChanged() {
     if(! m_allowSignals) return;
-    m_allowSignals = false;
-    m_pageLayout.orientation = widget.landscape->isChecked() ? KoPageFormat::Landscape : KoPageFormat::Portrait;
     if(widget.sizes->currentIndex() == KoPageFormat::CustomSize) {
         m_pageLayout.width = widget.width->value();
         m_pageLayout.height = widget.height->value();
-    }
+    } else
+        sizeChanged(widget.sizes->currentIndex());
 
-    m_allowSignals = true;
     marginsChanged();
 }
 
 void KWPageLayout::orientationChanged() {
     if(! m_allowSignals) return;
     m_allowSignals = false;
-    qSwap(m_pageLayout.width, m_pageLayout.height);
-    widget.width->changeValue( m_pageLayout.width );
-    widget.height->changeValue( m_pageLayout.height );
+    m_pageLayout.orientation = widget.landscape->isChecked() ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+
+    double x = widget.height->value();
+    widget.height->changeValue( widget.width->value() );
+    widget.width->changeValue( x );
+
     m_allowSignals = true;
     optionsChanged();
 }

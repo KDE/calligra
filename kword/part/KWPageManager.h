@@ -161,6 +161,9 @@ public:
      */
     void setPadding(const KoInsets &padding) { m_padding = padding; }
 
+    bool preferPageSpread() const { return m_preferPageSpread; }
+    void setPreferPageSpread(bool on) { m_preferPageSpread = on; }
+
 private:
     /// helper method for the topOfPage and bottomOfPage
     double pageOffset(int pageNumber, bool bottom) const;
@@ -171,6 +174,7 @@ private:
     QList<KWPage*> m_pageList;
     int m_firstPage;
     bool m_onlyAllowAppend; // true for WP style documents.
+    bool m_preferPageSpread;
 
     KoPageLayout m_defaultPageLayout;
     KoInsets m_padding;
