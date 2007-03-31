@@ -38,7 +38,7 @@ class KOfficeThroughAnalyzer : public StreamThroughAnalyzer {
         void setIndexable( AnalysisResult *i ) {
             idx = i;
         }
-        jstreams::InputStream* connectInputStream( jstreams::InputStream *in );
+        InputStream* connectInputStream( InputStream *in );
         bool isReadyWithStream() { return true; }
     public:
         KOfficeThroughAnalyzer( const KOfficeThroughAnalyzerFactory* f ) : factory( f ) {}
@@ -46,7 +46,7 @@ class KOfficeThroughAnalyzer : public StreamThroughAnalyzer {
 
 class KOfficeThroughAnalyzerFactory : public StreamThroughAnalyzerFactory {
 private:
-    const char* getName() const {
+    const char* name() const {
         return "KOfficeThroughAnalyzer";
     }
     StreamThroughAnalyzer* newInstance() const {
@@ -81,18 +81,18 @@ void KOfficeThroughAnalyzerFactory::registerFields( FieldRegister& reg ) {
     editingCyclesField = reg.registerField( editingCyclesFieldName, FieldRegister::integerType, 1, 0 );
 }
 
-jstreams::InputStream* KOfficeThroughAnalyzer::connectInputStream( jstreams::InputStream* in ) {
+InputStream* KOfficeThroughAnalyzer::connectInputStream( InputStream* in ) {
     if( !in )
         return in;
 
     const char *c;
-    int nread = in->read( c, in->getSize(), in->getSize() );
+    int nread = in->read( c, in->size(), in->size() );
     in->reset( 0 );
     if( nread == -2 )
         return in;
 
     QDomDocument doc;
-    if( !doc.setContent( QByteArray( c, in->getSize() ) ) )
+    if( !doc.setContent( QByteArray( c, in->size() ) ) )
         return in;
 
     // check if this is a koffice document
@@ -104,23 +104,23 @@ jstreams::InputStream* KOfficeThroughAnalyzer::connectInputStream( jstreams::Inp
     QDomNode authorNode = doc.namedItem("document-info").namedItem("author");
 
     // set author information
-    idx->setField( factory->authorField,
+    idx->addValue( factory->authorField,
                    (const char*) authorNode.namedItem( "full-name" ).toElement().text().toUtf8() );
 
     // set title information
-    idx->setField( factory->titleField,
+    idx->addValue( factory->titleField,
                    (const char*) authorNode.namedItem( "title" ).toElement().text().toUtf8() );
 
     // set keyword information
-    idx->setField( factory->keywordsField,
+    idx->addValue( factory->keywordsField,
                    (const char*) aboutNode.namedItem( "keyword" ).toElement().text().toUtf8() );
 
     // set abstract information
-    idx->setField( factory->abstractField, 
+    idx->addValue( factory->abstractField, 
                    (const char*) authorNode.namedItem( "abstract" ).toElement().text().toUtf8() );
 
     // set editing cycles information
-    idx->setField( factory->editingCyclesField, 
+    idx->addValue( factory->editingCyclesField, 
                    aboutNode.namedItem( "editing-cycles" ).toElement().text().toInt() );
 
     return in;
@@ -129,7 +129,7 @@ jstreams::InputStream* KOfficeThroughAnalyzer::connectInputStream( jstreams::Inp
 class Factory : public AnalyzerFactoryFactory {
 public:
     std::list<StreamThroughAnalyzerFactory*>
-    getStreamThroughAnalyzerFactories() const {
+    streamThroughAnalyzerFactories() const {
         std::list<StreamThroughAnalyzerFactory*> af;
         af.push_back(new KOfficeThroughAnalyzerFactory());
         return af;
