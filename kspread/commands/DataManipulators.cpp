@@ -91,6 +91,9 @@ bool AbstractDataManipulator::preProcessing()
     // not the first run - data already stored ...
     if ( !m_firstrun )
         return true;
+    // protection check
+    if ( !Manipulator::preProcessing() )
+        return false;
     m_sheet->cellStorage()->startUndoRecording();
     return true;
 }

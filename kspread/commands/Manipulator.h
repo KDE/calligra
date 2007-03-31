@@ -17,11 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KSPREAD_MANIPULATOR
 #define KSPREAD_MANIPULATOR
 
-#include <QHash>
 #include <QLinkedList>
 #include <QRect>
 #include <QString>
@@ -31,15 +29,11 @@
 
 #include "kspread_export.h"
 
-#include "Undo.h"
 #include "Region.h"
 #include "Validity.h"
 
 namespace KSpread
 {
-class Cell;
-class ColumnFormat;
-class RowFormat;
 class Sheet;
 
 /**
@@ -71,9 +65,11 @@ public:
 
     /**
      * Executes the actual operation and adds the manipulator to the undo history, if desired.
+     * \return \c true if the command was executed successfully
+     * \return \c false if the command fails or if the command was already executed once
      * \see setRegisterUndo
      */
-    void execute();
+    bool execute();
 
     /**
      * Executes the actual operation.
@@ -117,8 +113,11 @@ protected:
 
     /**
      * Preprocessing of the region.
+     * Checks the protection of each cell in the region.
+     * \return \c true if the sheet is not protected or all cells are not protected
+     * \return \c false if any of the cells is protected
      */
-    virtual bool preProcessing() { return true; }
+    virtual bool preProcessing();
 
     /**
      * Processes the region. Calls process(Element*).
@@ -136,7 +135,7 @@ protected:
     bool    m_reverse   : 1;
     bool    m_firstrun  : 1;
     bool    m_register  : 1;
-    bool    m_protcheck : 1;
+    bool    m_success   : 1;
 };
 
 /**
@@ -151,18 +150,6 @@ class KSPREAD_EXPORT MacroManipulator : public Manipulator {
     void add (Manipulator *manipulator);
   protected:
     QList<Manipulator *> manipulators;
-};
-
-/** class ProtectedCheck can be used to check, whether a particular
-  range is protected or not */
-class KSPREAD_EXPORT ProtectedCheck : public Region {
-  public:
-    ProtectedCheck ();
-    virtual ~ProtectedCheck ();
-    void setSheet (Sheet *sheet) { m_sheet = sheet; };
-    bool check ();
-  protected:
-    Sheet *m_sheet;
 };
 
 

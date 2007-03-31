@@ -65,7 +65,7 @@ Manipulator::Manipulator()
     m_reverse(false),
     m_firstrun(true),
     m_register(true),
-    m_protcheck(true)
+    m_success(true)
 {
 }
 
@@ -73,69 +73,57 @@ Manipulator::~Manipulator()
 {
 }
 
-void Manipulator::execute()
+bool Manipulator::execute()
 {
     if ( !m_firstrun )
-        return;
+        return false;
     // registering in undo history?
     if ( m_register )
         m_sheet->doc()->addCommand( this );
     else
         redo();
+    return m_success;
 }
 
 void Manipulator::redo()
 {
-  if (!m_sheet)
-  {
-    kWarning() << "Manipulator::redo(): No explicit m_sheet is set. "
-                << "Manipulating all sheets of the region." << endl;
-  }
-
-  // protection check if needed
-  if (m_protcheck) {
-    ProtectedCheck check;
-    check.setSheet (m_sheet);
-    Region::Iterator endOfList(cells().end());
-    for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
-      check.add ((*it)->rect());
-    if (check.check ())
+    if ( !m_sheet )
     {
-      KMessageBox::error (0, i18n ("You cannot change a protected sheet"));
-      return;
+        kWarning() << "Manipulator::redo(): No explicit m_sheet is set. "
+                   << "Manipulating all sheets of the region." << endl;
     }
-  }
 
-  bool successfully = true;
-  successfully = preProcessing();
-  if (!successfully)
-  {
-    kWarning() << "Manipulator::redo(): preprocessing was not successful!" << endl;
-    return;   // do nothing if pre-processing fails
-  }
+    bool successfully = true;
+    successfully = preProcessing();
+    if ( !successfully )
+    {
+        m_success = false;
+        return;   // do nothing if pre-processing fails
+    }
 
-  m_sheet->doc()->setUndoLocked(true);
-  m_sheet->doc()->emitBeginOperation();
-  m_sheet->setRegionPaintDirty( *this );
+    m_sheet->doc()->setUndoLocked( true );
+    m_sheet->doc()->emitBeginOperation();
+    m_sheet->setRegionPaintDirty( *this );
 
-  // successfully = true;
-  successfully = mainProcessing();
-  if (!successfully)
-  {
-    kWarning() << "Manipulator::redo(): processing was not successful!" << endl;
-  }
+    successfully = mainProcessing();
+    if ( !successfully )
+    {
+        m_success = false;
+        kWarning() << "Manipulator::redo(): processing was not successful!" << endl;
+    }
 
-  successfully = true;
-  successfully = postProcessing();
-  if (!successfully)
-  {
-    kWarning() << "Manipulator::redo(): postprocessing was not successful!" << endl;
-  }
+    successfully = true;
+    successfully = postProcessing();
+    if ( !successfully )
+    {
+        m_success = false;
+        kWarning() << "Manipulator::redo(): postprocessing was not successful!" << endl;
+    }
 
-  m_sheet->doc()->emitEndOperation();
-  m_sheet->doc()->setUndoLocked(false);
+    m_sheet->doc()->emitEndOperation();
+    m_sheet->doc()->setUndoLocked( false );
 
-  m_firstrun = false;
+    m_firstrun = false;
 }
 
 void Manipulator::undo()
@@ -180,6 +168,41 @@ bool Manipulator::process(Element* element)
     return true;
 }
 #endif
+
+bool Manipulator::preProcessing()
+{
+    // If the sheet's protection is not enabled, cell protection statue will not take effect.
+    if ( !m_sheet->isProtected() )
+        return true;
+
+    bool notProtected = true;
+    Region::ConstIterator endOfList( constEnd() );
+    for ( Region::ConstIterator it = constBegin(); it != endOfList; ++it )
+    {
+        const QRect range = (*it)->rect();
+
+        for ( int col = range.left(); col <= range.right(); ++col )
+        {
+            for ( int row = range.top(); row <= range.bottom(); ++row )
+            {
+                Cell cell( m_sheet, col, row );
+                if ( !cell.style().notProtected() )
+                {
+                    notProtected = false;
+                    break;
+                }
+            }
+            if ( !notProtected )
+            {
+                KMessageBox::error( 0, i18n( "Processing is not possible, "
+                                             "because some cells are protected." ) );
+                break;
+            }
+        }
+    }
+    return notProtected;
+}
+
 bool Manipulator::mainProcessing()
 {
   bool successfully = true;
@@ -227,49 +250,6 @@ void MacroManipulator::add (Manipulator *manipulator)
 
 
 /***************************************************************************
-  class ProtectedCheck
-****************************************************************************/
-
-ProtectedCheck::ProtectedCheck ()
-{
-}
-
-ProtectedCheck::~ProtectedCheck ()
-{
-}
-
-bool ProtectedCheck::check ()
-{
-  if (!m_sheet->isProtected())
-    return false;
-
-  bool prot = false;
-  Region::Iterator endOfList(cells().end());
-  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
-  {
-    Region::Element *element = *it;
-    QRect range = element->rect();
-
-    for (int col = range.left(); col <= range.right(); ++col)
-    {
-      for (int row = range.top(); row <= range.bottom(); ++row)
-      {
-        Cell cell( m_sheet, col, row );
-        if (!cell.style().notProtected())
-        {
-          prot = true;
-          break;
-        }
-      }
-      if (prot) break;
-    }
-  }
-  return prot;
-}
-
-
-
-/***************************************************************************
   class MergeManipulator
 ****************************************************************************/
 
@@ -280,7 +260,6 @@ MergeManipulator::MergeManipulator()
     m_mergeVertical(false),
     m_unmerger(0)
 {
-  m_protcheck = false;  // this manipulator does its own checking
 }
 
 MergeManipulator::~MergeManipulator()
@@ -474,7 +453,7 @@ bool MergeManipulator::preProcessing()
       }
     }
   }
-  return true;
+  return Manipulator::preProcessing(); // for protection check
 }
 
 bool MergeManipulator::postProcessing()

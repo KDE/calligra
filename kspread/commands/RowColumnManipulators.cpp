@@ -192,7 +192,7 @@ bool HideShowManipulator::preProcessing()
     add(region);
   }
 
-  return true;
+  return Manipulator::preProcessing(); // for protection check
 }
 
 bool HideShowManipulator::postProcessing()
@@ -364,7 +364,7 @@ bool AdjustColumnRowManipulator::preProcessing()
   {
     if (!m_newHeights.isEmpty() || !m_newWidths.isEmpty())
     {
-      return true;
+      return Manipulator::preProcessing(); // for protection check
     }
 //     createUndo();
 
@@ -491,7 +491,7 @@ bool AdjustColumnRowManipulator::preProcessing()
       }
     }
   }
-  return true;
+  return Manipulator::preProcessing();
 }
 
 class DummyWidget : public QWidget

@@ -105,18 +105,12 @@ bool SheetAdaptor::setText( int x, int y, const QString& text, bool parse )
 	//to true KSpread says: ASSERT: "f" in Dependencies.cpp (621)
 	//kspread: Cell at row 6, col 1 marked as formula, but formula is NULL
 
-	KSpread::ProtectedCheck prot;
-	prot.setSheet(m_sheet);
-	prot.add(QPoint(x, y));
-	if(prot.check()) return false;
-
 	KSpread::DataManipulator *dm = new KSpread::DataManipulator();
 	dm->setSheet(m_sheet);
 	dm->setValue(Value(text));
 	dm->setParsing(parse);
 	dm->add(QPoint(x, y));
-	dm->execute();
-	return true;
+	return dm->execute();
 }
 
 bool SheetAdaptor::setText( const QString& cellname, const QString& text, bool parse )

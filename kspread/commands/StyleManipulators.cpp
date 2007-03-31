@@ -21,6 +21,7 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
+#include "Doc.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleStorage.h"
@@ -250,7 +251,7 @@ bool BorderColorManipulator::preProcessing()
             m_undoData += undoData;
         }
     }
-    return true;
+    return Manipulator::preProcessing(); // for protection check
 }
 
 bool BorderColorManipulator::mainProcessing()
