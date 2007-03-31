@@ -5783,7 +5783,7 @@ void View::openPopupMenu( const QPoint & _point )
     qDeleteAll( d->toolList );
     d->toolList.clear();
 
-    if ( !isProtected && !activeSheet()->getWordSpelling( selection() ).isEmpty() )
+    if ( !isProtected && !activeSheet()->wordSpelling( selection() ).isEmpty() )
     {
       d->popupMenuFirstToolId = 10;
       int i = 0;
@@ -5836,7 +5836,7 @@ void View::slotActivateTool( int _id )
       return;
   }
 
-  QString text = activeSheet()->getWordSpelling (selection());
+  QString text = activeSheet()->wordSpelling( selection() );
 
   if ( tool->run( entry->command, &text, "QString", "text/plain") )
     activeSheet()->setWordSpelling (selection(), text);

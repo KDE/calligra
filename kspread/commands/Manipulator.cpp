@@ -62,7 +62,6 @@ Manipulator::Manipulator()
   : Region(),
     QUndoCommand(),
     m_sheet(0),
-    m_creation(true),
     m_reverse(false),
     m_firstrun(true),
     m_register(true),
@@ -147,6 +146,7 @@ void Manipulator::undo()
   m_reverse = !m_reverse;
 }
 
+#if 0
 bool Manipulator::process(Element* element)
 {
   Sheet* sheet = m_sheet; // TODO Stefan: element->sheet();
@@ -179,7 +179,7 @@ bool Manipulator::process(Element* element)
     sheet->checkRangeHBorder(range.right());
     return true;
 }
-
+#endif
 bool Manipulator::mainProcessing()
 {
   bool successfully = true;

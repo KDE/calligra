@@ -49,110 +49,101 @@ class Sheet;
 class Manipulator : public Region, public QUndoCommand
 {
 public:
-  Manipulator();
-  virtual ~Manipulator();
+    /**
+     * Constructor.
+     */
+    Manipulator();
 
-  /**
-   * \return the Sheet this Manipulator works on
-   */
-  Sheet* sheet() const { return m_sheet; }
-  /**
-   * Sets \p sheet to be the Sheet to work on.
-   */
-  void setSheet(Sheet* sheet) { m_sheet = sheet; }
+    /**
+     * Destructor.
+     */
+    virtual ~Manipulator();
 
-  /**
-   * \return \c true if cells are created, if it is necessary
-   */
-  bool creation() { return m_creation; }
-  /**
-   * Sets cell creatioin for regions containing default cells to \p creation .
-   */
-  void setCreation(bool creation) { m_creation = creation; }
+    /**
+     * \return the Sheet this Manipulator works on
+     */
+    Sheet* sheet() const { return m_sheet; }
 
-  /**
-   * Executes the actual operation and adds the manipulator to the undo history,
-   * if desired.
-   */
-  void execute();
-  /**
-   * Executes the actual operation.
-   */
-  virtual void redo();
-  /**
-   * Executes the actual operation in reverse order.
-   */
-  virtual void undo();
+    /**
+     * Sets \p sheet to be the Sheet to work on.
+     */
+    void setSheet( Sheet* sheet ) { m_sheet = sheet; }
 
-  virtual void setArgument(const QString& /*arg*/, const QString& /*val*/) {};
+    /**
+     * Executes the actual operation and adds the manipulator to the undo history, if desired.
+     * \see setRegisterUndo
+     */
+    void execute();
 
-  /**
-   * Sets reverse mode to \b reverse .
-   * \see redo
-   * \see undo
-   */
-  virtual void setReverse(bool reverse) { m_reverse = reverse; }
-  /**
-   * If \p registerUndo is \c true , this manipulator registers an
-   * undo operation for the document.
-   */
-  void setRegisterUndo(bool registerUndo) { m_register = registerUndo; }
+    /**
+     * Executes the actual operation.
+     */
+    virtual void redo();
 
-  /** Set whether the manipulator will automatically bail out with an error
-  message box, if the range is protected. */
-  void setProtectedCheck (bool protcheck) { m_protcheck = protcheck; };
+    /**
+     * Executes the actual operation in reverse order.
+     */
+    virtual void undo();
 
-  /**
-   * Sets the name to \p name . The name is used for the undo/redo
-   * functionality.
-   */
-  virtual void setName (const QString& name) { m_name = name; }
-  /**
-   * \return the manipulator's name
-   */
-  virtual QString name() const { return m_name; };
+    /**
+     * Sets reverse mode to \b reverse .
+     * \see redo
+     * \see undo
+     */
+    virtual void setReverse( bool reverse ) { m_reverse = reverse; }
+
+    /**
+     * If \p registerUndo is \c true , this manipulator registers an
+     * undo operation for the document.
+     */
+    void setRegisterUndo( bool registerUndo ) { m_register = registerUndo; }
+
+    /**
+     * Sets the name to \p name . The name is used for the undo/redo functionality.
+     */
+    virtual void setName( const QString& name ) { m_name = name; }
+
+    /**
+     * \return the manipulator's name
+     */
+    virtual QString name() const { return m_name; }
 
 protected:
-  /**
-   * Processes \p element , a Region::Point or a Region::Range .
-   * Invoked by mainProcessing() .
-   * Calls process(const Cell&) or process(Format*) depending on \p element .
-   */
-  virtual bool process(Element* element);
-  /**
-   * Processes \p cell .
-   */
-  virtual bool process(const Cell& cell) { Q_UNUSED(cell); return true; }
+    /**
+     * Processes \p element , a Region::Point or a Region::Range .
+     * Invoked by mainProcessing() .
+     */
+    virtual bool process( Element* ) { return true; }
 
-  /**
-   * Preprocessing the region.
-   */
-  virtual bool preProcessing() { return true; }
-  /**
-   * Processes the region. Calls process(Element*).
-   */
-  virtual bool mainProcessing();
-  /**
-   * Postprocessing the region.
-   */
-  virtual bool postProcessing() { return true; }
+    /**
+     * Preprocessing of the region.
+     */
+    virtual bool preProcessing() { return true; }
 
+    /**
+     * Processes the region. Calls process(Element*).
+     */
+    virtual bool mainProcessing();
 
-  Sheet* m_sheet;
-  QString m_name;
-  bool   m_creation  : 1;
-  bool   m_reverse   : 1;
-  bool   m_firstrun  : 1;
-  bool   m_register  : 1;
-  bool   m_protcheck : 1;
-private:
+    /**
+     * Postprocessing of the region.
+     */
+    virtual bool postProcessing() { return true; }
+
+protected:
+    Sheet*  m_sheet;
+    QString m_name;
+    bool    m_reverse   : 1;
+    bool    m_firstrun  : 1;
+    bool    m_register  : 1;
+    bool    m_protcheck : 1;
 };
 
 /**
  * The macro manipulator holds a set of manipulators and calls them all at once.
  * Each of the manipulators has its own range, MacroManipulator does not take
  * care of that.
- * */
+ */
 class KSPREAD_EXPORT MacroManipulator : public Manipulator {
   public:
     void redo ();

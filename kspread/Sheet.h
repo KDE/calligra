@@ -776,7 +776,7 @@ public:
     /**
      * @param selection the selection of cells to work on
      */
-    QString getWordSpelling(Selection* selection );
+    QString wordSpelling( Selection* selection );
 
     /**
      * @return @c true if there are text value in cell

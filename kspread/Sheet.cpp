@@ -1470,45 +1470,29 @@ QString Sheet::guessRowTitle(QRect& area, int row)
 }
 
 
-/**
- * Here we define two manipulators - GetWordSpellingManipulator and
- * SetWordSpellingManipulator. This is not ideal, but these two are so specific
- * that there isn't much use in declaring them in *Manipulators.h
- * */
-
-// returns all the strings in the range. Name a bit confusing.
-class GetWordSpellingManipulator : public Manipulator {
- public:
-  QString getSpelling () {
+QString Sheet::wordSpelling( Selection* selection )
+{
     QString res;
-    
-    Region::Iterator endOfList(cells().end());
-    for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
+    Region::ConstIterator endOfList( selection->constEnd() );
+    for ( Region::ConstIterator it = selection->constBegin(); it != endOfList; ++it )
     {
-      Region::Element *element = *it;
-      QRect range = element->rect();
+        const QRect range = (*it)->rect();
 
-      for (int col = range.left(); col <= range.right(); ++col) {
-        for (int row = range.top(); row <= range.bottom(); ++row) {
-          Cell cell( m_sheet, col, row );
-          if (cell.value().isString() && (!cell.isFormula())) {
-            QString txt = cell.value().asString();
-            if (!txt.isEmpty())
-              res += txt + '\n';
-          }
+        for ( int col = range.left(); col <= range.right(); ++col )
+        {
+            for ( int row = range.top(); row <= range.bottom(); ++row )
+            {
+                Cell cell( this, col, row );
+                if ( cell.value().isString() && !cell.isFormula() )
+                {
+                    QString txt = cell.value().asString();
+                    if ( !txt.isEmpty() )
+                        res += txt + '\n';
+                }
+            }
         }
-      }
     }
     return res;
-  };  
-};
-
-QString Sheet::getWordSpelling(Selection* selection )
-{
-  GetWordSpellingManipulator manipulator;
-  manipulator.setSheet (this);
-  manipulator.add (*selection);
-  return manipulator.getSpelling();
 }
 
 // applies new strings to the range
