@@ -325,8 +325,10 @@ int TextTool::pointToPosition(const QPointF & point) const {
     QPointF p = m_textShape->convertScreenPos(point);
     int caretPos = m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
     caretPos = qMax(caretPos, m_textShapeData->position());
-    if(m_textShapeData->endPosition() == -1)
+    if(m_textShapeData->endPosition() == -1) {
         kWarning(32500) << "Clicking in not fully laid-out textframe\n";
+        m_textShapeData->fireResizeEvent(); // requests a layout run ;)
+    }
     caretPos = qMin(caretPos, m_textShapeData->endPosition());
     return caretPos;
 }
@@ -365,19 +367,18 @@ void TextTool::mouseReleaseEvent( KoPointerEvent *event ) {
 }
 
 void TextTool::keyPressEvent(QKeyEvent *event) {
+    int destinationPosition = -1; // for those that the moveOperation is not implemented;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     if(event->key() == Qt::Key_Backspace) {
-//       if(event->modifiers() & Qt::ControlModifier)
-//           m_caret.deletePreviousWord();
-//       else
-            m_caret.deletePreviousChar();
+        if(!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
+            m_caret.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+        m_caret.deletePreviousChar();
         editingPluginEvents();
     }
     else if(event->key() == Qt::Key_Delete) {
-//       if(event->modifiers() & Qt::ControlModifier)
-//           m_caret.deleteWord();
-//       else
-            m_caret.deleteChar();
+        if(!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.
+            m_caret.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+        m_caret.deleteChar();
         editingPluginEvents();
     }
     else if((event->key() == Qt::Key_Left) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
@@ -393,13 +394,15 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
         if(hit(item, KStandardShortcut::Home))
             // Goto beginning of the document. Default: Ctrl-Home
-            moveOperation = QTextCursor::StartOfLine; // TODO
-        else if(hit(item, KStandardShortcut::End))
+            destinationPosition = 0;
+        else if(hit(item, KStandardShortcut::End)) {
             // Goto end of the document. Default: Ctrl-End
-            moveOperation = QTextCursor::StartOfLine; // TODO
-       else if(hit(item, KStandardShortcut::Prior)) // page up
+            QTextBlock last = m_textShapeData->document()->end().previous();
+            destinationPosition = last.position() + last.length() -1;
+        }
+        else if(hit(item, KStandardShortcut::Prior)) // page up
             // Scroll up one page. Default: Prior
-           moveOperation = QTextCursor::StartOfLine; // TODO
+            moveOperation = QTextCursor::StartOfLine; // TODO
         else if(hit(item, KStandardShortcut::Next))
             // Scroll down one page. Default: Next
             moveOperation = QTextCursor::StartOfLine; // TODO
@@ -435,7 +438,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             editingPluginEvents();
         }
     }
-    if(moveOperation != QTextCursor::NoMove) {
+    if(moveOperation != QTextCursor::NoMove || destinationPosition != -1) {
         useCursor(Qt::BlankCursor);
         bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         if(m_caret.hasSelection() && !shiftPressed)
@@ -444,8 +447,12 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             repaintCaret();
         // TODO if RTL toggle direction of cursor movement.
         int prevPosition = m_caret.position();
-        m_caret.movePosition(moveOperation,
-            shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        if(moveOperation != QTextCursor::NoMove)
+            m_caret.movePosition(moveOperation,
+                shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        else
+            m_caret.setPosition(destinationPosition,
+                shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         if(shiftPressed) // altered selection.
             repaintSelection(prevPosition, m_caret.position());
         else
