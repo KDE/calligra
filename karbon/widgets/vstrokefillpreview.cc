@@ -46,10 +46,9 @@ VStrokeFillPreview::VStrokeFillPreview( QWidget * parent )
     setFocusPolicy( Qt::NoFocus );
 
     setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
-    setMaximumHeight( PANEL_SIZEY );
+    setMaximumHeight( int( PANEL_SIZEY ) );
 
     installEventFilter( this );
-    m_pixmap = QPixmap( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
 
     update( m_stroke, m_fill );
 }
@@ -60,22 +59,47 @@ VStrokeFillPreview::~VStrokeFillPreview()
 
 void VStrokeFillPreview::paintEvent( QPaintEvent* event )
 {
-    QPainter p(this);
-    p.drawPixmap( QPoint((int)( width() - PANEL_SIZEX ) / 2,
-                  (int)( height() - PANEL_SIZEY ) / 2),
-                  m_pixmap, QRect(0, 0, (int)PANEL_SIZEX, (int)PANEL_SIZEY ));
+    QPainter painter( this );
+    painter.setClipRect( event->rect() );
+
+    // the checker board colors
+    QColor dark( 120, 120, 120 );
+    QColor light( 200, 200, 200 );
+
+    // draw checkerboard
+    painter.setPen( Qt::NoPen );
+    for( int y = 0; y < height(); y += 10 )
+    {
+        for( int x = 0; x < width(); x += 10 )
+        {
+            painter.setBrush( ( ( ( x + y ) % 20 ) == 0 ) ? light : dark );
+            painter.drawRect( x, y, 10, 10 );
+        }
+    }
+    painter.translate( QPoint( int(( width() - PANEL_SIZEX ) / 2), int(( height() - PANEL_SIZEY ) / 2 )));
+
+    if ( m_strokeWidget )
+    {
+        drawFill( painter, m_fill );
+        drawStroke( painter, m_stroke );
+    }
+    else
+    {
+        drawStroke( painter, m_stroke );
+        drawFill( painter, m_fill );
+    }
 
     QFrame::paintEvent( event );
 }
 
 QSize VStrokeFillPreview::sizeHint() const
 {
-    return QSize( PANEL_SIZEX, PANEL_SIZEY );
+    return QSize( int(PANEL_SIZEX), int(PANEL_SIZEY) );
 }
 
 QSize VStrokeFillPreview::minimumSizeHint() const
 {
-    return QSize( PANEL_SIZEX, PANEL_SIZEY );
+    return QSize( int(PANEL_SIZEX), int(PANEL_SIZEY) );
 }
 
 QSizePolicy VStrokeFillPreview::sizePolicy() const
@@ -128,39 +152,12 @@ void VStrokeFillPreview::update( const KoShapeBorderModel * stroke, const QBrush
 {
     m_fill = fill;
     m_stroke = stroke;
-
-    QPainter painter( &m_pixmap );
-
-    // the checker board colors
-    QColor dark( 100, 100, 100 );
-    QColor light( 180, 180, 180 );
-
-    // draw checkerboard
-    painter.setPen( Qt::NoPen );
-    for( unsigned char y = 0; y < PANEL_SIZEY; y += 10 )
-        for( unsigned char x = 0; x < PANEL_SIZEX; x += 10 )
-        {
-            painter.setBrush( ( ( ( x + y ) % 20 ) == 0 ) ? light : dark );
-            painter.drawRect( x, y, 10, 10 );
-        }
-
-    if ( m_strokeWidget )
-    {
-        drawFill( m_fill );
-        drawStroke( m_stroke );
-    }
-    else
-    {
-        drawStroke( m_stroke );
-        drawFill( m_fill );
-    }
-
     QFrame::update();
 }
 
-void VStrokeFillPreview::drawFill( const QBrush * fill )
+void VStrokeFillPreview::drawFill( QPainter & painter, const QBrush * fill )
 {
-    QPainter painter( &m_pixmap );
+    painter.save();
 
     QBrush brush( Qt::white );
 
@@ -225,11 +222,12 @@ void VStrokeFillPreview::drawFill( const QBrush * fill )
         painter.setRenderHint( QPainter::Antialiasing, true );
         painter.drawLine( m_fillRect.topRight(), m_fillRect.bottomLeft() );
     }
+    painter.restore();
 }
 
-void VStrokeFillPreview::drawStroke( const KoShapeBorderModel * stroke )
+void VStrokeFillPreview::drawStroke( QPainter & painter, const KoShapeBorderModel * stroke )
 {
-    QPainter painter( &m_pixmap );
+    painter.save();
 
     QRectF innerRect = m_strokeRect.adjusted( 5, 5, -5, -5 );
     QRectF outerRect = m_strokeRect.adjusted( 0, 0, 1, 1 );
@@ -250,8 +248,6 @@ void VStrokeFillPreview::drawStroke( const KoShapeBorderModel * stroke )
         path.lineTo( middleRect.bottomRight() );
         path.lineTo( middleRect.topRight() );
         path.close();
-
-        QPainter painter( &m_pixmap );
 
         KoShapeBorderModel * border = const_cast<KoShapeBorderModel *>( stroke );
         painter.save();
@@ -306,6 +302,8 @@ void VStrokeFillPreview::drawStroke( const KoShapeBorderModel * stroke )
         painter.setRenderHint( QPainter::Antialiasing, true );
         painter.drawLine( m_strokeRect.topRight(), m_strokeRect.bottomLeft() );
     }
+
+    painter.restore();
 }
 
 #include "vstrokefillpreview.moc"

@@ -24,7 +24,6 @@
 #define __VSTROKEFILLPREVIEW_H__
 
 #include <QFrame>
-#include <QPixmap>
 
 class QEvent;
 class QPaintEvent;
@@ -75,10 +74,9 @@ protected:
     virtual void paintEvent( QPaintEvent* event );
 
 private:
-    void drawFill( const QBrush* );
-    void drawStroke( const KoShapeBorderModel* );
+    void drawFill( QPainter & painter, const QBrush* );
+    void drawStroke( QPainter & painter, const KoShapeBorderModel* );
 
-    QPixmap m_pixmap; ///< the pixmap used for caching
     bool m_strokeWidget; ///< shows if stroke or fill is selected
     const QBrush * m_fill; ///< the fill to preview
     const KoShapeBorderModel * m_stroke; ///< the stroke to preview
