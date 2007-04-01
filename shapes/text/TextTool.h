@@ -105,6 +105,8 @@ private slots:
     void textDefaultFormat();
     /// see KoTextSelectionHandler::insertIndexMarker
     void insertIndexMarker();
+    /// shows a dialog to alter the paragraph properties
+    void formatParagraph();
 
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();

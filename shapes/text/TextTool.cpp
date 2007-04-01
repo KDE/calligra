@@ -20,6 +20,7 @@
 #include "TextTool.h"
 #include "dialogs/SimpleStyleWidget.h"
 #include "dialogs/StylesWidget.h"
+#include "dialogs/ParagraphSettingsDialog.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -180,6 +181,11 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
         }
         m_textEditingPlugins.insert(factory->objectId(), factory->create());
     }
+
+    action = new QAction(i18n("Paragraph..."), this);
+    addAction("format_paragraph", action);
+    action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
+    connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
 }
 
 TextTool::~TextTool() {
@@ -760,6 +766,11 @@ void TextTool::textDefaultFormat() {
 void TextTool::insertIndexMarker() {
     // TODO handle result when we figure out how to report errors from a tool.
     m_selectionHandler.insertIndexMarker();
+}
+
+void TextTool::formatParagraph() {
+    ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(m_canvas->canvasWidget());
+    dia->show();
 }
 
 

@@ -16,11 +16,19 @@ SET ( textshape_SRCS
     ListItemsHelper.cpp
     dialogs/StylesWidget.cpp
     dialogs/SimpleStyleWidget.cpp
+    dialogs/ParagraphLayout.cpp
+    dialogs/ParagraphIndentSpacing.cpp
+    dialogs/ParagraphBulletsNumbers.cpp
+    dialogs/ParagraphSettingsDialog.cpp
+
 )
 
 kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleStyleWidget.ui
     dialogs/StylesWidget.ui
+    dialogs/ParagraphLayout.ui
+    dialogs/ParagraphIndentSpacing.ui
+    dialogs/ParagraphBulletsNumbers.ui
 )
 
 kde4_automoc(${textshape_SRCS})
