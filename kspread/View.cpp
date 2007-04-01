@@ -3659,69 +3659,71 @@ void View::removeAllSheets()
   doc()->emitEndOperation();
 }
 
-void View::setActiveSheet( Sheet * _t, bool updateSheet )
+void View::setActiveSheet( Sheet* sheet, bool updateSheet )
 {
-  if ( _t == d->activeSheet )
-    return;
+    if ( sheet == d->activeSheet )
+        return;
 
-  doc()->emitBeginOperation(false);
+    doc()->emitBeginOperation( false );
 
-  saveCurrentSheetSelection();
+    saveCurrentSheetSelection();
 
-  Sheet * oldSheet = d->activeSheet;
+    const Sheet* oldSheet = d->activeSheet;
+    d->activeSheet = sheet;
 
-  d->activeSheet = _t;
+    if ( d->activeSheet == 0 )
+    {
+        doc()->emitEndOperation();
+        return;
+    }
 
-  if ( d->activeSheet == 0 )
-  {
+    if ( oldSheet && oldSheet->layoutDirection() != d->activeSheet->layoutDirection() )
+        refreshView();
+
+    doc()->setDisplaySheet( d->activeSheet );
+    if ( updateSheet )
+    {
+        d->tabBar->setActiveTab( d->activeSheet->sheetName() );
+        d->vBorderWidget->repaint();
+        d->hBorderWidget->repaint();
+        d->selectAllButton->repaint();
+        d->canvas->slotMaxColumn( d->activeSheet->maxColumn() );
+        d->canvas->slotMaxRow( d->activeSheet->maxRow() );
+    }
+
+    /* see if there was a previous selection on this other sheet */
+    QMap<Sheet*, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
+    QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
+    QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
+
+    // TODO Stefan: store the save markers/anchors in the Selection?
+    QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;
+    QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
+
+    d->selection->clear();
+    d->selection->setActiveSheet( d->activeSheet );
+    d->selection->setOriginSheet( d->activeSheet );
+    d->selection->initialize( QRect( newMarker, newAnchor ) );
+    d->choice->setActiveSheet( d->activeSheet );
+
+    d->canvas->scrollToCell(newMarker);
+    if (it3 != d->savedOffsets.end())
+    {
+        d->canvas->setXOffset((*it3).x());
+        d->canvas->setYOffset((*it3).y());
+        d->horzScrollBar->setValue((int)(*it3).x());
+        d->vertScrollBar->setValue((int)(*it3).y());
+    }
+
+    d->actions->showPageBorders->setChecked( d->activeSheet->isShowPageBorders() );
+    d->actions->protectSheet->setChecked( d->activeSheet->isProtected() );
+    d->actions->protectDoc->setChecked( doc()->map()->isProtected() );
+    d->adjustActions( !d->activeSheet->isProtected() );
+    d->adjustWorkbookActions( !doc()->map()->isProtected() );
+
+    calcStatusBarOp();
+
     doc()->emitEndOperation();
-    return;
-  }
-
-  if ( oldSheet && oldSheet->layoutDirection() == Qt::RightToLeft != d->activeSheet->layoutDirection() == Qt::RightToLeft )
-    refreshView();
-
-  doc()->setDisplaySheet( d->activeSheet );
-  if ( updateSheet )
-  {
-    d->tabBar->setActiveTab( _t->sheetName() );
-    d->vBorderWidget->repaint();
-    d->hBorderWidget->repaint();
-    d->selectAllButton->repaint();
-    d->canvas->slotMaxColumn( d->activeSheet->maxColumn() );
-    d->canvas->slotMaxRow( d->activeSheet->maxRow() );
-  }
-
-  d->actions->showPageBorders->setChecked( d->activeSheet->isShowPageBorders() );
-  d->actions->protectSheet->setChecked( d->activeSheet->isProtected() );
-  d->actions->protectDoc->setChecked( doc()->map()->isProtected() );
-  d->adjustActions( !d->activeSheet->isProtected() );
-  d->adjustWorkbookActions( !doc()->map()->isProtected() );
-
-  /* see if there was a previous selection on this other sheet */
-  QMap<Sheet*, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
-  QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
-  QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
-
-  // TODO Stefan: store the save markers/anchors in the Selection?
-  QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;
-  QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
-
-  d->selection->clear();
-  d->selection->setSheet( d->activeSheet );
-  d->selection->initialize(QRect(newMarker, newAnchor));
-
-  d->canvas->scrollToCell(newMarker);
-  if (it3 != d->savedOffsets.end())
-  {
-    d->canvas->setXOffset((*it3).x());
-    d->canvas->setYOffset((*it3).y());
-    d->horzScrollBar->setValue((int)(*it3).x());
-    d->vertScrollBar->setValue((int)(*it3).y());
-  }
-  calcStatusBarOp();
-
-  doc()->emitEndOperation();
 }
 
 void View::slotSheetRenamed( Sheet* sheet, const QString& old_name )

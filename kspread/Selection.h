@@ -31,7 +31,7 @@
 
 namespace KSpread
 {
-class View;
+class CellEditor;
 
 /**
  * \class Selection
@@ -59,9 +59,9 @@ public:
   /**
    * Constructor.
    * Creates a new selection with (1,1) as initial location.
-   * @param view the view this selection belongs to
+   * @param parent the parent widget
    */
-  explicit Selection(View* view);
+  explicit Selection( QObject* parent );
 
   /**
    * Copy Constructor.
@@ -165,20 +165,33 @@ public:
   QString name(Sheet* originSheet = 0) const;
 
   /**
+   * Sets the selection's active sheet.
+   * For usual selections this is always the origin sheet,
+   * but for cell choices used for formulaes it may differ.
+   * @param sheet the sheet which is currently active
+   */
+  void setActiveSheet(Sheet* sheet);
+
+  /**
+   * @return the selection's active sheet
+   */
+  Sheet* activeSheet() const;
+
+  /**
    * Sets the selection's origin sheet.
    * @param sheet the sheet from which the selection starts
    */
-  void setSheet(Sheet* sheet);
+  void setOriginSheet(Sheet* sheet);
 
   /**
    * @return the selection's origin sheet
    */
-  Sheet* sheet() const;
+  Sheet* originSheet() const;
 
   /**
    * Sets the element, which has @p point as anchor, as active
    */
-  void setActiveElement(const QPoint& point);
+  void setActiveElement( const QPoint& point, CellEditor* cellEditor );
 
   /**
    * Sets the @p number 'th element as active

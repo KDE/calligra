@@ -325,49 +325,48 @@ bool Canvas::chooseMode() const
 
 void Canvas::startChoose()
 {
-  if ( d->chooseCell )
-    return;
+    if ( d->chooseCell )
+        return;
 
-  choice()->clear();
-  choice()->setSheet(activeSheet());
+    choice()->clear();
+    choice()->setActiveSheet( activeSheet() );
+    choice()->setOriginSheet( activeSheet() );
 
-  // It is important to enable this AFTER we set the rect!
-  d->chooseCell = true;
+    // It is important to enable this AFTER we set the rect!
+    d->chooseCell = true;
 }
 
 void Canvas::startChoose( const QRect& rect )
 {
-  if (d->chooseCell)
-    return;
+    if ( d->chooseCell )
+        return;
 
-  choice()->setSheet(activeSheet());
-  choice()->initialize(rect);
+    choice()->setActiveSheet( activeSheet() );
+    choice()->initialize( rect );
+    choice()->setOriginSheet( activeSheet() );
 
-  // It is important to enable this AFTER we set the rect!
-  d->chooseCell = true;
+    // It is important to enable this AFTER we set the rect!
+    d->chooseCell = true;
 }
 
 void Canvas::endChoose()
 {
-  // While entering a formula the choose mode is turned on and off.
-  // Clear the choice even if we are not in choose mode. Otherwise,
-  // cell references will stay highlighted.
-  if (!choice()->isEmpty())
-  {
-    choice()->clear();
-    update();
-  }
+    // While entering a formula the choose mode is turned on and off.
+    // Clear the choice even if we are not in choose mode. Otherwise,
+    // cell references will stay highlighted.
+    if ( !choice()->isEmpty() )
+    {
+        choice()->clear();
+        update();
+    }
 
-  if ( !d->chooseCell )
-    return;
+    if ( !d->chooseCell )
+        return;
 
-  d->chooseCell = false;
+    d->chooseCell = false;
 
-  Sheet* sheet = choice()->sheet();
-  if (sheet)
-  {
-    d->view->setActiveSheet(sheet);
-  }
+    if ( choice()->originSheet() )
+        d->view->setActiveSheet( choice()->originSheet() );
 }
 
 HBorder* Canvas::hBorderWidget() const
@@ -1233,7 +1232,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
   if (d->chooseCell && highlightRangeSizeGripAt(ev_PosX,ev_PosY))
   {
-    choice()->setActiveElement(QPoint(col,row));
+    choice()->setActiveElement( QPoint( col, row ), d->cellEditor );
     d->mouseAction = ResizeSelection;
     return;
   }
@@ -3375,7 +3374,8 @@ bool Canvas::createEditor( bool clear,  bool focus )
         return false;
 
     // Set the starting sheet of the choice.
-    choice()->setSheet( sheet );
+    choice()->setActiveSheet( sheet );
+    choice()->setOriginSheet( sheet );
 
     if ( !d->cellEditor )
     {
@@ -3552,25 +3552,20 @@ void Canvas::closeEditor()
 
 void Canvas::updateEditor()
 {
-  if (!d->chooseCell)
-    return;
+    if ( !d->chooseCell )
+        return;
 
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return;
+    register Sheet * const sheet = activeSheet();
+    Q_ASSERT( sheet );
 
-  if (d->cellEditor)
-  {
-    if (choice()->sheet() != sheet)
+    if ( d->cellEditor )
     {
-      d->cellEditor->hide();
+        if ( choice()->originSheet() != sheet )
+            d->cellEditor->hide();
+        else
+            d->cellEditor->show();
+        d->cellEditor->updateChoice();
     }
-    else
-    {
-      d->cellEditor->show();
-    }
-    d->cellEditor->updateChoice();
-  }
 }
 
 void Canvas::updatePosWidget()
