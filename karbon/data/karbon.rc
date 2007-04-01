@@ -27,8 +27,8 @@
 		<ActionList name="view_closeallviews"/>
 		<Separator/>
 		<ActionList name="view_split"/>
-		<Action name="view_zoom_in"/>
-		<Action name="view_zoom_out"/>
+		<Action name="zoom_in"/>
+		<Action name="zoom_out"/>
 		<Action name="view_zoom"/>
         <Action name="view_mode"/>
 	<Separator/>
@@ -111,8 +111,6 @@
 	</ToolBar>
 	<ToolBar name="object_toolbar" fullWidth="false">
 		<Text>Object</Text>
-		<Action name="setLineStyle"/>
-		<Action name="setLineWidth"/>
 		<Action name="object_move_totop"/>
 		<Action name="object_move_up"/>
 		<Action name="object_move_down"/>

@@ -144,10 +144,6 @@ public slots:
 	void combinePath();
 	void separatePath();
 
-	//View:
-	void viewZoomIn();
-	void viewZoomOut();
-
 	void configure();
 
 	void pageLayout();
@@ -170,7 +166,6 @@ protected slots:
 	/// Called by the zoom action to set the zoom
 	void zoomChanged( KoZoomMode::Mode mode, double zoom );
 
-	void centerCanvas();
     void mousePositionChanged( const QPoint &position );
     void pageOffsetChanged();
 
@@ -200,7 +195,7 @@ private:
 
 	KarbonPart		*m_part;
 	KarbonCanvas		*m_canvas;
-	KoCanvasController	*m_canvasView;
+	KoCanvasController	*m_canvasController;
 	KoRuler			*m_horizRuler;
 	KoRuler			*m_vertRuler;
 

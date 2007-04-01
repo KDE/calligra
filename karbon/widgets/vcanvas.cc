@@ -55,70 +55,102 @@
 #include "vdocument.h"
 #include "karbon_part.h"
 
-const int defaultMargin = 50;
+class KarbonCanvas::KarbonCanvasPrivate
+{
+public:
+    KarbonCanvasPrivate()
+    : zoomHandler()
+    , document( 0 )
+    , part( 0 )
+    , showMargins( false )
+    , documentOffset( 0, 0 )
+    {}
+
+    ~KarbonCanvasPrivate()
+    {
+        delete toolProxy;
+        toolProxy = 0;
+    }
+
+    KoShapeManager* shapeManager;
+    KoZoomHandler zoomHandler;
+
+    KoToolProxy *toolProxy;
+
+    VDocument *document;
+    KarbonPart *part;
+    QPoint origin;         ///< the origin of the document page rect
+    bool showMargins;      ///< should page margins be shown
+    QPoint documentOffset; ///< the offset of the virtual canvas from the viewport
+};
 
 KarbonCanvas::KarbonCanvas( KarbonPart *p )
-    : QWidget()
-    , KoCanvasBase( p )
-    , m_zoomHandler()
-    , m_doc( &( p->document() ) )
-    , m_part( p )
-    , m_marginX( defaultMargin )
-    , m_marginY( defaultMargin )
-    , m_visibleWidth( 500 )
-    , m_visibleHeight( 500 )
-    , m_fitMarginX( 20 )
-    , m_fitMarginY( 20 )
-    , m_showMargins( false )
+    : QWidget() , KoCanvasBase( p ), d( new KarbonCanvasPrivate() )
 {
+    d->part = p;
+    d->document = &p->document();
+    d->toolProxy = new KoToolProxy(this);
+    d->shapeManager = new KoShapeManager(this, d->document->shapes() );
+    connect( d->shapeManager, SIGNAL(selectionChanged()), this, SLOT(adjustOrigin()) );
+
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
-
-    m_shapeManager = new KoShapeManager(this, m_doc->shapes() );
     setMouseTracking(true);
-
-    m_toolProxy = new KoToolProxy(this);
-
-    connect( m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(adjustSize()) );
     setFocusPolicy(Qt::ClickFocus); // allow to receive keyboard input
-    adjustSize();
+    adjustOrigin();
 }
 
 KarbonCanvas::~KarbonCanvas()
 {
-    delete m_toolProxy;
-    m_toolProxy = 0;
+    delete d;
+}
+
+KoShapeManager * KarbonCanvas::shapeManager() const
+{
+    return d->shapeManager;
+}
+
+KoViewConverter * KarbonCanvas::viewConverter()
+{
+    return &d->zoomHandler;
+}
+
+KoToolProxy * KarbonCanvas::toolProxy()
+{
+    return d->toolProxy;
 }
 
 void KarbonCanvas::paintEvent(QPaintEvent * ev)
 {
     QPainter gc( this );
-    gc.translate(-m_documentOffset);
+    gc.translate(-d->documentOffset);
     gc.setRenderHint(QPainter::Antialiasing);
-    gc.setClipRect(ev->rect().translated(m_documentOffset));
 
-    gc.translate( m_origin.x(), m_origin.y() );
+    QRect clipRect = ev->rect().translated(d->documentOffset);
+    gc.setClipRect( clipRect );
+
+    gc.translate( d->origin.x(), d->origin.y() );
     gc.setPen( Qt::black );
     //gc.setBrush( Qt::white );
-    gc.drawRect( m_zoomHandler.documentToView( m_documentRect ) );
+    gc.drawRect( d->zoomHandler.documentToView( QRectF( QPointF(0.0, 0.0), d->document->pageSize() ) ) );
 
-    paintMargins( gc, m_zoomHandler );
-    paintGrid( gc, m_zoomHandler, m_zoomHandler.viewToDocument( widgetToView( ev->rect() ) ) );
+    paintMargins( gc, d->zoomHandler );
+    paintGrid( gc, d->zoomHandler, d->zoomHandler.viewToDocument( widgetToView( clipRect ) ) );
 
-    m_shapeManager->paint( gc, m_zoomHandler, false );
-    m_toolProxy->paint( gc, m_zoomHandler );
+    d->shapeManager->paint( gc, d->zoomHandler, false );
+    d->toolProxy->paint( gc, d->zoomHandler );
 
     gc.end();
 }
 
 void KarbonCanvas::paintGrid( QPainter &painter, const KoViewConverter &converter, const QRectF &area )
 {
-    if( ! m_part->gridData().showGrid() )
+    if( ! d->part->gridData().showGrid() )
         return;
 
-    painter.setPen( m_part->gridData().gridColor() );
+    painter.setPen( d->part->gridData().gridColor() );
 
-    double gridX = m_part->gridData().gridX();
+    double gridX = d->part->gridData().gridX();
 
     double x = 0.0;
     do {
@@ -135,7 +167,7 @@ void KarbonCanvas::paintGrid( QPainter &painter, const KoViewConverter &converte
         x -= gridX;
     };
 
-    double gridY = m_part->gridData().gridY();
+    double gridY = d->part->gridData().gridY();
 
     double y = 0.0;
     do {
@@ -155,12 +187,12 @@ void KarbonCanvas::paintGrid( QPainter &painter, const KoViewConverter &converte
 
 void KarbonCanvas::paintMargins( QPainter &painter, const KoViewConverter &converter )
 {
-    if( ! m_showMargins )
+    if( ! d->showMargins )
         return;
 
-    KoPageLayout pl = m_part->pageLayout();
+    KoPageLayout pl = d->part->pageLayout();
 
-    QSizeF pageSize = m_doc->pageSize();
+    QSizeF pageSize = d->document->pageSize();
     QRectF marginRect( pl.left, pl.top, pageSize.width()-pl.left-pl.right, pageSize.height()-pl.top-pl.bottom );
 
     QPen pen( Qt::blue );
@@ -173,158 +205,122 @@ void KarbonCanvas::paintMargins( QPainter &painter, const KoViewConverter &conve
 
 void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseMoveEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
+    d->toolProxy->mouseMoveEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
 }
 
 void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
-    m_toolProxy->mousePressEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
+    d->toolProxy->mousePressEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
 }
 
 void KarbonCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseDoubleClickEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
+    d->toolProxy->mouseDoubleClickEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
 }
 
 void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseReleaseEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
+    d->toolProxy->mouseReleaseEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
 }
 
 void KarbonCanvas::keyReleaseEvent (QKeyEvent *e) {
-    m_toolProxy->keyReleaseEvent(e);
+    d->toolProxy->keyReleaseEvent(e);
 }
 
 void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
-    m_toolProxy->keyPressEvent(e);
+    d->toolProxy->keyPressEvent(e);
 }
 
 void KarbonCanvas::tabletEvent( QTabletEvent *e )
 {
-    m_toolProxy->tabletEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
+    d->toolProxy->tabletEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
 }
 
 void KarbonCanvas::wheelEvent( QWheelEvent *e )
 {
-    m_toolProxy->wheelEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
+    d->toolProxy->wheelEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
+}
+
+void KarbonCanvas::resizeEvent( QResizeEvent * )
+{
+    adjustOrigin();
 }
 
 void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
     if( horizontal )
-        *horizontal = m_part->gridData().gridX();
+        *horizontal = d->part->gridData().gridX();
     if( vertical )
-        *vertical = m_part->gridData().gridY();
+        *vertical = d->part->gridData().gridY();
 }
 
 bool KarbonCanvas::snapToGrid() const {
-    return m_part->gridData().snapToGrid();
+    return d->part->gridData().snapToGrid();
 }
 
 void KarbonCanvas::addCommand(QUndoCommand *command) {
 
-    m_part->KoDocument::addCommand(command);
+    d->part->KoDocument::addCommand(command);
 }
 
 void KarbonCanvas::updateCanvas(const QRectF& rc) {
-    QRect clipRect( viewToWidget( m_zoomHandler.documentToView(rc).toRect() ) );
+    QRect clipRect( viewToWidget( d->zoomHandler.documentToView(rc).toRect() ) );
     clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
-    clipRect.moveTopLeft( clipRect.topLeft() - m_documentOffset);
+    clipRect.moveTopLeft( clipRect.topLeft() - d->documentOffset);
     update(clipRect);
 }
 
-void KarbonCanvas::setVisibleSize( int visibleWidth, int visibleHeight ) {
-    m_visibleWidth = visibleWidth;
-    m_visibleHeight = visibleHeight;
-    adjustSize();
-}
+void KarbonCanvas::adjustOrigin()
+{
+    // calculate the zoomed doucment bounding rect
+    QRect documentRect = d->zoomHandler.documentToView( d->document->boundingRect() ).toRect();
 
-void KarbonCanvas::setFitMargin( int fitMarginX, int fitMarginY ) {
-    m_fitMarginX = fitMarginX;
-    m_fitMarginY = fitMarginY;
-}
+    d->origin = -1 * documentRect.topLeft();
 
-void KarbonCanvas::adjustSize() {
-    m_contentRect = m_doc->boundingRect();
-    m_documentRect = QRectF( QPointF(0.0, 0.0), m_doc->pageSize() );
+    // the document bounding rect is always centered on the virtual canvas
+    // if there are margins left around the zoomed document rect then
+    // distribute them evenly on both sides
+    int widthDiff = size().width() - documentRect.width();
+    if( widthDiff > 0.0 )
+        d->origin.rx() += static_cast<int>( 0.5 * widthDiff );
+    int heightDiff = size().height() - documentRect.height();
+    if( heightDiff > 0.0 )
+        d->origin.ry() += static_cast<int>( 0.5 * heightDiff );
 
-    if( m_zoomHandler.zoomMode() == KoZoomMode::ZOOM_PAGE )
-    {
-        double zoomX = double( m_visibleWidth-2*m_fitMarginX ) / double( m_zoomHandler.resolutionX() * m_documentRect.width() );
-        double zoomY = double( m_visibleHeight-2*m_fitMarginY ) / double( m_zoomHandler.resolutionY() * m_documentRect.height() );
-
-        double zoom = 1.0;
-        if(zoomX < 0.0 && zoomY > 0.0 )
-            zoom = zoomY;
-        else if(zoomX > 0.0 && zoomY < 0.0 )
-            zoom = zoomX;
-        else if(zoomX < 0.0 && zoomY < 0.0)
-            zoom = 0.0001;
-        else
-            zoom = qMin( zoomX, zoomY );
-        m_zoomHandler.setZoom( zoom );
-    }
-    else if( m_zoomHandler.zoomMode() == KoZoomMode::ZOOM_WIDTH )
-    {
-        double zoom = double( m_visibleWidth-2*m_fitMarginX ) / double( m_zoomHandler.resolutionX() * m_documentRect.width() );
-        m_zoomHandler.setZoom( zoom );
-    }
-
-    // calculate how much space we need with the current zoomed doc size and default margins
-    QRect zoomedRect = m_zoomHandler.documentToView( m_contentRect ).toRect();
-    int newWidth = zoomedRect.width() + 2 * defaultMargin;
-    int newHeight = zoomedRect.height() + 2 * defaultMargin;
-
-    // if the new size is smaller as the visible size, adjust the margins
-    if( newWidth < m_visibleWidth )
-        m_marginX = int(0.5 * float(m_visibleWidth - zoomedRect.width()));
-    else
-        m_marginX = defaultMargin;
-    if( newHeight < m_visibleHeight )
-        m_marginY = int(0.5 * float(m_visibleHeight - zoomedRect.height()));
-    else
-        m_marginY = defaultMargin;
-
-
-    QSize newSize(zoomedRect.width() + 2 * m_marginX, zoomedRect.height() + 2 * m_marginY);
-    emit documentSizeChanged(newSize);
-
-    m_origin.setX( m_marginX - zoomedRect.left() );
-    m_origin.setY( m_marginY - zoomedRect.top() );
-    emit documentOriginChanged( m_origin );
+    emit documentOriginChanged( d->origin );
 }
 
 void KarbonCanvas::setDocumentOffset(const QPoint &offset) {
-    m_documentOffset = offset;
+    d->documentOffset = offset;
 }
 
 QPoint KarbonCanvas::widgetToView( const QPoint& p ) const {
-    return p - m_origin;
+    return p - d->origin;
 }
 
 QRect KarbonCanvas::widgetToView( const QRect& r ) const {
-    return r.translated( - m_origin );
+    return r.translated( - d->origin );
 }
 
 QPoint KarbonCanvas::viewToWidget( const QPoint& p ) const {
-    return p + m_origin;
+    return p + d->origin;
 }
 
 QRect KarbonCanvas::viewToWidget( const QRect& r ) const {
-    return r.translated( m_origin );
+    return r.translated( d->origin );
 }
 
 KoUnit KarbonCanvas::unit() {
-    return m_doc->unit();
+    return d->document->unit();
 }
 
 QPoint KarbonCanvas::documentOrigin()
 {
-    return m_origin;
+    return d->origin;
 }
 
 void KarbonCanvas::setShowMargins( bool on )
 {
-    m_showMargins = on;
+    d->showMargins = on;
 }
 
 #include "vcanvas.moc"

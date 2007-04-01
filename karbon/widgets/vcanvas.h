@@ -76,7 +76,9 @@ public:
 
     void addCommand(QUndoCommand *command);
 
-    KoShapeManager *shapeManager() const { return m_shapeManager; }
+    KoShapeManager *shapeManager() const;
+    KoViewConverter *viewConverter();
+    KoToolProxy * toolProxy();
 
     /**
      * Tell the canvas repaint the specified rectangle. The coordinates
@@ -84,19 +86,9 @@ public:
      */
     void updateCanvas(const QRectF& rc);
 
-    KoViewConverter *viewConverter() { return &m_zoomHandler; }
-
     QWidget *canvasWidget() { return this; }
 
-    /** Sets the maximal available visible size. */
-    void setVisibleSize( int visibleWidth, int visibleHeight );
-
-    /** Sets the margins in pixel used when fitting to page or to width. */
-    void setFitMargin( int fitMarginX, int fitMarginY );
-
     virtual QPoint documentOrigin();
-
-    KoToolProxy * toolProxy() { return m_toolProxy; }
 
     /// Enables/disables showing page margins
     void setShowMargins( bool on );
@@ -104,12 +96,11 @@ public:
 public slots:
 
     /**
-     * Tell the canvas that it has to adjust its size.
-     * The new size depends on the current document size and the actual zoom factor.
-     * If the new calculated size is smaller than the visible size set
-     * by setVisibleSize, the visible size is used as the new size.
+     * Tell the canvas that it has to adjust its document origin.
+     * The new origin depends on the current document size, the actual zoom factor
+     * and the actual canvas size.
      */
-    void adjustSize();
+    void adjustOrigin();
     void setDocumentOffset(const QPoint &offset);
 
 signals:
@@ -126,6 +117,7 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *e);
     void tabletEvent( QTabletEvent *e );
     void wheelEvent( QWheelEvent *e );
+    void resizeEvent( QResizeEvent *e );
 
     QPoint widgetToView( const QPoint& p ) const;
     QRect widgetToView( const QRect& r ) const;
@@ -138,24 +130,8 @@ private:
     /// paint page margins
     void paintMargins( QPainter &painter, const KoViewConverter &converter );
 
-    KoShapeManager* m_shapeManager;
-    KoZoomHandler m_zoomHandler;
-
-    KoToolProxy *m_toolProxy;
-
-    VDocument *m_doc;
-    KarbonPart *m_part;
-    QRectF m_contentRect;  ///< the content rect around all content of the document (>=m_documentRect)
-    QRectF m_documentRect; ///< the doument page rect defining the documents page size
-    QPoint m_origin;       ///< the origin of the document page rect
-    int m_marginX;         ///< the minimum x margin around the document page rect
-    int m_marginY;         ///< the minimum y margin around the document page rect
-    int m_visibleWidth;    ///< available space in x-direction used for calulating zoom fit and margins
-    int m_visibleHeight;   ///< available space in y-direction used for calulating zoom fit and margins
-    int m_fitMarginX;      ///< x-margin used when zoom fitting to page or width
-    int m_fitMarginY;      ///< y-margin used when zoom fitting to page or width
-    bool m_showMargins;    ///< should page margins be shown
-    QPoint m_documentOffset;
+    class KarbonCanvasPrivate;
+    KarbonCanvasPrivate * const d;
 };
 
 #endif
