@@ -202,8 +202,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     m_zoomController->setDocumentSize( m_part->document().boundingRect().size() );
     KoZoomAction * zoomAction = m_zoomController->zoomAction();
     zoomAction->setZoomModes( KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE );
-    viewBar()->addAction( zoomAction );
-    connect( m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)), this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
+    addStatusBarItem( zoomAction->createWidget( statusBar() ), 0 );
+    connect( m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
+             this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
 
     m_smallPreview = new VSmallPreview( this );
     addStatusBarItem( m_smallPreview );
