@@ -85,12 +85,12 @@ class ImportFile:
 
                 readerClazz(file)
 
-        except e:
+        except:
             import traceback
             #list = traceback.format_tb(sys.exc_info()[2], None)
             #s = traceback.format_exception_only(sys.exc_info()[0], sys.exc_info()[1])
             tb = "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
-            forms.showMessageBox("Error","Error","%s" % e,tb)
+            forms.showMessageBox("Error","Error","%s" % tb)
 
     def __del__(self):
         self.dialog.delayedDestruct()
