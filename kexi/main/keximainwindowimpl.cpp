@@ -50,7 +50,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
-#include <kkeydialog.h>
+#include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
 #include <kdeversion.h>
 #include <kglobalsettings.h>
@@ -2415,10 +2415,10 @@ KexiMainWindowImpl::slotShowSettings()
 void
 KexiMainWindowImpl::slotConfigureKeys()
 {
-/*    KKeyDialog dlg;
+/*    KShortcutsDialog dlg;
     dlg.insert( actionCollection() );
     dlg.configure();*/
-	KKeyDialog::configure( actionCollection(), false/*bAllowLetterShortcuts*/, this );
+	KShortcutsDialog::configure( actionCollection(), false/*bAllowLetterShortcuts*/, this );
 }
 
 void

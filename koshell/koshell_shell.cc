@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kkeydialog.h>
+#include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
 #include <kmenu.h>
@@ -690,7 +690,7 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
 void KoShellWindow::slotConfigureKeys()
 {
   KoView *view = rootView();
-  KKeyDialog dlg(KKeyChooser::AllActions,KKeyChooser::LetterShortcutsAllowed, this );
+  KShortcutsDialog dlg(KShortcutsEditor::AllActions,KShortcutsEditor::LetterShortcutsAllowed, this );
   
   dlg.insert( actionCollection() );
   if ( view )
