@@ -56,4 +56,4 @@ public:
 };
 
 
-#endif // _KARBONGRADIENTEDITSTRATEGY_H_
+#endif // _KARBONSTYLEPREVIEWDOCKER_H_
