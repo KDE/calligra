@@ -205,8 +205,8 @@ static const char* const buttonpattern[]={
 #endif
 
 
-#include <qpixmap.h>
-#include <qtoolbutton.h>
+#include <QPixmap>
+#include <QPushButton>
 #include <QToolTip>
 #include <QButtonGroup>
 #include <QGridLayout>
@@ -229,39 +229,42 @@ static const char* const buttonpattern[]={
 #include "vtypebuttonbox.h"
 
 VTypeButtonBox::VTypeButtonBox( QWidget* parent )
-    : QGroupBox( parent ), m_isStrokeManipulator( false )
+    : QFrame( parent ), m_isStrokeManipulator( false )
 {
+    setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
+    setMinimumSize( 50, 50 );
+
     QGridLayout * layout = new QGridLayout( this );
     QButtonGroup * group = new QButtonGroup( this );
 
     // The button for no fill
-    QToolButton* button = new QToolButton( this );
+    QPushButton* button = new QPushButton( this );
     button->setIcon( QPixmap( (const char **) buttonnone ) );
-    button->setMinimumSize( 14, 14 );
+    button->setMinimumHeight( 20 );
     button->setToolTip( i18n( "None" ) );
     group->addButton( button, None );
     layout->addWidget( button, 0, 0 );
 
     // The button for solid fill
-    button = new QToolButton( this );
+    button = new QPushButton( this );
     button->setIcon( QPixmap( (const char **) buttonsolid ) );
-    button->setMinimumSize( 14, 14 );
+    button->setMinimumHeight( 20 );
     button->setToolTip( i18n( "Solid" ) );
     group->addButton( button, Solid );
     layout->addWidget( button, 0, 1 );
 
     // The button for gradient fill
-    button = new QToolButton( this );
+    button = new QPushButton( this );
     button->setIcon( QPixmap( (const char **) buttongradient ) );
-    button->setMinimumSize( 14, 14 );
+    button->setMinimumHeight( 20 );
     button->setToolTip( i18n( "Gradient" ) );
     group->addButton( button, Gradient );
     layout->addWidget( button, 1, 0 );
 
     // The button for pattern fill
-    button = new QToolButton( this );
+    button = new QPushButton( this );
     button->setIcon( QPixmap( (const char **) buttonpattern ) );
-    button->setMinimumSize( 14, 14 );
+    button->setMinimumHeight( 20 );
     button->setToolTip( i18n( "Pattern" ) );
     group->addButton( button, Pattern );
     layout->addWidget( button, 1, 1 );

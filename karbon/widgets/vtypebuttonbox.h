@@ -21,9 +21,9 @@
 #ifndef __VTYPEBUTTONBOX_H__
 #define __VTYPEBUTTONBOX_H__
 
-#include <QGroupBox>
+#include <QFrame>
 
-class VTypeButtonBox : public QGroupBox
+class VTypeButtonBox : public QFrame
 {
     Q_OBJECT
 
