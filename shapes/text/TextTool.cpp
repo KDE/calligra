@@ -18,8 +18,8 @@
  */
 
 #include "TextTool.h"
-#include "SimpleStyleWidget.h"
-#include "StylesWidget.h"
+#include "dialogs/SimpleStyleWidget.h"
+#include "dialogs/StylesWidget.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
