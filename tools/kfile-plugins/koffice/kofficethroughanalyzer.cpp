@@ -23,7 +23,6 @@
 #include <strigi/analyzerplugin.h>
 #include <strigi/fieldtypes.h>
 #include <strigi/analysisresult.h>
-#include <strigi/cnstr.h>
 
 #include <QDomDocument>
 
@@ -54,11 +53,11 @@ private:
     }
     void registerFields( FieldRegister& );
 
-    static const cnstr authorFieldName;
-    static const cnstr titleFieldName;
-    static const cnstr keywordsFieldName;
-    static const cnstr abstractFieldName;
-    static const cnstr editingCyclesFieldName;
+    static const std::string authorFieldName;
+    static const std::string titleFieldName;
+    static const std::string keywordsFieldName;
+    static const std::string abstractFieldName;
+    static const std::string editingCyclesFieldName;
 public:
     const RegisteredField* authorField;
     const RegisteredField* titleField;
@@ -67,11 +66,11 @@ public:
     const RegisteredField* editingCyclesField;
 };
 
-const cnstr KOfficeThroughAnalyzerFactory::authorFieldName( "author" );
-const cnstr KOfficeThroughAnalyzerFactory::titleFieldName( "title" );
-const cnstr KOfficeThroughAnalyzerFactory::keywordsFieldName( "keywords" );
-const cnstr KOfficeThroughAnalyzerFactory::abstractFieldName( "abstract" );
-const cnstr KOfficeThroughAnalyzerFactory::editingCyclesFieldName( "editing cycles" );
+const std::string KOfficeThroughAnalyzerFactory::authorFieldName( "author" );
+const std::string KOfficeThroughAnalyzerFactory::titleFieldName( "title" );
+const std::string KOfficeThroughAnalyzerFactory::keywordsFieldName( "keywords" );
+const std::string KOfficeThroughAnalyzerFactory::abstractFieldName( "abstract" );
+const std::string KOfficeThroughAnalyzerFactory::editingCyclesFieldName( "editing cycles" );
 
 void KOfficeThroughAnalyzerFactory::registerFields( FieldRegister& reg ) {
     authorField = reg.registerField( authorFieldName, FieldRegister::stringType, 1, 0 );
