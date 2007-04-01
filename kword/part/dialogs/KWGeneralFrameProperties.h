@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWFRAMERUNAROUNDPROPERTIES_H
-#define KWFRAMERUNAROUNDPROPERTIES_H
+#ifndef KWGENERALFRAMEPROPERTIES_H
+#define KWGENERALFRAMEPROPERTIES_H
 
-#include "ui_KWFrameRunaroundProperties.h"
-#include <dialog/KWShapeConfigFactory.h>
+#include "ui_KWGeneralFrameProperties.h"
+#include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>
 
@@ -29,17 +29,16 @@
 #include <QList>
 
 class KWFrame;
-class KoShape;
 
-/// A widget that is shown to allow the user to select the run around properties
-class KWFrameRunaroundProperties : public KoShapeConfigWidgetBase {
+/// A widget that allows the user to alter the general frame properties
+class KWGeneralFrameProperties : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
     /// constructor
-    explicit KWFrameRunaroundProperties(FrameConfigSharedState *state);
-    ~KWFrameRunaroundProperties();
+    explicit KWGeneralFrameProperties(FrameConfigSharedState *state);
+    ~KWGeneralFrameProperties();
 
-    /// load all info from the argument frames into this widget
+    /// load all info from the argument frame into this widget
     void open(const QList<KWFrame*> &frames);
     /// reimplemented
     void open(KoShape *shape);
@@ -49,12 +48,11 @@ public:
     KAction *createAction();
 
 private:
-    Ui::KWFrameRunaroundProperties widget;
+    Ui::KWGeneralFrameProperties widget;
     FrameConfigSharedState *m_state;
-
-    QButtonGroup *m_runAroundSide, *m_runAround;
-    QList<KWFrame*> m_frames;
     KoShape *m_shape;
+    QList<KWFrame*> m_frames;
+    QButtonGroup *m_textGroup, *m_newPageGroup;
 };
 
 #endif

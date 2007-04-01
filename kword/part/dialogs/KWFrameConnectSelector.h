@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWGENERALFRAMEPROPERTIES_H
-#define KWGENERALFRAMEPROPERTIES_H
+#ifndef KWFRAMECONNECTSELECTOR_H
+#define KWFRAMECONNECTSELECTOR_H
 
-#include "ui_KWGeneralFrameProperties.h"
-#include <dialog/KWShapeConfigFactory.h>
+#include "ui_KWFrameConnectSelector.h"
+#include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>
 
@@ -29,17 +29,20 @@
 #include <QList>
 
 class KWFrame;
+class KWTextFrame;
+class KWFrameSet;
+class KWDocument;
 
-/// A widget that allows the user to alter the general frame properties
-class KWGeneralFrameProperties : public KoShapeConfigWidgetBase {
+/// A widget that is shown for 1 textframe to connect it to a frameset
+class KWFrameConnectSelector : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
     /// constructor
-    explicit KWGeneralFrameProperties(FrameConfigSharedState *state);
-    ~KWGeneralFrameProperties();
+    explicit KWFrameConnectSelector(FrameConfigSharedState *state);
+    ~KWFrameConnectSelector();
 
     /// load all info from the argument frame into this widget
-    void open(const QList<KWFrame*> &frames);
+    bool open(KWFrame *frame);
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented
@@ -47,12 +50,17 @@ public:
     /// reimplemented
     KAction *createAction();
 
+private slots:
+    void frameSetSelected();
+    void nameChanged(const QString &text);
+
 private:
-    Ui::KWGeneralFrameProperties widget;
+    Ui::KWFrameConnectSelector widget;
+
+    QList<KWFrameSet*> m_frameSets;
+    QList<QTreeWidgetItem *> m_items;
     FrameConfigSharedState *m_state;
-    KoShape *m_shape;
-    QList<KWFrame*> m_frames;
-    QButtonGroup *m_textGroup, *m_newPageGroup;
+    KWFrame *m_frame;
 };
 
 #endif

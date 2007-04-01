@@ -27,8 +27,8 @@
 #include "KWViewMode.h"
 #include "KWFactory.h"
 #include "frames/KWFrame.h"
-#include "dialog/KWFrameDialog.h"
-#include "dialog/KWPageSettingsDialog.h"
+#include "dialogs/KWFrameDialog.h"
+#include "dialogs/KWPageSettingsDialog.h"
 
 // koffice libs includes
 #include <KoShape.h>

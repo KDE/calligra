@@ -20,7 +20,7 @@
 #define KWFRAMEGEOMETRY_H
 
 #include "ui_KWFrameGeometry.h"
-#include <dialog/KWShapeConfigFactory.h>
+#include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>
 

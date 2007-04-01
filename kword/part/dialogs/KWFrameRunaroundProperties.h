@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWFRAMECONNECTSELECTOR_H
-#define KWFRAMECONNECTSELECTOR_H
+#ifndef KWFRAMERUNAROUNDPROPERTIES_H
+#define KWFRAMERUNAROUNDPROPERTIES_H
 
-#include "ui_KWFrameConnectSelector.h"
-#include <dialog/KWShapeConfigFactory.h>
+#include "ui_KWFrameRunaroundProperties.h"
+#include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>
 
@@ -29,20 +29,18 @@
 #include <QList>
 
 class KWFrame;
-class KWTextFrame;
-class KWFrameSet;
-class KWDocument;
+class KoShape;
 
-/// A widget that is shown for 1 textframe to connect it to a frameset
-class KWFrameConnectSelector : public KoShapeConfigWidgetBase {
+/// A widget that is shown to allow the user to select the run around properties
+class KWFrameRunaroundProperties : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
     /// constructor
-    explicit KWFrameConnectSelector(FrameConfigSharedState *state);
-    ~KWFrameConnectSelector();
+    explicit KWFrameRunaroundProperties(FrameConfigSharedState *state);
+    ~KWFrameRunaroundProperties();
 
-    /// load all info from the argument frame into this widget
-    bool open(KWFrame *frame);
+    /// load all info from the argument frames into this widget
+    void open(const QList<KWFrame*> &frames);
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented
@@ -50,17 +48,13 @@ public:
     /// reimplemented
     KAction *createAction();
 
-private slots:
-    void frameSetSelected();
-    void nameChanged(const QString &text);
-
 private:
-    Ui::KWFrameConnectSelector widget;
-
-    QList<KWFrameSet*> m_frameSets;
-    QList<QTreeWidgetItem *> m_items;
+    Ui::KWFrameRunaroundProperties widget;
     FrameConfigSharedState *m_state;
-    KWFrame *m_frame;
+
+    QButtonGroup *m_runAroundSide, *m_runAround;
+    QList<KWFrame*> m_frames;
+    KoShape *m_shape;
 };
 
 #endif

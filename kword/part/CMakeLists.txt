@@ -30,17 +30,17 @@ set(kwordprivate_LIB_SRCS
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
 
-    dialog/KWFrameConnectSelector.cpp
-    dialog/KWFrameGeometry.cpp
-    dialog/KWFrameRunaroundProperties.cpp
-    dialog/KWGeneralFrameProperties.cpp
-    dialog/KWFrameDialog.cpp
-    dialog/KWShapeConfigFactory.cpp
-    dialog/KWDocumentColumns.cpp
-    dialog/KWPagePreview.cpp
-    dialog/KWPageLayout.cpp
-    dialog/KWStartupWidget.cpp
-    dialog/KWPageSettingsDialog.cpp
+    dialogs/KWFrameConnectSelector.cpp
+    dialogs/KWFrameGeometry.cpp
+    dialogs/KWFrameRunaroundProperties.cpp
+    dialogs/KWGeneralFrameProperties.cpp
+    dialogs/KWFrameDialog.cpp
+    dialogs/KWShapeConfigFactory.cpp
+    dialogs/KWDocumentColumns.cpp
+    dialogs/KWPagePreview.cpp
+    dialogs/KWPageLayout.cpp
+    dialogs/KWStartupWidget.cpp
+    dialogs/KWPageSettingsDialog.cpp
 
     commands/KWPagePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
@@ -48,13 +48,13 @@ set(kwordprivate_LIB_SRCS
 )
 
 kde4_add_ui_files(kwordprivate_LIB_SRCS
-    dialog/KWFrameConnectSelector.ui
-    dialog/KWFrameGeometry.ui
-    dialog/KWFrameRunaroundProperties.ui
-    dialog/KWGeneralFrameProperties.ui
-    dialog/KWDocumentColumns.ui
-    dialog/KWPageLayout.ui
-    dialog/KWStartupWidget.ui
+    dialogs/KWFrameConnectSelector.ui
+    dialogs/KWFrameGeometry.ui
+    dialogs/KWFrameRunaroundProperties.ui
+    dialogs/KWGeneralFrameProperties.ui
+    dialogs/KWDocumentColumns.ui
+    dialogs/KWPageLayout.ui
+    dialogs/KWStartupWidget.ui
 )
 
 kde4_automoc(${kwordprivate_LIB_SRCS})

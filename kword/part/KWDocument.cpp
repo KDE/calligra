@@ -32,8 +32,8 @@
 #include "frames/KWFrame.h"
 #include "frames/KWFrameLayout.h"
 #include "frames/KWTextDocumentLayout.h"
-#include "dialog/KWFrameDialog.h"
-#include "dialog/KWStartupWidget.h"
+#include "dialogs/KWFrameDialog.h"
+#include "dialogs/KWStartupWidget.h"
 #include "commands/KWPageInsertCommand.h"
 
 // koffice libs includes
