@@ -24,10 +24,13 @@
         <property name="text" >
          <string>Left:</string>
         </property>
+        <property name="buddy" >
+         <cstring>left</cstring>
+        </property>
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleSpinBox" />
+       <widget class="KoUnitDoubleSpinBox" name="left" />
       </item>
       <item rowspan="3" row="0" column="2" >
        <spacer>
@@ -47,26 +50,32 @@
         <property name="text" >
          <string>Right:</string>
         </property>
+        <property name="buddy" >
+         <cstring>right</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_2" />
+       <widget class="KoUnitDoubleSpinBox" name="right" />
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="label_3" >
         <property name="text" >
          <string>First Line:</string>
         </property>
+        <property name="buddy" >
+         <cstring>first</cstring>
+        </property>
        </widget>
       </item>
       <item row="2" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_3" />
+       <widget class="KoUnitDoubleSpinBox" name="first" />
       </item>
      </layout>
     </widget>
    </item>
    <item rowspan="4" row="0" column="1" >
-    <widget class="QGroupBox" name="groupBox_4" >
+    <widget class="QGroupBox" name="previewPane" >
      <property name="title" >
       <string>Preview</string>
      </property>
@@ -79,17 +88,20 @@
      </property>
      <layout class="QGridLayout" >
       <item row="0" column="0" colspan="3" >
-       <widget class="QComboBox" name="comboBox" />
+       <widget class="QComboBox" name="lineSpacing" />
       </item>
       <item row="1" column="0" >
        <widget class="QLabel" name="label_4" >
         <property name="text" >
          <string>Custom:</string>
         </property>
+        <property name="buddy" >
+         <cstring>custom</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_4" />
+       <widget class="KoUnitDoubleSpinBox" name="custom" />
       </item>
       <item row="1" column="2" >
        <spacer>
@@ -118,10 +130,13 @@
         <property name="text" >
          <string>Before:</string>
         </property>
+        <property name="buddy" >
+         <cstring>before</cstring>
+        </property>
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_5" />
+       <widget class="KoUnitDoubleSpinBox" name="before" />
       </item>
       <item rowspan="2" row="0" column="2" >
        <spacer>
@@ -141,10 +156,13 @@
         <property name="text" >
          <string>After:</string>
         </property>
+        <property name="buddy" >
+         <cstring>after</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_6" />
+       <widget class="KoUnitDoubleSpinBox" name="after" />
       </item>
      </layout>
     </widget>
@@ -164,6 +182,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoUnitDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>KoUnitWidgets.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

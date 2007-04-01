@@ -24,13 +24,21 @@
 
 #include <QWidget>
 
+class KoParagraphStyle;
+
 class ParagraphBulletsNumbers : public QWidget {
     Q_OBJECT
 public:
     ParagraphBulletsNumbers(QWidget *parent);
 
+    void open(KoParagraphStyle *style);
+
+    void save();
+
 private:
     Ui::ParagraphBulletsNumbers widget;
+
+    KoParagraphStyle *m_style;
 };
 
 #endif

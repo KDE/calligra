@@ -19,10 +19,19 @@
 
 #include "ParagraphLayout.h"
 
+#include <KoParagraphStyle.h>
+
 ParagraphLayout::ParagraphLayout(QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
 }
+
+void ParagraphLayout::open(KoParagraphStyle *style) {
+}
+
+void ParagraphLayout::save() {
+}
+
 
 #include "ParagraphLayout.moc"

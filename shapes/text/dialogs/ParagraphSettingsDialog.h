@@ -20,16 +20,23 @@
 #define PARAGRAPHSETTINGSDIALOG_H
 
 #include <KPageDialog>
+#include <QTextCursor>
 
 class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
 class ParagraphLayout;
+
+class KoParagraphStyle;
 
 /// A dialog to show the settings for a paragraph
 class ParagraphSettingsDialog : public KPageDialog {
     Q_OBJECT
 public:
     explicit ParagraphSettingsDialog(QWidget *parent);
+    ~ParagraphSettingsDialog();
+
+    void open(const QTextCursor &cursor);
+    void open(KoParagraphStyle *style);
 
 private:
     void accept();
@@ -38,6 +45,10 @@ private:
     ParagraphIndentSpacing *m_paragraphIndentSpacing;
     ParagraphLayout *m_paragraphLayout;
     ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
+
+    QTextCursor m_cursor;
+    KoParagraphStyle *m_style;
+    bool m_ownStyle;
 };
 
 #endif

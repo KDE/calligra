@@ -19,10 +19,18 @@
 
 #include "ParagraphBulletsNumbers.h"
 
+#include <KoParagraphStyle.h>
+
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
+}
+
+void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
+}
+
+void ParagraphBulletsNumbers::save() {
 }
 
 #include "ParagraphBulletsNumbers.moc"

@@ -24,13 +24,20 @@
 
 #include <QWidget>
 
+class KoParagraphStyle;
+
 class ParagraphIndentSpacing : public QWidget {
     Q_OBJECT
 public:
     ParagraphIndentSpacing(QWidget *parent);
+    void open(KoParagraphStyle *style);
+
+    void save();
 
 private:
     Ui::ParagraphIndentSpacing widget;
+
+    KoParagraphStyle *m_style;
 };
 
 #endif

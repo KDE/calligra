@@ -24,13 +24,21 @@
 
 #include <QWidget>
 
+class KoParagraphStyle;
+
 class ParagraphLayout : public QWidget {
     Q_OBJECT
 public:
     ParagraphLayout(QWidget *parent);
 
+    void open(KoParagraphStyle *style);
+
+    void save();
+
 private:
     Ui::ParagraphLayout widget;
+
+    KoParagraphStyle *m_style;
 };
 
 #endif

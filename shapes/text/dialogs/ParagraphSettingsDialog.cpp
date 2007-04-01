@@ -23,9 +23,15 @@
 #include "ParagraphLayout.h"
 #include "ParagraphBulletsNumbers.h"
 
+#include <KoParagraphStyle.h>
+
+#include <QTextBlock>
+
 
 ParagraphSettingsDialog::ParagraphSettingsDialog(QWidget *parent)
-    : KPageDialog(parent)
+    : KPageDialog(parent),
+    m_style(0),
+    m_ownStyle(false)
 {
     setFaceType(KPageDialog::Tabbed);
     m_paragraphIndentSpacing = new ParagraphIndentSpacing (this);
@@ -37,7 +43,21 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(QWidget *parent)
     addPage(m_paragraphBulletsNumbers, "Bullets/Numbers");
 }
 
+ParagraphSettingsDialog::~ParagraphSettingsDialog() {
+    if(m_ownStyle)
+        delete m_style;
+}
+
 void ParagraphSettingsDialog::accept() {
+    if(m_style) {
+        m_paragraphIndentSpacing->save();
+        m_paragraphLayout->save();
+        m_paragraphBulletsNumbers->save();
+
+        QTextBlock block = m_cursor.block();
+        m_style->applyStyle(block);
+    }
+
     QDialog::accept();
     deleteLater();
 }
@@ -45,6 +65,19 @@ void ParagraphSettingsDialog::accept() {
 void ParagraphSettingsDialog::reject() {
     QDialog::reject();
     deleteLater();
+}
+
+void ParagraphSettingsDialog::open(const QTextCursor &cursor) {
+    m_cursor = cursor;
+    m_ownStyle = true;
+    open( KoParagraphStyle::fromBlockFormat(m_cursor.blockFormat()) );
+}
+
+void ParagraphSettingsDialog::open(KoParagraphStyle *style) {
+    m_style = style;
+    m_paragraphIndentSpacing->open(style);
+    m_paragraphLayout->open(style);
+    m_paragraphBulletsNumbers->open(style);
 }
 
 #include <ParagraphSettingsDialog.moc>
