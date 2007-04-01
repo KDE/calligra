@@ -3696,9 +3696,9 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
     QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
     QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
 
-    // TODO Stefan: store the save markers/anchors in the Selection?
-    QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;
-    QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
+    // restore the old anchor and marker
+    const QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;
+    const QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
 
     d->selection->clear();
     d->selection->setActiveSheet( d->activeSheet );
