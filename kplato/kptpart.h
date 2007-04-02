@@ -133,15 +133,19 @@ public:
     //void setEmbedded( bool emb ) { m_embedded = emb; }
     void activate( QWidget *w = 0 );
     virtual KoDocument* hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix = QMatrix() );
-    QDomElement save( QDomDocument &doc );
-    bool load( const KoXmlElement& element );
+    virtual QDomElement save( QDomDocument &doc, bool uppercase = false );
+    virtual bool load( const KoXmlElement& element, bool uppercase = false );
     
     void setIcon( const QString &icon ) { m_icon = icon; }
     QString icon() const { return m_icon; }
     
+    void setTitle( const QString &title ) { m_title = title; }
+    QString title() const { return m_title; }
+    
 private:
     //bool m_embedded;
     QString m_icon;
+    QString m_title;
 };
 
 }  //KPlato namespace

@@ -175,8 +175,12 @@ void ViewCategoryDelegate::paint( QPainter * painter, const QStyleOptionViewItem
 class ViewListItem : public QTreeWidgetItem
 {
 public:
-    ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type = Type );
-    ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type = Type );
+    enum ItemType { ItemType_Category = Type, ItemType_SubView = UserType, ItemType_ChildDocument };
+    
+    enum DataRole { DataRole_View = Qt::UserRole, DataRole_Document, DataRole_ChildDocument };
+
+    ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
+    ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
     void setView( KoView *view );
     KoView *view() const;
     void setDocumentChild( DocumentChild *child );
@@ -203,39 +207,39 @@ ViewListItem::ViewListItem( QTreeWidgetItem *parent, const QString &tag, const Q
 
 void ViewListItem::setView( KoView *view )
 {
-    setData( 0, Qt::UserRole,  qVariantFromValue(static_cast<QWidget*>( view ) ) );
+    setData( 0, ViewListItem::DataRole_View,  qVariantFromValue(static_cast<QWidget*>( view ) ) );
 }
 
 KoView *ViewListItem::view() const
 {
-    if ( data(0, Qt::UserRole ).isValid() ) {
-        return static_cast<KoView*>( data(0, Qt::UserRole ).value<QWidget*>() );
+    if ( data(0, ViewListItem::DataRole_View ).isValid() ) {
+        return static_cast<KoView*>( data(0, ViewListItem::DataRole_View ).value<QWidget*>() );
     }
     return 0;
 }
 
 void ViewListItem::setDocument( KoDocument *doc )
 {
-    setData( 0, Qt::UserRole+1,  qVariantFromValue(static_cast<QObject*>( doc ) ) );
+    setData( 0, ViewListItem::DataRole_Document,  qVariantFromValue(static_cast<QObject*>( doc ) ) );
 }
 
 KoDocument *ViewListItem::document() const
 {
-    if ( data(0, Qt::UserRole+1 ).isValid() ) {
-        return static_cast<KoDocument*>( data(0, Qt::UserRole+1 ).value<QObject*>() );
+    if ( data(0, ViewListItem::DataRole_Document ).isValid() ) {
+        return static_cast<KoDocument*>( data(0, ViewListItem::DataRole_Document ).value<QObject*>() );
     }
     return 0;
 }
 
 void ViewListItem::setDocumentChild( DocumentChild *child )
 {
-    setData( 0, Qt::UserRole+2,  qVariantFromValue(static_cast<QObject*>( child ) ) );
+    setData( 0, ViewListItem::DataRole_ChildDocument,  qVariantFromValue(static_cast<QObject*>( child ) ) );
 }
 
 DocumentChild *ViewListItem::documentChild() const
 {
-    if ( data(0, Qt::UserRole+2 ).isValid() ) {
-        return static_cast<DocumentChild*>( data(0, Qt::UserRole+2 ).value<QObject*>() );
+    if ( data(0, ViewListItem::DataRole_ChildDocument ).isValid() ) {
+        return static_cast<DocumentChild*>( data(0, ViewListItem::DataRole_ChildDocument ).value<QObject*>() );
     }
     return 0;
 }
@@ -306,6 +310,8 @@ ViewListWidget::ViewListWidget( QWidget *parent )//QString name, KMainWindow *pa
 
     connect( m_viewlist, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), SLOT( slotActivated( QTreeWidgetItem*, QTreeWidgetItem* ) ) );
     
+    connect( m_viewlist, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), SLOT( slotItemChanged( QTreeWidgetItem*, int ) ) );
+    
     setupContextMenus();
 }
 
@@ -313,20 +319,22 @@ ViewListWidget::~ViewListWidget()
 {
 }
 
-void ViewListWidget::slotActionTriggered()
+void ViewListWidget::slotItemChanged( QTreeWidgetItem *item, int col )
 {
     //kDebug()<<k_funcinfo<<endl;
-    QString servName = sender()->objectName();
-    //kDebug()<<k_funcinfo<<servName<<endl;
-    KService::Ptr serv = KService::serviceByName( servName );
-    KoDocumentEntry entry = KoDocumentEntry( serv );
-    emit createKofficeDocument( entry );
+    if ( item && item->type() == ViewListItem::ItemType_ChildDocument && col == 0 ) {
+        DocumentChild *ch = static_cast<ViewListItem*>(item)->documentChild();
+        if ( ch ) {
+            ch->setTitle( item->text( 0 ) );
+            //kDebug()<<k_funcinfo<<ch->title()<<endl;
+        }
+    }
 }
 
 void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev )
 {
     //kDebug()<<k_funcinfo<<endl;
-    if ( item == 0 || item->type() == ViewListWidget::Category ) {
+    if ( item == 0 || item->type() == ViewListItem::ItemType_Category ) {
         return ;
     }
     emit activated( static_cast<ViewListItem*>( item ), static_cast<ViewListItem*>( prev ) );
@@ -337,7 +345,7 @@ ViewListItem *ViewListWidget::addCategory( const QString &tag, const QString& na
     //kDebug() << k_funcinfo << endl;
     ViewListItem *item = m_viewlist->findCategory( tag );
     if ( item == 0 ) {
-        item = new ViewListItem( m_viewlist, tag, QStringList( name ), ViewListWidget::Category );
+        item = new ViewListItem( m_viewlist, tag, QStringList( name ), ViewListItem::ItemType_Category );
         item->setExpanded( true );
         item->setFlags( item->flags() | Qt::ItemIsEditable );
     }
@@ -346,7 +354,7 @@ ViewListItem *ViewListWidget::addCategory( const QString &tag, const QString& na
 
 ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon )
 {
-    ViewListItem * item = new ViewListItem( category, tag, QStringList( name ), ViewListWidget::SubView );
+    ViewListItem * item = new ViewListItem( category, tag, QStringList( name ), ViewListItem::ItemType_SubView );
     item->setView( view );
     item->setDocument( doc );
     if ( !icon.isEmpty() )
@@ -357,13 +365,14 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString 
 
 ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon )
 {
-    ViewListItem * item = new ViewListItem( category, tag, QStringList( name ), ViewListWidget::ChildDocument );
+    ViewListItem * item = new ViewListItem( category, tag, QStringList( name ), ViewListItem::ItemType_ChildDocument );
     item->setView( view );
     item->setDocument( ch->document() );
     item->setDocumentChild( ch );
     if ( !icon.isEmpty() ) {
         item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
     }
+    item->setFlags( item->flags() | Qt::ItemIsEditable );
     //kDebug() << k_funcinfo << "added: " << item << endl;
     return item;
 }
@@ -425,6 +434,26 @@ ViewListItem *ViewListWidget::findItem(  const QWidget *view, QTreeWidgetItem *p
     return 0;
 }
 
+void ViewListWidget::slotCreatePart()
+{
+    kDebug()<<k_funcinfo<<endl;
+    QString servName = sender()->objectName();
+    kDebug()<<k_funcinfo<<servName<<endl;
+    KService::Ptr serv = KService::serviceByName( servName );
+    KoDocumentEntry entry = KoDocumentEntry( serv );
+    emit createKofficeDocument( entry );
+}
+
+void ViewListWidget::slotEditDocumentTitle()
+{
+    QTreeWidgetItem *item = m_viewlist->currentItem();
+    if ( item ) {
+        kDebug()<<k_funcinfo<<item<<": "<<item->type()<<endl;
+        m_viewlist->editItem( item );
+    }
+}
+
+
 void ViewListWidget::setupContextMenus()
 {
     // NOTE: can't use xml file as there may not be a factory()
@@ -443,7 +472,7 @@ void ViewListWidget::setupContextMenus()
         }
         action = new QAction( KIcon(serv->icon()), serv->genericName().replace('&',"&&"), this );
         action->setObjectName( serv->name().toLatin1() );
-        connect(action, SIGNAL( triggered( bool ) ), this, SLOT( slotActionTriggered() ) );
+        connect(action, SIGNAL( triggered( bool ) ), this, SLOT( slotCreatePart() ) );
         m_parts.append( action );
     }
     // no item actions
@@ -463,8 +492,10 @@ void ViewListWidget::setupContextMenus()
     // document actions
     //action = new QAction( KIcon( "show" ), i18n( "Show" ), this );
     //m_document.append( action );
-/*    action = new QAction( KIcon( "document-properties" ), i18n( "Document information" ), this );
-    m_document.append( action );*/
+    //action = new QAction( KIcon( "document-properties" ), i18n( "Document information" ), this );
+    action = new QAction( KIcon( "edit" ), i18n( "Document title" ), this );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotEditDocumentTitle() ) );
+    m_document.append( action );
 }
 
 void ViewListWidget::renameCategory()
@@ -482,15 +513,15 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
         lst = m_noitem;
         lst.append( m_separator );
         lst += m_parts;
-    } else if ( m_contextitem->type() == Category ) {
+    } else if ( m_contextitem->type() == ViewListItem::ItemType_Category ) {
         lst = m_category;
         lst.append( m_separator );
         lst += m_parts;
-    } else if ( m_contextitem->type() == SubView ) {
+    } else if ( m_contextitem->type() == ViewListItem::ItemType_SubView ) {
         lst = m_view;
         lst.append( m_separator );
         lst += m_parts;
-    } else if ( m_contextitem->type() == ChildDocument ) {
+    } else if ( m_contextitem->type() == ViewListItem::ItemType_ChildDocument ) {
         lst = m_document;
         lst.append( m_separator );
         lst += m_parts;
@@ -2110,8 +2141,8 @@ ViewListItem *View::createChildDocumentView( DocumentChild *ch )
     QTreeWidgetItem *cat = m_viewlist->addCategory( "Documents", i18n( "Documents" ) );
     cat->setIcon( 0, KIcon( "koshell" ) );
     
-    QString title;
-    if ( doc->documentInfo() ) {
+    QString title = ch->title();
+    if ( title.isEmpty() && doc->documentInfo() ) {
         title = doc->documentInfo()->aboutInfo( "title" );
     }
     if ( title.isEmpty() ) {
@@ -2150,7 +2181,7 @@ void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
     //kDebug() << k_funcinfo << "item=" << item << ", "<<prev<<endl;
-    if ( prev && prev->type() != ViewListWidget::ChildDocument ) {
+    if ( prev && prev->type() != ViewListItem::ItemType_ChildDocument ) {
         // Remove sub-view specific gui
         //kDebug()<<k_funcinfo<<"Deactivate: "<<prev<<endl;
         ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
@@ -2158,10 +2189,10 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
             v->setGuiActive( false );
         }
     }
-    if ( item->type() == ViewListWidget::SubView ) {
+    if ( item->type() == ViewListItem::ItemType_SubView ) {
         //kDebug()<<k_funcinfo<<"Activate: "<<item<<endl;
         m_tab->setCurrentWidget( item->view() );
-        if (  prev && prev->type() != ViewListWidget::SubView ) {
+        if (  prev && prev->type() != ViewListItem::ItemType_SubView ) {
             // Put back my own gui (removed when (if) viewing different doc)
             getPart()->activate( this );
         }
@@ -2172,7 +2203,7 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         }
         return;
     } 
-    if ( item->type() == ViewListWidget::ChildDocument ) {
+    if ( item->type() == ViewListItem::ItemType_ChildDocument ) {
         //kDebug()<<k_funcinfo<<"Activated: "<<item->view()<<endl;
         // changing doc also takes care of all gui
         m_tab->setCurrentWidget( item->view() );

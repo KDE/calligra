@@ -102,8 +102,6 @@ class ViewListWidget : public QWidget
 {
     Q_OBJECT
 public:
-    enum ItemType { Category = QTreeWidgetItem::Type, View = QTreeWidgetItem::UserType, SubView, ChildDocument };
-    
     ViewListWidget( QWidget *parent );//QString name, KMainWindow *parent );
     ~ViewListWidget();
     
@@ -120,9 +118,11 @@ signals:
     void createKofficeDocument( KoDocumentEntry &entry );
     
 protected slots:
-    void slotActionTriggered();
     void slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev );
+    void slotItemChanged( QTreeWidgetItem *item, int col );
     void renameCategory();
+    void slotCreatePart();
+    void slotEditDocumentTitle();
     
 protected:
     virtual void contextMenuEvent ( QContextMenuEvent *event );

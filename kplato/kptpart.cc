@@ -448,20 +448,24 @@ KoDocument* DocumentChild::hitTest( const QPoint& p, KoView* view, const QMatrix
 }
 
 
-QDomElement DocumentChild::save( QDomDocument &doc )
+QDomElement DocumentChild::save( QDomDocument &doc, bool uppercase )
 {
     if ( document() == 0 ) {
         return QDomElement();
     }
-    QDomElement e = KoDocumentChild::save( doc, false );
+    QDomElement e = KoDocumentChild::save( doc, uppercase );
+    kDebug()<<k_funcinfo<<m_title<<endl;
+    e.setAttribute( "title", m_title );
     e.setAttribute( "icon", m_icon );
     return e;
 }
 
-bool DocumentChild::load( const KoXmlElement& element )
+bool DocumentChild::load( const KoXmlElement& element, bool uppercase )
 {
-    if ( KoDocumentChild::load( element, false ) ) {
+    if ( KoDocumentChild::load( element, uppercase ) ) {
         m_icon = element.attribute( "icon", QString() );
+        m_title = element.attribute( "title", QString() );
+        kDebug()<<k_funcinfo<<m_title<<endl;
         return true;
     }
     return false;
