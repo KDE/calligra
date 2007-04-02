@@ -23,7 +23,7 @@
 #include "ui_kptmilestoneprogresspanelbase.h"
 #include "kpttask.h"
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -51,7 +51,7 @@ class MilestoneProgressPanel : public MilestoneProgressPanelImpl {
 public:
     explicit MilestoneProgressPanel(Task &task, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
     
     bool ok();
 

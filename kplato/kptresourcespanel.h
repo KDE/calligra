@@ -25,7 +25,7 @@
 
 #include <QString>
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -52,7 +52,7 @@ public:
     ~ResourcesPanel();
     
     bool ok();
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
 
 protected slots:
     void slotAddGroup();

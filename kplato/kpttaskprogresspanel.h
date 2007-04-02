@@ -26,7 +26,7 @@
 #include <QWidget>
 #include <QTableView>
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -73,7 +73,7 @@ class TaskProgressPanel : public TaskProgressPanelImpl {
 public:
     explicit TaskProgressPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
     
     bool ok();
 

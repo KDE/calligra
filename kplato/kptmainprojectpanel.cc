@@ -28,7 +28,7 @@
 #include <kdatewidget.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
@@ -91,39 +91,39 @@ bool MainProjectPanel::ok() {
     return true;
 }
 
-KCommand *MainProjectPanel::buildCommand(Part *part) {
-    KMacroCommand *m = 0;
+K3Command *MainProjectPanel::buildCommand(Part *part) {
+    K3MacroCommand *m = 0;
     QString c = i18n("Modify main project");
     if (project.name() != namefield->text()) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(new NodeModifyNameCmd(part, project, namefield->text()));
     }
     if (project.id() != idfield->text()) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(new NodeModifyIdCmd(part, project, idfield->text()));
     }
     if (project.leader() != leaderfield->text()) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(new NodeModifyLeaderCmd(part, project, leaderfield->text()));
     }
     if (project.description() != descriptionfield->text()) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(new NodeModifyDescriptionCmd(part, project, descriptionfield->text()));
     }
     if (bStartDate->isChecked() && project.constraint() != Node::MustStartOn) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustStartOn));
     }
     if (bEndDate->isChecked() && project.constraint() != Node::MustFinishOn) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustFinishOn));
     }
     if (bStartDate->isChecked() && startDateTime() != project.constraintStartTime().dateTime()) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(new ProjectModifyStartTimeCmd(part, project, startDateTime()));
     }
     if (bEndDate->isChecked() && endDateTime() != project.constraintEndTime().dateTime()) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(part, project, endDateTime()));
     }
     return m;

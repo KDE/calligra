@@ -28,7 +28,7 @@
 
 class QDate;
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -79,7 +79,7 @@ public:
     CalendarEditDialog(Project &project, Calendar *calendar, QWidget *parent=0, const char *name=0);
     ~CalendarEditDialog();
     
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

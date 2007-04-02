@@ -130,8 +130,8 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
 void WBSDefinitionPanel::setStartValues(Part */*part*/) {
 }
 
-KMacroCommand *WBSDefinitionPanel::buildCommand(Part */*part*/) {
-    KMacroCommand *cmd = new KMacroCommand(i18n("Modify WBS Definition"));
+K3MacroCommand *WBSDefinitionPanel::buildCommand(Part */*part*/) {
+    K3MacroCommand *cmd = new K3MacroCommand(i18n("Modify WBS Definition"));
 
     return cmd;
 }

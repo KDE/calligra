@@ -29,7 +29,7 @@
 #include <QString>
 #include <QList>
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -89,7 +89,7 @@ class CalendarListDialog : public KDialog {
 public:
     explicit CalendarListDialog(Project &project, QWidget *parent=0, const char *name=0);
     
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

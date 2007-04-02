@@ -18,7 +18,7 @@
 */
 
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -58,12 +58,12 @@ void ResourcesDialog::slotOk() {
     accept();
 }
 
-KCommand *ResourcesDialog::buildCommand(Part *part) {
-    KMacroCommand *m = 0;
+K3Command *ResourcesDialog::buildCommand(Part *part) {
+    K3MacroCommand *m = 0;
     QString c = i18n("Modify resources");
-    KCommand *cmd = panel->buildCommand(part);
+    K3Command *cmd = panel->buildCommand(part);
     if (cmd) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(cmd);
     }
     return m;

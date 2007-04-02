@@ -42,8 +42,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kcommand.h>
-#include <kcommand.h>
+#include <k3command.h>
+#include <k3command.h>
 #include <kparts/partmanager.h>
 #include <kmimetype.h>
 
@@ -62,7 +62,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         m_context( 0 ), m_xmlLoader()
 {
     m_update = m_calculate = false;
-    m_commandHistory = new KCommandHistory( actionCollection() );
+    m_commandHistory = new K3CommandHistory( actionCollection() );
 
     setComponentData( Factory::global() );
     setTemplateType( "kplato_template" );
@@ -72,7 +72,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     delete m_project;
     m_project = new Project(); // after config is loaded
 
-    connect( m_commandHistory, SIGNAL( commandExecuted( KCommand * ) ), SLOT( slotCommandExecuted( KCommand * ) ) );
+    connect( m_commandHistory, SIGNAL( commandExecuted( K3Command * ) ), SLOT( slotCommandExecuted( K3Command * ) ) );
     connect( m_commandHistory, SIGNAL( documentRestored() ), SLOT( slotDocumentRestored() ) );
 
     //FIXME the following is really dirty, we should make KPlato::Context a real class
@@ -324,12 +324,12 @@ void Part::paintContent( QPainter &painter, const QRect &rect)
 }
 
 
-void Part::addCommand( KCommand * cmd, bool execute )
+void Part::addCommand( K3Command * cmd, bool execute )
 {
     m_commandHistory->addCommand( cmd, execute );
 }
 
-void Part::slotCommandExecuted( KCommand * )
+void Part::slotCommandExecuted( K3Command * )
 {
     //kDebug()<<k_funcinfo<<endl;
     setModified( true );

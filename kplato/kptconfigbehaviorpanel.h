@@ -23,7 +23,7 @@
 #include "kptconfigbehaviorpanelbase.h"
 #include "kptconfig.h"
 
-class KMacroCommand;
+class K3MacroCommand;
 
 namespace KPlato
 {

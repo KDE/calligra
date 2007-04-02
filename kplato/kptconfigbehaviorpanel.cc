@@ -28,7 +28,7 @@
 #include <kcombobox.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>

@@ -32,7 +32,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kcommand.h>
+#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -139,35 +139,35 @@ bool TaskProgressPanel::ok() {
     return true;
 }
 
-KCommand *TaskProgressPanel::buildCommand(Part *part) {
-    KMacroCommand *cmd = 0;
+K3Command *TaskProgressPanel::buildCommand(Part *part) {
+    K3MacroCommand *cmd = 0;
     QString c = i18n("Modify task completion");
     
     if ( m_original.isStarted() != started->isChecked() ) {
-        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
         cmd->addCommand( new ModifyCompletionStartedCmd(part, m_original, started->isChecked() ) );
     }
     if ( m_original.isFinished() != finished->isChecked() ) {
-        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_original, finished->isChecked() ) );
     }
     if ( m_original.startTime().dateTime() != startTime->dateTime() ) {
-        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
         cmd->addCommand( new ModifyCompletionStartTimeCmd(part, m_original, startTime->dateTime() ) );
     }
     if ( m_original.finishTime().dateTime() != finishTime->dateTime() ) {
-        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishTimeCmd(part, m_original, finishTime->dateTime() ) );
     }
     if ( m_original.entryDate() != dateEdit->date() ) {
-        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
         Completion::Entry *e = new Completion::Entry( percentFinished->value(), remainingEffort->value(), actualEffort->value() );
         cmd->addCommand( new AddCompletionEntryCmd(part, m_original, dateEdit->date(), e ) );
     } else {
         if ( ( m_original.percentFinished() != percentFinished->value() ) ||
              ( m_original.remainingEffort()  != remainingEffort->value() ) ||
              ( m_original.actualEffort() != actualEffort->value() ) ) {
-            if ( cmd == 0 ) cmd = new KMacroCommand( c );
+            if ( cmd == 0 ) cmd = new K3MacroCommand( c );
             Completion::Entry *e = new Completion::Entry( percentFinished->value(), remainingEffort->value(), actualEffort->value() );
             cmd->addCommand( new AddCompletionEntryCmd(part, m_original, dateEdit->date(), e ) );
         }
@@ -179,7 +179,7 @@ KCommand *TaskProgressPanel::buildCommand(Part *part) {
             continue;
         }
         if ( m_original.usedEffort( r ) == 0 || *ue != *(m_original.usedEffort( r )) ) {
-            if ( cmd == 0 ) cmd = new KMacroCommand( c );
+            if ( cmd == 0 ) cmd = new K3MacroCommand( c );
             cmd->addCommand( new AddCompletionUsedEffortCmd( part, m_original, r, new Completion::UsedEffort( *ue ) ) );
         }
     }

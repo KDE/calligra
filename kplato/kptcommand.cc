@@ -142,7 +142,7 @@ CalendarRemoveCmd::CalendarRemoveCmd( Part *part, Project *project, Calendar *ca
         m_parent( cal->parentCal() ),
         m_cal( cal ),
         m_mine( false ),
-        m_cmd( new KMacroCommand("") )
+        m_cmd( new K3MacroCommand("") )
 {
     Q_ASSERT( project != 0 );
 
@@ -211,7 +211,7 @@ CalendarModifyParentCmd::CalendarModifyParentCmd( Part *part, Project *project, 
         : NamedCommand( part, name ),
         m_project( project ),
         m_cal( cal ),
-        m_cmd( new KMacroCommand( "" ) )
+        m_cmd( new K3MacroCommand( "" ) )
 {
     m_oldvalue = cal->parentCal();
     m_newvalue = newvalue;
@@ -251,7 +251,7 @@ CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Part *part, Calendar *cal,
         : NamedCommand( part, name ),
         m_cal( cal ),
         m_newvalue( value ),
-        m_cmd( new KMacroCommand( "" ) )
+        m_cmd( new K3MacroCommand( "" ) )
 {
     m_oldvalue = cal->timeZone();
     foreach ( Calendar *c, cal->calendars() ) {
@@ -416,7 +416,7 @@ CalendarModifyStateCmd::CalendarModifyStateCmd( Part *part, Calendar *calendar, 
         : NamedCommand( part, name ),
         m_calendar( calendar ),
         m_day( day ),
-        m_cmd( new KMacroCommand( "" ) )
+        m_cmd( new K3MacroCommand( "" ) )
 {
 
     m_newvalue = value;
@@ -610,7 +610,7 @@ NodeDeleteCmd::NodeDeleteCmd( Part *part, Node *node, const QString& name )
             }
         }
     }
-    m_cmd = new KMacroCommand( "" );
+    m_cmd = new K3MacroCommand( "" );
     foreach ( Relation * r, node->dependChildNodes() ) {
         m_cmd->addCommand( new DeleteRelationCmd( part, r ) );
     }
@@ -734,7 +734,7 @@ SubtaskAddCmd::SubtaskAddCmd( Part *part, Project *project, Node *node, Node *pa
     ResourceRequestCollection *rc = parent->requests();
     if ( rc ) {
         foreach ( ResourceGroupRequest *r, rc->requests() ) {
-            if ( m_cmd == 0 ) m_cmd = new KMacroCommand( "" );
+            if ( m_cmd == 0 ) m_cmd = new K3MacroCommand( "" );
             m_cmd->addCommand( new RemoveResourceGroupRequestCmd( m_part, r ) );
         }
     }
@@ -985,7 +985,7 @@ void NodeIndentCmd::execute()
             ResourceRequestCollection *rc = m_newparent->requests();
             if ( rc ) {
                 foreach ( ResourceGroupRequest *r, rc->requests() ) {
-                    if ( m_cmd == 0 ) m_cmd = new KMacroCommand( "" );
+                    if ( m_cmd == 0 ) m_cmd = new K3MacroCommand( "" );
                     m_cmd->addCommand( new RemoveResourceGroupRequestCmd( m_part, r ) );
                 }
             }
@@ -1104,7 +1104,7 @@ NodeMoveCmd::NodeMoveCmd( Part *part, Project *project, Node *node, Node *newPar
     ResourceRequestCollection *rc = newParent->requests();
     if ( rc ) {
         foreach ( ResourceGroupRequest *r, rc->requests() ) {
-            if ( m_cmd == 0 ) m_cmd = new KMacroCommand( "" );
+            if ( m_cmd == 0 ) m_cmd = new K3MacroCommand( "" );
             m_cmd->addCommand( new RemoveResourceGroupRequestCmd( m_part, r ) );
         }
     }
@@ -1339,7 +1339,7 @@ ModifyEffortCmd::ModifyEffortCmd( Part *part, Node &node, Duration oldvalue, Dur
         ResourceRequestCollection *rc = node.requests();
         if ( rc ) {
             foreach ( ResourceGroupRequest *r, rc->requests() ) {
-                if ( m_cmd == 0 ) m_cmd = new KMacroCommand( "" );
+                if ( m_cmd == 0 ) m_cmd = new K3MacroCommand( "" );
                 m_cmd->addCommand( new RemoveResourceGroupRequestCmd( m_part, r ) );
             }
         }
@@ -1873,7 +1873,7 @@ RemoveResourceGroupCmd::RemoveResourceGroupCmd( Part *part, Project *project, Re
     m_index = project->indexOf( group );
     m_mine = false;
     if ( !m_group->requests().isEmpty() ) {
-        m_cmd = new KMacroCommand("");
+        m_cmd = new K3MacroCommand("");
         foreach( ResourceGroupRequest * r, m_group->requests() ) {
             m_cmd->addCommand( new RemoveResourceGroupRequestCmd( part, r ) );
         }

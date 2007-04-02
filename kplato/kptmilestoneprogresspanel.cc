@@ -24,7 +24,7 @@
 #include <kdatetimewidget.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kcommand.h>
+#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -52,16 +52,16 @@ bool MilestoneProgressPanel::ok() {
     return true;
 }
 
-KCommand *MilestoneProgressPanel::buildCommand(Part *part) {
-    KMacroCommand *cmd = 0;
+K3Command *MilestoneProgressPanel::buildCommand(Part *part) {
+    K3MacroCommand *cmd = 0;
     QString c = i18n("Modify milestone completion");
     
     if ( m_completion.isFinished() != finished->isChecked() ) {
-        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_completion, finished->isChecked()) );
     }
     if ( m_completion.finishTime().dateTime() != finishTime->dateTime() ) {
-        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishTimeCmd(part, m_completion, finishTime->dateTime() ) );
     }
     if ( finished->isChecked() && finishTime->dateTime().isValid() ) {

@@ -23,7 +23,7 @@
 
 #include <kdialog.h>
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -45,7 +45,7 @@ public:
      */
     explicit SummaryTaskDialog(Task &task,  QWidget *parent=0);
 
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

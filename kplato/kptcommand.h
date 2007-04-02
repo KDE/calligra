@@ -20,7 +20,7 @@
 #ifndef KPTCOMMAND_H
 #define KPTCOMMAND_H
 
-#include <kcommand.h>
+#include <k3command.h>
 
 #include "kptappointment.h"
 #include "kptnode.h"
@@ -49,11 +49,11 @@ class Resource;
 class Schedule;
 class StandardWorktime;
 
-class NamedCommand : public KNamedCommand
+class NamedCommand : public K3NamedCommand
 {
 public:
     NamedCommand( Part *part, const QString& name )
-            : KNamedCommand( name ), m_part( part )
+            : K3NamedCommand( name ), m_part( part )
     {}
 
     void setCommandType( int type );
@@ -100,7 +100,7 @@ private:
     Calendar *m_parent;
     Calendar *m_cal;
     bool m_mine;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 };
 
 class KPLATO_TEST_EXPORT CalendarModifyNameCmd : public NamedCommand
@@ -129,7 +129,7 @@ private:
     Calendar *m_cal;
     Calendar *m_newvalue;
     Calendar *m_oldvalue;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 };
 
 class KPLATO_TEST_EXPORT CalendarModifyTimeZoneCmd : public NamedCommand
@@ -144,7 +144,7 @@ private:
     Calendar *m_cal;
     const KTimeZone *m_newvalue;
     const KTimeZone *m_oldvalue;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 };
 
 class KPLATO_TEST_EXPORT CalendarAddDayCmd : public NamedCommand
@@ -206,7 +206,7 @@ private:
     CalendarDay *m_day;
     CalendarDay::State m_newvalue;
     CalendarDay::State m_oldvalue;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 };
 
 class KPLATO_TEST_EXPORT CalendarModifyTimeIntervalCmd : public NamedCommand
@@ -303,7 +303,7 @@ private:
     int m_index;
     bool m_mine;
     QList<Appointment*> m_appointments;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 };
 
 class KPLATO_TEST_EXPORT TaskAddCmd : public NamedCommand
@@ -334,7 +334,7 @@ private:
     Node *m_node;
     Node *m_parent;
     bool m_added;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 };
 
 
@@ -468,7 +468,7 @@ private:
     Node &m_node;
     Node *m_oldparent, *m_newparent;
     int m_oldindex, m_newindex;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 };
 
 class KPLATO_TEST_EXPORT NodeUnindentCmd : public NamedCommand
@@ -526,7 +526,7 @@ private:
     int m_newpos;
     int m_oldpos;
     bool m_moved;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 };
 
 class KPLATO_TEST_EXPORT AddRelationCmd : public NamedCommand
@@ -628,7 +628,7 @@ public:
 private:
     Effort *m_effort;
     Duration m_oldvalue, m_newvalue;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 
 };
 
@@ -893,7 +893,7 @@ protected:
     Project *m_project;
     int m_index;
     bool m_mine;
-    KMacroCommand *m_cmd;
+    K3MacroCommand *m_cmd;
 };
 
 class KPLATO_TEST_EXPORT AddResourceGroupCmd : public RemoveResourceGroupCmd

@@ -35,7 +35,7 @@
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
-#include <kcommand.h>
+#include <k3command.h>
 #include <kdatetimewidget.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -190,52 +190,52 @@ void ResourceDialog::slotCalendarChanged(int /*cal*/) {
 
 }
 
-KCommand *ResourceDialog::buildCommand(Part *part) {
+K3Command *ResourceDialog::buildCommand(Part *part) {
     return buildCommand(m_original, m_resource, part);
 }
 
 // static
-KCommand *ResourceDialog::buildCommand(Resource *original, Resource &resource, Part *part) {
-    KMacroCommand *m=0;
+K3Command *ResourceDialog::buildCommand(Resource *original, Resource &resource, Part *part) {
+    K3MacroCommand *m=0;
     QString n = i18n("Modify Resource");
     if (resource.name() != original->name()) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceNameCmd(part, original, resource.name()));
     }
     if (resource.initials() != original->initials()) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceInitialsCmd(part, original, resource.initials()));
     }
     if (resource.email() != original->email()) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceEmailCmd(part, original, resource.email()));
     }
     if (resource.type() != original->type()) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceTypeCmd(part, original, resource.type()));
     }
     if (resource.units() != original->units()) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceUnitsCmd(part, original, resource.units()));
     }
     if (resource.availableFrom() != original->availableFrom()) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceAvailableFromCmd(part, original, resource.availableFrom().dateTime()));
     }
     if (resource.availableUntil() != original->availableUntil()) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceAvailableUntilCmd(part, original, resource.availableUntil().dateTime()));
     }
     if (resource.normalRate() != original->normalRate()) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceNormalRateCmd(part, original, resource.normalRate()));
     }
     if (resource.overtimeRate() != original->overtimeRate()) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceOvertimeRateCmd(part, original, resource.overtimeRate()));
     }
     if (resource.calendar(true) != original->calendar(true)) {
-        if (!m) m = new KMacroCommand(n);
+        if (!m) m = new K3MacroCommand(n);
         m->addCommand(new ModifyResourceCalendarCmd(part, original, resource.calendar(true)));
     }
     return m;

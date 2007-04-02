@@ -271,45 +271,45 @@ void AccountsPanel::slotSubBtn() {
     accountList->editItem(n);
 }
 
-KCommand *AccountsPanel::buildCommand(Part *part) {
-    KMacroCommand *cmd = 0;
+K3Command *AccountsPanel::buildCommand(Part *part) {
+    K3MacroCommand *cmd = 0;
     // First remove
     while (!m_removedItems.isEmpty()) {
         AccountItem *item = static_cast<AccountItem*>(m_removedItems.takeFirst());
         //kDebug()<<k_funcinfo<<"Removed item"<<endl;
-        if (!cmd) cmd = new KMacroCommand(i18n("Modify Accounts"));
+        if (!cmd) cmd = new K3MacroCommand(i18n("Modify Accounts"));
         cmd->addCommand(new RemoveAccountCmd(part, part->getProject(), item->account));
         delete item;
     }
     // Then add/modify
-    KCommand *c = save(part, part->getProject());
+    K3Command *c = save(part, part->getProject());
     if (c) {
-        if (!cmd) cmd = new KMacroCommand(i18n("Modify Accounts"));
+        if (!cmd) cmd = new K3MacroCommand(i18n("Modify Accounts"));
         cmd->addCommand(c);
     }
     return cmd;
 }
 
-KCommand *AccountsPanel::save(Part *part, Project &project) {
-    KMacroCommand *cmd=0;
+K3Command *AccountsPanel::save(Part *part, Project &project) {
+    K3MacroCommand *cmd=0;
     int cnt = accountList->topLevelItemCount();
     for (int i=0; i < cnt; ++i) {
-        KCommand *c = save(part, project, accountList->topLevelItem(i));
+        K3Command *c = save(part, project, accountList->topLevelItem(i));
         if (c) {
-            if (!cmd) cmd = new KMacroCommand("");
+            if (!cmd) cmd = new K3MacroCommand("");
             cmd->addCommand(c);
         }
     }
     return cmd;
 }
 
-KCommand *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) {
-    KMacroCommand *cmd=0;
+K3Command *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) {
+    K3MacroCommand *cmd=0;
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item->account == 0) {
         if (!item->text(0).isEmpty()) {
             kDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
-            if (!cmd) cmd = new KMacroCommand("");
+            if (!cmd) cmd = new K3MacroCommand("");
             item->account = new Account(item->text(0), item->text(1));
             if (item->parent()) {
                 kDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
@@ -320,12 +320,12 @@ KCommand *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) 
         }
     } else {
         if (!item->text(0).isEmpty() && (item->text(0) != item->account->name())) {
-            if (!cmd) cmd = new KMacroCommand("");
+            if (!cmd) cmd = new K3MacroCommand("");
             //kDebug()<<k_funcinfo<<"Renamed: "<<item->account->name()<<" to "<<item->text(0)<<endl;
             cmd->addCommand(new RenameAccountCmd(part, item->account, item->text(0)));
         }
         if (item->text(1) != item->account->description()) {
-            if (!cmd) cmd = new KMacroCommand("");
+            if (!cmd) cmd = new K3MacroCommand("");
             //kDebug()<<k_funcinfo<<"New description: "<<item->account->description()<<" to "<<item->text(1)<<endl;
             cmd->addCommand(new ModifyAccountDescriptionCmd(part, item->account, item->text(1)));
         }
@@ -333,9 +333,9 @@ KCommand *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) 
     int cnt = item->childCount();
     for (int i=0; i < cnt; ++i) {
         QTreeWidgetItem *myChild = item->child(i);
-        KCommand *c = save(part, project, myChild);
+        K3Command *c = save(part, project, myChild);
         if (c) {
-            if (!cmd) cmd = new KMacroCommand("");
+            if (!cmd) cmd = new K3MacroCommand("");
             cmd->addCommand(c);
         }
     }
@@ -345,7 +345,7 @@ KCommand *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) 
         newDefaultAccount = ai->account;
     }
     if (m_oldDefaultAccount != newDefaultAccount) {
-        if (!cmd) cmd = new KMacroCommand("");
+        if (!cmd) cmd = new K3MacroCommand("");
         cmd->addCommand(new ModifyDefaultAccountCmd(part, m_accounts, m_oldDefaultAccount, newDefaultAccount));
     }
     return cmd;

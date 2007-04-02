@@ -22,7 +22,7 @@
 
 #include <kdialog.h>
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -37,7 +37,7 @@ class MainProjectDialog : public KDialog {
 public:
     explicit MainProjectDialog(Project &project, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
     
 protected slots:
     void slotOk();

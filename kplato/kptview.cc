@@ -61,7 +61,7 @@
 #include <kxmlguifactory.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
@@ -1203,7 +1203,7 @@ void View::slotProjectEdit()
 {
     MainProjectDialog * dia = new MainProjectDialog( getProject() );
     if ( dia->exec()  == QDialog::Accepted) {
-        KCommand * cmd = dia->buildCommand( getPart() );
+        K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -1223,7 +1223,7 @@ void View::slotEditCalendar( Calendar *calendar )
     }
     CalendarEditDialog * dia = new CalendarEditDialog( getProject(), calendar );
     if ( dia->exec()  == QDialog::Accepted) {
-        KCommand * cmd = dia->buildCommand( getPart() );
+        K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             //kDebug()<<k_funcinfo<<"Modifying calendar"<<endl;
             getPart() ->addCommand( cmd ); //also executes
@@ -1236,7 +1236,7 @@ void View::slotProjectCalendar()
 {
     CalendarListDialog * dia = new CalendarListDialog( getProject() );
     if ( dia->exec()  == QDialog::Accepted) {
-        KCommand * cmd = dia->buildCommand( getPart() );
+        K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             //kDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
             getPart() ->addCommand( cmd ); //also executes
@@ -1249,7 +1249,7 @@ void View::slotProjectAccounts()
 {
     AccountsDialog * dia = new AccountsDialog( getProject().accounts() );
     if ( dia->exec()  == QDialog::Accepted) {
-        KCommand * cmd = dia->buildCommand( getPart() );
+        K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             //kDebug()<<k_funcinfo<<"Modifying account(s)"<<endl;
             getPart() ->addCommand( cmd ); //also executes
@@ -1262,7 +1262,7 @@ void View::slotProjectWorktime()
 {
     StandardWorktimeDialog * dia = new StandardWorktimeDialog( getProject() );
     if ( dia->exec()  == QDialog::Accepted) {
-        KCommand * cmd = dia->buildCommand( getPart() );
+        K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             //kDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
             getPart() ->addCommand( cmd ); //also executes
@@ -1275,7 +1275,7 @@ void View::slotProjectResources()
 {
     ResourcesDialog * dia = new ResourcesDialog( getProject() );
     if ( dia->exec()  == QDialog::Accepted) {
-        KCommand * cmd = dia->buildCommand( getPart() );
+        K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             //kDebug()<<k_funcinfo<<"Modifying resources"<<endl;
             getPart() ->addCommand( cmd ); //also executes
@@ -1476,7 +1476,7 @@ void View::slotAddSubTask()
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
-            KCommand * m = dia->buildCommand( getPart() );
+            K3Command * m = dia->buildCommand( getPart() );
             m->execute(); // do changes to task
             delete m;
             SubtaskAddCmd *cmd = new SubtaskAddCmd( getPart(), &( getProject() ), node, currNode, i18n( "Add Subtask" ) );
@@ -1497,7 +1497,7 @@ void View::slotAddTask()
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
-            KCommand * m = dia->buildCommand( getPart() );
+            K3Command * m = dia->buildCommand( getPart() );
             m->execute(); // do changes to task
             delete m;
             TaskAddCmd *cmd = new TaskAddCmd( getPart(), &( getProject() ), node, currNode, i18n( "Add Task" ) );
@@ -1521,7 +1521,7 @@ void View::slotAddMilestone()
     if ( dia->exec() == QDialog::Accepted ) {
         Node * currNode = currentTask();
         if ( currNode ) {
-            KCommand * m = dia->buildCommand( getPart() );
+            K3Command * m = dia->buildCommand( getPart() );
             m->execute(); // do changes to task
             delete m;
             TaskAddCmd *cmd = new TaskAddCmd( getPart(), &( getProject() ), node, currNode, i18n( "Add Milestone" ) );
@@ -1564,7 +1564,7 @@ void View::slotChartDisplay()
 {
     ChartDialog * dia = new ChartDialog(getProject());
     if ( dia->exec()  == QDialog::Accepted) {
-       // KCommand * cmd = dia->buildCommand( getPart() );
+       // K3Command * cmd = dia->buildCommand( getPart() );
       //  if ( cmd ) {
         //    getPart() ->addCommand( cmd );
        // }
@@ -1631,7 +1631,7 @@ void View::slotOpenNode( Node *node )
                 Project * project = dynamic_cast<Project *>( node );
                 MainProjectDialog *dia = new MainProjectDialog( *project );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    KCommand * m = dia->buildCommand( getPart() );
+                    K3Command * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1647,7 +1647,7 @@ void View::slotOpenNode( Node *node )
                 Q_ASSERT( task );
                 TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), getProject().standardWorktime() );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    KCommand * m = dia->buildCommand( getPart() );
+                    K3Command * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1664,7 +1664,7 @@ void View::slotOpenNode( Node *node )
                 Q_ASSERT( task );
                 TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), getProject().standardWorktime() );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    KCommand * m = dia->buildCommand( getPart() );
+                    K3Command * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1677,7 +1677,7 @@ void View::slotOpenNode( Node *node )
                 Q_ASSERT( task );
                 SummaryTaskDialog *dia = new SummaryTaskDialog( *task );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    KCommand * m = dia->buildCommand( getPart() );
+                    K3Command * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1709,7 +1709,7 @@ void View::slotTaskProgress()
                 Q_ASSERT( task );
                 TaskProgressDialog *dia = new TaskProgressDialog( *task, getProject().standardWorktime() );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    KCommand * m = dia->buildCommand( getPart() );
+                    K3Command * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1721,7 +1721,7 @@ void View::slotTaskProgress()
                 Task *task = dynamic_cast<Task *>( node );
                 MilestoneProgressDialog *dia = new MilestoneProgressDialog( *task );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    KCommand * m = dia->buildCommand( getPart() );
+                    K3Command * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1746,7 +1746,7 @@ void View::slotDeleteTask( QList<Node*> lst )
         return;
     }
     int num = 0;
-    KMacroCommand *cmd = new KMacroCommand( i18n( "Delete Tasks" ) );
+    K3MacroCommand *cmd = new K3MacroCommand( i18n( "Delete Tasks" ) );
     while ( !lst.isEmpty() ) {
         Node *node = lst.takeFirst();
         if ( node == 0 || node->parentNode() == 0 ) {
@@ -1867,7 +1867,7 @@ void View::slotAddRelation( Node *par, Node *child )
     Relation * rel = new Relation( par, child );
     AddRelationDialog *dia = new AddRelationDialog( rel, this );
     if ( dia->exec()  == QDialog::Accepted) {
-        KCommand * cmd = dia->buildCommand( getPart() );
+        K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd )
             getPart() ->addCommand( cmd );
     } else {
@@ -1897,7 +1897,7 @@ void View::slotModifyRelation( Relation *rel )
         if ( dia->relationIsDeleted() ) {
             getPart() ->addCommand( new DeleteRelationCmd( getPart(), rel, i18n( "Delete Relation" ) ) );
         } else {
-            KCommand *cmd = dia->buildCommand( getPart() );
+            K3Command *cmd = dia->buildCommand( getPart() );
             if ( cmd ) {
                 getPart() ->addCommand( cmd );
             }
@@ -1942,9 +1942,9 @@ void View::slotAddResource( ResourceGroup *group )
     Resource *r = new Resource();
     ResourceDialog *dia = new ResourceDialog( getProject(), r );
     if ( dia->exec()  == QDialog::Accepted) {
-        KMacroCommand *m = new KMacroCommand( i18n( "Add resource" ) );
+        K3MacroCommand *m = new K3MacroCommand( i18n( "Add resource" ) );
         m->addCommand( new AddResourceCmd( getPart(), group, r ) );
-        KCommand * cmd = dia->buildCommand( getPart() );
+        K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             m->addCommand( cmd );
         }
@@ -1965,7 +1965,7 @@ void View::slotEditResource()
     }
     ResourceDialog *dia = new ResourceDialog( getProject(), r );
     if ( dia->exec()  == QDialog::Accepted) {
-        KCommand * cmd = dia->buildCommand( getPart() );
+        K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd )
             getPart() ->addCommand( cmd );
     }
@@ -1998,22 +1998,22 @@ void View::slotDeleteResourceObjects( QObjectList lst )
         return;
     }
     int num = 0;
-    KMacroCommand *cmd = 0, *rc = 0, *gc = 0;
+    K3MacroCommand *cmd = 0, *rc = 0, *gc = 0;
     foreach ( QObject *o, lst ) {
         Resource *r = qobject_cast<Resource*>( o );
         if ( r ) {
-            if ( rc == 0 )  rc = new KMacroCommand( "" );
+            if ( rc == 0 )  rc = new K3MacroCommand( "" );
             rc->addCommand( new RemoveResourceCmd( getPart(), r->parentGroup(), r ) );
             continue;
         }
         ResourceGroup *g = qobject_cast<ResourceGroup*>( o );
         if ( g ) {
-            if ( gc == 0 )  gc = new KMacroCommand( "" );
+            if ( gc == 0 )  gc = new K3MacroCommand( "" );
             gc->addCommand( new RemoveResourceGroupCmd( getPart(), g->project(), g ) );
         }
     }
     if ( rc || gc ) {
-        cmd = new KMacroCommand( i18n( "Delete Resource Objects" ) );
+        cmd = new K3MacroCommand( i18n( "Delete Resource Objects" ) );
     }
     if ( rc ) 
         cmd->addCommand( rc );

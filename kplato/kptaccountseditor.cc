@@ -428,7 +428,7 @@ QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent )
 
 void AccountItemModel::removeAccounts( QList<Account*> lst )
 {
-    KMacroCommand *cmd = 0;
+    K3MacroCommand *cmd = 0;
     QString c = lst.count() > 1 ? i18n( "Delete Accounts" ) : i18n( "Delete Account" );
     while ( ! lst.isEmpty() ) {
         bool del = true;
@@ -440,7 +440,7 @@ void AccountItemModel::removeAccounts( QList<Account*> lst )
             }
         }
         if ( del ) {
-            if ( cmd == 0 ) cmd = new KMacroCommand( c );
+            if ( cmd == 0 ) cmd = new K3MacroCommand( c );
             cmd->addCommand( new RemoveAccountCmd( m_part, *m_project, acc ) );
         }
     }

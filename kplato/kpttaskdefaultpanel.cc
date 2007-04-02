@@ -33,7 +33,7 @@
 #include <kcombobox.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 #include <kdatewidget.h>
@@ -97,8 +97,8 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     leaderfield->setFocus();
 }
 
-KMacroCommand *TaskDefaultPanel::buildCommand(Part *part) {
-    KMacroCommand *cmd = new KMacroCommand(i18n("Modify Default Task"));
+K3MacroCommand *TaskDefaultPanel::buildCommand(Part *part) {
+    K3MacroCommand *cmd = new K3MacroCommand(i18n("Modify Default Task"));
     bool modified = false;
 
     Duration dt = Duration();

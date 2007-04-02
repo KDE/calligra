@@ -30,7 +30,7 @@
 #include <kcombobox.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
@@ -76,8 +76,8 @@ void SummaryTaskGeneralPanel::slotObligatedFieldsFilled() {
     emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty());
 }
 
-KMacroCommand *SummaryTaskGeneralPanel::buildCommand(Part *part) {
-    KMacroCommand *cmd = new KMacroCommand(i18n("Modify Task"));
+K3MacroCommand *SummaryTaskGeneralPanel::buildCommand(Part *part) {
+    K3MacroCommand *cmd = new K3MacroCommand(i18n("Modify Task"));
     bool modified = false;
 
     if (!namefield->isHidden() && m_task.name() != namefield->text()) {

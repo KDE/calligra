@@ -20,7 +20,7 @@
 #include "kpttaskprogressdialog.h"
 #include "kpttaskprogresspanel.h"
 
-#include <kcommand.h>
+#include <k3command.h>
 #include <klocale.h>
 
 #include <kdebug.h>
@@ -49,10 +49,10 @@ void TaskProgressDialog::slotChanged() {
     enableButtonOk(true);
 }
 
-KCommand *TaskProgressDialog::buildCommand(Part *part) {
-    KMacroCommand *m = new KMacroCommand(i18n("Modify Task Progress"));
+K3Command *TaskProgressDialog::buildCommand(Part *part) {
+    K3MacroCommand *m = new K3MacroCommand(i18n("Modify Task Progress"));
     bool modified = false;
-    KCommand *cmd = m_panel->buildCommand(part);
+    K3Command *cmd = m_panel->buildCommand(part);
     if (cmd) {
         m->addCommand(cmd);
         modified = true;

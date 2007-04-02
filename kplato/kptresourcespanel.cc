@@ -80,23 +80,23 @@ public:
         m_resource = 0;
         return r;
     }
-    KCommand *saveResource(Part *part, ResourceGroup *group);
+    K3Command *saveResource(Part *part, ResourceGroup *group);
 
     Resource *m_originalResource;
     Resource *m_resource; // work on a local copy
     State m_state;
 };
-KCommand *ResourcesPanelResourceItem::saveResource(Part *part, ResourceGroup *group) {
-    KMacroCommand *m=0;
+K3Command *ResourcesPanelResourceItem::saveResource(Part *part, ResourceGroup *group) {
+    K3MacroCommand *m=0;
     if (m_state == New) {
         //kDebug()<<k_funcinfo<<"Add resource: "<<m_resource->name()<<endl;
-        if (!m) m = new KMacroCommand("Add resource");
+        if (!m) m = new K3MacroCommand("Add resource");
         m->addCommand(new AddResourceCmd(part, group, takeResource()));
     } else if (m_state == Modified) {
         //kDebug()<<k_funcinfo<<"Modify resource: "<<m_originalResource->name()<<endl;
-        KCommand *cmd = ResourceDialog::buildCommand(m_originalResource, *m_resource, part);
+        K3Command *cmd = ResourceDialog::buildCommand(m_originalResource, *m_resource, part);
         if (cmd) {
-            if (!m) m = new KMacroCommand("Modify resource");
+            if (!m) m = new K3MacroCommand("Modify resource");
             m->addCommand(cmd);
         }
     }
@@ -312,7 +312,7 @@ void ResourcesPanel::slotAddResource() {
     Resource *r = new Resource();
     ResourceDialog *dia = new ResourceDialog(*project, r);
     if (dia->exec()) {
-        KCommand *cmd = dia->buildCommand();
+        K3Command *cmd = dia->buildCommand();
         if (cmd) {
             cmd->execute(); // modifications -> r
             delete cmd;
@@ -340,7 +340,7 @@ void ResourcesPanel::slotEditResource() {
     Resource *r = item->m_resourceItem->m_resource;
     ResourceDialog *dia = new ResourceDialog(*project, r);
     if (dia->exec()) {
-        KCommand *cmd = dia->buildCommand();
+        K3Command *cmd = dia->buildCommand();
         if (cmd) {
             cmd->execute(); // modifications -> r
             delete cmd;
@@ -391,14 +391,14 @@ bool ResourcesPanel::ok() {
     return true;
 }
 
-KCommand *ResourcesPanel::buildCommand(Part *part) {
-    KMacroCommand *m=0;
+K3Command *ResourcesPanel::buildCommand(Part *part) {
+    K3MacroCommand *m=0;
     GroupItem *gitem;
 
     QString cmdName = "Modify resourcegroups";
     foreach (GroupItem *gitem, m_deletedGroupItems) {
         if (!(gitem->m_state & GroupItem::New)) {
-            if (!m) m = new KMacroCommand(cmdName);
+            if (!m) m = new K3MacroCommand(cmdName);
             //kDebug()<<k_funcinfo<<"Remove group: '"<<gitem->m_name<<"'"<<endl;
             m->addCommand(new RemoveResourceGroupCmd(part, project, gitem->takeGroup()));
         }
@@ -407,13 +407,13 @@ KCommand *ResourcesPanel::buildCommand(Part *part) {
         //kDebug()<<k_funcinfo<<"Group: "<<gitem->m_name<<" has "<<gitem->m_resourceItems.count()<<" resources"<<" and "<<gitem->m_deletedItems.count()<<" deleted resources"<<endl;
         //First remove deleted resources from group
         foreach (ResourcesPanelResourceItem *ditem, gitem->m_deletedItems) {
-            if (!m) m = new KMacroCommand(cmdName);
+            if (!m) m = new K3MacroCommand(cmdName);
             //kDebug()<<k_funcinfo<<" Deleting resource: '"<<ditem->m_originalResource->name()<<"'"<<endl;
             m->addCommand(new RemoveResourceCmd(part, gitem->m_group, ditem->m_originalResource));
         }
         // Now add/modify group/resources
         if (gitem->m_state & GroupItem::New) {
-            if (!m) m = new KMacroCommand(cmdName);
+            if (!m) m = new K3MacroCommand(cmdName);
             //kDebug()<<k_funcinfo<<" Adding group: '"<<gitem->m_name<<"'"<<endl;
             gitem->saveResources();
             m->addCommand(new AddResourceGroupCmd(part, project, gitem->takeGroup()));
@@ -422,15 +422,15 @@ KCommand *ResourcesPanel::buildCommand(Part *part) {
         ResourceGroup *rg = gitem->takeGroup();
         if (gitem->m_state & GroupItem::Modified) {
             if (gitem->m_name != rg->name()) {
-                if (!m) m = new KMacroCommand(cmdName);
+                if (!m) m = new K3MacroCommand(cmdName);
                 //kDebug()<<k_funcinfo<<" Modifying group: '"<<gitem->m_name<<"'"<<endl;
                 m->addCommand(new ModifyResourceGroupNameCmd(part, rg, gitem->m_name));
             }
         }
         foreach (ResourcesPanelResourceItem *item, gitem->m_resourceItems) {
-            KCommand *cmd = item->saveResource(part, rg);
+            K3Command *cmd = item->saveResource(part, rg);
             if (cmd) {
-                if (!m) m = new KMacroCommand(cmdName);
+                if (!m) m = new K3MacroCommand(cmdName);
                 m->addCommand(cmd);
             }
         }

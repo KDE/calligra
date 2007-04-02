@@ -30,8 +30,8 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QWidget;
 
-class KCommand;
-class KMacroCommand;
+class K3Command;
+class K3MacroCommand;
 
 
 namespace KPlato

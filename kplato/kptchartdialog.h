@@ -24,7 +24,7 @@
 #include "kptchartpanel.h"
 class QWidget;
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {

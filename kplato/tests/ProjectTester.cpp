@@ -70,7 +70,7 @@ void ProjectTester::testTakeTask()
 void ProjectTester::testTaskAddCmd()
 {
     m_task = m_project->createTask( m_project );
-    KCommand *cmd = new SubtaskAddCmd( 0, m_project, m_task, m_project );
+    K3Command *cmd = new SubtaskAddCmd( 0, m_project, m_task, m_project );
     cmd->execute();
     QVERIFY( m_task->parentNode() == m_project );
     QCOMPARE( m_project->findNode( m_task->id() ), m_task );
@@ -86,7 +86,7 @@ void ProjectTester::testTaskDeleteCmd()
     QVERIFY( m_project->addTask( m_task, m_project ) );
     QVERIFY( m_task->parentNode() == m_project );
     
-    KCommand *cmd = new NodeDeleteCmd( 0, m_task );
+    K3Command *cmd = new NodeDeleteCmd( 0, m_task );
     cmd->execute();
     QVERIFY( m_project->findNode( m_task->id() ) == 0 );
     

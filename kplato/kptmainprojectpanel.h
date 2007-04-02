@@ -26,7 +26,7 @@
 
 #include <QWidget>
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -60,7 +60,7 @@ class MainProjectPanel : public MainProjectPanelImpl {
 public:
     explicit MainProjectPanel(Project &project, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
     
     bool ok();
 

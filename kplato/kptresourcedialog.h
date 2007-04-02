@@ -28,7 +28,7 @@
 #include <QMap>
 #include <QComboBox>
 
-class KCommand;
+class K3Command;
 
 class QTime;
 class QString;
@@ -68,9 +68,9 @@ public:
     bool calculationNeeded() {  return m_calculationNeeded; }
 
     Calendar *calendar() { return m_calendars[dia->calendarList->currentIndex()]; }
-    KCommand *buildCommand(Part *part = 0);
+    K3Command *buildCommand(Part *part = 0);
     
-    static KCommand *buildCommand(Resource *original, Resource &resource, Part *part);
+    static K3Command *buildCommand(Resource *original, Resource &resource, Part *part);
     
 protected slots:
     void enableButtonOk();

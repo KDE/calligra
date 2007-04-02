@@ -27,7 +27,7 @@
 
 class Q3ButtonGroup;
 class QAbstractButton;
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -55,7 +55,7 @@ class AddRelationDialog : public KDialog
 public:
     AddRelationDialog(Relation *rel, QWidget *p, const QString& caption=QString(), ButtonCodes buttons=Ok|Cancel, const char *n=0);
 
-    virtual KCommand *buildCommand(Part *part);
+    virtual K3Command *buildCommand(Part *part);
     int selectedRelationType() const;
     
 protected slots:
@@ -80,7 +80,7 @@ class ModifyRelationDialog : public AddRelationDialog
 public:
     explicit ModifyRelationDialog(Relation *rel, QWidget *p=0, const char *n=0);
 
-    virtual KCommand *buildCommand(Part *part);
+    virtual K3Command *buildCommand(Part *part);
     bool relationIsDeleted() { return m_deleted; }
 
 protected slots:

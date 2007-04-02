@@ -27,7 +27,7 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -76,8 +76,8 @@ void TaskCostPanel::setCurrentItem(QComboBox *box, const QString& name) {
     }
 }
 
-KCommand *TaskCostPanel::buildCommand(Part *part) {
-    KMacroCommand *cmd = new KMacroCommand(i18n("Modify Task Cost"));
+K3Command *TaskCostPanel::buildCommand(Part *part) {
+    K3MacroCommand *cmd = new K3MacroCommand(i18n("Modify Task Cost"));
     bool modified = false;
     
     if ((m_oldrunning == 0 && runningAccount->currentItem() != 0) ||

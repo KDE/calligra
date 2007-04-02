@@ -18,7 +18,7 @@
 */
 
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -55,12 +55,12 @@ void MainProjectDialog::slotOk() {
     accept();
 }
 
-KCommand *MainProjectDialog::buildCommand(Part *part) {
-    KMacroCommand *m = 0;
+K3Command *MainProjectDialog::buildCommand(Part *part) {
+    K3MacroCommand *m = 0;
     QString c = i18n("Modify main project");
-    KCommand *cmd = panel->buildCommand(part);
+    K3Command *cmd = panel->buildCommand(part);
     if (cmd) {
-        if (!m) m = new KMacroCommand(c);
+        if (!m) m = new K3MacroCommand(c);
         m->addCommand(cmd);
     }
     return m;

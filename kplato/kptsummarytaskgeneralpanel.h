@@ -22,7 +22,7 @@
 
 #include "ui_kptsummarytaskgeneralpanelbase.h"
 
-class KMacroCommand;
+class K3MacroCommand;
 
 namespace KPlato
 {
@@ -36,7 +36,7 @@ class SummaryTaskGeneralPanel : public QWidget, public Ui_SummaryTaskGeneralPane
 public:
     explicit SummaryTaskGeneralPanel(Task &task, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(Part *part);
+    K3MacroCommand *buildCommand(Part *part);
 
     bool ok();
 

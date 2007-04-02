@@ -41,7 +41,7 @@ AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p, const char *n)
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
-KCommand *AccountsDialog::buildCommand(Part *part) {
+K3Command *AccountsDialog::buildCommand(Part *part) {
     return m_panel->buildCommand(part);
 }
 

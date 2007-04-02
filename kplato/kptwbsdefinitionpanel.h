@@ -25,7 +25,7 @@
 #include <QItemDelegate>
 #include <QWidget>
 
-class KMacroCommand;
+class K3MacroCommand;
 
 namespace KPlato
 {
@@ -57,7 +57,7 @@ class WBSDefinitionPanel : public QWidget, public Ui_WBSDefinitionPanelBase {
 public:
     explicit WBSDefinitionPanel(WBSDefinition &def, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(Part *part);
+    K3MacroCommand *buildCommand(Part *part);
 
     bool ok();
 

@@ -930,13 +930,13 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         return false;
     }
     //kDebug()<<data->formats()<<endl;
-    KMacroCommand *m = 0;
+    K3MacroCommand *m = 0;
     if ( data->hasFormat( "text/x-vcard" ) ) {
         QByteArray vcard = data->data( "text/x-vcard" );
         KABC::VCardConverter vc;
         KABC::Addressee::List lst = vc.parseVCards( vcard );
         foreach( KABC::Addressee a, lst ) {
-            if ( m == 0 ) m = new KMacroCommand( i18np( "Add resource from addressbook", "Add %n resources from addressbook", lst.count() ) );
+            if ( m == 0 ) m = new K3MacroCommand( i18np( "Add resource from addressbook", "Add %n resources from addressbook", lst.count() ) );
             Resource *r = new Resource();
             r->setName( a.formattedName() );
             r->setEmail( a.preferredEmail() );

@@ -215,9 +215,9 @@ void RequestResourcesPanel::unitsChanged(int units) {
     }
 }
 
-KCommand *RequestResourcesPanel::buildCommand(Part *part) {
+K3Command *RequestResourcesPanel::buildCommand(Part *part) {
     //kDebug()<<k_funcinfo<<endl;
-    KMacroCommand *cmd = 0;
+    K3MacroCommand *cmd = 0;
     if (selectedGroup) {
         selectedGroup->update();
     }
@@ -226,7 +226,7 @@ KCommand *RequestResourcesPanel::buildCommand(Part *part) {
         GroupLVItem *grp = static_cast<GroupLVItem*>(item);
         foreach (ResourceTableItem *r, grp->resources()) {
             if (r->isChecked() != r->isOrigChecked()) {
-                if (!cmd) cmd = new KMacroCommand("");
+                if (!cmd) cmd = new K3MacroCommand("");
                 if (r->isChecked()) {
                     if (!grp->m_request) {
                         grp->m_request = new ResourceGroupRequest(grp->m_group, grp->m_units);

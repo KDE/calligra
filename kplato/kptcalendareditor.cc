@@ -514,10 +514,10 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         if ( parent.isValid() ) {
             par = calendar( parent );
         }
-        KMacroCommand *cmd = 0;
+        K3MacroCommand *cmd = 0;
         QList<Calendar*> lst = calendarList( stream );
         foreach ( Calendar *c, lst ) {
-            if ( cmd == 0 ) cmd = new KMacroCommand( i18n( "Re-parent Calendar" ) );
+            if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Re-parent Calendar" ) );
             cmd->addCommand( new CalendarModifyParentCmd( m_part, m_project, c, par ) );
         }
         if ( cmd ) {
@@ -581,7 +581,7 @@ QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, Calendar *pa
 
 void CalendarItemModel::removeCalendar( QList<Calendar *> /*lst*/ )
 {
-/*    KMacroCommand *cmd = 0;
+/*    K3MacroCommand *cmd = 0;
     QString s = lst.count() > 1 ? i18n( "Delete Calendars" ) : i18n( "Delete Calendar" );
     while ( ! lst.isEmpty() ) {
         bool del = true;
@@ -593,7 +593,7 @@ void CalendarItemModel::removeCalendar( QList<Calendar *> /*lst*/ )
             }
         }
         if ( del ) {
-            if ( cmd == 0 ) cmd = new KMacroCommand( s );
+            if ( cmd == 0 ) cmd = new K3MacroCommand( s );
             cmd->addCommand( new CalendarRemoveCmd( m_part, m_project, c ) );
         }
     }

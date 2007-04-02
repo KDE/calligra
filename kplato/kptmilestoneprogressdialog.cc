@@ -20,7 +20,7 @@
 #include "kptmilestoneprogressdialog.h"
 #include "kptmilestoneprogresspanel.h"
 
-#include <kcommand.h>
+#include <k3command.h>
 #include <klocale.h>
 
 #include <kdebug.h>
@@ -49,7 +49,7 @@ void MilestoneProgressDialog::slotChanged() {
     enableButtonOk(true);
 }
 
-KCommand *MilestoneProgressDialog::buildCommand(Part *part) {
+K3Command *MilestoneProgressDialog::buildCommand(Part *part) {
     return m_panel->buildCommand(part);;
 }
 

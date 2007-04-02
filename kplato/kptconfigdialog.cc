@@ -29,7 +29,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 
 //Added by qt3to4:
 #include <QPixmap>
@@ -79,7 +79,7 @@ void ConfigDialog::slotApply() {
         return;
 /*    if (!m_behaviorPage->ok())
         return;*/
-    KCommand *cmd = m_taskDefaultPage->buildCommand(0);
+    K3Command *cmd = m_taskDefaultPage->buildCommand(0);
     if (cmd)
         cmd->execute();
 

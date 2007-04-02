@@ -22,7 +22,7 @@
 #include "kptsummarytaskgeneralpanel.h"
 
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -45,10 +45,10 @@ SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
 }
 
 
-KCommand *SummaryTaskDialog::buildCommand(Part *part) {
-    KMacroCommand *m = new KMacroCommand(i18n("Modify Summary Task"));
+K3Command *SummaryTaskDialog::buildCommand(Part *part) {
+    K3MacroCommand *m = new K3MacroCommand(i18n("Modify Summary Task"));
     bool modified = false;
-    KCommand *cmd = m_generalTab->buildCommand(part);
+    K3Command *cmd = m_generalTab->buildCommand(part);
     if (cmd) {
         m->addCommand(cmd);
         modified = true;

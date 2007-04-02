@@ -22,7 +22,7 @@
 
 #include <kdialog.h>
 
-class KMacroCommand;
+class K3MacroCommand;
 
 namespace KPlato
 {
@@ -36,7 +36,7 @@ class WBSDefinitionDialog : public KDialog {
 public:
     explicit WBSDefinitionDialog(WBSDefinition &def, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(Part *part);
+    K3MacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

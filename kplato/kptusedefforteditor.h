@@ -25,7 +25,7 @@
 
 #include "kpttask.h"
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {

@@ -684,9 +684,9 @@ bool TaskStatusItemModel::dropMimeData( const QMimeData *data, Qt::DropAction ac
             }
         }
         int offset = 0;
-        KMacroCommand *cmd = 0;
+        K3MacroCommand *cmd = 0;
         foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new KMacroCommand( i18n( "Move tasks" ) );
+            if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Move tasks" ) );
             cmd->addCommand( new NodeMoveCmd( m_part, m_project, n, par, row + offset ) );
             offset++;
         }

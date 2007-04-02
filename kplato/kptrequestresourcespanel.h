@@ -30,8 +30,8 @@
 
 class QTableWidgetItem;
 
-class KCommand;
-class KMacroCommand;
+class K3Command;
+class K3MacroCommand;
 
 namespace KPlato
 {
@@ -104,7 +104,7 @@ class RequestResourcesPanel : public TaskResourcesPanelBase {
 public:
     RequestResourcesPanel(QWidget *parent, Task &task, bool baseline=false);
 
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
     
     bool ok();
     

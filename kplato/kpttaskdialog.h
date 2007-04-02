@@ -26,7 +26,7 @@
 class Duration;
 
 class KLineEdit;
-class KCommand;
+class K3Command;
 class KTextEdit;
 class KComboBox;
 class KDoubleNumInput;
@@ -66,7 +66,7 @@ public:
      */
     TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime=0, QWidget *parent=0);
 
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

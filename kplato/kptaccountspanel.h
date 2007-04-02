@@ -29,8 +29,8 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QWidget;
 
-class KCommand;
-class KMacroCommand;
+class K3Command;
+class K3MacroCommand;
 
 namespace KPlato
 {
@@ -55,7 +55,7 @@ class AccountsPanel : public AccountsPanelBase {
 public:
     explicit AccountsPanel(Accounts &acc, QWidget *parent=0);
     
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
     
     bool isUnique(QTreeWidgetItem *item);
     void renameStopped(QTreeWidgetItem *item);
@@ -83,8 +83,8 @@ protected:
     void removeElement(const QString& key);
     void removeElement(QTreeWidgetItem *item);
     void refreshDefaultAccount();
-    KCommand *save(Part *part, Project &project);
-    KCommand *save(Part *part, Project &project, QTreeWidgetItem *item);
+    K3Command *save(Part *part, Project &project);
+    K3Command *save(Part *part, Project &project, QTreeWidgetItem *item);
     
 private:
     Accounts &m_accounts;

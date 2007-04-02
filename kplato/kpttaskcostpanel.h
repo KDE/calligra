@@ -22,7 +22,7 @@
 
 #include "ui_kpttaskcostpanelbase.h"
 
-class KCommand;
+class K3Command;
 
 namespace KPlato
 {
@@ -50,7 +50,7 @@ class TaskCostPanel : public TaskCostPanelImpl {
 public:
     TaskCostPanel(Task &task, Accounts &accounts, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(Part *part);
+    K3Command *buildCommand(Part *part);
 
     bool ok();
 

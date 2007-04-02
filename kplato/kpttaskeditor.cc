@@ -331,7 +331,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
         {
-            KMacroCommand *cmd = 0;
+            K3MacroCommand *cmd = 0;
             QStringList res = m_project->resourceNameList();
             QStringList req = node->requestNameList();
             QStringList alloc;
@@ -345,7 +345,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 if ( r != 0 ) {
                     continue;
                 }
-                if ( cmd == 0 ) cmd = new KMacroCommand( i18n( "Add Resource" ) );
+                if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Add Resource" ) );
                 if ( pargr == 0 ) {
                     pargr = new ResourceGroup();
                     pargr->setName( i18n( "Resources" ) );
@@ -368,7 +368,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     // remove removed resource request
                     ResourceRequest *r = node->resourceRequest( s );
                     if ( r ) {
-                        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+                        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
                         //kDebug()<<k_funcinfo<<"delete request: "<<r->resource()->name()<<" group: "<<r->parent()->group()->name()<<endl;
                         cmd->addCommand( new RemoveResourceRequestCmd( m_part, r->parent(), r ) );
                     }
@@ -403,12 +403,12 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     ResourceGroupRequest *g = node->resourceGroupRequest( pargr );
                     if ( g == 0 ) {
                         // create a group request
-                        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+                        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
                         g = new ResourceGroupRequest( pargr );
                         cmd->addCommand( new AddResourceGroupRequestCmd( m_part, *task, g ) );
                         //kDebug()<<k_funcinfo<<"add group request: "<<g<<endl;
                     }
-                    if ( cmd == 0 ) cmd = new KMacroCommand( c );
+                    if ( cmd == 0 ) cmd = new K3MacroCommand( c );
                     cmd->addCommand( new AddResourceRequestCmd( m_part, g, new ResourceRequest( r, 100 ) ) );
                     kDebug()<<k_funcinfo<<"add request: "<<r->name()<<" group: "<<g<<endl;
                 }
@@ -657,7 +657,7 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
             Duration d = value.toList()[0].toLongLong();
             Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
             kDebug()<<k_funcinfo<<value.toList()[0].toLongLong()<<", "<<unit<<" -> "<<d.milliseconds()<<endl;
-            KMacroCommand *cmd = new KMacroCommand( i18n( "Modify estimate" ) );
+            K3MacroCommand *cmd = new K3MacroCommand( i18n( "Modify estimate" ) );
             cmd->addCommand( new ModifyEffortCmd( m_part, *node, node->effort()->expected(), d ) );
             cmd->addCommand( new ModifyEffortUnitCmd( m_part, *node, node->effort()->displayUnit(), unit ) );
             m_part->addCommand( cmd );
@@ -1257,9 +1257,9 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
             }
         }
         int offset = 0;
-        KMacroCommand *cmd = 0;
+        K3MacroCommand *cmd = 0;
         foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new KMacroCommand( i18n( "Move tasks" ) );
+            if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Move tasks" ) );
             cmd->addCommand( new NodeMoveCmd( m_part, m_project, n, par, row + offset ) );
             offset++;
         }
