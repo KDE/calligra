@@ -141,7 +141,10 @@ void ChartWidget::drawBasicChart(QPainter & painter)
     }
     //X
     painter.drawLine(QLine(LEFTMARGIN,size().height()-BOTTOMMARGIN,size().width()-RIGHTMARGIN,size().height()-BOTTOMMARGIN));
-   float MarginX_base=(size().width()-(RIGHTMARGIN+LEFTMARGIN))/(weeks.size()-1);
+   float MarginX_base=0;
+   if (weeks.size() > 1 ) {
+       MarginX_base = (size().width()-(RIGHTMARGIN+LEFTMARGIN))/(weeks.size()-1);
+   }
    float MarginX=0;
    QVector<QPointF>::iterator it_time = bcwsPoints.begin();
    int i=0;
