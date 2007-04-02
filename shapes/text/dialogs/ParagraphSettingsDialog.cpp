@@ -70,7 +70,7 @@ void ParagraphSettingsDialog::reject() {
 void ParagraphSettingsDialog::open(const QTextCursor &cursor) {
     m_cursor = cursor;
     m_ownStyle = true;
-    open( KoParagraphStyle::fromBlockFormat(m_cursor.blockFormat()) );
+    open( KoParagraphStyle::fromBlock(m_cursor.block()) );
 }
 
 void ParagraphSettingsDialog::open(KoParagraphStyle *style) {
