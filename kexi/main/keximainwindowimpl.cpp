@@ -2424,7 +2424,7 @@ KexiMainWindowImpl::slotConfigureKeys()
 void
 KexiMainWindowImpl::slotConfigureToolbars()
 {
-    KEditToolbar edit(factory());
+    KEditToolBar edit(factory());
 //    connect(&edit,SIGNAL(newToolbarConfig()),this,SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
 }
