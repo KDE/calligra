@@ -28,10 +28,35 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
 }
 
 void ParagraphLayout::open(KoParagraphStyle *style) {
+    m_style = style;
+    switch(style->alignment()) {
+        case Qt::AlignRight: widget.right->setChecked(true); break;
+        case Qt::AlignHCenter: widget.center->setChecked(true); break;
+        case Qt::AlignJustify: widget.justify->setChecked(true); break;
+        case Qt::AlignLeft:
+        default:
+           widget.left->setChecked(true); break;
+    }
+
+    // keep together??
+    widget.breakBefore->setChecked(style->breakBefore());
+    widget.breakAfter->setChecked(style->breakAfter());
 }
 
 void ParagraphLayout::save() {
+    Qt::Alignment align;
+    if(widget.right->isChecked())
+        align = Qt::AlignRight;
+    else if(widget.center->isChecked())
+        align = Qt::AlignHCenter;
+    else if(widget.justify->isChecked())
+        align = Qt::AlignJustify;
+    else
+        align = Qt::AlignLeft;
+    // keep together??
+    m_style->setAlignment(align);
+    m_style->setBreakBefore(widget.breakBefore->isChecked());
+    m_style->setBreakAfter(widget.breakAfter->isChecked());
 }
-
 
 #include "ParagraphLayout.moc"
