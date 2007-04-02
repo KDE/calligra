@@ -24,7 +24,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kcommand.h>
+#include <k3command.h>
 
 #include <qpainter.h>
 #include <qprinter.h>
@@ -44,7 +44,7 @@ KudesignerDoc::KudesignerDoc( QWidget *parentWidget, QObject* parent, bool singl
 {
     setComponentData( KudesignerFactory::global(), false );
     setTemplateType("kudesigner_template");
-    history = new KCommandHistory( actionCollection() );
+    history = new K3CommandHistory( actionCollection() );
 
     //     connect( history, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     //     connect( history, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
@@ -57,7 +57,7 @@ KudesignerDoc::~KudesignerDoc()
     delete history;
 }
 
-void KudesignerDoc::addCommand( KCommand *cmd )
+void KudesignerDoc::addCommand( K3Command *cmd )
 {
     cmd->execute();
     setModified( true );

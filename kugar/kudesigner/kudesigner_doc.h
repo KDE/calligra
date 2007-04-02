@@ -20,7 +20,7 @@
 #define KUDESIGNER_DOC_H
 
 #include <KoDocument.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include "plugin.h"
 
 class Q3Canvas;
@@ -59,7 +59,7 @@ public:
 	Qt::DockWidgetArea propertyPosition();
     void setForcedPropertyEditorPosition( Qt::DockWidgetArea );
 
-    void addCommand( KCommand *cmd );
+    void addCommand( K3Command *cmd );
 
     virtual bool modified() const;
 
@@ -82,7 +82,7 @@ protected slots:
     void documentRestored();
 
 private:
-    KCommandHistory *history;
+    K3CommandHistory *history;
 
     Kudesigner::Canvas *docCanvas;
 

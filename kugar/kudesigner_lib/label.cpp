@@ -143,13 +143,13 @@ int Label::getTextWrap()
     switch ( props[ "WordWrap" ].value().toInt() )
     {
     case 0:
-        return Qt::SingleLine;
+        return Qt::TextSingleLine;
         break;
     case 1:
-        return Qt::WordBreak;
+        return Qt::TextWordWrap;
         break;
     default:
-        return Qt::SingleLine;
+        return Qt::TextSingleLine;
     }
 }
 

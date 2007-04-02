@@ -464,7 +464,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
         return;
     }
 
-    QApplication::setOverrideCursor(KCursor::waitCursor());
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     m_thesproc_stdout = "";
     m_thesproc_stderr = "";
@@ -588,7 +588,7 @@ void Thesaurus::receivedThesStderr(K3Process *, char *result, int len)
 //
 void Thesaurus::findTermWordnet(const QString &term)
 {
-    QApplication::setOverrideCursor(KCursor::waitCursor());
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     m_wnproc_stdout = "";
     m_wnproc_stderr = "";

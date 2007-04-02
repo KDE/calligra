@@ -53,7 +53,7 @@ namespace Kudesigner
 //AddDetailFooterCommand
 
 AddDetailFooterCommand::AddDetailFooterCommand( int level, Canvas *doc )
-        : KNamedCommand( QObject::tr( "Insert Detail Footer Section" ) ), m_level( level ), m_doc( doc )
+        : K3NamedCommand( QObject::tr( "Insert Detail Footer Section" ) ), m_level( level ), m_doc( doc )
 {}
 
 void AddDetailFooterCommand::execute()
@@ -77,7 +77,7 @@ void AddDetailFooterCommand::unexecute()
 //AddDetailCommand
 
 AddDetailCommand::AddDetailCommand( int level, Canvas *doc )
-        : KNamedCommand( QObject::tr( "Insert Detail Section" ) ), m_level( level ), m_doc( doc )
+        : K3NamedCommand( QObject::tr( "Insert Detail Section" ) ), m_level( level ), m_doc( doc )
 {}
 
 void AddDetailCommand::execute()
@@ -101,7 +101,7 @@ void AddDetailCommand::unexecute()
 
 //AddDetailHeaderCommand
 AddDetailHeaderCommand::AddDetailHeaderCommand( int level, Canvas *doc )
-        : KNamedCommand( QObject::tr( "Insert Detail Header Section" ) ), m_level( level ), m_doc( doc )
+        : K3NamedCommand( QObject::tr( "Insert Detail Header Section" ) ), m_level( level ), m_doc( doc )
 {}
 
 void AddDetailHeaderCommand::execute()
@@ -125,7 +125,7 @@ void AddDetailHeaderCommand::unexecute()
 //AddPageFooterCommand
 
 AddPageFooterCommand::AddPageFooterCommand( Canvas *doc )
-        : KNamedCommand( QObject::tr( "Insert Page Footer Section" ) ), m_doc( doc )
+        : K3NamedCommand( QObject::tr( "Insert Page Footer Section" ) ), m_doc( doc )
 {}
 
 void AddPageFooterCommand::execute()
@@ -148,7 +148,7 @@ void AddPageFooterCommand::unexecute()
 //AddPageHeaderCommand
 
 AddPageHeaderCommand::AddPageHeaderCommand( Canvas *doc )
-        : KNamedCommand( QObject::tr( "Insert Page Header Section" ) ), m_doc( doc )
+        : K3NamedCommand( QObject::tr( "Insert Page Header Section" ) ), m_doc( doc )
 {}
 
 void AddPageHeaderCommand::execute()
@@ -171,7 +171,7 @@ void AddPageHeaderCommand::unexecute()
 //AddReportFooterCommand
 
 AddReportFooterCommand::AddReportFooterCommand( Canvas *doc )
-        : KNamedCommand( QObject::tr( "Insert Report Footer Section" ) ), m_doc( doc )
+        : K3NamedCommand( QObject::tr( "Insert Report Footer Section" ) ), m_doc( doc )
 {}
 
 void AddReportFooterCommand::execute()
@@ -194,7 +194,7 @@ void AddReportFooterCommand::unexecute()
 //AddReportHeaderCommand
 
 AddReportHeaderCommand::AddReportHeaderCommand( Canvas *doc )
-        : KNamedCommand( QObject::tr( "Insert Report Header Section" ) ), m_doc( doc )
+        : K3NamedCommand( QObject::tr( "Insert Report Header Section" ) ), m_doc( doc )
 {}
 
 void AddReportHeaderCommand::execute()
@@ -217,7 +217,7 @@ void AddReportHeaderCommand::unexecute()
 //AddReportItemCommand
 
 AddReportItemCommand::AddReportItemCommand( Canvas *doc, View *rc, int x, int y, RttiValues section, int sectionLevel ) :
-        KNamedCommand( QObject::tr( "Insert Report Item" ) ), m_doc( doc ), m_rc( rc ), m_x( x ), m_y( y ), m_section( section ), m_sectionLevel( sectionLevel )
+        K3NamedCommand( QObject::tr( "Insert Report Item" ) ), m_doc( doc ), m_rc( rc ), m_x( x ), m_y( y ), m_section( section ), m_sectionLevel( sectionLevel )
 {
     m_rtti = m_rc->itemToInsert;
     setName( "Insert " + Kudesigner::rttiName( m_rc->itemToInsert ) );
@@ -272,7 +272,7 @@ void AddReportItemCommand::unexecute()
 }
 
 DeleteReportItemsCommand::DeleteReportItemsCommand( Canvas * doc, Q3ValueList< Box* > & items )
-        : KNamedCommand( QObject::tr( "Delete Report Item(s)" ) ), m_doc( doc ), m_items( items )
+        : K3NamedCommand( QObject::tr( "Delete Report Item(s)" ) ), m_doc( doc ), m_items( items )
 {}
 
 void DeleteReportItemsCommand::execute( )

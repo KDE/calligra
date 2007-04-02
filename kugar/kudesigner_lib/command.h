@@ -19,7 +19,7 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include <kcommand.h>
+#include <k3command.h>
 #include "commdefs.h"
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -55,7 +55,7 @@ class View;
 class Canvas;
 class Box;
 
-class AddDetailFooterCommand: public KNamedCommand
+class AddDetailFooterCommand: public K3NamedCommand
 {
 public:
     AddDetailFooterCommand( int level, Canvas *doc );
@@ -69,7 +69,7 @@ private:
     DetailFooter *m_section;
 };
 
-class AddDetailCommand: public KNamedCommand
+class AddDetailCommand: public K3NamedCommand
 {
 public:
     AddDetailCommand( int level, Canvas *doc );
@@ -83,7 +83,7 @@ private:
     Detail *m_section;
 };
 
-class AddDetailHeaderCommand: public KNamedCommand
+class AddDetailHeaderCommand: public K3NamedCommand
 {
 public:
     AddDetailHeaderCommand( int level, Canvas *doc );
@@ -97,7 +97,7 @@ private:
     DetailHeader *m_section;
 };
 
-class AddPageFooterCommand: public KNamedCommand
+class AddPageFooterCommand: public K3NamedCommand
 {
 public:
     AddPageFooterCommand( Canvas *doc );
@@ -110,7 +110,7 @@ private:
     PageFooter *m_section;
 };
 
-class AddPageHeaderCommand: public KNamedCommand
+class AddPageHeaderCommand: public K3NamedCommand
 {
 public:
     AddPageHeaderCommand( Canvas *doc );
@@ -123,7 +123,7 @@ private:
     PageHeader *m_section;
 };
 
-class AddReportFooterCommand: public KNamedCommand
+class AddReportFooterCommand: public K3NamedCommand
 {
 public:
     AddReportFooterCommand( Canvas *doc );
@@ -136,7 +136,7 @@ private:
     ReportFooter *m_section;
 };
 
-class AddReportHeaderCommand: public KNamedCommand
+class AddReportHeaderCommand: public K3NamedCommand
 {
 public:
     AddReportHeaderCommand( Canvas *doc );
@@ -149,7 +149,7 @@ private:
     ReportHeader *m_section;
 };
 
-class AddReportItemCommand: public KNamedCommand
+class AddReportItemCommand: public K3NamedCommand
 {
 public:
     AddReportItemCommand( Canvas *doc, View *rc, int x, int y, RttiValues section, int sectionLevel = -1 );
@@ -168,7 +168,7 @@ private:
     int m_sectionLevel;
 };
 
-class DeleteReportItemsCommand: public KNamedCommand
+class DeleteReportItemsCommand: public K3NamedCommand
 {
 public:
     DeleteReportItemsCommand( Canvas *doc, Q3ValueList<Box*>& items );
