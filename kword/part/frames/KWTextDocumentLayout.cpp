@@ -374,7 +374,12 @@ void KWTextDocumentLayout::layout() {
                     m_frameSet->requestMoreFrames(m_state->y() - m_dummyShape->textShapeData->documentOffset());
                 else {
                     // if there is more space in the shape then there is text. Reset the no-grow bool.
-                    KWTextFrame *lastFrame = static_cast<KWTextFrame*> (m_frameSet->frames().last());
+                    QList<KWFrame*>::const_iterator iter = m_frameSet->frames().end();
+                    KWTextFrame *lastFrame;
+                    do {
+                        iter--;
+                        lastFrame = dynamic_cast<KWTextFrame*> (*iter);
+                    } while(lastFrame == 0);
                     KoTextShapeData *data = static_cast<KoTextShapeData*> (lastFrame->shape()->userData());
                     Q_ASSERT( data );
                     double spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
