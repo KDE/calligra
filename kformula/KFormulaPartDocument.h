@@ -26,7 +26,7 @@
 #include <KoShapeControllerBase.h>
 #include "KFormulaPartView.h"
 #include <QPainter>
-#include <kcommand.h>
+#include <k3command.h>
 
 class QIODevice;
 class QDomDocument;
@@ -87,7 +87,7 @@ protected:
 
 private:
     /// The undo stack
-    KCommandHistory* m_commandHistory;
+    K3CommandHistory* m_commandHistory;
 };
 
 #endif
