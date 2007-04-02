@@ -22,6 +22,8 @@
 
 #include "ui_ParagraphIndentSpacing.h"
 
+#include <KoUnit.h>
+
 #include <QWidget>
 
 class KoParagraphStyle;
@@ -31,8 +33,12 @@ class ParagraphIndentSpacing : public QWidget {
 public:
     ParagraphIndentSpacing(QWidget *parent);
     void open(KoParagraphStyle *style);
+    void setUnit(const KoUnit &unit);
 
     void save();
+
+private slots:
+    void lineSpacingChanged(int);
 
 private:
     Ui::ParagraphIndentSpacing widget;

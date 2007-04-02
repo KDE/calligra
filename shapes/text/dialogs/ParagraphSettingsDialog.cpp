@@ -80,4 +80,8 @@ void ParagraphSettingsDialog::open(KoParagraphStyle *style) {
     m_paragraphBulletsNumbers->open(style);
 }
 
+void ParagraphSettingsDialog::setUnit(const KoUnit &unit) {
+    m_paragraphIndentSpacing->setUnit(unit);
+}
+
 #include <ParagraphSettingsDialog.moc>

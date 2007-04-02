@@ -104,8 +104,8 @@ double Layout::docOffsetInShape() const {
 bool Layout::addLine(QTextLine &line) {
     double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     bool useFixedLineHeight = height != 0.0;
-    bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
     if(! useFixedLineHeight) {
+        const bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
         if(useFontProperties)
             height = line.height();
         else {
@@ -142,7 +142,7 @@ bool Layout::addLine(QTextLine &line) {
     if(! useFixedLineHeight) {
         double linespacing = m_format.doubleProperty(KoParagraphStyle::LineSpacing);;
         if(linespacing == 0.0) { // unset
-            int percent = m_format.intProperty(KoParagraphStyle::FixedLineHeight);
+            int percent = m_format.intProperty(KoParagraphStyle::PercentLineHeight);
             if(percent != 0)
                 linespacing = height * ((percent - 100) / 100.0);
             else if(linespacing == 0.0)

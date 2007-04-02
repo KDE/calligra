@@ -19,6 +19,8 @@
 #ifndef PARAGRAPHSETTINGSDIALOG_H
 #define PARAGRAPHSETTINGSDIALOG_H
 
+#include <KoUnit.h>
+
 #include <KPageDialog>
 #include <QTextCursor>
 
@@ -35,6 +37,7 @@ public:
     explicit ParagraphSettingsDialog(QWidget *parent);
     ~ParagraphSettingsDialog();
 
+    void setUnit(const KoUnit &unit);
     void open(const QTextCursor &cursor);
     void open(KoParagraphStyle *style);
 

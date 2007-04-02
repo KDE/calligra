@@ -771,6 +771,7 @@ void TextTool::insertIndexMarker() {
 void TextTool::formatParagraph() {
     ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(m_canvas->canvasWidget());
     dia->open(m_caret);
+    dia->setUnit(m_canvas->unit());
 
     dia->show();
 }

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2003 David Faure <faure@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,17 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
+
+    // Keep order in sync with lineSpacingType() and display()
+    widget.lineSpacing->addItem( i18nc( "Line spacing value", "Single" ) );
+    widget.lineSpacing->addItem( i18nc( "Line spacing value", "1.5 Lines" ) );
+    widget.lineSpacing->addItem( i18nc( "Line spacing value", "Double" ) );
+    widget.lineSpacing->addItem( i18n( "Proportional") ); // called Proportional like in OO
+    widget.lineSpacing->addItem( i18n( "Additional") ); // normal distance + absolute value
+    widget.lineSpacing->addItem( i18n( "Fixed") );
+
+    connect(widget.lineSpacing, SIGNAL(currentIndexChanged(int)), this, SLOT(lineSpacingChanged(int)));
+    lineSpacingChanged(0);
 }
 
 void ParagraphIndentSpacing::open(KoParagraphStyle *style) {
@@ -34,6 +46,63 @@ void ParagraphIndentSpacing::open(KoParagraphStyle *style) {
     widget.right->changeValue(style->rightMargin());
     widget.before->changeValue(style->topMargin());
     widget.after->changeValue(style->bottomMargin());
+
+    int index;
+    if(style->lineHeightPercent() != 0) {
+        int percent = style->lineHeightPercent();
+        if(percent == 120)
+            index = 0; // single
+        else if(percent == 180)
+            index = 1; // 1.5
+        else if(percent == 240)
+            index = 2; // double
+        else
+            index = 3; // proportional
+    }
+    else if(style->lineSpacing() > 0.0)
+        index = 4; // Additional
+    else
+        index = 5;
+    widget.lineSpacing->setCurrentIndex(index);
+    widget.minimumLineSpacing->changeValue(m_style->minimumLineHeight());
+    widget.useFont->setChecked(m_style->lineSpacingFromFont());
+}
+
+void ParagraphIndentSpacing::lineSpacingChanged(int row) {
+    bool percent = false, custom = false;
+    double customValue = 0.0;
+    switch(row) {
+        case 3: // proportional
+            percent = true;
+            widget.proportional->setValue(m_style->lineHeightPercent());
+            break;
+        case 4: // additional
+            custom = true;
+            customValue = qMax(0.1, m_style->lineSpacing());
+            break;
+        case 5: // fixed
+            custom = true;
+            if(m_style->lineHeightAbsolute() == 0) // unset
+                customValue = 12.0; // nice default value...
+            else
+                customValue = m_style->lineHeightAbsolute();
+            break;
+        default:; // other cases don't need the spinboxes
+    }
+
+    if(custom) {
+        widget.custom->setEnabled(true);
+        widget.spacingStack->setCurrentWidget(widget.unitsPage);
+        widget.custom->changeValue(customValue);
+    }
+    else {
+        widget.spacingStack->setCurrentWidget(widget.percentPage);
+        widget.proportional->setEnabled(percent);
+        if(! percent)
+            widget.proportional->setValue(100);
+    }
+
+    widget.minimumLineSpacing->setEnabled(row != 5);
 }
 
 void ParagraphIndentSpacing::save() {
@@ -42,6 +111,27 @@ void ParagraphIndentSpacing::save() {
     m_style->setRightMargin( widget.right->value() );
     m_style->setTopMargin( widget.before->value() );
     m_style->setBottomMargin( widget.after->value() );
+    switch(widget.lineSpacing->currentIndex()) {
+        case 0: m_style->setLineHeightPercent(120); break;
+        case 1: m_style->setLineHeightPercent(180); break;
+        case 2: m_style->setLineHeightPercent(240); break;
+        case 3: m_style->setLineHeightPercent(widget.proportional->value()); break;
+        case 4: m_style->setLineSpacing(widget.custom->value()); break;
+        case 5: m_style->setLineHeightAbsolute(widget.custom->value()); break;
+    }
+    if(widget.lineSpacing->currentIndex() != 5)
+        m_style->setMinimumLineHeight(widget.minimumLineSpacing->value());
+    m_style->setLineSpacingFromFont(widget.useFont->isChecked());
+}
+
+void ParagraphIndentSpacing::setUnit(const KoUnit &unit) {
+    widget.first->setUnit(unit);
+    widget.left->setUnit(unit);
+    widget.right->setUnit(unit);
+    widget.before->setUnit(unit);
+    widget.after->setUnit(unit);
+    widget.custom->setUnit(unit);
+    widget.minimumLineSpacing->setUnit(unit);
 }
 
 #include "ParagraphIndentSpacing.moc"

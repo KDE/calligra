@@ -191,7 +191,7 @@ void TestDocumentLayout::testAdvancedLineSpacing() {
     style.applyStyle(block);
 
     // check if styles do their work ;)
-    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::FixedLineHeight), 80);
+    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::PercentLineHeight), 80);
 
     block = block.next();
     QVERIFY(block.isValid()); //line2
