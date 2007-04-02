@@ -129,7 +129,7 @@ QVariant valueToVariant(const KSpread::Value& value)
 		case KSpread::Value::Boolean:
 			return QVariant( value.asBoolean() );
 		case KSpread::Value::Integer:
-			return static_cast<Q_LLONG>(value.asInteger());
+			return static_cast<qint64>(value.asInteger());
 		case KSpread::Value::Float:
 			return (float)value.asFloat();
 		case KSpread::Value::String:

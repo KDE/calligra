@@ -926,7 +926,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     }
     if ( !anchor.isEmpty() && anchor != d->anchor )
     {
-      setCursor( KCursor::handCursor() );
+      setCursor( Qt::PointingHandCursor );
     }
 
     d->anchor = anchor;
@@ -952,17 +952,17 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   else if ( !d->anchor.isEmpty() )
   {
     if ( !sheet->isProtected() )
-      setCursor( KCursor::handCursor() );
+      setCursor( Qt::PointingHandCursor );
   }
   else if ( r1.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) )
             && !r2.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) ) )
   {
-    setCursor( KCursor::handCursor() );
+    setCursor( Qt::PointingHandCursor );
   }
   else if ( d->chooseCell )
   {
 	//Visual cue to indicate that the user can drag-select the choice selection
-	setCursor( KCursor::crossCursor() );
+	setCursor( Qt::CrossCursor );
   }
   else
   {
@@ -1392,7 +1392,7 @@ void Canvas::startTheDrag()
     return;
 
   // right area for start dragging
-  setCursor( KCursor::handCursor() );
+  setCursor( Qt::PointingHandCursor );
 
   QDomDocument doc = sheet->saveCellRegion(*selection());
 
@@ -1412,7 +1412,7 @@ void Canvas::startTheDrag()
   drag->setMimeData( mimeData );
   drag->start();
 
-  setCursor( KCursor::arrowCursor() );
+  setCursor( Qt::ArrowCursor );
 }
 
 void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
