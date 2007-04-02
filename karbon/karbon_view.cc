@@ -200,6 +200,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     m_zoomController = new KoZoomController( m_canvasController, dynamic_cast<KoZoomHandler*>(m_canvas->viewConverter()), actionCollection() );
     m_zoomController->setPageSize( m_part->document().pageSize() );
     m_zoomController->setDocumentSize( m_part->document().boundingRect().size() );
+    m_zoomController->setFitMargin( 10 );
     KoZoomAction * zoomAction = m_zoomController->zoomAction();
     zoomAction->setZoomModes( KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE );
     addStatusBarItem( zoomAction->createWidget( statusBar() ), 0 );
@@ -1343,10 +1344,12 @@ void KarbonView::createDocumentTabDock()
 {
 	debugView("KarbonView::createDocumentTabDock()");
 
+    /*
 	m_DocumentTab = new VDocumentTab(this, this);
 	m_DocumentTab->setWindowTitle(i18n("Document"));
     createDock(i18n("Document"), m_DocumentTab);
 	connect( m_part, SIGNAL( unitChanged( KoUnit ) ), m_DocumentTab, SLOT( updateDocumentInfo() ) );
+    */
 }
 
 void KarbonView::createLayersTabDock()
@@ -1391,9 +1394,11 @@ void KarbonView::createResourceDock()
 {
 	debugView("KarbonView::createResourceDock()");
 
+    /*
 	m_styleDocker = new VStyleDocker( part(), this );
 	m_styleDocker->setWindowTitle(i18n("Resources"));
     createDock(i18n("Resources"), m_styleDocker);
+    */
 }
 
 VToolController *
