@@ -39,7 +39,6 @@ KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent)
 }
 
 KWTextFrame::~KWTextFrame() {
-kDebug() << "KWTextFrame::~KWTextFrame\n";
 }
 
 bool KWTextFrame::canAutoGrow() {
