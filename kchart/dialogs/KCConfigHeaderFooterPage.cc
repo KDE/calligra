@@ -156,7 +156,7 @@ void KCConfigHeaderFooterPage::apply()
 void KCConfigHeaderFooterPage::changeTitleFont()
 {
     Qt::CheckState state = titleFontIsRelative;
-    if (    KFontDialog::getFont( titleFont,false,this, true,&state ) != QDialog::Rejected
+    if (    KFontDialog::getFont( titleFont, KFontChooser::DisplayFrame, this, &state ) != QDialog::Rejected
             && Qt::PartiallyChecked != state )
         titleFontIsRelative = state;
 }
@@ -164,7 +164,7 @@ void KCConfigHeaderFooterPage::changeTitleFont()
 void KCConfigHeaderFooterPage::changeSubtitleFont()
 {
     Qt::CheckState state = subtitleFontIsRelative;
-    if (    KFontDialog::getFont( subtitleFont,false,this, true,&state ) != QDialog::Rejected
+    if (    KFontDialog::getFont( subtitleFont, KFontChooser::DisplayFrame, this, &state ) != QDialog::Rejected
             && Qt::PartiallyChecked != state )
         subtitleFontIsRelative = state;
 }
@@ -172,7 +172,7 @@ void KCConfigHeaderFooterPage::changeSubtitleFont()
 void KCConfigHeaderFooterPage::changeFooterFont()
 {
     Qt::CheckState state = footerFontIsRelative;
-    if (    KFontDialog::getFont( footerFont,false,this, true,&state ) != QDialog::Rejected
+    if (    KFontDialog::getFont( footerFont, KFontChooser::DisplayFrame, this, &state ) != QDialog::Rejected
             && Qt::PartiallyChecked != state )
         footerFontIsRelative = state;
 }

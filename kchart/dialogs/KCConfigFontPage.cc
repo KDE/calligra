@@ -162,16 +162,15 @@ void KCConfigFontPage::changeLabelFont()
 
     if ( diffAxes ) {
         QFont newFont;
-        int flags = 0;
-		Qt::CheckState newState
+        KFontChooser::FontDiffFlags flags = 0;
+        Qt::CheckState newState
             = (xAxisIsRelative == yAxisIsRelative)
             ? (xAxisIsRelative ? Qt::Checked : Qt::Unchecked )
             : Qt::PartiallyChecked;
         if (KFontDialog::getFontDiff( newFont,
                                       flags,
-                                      false,
+                                      KFontChooser::DisplayFrame,
                                       this,
-                                      true,
                                       &newState ) != QDialog::Rejected) {
             if ( KFontChooser::FamilyList & flags ) {
                 xAxis.setFamily( newFont.family() );
@@ -207,11 +206,10 @@ void KCConfigFontPage::changeLabelFont()
     }
     else if ( font && state ) {
         QFont newFont( *font );
-		Qt::CheckState newState = *state;
+        Qt::CheckState newState = *state;
         if (KFontDialog::getFont( newFont,
-                                  false,
+                                  KFontChooser::DisplayFrame,
                                   this,
-                                  true,
                                   &newState ) != QDialog::Rejected) {
             *font = newFont;
             if ( Qt::PartiallyChecked!= newState )

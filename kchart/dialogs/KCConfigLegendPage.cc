@@ -212,16 +212,16 @@ void KCConfigLegendPage::init()
 
 void KCConfigLegendPage::changeTitleLegendFont()
 {
-		Qt::CheckState state = titleLegendIsRelative;
-    if (    KFontDialog::getFont( titleLegend,false,this, true,&state ) != QDialog::Rejected
+    Qt::CheckState state = titleLegendIsRelative;
+    if (    KFontDialog::getFont( titleLegend, KFontChooser::DisplayFrame, this, &state ) != QDialog::Rejected
          && Qt::PartiallyChecked != state )
         titleLegendIsRelative = state;
 }
 
 void KCConfigLegendPage::changeTextLegendFont()
 {
-   Qt::CheckState state = textLegendIsRelative;
-    if (    KFontDialog::getFont( textLegend,false,this, true,&state ) != QDialog::Rejected
+    Qt::CheckState state = textLegendIsRelative;
+    if (    KFontDialog::getFont( textLegend, KFontChooser::DisplayFrame, this, &state ) != QDialog::Rejected
          && Qt::PartiallyChecked != state )
         textLegendIsRelative = state;
 }
