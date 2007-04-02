@@ -30,6 +30,8 @@
 #include "KDGanttViewTaskLink.h"
 
 #include <KoZoomHandler.h>
+#include <KoStore.h>
+#include <KoXmlReader.h>
 
 #include <qpainter.h>
 #include <qfileinfo.h>
@@ -43,6 +45,7 @@
 #include <kcommand.h>
 #include <kcommand.h>
 #include <kparts/partmanager.h>
+#include <kmimetype.h>
 
 #include <KoGlobal.h>
 
@@ -131,15 +134,21 @@ void Part::editProject()
     m_projectDialog->exec();
 }
 
-
-bool Part::loadXML( QIODevice *, const QDomDocument &document )
+bool Part::loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const KoXmlDocument&, KoStore * )
 {
+    kDebug()<<k_funcinfo<<endl;
+    return loadXML( 0, doc ); // We have only one format, so try to load that!
+}
+
+bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
+{
+    kDebug()<<k_funcinfo<<endl;
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
 
     QString value;
-    QDomElement plan = document.documentElement();
+    KoXmlElement plan = document.documentElement();
 
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
@@ -166,38 +175,45 @@ bool Part::loadXML( QIODevice *, const QDomDocument &document )
     }
     emit sigProgress( 5 );
 
-    QDomNodeList list = plan.childNodes();
-    if ( list.count() > 2 ) {
-        // TODO: Make a proper bitching about this
-        kDebug() << "*** Error ***\n";
-        kDebug() << "  Children count should be 1 but is " << list.count()
-        << "\n";
+#ifdef KOXML_USE_QDOM
+    int numNodes = plan.childNodes().count();
+#else
+    int numNodes = plan.childNodesCount();
+#endif
+    if ( numNodes > 3 ) {
+        //TODO: Make a proper bitching about this
+        kDebug() << "*** Error *** " << endl;
+        kDebug() << "  Children count should be maximum 3, but is " << numNodes << endl;
         return false;
     }
     m_xmlLoader.startLoad();
-    for ( unsigned int i = 0; i < list.count(); ++i ) {
-        if ( list.item( i ).isElement() ) {
-            QDomElement e = list.item( i ).toElement();
-
-            if ( e.tagName() == "context" ) {
-                delete m_context;
-                m_context = new Context();
-                m_context->load( e );
-            } else if ( e.tagName() == "project" ) {
-                Project * newProject = new Project();
-                m_xmlLoader.setProject( newProject );
-                if ( newProject->load( e, m_xmlLoader ) ) {
-                    // The load went fine. Throw out the old project
-                    delete m_project;
-                    m_project = newProject;
-                    delete m_projectDialog;
-                    m_projectDialog = 0;
-                } else {
-                    delete newProject;
-                    m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of project failed" );
-                    //TODO add some ui here
-                }
+    KoXmlNode n = plan.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if ( e.tagName() == "context" ) {
+            delete m_context;
+            m_context = new Context();
+            m_context->load( e );
+        } else if ( e.tagName() == "project" ) {
+            Project * newProject = new Project();
+            m_xmlLoader.setProject( newProject );
+            if ( newProject->load( e, m_xmlLoader ) ) {
+                // The load went fine. Throw out the old project
+                delete m_project;
+                m_project = newProject;
+                delete m_projectDialog;
+                m_projectDialog = 0;
+            } else {
+                delete newProject;
+                m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of project failed" );
+                //TODO add some ui here
             }
+        } else if ( e.tagName() == "objects" ) {
+            kDebug()<<k_funcinfo<<"loadObjects"<<endl;
+            loadObjects( e );
         }
     }
     m_xmlLoader.stopLoad();
@@ -218,6 +234,7 @@ bool Part::loadXML( QIODevice *, const QDomDocument &document )
 
 QDomDocument Part::saveXML()
 {
+    kDebug()<<k_funcinfo<<endl;
     QDomDocument document( "kplato" );
 
     document.appendChild( document.createProcessingInstruction(
@@ -241,7 +258,21 @@ QDomDocument Part::saveXML()
     }
     // Save the project
     m_project->save( doc );
-
+    
+    if ( ! children().isEmpty() ) {
+        QDomElement el = document.createElement( "objects" );
+        foreach ( KoDocumentChild *ch, children() ) {
+            if ( ch->isDeleted() ) {
+                continue;
+            }
+            QDomElement e = ch->save( document, false );
+            el.appendChild( e );
+        }
+        if ( el.childNodes().count() > 0 ) {
+            doc.appendChild( el );
+        }
+    }
+    
     m_commandHistory->documentSaved();
     return document;
 }
@@ -359,9 +390,44 @@ DocumentChild *Part::createChild( KoDocument *doc, const QRect& geometry )
     return ch;
 }
 
+void Part::loadObjects( const KoXmlElement &element )
+{
+    kDebug()<<k_funcinfo<<endl;
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if ( e.tagName() == "object" ) {
+            DocumentChild *ch = new DocumentChild( this );
+            if ( ch->load( e ) ) {
+                kDebug()<<k_funcinfo<<"loaded"<<endl;
+                insertChild( ch );
+            } else {
+                kDebug()<<k_funcinfo<<"Failed to load object"<<endl;
+                delete ch;
+            }
+        }
+    }
+}
+
+bool Part::loadChildren( KoStore* store )
+{
+    kDebug()<<k_funcinfo<<endl;
+    foreach ( KoDocumentChild *ch, children() ) {
+        ch->loadDocument( store );
+    }
+    return true;
+}
 
 //--------------------------------
-//TODO: test when embedded
+
+DocumentChild::DocumentChild ( KoDocument* parent )
+    : KoDocumentChild ( parent )
+{
+}
+
 DocumentChild::DocumentChild ( KoDocument* parent, KoDocument* doc, const QRect& geometry )
     : KoDocumentChild ( parent, doc, geometry )
 {
@@ -379,6 +445,26 @@ KoDocument* DocumentChild::hitTest( const QPoint& p, KoView* view, const QMatrix
         return document();
     }
     return 0;
+}
+
+
+QDomElement DocumentChild::save( QDomDocument &doc )
+{
+    if ( document() == 0 ) {
+        return QDomElement();
+    }
+    QDomElement e = KoDocumentChild::save( doc, false );
+    e.setAttribute( "icon", m_icon );
+    return e;
+}
+
+bool DocumentChild::load( const KoXmlElement& element )
+{
+    if ( KoDocumentChild::load( element, false ) ) {
+        m_icon = element.attribute( "icon", QString() );
+        return true;
+    }
+    return false;
 }
 
 

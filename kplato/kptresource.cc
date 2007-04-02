@@ -28,6 +28,8 @@
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
 
+#include <KoXmlReader.h>
+
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -146,24 +148,25 @@ ResourceGroup* ResourceGroup::getRequiredResource(int) {
 void ResourceGroup::deleteRequiredResource(int) {
 }
 
-bool ResourceGroup::load(QDomElement &element, XMLLoaderObject &status ) {
+bool ResourceGroup::load(KoXmlElement &element, XMLLoaderObject &status ) {
     //kDebug()<<k_funcinfo<<endl;
     setId(element.attribute("id"));
     m_name = element.attribute("name");
 
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "resource") {
-               // Load the resource
-                Resource *child = new Resource();
-                if (child->load(e, status)) {
-                    status.project().addResource( this, child );
-                } else {
-                    // TODO: Complain about this
-                    delete child;
-                }
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "resource") {
+            // Load the resource
+            Resource *child = new Resource();
+            if (child->load(e, status)) {
+                status.project().addResource( this, child );
+            } else {
+                // TODO: Complain about this
+                delete child;
             }
         }
     }
@@ -371,7 +374,7 @@ DateTime Resource::getBestAvailableTime(const DateTime /*after*/, const Duration
     return DateTime();
 }
 
-bool Resource::load(QDomElement &element, XMLLoaderObject &status) {
+bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     //kDebug()<<k_funcinfo<<endl;
     QString s;
     setId(element.attribute("id"));
@@ -790,7 +793,7 @@ ResourceRequest::~ResourceRequest() {
     m_resource = 0;
 }
 
-bool ResourceRequest::load(QDomElement &element, Project &project) {
+bool ResourceRequest::load(KoXmlElement &element, Project &project) {
     //kDebug()<<k_funcinfo<<endl;
     m_resource = project.resource(element.attribute("resource-id"));
     if (m_resource == 0) {
@@ -936,7 +939,7 @@ QStringList ResourceGroupRequest::requestNameList() const {
     return lst;
 }
 
-bool ResourceGroupRequest::load(QDomElement &element, Project &project) {
+bool ResourceGroupRequest::load(KoXmlElement &element, Project &project) {
     //kDebug()<<k_funcinfo<<endl;
     m_group = project.findResourceGroup(element.attribute("group-id"));
     if (m_group == 0) {
@@ -947,18 +950,19 @@ bool ResourceGroupRequest::load(QDomElement &element, Project &project) {
     
     m_units  = element.attribute("units").toInt();
 
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "resource-request") {
-                ResourceRequest *r = new ResourceRequest();
-                if (r->load(e, project))
-                    addResourceRequest(r);
-                else {
-                    kError()<<k_funcinfo<<"Failed to load resource request"<<endl;
-                    delete r;
-                }
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "resource-request") {
+            ResourceRequest *r = new ResourceRequest();
+            if (r->load(e, project))
+                addResourceRequest(r);
+            else {
+                kError()<<k_funcinfo<<"Failed to load resource request"<<endl;
+                delete r;
             }
         }
     }
@@ -1272,7 +1276,7 @@ bool ResourceRequestCollection::contains( const QString &identity ) const {
     return lst.indexOf( QRegExp( identity, Qt::CaseSensitive, QRegExp::FixedString ) ) != -1;
 }
 
-// bool ResourceRequestCollection::load(QDomElement &element, Project &project) {
+// bool ResourceRequestCollection::load(KoXmlElement &element, Project &project) {
 //     //kDebug()<<k_funcinfo<<endl;
 //     return true;
 // }

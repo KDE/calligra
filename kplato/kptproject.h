@@ -93,7 +93,7 @@ public:
      */
     Duration *getRandomDuration();
 
-    virtual bool load( QDomElement &element, XMLLoaderObject &status );
+    virtual bool load( KoXmlElement &element, XMLLoaderObject &status );
     virtual void save( QDomElement &element ) const;
 
     /**

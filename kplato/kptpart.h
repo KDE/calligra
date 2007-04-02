@@ -67,11 +67,11 @@ public:
     const Project &getProject() const { return * m_project; }
 
     // The load and save functions. Look in the file kplato.dtd for info
-    virtual bool loadXML( QIODevice *, const QDomDocument &document );
+    virtual bool loadXML( QIODevice *, const KoXmlDocument &document );
     virtual QDomDocument saveXML();
 
     bool saveOasis( KoStore*, KoXmlWriter* ) { return false; }
-    bool loadOasis( const QDomDocument &, KoOasisStyles &, const QDomDocument&, KoStore * ) { return false; }
+    bool loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const QDomDocument&, KoStore * );
 
     void addCommand( KCommand * cmd, bool execute = true );
 
@@ -85,10 +85,11 @@ public:
     const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
     
     void activate( QWidget *w = 0 );
-    DocumentChild *createChild( KoDocument *doc, const QRect &geometry );
+    DocumentChild *createChild( KoDocument *doc, const QRect &geometry = QRect() );
     
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
+    virtual bool loadChildren( KoStore* );
 
 protected slots:
     void slotDocumentRestored();
@@ -96,6 +97,9 @@ protected slots:
     void slotCopyContextFromView();
     void slotViewDestroyed();
 
+private:
+    void loadObjects( const KoXmlElement &element );
+    
 private:
     Project *m_project;
     MainProjectDialog *m_projectDialog;
@@ -124,13 +128,20 @@ private:
 class DocumentChild : public KoDocumentChild
 {
 public:
-    DocumentChild ( KoDocument* parent, KoDocument* doc, const QRect& geometry );
+    DocumentChild( KoDocument* parent );
+    DocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry );
     //void setEmbedded( bool emb ) { m_embedded = emb; }
     void activate( QWidget *w = 0 );
     virtual KoDocument* hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix = QMatrix() );
+    QDomElement save( QDomDocument &doc );
+    bool load( const KoXmlElement& element );
+    
+    void setIcon( const QString &icon ) { m_icon = icon; }
+    QString icon() const { return m_icon; }
     
 private:
     //bool m_embedded;
+    QString m_icon;
 };
 
 }  //KPlato namespace

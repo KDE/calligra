@@ -28,6 +28,8 @@
 #include "kptduration.h"
 #include "kptproject.h"
 
+#include <KoXmlReader.h>
+
 namespace KPlato
 {
 
@@ -133,29 +135,30 @@ bool Account::isChildOf( const Account *account) const
     return  m_parent->isChildOf( account );
 }
 
-bool Account::load(QDomElement &element, Project &project) {
+bool Account::load(KoXmlElement &element, Project &project) {
     m_name = element.attribute("name");
     m_description = element.attribute("description");
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "costplace") {
-                Account::CostPlace *child = new Account::CostPlace(this);
-                if (child->load(e, project)) {
-                    append(child);
-                } else {
-                    delete child;
-                }
-            } else if (e.tagName() == "account") {
-                Account *child = new Account();
-                if (child->load(e, project)) {
-                    m_accountList.append(child);
-                } else {
-                    // TODO: Complain about this
-                    kWarning()<<k_funcinfo<<"Loading failed"<<endl;
-                    delete child;
-                }
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "costplace") {
+            Account::CostPlace *child = new Account::CostPlace(this);
+            if (child->load(e, project)) {
+                append(child);
+            } else {
+                delete child;
+            }
+        } else if (e.tagName() == "account") {
+            Account *child = new Account();
+            if (child->load(e, project)) {
+                m_accountList.append(child);
+            } else {
+                // TODO: Complain about this
+                kWarning()<<k_funcinfo<<"Loading failed"<<endl;
+                delete child;
             }
         }
     }
@@ -332,7 +335,7 @@ void Account::CostPlace::setShutdown(bool on ) {
         m_node->setShutdownAccount(on ? m_account : 0);
 }
 
-bool Account::CostPlace::load(QDomElement &element, Project &project) {
+bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
     //kDebug()<<k_funcinfo<<endl;
     m_nodeId = element.attribute("node-id");
     if (m_nodeId.isEmpty()) {
@@ -460,20 +463,21 @@ void Accounts::take(Account *account){
     //kDebug()<<k_funcinfo<<account->name()<<endl;
 }
     
-bool Accounts::load(QDomElement &element, Project &project) {
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "account") {
-                Account *child = new Account();
-                if (child->load(e, project)) {
-                    insert(child);
-                } else {
-                    // TODO: Complain about this
-                    kWarning()<<k_funcinfo<<"Loading failed"<<endl;
-                    delete child;
-                }
+bool Accounts::load(KoXmlElement &element, Project &project) {
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "account") {
+            Account *child = new Account();
+            if (child->load(e, project)) {
+                insert(child);
+            } else {
+                // TODO: Complain about this
+                kWarning()<<k_funcinfo<<"Loading failed"<<endl;
+                delete child;
             }
         }
     }

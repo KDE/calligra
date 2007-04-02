@@ -23,6 +23,8 @@
 
 #include "kptduration.h"
 
+#include <KoXmlReader.h>
+
 #include <QString>
 
 class QDomElement;
@@ -80,7 +82,7 @@ public:
         NOTIMPL = 2l
     };
 
-    bool load(QDomElement &element, Project &project);
+    bool load(KoXmlElement &element, Project &project);
     void save(QDomElement &element) const;
 
     Node * getmParent(){ return this->m_parent; }

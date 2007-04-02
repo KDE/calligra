@@ -1100,7 +1100,7 @@ Duration Effort::effort(int valueType, bool pert) const {
     return m_expectedEffort; // default
 }
 
-bool Effort::load(QDomElement &element) {
+bool Effort::load(KoXmlElement &element) {
     m_expectedEffort = Duration::fromString(element.attribute("expected"));
     m_optimisticEffort = Duration::fromString(element.attribute("optimistic"));
     m_pessimisticEffort = Duration::fromString(element.attribute("pessimistic"));

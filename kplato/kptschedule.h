@@ -26,6 +26,7 @@
 
 #include <QString>
 
+//class KoXmlElement;
 class QDomElement;
 class QStringList;
 
@@ -87,8 +88,8 @@ public:
 
     bool isCritical() const { return positiveFloat == Duration::zeroDuration; }
 
-    virtual bool loadXML( const QDomElement &element );
-    virtual void saveXML( QDomElement &element ) const;
+    virtual bool loadXML( const KoXmlElement &element );
+    virtual void saveXML( KoXmlElement &element ) const;
     void saveCommonXML( QDomElement &element ) const;
     void saveAppointments( QDomElement &element ) const;
 
@@ -261,7 +262,7 @@ public:
     { return m_parent == 0 ? true : m_parent->isDeleted(); }
     void setDeleted( bool on );
 
-    virtual bool loadXML( const QDomElement &element, XMLLoaderObject &status );
+    virtual bool loadXML( const KoXmlElement &element, XMLLoaderObject &status );
     virtual void saveXML( QDomElement &element ) const;
 
     // tasks------------>
@@ -334,7 +335,7 @@ public:
     virtual bool allowOverbooking() const;
     virtual bool usePert() const;
 
-    virtual bool loadXML( const QDomElement &element, XMLLoaderObject &status );
+    virtual bool loadXML( const KoXmlElement &element, XMLLoaderObject &status );
     virtual void saveXML( QDomElement &element ) const;
 
     void setManager( ScheduleManager *sm ) { m_manager = sm; }
@@ -427,13 +428,13 @@ public:
     int numSchedules() const;
     int indexOf( const MainSchedule *sch ) const;
 
-    bool loadXML( QDomElement &element, XMLLoaderObject &status );
+    bool loadXML( KoXmlElement &element, XMLLoaderObject &status );
     void saveXML( QDomElement &element ) const;
     
     void scheduleChanged( MainSchedule *sch );
     
 protected:
-    MainSchedule *loadMainSchedule( QDomElement &element, XMLLoaderObject &status );
+    MainSchedule *loadMainSchedule( KoXmlElement &element, XMLLoaderObject &status );
     
 protected:
     Project &m_project;

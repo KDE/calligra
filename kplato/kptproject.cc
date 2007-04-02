@@ -30,6 +30,8 @@
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
 
+#include <KoXmlReader.h>
+
 #include <qdom.h>
 #include <QString>
 #include <qdatetime.h>
@@ -343,7 +345,7 @@ void Project::initiateCalculationLists( MainSchedule &sch )
     }
 }
 
-bool Project::load( QDomElement &element, XMLLoaderObject &status )
+bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<"--->"<<endl;
     QList<Calendar*> cals;
@@ -382,31 +384,32 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
     // Load the project children
     // Do calendars first, they only refrence other calendars
     //kDebug()<<k_funcinfo<<"Calendars--->"<<endl;
-    QDomNodeList list = element.childNodes();
-    for ( unsigned int i = 0; i < list.count(); ++i ) {
-        if ( list.item( i ).isElement() ) {
-            QDomElement e = list.item( i ).toElement();
-            if ( e.tagName() == "calendar" ) {
-                // Load the calendar.
-                // Referenced by resources
-                Calendar * child = new Calendar();
-                child->setProject( this );
-                if ( child->load( e, status ) ) {
-                    cals.append( child ); // temporary, reorder later
-                } else {
-                    // TODO: Complain about this
-                    kError() << k_funcinfo << "Failed to load calendar" << endl;
-                    delete child;
-                }
-            } else if ( e.tagName() == "standard-worktime" ) {
-                // Load standard worktime
-                StandardWorktime * child = new StandardWorktime();
-                if ( child->load( e, status ) ) {
-                    setStandardWorktime( child );
-                } else {
-                    kError() << k_funcinfo << "Failed to load standard worktime" << endl;
-                    delete child;
-                }
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if ( e.tagName() == "calendar" ) {
+            // Load the calendar.
+            // Referenced by resources
+            Calendar * child = new Calendar();
+            child->setProject( this );
+            if ( child->load( e, status ) ) {
+                cals.append( child ); // temporary, reorder later
+            } else {
+                // TODO: Complain about this
+                kError() << k_funcinfo << "Failed to load calendar" << endl;
+                delete child;
+            }
+        } else if ( e.tagName() == "standard-worktime" ) {
+            // Load standard worktime
+            StandardWorktime * child = new StandardWorktime();
+            if ( child->load( e, status ) ) {
+                setStandardWorktime( child );
+            } else {
+                kError() << k_funcinfo << "Failed to load standard worktime" << endl;
+                delete child;
             }
         }
     }
@@ -440,115 +443,120 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
     }
     //kDebug()<<k_funcinfo<<"Calendars<---"<<endl;
     // Resource groups and resources, can reference calendars
-    for ( unsigned int i = 0; i < list.count(); ++i ) {
-        if ( list.item( i ).isElement() ) {
-            QDomElement e = list.item( i ).toElement();
-
-            if ( e.tagName() == "resource-group" ) {
-                // Load the resources
-                // References calendars
-                ResourceGroup * child = new ResourceGroup();
-                if ( child->load( e, status ) ) {
-                    addResourceGroup( child );
-                } else {
-                    // TODO: Complain about this
-                    delete child;
-                }
+    n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if ( e.tagName() == "resource-group" ) {
+            // Load the resources
+            // References calendars
+            ResourceGroup * child = new ResourceGroup();
+            if ( child->load( e, status ) ) {
+                addResourceGroup( child );
+            } else {
+                // TODO: Complain about this
+                delete child;
             }
         }
     }
     // The main stuff
-    for ( unsigned int i = 0; i < list.count(); ++i ) {
-        if ( list.item( i ).isElement() ) {
-            QDomElement e = list.item( i ).toElement();
-
-            if ( e.tagName() == "project" ) {
-                //kDebug()<<k_funcinfo<<"Sub project--->"<<endl;
+    n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if ( e.tagName() == "project" ) {
+            //kDebug()<<k_funcinfo<<"Sub project--->"<<endl;
 /*                // Load the subproject
-                Project * child = new Project( this );
-                if ( child->load( e ) ) {
-                    if ( !addTask( child, this ) ) {
-                        delete child; // TODO: Complain about this
-                    }
-                } else {
-                    // TODO: Complain about this
-                    delete child;
-                }*/
-            } else if ( e.tagName() == "task" ) {
-                //kDebug()<<k_funcinfo<<"Task--->"<<endl;
-                // Load the task (and resourcerequests).
-                // Depends on resources already loaded
-                Task * child = new Task( this );
-                if ( child->load( e, status ) ) {
-                    if ( !addTask( child, this ) ) {
-                        delete child; // TODO: Complain about this
-                    }
-                } else {
-                    // TODO: Complain about this
-                    delete child;
+            Project * child = new Project( this );
+            if ( child->load( e ) ) {
+                if ( !addTask( child, this ) ) {
+                    delete child; // TODO: Complain about this
                 }
+            } else {
+                // TODO: Complain about this
+                delete child;
+            }*/
+        } else if ( e.tagName() == "task" ) {
+            //kDebug()<<k_funcinfo<<"Task--->"<<endl;
+            // Load the task (and resourcerequests).
+            // Depends on resources already loaded
+            Task * child = new Task( this );
+            if ( child->load( e, status ) ) {
+                if ( !addTask( child, this ) ) {
+                    delete child; // TODO: Complain about this
+                }
+            } else {
+                // TODO: Complain about this
+                delete child;
             }
         }
     }
     // These go last
-    for ( unsigned int i = 0; i < list.count(); ++i ) {
-        if ( list.item( i ).isElement() ) {
-            QDomElement e = list.item( i ).toElement();
-            if ( e.tagName() == "accounts" ) {
-                //kDebug()<<k_funcinfo<<"Accounts--->"<<endl;
-                // Load accounts
-                // References tasks
-                if ( !m_accounts.load( e, *this ) ) {
-                    kError() << k_funcinfo << "Failed to load accounts" << endl;
+    n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if ( e.tagName() == "accounts" ) {
+            //kDebug()<<k_funcinfo<<"Accounts--->"<<endl;
+            // Load accounts
+            // References tasks
+            if ( !m_accounts.load( e, *this ) ) {
+                kError() << k_funcinfo << "Failed to load accounts" << endl;
+            }
+        } else if ( e.tagName() == "relation" ) {
+            //kDebug()<<k_funcinfo<<"Relation--->"<<endl;
+            // Load the relation
+            // References tasks
+            Relation * child = new Relation();
+            if ( !child->load( e, *this ) ) {
+                // TODO: Complain about this
+                kError() << k_funcinfo << "Failed to load relation" << endl;
+                delete child;
+            }
+            //kDebug()<<k_funcinfo<<"Relation<---"<<endl;
+        } else if ( e.tagName() == "schedules" ) {
+            //kDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
+            // References tasks and resources
+            n = e.firstChild();
+            for ( ; ! n.isNull(); n = n.nextSibling() ) {
+                if ( ! n.isElement() ) {
+                    continue;
                 }
-            } else if ( e.tagName() == "relation" ) {
-                //kDebug()<<k_funcinfo<<"Relation--->"<<endl;
-                // Load the relation
-                // References tasks
-                Relation * child = new Relation();
-                if ( !child->load( e, *this ) ) {
-                    // TODO: Complain about this
-                    kError() << k_funcinfo << "Failed to load relation" << endl;
-                    delete child;
-                }
-                //kDebug()<<k_funcinfo<<"Relation<---"<<endl;
-            } else if ( e.tagName() == "schedules" ) {
-                //kDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
-                // References tasks and resources
-                QDomNodeList lst = e.childNodes();
-                for ( unsigned int i = 0; i < lst.count(); ++i ) {
-                    if ( lst.item( i ).isElement() ) {
-                        QDomElement el = lst.item( i ).toElement();
-                        //kDebug()<<k_funcinfo<<el.tagName()<<" Version="<<status.version()<<endl;
-                        ScheduleManager *sm = 0;
-                        bool add = false;
-                        if ( status.version() <= "0.5" ) {
-                            if ( el.tagName() == "schedule" ) {
-                                sm = findScheduleManager( el.attribute( "name" ) );
-                                if ( sm == 0 ) {
-                                    sm = new ScheduleManager( *this, el.attribute( "name" ) );
-                                    add = true;
-                                }
-                            }
-                        } else if ( el.tagName() == "plan" ) {
-                            sm = new ScheduleManager( *this );
+                KoXmlElement el = n.toElement();
+                //kDebug()<<k_funcinfo<<el.tagName()<<" Version="<<status.version()<<endl;
+                ScheduleManager *sm = 0;
+                bool add = false;
+                if ( status.version() <= "0.5" ) {
+                    if ( el.tagName() == "schedule" ) {
+                        sm = findScheduleManager( el.attribute( "name" ) );
+                        if ( sm == 0 ) {
+                            sm = new ScheduleManager( *this, el.attribute( "name" ) );
                             add = true;
                         }
-                        if ( sm ) {
-                            if ( sm->loadXML( el, status ) ) {
-                                if ( add )
-                                    addScheduleManager( sm );
-                            } else {
-                                kError() << k_funcinfo << "Failed to load schedule manager" << endl;
-                                delete sm;
-                            }
-                        } else {
-                            kDebug()<<k_funcinfo<<"No schedule manager ?!"<<endl;
-                        }
                     }
+                } else if ( el.tagName() == "plan" ) {
+                    sm = new ScheduleManager( *this );
+                    add = true;
                 }
-                //kDebug()<<k_funcinfo<<"Node schedules<---"<<endl;
+                if ( sm ) {
+                    if ( sm->loadXML( el, status ) ) {
+                        if ( add )
+                            addScheduleManager( sm );
+                    } else {
+                        kError() << k_funcinfo << "Failed to load schedule manager" << endl;
+                        delete sm;
+                    }
+                } else {
+                    kDebug()<<k_funcinfo<<"No schedule manager ?!"<<endl;
+                }
             }
+            //kDebug()<<k_funcinfo<<"Node schedules<---"<<endl;
         }
     }
     //kDebug()<<k_funcinfo<<"Project schedules--->"<<endl;

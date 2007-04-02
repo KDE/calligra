@@ -25,6 +25,7 @@
 #include <KoMainWindow.h>
 #include <KoToolManager.h>
 #include <KoToolBox.h>
+#include <KoDocumentChild.h>
 
 #include <QApplication>
 #include <QDockWidget>
@@ -546,6 +547,9 @@ View::View( Part* part, QWidget* parent )
     createPertResultView( cat );
     createResourceAssignmentView( cat );
     
+    // Add child documents
+    createChildDocumentViews();
+    
     connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
     connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
 
@@ -749,7 +753,7 @@ void View::createResourceditor( ViewListItem *cat )
     resourceeditor->draw( getProject() );
     
     ViewListItem *i = m_viewlist->addView( cat, "ResourceEditor", i18n( "Resources" ), resourceeditor, getPart(), "resource_editor" );
-    i->setToolTip( 0, i18n( "Resource breakdown structure." ) );
+    i->setToolTip( 0, i18n( "Edit resource breakdown structure." ) );
     
     connect( resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -766,7 +770,7 @@ void View::createTaskeditor( ViewListItem *cat )
     m_tab->addWidget( taskeditor );
     
     ViewListItem *i = m_viewlist->addView( cat, "taskeditor", i18n( "Tasks" ), taskeditor, getPart(), "task_editor" );
-    i->setToolTip( 0, i18n( "Work breakdown structure." ) );
+    i->setToolTip( 0, i18n( "Edit work breakdown structure" ) );
     
     taskeditor->draw( getProject() );
     
@@ -792,7 +796,7 @@ void View::createAccountsEditor( ViewListItem *cat )
     m_tab->addWidget( ae );
     
     ViewListItem *i = m_viewlist->addView( cat, "AccountEditor", i18n( "Accounts" ), ae, getPart(), "accounts_editor" );
-    i->setToolTip( 0, i18n( "Cost breakdown structure." ) );
+    i->setToolTip( 0, i18n( "Edit cost breakdown structure." ) );
     
     ae->draw( getProject() );
     
@@ -2092,21 +2096,20 @@ KoDocument *View::hitTest( const QPoint &pos )
 
 }
 
-void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
+void View::createChildDocumentViews()
 {
-    QString e;
-    KoDocument *doc = entry.createDoc( &e, getPart() );
-    if ( doc == 0 ) {
-        return;
+    foreach ( KoDocumentChild *ch, getPart()->children() ) {
+        createChildDocumentView( static_cast<DocumentChild*>( ch ) );
     }
-    if ( ! doc->showEmbedInitDialog( this ) ) {
-        delete doc;
-        return;
-    }
-    DocumentChild *ch = getPart()->createChild( doc, geometry() );
+}
+
+ViewListItem *View::createChildDocumentView( DocumentChild *ch )
+{
+    KoDocument *doc = ch->document();
     
     QTreeWidgetItem *cat = m_viewlist->addCategory( "Documents", i18n( "Documents" ) );
     cat->setIcon( 0, KIcon( "koshell" ) );
+    
     QString title;
     if ( doc->documentInfo() ) {
         title = doc->documentInfo()->aboutInfo( "title" );
@@ -2118,10 +2121,29 @@ void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
         title = "Untitled";
     }
     KoView *v = doc->createView( this );
-    ViewListItem *i = m_viewlist->addView( cat, doc->objectName(), title, v, ch );
-    i->setIcon( 0, KIcon( entry.service()->icon() ) );
+    ch->setGeometry( geometry(), true );
     m_tab->addWidget( v );
-    //kDebug()<<k_funcinfo<<"Added: "<<v<<endl;
+    ViewListItem *i = m_viewlist->addView( cat, doc->objectName(), title, v, ch );
+    if ( ! ch->icon().isEmpty() ) {
+        i->setIcon( 0, KIcon( ch->icon() ) );
+    }
+    return i;
+}
+
+void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
+{
+    QString e;
+    KoDocument *doc = entry.createDoc( &e, getPart() );
+    if ( doc == 0 ) {
+        return;
+    }
+    if ( ! doc->showEmbedInitDialog( this ) ) {
+        delete doc;
+        return;
+    }
+    DocumentChild *ch = getPart()->createChild( doc );
+    ch->setIcon( entry.service()->icon() );
+    ViewListItem *i = createChildDocumentView( ch );
     m_viewlist->setSelected( i );
 }
 

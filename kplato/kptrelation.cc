@@ -67,7 +67,7 @@ void Relation::setType(Type type) {
 }
 
 
-bool Relation::load(QDomElement &element, Project &project) {
+bool Relation::load(KoXmlElement &element, Project &project) {
     m_parent = project.findNode(element.attribute("parent-id"));
     if (m_parent == 0) {
         return false;

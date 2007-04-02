@@ -79,7 +79,7 @@ public:
             const QMap<QDate, ActualEffort*> &actualEffortMap() const { return m_actual; }
             
             /// Load from document
-            bool loadXML(QDomElement &element, XMLLoaderObject &status );
+            bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
             /// Save to document
             void saveXML(QDomElement &element) const;
         
@@ -135,7 +135,7 @@ public:
     Completion &operator=(const Completion &p);
     
     /// Load from document
-    bool loadXML(QDomElement &element, XMLLoaderObject &status );
+    bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
     /// Save to document
     void saveXML(QDomElement &element) const;
     
@@ -251,7 +251,7 @@ public:
     void setConstraint(Node::ConstraintType type);
 
     /// Load from document
-    virtual bool load(QDomElement &element, XMLLoaderObject &status );
+    virtual bool load(KoXmlElement &element, XMLLoaderObject &status );
     /// Save to document
     virtual void save(QDomElement &element) const;
     /// Save appointments for schedule with id

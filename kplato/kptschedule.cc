@@ -27,6 +27,8 @@
 #include "kpttask.h"
 #include "kptxmlloaderobject.h"
 
+#include <KoXmlReader.h>
+
 #include <QDomElement>
 #include <QString>
 #include <QStringList>
@@ -212,7 +214,7 @@ QStringList Schedule::overbookedResources() const
     return rl;
 }
 
-bool Schedule::loadXML( const QDomElement &sch )
+bool Schedule::loadXML( const KoXmlElement &sch )
 {
     m_name = sch.attribute( "name" );
     setType( sch.attribute( "type" ) );
@@ -544,7 +546,7 @@ void NodeSchedule::setDeleted( bool on )
     }
 }
 
-bool NodeSchedule::loadXML( const QDomElement &sch, XMLLoaderObject &status )
+bool NodeSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<endl;
     QString s;
@@ -828,7 +830,7 @@ void MainSchedule::changed( Schedule *sch )
     }
 }
 
-bool MainSchedule::loadXML( const QDomElement &sch, XMLLoaderObject &status )
+bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<endl;
     QString s;
@@ -841,20 +843,20 @@ bool MainSchedule::loadXML( const QDomElement &sch, XMLLoaderObject &status )
     if ( !s.isEmpty() )
         endTime = DateTime::fromString( s, status.projectSpec() );
 
-    QDomNodeList al = sch.childNodes();
-    //kDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;
-    for ( unsigned int i = 0; i < al.count(); ++i ) {
-        if ( al.item( i ).isElement() ) {
-            QDomElement app = al.item( i ).toElement();
-            if ( app.tagName() == "appointment" ) {
-                // Load the appointments.
-                // Resources and tasks must already be loaded
-                Appointment * child = new Appointment();
-                if ( !child->loadXML( app, status, *this ) ) {
-                    // TODO: Complain about this
-                    kError() << k_funcinfo << "Failed to load appointment" << endl;
-                    delete child;
-                }
+    KoXmlNode n = sch.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement app = n.toElement();
+        if ( app.tagName() == "appointment" ) {
+            // Load the appointments.
+            // Resources and tasks must already be loaded
+            Appointment * child = new Appointment();
+            if ( !child->loadXML( app, status, *this ) ) {
+                // TODO: Complain about this
+                kError() << k_funcinfo << "Failed to load appointment" << endl;
+                delete child;
             }
         }
     }
@@ -1113,7 +1115,7 @@ QList<MainSchedule*> ScheduleManager::schedules() const
     return m_schedules;
 }
 
-bool ScheduleManager::loadXML( QDomElement &element, XMLLoaderObject &status )
+bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
 {
     MainSchedule *sch = 0;
     if ( status.version() <= "0.5" ) {
@@ -1133,20 +1135,21 @@ bool ScheduleManager::loadXML( QDomElement &element, XMLLoaderObject &status )
     m_name = element.attribute( "name" );
     m_usePert = (bool)(element.attribute( "distribution" ).toInt());
     m_allowOverbooking = (bool)(element.attribute( "overbooking" ).toInt());
-    QDomNodeList list = element.childNodes();
-    for ( unsigned int i = 0; i < list.count(); ++i ) {
-        if ( list.item( i ).isElement() ) {
-            QDomElement e = list.item( i ).toElement();
-            //kDebug()<<k_funcinfo<<e.tagName()<<endl;
-            if ( e.tagName() == "schedule" ) {
-                sch = loadMainSchedule( e, status );
-                if ( sch ) {
-                    sch->setManager( this );
-                    switch ( sch->type() ) {
-                        case Schedule::Expected: setExpected( sch ); break;
-                        case Schedule::Optimistic: setOptimistic( sch ); break;
-                        case Schedule::Pessimistic: setPessimistic( sch ); break;
-                    }
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        //kDebug()<<k_funcinfo<<e.tagName()<<endl;
+        if ( e.tagName() == "schedule" ) {
+            sch = loadMainSchedule( e, status );
+            if ( sch ) {
+                sch->setManager( this );
+                switch ( sch->type() ) {
+                    case Schedule::Expected: setExpected( sch ); break;
+                    case Schedule::Optimistic: setOptimistic( sch ); break;
+                    case Schedule::Pessimistic: setPessimistic( sch ); break;
                 }
             }
         }

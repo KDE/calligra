@@ -23,6 +23,8 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 
+#include <KoXmlReader.h>
+
 #include <QString>
 #include <QList>
 
@@ -64,7 +66,7 @@ public:
     Duration effort(const DateTime &start, const DateTime end) const;
     Duration effort(const QDate &time, bool upto) const;
     
-    bool loadXML(QDomElement &element, XMLLoaderObject &status);
+    bool loadXML(KoXmlElement &element, XMLLoaderObject &status);
     void saveXML(QDomElement &element) const;
     
     const DateTime &startTime() const { return m_start; }
@@ -153,7 +155,7 @@ public:
     
     const AppointmentIntervalList &intervals() const { return m_intervals; }
 
-    bool loadXML(QDomElement &element, XMLLoaderObject &status, Schedule &sch);
+    bool loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedule &sch);
     void saveXML(QDomElement &element) const;
 
     /**

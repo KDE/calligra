@@ -31,6 +31,8 @@
 #include <QRect>
 #include <QString>
 
+#include <KoXmlReader.h>
+
 class QDomElement;
 
 /// The main namespace.
@@ -101,8 +103,8 @@ public:
     virtual Node *projectNode();
     
     // The load and save methods
-    virtual bool load(QDomElement &) { return true; }
-    virtual bool load(QDomElement &, Project &) { return true; }
+    virtual bool load(KoXmlElement &) { return true; }
+    virtual bool load(KoXmlElement &, Project &) { return true; }
     virtual void save(QDomElement &element) const  = 0;
     /// Save me and my childrens relations.
     virtual void saveRelations(QDomElement &element) const;
@@ -608,7 +610,7 @@ public:
     void set(unsigned days, unsigned hours, unsigned minutes);
     void expectedEffort(unsigned *days, unsigned *hours, unsigned *minutes);
 
-    bool load(QDomElement &element);
+    bool load(KoXmlElement &element);
     void save(QDomElement &element) const;
 
     /**

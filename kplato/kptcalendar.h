@@ -33,6 +33,8 @@
 #include <klocale.h>
 #include <ktimezones.h>
 
+#include <KoXmlReader.h>
+
 class QDomElement;
 class QDateTime;
 class QTime;
@@ -66,7 +68,7 @@ public:
     CalendarDay(CalendarDay *day);
     ~CalendarDay();
 
-    bool load( QDomElement &element, XMLLoaderObject &status );
+    bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
     const QList<TimeInterval*> &workingIntervals() const { return m_workingIntervals; }
@@ -176,7 +178,7 @@ public:
     CalendarWeekdays( const CalendarWeekdays *weekdays );
     ~CalendarWeekdays();
 
-    bool load( QDomElement &element, XMLLoaderObject &status );
+    bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
     const QList<CalendarDay*> weekdays() const 
@@ -299,7 +301,7 @@ public:
     void takeCalendar( Calendar *calendar );
     int indexOf( const Calendar *calendar ) const;
 
-    bool load( QDomElement &element, XMLLoaderObject &status );
+    bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
     void setState( CalendarDay *day, CalendarDay::State state );
@@ -492,7 +494,7 @@ public:
     /// Set the work time of a normal day
     void setDay(double hours) { m_day = Duration(hours, Duration::Unit_h); }
     
-    bool load( QDomElement &element, XMLLoaderObject &status );
+    bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
     

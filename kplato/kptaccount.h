@@ -30,6 +30,8 @@
 
 #include <kdebug.h>
 
+#include <KoXmlReader.h>
+
 class QDomElement;
 class QString;
 
@@ -83,7 +85,7 @@ public:
     bool isChildOf( const Account *account ) const;
     void insertChildren();
     
-    bool load(QDomElement &element, Project &project);
+    bool load(KoXmlElement &element, Project &project);
     void save(QDomElement &element) const;
     
     const QList<Account*> &accountList() const { return m_accountList; }
@@ -127,7 +129,7 @@ public:
         bool shutdown() const  { return m_shutdown; }
         void setShutdown(bool on);
     
-        bool load(QDomElement &element, Project &project);
+        bool load(KoXmlElement &element, Project &project);
         void save(QDomElement &element) const;
     
     private:
@@ -189,7 +191,7 @@ public:
     void insert(Account *account, Account *parent=0, int index = -1);
     void take(Account *account);
     
-    bool load(QDomElement &element, Project &project);
+    bool load(KoXmlElement &element, Project &project);
     void save(QDomElement &element) const;
 
     QStringList costElements() const;

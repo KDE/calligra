@@ -32,6 +32,8 @@
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
 
+#include <KoXmlReader.h>
+
 #include <qdom.h>
 #include <qbrush.h>
 //Added by qt3to4:
@@ -195,7 +197,7 @@ void Task::setConstraint(Node::ConstraintType type) {
 }
 
 
-bool Task::load(QDomElement &element, XMLLoaderObject &status ) {
+bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
     QString s;
     bool ok = false;
     m_id = element.attribute("id");
@@ -224,64 +226,65 @@ bool Task::load(QDomElement &element, XMLLoaderObject &status ) {
     m_wbs = element.attribute("wbs", "");
     
     // Load the task children
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-
-            if (e.tagName() == "project") {
-                // Load the subproject
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "project") {
+            // Load the subproject
 /*                Project *child = new Project(this, status);
-                if (child->load(e)) {
-                    if (!project.addSubTask(child, this)) {
-                        delete child;  // TODO: Complain about this
-                    }
-                } else {
-                    // TODO: Complain about this
-                    delete child;
-                }*/
-            } else if (e.tagName() == "task") {
-                // Load the task
-                Task *child = new Task(this);
-                if (child->load(e, status)) {
-                    if (!status.project().addSubTask(child, this)) {
-                        delete child;  // TODO: Complain about this
-                    }
-                } else {
-                    // TODO: Complain about this
-                    delete child;
+            if (child->load(e)) {
+                if (!project.addSubTask(child, this)) {
+                    delete child;  // TODO: Complain about this
                 }
-            } else if (e.tagName() == "resource") {
-                // TODO: Load the resource (projects don't have resources yet)
-            } else if (e.tagName() == "effort") {
-                //  Load the effort
-                m_effort->load(e);
-            } else if (e.tagName() == "resourcegroup-request") {
-                // Load the resource request
-                ResourceGroupRequest *r = new ResourceGroupRequest();
-                if (r->load(e, status.project())) {
-                    addRequest(r);
-                } else {
-                    kError()<<k_funcinfo<<"Failed to load resource request"<<endl;
-                    delete r;
+            } else {
+                // TODO: Complain about this
+                delete child;
+            }*/
+        } else if (e.tagName() == "task") {
+            // Load the task
+            Task *child = new Task(this);
+            if (child->load(e, status)) {
+                if (!status.project().addSubTask(child, this)) {
+                    delete child;  // TODO: Complain about this
                 }
-            } else if (e.tagName() == "progress") {
-                m_completion.loadXML( e, status );
-            } else if (e.tagName() == "schedules") {
-                QDomNodeList lst = e.childNodes();
-                for (unsigned int i=0; i<lst.count(); ++i) {
-                    if (lst.item(i).isElement()) {
-                        QDomElement el = lst.item(i).toElement();
-                        if (el.tagName() == "schedule") {
-                            NodeSchedule *sch = new NodeSchedule();
-                            if (sch->loadXML(el, status)) {
-                                sch->setNode(this);
-                                addSchedule(sch);
-                            } else {
-                                kError()<<k_funcinfo<<"Failed to load schedule"<<endl;
-                                delete sch;
-                            }
-                        }
+            } else {
+                // TODO: Complain about this
+                delete child;
+            }
+        } else if (e.tagName() == "resource") {
+            // TODO: Load the resource (projects don't have resources yet)
+        } else if (e.tagName() == "effort") {
+            //  Load the effort
+            m_effort->load(e);
+        } else if (e.tagName() == "resourcegroup-request") {
+            // Load the resource request
+            ResourceGroupRequest *r = new ResourceGroupRequest();
+            if (r->load(e, status.project())) {
+                addRequest(r);
+            } else {
+                kError()<<k_funcinfo<<"Failed to load resource request"<<endl;
+                delete r;
+            }
+        } else if (e.tagName() == "progress") {
+            m_completion.loadXML( e, status );
+        } else if (e.tagName() == "schedules") {
+            KoXmlNode n = e.firstChild();
+            for ( ; ! n.isNull(); n = n.nextSibling() ) {
+                if ( ! n.isElement() ) {
+                    continue;
+                }
+                KoXmlElement el = n.toElement();
+                if (el.tagName() == "schedule") {
+                    NodeSchedule *sch = new NodeSchedule();
+                    if (sch->loadXML(el, status)) {
+                        sch->setNode(this);
+                        addSchedule(sch);
+                    } else {
+                        kError()<<k_funcinfo<<"Failed to load schedule"<<endl;
+                        delete sch;
                     }
                 }
             }
@@ -2068,7 +2071,7 @@ double Completion::actualCostTo( const QDate &date ) const
     return c;
 }
 
-bool Completion::loadXML( QDomElement &element, XMLLoaderObject &status )
+bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<endl;
     QString s;
@@ -2210,7 +2213,7 @@ bool Completion::UsedEffort::operator==( const Completion::UsedEffort &e ) const
     return m_actual == e.actualEffortMap();
 }
 
-bool Completion::UsedEffort::loadXML(QDomElement &element, XMLLoaderObject & )
+bool Completion::UsedEffort::loadXML(KoXmlElement &element, XMLLoaderObject & )
 {
     //kDebug()<<k_funcinfo<<endl;
     QDomNodeList list = element.childNodes();

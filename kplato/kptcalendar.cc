@@ -25,6 +25,8 @@
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
 
+#include <KoXmlReader.h>
+
 #include <qdom.h>
 #include <QList>
 
@@ -86,7 +88,7 @@ const CalendarDay &CalendarDay::copy(const CalendarDay &day) {
     return *this;
 }
 
-bool CalendarDay::load( QDomElement &element, XMLLoaderObject &status ) {
+bool CalendarDay::load( KoXmlElement &element, XMLLoaderObject &status ) {
     //kDebug()<<k_funcinfo<<endl;
     bool ok=false;
     m_state = QString(element.attribute("state", "-1")).toInt(&ok);
@@ -100,19 +102,20 @@ bool CalendarDay::load( QDomElement &element, XMLLoaderObject &status ) {
             m_date = QDate::fromString(s);
     }
     clearIntervals();
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "interval") {
-                //kDebug()<<k_funcinfo<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end")<<endl;
-                QString st = e.attribute("start");
-                QString en = e.attribute("end");
-                if (!st.isEmpty() && !en.isEmpty()) {
-                    QTime start = QTime::fromString(st);
-                    QTime end = QTime::fromString(en);
-                    addInterval(new TimeInterval(start,end));
-                }
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "interval") {
+            kDebug()<<k_funcinfo<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end")<<endl;
+            QString st = e.attribute("start");
+            QString en = e.attribute("end");
+            if (!st.isEmpty() && !en.isEmpty()) {
+                QTime start = QTime::fromString(st);
+                QTime end = QTime::fromString(en);
+                addInterval(new TimeInterval(start,end));
             }
         }
     }
@@ -412,7 +415,7 @@ const CalendarWeekdays &CalendarWeekdays::copy(const CalendarWeekdays &weekdays)
     return *this;
 }
 
-bool CalendarWeekdays::load( QDomElement &element, XMLLoaderObject &status ) {
+bool CalendarWeekdays::load( KoXmlElement &element, XMLLoaderObject &status ) {
     //kDebug()<<k_funcinfo<<endl;
     bool ok;
     int dayNo = QString(element.attribute("day","-1")).toInt(&ok);
@@ -711,7 +714,7 @@ int Calendar::indexOf( const Calendar *calendar ) const
     return m_calendars.indexOf( const_cast<Calendar*>(calendar) );
 }
 
-bool Calendar::load( QDomElement &element, XMLLoaderObject &status ) {
+bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
     //kDebug()<<k_funcinfo<<element.text()<<endl;
     //bool ok;
     setId(element.attribute("id"));
@@ -725,34 +728,35 @@ bool Calendar::load( QDomElement &element, XMLLoaderObject &status ) {
     if ( m_default ) {
         status.project().setDefaultCalendar( this );
     }
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "weekday") {
-                if ( !m_weekdays->load( e, status ) )
-                    return false;
-            }
-            if (e.tagName() == "day") {
-                CalendarDay *day = new CalendarDay();
-                if ( day->load( e, status ) ) {
-                    if (!day->date().isValid()) {
-                        delete day;
-                        kError()<<k_funcinfo<<m_name<<": Failed to load calendarDay - Invalid date"<<endl;
-                    } else {
-                        CalendarDay *d = findDay(day->date());
-                        if (d) {
-                            // already exists, keep the new
-                            delete takeDay(d);
-                            kWarning()<<k_funcinfo<<m_name<<" Load calendarDay - Date already exists"<<endl;
-                        }
-                        addDay(day);
-                    }
-                } else {
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "weekday") {
+            if ( !m_weekdays->load( e, status ) )
+                return false;
+        }
+        if (e.tagName() == "day") {
+            CalendarDay *day = new CalendarDay();
+            if ( day->load( e, status ) ) {
+                if (!day->date().isValid()) {
                     delete day;
-                    kError()<<k_funcinfo<<"Failed to load calendarDay"<<endl;
-                    return true; //false; don't throw away the whole calendar
+                    kError()<<k_funcinfo<<m_name<<": Failed to load calendarDay - Invalid date"<<endl;
+                } else {
+                    CalendarDay *d = findDay(day->date());
+                    if (d) {
+                        // already exists, keep the new
+                        delete takeDay(d);
+                        kWarning()<<k_funcinfo<<m_name<<" Load calendarDay - Date already exists"<<endl;
+                    }
+                    addDay(day);
                 }
+            } else {
+                delete day;
+                kError()<<k_funcinfo<<"Failed to load calendarDay"<<endl;
+                return true; //false; don't throw away the whole calendar
             }
         }
     }
@@ -1209,34 +1213,35 @@ void StandardWorktime::init() {
     m_day = Duration(0, 8, 0);
 }
 
-bool StandardWorktime::load( QDomElement &element, XMLLoaderObject &status ) {
+bool StandardWorktime::load( KoXmlElement &element, XMLLoaderObject &status ) {
     //kDebug()<<k_funcinfo<<endl;
     m_year = Duration::fromString(element.attribute("year"), Duration::Format_Hour); 
     m_month = Duration::fromString(element.attribute("month"), Duration::Format_Hour); 
     m_week = Duration::fromString(element.attribute("week"), Duration::Format_Hour); 
     m_day = Duration::fromString(element.attribute("day"), Duration::Format_Hour); 
     
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "calendar") {
-                // pre 0.6 version stored base calendar in standard worktime
-                if ( status.version() >= "0.6" ) {
-                    kWarning()<<k_funcinfo<<"Old format, calendar in standard worktime"<<endl;
-                    kWarning()<<k_funcinfo<<"Tries to load anyway"<<endl;
-                }
-                // try to load anyway
-                Calendar *calendar = new Calendar;
-                if ( calendar->load( e, status ) ) {
-                    status.project().addCalendar( calendar );
-                    calendar->setDefault( true );
-                    status.project().setDefaultCalendar( calendar ); // hmmm
-                    status.setBaseCalendar( calendar );
-                } else {
-                    delete calendar;
-                    kError()<<k_funcinfo<<"Failed to load calendar"<<endl;
-                }
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "calendar") {
+            // pre 0.6 version stored base calendar in standard worktime
+            if ( status.version() >= "0.6" ) {
+                kWarning()<<k_funcinfo<<"Old format, calendar in standard worktime"<<endl;
+                kWarning()<<k_funcinfo<<"Tries to load anyway"<<endl;
+            }
+            // try to load anyway
+            Calendar *calendar = new Calendar;
+            if ( calendar->load( e, status ) ) {
+                status.project().addCalendar( calendar );
+                calendar->setDefault( true );
+                status.project().setDefaultCalendar( calendar ); // hmmm
+                status.setBaseCalendar( calendar );
+            } else {
+                delete calendar;
+                kError()<<k_funcinfo<<"Failed to load calendar"<<endl;
             }
         }
     }

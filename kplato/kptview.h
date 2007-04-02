@@ -315,6 +315,9 @@ private:
     void createAccountsView( ViewListItem *cat );
     void createResourceAssignmentView( ViewListItem *cat );
 
+    void createChildDocumentViews();
+    ViewListItem *createChildDocumentView( DocumentChild *ch );
+    
 private:
     QSplitter *m_sp;
     QStackedWidget *m_tab;

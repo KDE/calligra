@@ -80,7 +80,7 @@ Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
     return (m_end - s) * m_load / 100;
 }
 
-bool AppointmentInterval::loadXML(QDomElement &element, XMLLoaderObject &status) {
+bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status) {
     //kDebug()<<k_funcinfo<<endl;
     bool ok;
     QString s = element.attribute("start");
@@ -261,7 +261,7 @@ bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
     return false;
 }
 
-bool Appointment::loadXML(QDomElement &element, XMLLoaderObject &status, Schedule &sch) {
+bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedule &sch) {
     //kDebug()<<k_funcinfo<<project.name()<<endl;
     Node *node = status.project().findNode(element.attribute("task-id"));
     if (node == 0) {

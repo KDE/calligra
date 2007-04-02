@@ -32,6 +32,8 @@
 
 #include <kdebug.h>
 
+#include <KoXmlReader.h>
+
 class QTime;
 
 class KTimeZone;
@@ -134,7 +136,7 @@ public:
          */
     void deleteRequiredResource( int );
 
-    bool load( QDomElement &element, XMLLoaderObject &status );
+    bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;
 
     void initiateCalculation( Schedule &sch );
@@ -258,7 +260,7 @@ public:
     DateTime getBestAvailableTime( Duration duration );
     DateTime getBestAvailableTime( const DateTime after, const Duration duration );
 
-    bool load( QDomElement &element, XMLLoaderObject &status );
+    bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;
 
     ///Return the list of appointments for current schedule.
@@ -467,7 +469,7 @@ public:
     Resource *resource() const { return m_resource; }
     void setResource( Resource* resource ) { m_resource = resource; }
 
-    bool load( QDomElement &element, Project &project );
+    bool load( KoXmlElement &element, Project &project );
     void save( QDomElement &element ) const;
 
     /**
@@ -539,7 +541,7 @@ public:
     ResourceRequest *resourceRequest( const QString &name );
     QStringList requestNameList() const;
     
-    bool load( QDomElement &element, Project &project );
+    bool load( KoXmlElement &element, Project &project );
     void save( QDomElement &element ) const;
 
     /**
@@ -639,7 +641,7 @@ public:
 
     QStringList requestNameList() const;
     
-    //bool load(QDomElement &element, Project &project);
+    //bool load(KoXmlElement &element, Project &project);
     void save( QDomElement &element ) const;
 
     /**
