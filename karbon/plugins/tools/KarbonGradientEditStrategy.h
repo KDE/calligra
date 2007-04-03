@@ -68,7 +68,7 @@ public:
     static int handleRadius() { return m_handleRadius; }
 
     /// returns the gradient handles bounding rect
-    QRectF boundingRect();
+    QRectF boundingRect() const;
 
     /// returns the actual gradient
     const QGradient * gradient();

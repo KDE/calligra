@@ -101,7 +101,7 @@ QUndoCommand * GradientStrategy::createCommand()
     return new KoShapeBackgroundCommand( shapes << m_shape, m_newBackground, 0 );
 }
 
-QRectF GradientStrategy::boundingRect()
+QRectF GradientStrategy::boundingRect() const
 {
     // calculate the bounding rect of the handles
     QRectF bbox( m_matrix.map( m_handles[0] ), QSize(0,0) );
