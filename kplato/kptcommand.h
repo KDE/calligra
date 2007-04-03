@@ -29,9 +29,15 @@
 #include "kpttask.h"
 
 #include <QList>
+#include <QTreeWidgetItem>
 
 class QString;
+/**
+ * @file
+ * This file includes all undo/redo commands
+ */
 
+/// The main namespace
 namespace KPlato
 {
 
@@ -48,6 +54,8 @@ class ResourceGroup;
 class Resource;
 class Schedule;
 class StandardWorktime;
+class ViewListItem;
+class ViewListWidget;
 
 class NamedCommand : public K3NamedCommand
 {
@@ -1353,6 +1361,36 @@ private:
     StandardWorktime *swt;
     double m_oldvalue;
     double m_newvalue;
+};
+
+class KPLATO_TEST_EXPORT InsertEmbeddedDocumentCmd : public NamedCommand
+{
+public:
+    InsertEmbeddedDocumentCmd( Part *part, ViewListWidget *list, ViewListItem *item, QTreeWidgetItem *parent, const QString& name = QString() );
+    ~InsertEmbeddedDocumentCmd();
+    void execute();
+    void unexecute();
+private:
+    ViewListWidget *m_list;
+    QTreeWidgetItem *m_parent;
+    ViewListItem *m_item;
+    int m_index;
+    bool m_mine;
+};
+
+class KPLATO_TEST_EXPORT DeleteEmbeddedDocumentCmd : public NamedCommand
+{
+public:
+    DeleteEmbeddedDocumentCmd( Part *part, ViewListWidget *list, ViewListItem *item, const QString& name = QString() );
+    ~DeleteEmbeddedDocumentCmd();
+    void execute();
+    void unexecute();
+private:
+    ViewListWidget *m_list;
+    QTreeWidgetItem *m_parent;
+    ViewListItem *m_item;
+    int m_index;
+    bool m_mine;
 };
 
 

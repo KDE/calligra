@@ -172,26 +172,11 @@ void ViewCategoryDelegate::paint( QPainter * painter, const QStyleOptionViewItem
 
 }
 
-class ViewListItem : public QTreeWidgetItem
+ViewListItem::ViewListItem( const QString &tag, const QStringList &strings, int type )
+    : QTreeWidgetItem( strings, type ),
+    m_tag( tag )
 {
-public:
-    enum ItemType { ItemType_Category = Type, ItemType_SubView = UserType, ItemType_ChildDocument };
-    
-    enum DataRole { DataRole_View = Qt::UserRole, DataRole_Document, DataRole_ChildDocument };
-
-    ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
-    ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
-    void setView( KoView *view );
-    KoView *view() const;
-    void setDocumentChild( DocumentChild *child );
-    DocumentChild *documentChild() const;
-    void setDocument( KoDocument *doc );
-    KoDocument *document() const;
-
-    QString tag() const { return m_tag; }
-private:
-    QString m_tag;
-};
+}
 
 ViewListItem::ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type )
     : QTreeWidgetItem( parent, strings, type ),
@@ -298,8 +283,9 @@ ViewListItem *ViewListTreeWidget::findCategory( const QString &cat )
     return 0;
 }
 
-ViewListWidget::ViewListWidget( QWidget *parent )//QString name, KMainWindow *parent )
-        : QWidget( parent )
+ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KMainWindow *parent )
+        : QWidget( parent ),
+        m_part( part )
 {
     setObjectName("ViewListWidget");
     m_viewlist = new ViewListTreeWidget( this );
@@ -363,9 +349,9 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString 
     return item;
 }
 
-ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon )
+ViewListItem *ViewListWidget::createView( const QString& tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon )
 {
-    ViewListItem * item = new ViewListItem( category, tag, QStringList( name ), ViewListItem::ItemType_ChildDocument );
+    ViewListItem * item = new ViewListItem( tag, QStringList( name ), ViewListItem::ItemType_ChildDocument );
     item->setView( view );
     item->setDocument( ch->document() );
     item->setDocumentChild( ch );
@@ -446,13 +432,48 @@ void ViewListWidget::slotCreatePart()
 
 void ViewListWidget::slotEditDocumentTitle()
 {
-    QTreeWidgetItem *item = m_viewlist->currentItem();
-    if ( item ) {
-        kDebug()<<k_funcinfo<<item<<": "<<item->type()<<endl;
-        m_viewlist->editItem( item );
+    //QTreeWidgetItem *item = m_viewlist->currentItem();
+    if ( m_contextitem ) {
+        kDebug()<<k_funcinfo<<m_contextitem<<": "<<m_contextitem->type()<<endl;
+        m_viewlist->editItem( m_contextitem );
     }
 }
 
+void ViewListWidget::slotRemoveDocument()
+{
+    if ( m_contextitem ) {
+        kDebug()<<k_funcinfo<<m_contextitem<<": "<<m_contextitem->type()<<endl;
+        m_part->addCommand( new DeleteEmbeddedDocumentCmd( m_part, this, m_contextitem, i18n( "Remove Document" ) ) );
+        m_contextitem = 0;
+    }
+}
+
+int ViewListWidget::takeViewListItem( ViewListItem *item )
+{
+    QTreeWidgetItem *p = item->parent();
+    if ( p == 0 ) {
+        p = m_viewlist->invisibleRootItem();
+    }
+    int i = p->indexOfChild( item );
+    if ( i != -1 ) {
+        p->takeChild( i );
+        emit viewListItemRemoved( item );
+    }
+    return i;
+}
+
+void ViewListWidget::insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index )
+{
+    QTreeWidgetItem *p = parent;
+    if ( p == 0 ) {
+        p = m_viewlist->invisibleRootItem();
+    }
+    if ( index == -1 ) {
+        index = p->childCount();
+    }
+    p->insertChild( index, item );
+    emit viewListItemInserted( item );
+}
 
 void ViewListWidget::setupContextMenus()
 {
@@ -493,8 +514,11 @@ void ViewListWidget::setupContextMenus()
     //action = new QAction( KIcon( "show" ), i18n( "Show" ), this );
     //m_document.append( action );
     //action = new QAction( KIcon( "document-properties" ), i18n( "Document information" ), this );
-    action = new QAction( KIcon( "edit" ), i18n( "Document title" ), this );
+    action = new QAction( KIcon( "fileedit" ), i18n( "Edit Document Title" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotEditDocumentTitle() ) );
+    m_document.append( action );
+    action = new QAction( KIcon( "view-remove" ), i18n( "Remove Document" ), this );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveDocument() ) );
     m_document.append( action );
 }
 
@@ -555,7 +579,7 @@ View::View( Part* part, QWidget* parent )
     layout->addWidget( m_sp );
     
     // to the left
-    m_viewlist = new ViewListWidget( m_sp );
+    m_viewlist = new ViewListWidget( getPart(), m_sp );
     // to the right
     m_tab = new QStackedWidget( m_sp );
     
@@ -582,6 +606,9 @@ View::View( Part* part, QWidget* parent )
     createChildDocumentViews();
     
     connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
+    connect( m_viewlist, SIGNAL( viewListItemRemoved( ViewListItem* ) ), SLOT( slotViewListItemRemoved( ViewListItem* ) ) );
+    connect( m_viewlist, SIGNAL( viewListItemInserted( ViewListItem* ) ), SLOT( slotViewListItemInserted( ViewListItem* ) ) );
+    
     connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
 
     // The menu items
@@ -2129,8 +2156,14 @@ KoDocument *View::hitTest( const QPoint &pos )
 
 void View::createChildDocumentViews()
 {
+    QTreeWidgetItem *cat = m_viewlist->addCategory( "Documents", i18n( "Documents" ) );
+    cat->setIcon( 0, KIcon( "koshell" ) );
+    
     foreach ( KoDocumentChild *ch, getPart()->children() ) {
-        createChildDocumentView( static_cast<DocumentChild*>( ch ) );
+        if ( ! ch->isDeleted() ) {
+            ViewListItem *i = createChildDocumentView( static_cast<DocumentChild*>( ch ) );
+            cat->insertChild( cat->childCount(), i );
+        }
     }
 }
 
@@ -2138,8 +2171,6 @@ ViewListItem *View::createChildDocumentView( DocumentChild *ch )
 {
     KoDocument *doc = ch->document();
     
-    QTreeWidgetItem *cat = m_viewlist->addCategory( "Documents", i18n( "Documents" ) );
-    cat->setIcon( 0, KIcon( "koshell" ) );
     
     QString title = ch->title();
     if ( title.isEmpty() && doc->documentInfo() ) {
@@ -2154,11 +2185,25 @@ ViewListItem *View::createChildDocumentView( DocumentChild *ch )
     KoView *v = doc->createView( this );
     ch->setGeometry( geometry(), true );
     m_tab->addWidget( v );
-    ViewListItem *i = m_viewlist->addView( cat, doc->objectName(), title, v, ch );
+    ViewListItem *i = m_viewlist->createView( doc->objectName(), title, v, ch );
     if ( ! ch->icon().isEmpty() ) {
         i->setIcon( 0, KIcon( ch->icon() ) );
     }
     return i;
+}
+
+void View::slotViewListItemRemoved( ViewListItem *item )
+{
+    // atm. it's only child docs that can be removed, so this restores basic ui
+    if ( item->documentChild() ) {
+        item->documentChild()->setActivated( false, this );
+    }
+    m_tab->removeWidget( item->view() );
+}
+
+void View::slotViewListItemInserted( ViewListItem *item )
+{
+    m_tab->addWidget( item->view() );
 }
 
 void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
@@ -2172,9 +2217,13 @@ void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
         delete doc;
         return;
     }
+    QTreeWidgetItem *cat = m_viewlist->addCategory( "Documents", i18n( "Documents" ) );
+    cat->setIcon( 0, KIcon( "koshell" ) );
+    
     DocumentChild *ch = getPart()->createChild( doc );
     ch->setIcon( entry.service()->icon() );
     ViewListItem *i = createChildDocumentView( ch );
+    getPart()->addCommand( new InsertEmbeddedDocumentCmd( getPart(), m_viewlist, i, cat, i18n( "Insert Document" ) ) );
     m_viewlist->setSelected( i );
 }
 
@@ -2207,7 +2256,7 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         //kDebug()<<k_funcinfo<<"Activated: "<<item->view()<<endl;
         // changing doc also takes care of all gui
         m_tab->setCurrentWidget( item->view() );
-        item->documentChild()->activate( item->view() );
+        item->documentChild()->setActivated( true, item->view() );
         return;
     }
 }
@@ -2219,14 +2268,13 @@ QWidget *View::canvas() const
 
 void View::slotCurrentChanged( int index )
 {
-    //kDebug()<<k_funcinfo<<m_tab->currentIndex()<<endl;
-    
-    KoView *currentview = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
-    if ( currentview ) {
-        //kDebug()<<k_funcinfo<<"ViewBase: "<<currentview<<endl;
-        updateView( currentview );
+    kDebug()<<k_funcinfo<<m_tab->currentIndex()<<endl;
+    ViewListItem *item = m_viewlist->findItem( m_tab->currentWidget() );
+    if ( item == 0 ) {
         return;
     }
+    kDebug()<<k_funcinfo<<item->text(0)<<endl;
+    item->setSelected( true );
 }
 
 void View::updateView( QWidget *widget )

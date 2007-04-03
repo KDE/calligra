@@ -433,10 +433,17 @@ DocumentChild::DocumentChild ( KoDocument* parent, KoDocument* doc, const QRect&
 {
 }
 
-void DocumentChild::activate( QWidget *w )
+void DocumentChild::setActivated( bool act, QWidget *w )
 {
-   if ( document()->manager() )
-        document()->manager()->setActivePart( document(), w );
+    if ( document()->manager() ) {
+        if ( act ) {
+            document()->manager()->setActivePart( document(), w );
+        } else if ( parentDocument()->manager() ) {
+            parentDocument()->manager()->setActivePart( parentDocument(), w );
+        } else {
+            document()->manager()->setActivePart( 0, w );
+        }
+    }
 }
 
 KoDocument* DocumentChild::hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix )

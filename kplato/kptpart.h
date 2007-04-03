@@ -131,7 +131,7 @@ public:
     DocumentChild( KoDocument* parent );
     DocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry );
     //void setEmbedded( bool emb ) { m_embedded = emb; }
-    void activate( QWidget *w = 0 );
+    void setActivated( bool activate, QWidget *w = 0 );
     virtual KoDocument* hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix = QMatrix() );
     virtual QDomElement save( QDomDocument &doc, bool uppercase = false );
     virtual bool load( const KoXmlElement& element, bool uppercase = false );

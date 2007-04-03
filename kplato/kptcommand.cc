@@ -26,6 +26,7 @@
 #include "kptcalendar.h"
 #include "kptrelation.h"
 #include "kptresource.h"
+#include "kptview.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -2751,6 +2752,62 @@ void ModifyStandardWorktimeDayCmd::execute()
 void ModifyStandardWorktimeDayCmd::unexecute()
 {
     swt->setDay( m_oldvalue );
+    setCommandType( 0 );
+}
+
+InsertEmbeddedDocumentCmd::InsertEmbeddedDocumentCmd( Part *part, ViewListWidget *list, ViewListItem *item, QTreeWidgetItem *parent, const QString& name )
+        : NamedCommand( part, name ),
+        m_list( list ),
+        m_parent( parent ),
+        m_item( item ),
+        m_index( -1 ),
+        m_mine( false )
+{
+}
+InsertEmbeddedDocumentCmd::~InsertEmbeddedDocumentCmd()
+{
+    if ( m_mine ) {
+        delete m_item;
+    }
+}
+void InsertEmbeddedDocumentCmd::execute()
+{
+    m_list->insertViewListItem( m_item, m_parent, m_index );
+    m_item->documentChild()->setDeleted( false );
+    setCommandType( 0 );
+}
+void InsertEmbeddedDocumentCmd::unexecute()
+{
+    m_item->documentChild()->setDeleted( true );
+    m_index = m_list->takeViewListItem( m_item );
+    setCommandType( 0 );
+}
+
+DeleteEmbeddedDocumentCmd::DeleteEmbeddedDocumentCmd( Part *part, ViewListWidget *list, ViewListItem *item, const QString& name )
+        : NamedCommand( part, name ),
+        m_list( list ),
+        m_parent( item->parent() ),
+        m_item( item ),
+        m_index( -1 ),
+        m_mine( false )
+{
+}
+DeleteEmbeddedDocumentCmd::~DeleteEmbeddedDocumentCmd()
+{
+    if ( m_mine ) {
+        delete m_item;
+    }
+}
+void DeleteEmbeddedDocumentCmd::execute()
+{
+    m_index = m_list->takeViewListItem( m_item );
+    m_item->documentChild()->setDeleted( true );
+    setCommandType( 0 );
+}
+void DeleteEmbeddedDocumentCmd::unexecute()
+{
+    m_item->documentChild()->setDeleted( true );
+    m_list->insertViewListItem( m_item, m_parent, m_index );
     setCommandType( 0 );
 }
 

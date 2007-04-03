@@ -80,6 +80,28 @@ class Relation;
 class Context;
 class ViewAdaptor;
 
+class ViewListItem : public QTreeWidgetItem
+{
+public:
+    enum ItemType { ItemType_Category = Type, ItemType_SubView = UserType, ItemType_ChildDocument };
+    
+    enum DataRole { DataRole_View = Qt::UserRole, DataRole_Document, DataRole_ChildDocument };
+
+    ViewListItem( const QString &tag, const QStringList &strings, int type = ItemType_Category );
+    ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
+    ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
+    void setView( KoView *view );
+    KoView *view() const;
+    void setDocumentChild( DocumentChild *child );
+    DocumentChild *documentChild() const;
+    void setDocument( KoDocument *doc );
+    KoDocument *document() const;
+
+    QString tag() const { return m_tag; }
+private:
+    QString m_tag;
+};
+
 class ViewListTreeWidget : public QTreeWidget
 {
     Q_OBJECT
@@ -102,20 +124,29 @@ class ViewListWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ViewListWidget( QWidget *parent );//QString name, KMainWindow *parent );
+    ViewListWidget( Part *part, QWidget *parent );//QString name, KMainWindow *parent );
     ~ViewListWidget();
     
+    /// Add a category if it does not allready exist
     ViewListItem *addCategory( const QString &tag, const QString& name );
+    /// Add a sub-view
     ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString() );
-    ViewListItem *addView( QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon = QString() );
+    /// Create a embedded child document view (callers resposibility to add to the list)
+    ViewListItem *createView( const QString &tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon = QString() );
+    
     void setSelected( QTreeWidgetItem *item );
     KoView *findView( const QString &tag );
     ViewListItem *findItem( const QString &tag, QTreeWidgetItem* parent = 0 );
     ViewListItem *findItem( const QWidget *view, QTreeWidgetItem* parent = 0 );
     
+    int takeViewListItem( ViewListItem *item );
+    void insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
+
 signals:
     void activated( ViewListItem*, ViewListItem* );
     void createKofficeDocument( KoDocumentEntry &entry );
+    void viewListItemRemoved( ViewListItem *item );
+    void viewListItemInserted( ViewListItem *item );
     
 protected slots:
     void slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev );
@@ -123,6 +154,7 @@ protected slots:
     void renameCategory();
     void slotCreatePart();
     void slotEditDocumentTitle();
+    void slotRemoveDocument();
     
 protected:
     virtual void contextMenuEvent ( QContextMenuEvent *event );
@@ -131,6 +163,7 @@ private:
     void setupContextMenus();
     
 private:
+    Part *m_part;
     ViewListTreeWidget *m_viewlist;
     Q3ValueList<KoDocumentEntry> m_lstEntries;
     KoDocumentEntry m_documentEntry;
@@ -300,6 +333,8 @@ protected:
 
 private slots:
     void slotActionDestroyed( QObject *o );
+    void slotViewListItemRemoved( ViewListItem *item );
+    void slotViewListItemInserted( ViewListItem *item );
     
 private:
     void createTaskeditor( ViewListItem *cat );
