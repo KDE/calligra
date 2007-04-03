@@ -23,12 +23,17 @@
 #include "KWDocument.h"
 #include "commands/KWPagePropertiesCommand.h"
 
+#include <KoLayoutVisitor.h>
+
+#include <QTimer>
+
 //#include <KDebug>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, KWPage *page)
     : KDialog(parent),
     m_document(document),
     m_page(page)
+,m_visited (false)
 {
     Q_ASSERT(document);
     Q_ASSERT(page);
@@ -78,6 +83,19 @@ void KWPageSettingsDialog::accept() {
 void KWPageSettingsDialog::reject() {
     QDialog::reject();
     deleteLater();
+}
+
+void KWPageSettingsDialog::showEvent (QShowEvent *e) {
+    QDialog::showEvent(e);
+    if(m_visited) return;
+    m_visited = true;
+    QTimer::singleShot(0, this, SLOT(visit()));
+}
+
+void KWPageSettingsDialog::visit() {
+    KoLayoutVisitor visitor;
+    visitor.visit(m_pageLayoutWidget);
+    visitor.relayout();
 }
 
 #include <KWPageSettingsDialog.moc>

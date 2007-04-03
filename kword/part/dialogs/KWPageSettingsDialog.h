@@ -36,16 +36,19 @@ public:
 
 private slots:
     void setPageLayout(const KoPageLayout &layout);
+    void visit();
 
 private:
     void accept();
     void reject();
+    void showEvent (QShowEvent *e);
 
 private:
     KWDocument *m_document;
     KWPage *m_page;
     KoPageLayout m_layout;
     KWPageLayout *m_pageLayoutWidget;
+    bool m_visited;
 };
 
 #endif
