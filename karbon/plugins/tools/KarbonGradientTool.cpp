@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -151,6 +152,7 @@ void KarbonGradientTool::activate( bool temporary )
     }
 
     initialize();
+    repaintDecorations();
 
     useCursor(Qt::ArrowCursor, true);
 }
