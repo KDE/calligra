@@ -41,9 +41,13 @@ public:
     void open(const QTextCursor &cursor);
     void open(KoParagraphStyle *style);
 
+private slots:
+    void visit();
+
 private:
     void accept();
     void reject();
+    void showEvent (QShowEvent *);
 
     ParagraphIndentSpacing *m_paragraphIndentSpacing;
     ParagraphLayout *m_paragraphLayout;
@@ -52,6 +56,7 @@ private:
     QTextCursor m_cursor;
     KoParagraphStyle *m_style;
     bool m_ownStyle;
+    bool m_visited;
 };
 
 #endif

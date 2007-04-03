@@ -24,14 +24,17 @@
 #include "ParagraphBulletsNumbers.h"
 
 #include <KoParagraphStyle.h>
+#include <KoLayoutVisitor.h>
 
 #include <QTextBlock>
+#include <QTimer>
 
 
 ParagraphSettingsDialog::ParagraphSettingsDialog(QWidget *parent)
     : KPageDialog(parent),
     m_style(0),
     m_ownStyle(false)
+,m_visited(false)
 {
     setFaceType(KPageDialog::Tabbed);
     m_paragraphIndentSpacing = new ParagraphIndentSpacing (this);
@@ -82,6 +85,21 @@ void ParagraphSettingsDialog::open(KoParagraphStyle *style) {
 
 void ParagraphSettingsDialog::setUnit(const KoUnit &unit) {
     m_paragraphIndentSpacing->setUnit(unit);
+}
+
+void ParagraphSettingsDialog::showEvent (QShowEvent *e) {
+    QDialog::showEvent(e);
+    if(m_visited) return;
+    m_visited = true;
+    QTimer::singleShot(0, this, SLOT(visit()));
+}
+
+void ParagraphSettingsDialog::visit() {
+    KoLayoutVisitor visitor;
+    visitor.visit(m_paragraphBulletsNumbers);
+    visitor.visit(m_paragraphLayout);
+    visitor.visit(m_paragraphIndentSpacing);
+    visitor.relayout();
 }
 
 #include <ParagraphSettingsDialog.moc>
