@@ -40,7 +40,6 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     addStyle(i18n( "Circle Bullet" ), KoListStyle::CircleItem);
     addStyle(i18n( "Custom Bullet" ), KoListStyle::CustomCharItem);
 
-/*
     addStyle(i18n("Bengali"), KoListStyle::Bengali);
     addStyle(i18n("Gujarati"), KoListStyle::Gujarati);
     addStyle(i18n("Gurumukhi"), KoListStyle::Gurumukhi);
@@ -54,7 +53,6 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     addStyle(i18n("Abjad"), KoListStyle::Abjad);
     addStyle(i18n("AbjadMinor"), KoListStyle::AbjadMinor);
     addStyle(i18n("ArabicAlphabet"), KoListStyle::ArabicAlphabet);
-*/
 
     widget.alignment->addItem(i18nc("Automatic horizontal alignment", "Auto"));
     widget.alignment->addItem(i18n("Left"));
@@ -106,12 +104,30 @@ void ParagraphBulletsNumbers::save() {
 void ParagraphBulletsNumbers::styleChanged(int index) {
 //kDebug() << "ParagraphBulletsNumbers::styleChanged\n";
     KoListStyle::Style style = m_mapping[index];
-    // TODO set the style on a spinbox
+    switch( style ) {
+        case KoListStyle::SquareItem:
+        case KoListStyle::DiscItem:
+        case KoListStyle::CircleItem:
+        case KoListStyle::BoxItem:
+        case KoListStyle::KoListStyle::CustomCharItem:
+        case KoListStyle::KoListStyle::NoItem:
+            widget.startValue->setCounterType(KoListStyle::DecimalItem);
+            widget.startValue->setValue(1);
+            widget.startValue->setEnabled(false);
+            break;
+        default:
+            widget.startValue->setEnabled(true);
+            widget.startValue->setCounterType(style);
+            int value = widget.startValue->value();
+            widget.startValue->setValue(value +1);
+            widget.startValue->setValue(value); // surely to trigger a change event.
+    }
     if(style == KoListStyle::CustomCharItem)
         widget.customCharacter->setText(m_style->bulletCharacter());
     else
         widget.customCharacter->setText("-");
 
+    widget.listPropertiesPane->setEnabled(style != KoListStyle::NoItem);
 }
 
 #include "ParagraphBulletsNumbers.moc"

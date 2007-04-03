@@ -28,9 +28,9 @@
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
 
-enum Capitalisation { Lowercase, Uppercase };
+using namespace Lists;
 
-static QString intToRoman( int n ) {
+QString Lists::intToRoman( int n ) {
     static const QByteArray RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
     static const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
     static const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
@@ -44,7 +44,7 @@ static QString intToRoman( int n ) {
                                 RNTens[ ( n / 10 ) % 10 ] + RNUnits[ ( n ) % 10 ] );
 }
 
-static QString intToAlpha( int n, Capitalisation caps ) {
+QString Lists::intToAlpha( int n, Capitalisation caps ) {
     const char offset = caps == Uppercase?'A':'a';
     QString answer;
     char bottomDigit;
@@ -57,7 +57,7 @@ static QString intToAlpha( int n, Capitalisation caps ) {
     return answer;
 }
 
-static QString intToScript(int n, KoListStyle::Style type) {
+QString Lists::intToScript(int n, KoListStyle::Style type) {
     // 10-base
     static const int bengali = 0x9e6;
     static const int gujarati = 0xae6;
@@ -113,7 +113,7 @@ static QString intToScript(int n, KoListStyle::Style type) {
     return answer;
 }
 
-static QString intToScriptList(int n, KoListStyle::Style type) {
+QString Lists::intToScriptList(int n, KoListStyle::Style type) {
     // 1 time Sequences
     // note; the leading X is to make these 1 based.
     static const char* Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",

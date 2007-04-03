@@ -20,10 +20,21 @@
 #ifndef LISTITEMSHELPER_H
 #define LISTITEMSHELPER_H
 
+#include <KoListStyle.h>
+
 #include <QFont>
 #include <QFontMetricsF>
 
 class QTextList;
+
+namespace Lists {
+    enum Capitalisation { Lowercase, Uppercase };
+
+    QString intToRoman( int n );
+    QString intToAlpha( int n, Capitalisation caps );
+    QString intToScript(int n, KoListStyle::Style type);
+    QString intToScriptList(int n, KoListStyle::Style type);
+};
 
 /// \internal helper class for calculating text-lists prefixes and indents
 class ListItemsHelper {

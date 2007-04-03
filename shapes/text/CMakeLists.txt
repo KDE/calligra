@@ -20,7 +20,7 @@ SET ( textshape_SRCS
     dialogs/ParagraphIndentSpacing.cpp
     dialogs/ParagraphBulletsNumbers.cpp
     dialogs/ParagraphSettingsDialog.cpp
-
+    dialogs/ListsSpinBox.cpp
 )
 
 kde4_add_ui_files(textshape_SRCS
