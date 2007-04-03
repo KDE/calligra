@@ -202,14 +202,7 @@ void KarbonGradientTool::deactivate()
     delete m_gradient;
     m_gradient = 0;
 
-    foreach( GradientStrategy* strategy, m_gradients )
-    {
-        strategy->repaint();
-        delete strategy;
-    }
-    m_gradients.clear();
-    foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
-        shape->repaint();
+    qDeleteAll( m_gradients );
 }
 
 void KarbonGradientTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
