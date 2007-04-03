@@ -22,6 +22,8 @@
 
 #include "ui_ParagraphBulletsNumbers.h"
 
+#include <KoListStyle.h>
+
 #include <QWidget>
 
 class KoParagraphStyle;
@@ -35,10 +37,16 @@ public:
 
     void save();
 
+    void addStyle(const QString &text, KoListStyle::Style style);
+
+private slots:
+    void styleChanged(int);
+
 private:
     Ui::ParagraphBulletsNumbers widget;
 
-    KoParagraphStyle *m_style;
+    KoListStyle *m_style;
+    QHash<int, KoListStyle::Style> m_mapping;
 };
 
 #endif

@@ -38,7 +38,7 @@ void ParagraphLayout::open(KoParagraphStyle *style) {
            widget.left->setChecked(true); break;
     }
 
-    // keep together??
+    widget.keepTogether->setChecked(style->nonBreakableLines());
     widget.breakBefore->setChecked(style->breakBefore());
     widget.breakAfter->setChecked(style->breakAfter());
 }
@@ -53,8 +53,8 @@ void ParagraphLayout::save() {
         align = Qt::AlignJustify;
     else
         align = Qt::AlignLeft;
-    // keep together??
     m_style->setAlignment(align);
+    m_style->setNonBreakableLines(widget.keepTogether->isChecked());
     m_style->setBreakBefore(widget.breakBefore->isChecked());
     m_style->setBreakAfter(widget.breakAfter->isChecked());
 }
