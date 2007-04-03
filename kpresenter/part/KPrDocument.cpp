@@ -19,7 +19,6 @@
 
 #include "KPrDocument.h"
 
-#include <kcommand.h>
 
 #include "KPrView.h"
 
