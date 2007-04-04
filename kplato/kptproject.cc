@@ -1420,7 +1420,7 @@ bool Project::legalToLink( Node *par, Node *child )
 {
     //kDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents) "<<child.name()<<" ("<<child.numDependChildNodes()<<" children)"<<endl;
 
-    if ( par == 0 || child == 0 || par->isDependChildOf( child ) ) {
+    if ( par == 0 || child == 0 || par == child || par->isDependChildOf( child ) ) {
         return false;
     }
     bool legal = true;
