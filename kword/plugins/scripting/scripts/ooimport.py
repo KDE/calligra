@@ -338,39 +338,3 @@ print "..................2"
 #print "DISCONNECT ..."
 #controller.disconnect()
 #print "DONE"
-
-
-
-#try:
-    #opts, args = getopt.getopt(sys.argv[1:], "hc:", ["help", "connection-string=" , "html", "pdf", "stdout" ])
-    #url = "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
-    #ctxLocal = uno.getComponentContext()
-    #smgrLocal = ctxLocal.ServiceManager
-    #resolver = smgrLocal.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", ctxLocal )
-    #ctx = resolver.resolve( url )
-    #smgr = ctx.ServiceManager
-    #desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", ctx )
-    #cwd = systemPathToFileUrl( getcwd() )
-    #for path in args:
-        #try:
-            #fileUrl = absolutize( cwd, systemPathToFileUrl(path) )
-            #doc = desktop.loadComponentFromURL( fileUrl , "_blank", 0, inProps )
-            #if not doc:
-                #raise UnoException( "Couldn't open stream for unknown reason", None )
-            #if not stdout:
-                #(dest, ext) = splitext(path)
-                #dest = dest + "." + extension
-                #destUrl = absolutize( cwd, systemPathToFileUrl(dest) )
-                #sys.stderr.write(destUrl + "\n")
-                #doc.storeToURL(destUrl, outProps)
-            #else:
-                #doc.storeToURL("private:stream",outProps)
-        #except IOException, e:
-            #sys.stderr.write( "Error during conversion: " + e.Message + "\n" )
-        #except UnoException, e:
-            #sys.stderr.write( "Error ("+repr(e.__class__)+") during conversion:" + e.Message + "\n" )
-        #if doc: doc.dispose()
-#except UnoException, e:
-    #sys.stderr.write( "Error ("+repr(e.__class__)+") :" + e.Message + "\n" )
-#except getopt.GetoptError,e:
-    #sys.stderr.write( str(e) + "\n" )
