@@ -5,6 +5,10 @@ install(FILES
     DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/variables)
 
 install(FILES
+    ooimport.py ooimportconfig.ui
+    DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/extensions)
+
+install(FILES
     sample_importfile.py
     sample_exportfile.py
     sample_doctree.rb
@@ -20,4 +24,4 @@ install(FILES
     sample_insertshape.py
     sample_allshapes.py
     sample_onlinehelp.py
-    DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/extensions)
+    DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/samples)

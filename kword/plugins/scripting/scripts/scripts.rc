@@ -1,5 +1,12 @@
 <KrossScripting>
 
+    <script
+        name="pyooimport"
+        text="Import file with OpenOffice.org"
+        comment="Uses PyUNO to import a file using OpenOffice.org"
+        interpreter="python"
+        file="extensions/ooimport.py" />
+
     <!--
         The "variables" collection provides scripting variables to KWord. Those
         scripting variables are displayed in the Insert=>Variable menu and
@@ -47,91 +54,91 @@
             text="Import File..."
             comment="Python script to import content from a file"
             interpreter="python"
-            file="extensions/sample_importfile.py" />
+            file="samples/sample_importfile.py" />
         <script
             name="pysampleexportfile"
             text="Export File..."
             comment="Python script to export content to a file"
             interpreter="python"
-            file="extensions/sample_exportfile.py" />
+            file="samples/sample_exportfile.py" />
         <script
             name="pysampleinsertshape"
             text="Insert Shape..."
             comment="Python script to insert a shape"
             interpreter="python"
-            file="extensions/sample_insertshape.py" />
+            file="samples/sample_insertshape.py" />
         <script
             name="rbsampledoctree"
             text="Document Tree..."
             comment="QtRuby script that displays the document structur within a treeview"
             interpreter="ruby"
-            file="extensions/sample_doctree.rb" />
+            file="samples/sample_doctree.rb" />
         <script
             name="rbsamplecursor"
             text="Control Cursor..."
             comment="Ruby script that demonstrates how to control the cursor"
             interpreter="ruby"
-            file="extensions/sample_cursor.rb" />
+            file="samples/sample_cursor.rb" />
         <script
             name="pysampleactions"
             text="Execute Action..."
             comment="Python script that demonstrates usage of actions"
             interpreter="python"
-            file="extensions/sample_actions.py" />
+            file="samples/sample_actions.py" />
         <script
             name="pysampletoolactions"
             text="Tool Actions..."
             comment="Python script that demonstrates usage of tool actions"
             interpreter="python"
-            file="extensions/sample_toolactions.py" />
+            file="samples/sample_toolactions.py" />
         <script
             name="pysampleprogressbar"
             text="Progressbar"
             comment="Python script that demonstrates how to use the progressbar"
             interpreter="python"
-            file="extensions/sample_progressbar.py" />
+            file="samples/sample_progressbar.py" />
         <script
             name="pysampletext"
             text="Text"
             comment="Python script that demonstrates usage of the text engine"
             interpreter="python"
-            file="extensions/sample_text.py" />
+            file="samples/sample_text.py" />
         <script
             name="pysamplelisthtml"
             text="Lists with HTML"
             comment="Python script that demonstrates how to create lists with HTML"
             interpreter="python"
-            file="extensions/sample_lists_html.py" />
+            file="samples/sample_lists_html.py" />
         <script
             name="pysamplelistcursor"
             text="Lists with Cursor"
             comment="Python script that demonstrates how to create lists with a cursor"
             interpreter="python"
-            file="extensions/sample_lists_cursor.py" />
+            file="samples/sample_lists_cursor.py" />
         <script
             name="pysampletables"
             text="Tables"
             comment="Python script that demonstrates how to deal with tables"
             interpreter="python"
-            file="extensions/sample_tables.py" />
+            file="samples/sample_tables.py" />
         <script
             name="pysamplevariables"
             text="Variables"
             comment="Python script that demonstrates how to handle variables"
             interpreter="python"
-            file="extensions/sample_variables.py" />
+            file="samples/sample_variables.py" />
         <script
             name="pysampleallshapes"
             text="All Shapes"
             comment="Python script adds all shapes"
             interpreter="python"
-            file="extensions/sample_allshapes.py" />
+            file="samples/sample_allshapes.py" />
         <script
             name="pysampleonlinehelp"
             text="Online Help..."
             comment="Python script that uses the KHTML Part to display the KWord Scripting online help"
             interpreter="python"
-            file="extensions/sample_onlinehelp.py" />
+            file="samples/sample_onlinehelp.py" />
 
     </collection>
 
