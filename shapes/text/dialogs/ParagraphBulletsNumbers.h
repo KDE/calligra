@@ -41,10 +41,12 @@ public:
 
 private slots:
     void styleChanged(int);
+    void customCharButtonPressed();
 
 private:
     Ui::ParagraphBulletsNumbers widget;
 
+    KoParagraphStyle *m_paragStyle;
     KoListStyle *m_style;
     QHash<int, KoListStyle::Style> m_mapping;
 };

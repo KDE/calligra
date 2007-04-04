@@ -20,11 +20,14 @@
 #include "ParagraphBulletsNumbers.h"
 
 #include <KoParagraphStyle.h>
+#include <KoCharSelectDia.h>
 
 #include <KDebug>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+    m_paragStyle(0),
+    m_style(0)
 {
     widget.setupUi(this);
 
@@ -57,8 +60,10 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     widget.alignment->addItem(i18nc("Automatic horizontal alignment", "Auto"));
     widget.alignment->addItem(i18n("Left"));
     widget.alignment->addItem(i18n("Right"));
+    widget.alignment->addItem(i18n("Centered"));
 
     connect(widget.listTypes, SIGNAL(currentRowChanged(int)), this, SLOT(styleChanged(int)));
+    connect(widget.customCharacter, SIGNAL(clicked(bool)), this, SLOT(customCharButtonPressed()));
 }
 
 void ParagraphBulletsNumbers::addStyle(const QString &text, KoListStyle::Style style) {
@@ -67,10 +72,14 @@ void ParagraphBulletsNumbers::addStyle(const QString &text, KoListStyle::Style s
 }
 
 void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
+    m_paragStyle = style;
     m_style = style->listStyle();
     widget.listPropertiesPane->setEnabled(m_style);
-    if(m_style == 0)
+    widget.customCharacter->setText("-");
+    if(m_style == 0) {
+        widget.listTypes->setCurrentRow(0);
         return;
+    }
     widget.prefix->setText(m_style->listItemPrefix());
     widget.suffix->setText(m_style->listItemSuffix());
     KoListStyle::Style s = m_style->style();
@@ -81,15 +90,22 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
         }
     }
     int align;
-    switch(m_style->alignment()) {
-        case Qt::AlignLeft: align = 0; break;
-        case Qt::AlignRight: align = 1; break;
-        default: align = 2;
-    }
+kDebug() << "a: " << m_style->alignment() << endl;
+    if(m_style->alignment() == (Qt::AlignLeft | Qt::AlignAbsolute))
+        align = 1;
+    else if(m_style->alignment() == (Qt::AlignRight | Qt::AlignAbsolute))
+        align = 2;
+    else if(m_style->alignment() == Qt::AlignCenter)
+        align = 3;
+    else
+        align = 0;
+
     widget.alignment->setCurrentIndex(align);
     widget.depth->setValue(m_style->level());
     widget.levels->setValue(m_style->displayLevel());
     widget.startValue->setValue(m_style->startValue());
+    if(s == KoListStyle::CustomCharItem)
+        widget.customCharacter->setText(m_style->bulletCharacter());
 
     // *** features not in GUI;
     // character style
@@ -98,7 +114,36 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
 }
 
 void ParagraphBulletsNumbers::save() {
-    if(m_style == 0) return;
+    Q_ASSERT(m_paragStyle);
+    KoListStyle::Style style = m_mapping[widget.listTypes->currentRow()];
+    if(style == KoListStyle::NoItem) {
+        m_style = 0;
+        m_paragStyle->removeListStyle();
+        return;
+    }
+    if(m_style == 0) {
+        KoListStyle ls;
+        m_paragStyle->setListStyle(ls);
+        m_style = m_paragStyle->listStyle();
+        Q_ASSERT(m_style);
+    }
+    m_style->setStyle(style);
+    m_style->setLevel(widget.depth->value());
+    m_style->setDisplayLevel(widget.levels->value());
+    m_style->setStartValue(widget.startValue->value());
+    m_style->setListItemPrefix(widget.prefix->text());
+    m_style->setListItemSuffix(widget.suffix->text());
+
+    Qt::Alignment align;
+    switch(widget.alignment->currentIndex()) {
+        case 0: align = Qt::AlignLeft; break;
+        case 1: align = Qt::AlignLeft | Qt::AlignAbsolute; break;
+        case 2: align = Qt::AlignRight | Qt::AlignAbsolute; break;
+        case 3: align = Qt::AlignCenter; break;
+        default:
+            Q_ASSERT(false);
+    }
+    m_style->setAlignment(align);
 }
 
 void ParagraphBulletsNumbers::styleChanged(int index) {
@@ -122,12 +167,23 @@ void ParagraphBulletsNumbers::styleChanged(int index) {
             widget.startValue->setValue(value +1);
             widget.startValue->setValue(value); // surely to trigger a change event.
     }
-    if(style == KoListStyle::CustomCharItem)
-        widget.customCharacter->setText(m_style->bulletCharacter());
-    else
-        widget.customCharacter->setText("-");
-
     widget.listPropertiesPane->setEnabled(style != KoListStyle::NoItem);
+}
+
+void ParagraphBulletsNumbers::customCharButtonPressed() {
+    QString font;
+    QChar character;
+    if(KoCharSelectDia::selectChar(font, character, this)) {
+        widget.customCharacter->setText(character);
+        widget.customCharacter->setFont(QFont(font));
+    }
+    // also switch to the custom list style.
+    foreach(int row, m_mapping.keys()) {
+        if(m_mapping[row] == KoListStyle::CustomCharItem) {
+            widget.listTypes->setCurrentRow(row);
+            break;
+        }
+    }
 }
 
 #include "ParagraphBulletsNumbers.moc"
