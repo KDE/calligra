@@ -34,7 +34,7 @@ namespace Lists {
     QString intToAlpha( int n, Capitalisation caps );
     QString intToScript(int n, KoListStyle::Style type);
     QString intToScriptList(int n, KoListStyle::Style type);
-};
+}
 
 /// \internal helper class for calculating text-lists prefixes and indents
 class ListItemsHelper {
