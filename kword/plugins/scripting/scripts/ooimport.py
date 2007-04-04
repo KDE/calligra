@@ -238,7 +238,7 @@ class UnoController:
         self.unoClient.unoDocument.read(outputstream)
 
 class KWordOutputStream( UnoDocument.OutputStream ):
-    def __init__(self):
+    def __init__(self, unoConfig):
             #self.filterName = "Text (encoded)"
             self.filterName = "HTML (StarWriter)"
             #self.filterName = "writer_pdf_Export"
@@ -246,6 +246,7 @@ class KWordOutputStream( UnoDocument.OutputStream ):
             import KWord
             self.doc = KWord.mainFrameSet().document()
             self.html = ""
+
     def closeOutput(self):
         #self.doc.setHtml(self.html)
         #self.html = ""
@@ -261,13 +262,13 @@ class KWordOutputStream( UnoDocument.OutputStream ):
 class ImportDialog:
     def __init__(self, action):
         import Kross
-        forms = Kross.module("forms")
-        self.dialog = forms.createDialog("Import file with OpenOffice.org")
+        self.forms = Kross.module("forms")
+        self.dialog = self.forms.createDialog("Import file with OpenOffice.org")
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         openpage = self.dialog.addPage("Open","Import File","fileopen")
-        openwidget = forms.createFileWidget(openpage, "kfiledialog:///kwordooimport")
+        openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kwordooimport")
         openwidget.setMode("Opening")
         filters = [
             "*.odt|OpenDocument Text (*.odt)",
@@ -293,7 +294,7 @@ class ImportDialog:
         openwidget.setFilter("\n".join(filters))
 
         configpage = self.dialog.addPage("Connect","OpenOffice.org UNO Connection","connect_no")
-        configwidget = forms.createWidgetFromUIFile(configpage, os.path.join(action.currentPath(),"ooimportconfig.ui"))
+        configwidget = self.forms.createWidgetFromUIFile(configpage, os.path.join(action.currentPath(),"ooimportconfig.ui"))
 
         if self.dialog.exec_loop():
             file = openwidget.selectedFile()
@@ -311,15 +312,30 @@ class ImportDialog:
             else:
                 controller.unoConfig.connectTimeout = 0
 
-            controller.connect()
-            controller.loadDocument( "file://%s" % file )
+            progress = self.forms.showProgressDialog("Import...", "Initialize...")
+            class ProgressWriter:
+                def __init__(self, progress):
+                    self.progress = progress
+                    self.progress.value = 0
+                def write(self, s):
+                    self.progress.labelText = s
+                    # fake progress
+                    self.progress.value = self.progress.value + 1
+                    print s
+            try:
+                controller.unoConfig.logger = ProgressWriter(progress)
 
-            outputstream = KWordOutputStream()
-            controller.writeDocument(outputstream)
-            outputstream.flush()
+                controller.connect()
+                controller.loadDocument( "file://%s" % file )
 
-            controller.disconnect()
+                outputstream = KWordOutputStream(controller.unoConfig)
+                controller.writeDocument(outputstream)
+                outputstream.flush()
 
+                controller.disconnect()
+
+            finally:
+                progress.reset()
     def __del__(self):
         self.dialog.delayedDestruct()
 
