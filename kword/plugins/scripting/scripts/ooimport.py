@@ -323,15 +323,20 @@ class ImportDialog:
                     self.progress.value = self.progress.value + 1
                     print s
             try:
-                controller.unoConfig.logger = ProgressWriter(progress)
+                progresswriter = ProgressWriter(progress)
+                controller.unoConfig.logger = progresswriter
 
                 controller.connect()
+
+                progresswriter.progress.value = 50
                 controller.loadDocument( "file://%s" % file )
 
+                progresswriter.progress.value = 90
                 outputstream = KWordOutputStream(controller.unoConfig)
                 controller.writeDocument(outputstream)
                 outputstream.flush()
 
+                progresswriter.progress.value = 100
                 controller.disconnect()
 
             finally:
