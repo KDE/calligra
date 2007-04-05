@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
 
 """
 This python script connects KWord and OpenOffice.org together.
@@ -38,7 +38,7 @@ http://udk.openoffice.org/python/python-bridge.html
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
-import sys, os, time, subprocess, signal
+import sys, os, time, traceback, threading, subprocess, signal
 
 try:
     import uno
@@ -64,7 +64,9 @@ class UnoConfig:
         self.port = 2002
         # Number of seconds we try to connect before aborting, set to 0 to try to
         # connect only once and -1 to disable timeout and try to connect forever.
-        self.connectTimeout = 30
+        self.connectTimeout = 45
+        # Startup OpenOffice.org instance if not running already.
+        self.startupServer = True
         # Hide the client window.
         self.hideClient = True
         # Close new documents once not needed any longer.
@@ -142,12 +144,6 @@ class UnoDocument:
 class UnoServer:
     """ Class that provides functionality to deal with the OpenOffice.org server instance. """
 
-    #class ServerThread(threading.Thread):
-        #def __init__(self):
-            #threading.Thread.__init__(self)
-        #def run(self):
-            #pass
-
     def __init__(self, unoConfig):
         self.unoConfig = unoConfig
 
@@ -201,8 +197,9 @@ class UnoClient:
                 break
             except UnoNoConnectException:
                 self.unoConfig.logger.write("Failed to connect with OpenOffice.org on %s:%s ...\n" % (self.unoConfig.host,self.unoConfig.port))
-                if not self.unoServer:
-                    self.unoServer = UnoServer(self.unoConfig)
+                if self.unoConfig.startupServer:
+                    if not self.unoServer:
+                        self.unoServer = UnoServer(self.unoConfig)
                 if self.unoConfig.connectTimeout >= 0:
                     if elapsed >= self.unoConfig.connectTimeout:
                         raise "Failed to connect to OpenOffice.org on %s:%s" % (self.unoConfig.host,self.unoConfig.port)
@@ -275,19 +272,21 @@ class ImportDialog:
             "*.ott|OpenDocument Text Template (*.ott)",
             "*.sxw|OpenOffice.org 1.0 Text Document (*.sxw)",
             "*.stw|OpenOffice.org 1.0 Text Document Template (*.stw)",
-            "*.doc|Microsoft Word 97/2000/XP (*.doc)",
-            "*.dot|Microsoft Word 97/2000/XP Template (*.dot)",
-            "*.doc|Microsoft Word 6.0/95 (*.doc)",
-            "*.dot|Microsoft Word 95 Template (*.dot)",
+            "*.doc|Microsoft Word 95/97/2000/XP (*.doc)",
+            "*.dot|Microsoft Word 95/97/2000/XP Template (*.dot)",
+            "*.xml|Microsoft Word 2003 XML (*.xml)",
             "*.rtf|Rich Text Format (*.rtf)",
             "*.txt|Text (*.txt)",
-            "*.txt|Text Encoded (*.txt)",
             "*.html *.htm|HTML Document (*.html *.htm)",
             "*.xml|DocBook (*.xml)",
-            "*.sdw|StarWriter 3.0 - 5.0 (*.sdw)",
+            "*.sdw|StarWriter 1.0 - 5.0 (*.sdw)",
             "*.vor|StarWriter 3.0 - 5.0 Templates (*.vor)",
             "*.wpd|WordPerfect Document (*.wpd)",
             "*.lwp|Lotus WordPro Document (*.lwp)",
+            "*.jtd|Ichitaro 8/9/10/11 (*.jtd)",
+            "*.jtt|Ichitaro 8/9/10/11 Template (*.jtt)",
+            "*.hwp|Hangul WP 97 (*.hwp)",
+            "*.wps|WPS 2000/Office 1.0 (*.wps)",
         ]
         filters.insert(0, "%s|All Supported Files" % " ".join([f.split("|")[0] for f in filters]))
         filters.append("*|All Files")
@@ -297,57 +296,76 @@ class ImportDialog:
         configwidget = self.forms.createWidgetFromUIFile(configpage, os.path.join(action.currentPath(),"ooimportconfig.ui"))
 
         if self.dialog.exec_loop():
-            file = openwidget.selectedFile()
-            if not file:
-                raise "No file selected"
-            if not os.path.isfile(file):
-                raise "No such file: %s" % file
+            class ProgressThread(threading.Thread):
+                def __init__(self, forms, file):
+                    threading.Thread.__init__(self)
+                    self.forms = forms
+                    self.progress = self.forms.showProgressDialog("Import...", "Initialize...")
+                    self.progress.labelText = "Loading %s" % file
+                    self.value = 0
+                    self.progress.value = self.value
+                    self.done = False
+                    self.progress.update()
+                def finish(self):
+                    self.progress.value = 100
+                    self.done = True
+                def write(self, text):
+                    if text != "":
+                        self.progress.labelText = text
+                        self.progress.update()
+                    print text
+                def run(self):
+                    while not self.done:
+                        if self.value == self.progress.value:
+                            self.value = self.value + 1
+                        self.progress.value = self.value
+                        time.sleep(1)
+                    self.progress.reset()
 
-            controller = UnoController()
-
-            controller.unoConfig.host = configwidget["hostEdit"].text
-            controller.unoConfig.port = configwidget["portEdit"].value
-            if configwidget["timeoutCheckBox"].checked:
-                controller.unoConfig.connectTimeout = configwidget["timeoutEdit"].text
-            else:
-                controller.unoConfig.connectTimeout = 0
-
-            progress = self.forms.showProgressDialog("Import...", "Initialize...")
-            class ProgressWriter:
-                def __init__(self, progress):
-                    self.progress = progress
-                    self.progress.value = 0
-                def write(self, s):
-                    self.progress.labelText = s
-                    # fake progress
-                    self.progress.value = self.progress.value + 1
-                    print s
             try:
-                progresswriter = ProgressWriter(progress)
-                controller.unoConfig.logger = progresswriter
+                file = openwidget.selectedFile()
+                if not file or not os.path.isfile(file):
+                    raise "No such file: %s" % file
 
-                controller.connect()
+                progressThread = ProgressThread(self.forms, file)
+                progressThread.start()
+                try:
+                    controller = UnoController()
+                    controller.unoConfig.logger = progressThread
 
-                progresswriter.progress.value = 50
-                controller.loadDocument( "file://%s" % file )
+                    controller.unoConfig.host = configwidget["hostEdit"].text
+                    controller.unoConfig.port = configwidget["portEdit"].value
+                    if configwidget["timeoutCheckBox"].checked:
+                        controller.unoConfig.connectTimeout = configwidget["timeoutEdit"].value
+                    else:
+                        controller.unoConfig.connectTimeout = -1
+                    controller.unoConfig.startupServer = configwidget["startupCheckBox"].checked
 
-                progresswriter.progress.value = 90
-                outputstream = KWordOutputStream(controller.unoConfig)
-                controller.writeDocument(outputstream)
-                outputstream.flush()
+                    progressThread.value = 5
+                    controller.connect()
+                    try:
+                        progressThread.value = 30
+                        controller.loadDocument( "file://%s" % file )
 
-                progresswriter.progress.value = 100
-                controller.disconnect()
+                        progressThread.value = 70
+                        outputstream = KWordOutputStream(controller.unoConfig)
+                        controller.writeDocument(outputstream)
 
-            finally:
-                progress.reset()
+                        progressThread.value = 90
+                        outputstream.flush()
+                    finally:
+                        controller.disconnect()
+                finally:
+                    progressThread.finish()
+                    progressThread.join() # wait till the thread finished
+            except:
+                tb = "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
+                self.forms.showMessageBox("Error","Error","%s" % tb)
+
     def __del__(self):
         self.dialog.delayedDestruct()
 
-print "..................1"
-dialog = ImportDialog(self)
-print "..................2"
-
+ImportDialog(self)
 
 #print "CONNECT ..."
 #controller.connect()
