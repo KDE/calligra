@@ -91,6 +91,9 @@ public:
     /// Set the document to be passed to new instances of the KWTextFrameSet
     void setDocument(KWDocument *document) { m_document = document; }
 
+    /// return the main text frameset of the document
+    KWTextFrameSet *mainFrameSet() const;
+
 signals:
     /**
      * Signal emitted when a frameset is created

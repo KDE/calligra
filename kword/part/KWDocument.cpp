@@ -278,6 +278,10 @@ KWFrameSet *KWDocument::frameSetByName( const QString & name )
     return 0;
 }
 
+KWTextFrameSet *KWDocument::mainFrameSet() const {
+    return m_frameLayout.mainFrameSet();
+}
+
 
 QString KWDocument::uniqueFrameSetName( const QString& suggestion ) {
     // make up a new name for the frameset, use "[base] [digits]" as template.

@@ -191,6 +191,8 @@ public:
     QString suggestFrameSetNameForCopy( const QString& base );
     /// return a suggestion for a new frameset name that does not collide with known ones.
     QString uniqueFrameSetName( const QString& suggestion );
+    /// return the main text frameset of the document
+    KWTextFrameSet *mainFrameSet() const;
 
     /**
      * Return the style manager for this document.

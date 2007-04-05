@@ -681,4 +681,9 @@ KWFrame* KWFrameLayout::createCopyFrame(KWFrameSet *fs, KWPage *page) {
     return frame;
 }
 
+KWTextFrameSet *KWFrameLayout::mainFrameSet() const {
+    const_cast<KWFrameLayout*>(this)->setup();
+    return m_maintext;
+}
+
 #include "KWFrameLayout.moc"
