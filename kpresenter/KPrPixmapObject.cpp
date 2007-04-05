@@ -251,6 +251,10 @@ void KPrPixmapObject::reload( void )
 {
     // ### FIXME: this seems wrong, KoPictureCollection will never reload it (or perhaps it is the function name that is wrong)
     setPicture( image.getKey() );
+    if (image.isNull()) {
+        // this happens for example when doing copy&paste from a different KPresenter instance
+        image = imageCollection->loadPicture( image.getKey().filename() );
+    }
 }
 
 QDomDocumentFragment KPrPixmapObject::save( QDomDocument& doc, double offset )
