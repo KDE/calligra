@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include <qwmatrix.h>
 #include <qiconset.h>
 #include <qbitmap.h>
+#include <qfile.h>
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -34,6 +35,10 @@
 #include <kiconeffect.h>
 #include <kpixmapeffect.h>
 #include <kiconloader.h>
+
+#if defined(Q_WS_WIN)
+# include <win32_utils.h>
+#endif
 
 using namespace KexiUtils;
 
@@ -364,6 +369,66 @@ void* KexiUtils::stringToPtrInternal(const QString& str, uint size)
 			return 0;
 	}
 	return *(void**)(array.data());
+}
+
+void KexiUtils::setFocusWithReason(QWidget* widget, QFocusEvent::Reason reason)
+{
+	QEvent fe( QEvent::FocusIn );
+	QFocusEvent::setReason(reason);
+	QApplication::sendEvent( widget, &fe );
+	QFocusEvent::resetReason();
+}
+
+void KexiUtils::unsetFocusWithReason(QWidget* widget, QFocusEvent::Reason reason)
+{
+	QEvent fe( QEvent::FocusOut );
+	QFocusEvent::setReason(reason);
+	QApplication::sendEvent( widget, &fe );
+	QFocusEvent::resetReason();
+}
+
+CopyFileResult KexiUtils::copyFile(const QString& src, const QString& dest)
+{
+#ifdef Q_WS_WIN
+	int res = fcopy( QFile::encodeName( src ), QFile::encodeName( dest ) );
+	if (res == fcopy_src_err)
+		return CopyReadError;
+	else if (res == fcopy_dest_err)
+		return CopyWriteError;
+	
+	return CopySuccess;
+#else
+# define _fcopy_BUFLEN 1024*32
+	char _fcopy_buf[_fcopy_BUFLEN];
+	FILE *in, *out;
+	int c_in=0, c_out=0;
+	CopyFileResult res=CopySuccess;
+	
+	in=fopen(QFile::encodeName( src ), "rb");
+	if (!in)
+		return CopyReadError;
+	out=fopen(QFile::encodeName( dest ), "wb");
+	if (!out)
+		return CopyWriteError;
+	while (!feof(in) && !ferror(in) && !ferror(out)) {
+		c_in=fread(_fcopy_buf, 1, _fcopy_BUFLEN, in);
+		if (ferror(in) || c_in==0)
+			break;
+		c_out=fwrite(_fcopy_buf, 1, c_in, out);
+		if (ferror(out) || c_in!=c_out)
+			break;
+	}
+	
+	if (ferror(in))
+		res=CopyReadError;
+	else if (ferror(out))
+		res=CopyWriteError;
+	else if (c_in!=c_out)
+		res=CopyWriteError;
+	fclose(in);
+	fclose(out);
+	return res;
+#endif
 }
 
 #include "utils_p.moc"

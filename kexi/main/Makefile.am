@@ -5,7 +5,7 @@ libkeximain_la_SOURCES = \
 	keximainwindowimpl.cpp \
 	kexistatusbar.cpp \
 	kexinamewidget.cpp kexinamedialog.cpp \
-	kexinewstuff.cpp
+	kexinewstuff.cpp kexifinddialogbase.ui kexifinddialog.cpp
 
 libkeximain_la_LDFLAGS = -no-undefined $(KDE_RPATH) $(all_libraries) \
 	$(VER_INFO) -Wnounresolved

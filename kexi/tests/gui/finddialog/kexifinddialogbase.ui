@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KexiFindDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -208,9 +208,6 @@
             <property name="text">
                 <string>Prompt on replace</string>
             </property>
-            <property name="accel">
-                <string></string>
-            </property>
             <property name="checked">
                 <bool>true</bool>
             </property>
@@ -254,9 +251,6 @@
                     </property>
                     <property name="text">
                         <string>Close</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
                     </property>
                 </widget>
                 <widget class="KPushButton">

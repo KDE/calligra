@@ -2,7 +2,7 @@
  Kexi Development CHANGELOG Document
  From jstaniek's Point of View
  
- Copyright (C) 2003-2006 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
+ Copyright (C) 2003-2007 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
@@ -15,12 +15,131 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+TODO: fix displaying default values in comboboxes (form and tableview)
+TODO: use KCompletionBox in (editable/noneditable) comboboxes
+
+2007-03-21, 22
+Table Designer
+- clear command history after successful saving of the design
+- on switching to data view, do not warn about removing data, 
+  if the data will stay untouched
+2.0: merged
+Query Designer
+- removed possible crash in data view
+2.0: merged
+
+2007-03-16
+Query Designer
+- fixed table sizes in the Design View
+- fixed displaying relation connection lines when connected field is not visible
+- fixed mouse drop position when target points on a field of table with 
+  scrolled-down contents
+- do not show internal relationships for visible lookup fields (JOINs) in SQL view
+2.0: merged
+Table View
+- make column readonly if query-based data source itself is stored (i.e. has connection) 
+   and lookup column is defined
+2.0: merged
+
+2007-03-15
+KexiDB
+- SQL parser can work recursively now (needed when multiple parsers are used 
+  in the same thread, removed possible crash)
+2.0: merged
+
+2007-03-12..14
+Main Window
+- main window is activated after closing "Insert image" file dialog 
+= "find" action: restart searching from start for "Search all rows" mode if:
+== user has changed the value to find since previous searching, or
+== user has recently changed direction to "Search all rows"
+- searching is performed within lookup values as well
+Simple Printouts
+- fixed problem with records printed between page boundaries
+- fixed problem with updating print preview's page navigator when number of pages differs 
+   compared to previous preview
+2.0: merged
+
+Table View
+- usability: within cells of type "Image" pressing Tab, Shift+Tab, Left
+  or Right keys now closes the popup and moves the cursor
+2.0: merged
+
+2007-03-07
+Simple Printouts
+- fixed refreshing print preview after table data or query results changed
+2.0: merged
+
+2007-03-02
+Simple Printouts
+- added support for printing and previewing images
+- improved previewing quality
+- fixed landscape mode
+2.0: merged
+
+2007-02-27
+Forms
+- hide popup in combo box or image box as soon as it loses focus
+- changes made to combo box selection is cancelled if the popup 
+   loses focus without accepting
+- hide popup in combo box or image box as soon as user moves 
+   to other record (usually with a shortcut)
+- fixed handling page down/page up keys within combo box popups
+  (previously it moved to other record)
+2.0: merged
+
+2007-02-23
+Forms
+- for buttons, left/up and right/down keys act like tab/backtab
+2.0: merged
+
+2007-02-19
+Forms
+- fixed displaying margin for image boxes
+- fixed assigning static images to image boxes without saving form's design;
+  the images can now be saved also in data view mode
+- fixed handling tab key for image boxes
+- automatic tab order:
+-- fixed ordering for widgets within containers (e.g. a group box)
+-- widgets within tab widget pages are ordered by page number
+-- widgets inside tab widget that are not visible are skipped when moving 
+   focus using Tab/Shift+Tab key
+- Ctrl+Tab shortcut (for switching between tabs) works on windows
+  if multiline text editor is focused
+2.0: merged
+
+2007-02-12
+Forms
+- fields dragging & dropping works for containers (tab widgets, frames and group boxes)
+2.0: merged
+
+2007-02-09..14
+Main Window
+- Edit->Find action added, works within table, query and form views as a global, 
+  context-dependent tool window.
+2.0: merged
+
 ~~~~~~~~~~~~~~~~ 1.1.2 bugfix release (with KOffice 1.6.2)  ~~~~~~~~~~~~~~~~
+
+2007-02-09
+Table View
+- added more actions to the context menu in data view
+
+2007-02-08
+Tools
+- added "Delete column" tool for deleting table columns without removing data;
+  translation enabled; with GUI wrapper
+- fixes for "Add column" tool
+2.0: merged
 
 2007-02-07
 KexiDB
 = fixed possible crash when running a query without primary key included
-   (encountered e.g. when a form contain static images)
+   (encountered e.g. when a form contains static images)
+2.0: merged
+Tools
+- added GUI version of "Add column" tool (with translation enabled)
+- the tool is now installed
 2.0: merged
 
 2007-02-06

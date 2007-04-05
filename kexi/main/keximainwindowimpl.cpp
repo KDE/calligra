@@ -32,6 +32,9 @@
 #include <qtooltip.h>
 #include <qmutex.h>
 #include <qwaitcondition.h>
+#include <qfiledialog.h>
+#include <qdockwindow.h>
+#include <qdockarea.h>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -54,6 +57,8 @@
 #include <ktabwidget.h>
 #include <kimageio.h>
 #include <khelpmenu.h>
+#include <kfiledialog.h>
+#include <krecentdocument.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -76,6 +81,9 @@
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
 #include "kexiactioncategories.h"
+#include "kexifinddialog.h"
+#include "kexisearchandreplaceiface.h"
+
 #include "kde2_closebutton.xpm"
 
 #include <widget/kexibrowser.h>
@@ -87,19 +95,18 @@
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectWizard.h"
 #include "startup/KexiStartupDialog.h"
-/*
-#include "startup/KexiConnSelector.h"
-#include "startup/KexiProjectSelectorBase.h"
-#include "startup/KexiProjectSelector.h"
-*/
+#include "startup/KexiStartupFileDialog.h"
 #include "kexinamedialog.h"
 #include "printing/kexisimpleprintingpart.h"
 #include "printing/kexisimpleprintingpagesetup.h"
 
 //Extreme verbose debug
 #if defined(Q_WS_WIN)
+# include <krecentdirs.h>
+# include <win32_utils.h>
 //# define KexiVDebug kdDebug()
 #endif
+
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) kdDebug()
 #endif
@@ -145,12 +152,17 @@ int KexiMainWindowImpl::create(int argc, char *argv[], KAboutData* aboutdata)
 	QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindowImpl is created
 //! @todo switch GUIenabled off when needed
 	KApplication* app = new KApplication(true, GUIenabled);
+
 #ifdef KEXI_STANDALONE
 	KGlobal::locale()->removeCatalogue("kexi");
 	KGlobal::locale()->insertCatalogue("standalone_kexi");
 #endif
 	KGlobal::locale()->insertCatalogue("koffice");
 	KGlobal::locale()->insertCatalogue("koproperty");
+
+#ifdef CUSTOM_VERSION
+# include "custom_exec.h"
+#endif
 
 #ifdef KEXI_DEBUG_GUI
 	QWidget* debugWindow = 0;
@@ -186,10 +198,6 @@ int KexiMainWindowImpl::create(int argc, char *argv[], KAboutData* aboutdata)
 		delete app;
 		return 0;
 	}
-
-#ifdef CUSTOM_VERSION
-# include "custom_exec.h"
-#endif
 
 	KexiMainWindowImpl *win = new KexiMainWindowImpl();
 	app->setMainWidget(win);
@@ -362,7 +370,9 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		QObject::connect( closeButton, SIGNAL( clicked() ), this, SLOT( closeActiveView() ) );
 	}
 
-//	manager()->readConfig( d->config, "DockWindows" );
+#ifdef KEXI_ADD_CUSTOM_KEXIMAINWINDOWIMPL
+# include "keximainwindowimpl_ctor.h"
+#endif
 }
 
 KexiMainWindowImpl::~KexiMainWindowImpl()
@@ -682,6 +692,27 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
 	d->action_edit_redo->setWhatsThis(i18n("Reverts the most recent undo action."));
 
+#if 0 //old
+	d->action_edit_find = createSharedAction( KStdAction::Find, "edit_find");
+	d->action_edit_findnext = createSharedAction( KStdAction::FindNext, "edit_findnext");
+	d->action_edit_findprev = createSharedAction( KStdAction::FindPrev, "edit_findprevious");
+//! @todo d->action_edit_paste = createSharedAction( KStdAction::Replace, "edit_replace");
+#endif
+
+	d->action_edit_find = KStdAction::find(
+		this, SLOT(slotEditFind()), actionCollection(), "edit_find" );
+//	d->action_edit_find = createSharedAction( KStdAction::Find, "edit_find");
+	d->action_edit_findnext = KStdAction::findNext(
+		this, SLOT(slotEditFindNext()), actionCollection(), "edit_findnext");
+	d->action_edit_findprev = KStdAction::findPrev(
+		this, SLOT(slotEditFindPrevious()), actionCollection(), "edit_findprevious");
+	d->action_edit_replace = 0;
+//! @todo	d->action_edit_replace = KStdAction::replace(
+//!		this, SLOT(slotEditReplace()), actionCollection(), "project_print_preview" ); 
+	d->action_edit_replace_all = 0;
+//! @todo d->action_edit_replace_all = new KAction( futureI18n("Replace All"), "", 0, 
+//!   this, SLOT(slotEditReplaceAll()), actionCollection(), "edit_replaceall");
+
 	d->action_edit_select_all =  createSharedAction( KStdAction::SelectAll, "edit_select_all");
 
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "editdelete",
@@ -974,6 +1005,18 @@ void KexiMainWindowImpl::initActions()
 	acat->addAction("edit_edititem", Kexi::PartItemActionCategory|Kexi::WindowActionCategory,
 		KexiPart::TableObjectType, KexiPart::QueryObjectType);
 
+	acat->addAction("edit_find", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("edit_findnext", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("edit_findprevious", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("edit_replace", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
 	acat->addAction("edit_paste_special_data_table", Kexi::GlobalActionCategory);
 
 	acat->addAction("help_about_app", Kexi::GlobalActionCategory);
@@ -1217,10 +1260,8 @@ tristate KexiMainWindowImpl::startup()
 		if (d->propEditor)
 			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
 		return createBlankProject();
-	case KexiStartupHandler::UseTemplate:
-		return cancelled;
-		//TODO
-		break;
+	case KexiStartupHandler::CreateFromTemplate:
+		return createProjectFromTemplate(*Kexi::startupHandler().projectData());
 	case KexiStartupHandler::OpenProject:
 		return openProject(*Kexi::startupHandler().projectData());
 	case KexiStartupHandler::ImportProject:
@@ -1306,6 +1347,70 @@ tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 
 	QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
 	return true;
+}
+
+tristate KexiMainWindowImpl::createProjectFromTemplate(const KexiProjectData& projectData)
+{
+	QStringList mimetypes;
+	mimetypes.append( KexiDB::Driver::defaultFileBasedDriverMimeType() );
+	QString fname;
+	const QString startDir(":OpenExistingOrCreateNewProject"/*as in KexiNewProjectWizard*/);
+	const QString caption( futureI18n("Select New Project's Location") );
+	
+	while (true) {
+#ifdef Q_WS_WIN
+	//! @todo remove
+		QString recentDir = KGlobalSettings::documentPath();
+		if (fname.isEmpty() && !projectData.constConnectionData()->dbFileName().isEmpty()) //propose filename from db template name
+		  fname = KFileDialog::getStartURL(startDir, recentDir).path() 
+				+ '/' + projectData.constConnectionData()->dbFileName();
+		fname = QFileDialog::getSaveFileName( 
+			KFileDialog::getStartURL(fname.isEmpty() ? startDir : fname, recentDir).path(),
+			KexiUtils::fileDialogFilterStrings(mimetypes, false),
+			this, "CreateProjectFromTemplate", caption);
+		if ( !fname.isEmpty() ) {
+			//save last visited path
+			KURL url;
+			url.setPath( fname );
+			if (url.isLocalFile())
+				KRecentDirs::add(startDir, url.directory());
+		}
+#else
+		Q_UNUSED(projectData);
+		if (fname.isEmpty() &&
+			!projectData.constConnectionData()->dbFileName().isEmpty())
+		{
+			//propose filename from db template name
+		  fname = projectData.constConnectionData()->dbFileName();
+		}
+		const bool specialDir = fname.isEmpty();
+	kdDebug() << fname << "............." << endl;
+		KFileDialog dlg( specialDir ? startDir : QString::null, 
+			mimetypes.join(" "), this, "filedialog", true);
+		if ( !specialDir )
+			dlg.setSelection( fname ); // may also be a filename
+		dlg.setOperationMode( KFileDialog::Saving );
+		dlg.setCaption( caption );
+		dlg.exec();
+		fname = dlg.selectedFile();
+		if (!fname.isEmpty())
+			KRecentDocument::add(fname);
+//		fname = KFileDialog::getSaveFileName(fname.isEmpty() ? startDir : fname, 
+	//		mimetypes.join(" "), this, caption);
+#endif
+		if ( fname.isEmpty() )
+			return cancelled;
+		if (KexiStartupFileDialog::askForOverwriting(fname, this))
+			break;
+	}
+
+	if (KexiUtils::CopySuccess != KexiUtils::copyFile(
+		projectData.constConnectionData()->fileName(), fname ))
+	{
+		return false;
+	}
+
+	return openProject(fname, 0, QString::null, projectData.autoopenObjects/*copy*/);
 }
 
 void KexiMainWindowImpl::updateReadOnlyState()
@@ -2354,6 +2459,7 @@ void KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 //		d->last_checked_mode = d->actions_for_view_modes[ d->curDialog->currentViewMode() ];
 	invalidateViewModeActions();
 	invalidateActions();
+	d->updateFindDialogContents();
 	if (dlg)
 		dlg->setFocus();
 }
@@ -2557,7 +2663,7 @@ KexiMainWindowImpl::slotProjectOpen()
 	if (dlg.exec()!=QDialog::Accepted)
 		return;
 
-	openProject(dlg.selectedExistingFile(), dlg.selectedExistingConnection());
+	openProject(dlg.selectedFileName(), dlg.selectedExistingConnection());
 }
 
 tristate KexiMainWindowImpl::openProject(const QString& aFileName, 
@@ -2578,7 +2684,8 @@ tristate KexiMainWindowImpl::openProject(const QString& aFileName,
 }
 
 tristate KexiMainWindowImpl::openProject(const QString& aFileName, 
-	KexiDB::ConnectionData *cdata, const QString& dbName)
+	KexiDB::ConnectionData *cdata, const QString& dbName,
+	const QValueList<KexiProjectData::ObjectInfo>& autoopenObjects)
 {
 	if (d->prj) {
 		return openProjectInExternalKexiInstance(aFileName, cdata, dbName);
@@ -2632,6 +2739,7 @@ tristate KexiMainWindowImpl::openProject(const QString& aFileName,
 	}
 	if (!projectData)
 		return false;
+	projectData->autoopenObjects = autoopenObjects;
 	const tristate res = openProject(*projectData);
 	if (deleteAfterOpen) //projectData object has been copied
 		delete projectData;
@@ -2932,6 +3040,7 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 	d->updatePropEditorVisibility(viewMode);
 	invalidateProjectWideActions();
 	invalidateSharedActions();
+	d->updateFindDialogContents();
 	return true;
 }
 
@@ -4055,12 +4164,12 @@ void KexiMainWindowImpl::slotToolsCompactDatabase()
 		if (dlg.exec()!=QDialog::Accepted)
 			return;
 
-		if (dlg.selectedExistingFile().isEmpty()) {
+		if (dlg.selectedFileName().isEmpty()) {
 //! @todo add support for server based if needed?
 			return;
 		}
 		KexiDB::ConnectionData cdata;
-		cdata.setFileName( dlg.selectedExistingFile() );
+		cdata.setFileName( dlg.selectedFileName() );
 		
 		//detect driver name for the selected file
 		KexiStartupData::Import detectedImportAction;
@@ -4241,7 +4350,9 @@ bool KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item, const QString
 
 tristate KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item)
 {
-	return printPreviewForItem(item, QString::null, false);
+	return printPreviewForItem(item, QString::null, 
+//! @todo store cached row data?
+		true/*reload*/);
 }
 
 bool KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item, 
@@ -4410,6 +4521,79 @@ void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
 	delete dlg;
+}
+
+void KexiMainWindowImpl::slotEditFind()
+{
+//	KexiViewBase *view = d->currentViewSupportingAction("edit_findnext");
+	KexiSearchAndReplaceViewInterface* iface = d->currentViewSupportingSearchAndReplaceInterface();
+	if (!iface)
+		return;
+	d->updateFindDialogContents(true/*create if does not exist*/);
+	d->findDialog()->setReplaceMode(false);
+
+	d->findDialog()->show();
+	d->findDialog()->setActiveWindow();
+	d->findDialog()->raise();
+}
+
+void KexiMainWindowImpl::slotEditFind(bool next)
+{
+	KexiSearchAndReplaceViewInterface* iface = d->currentViewSupportingSearchAndReplaceInterface();
+	if (!iface)
+		return;
+	tristate res = iface->find( 
+		d->findDialog()->valueToFind(), d->findDialog()->options(), next);
+	if (~res)
+		return;
+	d->findDialog()->updateMessage( true == res );
+//! @todo result
+}
+
+void KexiMainWindowImpl::slotEditFindNext()
+{
+	slotEditFind( true );
+}
+
+void KexiMainWindowImpl::slotEditFindPrevious()
+{
+	slotEditFind( false );
+}
+
+void KexiMainWindowImpl::slotEditReplace()
+{
+	KexiSearchAndReplaceViewInterface* iface = d->currentViewSupportingSearchAndReplaceInterface();
+	if (!iface)
+		return;
+	d->updateFindDialogContents(true/*create if does not exist*/);
+	d->findDialog()->setReplaceMode(true);
+//! @todo slotEditReplace()
+	d->findDialog()->show();
+	d->findDialog()->setActiveWindow();
+}
+
+void KexiMainWindowImpl::slotEditReplaceNext()
+{
+	slotEditReplace( false );
+}
+
+void KexiMainWindowImpl::slotEditReplace(bool all)
+{
+	KexiSearchAndReplaceViewInterface* iface = d->currentViewSupportingSearchAndReplaceInterface();
+	if (!iface)
+		return;
+//! @todo add question: "Do you want to replace every occurence of \"%1\" with \"%2\"? 
+//!       You won't be able to undo this." + "Do not ask again".
+	tristate res = iface->findNextAndReplace( 
+		d->findDialog()->valueToFind(), d->findDialog()->valueToReplaceWith(),
+		d->findDialog()->options(), all);
+	d->findDialog()->updateMessage( true == res );
+//! @todo result
+}
+
+void KexiMainWindowImpl::slotEditReplaceAll()
+{
+	slotEditReplace( true );
 }
 
 void KexiMainWindowImpl::addWindow( KMdiChildView* pView, int flags )

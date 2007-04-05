@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -160,7 +160,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Implemented for KexiMainWindow */
 		virtual void highlightObject(const QCString& mime, const QCString& name);
 
-		/*! Opens project pointed by \a projectData, \return true on success.
+		/*! Opens project pointed by \a projectData.
 		 Application state (e.g. actions) is updated. 
 		 \a projectData is copied into a project structures. 
 		 \return true on success */
@@ -177,7 +177,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		  'kexi --skip-dialog file.kexic' is executed (or the connection is opened 
 		  directly if there's no porject opened in the current Kexi main window. */
 		tristate openProject(const QString& aFileName, KexiDB::ConnectionData *cdata, 
-			const QString& dbName = QString::null);
+			const QString& dbName = QString::null,
+			const QValueList<KexiProjectData::ObjectInfo>& autoopenObjects = QValueList<KexiProjectData::ObjectInfo>());
 
 		/*! Helper. Opens project pointed by \a aFileName.
 		 Like above but \a fileNameForConnectionData can be passed instead of 
@@ -187,6 +188,12 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 \a fileNameForConnectionData can be empty. */
 		tristate openProject(const QString& aFileName, 
 			const QString& fileNameForConnectionData, const QString& dbName = QString::null);
+
+		/*! Creates a new project usign template pointed by \a projectData.
+		 Application state (e.g. actions) is updated. 
+		 New project data is copied into a project structures. 
+		 \return true on success */
+		tristate createProjectFromTemplate(const KexiProjectData& projectData);
 
 		/*! Closes current project, \return true on success.
 		 Application state (e.g. actions) is updated.
@@ -418,6 +425,14 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotProjectQuit();
 		void slotEditPasteSpecialDataTable();
 		void slotEditCopySpecialDataTable();
+		void slotEditFind();
+		void slotEditFind(bool next); //!< helper
+		void slotEditFindNext();
+		void slotEditFindPrevious();
+		void slotEditReplace(bool all); //!< helper
+		void slotEditReplace();
+		void slotEditReplaceNext();
+		void slotEditReplaceAll();
 		void slotViewNavigator();
 		void slotViewMainArea();
 		void slotViewPropertyEditor();

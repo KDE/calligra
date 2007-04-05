@@ -92,13 +92,19 @@ void KexiSimplePrintPreviewScrollView::resizeEvent( QResizeEvent *re )
 //	kdDebug() << widget->width() << " " << widget->height() << endl;
 	setUpdatesEnabled(false);
 	if (re->size().width() > (widget->width()+2*KexiSimplePrintPreviewScrollView_MARGIN)
-		|| re->size().height() > (widget->height()+2*KexiSimplePrintPreviewScrollView_MARGIN)) {
+		|| re->size().height() > (widget->height()+2*KexiSimplePrintPreviewScrollView_MARGIN))
+	{
 		resizeContents(
 			QMAX(re->size().width(), widget->width()+2*KexiSimplePrintPreviewScrollView_MARGIN),
 			QMAX(re->size().height(), widget->height()+2*KexiSimplePrintPreviewScrollView_MARGIN));
 		int vscrbarWidth = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 0;
-		moveChild(widget, (contentsWidth() - vscrbarWidth - widget->width())/2, 
-			(contentsHeight() - widget->height())/2);
+		int newContentsWidth
+			= QMAX(re->size().width(), widget->width()+2*KexiSimplePrintPreviewScrollView_MARGIN);
+		int newContentsHeight
+			= QMAX(re->size().height(), widget->height()+2*KexiSimplePrintPreviewScrollView_MARGIN);
+		moveChild(widget, (newContentsWidth - vscrbarWidth - widget->width())/2, 
+			(newContentsHeight - widget->height())/2);
+		resizeContents( newContentsWidth, newContentsHeight );
 	}
 	setUpdatesEnabled(true);
 }
@@ -149,9 +155,8 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
  , m_engine(engine)
  , m_settings(*m_engine.settings())
  , m_pageNumber(-1)
+ , m_pagesCount(-1)
 {
-//	m_pagesCount = INT_MAX;
-
 	setCaption(i18n("%1 - Print Preview - %2").arg(previewName).arg(KEXI_APP_NAME));
 	setIcon(DesktopIcon("filequickprint"));
 	QVBoxLayout *lyr = new QVBoxLayout(this, 6);
@@ -194,12 +199,19 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 	m_scrollView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 	lyr->addWidget(m_scrollView);
 
-	m_navToolbar = new KToolBar(0, this);
+	QWidget* navToolbarWidget = new QWidget(this); //widget used to center the navigator toolbar
+	navToolbarWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+	QHBoxLayout *navToolbarLyr = new QHBoxLayout(navToolbarWidget);
+	lyr->addWidget(navToolbarWidget);
+
+	m_navToolbar = new KToolBar(0, navToolbarWidget);
+	navToolbarLyr->addStretch(1);
+	navToolbarLyr->addWidget(m_navToolbar);
+	navToolbarLyr->addStretch(1);
 //	m_navToolbar->setFullWidth(true);
 	m_navToolbar->setLineWidth(0);
 	m_navToolbar->setFrameStyle(QFrame::NoFrame);
 	m_navToolbar->setIconText(KToolBar::IconTextRight);
-	lyr->addWidget(m_navToolbar);
 
 	m_idFirst = m_navToolbar->insertWidget( -1, 0, new KPushButton(BarIconSet("start"), i18n("First Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idFirst, SIGNAL(clicked()), this, SLOT(slotFirstClicked()));
@@ -290,13 +302,13 @@ void KexiSimplePrintPreviewWindow::slotLastClicked()
 
 void KexiSimplePrintPreviewWindow::goToPage(int pageNumber)
 {
-	if (pageNumber==m_pageNumber || pageNumber < 0 || pageNumber > ((int)m_engine.pagesCount()-1))
+	if ((pageNumber==m_pageNumber && m_pagesCount == (int)m_engine.pagesCount()) 
+		|| pageNumber < 0 || pageNumber > ((int)m_engine.pagesCount()-1))
 		return;
 	m_pageNumber = pageNumber;
+	m_pagesCount = m_engine.pagesCount();
 
 	m_view->repaint(); //this will automatically paint a new page
-//	if (m_engine.eof())
-//		m_pagesCount = pageNumber+1;
 
 	m_navToolbar->setItemEnabled(m_idNext, pageNumber < ((int)m_engine.pagesCount()-1));
 	m_navToolbar->setItemEnabled(m_idLast, pageNumber < ((int)m_engine.pagesCount()-1));

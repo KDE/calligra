@@ -246,8 +246,7 @@ bool KexiSimplePrintingCommand::showPrintPreview(const KexiSimplePrintingSetting
 	}
 	if (titleText.isEmpty())
 		titleText = tableOrQuery.captionOrName();
-	if (!m_previewWindow) {
-		backToPage0 = false;
+	if (!m_previewWindow || m_printPreviewNeedsReloading) {
 		QString errorMessage;
 		if (!m_previewEngine->init(
 			*conn, tableOrQuery, titleText, errorMessage)) {
@@ -255,6 +254,9 @@ bool KexiSimplePrintingCommand::showPrintPreview(const KexiSimplePrintingSetting
 				KMessageBox::sorry(m_mainWin, errorMessage, i18n("Print Preview")); 
 			return false;
 		}
+	}
+	if (!m_previewWindow) {
+		backToPage0 = false;
 		m_previewWindow = new KexiSimplePrintPreviewWindow(
 			*m_previewEngine, tableOrQuery.captionOrName(), 0, 
 			Qt::WStyle_Customize|Qt::WStyle_NormalBorder|Qt::WStyle_Title|

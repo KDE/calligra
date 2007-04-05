@@ -48,12 +48,9 @@
 #include <kprogress.h>
 #include <ktextedit.h>
 #include <kstaticdeleter.h>
+#include <kuser.h>
 
 #include <unistd.h>
-
-#if KDE_IS_VERSION(3,1,9)
-# include <kuser.h>
-#endif
 
 #include <qcstring.h>
 #include <qapplication.h>
@@ -652,25 +649,34 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		if (d->startupDialog->exec()!=QDialog::Accepted)
 			return true;
 
-		int r = d->startupDialog->result();
-		if (r==KexiStartupDialog::TemplateResult) {
-//			kdDebug() << "Template key == " << d->startupDialog->selectedTemplateKey() << endl;
-			QString selectedTemplateKey( d->startupDialog->selectedTemplateKey() );
-			if (selectedTemplateKey=="blank") {
-				m_action = CreateBlankProject;
-				return true;
-			}
-			else if (selectedTemplateKey=="import") {
-				m_action = ImportProject;
-				return true;
-			}
-			
-//! @todo - templates: m_action = UseTemplate;
+		const int r = d->startupDialog->result();
+		if (r == KexiStartupDialog::CreateBlankResult) {
+			m_action = CreateBlankProject;
 			return true;
 		}
-		else if (r==KexiStartupDialog::OpenExistingResult) {
+		else if (r == KexiStartupDialog::ImportResult) {
+			m_action = ImportProject;
+			return true;
+		}
+		else if (r == KexiStartupDialog::CreateFromTemplateResult) {
+			const QString selFile( d->startupDialog->selectedFileName() );
+			cdata.setFileName( selFile );
+			QString detectedDriverName;
+			const tristate res = detectActionForFile( m_importActionData, detectedDriverName, 
+				cdata.driverName, selFile );
+			if (true != res)
+				return res;
+			if (m_importActionData || detectedDriverName.isEmpty())
+				return false;
+			cdata.driverName = detectedDriverName;
+			m_projectData = new KexiProjectData(cdata, selFile);
+			m_projectData->autoopenObjects = d->startupDialog->autoopenObjects();
+			m_action = CreateFromTemplate;
+			return true;
+		}
+		else if (r == KexiStartupDialog::OpenExistingResult) {
 //			kdDebug() << "Existing project --------" << endl;
-			QString selFile = d->startupDialog->selectedExistingFile();
+			const QString selFile( d->startupDialog->selectedFileName() );
 			if (!selFile.isEmpty()) {
 				//file-based project
 //				kdDebug() << "Project File: " << selFile << endl;

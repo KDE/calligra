@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="147">
+<kpartgui name="kexi" version="164">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -59,13 +59,15 @@
     </Menu>
     <MergeLocal name="edit_paste_merge"/>
     <Separator/>
+    <Action name="edit_find"/>
+    <Action name="edit_replace"/>
+    <Separator/>
     <Action name="edit_select_all"/> 
     <Separator/>
     <Action name="edit_delete"/>
     <Action name="edit_delete_row"/>
     <ActionList name="edit_clear_table"/>
     <ActionList name="edit_insert_empty_row"/>
-    <DefineGroup name="edit_find"/>
     <Merge/>
   </Menu>
   
@@ -157,7 +159,7 @@
   </Menu>
 </MenuBar>
 
-<ToolBar name="mainToolBar" noMerge="1" fullWidth="false">
+<ToolBar name="mainToolBar" noMerge="1" fullWidth="false" index="0">
   <text>Main Toolbar</text>
   <Action name="project_save"/>
   <Separator/>
@@ -166,27 +168,37 @@
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>
-  <!-- Separator/>
-  <Action name="edit_find"/>
-  <Action name="view_zoom"/>
-  <Separator/ -->
+  <!-- Separator/ -->
+  <!-- Action name="view_zoom"/ -->
+  <!-- Separator/ -->
   <Action name="project_relations"/>
 </ToolBar>
 
-<ToolBar name="viewToolBar" fullWidth="false" noMerge="1">
+<ToolBar name="viewToolBar" fullWidth="false" noMerge="1" index="1">
   <text>View</text>
   <Action name="view_data_mode" type="toggle" />
   <Action name="view_design_mode" type="toggle" />
   <Action name="view_text_mode" type="toggle" />
 </ToolBar>
 
-<ToolBar name="dataToolBar" fullWidth="false" noMerge="0">
+<ToolBar name="dataToolBar" fullWidth="false" noMerge="1" index="2">
   <text>Data</text>
   <Action name="data_cancel_row_changes"/>
   <Action name="data_save_row"/>
+  <Separator/>
   <Action name="data_sort_az"/>
   <Action name="data_sort_za"/>
+  <Separator/>
+  <Action name="edit_find"/>
   <!-- Action name="data_filter"/ -->
+</ToolBar>
+
+<ToolBar name="designToolBar" fullWidth="false" noMerge="1" index="3">
+  <text>Design</text>
+</ToolBar>
+
+<ToolBar name="format" fullWidth="false" noMerge="1" index="4">
+  <text>Format</text>
 </ToolBar>
 
 </kpartgui>

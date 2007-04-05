@@ -39,7 +39,7 @@ namespace KexiDB
  Use this class by acessing to its singleton: KexiBLOBBuffer::self().
 
  This class is used for buffering BLOB data, 
- to avoid duplicating object's data in memory and a need for loding (decoding) 
+ to avoid duplicating object's data in memory and a need for loading (decoding) 
  the same object many times. 
  The data is always local, what means database storage is not employed here.
  
@@ -59,13 +59,13 @@ namespace KexiDB
     when KexiBLOBBuffer::Handle::stored() is false
  KexiBLOBBuffer::Handle::setStoredWidthID() can be used to switch from unstored to stored state.
  Among others, the state has effect on saving forms: only unstored BLOBs will be saved back 
- to the database; when a BLOB need to be removed, only it will be physically removed only if it was stored.
+ to the database; when a BLOB needs to be removed, only it will be physically removed only if it was stored.
 
  KexiBLOBBuffer is also useful for two more reasons:
  - Property editor's item for "image" property displays a preview of pixmap contents.
    Without buffering, it would be needed to load pixmap data again: what if the file
    it is loaded from is located remote and connection is slow? Memory would be also unnecessary doubled.
- - Undo/Redo frameword requires to store previous property values. Having a reference defined 
+ - Undo/Redo framework requires to store previous property values. Having a reference defined 
    by a single interger, memory can be handled more effectively. 
 
  Example use cases:
@@ -73,7 +73,7 @@ namespace KexiDB
  integer identifier is returned.
  Then, multiple image widgets are using "abc.jpg" for displaying.
  Duplicating an image widget means only duplicating it's properties 
- like position and BLOB's id: BLOB itself (data of "abc.jpg")is not duplicated.
+ like position and BLOB's id: BLOB itself (data of "abc.jpg") is not duplicated.
  Creating a new image widget and assiging the same "abc.jpg" pixmap, means only 
  referencing KexiBLOBBuffer using the same identifier.
 */

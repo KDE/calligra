@@ -14,7 +14,8 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp kexiaboutdata.cpp \
 	kexidataiteminterface.cpp kexievents.cpp \
 	kexidbshortcutfile.cpp \
 	kexiblobbuffer.cpp kexistaticpart.cpp \
-	kexitabledesignerinterface.cpp
+	kexitabledesignerinterface.cpp kexisearchandreplaceiface.cpp \
+	kexitemplateloader.cpp
 
 #kexipartdatasource.cpp
 
