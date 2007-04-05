@@ -86,7 +86,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		/*! \return true if the column is read-only
 		 For db-aware column this can depend on whether the column 
 		 is in parent table of this query. \sa setReadOnly() */
-		inline bool isReadOnly() const { return m_readOnly; }
+		bool isReadOnly() const;
 
 //TODO: synchronize this with table view:
 		//! forces readOnly flag to be set to \a ro

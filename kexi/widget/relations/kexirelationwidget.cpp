@@ -243,12 +243,8 @@ void KexiRelationWidget::emptyAreaGotFocus()
 
 void KexiRelationWidget::tableContextMenuRequest(const QPoint& pos)
 {
-//	if (m_focusedTableView != sender())
-//		return;
-	kdDebug() << "HEADER CTXT MENU!" <<endl;
 	invalidateActions();
 	executePopup( pos );
-//	m_tableQueryPopup->exec(pos);
 }
 
 void KexiRelationWidget::connectionContextMenuRequest(const QPoint& pos)

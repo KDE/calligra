@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003	Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -103,7 +103,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTable : public KexiFieldListView
 //		KexiDB::TableSchema *table() const { return m_table; };
 		int globalY(const QString &item);
 //		void setReadOnly(bool);
-		virtual QSize sizeHint();
+		virtual QSize sizeHint() const;
 
 	signals:
 		void tableScrolling();

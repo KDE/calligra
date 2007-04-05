@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -301,49 +301,29 @@ KexiRelationViewTable::KexiRelationViewTable(KexiDB::TableOrQuerySchema* tableOr
 
 	connect(this, SIGNAL(dropped(QDropEvent *, QListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotContentsMoving(int,int)));
-//	connect(this, SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),
-//		this, SLOT(slotItemDoubleClicked(QListViewItem*,const QPoint&,int)));
 }
 
 KexiRelationViewTable::~KexiRelationViewTable()
 {
 }
 
-QSize KexiRelationViewTable::sizeHint()
+QSize KexiRelationViewTable::sizeHint() const
 {
-/*
-	QFontMetrics fm(font());
-	kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i") 
-		<< ", " << fm.width(schema()->name()+"  ") << endl; 
-//! @todo width is still not OK
-	int maxWidth = columnWidth(0) + fm.width("i");
-	const KexiDB::QueryColumnInfo::Vector columns(schema()->columns(true));
-	for (uint i=0; i<columns.count(); i++)
-		maxWidth = QMAX(maxWidth, fm.width(columns[i]->field->name())+20);
-
-	QSize s(
-		QMAX( maxWidth, fm.width(schema()->name()+"  ")+20), 
-		childCount()*firstChild()->totalHeight() + 4 );
-//	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
-	return s;*/
 	QFontMetrics fm(fontMetrics());
 
-	kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i") 
-		<< ", " << fm.width(schema()->name()+"  ") << endl; 
+//	kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i") 
+//		<< ", " << fm.width(schema()->name()+"  ") << endl; 
 
-//! @todo width is still not OK
 	int maxWidth = -1;
-	const int iconWidth = IconSize(KIcon::Small) + fm.width("i")+50;
+	const int iconWidth = IconSize(KIcon::Small) + fm.width("i")+20;
 	for (QListViewItem *item = firstChild(); item; item	= item->nextSibling())
 		maxWidth = QMAX(maxWidth, iconWidth + fm.width(item->text(0)));
-//	const KexiDB::QueryColumnInfo::Vector columns(schema()->columns(true/*unique*/));
-//	for (uint i=0; i<columns.count(); i++)
-//		maxWidth = QMAX(maxWidth, col0Width + fm.width(columns[i]->field->name())+20);
+
+	const uint rowCount = QMIN( 8, childCount() );
 
 	QSize s(
-		QMAX( maxWidth, fm.width(schema()->name()+"  ")+20), 
-		childCount()*firstChild()->totalHeight() + 4 );
-//	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
+		QMAX( maxWidth, fm.width(schema()->name()+" ")), 
+		rowCount*firstChild()->totalHeight() + 4 );
 	return s;
 }
 
@@ -359,19 +339,21 @@ int
 KexiRelationViewTable::globalY(const QString &item)
 {
 	QListViewItem *i = findItem(item, 0);
-	if(i)
-	{
-		int y=itemRect(i).y() + (itemRect(i).height() / 2);
-		return mapToGlobal(QPoint(0, y)).y();
-	}
-	return -1;
+	if (!i)
+		return -1;
+	int y = itemRect(i).y() + (itemRect(i).height() / 2);
+	if (contentsY() > itemPos(i))
+		y = 0;
+	else if (y == 0)
+		y = height();
+	return mapToGlobal(QPoint(0, y)).y();
 }
 
 bool
 KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 {
 //	kdDebug() << "KexiRelationViewTable::acceptDrag()" << endl;
-	QListViewItem *receiver = itemAt(ev->pos());
+	QListViewItem *receiver = itemAt(ev->pos() - QPoint(0,contentsY()));
 	if (!receiver || !KexiFieldDrag::canDecodeSingle(ev))
 		return false;
 	QString sourceMimeType;
@@ -391,7 +373,7 @@ KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 void
 KexiRelationViewTable::slotDropped(QDropEvent *ev)
 {
-	QListViewItem *recever = itemAt(ev->pos());
+	QListViewItem *recever = itemAt(ev->pos() - QPoint(0,contentsY()));
 	if (!recever || !KexiFieldDrag::canDecodeSingle(ev)) {
 		ev->ignore();
 		return;

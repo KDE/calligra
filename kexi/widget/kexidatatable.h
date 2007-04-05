@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -63,39 +63,18 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDataAwareView
 
 		virtual ~KexiDataTable();
 
-//moved		virtual QWidget* mainWidget();
-
 		KexiTableView* tableView() const;
-
-//moved		virtual QSize minimumSizeHint() const;
-//moved		virtual QSize sizeHint() const;
 
 	public slots:
 		/*! Sets data. Only works for db-aware table. */
 		void setData(KexiDB::Cursor *cursor);
 
-//moved		void deleteAllRows();
-
 	protected slots:
-#if 0 //moved
-		/*! Updates shared actions related to currently selected row. 
-		 Called for KexiTableView::rowEditStarted(), KexiTableView::rowEditTerminated(),
-		 and KexiTableView::slotCellSelected() signals. 
-		 Call this implementation if you are reimplementing this method. */
-		virtual void slotUpdateRowActions(int row);
-#endif
 //! @todo
 		void filter();
-//moved		virtual void slotCellSelected(int col, int row);
-//moved		void reloadActions();
 
 	protected:
-//moved		void initActions();
 		void init();
-//moved		virtual void updateActions(bool activated);
-
-//moved		KexiTableView *m_view;
 };
 
 #endif
-
