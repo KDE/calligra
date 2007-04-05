@@ -245,6 +245,12 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 		//! Reimplemented to pass the information also to the "Lookup" tab
 		virtual void propertySetSwitched();
 
+		/*! \return true if physical altering is needed for the current list of actions.
+		 Used in KexiTableDesignerView::beforeSwitchTo() to avoid warning about removinf 
+		 table data if table recreating is not needed. 
+		 True is also returned if there is any trouble with getting the answer. */
+		bool isPhysicalAlteringNeeded();
+
 	private:
 		KexiTableDesignerViewPrivate *d;
 };

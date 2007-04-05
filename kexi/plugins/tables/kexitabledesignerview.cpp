@@ -601,7 +601,8 @@ tristate KexiTableDesignerView::beforeSwitchTo(int mode, bool &dontStore)
 			bool emptyTable;
 			int r = KMessageBox::warningYesNoCancel(this,
 				i18n("Saving changes for existing table design is now required.")
-				+ "\n" + d->messageForSavingChanges(emptyTable), QString::null,
+				+ "\n" + d->messageForSavingChanges(emptyTable, /* skip warning? */!isPhysicalAlteringNeeded()), 
+				QString::null,
 				KStdGuiItem::save(), KStdGuiItem::discard(), QString::null, 
 				KMessageBox::Notify|KMessageBox::Dangerous);
 			if (r == KMessageBox::Cancel)
@@ -1464,7 +1465,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 //! @todo temp; remove this case:
 			delete alterTableHandler;
 			alterTableHandler = 0;
-			// - inform about removing the current table and ask for confimation
+			// - inform about removing the current table and ask for confirmation
 			if (!d->dontAskOnStoreData && !dontAsk) {
 				bool emptyTable;
 				const QString msg = d->messageForSavingChanges(emptyTable);
@@ -1506,6 +1507,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 		//change current schema
 		tempData()->table = newTable;
 		tempData()->tableSchemaChangedInPreviousView = true;
+		d->history->clear();
 	}
 	else {
 		delete newTable;
@@ -1913,6 +1915,29 @@ void KexiTableDesignerView::propertySetSwitched()
 	
 	static_cast<KexiTablePart*>(parentDialog()->part())->lookupColumnPage()
 		->assignPropertySet(propertySet());
+}
+
+bool KexiTableDesignerView::isPhysicalAlteringNeeded()
+{
+	//- create action list for the alter table handler
+	KexiDB::AlterTableHandler::ActionList actions;
+	tristate res = buildAlterTableActions( actions );
+	if (res != true)
+		return true;
+
+	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+	KexiDB::AlterTableHandler *alterTableHandler = new KexiDB::AlterTableHandler( *conn );
+	alterTableHandler->setActions(actions);
+
+	//only compute requirements
+	KexiDB::AlterTableHandler::ExecutionArguments args;
+	args.onlyComputeRequirements = true;
+	(void)alterTableHandler->execute(tempData()->table->name(), args);
+	res = args.result;
+	delete alterTableHandler;
+	if (res == true && 0 == (args.requirements & (0xffff ^ KexiDB::AlterTableHandler::SchemaAlteringRequired)))
+		return false;
+	return true;
 }
 
 #include "kexitabledesignerview.moc"

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexitablepartinst" version="5">
+<kpartgui name="kexitablepartinst" version="6">
 
 <MenuBar>
   <Menu name="edit" noMerge="0">
@@ -9,7 +9,7 @@
   </Menu>
 </MenuBar>
 
-<ToolBar name="design" fullWidth="false" noMerge="0">
+<ToolBar name="designToolBar" fullWidth="false" noMerge="0">
   <text>Design</text>
   <!-- Design View -->
   <!-- TODO: reenable after shared toggle actions fix: Action name="tablepart_toggle_pkey"/ -->
