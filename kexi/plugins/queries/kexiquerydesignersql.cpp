@@ -248,7 +248,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 				//this view is no longer _just_ switched from "NoViewMode"
 				d->justSwitchedFromNoViewMode = false;
 				//replace old query schema with new one
-				temp->setQuery( d->parsedQuery ); //this wil also delete temp->query()
+				temp->setQuery( d->parsedQuery ); //this will also delete temp->query()
 //				delete temp->query; //safe?
 //				temp->query = d->parsedQuery;
 				d->parsedQuery = 0;
@@ -313,6 +313,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 		KexiDB::Connection* conn = mainWin()->project()->dbConnection();
 		KexiDB::Connection::SelectStatementOptions options;
 		options.identifierEscaping = KexiDB::Driver::EscapeKexi;
+		options.addVisibleLookupColumns = false;
 		d->origStatement = conn->selectStatement(*query, options).stripWhiteSpace();
 	}
 

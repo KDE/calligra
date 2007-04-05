@@ -1139,6 +1139,7 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
 
 	KexiDB::Connection::SelectStatementOptions options;
 	options.identifierEscaping = KexiDB::Driver::EscapeKexi|KexiDB::Driver::EscapeAsNecessary;
+	options.addVisibleLookupColumns = false;
 	QString sqlText = dbConn->selectStatement( *temp->query(), options );
 	if (!storeDataBlock( sqlText, "sql" )) {
 		return false;

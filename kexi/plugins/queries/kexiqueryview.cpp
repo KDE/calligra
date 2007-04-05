@@ -96,8 +96,11 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 	if (oldCursor)
 		oldCursor->connection()->deleteCursor(oldCursor);
 
-	//TODO: maybe allow writing and inserting for single-table relations?
+//! @todo maybe allow writing and inserting for single-table relations?
 	tableView()->setReadOnly( true );
+//! @todo maybe allow writing and inserting for single-table relations?
+	//set data model itself read-only too
+	tableView()->data()->setReadOnly( true );
 	tableView()->setInsertingEnabled( false );
 	return true;
 }
