@@ -100,6 +100,13 @@ namespace KexiDB
 	 'type' property when user selects type group for a field. */
 	KEXI_DB_EXPORT Field::Type defaultTypeForGroup(Field::TypeGroup typeGroup);
 
+	/*! \return a slightly simplified type name for \a field. 
+	 For BLOB type it returns i18n'd "Image" string or other, depending on the mime type.
+	 For numbers (either floating-point or integer) it returns i18n'd "Number: string.
+	 For other types it the same string as Field::typeGroupName() is returned. */
+//! @todo support names of other BLOB subtypes
+	KEXI_DB_EXPORT QString simplifiedTypeName(const Field& field);
+
 	/*! \return true if \a v represents an empty (but not null) value.
 	 Values of some types (as for strings) can be both empty and not null. */
 	inline bool isEmptyValue(Field *f, const QVariant &v) {

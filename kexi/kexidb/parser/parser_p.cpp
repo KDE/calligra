@@ -29,8 +29,8 @@
 
 using namespace KexiDB;
 
-Parser *parser;
-Field *field;
+Parser *parser = 0;
+Field *field = 0;
 //bool requiresTable;
 QPtrList<Field> fieldList;
 int current = 0;

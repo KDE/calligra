@@ -118,7 +118,13 @@ Parser::parse(const QString &statement)
 	init();
 	clear();
 	d->statement = statement;
-	return parseData(this, statement.utf8());
+
+	KexiDB::Parser *oldParser = parser;
+	KexiDB::Field *oldField = field;
+	bool res = parseData(this, statement.utf8());
+	parser = oldParser;
+	field = oldField;
+	return res;
 }
 
 void
