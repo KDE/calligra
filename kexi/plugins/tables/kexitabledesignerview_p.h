@@ -57,6 +57,8 @@ class CommandHistory : public KCommandHistory
 
 		void addCommand(KCommand *command, bool execute = true);
 
+		void clear();
+
 	public slots:
 		virtual void undo();
 		virtual void redo();
@@ -117,7 +119,11 @@ class KexiTableDesignerViewPrivate
 		bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
 			CommandGroup *commandGroup = 0);
 
-		QString messageForSavingChanges(bool &emptyTable);
+		/*! \return message used to ask user for accepting saving the design. 
+		 \a emptyTable is set to true if the table designed contains no rows.
+		 If \a skipWarning is true, no warning about data loss is appended (useful when 
+		 only non-physical altering actions will be performed). */
+		QString messageForSavingChanges(bool &emptyTable, bool skipWarning = false);
 
 		/*! Updates icon in the first column, depending on property set \a set.
 		 For example, when "rowSource" and "rowSourceType" propertiesa are not empty, 
