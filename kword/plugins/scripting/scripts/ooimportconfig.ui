@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>469</width>
-    <height>305</height>
+    <height>396</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -144,7 +144,7 @@
        <item>
         <widget class="QLabel" name="label_5" >
          <property name="text" >
-          <string>Number of seconds we try to connect before aborting.</string>
+          <string>Number of seconds we try to connect before aborting. If set to 0 we try to connect only once and if failed abort. If the timeout is disabled, we try to connect forever.</string>
          </property>
          <property name="wordWrap" >
           <bool>true</bool>
@@ -208,14 +208,28 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="startupCheckBox" >
-       <property name="text" >
-        <string>Startup OpenOffice.org instance if not running already.</string>
-       </property>
-       <property name="checked" >
-        <bool>true</bool>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>If the first try to connect with OpenOffice.org failed, we are able to start OpenOffice.org for you, connect with that instance and once the work is done, shutdown it again.</string>
+         </property>
+         <property name="wordWrap" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="startupCheckBox" >
+         <property name="text" >
+          <string>Startup and shutdown OpenOffice.org instance if not running already.</string>
+         </property>
+         <property name="checked" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <spacer>
