@@ -1,7 +1,7 @@
 Compile-Time Options for Kexi
 -----------------------------
 
-(c) 2005, Jaroslaw Staniek, <js @ iidea . pl>
+(c) 2005-2007, Jaroslaw Staniek, <js @ iidea . pl>
 
 
 See http://www.kexi-project.org/wiki/wikiview/index.php?AdvancedBuildNotes
@@ -53,12 +53,6 @@ Kross, located at kexi/scripting{core|plugins}, should be
 compiled and used for scripting.
 Default: same as KEXI_SCRIPTS_SUPPORT
 
-* KEXI_SERVER_SUPPORT
-Type: defined/undefined
-Default: defined in kexidb/kexidb_export.h if KEXI_OPTIONS is undefined
-Description: If defined, server connections will be supported; else: support 
-for these will be disabled even if is compiled.
-
 * KEXI_NO_MIGRATION
 Type: defined/undefined
 Default: undefined
@@ -95,16 +89,6 @@ Notes:
 - you can assign KUser().loginName() for username if you want to get current 
   login.
 
-* KEXI_SHOW_DEBUG_ACTIONS
-Type: defined/undefined
-Default: undefined
-Description: If defined, additional toolbar "Show Form UI Code" action will 
-be available form form's design mode. This is useful for debugging: after 
-executing the action, a dialog with current (after changes) and original form's 
-GUI XML code will be presented in a tabbed dialog, so you can compare what changed 
-and look for possible problems. The "current" XML code will be saved when "save" 
-action is executed.
-
 * KEXI_USE_GRADIENT_WIDGET
 Type: defined/undefined
 Default: undefined
@@ -136,16 +120,28 @@ with some minor vendor-specific tweaks. Used for OOPL version.
 
 * KEXI_DEBUG_GUI
 Type: defined/undefined
-Default: defined (but should be undefined for releases)
-Description: If defined, showKexiDBDebugger=true (in [General] group) 
+Default: defined (but should be undefined for final releases)
+Description: If defined, showInternalDebugger=true (in [General] group) 
 can be specified to display KexiDB Debugger. 
 In the future the window will be probably used for debugging other features
 like scripts or macros. This option is useful for Kexi Developers.
+
+Also shows additional "Show Form UI Code" action in form's design mode. 
+This is useful for debugging: after executing the action, 
+a dialog with current (after changes) and original form's 
+GUI XML code will be presented in a tabbed dialog, so you can compare what changed 
+and look for possible problems. The "current" XML code will be saved when "save" 
+action is executed. TODO: it will be merged with Internal Debuger window.
 
 * KEXI_DB_COMBOBOX_WIDGET
 Type: defined/undefined
 Default: undefined
 Description: Defined means Kexi offers combo box form widget.
+
+* DB_TEMPLATES
+Type: defined/undefined
+Default: undefined
+Description: Defined means Kexi offers "Templates" in the startup dialog.
 
 ==== Obsolete, don't use ====
 

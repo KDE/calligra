@@ -50,6 +50,7 @@ public:
 		closedDialogViewGUIClient=0;
 		nameDialog=0;
 		curDialog=0;
+		m_findDialog=0;
 		block_KMdiMainFrm_eventFilter=false;
 		focus_before_popup=0;
 //		relationPart=0;
@@ -333,6 +334,85 @@ void updatePropEditorDockWidthInfo() {
 		m_openedCustomObjectsForItem.insert( key.latin1(), object );
 	}
 
+	KexiFindDialog *findDialog() {
+		if (!m_findDialog) {
+			m_findDialog = new KexiFindDialog(wnd);
+			m_findDialog->setActions( action_edit_findnext, action_edit_findprev,
+				action_edit_replace, action_edit_replace_all );
+/*			connect(m_findDialog, SIGNAL(findNext()), action_edit_findnext, SLOT(activate()));
+			connect(m_findDialog, SIGNAL(find()), wnd, SLOT(slotEditFindNext()));
+			connect(m_findDialog, SIGNAL(replace()), wnd, SLOT(slotEditReplaceNext()));
+			connect(m_findDialog, SIGNAL(replaceAll()), wnd, SLOT(slotEditReplaceAll()));*/
+		}
+		return m_findDialog;
+	}
+
+	/*! Updates the find/replace dialog depending on the active view.
+	 Nothing is performed if the dialog is not instantiated yet or is invisible. */
+	void updateFindDialogContents(bool createIfDoesNotExist = false) {
+		if (!createIfDoesNotExist && (!m_findDialog || !m_findDialog->isVisible()))
+			return;
+		KexiSearchAndReplaceViewInterface* iface = currentViewSupportingSearchAndReplaceInterface();
+		if (!iface) {
+			if (m_findDialog) {
+				m_findDialog->setButtonsEnabled(false);
+				m_findDialog->setLookInColumnList(QStringList(), QStringList());
+			}
+			return;
+		}
+//! @todo use ->caption() here, depending on global settings related to displaying captions
+		findDialog()->setObjectNameForCaption(curDialog->partItem()->name());
+
+		QStringList columnNames;
+		QStringList columnCaptions;
+		QString currentColumnName; // for 'look in'
+		if (!iface->setupFindAndReplace(columnNames, columnCaptions, currentColumnName)) {
+			m_findDialog->setButtonsEnabled(false);
+			m_findDialog->setLookInColumnList(QStringList(), QStringList());
+			return;
+		}
+		m_findDialog->setButtonsEnabled(true);
+
+	/*	//update "look in" list
+		KexiTableViewColumn::List columns( dataAwareObject()->data()->columns );
+		QStringList columnNames;
+		QStringList columnCaptions;
+		for (KexiTableViewColumn::ListIterator it(columns); it.current(); ++it) {
+			if (!it.current()->visible())
+				continue;
+			columnNames.append( it.current()->field()->name() );
+			columnCaptions.append( it.current()->captionAliasOrName() );
+		}*/
+		const QString prevColumnName( m_findDialog->currentLookInColumnName());
+		m_findDialog->setLookInColumnList(columnNames, columnCaptions);
+		m_findDialog->setCurrentLookInColumnName( prevColumnName );
+	}
+
+	//! \return the current view if it supports \a actionName, otherwise returns 0.
+	KexiViewBase *currentViewSupportingAction(const char* actionName) const
+	{
+		if (!curDialog)
+			return 0;
+		KexiViewBase *view = curDialog->selectedView();
+		if (!view)
+			return 0;
+		KAction *action = view->sharedAction(actionName);
+		if (!action || !action->isEnabled())
+			return 0;
+		return view;
+	}
+
+	//! \return the current view if it supports KexiSearchAndReplaceViewInterface.
+	KexiSearchAndReplaceViewInterface* currentViewSupportingSearchAndReplaceInterface() const
+	{
+		if (!curDialog)
+			return 0;
+		KexiViewBase *view = curDialog->selectedView();
+		if (!view)
+			return 0;
+		return dynamic_cast<KexiSearchAndReplaceViewInterface*>(view);
+	}
+
 		KexiMainWindowImpl *wnd;
 		KexiStatusBar *statusBar;
 		KexiProject *prj;
@@ -384,6 +464,8 @@ void updatePropEditorDockWidthInfo() {
 		//! edit menu
 		KAction *action_edit_delete, *action_edit_delete_row,
 			*action_edit_cut, *action_edit_copy, *action_edit_paste,
+			*action_edit_find, *action_edit_findnext, *action_edit_findprev,
+			*action_edit_replace, *action_edit_replace_all,
 			*action_edit_select_all,
 			*action_edit_undo, *action_edit_redo,
 			*action_edit_insert_empty_row,
@@ -502,18 +584,19 @@ void updatePropEditorDockWidthInfo() {
 		//! Used by openedCustomObjectsForItem() and addOpenedCustomObjectForItem()
 		Q3AsciiDict<QObject> m_openedCustomObjectsForItem;
 
-	int propEditorDockSeparatorPos, navDockSeparatorPos;
+		int propEditorDockSeparatorPos, navDockSeparatorPos;
 //	int navDockSeparatorPosWithAutoOpen;
-	bool wasAutoOpen;
-	bool dialogExistedBeforeCloseProject;
+		bool wasAutoOpen;
+		bool dialogExistedBeforeCloseProject;
 
-	KMdi::MdiMode mdiModeToSwitchAfterRestart;
+		KMdi::MdiMode mdiModeToSwitchAfterRestart;
 
-protected:
-	//! @todo move to KexiProject
-	KexiDialogDict dialogs;
+	private:
+		//! @todo move to KexiProject
+		KexiDialogDict dialogs;
 #ifndef KEXI_NO_PROCESS_EVENTS
-	QMap<int, PendingJobType> pendingDialogs; //!< part item identifiers for dialogs whoose opening has been started
-//todo(threads)	QMutex dialogsMutex; //!< used for locking dialogs and pendingDialogs dicts
+		QMap<int, PendingJobType> pendingDialogs; //!< part item identifiers for dialogs whoose opening has been started
+	//todo(threads)	QMutex dialogsMutex; //!< used for locking dialogs and pendingDialogs dicts
 #endif
+		KexiFindDialog *m_findDialog;
 };

@@ -1,20 +1,1346 @@
 -----------------------------------------------------------------------------
  Kexi Development CHANGELOG Document
- From js's Point of View
+ From jstaniek's Point of View
  
- Copyright (C) 2003-2006 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
+ Copyright (C) 2003-2007 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
 For most important commits use: CCMAIL:kexi-devel@kde.org
-Use CCMAIL:###-done@bugs.kde.org
+For interesting commits use: 
+FEATURE: <desctiption>
+CCMAIL:danny@commit-digest.org
+For bugfixes use CCMAIL:###-done@bugs.kde.org
+Legend:
+= -a fix for recently introduced bug or a minor/too technical fix not worth 
+   mentioning in the public changelog
 
-2006-03-28
-TableView
-- boolean editor: only accept clicking on the [x] rect
+TODO: fix displaying default values in comboboxes (form and tableview)
+TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
-TODO:
-- inform Raphael about koffice.org/1.5/ url, give him the php code
+2007-03-21, 22
+Table Designer
+- clear command history after successful saving of the design
+- on switching to data view, do not warn about removing data, 
+  if the data will stay untouched
+2.0: merged
+Query Designer
+- removed possible crash in data view
+2.0: merged
+
+2007-03-16
+Query Designer
+- fixed table sizes in the Design View
+- fixed displaying relation connection lines when connected field is not visible
+- fixed mouse drop position when target points on a field of table with 
+  scrolled-down contents
+- do not show internal relationships for visible lookup fields (JOINs) in SQL view
+2.0: merged
+Table View
+- make column readonly if query-based data source itself is stored (i.e. has connection) 
+   and lookup column is defined
+2.0: merged
+
+2007-03-15
+KexiDB
+- SQL parser can work recursively now (needed when multiple parsers are used 
+  in the same thread, removed possible crash)
+2.0: merged
+
+2007-03-12..14
+Main Window
+- main window is activated after closing "Insert image" file dialog 
+= "find" action: restart searching from start for "Search all rows" mode if:
+== user has changed the value to find since previous searching, or
+== user has recently changed direction to "Search all rows"
+- searching is performed within lookup values as well
+Simple Printouts
+- fixed problem with records printed between page boundaries
+- fixed problem with updating print preview's page navigator when number of pages differs 
+   compared to previous preview
+2.0: merged
+
+Table View
+- usability: within cells of type "Image" pressing Tab, Shift+Tab, Left
+  or Right keys now closes the popup and moves the cursor
+2.0: merged
+
+2007-03-07
+Simple Printouts
+- fixed refreshing print preview after table data or query results changed
+2.0: merged
+
+2007-03-02
+Simple Printouts
+- added support for printing and previewing images
+- improved previewing quality
+- fixed landscape mode
+2.0: merged
+
+2007-02-27
+Forms
+- hide popup in combo box or image box as soon as it loses focus
+- changes made to combo box selection is cancelled if the popup 
+   loses focus without accepting
+- hide popup in combo box or image box as soon as user moves 
+   to other record (usually with a shortcut)
+- fixed handling page down/page up keys within combo box popups
+  (previously it moved to other record)
+2.0: merged
+
+2007-02-23
+Forms
+- for buttons, left/up and right/down keys act like tab/backtab
+2.0: merged
+
+2007-02-19
+Forms
+- fixed displaying margin for image boxes
+- fixed assigning static images to image boxes without saving form's design;
+  the images can now be saved also in data view mode
+- fixed handling tab key for image boxes
+- automatic tab order:
+-- fixed ordering for widgets within containers (e.g. a group box)
+-- widgets within tab widget pages are ordered by page number
+-- widgets inside tab widget that are not visible are skipped when moving 
+   focus using Tab/Shift+Tab key
+- Ctrl+Tab shortcut (for switching between tabs) works on windows
+  if multiline text editor is focused
+2.0: merged
+
+2007-02-12
+Forms
+- fields dragging & dropping works for containers (tab widgets, frames and group boxes)
+2.0: merged
+
+2007-02-09..14
+Main Window
+- Edit->Find action added, works within table, query and form views as a global, 
+  context-dependent tool window.
+2.0: merged
+
+~~~~~~~~~~~~~~~~ 1.1.2 bugfix release (with KOffice 1.6.2)  ~~~~~~~~~~~~~~~~
+
+2007-02-09
+Table View
+- added more actions to the context menu in data view
+
+2007-02-08
+Tools
+- added "Delete column" tool for deleting table columns without removing data;
+  translation enabled; with GUI wrapper
+- fixes for "Add column" tool
+2.0: merged
+
+2007-02-07
+KexiDB
+= fixed possible crash when running a query without primary key included
+   (encountered e.g. when a form contains static images)
+2.0: merged
+Tools
+- added GUI version of "Add column" tool (with translation enabled)
+- the tool is now installed
+2.0: merged
+
+2007-02-06
+KexiDB
+- queries are supported as row source for lookup fields
+- sort query results by primary key fields if there is no explicit sorting specified
+  (especially useful when there are complex joins)
+2.0: merged
+
+2007-02-05
+Query Designer
+- fixed crash if column being removed has sorting set up
+2.0: merged
+
+2007-01-26..2007-02-05
+Table Designer
+- added support for multiple visible columns in the combo box editor
+   (the same for forms)
+- on altering table, remove old lookup field schema objects;
+   make sure you do not save empty type/name fields to XML
+- fixed updating "lookup column" tab's contents
+2.0: merged
+
+2007-01-24..25
+Table Designer
+- fixed altering table schema when lookup column has been changed
+2.0: merged
+Forms
+- align autofield's label to left if it is on the top
+- do not show popup after clicking on combo box
+- fixed popup position of combo boxes inside a container
+- fixed saving property values of type "enum" for subwidgets
+2.0: merged
+
+2007-01-23
+Table Designer
+- fixed crash on saving design with lookup columns defined
+2.0: merged
+Forms
+- fixed handling "align" property for image boxes when scaling is off
+2.0: merged
+
+2007-01-09
+Table Designer
+- some changes do not require table removing now: 
+  e.g. field's caption, description, text width, defaultValue,
+  visibleDecimalPlaces
+- fixed updating default value when field type changes
+2.0: merged
+Forms
+- floating point values:
+-- values are now formatted in the same way as in table view, 
+  so "decimal places" property of the field is honoured
+-- locale-dependent decimal symbol can be entered instead of '.'
+2.0: merged
+
+2007-01-08
+Build system
+= fixed generating examples when Kexi binaries are not installed
+  (it's the case for fresh compilation)
+2.0: merged
+General
+- Fixed crash related to QtCurve widget style.
+2.0: merged
+
+2007-01-03
+Kexi
+- use transliteration table generated by a shell script 
+  to generate identifiers out of unicode characters;
+  plus some adjustments made by hand
+BUG: 133170
+2.0: merged
+
+2007-01-02
+Startup
+- Command line option "--show-navigator" added - shows the Project Navigator
+  side pane even if Kexi runs in User Mode.
+2.0: merged
+Kexi
+= Example files are generated usign a standard automake rule and are installed
+to the Kexi's data dir (so packagers can ship it).
+2.0: merged
+
+2006-12-21..28
+Kexi 2.0
+= formeditor lib ported to KDE4 (not tested)
+Startup, Main Window
+- "User Mode" implemented; command line option --final-mode replaced with --user-mode
+  as described at http://kexi-project.org/wiki/wikiview/index.php?UserMode;
+  all actions related to design are hidden as well as property editor and navigator panes
+2.0: merged
+General
+= removed usage of KEXI_SERVER_SUPPORT macro
+2.0: merged
+
+2006-12-18..20
+Forms
+- "Assign Action" dialog:
+-- added 'create new' and 'close view' actions with a given context
+-- "Current form" actions category added with actions like 
+   "go to next record", "go to new record"
+-- more design actions like 'undo' moved to the global category
+2.0: merged
+Main Window
+- action tooltips made generic (not only for tables), 
+   e.g. "Save changes made to the current row"
+2.0: merged
+
+2006-12-13..15
+Startup
+= do not recreate kexi__blobs table when connection is readonly;
+- projects created with older Kexi versions can be now opened 
+  in readonly mode too
+2.0: merged
+Project Migration
+- fixed copying existing objects to the destination database
+- MySQL and PostgreSQL
+-- fixed importing unicode text and static images if present in the source database (BLOBs)
+-- data types are better handled for import
+2.0: merged
+Forms
+- action selection dialog:
+-- the list of menu commands now contains tooltips instead of action texts to improve 
+   readability and is displayed with full width
+-- actions are now categorized, so actions that have no practical use are hidden
+2.0: merged
+
+General
+= typos fixed in API docs
+BUG:138542
+2.0: merged
+
+2006-12-07
+Tools
+- added 'add column' utility:
+  This script adds a new empty column to a table in a .kexi (SQLite 3)
+  database file without removing data from the table.
+2.0: merged
+
+2006-12-06..12
+Forms
+- action selection dialog:
+-- moved "Macros" and "Scripts" to "category" list,
+    which also supports opening tables/queries/forms, running macros/scripts
+-- added "Action type" column so it is possible to assign printing 
+    and opening in objects design view
+-- added "Execute form's action" category
+2.0: merged
+Main Window
+- Project Navigator:
+== widget moved to widgets/ for reuse
+-- double/single clicking on executable objects (macro, script) executes them
+2.0: merged
+
+2006-12-05
+General
+- missing i18n()
+2.0: merged
+Query Designer
+- display "(All Columns)" near the "*"
+- SQL editor on Unix: initially, clear undo/redo buffer
+  (otherwise Ctrl+Z clears the contents)
+2.0: merged
+KexiDB
+- fixed problem with constructing SQL statements: 
+  for multi-table queries "ORDER BY column" prepends "table" only if "column" 
+  is not a name of alias
+2.0: merged
+
+~~~~~~~~~~~~~~~~ 2007 (OOPL) ~~~~~~~~~~~~~~~~
+
+2006-11-28..29
+Examples
+- added parametrized query 'Owners by age'
+= update the parameter query: remove joins because there's still one related bug
+2.0: merged
+
+2006-11-27
+Examples
+- "Simple Database" example updated: added "Ownership" form and a macro 
+- "Simple Database": added "write_simple_text_report" Python script
+2.0: merged
+
+2006-11-21
+Table View
+- fixed crash when combo box drop down button is clicked but bound column
+  is not defined for lookup field
+2.0: merged
+Forms
+- fixed possible crash when auto field is used for field with lookup 
+  column defined
+- sane icon for the Auto Field widget and Label, improved button icon
+2.0: merged
+
+2006-11-17
+CSV Export
+- export visible values for lookup columns instead of internal values
+Simple Printouts
+- print visible values for lookup columns instead of internal values
+2.0: merged
+KexiDB
+- generate aliases for lookup table names to avoid errors because 
+ of ambiguous table names when the same lookup table is used more than once;
+ For example, use persons1 and persons1 aliases here:
+ SELECT service.id, service.emploee, service.service_man, persons1.surname, 
+ persons2.surname, service.OID FROM service 
+ LEFT OUTER JOIN persons AS persons1 ON service.emploee=persons1.id 
+ LEFT OUTER JOIN persons AS persons2 ON service.service_man=persons2.id;
+2.0: merged
+
+~~~~~~~~~~~~~~~~ 1.1.1 bugfix release (with KOffice 1.6.1)  ~~~~~~~~~~~~~~~~
+Query Designer
+- propery initialize newly appended rows
+2.0: merged
+
+2006-11-16
+Table View
+- fixed updating contents of the combobox's internal text editor after 
+   pressing F2 or Enter key 
+- fixed possible crash on application's close
+- fixed copying/pasting values from the combo box (visible text is now copied/pasted)
+2.0: merged
+
+2006-11-15
+Query Designer
+- fixed setting up sorting in the design view
+- fixed setting up string constants as criteria
+2.0: merged
+Table View
+- fixed copying time and date/time values to clipboard
+- fixed pasting time, date and date/time values from clipboard
+2.0: merged
+
+2006-11-14
+Forms
+- fixed displaying Date/Time values
+- fixed crash when "Esc" key is pressed to "cancel row changes" 
+  and a combobox widget is focused
+- fixed handling Ctrl+Delete key for "Delete current row" action
+- fixed crash when an autofield's subwidget is painted but the parent 
+  is about to be deleted
+2.0: merged
+Table View
+- fixed displaying visible values (usually a text) for lookup columns
+  when there's a default value defined in the referenced table
+- visible values of types other than text or numbers are properly 
+  displayed (including images)
+2.0: merged
+Queries
+- fixed retrieving parameters of type Text
+2.0: merged
+
+2006-11-07..13
+Main Window
+- switch contents of custom property tabs after switching the current tab/window
+  (needed for Table Designer's tab)
+- added a warning message box with "Errors encountered during loading plugins" 
+  message, controled by dontShowWarningsRelatedToPluginsLoading configuration setting.
+- groups and items for nonexisting plugins are not visible now
+2.0: merged
+Query Designer
+- show more error messages on opening query in design view 
+  (e.g. for unsupported column expressions)
+- fixed saving relationships: removed too strict checking for datatypes when creating 
+  relationships (signedness)
+2.0: merged
+KexiDB
+- Parser: improved types evaluation for expressions
+- kexi__objectdata.o_data field type changed from BLOB to LongText (backward compatible)
+  to improve human-readability
+2.0: merged
+Forms
+- fixed problem with setting "invalid" flag for fields with invalid data source
+2.0: merged
+Core
+= fixed possible crash on application exit when data changes listener is removed
+2.0: merged
+General
+- Simple_Database.kexi example updated: combo boxes are now used; example data looks better
+2.0: merged
+
+~~~~~~~~~~~~~~~~ 1.1.1-pre ~~~~~~~~~~~~~~~~
+
+2006-10-30..2006-11-06
+Table View
+- better displaying tooltips for columns with lookup data
+- sorting columns with lookup data works
+= various improvements for combo boxes
+2.0: merged
+Forms
+- database-aware combo box form widget works, improved data displaying, 
+  mouse and keyboard handling
+- fixed bug #136688 - displaying dates (e.g. with dd.mm.yyyy format)
+= do not block Escape key if there are no data changes to cancel;
+  do not block shortcuts like Shift+Left arrow
+2.0: merged
+
+2006-10-27
+Forms
+- display proper record when a new row was saved and user moved to previous record
+= fixed possible crash inside the row buffer
+2.0: merged
+Table View
+= fixed handling data in lookup fields and cursor moving
+= fixed adjusting width of column containing lookup field
+2.0: merged
+
+2006-10-24..26
+Query Designer
+- New: Added support for parameter queries in design and SQL view. 
+  User is asked for entering value of a parameter in a dialog window. 
+  Paramers can be of any type except Object.
+  (see also: MSA 2002 Bible, p. 767)
+2.0: merged
+Table Designer
+- Byte datatype is always set to unsigned now
+- "Double precision" datatype is now the default for the floating point 
+  type group instead of Float (so we get better precision by default)
+2.0: merged
+Table View
+- fixed validating Big Integer numbers
+2.0: merged
+Forms
+- fixed validating Big Integer numbers
+2.0: merged
+
+2006-10-20
+Forms
+= fixed default size of combo box widgets
+= removed crash when a combobox without a data source was clicked
+2.0: merged
+Main Window
+- accessibility: property editor can be focused using an accelerator key;
+  moreover, Alt+2 now focuses main area and Alt+3 focuses Property Editor
+2.0: merged
+Table Designer
+- "combo" icon is displayed near the field name that have lookup column defined
+2.0: merged
+
+2006-10-16
+Query Designer
+- refresh design view after a sequence of switches: 
+   text view -> data view -> design view
+2.0: merged
+KexiDB
+= saving "lookup column" metadata supported
+2.0: merged
+
+2006-10-12
+Forms
+- fixed displaying contents "Data Source" property for multiple selections;
+  unnecessary updates removed (GUI is updated only after adding 
+  the last widget to the selection)
+2.0: merged
+Table Designer
+- "Lookup column" property tab added to the property pane
+2.0: merged
+
+2006-10-11
+KFormDesigner
+- removed crash on close and problems with displaying properties
+2.0: merged
+Forms
+- do not update the property editor for every form (only one is active anyway)
+2.0: merged
+
+2006-10-09..10
+Table View
+- fixed drawing selection highlighting for the horizontal header immediately after
+  scrolling the table
+2.0: merged
+Query Designer
+- column sorting is also supported for columns with cleared "visible" flag
+- SQL view's section header now provides an accelerator
+2.0: merged
+
+~~~~~~~~~~~~~~~~ 1.1 stable (with KOffice 1.6)  ~~~~~~~~~~~~~~~~
+
+2006-10-06
+KexiDB
+= fixed constructing ORDER BY part of SQL statements (ambiguous fields)
+= when creating "columns by name" cache, also remeber "table.alias" identifiers
+= QuerySchema: retrieving infromation about columns much improved
+  (needed by the parser and designer)
+2.0: merged
+Query Designer
+= fixes for handling ordering information in design mode when there're asterisks
+  in the query
+2.0: merged
+Forms
+- fixed bug #134976: Yes/No field default value does not work properly
+  (for required field: if you add a checkbox that points to a Yes/No 
+  field that has a default value the default value is not accepted)
+2.0: merged
+Table View
+- fixed problem with editing floating-point values when there's default 
+   value set to 0.0
+2.0: merged
+
+2006-10-04, 05
+Table View
+= fixed displaying values for combobox fields
+= it is now possible to have empty combobox item: selecting it clears 
+  the value of combobox
+2.0: merged
+Query Designer
+- invalid input (e.g. criteria or sorting) now displays a message box with 
+  "Correct" and "Discard Changes" buttons
+- added support for setting order of columns in Design and SQL views (ORDER BY)
+- fields were sometimes added twice
+2.0: merged
+KexiDB
+= fixed handling information about columns ordering
+2.0: ported
+KoProperty
+= Property: added a method for clearing "modified" flag
+2.0: ported
+
+2006-10-03
+Forms
+- solution for bug #134773: hide "Editor type" property for auto fields
+  Kexi 2.0 will have it unhidden.
+2.0: ported
+- fixed updating property values of enum type
+2.0: merged
+Core
+- fixed bug #134977: enabling/disabling of actions in query editor
+2.0: merged
+Main Window
+- fixed bug #134975: "Data actions do not appear on first open"
+  workaround used before Kexi 2.0: the Data toolbar is always visible
+2.0: merged
+
+~ ~ ~ ~ End of aKademy 2006, Dublin ~ ~ ~ ~
+
+2006-09-30
+KexiDB
+= support for ORDER BY while generating SQL statements
+2.0: ported
+
+2006-09-29
+Form
+- fixed bug #134504 "Several glitches in Kexi GUI"
+2.0: ported
+Docs
+- fixed bug #134503 "Typos in several Kexi docs"
+
+2006-09-28
+KexiDB
+= use COUNT(*), not COUNT() -- fixes MySQL support
+= missing ORDER BY usage while generating SQL statements
+2.0: ported
+2.0: 'parser' target added
+
+2006-09-25
+Forms
+- The first widget of a given kind should be named "widget" by default,
+  the second - "widget2" and so on. (thanks to Natalie)
+2.0: ported
+
+2006-09-21..27
+KexiDB
+- added support for ORDER BY clause
+2.0: ported
+
+~ ~ ~ ~ aKademy 2006, Dublin ~ ~ ~ ~
+
+2006-09-19
+Forms
+- double clicking items of "Available fields" list inserts a new auto field
+- fixed form's selecting data source via the data source pane
+2.0: merged
+KexiDB
+= fixed retrieving autonumber data
+2.0: merged
+
+~~~~~~~~~~~~ 1.1 RC1 release (with KOffice 1.6 RC1)  ~~~~~~~~~~~~
+
+2006-09-14
+KoProperty
+- property is not changed when new and old value are both null
+- spin boxes for integer and double values: deleting the contents
+  now sets null value
+= consider unsigner long long and long long values as compatible
+2.0: merged
+KexiDB
+- do not try to insert default values into a column with unique 
+  flag declared (or even PK) 
+2.0: merged
+Table View
+- Fixed repainting after "Edit->Clear Table Contents" action
+= display question mark for null values in boolean column even 
+   if it has to be "notNull"
+2.0: merged
+Table Designer
+- set "false" as default value for columns with Yes/No types
+- when column type changes, default value is updated to match the new type
+  (e.g. casted from integer to text; incompatible values are removed)
+2.0: merged
+
+2006-09-11..13
+KoProperty
+= fixed group widget's height
+2.0: merged
+Table View
+= fixed drawing drop-down arrow for styles like ThinKeramik
+2.0: merged
+- more shortcuts added, shortcuts are now usable and a bit MSA-like
+-- CTRL+End now moves to the last field in the last record 
+    (previously: the last record)
+-- CTRL+Home now moves to the first field in the first record 
+    (previously: the first record)
+-- CTRL+PgDown now moves to the next record
+-- CTRL+PgUp now moves to the previous record
+-- CTRL+Plus or CTRL+= now moves to the new record
+= some common code moved to KexiDataAwareObjectInterface from KexiTableView,
+  thus allowing to reuse it in forms
+2.0: merged
+Forms
+- fixed tab/backtab key handling
+- fixed displaying custom label text when "Auto Label" property is off
+- handling of global shortcuts like CTRL+PgDown is now shared with 
+   Table View (accesibility: it is now possible to move to next/previous 
+   record using keyboard)
+- moving to new row sets the focus in the first data-aware widget 
+   (in tab order)
+- fixed leaving from "editing" state on "accept row changes" or moving 
+   to other record
+2.0: merged
+
+2006-09-08
+Table Designer
+- fixed inserting fields of type "Object"
+= "subType" has no longer a special meaning for BLOB types, 
+  "objectType" is used for this purpose
+2.0: merged
+KexiDB
+= fixed saving custom property values
+2.0: merged
+	
+2006-09-07
+Forms
+- custom widget factories can be now loaded properly
+= X-KFormDesigner-XMLGUIFileName variable added 
+  to the KFormDesigner/WidgetFactory service type, so it's now
+  possible to specify XMLGUI file for defining toolbar actions
+  for custom widget factories
+2.0: merged
+KexiDB
+= Added SimpleCommandLineApp class - an utility for writing small 
+  command line programs and tests that support database connections
+  out of the box and provide required arguments.
+= debug areas fixed
+2.0: merged
+
+2006-09-04
+Kexi docs
+- things like 'e.g.' moved to &eg;
+- use <procedure> where appropriate
+- a chapter about forms translated to english
+i18n
+= Stephan Binner's fixes #579553 and #579330 ported to 2.0
+Forms
+- hide QRadioButton widget - current implementation is no-op
+
+~~~~~~~~~~~~ 1.1 beta 1 release (with KOffice 1.6 beta 1)  ~~~~~~~~~~~~
+
+2006-09-01
+Forms
+= added KEXI_DB_COMBOBOX_WIDGET define required 
+  to add support for combobox form widget (disabled by default for beta 1)
+2.0: merged
+KexiDB
+= dependency on newer (>=4.1) client library removed:
+  MySQL driver now uses 'SELECT @@version' SQL statement instead of dedicated 
+  API function
+= added possibility for switching off "LIMIT 1" optmization 
+  for methods like Connection::querySingleString() 
+  (e.g. needed for 'SELECT @@version')
+2.0: merged
+
+2006-08-29
+General
+- Added unicode->latin1 mappings for Czech characters
+2.0: merged
+
+2006-08-25
+Table View
+= tooltips are displayed also for "insert" row, if needed
+Forms
+= fixed displaying widget names for unbound auto fields 
+  and image boxes while in design mode
+= fixed setting data source for auto field
+- initial version of the combo box widget (will be disabled for beta 1)
+2.0: merged
+
+2006-08-24
+Table View
+= displaying cell's selection background fixed for nonstandard font
+2.0: merged
+
+2006-08-22..23
+Forms
+- display default values in the new row; 
+  default text is displayed with a special style (italic blue) as in table view;
+  cancelling changes in a widget reverts its contents to default value 
+  (if available); the special style is removed as soon as the editing starts
+- "redo" action removed from the data-aware widgets' context menu 
+  (to avoid problems with data handling)
+2.0: merged
+Table Designer
+= fixed setting subtype by user
+2.0: merged
+
+2006-08-21
+CSV Import Dialog
+= fixed delimiter change using the combo box (introduced by the prev commit)
+= unnecessary rows are removed after delimiter changes
+2.0: merged
+Table View
+- do not display default values for autonumbered fields
+- do not fill default values for already filled fields
+= boolean editor in tristate mode: fixed switching between true/false/NULL values
+- display default boolean values in blue
+- display tooltip with row number when the vertical scrollbar is dragged
+= fixed displaying tooltips for default values in the "insert" row
+2.0: merged
+
+2006-08-17
+Table View
+- tooltips are displayed for cells with too large contents
+2.0: merged
+CSV Import Dialog
+- delimiter detection is now even more clever, allowing to import more complex data: 
+  characters outside quotes have higher priority; additional algorithm counting 
+  number of candidates for delimiters is used.
+2.0: merged
+
+2006-08-14
+Table View
+- default values are displayed and work properly with editing
+- current row and column are marked as selection on the vertical 
+   and horizontal header sections
+2.0: merged
+KexiDB
+= improved table name altering
+= row edit buffer now handles default values
+2.0: merged
+
+2006-08-11
+KoProperty
+= "3rdState" option for boolean types now uses a combo box with 3 items
+= removed unmaintained QT_ONLY code
+2.0: merged
+= 2.0: some dependency on Qt3 removed
+
+CSV Export
+= fixed crash on exporting to clipboard
+- time and object values: fixed exporting or copying to clipboard
+2.0: merged
+Main Window
+= "copy special" action is available after switching back to table data view
+2.0: merged
+
+2006-08-09
+KoProperty
+= "3rdState" option added for BoolEdit - i18n'd QString, if not empty, 
+  the the editor's button accept third "null" state with name equal to this string. 
+  When this value is selected, Widget::value() returns null QVariant. 
+  This option is used for example in the "defaultValue" property for a field 
+  of type boolean (in Kexi Table Designer). Third, "null" value of the property 
+  means there is no "defaultValue" specified.
+Table Designer
+- Added "defaultValue" property to the designer
+= Alter Table Test Suite: added "i" variable support (including operator++), 
+  closeWindow command, quit command, and optional "clipboard" flag 
+  for showSchema, showActions, showTableData. Improved showTableData command.
+  Added "defaultvalues" test.
+2.0: merged
+KexiDB
+= added BLOB-encoding/decoding-related functions
+= improved storing and retrieving "defaultValue" property of table field
+2.0: merged
+
+2006-08-08
+General
+= operator tristate::bool() removed (unsafe, comparison with false was broken)
+2.0: merged
+Table Designer, KexiDB
+- fields of type yes/no have default value set to false (by default)
+= schema editing improved; on table altering, default values are inserted 
+  and not-empty values are used is there's no default
+2.0: merged
+
+2006-08-07
+KexiDB
+= improved version-related parts of the API
+= server version information is retrieved
+2.0: merged
+
+2006-08-03
+KexiDB
+= PostgreSQL: use TIMESTAMP, not DATETIME for date/time data type
+2.0: merged
+
+2006-08-02
+CSV Export
+= GUI-less exporting is supported in the API (usable for tests)
+2.0: merged
+General
+- "skip-startup-dialog" command line option added
+2.0: merged
+KexiDB
+= Field::typeForString() and Field::typeGroupForString() are now case-insensitive.
+= added missing support for "indexed" and "type" properties for functions 
+  like KexiDB::setFieldProperty()
+2.0: merged
+KoProperty
+= Property::oldValue() should not return value() if no value is available.
+2.0: merged
+Table Designer
+= fixed setting types and subtypes
+= fixed a crash when there are more than 50 "alter table" actions 
+2.0: merged
+
+2006-08-01
+Table Designer
+= A test suite added for table altering
+2.0: merged
+
+~~~~~~~~~~~~ 1.1 alpha 1 release (with KOffice 1.6 alpha 1)  ~~~~~~~~~~~~
+
+2006-07-31
+KexiDB
+= custom properties can be set for Field objects
+2.0: merged
+Table View
+- deleting cell contents containing Yes/No values
+- do not display drop-down buttons for read-only data
+2.0: merged
+Query Designer
+- possible crash fixed when new design is saved in the data view: 
+  only rebuild schema if it has not been rebuilt previously
+1.0/2.0: ported
+
+2006-07-28
+Table Designer
+- fields of Yes/No type have "not null" set by default
+- fixed clearing "not null" property
+2.0: merged
+Table View
+- boolean "not null" field displays "false" instead of null in the new row
+= fixed column width adjustment
+= unused code removed
+2.0: merged
+
+2006-07-26..27
+Property Editor
+- fixed image scaling in the image editor
+2.0: merged
+Forms
+- image box: (in data view) do not allow to show context menu using keyboard 
+  for static image (i.e. if no data source is assigned); 
+  such a widget also ignores focus events (effective focus policy is NoFocus then);
+  focus frame is painted when needed
+2.0: merged
+
+2006-07-24
+Main Window
+- fixed setting focus after switching between views
+2.0: merged
+
+2006-07-18..2006-07-25
+KexiDB
+- added support for db-aware lookup fields
+2.0: merged
+Table View
+- added support for db-aware combobox fields
+- displaying values in combo box popup fixed
+2.0: merged
+CSV Import Dialog
+- leading 0xFEFF "BOM" unicode character is skipped
+   (http://www.unicode.org/charts/PDF/UFFF0.pdf)
+- added "Strip leading and trailing blanks off of text values" option
+- fixed changing options
+2.0: merged
+
+2006-07-17
+Forms
+- fixed maintaining focus when menu has been clicked
+- fixed tab/backtab for button widget (non-db-aware widgets in general)
+2.0: merged
+
+2006-07-10..14
+Forms
+- context menus now have consistent title: "<objectname> : <objecttype>"
+- cut/copy/paste shared actions work for form widgets in data view
+2.0: merged
+Table View
+- context menu from image box reused in the Table View's cell editor
+- cut/copy/paste/clear actions work for the image cells, including shortcuts
+- cut/copy/paste/clear actions work for text/number/boolean cells
+- fractional character ("," or ".") can be entered as the first character for
+  floating-point data types, what means 0.xxxxx
+- fixed updating row number info in the record navigator and updating the current 
+  cell after column sorting
+- BLOB data is sorted by size
+2.0: merged
+KexiDB
+- SQLite driver: read only connections work again
+2.0: merged
+
+2006-07-07
+Forms
+- AutoField, Image Box: fixed setting background color; 
+  drop-down button keeps its default color
+2.0: merged
+Table View
+- added drop down button as image cell editor
+2.0: merged
+
+~~~~~~~~~~~~~~~~ 1.0.2 bugfix release (with KOffice 1.5.2)  ~~~~~~~~~~~~~~~~
+~ Now, as 1.0.x is closed for changes, all the changes are merged into 2.0 only ~~
+
+2006-07-06
+Forms
+- Data Source tab of the Property Pane: fixed entering field or table/query 
+  name by hand: pressing return accepts selection; focus-out accepts selection;
+  entering in-progress clears previous selection
+2.0: merged
+- displaying images optimized: no background is cached or painted
+2.0: merged
+- text box widget now displays text aligned to the left after loosing the focus
+2.0: merged
+- possible crash removed when changing property of enum type
+1.0/2.0: ported
+Table View
+- Image cell editor: appearance improved, tooltip with a thumbnail added, 
+  dropdown button with context menu added (the same as in Image Box form widget)
+2.0: merged
+KoProperty
+- fixed handling groups
+(1.0.2)
+Forms
+- improvements related to data editing within forms backported from 1.1 
+(1.0.2)
+
+2006-07-05
+Forms
+- AutoField: fixed handling foreground and background colors; 
+  added "foregroundLabelColor" and "backgroundLabelColor" properties;
+  subproperties coming from super classes are now visible;
+  better handling internal layout depending on label's position
+2.0: merged
+- "tristate" property for check box widget redefined:
+  supports DefaultTristate, TristateYes, TristateNo values. 
+  Thus, for bound widgets null values can be set
+  and for unbound widgets only Yes or No values can be set (by default).
+2.0: merged
+- fixed creating modified property objects of enum type
+2.0: merged
+KoProperty
+- fixed possible crash when clicking "undo" button causing 
+  the full property set's reload (it was the case for "Editor Type" 
+  property of the AutoField widget)
+1.0/2.0: ported
+
+2006-07-04
+KexiDB
+- fixed copying index and table objects
+1.0/2.0: ported
+
+2006-07-03
+Forms
+- AutoField: focus label's associated widget (editor) 
+  when user clicked the label
+2.0: merged
+- AutoField: update data source and values for subproperties on form loading 
+  also when we're switching from design to data view
+1.0/2.0: ported
+- AutoField: removed crash when table field has been renamed in the data source
+1.0/2.0: ported
+
+2006-06-28
+KexiDB
+- SQLite 3.2: fixed opening databases with non-latin1 pathnames
+2.0: merged
+CSV Import Dialog
+- parsing data improved: values without leading zeros, like 1/2/2006 work;
+ Since apps like MS Access in the USA creates csv files with date 
+ format month/day/year, (and without leading zeros), text with "/" 
+ inside is assumed to be in this format.
+1.0/2.0: ported
+
+2006-06-27
+Forms
+- Image Box widget: now supports saving data in the database!
+  Fixed filling duplicated data widgets; fixed editing;
+  "Drop-Down Button Visible" property added.
+2.0: merged
+
+2006-06-26
+Forms
+- AutoField widget: changing value of "Widget Type" property reloads the entire 
+  property set, so new properties can appear and unused properties can be hidden 
+  in the Property Editor.
+2.0: merged
+KoProperty
+- delayed deleting of editors on setting a new property set
+1.0/2.0: ported
+- added additional, internal "property change" signal so it will be always emitted 
+  _before_ the public one; thus e.g. it is legal to reload the property set within 
+  the "property change" handler
+2.0: merged
+
+2006-06-19..23
+Forms
+- ImageBox widget: drop-down button moved to bottom-right, usability improved 
+  (e.g. keyboard handling for popup), db-awareness added, 
+  frame-related properties added, tab/backtab handling fixed,
+  fixed updating position of image when the frame changes
+2.0: merged
+- AutoField widget: added support for Image (Object) type,
+  fixed handling color properties, internal editor's properties are 
+  automatically inherited by the AutoField widget as so-called subproperties
+2.0: merged
+- removed flickering of the Property Pane after dropping a new field 
+  onto the form
+2.0: merged
+
+2006-06-06
+CSV Import Dialog
+- fixed recursion when importing clipboard data 
+1.0/2.0: ported
+- allow to change the delimiter when importing clipboard data 
+1.0/2.0: ported
+Migration
+- improved usability for selecting type of destination database
+  (no mention of SQLite for now)
+2.0: merged
+KexiDB
+- renaming table fields works, table schema is recreated when needed,
+  and just altered in-place when it's enough to do so
+2.0: merged
+Table View
+- cell editor: the contents are marked as changed only when the original 
+  value differs from the current
+1.0/2.0: ported
+Table Designer
+- changing field's description is supported by undo/redo commands 
+  and by alter table actions.
+2.0: merged
+- Internal Debugger: added "Real alter table" button, 
+  for convenience, "save" action now uses the old alter table code
+2.0: merged
+
+2006-06-05
+KoProperty
+- clear all properties and group names when using operator =
+1.0/2.0: ported
+KexiDB
+- SQLite library upgraded from 3.0.7 to 3.2.8 (backward compatible),
+  to get "table renaming" function.
+2.0: merged
+- optimization: "rename table" action now uses "ALTER TABLE RENAME TO" 
+  SQL statement, O(1).
+2.0: merged
+- X-Kexi-DoNotAllowProjectImportingTo KexiDB driver property added, false by defaut
+2.0: merged
+
+2006-06-02
+KexiDB
+- fixed setting database filename when relative path has been provided
+1.0/2.0: ported
+- minor utilities added usable for altering
+2.0: merged
+- table altering improved for SQLite: changing data types will be possible soon
+2.0: merged
+
+2006-05-31
+KoProperty
+- methods in Set::Iterator are now const
+2.0: merged
+- added propertyValues(const Set& set) utility function
+2.0: merged
+
+2006-05-30
+Table View
+- spreadsheet mode: fixed inserting empty rows and deleting rows
+1.0/2.0: ported
+Table Designer
+- improved undo/redo actions: deleting and redoing actions fixed
+2.0: merged
+- added title to the context menu
+2.0: merged
+KexiDB
+- improved alter table machinery; now fields are identified by UIDs 
+  to avoid problems with multiple fields sharing the same name
+2.0: merged
+
+2006-05-29
+KoProperty
+- animate clicking on the group title's area
+2.0: merged
+- added a container widget that can be used to split information into hideable sections 
+2.0: merged
+Form Designer
+- data source pane splitted vertically into two sections for clarity
+2.0: merged
+Table Designer
+- clear PK when selecting non-integer type
+2.0: merged
+
+2006-05-27
+KoProperty
+- Possible fix for crash. Not sure this is the definitive fix for bug 124917.
+  Thanks to Jaime Torres
+2.0: merged
+- group items now have rather pretty appearance styled with KDE style
+2.0: merged
+- fixed groups order, API changed: now it's possible to get order of groups
+2.0: merged
+- sorting disabled when groups are present
+2.0: merged
+- icons can be defined and displayed within the group items
+2.0: merged
+
+2006-05-26
+KexiDB
+- improved handling extended table schema information
+- improved alter table
+2.0: merged
+Table Designer
+- improved undo/redo actions; prepared for reuse
+  in the table-altering machinery of KexiDB
+2.0: merged
+
+2006-05-25
+Forms
+- set the data source readonly if it comes from query
+1.0/2.0: ported
+- "Read only" property is now supported by all data-aware widgets, 
+  and form itself
+2.0: merged
+- background color of the line edit in read-only mode is blended with white
+  to get lighter gray
+2.0: merged
+- accessibility+usability: read only line edit widget now shows the caret
+2.0: merged
+- display field caption as title for editor's context menu
+2.0: merged
+
+~~~~~~~~~~~~~~~~ 2006.1.1 (OOPL, bugfix) ~~~~~~~~~~~~~~~~
+
+2006-05-18
+Table Designer
+- improved support Undo/Redo actions
+2.0: merged
+Forms
+- fixed saving data changes for db-aware checkboxes
+  (fixed by setting StrongFocus policy as default)
+1.0/2.0: ported
+
+~~~~~~~~~~~~~~~~ 1.0.1 bugfix release (with KOffice 1.5.1)  ~~~~~~~~~~~~~~~~
+
+2006-05-17
+Main Window
+- Project Navigator: remove Enter and CTRL+Enter accels, 
+  as these blocks other actions
+- Project Navigator: fix setting focus
+1.0/2.0: ported
+
+2006-05-16
+Migration
+- display error for not found import/export driver
+1.0/2.0: ported
+Startup
+- (temporary) do not propose importing broken SQLite databases files
+  as there is no import driver implemented yet; display error message instead
+1.0/2.0: ported
+Table Designer
+- fixed saving boolean types for table design
+1.0/2.0: ported
+
+2006-05-15
+General
+- -execute command line option added; useful for executing macros, scripts, etc.
+2.0: merged
+Table View
+- small API and source code improvements (s/buf/set)
+2.0: merged
+KoProperty
+- fixed making a deep copy of Set object containing custom properties
+- deep copy of Set object now maintains the original order
+- fixed possible crash on deleting Set object created by copy constructor
+1.0/2.0: ported
+
+2006-05-09
+KoProperty
+- API changed: a few methods are now const; optimization
+2.0: merged
+
+2006-05-08
+KexiDB
+- fixed converting floating-point values to SQL-compatible strings when the number 
+  was provided as string QVariant
+1.0/2.0: ported
+Forms
+- fixed entering floating-point values for locales where ',', not '.' is the fractional point
+1.0/2.0: ported
+Query Designer
+- show error message when switching to other view failed (i18n-safe)
+- just show empty editor when opening a design in text view and there is no sql 
+  statement found in the backend
+1.0/2.0: ported
+MDB Import
+- fixed importing decimal (numeric) values 
+  (by fixing setting fractional point's position and adding negative sign when needed)
+1.0: ported
+
+2006-05-05
+Table Designer
+- Undo/Redo actions added and integrated with table altering 
+Internal
+- "AlterTable" tab added to the "Kexi Internal Debugger" window
+
+~~~~~~~~~~~~~~~~ 2006.1 (OOPL) ~~~~~~~~~~~~~~~~
+
+2006-05-04
+Main Window
+- fixed crash when double (or single, depending on the settings) clicking 
+  on the empty area of the Project Browser
+1.0/2.0: ported
+Query Designer
+- fix saving design changes while in Data View
+1.0/2.0: ported
+
+2006-05-02
+CSV Import Dialog
+- fixed importing floating-point values where there are integer 
+  and floating-point values mixed
+1.0/2.0: ported
+MDB Import
+- fixed importing floating-point or decimal values (there is still a bug in mdbtools 
+  with fetching decimal values)
+KexiDB
+- fixed building SQL INSERT statements for "prepared statement"
+1.0/2.0: ported
+
+2006-05-01
+KexiDB
+- ported to Qt4; tests/newapi works
+
+2006-04-28
+KexiDB
+- SQLite3 driver: report error when closing database failed
+1.0/2.0: ported
+Core
+- KexiProject: report error when closing database failed
+Query Data View
+- properly destroy cursor on view removing; this also fixes the problem
+  with compacting Kexi database when it cannot be reopened read/write when 
+  there was opened view with query data because of db cursor blocking the database
+- properly close as soon as the data is fetched (temporary solution)
+General
+- "Kexi Internal Debugger" introduced to help in Kexi development; 
+  "showKexiDBDebuger" in [General] should be set to true and KEXI_DEBUG_GUI defined
+  to use this.
+Form Designer
+- fixed possible crash on closing form
+1.0/2.0: ported
+
+2006-04-27
+KexiDB
+- "visibleDecimalPlaces" property added for table fields of type floating point 
+  (will be added for decimal and currency too); "Auto" state is supported 
+  as default so only meaningful fractional digits are be displayed
+Table Designer
+- "visibleDecimalPlaces" property supported for floating point types
+Table View
+- "visibleDecimalPlaces" property supported when displaying and editing 
+  floating point values
+MDB Import
+- on importing table rows: report failure when inserting row failed
+
+2006-04-25
+CSV Import
+- simplify whitespace of text in cells (for preview only)
+- fixed delimiter detecting
+- priority in delimiter detection changed: now ";" has priority over ","
+1.0/2.0: ported
+Form Designer
+- hide minimumSize and maximumSize widget properties
+1.0/2.0: ported
+
+2006-04-13
+Kexi 2.0
+- merged changes since revision 523723
+KexiDB
+- fixed loading length of text fields within table schema
+0.9/1.0/2.0: ported
 
 2006-04-12
 CSV Import
@@ -24,7 +1350,7 @@ CSV Import
   by setting ImportExport/MaximumBytesForPreviewInImportDialog option in kexirc
 1.0/2.0: ported
 - display rows number on the top of the window
-2.0: ported
+2.0: merged
 
 2006-04-11
 Forms Designer
@@ -44,7 +1370,7 @@ KexiDB
 Table Designer
 - More intrusive warning when altering table design
 1.0: ported (except the message)
-2.0: ported
+2.0: merged
 Forms Designer
 - fixed possible crash when switching to data view mode unbound autofield widgets
 - while in data mode, do not display "(unbound)" text for unbound autofield widgets
@@ -1112,7 +2438,7 @@ Table View
   (default shortcut is overriden)
 Table Designer
 - on switching to design mode, row buffers are initialized after old buffers 
-  are cleared, not before (this fixes bug with disappearing propery buffer)
+  are cleared, not before (this fixes bug with disappearing property buffer)
 Form Designer
 - fix for setting background (gradient widget cleared background color value)
 
@@ -2194,8 +3520,8 @@ Table Designer
 - some rules added: e.g. setting 'indexed' property to false clears 'primaryKey';
   setting 'primaryKey' to true sets 'indexed', 'unique', etc. to true
 Core
-- KexiPropery, KexiProperyBuffer: some operators added, operator [QCString] now
-  returns KexiPropery, convenient operator = (QVariant) added; KexiPropery::null added
+- KexiProperty, KexiPropertyBuffer: some operators added, operator [QCString] now
+  returns KexiProperty, convenient operator = (QVariant) added; KexiProperty::null added
 TODO: KexiProperty: add support for positive integers, "Auto" values e.g. for integer ==0
  like defined in QSpinBox. Reuse this in PropIntSpinBox.
 
@@ -2240,7 +3566,7 @@ KexiDB
 - kexi__query* tables removed (to complicated, not needed since we 
   are primarily using kexi__objectdata and xml)
 - Driver::IgnoreTransactions flag added: transactions are silently bypassed,
-  (temporary, useful for current mysql driver implemntation)
+  (temporary, useful for current mysql driver implementation)
 - Query Schema: QueryFieldInfo introduced:
   "select a as one, a as two from table" is now possible
   (two different aliases for the same field); 
@@ -3480,7 +4806,7 @@ e.g. for KexiDialogBase.
 2004-01-03
 - KexiDB, core:
 	-ConnectionData and KexiProjectData now inherit QObject 
-	 (useful for QPointer, sharing and for notifications about changes)
+	 (useful for QGuardedPtr, sharing and for notifications about changes)
 	-project_caption, project_desc properties are now created and stored in projects
 	-some utility functions added in kexidb/utils.cpp
 - KexiMainWindow: application's caption now also contain current project's caption (or name)
@@ -3976,7 +5302,7 @@ TODO: update on lostfocus
 - KexiDB::Object::debugError() added for convenience
 - Object: serverErrorMsg(), serverResult(), serverResultName(),
 	drv_clearServerResult() added
-- virtual quint64 Connection::drv_lastInsertRowID() added - returns unique
+- virtual Q_ULLONG Connection::drv_lastInsertRowID() added - returns unique
    identifier of last inserted row. 
 - DriverBehaviour::AUTO_INCREMENT_FIELD_OPTION added; autoinc field's option is now 
 	used in "CREATE TABLE" statement building; bool SPECIAL_AUTO_INCREMENT_DEF added
@@ -4140,7 +5466,7 @@ TODO: add
   - simplification: now bof() is computed as m_at==0
   - we are internally counting records from 1 and externally from 0
      (what is visible using at()).
-  - m_at and thus at() has now qint64 type
+  - m_at and thus at() has now Q_LLONG type
 
 2003-09-14
 - KexiDB::Object::setErrorMsg renamed to setError
@@ -4289,7 +5615,7 @@ TODO: add drag from browser
 	- moving TableViews back from outside of scroll view area automatically shrinks scroll view's 
 	area to smallest possible size
 	- field that we drag over now is highlighted
-TODO: fix K3ListView::viewportPaintEvent() like in KexiRelationViewTable::drawItemHighlighter()
+TODO: fix KListView::viewportPaintEvent() like in KexiRelationViewTable::drawItemHighlighter()
       and commit to cvs (kdeui)
 - KexiRelationViewTableContainer got now focus/unfocus/z-order functionality. Colors of table headers 
 	are consistent with focusing and OS settings
@@ -4320,7 +5646,7 @@ TODO: like above: "Print" and "Print to"
 
 2003-07-18
 - " " prepended to Project Browsers' list items' texts for better look (maybe add this feature 
-	to K3ListView or make its generic subclass?)
+	to KListView or make its generic subclass?)
 - Some fixes with text positioning in tableview cells: float and date type y-offset, 
 	date type editor frames removed
 TODO: maybe optionally use KDateWidget (this needs to extend and improve this class)?
@@ -4531,3 +5857,6 @@ dock windows visiblity fixed, simplified code
 2003-03-28
 - first touch on Kexi sources for porting
 
+2002-06-23, Sunday, 00:20:36 (Lucijan)
+- First Kexi commit, SVN revision #162554
+  details: http://websvn.kde.org/trunk/koffice/kexi/?rev=162554

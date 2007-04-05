@@ -31,12 +31,12 @@ class KEXICORE_EXPORT KexiStartupData
 {
 	public:
 		typedef enum Action {
-			DoNothing = 0,
-			CreateBlankProject = 1,
-			UseTemplate = 2,
-			OpenProject = 3,
-			ImportProject = 4,
-			Exit = 5
+			DoNothing,
+			CreateBlankProject,
+			CreateFromTemplate,
+			OpenProject,
+			ImportProject,
+			Exit
 		};
 
 		/*! Data required to perform import action. 

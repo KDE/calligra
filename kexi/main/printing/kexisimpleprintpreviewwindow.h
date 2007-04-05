@@ -73,7 +73,8 @@ class KexiSimplePrintPreviewWindow : public QWidget
 		KexiSimplePrintingEngine &m_engine;
 		const KexiSimplePrintingSettings& m_settings;
 		KToolBar *m_toolbar, *m_navToolbar;
-		int m_pageNumber;//, m_pagesCount;
+		int m_pageNumber;
+		int m_pagesCount; //!< needed to know that pages could has been changed
 		int m_idFirst, m_idLast, m_idPrevious, m_idNext, m_idPageNumberLabel;
 		KexiSimplePrintPreviewScrollView *m_scrollView;
 		KexiSimplePrintPreviewView *m_view;

@@ -1,7 +1,5 @@
-//Added by qt3to4:
-#include <Q3PtrList>
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,6 +33,7 @@ class KexiSimplePrintingSettings;
 #include <q3paintdevicemetrics.h>
 #include <qfontmetrics.h>
 #include <qfont.h>
+#include <Q3PtrList>
 
 //! @short Settings data for simple printing engine.
 class KexiSimplePrintingSettings
@@ -81,7 +80,7 @@ class KexiSimplePrintingEngine : public QObject
 		bool eof() const { return m_eof; }
 
 		//! \return number of pages. Can be used after calculatePagesCount().
-		uint pagesCount() { return m_pagesCount; }
+		uint pagesCount() const { return m_pagesCount; }
 
 		//! \return number of painted pages so far. 
 		//! If eof() is true, this number is equal to total page count.
@@ -95,15 +94,16 @@ class KexiSimplePrintingEngine : public QObject
 
 	protected:
 		void paintRecord(QPainter& painter, KexiTableItem *item, 
-			int cellMargin, uint &y, uint paintedRows, bool paint);
+			int cellMargin, double &y, uint paintedRows, bool paint, bool printing);
 
 		const KexiSimplePrintingSettings* m_settings;
 
 //		QPainter* m_painter;
 		QFont m_mainFont, m_headerFont;
 		Q3PaintDeviceMetrics m_pdm;
-		int m_dpiX, m_dpiY;
+		double m_dpiX, m_dpiY;
 		uint m_pageWidth, m_pageHeight;
+		uint m_SCALE;
 		//QFontMetrics m_headerFM, m_mainFM;
 		KexiDB::Cursor *m_cursor;
 		KexiTableViewData *m_data;
@@ -121,10 +121,10 @@ class KexiSimplePrintingEngine : public QObject
 		uint m_pagesCount;
 		bool m_eof;
 		bool m_paintInitialized; //!< used by paintPage()
-		double leftMargin;
-		double rightMargin;
-		double topMargin;
-		double bottomMargin;
+		double m_leftMargin;
+		double m_rightMargin;
+		double m_topMargin;
+		double m_bottomMargin;
 		double m_fx, m_fy;
 };
 

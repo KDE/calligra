@@ -13,7 +13,10 @@ set(keximain_LIB_SRCS
    kexistatusbar.cpp 
    kexinamewidget.cpp 
    kexinamedialog.cpp 
-   kexinewstuff.cpp )
+   kexinewstuff.cpp
+   kexifinddialog.cpp
+   kexifinddialogbase.ui
+)
 
 kde4_automoc(${keximain_LIB_SRCS})
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +34,7 @@
 class QColor;
 class QMetaProperty;
 
-//! General Utils
+//! @short General Utils
 namespace KexiUtils
 {
 	//! \return true if \a o has parent \a par.
@@ -60,23 +60,24 @@ namespace KexiUtils
 
 	//! Const version of findParent()
 	template<class type>
-	inline type findParentConst(const QObject* const o, const char* className)
+	inline const type findParentConst(const QObject* const o, const char* className)
 	{
 		const QObject * obj = o;
 		if (!obj || !className || className[0]=='\0')
 			return 0;
 		while ( ((obj=obj->parent())) && !obj->inherits(className) )
 			;
-		return qobject_cast<type>(obj);
+		return qobject_cast<const type>(obj);
 	}
 
-	//! \return first found child of \a o, that inherit \a className.
-	//! If \a objName is 0 (the default), all object names match. 
+	/*! \return first found child of \a o, inheriting \a className.
+	 If objName is 0 (the default), all object names match. 
+	 Returned pointer type is casted. */
 	KEXIUTILS_EXPORT QObject* findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName);
 
-	//! \return first found child of \a o, that inherit \a className.
-	//! If \a objName is 0 (the default), all object names match. 
-	//! Returned pointer type is casted.
+	/*! \return first found child of \a o, that inherit \a className.
+	 If \a objName is 0 (the default), all object names match. 
+	 Returned pointer type is casted. */
 	template<class type>
 	inline type findFirstChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName = 0)
 	{
@@ -228,7 +229,7 @@ namespace KexiUtils
 
 	/*! \return a map deserialized from a byte array \a array.
 	 \a array need to contain data previously serialized using KexiUtils::serializeMap(). */
-	KEXIUTILS_EXPORT QMap<QString,QString> deserializeMap( QByteArray& array);
+	KEXIUTILS_EXPORT QMap<QString,QString> deserializeMap(const QByteArray& array);
 
 	/*! \return a map deserialized from \a string.
 	 \a string need to contain data previously serialized using KexiUtils::serializeMap(). */
@@ -289,6 +290,12 @@ namespace KexiUtils
 	{
 		return static_cast<type*>( stringToPtrInternal(str, sizeof(type*)) );
 	}
+
+	//! Sets focus for widget \a widget with reason \a reason.
+	KEXIUTILS_EXPORT void setFocusWithReason(QWidget* widget, QFocusEvent::Reason reason);
+
+	//! Unsets focus for widget \a widget with reason \a reason.
+	KEXIUTILS_EXPORT void unsetFocusWithReason(QWidget* widget, QFocusEvent::Reason reason);
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here

@@ -34,7 +34,11 @@ set(kexicore_LIB_SRCS
    kexievents.cpp 
    kexidbshortcutfile.cpp 
    kexiblobbuffer.cpp 
-   kexistaticpart.cpp )
+   kexistaticpart.cpp
+   kexitabledesignerinterface.cpp
+   kexisearchandreplaceiface.cpp
+   kexitemplateloader.cpp
+)
 
 kde4_automoc(${kexicore_LIB_SRCS})
 

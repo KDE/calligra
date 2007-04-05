@@ -20,6 +20,8 @@
 #ifndef _TRISTATE_TYPE_H_
 #define _TRISTATE_TYPE_H_
 
+#include <qstring.h>
+
 /**
  * \e cancelled value, in most cases usable if there is a need for returning 
  * \e cancelled value explicitly. Example use:

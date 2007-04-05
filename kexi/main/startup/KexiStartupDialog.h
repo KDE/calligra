@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,27 +33,7 @@
 #include <QEvent>
 
 #include <kexidb/connectiondata.h>
-
-class KTextBrowser;
-
-/*! Helper class for displaying templates set with description. */
-class KEXIMAIN_EXPORT TemplatesPage : public QSplitter
-{
-	Q_OBJECT
-	
-	public:
-		TemplatesPage( Qt::Orientation o, QWidget * parent = 0, const char * name = 0 );
-		~TemplatesPage(); 
-		void addItem(const QString& key, const QString& name, 
-			const QString& description, const QPixmap& icon);
-	private slots:
-		void itemClicked(Q3IconViewItem *item);
-	
-	public:
-		K3IconView *templates;
-		KTextBrowser *info;
-};
-
+#include <core/kexiprojectdata.h>
 
 class KexiStartupDialogPrivate;
 class KexiProjectData;
@@ -74,11 +54,21 @@ public:
 	/*! The Dialog returns one of these values depending 
 	 on the input of the user.
 	 CancelResult The user pressed 'Cancel'
-	 TemplateResult The user selected a template
+	 CreateBlankResult The user selected a template
+	 CreateFromTemplateResult The user selected a template
+	 ImportResult The user selected a template
 	 OpenExistingResult The user has chosen an existing connection or db file
 	 OpenRecentResult The user selected one of recently used databases
 	 */
-	enum Result { CancelResult=0, TemplateResult=1, OpenExistingResult=2, OpenRecentResult=3 };
+	enum Result { 
+		CancelResult,             //!< The user has pressed 'Cancel'
+		CreateBlankResult,        //!< The user has selected a template
+		CreateFromTemplateResult, //!< The user has selected a template to be used for creating a new db
+		ImportResult,             //!< The user has chosen to import db
+		OpenExistingResult,       //!< The user has chosen an existing connection or db file
+		OpenRecentResult          //!< The user has selected one of recently used databases
+	};
+
 	/*!
 	 To configure the dialog you have to use this enum 
 	  (any !=0 or'ed value is ok)
@@ -120,23 +110,22 @@ public:
 	 \return one of Result values. Use this after dialog is closed. */
 	int result() const;
 
-	/*! \return key string of selected database template if result() is TemplateResult,
-		otherwise null string. The key is of form: "<group>/<name>",
-		for example: "business/address_book".
-		For blank databases "blank" key is used - then additional information 
-		about selected connection should be used with appropriate methods. */
-	QString selectedTemplateKey() const;
-
 	/*! \return data of selected Kexi project (if "Open Recent" tab was selected).
 		Returns NULL if no selection has been made or other tab was selected.
 	*/
 	KexiProjectData* selectedProjectData() const;
 	
 	/*! \return name of selected Kexi project file 
-		(if "Open Existing" tab was selected and this file was clicked).
+		(if result() == OpenExistingResult)
+		or name of template file to be used for creating a new database.
+		(if result() == CreateFromTemplateResult).
 		Returns empty string if no such selection has been made or other tab was selected.
 	*/
-	QString selectedExistingFile() const;
+	QString selectedFileName() const;
+
+	/*! \return "autoopen" objects defined for selected template. 
+	 Only makes sense if template was used. */
+	Q3ValueList<KexiProjectData::ObjectInfo> autoopenObjects() const;
 
 	/*! \return a pointer to selected Kexi connection data.
 		(if "Open Existing" tab was selected and this connection data was clicked).
@@ -155,16 +144,18 @@ protected slots:
 	virtual void slotOk();
 	
 	//! slot activated when one of page in templates window is shown
-	void templatesPageShown(QWidget *page);
-
+	void slotPageShown(QWidget *page);
+/*
 	//! Any icon view item has been executed (dblclicked)
 	void templateItemExecuted(Q3IconViewItem *item);
 
 	//! Any icon view item has been selected
-	void templateItemSelected(Q3IconViewItem *item);
+	void templateItemSelected(QIconViewItem *item);*/
 
 	//! Any tab has been selected
 	void tabShown(QWidget *w);
+
+	void templateSelected(const QString& fileName);
 
 	//! helper
 	void recentProjectItemExecuted(KexiProjectData *data);
@@ -188,7 +179,7 @@ private:
 	void setupPageOpenRecent();
 	
 	//! used internally on accepting templates selection
-	void updateSelectedTemplateKeyInfo();
+//	void updateSelectedTemplateKeyInfo();
 
 	KexiStartupDialogPrivate *d;
 };

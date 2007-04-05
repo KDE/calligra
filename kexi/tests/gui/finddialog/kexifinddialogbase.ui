@@ -208,9 +208,6 @@
             <property name="text">
                 <string>Prompt on replace</string>
             </property>
-            <property name="accel">
-                <string></string>
-            </property>
             <property name="checked">
                 <bool>true</bool>
             </property>
@@ -254,9 +251,6 @@
                     </property>
                     <property name="text">
                         <string>Close</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
                     </property>
                 </widget>
                 <widget class="KPushButton">
