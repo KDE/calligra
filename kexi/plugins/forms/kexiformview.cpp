@@ -40,6 +40,7 @@
 #include <formeditor/widgetpropertyset.h>
 #include <formeditor/commands.h>
 #include <formeditor/widgetwithsubpropertiesinterface.h>
+#include <formeditor/objecttree.h>
 
 #include <kexi.h>
 #include <kexidialogbase.h>
@@ -53,7 +54,7 @@
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
 #include <widget/kexipropertyeditorview.h>
-#include <formeditor/objecttree.h>
+#include <kexiutils/utils.h>
 
 #include <koproperty/set.h>
 #include <koproperty/property.h>
@@ -374,6 +375,24 @@ void KexiFormView::updateValuesForSubproperties()
 	}
 }
 
+//! Used in KexiFormView::loadForm()
+static void setUnsavedBLOBIdsForDataViewMode( 
+	QWidget* widget, const QMap<Q3CString, KexiBLOBBuffer::Id_t>& unsavedLocalBLOBsByName)
+{
+	if (-1 != widget->metaObject()->findProperty("pixmapId")) {
+		const KexiBLOBBuffer::Id_t blobID = unsavedLocalBLOBsByName[ widget->name() ];
+		if (blobID > 0)
+			widget->setProperty("pixmapId", (uint /* KexiBLOBBuffer::Id_t is unsafe and unsupported by QVariant - will be fixed in Qt4*/)blobID);
+	}
+	const QObjectList *list = widget->children();
+	if (!list)
+		return;
+	for (QObjectListIterator it(*list); it.current(); ++it) {
+		if (dynamic_cast<QWidget*>(it.current()))
+			setUnsavedBLOBIdsForDataViewMode(dynamic_cast<QWidget*>(it.current()), unsavedLocalBLOBsByName);
+	}
+}
+
 void
 KexiFormView::loadForm()
 {
@@ -384,6 +403,7 @@ KexiFormView::loadForm()
 	if(viewMode()==Kexi::DataViewMode && !tempData()->tempForm.isNull() )
 	{
 		KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, tempData()->tempForm);
+		setUnsavedBLOBIdsForDataViewMode( m_dbform, tempData()->unsavedLocalBLOBsByName );
 		updateAutoFieldsDataSource();
 		updateValuesForSubproperties();
 		return;
@@ -439,6 +459,16 @@ KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 		KexiFormPart::TempData* temp = tempData();
 		if (!KFormDesigner::FormIO::saveFormToString(form(), temp->tempForm))
 			return false;
+
+		//collect blobs from design mode by name for use in data view mode
+		temp->unsavedLocalBLOBsByName.clear();
+		for (QMapConstIterator<QWidget*, KexiBLOBBuffer::Id_t> it = temp->unsavedLocalBLOBs.constBegin(); 
+			it!=temp->unsavedLocalBLOBs.constEnd(); ++it)
+		{
+			if (!it.key())
+				continue;
+			temp->unsavedLocalBLOBsByName.insert( it.key()->name(), it.data() );
+		}
 	}
 
 	return true;
@@ -526,7 +556,7 @@ KexiFormView::afterSwitchFrom(int mode)
 				it.toFirst();
 
 			it.current()->setFocus();
-			SET_FOCUS_USING_REASON(it.current(), QFocusEvent::Tab);
+			KexiUtils::setFocusWithReason(it.current(), QFocusEvent::Tab);
 			m_setFocusInternalOnce = it.current();
 		}
 
@@ -733,71 +763,61 @@ KexiFormView::storeData(bool dontAsk)
 	
 	KexiDB::PreparedStatement::Ptr st = conn->prepareStatement(
 		KexiDB::PreparedStatement::InsertStatement, *blobsFieldsWithoutID);
-//#if 0 
-////! @todo reenable when all drivers get PreparedStatement support
 	if (!st) {
 		delete blobsFieldsWithoutID;
 		//! @todo show message 
 		return false;
 	}
-//#endif
 	KexiBLOBBuffer *blobBuf = KexiBLOBBuffer::self();
-	for (QMapConstIterator<QWidget*, KexiBLOBBuffer::Id_t> it = m_unsavedLocalBLOBs.constBegin(); 
-		it!=m_unsavedLocalBLOBs.constEnd(); ++it)
-	{
-		if (!it.key()) {
-			kexipluginswarn << "KexiFormView::storeData(): it.key()==0 !" << endl;
-			continue;
-		}
-		kexipluginsdbg << "name=" << it.key()->name() << " dataID=" << it.data() << endl;
-		KexiBLOBBuffer::Handle h( blobBuf->objectForId(it.data(), /*!stored*/false) );
-		if (!h)
-			continue; //no BLOB assigned
+	KexiFormView *designFormView 
+		= dynamic_cast<KexiFormView*>( parentDialog()->viewForMode(Kexi::DesignViewMode) );
+	if (designFormView) {
+		for (QMapConstIterator<QWidget*, KexiBLOBBuffer::Id_t> it = tempData()->unsavedLocalBLOBs.constBegin(); 
+			it!=tempData()->unsavedLocalBLOBs.constEnd(); ++it)
+		{
+			if (!it.key()) {
+				kexipluginswarn << "KexiFormView::storeData(): it.key()==0 !" << endl;
+				continue;
+			}
+			kexipluginsdbg << "name=" << it.key()->name() << " dataID=" << it.data() << endl;
+			KexiBLOBBuffer::Handle h( blobBuf->objectForId(it.data(), /*!stored*/false) );
+			if (!h)
+				continue; //no BLOB assigned
 
-		QString originalFileName(h.originalFileName());
-		QFileInfo fi(originalFileName);
-		QString caption(fi.baseName().replace('_', " ").simplified());
-////////
+			QString originalFileName(h.originalFileName());
+			QFileInfo fi(originalFileName);
+			QString caption(fi.baseName().replace('_', " ").simplified());
 
-//		KexiDB::PreparedStatement st(KexiDB::PreparedStatement::InsertStatement, *conn, *blobsTable);
-		if (st) {
-			*st /* << NO, (pgsql doesn't support this):QVariant()*/ /*id*/ 
-				<< h.data() << originalFileName << caption 
-				<< h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
-			if (!st->execute()) {
-				delete blobsFieldsWithoutID;
-				kexipluginsdbg << " execute error" << endl;
+			if (st) {
+				*st /* << NO, (pgsql doesn't support this):QVariant()*/ /*id*/ 
+					<< h.data() << originalFileName << caption 
+					<< h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
+				if (!st->execute()) {
+					delete blobsFieldsWithoutID;
+					kexipluginsdbg << " execute error" << endl;
+					return false;
+				}
+			}
+			delete blobsFieldsWithoutID;
+			blobsFieldsWithoutID=0;
+			const quint64 storedBLOBID = conn->lastInsertedAutoIncValue("o_id", "kexi__blobs");
+			if ((quint64)-1 == storedBLOBID) {
+	//! @todo show message?
 				return false;
 			}
+			kexipluginsdbg << " storedDataID=" << storedBLOBID << endl;
+			h.setStoredWidthID((KexiBLOBBuffer::Id_t /*unsafe - will be fixed in Qt4*/)storedBLOBID);
+			//set widget's internal property so it can be saved...
+			const QVariant oldStoredPixmapId( it.key()->property("storedPixmapId") );
+			it.key()->setProperty("storedPixmapId", 
+				QVariant((uint /* KexiBLOBBuffer::Id_t is unsafe and unsupported by QVariant - will be fixed in Qt4*/)storedBLOBID));
+			KFormDesigner::ObjectTreeItem *widgetItem = designFormView->form()->objectTree()->lookup(it.key()->name()); //form()->objectTree()->lookup(it.key()->name());
+			if (widgetItem)
+				widgetItem->addModifiedProperty( "storedPixmapId", oldStoredPixmapId );
+			else
+				kexipluginswarn << "KexiFormView::storeData(): no '" << widgetItem->name() << "' widget found within a form" << endl;
 		}
-///////
-#if 0
-		if (!conn->insertRecord(*blobsFieldsWithoutID, h.data(), originalFileName, caption, h.mimeType())) {
-			delete blobsFieldsWithoutID;
-//! @todo show message?
-			return false;
-		}
-#endif
-		delete blobsFieldsWithoutID;
-		blobsFieldsWithoutID=0;
-		const quint64 storedBLOBID = conn->lastInsertedAutoIncValue("o_id", "kexi__blobs");
-		if ((quint64)-1 == storedBLOBID) {
-//! @todo show message?
-			return false;
-		}
-		kexipluginsdbg << " storedDataID=" << storedBLOBID << endl;
-		h.setStoredWidthID((KexiBLOBBuffer::Id_t /*unsafe - will be fixed in Qt4*/)storedBLOBID);
-		//set widget's internal property so it can be saved...
-		const QVariant oldStoredPixmapId( it.key()->property("storedPixmapId") );
-		it.key()->setProperty("storedPixmapId", 
-			QVariant((uint /* KexiBLOBBuffer::Id_t is unsafe and unsupported by QVariant - will be fixed in Qt4*/)storedBLOBID));
-		KFormDesigner::ObjectTreeItem *widgetItem = form()->objectTree()->lookup(it.key()->name());
-		if (widgetItem)
-			widgetItem->addModifiedProperty( "storedPixmapId", oldStoredPixmapId );
-		else
-			kexipluginswarn << "KexiFormView::storeData(): no '" << widgetItem->name() << "' widget found within a form" << endl;
 	}
-//TODO: forall it.key()->setProperty(
 
 	//-- now, save form's XML
 	QString data;
@@ -807,7 +827,7 @@ KexiFormView::storeData(bool dontAsk)
 		return false;
 
 	//all blobs are now saved
-	m_unsavedLocalBLOBs.clear();
+	tempData()->unsavedLocalBLOBs.clear();
 
 	tempData()->tempForm.clear();
 	return true;
@@ -985,7 +1005,7 @@ KexiFormView::setFocusInternal()
 		if (m_dbform->focusWidget()) {
 			//better-looking focus
 			if (m_setFocusInternalOnce) {
-				SET_FOCUS_USING_REASON(m_setFocusInternalOnce, QFocusEvent::Other);//Tab);
+				KexiUtils::setFocusWithReason(m_setFocusInternalOnce, QFocusEvent::Other);//Tab);
 				m_setFocusInternalOnce = 0;
 			}
 			else {
@@ -1223,9 +1243,9 @@ KexiFormView::setUnsavedLocalBLOB(QWidget *widget, KexiBLOBBuffer::Id_t id)
 {
 //! @todo if there already was data assigned, remember it should be dereferenced
 	if (id==0) 
-		m_unsavedLocalBLOBs.remove(widget);
+		tempData()->unsavedLocalBLOBs.remove(widget);
 	else
-		m_unsavedLocalBLOBs.insert(widget, id);
+		tempData()->unsavedLocalBLOBs.insert(widget, id);
 }
 
 /*

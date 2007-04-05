@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,7 +20,10 @@
 
 #include <qcursor.h>
 #include <qobject.h>
+#include <qtabwidget.h>
+#include <qtabbar.h>
 #include <kdebug.h>
+#include <kexiutils/utils.h>
 
 #include "form.h"
 #include "objecttree.h"
@@ -27,7 +31,6 @@
 
 using namespace KFormDesigner;
 
-/// Helper function to clear a list (by removing all children)
 void
 KFormDesigner::removeChildrenFromList(WidgetList &list)
 {
@@ -46,7 +49,6 @@ KFormDesigner::removeChildrenFromList(WidgetList &list)
 	}
 }
 
-//// Helper functions for event filtering on composed widgets
 void
 KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
 {
@@ -106,3 +108,69 @@ KFormDesigner::getSizeFromChildren(QWidget *w, const char *inheritClass)
 	return QSize(tmpw, tmph) + QSize(10, 10);
 }
 
+// -----------------
+
+HorWidgetList::HorWidgetList(QWidget *topLevelWidget)
+	: WidgetList()
+	, m_topLevelWidget(topLevelWidget)
+{
+}
+
+HorWidgetList::~HorWidgetList()
+{
+}
+
+int HorWidgetList::compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+{
+	QWidget *w1 = static_cast<QWidget*>(item1);
+	QWidget *w2 = static_cast<QWidget*>(item2);
+	return w1->mapTo(m_topLevelWidget, QPoint(0,0)).x() - w2->mapTo(m_topLevelWidget, QPoint(0,0)).x();
+}
+
+// -----------------
+
+VerWidgetList::VerWidgetList(QWidget *topLevelWidget)
+	: WidgetList()
+	, m_topLevelWidget(topLevelWidget)
+{
+}
+
+VerWidgetList::~VerWidgetList()
+{
+}
+
+int VerWidgetList::compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+{
+	QWidget *w1 = static_cast<QWidget*>(item1);
+	QWidget *w2 = static_cast<QWidget*>(item2);
+
+	int y1, y2;
+	QObject *page1 = 0;
+	TabWidget *tw1 = KFormDesigner::findParent<KFormDesigner::TabWidget>(w1, "KFormDesigner::TabWidget", page1);
+	if (tw1) // special case
+		y1 = w1->mapTo(m_topLevelWidget, QPoint(0,0)).y() + tw1->tabBarHeight() -2 -2;
+	else
+		y1 = w1->mapTo(m_topLevelWidget, QPoint(0,0)).y();
+
+	QObject *page2 = 0;
+	TabWidget *tw2 = KFormDesigner::findParent<KFormDesigner::TabWidget>(w2, "KFormDesigner::TabWidget", page2);
+	if (tw1 && tw2 && tw1 == tw2 && page1 != page2) {
+		// this sorts widgets by tabs there're put in
+		return tw1->indexOf(static_cast<QWidget*>(page1)) - tw2->indexOf(static_cast<QWidget*>(page2));
+	}
+
+	if (tw2) // special case
+		y2 = w2->mapTo(m_topLevelWidget, QPoint(0,0)).y() + tw2->tabBarHeight() -2 -2;
+	else
+		y2 = w2->mapTo(m_topLevelWidget, QPoint(0,0)).y();
+	
+	kDebug() << w1->name() << ": " << y1 << " " 
+		<< " | " << w2->name() << ": " << y2 << endl;
+
+
+	//kDebug() << w1->name() << ": " << w1->mapTo(m_topLevelWidget, QPoint(0,0)) << " " << w1->y()
+		//<< " | " << w2->name() << ":" /*<< w2->mapFrom(m_topLevelWidget, QPoint(0,w2->y()))*/ << " " << w2->y() << endl;
+	return y1 - y2;
+}
+
+#include "utils.moc"

@@ -311,6 +311,7 @@ if ( m_mode == Clipboard )
 	m_timeRegExp1 = QRegExp("(\\d{1,2}):(\\d{1,2}):(\\d{1,2})");
 	m_timeRegExp2 = QRegExp("(\\d{1,2}):(\\d{1,2})");
 	m_fpNumberRegExp = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+");
+	QString caption( i18n("Open CSV Data File") );
 
 	if (m_mode == File) {
 		QStringList mimetypes( csvMimeTypes() );
@@ -320,7 +321,7 @@ if ( m_mode == Clipboard )
 		m_fname = Q3FileDialog::getOpenFileName( 
 			KFileDialog::getStartURL(":CSVImportExport", recentDir).path(),
 			KexiUtils::fileDialogFilterStrings(mimetypes, false),
-			page, "KexiCSVImportDialog", i18n("Open CSV Data File"));
+			page, "KexiCSVImportDialog", caption);
 		if ( !m_fname.isEmpty() ) {
 			//save last visited path
 			KUrl url;
@@ -329,7 +330,8 @@ if ( m_mode == Clipboard )
 				KRecentDirs::add(":CSVImportExport", url.directory());
 		}
 #else
-		m_fname = KFileDialog::getOpenFileName(":CSVImportExport", mimetypes.join(" "), this);
+		m_fname = KFileDialog::getOpenFileName(":CSVImportExport", mimetypes.join(" "), 
+			this, caption);
 #endif
 		//cancel action !
 		if ( m_fname.isEmpty() )

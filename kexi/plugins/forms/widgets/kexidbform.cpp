@@ -37,12 +37,15 @@
 #include <kdebug.h>
 
 #include "kexidbform.h"
+#include "kexiformpart.h"
 #include "kexiformscrollview.h"
 
 #include <formeditor/objecttree.h>
 #include <formeditor/formmanager.h> 
+#include <formeditor/widgetlibrary.h>
 #include <widget/tableview/kexidataawareobjectiface.h>
 #include <widget/kexiscrollview.h>
+#include <kexiutils/utils.h>
 
 //! @internal
 class KexiDBForm::Private
@@ -402,12 +405,41 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 		if (preview()) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 			const int key = ke->key();
-			const bool tab = ke->state() == Qt::NoButton && key == Qt::Key_Tab;
-			const bool backtab = ((ke->state() == Qt::NoButton || ke->state() == Qt::ShiftButton) && key == Qt::Key_Backtab)
+			bool tab = ke->state() == Qt::NoButton && key == Qt::Key_Tab;
+			bool backtab = ((ke->state() == Qt::NoButton || ke->state() == Qt::ShiftButton) && key == Qt::Key_Backtab)
 				|| (ke->state() == Qt::ShiftButton && key == Qt::Key_Tab);
 			QObject *o = watched; //focusWidget();
 			QWidget* realWidget = dynamic_cast<QWidget*>(o); //will beused below (for tab/backtab handling)
+
 			if (!tab && !backtab) {
+				//for buttons, left/up and right/down keys act like tab/backtab (see qbutton.cpp)
+				if (realWidget->inherits("QButton")) {
+					if (ke->state() == Qt::NoButton && (key == Qt::Key_Right || key == Qt::Key_Down))
+						tab = true;
+					else if (ke->state() == Qt::NoButton && (key == Qt::Key_Left || key == Qt::Key_Up))
+						backtab = true;
+				}
+			}
+
+			if (!tab && !backtab) {
+				// allow the editor widget to grab the key press event
+				while (true) {
+					if (!o || o == dynamic_cast<QObject*>(d->dataAwareObject))
+						break;
+					if (dynamic_cast<KexiFormDataItemInterface*>(o)) {
+						realWidget = dynamic_cast<QWidget*>(o); //will be used below
+						if (realWidget == this) //we have encountered 'this' form surface, give up
+							return false;
+						KexiFormDataItemInterface* dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(o);
+						while (dataItemIface) {
+							if (dataItemIface->keyPressed(ke))
+								return false;
+							dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(dataItemIface->parentInterface()); //try in parent, e.g. in combobox
+						}
+						break;
+					}
+					o = o->parent();
+				}
 				// try to handle global shortcuts at the KexiDataAwareObjectInterface 
 				// level (e.g. for "next record" action)
 				int curRow = d->dataAwareObject->currentRow();
@@ -449,20 +481,6 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					d->dataAwareObject->deleteCurrentRow();
 					return true;
 				}
-				// allow the editor widget to grab the key press event
-				while (true) {
-					if (!o || o == dynamic_cast<QObject*>(d->dataAwareObject))
-						break;
-					if (dynamic_cast<KexiFormDataItemInterface*>(o)) {
-						realWidget = dynamic_cast<QWidget*>(o); //will be used below (for tab/backtab handling)
-						if (realWidget == this) //we have encountered 'this' form surface, give up
-							return false;
-						if (dynamic_cast<KexiFormDataItemInterface*>(o)->keyPressed(ke))
-							return false;
-						break;
-					}
-					o = o->parent();
-				}
 			}
 			// handle Esc key
 			if (ke->state() == Qt::NoButton && key == Qt::Key_Escape) {
@@ -480,6 +498,11 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 				return true;
 
 			if (tab || backtab) {
+				//the watched widget can be a subwidget of a real widget, e.g. a drop down button of image box: find it
+				while (!KexiFormPart::library()->widgetInfoForClassName(realWidget->className()))
+					realWidget = realWidget->parentWidget();
+				if (!realWidget)
+					return true; //ignore
 				//the watched widget can be a subwidget of a real widget, e.g. autofield: find it
 				//QWidget* realWidget = static_cast<QWidget*>(watched);
 				while (dynamic_cast<KexiDataItemInterface*>(realWidget) && dynamic_cast<KexiDataItemInterface*>(realWidget)->parentInterface())
@@ -487,50 +510,69 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 
 				d->setOrderedFocusWidgetsIteratorTo( realWidget );
 				kexipluginsdbg << realWidget->name() << endl;
-				if (tab) {
-					if (d->orderedFocusWidgets.first() && realWidget == d->orderedFocusWidgets.last()) {
-						d->orderedFocusWidgetsIterator.toFirst();
+
+				// find next/prev widget to focus
+				QWidget *widgetToUnfocus = realWidget;
+				QWidget *widgetToFocus = 0;
+				bool wasAtFirstWidget = false; //used to protect against infinite loop
+				while (true) {
+					if (tab) {
+						if (d->orderedFocusWidgets.first() && realWidget == d->orderedFocusWidgets.last()) {
+							if (wasAtFirstWidget)
+								break;
+							d->orderedFocusWidgetsIterator.toFirst();
+							wasAtFirstWidget = true;
+						}
+						else if (realWidget == d->orderedFocusWidgetsIterator.current()) {
+							++d->orderedFocusWidgetsIterator; //next
+						}
+						else
+							return true; //ignore
 					}
-					else if (realWidget == d->orderedFocusWidgetsIterator.current()) {
-/*	QEvent fe( QEvent::FocusOut );
-	QFocusEvent::setReason(QFocusEvent::Tab);
-	QApplication::sendEvent( d->orderedFocusWidgetsIterator.current(), &fe );
-	QFocusEvent::resetReason();*/
-						++d->orderedFocusWidgetsIterator; //next
+					else {//backtab
+						if (d->orderedFocusWidgets.last() && realWidget == d->orderedFocusWidgets.first()) {
+							d->orderedFocusWidgetsIterator.toLast();
+						}
+						else if (realWidget == d->orderedFocusWidgetsIterator.current()) {
+							--d->orderedFocusWidgetsIterator; //prev
+						}
+						else
+							return true; //ignore
 					}
-					else
-						return true; //ignore
-					//set focus, but don't use just setFocus() because certain widgets
-					//behaves differently (e.g. QLineEdit calls selectAll()) when 
-					//focus event's reason is QFocusEvent::Tab
-					QWidget *widgetToFocus = d->orderedFocusWidgetsIterator.current();
-					if (widgetToFocus->focusProxy())
-						widgetToFocus = widgetToFocus->focusProxy();
-					if (widgetToFocus && d->dataAwareObject->acceptEditor()) {//try to accept this will validate the current 
-						                                       //input (if any)
-						UNSET_FOCUS_USING_REASON(realWidget, QFocusEvent::Tab);
-						SET_FOCUS_USING_REASON(widgetToFocus, QFocusEvent::Tab);
+
+					widgetToFocus = d->orderedFocusWidgetsIterator.current();
+
+					QObject *pageFor_widgetToFocus = 0;
+					KFormDesigner::TabWidget *tabWidgetFor_widgetToFocus 
+						= KFormDesigner::findParent<KFormDesigner::TabWidget>(
+							widgetToFocus, "KFormDesigner::TabWidget", pageFor_widgetToFocus);
+					if (tabWidgetFor_widgetToFocus && tabWidgetFor_widgetToFocus->currentPage()!=pageFor_widgetToFocus) {
+						realWidget = widgetToFocus;
+						continue; //the new widget to focus is placed on invisible tab page: move to next widget
+					}
+					break;
+				}//while
+			
+				//set focus, but don't use just setFocus() because certain widgets
+				//behaves differently (e.g. QLineEdit calls selectAll()) when 
+				//focus event's reason is QFocusEvent::Tab
+				if (widgetToFocus->focusProxy())
+					widgetToFocus = widgetToFocus->focusProxy();
+				if (widgetToFocus && d->dataAwareObject->acceptEditor()) {
+					if (tab) {
+						//try to accept this will validate the current input (if any)
+						KexiUtils::unsetFocusWithReason(widgetToUnfocus, QFocusEvent::Tab);
+						KexiUtils::setFocusWithReason(widgetToFocus, QFocusEvent::Tab);
 						kexipluginsdbg << "focusing " << widgetToFocus->name() << endl;
 					}
-					return true;
-				} else if (backtab) {
-					if (d->orderedFocusWidgets.last() && realWidget == d->orderedFocusWidgets.first()) {
-						d->orderedFocusWidgetsIterator.toLast();
-					}
-					else if (realWidget == d->orderedFocusWidgetsIterator.current()) {
-						--d->orderedFocusWidgetsIterator; //prev
-					}
-					else
-						return true; //ignore
-					if (d->dataAwareObject->acceptEditor()) {//try to accept this will validate the current 
-						                                       //input (if any)
-						UNSET_FOCUS_USING_REASON(realWidget, QFocusEvent::Backtab);
+					else {//backtab
+						KexiUtils::unsetFocusWithReason(widgetToUnfocus, QFocusEvent::Backtab);
 						//set focus, see above note
-						SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Backtab);
+						KexiUtils::setFocusWithReason(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Backtab);
 						kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
 					}
-					return true;
 				}
+				return true;
 			}
 		}
 	}

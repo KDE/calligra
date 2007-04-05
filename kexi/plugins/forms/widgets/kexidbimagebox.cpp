@@ -61,6 +61,8 @@
 
 static KStaticDeleter<QPixmap> KexiDBImageBox_pmDeleter;
 static QPixmap* KexiDBImageBox_pm = 0;
+static KStaticDeleter<QPixmap> KexiDBImageBox_pmSmallDeleter;
+static QPixmap* KexiDBImageBox_pmSmall = 0;
 
 KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *name )
 	: KexiFrame( parent, name, Qt::WNoAutoErase )
@@ -82,6 +84,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 
 	//setup popup menu
 	m_popupMenu = new KexiImageContextMenu(this);
+	m_popupMenu->installEventFilter(this);
 
 	if (m_designMode) {
 		m_chooser = 0;
@@ -155,7 +158,7 @@ void KexiDBImageBox::setValueInternal( const QVariant& add, bool removeOld, bool
 {
 	if (isReadOnly())
 		return;
-//	const bool valueWasEmpty = m_value.isEmpty();
+	m_popupMenu->hide();
 	if (removeOld) 
 		m_value = add.toByteArray();
 	else //do not add "m_origValue" to "add" as this is QByteArray
@@ -174,8 +177,6 @@ void KexiDBImageBox::setValueInternal( const QVariant& add, bool removeOld, bool
 		m_pixmap = QPixmap();
 	}
 	repaint();
-//	if (m_value.isEmpty() != valueWasEmpty)
-//		emit pixmapChanged();//valueChanged(m_value);
 }
 
 void KexiDBImageBox::setInvalidState( const QString& displayText )
@@ -634,7 +635,7 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 		return;
 	QPainter p(this);
 	p.setClipRect(pe->rect());
-	const int m = realLineWidth();
+	const int m = realLineWidth() + margin();
 	QColor bg(eraseColor());
 	if (m_designMode && pixmap().isNull()) {
 		QPixmap pm(size()-QSize(m, m));
@@ -643,19 +644,26 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 		p2.fillRect(0,0,width(),height(), bg);
 
 		updatePixmap();
-		QImage img(KexiDBImageBox_pm->convertToImage());
+		QPixmap *imagBoxPm;
+		const bool tooLarge = (height()-m-m) <= KexiDBImageBox_pm->height();
+		if (tooLarge || (width()-m-m) <= KexiDBImageBox_pm->width())
+			imagBoxPm = KexiDBImageBox_pmSmall;
+		else
+			imagBoxPm = KexiDBImageBox_pm;
+		QImage img(imagBoxPm->convertToImage());
 		img = KImageEffect::flatten(img, bg.dark(150),
 			qGray( bg.rgb() ) <= 20 ? QColor(Qt::gray).dark(150) : bg.light(105));
 
 		QPixmap converted;
 		converted.convertFromImage(img);
-		p2.drawPixmap(2, height()-m-m-KexiDBImageBox_pm->height()-2, converted);
+//		if (tooLarge)
+//			p2.drawPixmap(2, 2, converted);
+//		else
+			p2.drawPixmap(2, height()-m-m-imagBoxPm->height()-2, converted);
 		QFont f(qApp->font());
 		p2.setFont(f);
 		p2.setPen( KexiUtils::contrastColor( bg ) );
-		; 
-
-		p2.drawText(pm.rect(), Qt::AlignCenter|Qt::WordBreak, 
+		p2.drawText(pm.rect(), Qt::AlignCenter,
 			dataSource().isEmpty() 
 				? QString::fromLatin1(name())+"\n"+i18n("Unbound Image Box", "(unbound)") //i18n("No Image")
 				: dataSource());
@@ -693,22 +701,17 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 	}
 }*/
 
-void KexiDBImageBox::updatePixmap() {
+void KexiDBImageBox::updatePixmap()
+{
 	if (! (m_designMode && pixmap().isNull()) )
 		return;
 
-//			if (KexiDBImageBox_pm) {
-//				QSize size = KexiDBImageBox_pm->size();
-//				if ((KexiDBImageBox_pm->width() > (width()/2) || KexiDBImageBox_pm->height() > (height()/2))) {
-//					int maxSize = QMAX(width()/2, height()/2);
-//					size = QSize(maxSize,maxSize);
-//					delete KexiDBImageBox_pm;
-//					KexiDBImageBox_pm = 0;
-//				}
-//			}
 	if (!KexiDBImageBox_pm) {
 		QString fname( locate("data", QString("kexi/pics/imagebox.png")) );
 		KexiDBImageBox_pmDeleter.setObject( KexiDBImageBox_pm, new QPixmap(fname, "PNG") );
+		QImage img(KexiDBImageBox_pm->convertToImage());
+		KexiDBImageBox_pmSmallDeleter.setObject( KexiDBImageBox_pmSmall, 
+			new QPixmap( img.smoothScale(img.width()/2, img.height()/2, QImage::ScaleMin) ) );
 	}
 }
 
@@ -838,6 +841,10 @@ bool KexiDBImageBox::eventFilter( QObject * watched, QEvent * e )
 		if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut || e->type()==QEvent::MouseButtonPress) {
 			update(); //to repaint focus rect
 		}
+	}
+	// hide popup menu as soon as it loses focus
+	if (watched==m_popupMenu && e->type()==QEvent::FocusOut) {
+		m_popupMenu->hide();
 	}
 	return KexiFrame::eventFilter(watched, e);
 }

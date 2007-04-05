@@ -308,6 +308,8 @@ bool KexiDBComboBox::keyPressed(QKeyEvent *ke)
 		popup()->hide();
 		return true;
 	}
+	if (ke->state() == Qt::NoButton && (k==Qt::Key_PageDown || k==Qt::Key_PageUp) && popupVisible)
+		return true;
 	return false;
 }
 
@@ -360,6 +362,12 @@ bool KexiDBComboBox::eventFilter( QObject *o, QEvent *e )
 			// handle F2/F4
 			if (handleKeyPressEvent(static_cast<QKeyEvent*>(e)))
 				return true;
+		}
+		else if (e->type()==QEvent::FocusOut) {
+			if (popup() && popup()->isVisible()) {
+				popup()->hide();
+				undoChanges();
+			}
 		}
 	}
 	else if (!d->isEditable && d->subWidgetsWithDisabledEvents && d->subWidgetsWithDisabledEvents->find(o)) {
@@ -435,6 +443,8 @@ void KexiDBComboBox::setValueInternal(const QVariant& add, bool removeOld)
 {
 	//// use KexiDBAutoField instead of KexiComboBoxBase::setValueInternal 
 	//// expects existing popup(), but we want to have delayed creation
+	if (popup())
+		popup()->hide();
 	KexiComboBoxBase::setValueInternal(add, removeOld);
 }
 

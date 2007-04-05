@@ -63,9 +63,8 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		virtual bool columnEditable(int col);
 
 		/*! \return number of visible columns in this view. 
-		 There can be a number of duplicated columns defined
-		 (data-aware widgets, see KexiFormScrollView::columns()),
-		 so columns() can return greater number than dataColumns(). */
+		 There can be a number of duplicated columns defined,
+		 so columns() can return greater or smaller number than dataColumns(). */
 		virtual int columns() const;
 
 		/*! \return column information for column number \a col. 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -75,6 +75,9 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 		 \a widget is equal to 'this'.
 		 Reimplemented after KexiFormDataItemInterface. */
 		virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+
+		//! Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
+		virtual void keyPressEvent( QKeyEvent *ke );
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }

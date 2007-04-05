@@ -28,6 +28,7 @@
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexidialogbase.h>
+#include <kexiblobbuffer.h>
 
 namespace KFormDesigner
 {
@@ -70,6 +71,11 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 				QString tempForm;
 				QPoint scrollViewContentsPos; //!< to preserve contents pos after switching to other view
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
+				//! Used in KexiFormView::setUnsavedLocalBLOBs()
+				QMap<QWidget*, KexiBLOBBuffer::Id_t> unsavedLocalBLOBs;
+				//! Used when loading a form from (temporary) XML in Data View 
+				//! to get unsaved blobs collected at design mode.
+				QMap<Q3CString, KexiBLOBBuffer::Id_t> unsavedLocalBLOBsByName;
 		};
 
 		virtual QString i18nMessage(const Q3CString& englishMessage, 
