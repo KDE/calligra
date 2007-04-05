@@ -21,7 +21,7 @@
 #ifndef KOTEXTSHAPE_H
 #define KOTEXTSHAPE_H
 
-#include <KoShape.h>
+#include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
 
 #include <QTextDocument>
@@ -34,13 +34,13 @@
  * The Text shape is capable of drawing structured text.
  * @see KoTextShapeData
  */
-class TextShape : public KoShape {
+class TextShape : public KoShapeContainer {
 public:
     TextShape();
     virtual ~TextShape();
 
     /// reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
 
