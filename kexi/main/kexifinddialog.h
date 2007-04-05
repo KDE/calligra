@@ -21,7 +21,7 @@
 #define KEXIFINDDIALOG_H
 
 #include "kexifinddialogbase.h"
-#include "kexidataawareobjectiface.h"
+#include <widget/tableview/kexidataawareobjectiface.h>
 
 class KAction;
 
