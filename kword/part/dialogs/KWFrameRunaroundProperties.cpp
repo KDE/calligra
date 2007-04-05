@@ -81,14 +81,14 @@ void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames) {
         m_runAroundSide->button(side)->setChecked(true);
     if(runaround != GuiHelper::TriState)
         m_runAround->button(ra)->setChecked(true);
-    widget.distance->setValue(distance);
+    widget.distance->changeValue(distance);
 }
 
 void KWFrameRunaroundProperties::open(KoShape *shape) {
     m_shape = shape;
     widget.runAround->setChecked(true);
     widget.longest->setChecked(true);
-    widget.distance->setValue(MM_TO_POINT(3));
+    widget.distance->changeValue(MM_TO_POINT(3));
 }
 
 void KWFrameRunaroundProperties::save() {
