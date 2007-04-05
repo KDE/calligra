@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,14 +17,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiImageContextMenu_H
-#define KexiImageContextMenu_H
+#ifndef KexiContextMenuUtils_H
+#define KexiContextMenuUtils_H
 
-#include <kmenu.h>
+#include <kexidb/queryschema.h>
+#include <kpopupmenu.h>
 #include <kurl.h>
 
 class KActionCollection;
 class KexiDataItemInterface;
+
+//! @short A set of helpers for updating popup menu titles
+/*! The functions set meaningful titles like "Emploee : Image".
+*/
+class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
+{
+	public:
+		/*! Updates title for context menu.
+		 \return true if the title has been updated. */
+		static bool updateTitle(QPopupMenu *menu, const QString& objectName, 
+			const QString& objectTypeName, const QString& iconName);
+};
 
 //! @short A context menu used for images within form and table views
 /*! Used in KexiDBImageBox and KexiBlobTableEdit.
@@ -46,8 +59,8 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
 
 		/*! Updates title for context menu.
 		 Used in KexiDBWidgetContextMenuExtender::createTitle(QPopupMenu *menu) and KexiDBImageBox.
-		 \return true if the title has been added. */
-		static bool updateTitle(QPopupMenu *menu, const QString& title, const QString& icon = QString::null);
+		 \return true if the title has been updated. */
+		static bool updateTitle(QPopupMenu *menu, const QString& title, const QString& iconName = QString::null);
 
 	public slots:
 		void updateActionsAvailability();

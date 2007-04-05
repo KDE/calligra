@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -79,6 +79,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 	m_scrollbarToolTipsEnabled = true;
 	m_scrollBarTipTimerCnt = 0;
 	m_scrollBarTip = 0;
+	m_recentSearchDirection = KexiSearchAndReplaceViewInterface::Options::DefaultSearchDirection;
 
 	// setup scrollbar tooltip and related members
 	m_scrollBarTip = new QLabel("",0, "vScrollBarToolTip",
@@ -207,6 +208,7 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 		m_verticalHeader->showInsertRow(m_data && isInsertingEnabled());
 
 	initDataContents();
+	updateIndicesForVisibleValues();
 
 	if (m_data)
 		/*emit*/ dataSet( m_data );
@@ -227,7 +229,7 @@ void KexiDataAwareObjectInterface::initDataContents()
 		if (m_data->columnsCount()>0) {
 			if (rows()>0) {
 				m_itemIterator->toFirst();
-				m_currentItem = **m_itemIterator; //m_data->first();
+				m_currentItem = **m_itemIterator;
 				curRow = 0;
 				curCol = 0;
 			}
@@ -557,7 +559,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 			m_errorMessagePopup->close();
 		}
 
-		if (m_curRow != newrow) {//update current row info
+		if (m_curRow != newrow || forceSet)  {//update current row info
 			m_navPanel->setCurrentRecordNumber(newrow+1);
 //			setNavRowNumber(newrow);
 //			d->navBtnPrev->setEnabled(newrow>0);
@@ -607,6 +609,10 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 			}
 		}
 
+		// position changed, so subsequent searching should be started from scratch 
+		// (e.g. from the current cell or the top-left cell)
+		m_positionOfRecentlyFoundValue.exists = false;
+
 		//show editor-dependent focus, if needed
 		editorShowFocus( m_curRow, m_curCol );
 
@@ -622,7 +628,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 //		ensureVisible(pcenter.x(), pcenter.y(), columnWidth(d->curCol)/2, rh/2);
 
 //		ensureVisible(columnPos(d->curCol), rowPos(d->curRow) - contentsY(), columnWidth(d->curCol), rh);
-		if (m_verticalHeader && oldRow != m_curRow)
+		if (m_verticalHeader && (oldRow != m_curRow || forceSet))
 			m_verticalHeader->setCurrentRow(m_curRow);
 
 		if (m_updateEntireRowWhenMovingToOtherRow)
@@ -630,7 +636,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		else
 			updateCell( m_curRow, m_curCol );
 
-		if (m_curCol != oldCol || m_curRow != oldRow ) {//ensure this is also refreshed
+		if (m_curCol != oldCol || m_curRow != oldRow || forceSet) {//ensure this is also refreshed
 			if (!m_updateEntireRowWhenMovingToOtherRow) //only if entire row has not been updated
 				updateCell( oldRow, m_curCol );
 		}
@@ -671,7 +677,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		//quite clever: ensure the cell is visible:
 		ensureCellVisible(m_curRow, m_curCol);
 
-		if (m_horizontalHeader && oldCol != m_curCol)
+		if (m_horizontalHeader && (oldCol != m_curCol || forceSet))
 			m_horizontalHeader->setSelectedSection(m_curCol);
 
 		/*emit*/ itemSelected(m_currentItem);
@@ -1367,6 +1373,7 @@ void KexiDataAwareObjectInterface::clearColumns(bool repaint)
 	m_data->clearInternal();
 
 	clearColumnsInternal(repaint);
+	updateIndicesForVisibleValues();
 
 	if (repaint)
 //		viewport()->repaint();
@@ -1841,4 +1848,264 @@ int KexiDataAwareObjectInterface::showErrorMessageForResult(KexiDB::ResultInfo* 
 		KMessageBox::detailedSorry(thisWidget, resultInfo->msg, resultInfo->desc);
 	
 	return KMessageBox::Ok;
+}
+
+void KexiDataAwareObjectInterface::updateIndicesForVisibleValues()
+{
+	m_indicesForVisibleValues.resize( m_data ? m_data->columnsCount() : 0 );
+	if (!m_data)
+		return;
+	for (uint i=0; i < m_data->columnsCount(); i++) {
+		KexiTableViewColumn* tvCol = m_data->column(i);
+		if (tvCol->columnInfo && tvCol->columnInfo->indexForVisibleLookupValue()!=-1)
+			// retrieve visible value from lookup field
+			m_indicesForVisibleValues[ i ] = tvCol->columnInfo->indexForVisibleLookupValue();
+		else
+			m_indicesForVisibleValues[ i ] = i;
+	}
+}
+
+/*! Performs searching \a stringValue in \a where string.
+ \a matchAnyPartOfField, \a matchWholeField, \a wholeWordsOnly options are used to control how to search.
+
+ If \a matchWholeField is true, \a wholeWordsOnly is not checked.
+ \a firstCharacter is in/out parameter. If \a matchAnyPartOfField is true and \a matchWholeField is false,
+ \a firstCharacter >= 0, the search will be performed after skipping first \a firstCharacter characters.
+
+ If \a forward is false, we are searching backwart from \a firstCharacter position. \a firstCharacter == -1
+ means then the last character. \a firstCharacter == INT_MAX means "before first" place, so searching fails
+ immediately.
+ On success, true is returned and \a firstCharacter is set to position of the matched string. */
+static inline bool findInString(const QString& stringValue, int stringLength, const QString& where, 
+	int& firstCharacter, bool matchAnyPartOfField, bool matchWholeField, 
+	bool caseSensitive, bool wholeWordsOnly, bool forward)
+{
+	if (where.isEmpty()) {
+		firstCharacter = -1;
+		return false;
+	}
+
+	if (matchAnyPartOfField) {
+		if (forward) {
+			int pos = firstCharacter == -1 ? 0 : firstCharacter;
+			if (wholeWordsOnly) {
+				const int whereLength = where.length();
+				while (true) {
+					pos = where.find( stringValue, pos, caseSensitive );
+					if (pos == -1)
+						break;
+					if ((pos > 0 && where.at(pos-1).isLetterOrNumber())
+						||((pos+stringLength-1) < (whereLength-1) && where.at(pos+stringLength-1+1).isLetterOrNumber()))
+					{
+						pos++; // invalid match because before or after the string there is non-white space
+					}
+					else
+						break;
+				}//while
+				firstCharacter = pos;
+			}
+			else {// !wholeWordsOnly
+				firstCharacter = where.find( stringValue, pos, caseSensitive );
+			}
+			return firstCharacter != -1;
+		}
+		else { // !matchAnyPartOfField
+			if (firstCharacter == INT_MAX) {
+				firstCharacter = -1; //next time we'll be looking at different cell
+				return false;
+			}
+			int pos = firstCharacter;
+			if (wholeWordsOnly) {
+				const int whereLength = where.length();
+				while (true) {
+					pos = where.findRev( stringValue, pos, caseSensitive );
+					if (pos == -1)
+						break;
+					if ((pos > 0 && where.at(pos-1).isLetterOrNumber())
+						||((pos+stringLength-1) < (whereLength-1) && where.at(pos+stringLength-1+1).isLetterOrNumber()))
+					{
+						// invalid match because before or after the string there is non-white space
+						pos--;
+						if (pos < 0) // it can make pos < 0
+							break;
+					}
+					else
+						break;
+				}//while
+				firstCharacter = pos;
+			}
+			else {// !wholeWordsOnly
+				firstCharacter = where.findRev( stringValue, pos, caseSensitive );
+			}
+			return firstCharacter != -1;
+		}
+	}
+	else if (matchWholeField) {
+		if (firstCharacter != -1 && firstCharacter != 0) { //we're not at 0-th char
+			firstCharacter = -1;
+		}
+		else if ( (caseSensitive ? where : where.lower()) == stringValue) {
+			firstCharacter = 0;
+			return true;
+		}
+	}
+	else {// matchStartOfField
+		if (firstCharacter != -1 && firstCharacter != 0) { //we're not at 0-th char
+			firstCharacter = -1;
+		}
+		else if (where.startsWith(stringValue, caseSensitive)) {
+			if (wholeWordsOnly) {
+				// If where.length() < stringValue.length(), true will be returned too - fine.
+				return !where.at( stringValue.length() ).isLetterOrNumber();
+			}
+			firstCharacter = 0;
+			return true;
+		}
+	}
+	return false;
+}
+
+tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind, 
+	const KexiSearchAndReplaceViewInterface::Options& options, bool next)
+{
+	if (!hasData())
+		return cancelled;
+	const QVariant prevSearchedValue( m_recentlySearchedValue );
+	m_recentlySearchedValue = valueToFind;
+	const KexiSearchAndReplaceViewInterface::Options::SearchDirection prevSearchDirection = m_recentSearchDirection;
+	m_recentSearchDirection = options.searchDirection;
+	if (valueToFind.isNull() || valueToFind.toString().isEmpty())
+		return cancelled;
+
+	const bool forward = (options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchUp) 
+		? !next : next; //direction can be reversed
+
+	if ((!prevSearchedValue.isNull() && prevSearchedValue!=valueToFind)
+		|| (prevSearchDirection!=options.searchDirection && options.searchDirection==KexiSearchAndReplaceViewInterface::Options::SearchAllRows))
+	{
+		// restart searching when value has been changed or new direction is SearchAllRows
+		m_positionOfRecentlyFoundValue.exists = false;
+	}
+
+	const bool startFrom1stRowAndCol = !m_positionOfRecentlyFoundValue.exists && next
+		&& options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows;
+	const bool startFromLastRowAndCol = 
+		  (!m_positionOfRecentlyFoundValue.exists && !next && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows)
+		||(m_curRow >= rows() && !forward); //we're at "insert" row, and searching backwards: move to the last cell
+
+	if (!startFrom1stRowAndCol && !startFromLastRowAndCol && m_curRow >= rows()) {
+		//we're at "insert" row, and searching forward: no chances to find something
+		return false;
+	}
+	KexiTableViewData::Iterator it( (startFrom1stRowAndCol || startFromLastRowAndCol)
+		? m_data->iterator() : *m_itemIterator /*start from the current cell*/ );
+	if (startFromLastRowAndCol)
+		it.toLast();
+	int firstCharacter;
+	if (m_positionOfRecentlyFoundValue.exists) {// start after the next/prev char position
+		if (forward)
+			firstCharacter = m_positionOfRecentlyFoundValue.lastCharacter + 1;
+		else {
+			firstCharacter = (m_positionOfRecentlyFoundValue.firstCharacter > 0) ? 
+				(m_positionOfRecentlyFoundValue.firstCharacter - 1) : INT_MAX /* this means 'before first'*/;
+		}
+	}
+	else {
+		firstCharacter = -1; //forward ? -1 : INT_MAX;
+	}
+
+	const int columnsCount = m_data->columnsCount();
+	int row, col;
+	if (startFrom1stRowAndCol) {
+		row = 0;
+		col = 0;
+	}
+	else if (startFromLastRowAndCol) {
+		row = rows()-1;
+		col = columnsCount-1;
+	}
+	else {
+		row = m_curRow;
+		col = m_curCol;
+	}
+
+	//sache some flags for efficiency
+	const bool matchAnyPartOfField 
+		= options.textMatching == KexiSearchAndReplaceViewInterface::Options::MatchAnyPartOfField;
+	const bool matchWholeField 
+		= options.textMatching == KexiSearchAndReplaceViewInterface::Options::MatchWholeField;
+	const bool caseSensitive = options.caseSensitive;
+	const bool wholeWordsOnly = options.wholeWordsOnly;
+//unused	const bool promptOnReplace = options.promptOnReplace;
+	int columnNumber = (options.columnNumber == KexiSearchAndReplaceViewInterface::Options::CurrentColumn) 
+		? m_curCol : options.columnNumber;
+	if (columnNumber>=0)
+		col = columnNumber;
+	const bool lookInAllColumns = columnNumber == KexiSearchAndReplaceViewInterface::Options::AllColumns;
+	int firstColumn; // real number of the first column, can be smaller than lastColumn if forward==true
+	int lastColumn; // real number of the last column
+	if (lookInAllColumns) {
+		firstColumn = forward ? 0 : columnsCount-1;
+		lastColumn = forward ? columnsCount-1 : 0;
+	}
+	else {
+		firstColumn = columnNumber;
+		lastColumn = columnNumber;
+	}
+	const QString stringValue( caseSensitive ? valueToFind.toString() : valueToFind.toString().lower() );
+	const int stringLength = stringValue.length();
+
+	// search
+	const int prevRow = m_curRow;
+	KexiTableItem *item;
+	while ( (item = it.current()) ) {
+		for (; forward ? col <= lastColumn : col >= lastColumn; 
+			col = forward ? (col+1) : (col-1))
+		{
+			const QVariant cell( item->at( m_indicesForVisibleValues[ col ] ) );
+			if (findInString(stringValue, stringLength, cell.toString(), firstCharacter, 
+				matchAnyPartOfField, matchWholeField, caseSensitive, wholeWordsOnly, forward))
+			{
+				//*m_itemIterator = it;
+				//m_currentItem = *it;
+				//m_curRow = row;
+				//m_curCol = col;
+				setCursorPosition(row, col, true/*forceSet*/);
+				if (prevRow != m_curRow)
+					updateRow(prevRow);
+				// remember the exact position for the found value
+				m_positionOfRecentlyFoundValue.exists = true;
+				m_positionOfRecentlyFoundValue.firstCharacter = firstCharacter;
+//! @todo for regexp lastCharacter should be computed
+				m_positionOfRecentlyFoundValue.lastCharacter = firstCharacter + stringLength - 1;
+				return true;
+			}
+		}//for
+		if (forward) {
+			++it;
+			++row;
+		}
+		else {
+			--it;
+			--row;
+		}
+		col = firstColumn;
+	}//while
+	return false;
+}
+
+tristate KexiDataAwareObjectInterface::findNextAndReplace(
+	const QVariant& valueToFind, const QVariant& replacement, 
+	const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll)
+{
+	Q_UNUSED(replacement);
+	Q_UNUSED(options);
+	Q_UNUSED(replaceAll);
+	
+	if (isReadOnly())
+		return cancelled;
+	if (valueToFind.isNull() || valueToFind.toString().isEmpty())
+		return cancelled;
+	//! @todo implement KexiDataAwareObjectInterface::findAndReplace()
+	return false;
 }

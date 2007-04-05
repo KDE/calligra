@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 
 #include <kexidataawareobjectiface.h>
 #include <utils/kexisharedactionclient.h>
+#include <core/keximainwindow.h>
 
 #include <qlayout.h>
 //Added by qt3to4:
@@ -30,6 +31,7 @@
 
 KexiDataAwareView::KexiDataAwareView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
+ , KexiSearchAndReplaceViewInterface()
  , m_internalView(0)
  , m_actionClient(0)
  , m_dataAwareObject(0)
@@ -119,6 +121,23 @@ void KexiDataAwareView::initActions()
 
 	plugSharedAction("edit_paste", this, SLOT(paste()));
 	m_actionClient->plugSharedAction(sharedAction("edit_paste")); //for proper shortcut
+
+//	plugSharedAction("edit_find", this, SLOT(editFind()));
+//	m_actionClient->plugSharedAction(sharedAction("edit_find")); //for proper shortcut
+
+//	plugSharedAction("edit_findnext", this, SLOT(editFindNext()));
+//	m_actionClient->plugSharedAction(sharedAction("edit_findnext")); //for proper shortcut
+
+//	plugSharedAction("edit_findprevious", this, SLOT(editFindPrevious()));
+//	m_actionClient->plugSharedAction(sharedAction("edit_findprev")); //for proper shortcut
+
+//! @todo	plugSharedAction("edit_replace", this, SLOT(editReplace()));
+//! @todo	m_actionClient->plugSharedAction(sharedAction("edit_replace")); //for proper shortcut
+
+//	setAvailable("edit_find", true);
+//	setAvailable("edit_findnext", true);
+//	setAvailable("edit_findprevious", true);
+//! @todo	setAvailable("edit_replace", true);
 }
 
 void KexiDataAwareView::slotUpdateRowActions(int row)
@@ -131,6 +150,8 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
 	const bool sorting = m_dataAwareObject->isSortingEnabled();
 	const int rows = m_dataAwareObject->rows();
 
+	setAvailable("edit_cut", !ro);
+	setAvailable("edit_paste", !ro);
 	setAvailable("edit_delete", !ro); // && !(inserting && row==rows));
 	setAvailable("edit_delete_row", !ro && !(deleting && row==rows));
 	setAvailable("edit_insert_empty_row", !ro && emptyInserting);
@@ -148,7 +169,7 @@ QWidget* KexiDataAwareView::mainWidget()
 
 QSize KexiDataAwareView::minimumSizeHint() const
 {
-    return m_internalView ? m_internalView->minimumSizeHint() : QSize(0,0);//KexiViewBase::minimumSizeHint();
+	return m_internalView ? m_internalView->minimumSizeHint() : QSize(0,0);//KexiViewBase::minimumSizeHint();
 }
 
 QSize KexiDataAwareView::sizeHint() const
@@ -174,12 +195,20 @@ void KexiDataAwareView::reloadActions()
 */
 	m_dataAwareObject->contextMenu()->clear();
 
+	plugSharedAction("edit_cut", m_dataAwareObject->contextMenu());
+	plugSharedAction("edit_copy", m_dataAwareObject->contextMenu());
+	plugSharedAction("edit_paste", m_dataAwareObject->contextMenu());
+
+	bool separatorNeeded = true;
+
 	unplugSharedAction("edit_clear_table");
 	plugSharedAction("edit_clear_table", this, SLOT(deleteAllRows()));
 
 	if (m_dataAwareObject->isEmptyRowInsertingEnabled()) {
 		unplugSharedAction("edit_insert_empty_row");
 		plugSharedAction("edit_insert_empty_row", m_internalView, SLOT(insertEmptyRow()));
+		if (separatorNeeded)
+			m_dataAwareObject->contextMenu()->insertSeparator();
 		plugSharedAction("edit_insert_empty_row", m_dataAwareObject->contextMenu());
 	}
 	else {
@@ -187,11 +216,16 @@ void KexiDataAwareView::reloadActions()
 		unplugSharedAction("edit_insert_empty_row", m_dataAwareObject->contextMenu());
 	}
 
-	if (m_dataAwareObject->isDeleteEnabled())
+	if (m_dataAwareObject->isDeleteEnabled()) {
+		if (separatorNeeded)
+			m_dataAwareObject->contextMenu()->insertSeparator();
+		plugSharedAction("edit_delete", m_dataAwareObject->contextMenu());
 		plugSharedAction("edit_delete_row", m_dataAwareObject->contextMenu());
-	else
+	}
+	else {
 		unplugSharedAction("edit_delete_row", m_dataAwareObject->contextMenu());
-
+		unplugSharedAction("edit_delete_row", m_dataAwareObject->contextMenu());
+	}
 	//if (!m_view->isSortingEnabled()) {
 //		unplugSharedAction("data_sort_az");
 //		unplugSharedAction("data_sort_za");
@@ -201,11 +235,6 @@ void KexiDataAwareView::reloadActions()
 
 	slotCellSelected( m_dataAwareObject->currentColumn(), m_dataAwareObject->currentRow() );
 }
-
-/*void KexiDataAwareView::slotCellSelected(const QVariant& v)
-{
-	slotCellSelected( v.toPoint().x(), v.toPoint().y() );
-}*/
 
 void KexiDataAwareView::slotCellSelected(int /*col*/, int row)
 {
@@ -279,5 +308,78 @@ void KexiDataAwareView::slotGoToNextRow() { m_dataAwareObject->selectNextRow(); 
 void KexiDataAwareView::slotGoToLastRow() { m_dataAwareObject->selectLastRow(); }
 void KexiDataAwareView::slotGoToNewRow() { m_dataAwareObject->addNewRecordRequested(); }
 
+bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringList& columnCaptions,
+	QString& currentColumnName)
+{
+	if (!dataAwareObject() || !dataAwareObject()->data())
+		return false;
+	KexiTableViewColumn::List columns( dataAwareObject()->data()->columns );
+	for (KexiTableViewColumn::ListIterator it(columns); it.current(); ++it) {
+		if (!it.current()->visible())
+			continue;
+		columnNames.append( it.current()->field()->name() );
+		columnCaptions.append( it.current()->captionAliasOrName() );
+	}
+
+	//update "look in" selection if there was any
+	const int currentColumnNumber = dataAwareObject()->currentColumn();
+	if (currentColumnNumber!=-1) {
+		KexiTableViewColumn *col = columns.at( currentColumnNumber );
+		if (col && col->field())
+			currentColumnName = col->field()->name();
+	}
+	return true;
+}
+
+tristate KexiDataAwareView::find(const QVariant& valueToFind, 
+	const KexiSearchAndReplaceViewInterface::Options& options, bool next)
+{
+	if (!dataAwareObject() || !dataAwareObject()->data())
+		return cancelled;
+
+//	const KexiDataAwareObjectInterface::FindAndReplaceOptions options(dlg->options());
+/*	if (res == KexiFindDialog::Find) {*/
+//		QVariant valueToFind(dlg->valueToFind());
+		return dataAwareObject()->find( valueToFind, options, next );
+/*
+//! @todo result...
+
+	}
+	else if (res == KexiFindDialog::Replace) {
+//! @todo
+	}
+	else if (res == KexiFindDialog::ReplaceAll) {
+//! @todo
+	}
+	*/
+}
+
+tristate KexiDataAwareView::findNextAndReplace(const QVariant& valueToFind,
+	const QVariant& replacement, 
+	const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll)
+{
+	if (!dataAwareObject() || !dataAwareObject()->data())
+		return cancelled;
+
+	return dataAwareObject()->findNextAndReplace(valueToFind, replacement, options, replaceAll);
+}
+
+/*
+void KexiDataAwareView::editFindNext()
+{
+	//! @todo reuse code from editFind()
+}
+
+void KexiDataAwareView::editFindPrevious()
+{
+	//! @todo reuse code from editFind()
+}
+
+void KexiDataAwareView::editReplace()
+{
+	//! @todo editReplace()
+	//! @todo reuse code from editFind()
+	// When ready, update KexiDataAwareView::initActions() and KexiMainWindowImpl
+}*/
 
 #include "kexidataawareview.moc"

@@ -113,6 +113,8 @@ class KexiBlobTableEdit : public KexiTableEdit
 		//! @internal
 		void executeCopyAction(const QByteArray& data);
 
+		virtual bool eventFilter( QObject *o, QEvent *e );
+
 		class Private;
 		Private *d;
 //todo		KTemporaryFile* m_tempFile;

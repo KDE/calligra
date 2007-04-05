@@ -123,10 +123,15 @@ KexiTableViewColumn::KexiTableViewColumn(
 		//todo: compute other auto-name?
 	}
 	init();
-	//setup column's readonly flag: 
-	// true if it's not from parent table's field or if the query itself is coming read-only connection
-	m_readOnly = (query.masterTable()!=columnInfo->field->table())
+	//setup column's readonly flag: true, if
+	// - it's not from parent table's field, or
+	// - if the query itself is coming from read-only connection, or
+	// - if the query itself is stored (i.e. has connection) and lookup column is defined
+	const bool columnFromMasterTable = query.masterTable()==columnInfo->field->table();
+	m_readOnly = !columnFromMasterTable
 		|| (query.connection() && query.connection()->isReadOnly());
+//		|| (query.connection() && (query.connection()->isReadOnly() || visibleLookupColumnInfo));
+//! @todo 2.0: remove this when queries become editable            ^^^^^^^^^^^^^^
 //	kDebug() << "KexiTableViewColumn: query.masterTable()==" 
 //		<< (query.masterTable() ? query.masterTable()->name() : "notable") << ", columnInfo->field->table()=="
 //		<< (columnInfo->field->table() ? columnInfo->field->table()->name()  : "notable") << endl;
@@ -195,6 +200,11 @@ void KexiTableViewColumn::setRelatedData(KexiTableViewData *data)
 void KexiTableViewColumn::setRelatedDataEditable(bool set)
 {
 	m_relatedDataEditable = set;
+}
+
+bool KexiTableViewColumn::isReadOnly() const
+{
+	return m_readOnly || (m_data && m_data->isReadOnly());
 }
 
 bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const

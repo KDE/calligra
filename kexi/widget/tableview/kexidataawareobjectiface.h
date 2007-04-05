@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -34,6 +34,7 @@
 
 #include <kdebug.h>
 #include <widget/utils/kexiarrowtip.h>
+#include <kexisearchandreplaceiface.h> 
 #include "kexitableviewdata.h"
 
 class QObject;
@@ -477,6 +478,34 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		//! Paste current clipboard contents (e.g. to a cell)
 		virtual void paste() = 0;
 
+		/*! Finds \a valueToFind within the data items
+		 \a options are used to control the process. Selection is moved to found value.
+		 If \a next is true, "find next" is performed, else "find previous" is performed. 
+
+		 Searching behaviour also depends on status of the previous search: for every search,
+		 position of the cells containing the found value is stored internally 
+		 by the data-aware interface (not in options). 
+		 Moreover, position (start, end) of the found value is also stored.
+		 Thus, the subsequent search will reuse this information to be able to start 
+		 searching exactly after the previously found value (or before for "find previous" option).
+		 The flags can be zeroed, what will lead to seaching from the first character 
+		 of the current item (cell).
+
+		 \return true if value has been found, false if value has not been found,
+		 and cancelled if there is nothing to find or there is no data to search in. */
+		virtual tristate find(const QVariant& valueToFind, 
+			const KexiSearchAndReplaceViewInterface::Options& options, bool next);
+
+		/*! Finds \a valueToFind within the data items and replaces with \a replacement
+		 \a options are used to control the process.
+		 \return true if value has been found and replaced, false if value 
+		 has not been found and replaced, and cancelled if there is nothing 
+		 to find or there is no data to search in or the data is read only.
+		 If \a replaceAll is true, all found values are replaced. */
+		virtual tristate findNextAndReplace(const QVariant& valueToFind, 
+			const QVariant& replacement, 
+			const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
+
 		/*! \return vertical scrollbar */
 		virtual QScrollBar* verticalScrollBar() const = 0;
 
@@ -675,6 +704,13 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 and KMessageBox::Yes or KMessageBox::No in case of "queryYesNo" message. */
 		int showErrorMessageForResult(KexiDB::ResultInfo* resultInfo);
 
+		/*! Prepares array of indices of visible values to search within.
+		 This is per-interface global cache. 
+		 Needed for faster lookup because there could be lookup values. 
+		 Called whenever columns definition changes, i.e. in setData() and clearColumns().
+		 @see find() */
+		void updateIndicesForVisibleValues();
+
 		//! data structure displayed for this object
 		KexiTableViewData *m_data;
 
@@ -812,6 +848,30 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		QLabel* m_scrollBarTip; //!< scrollbar tooltip
 		QTimer m_scrollBarTipTimer; //!< scrollbar tooltip's timer
 		uint m_scrollBarTipTimerCnt; //!< helper for timeout counting (scrollbar tooltip)
+
+		//! Used to mark recently found value
+		class PositionOfValue {
+			public:
+				PositionOfValue() : firstCharacter(0), lastCharacter(0), exists(false)
+				{}
+			uint firstCharacter;
+			uint lastCharacter;
+			bool exists : 1;
+		};
+
+		/*! Used to mark recently found value. Updated on succesful execution of find().
+		 If the current cursor's position changes, or data in the current cell changes, 
+		 positionOfRecentlyFoundValue.exists is set to false. */
+		PositionOfValue m_positionOfRecentlyFoundValue;
+
+		/*! Used to compare whether we're looking for new value. */
+		QVariant m_recentlySearchedValue;
+
+		/*! Used to compare whether the search direction has changed. */
+		KexiSearchAndReplaceViewInterface::Options::SearchDirection m_recentSearchDirection;
+
+		//! Setup by updateIndicesForVisibleValues() and used by find()
+		Q3ValueVector<uint> m_indicesForVisibleValues;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const

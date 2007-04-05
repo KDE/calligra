@@ -43,7 +43,7 @@ KexiRelationViewConnection::KexiRelationViewConnection(
 	SourceConnection &c, KexiRelationView *parent)
 {
 	m_parent = parent;
-	kDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << endl;
+//	kDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << endl;
 
 	m_masterTable = masterTbl;
 	if(!masterTbl || !detailsTbl)
@@ -209,7 +209,7 @@ KexiRelationViewConnection::connectionRect()
 
 //	return QRect(sx - 1, sy - 1, (rx + m_detailsTable->width()) - sx + 1, ry - sy + 1);
 	QRect rect(left - 150, top - 150, dx + 150, dy + 150);
-	kDebug() << "KexiRelationViewConnection::connectionRect():" << m_oldRect << "," << rect << endl;
+//	kDebug() << "KexiRelationViewConnection::connectionRect():" << m_oldRect << "," << rect << endl;
 	
 	m_oldRect = rect;
 

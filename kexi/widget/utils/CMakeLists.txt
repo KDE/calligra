@@ -15,7 +15,7 @@ set(kexiguiutils_LIB_SRCS
    kexidatetimeformatter.cpp
    kexitooltip.cpp
    kexiarrowtip.cpp
-   kexiimagecontextmenu.cpp
+   kexicontextmenuutils.cpp
    kexicomboboxdropdownbutton.cpp
 )
 

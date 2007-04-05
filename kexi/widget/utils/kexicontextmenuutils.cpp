@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexiimagecontextmenu.h"
+#include "kexicontextmenuutils.h"
 
 #include <kactioncollection.h>
 #include <klocale.h>
@@ -62,7 +62,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 	setName("KexiImageContextMenu");
 	insertTitle(QString::null);
 
-	d->insertFromFileAction = new KAction(i18n("Insert From &File..."), KIcon("document-open"), 0,
+	d->insertFromFileAction = new KAction(i18n("Insert From &File..."), SmallIconSet("fileopen"), 0,
 			this, SLOT(insertFromFile()), &d->actionCollection, "insert");
 	d->insertFromFileAction->plug(this);
 	d->saveAsAction = KStandardAction::saveAs(this, SLOT(saveAs()), &d->actionCollection);
@@ -75,7 +75,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 	d->copyAction->plug(this);
 	d->pasteAction = KStandardAction::paste(this, SLOT(paste()), &d->actionCollection);
 	d->pasteAction->plug(this);
-	d->deleteAction = new KAction(i18n("&Clear"), KIcon("edit-delete"), 0,
+	d->deleteAction = new KAction(i18n("&Clear"), SmallIconSet("editdelete"), 0,
 		this, SLOT(clear()), &d->actionCollection, "delete");
 	d->deleteAction->plug(this);
 #ifdef KEXI_NO_UNFINISHED 
@@ -96,12 +96,12 @@ KexiImageContextMenu::~KexiImageContextMenu()
 
 void KexiImageContextMenu::insertFromFile()
 {
-	QWidget *focusWidget = qApp->focusWidget();
+//	QWidget *focusWidget = qApp->focusWidget();
 #ifdef Q_WS_WIN
 	QString recentDir;
-	QString fileName = QFileDialog::getOpenFileName(
+	QString fileName = Q3FileDialog::getOpenFileName(
 		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path(), 
-		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
+		convertKFileDialogFilterToQ3FileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
 		this, 0, i18n("Insert Image From File"));
 	KURL url;
 	if (!fileName.isEmpty())
@@ -114,10 +114,11 @@ void KexiImageContextMenu::insertFromFile()
 	//! @todo download the file if remote, then set fileName properly
 #endif
 	if (!url.isValid()) {
-		//focus the app again because to avoid annoying the user with unfocesed main window
-		if (focusWidget) {
-			focusWidget->raise();
-			focusWidget->setFocus();
+		//focus the app again because to avoid annoying the user with unfocused main window
+		if (qApp->mainWidget()) {
+			//focusWidget->raise();
+			//focusWidget->setFocus();
+			qApp->mainWidget()->raise();
 		}
 		return;
 	}
@@ -131,10 +132,10 @@ void KexiImageContextMenu::insertFromFile()
 #endif
 
 	emit insertFromFileRequested(url);
-	if (focusWidget) {
-		focusWidget->raise();
-		focusWidget->setFocus();
-// todo: fix
+	if (qApp->mainWidget()) {
+//		focusWidget->raise();
+//		focusWidget->setFocus();
+		qApp->mainWidget()->raise();
 	}
 }
 
@@ -158,9 +159,9 @@ void KexiImageContextMenu::saveAs()
 	
 #ifdef Q_WS_WIN
 	QString recentDir;
-	QString fileName = QFileDialog::getSaveFileName(
+	QString fileName = Q3FileDialog::getSaveFileName(
 		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path() + origFilename,
-		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
+		convertKFileDialogFilterToQ3FileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
 		this, 0, i18n("Save Image to File"));
 #else
 	//! @todo add originalFileName! (requires access to KRecentDirs)
@@ -187,7 +188,7 @@ void KexiImageContextMenu::saveAs()
 		"<qt>"+i18n("File \"%1\" already exists."
 		"<p>Do you want to replace it with a new one?")
 		.arg(QDir::convertSeparators(fileName))+"</qt>",0, 
-		KGuiItem(i18n("&Replace")), KGuiItem(i18n("&Do not replace"))))
+		KGuiItem(i18n("&Replace")), KGuiItem(i18n("&Don't Replace"))))
 	{
 		return;
 	}
@@ -243,29 +244,40 @@ KActionCollection* KexiImageContextMenu::actionCollection() const
 }
 
 //static
-bool KexiImageContextMenu::updateTitle(QPopupMenu *menu, const QString& title, const QString& icon)
+bool KexiImageContextMenu::updateTitle(QPopupMenu *menu, const QString& title, const QString& iconName)
 {
-	if (title.isEmpty())
+	return KexiContextMenuUtils::updateTitle(menu, title, i18n("Image"), iconName);
+}
+
+// -------------------------------------------
+
+//static
+bool KexiContextMenuUtils::updateTitle(QPopupMenu *menu, const QString& objectName, 
+	const QString& objectTypeName, const QString& iconName)
+{
+	if (!menu || objectName.isEmpty() || objectTypeName.isEmpty())
 		return false;
-
-	/*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
-	 (see doc/dev/settings.txt) */
-	QString realTitle = i18n("%1 : Image").arg( title[0].upper() + title.mid(1) );
-
 	const int id = menu->idAt(0);
 	QMenuItem *item = menu->findItem(id);
-	if (item && dynamic_cast<KPopupTitle *>(item->widget())) {
-		if (icon.isEmpty())
-			dynamic_cast<KPopupTitle *>(item->widget())->setTitle(realTitle);
-		else {
-			QPixmap pixmap(SmallIcon( icon ));
-			dynamic_cast<KPopupTitle *>(item->widget())->setTitle(realTitle, &pixmap);
-		}
-	}
-	else
+	if (!item)
+		return false;
+	KPopupTitle *title = dynamic_cast<KPopupTitle *>(item->widget());
+	if (!title)
 		return false;
 
+/*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
+ (see doc/dev/settings.txt) */
+	QString realTitle( futureI18n2("Object name : Object type", "%1 : %2")
+		.arg( objectName[0].upper() + objectName.mid(1) )
+		.arg( objectTypeName ));
+
+	if (iconName.isEmpty())
+		title->setTitle(realTitle);
+	else {
+		QPixmap pixmap(SmallIcon( iconName ));
+		title->setTitle(realTitle, &pixmap);
+	}
 	return true;
 }
 
-#include "kexiimagecontextmenu.moc"
+#include "kexicontextmenuutils.moc"

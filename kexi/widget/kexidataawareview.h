@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #define KEXIDATAAWAREVIEW_H
 
 #include <kexiviewbase.h>
+#include <kexisearchandreplaceiface.h>
 
 class KexiDataAwareObjectInterface;
 class KexiSharedActionClient;
@@ -34,8 +35,11 @@ class KexiSharedActionClient;
 
  Action implementations like data editing and deleting are shared for different
  view types to keep even better consistency.
+ The view also implements KexiSearchAndReplaceViewInterface to support search/replace features
+ used by shared KexiFindDialog.
 */
-class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase
+class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase, 
+	public KexiSearchAndReplaceViewInterface
 {
 	Q_OBJECT
 
@@ -45,8 +49,26 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase
 		QWidget* mainWidget();
 
 		virtual QSize minimumSizeHint() const;
+		
 		virtual QSize sizeHint() const;
+		
 		KexiDataAwareObjectInterface* dataAwareObject() const { return m_dataAwareObject; }
+
+		/*! Sets up data for find/replace dialog, based on view's data model. 
+		 Implemented for KexiSearchAndReplaceViewInterface. */
+		virtual bool setupFindAndReplace(QStringList& columnNames, QStringList& columnCaptions,
+			QString& currentColumnName);
+
+		/*! Finds \a valueToFind within the view. 
+		 Implemented for KexiSearchAndReplaceViewInterface. */
+		virtual tristate find(const QVariant& valueToFind, 
+			const KexiSearchAndReplaceViewInterface::Options& options, bool next);
+
+		/*! Finds \a valueToFind within the view and replaces with \a replacement. 
+		 Implemented for KexiSearchAndReplaceViewInterface. */
+		virtual tristate findNextAndReplace(const QVariant& valueToFind, 
+			const QVariant& replacement, 
+			const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
 
 	public slots:
 		void deleteAllRows();
@@ -65,6 +87,11 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase
 		void slotGoToNextRow();
 		void slotGoToLastRow();
 		void slotGoToNewRow();
+/*		void editFind();
+		void slotFind();
+		void editFindNext();
+		void editFindPrevious();
+		void editReplace();*/
 
 	protected slots:
 //		void slotCellSelected(const QVariant& v); //!< @internal
@@ -82,7 +109,6 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase
 		void initActions();
 		virtual void updateActions(bool activated);
 
-		//KexiViewBase
 		QWidget* m_internalView;
 		KexiSharedActionClient* m_actionClient;
 		KexiDataAwareObjectInterface* m_dataAwareObject;

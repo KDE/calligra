@@ -57,7 +57,7 @@
 
 #include <kexiutils/utils.h>
 #include <widget/utils/kexidropdownbutton.h>
-#include <widget/utils/kexiimagecontextmenu.h>
+#include <widget/utils/kexicontextmenuutils.h>
 
 //! @internal
 class KexiBlobTableEdit::Private
@@ -93,6 +93,7 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *paren
 	QToolTip::add(d->button, i18n("Click to show available actions for this cell"));
 
 	d->popup = new KexiImageContextMenu(this);
+	d->popup->installEventFilter(this);
 	if (column.columnInfo)
 		KexiImageContextMenu::updateTitle( d->popup, column.columnInfo->captionOrAliasOrName(),
 //! @todo pixmaplabel icon is hardcoded...
@@ -162,47 +163,6 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 
 	setViewWidget( new QWidget(this) );
 #endif
-
-/*js: TODO
-	QGridLayout *g = new QGridLayout(m_view);
-
-	if(mmr->mimeType().contains("text/") || val.size() == 0)
-	{
-		m_content = new QTextEdit(m_view);
-		m_content->setTextFormat(PlainText);
-		m_content->setText(QString(val));
-		g->addWidget(m_content,	0, 0);
-	}
-	else
-	{
-		QLabel *l = new QLabel("", this);
-//		g->addMultiCellWidget(l, 0, 1, 0, 1);
-		g->addMultiCellWidget(l, 0, 2, 0, 1);
-		if(mmr->mimeType().contains("image/"))
-		{
-			//sale the image to the maximal allowed size by optaining the aspect ratio
-			QImage pix(m_tempFile->fileName());
-			pix = pix.smoothScale(m_view->width(), l->height(), QImage::ScaleMin);
-
-			l->setScaledContents(true);
-			l->setPixmap(QPixmap(pix));
-		}
-		else
-		{
-			l->setPixmap(KMimeType::pixmapForURL(KUrl(m_tempFile->fileName())));
-		}
-
-//		QLabel *l = new QLabel(this);
-		QLabel *lsize = new QLabel(i18n("Size:"), this);
-		QLabel *size = new QLabel(QString::number(val.size()) + " bytes", this);
-		g->addMultiCellWidget(lsize, 2, 2, 0, 0);
-		g->addMultiCellWidget(size, 2, 2, 1, 1);
-	}
-
-	KArrowButton *menu = new KArrowButton(m_view, Qt::DownArrow, "Menu button");
-	g->addWidget(menu, 3, 0);
-	connect(menu, SIGNAL(clicked()), SLOT(menu()));
-*/
 }
 
 bool KexiBlobTableEdit::valueIsNull()
@@ -241,6 +201,7 @@ KexiBlobTableEdit::value()
 	free(data);
 	kDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size() << endl;
 	return QVariant(value);
+#endif
 }
 
 void KexiBlobTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h )
@@ -269,132 +230,6 @@ KexiBlobTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val
 			pixmap, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/);
 	}
 }
-
-/*
-void
-KexiBlobTableEdit::slotFinished(KProcess* p)
-{
-	kDebug() << "Prorgam is finished!" << endl;
-
-
-	// No need for m_proc now that the app has exited
-	delete m_proc;
-	m_proc = 0;
-}
-
-QString
-KexiBlobTableEdit::openWithDlg(const QString& file)
-{
-	KUrl::List ul;
-	KUrl url;
-	url.setPath(file);
-	ul.append(url);
-	QString exec;
-
-	KOpenWithDlg* dlg = new KOpenWithDlg(ul, this);
-
-	if(dlg->exec() == QDialog::Accepted)
-	{
-		exec = dlg->text().section(' ', 0, 0);
-	}
-
-	delete dlg;
-	dlg = 0;
-
-	return exec;
-}
-
-void
-KexiBlobTableEdit::execute(const QString& app, const QString& file)
-{
-	kDebug() << "KexiBlobTableEdit: App = " << app << "File = " << file << endl;
-
-	// only execute if there isn't any other app already running
-	if(!m_proc)
-	{
-		m_proc = new KProcess();
-		*m_proc << app;
-		*m_proc << file;
-		connect(m_proc, SIGNAL(processExited(KProcess *)), SLOT(slotFinished(KProcess *)));
-		m_proc->start();
-	}
-}
-
-void
-KexiBlobTableEdit::open()
-{
-	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->fileName());
-	kDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
-	KService::Ptr ptr = KServiceTypeProfile::preferredService(mmr->mimeType(), "Application");
-	QString exec;
-
-	if(!ptr.data())
-	{
-		exec = openWithDlg(m_tempFile->fileName());
-	}
-	else
-	{
-		exec = ptr->exec().section(' ', 0, 0);
-	}
-
-	if(!exec.isEmpty())
-	{
-		execute(exec, m_tempFile->fileName());
-	}
-}
-
-void
-KexiBlobTableEdit::openWith()
-{
-	QString exec = openWithDlg(m_tempFile->fileName());
-
-	if(!exec.isEmpty())
-	{
-		execute(exec, m_tempFile->fileName());
-	}
-}
-
-void
-KexiBlobTableEdit::menu()
-{
-	Q3PopupMenu* menu = new Q3PopupMenu(this, "BLOB Menu");
-
-	menu->insertItem(i18n("Open"), this, SLOT(open()));
-	menu->insertItem(i18n("Open With..."), this, SLOT(openWith()));
-	menu->insertSeparator();
-	menu->insertItem(i18n("Load From File..."), this, SLOT(loadFile()));
-	menu->insertItem(i18n("Save to File..."), this, SLOT(saveFile()));
-
-	QPoint pos = mapToGlobal(widget()->pos());
-	pos.setY(pos.y() + widget()->height());
-	menu->move(pos);
-	menu->exec();
-
-	delete menu;
-	menu = 0;
-}
-
-void
-KexiBlobTableEdit::loadFile()
-{
-	QString file = KFileDialog::getOpenFileName();
-
-	if(!file.isEmpty())
-	{
-		(void) KIO::file_copy(KUrl(file), KUrl(m_tempFile->fileName()), -1, true);
-	}
-}
-
-void
-KexiBlobTableEdit::saveFile()
-{
-	QString file = KFileDialog::getSaveFileName();
-
-	if(!file.isEmpty())
-	{
-		(void)KIO::file_copy(KUrl(m_tempFile->fileName()), KUrl(file), -1, true);
-	}
-}*/
 
 bool KexiBlobTableEdit::cursorAtStart()
 {
@@ -587,6 +422,8 @@ bool KexiBlobTableEdit::handleKeyPress( QKeyEvent* ke, bool editorActive )
 		else if ((ke->state()==NoButton && (k==Qt::Key_F2 || k==Qt::Key_Space || k==Qt::Key_Enter || k==Qt::Key_Return))) {
 			d->popup->insertFromFile();
 		}
+		else
+			return false;
 	}
 	else
 		return false;
@@ -616,6 +453,24 @@ void KexiBlobTableEdit::handleAction(const QString& actionName)
 	}
 }
 
+bool KexiBlobTableEdit::eventFilter( QObject *o, QEvent *e )
+{
+	if (o == d->popup && e->type()==QEvent::KeyPress) {
+		QKeyEvent* ke = static_cast<QKeyEvent*>(e);
+		const int state = ke->state();
+		const int k = ke->key();
+		if (   (state==Qt::NoButton && (k==Qt::Key_Tab || k==Qt::Key_Left || k==Qt::Key_Right))
+		    || (state==Qt::ShiftButton && k==Qt::Key_Backtab)
+		   )
+		{
+			d->popup->hide();
+	    QApplication::sendEvent( this, ke ); //re-send to move cursor
+			return true;
+		}
+	}
+	return false;
+}
+
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiBlobEditorFactoryItem, KexiBlobTableEdit)
 
 //=======================
@@ -634,7 +489,6 @@ public:
 
 	Q3Cache<QPixmap> pixmapCache;
 };
-
 
 KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, QWidget *parent)
  : KexiTableEdit(column, parent)
