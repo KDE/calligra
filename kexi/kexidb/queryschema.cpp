@@ -433,7 +433,7 @@ QString OrderByColumn::toSQLString(bool includeTableName, Driver *drv, int ident
 	}
 	else {
 		if (includeTableName) {
-			tableName = m_column->field->table()->name();
+			tableName = m_field->table()->name();
 			if (drv)
 				tableName = drv->escapeIdentifier(tableName, identifierEscaping);
 			tableName += ".";

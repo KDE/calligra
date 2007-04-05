@@ -1251,4 +1251,15 @@ Field::Type KexiDB::maximumForIntegerTypes(Field::Type t1, Field::Type t2)
 	return KexiDB::maximumForIntegerTypes(t2, t1); //swap
 }
 
+QString KexiDB::simplifiedTypeName(const Field& field)
+{
+	if (field.isNumericType())
+		return futureI18n("Number"); //simplify
+	else if (field.type() == Field::BLOB)
+//! @todo support names of other BLOB subtypes
+		return futureI18n("Image"); //simplify
+
+	return field.typeGroupName();
+}
+
 #include "utils_p.moc"

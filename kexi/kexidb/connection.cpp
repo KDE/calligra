@@ -59,6 +59,7 @@ namespace KexiDB {
 Connection::SelectStatementOptions::SelectStatementOptions()
  : identifierEscaping(Driver::EscapeDriver|Driver::EscapeAsNecessary)
  , alsoRetrieveROWID(false)
+ , addVisibleLookupColumns(true)
 {
 }
 
@@ -1141,7 +1142,8 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 					sql += (QString::fromLatin1(" AS ") + aliasString);
 //! @todo add option that allows to omit "AS" keyword
 			}
-			LookupFieldSchema *lookupFieldSchema = f->table() ? f->table()->lookupFieldSchema( *f ) : 0;
+			LookupFieldSchema *lookupFieldSchema = (options.addVisibleLookupColumns && f->table())
+				? f->table()->lookupFieldSchema( *f ) : 0;
 			if (lookupFieldSchema && lookupFieldSchema->boundColumn()>=0) {
 				// Lookup field schema found
 				// Now we also need to fetch "visible" value from the lookup table, not only the value of binding.

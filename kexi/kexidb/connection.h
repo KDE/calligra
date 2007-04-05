@@ -680,6 +680,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 				//! True if ROWID should be also retrieved. False by default.
 				bool alsoRetrieveROWID : 1;
+
+				/*! True if relations (LEFT OUTER JOIN) for visible lookup columns should be added. 
+				 True by default. This is set to false when user-visible statement is generated 
+				 e.g. for the Query Designer. */
+				bool addVisibleLookupColumns : 1;
 		};
 
 		/*! \return "SELECT ..." statement's string needed for executing query 

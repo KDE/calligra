@@ -81,7 +81,6 @@ KexiDB::QuerySchema* buildSelectQuery(
 
 extern KexiDB::Parser *parser;
 extern KexiDB::Field *field;
-extern bool requiresTable;
 
 
 #endif
