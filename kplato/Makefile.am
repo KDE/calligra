@@ -123,7 +123,7 @@ rc_DATA = kplato.rc kplato_readonly.rc
 
 ## NOTE: extractattr needs <Label & Text on same line!
 messages: rc.cpp
-	$(EXTRACTATTR) --attr=Label,Text reports/*.ktf >>rp.cpp
+	$(EXTRACTATTR) --attr=Label,Text reports/*.ktf >>rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kptaboutdata.h -o $(podir)/kplato.pot
 
 kde_services_DATA = kplatopart.desktop
