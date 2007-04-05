@@ -179,7 +179,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
     m_canvas = new KarbonCanvas( p );
     m_canvas->setParent( this );
-
+    m_canvas->setDocumentViewMargin( 150 );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 
     m_canvasController = new KoCanvasController(this);
@@ -199,7 +199,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
     m_zoomController = new KoZoomController( m_canvasController, dynamic_cast<KoZoomHandler*>(m_canvas->viewConverter()), actionCollection() );
     m_zoomController->setPageSize( m_part->document().pageSize() );
-    m_zoomController->setDocumentSize( m_part->document().boundingRect().size() );
+    m_zoomController->setDocumentSize( m_canvas->documentViewRect().size() );
     m_zoomController->setFitMargin( 10 );
     KoZoomAction * zoomAction = m_zoomController->zoomAction();
     zoomAction->setZoomModes( KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE );
@@ -234,7 +234,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     m_horizRuler->setUnit(p->unit());
     layout->addWidget( m_horizRuler, 0, 1 );
     connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
-    connect( m_canvasController, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
 
     m_vertRuler = new KoRuler( this, Qt::Vertical, m_canvas->viewConverter() );
     m_vertRuler->setShowMousePosition(true);
@@ -243,11 +242,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
 
     connect(m_canvas, SIGNAL(documentOriginChanged( const QPoint &)), this , SLOT(pageOffsetChanged()));
+    connect( m_canvasController, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
     connect( m_canvasController, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
     connect( m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint &)),
             this, SLOT(mousePositionChanged(const QPoint&)));
 
-    //connect(m_canvas, SIGNAL(documentSizeChanged(const QSize&)), m_canvasController, SLOT(setDocumentSize(const QSize&)));
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
@@ -920,10 +919,23 @@ KarbonView::viewModeChanged()
 
 void KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
 {
+    static KoZoomMode::Mode lastMode = KoZoomMode::ZOOM_CONSTANT;
+
     debugView(QString("KarbonView::zoomChanged( mode = %1, zoom = %2) )").arg(mode).arg(zoom));
 
+    QRectF documentViewRect = m_canvas->documentViewRect();
+    m_zoomController->setDocumentSize( documentViewRect.size() );
     m_canvas->adjustOrigin();
     m_canvas->update();
+    if( mode != KoZoomMode::ZOOM_CONSTANT && lastMode != mode )
+    {
+        // center the page rect when change the zoom mode to ZOOM_PAGE or ZOOM_WIDTH
+        QRectF pageRect( -documentViewRect.topLeft(), m_part->document().pageSize() );
+        QPointF center = m_canvas->viewConverter()->documentToView( pageRect.center() );
+        m_canvasController->setPreferredCenter( center.toPoint() );
+    }
+
+    lastMode = mode;
 }
 
 void
@@ -1173,7 +1185,7 @@ KarbonView::togglePageMargins(bool b)
     debugView(QString("KarbonView::togglePageMargins(%1)").arg(b));
 
     ((KToggleAction*)actionCollection()->action("view_show_margins"))->setChecked(b);
-    m_canvas->setShowMargins( b );
+    m_canvas->setShowPageMargins( b );
     m_canvas->update();
 }
 

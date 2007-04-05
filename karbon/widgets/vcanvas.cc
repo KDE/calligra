@@ -64,6 +64,7 @@ public:
     , part( 0 )
     , showMargins( false )
     , documentOffset( 0, 0 )
+    , viewMargin( 100 )
     {}
 
     ~KarbonCanvasPrivate()
@@ -82,6 +83,7 @@ public:
     QPoint origin;         ///< the origin of the document page rect
     bool showMargins;      ///< should page margins be shown
     QPoint documentOffset; ///< the offset of the virtual canvas from the viewport
+    int viewMargin;        ///< the view margin around the document in pixels
 };
 
 KarbonCanvas::KarbonCanvas( KarbonPart *p )
@@ -118,6 +120,11 @@ KoViewConverter * KarbonCanvas::viewConverter()
 KoToolProxy * KarbonCanvas::toolProxy()
 {
     return d->toolProxy;
+}
+
+QWidget * KarbonCanvas::canvasWidget()
+{
+    return this;
 }
 
 void KarbonCanvas::paintEvent(QPaintEvent * ev)
@@ -271,10 +278,11 @@ void KarbonCanvas::updateCanvas(const QRectF& rc) {
 
 void KarbonCanvas::adjustOrigin()
 {
-    // calculate the zoomed doucment bounding rect
-    QRect documentRect = d->zoomHandler.documentToView( d->document->boundingRect() ).toRect();
+    // calculate the zoomed document bounding rect
+    //QRect documentRect = d->zoomHandler.documentToView( d->document->boundingRect() ).toRect();
+    QRect documentRect = d->zoomHandler.documentToView( documentViewRect() ).toRect();
 
-    d->origin = -1 * documentRect.topLeft();
+    d->origin = -documentRect.topLeft();
 
     // the document bounding rect is always centered on the virtual canvas
     // if there are margins left around the zoomed document rect then
@@ -318,9 +326,28 @@ QPoint KarbonCanvas::documentOrigin()
     return d->origin;
 }
 
-void KarbonCanvas::setShowMargins( bool on )
+void KarbonCanvas::setShowPageMargins( bool on )
 {
     d->showMargins = on;
+}
+
+void KarbonCanvas::setDocumentViewMargin( int margin )
+{
+    d->viewMargin = margin;
+}
+
+int KarbonCanvas::documentViewMargin() const
+{
+    return d->viewMargin;
+}
+
+QRectF KarbonCanvas::documentViewRect() const
+{
+    QRectF documentRect = d->document->boundingRect();
+    double xMargin  = d->zoomHandler.viewToDocumentX( d->viewMargin );
+    double yMargin  = d->zoomHandler.viewToDocumentY( d->viewMargin );
+
+    return documentRect.adjusted( -xMargin, -yMargin, xMargin, yMargin );
 }
 
 #include "vcanvas.moc"

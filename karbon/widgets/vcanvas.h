@@ -69,29 +69,45 @@ public:
     explicit KarbonCanvas( KarbonPart *p );
     virtual ~KarbonCanvas();
 
-    // from KoCanvasBase
+    /// reimplemented from KoCanvasBase
     virtual void gridSize(double *horizontal, double *vertical) const;
+    /// reimplemented from KoCanvasBase
     virtual bool snapToGrid() const;
+    /// reimplemented from KoCanvasBase
     virtual KoUnit unit();
-
+    /// reimplemented from KoCanvasBase
     void addCommand(QUndoCommand *command);
-
+    /// reimplemented from KoCanvasBase
     KoShapeManager *shapeManager() const;
+    /// reimplemented from KoCanvasBase
     KoViewConverter *viewConverter();
+    /// reimplemented from KoCanvasBase
     KoToolProxy * toolProxy();
-
-    /**
-     * Tell the canvas repaint the specified rectangle. The coordinates
-     * are document coordinates, not view coordinates.
-     */
+    /// reimplemented from KoCanvasBase
+    virtual QPoint documentOrigin();
+    /// reimplemented from KoCanvasBase
+    QWidget *canvasWidget();
+    /// reimplemented from KoCanvasBase
     void updateCanvas(const QRectF& rc);
 
-    QWidget *canvasWidget() { return this; }
-
-    virtual QPoint documentOrigin();
-
     /// Enables/disables showing page margins
-    void setShowMargins( bool on );
+    void setShowPageMargins( bool on );
+
+    /**
+    * Sets the viewing margin around the document in pixels
+    * @param margin the viewing margin around the document
+    */
+    void setDocumentViewMargin( int margin );
+
+    /// Returns the viewing margin around the document
+    int documentViewMargin() const;
+
+    /**
+     * Returns the document bounding rect with the viewing margin applied.
+     * The rect is returned in pt.
+     * @return the document bounding rect with viewing margins applied.
+     */
+    QRectF documentViewRect() const;
 
 public slots:
 
@@ -104,7 +120,6 @@ public slots:
     void setDocumentOffset(const QPoint &offset);
 
 signals:
-    void documentSizeChanged(const QSize &size);
     void documentOriginChanged( const QPoint &origin );
 protected:
     void paintEvent(QPaintEvent * ev);
