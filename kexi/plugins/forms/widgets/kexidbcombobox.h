@@ -170,7 +170,8 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 
 		/*! Called by top-level form on key press event.
 		 Used for Key_Escape to if the popup is visible,
-		 so the key press won't be consumed to perform "cancel editing". */
+		 so the key press won't be consumed to perform "cancel editing". 
+		 Also used for grabbing page down/up keys. */
 		virtual bool keyPressed(QKeyEvent *ke);
 
 		class Private;

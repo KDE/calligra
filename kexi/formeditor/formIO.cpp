@@ -1047,11 +1047,11 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			// as we don't save geometry, we need to sort widgets in the right order, not creation order
 			WidgetList *list;
 			if(layout.tagName() == "hbox") {
-				list = new HorWidgetList();
+				list = new HorWidgetList(item->container()->form()->toplevelContainer()->widget());
 				layout.setTagName("hbox");
 			}
 			else {
-				list = new VerWidgetList();
+				list = new VerWidgetList(item->container()->form()->toplevelContainer()->widget());
 				layout.setTagName("vbox");
 			}
 

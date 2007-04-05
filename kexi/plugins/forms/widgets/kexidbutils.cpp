@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,10 +23,12 @@
 #include <kiconloader.h>
 
 #include <kexidb/queryschema.h>
+#include <kexidb/utils.h>
 #include <formeditor/widgetlibrary.h>
 #include <kexiutils/utils.h>
 #include "../kexiformpart.h"
-#include <widget/utils/kexiimagecontextmenu.h>
+#include <widget/utils/kexicontextmenuutils.h>
+
 
 QColor lighterGrayBackgroundColor(const QPalette& palette)
 {
@@ -59,7 +61,9 @@ void KexiDBWidgetContextMenuExtender::createTitle(QPopupMenu *menu)
 		icon = KexiFormPart::library()->iconName(dynamic_cast<QWidget*>(m_iface)->className());
 
 	m_contextMenuHasTitle = m_iface->columnInfo() ?
-		KexiImageContextMenu::updateTitle(m_contextMenu, m_iface->columnInfo()->captionOrAliasOrName(), icon)
+		KexiContextMenuUtils::updateTitle(m_contextMenu, 
+			m_iface->columnInfo()->captionOrAliasOrName(), 
+			KexiDB::simplifiedTypeName(*m_iface->columnInfo()->field), icon)
 		: false;
 
 	if (!m_contextMenuHasTitle)

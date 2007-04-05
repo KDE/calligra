@@ -45,6 +45,7 @@
 #include <keximainwindow.h>
 #include <kexiutils/utils.h>
 #include <widget/kexicustompropertyfactory.h>
+#include <widget/utils/kexicontextmenuutils.h>
 
 #include "kexiformview.h"
 #include "widgets/kexidbautofield.h"

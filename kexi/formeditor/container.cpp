@@ -603,13 +603,13 @@ Container::setLayout(LayoutType type)
 		case HBox:
 		{
 			m_layout = (QLayout*) new QHBoxLayout(m_container, m_margin, m_spacing);
-			createBoxLayout(new HorWidgetList());
+			createBoxLayout(new HorWidgetList(m_form->toplevelContainer()->widget()));
 			break;
 		}
 		case VBox:
 		{
 			m_layout = (QLayout*) new QVBoxLayout(m_container, m_margin, m_spacing);
-			createBoxLayout(new VerWidgetList());
+			createBoxLayout(new VerWidgetList(m_form->toplevelContainer()->widget()));
 			break;
 		}
 		case Grid:
@@ -675,12 +675,12 @@ Container::createFlowLayout()
 	const int offset = 15;
 	WidgetList *list=0, *list2=0;
 	if(flow->orientation() == Horizontal) {
-		list = new VerWidgetList();
-		list2 = new HorWidgetList();
+		list = new VerWidgetList(m_form->toplevelContainer()->widget());
+		list2 = new HorWidgetList(m_form->toplevelContainer()->widget());
 	}
 	else {
-		list = new HorWidgetList();
-		list2 = new VerWidgetList();
+		list = new HorWidgetList(m_form->toplevelContainer()->widget());
+		list2 = new VerWidgetList(m_form->toplevelContainer()->widget());
 	}
 
 	// fill the list
@@ -733,8 +733,8 @@ void
 Container::createGridLayout(bool testOnly)
 {
 	//Those lists sort widgets by y and x
-	VerWidgetList *vlist = new VerWidgetList();
-	HorWidgetList *hlist = new HorWidgetList();
+	VerWidgetList *vlist = new VerWidgetList(m_form->toplevelContainer()->widget());
+	HorWidgetList *hlist = new HorWidgetList(m_form->toplevelContainer()->widget());
 	// The vector are used to store the x (or y) beginning of each column (or row)
 	QValueVector<int> cols;
 	QValueVector<int> rows;

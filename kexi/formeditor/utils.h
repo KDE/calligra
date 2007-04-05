@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,11 +22,43 @@
 #define FORMEDITORUTILS_H
 
 #include <qptrlist.h>
-#include <qwidget.h>
+#include <qtabbar.h>
+#include <qtabwidget.h>
+
+//! @todo replace QTabWidget by KTabWidget after the bug with & is fixed:
+#define TabWidgetBase QTabWidget
+//#define USE_KTabWidget //todo: uncomment
 
 namespace KFormDesigner {
 
 class Form;
+
+/*! \return parent object of \a o that inherits \a className or NULL if no such parent
+ If the parent is found, \a prevPrev is set to a child of child of the parent, 
+ what for TabWidget means the page widget. */
+template<class type>
+type* findParent(QObject* o, const char* className, QObject* &prevPrev)
+{
+	if (!o || !className || className[0]=='\0')
+		return 0;
+	QObject *prev = o;
+	while ( ((o=o->parent())) && !o->inherits(className) ) {
+		prevPrev = prev;
+		prev = o;
+	}
+	return static_cast<type*>(o);
+}
+
+//! A tab widget providing information about height of the tab bar.
+class KFORMEDITOR_EXPORT TabWidget : public TabWidgetBase
+{
+	Q_OBJECT
+	public:
+		TabWidget(QWidget *parent, const char *name) 
+		 : TabWidgetBase(parent, name) {}
+		virtual ~TabWidget() {}
+		int tabBarHeight() const { return tabBar()->height(); }
+};
 
 //! @short A list of widget pointers.
 typedef QPtrList<QWidget> WidgetList;
@@ -33,40 +66,26 @@ typedef QPtrList<QWidget> WidgetList;
 //! @short An iterator for WidgetList.
 typedef QPtrListIterator<QWidget> WidgetListIterator;
 
-//! Helper classes for sorting widgets horizontally
+//! @short A helper for sorting widgets horizontally
 class HorWidgetList : public WidgetList
 {
 	public:
-	HorWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
-	{
-		QWidget *w1 = static_cast<QWidget*>(item1);
-		QWidget *w2 = static_cast<QWidget*>(item2);
-
-		if(w1->x() < w2->x())
-			return -1;
-		if(w1->x() > w2->x())
-			return 1;
-		return 0; // item1 == item2
-	}
+		HorWidgetList(QWidget *topLevelWidget);
+		virtual ~HorWidgetList();
+	protected:
+		virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2);
+		QWidget *m_topLevelWidget;
 };
 
-//! Helper classes for sorting widgets vertically
+//! @short A helper for sorting widgets vertically
 class VerWidgetList : public WidgetList
 {
 	public:
-	VerWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
-	{
-		QWidget *w1 = static_cast<QWidget*>(item1);
-		QWidget *w2 = static_cast<QWidget*>(item2);
-
-		if(w1->y() < w2->y())
-			return -10;
-		if(w1->y() > w2->y())
-			return 1;
-		return 0; // item1 == item2
-	}
+		VerWidgetList(QWidget *topLevelWidget);
+		virtual ~VerWidgetList();
+	protected:
+		virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2);
+		QWidget *m_topLevelWidget;
 };
 
 /*! This function is used to remove all the child widgets from a list, and

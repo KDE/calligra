@@ -856,11 +856,11 @@ CreateLayoutCommand::CreateLayoutCommand(int layoutType, WidgetList &list, Form 
 		case Container::Grid:
 		case Container::HSplitter:
 		case Container::HFlow:
-			m_list = new HorWidgetList(); break;
+			m_list = new HorWidgetList(form->toplevelContainer()->widget()); break;
 		case Container::VBox:
 		case Container::VSplitter:
 		case Container::VFlow:
-			m_list = new VerWidgetList(); break;
+			m_list = new VerWidgetList(form->toplevelContainer()->widget()); break;
 	}
 	for(QWidget *w = list.first(); w; w = list.next())
 		m_list->append(w);

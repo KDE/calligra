@@ -64,48 +64,6 @@
 # include <kinputdialog.h>
 #endif
 
-/*
-class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
-{
-	public:
-		MyTabWidget(QWidget *parent, const char *name, QObject *container)
-		 : KTabWidget(parent, name)
-		{
-			m_container = container;
-
-			QObjectList *list = new QObjectList(*children());
-			for(QObject *obj = list->first(); obj; obj = list->next())
-			{
-				if(obj->isA("KTabBar"))
-					obj->installEventFilter(this);
-			}
-			delete list;
-		}
-		~MyTabWidget() {;}
-
-		void setContainer(QObject *container)
-		{
-			m_container = container;
-		}
-		virtual bool eventFilter(QObject *o, QEvent *ev)
-		{
-			if((!m_container) || (ev->type() != QEvent::MouseButtonRelease))
-				return KTabWidget::eventFilter(o, ev);
-
-			QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
-			if(mev->button() != RightButton)
-				return KTabWidget::eventFilter(o, ev);
-
-			bool ok = m_container->eventFilter(this, ev);
-			if(!ok)
-				return KTabWidget::eventFilter(o, ev);
-			return true;
-		}
-
-	private:
-		QGuardedPtr<QObject>   m_container;
-};*/
-
 ContainerWidget::ContainerWidget(QWidget *parent, const char *name)
  : QWidget(parent, name)
 {
@@ -158,7 +116,7 @@ void GroupBox::dropEvent( QDropEvent *e )
 ////////////////////////
 
 KFDTabWidget::KFDTabWidget(QWidget *parent, const char *name)
- : TabWidgetBase(parent, name)
+ : KFormDesigner::TabWidget(parent, name)
 {
 }
 
@@ -559,7 +517,6 @@ ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	}
 	else if(c == "KFDTabWidget")
 	{
-		//MyTabWidget *tab = new MyTabWidget(p, n, container);
 		KFDTabWidget *tab = new KFDTabWidget(p, n);
 #if defined(USE_KTabWidget) && KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 		tab->setTabReorderingEnabled(true);

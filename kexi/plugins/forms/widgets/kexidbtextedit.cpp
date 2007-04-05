@@ -23,6 +23,8 @@
 #include <kexidb/queryschema.h>
 
 #include <kapplication.h>
+#include <kstdaccel.h>
+#include <kdebug.h>
 
 #include <qpainter.h>
 
@@ -34,6 +36,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent, const char *name)
  , m_slotTextChanged_enabled(true)
 {
 	connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+	installEventFilter(this);
 }
 
 KexiDBTextEdit::~KexiDBTextEdit()
@@ -191,6 +194,16 @@ void KexiDBTextEdit::moveCursorToStart()
 void KexiDBTextEdit::selectAll()
 {
 	KTextEdit::selectAll();
+}
+
+void KexiDBTextEdit::keyPressEvent( QKeyEvent *ke )
+{
+	// for instance, Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
+	if (KStdAccel::tabNext().contains( KKey(ke) ) || KStdAccel::tabPrev().contains( KKey(ke) )) {
+		ke->ignore();
+		return;
+	}
+	KTextEdit::keyPressEvent(ke);
 }
 
 #include "kexidbtextedit.moc"

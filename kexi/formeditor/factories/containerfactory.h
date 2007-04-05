@@ -22,20 +22,10 @@
 #ifndef CONTAINERFACTORY_H
 #define CONTAINERFACTORY_H
 
-#if KDE_VERSION < KDE_MAKE_VERSION(3,1,9)
-# define KTabWidget QTabWidget
-#include <qtabwidget.h>
-#else
-#include <ktabwidget.h>
-#endif
-
-//! @todo replace QTabWidget by KTabWidget after the bug with & is fixed:
-#define TabWidgetBase QTabWidget
-//#define USE_KTabWidget //todo: uncomment
-
 #include <kcommand.h>
 
 #include "widgetfactory.h"
+#include "../utils.h"
 
 namespace KFormDesigner
 {
@@ -165,7 +155,7 @@ class KFORMEDITOR_EXPORT ContainerWidget : public QWidget
 };
 
 //! A tab widget
-class KFORMEDITOR_EXPORT KFDTabWidget : public TabWidgetBase
+class KFORMEDITOR_EXPORT KFDTabWidget : public KFormDesigner::TabWidget
 {
 	Q_OBJECT
 

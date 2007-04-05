@@ -225,7 +225,7 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		QRect m_widgetGeometryForRecentInsertAutoFields;
 
 		//! Used in setUnsavedLocalBLOBs()
-		QMap<QWidget*, KexiBLOBBuffer::Id_t> m_unsavedLocalBLOBs;
+//		QMap<QWidget*, KexiBLOBBuffer::Id_t> m_unsavedLocalBLOBs;
 };
 
 #endif

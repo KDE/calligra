@@ -36,18 +36,6 @@
 class KexiDataAwareObjectInterface;
 class KexiFormScrollView;
 
-#define SET_FOCUS_USING_REASON(widget, reason) \
-	{ QEvent fe( QEvent::FocusIn ); \
-	QFocusEvent::setReason(reason); \
-	QApplication::sendEvent( widget, &fe ); \
-	QFocusEvent::resetReason(); }
-
-#define UNSET_FOCUS_USING_REASON(widget, reason) \
-	{ QEvent fe( QEvent::FocusOut ); \
-	QFocusEvent::setReason(reason); \
-	QApplication::sendEvent( widget, &fe ); \
-	QFocusEvent::resetReason(); }
-
 //! @short A DB-aware form widget, acting as form's toplevel widget
 class KEXIFORMUTILS_EXPORT KexiDBForm : 
 	public KexiDBFormBase,

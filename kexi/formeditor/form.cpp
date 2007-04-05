@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qobjectlist.h>
+#include <qptrdict.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -39,9 +40,9 @@
 #include "pixmapcollection.h"
 #include "events.h"
 #include "utils.h"
-#include <koproperty/property.h>
-
 #include "form.h"
+#include <koproperty/property.h>
+#include <kexiutils/utils.h>
 
 using namespace KFormDesigner;
 
@@ -451,32 +452,27 @@ Form::slotFormRestored()
 ///////////////////////////  Tab stops ////////////////////////
 
 void
-Form::addWidgetToTabStops(ObjectTreeItem *c)
+Form::addWidgetToTabStops(ObjectTreeItem *it)
 {
-	QWidget *w = c->widget();
+	QWidget *w = it->widget();
 	if(!w)
 		return;
 	if(!(w->focusPolicy() & QWidget::TabFocus))
 	{
-		if(!w->children())
+		if (!w->children())
 			return;
-
 		// For composed widgets, we check if one of the child can have focus
-		QObjectList list = *(w->children());
-		for(QObject *obj = list.first(); obj; obj = list.next())
-		{
-//			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus)) {
-//			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() & QWidget::TabFocus)) {
-			if(obj->isWidgetType()) {//QWidget::TabFocus flag will be checked later!
-				if(d->tabstops.findRef(c) == -1) {
-					d->tabstops.append(c);
+		for(QObjectListIterator chIt(*w->children()); chIt.current(); ++chIt) {
+			if(chIt.current()->isWidgetType()) {//QWidget::TabFocus flag will be checked later!
+				if(d->tabstops.findRef(it) == -1) {
+					d->tabstops.append(it);
 					return;
 				}
 			}
 		}
 	}
-	else if(d->tabstops.findRef(c) == -1) // not yet in the list
-		d->tabstops.append(c);
+	else if(d->tabstops.findRef(it) == -1) // not yet in the list
+		d->tabstops.append(it);
 }
 
 void
@@ -492,32 +488,70 @@ Form::updateTabStopsOrder()
 	}
 }
 
+//! Collects all the containers reculsively. Used by Form::autoAssignTabStops().
+void collectContainers(ObjectTreeItem* item, QPtrDict<char>& containers)
+{
+	if (!item->container())
+		return;
+	if (!containers[ item->container() ]) {
+		kdDebug() << "collectContainers() " << item->container()->objectTree()->className() 
+			<< " " << item->container()->objectTree()->name() << endl;
+		containers.insert( item->container(), (const char *)1 );
+	}
+	for (ObjectTreeListIterator it(*item->children()); it.current(); ++it)
+		collectContainers(it.current(), containers);
+}
+
 void
 Form::autoAssignTabStops()
 {
-	VerWidgetList list;
-	HorWidgetList hlist;
+	VerWidgetList list(toplevelContainer()->widget());
+	HorWidgetList hlist(toplevelContainer()->widget());
+
+	// 1. Collect all the containers, as we'll be sorting widgets groupped by containers
+	QPtrDict<char> containers;
+
+	collectContainers( toplevelContainer()->objectTree(), containers );
 
 	foreach_list(ObjectTreeListIterator, it, d->tabstops) {
-		if(it.current()->widget())
+		if(it.current()->widget()) {
+			kdDebug() << "Form::autoAssignTabStops() widget to sort: " << it.current()->widget() << endl;
 			list.append(it.current()->widget());
+		}
 	}
 
 	list.sort();
+	foreach_list(QPtrListIterator<QWidget>, iter, list)
+		kdDebug() << iter.current()->className() << " " << iter.current()->name() << endl;
+
 	d->tabstops.clear();
 
 	/// We automatically sort widget from the top-left to bottom-right corner
-	//! \todo Handle RTL layout (ie form top-right to bottom-left)
+	//! \todo Handle RTL layout (ie from top-right to bottom-left)
 	foreach_list(WidgetListIterator, it, list) {
-//	for(WidgetListIterator it(list); it.current() != 0; ++it)
 		QWidget *w = it.current();
 		hlist.append(w);
 
 		++it;
 		QWidget *nextw = it.current();
-		while(nextw && (nextw->y() < (w->y() + 20))) {
+		QObject *page_w = 0;
+		KFormDesigner::TabWidget *tab_w = KFormDesigner::findParent<KFormDesigner::TabWidget>(w, "KFormDesigner::TabWidget", page_w);
+		while (nextw) {
+			if (KexiUtils::hasParent(w, nextw)) // do not group (sort) widgets where on is a child of another
+				break;
+			if (nextw->y() >= (w->y() + 20))
+				break;
+			if (tab_w) {
+				QObject *page_nextw = 0;
+				KFormDesigner::TabWidget *tab_nextw = KFormDesigner::findParent<KFormDesigner::TabWidget>(nextw, "KFormDesigner::TabWidget", page_nextw);
+				if (tab_w == tab_nextw) {
+					if (page_w != page_nextw) // 'nextw' widget within different tab page
+						break;
+				}
+			}
 			hlist.append(nextw);
-			++it; nextw = it.current();
+			++it;
+			nextw = it.current();
 		}
 		hlist.sort();
 
