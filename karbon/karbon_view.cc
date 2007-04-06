@@ -926,7 +926,6 @@ void KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
     QRectF documentViewRect = m_canvas->documentViewRect();
     m_zoomController->setDocumentSize( documentViewRect.size() );
     m_canvas->adjustOrigin();
-    m_canvas->update();
     if( mode != KoZoomMode::ZOOM_CONSTANT && lastMode != mode )
     {
         // center the page rect when change the zoom mode to ZOOM_PAGE or ZOOM_WIDTH
@@ -934,6 +933,7 @@ void KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
         QPointF center = m_canvas->viewConverter()->documentToView( pageRect.center() );
         m_canvasController->setPreferredCenter( center.toPoint() );
     }
+    m_canvas->update();
 
     lastMode = mode;
 }

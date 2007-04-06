@@ -94,7 +94,7 @@ public:
     void setShowPageMargins( bool on );
 
     /**
-    * Sets the viewing margin around the document in pixels
+    * Sets the viewing margin around the document in pt
     * @param margin the viewing margin around the document
     */
     void setDocumentViewMargin( int margin );

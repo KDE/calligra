@@ -279,7 +279,6 @@ void KarbonCanvas::updateCanvas(const QRectF& rc) {
 void KarbonCanvas::adjustOrigin()
 {
     // calculate the zoomed document bounding rect
-    //QRect documentRect = d->zoomHandler.documentToView( d->document->boundingRect() ).toRect();
     QRect documentRect = d->zoomHandler.documentToView( documentViewRect() ).toRect();
 
     d->origin = -documentRect.topLeft();
@@ -344,10 +343,7 @@ int KarbonCanvas::documentViewMargin() const
 QRectF KarbonCanvas::documentViewRect() const
 {
     QRectF documentRect = d->document->boundingRect();
-    double xMargin  = d->zoomHandler.viewToDocumentX( d->viewMargin );
-    double yMargin  = d->zoomHandler.viewToDocumentY( d->viewMargin );
-
-    return documentRect.adjusted( -xMargin, -yMargin, xMargin, yMargin );
+    return documentRect.adjusted( -d->viewMargin, -d->viewMargin, d->viewMargin, d->viewMargin );
 }
 
 #include "vcanvas.moc"
