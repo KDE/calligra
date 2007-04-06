@@ -58,10 +58,11 @@
 
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument(parentWidget, parent, singleViewMode),
-    m_zoom(100),
-    m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
+      m_hasTOC(false),
+      m_defaultColumnSpacing(3.0),
+      m_zoom(100),
+      m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
 {
-    m_hasTOC = false;
     m_frameLayout.setDocument(this);
     m_styleManager = new KoStyleManager(this);
     m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
