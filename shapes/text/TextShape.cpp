@@ -23,6 +23,7 @@
 
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextShapeContainerModel.h>
 #include <KoViewConverter.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
@@ -41,7 +42,8 @@
 
 
 TextShape::TextShape()
-    : m_demoText(false)
+    : KoShapeContainer(new KoTextShapeContainerModel()),
+    m_demoText(false)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
