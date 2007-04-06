@@ -35,8 +35,6 @@ public:
                        double zoomX = 1.0, double zoomY = 1.0 );
 
     bool loadXML( QIODevice *, const KoXmlDocument & doc );
-    bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                    const KoXmlDocument & settings, KoStore* store );
 
 protected:
     KoView * createViewInstance( QWidget *parent );

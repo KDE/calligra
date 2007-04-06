@@ -43,12 +43,6 @@ bool KPrDocument::loadXML( QIODevice *, const KoXmlDocument & doc )
     return true;
 }
 
-bool KPrDocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                             const KoXmlDocument & settings, KoStore* store )
-{
-    return true;
-}
-
 KoView * KPrDocument::createViewInstance( QWidget *parent )
 {
     return new KPrView( this, parent );
