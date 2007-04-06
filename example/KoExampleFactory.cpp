@@ -27,7 +27,7 @@
 #include <kdebug.h>
 
 //K_EXPORT_COMPONENT_FACTORY( libkoexamplepart, ExampleFactory )
-K_EXPORT_PLUGIN( ExampleFactory )
+Q_EXPORT_PLUGIN( ExampleFactory )
 
 KComponentData* ExampleFactory::s_global = 0L;
 KAboutData* ExampleFactory::s_aboutData = 0L;
