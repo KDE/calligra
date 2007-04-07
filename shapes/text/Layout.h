@@ -37,32 +37,32 @@ class Layout : public KoTextDocumentLayout::LayoutState {
 public:
     explicit Layout(KoTextDocumentLayout *parent);
     /// start layouting, return false when there is nothing to do
-    bool start();
+    virtual bool start();
     /// end layouting
-    void end();
-    void reset();
+    virtual void end();
+    virtual void reset();
     /// returns true if reset has been called.
-    bool interrupted();
-    double width();
-    double x();
-    double y();
+    virtual bool interrupted();
+    virtual double width();
+    virtual double x();
+    virtual double y();
     /// return the y offset of the document at start of shape.
-    double docOffsetInShape() const;
+    virtual double docOffsetInShape() const;
     /// when a line is added, update internal vars.  Return true if line does not fit in shape
-    bool addLine(QTextLine &line);
+    virtual bool addLine(QTextLine &line);
     /// prepare for next paragraph; return false if there is no next parag.
-    bool nextParag();
-    double documentOffsetInShape();
-    bool setFollowupShape(KoShape *shape);
+    virtual bool nextParag();
+    virtual double documentOffsetInShape();
+    virtual bool setFollowupShape(KoShape *shape);
 
     /// paint the document
-    void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext & context);
+    virtual void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext & context);
 
-    void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
-    KoStyleManager *styleManager() const { return m_styleManager; }
+    virtual void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
+    virtual KoStyleManager *styleManager() const { return m_styleManager; }
 
     /// reimplemented from superclass
-    void clearTillEnd();
+    virtual void clearTillEnd();
 
 private:
     void updateBorders();
