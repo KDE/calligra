@@ -123,6 +123,7 @@ private slots:
     void sendToBack() { adjustZOrderOfSelectedFrames(KoShapeReorderCommand::SendToBack); }
     void toggleViewFrameBorders(bool on);
     void formatPage();
+    void inlineFrame();
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods

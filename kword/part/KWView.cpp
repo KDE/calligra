@@ -27,6 +27,7 @@
 #include "KWViewMode.h"
 #include "KWFactory.h"
 #include "frames/KWFrame.h"
+#include "frames/KWTextFrameSet.h"
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWPageSettingsDialog.h"
 
@@ -48,6 +49,8 @@
 #include <KoInlineObjectRegistry.h>
 #include <KoToolProxy.h>
 #include <KoCanvasResourceProvider.h>
+#include <KoTextAnchor.h>
+#include <KoShapeGroupCommand.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -205,6 +208,10 @@ void KWView::setupActions() {
     action->setToolTip( i18n( "Change properties of entire page" ) );
     //action->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
     connect(action, SIGNAL(triggered()), this, SLOT( formatPage() ));
+
+    action = new QAction(i18n("Make inline"), this);
+    actionCollection()->addAction("inline_frame", action);
+    connect(action, SIGNAL(triggered()), this, SLOT( inlineFrame() ));
 
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
@@ -1009,6 +1016,7 @@ const bool clipToPage=false; // should become a setting in the GUI
 }
 
 void KWView::insertFrameBreak() {
+    // TODO should this be removed??
     KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
     if(handler)
         handler->insertFrameBreak();
@@ -1076,6 +1084,55 @@ void KWView::formatPage() {
         return;
     KWPageSettingsDialog *dia = new KWPageSettingsDialog(this, m_document, m_currentPage);
     dia->show();
+}
+
+void KWView::inlineFrame() {
+    Q_ASSERT(kwdocument()->mainFrameSet());
+    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+
+    KoShape *targetShape = 0;
+    foreach(KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
+        if(shape->isLocked())
+            continue;
+        targetShape = shape;
+        break; // TODO group before...
+    }
+    if(targetShape == 0) {
+        // message:  "Please select at least one non locked shape and try again"
+        kDebug() << "Please select at least one non locked shape and try again\n";
+        return;
+    }
+
+    KoTextAnchor *anchor = new KoTextAnchor(targetShape);
+    selection->deselectAll();
+    KWFrame *frameForAnchor = 0;
+    int area = 0;
+    QRectF br = targetShape->boundingRect();
+    // now find the frame that is closest to the frame we want to inline.
+    foreach(KWFrame *frame, kwdocument()->mainFrameSet()->frames()) {
+        QRectF intersection = br.intersected(frame->shape()->boundingRect());
+        int intersectArea = qRound(intersection.width() * intersection.height());
+        if(intersectArea > area) {
+            frameForAnchor = frame;
+            area = intersectArea;
+        }
+        else if(frameForAnchor == 0) {
+            // TODO check distance between frames or something.
+        }
+    }
+if(frameForAnchor == 0) {/* can't happen later on... */ kDebug() << "spliting...\n"; return; }
+    selection->select(frameForAnchor->shape());
+
+    QPointF absPos = targetShape->absolutePosition();
+    targetShape->setParent(static_cast<KoShapeContainer*> (frameForAnchor->shape()));
+    targetShape->setAbsolutePosition(absPos);
+
+    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
+    KoToolManager::instance()->switchToolRequested(tool);
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    Q_ASSERT(handler);
+    // TODO move caret
+    handler->insertInlineObject(anchor);
 }
 
 // end of actions

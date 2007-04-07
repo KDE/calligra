@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@
 #include <QSizeF>
 
 class KWTextFrameSet;
+class KWAnchorStrategy;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -45,13 +46,17 @@ public:
     /// reimplemented from KoTextDocumentLayout::shapes()
     QList<KoShape*> shapes() const;
 
+private:
     /// reimplemented from KoTextDocumentLayout::relayout()
     virtual void relayout();
 
-private:
+    virtual void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
+
     KWTextFrameSet *m_frameSet;
     class DummyShape;
     DummyShape * const m_dummyShape;
+
+    QList<KWAnchorStrategy*> m_activeAnchors;
 
     int m_lastKnownFrameCount;
 };

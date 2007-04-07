@@ -22,8 +22,11 @@
 #include "KWTextFrame.h"
 #include "KWDocument.h"
 #include "KWPage.h"
+#include "frames/KWAnchorStrategy.h"
 
 #include <KoTextShapeData.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoTextAnchor.h>
 
 #include <QList>
 #include <QPainterPath>
@@ -87,19 +90,36 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line) {
 // ----------------- Class that allows us with the runaround of QPainterPaths ----------------
 class Outline {
 public:
-    Outline(KWFrame *frame, const QMatrix &matrix) : m_side(None), m_frame(frame) {
-        QPainterPath path =  matrix.map(frame->shape()->outline());
+    Outline(KWFrame *frame, const QMatrix &matrix) : m_side(None) {
+        if(frame->textRunAround() == KWord::NoRunAround)
+            m_side = Empty;
+        else {
+            init(matrix, frame->shape(), frame->runAroundDistance());
+
+            if(frame->runAroundSide() == KWord::LeftRunAroundSide)
+                m_side = Right;
+            else if(frame->runAroundSide() == KWord::RightRunAroundSide)
+                m_side = Left;
+        }
+    }
+
+    Outline(KoShape *shape, const QMatrix &matrix) : m_side(None) {
+        init(matrix, shape, 0);
+    }
+
+    void init(const QMatrix &matrix, KoShape *shape, double distance) {
+        QPainterPath path =  matrix.map(shape->outline());
         m_bounds = path.boundingRect();
-        if(frame->runAroundDistance() >= 0.0) {
+        if(distance >= 0.0) {
             QMatrix grow = matrix;
             grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
-            const double scaleX = (m_bounds.width() + frame->runAroundDistance()) / m_bounds.width();
-            const double scaleY = (m_bounds.height() + frame->runAroundDistance()) / m_bounds.height();
+            const double scaleX = (m_bounds.width() + distance) / m_bounds.width();
+            const double scaleY = (m_bounds.height() + distance) / m_bounds.height();
             grow.scale(scaleX, scaleY);
             grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
 
-            path =  grow.map(frame->shape()->outline());
-            // kDebug() << "Grow " << frame->runAroundDistance() << ", Before: " << m_bounds << ", after: " << path.boundingRect() << endl;
+            path =  grow.map(shape->outline());
+            // kDebug() << "Grow " << distance << ", Before: " << m_bounds << ", after: " << path.boundingRect() << endl;
             m_bounds = path.boundingRect();
         }
 
@@ -117,14 +137,12 @@ public:
             m_edges.insert(line.y1(), line);
             prev = vtx;
         }
-
-        if(m_frame->runAroundSide() == KWord::LeftRunAroundSide)
-            m_side = Right;
-        else if(m_frame->runAroundSide() == KWord::RightRunAroundSide)
-            m_side = Left;
     }
 
     QRectF limit(const QRectF &content) {
+        if(m_side == Empty)
+            return QRectF();
+
         if(m_side == None) { // first time for this text;
             double insetLeft = m_bounds.right() - content.left();
             double insetRight = content.right() - m_bounds.left();
@@ -136,8 +154,6 @@ public:
         }
         if(!m_bounds.intersects(content))
             return content;
-        if(m_frame->textRunAround() == KWord::NoRunAround)
-            return QRectF(); // empty
 
         // two points, as we are checking a rect, not a line.
         double points[2] = { content.top(), content.bottom() };
@@ -172,14 +188,11 @@ public:
         return answer;
     }
 
-    KWFrame *frame() { return m_frame; }
-
 private:
-    enum Side { None, Left, Right };
+    enum Side { None, Left, Right, Empty };
     Side m_side;
     QMultiMap<double, QLineF> m_edges; //sorted with y-coord
     QRectF m_bounds;
-    KWFrame *m_frame;
 };
 
 class KWTextDocumentLayout::DummyShape : public KoShape {
@@ -262,6 +275,16 @@ void KWTextDocumentLayout::relayout() {
     layout();
 }
 
+void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &f) {
+    KoTextDocumentLayout::positionInlineObject(item, position, f);
+    KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObjectTextManager()->inlineTextObject(f.toCharFormat()));
+    if(anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
+        foreach(KWAnchorStrategy *strategy, m_activeAnchors)
+            if(strategy->anchor() == anchor) return;
+            m_activeAnchors.append(new KWAnchorStrategy(anchor));
+    }
+}
+
 void KWTextDocumentLayout::layout() {
 //kDebug() << "KWTextDocumentLayout::layout" << endl;
     QList<Outline*> outlines;
@@ -300,7 +323,7 @@ void KWTextDocumentLayout::layout() {
                     rect.setHeight(line.height());
                     QRectF newLine = limit(rect);
                     if(newLine.width() <= 0.)
-                        // TODO be more intelligent then just moving down 10 pt
+                        // TODO be more intelligent than just moving down 10 pt
                         rect = QRectF(m_state->x(), rect.top() + 10, m_state->width(), rect.height());
                     else if(qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right() - rect.right()) < 1E-10)
                         break;
@@ -329,6 +352,7 @@ void KWTextDocumentLayout::layout() {
                 // refresh the outlines cache.
                 qDeleteAll(outlines);
                 outlines.clear();
+                QMatrix helpMatrix= currentShape->transformationMatrix(0).inverted();
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach(KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
                     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
@@ -339,15 +363,21 @@ void KWTextDocumentLayout::layout() {
                             continue;
                         if(frame->textRunAround() == KWord::RunThrough)
                             continue;
-                        if(frame->shape()->zIndex() < currentShape->zIndex())
+                        if(frame->shape()->zIndex() <= currentShape->zIndex())
                             continue;
                         if(! bounds.intersects( frame->shape()->boundingRect()))
                             continue;
                         QMatrix matrix = frame->shape()->transformationMatrix(0);
-                        matrix = matrix * currentShape->transformationMatrix(0).inverted();
+                        matrix = matrix * helpMatrix;
                         matrix.translate(0, m_state->documentOffsetInShape());
                         outlines.append(new Outline(frame, matrix));
                     }
+                }
+                foreach(KWAnchorStrategy *strategy, m_activeAnchors) {
+                    QMatrix matrix = strategy->anchoredShape()->transformationMatrix(0);
+                    matrix = matrix * helpMatrix;
+                    matrix.translate(0, m_state->documentOffsetInShape());
+                    outlines.append(new Outline(strategy->anchoredShape(), matrix));
                 }
 
                 // set the page number of the shape.
@@ -355,6 +385,21 @@ void KWTextDocumentLayout::layout() {
                 data->setPageNumber( m_frameSet->pageManager()->pageNumber(currentShape));
             }
         }
+
+        // anchors might require us to do some layout again, give it the chance to 'do as it will'
+        bool restartLine = false;
+        foreach(KWAnchorStrategy *strategy, m_activeAnchors) {
+            if(strategy->checkState(m_state)) {
+                restartLine = true;
+                break;
+            }
+            if(strategy->shouldRemove()) {
+                m_activeAnchors.removeAll(strategy);
+                delete strategy;
+            }
+        }
+        if(restartLine)
+            continue;
 
         Line line(m_state);
         if (!line.isValid()) { // end of parag
