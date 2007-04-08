@@ -411,7 +411,7 @@ void KexiConnSelectorWidget::slotRemoteRemoveBtnClicked()
 		return;
 	if (KMessageBox::Continue!=KMessageBox::warningContinueCancel(0, 
 		i18n("Do you want to remove database connection \"%1\" from the list of available connections?")
-		.arg(item->data()->serverInfoString(true)), QString::null, KStdGuiItem::del(), QString::null, 
+		.arg(item->data()->serverInfoString(true)), QString::null, KStandardGuiItem::del(), QString::null, 
 		KMessageBox::Notify|KMessageBox::Dangerous))
 		return;
 

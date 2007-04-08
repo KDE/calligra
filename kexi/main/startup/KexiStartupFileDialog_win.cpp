@@ -91,9 +91,9 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //TODO    d->hasView = false;
 //(js)    d->mainWidget = new QWidget( this, "KFileDialog::mainWidget");
 //(js)    setMainWidget( d->mainWidget );
-//(js)    d->okButton = new KPushButton( KStdGuiItem::ok(), d->mainWidget );
+//(js)    d->okButton = new KPushButton( KStandardGuiItem::ok(), d->mainWidget );
 //(js)    d->okButton->setDefault( true );
-//(js)    d->cancelButton = new KPushButton(KStdGuiItem::cancel(), d->mainWidget);
+//(js)    d->cancelButton = new KPushButton(KStandardGuiItem::cancel(), d->mainWidget);
 //(js)    connect( d->okButton, SIGNAL( clicked() ), SLOT( slotOk() ));
 //(js)    connect( d->cancelButton, SIGNAL( clicked() ), SLOT( slotCancel() ));
 //(js)    d->customWidget = widget;
@@ -391,7 +391,7 @@ void KexiStartupFileDialogBase::setOperationMode( KFileDialog::OperationMode mod
       setIcon( KGlobal::iconLoader()->loadIcon("document-save", K3Icon::Desktop) );
     }
 //(js)    filterWidget->setEditable( !d->hasDefaultFilter || mode != Saving );
-//(js)    d->okButton->setGuiItem( (mode == Saving) ? KStdGuiItem::save() : KStdGuiItem::ok() );
+//(js)    d->okButton->setGuiItem( (mode == Saving) ? KStandardGuiItem::save() : KStandardGuiItem::ok() );
 //TODO    updateLocationWhatsThis ();
     updateAutoSelectExtension ();
 }
@@ -420,7 +420,7 @@ void KexiStartupFileDialogBase::setFilter(const QString& filter)
     // interpret as a MIME filter.
 
     if (pos > 0 && filter[pos - 1] != '\\') {
-        QStringList filters = QStringList::split( " ", d->kde_filters );
+        QStringList filters = d->kde_filters.split(" ");
         setMimeFilter( filters );
         return;
     }

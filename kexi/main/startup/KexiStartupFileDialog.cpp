@@ -257,7 +257,7 @@ QString KexiStartupFileDialog::currentFileName()
 	
 	if (!currentFilter().isEmpty()) {
 		if (m_mode & SavingFileBasedDB) {
-			QStringList filters = QStringList::split(" ", currentFilter()); //.first().trimmed();
+			QStringList filters = currentFilter().split(" ");
 			kDebug()<< " filter == " << filters << endl;
 			QString ext = QFileInfo(path).extension(false);
 			bool hasExtension = false;

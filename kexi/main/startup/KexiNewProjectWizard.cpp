@@ -342,7 +342,7 @@ void KexiNewProjectWizard::accept()
 			if (KMessageBox::Continue!=KMessageBox::warningContinueCancel( this, "<qt>"
 				+i18n("<b>A project with database name \"%1\" already exists</b>"
 				"<p>Do you want to delete it and create a new one?")
-				.arg( m_server_db_name->le_dbname->text() ), QString::null, KStdGuiItem::del(), 
+				.arg( m_server_db_name->le_dbname->text() ), QString::null, KStandardGuiItem::del(), 
 				QString::null, KMessageBox::Notify|KMessageBox::Dangerous ))
 			{
 				m_server_db_name->le_dbname->setFocus();
