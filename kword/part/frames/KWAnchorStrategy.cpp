@@ -27,7 +27,7 @@
 #include <QTextLine>
 #include <QTextDocument>
 
-#include <KDebug>
+//#include <KDebug>
 
 KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
     : m_anchor(anchor),
@@ -56,16 +56,18 @@ KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
             break;
         case KoTextAnchor::VerticalOffset:
         case KoTextAnchor::AboveCurrentLine:
+        case KoTextAnchor::BelowCurrentLine:
+            m_knowledgePoint = qMax(m_knowledgePoint, anchor->positionInDocument());
+            break;
         case KoTextAnchor::TopOfFrame:
-        case KoTextAnchor::BottomOfFrame:
-        case KoTextAnchor::BelowCurrentLine: {
+        case KoTextAnchor::BottomOfFrame: {
             KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (anchor->shape()->parent()->userData());
-            m_knowledgePoint = qMax(m_knowledgePoint, data->position());
+            m_knowledgePoint = qMax(m_knowledgePoint, data->position() + 1);
             break;
         }
         case KoTextAnchor::BottomOfParagraph: {
             QTextBlock block = anchor->document()->findBlock(anchor->positionInDocument());
-            m_knowledgePoint = qMax(m_knowledgePoint, block.position() + block.length());
+            m_knowledgePoint = qMax(m_knowledgePoint, block.position() + block.length() - 2);
             break;
         }
     }
@@ -75,20 +77,9 @@ KWAnchorStrategy::~KWAnchorStrategy() {
 }
 
 bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state) {
-    if(m_finished)
+//kDebug() << "KWAnchorStrategy::checkState [" << m_pass << "] pos: " << state->cursorPosition() << (m_finished?" Already finished!\n":"\n");
+    if(m_finished || m_knowledgePoint > state->cursorPosition())
         return false;
-kDebug() << "KWAnchorStrategy::checkState\n";
-    bool haveInfo = false;
-    if(state->layout->lineCount() && m_knowledgePoint < state->layout->lineAt(0).textStart())
-        haveInfo = true;
-    else {
-        QTextLine line = state->layout->lineAt(state->layout->lineCount() -1);
-        if(line.textStart() + line.textLength() > m_knowledgePoint)
-            haveInfo = true;
-    }
-    if(!haveInfo)
-        return false;
-kDebug() << "  still here\n";
 
     // *** alter 'state' to relayout the part we want.
     QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
@@ -107,13 +98,12 @@ kDebug() << "  still here\n";
             newPosition.setX(containerBoundingRect.width() - boundingRect.width());
             break;
         case KoTextAnchor::Center:
-            newPosition.setX(containerBoundingRect.width() - boundingRect.width() / 2.0);
+            newPosition.setX((containerBoundingRect.width() - boundingRect.width()) / 2.0);
             break;
         case KoTextAnchor::HorizontalOffset: {
             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
             Q_ASSERT(tl.isValid());
             double x = tl.cursorToX(m_anchor->positionInDocument() - block.position());
-kDebug() << " tmpX: " << x << " + " << m_anchor->offset().x() << endl;
             newPosition.setX(x + m_anchor->offset().x());
             break;
         }
@@ -130,24 +120,28 @@ kDebug() << " tmpX: " << x << " + " << m_anchor->offset().x() << endl;
         }
         case KoTextAnchor::AboveCurrentLine:
         case KoTextAnchor::BelowCurrentLine: {
-             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-             m_currentLineY = tl.y() + tl.ascent();
+            QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+            Q_ASSERT(tl.isValid());
+            KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (m_anchor->shape()->parent()->userData());
+            m_currentLineY = tl.y() + tl.height() - data->documentOffset();
             if(m_anchor->verticalAlignment() == KoTextAnchor::BelowCurrentLine)
-                newPosition.setY(m_currentLineY - boundingRect.height());
-            else
                 newPosition.setY(m_currentLineY);
+            else
+                newPosition.setY(m_currentLineY - boundingRect.height() - tl.height());
             break;
         }
         case KoTextAnchor::BottomOfParagraph: {
             QTextLine tl = layout->lineAt(layout->lineCount()-1);
-            newPosition.setY(tl.y() + tl.ascent());
+            Q_ASSERT(tl.isValid());
+            newPosition.setY(tl.y() + tl.height());
             break;
         }
         case KoTextAnchor::BottomOfFrame:
-            newPosition.setY(containerBoundingRect.bottom() - boundingRect.height());
+            newPosition.setY(containerBoundingRect.height() - boundingRect.height());
             break;
         case KoTextAnchor::VerticalOffset: {
             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+            Q_ASSERT(tl.isValid());
             newPosition.setY(tl.y() + tl.ascent() + m_anchor->offset().y());
             // use frame runaround properties (runthrough/around and side) to give shape a nice position
             break;
@@ -159,15 +153,10 @@ kDebug() << " tmpX: " << x << " + " << m_anchor->offset().x() << endl;
         // for the cases where we align with text; check if the text is within margin. If so; set finished to true.
         QPointF diff = newPosition - m_anchor->shape()->position();
         m_finished = qAbs(diff.x()) < 2.0 && qAbs(diff.y()) < 2.0;
-kDebug() << "  pass: " << m_pass << " finished: " << m_finished << endl;
     }
     m_pass++;
 
-    // revert the layout state
-    // TODO
-
     // set the shape to the proper position based on the data
-kDebug() << "  repositioning to " << newPosition << "\n";
     m_anchor->shape()->repaint();
     m_anchor->shape()->setPosition(newPosition);
     m_anchor->shape()->repaint();

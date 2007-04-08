@@ -46,6 +46,7 @@ public:
     virtual double width();
     virtual double x();
     virtual double y();
+    virtual int cursorPosition() const;
     /// return the y offset of the document at start of shape.
     virtual double docOffsetInShape() const;
     /// when a line is added, update internal vars.  Return true if line does not fit in shape

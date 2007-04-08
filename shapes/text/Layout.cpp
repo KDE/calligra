@@ -682,3 +682,12 @@ void Layout::clearTillEnd() {
         block = block.next();
     }
 }
+
+int Layout::cursorPosition() const {
+    int answer = m_block.position();
+    if(layout && layout->lineCount()) {
+        QTextLine tl = layout->lineAt(layout->lineCount() -1);
+        answer += tl.textStart() + tl.textLength() - 1;
+    }
+    return answer;
+}
