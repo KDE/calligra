@@ -5,6 +5,9 @@ add_subdirectory( printing )
 
 include_directories( ${CMAKE_SOURCE_DIR}/libs/kofficeui ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDES}  )
 
+ADD_DEFINITIONS(
+-DKEXI_NO_CTXT_HELP=1
+)
 
 ########### next target ###############
 
@@ -16,6 +19,7 @@ set(keximain_LIB_SRCS
    kexinewstuff.cpp
    kexifinddialog.cpp
    kexifinddialogbase.ui
+   startup/KexiStartupDialogTemplatesPage.cpp
 )
 
 kde4_automoc(${keximain_LIB_SRCS})
