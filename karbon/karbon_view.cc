@@ -89,7 +89,6 @@
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
-#include <KoShapeDeleteCommand.h>
 #include <KoShapeUngroupCommand.h>
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
