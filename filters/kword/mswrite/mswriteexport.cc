@@ -44,7 +44,7 @@
 #include "mswriteexport.h"
 
 
-class MSWriteExportFactory : KGenericFactory <MSWriteExport>
+class MSWriteExportFactory : public KGenericFactory <MSWriteExport>
 {
 public:
 	MSWriteExportFactory () : KGenericFactory <MSWriteExport> ("kwordmswriteexport")

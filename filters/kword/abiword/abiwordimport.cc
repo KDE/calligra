@@ -39,7 +39,7 @@
 
 #include "abiwordimport.h"
 
-class ABIWORDImportFactory : KGenericFactory<ABIWORDImport>
+class ABIWORDImportFactory : public KGenericFactory<ABIWORDImport>
 {
 public:
     ABIWORDImportFactory(void) : KGenericFactory<ABIWORDImport> ("kwordabiwordimport")

@@ -41,7 +41,7 @@
 //Added by qt3to4:
 #include <QByteArray>
 
-class OOWRITERExportFactory : KGenericFactory<OOWRITERExport>
+class OOWRITERExportFactory : public KGenericFactory<OOWRITERExport>
 {
 public:
     OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport> ("kwordoowriterexport")

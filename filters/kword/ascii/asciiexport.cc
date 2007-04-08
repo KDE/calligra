@@ -48,7 +48,7 @@
 #include <asciiexport.h>
 
 
-class ASCIIExportFactory : KGenericFactory<ASCIIExport>
+class ASCIIExportFactory : public KGenericFactory<ASCIIExport>
 {
 public:
     ASCIIExportFactory() : KGenericFactory<ASCIIExport>("kwordasciiexport")

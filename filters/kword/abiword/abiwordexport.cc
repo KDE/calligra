@@ -56,7 +56,7 @@
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
 
-class ABIWORDExportFactory : KGenericFactory<ABIWORDExport>
+class ABIWORDExportFactory : public KGenericFactory<ABIWORDExport>
 {
 public:
     ABIWORDExportFactory(void) : KGenericFactory<ABIWORDExport> ("kwordabiwordexport")

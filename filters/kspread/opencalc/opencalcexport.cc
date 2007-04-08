@@ -59,7 +59,7 @@ using namespace KSpread;
 
 typedef Q3ValueList<Reference> AreaList;
 
-class OpenCalcExportFactory : KGenericFactory<OpenCalcExport>
+class OpenCalcExportFactory : public KGenericFactory<OpenCalcExport>
 {
 public:
     OpenCalcExportFactory(void) : KGenericFactory<OpenCalcExport> ("kspreadopencalcexport")

@@ -44,7 +44,7 @@
 #include <asciiimport.moc>
 #include "ImportDialog.h"
 
-class ASCIIImportFactory : KGenericFactory<ASCIIImport>
+class ASCIIImportFactory : public KGenericFactory<ASCIIImport>
 {
 public:
     ASCIIImportFactory(void) : KGenericFactory<ASCIIImport> ("kwordasciiimport")

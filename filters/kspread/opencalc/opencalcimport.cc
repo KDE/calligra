@@ -64,7 +64,7 @@
 
 using namespace KSpread;
 
-class OpenCalcImportFactory : KGenericFactory<OpenCalcImport>
+class OpenCalcImportFactory : public KGenericFactory<OpenCalcImport>
 {
 public:
     OpenCalcImportFactory(void) : KGenericFactory<OpenCalcImport> ("kspreadopencalcimport")

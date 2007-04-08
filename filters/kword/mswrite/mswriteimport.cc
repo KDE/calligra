@@ -45,7 +45,7 @@
 #include "mswriteimport.h"
 
 
-class MSWriteImportFactory : KGenericFactory <MSWriteImport>
+class MSWriteImportFactory : public KGenericFactory <MSWriteImport>
 {
 public:
 	MSWriteImportFactory () : KGenericFactory <MSWriteImport> ("kwordmswriteimport")
