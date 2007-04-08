@@ -9,17 +9,6 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KDE34COMPAT)")
 #install( FILES  kexiui.rc  DESTINATION ${DATA_INSTALL_DIR}/kexi)
 #install( FILES  x-kexiproject-sqlite.desktop  x-kexi-connectiondata.desktop  x-kexiproject-sqlite2.desktop  x-kexiproject-sqlite3.desktop  x-kexiproject-shortcut.desktop  DESTINATION ${MIME_INSTALL_DIR}/application)
 
-#KDE4
-install(FILES
-    x-kexiproject-sqlite.desktop
-    x-kexi-connectiondata.desktop
-    x-kexiproject-sqlite2.desktop
-    x-kexiproject-sqlite3.desktop
-    x-kexiproject-shortcut.desktop
-    DESTINATION ${MIME_INSTALL_DIR}/application
-    )
-
-
 
 #original Makefile.am contents follow:
 
