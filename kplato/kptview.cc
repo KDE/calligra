@@ -2281,7 +2281,6 @@ void View::updateView( QWidget *widget )
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
     //setScheduleActionsEnabled();
-    //kDebug()<<"UUUUUUPPPPPDDDDAAAAATTTTEEE"<<endl;
 
     mainWindow() ->toolBar( "report" ) ->hide();
     QWidget *widget2; 

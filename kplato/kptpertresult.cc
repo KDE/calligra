@@ -30,7 +30,6 @@ void PertResult::draw( Project &project)
     QList<Node*> list;
     QString res;
     testComplexGraph();
-    kDebug()<<"TESTOUILLE"<<endl;
     foreach(Node * currentNode, project.projectNode()->childNodeIterator()){
         if (currentNode->type()!=4){
  
