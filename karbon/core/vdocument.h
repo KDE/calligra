@@ -232,25 +232,6 @@ public:
 	 */
 	void remove( KoShape* shape );
 	
-	/**
-	 * Returns custom name of specified object.
-	 *
-	 * @param shape the object to retrieve name for
-	 * @return the custom name of the object or an empty string if no custom name is set
-	 */
-	QString objectName( const KoShape *shape ) const;
-
-	/**
-	 * Sets custom name of specified object.
-	 *
-	 * By default all object have generic names like path, rectangle or text that
-	 * is defined within the object's class.
-	 * 
-	 * @param obj the object to set custom name for
-	 * @param name the the custom name to set
-	 */
-	void setObjectName( const KoShape *shape, const QString &name );
-
 	bool saveAsPath() const { return m_saveAsPath; }
 	void saveAsPath( bool b ) { m_saveAsPath = b; }
 

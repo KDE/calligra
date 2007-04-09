@@ -252,19 +252,6 @@ VDocument::accept( VVisitor& visitor )
 	visitor.visitVDocument( *this );
 }
 
-QString
-VDocument::objectName( const KoShape *shape ) const
-{
-    QMap<const KoShape *, QString>::ConstIterator it = m_objectNames.find( shape );
-    return it == m_objectNames.end() ? 0L : it.value();
-}
-
-void
-VDocument::setObjectName( const KoShape *shape, const QString &name )
-{
-    m_objectNames.insert( shape, name );
-}
-
 QRectF VDocument::boundingRect() const
 {
     // initialize bounding rect with page size

@@ -212,11 +212,11 @@ void VLayerDocker::addLayer()
     if( ok )
     {
         KoShapeLayer* layer = new KoShapeLayer();
+        layer->setName( name );
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
         QUndoCommand *cmd = new KoShapeCreateCommand( m_shapeController, layer, 0 );
         cmd->setText( i18n( "Create Layer") );
         canvasController->canvas()->addCommand( cmd );
-        m_document->setObjectName( layer, name );
         m_model->update();
     }
 }
@@ -453,7 +453,7 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
     {
         case Qt::DisplayRole:
         {
-            QString name = m_document->objectName( shape );
+            QString name = shape->name();
             if( name.isEmpty() )
             {
                 if( dynamic_cast<KoShapeLayer*>( shape ) )
@@ -466,7 +466,7 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
             return name;
         }
         case Qt::DecorationRole: return QVariant();//return shape->icon();
-        case Qt::EditRole: return m_document->objectName( shape );
+        case Qt::EditRole: return shape->name();
         case Qt::SizeHintRole: return shape->size();
         case ActiveRole:
         {
@@ -527,7 +527,7 @@ bool VDocumentModel::setData(const QModelIndex &index, const QVariant &value, in
     {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            m_document->setObjectName( shape, value.toString() );
+            shape->setName( value.toString() );
             break;
         case PropertiesRole:
             setProperties( shape, value.value<PropertyList>());
