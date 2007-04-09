@@ -20,7 +20,7 @@
 #include "vlayerdocker.h"
 
 #include <QGridLayout>
-#include <QToolButton>
+#include <QPushButton>
 #include <QButtonGroup>
 #include <QAbstractItemModel>
 #include <QPainterPath>
@@ -87,35 +87,31 @@ VLayerDocker::VLayerDocker( KoShapeControllerBase *shapeController, VDocument *d
 
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
-    layout->addWidget( m_layerView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, 5 );
+    layout->addWidget( m_layerView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, 4 );
 
     QButtonGroup *buttonGroup = new QButtonGroup( mainWidget );
     buttonGroup->setExclusive( false );
 
-    QToolButton *button = new QToolButton( mainWidget );
-    button->setIcon( SmallIcon( "14_layer_newlayer" ) );
-    button->setText( i18n( "New" ) );
+    QPushButton *button = new QPushButton( mainWidget );
+    button->setIcon( SmallIcon( "list-add" ) );
     button->setToolTip( i18n("Add a new layer") );
     buttonGroup->addButton( button, Button_New );
     layout->addWidget( button, 1, 0 );
 
-    button = new QToolButton( mainWidget );
-    button->setIcon( SmallIcon( "14_layer_raiselayer" ) );
-    button->setText( i18n( "Raise" ) );
+    button = new QPushButton( mainWidget );
+    button->setIcon( SmallIcon( "arrow-up" ) );
     button->setToolTip( i18n("Raise selected objects") );
     buttonGroup->addButton( button, Button_Raise );
     layout->addWidget( button, 1, 1 );
 
-    button = new QToolButton( mainWidget );
-    button->setIcon( SmallIcon( "14_layer_lowerlayer" ) );
-    button->setText( i18n( "Lower" ) );
+    button = new QPushButton( mainWidget );
+    button->setIcon( SmallIcon( "arrow-down" ) );
     button->setToolTip( i18n("Lower selected objects") );
     buttonGroup->addButton( button, Button_Lower );
     layout->addWidget( button, 1, 2 );
 
-    button = new QToolButton( mainWidget );
-    button->setIcon( SmallIcon( "14_layer_deletelayer" ) );
-    button->setText( i18n( "Delete" ) );
+    button = new QPushButton( mainWidget );
+    button->setIcon( SmallIcon( "list-remove" ) );
     button->setToolTip( i18n("Delete selected objects") );
     buttonGroup->addButton( button, Button_Delete );
     layout->addWidget( button, 1, 3 );
@@ -552,7 +548,7 @@ KoDocumentSectionModel::PropertyList VDocumentModel::properties( KoShape* shape 
 {
     PropertyList l;
     l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
-    l << Property(i18n("Locked"), SmallIcon("locked"), SmallIcon("unlocked"), shape->isLocked());
+    l << Property(i18n("Locked"), SmallIcon("encrypted"), SmallIcon("decrypted"), shape->isLocked());
     return l;
 }
 
