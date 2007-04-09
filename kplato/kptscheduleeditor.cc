@@ -761,6 +761,7 @@ void ScheduleEditor::slotCalculateSchedule()
     ScheduleManager *sm = m_editor->currentManager();
     if ( sm ) {
         emit calculateSchedule( m_editor->project(), sm );
+	//emit slotUpdate();
     }
 }
 

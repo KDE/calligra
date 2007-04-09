@@ -2086,7 +2086,7 @@ void View::slotUpdate()
     m_updateAccountsview = true;
     m_updateResourceAssignmentView = true;
     m_updatePertEditor = true;
-
+    m_updatePertResult = true;
     updateView( m_tab->currentWidget() );
 }
 
@@ -2281,32 +2281,39 @@ void View::updateView( QWidget *widget )
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
     //setScheduleActionsEnabled();
+    //kDebug()<<"UUUUUUPPPPPDDDDAAAAATTTTEEE"<<endl;
+
     mainWindow() ->toolBar( "report" ) ->hide();
-    if ( widget == m_viewlist->findView( "GanttView" ) ) {
-        //kDebug()<<k_funcinfo<<"draw gantt"<<endl;
-        if ( m_updateGanttview )
-            static_cast<ViewBase*>( widget ) ->drawChanges( getProject() );
-        //setTaskActionsEnabled( widget, true );
-        m_updateGanttview = false;
-    } else if ( widget == m_viewlist->findView( "ResourceView" ) ) {
-        //kDebug()<<k_funcinfo<<"draw resourceview"<<endl;
-        if ( m_updateResourceview )
-            static_cast<ViewBase*>( widget ) ->draw( getPart() ->getProject() );
-        m_updateResourceview = false;
-    } else if ( widget == m_viewlist->findView( "AccountsView" ) ) {
-        //kDebug()<<k_funcinfo<<"draw accountsview"<<endl;
-        if ( m_updateAccountsview )
-            static_cast<ViewBase*>( widget ) ->draw();
-        m_updateAccountsview = false;
-    } else if ( widget == m_viewlist->findView( "ResourceAssignmentView" ) ) {
-        if ( m_updateResourceAssignmentView )
-            static_cast<ViewBase*>( widget ) ->draw( getProject() );
-        m_updateResourceAssignmentView = false;
-    } else if ( widget == m_viewlist->findView( "DependencyEditor" ) ) {
-        static_cast<ViewBase*>( widget ) -> draw( getProject() );
-    }else if ( widget == m_viewlist->findView( "PertResultView" ) ) {
-        static_cast<ViewBase*>( widget ) -> draw( getProject() );
-    }
+    QWidget *widget2; 
+
+    widget2 = m_viewlist->findView( "GanttView" ) ;
+    if ( m_updateGanttview )
+	static_cast<ViewBase*>( widget2 ) ->drawChanges( getProject() );
+        //setTaskActionsEnabled( widget2, true );
+    m_updateGanttview = false;
+
+    widget2 = m_viewlist->findView( "ResourceView" ) ;
+    if ( m_updateResourceview )
+        static_cast<ViewBase*>( widget2 ) ->draw( getPart() ->getProject() );
+    m_updateResourceview = false;
+
+    widget2 = m_viewlist->findView( "AccountsView" );
+    if ( m_updateAccountsview )
+        static_cast<ViewBase*>( widget2 ) ->draw();
+    m_updateAccountsview = false;
+
+    widget2 = m_viewlist->findView( "ResourceAssignmentView" );
+    if ( m_updateResourceAssignmentView )
+        static_cast<ViewBase*>( widget2 ) ->draw( getProject() );
+    m_updateResourceAssignmentView = false;
+
+    widget2 = m_viewlist->findView( "PertEditor" );
+        static_cast<ViewBase*>( widget2 ) -> draw( getProject() );
+
+
+    widget2 = m_viewlist->findView( "PertResultView" ) ;
+        static_cast<ViewBase*>( widget2 ) -> draw( getProject() );
+
     QApplication::restoreOverrideCursor();
 }
 
