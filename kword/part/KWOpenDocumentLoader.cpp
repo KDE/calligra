@@ -269,7 +269,7 @@ bool KWOpenDocumentLoader::loadPageLayout(const QString& masterPageName, KoOasis
     Q_ASSERT( styles.masterPages().contains(masterPageName) );
     const QDomElement* masterPage = styles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
-    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
+    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
     Q_ASSERT( masterPageStyle );
     if ( masterPageStyle ) {
         KoPageLayout pageLayout = KoPageLayout::standardLayout();
@@ -337,7 +337,7 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, Ko
     const KoOasisStyles& styles = context.oasisStyles();
     Q_ASSERT( styles.masterPages().contains(masterPageName) );
     const QDomElement *masterPage = styles.masterPages()[ masterPageName ];
-    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
+    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
 #if 0 //1.6:
     // This check is done here and not in loadOasisPageLayout in case the Standard master-page
     // has no page information but the first paragraph points to a master-page that does (#129585)
@@ -417,8 +417,8 @@ void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context, QList<KoXm
         Q_ASSERT( !styleElem->isNull() );
 
         //1.6: KoParagStyle::loadStyle
-        QString name = styleElem->attributeNS( KoXmlNS::style, "name", QString::null );
-        QString displayName = styleElem->attributeNS( KoXmlNS::style, "display-name", QString::null );
+        QString name = styleElem->attributeNS( KoXmlNS::style, "name", QString() );
+        QString displayName = styleElem->attributeNS( KoXmlNS::style, "display-name", QString() );
         if ( displayName.isEmpty() )
             displayName = name;
 
@@ -663,11 +663,11 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
     }
 
     //1.6: KWTextParag::loadOasis
-    QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+    QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
     kDebug()<<"==> PARAGRAPH styleName="<<styleName<<" userStyleName="<<userStyleName<<" userStyle="<<(userStyle?"YES":"NULL")<<endl;
     if ( !styleName.isEmpty() ) {
         const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
-        QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
+        QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString() ) : QString();
         if ( masterPageName.isEmpty() )
             masterPageName = "Standard";
 
@@ -748,7 +748,7 @@ void KWOpenDocumentLoader::loadHeading(const KoXmlElement& parent, KoOasisLoadin
     }
 #else
     //1.6: KWTextParag::loadOasis
-    const QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+    const QString styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
     kDebug()<<"==> HEADING styleName="<<styleName<<endl;
     if ( !styleName.isEmpty() ) {
         const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
@@ -836,7 +836,7 @@ void KWOpenDocumentLoader::loadList(const KoXmlElement& parent, KoOasisLoadingCo
 
     QString styleName;
     if( parent.hasAttributeNS( KoXmlNS::text, "style-name" ) )
-        styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+        styleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
 
     //QString userStyleName = context.styleStack().userStyleName( "paragraph" );
     KoParagraphStyle *paragstyle = d->document->styleManager()->paragraphStyle(styleName);
@@ -985,7 +985,7 @@ if(parent.localName()!="span") {
             //context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
             context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
             //const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString::null );
-            const QString textStyleName = parent.attributeNS( KoXmlNS::text, "style-name", QString::null );
+            const QString textStyleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
             const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "text"/*"paragraph"*/ );
             KoCharacterStyle *charstyle1 = 0;
             if( textStyleElem ) {
@@ -1058,7 +1058,7 @@ if(parent.localName()!="span") {
         {
             int howmany = 1;
             if (ts.hasAttributeNS( KoXmlNS::text, "c"))
-                howmany = ts.attributeNS( KoXmlNS::text, "c", QString::null).toInt();
+                howmany = ts.attributeNS( KoXmlNS::text, "c", QString()).toInt();
             cursor.insertText( QString().fill(32, howmany) );
         }
         else if ( isTextNS && localName == "tab" ) // text:tab

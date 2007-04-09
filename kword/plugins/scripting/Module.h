@@ -60,7 +60,7 @@ namespace Scripting {
     * \endcode
     *
     * Python example that prints the documents Url and some other
-    * meta informations;
+    * meta information;
     * \code
     * import KWord
     * print KWord.document().url()

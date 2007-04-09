@@ -31,7 +31,6 @@
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoTextSelectionHandler.h>
-#include <KoTextSelectionHandler.h>
 //#include <KWord.h>
 #include <KWView.h>
 #include <KWCanvas.h>

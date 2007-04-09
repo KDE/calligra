@@ -568,7 +568,7 @@ void KWDocument::printDebug() {
         else if(page->pageSide() == KWPage::PageSpread) {
             side = "[PageSpread]";
             pgnum++;
-            num += "-" + QString::number(pgnum);
+            num += '-' + QString::number(pgnum);
         }
         kDebug(32001) << "Page " << num << side << " width=" << page->width() << " height=" << page->height() << endl;
     }
