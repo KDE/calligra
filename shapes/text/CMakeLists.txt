@@ -14,6 +14,7 @@ SET ( textshape_SRCS
     TextToolFactory.cpp
     Layout.cpp
     ListItemsHelper.cpp
+    ChangeTracker.cpp
     dialogs/StylesWidget.cpp
     dialogs/SimpleStyleWidget.cpp
     dialogs/ParagraphLayout.cpp

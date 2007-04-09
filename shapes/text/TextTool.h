@@ -30,8 +30,9 @@
 #include <QHash>
 
 class KoStyleManager;
-class UndoTextCommand; // private class
 class KoTextEditingPlugin;
+class UndoTextCommand;
+class ChangeTracker;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -107,6 +108,8 @@ private slots:
     void insertIndexMarker();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
+    /// When enabled, make the change tracker record changes made while typing
+    void toggleTrackChanges(bool);
 
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();
@@ -128,12 +131,15 @@ private:
 
 private:
     friend class UndoTextCommand;
+    friend class ChangeTracker;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
     QTextCursor m_caret;
+    ChangeTracker *m_changeTracker;
     KoTextSelectionHandler m_selectionHandler;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
+    bool m_trackChanges;
     int m_prevCursorPosition; /// used by editingPluginEvents
 
     QAction *m_actionFormatBold;

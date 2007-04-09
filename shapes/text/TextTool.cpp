@@ -18,6 +18,7 @@
  */
 
 #include "TextTool.h"
+#include "ChangeTracker.h"
 #include "dialogs/SimpleStyleWidget.h"
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
@@ -56,8 +57,10 @@ TextTool::TextTool(KoCanvasBase *canvas)
 : KoTool(canvas),
     m_textShape(0),
     m_textShapeData(0),
+    m_changeTracker(0),
     m_allowActions(true),
     m_allowAddUndoCommand(true),
+    m_trackChanges(false),
     m_prevCursorPosition(-1)
 {
     m_actionFormatBold  = new QAction(KIcon("format-text-bold"), i18n("Bold"), this);
@@ -186,6 +189,11 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     addAction("format_paragraph", action);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
     connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
+
+    action = new QAction(i18n("Record"), this);
+    action->setCheckable(true);
+    addAction("edit_record_changes", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleTrackChanges(bool)));
 }
 
 TextTool::~TextTool() {
@@ -318,6 +326,11 @@ void TextTool::setShapeData(KoTextShapeData *data) {
             m_textShape->setDemoText(false); // remove demo text
         }
         m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
+    }
+    if(m_trackChanges) {
+        if(m_changeTracker == 0)
+            m_changeTracker = new ChangeTracker(this);
+        m_changeTracker->setDocument(m_textShapeData->document());
     }
 }
 
@@ -774,6 +787,18 @@ void TextTool::formatParagraph() {
     dia->setUnit(m_canvas->unit());
 
     dia->show();
+}
+
+void TextTool::toggleTrackChanges(bool on) {
+    m_trackChanges = on;
+    if(on){
+        if(m_textShapeData && m_changeTracker == 0)
+            m_changeTracker = new ChangeTracker(this);
+        if(m_changeTracker)
+            m_changeTracker->setDocument(m_textShapeData->document());
+    }
+    else if(m_changeTracker)
+        m_changeTracker->setDocument(0);
 }
 
 
