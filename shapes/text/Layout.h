@@ -53,6 +53,7 @@ public:
     virtual bool addLine(QTextLine &line);
     /// prepare for next paragraph; return false if there is no next parag.
     virtual bool nextParag();
+    virtual bool previousParag();
     virtual double documentOffsetInShape();
     virtual bool setFollowupShape(KoShape *shape);
 

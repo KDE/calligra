@@ -685,9 +685,47 @@ void Layout::clearTillEnd() {
 
 int Layout::cursorPosition() const {
     int answer = m_block.position();
-    if(layout && layout->lineCount()) {
+    if(!m_newParag && layout && layout->lineCount()) {
         QTextLine tl = layout->lineAt(layout->lineCount() -1);
         answer += tl.textStart() + tl.textLength() - 1;
     }
     return answer;
 }
+
+bool Layout::previousParag() {
+    if(m_block.position() == 0 && layout->lineCount() == 0)
+        return false;
+
+    layout->endLayout();
+    if(layout->lineCount() == 0) {
+        m_block = m_block.previous();
+        layout = m_block.layout();
+    }
+    QTextLine tl = layout->lineAt(0);
+    Q_ASSERT(tl.isValid());
+    m_y = tl.y();
+
+    m_format = m_block.blockFormat();
+    m_blockData = dynamic_cast<KoTextBlockData*> (m_block.userData());
+    m_isRtl = m_block.text().isRightToLeft();
+
+    m_fragmentIterator = m_block.begin();
+    m_newParag = true;
+
+    if(m_data->position() > m_block.position()) { // go back a shape.
+        QList<KoShape *> shapes = m_parent->shapes();
+        for(--shapeNumber; shapeNumber >= 0; shapeNumber--) {
+            shape = shapes[shapeNumber];
+            m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
+            if(m_data != 0)
+                break;
+        }
+
+        m_shapeBorder = shape->borderInsets();
+    }
+    m_newShape = m_block.position() == m_data->position();
+    updateBorders(); // fill the border inset member vars.
+    layout->beginLayout();
+    return true;
+}
+

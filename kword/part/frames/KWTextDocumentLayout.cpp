@@ -25,6 +25,7 @@
 #include "frames/KWAnchorStrategy.h"
 
 #include <KoTextShapeData.h>
+#include <KoShapeContainer.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextAnchor.h>
 
@@ -185,6 +186,7 @@ public:
             else
                 answer.setRight( qMin(answer.right(), x));
         }
+
         return answer;
     }
 
@@ -279,9 +281,9 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     KoTextDocumentLayout::positionInlineObject(item, position, f);
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObjectTextManager()->inlineTextObject(f.toCharFormat()));
     if(anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
-        foreach(KWAnchorStrategy *strategy, m_activeAnchors)
+        foreach(KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors)
             if(strategy->anchor() == anchor) return;
-            m_activeAnchors.append(new KWAnchorStrategy(anchor));
+        m_newAnchors.append(new KWAnchorStrategy(anchor));
     }
 }
 
@@ -352,7 +354,6 @@ void KWTextDocumentLayout::layout() {
                 // refresh the outlines cache.
                 qDeleteAll(outlines);
                 outlines.clear();
-                QMatrix helpMatrix= currentShape->transformationMatrix(0).inverted();
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach(KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
                     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
@@ -367,19 +368,21 @@ void KWTextDocumentLayout::layout() {
                             continue;
                         if(! bounds.intersects( frame->shape()->boundingRect()))
                             continue;
+                        bool isChild = false;
+                        KoShape *parent = frame->shape()->parent();
+                        while(parent && !isChild) {
+                            if(parent == currentShape)
+                                isChild = true;
+                            parent = parent->parent();
+                        }
+                        if(isChild)
+                            continue;
                         QMatrix matrix = frame->shape()->transformationMatrix(0);
-                        matrix = matrix * helpMatrix;
+                        matrix = matrix * currentShape->transformationMatrix(0).inverted();
                         matrix.translate(0, m_state->documentOffsetInShape());
                         outlines.append(new Outline(frame, matrix));
                     }
                 }
-                foreach(KWAnchorStrategy *strategy, m_activeAnchors) {
-                    QMatrix matrix = strategy->anchoredShape()->transformationMatrix(0);
-                    matrix = matrix * helpMatrix;
-                    matrix.translate(0, m_state->documentOffsetInShape());
-                    outlines.append(new Outline(strategy->anchoredShape(), matrix));
-                }
-
                 // set the page number of the shape.
                 KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (currentShape->userData());
                 data->setPageNumber( m_frameSet->pageManager()->pageNumber(currentShape));
@@ -388,18 +391,29 @@ void KWTextDocumentLayout::layout() {
 
         // anchors might require us to do some layout again, give it the chance to 'do as it will'
         bool restartLine = false;
-        foreach(KWAnchorStrategy *strategy, m_activeAnchors) {
+        foreach(KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             if(strategy->checkState(m_state)) {
                 restartLine = true;
                 break;
             }
-            if(strategy->shouldRemove()) {
+            if(strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
                 m_activeAnchors.removeAll(strategy);
                 delete strategy;
             }
         }
         if(restartLine)
             continue;
+
+        foreach(KWAnchorStrategy *strategy, m_newAnchors) {
+            if(strategy->anchoredShape() != 0) {
+                QMatrix matrix = strategy->anchoredShape()->transformationMatrix(0);
+                matrix = matrix * currentShape->transformationMatrix(0).inverted();
+                matrix.translate(0, m_state->documentOffsetInShape());
+                outlines.append(new Outline(strategy->anchoredShape(), matrix));
+            }
+            m_activeAnchors.append(strategy);
+        }
+        m_newAnchors.clear();
 
         Line line(m_state);
         if (!line.isValid()) { // end of parag

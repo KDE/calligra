@@ -34,7 +34,7 @@ public:
     virtual ~KWAnchorStrategy();
 
     bool checkState(KoTextDocumentLayout::LayoutState *state);
-    bool shouldRemove();
+    bool isFinished();
     KoShape * anchoredShape() const;
 
     KoTextAnchor *anchor() { return m_anchor; }

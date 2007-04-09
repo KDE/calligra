@@ -57,6 +57,7 @@ private:
     DummyShape * const m_dummyShape;
 
     QList<KWAnchorStrategy*> m_activeAnchors;
+    QList<KWAnchorStrategy*> m_newAnchors;
 
     int m_lastKnownFrameCount;
 };
