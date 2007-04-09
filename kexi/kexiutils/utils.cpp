@@ -27,6 +27,7 @@
 #include <qicon.h>
 #include <QMetaProperty>
 #include <QBitmap>
+#include <QFocusEvent>
 #include <qfile.h>
 
 #include <kdebug.h>
@@ -58,7 +59,7 @@ void DelayedCursorHandler::stop() {
 	QApplication::restoreOverrideCursor();
 }
 void DelayedCursorHandler::show() {
-	QApplication::setOverrideCursor( KCursor::waitCursor() );
+	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 }
 
 DelayedCursorHandler _delayedCursorHandler;
@@ -349,7 +350,8 @@ void KexiUtils::serializeMap(const QMap<QString,QString>& map, QString& string)
 QMap<QString,QString> KexiUtils::deserializeMap(const QByteArray& array)
 {
 	QMap<QString,QString> map;
-	QDataStream ds( &array,QIODevice::ReadOnly);
+	QByteArray ba(array);
+	QDataStream ds( &ba,QIODevice::ReadOnly);
 	ds.setVersion(QDataStream::Qt_3_1);
 	ds >> map;
 	return map;
@@ -512,64 +514,20 @@ void* KexiUtils::stringToPtrInternal(const QString& str, uint size)
 	return *(void**)(array.data());
 }
 
-void KexiUtils::setFocusWithReason(QWidget* widget, QFocusEvent::Reason reason)
+void KexiUtils::setFocusWithReason(QWidget* widget, Qt::FocusReason reason)
 {
-	QEvent fe( QEvent::FocusIn );
-	QFocusEvent::setReason(reason);
-	QApplication::sendEvent( widget, &fe );
-	QFocusEvent::resetReason();
+	QFocusEvent fe( QEvent::FocusIn, reason );
+	//QFocusEvent::setReason(reason);
+	QCoreApplication::sendEvent( widget, &fe );
+	//QFocusEvent::resetReason();
 }
 
-void KexiUtils::unsetFocusWithReason(QWidget* widget, QFocusEvent::Reason reason)
+void KexiUtils::unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason)
 {
-	QEvent fe( QEvent::FocusOut );
-	QFocusEvent::setReason(reason);
-	QApplication::sendEvent( widget, &fe );
-	QFocusEvent::resetReason();
-}
-
-CopyFileResult KexiUtils::copyFile(const QString& src, const QString& dest)
-{
-#ifdef Q_WS_WIN
-	int res = fcopy( QFile::encodeName( src ), QFile::encodeName( dest ) );
-	if (res == fcopy_src_err)
-		return CopyReadError;
-	else if (res == fcopy_dest_err)
-		return CopyWriteError;
-	
-	return CopySuccess;
-#else
-# define _fcopy_BUFLEN 1024*32
-	char _fcopy_buf[_fcopy_BUFLEN];
-	FILE *in, *out;
-	int c_in=0, c_out=0;
-	CopyFileResult res=CopySuccess;
-	
-	in=fopen(QFile::encodeName( src ), "rb");
-	if (!in)
-		return CopyReadError;
-	out=fopen(QFile::encodeName( dest ), "wb");
-	if (!out)
-		return CopyWriteError;
-	while (!feof(in) && !ferror(in) && !ferror(out)) {
-		c_in=fread(_fcopy_buf, 1, _fcopy_BUFLEN, in);
-		if (ferror(in) || c_in==0)
-			break;
-		c_out=fwrite(_fcopy_buf, 1, c_in, out);
-		if (ferror(out) || c_in!=c_out)
-			break;
-	}
-	
-	if (ferror(in))
-		res=CopyReadError;
-	else if (ferror(out))
-		res=CopyWriteError;
-	else if (c_in!=c_out)
-		res=CopyWriteError;
-	fclose(in);
-	fclose(out);
-	return res;
-#endif
+	QFocusEvent fe( QEvent::FocusOut, reason );
+	//QFocusEvent::setReason(reason);
+	QCoreApplication::sendEvent( widget, &fe );
+	//QFocusEvent::resetReason();
 }
 
 #include "utils_p.moc"

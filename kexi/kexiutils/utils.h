@@ -53,9 +53,9 @@ namespace KexiUtils
 	{
 		if (!o)
 			return 0;
-		while ( ((o=o->parent()) && !::qobject_cast<type *>(o) ) )
+		while ( ((o=o->parent()) && !::qobject_cast< type >(o) ) )
 			;
-		return qobject_cast<type>(o);
+		return ::qobject_cast< type >(o);
 	}
 
 	//! Const version of findParent()
@@ -67,7 +67,7 @@ namespace KexiUtils
 			return 0;
 		while ( ((obj=obj->parent())) && !obj->inherits(className) )
 			;
-		return qobject_cast<const type>(obj);
+		return ::qobject_cast< const type >(obj);
 	}
 
 	/*! \return first found child of \a o, inheriting \a className.
@@ -81,7 +81,7 @@ namespace KexiUtils
 	template<class type>
 	inline type findFirstChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName = 0)
 	{
-		return qobject_cast<type>(findFirstQObjectChild(o, className, objName));
+		return ::qobject_cast< type >(findFirstQObjectChild(o, className, objName));
 	}
 
 	//! Finds property name and returns its index; otherwise returns -1.
@@ -292,10 +292,10 @@ namespace KexiUtils
 	}
 
 	//! Sets focus for widget \a widget with reason \a reason.
-	KEXIUTILS_EXPORT void setFocusWithReason(QWidget* widget, QFocusEvent::Reason reason);
+	KEXIUTILS_EXPORT void setFocusWithReason(QWidget* widget, Qt::FocusReason reason);
 
 	//! Unsets focus for widget \a widget with reason \a reason.
-	KEXIUTILS_EXPORT void unsetFocusWithReason(QWidget* widget, QFocusEvent::Reason reason);
+	KEXIUTILS_EXPORT void unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason);
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
