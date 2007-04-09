@@ -501,10 +501,10 @@ QString ValueFormatter::dateFormat (const QDate &date, Format::Type fmtType)
 {
   QString tmp;
   if (fmtType == Format::ShortDate) {
-    tmp = m_converter->locale()->formatDate(date, true);
+    tmp = m_converter->locale()->formatDate(date, KLocale::ShortDate);
   }
   else if (fmtType == Format::TextDate) {
-    tmp = m_converter->locale()->formatDate(date, false);
+    tmp = m_converter->locale()->formatDate(date, KLocale::LongDate);
   }
   else if (fmtType == Format::Date1) {  /*18-Feb-99 */
     tmp = QString().sprintf("%02d", date.day());
@@ -624,7 +624,7 @@ QString ValueFormatter::dateFormat (const QDate &date, Format::Type fmtType)
     tmp += '/' + QString().sprintf("%02d", date.day());
   }
   else
-    tmp = m_converter->locale()->formatDate(date, true);
+    tmp = m_converter->locale()->formatDate(date, KLocale::ShortDate);
 
   // Missing compared with gnumeric:
   //  "m/d/yy h:mm",    /* 20 */

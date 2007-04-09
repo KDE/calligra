@@ -121,7 +121,7 @@ void TaskAppointmentsView::slotUpdate()
     //kDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     QStringList df;
     for ( QDate dt = start; dt <= end; dt = cal->addDays( dt, 1 ) ) {
-        df << locale->formatDate( dt, true );
+        df << locale->formatDate( dt, KLocale::ShortDate );
     }
     setSlaveLabels( df );
     foreach ( QTreeWidgetItem * i, masterItems() ) {

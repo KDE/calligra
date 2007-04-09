@@ -272,7 +272,7 @@ Value ValueConverter::asString (const Value &value) const
       if (fmt == Value::fmt_DateTime)
         val = Value(m_parser->locale()->formatDateTime (value.asDateTime( doc() )));
       else if (fmt == Value::fmt_Date)
-        val = Value(m_parser->locale()->formatDate (value.asDate( doc() ), true));
+        val = Value(m_parser->locale()->formatDate (value.asDate( doc() ), KLocale::ShortDate));
       else if (fmt == Value::fmt_Time)
         val = Value(m_parser->locale()->formatTime (value.asTime( doc() )));
       else
@@ -292,7 +292,7 @@ Value ValueConverter::asString (const Value &value) const
       if (fmt == Value::fmt_DateTime)
         val = Value(m_parser->locale()->formatDateTime (value.asDateTime( doc() )));
       else if (fmt == Value::fmt_Date)
-        val = Value(m_parser->locale()->formatDate (value.asDate( doc() ), true));
+        val = Value(m_parser->locale()->formatDate (value.asDate( doc() ), KLocale::ShortDate));
       else if (fmt == Value::fmt_Time)
         val = Value(m_parser->locale()->formatTime (value.asTime( doc() )));
       else

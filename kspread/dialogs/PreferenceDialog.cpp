@@ -193,7 +193,7 @@ void parameterLocale::updateToMatchLocale(KLocale* locale)
   m_language->setText( i18n("Language: %1", locale->language() ));
   m_number->setText( i18n("Default number format: %1", locale->formatNumber(12.55) ));
   m_date->setText( i18n("Long date format: %1", locale->formatDate( QDate::currentDate() )));
-  m_shortDate->setText( i18n("Short date format: %1", locale->formatDate( QDate::currentDate() ,true) ));
+  m_shortDate->setText( i18n("Short date format: %1", locale->formatDate( QDate::currentDate() ,KLocale::ShortDate) ));
   m_time->setText( i18n("Time format: %1", locale->formatTime( QTime::currentTime() ) ));
   m_money->setText( i18n("Currency format: %1", locale->formatMoney(12.55) ));
 }

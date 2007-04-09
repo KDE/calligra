@@ -2303,7 +2303,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         int day = t.right(t.length()-pos1-1).toInt();
         setValue( Value( QDate(year,month,day), doc() ) );
         if ( value().asDate( doc() ).isValid() ) // Should always be the case for new docs
-          setInputText( locale()->formatDate( value().asDate( doc() ), true ) );
+          setInputText( locale()->formatDate( value().asDate( doc() ), KLocale::ShortDate ) );
         else // This happens with old docs, when format is set wrongly to date
         {
           setCellText( pasteOperation( t, inputText(), op ) );

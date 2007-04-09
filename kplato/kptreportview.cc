@@ -83,7 +83,7 @@ public:
         if (!tag.contains('.')) {
             // global tags
             if (tag == "currentdate") {
-                return l->formatDate(QDate::currentDate(), true);
+                return l->formatDate(QDate::currentDate(), KLocale::ShortDate);
             }
             return QString();
         }
@@ -105,7 +105,7 @@ public:
             else if (tag.section(".", 1, 1) == "starttime")
                 return (m_task ? l->formatTime(m_task->startTime().time()) : QString::null);
             else if (tag.section(".", 1, 1) == "startdate")
-                return (m_task ? l->formatDate(m_task->startTime().date(), true) : QString::null);
+                return (m_task ? l->formatDate(m_task->startTime().date(), KLocale::ShortDate) : QString::null);
             else if (tag.section(".", 1, 1) == "duration") {
                     return (m_task ? m_task->duration().toString(Duration::Format_i18nDayTime) : QString::null);
             } else if (tag.section(".", 1, 1) == "plannedcost") {
@@ -123,9 +123,9 @@ public:
             if (tag.section(".", 1, 1) == "email")
                 return (m_resource ? m_resource->email() : QString::null);
             if (tag.section(".", 1, 1) == "availablefrom")
-                return (m_resource ? l->formatDate(m_resource->availableFrom().date(), true) : QString::null);
+                return (m_resource ? l->formatDate(m_resource->availableFrom().date(), KLocale::ShortDate) : QString::null);
             if (tag.section(".", 1, 1) == "availableuntil")
-                return (m_resource ? l->formatDate(m_resource->availableUntil().date(), true) : QString::null);
+                return (m_resource ? l->formatDate(m_resource->availableUntil().date(), KLocale::ShortDate) : QString::null);
             if (tag.section(".", 1, 1) == "units")
                 return (m_resource ? QString("%1%").arg(m_resource->units()) : QString::null);
             if (tag.section(".", 1, 1) == "normalrate")

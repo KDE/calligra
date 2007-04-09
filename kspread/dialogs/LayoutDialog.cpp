@@ -1344,8 +1344,8 @@ void CellFormatPageFloat::init()
     QString tmp;
     QString tmp2;
     QDate tmpDate( 2000,2,18);
-    list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), true);
-    list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), false);
+    list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), KLocale::ShortDate);
+    list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), KLocale::LongDate);
 
     ValueFormatter *fmt = dlg->getDoc()->formatter();
 

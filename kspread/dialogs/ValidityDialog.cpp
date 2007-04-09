@@ -481,9 +481,9 @@ void DlgValidity::init()
       break;
      case Validity::Date:
       chooseType->setCurrentIndex(4);
-      val_min->setText(m_pView->doc()->locale()->formatDate(validity.minimumDate(),true));
+      val_min->setText(m_pView->doc()->locale()->formatDate(validity.minimumDate(),KLocale::ShortDate));
       if(validity.condition() >=5 )
-        val_max->setText(m_pView->doc()->locale()->formatDate(validity.maximumDate(),true));
+        val_max->setText(m_pView->doc()->locale()->formatDate(validity.maximumDate(),KLocale::ShortDate));
       break;
      case Validity::Time:
       chooseType->setCurrentIndex(5);

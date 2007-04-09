@@ -440,7 +440,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 		else if (ftype==KexiDB::Field::Date) {
 			QDate date(v.toDate());
 			if (date.isValid())
-				text = KGlobal::locale()->formatDate(date, true/*short*/);
+				text = KGlobal::locale()->formatDate(date, KLocale::ShortDate);
 		}
 //! todo inherit format
 		else if (ftype==KexiDB::Field::Time) {
