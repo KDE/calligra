@@ -784,10 +784,11 @@ View::View( Part* part, QWidget* parent )
         //m_progress->hide();
     }
     connect( &getProject(), SIGNAL( scheduleChanged( MainSchedule* ) ), SLOT( slotScheduleChanged( MainSchedule* ) ) );
+
     connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotScheduleAdded( const MainSchedule* ) ) );
     connect( &getProject(), SIGNAL( scheduleRemoved( const MainSchedule* ) ), SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     slotPlugScheduleActions();
-    
+
     m_viewlist->setSelected( m_viewlist->findItem( "TaskEditor" ) );
     //kDebug()<<k_funcinfo<<" end "<<endl;
 }
@@ -892,6 +893,7 @@ void View::createScheduleEditor( ViewListItem *cat )
 
     connect( scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
     connect( scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
+    
     connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
 
 }
@@ -1460,7 +1462,7 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     QApplication::restoreOverrideCursor();
     statusBar()->clearMessage();
     statusBar()->showMessage( i18n( "%1: Calculating done", sm->name() ), 2000 );
-
+    slotUpdate();
 }
 
 void View::slotAddScheduleManager( Project *project )
