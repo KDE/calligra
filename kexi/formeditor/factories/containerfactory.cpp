@@ -251,7 +251,7 @@ VFlow::sizeHint() const
 ///////  Tab related KCommand (to allow tab creation/deletion undoing)
 
 InsertPageCommand::InsertPageCommand(KFormDesigner::Container *container, QWidget *parent)
-  : KCommand()
+  : K3Command()
 {
 	m_containername = container->widget()->name();
 	m_form = container->form();
@@ -305,7 +305,7 @@ InsertPageCommand::unexecute()
 
 	KFormDesigner::WidgetList list;
 	list.append(page);
-	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
+	K3Command *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
 
 	Q3CString classname = parent->className();
 	if(classname == "KFDTabWidget")
@@ -845,7 +845,7 @@ void ContainerFactory::addTabPage()
 //	if (!m_widget->inherits("QTabWidget"))
 	if (!widget()->inherits("QTabWidget"))
 		return;
-	KCommand *com = new InsertPageCommand(m_container, widget());
+	K3Command *com = new InsertPageCommand(m_container, widget());
 	if(dynamic_cast<TabWidgetBase*>(widget())->count() == 0)
 	{
 		com->execute();
@@ -864,7 +864,7 @@ void ContainerFactory::removeTabPage()
 
 	KFormDesigner::WidgetList list;
 	list.append(w);
-	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
+	K3Command *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
 	tab->removePage(w);
 	m_container->form()->addCommand(com, true);
 }
@@ -898,7 +898,7 @@ void ContainerFactory::addStackPage()
 {
 	if (!widget()->isA("QWidgetStack"))
 		return;
-	KCommand *com = new InsertPageCommand(m_container, widget());
+	K3Command *com = new InsertPageCommand(m_container, widget());
 	if(!((Q3WidgetStack*)widget())->visibleWidget())
 	{
 		com->execute();
@@ -917,7 +917,7 @@ void ContainerFactory::removeStackPage()
 
 	KFormDesigner::WidgetList list;
 	list.append(page);
-	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
+	K3Command *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
 
 	// raise prev widget
 	int id = stack->id(page) - 1;

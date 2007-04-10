@@ -29,7 +29,7 @@
 #include <qdom.h>
 #include <Q3CString>
 
-#include <kcommand.h>
+#include <k3command.h>
 #include "utils.h"
 
 class QWidget;
@@ -45,7 +45,7 @@ class Container;
 class Form;
 
 //! Base class for KFormDesigner's commands
-class KFORMEDITOR_EXPORT Command : public KCommand
+class KFORMEDITOR_EXPORT Command : public K3Command
 {
 	public:
 		Command();
@@ -340,7 +340,7 @@ class KFORMEDITOR_EXPORT CommandGroup : public Command
 		 all subcommands will be unexecuted (in reverse order 
 		 to the one in which they were added).
 		*/
-		void addCommand(KCommand *command, bool allowExecute);
+		void addCommand(K3Command *command, bool allowExecute);
 
 		/*! Executes all subcommands added to this group
 		 in the same order as they were added. Subcommands added with 
@@ -357,7 +357,7 @@ class KFORMEDITOR_EXPORT CommandGroup : public Command
 		/*! \return a list of all subcommands of this group. 
 		 Note that if a given subcommand is a group itself, 
 		 it will not be expanded to subcommands on this list. */
-		const QList< KCommand*>& commands() const;
+		const QList< K3Command*>& commands() const;
 
 		/*! Resets all 'allowExecute' flags that was set in addCommand().
 		 Call this after calling CommandGroup::execute() to ensure that

@@ -35,7 +35,7 @@
 #include <kpushbutton.h>
 #include <knuminput.h>
 #include <kcombobox.h>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <ktextedit.h>
 #include <kiconloader.h>
 #include <kicon.h>
@@ -228,6 +228,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QStringList &)
 	wListBox->setClassName("KListBox");
 	wListBox->addAlternateClassName("QListBox");
 	wListBox->addAlternateClassName("Q3ListBox");
+	wListBox->addAlternateClassName("K3ListBox");
 	wListBox->setIncludeFileName("klistbox.h");
 	wListBox->setName(i18n("List Box"));
 	wListBox->setNamePrefix(
@@ -412,8 +413,8 @@ StdWidgetFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 	else if(c == "KComboBox")
 		w = new KComboBox(p);
 
-	else if(c == "KListBox")
-		w = new KListBox(p);
+	else if(c == "KListBox" || c == "K3ListBox")
+		w = new K3ListBox(p);
 
 	else if(c == "KTextEdit")
 		w = new KTextEdit(/*i18n("Enter your text here")*/text, p);
@@ -477,12 +478,12 @@ StdWidgetFactory::createMenuActions(const Q3CString &classname, QWidget *,
 {
 	if((classname == "QLabel") || (classname == "KTextEdit"))
 	{
-		menu->insertItem(KIcon("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
+		menu->addAction(KIcon("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
 		return true;
 	}
 	else if(classname == "QListView" || classname == "Q3ListView" || classname == "KListView" || classname=="K3ListView")
 	{
-		menu->insertItem(KIcon("edit"), i18n("Edit Listview Contents"), this, SLOT(editListContents()));
+		menu->addAction(KIcon("edit"), i18n("Edit Listview Contents"), this, SLOT(editListContents()));
 		return true;
 	}
 
@@ -548,12 +549,12 @@ StdWidgetFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesi
 		createEditor(classname, check->text(), check, container, editorRect, Qt::AlignLeft);
 		return true;
 	}
-	else if(classname == "KComboBox" || classname == "KListBox")
+	else if(classname == "KComboBox" || classname == "KListBox" || (classname == "K3ListBox"))
 	{
 		QStringList list;
-		if(classname == "KListBox")
+		if(classname == "KListBox" || classname == "K3ListBox")
 		{
-			KListBox *listbox = (KListBox*)w;
+			K3ListBox *listbox = (K3ListBox*)w;
 			for(uint i=0; i < listbox->count(); i++)
 				list.append(listbox->text(i));
 		}
@@ -561,20 +562,20 @@ StdWidgetFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesi
 		{
 			KComboBox *combo = (KComboBox*)w;
 			for(int i=0; i < combo->count(); i++)
-				list.append(combo->text(i));
+				list.append(combo->itemText(i));
 		}
 
 		if(editList(w, list))
 		{
-			if(classname == "KListBox")
+			if(classname == "KListBox" || classname == "K3ListBox")
 			{
-				((KListBox*)w)->clear();
-				((KListBox*)w)->insertStringList(list);
+				((K3ListBox*)w)->clear();
+				((K3ListBox*)w)->insertStringList(list);
 			}
 			else if(classname == "KComboBox")
 			{
 				((KComboBox*)w)->clear();
-				((KComboBox*)w)->insertStringList(list);
+				((KComboBox*)w)->addItems(list);
 			}
 		}
 		return true;
@@ -592,8 +593,8 @@ StdWidgetFactory::clearWidgetContent(const Q3CString &classname, QWidget *w)
 {
 	if(classname == "KLineEdit")
 		((KLineEdit*)w)->clear();
-	else if(classname == "KListBox")
-		((KListBox*)w)->clear();
+	else if(classname == "KListBox" || classname == "K3ListBox")
+		((K3ListBox*)w)->clear();
 	else if(classname == "QListView" || classname == "Q3ListView" || classname == "KListView" || classname == "K3ListView")
 		((K3ListView*)w)->clear();
 	else if(classname == "KComboBox")
@@ -608,7 +609,7 @@ StdWidgetFactory::clearWidgetContent(const Q3CString &classname, QWidget *w)
 bool
 StdWidgetFactory::changeText(const QString &text)
 {
-	Q3CString n = WidgetFactory::widget()->className();
+	Q3CString n = WidgetFactory::widget()->metaObject()->className();
 	QWidget *w = WidgetFactory::widget();
 	if(n == "KIntSpinBox")
 		((KIntSpinBox*)w)->setValue(text.toInt());
@@ -688,14 +689,14 @@ StdWidgetFactory::saveSpecialProperty(const Q3CString &classname, const QString 
 		for(int i=0; i < combo->count(); i++)
 		{
 			QDomElement item = domDoc.createElement("item");
-			KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "text", combo->text(i));
+			KFormDesigner::FormIO::savePropertyElement(item, domDoc, "property", "text", combo->itemText(i));
 			parentNode.appendChild(item);
 		}
 		return true;
 	}
-	else if(name == "list_items" && (classname == "KListBox"))
+	else if(name == "list_items" && (classname == "KListBox" || classname == "K3ListBox"))
 	{
-		KListBox *listbox = (KListBox*)w;
+		K3ListBox *listbox = (K3ListBox*)w;
 		for(uint i=0; i < listbox->count(); i++)
 		{
 			QDomElement item = domDoc.createElement("item");
@@ -761,18 +762,18 @@ StdWidgetFactory::readSpecialProperty(const Q3CString &classname, QDomElement &n
 	{
 		KComboBox *combo = (KComboBox*)w;
 		QVariant val = KFormDesigner::FormIO::readPropertyValue(node.firstChild().firstChild(), w, name);
-		if(val.canCast(QVariant::Pixmap))
-			combo->insertItem(val.value<QPixmap>());
+		if(val.canConvert(QVariant::Pixmap))
+			combo->addItem(val.value<QPixmap>(), QString());
 		else
-			combo->insertItem(val.toString());
+			combo->addItem(val.toString());
 		return true;
 	}
 
-	if(tag == "item" && (classname == "KListBox"))
+	if(tag == "item" && (classname == "KListBox" || classname == "K3ListBox"))
 	{
-		KListBox *listbox = (KListBox*)w;
+		K3ListBox *listbox = (K3ListBox*)w;
 		QVariant val = KFormDesigner::FormIO::readPropertyValue(node.firstChild().firstChild(), w, name);
-		if(val.canCast(QVariant::Pixmap))
+		if(val.canConvert(QVariant::Pixmap))
 			listbox->insertItem(val.value<QPixmap>());
 		else
 			listbox->insertItem(val.toString());
@@ -933,7 +934,7 @@ StdWidgetFactory::autoSaveProperties(const Q3CString &classname)
 		l << "pixmap";
 	else if(classname == "KComboBox")
 		l << "list_items";
-	else if(classname == "KListBox")
+	else if(classname == "KListBox" || classname == "K3ListBox")
 		l << "list_items";
 	else if(classname == "KListView" || classname == "K3ListView")
 		l << "list_contents";
@@ -956,11 +957,16 @@ StdWidgetFactory::autoSaveProperties(const Q3CString &classname)
 void
 StdWidgetFactory::editText()
 {
-	Q3CString classname = widget()->className();
+	Q3CString classname = widget()->metaObject()->className();
 	QString text;
-	if(classname == "KTextEdit")
-		text = ((KTextEdit*)widget())->text();
-	else if(classname == "QLabel")
+	if(classname == "KTextEdit") {
+		KTextEdit* te = (KTextEdit*)widget();
+    if (te->textFormat() == Qt::RichText || te->textFormat() == Qt::LogText)
+        text = te->toHtml();
+    else
+        text = te->toPlainText();
+	}
+  else if(classname == "QLabel")
 		text = ((QLabel*)widget())->text();
 
 	if(editRichText(widget(), text))

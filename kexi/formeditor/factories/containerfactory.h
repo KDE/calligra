@@ -22,7 +22,7 @@
 #ifndef CONTAINERFACTORY_H
 #define CONTAINERFACTORY_H
 
-#include <kcommand.h>
+#include <k3command.h>
 
 #include "widgetfactory.h"
 #include "../utils.h"
@@ -40,7 +40,7 @@ namespace KFormDesigner
 	class Container;
 }
 
-class InsertPageCommand : public KCommand
+class InsertPageCommand : public K3Command
 {
 	public:
 		InsertPageCommand(KFormDesigner::Container *container, QWidget *widget);

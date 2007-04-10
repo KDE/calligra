@@ -22,13 +22,12 @@
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qobject.h>
-#include <qptrdict.h>
-//Added by qt3to4:
+#include <QMap>
 #include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include <kaction.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
@@ -109,7 +108,7 @@ Form::Form(WidgetLibrary* library, const char *name, bool designMode)
 
 	// Init actions
 	d->collection = new KActionCollection(this);
-	d->history = new KCommandHistory(d->collection, true);
+	d->history = new K3CommandHistory(d->collection, true);
 	connect(d->history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
 	connect(d->history, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
 }
@@ -141,7 +140,8 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const Q3CString
 		<< " formWidget=" << formWidget << "className=" << name() << endl;
 
 	setFormWidget( formWidget );
-	d->toplevel = new Container(0, container, this, name());
+	d->toplevel = new Container(0, container, this);
+	d->toplevel->setObjectName(name());
 	d->topTree = new ObjectTree(i18n("Form"), container->name(), container, d->toplevel);
 	d->toplevel->setObjectTree(d->topTree);
 	d->toplevel->setForm(this);
@@ -235,7 +235,7 @@ Form::setDesignMode(bool design)
 		ObjectTreeDict *dict = new ObjectTreeDict( *(d->topTree->dict()) );
 		ObjectTreeDictIterator it(*dict);
 		for(; it.current(); ++it)
-			m_lib->previewWidget(it.current()->widget()->className(), it.current()->widget(), d->toplevel);
+			m_lib->previewWidget(it.current()->widget()->metaObject()->className(), it.current()->widget(), d->toplevel);
 		delete dict;
 
 		d->widget = d->topTree->widget();
@@ -419,7 +419,7 @@ Form::emitChildRemoved(ObjectTreeItem *item)
 }
 
 void
-Form::addCommand(KCommand *command, bool execute)
+Form::addCommand(K3Command *command, bool execute)
 {
 	emit FormManager::self()->dirty(this, true);
 	d->dirty = true;
@@ -512,7 +512,7 @@ Form::updateTabStopsOrder()
 {
 	for (ObjectTreeListIterator it(d->tabstops);it.current();) {
 		if(!(it.current()->widget()->focusPolicy() & Qt::TabFocus)) {
-			kexidbg << "Form::updateTabStopsOrder(): widget removed because has no TabFocus: " << it.current()->widget()->name() << endl;
+			kexidbg << "Form::updateTabStopsOrder(): widget removed because has no TabFocus: " << it.current()->widget()->objectName() << endl;
 			d->tabstops.remove( it.current() );
 		}
 		else
@@ -521,14 +521,14 @@ Form::updateTabStopsOrder()
 }
 
 //! Collects all the containers reculsively. Used by Form::autoAssignTabStops().
-void collectContainers(ObjectTreeItem* item, Q3PtrDict<char>& containers)
+void collectContainers(ObjectTreeItem* item, QSet<Container*>& containers)
 {
 	if (!item->container())
 		return;
-	if (!containers[ item->container() ]) {
+	if (!containers.contains( item->container() )) {
 		kDebug() << "collectContainers() " << item->container()->objectTree()->className() 
 			<< " " << item->container()->objectTree()->name() << endl;
-		containers.insert( item->container(), (const char *)1 );
+		containers.insert( item->container() );
 	}
 	for (ObjectTreeListIterator it(*item->children()); it.current(); ++it)
 		collectContainers(it.current(), containers);
@@ -541,7 +541,7 @@ Form::autoAssignTabStops()
 	HorWidgetList hlist(toplevelContainer()->widget());
 
 	// 1. Collect all the containers, as we'll be sorting widgets groupped by containers
-	Q3PtrDict<char> containers;
+	QSet<Container*> containers;
 
 	collectContainers( toplevelContainer()->objectTree(), containers );
 
@@ -554,7 +554,8 @@ Form::autoAssignTabStops()
 
 	list.sort();
 	foreach_list(Q3PtrListIterator<QWidget>, iter, list)
-		kDebug() << iter.current()->className() << " " << iter.current()->name() << endl;
+		kDebug() << iter.current()->metaObject()->className() 
+			<< " " << iter.current()->objectName() << endl;
 
 	d->tabstops.clear();
 
@@ -588,7 +589,7 @@ Form::autoAssignTabStops()
 		hlist.sort();
 
 		for(WidgetListIterator it2(hlist); it2.current() != 0; ++it2) {
-			ObjectTreeItem *tree = d->topTree->lookup(it2.current()->name());
+			ObjectTreeItem *tree = d->topTree->lookup(it2.current()->objectName());
 			if(tree) {
 				kDebug() << "Form::autoAssignTabStops() adding " << tree->name() << endl;
 				d->tabstops.append(tree);

@@ -726,7 +726,7 @@ FormManager::deleteWidget()
 		return;
 	}
 
-	KCommand *com = new DeleteWidgetCommand(*list, activeForm());
+	K3Command *com = new DeleteWidgetCommand(*list, activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -772,7 +772,7 @@ FormManager::cutWidget()
 	if(list->isEmpty())
 		return;
 
-	KCommand *com = new CutWidgetCommand(*list, activeForm());
+	K3Command *com = new CutWidgetCommand(*list, activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -784,7 +784,7 @@ FormManager::pasteWidget()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	KCommand *com = new PasteWidgetCommand(m_domDoc, activeForm()->activeContainer(), m_insertPoint);
+	K3Command *com = new PasteWidgetCommand(m_domDoc, activeForm()->activeContainer(), m_insertPoint);
 	activeForm()->addCommand(com, true);
 }
 
@@ -1143,7 +1143,7 @@ FormManager::createLayout(int layoutType)
 		}
 	}
 
-	KCommand *com = new CreateLayoutCommand(layoutType, *list, m_active);
+	K3Command *com = new CreateLayoutCommand(layoutType, *list, m_active);
 	m_active->addCommand(com, true);
 }
 
@@ -1158,7 +1158,7 @@ FormManager::breakLayout()
 
 	if((c == "Grid") || (c == "VBox") || (c == "HBox") || (c == "HFlow") || (c == "VFlow"))
 	{
-		KCommand *com = new BreakLayoutCommand(container);
+		K3Command *com = new BreakLayoutCommand(container);
 		m_active->addCommand(com, true);
 	}
 	else // normal container
@@ -1281,7 +1281,7 @@ FormManager::alignWidgets(int type)
 		}
 	}
 
-	KCommand *com = new AlignWidgetsCommand(type, *(activeForm()->selectedWidgets()), activeForm());
+	K3Command *com = new AlignWidgetsCommand(type, *(activeForm()->selectedWidgets()), activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -1315,7 +1315,7 @@ FormManager::adjustWidgetSize()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToFit, *(activeForm()->selectedWidgets()), activeForm());
+	K3Command *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToFit, *(activeForm()->selectedWidgets()), activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -1325,7 +1325,7 @@ FormManager::alignWidgetsToGrid()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	KCommand *com = new AlignWidgetsCommand(AlignWidgetsCommand::AlignToGrid, *(activeForm()->selectedWidgets()), activeForm());
+	K3Command *com = new AlignWidgetsCommand(AlignWidgetsCommand::AlignToGrid, *(activeForm()->selectedWidgets()), activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -1335,7 +1335,7 @@ FormManager::adjustSizeToGrid()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToGrid, *(activeForm()->selectedWidgets()), activeForm());
+	K3Command *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToGrid, *(activeForm()->selectedWidgets()), activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -1345,7 +1345,7 @@ FormManager::adjustWidthToSmall()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToSmallWidth, *(activeForm()->selectedWidgets()), activeForm());
+	K3Command *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToSmallWidth, *(activeForm()->selectedWidgets()), activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -1355,7 +1355,7 @@ FormManager::adjustWidthToBig()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToBigWidth, *(activeForm()->selectedWidgets()), activeForm());
+	K3Command *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToBigWidth, *(activeForm()->selectedWidgets()), activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -1365,7 +1365,7 @@ FormManager::adjustHeightToSmall()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToSmallHeight, *(activeForm()->selectedWidgets()), activeForm());
+	K3Command *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToSmallHeight, *(activeForm()->selectedWidgets()), activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -1375,7 +1375,7 @@ FormManager::adjustHeightToBig()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToBigHeight, *(activeForm()->selectedWidgets()), activeForm());
+	K3Command *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToBigHeight, *(activeForm()->selectedWidgets()), activeForm());
 	activeForm()->addCommand(com, true);
 }
 
@@ -1720,10 +1720,13 @@ FormManager::changeFont()
 		return;
 	}
 	//multiple widgets
-	int diffFlags=0;
-	if (QDialog::Accepted != KFontDialog::getFontDiff(font, diffFlags, false, m_active->widget())
+	QFlags<KFontChooser::FontDiff> diffFlags = KFontChooser::NoFontDiffFlags;
+	if (QDialog::Accepted != KFontDialog::getFontDiff(
+			font, diffFlags, KFontChooser::NoDisplayFlags, m_active->widget())
 		|| 0==diffFlags)
+	{
 		return;
+	}
 	//update font
 	for (WidgetListIterator it(widgetsWithFontProperty); (widget = it.current()); ++it) {
 		QFont prevFont( widget->font() );

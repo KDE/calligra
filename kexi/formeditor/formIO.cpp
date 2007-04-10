@@ -45,7 +45,7 @@
 
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <kcommand.h>
+#include <k3command.h>
 #include <kacceleratormanager.h>
 
 #include <kexiutils/utils.h>

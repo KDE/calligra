@@ -120,7 +120,7 @@ HorWidgetList::~HorWidgetList()
 {
 }
 
-int HorWidgetList::compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+int HorWidgetList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
 {
 	QWidget *w1 = static_cast<QWidget*>(item1);
 	QWidget *w2 = static_cast<QWidget*>(item2);
@@ -139,7 +139,7 @@ VerWidgetList::~VerWidgetList()
 {
 }
 
-int VerWidgetList::compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+int VerWidgetList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
 {
 	QWidget *w1 = static_cast<QWidget*>(item1);
 	QWidget *w2 = static_cast<QWidget*>(item2);

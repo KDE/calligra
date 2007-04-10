@@ -54,7 +54,7 @@ using namespace KFormDesigner;
 // Command
 
 Command::Command()
- : KCommand()
+ : K3Command()
 {
 }
 
@@ -1520,14 +1520,14 @@ CutWidgetCommand::debug()
 // CommandGroup
 
 namespace KFormDesigner {
-class CommandGroup::SubCommands : public KMacroCommand
+class CommandGroup::SubCommands : public K3MacroCommand
 {
 	public:
 		SubCommands( const QString & name )
-		 : KMacroCommand(name)
+		 : K3MacroCommand(name)
 		{
 		}
-		const QList<KCommand*>& commands() const { return m_commands; }
+		const QList<K3Command*>& commands() const { return K3MacroCommand::commands(); }
 };
 }
 
@@ -1543,12 +1543,12 @@ CommandGroup::~CommandGroup()
 	delete m_subCommands;
 }
 
-const QList<KCommand*>& CommandGroup::commands() const
+const QList<K3Command*>& CommandGroup::commands() const
 {
 	return m_subCommands->commands();
 }
 
-void CommandGroup::addCommand(KCommand *command, bool allowExecute)
+void CommandGroup::addCommand(K3Command *command, bool allowExecute)
 {
 	if (!command)
 		return;
@@ -1561,7 +1561,7 @@ void CommandGroup::addCommand(KCommand *command, bool allowExecute)
 void CommandGroup::execute()
 {
 	FormManager::self()->blockPropertyEditorUpdating(this);
-	foreach (KCommand* command, m_subCommands->commands()) {
+	foreach (K3Command* command, m_subCommands->commands()) {
 		if (!m_commandsShouldntBeExecuted[ command ])
 			command->execute();
 	}
@@ -1591,7 +1591,7 @@ CommandGroup::debug()
 	kDebug() << "*CommandGroup: name=\"" << name() << "\" #=" 
 		<< m_subCommands->commands().count() << endl;
 	uint i = 0;
-	foreach (KCommand* command, m_subCommands->commands()) {
+	foreach (K3Command* command, m_subCommands->commands()) {
 		i++;
 		kDebug() << "#" << i << ":" 
 			<< (m_commandsShouldntBeExecuted[command] ? "!" : "") << "allowExecute:" << endl;

@@ -34,8 +34,8 @@
 class QWidget;
 class QDomElement;
 class KActionCollection;
-class KCommandHistory;
-class KCommand;
+class K3CommandHistory;
+class K3Command;
 class PixmapCollection;
 
 namespace KFormDesigner {
@@ -102,7 +102,7 @@ class FormPrivate
 		bool  design;
 		QString  filename;
 
-		KCommandHistory  *history;
+		K3CommandHistory  *history;
 		KActionCollection  *collection;
 
 		ObjectTreeList  tabstops;
@@ -251,13 +251,13 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		//! Sets the filename of this Form to \a filename.
 		void setFilename(const QString &file) { d->filename = file; }
 
-		KCommandHistory* commandHistory() const { return d->history; }
+		K3CommandHistory* commandHistory() const { return d->history; }
 		ConnectionBuffer* connectionBuffer() const { return d->connBuffer; }
 		PixmapCollection* pixmapCollection() const { return d->pixcollection; }
 
 		/*! Adds a widget in the form's command history. Please use it instead
 		of calling directly actionCollection()->addCommand(). */
-		void addCommand(KCommand *command, bool execute);
+		void addCommand(K3Command *command, bool execute);
 
 		/*! Clears form's command history. */
 		void clearCommandHistory();

@@ -55,8 +55,8 @@ class KFORMEDITOR_EXPORT TabWidget : public TabWidgetBase
 {
 	Q_OBJECT
 	public:
-		TabWidget(QWidget *parent, const char *name) 
-		 : TabWidgetBase(parent, name) {}
+		TabWidget(QWidget *parent) 
+		 : TabWidgetBase(parent) {}
 		virtual ~TabWidget() {}
 		int tabBarHeight() const { return tabBar()->height(); }
 };

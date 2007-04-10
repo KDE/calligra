@@ -24,7 +24,7 @@
 
 #include <k3listview.h>
 #include <ktabwidget.h>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -155,7 +155,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	vbox->addStretch();
 
 	// The listbox with columns name /////
-	m_listbox = new KListBox(m_columnsPageItem->widget(), "editlistview_columns");
+	m_listbox = new K3ListBox(m_columnsPageItem->widget(), "editlistview_columns");
 	m_listbox->setFocus();
 	hbox->insertWidget(0, m_listbox);
 	hbox->addWidget(m_editor);

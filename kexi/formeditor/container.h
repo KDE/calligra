@@ -81,7 +81,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		/**
 		 * Creates a Container from the widget \a container, which have
 		 \a toplevel as parent Container. */
-		Container(Container *toplevel, QWidget *container, QObject *parent=0, const char *name=0);
+		Container(Container *toplevel, QWidget *container, QObject *parent=0);
 		virtual ~Container();
 
 		//! \return a pointer to the toplevel Container, or 0 if this Container is toplevel

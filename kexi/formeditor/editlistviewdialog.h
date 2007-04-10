@@ -30,7 +30,7 @@ class Q3ListView;
 class Q3ListViewItem;
 class K3ListViewItem;
 class K3ListView;
-class KListBox;
+class K3ListBox;
 class Q3ListBoxItem;
 
 namespace KoProperty {
@@ -84,7 +84,7 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KPageDialog
 		KoProperty::Editor  *m_editor;
 		KoProperty::Set  *m_propSet;
 		KPageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
-		KListBox  *m_listbox;
+		K3ListBox  *m_listbox;
 		K3ListView  *m_listview;
 		Q3IntDict<QToolButton>  m_buttons;
 };
