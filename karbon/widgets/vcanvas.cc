@@ -84,6 +84,7 @@ public:
     bool showMargins;      ///< should page margins be shown
     QPoint documentOffset; ///< the offset of the virtual canvas from the viewport
     int viewMargin;        ///< the view margin around the document in pixels
+    QRectF contentRect;    ///< the last calculated content rect
 };
 
 KarbonCanvas::KarbonCanvas( KarbonPart *p )
@@ -266,7 +267,9 @@ bool KarbonCanvas::snapToGrid() const {
 
 void KarbonCanvas::addCommand(QUndoCommand *command) {
 
+    kDebug() << "KarbonCanvas::addCommand" << endl;
     d->part->KoDocument::addCommand(command);
+    adjustOrigin();
 }
 
 void KarbonCanvas::updateCanvas(const QRectF& rc) {
@@ -278,9 +281,15 @@ void KarbonCanvas::updateCanvas(const QRectF& rc) {
 
 void KarbonCanvas::adjustOrigin()
 {
+    kDebug() << "KarbonCanvas::adjustOrigin" << endl;
+
     // calculate the zoomed document bounding rect
     QRect documentRect = d->zoomHandler.documentToView( documentViewRect() ).toRect();
 
+    // save the old origin to see if it has changed
+    QPoint oldOrigin = d->origin;
+
+    // set the origin to the zoom document rect origin
     d->origin = -documentRect.topLeft();
 
     // the document bounding rect is always centered on the virtual canvas
@@ -293,7 +302,9 @@ void KarbonCanvas::adjustOrigin()
     if( heightDiff > 0.0 )
         d->origin.ry() += static_cast<int>( 0.5 * heightDiff );
 
-    emit documentOriginChanged( d->origin );
+    // check if the origin has changed and emit signal if it has
+    if( d->origin != oldOrigin )
+        emit documentOriginChanged( d->origin );
 }
 
 void KarbonCanvas::setDocumentOffset(const QPoint &offset) {
@@ -340,10 +351,22 @@ int KarbonCanvas::documentViewMargin() const
     return d->viewMargin;
 }
 
-QRectF KarbonCanvas::documentViewRect() const
+QRectF KarbonCanvas::documentViewRect()
 {
-    QRectF documentRect = d->document->boundingRect();
-    return documentRect.adjusted( -d->viewMargin, -d->viewMargin, d->viewMargin, d->viewMargin );
+    kDebug(38000) << "KarbonCanvas::documentViewRect" << endl;
+
+    // save the old content rect for comparing
+    QRectF oldContentRect = d->contentRect;
+    // calculate the actual content rect
+    d->contentRect = d->document->boundingRect();
+
+    QRectF viewRect = d->contentRect.adjusted( -d->viewMargin, -d->viewMargin, d->viewMargin, d->viewMargin );
+
+    // check if the content rect has changed and emit signal if it has
+    if( oldContentRect != d->contentRect )
+        emit documentViewRectChanged( viewRect );
+
+    return viewRect;
 }
 
 #include "vcanvas.moc"

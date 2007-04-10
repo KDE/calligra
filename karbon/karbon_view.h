@@ -169,6 +169,8 @@ protected slots:
     void mousePositionChanged( const QPoint &position );
     void pageOffsetChanged();
 
+    void documentViewRectChanged( const QRectF &viewRect );
+
 signals:
 	void selectionChange();
 	void pageLayoutChanged();

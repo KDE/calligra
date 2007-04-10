@@ -615,12 +615,9 @@ KarbonPart::addShape( KoShape* shape )
         foreach( KoView *view, views() ) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
             canvas->shapeManager()->add(shape);
-            canvas->adjustOrigin();
-            canvas->update();
         }
     }
 
-    updateDocumentSize();
     setModified( true );
 }
 
@@ -638,11 +635,8 @@ KarbonPart::removeShape( KoShape* shape )
         foreach( KoView *view, views() ) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
             canvas->shapeManager()->remove(shape);
-            canvas->adjustOrigin();
-            canvas->update();
         }
     }
-    updateDocumentSize();
     setModified( true );
 }
 

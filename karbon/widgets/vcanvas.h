@@ -107,7 +107,7 @@ public:
      * The rect is returned in pt.
      * @return the document bounding rect with viewing margins applied.
      */
-    QRectF documentViewRect() const;
+    QRectF documentViewRect();
 
 public slots:
 
@@ -120,7 +120,23 @@ public slots:
     void setDocumentOffset(const QPoint &offset);
 
 signals:
+
+    /**
+     * This signal is emitted when the document origin has changed.
+     * The document origin is the point (in pixel) on the virtual
+     * canvas where the documents origin (0,0) or the top left
+     * corner of the page is.
+     */
     void documentOriginChanged( const QPoint &origin );
+
+    /**
+     * This signal is emitted when the document view rect has changed.
+     * The document view rect is the union of the document page rect,
+     * the bounding rects of the all document objects and with the
+     * viewing margin applied.
+     */
+    void documentViewRectChanged( const QRectF &viewRect );
+
 protected:
     void paintEvent(QPaintEvent * ev);
     void mouseEvent(QMouseEvent *e);

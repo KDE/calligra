@@ -178,7 +178,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
     m_canvas = new KarbonCanvas( p );
     m_canvas->setParent( this );
-    m_canvas->setDocumentViewMargin( 150 );
+    m_canvas->setDocumentViewMargin( 250 );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 
     m_canvasController = new KoCanvasController(this);
@@ -240,7 +240,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     layout->addWidget( m_vertRuler, 1, 0 );
     connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
 
-    connect(m_canvas, SIGNAL(documentOriginChanged( const QPoint &)), this , SLOT(pageOffsetChanged()));
+    connect(m_canvas, SIGNAL(documentOriginChanged( const QPoint &)), this, SLOT(pageOffsetChanged()));
+    connect(m_canvas, SIGNAL(documentViewRectChanged(const QRectF &)),
+            this, SLOT(documentViewRectChanged(const QRectF &)));
     connect( m_canvasController, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
     connect( m_canvasController, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
     connect( m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint &)),
@@ -937,6 +939,14 @@ void KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
     lastMode = mode;
 }
 
+void KarbonView::documentViewRectChanged( const QRectF &viewRect )
+{
+    debugView("KarbonView::documentViewRectChanged()");
+    m_zoomController->setDocumentSize( viewRect.size() );
+    m_canvas->update();
+    m_canvasController->ensureVisible( m_canvas->shapeManager()->selection()->boundingRect() );
+}
+
 void
 KarbonView::initActions()
 {
@@ -1191,6 +1201,7 @@ KarbonView::togglePageMargins(bool b)
 void
 KarbonView::pageOffsetChanged()
 {
+    debugView(QString("KarbonView::pageOffsetChanged()"));
     m_horizRuler->setOffset( m_canvasController->canvasOffsetX() + m_canvas->documentOrigin().x() );
     m_vertRuler->setOffset( m_canvasController->canvasOffsetY() + m_canvas->documentOrigin().y() );
 }
@@ -1425,5 +1436,6 @@ void KarbonView::updateReadWrite( bool readwrite )
     debugView("KarbonView::updateReadWrite( bool )");
     kDebug(38000) << "writable state = " << readwrite << endl;
 }
+
 #include "karbon_view.moc"
 
