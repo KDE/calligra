@@ -118,7 +118,7 @@ kde4_automoc(${BenchmarkPointStorage_SRCS})
 
 kde4_add_executable(BenchmarkPointStorage RUN_UNINSTALLED ${BenchmarkPointStorage_SRCS})
 
-target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY})
+target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY})
 
 # add_test(kspread-BenchmarkPointStorage BenchmarkPointStoragetest)
 
