@@ -42,7 +42,7 @@
 #include <QFrame>
 
 #include <kapplication.h>
-#include <kcombobox.h>
+#include <khistorycombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kdatatool.h>
@@ -144,7 +144,7 @@ protected:
     KPushButton *m_lang;
 
     KPushButton *m_search;
-    KHistoryCombo *m_edit;
+    KHistoryComboBox *m_edit;
     QLabel *m_edit_label;
 
     QLabel *m_replace_label;
