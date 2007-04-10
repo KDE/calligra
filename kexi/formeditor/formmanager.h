@@ -492,6 +492,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		int m_contextMenuKey; //!< Id of context menu key (cached)
 
 		void *m_objectBlockingPropertyEditorUpdating;
+		QStyle *m_style;
 		bool m_isRedoing : 1;
 
 		friend class PropertyCommand;

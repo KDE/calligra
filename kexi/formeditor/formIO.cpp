@@ -1003,7 +1003,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	else if (KexiUtils::objectIsA(item->widget(), 
 			QList<QByteArray>() << "HBox" << "VBox" << "Grid" << "HFlow" << "VFlow"))
 		tclass.setAttribute("class", "QLayoutWidget");
-	else if(item->widget()->isA("CustomWidget"))
+	else if(KexiUtils::objectIsA(item->widget(), "CustomWidget"))
 		tclass.setAttribute("class", item->className());
 	else // Normal widgets
 		tclass.setAttribute("class", lib->savingName(item->widget()->metaObject()->className()) );
@@ -1037,7 +1037,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	QMap<QString,QVariant>::ConstIterator endIt = map->constEnd();
 	for(QMap<QString,QVariant>::ConstIterator it = map->constBegin(); it != endIt; ++it)
 	{
-		const Q3CString name( it.key().latin1() );
+		const Q3CString name( it.key().toLatin1() );
 		if(name == "hAlign" || name == "vAlign" || name == "wordbreak" || name == "alignment") {
 			if(!savedAlignment) // not to save it twice
 			{
@@ -1055,7 +1055,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	}
 	delete map;
 
-	if(item->widget()->isA("CustomWidget")) {
+	if(KexiUtils::objectIsA(item->widget(), "CustomWidget")) {
 		QDomDocument doc("TEMP");
 		doc.setContent(item->m_unknownProps);
 		for(QDomNode n = doc.firstChild(); !n.isNull(); n = n.nextSibling()) {
@@ -1106,7 +1106,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			list->sort();
 
 			for(QWidget *obj = list->first(); obj; obj = list->next()) {
-				ObjectTreeItem *titem = item->container()->form()->objectTree()->lookup(obj->name());
+				ObjectTreeItem *titem = item->container()->form()->objectTree()->lookup(obj->objectName());
 				if(item)
 					saveWidget(titem, layout, domDoc);
 			}
@@ -1399,9 +1399,9 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 				item->addSubproperty( name.toLatin1(), readPropertyValue(node.firstChild(), w, name) );
 				const QVariant val( readPropertyValue(node.firstChild(), w, name) );
 				kDebug() << val.toStringList() << endl;
-				item->addSubproperty( name.latin1(), val );
+				item->addSubproperty( name.toLatin1(), val );
 				//subwidget->setProperty(name.latin1(), val);
-				item->addModifiedProperty( name.latin1(), val );
+				item->addModifiedProperty( name.toLatin1(), val );
 				continue;
 			}
 

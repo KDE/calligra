@@ -98,8 +98,8 @@ FormWidget::~FormWidget()
 
 //--------------------------------------
 
-Form::Form(WidgetLibrary* library, const char *name, bool designMode)
-  : QObject(library, name)
+Form::Form(WidgetLibrary* library, bool designMode)
+  : QObject(library)
   , m_lib(library)
 {
 	d = new FormPrivate();
@@ -136,20 +136,20 @@ Form::widget() const
 void
 Form::createToplevel(QWidget *container, FormWidget *formWidget, const Q3CString &)
 {
-	kDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>")
-		<< " formWidget=" << formWidget << "className=" << name() << endl;
+	kDebug() << "Form::createToplevel() container= "<< (container ? container->objectName() : "<NULL>")
+		<< " formWidget=" << formWidget << endl;
 
 	setFormWidget( formWidget );
 	d->toplevel = new Container(0, container, this);
-	d->toplevel->setObjectName(name());
-	d->topTree = new ObjectTree(i18n("Form"), container->name(), container, d->toplevel);
+	d->toplevel->setObjectName(objectName());
+	d->topTree = new ObjectTree(i18n("Form"), container->objectName(), container, d->toplevel);
 	d->toplevel->setObjectTree(d->topTree);
 	d->toplevel->setForm(this);
 #ifdef __GNUC__
 #warning pixmapcollection
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-	d->pixcollection = new PixmapCollection(container->name(), this);
+	d->pixcollection = new PixmapCollection(container->objectName(), this);
 #endif
 
 	d->topTree->setWidget(container);
@@ -171,7 +171,7 @@ Form::activeContainer()
 		return d->toplevel;
 
 	if(d->selected.count() == 1)
-		it = d->topTree->lookup(d->selected.last()->name());
+		it = d->topTree->lookup(d->selected.last()->objectName());
 	else
 		it = commonParentContainer( &(d->selected) );
 
@@ -200,7 +200,7 @@ Form::commonParentContainer(WidgetList *wlist)
 
 	// one widget remains == the container we are looking for
 	if(list->count() == 1)
-		item = d->topTree->lookup(list->first()->name());
+		item = d->topTree->lookup(list->first()->objectName());
 	else // we need to go one level up
 		item =  commonParentContainer(list);
 
@@ -216,7 +216,7 @@ Form::parentContainer(QWidget *w)
 		return 0;
 	//	it = d->topTree->lookup(d->selected.last()->name());
 	//else
-	it = d->topTree->lookup(w->name());
+	it = d->topTree->lookup(w->objectName());
 
 	if(it->parent()->container())
 		return it->parent()->container();
@@ -266,8 +266,8 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWillBeSel
 	while(!dontRaise && wtmp && wtmp->parentWidget() && (wtmp != widget()))
 	{
 		wtmp->raise();
-		if(d->resizeHandles[ wtmp->name() ])
-			d->resizeHandles[ wtmp->name() ]->raise();
+		if(d->resizeHandles[ wtmp->objectName() ])
+			d->resizeHandles[ wtmp->objectName() ]->raise();
 		wtmp = wtmp->parentWidget();
 	}
 
@@ -284,7 +284,8 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWillBeSel
 	emitActionSignals(false);
 
 	// WidgetStack and TabWidget pages widgets shouldn't have resize handles, but their parent
-	if(!FormManager::self()->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
+	if(!FormManager::self()->isTopLevel(w) && w->parentWidget()
+		&& KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack"))
 	{
 		w = w->parentWidget();
 		if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget"))
@@ -292,20 +293,20 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWillBeSel
 	}
 
 	if(w && w != widget())
-		d->resizeHandles.insert(w->name(), new ResizeHandleSet(w, this));
+		d->resizeHandles.insert(w->objectName(), new ResizeHandleSet(w, this));
 }
 
 ResizeHandleSet*
 Form::resizeHandlesForWidget(QWidget* w)
 {
-	return d->resizeHandles[w->name()];
+	return d->resizeHandles[w->objectName()];
 }
 
 void
 Form::unSelectWidget(QWidget *w)
 {
 	d->selected.remove(w);
-	d->resizeHandles.remove(w->name());
+	d->resizeHandles.remove(w->objectName());
 }
 
 void

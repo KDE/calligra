@@ -141,7 +141,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 	public:
 		/*! Creates a simple Form, child of the FormManager \a manager.
 		 */
-		Form(WidgetLibrary* library, const char *name=0, bool designMode = true);
+		Form(WidgetLibrary* library, bool designMode = true);
 		~Form();
 
 		//! \return A pointer to the WidgetLibrary supporting this form.

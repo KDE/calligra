@@ -208,12 +208,10 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 		textedit->setFont(w->font());
 		textedit->setResizePolicy(Q3ScrollView::Manual);
 		textedit->setGeometry(geometry);
-		if(background == Qt::NoBackground)
-			textedit->setBackgroundMode(w->backgroundMode());
-		else
-			textedit->setBackgroundMode(background);
-//		textedit->setPaletteBackgroundColor(textedit->colorGroup().color( QColorGroup::Base ));
-		textedit->setPaletteBackgroundColor(w->paletteBackgroundColor());
+		textedit->setBackgroundRole(w->backgroundRole());
+		QPalette pal(textedit->palette());
+		pal.setColor(w->backgroundRole(), w->palette().active().background());
+		textedit->setPalette(pal);
 		for(int i =0; i <= textedit->paragraphs(); i++)
 			textedit->setParagraphBackgroundColor(i, w->paletteBackgroundColor());
 		textedit->selectAll(true);
@@ -242,13 +240,10 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 		editor->setPalette(w->palette());
 		editor->setFont(w->font());
 		editor->setGeometry(geometry);
-		if(background == Qt::NoBackground)
-			editor->setBackgroundMode(w->backgroundMode());
-		else
-			editor->setBackgroundMode(background);
+		editor->setBackgroundRole(w->backgroundRole());
 		editor->installEventFilter(this);
 		editor->setFrame(useFrame);
-		editor->setMargin(2); //to move away from resize handle
+		editor->setContentsMargins(2,2,2,2); //to move away from resize handle
 		editor->show();
 		editor->setFocus();
 		editor->selectAll();

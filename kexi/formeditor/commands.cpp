@@ -1527,7 +1527,7 @@ class CommandGroup::SubCommands : public K3MacroCommand
 		 : K3MacroCommand(name)
 		{
 		}
-		const QList<K3Command*>& commands() const { return K3MacroCommand::commands(); }
+		QList<K3Command*> commands() const { return K3MacroCommand::commands(); }
 };
 }
 

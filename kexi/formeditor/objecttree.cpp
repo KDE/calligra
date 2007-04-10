@@ -241,6 +241,6 @@ ObjectTree::generateUniqueName(const Q3CString &prefix, bool numberSuffixRequire
 	while(lookup(name + QString::number(i)))
 		i++;
 
-	return (name + QString::number(i)).latin1();
+	return (name + QString::number(i)).toLatin1();
 }
 

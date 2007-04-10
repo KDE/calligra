@@ -118,14 +118,16 @@ static KStaticDeleter<FormManager> m_managerDeleter;
 FormManager* FormManager::_self = 0L;
 
 FormManager::FormManager(QObject *parent, int options, const char *name)
-   : QObject(parent, name)
+   : QObject(parent)
 #ifdef KEXI_DEBUG_GUI
    , m_uiCodeDialog(0)
    , m_options(options)
 #endif
    , m_objectBlockingPropertyEditorUpdating(0)
+   , m_style(0)
    , m_isRedoing(false)
 {
+	setObjectName(name);
 	Q_UNUSED(options);
 #ifdef KEXI_STANDALONE
 	KGlobal::locale()->insertCatalog("standalone_kformdesigner");
@@ -170,6 +172,7 @@ FormManager::~FormManager()
 #ifdef KEXI_DEBUG_GUI
 	delete m_uiCodeDialog;
 #endif
+	delete m_style;
 //	delete m_propFactory;
 }
 
@@ -253,8 +256,8 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KX
 		this, SLOT(slotStyle()));
 	styleAction->setEditable(false);
 
-	KGlobal::config()->setGroup("General");
-	QString currentStyle( QString::fromLatin1(kapp->style()->name()).lower() );
+//js: unused? KGlobalGroup cg = KGlobal::config()->group("General");
+	QString currentStyle( kapp->style()->objectName().toLower() );
 	const QStringList styles = QStyleFactory::keys();
 	styleAction->setItems(styles);
 	styleAction->setCurrentItem(0);
@@ -263,7 +266,7 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KX
 	int idx = 0;
 	for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
 	{
-		if ((*it).lower() == currentStyle) {
+		if ((*it).toLower() == currentStyle) {
 			styleAction->setCurrentItem(idx);
 			break;
 		}
@@ -317,11 +320,10 @@ FormManager::insertWidget(const Q3CString &classname)
 //		form->d->cursors = new QMap<QString, QCursor>();
 		if (form->toplevelContainer())
 			form->widget()->setCursor(QCursor(Qt::CrossCursor));
-		QObjectList l( form->widget()->queryList( "QWidget" ) );
-		foreach(QObject *o, l) {
-			QWidget *w = static_cast<QWidget*>(o);
-			if (w->ownCursor()) {
-				form->d->cursors.insert(o, w->cursor());
+		const QList<QWidget*> l( form->widget()->findChildren<QWidget*>() );
+		foreach(QWidget *w, l) {
+			if (w->testAttribute(Qt::WA_SetCursor)) {
+				form->d->cursors.insert(w, w->cursor());
 				w->setCursor(QCursor(Qt::CrossCursor));
 			}
 		}
@@ -344,9 +346,9 @@ FormManager::stopInsert()
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
 		form->widget()->unsetCursor();
-		QObjectList l( form->widget()->queryList( "QWidget" ) );
-		foreach (QObject *o, l) {
-			static_cast<QWidget*>(o)->unsetCursor();
+		const QList<QWidget*> l( form->widget()->findChildren<QWidget*>() );
+		foreach(QWidget *w, l) {
+			w->unsetCursor();
 #if 0
 			if( ((QWidget*)o)->ownCursor()) {
 				QMap<QObject*,QCursor>::ConstIterator curIt( form->d->cursors.find(o) );
@@ -391,16 +393,15 @@ FormManager::startCreatingConnection()
 			form->widget()->setCursor(QCursor(Qt::PointingHandCursor));
 			form->widget()->setMouseTracking(true);
 		}
-		QObjectList l( form->widget()->queryList( "QWidget" ) );
-		foreach (QObject *o, l) {
-			QWidget *w = static_cast<QWidget*>(o);
-			if( w->ownCursor() ) {
+		const QList<QWidget*> l( form->widget()->findChildren<QWidget*>() );
+		foreach(QWidget *w, l) {
+			if( w->testAttribute(Qt::WA_SetCursor) ) {
 				form->d->cursors.insert(w, w->cursor());
 //				form->d->cursors->insert(w->name(), w->cursor());
 				w->setCursor(QCursor(Qt::PointingHandCursor ));
 			}
 			if (w->hasMouseTracking())
-				form->d->mouseTrackers->append(w->name());
+				form->d->mouseTrackers->append(w->objectName());
 			w->setMouseTracking(true);
 		}
 	}
@@ -447,15 +448,14 @@ FormManager::stopCreatingConnection()
 	{
 		form->widget()->unsetCursor();
 		form->widget()->setMouseTracking(false);
-		QObjectList l( form->widget()->queryList( "QWidget" ) );
-		foreach (QObject *o, l) {
-			QWidget *w = static_cast<QWidget*>(o);
-			if (w->ownCursor()) {
-				QMap<QObject*,QCursor>::ConstIterator curIt( form->d->cursors.find(o) );
+		const QList<QWidget*> l( form->widget()->findChildren<QWidget*>() );
+		foreach(QWidget *w, l) {
+			if (w->testAttribute(Qt::WA_SetCursor)) {
+				QMap<QObject*,QCursor>::ConstIterator curIt( form->d->cursors.find(w) );
 				if (curIt!=form->d->cursors.constEnd())
 					w->setCursor( *curIt );
 			}
-			w->setMouseTracking( !form->d->mouseTrackers->grep(w->name()).isEmpty() );
+			w->setMouseTracking( form->d->mouseTrackers->contains(w->objectName()) );
 		}
 		delete (form->d->mouseTrackers);
 		form->d->mouseTrackers = 0;
@@ -479,7 +479,7 @@ void
 FormManager::windowChanged(QWidget *w)
 {
 	kDebug() << "FormManager::windowChanged(" 
-		<< (w ? (QString(w->className())+" "+w->name()) : QString("0")) << ")" << endl;
+		<< (w ? (QString(w->metaObject()->className())+" "+w->objectName()) : QString("0")) << ")" << endl;
 
 	if(!w)
 	{
@@ -505,23 +505,24 @@ FormManager::windowChanged(QWidget *w)
 			//if(m_propSet)
 			//	m_propList->setCollection(form->pixmapCollection());
 
-			kDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
+			kDebug() << "FormManager::windowChanged() active form is " 
+				<< form->objectTree()->name() << endl;
 
 			if(m_collection)
 			{
 #ifndef KFD_NO_STYLES
 				// update the 'style' action
-				KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
+				KSelectAction *style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
 				const QString currentStyle = form->widget()->style().name();
-				const QStringList styles = m_style->items();
+				const QStringList styles = style->items();
 
 				int idx = 0;
 				QStringList::ConstIterator endIt = styles.constEnd();
 				for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
 				{
-					if ((*it).lower() == currentStyle) {
+					if ((*it).toLower() == currentStyle) {
 						kDebug() << "Updating the style to " << currentStyle << endl;
-						m_style->setCurrentItem(idx);
+						style->setCurrentItem(idx);
 						break;
 					}
 				}
@@ -546,25 +547,25 @@ FormManager::windowChanged(QWidget *w)
 
 	for(form = m_preview.first(); form; form = m_preview.next())
 	{
-		kDebug() << (form->widget() ? form->widget()->name() : "") << endl;
+		kDebug() << (form->widget() ? form->widget()->objectName() : "") << endl;
 		if(form->toplevelContainer() && form->widget() == w) {
-			kDebug() << "FormManager::windowChanged() active preview form is " << form->widget()->name() << endl;
+			kDebug() << "FormManager::windowChanged() active preview form is " << form->widget()->objectName() << endl;
 
 			if(m_collection)
 			{
 #ifndef KFD_NO_STYLES
 				// update the 'style' action
-				KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
+				KSelectAction *style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
 				const QString currentStyle = form->widget()->style().name();
-				const QStringList styles = m_style->items();
+				const QStringList styles = style->items();
 
 				int idx = 0;
 				QStringList::ConstIterator endIt = styles.constEnd();
 				for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
 				{
-					if ((*it).lower() == currentStyle) {
+					if ((*it).toLower() == currentStyle) {
 						kDebug() << "Updating the style to " << currentStyle << endl;
-						m_style->setCurrentItem(idx);
+						style->setCurrentItem(idx);
 						break;
 					}
 				}
@@ -664,9 +665,10 @@ FormManager::previewForm(Form *form, QWidget *container, Form *toForm)
 		return;
 
 	Form *myform;
-	if(!toForm)
-		myform = new Form(form->library(), form->objectTree()->name().latin1(), 
-			false/*!designMode, we need to set it early enough*/);
+	if(!toForm) {
+		myform = new Form(form->library(), false/*!designMode, we need to set it early enough*/);
+		myform->setObjectName( form->objectTree()->name() );
+	}
 	else
 		myform = toForm;
 	myform->createToplevel(container);
@@ -701,10 +703,10 @@ FormManager::isTopLevel(QWidget *w)
 	if(!activeForm() || !activeForm()->objectTree())
 		return false;
 
-//	kDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = "
+//	kDebug() << "FormManager::isTopLevel(): for: " << w->objectName() << " = "
 //		<< activeForm()->objectTree()->lookup(w->name())<< endl;
 
-	ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->name());
+	ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->objectName());
 	if(!item)
 		return true;
 
@@ -750,7 +752,7 @@ FormManager::copyWidget()
 	QWidget *w;
 	for(w = list->first(); w; w = list->next())
 	{
-		ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
+		ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->objectName());
 		if (!it)
 			continue;
 
@@ -860,7 +862,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	const bool enableLayout = multiple || w == container->widget();
 
 	m_menuWidget = w;
-	QString n = container->form()->library()->displayName(w->className());
+	QString n = container->form()->library()->displayName(w->metaObject()->className());
 //	QValueVector<int> menuIds();
 
 	if (!m_popup) {
@@ -876,12 +878,12 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	if (!multiple) {
 		if(w == container->form()->widget()) {
 			icon = SmallIcon("form");
-			titleText = i18n("%1 : Form").arg(w->name());
+			titleText = i18n("%1 : Form").arg(w->objectName());
 		}
 		else {
 			icon = SmallIcon(
-				container->form()->library()->iconName(w->className()));
-			titleText = QString(w->name()) + " : " + n;
+				container->form()->library()->iconName(w->metaObject()->className()));
+			titleText = QString(w->objectName()) + " : " + n;
 		}
 	}
 	else {
@@ -896,7 +898,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	{ a = action(_name); \
 	if (a && (forceVisible || a->isEnabled())) { \
 		if (separatorNeeded) \
-			m_popup->insertSeparator(); \
+			m_popup->addSeparator(); \
 		separatorNeeded = false; \
 		m_popup->addAction(a); \
 	} \
@@ -920,7 +922,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	if(!multiple && w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != Qt::RichText))
 	{
 		if (separatorNeeded)
-			m_popup->insertSeparator();
+			m_popup->addSeparator();
 
 		KMenu *sub = new KMenu(w);
 		QWidget *buddy = ((QLabel*)w)->buddy();
@@ -928,13 +930,13 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		sub->insertItem(i18n("No Buddy"), MenuNoBuddy);
 		if(!buddy)
 			sub->setItemChecked(MenuNoBuddy, true);
-		sub->insertSeparator();
+		sub->addSeparator();
 
 		// add all the widgets that can have focus
 		for(ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it)
 		{
 			int index = sub->insertItem( 
-				SmallIcon(container->form()->library()->iconName(it.current()->className().latin1())),
+				SmallIcon(container->form()->library()->iconName(it.current()->className().toLatin1())),
 				it.current()->name());
 			if(it.current()->widget() == buddy)
 				sub->setItemChecked(index, true);
@@ -952,7 +954,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	if(!multiple && !(m_options & HideEventsInPopupMenu))
 	{
 		if (separatorNeeded)
-			m_popup->insertSeparator();
+			m_popup->addSeparator();
 
 		// We create the signals menu
 		KMenu *sigMenu = new KMenu();
@@ -974,13 +976,13 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	// Other items
 	if(!multiple)
 	{
-		int lastID = -1;
+		QAction* lastAction = 0;
 		if (separatorNeeded) {
-			lastID = m_popup->insertSeparator();
+			lastAction = m_popup->addSeparator();
 		}
 		const uint oldIndex = m_popup->count()-1;
 		container->form()->library()
-			->createMenuActions(w->className(), w, m_popup, container);
+			->createMenuActions(w->metaObject()->className(), w, m_popup, container);
 		if (oldIndex == (m_popup->count()-1)) {
 //			for (uint i=oldIndex; i<m_popup->count(); i++) {
 //				int id = m_popup->idAt( i );
@@ -989,8 +991,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 //			}
 			//nothing added
 			if (separatorNeeded) {
-				m_popup->removeItem( lastID );
-//				menuIds->pop_back();
+				m_popup->removeAction( lastAction );
 			}
 		}
 	}
@@ -1055,7 +1056,7 @@ FormManager::menuSignalChosen(QAction* action)
 		}
 	}
 	else if(m_menuWidget)
-		emit createFormSlot(m_active, m_menuWidget->name(), action->text());
+		emit createFormSlot(m_active, m_menuWidget->objectName(), action->text());
 }
 
 void
@@ -1123,7 +1124,7 @@ FormManager::createLayout(int layoutType)
 	}
 	if(list->count() == 1)
 	{
-		ObjectTreeItem *item = m_active->objectTree()->lookup(list->first()->name());
+		ObjectTreeItem *item = m_active->objectTree()->lookup(list->first()->objectName());
 		if(!item || !item->container() || !m_propSet->contains("layout"))
 			return;
 		(*m_propSet)["layout"] = Container::layoutTypeToString(layoutType);
@@ -1133,7 +1134,7 @@ FormManager::createLayout(int layoutType)
 	QWidget *parent = list->first()->parentWidget();
 	for(QWidget *w = list->first(); w; w = list->next())
 	{
-		kDebug() << "comparing widget " << w->name() << " whose parent is " << w->parentWidget()->name() << " insteaed of " << parent->name() << endl;
+		kDebug() << "comparing widget " << w->objectName() << " whose parent is " << w->parentWidget()->objectName() << " insteaed of " << parent->objectName() << endl;
 		if(w->parentWidget() != parent)
 		{
 			KMessageBox::sorry(m_active->widget()->topLevelWidget(), i18n("<b>Cannot create the layout.</b>\n"
@@ -1154,7 +1155,7 @@ FormManager::breakLayout()
 		return;
 
 	Container *container = activeForm()->activeContainer();
-	Q3CString c( container->widget()->className() );
+	Q3CString c( container->widget()->metaObject()->className() );
 
 	if((c == "Grid") || (c == "VBox") || (c == "HBox") || (c == "HFlow") || (c == "VFlow"))
 	{
@@ -1229,12 +1230,17 @@ FormManager::slotStyle()
 
 	KSelectAction *styleAction = qobject_cast<KSelectAction*>(
 		m_collection->action("change_style"));
-	QString style = styleAction->currentText();
-	activeForm()->widget()->setStyle(style);
-
-	QObjectList l( activeForm()->widget()->queryList( "QWidget" ) );
-	foreach (QObject *o, l)
-		static_cast<QWidget*>(o)->setStyle( style );
+	const QString styleName = styleAction->currentText().toLower();
+	if (styleName == activeForm()->widget()->style()->objectName().toLower())
+		return;
+	delete m_style;
+	m_style = QStyleFactory::create(styleName);
+	if (m_style) {
+		activeForm()->widget()->setStyle(m_style);
+		const QList<QWidget*> l( activeForm()->widget()->findChildren<QWidget*>() );
+		foreach(QWidget *w, l)
+			w->setStyle( m_style );
+	}
 }
 
 void
@@ -1421,7 +1427,7 @@ FormManager::clearWidgetContent()
 		return;
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
-		activeForm()->library()->clearWidgetContent(w->className(), w);
+		activeForm()->library()->clearWidgetContent(w->metaObject()->className(), w);
 }
 
 void
@@ -1536,7 +1542,7 @@ FormManager::emitWidgetSelected( KFormDesigner::Form* form, bool multiple )
 	{
 		KFormDesigner::ObjectTreeItem *item = 0;
 		if (form->selectedWidgets()->first())
-			form->objectTree()->lookup( form->selectedWidgets()->first()->name() );
+			form->objectTree()->lookup( form->selectedWidgets()->first()->objectName() );
 		if(item && item->container())
 			containerSelected = true;
 	}
@@ -1695,7 +1701,7 @@ FormManager::changeFont()
 	QFont font;
 	bool oneFontSelected = true;
 	for (WidgetListIterator it(*wlist); (widget = it.current()); ++it) {
-		if (m_active->library()->isPropertyVisible(widget->className(), widget, "font")) {
+		if (m_active->library()->isPropertyVisible(widget->metaObject()->className(), widget, "font")) {
 			widgetsWithFontProperty.append(widget);
 			if (oneFontSelected) {
 				if (widgetsWithFontProperty.count()==1)

@@ -262,7 +262,8 @@ KFormDesignerKDevPart::createBlankForm()
 		return;  // active form is already a blank one
 
 	QString n = i18n("Form") + QString::number(++m_count);
-	Form *form = new Form(formsLibrary(), n.latin1());
+	Form *form = new Form(formsLibrary())
+	form->setObjectName(n);
 	FormWidgetBase *w = new FormWidgetBase(this, m_workspace, n.latin1());
 
 	w->setCaption(n);

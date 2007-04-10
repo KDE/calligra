@@ -544,19 +544,19 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 		else  {
 //			if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
 			if (d->slotPropertyChanged_addCommandEnabled && !KFormDesigner::FormManager::self()->isRedoing()) {
-				d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
+				d->lastCommand = new PropertyCommand(this, d->widgets.first()->objectName().toLatin1(),
 						d->widgets.first()->property(property), value, property);
 				KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 			}
 
 			// If the property is changed, we add it in ObjectTreeItem modifProp
-			ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->name());
+			ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->objectName());
 			if (tree && p.isModified())
 				tree->addModifiedProperty(property, d->widgets.first()->property(property));
 		}
 
 			if(property == "name")
-				emit widgetNameChanged(d->widgets.first()->name(), p.value().toByteArray());
+				emit widgetNameChanged(d->widgets.first()->objectName().toLatin1(), p.value().toByteArray());
 			d->widgets.first()->setProperty(property, value);
 			emitWidgetPropertyChanged(d->widgets.first(), property, value);
 	}
@@ -582,7 +582,7 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 			if (!alterLastCommand) {
 				ObjectTreeItem *tree
 					= KFormDesigner::FormManager::self()->activeForm()->objectTree()
-						->lookup((*it)->name());
+						->lookup((*it)->objectName());
 				if (tree && p.isModified())
 					tree->addModifiedProperty(property, (*it)->property(property));
 			}
@@ -630,7 +630,7 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 			kWarning() << "WidgetPropertySet::createPropertyCommandsInDesignMode(): \"" <<it.key()<<"\" property not found"<<endl;
 			continue;
 		}
-		PropertyCommand *subCommand = new PropertyCommand(this, widget->name(),
+		PropertyCommand *subCommand = new PropertyCommand(this, widget->objectName().toLatin1(),
 			widget->property(it.key()), it.value(), it.key());
 		group->addCommand( subCommand, execFlagForSubCommands);
 		if (widgetIsSelected) {
@@ -642,7 +642,7 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 			if (-1!=KexiUtils::indexOfPropertyWithSuperclasses(subwidget, it.key()) 
 				&& subwidget->property(it.key())!=it.value()) 
 			{
-				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(widget->name());
+				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(widget->objectName());
 				if (tree)
 					tree->addModifiedProperty(it.key(), subwidget->property(it.key()));
 				subwidget->setProperty(it.key(), it.value());
@@ -664,7 +664,7 @@ WidgetPropertySet::saveEnabledProperty(bool value)
 //	for(QWidget *w = d->widgets.first(); w; w = d->widgets.next()) {
 	foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
 		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()
-			->lookup((*it)->name());
+			->lookup((*it)->objectName());
 		if(tree->isEnabled() == value)
 			continue;
 
@@ -698,7 +698,7 @@ WidgetPropertySet::isNameValid(const QString &name)
 		KMessageBox::sorry(KFormDesigner::FormManager::self()->activeForm()->widget(),
 			i18n("Could not rename widget \"%1\" to \"%2\" because "
 			"\"%3\" is not a valid name (identifier) for a widget.\n")
-			.arg(w->name()).arg(name).arg(name));
+			.arg(w->objectName()).arg(name).arg(name));
 		d->slotPropertyChangedEnabled = false;
 		d->set["name"].resetValue();
 		d->slotPropertyChangedEnabled = true;
@@ -709,7 +709,7 @@ WidgetPropertySet::isNameValid(const QString &name)
 		KMessageBox::sorry( KFormDesigner::FormManager::self()->activeForm()->widget(),
 			i18n("Could not rename widget \"%1\" to \"%2\" "
 			"because a widget with the name \"%3\" already exists.\n")
-			.arg(w->name()).arg(name).arg(name));
+			.arg(w->objectName()).arg(name).arg(name));
 		d->slotPropertyChangedEnabled = false;
 		d->set["name"].resetValue();
 		d->slotPropertyChangedEnabled = true;
@@ -730,7 +730,7 @@ WidgetPropertySet::slotPropertyReset(KoProperty::Set& set, KoProperty::Property&
 	// We use the old value in modifProp for each widget
 //	for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())  {
 	foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
-		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->name());
+		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->objectName());
 		if(tree->modifiedProperties()->contains(property.name()))
 			(*it)->setProperty(property.name(), tree->modifiedProperties()->find(property.name()).value());
 	}
@@ -773,7 +773,7 @@ WidgetPropertySet::eventFilter(QObject *o, QEvent *ev)
 		else  {
 			QStringList list;
 			foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets)
-				list.append((*it)->name());
+				list.append((*it)->objectName());
 
 			d->lastGeoCommand = new GeometryPropertyCommand(this, list, static_cast<QMoveEvent*>(ev)->oldPos());
 			if (KFormDesigner::FormManager::self()->activeForm())
@@ -907,7 +907,7 @@ WidgetPropertySet::saveAlignProperty(const QString &property)
 	if(d->lastCommand && d->lastCommand->property() == "alignment")
 		d->lastCommand->setValue(valueForKeys);
 	else {
-		d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
+		d->lastCommand = new PropertyCommand(this, d->widgets.first()->objectName().toLatin1(),
 			subwidget->property("alignment"), valueForKeys, "alignment");
 		KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 	}
@@ -961,7 +961,7 @@ WidgetPropertySet::saveLayoutProperty(const QString &prop, const QVariant &value
 	Container *container=0;
 	if(!KFormDesigner::FormManager::self()->activeForm() || !KFormDesigner::FormManager::self()->activeForm()->objectTree())
 		return;
-	ObjectTreeItem *item = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->name());
+	ObjectTreeItem *item = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->objectName());
 	if(!item)
 		return;
 	container = item->container();
@@ -972,7 +972,7 @@ WidgetPropertySet::saveLayoutProperty(const QString &prop, const QVariant &value
 		if(d->lastCommand && d->lastCommand->property() == "layout" && !d->isUndoing)
 			d->lastCommand->setValue(value);
 		else if(!d->isUndoing)  {
-			d->lastCommand = new LayoutPropertyCommand(this, d->widgets.first()->name(),
+			d->lastCommand = new LayoutPropertyCommand(this, d->widgets.first()->objectName().toLatin1(),
 				d->set["layout"].oldValue(), value);
 			KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 		}
@@ -996,7 +996,7 @@ WidgetPropertySet::saveLayoutProperty(const QString &prop, const QVariant &value
 		container->layout()->setSpacing(value.toInt());
 	}
 
-	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->name());
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->objectName());
 	if(tree && d->set[ prop.toLatin1() ].isModified())
 		tree->addModifiedProperty(prop.toLatin1(), d->set[prop.toLatin1()].oldValue());
 
@@ -1006,7 +1006,7 @@ WidgetPropertySet::saveLayoutProperty(const QString &prop, const QVariant &value
 	if(d->lastCommand && (QString(d->lastCommand->property()) == prop))
 		d->lastCommand->setValue(value);
 	else  {
-		d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
+		d->lastCommand = new PropertyCommand(this, d->widgets.first()->objectName().toLatin1(),
 			d->set[ prop.toLatin1() ].oldValue(), value, prop.toLatin1());
 		KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 	}

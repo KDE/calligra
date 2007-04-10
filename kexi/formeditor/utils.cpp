@@ -57,7 +57,7 @@ KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
 
 	kDebug() << "Installing event filter on widget: " << object->objectName() << " directed to " << container->objectName() << endl;
 	object->installEventFilter(container);
-	if(((QWidget*)object)->ownCursor())
+	if(((QWidget*)object)->testAttribute(Qt::WA_SetCursor))
 		((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
 
 	const QObjectList list( object->children() );
@@ -86,7 +86,7 @@ KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
 		) //fix weird behaviour
 		return; // if the user has set a cursor for this widget or this is a container, don't change it
 
-	if(w->ownCursor())
+	if(w->testAttribute(Qt::WA_SetCursor))
 		w->setCursor(Qt::ArrowCursor);
 
 	const QList<QWidget*> list( w->findChildren<QWidget*>() );
@@ -164,8 +164,8 @@ int VerWidgetList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::It
 	else
 		y2 = w2->mapTo(m_topLevelWidget, QPoint(0,0)).y();
 	
-	kDebug() << w1->name() << ": " << y1 << " " 
-		<< " | " << w2->name() << ": " << y2 << endl;
+	kDebug() << w1->objectName() << ": " << y1 << " " 
+		<< " | " << w2->objectName() << ": " << y2 << endl;
 
 
 	//kDebug() << w1->name() << ": " << w1->mapTo(m_topLevelWidget, QPoint(0,0)) << " " << w1->y()

@@ -64,10 +64,9 @@ ResizeHandle::~ResizeHandle()
 
 void ResizeHandle::setEditingMode(bool editing)
 {
-	if(editing)
-		setBackgroundColor(Qt::blue);
-	else
-		setBackgroundColor(Qt::black);
+	QPalette pal(palette());
+	pal.setColor(backgroundRole(), editing ? Qt::blue : Qt::black);
+	setPalette(pal);
 }
 
 void ResizeHandle::updatePos()
@@ -143,7 +142,7 @@ void ResizeHandle::mousePressEvent(QMouseEvent *ev)
 	m_y = ev->y();
 	if (startDragging) {
 //	m_form->resizeHandleDraggingStarted(m_set->widget());
-		WidgetFactory *wfactory = m_set->m_form->library()->factoryForClassName(m_set->widget()->className());
+		WidgetFactory *wfactory = m_set->m_form->library()->factoryForClassName(m_set->widget()->metaObject()->className());
 		if (wfactory)
 			wfactory->resetEditor();
 	}
@@ -165,7 +164,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 	int dummyx = ev->x() - m_x;
 	int dummyy = ev->y() - m_y;
 
-	if(FormManager::self()->snapWidgetsToGrid() && (ev->state() != (Qt::LeftButton|Qt::ControlModifier|Qt::AltModifier)))
+	if(FormManager::self()->snapWidgetsToGrid() && ev->buttons() != Qt::LeftButton && ev->modifiers()!=(Qt::ControlModifier|Qt::AltModifier))
 	{
 		dummyy = (int) ( ((float)dummyy) / ((float)gridY) + 0.5 );
 		dummyy *= gridY;
