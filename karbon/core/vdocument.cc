@@ -43,92 +43,108 @@
 
 #include <kdebug.h>
 
-VDocument::VDocument()
-: VObject( 0L )
-, m_pageSize(0.0, 0.0)
-, m_selectionMode( VDocument::ActiveLayer )
-, m_unit( KoUnit::Millimeter )
-, m_saveAsPath(true)
+class VDocument::Private
 {
-    m_selection = new VSelection( this );
+public:
+    Private()
+    : pageSize(0.0, 0.0)
+    , unit( KoUnit::Millimeter )
+    , saveAsPath(true)
+    {}
+
+    ~Private()
+    {
+        delete( selection );
+        qDeleteAll( layers );
+    }
+
+    QSizeF pageSize; ///< the documents page size
+
+    QList<KoShape*> objects;   ///< The list of all object of the document.
+    VLayerList layers;         ///< The layers in this document.
+
+    VSelection* selection;        ///< The selection. A list of selected objects.
+    VSelectionMode selectionMode; ///< The selectionMode
+
+    KoUnit unit; ///< The unit.
+
+    // TODO this flag is used nowhere, can we remove it?
+    bool saveAsPath;
+};
+
+VDocument::VDocument()
+: VObject( 0L ), d( new Private )
+{
+    d->selection = new VSelection( this );
     // create a layer. we need at least one:
     insertLayer( new KoShapeLayer() );
 }
 
 VDocument::VDocument( const VDocument& document )
-    : VObject( document ), m_pageSize(0.0, 0.0)
+    : VObject( document ), d( new Private )
 {
-	m_selection = new VSelection( this );
-	m_layers = document.m_layers;
+    d->selection = new VSelection( this );
+    d->layers = document.layers();
 // TODO
 }
 
 VDocument::~VDocument()
 {
-	delete( m_selection );
-	foreach( KoShapeLayer* shape, m_layers )
-		delete shape;
+    delete d;
 }
 
-void
-VDocument::insertLayer( KoShapeLayer* layer )
+void VDocument::insertLayer( KoShapeLayer* layer )
 {
-    m_layers.append( layer );
-} // VDocument::insertLayer
+    d->layers.append( layer );
+}
 
-void
-VDocument::removeLayer( KoShapeLayer* layer )
+void VDocument::removeLayer( KoShapeLayer* layer )
 {
-	m_layers.removeAt( m_layers.indexOf( layer ) );
-	if ( m_layers.count() == 0 )
-		m_layers.append( new KoShapeLayer() );
-} // VDocument::removeLayer
+    d->layers.removeAt( d->layers.indexOf( layer ) );
+    if ( d->layers.count() == 0 )
+        d->layers.append( new KoShapeLayer() );
+}
 
 bool VDocument::canRaiseLayer( KoShapeLayer* layer )
 {
-    int pos = m_layers.indexOf( layer );
-    return (pos != int( m_layers.count() ) - 1 && pos >= 0 );
+    int pos = d->layers.indexOf( layer );
+    return (pos != int( d->layers.count() ) - 1 && pos >= 0 );
 }
 
 bool VDocument::canLowerLayer( KoShapeLayer* layer )
 {
-    int pos = m_layers.indexOf( layer );
+    int pos = d->layers.indexOf( layer );
     return (pos>0);
 }
 
-void
-VDocument::raiseLayer( KoShapeLayer* layer )
+void VDocument::raiseLayer( KoShapeLayer* layer )
 {
-	int pos = m_layers.indexOf( layer );
-	if( pos != int( m_layers.count() ) - 1 && pos >= 0 )
-		m_layers.move( pos, pos + 1 );
-} // VDocument::raiseLayer
-
-void
-VDocument::lowerLayer( KoShapeLayer* layer )
-{
-	int pos = m_layers.indexOf( layer );
-	if ( pos > 0 )
-		m_layers.move( pos, pos - 1 );
-} // VDocument::lowerLayer
-
-int
-VDocument::layerPos( KoShapeLayer* layer )
-{
-	return m_layers.indexOf( layer );
-} // VDocument::layerPos
-
-void
-VDocument::add( KoShape* shape )
-{
-    if( ! m_objects.contains( shape ) )
-        m_objects.append( shape );
+    int pos = d->layers.indexOf( layer );
+    if( pos != int( d->layers.count() ) - 1 && pos >= 0 )
+        d->layers.move( pos, pos + 1 );
 }
 
-void
-VDocument::remove( KoShape* shape )
+void VDocument::lowerLayer( KoShapeLayer* layer )
 {
-    m_objects.removeAt( m_objects.indexOf( shape ) );
+    int pos = d->layers.indexOf( layer );
+    if ( pos > 0 )
+        d->layers.move( pos, pos - 1 );
+}
+
+int VDocument::layerPos( KoShapeLayer* layer )
+{
+    return d->layers.indexOf( layer );
+}
+
+void VDocument::add( KoShape* shape )
+{
+    if( ! d->objects.contains( shape ) )
+        d->objects.append( shape );
+}
+
+void VDocument::remove( KoShape* shape )
+{
+    d->objects.removeAt( d->objects.indexOf( shape ) );
 }
 
 QDomDocument
@@ -165,11 +181,11 @@ VDocument::save( QDomElement& me ) const
 	me.setAttribute( "version", "0.1" );
 	me.setAttribute( "editor", "Karbon14" );
 	me.setAttribute( "syntaxVersion", "0.1" );
-    if( m_pageSize.width() > 0.0 )
-        me.setAttribute( "width", m_pageSize.width() );
-    if( m_pageSize.height() > 0. )
-        me.setAttribute( "height", m_pageSize.height() );
-	me.setAttribute( "unit", KoUnit::unitName( m_unit ) );
+    if( d->pageSize.width() > 0.0 )
+        me.setAttribute( "width", d->pageSize.width() );
+    if( d->pageSize.height() > 0. )
+        me.setAttribute( "height", d->pageSize.height() );
+	me.setAttribute( "unit", KoUnit::unitName( d->unit ) );
 
 	// save objects:
 	/* TODO: porting to flake
@@ -192,8 +208,7 @@ VDocument::load( const QDomElement& doc )
 	loadXML( doc );
 }
 
-bool
-VDocument::loadXML( const QDomElement& doc )
+bool VDocument::loadXML( const QDomElement& doc )
 {
     if( doc.attribute( "mime" ) != "application/x-karbon" ||
 		doc.attribute( "syntaxVersion" ) != "0.1" )
@@ -201,17 +216,17 @@ VDocument::loadXML( const QDomElement& doc )
 		return false;
 	}
 
-	qDeleteAll(m_layers);
-	m_layers.clear();
+    qDeleteAll( d->layers );
+    d->layers.clear();
 
-    m_pageSize.setWidth( doc.attribute( "width", "800.0" ).toDouble() );
-    m_pageSize.setHeight( doc.attribute( "height", "550.0" ).toDouble() );
+    d->pageSize.setWidth( doc.attribute( "width", "800.0" ).toDouble() );
+    d->pageSize.setHeight( doc.attribute( "height", "550.0" ).toDouble() );
 
-	m_unit = KoUnit::unit( doc.attribute( "unit", KoUnit::unitName( m_unit ) ) );
+    d->unit = KoUnit::unit( doc.attribute( "unit", KoUnit::unitName( d->unit ) ) );
 
 	loadDocumentContent( doc );
 
-    if( m_layers.isEmpty() )
+    if( d->layers.isEmpty() )
         insertLayer( new KoShapeLayer() );
 
 	return true;
@@ -255,8 +270,8 @@ VDocument::accept( VVisitor& visitor )
 QRectF VDocument::boundingRect() const
 {
     // initialize bounding rect with page size
-    QRectF bb( QPointF(0.0, 0.0), m_pageSize );
-    foreach( KoShape* layer, m_layers )
+    QRectF bb( QPointF(0.0, 0.0), d->pageSize );
+    foreach( KoShape* layer, d->layers )
     {
         bb = bb.unite(  layer->boundingRect() );
     }
@@ -266,15 +281,50 @@ QRectF VDocument::boundingRect() const
 
 QSizeF VDocument::pageSize() const
 {
-    return m_pageSize;
+    return d->pageSize;
 }
 
 void VDocument::setPageSize( QSizeF pageSize )
 {
-    m_pageSize = pageSize;
+    d->pageSize = pageSize;
 }
 
 const QList<KoShape*> VDocument::shapes() const
 {
-    return m_objects;
+    return d->objects;
+}
+
+VSelection* VDocument::selection() const
+{
+    return d->selection;
+}
+
+VDocument::VSelectionMode VDocument::selectionMode()
+{
+    return VDocument::AllLayers;
+}
+
+bool VDocument::saveAsPath() const
+{
+    return d->saveAsPath;
+}
+
+void VDocument::saveAsPath( bool b )
+{
+    d->saveAsPath = b;
+}
+
+KoUnit VDocument::unit() const
+{
+    return d->unit;
+}
+
+void VDocument::setUnit( KoUnit unit )
+{
+    d->unit = unit;
+}
+
+const VLayerList& VDocument::layers() const
+{
+    return d->layers;
 }

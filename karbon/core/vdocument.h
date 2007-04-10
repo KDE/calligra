@@ -90,16 +90,14 @@ public:
 	 *
 	 * @return the document's unit
 	 */
-	KoUnit unit() const
-		{ return m_unit; }
+    KoUnit unit() const;
 
 	/**
 	 * Sets document unit.
 	 *
 	 * @param unit the new document unit
 	 */
-	void setUnit( KoUnit unit )
-		{ m_unit = unit; }
+    void setUnit( KoUnit unit );
 
 	/**
 	 * Checks if specified layer can be raised. 
@@ -170,7 +168,7 @@ public:
      * resembles a root container which can contain other containers in an
      * arbitrary nesting depth.
 	 */
-	const VLayerList& layers() const { return m_layers; }
+	const VLayerList& layers() const;
 
 	/**
 	 * Returns the list of all shapes of the document.
@@ -199,24 +197,14 @@ public:
 	 *
 	 * @return the document's selection
 	 */
-	VSelection* selection() const
-		{ return m_selection; }
+    VSelection* selection() const;
 
 	/**
 	 * Returns the selection mode.
 	 * 
 	 * @return the actual selection mode
 	 */
-	VSelectionMode selectionMode() 
-		{ return m_selectionMode; }
-
-	/**
-	 * Sets the selection mode.
-	 *
-	 * @param mode the new selection mode
-	 */
-	void setSelectionMode( VSelectionMode mode ) 
-		{ m_selectionMode = mode; }
+    VSelectionMode selectionMode();
 
 	/**
 	 * Adds an object to the document.
@@ -232,8 +220,8 @@ public:
 	 */
 	void remove( KoShape* shape );
 	
-	bool saveAsPath() const { return m_saveAsPath; }
-	void saveAsPath( bool b ) { m_saveAsPath = b; }
+    bool saveAsPath() const;
+    void saveAsPath( bool b );
 
     /// Returns the bounding rectangle of the documents content
     QRectF boundingRect() const;
@@ -246,20 +234,8 @@ public:
 
 private:
 
-    QSizeF m_pageSize; ///< the documents page size
-
-    QList<KoShape*> m_objects;   ///< The list of all object of the document.
-    VLayerList m_layers;         ///< The layers in this document.
-
-    VSelection* m_selection;        ///< The selection. A list of selected objects.
-    VSelectionMode m_selectionMode; ///< The selectionMode
-
-    KoUnit m_unit; ///< The unit.
-
-    QMap<const KoShape *, QString>	m_objectNames; /// the shape <-> name mapping
-
-	// TODO this flag is used nowhere, can we remove it?
-	bool m_saveAsPath;
+    class Private;
+    Private * const d;
 };
 
 #endif
