@@ -73,14 +73,14 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
 			return false;
 		QString baseFilename( dir + (data->hostName.isEmpty() ? "localhost" : data->hostName) );
 		int i = 0;
-		while (KStandardDirs::exists(baseFilename+(i>0 ? QString::number(i) : QString::null)+".kexic"))
+		while (KStandardDirs::exists(baseFilename+(i>0 ? QString::number(i) : QString())+".kexic"))
 			i++;
 		if (!KStandardDirs::exists(dir)) {
 			//make 'connections' dir and protect it
 			if (!KStandardDirs::makeDir(dir, 0700))
 				return false;
 		}
-		filename = baseFilename+(i>0 ? QString::number(i) : QString::null)+".kexic";
+		filename = baseFilename+(i>0 ? QString::number(i) : QString())+".kexic";
 	}
 	addConnectionDataInternal(data, filename);
 	bool result = saveConnectionData(data, data);
@@ -174,7 +174,7 @@ QString KexiDBConnectionSet::fileNameForConnectionData(KexiDB::ConnectionData *d
 	if (!data)
 		return QString();
 	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( data );
-	return (it == d->filenamesForData.constEnd()) ? QString::null : it.value();
+	return (it == d->filenamesForData.constEnd()) ? QString() : it.value();
 }
 
 KexiDB::ConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString& fileName) const

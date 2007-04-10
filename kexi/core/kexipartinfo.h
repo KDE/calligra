@@ -25,7 +25,7 @@
 
 class KexiMainWindowImpl;
 class KexiProject;
-class KexiDialogBase;
+class KexiWindow;
 
 namespace KexiPart
 {
@@ -118,7 +118,7 @@ class KEXICORE_EXPORT Info
 		friend class Manager;
 		friend class ::KexiProject;
 		friend class ::KexiMainWindowImpl;
-		friend class ::KexiDialogBase;
+		friend class ::KexiWindow;
 
 		/**
 		 * Sets the project-part-id.
@@ -141,7 +141,7 @@ class KEXICORE_EXPORT Info
 		/**
 		 * \return true if ID of the part is stored in project's database
 		 * false by default. This flag is updated in Manager::checkProject()
-		 * and set to true on first successful execution of KexiDialogBase::storeNewData()
+		 * and set to true on first successful execution of KexiWindow::storeNewData()
 		 * @internal
 		 */
 		bool isIdStoredInPartDatabase() const;

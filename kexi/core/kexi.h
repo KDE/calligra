@@ -40,10 +40,10 @@ namespace Kexi
 {
 	KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData = 0);
 
-	/*! Modes of view for the dialogs. Used mostly for parts and KexiDialogBase. */
+	/*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 	enum ViewMode { 
 		AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
-		NoViewMode = 0, //!< In KexiViewBase::afterSwitchFrom() and KexiViewBase::beforeSwitchTo() 
+		NoViewMode = 0, //!< In KexiView::afterSwitchFrom() and KexiView::beforeSwitchTo() 
 		                //!< means that parent dialog of the view has not yet view defined.
 		DataViewMode = 1,
 		DesignViewMode = 2,
@@ -109,13 +109,13 @@ namespace Kexi
 			//! Note: for safety, \a dbObject needs to be derived from QObject, 
 			//! otherwise it won't be assigned
 			void setStatus(KexiDB::Object* dbObject, 
-				const QString& message = QString::null, const QString& description = QString::null);
+				const QString& message = QString(), const QString& description = QString());
 
 			void setStatus(KexiDB::ResultInfo* result, 
-				const QString& message = QString::null, const QString& description = QString::null);
+				const QString& message = QString(), const QString& description = QString());
 
 			void setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result, 
-				const QString& message = QString::null, const QString& description = QString::null);
+				const QString& message = QString(), const QString& description = QString());
 
 			void clearStatus();
 
@@ -140,10 +140,11 @@ namespace Kexi
 }//namespace Kexi
 
 //! Displays information that feature "feature_name" is not availabe in the current application version
-KEXICORE_EXPORT void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text = QString::null);
+KEXICORE_EXPORT void KEXI_UNFINISHED(
+	const QString& feature_name, const QString& extra_text = QString());
 
 //! Like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text
 #define KEXI_UNFINISHED_SHARED_ACTION(action_name) \
-	KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString::null)
+	KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString())
 
 #endif

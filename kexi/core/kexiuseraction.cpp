@@ -1,3 +1,4 @@
+#include <KActionCollection>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kshortcut.h>
@@ -11,12 +12,12 @@
 #include "keximainwindow.h"
 #include "kexiuseraction.h"
 
-KexiUserAction::KexiUserAction(KexiMainWindow *win, KActionCollection *parent, const QString &name, const QString &text, const QString &pixmap)
- : KAction(text, pixmap, KShortcut(), this, SLOT(execute()), parent, name.toLatin1())
+KexiUserAction::KexiUserAction(KActionCollection *parent, const QString &name, const QString &text, const QString &pixmap)
+ : KAction(KIcon(pixmap), text, parent)
 {
-	m_win = win;
+	setObjectName(name);
 	m_method = 0;
-	connect(this, SIGNAL(activated()), this, SLOT(execute()));
+	connect(this, SIGNAL(triggered()), this, SLOT(execute()));
 }
 
 void
@@ -38,15 +39,17 @@ KexiUserAction::execute()
 			//get partinfo
 			KexiPart::Info *i = Kexi::partManager().infoForMimeType(m_args[0].toString().toLatin1());
 			if (!i) {
-				KMessageBox::error(m_win, i18n("Specified part does not exist"));
+				KMessageBox::error(KexiMainWindow::global()->thisWidget(), i18n("Specified part does not exist"));
 				return;
 			}
 
 			Kexi::partManager().part(i); //load part if doesn't exists
-			KexiPart::Item *item = m_win->project()->item(i, m_args[1].toString());
+			KexiPart::Item *item = KexiMainWindow::global()->project()->item(i, m_args[1].toString());
 			bool openingCancelled;
-			if(!m_win->openObject(item, Kexi::DataViewMode, openingCancelled) && !openingCancelled) {
-				KMessageBox::error(m_win, i18n("Specified document could not be opened."));
+			if (!KexiMainWindow::global()->openObject(item, Kexi::DataViewMode, openingCancelled)
+				&& !openingCancelled)
+			{
+				KMessageBox::error(KexiMainWindow::global()->thisWidget(), i18n("Specified document could not be opened."));
 				return;
 			}
 			if (openingCancelled)
@@ -59,12 +62,13 @@ KexiUserAction::execute()
 }
 
 KexiUserAction *
-KexiUserAction::fromCurrentRecord(KexiMainWindow *context, KActionCollection *parent, KexiDB::Cursor *c)
+KexiUserAction::fromCurrentRecord(KActionCollection *parent, KexiDB::Cursor *c)
 {
 	if(!c || c->bof() || c->eof())
 		return 0;
 
-	KexiUserAction *a = new KexiUserAction(context, parent, c->value(1).toString(), c->value(2).toString(), c->value(3).toString());
+	KexiUserAction *a = new KexiUserAction(parent, 
+		c->value(1).toString(), c->value(2).toString(), c->value(3).toString());
 	QString args = c->value(5).toString();
 	bool quote = false;
 

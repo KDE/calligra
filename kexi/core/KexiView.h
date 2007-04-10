@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,21 +17,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIVIEWBASE_H
-#define KEXIVIEWBASE_H
+#ifndef KEXIVIEW_H
+#define KEXIVIEW_H
 
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QEvent>
 #include <QCloseEvent>
-#include <Q3PtrList>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "kexiactionproxy.h"
 
 class KexiMainWindow;
-class KexiDialogBase;
+class KexiWindow;
 
 namespace KoProperty {
 	class Set;
@@ -41,62 +38,63 @@ namespace KexiDB {
 	class SchemaData;
 }
 
-//! Base class for single view embeddable of in KexiDialogBase.
+//! Base class for single view embeddable in KexiWindow.
 /*! This class automatically works as a proxy for shared (application-wide) actions.
- KexiViewBase has 'dirty' flag to indicate that view's data has changed.
- This flag's state is reused by KexiDialogBase object that contain the view.
- KexiViewBase objects can be also nested, using addChildView(): any actions and 'dirty' flag
+ KexiView has 'dirty' flag to indicate that view's data has changed.
+ This flag's state is reused by KexiWindow object that contain the view.
+ KexiView objects can be also nested, using addChildView(): any actions and 'dirty' flag
  are transmited to parent view in this case.
 
- KexiViewBase objects are usually allocated within KexiDialogBase objects by implementing
+ KexiView objects are usually allocated within KexiWindow objects by implementing
  KexiPart::createView() method. See query or table part code for examples.
 
- KexiViewBase object can be also allocated without attaching it KexiDialogBase,
+ KexiView object can be also allocated without attaching it KexiWindow,
  especially withinn dock window. see KexiMainWindowImpl::initNavigator() to see example
  how KexiBrowser does this.
 */
-class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
+class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 {
 	Q_OBJECT
 
 	public:
-		KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
-		virtual ~KexiViewBase();
+		KexiView(QWidget *parent, const char *name = 0);
+		virtual ~KexiView();
 
-		//! \return kexi main window that contain this view
-		inline KexiMainWindow *mainWin() const { return m_mainWin; }
+//		//! \return kexi main window that contain this view
+//kde4 not needed		inline KexiMainWindow *mainWin() const { return m_mainWin; }
 
-		//! \return parent KexiDialogBase that contains this view, or 0 if no dialog contain this view
-		KexiDialogBase* parentDialog() const { return m_dialog; }
+		//! \return parent KexiWindow that containing this view, 
+		//! or 0 if no window contain this view
+		KexiWindow* window() const;
 
 		/*! Added for convenience.
-		 \return KexiPart object that was used to create this view (with a dialog)
-		 or 0 if this view is not created using KexiPart. \sa parentDialog() */
+		 \return KexiPart object that was used to create this view (with a window)
+		 or 0 if this view is not created using KexiPart. \sa window() */
 		KexiPart::Part* part() const;
 
 		/*! \return preferred size hint, that can be used to resize the view.
 		 It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size,
-		 so the view won't exceed this maximum size. The method is used e.g. in KexiDialogBase::sizeHint().
+		 so the view won't exceed this maximum size. The method is used e.g. in KexiWindow::sizeHint().
 		 If you reimplement this method, do not forget to return value of
-		 yoursize.boundedTo( KexiViewBase::preferredSizeHint(otherSize) ). */
+		 yoursize.boundedTo( KexiView::preferredSizeHint(otherSize) ). */
 		virtual QSize preferredSizeHint(const QSize& otherSize);
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
 
-		void addChildView( KexiViewBase* childView );
+		void addChildView( KexiView* childView );
 
 		/*! True if contents (data) of the view is dirty and need to be saved
-		 This may or not be used, depending if changes in the dialog
+		 This may or not be used, depending if changes in the window
 		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
-		 (e.g. like in alter-table dialog).
-		 "Dirty" flag is reused by KexiDialogBase::dirty().
-		 Default implementation just uses internal m_dirty flag, that is false by default.
+		 (e.g. like in alter-table window).
+		 "Dirty" flag is reused by KexiWindow::dirty().
+		 Default implementation just uses internal dirty flag, that is false by default.
 		 Reimplement this if you e.g. want reuse other "dirty"
 		 flag from internal structures that may be changed. */
-		virtual bool dirty() const { return m_dirty; }
+		virtual bool isDirty() const;
 
 		/*! \return the view mode for this view. */
-		int viewMode() const { return m_viewMode; }
+		int viewMode() const;
 
 		/*! Reimpelmented from KexiActionProxy.
 		 \return shared action with name \a action_name for this view.
@@ -117,7 +115,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		virtual void propertySetSwitched();
 
 		/*! Sets dirty flag on or off. It the flag changes,
-		 dirty(bool) signal is emitted by parent dialog (KexiDialog),
+		 dirty(bool) signal is emitted by the parent window (KexiWindow),
 		 to inform the world about that. If this view has a parent view, setDirty()
 		 is called also on parent view.
 		 Always use this function to update 'dirty' flag information. */
@@ -133,7 +131,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		void focus(bool in);
 
 	protected:
-		/*! called by KexiDialogBase::switchToViewMode() right before dialog is switched to new mode
+		/*! called by KexiWindow::switchToViewMode() right before window is switched to new mode
 		 By default does nothing. Reimplement this if you need to do something
 		 before switching to this view.
 		 \return true if you accept or false if a error occupied and view shouldn't change
@@ -143,7 +141,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 by storeData() or storeNewData(). */
 		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
 
-		/*! called by KexiDialogBase::switchToViewMode() right after dialog is switched to new mode
+		/*! called by KexiWindow::switchToViewMode() right after window is switched to new mode
 		 By default does nothing. Reimplement this if you need to do something
 		 after switching to this view.
 		 \return true if you accept or false if a error occupied and view shouldn't change
@@ -162,11 +160,12 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 If \a preservePrevSelection is true and there was a property set
 		 assigned before call, previously selected item will be preselected
 		 in the editor (if found). */
-		void propertySetReloaded(bool preservePrevSelection = false, const Q3CString& propertyToSelect = Q3CString());
+		void propertySetReloaded(bool preservePrevSelection = false, 
+			const QByteArray& propertyToSelect = QByteArray());
 
-		/*! Tells this dialog to create and store data of the new object
+		/*! Tells this view to create and store data of the new object
 		 pointed by \a sdata on the backend.
-		 Called by KexiDialogBase::storeNewData().
+		 Called by KexiWindow::storeNewData().
 		 Default implementation:
 		 - makes a deep copy of \a sdata
 		 - stores object schema data \a sdata in 'kexi__objects' internal table
@@ -175,7 +174,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 Requirements:
 		 - deep copy of \a sdata should be made
 		 - schema data should be created at the backend
-		   (by calling KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata)),
+		   (by calling KexiView::storeNewData(const KexiDB::SchemaData& sdata)),
 		   or using Connection::storeObjectSchemaData() or more specialized
 		   method. For example, KexiAlterTableDialog
 		   uses Connection::createTable(TableSchema) for this
@@ -191,10 +190,11 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 and \a dataString is set to null string. The default is false.
 		 \return true on success
 		 \sa storeDataBlock(). */
-		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null, bool canBeEmpty = false );
+		bool loadDataBlock( QString &dataString, const QString& dataID = QString(), 
+			bool canBeEmpty = false );
 
 		/*! Tells this view to store data changes on the backend.
-		 Called by KexiDialogBase::storeData().
+		 Called by KexiWindow::storeData().
 		 Default implementation:
 		 - makes a deep copy of \a sdata
 		 - stores object schema data \a sdata in 'kexi__objects' internal table
@@ -211,13 +211,13 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 at the database backend. Block will be stored in "kexi__objectdata" table pointed by
 		 this object's id and an optional \a dataID identifier.
 
-		 If dialog's id is not available (KexiDialogBase::id()),
+		 If window's id is not available (KexiWindow::id()),
 		 then ID that was just created in storeNewData() is used
-		 (see description of m_newlyAssignedID member).
+		 (see description of newlyAssignedID()).
 		 If there is already such record in the table, it's simply overwritten.
 		 \return true on success
 		*/
-		bool storeDataBlock( const QString &dataString, const QString &dataID = QString::null );
+		bool storeDataBlock( const QString &dataString, const QString &dataID = QString() );
 
 		/*! Removes (potentially large) string data (e.g. xml form's representation),
 		 pointed by optional \a dataID, from the database backend.
@@ -232,54 +232,59 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 call superclass impelmentation at the end!).
 		 This implementation does nothing for this view but calls updateActions()
 		 for every child-view of this view.
-		 called by KexiDialogBase on dialog's activation (\a activated is true)
+		 called by KexiWindow on window's activation (\a activated is true)
 		 or deactivation. */
 		virtual void updateActions(bool activated);
 
 		virtual void setFocusInternal() { QWidget::setFocus(); }
 
-		/*! Allows to react on parent dialog's detaching (only for KMDI's ChildFrame mode)
-		 - it is called by KexiDialogBase::youAreDetached().
+		/*! Allows to react on parent window's detaching (only for KMDI's ChildFrame mode)
+		 - it is called by KexiWindow::youAreDetached().
 		 Default implementation does nothing.
 		 Implement it if you want to perform some appropriate actions. */
-		virtual void parentDialogDetached() {};
+		virtual void windowDetached() {};
 
-		/*! Allows to react on parent dialog's attaching (only for KMDI's ChildFrame mode)
-		 - it is called by KexiDialogBase::youAreAttached().
+		/*! Allows to react on parent window's attaching (only for KMDI's ChildFrame mode)
+		 - it is called by KexiWindow::youAreAttached().
 		 Default implementation does nothing.
 		 Implement it if you want to perform some appropriate actions. */
-		virtual void parentDialogAttached() {};
+		virtual void windowAttached() {};
 
 		QString m_defaultIconName;
 
+#warning todo: add some protected access methods
+/*
+
 		KexiMainWindow *m_mainWin;
 
-		KexiDialogBase *m_dialog;
+		KexiWindow *m_dialog;
 
 		QWidget *m_viewWidget;
 
-		KexiViewBase *m_parentView;
+		KexiView *m_parentView;
 
 		QPointer<QWidget> m_lastFocusedChildBeforeFocusOut;
 
-	private:
+	private:*/
 		/*! Member set to newly assigned object's ID in storeNewData()
 		 and used in storeDataBlock(). This is needed because usually,
 		 storeDataBlock() can be called from storeNewData() and in this case
 		 dialog has not yet assigned valid identifier (it has just negative temp. number).
-		 \sa KexiDialogBase::id()
+		 \sa KexiWindow::id()
 		 */
-		int m_newlyAssignedID;
+/*		int m_newlyAssignedID;
 
-		/*! Mode for this view. Initialized by KexiDialogBase::switchToViewMode().
-		 Can be useful when single class is used for more than one view (e.g. KexiDBForm). */
+		//! Mode for this view. Initialized by KexiWindow::switchToViewMode().
+		//! Can be useful when single class is used for more than one view (e.g. KexiDBForm). 
 		int m_viewMode;
 
-		Q3PtrList<KexiViewBase> m_children;
+		Q3PtrList<KexiView> m_children;
 
-		bool m_dirty : 1;
+		bool m_dirty : 1; */
 
-	friend class KexiDialogBase;
+	class Private;
+	Private * const d;
+	friend class KexiWindow;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,37 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIPARTGUICL_H
-#define KEXIPARTGUICL_H
+#include "KexiWindowData.h"
 
-#include "kexipart.h"
-
-#include <qobject.h>
-
-#include <kxmlguiclient.h>
-
-namespace KexiPart
+KexiWindowData::KexiWindowData(QObject* parent)
+: QObject(parent)
+, proposeOpeningInTextViewModeBecauseOfProblems(false)
 {
-
-/** @internal A GUI Client used by KexiPart::Part objects within KexiMainWindow
-*/
-class GUIClient : public QObject, public KXMLGUIClient
-{
-	public:
-		virtual ~GUIClient() {};
-
-		inline Part *part() { return static_cast<Part*>(QObject::parent()); }
-
-	protected:
-		/*! Creates a new GUI Client. If \a partInstanceClient is true, the part will be 
-		 used as "instance" client, otherwise it will be defined per-view. 
-		 \a nameSuffix is used in constructing client's name (only useful for debugging purposes). */
-		GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix);
-
-		friend class Part;
-};
-
+	setObjectName("KexiWindowData");
 }
 
-#endif
-
+KexiWindowData::~KexiWindowData()
+{
+}

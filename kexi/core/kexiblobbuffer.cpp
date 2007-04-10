@@ -216,7 +216,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
 	QString mimeType( KImageIO::typeForMime( fileName ).at(0) );
 #endif
 	QByteArray data( f.readAll() );
-	if (f.status()!=IO_Ok) {
+	if (f.error()!=QFile::NoError) {
 		//! @todo err msg
 		return KexiBLOBBuffer::Handle();
 	}
@@ -255,8 +255,8 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QPixmap& pixmap)
 		QByteArray(), //(pixmap will be converted to byte array on demand)
 		++d->maxId, 
 		false, //not stored
-		QString::null, 
-		QString::null, 
+		QString(), 
+		QString(), 
 		"image/png", //!< @todo OK? What about jpegs?
 		0, //folder id
 		pixmap);

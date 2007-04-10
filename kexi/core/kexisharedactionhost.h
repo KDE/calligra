@@ -66,7 +66,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 Default implementation always returns false. 
 		 You can reimplement it e.g. like in KexiMainWindowImpl::acceptsSharedActions():
 		 \code
-			return o->inherits("KexiDialogBase") || o->inherits("KexiViewBase");
+			return o->inherits("KexiWindow") || o->inherits("KexiView");
 		 \endcode
 		 */
 		virtual bool acceptsSharedActions(QObject *o);
@@ -101,7 +101,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 has this action plugged _and_ it is available (i.e. enabled). 
 		 Otherwise the action is disabled.
 
-		 If \a o is not KexiDialogBase or its child,
+		 If \a o is not KexiWindow or its child,
 		 actions are only invalidated if these come from mainwindow's KActionCollection
 		 (thus part-actions are untouched when the focus is e.g. in the Property Editor.
 
@@ -159,8 +159,8 @@ class KEXICORE_EXPORT KexiSharedActionHost
 
 	friend class KexiActionProxy;
 	friend class KexiPart::Part;
-	friend class KexiViewBase;
-	friend class KexiDialogBase;
+	friend class KexiView;
+	friend class KexiWindow;
 };
 
 #endif

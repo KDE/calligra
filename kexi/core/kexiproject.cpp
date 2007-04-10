@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,8 +21,6 @@
 #include <qfile.h>
 #include <qapplication.h>
 #include <qdom.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -46,7 +44,8 @@
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
 #include "kexipart.h"
-#include "kexidialogbase.h"
+#include "KexiWindow.h"
+#include "KexiWindowData.h"
 #include "kexi.h"
 #include "keximainwindow.h"
 #include "kexiblobbuffer.h"
@@ -59,37 +58,34 @@ class KexiProject::Private
 	public:
 		Private()
 		 : data(0)
-		 , itemDictsCache(199)
-		 , unstoredItems(199)
 		 , tempPartItemID_Counter(-1)
 		 , sqlParser(0)
 		 , versionMajor(0)
 		 , versionMinor(0)
+		 , privateIDCounter(0)
 		{
-			itemDictsCache.setAutoDelete(true);
-			unstoredItems.setAutoDelete(true);
 		}
 		~Private() {
 			delete data;
 			data=0;
 			delete sqlParser;
+			qDeleteAll(itemDictsCache);
+			qDeleteAll(unstoredItems);
 		}
 
 		QPointer<KexiDB::Connection> connection;
 		QPointer<KexiProjectData> data;
-		
 		QString error_title;
 
 		//! a cache for item() method, indexed by project part's ids
-		Q3IntDict<KexiPart::ItemDict> itemDictsCache;
-
-		Q3PtrDict<KexiPart::Item> unstoredItems;
+		QHash<int, KexiPart::ItemDict*> itemDictsCache;
+		QSet<KexiPart::Item*> unstoredItems;
 		int tempPartItemID_Counter; //!< helper for getting unique 
 		                              //!< temporary identifiers for unstored items
 		KexiDB::Parser* sqlParser;
-
 		int versionMajor;
 		int versionMinor;
+		int privateIDCounter; //!< counter: ID for private "document" like Relations window
 };
 
 //---------------------------
@@ -411,7 +407,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 	}
 
 	//Store default part infos.
-	//Infos for other parts (forms, reports...) are created on demand in KexiDialogBase::storeNewData()
+	//Infos for other parts (forms, reports...) are created on demand in KexiWindow::storeNewData()
 	KexiDB::InternalTableSchema *t_parts = new KexiDB::InternalTableSchema("kexi__parts"); //newKexiDBSystemTableSchema("kexi__parts");
 	t_parts->addField( 
 		new KexiDB::Field("p_id", KexiDB::Field::Integer, KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned) 
@@ -483,7 +479,7 @@ KexiProject::createConnection()
 	if (!d->connection->connect())
 	{
 		setError(d->connection);
-		kDebug() << "KexiProject::createConnection(): error connecting: " << (d->connection ? d->connection->errorMsg() : QString::null) << endl;
+		kDebug() << "KexiProject::createConnection(): error connecting: " << (d->connection ? d->connection->errorMsg() : QString()) << endl;
 		closeConnection();
 		return false;
 	}
@@ -557,7 +553,7 @@ KexiProject::items(KexiPart::Info *i)
 		return 0;
 
 	//trying in cache...
-	KexiPart::ItemDict *dict = d->itemDictsCache[ i->projectPartID() ];
+	KexiPart::ItemDict *dict = d->itemDictsCache.value( i->projectPartID() );
 	if (dict)
 		return dict;
 	//retrieve:
@@ -628,7 +624,7 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 		return;
 	KexiPart::ItemDict *dict = items(info);
 	item->setNeverSaved( false );
-	d->unstoredItems.take(item); //no longer unstored
+	d->unstoredItems.remove(item); //no longer unstored
 	dict->insert( item->identifier(), item );
 	//let's update e.g. navigator
 	emit newItemStored(*item);
@@ -665,8 +661,7 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
 KexiPart::Item*
 KexiProject::item(int identifier)
 {
-	KexiPart::ItemDict *dict;
-	for (Q3IntDictIterator<KexiPart::ItemDict> it(d->itemDictsCache); (dict = it.current()); ++it) {
+	foreach (KexiPart::ItemDict *dict, d->itemDictsCache) {
 		KexiPart::Item *item = dict->find(identifier);
 		if (item)
 			return item;
@@ -725,7 +720,7 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
 	return part;
 }
 
-KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& item, 
+KexiWindow* KexiProject::openObject(KexiPart::Item& item, 
 	int viewMode, QMap<QString,QString>* staticObjectArgs)
 {
 	clearError();
@@ -736,22 +731,22 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& ite
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return 0;
-	KexiDialogBase *dlg  = part->openInstance(wnd, item, viewMode, staticObjectArgs);
-	if (!dlg) {
+	KexiWindow *window  = part->openInstance(item, viewMode, staticObjectArgs);
+	if (!window) {
 		if (part->lastOperationStatus().error())
 			setError(i18n("Opening object \"%1\" failed.").arg(item.name())+"<br>"
 				+part->lastOperationStatus().message, 
 				part->lastOperationStatus().description);
 		return 0;
 	}
-	return dlg;
+	return window;
 }
 
-KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QString &mimeType, 
+KexiWindow* KexiProject::openObject(const QString &mimeType, 
 	const QString& name, int viewMode)
 {
 	KexiPart::Item *it = itemForMimeType(mimeType, name);
-	return it ? openObject(wnd, *it, viewMode) : 0;
+	return it ? openObject(*it, viewMode) : 0;
 }
 
 bool KexiProject::checkWritable()
@@ -762,7 +757,7 @@ bool KexiProject::checkWritable()
 	return false;
 }
 
-bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
+bool KexiProject::removeObject(KexiPart::Item& item)
 {
 	clearError();
 	if (data()->userMode())
@@ -774,7 +769,7 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return false;
-	if (!item.neverSaved() && !part->remove(wnd, item)) {
+	if (!item.neverSaved() && !part->remove(item)) {
 		//js TODO check for errors
 		return false;
 	}
@@ -797,14 +792,14 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 
 	//now: remove this item from cache
 	if (part->info()) {
-		KexiPart::ItemDict *dict = d->itemDictsCache[ part->info()->projectPartID() ];
+		KexiPart::ItemDict *dict = d->itemDictsCache.value( part->info()->projectPartID() );
 		if (!(dict && dict->remove( item.identifier() )))
 			d->unstoredItems.remove(&item);//remove temp.
 	}
 	return true;
 }
 
-bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const QString& _newName )
+bool KexiProject::renameObject( KexiPart::Item& item, const QString& _newName )
 {
 	clearError();
 	if (data()->userMode())
@@ -837,7 +832,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 		setError(d->connection);
 		return false;
 	}
-	if (!part->rename(wnd, item, newName)) {
+	if (!part->rename(item, newName)) {
 		setError(part->lastOperationStatus().message, part->lastOperationStatus().description);
 		return false;
 	}
@@ -886,7 +881,6 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 	}
 	base_name = KexiUtils::string2Identifier(base_name).toLower();
 	KexiPart::ItemDictIterator it(*dict);
-	Q3PtrDictIterator<KexiPart::Item> itUnstored(d->unstoredItems);
 	do {
 		new_name = base_name;
 		if (n>=1)
@@ -899,11 +893,14 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 			n++;
 			continue; //stored exists!
 		}
-		for (itUnstored.toFirst(); itUnstored.current(); ++itUnstored) {
-			if (itUnstored.current()->name().toLower()==new_name)
+		QSet<KexiPart::Item*>::ConstIterator itUnstored;
+		for (itUnstored = d->unstoredItems.constBegin();
+			itUnstored!=d->unstoredItems.constEnd(); ++itUnstored)
+		{
+			if ((*itUnstored)->name().toLower()==new_name)
 				break;
 		}
-		if ( !itUnstored.current() )
+		if ( itUnstored == d->unstoredItems.constEnd() )
 			break; //unstored doesn't exist
 		n++;
 	} while (n<1000/*sanity*/);
@@ -921,7 +918,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 	item->setName(new_name);
 	item->setCaption(new_caption);
 	item->setNeverSaved(true);
-	d->unstoredItems.insert(item, item);
+	d->unstoredItems.insert(item);
 	return item;
 }
 
@@ -964,7 +961,7 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
 			"The project %1 already exists.\n"
 			"Do you want to replace it with a new, blank one?")
 				.arg(prj->data()->infoString())+"\n"+warningNoUndo+"</qt>",
-			QString::null, KGuiItem(i18n("Replace")), KStdGuiItem::cancel() ))
+			QString(), KGuiItem(i18n("Replace")), KStandardGuiItem::cancel() ))
 //todo add serverInfoString() for server-based prj
 		{
 			delete prj;
@@ -1004,23 +1001,9 @@ tristate KexiProject::dropProject(KexiProjectData* data,
 	return prj.dbConnection()->dropDatabase();
 }
 
-/*void KexiProject::reloadPartItem( KexiDialogBase* dialog )
+int KexiProject::generatePrivateID()
 {
-	if (!dialog)
-		return;
-
-	KexiPart::Item* item = dialog->partItem();
-
-	if (dialog || !d->connection->setQuerySchemaObsolete( queryName ))
-		return;
-	KexiPart::Info *partInfo = Kexi::partManager().infoForMimeType("kexi/query");
-	if (!partInfo)
-		return; //err?
-		item(partInfo, queryName);
-	if (!item)
-		return; //err?
-	emit itemSetO
-
-}*/
+	return --d->privateIDCounter;
+}
 
 #include "kexiproject.moc"

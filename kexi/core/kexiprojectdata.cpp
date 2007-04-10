@@ -56,29 +56,33 @@ public:
 //---------------------------------------
 
 KexiProjectData::KexiProjectData()
- : QObject(0, "KexiProjectData")
+ : QObject(0)
  , KexiDB::SchemaData()
  , formatVersion(0)
  , d( new KexiProjectDataPrivate() )
 {
+	setObjectName("KexiProjectData");
 }
 
 KexiProjectData::KexiProjectData( 
 	const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption )
- : QObject(0, "KexiProjectData")
+ : QObject(0)
  , KexiDB::SchemaData()
  , formatVersion(0)
  , d( new KexiProjectDataPrivate() )
 {
+	setObjectName("KexiProjectData");
 	d->connData = cdata;
 	setDatabaseName(dbname);
 	setCaption(caption);
 }
 
 KexiProjectData::KexiProjectData( const KexiProjectData& pdata )
- : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
+ : QObject(0)
+ , KexiDB::SchemaData()
  , d( 0 )
 {
+	setObjectName("KexiProjectData");
 	*this = pdata;
 	autoopenObjects = pdata.autoopenObjects;
 /*

@@ -27,15 +27,11 @@
 #include <q3intdict.h>
 #include <q3valuelist.h>
 #include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kservice.h>
 
 #include <kexidb/object.h>
-
 #include "../kexi_export.h"
-//#include "kexipartdatasource.h"
 
 namespace KexiDB
 {
@@ -51,7 +47,7 @@ namespace KexiPart
 	struct Missing
 	{
 		QString name;
-		Q3CString mime;
+		QString mime;
 		QString url;
 	};
 

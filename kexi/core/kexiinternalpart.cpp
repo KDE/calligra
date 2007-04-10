@@ -20,8 +20,8 @@
 
 #include "kexiinternalpart.h"
 
-#include "kexidialogbase.h"
-#include "kexiviewbase.h"
+#include "KexiWindow.h"
+#include "KexiView.h"
 #include "keximainwindow.h"
 
 #include <q3asciidict.h>
@@ -41,17 +41,15 @@ class KexiInternalPartManager
 {
 	public:
 		KexiInternalPartManager()
-		 : m_parts(101, false)
 		{
-			m_parts.setAutoDelete(false);
 		}
 		
 		KexiInternalPart* findPart(KexiDB::MessageHandler *msgHdr, const char* partName)
 		{
 			KexiInternalPart *part = m_parts[partName];
 			if (!part) {
-				Q3CString fullname("kexihandler_");
-				fullname += Q3CString(partName).lower();
+				QByteArray fullname("kexihandler_");
+				fullname += QByteArray(partName).toLower();
 				part = KLibLoader::createInstance<KexiInternalPart>(fullname);
 				if (!part) {
 					if (msgHdr)
@@ -65,7 +63,7 @@ class KexiInternalPartManager
 	
 	private:
 		
-		Q3AsciiDict<KexiInternalPart> m_parts;
+		QHash<QByteArray, KexiInternalPart*> m_parts;
 };
 
 KexiInternalPartManager internalPartManager;
@@ -73,10 +71,11 @@ KexiInternalPartManager internalPartManager;
 //----------------------------------------------
 
 KexiInternalPart::KexiInternalPart(QObject *parent, const char *name, const QStringList &)
- : QObject(parent, name)
+ : QObject(parent)
  , m_uniqueDialog(true)
  , m_cancelled(false)
 {
+	setObjectName(name);
 }
 
 KexiInternalPart::~KexiInternalPart()
@@ -92,56 +91,53 @@ KexiInternalPart::part(KexiDB::MessageHandler *msgHdr, const char* partName)
 
 //static
 QWidget* KexiInternalPart::createWidgetInstance(const char* partName, 
-	const char* widgetClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
+	const char* widgetClass, KexiDB::MessageHandler *msgHdr, 
 	QWidget *parent, const char *objName, QMap<QString,QString>* args)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part)
 		return 0; //fatal!
-	return part->createWidget(widgetClass, mainWin, parent, objName ? objName : partName, args);
+	return part->createWidget(widgetClass, parent, objName ? objName : partName, args);
 }
 
-KexiDialogBase* KexiInternalPart::findOrCreateKexiDialog(
-	KexiMainWindow* mainWin, const char *objName)
+KexiWindow* KexiInternalPart::findOrCreateKexiWindow(
+	const char *objName)
 {
 	if (m_uniqueDialog && !m_uniqueWidget.isNull())
-		return dynamic_cast<KexiDialogBase*>((QWidget*)m_uniqueWidget);
-//	KexiDialogBase *dlg = createDialog(mainWin, objName);
-	KexiDialogBase * dlg = new KexiDialogBase(mainWin, "");
-	KexiViewBase *view = createView(mainWin, 0, objName);
+		return dynamic_cast<KexiWindow*>((QWidget*)m_uniqueWidget);
+	KexiWindow * wnd = new KexiWindow();
+	KexiView *view = createView(0, objName);
 	if (!view)
 		return 0;
 
-//	dlg->show();
-	
 	if (m_uniqueDialog)
-		m_uniqueWidget = dlg; //recall unique!
-	dlg->addView(view);
-	dlg->setCaption( view->caption() );
-	dlg->setTabCaption( view->caption() );
-	dlg->resize(view->sizeHint());
-	dlg->setMinimumSize(view->minimumSizeHint().width(),view->minimumSizeHint().height());
-	dlg->setId( mainWin->generatePrivateID() );
-	dlg->registerDialog();
-	return dlg;
+		m_uniqueWidget = wnd; //recall unique!
+	wnd->addView(view);
+	wnd->setWindowTitle( view->windowTitle() );
+#warning TODO	wnd->setTabCaption( view->caption() );
+	wnd->resize(view->sizeHint());
+	wnd->setMinimumSize(view->minimumSizeHint().width(),view->minimumSizeHint().height());
+	wnd->setId( KexiMainWindow::global()->project()->generatePrivateID() );
+	wnd->registerDialog();
+	return wnd;
 }
 
 //static
-KexiDialogBase* KexiInternalPart::createKexiDialogInstance(
+KexiWindow* KexiInternalPart::createKexiWindowInstance(
 	const char* partName, 
-	KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName)
+	KexiDB::MessageHandler *msgHdr, const char *objName)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part) {
 		kDebug() << "KexiInternalPart::createDialogInstance() !part" << endl;
 		return 0; //fatal!
 	}
-	return part->findOrCreateKexiDialog(mainWin, objName ? objName : partName);
+	return part->findOrCreateKexiWindow(objName ? objName : partName);
 }
 
 //static
 QDialog* KexiInternalPart::createModalDialogInstance(const char* partName, 
-	const char* dialogClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
+	const char* dialogClass, KexiDB::MessageHandler *msgHdr, 
 	const char *objName, QMap<QString,QString>* args)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
@@ -153,7 +149,7 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
 	if (part->uniqueDialog() && !part->m_uniqueWidget.isNull())
 		w = part->m_uniqueWidget;
 	else
-		w = part->createWidget(dialogClass, mainWin, mainWin, objName ? objName : partName, args);
+		w = part->createWidget(dialogClass, KexiMainWindow::global()->thisWidget(), objName ? objName : partName, args);
 
 	if (dynamic_cast<QDialog*>(w)) {
 		if (part->uniqueDialog())
@@ -168,40 +164,37 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
 
 //static 
 bool KexiInternalPart::executeCommand(const char* partName, 
-	KexiMainWindow* mainWin, const char* commandName, QMap<QString,QString>* args)
+	const char* commandName, QMap<QString,QString>* args)
 {
 	KexiInternalPart *part = internalPartManager.findPart(0, partName);
 	if (!part) {
 		kDebug() << "KexiInternalPart::createDialogInstance() !part" << endl;
 		return 0; //fatal!
 	}
-	return part->executeCommand(mainWin, commandName, args);
+	return part->executeCommand(commandName, args);
 }
 
-QWidget* KexiInternalPart::createWidget(const char* widgetClass, KexiMainWindow* mainWin, 
+QWidget* KexiInternalPart::createWidget(const char* widgetClass,
 	QWidget * parent, const char * objName, QMap<QString,QString>* args)
 {
 	Q_UNUSED(widgetClass);
-	Q_UNUSED(mainWin);
 	Q_UNUSED(parent);
 	Q_UNUSED(objName);
 	Q_UNUSED(args);
 	return 0;
 }
 
-KexiViewBase* KexiInternalPart::createView(KexiMainWindow* mainWin, QWidget * parent,
+KexiView* KexiInternalPart::createView(QWidget * parent,
  const char * objName)
 {
-	Q_UNUSED(mainWin);
 	Q_UNUSED(parent);
 	Q_UNUSED(objName);
 	return 0;
 }
 
-bool KexiInternalPart::executeCommand(KexiMainWindow* mainWin, const char* commandName, 
+bool KexiInternalPart::executeCommand(const char* commandName, 
 	QMap<QString,QString>* args)
 {
-	Q_UNUSED(mainWin);
 	Q_UNUSED(commandName);
 	Q_UNUSED(args);
 	return false;

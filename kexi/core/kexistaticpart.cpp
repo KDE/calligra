@@ -22,14 +22,13 @@
 #include "kexipartinfo_p.h"
 #include "kexipartitem.h"
 #include "kexi.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace KexiPart;
 
 //------------------------------
 
-StaticInfo::StaticInfo(const Q3CString& mimeType, const QString& itemIcon, const QString& objectName)
+StaticInfo::StaticInfo(const QString& mimeType, const QString& itemIcon,
+	const QString& objectName)
  : Info()
 {
 	d->mimeType = mimeType;
@@ -43,7 +42,8 @@ StaticInfo::~StaticInfo()
 
 //------------------------------
 
-StaticPart::StaticPart(const Q3CString& mimeType, const QString& itemIcon, const QString& objectName)
+StaticPart::StaticPart(const QString& mimeType, const QString& itemIcon, 
+	const QString& objectName)
  : Part(&Kexi::partManager(), new StaticInfo(mimeType, itemIcon, objectName))
 {
 	Kexi::partManager().insertStaticPart(this);
@@ -53,11 +53,11 @@ StaticPart::~StaticPart()
 {
 }
 
-KexiViewBase* StaticPart::createView(QWidget *parent, KexiDialogBase* dialog, 
+KexiView* StaticPart::createView(QWidget *parent, KexiWindow* window, 
 	KexiPart::Item &item, int viewMode)
 {
 	Q_UNUSED(parent);
-	Q_UNUSED(dialog);
+	Q_UNUSED(window);
 	Q_UNUSED(item);
 	Q_UNUSED(viewMode);
 	//unused

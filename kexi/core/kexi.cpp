@@ -293,12 +293,12 @@ class ObjectStatusMessageHandler : public KexiDB::MessageHandler
 		}
 
 		virtual void showErrorMessage(const QString &title, 
-			const QString &details = QString::null)
+			const QString &details = QString())
 		{
 			m_status->setStatus(title, details);
 		}
 		
-		virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString::null)
+		virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString())
 		{
 			m_status->setStatus(obj, msg);
 		}

@@ -22,8 +22,9 @@
 #include "kexipartinfo.h"
 #include "kexipartitem.h"
 #include "kexistaticpart.h"
-#include "kexidialogbase.h"
-#include "kexiviewbase.h"
+#include "KexiWindow.h"
+#include "KexiWindowData.h"
+#include "KexiView.h"
 
 #include "kexipartguiclient.h"
 #include "keximainwindow.h"
@@ -33,10 +34,6 @@
 #include <kexidb/connection.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
-
-#include <q3widgetstack.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kactioncollection.h>
 #include <kiconloader.h>
@@ -55,17 +52,17 @@ public:
 	}
 
 	//! Helper, used in Part::openInstance()
-	tristate askForOpeningInTextMode(KexiDialogBase *dlg, KexiPart::Item &item, 
+	tristate askForOpeningInTextMode(KexiWindow *window, KexiPart::Item &item, 
 		int supportedViewModes, int viewMode)
 	{
 		if (viewMode != Kexi::TextViewMode
 			&& supportedViewModes & Kexi::TextViewMode 
-			&& dlg->tempData()->proposeOpeningInTextViewModeBecauseOfProblems)
+			&& window->data()->proposeOpeningInTextViewModeBecauseOfProblems)
 		{
 			//ask
 			KexiUtils::WaitCursorRemover remover;
 	//! @todo use message handler for this to enable non-gui apps
-			QString singleStatusString( dlg->singleStatusString() );
+			QString singleStatusString( window->singleStatusString() );
 			if (!singleStatusString.isEmpty())
 				singleStatusString.prepend(QString("\n\n")+i18n("Details:")+" ");
 			if (KMessageBox::No==KMessageBox::questionYesNo(0, 
@@ -73,9 +70,8 @@ public:
 					? i18n("Object \"%1\" could not be opened in Design View.").arg(item.name())
 					: i18n("Object could not be opened in Data View."))+"\n"
 				+ i18n("Do you want to open it in Text View?") + singleStatusString, 0, 
-				KStdGuiItem::open(), KStdGuiItem::cancel()))
+				KStandardGuiItem::open(), KStandardGuiItem::cancel()))
 			{
-	//			dlg->close(); //this will destroy dlg
 				return false;
 			}
 			return true;
@@ -101,7 +97,7 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 	m_info = 0;
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 	m_supportedUserViewModes = Kexi::DataViewMode;
-	m_mainWin = 0;
+//	m_mainWin = 0;
 	m_newObjectsAreDirty = false;
 }
 
@@ -115,7 +111,7 @@ Part::Part(QObject* parent, StaticInfo *info)
 	m_info = info;
 	m_supportedViewModes = Kexi::DesignViewMode;
 	m_supportedUserViewModes = 0;
-	m_mainWin = 0;
+//	m_mainWin = 0;
 	m_newObjectsAreDirty = false;
 }
 
@@ -124,47 +120,36 @@ Part::~Part()
 	delete d;
 }
 
-void Part::createGUIClients(KexiMainWindow *win)
+void Part::createGUIClients()//KexiMainWindow *win)
 {
-	m_mainWin = win;
+//	m_mainWin = win;
 	if (!m_guiClient) {
 		//create part's gui client
-		m_guiClient = new GUIClient(m_mainWin, this, false, "part");
+		m_guiClient = new GUIClient(this, false, "part");
 
 		//default actions for part's gui client:
 		KAction *act = new KAction(
+			KIcon(info()->createItemIcon()),
 			m_names["instanceCaption"]+"...",
-			info()->createItemIcon(),
-			KShortcut(),
-			this,
-			SLOT(slotCreate()),
-			m_mainWin->actionCollection(),
-			KexiPart::nameForCreateAction(*info()));
-		act->plug( m_mainWin->findPopupMenu("insert") );
-//		new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
-//		SLOT(create()), m_guiClient->actionCollection(), (info()->objectName()+"part_create").toLatin1());
-		//let init specific actions for parts
-//		initPartActions( m_guiClient->actionCollection() );
-		m_mainWin->guiFactory()->addClient(m_guiClient); //this client is added permanently
-
-		//create part instance's gui client
-//		m_instanceGuiClient = new GUIClient(win, this, true);
+			KexiMainWindow::global()->actionCollection()
+		);
+		act->setObjectName(KexiPart::nameForCreateAction(*info()));
+		connect(act, SIGNAL(triggered()), this, SLOT(slotCreate()));
+		KexiMainWindow::global()->guiFactory()->addClient(m_guiClient); //this client is added permanently
 
 		//default actions for part instance's gui client:
 		//NONE
 		//let init specific actions for part instances
 		for (int mode = 1; mode <= 0x01000; mode <<= 1) {
 			if (m_supportedViewModes & mode) {
-				GUIClient *instanceGuiClient = new GUIClient(m_mainWin, 
+				GUIClient *instanceGuiClient = new GUIClient( 
 					this, true, Kexi::nameForViewMode(mode).toLatin1());
 				m_instanceGuiClients.insert(mode, instanceGuiClient);
-//				initInstanceActions( mode, instanceGuiClient->actionCollection() );
 			}
 		}
 		// also add an instance common for all modes (mode==0)
-		GUIClient *instanceGuiClient = new GUIClient(m_mainWin, this, true, "allViews");
+		GUIClient *instanceGuiClient = new GUIClient(this, true, "allViews");
 		m_instanceGuiClients.insert(Kexi::AllViewModes, instanceGuiClient);
-//		initInstanceActions( Kexi::AllViewModes , instanceGuiClient->actionCollection() );
 
 //todo
 		initPartActions();
@@ -187,7 +172,7 @@ KAction* Part::createSharedAction(int mode, const QString &text,
 		kDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
 		return 0;
 	}
-	return m_mainWin->createSharedAction(text, pix_name, cut, name, 
+	return KexiMainWindow::global()->createSharedAction(text, pix_name, cut, name, 
 		instanceGuiClient->actionCollection(), subclassName);
 }
 
@@ -197,7 +182,7 @@ KAction* Part::createSharedPartAction(const QString &text,
 {
 	if (!m_guiClient)
 		return 0;
-	return m_mainWin->createSharedAction(text, pix_name, cut, name, 
+	return KexiMainWindow::global()->createSharedAction(text, pix_name, cut, name, 
 		m_guiClient->actionCollection(), subclassName);
 }
 
@@ -239,10 +224,10 @@ void Part::setActionAvailable(const char *action_name, bool avail)
 			return;
 		}
 	}
-	m_mainWin->setActionAvailable(action_name, avail);
+	KexiMainWindow::global()->setActionAvailable(action_name, avail);
 }
 
-KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode,
+KexiWindow* Part::openInstance(KexiPart::Item &item, int viewMode,
 	QMap<QString,QString>* staticObjectArgs)
 {
 	//now it's the time for creating instance actions
@@ -252,17 +237,8 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 	}
 
 	m_status.clearStatus();
-//	KexiDialogBase *dlg = createInstance(win,item,viewMode);
-//	if (!dlg)
-//		return 0;
-//	QString capt = QString("%1 : %2").arg(item.name()).arg(instanceName());
-	KexiDialogBase *dlg = new KexiDialogBase(win);
-	dlg->m_supportedViewModes = m_supportedViewModes;
-//	dlg->m_neverSaved = item.neverSaved();
-//	dlg->m_currentViewMode = viewMode;
-	dlg->m_part = this;
-	dlg->m_item = &item;
-	dlg->updateCaption();
+	KexiWindow *window = new KexiWindow(KexiMainWindow::global()->thisWidget(),
+		m_supportedViewModes, *this, item);
 
 	KexiDB::SchemaData sdata(m_info->projectPartID());
 	sdata.setName( item.name() );
@@ -272,91 +248,90 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 /*! @todo js: apply settings for caption displaying method; there can be option for
  - displaying item.caption() as caption, if not empty, without instanceName
  - displaying the same as above in tabCaption (or not) */
-//	dlg->setCaption( capt );
-//	dlg->setTabCaption( item.name() );
-	dlg->setId(item.identifier()); //not needed, but we did it
-//moved down	dlg->registerDialog();
-	dlg->setIcon( SmallIcon( dlg->itemIcon() ) );
-	if (dlg->mdiParent())
-		dlg->mdiParent()->setIcon( *dlg->icon() );
-//	if (dlg->mainWidget())
-//		dlg->mainWidget()->setIcon( *dlg->icon() );
-	dlg->stack()->setIcon( *dlg->icon() );
-	dlg->m_tempData = createTempData(dlg);
+	window->setId(item.identifier()); //not needed, but we did it
+	window->setWindowIcon( SmallIcon( window->itemIcon() ) );
+#warning todo
+#if 0
+	if (window->mdiParent())
+		window->mdiParent()->setIcon( *window->icon() );
+#endif
+//	window->setWindowIcon( *window->icon() );
+	window->setData( createWindowData(window) );
 
 	if (!item.neverSaved()) {
 		//we have to load schema data for this dialog
-		dlg->m_schemaData = loadSchemaData(dlg, sdata, viewMode);
-		if (!dlg->m_schemaData) {
+		window->setSchemaData( loadSchemaData(window, sdata, viewMode) );
+		if (!window->schemaData()) {
 			//last chance:
-			if (false == d->askForOpeningInTextMode(dlg, item, dlg->m_supportedViewModes, viewMode)) {
-				delete dlg;
+			if (false == d->askForOpeningInTextMode(
+				window, item, window->supportedViewModes(), viewMode))
+			{
+				delete window;
 				return 0;
 			}
 			viewMode = Kexi::TextViewMode;
-			dlg->m_schemaData = loadSchemaData(dlg, sdata, viewMode);
+			window->setSchemaData( loadSchemaData(window, sdata, viewMode) );
 		}
-		if (!dlg->m_schemaData) {
+		if (!window->schemaData()) {
 			if (!m_status.error())
-				m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), 
+				m_status = Kexi::ObjectStatus( KexiMainWindow::global()->project()->dbConnection(), 
 					i18n("Could not load object's definition."), i18n("Object design may be corrupted."));
 			m_status.append( 
 				Kexi::ObjectStatus(i18n("You can delete \"%1\" object and create it again.")
-				.arg(item.name()), QString::null) );
+				.arg(item.name()), QString()) );
 
-			dlg->close();
-			delete dlg;
+			window->close();
+			delete window;
 			return 0;
 		}
 	}
 
 	bool switchingFailed = false;
 	bool dummy;
-	tristate res = dlg->switchToViewMode( viewMode, staticObjectArgs, dummy );
+	tristate res = window->switchToViewMode( viewMode, staticObjectArgs, dummy );
 	if (!res) {
 		tristate askForOpeningInTextModeRes
-			= d->askForOpeningInTextMode(dlg, item, dlg->m_supportedViewModes, viewMode);
-//		if (viewMode==Kexi::DesignViewMode && dlg->isDesignModePreloadedForTextModeHackUsed(Kexi::TextViewMode))
-//			askForOpeningInTextModeRes = cancelled; //do not try
-//		else
+			= d->askForOpeningInTextMode(window, item, window->supportedViewModes(), viewMode);
 		if (true == askForOpeningInTextModeRes) {
-			delete dlg->m_schemaData; //old one
-			dlg->close();
-			delete dlg;
+			delete window->schemaData(); //old one
+			window->close();
+			delete window;
 			//try in text mode
-			return openInstance(win, item, Kexi::TextViewMode, staticObjectArgs);
+			return openInstance(item, Kexi::TextViewMode, staticObjectArgs);
 		}
 		else if (false == askForOpeningInTextModeRes) {
-			delete dlg->m_schemaData; //old one
-			dlg->close();
-			delete dlg;
+			delete window->schemaData(); //old one
+			window->close();
+			delete window;
 			return 0;
 		}
-		//dlg has an error info
+		//the window has an error info
 		switchingFailed = true;
 	}
 	if (~res)
 		switchingFailed = true;
 
 	if (switchingFailed) {
-		m_status = dlg->status();
-		dlg->close();
-		delete dlg;
+		m_status = window->status();
+		window->close();
+		delete window;
 		return 0;
 	}
-	dlg->registerDialog(); //ok?
-	dlg->show();
+	window->registerDialog(); //ok?
+	window->show();
 
-	if (dlg->mdiParent() && dlg->mdiParent()->state()==KexiMdiMainFrm::Normal) //only resize dialog if it is in normal state
-		dlg->resize(dlg->sizeHint());
-
-	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
+#warning Part::openInstance(): resize window->resize(window->sizeHint()) for standalone windows
+#if 0
+	if (window->mdiParent() && window->mdiParent()->state()==KexiMdiMainFrm::Normal) //only resize the window if it is in normal state
+		window->resize(window->sizeHint());
+#endif
+	window->setMinimumSize(window->minimumSizeHint().width(), window->minimumSizeHint().height());
 
 	//dirty only if it's a new object
-	if (dlg->selectedView())
-		dlg->selectedView()->setDirty( m_newObjectsAreDirty ? item.neverSaved() : false );
+	if (window->selectedView())
+		window->selectedView()->setDirty( m_newObjectsAreDirty ? item.neverSaved() : false );
 	
-	return dlg;
+	return window;
 }
 
 void Part::slotCreate()
@@ -364,20 +339,24 @@ void Part::slotCreate()
 	emit newObjectRequest( m_info );
 }
 
-KexiDB::SchemaData* Part::loadSchemaData(KexiDialogBase * /*dlg*/, const KexiDB::SchemaData& sdata, 
-	int /*viewMode*/)
+KexiDB::SchemaData* Part::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata, 
+	int viewMode)
 {
+	Q_UNUSED(window);
+	Q_UNUSED(viewMode);
 	KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
 	*new_schema = sdata;
 	return new_schema;
 }
 
-bool Part::loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QString& dataID)
+bool Part::loadDataBlock(KexiWindow *window, QString &dataString, const QString& dataID)
 {
-	if (!dlg->mainWin()->project()->dbConnection()->loadDataBlock( dlg->id(), dataString, dataID )) {
-		m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), 
+	if (!KexiMainWindow::global()->project()->dbConnection()->loadDataBlock( 
+		window->id(), dataString, dataID ))
+	{
+		m_status = Kexi::ObjectStatus( KexiMainWindow::global()->project()->dbConnection(), 
 			i18n("Could not load object's data."), i18n("Data identifier: \"%1\".").arg(dataID) );
-		m_status.append( *dlg );
+		m_status.append( *window );
 		return false;
 	}
 	return true;
@@ -391,36 +370,36 @@ void Part::initInstanceActions()
 {
 }
 
-bool Part::remove(KexiMainWindow *win, KexiPart::Item &item)
+bool Part::remove(KexiPart::Item &item)
 {
-	if (!win || !win->project() || !win->project()->dbConnection())
+	KexiDB::Connection *conn = KexiMainWindow::global()->project()->dbConnection();
+	if (!conn)
 		return false;
-	KexiDB::Connection *conn = win->project()->dbConnection();
 	return conn->removeObject( item.identifier() );
 }
 
-KexiDialogTempData* Part::createTempData(KexiDialogBase* dialog)
+KexiWindowData* Part::createWindowData(KexiWindow* window)
 {
-	return new KexiDialogTempData(dialog);
+	return new KexiWindowData(window);
 }
 
-QString Part::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
+QString Part::i18nMessage(const QString& englishMessage, KexiWindow* window) const
 {
-	Q_UNUSED(dlg);
+	Q_UNUSED(window);
 	if( QString(englishMessage).startsWith(":") )
 		return QString();
 	return englishMessage;
 }
 
-void Part::setupCustomPropertyPanelTabs(KTabWidget *, KexiMainWindow*)
+void Part::setupCustomPropertyPanelTabs(KTabWidget *)
 {
 }
 
-Q3CString Part::instanceName() const
+QString Part::instanceName() const
 {
 	// "instanceName" should be already valid identifier but we're using
 	// KexiUtils::string2Identifier() to be sure translators did it right.
-	return KexiUtils::string2Identifier(m_names["instanceName"]).toLower().toLatin1();
+	return KexiUtils::string2Identifier(m_names["instanceName"]).toLower();
 }
 
 QString Part::instanceCaption() const
@@ -428,9 +407,8 @@ QString Part::instanceCaption() const
 	return m_names["instanceCaption"];
 }
 
-tristate Part::rename(KexiMainWindow *win, KexiPart::Item &item, const QString& newName)
+tristate Part::rename(KexiPart::Item &item, const QString& newName)
 {
-	Q_UNUSED(win);
 	Q_UNUSED(item);
 	Q_UNUSED(newName);
 	return true;
@@ -439,13 +417,13 @@ tristate Part::rename(KexiMainWindow *win, KexiPart::Item &item, const QString& 
 //-------------------------------------------------------------------------
 
 
-GUIClient::GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient, const char* nameSuffix)
+GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix)
  : QObject(part, 
    (part->info()->objectName() 
     + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString())).toLatin1() )
- , KXMLGUIClient(win)
+ , KXMLGUIClient(*KexiMainWindow::global()->guiClient())
 {
-	if(!win->project()->data()->userMode())
+	if(!KexiMainWindow::global()->project()->data()->userMode())
 		setXMLFile(QString::fromLatin1("kexi")+part->info()->objectName()
 			+"part"+(partInstanceClient?"inst":"")+"ui.rc");
 

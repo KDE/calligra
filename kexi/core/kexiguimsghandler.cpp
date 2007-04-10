@@ -149,7 +149,7 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 #if 0 //sebsauer 20061123
 	KDialogBase *dialog = new KDialogBase(
 		i18n("Warning"), KDialogBase::Yes, KDialogBase::Yes, KDialogBase::No,
-		m_messageHandlerParentWidget, "warningContinue", true, true, KStdGuiItem::cont() );
+		m_messageHandlerParentWidget, "warningContinue", true, true, KStandardGuiItem::cont() );
 	bool checkboxResult = false;
 	KMessageBox::createKMessageBox(dialog, QMessageBox::Warning, 
 		title + (details.isEmpty() ? QString::null : (QString("\n")+details)), QStringList(),
@@ -158,7 +158,7 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 	if (checkboxResult)
 		KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
 #else
-	KMessageBox::warningContinueCancel(m_messageHandlerParentWidget, details, title, KStdGuiItem::cont());
+	KMessageBox::warningContinueCancel(m_messageHandlerParentWidget, details, title, KStandardGuiItem::cont());
 #endif
 }
 
@@ -172,10 +172,11 @@ int KexiGUIMessageHandler::askQuestion( const QString& message,
 	Q_UNUSED(defaultResult);
 	if (KMessageBox::WarningContinueCancel == dlgType)
 		return KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
-			message, QString::null, buttonYes, dontShowAskAgainName, options);
+			message, QString(), buttonYes, KStandardGuiItem::cancel(),
+			dontShowAskAgainName, options);
 	else
-	
 		return KMessageBox::messageBox(m_messageHandlerParentWidget,
-			dlgType, message, QString::null, buttonYes, buttonNo, dontShowAskAgainName, options);
+			dlgType, message, QString(), buttonYes, buttonNo, KStandardGuiItem::cancel(),
+			dontShowAskAgainName, options);
 }
 

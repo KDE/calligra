@@ -23,8 +23,6 @@
 
 #include "kexipart.h"
 #include "kexipartinfo.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 namespace KexiPart
 {
@@ -35,7 +33,8 @@ namespace KexiPart
 class KEXICORE_EXPORT StaticInfo : public Info
 {
 	public:
-		StaticInfo(const Q3CString& mimeType, const QString& itemIcon, const QString& objectName);
+		StaticInfo(const QString& mimeType, const QString& itemIcon, 
+			const QString& objectName);
 		~StaticInfo();
 
 	protected:
@@ -47,17 +46,18 @@ class KEXICORE_EXPORT StaticInfo : public Info
 class KEXICORE_EXPORT StaticPart : public Part
 {
 	public:
-		StaticPart(const Q3CString& mimeType, const QString& itemIcon, const QString& objectName);
+		StaticPart(const QString& mimeType, const QString& itemIcon, 
+			const QString& objectName);
 		virtual ~StaticPart();
 
 		/*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be 
-		 used inside \a dialog. \a args arguments can be passed. */
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
+		 used inside \a window. \a args arguments can be passed. */
+		virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
 			KexiPart::Item &item, int viewMode, QMap<QString,QString>* args) = 0;
 
 	protected:
 		//! unused by static parts
-		KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
+		KexiView* createView(QWidget *parent, KexiWindow* window, 
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 };
 

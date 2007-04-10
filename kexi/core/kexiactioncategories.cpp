@@ -23,7 +23,7 @@
 #include <kdebug.h>
 
 #include <qmap.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 
 namespace Kexi {
 
@@ -41,7 +41,7 @@ class ActionInternal
 			delete supportedObjectTypes;
 		}
 		int categories;
-		QMap<int, bool> *supportedObjectTypes;
+		QSet<int> *supportedObjectTypes;
 		bool allObjectTypesAreSupported : 1;
 };
 
@@ -54,10 +54,13 @@ class ActionCategories::Private
 	public:
 		Private()
 		{
-			actions.setAutoDelete(true);
+		}
+		~Private()
+		{
+			qDeleteAll(actions);
 		}
 
-	QAsciiDict<ActionInternal> actions;
+	QMap<QByteArray, ActionInternal*> actions;
 };
 
 KEXICORE_EXPORT ActionCategories *actionCategories()
@@ -89,7 +92,7 @@ void ActionCategories::addAction(const char* name, int categories,
 	KexiPart::ObjectTypes supportedObjectType5, KexiPart::ObjectTypes supportedObjectType6,
 	KexiPart::ObjectTypes supportedObjectType7, KexiPart::ObjectTypes supportedObjectType8)
 {
-	ActionInternal * a = d->actions.find( name );
+	ActionInternal * a = d->actions.value( name );
 	if (a) {
 		a->categories |= categories;
 	}
@@ -99,22 +102,22 @@ void ActionCategories::addAction(const char* name, int categories,
 	}
 	if (supportedObjectType1) {
 		if (!a->supportedObjectTypes)
-			a->supportedObjectTypes = new QMap<int, bool>();
-		a->supportedObjectTypes->insert(supportedObjectType1, true);
+			a->supportedObjectTypes = new QSet<int>();
+		a->supportedObjectTypes->insert(supportedObjectType1);
 		if (supportedObjectType2) {
-			a->supportedObjectTypes->insert(supportedObjectType2, true);
+			a->supportedObjectTypes->insert(supportedObjectType2);
 			if (supportedObjectType3) {
-				a->supportedObjectTypes->insert(supportedObjectType3, true);
+				a->supportedObjectTypes->insert(supportedObjectType3);
 				if (supportedObjectType4) {
-					a->supportedObjectTypes->insert(supportedObjectType4, true);
+					a->supportedObjectTypes->insert(supportedObjectType4);
 					if (supportedObjectType5) {
-						a->supportedObjectTypes->insert(supportedObjectType5, true);
+						a->supportedObjectTypes->insert(supportedObjectType5);
 						if (supportedObjectType6) {
-							a->supportedObjectTypes->insert(supportedObjectType6, true);
+							a->supportedObjectTypes->insert(supportedObjectType6);
 							if (supportedObjectType7) {
-								a->supportedObjectTypes->insert(supportedObjectType7, true);
+								a->supportedObjectTypes->insert(supportedObjectType7);
 								if (supportedObjectType8) {
-									a->supportedObjectTypes->insert(supportedObjectType8, true);
+									a->supportedObjectTypes->insert(supportedObjectType8);
 								}
 							}
 						}
@@ -127,7 +130,7 @@ void ActionCategories::addAction(const char* name, int categories,
 
 void ActionCategories::setAllObjectTypesSupported(const char* name, bool set)
 {
-	ActionInternal * a = d->actions.find( name );
+	ActionInternal * a = d->actions.value( name );
 	if (a)
 		a->allObjectTypesAreSupported = set;
 	else
@@ -136,13 +139,13 @@ void ActionCategories::setAllObjectTypesSupported(const char* name, bool set)
 
 int ActionCategories::actionCategories(const char* name) const
 {
-	const ActionInternal * a = d->actions.find( name );
+	const ActionInternal * a = d->actions.value( name );
 	return a ? a->categories : 0;
 }
 
 bool ActionCategories::actionSupportsObjectType(const char* name, KexiPart::ObjectTypes objectType) const
 {
-	const ActionInternal * a = d->actions.find( name );
+	const ActionInternal * a = d->actions.value( name );
 	if (a && a->allObjectTypesAreSupported)
 		return true;
 	return (a && a->supportedObjectTypes) ? a->supportedObjectTypes->contains(objectType) : false;

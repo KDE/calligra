@@ -30,9 +30,6 @@
 #include <qwidget.h>
 #include <q3signal.h>
 #include <qicon.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
 
 KAction_setEnabled_Helper::KAction_setEnabled_Helper(KexiActionProxy* proxy)
  : QObject()
@@ -98,11 +95,10 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
 KexiActionProxy::~KexiActionProxy()
 {
 	qDeleteAll(m_signals);
-	Q3PtrListIterator<KexiActionProxy> it(m_sharedActionChildren);
 	//detach myself from every child
-	for (;it.current();++it) {
-		it.current()->setActionProxyParent_internal( 0 );
-	}
+	foreach (KexiActionProxy *proxy, m_sharedActionChildren)
+		proxy->setActionProxyParent_internal( 0 );
+	
 	//take me from parent
 	if (m_actionProxyParent)
 		m_actionProxyParent->takeActionProxyChild( this );
@@ -165,10 +161,11 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
 
 	KAction *ka = dynamic_cast<KAction*>(a);
 	Q_ASSERT(ka);
-	KAction *alt_act = new KAction(0 /*KActionCollection*/, altName/*objectName*/);
+	KAction *alt_act = new KAction(0);
+	alt_act->setObjectName(altName);
 	alt_act->setText(alternativeText);
 	alt_act->setParent(ka->parent());
-	alt_act->setIcon(KIcon(ka->iconSet()));
+	alt_act->setIcon(KIcon(ka->icon()));
 	alt_act->setShortcut(ka->shortcut());
 
 	QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(activate()));
@@ -206,9 +203,8 @@ bool KexiActionProxy::activateSharedAction(const QString& action_name, bool also
 	if (!p || !p->second) {
 		//try in children...
 		if (alsoCheckInChildren) {
-			Q3PtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
-			for( ; it.current(); ++it ) {
-				if (it.current()->activateSharedAction( action_name, alsoCheckInChildren ))
+			foreach (KexiActionProxy *proxy, m_sharedActionChildren) {
+				if (proxy->activateSharedAction( action_name, alsoCheckInChildren ))
 					return true;
 			}
 		}
@@ -231,9 +227,8 @@ bool KexiActionProxy::isSupported(const QString& action_name) const
 		//not supported explicitly - try in children...
 		if (m_focusedChild)
 			return m_focusedChild->isSupported(action_name);
-		Q3PtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
-		for( ; it.current(); ++it ) {
-			if (it.current()->isSupported(action_name))
+		foreach (KexiActionProxy *proxy, m_sharedActionChildren) {
+			if (proxy->isSupported(action_name))
 				return true;
 		}
 		return false; //not suported
@@ -249,10 +244,9 @@ bool KexiActionProxy::isAvailable(const QString& action_name, bool alsoCheckInCh
 		if (alsoCheckInChildren) {
 			if (m_focusedChild)
 				return m_focusedChild->isAvailable(action_name, alsoCheckInChildren);
-			Q3PtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
-			for( ; it.current(); ++it ) {
-				if (it.current()->isSupported(action_name))
-					return it.current()->isAvailable(action_name, alsoCheckInChildren);
+			foreach (KexiActionProxy *proxy, m_sharedActionChildren) {
+				if (proxy->isSupported(action_name))
+					return proxy->isAvailable(action_name, alsoCheckInChildren);
 			}
 		}
 		return m_actionProxyParent ? m_actionProxyParent->isAvailable(action_name, false) : false; //last chance: parent
@@ -280,8 +274,9 @@ void KexiActionProxy::addActionProxyChild( KexiActionProxy* child )
 
 void KexiActionProxy::takeActionProxyChild( KexiActionProxy* child )
 {
-	if (m_sharedActionChildren.findRef( child ) != -1)
-		m_sharedActionChildren.take();
+	const int index = m_sharedActionChildren.indexOf(child);
+	if (index != -1)
+		m_sharedActionChildren.removeAt( index );
 }
 
 void KexiActionProxy::setActionProxyParent_internal( KexiActionProxy* parent )

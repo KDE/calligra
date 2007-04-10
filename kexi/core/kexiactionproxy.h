@@ -21,13 +21,8 @@
 #define KEXIACTIONPROXY_H
 
 #include <qpointer.h>
-#include <q3asciidict.h>
 #include <qobject.h>
 #include <qpair.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
 
 #include "kexiproject.h"
 #include "kexisharedactionhost.h"
@@ -77,7 +72,7 @@ class KEXICORE_EXPORT KexiSharedActionConnector
  For example, edit->copy action can be reused to copy different types of items.
  Availability and meaning of given action depends on the context, while
  the context changes e.g. when another window is activated.
- This class is mostly used by subclassing in KexiDialogBase or KexiDockBase
+ This class is mostly used by subclassing in KexiWindow or KexiDockBase
  - you can subclass in a similar way.
 */
 
@@ -162,9 +157,9 @@ class KEXICORE_EXPORT KexiActionProxy
 		QPointer<QObject> m_receiver;
 		QMap<QString, QPair<Q3Signal*,bool>* > m_signals;
 
-		Q3PtrList<KexiActionProxy> m_sharedActionChildren;
+		QList<KexiActionProxy*> m_sharedActionChildren;
 
-		Q3PtrList<KAction> m_alternativeActions;
+		QList<KAction*> m_alternativeActions;
 
 		KexiActionProxy* m_actionProxyParent;
 

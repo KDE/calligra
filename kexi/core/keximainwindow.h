@@ -32,10 +32,11 @@
 
 #include "kexisharedactionhost.h"
 #include "kexi.h"
-#include "keximdi.h"
+//#include "keximdi.h"
 
-class KexiDialogBase;
+class KexiWindow;
 class KexiProject;
+class KActionCollection;
 namespace KexiPart {
 	class Item;
 }
@@ -46,9 +47,9 @@ namespace KexiPart {
  * KexiMainWindow offers simple features what lowers cross-dependency (and also avoids
  * circular dependencies between Kexi modules).
  */
-class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedActionHost
+class KEXICORE_EXPORT KexiMainWindow : /*public KexiMdiMainFrm,*/ public KexiSharedActionHost
 {
-	Q_OBJECT
+//	Q_OBJECT
 	public:
 		//! Used by printActionForItem()
 		enum PrintActionType {
@@ -60,11 +61,37 @@ class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedA
 		KexiMainWindow();
 		virtual ~KexiMainWindow();
 
+		//! \return KexiMainWindowImpl global singleton (if it is instantiated)
+#warning TODO static KexiMainWindowImpl* global()
+		static KexiMainWindow* global() { return 0; }
+		
+		QWidget* thisWidget() { return dynamic_cast<QWidget*>(this); }
+
 		//! Project data of currently opened project or NULL if no project here yet.
 		virtual KexiProject *project() = 0;
 
-		/*! Registers dialog \a dlg for watching and adds it to the main window's stack. */
-		virtual void registerChild(KexiDialogBase *dlg) = 0;
+		virtual KActionCollection* actionCollection() const = 0;
+
+		virtual QWidget* focusWidget() const = 0;
+		
+		//! Implemented by KXMLGUIClient
+#warning TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0;
+		virtual void plugActionList(const QString& name,
+			const QList<KAction *>& actionList) = 0;
+			
+#warning TODO KXMLGUIClient* guiClient() const = 0;
+		virtual KXMLGUIClient* guiClient() const = 0;
+			
+		//! Implemented by KXMLGUIClient
+#warning TODO virtual void unplugActionList (const QString &name) = 0;
+		virtual void unplugActionList (const QString &name) = 0;
+  
+  	//! Implemented by KMainWindow
+#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0;
+		virtual KXMLGUIFactory * guiFactory() = 0;
+
+		/*! Registers window \a window for watching and adds it to the main window's stack. */
+		virtual void registerChild(KexiWindow *window) = 0;
 
 		virtual Q3PopupMenu* findPopupMenu(const char *popupName) = 0;
 
@@ -73,19 +100,21 @@ class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedA
 		 Private means that the object is not stored as-is in the project but is somewhat
 		 generated and in most cases there is at most one unique instance document of such type (part).
 		 To generate this ID, just app-wide internal counter is used. */
-		virtual int generatePrivateID() = 0;
+//moved to KexiProject		virtual int generatePrivateID() = 0;
 
 		/*! \return a list of all actions defined by application.
 		 Not all of them are shared. Don't use plug these actions
-		 in your windows by hand but user methods from KexiViewBase! */
+		 in your windows by hand but user methods from KexiView! */
 		virtual QList<KAction*> allActions() const = 0;
 
-		/*! \return currently active dialog (window) od 0 if there is no active dialog. */
-		virtual KexiDialogBase* currentDialog() const = 0;
+		/*! \return currently active window or 0 if there is no active window. */
+		virtual KexiWindow* currentWindow() const = 0;
 
 		/*! \return true if this window is in the User Mode. */
 		virtual bool userMode() const = 0;
 
+#warning SIGNALS...
+#if 0
 	signals:
 		//! Emitted to make sure the project can be close. 
 		//! Connect a slot here and set \a cancel to true to cancel the closing.
@@ -97,20 +126,21 @@ class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedA
 
 		//! Emitted after closing the project. 
 		void projectClosed();
+#endif
 
-	public slots:
+//	public slots:
 		/*! Creates new object of type defined by \a info part info. 
 		 \a openingCancelled is set to true is opening has been cancelled. 
 		 \return true on success. */
 		virtual bool newObject( KexiPart::Info *info, bool& openingCancelled ) = 0;
 
 		//! Opens object pointed by \a item in a view \a viewMode
-		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode,
+		virtual KexiWindow* openObject(KexiPart::Item *item, int viewMode,
 			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0,
 			QString* errorMessage = 0) = 0;
 
 		//! For convenience
-		virtual KexiDialogBase * openObject(const Q3CString& mime, const QString& name, 
+		virtual KexiWindow* openObject(const Q3CString& mime, const QString& name, 
 			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		/*! Closes the object for \a item. 
@@ -121,33 +151,33 @@ class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedA
 		/*! Called to accept property butter editing. */
 		virtual void acceptPropertySetEditing() = 0;
 
-		/*! Received information from active view that \a dlg has switched
+		/*! Received information from active view that \a window has switched
 		its property set, so property editor contents should be reloaded.
 		 If \a force is true, property editor's data is reloaded even
 		 if the currently pointed property set is the same as before.
 		 If \a preservePrevSelection is true and there was a property set
 		 set before call, previously selected item will be preselected
 		 in the editor (if found). */
-		virtual void propertySetSwitched(KexiDialogBase *dlg, bool force=false,
+		virtual void propertySetSwitched(KexiWindow *window, bool force=false,
 			bool preservePrevSelection = true, const QString& propertyToSelect = QString()) = 0;
 
-		/*! Saves dialog's \a dlg data. If dialog's data is never saved,
+		/*! Saves window's \a window data. If window's data is never saved,
 		 user is asked for name and title, before saving (see getNewObjectInfo()).
 		 \return true on successul saving or false on error.
 		 If saving was cancelled by user, cancelled is returned.
 		 \a messageWhenAskingForName is a i18n'ed text that will be visible
 		 within name/caption dialog (see KexiNameDialog), which is popped
 		 up for never saved objects. */
-		virtual tristate saveObject( KexiDialogBase *dlg,
-			const QString& messageWhenAskingForName = QString::null, bool dontAsk = false ) = 0;
+		virtual tristate saveObject( KexiWindow *window,
+			const QString& messageWhenAskingForName = QString(), bool dontAsk = false ) = 0;
 
-		/*! Closes dialog \a dlg. If dialog's data (see KexiDialoBase::dirty()) is unsaved,
+		/*! Closes window \a window. If window's data (see KexiWindow::isDirty()) is unsaved,
 		 used will be asked if saving should be perforemed.
 		 \return true on successull closing or false on closing error.
 		 If closing was cancelled by user, cancelled is returned. */
-		virtual tristate closeDialog(KexiDialogBase *dlg) = 0;
+		virtual tristate closeWindow(KexiWindow *dlg) = 0;
 
-		/*! Displays a dialog for entering object's name and title.
+		/*! Displays a window for entering object's name and title.
 		 Used on new object saving.
 		 \return true on successul closing or cancelled on cancel returned.
 		 It's unlikely to have false returned here.
@@ -160,7 +190,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedA
 		 If it's true, user agreed on overwriting, if it's false, user picked
 		 nonexisting name, so no overwrite will be needed. */
 		virtual tristate getNewObjectInfo( KexiPart::Item *partItem, KexiPart::Part *part,
-			bool& allowOverwriting, const QString& messageWhenAskingForName = QString::null ) = 0;
+			bool& allowOverwriting, const QString& messageWhenAskingForName = QString() ) = 0;
 
 		/*! Highlights object of mime \a mime and name \a name.
 		 This can be done in the Project Navigator or so. 
@@ -183,7 +213,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedA
 		 Also used by KexiFormEventAction. */
 		virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
 
-	protected slots:
+	protected: // slots:
 		virtual void slotObjectRenamed(const KexiPart::Item &item, const Q3CString& oldName) = 0;
 
 };

@@ -50,7 +50,7 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 		KexiProjectData();
 
 		KexiProjectData( const KexiDB::ConnectionData &cdata, 
-			const QString& dbname = QString::null, const QString& caption = QString::null );
+			const QString& dbname = QString(), const QString& caption = QString() );
 			
 		/*! Constructs a copy of \a pdata */
 		KexiProjectData( const KexiProjectData& pdata );

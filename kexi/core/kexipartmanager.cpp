@@ -34,8 +34,6 @@
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace KexiPart;
 
@@ -64,9 +62,9 @@ Manager::lookup()
 	KService::List tlist = KMimeTypeTrader::self()->query("Kexi/Handler", 
 		"[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
 	
-	KConfig conf("kexirc", true);
-	conf.setGroup("Parts");
-	QStringList sl_order = QStringList::split( ",", conf.readEntry("Order") );//we'll set parts in defined order
+	KConfig conf("kexirc");
+	KConfigGroup cg = conf.group("Parts");
+	QStringList sl_order = cg.readEntry("Order").split( "," );//we'll set parts in defined order
 	const int size = qMax( tlist.count(), sl_order.count() );
 	QList<KService::Ptr> ordered;
 	int offset = size; //we will insert not described parts from #offset
@@ -86,7 +84,7 @@ Manager::lookup()
 		if (!Kexi::tempShowScripts() && mime=="kexi/script")
 			continue;
 //</TEMP>
-		int idx = sl_order.findIndex( ptr->library() );
+		const int idx = sl_order.indexOf( ptr->library() );
 		if (idx!=-1)
 			ordered.insert(idx, ptr);
 		else //add to end
@@ -230,12 +228,12 @@ Manager::checkProject(KexiDB::Connection *conn)
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
 	{
 //		id++;
-		Info *i = infoForMimeType(cursor->value(2).toCString());
+		Info *i = infoForMimeType(cursor->value(2).toString());
 		if(!i)
 		{
 			Missing m;
 			m.name = cursor->value(1).toString();
-			m.mime = cursor->value(2).toCString();
+			m.mime = cursor->value(2).toString();
 			m.url = cursor->value(3).toString();
 
 			m_missing.append(m);

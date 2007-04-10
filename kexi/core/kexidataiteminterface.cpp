@@ -52,8 +52,8 @@ void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add,
 //needed?	clear();
 	if (dynamic_cast<QObject*>(this)) {
 		kDebug() << "KexiDataItemInterface::setValue(): " <<
-			dynamic_cast<QObject*>(this)->className() << " " 
-			<< dynamic_cast<QWidget*>(this)->name()
+			dynamic_cast<QObject*>(this)->metaObject()->className() << " " 
+			<< dynamic_cast<QWidget*>(this)->objectName()
 			<< " value=" << value << " add=" << add << endl;
 	}
 	m_origValue = value;

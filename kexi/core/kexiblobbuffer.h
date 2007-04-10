@@ -192,9 +192,9 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 			public:
 				Item(const QByteArray& data, Id_t ident,
 					bool stored,
-					const QString& name = QString::null,
-					const QString& caption = QString::null,
-					const QString& mimeType = QString::null,
+					const QString& name = QString(),
+					const QString& caption = QString(),
+					const QString& mimeType = QString(),
 					Id_t folderId = 0,
 					const QPixmap& pixmap = QPixmap());
 				~Item();

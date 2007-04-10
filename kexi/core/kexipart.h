@@ -23,18 +23,15 @@
 
 #include <qobject.h>
 #include <qmap.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kexiutils/tristate.h>
 #include "kexi.h"
 #include "keximainwindow.h"
 
 class KActionCollection;
-class KexiDialogBase;
-class KexiDialogTempData;
-class KexiViewBase;
-class KexiMainWindowImpl;
+class KexiWindow;
+class KexiWindowData;
+class KexiView;
 class KAction;
 class KShortcut;
 class KTabWidget;
@@ -95,7 +92,7 @@ class KEXICORE_EXPORT Part : public QObject
 		 that equals Kexi::DataViewMode | Kexi::DesignViewMode, 
 		 or Kexi::DesignViewMode in case of Kexi::PartStaticPart object.
 		 This information is used to set supported view modes for every 
-		 KexiDialogBase-derived object created by this KexiPart. */
+		 KexiView-derived object created by this KexiPart. */
 		inline int supportedViewModes() const { return m_supportedViewModes; }
 
 		/*! \return supported modes for dialogs created by this part in "user mode", i.e. a combination
@@ -103,14 +100,14 @@ class KEXICORE_EXPORT Part : public QObject
 		 Set this member in your KexiPart subclass' ctor, if you need to override the default value
 		 that equals Kexi::DataViewMode. or 0 in case of Kexi::PartStaticPart object.
 		 This information is used to set supported view modes for every 
-		 KexiDialogBase-derived object created by this KexiPart. */
+		 KexiView-derived object created by this KexiPart. */
 		inline int supportedUserViewModes() const { return m_supportedUserViewModes; }
 
 //! @todo make it protected, outside world should use KexiProject
 		/*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode. 
 		 \a viewMode is one of Kexi::ViewMode enum. 
 		 \a staticObjectArgs can be passed for static Kexi Parts. */
-		KexiDialogBase* openInstance(KexiMainWindow *win, KexiPart::Item &item, 
+		KexiWindow* openInstance(KexiPart::Item &item, 
 			int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 //! @todo make it protected, outside world should use KexiProject
@@ -128,7 +125,7 @@ class KEXICORE_EXPORT Part : public QObject
 		 
 		 Default implementation just removes object from kexi__* system structures 
 		 at the database backend using KexiDB::Connection::removeObject(). */
-		virtual bool remove(KexiMainWindow *win, KexiPart::Item & item);
+		virtual bool remove(KexiPart::Item & item);
 
 		/*! Renames stored data pointed by \a item to \a newName 
 		 (example: table name is altered in the database). 
@@ -141,24 +138,24 @@ class KEXICORE_EXPORT Part : public QObject
 		 You shouldn't use by hand transactions here.
 
 		 Default implementation does nothing and returns true. */
-		virtual tristate rename(KexiMainWindow *win, KexiPart::Item &item, const QString& newName);
+		virtual tristate rename(KexiPart::Item &item, const QString& newName);
 
-		/*! Creates and returns a new temporary data for a dialog \a dialog. 
+		/*! Creates and returns a new temporary data for a window  \a window. 
 		 This method is called on openInstance() once per dialog.
-		 Reimplement this to return KexiDialogTempData subclass instance.
-		 Default implemention just returns empty KexiDialogTempData object. */
-		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
+		 Reimplement this to return KexiWindowData subclass instance.
+		 Default implemention just returns empty KexiWindowData object. */
+		virtual KexiWindowData* createWindowData(KexiWindow *window);
 
 		/*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be 
 		 used inside \a dialog. */
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
+		virtual KexiView* createView(QWidget *parent, KexiWindow *window, 
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		/*! i18n'd instance name usable for displaying in gui as object's name.
 		 The name is valid identifier - contains latin1 lowercase characters only.
 		 @todo move this to Info class when the name could be moved as localized property 
 		 to service's .desktop file. */
-		Q3CString instanceName() const;
+		QString instanceName() const;
 
 		/*! i18n'd instance name usable for displaying in gui as object's caption.
 		 @todo move this to Info class when the name could be moved as localized property 
@@ -203,8 +200,8 @@ class KEXICORE_EXPORT Part : public QObject
 		 a part does not offer a message for such \a englishMessage.
 		 This is used e.g. in KexiMainWindowImpl::closeDialog().
 		 */
-		virtual QString i18nMessage(const Q3CString& englishMessage, 
-			KexiDialogBase* dlg) const;
+		virtual QString i18nMessage(const QString& englishMessage, 
+			KexiWindow *window) const;
 
 	signals: 
 		void newObjectRequest( KexiPart::Info *info );
@@ -216,11 +213,9 @@ class KEXICORE_EXPORT Part : public QObject
 		//! Used by StaticPart
 		Part(QObject* parent, StaticInfo *info);
 
-//		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
-
-		//! Creates GUICLients for this part, attached to \a win
+		//! Creates GUIClients for this part, attached to the main window
 		//! This method is called from KexiMainWindow
-		void createGUIClients(KexiMainWindow *win);
+		void createGUIClients();
 
 #if 0
 		/*! For reimplementation. Create here all part actions (KAction or similar). 
@@ -248,10 +243,10 @@ class KEXICORE_EXPORT Part : public QObject
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
-		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, 
+		virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, 
 			const KexiDB::SchemaData& sdata, int viewMode);
 
-		bool loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QString& dataID = QString::null);
+		bool loadDataBlock( KexiWindow *window, QString &dataString, const QString& dataID = QString());
 
 		/*! Creates shared action for action collection declared 
 		 for 'instance actions' of this part.
@@ -286,11 +281,11 @@ class KEXICORE_EXPORT Part : public QObject
 
 		/*! This method can be reimplemented to setup additional tabs 
 		 in the property editor panel. Default implementation does nothing. 
-		 This method is called whenever current dialog (KexiDialogBase) is switched and
+		 This method is called whenever current window (KexiWindow) is switched and
 		 type (mime type) of its contents differs from previous one. 
 		 For example, if a user switched from Table Designer to Form Designer,
 		 additional tab containing Form Designer's object tree should be shown. */
-		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin);
+		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
 		//! Set of i18n'd action names for, initialised on KexiPart::Part subclass ctor
 		//! The names are useful because the same action can have other name for each part
@@ -309,7 +304,7 @@ class KEXICORE_EXPORT Part : public QObject
 		Info *m_info;
 		GUIClient *m_guiClient;
 		QMap<int, GUIClient*> m_instanceGuiClients;
-		KexiMainWindow* m_mainWin;
+//moved to singleton		KexiMainWindow* m_mainWin;
 		Kexi::ObjectStatus m_status;
 
 		/*! If you're implementing a new part, set this to value >0 in your ctor 
@@ -326,7 +321,7 @@ class KEXICORE_EXPORT Part : public QObject
 
 	friend class Manager;
 	friend class ::KexiMainWindow;
-	friend class ::KexiMainWindowImpl;
+//	friend class ::KexiMainWindowImpl;
 	friend class GUIClient;
 };
 

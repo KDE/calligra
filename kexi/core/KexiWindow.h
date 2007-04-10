@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,28 +18,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIDIALOGBASE_H
-#define KEXIDIALOGBASE_H
+#ifndef KEXIWINDOWBASE_H
+#define KEXIWINDOWBASE_H
 
 #include "kexipartguiclient.h"
 #include "kexiactionproxy.h"
 #include "kexi.h"
 #include "kexipart.h"
-#include "kexiviewbase.h"
-#include "keximdi.h"
+#include "KexiView.h"
+//#include "keximdi.h"
 
 #include <QPointer>
-//Added by qt3to4:
 #include <QEvent>
 #include <QCloseEvent>
+#include <QStackedWidget>
 
 //#include <k3mdichildview.h>
 #include <kmainwindow.h>
 #include <kxmlguiclient.h>
 
-class Q3WidgetStack;
 class KexiMainWindow;
-class KexiViewBase;
+class KexiWindowData;
+class KexiView;
 class KActionCollection;
 class KexiContextHelpInfo;
 namespace KexiPart {
@@ -50,58 +50,32 @@ namespace KoProperty {
 	class Set;
 }
 
-//! Privides temporary data shared between KexiDialogBase's views (KexiView's)
-/*! Designed for reimplementation, if needed. */
-class KEXICORE_EXPORT KexiDialogTempData : public QObject
-{
-	public:
-	KexiDialogTempData(QObject* parent)
-	 : QObject(parent)
-	 , proposeOpeningInTextViewModeBecauseOfProblems(false)
-	{
-		setObjectName("KexiDialogTempData");
-	}
-	/*! Initially false, KexiPart::Part implementation can set this to true
-	 on data loading (e.g. in loadSchemaData()), to indicate that TextView mode
-	 could be used instead of DataView or DesignView, because there are problems
-	 with opening object.
-
-	 For example, in KexiQueryPart::loadSchemaData() query statement can be invalid,
-	 and thus could not be displayed in DesignView mode or executed for DataView.
-	 So, this flag is set to true and user is asked for confirmation for switching
-	 to TextView (SQL Editor).
-
-	 After switching to TextView, this flag is cleared.
-	 */
-	bool proposeOpeningInTextViewModeBecauseOfProblems : 1;
-};
-
 //! Base class for child window of Kexi's main application window.
 /*! This class can contain a number of configurable views, switchable using toggle action.
  It also automatically works as a proxy for shared (application-wide) actions.
 */
-class KEXICORE_EXPORT KexiDialogBase
-	: public KexiMdiChildView
+class KEXICORE_EXPORT KexiWindow
+//	: public KexiMdiChildView
+	: public QStackedWidget
 	, public KexiActionProxy
 	, public Kexi::ObjectStatus
 {
 	Q_OBJECT
 
 	public:
-		KexiDialogBase(KexiMainWindow *parent, const QString &caption = QString::null);
-		virtual ~KexiDialogBase();
+		virtual ~KexiWindow();
 
-		bool isRegistered();
+		bool isRegistered() const;
 
 		//! \return currently selected view or 0 if there is no current view
-		KexiViewBase *selectedView() const;
+		KexiView *selectedView() const;
 
 		/*! \return a view for a given \a mode or 0 if there's no such mode available (or opened).
 		 This does not open mode if it's not opened. */
-		KexiViewBase *viewForMode(int mode) const;
+		KexiView *viewForMode(int mode) const;
 
 		//! Adds \a view for the dialog. It will be the _only_ view (of unspecified mode) for the dialog
-		void addView(KexiViewBase *view);
+		void addView(KexiView *view);
 
 		/*! \return main (top level) widget inside this dialog.
 		 This widget is used for e.g. determining minimum size hint and size hint. */
@@ -113,7 +87,9 @@ class KEXICORE_EXPORT KexiDialogBase
 		/*! reimplemented: size hint is inherited from currently visible view. */
 		virtual QSize sizeHint() const;
 
+#if 0 //main window moved to a singleton
 		KexiMainWindow *mainWin() const { return m_parentWindow; }
+#endif
 
 		//js todo: maybe remove this since it's often the same as partItem()->identifier()?:
 
@@ -121,7 +97,7 @@ class KEXICORE_EXPORT KexiDialogBase
 		 if there is a part item associated with this dialog (see partItem()),
 		 partItem()->identifier() will be is used as identifier, so this method is noop.
 		 Thus, it's usable only for dialog types when no part item is assigned. */
-		void setId(int id) { m_id = id; }
+		void setId(int id);
 
 		/*! If there is a part item associated with this dialog (see partItem()),
 		 partItem()->identifier() is returned, otherwise internal dialog's identifier
@@ -129,10 +105,10 @@ class KEXICORE_EXPORT KexiDialogBase
 		int	id() const;
 
 		//! \return Kexi part used to create this window
-		inline KexiPart::Part* part() const { return m_part; }
+		KexiPart::Part* part() const;
 
 		//! \return Kexi part item used to create this window
-		KexiPart::Item *partItem() const { return m_item; }
+		KexiPart::Item *partItem() const;
 
 		//! Kexi dialog's gui COMMON client.
 		//! It's obtained by querying part object for this dialog.
@@ -155,11 +131,14 @@ class KEXICORE_EXPORT KexiDialogBase
 		 \a mode is one of Kexi::ViewMode enum elements.
 		 The flags are used e.g. for testing by KexiMainWindow, if actions
 		 of switching to given view mode is available.
-		 This member is intialised in KexiPart that creates this KexiDialogBase object. */
-		bool supportsViewMode( int mode ) const { return m_supportedViewModes & mode; }
+		 This member is intialised in KexiPart that creates this window object. */
+		bool supportsViewMode( int mode ) const;
+
+		/*! \return information about supported view modes. */ 
+		int supportedViewModes() const;
 
 		/*! \return current view mode for this dialog. */
-		int currentViewMode() const { return m_currentViewMode; }
+		int currentViewMode() const;
 
 		/*! Switches this dialog to \a newViewMode.
 		 \a viewMode is one of Kexi::ViewMode enum elements.
@@ -185,11 +164,11 @@ class KEXICORE_EXPORT KexiDialogBase
 		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
 		 (e.g. like in alter-table dialog).
 		 \return true if at least on "dirty" flag is set for one of the dialog's view. */
-		bool dirty() const;
+		bool isDirty() const;
 
 		/*! \return a pointer to view that has recently set dirty flag.
 		 This value is cleared when dirty flag is set to false (i.e. upon saving changes). */
-		KexiViewBase* viewThatRecentlySetDirtyFlag() const { return m_viewThatRecentlySetDirtyFlag; }
+		KexiView* viewThatRecentlySetDirtyFlag() const;
 
 		/*! \return true, if this dialog's data were never saved.
 		 If it's true we're usually try to ask a user if the dialog's
@@ -199,19 +178,20 @@ class KEXICORE_EXPORT KexiDialogBase
 		*/
 		bool neverSaved() const;
 
-		/*! \return property set provided by a current view,
+		/*! \return property set provided by the current view,
 		 or NULL if there is no view set (or the view has no set assigned). */
 		KoProperty::Set *propertySet();
 
-		KexiDB::SchemaData* schemaData() const { return m_schemaData; }
+		KexiDB::SchemaData* schemaData() const;
+		
+		void setSchemaData(KexiDB::SchemaData* schemaData);
+		
 		/*! Reimpelmented: "*" is added if for 'dirty' dialog's data. */
 //		QString caption() const;
 
-		/*! Used by KexiViewBase subclasses. \return temporary data shared between views */
-		KexiDialogTempData *tempData() const { return m_tempData; }
-
-//		/*! Used by KexiViewBase subclasses. Sets temporary data shared between views. */
-//		void setTempData( KexiDialogTempData* data ) { m_tempData = data; }
+		/*! Used by KexiView subclasses. \return temporary data shared between
+		 views */
+		KexiWindowData *data() const;
 
 		/*! Called primarily by KexiMainWindowImpl to activate dialog.
 		 Selected view (if present) is also informed about activation. */
@@ -240,18 +220,21 @@ class KEXICORE_EXPORT KexiDialogBase
 		 Object's schema data has been never stored,
 		 so it is created automatically, using information obtained
 		 form part item. On success, part item's ID is updated to new value,
-		 and m_schemaData is set. \sa schemaData().
+		 and schema data is set. \sa schemaData().
 		 \return true on success, false on failure and cancelled when storing has been cancelled. */
 		tristate storeNewData();
 
-		/*! Reimplemented - we're informing the current view about performed detaching by calling
-		 KexiViewBase::parentDialogDetached(), so the view can react on this event
-		 (by default KexiViewBase::parentDialogDetached() does nothing, you can reimplement it). */
+		/*! Reimplemented - we're informing the current view about performed 
+		 detaching by calling KexiView::parentDialogDetached(), so the view 
+		 can react on this event 
+		 (by default KexiView::parentDialogDetached() does nothing, you can 
+		 reimplement it). */
 		void sendDetachedStateToCurrentView();
 
 		/*! W're informing the current view about performed atttaching by calling
-		 KexiViewBase::parentDialogAttached(), so the view can react on this event
-		 (by default KexiViewBase::parentDialogAttached() does nothing, you can reimplement it). */
+		 KexiView::parentDialogAttached(), so the view can react on this event
+		 (by default KexiView::parentDialogAttached() does nothing, you can 
+		 reimplement it). */
 		void sendAttachedStateToCurrentView();
 
 	signals:
@@ -261,18 +244,26 @@ class KEXICORE_EXPORT KexiDialogBase
 		void closing();
 
 		/*! Emited to inform the world that 'dirty' flag changes.
-		 Activated by KexiViewBase::setDirty(). */
-		void dirtyChanged(KexiDialogBase*);
+		 Activated by KexiView::setDirty(). */
+		void dirtyChanged(KexiWindow*);
 
 	protected slots:
 		/*!  Sets 'dirty' flag on every dialog's view. */
 		void setDirty(bool dirty);
 
 	protected:
+		//! Used by KexiPart::Part
+		KexiWindow(QWidget *parent, int supportedViewModes, KexiPart::Part& part,
+			KexiPart::Item& item);
+			
+		//! Used by KexiInternalPart
+		KexiWindow();
+		
 		/*! Used by Part::openInstance(), 
 		 like switchToViewMode( int newViewMode ), but passed \a staticObjectArgs.
 		 Only used for parts of class KexiPart::StaticPart. */
-		tristate switchToViewMode( int newViewMode, QMap<QString,QString>* staticObjectArgs,
+		tristate switchToViewMode( int newViewMode, 
+			QMap<QString,QString>* staticObjectArgs,
 			bool& proposeOpeningInTextViewModeBecauseOfProblems);
 
 		void registerDialog();
@@ -280,80 +271,34 @@ class KEXICORE_EXPORT KexiDialogBase
 		virtual void closeEvent( QCloseEvent * e );
 
 		//! \internal
-		void addView(KexiViewBase *view, int mode);
+		void addView(KexiView *view, int mode);
 
 		//! \internal
 		void removeView(int mode);
 
-		int m_supportedViewModes;
-		int m_openedViewModes;
-		int m_currentViewMode;
-
-		inline Q3WidgetStack * stack() const { return m_stack; }
-
 		//! Used by \a view to inform the dialog about changing state of the "dirty" flag.
-		void dirtyChanged(KexiViewBase* view);
-#if 0
-		/*! Loads large string data \a dataString block (e.g. xml form's representation),
-		 indexed with optional \a dataID, from the database backend.
-		 \return true on success
-		 \sa storeDataBlock(). */
-		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
-
-		/*! Stores (potentially large) string data \a dataString, block (e.g. xml form's representation),
-		 at the database backend. Block will be stored in "kexi__objectdata" table pointed by
-		 this object's id and an optional \a dataID identifier.
-		 If there is already such record in the table, it's simply overwritten.
-		 \return true on success
-		*/
-		bool storeDataBlock( const QString &dataString, const QString& dataID = QString::null );
-
-		/*! Removes (potentially large) string data (e.g. xml form's representation),
-		 pointed by optional \a dataID, from the database backend.
-		 \return true on success. Does not fail if the block doe not exists.
-		 Note that if \a dataID is not specified, all data blocks for this dialog will be removed.
-		 \sa storeDataBlock(). */
-		bool removeDataBlock( QString &dataString, const QString& dataID = QString::null);
-
-		/*! @internal
-		 Used by KexiDialogBase::storeDataBlock() and by KexiViewBase::storeDataBlock().
-		*/
-		bool storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID );
-#endif
-//		void setError(const QString& message, const QString& details);
-
+		void dirtyChanged(KexiView* view);
+		
 		bool isDesignModePreloadedForTextModeHackUsed(int newViewMode) const;
 
-	private:
-		KexiMainWindow *m_parentWindow;
-		bool m_isRegistered;
-#ifdef KEXI_NO_CTXT_HELP
-		KexiContextHelpInfo *m_contextHelpInfo;
-#endif
-		int m_id;
-		QPointer<KexiPart::Part> m_part;
-		KexiPart::Item *m_item;
-		Q3WidgetStack *m_stack;
-		QString m_origCaption; //!< helper
-		KexiDB::SchemaData* m_schemaData;
-		QPointer<KexiViewBase> m_newlySelectedView; //!< Used in dirty(), temporary set in switchToViewMode()
-		                                   //!< during view setup, when a new view is not yet raised.
-		//! Used in viewThatRecentlySetDirtyFlag(), modified in dirtyChanged().
-		QPointer<KexiViewBase> m_viewThatRecentlySetDirtyFlag; 
-		QPointer<KexiDialogTempData> m_tempData; //!< temporary data shared between views
-
 		/*! Created view's mode - helper for switchToViewMode(),
-		 KexiViewBase ctor uses that info. >0 values are useful. */
-		int m_creatingViewsMode;
+		 KexiView ctor uses that info. >0 values are useful. */
+		int creatingViewsMode() const;
+
+		/*! Sets temporary data shared between views. */
+		void setData(KexiWindowData* data);
+
+	private:
+		class Private;
+		Private * d;
 
 		bool m_destroying : 1; //!< true after entering to the dctor
-		bool m_disableDirtyChanged; //!< used in setDirty(), affects dirtyChanged()
 
 		friend class KexiMainWindow;
 //		friend class KexiMainWindowImpl;
 		friend class KexiPart::Part;
 		friend class KexiInternalPart;
-		friend class KexiViewBase;
+		friend class KexiView;
 };
 
 #endif

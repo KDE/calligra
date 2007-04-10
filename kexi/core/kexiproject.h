@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,8 +22,6 @@
 #define KEXIPROJECT_H
 
 #include <qobject.h>
-#include <q3intdict.h>
-#include <q3ptrdict.h>
 #include <qpointer.h>
 
 #include <kexiutils/tristate.h>
@@ -57,7 +55,7 @@ namespace KexiPart
 }
 
 class KexiMainWindow;
-class KexiDialogBase;
+class KexiWindow;
 
 /**
  * @short A project's main controller. 
@@ -180,20 +178,20 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		/*! Opens object pointed by \a item in a view \a viewMode.
 		 \a staticObjectArgs can be passed for static object 
 		 (only works when part for this item is of type KexiPart::StaticPart) */
-		KexiDialogBase* openObject(KexiMainWindow *wnd, KexiPart::Item& item, 
+		KexiWindow* openObject(KexiPart::Item& item, 
 			int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		//! For convenience
-		KexiDialogBase* openObject(KexiMainWindow *wnd, const QString &mimeType, 
+		KexiWindow* openObject(const QString &mimeType, 
 			const QString& name, int viewMode = Kexi::DataViewMode);
 
 		/*! Remove a part instance pointed by \a item.
 		 \return true on success. */
-		bool removeObject(KexiMainWindow *wnd, KexiPart::Item& item);
+		bool removeObject(KexiPart::Item& item);
 
 		/*! Renames a part instance pointed by \a item to a new name \a newName.
 		 \return true on success. */
-		bool renameObject(KexiMainWindow *wnd, KexiPart::Item& item, const QString& newName);
+		bool renameObject(KexiPart::Item& item, const QString& newName);
 
 		/*! Creates part item for given part \a info. 
 		 Newly item will not be saved to the backend but stored in memory only
@@ -210,15 +208,15 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 This method is used before creating new object.
 		 \return newly created part item or NULL on any error. */
 		KexiPart::Item* createPartItem(KexiPart::Info *info, 
-			const QString& suggestedCaption = QString::null );
+			const QString& suggestedCaption = QString() );
 
 		//! Added for convenience.
 		KexiPart::Item* createPartItem(KexiPart::Part *part, 
-			const QString& suggestedCaption = QString::null);
+			const QString& suggestedCaption = QString());
 
 		/*! Adds item \a item after it is succesfully stored as an instance of part
 		 pointed by \a info. Also clears 'neverSaved' flag if \a item.
-		 Used by KexiDialogBase::storeNewData(). 
+		 Used by KexiWindow::storeNewData(). 
 		 @internal */
 		void addStoredItem(KexiPart::Info *info, KexiPart::Item *item);
 
@@ -235,7 +233,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 Identifier of the item will be updated to a final value 
 		 (stored in the backend), because previously there was temporary one set.
 		 \return true for successfully created object or false on any error. */
-		bool createObject(KexiDialogBase *dlg);
+		bool createObject(KexiWindow *window);
 #endif
 
 		KexiDB::Parser* sqlParser();
@@ -260,6 +258,13 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 //		/** used to emit objectCreated() signal */
 //		void emitObjectCreated(const QCString &mime, const QCString& name) { emit objectCreated(mime, name); }
 //		void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
+
+		/*! Generates ID for private "document" like Relations window.
+		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
+		 Private means that the object is not stored as-is in the project but is somewhat
+		 generated and in most cases there is at most one unique instance document of such type (part).
+		 To generate this ID, just app-wide internal counter is used. */
+		virtual int generatePrivateID();
 
 	protected:
 		/*! Creates connection using project data. 

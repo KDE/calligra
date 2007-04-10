@@ -11,7 +11,7 @@ namespace KexiDB
 	class Cursor;
 }
 class KexiMainWindow;
-typedef Q3ValueVector<QVariant> Arguments;
+class KActionCollection;
 
 /*! action that can be defined by a user for a special scope e.g. main, form ...
     the actions can have some predefined \ref Methods which are described in \ref KexiUserActionMethod
@@ -22,6 +22,8 @@ class KEXICORE_EXPORT KexiUserAction : public KAction
 	Q_OBJECT
 
 	public:
+		typedef QVector<QVariant> Arguments;
+
 		/*! bytecode of available methods */
 		enum Methods
 		{
@@ -48,7 +50,8 @@ class KEXICORE_EXPORT KexiUserAction : public KAction
 		/*! constructs an action
 		    \note methods are associated using setMethod() 
 		    */
-		KexiUserAction(KexiMainWindow *context, KActionCollection *parent, const QString &name, const QString &text, const QString &pixmap);
+		KexiUserAction(KActionCollection *parent, const QString &name, const QString &text,
+			const QString &pixmap);
 		~KexiUserAction();
 
 		/*! sets execution information associated with this action this will mostly look like
@@ -64,7 +67,8 @@ class KEXICORE_EXPORT KexiUserAction : public KAction
 
 		/*! creates a KexiUserAction from current record in \a c
 		    mostly needed for creation from kexi__useractions table */
-		static KexiUserAction *fromCurrentRecord(KexiMainWindow *context, KActionCollection *parent, KexiDB::Cursor *c);
+		static KexiUserAction *fromCurrentRecord(
+			KActionCollection *parent, KexiDB::Cursor *c);
 
 	protected slots:
 		/*! actually executes the associated method
@@ -73,7 +77,6 @@ class KEXICORE_EXPORT KexiUserAction : public KAction
 		void execute();
 
 	private:
-		KexiMainWindow *m_win;
 		int m_method;
 		Arguments m_args;
 };

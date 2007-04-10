@@ -2,13 +2,17 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
+ADD_DEFINITIONS( 
+-include ${CMAKE_SOURCE_DIR}/kexi/kexi_global.h
+-DKEXI_NO_CTXT_HELP=1
+)
 
 ########### next target ###############
 
 set(kexicore_LIB_SRCS 
    kexi_global.cpp 
    kexi.cpp 
-   keximdi.cpp
+#   keximdi.cpp
    keximainwindow.cpp 
    kexidbconnectionset.cpp 
    kexiprojectset.cpp 
@@ -16,8 +20,9 @@ set(kexicore_LIB_SRCS
    kexisharedactionhost.cpp 
    kexiactioncategories.cpp
    kexiproject.cpp 
-   kexidialogbase.cpp 
-   kexiviewbase.cpp 
+   KexiWindow.cpp 
+   KexiWindowData.cpp 
+   KexiView.cpp 
    kexipartmanager.cpp 
    kexipartinfo.cpp 
    kexipartitem.cpp 
@@ -44,7 +49,7 @@ kde4_automoc(${kexicore_LIB_SRCS})
 
 kde4_add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
-target_link_libraries(kexicore  ${KDE4_KDECORE_LIBS} kexiutils kexidb kexidbparser koproperty )
+target_link_libraries(kexicore  ${KDE4_KDECORE_LIBS} kexiutils kexidb koproperty )
 
 set_target_properties(kexicore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kexicore  DESTINATION ${LIB_INSTALL_DIR})

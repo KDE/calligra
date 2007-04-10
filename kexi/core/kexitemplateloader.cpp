@@ -33,24 +33,28 @@
 KexiTemplateInfo::List KexiTemplateLoader::loadListInfo()
 {
 	KexiTemplateInfo::List list;
-	const QString subdir = QString(kapp->instanceName()) + "/templates";
+//	const QString subdir = QString(kapp->instanceName()) + "/templates";
+#ifdef __GNUC
+#warning KexiTemplateLoader::loadListInfo() -- OK? KGlobal::mainComponent().componentName()
+#endif
+	const QString subdir = KGlobal::mainComponent().componentName() + "/templates";
 	QString lang( KGlobal::locale()->language() );
-	QStringList dirs( kapp->dirs()->findDirs("data", subdir) );
+	QStringList dirs( KGlobal::dirs()->findDirs("data", subdir) );
 	while (true) {
-		foreach( QStringList::ConstIterator, it, dirs) {
-			QDir dir((*it)+lang);
+		foreach( QString dirname, dirs) {
+			QDir dir(dirname+lang);
 			if (!dir.exists())
 				continue;
 			if (!dir.isReadable()) {
-				kWarning() << "KexiTemplateLoader::loadListInfo() \"" << dir.absPath() << "\" not readable!" << endl;
+				kWarning() << "KexiTemplateLoader::loadListInfo() \"" << dir.absolutePath() << "\" not readable!" << endl;
 				continue;
 			}
 			const QStringList templateDirs( dir.entryList(QDir::Dirs, QDir::Name) );
-			const QString absDirPath( dir.absPath() + '/' );
-			foreach(QStringList::ConstIterator, templateIt, templateDirs) {
-				if ((*templateIt)=="." || (*templateIt==".."))
+			const QString absDirPath( dir.absolutePath() + '/' );
+			foreach(QString templateDir, templateDirs) {
+				if (templateDir=="." || templateDir=="..")
 					continue;
-				KexiTemplateInfo info = KexiTemplateLoader::loadInfo( absDirPath + *templateIt );
+				KexiTemplateInfo info = KexiTemplateLoader::loadInfo( absDirPath + templateDir );
 				if (!info.name.isEmpty())
 					list.append( info );	
 			}
@@ -74,29 +78,34 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
 	}
 	if (!QFileInfo(directory+"/info.txt").isReadable())
 		return KexiTemplateInfo();
-	KConfig infoTxt(directory+"/info.txt", true/*readonly*/, false/*local*/);
+	KConfig infoTxt(directory+"/info.txt", KConfig::OnlyLocal);
+	KConfigGroup cg = infoTxt.group(QString());
+
 	KexiTemplateInfo info;
-	info.name = infoTxt.readEntry("Name");
+	info.name = cg.readEntry("Name");
 	if (info.name.isEmpty()) {
 		kWarning() << "KexiTemplateLoader::loadInfo() \"" << (directory+"/info.txt") << "\" contains no \"name\" field" << endl;
 		return KexiTemplateInfo();
 	}
-	const QStringList templateFiles( dir.entryList("*.kexi", QDir::Files|QDir::Readable, QDir::Name) );
+	QStringList templateFileNameFilters;
+	templateFileNameFilters.append("*.kexi");
+	const QStringList templateFiles( 
+		dir.entryList(templateFileNameFilters, QDir::Files|QDir::Readable, QDir::Name) );
 	if (templateFiles.isEmpty()) {
 		kWarning() << "KexiTemplateLoader::loadInfo() no readable .kexi template file found in \"" << directory << "\"" << endl;
 		return KexiTemplateInfo();
 	}
 	info.filename = directory+"/"+templateFiles.first();
-	info.description = infoTxt.readEntry("Description");
-	const QString iconFileName( infoTxt.readEntry("Icon") );
+	info.description = cg.readEntry("Description");
+	const QString iconFileName( cg.readEntry("Icon") );
 	if (!iconFileName.isEmpty())
 		info.icon = QPixmap(directory+'/'+iconFileName);
 	if (info.icon.isNull())
 		info.icon = DesktopIcon("kexiproject_sqlite"); //default
-	QStringList autoopenObjectsString = infoTxt.readListEntry("AutoOpenObjects");
-	foreach( QStringList::ConstIterator, it, autoopenObjectsString) {
+	QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());
+	foreach( QString autoopenObjectString, autoopenObjectsString) {
 		KexiProjectData::ObjectInfo autoopenObject;
-		QStringList autoopenObjectNameSplitted( QStringList::split(':', *it) );
+		QStringList autoopenObjectNameSplitted( autoopenObjectString.split(':') );
 		if (autoopenObjectNameSplitted.count()>1) {
 			autoopenObject["type"] = autoopenObjectNameSplitted[0];
 			autoopenObject["name"] = autoopenObjectNameSplitted[1];

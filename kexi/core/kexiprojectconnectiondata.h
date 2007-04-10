@@ -45,7 +45,7 @@ class KEXICORE_EXPORT KexiProjectConnectionData:public KexiDB::ConnectionData
 		/**
 		 * connect to a embedded database
 		 */
-		KexiProjectConnectionData(const QString &driverName, const QString &fileName=QString::null);
+		KexiProjectConnectionData(const QString &driverName, const QString &fileName=QString());
 
 		~KexiProjectConnectionData();
 
