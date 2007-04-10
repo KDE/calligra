@@ -95,7 +95,7 @@ Thesaurus::Thesaurus(QObject* parent, const QStringList &)
 
     QHBoxLayout *row1 = new QHBoxLayout();
     m_top_layout->addLayout( row1 );
-    m_edit = new KHistoryCombo(m_page);
+    m_edit = new KHistoryComboBox(m_page);
     m_edit_label = new QLabel( i18n("&Search for:"), m_page);
     m_edit_label->setBuddy( m_edit );
 
