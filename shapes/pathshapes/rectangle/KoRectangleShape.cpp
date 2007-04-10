@@ -42,17 +42,11 @@ KoRectangleShape::~KoRectangleShape()
 {
 }
 
-bool KoRectangleShape::saveOdfData( KoShapeSavingContext & context ) const
+void KoRectangleShape::saveOdf( KoShapeSavingContext * context )
 {
-    saveOdfSizeAndPosition( context );
-    // TODO save rectange specific stuff
-
-    return true;
-}
-
-const char * KoRectangleShape::odfTagName() const
-{
-    return "draw:rect";
+    context->xmlWriter().startElement("draw:rect");
+    saveOdfMandatoryAttributes(context);
+    context->xmlWriter().endElement();
 }
 
 void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )

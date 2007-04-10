@@ -50,6 +50,8 @@ public:
     void setDemoText(bool on);
     bool demoText() const { return m_demoText; }
 
+    virtual void saveOdf(KoShapeSavingContext * context);
+
 private:
     void shapeChanged(ChangeType type);
 

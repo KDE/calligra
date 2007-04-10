@@ -46,9 +46,12 @@ KoEllipseShape::~KoEllipseShape()
 {
 }
 
-bool KoEllipseShape::saveOdfData( KoShapeSavingContext & context ) const
+void KoEllipseShape::saveOdf( KoShapeSavingContext * context )
 {
-    saveOdfSizeAndPosition( context );
+    context->xmlWriter().startElement("draw:ellipse");
+    saveOdfMandatoryAttributes(context);
+    saveOdfSizePositionAttributes(context);
+    saveOdfTransformationAttributes(context);
 
     char * kind = "full";
     switch ( m_type )
@@ -66,17 +69,11 @@ bool KoEllipseShape::saveOdfData( KoShapeSavingContext & context ) const
             kind = "cut";
             break;
     }
-    context.xmlWriter().addAttribute( "draw:kind", kind );
+    context->xmlWriter().addAttribute( "draw:kind", kind );
 
-    context.xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
-    context.xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
-
-    return true;
-}
-
-const char * KoEllipseShape::odfTagName() const
-{
-    return "draw:ellipse";
+    context->xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
+    context->xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
+    context->xmlWriter().endElement();
 }
 
 void KoEllipseShape::resize( const QSizeF &newSize )

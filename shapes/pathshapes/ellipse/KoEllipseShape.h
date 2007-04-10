@@ -76,9 +76,7 @@ public:
     double endAngle() const;
 
 protected:
-    const char * odfTagName() const;
-
-    bool saveOdfData( KoShapeSavingContext & context ) const;
+    void saveOdf( KoShapeSavingContext * context );
 
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );

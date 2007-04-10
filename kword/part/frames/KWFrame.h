@@ -24,6 +24,7 @@
 #include "kword_export.h"
 
 #include <KoShape.h>
+#include <KoShapeSavingContext.h>
 #include <KoShapeApplicationData.h>
 
 class KWFrameSet;
@@ -152,6 +153,8 @@ public:
      * @param frame the frame to use as original
      */
     virtual void copySettings(const KWFrame *frame);
+
+    void saveOdf(KoShapeSavingContext &context);
 
 private:
     KoShape *m_shape;

@@ -21,6 +21,8 @@
 #include "KWFrame.h"
 #include "KWFrameSet.h"
 
+#include <KoXmlWriter.h>
+
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
       // Initialize member vars here. This ensures they are all initialized, since it's
       // easier to compare this list with the member vars list (compiler ensures order).
@@ -69,4 +71,13 @@ void KWFrame::copySettings(const KWFrame *frame) {
     setTextRunAround(frame->textRunAround());
     setCopy(frame->isCopy());
     shape()->copySettings(frame->shape());
+}
+
+void KWFrame::saveOdf(KoShapeSavingContext &context) {
+    context.xmlWriter().startElement("draw:frame");
+    // TODO anchor type, copy frame etc.
+    shape()->saveOdfSizePositionAttributes(context);
+    context.xmlWriter().addAttribute("draw:z-index", shape()->zIndex());
+    shape()->saveOdf(context);
+    context.xmlWriter().endElement();
 }

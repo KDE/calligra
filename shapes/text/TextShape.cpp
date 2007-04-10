@@ -33,6 +33,9 @@
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 
+#include "KoShapeSavingContext.h"
+#include "KoXmlWriter.h"
+
 #include <QTextLayout>
 #include <QFont>
 #include <QPen>
@@ -193,5 +196,17 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
             painter.drawLine(topLeft.x() + 3, topLeft.y() + 7, bottomRight.x() - 4, topLeft.y() + 7);
         }
     }
+}
+
+void TextShape::saveOdf(KoShapeSavingContext * context) {
+    context->xmlWriter().startElement( "draw:text-box" );
+    //fo:min-height="120pt" draw:chain-next-name="Framesetje-2"
+
+    // text:p etc
+context->xmlWriter().startElement( "text:p" );
+context->xmlWriter().addTextSpan("Text Frame.");
+context->xmlWriter().endElement();
+
+    context->xmlWriter().endElement();
 }
 

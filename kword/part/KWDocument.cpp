@@ -44,12 +44,16 @@
 #include <KoShapeFactory.h>
 #include <KoStyleManager.h>
 #include <KoInteractionTool.h>
+#include <KoStoreDevice.h>
+#include <KoSavingContext.h>
+#include <KoXmlWriter.h>
 
 // KDE + Qt includes
 #include <klocale.h>
 #include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kaction.h>
+#include <KTemporaryFile>
 #include <QIODevice>
 #include <QTimer>
 #include <QThread>
@@ -120,9 +124,102 @@ void KWDocument::paintContent(QPainter&, const QRect& rect) {
     // TODO
 }
 
-bool KWDocument::saveOasis(KoStore*, KoXmlWriter*) {
-    // TODO
-    return false;
+bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
+    if ( !store->open( "content.xml" ) )
+        return false;
+
+    KoStoreDevice contentDev( store );
+    KoXmlWriter* contentWriter = createOasisXmlWriter( &contentDev, "office:document-content" );
+
+    KoGenStyles mainStyles;
+    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
+
+    // for office:master-styles
+    KTemporaryFile masterStyles;
+    masterStyles.open();
+    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
+
+/*
+    KoPASavingContext paContext( masterStylesTmpWriter, savingContext, 1 );
+
+    paContext.setOptions( KoPASavingContext::DrawId | KoPASavingContext::AutoStyleInStyleXml );
+
+    masterStylesTmpWriter.startElement( "office:master-styles" );
+
+    // save master pages
+    foreach( KoPAPageBase *page, m_masterPages )
+    {
+        page->saveOdf( paContext );
+    }
+    masterStylesTmpWriter.endElement();
+
+    masterStyles.close();
+*/
+    // for office:body
+    KTemporaryFile contentTmpFile;
+    contentTmpFile.open();
+    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
+
+    contentTmpWriter.startElement( "office:body" );
+    contentTmpWriter.startElement( "office:text" );
+
+    KoShapeSavingContext context (contentTmpWriter, savingContext);
+
+    foreach(KWFrameSet *fs, frameSets()) {
+        //KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        // TODO loop over all non-autocreated frames and save them.
+        foreach(KWFrame *frame, fs->frames()) {
+            frame->saveOdf(context);
+        }
+    }
+
+    // TODO save text
+
+/*
+    contentTmpWriter.startElement( odfTagName() );
+
+    paContext.setXmlWriter( contentTmpWriter );
+    paContext.setOptions( KoPASavingContext::DrawId );
+
+    // save pages
+    foreach ( KoPAPageBase *page, m_pages )
+    {
+        page->saveOdf( paContext );
+        paContext.incrementPage();
+    }
+*/
+    contentTmpWriter.endElement(); // office:text
+    contentTmpWriter.endElement(); // office:body
+
+    contentTmpFile.close();
+
+    contentWriter->startElement( "office:automatic-styles" );
+    //saveOdfAutomaticStyles( *contentWriter, mainStyles, false );
+    contentWriter->endElement();
+
+    // And now we can copy over the contents from the tempfile to the real one
+    contentWriter->addCompleteElement( &contentTmpFile );
+
+    contentWriter->endElement(); // root element
+    contentWriter->endDocument();
+    delete contentWriter;
+
+    if ( !store->close() ) // done with content.xml
+        return false;
+
+    //add manifest line for content.xml
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+
+    if ( !store->open( "styles.xml" ) )
+        return false;
+
+    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+    //saveOdfDocumentStyles( store, mainStyles, &masterStyles );
+
+    if ( !store->close() ) // done with styles.xml
+        return false;
+
+    return true;
 }
 
 KoView* KWDocument::createViewInstance(QWidget* parent) {
