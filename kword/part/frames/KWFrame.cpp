@@ -76,8 +76,8 @@ void KWFrame::copySettings(const KWFrame *frame) {
 void KWFrame::saveOdf(KoShapeSavingContext &context) {
     context.xmlWriter().startElement("draw:frame");
     // TODO anchor type, copy frame etc.
-    shape()->saveOdfSizePositionAttributes(context);
+    shape()->saveOdfSizePositionAttributes(&context);
     context.xmlWriter().addAttribute("draw:z-index", shape()->zIndex());
-    shape()->saveOdf(context);
+    shape()->saveOdf(&context);
     context.xmlWriter().endElement();
 }
