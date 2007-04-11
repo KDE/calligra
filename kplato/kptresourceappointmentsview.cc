@@ -133,7 +133,7 @@ void ResourceAppointmentsView::slotUpdate() {
     //kDebug()<<k_funcinfo<<start<<" - "<<end<<endl;
     QStringList df;
     for (QDate dt = m_start; dt <= m_end; dt = cal->addDays(dt, 1)) {
-        df << locale->formatDate(dt, KLocale::ShortDate);
+        df << locale->formatDate(dt, KLocale::ShortFormat);
     }
     setSlaveLabels(df);
     if (m_totalItem) {

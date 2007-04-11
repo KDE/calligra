@@ -247,7 +247,7 @@ void AccountsView::slotUpdate()
     if ( m_cumulative ) {
         t += " <b>" + i18n( "Cumulative" ) + "</b>  ";
     }
-    t += i18n( "Cut-off date:%1", "<b>" + locale->formatDate( m_date, KLocale::ShortDate ) + "</b>" );
+    t += i18n( "Cut-off date:%1", "<b>" + locale->formatDate( m_date, KLocale::ShortFormat ) + "</b>" );
     t += ' ' + i18n( "Periodicity:%1", "<b>" + periodText( m_period ) + "</b>" );
     m_label->setText( t );
 
@@ -258,7 +258,7 @@ void AccountsView::slotUpdate()
     QStringList df;
     if ( m_period == 0 ) { //Daily
         for ( QDate dt = start; dt <= end; dt = cal->addDays( dt, 1 ) ) {
-            df << locale->formatDate( dt, KLocale::ShortDate );
+            df << locale->formatDate( dt, KLocale::ShortFormat );
         }
         m_dlv->setSlaveLabels( df );
         foreach ( QTreeWidgetItem * i, m_dlv->masterItems() ) {
