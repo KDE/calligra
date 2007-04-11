@@ -37,6 +37,7 @@ private slots:
 private:
     QTextDocument *m_document;
     TextTool *m_tool;
+    bool m_enableSignals;
 };
 
 #endif

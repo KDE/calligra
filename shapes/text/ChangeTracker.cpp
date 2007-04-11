@@ -25,7 +25,8 @@
 ChangeTracker::ChangeTracker(TextTool *parent)
     : QObject(parent),
     m_document(0),
-    m_tool(parent)
+    m_tool(parent),
+    m_enableSignals(true)
 {
 }
 
@@ -38,11 +39,14 @@ void ChangeTracker::setDocument(QTextDocument * document) {
 }
 
 void ChangeTracker::contentsChange (int from, int charsRemoves, int charsAdded) {
+    if(! m_enableSignals) return;
+    m_enableSignals = false;
     kDebug() << "ChangeTracker::contentsChange " << from << ", " << charsRemoves << ", " << charsAdded << endl;
 
-    if(charsRemoves == 0 && charsAdded == 0)
-        return;
-    if(charsRemoves == 0) { // easy
+    if(charsRemoves == 0 && charsAdded == 0) {
+        // I think we can quietly ignore this.
+    }
+    else if(charsRemoves == 0) { // easy
         QTextCursor cursor(m_document);
         cursor.setPosition(from);
         cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
@@ -65,6 +69,8 @@ void ChangeTracker::contentsChange (int from, int charsRemoves, int charsAdded) 
         kDebug() << "   - \"" << previousText << "\"\n";
         kDebug() << "   + \"" << cursor.selectedText() << "\"\n";
     }
+
+    m_enableSignals = true;
 }
 
 #include "ChangeTracker.moc"
