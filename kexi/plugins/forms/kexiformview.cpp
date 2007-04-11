@@ -54,6 +54,7 @@
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
 #include <widget/kexipropertyeditorview.h>
+#include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
 
 #include <koproperty/set.h>
@@ -682,7 +683,15 @@ void KexiFormView::initDataSource()
 			deleteQuery();
 		}
 		else {
-			m_cursor = conn->executeQuery( *m_query );
+			KexiDB::debug( m_query->parameters() );
+			// like in KexiQueryView::executeQuery()
+			Q3ValueList<QVariant> params;
+			{
+				KexiUtils::WaitCursorRemover remover;
+				params = KexiQueryParameters::getParameters(this, *conn->driver(), *m_query, ok);
+			}
+			if (ok) //input cancelled
+				m_cursor = conn->executeQuery( *m_query, params );
 		}
 		m_scrollView->invalidateDataSources( invalidSources, m_query );
 		ok = m_cursor!=0;
