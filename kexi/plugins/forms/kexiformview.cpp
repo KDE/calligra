@@ -527,10 +527,7 @@ KexiFormView::afterSwitchFrom(int mode)
 		if (!m_dbform->orderedFocusWidgets()->isEmpty()) {
 //			QWidget *www = focusWidget();
 			//if (Kexi::hasParent(this, qApp->focusWidget())) {
-				QEvent fe( QEvent::FocusOut );
-				QFocusEvent::setReason(QFocusEvent::Tab);
-				QApplication::sendEvent( qApp->focusWidget(), &fe );
-				QFocusEvent::resetReason();
+				KexiUtils::unsetFocusWithReason(qApp->focusWidget(), QFocusEvent::Tab);
 			//}
 
 			QPtrListIterator<QWidget> it(*m_dbform->orderedFocusWidgets());
