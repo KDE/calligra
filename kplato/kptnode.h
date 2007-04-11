@@ -449,31 +449,41 @@ public:
     { return DateTime(); }
     
     /**
-     * getEarliestStart() returns earliest time this node can start
+     * earlyStart() returns earliest time this node can start
      * given the constraints of the network.
-     * @see earliestStart
      */
-    DateTime getEarliestStart() const
-    { return m_currentSchedule ? m_currentSchedule->earliestStart : DateTime(); }
+    DateTime earlyStart( long id = -1 ) const;
     /**
-     * setEarliestStart() sets earliest time this node can start
-     * @see earliestStart
+     * setEarlyStart() sets earliest time this node can start
      */
-    void setEarliestStart(const DateTime &dt) 
-    { if (m_currentSchedule) m_currentSchedule->earliestStart = dt; }
+    void setEarlyStart(const DateTime &dt, long id = -1 );
     /**
-     * getLatestFinish() returns latest time this node can finish
-     * @see latestFinish
-     */
-    DateTime getLatestFinish() const 
-    { return m_currentSchedule ? m_currentSchedule->latestFinish : DateTime(); }
-    /**
-     * setLatestFinish() sets latest time this node can finish
+     * lateStart() returns latest time this node can start
      * given the constraints of the network.
-     * @see latestFinish
      */
-    void setLatestFinish(const DateTime &dt) 
-    { if (m_currentSchedule) m_currentSchedule->latestFinish = dt; }
+    DateTime lateStart( long id = -1 ) const;
+    /**
+     * setLateStart() sets the earliest time this node can start
+     */
+    void setLateStart(const DateTime &dt, long id = -1 );
+    /**
+     * earlyFinish() returns earliest time this node can finish
+     * given the constraints of the network.
+     */
+    DateTime earlyFinish( long id = -1 ) const;
+    /**
+     * setEarlyFinish() sets earliest time this node can finish
+     */
+    void setEarlyFinish(const DateTime &dt, long id = -1 );
+    /**
+     * lateFinish() returns latest time this node can finish
+     * given the constraints of the network.
+     */
+    DateTime lateFinish( long id = -1 ) const;
+    /**
+     * setLateFinish() sets latest time this node can finish
+     */
+    void setLateFinish(const DateTime &dt, long id = -1 );
     
     /// Adds appointment to both this node and resource
     virtual void addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load=100);

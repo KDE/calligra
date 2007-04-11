@@ -132,22 +132,22 @@ void Project::calculate()
         if ( m_constraint == Node::MustStartOn ) {
             //kDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString()<<endl;
             cs->startTime = m_constraintStartTime;
-            cs->earliestStart = m_constraintStartTime;
+            cs->earlyStart = m_constraintStartTime;
             // Calculate from start time
-            propagateEarliestStart( cs->earliestStart );
-            cs->latestFinish = calculateForward( estType );
-            propagateLatestFinish( cs->latestFinish );
+            propagateEarliestStart( cs->earlyStart );
+            cs->lateFinish = calculateForward( estType );
+            propagateLatestFinish( cs->lateFinish );
             cs->calculateBackward( estType );
             cs->endTime = scheduleForward( cs->startTime, estType );
             calcCriticalPath( false );
         } else {
             //kDebug()<<k_funcinfo<<"Node="<<m_name<<" End="<<m_constraintEndTime.toString()<<endl;
             cs->endTime = m_constraintEndTime;
-            cs->latestFinish = m_constraintEndTime;
+            cs->lateFinish = m_constraintEndTime;
             // Calculate from end time
-            propagateLatestFinish( cs->latestFinish );
-            cs->earliestStart = calculateBackward( estType );
-            propagateEarliestStart( cs->earliestStart );
+            propagateLatestFinish( cs->lateFinish );
+            cs->earlyStart = calculateBackward( estType );
+            propagateEarliestStart( cs->earlyStart );
             cs->calculateForward( estType );
             cs->startTime = scheduleBackward( cs->endTime, estType );
             calcCriticalPath( true );

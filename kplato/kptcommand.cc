@@ -688,8 +688,8 @@ TaskAddCmd::TaskAddCmd( Part *part, Project *project, Node *node, Node *after, c
             node->setEndTime( node->startTime() + node->duration() );
         }
     }
-    node->setEarliestStart( node->startTime() );
-    node->setLatestFinish( node->endTime() );
+    node->setEarlyStart( node->startTime() );
+    node->setLateFinish( node->endTime() );
     node->setWorkStartTime( node->startTime() );
     node->setWorkEndTime( node->endTime() );
 }
@@ -726,8 +726,8 @@ SubtaskAddCmd::SubtaskAddCmd( Part *part, Project *project, Node *node, Node *pa
     // set some reasonable defaults for normally calculated values
     node->setStartTime( parent->startTime() );
     node->setEndTime( node->startTime() + node->duration() );
-    node->setEarliestStart( node->startTime() );
-    node->setLatestFinish( node->endTime() );
+    node->setEarlyStart( node->startTime() );
+    node->setLateFinish( node->endTime() );
     node->setWorkStartTime( node->startTime() );
     node->setWorkEndTime( node->endTime() );
     

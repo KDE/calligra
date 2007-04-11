@@ -634,7 +634,7 @@ DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
         switch (r->type()) {
             case Relation::StartStart:
                 // I can't start earlier than my predesseccor
-                t = r->parent()->getEarliestStart() + r->lag();
+                t = r->parent()->earlyStart() + r->lag();
                 break;
             case Relation::FinishFinish:
                 // I can't finish earlier than my predeccessor, so
@@ -663,14 +663,14 @@ DateTime Task::calculateForward(int use) {
     // calculate all predecessors
     if (!dependParentNodes().isEmpty()) {
         DateTime time = calculatePredeccessors(dependParentNodes(), use);
-        if (time.isValid() && time > cs->earliestStart) {
-            cs->earliestStart = time;
+        if (time.isValid() && time > cs->earlyStart) {
+            cs->earlyStart = time;
         }
     }
     if (!m_parentProxyRelations.isEmpty()) {
         DateTime time = calculatePredeccessors(m_parentProxyRelations, use);
-        if (time.isValid() && time > cs->earliestStart) {
-            cs->earliestStart = time;
+        if (time.isValid() && time > cs->earlyStart) {
+            cs->earlyStart = time;
         }
     }
     return calculateEarlyFinish( use );
@@ -686,16 +686,16 @@ DateTime Task::calculateEarlyFinish(int use) {
     cs->setCalculationMode( Schedule::CalculateForward );
     if (m_visitedForward) {
         //kDebug()<<earliestStart.toString()<<" + "<<m_durationBackward.toString()<<" "<<m_name<<" calculateForward() (visited)"<<endl;
-        return m_earlyFinish;
+        return cs->earlyFinish;
     }
-    //kDebug()<<k_funcinfo<<"------> "<<m_name<<" "<<cs->earliestStart<<endl;
+    //kDebug()<<k_funcinfo<<"------> "<<m_name<<" "<<cs->earlyStart<<endl;
     if (type() == Node::Type_Task) {
         m_durationForward = m_effort->effort(use, pert);
         switch (constraint()) {
             case Node::ASAP:
             case Node::ALAP:
             {
-                m_earlyStart = workStartAfter(cs->earliestStart);
+                m_earlyStart = workStartAfter(cs->earlyStart);
                 m_durationForward = duration(m_earlyStart, use, false);
                 //kDebug()<<k_funcinfo<<m_name<<": "<<earlyStart<<"+"<<m_durationForward.toString()<<"="<<(earlyStart+m_durationForward)<<endl;
                 if ( !cs->allowOverbooking() ) {
@@ -703,14 +703,14 @@ DateTime Task::calculateEarlyFinish(int use) {
                     cs->endTime = m_earlyStart + m_durationForward;
                     makeAppointments();
                 }
-                m_durationForward += cs->earliestStart - m_earlyStart;
+                m_durationForward += cs->earlyStart - m_earlyStart;
                 break;
             }
             case Node::MustFinishOn:
             {
-                m_earlyStart = cs->earliestStart;
+                m_earlyStart = cs->earlyStart;
                 m_durationForward = duration(m_earlyStart, use, false);
-                DateTime earlyFinish = cs->earliestStart + m_durationForward;
+                DateTime earlyFinish = cs->earlyStart + m_durationForward;
                 if (earlyFinish > m_constraintEndTime) {
                     cs->schedulingError = true;
                 } else if (earlyFinish < m_constraintEndTime) {
@@ -723,34 +723,34 @@ DateTime Task::calculateEarlyFinish(int use) {
                     cs->endTime = earlyFinish;
                     makeAppointments();
                 }
-                m_durationForward = earlyFinish - cs->earliestStart;
+                m_durationForward = earlyFinish - cs->earlyStart;
                 break;
             }
             case Node::FinishNotLater:
-                m_durationForward = duration(cs->earliestStart, use, false);
-                if (cs->earliestStart + m_durationForward > m_constraintEndTime) {
+                m_durationForward = duration(cs->earlyStart, use, false);
+                if (cs->earlyStart + m_durationForward > m_constraintEndTime) {
                     cs->schedulingError = true;
                     m_durationForward = duration(m_constraintEndTime, use, true);
-                    cs->earliestStart = m_constraintEndTime - m_durationForward;
+                    cs->earlyStart = m_constraintEndTime - m_durationForward;
                 }
                 if ( !cs->allowOverbooking() ) {
-                    cs->startTime = cs->earliestStart;
-                    cs->endTime = cs->earliestStart + m_durationForward;
+                    cs->startTime = cs->earlyStart;
+                    cs->endTime = cs->earlyStart + m_durationForward;
                     makeAppointments();
                 }
-                m_earlyStart = workTimeAfter( cs->earliestStart );
+                m_earlyStart = workTimeAfter( cs->earlyStart );
                 break;
             case Node::MustStartOn:
             {
-                //kDebug()<<k_funcinfo<<cs->earliestStart<<"> "<<m_constraintStartTime<<endl;
+                //kDebug()<<k_funcinfo<<cs->earlyStart<<"> "<<m_constraintStartTime<<endl;
                 DateTime earlyStart = workStartAfter( m_constraintStartTime );
-                if ( cs->earliestStart > m_constraintStartTime ) {
+                if ( cs->earlyStart > m_constraintStartTime ) {
                     cs->schedulingError = true;
-                    m_earlyStart = workStartAfter( cs->earliestStart );
+                    m_earlyStart = workStartAfter( cs->earlyStart );
                 }
                 m_durationForward = duration( earlyStart, use, false );
-                if ( m_visitedBackward && cs->latestFinish < earlyStart + m_durationForward ) {
-                    m_earlyStart = cs->latestFinish - m_durationBackward;
+                if ( m_visitedBackward && cs->lateFinish < earlyStart + m_durationForward ) {
+                    m_earlyStart = cs->lateFinish - m_durationBackward;
                     m_durationForward = m_durationBackward;
                 }
                 if ( !cs->allowOverbooking() ) {
@@ -758,30 +758,30 @@ DateTime Task::calculateEarlyFinish(int use) {
                     cs->endTime = m_earlyStart + m_durationForward;
                     makeAppointments();
                 }
-                m_durationForward += m_earlyStart - cs->earliestStart;
+                m_durationForward += m_earlyStart - cs->earlyStart;
                 break;
             }
             case Node::StartNotEarlier:
-                if ( cs->earliestStart > m_constraintStartTime ) { // TODO check
+                if ( cs->earlyStart > m_constraintStartTime ) { // TODO check
                     cs->schedulingError = true;
                 }
-                if (cs->earliestStart < m_constraintStartTime) {
-                    cs->earliestStart = m_constraintStartTime;
+                if (cs->earlyStart < m_constraintStartTime) {
+                    cs->earlyStart = m_constraintStartTime;
                 }
-                m_durationForward = duration(cs->earliestStart, use, false);
+                m_durationForward = duration(cs->earlyStart, use, false);
                 if ( !cs->allowOverbooking() ) {
-                    cs->startTime = cs->earliestStart;
-                    cs->endTime = cs->earliestStart + m_durationForward;
+                    cs->startTime = cs->earlyStart;
+                    cs->endTime = cs->earlyStart + m_durationForward;
                     makeAppointments();
                 }
-                m_earlyStart = cs->earliestStart;
+                m_earlyStart = cs->earlyStart;
                 break;
             case Node::FixedInterval: {
-                if ( cs->earliestStart > m_constraintStartTime ) {
+                if ( cs->earlyStart > m_constraintStartTime ) {
                     cs->schedulingError = true;
                 }
-                //cs->earliestStart = m_constraintStartTime;
-                m_durationForward = m_constraintEndTime - cs->earliestStart;
+                //cs->earlyStart = m_constraintStartTime;
+                m_durationForward = m_constraintEndTime - cs->earlyStart;
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = m_constraintStartTime;
                     cs->endTime = m_constraintEndTime;
@@ -795,28 +795,28 @@ DateTime Task::calculateEarlyFinish(int use) {
         m_durationForward = Duration::zeroDuration;
         switch (constraint()) {
             case Node::MustFinishOn:
-                cs->earliestStart = m_constraintEndTime;
+                cs->earlyStart = m_constraintEndTime;
                 break;
             case Node::FinishNotLater:
-                if (cs->earliestStart > m_constraintEndTime) {
-                    cs->earliestStart = m_constraintEndTime;
+                if (cs->earlyStart > m_constraintEndTime) {
+                    cs->earlyStart = m_constraintEndTime;
                 }
                 break;
             case Node::MustStartOn:
-                cs->earliestStart = m_constraintStartTime;
+                cs->earlyStart = m_constraintStartTime;
                 break;
             case Node::StartNotEarlier:
-                if (cs->earliestStart < m_constraintStartTime) {
-                    cs->earliestStart = m_constraintStartTime;
+                if (cs->earlyStart < m_constraintStartTime) {
+                    cs->earlyStart = m_constraintStartTime;
                 }
                 break;
             case Node::FixedInterval:
-                cs->earliestStart = m_constraintStartTime;
+                cs->earlyStart = m_constraintStartTime;
                 break;
             default:
                 break;
         }
-        m_earlyStart = cs->earliestStart;
+        m_earlyStart = cs->earlyStart;
         //kDebug()<<k_funcinfo<<m_name<<" "<<earliestStart.toString()<<endl
     } else if (type() == Node::Type_Summarytask) {
         kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
@@ -824,11 +824,11 @@ DateTime Task::calculateEarlyFinish(int use) {
         m_durationForward = Duration::zeroDuration;
     }
     
-    //kDebug()<<"Earlyfinish: "<<cs->earliestStart<<"+"<<m_durationForward.toString()<<"="<<(cs->earliestStart+m_durationForward).toString()<<" "<<m_name<<" calculateForward()"<<endl;
+    //kDebug()<<"Earlyfinish: "<<cs->earlyStart<<"+"<<m_durationForward.toString()<<"="<<(cs->earlyStart+m_durationForward).toString()<<" "<<m_name<<" calculateForward()"<<endl;
     m_visitedForward = true;
     cs->insertForwardNode( this );
-    m_earlyFinish = cs->earliestStart + m_durationForward;
-    return m_earlyFinish;
+    cs->earlyFinish = cs->earlyStart + m_durationForward;
+    return cs->earlyFinish;
 }
 
 DateTime Task::calculateSuccessors(const QList<Relation*> &list, int use) {
@@ -849,7 +849,7 @@ DateTime Task::calculateSuccessors(const QList<Relation*> &list, int use) {
             case Relation::FinishFinish:
                 // My successor cannot finish before me, so
                 // I can't finish later than it's latest finish - lag
-                t = r->child()->getLatestFinish() -  r->lag();
+                t = r->child()->lateFinish() -  r->lag();
                 break;
             default:
                 t -= r->lag();
@@ -873,14 +873,14 @@ DateTime Task::calculateBackward(int use) {
     // calculate all successors
     if (!dependChildNodes().isEmpty()) {
         DateTime time = calculateSuccessors(dependChildNodes(), use);
-        if (time.isValid() && time < cs->latestFinish) {
-            cs->latestFinish = time;
+        if (time.isValid() && time < cs->lateFinish) {
+            cs->lateFinish = time;
         }
     }
     if (!m_childProxyRelations.isEmpty()) {
         DateTime time = calculateSuccessors(m_childProxyRelations, use);
-        if (time.isValid() && time < cs->latestFinish) {
-            cs->latestFinish = time;
+        if (time.isValid() && time < cs->lateFinish) {
+            cs->lateFinish = time;
         }
     }
     return calculateLateStart( use );
@@ -896,21 +896,21 @@ DateTime Task::calculateLateStart(int use) {
     bool pert = cs->usePert();
     if (m_visitedBackward) {
         //kDebug()<<latestFinish.toString()<<" - "<<m_durationBackward.toString()<<" "<<m_name<<" calculateBackward() (visited)"<<endl;
-        return m_lateStart;
+        return cs->lateStart;
     }
-    //kDebug()<<k_funcinfo<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->latestFinish<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->lateFinish<<endl;
     if (type() == Node::Type_Task) {
         m_durationBackward = m_effort->effort(use, pert);
         switch (constraint()) {
             case Node::ASAP:
             case Node::ALAP:
-                cs->endTime = workFinishBefore(cs->latestFinish);
+                cs->endTime = workFinishBefore(cs->lateFinish);
                 m_durationBackward = duration(cs->endTime, use, true);
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = cs->endTime - m_durationBackward;
                     makeAppointments();
                 }
-                m_durationBackward += cs->latestFinish - cs->endTime;
+                m_durationBackward += cs->lateFinish - cs->endTime;
                 m_lateFinish = cs->endTime;
                 break;
             case Node::MustStartOn:
@@ -918,9 +918,9 @@ DateTime Task::calculateLateStart(int use) {
                 DateTime lateStart = workStartAfter( m_constraintStartTime );
                 m_durationBackward = duration(lateStart, use, false);
                 m_lateFinish = lateStart + m_durationBackward;
-                if ( m_lateFinish > cs->latestFinish ) {
+                if ( m_lateFinish > cs->lateFinish ) {
                     cs->schedulingError = true;
-                    m_lateFinish = cs->latestFinish;
+                    m_lateFinish = cs->lateFinish;
                     m_durationBackward = duration( m_lateFinish, use, true );
                 }
                 if ( !cs->allowOverbooking() ) {
@@ -932,7 +932,7 @@ DateTime Task::calculateLateStart(int use) {
             }
             case Node::StartNotEarlier:
             {
-                m_lateFinish = cs->latestFinish;
+                m_lateFinish = cs->lateFinish;
                 m_durationBackward = duration(m_lateFinish, use, true);
                 if (m_lateFinish - m_durationBackward < m_constraintStartTime) {
                     m_durationBackward = duration(m_constraintStartTime, use, false);
@@ -943,27 +943,27 @@ DateTime Task::calculateLateStart(int use) {
                     cs->endTime = m_lateFinish;
                     makeAppointments();
                 }
-                m_durationBackward += cs->latestFinish - m_lateFinish;
+                m_durationBackward += cs->lateFinish - m_lateFinish;
                 break;
             }
             case Node::MustFinishOn:
-                //cs->latestFinish = m_constraintEndTime;
-                //kDebug()<<m_name<<": "<<cs->latestFinish<<"< "<<m_constraintEndTime<<endl;
-                if ( cs->latestFinish < m_constraintEndTime ) {
+                //cs->lateFinish = m_constraintEndTime;
+                //kDebug()<<m_name<<": "<<cs->lateFinish<<"< "<<m_constraintEndTime<<endl;
+                if ( cs->lateFinish < m_constraintEndTime ) {
                     cs->schedulingError = true;
                 }
-                m_durationBackward = duration(cs->latestFinish, use, true);
+                m_durationBackward = duration(cs->lateFinish, use, true);
                 if ( !cs->allowOverbooking() ) {
-                    cs->startTime = cs->latestFinish - m_durationBackward;
-                    cs->endTime = cs->latestFinish;
+                    cs->startTime = cs->lateFinish - m_durationBackward;
+                    cs->endTime = cs->lateFinish;
                     makeAppointments();
                 }
-                //m_durationBackward += cs->latestFinish - m_constraintEndTime;
+                //m_durationBackward += cs->lateFinish - m_constraintEndTime;
                 m_lateFinish = m_constraintEndTime;
                 break;
             case Node::FinishNotLater:
-                if (cs->latestFinish > m_constraintEndTime) {
-                    cs->latestFinish = m_constraintEndTime;
+                if (cs->lateFinish > m_constraintEndTime) {
+                    cs->lateFinish = m_constraintEndTime;
                 }
                 m_durationBackward = duration(m_constraintEndTime, use, true);
                 if ( !cs->allowOverbooking() ) {
@@ -971,12 +971,12 @@ DateTime Task::calculateLateStart(int use) {
                     cs->endTime = m_constraintEndTime;
                     makeAppointments();
                 }
-                m_durationBackward += cs->latestFinish - m_constraintEndTime;
+                m_durationBackward += cs->lateFinish - m_constraintEndTime;
                 m_lateFinish = m_constraintEndTime;
                 break;
             case Node::FixedInterval: {
-                //cs->latestFinish = m_constraintEndTime;
-                if ( cs->latestFinish < m_constraintEndTime ) {
+                //cs->lateFinish = m_constraintEndTime;
+                if ( cs->lateFinish < m_constraintEndTime ) {
                     cs->schedulingError = true;
                 }
                 m_durationBackward = m_constraintEndTime - m_constraintStartTime;
@@ -993,29 +993,29 @@ DateTime Task::calculateLateStart(int use) {
         m_durationBackward = Duration::zeroDuration;
         switch (constraint()) {
             case Node::MustFinishOn:
-                cs->latestFinish = m_constraintEndTime;
+                cs->lateFinish = m_constraintEndTime;
                 break;
             case Node::FinishNotLater:
-                if (cs->latestFinish > m_constraintEndTime) {
-                    cs->latestFinish = m_constraintEndTime;
+                if (cs->lateFinish > m_constraintEndTime) {
+                    cs->lateFinish = m_constraintEndTime;
                 }
                 break;
             case Node::MustStartOn:
-                cs->latestFinish = m_constraintStartTime;
+                cs->lateFinish = m_constraintStartTime;
                 break;
             case Node::StartNotEarlier:
-                if (cs->latestFinish < m_constraintStartTime) {
-                    cs->latestFinish = m_constraintStartTime;
+                if (cs->lateFinish < m_constraintStartTime) {
+                    cs->lateFinish = m_constraintStartTime;
                 }
                 break;
             case Node::FixedInterval:
-                cs->latestFinish = m_constraintEndTime;
+                cs->lateFinish = m_constraintEndTime;
                 break;
             default:
                 break;
         }
-        m_lateFinish = cs->latestFinish;
-        //kDebug()<<k_funcinfo<<m_name<<" "<<cs->latestFinish<<endl;
+        m_lateFinish = cs->lateFinish;
+        //kDebug()<<k_funcinfo<<m_name<<" "<<cs->lateFinish<<endl;
     } else if (type() == Node::Type_Summarytask) {
         kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     } else { // ???
@@ -1023,9 +1023,9 @@ DateTime Task::calculateLateStart(int use) {
     }
     m_visitedBackward = true;
     cs->insertBackwardNode( this );
-    //kDebug()<<"Latestart: "<<cs->latestFinish<<"-"<<m_durationBackward.toString()<<"="<<(cs->latestFinish-m_durationBackward)<<" "<<m_name<<" calculateBackward()"<<endl;
-    m_lateStart = cs->latestFinish - m_durationBackward;
-    return m_lateStart;
+    //kDebug()<<"Latestart: "<<cs->lateFinish<<"-"<<m_durationBackward.toString()<<"="<<(cs->lateFinish-m_durationBackward)<<" "<<m_name<<" calculateBackward()"<<endl;
+    cs->lateStart = cs->lateFinish - m_durationBackward;
+    return cs->lateStart;
 }
 
 DateTime Task::schedulePredeccessors(const QList<Relation*> &list, int use) {
@@ -1036,7 +1036,7 @@ DateTime Task::schedulePredeccessors(const QList<Relation*> &list, int use) {
             continue; // skip summarytasks
         }
         // schedule the predecessors
-        DateTime earliest = r->parent()->getEarliestStart();
+        DateTime earliest = r->parent()->earlyStart();
         DateTime t = r->parent()->scheduleForward(earliest, use);
         switch (r->type()) {
             case Relation::StartStart:
@@ -1066,7 +1066,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     Schedule *cs = m_currentSchedule;
     cs->setCalculationMode( Schedule::Scheduling );
     bool pert = cs->usePert();
-    cs->startTime = earliest > cs->earliestStart ? earliest : cs->earliestStart;
+    cs->startTime = earliest > cs->earlyStart ? earliest : cs->earlyStart;
     // First, calculate all my own predecessors
     DateTime time = schedulePredeccessors(dependParentNodes(), use);
     if (time.isValid() && time > cs->startTime) {
@@ -1095,7 +1095,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     }
     cs->notScheduled = false;
     if ( !cs->startTime.isValid() ) {
-        cs->startTime = cs->earliestStart;
+        cs->startTime = cs->earlyStart;
     }
     //kDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
     if(type() == Node::Type_Task) {
@@ -1107,16 +1107,16 @@ DateTime Task::scheduleFromStartTime(int use) {
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::ALAP:
             // cs->startTime calculated above
-            cs->duration = duration(cs->latestFinish, use, true);
-            cs->endTime = cs->latestFinish;
+            cs->duration = duration(cs->lateFinish, use, true);
+            cs->endTime = cs->lateFinish;
             cs->startTime = cs->endTime - cs->duration;
-            //kDebug()<<k_funcinfo<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->latestFinish<<endl;
+            //kDebug()<<k_funcinfo<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->lateFinish<<endl;
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::StartNotEarlier:
             // cs->startTime calculated above
@@ -1127,11 +1127,11 @@ DateTime Task::scheduleFromStartTime(int use) {
             }
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
-            if (cs->endTime > cs->latestFinish) {
+            if (cs->endTime > cs->lateFinish) {
                 cs->schedulingError = true;
             }
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::FinishNotLater:
             // cs->startTime calculated above
@@ -1145,7 +1145,7 @@ DateTime Task::scheduleFromStartTime(int use) {
                 cs->startTime = cs->endTime - cs->duration;*/
             }
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::MustStartOn:
             // cs->startTime calculated above
@@ -1157,7 +1157,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::MustFinishOn:
             cs->endTime = workFinishBefore( m_constraintEndTime );
@@ -1173,15 +1173,15 @@ DateTime Task::scheduleFromStartTime(int use) {
             } else {
                 cs->startTime = cs->endTime - cs->duration;
             }
-            //kDebug()<<"MustFinishOn:"<<m_constraintEndTime<<", "<<cs->latestFinish<<": "<<cs->startTime<<cs->endTime<<endl;
+            //kDebug()<<"MustFinishOn:"<<m_constraintEndTime<<", "<<cs->lateFinish<<": "<<cs->startTime<<cs->endTime<<endl;
             makeAppointments();
             // TODO check
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::FixedInterval: {
             // cs->startTime calculated above
             //kDebug()<<"FixedInterval="<<m_constraintStartTime<<" "<<cs->startTime<<endl;
-            if (cs->startTime < cs->earliestStart) {
+            if (cs->startTime < cs->earlyStart) {
                 cs->schedulingError = true;
             }
             cs->startTime = m_constraintStartTime;
@@ -1192,7 +1192,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             //kDebug()<<"FixedInterval="<<cs->startTime<<", "<<cs->endTime<<endl;
             makeAppointments();
             // TODO check
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         }
         default:
@@ -1203,12 +1203,12 @@ DateTime Task::scheduleFromStartTime(int use) {
         case Node::ASAP: {
             cs->endTime = cs->startTime;
             // TODO check, do we need to check succeccors earliestStart?
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         }
         case Node::ALAP: {
-            cs->startTime = cs->latestFinish;
-            cs->endTime = cs->latestFinish;
+            cs->startTime = cs->lateFinish;
+            cs->endTime = cs->lateFinish;
             cs->positiveFloat = Duration::zeroDuration;
             break;
         }
@@ -1216,35 +1216,35 @@ DateTime Task::scheduleFromStartTime(int use) {
         case Node::FixedInterval:
             //kDebug()<<"Forw, MustStartOn: "<<m_constraintStartTime.toString()<<" "<<cs->startTime.toString()<<endl;
             if (m_constraintStartTime < cs->startTime ||
-                m_constraintStartTime > cs->latestFinish) {
+                m_constraintStartTime > cs->lateFinish) {
                 cs->schedulingError = true;
             }
             cs->startTime = m_constraintStartTime;
             cs->endTime = m_constraintStartTime;
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         case Node::MustFinishOn:
             if (m_constraintEndTime < cs->startTime ||
-                m_constraintEndTime > cs->latestFinish) {
+                m_constraintEndTime > cs->lateFinish) {
                 cs->schedulingError = true;
             }
             cs->startTime = m_constraintEndTime;
             cs->endTime = m_constraintEndTime;
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         case Node::StartNotEarlier:
             if (cs->startTime < m_constraintStartTime) {
                 cs->schedulingError = true;
             }
             cs->endTime = cs->startTime;
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         case Node::FinishNotLater:
             if (cs->startTime > m_constraintEndTime) {
                 cs->schedulingError = true;
             }
             cs->endTime = cs->startTime;
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         default:
             break;
@@ -1257,8 +1257,8 @@ DateTime Task::scheduleFromStartTime(int use) {
         cs->duration = cs->endTime - cs->startTime;
         kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
-    cs->startFloat = m_lateStart - m_earlyStart;
-    cs->finishFloat = m_lateFinish - m_earlyFinish;
+    cs->startFloat = cs->lateStart - cs->earlyStart;
+    cs->finishFloat = cs->lateFinish - cs->earlyFinish;
     //kDebug()<<cs->startTime<<" : "<<cs->endTime<<" "<<m_name<<" scheduleForward()"<<endl;
     m_visitedForward = true;
     return cs->endTime;
@@ -1272,7 +1272,7 @@ DateTime Task::scheduleSuccessors(const QList<Relation*> &list, int use) {
             continue;
         }
         // get the successors starttime
-        DateTime latest = r->child()->getLatestFinish();
+        DateTime latest = r->child()->lateFinish();
         DateTime t = r->child()->scheduleBackward(latest, use);
         switch (r->type()) {
             case Relation::StartStart:
@@ -1300,7 +1300,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
     Schedule *cs = m_currentSchedule;
     cs->setCalculationMode( Schedule::Scheduling );
     bool pert = cs->usePert();
-    cs->endTime = latest < cs->latestFinish ? latest : cs->latestFinish;
+    cs->endTime = latest < cs->lateFinish ? latest : cs->lateFinish;
     // First, calculate all my own successors
     DateTime time = scheduleSuccessors(dependChildNodes(), use);
     if (time.isValid() && time < cs->endTime) {
@@ -1327,7 +1327,7 @@ DateTime Task::scheduleFromEndTime(int use) {
     }
     cs->notScheduled = false;
     if ( !cs->endTime.isValid() ) {
-        cs->endTime = cs->latestFinish;
+        cs->endTime = cs->lateFinish;
     }
     //kDebug()<<k_funcinfo<<"------> "<<m_name<<" "<<cs->endTime<<endl;
     if (type() == Node::Type_Task) {
@@ -1335,9 +1335,9 @@ DateTime Task::scheduleFromEndTime(int use) {
         switch (m_constraint) {
         case Node::ASAP: {
             // cs->endTime calculated above
-            //kDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  early="<<cs->earliestStart<<endl;
+            //kDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  early="<<cs->earlyStart<<endl;
             cs->endTime = workFinishBefore(cs->endTime);
-            cs->startTime = workStartAfter( cs->earliestStart );
+            cs->startTime = workStartAfter( cs->earlyStart );
             cs->duration = duration(cs->startTime, use, false);
             DateTime e = cs->startTime + cs->duration;
             if (e > cs->endTime) {
@@ -1346,22 +1346,22 @@ DateTime Task::scheduleFromEndTime(int use) {
             cs->endTime = e;
             //kDebug()<<k_funcinfo<<m_name<<": start="<<cs->startTime<<"+"<<cs->duration.toString()<<"="<<e<<" -> end="<<cs->endTime<<endl;
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         }
         case Node::ALAP:
         {
             // cs->endTime calculated above
-            //kDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  late="<<cs->latestFinish<<endl;
+            //kDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  late="<<cs->lateFinish<<endl;
             cs->endTime = workFinishBefore(cs->endTime);
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
-            if ( cs->startTime < cs->earliestStart ) {
+            if ( cs->startTime < cs->earlyStart ) {
                 cs->schedulingError = true;
             }
             //kDebug()<<k_funcinfo<<m_name<<": lateStart="<<cs->startTime<<endl;
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         }
         case Node::StartNotEarlier:
@@ -1377,7 +1377,7 @@ DateTime Task::scheduleFromEndTime(int use) {
                 cs->endTime = cs->startTime + cs->duration;*/
             }
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::FinishNotLater:
             // cs->endTime calculated above
@@ -1390,15 +1390,15 @@ DateTime Task::scheduleFromEndTime(int use) {
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::MustStartOn:
             // cs->endTime calculated above
             //kDebug()<<"MustStartOn="<<m_constraintStartTime.toString()<<" "<<cs->startTime.toString()<<endl;
-            if (m_constraintStartTime > cs->latestFinish - m_durationBackward) {
+            if (m_constraintStartTime > cs->lateFinish - m_durationBackward) {
                 cs->schedulingError = true;
-                cs->startTime = cs->latestFinish - m_durationBackward;
-                cs->endTime = workFinishBefore( cs->latestFinish );
+                cs->startTime = cs->lateFinish - m_durationBackward;
+                cs->endTime = workFinishBefore( cs->lateFinish );
             } else {
                 cs->startTime = m_constraintStartTime;
                 cs->duration = duration(cs->startTime, use, false);
@@ -1408,20 +1408,20 @@ DateTime Task::scheduleFromEndTime(int use) {
                 cs->endTime = cs->startTime + cs->duration;
             }
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::MustFinishOn:
             // cs->endTime calculated above
             //kDebug()<<"MustFinishOn="<<m_constraintEndTime.toString()<<" "<<cs->startTime.toString()<<endl;
-            if (m_constraintEndTime > cs->latestFinish ||
-                m_constraintEndTime < cs->earliestStart + m_durationForward) {
+            if (m_constraintEndTime > cs->lateFinish ||
+                m_constraintEndTime < cs->earlyStart + m_durationForward) {
                 cs->schedulingError = true;
             }
             cs->endTime = m_constraintEndTime;
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             makeAppointments();
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         case Node::FixedInterval: {
             // cs->endTime calculated above
@@ -1437,7 +1437,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             cs->workEndTime = m_constraintEndTime;
             makeAppointments();
             // TODO check
-            cs->positiveFloat = workTimeBefore( cs->latestFinish ) - cs->endTime;
+            cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             break;
         }
         default:
@@ -1449,47 +1449,47 @@ DateTime Task::scheduleFromEndTime(int use) {
     } else if (type() == Node::Type_Milestone) {
         switch (m_constraint) {
         case Node::ASAP:
-            cs->startTime = cs->earliestStart;
-            cs->endTime = cs->earliestStart;
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->startTime = cs->earlyStart;
+            cs->endTime = cs->earlyStart;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         case Node::ALAP:
-            cs->startTime = cs->latestFinish;
-            cs->endTime = cs->latestFinish;
+            cs->startTime = cs->lateFinish;
+            cs->endTime = cs->lateFinish;
             cs->positiveFloat = Duration::zeroDuration;
             break;
         case Node::MustStartOn:
         case Node::FixedInterval:
-            if (m_constraintStartTime < cs->earliestStart ||
+            if (m_constraintStartTime < cs->earlyStart ||
                 m_constraintStartTime > cs->endTime) {
                 cs->schedulingError = true;
             }
-            cs->startTime = cs->earliestStart;
-            cs->endTime = cs->earliestStart;
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->startTime = cs->earlyStart;
+            cs->endTime = cs->earlyStart;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         case Node::MustFinishOn:
-            if (m_constraintEndTime < cs->earliestStart ||
+            if (m_constraintEndTime < cs->earlyStart ||
                 m_constraintEndTime > cs->endTime) {
                 cs->schedulingError = true;
             }
             cs->startTime = m_constraintEndTime;
             cs->endTime = m_constraintEndTime;
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         case Node::StartNotEarlier:
             if (m_constraintStartTime > cs->endTime) {
                 cs->schedulingError = true;
             }
             cs->startTime = cs->endTime;
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         case Node::FinishNotLater:
             if (m_constraintEndTime < cs->endTime) {
                 cs->schedulingError = true;
             }
             cs->startTime = cs->endTime;
-            cs->positiveFloat = cs->latestFinish - cs->endTime;
+            cs->positiveFloat = cs->lateFinish - cs->endTime;
             break;
         default:
             break;
@@ -1501,8 +1501,8 @@ DateTime Task::scheduleFromEndTime(int use) {
         cs->duration = cs->endTime - cs->startTime;
         kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
-    cs->startFloat = m_lateStart - m_earlyStart;
-    cs->finishFloat = m_lateFinish - m_earlyFinish;
+    cs->startFloat = cs->lateStart - cs->earlyStart;
+    cs->finishFloat = cs->lateFinish - cs->earlyFinish;
     //kDebug()<<k_funcinfo<<m_name<<": "<<cs->startTime<<" : "<<cs->endTime<<endl;
     m_visitedBackward = true;
     return cs->startTime;
@@ -1512,8 +1512,8 @@ void Task::adjustSummarytask() {
     if (m_currentSchedule == 0)
         return;
     if (type() == Type_Summarytask) {
-        DateTime start = m_currentSchedule->latestFinish;
-        DateTime end = m_currentSchedule->earliestStart;
+        DateTime start = m_currentSchedule->lateFinish;
+        DateTime end = m_currentSchedule->earlyStart;
         foreach (Node *n, m_nodes) {
             n->adjustSummarytask();
             if (n->startTime() < start)

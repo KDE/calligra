@@ -448,6 +448,78 @@ DateTime Node::endTime( long id ) const
     return s ? s->endTime : DateTime();
 }
     
+void Node::setEarlyStart(const DateTime &dt, long id )
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) s->earlyStart = dt;
+}
+
+DateTime Node::earlyStart( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->earlyStart : DateTime();
+}
+
+void Node::setLateStart(const DateTime &dt, long id )
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) s->lateStart = dt;
+}
+
+DateTime Node::lateStart( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->lateStart : DateTime();
+}
+    
+void Node::setEarlyFinish(const DateTime &dt, long id )
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) s->earlyFinish = dt;
+}
+
+DateTime Node::earlyFinish( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->earlyFinish : DateTime();
+}
+
+void Node::setLateFinish(const DateTime &dt, long id )
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) s->lateFinish = dt;
+}
+
+DateTime Node::lateFinish( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->lateFinish : DateTime();
+}
+    
 DateTime Node::workStartTime( long id ) const
 {
     Schedule *s = m_currentSchedule;
@@ -603,8 +675,8 @@ QStringList Node::constraintList( bool trans ) {
 void Node::propagateEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
-    m_currentSchedule->earliestStart = time;
-    //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->earliestStart.toString()<<endl;
+    m_currentSchedule->earlyStart = time;
+    //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->earlyStart.toString()<<endl;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->propagateEarliestStart(time);
@@ -614,8 +686,8 @@ void Node::propagateEarliestStart(DateTime &time) {
 void Node::propagateLatestFinish(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
-    m_currentSchedule->latestFinish = time;
-    //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->latestFinish<<endl;
+    m_currentSchedule->lateFinish = time;
+    //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->lateFinish<<endl;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->propagateLatestFinish(time);
@@ -625,8 +697,8 @@ void Node::propagateLatestFinish(DateTime &time) {
 void Node::moveEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
-    if (m_currentSchedule->earliestStart < time)
-        m_currentSchedule->earliestStart = time;
+    if (m_currentSchedule->earlyStart < time)
+        m_currentSchedule->earlyStart = time;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->moveEarliestStart(time);
@@ -636,8 +708,8 @@ void Node::moveEarliestStart(DateTime &time) {
 void Node::moveLatestFinish(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
-    if (m_currentSchedule->latestFinish > time)
-        m_currentSchedule->latestFinish = time;
+    if (m_currentSchedule->lateFinish > time)
+        m_currentSchedule->lateFinish = time;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->moveLatestFinish(time);

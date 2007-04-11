@@ -551,12 +551,28 @@ bool NodeSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
     //kDebug()<<k_funcinfo<<endl;
     QString s;
     Schedule::loadXML( sch );
-    s = sch.attribute( "earlieststart" );
-    if ( !s.isEmpty() )
-        earliestStart = DateTime::fromString( s, status.projectSpec() );
-    s = sch.attribute( "latestfinish" );
-    if ( !s.isEmpty() )
-        latestFinish = DateTime::fromString( s, status.projectSpec() );
+    s = sch.attribute( "earlystart" );
+    if ( s.isEmpty() ) { // try version < 0.6
+        s = sch.attribute( "earlieststart" );
+    }
+    if ( !s.isEmpty() ) {
+        earlyStart = DateTime::fromString( s, status.projectSpec() );
+    }
+    s = sch.attribute( "latefinish" );
+    if ( s.isEmpty() ) { // try version < 0.6
+        s = sch.attribute( "latestfinish" );
+    }
+    if ( !s.isEmpty() ) {
+        lateFinish = DateTime::fromString( s, status.projectSpec() );
+    }
+    s = sch.attribute( "latestart" );
+    if ( !s.isEmpty() ) {
+        lateStart = DateTime::fromString( s, status.projectSpec() );
+    }
+    s = sch.attribute( "earlyfinish" );
+    if ( !s.isEmpty() ) {
+        earlyFinish = DateTime::fromString( s, status.projectSpec() );
+    }
     s = sch.attribute( "start" );
     if ( !s.isEmpty() )
         startTime = DateTime::fromString( s, status.projectSpec() );
@@ -594,10 +610,18 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     element.appendChild( sch );
     saveCommonXML( sch );
 
-    if ( earliestStart.isValid() )
-        sch.setAttribute( "earlieststart", earliestStart.toString( KDateTime::ISODate ) );
-    if ( latestFinish.isValid() )
-        sch.setAttribute( "latestfinish", latestFinish.toString( KDateTime::ISODate ) );
+    if ( earlyStart.isValid() ) {
+        sch.setAttribute( "earlystart", earlyStart.toString( KDateTime::ISODate ) );
+    }
+    if ( lateStart.isValid() ) {
+        sch.setAttribute( "latestart", lateStart.toString( KDateTime::ISODate ) );
+    }
+    if ( earlyFinish.isValid() ) {
+        sch.setAttribute( "earlyfinish", earlyFinish.toString( KDateTime::ISODate ) );
+    }
+    if ( lateFinish.isValid() ) {
+        sch.setAttribute( "latefinish", lateFinish.toString( KDateTime::ISODate ) );
+    }
     if ( startTime.isValid() )
         sch.setAttribute( "start", startTime.toString( KDateTime::ISODate ) );
     if ( endTime.isValid() )
@@ -1216,8 +1240,8 @@ void NodeSchedule::printDebug( const QString& _indent )
     kDebug() << indent << "Start time: " << startTime.toString() << endl;
     kDebug() << indent << "End time: " << endTime.toString() << endl;
     kDebug() << indent << "Duration: " << duration.seconds() << QByteArray( " secs" ) << " (" << duration.toString() << ")" << endl;
-    kDebug() << indent << "Earliest start: " << earliestStart.toString() << endl;
-    kDebug() << indent << "Latest finish: " << latestFinish.toString() << endl;
+    kDebug() << indent << "Earliest start: " << earlyStart.toString() << endl;
+    kDebug() << indent << "Latest finish: " << lateFinish.toString() << endl;
 
     kDebug() << indent << "schedulingError=" << schedulingError << endl;
     Task *t = qobject_cast<Task*>( m_node );
@@ -1296,8 +1320,8 @@ void MainSchedule::printDebug( const QString& _indent )
     kDebug() << indent << "Start time: " << startTime.toString() << endl;
     kDebug() << indent << "End time: " << endTime.toString() << endl;
     kDebug() << indent << "Duration: " << duration.seconds() << QByteArray( " secs" ) << " (" << duration.toString() << ")" << endl;
-    kDebug() << indent << "Earliest start: " << earliestStart.toString() << endl;
-    kDebug() << indent << "Latest finish: " << latestFinish.toString() << endl;
+    kDebug() << indent << "Earliest start: " << earlyStart.toString() << endl;
+    kDebug() << indent << "Latest finish: " << lateFinish.toString() << endl;
 
     kDebug() << indent << endl;
     kDebug() << indent << "Appointments: " << m_appointments.count() << endl;

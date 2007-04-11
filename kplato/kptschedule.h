@@ -147,8 +147,8 @@ public:
     
     virtual double normalRatePrHour() const { return 0.0; }
 
-    void setEarliestStart( DateTime &dt ) { earliestStart = dt; }
-    void setLatestFinish( DateTime &dt ) { latestFinish = dt; }
+    void setEarliestStart( DateTime &dt ) { earlyStart = dt; }
+    void setLatestFinish( DateTime &dt ) { lateFinish = dt; }
 
     virtual void initiateCalculation();
     virtual void calcResourceOverbooked();
@@ -191,17 +191,27 @@ protected:
     friend class RecalculateProjectCmd;
     friend class ScheduleManager;
     /**
-      * earliestStart is calculated by PERT/CPM.
+      * earlyStart is calculated by PERT/CPM.
       * A task may be scheduled to start later because of constraints
       * or resource availability etc.
       */
-    DateTime earliestStart;
+    DateTime earlyStart;
     /**
-      * latestFinish is calculated by PERT/CPM.
+      * lateStart is calculated by PERT/CPM.
+      * A task may not be scheduled to start later.
+      */
+    DateTime lateStart;
+    /**
+      * earlyFinish is calculated by PERT/CPM.
+      * A task may not be scheduled to finish earlier.
+      */
+    DateTime earlyFinish;
+    /**
+      * lateFinish is calculated by PERT/CPM.
       * A task may be scheduled to finish earlier because of constraints
       * or resource availability etc.
       */
-    DateTime latestFinish;
+    DateTime lateFinish;
     /**  startTime is the scheduled start time.
       *  It depends on constraints (i.e. ASAP/ALAP) and resource availability.
       *  It will always be later or equal to @ref earliestStart
