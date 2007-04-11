@@ -75,8 +75,6 @@ public:
      */
     int frameCount() const { return m_frames.count(); }
 
-    virtual void saveOdf(KoShapeSavingContext *context);
-
 #ifndef NDEBUG
     /// use kDebug calls to print internal info on this frameset
     virtual void printDebug();
