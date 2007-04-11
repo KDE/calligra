@@ -154,7 +154,7 @@ public:
      */
     virtual void copySettings(const KWFrame *frame);
 
-    void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoShapeSavingContext *context);
 
 private:
     KoShape *m_shape;

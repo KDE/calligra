@@ -169,7 +169,7 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
         //KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
         // TODO loop over all non-autocreated frames and save them.
         foreach(KWFrame *frame, fs->frames()) {
-            frame->saveOdf(context);
+            frame->saveOdf(&context);
         }
     }
 

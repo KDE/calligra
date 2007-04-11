@@ -45,8 +45,9 @@ KoRectangleShape::~KoRectangleShape()
 void KoRectangleShape::saveOdf( KoShapeSavingContext * context )
 {
     context->xmlWriter().startElement("draw:rect");
-    saveOdfMandatoryAttributes(context);
+    saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
     context->xmlWriter().endElement();
+    saveOdfConnections(context);
 }
 
 void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
