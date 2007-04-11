@@ -678,7 +678,9 @@ void TextTool::addUndoCommand() {
                 return;
             if(! m_tool.isNull()) {
                 m_tool->m_allowAddUndoCommand = false;
-                 m_document->undo(&m_tool->m_caret);
+                if(m_tool->m_changeTracker)
+                    m_tool->m_changeTracker->notifyForUndo();
+                m_document->undo(&m_tool->m_caret);
             }
             else
                 m_document->undo();

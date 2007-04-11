@@ -31,13 +31,15 @@ public:
 
     void setDocument(QTextDocument * document);
 
+    void notifyForUndo();
+
 private slots:
     void contentsChange (int from, int charsRemoves, int charsAdded);
 
 private:
     QTextDocument *m_document;
     TextTool *m_tool;
-    bool m_enableSignals;
+    bool m_enableSignals, m_reverseUndo;
 };
 
 #endif

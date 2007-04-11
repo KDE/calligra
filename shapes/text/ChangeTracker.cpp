@@ -26,11 +26,13 @@ ChangeTracker::ChangeTracker(TextTool *parent)
     : QObject(parent),
     m_document(0),
     m_tool(parent),
-    m_enableSignals(true)
+    m_enableSignals(true),
+    m_reverseUndo(false)
 {
 }
 
 void ChangeTracker::setDocument(QTextDocument * document) {
+    m_reverseUndo = false;
     if(m_document)
         disconnect(m_document, SIGNAL(contentsChange(int,int,int)), this, SLOT(contentsChange(int,int,int)));
     m_document = document;
@@ -55,12 +57,12 @@ void ChangeTracker::contentsChange (int from, int charsRemoves, int charsAdded) 
     else {
         bool prev = m_tool->m_allowAddUndoCommand;
         m_tool->m_allowAddUndoCommand = false;
-        m_document->undo();
+        m_reverseUndo ? m_document->redo() : m_document->undo();
         QTextCursor cursor(m_document);
         cursor.setPosition(from);
         cursor.setPosition(from + charsRemoves, QTextCursor::KeepAnchor);
         QString previousText = cursor.selectedText();
-        m_document->redo();
+        m_reverseUndo ? m_document->undo() : m_document->redo();
         m_tool->m_allowAddUndoCommand = prev;
 
         cursor.setPosition(from);
@@ -71,6 +73,11 @@ void ChangeTracker::contentsChange (int from, int charsRemoves, int charsAdded) 
     }
 
     m_enableSignals = true;
+    m_reverseUndo = false;
+}
+
+void ChangeTracker::notifyForUndo() {
+    m_reverseUndo = true;
 }
 
 #include "ChangeTracker.moc"
