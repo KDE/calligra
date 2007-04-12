@@ -112,6 +112,8 @@ private slots:
     void formatParagraph();
     /// When enabled, make the change tracker record changes made while typing
     void toggleTrackChanges(bool);
+    /// select all text in the current document.
+    void selectAll();
 
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();

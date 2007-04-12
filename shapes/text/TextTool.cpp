@@ -35,7 +35,9 @@
 #include <KoXmlWriter.h>
 
 #include <kdebug.h>
-#include <kstandardshortcut.h>
+#include <KStandardShortcut>
+#include <KAction>
+#include <KStandardAction>
 #include <QAbstractTextDocumentLayout>
 #include <QAction>
 #include <QBuffer>
@@ -197,6 +199,9 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     action->setCheckable(true);
     addAction("edit_record_changes", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleTrackChanges(bool)));
+
+    action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
+    addAction("edit_selectall", action);
 }
 
 TextTool::~TextTool() {
@@ -629,10 +634,28 @@ void TextTool::repaintCaret() {
 }
 
 void TextTool::repaintSelection(int startPosition, int endPosition) {
+    QList<TextShape *> shapes;
+    if(m_textShapeData->position() > startPosition || m_textShapeData->endPosition() < endPosition) {
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+        Q_ASSERT(lay);
+        foreach(KoShape* shape, lay->shapes()) {
+            TextShape *textShape = dynamic_cast<TextShape*> (shape);
+            if(textShape->textShapeData()->position() >= startPosition &&
+                    textShape->textShapeData()->endPosition() <= endPosition)
+                shapes.append(textShape);
+        }
+    }
+    else // the simple case; the full selection is inside the current shape.
+        shapes.append(m_textShape);
+
+    // loop over all shapes that contain the text and update per shape.
     QRectF repaintRect = textRect(startPosition, endPosition);
-    repaintRect.moveTop(repaintRect.y() - m_textShapeData->documentOffset());
-    repaintRect = m_textShape->transformationMatrix(0).mapRect(repaintRect);
-    m_canvas->updateCanvas(repaintRect);
+    foreach(TextShape *ts, shapes) {
+        QRectF rect = repaintRect;
+        rect.moveTop(rect.y() - ts->textShapeData()->documentOffset());
+        rect = ts->transformationMatrix(0).mapRect(rect);
+        m_canvas->updateCanvas(ts->boundingRect().intersected(rect));
+    }
 }
 
 QRectF TextTool::textRect(int startPosition, int endPosition) {
@@ -826,6 +849,14 @@ void TextTool::toggleTrackChanges(bool on) {
     }
     else if(m_changeTracker)
         m_changeTracker->setDocument(0);
+}
+
+void TextTool::selectAll() {
+    if(m_textShapeData == 0) return;
+    QTextBlock lastBlock = m_textShapeData->document()->end().previous();
+    m_caret.setPosition(lastBlock.position() + lastBlock.length() - 1);
+    m_caret.setPosition(0, QTextCursor::KeepAnchor);
+    repaintSelection(0, m_caret.anchor());
 }
 
 

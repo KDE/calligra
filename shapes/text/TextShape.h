@@ -52,6 +52,8 @@ public:
 
     virtual void saveOdf(KoShapeSavingContext * context);
 
+    KoTextShapeData *textShapeData() { return m_textShapeData; }
+
 private:
     void shapeChanged(ChangeType type);
 
