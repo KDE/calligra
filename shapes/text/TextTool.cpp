@@ -32,18 +32,21 @@
 #include <KoTextEditingPlugin.h>
 #include <KoTextEditingRegistry.h>
 #include <KoTextEditingFactory.h>
+#include <KoXmlWriter.h>
 
-// #include <kdebug.h>
+#include <kdebug.h>
 #include <kstandardshortcut.h>
-#include <QKeyEvent>
+#include <QAbstractTextDocumentLayout>
 #include <QAction>
+#include <QBuffer>
 #include <QTextBlock>
 #include <QTabWidget>
 #include <QTextLayout>
-#include <QAbstractTextDocumentLayout>
+#include <QKeyEvent>
 #include <QUndoCommand>
 #include <QPointer>
 #include <QMenu>
+#include <QClipboard>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut) {
     foreach(QKeySequence ks, KStandardShortcut::shortcut(shortcut)) {
@@ -342,7 +345,24 @@ void TextTool::updateSelectionHandler() {
 }
 
 void TextTool::copy() {
-    kDebug() << "TextTool::copy\n";
+    if(m_textShapeData == 0 || !m_caret.hasSelection()) return;
+    int from = m_caret.position();
+    int to = m_caret.anchor();
+    if(to < from)
+        qSwap(to, from);
+
+    QByteArray bytes;
+    QBuffer buffer( &bytes );
+    buffer.open( QIODevice::WriteOnly );
+    KoXmlWriter writer( &buffer );
+    //writer.startDocument( "foobar" );
+    m_textShapeData->saveOdf(&writer, from, to);
+    //writer.endDocument();
+    buffer.putChar( '\0' ); // null-terminate
+    QMimeData *data = new QMimeData();
+    data->setData("application/vnd.oasis.opendocument.text", bytes);
+    QApplication::clipboard()->setMimeData(data);
+kDebug() << "output: " << QString::fromUtf8(bytes) << endl;
 }
 
 int TextTool::pointToPosition(const QPointF & point) const {

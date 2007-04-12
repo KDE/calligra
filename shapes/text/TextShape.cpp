@@ -199,18 +199,19 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
 }
 
 void TextShape::saveOdf(KoShapeSavingContext * context) {
+    KoXmlWriter *writer = &context->xmlWriter();
     //fo:min-height="120pt" draw:chain-next-name="Framesetje-2"
     const bool nestedInFrame = context->isSet(KoShapeSavingContext::FrameOpened);
     if(! nestedInFrame) {
-        context->xmlWriter().startElement( "draw:frame" );
+        writer->startElement( "draw:frame" );
         saveOdfFrameAttributes(context);
     }
-    context->xmlWriter().startElement( "draw:text-box" );
+    writer->startElement( "draw:text-box" );
 
-    m_textShapeData->saveOdf(context);
+    m_textShapeData->saveOdf(writer);
 
-    context->xmlWriter().endElement(); // draw-text-box
+    writer->endElement(); // draw-text-box
     if(! nestedInFrame)
-        context->xmlWriter().endElement(); // draw-frame
+        writer->endElement(); // draw-frame
 }
 
