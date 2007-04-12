@@ -207,10 +207,7 @@ void TextShape::saveOdf(KoShapeSavingContext * context) {
     }
     context->xmlWriter().startElement( "draw:text-box" );
 
-    // text:p etc
-context->xmlWriter().startElement( "text:p" );
-context->xmlWriter().addTextSpan("Text Frame.");
-context->xmlWriter().endElement();
+    m_textShapeData->saveOdf(context);
 
     context->xmlWriter().endElement(); // draw-text-box
     if(! nestedInFrame)
