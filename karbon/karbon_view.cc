@@ -1136,7 +1136,8 @@ KarbonView::initActions()
 void
 KarbonView::mousePositionChanged( const QPoint &position )
 {
-    QPoint viewPos = position - m_canvas->documentOrigin();
+    QPoint canvasOffset( m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY() );
+    QPoint viewPos = position - m_canvas->documentOrigin() - canvasOffset;
     m_horizRuler->updateMouseCoordinate( viewPos.x() );
     m_vertRuler->updateMouseCoordinate( viewPos.y() );
 
