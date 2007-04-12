@@ -101,7 +101,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
             Q_ASSERT(action);
             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
             if( ! factory ) continue;
-            kDebug(32010) << "Adding scripting variable with id=" << factory->id().id() << " and name=" << factory->id().name() << endl;
+            kDebug(32010) << "Adding scripting variable with id=" << factory->id() << endl;
         }
     }
 }

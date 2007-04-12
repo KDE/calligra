@@ -170,7 +170,7 @@ namespace Scripting {
                     kDebug(32010) << "Scripting::VariableFactory::create: Action has empty objectName" << endl;
                     return 0;
                 }
-                if( KoInlineObjectRegistry::instance()->exists(action->objectName()) ) {
+                if( KoInlineObjectRegistry::instance()->contains(action->objectName()) ) {
                     kDebug(32010) << "Scripting::VariableFactory::create: Action \"" << action->objectName() << "\" already exist" << endl;
                     return 0;
                 }

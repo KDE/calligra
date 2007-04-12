@@ -181,13 +181,13 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     connect(action, SIGNAL(triggered()), this, SLOT( textDefaultFormat() ));
 
     foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
-        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->get(key);
+        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         Q_ASSERT(factory);
-        if(m_textEditingPlugins.contains(factory->objectId())) {
-            kWarning(32500) << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->objectId() << ")\n";
+        if(m_textEditingPlugins.contains(factory->id())) {
+            kWarning(32500) << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->id() << ")\n";
             continue;
         }
-        m_textEditingPlugins.insert(factory->objectId(), factory->create());
+        m_textEditingPlugins.insert(factory->id(), factory->create());
     }
 
     action = new QAction(i18n("Paragraph..."), this);
@@ -294,10 +294,10 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
         menu.addAction(action("format_font"));
 
         foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
-            KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->get(key);
+            KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
             if(factory->showInMenu()) {
                 QAction *action = new QAction(factory->title(), &menu);
-                action->setData(factory->objectId());
+                action->setData(factory->id());
                 menu.addAction(action);
             }
         }

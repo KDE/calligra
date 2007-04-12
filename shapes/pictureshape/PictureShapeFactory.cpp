@@ -49,14 +49,12 @@ PictureShapeFactory::PictureShapeFactory( QObject* parent, const QStringList& li
 KoShape* PictureShapeFactory::createDefaultShape() const
 {
     PictureShape* shape = new PictureShape();
-    shape->setShapeId( shapeId() );
     return shape;
 }
 
 KoShape* PictureShapeFactory::createShape( const KoProperties* params ) const
 {
     PictureShape* shape = new PictureShape();
-    shape->setShapeId( shapeId() );
     return shape;
 }
 

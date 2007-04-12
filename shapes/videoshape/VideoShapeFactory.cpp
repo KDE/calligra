@@ -49,14 +49,12 @@ VideoShapeFactory::VideoShapeFactory( QObject* parent, const QStringList& list )
 KoShape* VideoShapeFactory::createDefaultShape() const
 {
     VideoShape* shape = new VideoShape();
-    shape->setShapeId( shapeId() );
     return shape;
 }
 
 KoShape* VideoShapeFactory::createShape( const KoProperties* params ) const
 {
     VideoShape* shape = new VideoShape();
-    shape->setShapeId( shapeId() );
     return shape;
 }
 

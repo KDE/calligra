@@ -79,8 +79,8 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
 
     // Init shape Factories with our frame based configuration panels.
     QList<KoShapeConfigFactory *> panels = KWFrameDialog::panels(this);
-    foreach(KoID id, KoShapeRegistry::instance()->listKeys())
-        KoShapeRegistry::instance()->get(id)->setOptionPanels(panels);
+    foreach(QString id, KoShapeRegistry::instance()->keys())
+        KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
 
     clear();
 }
@@ -607,7 +607,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
 
 void KWDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow) {
     // print error if kotext not available
-    if( KoShapeRegistry::instance()->get(TextShape_SHAPEID) == 0 )
+    if( KoShapeRegistry::instance()->value(TextShape_SHAPEID) == 0 )
         // need to wait 1 event since exiting here would not work.
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
     else
