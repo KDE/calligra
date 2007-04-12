@@ -32,6 +32,7 @@
 #include "dialogs/KWPageSettingsDialog.h"
 
 // koffice libs includes
+#include <KoCopyController.h>
 #include <KoShape.h>
 #include <KoText.h>
 #include <KoShapeContainer.h>
@@ -212,6 +213,9 @@ void KWView::setupActions() {
     action = new QAction(i18n("Make inline"), this);
     actionCollection()->addAction("inline_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT( inlineFrame() ));
+
+    action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
+    new KoCopyController(kwcanvas(), action);
 
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it

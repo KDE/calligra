@@ -44,30 +44,32 @@ public:
     ~TextTool();
 
     /// reimplemented from superclass
-    void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, KoViewConverter &converter );
 
     /// reimplemented from superclass
-    void mousePressEvent( KoPointerEvent *event ) ;
+    virtual void mousePressEvent( KoPointerEvent *event ) ;
     /// reimplemented from superclass
-    void mouseDoubleClickEvent( KoPointerEvent *event );
+    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
     /// reimplemented from superclass
-    void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent( KoPointerEvent *event );
     /// reimplemented from superclass
-    void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent( KoPointerEvent *event );
     /// reimplemented from superclass
-    void keyPressEvent(QKeyEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented from superclass
-    void keyReleaseEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent *event);
 
     /// reimplemented from superclass
-    void activate (bool temporary=false);
+    virtual void activate (bool temporary=false);
     /// reimplemented from superclass
-    void deactivate();
+    virtual void deactivate();
+    /// reimplemented from superclass
+    virtual void copy();
 
     /// reimplemented from superclass
-    KoToolSelection* selection();
+    virtual KoToolSelection* selection();
     /// reimplemented from superclass
-    QWidget *createOptionWidget();
+    virtual QWidget *createOptionWidget();
 
 signals:
     /// emitted every time a different styleManager is set.

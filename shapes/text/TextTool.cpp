@@ -338,6 +338,11 @@ void TextTool::updateSelectionHandler() {
     m_selectionHandler.setShape(m_textShape);
     m_selectionHandler.setShapeData(m_textShapeData);
     m_selectionHandler.setCaret(&m_caret);
+    emit sigSelectionChanged(m_caret.hasSelection());
+}
+
+void TextTool::copy() {
+    kDebug() << "TextTool::copy\n";
 }
 
 int TextTool::pointToPosition(const QPointF & point) const {
