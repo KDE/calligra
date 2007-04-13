@@ -30,6 +30,7 @@
 #include <KoXmlReader.h>
 
 #include <QDomElement>
+#include <QList>
 #include <QString>
 #include <QStringList>
 
@@ -943,13 +944,20 @@ DateTime MainSchedule::scheduleBackward( const DateTime &latest, int use )
     return start;
 }
 
+bool MainSchedule::recalculate() const
+{
+    return m_manager == 0 ? false : m_manager->recalculate();
+}
+
 //-----------------------------------------
 ScheduleManager::ScheduleManager( Project &project, const QString name )
     : m_project( project),
+    m_parent( 0 ),
     m_name( name ),
     m_allowOverbooking( false ),
     m_calculateAll( false ),
     m_usePert( false ),
+    m_recalculate( false ),
     m_expected( 0 ),
     m_optimistic( 0 ),
     m_pessimistic( 0 )
@@ -957,6 +965,41 @@ ScheduleManager::ScheduleManager( Project &project, const QString name )
     //kDebug()<<k_funcinfo<<name<<endl;
 }
 
+ScheduleManager::~ScheduleManager()
+{
+    qDeleteAll( m_children );
+    setParentManager( 0 );
+}
+
+void ScheduleManager::setParentManager( ScheduleManager *sm )
+{
+    if ( m_parent ) {
+        m_parent->removeChild( this );
+    }
+    m_parent = sm;
+    if ( sm ) {
+        sm->insertChild( this );
+    }
+}
+
+int ScheduleManager::removeChild( const ScheduleManager *sm )
+{
+    int i = m_children.indexOf( const_cast<ScheduleManager*>( sm ) );
+    if ( i != -1 ) {
+        m_children.removeAt( i );
+    }
+    return i;
+}
+
+void ScheduleManager::insertChild( ScheduleManager *sm, int index )
+{
+    kDebug()<<k_funcinfo<<m_name<<", insert "<<sm->name()<<", "<<index<<endl;
+    if ( index == -1 ) {
+        m_children.append( sm );
+    } else {
+        m_children.insert( index, sm );
+    }
+}
 
 void ScheduleManager::createSchedules()
 {
@@ -968,6 +1011,49 @@ void ScheduleManager::createSchedules()
         setOptimistic( 0 );
         setPessimistic( 0 );
     }
+}
+
+int ScheduleManager::indexOf( const ScheduleManager *child ) const
+{
+    //kDebug()<<k_funcinfo<<this<<", "<<child<<endl;
+    return m_children.indexOf( const_cast<ScheduleManager*>( child ) );
+}
+
+ScheduleManager *ScheduleManager::findManager( const QString& name ) const
+{
+    if ( m_name == name ) {
+        return const_cast<ScheduleManager*>( this );
+    }
+    foreach ( ScheduleManager *sm, m_children ) {
+        ScheduleManager *m = sm->findManager( name );
+        if ( m ) {
+            return m;
+        }
+    }
+    return 0;
+}
+
+QList<ScheduleManager*> ScheduleManager::allChildren() const
+{
+    QList<ScheduleManager*> lst;
+    lst << m_children;
+    foreach ( ScheduleManager *sm, m_children ) {
+        lst << sm->allChildren();
+    }
+    return lst;
+}
+
+bool ScheduleManager::isParentOf( const ScheduleManager *sm ) const
+{
+    if ( indexOf( sm ) >= 0 ) {
+        return true;
+    }
+    foreach ( ScheduleManager *p, m_children ) {
+        if ( p->isParentOf( sm ) ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void ScheduleManager::setName( const QString& name )
@@ -1176,6 +1262,14 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                     case Schedule::Pessimistic: setPessimistic( sch ); break;
                 }
             }
+        } else if ( e.tagName() == "plan" ) {
+            ScheduleManager *sm = new ScheduleManager( status.project() );
+            if ( sm->loadXML( e, status ) ) {
+                sm->setParentManager( this );
+            } else {
+                kError()<<k_funcinfo<<"Failed to load schedule manager"<<endl;
+                delete sm;
+            }
         }
     }
     m_calculateAll = schedules().count() > 1;
@@ -1213,6 +1307,9 @@ void ScheduleManager::saveXML( QDomElement &element ) const
             s->saveXML( schs );
             m_project.saveAppointments( schs, s->id() );
         }
+    }
+    foreach ( ScheduleManager *sm, m_children ) {
+        sm->saveXML( el );
     }
 
 }

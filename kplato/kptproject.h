@@ -83,6 +83,14 @@ public:
      */
     void calculate( ScheduleManager &sm );
 
+    /**
+     * Re-calculate the schedules managed by the schedule manager
+     *
+     * @param sm Schedule manager
+     * @param dt The datetime from when the schedule shall be re-calculated
+     */
+    void calculate( ScheduleManager &sm, const DateTime &dt );
+
     virtual DateTime startTime( long id = -1 ) const;
     virtual DateTime endTime( long id = -1 ) const;
 
@@ -357,13 +365,16 @@ public:
     QString uniqueScheduleName() const;
     ScheduleManager *createScheduleManager();
     ScheduleManager *createScheduleManager( const QString name );
+    /// Returns a list of all top level schedule managers
     QList<ScheduleManager*> scheduleManagers() const { return m_managers; }
     int numScheduleManagers() const { return m_managers.count(); }
     int indexOf( const ScheduleManager *sm ) const { return m_managers.indexOf( const_cast<ScheduleManager*>(sm) ); }
-    bool isScheduleManager( void* ptr ) const { return indexOf( static_cast<ScheduleManager*>( ptr ) ) >= 0; }
-    void addScheduleManager( ScheduleManager *sm );
-    void takeScheduleManager( ScheduleManager *sm );
-    ScheduleManager *findScheduleManager( const QString name ) const;
+    bool isScheduleManager( void* ptr ) const;
+    void addScheduleManager( ScheduleManager *sm, ScheduleManager *parent = 0 );
+    int takeScheduleManager( ScheduleManager *sm );
+    ScheduleManager *findScheduleManager( const QString &name ) const;
+    /// Returns a list of all schedule managers
+    QList<ScheduleManager*> allScheduleManagers() const;
     
     void changed( ResourceGroup *group );
     void changed( Resource *resource );
@@ -468,15 +479,17 @@ signals:
     void relationRemoved( Relation *rel );
     
 protected:
-    /**
-     * Calculate the schedule.
-     *
-     * @param schedule Schedule to use
-     */
+    /// Calculate the schedule.
     void calculate( Schedule *scedule );
     /// Calculate current schedule
     void calculate();
 
+    /// Re-calculate the schedule from @p dt
+    void calculate( Schedule *scedule, const DateTime &dt );
+    /// Calculate current schedule from @p dt (Always calculates forward)
+    void calculate( const DateTime &dt );
+    
+    /// Calculate critical path
     virtual bool calcCriticalPath( bool fromEnd );
 
 protected:

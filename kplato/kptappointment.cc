@@ -284,7 +284,7 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
     }
     //kDebug()<<k_funcinfo<<"res="<<m_resource<<" node="<<m_node<<endl;
     QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
+    for (int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "interval") {

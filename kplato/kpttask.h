@@ -445,11 +445,6 @@ protected:
      */
     virtual void adjustSummarytask();
     
-    /**
-     * Return the duration calculated on bases of the requested resources
-     */
-    virtual Duration calcDuration(const DateTime &time, const Duration &effort, bool backward);
-
     /// Calculate the critical path
     virtual bool calcCriticalPath(bool fromEnd);
     virtual void calcFreeFloat();
@@ -486,6 +481,21 @@ public:
 
     int activityFreeMargin();
     void setActivityFreeMargin(int value);
+
+protected:
+    /**
+     * Calculates and returns the duration of the node.
+     * Uses the correct expected-, optimistic- or pessimistic effort
+     * dependent on @p use.
+     * @param time Where to start calculation.
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @param backward If true, time specifies when the task should end.
+     */
+    virtual Duration duration(const DateTime &time, int use, bool backward);
+    /**
+     * Return the duration calculated on bases of the requested resources
+     */
+    Duration calcDuration(const DateTime &time, const Duration &effort, bool backward);
 
 private:
     DateTime calculateSuccessors(const QList<Relation*> &list, int use);

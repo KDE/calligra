@@ -85,24 +85,69 @@ Project::~Project()
 
 int Project::type() const { return Node::Type_Project; }
 
+void Project::calculate( Schedule *schedule, const DateTime &dt )
+{
+    if ( schedule == 0 ) {
+        kError() << k_funcinfo << "Schedule == 0, cannot calculate" << endl;
+        return ;
+    }
+    m_currentSchedule = schedule;
+    calculate( dt );
+}
+
+void Project::calculate( const DateTime &dt )
+{
+    if ( m_currentSchedule == 0 ) {
+        kError() << k_funcinfo << "No current schedule to calculate" << endl;
+        return ;
+    }
+    MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
+    Effort::Use estType = ( Effort::Use ) cs->type();
+    if ( type() == Type_Project ) {
+        initiateCalculation( *cs );
+        initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
+        //kDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString()<<endl;
+        cs->startTime = dt;
+        cs->earlyStart = dt;
+        // Calculate from start time
+        propagateEarliestStart( cs->earlyStart );
+        cs->lateFinish = calculateForward( estType );
+        propagateLatestFinish( cs->lateFinish );
+        cs->calculateBackward( estType );
+        cs->endTime = scheduleForward( cs->startTime, estType );
+        calcCriticalPath( false );
+        //makeAppointments();
+        calcResourceOverbooked();
+        cs->notScheduled = false;
+        calcFreeFloat();
+        emit scheduleChanged( cs );
+    } else if ( type() == Type_Subproject ) {
+        kWarning() << k_funcinfo << "Subprojects not implemented" << endl;
+    } else {
+        kError() << k_funcinfo << "Illegal project type: " << type() << endl;
+    }
+}
+
 void Project::calculate( ScheduleManager &sm )
 {
     emit sigProgress( 0 );
     //kDebug()<<k_funcinfo<<endl;
-    sm.createSchedules();
-    
-    calculate( sm.expected() );
-    emit scheduleChanged( sm.expected() );
-    if ( sm.optimistic() ) {
-        calculate( sm.optimistic() );
-        emit scheduleChanged( sm.optimistic() );
+    if ( sm.recalculate() ) {
+        sm.setCalculateAll( false );
+        sm.createSchedules();
+        calculate( sm.expected(), sm.fromDateTime() );
+    } else {
+        sm.createSchedules();
+        calculate( sm.expected() );
+        emit scheduleChanged( sm.expected() );
+        if ( sm.optimistic() ) {
+            calculate( sm.optimistic() );
+        }
+        if ( sm.pessimistic() ) {
+            calculate( sm.pessimistic() );
+        }
+        setCurrentSchedule( sm.expected()->id() );
     }
-    if ( sm.pessimistic() ) {
-        calculate( sm.pessimistic() );
-        emit scheduleChanged( sm.pessimistic() );
-    }
-    setCurrentSchedule( sm.expected()->id() );
-
     emit sigProgress( 100 );
     emit sigProgress( -1 );
 
@@ -1495,29 +1540,40 @@ void Project::setCurrentSchedule( long id )
     emit currentScheduleChanged();
 }
 
-QString Project::uniqueScheduleName() const {
+ScheduleManager *Project::findScheduleManager( const QString &name ) const
+{
     //kDebug()<<k_funcinfo<<endl;
-    QString n = i18n( "Plan" );
-    bool unique = true;
+    ScheduleManager *m = 0;
     foreach( ScheduleManager *sm, m_managers ) {
-        if ( n == sm->name() ) {
-            unique = false;
+        m = sm->findManager( name );
+        if ( m ) {
             break;
         }
     }
+    return m;
+}
+
+QList<ScheduleManager*> Project::allScheduleManagers() const
+{
+    QList<ScheduleManager*> lst;
+    lst << m_managers;
+    foreach ( ScheduleManager *sm, m_managers ) {
+        lst << sm->allChildren();
+    }
+    return lst;
+}
+
+QString Project::uniqueScheduleName() const {
+    //kDebug()<<k_funcinfo<<endl;
+    QString n = i18n( "Plan" );
+    bool unique = findScheduleManager( n ) == 0;
     if ( unique ) {
         return n;
     }
     n += " %1";
     int i = 1;
     for ( ; true; ++i ) {
-        unique = true;
-        foreach( ScheduleManager *sm, m_managers ) {
-            if ( n.arg( i ) == sm->name() ) {
-                unique = false;
-                break;
-            }
-        }
+        unique = findScheduleManager( n.arg( i ) ) == 0;;
         if ( unique ) {
             break;
         }
@@ -1525,31 +1581,52 @@ QString Project::uniqueScheduleName() const {
     return n.arg( i );
 }
 
-void Project::addScheduleManager( ScheduleManager *sm )
+void Project::addScheduleManager( ScheduleManager *sm, ScheduleManager *parent )
 {
-    emit scheduleManagerToBeAdded( sm, m_managers.count() );
-    m_managers.append( sm ); 
+    if ( parent == 0 ) {
+        emit scheduleManagerToBeAdded( parent, m_managers.count() );
+        m_managers.append( sm );
+    } else {
+        emit scheduleManagerToBeAdded( parent, parent->children().count() );
+        sm->setParentManager( parent );
+    }
     emit scheduleManagerAdded( sm );
     //kDebug()<<k_funcinfo<<"Added: "<<sm->name()<<", now "<<m_managers.count()<<endl;
 }
 
-void Project::takeScheduleManager( ScheduleManager *sm )
+int Project::takeScheduleManager( ScheduleManager *sm )
 {
-    if ( indexOf( sm ) >= 0 ) {
-        emit scheduleManagerToBeRemoved( sm );
-        m_managers.removeAt( indexOf( sm ) );
-        emit scheduleManagerRemoved( sm );
+    int index = -1;
+    if ( sm->parentManager() ) {
+        int index = sm->parentManager()->indexOf( sm );
+        if ( index >= 0 ) {
+            emit scheduleManagerToBeRemoved( sm );
+            sm->setParentManager( 0 );
+            emit scheduleManagerRemoved( sm );
+        }
+    } else {
+        index = indexOf( sm );
+        if ( index >= 0 ) {
+            emit scheduleManagerToBeRemoved( sm );
+            m_managers.removeAt( indexOf( sm ) );
+            emit scheduleManagerRemoved( sm );
+        }
     }
+    return index;
 }
 
-ScheduleManager *Project::findScheduleManager( const QString name ) const
+bool Project::isScheduleManager( void *ptr ) const
 {
-    //kDebug()<<k_funcinfo<<name<<endl;
-    foreach ( ScheduleManager *sm, m_managers ) {
-        if ( sm->name() == name )
-            return sm;
+    const ScheduleManager *sm = static_cast<ScheduleManager*>( ptr );
+    if ( indexOf( sm ) >= 0 ) {
+        return true;
     }
-    return 0;
+    foreach ( ScheduleManager *p, m_managers ) {
+        if ( p->isParentOf( sm ) ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 ScheduleManager *Project::createScheduleManager( const QString name )

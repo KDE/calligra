@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 Dag Andersen kplato@kde.org>
+  Copyright (C) 2006-2007 Dag Andersen kplato@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -66,34 +66,35 @@ ScheduleItemModel::~ScheduleItemModel()
 {
 }
 
-void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *manager, int row )
+void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *parent, int row )
 {
-    //kDebug()<<k_funcinfo<<manager->name()<<endl;
+    kDebug()<<k_funcinfo<<parent<<endl;
     Q_ASSERT( m_manager == 0 );
-    m_manager = const_cast<ScheduleManager*>(manager);
-    beginInsertRows( QModelIndex(), row, row );
+    m_manager = const_cast<ScheduleManager*>(parent);
+    beginInsertRows( index( parent ), row, row );
 }
 
 void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *manager )
 {
-    //kDebug()<<k_funcinfo<<manager->name()<<endl;
-    Q_ASSERT( manager == m_manager );
+    kDebug()<<k_funcinfo<<manager->name()<<endl;
+    Q_ASSERT( manager->parentManager() == m_manager );
     endInsertRows();
     m_manager = 0;
 }
 
 void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *manager )
 {
-    //kDebug()<<k_funcinfo<<manager->name()<<endl;
+    kDebug()<<k_funcinfo<<manager->name()<<endl;
     Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(manager);
-    int row = index( manager ).row();
-    beginRemoveRows( QModelIndex(), row, row );
+    QModelIndex i = index( manager );
+    int row = i.row();
+    beginRemoveRows( parent( i ), row, row );
 }
 
 void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manager )
 {
-    //kDebug()<<k_funcinfo<<manager->name()<<endl;
+    kDebug()<<k_funcinfo<<manager->name()<<endl;
     Q_ASSERT( manager == m_manager );
     endRemoveRows();
     m_manager = 0;
@@ -102,34 +103,34 @@ void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manag
 void ScheduleItemModel::slotScheduleToBeInserted( const ScheduleManager *manager, int row )
 {
     //kDebug()<<k_funcinfo<<manager->name()<<" row="<<row<<endl;
-    Q_ASSERT( m_manager == 0 );
+/*    Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(manager);
-    beginInsertRows( index( manager ), row, row );
+    beginInsertRows( index( manager ), row, row );*/
 }
 
 void ScheduleItemModel::slotScheduleInserted( const MainSchedule *schedule )
 {
     //kDebug()<<k_funcinfo<<schedule<<"<--"<<schedule->manager()<<endl;
-    Q_ASSERT( schedule->manager() == m_manager );
+/*    Q_ASSERT( schedule->manager() == m_manager );
     endInsertRows();
-    m_manager = 0;
+    m_manager = 0;*/
 }
 
 void ScheduleItemModel::slotScheduleToBeRemoved( const MainSchedule *schedule )
 {
-    Q_ASSERT( m_manager == 0 );
+/*    Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(schedule->manager());
     int row = index( schedule ).row();
     //kDebug()<<k_funcinfo<<schedule->name()<<", "<<row<<" man="<<index( schedule->manager() ).row()<<endl;
-    beginRemoveRows( index( schedule->manager() ), row, row );
+    beginRemoveRows( index( schedule->manager() ), row, row );*/
 }
 
 void ScheduleItemModel::slotScheduleRemoved( const MainSchedule *schedule )
 {
     //kDebug()<<k_funcinfo<<schedule->name()<<endl;
-    Q_ASSERT( schedule->manager() == m_manager );
+/*    Q_ASSERT( schedule->manager() == m_manager );
     endRemoveRows();
-    m_manager = 0;
+    m_manager = 0;*/
 }
 
 void ScheduleItemModel::setProject( Project *project )
@@ -165,7 +166,7 @@ void ScheduleItemModel::setProject( Project *project )
     
         connect( m_project, SIGNAL( scheduleManagerAdded( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
     
-        connect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerRemoved( const ScheduleManager* ) ) );
     
         connect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
         
@@ -189,12 +190,12 @@ void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
 
 void ScheduleItemModel::slotScheduleChanged( MainSchedule *sch )
 {
-    if ( sch == 0 ) {
+/*    if ( sch == 0 ) {
         return;
     }
     int r = sch->manager()->indexOf( sch );
     //kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
-    emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );
+    emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );*/
 }
 
 
@@ -220,18 +221,17 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
 }
 
 
-QModelIndex ScheduleItemModel::parent( const QModelIndex &index ) const
+QModelIndex ScheduleItemModel::parent( const QModelIndex &inx ) const
 {
-    if ( !index.isValid() || m_project == 0 ) {
+    if ( !inx.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug()<<k_funcinfo<<index.internalPointer()<<": "<<index.row()<<", "<<index.column()<<endl;
-    if ( m_project->isScheduleManager( index.internalPointer() ) ) {
-        // it's manager, doesn't have a parent
+    //kDebug()<<k_funcinfo<<inx.internalPointer()<<": "<<inx.row()<<", "<<inx.column()<<endl;
+    ScheduleManager *sm = manager( inx );
+    if ( sm == 0 ) {
         return QModelIndex();
     }
-    MainSchedule *s = schedule( index );
-    return createIndex( m_project->indexOf( s->manager() ), index.column(), s->manager() );
+    return index( sm->parentManager() );
 }
 
 bool ScheduleItemModel::hasChildren( const QModelIndex &parent ) const
@@ -248,7 +248,7 @@ QModelIndex ScheduleItemModel::index( int row, int column, const QModelIndex &pa
         return QModelIndex();
     }
     if ( parent.isValid() ) {
-        return createIndex( row, column, manager( parent )->schedules().value( row ) );
+        return createIndex( row, column, manager( parent )->children().value( row ) );
     }
     return createIndex( row, column, m_project->scheduleManagers().value( row ) );
 }
@@ -258,19 +258,13 @@ QModelIndex ScheduleItemModel::index( const ScheduleManager *manager ) const
     if ( m_project == 0 || manager == 0 ) {
         return QModelIndex();
     }
-    return createIndex( m_project->indexOf( manager ), 0, const_cast<ScheduleManager*>(manager) );
-
-}
-
-QModelIndex ScheduleItemModel::index( const MainSchedule *sch ) const
-{
-    if ( m_project == 0 || sch == 0 || sch->manager() == 0) {
-        return QModelIndex();
+    if ( manager->parentManager() == 0 ) {
+        return createIndex( m_project->indexOf( manager ), 0, const_cast<ScheduleManager*>(manager) );
     }
-    return createIndex( sch->manager()->indexOf( sch ), 0, const_cast<MainSchedule*>(sch) );
+    return createIndex( manager->parentManager()->indexOf( manager ), 0, const_cast<ScheduleManager*>(manager) );
 }
 
-int ScheduleItemModel::columnCount( const QModelIndex &parent ) const
+int ScheduleItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
     return 5;
 }
@@ -283,26 +277,25 @@ int ScheduleItemModel::rowCount( const QModelIndex &parent ) const
     if ( !parent.isValid() ) {
         return m_project->numScheduleManagers();
     }
-    if ( manager( parent ) ) {
-        return manager( parent )->numSchedules();
+    ScheduleManager *sm = manager( parent );
+    if ( sm ) {
+        //kDebug()<<k_funcinfo<<sm->name()<<", "<<sm->children().count()<<endl;
+        return sm->children().count();
     }
-    return 0; 
+    return 0;
 }
 
 QVariant ScheduleItemModel::name( const QModelIndex &index, int role ) const
 {
     ScheduleManager *sm = manager ( index );
-    MainSchedule *sch = 0;
     if ( sm == 0 ) {
-        sch = schedule( index );
-        if ( sch == 0 )
-            return QVariant();
+        return QVariant();
     }
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
         case Qt::ToolTipRole:
-            return sm ? sm->name() : sch->typeToString();
+            return sm->name();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -327,24 +320,21 @@ bool ScheduleItemModel::setName( const QModelIndex &index, const QVariant &value
 QVariant ScheduleItemModel::state( const QModelIndex &index, int role ) const
 {
     ScheduleManager *sm = manager ( index );
-    MainSchedule *sch = 0;
     if ( sm == 0 ) {
-        sch = schedule( index );
-        if ( sch == 0 )
-            return QVariant();
+        return QVariant();
     }
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole: 
         {
-            QStringList l = sm ? sm->state() : sch->state();
+            QStringList l = sm->state();
             if ( l.isEmpty() ) {
                 return "";
             }
             return l.first();
         }
         case Qt::ToolTipRole:
-            return ( sm ? sm->state() : sch->state() ).join(", ");
+            return sm->state().join(", ");
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
@@ -579,14 +569,6 @@ QStringList ScheduleItemModel::mimeTypes () const
     return QStringList();
 }
 
-MainSchedule *ScheduleItemModel::schedule( const QModelIndex &index ) const
-{
-    if ( !index.isValid() || manager( index ) != 0 ) {
-        return 0;
-    }
-    return static_cast<MainSchedule*>( index.internalPointer() );
-}
-
 ScheduleManager *ScheduleItemModel::manager( const QModelIndex &index ) const
 {
     ScheduleManager *o = 0;
@@ -748,6 +730,11 @@ void ScheduleEditor::setupGui()
     connect( actionAddSchedule, SIGNAL( triggered( bool ) ), SLOT( slotAddSchedule() ) );
     addAction( name, actionAddSchedule );
     
+    actionAddSubSchedule  = new KAction(KIcon( "document-new" ), i18n("Add Sub-schedule..."), this);
+    actionCollection()->addAction("add_subschedule", actionAddSubSchedule );
+    connect( actionAddSubSchedule, SIGNAL( triggered( bool ) ), SLOT( slotAddSubSchedule() ) );
+    addAction( name, actionAddSubSchedule );
+    
     actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Schedules"), this);
     actionCollection()->addAction("schedule_delete_selection", actionDeleteSelection );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
@@ -759,16 +746,38 @@ void ScheduleEditor::slotCalculateSchedule()
 {
     //kDebug()<<k_funcinfo<<endl;
     ScheduleManager *sm = m_editor->currentManager();
-    if ( sm ) {
-        emit calculateSchedule( m_editor->project(), sm );
+    if ( sm == 0 ) {
+        return;
     }
-    
+    sm->setRecalculate( sm->parentManager() );
+    emit calculateSchedule( m_editor->project(), sm );
 }
 
 void ScheduleEditor::slotAddSchedule()
 {
     //kDebug()<<k_funcinfo<<endl;
-    emit addScheduleManager( m_editor->project() );
+    ScheduleManager *sm = m_editor->currentManager();
+    if ( sm && sm->parentManager() ) {
+        sm = sm->parentManager();
+        ScheduleManager *m = m_editor->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
+        
+        m_editor->part()->addCommand( new AddScheduleManagerCmd( m_editor->part(), sm, m, i18n( "Create sub-schedule" ) ) );
+    } else {
+        emit addScheduleManager( m_editor->project() );
+    }
+}
+
+void ScheduleEditor::slotAddSubSchedule()
+{
+    //kDebug()<<k_funcinfo<<endl;
+    ScheduleManager *sm = m_editor->currentManager();
+    if ( sm ) {
+        ScheduleManager *m = m_editor->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
+        
+        m_editor->part()->addCommand( new AddScheduleManagerCmd( m_editor->part(), sm, m, i18n( "Create sub-schedule" ) ) );
+    } else {
+        emit addScheduleManager( m_editor->project() );
+    }
 }
 
 void ScheduleEditor::slotDeleteSelection()

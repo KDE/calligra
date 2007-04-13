@@ -494,22 +494,17 @@ public:
     virtual void addParentProxyRelation(Node *, const Relation *) {}
     virtual void addChildProxyRelation(Node *, const Relation *) {}
     
-    /**
-     * Calculates and returns the duration of the node.
-     * Uses the correct expected-, optimistic- or pessimistic effort
-     * dependent on use.
-     * @param time Where to start calculation.
-     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
-     * @param backward If true, time specifies when the task should end.
-     */
-    Duration duration(const DateTime &time, int use, bool backward);
-    // Reimplement this
-    virtual Duration calcDuration(const DateTime &/*time*/, const Duration &/*effort*/, bool /*backward*/) { return Duration::zeroDuration;}
-
     virtual void changed() { changed( this ); }
     Duration getmDurationForward(){ return this->m_durationForward;}
     
 protected:
+    /**
+     * Calculates and returns the duration of the node.
+     * Reimplement.
+     */
+    virtual Duration duration(const DateTime &/*time*/, int /*use*/, bool /*backward*/)
+        { return Duration::zeroDuration; }
+
     // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
     void setCurrentSchedulePtr(Schedule *schedule) { m_currentSchedule = schedule; }
     virtual void changed(Node *node);

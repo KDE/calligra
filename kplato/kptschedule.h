@@ -24,12 +24,14 @@
 #include "kpteffortcostmap.h"
 #include "kptresource.h"
 
+#include <QList>
 #include <QString>
 
 //class KoXmlElement;
 class QDomElement;
 class QStringList;
 
+/// The main namespace
 namespace KPlato
 {
 
@@ -79,6 +81,7 @@ public:
     Schedule *parent() const { return m_parent; }
     virtual bool isDeleted() const;
     virtual void setDeleted( bool on );
+    virtual bool recalculate() const { return m_parent == 0 ? false : m_parent->recalculate(); }
 
     virtual Resource *resource() const { return 0; }
     virtual Node *node() const { return 0; }
@@ -177,12 +180,12 @@ protected:
     Type m_type;
     long m_id;
     bool m_deleted;
+    Schedule *m_parent;
 
     int m_calculationMode;
     QList<Appointment*> m_appointments;
     QList<Appointment*> m_forward;
     QList<Appointment*> m_backward;
-    Schedule *m_parent;
 
     friend class Node;
     friend class Task;
@@ -350,6 +353,7 @@ public:
 
     void setManager( ScheduleManager *sm ) { m_manager = sm; }
     ScheduleManager *manager() const { return m_manager; }
+    virtual bool recalculate() const;
     
     DateTime calculateForward( int use );
     DateTime calculateBackward( int use );
@@ -398,22 +402,44 @@ public:
 };
 
 /**
- ScheduleManager is used by the Project class to manage the schedules.
- Each ScheduleManager manages a schedule group that can consist of 
- Expected-, Optimistic- and Pessimistic schedules.
+ * ScheduleManager is used by the Project class to manage the schedules.
+ * Each ScheduleManager manages a schedule group that can consist of 
+ * Expected-, Optimistic- and Pessimistic schedules.
+ * A ScheduleManager can also have child manager(s).
  */
 class ScheduleManager
 {
 public:
     explicit ScheduleManager( Project &project, const QString name = QString() );
-
+    ~ScheduleManager();
+    
     void setName( const QString& name );
     QString name() const { return m_name; }
 
+    Project &project() const { return m_project; }
+    
+    void setParentManager( ScheduleManager *sm );
+    ScheduleManager *parentManager() const { return m_parent; }
+    
+    int removeChild( const ScheduleManager *sm );
+    void insertChild( ScheduleManager *sm, int index = -1 );
+    const QList<ScheduleManager*> &children() const { return m_children; }
+    /// Return list of all child managers (also childrens children)
+    QList<ScheduleManager*> allChildren() const;
+    int indexOf( const ScheduleManager* child ) const;
+    bool isParentOf( const ScheduleManager *sm ) const;
+    ScheduleManager *findManager( const QString &name ) const;
+    
+    bool recalculate() const { return m_recalculate; }
+    void setRecalculate( bool on ) { m_recalculate = on; }
+    DateTime fromDateTime() { return KDateTime::currentLocalDateTime(); }
+    
     void createSchedules();
     
     void setDeleted( bool on );
     
+    bool isScheduled() const { return m_expected == 0 ? false :  m_expected->isScheduled(); }
+
     void setExpected( MainSchedule *sch );
     MainSchedule *expected() const { return m_expected; }
 
@@ -448,14 +474,17 @@ protected:
     
 protected:
     Project &m_project;
+    ScheduleManager *m_parent;
     QString m_name;
     bool m_allowOverbooking;
     bool m_calculateAll;
     bool m_usePert;
+    bool m_recalculate;
     MainSchedule *m_expected;
     MainSchedule *m_optimistic;
     MainSchedule *m_pessimistic;
     QList<MainSchedule*> m_schedules;
+    QList<ScheduleManager*> m_children;
 };
 
 

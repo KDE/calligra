@@ -1340,6 +1340,9 @@ void View::slotScheduleRemoved( const MainSchedule *sch )
 
 void View::slotScheduleAdded( const MainSchedule *sch )
 {
+    if ( sch->type() != Schedule::Expected ) {
+        return; // Only view expected
+    }
     MainSchedule *s = const_cast<MainSchedule*>( sch ); // FIXME
     //kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
     QAction *checked = m_scheduleActionGroup->checkedAction();
@@ -1375,7 +1378,7 @@ QAction *View::addScheduleAction( Schedule *sch )
 {
     QAction *act = 0;
     if ( ! sch->isDeleted() ) {
-        QString n = sch->name() + " (" + sch->typeToString( true ) + ')';
+        QString n = sch->name();
         QAction *act = new KToggleAction( n, this);
         actionCollection()->addAction(n, act );
         m_scheduleActions.insert( act, sch );
@@ -1417,7 +1420,11 @@ void View::slotPlugScheduleActions()
     m_scheduleActions.clear();
     Schedule *cs = getProject().currentSchedule();
     QAction *ca = 0;
-    foreach( Schedule *sch, getProject().schedules().values() ) {
+    foreach( ScheduleManager *sm, getProject().allScheduleManagers() ) {
+        Schedule *sch = sm->expected();
+        if ( sch == 0 ) {
+            continue;
+        }
         QAction *act = addScheduleAction( sch );
         if ( act ) {
             if ( ca == 0 && cs == sch ) {
@@ -2401,7 +2408,7 @@ void View::setLabel()
     long id = getProject().currentViewScheduleId();
     Schedule *s = id == -1 ? getProject().currentSchedule() : getProject().findSchedule( id );
     if ( s && !s->isDeleted() && s->isScheduled() ) {
-        m_estlabel->setText( s->name() + " ("+ s->typeToString( true ) + ')'  );
+        m_estlabel->setText( s->name() );
         return;
     }
     m_estlabel->setText( i18n( "Not scheduled" ) );

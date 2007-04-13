@@ -1229,13 +1229,16 @@ class KPLATO_TEST_EXPORT AddScheduleManagerCmd : public NamedCommand
 {
 public:
     AddScheduleManagerCmd( Part *part, Project &project, ScheduleManager *sm, const QString& name = 0 );
+    AddScheduleManagerCmd( Part *part, ScheduleManager *parent, ScheduleManager *sm, const QString& name = 0 );
     ~AddScheduleManagerCmd();
     void execute();
     void unexecute();
 
 protected:
     Project &m_node;
+    ScheduleManager *m_parent;
     ScheduleManager *m_sm;
+    int m_index;
     MainSchedule *m_exp, *m_opt, *m_pess;
     bool m_mine;
 };

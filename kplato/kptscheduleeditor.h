@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2006-2007 Dag Andersen <kplato@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -58,7 +58,6 @@ public:
     virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     QModelIndex index( const ScheduleManager *manager ) const;
-    QModelIndex index( const MainSchedule *sch ) const;
 
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
@@ -76,7 +75,6 @@ public:
     virtual QStringList mimeTypes () const;
 
     ScheduleManager *manager( const QModelIndex &index ) const;
-    MainSchedule *schedule( const QModelIndex &index ) const;
     
 protected slots:
     void slotManagerChanged( ScheduleManager *sch );
@@ -182,6 +180,7 @@ private slots:
 
     void slotCalculateSchedule();
     void slotAddSchedule();
+    void slotAddSubSchedule();
     void slotDeleteSelection();
     
 private:
@@ -189,6 +188,7 @@ private:
 
     KAction *actionCalculateSchedule;
     KAction *actionAddSchedule;
+    KAction *actionAddSubSchedule;
     KAction *actionDeleteSelection;
 };
 

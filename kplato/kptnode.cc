@@ -77,7 +77,6 @@ Node::~Node() {
     if (findNode() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
-    Relation *rel = 0;
     while (!m_dependParentNodes.isEmpty()) {
         delete m_dependParentNodes.takeFirst();
     }
@@ -386,25 +385,6 @@ bool Node::canMoveTo( Node *newParent )
         }
     }
     return true;
-}
-
-Duration Node::duration(const DateTime &time, int use, bool backward) {
-    //kDebug()<<k_funcinfo<<endl;
-    // TODO: handle risc
-    if (!time.isValid()) {
-        kError()<<k_funcinfo<<"Time is invalid"<<endl;
-        return Duration::zeroDuration;
-    }
-    if (m_effort == 0) {
-        kError()<<k_funcinfo<<"m_effort == 0"<<endl;
-        return Duration::zeroDuration;
-    }
-    if (m_currentSchedule == 0) {
-        return Duration::zeroDuration;
-        kError()<<k_funcinfo<<"No current schedule"<<endl;
-    }
-    //kDebug()<<k_funcinfo<<m_name<<": Use="<<use<<endl;
-    return calcDuration(time, m_effort->effort(use, m_currentSchedule->usePert()), backward);
 }
 
 void Node::makeAppointments() {

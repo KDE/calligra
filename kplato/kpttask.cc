@@ -1099,6 +1099,14 @@ DateTime Task::scheduleFromStartTime(int use) {
     }
     //kDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
     if(type() == Node::Type_Task) {
+        if ( cs->recalculate() && m_completion.isFinished() ) {
+            cs->startTime = m_completion.startTime();
+            cs->endTime = m_completion.finishTime();
+            cs->startFloat = 0;
+            cs->finishFloat = 0;
+            m_visitedForward = true;
+            return cs->endTime;
+        }
         cs->duration = m_effort->effort(use, pert);
         switch (m_constraint) {
         case Node::ASAP:
@@ -1108,6 +1116,9 @@ DateTime Task::scheduleFromStartTime(int use) {
             cs->endTime = cs->startTime + cs->duration;
             makeAppointments();
             cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
+            if ( cs->recalculate() && m_completion.isStarted() ) {
+                cs->earlyStart = cs->startTime = m_completion.startTime();
+            }
             break;
         case Node::ALAP:
             // cs->startTime calculated above
@@ -1117,6 +1128,9 @@ DateTime Task::scheduleFromStartTime(int use) {
             //kDebug()<<k_funcinfo<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->lateFinish<<endl;
             makeAppointments();
             cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
+            if ( cs->recalculate() && m_completion.isStarted() ) {
+                cs->earlyStart = cs->startTime = m_completion.startTime();
+            }
             break;
         case Node::StartNotEarlier:
             // cs->startTime calculated above
@@ -1199,6 +1213,14 @@ DateTime Task::scheduleFromStartTime(int use) {
             break;
         }
     } else if (type() == Node::Type_Milestone) {
+        if ( cs->recalculate() && m_completion.isFinished() ) {
+            cs->startTime = m_completion.startTime();
+            cs->endTime = m_completion.finishTime();
+            cs->startFloat = 0;
+            cs->finishFloat = 0;
+            m_visitedForward = true;
+            return cs->endTime;
+        }
         switch (m_constraint) {
         case Node::ASAP: {
             cs->endTime = cs->startTime;
@@ -1528,6 +1550,36 @@ void Task::adjustSummarytask() {
         //kDebug()<<k_funcinfo<<cs->name<<": "<<m_currentSchedule->startTime.toString()<<" : "<<m_currentSchedule->endTime.toString()<<endl;
     }
 }
+
+Duration Task::duration(const DateTime &time, int use, bool backward) {
+    //kDebug()<<k_funcinfo<<endl;
+    // TODO: handle risc
+    if (!time.isValid()) {
+        kError()<<k_funcinfo<<"Time is invalid"<<endl;
+        return Duration::zeroDuration;
+    }
+    if (m_effort == 0) {
+        kError()<<k_funcinfo<<"m_effort == 0"<<endl;
+        return Duration::zeroDuration;
+    }
+    if (m_currentSchedule == 0) {
+        return Duration::zeroDuration;
+        kError()<<k_funcinfo<<"No current schedule"<<endl;
+    }
+    //kDebug()<<k_funcinfo<<m_name<<": Use="<<use<<endl;
+    Duration eff;
+    if ( m_currentSchedule->recalculate() && m_completion.isStarted() ) {
+        eff = m_completion.remainingEffort();
+        kDebug()<<k_funcinfo<<m_name<<": recalculate, effort="<<eff.toDouble(Duration::Unit_h)<<endl;
+        if ( eff == 0 || m_completion.isFinished() ) {
+            return eff;
+        }
+    } else {
+        eff = m_effort->effort(use, m_currentSchedule->usePert());
+    }
+    return calcDuration(time, eff, backward);
+}
+
 
 Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool backward) {
     //kDebug()<<"--------> calcDuration "<<(backward?"(B) ":"(F) ")<<m_name<<" time="<<time<<" effort="<<effort.toString(Duration::Format_Day)<<endl;
