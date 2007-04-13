@@ -585,7 +585,7 @@ void KisRawImport::slotFillCmbProfiles()
 {
     KoID s = colorSpace();
 
-    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance() -> get(s);
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance() -> value(s.id());
     m_page -> cmbProfile -> clear();
     QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
