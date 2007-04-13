@@ -44,8 +44,6 @@
 #include <KoMainWindow.h>
 #include <KoToolBox.h>
 #include <KoTextShapeData.h>
-#include <KoShapeSelector.h>
-#include <KoShapeSelectorFactory.h>
 #include <KoTextSelectionHandler.h>
 #include <KoInlineObjectRegistry.h>
 #include <KoToolProxy.h>
@@ -83,9 +81,6 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     m_currentPage = m_document->pageManager()->page(m_document->startPage());
 
     setupActions();
-
-    KoShapeSelectorFactory shapeSelectorFactory;
-    createDockWidget( &shapeSelectorFactory );
 
     connect( kwcanvas()->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 }

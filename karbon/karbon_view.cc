@@ -95,12 +95,10 @@
 #include <KoShapeReorderCommand.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
-#include <KoShapeSelector.h>
 #include <KoPathShape.h>
 #include <KoPathCombineCommand.h>
 #include <KoPathSeparateCommand.h>
 #include <KoToolBoxFactory.h>
-#include <KoShapeSelectorFactory.h>
 #include <KoShapeController.h>
 #include <KoZoomController.h>
 #include <KoParameterShape.h>
@@ -272,8 +270,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 		KoToolBoxFactory toolBoxFactory(m_canvasController, "Karbon" );
 		createDockWidget( &toolBoxFactory );
-		KoShapeSelectorFactory shapeSelectorFactory;
-		createDockWidget( &shapeSelectorFactory );
 
         KarbonStylePreviewDockerFactory styleFactory;
         m_stylePreview = dynamic_cast<KarbonStylePreviewDocker*>( createDockWidget( &styleFactory ) );
