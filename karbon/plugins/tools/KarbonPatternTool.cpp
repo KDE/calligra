@@ -40,7 +40,7 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QButtonGroup>
-#include <QToolButton>
+#include <QPushButton>
 #include <QFileInfo>
 #include <QUndoCommand>
 
@@ -229,23 +229,25 @@ QWidget * KarbonPatternTool::createOptionWidget()
     m_buttonGroup = new QButtonGroup( optionWidget );
     m_buttonGroup->setExclusive( false );
 
-    QToolButton *button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon( "14_layer_newlayer" ) );
-    button->setText( i18n( "Import" ) );
+    QPushButton *button = new QPushButton( optionWidget );
+    button->setIcon( SmallIcon( "list-add" ) );
     button->setToolTip( i18n("Import pattern") );
     button->setEnabled( true );
     m_buttonGroup->addButton( button, Button_Import );
     layout->addWidget( button, 1, 0 );
 
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon( "14_layer_deletelayer" ) );
-    button->setText( i18n( "Delete" ) );
+    button = new QPushButton( optionWidget );
+    button->setIcon( SmallIcon( "list-remove" ) );
     button->setToolTip( i18n("Delete pattern") );
     button->setEnabled( false );
     m_buttonGroup->addButton( button, Button_Remove );
     layout->addWidget( button, 1, 1 );
 
-    layout->setColumnStretch( 3, 1 );
+    layout->setColumnStretch( 0, 1 );
+    layout->setColumnStretch( 1, 1 );
+    layout->setColumnStretch( 2, 2 );
+    layout->setSpacing( 0 );
+    layout->setMargin( 3 );
 
     connect( m_buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
     connect( m_patternChooser, SIGNAL( selected( QTableWidgetItem* ) ), this, SLOT( patternSelected( QTableWidgetItem* ) ) );
