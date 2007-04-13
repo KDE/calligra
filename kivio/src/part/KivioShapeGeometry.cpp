@@ -257,7 +257,7 @@ KivioShapeGeometryFactory::KivioShapeGeometryFactory(KoDocument* doc)
     m_doc = doc;
 }
 
-QString KivioShapeGeometryFactory::dockId() const
+QString KivioShapeGeometryFactory::id() const
 {
     return QString("KivioShapeGeometry");
 }
@@ -270,7 +270,7 @@ Qt::DockWidgetArea KivioShapeGeometryFactory::defaultDockWidgetArea() const
 QDockWidget* KivioShapeGeometryFactory::createDockWidget()
 {
     KivioShapeGeometry* dockWidget = new KivioShapeGeometry(m_doc);
-    dockWidget->setObjectName(dockId());
+    dockWidget->setObjectName(id());
     dockWidget->setUnit(m_doc->unit());
 
     QObject::connect(m_doc, SIGNAL(unitChanged(KoUnit)), dockWidget, SLOT(setUnit(KoUnit)));

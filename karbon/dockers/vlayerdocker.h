@@ -41,7 +41,7 @@ class VLayerDockerFactory : public KoDockFactory
 public:
     VLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document );
 
-    virtual QString dockId() const;
+    virtual QString id() const;
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
     virtual QDockWidget* createDockWidget();
 private:

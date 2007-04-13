@@ -62,7 +62,7 @@ VLayerDockerFactory::VLayerDockerFactory( KoShapeControllerBase *shapeController
 {
 }
 
-QString VLayerDockerFactory::dockId() const
+QString VLayerDockerFactory::id() const
 {
     return QString("Layer view");
 }
@@ -75,7 +75,7 @@ Qt::DockWidgetArea VLayerDockerFactory::defaultDockWidgetArea() const
 QDockWidget* VLayerDockerFactory::createDockWidget()
 {
     VLayerDocker* widget = new VLayerDocker( m_shapeController, m_document);
-    widget->setObjectName(dockId());
+    widget->setObjectName(id());
 
     return widget;
 }

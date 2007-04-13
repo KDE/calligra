@@ -42,7 +42,7 @@ class VStrokeDockerFactory : public KoDockFactory
 public:
     VStrokeDockerFactory();
 
-    virtual QString dockId() const;
+    virtual QString id() const;
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
     virtual QDockWidget* createDockWidget();
 };

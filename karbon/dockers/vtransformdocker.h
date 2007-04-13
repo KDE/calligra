@@ -35,7 +35,7 @@ class VTransformDockerFactory : public KoDockFactory
 public:
     VTransformDockerFactory();
 
-    virtual QString dockId() const;
+    virtual QString id() const;
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
     virtual QDockWidget* createDockWidget();
 };

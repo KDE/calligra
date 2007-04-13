@@ -55,7 +55,7 @@ VStrokeDockerFactory::VStrokeDockerFactory()
 {
 }
 
-QString VStrokeDockerFactory::dockId() const
+QString VStrokeDockerFactory::id() const
 {
     return QString("Stroke Properties");
 }
@@ -68,7 +68,7 @@ Qt::DockWidgetArea VStrokeDockerFactory::defaultDockWidgetArea() const
 QDockWidget* VStrokeDockerFactory::createDockWidget()
 {
     VStrokeDocker* widget = new VStrokeDocker();
-    widget->setObjectName(dockId());
+    widget->setObjectName(id());
 
     return widget;
 }

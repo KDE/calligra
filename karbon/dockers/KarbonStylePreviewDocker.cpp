@@ -87,7 +87,7 @@ KarbonStylePreviewDockerFactory::KarbonStylePreviewDockerFactory()
 {
 }
 
-QString KarbonStylePreviewDockerFactory::dockId() const
+QString KarbonStylePreviewDockerFactory::id() const
 {
     return QString("Style Preview");
 }
@@ -100,7 +100,7 @@ Qt::DockWidgetArea KarbonStylePreviewDockerFactory::defaultDockWidgetArea() cons
 QDockWidget* KarbonStylePreviewDockerFactory::createDockWidget()
 {
     KarbonStylePreviewDocker * widget = new KarbonStylePreviewDocker();
-    widget->setObjectName(dockId());
+    widget->setObjectName(id());
 
     return widget;
 }

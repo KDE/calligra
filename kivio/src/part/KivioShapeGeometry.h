@@ -61,7 +61,7 @@ class KivioShapeGeometryFactory : public KoDockFactory
     public:
         KivioShapeGeometryFactory(KoDocument* doc);
 
-        virtual QString dockId() const;
+        virtual QString id() const;
         virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
         virtual QDockWidget* createDockWidget();
 
