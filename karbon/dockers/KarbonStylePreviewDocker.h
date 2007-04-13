@@ -36,7 +36,7 @@ public:
     ~KarbonStylePreviewDocker();
 
     bool strokeIsSelected() const;
-    void updateStyle( const KoShapeBorderModel * stroke, const QBrush * fill );
+    void updateStyle( const KoShapeBorderModel * stroke, const QBrush & fill );
 private slots:
     void fillSelected();
     void strokeSelected();

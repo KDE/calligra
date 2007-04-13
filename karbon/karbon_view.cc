@@ -1309,7 +1309,7 @@ KarbonView::selectionChanged()
             m_strokeDocker->setStroke( shape->border() );
             if ( shell() ) {
                 //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
-                    m_stylePreview->updateStyle( shape->border(), &shape->background() );
+                    m_stylePreview->updateStyle( shape->border(), shape->background() );
                     //m_smallPreview->update( *obj->stroke(), *obj->fill() );
                 //}
             }
@@ -1318,7 +1318,7 @@ KarbonView::selectionChanged()
         {
             if ( shell() ) {
                 //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
-                    m_stylePreview->updateStyle( 0, 0 );
+                    m_stylePreview->updateStyle( 0, QBrush( Qt::NoBrush ) );
                     //m_smallPreview->update( *obj->stroke(), *obj->fill() );
                 //}
             }
@@ -1351,7 +1351,7 @@ KarbonView::selectionChanged()
     {
         if ( shell() )
             //if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_stylePreview )
-            m_stylePreview->updateStyle( 0, 0 );
+            m_stylePreview->updateStyle( 0, QBrush( Qt::NoBrush ) );
     }
     emit selectionChange();
 }

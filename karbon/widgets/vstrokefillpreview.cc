@@ -40,7 +40,7 @@
 #define PANEL_SIZEY 50.0
 
 VStrokeFillPreview::VStrokeFillPreview( QWidget * parent )
-    : QFrame( parent ), m_strokeWidget( false ), m_fill( 0 ), m_stroke( 0 )
+    : QFrame( parent ), m_strokeWidget( false ), m_fill( Qt::NoBrush ), m_stroke( 0 )
     , m_strokeRect( 5.0, 5.0, 30.0, 30.0 ), m_fillRect(15.0, 15.0, 30.0, 30.0 )
 {
     setFocusPolicy( Qt::NoFocus );
@@ -148,29 +148,29 @@ bool VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
     return false;
 }
 
-void VStrokeFillPreview::update( const KoShapeBorderModel * stroke, const QBrush * fill )
+void VStrokeFillPreview::update( const KoShapeBorderModel * stroke, const QBrush & fill )
 {
     m_fill = fill;
     m_stroke = stroke;
     QFrame::update();
 }
 
-void VStrokeFillPreview::drawFill( QPainter & painter, const QBrush * fill )
+void VStrokeFillPreview::drawFill( QPainter & painter, const QBrush & fill )
 {
     painter.save();
 
     QBrush brush( Qt::white );
 
-    if( fill && fill->style() != Qt::NoBrush )
+    if( fill.style() != Qt::NoBrush )
     {
-        switch( fill->style() )
+        switch( fill.style() )
         {
             case Qt::LinearGradientPattern:
             {
                 QLinearGradient g;
                 g.setStart( QPointF( 30, 20 ) );
                 g.setFinalStop( QPointF( 30, 50 ) );
-                g.setStops( fill->gradient()->stops() );
+                g.setStops( fill.gradient()->stops() );
                 brush = QBrush( g );
                 break;
             }
@@ -180,7 +180,7 @@ void VStrokeFillPreview::drawFill( QPainter & painter, const QBrush * fill )
                 g.setCenter( m_fillRect.center() );
                 g.setFocalPoint( m_fillRect.center() );
                 g.setRadius( 15.0 );
-                g.setStops( fill->gradient()->stops() );
+                g.setStops( fill.gradient()->stops() );
                 brush = QBrush( g );
                 break;
             }
@@ -189,12 +189,12 @@ void VStrokeFillPreview::drawFill( QPainter & painter, const QBrush * fill )
                 QConicalGradient g;
                 g.setCenter( m_fillRect.center() );
                 g.setAngle( 0.0 );
-                g.setStops( fill->gradient()->stops() );
+                g.setStops( fill.gradient()->stops() );
                 brush = QBrush( g );
                 break;
             }
             default:
-                brush = *fill;
+                brush = fill;
                 break;
         }
     }
@@ -214,7 +214,7 @@ void VStrokeFillPreview::drawFill( QPainter & painter, const QBrush * fill )
     painter.drawLine( m_fillRect.topRight(), m_fillRect.bottomRight() );
     painter.drawLine( m_fillRect.bottomRight(), m_fillRect.bottomLeft() );
 
-    if( ! fill || ( fill && fill->style() == Qt::NoBrush ) )
+    if( fill.style() == Qt::NoBrush )
     {
         QPen pen( Qt::red );
         pen.setWidth( 2 );

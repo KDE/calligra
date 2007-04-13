@@ -64,7 +64,7 @@ bool KarbonStylePreviewDocker::strokeIsSelected() const
     return m_preview->strokeIsSelected();
 }
 
-void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, const QBrush * fill )
+void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, const QBrush & fill )
 {
     m_preview->update( stroke, fill );
 }
