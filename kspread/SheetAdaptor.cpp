@@ -82,9 +82,10 @@ int SheetAdaptor::cellColumn( const QString& cellname )
 
 QPoint SheetAdaptor::cellLocation( const QString& cellname )
 {
-    const QRect rect = (*Region( m_sheet->doc()->map(), cellname, m_sheet ).constBegin())->rect();
-    if ( rect.isNull() ) return QPoint();
-    return rect.topLeft();
+    const Region region( m_sheet->doc()->map(), cellname, m_sheet );
+    if ( region.isEmpty() || !region.isValid() ) return QPoint();
+    if ( region.firstRange().isNull() ) return QPoint();
+    return region.firstRange().topLeft();
 }
 
 QString SheetAdaptor::text( int x, int y )

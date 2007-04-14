@@ -692,6 +692,18 @@ void Region::clear()
   }
 }
 
+const QRect& Region::firstRange() const
+{
+    Q_ASSERT( !d->cells.isEmpty() );
+    return d->cells.value( 0 )->rect();
+}
+
+const QRect& Region::lastRange() const
+{
+    Q_ASSERT( !d->cells.isEmpty() );
+    return d->cells.value( d->cells.count()-1 )->rect();
+}
+
 QRect Region::boundingRect() const
 {
   int left   = KS_colMax;
