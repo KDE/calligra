@@ -692,15 +692,17 @@ void Region::clear()
   }
 }
 
-const QRect& Region::firstRange() const
+QRect Region::firstRange() const
 {
-    Q_ASSERT( !d->cells.isEmpty() );
+    if ( d->cells.isEmpty() || !isValid() )
+        return QRect();
     return d->cells.value( 0 )->rect();
 }
 
-const QRect& Region::lastRange() const
+QRect Region::lastRange() const
 {
-    Q_ASSERT( !d->cells.isEmpty() );
+    if ( d->cells.isEmpty() || !isValid() )
+        return QRect();
     return d->cells.value( d->cells.count()-1 )->rect();
 }
 

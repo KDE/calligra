@@ -83,8 +83,8 @@ int SheetAdaptor::cellColumn( const QString& cellname )
 QPoint SheetAdaptor::cellLocation( const QString& cellname )
 {
     const Region region( m_sheet->doc()->map(), cellname, m_sheet );
-    if ( region.isEmpty() || !region.isValid() ) return QPoint();
-    if ( region.firstRange().isNull() ) return QPoint();
+    if ( region.firstRange().isNull() )
+        return QPoint();
     return region.firstRange().topLeft();
 }
 

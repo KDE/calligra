@@ -267,8 +267,8 @@ public:
   virtual void clear();
 
 
-  const QRect& firstRange() const;
-  const QRect& lastRange() const;
+  QRect firstRange() const;
+  QRect lastRange() const;
 
   QRect boundingRect() const;
 
