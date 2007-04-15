@@ -262,9 +262,16 @@ Things not in bugzilla
       reference depth is useless. Therefore, we have to respect the
       automatic recalc setting.
     - Move Cell::calc() to RecalcManager.				done
+    - Emit an appropriate Damage after cell/col/row insertion/deletion.	----
 
-  + Value							      1 ----
-    - Support datetimes.						----
+  + Named areas							      1 ----
+    - Update on cell/col/row insertion/deletion.			----
+      Maybe refactor the code to have a separate manager for the named
+      areas and store them in a RectStorage; similar to named styles.
+
+  + Value							      1 DONE
+    - Support datetimes (again)						done
+    - Distinct complex type						done
 
   + Matrix operations						      2 ----
     - Determinant							done
@@ -276,7 +283,10 @@ Things not in bugzilla
     - Rank								----
     - Transpose								done
 
-  + Locked areas (for formulas with a matrix as result)		      2 TOMA
+  + Locked areas (for formulas with a matrix as result)		      2 ----
+    - Move the unlocking/checking from CellStorage to the preprocessing	----
+      of the Commands. Copy/paste operations need a special handling
+      unless they are converted to Commands.
 
   + References to cells in other files				      2 ----
 
