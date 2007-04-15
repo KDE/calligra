@@ -1216,9 +1216,10 @@ void View::Private::initActions()
   connect( actions->formulaSelection, SIGNAL( triggered( const QString& ) ),
       view, SLOT( formulaSelection( const QString& ) ) );
 
-  actions->viewZoom = new KoZoomAction(KoZoomMode::ZOOM_CONSTANT, i18n( "Zoom" ), view);
-  connect( actions->viewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, int ) ),
-      view, SLOT( viewZoom( KoZoomMode::Mode, int ) ) );
+    actions->viewZoom = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT, i18n( "Zoom" ), view );
+    ac->addAction( "view_zoom", actions->viewZoom );
+    connect( actions->viewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
+             view, SLOT( viewZoom( KoZoomMode::Mode, double ) ) );
 
   actions->consolidate  = new KAction(i18n("&Consolidate..."), view);
   ac->addAction("consolidate", actions->consolidate );
@@ -5062,30 +5063,19 @@ void View::togglePageBorders( bool mode )
   doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
-void View::viewZoom( KoZoomMode::Mode mode, int zoom )
+void View::viewZoom( KoZoomMode::Mode mode, double zoom )
 {
-  int oldZoom = doc()->zoomInPercent();
-  int newZoom = zoom;
+    int oldZoom = doc()->zoomInPercent();
+    int newZoom = qRound( zoom * 100 );
 
-  bool ok = ( mode == KoZoomMode::ZOOM_CONSTANT );
-  if ( !ok || newZoom < 10 ) //zoom should be valid and >10
-    newZoom = oldZoom;
-  if ( newZoom != oldZoom )
-  {
-    d->actions->viewZoom->setZoom( newZoom );
-
-    doc()->emitBeginOperation( false );
-
-    d->canvas->closeEditor();
-    setZoom( newZoom, true );
-
-    if (activeSheet())
+    bool ok = ( mode == KoZoomMode::ZOOM_CONSTANT );
+    if ( !ok || newZoom < 10 ) //zoom should be valid and >10
+        newZoom = oldZoom;
+    if ( newZoom != oldZoom )
     {
-      QRect r( d->canvas->visibleCells() );
-      r.setWidth( r.width() + 2 );
-      doc()->emitEndOperation( r );
+        d->canvas->closeEditor();
+        setZoom( newZoom, true );
     }
-  }
 }
 
 void View::setZoom( int zoom, bool /*updateViews*/ )
@@ -5098,13 +5088,8 @@ void View::setZoom( int zoom, bool /*updateViews*/ )
   doc()->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
   //KoView::setZoom( doc()->zoomedResolutionY() /* KoView only supports one zoom */ );
 
-  Q_ASSERT(d->activeSheet);
-
-  if (d->activeSheet)  //this is 0 when viewing a document in konqueror!? (see Q_ASSERT above)
-    d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
-
   doc()->refreshInterface();
-  doc()->emitEndOperation();
+  doc()->emitEndOperation( Region( 1, 1, KS_colMax, KS_rowMax ) );
 }
 
 void View::showStatusBar( bool b )
