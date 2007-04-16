@@ -26,6 +26,9 @@
 
 #include <QWidget>
 
+/**
+ * This widget visually shows and alters the KoColumns data structure.
+ */
 class KWDocumentColumns : public QWidget {
     Q_OBJECT
 public:

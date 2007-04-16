@@ -30,6 +30,12 @@ class KoShapeControllerBase;
 class KWFrameDeleteCommand : public QUndoCommand
 {
 public:
+    /**
+     * Constructor for a command to delete a frame.
+     * @param shapeController the shape controller to remove / add the shapes from/to.
+     * @param frame the frame to delete.
+     * @param parent the parent for macro command functionality
+     */
     explicit KWFrameDeleteCommand(KoShapeControllerBase *shapeController, KWFrame *frame, QUndoCommand *parent = 0 );
 
     /// redo the command

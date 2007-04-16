@@ -24,6 +24,7 @@
 
 #include <QWidget>
 
+/// A widget to preview the KoPageLayout and KoColumns data structures.
 class KWPagePreview : public QWidget {
     Q_OBJECT
 public:

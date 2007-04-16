@@ -161,7 +161,16 @@ public:
      */
     void setPadding(const KoInsets &padding) { m_padding = padding; }
 
+    /**
+     * This property can be set to register that new pages created should be made to be a pageSpread when aproriate.
+     * Note that the pageManager itself will not use this variable since it doesn't have a factory method for pages.
+     */
     bool preferPageSpread() const { return m_preferPageSpread; }
+    /**
+     * Set the property to register that new pages created should be made to be a pageSpread when aproriate.
+     * Note that the pageManager itself will not use this variable since it doesn't have a factory method for pages.
+     * @param on If true, it is requested that new, even numbered pages are set to be page spreads.
+     */
     void setPreferPageSpread(bool on) { m_preferPageSpread = on; }
 
 private:

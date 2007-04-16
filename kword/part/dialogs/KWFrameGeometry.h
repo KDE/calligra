@@ -30,6 +30,7 @@
 class KWFrame;
 class KoShape;
 
+/// A (very simple) widget to show some KoShape sizing / positioning information.
 class KWFrameGeometry : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:

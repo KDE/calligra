@@ -27,10 +27,20 @@
 class KWDocument;
 class KWPage;
 
-/// The undo / redo command for changing the properties of a KWPage
+/**
+ * The undo / redo command for changing the properties of a KWPage
+ * When altering the size of a page this command will also reposition all required frames to account for the changes.
+ */
 class KWPagePropertiesCommand : public QUndoCommand
 {
 public:
+    /**
+     * The command to alter the properties of a page.
+     * @param document the document the page belongs to.
+     * @param page the unchanged page.
+     * @param newLayout the new layout properties.
+     * @param parent the parent for macro command functionality
+     */
     explicit KWPagePropertiesCommand( KWDocument *document, KWPage *page, const KoPageLayout &newLayout, QUndoCommand *parent = 0 );
 
     /// redo the command

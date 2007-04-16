@@ -44,6 +44,9 @@ class QDomDocument;
 class QTextCursor;
 //class QColor;
 
+/**
+ * Class that has a lot of the OpenDocument (ODF) loading code for KWord.
+ */
 class KWOpenDocumentLoader : public QObject
 {
     Q_OBJECT

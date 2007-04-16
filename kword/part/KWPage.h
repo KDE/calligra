@@ -125,7 +125,20 @@ public:
     /// return the effective pageLayout combining the default and the page specific ones
     const KoPageLayout pageLayout() const;
 
+    /**
+     * Mark this page to be in landscape or portrait mode.
+     * Note that the orientation has no influence on the actual page or its size in any way. Its
+     * just a property. There are dialogs that will be better at showing page sizes and at offering features
+     * when this property is set properly, though.
+     * @param orientation the new orientation.
+     */
     void setOrientationHint(KoPageFormat::Orientation orientation);
+    /**
+     * Return the orientation property of the page.
+     * Note that the orientation has no influence on the actual page or its size in any way. Its
+     * just a property. There are dialogs that will be better at showing page sizes and at offering features
+     * when this property is set properly, though.
+     */
     KoPageFormat::Orientation orientationHint() const;
 
 private:

@@ -222,8 +222,6 @@ public slots:
     /// Register new frameset
     void addFrameSet( KWFrameSet *f );
 
-    void firePageSetupChanged();
-
 signals:
     /// signal emitted when a page has been added
     void pageSetupChanged();
@@ -259,6 +257,8 @@ private:
     void clear();
 
     void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
+    /// emits pageSetupChanged
+    void firePageSetupChanged();
 
 private:
     bool m_hasTOC;

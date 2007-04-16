@@ -31,6 +31,12 @@ class KoShapeMoveCommand;
 class KWPageInsertCommand : public QUndoCommand
 {
 public:
+    /**
+     * The constuctor for a command to insert a new page.
+     * @param document the document that gets a new page.
+     * @param afterPageNum we will insert a new page after the page indicated with pagenumber afterPageNum
+     * @param parent the parent for command macros
+     */
     explicit KWPageInsertCommand( KWDocument *document, int afterPageNum, QUndoCommand *parent = 0 );
     ~KWPageInsertCommand();
 

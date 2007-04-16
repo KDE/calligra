@@ -62,9 +62,16 @@ public:
      * When lots of changes are made it may be faster to disable layouts for a little while.
      * @param allow if false; text will no longer be layouted until enabled again.  If true,
      *  schedule a layout.
+     * @see allowLayout
      */
     void setAllowLayout(bool allow);
+
+    /**
+     * @return if we are allowed to layout the text in this frame.
+     * @see setAllowLayout()
+     */
     bool allowLayout() const;
+
     /**
      * Set the page manager used by this frameset.
      * If we can't get rid of the dependency on KWDocument, we should remove this variable.
