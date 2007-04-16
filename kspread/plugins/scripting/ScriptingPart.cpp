@@ -35,10 +35,9 @@
 #include <Doc.h>
 #include <View.h>
 
-#define KROSS_MAIN_EXPORT KDE_EXPORT
+//#define KROSS_MAIN_EXPORT KDE_EXPORT
 #include <kross/core/manager.h>
-#include <kross/core/guiclient.h>
-//#include <main/wdgscriptsmanager.h>
+#include <kross/ui/guiclient.h>
 
 typedef KGenericFactory< ScriptingPart > KSpreadScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( krossmodulekspread, KSpreadScriptingFactory( "krossmodulekspread" ) )
@@ -74,11 +73,11 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 	// Setup the actions Kross provides and KSpread likes to have.
     KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
     actionCollection()->addAction("executescriptfile", execaction );
-	connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(executeFile()));
+	connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowExecuteScriptFile()));
 
     KAction* manageraction  = new KAction(i18n("Script Manager..."), this);
     actionCollection()->addAction("configurescripts", manageraction );
-	connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(showManager()));
+	connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowScriptManager()));
 
 	QAction* scriptmenuaction = d->guiclient->action("scripts");
 	actionCollection()->addAction("scripts", scriptmenuaction);
@@ -95,7 +94,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	foreach(QByteArray ba, args->getOptionList("scriptfile")) {
-		KUrl url(ba);
+		QUrl url(ba);
 		QFileInfo fi(url.path());
 		const QString file = fi.absoluteFilePath();
 		if( ! fi.exists() ) {
@@ -122,7 +121,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 				continue;
 			}
 		}
-		if( ! d->guiclient->executeFile(url) )
+		if( ! Kross::Manager::self().executeScriptFile(url) )
 			kWarning() << QString("ScriptingPart: Failed to execute scriptfile \"%1\"").arg(file) << endl;
 	}
 }

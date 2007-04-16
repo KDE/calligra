@@ -37,7 +37,7 @@
               <string>Host:</string>
              </property>
              <property name="alignment" >
-              <set>Qt::AlignAbsolute|Qt::AlignBottom|Qt::AlignCenter|Qt::AlignHCenter|Qt::AlignHorizontal_Mask|Qt::AlignJustify|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
+              <set>Qt::AlignCenter|Qt::AlignHorizontal_Mask|Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter|Qt::AlignVertical_Mask</set>
              </property>
             </widget>
            </item>
