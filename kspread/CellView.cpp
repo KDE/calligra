@@ -2332,7 +2332,7 @@ void CellView::drawText( QPainter& painter, const QFont& font,
                          const QPointF& location, const QString& text,
                          const Cell& cell ) const
 {
-    const double width = cell.doc()->zoomItX( d->width );
+    Q_UNUSED( cell )
     QTextLayout textLayout( text, font );
     textLayout.beginLayout();
     forever
@@ -2340,7 +2340,7 @@ void CellView::drawText( QPainter& painter, const QFont& font,
         QTextLine line = textLayout.createLine();
         if ( !line.isValid() )
             break;
-        line.setLineWidth( width );
+        line.setLineWidth( d->width );
     }
     textLayout.endLayout();
     QPointF loc( location.x(), location.y() - font.pointSizeF() );
