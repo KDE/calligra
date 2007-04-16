@@ -432,6 +432,15 @@ void TestFinancialFunctions::testNOMINAL()
 }
 
 
+// Net present value
+// NPV(rate, values)
+void TestFinancialFunctions::testNPV()
+{
+    CHECK_EVAL( "NPV(100%; 4; 5; 7)", 4.125 );
+    CHECK_EVAL( "NPV(10%; 100; 200)", 256.198347107438 );
+}
+
+
 // Straight-line depreciation
 // SLN(cost, salvage, life)
 void TestFinancialFunctions::testSLN()

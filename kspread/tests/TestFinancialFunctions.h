@@ -39,6 +39,7 @@ private slots:
   void testEUROCONVERT();
   void testLEVELCOUPON();
   void testNOMINAL();
+  void testNPV();
   void testSLN();
   void testSYD();
   void testZEROCOUPON();

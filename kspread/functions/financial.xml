@@ -968,5 +968,31 @@
     </Help>
     </Function>
 
+    <Function>
+        <Name>NPV</Name>
+        <Type>Float</Type>
+        <Parameter>
+            <Comment>Rate</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Parameter>
+            <Comment>Values (array)</Comment>
+            <Type>Float</Type>
+        </Parameter>
+        <Help>
+            <Text>The net present value (NPV) for a series of periodic cash flows.</Text>
+            <Text>Computes the net present value for a series of periodic cash flows with the
+                discount rate Rate. Values should be positive if they are received as income, and
+                negative if the amounts are paid as outgo.</Text>
+            <Syntax>NPV(Rate; Values)</Syntax>
+            <Example>NPV(100%;4;5;7) = 4.125</Example>
+            <Related>FV</Related>
+            <Related>IRR</Related>
+            <Related>NPER</Related>
+            <Related>PMT</Related>
+            <Related>PV</Related>
+        </Help>
+    </Function>
+
   </Group>
 </KSpreadFunctions>

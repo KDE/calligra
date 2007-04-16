@@ -64,6 +64,7 @@ Value func_ispmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_level_coupon (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_nominal (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_nper (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_npv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ppmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv (valVector args, ValueCalc *calc, FuncExtra *);
@@ -156,6 +157,10 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("NPER", func_nper);
   f->setParamCount (3, 5);
+  repo->add (f);
+  f = new Function ("NPV", func_npv);
+  f->setParamCount (2, -1);
+  f->setAcceptArray();
   repo->add (f);
   f = new Function ("PMT", func_pmt);
   f->setParamCount (3, 5);
@@ -1046,4 +1051,32 @@ Value func_euroconvert (valVector args, ValueCalc *calc, FuncExtra *)
   double result = number * factor2 / factor1;
 
   return Value (result);
+}
+
+void awNpv (ValueCalc *c, Value &res, Value val, Value rate)
+{
+    Value result = c->conv()->asFloat( res.element( 0, 0 ) );
+    Value value = c->conv()->asFloat( val );
+    Value i = c->conv()->asFloat( res.element( 1, 0 ) );
+    res.setElement( 0, 0, c->add( result, c->div( value, c->pow( c->add( Value(1.0), rate ), i ))));
+    res.setElement( 1, 0, c->add( i, Value(1.0) ) ); // increment counter
+}
+
+// NPV
+Value func_npv( valVector args, ValueCalc* calc, FuncExtra* )
+{
+    Value result( Value::Array );
+    result.setElement( 0, 0, Value( 0.0 ) ); // actual result
+    result.setElement( 1, 0, Value( 1.0 ) ); // counter
+    if ( args.count() == 2 )
+    {
+        Value vector = args[1]; // may be an array
+        calc->arrayWalk( vector, result, awNpv, calc->conv()->asFloat( args[0] ) );
+    }
+    else
+    {
+        valVector vector = args.mid( 1 );
+        calc->arrayWalk( vector, result, awNpv, calc->conv()->asFloat( args[0] ) );
+    }
+    return result.element( 0, 0 );
 }
