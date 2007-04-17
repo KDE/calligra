@@ -66,9 +66,9 @@ public:
     const RegisteredField* editingCyclesField;
 };
 
-const std::string KOfficeThroughAnalyzerFactory::authorFieldName( "author" );
-const std::string KOfficeThroughAnalyzerFactory::titleFieldName( "title" );
-const std::string KOfficeThroughAnalyzerFactory::keywordsFieldName( "keywords" );
+const std::string KOfficeThroughAnalyzerFactory::authorFieldName( "content.author" );
+const std::string KOfficeThroughAnalyzerFactory::titleFieldName( "content.title" );
+const std::string KOfficeThroughAnalyzerFactory::keywordsFieldName( "content.keyword" );
 const std::string KOfficeThroughAnalyzerFactory::abstractFieldName( "abstract" );
 const std::string KOfficeThroughAnalyzerFactory::editingCyclesFieldName( "editing cycles" );
 

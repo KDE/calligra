@@ -61,8 +61,8 @@ public:
     const RegisteredField* abstractField;
 };
 
-const std::string GnumericThroughAnalyzerFactory::authorFieldName( "author" );
-const std::string GnumericThroughAnalyzerFactory::titleFieldName( "title" );
+const std::string GnumericThroughAnalyzerFactory::authorFieldName( "content.author" );
+const std::string GnumericThroughAnalyzerFactory::titleFieldName( "content.title" );
 const std::string GnumericThroughAnalyzerFactory::abstractFieldName( "abstract" );
 
 void GnumericThroughAnalyzerFactory::registerFields( FieldRegister& reg ) {
