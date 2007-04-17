@@ -1,5 +1,6 @@
-/*   
-   Copyright 2006 - Robert Knight <robertknight@gmail.com>
+/* This file is part of the KDE project
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2006 Robert Knight <robertknight@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,6 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
 #ifndef CANVAS_PRIVATE_H
 #define CANVAS_PRIVATE_H
 
@@ -26,14 +28,16 @@
 
 class QLabel;
 
+class KoShapeManager;
+class KoToolProxy;
+
 namespace KSpread
 {
-
-class EditWidget;
 class CellEditor;
 class CellWindow;
-class View;
 class ComboboxLocationEditWidget;
+class EditWidget;
+class View;
 
 class Canvas::Private
 {
@@ -126,6 +130,10 @@ public:
     int prevSpokenFocusCol;
     int prevSpokenRow;
     int prevSpokenCol;
+
+    // flake
+    KoShapeManager* shapeManager;
+    KoToolProxy* toolProxy;
 };
 
 } //namespace KSpread

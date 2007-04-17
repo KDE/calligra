@@ -81,10 +81,13 @@
 #include <kwordwrap.h>
 
 // KOffice
-#include <KoOasisStore.h>
-#include <KoStore.h>
-#include <KoXmlWriter.h>
 #include <KoDocumentChild.h>
+#include <KoOasisStore.h>
+#include <KoShapeManager.h>
+#include <KoStore.h>
+#include <KoToolManager.h>
+#include <KoToolProxy.h>
+#include <KoXmlWriter.h>
 
 // KSpread
 #include "CellStorage.h"
@@ -123,6 +126,7 @@ using namespace KSpread;
 
 Canvas::Canvas(View *view)
     : QWidget( view )
+    , KoCanvasBase( view->doc() )
     , d( new Private )
 {
   setAttribute( Qt::WA_OpaquePaintEvent );
@@ -186,14 +190,20 @@ Canvas::Canvas(View *view)
   installEventFilter( this ); // for TAB key processing, otherwise focus change
   setAcceptDrops( true );
   setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
+
+    // flake
+    d->shapeManager = new KoShapeManager( this );
+    d->toolProxy = new KoToolProxy( this );
 }
 
 Canvas::~Canvas()
 {
 // FIXME Stefan: Still needed?
 //   delete d->scrollTimer;
-  delete d->validationInfo;
-  delete d;
+    delete d->shapeManager;
+    delete d->toolProxy;
+    delete d->validationInfo;
+    delete d;
 }
 
 KSpread::View* Canvas::view() const
@@ -204,6 +214,49 @@ KSpread::View* Canvas::view() const
 Doc* Canvas::doc() const
 {
   return d->view->doc();
+}
+
+void Canvas::gridSize( double* horizontal, double* vertical ) const
+{
+    *horizontal = doc()->defaultColumnFormat()->width();
+    *vertical = doc()->defaultRowFormat()->height();
+}
+
+bool Canvas::snapToGrid() const
+{
+    return false; // FIXME
+}
+
+void Canvas::addCommand( QUndoCommand* command )
+{
+    doc()->addCommand( command );
+}
+
+KoShapeManager* Canvas::shapeManager() const
+{
+    return d->shapeManager;
+}
+
+void Canvas::updateCanvas( const QRectF& rc )
+{
+    QRect clipRect( viewConverter()->documentToView( rc ).toRect() );
+    clipRect.adjust( -2, -2, 2, 2 ); // Resize to fit anti-aliasing
+    update( clipRect );
+}
+
+KoViewConverter* Canvas::viewConverter()
+{
+    return view()->zoomHandler();
+}
+
+KoUnit Canvas::unit()
+{
+    return doc()->unit();
+}
+
+KoToolProxy* Canvas::toolProxy()
+{
+    return d->toolProxy;
 }
 
 void Canvas::setEditWidget( KSpread::EditWidget * ew )
@@ -705,6 +758,9 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( (!d->view->koDocument()->isReadWrite()) && (d->mouseAction!=Mark))
     return;
 
+    // flake
+//     d->toolProxy->mouseMoveEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
+
   if ( d->mousePressed && d->modType != MT_NONE )
   {
     QPointF docPoint ( doc()->unzoomPointOldF( _ev->pos() ) );
@@ -978,11 +1034,14 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   (d->chooseCell ? choice() : selection())->update(QPoint(col,row));
 }
 
-void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
+void Canvas::mouseReleaseEvent( QMouseEvent* event )
 {
   register Sheet * const sheet = activeSheet();
   if (!sheet)
     return;
+
+    // flake
+//     d->toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() ) );
 
 // TODO Stefan: Still needed?
 //   if ( d->scrollTimer->isActive() )
@@ -1130,6 +1189,9 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   register Sheet * const sheet = activeSheet();
   if (!sheet)
     return;
+
+    // flake
+//     d->toolProxy->mousePressEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
 
   if ( _ev->button() == Qt::LeftButton )
   {
@@ -1421,6 +1483,9 @@ void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
   if (!sheet)
     return;
 
+    // flake
+//     d->toolProxy->mouseDoubleClickEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
+
   EmbeddedObject *obj;
   if ( ( obj = getObject( _ev->pos(), sheet ) ) )
   {
@@ -1502,6 +1567,10 @@ void Canvas::paintEvent( QPaintEvent* event )
     /* now paint the selection */
     paintHighlightedRanges(painter, paintRect);
     paintNormalMarker(painter, paintRect);
+
+    // flake
+//     d->shapeManager->paint( painter, *viewConverter(), false );
+//     d->toolProxy->paint( painter, *viewConverter() );
 
     //restore clip region with children area
 //     painter.restore();
@@ -2655,6 +2724,9 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
 
   if ( !sheet || formatKeyPress( _ev ))
     return;
+
+    // flake
+//     d->toolProxy->keyPressEvent( _ev );
 
   // Dont handle the remaining special keys.
   if ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) &&

@@ -49,6 +49,7 @@ class QScrollBar;
 
 class KoDocumentEntry;
 class KoTabBar;
+class KoZoomHandler;
 
 namespace KSpread
 {
@@ -127,6 +128,9 @@ public:
 
     /** Returns the tab bar */
     KoTabBar* tabBar() const;
+
+    /** \return the zoom handler */
+    KoZoomHandler* zoomHandler() const;
 
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 

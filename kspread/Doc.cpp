@@ -379,6 +379,14 @@ void Doc::setDefaultRowHeight( double height )
     d->defaultRowFormat->setHeight( height );
 }
 
+void Doc::addShape( KoShape* shape )
+{
+}
+
+void Doc::removeShape( KoShape* shape )
+{
+}
+
 void Doc::saveConfig()
 {
     if ( isEmbedded() ||!isReadWrite())

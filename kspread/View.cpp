@@ -89,6 +89,7 @@
 // KOffice includes
 #include <tkcoloractions.h>
 #include <kdatatool.h>
+#include <KoCanvasController.h>
 #include <KoCharSelectDia.h>
 #include <KoMainWindow.h>
 #include <KoOasisLoadingContext.h>
@@ -96,10 +97,14 @@
 #include <KoOasisStyles.h>
 #include <KoPartSelectAction.h>
 #include <KoTabBar.h>
+#include <KoToolBox.h>
+#include <KoToolManager.h>
 #include <Toolbox.h>
 #include <KoTemplateCreateDia.h>
 #include <KoZoomAction.h>
 #include <ktoolinvocation.h>
+#include <KoToolBoxFactory.h>
+#include <KoShapeSelectorFactory.h>
 
 // KSpread includes
 #include "CellStorage.h"
@@ -205,6 +210,8 @@ public:
     QWidget *frame;
     QFrame *toolWidget;
     Canvas *canvas;
+    KoCanvasController* canvasController;
+    KoZoomHandler* zoomHandler;
     VBorder *vBorderWidget;
     HBorder *hBorderWidget;
     SelectAllButton* selectAllButton;
@@ -1769,6 +1776,8 @@ View::View( QWidget *_parent, Doc *_doc )
 
 View::~View()
 {
+    KoToolManager::instance()->removeCanvasController( d->canvasController );
+
     //  ElapsedTime el( "~View" );
     if ( doc()->isReadWrite() ) // make sure we're not embedded in Konq
         deleteEditor( true );
@@ -1805,6 +1814,8 @@ View::~View()
     d->insertHandler = 0;
 
     delete d->actions;
+    delete d->zoomHandler;
+    delete d->canvasController;
     // NOTE Stefan: Delete the Canvas explicitly, even if it has this view as
     //              parent. Otherwise, it leads to crashes, because it tries to
     //              access this View in some events (Bug #126492).
@@ -1866,6 +1877,15 @@ void View::initView()
 
     // The widget on which we display the sheet
     d->canvas = new Canvas( this );
+    d->canvasController = new KoCanvasController( this );
+    d->canvasController->setCanvas( d->canvas );
+    KoToolManager::instance()->addController( d->canvasController );
+    KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
+//     KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
+//     createDockWidget( &toolBoxFactory );
+//     KoShapeSelectorFactory shapeSelectorFactory;
+//     createDockWidget( &shapeSelectorFactory );
+    d->zoomHandler = new KoZoomHandler();
 
     // The line-editor that appears above the sheet and allows to
     // edit the cells content. It knows about the two buttons.
@@ -1970,6 +1990,11 @@ ComboboxLocationEditWidget* View::posWidget()const
 KoTabBar* View::tabBar() const
 {
     return d->tabBar;
+}
+
+KoZoomHandler* View::zoomHandler() const
+{
+    return d->zoomHandler;
 }
 
 bool View::isLoading() const

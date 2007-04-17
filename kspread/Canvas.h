@@ -35,6 +35,8 @@
 #include <QList>
 #include <QWidget>
 
+#include <KoCanvasBase.h>
+
 #include "kspread_export.h"
 
 #include "Global.h"
@@ -60,7 +62,6 @@ class QWheelEvent;
 
 namespace KSpread
 {
-
 class Cell;
 class CellView;
 class EditWidget;
@@ -87,7 +88,7 @@ class EmbeddedObject;
  * That means that this class knows what to do when a key is pressed
  * or if the mouse button was clicked.
  */
-class KSPREAD_EXPORT Canvas : public QWidget
+class KSPREAD_EXPORT Canvas : public QWidget, public KoCanvasBase
 {
     friend class HBorder;
     friend class VBorder;
@@ -123,6 +124,26 @@ public:
 
     View* view() const;
     Doc* doc() const;
+
+    // KoCanvasBase interface methods.
+    /// reimplemented method from KoCanvasBase
+    void gridSize( double* horizontal, double* vertical ) const;
+    /// reimplemented method from KoCanvasBase
+    bool snapToGrid() const;
+    /// reimplemented method from KoCanvasBase
+    void addCommand( QUndoCommand* command );
+    /// reimplemented method from KoCanvasBase
+    KoShapeManager* shapeManager() const;
+    /// reimplemented method from KoCanvasBase
+    void updateCanvas( const QRectF& rc );
+    /// reimplemented method from KoCanvasBase
+    KoToolProxy* toolProxy();
+    /// reimplemented method from KoCanvasBase
+    KoViewConverter* viewConverter();
+    /// reimplemented method from KoCanvasBase
+    QWidget* canvasWidget() { return this; }
+    /// reimplemented method from KoCanvasBase
+    KoUnit unit();
 
     KSpread::EditWidget* editWidget() const;
     KSpread::CellEditor* editor() const;

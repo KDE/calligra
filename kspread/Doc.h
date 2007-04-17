@@ -36,6 +36,7 @@
 #include <kglobalsettings.h>
 
 #include <KoDocument.h>
+#include <KoShapeControllerBase.h>
 #include <KoXmlReader.h>
 #include <KoZoomHandler.h>
 
@@ -88,7 +89,7 @@ struct Reference
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler
+class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler, public KoShapeControllerBase
 {
   Q_OBJECT
   Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
@@ -150,6 +151,11 @@ public:
    */
   virtual QByteArray mimeType() const { return MIME_TYPE; }
 
+    // KoShapeControllerBase interface
+    /// reimplemented method from KoShapeControllerBase
+    virtual void addShape( KoShape* shape );
+    /// reimplemented method from KoShapeControllerBase
+    virtual void removeShape(KoShape* shape);
 
   /**
    * A sheet could use a different localization as the KDE default.
