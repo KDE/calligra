@@ -43,10 +43,19 @@ private slots:
     void testFIXED();
     void testJIS();
     void testLEFT();
+    void testLEN();
+    void testLOWER();
+    void testMID();
+    void testPROPER();
+    void testREPLACE();
     void testREPT();
     void testRIGHT();
+    void testSEARCH();
+    void testSUBSTITUTE();
+    void testTRIM();
     void testUNICHAR();
     void testUNICODE();
+    void testUPPER();
 
 private:
     Value evaluate(const QString&, Value& ex);
