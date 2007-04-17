@@ -1,6 +1,6 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
-* KMainWindow support : Make an action editor + a toolbar editor (as in MozillaFirebird ?) + a menu editor
+* KXmlGuiWindow support : Make an action editor + a toolbar editor (as in MozillaFirebird ?) + a menu editor
   (see Gambas and askk other devs if they already have done this)
 * Automatically set label name to the text
 * Create an event editor and manage signals/slots (EventBuffer ?)

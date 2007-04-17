@@ -23,7 +23,7 @@
 #include "kivio_map.h"
 #include <dcopclient.h>
 #include <kapplication.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include "kivio_grid_data.h"
 #include "kivio_config.h"
 

@@ -34,7 +34,7 @@
 #include <QStackedWidget>
 
 //#include <k3mdichildview.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kxmlguiclient.h>
 
 class KexiMainWindow;
@@ -134,7 +134,7 @@ class KEXICORE_EXPORT KexiWindow
 		 This member is intialised in KexiPart that creates this window object. */
 		bool supportsViewMode( int mode ) const;
 
-		/*! \return information about supported view modes. */ 
+		/*! \return information about supported view modes. */
 		int supportedViewModes() const;
 
 		/*! \return current view mode for this dialog. */
@@ -183,9 +183,9 @@ class KEXICORE_EXPORT KexiWindow
 		KoProperty::Set *propertySet();
 
 		KexiDB::SchemaData* schemaData() const;
-		
+
 		void setSchemaData(KexiDB::SchemaData* schemaData);
-		
+
 		/*! Reimpelmented: "*" is added if for 'dirty' dialog's data. */
 //		QString caption() const;
 
@@ -208,7 +208,7 @@ class KEXICORE_EXPORT KexiWindow
 
 		/*! Internal. Called by KexiMainWindowImpl::saveObject().
 		 Tells this dialog to save changes of the existing object
-		 to the backend. If \a dontAsk is true, no question dialog will 
+		 to the backend. If \a dontAsk is true, no question dialog will
 		 be shown to the user. The default is false.
 		 \sa storeNewData()
 		 \return true on success, false on failure and cancelled when storing has been cancelled. */
@@ -224,16 +224,16 @@ class KEXICORE_EXPORT KexiWindow
 		 \return true on success, false on failure and cancelled when storing has been cancelled. */
 		tristate storeNewData();
 
-		/*! Reimplemented - we're informing the current view about performed 
-		 detaching by calling KexiView::parentDialogDetached(), so the view 
-		 can react on this event 
-		 (by default KexiView::parentDialogDetached() does nothing, you can 
+		/*! Reimplemented - we're informing the current view about performed
+		 detaching by calling KexiView::parentDialogDetached(), so the view
+		 can react on this event
+		 (by default KexiView::parentDialogDetached() does nothing, you can
 		 reimplement it). */
 		void sendDetachedStateToCurrentView();
 
 		/*! W're informing the current view about performed atttaching by calling
 		 KexiView::parentDialogAttached(), so the view can react on this event
-		 (by default KexiView::parentDialogAttached() does nothing, you can 
+		 (by default KexiView::parentDialogAttached() does nothing, you can
 		 reimplement it). */
 		void sendAttachedStateToCurrentView();
 
@@ -255,14 +255,14 @@ class KEXICORE_EXPORT KexiWindow
 		//! Used by KexiPart::Part
 		KexiWindow(QWidget *parent, int supportedViewModes, KexiPart::Part& part,
 			KexiPart::Item& item);
-			
+
 		//! Used by KexiInternalPart
 		KexiWindow();
-		
-		/*! Used by Part::openInstance(), 
+
+		/*! Used by Part::openInstance(),
 		 like switchToViewMode( int newViewMode ), but passed \a staticObjectArgs.
 		 Only used for parts of class KexiPart::StaticPart. */
-		tristate switchToViewMode( int newViewMode, 
+		tristate switchToViewMode( int newViewMode,
 			QMap<QString,QString>* staticObjectArgs,
 			bool& proposeOpeningInTextViewModeBecauseOfProblems);
 
@@ -278,7 +278,7 @@ class KEXICORE_EXPORT KexiWindow
 
 		//! Used by \a view to inform the dialog about changing state of the "dirty" flag.
 		void dirtyChanged(KexiView* view);
-		
+
 		bool isDesignModePreloadedForTextModeHackUsed(int newViewMode) const;
 
 		/*! Created view's mode - helper for switchToViewMode(),

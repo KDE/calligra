@@ -23,7 +23,7 @@
 
 #include <QRect>
 #include <QWidget>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 //#include <kxmlguiclient.h>
 
 #include "../kexi_export.h"
@@ -44,7 +44,7 @@ class KEXICORE_EXPORT KexiMdiChildView : public QWidget
 };
 
 /// KMdiMainFrm replacment
-class KEXICORE_EXPORT KexiMdiMainFrm : public KMainWindow
+class KEXICORE_EXPORT KexiMdiMainFrm : public KXmlGuiWindow
 {
 		Q_OBJECT
 	public:

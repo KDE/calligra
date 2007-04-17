@@ -34,7 +34,7 @@
 
 * It (will be) still properly integrated with other KOffice compontents (KWord mailmerge, KChart graphs, Kugar reports, KSpread tables ...) and/or reuse them
 
-* Work on moving Kexi-as-KoMainWindow/KoDocument-driven application to Kexi-as-KMainWindow/KexiDB-driven application is stared by Kexi Team
+* Work on moving Kexi-as-KoMainWindow/KoDocument-driven application to Kexi-as-KXmlGuiWindow/KexiDB-driven application is stared by Kexi Team
 
 
 %%%

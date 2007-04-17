@@ -28,7 +28,7 @@
 //#include <kparts/factory.h>
 //#include <klibloader.h>
 //#include <k3mdimainfrm.h>
-//#include <kmainwindow.h>
+//#include <kxmlguiwindow.h>
 #include <kmenu.h>
 
 #include <kexidialogbase.h>
@@ -69,7 +69,7 @@ void KexiScriptEditor::initialize(Kross::Api::ScriptAction* scriptaction)
         // If there is no code we just add some information.
 ///@todo remove after release
         code = "# " + QStringList::split("\n", i18n(
-            "This note will appear for a user in the script's source code " 
+            "This note will appear for a user in the script's source code "
             "as a comment. Keep every row not longer than 60 characters and use '\n.'",
 
             "This is Technology Preview (BETA) version of scripting\n"

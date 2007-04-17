@@ -33,7 +33,7 @@
 #include <kmessagebox.h>
 #include <kseparator.h>
 #include <kservice.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 
 #include <QFile>
@@ -506,7 +506,7 @@ void KWMailMergeConfigDialog::slotOpenClicked()
 void KWMailMergeConfigDialog::slotPreviewClicked()
 {
     db_->action=KWSLMergePreview;
-    KMainWindow *mw=dynamic_cast<KMainWindow*>(((QWidget *)parent())->topLevelWidget());
+    KXmlGuiWindow *mw=dynamic_cast<KXmlGuiWindow*>(((QWidget *)parent())->topLevelWidget());
     if (mw)
     {
         KAction *ac=mw->actionCollection()->action(KStandardAction::stdName(KStandardAction::PrintPreview));
@@ -514,7 +514,7 @@ void KWMailMergeConfigDialog::slotPreviewClicked()
         else kWarning()<<"Toplevel doesn't provide a print preview action"<<endl;
     }
     else
-        kWarning()<<"Toplevel is no KMainWindow->no preview"<<endl;
+        kWarning()<<"Toplevel is no KXmlGuiWindow->no preview"<<endl;
 }
 
 void KWMailMergeConfigDialog::slotDocumentClicked()

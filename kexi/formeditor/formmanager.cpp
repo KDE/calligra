@@ -40,7 +40,7 @@
 #include <kstandardaction.h>
 #include <kaction.h>
 #include <kxmlguiclient.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kstyle.h>
@@ -95,7 +95,7 @@ namespace KFormDesigner {
 class PropertyFactory : public KoProperty::CustomPropertyFactory
 {
 	public:
-		PropertyFactory(QObject *parent) 
+		PropertyFactory(QObject *parent)
 		: KoProperty::CustomPropertyFactory(parent)
 //			m_manager(manager)
 		{
@@ -140,7 +140,7 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 
 //moved to createWidgetLibrary()	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
 	m_propSet = new WidgetPropertySet(this);
-	
+
 	m_widgetActionGroup = new QActionGroup(this);
 
 	//unused m_editor = 0;
@@ -160,7 +160,7 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 		this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
 
 	// register kfd custom editors
-	KoProperty::FactoryManager::self()->registerFactoryForEditor(KoProperty::Pixmap, 
+	KoProperty::FactoryManager::self()->registerFactoryForEditor(KoProperty::Pixmap,
 		new PropertyFactory(KoProperty::FactoryManager::self()));
 }
 
@@ -182,7 +182,7 @@ FormManager* FormManager::self()
 	return _self;
 }
 
-WidgetLibrary* 
+WidgetLibrary*
 FormManager::createWidgetLibrary(FormManager* m, const QStringList& supportedFactoryGroups)
 {
 	if(!_self)
@@ -213,7 +213,7 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KX
 {
 	m_collection = collection;
 
-	ActionList actions = lib->createWidgetActions(client, m_collection, 
+	ActionList actions = lib->createWidgetActions(client, m_collection,
 		this, SLOT(insertWidget(const Q3CString &)));
 
 	if (m_options & HideSignalSlotConnections)
@@ -478,7 +478,7 @@ FormManager::snapWidgetsToGrid()
 void
 FormManager::windowChanged(QWidget *w)
 {
-	kDebug() << "FormManager::windowChanged(" 
+	kDebug() << "FormManager::windowChanged("
 		<< (w ? (QString(w->metaObject()->className())+" "+w->objectName()) : QString("0")) << ")" << endl;
 
 	if(!w)
@@ -505,7 +505,7 @@ FormManager::windowChanged(QWidget *w)
 			//if(m_propSet)
 			//	m_propList->setCollection(form->pixmapCollection());
 
-			kDebug() << "FormManager::windowChanged() active form is " 
+			kDebug() << "FormManager::windowChanged() active form is "
 				<< form->objectTree()->name() << endl;
 
 			if(m_collection)
@@ -639,11 +639,11 @@ FormManager::initForm(Form *form)
 
 	m_active = form;
 
-	connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)), 
+	connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
 		m_propSet, SLOT(setSelectedWidgetWithoutReload(QWidget*, bool, bool)));
 	if(m_treeview)
 	{
-		connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)), 
+		connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
 			m_treeview, SLOT(setSelectedWidget(QWidget*, bool)));
 		connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
 		connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
@@ -802,7 +802,7 @@ FormManager::createSignalMenu(QWidget *w)
 	m_sigSlotMenu = new KMenu();
 	m_sigSlotMenu->addTitle(SmallIcon("connection"), i18n("Signals"));
 
-	const QList<QMetaMethod> list( 
+	const QList<QMetaMethod> list(
 		KexiUtils::methodsForMetaObjectWithParents(w->metaObject(),
 		QMetaMethod::Signal, QMetaMethod::Public) );
 //qt3:	Q3StrList list = w->metaObject()->signalNames(true);
@@ -827,7 +827,7 @@ FormManager::createSlotMenu(QWidget *w)
 
 	QString signalArg( m_connection->signal().remove( QRegExp(".*[(]|[)]") ) );
 
-	const QList<QMetaMethod> list( 
+	const QList<QMetaMethod> list(
 		KexiUtils::methodsForMetaObjectWithParents(w->metaObject(),
 		QMetaMethod::Slot, QMetaMethod::Public) );
 //qt3:	Q3StrList list = w->metaObject()->slotNames(true);
@@ -890,7 +890,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		icon = SmallIcon("multiple_obj");
 		titleText = i18n("Multiple Widgets") + QString(" (%1)").arg(widgetsCount);
 	}
-	
+
 	m_popup->addTitle(icon, titleText);
 
 	KAction *a;
@@ -935,7 +935,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		// add all the widgets that can have focus
 		for(ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it)
 		{
-			int index = sub->insertItem( 
+			int index = sub->insertItem(
 				SmallIcon(container->form()->library()->iconName(it.current()->className().toLatin1())),
 				it.current()->name());
 			if(it.current()->widget() == buddy)
@@ -967,7 +967,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 //		menuIds->append(id);
 		if(list.isEmpty())
 			m_popup->setItemEnabled(id, false);
-		connect(sigMenu, SIGNAL(triggered(QAction*)), 
+		connect(sigMenu, SIGNAL(triggered(QAction*)),
 			this, SLOT(menuSignalChosen(QAction*)));
 		separatorNeeded = true;
 	}
@@ -1413,7 +1413,7 @@ FormManager::selectAll()
 
 	activeForm()->selectFormWidget();
 	uint count = activeForm()->objectTree()->children()->count();
-	for(ObjectTreeItem *it = activeForm()->objectTree()->children()->first(); it; 
+	for(ObjectTreeItem *it = activeForm()->objectTree()->children()->first(); it;
 		it = activeForm()->objectTree()->children()->next(), count--)
 	{
 		activeForm()->setSelectedWidget(it->widget(), /*add*/true, /*raise*/false, /*moreWillBeSelected*/count>1);

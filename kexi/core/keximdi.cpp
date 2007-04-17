@@ -60,7 +60,7 @@ void KexiMdiChildView::activate()
  */
 
 KexiMdiMainFrm::KexiMdiMainFrm(QWidget* parent)
-	: KMainWindow(parent)
+	: KXmlGuiWindow(parent)
 {
 }
 

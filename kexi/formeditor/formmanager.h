@@ -42,7 +42,7 @@ class KToggleAction;
 class KDialog;
 class KTextEdit;
 class KXMLGUIClient;
-class KMainWindow;
+class KXmlGuiWindow;
 
 namespace KoProperty {
 	class Editor;
@@ -84,9 +84,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		virtual ~FormManager();
 
-		//! Creates widget library for supportedFactoryGroups 
+		//! Creates widget library for supportedFactoryGroups
 		//! and initializes FormManager singleton. \a m should be always the same for every call.
-		static WidgetLibrary* createWidgetLibrary(FormManager* m, 
+		static WidgetLibrary* createWidgetLibrary(FormManager* m,
 			const QStringList& supportedFactoryGroups);
 
 		//! Access to FormManager singleton
@@ -173,10 +173,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Shows a property set \a set in a Property Editor.
 		 If \a buff is 0, Property Editor will be cleared.
 		 If \a forceReload is true, the set will be reloaded even
-		 if it's the same as previous one. 
-		 If \a propertyToSelect is not empty, an item for this name will be selected 
+		 if it's the same as previous one.
+		 If \a propertyToSelect is not empty, an item for this name will be selected
 		 (usable when previously there was no set visible). */
-		virtual void showPropertySet(WidgetPropertySet *set, bool forceReload = false, 
+		virtual void showPropertySet(WidgetPropertySet *set, bool forceReload = false,
 			const Q3CString& propertyToSelect = Q3CString());
 
 		void blockPropertyEditorUpdating(void *blockingObject);
@@ -219,7 +219,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void emitNoFormSelected();
 
 		/*! @internal
-		 \return true is redo action is being executed. 
+		 \return true is redo action is being executed.
 		 Used in WidgetPropertySet::slotPropertyChanged() */
 		bool isRedoing() const { return m_isRedoing; }
 
@@ -340,7 +340,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! This signal is emitted as the property set switched.
 		 If \a forceReload is true, the set needs to be reloaded even
 		 if it's the same as previous one. */
-		void propertySetSwitched(KoProperty::Set *set, bool forceReload = false, 
+		void propertySetSwitched(KoProperty::Set *set, bool forceReload = false,
 			const Q3CString& propertyToSelect = Q3CString());
 
 		/*! This signal is emitted when any change is made to the Form \a form,
@@ -438,7 +438,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void emitUndoEnabled(bool enabled, const QString &text);
 		void emitRedoEnabled(bool enabled, const QString &text);
 
-		/*! True if emitSelectionSignals() updates property set so showPropertySet() will 
+		/*! True if emitSelectionSignals() updates property set so showPropertySet() will
 		 not be needed in windowChanged(). False by default. Set to true in KexiFormManager. */
 		bool m_emitSelectionSignalsUpdatesPropertySet : 1;
 
