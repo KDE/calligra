@@ -104,7 +104,6 @@
 #include <KoZoomAction.h>
 #include <ktoolinvocation.h>
 #include <KoToolBoxFactory.h>
-#include <KoShapeSelectorFactory.h>
 
 // KSpread includes
 #include "CellStorage.h"
@@ -1883,8 +1882,6 @@ void View::initView()
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
 //     KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
 //     createDockWidget( &toolBoxFactory );
-//     KoShapeSelectorFactory shapeSelectorFactory;
-//     createDockWidget( &shapeSelectorFactory );
     d->zoomHandler = new KoZoomHandler();
 
     // The line-editor that appears above the sheet and allows to
