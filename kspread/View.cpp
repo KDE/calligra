@@ -1938,7 +1938,6 @@ void View::initView()
     d->viewLayout->addWidget( bottomPart, 3, 0, 1, 3 );
 
     KStatusBar * sb = statusBar();
-    Q_ASSERT(sb);
     d->calcLabel = sb ? new QLabel( sb ) : 0;
     addStatusBarItem( d->calcLabel, 0 );
     if (d->calcLabel)
