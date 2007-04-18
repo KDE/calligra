@@ -203,6 +203,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     addStatusBarItem( zoomAction->createWidget( statusBar() ), 0 );
     connect( m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
              this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
+    m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
     m_smallPreview = new VSmallPreview( this );
     addStatusBarItem( m_smallPreview );
@@ -1198,7 +1199,6 @@ KarbonView::togglePageMargins(bool b)
 void
 KarbonView::pageOffsetChanged()
 {
-    debugView(QString("KarbonView::pageOffsetChanged()"));
     m_horizRuler->setOffset( m_canvasController->canvasOffsetX() + m_canvas->documentOrigin().x() );
     m_vertRuler->setOffset( m_canvasController->canvasOffsetY() + m_canvas->documentOrigin().y() );
 }
