@@ -24,12 +24,13 @@
 #include "kptdurationwidget.h"
 #include "kptdurationspinbox.h"
 
-#include <QAbstractItemModel>
-#include <QItemDelegate>
+#include <QComboBox>
+#include <QHeaderView>
 #include <QItemSelectionModel>
+#include <QKeyEvent>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
-#include <QTreeWidgetItem>
+#include <QTimeEdit>
 
 #include <klineedit.h>
 #include <kdebug.h>

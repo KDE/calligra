@@ -22,7 +22,6 @@
 #include "kptview.h"
 #include "kptcanvasitem.h"
 #include "kptnode.h"
-#include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
@@ -290,7 +289,7 @@ void ResourceAssignmentView::drawTasksAttributedToAResource (Resource *res, QTre
         int percent = ((rr->parent())->task())->completion().percentFinished();
         //kDebug() << "[void KPlato::ResourceAssignmentView::drawTasksAttributedToAResource()] " << percent << "\n";
         advance.setNum(percent);
-	advance += "%";
+	advance += '%';
         item->setText( 1, advance );
         }
         /*State: Finished*/
@@ -374,7 +373,7 @@ void ResourceAssignmentView::drawTasksAttributedToAGroup (ResourceGroup *group, 
                     /*Determine the task's advance*/
                     int percent = ((rr->parent())->task())->completion().percentFinished();
                     advance.setNum(percent);
-	            advance += "%";
+	            advance += '%';
                     item->setText( 1, advance );
                     }
 	        }

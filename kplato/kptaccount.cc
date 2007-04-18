@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kptaccount.h"
+
 #include <qdom.h>
 #include <QString>
 
@@ -24,7 +26,6 @@
 
 #include <kdebug.h>
 
-#include "kptaccount.h"
 #include "kptduration.h"
 #include "kptproject.h"
 

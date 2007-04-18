@@ -17,8 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kpttask.h"
 #include "kptcanvasitem.h"
+
+#include "kpttask.h"
 #include "kptrelation.h"
 #include "kptganttview.h"
 

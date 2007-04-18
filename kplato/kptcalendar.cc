@@ -17,8 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptmap.h"
 #include "kptcalendar.h"
+
+#include "kptmap.h"
 #include "kptduration.h"
 #include "kptdatetime.h"
 #include "kptproject.h"

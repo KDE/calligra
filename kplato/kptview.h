@@ -127,7 +127,7 @@ public:
     ViewListWidget( Part *part, QWidget *parent );//QString name, KXmlGuiWindow *parent );
     ~ViewListWidget();
 
-    /// Add a category if it does not allready exist
+    /// Add a category if it does not already exist
     ViewListItem *addCategory( const QString &tag, const QString& name );
     /// Add a sub-view
     ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString() );

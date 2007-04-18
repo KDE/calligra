@@ -17,9 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
-
 #include "kptcalendareditbase.h"
+
+#include <kptcalendarpanel.h>
+
+#include <klocale.h>
 
 #include <QVariant>
 #include <QPushButton>
@@ -28,7 +30,6 @@
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
-#include <kptcalendarpanel.h>
 #include <QLabel>
 #include <QComboBox>
 #include <q3buttongroup.h>

@@ -25,7 +25,6 @@
 #include "kptview.h"
 #include "kptcanvasitem.h"
 #include "kptnode.h"
-#include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"

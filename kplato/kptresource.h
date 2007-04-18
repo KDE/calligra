@@ -24,7 +24,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 
-#include <QtCore>
+
 #include <qdom.h>
 #include <QHash>
 #include <QString>

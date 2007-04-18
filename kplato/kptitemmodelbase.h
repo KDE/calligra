@@ -22,7 +22,9 @@
 
 #include "kptglobal.h"
 
-#include <QtGui>
+#include <QAbstractItemModel>
+#include <QItemDelegate>
+#include <QTreeView>
 
 namespace KPlato
 {

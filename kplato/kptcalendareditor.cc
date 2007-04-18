@@ -28,7 +28,6 @@
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
-#include "kptcalendar.h"
 #include "kptdatetime.h"
 #include "kptcontext.h"
 
@@ -44,6 +43,7 @@
 #include <QObject>
 #include <QTreeWidget>
 #include <QStringList>
+#include <QSplitter>
 #include <QVBoxLayout>
 
 #include <kicon.h>

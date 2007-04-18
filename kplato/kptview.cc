@@ -18,6 +18,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
+#include "kptview.h"
+
 #include <kprinter.h>
 #include <kmessagebox.h>
 
@@ -67,7 +69,6 @@
 #include <kparts/partmanager.h>
 #include <KoQueryTrader.h>
 
-#include "kptview.h"
 #include "kptviewbase.h"
 #include "kptaccountsview.h"
 #include "kptaccountseditor.h"

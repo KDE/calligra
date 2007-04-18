@@ -222,7 +222,7 @@ namespace KPlato
         while(it != vect.end())
         {
             kDebug()<<"itY before"<<it->y()<<endl;
-            if (totalCostPlanned > 0.0) { // avoid devide by 0
+            if (totalCostPlanned > 0.0) { // avoid divide by 0
                 it->setY(it->y()*100/totalCostPlanned);
             } else {
                 it->setY(0);
@@ -239,7 +239,7 @@ namespace KPlato
         while(it != vect.end())
         {
             kDebug()<<"itx before"<<it->x()<<endl;
-            if (vect.size() > 1 ) { // avoid devide by 0
+            if (vect.size() > 1 ) { // avoid divide by 0
                 it->setX(it->x()*100/(vect.size()-1));
             } else {
                 it->setX(0);
