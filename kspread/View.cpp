@@ -1223,7 +1223,7 @@ void View::Private::initActions()
   connect( actions->formulaSelection, SIGNAL( triggered( const QString& ) ),
       view, SLOT( formulaSelection( const QString& ) ) );
 
-    actions->viewZoom = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT, i18n( "Zoom" ), view );
+    actions->viewZoom = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT, i18n( "Zoom" ), false, view );
     ac->addAction( "view_zoom", actions->viewZoom );
     connect( actions->viewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
              view, SLOT( viewZoom( KoZoomMode::Mode, double ) ) );

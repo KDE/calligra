@@ -106,7 +106,7 @@ void KWView::setupActions() {
     if ( kwcanvas() && kwcanvas()->viewMode()->hasPages() )
         modes |= KoZoomMode::ZOOM_PAGE;
 
-    m_actionViewZoom = new KoZoomAction( modes, i18n("Zoom"), this );
+    m_actionViewZoom = new KoZoomAction( modes, i18n("Zoom"), false, this );
     actionCollection()->addAction("view_zoom", m_actionViewZoom);
     actionCollection()->addAction(KStandardAction::ZoomIn,  "zoom_in", m_actionViewZoom, SLOT(zoomIn()));
     actionCollection()->addAction(KStandardAction::ZoomOut,  "zoom_out", m_actionViewZoom, SLOT(zoomOut()));

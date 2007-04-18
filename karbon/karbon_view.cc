@@ -194,7 +194,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     m_cursorCoords->setMinimumWidth( 50 );
     addStatusBarItem( m_cursorCoords, 0 );
 
-    m_zoomController = new KoZoomController( m_canvasController, dynamic_cast<KoZoomHandler*>(m_canvas->viewConverter()), actionCollection() );
+    m_zoomController = new KoZoomController( m_canvasController, dynamic_cast<KoZoomHandler*>(m_canvas->viewConverter()), actionCollection(), false );
     m_zoomController->setPageSize( m_part->document().pageSize() );
     m_zoomController->setDocumentSize( m_canvas->documentViewRect().size() );
     m_zoomController->setFitMargin( 10 );
