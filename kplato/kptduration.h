@@ -50,7 +50,7 @@ class KPLATO_TEST_EXPORT Duration {
         Duration();
         Duration(const Duration &d);
         Duration(unsigned d, unsigned h, unsigned m, unsigned s=0, unsigned ms=0);
-        Duration(qint64 ms);
+        explicit Duration(const qint64 ms);
         Duration(double value, Duration::Unit unit);
         ~Duration();
 

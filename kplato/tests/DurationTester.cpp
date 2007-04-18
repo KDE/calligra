@@ -22,22 +22,64 @@
 namespace KPlato
 {
 
-void DurationTester::testArithmetic() {
+void DurationTester::add() {
     Duration d1(0, 2, 0);
     Duration d2(1, 0, 0);
     
-    QVERIFY((d1+d1).toString() == Duration(0, 4, 0).toString());
-    QVERIFY((d1-d1).toString() == Duration(0, 0, 0).toString());
-    QVERIFY((d1/2).toString() == Duration(0, 1, 0).toString());
+    QVERIFY((d1+d1) == Duration(0, 4, 0));
+}
+void DurationTester::subtract() {
+    Duration d1(0, 2, 0);
+    Duration d2(1, 0, 0);
+    
+    QVERIFY((d1-d1) == Duration(0, 0, 0));
+    QVERIFY((d2-d1) == Duration(0, 22, 0));
+    QVERIFY((d1-d2) == Duration::zeroDuration); // underflow, return 0
+}
+void DurationTester::devide() {
+    Duration d1(0, 2, 0);
+    
+    QVERIFY((d1/2) == Duration(0, 1, 0));
+}
+void DurationTester::equal() {
+    Duration d1(0, 2, 0);
     
     QVERIFY(d1==d1);
-    QVERIFY(d1<=d1);
-    QVERIFY(d1>=d1);
-    QVERIFY(!(d1!=d1));
-    QVERIFY(d2>d1);
-    QVERIFY(d1<d2);
+}
+void DurationTester::lessThanOrEqual() {
+    Duration d1(0, 2, 0);
+    Duration d2(1, 0, 0);
     
+    QVERIFY(d1<=d1);
+    QVERIFY(d1<=d2);
+}
+void DurationTester::greaterThanOrEqual() {
+    Duration d1(0, 2, 0);
+    Duration d2(1, 0, 0);
+    
+    QVERIFY(d1>=d1);
+    QVERIFY(d2>=d1);
+}
+void DurationTester::notEqual() {
+    Duration d1(0, 2, 0);
+    Duration d2(1, 0, 0);
+    
+    QVERIFY(!(d1!=d1));
+    QVERIFY(d1!=d2);
+    QVERIFY(d2!=d1);
+}
+void DurationTester::greaterThan() {
+    Duration d1(0, 2, 0);
+    Duration d2(1, 0, 0);
+    
+    QVERIFY(d2>d1);
     QVERIFY(d1 > 1*60*60*1000);
+}
+void DurationTester::lessThan() {
+    Duration d1(0, 2, 0);
+    Duration d2(1, 0, 0);
+    
+    QVERIFY(d1<d2);
     QVERIFY(d1 < 3*60*60*1000);
 }
 

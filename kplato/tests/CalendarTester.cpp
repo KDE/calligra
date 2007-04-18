@@ -41,14 +41,14 @@ void CalendarTester::testSingleDay() {
     t.addDay(day);
     QVERIFY(t.findDay(wdate) == day);
     
-    QVERIFY(t.hasInterval(after, after.addDays(1)) == false);
-    QVERIFY(t.hasInterval(before, before.addDays(-1)) == false);
+    QVERIFY(t.hasInterval(after, DateTime( after.addDays(1))) == false);
+    QVERIFY(t.hasInterval(before, DateTime(before.addDays(-1))) == false);
     
     QVERIFY(t.hasInterval(after, before) == false);
     QVERIFY(t.hasInterval(before, after));
     
-    QVERIFY((t.firstAvailableAfter(after, after.addDays(10))).isValid() == false);
-    QVERIFY((t.firstAvailableBefore(before, before.addDays(-10))).isValid() == false);
+    QVERIFY((t.firstAvailableAfter(after, DateTime(after.addDays(10)))).isValid() == false);
+    QVERIFY((t.firstAvailableBefore(before, DateTime(before.addDays(-10)))).isValid() == false);
     
     QCOMPARE(t.firstAvailableAfter(before,after).toString(), wdt1.toString());
     QCOMPARE(t.firstAvailableBefore(after, before).toString(), wdt2.toString());
@@ -96,14 +96,14 @@ void CalendarTester::testCalendarWithParent() {
     QVERIFY(p.findDay(wdate) == day);
     
     //same tests as in testSingleDay()
-    QVERIFY(t.hasInterval(after, after.addDays(1)) == false);
-    QVERIFY(t.hasInterval(before, before.addDays(-1)) == false);
+    QVERIFY(t.hasInterval(after, DateTime(after.addDays(1))) == false);
+    QVERIFY(t.hasInterval(before, DateTime(before.addDays(-1))) == false);
     
     QVERIFY(t.hasInterval(after, before) == false);
     QVERIFY(t.hasInterval(before, after));
     
-    QVERIFY((t.firstAvailableAfter(after, after.addDays(10))).isValid() == false);
-    QVERIFY((t.firstAvailableBefore(before, before.addDays(-10))).isValid() == false);
+    QVERIFY((t.firstAvailableAfter(after, DateTime(after.addDays(10)))).isValid() == false);
+    QVERIFY((t.firstAvailableBefore(before, DateTime(before.addDays(-10)))).isValid() == false);
     
     QVERIFY(t.firstAvailableAfter(before, after).isValid());
     QVERIFY(t.firstAvailableBefore(after, before).isValid());

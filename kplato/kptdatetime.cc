@@ -40,28 +40,37 @@ DateTime::DateTime(const QDate &date, const QTime &time, const KDateTime::Spec &
 }
 
 void DateTime::add(const Duration &duration) {
-    if (isValid())
-        *this = addSecs(duration.seconds());
-    //kDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
+    if (isValid()) {
+        KDateTime x = addMSecs(duration.milliseconds());
+        setDate( x.date() );
+        setTime( x.time() );
+        //kDebug()<<k_funcinfo<<toString()<<endl;
+    }
 }
 
 void DateTime::subtract(const Duration &duration) {
-    if (isValid())
-        *this = addSecs(-duration.seconds());
-    //kDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
+    if (isValid()) {
+        KDateTime x = addMSecs(-duration.milliseconds());
+        setDate( x.date() );
+        setTime( x.time() );
+        //kDebug()<<k_funcinfo<<toString()<<endl;
+    }
 }
 
 Duration DateTime::duration(const DateTime &dt) const {
     Duration dur;
     if (isValid() && dt.isValid()) {
-        if (dt < *this) {
-            dur.addDays(dt.daysTo(*this));
-            dur.addSeconds(dt.time().secsTo(time()));
-        } else {
-            dur.addDays(daysTo(dt));
-            dur.addSeconds(time().secsTo(dt.time()));
+        qint64 s = secsTo_long( dt );
+        qint64 ms = dt.time().msec() - time().msec();
+        //kDebug()<<k_funcinfo<<s<<", "<<ms<<endl;
+        if ( ms < 0  && s > 0 ) {
+            s += 1;
+        } else if ( ms > 0 && s < 0 ) {
+            s -= 1;
         }
+        dur = Duration( QABS( (s * 1000 ) + ms ) );
     }
+    //kDebug()<<k_funcinfo<<dur.milliseconds()<<endl;
     return dur;
 }
 

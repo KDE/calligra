@@ -1102,8 +1102,8 @@ DateTime Task::scheduleFromStartTime(int use) {
         if ( cs->recalculate() && m_completion.isFinished() ) {
             cs->startTime = m_completion.startTime();
             cs->endTime = m_completion.finishTime();
-            cs->startFloat = 0;
-            cs->finishFloat = 0;
+            cs->startFloat = Duration::zeroDuration;
+            cs->finishFloat = Duration::zeroDuration;
             m_visitedForward = true;
             return cs->endTime;
         }
@@ -1216,8 +1216,8 @@ DateTime Task::scheduleFromStartTime(int use) {
         if ( cs->recalculate() && m_completion.isFinished() ) {
             cs->startTime = m_completion.startTime();
             cs->endTime = m_completion.finishTime();
-            cs->startFloat = 0;
-            cs->finishFloat = 0;
+            cs->startFloat = Duration::zeroDuration;
+            cs->finishFloat = Duration::zeroDuration;
             m_visitedForward = true;
             return cs->endTime;
         }

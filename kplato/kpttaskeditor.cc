@@ -654,7 +654,7 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
         case Qt::EditRole:
-            Duration d = value.toList()[0].toLongLong();
+            Duration d( value.toList()[0].toLongLong() );
             Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
             kDebug()<<k_funcinfo<<value.toList()[0].toLongLong()<<", "<<unit<<" -> "<<d.milliseconds()<<endl;
             K3MacroCommand *cmd = new K3MacroCommand( i18n( "Modify estimate" ) );

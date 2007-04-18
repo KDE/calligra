@@ -29,7 +29,16 @@ class DurationTester : public QObject
 {
     Q_OBJECT
 private slots:
-    void testArithmetic();
+    void add();
+    void subtract();
+    void devide();
+    void equal();
+    void lessThanOrEqual();
+    void greaterThanOrEqual();
+    void notEqual();
+    void greaterThan();
+    void lessThan();
+
 };
 
 }

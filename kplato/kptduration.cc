@@ -58,7 +58,7 @@ Duration::Duration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) 
     m_ms += static_cast<qint64>(d) * 24 * 60 * 60 * 1000;
 }
 
-Duration::Duration(qint64 ms) {
+Duration::Duration(const qint64 ms) {
     m_ms = ms;
 }
 

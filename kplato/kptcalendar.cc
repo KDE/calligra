@@ -109,7 +109,7 @@ bool CalendarDay::load( KoXmlElement &element, XMLLoaderObject &status ) {
         }
         KoXmlElement e = n.toElement();
         if (e.tagName() == "interval") {
-            kDebug()<<k_funcinfo<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end")<<endl;
+            //kDebug()<<k_funcinfo<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end")<<endl;
             QString st = e.attribute("start");
             QString en = e.attribute("end");
             if (!st.isEmpty() && !en.isEmpty()) {
@@ -233,26 +233,16 @@ Duration CalendarDay::effort(const QDate &date, const QTime &start, const QTime 
         return eff;
     }
     foreach (TimeInterval *i, m_workingIntervals) {
-        //kDebug()<<k_funcinfo<<"Interval: "<<i->first<<" - "<<i->second<<endl;
-        TimeInterval ti( i->first, i->second );
+        QTime t1 = start < i->first ? i->first : start;
+        QTime t2 = end > i->second ? i->second : end;
+        //kDebug()<<k_funcinfo<<"Interval: "<<t1<<" - "<<t2<<endl;
+        DateTimeInterval dti( DateTime( date, t1, spec ), DateTime( date, t2, spec ) );
         if ( sch ) {
-            DateTimeInterval dti( DateTime( date, i->first, spec ), DateTime( date, i->second, spec ) );
             dti = sch->available( dti );
-            //kDebug()<<k_funcinfo<<"Checked sch: "<<ti.first<<" - "<<ti.second<<endl;
-            ti = TimeInterval( dti.first.toTimeSpec( spec ).time(), dti.second.toTimeSpec( spec ).time() );
+            //kDebug()<<k_funcinfo<<"Checked sch: "<<dti.first<<" - "<<dti.second<<endl;
         }
-        if (!ti.first.isNull() && !ti.second.isNull() && end > ti.first && start < ti.second) {
-            DateTime dtStart(date, start);
-            if (start < ti.first) {
-                dtStart.setTime(ti.first);
-            }
-            DateTime dtEnd(date, end);
-            if (end > ti.second) {
-                dtEnd.setTime(ti.second);
-            }
-            eff += dtEnd - dtStart;
-            //kDebug()<<k_funcinfo<<dtStart.time()<<" - "<<dtEnd.time()<<"="<<eff.toString(Duration::Format_Day)<<endl;
-        }
+        eff += dti.second - dti.first;
+        //kDebug()<<k_funcinfo<<dti.first.toString()<<" - "<<dti.second.toString()<<", effort now "<<eff.toString()<<endl;
     }
     //kDebug()<<k_funcinfo<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<": "<<start.toString()<<" - "<<end.toString()<<": total="<<eff.toString(Duration::Format_Day)<<endl;
     return eff;
@@ -284,22 +274,23 @@ TimeInterval CalendarDay::interval(const QDate date, const QTime &start, const Q
     if ( hasInterval() ) {
         foreach (TimeInterval *i, m_workingIntervals) {
             if (start < i->second && end > i->first) {
-                t1 = start > i->first ? start : i->first;
-                t2 = end < i->second ? end : i->second;
+                QTime t1 = start < i->first ? i->first : start;
+                QTime t2 = end > i->second ? i->second : end;
                 TimeInterval ti( t1, t2 );
                 //kDebug()<<k_funcinfo<<"---->"<<sch<<" "<<date<<", "<<t1<<t2<<endl;
                 if ( sch ) {
                     // check if booked
                     //kDebug()<<k_funcinfo<<"---->"<<date<<", "<<t1<<t2<<endl;
-                    DateTimeInterval dti( DateTime( date, i->first, spec ), DateTime( date, i->second, spec ) );
+                    DateTimeInterval dti( DateTime( date, t1, spec ), DateTime( date, t2, spec ) );
                     dti = sch->available( dti );
                     //kDebug()<<k_funcinfo<<"Checked sch: "<<ti.first<<" - "<<ti.second<<endl;
                     ti = TimeInterval( dti.first.toTimeSpec( spec ).time(), dti.second.toTimeSpec( spec ).time() );
                 }
                 if ( !ti.first.isNull() && !ti.second.isNull() && ti.first < ti.second ) {
-                    //kDebug()<<k_funcinfo<<"true:"<<" "<<dti->first<<" - "<<dti->second<<endl;
+                    //kDebug()<<k_funcinfo<<"true:"<<" "<<ti.first<<" - "<<ti.second<<endl;
                     return ti;
                 }
+                return TimeInterval( QTime(), QTime() );
             }
         }
     }
@@ -982,8 +973,8 @@ DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &
         return DateTimeInterval(DateTime(), DateTime());
     }
     // convert to calendar's timezone in case caller use a different timezone
-    DateTime s = start.toTimeSpec( m_spec );
-    DateTime e = end.toTimeSpec( m_spec );
+    DateTime s = DateTime( start.toTimeSpec( m_spec ) );
+    DateTime e = DateTime( end.toTimeSpec( m_spec ) );
     //kDebug()<<k_funcinfo<<"tospec: "<<s.toString()<<" - "<<e.toString()<<endl;
     QTime startTime;
     QTime endTime;

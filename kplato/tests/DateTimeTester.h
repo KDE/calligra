@@ -29,8 +29,17 @@ class DateTimeTester : public QObject
 {
     Q_OBJECT
 private slots:
-    void testSubtract();
-    void testAdd();
+    void subtractDay();
+    void subtractHour();
+    void subtractMinute();
+    void subtractSecond();
+    void subtractMillisecond();
+    
+    void addDay();
+    void addHour();
+    void addMinute();
+    void addSecond();
+    void addMillisecond();
 
 };
 

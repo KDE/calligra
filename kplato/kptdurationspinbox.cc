@@ -57,8 +57,7 @@ void DurationSpinBox::setValue( const Duration &value )
 void DurationSpinBox::setValue( const qint64 value )
 {
     //kDebug()<<k_funcinfo<<value<<endl;
-    Duration d = value;
-    setValue( d );
+    setValue( Duration( value ) );
 }
 
 qint64 DurationSpinBox::value() const
