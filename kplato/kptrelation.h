@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 
 class QDomElement;
 
+/// The main namespace
 namespace KPlato
 {
 
@@ -37,10 +38,10 @@ class Project;
 class PertCanvas;
 
 /**
-  * The relation class couples a 2 nodes together which are dependent on each other.
+  * The relation class couples 2 nodes together which are dependent on each other.
   * If for example you have a project to build a house, the node that represents the 
-  * adding of the roof is dependent on the node that represents the building of the walls.
-  * The roof can't be put up if the walls are not there yet.
+  * adding of the roof is dependent on the node that represents the building of the walls;
+  * the roof can't be put up if the walls are not there yet.
   * We actually have a number of relationtypes so this relation can be used in different manners.
   */
 class Relation {
@@ -76,18 +77,9 @@ public:
      */
     Node *child() const { return m_child; }
 
-    enum Result {
-        SUCCESS = 0l,
-        HASCHILDREN = 1l,
-        NOTIMPL = 2l
-    };
-
     bool load(KoXmlElement &element, Project &project);
     void save(QDomElement &element) const;
 
-    Node * getmParent(){ return this->m_parent; }
-    Node * getmChild(){ return this->m_child; }
-    Duration getmLag(){ return this->m_lag; }
 protected: // variables
     Node *m_parent;
     Node *m_child;
