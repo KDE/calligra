@@ -29,9 +29,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qdom.h>
-#include <QRectF>
-
 #include "vdocument.h"
 #include "vselection.h"
 #include "vvisitor.h"
@@ -39,9 +36,15 @@
 #include <KoStore.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
+#include <KoSavingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoShapeLayer.h>
 
 #include <kdebug.h>
+
+#include <qdom.h>
+#include <QRectF>
+
 
 class VDocument::Private
 {
@@ -157,21 +160,19 @@ VDocument::saveXML() const
 	return doc;
  }
 
-void
-VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
+void VDocument::saveOasis( KoStore * store, KoXmlWriter & docWriter, KoSavingContext & context ) const
 {
-	docWriter->startElement( "draw:page" );
-	docWriter->addAttribute( "draw:name", name());
-	docWriter->addAttribute( "draw:id", "page1");
-	docWriter->addAttribute( "draw:master-page-name", "Default");
+    docWriter.startElement( "draw:page" );
+    docWriter.addAttribute( "draw:name", name());
+    docWriter.addAttribute( "draw:id", "page1");
+    docWriter.addAttribute( "draw:master-page-name", "Default");
 
-	// save objects:
-    /* TODO implement saving of layers
-	int index = 0;
-	foreach( KoShapeLayer* layer, m_layers )
-		layer->saveOasis( store, docWriter, mainStyles, ++index );
-    */
-	docWriter->endElement(); // draw:page
+    KoShapeSavingContext shapeContext( docWriter, context );
+
+    foreach( KoShapeLayer * layer, d->layers )
+        layer->saveOdf( &shapeContext );
+
+    docWriter.endElement(); // draw:page
 }
 
 void

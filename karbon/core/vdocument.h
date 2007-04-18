@@ -45,7 +45,7 @@ class QDomElement;
 class VSelection;
 class KoPageLayout;
 class KoShape;
-
+class KoSavingContext;
 class KoShapeLayer;
 
 typedef QList<KoShapeLayer*> VLayerList;
@@ -179,7 +179,7 @@ public:
 	const QList<KoShape*> shapes() const;
 
 	QDomDocument saveXML() const;
-	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
+	void saveOasis( KoStore * store, KoXmlWriter & docWriter, KoSavingContext & context ) const;
 	enum { STYLE_GRAPHICAUTO = 20, STYLE_LINEAR_GRADIENT, STYLE_RADIAL_GRADIENT, STYLE_STROKE };
 	bool loadXML( const QDomElement& doc );
 	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );

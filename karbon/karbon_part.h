@@ -106,7 +106,9 @@ public slots:
 protected:
 	virtual KoView* createViewInstance( QWidget* parent );
 	virtual void removeView( KoView *view );
-	void saveOasisSettings( KoXmlWriter &/*settingsWriter*/ );
+    void saveOasisSettings( KoStore * store );
+    void saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyles );
+    void saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles );
 	void loadOasisSettings( const QDomDocument&settingsDoc );
 
     void updateDocumentSize();

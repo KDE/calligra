@@ -55,6 +55,7 @@
 #include <KoStoreDevice.h>
 #include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>
+#include <KoSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
@@ -329,8 +330,15 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
         return false;
 
     KoStoreDevice storeDev( store );
-    KoXmlWriter* docWriter = createOasisXmlWriter( &storeDev, "office:document-content" );
+    KoXmlWriter * docWriter = createOasisXmlWriter( &storeDev, "office:document-content" );
+
     KoGenStyles mainStyles;
+    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
+
+    // for office:master-styles
+    KTemporaryFile masterStyles;
+    masterStyles.open();
+    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
 
     KoGenStyle pageLayout = m_pageLayout.saveOasis();
     QString layoutName = mainStyles.lookup( pageLayout, "PL" );
@@ -345,19 +353,12 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:drawing" );
 
-    m_doc.saveOasis( store, &contentTmpWriter, mainStyles ); // Save contents
+    m_doc.saveOasis( store, contentTmpWriter, savingContext ); // Save contents
 
     contentTmpWriter.endElement(); // office:drawing
     contentTmpWriter.endElement(); // office:body
 
-    docWriter->startElement( "office:automatic-styles" );
-
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( VDocument::STYLE_GRAPHICAUTO );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( docWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
-
-    docWriter->endElement(); // office:automatic-styles
+    saveOasisAutomaticStyles( docWriter, mainStyles );
 
     // And now we can copy over the contents from the tempfile to the real one
     contentTmpFile.seek(0);
@@ -375,12 +376,37 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     if( !store->open( "styles.xml" ) )
         return false;
 
-    KoXmlWriter* styleWriter = createOasisXmlWriter( &storeDev, "office:document-styles" );
+    saveOasisDocumentStyles( store, mainStyles );
+
+    if( !store->close() )
+        return false;
+
+    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+
+    if(!store->open("settings.xml"))
+        return false;
+
+    saveOasisSettings( store );
+
+    if(!store->close())
+        return false;
+
+    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+
+    setModified( false );
+    return true;
+}
+
+void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyles )
+{
+    KoStoreDevice stylesDev( store );
+    KoXmlWriter* styleWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
     styleWriter->startElement( "office:styles" );
 
-    styles = mainStyles.styles( VDocument::STYLE_LINEAR_GRADIENT );
-    it = styles.begin();
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( VDocument::STYLE_LINEAR_GRADIENT );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+
     for( ; it != styles.end() ; ++it )
         (*it).style->writeStyle( styleWriter, mainStyles, "svg:linearGradient", (*it).name, 0, true,  true /*add draw:name*/);
 
@@ -408,50 +434,42 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     for( ; it != styles.end(); ++it)
         (*it).style->writeStyle( styleWriter, mainStyles, "style:master-page", (*it).name, "");
 
-    styleWriter->endElement(); // office:master-styles
+    styleWriter->endElement();  // office:master-styles
+    styleWriter->endElement();  // office:styles
+    styleWriter->endDocument(); // office:document-styles
 
-    styleWriter->endElement(); // Root element
-    styleWriter->endDocument();
     delete styleWriter;
-
-    if( !store->close() )
-        return false;
-
-    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-
-
-    if(!store->open("settings.xml"))
-        return false;
-
-
-    KoXmlWriter& settingsWriter = *createOasisXmlWriter(&storeDev, "office:document-settings");
-    settingsWriter.startElement("office:settings");
-    settingsWriter.startElement("config:config-item-set");
-    settingsWriter.addAttribute("config:name", "view-settings");
-
-    KoUnit::saveOasis(&settingsWriter, unit());
-    saveOasisSettings( settingsWriter );
-
-    settingsWriter.endElement(); // config:config-item-set
-    settingsWriter.endElement(); // office:settings
-    settingsWriter.endElement(); // Root element
-    settingsWriter.endDocument();
-    delete &settingsWriter;
-
-
-    if(!store->close())
-        return false;
-
-    manifestWriter->addManifestEntry("settings.xml", "text/xml");
-
-    setModified( false );
-    return true;
 }
 
-void
-KarbonPart::saveOasisSettings( KoXmlWriter &/*settingsWriter*/ )
+void KarbonPart::saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles )
 {
-    //todo
+    contentWriter->startElement( "office:automatic-styles" );
+
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( VDocument::STYLE_GRAPHICAUTO );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for( ; it != styles.end() ; ++it )
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:graphic-properties" );
+
+    contentWriter->endElement(); // office:automatic-styles
+}
+
+void KarbonPart::saveOasisSettings( KoStore * store )
+{
+    KoStoreDevice settingsDev( store );
+    KoXmlWriter * settingsWriter = createOasisXmlWriter( &settingsDev, "office:document-settings");
+
+    settingsWriter->startElement("office:settings");
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "view-settings");
+
+    KoUnit::saveOasis( settingsWriter, unit() );
+
+    settingsWriter->endElement(); // config:config-item-set
+    settingsWriter->endElement(); // office:settings
+    settingsWriter->endElement(); // office:document-settings
+    settingsWriter->endDocument();
+
+    delete settingsWriter;
 }
 
 void
