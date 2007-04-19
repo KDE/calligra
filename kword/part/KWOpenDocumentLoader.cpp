@@ -1006,7 +1006,11 @@ if(parent.localName()!="span") {
             }
 
             text = normalizeWhitespace(text.replace('\n', QChar(0x2028)), *stripLeadingSpace);
-            *stripLeadingSpace = text[text.length() - 1].isSpace();
+
+            if ( text.isEmpty() )
+                *stripLeadingSpace = false;
+            else
+                *stripLeadingSpace = text[text.length() - 1].isSpace();
 
             cursor.insertText( text );
 
