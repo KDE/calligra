@@ -142,7 +142,7 @@ private:
     Resource *m_resource; // Used for sanity checks
 };
 
-class ResourceTreeView : public TreeViewBase
+class ResourceTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
@@ -158,21 +158,10 @@ public:
     QList<ResourceGroup*> selectedGroups() const;
     QList<Resource*> selectedResources() const;
 
-signals:
-    void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
-
-    void contextMenuRequested( QModelIndex, const QPoint& );
-    
 protected slots:
     void headerContextMenuRequested( const QPoint &pos );
     void slotActivated( const QModelIndex index );
-    virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
 
-protected:
-    void contextMenuEvent ( QContextMenuEvent * event );
 };
 
 class ResourceEditor : public ViewBase

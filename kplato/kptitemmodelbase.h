@@ -24,6 +24,8 @@
 
 #include <QAbstractItemModel>
 #include <QItemDelegate>
+#include <QSplitter>
+#include <QScrollBar>
 #include <QTreeView>
 
 namespace KPlato
@@ -182,12 +184,75 @@ public:
 
     int nextColumn( int col ) const;
     int previousColumn( int col ) const;
-
+    
+signals:
+    void contextMenuRequested( QModelIndex, const QPoint& );
+    void afterLastColumn();
+    void beforeFirstColumn();
+    
 protected:
     void keyPressEvent(QKeyEvent *event);
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
+    
+    void contextMenuEvent ( QContextMenuEvent * event );
+
+protected slots:
+    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
+    
+protected:
+    bool m_arrowKeyNavigation;
+};
+
+
+class DoubleTreeViewBase : public QSplitter
+{
+    Q_OBJECT
+public:
+    explicit DoubleTreeViewBase( QWidget *parent );
+    ~DoubleTreeViewBase();
+    
+    void setModel( ItemModelBase *model );
+    ItemModelBase *model() const;
+    
+    void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
+    bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
+
+//     int nextColumn( int col ) const;
+//     int previousColumn( int col ) const;
+    QItemSelectionModel *selectionModel() const { return m_selectionmodel; }
+    
+    void setSelectionMode( QAbstractItemView::SelectionMode mode );
+    void setItemDelegateForColumn( int col, QAbstractItemDelegate * delegate );
+    void setEditTriggers ( QAbstractItemView::EditTriggers );
+    QAbstractItemView::EditTriggers editTriggers() const;
+    
+    void setAcceptDrops( bool );
+    void setDropIndicatorShown( bool );
+
+    void setStretchLastSection( bool );
+    
+signals:
+    void contextMenuRequested( QModelIndex, const QPoint& );
+    void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
+    void selectionChanged( const QModelIndexList );
+    
+public slots:
+    void setExpanded( const QModelIndex & );
+    void setCollapsed( const QModelIndex & );
+    void edit( const QModelIndex &index );
+
+protected slots:
+    void slotSelectionChanged( const QItemSelection &sel, const QItemSelection & );
 
 protected:
+//     void keyPressEvent(QKeyEvent *event);
+//     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
+
+protected:
+    TreeViewBase *m_leftview;
+    TreeViewBase *m_rightview;
+    ItemModelBase *m_model;
+    QItemSelectionModel *m_selectionmodel;
     bool m_arrowKeyNavigation;
 };
 

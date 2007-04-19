@@ -1012,13 +1012,13 @@ QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Re
 
 //--------------------
 ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
-    : TreeViewBase( parent )
+    : DoubleTreeViewBase( parent )
 {
-    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    header()->setStretchLastSection( false );
+//    header()->setContextMenuPolicy( Qt::CustomContextMenu );
+    setStretchLastSection( false );
     
     setModel( new ResourceItemModel( part ) );
-    setSelectionModel( new QItemSelectionModel( model() ) );
+    
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     setItemDelegateForColumn( 1, new EnumDelegate( this ) );
@@ -1027,8 +1027,6 @@ ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
     setAcceptDrops( true );
     setDropIndicatorShown( true );
     
-    connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
-    connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
 
 }
@@ -1040,42 +1038,19 @@ void ResourceTreeView::slotActivated( const QModelIndex index )
 
 void ResourceTreeView::headerContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at "<<pos<<endl;
-}
-
-void ResourceTreeView::contextMenuEvent ( QContextMenuEvent *event )
-{
-    kDebug()<<k_funcinfo<<endl;
-    emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
-}
-
-void ResourceTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
-{
-    //kDebug()<<k_funcinfo<<sel.indexes().count()<<endl;
-    TreeViewBase::selectionChanged( sel, desel );
-    emit selectionChanged( selectionModel()->selectedIndexes() );
-}
-
-void ResourceTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
-{
-    //kDebug()<<k_funcinfo<<endl;
-    TreeViewBase::currentChanged( current, previous );
-    emit currentChanged( current );
+//    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at "<<pos<<endl;
 }
 
 QObject *ResourceTreeView::currentObject() const
 {
-    return itemModel()->object( currentIndex() );
+    return itemModel()->object( selectionModel()->currentIndex() );
 }
 
 QList<QObject*> ResourceTreeView::selectedObjects() const
 {
     QList<QObject*> lst;
-    foreach( QModelIndex i, selectionModel()->selectedRows() ) {
-        QObject *o = itemModel()->object( i );
-        if ( o ) {
-            lst << o;
-        }
+    foreach (QModelIndex i, selectionModel()->selectedRows() ) {
+        lst << static_cast<QObject*>( i.internalPointer() );
     }
     return lst;
 }
@@ -1114,12 +1089,13 @@ ResourceEditor::ResourceEditor( Part *part, QWidget *parent )
     l->setMargin( 0 );
     m_view = new ResourceTreeView( part, this );
     l->addWidget( m_view );
+    
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
+    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
-    
+
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
 }
 
@@ -1137,7 +1113,7 @@ void ResourceEditor::setGuiActive( bool activate )
     kDebug()<<k_funcinfo<<activate<<endl;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->currentIndex().isValid() ) {
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }
@@ -1256,7 +1232,7 @@ void ResourceEditor::slotAddResource()
     Resource *r = new Resource();
     QModelIndex i = m_view->itemModel()->insertResource( g, r );
     if ( i.isValid() ) {
-        m_view->setCurrentIndex( i );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
     }
 
@@ -1268,7 +1244,7 @@ void ResourceEditor::slotAddGroup()
     ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->itemModel()->insertGroup( g );
     if ( i.isValid() ) {
-        m_view->setCurrentIndex( i );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
     }
 }
