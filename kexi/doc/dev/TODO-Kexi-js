@@ -878,6 +878,15 @@ CSV Import TODO:
 - add "skip empty columns" and "skip empty rows" option
 - (advanced) there can be a column that is a result of exporting combo box visible values;
   in this case add option for normalizing the table using existing (or new) lookup table
+- add clear message when :
+-- primary key cannot be set because of non-unique values
+-- number cannot be set because non-number values
+-- etc.
+- add "fix non-unique valuesID /add missing ID values" option for PK column
+- add option for skipping particular columns
+- add option for filtering import results afterwards:
+-- to limit number of rows stored in db and 
+-- to process columns using expressions
 
 CSV Export TODO:
 - add progress bar and wizard

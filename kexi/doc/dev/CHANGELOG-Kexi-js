@@ -18,6 +18,11 @@ Legend:
 TODO: fix displaying default values in comboboxes (form and tableview)
 TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
+2007-04-11
+Forms
+- forms having parameter query as data source now ask for parameters
+2.0: merged
+
 2007-03-21, 22
 Table Designer
 - clear command history after successful saving of the design
