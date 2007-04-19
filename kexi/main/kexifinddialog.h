@@ -21,7 +21,7 @@
 #define KEXIFINDDIALOG_H
 
 #include "kexifinddialogbase.h"
-#include <core/kexiseachandreplaceiface.h>
+#include <core/kexisearchandreplaceiface.h>
 
 class KAction;
 
