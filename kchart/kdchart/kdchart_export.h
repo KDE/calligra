@@ -4,7 +4,7 @@
 #include <qglobal.h>
 
 #if 1
-#include <../../lib/kofficecore/koffice_export.h>
+#include <koffice_export.h>
 #else
 
 #if defined(Q_OS_WIN32) && defined(KDCHART_DLL)
