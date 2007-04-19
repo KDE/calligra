@@ -50,7 +50,8 @@ schemadata.h \
 simplecommandlineapp.h \
 tableschema.h \
 transaction.h \
-utils.h
+utils.h \
+parser/parser.h
 
 libkexidb_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KIO) \
 	 $(top_builddir)/kexi/kexiutils/libkexiutils.la
