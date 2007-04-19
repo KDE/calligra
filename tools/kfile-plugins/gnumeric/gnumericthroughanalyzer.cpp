@@ -26,6 +26,7 @@
 #include <QDomDocument>
 
 using namespace Strigi;
+using namespace std;
 
 class GnumericThroughAnalyzerFactory;
 class GnumericThroughAnalyzer : public StreamThroughAnalyzer {
