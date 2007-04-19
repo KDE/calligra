@@ -625,81 +625,81 @@ private:
 
 };
 
-class KPLATO_TEST_EXPORT ModifyEffortCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyEstimateCmd : public NamedCommand
 {
 public:
-    ModifyEffortCmd( Part *part, Node &node, Duration oldvalue, Duration newvalue, const QString& name = QString() );
-    ~ModifyEffortCmd();
+    ModifyEstimateCmd( Part *part, Node &node, Duration oldvalue, Duration newvalue, const QString& name = QString() );
+    ~ModifyEstimateCmd();
     void execute();
     void unexecute();
 
 private:
-    Effort *m_effort;
+    Estimate *m_estimate;
     Duration m_oldvalue, m_newvalue;
     K3MacroCommand *m_cmd;
 
 };
 
-class KPLATO_TEST_EXPORT EffortModifyOptimisticRatioCmd : public NamedCommand
+class KPLATO_TEST_EXPORT EstimateModifyOptimisticRatioCmd : public NamedCommand
 {
 public:
-    EffortModifyOptimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    EstimateModifyOptimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
-    Effort *m_effort;
+    Estimate *m_estimate;
     int m_oldvalue, m_newvalue;
 
 };
 
-class KPLATO_TEST_EXPORT EffortModifyPessimisticRatioCmd : public NamedCommand
+class KPLATO_TEST_EXPORT EstimateModifyPessimisticRatioCmd : public NamedCommand
 {
 public:
-    EffortModifyPessimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    EstimateModifyPessimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
-    Effort *m_effort;
+    Estimate *m_estimate;
     int m_oldvalue, m_newvalue;
 
 };
 
-class KPLATO_TEST_EXPORT ModifyEffortTypeCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyEstimateTypeCmd : public NamedCommand
 {
 public:
-    ModifyEffortTypeCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    ModifyEstimateTypeCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
-    Effort *m_effort;
+    Estimate *m_estimate;
     int m_oldvalue, m_newvalue;
 
 };
 
-class KPLATO_TEST_EXPORT ModifyEffortUnitCmd : public NamedCommand
+class KPLATO_TEST_EXPORT ModifyEstimateUnitCmd : public NamedCommand
 {
 public:
-    ModifyEffortUnitCmd( Part *part, Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name = QString() );
+    ModifyEstimateUnitCmd( Part *part, Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
-    Effort *m_effort;
+    Estimate *m_estimate;
     Duration::Unit m_oldvalue, m_newvalue;
 };
 
-class KPLATO_TEST_EXPORT EffortModifyRiskCmd : public NamedCommand
+class KPLATO_TEST_EXPORT EstimateModifyRiskCmd : public NamedCommand
 {
 public:
-    EffortModifyRiskCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    EstimateModifyRiskCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
-    Effort *m_effort;
+    Estimate *m_estimate;
     int m_oldvalue, m_newvalue;
 
 };

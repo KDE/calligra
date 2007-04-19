@@ -84,7 +84,7 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
     actualEffort->setFieldUnit(1, i18nc("hour", "h"));
     actualEffort->setFieldUnit(2, i18nc("minute", "m"));
     
-    scheduledEffort = task.effort()->expected();
+    scheduledEffort = task.estimate()->expected();
     
     m_year = dateEdit->date().year();
     m_weekOffset = 1;

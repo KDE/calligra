@@ -615,14 +615,14 @@ QVariant NodeItemModel::estimateType( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
-                return node->effort()->typeToString( true );
+                return node->estimate()->typeToString( true );
             }
             return QString();
         case Role::EnumList: 
-            return Effort::typeToStringList( true );
+            return Estimate::typeToStringList( true );
         case Qt::EditRole:
         case Role::EnumListValue: 
-            return (int)node->effort()->type();
+            return (int)node->estimate()->type();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -634,11 +634,11 @@ bool NodeItemModel::setEstimateType( Node *node, const QVariant &value, int role
 {
     switch ( role ) {
         case Qt::EditRole:
-            Effort::Type v = Effort::Type( value.toInt() );
-            if ( v == node->effort()->type() ) {
+            Estimate::Type v = Estimate::Type( value.toInt() );
+            if ( v == node->estimate()->type() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyEffortTypeCmd( m_part, *node, node->effort()->type(), v, "Modify estimate type" ) );
+            m_part->addCommand( new ModifyEstimateTypeCmd( m_part, *node, node->estimate()->type(), v, "Modify estimate type" ) );
             return true;
     }
     return false;
@@ -650,22 +650,22 @@ QVariant NodeItemModel::estimate( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
-                Duration::Unit unit = node->effort()->displayUnit();
+                Duration::Unit unit = node->estimate()->displayUnit();
                 QList<double> scales; // TODO: week
-                if ( node->effort()->type() == Effort::Type_Effort ) {
+                if ( node->estimate()->type() == Estimate::Type_Effort ) {
                     scales << m_project->standardWorktime()->day();
                     // rest is default
                 }
-                double v = Effort::scale( node->effort()->expected(), unit, scales );
+                double v = Estimate::scale( node->estimate()->expected(), unit, scales );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
                 return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
             }
             break;
         case Qt::EditRole:
-            return node->effort()->expected().milliseconds();
+            return node->estimate()->expected().milliseconds();
         case Role::DurationScales: {
             QVariantList lst; // TODO: week
-            if ( node->effort()->type() == Effort::Type_Effort ) {
+            if ( node->estimate()->type() == Estimate::Type_Effort ) {
                 lst.append( m_project->standardWorktime()->day() );
             } else {
                 lst.append( 24.0 );
@@ -674,7 +674,7 @@ QVariant NodeItemModel::estimate( const Node *node, int role ) const
             return lst;
         }
         case Role::DurationUnit:
-            return static_cast<int>( node->effort()->displayUnit() );
+            return static_cast<int>( node->estimate()->displayUnit() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -689,12 +689,12 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
             Duration d( value.toList()[0].toLongLong() );
             Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
             //kDebug()<<k_funcinfo<<value.toList()[0].toLongLong()<<", "<<unit<<" -> "<<d.milliseconds()<<endl;
-            if ( d == node->effort()->expected() ) {
+            if ( d == node->estimate()->expected() ) {
                 return false;
             }
             K3MacroCommand *cmd = new K3MacroCommand( i18n( "Modify estimate" ) );
-            cmd->addCommand( new ModifyEffortCmd( m_part, *node, node->effort()->expected(), d ) );
-            cmd->addCommand( new ModifyEffortUnitCmd( m_part, *node, node->effort()->displayUnit(), unit ) );
+            cmd->addCommand( new ModifyEstimateCmd( m_part, *node, node->estimate()->expected(), d ) );
+            cmd->addCommand( new ModifyEstimateUnitCmd( m_part, *node, node->estimate()->displayUnit(), unit ) );
             m_part->addCommand( cmd );
             return true;
     }
@@ -708,7 +708,7 @@ QVariant NodeItemModel::optimisticRatio( const Node *node, int role ) const
         case Qt::EditRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
-                return node->effort()->optimisticRatio();
+                return node->estimate()->optimisticRatio();
             }
             return QString();
         case Role::Minimum:
@@ -726,10 +726,10 @@ bool NodeItemModel::setOptimisticRatio( Node *node, const QVariant &value, int r
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toInt() == node->effort()->optimisticRatio() ) {
+            if ( value.toInt() == node->estimate()->optimisticRatio() ) {
                 return false;
             }
-            m_part->addCommand( new EffortModifyOptimisticRatioCmd( m_part, *node, node->effort()->optimisticRatio(), value.toInt(), "Modify estimate" ) );
+            m_part->addCommand( new EstimateModifyOptimisticRatioCmd( m_part, *node, node->estimate()->optimisticRatio(), value.toInt(), "Modify estimate" ) );
             return true;
     }
     return false;
@@ -742,7 +742,7 @@ QVariant NodeItemModel::pessimisticRatio( const Node *node, int role ) const
         case Qt::EditRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
-                return node->effort()->pessimisticRatio();
+                return node->estimate()->pessimisticRatio();
             }
             return QString();
         case Role::Minimum:
@@ -760,10 +760,10 @@ bool NodeItemModel::setPessimisticRatio( Node *node, const QVariant &value, int 
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toInt() == node->effort()->pessimisticRatio() ) {
+            if ( value.toInt() == node->estimate()->pessimisticRatio() ) {
                 return false;
             }
-            m_part->addCommand( new EffortModifyPessimisticRatioCmd( m_part, *node, node->effort()->pessimisticRatio(), value.toInt(), "Modify estimate" ) );
+            m_part->addCommand( new EstimateModifyPessimisticRatioCmd( m_part, *node, node->estimate()->pessimisticRatio(), value.toInt(), "Modify estimate" ) );
             return true;
     }
     return false;
@@ -775,14 +775,14 @@ QVariant NodeItemModel::riskType( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
-                return node->effort()->risktypeToString( true );
+                return node->estimate()->risktypeToString( true );
             }
             return QString();
         case Role::EnumList: 
-            return Effort::risktypeToStringList( true );
+            return Estimate::risktypeToStringList( true );
         case Qt::EditRole:
         case Role::EnumListValue: 
-            return (int)node->effort()->risktype();
+            return (int)node->estimate()->risktype();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -794,11 +794,11 @@ bool NodeItemModel::setRiskType( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toInt() == node->effort()->risktype() ) {
+            if ( value.toInt() == node->estimate()->risktype() ) {
                 return false;
             }
-            Effort::Risktype v = Effort::Risktype( value.toInt() );
-            m_part->addCommand( new EffortModifyRiskCmd( m_part, *node, node->effort()->risktype(), v, "Modify Risk Type" ) );
+            Estimate::Risktype v = Estimate::Risktype( value.toInt() );
+            m_part->addCommand( new EstimateModifyRiskCmd( m_part, *node, node->estimate()->risktype(), v, "Modify Risk Type" ) );
             return true;
     }
     return false;
@@ -1688,7 +1688,7 @@ void TaskEditor::slotAddMilestone()
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
         Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
-        t->effort()->set( Duration::zeroDuration );
+        t->estimate()->set( Duration::zeroDuration );
         edit( m_view->itemModel()->insertSubtask( t, t->parentNode() ) );
         return;
     }
@@ -1697,7 +1697,7 @@ void TaskEditor::slotAddMilestone()
         return;
     }
     Task *t = m_view->project()->createTask( part()->config().taskDefaults(), sib->parentNode() );
-    t->effort()->set( Duration::zeroDuration );
+    t->estimate()->set( Duration::zeroDuration );
     edit( m_view->itemModel()->insertTask( t, sib ) );
 }
 

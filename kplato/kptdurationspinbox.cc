@@ -205,14 +205,14 @@ double DurationSpinBox::durationToDouble( const Duration &value, Duration::Unit 
 {
     QList<double> lst;
     lst << hourToFromDay << minToFromHour << secToFromMin << msToFromSec;
-    return Effort::scale( value, unit, lst );
+    return Estimate::scale( value, unit, lst );
 }
 
 Duration DurationSpinBox::durationFromDouble( double value, Duration::Unit unit) const
 {
     QList<double> lst;
     lst << hourToFromDay << minToFromHour << secToFromMin << msToFromSec;
-    return Effort::scale( value, unit, lst );
+    return Estimate::scale( value, unit, lst );
 }
 
 } //namespace KPlato

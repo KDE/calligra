@@ -102,7 +102,7 @@ void Project::calculate( const DateTime &dt )
         return ;
     }
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
-    Effort::Use estType = ( Effort::Use ) cs->type();
+    Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
@@ -170,7 +170,7 @@ void Project::calculate()
         return ;
     }
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
-    Effort::Use estType = ( Effort::Use ) cs->type();
+    Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!

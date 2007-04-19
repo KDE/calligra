@@ -107,7 +107,7 @@ private:
     Task &m_task;
     double m_dayLength;
     
-    Duration m_effort;
+    Duration m_estimate;
     Duration m_duration;
 };
 

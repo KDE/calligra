@@ -45,7 +45,7 @@ class Appointment;
 class ResourceGroup;
 class Resource;
 class ResourceGroupRequest;
-class Effort;
+class Estimate;
 class WBSDefinition;
 class EffortCostMap;
 
@@ -187,7 +187,7 @@ public:
     virtual DateTime endTime( long id = -1 ) const;
 
     /// Return the estimate for this node
-    Effort* effort() const { return m_effort; }
+    Estimate *estimate() const { return m_estimate; }
 
     /**
      * Instead of using the expected duration, generate a random value using
@@ -240,7 +240,7 @@ public:
     /// within the duration of this node
     virtual void calcResourceOverbooked();
 
-    /// EffortType == Effort, but no resource is requested
+    /// EstimateType == Estimate, but no resource is requested
     bool resourceError( long id = -1 ) const;
     /// The assigned resource is overbooked
     virtual bool resourceOverbooked( long id = -1 ) const;
@@ -521,7 +521,7 @@ protected:
     QString m_leader;      // Person or group responsible for this node
     QString m_description; // Description of this node
 
-    Effort* m_effort;
+    Estimate *m_estimate;
     
 
     ConstraintType m_constraint;
@@ -567,45 +567,49 @@ public:
 
 };
 
-////////////////////////////////   Effort   ////////////////////////////////
+////////////////////////////////   Estimate   ////////////////////////////////
 /**
   * Any @ref Node will store how much time it takes to complete the node
   * (typically a @ref Task) in the traditional scheduling software the
-  * effort which is needed to complete the node is not simply a timespan but
+  * estimate which is needed to complete the node is not simply a timespan but
   * is stored as an optimistic, a pessimistic and an expected timespan.
   */
-class Effort {
+class Estimate {
 public:
-    explicit Effort ( Duration e = Duration::zeroDuration, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
+    explicit Estimate ( Duration e = Duration::zeroDuration, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
 
-    explicit Effort ( double e, double p = 0, double o = 0);
+    explicit Estimate ( double e, double p = 0, double o = 0);
     
-    Effort (const Effort &effort);
-    ~Effort();
+    Estimate (const Estimate &estimate);
+    ~Estimate();
 
-    enum Type { Type_Effort = 0,        // Changing amount of resources changes the task duration
-                          Type_FixedDuration = 1     // Changing amount of resources will not change the tasks duration
-     };
+    enum Type {
+        Type_Effort = 0, /// Changing amount of resources changes the task duration
+        Type_FixedDuration = 1 /// Changing amount of resources will not change the tasks duration
+    };
+    Node *parentNode() const { return m_parent; }
+    void setParentNode( Node* parent ) { m_parent = parent; }
+    
     Type type() const { return m_type; }
-    void setType(Type type) { m_type = type; }
+    void setType(Type type) { m_type = type; changed(); }
     void setType(const QString& type);
     QString typeToString( bool trans=false ) const;
     static QStringList typeToStringList( bool trans=false );
     
     enum Risktype { Risk_None, Risk_Low, Risk_High };
     Risktype risktype() const { return m_risktype; }
-    void setRisktype(Risktype type) { m_risktype = type; }
+    void setRisktype(Risktype type) { m_risktype = type; changed(); }
     void setRisktype(const QString& type);
     QString risktypeToString( bool trans=false ) const;
     static QStringList risktypeToStringList( bool trans=false );
 
     enum Use { Use_Expected=0, Use_Optimistic=1, Use_Pessimistic=2 };
-    Duration effort(int valueType, bool pert) const;
-    const Duration& optimistic() const {return m_optimisticEffort;}
-    const Duration& pessimistic() const {return m_pessimisticEffort;}
-    const Duration& expected() const {return m_expectedEffort;}
+    Duration value(int valueType, bool pert) const;
+    const Duration& optimistic() const {return m_optimisticEstimate;}
+    const Duration& pessimistic() const {return m_pessimisticEstimate;}
+    const Duration& expected() const {return m_expectedEstimate;}
 
-    /// The unit in which this this value was last entered.
+    /// The unit in which this value was last entered.
     Duration::Unit displayUnit() const { return m_displayUnit; }
     /// Set display unit.
     void setDisplayUnit( Duration::Unit unit ) { m_displayUnit = unit; }
@@ -613,7 +617,7 @@ public:
     void set( Duration e, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
     void set( int e, int p = -1, int o = -1 );
     void set(unsigned days, unsigned hours, unsigned minutes);
-    void expectedEffort(unsigned *days, unsigned *hours, unsigned *minutes);
+    void expectedEstimate(unsigned *days, unsigned *hours, unsigned *minutes);
 
     bool load(KoXmlElement &element);
     void save(QDomElement &element) const;
@@ -639,11 +643,6 @@ public:
      */
     int pessimisticRatio() const;
 
-    /**
-     * No effort.
-     */
-    static const Effort zeroEffort;
-
     Duration variance() const;
     Duration pertExpected() const;
     Duration pertOptimistic() const;
@@ -652,11 +651,14 @@ public:
     static double scale( const Duration &value, Duration::Unit unit, QList<double> scales );
     static Duration scale( double value, Duration::Unit unit, QList<double> scales );
 
-
+protected:
+    void changed() { if ( m_parent ) m_parent->changed(); }
+    
 private:
-    Duration m_optimisticEffort;
-    Duration m_pessimisticEffort;
-    Duration m_expectedEffort;
+    Node *m_parent;
+    Duration m_optimisticEstimate;
+    Duration m_pessimisticEstimate;
+    Duration m_expectedEstimate;
 
     Type m_type;
     Risktype m_risktype;

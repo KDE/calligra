@@ -60,7 +60,7 @@ TaskDefaultPanel::TaskDefaultPanel(Task &task, StandardWorktime *workTime, QWidg
 }
 
 void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
-    m_effort = m_duration = task.effort()->expected();
+    m_estimate = m_duration = task.estimate()->expected();
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
 
@@ -68,14 +68,14 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     if (workTime) {
         //kDebug()<<k_funcinfo<<"daylength="<<workTime->day()<<endl;
         m_dayLength = workTime->day();
-        if (task.effort()->type() == Effort::Type_Effort) {
+        if (task.estimate()->type() == Estimate::Type_Effort) {
             setEstimateScales(m_dayLength);
         }
     }
     setEstimateFieldUnit(0, i18nc("days", "d"));
     setEstimateFieldUnit(1, i18nc("hours", "h"));
     setEstimateFieldUnit(2, i18nc("minutes", "m"));
-    setEstimateType(task.effort()->type());
+    setEstimateType(task.estimate()->type());
 
     setSchedulingType(task.constraint());
     if (task.constraintStartTime().isValid()) {
@@ -89,10 +89,10 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     } else {
         setEndDateTime(QDateTime(startDate().addDays(1), QTime()));
     }
-    //kDebug()<<k_funcinfo<<"Effort: "<<task.effort()->expected().toString()<<endl;
-    setEstimate(task.effort()->expected());
-    setOptimistic(task.effort()->optimisticRatio());
-    setPessimistic(task.effort()->pessimisticRatio());
+    //kDebug()<<k_funcinfo<<"Estimate: "<<task.estimate()->expected().toString()<<endl;
+    setEstimate(task.estimate()->expected());
+    setOptimistic(task.estimate()->optimisticRatio());
+    setPessimistic(task.estimate()->pessimisticRatio());
 
     leaderfield->setFocus();
 }
@@ -127,25 +127,25 @@ K3MacroCommand *TaskDefaultPanel::buildCommand(Part *part) {
         modified = true;
     }
     int et = estimationType();
-    if (et != m_task.effort()->type()) {
-        cmd->addCommand(new ModifyEffortTypeCmd(part, m_task,  m_task.effort()->type(), et));
+    if (et != m_task.estimate()->type()) {
+        cmd->addCommand(new ModifyEstimateTypeCmd(part, m_task,  m_task.estimate()->type(), et));
         modified = true;
     }
     dt = estimationValue();
     kDebug()<<k_funcinfo<<"Estimate: "<<dt.toString()<<endl;
-    bool expchanged = dt != m_task.effort()->expected();
+    bool expchanged = dt != m_task.estimate()->expected();
     if ( expchanged ) {
-        cmd->addCommand(new ModifyEffortCmd(part, m_task, m_task.effort()->expected(), dt));
+        cmd->addCommand(new ModifyEstimateCmd(part, m_task, m_task.estimate()->expected(), dt));
         modified = true;
     }
     int x = optimistic();
-    if ( x != m_task.effort()->optimisticRatio() || expchanged) {
-        cmd->addCommand(new EffortModifyOptimisticRatioCmd(part, m_task, m_task.effort()->optimisticRatio(), x));
+    if ( x != m_task.estimate()->optimisticRatio() || expchanged) {
+        cmd->addCommand(new EstimateModifyOptimisticRatioCmd(part, m_task, m_task.estimate()->optimisticRatio(), x));
         modified = true;
     }
     x = pessimistic();
-    if ( x != m_task.effort()->pessimisticRatio() || expchanged) {
-        cmd->addCommand(new EffortModifyPessimisticRatioCmd(part, m_task, m_task.effort()->pessimisticRatio(), x));
+    if ( x != m_task.estimate()->pessimisticRatio() || expchanged) {
+        cmd->addCommand(new EstimateModifyPessimisticRatioCmd(part, m_task, m_task.estimate()->pessimisticRatio(), x));
         modified = true;
     }
     if (!modified) {

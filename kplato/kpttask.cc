@@ -50,9 +50,11 @@ Task::Task(Node *parent)
 {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     Duration d(1, 0, 0);
-    m_effort = new Effort(d);
-    m_effort->setOptimisticRatio(-10);
-    m_effort->setPessimisticRatio(20);
+    m_estimate = new Estimate();
+    m_estimate->setOptimisticRatio(-10);
+    m_estimate->setPessimisticRatio(20);
+    m_estimate->setParentNode( this );
+    
     m_requests = 0;
 
     if (m_parent)
@@ -67,13 +69,16 @@ Task::Task(Task &task, Node *parent)
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_requests = 0;
     
-    m_effort = task.effort() ? new Effort(*(task.effort())) 
-                             : new Effort(); // Avoid crash, (shouldn't be zero)
+    if ( task.estimate() ) {
+        m_estimate = new Estimate( *( task.estimate() ) );
+    } else {
+        m_estimate = new Estimate();
+    }
+    m_estimate->setParentNode( this );
 }
 
 
 Task::~Task() {
-    delete m_effort;
     while (!m_resource.isEmpty()) {
         delete m_resource.takeFirst();
     }
@@ -95,7 +100,7 @@ int Task::type() const {
     if ( numChildren() > 0) {
         return Node::Type_Summarytask;
     }
-    else if ( 0 == effort()->expected().seconds() ) {
+    else if ( 0 == m_estimate->expected().milliseconds() ) {
         return Node::Type_Milestone;
     }
     else {
@@ -256,9 +261,10 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
             }
         } else if (e.tagName() == "resource") {
             // TODO: Load the resource (projects don't have resources yet)
-        } else if (e.tagName() == "effort") {
-            //  Load the effort
-            m_effort->load(e);
+        } else if (e.tagName() == "estimate" || 
+                   ( /*status.version() < "0.6" &&*/ e.tagName() == "effort" ) ) {
+            //  Load the estimate
+            m_estimate->load(e);
         } else if (e.tagName() == "resourcegroup-request") {
             // Load the resource request
             ResourceGroupRequest *r = new ResourceGroupRequest();
@@ -312,7 +318,7 @@ void Task::save(QDomElement &element)  const {
     
     me.setAttribute("wbs", m_wbs);
     
-    m_effort->save(me);
+    m_estimate->save(me);
 
     m_completion.saveXML( me );
     
@@ -609,8 +615,8 @@ void Task::initiateCalculationLists(MainSchedule &sch) {
             sch.insertStartNode(this);
             //kDebug()<<k_funcinfo<<"startnodes append: "<<m_name<<endl;
         }
-        if ( ( m_constraint == Node::MustStartOn && m_effort->type() == Effort::Type_FixedDuration ) ||
-            ( m_constraint == Node::MustFinishOn && m_effort->type() == Effort::Type_FixedDuration ) ||
+        if ( ( m_constraint == Node::MustStartOn && m_estimate->type() == Estimate::Type_FixedDuration ) ||
+            ( m_constraint == Node::MustFinishOn && m_estimate->type() == Estimate::Type_FixedDuration ) ||
             ( m_constraint == Node::FixedInterval ) )
         {
             sch.insertHardConstraint( this );
@@ -690,7 +696,7 @@ DateTime Task::calculateEarlyFinish(int use) {
     }
     //kDebug()<<k_funcinfo<<"------> "<<m_name<<" "<<cs->earlyStart<<endl;
     if (type() == Node::Type_Task) {
-        m_durationForward = m_effort->effort(use, pert);
+        m_durationForward = m_estimate->value(use, pert);
         switch (constraint()) {
             case Node::ASAP:
             case Node::ALAP:
@@ -900,7 +906,7 @@ DateTime Task::calculateLateStart(int use) {
     }
     //kDebug()<<k_funcinfo<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->lateFinish<<endl;
     if (type() == Node::Type_Task) {
-        m_durationBackward = m_effort->effort(use, pert);
+        m_durationBackward = m_estimate->value(use, pert);
         switch (constraint()) {
             case Node::ASAP:
             case Node::ALAP:
@@ -1107,7 +1113,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             m_visitedForward = true;
             return cs->endTime;
         }
-        cs->duration = m_effort->effort(use, pert);
+        cs->duration = m_estimate->value(use, pert);
         switch (m_constraint) {
         case Node::ASAP:
             // cs->startTime calculated above
@@ -1353,7 +1359,7 @@ DateTime Task::scheduleFromEndTime(int use) {
     }
     //kDebug()<<k_funcinfo<<"------> "<<m_name<<" "<<cs->endTime<<endl;
     if (type() == Node::Type_Task) {
-        cs->duration = m_effort->effort(use, pert);
+        cs->duration = m_estimate->value(use, pert);
         switch (m_constraint) {
         case Node::ASAP: {
             // cs->endTime calculated above
@@ -1558,10 +1564,6 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
         kError()<<k_funcinfo<<"Time is invalid"<<endl;
         return Duration::zeroDuration;
     }
-    if (m_effort == 0) {
-        kError()<<k_funcinfo<<"m_effort == 0"<<endl;
-        return Duration::zeroDuration;
-    }
     if (m_currentSchedule == 0) {
         return Duration::zeroDuration;
         kError()<<k_funcinfo<<"No current schedule"<<endl;
@@ -1575,7 +1577,7 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
             return eff;
         }
     } else {
-        eff = m_effort->effort(use, m_currentSchedule->usePert());
+        eff = m_estimate->value(use, m_currentSchedule->usePert());
     }
     return calcDuration(time, eff, backward);
 }
@@ -1584,9 +1586,9 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
 Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool backward) {
     //kDebug()<<"--------> calcDuration "<<(backward?"(B) ":"(F) ")<<m_name<<" time="<<time<<" effort="<<effort.toString(Duration::Format_Day)<<endl;
     
-    // Allready checked: m_effort, m_currentSchedule and time.
+    // Allready checked: m_currentSchedule and time.
     Duration dur = effort; // use effort as default duration
-    if (m_effort->type() == Effort::Type_Effort) {
+    if (m_estimate->type() == Estimate::Type_Effort) {
         if (m_requests == 0 || m_requests->isEmpty()) {
             m_currentSchedule->resourceError = true;
             return effort;
@@ -1599,11 +1601,11 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
         }
         return dur;
     }
-    if (m_effort->type() == Effort::Type_FixedDuration) {
+    if (m_estimate->type() == Estimate::Type_FixedDuration) {
         //TODO: Different types of fixed duration
         return dur; //
     }
-    kError()<<k_funcinfo<<"Unsupported effort type: "<<m_effort->type()<<endl;
+    kError()<<k_funcinfo<<"Unsupported estimate type: "<<m_estimate->type()<<endl;
     return dur;
 }
 
@@ -1873,10 +1875,10 @@ bool Task::effortMetError( long id ) const {
     if ( id != -1 ) {
         s = findSchedule( id );
     }
-    if (s == 0 || s->notScheduled || m_effort->type() != Effort::Type_Effort) {
+    if (s == 0 || s->notScheduled || m_estimate->type() != Estimate::Type_Effort) {
         return false;
     }
-    return s->plannedEffort() < effort()->effort(static_cast<Effort::Use>(s->type()),  s->usePert());
+    return s->plannedEffort() < estimate()->value(static_cast<Estimate::Use>(s->type()),  s->usePert());
 }
 
 uint Task::state( long id ) const

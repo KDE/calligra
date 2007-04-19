@@ -560,7 +560,7 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
 //-------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
-        m_currentEstimateType( Effort::Use_Expected )
+        m_currentEstimateType( Estimate::Use_Expected )
 {
     //kDebug()<<k_funcinfo<<endl;
     getProject().setCurrentSchedule( Schedule::Expected );
@@ -1551,8 +1551,7 @@ void View::slotAddTask()
 void View::slotAddMilestone()
 {
     Task * node = getProject().createTask( currentTask() );
-    node->effort() ->set
-    ( Duration::zeroDuration );
+    node->estimate() ->set( Duration::zeroDuration );
 
     TaskDialog *dia = new TaskDialog( *node, getProject().accounts(), getProject().standardWorktime() );
     if ( dia->exec() == QDialog::Accepted ) {

@@ -1325,9 +1325,9 @@ void RemoveResourceRequestCmd::unexecute()
     setCommandType( 1 );
 }
 
-ModifyEffortCmd::ModifyEffortCmd( Part *part, Node &node, Duration oldvalue, Duration newvalue, const QString& name )
+ModifyEstimateCmd::ModifyEstimateCmd( Part *part, Node &node, Duration oldvalue, Duration newvalue, const QString& name )
         : NamedCommand( part, name ),
-        m_effort( node.effort() ),
+        m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue ),
         m_cmd( 0 )
@@ -1346,22 +1346,22 @@ ModifyEffortCmd::ModifyEffortCmd( Part *part, Node &node, Duration oldvalue, Dur
         }
     }
 }
-ModifyEffortCmd::~ModifyEffortCmd()
+ModifyEstimateCmd::~ModifyEstimateCmd()
 {
     delete m_cmd;
 }
-void ModifyEffortCmd::execute()
+void ModifyEstimateCmd::execute()
 {
-    m_effort->set( m_newvalue );
+    m_estimate->set( m_newvalue );
     setSchScheduled( false );
     if ( m_cmd ) {
         m_cmd->execute();
     }
     setCommandType( 1 );
 }
-void ModifyEffortCmd::unexecute()
+void ModifyEstimateCmd::unexecute()
 {
-    m_effort->set( m_oldvalue );
+    m_estimate->set( m_oldvalue );
     if ( m_cmd ) {
         m_cmd->unexecute();
     }
@@ -1369,9 +1369,9 @@ void ModifyEffortCmd::unexecute()
     setCommandType( 1 );
 }
 
-EffortModifyOptimisticRatioCmd::EffortModifyOptimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
+EstimateModifyOptimisticRatioCmd::EstimateModifyOptimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
         : NamedCommand( part, name ),
-        m_effort( node.effort() ),
+        m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue )
 {
@@ -1380,22 +1380,22 @@ EffortModifyOptimisticRatioCmd::EffortModifyOptimisticRatioCmd( Part *part, Node
         addSchScheduled( s );
     }
 }
-void EffortModifyOptimisticRatioCmd::execute()
+void EstimateModifyOptimisticRatioCmd::execute()
 {
-    m_effort->setOptimisticRatio( m_newvalue );
+    m_estimate->setOptimisticRatio( m_newvalue );
     setSchScheduled( false );
     setCommandType( 1 );
 }
-void EffortModifyOptimisticRatioCmd::unexecute()
+void EstimateModifyOptimisticRatioCmd::unexecute()
 {
-    m_effort->setOptimisticRatio( m_oldvalue );
+    m_estimate->setOptimisticRatio( m_oldvalue );
     setSchScheduled();
     setCommandType( 1 );
 }
 
-EffortModifyPessimisticRatioCmd::EffortModifyPessimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
+EstimateModifyPessimisticRatioCmd::EstimateModifyPessimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
         : NamedCommand( part, name ),
-        m_effort( node.effort() ),
+        m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue )
 {
@@ -1404,22 +1404,22 @@ EffortModifyPessimisticRatioCmd::EffortModifyPessimisticRatioCmd( Part *part, No
         addSchScheduled( s );
     }
 }
-void EffortModifyPessimisticRatioCmd::execute()
+void EstimateModifyPessimisticRatioCmd::execute()
 {
-    m_effort->setPessimisticRatio( m_newvalue );
+    m_estimate->setPessimisticRatio( m_newvalue );
     setSchScheduled( false );
     setCommandType( 1 );
 }
-void EffortModifyPessimisticRatioCmd::unexecute()
+void EstimateModifyPessimisticRatioCmd::unexecute()
 {
-    m_effort->setPessimisticRatio( m_oldvalue );
+    m_estimate->setPessimisticRatio( m_oldvalue );
     setSchScheduled();
     setCommandType( 1 );
 }
 
-ModifyEffortTypeCmd::ModifyEffortTypeCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
+ModifyEstimateTypeCmd::ModifyEstimateTypeCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
         : NamedCommand( part, name ),
-        m_effort( node.effort() ),
+        m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue )
 {
@@ -1428,39 +1428,39 @@ ModifyEffortTypeCmd::ModifyEffortTypeCmd( Part *part, Node &node, int oldvalue, 
         addSchScheduled( s );
     }
 }
-void ModifyEffortTypeCmd::execute()
+void ModifyEstimateTypeCmd::execute()
 {
-    m_effort->setType( static_cast<Effort::Type>( m_newvalue ) );
+    m_estimate->setType( static_cast<Estimate::Type>( m_newvalue ) );
     setSchScheduled( false );
     setCommandType( 1 );
 }
-void ModifyEffortTypeCmd::unexecute()
+void ModifyEstimateTypeCmd::unexecute()
 {
-    m_effort->setType( static_cast<Effort::Type>( m_oldvalue ) );
+    m_estimate->setType( static_cast<Estimate::Type>( m_oldvalue ) );
     setSchScheduled();
     setCommandType( 1 );
 }
 
-ModifyEffortUnitCmd::ModifyEffortUnitCmd( Part *part, Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name )
+ModifyEstimateUnitCmd::ModifyEstimateUnitCmd( Part *part, Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name )
         : NamedCommand( part, name ),
-        m_effort( node.effort() ),
+        m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue )
 {
 }
-void ModifyEffortUnitCmd::execute()
+void ModifyEstimateUnitCmd::execute()
 {
-    m_effort->setDisplayUnit( m_newvalue );
+    m_estimate->setDisplayUnit( m_newvalue );
     setCommandType( 0 );
 }
-void ModifyEffortUnitCmd::unexecute()
+void ModifyEstimateUnitCmd::unexecute()
 {
-    m_effort->setDisplayUnit( m_oldvalue );
+    m_estimate->setDisplayUnit( m_oldvalue );
 }
 
-EffortModifyRiskCmd::EffortModifyRiskCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
+EstimateModifyRiskCmd::EstimateModifyRiskCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
         : NamedCommand( part, name ),
-        m_effort( node.effort() ),
+        m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue )
 {
@@ -1469,15 +1469,15 @@ EffortModifyRiskCmd::EffortModifyRiskCmd( Part *part, Node &node, int oldvalue, 
         addSchScheduled( s );
     }
 }
-void EffortModifyRiskCmd::execute()
+void EstimateModifyRiskCmd::execute()
 {
-    m_effort->setRisktype( static_cast<Effort::Risktype>( m_newvalue ) );
+    m_estimate->setRisktype( static_cast<Estimate::Risktype>( m_newvalue ) );
     setSchScheduled( false );
     setCommandType( 1 );
 }
-void EffortModifyRiskCmd::unexecute()
+void EstimateModifyRiskCmd::unexecute()
 {
-    m_effort->setRisktype( static_cast<Effort::Risktype>( m_oldvalue ) );
+    m_estimate->setRisktype( static_cast<Estimate::Risktype>( m_oldvalue ) );
     setSchScheduled();
     setCommandType( 1 );
 }

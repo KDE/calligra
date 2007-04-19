@@ -61,10 +61,10 @@ void Config::load() {
         dt = config->readEntry("ConstraintEndTime",QDateTime());
         m_taskDefaults.setConstraintEndTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
         
-        m_taskDefaults.effort()->setType((Effort::Type)config->readEntry("EffortType",0));
-        m_taskDefaults.effort()->set(Duration((qint64)(config->readEntry("ExpectedEffort",0))*1000)); //FIXME
-        m_taskDefaults.effort()->setPessimisticRatio(config->readEntry("PessimisticEffort",0));
-        m_taskDefaults.effort()->setOptimisticRatio(config->readEntry("OptimisticEffort",0));
+        m_taskDefaults.estimate()->setType((Estimate::Type)config->readEntry("EstimateType",0));
+        m_taskDefaults.estimate()->set(Duration((qint64)(config->readEntry("ExpectedEstimate",0))*1000)); //FIXME
+        m_taskDefaults.estimate()->setPessimisticRatio(config->readEntry("PessimisticEstimate",0));
+        m_taskDefaults.estimate()->setOptimisticRatio(config->readEntry("OptimisticEstimate",0));
     }
 }
 
@@ -84,10 +84,10 @@ void Config::save() {
     config.writeEntry("ConstraintType", (int)m_taskDefaults.constraint());
     config.writeEntry("ConstraintStartTime", m_taskDefaults.constraintStartTime().dateTime());
     config.writeEntry("ConstraintEndTime", m_taskDefaults.constraintEndTime().dateTime());
-    config.writeEntry("EffortType", (int)m_taskDefaults.effort()->type());
-    config.writeEntry("ExpectedEffort", m_taskDefaults.effort()->expected().seconds()); //FIXME
-    config.writeEntry("PessimisticEffort", m_taskDefaults.effort()->pessimisticRatio());
-    config.writeEntry("OptimisticEffort", m_taskDefaults.effort()->optimisticRatio());
+    config.writeEntry("EstimateType", (int)m_taskDefaults.estimate()->type());
+    config.writeEntry("ExpectedEstimate", m_taskDefaults.estimate()->expected().seconds()); //FIXME
+    config.writeEntry("PessimisticEstimate", m_taskDefaults.estimate()->pessimisticRatio());
+    config.writeEntry("OptimisticEstimate", m_taskDefaults.estimate()->optimisticRatio());
 }
 
 }  //KPlato namespace
