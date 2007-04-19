@@ -370,6 +370,9 @@ bool ResourceItemModel::setName( Resource *res, const QVariant &value, int role 
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toString() == res->name() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceNameCmd( m_part, res, value.toString(), "Modify resource name" ) );
             return true;
     }
@@ -380,6 +383,9 @@ bool ResourceItemModel::setName( ResourceGroup *res, const QVariant &value, int 
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toString() == res->name() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceGroupNameCmd( m_part, res, value.toString(), "Modify resourcegroup name" ) );
             return true;
     }
@@ -431,6 +437,9 @@ bool ResourceItemModel::setType( Resource *res, const QVariant &value, int role 
     switch ( role ) {
         case Qt::EditRole:
             Resource::Type v = static_cast<Resource::Type>( value.toInt() );
+            if ( v == res->type() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceTypeCmd( m_part, res, v, "Modify resource type" ) );
             return true;
     }
@@ -442,6 +451,9 @@ bool ResourceItemModel::setType( ResourceGroup *res, const QVariant &value, int 
     switch ( role ) {
         case Qt::EditRole:
             ResourceGroup::Type v = static_cast<ResourceGroup::Type>( value.toInt() );
+            if ( v == res->type() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceGroupTypeCmd( m_part, res, v, "Modify resourcegroup type" ) );
             return true;
     }
@@ -468,6 +480,9 @@ bool ResourceItemModel::setInitials( Resource *res, const QVariant &value, int r
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toString() == res->initials() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceInitialsCmd( m_part, res, value.toString(), "Modify resource initials" ) );
             return true;
     }
@@ -494,6 +509,9 @@ bool ResourceItemModel::setEmail( Resource *res, const QVariant &value, int role
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toString() == res->email() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceEmailCmd( m_part, res, value.toString(), "Modify resource email" ) );
             return true;
     }
@@ -552,6 +570,9 @@ bool ResourceItemModel::setCalendar( Resource *res, const QVariant &value, int r
                     c = m_project->calendarByName( lst.at( value.toInt() ) );
                 }
             }
+            if ( c == res->calendar( true ) ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceCalendarCmd( m_part, res, c, "Modify resource calendar" ) );
             return true;
         }
@@ -580,6 +601,9 @@ bool ResourceItemModel::setUnits( Resource *res, const QVariant &value, int role
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toInt() == res->units() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceUnitsCmd( m_part, res, value.toInt(), "Modify resource available units" ) );
             return true;
     }
@@ -608,6 +632,9 @@ bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, 
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toDateTime() == res->availableFrom().dateTime() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceAvailableFromCmd( m_part, res, value.toDateTime(), "Modify resource available from" ) );
             return true;
     }
@@ -636,6 +663,9 @@ bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value,
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toDateTime() == res->availableUntil().dateTime() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceAvailableUntilCmd( m_part, res, value.toDateTime(), "Modify resource available until" ) );
             return true;
     }
@@ -646,6 +676,7 @@ QVariant ResourceItemModel::normalRate( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
+            return KGlobal::locale()->formatMoney( res->normalRate() );
         case Qt::EditRole:
             return res->normalRate();
         case Qt::TextAlignmentRole:
@@ -662,6 +693,9 @@ bool ResourceItemModel::setNormalRate( Resource *res, const QVariant &value, int
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toDouble() == res->normalRate() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceNormalRateCmd( m_part, res, value.toDouble(), "Modify resource normal rate" ) );
             return true;
     }
@@ -673,6 +707,7 @@ QVariant ResourceItemModel::overtimeRate( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
+            return KGlobal::locale()->formatMoney( res->overtimeRate() );
         case Qt::EditRole:
             return res->overtimeRate();
         case Qt::TextAlignmentRole:
@@ -689,6 +724,9 @@ bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, i
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toDouble() == res->overtimeRate() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyResourceOvertimeRateCmd( m_part, res, value.toDouble(), "Modify resource overtime rate" ) );
             return true;
     }
@@ -977,6 +1015,8 @@ ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
     : TreeViewBase( parent )
 {
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
+    header()->setStretchLastSection( false );
+    
     setModel( new ResourceItemModel( part ) );
     setSelectionModel( new QItemSelectionModel( model() ) );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
