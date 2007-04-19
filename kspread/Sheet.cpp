@@ -318,11 +318,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->name = sheetName;
 
   new SheetAdaptor(this);
-#ifdef __GNUC__
-#warning TODO: Check D-Bus object path.
-// Stefan: Taking the document's object name into the object path, crashes on opening a doc in konq.
-#endif
-  QDBusConnection::sessionBus().registerObject( /*'/'+map->doc()->objectName() +*/ '/' + map->objectName()+ '/' + objectName, this);
+  QDBusConnection::sessionBus().registerObject( '/'+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName, this);
 
   d->cellStorage = new CellStorage( this );
   d->rows.setAutoDelete( true );

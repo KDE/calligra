@@ -231,16 +231,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   d->undoLocked = 0;
 
-
-  // Make us scriptable if the document has a name
-  // Set a name if there is no name specified
-  // NOTE Stefan: This is the ctor and the KoDocument ctor does NOT set
-  //              an object name, so there's no object name at all yet.
-  //              Let's set one for D-Bus.
-  QString tmp = QString( "Document%1" ).arg( d->s_docId++ );
-  setObjectName( tmp.toLocal8Bit() );
-//   dcopObject();
-
   // default document properties
   d->syntaxVersion = CURRENT_SYNTAX_VERSION;
   d->verticalScrollBar = true;
