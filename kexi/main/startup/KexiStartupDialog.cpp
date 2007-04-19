@@ -336,11 +336,11 @@ void KexiStartupDialog::setupPageTemplates()
 	QString kexi_sqlite_icon_name 
 		= KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
 	templPageFrame = d->templatesWidget->addPage (
-		futureI18n2("Keep this text narrow: split to multiple rows if needed", "Create From\nTemplate"), 
-		futureI18n("New Database Project From Template"), DesktopIcon(kexi_sqlite_icon_name) );
+		i18n("Keep this text narrow: split to multiple rows if needed", "Create From\nTemplate"), 
+		i18n("New Database Project From Template"), DesktopIcon(kexi_sqlite_icon_name) );
 	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 	QLabel *lbl_templ = new QLabel( 
-		futureI18n("Kexi will create a new database project using selected template.\n"
+		i18n("Kexi will create a new database project using selected template.\n"
 		"Select template and click \"OK\" button to proceed."), templPageFrame );
 	lbl_templ->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::WordBreak);
 	lbl_templ->setMargin(0);

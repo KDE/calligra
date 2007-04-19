@@ -1251,10 +1251,10 @@ Field::Type KexiDB::maximumForIntegerTypes(Field::Type t1, Field::Type t2)
 QString KexiDB::simplifiedTypeName(const Field& field)
 {
 	if (field.isNumericType())
-		return futureI18n("Number"); //simplify
+		return i18n("Number"); //simplify
 	else if (field.type() == Field::BLOB)
 //! @todo support names of other BLOB subtypes
-		return futureI18n("Image"); //simplify
+		return i18n("Image"); //simplify
 
 	return field.typeGroupName();
 }

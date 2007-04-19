@@ -267,7 +267,7 @@ bool KexiContextMenuUtils::updateTitle(QPopupMenu *menu, const QString& objectNa
 
 /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
  (see doc/dev/settings.txt) */
-	QString realTitle( futureI18n2("Object name : Object type", "%1 : %2")
+	QString realTitle( i18n("Object name : Object type", "%1 : %2")
 		.arg( objectName[0].upper() + objectName.mid(1) )
 		.arg( objectTypeName ));
 

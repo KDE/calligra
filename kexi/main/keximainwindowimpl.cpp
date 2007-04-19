@@ -710,7 +710,7 @@ void KexiMainWindowImpl::initActions()
 //! @todo	d->action_edit_replace = KStdAction::replace(
 //!		this, SLOT(slotEditReplace()), actionCollection(), "project_print_preview" ); 
 	d->action_edit_replace_all = 0;
-//! @todo d->action_edit_replace_all = new KAction( futureI18n("Replace All"), "", 0, 
+//! @todo d->action_edit_replace_all = new KAction( i18n("Replace All"), "", 0, 
 //!   this, SLOT(slotEditReplaceAll()), actionCollection(), "edit_replaceall");
 
 	d->action_edit_select_all =  createSharedAction( KStdAction::SelectAll, "edit_select_all");
@@ -1355,7 +1355,7 @@ tristate KexiMainWindowImpl::createProjectFromTemplate(const KexiProjectData& pr
 	mimetypes.append( KexiDB::Driver::defaultFileBasedDriverMimeType() );
 	QString fname;
 	const QString startDir(":OpenExistingOrCreateNewProject"/*as in KexiNewProjectWizard*/);
-	const QString caption( futureI18n("Select New Project's Location") );
+	const QString caption( i18n("Select New Project's Location") );
 	
 	while (true) {
 #ifdef Q_WS_WIN

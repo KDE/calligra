@@ -159,8 +159,8 @@ void KexiFindDialog::setLookInColumnList(const QStringList& columnNames,
 	d->lookInColumnNames = columnNames;
 	d->lookInColumnCaptions = columnCaptions;
 	m_lookIn->clear();
-	m_lookIn->insertItem(futureI18n("(All fields)"));
-	m_lookIn->insertItem(futureI18n("(Current field)"));
+	m_lookIn->insertItem(i18n("(All fields)"));
+	m_lookIn->insertItem(i18n("(Current field)"));
 	m_lookIn->insertStringList(d->lookInColumnCaptions);
 }
 
@@ -212,15 +212,15 @@ void KexiFindDialog::setObjectNameForCaption(const QString& name)
 	d->objectName = name;
 	if (d->replaceMode) {
 		if (name.isEmpty())
-			setCaption(futureI18n("Replace"));
+			setCaption(i18n("Replace"));
 		else
-			setCaption(futureI18n("Replace in \"%1\"").arg(name));
+			setCaption(i18n("Replace in \"%1\"").arg(name));
 	}
 	else {
 		if (name.isEmpty())
-			setCaption(futureI18n("Find"));
+			setCaption(i18n("Find"));
 		else
-			setCaption(futureI18n("Find in \"%1\"").arg(name));
+			setCaption(i18n("Find in \"%1\"").arg(name));
 	}
 }
 
@@ -243,7 +243,7 @@ void KexiFindDialog::updateMessage( bool found )
 	if (found)
 		setMessage(QString::null);
 	else
-		setMessage(futureI18n("The search item was not found"));
+		setMessage(i18n("The search item was not found"));
 }
 
 void KexiFindDialog::slotCloseClicked()
