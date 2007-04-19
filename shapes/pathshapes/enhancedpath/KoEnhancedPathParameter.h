@@ -53,6 +53,8 @@ public:
     virtual double evaluate( KoEnhancedPathShape *path ) = 0;
     /// modifies the parameter if possible, using the new value
     virtual void modify( double value, KoEnhancedPathShape *path );
+    /// returns string representation of the parameter
+    virtual QString toString() const = 0;
 };
 
 /// A constant parameter, a fixed value (i.e. 5, 11.3, -7 )
@@ -62,6 +64,7 @@ public:
     /// Constructs the constant parameter with the given value
     explicit KoEnhancedPathConstantParameter( double value );
     double evaluate( KoEnhancedPathShape *path );
+    virtual QString toString() const;
 private:
     double m_value; ///< the constant value
 };
@@ -77,6 +80,7 @@ public:
     double evaluate( KoEnhancedPathShape *path );
     /// Returns identfier type from given string
     static Identifier identifierFromString( const QString &text );
+    virtual QString toString() const;
 private:
     Identifier m_identifier; ///< the identifier type
 };
@@ -89,6 +93,7 @@ public:
     explicit KoEnhancedPathReferenceParameter( const QString &reference );
     double evaluate( KoEnhancedPathShape *path );
     virtual void modify( double value, KoEnhancedPathShape *path );
+    virtual QString toString() const;
 private:
     QString m_reference; ///< the reference, formula or modifier
 };

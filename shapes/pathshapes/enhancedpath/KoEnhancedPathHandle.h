@@ -24,6 +24,7 @@
 
 class KoEnhancedPathShape;
 class KoEnhancedPathParameter;
+class KoShapeSavingContext;
 
 /**
  * An interaction handle used by the KoEnhancedPathShape for
@@ -99,6 +100,9 @@ public:
      * @param maxRadius the maximum polar radius
      */
     void setRadiusRange( KoEnhancedPathParameter *minRadius, KoEnhancedPathParameter *maxRadius );
+
+    /// save to the given shape saving context
+    void saveOdf( KoShapeSavingContext * context );
 private:
     /// Returns if handle is polar
     bool isPolar() const;

@@ -43,6 +43,8 @@ public:
     bool execute( KoEnhancedPathShape * path );
     /// Adds a new parameter to the command
     void addParameter( KoEnhancedPathParameter *parameter );
+    /// Returns a string representation of the command
+    QString toString() const;
 private:
     /// Returns a list of points, created from the parameter list
     QList<QPointF> pointsFromParameters( KoEnhancedPathShape *path );

@@ -22,6 +22,24 @@
 #include "KoEnhancedPathShape.h"
 #include <math.h>
 
+QString identifierData[] = {
+    "",          // IdentifierUnknown
+    "pi",        // IdentifierPi
+    "left",      // IdentifierLeft
+    "top",       // IdentifierTop
+    "right",     // IdentifierRight
+    "bottom",    // IdentifierBottom
+    "xstretch",  // IdentifierXstretch
+    "ystretch",  // IdentifierYstretch
+    "hasstroke", // IdentifierHasStroke
+    "hasfill",   // IdentifierHasFill
+    "width",     // IdentifierWidth
+    "height",    // IdentifierHeight
+    "logwidth",  // IdentifierLogwidth
+    "logheight"  // IdentifierLogheight
+};
+
+
 KoEnhancedPathParameter::KoEnhancedPathParameter()
 {
 }
@@ -51,6 +69,11 @@ double KoEnhancedPathConstantParameter::evaluate( KoEnhancedPathShape *path )
 {
     Q_UNUSED( path )
     return m_value;
+}
+
+QString KoEnhancedPathConstantParameter::toString() const
+{
+    return QString::number( m_value );
 }
 
 KoEnhancedPathNamedParameter::KoEnhancedPathNamedParameter( Identifier identifier )
@@ -144,6 +167,11 @@ Identifier KoEnhancedPathNamedParameter::identifierFromString( const QString &te
         return IdentifierUnknown;
 }
 
+QString KoEnhancedPathNamedParameter::toString() const
+{
+    return identifierData[m_identifier];
+}
+
 KoEnhancedPathReferenceParameter::KoEnhancedPathReferenceParameter( const QString &reference )
 : m_reference( reference )
 {
@@ -158,3 +186,9 @@ void KoEnhancedPathReferenceParameter::modify( double value, KoEnhancedPathShape
 {
     path->modifyReference( m_reference, value );
 }
+
+QString KoEnhancedPathReferenceParameter::toString() const
+{
+    return m_reference;
+}
+

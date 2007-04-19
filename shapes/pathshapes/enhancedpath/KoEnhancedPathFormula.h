@@ -136,6 +136,8 @@ public:
     /// Returns the last occurred error
     Error error() { return m_error; }
 
+    /// returns string representaion of the formula
+    QString toString() const;
 private:
     /// Separates the given formula text into tokens.
     TokenList scan( const QString &formula ) const;

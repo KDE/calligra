@@ -706,6 +706,12 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
     return m_valid;
 }
 
+QString KoEnhancedPathFormula::toString() const
+{
+    return m_text;
+}
+
+
 FormulaToken::FormulaToken( Type type, const QString & text, int position )
     : m_type( type ), m_text( text ), m_position( position )
 {
@@ -856,7 +862,6 @@ QString matchFunction( KoEnhancedPathFormula::Function function )
 
     return "unknown";
 }
-
 
 void KoEnhancedPathFormula::debugTokens( const TokenList &tokens )
 {

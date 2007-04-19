@@ -23,6 +23,9 @@
 #include "KoEnhancedPathHandle.h"
 #include "KoEnhancedPathFormula.h"
 
+#include <KoXmlWriter.h>
+#include <KoShapeSavingContext.h>
+
 KoEnhancedPathShape::KoEnhancedPathShape( const QRectF &viewBox )
 : m_viewBox( viewBox ), m_viewBoxOffset( 0.0, 0.0 )
 {
@@ -309,4 +312,39 @@ double KoEnhancedPathShape::shapeToViewbox( double value ) const
 double KoEnhancedPathShape::viewboxToShape( double value ) const
 {
     return m_viewMatrix.map( QPointF( value, value ) ).x();
+}
+
+void KoEnhancedPathShape::saveOdf( KoShapeSavingContext * context )
+{
+    context->xmlWriter().startElement("draw:custom-shape");
+    saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
+
+    context->xmlWriter().startElement("draw:enhanced-geometry");
+    context->xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg( m_viewBox.x() ).arg( m_viewBox.y() ).arg( m_viewBox.width() ).arg( m_viewBox.height() ) );
+
+    QString modifiers;
+    foreach( double modifier, m_modifiers )
+        modifiers += QString::number( modifier ) + " ";
+    context->xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed() );
+
+    QString path;
+    foreach( KoEnhancedPathCommand * c, m_commands )
+        path += c->toString() + " ";
+    context->xmlWriter().addAttribute("draw:enhanced-path", path.trimmed() );
+
+    FormulaStore::const_iterator i = m_formulae.constBegin();
+    for( ; i != m_formulae.constEnd(); ++i )
+    {
+        context->xmlWriter().startElement("draw:equation");
+        context->xmlWriter().addAttribute("draw:name", i.key() );
+        context->xmlWriter().addAttribute("draw:formula", i.value()->toString() );
+        context->xmlWriter().endElement(); // draw:equation
+    }
+
+    foreach( KoEnhancedPathHandle * handle, m_enhancedHandles )
+        handle->saveOdf( context );
+
+    context->xmlWriter().endElement(); // draw:enhanced-geometry
+    context->xmlWriter().endElement(); // draw:custom-shape
+    saveOdfConnections(context);
 }
