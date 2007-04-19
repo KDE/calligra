@@ -7,6 +7,8 @@ libkexidbparser_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO)
 
 noinst_HEADERS = parser_p.h
 
+kexidbparserinclude_HEADERS = parser.h
+
 INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/kexidb $(all_includes)
 METASOURCES = AUTO
 
