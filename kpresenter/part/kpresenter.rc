@@ -19,6 +19,8 @@
             <Separator/>
             <Action name="view_masterpages"/>
             <Separator/>
+            <Action name="view_mode"/>
+            <Separator/>
             <Action name="view_rulers"/>
             <Separator/>
             <Action name="view_grid"/>

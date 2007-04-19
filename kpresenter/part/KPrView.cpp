@@ -20,9 +20,16 @@
 #include "KPrView.h"
 
 #include <KPrDocument.h>
+#include <KPrViewModePresentation.h>
+
+#include <klocale.h>
+#include <ktoggleaction.h>
+#include <kactioncollection.h>
 
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
 : KoPAView( document, parent )
+, m_presentationMode( new KPrViewModePresentation( this, m_canvas ))                       
+, m_normalMode( 0 )    
 {
     initActions();
 }
@@ -45,8 +52,27 @@ void KPrView::initActions()
     else
        setXMLFile( "kpresenter.rc" );
 
-    // KoPAView::initActions();
     // do special kpresenter stuff here
+    m_actionViewMode  = new KToggleAction( i18n( "View Mode" ), this );
+    actionCollection()->addAction( "view_mode", m_actionViewMode );
+    connect( m_actionViewMode, SIGNAL( triggered( bool ) ), this, SLOT( changeViewMode( bool ) ) );
+}
+
+void KPrView::changeViewMode( bool mode )
+{
+    if ( m_normalMode == 0 )
+    {
+        m_normalMode = viewMode();
+    }
+
+    if ( mode )
+    {
+        setViewMode( m_presentationMode );
+    }
+    else
+    {
+        setViewMode( m_normalMode );
+    }
 }
 
 

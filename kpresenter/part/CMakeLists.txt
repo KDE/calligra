@@ -12,6 +12,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrFactory.cpp
      KPrDocument.cpp
      KPrView.cpp
+     KPrViewModePresentation.cpp
    )
 
 kde4_automoc(${kpresenterprivate_LIB_SRCS})

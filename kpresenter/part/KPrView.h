@@ -25,6 +25,7 @@
 #include <KoPAView.h>
 
 class KPrDocument;
+class KPrViewModePresentation;
 
 class KPrView : public KoPAView
 {
@@ -36,6 +37,16 @@ public:
 protected:    
     void initGUI();
     void initActions();
+
+protected slots:
+    // this is just a test method for changing to presentation mode
+    // this will be removed again. do not use otherwise
+    void changeViewMode( bool mode );
+
+private:
+    KToggleAction *m_actionViewMode;
+    KPrViewModePresentation *m_presentationMode;
+    KoPAViewMode *m_normalMode;
 };
 
 #endif /* KPRVIEW_H */
