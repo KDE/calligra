@@ -1,18 +1,15 @@
 include_directories( ${KOFFICECORE_INCLUDES})
+# build the analyzer as a module
+kde4_add_library(abiword MODULE abiwordthroughanalyzer.cpp)
 
-set(kfile_abiword_SRCS kfile_abiword.cpp )
+# link with the required libraries
+target_link_libraries(abiword ${STREAMANALYZER_LIBRARY} ${KDE4_KIO_LIBS})
 
-kde4_automoc(${kfile_abiword_SRCS})
+# adjust the name so the module is recognized as a strigi plugin
+set_target_properties(abiword PROPERTIES
+    PREFIX strigita_)
 
-kde4_add_plugin(kfile_abiword ${kfile_abiword_SRCS})
-
-
-
-target_link_libraries(kfile_abiword  ${KDE4_KDECORE_LIBS} kofficecore )
-
-install(TARGETS kfile_abiword  DESTINATION ${PLUGIN_INSTALL_DIR})
+# install the module in the right directory so it is picked up
+install(TARGETS abiword LIBRARY DESTINATION ${LIB_INSTALL_DIR}/strigi)
 
 
-########### install files ###############
-
-install( FILES  kfile_abiword.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
