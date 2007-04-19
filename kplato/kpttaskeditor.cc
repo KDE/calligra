@@ -190,7 +190,10 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            default: flags |= Qt::ItemIsEditable;
+            case 17: // description
+                break;
+            default: 
+                flags |= Qt::ItemIsEditable;
         }
     }
     return flags;
@@ -278,6 +281,9 @@ bool NodeItemModel::setName( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toString() == node->name() ) {
+                return false;
+            }
             m_part->addCommand( new NodeModifyNameCmd( m_part, *node, value.toString(), "Modify task name" ) );
             return true;
     }
@@ -302,6 +308,9 @@ bool NodeItemModel::setLeader( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toString() == node->leader() ) {
+                return false;
+            }
             m_part->addCommand( new NodeModifyLeaderCmd( m_part, *node, value.toString(), "Modify task responsible" ) );
             return true;
     }
@@ -425,7 +434,15 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
 QVariant NodeItemModel::description( const Node *node, int role ) const
 {
     switch ( role ) {
-        case Qt::DisplayRole:
+        case Qt::DisplayRole: {
+            QString s = node->description();
+            int i = s.indexOf( '\n' );
+            s = s.left( i );
+            if ( i > 0 ) {
+                s += "...";
+            }
+            return s;
+        }
         case Qt::EditRole:
         case Qt::ToolTipRole:
             return node->description();
@@ -440,6 +457,9 @@ bool NodeItemModel::setDescription( Node *node, const QVariant &value, int role 
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toString() == node->description() ) {
+                return false;
+            }
             m_part->addCommand( new NodeModifyDescriptionCmd( m_part, *node, value.toString(), "Modify task description" ) );
             return true;
     }
@@ -492,6 +512,9 @@ bool NodeItemModel::setConstraint( Node *node, const QVariant &value, int role )
         case Qt::EditRole:
             Node::ConstraintType v = Node::ConstraintType( value.toInt() );
             kDebug()<<k_funcinfo<<v<<endl;
+            if ( v == node->constraint() ) {
+                return false;
+            }
             m_part->addCommand( new NodeModifyConstraintCmd( m_part, *node, v, "Modify constraint type" ) );
             return true;
     }
@@ -533,6 +556,9 @@ bool NodeItemModel::setConstraintStartTime( Node *node, const QVariant &value, i
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
+                return false;
+            }
             m_part->addCommand( new NodeModifyConstraintStartTimeCmd( m_part, *node, value.toDateTime(), "Modify constraint start time" ) );
             return true;
     }
@@ -574,6 +600,9 @@ bool NodeItemModel::setConstraintEndTime( Node *node, const QVariant &value, int
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
+                return false;
+            }
             m_part->addCommand( new NodeModifyConstraintEndTimeCmd( m_part, *node, value.toDateTime(), "Modify constraint end time" ) );
             return true;
     }
@@ -606,6 +635,9 @@ bool NodeItemModel::setEstimateType( Node *node, const QVariant &value, int role
     switch ( role ) {
         case Qt::EditRole:
             Effort::Type v = Effort::Type( value.toInt() );
+            if ( v == node->effort()->type() ) {
+                return false;
+            }
             m_part->addCommand( new ModifyEffortTypeCmd( m_part, *node, node->effort()->type(), v, "Modify estimate type" ) );
             return true;
     }
@@ -656,7 +688,10 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
         case Qt::EditRole:
             Duration d( value.toList()[0].toLongLong() );
             Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
-            kDebug()<<k_funcinfo<<value.toList()[0].toLongLong()<<", "<<unit<<" -> "<<d.milliseconds()<<endl;
+            //kDebug()<<k_funcinfo<<value.toList()[0].toLongLong()<<", "<<unit<<" -> "<<d.milliseconds()<<endl;
+            if ( d == node->effort()->expected() ) {
+                return false;
+            }
             K3MacroCommand *cmd = new K3MacroCommand( i18n( "Modify estimate" ) );
             cmd->addCommand( new ModifyEffortCmd( m_part, *node, node->effort()->expected(), d ) );
             cmd->addCommand( new ModifyEffortUnitCmd( m_part, *node, node->effort()->displayUnit(), unit ) );
@@ -691,6 +726,9 @@ bool NodeItemModel::setOptimisticRatio( Node *node, const QVariant &value, int r
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toInt() == node->effort()->optimisticRatio() ) {
+                return false;
+            }
             m_part->addCommand( new EffortModifyOptimisticRatioCmd( m_part, *node, node->effort()->optimisticRatio(), value.toInt(), "Modify estimate" ) );
             return true;
     }
@@ -722,6 +760,9 @@ bool NodeItemModel::setPessimisticRatio( Node *node, const QVariant &value, int 
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toInt() == node->effort()->pessimisticRatio() ) {
+                return false;
+            }
             m_part->addCommand( new EffortModifyPessimisticRatioCmd( m_part, *node, node->effort()->pessimisticRatio(), value.toInt(), "Modify estimate" ) );
             return true;
     }
@@ -753,6 +794,9 @@ bool NodeItemModel::setRiskType( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
         case Qt::EditRole:
+            if ( value.toInt() == node->effort()->risktype() ) {
+                return false;
+            }
             Effort::Risktype v = Effort::Risktype( value.toInt() );
             m_part->addCommand( new EffortModifyRiskCmd( m_part, *node, node->effort()->risktype(), v, "Modify Risk Type" ) );
             return true;
@@ -879,6 +923,9 @@ bool NodeItemModel::setStartupCost( Node *node, const QVariant &value, int role 
     switch ( role ) {
         case Qt::EditRole:
             double v = KGlobal::locale()->readMoney( value.toString() );
+            if ( v == node->startupCost() ) {
+                return false;
+            }
             m_part->addCommand( new NodeModifyStartupCostCmd( m_part, *node, v, i18n( "Modify Startup Cost" ) ) );
             return true;
     }
@@ -955,6 +1002,9 @@ bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role
     switch ( role ) {
         case Qt::EditRole:
             double v = KGlobal::locale()->readMoney( value.toString() );
+            if ( v == node->shutdownCost() ) {
+                return false;
+            }
             m_part->addCommand( new NodeModifyShutdownCostCmd( m_part, *node, v, i18n( "Modify Shutdown Cost" ) ) );
             return true;
     }
