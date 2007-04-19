@@ -125,17 +125,27 @@ InputStream* AbiwordThroughAnalyzer::connectInputStream( InputStream* input ) {
     QString title;
     QString abstract;
 
-    while( !m_item.isNull() )
+    int finish = 0;
+    while( !m_item.isNull() && (finish <3))
     {
         QString key = m_item.toElement().attribute( "key" );
         if ( key.isEmpty() )
             continue;
         else if ( key=="dc.creator" )
+	{
             author=m_item.toElement().text();
+	    finish++;
+	}
         else if ( key=="dc.description" )
+	{
             abstract=m_item.toElement().text();
+	    finish++;
+	}
         else if ( key=="dc.title" )
+	{
             title=m_item.toElement().text();
+	    finish++;
+	}
         else
 	{
             kDebug()<<" Other key :"<<key<<endl;
