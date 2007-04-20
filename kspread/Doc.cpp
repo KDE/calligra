@@ -56,6 +56,7 @@
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
 #include <KoOasisStyles.h>
+#include <KoShapeManager.h>
 #include <KoStoreDevice.h>
 #include <KoVariable.h>
 #include <KoXmlNS.h>
@@ -371,10 +372,20 @@ void Doc::setDefaultRowHeight( double height )
 
 void Doc::addShape( KoShape* shape )
 {
+    foreach ( KoView* view, views() )
+    {
+        Canvas* canvas = static_cast<View*>( view )->canvasWidget();
+        canvas->shapeManager()->add( shape );
+    }
 }
 
 void Doc::removeShape( KoShape* shape )
 {
+    foreach ( KoView* view, views() )
+    {
+        Canvas* canvas = static_cast<View*>( view )->canvasWidget();
+        canvas->shapeManager()->remove( shape );
+    }
 }
 
 void Doc::saveConfig()

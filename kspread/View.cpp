@@ -1880,8 +1880,8 @@ void View::initView()
     d->canvasController->setCanvas( d->canvas );
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
-//     KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
-//     createDockWidget( &toolBoxFactory );
+    KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
+    createDockWidget( &toolBoxFactory );
     d->zoomHandler = new KoZoomHandler();
 
     // The line-editor that appears above the sheet and allows to
