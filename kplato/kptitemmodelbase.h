@@ -164,8 +164,10 @@ public:
     bool isReadWrite() { return m_readWrite; }
 
     /**
-     * Re-implement to check if the @p data is allowed to be dropped on @p index,
+     * Check if the @p data is allowed to be dropped on @p index,
      * @p dropIndicatorPosition indicates position relative @p index.
+     *
+     * Base implementation checks flags and mimetypes.
      */
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
     

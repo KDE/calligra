@@ -400,8 +400,15 @@ void ItemModelBase::slotLayoutToBeChanged()
     emit layoutAboutToBeChanged();
 }
 
-bool ItemModelBase::dropAllowed( const QModelIndex &, int, const QMimeData * )
+bool ItemModelBase::dropAllowed( const QModelIndex &index, int, const QMimeData *data )
 {
+    if ( flags( index ) & Qt::ItemIsDropEnabled ) {
+        foreach ( QString s, data->formats() ) {
+            if ( mimeTypes().contains( s ) ) {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
@@ -568,31 +575,30 @@ ItemModelBase *TreeViewBase::itemModel() const
 
 void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
 {
+    //kDebug()<<k_funcinfo<<endl;
     if (dragDropMode() == InternalMove
         && (event->source() != this || !(event->possibleActions() & Qt::MoveAction))) {
-        event->ignore();
+        //kDebug()<<k_funcinfo<<"Internal: "<<event->isAccepted()<<endl;
         return;
     }
     QTreeView::dragMoveEvent( event );
-    if ( ! event->isAccepted() ) {
-        return;
-    }
-    //QTreeView thinks it's ok to drop
     event->ignore();
     if ( dropIndicatorPosition() == QAbstractItemView::OnViewport ) {
         if ( m_acceptDropsOnView ) {
             event->accept();
         }
+        //kDebug()<<k_funcinfo<<"On viewport:"<<event->isAccepted()<<endl;
         return;
     }
     QModelIndex index = indexAt( event->pos() );
     if ( ! index.isValid() ) {
+        //kDebug()<<k_funcinfo<<"Invalid index:"<<event->isAccepted()<<endl;
         return;
     }
     if ( itemModel()->dropAllowed( index, dropIndicatorPosition(), event->mimeData() ) ) {
         event->accept();
     }
-    kDebug()<<k_funcinfo<<event->isAccepted()<<endl;
+    //kDebug()<<k_funcinfo<<event->isAccepted()<<endl;
 }
 
 //--------------------------------
