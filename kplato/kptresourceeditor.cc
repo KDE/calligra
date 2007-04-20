@@ -952,6 +952,7 @@ QStringList ResourceItemModel::mimeTypes() const
 
 bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
 {
+    kDebug()<<k_funcinfo<<row<<" p:"<<parent.row()<<endl;
     if (action == Qt::IgnoreAction)
         return true;
 
@@ -959,11 +960,12 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         return false;
     }
     //kDebug()<<k_funcinfo<<row<<" p:"<<parent.row()<<endl;
-    
-    if ( !parent.isValid() ) {
-        return false;
+    ResourceGroup *g = 0;
+    if ( parent.isValid() ) {
+        g = qobject_cast<ResourceGroup*>( object( parent ) );
+    } else {
+        g = qobject_cast<ResourceGroup*>( object( index( row, column, parent ) ) );
     }
-    ResourceGroup *g = qobject_cast<ResourceGroup*>( object( parent ) );
     if ( g == 0 ) {
         return false;
     }
