@@ -20,6 +20,7 @@
 #ifndef KEXIDATETIMEFORMATTER_H
 #define KEXIDATETIMEFORMATTER_H
 
+#include <kexi_export.h>
 #include <qdatetimeedit.h>
 #include <qregexp.h>
 

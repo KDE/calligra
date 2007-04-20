@@ -38,19 +38,20 @@
 #include <ktexteditor/viewstatusmsginterface.h>
 #endif
 
-KexiStatusBar::KexiStatusBar(QWidget *parent, const char *name)
-    : KStatusBar(parent, name)
+KexiStatusBar::KexiStatusBar(QWidget *parent)
+    : KStatusBar(parent)
 #if KexiStatusBar_KTEXTEDITOR_USED
 	, m_cursorIface(0)
 #endif
 	, m_activePart(0)
 {
+	setObjectName("KexiStatusBar");
 	int id = 0;
 	m_msgID = id++;
-	insertItem("", m_msgID, 1, true);
+	insertPermanentItem("", m_msgID, 1 /*stretch*/);
 
 	m_readOnlyID = id++;
-	insertFixedItem(i18n("Read only"), m_readOnlyID, true);
+	insertPermanentItem(i18n("Read only"), m_readOnlyID);
 	setReadOnlyFlag(false);
 
 // @todo

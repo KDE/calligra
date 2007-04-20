@@ -603,7 +603,7 @@ tristate KexiTableDesignerView::beforeSwitchTo(int mode, bool &dontStore)
 				i18n("Saving changes for existing table design is now required.")
 				+ "\n" + d->messageForSavingChanges(emptyTable, /* skip warning? */!isPhysicalAlteringNeeded()), 
 				QString::null,
-				KStdGuiItem::save(), KStdGuiItem::discard(), QString::null, 
+				KStandardGuiItem::save(), KStandardGuiItem::discard(), QString::null, 
 				KMessageBox::Notify|KMessageBox::Dangerous);
 			if (r == KMessageBox::Cancel)
 				res = cancelled;
@@ -961,7 +961,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 
 			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
 				i18n("Setting Autonumber Field"),
-				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
+				KGuiItem(i18n("Create &Primary Key"), "key"), KStandardGuiItem::cancel() ))
 			{
 				changePrimaryKey = true;
 				setPrimaryKey = true;
@@ -1017,7 +1017,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 			kexipluginsdbg << "INVALID " << property.value().toString() << endl;
 //			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
 //				i18n("This field has promary key assigned. Setting autonumber field"),
-//				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
+//				KGuiItem(i18n("Create &Primary Key"), "key"), KStandardGuiItem::cancel() ))
 
 		}
 		KexiDB::Field::Type type = KexiDB::intToFieldType( set["type"].value().toInt() );
@@ -1214,7 +1214,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 				"Do you want to add primary key automatically now?</p>"
 				"<p>If you want to add a primary key by hand, press \"Cancel\" "
 				"to cancel saving table design.</p>").arg(schema.name()),
-				QString::null, KGuiItem(i18n("&Add Primary Key"), "key"), KStdGuiItem::no(),
+				QString::null, KGuiItem(i18n("&Add Primary Key"), "key"), KStandardGuiItem::no(),
 					"autogeneratePrimaryKeysOnTableDesignSaving");
 			if (questionRes==KMessageBox::Cancel) {
 				return cancelled;

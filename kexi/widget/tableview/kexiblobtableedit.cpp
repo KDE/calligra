@@ -24,15 +24,12 @@
 
 #include <qdatastream.h>
 #include <qfile.h>
-#include <q3popupmenu.h>
-#include <q3textedit.h>
 #include <qlayout.h>
 #include <qstatusbar.h>
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qpainter.h>
-#include <qtooltip.h>
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qbuffer.h>
@@ -40,12 +37,9 @@
 #include <kdebug.h>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
-#include <kmimemagic.h>
-#include <kuserprofile.h>
 #include <kservice.h>
 #include <kprocess.h>
 #include <kopenwith.h>
-#include <kurl.h>
 #include <karrowbutton.h>
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -64,7 +58,7 @@ class KexiBlobTableEdit::Private
 {
 public:
 	Private()
-	 : popup(0)
+	 : menu(0)
 	 , readOnly(false)
 	 , setValueInternalEnabled(true)
 	{
@@ -73,7 +67,7 @@ public:
 	QByteArray value;
 	KexiDropDownButton *button;
 	QSize totalSize;
-	KexiImageContextMenu *popup;
+	KexiImageContextMenu *menu;
 	bool readOnly : 1; //!< cached for slotUpdateActionsAvailabilityRequested() 
 	bool setValueInternalEnabled : 1; //!< used to disable KexiBlobTableEdit::setValueInternal()
 };
@@ -84,41 +78,40 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *paren
  : KexiTableEdit(column, parent)
  , d ( new Private() )
 {
-	setName("KexiBlobTableEdit");
 //	m_proc = 0;
 //	m_content = 0;
 	m_hasFocusableWidget = false;
 	d->button = new KexiDropDownButton( parentWidget() /*usually a viewport*/ );
 	d->button->hide();
-	QToolTip::add(d->button, i18n("Click to show available actions for this cell"));
+	d->button->setToolTip( i18n("Click to show available actions for this cell") );
 
-	d->popup = new KexiImageContextMenu(this);
-	d->popup->installEventFilter(this);
+	d->menu = new KexiImageContextMenu(this);
+	d->menu->installEventFilter(this);
 	if (column.columnInfo)
-		KexiImageContextMenu::updateTitle( d->popup, column.columnInfo->captionOrAliasOrName(),
+		KexiImageContextMenu::updateTitle( d->menu, column.columnInfo->captionOrAliasOrName(),
 //! @todo pixmaplabel icon is hardcoded...
 			"pixmaplabel" );
-	d->button->setPopup( d->popup );
+	d->button->setMenu( d->menu );
 
 	//force edit requested to start editing... (this will call slotUpdateActionsAvailabilityRequested())
-	//connect(d->popup, SIGNAL(aboutToShow()), this, SIGNAL(editRequested()));
+	//connect(d->menu, SIGNAL(aboutToShow()), this, SIGNAL(editRequested()));
 
-	connect(d->popup, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)), 
+	connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)), 
 		this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
 
-	connect(d->popup, SIGNAL(insertFromFileRequested(const KURL&)),
-		this, SLOT(handleInsertFromFileAction(const KURL&)));
-	connect(d->popup, SIGNAL(saveAsRequested(const QString&)),
+	connect(d->menu, SIGNAL(insertFromFileRequested(const KUrl&)),
+		this, SLOT(handleInsertFromFileAction(const KUrl&)));
+	connect(d->menu, SIGNAL(saveAsRequested(const QString&)),
 		this, SLOT(handleSaveAsAction(const QString&)));
-	connect(d->popup, SIGNAL(cutRequested()),
+	connect(d->menu, SIGNAL(cutRequested()),
 		this, SLOT(handleCutAction()));
-	connect(d->popup, SIGNAL(copyRequested()),
+	connect(d->menu, SIGNAL(copyRequested()),
 		this, SLOT(handleCopyAction()));
-	connect(d->popup, SIGNAL(pasteRequested()),
+	connect(d->menu, SIGNAL(pasteRequested()),
 		this, SLOT(handlePasteAction()));
-	connect(d->popup, SIGNAL(clearRequested()),
+	connect(d->menu, SIGNAL(clearRequested()),
 		this, SLOT(clear()));
-	connect(d->popup, SIGNAL(showPropertiesRequested()),
+	connect(d->menu, SIGNAL(showPropertiesRequested()),
 		this, SLOT(handleShowPropertiesAction()));
 }
 
@@ -225,7 +218,7 @@ KexiBlobTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val
 	x = 0;
 	w -= 1; //a place for border
 	h -= 1; //a place for border
-	if (p && val.canCast(QVariant::ByteArray) && pixmap.loadFromData(val.toByteArray())) {
+	if (p && val.canConvert(QVariant::ByteArray) && pixmap.loadFromData(val.toByteArray())) {
 		KexiUtils::drawPixmap( *p, 0/*lineWidth*/, QRect(x, y_offset, w, h), 
 			pixmap, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/);
 	}
@@ -241,12 +234,12 @@ bool KexiBlobTableEdit::cursorAtEnd()
 	return true;
 }
 
-void KexiBlobTableEdit::handleInsertFromFileAction(const KURL& url)
+void KexiBlobTableEdit::handleInsertFromFileAction(const KUrl& url)
 {
 	if (isReadOnly())
 		return;
 
-	QString fileName( url.isLocalFile() ? url.path() : url.prettyURL() );
+	QString fileName( url.isLocalFile() ? url.path() : url.prettyUrl() );
 
 	//! @todo download the file if remote, then set fileName properly
 	QFile f(fileName);
@@ -255,7 +248,7 @@ void KexiBlobTableEdit::handleInsertFromFileAction(const KURL& url)
 		return;
 	}
 	QByteArray ba = f.readAll();
-	if (f.status()!=IO_Ok) {
+	if (f.error()!=QFile::NoError) {
 		//! @todo err msg
 		f.close();
 		return;
@@ -282,8 +275,8 @@ void KexiBlobTableEdit::handleSaveAsAction(const QString& fileName)
 		//! @todo err msg
 		return;
 	}
-	f.writeBlock( d->value );
-	if (f.status()!=IO_Ok) {
+	f.write( d->value );
+	if (f.error()!=QFile::NoError) {
 		//! @todo err msg
 		f.close();
 		return;
@@ -318,8 +311,8 @@ void KexiBlobTableEdit::handlePasteAction()
 		return;
 	QPixmap pm( qApp->clipboard()->pixmap(QClipboard::Clipboard) );
 	QByteArray ba;
-	QBuffer buffer( ba );
-	buffer.open( IO_WriteOnly );
+	QBuffer buffer( &ba );
+	buffer.open( QIODevice::WriteOnly );
 	if (pm.save( &buffer, "PNG" )) {// write pixmap into ba in PNG format
 		setValueInternal( ba, true );
 	}
@@ -365,10 +358,10 @@ void KexiBlobTableEdit::resize(int w, int h)
 		d->button->resize( h, h );
 	m_rightMarginWhenFocused = m_rightMargin + addWidth;
 	QRect r( pos().x(), pos().y(), w+1, h+1 );
-	r.moveBy(m_scrollView->contentsX(),m_scrollView->contentsY());
+	r.translate( m_scrollView->contentsX(), m_scrollView->contentsY() );
 	updateFocus( r );
-//todo	if (d->popup) {
-//todo		d->popup->updateSize();
+//todo	if (d->menu) {
+//todo		d->menu->updateSize();
 //todo	}
 }
 
@@ -411,16 +404,19 @@ bool KexiBlobTableEdit::handleKeyPress( QKeyEvent* ke, bool editorActive )
 	Q_UNUSED(editorActive);
 
 	const int k = ke->key();
-	KKey kkey(ke);
 	if (!d->readOnly) {
-		if ((ke->state()==Qt::NoButton && k==Qt::Key_F4)
-			|| (ke->state()==Qt::AltButton && k==Qt::Key_Down)) {
+		if ((ke->modifiers()==Qt::NoButton && k==Qt::Key_F4)
+			|| (ke->modifiers()==Qt::AltButton && k==Qt::Key_Down))
+		{
 			d->button->animateClick();
-			QMouseEvent me( QEvent::MouseButtonPress, QPoint(2,2), Qt::LeftButton, Qt::NoButton );
+			QMouseEvent me( QEvent::MouseButtonPress, QPoint(2,2), Qt::LeftButton, Qt::NoButton,
+				Qt::NoModifier );
 			QApplication::sendEvent( d->button, &me );
 		}
-		else if ((ke->state()==NoButton && (k==Qt::Key_F2 || k==Qt::Key_Space || k==Qt::Key_Enter || k==Qt::Key_Return))) {
-			d->popup->insertFromFile();
+		else if (ke->modifiers()==Qt::NoButton 
+		  && (k==Qt::Key_F2 || k==Qt::Key_Space || k==Qt::Key_Enter || k==Qt::Key_Return))
+		{
+			d->menu->insertFromFile();
 		}
 		else
 			return false;
@@ -432,7 +428,7 @@ bool KexiBlobTableEdit::handleKeyPress( QKeyEvent* ke, bool editorActive )
 
 bool KexiBlobTableEdit::handleDoubleClick()
 {
-	d->popup->insertFromFile();
+	d->menu->insertFromFile();
 	return true;
 }
 
@@ -445,25 +441,25 @@ void KexiBlobTableEdit::handleCopyAction(const QVariant& value, const QVariant& 
 void KexiBlobTableEdit::handleAction(const QString& actionName)
 {
 	if (actionName=="edit_paste") {
-		d->popup->paste();
+		d->menu->paste();
 	}
 	else if (actionName=="edit_cut") {
 		emit editRequested();
-		d->popup->cut();
+		d->menu->cut();
 	}
 }
 
 bool KexiBlobTableEdit::eventFilter( QObject *o, QEvent *e )
 {
-	if (o == d->popup && e->type()==QEvent::KeyPress) {
+	if (o == d->menu && e->type()==QEvent::KeyPress) {
 		QKeyEvent* ke = static_cast<QKeyEvent*>(e);
-		const int state = ke->state();
+		const int mods = ke->modifiers();
 		const int k = ke->key();
-		if (   (state==Qt::NoButton && (k==Qt::Key_Tab || k==Qt::Key_Left || k==Qt::Key_Right))
-		    || (state==Qt::ShiftButton && k==Qt::Key_Backtab)
+		if (   (mods==Qt::NoButton && (k==Qt::Key_Tab || k==Qt::Key_Left || k==Qt::Key_Right))
+		    || (mods==Qt::ShiftButton && k==Qt::Key_Backtab)
 		   )
 		{
-			d->popup->hide();
+			d->menu->hide();
 	    QApplication::sendEvent( this, ke ); //re-send to move cursor
 			return true;
 		}
@@ -494,7 +490,6 @@ KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, QWidget *par
  : KexiTableEdit(column, parent)
  , d( new Private() )
 {
-	setName("KexiKIconTableEdit");
 	init();
 }
 
@@ -571,7 +566,7 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVa
 	QPixmap *pix = 0;
 	if (!key.isEmpty() && !(pix = d->pixmapCache[ key ])) {
 		//cache pixmap
-		QPixmap pm = KGlobal::iconLoader()->loadIcon( key, K3Icon::Small, 
+		QPixmap pm = KIconLoader::global()->loadIcon( key, K3Icon::Small, 
 			0, K3Icon::DefaultState, 0L, true/*canReturnNull*/ );
 		if (!pm.isNull()) {
 			pix = new QPixmap(pm);

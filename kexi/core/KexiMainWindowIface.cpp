@@ -18,19 +18,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "keximainwindow.h"
+#include "KexiMainWindowIface.h"
 
 #include <kdebug.h>
 
-KexiMainWindow::KexiMainWindow()
- : //KexiMdiMainFrm()
- KexiSharedActionHost(this)
+KexiMainWindowIface::KexiMainWindowIface()
+ : KexiSharedActionHost(this)
 {
 }
 
-KexiMainWindow::~KexiMainWindow()
+KexiMainWindowIface::~KexiMainWindowIface()
 {
 }
-
-#include "keximainwindow.moc"
 

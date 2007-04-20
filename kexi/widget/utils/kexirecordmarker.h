@@ -23,8 +23,8 @@
 #ifndef KEXIRECORDMARKER_H
 #define KEXIRECORDMARKER_H
 
-#include <qwidget.h>
-//Added by qt3to4:
+#include "../../kexi_export.h"
+#include <QWidget>
 #include <QPaintEvent>
 
 class QImage;
@@ -35,8 +35,8 @@ class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
 	Q_OBJECT
 
 	public:
-		KexiRecordMarker(QWidget *parent, const char* name = 0);
-		~KexiRecordMarker();
+		KexiRecordMarker(QWidget *parent);
+		virtual ~KexiRecordMarker();
 
 		int rows() const;
 

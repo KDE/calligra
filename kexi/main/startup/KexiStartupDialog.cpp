@@ -129,14 +129,7 @@ public:
 	bool singlePage : 1;
 };
 
-bool dlgSinglePage(int type)
-{
-	return (type==KexiStartupDialog::Templates)
-	|| (type==KexiStartupDialog::OpenExisting)
-	|| (type==KexiStartupDialog::OpenRecent);
-}
-
-QString captionForDialogType(int type)
+static QString captionForDialogType(int type)
 {
 	if (type==KexiStartupDialog::Templates)
 		return i18n("Create Project");
@@ -149,23 +142,23 @@ QString captionForDialogType(int type)
 }
 
 /*================================================================*/
-/*KexiStartupDialog::KexiStartupDialog(QWidget *parent, const char *name, KComponentData global,
-	const QCString &format, const QString &nativePattern,
-	const QString &nativeName, const DialogType &dialogType,
-	const QCString& templateType) :
-	KDialogBase(parent, name, true, i18n("Open Document"), KDialogBase::Ok | KDialogBase::Cancel,
-	KDialogBase::Ok) {
-*/
+
 KexiStartupDialog::KexiStartupDialog(
 	int dialogType, int dialogOptions,
 	KexiDBConnectionSet& connSet, KexiProjectSet& recentProjects,
-	QWidget *parent, const char *name )
- : KDialogBase(
- 	dlgSinglePage(dialogType) ? Plain : Tabbed
-	,captionForDialogType(dialogType)
- 	,Help | Ok | Cancel, Ok, parent, name )
+	QWidget *parent )
+ : KPageDialog( parent )
  , d(new KexiStartupDialogPrivate())
 {
+	setFaceType(
+		(dialogType==KexiStartupDialog::Templates
+		|| dialogType==KexiStartupDialog::OpenExisting
+		|| dialogType==KexiStartupDialog::OpenRecent)
+		? Plain : Tabbed
+	);
+	setCaption( captionForDialogType(dialogType) );
+	setButtons( Help | Ok | Cancel );
+	
 	d->recentProjects = &recentProjects;
 	d->connSet = &connSet;
 	d->dialogType = dialogType;
@@ -173,9 +166,9 @@ KexiStartupDialog::KexiStartupDialog(
  	d->singlePage = dlgSinglePage(dialogType);
 
 	if (dialogType==OpenExisting) {//this dialog has "open" tab only!
-		setIcon(DesktopIcon("document-open"));
+		setWindowIcon(DesktopIcon("document-open"));
 	} else {
-		setIcon(d->kexi_sqlite_icon);
+		setWindowIcon(d->kexi_sqlite_icon);
 	}
 
 	setSizeGripEnabled(true);
@@ -343,11 +336,11 @@ void KexiStartupDialog::setupPageTemplates()
 	QString kexi_sqlite_icon_name 
 		= KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
 	templPageFrame = d->templatesWidget->addPage (
-		futureI18n2("Keep this text narrow: split to multiple rows if needed", "Create From\nTemplate"), 
-		futureI18n("New Database Project From Template"), DesktopIcon(kexi_sqlite_icon_name) );
+		i18nc("Keep this text narrow: split to multiple rows if needed", "Create From\nTemplate"), 
+		i18n("New Database Project From Template"), DesktopIcon(kexi_sqlite_icon_name) );
 	tmplyr = new Q3VBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 	QLabel *lbl_templ = new QLabel( 
-		futureI18n("Kexi will create a new database project using selected template.\n"
+		i18n("Kexi will create a new database project using selected template.\n"
 		"Select template and click \"OK\" button to proceed."), templPageFrame );
 	lbl_templ->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::WordBreak);
 	lbl_templ->setMargin(0);

@@ -96,7 +96,7 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 
 		/*! Shows a property set \a set in a Property Editor. */
 		void slotPropertySetSwitched(KoProperty::Set *set, bool forceReload = false, 
-			const Q3CString& propertyToSelect = Q3CString());
+			const QByteArray& propertyToSelect = QByteArray());
 
 	protected:
 		virtual bool openFile();

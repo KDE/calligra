@@ -18,7 +18,7 @@
  */
 
 #include "kexidbconnectionwidget.h"
-#include "kexidbconnectionwidgetdetailsbase.h"
+#include "ui_kexidbconnectionwidgetdetails.h"
 
 #include <kexi.h>
 #include <kexiguimsghandler.h>
@@ -67,10 +67,12 @@ class KexiDBConnectionWidget::Private
 
 //---------
 
-KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* name )
- : KexiDBConnectionWidgetBase( parent, name )
+KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent )
+ : Ui::KexiDBConnectionWidget( parent )
  , d(new Private())
 {
+	setupUi(this);
+	setObjectName("KexiConnSelectorWidget");
 	iconLabel->setPixmap(DesktopIcon("network-wired"));
 
 	Q3VBoxLayout *driversComboLyr = new Q3VBoxLayout(frmEngine);
@@ -226,7 +228,9 @@ void KexiDBConnectionWidget::slotCBToggled(bool on)
 KexiDBConnectionTabWidget::KexiDBConnectionTabWidget( QWidget* parent, const char* name )
  : KTabWidget( parent, name )
 {
-	mainWidget = new KexiDBConnectionWidget( this, "mainWidget" );
+	mainWidget = new KexiDBConnectionWidget( this );
+	mainWidget->setupUi(this);
+	mainWidget->setObjectName( "mainWidget" );
 	mainWidget->layout()->setMargin(KDialog::marginHint());
 	addTab( mainWidget, i18n("Parameters") );
 
@@ -236,10 +240,17 @@ KexiDBConnectionTabWidget::KexiDBConnectionTabWidget( QWidget* parent, const cha
 //	QLabel *lbl = new QLabel(i18n("&Description:"), page2);
 //	m_descriptionEdit = new KTextEdit(page2);
 //	lbl->setBuddy(m_descriptionEdit);
-	detailsWidget = new KexiDBConnectionWidgetDetailsBase(this, "detailsWidget");
+	detailsWidget = new Ui:KexiDBConnectionWidgetDetails(this);
+	detailsWidget->setObjectName("detailsWidget");
+	detailsWidget->setupUi(this);
 	addTab( detailsWidget, i18n("Details") );
+	connect( detailsWidget->chkSocketDefault, SIGNAL( toggled(bool) ),
+		this, SLOT( slotSocketComboboxToggled(bool) ) );
+	connect( detailsWidget->chkUseSocket, SIGNAL( toggled(bool) ), 
+		this, SLOT( slotSocketComboboxToggled(bool) ) );
 
-	connect( mainWidget->testConnectionButton(), SIGNAL(clicked()), this, SLOT(slotTestConnection()) );
+	connect( mainWidget->testConnectionButton(), SIGNAL(clicked()),
+		this, SLOT(slotTestConnection()) );
 }
 
 KexiDBConnectionTabWidget::~KexiDBConnectionTabWidget()
@@ -324,14 +335,23 @@ bool KexiDBConnectionTabWidget::savePasswordOptionSelected() const
 	return mainWidget->chkSavePassword->isChecked();
 }
 
-
-
-
 void KexiDBConnectionTabWidget::slotTestConnection()
 {
 	KexiGUIMessageHandler msgHandler;
 	KexiDB::connectionTestDialog(this, *currentProjectData().connectionData(), 
 		msgHandler);
+}
+
+void KexiDBConnectionTabWidget::slotSocketComboboxToggled( bool on )
+{
+	if (sender()==detailsWidget->chkSocketDefault) {
+		detailsWidget->customSocketEdit->setEnabled( !on );
+	}
+	else if (sender()==detailsWidget->chkUseSocket) {
+		detailsWidget->customSocketEdit->setEnabled(
+			on && !detailsWidget->chkSocketDefault->isChecked() );
+		detailsWidget->chkSocketDefault->setEnabled( on );
+	}
 }
 
 //--------

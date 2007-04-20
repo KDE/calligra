@@ -147,7 +147,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	conn_sel_lyr->addSpacing(KDialogBase::spacingHint());
 
 	m_conn_sel = new KexiConnSelectorWidget(conn_set, ":OpenExistingOrCreateNewProject", 
-		m_conn_sel_widget, "KexiConnSelectorWidget");
+		m_conn_sel_widget);
 	conn_sel_lyr->addWidget( m_conn_sel );
 
 	//"Select database server connection"
@@ -190,7 +190,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	m_server_db_name->le_caption->setText(i18n("New database"));
 	m_server_db_name->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this, "id_val"));
 	m_project_selector = new KexiProjectSelectorWidget(
-		m_server_db_name->frm_dblist, "KexiProjectSelectorWidget", 0, false, false );
+		m_server_db_name->frm_dblist, 0, false, false );
 	GLUE_WIDGET(m_project_selector, m_server_db_name->frm_dblist);
 	m_project_selector->setFocusPolicy(Qt::NoFocus);
 	m_project_selector->setSelectable(false);

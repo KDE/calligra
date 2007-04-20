@@ -26,7 +26,6 @@
 
 #include <kexiutils/tristate.h>
 #include "kexi.h"
-#include "keximainwindow.h"
 
 class KActionCollection;
 class KexiWindow;
@@ -320,8 +319,7 @@ class KEXICORE_EXPORT Part : public QObject
 		PartPrivate *d;
 
 	friend class Manager;
-	friend class ::KexiMainWindow;
-//	friend class ::KexiMainWindowImpl;
+	//friend class KexiMainWindowIface;
 	friend class GUIClient;
 };
 

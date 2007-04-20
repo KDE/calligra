@@ -478,7 +478,7 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 		query = new KexiDB::SchemaData(); //just empty
 
 		ok = (KMessageBox::questionYesNo(this, i18n("Do you want to save invalid query?"),
-			0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeSavingInvalidQueries"/*config entry*/)==KMessageBox::Yes);
+			0, KStandardGuiItem::yes(), KStandardGuiItem::no(), "askBeforeSavingInvalidQueries"/*config entry*/)==KMessageBox::Yes);
 		if (ok) {
 			(KexiDB::SchemaData&)*query = sdata; //copy main attributes
 			ok = m_mainWin->project()->dbConnection()->storeObjectSchemaData( *query, true /*newObject*/ );

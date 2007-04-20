@@ -34,7 +34,6 @@
 KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent)
  : KexiTableEdit(column, parent)
 {
-	setName("KexiBoolTableEdit");
 	kDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
 	kDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
 	m_hasFocusableWidget = false;
@@ -71,7 +70,7 @@ QVariant KexiBoolTableEdit::value()
 void KexiBoolTableEdit::clear()
 {
 	if (field()->isNotNull())
-		m_currentValue = QVariant(false, 0);
+		m_currentValue = QVariant(false);
 	else
 		m_currentValue = QVariant();
 }
@@ -120,13 +119,13 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool focused, const QVariant
 void KexiBoolTableEdit::clickedOnContents()
 {
 	if (field()->isNotNull())
-		m_currentValue = QVariant( !m_currentValue.toBool(), 0 );
+		m_currentValue = QVariant( !m_currentValue.toBool() );
 	else {
 		// null allowed: use the cycle: true -> false -> null
 		if (m_currentValue.isNull())
-			m_currentValue = QVariant( true, 1 );
+			m_currentValue = QVariant( true );
 		else
-			m_currentValue = m_currentValue.toBool() ? QVariant( false, 1 ) : QVariant();
+			m_currentValue = m_currentValue.toBool() ? QVariant( false ) : QVariant();
 	}
 }
 
@@ -137,11 +136,11 @@ void KexiBoolTableEdit::handleAction(const QString& actionName)
 		bool ok;
 		const int value = qApp->clipboard()->text( QClipboard::Clipboard ).toInt(&ok);
 		if (ok) {
-			m_currentValue = (value==0) ? QVariant(false, 0) : QVariant(true, 1);
+			m_currentValue = (value==0) ? QVariant(false) : QVariant(true);
 		}
 		else {
 			m_currentValue = field()->isNotNull() 
-				? QVariant(0, false)/*0 instead of NULL - handle case when null is not allowed*/
+				? QVariant(0)/*0 instead of NULL - handle case when null is not allowed*/
 				: QVariant();
 		}
 		repaintRelatedCell();
@@ -150,7 +149,7 @@ void KexiBoolTableEdit::handleAction(const QString& actionName)
 		emit editRequested();
 //! @todo handle defaultValue...
 		m_currentValue = field()->isNotNull() 
-			? QVariant(0, false)/*0 instead of NULL - handle case when null is not allowed*/
+			? QVariant(0)/*0 instead of NULL - handle case when null is not allowed*/
 			: QVariant();
 		handleCopyAction(m_origValue, QVariant());
 		repaintRelatedCell();
@@ -169,7 +168,7 @@ void KexiBoolTableEdit::handleCopyAction(const QVariant& value, const QVariant& 
 int KexiBoolTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )
 {
 	Q_UNUSED(fm);
-	return val.toPixmap().width();
+	return val.value<QPixmap>().width();
 }
 
 //======================================================
@@ -177,4 +176,3 @@ int KexiBoolTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiBoolEditorFactoryItem, KexiBoolTableEdit)
 
 #include "kexibooltableedit.moc"
-

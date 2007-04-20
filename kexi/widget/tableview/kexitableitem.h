@@ -25,6 +25,7 @@
 #ifndef KEXITABLEITEM_H
 #define KEXITABLEITEM_H
 
+#include <kexi_export.h>
 #include <qstring.h>
 #include <qdatetime.h>
 #include <q3valuevector.h>

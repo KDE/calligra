@@ -13,7 +13,7 @@ set(kexicore_LIB_SRCS
    kexi_global.cpp 
    kexi.cpp 
 #   keximdi.cpp
-   keximainwindow.cpp 
+   KexiMainWindowIface.cpp
    kexidbconnectionset.cpp 
    kexiprojectset.cpp 
    kexiactionproxy.cpp 
@@ -30,8 +30,8 @@ set(kexicore_LIB_SRCS
    kexiprojectdata.cpp 
    kexiinternalpart.cpp 
    kexidragobjects.cpp 
-   kexiuseraction.cpp 
-   kexiuseractionmethod.cpp 
+ #  kexiuseraction.cpp 
+ #  kexiuseractionmethod.cpp 
    kexistartupdata.cpp 
    kexiguimsghandler.cpp 
    kexitextmsghandler.cpp 

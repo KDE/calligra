@@ -7,3 +7,4 @@
 	the database, making it easy to share data and design.
  */
 IGNORE_PREFIX=Kexi
+EXCLUDE=kexi/3rdparty tests main2 kexidb/parser/sqlparser.h kexidb/drivers/odbc plugins/relations

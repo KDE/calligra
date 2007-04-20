@@ -104,8 +104,8 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	}
 	else
 	{
-		connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const QCString&)),
-			this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool, const QCString&)));
+		connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const QByteArray&)),
+			this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool, const QByteArray&)));
 		connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
@@ -423,7 +423,8 @@ KexiFormView::loadForm()
 }
 
 void
-KexiFormView::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload, const QCString& propertyToSelect)
+KexiFormView::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload,
+	const QByteArray& propertyToSelect)
 {
 //	if (set && parentDialog()!=parentDialog()->mainWin()->currentDialog())
 	if (form() != KFormDesigner::FormManager::self()->activeForm())
@@ -536,10 +537,7 @@ KexiFormView::afterSwitchFrom(int mode)
 		if (!m_dbform->orderedFocusWidgets()->isEmpty()) {
 //			QWidget *www = focusWidget();
 			//if (Kexi::hasParent(this, qApp->focusWidget())) {
-				QEvent fe( QEvent::FocusOut );
-				QFocusEvent::setReason(QFocusEvent::Tab);
-				QApplication::sendEvent( qApp->focusWidget(), &fe );
-				QFocusEvent::resetReason();
+				KexiUtils::unsetFocusWithReason(qApp->focusWidget(), QFocusEvent::Tab);
 			//}
 
 			Q3PtrListIterator<QWidget> it(*m_dbform->orderedFocusWidgets());

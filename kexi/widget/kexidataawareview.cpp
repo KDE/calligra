@@ -208,7 +208,7 @@ void KexiDataAwareView::reloadActions()
 		unplugSharedAction("edit_insert_empty_row");
 		plugSharedAction("edit_insert_empty_row", m_internalView, SLOT(insertEmptyRow()));
 		if (separatorNeeded)
-			m_dataAwareObject->contextMenu()->insertSeparator();
+			m_dataAwareObject->contextMenu()->addSeparator();
 		plugSharedAction("edit_insert_empty_row", m_dataAwareObject->contextMenu());
 	}
 	else {
@@ -218,7 +218,7 @@ void KexiDataAwareView::reloadActions()
 
 	if (m_dataAwareObject->isDeleteEnabled()) {
 		if (separatorNeeded)
-			m_dataAwareObject->contextMenu()->insertSeparator();
+			m_dataAwareObject->contextMenu()->addSeparator();
 		plugSharedAction("edit_delete", m_dataAwareObject->contextMenu());
 		plugSharedAction("edit_delete_row", m_dataAwareObject->contextMenu());
 	}

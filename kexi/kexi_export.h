@@ -145,7 +145,7 @@
 #endif
 
 /* temporary */
-#ifndef KOPROPERTY_EXPORT
+/*#ifndef KOPROPERTY_EXPORT
 # ifdef MAKE_KOPROPERTY_LIB
 #  define KOPROPERTY_EXPORT KDE_EXPORT
 # elif defined(KDE_MAKE_LIB)
@@ -153,7 +153,7 @@
 # else
 #  define KOPROPERTY_EXPORT
 # endif
-#endif
+#endif*/
 
 /* temporary */
 #ifndef KOMACRO_EXPORT

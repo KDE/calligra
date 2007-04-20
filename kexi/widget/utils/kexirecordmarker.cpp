@@ -23,69 +23,34 @@
 #include "kexirecordmarker.h"
 
 #include <qcolor.h>
-#include <qstyle.h>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qimage.h>
 #include <qapplication.h>
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QPaintEvent>
-
+#include <QStyle>
+#include <QStyleOptionHeader>
+ 
 #include <kdebug.h>
 #include <kstaticdeleter.h>
 
 #include <kexiutils/utils.h>
 
+#include "../../pics/tableview_pen.xpm"
+#include "../../pics/tableview_plus.xpm"
+
 static KStaticDeleter<QImage> KexiRecordMarker_pen_deleter, KexiRecordMarker_plus_deleter;
 QImage* KexiRecordMarker_pen = 0, *KexiRecordMarker_plus = 0;
-
-static const unsigned char img_pen_data[] = {
-    0x00,0x00,0x03,0x30,0x78,0x9c,0xfb,0xff,0xff,0x3f,0xc3,0x7f,0x32,0x30,
-    0x10,0x80,0x88,0xff,0xe4,0xe8,0x85,0xe9,0xc7,0xc6,0x26,0x55,0x3f,0x3a,
-    0x4d,0x8e,0x7e,0x72,0xfc,0x32,0xd2,0xf5,0xa3,0xeb,0xa5,0xb5,0x7e,0x5c,
-    0xe9,0x85,0x54,0xfb,0xb1,0xa5,0x1b,0x52,0xdc,0x0e,0x00,0xf2,0xea,0x0a,
-    0x13
-};
-static const unsigned char img_plus_data[] = {
-    0x00,0x00,0x01,0x90,0x78,0x9c,0xfb,0xff,0xff,0x3f,0xc3,0x7f,0x28,0x86,
-    0x82,0xff,0x50,0x0c,0x17,0x47,0xc7,0xd4,0x50,0x87,0x05,0xc0,0xd5,0xe1,
-    0x10,0xa7,0x16,0x26,0xca,0x5e,0x7c,0xfe,0x20,0x47,0x1d,0xb2,0x5a,0x5c,
-    0xea,0x40,0x72,0x00,0x03,0x6e,0x74,0x8c
-};
-
-static struct EmbedImage {
-    int width, height, depth;
-    const unsigned char *data;
-    ulong compressed;
-    int numColors;
-    const QRgb *colorTable;
-    bool alpha;
-    const char *name;
-} embed_image[] = {
-    { 17, 12, 32, (const unsigned char*)img_pen_data, 57, 0, 0, true, "tableview_pen.png" },
-    { 10, 10, 32, (const unsigned char*)img_pen_data, 50, 0, 0, true, "tableview_plus.png" }
-};
-
-QImage* getImg(const unsigned char* data, int id)
-{
-	QByteArray baunzip;
-	baunzip = qUncompress( data, embed_image[id].compressed );
-	QImage *img = new QImage( QImage((uchar*)baunzip.data(),
-			embed_image[id].width, embed_image[id].height,
-			embed_image[id].depth, (QRgb*)embed_image[id].colorTable,
-			embed_image[id].numColors, QImage::BigEndian
-	).copy() );
-	if ( embed_image[id].alpha )
-		img->setAlphaBuffer(true);
-	return img;
-}
 
 static void initRecordMarkerImages()
 {
 	if (!KexiRecordMarker_pen) {
 /*! @warning not reentrant! */
-		KexiRecordMarker_pen_deleter.setObject( KexiRecordMarker_pen, getImg(img_pen_data, 0) );
-		KexiRecordMarker_plus_deleter.setObject( KexiRecordMarker_plus, getImg(img_plus_data, 1) );
+		KexiRecordMarker_pen_deleter.setObject( 
+			KexiRecordMarker_pen, new QImage(tableview_pen_xpm) );
+		KexiRecordMarker_plus_deleter.setObject(
+			KexiRecordMarker_plus, new QImage(tableview_plus_xpm) );
 	}
 }
 
@@ -118,8 +83,8 @@ public:
 
 //----------------------------------------------------------------
 
-KexiRecordMarker::KexiRecordMarker(QWidget *parent, const char* name)
- : QWidget(parent, name)
+KexiRecordMarker::KexiRecordMarker(QWidget *parent)
+ : QWidget(parent)
  , d( new Private() )
 {
 	initRecordMarkerImages();
@@ -207,9 +172,17 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 		int y = ((d->rowHeight * i)-d->offset);
 		QRect r(0, y, width(), d->rowHeight);
 		p.drawRect(r);
-		style().drawPrimitive( QStyle::PE_HeaderSection, &p, r,
+		QStyleOptionHeader optionHeader;
+		optionHeader.initFrom(this);
+		optionHeader.orientation = Qt::Vertical;
+		optionHeader.rect = r;
+		optionHeader.state = QStyle::State_Raised;
+		style()->drawControl( QStyle::CE_HeaderSection, &optionHeader, &p );
+#warning 2.0: TODO?
+/* 2.0: TODO		
+		, r,
 			(d->currentRow == i) ? selectedColorGroup : (d->highlightedRow == i ? highlightedColorGroup : colorGroup()), 
-			QStyle::Style_Raised | (isEnabled() ? QStyle::Style_Enabled : 0));
+			QStyle::Style_Raised | (isEnabled() ? QStyle::Style_Enabled : 0));*/
 	}
 	if (d->editRow!=-1 && d->editRow >= first && d->editRow <= (last/*+1 for insert row*/)) {
 		//show pen when editing
@@ -224,7 +197,7 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 		//show marker
 		p.setBrush(colorGroup().foreground());
 		p.setPen(QPen(Qt::NoPen));
-		Q3PointArray points(3);
+		QPolygon points(3);
 		int ofs = d->rowHeight / 4;
 		int ofs2 = (width() - ofs) / 2 -1;
 		int pos = ((d->rowHeight*d->currentRow)-d->offset)-ofs/2+2;

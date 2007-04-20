@@ -21,8 +21,8 @@
 #include "KexiWindow.h"
 #include "KexiWindowData.h"
 #include "KexiView.h"
+#include "KexiMainWindowIface.h"
 
-#include "keximainwindow.h"
 #include "kexicontexthelp_p.h"
 #include "kexipart.h"
 #include "kexistaticpart.h"
@@ -95,7 +95,7 @@ KexiWindow::KexiWindow(/*const QString &caption, */ QWidget *parent,
 	int supportedViewModes, KexiPart::Part& part,	KexiPart::Item& item)
 // : KexiMdiChildView(parent, caption)
  : QStackedWidget(parent)
- , KexiActionProxy(this, KexiMainWindow::global())
+ , KexiActionProxy(this, KexiMainWindowIface::global())
  , d( new Private() )
  , m_destroying(false)
 {
@@ -117,7 +117,7 @@ KexiWindow::KexiWindow(/*const QString &caption, */ QWidget *parent,
 KexiWindow::KexiWindow()
 // : KexiMdiChildView(parent, caption)
  : QStackedWidget(0)
- , KexiActionProxy(this, KexiMainWindow::global())
+ , KexiActionProxy(this, KexiMainWindowIface::global())
  , d( new Private() )
  , m_destroying(false)
 {
@@ -237,7 +237,7 @@ void KexiWindow::registerDialog()
 {
 	if (d->isRegistered)
 		return;
-	KexiMainWindow::global()->registerChild(this);
+	KexiMainWindowIface::global()->registerChild(this);
 	d->isRegistered=true;
 /* kde4
 	if ( m_parentWindow->mdiMode() == KexiMdiMainFrm::ToplevelMode ) {
@@ -290,7 +290,7 @@ void KexiWindow::setContextHelp(const QString& caption,
 
 void KexiWindow::closeEvent( QCloseEvent * e )
 {
-	KexiMainWindow::global()->acceptPropertySetEditing();
+	KexiMainWindowIface::global()->acceptPropertySetEditing();
 
 	//let any view send "closing" signal
 /*	QObjectList list = queryList( "KexiView", 0, false, false);
@@ -392,7 +392,7 @@ tristate KexiWindow::switchToViewMode( int newViewMode,
 	QMap<QString,QString>* staticObjectArgs,
 	bool& proposeOpeningInTextViewModeBecauseOfProblems)
 {
-	KexiMainWindow::global()->acceptPropertySetEditing();
+	KexiMainWindowIface::global()->acceptPropertySetEditing();
 
 	const bool designModePreloadedForTextModeHack = isDesignModePreloadedForTextModeHackUsed(newViewMode);
 	tristate res = true;
@@ -422,7 +422,7 @@ tristate KexiWindow::switchToViewMode( int newViewMode,
 		if (~res || !res)
 			return res;
 		if (!dontStore && view->isDirty()) {
-			res = KexiMainWindow::global()->saveObject(this, i18n("Design has been changed. "
+			res = KexiMainWindowIface::global()->saveObject(this, i18n("Design has been changed. "
 				"You must save it before switching to other view."));
 			if (~res || !res)
 				return res;
@@ -485,7 +485,7 @@ tristate KexiWindow::switchToViewMode( int newViewMode,
 		kDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< prevViewMode << " restored." << endl;
 		const Kexi::ObjectStatus status(*this);
-		setStatus(KexiMainWindow::global()->project()->dbConnection(), 
+		setStatus(KexiMainWindowIface::global()->project()->dbConnection(), 
 			i18n("Switching to other view failed (%1).").arg(Kexi::nameForViewMode(newViewMode)),"");
 		append( status );
 		d->currentViewMode = prevViewMode;
@@ -501,7 +501,7 @@ tristate KexiWindow::switchToViewMode( int newViewMode,
 	addActionProxyChild( newView ); //new proxy child
 	setCurrentIndex( d->indexForView[newViewMode] );
 	newView->propertySetSwitched();
-	KexiMainWindow::global()->invalidateSharedActions( newView );
+	KexiMainWindowIface::global()->invalidateSharedActions( newView );
 	QTimer::singleShot(10, newView, SLOT(setFocus())); //newView->setFocus(); //js ok?
 //	setFocus();
 	return true;
@@ -566,7 +566,7 @@ bool KexiWindow::eventFilter(QObject *obj, QEvent *e)
 		QWidget *w = m_parentWindow->activeWindow();
 		w=0;
 	}*/
-	if ((e->type()==QEvent::FocusIn && KexiMainWindow::global()->currentWindow()==this)
+	if ((e->type()==QEvent::FocusIn && KexiMainWindowIface::global()->currentWindow()==this)
 		|| e->type()==QEvent::MouseButtonPress) {
 		if (currentWidget() && KexiUtils::hasParent(currentWidget(), obj)) {
 			//pass the activation
@@ -631,14 +631,14 @@ tristate KexiWindow::storeNewData()
 	if (cancel)
 		return cancelled;
 	if (!d->schemaData) {
-		setStatus(KexiMainWindow::global()->project()->dbConnection(), i18n("Saving object's definition failed."),"");
+		setStatus(KexiMainWindowIface::global()->project()->dbConnection(), i18n("Saving object's definition failed."),"");
 		return false;
 	}
 
 	if (!part()->info()->isIdStoredInPartDatabase()) {
 		//this part's ID is not stored within kexi__parts:
 		KexiDB::TableSchema *ts =
-			KexiMainWindow::global()->project()->dbConnection()->tableSchema("kexi__parts");
+			KexiMainWindowIface::global()->project()->dbConnection()->tableSchema("kexi__parts");
 		kDebug() << "KexiWindow::storeNewData(): schema: " << ts << endl;
 		if (!ts)
 			return false;
@@ -651,7 +651,7 @@ tristate KexiWindow::storeNewData()
 			// Find first available custom part ID by taking the greatest
 			// existing custom ID (if it exists) and adding 1.
 			p_id = (int)KexiPart::UserObjectType;
-			tristate success = KexiMainWindow::global()->project()->dbConnection()
+			tristate success = KexiMainWindowIface::global()->project()->dbConnection()
 			->querySingleNumber("SELECT max(p_id) FROM kexi__parts", d->id);
 			if (!success) {
 			       	// Couldn't read part id's from the kexi__parts table
@@ -673,7 +673,7 @@ tristate KexiWindow::storeNewData()
 //		QStringList sl = part()->info()->ptr()->propertyNames();
 //		for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
 //			kexidbg << *it << " " << part()->info()->ptr()->property(*it).toString() <<  endl;
-		if (!KexiMainWindow::global()->project()->dbConnection()
+		if (!KexiMainWindowIface::global()->project()->dbConnection()
 			->insertRecord(
 				*fl,
 				QVariant(p_id),
@@ -697,7 +697,7 @@ tristate KexiWindow::storeNewData()
 	//new schema data has now ID updated to a unique value
 	//-assign that to item's identifier
 	d->item->setIdentifier( d->schemaData->id() );
-	KexiMainWindow::global()->project()->addStoredItem( part()->info(), d->item );
+	KexiMainWindowIface::global()->project()->addStoredItem( part()->info(), d->item );
 
 	return true;
 }
@@ -711,10 +711,10 @@ tristate KexiWindow::storeData(bool dontAsk)
 		return false;
 
 #define storeData_ERR \
-	setStatus(KexiMainWindow::global()->project()->dbConnection(), i18n("Saving object's data failed."),"");
+	setStatus(KexiMainWindowIface::global()->project()->dbConnection(), i18n("Saving object's data failed."),"");
 
 	//save changes using transaction
-	KexiDB::Transaction transaction = KexiMainWindow::global()
+	KexiDB::Transaction transaction = KexiMainWindowIface::global()
 		->project()->dbConnection()->beginTransaction();
 	if (transaction.isNull()) {
 		storeData_ERR;
@@ -744,7 +744,7 @@ void KexiWindow::activate()
 	KexiView *v = selectedView();
 	//kDebug() << "focusWidget(): " << focusWidget()->name() << endl;
 #warning TODO KexiWindow::activate() OK instead of focusedChildWidget()?
-	if (KexiUtils::hasParent( v, /*kde4*/ KexiMainWindow::global()->focusWidget() )) //QStackedWidget::focusedChildWidget()))
+	if (KexiUtils::hasParent( v, /*kde4*/ KexiMainWindowIface::global()->focusWidget() )) //QStackedWidget::focusedChildWidget()))
 #warning TODO		QStackedWidget::activate();
 	#if 0
 	else

@@ -20,8 +20,10 @@
 #ifndef KEXITOOLTIP_H
 #define KEXITOOLTIP_H
 
-#include <qwidget.h>
-#include <qvariant.h>
+#include <kexi_export.h>
+
+#include <QWidget>
+#include <QVariant>
 
 //! \brief A tooltip that can display rich content
 class KEXIGUIUTILS_EXPORT KexiToolTip : public QWidget

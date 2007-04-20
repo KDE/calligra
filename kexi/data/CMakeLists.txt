@@ -1,4 +1,4 @@
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KDE34COMPAT)")
+#message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KDE34COMPAT)")
 
 ########### install files ###############
 

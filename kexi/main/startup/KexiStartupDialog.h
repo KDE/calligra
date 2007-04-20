@@ -20,17 +20,7 @@
 #ifndef KexiStartupDialog_h
 #define KexiStartupDialog_h
 
-#include <kdialogbase.h>
-#include <kicondialog.h>
-#include <k3iconview.h>
-#include <kfileiconview.h>
-#include <kfiledialog.h>
-
-#include <qlabel.h>
-#include <qsplitter.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QEvent>
+#include <KPageDialog>
 
 #include <kexidb/connectiondata.h>
 #include <core/kexiprojectdata.h>
@@ -40,13 +30,15 @@ class KexiProjectData;
 class KexiProjectSet;
 class KexiDBConnectionSet;
 class ConnectionDataLVItem;
+class QEvent;
 
+//! @short Kexi startup dialog
 /*!
-   This class is used to show the template/open-existing/open-recent tabbed dialog
-   on Kexi startup. If only one page is shown, tab is no displayed, so dialog 
-   becomes a normal "plain" type dialog.
- */
-class KEXIMAIN_EXPORT KexiStartupDialog : public KDialogBase
+ This class is used to show the template/open-existing/open-recent tabbed dialog
+ on Kexi startup. If only one page is shown, tab is no displayed, so dialog 
+ becomes a normal "plain" type dialog.
+*/
+class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog
 {
     Q_OBJECT
 
@@ -99,7 +91,8 @@ public:
 		int dialogOptions,
 		KexiDBConnectionSet& connSet,
 		KexiProjectSet& recentProjects,
-		QWidget *parent = 0, const char *name = 0 );
+		QWidget *parent = 0 );
+
 	~KexiStartupDialog();
 
 	/*! \return true if startup dialog should be shown (info is taken from kexi config)

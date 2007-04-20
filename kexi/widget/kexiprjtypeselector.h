@@ -20,10 +20,10 @@
 #ifndef KEXIPRJTYPESELECTOR_H
 #define KEXIPRJTYPESELECTOR_H
 
-#include "kexiprjtypeselectorbase.h"
+#include "ui_kexiprjtypeselector.h"
 
 //! @short A simple widget with radio buttons with "show file/server-based projects" options
-class KEXIEXTWIDGETS_EXPORT KexiPrjTypeSelector : public KexiPrjTypeSelectorBase
+class KEXIEXTWIDGETS_EXPORT KexiPrjTypeSelector : public Ui::KexiPrjTypeSelector
 {
 	Q_OBJECT
 
@@ -31,8 +31,8 @@ class KEXIEXTWIDGETS_EXPORT KexiPrjTypeSelector : public KexiPrjTypeSelectorBase
 		KexiPrjTypeSelector( QWidget* parent = 0 );
 		~KexiPrjTypeSelector();
 
-	protected slots:
-		virtual void languageChange() { KexiPrjTypeSelectorBase::languageChange(); } 
+//	protected slots:
+//		virtual void languageChange() { KexiPrjTypeSelectorBase::languageChange(); } 
 };
 
 #endif // KEXIPRJTYPESELECTOR_H

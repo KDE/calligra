@@ -23,11 +23,12 @@
 #include <kexidbconnectionset.h>
 #include <kexidb/driver.h>
 #include "KexiStartupFileDialog.h"
+#include "ui_KexiConnSelector.h"
 
-#include <kdialogbase.h>
+#include <KDialog>
 #include <k3listview.h>
 
-#include <qpointer.h>
+#include <QPointer>
 
 class KexiConnSelectorBase;
 
@@ -47,17 +48,20 @@ class ConnectionDataLVItem : public Q3ListViewItem
 };
 
 
-//class KexiOpenExistingFile;
 class KexiConnSelectorWidgetPrivate;
 
 /*! Widget that allows to select a database connection (without choosing database itself)
 */
-class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
+class KEXIMAIN_EXPORT KexiConnSelectorWidget : private Ui::KexiConnSelector
 {
 	Q_OBJECT
 
 	public:
-		enum ConnType { FileBased=1, ServerBased=2 };
+		//! Defines connection type
+		enum ConnType {
+			FileBased=1, //!< the widget displays file-based connection
+			ServerBased=2 //!< the widget displays server-based connection
+		};
 
 		/*! Constructs a KexiConnSelector which contain \a conn_set as connection set. 
 		 \a conn_set can be altered, because Add/Edit/Remove buttons are available 
@@ -65,8 +69,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 		 (it can also contain a configuration variable name with ":" prefix as described 
 		 in KRecentDirs documentation). */
 		KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, 
-			const QString& startDirOrVariable, 
-			QWidget* parent = 0, const char* name = 0 );
+			const QString& startDirOrVariable, QWidget* parent = 0 );
 
 		virtual ~KexiConnSelectorWidget();
 		

@@ -176,7 +176,7 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 	m_toolbar->setIconText(KToolBar::IconTextRight);
 	lyr->addWidget(m_toolbar);
 
-	id = m_toolbar->insertWidget( -1, 0, new KPushButton(KStdGuiItem::print(), m_toolbar) );
+	id = m_toolbar->insertWidget( -1, 0, new KPushButton(KStandardGuiItem::print(), m_toolbar) );
 	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotPrintClicked()));
 	static_cast<KPushButton*>(m_toolbar->getWidget(id))->setAccel(Qt::CTRL|Qt::Key_P);
 	m_toolbar->insertSeparator();
@@ -197,7 +197,7 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 	m_toolbar->insertSeparator();
 #endif
 
-	id = m_toolbar->insertWidget(-1, 0, new KPushButton(KStdGuiItem::close(), m_toolbar));
+	id = m_toolbar->insertWidget(-1, 0, new KPushButton(KStandardGuiItem::close(), m_toolbar));
 	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(close()));
 	m_toolbar->alignItemRight(id);
 

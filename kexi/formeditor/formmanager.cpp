@@ -1172,7 +1172,8 @@ FormManager::breakLayout()
 }
 
 void
-FormManager::showPropertySet(WidgetPropertySet *set, bool forceReload, const Q3CString& propertyToSelect)
+FormManager::showPropertySet(WidgetPropertySet *set, bool forceReload, 
+	const QByteArray& propertyToSelect)
 {
 	if (m_objectBlockingPropertyEditorUpdating)
 		return;

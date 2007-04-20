@@ -83,6 +83,13 @@ class KEXIUTILS_EXPORT StyleProxy : public QStyle
 			m_style->drawItemText(painter, rect, flags, pal, enabled, text, textRole);
 		}
 
+		virtual void drawPrimitive( PrimitiveElement element, 
+			const QStyleOption * option, QPainter * painter, 
+			const QWidget * widget = 0 ) const
+		{
+			m_style->drawPrimitive( element, option, painter, widget );
+		}
+
 		virtual void drawItemPixmap(QPainter *painter, const QRect &rect,
 			int alignment, const QPixmap &pixmap) const
 		{

@@ -20,7 +20,7 @@
 #ifndef KEXIDBCONNECTIONWIDGET_H
 #define KEXIDBCONNECTIONWIDGET_H
 
-#include "kexidbconnectionwidgetbase.h"
+#include "ui_kexidbconnectionwidget.h"
 
 #include <kexiprojectdata.h>
 
@@ -32,13 +32,14 @@ class KPushButton;
 class KexiDBDriverComboBox;
 class KexiDBConnectionWidgetDetailsBase;
 class KexiDBConnectionTabWidget;
+namespace Ui { KexiDBConnectionWidgetDetails }
 
-class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidget : public KexiDBConnectionWidgetBase
+class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidget : private Ui::KexiDBConnectionWidget
 {
 	Q_OBJECT
 
 	public:
-		KexiDBConnectionWidget( QWidget* parent = 0, const char* name = 0 );
+		KexiDBConnectionWidget( QWidget* parent = 0 );
 		virtual ~KexiDBConnectionWidget();
 
 		/*! Sets project data \a data.
@@ -83,9 +84,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidget : public KexiDBConnectionWidg
 		KexiDBDriverComboBox *m_driversCombo;
 
 		class Private;
-		Private *d;
-
-//		friend class KexiDBConnectionTabWidget;
+		Private * const d;
 };
 
 class KEXIEXTWIDGETS_EXPORT KexiDBConnectionTabWidget : public KTabWidget
@@ -112,10 +111,11 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionTabWidget : public KTabWidget
 
 	protected slots:
 		void slotTestConnection();
+		void slotSocketComboboxToggled( bool on );
 
 	protected:
 		KexiDBConnectionWidget *mainWidget;
-		KexiDBConnectionWidgetDetailsBase* detailsWidget;
+		Ui::KexiDBConnectionWidgetDetails* detailsWidget;
 
 	friend class KexiDBConnectionDialog;
 };

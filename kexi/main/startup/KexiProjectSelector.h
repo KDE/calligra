@@ -20,7 +20,7 @@
 #ifndef KEXIPROJECTSELECTOR_H
 #define KEXIPROJECTSELECTOR_H
 
-#include "KexiProjectSelectorBase.h"
+#include "ui_KexiProjectSelector.h"
 #include "kexiprojectset.h"
 
 #include <kdialogbase.h>
@@ -31,7 +31,7 @@ class KexiProjectSelectorWidgetPrivate;
 
 /*! Widget that allows to select a kexi project (or database)
 */
-class KEXIMAIN_EXPORT KexiProjectSelectorWidget : public KexiProjectSelectorBase
+class KEXIMAIN_EXPORT KexiProjectSelectorWidget : private Ui::KexiProjectSelector
 {
 	Q_OBJECT
 
@@ -44,11 +44,11 @@ public:
 	 information about database driver and connection columns are added.
 	 \a prj_set may be NULL - you can assign a set later with setProjectSet().
 	*/
-	KexiProjectSelectorWidget( QWidget* parent = 0, const char* name = 0, 
+	KexiProjectSelectorWidget( QWidget* parent = 0, 
 		KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
 		bool showConnectionColumns = true );
     
-	~KexiProjectSelectorWidget();
+	virtual ~KexiProjectSelectorWidget();
 	
 	/*! \return data of selected project. Returns NULL if no selection has been made.
 	*/
@@ -90,14 +90,14 @@ protected:
 };
 
 /*! Dialog container for KexiProjectSelectorWidget */
-class KexiProjectSelectorDialog : public KDialogBase
+class KexiProjectSelectorDialog : public KDialog
 {
 	Q_OBJECT
 public:
 	/*! Constructor 1, used for displaying recent projects list
 	 Label "there are recently opened projects" is displayed automatically
 	*/
-	KexiProjectSelectorDialog( QWidget *parent, const char *name,
+	KexiProjectSelectorDialog( QWidget *parent, 
 		KexiProjectSet* prj_set, 
 		bool showProjectNameColumn = true, bool showConnectionColumns = true);
 
@@ -105,20 +105,20 @@ public:
 	 Label "Select one of these existing projects on server" is displayed automatically
 	 You should test if project set was properly loaded using projectSet()->error().
 	*/
-	KexiProjectSelectorDialog( QWidget *parent, const char *name,
-		KexiDB::ConnectionData* cdata, 
+	KexiProjectSelectorDialog( QWidget *parent, 
+		const KexiDB::ConnectionData& cdata, 
 		bool showProjectNameColumn = true, bool showConnectionColumns = true);
 	
-	~KexiProjectSelectorDialog();
+	virtual ~KexiProjectSelectorDialog();
 	
 	/*! \return data of selected project. Returns NULL if no selection has been made.
 	*/
 	KexiProjectData* selectedProjectData() const;
 
 	/*! \return currently assigned project set or NULL if no project set is assigned. */
-	inline KexiProjectSet *projectSet() { return m_sel->projectSet(); }
+	inline KexiProjectSet *projectSet() const { return m_sel->projectSet(); }
 
-	virtual void show();
+	virtual void showEvent( QShowEvent * event );
 
 protected slots:
 	void slotProjectExecuted(KexiProjectData*);

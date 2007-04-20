@@ -36,6 +36,7 @@
 #include "kexitableitem.h"
 
 #include <kexidb/error.h>
+#include <kexidb/cursor.h>
 
 namespace KexiDB {
 class Field;

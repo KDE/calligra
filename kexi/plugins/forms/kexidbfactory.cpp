@@ -435,13 +435,13 @@ KexiDBFactory::createMenuActions(const Q3CString &classname, QWidget *w, QPopupM
 		menu->insertItem(i18n("&Image"), subMenu);
 		ac->action("insert")->plug(subMenu);
 		ac->action("file_save_as")->plug(subMenu);
-		subMenu->insertSeparator();
+		subMenu->addSeparator();
 		ac->action("edit_cut")->plug(subMenu);
 		ac->action("edit_copy")->plug(subMenu);
 		ac->action("edit_paste")->plug(subMenu);
 		ac->action("delete")->plug(subMenu);
 		if (ac->action("properties")) {
-			subMenu->insertSeparator();
+			subMenu->addSeparator();
 			ac->action("properties")->plug(subMenu);
 		}
 	}

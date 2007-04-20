@@ -27,17 +27,21 @@
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qtimer.h>
+#include <QPolygon>
 
 #include <kexiutils/utils.h>
+
+#warning KexiArrowTip ported to Qt4 but not tested
 
 KexiArrowTip::KexiArrowTip(const QString& text, QWidget* parent)
  : KexiToolTip(text, parent)
  , m_opacity(0.0)
 {
 	QPalette pal( palette() );
-	QColorGroup cg(pal.active());
+	pal.setColor( QPalette::WindowText, Qt::red );
+/*	QColorGroup cg(pal.active());
 	cg.setColor(QColorGroup::Foreground, Qt::red);
-	pal.setActive(cg);
+	pal.setActive(cg);*/
 	setPalette(pal);
 
 	QFontMetrics fm(font());
@@ -47,17 +51,15 @@ KexiArrowTip::KexiArrowTip(const QString& text, QWidget* parent)
 	sz += QSize(0, m_arrowHeight); //+arrow height
 	resize(sz);
 
-	setAutoMask( false );
+//removed: 2.0 setAutoMask( false );
 
 	//generate mask
 	QPixmap maskPm(size());
-	maskPm.fill( black );
+	maskPm.fill( Qt::black );
 	QPainter maskPainter(&maskPm);
 	drawFrame(maskPainter);
-	QImage maskImg( maskPm.convertToImage() );
-	QBitmap bm;
-	bm = maskImg.createHeuristicMask();
-	setMask( bm );
+	QImage maskImg( maskPm.toImage() );
+	setMask( QBitmap::fromImage( maskImg.createHeuristicMask() ) );
 }
 
 KexiArrowTip::~KexiArrowTip()
@@ -103,29 +105,33 @@ void KexiArrowTip::decreaseOpacity()
 	QTimer::singleShot(25, this, SLOT(decreaseOpacity()));
 }
 
-bool KexiArrowTip::close ( bool alsoDelete )
+void KexiArrowTip::closeEvent( QCloseEvent * event )
 {
 	if (!isVisible()) {
-		return KexiToolTip::close(alsoDelete);
+		KexiToolTip::closeEvent(event);
 	}
 	if (m_opacity>0.0)
 		decreaseOpacity();
 	else
-		return KexiToolTip::close(alsoDelete);
-	return m_opacity<=0.0;
+		KexiToolTip::closeEvent(event);
+	//return m_opacity<=0.0;
 }
 
 void KexiArrowTip::drawContents(QPainter& p)
 {
-	p.setPen( QPen(palette().active().foreground(), 1) );
+	p.setPen( QPen( palette().color( QPalette::WindowText ), 1) );
+	//p.setPen( QPen(palette().active().foreground(), 1) );
 	p.drawText(QRect(0,m_arrowHeight,width(),height()-m_arrowHeight), 
 		Qt::AlignCenter, m_value.toString());
 }
 
 void KexiArrowTip::drawFrame(QPainter& p)
 {
-	QPen pen(palette().active().foreground(), 1, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
-	p.setPen( pen );
+	//QPen pen(palette().active().foreground(), 1, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+	p.setPen(
+		QPen( palette().color( QPalette::WindowText ), 1, 
+			Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin )
+	);
 	/*
 	   /\
 	 +-  -----+
@@ -134,7 +140,7 @@ void KexiArrowTip::drawFrame(QPainter& p)
 	*/
 	//1st line
 	const int arrowOffset = 5; //5 pixels to right
-	QPointArray pa(8);
+	QPolygon pa(8);
 	pa.setPoint(0, 0, m_arrowHeight-1);
 	pa.setPoint(1, 0, height()-1);
 	pa.setPoint(2, width()-1, height()-1);

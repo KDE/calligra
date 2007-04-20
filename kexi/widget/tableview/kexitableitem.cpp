@@ -23,6 +23,7 @@
 */
 
 #include "kexitableitem.h"
+#include <kexi_global.h>
 
 #include <kdebug.h>
 
@@ -56,7 +57,7 @@ void
 KexiTableItem::debug() const
 {
 	QString s = QString("KexiTableItem (%1 items)").arg(size());
-	for (uint i = 0; i < size(); i++)
+	for (int i = 0; i < size(); i++)
 		s.append( QString::number(i)+":"+at(i).toString()+" " );
 	kexidbg << s << endl;
 }

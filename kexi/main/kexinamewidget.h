@@ -20,6 +20,7 @@
 #ifndef KEXINAMEWIDGET_H
 #define KEXINAMEWIDGET_H
 
+#include <kexi_export.h>
 #include <qlabel.h>
 #include <qlayout.h>
 //Added by qt3to4:
@@ -36,13 +37,12 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 	Q_OBJECT
 
 	public:
-		KexiNameWidget(const QString& message, 
-			QWidget * parent = 0, const char * name = 0, Qt::WFlags fl = 0);
+		KexiNameWidget(const QString& message, QWidget * parent = 0);
 
 		KexiNameWidget(const QString& message, 
 			const QString& nameLabel, const QString& nameText, 
 			const QString& captionLabel, const QString& captionText, 
-			QWidget * parent = 0, const char * name = 0, Qt::WFlags fl = 0);
+			QWidget * parent = 0);
 
 		virtual ~KexiNameWidget(); 
 

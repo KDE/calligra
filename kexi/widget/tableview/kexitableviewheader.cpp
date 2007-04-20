@@ -21,10 +21,15 @@
 
 #include <qapplication.h>
 #include <qtooltip.h>
-#include <qstyle.h>
+#include <QStyle>
+#include <QStyleOption>
+#include <QMouseEvent>
+#include <QHelpEvent>
 
 #include <kexiutils/utils.h>
 #include <kexiutils/styleproxy.h>
+
+#warning KexiTableViewHeader ported but not tested
 
 //! @internal A style that allows to temporary change background color while
 //!           drawing header section primitive. Used in KexiTableViewHeader.
@@ -34,22 +39,26 @@ class KexiTableViewHeaderStyle : public KexiUtils::StyleProxy
 		KexiTableViewHeaderStyle(QStyle *parentStyle, QWidget *widget)
 		 : KexiUtils::StyleProxy(parentStyle)
 		{
-			setBackgroundColor( widget->palette().active().background() );
+			setBackgroundColor( widget->palette().color(widget->backgroundRole()) );
 		}
-		~KexiTableViewHeaderStyle() {}
+		virtual ~KexiTableViewHeaderStyle() {}
 
-		virtual void drawPrimitive( PrimitiveElement pe,
-			QPainter *p, const QRect &r, const QColorGroup &cg, SFlags flags = Style_Default,
-			const QStyleOption& option = QStyleOption::Default ) const
+		virtual void drawControl( ControlElement ce, 
+			const QStyleOption * option, QPainter * painter, const QWidget * widget = 0 ) const
+			//drawPrimitive
+			//PrimitiveElement pe,
+			//QPainter *p, const QRect &r, const QColorGroup &cg, SFlags flags = Style_Default,
+			//const QStyleOption& option = QStyleOption::Default ) const
 		{
-			if (pe==QStyle::PE_HeaderSection) {
-				QColorGroup newCg(cg);
-				newCg.setColor(QColorGroup::Button, m_backgroundColor);
-				newCg.setColor(QColorGroup::Background, m_backgroundColor); //set background color as well (e.g. for thinkeramik)
-				m_style->drawPrimitive( pe, p, r, newCg, flags, option );
+			if (ce == CE_HeaderSection && option) {
+				QStyleOption newOption(*option);
+				newOption.palette.setColor(QPalette::Button, m_backgroundColor);
+				//set background color as well (e.g. for thinkeramik)
+				newOption.palette.setColor(QPalette::Background, m_backgroundColor);
+				m_style->drawControl( ce, &newOption, painter, widget );
 				return;
 			}
-			m_style->drawPrimitive( pe, p, r, cg, flags, option );
+			m_style->drawControl( ce, option, painter, widget );
 		}
 
 		void setBackgroundColor( const QColor& color ) { m_backgroundColor = color; }
@@ -58,14 +67,15 @@ class KexiTableViewHeaderStyle : public KexiUtils::StyleProxy
 		QColor m_backgroundColor;
 };
 
-KexiTableViewHeader::KexiTableViewHeader(QWidget * parent, const char * name) 
-	: QHeader(parent, name)
+KexiTableViewHeader::KexiTableViewHeader(QWidget * parent) 
+	: Q3Header(parent)
 	, m_lastToolTipSection(-1)
 	, m_selectionBackgroundColor(qApp->palette().active().highlight())
+	, m_privateStyle(0)
 	, m_selectedSection(-1)
 	, m_styleChangeEnabled(true)
-{
-	styleChange( style() );
+{	
+	styleChanged();
 	installEventFilter(this);
 	connect(this, SIGNAL(sizeChange(int,int,int)), 
 		this, SLOT(slotSizeChange(int,int,int)));
@@ -73,15 +83,25 @@ KexiTableViewHeader::KexiTableViewHeader(QWidget * parent, const char * name)
 
 KexiTableViewHeader::~KexiTableViewHeader()
 {
+	setStyle( 0 );
+	delete m_privateStyle;
 }
 
-void KexiTableViewHeader::styleChange( QStyle& oldStyle )
+bool KexiTableViewHeader::event( QEvent *event )
 {
-	QHeader::styleChange( oldStyle );
+	if ( event->type() == QEvent::StyleChange )
+		styleChanged();
+	return Q3Header::event( event );
+}
+
+void KexiTableViewHeader::styleChanged()
+{
 	if (!m_styleChangeEnabled)
 		return;
 	m_styleChangeEnabled = false;
-	setStyle( new KexiTableViewHeaderStyle(&qApp->style(), this) );
+	setStyle(0);
+	delete m_privateStyle;
+	setStyle( m_privateStyle = new KexiTableViewHeaderStyle(style(), this) );
 	m_styleChangeEnabled = true;
 }
 
@@ -89,14 +109,14 @@ int KexiTableViewHeader::addLabel ( const QString & s, int size )
 {
 	m_toolTips += "";
 	slotSizeChange(0,0,0);//refresh
-	return QHeader::addLabel(s, size);
+	return Q3Header::addLabel(s, size);
 }
 
 int KexiTableViewHeader::addLabel ( const QIconSet & iconset, const QString & s, int size )
 {
 	m_toolTips += "";
 	slotSizeChange(0,0,0);//refresh
-	return QHeader::addLabel(iconset, s, size);
+	return Q3Header::addLabel(iconset, s, size);
 }
 
 void KexiTableViewHeader::removeLabel( int section )
@@ -107,7 +127,7 @@ void KexiTableViewHeader::removeLabel( int section )
 	it += section;
 	m_toolTips.remove(it);
 	slotSizeChange(0,0,0);//refresh
-	QHeader::removeLabel(section);
+	Q3Header::removeLabel(section);
 }
 
 void KexiTableViewHeader::setToolTip( int section, const QString & toolTip )
@@ -122,11 +142,13 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
 	if (e->type()==QEvent::MouseMove) {
 		const int section = sectionAt( static_cast<QMouseEvent*>(e)->x() );
 		if (section != m_lastToolTipSection && section >= 0 && section < (int)m_toolTips.count()) {
-			QToolTip::remove(this, m_toolTipRect);
+			//QToolTip::remove(this, m_toolTipRect);
+#warning TODO	
 			QString tip = m_toolTips[ section ];
 			if (tip.isEmpty()) { //try label
 				QFontMetrics fm(font());
-				int minWidth = fm.width( label( section ) ) + style().pixelMetric( QStyle::PM_HeaderMargin );
+				int minWidth = fm.width( label( section ) )
+					+ style()->pixelMetric( QStyle::PM_HeaderMargin );
 				QIconSet *iset = iconSet( section );
 				if (iset)
 					minWidth += (2+iset->pixmap( QIconSet::Small, QIconSet::Normal ).width()); //taken from QHeader::sectionSizeHint()
@@ -137,21 +159,29 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
 				m_lastToolTipSection = -1;
 			}
 			else {
-				QToolTip::add(this, m_toolTipRect = sectionRect(section), tip);
+#warning QToolTip::showText() OK?
+				QToolTip::showText(static_cast<QMouseEvent*>(e)->globalPos(), tip,
+					this, m_toolTipRect = sectionRect(section));
 				m_lastToolTipSection = section;
 			}
 		}
 	}
+  else if (e->type() == QEvent::ToolTip) {
+		QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
+#warning TODO
+	}
 //			if (e->type()==QEvent::MouseButtonPress) {
 //	todo
 //			}
-	return QHeader::eventFilter(watched, e);
+	return Q3Header::eventFilter(watched, e);
 }
 
 void KexiTableViewHeader::slotSizeChange(int /*section*/, int /*oldSize*/, int /*newSize*/ )
 {
 	if (m_lastToolTipSection>0)
-		QToolTip::remove(this, m_toolTipRect);
+		QToolTip::hideText();
+#warning TODO OK?
+//		QToolTip::remove(this, m_toolTipRect);
 	m_lastToolTipSection = -1; //tooltip's rect is now invalid
 }
 
@@ -185,16 +215,17 @@ int KexiTableViewHeader::selectedSection() const
 void KexiTableViewHeader::paintSection( QPainter * p, int index, const QRect & fr )
 {
 	const bool paintSelection = index==m_selectedSection && index != -1;
-	if (paintSelection) {
-		static_cast<KexiTableViewHeaderStyle&>(style()).setBackgroundColor(
+	if (paintSelection && dynamic_cast<KexiTableViewHeaderStyle*>(style())) {
+		dynamic_cast<KexiTableViewHeaderStyle*>(style())->setBackgroundColor(
 			KexiUtils::blendedColors( 
 				palette().active().background(), m_selectionBackgroundColor, 2, 1) );
 	}
 
-	QHeader::paintSection( p, index, fr );
+	Q3Header::paintSection( p, index, fr );
 
-	if (paintSelection) { //revert the color for subsequent paints
-		static_cast<KexiTableViewHeaderStyle&>(style()).setBackgroundColor(
+	if (paintSelection && dynamic_cast<KexiTableViewHeaderStyle*>(style())) {
+		//revert the color for subsequent paints
+		dynamic_cast<KexiTableViewHeaderStyle*>(style())->setBackgroundColor(
 			palette().active().background());
 	}
 }

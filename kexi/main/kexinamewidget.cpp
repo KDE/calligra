@@ -21,6 +21,8 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klineedit.h>
 #include <kmessagebox.h>
@@ -32,22 +34,20 @@
 
 using namespace KexiUtils;
 
-KexiNameWidget::KexiNameWidget( const QString& message, 
-	QWidget* parent, const char* name, WFlags fl )
- : QWidget(parent, name, fl)
+KexiNameWidget::KexiNameWidget( const QString& message, QWidget* parent)
+ : QWidget(parent)
 {
+	setObjectName("KexiNameWidget");
 	init(message, QString::null, QString::null, QString::null, QString::null);
 }
 
 KexiNameWidget::KexiNameWidget(const QString& message, 
 	const QString& nameLabel, const QString& nameText, 
 	const QString& captionLabel, const QString& captionText, 
-	QWidget * parent, const char * name, WFlags fl)
+	QWidget * parent)
+ : QWidget(parent)
 {
-	Q_UNUSED( parent );
-	Q_UNUSED( name );
-	Q_UNUSED( fl );
-
+	setObjectName("KexiNameWidget");
 	init(message, nameLabel, nameText, captionLabel, captionText);
 }
 
@@ -62,12 +62,12 @@ void KexiNameWidget::init(
 	m_le_name_autofill = true;
 	m_caption_required = false;
 
-	lyr = new QGridLayout( this, 1, 1, 0, 6, "lyr");
+	lyr = new Q3GridLayout( this, 1, 1, 0, 6, "lyr");
 
 	lbl_message = new QLabel( this, "message" );
 	setMessageText( message );
 	lbl_message->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-	lbl_message->setAlignment( QLabel::AlignTop | QLabel::WordBreak );
+	lbl_message->setAlignment( Qt::AlignTop | Qt::TextWordWrap );
 	lyr->addMultiCellWidget( lbl_message, 0, 0, 0, 1 );
 
 	lbl_caption = new QLabel( captionLabel.isEmpty() ? i18n( "Caption:" ) : captionLabel,
@@ -86,8 +86,8 @@ void KexiNameWidget::init(
 	le_name = new KLineEdit( nameText, this );
 	le_name->setObjectName( "le_name" );
 	le_name->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed,1,0));
-	Validator *idValidator = new IdentifierValidator(0, "id_val");
-	le_name->setValidator( m_validator = new MultiValidator(idValidator, this, "val") );
+	Validator *idValidator = new IdentifierValidator(0);
+	le_name->setValidator( m_validator = new MultiValidator(idValidator, this) );
 	lyr->addWidget( le_name, 2, 1 );
 
 	setFocusProxy(le_caption);

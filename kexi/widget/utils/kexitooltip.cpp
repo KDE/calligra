@@ -28,14 +28,16 @@
 #include <qfontmetrics.h>
 #include <qtimer.h>
 
+#warning KexiToolTip ported to Qt4 but not tested
 
 KexiToolTip::KexiToolTip(const QVariant& value, QWidget* parent)
- : QWidget(parent, "KexiToolTip", Qt::WStyle_Customize | Qt::WType_Popup | Qt::WStyle_NoBorder 
-	| Qt::WX11BypassWM | Qt::WDestructiveClose)
+ : QWidget(parent)
  , m_value(value)
 {
+	setWindowFlags( Qt::WStyle_Customize | Qt::WType_Popup | Qt::WStyle_NoBorder
+		| Qt::WX11BypassWM | Qt::WDestructiveClose );
 	setPalette( QToolTip::palette() );
-	setFocusPolicy(QWidget::NoFocus);
+	setFocusPolicy(Qt::NoFocus);
 }
 
 KexiToolTip::~KexiToolTip()

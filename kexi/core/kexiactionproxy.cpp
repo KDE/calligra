@@ -19,7 +19,7 @@
 
 #include "kexiactionproxy.h"
 #include "kexiactionproxy_p.h"
-#include "keximainwindow.h"
+#include "KexiMainWindowIface.h"
 
 #include <kdebug.h>
 #include <kaction.h>

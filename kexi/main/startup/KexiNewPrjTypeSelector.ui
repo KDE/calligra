@@ -1,97 +1,94 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KexiNewPrjTypeSelector</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>KexiNewPrjTypeSelector</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KexiNewPrjTypeSelector</class>
+  <widget class="QWidget" name="KexiNewPrjTypeSelector" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>328</width>
+        <height>203</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>328</width>
-            <height>203</height>
-        </rect>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>spacer9</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item row="2" column="0" >
+        <spacer name="spacer9" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>16</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Fixed</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <widget class="K3ListView" row="1" column="0">
-            <column>
-                <property name="text">
-                    <string></string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <property name="name">
-                <cstring>lv_types</cstring>
+      </item>
+      <item row="1" column="0" >
+        <widget class="K3ListView" name="lv_types" >
+          <property name="allColumnsShowFocus" >
+            <bool>true</bool>
+          </property>
+          <property name="resizeMode" >
+            <enum>LastColumn</enum>
+          </property>
+          <column>
+            <property name="text" >
+              <string/>
             </property>
-            <property name="allColumnsShowFocus">
-                <bool>true</bool>
+            <property name="clickable" >
+              <bool>true</bool>
             </property>
-            <property name="resizeMode">
-                <enum>LastColumn</enum>
+            <property name="resizable" >
+              <bool>true</bool>
             </property>
+          </column>
         </widget>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>lbl</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>1</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Kexi will create a new database project. Select a storage method which will be used to store the new project.
+      </item>
+      <item row="0" column="0" >
+        <widget class="QLabel" name="lbl" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>1</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>Kexi will create a new database project. Select a storage method which will be used to store the new project.
 </string>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignTop</set>
-            </property>
-            <property name="wordWrap" >
-                <bool>true</bool>
-            </property>
+          </property>
+          <property name="alignment" >
+            <set>Qt::AlignTop</set>
+          </property>
+          <property name="wordWrap" >
+            <bool>true</bool>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
         </widget>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<tabstops>
-</tabstops>
-<functions>
-    <function access="private" specifier="non virtual">init()</function>
-</functions>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>k3listview.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <customwidgets>
+    <customwidget>
+      <class>K3ListView</class>
+      <extends>Q3ListView</extends>
+    </customwidget>
+  </customwidgets>
+  <includes>
+    <include location="local" >k3listview.h</include>
+  </includes>
+</ui>

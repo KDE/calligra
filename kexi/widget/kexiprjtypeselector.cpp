@@ -24,8 +24,10 @@
 #include <kexidb/driver.h>
 
 KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent )
-	: KexiPrjTypeSelectorBase( parent, "KexiPrjTypeSelector" )
+	: Ui::KexiPrjTypeSelector( parent )
 {
+	setupUi(this);
+	setObjectName("KexiPrjTypeSelector");
 	QString none;
 	icon_file->setPixmap( 
 		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( 
@@ -35,10 +37,20 @@ KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent )
 	icon_file->setFixedSize(icon_file->pixmap()->size()/2);
 	icon_server->setPixmap( DesktopIcon("network-wired", 48) );
 	icon_server->setFixedSize(icon_server->pixmap()->size()/2);
+  
+	connect( buttonGroup, SIGNAL( clicked(int) ),
+		this, SLOT( slotSelectionChanged(int) ) );
+	
+	slotSelectionChanged( 1 );
 }
 
 KexiPrjTypeSelector::~KexiPrjTypeSelector()
 {
+}
+
+void KexiPrjTypeSelector::slotSelectionChanged( int id )
+{
+	frame_server->setEnabled(id==2);
 }
 
 #include "kexiprjtypeselector.moc"

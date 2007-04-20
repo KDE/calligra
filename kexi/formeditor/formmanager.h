@@ -177,7 +177,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 If \a propertyToSelect is not empty, an item for this name will be selected
 		 (usable when previously there was no set visible). */
 		virtual void showPropertySet(WidgetPropertySet *set, bool forceReload = false,
-			const Q3CString& propertyToSelect = Q3CString());
+			const QByteArray& propertyToSelect = QByteArray());
 
 		void blockPropertyEditorUpdating(void *blockingObject);
 
@@ -341,7 +341,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 If \a forceReload is true, the set needs to be reloaded even
 		 if it's the same as previous one. */
 		void propertySetSwitched(KoProperty::Set *set, bool forceReload = false,
-			const Q3CString& propertyToSelect = Q3CString());
+			const QByteArray& propertyToSelect = QByteArray());
 
 		/*! This signal is emitted when any change is made to the Form \a form,
 		 so it will need to be saved. */

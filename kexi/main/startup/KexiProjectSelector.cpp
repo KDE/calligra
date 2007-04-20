@@ -97,14 +97,14 @@ public:
  *  Constructs a KexiProjectSelector which is a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f' 
  */
-KexiProjectSelectorWidget::KexiProjectSelectorWidget( 
-	QWidget* parent, const char* name, 
-	KexiProjectSet* prj_set, bool showProjectNameColumn,
-	bool showConnectionColumns )
-    : KexiProjectSelectorBase( parent, name )
+KexiProjectSelectorWidget::KexiProjectSelectorWidget( QWidget* parent, 
+	KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns )
+	: Ui::KexiProjectSelectorBase( parent )
 	,m_prj_set(prj_set)
 	,d(new KexiProjectSelectorWidgetPrivate())
 {
+	setupUi(this);
+	setObjectName("KexiProjectSelectorDialog");
 	d->showProjectNameColumn = showProjectNameColumn;
 	d->showConnectionColumns = showConnectionColumns;
 	QString none, iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
@@ -220,38 +220,27 @@ bool KexiProjectSelectorWidget::isSelectable() const
 
 /*================================================================*/
 
-KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const char *name,
+KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, 
 	KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
-	: KDialogBase( Plain, i18n("Open Recent Project"), 
-#ifndef KEXI_NO_UNFINISHED 
-	//! @todo re-add Help when doc is available
-	Help | 
-#endif
-	Ok | Cancel, Ok, parent, name )
+	: KDialog( parent )
 {
+	setCaption( i18n("Open Recent Project") );
 	init(prj_set, showProjectNameColumn, showConnectionColumns);
 }
 
-KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const char *name,
-	KexiDB::ConnectionData* cdata, 
+KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, 
+	const KexiDB::ConnectionData& cdata, 
 	bool showProjectNameColumn, bool showConnectionColumns)
-	: KDialogBase( 
-		Plain, i18n("Open Project"), 
-#ifndef KEXI_NO_UNFINISHED 
-	//! @todo re-add Help when doc is available
-	Help | 
-#endif
-	Ok | Cancel, Ok, parent, name, true/*modal*/, false/*sep*/ )
+	: KDialog( paent )
 {
-	setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), "document-open", i18n("Open Database Connection")));
-	assert(cdata);
-	if (!cdata)
-		return;
-	KexiProjectSet *prj_set = new KexiProjectSet( *cdata );
+	setCaption( i18n("Open Project") );
+	KexiProjectSet *prj_set = new KexiProjectSet( cdata );
 	init(prj_set, showProjectNameColumn, showConnectionColumns);
+	setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), "document-open", 
+		i18n("Open Database Connection")));
 	
 	m_sel->label->setText( i18n("Select a project on <b>%1</b> database server to open:")
-		.arg(cdata->serverInfoString(false)) );
+		.arg(cdata.serverInfoString(false)) );
 }
 
 KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
@@ -261,13 +250,23 @@ KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
 void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNameColumn, 
 	bool showConnectionColumns)
 {
+	setObjectName("KexiProjectSelectorDialog");
+	setModal( true );
+	setButtons( 
+#ifndef KEXI_NO_UNFINISHED 
+		//! @todo re-add Help when doc is available
+		Help | 
+#endif
+		Ok | Cancel, Ok
+	);
+ 	setFaceType(Plain);
 	setSizeGripEnabled(true);
 	
-	Q3VBoxLayout *lyr = new Q3VBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(plainPage(), 0, KDialog::spacingHint(), "lyr");
 	m_sel = new KexiProjectSelectorWidget(plainPage(), "sel", 
 		prj_set, showProjectNameColumn, showConnectionColumns);
 	lyr->addWidget(m_sel);
-	setIcon(*m_sel->icon());
+	setWindowIcon(*m_sel->icon());
 	m_sel->setFocus();
 	
 	connect(m_sel,SIGNAL(projectExecuted(KexiProjectData*)),
@@ -291,9 +290,9 @@ void KexiProjectSelectorDialog::slotProjectSelectionChanged(KexiProjectData* pda
 	enableButtonOK(pdata);
 }
 
-void KexiProjectSelectorDialog::show()
+void KexiProjectSelectorDialog::showEvent( QShowEvent * event )
 {
-	KDialogBase::show();
+	KDialog::showEvent(event);
 	KDialog::centerOnScreen(this);
 }
 

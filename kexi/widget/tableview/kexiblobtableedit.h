@@ -23,10 +23,8 @@
 
 #include <q3cstring.h>
 #include <q3cache.h>
-//Added by qt3to4:
-#include <QPixmap>
 
-#include <kurl.h>
+#include <KUrl>
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
@@ -85,7 +83,7 @@ class KexiBlobTableEdit : public KexiTableEdit
 	protected slots:
 		void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
 
-		void handleInsertFromFileAction(const KURL& url);
+		void handleInsertFromFileAction(const KUrl& url);
 		void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
 		void handleSaveAsAction(const QString& fileName);
 		void handleCutAction();
@@ -168,7 +166,7 @@ class KexiKIconTableEdit : public KexiTableEdit
 		void init();
 
 		//! We've no editor widget that would store current value, so we do this here
-		QVariant m_currentValue;
+		//QVariant m_currentValue;
 
 		class Private;
 		Private *d;

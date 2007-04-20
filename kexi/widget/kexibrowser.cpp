@@ -225,7 +225,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 		m_partPopupTitle_id = m_partPopup->insertTitle("");
 		m_newObjectAction->plug(m_partPopup);
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-		m_partPopup->insertSeparator();
+		m_partPopup->addSeparator();
 		plugSharedAction("edit_paste", m_partPopup);
 #endif
 	}
@@ -249,19 +249,19 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 
 		if (m_newObjectAction) {
 			m_newObjectAction->plug(m_itemPopup);
-			m_itemPopup->insertSeparator();
+			m_itemPopup->addSeparator();
 		}
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	//todo	plugSharedAction("edit_cut", m_itemPopup);
 	//todo	plugSharedAction("edit_copy", m_itemPopup);
-	//todo	m_itemPopup->insertSeparator();
+	//todo	m_itemPopup->addSeparator();
 #endif
 		m_executeAction->plug(m_itemPopup);
 		m_executeAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 
 		m_exportActionMenu->plug(m_itemPopup);
 		m_exportActionMenu_id = m_exportActionMenu->menuId(0);
-		m_itemPopup->insertSeparator();
+		m_itemPopup->addSeparator();
 		m_exportActionMenu_id_sep = m_itemPopup->idAt(m_itemPopup->count()-1);
 
 		m_printAction->plug(m_itemPopup);
@@ -270,7 +270,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 		m_pageSetupAction->plug(m_itemPopup);
 		m_pageSetupAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 		if (m_renameAction || m_deleteAction) {
-			m_itemPopup->insertSeparator();
+			m_itemPopup->addSeparator();
 			m_pageSetupAction_id_sep = m_itemPopup->idAt(m_itemPopup->count()-1);
 		}
 		else {

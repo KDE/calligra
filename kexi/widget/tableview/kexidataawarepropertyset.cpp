@@ -140,7 +140,7 @@ KoProperty::Set* KexiDataAwarePropertySet::currentPropertySet() const
 
 uint KexiDataAwarePropertySet::currentRow() const
 {
-       return m_dataObject->currentRow();
+	return m_dataObject->currentRow();
 }
 
 void KexiDataAwarePropertySet::slotRowDeleted()

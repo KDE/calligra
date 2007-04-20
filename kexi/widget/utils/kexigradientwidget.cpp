@@ -40,6 +40,7 @@ KexiGradientWidget::KexiGradientWidget( QWidget *parent, const char *name, Qt::W
 	p_color1( Qt::white ), p_color2( Qt::blue ), p_currentChild( 0 ),
 	p_opacity( 0.5 ), p_cacheDirty( true )
 {
+	p_rebuildDelayTimer.setSingleShot(true);
 	p_customBackgroundWidgets.setAutoDelete( false );
 	p_knownWidgets.setAutoDelete( false );
 
@@ -72,7 +73,8 @@ bool KexiGradientWidget::isValidChildWidget( QObject* child ) {
 	return true;
 }
 
-void KexiGradientWidget::buildChildrenList( WidgetList& list, QWidget* p ) {
+void KexiGradientWidget::buildChildrenList( WidgetList& list, QWidget* p )
+{
 	QObjectList* objects = p->queryList( "QWidget", 0, false, false );
 
 	for ( QObjectList::Iterator it = objects->begin(); it != objects->end(); ++it ) {

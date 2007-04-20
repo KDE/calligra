@@ -186,8 +186,8 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 	container->show();
 	setWidget(container);
 	connect(m_workspace, SIGNAL(windowActivated(QWidget*)), KFormDesigner::FormManager::self(), SLOT(windowChanged(QWidget*)));
-	connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const Q3CString&)),
-		this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool, const Q3CString&)));
+	connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const QByteArray&)),
+		this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool, const QByteArray&)));
 
 //	slotNoFormSelected();
 	KFormDesigner::FormManager::self()->emitNoFormSelected();
@@ -716,7 +716,7 @@ FormWidgetBase::closeEvent(QCloseEvent *ev)
 }
 
 void KFormDesignerPart::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload, 
-	const Q3CString& propertyToSelect)
+	const QByteArray& propertyToSelect)
 {
 	if (m_editor) {
 		if (propertyToSelect.isEmpty() && forceReload)

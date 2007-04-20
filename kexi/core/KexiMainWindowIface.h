@@ -18,16 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIMAINWINDOW_H
-#define KEXIMAINWINDOW_H
+#ifndef KEXIMAINWINDOWIFACE_H
+#define KEXIMAINWINDOWIFACE_H
 
 #include <qmap.h>
-#include <q3intdict.h>
-//Added by qt3to4:
 #include <Q3PopupMenu>
 #include <Q3CString>
 
-#include <kxmlguiwindow.h>
+#include <kmainwindow.h>
 #include <kexiutils/tristate.h>
 
 #include "kexisharedactionhost.h"
@@ -47,7 +45,7 @@ namespace KexiPart {
  * KexiMainWindow offers simple features what lowers cross-dependency (and also avoids
  * circular dependencies between Kexi modules).
  */
-class KEXICORE_EXPORT KexiMainWindow : /*public KexiMdiMainFrm,*/ public KexiSharedActionHost
+class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public KexiSharedActionHost
 {
 //	Q_OBJECT
 	public:
@@ -58,36 +56,38 @@ class KEXICORE_EXPORT KexiMainWindow : /*public KexiMdiMainFrm,*/ public KexiSha
 			PageSetupForItem
 		};
 
-		KexiMainWindow();
-		virtual ~KexiMainWindow();
+		KexiMainWindowIface();
+		virtual ~KexiMainWindowIface();
 
 		//! \return KexiMainWindowImpl global singleton (if it is instantiated)
 #warning TODO static KexiMainWindowImpl* global()
-		static KexiMainWindow* global() { return 0; }
-
+		static KexiMainWindowIface* global() { return 0; }
+		
 		QWidget* thisWidget() { return dynamic_cast<QWidget*>(this); }
 
 		//! Project data of currently opened project or NULL if no project here yet.
 		virtual KexiProject *project() = 0;
 
+#warning TODO	virtual KActionCollection* actionCollection() const = 0;
 		virtual KActionCollection* actionCollection() const = 0;
 
+#warning TODO virtual QWidget* focusWidget() const = 0;
 		virtual QWidget* focusWidget() const = 0;
-
+		
 		//! Implemented by KXMLGUIClient
 #warning TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0;
 		virtual void plugActionList(const QString& name,
 			const QList<KAction *>& actionList) = 0;
-
+			
 #warning TODO KXMLGUIClient* guiClient() const = 0;
 		virtual KXMLGUIClient* guiClient() const = 0;
-
+			
 		//! Implemented by KXMLGUIClient
 #warning TODO virtual void unplugActionList (const QString &name) = 0;
 		virtual void unplugActionList (const QString &name) = 0;
-
-  	//! Implemented by KXmlGuiWindow
-#warning TODO virtual KXMLGUIFactory * KXmlGuiWindow::guiFactory() = 0;
+  
+  	//! Implemented by KMainWindow
+#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0;
 		virtual KXMLGUIFactory * guiFactory() = 0;
 
 		/*! Registers window \a window for watching and adds it to the main window's stack. */
@@ -116,21 +116,21 @@ class KEXICORE_EXPORT KexiMainWindow : /*public KexiMdiMainFrm,*/ public KexiSha
 #warning SIGNALS...
 #if 0
 	signals:
-		//! Emitted to make sure the project can be close.
+		//! Emitted to make sure the project can be close. 
 		//! Connect a slot here and set \a cancel to true to cancel the closing.
 		void acceptProjectClosingRequested(bool& cancel);
 
 		//! Emitted before closing the project (and destroying all it's data members).
-		//! You can do you cleanup of your structures here.
+		//! You can do you cleanup of your structures here. 
 		void beforeProjectClosing();
 
-		//! Emitted after closing the project.
+		//! Emitted after closing the project. 
 		void projectClosed();
 #endif
 
 //	public slots:
-		/*! Creates new object of type defined by \a info part info.
-		 \a openingCancelled is set to true is opening has been cancelled.
+		/*! Creates new object of type defined by \a info part info. 
+		 \a openingCancelled is set to true is opening has been cancelled. 
 		 \return true on success. */
 		virtual bool newObject( KexiPart::Info *info, bool& openingCancelled ) = 0;
 
@@ -140,11 +140,11 @@ class KEXICORE_EXPORT KexiMainWindow : /*public KexiMdiMainFrm,*/ public KexiSha
 			QString* errorMessage = 0) = 0;
 
 		//! For convenience
-		virtual KexiWindow* openObject(const Q3CString& mime, const QString& name,
+		virtual KexiWindow* openObject(const Q3CString& mime, const QString& name, 
 			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
-		/*! Closes the object for \a item.
-		 \return true on success (closing can be dealyed though), false on failure and cancelled
+		/*! Closes the object for \a item. 
+		 \return true on success (closing can be dealyed though), false on failure and cancelled 
 		 if the object has "opening" job assigned. */
 		virtual tristate closeObject(KexiPart::Item* item) = 0;
 
@@ -159,7 +159,7 @@ class KEXICORE_EXPORT KexiMainWindow : /*public KexiMdiMainFrm,*/ public KexiSha
 		 set before call, previously selected item will be preselected
 		 in the editor (if found). */
 		virtual void propertySetSwitched(KexiWindow *window, bool force=false,
-			bool preservePrevSelection = true, const QString& propertyToSelect = QString()) = 0;
+			bool preservePrevSelection = true, const QByteArray& propertyToSelect = QByteArray()) = 0;
 
 		/*! Saves window's \a window data. If window's data is never saved,
 		 user is asked for name and title, before saving (see getNewObjectInfo()).
@@ -193,7 +193,7 @@ class KEXICORE_EXPORT KexiMainWindow : /*public KexiMdiMainFrm,*/ public KexiSha
 			bool& allowOverwriting, const QString& messageWhenAskingForName = QString() ) = 0;
 
 		/*! Highlights object of mime \a mime and name \a name.
-		 This can be done in the Project Navigator or so.
+		 This can be done in the Project Navigator or so. 
 		 If a window for the object is opened (in any mode), it should be raised. */
 		virtual void highlightObject(const Q3CString& mime, const Q3CString& name) = 0;
 
@@ -201,15 +201,15 @@ class KEXICORE_EXPORT KexiMainWindow : /*public KexiMdiMainFrm,*/ public KexiSha
 		//! \return true on success.
 		virtual tristate printItem(KexiPart::Item* item) = 0;
 
-		//! Shows "print preview" dialog.
+		//! Shows "print preview" window. 
 		//! \return true on success.
 		virtual tristate printPreviewForItem(KexiPart::Item* item) = 0;
 
-		//! Shows "page setup" dialog for \a item.
+		//! Shows "page setup" window for \a item.
 		//! \return true on success and cancelled when the action was cancelled.
 		virtual tristate showPageSetupForItem(KexiPart::Item* item) = 0;
 
-		/*! Executes custom action for the main window, usually provided by a plugin.
+		/*! Executes custom action for the main window, usually provided by a plugin. 
 		 Also used by KexiFormEventAction. */
 		virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
 

@@ -15,9 +15,6 @@ set(kexidatatable_LIB_SRCS
    kexitableviewheader.cpp 
    kexitableitem.cpp 
    kexitableviewdata.cpp 
-   kexidatetableedit.cpp 
-   kexitimetableedit.cpp 
-   kexidatetimetableedit.cpp 
    kexiinputtableedit.cpp 
    kexiblobtableedit.cpp 
    kexibooltableedit.cpp 
@@ -28,11 +25,19 @@ set(kexidatatable_LIB_SRCS
    kexitextformatter.cpp
 )
 
+# TODO: reenable when kexidatetimeformatter is ported
+#   kexidatetableedit.cpp 
+#   kexitimetableedit.cpp 
+#   kexidatetimetableedit.cpp 
+
 kde4_automoc(${kexidatatable_LIB_SRCS})
 
 kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 
-target_link_libraries(kexidatatable  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils koproperty ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kexidatatable  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
+ ${QT_QT3SUPPORT_LIBRARY}
+ kexicore kexiutils kexiguiutils koproperty 
+)
 
 set_target_properties(kexidatatable PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kexidatatable  DESTINATION ${LIB_INSTALL_DIR})

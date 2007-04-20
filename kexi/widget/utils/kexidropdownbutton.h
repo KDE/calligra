@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,15 +15,31 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- */
+*/
 
-void KexiDBConnectionWidgetDetailsBase::slotCBToggled( bool on )
+#ifndef KexiDropDownButton_H
+#define KexiDropDownButton_H
+
+#include <kexi_export.h>
+#include <QToolButton>
+
+//! @short A button for drop-down "Image" menu
+/*! Used in KexiDBImageBox and KexiBlobTableEdit.
+ Additionally, the button reacts on pressing space, return, enter, 
+ F2, F4 and alt+down buttons. */
+class KEXIGUIUTILS_EXPORT KexiDropDownButton : public QToolButton
 {
-	if (sender()==chkSocketDefault) {
-		customSocketEdit->setEnabled( !on );
-	}
-	else if (sender()==chkUseSocket) {
-		customSocketEdit->setEnabled( on && !chkSocketDefault->isChecked() );
-		chkSocketDefault->setEnabled( on );
-	}
-}
+	Q_OBJECT
+
+	public:
+		KexiDropDownButton(QWidget *parent);
+		virtual ~KexiDropDownButton();
+
+		virtual QSize sizeHint() const;
+
+	protected:
+		virtual void paintEvent( QPaintEvent *e );
+		virtual void keyPressEvent( QKeyEvent * e );
+};
+
+#endif

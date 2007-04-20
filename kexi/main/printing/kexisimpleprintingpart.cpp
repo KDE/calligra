@@ -23,10 +23,10 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <keximainwindow.h>
-#include <kexidialogbase.h>
-#include <kexiproject.h>
-#include <kexipartinfo.h>
+#include <KexiMainWindow.h>
+#include <core/KexiWindow.h>
+#include <core/kexiproject.h>
+#include <core/kexipartinfo.h>
 
 KexiSimplePrintingPart::KexiSimplePrintingPart()
  : KexiPart::StaticPart("kexi/simpleprinting", "document-print", i18n("Printing"))
@@ -48,12 +48,13 @@ KexiSimplePrintingPart::~KexiSimplePrintingPart()
 {
 }
 
-KexiViewBase* KexiSimplePrintingPart::createView(QWidget *parent, KexiDialogBase* dialog, 
+KexiView* KexiSimplePrintingPart::createView(QWidget *parent, KexiWindow* window, 
 			KexiPart::Item &item, int viewMode, QMap<QString,QString>* args)
 {
 	Q_UNUSED( item );
 	if (viewMode == Kexi::DesignViewMode) {
-		KexiSimplePrintingPageSetup *w = new KexiSimplePrintingPageSetup( dialog->mainWin(), parent, args );
+		KexiSimplePrintingPageSetup *w = new KexiSimplePrintingPageSetup( 
+			KexiMainWindow::self(), parent, args );
 		return w;
 	}
 

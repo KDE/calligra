@@ -20,11 +20,10 @@
 #ifndef KEXISIMPLEPRINTINGPART_H
 #define KEXISIMPLEPRINTINGPART_H
 
-#include <kexidialogbase.h>
+#include <KexiWindow.h>
 #include <kexistaticpart.h>
 #include <kexipartitem.h>
 
-class KexiMainWin;
 namespace KexiDB
 {
 	class QuerySchema;
@@ -43,7 +42,7 @@ class KexiSimplePrintingPart : public KexiPart::StaticPart
 		virtual ~KexiSimplePrintingPart();
 
 	protected:
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
+		virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
 			KexiPart::Item &item, int viewMode, QMap<QString,QString>* staticObjectArgs);
 };
 

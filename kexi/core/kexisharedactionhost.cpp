@@ -21,6 +21,7 @@
 #include "kexisharedactionhost_p.h"
 #include "kexiactionproxy.h"
 #include "KexiWindow.h"
+#include "KexiMainWindowIface.h"
 
 #include <kexiutils/utils.h>
 
@@ -87,7 +88,7 @@ void KexiSharedActionHost::setAsDefaultHost()
 
 //--------------------------------------------------
 
-KexiSharedActionHost::KexiSharedActionHost(KexiMainWindow* mainWin)
+KexiSharedActionHost::KexiSharedActionHost(KexiMainWindowIface* mainWin)
 : d( new KexiSharedActionHostPrivate(this) )
 {
 	d->mainWin = mainWin;
@@ -139,7 +140,7 @@ void KexiSharedActionHost::plugActionProxy(KexiActionProxy *proxy)
 	d->actionProxies.insert( proxy->receiver(), proxy );
 }
 
-KexiMainWindow* KexiSharedActionHost::mainWindow() const
+KexiMainWindowIface* KexiSharedActionHost::mainWindow() const
 {
 	return d->mainWin;
 }

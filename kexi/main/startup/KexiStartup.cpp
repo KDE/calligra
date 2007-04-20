@@ -910,7 +910,7 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled
 	}
 	KexiProjectData* projectData = 0;
 	//dialog for selecting a project
-	KexiProjectSelectorDialog prjdlg( parent, "prjdlg", cdata, true, false );
+	KexiProjectSelectorDialog prjdlg( parent, "prjdlg", *cdata, true, false );
 	if (!prjdlg.projectSet() || prjdlg.projectSet()->error()) {
 		KexiGUIMessageHandler msgh;
 		if (prjdlg.projectSet())

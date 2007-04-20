@@ -32,7 +32,7 @@
 
 class KShortcut;
 class KGuiItem;
-class KexiMainWindow;
+class KexiMainWindowIface;
 class KexiActionProxy;
 class KexiSharedActionHostPrivate;
 
@@ -56,7 +56,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 	public:
 
 		/*! Constructs host for main window \a mainWin. */
-		KexiSharedActionHost(KexiMainWindow* mainWin);
+		KexiSharedActionHost(KexiMainWindowIface* mainWin);
 
 		virtual ~KexiSharedActionHost();
 
@@ -120,7 +120,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		void updateActionAvailable(const QString& action_name, bool avail, QObject *obj);
 
 		/*! \return main window for which this host is defined. */
-		KexiMainWindow* mainWindow() const;
+		KexiMainWindowIface* mainWindow() const;
 
 		/*! Creates shared action using \a text, \a pix_name pixmap, shortcut \a cut,
 		 optional \a name. You can pass your own action collection as \a col. 

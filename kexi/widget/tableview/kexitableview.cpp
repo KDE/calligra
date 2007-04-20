@@ -54,6 +54,8 @@
 #include <QDropEvent>
 #include <QPixmap>
 #include <q3tl.h>
+#include <QDesktopWidget>
+#include <QMatrix>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -67,6 +69,7 @@
 #endif
 
 #include "kexitableview.h"
+#include <kexi_global.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/validator.h>
 
@@ -138,21 +141,23 @@ class KexiTableView::WhatsThis : public Q3WhatsThis
 
 //-----------------------------------------
 
+#warning TODO KexiTableViewCellToolTip
+/* TODO
 KexiTableViewCellToolTip::KexiTableViewCellToolTip( KexiTableView * tableView )
- : QToolTip(tableView->viewport())
+ : QToolTip() // 2.0: tableView->viewport())
  , m_tableView(tableView)
 {
 }
 
 KexiTableViewCellToolTip::~KexiTableViewCellToolTip()
 {
-	remove(parentWidget());
+	//2.0: remove(parentWidget());
 }
 
 void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 {
 	const QPoint cp( m_tableView->viewportToContents( p ) );
-	const int row = m_tableView->rowAt( cp.y(), true/*ignoreEnd*/ );
+	const int row = m_tableView->rowAt( cp.y(), true );
 	const int col = m_tableView->columnAt( cp.x() );
 
 	//show tooltip if needed
@@ -189,6 +194,7 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 		}
 	}
 }
+*/ //TODO
 
 //-----------------------------------------
 
@@ -202,8 +208,9 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
 	d = new KexiTableViewPrivate(this);
 
-	connect( KGlobalSettings::self(), SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
-	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);
+	connect( KGlobalSettings::self(), SIGNAL( settingsChanged(int) ),
+		this, SLOT( slotSettingsChanged(int) ) );
+	slotSettingsChanged(KGlobalSettings::SETTINGS_SHORTCUTS);
 
 	m_data = new KexiTableViewData(); //to prevent crash because m_data==0
 	m_owner = true;                   //-this will be deleted if needed
@@ -235,7 +242,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	verticalScrollBar()->raise();
 
 	//context menu
-	m_popupMenu = new KMenu(this, "contextMenu");
+	m_popupMenu = new KMenu(this);
+	m_popupMenu->setObjectName("m_popupMenu");
 #if 0 //moved to mainwindow's actions
 	d->menu_id_addRecord = m_popupMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL+Qt::Key_Insert);
 	d->menu_id_removeRecord = m_popupMenu->insertItem(
@@ -257,14 +265,16 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //	setMargins(14, fontMetrics().height() + 4, 0, 0);
 
 	// Create headers
-	m_horizontalHeader = new KexiTableViewHeader(this, "topHeader");
+	m_horizontalHeader = new KexiTableViewHeader(this);
+	m_horizontalHeader->setObjectName("m_horizontalHeader");
 	m_horizontalHeader->setSelectionBackgroundColor( palette().active().highlight() );
 	m_horizontalHeader->setOrientation(Qt::Horizontal);
 	m_horizontalHeader->setTracking(false);
 	m_horizontalHeader->setMovingEnabled(false);
 	connect(m_horizontalHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotTopHeaderSizeChange(int,int,int)));
 
-	m_verticalHeader = new KexiRecordMarker(this, "rm");
+	m_verticalHeader = new KexiRecordMarker(this);
+	m_verticalHeader->setObjectName("m_verticalHeader");
 	m_verticalHeader->setSelectionBackgroundColor( palette().active().highlight() );
 	m_verticalHeader->setCellHeight(d->rowHeight);
 //	m_verticalHeader->setFixedWidth(d->rowHeight);
@@ -317,7 +327,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //will be updated by setAppearance:	updateFonts();
 	setAppearance(d->appearance); //refresh
 
-	d->cellToolTip = new KexiTableViewCellToolTip(this);
+#warning TODO d->cellToolTip = new KexiTableViewCellToolTip(this);
 	new WhatsThis(this);
 }
 
@@ -519,8 +529,8 @@ QSize KexiTableView::sizeHint() const
 		(m_navPanel->isVisible() ? m_navPanel->width() : 0) );
 	int h = qMax( ts.height()+topMargin()+horizontalScrollBar()->sizeHint().height(), 
 		minimumSizeHint().height() );
-	w = qMin( w, qApp->desktop()->width()*3/4 ); //stretch
-	h = qMin( h, qApp->desktop()->height()*3/4 ); //stretch
+	w = qMin( w, qApp->desktop()->availableGeometry(this).width()*3/4 ); //stretch
+	h = qMin( h, qApp->desktop()->availableGeometry(this).height()*3/4 ); //stretch
 
 //	kexidbg << "KexiTableView::sizeHint()= " <<w <<", " <<h << endl;
 
@@ -544,6 +554,7 @@ QSize KexiTableView::minimumSizeHint() const
 
 void KexiTableView::createBuffer(int width, int height)
 {
+#warning TODO KexiTableView::createBuffer(): remove buffering a Qt4 has internal buffers
 	if(!d->pBufferPm)
 		d->pBufferPm = new QPixmap(width, height);
 	else
@@ -595,10 +606,10 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 		int translx = colp-cx;
 
 		// Translate painter and draw the cell
-		pb->saveWorldMatrix();
+		const QMatrix oldMx = pb->worldMatrix();
 		pb->translate(translx, transly);
 			paintCell( pb, item, c, r, QRect(colp, rowp, colw, d->rowHeight));
-		pb->restoreWorldMatrix();
+		pb->setWorldMatrix( oldMx );
 	}
 
 	if (m_dragIndicatorLine>=0) {
@@ -610,11 +621,11 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 			y_line = transly+1;
 		}
 		if (y_line>=0) {
-			RasterOp op = pb->rasterOp();
-			pb->setRasterOp(XorROP);
+			QPainter::CompositionMode oldCompositionMode = pb->compositionMode();
+			pb->setCompositionMode(QPainter::CompositionMode_Xor);
 			pb->setPen( QPen(Qt::white, 3) );
 			pb->drawLine(0, y_line, maxwc, y_line);
-			pb->setRasterOp(op);
+			pb->setCompositionMode(oldCompositionMode);
 		}
 	}
 }
@@ -675,7 +686,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 	createBuffer(cw, ch);
 	if(d->pBufferPm->isNull())
 		return;
-	QPainter *pb = new QPainter(d->pBufferPm, this);
+	QPainter *pb = new QPainter(d->pBufferPm/* Qt4 , this*/);
 //	pb->fillRect(0, 0, cw, ch, colorGroup().base());
 
 //	int maxwc = qMin(cw, (columnPos(d->numCols - 1) + columnWidth(d->numCols - 1)));
@@ -1141,7 +1152,7 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
 
 void KexiTableView::showContextMenu(const QPoint& _pos)
 {
-	if (!d->contextMenuEnabled || m_popupMenu->count()<1)
+	if (!d->contextMenuEnabled || m_popupMenu->isEmpty())
 		return;
 	QPoint pos(_pos);
 	if (pos==QPoint(-1,-1)) {
@@ -1236,7 +1247,7 @@ void KexiTableView::contentsMouseReleaseEvent(QMouseEvent *)
 static bool overrideEditorShortcutNeeded(QKeyEvent *e)
 {
 	//perhaps more to come...
-	return e->key() == Qt::Key_Delete && e->state()==Qt::ControlModifier;
+	return e->key() == Qt::Key_Delete && e->modifiers()==Qt::ControlModifier;
 }
 
 bool KexiTableView::shortCutPressed( QKeyEvent *e, const Q3CString &action_name )
@@ -1245,8 +1256,11 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const Q3CString &action_name 
 	KAction *action = m_sharedActions[action_name];
 	if (action) {
 		if (!action->isEnabled())//this action is disabled - don't process it!
-			return false; 
-		if (action->shortcut() == KShortcut( KKey(e) )) {
+			return false;
+#warning OK? (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() )
+		if (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() )
+		  ||(action->shortcut().alternate() == QKeySequence( e->key()|e->modifiers() )))
+		{
 			//special cases when we need to override editor's shortcut
 			if (overrideEditorShortcutNeeded(e)) {
 				return true;
@@ -1258,15 +1272,15 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const Q3CString &action_name 
 	//check default shortcut (when user app has no action shortcuts defined
 	// but we want these shortcuts to still work)
 	if (action_name=="data_save_row")
-		return (k == Qt::Key_Return || k == Qt::Key_Enter) && e->state()==Qt::ShiftModifier;
+		return (k == Qt::Key_Return || k == Qt::Key_Enter) && e->modifiers()==Qt::ShiftModifier;
 	if (action_name=="edit_delete_row")
-		return k == Qt::Key_Delete && e->state()==Qt::ControlModifier;
+		return k == Qt::Key_Delete && e->modifiers()==Qt::ControlModifier;
 	if (action_name=="edit_delete")
-		return k == Qt::Key_Delete && e->state()==Qt::NoButton;
+		return k == Qt::Key_Delete && e->modifiers()==Qt::NoModifier;
 	if (action_name=="edit_edititem")
-		return k == Qt::Key_F2 && e->state()==Qt::NoButton;
+		return k == Qt::Key_F2 && e->modifiers()==Qt::NoModifier;
 	if (action_name=="edit_insert_empty_row")
-		return k == Qt::Key_Insert && e->state()==(Qt::ShiftModifier | Qt::ControlModifier);
+		return k == Qt::Key_Insert && e->modifiers()==(Qt::ShiftModifier | Qt::ControlModifier);
 
 	return false;
 }
@@ -1335,7 +1349,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	int curRow = m_curRow;
 	int curCol = m_curCol;
 
-	const bool nobtn = e->state()==Qt::NoButton;
+	const bool nobtn = e->modifiers()==Qt::NoModifier;
 	bool printable = false;
 
 	//check shared shortcuts
@@ -1408,9 +1422,9 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 					curCol++;
 			}
 		}
-		else if ((e->state()==Qt::ShiftModifier && k==Qt::Key_Tab)
+		else if ((e->modifiers()==Qt::ShiftModifier && k==Qt::Key_Tab)
 		 || (nobtn && k==Qt::Key_Backtab)
-		 || (e->state()==Qt::ShiftModifier && k==Qt::Key_Backtab)
+		 || (e->modifiers()==Qt::ShiftModifier && k==Qt::Key_Backtab)
 		 || (nobtn && k==Qt::Key_Left)
 			) {
 //! \todo add option for stopping at last column
@@ -2234,12 +2248,12 @@ void KexiTableView::maximizeColumnsWidth( const Q3ValueList<int> &columnList )
 	if (width() <= m_horizontalHeader->headerWidth())
 		return;
 	//sort the list and make it unique
-	Q3ValueList<int>::const_iterator it;
 	Q3ValueList<int> cl, sortedList = columnList;
 	qHeapSort(sortedList);
 	int i=-999;
+	Q3ValueList<int>::const_iterator it, end( sortedList.constEnd() );
 
-	for (it=sortedList.constBegin(); it!=sortedList.end(); ++it) {
+	for (it=sortedList.constBegin(); it!=end; ++it) {
 		if (i!=(*it)) {
 			cl += (*it);
 			i = (*it);
@@ -2432,7 +2446,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 		if (e->spontaneous() /*|| e->type()==QEvent::AccelOverride*/) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 			const int k = ke->key();
-			int s = ke->state();
+			int mods = ke->modifiers();
 			//cell editor's events:
 			//try to handle the event @ editor's level
 			KexiTableEdit *edit = tableEditorWidget( m_curCol );
@@ -2441,7 +2455,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				return true;
 			}
 			else if (m_editor && (o==dynamic_cast<QObject*>(m_editor) || o==m_editor->widget())) {
-				if ( (k==Qt::Key_Tab && (s==Qt::NoButton || s==Qt::ShiftModifier))
+				if ( (k==Qt::Key_Tab && (mods==Qt::NoModifier || mods==Qt::ShiftModifier))
 					|| (overrideEditorShortcutNeeded(ke))
 					|| (k==Qt::Key_Enter || k==Qt::Key_Return || k==Qt::Key_Up || k==Qt::Key_Down) 
 					|| (k==Qt::Key_Left && m_editor->cursorAtStart())
@@ -2611,7 +2625,7 @@ KexiTableItem *KexiTableView::highlightedItem() const
 
 void KexiTableView::slotSettingsChanged(int category)
 {
-	if (category==KApplication::SETTINGS_SHORTCUTS) {
+	if (category == KGlobalSettings::SETTINGS_SHORTCUTS) {
 		d->contextMenuKey = KGlobalSettings::contextMenuKey();
 	}
 }

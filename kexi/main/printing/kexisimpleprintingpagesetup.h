@@ -21,7 +21,7 @@
 #define KEXISIMPLEPRINTINGPAGESETUP_H
 
 #include "kexisimpleprintingengine.h"
-#include <kexiviewbase.h>
+#include <KexiView.h>
 
 class KexiSimplePrintingPageSetupBase;
 class KoPageLayoutSize;
@@ -69,7 +69,7 @@ class KexiSimplePrintingCommand : public QObject
 };
 
 //! @short A window for displaying settings for simple printing.
-class KexiSimplePrintingPageSetup : public KexiViewBase
+class KexiSimplePrintingPageSetup : public KexiView
 {
 	Q_OBJECT
 

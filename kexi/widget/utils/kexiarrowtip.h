@@ -34,8 +34,8 @@ class KEXIGUIUTILS_EXPORT KexiArrowTip : public KexiToolTip
 		virtual ~KexiArrowTip();
 
 		inline QString text() const { return m_value.toString(); }
-		virtual bool close() { return close(false); }
-		virtual bool close( bool alsoDelete );
+//2.0 virtual bool close() { return close(false); }
+//2.0	virtual bool close( bool alsoDelete );
 
 	public slots:
 		virtual void show();
@@ -48,6 +48,7 @@ class KEXIGUIUTILS_EXPORT KexiArrowTip : public KexiToolTip
 	protected:
 		virtual void drawFrame(QPainter& p);
 		virtual void drawContents(QPainter& p);
+		virtual void closeEvent( QCloseEvent * event );
 
 		int m_arrowHeight;
 		double m_opacity;

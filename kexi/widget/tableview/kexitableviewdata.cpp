@@ -369,12 +369,12 @@ void KexiTableViewData::addColumn( KexiTableViewColumn* col )
 //	}
 	columns.append( col );
 	col->m_data = this;
-	if (m_globalColumnsIDs.size() < columns.count()) {//sanity
+	if (m_globalColumnsIDs.size() < (int)columns.count()) {//sanity
 		m_globalColumnsIDs.resize( m_globalColumnsIDs.size()*2 );
 	}
 	if (col->visible()) {
 		m_visibleColumnsCount++;
-		if (m_visibleColumnsIDs.size() < m_visibleColumnsCount) {//sanity
+		if ((uint)m_visibleColumnsIDs.size() < m_visibleColumnsCount) {//sanity
 			m_visibleColumnsIDs.resize( m_visibleColumnsIDs.size()*2 );
 		}
 		m_visibleColumnsIDs[ columns.count()-1 ] = m_visibleColumnsCount-1;
@@ -714,8 +714,9 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 			uint i=0;
 			for (KexiTableViewColumn::ListIterator it2(columns);it2.current();++it2, i++) {
 				if (it2.current()->field()->name()==it.key()) {
-					kDebug() << it2.current()->field()->name()<< ": "<<item[i].toString()<<" -> "<<it.data().toString()<<endl;
-					item[i] = it.data();
+					kDebug() << it2.current()->field()->name()<< ": "<<item[i].toString()
+						<<" -> "<<it.value().toString()<<endl;
+					item[i] = it.value();
 				}
 			}
 		}
@@ -824,7 +825,7 @@ void KexiTableViewData::clearInternal()
 		removeLast();
 #ifndef KEXI_NO_PROCESS_EVENTS
 		if (i % 1000 == 0)
-			qApp->processEvents( 1 );
+			qApp->processEvents( QEventLoop::AllEvents, 1 );
 #endif
 	}
 }
@@ -875,7 +876,7 @@ void KexiTableViewData::preloadAllRows()
 		m_cursor->moveNext();
 #ifndef KEXI_NO_PROCESS_EVENTS
 		if ((i % 1000) == 0)
-			qApp->processEvents( 1 );
+			qApp->processEvents( QEventLoop::AllEvents, 1 );
 #endif
 	}
 }

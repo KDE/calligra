@@ -18,8 +18,8 @@
 */
 
 #include "KexiView.h"
+#include "KexiMainWindowIface.h"
 
-#include "keximainwindow.h"
 #include "KexiWindow.h"
 #include "kexiproject.h"
 #include <koproperty/set.h>
@@ -161,14 +161,14 @@ KoProperty::Set *KexiView::propertySet()
 void KexiView::propertySetSwitched()
 {
 	if (window())
-		KexiMainWindow::global()->propertySetSwitched( window(), false );
+		KexiMainWindowIface::global()->propertySetSwitched( window(), false );
 }
 
 void KexiView::propertySetReloaded(bool preservePrevSelection, 
 	const QByteArray& propertyToSelect)
 {
 	if (window())
-		KexiMainWindow::global()->propertySetSwitched( 
+		KexiMainWindowIface::global()->propertySetSwitched( 
 			window(), true, preservePrevSelection, propertyToSelect );
 }
 
@@ -200,7 +200,7 @@ KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata, bool
 	KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
 	*new_schema = sdata;
 
-	if (!KexiMainWindow::global()->project()->dbConnection()
+	if (!KexiMainWindowIface::global()->project()->dbConnection()
 			->storeObjectSchemaData( *new_schema, true ))
 	{
 		delete new_schema;
@@ -215,7 +215,7 @@ tristate KexiView::storeData(bool dontAsk)
 	Q_UNUSED(dontAsk);
 	if (!d->window || !d->window->schemaData())
 		return false;
-	if (!KexiMainWindow::global()->project()->dbConnection()
+	if (!KexiMainWindowIface::global()->project()->dbConnection()
 			->storeObjectSchemaData( *d->window->schemaData(), false /*existing object*/ ))
 	{
 		return false;
@@ -228,7 +228,7 @@ bool KexiView::loadDataBlock( QString &dataString, const QString& dataID, bool c
 {
 	if (!d->window)
 		return false;
-	const tristate res = KexiMainWindow::global()->project()->dbConnection()
+	const tristate res = KexiMainWindowIface::global()->project()->dbConnection()
 		->loadDataBlock(d->window->id(), dataString, dataID);
 	if (canBeEmpty && ~res) {
 		dataString.clear();
@@ -250,7 +250,7 @@ bool KexiView::storeDataBlock( const QString &dataString, const QString &dataID 
 		effectiveID = d->window->id();
 
 	return effectiveID>0
-		&& KexiMainWindow::global()->project()->dbConnection()->storeDataBlock(
+		&& KexiMainWindowIface::global()->project()->dbConnection()->storeDataBlock(
 			effectiveID, dataString, dataID);
 }
 
@@ -258,7 +258,7 @@ bool KexiView::removeDataBlock( const QString& dataID )
 {
 	if (!d->window)
 		return false;
-	return KexiMainWindow::global()->project()->dbConnection()
+	return KexiMainWindowIface::global()->project()->dbConnection()
 		->removeDataBlock(d->window->id(), dataID);
 }
 
@@ -335,7 +335,7 @@ void KexiView::setFocus()
 		else
 			setFocusInternal();
 	}
-	KexiMainWindow::global()->invalidateSharedActions(this);
+	KexiMainWindowIface::global()->invalidateSharedActions(this);
 }
 
 QAction* KexiView::sharedAction( const char *action_name )

@@ -1,428 +1,396 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KexiSimplePrintingPageSetupBase</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>KexiSimplePrintingPageSetupBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KexiSimplePrintingPageSetupBase</class>
+  <widget class="QWidget" name="KexiSimplePrintingPageSetupBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>338</width>
+        <height>451</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>338</width>
-            <height>451</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>.</string>
     </property>
-    <property name="caption">
-        <string>.</string>
+    <property name="focusPolicy" >
+      <enum>Qt::WheelFocus</enum>
     </property>
-    <property name="focusPolicy">
-        <enum>Qt::WheelFocus</enum>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="6">
-            <property name="name">
-                <cstring>layout15</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>iconLabel</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="alignment">
-                        <set>Qt::AlignVCenter</set>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>captionLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&lt;h2&gt;Page Setup for Printing "%1" Table Data&lt;/h2&gt;</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>headerTitleLineEdit</cstring>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="KLineEdit" row="5" column="0" rowspan="1" colspan="5">
-            <property name="name">
+    <layout class="QGridLayout" >
+      <item rowspan="1" row="0" column="0" colspan="6" >
+        <layout class="QHBoxLayout" >
+          <item>
+            <widget class="QLabel" name="iconLabel" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>0</hsizetype>
+                  <vsizetype>5</vsizetype>
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+              <property name="text" >
+                <string/>
+              </property>
+              <property name="alignment" >
+                <set>Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap" >
+                <bool>false</bool>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QLabel" name="captionLabel" >
+              <property name="text" >
+                <string>&lt;h2>Page Setup for Printing "%1" Table Data&lt;/h2></string>
+              </property>
+              <property name="buddy" stdset="0" >
                 <cstring>headerTitleLineEdit</cstring>
-            </property>
-            <property name="sizePolicy">
+              </property>
+              <property name="wordWrap" >
+                <bool>false</bool>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item rowspan="1" row="5" column="0" colspan="5" >
+        <widget class="KLineEdit" name="headerTitleLineEdit" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>2</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+        </widget>
+      </item>
+      <item row="5" column="5" >
+        <widget class="KPushButton" name="headerTitleFontButton" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>Set Font...</string>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="4" column="0" colspan="5" >
+        <widget class="QLabel" name="textLabel2" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>Page title:</string>
+          </property>
+          <property name="alignment" >
+            <set>Qt::AlignBottom</set>
+          </property>
+          <property name="buddy" stdset="0" >
+            <cstring>headerTitleLineEdit</cstring>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="2" column="0" colspan="6" >
+        <layout class="QHBoxLayout" >
+          <item>
+            <widget class="KPushButton" name="printButton" >
+              <property name="text" >
+                <string/>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="KPushButton" name="printPreviewButton" >
+              <property name="sizePolicy" >
                 <sizepolicy>
-                    <hsizetype>2</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
+                  <hsizetype>0</hsizetype>
+                  <vsizetype>1</vsizetype>
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
                 </sizepolicy>
-            </property>
-        </widget>
-        <widget class="KPushButton" row="5" column="5">
-            <property name="name">
-                <cstring>headerTitleFontButton</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Set Font...</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="4" column="0" rowspan="1" colspan="5">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Page title:</string>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignBottom</set>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>headerTitleLineEdit</cstring>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="6">
-            <property name="name">
-                <cstring>layout19</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>printButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>printPreviewButton</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>230</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
-        </widget>
-        <widget class="QCheckBox" row="8" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>addPageNumbersCheckbox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Add page numbers</string>
-            </property>
-        </widget>
-        <widget class="QGroupBox" row="7" column="0" rowspan="1" colspan="5">
-            <property name="name">
-                <cstring>groupBox1</cstring>
-            </property>
-            <property name="title">
-                <string>Page Size &amp;&amp; Margins</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>pageSizeAndMarginsLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="KPushButton" row="7" column="5">
-            <property name="name">
-                <cstring>changePageSizeAndMarginsButton</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Change...</string>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget" row="12" column="0" rowspan="1" colspan="6">
-            <property name="name">
-                <cstring>layout4</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer row="0" column="1">
-                    <property name="name">
-                        <cstring>spacer23</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>80</width>
-                            <height>6</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="KUrlLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>saveSetupLink</cstring>
-                    </property>
-                    <property name="focusPolicy">
-                        <enum>Qt::WheelFocus</enum>
-                    </property>
-                    <property name="margin">
-                        <number>3</number>
-                    </property>
-                    <property name="text">
-                        <string>Save This Setup as Default</string>
-                    </property>
-                    <property name="indent">
-                        <number>6</number>
-                    </property>
-                    <property name="url" stdset="0">
-                        <string></string>
-                    </property>
-                    <property name="tipText">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="KUrlLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>openDataLink</cstring>
-                    </property>
-                    <property name="focusPolicy">
-                        <enum>Qt::WheelFocus</enum>
-                    </property>
-                    <property name="margin">
-                        <number>3</number>
-                    </property>
-                    <property name="text">
-                        <string>Open This Table</string>
-                    </property>
-                    <property name="indent">
-                        <number>6</number>
-                    </property>
-                    <property name="url" stdset="0">
-                        <string></string>
-                    </property>
-                    <property name="tipText">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel6</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Related actions:</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QCheckBox" row="9" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>addDateTimeCheckbox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Add date and time</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="10" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>addTableBordersCheckbox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Add table borders</string>
-            </property>
-        </widget>
-        <spacer row="13" column="4">
-            <property name="name">
-                <cstring>spacer9</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
+              </property>
+              <property name="text" >
+                <string/>
+              </property>
+              <property name="shortcut" >
+                <string/>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <spacer name="spacer1" >
+              <property name="sizeHint" >
+                <size>
+                  <width>230</width>
+                  <height>20</height>
+                </size>
+              </property>
+              <property name="sizeType" >
                 <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
+              </property>
+              <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+        </layout>
+      </item>
+      <item rowspan="1" row="8" column="0" colspan="2" >
+        <widget class="QCheckBox" name="addPageNumbersCheckbox" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>Add page numbers</string>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="7" column="0" colspan="5" >
+        <widget class="Q3GroupBox" name="groupBox1" >
+          <property name="title" >
+            <string>Page Size &amp;&amp; Margins</string>
+          </property>
+          <layout class="QVBoxLayout" >
+            <item>
+              <widget class="QLabel" name="pageSizeAndMarginsLabel" >
+                <property name="text" >
+                  <string/>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+          </layout>
+        </widget>
+      </item>
+      <item row="7" column="5" >
+        <widget class="KPushButton" name="changePageSizeAndMarginsButton" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>Change...</string>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="12" column="0" colspan="6" >
+        <layout class="QGridLayout" >
+          <item row="0" column="1" >
+            <spacer name="spacer23" >
+              <property name="sizeHint" >
                 <size>
-                    <width>20</width>
-                    <height>16</height>
+                  <width>80</width>
+                  <height>6</height>
                 </size>
-            </property>
+              </property>
+              <property name="sizeType" >
+                <enum>Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+          <item row="2" column="0" >
+            <widget class="KUrlLabel" name="saveSetupLink" >
+              <property name="focusPolicy" >
+                <enum>Qt::WheelFocus</enum>
+              </property>
+              <property name="margin" >
+                <number>3</number>
+              </property>
+              <property name="text" >
+                <string>Save This Setup as Default</string>
+              </property>
+              <property name="indent" >
+                <number>6</number>
+              </property>
+              <property name="url" stdset="0" >
+                <string/>
+              </property>
+              <property name="tipText" >
+                <string/>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="0" >
+            <widget class="KUrlLabel" name="openDataLink" >
+              <property name="focusPolicy" >
+                <enum>Qt::WheelFocus</enum>
+              </property>
+              <property name="margin" >
+                <number>3</number>
+              </property>
+              <property name="text" >
+                <string>Open This Table</string>
+              </property>
+              <property name="indent" >
+                <number>6</number>
+              </property>
+              <property name="url" stdset="0" >
+                <string/>
+              </property>
+              <property name="tipText" >
+                <string/>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="0" >
+            <widget class="QLabel" name="textLabel6" >
+              <property name="text" >
+                <string>Related actions:</string>
+              </property>
+              <property name="wordWrap" >
+                <bool>false</bool>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item rowspan="1" row="9" column="0" colspan="2" >
+        <widget class="QCheckBox" name="addDateTimeCheckbox" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>Add date and time</string>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="10" column="0" colspan="2" >
+        <widget class="QCheckBox" name="addTableBordersCheckbox" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>Add table borders</string>
+          </property>
+        </widget>
+      </item>
+      <item row="13" column="4" >
+        <spacer name="spacer9" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>16</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <spacer row="1" column="3">
-            <property name="name">
-                <cstring>spacer15</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>4</height>
-                </size>
-            </property>
+      </item>
+      <item row="1" column="3" >
+        <spacer name="spacer15" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>4</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Fixed</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <spacer row="6" column="0">
-            <property name="name">
-                <cstring>spacer10</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>4</height>
-                </size>
-            </property>
+      </item>
+      <item row="6" column="0" >
+        <spacer name="spacer10" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>4</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Fixed</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <spacer row="3" column="1">
-            <property name="name">
-                <cstring>spacer12</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>4</height>
-                </size>
-            </property>
+      </item>
+      <item row="3" column="1" >
+        <spacer name="spacer12" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>4</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Fixed</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <spacer row="11" column="2">
-            <property name="name">
-                <cstring>spacer14</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>4</height>
-                </size>
-            </property>
+      </item>
+      <item row="11" column="2" >
+        <spacer name="spacer14" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>4</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Fixed</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<tabstops>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <tabstops>
     <tabstop>printButton</tabstop>
     <tabstop>printPreviewButton</tabstop>
     <tabstop>headerTitleLineEdit</tabstop>
@@ -433,15 +401,14 @@
     <tabstop>addTableBordersCheckbox</tabstop>
     <tabstop>openDataLink</tabstop>
     <tabstop>saveSetupLink</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kurllabel.h</includehint>
-    <includehint>kurllabel.h</includehint>
-</includehints>
-</UI>
+  </tabstops>
+  <includes>
+    <include location="local" >klineedit.h</include>
+    <include location="local" >kpushbutton.h</include>
+    <include location="local" >kpushbutton.h</include>
+    <include location="local" >kpushbutton.h</include>
+    <include location="local" >kpushbutton.h</include>
+    <include location="local" >kurllabel.h</include>
+    <include location="local" >kurllabel.h</include>
+  </includes>
+</ui>

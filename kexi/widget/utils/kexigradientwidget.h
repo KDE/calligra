@@ -20,9 +20,8 @@
 #ifndef KEXIGRADIENTWIDGET_H
 #define KEXIGRADIENTWIDGET_H
 
-#include <qtimer.h>
-#include <qwidget.h>
-//Added by qt3to4:
+#include <QTimer>
+#include <QWidget>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QEvent>
@@ -40,7 +39,7 @@
   @author Christian Nitschkowski
 */
 class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
-	typedef Q3PtrList<QWidget> WidgetList;
+	typedef QList<QWidget*> WidgetList;
 
 	Q_OBJECT
 	Q_PROPERTY(DisplayMode displayMode READ displayMode WRITE setDisplayMode DESIGNABLE true)
@@ -81,7 +80,7 @@ class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
 
 		virtual void setPaletteBackgroundPixmap( const QPixmap& pixmap ) {
 			p_backgroundPixmap = pixmap;
-			p_rebuildDelayTimer.start( REBUILD_DELAY, true );
+			p_rebuildDelayTimer.start( REBUILD_DELAY );
 		}
 
 		virtual const QColor& paletteBackgroundColor() const;
@@ -179,7 +178,7 @@ class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
 		virtual void paintEvent( QPaintEvent* e );
 
 		virtual void resizeEvent( QResizeEvent* e ) {
-			p_rebuildDelayTimer.start( REBUILD_DELAY, true );
+			p_rebuildDelayTimer.start( REBUILD_DELAY );
 			QWidget::resizeEvent( e );
 		}
 

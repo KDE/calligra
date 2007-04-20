@@ -94,7 +94,7 @@ void KexiTimeTableEdit::setupContents( QPainter *p, bool focused, const QVariant
 #else
 	y_offset = 0;
 #endif
-	if (!val.isNull() && val.canCast(QVariant::Time))
+	if (!val.isNull() && val.canConvert(QVariant::Time))
 		txt = m_formatter.timeToString(val.toTime());
 	align |= Qt::AlignLeft;
 }

@@ -47,7 +47,6 @@
 #include "KexiWindow.h"
 #include "KexiWindowData.h"
 #include "kexi.h"
-#include "keximainwindow.h"
 #include "kexiblobbuffer.h"
 #include "kexiguimsghandler.h"
 

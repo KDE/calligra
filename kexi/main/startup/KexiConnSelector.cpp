@@ -23,8 +23,6 @@
 #include <kexidb/connectiondata.h>
 
 #include <kexi.h>
-#include "KexiConnSelectorBase.h"
-//#include "KexiOpenExistingFile.h"
 #include <widget/kexiprjtypeselector.h>
 #include <widget/kexidbconnectionwidget.h>
 
@@ -105,10 +103,11 @@ public:
 /*================================================================*/
 
 KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, 
-	const QString& startDirOrVariable, QWidget* parent, const char* name )
-	: QWidget( parent, name )
+	const QString& startDirOrVariable, QWidget* parent )
+	: Ui::KexiConnSelector( parent )
 	,d(new KexiConnSelectorWidgetPrivate())
 {
+	setupUi(this);
 	d->conn_set = &conn_set;
 	d->startDirOrVariable = startDirOrVariable;
 	QString none, iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);

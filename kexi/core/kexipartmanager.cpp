@@ -75,8 +75,6 @@ Manager::lookup()
 		QString mime = ptr->property("X-Kexi-TypeMime").toString();
 		kDebug() << "Manager::lookup(): " << mime << endl;
 //<TEMP>: disable some parts if needed
-		if (!Kexi::tempShowForms() && mime=="kexi/form")
-			continue;
 		if (!Kexi::tempShowReports() && mime=="kexi/report")
 			continue;
 		if (!Kexi::tempShowMacros() && mime=="kexi/macro")

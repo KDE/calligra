@@ -19,6 +19,7 @@
  */
 
 #include "kexiinputtableedit.h"
+#include <kexi_global.h>
 
 #include <qregexp.h>
 #include <qevent.h>
@@ -46,18 +47,17 @@
 class MyLineEdit : public KLineEdit
 {
 	public:
-		MyLineEdit(QWidget *parent, const char *name) : KLineEdit(parent,name)
+		MyLineEdit(QWidget *parent) : KLineEdit(parent)
 		{}
 	protected:
 		virtual void drawFrame ( QPainter * p ) {
 			p->setPen( QPen( colorGroup().text() ) );
 			QRect r = rect();
-			p->moveTo( r.topLeft() );
-			p->lineTo( r.topRight() );
-			p->lineTo( r.bottomRight() );
-			p->lineTo( r.bottomLeft() );
+			p->drawLine( r.topLeft(), r.topRight() );
+			p->drawLine( r.topRight(), r.bottomRight() );
+			p->drawLine( r.topRight(), r.bottomLeft() );
 			if (pos().x() == 0) //draw left side only when it is @ the edge
-				p->lineTo( r.topLeft() );
+				p->drawLine( r.bottomLeft(), r.topLeft() );
 		}
 };
 
@@ -66,7 +66,6 @@ class MyLineEdit : public KLineEdit
 KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent)
  : KexiTableEdit(column, parent)
 {
-	setName("KexiInputTableEdit");
 //	m_type = f.type(); //copied because the rest of code uses m_type
 //	m_field = &f;
 //	m_origValue = value;//original value
@@ -100,7 +99,8 @@ void KexiInputTableEdit::init()
 	}
 
 	//create internal editor
-	m_lineedit = new MyLineEdit(this, "KexiInputTableEdit-KLineEdit");
+	m_lineedit = new MyLineEdit(this);
+	m_lineedit->setObjectName("KexiInputTableEdit-MyLineEdit");
 	setViewWidget(m_lineedit);
 	if (align_right)
 		m_lineedit->setAlignment(Qt::AlignRight);
@@ -141,8 +141,8 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 #endif
 
 	if (!m_lineedit->validator()) {
-		QValidator *validator = new KexiDB::FieldValidator(
-			*field(), m_lineedit, "KexiInputTableEdit-validator");
+		QValidator *validator = new KexiDB::FieldValidator(*field(), m_lineedit);
+		validator->setObjectName("KexiInputTableEdit-validator");
 		m_lineedit->setValidator( validator );
 	}
 }

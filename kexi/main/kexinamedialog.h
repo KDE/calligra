@@ -20,31 +20,27 @@
 #ifndef KEXINAMEDIALOG_H
 #define KEXINAMEDIALOG_H
 
-#include <kdialogbase.h>
-
-#include "kexinamewidget.h"
-//Added by qt3to4:
 #include <QPixmap>
 #include <QLabel>
+#include <KDialog>
 
-class KEXIMAIN_EXPORT KexiNameDialog : public KDialogBase
+#include "kexinamewidget.h"
+
+class KEXIMAIN_EXPORT KexiNameDialog : public KDialog
 {
 	Q_OBJECT
 
 	public:
-		KexiNameDialog(const QString& message, 
-			QWidget * parent = 0, const char * name = 0);
+		KexiNameDialog(const QString& message, QWidget * parent = 0);
 
 		KexiNameDialog(const QString& message, 
 			const QString& nameLabel, const QString& nameText, 
 			const QString& captionLabel, const QString& captionText, 
-			QWidget * parent = 0, const char * name = 0);
+			QWidget * parent = 0);
 		
 		virtual ~KexiNameDialog();
 
 		KexiNameWidget* widget() const { return m_widget; }
-
-		virtual void show();
 
 	public slots:
 		virtual void setDialogIcon(const QPixmap& icon);
@@ -56,6 +52,7 @@ class KEXIMAIN_EXPORT KexiNameDialog : public KDialogBase
 	
 	protected:
 		void init();
+		virtual void showEvent( QShowEvent * event );
 
 		QLabel *m_icon;
 		KexiNameWidget* m_widget;

@@ -1,5 +1,3 @@
-
-
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${KDE4_INCLUDES}  )
 
 
@@ -8,22 +6,26 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/ut
 set(kexiguiutils_LIB_SRCS 
    kexisharedactionclient.cpp 
    kexirecordnavigator.cpp 
-   kexigradientwidget.cpp 
    kexirecordmarker.cpp 
    kexidisplayutils.cpp 
    kexiflowlayout.cpp
-   kexidatetimeformatter.cpp
    kexitooltip.cpp
    kexiarrowtip.cpp
    kexicontextmenuutils.cpp
+   kexidropdownbutton.cpp
    kexicomboboxdropdownbutton.cpp
 )
+
+# todo: use new Qt4's QDateTimeEdit: kexidatetimeformatter.cpp
+# todo: use new Qt4's painting engine: kexigradientwidget.cpp 
 
 kde4_automoc(${kexiguiutils_LIB_SRCS})
 
 kde4_add_library(kexiguiutils SHARED ${kexiguiutils_LIB_SRCS})
 
-target_link_libraries(kexiguiutils  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kexiguiutils ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
+	kexiutils ${KDE4_KIO_LIBS} ${QT_QT3SUPPORT_LIBRARY}
+)
 
 set_target_properties(kexiguiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kexiguiutils  DESTINATION ${LIB_INSTALL_DIR})

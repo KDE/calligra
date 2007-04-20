@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <Q3PopupMenu>
-#include <Q3PtrList>
 /* This file is part of the KDE projec
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
@@ -26,42 +23,41 @@
 #endif
 
 //! @internal safer dictionary
-typedef QMap< int, QPointer<KexiDialogBase> > KexiDialogDict; 
+typedef QMap< int, QPointer<KexiWindow> > KexiWindowDict;
 
 //! @internal
-class KexiMainWindowImpl::Private
+class KexiMainWindow::Private
 {
 public:
-	Private(KexiMainWindowImpl* w)
+	Private(KexiMainWindow* w)
 //		: dialogs(401)
 		: wnd(w)
-		, m_openedCustomObjectsForItem(1019, true)
 	{
 		propEditor=0;
-		propEditorToolWindow=0;
-		propEditorTabWidget=0;
+//2.0: unused				propEditorToolWindow=0;
+//2.0: unused				propEditorTabWidget=0;
 		userMode = false;
 		nav=0;
-		navToolWindow=0;
+//2.0: unused				navToolWindow=0;
 		prj = 0;
-		curDialogGUIClient=0;
-		curDialogViewGUIClient=0;
-		closedDialogGUIClient=0;
-		closedDialogViewGUIClient=0;
+		curWindowGUIClient=0;
+		curWindowViewGUIClient=0;
+		closedWindowGUIClient=0;
+		closedWindowViewGUIClient=0;
 		nameDialog=0;
-		curDialog=0;
+		curWindow=0;
 		m_findDialog=0;
-		block_KMdiMainFrm_eventFilter=false;
+//2.0: unused		block_KMdiMainFrm_eventFilter=false;
 		focus_before_popup=0;
 //		relationPart=0;
-		privateIDCounter=0;
+//moved		privateIDCounter=0;
 		action_view_nav=0;
 		action_view_propeditor=0;
 		action_view_mainarea=0;
 		action_open_recent_projects_title_id = -1;
 		action_open_recent_connections_title_id = -1;
-		forceDialogClosing=false;
-		insideCloseDialog=false;
+		forceWindowClosing=false;
+		insideCloseWindow=false;
 #ifndef KEXI_NO_PENDING_DIALOGS
 		actionToExecuteWhenPendingJobsAreFinished = NoAction;
 #endif
@@ -74,7 +70,7 @@ public:
 		navDockSeparatorPos=-1;
 //		navDockSeparatorPosWithAutoOpen=-1;
 		wasAutoOpen = false;
-		dialogExistedBeforeCloseProject = false;
+		windowExistedBeforeCloseProject = false;
 #ifndef KEXI_SHOW_UNIMPLEMENTED
 		dummy_action = new KActionMenu("", wnd);
 #endif
@@ -82,121 +78,121 @@ public:
 #ifdef HAVE_KNEWSTUFF
 		newStuff = 0;
 #endif
-		mdiModeToSwitchAfterRestart = (KMdi::MdiMode)0;
+//2.0: unused		mdiModeToSwitchAfterRestart = (KMdi::MdiMode)0;
 		forceShowProjectNavigatorOnCreation = false;
 		forceHideProjectNavigatorOnCreation = false;
 		navWasVisibleBeforeProjectClosing = false;
 		saveSettingsForShowProjectNavigator = true;
-		m_openedCustomObjectsForItem.setAutoDelete(true);
 	}
 	~Private() {
+		qDeleteAll(m_openedCustomObjectsForItem);
 	}
 
 #ifndef KEXI_NO_PENDING_DIALOGS
 	//! Job type. Currently used for marking items as being opened or closed.
 	enum PendingJobType {
 		NoJob = 0,
-		DialogOpeningJob,
-		DialogClosingJob
+		WindowOpeningJob,
+		WindowClosingJob
 	};
 
-	KexiDialogBase *openedDialogFor( const KexiPart::Item* item, PendingJobType &pendingType )
+	KexiWindow *openedWindowFor( const KexiPart::Item* item, PendingJobType &pendingType )
 	{
-		return openedDialogFor( item->identifier(), pendingType );
+		return openedWindowFor( item->identifier(), pendingType );
 	}
 
-	KexiDialogBase *openedDialogFor( int identifier, PendingJobType &pendingType )
+	KexiWindow *openedWindowFor( int identifier, PendingJobType &pendingType )
 	{
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		QMap<int, PendingJobType>::ConstIterator it = pendingDialogs.find( identifier );
-		if (it==pendingDialogs.constEnd())
+		QHash<int, PendingJobType>::ConstIterator it = pendingWindows.find( identifier );
+		if (it==pendingWindows.end())
 			pendingType = NoJob;
 		else
-			pendingType = it.data();
+			pendingType = it.value();
 		
-		if (pendingType == DialogOpeningJob) {
+		if (pendingType == WindowOpeningJob) {
 			return 0;
 		}
-		return (KexiDialogBase*)dialogs[ identifier ];
+		return (KexiWindow*)windows[ identifier ];
 	}
 #else
-	KexiDialogBase *openedDialogFor( const KexiPart::Item* item )
+	KexiWindow *openedWindowFor( const KexiPart::Item* item )
 	{
-		return openedDialogFor( item->identifier() );
+		return openedWindowFor( item->identifier() );
 	}
 
-	KexiDialogBase *openedDialogFor( int identifier )
+	KexiWindow *openedWindowFor( int identifier )
 	{
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		return (KexiDialogBase*)dialogs[ identifier ];
+		return (KexiWindow*)windows[ identifier ];
 	}
 #endif
 
-	void insertDialog(KexiDialogBase *dlg) {
+	void insertWindow(KexiWindow *window) {
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		dialogs.insert(dlg->id(), QPointer<KexiDialogBase>(dlg));
+		windows.insert(window->id(), QPointer<KexiWindow>(window));
 #ifndef KEXI_NO_PENDING_DIALOGS
-		pendingDialogs.remove(dlg->id());
+		pendingWindows.remove(window->id());
 #endif
 	}
 
 #ifndef KEXI_NO_PENDING_DIALOGS
-	void addItemToPendingDialogs(const KexiPart::Item* item, PendingJobType jobType) {
+	void addItemToPendingWindows(const KexiPart::Item* item, PendingJobType jobType) {
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		pendingDialogs.replace( item->identifier(), jobType );
+		pendingWindows.insert( item->identifier(), jobType );
 	}
 
-	bool pendingDialogsExist() {
-		if (pendingDialogs.constBegin()!=pendingDialogs.constEnd())
-			kDebug() << 	pendingDialogs.constBegin().key() << " " << (int)pendingDialogs.constBegin().data() << endl;
+	bool pendingWindowsExist() {
+		if (pendingWindows.begin()!=pendingWindows.end())
+			kDebug() << 	pendingWindows.constBegin().key() << " " << (int)pendingWindows.constBegin().value() << endl;
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		return !pendingDialogs.isEmpty();
-	}
-#endif
-
-	void updateDialogId(KexiDialogBase *dlg, int oldItemID) {
-//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		dialogs.remove(oldItemID);
-#ifndef KEXI_NO_PENDING_DIALOGS
-		pendingDialogs.remove(oldItemID);
-#endif
-		dialogs.insert(dlg->id(), QPointer<KexiDialogBase>(dlg));
-	}
-
-	void removeDialog(int identifier) {
-//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		dialogs.remove(identifier);
-	}
-
-#ifndef KEXI_NO_PENDING_DIALOGS
-	void removePendingDialog(int identifier) {
-//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		pendingDialogs.remove(identifier);
+		return !pendingWindows.isEmpty();
 	}
 #endif
 
-	uint openedDialogsCount() {
+	void updateWindowId(KexiWindow *window, int oldItemID) {
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		return dialogs.count();
+		windows.remove(oldItemID);
+#ifndef KEXI_NO_PENDING_DIALOGS
+		pendingWindows.remove(oldItemID);
+#endif
+		windows.insert(window->id(), QPointer<KexiWindow>(window));
 	}
 
-	//! Used in KexiMainWindowImple::closeProject()
-	void clearDialogs() {
+	void removeWindow(int identifier) {
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		dialogs.clear();
+		windows.remove(identifier);
+	}
+
 #ifndef KEXI_NO_PENDING_DIALOGS
-		pendingDialogs.clear();
+	void removePendingWindow(int identifier) {
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
+		pendingWindows.remove(identifier);
+	}
+#endif
+
+	uint openedWindowsCount() {
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
+		return windows.count();
+	}
+
+	//! Used in KexiMainWindowe::closeProject()
+	void clearWindows() {
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
+		windows.clear();
+#ifndef KEXI_NO_PENDING_DIALOGS
+		pendingWindows.clear();
 #endif
 	}
 
 	/*! Toggles last checked view mode radio action, if available. */
 	void toggleLastCheckedMode()
 	{
-		if (curDialog.isNull())
+		if (curWindow.isNull())
 			return;
-		KRadioAction *ra = actions_for_view_modes[ curDialog->currentViewMode() ];
-		if (ra)
-			ra->setChecked(true);
+		KToggleAction *ta = actions_for_view_modes.value( curWindow->currentViewMode() );
+		if (ta)
+			ta->setChecked(true);
 //		if (!last_checked_mode)
 //			return;
 //		last_checked_mode->setChecked(true);
@@ -228,14 +224,14 @@ void updatePropEditorDockWidthInfo() {
 
 	void hideMenuItem(const QString& menuName, const QString& itemText, bool alsoSeparator)
 	{
-		Q3PopupMenu *pm = popups[menuName.ascii()];
+		Q3PopupMenu *pm = popups[menuName.toLatin1()];
 		if (!pm)
 			return;
 		uint i=0;
 		const uint c = pm->count();
 		for (;i<c;i++) {
 			kDebug() << pm->text( pm->idAt(i) ) <<endl;
-			if (pm->text( pm->idAt(i) ).lower().trimmed()==itemText.lower().trimmed())
+			if (pm->text( pm->idAt(i) ).toLower().trimmed()==itemText.toLower().trimmed())
 				break;
 		}
 		if (i<c) {
@@ -247,13 +243,14 @@ void updatePropEditorDockWidthInfo() {
 	
 	void disableMenuItem(const QString& menuName, const QString& itemText)
 	{
-		QPopupMenu *pm = popups[menuName.ascii()];
+#warning reimplement disableMenuItem()
+		Q3PopupMenu *pm = popups[menuName.toLatin1()];
 		if (!pm)
 			return;
 		uint i=0;
 		const uint c = pm->count();
 		for (;i<c;i++) {
-			if (pm->text( pm->idAt(i) ).lower().trimmed()==itemText.lower().trimmed())
+			if (pm->text( pm->idAt(i) ).toLower().trimmed()==itemText.toLower().trimmed())
 				break;
 		}
 		if (i<c)
@@ -262,6 +259,8 @@ void updatePropEditorDockWidthInfo() {
 
 	void updatePropEditorVisibility(int viewMode)
 	{
+#warning TODO updatePropEditorVisibility
+#if 0 //TODO reenable
 		if (propEditorToolWindow) {
 			if (viewMode==0 || viewMode==Kexi::DataViewMode) {
 #ifdef PROPEDITOR_VISIBILITY_CHANGES
@@ -282,10 +281,13 @@ void updatePropEditorDockWidthInfo() {
 #endif*/
 			}
 		}
+#endif
 	}
 
 	void restoreNavigatorWidth()
 	{
+//2.0: unused
+#if 0
 #if defined(KDOCKWIDGET_P)
 			if (wnd->mdiMode()==KMdi::ChildframeMode || wnd->mdiMode()==KMdi::TabPageMode) {
 				KDockWidget *dw = (KDockWidget *)nav->parentWidget();
@@ -314,6 +316,8 @@ void updatePropEditorDockWidthInfo() {
 //					ds->setSeparatorPos( ds->separatorPos(), true );
 			}
 #endif
+
+#endif
 	}
 
 	template<class type>
@@ -321,17 +325,17 @@ void updatePropEditorDockWidthInfo() {
 	{
 		if (!item || !name) {
 			kWarning() << 
-				"KexiMainWindowImpl::Private::openedCustomObjectsForItem(): !item || !name" << endl;
+				"KexiMainWindow::Private::openedCustomObjectsForItem(): !item || !name" << endl;
 			return 0;
 		}
-		QString key( QString::number(item->identifier()) + name );
-		return dynamic_cast<type*>( m_openedCustomObjectsForItem.find( key.latin1() ) );
+		QByteArray key( QByteArray::number(item->identifier()) + name );
+		return qobject_cast<type*>( m_openedCustomObjectsForItem.value( key ) );
 	}
 
 	void addOpenedCustomObjectForItem(KexiPart::Item* item, QObject* object, const char* name)
 	{
-		QString key = QString::number(item->identifier()) + name;
-		m_openedCustomObjectsForItem.insert( key.latin1(), object );
+		QByteArray key( QByteArray::number(item->identifier()) + name );
+		m_openedCustomObjectsForItem.insert( key, object );
 	}
 
 	KexiFindDialog *findDialog() {
@@ -361,7 +365,7 @@ void updatePropEditorDockWidthInfo() {
 			return;
 		}
 //! @todo use ->caption() here, depending on global settings related to displaying captions
-		findDialog()->setObjectNameForCaption(curDialog->partItem()->name());
+		findDialog()->setObjectNameForCaption(curWindow->partItem()->name());
 
 		QStringList columnNames;
 		QStringList columnCaptions;
@@ -389,14 +393,14 @@ void updatePropEditorDockWidthInfo() {
 	}
 
 	//! \return the current view if it supports \a actionName, otherwise returns 0.
-	KexiViewBase *currentViewSupportingAction(const char* actionName) const
+	KexiView *currentViewSupportingAction(const char* actionName) const
 	{
-		if (!curDialog)
+		if (!curWindow)
 			return 0;
-		KexiViewBase *view = curDialog->selectedView();
+		KexiView *view = curWindow->selectedView();
 		if (!view)
 			return 0;
-		KAction *action = view->sharedAction(actionName);
+		QAction *action = view->sharedAction(actionName);
 		if (!action || !action->isEnabled())
 			return 0;
 		return view;
@@ -405,18 +409,18 @@ void updatePropEditorDockWidthInfo() {
 	//! \return the current view if it supports KexiSearchAndReplaceViewInterface.
 	KexiSearchAndReplaceViewInterface* currentViewSupportingSearchAndReplaceInterface() const
 	{
-		if (!curDialog)
+		if (!curWindow)
 			return 0;
-		KexiViewBase *view = curDialog->selectedView();
+		KexiView *view = curWindow->selectedView();
 		if (!view)
 			return 0;
 		return dynamic_cast<KexiSearchAndReplaceViewInterface*>(view);
 	}
 
-		KexiMainWindowImpl *wnd;
+		KexiMainWindow *wnd;
 		KexiStatusBar *statusBar;
 		KexiProject *prj;
-		KConfig *config;
+		KSharedConfig::Ptr config;
 #ifndef KEXI_NO_CTXT_HELP
 		KexiContextHelp *ctxHelp;
 #endif
@@ -429,15 +433,16 @@ void updatePropEditorDockWidthInfo() {
 		QPointer<KexiPropertyEditorView> propEditor;
 		QPointer<KoProperty::Set> propBuffer;
 
-		KXMLGUIClient *curDialogGUIClient, *curDialogViewGUIClient,
-			*closedDialogGUIClient, *closedDialogViewGUIClient;
-		QPointer<KexiDialogBase> curDialog;
+		KXMLGUIClient *curWindowGUIClient, *curWindowViewGUIClient,
+			*closedWindowGUIClient, *closedWindowViewGUIClient;
+		QPointer<KexiWindow> curWindow;
 
 		KexiNameDialog *nameDialog;
 
 		QTimer timer; //helper timer
 //		QSignalMapper *actionMapper;
 
+//! @todo move menu handling outside
 		Q3AsciiDict<Q3PopupMenu> popups; //list of menu popups
 		Q3PopupMenu *createMenu;
 
@@ -475,9 +480,10 @@ void updatePropEditorDockWidthInfo() {
 
 		//! view menu
 		KAction *action_view_nav, *action_view_propeditor, *action_view_mainarea;
-		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
-		Q3IntDict<KRadioAction> actions_for_view_modes;
-//		KRadioAction *last_checked_mode;
+//! todo see FormManager::createActions() for usage
+		QActionGroup* action_view_mode;
+		KToggleAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
+		QHash<int, KToggleAction*> actions_for_view_modes;
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
@@ -500,24 +506,24 @@ void updatePropEditorDockWidthInfo() {
 		KAction *action_configure;
 
 		//! for dock windows
-		KMdiToolViewAccessor* navToolWindow;
-		KMdiToolViewAccessor* propEditorToolWindow;
+//2.0: unused		KMdiToolViewAccessor* navToolWindow;
+//2.0: unused		KMdiToolViewAccessor* propEditorToolWindow;
 
 		QPointer<QWidget> focus_before_popup;
 //		KexiRelationPart *relationPart;
 
-		int privateIDCounter; //!< counter: ID for private "document" like Relations window
+//moved		int privateIDCounter; //!< counter: ID for private "document" like Relations window
 
-		bool block_KMdiMainFrm_eventFilter : 1;
+//2.0: unused	bool block_KMdiMainFrm_eventFilter : 1;
 
-		//! Set to true only in destructor, used by closeDialog() to know if
-		//! user can cancel dialog closing. If true user even doesn't see any messages
-		//! before closing a dialog. This is for extremely sanity... and shouldn't be even needed.
-		bool forceDialogClosing : 1;
+		//! Set to true only in destructor, used by closeWindow() to know if
+		//! user can cancel window closing. If true user even doesn't see any messages
+		//! before closing a window. This is for extremely sanity... and shouldn't be even needed.
+		bool forceWindowClosing : 1;
 
-		//! Indicates that we're inside closeDialog() method - to avoid inf. recursion
-		//! on dialog removing
-		bool insideCloseDialog : 1;
+		//! Indicates that we're inside closeWindow() method - to avoid inf. recursion
+		//! on window removing
+		bool insideCloseWindow : 1;
 
 #ifndef KEXI_NO_PENDING_DIALOGS
 		//! Used in executeActionWhenPendingJobsAreFinished().
@@ -543,11 +549,11 @@ void updatePropEditorDockWidthInfo() {
 		}
 #endif
 
-		//! Used for delayed dialogs closing for 'close all'
-		Q3PtrList<KexiDialogBase> windowsToClose;
+		//! Used for delayed windows closing for 'close all'
+		QList<KexiWindow*> windowsToClose;
 
 		//! Opened page setup dialogs, used by printOrPrintPreviewForItem().
-		Q3IntDict<KexiDialogBase> pageSetupDialogs;
+		QHash<int, KexiWindow*> pageSetupDialogs;
 
 		/*! A map from Kexi dialog to "print setup" part item's ID of the data item
 		 used by closeDialog() to find an ID of the data item, so the entry 
@@ -582,21 +588,21 @@ void updatePropEditorDockWidthInfo() {
 #endif
 
 		//! Used by openedCustomObjectsForItem() and addOpenedCustomObjectForItem()
-		Q3AsciiDict<QObject> m_openedCustomObjectsForItem;
+		QHash<QByteArray, QObject*> m_openedCustomObjectsForItem;
 
 		int propEditorDockSeparatorPos, navDockSeparatorPos;
 //	int navDockSeparatorPosWithAutoOpen;
 		bool wasAutoOpen;
-		bool dialogExistedBeforeCloseProject;
+		bool windowExistedBeforeCloseProject;
 
-		KMdi::MdiMode mdiModeToSwitchAfterRestart;
+//2.0: unused		KMdi::MdiMode mdiModeToSwitchAfterRestart;
 
 	private:
 		//! @todo move to KexiProject
-		KexiDialogDict dialogs;
+		KexiWindowDict windows;
 #ifndef KEXI_NO_PROCESS_EVENTS
-		QMap<int, PendingJobType> pendingDialogs; //!< part item identifiers for dialogs whoose opening has been started
-	//todo(threads)	QMutex dialogsMutex; //!< used for locking dialogs and pendingDialogs dicts
+		QHash<int, PendingJobType> pendingWindows; //!< part item identifiers for windows whoose opening has been started
+	//todo(threads)	QMutex dialogsMutex; //!< used for locking windows and pendingWindows dicts
 #endif
 		KexiFindDialog *m_findDialog;
 };

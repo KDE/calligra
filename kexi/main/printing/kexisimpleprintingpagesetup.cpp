@@ -302,7 +302,7 @@ void KexiSimplePrintingCommand::slotShowPageSetupRequested()
 
 KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWin, QWidget *parent, 
 	QMap<QString,QString>* args )
-	: KexiViewBase( mainWin, parent, "KexiSimplePrintingPageSetup" )
+	: KexiView( mainWin, parent, "KexiSimplePrintingPageSetup" )
 	, m_settings( KexiSimplePrintingSettings::load() )
 //	, m_command(0)
 {
@@ -338,8 +338,8 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 //	setFocusPolicy(WheelFocus);
 	m_contents->setFocusProxy(m_contents->headerTitleLineEdit);
 
-	m_contents->printButton->setIconSet( KStdGuiItem::print().iconSet(K3Icon::Small) );
-	m_contents->printButton->setText( KStdGuiItem::print().text() );
+	m_contents->printButton->setIconSet( KStandardGuiItem::print().iconSet(K3Icon::Small) );
+	m_contents->printButton->setText( KStandardGuiItem::print().text() );
 	connect(m_contents->printButton, SIGNAL(clicked()), this, SLOT(print()));
 
 	m_contents->printPreviewButton->setIconSet( KIcon("document-print-preview") );
@@ -514,8 +514,11 @@ void KexiSimplePrintingPageSetup::slotChangePageSizeAndMargins()
 {
 	KoHeadFoot headfoot; //dummy
 
+#warning TODO reenable when KoPageLayoutDia is ported
+#if 0//TODO
 	if (int(QDialog::Accepted) != KoPageLayoutDia::pageLayout( 
 		m_settings.pageLayout, headfoot, FORMAT_AND_BORDERS | DISABLE_UNIT, m_unit, this ))
+#endif
 		return;
 
 	//update

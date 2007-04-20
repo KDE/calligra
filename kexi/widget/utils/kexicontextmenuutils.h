@@ -20,9 +20,10 @@
 #ifndef KexiContextMenuUtils_H
 #define KexiContextMenuUtils_H
 
+#include <kexi_export.h>
 #include <kexidb/queryschema.h>
-#include <kpopupmenu.h>
-#include <kurl.h>
+#include <KMenu>
+#include <KUrl>
 
 class KActionCollection;
 class KexiDataItemInterface;
@@ -35,7 +36,7 @@ class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
 	public:
 		/*! Updates title for context menu.
 		 \return true if the title has been updated. */
-		static bool updateTitle(QPopupMenu *menu, const QString& objectName, 
+		static bool updateTitle(QMenu *menu, const QString& objectName, 
 			const QString& objectTypeName, const QString& iconName);
 };
 
@@ -60,7 +61,8 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
 		/*! Updates title for context menu.
 		 Used in KexiDBWidgetContextMenuExtender::createTitle(QPopupMenu *menu) and KexiDBImageBox.
 		 \return true if the title has been updated. */
-		static bool updateTitle(QPopupMenu *menu, const QString& title, const QString& iconName = QString::null);
+		static bool updateTitle(QMenu *menu, const QString& title, 
+			const QString& iconName = QString::null);
 
 	public slots:
 		void updateActionsAvailability();
@@ -79,7 +81,7 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
 		void updateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
 
 		/*! Emitted before "insertFromFile" action was requested. */
-		void insertFromFileRequested(const KURL &url);
+		void insertFromFileRequested(const KUrl &url);
 
 		/*! Emitted before "saveAs" action was requested. 
 		 You should fill \a origFilename, \a fileExtension and \a dataIsEmpty values.

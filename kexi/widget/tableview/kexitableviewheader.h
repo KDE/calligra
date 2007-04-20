@@ -20,7 +20,8 @@
 #ifndef KEXITABLEVIEWHEADER_H
 #define KEXITABLEVIEWHEADER_H
 
-#include <qheader.h>
+#include <kexi_export.h>
+#include <q3header.h>
 
 class QStyle;
 
@@ -30,12 +31,12 @@ class QStyle;
 
  \todo react on indexChange ( int section, int fromIndex, int toIndex ) signal
 */
-class KEXIDATATABLE_EXPORT KexiTableViewHeader : public QHeader
+class KEXIDATATABLE_EXPORT KexiTableViewHeader : public Q3Header
 {
 	Q_OBJECT
 
 	public:
-		KexiTableViewHeader(QWidget * parent = 0, const char * name = 0);
+		KexiTableViewHeader(QWidget * parent = 0);
 
 		virtual ~KexiTableViewHeader();
 
@@ -60,14 +61,16 @@ class KEXIDATATABLE_EXPORT KexiTableViewHeader : public QHeader
 		void slotSizeChange(int section, int oldSize, int newSize );
 
 	protected:
-		virtual void paintSection ( QPainter * p, int index, const QRect & fr );
-		virtual void styleChange( QStyle& oldStyle );
+		virtual bool event( QEvent *event );
+		virtual void paintSection( QPainter * p, int index, const QRect & fr );
+		virtual void styleChanged();
 
 		int m_lastToolTipSection;
 		QRect m_toolTipRect;
 
 		QStringList m_toolTips;
 		QColor m_selectionBackgroundColor;
+		QStyle* m_privateStyle;
 		int m_selectedSection;
 		bool m_styleChangeEnabled : 1;
 };

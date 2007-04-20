@@ -22,7 +22,7 @@
 
 #include "KexiWindow.h"
 #include "KexiView.h"
-#include "keximainwindow.h"
+#include "KexiMainWindowIface.h"
 
 #include <q3asciidict.h>
 #include <qdialog.h>
@@ -117,7 +117,7 @@ KexiWindow* KexiInternalPart::findOrCreateKexiWindow(
 #warning TODO	wnd->setTabCaption( view->caption() );
 	wnd->resize(view->sizeHint());
 	wnd->setMinimumSize(view->minimumSizeHint().width(),view->minimumSizeHint().height());
-	wnd->setId( KexiMainWindow::global()->project()->generatePrivateID() );
+	wnd->setId( KexiMainWindowIface::global()->project()->generatePrivateID() );
 	wnd->registerDialog();
 	return wnd;
 }
@@ -149,7 +149,7 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
 	if (part->uniqueDialog() && !part->m_uniqueWidget.isNull())
 		w = part->m_uniqueWidget;
 	else
-		w = part->createWidget(dialogClass, KexiMainWindow::global()->thisWidget(), objName ? objName : partName, args);
+		w = part->createWidget(dialogClass, KexiMainWindowIface::global()->thisWidget(), objName ? objName : partName, args);
 
 	if (dynamic_cast<QDialog*>(w)) {
 		if (part->uniqueDialog())

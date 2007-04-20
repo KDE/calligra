@@ -72,9 +72,6 @@ namespace Kexi
 	//some temporary flags
 
 	//! false by default, flag loaded on main window startup
-	KEXICORE_EXPORT bool& tempShowForms(); 
-
-	//! false by default, flag loaded on main window startup
 	KEXICORE_EXPORT bool& tempShowReports(); 
 
 	//! false by default, flag loaded on main window startup

@@ -28,13 +28,15 @@
 #include <q3scrollview.h>
 #include <qlabel.h>
 #include <qtooltip.h>
-//Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3Frame>
+#include <QStyle>
+#include <QStyleOptionComplex>
 
 #include <kmessagebox.h>
 
 #include <kexi.h>
+#include <kexi_global.h>
 #include <kexiutils/validator.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexirecordmarker.h>
@@ -42,6 +44,8 @@
 #include <kexidataiteminterface.h>
 
 #include "kexitableviewheader.h"
+
+#include <limits.h>
 
 using namespace KexiUtils;
 
@@ -78,12 +82,16 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 	m_vScrollBarValueChanged_enabled = true;
 	m_scrollbarToolTipsEnabled = true;
 	m_scrollBarTipTimerCnt = 0;
+	m_scrollBarTipTimer.setSingleShot(true);
 	m_scrollBarTip = 0;
 	m_recentSearchDirection = KexiSearchAndReplaceViewInterface::Options::DefaultSearchDirection;
 
 	// setup scrollbar tooltip and related members
-	m_scrollBarTip = new QLabel("",0, "vScrollBarToolTip",
-		Qt::WStyle_Customize |Qt::WStyle_NoBorder|Qt::WX11BypassWM|Qt::WStyle_StaysOnTop|Qt::WStyle_Tool);
+	m_scrollBarTip = new QLabel();
+	m_scrollBarTip->setObjectName("vScrollBarToolTip");
+	m_scrollBarTip->setWindowFlags(
+		Qt::WStyle_Customize|Qt::WStyle_NoBorder|Qt::WX11BypassWM
+		|Qt::WStyle_StaysOnTop|Qt::WStyle_Tool );
 	m_scrollBarTip->setPalette(QToolTip::palette());
 	m_scrollBarTip->setMargin(2);
 	m_scrollBarTip->setIndent(0);
@@ -892,20 +900,6 @@ bool KexiDataAwareObjectInterface::cancelEditor()
 	return true;
 }
 
-//! @internal
-class KexiDataAwareObjectInterfaceToolTip : public QToolTip {
-	public:
-	KexiDataAwareObjectInterfaceToolTip( const QString & text, const QPoint & pos, QWidget * widget )
-		: QToolTip(widget), m_text(text)
-	{
-		tip( QRect(pos, QSize(100, 100)), text );
-	}
-	virtual void maybeTip(const QPoint & p) {
-		tip( QRect(p, QSize(100, 100)), m_text);
-	}
-	QString m_text;
-};
-
 bool KexiDataAwareObjectInterface::acceptEditor()
 {
 	if (!hasData())
@@ -1211,9 +1205,10 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
 	case ImmediateDelete:
 		break;
 	case AskDelete:
-		if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(dynamic_cast<QWidget*>(this), 
-			i18n("Do you want to delete selected row?"), 0, 
-			KGuiItem(i18n("&Delete Row"),"edit-delete"),
+		if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(
+			dynamic_cast<QWidget*>(this), 
+			i18n("Do you want to delete selected row?"), QString(), 
+			KGuiItem(i18n("&Delete Row"),"edit-delete"), KStandardGuiItem::cancel(),
 			"dontAskBeforeDeleteRow"/*config entry*/,
 			KMessageBox::Notify|KMessageBox::Dangerous))
 			return;
@@ -1671,15 +1666,18 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
 	if (moveToLastField)
 		*moveToLastField = false;
 
-	const bool nobtn = e->state()==Qt::NoButton;
+	const bool nobtn = e->modifiers()==Qt::NoModifier;
 	const int k = e->key();
-	//kDebug() << "-----------" << e->state() << " " << k << endl;
 
-	if ((k == Qt::Key_Up && nobtn) || (k == Qt::Key_PageUp && e->state()==Qt::ControlButton)) {
+	if (  (k == Qt::Key_Up && nobtn) 
+	    ||(k == Qt::Key_PageUp && e->modifiers()==Qt::ControlModifier))
+	{
 		selectPrevRow();
 		e->accept();
 	}
-	else if ((k == Qt::Key_Down && nobtn) || (k == Qt::Key_PageDown && e->state()==Qt::ControlButton)) {
+	else if ((k == Qt::Key_Down && nobtn)
+	      || (k == Qt::Key_PageDown && e->modifiers()==Qt::ControlModifier))
+	{
 		selectNextRow();
 		e->accept();
 	}
@@ -1696,11 +1694,11 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
 			//we're in row-selection mode: home key always moves to 1st row
 			curRow = 0;//to 1st row
 		}
-		else {//cell selection mode: different actions depending on ctrl and shift keys state
+		else {//cell selection mode: different actions depending on ctrl and shift keys mods
 			if (nobtn) {
 				curCol = 0;//to 1st col
 			}
-			else if (e->state()==Qt::ControlButton) {
+			else if (e->modifiers() == Qt::ControlModifier) {
 				curRow = 0;//to 1st row and col
 				curCol = 0;
 			}
@@ -1717,11 +1715,11 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
 			//we're in row-selection mode: home key always moves to last row
 			curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row
 		}
-		else {//cell selection mode: different actions depending on ctrl and shift keys state
+		else {//cell selection mode: different actions depending on ctrl and shift keys mods
 			if (nobtn) {
 				curCol = columns()-1;//to last col
 			}
-			else if (e->state()==Qt::ControlButton) {
+			else if (e->modifiers()==Qt::ControlModifier) {
 				curRow = m_data->count()-1 /*+(isInsertingEnabled()?1:0)*/; //to last row and col
 				curCol = columns()-1;//to last col
 			}
@@ -1733,8 +1731,11 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
 		//do not accept yet
 		e->ignore();
 	}
-	else if (isInsertingEnabled() && (e->state()==Qt::ControlButton && k == Qt::Key_Equal
-		|| e->state()==(Qt::ControlButton|Qt::ShiftButton) && k == Qt::Key_Equal)) {
+	else if (isInsertingEnabled() 
+		&& (   (e->modifiers()==Qt::ControlModifier && k == Qt::Key_Equal)
+		    || (e->modifiers()==(Qt::ControlButton|Qt::ShiftButton) && k == Qt::Key_Equal)
+		   ))
+	{
 		curRow = m_data->count(); //to the new row
 		curCol = 0;//to first col
 		if (moveToFirstField)
@@ -1755,7 +1756,14 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
 		return;
 
 	if (m_scrollbarToolTipsEnabled) {
-		const QRect r( verticalScrollBar()->sliderRect() );
+//		const QRect r( verticalScrollBar()->sliderRect() );
+#warning ported but not tested KexiDataAwareObjectInterface::vScrollBarValueChanged()
+		QStyleOptionComplex styleOption;
+		styleOption.initFrom(verticalScrollBar());
+		const QRect r( verticalScrollBar()->style()->subControlRect(
+			QStyle::CC_ScrollBar, &styleOption, 
+			QStyle::SC_ScrollBarSlider, verticalScrollBar()) );
+		
 		const int row = lastVisibleRow()+1;
 		if (row<=0) {
 			m_scrollBarTipTimer.stop();
@@ -1769,8 +1777,8 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
 			thisWidget->mapToGlobal( r.topLeft() + verticalScrollBar()->pos() ) 
 				+ QPoint( - m_scrollBarTip->width()-5, 
 			r.height()/2 - m_scrollBarTip->height()/2) );
-		if (verticalScrollBar()->draggingSlider()) {
-			kDebug(44021) << "  draggingSlider()  " << endl;
+		if (verticalScrollBar()->isSliderDown()) {
+			kDebug(44021) << "  isSliderDown()  " << endl;
 			m_scrollBarTipTimer.stop();
 			m_scrollBarTip->show();
 			m_scrollBarTip->raise();
@@ -1781,7 +1789,7 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
 				m_scrollBarTipTimerCnt=0;
 				m_scrollBarTip->show();
 				m_scrollBarTip->raise();
-				m_scrollBarTipTimer.start(500, true);
+				m_scrollBarTipTimer.start(500);
 			}
 		}
 	}
@@ -1814,7 +1822,7 @@ void KexiDataAwareObjectInterface::scrollBarTipTimeout()
 //		kDebug(44021) << "TIMEOUT! - hide" << endl;
 		if (m_scrollBarTipTimerCnt>0) {
 			m_scrollBarTipTimerCnt=0;
-			m_scrollBarTipTimer.start(500, true);
+			m_scrollBarTipTimer.start(500);
 			return;
 		}
 		m_scrollBarTip->hide();
@@ -1838,7 +1846,9 @@ int KexiDataAwareObjectInterface::showErrorMessageForResult(KexiDB::ResultInfo* 
 		return KMessageBox::questionYesNo(thisWidget, resultInfo->msg 
 			+ (resultInfo->desc.isEmpty() ? QString::null : ("\n"+resultInfo->desc)),
 			QString::null, 
-			KGuiItem(i18n("Correct Changes", "Correct"), QString::null, i18n("Correct changes")),
+			KGuiItem(i18nc("Correct Changes", "Correct"), 
+			QString::null, 
+			i18n("Correct changes")),
 			KGuiItem(i18n("Discard Changes")) );
 	}
 
@@ -1876,9 +1886,10 @@ void KexiDataAwareObjectInterface::updateIndicesForVisibleValues()
  means then the last character. \a firstCharacter == INT_MAX means "before first" place, so searching fails
  immediately.
  On success, true is returned and \a firstCharacter is set to position of the matched string. */
-static inline bool findInString(const QString& stringValue, int stringLength, const QString& where, 
+static inline bool findInString(const QString& stringValue, int stringLength, 
+	const QString& where, 
 	int& firstCharacter, bool matchAnyPartOfField, bool matchWholeField, 
-	bool caseSensitive, bool wholeWordsOnly, bool forward)
+	Qt::CaseSensitivity caseSensitivity, bool wholeWordsOnly, bool forward)
 {
 	if (where.isEmpty()) {
 		firstCharacter = -1;
@@ -1891,7 +1902,7 @@ static inline bool findInString(const QString& stringValue, int stringLength, co
 			if (wholeWordsOnly) {
 				const int whereLength = where.length();
 				while (true) {
-					pos = where.find( stringValue, pos, caseSensitive );
+					pos = where.indexOf( stringValue, pos, caseSensitivity );
 					if (pos == -1)
 						break;
 					if ((pos > 0 && where.at(pos-1).isLetterOrNumber())
@@ -1905,7 +1916,7 @@ static inline bool findInString(const QString& stringValue, int stringLength, co
 				firstCharacter = pos;
 			}
 			else {// !wholeWordsOnly
-				firstCharacter = where.find( stringValue, pos, caseSensitive );
+				firstCharacter = where.indexOf( stringValue, pos, caseSensitivity );
 			}
 			return firstCharacter != -1;
 		}
@@ -1918,7 +1929,7 @@ static inline bool findInString(const QString& stringValue, int stringLength, co
 			if (wholeWordsOnly) {
 				const int whereLength = where.length();
 				while (true) {
-					pos = where.findRev( stringValue, pos, caseSensitive );
+					pos = where.lastIndexOf( stringValue, pos, caseSensitivity );
 					if (pos == -1)
 						break;
 					if ((pos > 0 && where.at(pos-1).isLetterOrNumber())
@@ -1935,7 +1946,7 @@ static inline bool findInString(const QString& stringValue, int stringLength, co
 				firstCharacter = pos;
 			}
 			else {// !wholeWordsOnly
-				firstCharacter = where.findRev( stringValue, pos, caseSensitive );
+				firstCharacter = where.lastIndexOf( stringValue, pos, caseSensitivity );
 			}
 			return firstCharacter != -1;
 		}
@@ -1944,7 +1955,7 @@ static inline bool findInString(const QString& stringValue, int stringLength, co
 		if (firstCharacter != -1 && firstCharacter != 0) { //we're not at 0-th char
 			firstCharacter = -1;
 		}
-		else if ( (caseSensitive ? where : where.lower()) == stringValue) {
+		else if ( (caseSensitivity==Qt::CaseSensitive ? where : where.toLower()) == stringValue) {
 			firstCharacter = 0;
 			return true;
 		}
@@ -1953,7 +1964,7 @@ static inline bool findInString(const QString& stringValue, int stringLength, co
 		if (firstCharacter != -1 && firstCharacter != 0) { //we're not at 0-th char
 			firstCharacter = -1;
 		}
-		else if (where.startsWith(stringValue, caseSensitive)) {
+		else if (where.startsWith(stringValue, caseSensitivity)) {
 			if (wholeWordsOnly) {
 				// If where.length() < stringValue.length(), true will be returned too - fine.
 				return !where.at( stringValue.length() ).isLetterOrNumber();
@@ -2034,7 +2045,8 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
 		= options.textMatching == KexiSearchAndReplaceViewInterface::Options::MatchAnyPartOfField;
 	const bool matchWholeField 
 		= options.textMatching == KexiSearchAndReplaceViewInterface::Options::MatchWholeField;
-	const bool caseSensitive = options.caseSensitive;
+	const Qt::CaseSensitivity caseSensitivity
+		= options.caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
 	const bool wholeWordsOnly = options.wholeWordsOnly;
 //unused	const bool promptOnReplace = options.promptOnReplace;
 	int columnNumber = (options.columnNumber == KexiSearchAndReplaceViewInterface::Options::CurrentColumn) 
@@ -2052,7 +2064,9 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
 		firstColumn = columnNumber;
 		lastColumn = columnNumber;
 	}
-	const QString stringValue( caseSensitive ? valueToFind.toString() : valueToFind.toString().lower() );
+	const QString stringValue( 
+		caseSensitivity==Qt::CaseSensitive 
+		? valueToFind.toString() : valueToFind.toString().toLower() );
 	const int stringLength = stringValue.length();
 
 	// search
@@ -2064,7 +2078,7 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
 		{
 			const QVariant cell( item->at( m_indicesForVisibleValues[ col ] ) );
 			if (findInString(stringValue, stringLength, cell.toString(), firstCharacter, 
-				matchAnyPartOfField, matchWholeField, caseSensitive, wholeWordsOnly, forward))
+				matchAnyPartOfField, matchWholeField, caseSensitivity, wholeWordsOnly, forward))
 			{
 				//*m_itemIterator = it;
 				//m_currentItem = *it;

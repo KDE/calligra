@@ -94,7 +94,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	m_designSelectedTableAction = new KAction(i18n("&Design Table"), SmallIcon("edit"), KShortcut(),
 		this, SLOT(designSelectedTable()), this, "relationsview_designTable");
 	m_designSelectedTableAction->plug( m_tableQueryPopup );
-	m_tableQueryPopup->insertSeparator();
+	m_tableQueryPopup->addSeparator();
 
 	KAction* hide_action = plugSharedAction("edit_delete", i18n("&Hide Table"), m_tableQueryPopup);
 	hide_action->setIconSet(QIcon());

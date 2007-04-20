@@ -96,13 +96,13 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	d->lyr->addWidget( m_navBtnFirst = new QToolButton(this) );
 	m_navBtnFirst->setFixedWidth(bw);
 	m_navBtnFirst->setFocusPolicy(Qt::NoFocus);
-	m_navBtnFirst->setIconSet( KIcon("navigator_first") );
+	m_navBtnFirst->setIcon( KIcon("navigator_first") );
 	m_navBtnFirst->setToolTip( i18n("First row"));
 	
 	d->lyr->addWidget( m_navBtnPrev = new QToolButton(this) );
 	m_navBtnPrev->setFixedWidth(bw);
 	m_navBtnPrev->setFocusPolicy(Qt::NoFocus);
-	m_navBtnPrev->setIconSet( KIcon("navigator_prev") );
+	m_navBtnPrev->setIcon( KIcon("navigator_prev") );
 	m_navBtnPrev->setAutoRepeat(true);
 	m_navBtnPrev->setToolTip( i18n("Previous row"));
 	
@@ -143,21 +143,21 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	d->lyr->addWidget( m_navBtnNext = new QToolButton(this) );
 	m_navBtnNext->setFixedWidth(bw);
 	m_navBtnNext->setFocusPolicy(Qt::NoFocus);
-	m_navBtnNext->setIconSet( KIcon("navigator_next") );
+	m_navBtnNext->setIcon( KIcon("navigator_next") );
 	m_navBtnNext->setAutoRepeat(true);
 	m_navBtnNext->setToolTip( i18n("Next row"));
 	
 	d->lyr->addWidget( m_navBtnLast = new QToolButton(this) );
 	m_navBtnLast->setFixedWidth(bw);
 	m_navBtnLast->setFocusPolicy(Qt::NoFocus);
-	m_navBtnLast->setIconSet( KIcon("navigator_last") );
+	m_navBtnLast->setIcon( KIcon("navigator_last") );
 	m_navBtnLast->setToolTip( i18n("Last row"));
 	
 	d->lyr->addSpacing( 6 );
 	d->lyr->addWidget( m_navBtnNew = new QToolButton(this) );
 	m_navBtnNew->setFixedWidth(bw);
 	m_navBtnNew->setFocusPolicy(Qt::NoFocus);
-	m_navBtnNew->setIconSet( KIcon("navigator_new") );
+	m_navBtnNew->setIcon( KIcon("navigator_new") );
 	m_navBtnNew->setToolTip( i18n("New row"));
 	m_navBtnNext->setEnabled(isInsertingEnabled());
 	
@@ -225,9 +225,9 @@ bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 			}
 		}
 		else if (e->type()==QEvent::FocusOut) {
-			if (static_cast<QFocusEvent*>(e)->reason()!=QFocusEvent::Tab
-				&& static_cast<QFocusEvent*>(e)->reason()!=QFocusEvent::Backtab
-				&& static_cast<QFocusEvent*>(e)->reason()!=QFocusEvent::Other)
+			if (static_cast<QFocusEvent*>(e)->reason()!=Qt::TabFocusReason
+				&& static_cast<QFocusEvent*>(e)->reason()!=Qt::BacktabFocusReason
+				&& static_cast<QFocusEvent*>(e)->reason()!=Qt::OtherFocusReason)
 				recordEntered=true;
 			ret = false;
 		}
@@ -438,7 +438,7 @@ void KexiRecordNavigator::setEditingIndicatorEnabled(bool set)
 			d->editingIndicatorLabel = new QLabel(this);
 			d->editingIndicatorLabel->setAlignment(Qt::AlignCenter);
 			QPixmap pix;
-			pix.convertFromImage( *KexiRecordMarker::penImage() );
+			pix.fromImage( *KexiRecordMarker::penImage() );
 			d->editingIndicatorLabel->setFixedWidth( pix.width() + 2*2 );
 			d->lyr->insertWidget( 0, d->editingIndicatorLabel );
 		}
@@ -465,7 +465,7 @@ void KexiRecordNavigator::showEditingIndicator(bool show)
 	}
 	else {
 		d->editingIndicatorLabel->setPixmap( QPixmap() );
-		QToolTip::remove( d->editingIndicatorLabel );
+		d->editingIndicatorLabel->setToolTip( QString() );
 	}
 }
 

@@ -29,7 +29,6 @@
 #include <qtimer.h>
 #include <qpointer.h>
 #include <qlabel.h>
-//Added by qt3to4:
 #include <Q3ValueList>
 
 #include <kdebug.h>
@@ -683,7 +682,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void updateAllVisibleRowsBelow(int row) { Q_UNUSED( row ); }
 
 		//! Call this from the subclass. */
-		virtual void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent* e);
+		virtual void focusOutEvent(QFocusEvent* e);
 
 		/*! Handles verticalScrollBar()'s valueChanged(int) signal. 
 		 Called when vscrollbar's value has been changed. 
@@ -836,7 +835,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		int m_rowWillBeDeleted;
 
 		/*! Displays passive error popup label used when invalid data has been entered. */
-		QPointer<QLabel> m_errorMessagePopup;
+		QPointer<KexiArrowTip> m_errorMessagePopup;
 
 		/*! Used to enable/disable execution of vScrollBarValueChanged()
 		 when users navigate through rows using keyboard, so vscrollbar tooltips are not visible. */

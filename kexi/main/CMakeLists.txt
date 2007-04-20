@@ -1,8 +1,3 @@
-
-
-add_subdirectory( startup )
-add_subdirectory( printing )
-
 include_directories( ${CMAKE_SOURCE_DIR}/libs/kofficeui ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDES}  )
 
 ADD_DEFINITIONS(
@@ -12,17 +7,40 @@ ADD_DEFINITIONS(
 ########### next target ###############
 
 set(keximain_LIB_SRCS 
-   keximainwindowimpl.cpp 
-   kexistatusbar.cpp 
-   kexinamewidget.cpp 
-   kexinamedialog.cpp 
-   kexinewstuff.cpp
-   kexifinddialog.cpp
-   kexifinddialogbase.ui
-   startup/KexiStartupDialogTemplatesPage.cpp
+KexiMainWindow.cpp 
+kexifinddialog.cpp
+kexistatusbar.cpp 
+kexinamewidget.cpp 
+kexinamedialog.cpp 
+kexinewstuff.cpp
+
+startup/KexiConnSelector.cpp
+startup/KexiNewProjectWizard.cpp
+startup/KexiProjectSelector.cpp
+startup/KexiStartupDialog.cpp
+startup/KexiStartupFileDialog.cpp
+startup/KexiStartup.cpp
+startup/KexiDBTitlePage.cpp
+startup/KexiStartupDialogTemplatesPage.cpp
+
+printing/kexisimpleprintingengine.cpp
+printing/kexisimpleprintingpagesetup.cpp
+printing/kexisimpleprintingpart.cpp
+printing/kexisimpleprintpreviewwindow.cpp
+
 )
 
 kde4_automoc(${keximain_LIB_SRCS})
+
+kde4_add_ui_files(keximain_LIB_SRCS
+	kexifinddialog.ui
+	startup/KexiConnSelector.ui
+	startup/KexiDBTitlePage.ui
+	startup/KexiNewPrjTypeSelector.ui
+	startup/KexiOpenExistingFile.ui
+	startup/KexiProjectSelector.ui
+	startup/KexiServerDBNamePage.ui
+)
 
 kde4_add_library(keximain SHARED ${keximain_LIB_SRCS})
 

@@ -26,9 +26,9 @@
 #include <kexidb/indexschema.h>
 #include <kexidb/tableschema.h>
 #include "kexitableviewdata.h"
-#include "kexidatetableedit.h"
-#include "kexitimetableedit.h"
-#include "kexidatetimetableedit.h"
+#warning TODO reenable #include "kexidatetableedit.h"
+#warning TODO reenable #include "kexitimetableedit.h"
+#warning TODO reenable #include "kexidatetimetableedit.h"
 #include "kexitableedit.h"
 #include "kexiinputtableedit.h"
 #include "kexicomboboxtableedit.h"
@@ -114,9 +114,9 @@ void KexiCellEditorFactory::init()
 	KexiCellEditorFactory_deleter.setObject(KexiCellEditorFactory_static, new KexiCellEditorFactoryPrivate());
 
 	KexiCellEditorFactory_static->registerItem( *new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB );
-	KexiCellEditorFactory_static->registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date );
-	KexiCellEditorFactory_static->registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time );
-	KexiCellEditorFactory_static->registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime );
+#warning TODO reenable 	KexiCellEditorFactory_static->registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date );
+	#warning TODO reenable KexiCellEditorFactory_static->registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time );
+#warning TODO reenable 	KexiCellEditorFactory_static->registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime );
 	KexiCellEditorFactory_static->registerItem( *new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum );
 	KexiCellEditorFactory_static->registerItem( *new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean );
 	KexiCellEditorFactory_static->registerItem( *new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "KIcon" );

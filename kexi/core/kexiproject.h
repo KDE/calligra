@@ -332,7 +332,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		class Private;
 		Private *d;
 
-		friend class KexiMainWindowImpl;
+		friend class KexiMainWindow;
 };
 
 

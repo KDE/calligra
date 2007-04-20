@@ -20,6 +20,7 @@
 #ifndef KexiComboBoxDropDownButton_H
 #define KexiComboBoxDropDownButton_H
 
+#include <kexi_export.h>
 #include <kpushbutton.h>
 
 class KComboBox;
@@ -35,10 +36,13 @@ class KEXIGUIUTILS_EXPORT KexiComboBoxDropDownButton : public KPushButton
 
 	protected:
 		/*! Reimplemented after @ref KPushButton to draw drop-down arrow. */
-		virtual void drawButton(QPainter *p);
+		virtual void paintEvent(QPaintEvent *pe);
 
 		/*! Reimplemented after @ref KPushButton to adapt size to style changes. */
-		virtual void styleChange( QStyle & oldStyle );
+		virtual bool event( QEvent *event );
+		
+		/*! Adjusts appearance for current style. */
+		void styleChanged();
 
 		int m_fixForHeight;
 		bool m_drawComplexControl : 1;

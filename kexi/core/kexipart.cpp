@@ -27,8 +27,7 @@
 #include "KexiView.h"
 
 #include "kexipartguiclient.h"
-#include "keximainwindow.h"
-//#include "kexipartdatasource.h"
+#include "KexiMainWindowIface.h"
 #include "kexi.h"
 
 #include <kexidb/connection.h>
@@ -131,11 +130,11 @@ void Part::createGUIClients()//KexiMainWindow *win)
 		KAction *act = new KAction(
 			KIcon(info()->createItemIcon()),
 			m_names["instanceCaption"]+"...",
-			KexiMainWindow::global()->actionCollection()
+			KexiMainWindowIface::global()->actionCollection()
 		);
 		act->setObjectName(KexiPart::nameForCreateAction(*info()));
 		connect(act, SIGNAL(triggered()), this, SLOT(slotCreate()));
-		KexiMainWindow::global()->guiFactory()->addClient(m_guiClient); //this client is added permanently
+		KexiMainWindowIface::global()->guiFactory()->addClient(m_guiClient); //this client is added permanently
 
 		//default actions for part instance's gui client:
 		//NONE
@@ -172,7 +171,7 @@ KAction* Part::createSharedAction(int mode, const QString &text,
 		kDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
 		return 0;
 	}
-	return KexiMainWindow::global()->createSharedAction(text, pix_name, cut, name, 
+	return KexiMainWindowIface::global()->createSharedAction(text, pix_name, cut, name, 
 		instanceGuiClient->actionCollection(), subclassName);
 }
 
@@ -182,7 +181,7 @@ KAction* Part::createSharedPartAction(const QString &text,
 {
 	if (!m_guiClient)
 		return 0;
-	return KexiMainWindow::global()->createSharedAction(text, pix_name, cut, name, 
+	return KexiMainWindowIface::global()->createSharedAction(text, pix_name, cut, name, 
 		m_guiClient->actionCollection(), subclassName);
 }
 
@@ -224,7 +223,7 @@ void Part::setActionAvailable(const char *action_name, bool avail)
 			return;
 		}
 	}
-	KexiMainWindow::global()->setActionAvailable(action_name, avail);
+	KexiMainWindowIface::global()->setActionAvailable(action_name, avail);
 }
 
 KexiWindow* Part::openInstance(KexiPart::Item &item, int viewMode,
@@ -237,7 +236,7 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, int viewMode,
 	}
 
 	m_status.clearStatus();
-	KexiWindow *window = new KexiWindow(KexiMainWindow::global()->thisWidget(),
+	KexiWindow *window = new KexiWindow(KexiMainWindowIface::global()->thisWidget(),
 		m_supportedViewModes, *this, item);
 
 	KexiDB::SchemaData sdata(m_info->projectPartID());
@@ -274,7 +273,7 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, int viewMode,
 		}
 		if (!window->schemaData()) {
 			if (!m_status.error())
-				m_status = Kexi::ObjectStatus( KexiMainWindow::global()->project()->dbConnection(), 
+				m_status = Kexi::ObjectStatus( KexiMainWindowIface::global()->project()->dbConnection(), 
 					i18n("Could not load object's definition."), i18n("Object design may be corrupted."));
 			m_status.append( 
 				Kexi::ObjectStatus(i18n("You can delete \"%1\" object and create it again.")
@@ -351,10 +350,10 @@ KexiDB::SchemaData* Part::loadSchemaData(KexiWindow *window, const KexiDB::Schem
 
 bool Part::loadDataBlock(KexiWindow *window, QString &dataString, const QString& dataID)
 {
-	if (!KexiMainWindow::global()->project()->dbConnection()->loadDataBlock( 
+	if (!KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock( 
 		window->id(), dataString, dataID ))
 	{
-		m_status = Kexi::ObjectStatus( KexiMainWindow::global()->project()->dbConnection(), 
+		m_status = Kexi::ObjectStatus( KexiMainWindowIface::global()->project()->dbConnection(), 
 			i18n("Could not load object's data."), i18n("Data identifier: \"%1\".").arg(dataID) );
 		m_status.append( *window );
 		return false;
@@ -372,7 +371,7 @@ void Part::initInstanceActions()
 
 bool Part::remove(KexiPart::Item &item)
 {
-	KexiDB::Connection *conn = KexiMainWindow::global()->project()->dbConnection();
+	KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 	if (!conn)
 		return false;
 	return conn->removeObject( item.identifier() );
@@ -421,9 +420,9 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
  : QObject(part, 
    (part->info()->objectName() 
     + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString())).toLatin1() )
- , KXMLGUIClient(*KexiMainWindow::global()->guiClient())
+ , KXMLGUIClient(*KexiMainWindowIface::global()->guiClient())
 {
-	if(!KexiMainWindow::global()->project()->data()->userMode())
+	if(!KexiMainWindowIface::global()->project()->data()->userMode())
 		setXMLFile(QString::fromLatin1("kexi")+part->info()->objectName()
 			+"part"+(partInstanceClient?"inst":"")+"ui.rc");
 
