@@ -34,8 +34,8 @@
 #include <QStackedWidget>
 
 //#include <k3mdichildview.h>
-#include <kxmlguiwindow.h>
-#include <kxmlguiclient.h>
+//#include <kxmlguiwindow.h>
+//#include <kxmlguiclient.h>
 
 class KexiMainWindow;
 class KexiWindowData;
