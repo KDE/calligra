@@ -759,7 +759,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
     // flake
-    d->toolProxy->mouseMoveEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
+//     d->toolProxy->mouseMoveEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
 
   if ( d->mousePressed && d->modType != MT_NONE )
   {
@@ -1041,7 +1041,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* event )
     return;
 
     // flake
-    d->toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+//     d->toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() ) );
 
 // TODO Stefan: Still needed?
 //   if ( d->scrollTimer->isActive() )
@@ -1191,7 +1191,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     return;
 
     // flake
-    d->toolProxy->mousePressEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
+//     d->toolProxy->mousePressEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
 
   if ( _ev->button() == Qt::LeftButton )
   {
@@ -1484,7 +1484,7 @@ void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
     return;
 
     // flake
-    d->toolProxy->mouseDoubleClickEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
+//     d->toolProxy->mouseDoubleClickEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
 
   EmbeddedObject *obj;
   if ( ( obj = getObject( _ev->pos(), sheet ) ) )
@@ -1569,8 +1569,8 @@ void Canvas::paintEvent( QPaintEvent* event )
     paintNormalMarker(painter, paintRect);
 
     // flake
-    d->shapeManager->paint( painter, *viewConverter(), false );
-    d->toolProxy->paint( painter, *viewConverter() );
+//     d->shapeManager->paint( painter, *viewConverter(), false );
+//     d->toolProxy->paint( painter, *viewConverter() );
 
     //restore clip region with children area
 //     painter.restore();
@@ -2726,7 +2726,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
     return;
 
     // flake
-    d->toolProxy->keyPressEvent( _ev );
+//     d->toolProxy->keyPressEvent( _ev );
 
   // Dont handle the remaining special keys.
   if ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) &&
