@@ -163,6 +163,12 @@ public:
     virtual void setReadWrite( bool rw ) { m_readWrite = rw; }
     bool isReadWrite() { return m_readWrite; }
 
+    /**
+     * Re-implement to check if the @p data is allowed to be dropped on @p index,
+     * @p dropIndicatorPosition indicates position relative @p index.
+     */
+    virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
+    
 protected slots:
     virtual void slotLayoutToBeChanged();
     virtual void slotLayoutChanged();
@@ -177,6 +183,14 @@ class TreeViewBase : public QTreeView
 {
     Q_OBJECT
 public:
+    // Copy from protected enum in QAbstractItemView
+    enum DropIndicatorPosition {
+        OnItem = QAbstractItemView::OnItem,  /// The item will be dropped on the index.
+        AboveItem = QAbstractItemView::AboveItem, /// The item will be dropped above the index.
+        BelowItem = QAbstractItemView::BelowItem,  /// The item will be dropped below the index.
+        OnViewport = QAbstractItemView::OnViewport /// The item will be dropped onto a region of the viewport with no items if acceptDropsOnView is set.
+    };
+    
     explicit TreeViewBase( QWidget *parent );
 
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
@@ -184,6 +198,10 @@ public:
 
     QModelIndex nextColumn( const QModelIndex &current ) const;
     QModelIndex previousColumn( const QModelIndex &current ) const;
+    
+    void setAcceptDropsOnView( bool mode ) { m_acceptDropsOnView = mode; }
+
+    ItemModelBase *itemModel() const;
     
 signals:
     void contextMenuRequested( QModelIndex, const QPoint& );
@@ -195,12 +213,15 @@ protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
     
     void contextMenuEvent ( QContextMenuEvent * event );
-
+    
+    void dragMoveEvent(QDragMoveEvent *event);
+    
 protected slots:
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
     
 protected:
     bool m_arrowKeyNavigation;
+    bool m_acceptDropsOnView;
 };
 
 
@@ -225,7 +246,10 @@ public:
     QAbstractItemView::EditTriggers editTriggers() const;
     
     void setAcceptDrops( bool );
+    void setAcceptDropsOnView( bool );
     void setDropIndicatorShown( bool );
+    void setDragDropMode( QAbstractItemView::DragDropMode mode );
+    void setDragEnabled ( bool mode );
 
     void setStretchLastSection( bool );
     
@@ -244,9 +268,6 @@ protected slots:
     void slotToRightView( const QModelIndex &index );
     void slotToLeftView( const QModelIndex &index );
     
-protected:
-//     void keyPressEvent(QKeyEvent *event);
-//     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
 
 protected:
     TreeViewBase *m_leftview;

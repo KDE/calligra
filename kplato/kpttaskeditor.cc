@@ -1208,6 +1208,28 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
     return m;
 }
 
+bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
+{
+    kDebug()<<k_funcinfo<<endl;
+    Node *dn = node( index );
+    if ( dn == 0 ) {
+        kError()<<k_funcinfo<<"no node to drop on!"<<endl;
+        return false; // hmmm
+    }
+    switch ( dropIndicatorPosition ) {
+        case TreeViewBase::AboveItem:
+        case TreeViewBase::BelowItem:
+            // dn == sibling
+            return dropAllowed( dn->parentNode(), data );
+        case TreeViewBase::OnItem:
+            // dn == new parent
+            return dropAllowed( dn, data );
+        default:
+            break;
+    }
+    return false;
+}
+
 bool NodeItemModel::dropAllowed( Node *on, const QMimeData *data )
 {
     if ( !data->hasFormat("application/x-vnd.kde.kplato.nodeitemmodel.internal") ) {
@@ -1377,11 +1399,10 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 
 //--------------------
 NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
-    : TreeViewBase( parent )
+    : DoubleTreeViewBase( parent )
 {
-    header()->setContextMenuPolicy( Qt::CustomContextMenu );
+//    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setModel( new NodeItemModel( part ) );
-    setSelectionModel( new QItemSelectionModel( model() ) );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     
@@ -1391,7 +1412,8 @@ NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
             setItemDelegateForColumn( c, delegate );
         }
     }
-    connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
+//    connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
+    
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
 }
@@ -1403,80 +1425,7 @@ void NodeTreeView::slotActivated( const QModelIndex index )
 
 void NodeTreeView::headerContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at "<<pos<<endl;
-}
-
-void NodeTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
-{
-    kDebug()<<k_funcinfo<<sel.indexes().count()<<endl;
-    foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
-        kDebug()<<k_funcinfo<<i.row()<<", "<<i.column()<<endl;
-    }
-    TreeViewBase::selectionChanged( sel, desel );
-    emit selectionChanged( selectionModel()->selectedIndexes() );
-}
-
-void NodeTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
-{
-    kDebug()<<k_funcinfo<<endl;
-    TreeViewBase::currentChanged( current, previous );
-    emit currentChanged( current );
-}
-
-
-void NodeTreeView::contextMenuEvent ( QContextMenuEvent * event )
-{
-    kDebug()<<k_funcinfo<<endl;
-    QModelIndex i = indexAt( event->pos() );
-    if ( ! i.isValid() ) {
-        return;
-    }
-    Node *node = itemModel()->node( i );
-    if ( node == 0 ) {
-        return;
-    }
-    emit contextMenuRequested( node, event->globalPos() );
-}
-
-void NodeTreeView::dragMoveEvent(QDragMoveEvent *event)
-{
-    if (dragDropMode() == InternalMove
-        && (event->source() != this || !(event->possibleActions() & Qt::MoveAction)))
-        return;
-
-    TreeViewBase::dragMoveEvent( event );
-    if ( ! event->isAccepted() ) {
-        return;
-    }
-    //QTreeView thinks it's ok to drop
-    event->ignore();
-    QModelIndex index = indexAt( event->pos() );
-    if ( ! index.isValid() ) {
-        event->accept();
-        return; // always ok to drop on main project
-    }
-    Node *dn = itemModel()->node( index );
-    if ( dn == 0 ) {
-        kError()<<k_funcinfo<<"no node to drop on!"<<endl;
-        return; // hmmm
-    }
-    switch ( dropIndicatorPosition() ) {
-        case AboveItem:
-        case BelowItem:
-            //dn == sibling
-            if ( itemModel()->dropAllowed( dn->parentNode(), event->mimeData() ) ) {
-                event->accept();
-            }
-            break;
-        case OnItem:
-            //dn == new parent
-            if ( itemModel()->dropAllowed( dn, event->mimeData() ) ) {
-                event->accept();
-            }
-            break;
-        default:
-            break;
-    }
+//    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at "<<pos<<endl;
 }
 
 //-----------------------------------
@@ -1492,15 +1441,16 @@ TaskEditor::TaskEditor( Part *part, QWidget *parent )
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
     m_view->setDragDropMode( QAbstractItemView::InternalMove );
-    m_view->setDropIndicatorShown ( true );
+    m_view->setDropIndicatorShown( true );
     m_view->setDragEnabled ( true );
     m_view->setAcceptDrops( true );
+    m_view->setAcceptDropsOnView( true );
     
-    connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT ( slotCurrentChanged( QModelIndex ) ) );
+    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
     
-    connect( m_view, SIGNAL( contextMenuRequested( Node*, const QPoint& ) ), SLOT( slotContextMenuRequested( Node*, const QPoint& ) ) );
+    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 }
 
 void TaskEditor::draw( Project &project )
@@ -1517,12 +1467,12 @@ void TaskEditor::setGuiActive( bool activate )
     kDebug()<<k_funcinfo<<activate<<endl;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->currentIndex().isValid() ) {
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
         m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }
 
-void TaskEditor::slotCurrentChanged(  const QModelIndex &curr )
+void TaskEditor::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
 {
     kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
     slotEnableActions();
@@ -1565,15 +1515,19 @@ Node *TaskEditor::selectedNode() const
 }
 
 Node *TaskEditor::currentNode() const {
-    Node * n = m_view->itemModel()->node( m_view->currentIndex() );
-    if ( n->type() == Node::Type_Project ) {
+    Node * n = m_view->itemModel()->node( m_view->selectionModel()->currentIndex() );
+    if ( n == 0 || n->type() == Node::Type_Project ) {
         return 0;
     }
     return n;
 }
 
-void TaskEditor::slotContextMenuRequested( Node *node, const QPoint& pos )
+void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
 {
+    Node *node = m_view->itemModel()->node( index );
+    if ( node == 0 ) {
+        return;
+    }
     kDebug()<<k_funcinfo<<node->name()<<" : "<<pos<<endl;
     QString name;
     switch ( node->type() ) {
@@ -1716,8 +1670,8 @@ void TaskEditor::edit( QModelIndex i )
 {
     if ( i.isValid() ) {
         QModelIndex p = m_view->model()->parent( i );
-        m_view->setExpanded( p, true );
-        m_view->setCurrentIndex( i );
+        m_view->setExpanded( p );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
     }
 }

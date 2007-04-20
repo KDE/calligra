@@ -400,9 +400,17 @@ void ItemModelBase::slotLayoutToBeChanged()
     emit layoutAboutToBeChanged();
 }
 
+bool ItemModelBase::dropAllowed( const QModelIndex &, int, const QMimeData * )
+{
+    return false;
+}
+
+//------------------------------------------------
+
 TreeViewBase::TreeViewBase( QWidget *parent )
     : QTreeView( parent ),
-    m_arrowKeyNavigation( true )
+    m_arrowKeyNavigation( true ),
+    m_acceptDropsOnView( false )
 {
     setAlternatingRowColors ( true );
 }
@@ -553,6 +561,40 @@ void TreeViewBase::currentChanged( const QModelIndex &current, const QModelIndex
     }
 }
 
+ItemModelBase *TreeViewBase::itemModel() const
+{
+    return static_cast<ItemModelBase*>( model() );
+}
+
+void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (dragDropMode() == InternalMove
+        && (event->source() != this || !(event->possibleActions() & Qt::MoveAction))) {
+        event->ignore();
+        return;
+    }
+    QTreeView::dragMoveEvent( event );
+    if ( ! event->isAccepted() ) {
+        return;
+    }
+    //QTreeView thinks it's ok to drop
+    event->ignore();
+    if ( dropIndicatorPosition() == QAbstractItemView::OnViewport ) {
+        if ( m_acceptDropsOnView ) {
+            event->accept();
+        }
+        return;
+    }
+    QModelIndex index = indexAt( event->pos() );
+    if ( ! index.isValid() ) {
+        return;
+    }
+    if ( itemModel()->dropAllowed( index, dropIndicatorPosition(), event->mimeData() ) ) {
+        event->accept();
+    }
+    kDebug()<<k_funcinfo<<event->isAccepted()<<endl;
+}
+
 //--------------------------------
 DoubleTreeViewBase::DoubleTreeViewBase( QWidget *parent )
     : QSplitter( parent ),
@@ -681,18 +723,6 @@ QAbstractItemView::EditTriggers DoubleTreeViewBase::editTriggers() const
     return m_leftview->editTriggers();
 }
 
-void DoubleTreeViewBase::setAcceptDrops( bool mode )
-{
-    m_leftview->setAcceptDrops( mode );
-    m_rightview->setAcceptDrops( mode );
-}
-
-void DoubleTreeViewBase::setDropIndicatorShown( bool mode )
-{
-    m_leftview->setDropIndicatorShown( mode );
-    m_rightview->setDropIndicatorShown( mode );
-}
-
 void DoubleTreeViewBase::setStretchLastSection( bool mode )
 {
     m_rightview->header()->setStretchLastSection( mode );
@@ -705,6 +735,31 @@ void DoubleTreeViewBase::edit( const QModelIndex &index )
     } else if ( ! m_leftview->isColumnHidden( index.column() ) ) {
         m_rightview->edit( index );
     }
+}
+
+void DoubleTreeViewBase::setDragDropMode( QAbstractItemView::DragDropMode mode )
+{
+    m_leftview->setDragDropMode( mode );
+}
+
+void DoubleTreeViewBase::setDropIndicatorShown( bool mode )
+{
+    m_leftview->setDropIndicatorShown( mode );
+}
+
+void DoubleTreeViewBase::setDragEnabled ( bool mode )
+{
+    m_leftview->setDragEnabled( mode );
+}
+
+void DoubleTreeViewBase::setAcceptDrops( bool mode )
+{
+    m_leftview->setAcceptDrops( mode );
+}
+
+void DoubleTreeViewBase::setAcceptDropsOnView( bool mode )
+{
+    m_leftview->setAcceptDropsOnView( mode );
 }
 
 

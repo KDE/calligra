@@ -90,6 +90,8 @@ public:
     static QList<Node*> removeChildNodes( const QList<Node*> nodes );
     bool dropAllowed( Node *on, const QMimeData *data );
     
+    virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
+    
 protected slots:
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
@@ -142,7 +144,7 @@ private:
     Node *m_node; // for sanety check
 };
 
-class NodeTreeView : public TreeViewBase
+class NodeTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
@@ -156,21 +158,12 @@ public:
     void setProject( Project *project ) { itemModel()->setProject( project ); }
     
 signals:
-    void currentChanged( const QModelIndex& );
     void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
-    void contextMenuRequested( Node *node, const QPoint &pos );
     
 protected slots:
     void headerContextMenuRequested( const QPoint &pos );
     void slotActivated( const QModelIndex index );
-    virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
     
-protected:
-    void contextMenuEvent( QContextMenuEvent * event );
-    void dragMoveEvent(QDragMoveEvent *event);
-
 };
 
 class TaskEditor : public ViewBase
@@ -211,8 +204,8 @@ protected:
 
 private slots:
     void slotSelectionChanged( const QModelIndexList );
-    void slotCurrentChanged( const QModelIndex& );
-    void slotContextMenuRequested( Node *node, const QPoint& pos );
+    void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     
     void slotEnableActions();
 
