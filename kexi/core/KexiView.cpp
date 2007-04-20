@@ -69,12 +69,11 @@ class KexiView::Private
 
 //----------------------------------------------------------
 
-KexiView::KexiView(QWidget *parent, const char *name)
+KexiView::KexiView(QWidget *parent)
  : QWidget(parent)
  , KexiActionProxy(this)
  , d( new Private() )
 {
-	setObjectName(name);
 	QWidget *wi=this;
 	while ((wi = wi->parentWidget()) && !wi->inherits("KexiWindow"))
 		;

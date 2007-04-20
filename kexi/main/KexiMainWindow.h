@@ -45,6 +45,9 @@ namespace KexiPart {
 	class Part;
 }
 
+class KXMLGUIClient;
+class KXMLGUIFactory;
+
 /**
  * @short Kexi's main window implementation
  */
@@ -74,7 +77,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 #warning TODO virtual void unplugActionList (const QString &name);
 		virtual void unplugActionList (const QString &name) {};
-  
+  	
   	//! Implemented by KMainWindow
 #warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory();
 		virtual KXMLGUIFactory * guiFactory() { return 0; }

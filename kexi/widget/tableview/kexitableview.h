@@ -163,6 +163,9 @@ public:
 	KexiTableView(KexiTableViewData* data=0, QWidget* parent=0, const char* name=0);
 	virtual ~KexiTableView();
 
+	//! redeclared to avoid conflict with private QWidget::data
+	inline KexiTableViewData *data() const { return KexiDataAwareObjectInterface::data(); }
+
 	/*! \return current appearance settings */
 	const Appearance& appearance() const;
 

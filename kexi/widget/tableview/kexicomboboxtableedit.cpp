@@ -70,11 +70,10 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidge
  , KexiComboBoxBase()
  , d(new Private())
 {
-	setName("KexiComboBoxTableEdit");
 	m_setVisibleValueOnSetValueInternal = true;
 	d->button = new KexiComboBoxDropDownButton( parentWidget() /*usually a viewport*/ );
 	d->button->hide();
-	d->button->setFocusPolicy( NoFocus );
+	d->button->setFocusPolicy( Qt::NoFocus );
 	connect(d->button, SIGNAL(clicked()), this, SLOT(slotButtonClicked()));
 
 	connect(m_lineedit, SIGNAL(textChanged(const QString&)), this, SLOT(slotLineEditTextChanged(const QString&)));
@@ -163,7 +162,7 @@ void KexiComboBoxTableEdit::resize(int w, int h)
 	m_rightMarginWhenFocused = m_rightMargin + (column()->isReadOnly() ? 0 : d->button->width());
 	QRect r( pos().x(), pos().y(), w+1, h+1 );
 	if (m_scrollView)
-		r.moveBy(m_scrollView->contentsX(), m_scrollView->contentsY());
+		r.translate(m_scrollView->contentsX(), m_scrollView->contentsY());
 	updateFocus( r );
 	if (popup()) {
 		popup()->updateSize();
@@ -262,33 +261,33 @@ void KexiComboBoxTableEdit::slotButtonClicked()
 
 	if (m_mouseBtnPressedWhenPopupVisible) {
 		m_mouseBtnPressedWhenPopupVisible = false;
-		d->button->setOn(false);
+		d->button->setChecked(false);
 		return;
 	}
 	kDebug() << "KexiComboBoxTableEdit::slotButtonClicked()" << endl;
 	if (!popup() || !popup()->isVisible()) {
 		kDebug() << "SHOW POPUP" << endl;
 		showPopup();
-		d->button->setOn(true);
+		d->button->setChecked(true);
 	}
 }
 
 void KexiComboBoxTableEdit::slotPopupHidden()
 {
-	d->button->setOn(false);
+	d->button->setChecked(false);
 //	d->currentEditorWidth = 0;
 }
 
 void KexiComboBoxTableEdit::updateButton()
 {
-	d->button->setOn(popup()->isVisible());
+	d->button->setChecked(popup()->isVisible());
 }
 
 void KexiComboBoxTableEdit::hide()
 {
 	KexiInputTableEdit::hide();
 	KexiComboBoxBase::hide();
-	d->button->setOn(false);
+	d->button->setChecked(false);
 }
 
 void KexiComboBoxTableEdit::show()
@@ -302,8 +301,8 @@ void KexiComboBoxTableEdit::show()
 bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 {
 	const int k = ke->key();
-	if ((ke->state()==NoButton && k==Qt::Key_F4)
-		|| (ke->state()==AltButton && k==Qt::Key_Down))
+	if ((ke->modifiers()==Qt::NoButton && k==Qt::Key_F4)
+		|| (ke->modifiers()==Qt::AltButton && k==Qt::Key_Down))
 	{
 		//show popup
 		slotButtonClicked();

@@ -43,7 +43,7 @@ class KEXIDATATABLE_EXPORT KexiDataTableView : public KexiTableView
 		/**
 		 * creates a blank widget
 		 */
-		KexiDataTableView(QWidget *parent, const char *name =0);
+		KexiDataTableView(QWidget *parent);
 
 		/*! Creates a table widget and fills it using data from \a cursor.
 		 Cursor will be opened (with open()) if it is not yet opened.
@@ -51,7 +51,7 @@ class KEXIDATATABLE_EXPORT KexiDataTableView : public KexiTableView
 		 and Connection::executeQuery()), otherwise the table view remain not filled with data.
 		 Cursor \a cursor will not be owned by this object.
 		 */
-		KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *cursor);
+		KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor);
 
 		~KexiDataTableView();
 

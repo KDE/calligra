@@ -261,6 +261,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 		d->rowHeight = 17;
 
 	d->pUpdateTimer = new QTimer(this);
+	d->pUpdateTimer->setSingleShot(true);
 
 //	setMargins(14, fontMetrics().height() + 4, 0, 0);
 
@@ -559,7 +560,7 @@ void KexiTableView::createBuffer(int width, int height)
 		d->pBufferPm = new QPixmap(width, height);
 	else
 		if(d->pBufferPm->width() < width || d->pBufferPm->height() < height)
-			d->pBufferPm->resize(width, height);
+			*d->pBufferPm = QPixmap(width, height);
 //	d->pBufferPm->fill();
 }
 
@@ -1752,7 +1753,7 @@ void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 		}
 	}
 	else
-		e->acceptAction(false);
+		e->accept();
 /*	QStringList::ConstIterator it, end( d->dropFilters.constEnd() ); 
 	for( it = d->dropFilters.constBegin(); it != end; it++)
 	{
@@ -2200,7 +2201,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 		return;
 
 	Q3PtrListIterator<KexiTableItem> it = m_data->iterator();
-	if (it.current() && it.current()->count()<=(uint)indexOfVisibleColumn)
+	if (it.current() && it.current()->count()<=indexOfVisibleColumn)
 		return;
 
 	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item( columnType(indexOfVisibleColumn) );
@@ -2336,7 +2337,7 @@ void KexiTableView::triggerUpdate()
 {
 //	kDebug(44021) << "KexiTableView::triggerUpdate()" << endl;
 //	if (!d->pUpdateTimer->isActive())
-		d->pUpdateTimer->start(20, true);
+		d->pUpdateTimer->start(20);
 //		d->pUpdateTimer->start(200, true);
 }
 

@@ -391,11 +391,11 @@ void KexiUtils::simpleDecrypt(QString& string)
 		string[i] = QChar( string[i].unicode() - 47 - i );
 }
 
-#if 0//todo
-
 void KexiUtils::drawPixmap( QPainter& p, int lineWidth, const QRect& rect, 
 	const QPixmap& pixmap, int alignment, bool scaledContents, bool keepAspectRatio)
 {
+#warning TODO KexiUtils::drawPixmap
+#if 0 //todo
 	if (pixmap.isNull())
 		return;
 
@@ -483,9 +483,8 @@ void KexiUtils::drawPixmap( QPainter& p, int lineWidth, const QRect& rect,
 			(int)p.worldMatrix().dy() + rect.y() + lineWidth + pos.y(), 
 			&pixmapBuffer);
 	}
+	#endif
 }
-
-#endif
 
 QString KexiUtils::ptrToStringInternal(void* ptr, uint size)
 {

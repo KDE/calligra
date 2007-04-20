@@ -82,7 +82,7 @@ void KexiInputTableEdit::init()
 //	kDebug() << "KexiInputTableEdit: type== " << field()->typeName() << endl;
 //	kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName() << endl;
 
-	m_textFormatter.setField( field() );
+#warning TODO reenable 	m_textFormatter.setField( field() );
 
 	//init settings
 	m_decsym = KGlobal::locale()->decimalSymbol();
@@ -121,7 +121,8 @@ void KexiInputTableEdit::init()
 
 void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
+	QString text; //tmp
+#warning TODO reenable 	QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
 	if (text.isEmpty()) {
 		if (m_origValue.toString().isEmpty()) {
 			//we have to set NULL initial value:
@@ -342,7 +343,7 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 {
 	Q_UNUSED(visibleValue);
 //! @todo handle rich text?
-	qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString::null) );
+#warning TODO reenable	qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString::null) );
 }
 
 void KexiInputTableEdit::handleAction(const QString& actionName)
@@ -369,8 +370,9 @@ void KexiInputTableEdit::handleAction(const QString& actionName)
 bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, 
 	const QFontMetrics& fm, bool focused)
 {
-	QString text( value.type()==QVariant::String ? value.toString()
-		: m_textFormatter.valueToText(value, QString::null) );
+	QString text; //tmp
+#warning TODO reenable	QString text( value.type()==QVariant::String ? value.toString()
+#warning TODO reenable		: m_textFormatter.valueToText(value, QString::null) );
 	QRect internalRect(rect);
 	internalRect.setLeft(rect.x()+leftMargin());
 	internalRect.setWidth(internalRect.width()-rightMargin(focused)-2*3);

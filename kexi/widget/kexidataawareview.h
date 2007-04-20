@@ -20,7 +20,8 @@
 #ifndef KEXIDATAAWAREVIEW_H
 #define KEXIDATAAWAREVIEW_H
 
-#include <kexiviewbase.h>
+#include <kexi_export.h>
+#include <KexiView.h>
 #include <kexisearchandreplaceiface.h>
 
 class KexiDataAwareObjectInterface;
@@ -38,13 +39,15 @@ class KexiSharedActionClient;
  The view also implements KexiSearchAndReplaceViewInterface to support search/replace features
  used by shared KexiFindDialog.
 */
-class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase, 
+class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiView, 
 	public KexiSearchAndReplaceViewInterface
 {
 	Q_OBJECT
 
 	public:
-		KexiDataAwareView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+		KexiDataAwareView(KexiMainWindow *mainWin, QWidget *parent);
+		
+		virtual ~KexiDataAwareView();
 
 		QWidget* mainWidget();
 

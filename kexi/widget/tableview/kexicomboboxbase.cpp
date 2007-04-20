@@ -23,6 +23,7 @@
 #include <qwindowsstyle.h>
 #include <qpainter.h>
 
+#include <kexi_global.h>
 #include "kexicomboboxbase.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
 #include "kexicomboboxpopup.h"
@@ -174,7 +175,7 @@ KexiTableItem* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(const QV
 //.trimmed() is not generic!
 
 	const bool valueIsText = v.type()==QVariant::String || v.type()==QVariant::CString; //most common case
-	const QString txt( valueIsText ? v.toString().trimmed().lower() : QString::null );
+	const QString txt( valueIsText ? v.toString().trimmed().toLower() : QString::null );
 	KexiTableViewData *lookupData = popup()->tableView()->data();
 	const int visibleColumn = lookupFieldSchema->visibleColumn( lookupData->columnsCount() );
 	if (-1 == visibleColumn)
@@ -183,7 +184,7 @@ KexiTableItem* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(const QV
 	int row;
 	for (row = 0;it.current();++it, row++) {
 		if (valueIsText) {
-			if (it.current()->at(visibleColumn).toString().trimmed().lower() == txt)
+			if (it.current()->at(visibleColumn).toString().trimmed().toLower() == txt)
 				break;
 		}
 		else {
@@ -214,10 +215,10 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
 	//-not effective for large sets: please cache it!
 	//.trimmed() is not generic!
 
-	const QString txt = str.trimmed().lower();
+	const QString txt = str.trimmed().toLower();
 	KexiTableViewData::Iterator it( relData->iterator() );
 	for (*row = 0;it.current();++it, (*row)++) {
-		if (it.current()->at(lookInColumn).toString().trimmed().lower()==txt)
+		if (it.current()->at(lookInColumn).toString().trimmed().toLower()==txt)
 			break;
 	}
 	if (it.current())
@@ -290,7 +291,7 @@ QVariant KexiComboBoxBase::visibleValueForLookupField()
 	if (-1 == visibleColumn)
 		return QVariant();
 	KexiTableItem *it = popup()->tableView()->selectedItem();
-	return it ? it->at( qMin( (uint)visibleColumn, it->count()-1)/*sanity*/ ) : QVariant();
+	return it ? it->at( qMin( visibleColumn, it->count()-1)/*sanity*/ ) : QVariant();
 }
 
 QVariant KexiComboBoxBase::visibleValue()
@@ -473,7 +474,7 @@ void KexiComboBoxBase::slotItemSelected(KexiTableItem*)
 		KexiTableItem *item = popup()->tableView()->selectedItem();
 		const int visibleColumn = lookupFieldSchema->visibleColumn( popup()->tableView()->data()->columnsCount() );
 		if (item && visibleColumn!=-1 /* && (int)item->size() >= visibleColumn --already checked*/) {
-			valueToSet = item->at( qMin( (uint)visibleColumn, item->count()-1)/*sanity*/ );
+			valueToSet = item->at( qMin(visibleColumn, item->count()-1)/*sanity*/ );
 		}
 	}
 	else {

@@ -24,6 +24,7 @@
 #include "kexitableitem.h"
 #include "kexitableedit.h"
 
+#include <kexi_global.h>
 #include <kexidb/lookupfieldschema.h>
 #include <kexidb/expression.h>
 #include <kexidb/parser/sqlparser.h>
@@ -32,8 +33,6 @@
 
 #include <qlayout.h>
 #include <qevent.h>
-//Added by qt3to4:
-#include <Q3Frame>
 #include <QKeyEvent>
 
 /*! @internal
@@ -42,12 +41,13 @@ class KexiComboBoxPopup_KexiTableView : public KexiDataTableView
 {
 	public:
 		KexiComboBoxPopup_KexiTableView(QWidget* parent=0)
-		 : KexiDataTableView(parent, "KexiComboBoxPopup_tv")
+		 : KexiDataTableView(parent)
 		{
 			init();
 		}
 		void init()
 		{
+			setObjectName("KexiComboBoxPopup_tv");
 			setReadOnly( true );
 			setLineWidth( 0 );
 			d->moveCursorOnMouseRelease = true;
@@ -107,7 +107,7 @@ class KexiComboBoxPopupPrivate
 const int KexiComboBoxPopup::defaultMaxRows = 8;
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column)
- : Q3Frame( parent, "KexiComboBoxPopup", Qt::WType_Popup )
+ : QFrame( parent, Qt::WType_Popup )
 {
 	init();
 	//setup tv data
@@ -115,7 +115,7 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &colum
 }
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field)
- : Q3Frame( parent, "KexiComboBoxPopup", WType_Popup )
+ : QFrame( parent, Qt::WType_Popup )
 {
 	init();
 	//setup tv data
@@ -129,6 +129,7 @@ KexiComboBoxPopup::~KexiComboBoxPopup()
 
 void KexiComboBoxPopup::init()
 {
+	setObjectName("KexiComboBoxPopup");
 	d = new KexiComboBoxPopupPrivate();
 	setPaletteBackgroundColor(palette().color(QPalette::Active,QColorGroup::Base));
 	setLineWidth( 1 );
@@ -275,8 +276,8 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 	d->int_f = new KexiDB::Field(field->name(), KexiDB::Field::Text);
 	KexiTableViewData *data = new KexiTableViewData();
 	data->addColumn( new KexiTableViewColumn( *d->int_f ) );
-	QValueVector<QString> hints = field->enumHints();
-	for(uint i=0; i < hints.size(); i++) {
+	const QVector<QString> hints( field->enumHints() );
+	for(int i=0; i < hints.size(); i++) {
 		KexiTableItem *item = data->createItem();//new KexiTableItem(1);
 		(*item)[0]=QVariant(hints[i]);
 		kDebug() << "added: '" << hints[i] <<"'"<<endl;
@@ -323,7 +324,7 @@ void KexiComboBoxPopup::resize( int w, int h )
 	d->tv->verticalScrollBar()->hide();
 	d->tv->move(1,1);
 	d->tv->resize( w-2, h-2 );
-	Q3Frame::resize(w,h);
+	QFrame::resize(w,h);
 	update();
 	updateGeometry();
 }
@@ -356,8 +357,8 @@ bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 		if (e->type()==QEvent::KeyPress) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 			const int k = ke->key();
-			if ((ke->state()==Qt::NoButton && (k==Qt::Key_Escape || k==Qt::Key_F4))
-				|| (ke->state()==Qt::AltModifier && k==Qt::Key_Up))
+			if ((ke->modifiers()==Qt::NoButton && (k==Qt::Key_Escape || k==Qt::Key_F4))
+				|| (ke->modifiers()==Qt::AltModifier && k==Qt::Key_Up))
 			{
 				hide();
 				emit cancelled();
@@ -365,7 +366,7 @@ bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 			}
 		}
 	}
-	return Q3Frame::eventFilter( o, e );
+	return QFrame::eventFilter( o, e );
 }
 
 void KexiComboBoxPopup::slotDataReloadRequested()

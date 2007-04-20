@@ -22,13 +22,13 @@ set(kexidatatable_LIB_SRCS
    kexicomboboxtableedit.cpp 
    kexicomboboxpopup.cpp 
    kexidataawarepropertyset.cpp
-   kexitextformatter.cpp
 )
 
 # TODO: reenable when kexidatetimeformatter is ported
 #   kexidatetableedit.cpp 
 #   kexitimetableedit.cpp 
 #   kexidatetimetableedit.cpp 
+#   kexitextformatter.cpp
 
 kde4_automoc(${kexidatatable_LIB_SRCS})
 

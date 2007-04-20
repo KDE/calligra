@@ -20,9 +20,7 @@
 #ifndef KEXICOMBOBOXPOPUP_H
 #define KEXICOMBOBOXPOPUP_H
 
-#include <q3frame.h>
-//Added by qt3to4:
-#include <QEvent>
+#include <QFrame>
 
 class KexiComboBoxPopupPrivate;
 class KexiTableView;
@@ -32,13 +30,14 @@ class KexiTableItem;
 namespace KexiDB {
 	class Field;
 }
+class QEvent;
 
 //! Internal class for displaying popup table view 
-class KexiComboBoxPopup : public Q3Frame
+class KexiComboBoxPopup : public QFrame
 {
 	Q_OBJECT
 	public:
-//js TODO: more ctors!
+//! @todo js: more ctors!
 		/*! Constructor for creating a popup using definition from \a column. 
 		 If the column is lookup column, it's definition is used to display
 		 one or more column within the popup. Otherwise column.field() is used

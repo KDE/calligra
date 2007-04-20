@@ -33,14 +33,14 @@
 #include "kexidatatableview.h"
 
 
-KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name)
- : KexiTableView(0, parent, name)
+KexiDataTableView::KexiDataTableView(QWidget *parent)
+ : KexiTableView(0, parent)
 {
 	init();
 }
 
-KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *cursor)
- : KexiTableView(0, parent, name)
+KexiDataTableView::KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor)
+ : KexiTableView(0, parent)
 {
 	init();
 	setData(cursor);

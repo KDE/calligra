@@ -20,22 +20,23 @@
 #ifndef KEXIDATAAWAREPROPERTYSET_H
 #define KEXIDATAAWAREPROPERTYSET_H
 
-#include <qpointer.h>
-#include <q3ptrvector.h>
-//Added by qt3to4:
+#include <kexi_export.h>
+#include <QPointer>
+#include <QVector>
 #include <Q3ValueList>
+#include <Q3CString>
 #include <koproperty/set.h>
 
-typedef Q3PtrVector<KoProperty::Set> SetVector;
+typedef QVector<KoProperty::Set*> SetVector;
 
-class KexiViewBase;
+class KexiView;
 class KexiTableItem;
 class KexiTableViewData;
 class KexiDataAwareObjectInterface;
 
 /*! This helper class handles data changes of a single
  object implementing KexiDataAwareObjectInterface (e.g. KexiTableView) inside
- a KexiViewBase container.
+ a KexiView container.
 
  It is currently used in KexiAlterTableDialog and KexiQueryDesignerGuiEditor,
  and may be used for similar purposes, when each KexiDataAwareObjectInterface's
@@ -49,7 +50,7 @@ class KexiDataAwareObjectInterface;
  - inserting single property set that and associating it with new row
  - all property sets are cleared when view's data is cleared (using clear())
  - setting view's 'dirty' flag when needed
- - signalling via KexiViewBase::propertySetSwitched() that current property
+ - signalling via KexiView::propertySetSwitched() that current property
    set has changed (e.g. on moving to other row)
 */
 class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
@@ -62,7 +63,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 		 (KexiDataAwareObjectInterface::setData()) now but it can be done later as well
 		 (but assigning data is needed for proper functionality).
 		 Any changed reassignments of table view's data will be handled automatically. */
-		KexiDataAwarePropertySet(KexiViewBase *view, KexiDataAwareObjectInterface* dataObject);
+		KexiDataAwarePropertySet(KexiView *view, KexiDataAwareObjectInterface* dataObject);
 
 		virtual ~KexiDataAwarePropertySet();
 
@@ -82,7 +83,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 		/*! \return number of the first row containing \a propertyName property equal to \a value.
 		 This is used e.g. in the Table Designer to find a row by field name. 
 		 If no such row has been found, -1 is returned. */
-		int findRowForPropertyValue(const QCString& propertyName, const QVariant& value);
+		int findRowForPropertyValue(const Q3CString& propertyName, const QVariant& value);
 
 	signals:
 		/*! Emmited when row is deleted.
@@ -139,9 +140,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 	protected:
 		SetVector m_sets; //!< prop. sets vector
 
-		QPointer<KexiViewBase> m_view;
+		QPointer<KexiView> m_view;
 		KexiDataAwareObjectInterface* m_dataObject;
-//		QPointer<KexiTableView> m_tableView;
 		QPointer<KexiTableViewData> m_currentTVData;
 
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()

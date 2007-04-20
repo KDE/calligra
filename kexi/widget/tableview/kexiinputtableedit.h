@@ -28,7 +28,7 @@
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
-#include "kexitextformatter.h"
+#warning TODO reenable #include "kexitextformatter.h"
 
 /*! @short General purpose cell editor using line edit widget.
 */
@@ -113,7 +113,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 		void init();
 		virtual void paintEvent( QPaintEvent *e );
 
-		KexiTextFormatter m_textFormatter;
+#warning TODO reenable 		KexiTextFormatter m_textFormatter;
 		bool m_calculatedCell;
 		QString m_decsym; //! decimal symbol
 		QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing

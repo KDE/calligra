@@ -1,6 +1,6 @@
 #ifndef _SQLPARSER_H_
 #define _SQLPARSER_H_
-#include "field.h"
+#include <kexidb/field.h>
 #include "parser.h"
 #include "sqltypes.h"
 

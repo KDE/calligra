@@ -21,7 +21,7 @@
 
 #include <kexidataawareobjectiface.h>
 #include <utils/kexisharedactionclient.h>
-#include <core/keximainwindow.h>
+#include <core/KexiMainWindow.h>
 
 #include <qlayout.h>
 //Added by qt3to4:
@@ -29,12 +29,16 @@
 
 #include <kmenu.h>
 
-KexiDataAwareView::KexiDataAwareView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
- : KexiViewBase(mainWin, parent, name)
+KexiDataAwareView::KexiDataAwareView(KexiMainWindow *mainWin, QWidget *parent)
+ : KexiView(parent)
  , KexiSearchAndReplaceViewInterface()
  , m_internalView(0)
  , m_actionClient(0)
  , m_dataAwareObject(0)
+{
+}
+
+KexiDataAwareView::~KexiDataAwareView()
 {
 }
 
@@ -169,19 +173,19 @@ QWidget* KexiDataAwareView::mainWidget()
 
 QSize KexiDataAwareView::minimumSizeHint() const
 {
-	return m_internalView ? m_internalView->minimumSizeHint() : QSize(0,0);//KexiViewBase::minimumSizeHint();
+	return m_internalView ? m_internalView->minimumSizeHint() : QSize(0,0);//KexiView::minimumSizeHint();
 }
 
 QSize KexiDataAwareView::sizeHint() const
 {
-	return m_internalView ? m_internalView->sizeHint() : QSize(0,0);//KexiViewBase::sizeHint();
+	return m_internalView ? m_internalView->sizeHint() : QSize(0,0);//KexiView::sizeHint();
 }
 
 void KexiDataAwareView::updateActions(bool activated)
 {
 	setAvailable("data_sort_az", m_dataAwareObject->isSortingEnabled());
 	setAvailable("data_sort_za", m_dataAwareObject->isSortingEnabled());
-	KexiViewBase::updateActions(activated);
+	KexiView::updateActions(activated);
 }
 
 void KexiDataAwareView::reloadActions()
