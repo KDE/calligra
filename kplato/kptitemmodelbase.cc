@@ -407,31 +407,32 @@ TreeViewBase::TreeViewBase( QWidget *parent )
     setAlternatingRowColors ( true );
 }
 
-int TreeViewBase::nextColumn( int col ) const
+QModelIndex TreeViewBase::nextColumn( const QModelIndex &curr ) const
 {
-    int s = header()->visualIndex( col ) + 1;
+    int s = header()->visualIndex( curr.column() ) + 1;
     while ( isColumnHidden( header()->logicalIndex( s ) ) ) {
         if ( s >= header()->count() ) {
-            kDebug()<<col<<": -1"<<endl;
-            return -1;
+            kDebug()<<curr.column()<<": -1"<<endl;
+            return QModelIndex();
         }
         ++s;
     }
-    //kDebug()<<k_funcinfo<<col<<": next="<<header()->logicalIndex( s )<<", "<<s<<endl;
-    return header()->logicalIndex( s );
+    kDebug()<<k_funcinfo<<curr.column()<<": next="<<header()->logicalIndex( s )<<", "<<s<<endl;
+    return model()->index( curr.row(), header()->logicalIndex( s ), curr.parent() );
 }
 
-int TreeViewBase::previousColumn( int col ) const
+QModelIndex TreeViewBase::previousColumn( const QModelIndex &curr ) const
 {
-    int s = header()->visualIndex( col ) - 1;
+    int s = header()->visualIndex( curr.column() ) - 1;
     while ( isColumnHidden( header()->logicalIndex( s ) ) ) {
         if ( s < 0 ) {
-            return -1;
+            kDebug()<<curr.column()<<": -1"<<endl;
+            return QModelIndex();
         }
         --s;
     }
-    //kDebug()<<k_funcinfo<<col<<": prev="<<header()->logicalIndex( s )<<", "<<s<<endl;
-    return header()->logicalIndex( s );
+    kDebug()<<k_funcinfo<<curr.column()<<": prev="<<header()->logicalIndex( s )<<", "<<s<<endl;
+    return model()->index( curr.row(), header()->logicalIndex( s ), curr.parent() );
 }
 
 /*!
@@ -448,24 +449,22 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
     if ( current.isValid() ) {
         switch (event->key()) {
             case Qt::Key_Right: {
-                int nxt = nextColumn( current.column() );
-                if ( nxt != -1 ) {
-                    QModelIndex i = model()->index( current.row(), nxt, current.parent() );
-                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+                QModelIndex nxt = nextColumn( current );
+                if ( nxt.isValid() ) {
+                    selectionModel()->setCurrentIndex( nxt, QItemSelectionModel::NoUpdate );
                 } else {
-                    emit afterLastColumn();
+                    emit moveAfterLastColumn( current );
                 }
                 event->accept();
                 return;
                 break;
             }
             case Qt::Key_Left: {
-                int prv = previousColumn( current.column() );
-                if ( prv != -1 ) {
-                    QModelIndex i = model()->index( current.row(), prv, current.parent() );
-                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+                QModelIndex prv = previousColumn( current );
+                if ( prv.isValid() ) {
+                    selectionModel()->setCurrentIndex( prv, QItemSelectionModel::NoUpdate );
                 } else {
-                    emit beforeFirstColumn();
+                    emit moveBeforeFirstColumn( current );
                 }
                 event->accept();
                 return;
@@ -581,10 +580,33 @@ DoubleTreeViewBase::DoubleTreeViewBase( QWidget *parent )
     
     connect( m_leftview, SIGNAL( currentChanged( QModelIndex ) ), this, SIGNAL( currentChanged( QModelIndex ) ) );
     connect( m_rightview, SIGNAL( currentChanged( QModelIndex ) ), this, SIGNAL( currentChanged( QModelIndex ) ) );
+
+    connect( m_leftview, SIGNAL( moveAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotToRightView( const QModelIndex & ) ) );
+    connect( m_rightview, SIGNAL( moveBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotToLeftView( const QModelIndex & ) ) );
 }
 
 DoubleTreeViewBase::~DoubleTreeViewBase()
 {
+}
+
+void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
+{
+    kDebug()<<k_funcinfo<<index.column()<<endl;
+    m_rightview->setFocus();
+    QModelIndex nxt = m_rightview->nextColumn( index );
+    if ( nxt.isValid() ) {
+        m_selectionmodel->setCurrentIndex( nxt, QItemSelectionModel::NoUpdate );
+    }
+}
+
+void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
+{
+    kDebug()<<k_funcinfo<<index.column()<<endl;
+    m_leftview->setFocus();
+    QModelIndex prv = m_leftview->previousColumn( index );
+    if ( prv.isValid() ) {
+        m_selectionmodel->setCurrentIndex( prv, QItemSelectionModel::NoUpdate );
+    }
 }
 
 void DoubleTreeViewBase::setExpanded( const QModelIndex &index )
@@ -611,7 +633,11 @@ void DoubleTreeViewBase::setModel( ItemModelBase *model )
         m_leftview->hideColumn( i );
         m_rightview->showColumn( i );
     }
+    if ( m_selectionmodel ) {
+        disconnect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
     
+        disconnect( m_selectionmodel, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SIGNAL( currentChanged ( const QModelIndex &, const QModelIndex & ) ) );
+    }
     m_selectionmodel = new QItemSelectionModel( m_model );
     m_leftview->setSelectionModel( m_selectionmodel );
     m_rightview->setSelectionModel( m_selectionmodel );

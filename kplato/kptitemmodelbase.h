@@ -182,13 +182,13 @@ public:
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
 
-    int nextColumn( int col ) const;
-    int previousColumn( int col ) const;
+    QModelIndex nextColumn( const QModelIndex &current ) const;
+    QModelIndex previousColumn( const QModelIndex &current ) const;
     
 signals:
     void contextMenuRequested( QModelIndex, const QPoint& );
-    void afterLastColumn();
-    void beforeFirstColumn();
+    void moveAfterLastColumn( const QModelIndex & );
+    void moveBeforeFirstColumn( const QModelIndex & );
     
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -217,8 +217,6 @@ public:
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
 
-//     int nextColumn( int col ) const;
-//     int previousColumn( int col ) const;
     QItemSelectionModel *selectionModel() const { return m_selectionmodel; }
     
     void setSelectionMode( QAbstractItemView::SelectionMode mode );
@@ -243,7 +241,9 @@ public slots:
 
 protected slots:
     void slotSelectionChanged( const QItemSelection &sel, const QItemSelection & );
-
+    void slotToRightView( const QModelIndex &index );
+    void slotToLeftView( const QModelIndex &index );
+    
 protected:
 //     void keyPressEvent(QKeyEvent *event);
 //     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
