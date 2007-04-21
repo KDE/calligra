@@ -155,7 +155,13 @@ void KWTextFrameSet::spaceLeft(double excessHeight) {
     Q_ASSERT(excessHeight >= 0);
     if(frameCount() == 0)
         return; // there is no way we can get more frames anyway.
-    KWTextFrame *lastFrame = static_cast<KWTextFrame*> (frames()[frameCount()-1]);
+    KWTextFrame *lastFrame = 0;
+    foreach(KWFrame *frame, frames()) { // TODO use an iterator and iter--
+        KWTextFrame *tf = dynamic_cast<KWTextFrame*> (frame);
+        if(tf)
+            lastFrame = tf;
+    }
+    Q_ASSERT(lastFrame);
     if(lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior)
         lastFrame->autoShrink(lastFrame->shape()->size().height() - excessHeight);
 }
@@ -181,19 +187,19 @@ bool KWTextFrameSet::allowLayout() const {
 
 // static
 bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2) {
-    const KWTextFrame *f1 = static_cast<const KWTextFrame*>(frame1);
-    const KWTextFrame *f2 = static_cast<const KWTextFrame*>(frame2);
+    const KWTextFrame *f1 = dynamic_cast<const KWTextFrame*>(frame1);
+    const KWTextFrame *f2 = dynamic_cast<const KWTextFrame*>(frame2);
 
-    if(f1->sortingId() >= 0 && f2->sortingId() >= 0) {
+    if(f1 && f2 && f1->sortingId() >= 0 && f2->sortingId() >= 0) { // copy frames don't have a sortingId
         return f1->sortingId() > f2->sortingId();
     }
-    QPointF pos = f1->shape()->absolutePosition();
-    QRectF bounds = f2->shape()->boundingRect();
+    QPointF pos = frame1->shape()->absolutePosition();
+    QRectF bounds = frame2->shape()->boundingRect();
 
-    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (f1->frameSet());
+    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (frame1->frameSet());
     if(tfs && tfs->pageManager()) { // check per page.
-        KWPage *page1 = tfs->pageManager()->page(f1->shape());
-        KWPage *page2 = tfs->pageManager()->page(f2->shape());
+        KWPage *page1 = tfs->pageManager()->page(frame1->shape());
+        KWPage *page2 = tfs->pageManager()->page(frame2->shape());
         if(page1 != page2 && page1 != 0 && page2 != 0)
             return page1->pageNumber() < page2->pageNumber();
     }
@@ -206,8 +212,8 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
     if(pos.y() > bounds.bottom()) return false;
     if(pos.y() < bounds.top()) return true;
 
-    // my center lies inside f2. Lets check the topleft pos.
-    if(f1->shape()->boundingRect().top() > bounds.top()) return false;
+    // my center lies inside frame2. Lets check the topleft pos.
+    if(frame1->shape()->boundingRect().top() > bounds.top()) return false;
     return true;
 }
 
