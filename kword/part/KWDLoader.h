@@ -21,6 +21,8 @@
 #define KWDLOADER_H
 
 #include <QObject>
+#include <QTextCursor>
+#include <QDomElement>
 
 class KWDocument;
 class KWFrameSet;
@@ -32,6 +34,7 @@ class KoParagraphStyle;
 class KoCharacterStyle;
 class QDomElement;
 class QColor;
+class KoShape;
 
 /// KWDocument delegates to this class the loading of (old style) KWD documents
 class KWDLoader : public QObject
@@ -73,6 +76,8 @@ private:
     void fill(KoCharacterStyle *style, QDomElement formatElem);
     void fill(KWFrame *frame, QDomElement frameElem);
 
+    void insertAnchors();
+
     // load the document wide styles
     void loadStyleTemplates( const QDomElement &styles );
 
@@ -86,6 +91,14 @@ private:
     KWPageManager *m_pageManager;
     bool m_foundMainFS;
     int m_nrItemsToLoad, m_itemsLoaded;
+
+    struct AnchorData {
+        int cursorPosition;
+        KoShape *textShape;
+        QTextDocument *document;
+        QString frameSetName;
+    };
+    QList<AnchorData> m_anchors;
 };
 
 #endif

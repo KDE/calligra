@@ -26,15 +26,17 @@
 // koffice
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
+#include <KoShapeContainer.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 #include <KoListStyle.h>
 #include <KoTextShapeData.h>
+#include <KoTextAnchor.h>
+#include <KoTextDocumentLayout.h>
 
 // KDE + Qt includes
 #include <QDomDocument>
-#include <QTextCursor>
 #include <QTextBlock>
 #include <klocale.h>
 
@@ -321,6 +323,9 @@ bool KWDLoader::load(QDomElement &root) {
         loadFrameSets( framesets );
 
     emit sigProgress(85);
+
+    insertAnchors();
+
 #if 0
 
     loadPictureMap( root );
@@ -596,31 +601,52 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                 QDomElement format = formats.firstChildElement("FORMAT");
                 while(! format.isNull()) {
                     QString id = format.attribute("id", "0");
+                    QTextCursor formatCursor(block) ;
+                    int pos = format.attribute("pos", "-1").toInt();
+                    if(format.hasAttribute("pos") && pos >= 0) {
+                        int length = format.attribute("len").toInt();
+                        if(length > 0) {
+                            formatCursor.setPosition(block.position() + pos);
+                            formatCursor.setPosition(block.position() + pos + length, QTextCursor::KeepAnchor);
+                        }
+                        else {
+                            kWarning("Format has missing or invalid 'len' value, ignoring\n");
+                            continue;
+                        }
+                    } else {
+                        kWarning("Format has missing or invalid 'pos' value, ignoring\n");
+                        continue;
+                    }
                     if(id == "1") {
                         KoCharacterStyle s2(*style);
                         fill(&s2, format);
-                        int pos = format.attribute("pos", "-1").toInt();
-                        if(format.hasAttribute("pos") && pos >= 0) {
-                            int length = format.attribute("len").toInt();
-                            if(length > 0) {
-                                QTextCursor c2(block) ;
-                                c2.setPosition(block.position() + pos);
-                                c2.setPosition(block.position() + pos + length,
-                                        QTextCursor::KeepAnchor);
-                                s2.applyStyle(&c2);
-                            }
-                            else
-                                kWarning("Format has missing or invalid 'len' value, ignoring\n");
-                        } else
-                            kWarning("Format has missing or invalid 'pos' value, ignoring\n");
+                        s2.applyStyle(&formatCursor);
                     } else if(id == "2") {
                         kWarning("File to old, image can not be recovered\n");
                     } else if(id == "4") {
                         // load variable // TODO
                     } else if(id == "5") {
                         kWarning("File to old, footnote can not be recovered\n");
-                    } else if(id == "6") {
-                        // anchor for floating frame. TODO
+                    } else if(id == "6") { // anchor for floating frame.
+                        QDomElement anchor = format.firstChildElement("ANCHOR");
+                        if(anchor.isNull()) {
+                            kWarning() << "Missing ANCHOR tag\n";
+                            continue;
+                        }
+                        QString type = anchor.attribute("type", "frameset");
+                        if(type == "frameset") {
+                            if(! anchor.hasAttribute("instance")) {
+                                kWarning() << "ANCHOR is missing its instance attribute\n";
+                                continue;
+                            }
+                            AnchorData data;
+                            data.textShape = fs->frames().first()->shape();
+                            data.cursorPosition = formatCursor.anchor();
+                            data.document = fs->document();
+                            data.frameSetName = anchor.attribute("instance");
+                            m_anchors.append(data);
+                        } else
+                            ;// TODO
                     }
                     format = format.nextSiblingElement("FORMAT");
                 }
@@ -993,6 +1019,29 @@ void KWDLoader::loadStyleTemplates( const QDomElement &stylesElem ) {
 
         style = style.nextSiblingElement("STYLE");
     }
+}
+
+void KWDLoader::insertAnchors() {
+    foreach(AnchorData anchor, m_anchors) {
+        KWFrameSet *fs = m_document->frameSetByName(anchor.frameSetName);
+        if(fs == 0) {
+            kWarning() << "Anchored frameset not found: '" << anchor.frameSetName << endl;
+            continue;
+        }
+        KWFrame *frame = fs->frames().first();
+        if(frame == 0)  continue;
+        frame->shape()->setPosition(QPointF(0,0));
+        dynamic_cast<KoShapeContainer*> (anchor.textShape)->addChild( frame->shape() ); // attach here & avoid extra layouts
+        KoTextAnchor *textAnchor = new KoTextAnchor(frame->shape());
+        QTextCursor cursor(anchor.document);
+        cursor.setPosition(anchor.cursorPosition);
+        cursor.setPosition(anchor.cursorPosition + 1, QTextCursor::KeepAnchor);
+        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (cursor.block().document()->documentLayout());
+        Q_ASSERT(layout);
+        Q_ASSERT(layout->inlineObjectTextManager());
+        layout->inlineObjectTextManager()->insertInlineObject(cursor, textAnchor);
+    }
+    m_anchors.clear();
 }
 
 #include "KWDLoader.moc"
