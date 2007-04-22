@@ -1,5 +1,5 @@
 
 
 add_subdirectory( locolor )
-add_subdirectory( crystalsvg )
+add_subdirectory( hicolor )
 

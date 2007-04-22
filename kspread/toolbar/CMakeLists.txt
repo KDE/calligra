@@ -1,3 +1,3 @@
-add_subdirectory( crystalsvg )
+add_subdirectory( hicolor )
 
 
