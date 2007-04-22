@@ -87,6 +87,7 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
 
 KWDocument::~KWDocument() {
     delete m_styleManager;
+    qDeleteAll(m_frameSets);
 }
 
 void KWDocument::addShape (KoShape *shape) {
