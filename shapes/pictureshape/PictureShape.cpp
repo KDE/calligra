@@ -19,10 +19,8 @@
 
 #include "PictureShape.h"
 
-//#include <QFrame>
-//#include <QVBoxLayout>
-//#include <kdebug.h>
 #include <KoImageData.h>
+#include <KoViewConverter.h>
 
 #include <QPainter>
 
@@ -40,9 +38,8 @@ void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) 
     if(m_imageData == 0)
         return;
 
-    // TODO rewrite this!
-    applyConversion( painter, converter );
-    const QRectF rect = QRectF( QPointF( 0.0, 0.0 ), size() );
-    painter.drawPixmap(rect, m_imageData->pixmap(), rect);
+    QPixmap pm = m_imageData->pixmap();
+    QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
+    painter.drawPixmap(target.toRect(), pm, QRect(0, 0, pm.width(), pm.height()));
 }
 
