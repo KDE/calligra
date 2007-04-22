@@ -885,6 +885,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if (!sheet)
     return;
 
+#ifdef KSPREAD_KOPART_EMBEDDING
   if ( d->mouseSelectedObject )
   {
     EmbeddedObject *obj = 0;
@@ -900,6 +901,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
       return;
     }
   }
+#endif // KSPREAD_KOPART_EMBEDDING
 
   double dwidth = d->view->doc()->unzoomItXOld( width() );
   double ev_PosX;
@@ -1202,6 +1204,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   if ( sheet && _ev->button() == Qt::LeftButton)
   {
     d->m_moveStartPosMouse = objectRect( false ).topLeft();
+#ifdef KSPREAD_KOPART_EMBEDDING
     EmbeddedObject *obj = getObject( _ev->pos(), sheet );
 
     if ( obj )
@@ -1250,6 +1253,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
       return;
     }
     else
+#endif // KSPREAD_KOPART_EMBEDDING
     {
       d->modType = MT_NONE;
       if ( !( _ev->modifiers() & Qt::ShiftModifier ) && !( _ev->modifiers() & Qt::ControlModifier ) )
@@ -1486,6 +1490,7 @@ void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
     // flake
 //     d->toolProxy->mouseDoubleClickEvent( _ev, viewConverter()->viewToDocument( _ev->pos() ) );
 
+#ifdef KSPREAD_KOPART_EMBEDDING
   EmbeddedObject *obj;
   if ( ( obj = getObject( _ev->pos(), sheet ) ) )
   {
@@ -1505,7 +1510,7 @@ void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
       }
     }
   }
-
+#endif // KSPREAD_KOPART_EMBEDDING
   if ( d->view->koDocument()->isReadWrite() && sheet )
     createEditor( false /* keep content */);
 }
@@ -2094,6 +2099,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
 
   d->view->doc()->emitEndOperation( Region(QRect( cursor, cursor )) );
 
+#ifdef KSPREAD_KOPART_EMBEDDING
   if ( d->mousePressed /*&& toolEditMode == TEM_MOUSE */)
   {
     switch (d->modType)
@@ -2141,6 +2147,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
         break;
     }
   }
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 bool Canvas::processHomeKey(QKeyEvent* event)
@@ -3021,6 +3028,7 @@ KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
   QPoint const p ( (int) pos.x() ,
               (int) pos.y() );
 
+#ifdef KSPREAD_KOPART_EMBEDDING
   foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
     if ( object->sheet() == _sheet )
@@ -3034,15 +3042,18 @@ KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
               return object;
     }
   }
+#endif // KSPREAD_KOPART_EMBEDDING
   return 0;
 }
 
 void Canvas::selectObject( EmbeddedObject *obj )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
   if ( obj->sheet() != activeSheet() || obj->isSelected() )
     return;
   obj->setSelected( true );
   repaintObject( obj );
+#endif // KSPREAD_KOPART_EMBEDDING
 
   d->mouseSelectedObject = true;
   emit objectSelectedChanged();
@@ -3160,6 +3171,7 @@ void Canvas::moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged )
 
 void Canvas::resizeObject( ModifyType _modType, const QPointF & point, bool keepRatio )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
     EmbeddedObject *obj = d->m_resizeObject;
 
     QRectF objRect = obj->geometry();
@@ -3313,11 +3325,13 @@ void Canvas::resizeObject( ModifyType _modType, const QPointF & point, bool keep
     repaintObject( obj );
     emit objectSizeChanged();
   }
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 
 void Canvas::finishResizeObject( const QString &/*name*/, bool /*layout*/ )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
   if ( d->m_resizeObject )
   {
     QPointF move = QPointF( d->m_resizeObject->geometry().x() - d->m_rectBeforeResize.x(),
@@ -3340,6 +3354,7 @@ void Canvas::finishResizeObject( const QString &/*name*/, bool /*layout*/ )
     repaintObject( d->m_resizeObject );
     d->m_resizeObject = 0;
   }
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void Canvas::raiseObject( EmbeddedObject *object )
@@ -3531,6 +3546,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
 
 void Canvas::repaintObject( EmbeddedObject *obj )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
 	//Calculate where the object appears on the canvas widget and then repaint that part of the widget
 	QRect canvasRelativeGeometry = doc()->zoomRectOld( obj->geometry() );
 	canvasRelativeGeometry.translate( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
@@ -3553,6 +3569,7 @@ void Canvas::repaintObject( EmbeddedObject *obj )
     obj->draw(&p); //this goes faster than calling repaint
     p.end();
   }*/
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void Canvas::copyOasisObjects()
@@ -3589,6 +3606,7 @@ void Canvas::copyOasisObjects()
     kDebug(36003) << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
     mimeData->setData( mimeType, buffer.buffer() );
 
+#ifdef KSPREAD_KOPART_EMBEDDING
     //save the objects as pictures too so that other programs can access them
     foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
@@ -3607,6 +3625,7 @@ void Canvas::copyOasisObjects()
         mimeData->setImageData( pixmap.toImage() );
       }
     }
+#endif // KSPREAD_KOPART_EMBEDDING
 
     QApplication::clipboard()->setMimeData( mimeData, QClipboard::Clipboard );
 }
@@ -3763,6 +3782,7 @@ void Canvas::clipoutChildren( QPainter& painter ) const
   const double horizontalOffset = -xOffset() * doc()->zoomedResolutionX();
   const double verticalOffset = -yOffset() * doc()->zoomedResolutionY();
 
+#ifdef KSPREAD_KOPART_EMBEDDING
   foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
     if ( ( object )->sheet() == activeSheet() )
@@ -3779,6 +3799,7 @@ void Canvas::clipoutChildren( QPainter& painter ) const
       //painter.fillRect( doc()->zoomRectOld( object->geometry() ), QColor("red" ) );
     }
   }
+#endif // KSPREAD_KOPART_EMBEDDING
 
   painter.setClipRegion( rgn );
 }
@@ -3806,6 +3827,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 
   const QRect zoomedWindowGeometry = painterWindowGeometry( painter );
 
+#ifdef KSPREAD_KOPART_EMBEDDING
   foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
     QRect const zoomedObjectGeometry = doc()->zoomRectOld( object->geometry() );
@@ -3842,6 +3864,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
         object->draw( &painter );
     }
   }
+#endif // KSPREAD_KOPART_EMBEDDING
   painter.restore();
 }
 

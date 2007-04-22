@@ -290,6 +290,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
            ( obj->getType() == OBJECT_CHART && m_bPrintCharts ) ) )
         continue;
 
+#ifdef KSPREAD_KOPART_EMBEDDING
       QRect zoomRectOld = m_pDoc->zoomRectOld( object->geometry() );
       QPixmap *p = new QPixmap( zoomRectOld.size() );
       QPainter painter(p);
@@ -305,6 +306,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
       m_printObjects.append( po );
       po->obj = object;
       po->p = p;
+#endif // KSPREAD_KOPART_EMBEDDING
     }
 
     if ( page_list.count() == 0 )
@@ -510,6 +512,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     //QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     //QPtrListIterator<EmbeddedObject> itObject( m_pDoc->embeddedObjects() );
 
+#ifdef KSPREAD_KOPART_EMBEDDING
     QList<PrintObject *>::iterator itObject;
     for ( itObject = m_printObjects.begin(); itObject != m_printObjects.end(); ++itObject ) {
           EmbeddedObject *obj = (*itObject)->obj;
@@ -549,6 +552,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
             painter.restore();
         }
     }
+#endif // KSPREAD_KOPART_EMBEDDING
 
     //Don't let obscuring cells and children overpaint this area
     clipRegion -= QRegion ( m_pDoc->zoomItXOld( leftBorderPts() + topLeft.x() ),

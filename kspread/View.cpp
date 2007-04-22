@@ -3969,6 +3969,7 @@ void View::cutSelection()
         markSelectionAsDirty();
         doc()->emitEndOperation();
 
+#ifdef KSPREAD_KOPART_EMBEDDING
         doc()->beginMacro( i18n( "Cut Objects" ) );
         foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
         {
@@ -3980,6 +3981,7 @@ void View::cutSelection()
         }
         canvasWidget()->setMouseSelectedObject( false );
         doc()->endMacro();
+#endif // KSPREAD_KOPART_EMBEDDING
 
         return;
     }
@@ -4884,6 +4886,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     QRectF unzoomedRect = doc()->viewToDocument( _geometry );
     unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
 
+#ifdef KSPREAD_KOPART_EMBEDDING
     InsertObjectCommand *cmd = 0;
     if ( d->selection->isColumnOrRowSelected() )
     {
@@ -4894,10 +4897,12 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
       cmd = new InsertObjectCommand( unzoomedRect, _e, d->selection->lastRange(), d->canvas  );
 
     doc()->addCommand( cmd );
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
   if ( !d->activeSheet )
     return;
 
@@ -4907,6 +4912,7 @@ void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 
   InsertObjectCommand *cmd = new InsertObjectCommand( unzoomedRect, _e, d->canvas );
   doc()->addCommand( cmd );
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 QPointF View::markerDocumentPosition()
@@ -4919,6 +4925,7 @@ QPointF View::markerDocumentPosition()
 
 void View::insertPicture()
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
   //Note:  We don't use the usual insert handler here (which allows the user to drag-select the target area
   //for the object) because when inserting raster graphics, it is usually desireable to insert at 100% size,
   //since the graphic won't look right if inserted with an incorrect aspect ratio or if blurred due to the
@@ -4936,6 +4943,7 @@ void View::insertPicture()
 
   InsertObjectCommand *cmd = new InsertObjectCommand( QRectF(markerDocumentPosition(),QSizeF(0,0)) , file, d->canvas );
   doc()->addCommand( cmd );
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::slotUpdateChildGeometry( EmbeddedKOfficeObject */*_child*/ )
@@ -5875,6 +5883,7 @@ void View::deleteSelection()
 
 void View::deleteSelectedObjects()
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
     doc()->beginMacro( i18n( "Remove Object" ) );
     foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
@@ -5886,6 +5895,7 @@ void View::deleteSelectedObjects()
     }
     canvasWidget()->setMouseSelectedObject( false );
     doc()->endMacro();
+#endif
 }
 
 void View::adjust()
@@ -6153,7 +6163,7 @@ void View::extraProperties()
     if (!activeSheet())
       return;
     //d->canvas->setToolEditMode( TEM_MOUSE );
-
+#ifdef KSPREAD_KOPART_EMBEDDING
     d->m_propertyEditor = new PropertyEditor( this, "KPrPropertyEditor", d->activeSheet, doc() );
     d->m_propertyEditor->setWindowTitle( i18n( "Properties" ) );
 
@@ -6163,11 +6173,14 @@ void View::extraProperties()
 
     delete d->m_propertyEditor;
     d->m_propertyEditor = 0;
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::propertiesOk()
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
     d->m_propertyEditor->executeCommand();
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::styleDialog()

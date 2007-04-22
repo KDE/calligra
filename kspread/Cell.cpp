@@ -1863,6 +1863,7 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
 
 void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& oasisContext )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
     for( KoXmlElement e = parent; !e.isNull(); e = e.nextSibling().toElement() )
     {
         if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
@@ -1921,6 +1922,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
           }
         }
     }
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 

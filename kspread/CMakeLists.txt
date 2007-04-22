@@ -24,7 +24,7 @@ SET (commands_DIR_SRCS
 	commands/ConditionCommand.cpp
 	commands/DataManipulators.cpp
 	commands/DefinePrintRangeCommand.cpp
-	commands/EmbeddedObjectCommands.cpp
+# 	commands/EmbeddedObjectCommands.cpp
 	commands/LinkCommand.cpp
 	commands/MacroCommand.cpp
 	commands/MergeCommand.cpp
@@ -126,8 +126,8 @@ SET (kspreadcommon_LIB_SRCS
 	Map.cpp
 	MapAdaptor.cpp
 # 	Numformat.cpp
-	Object.cpp
-	PropertyEditor.cpp
+# 	Object.cpp
+# 	PropertyEditor.cpp
 	RecalcManager.cpp
 	Region.cpp
 	RowColumnFormat.cpp

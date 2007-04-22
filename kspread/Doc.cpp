@@ -744,6 +744,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 
     if ( saveFlag == SaveSelected )
     {
+#ifdef KSPREAD_KOPART_EMBEDDING
       foreach ( EmbeddedObject* object, d->embeddedObjects )
       {
         if ( object->getType() != OBJECT_CHART  && object->getType() != OBJECT_KOFFICE_PART )
@@ -755,6 +756,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
           if ( !embedded->saveOasis( store, manifestWriter ) )
             continue;
       }
+#endif // KSPREAD_KOPART_EMBEDDING
     }
 
 
@@ -2258,6 +2260,7 @@ bool Doc::captureAllArrowKeys() const
 
 void Doc::insertObject( EmbeddedObject * obj )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
   switch ( obj->getType() )
   {
     case OBJECT_KOFFICE_PART: case OBJECT_CHART:
@@ -2269,6 +2272,7 @@ void Doc::insertObject( EmbeddedObject * obj )
       ;
   }
   d->embeddedObjects.append( obj );
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 QList<EmbeddedObject*>& Doc::embeddedObjects()

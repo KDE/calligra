@@ -161,6 +161,7 @@ ChartBinding::~ChartBinding()
 
 void ChartBinding::cellChanged( const Cell& /*changedCell*/ )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
     if ( m_bIgnoreChanges )
         return;
 
@@ -202,6 +203,7 @@ void ChartBinding::cellChanged( const Cell& /*changedCell*/ )
         }
     }
     chart->analyzeHeaders( );
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 
@@ -621,13 +623,13 @@ const QColor& Sheet::emptyColor() const
 int Sheet::numberSelectedObjects() const
 {
     int num = 0;
-
+#ifdef KSPREAD_KOPART_EMBEDDING
     foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
         if( object->sheet() == this && object->isSelected() )
             num++;
     }
-
+#endif // KSPREAD_KOPART_EMBEDDING
     return num;
 }
 
@@ -2659,7 +2661,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
             styleIndex = styleStorage()->nextColumn( styleIndex );
         }
     }
-
+#ifdef KSPREAD_KOPART_EMBEDDING
     foreach ( EmbeddedObject* object,doc()->embeddedObjects() )
     {
        if ( object->sheet() == this )
@@ -2671,6 +2673,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
          sheet.appendChild( e );
        }
     }
+#endif // KSPREAD_KOPART_EMBEDDING
     return sheet;
 }
 
@@ -2683,6 +2686,7 @@ bool Sheet::isLoading()
 QList<EmbeddedObject*> Sheet::getSelectedObjects()
 {
     QList<EmbeddedObject*> objects;
+#ifdef KSPREAD_KOPART_EMBEDDING
     foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
         if( object->isSelected()
@@ -2691,20 +2695,21 @@ QList<EmbeddedObject*> Sheet::getSelectedObjects()
             objects.append( object );
         }
     }
+#endif // KSPREAD_KOPART_EMBEDDING
      return objects;
 }
 
 QRectF Sheet::getRealRect( bool all )
 {
     QRectF rect;
-
+#ifdef KSPREAD_KOPART_EMBEDDING
     foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
 
         if ( all || ( object->isSelected() && ! object->isProtect() ) )
             rect |= object->geometry();
     }
-
+#endif // KSPREAD_KOPART_EMBEDDING
     return rect;
 }
 
@@ -2713,6 +2718,7 @@ QUndoCommand* Sheet::moveObject(View *_view, double diffx, double diffy)
 {
     bool createCommand=false;
     MoveObjectByCmd *moveByCmd=0;
+#ifdef KSPREAD_KOPART_EMBEDDING
     Canvas * canvas = _view->canvasWidget();
     QList<EmbeddedObject*> _objects;
     foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
@@ -2736,6 +2742,7 @@ QUndoCommand* Sheet::moveObject(View *_view, double diffx, double diffy)
 
 //         m_doc->updateSideBarItem( this );
     }
+#endif // KSPREAD_KOPART_EMBEDDING
     return moveByCmd;
 }
 
@@ -2743,6 +2750,7 @@ QUndoCommand* Sheet::moveObject(View *_view,const QPointF &_move,bool key)
 {
     QList<EmbeddedObject*> _objects;
     MoveObjectByCmd *moveByCmd=0;
+#ifdef KSPREAD_KOPART_EMBEDDING
     Canvas * canvas = _view->canvasWidget();
     foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
@@ -2769,6 +2777,7 @@ QUndoCommand* Sheet::moveObject(View *_view,const QPointF &_move,bool key)
                                    QPointF( _move ),
                                    _objects, doc() ,this );
 
+#endif // KSPREAD_KOPART_EMBEDDING
     return moveByCmd;
 }
 
@@ -2777,6 +2786,7 @@ QUndoCommand* Sheet::moveObject(View *_view,const QPointF &_move,bool key)
  */
 bool Sheet::objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
     foreach ( EmbeddedObject* obj, list ) {
         // object name can exist in current object.
         if ( obj->getObjectName() == object->getObjectName() &&
@@ -2784,10 +2794,12 @@ bool Sheet::objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &li
             return true;
         }
     }
+#endif // KSPREAD_KOPART_EMBEDDING
     return false;
 }
 
 void Sheet::unifyObjectName( EmbeddedObject *object ) {
+#ifdef KSPREAD_KOPART_EMBEDDING
     if ( object->getObjectName().isEmpty() ) {
         object->setObjectName( object->getTypeString() );
     }
@@ -2806,6 +2818,7 @@ void Sheet::unifyObjectName( EmbeddedObject *object ) {
         objectName += QString(" (%1)").arg( count );
         object->setObjectName( objectName );
     }
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 
@@ -3122,6 +3135,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
 
 void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& oasisContext )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
     KoXmlElement e;
     KoXmlNode n = parent.firstChild();
     while( !n.isNull() )
@@ -3155,6 +3169,7 @@ void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext&
         }
         n = n.nextSibling();
     }
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 
@@ -4567,6 +4582,7 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
                 else
                     delete cl;
             }
+#ifdef KSPREAD_KOPART_EMBEDDING
             else if ( tagName == "object" )
             {
                 EmbeddedKOfficeObject *ch = new EmbeddedKOfficeObject( doc(), this );
@@ -4589,6 +4605,7 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
                     delete ch;
                 }
             }
+#endif // KSPREAD_KOPART_EMBEDDING
         }
         n = n.nextSibling();
     }
@@ -4640,6 +4657,7 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
 
 bool Sheet::loadChildren( KoStore* _store )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
     foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
         if ( object->sheet() == this && ( object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART ) )
@@ -4649,7 +4667,7 @@ bool Sheet::loadChildren( KoStore* _store )
                 return false;
         }
     }
-
+#endif // KSPREAD_KOPART_EMBEDDING
     return true;
 }
 
@@ -4744,7 +4762,7 @@ bool Sheet::insertChart( const QRectF& rect, KoDocumentEntry& documentEntry,
 
     if ( !document->showEmbedInitDialog( parentWidget ) )
         return false;
-
+#ifdef KSPREAD_KOPART_EMBEDDING
     EmbeddedChart * ch = new EmbeddedChart( doc(), this, document, rect );
     ch->setDataArea( dataArea );
     ch->update();
@@ -4762,7 +4780,7 @@ bool Sheet::insertChart( const QRectF& rect, KoDocumentEntry& documentEntry,
         wiz->show( rangeString );
 
     insertObject( ch );
-
+#endif // KSPREAD_KOPART_EMBEDDING
     return true;
 }
 
@@ -4778,9 +4796,10 @@ bool Sheet::insertChild( const QRectF& rect, KoDocumentEntry& documentEntry,
     }
     if ( !document->showEmbedInitDialog( parentWidget ) )
         return false;
-
+#ifdef KSPREAD_KOPART_EMBEDDING
     EmbeddedKOfficeObject* ch = new EmbeddedKOfficeObject( doc(), this, document, rect );
     insertObject( ch );
+#endif // KSPREAD_KOPART_EMBEDDING
     return true;
 }
 
@@ -4822,11 +4841,12 @@ bool Sheet::insertPicture( const QPointF& point ,  KoPicture& picture )
     destinationSize.setHeight( KoUnit::fromUserValue(inchHeight,KoUnit::Inch) );
 
     destinationRect.setSize( destinationSize);
-
+#ifdef KSPREAD_KOPART_EMBEDDING
     EmbeddedPictureObject* object = new EmbeddedPictureObject( this, destinationRect, doc()->pictureCollection(),key);
    // ch->setPicture(key);
 
     insertObject( object );
+#endif // KSPREAD_KOPART_EMBEDDING
     return true;
 }
 
@@ -4858,15 +4878,17 @@ void Sheet::insertObject( EmbeddedObject *_obj )
 
 void Sheet::changeChildGeometry( EmbeddedKOfficeObject *_child, const QRectF& _rect )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
     _child->setGeometry( _rect );
 
     emit sig_updateChildGeometry( _child );
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 bool Sheet::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
-
+#ifdef KSPREAD_KOPART_EMBEDDING
     foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
         if ( object->sheet() == this && ( object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART ) )
@@ -4876,11 +4898,13 @@ bool Sheet::saveChildren( KoStore* _store, const QString &_path )
                 return false;
         }
     }
+#endif // KSPREAD_KOPART_EMBEDDING
     return true;
 }
 
 bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int & indexObj, int &partIndexObj )
 {
+#ifdef KSPREAD_KOPART_EMBEDDING
   //int i = 0;
   if ( doc()->embeddedObjects().isEmpty() )
     return true;
@@ -4908,6 +4932,7 @@ bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenS
   {
     xmlWriter.endElement();
   }
+#endif // KSPREAD_KOPART_EMBEDDING
   return true;
 }
 
