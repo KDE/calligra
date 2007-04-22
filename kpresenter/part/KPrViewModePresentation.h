@@ -43,7 +43,6 @@ public:
     void activate( KoPAViewMode * previousViewMode );
     void deactivate();
 private:
-    QWidget * m_savedParent;
     KoPAViewMode * m_savedViewMode;
 };
 

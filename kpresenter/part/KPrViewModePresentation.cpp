@@ -33,7 +33,6 @@
 
 KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * canvas )
 : KoPAViewMode( view, canvas )
-, m_savedParent( 0 )
 {
 }
 
@@ -124,16 +123,11 @@ void KPrViewModePresentation::wheelEvent( QWheelEvent * event, const QPointF &po
 void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 {
     m_savedViewMode = previousViewMode;
-    m_savedParent = m_canvas->parentWidget();
-    m_canvas->setParent( ( QWidget* )0, Qt::Window );
     m_view->setCanvasMode( true );
-    m_canvas->showFullScreen();
 }
 
 void KPrViewModePresentation::deactivate()
 {
-    m_canvas->setParent( m_savedParent, Qt::Widget );
     m_canvas->setFocus();
     m_view->setCanvasMode( false );
-    m_canvas->showNormal();
 }
