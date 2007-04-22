@@ -317,6 +317,8 @@ bool KWDLoader::load(QDomElement &root) {
     setSpellCheckIgnoreList( lst );
 #endif
     QDomElement pixmaps = root.firstChildElement("PIXMAPS");
+    if(pixmaps.isNull())
+        pixmaps = root.firstChildElement("PICTURES");
     if(! pixmaps.isNull()) {
         QDomNodeList children = pixmaps.childNodes();
         for(int i=0; i < children.count(); i++) {
@@ -478,6 +480,8 @@ KWFrameSet *KWDLoader::loadFrameSet( QDomElement framesetElem, bool loadFrames, 
         if(frame.isNull())
             return 0;
         QDomElement image = framesetElem.firstChildElement("IMAGE");
+        if(image.isNull())
+            image = framesetElem.firstChildElement("PICTURE");
         if(image.isNull())
             return 0;
         QDomElement key = image.firstChildElement("KEY");
