@@ -27,7 +27,7 @@ class PictureToolFactory : public KoToolFactory
 {
     Q_OBJECT
 public:
-    PictureToolFactory( QObject* parent, const QStringList& );
+    PictureToolFactory( QObject* parent);
     ~PictureToolFactory();
 
     KoTool* createTool( KoCanvasBase* canvas );

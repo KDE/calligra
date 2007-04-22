@@ -16,27 +16,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "Plugin.h"
+#include "PictureShapeFactory.h"
+#include "PictureToolFactory.h"
 
-#ifndef PICTURESHAPE_H
-#define PICTURESHAPE_H
+#include <KoToolRegistry.h>
+#include <KoShapeRegistry.h>
 
-#include <KoShape.h>
+#include <kgenericfactory.h>
 
-#define PICTURESHAPEID "PictureShape"
 
-class KoImageData;
+K_EXPORT_COMPONENT_FACTORY( pictureshape, KGenericFactory<Plugin>( "Plugin" ) )
 
-class PictureShape : public KoShape
+Plugin::Plugin(QObject *parent, const QStringList &)
+    : QObject(parent)
 {
-public:
-    explicit PictureShape();
-    virtual ~PictureShape();
+    KoShapeRegistry::instance()->add( new PictureShapeFactory(parent) );
+    KoToolRegistry::instance()->add( new PictureToolFactory(parent) );
+}
 
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+#include "Plugin.moc"
 
-private:
-    KoImageData *m_imageData;
-};
-
-
-#endif

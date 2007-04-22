@@ -63,6 +63,13 @@ signals:
     void sigProgress(int percent);
 
 private:
+    // old kword files have a lot of fields for the image key, so we duplicate that here.
+    struct ImageKey {
+        QString year, month, day, hour, minute, second, milisecond;
+        QString oldFilename, filename;
+    };
+
+
     /// find and load all framesets
     void loadFrameSets( const QDomElement &framesets );
     /// load one frameset
@@ -75,12 +82,12 @@ private:
     void fill(KoParagraphStyle *style, QDomElement layoutElem);
     void fill(KoCharacterStyle *style, QDomElement formatElem);
     void fill(KWFrame *frame, QDomElement frameElem);
+    void fill(ImageKey *key, QDomElement keyElement);
 
     void insertAnchors();
 
     // load the document wide styles
     void loadStyleTemplates( const QDomElement &styles );
-
 
     // helper method. Gets the color from an element assuming there are 'red','green', 'blue' attributes on it.
     QColor colorFrom(const QDomElement &element);
@@ -99,6 +106,8 @@ private:
         QString frameSetName;
     };
     QList<AnchorData> m_anchors;
+
+    QList<ImageKey> m_images;
 };
 
 #endif

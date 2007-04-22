@@ -156,6 +156,10 @@ public:
 
     void saveOdf(KoShapeSavingContext *context);
 
+protected:
+    /// replace the current set shape with the argument one.
+    void setShape(KoShape *shape);
+
 private:
     KoShape *m_shape;
     KWord::FrameBehavior m_frameBehavior;

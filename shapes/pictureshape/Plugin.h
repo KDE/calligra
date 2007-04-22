@@ -17,26 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PICTURESHAPE_H
-#define PICTURESHAPE_H
+#ifndef PLUGIN_H
+#define PLUGIN_H
 
-#include <KoShape.h>
+#include <QObject>
 
-#define PICTURESHAPEID "PictureShape"
+class QStringList;
 
-class KoImageData;
-
-class PictureShape : public KoShape
-{
+class Plugin : public QObject {
+    Q_OBJECT
 public:
-    explicit PictureShape();
-    virtual ~PictureShape();
-
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-
-private:
-    KoImageData *m_imageData;
+    Plugin( QObject * parent,  const QStringList & );
 };
-
 
 #endif

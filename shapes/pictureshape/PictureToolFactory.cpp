@@ -24,14 +24,14 @@
 #include "PictureToolFactory.h"
 
 
-PictureToolFactory::PictureToolFactory( QObject* parent, const QStringList& )
+PictureToolFactory::PictureToolFactory( QObject* parent)
     : KoToolFactory( parent, "PictureToolFactoryId", i18n( "Picture Tool" ) )
 {
     setToolTip( i18n( "Picture editing tool" ) );
     setIcon( "pictureshape" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
-    setActivationShapeId( PictureShapeId );
+    setActivationShapeId( PICTURESHAPEID );
 }
 
 PictureToolFactory::~PictureToolFactory()

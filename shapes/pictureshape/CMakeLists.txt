@@ -3,11 +3,12 @@ include_directories( ${KOFFICEUI_INCLUDES} )
 ########### Flake Plugin library ###############
 
 SET (pictureshape_LIB_SRCS
-	PictureShape.cpp
-	PictureShapeFactory.cpp
-	PictureTool.cpp
-	PictureToolFactory.cpp
-	)
+    PictureShape.cpp
+    PictureShapeFactory.cpp
+    PictureTool.cpp
+    PictureToolFactory.cpp
+    Plugin.cpp
+)
 
 kde4_automoc(${pictureshape_LIB_SRCS})
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})

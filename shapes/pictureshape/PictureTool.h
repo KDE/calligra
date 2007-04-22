@@ -21,32 +21,37 @@
 
 #include <KoTool.h>
 
+class PictureShape;
+
 class PictureTool : public KoTool
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  explicit PictureTool( KoCanvasBase* canvas );
-  ~PictureTool();
+    explicit PictureTool( KoCanvasBase* canvas );
 
-  virtual void paint( QPainter& painter, KoViewConverter& converter );
+    /// reimplemented from KoTool
+    virtual void paint( QPainter& , KoViewConverter& ) {}
+    /// reimplemented from KoTool
+    virtual void mousePressEvent( KoPointerEvent* ) {}
+    /// reimplemented from KoTool
+    virtual void mouseMoveEvent( KoPointerEvent* ) {}
+    /// reimplemented from KoTool
+    virtual void mouseReleaseEvent( KoPointerEvent* ) {}
 
-  virtual void mousePressEvent( KoPointerEvent* event ) ;
-  virtual void mouseMoveEvent( KoPointerEvent* event );
-  virtual void mouseReleaseEvent( KoPointerEvent* event );
-
-  void activate (bool temporary=false);
-  void deactivate();
+    /// reimplemented from KoTool
+    virtual void activate (bool temporary=false);
+    /// reimplemented from KoTool
+    virtual void deactivate();
 
 protected:
-  /*
-   * Create default option widget
-   */
+    /// reimplemented from KoTool
     virtual QWidget * createOptionWidget();
 
-protected slots:
+private slots:
     void slotChangeUrl();
+
 private:
-   PictureShape *m_pictureshape;
+    PictureShape *m_pictureshape;
 };
 
 #endif 

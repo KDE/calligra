@@ -16,27 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOIMAGECOLLECTION_H
+#define KOIMAGECOLLECTION_H
 
-#ifndef PICTURESHAPE_H
-#define PICTURESHAPE_H
-
-#include <KoShape.h>
-
-#define PICTURESHAPEID "PictureShape"
+#include "kofficeui_export.h"
 
 class KoImageData;
+class KoStore;
 
-class PictureShape : public KoShape
-{
+class KOFFICEUI_EXPORT KoImageCollection {
 public:
-    explicit PictureShape();
-    virtual ~PictureShape();
+    KoImageCollection();
+    ~KoImageCollection();
 
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    bool loadFromStore(KoStore *store);
+
+protected:
+    friend class KoImageData;
+    void addImage(KoImageData *image);
+    void removeImage(KoImageData *image);
+
 
 private:
-    KoImageData *m_imageData;
+    class Private;
+    Private * const d;
 };
-
 
 #endif

@@ -22,6 +22,7 @@
 #include "KWPageSettings.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
+#include "frames/KWImageFrame.h"
 
 // koffice
 #include <KoShapeRegistry.h>
@@ -280,7 +281,7 @@ bool KWDLoader::load(QDomElement &root) {
     if( !bookmark.isNull() )
     {
         QDomElement bookmarkitem = root.namedItem("BOOKMARKS").toElement();
-        bookmarkitem = bookmarkitem.firstChild().toElement();
+        bookmarkitem = bookmarkitem.firstChildElement();
 
         while ( !bookmarkitem.isNull() )
         {
@@ -305,7 +306,7 @@ bool KWDLoader::load(QDomElement &root) {
     if( !spellCheckIgnore.isNull() )
     {
         QDomElement spellWord=root.namedItem("SPELLCHECKIGNORELIST").toElement();
-        spellWord=spellWord.firstChild().toElement();
+        spellWord=spellWord.firstChildElement();
         while ( !spellWord.isNull() )
         {
             if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
@@ -315,6 +316,20 @@ bool KWDLoader::load(QDomElement &root) {
     }
     setSpellCheckIgnoreList( lst );
 #endif
+    QDomElement pixmaps = root.firstChildElement("PIXMAPS");
+    if(! pixmaps.isNull()) {
+        QDomNodeList children = pixmaps.childNodes();
+        for(int i=0; i < children.count(); i++) {
+            QDomElement key = children.at(i).toElement();
+            if(! key.isNull() && key.nodeName() != "KEY")
+                continue;
+            ImageKey ik;
+            fill(&ik, key);
+            m_images.append(ik);
+        }
+    }
+
+
     emit sigProgress(25);
 
 
@@ -346,7 +361,7 @@ void KWDLoader::loadFrameSets( const QDomElement &framesets ) {
     // <FRAMESET>
     // First prepare progress info
     m_nrItemsToLoad = 0; // total count of items (mostly paragraph and frames)
-    QDomElement framesetElem = framesets.firstChild().toElement();
+    QDomElement framesetElem = framesets.firstChildElement();
     // Workaround the slowness of QDom's elementsByTagName
     QList<QDomElement> frameSetsList;
     for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
@@ -459,13 +474,34 @@ KWFrameSet *KWDLoader::loadFrameSet( QDomElement framesetElem, bool loadFrames, 
     }
     case 2: // FT_PICTURE
     {
-/*
-        KWPictureFrameSet *fs = new KWPictureFrameSet( this, fsname );
-        fs->load( framesetElem, loadFrames );
-        addFrameSet(fs, false);
-        return fs; */
-        // TODO return image frameset
-        return 0;
+        QDomElement frame = framesetElem.firstChildElement("FRAME");
+        if(frame.isNull())
+            return 0;
+        QDomElement image = framesetElem.firstChildElement("IMAGE");
+        if(image.isNull())
+            return 0;
+        QDomElement key = image.firstChildElement("KEY");
+        if(key.isNull())
+            return 0;
+
+        ImageKey imageKey;
+        fill(&imageKey, key);
+        if(imageKey.filename.isEmpty()) {
+            kWarning() << "could not find image in the store\n";
+            return 0;
+        }
+
+        KWFrameSet *fs = new KWFrameSet();
+        fill(fs, framesetElem);
+        fs->setName(fsname);
+
+        KoImageData data(m_document->imageCollection());
+        data.setStoreHref(imageKey.filename);
+        KWImageFrame *imageFrame = new KWImageFrame(data, fs);
+        imageFrame->shape()->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
+        fill(imageFrame, frame);
+        m_document->addFrameSet(fs);
+        return fs;
     }
     case 4: { //FT_FORMULA
 #if 0
@@ -503,7 +539,7 @@ void KWDLoader::fill(KWFrameSet *fs, QDomElement framesetElem) {
 void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
     fill(static_cast<KWFrameSet*>(fs), framesetElem);
     // <FRAME>
-    QDomElement frameElem = framesetElem.firstChild().toElement();
+    QDomElement frameElem = framesetElem.firstChildElement();
     for ( ; !frameElem.isNull() ; frameElem = frameElem.nextSibling().toElement() )
     {
         if ( frameElem.tagName() == "FRAME" )
@@ -531,7 +567,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
     QTextCursor cursor(fs->document());
     // <PARAGRAPH>
     bool firstParag = true;
-    QDomElement paragraph = framesetElem.firstChild().toElement();
+    QDomElement paragraph = framesetElem.firstChildElement();
     for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
         if ( paragraph.tagName() == "PARAGRAPH" ) {
@@ -975,6 +1011,31 @@ void KWDLoader::fill(KWFrame *frame, QDomElement frameElem) {
         margins.bottom = frameElem.attribute("bbottompt", "0.0").toDouble();
 
         textShapeData->setShapeMargins(margins);
+    }
+}
+
+void KWDLoader::fill(ImageKey *key, QDomElement keyElement) {
+    key->year = keyElement.attribute("year");
+    key->month = keyElement.attribute("month");
+    key->day = keyElement.attribute("day");
+    key->hour = keyElement.attribute("hour");
+    key->minute = keyElement.attribute("minute");
+    key->second = keyElement.attribute("second");
+    key->milisecond = keyElement.attribute("msec");
+    key->oldFilename = keyElement.attribute("filename");
+    key->filename = keyElement.attribute("name");
+
+    if(key->filename.isEmpty()) {
+        foreach(ImageKey storedKey, m_images) {
+            if(storedKey.year == key->year && storedKey.oldFilename == key->oldFilename &&
+                    storedKey.month == key->month && storedKey.day == key->day &&
+                    storedKey.hour == key->hour && storedKey.minute == key->minute &&
+                    storedKey.second == key->second && storedKey.year == key->year &&
+                    storedKey.milisecond == key->milisecond) {
+                key->filename = storedKey.filename;
+                return;
+            }
+        }
     }
 }
 

@@ -16,27 +16,32 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KWIMAGEFRAME_H
+#define KWIMAGEFRAME_H
 
-#ifndef PICTURESHAPE_H
-#define PICTURESHAPE_H
+#include "KWFrame.h"
 
-#include <KoShape.h>
+#include <KoImageData.h>
 
-#define PICTURESHAPEID "PictureShape"
-
-class KoImageData;
-
-class PictureShape : public KoShape
-{
+class KWORD_EXPORT KWImageFrame : public KWFrame {
 public:
-    explicit PictureShape();
-    virtual ~PictureShape();
+    enum ImageQuality {
+        LowQuality,
+        MediumQuality,
+        HighQuality,
+        EditableQuality
+    };
 
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    KWImageFrame(const KoImageData &imageData, KWFrameSet *parent);
+    ~KWImageFrame();
+
+    void setImageQuality(ImageQuality quality);
+    ImageQuality imageQuality() const;
 
 private:
-    KoImageData *m_imageData;
+    KoImageData m_imageData;
+    bool m_fullKritaShape;
 };
 
-
 #endif
+

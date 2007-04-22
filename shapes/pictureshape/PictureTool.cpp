@@ -16,23 +16,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QPainter>
-#include <QGridLayout>
-#include <QToolButton>
+#include "PictureTool.h"
+#include "PictureShape.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <KFileDialog>
-
+//   #include <QPainter>
+//   #include <QGridLayout>
+//   #include <QToolButton>
+//
+//   #include <kdebug.h>
+//   #include <klocale.h>
+//   #include <kiconloader.h>
+//   #include <KFileDialog>
+//
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-
-#include "PictureShape.h"
-
-#include "PictureTool.h"
-#include "PictureTool.moc"
 
 PictureTool::PictureTool( KoCanvasBase* canvas )
     : KoTool( canvas ),
@@ -40,14 +38,9 @@ PictureTool::PictureTool( KoCanvasBase* canvas )
 {
 }
 
-PictureTool::~PictureTool()
-{
-}
-
 void PictureTool::activate (bool temporary)
 {
     Q_UNUSED( temporary );
-    kDebug() << k_funcinfo << endl;
 
     KoSelection* selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
@@ -66,29 +59,12 @@ void PictureTool::activate (bool temporary)
 
 void PictureTool::deactivate()
 {
-  kDebug()<<"PictureTool::deactivate\n";
   m_pictureshape = 0;
 }
 
-void PictureTool::paint( QPainter& painter, KoViewConverter& viewConverter )
-{
-}
-
-void PictureTool::mousePressEvent( KoPointerEvent* )
-{
-}
-
-void PictureTool::mouseMoveEvent( KoPointerEvent* )
-{
-}
-
-void PictureTool::mouseReleaseEvent( KoPointerEvent* )
-{
-}
-
-
 QWidget * PictureTool::createOptionWidget()
 {
+/*
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout( optionWidget );
 
@@ -101,14 +77,18 @@ QWidget * PictureTool::createOptionWidget()
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotChangeUrl() ) );
 
     return optionWidget;
-
+*/
+    return 0;
 }
 
 void PictureTool::slotChangeUrl()
 {
+/*
   kDebug()<<" PictureTool::slotChangeUrl \n";
   KUrl url = KFileDialog::getOpenUrl();
   if(!url.isEmpty() && m_pictureshape)
     m_pictureshape->setCurrentUrl(url);
+*/
 }
 
+#include "PictureTool.moc"

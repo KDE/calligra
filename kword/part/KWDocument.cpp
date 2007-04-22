@@ -567,7 +567,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     emit sigProgress(-1);
 
-    kDebug(32001) << "KWDocument::loadXML done" << endl;
+    kDebug(32001) << "KWDocument::endOfLoading done" << endl;
 
 #if 0
     // Connect to notifications from main text-frameset
@@ -584,6 +584,13 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     firePageSetupChanged();
     setModified(false);
 }
+
+bool KWDocument::completeLoading (KoStore *store) {
+    if(! m_imageCollection.loadFromStore(store))
+        return false;
+    return true;
+}
+
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
 //kDebug(32002) << "KWDocument::requestMoreSpace\n";

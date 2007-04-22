@@ -26,6 +26,7 @@
 #include "frames/KWFrameLayout.h"
 
 #include <KoDocument.h>
+#include <KoImageCollection.h>
 #include <KoShapeControllerBase.h>
 #include <KoZoomMode.h>
 #include <KoInlineTextObjectManager.h>
@@ -68,13 +69,13 @@ public:
 
     // KoDocument interface
     /// reimplemented from KoDocument
-    void paintContent(QPainter&, const QRect&);
+    virtual void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument
-    bool loadXML(QIODevice*, const QDomDocument&);
+    virtual bool loadXML(QIODevice*, const QDomDocument&);
     /// reimplemented from KoDocument
-    bool loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*);
+    virtual bool loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*);
     /// reimplemented from KoDocument
-    bool saveOasis(KoStore*, KoXmlWriter*);
+    virtual bool saveOasis(KoStore*, KoXmlWriter*);
     /// reimplemented from KoDocument
     KoView* createViewInstance(QWidget*);
 
@@ -96,6 +97,9 @@ public:
      * Set new pageSettings for this document, triggering a layout change.
      */
     void setPageSettings(const KWPageSettings &newPageSettings);
+
+    KoImageCollection *imageCollection() { return &m_imageCollection; }
+    const KoImageCollection *imageCollection() const { return &m_imageCollection; }
 
     /**
      * Insert a new page after another,
@@ -239,6 +243,10 @@ private slots:
     /// Called after the constructor figures out there is an install problem.
     void showErrorAndDie();
 
+protected:
+    /// reimplemented from KoDocument
+    virtual bool completeLoading (KoStore *store);
+
 private:
     friend class PageProcessingQueue;
     friend class KWDLoader;
@@ -275,6 +283,7 @@ private:
     KWFrameLayout m_frameLayout;
 
     KoStyleManager *m_styleManager;
+    KoImageCollection m_imageCollection;
 
     KoInlineTextObjectManager *m_inlineTextObjectManager;
 };

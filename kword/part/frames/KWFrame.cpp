@@ -90,3 +90,7 @@ void KWFrame::saveOdf(KoShapeSavingContext *context) {
     shape()->saveOdf(context);
     writer.endElement();
 }
+
+void KWFrame::setShape(KoShape *shape) {
+    m_shape = shape;
+}
