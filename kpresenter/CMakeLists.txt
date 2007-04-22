@@ -19,7 +19,7 @@ add_subdirectory( part )
 #include_directories( ${X11_dpms_INCLUDE_PATH} )
 #
 #add_subdirectory( autoforms )
-#add_subdirectory( pics )
+add_subdirectory( pics )
 #add_subdirectory( templates )
 #add_subdirectory( dtd )
 #add_subdirectory( slideshow )

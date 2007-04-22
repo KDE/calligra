@@ -13,7 +13,7 @@ add_subdirectory( core )
 add_subdirectory( widget )
 add_subdirectory( formeditor )
 add_subdirectory( data )
-#add_subdirectory( pics )
+add_subdirectory( pics )
 
 add_subdirectory( main )
 # The main2 directory contains some new mainwindow-code based on KoDocument+KoView
