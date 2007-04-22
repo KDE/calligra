@@ -297,7 +297,7 @@ QString KoEnhancedPathCommand::toString() const
     QString cmd = m_command;
 
     foreach( KoEnhancedPathParameter * p, m_parameters )
-        cmd += p->toString() + " ";
+        cmd += p->toString() + ' ';
 
     return cmd.trimmed();
 }

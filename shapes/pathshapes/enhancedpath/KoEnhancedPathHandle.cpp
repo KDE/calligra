@@ -127,10 +127,10 @@ bool KoEnhancedPathHandle::isPolar() const
 void KoEnhancedPathHandle::saveOdf( KoShapeSavingContext * context )
 {
     context->xmlWriter().startElement("draw:handle");
-    context->xmlWriter().addAttribute("draw:handle-position", m_positionX->toString() + " " + m_positionY->toString() );
+    context->xmlWriter().addAttribute("draw:handle-position", m_positionX->toString() + ' ' + m_positionY->toString() );
     if( isPolar() )
     {
-        context->xmlWriter().addAttribute("draw:handle-polar", m_polarX->toString() + " " + m_polarY->toString() );
+        context->xmlWriter().addAttribute("draw:handle-polar", m_polarX->toString() + ' ' + m_polarY->toString() );
         if( m_minRadius )
             context->xmlWriter().addAttribute("draw:handle-radius-range-minimum", m_minRadius->toString() );
         if( m_maxRadius )

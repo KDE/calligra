@@ -324,12 +324,12 @@ void KoEnhancedPathShape::saveOdf( KoShapeSavingContext * context )
 
     QString modifiers;
     foreach( double modifier, m_modifiers )
-        modifiers += QString::number( modifier ) + " ";
+        modifiers += QString::number( modifier ) + ' ';
     context->xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed() );
 
     QString path;
     foreach( KoEnhancedPathCommand * c, m_commands )
-        path += c->toString() + " ";
+        path += c->toString() + ' ';
     context->xmlWriter().addAttribute("draw:enhanced-path", path.trimmed() );
 
     FormulaStore::const_iterator i = m_formulae.constBegin();
