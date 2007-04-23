@@ -99,6 +99,11 @@ SET (functions_DIR_SRCS
 	functions/trig.cpp
 	)
 
+SET (ui_DIR_SRCS
+	ui/DefaultTool.cpp
+	ui/DefaultToolFactory.cpp
+	)
+
 SET (kspreadcommon_LIB_SRCS
 	AutoFill.cpp
 	Border.cpp
@@ -155,6 +160,7 @@ SET (kspreadcommon_LIB_SRCS
 	${commands_DIR_SRCS}
 	${dialogs_DIR_SRCS}
 	${functions_DIR_SRCS}
+	${ui_DIR_SRCS}
 	)
 
 kde4_automoc(${kspreadcommon_LIB_SRCS})

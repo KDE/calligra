@@ -93,6 +93,7 @@ class KSPREAD_EXPORT Canvas : public QWidget, public KoCanvasBase
     friend class HBorder;
     friend class VBorder;
     friend class View;
+    friend class DefaultTool;
 
     Q_OBJECT
 

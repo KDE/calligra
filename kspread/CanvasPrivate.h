@@ -74,26 +74,7 @@ public:
 
     // True when the mouse button is pressed
     bool mousePressed;
-
-    // If the user is dragging around with the mouse then this tells us what he is doing.
-    // The user may want to mark cells or he started in the lower right corner
-    // of the marker which is something special. The values for the 2 above
-    // methods are called 'Mark' and 'ResizeCell' or 'AutoFill' depending
-    // on the mouse button used. By default this variable holds
-    // the value 'NoAction'.
-    Canvas::MouseActions mouseAction;
-
-    // If we use the lower right corner of the marker to start autofilling, then this
-    // rectangle conatins all cells that were already marker when the user started
-    // to mark the rectangle which he wants to become autofilled.
-    QRect autoFillSource;
-
-    // Start coordinates for drag and drop
-    QPoint dragStart;
     bool dragging;
-
-    // If the mouse is over some anchor ( in the sense of HTML anchors )
-    QString anchor;
 
     bool mouseSelectedObject;
     bool drawContour;

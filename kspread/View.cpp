@@ -99,6 +99,7 @@
 #include <KoTabBar.h>
 #include <KoToolBox.h>
 #include <KoToolManager.h>
+#include <KoToolRegistry.h>
 #include <Toolbox.h>
 #include <KoTemplateCreateDia.h>
 #include <KoZoomAction.h>
@@ -176,6 +177,8 @@
 #include "dialogs/SubtotalDialog.h"
 #include "dialogs/ValidityDialog.h"
 #include "dialogs/FindDialog.h"
+
+#include "ui/DefaultToolFactory.h"
 
 #include "PropertyEditor.h"
 #include "GeneralProperty.h"
@@ -1878,10 +1881,12 @@ void View::initView()
     d->canvas = new Canvas( this );
     d->canvasController = new KoCanvasController( this );
     d->canvasController->setCanvas( d->canvas );
+    KoToolRegistry::instance()->add( new DefaultToolFactory( this ) );
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
     KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
     createDockWidget( &toolBoxFactory );
+    KoToolManager::instance()->switchToolRequested( KSPREAD_DEFAULT_TOOL_ID );
     d->zoomHandler = new KoZoomHandler();
 
     // The line-editor that appears above the sheet and allows to
