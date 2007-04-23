@@ -135,14 +135,18 @@ bool pqxxSqlDriver::isSystemDatabaseName( const QString& n ) const
 //
 QString pqxxSqlDriver::escapeString( const QString& str) const
 {
-    return QString(pqxx::Quote(str.toAscii().constData()).c_str());
+    return QString::fromLatin1("'")
+    	+ QString::fromAscii( pqxx::sqlesc(std::string(str.toAscii().constData())).c_str() )
+    	+ QString::fromLatin1("'");
 }
 
 //==================================================================================
 //
 Q3CString pqxxSqlDriver::escapeString( const Q3CString& str) const
 {
-    return Q3CString(pqxx::Quote(str.constData()).c_str());
+    return Q3CString("'")
+    	+ Q3CString( pqxx::sqlesc(QString(str).toAscii()).c_str() )
+    	+ Q3CString("'");
 }
 
 //==================================================================================

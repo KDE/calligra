@@ -31,7 +31,7 @@
 #define PQXXSQLCONNECTIONINTERNAL_H
 
 #include <kexidb/connection_p.h>
-#include <pqxx/all.h>
+#include <pqxx/pqxx>
 
 /**
 	@author Adam Pigg <adam@piggz.co.uk>
