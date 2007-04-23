@@ -113,9 +113,8 @@ void KWView::setupActions() {
     m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
     m_zoomHandler.setZoomMode( m_document->zoomMode() );
     m_zoomHandler.setZoom( m_document->zoom() );
-    updateZoomControls();
-    connect( m_actionViewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, int ) ),
-            this, SLOT( viewZoom( KoZoomMode::Mode, int ) ) );
+    connect( m_actionViewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
+            this, SLOT( viewZoom( KoZoomMode::Mode, double ) ) );
 
     m_actionFormatFrameSet  = new KAction(i18n("Frame/Frameset Properties"), this);
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet );
@@ -859,14 +858,14 @@ void KWView::setZoom( int zoom ) {
     m_gui->updateRulers();
 }
 
-void KWView::viewZoom( KoZoomMode::Mode mode, int zoom )
+void KWView::viewZoom( KoZoomMode::Mode mode, double zoom )
 {
     //kDebug(32003) << " viewZoom '" << KoZoomMode::toString( mode ) << ", " << zoom << "'" << endl;
 
     if ( !m_currentPage )
         return;
 
-    int newZoom = zoom;
+    int newZoom = zoom*100;
 
     if ( mode == KoZoomMode::ZOOM_WIDTH ) {
         m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_WIDTH);
@@ -894,7 +893,6 @@ void KWView::viewZoom( KoZoomMode::Mode mode, int zoom )
         return;
 
     setZoom( newZoom );
-    updateZoomControls();
     canvas()->setFocus();
 }
 
@@ -907,24 +905,8 @@ void KWView::changeZoomMenu() {
     m_actionViewZoom->setZoomModes( modes );
 }
 
-void KWView::updateZoomControls()
-{
-    switch(m_zoomHandler.zoomMode())
-    {
-        case KoZoomMode::ZOOM_WIDTH:
-        case KoZoomMode::ZOOM_PAGE:
-            m_actionViewZoom->setZoom( KoZoomMode::toString( m_zoomHandler.zoomMode() ) );
-            break;
-        case KoZoomMode::ZOOM_CONSTANT:
-            m_actionViewZoom->setZoom( m_zoomHandler.zoomInPercent() );
-            break;
-        case KoZoomMode::ZOOM_PIXELS:
-            kWarning(32003) << "Illegal zoommode!\n";
-    }
-}
-
 void KWView::updateZoom( ) {
-    viewZoom( m_zoomHandler.zoomMode(), m_zoomHandler.zoomInPercent() );
+    viewZoom( m_zoomHandler.zoomMode(), m_zoomHandler.zoomInPercent()/100.0 );
 }
 
 void KWView::resizeEvent( QResizeEvent *e )

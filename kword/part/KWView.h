@@ -100,7 +100,7 @@ private:
     void updateZoomControls();
 
 private slots:
-    void viewZoom( KoZoomMode::Mode mode, int zoom );
+    void viewZoom( KoZoomMode::Mode mode, double zoom );
     void updateZoom();
     void editFrameProperties();
 
