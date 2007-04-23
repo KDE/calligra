@@ -128,6 +128,7 @@ DefaultTool::~DefaultTool()
 
 void DefaultTool::paint( QPainter& painter, KoViewConverter& viewConverter )
 {
+    KoShape::applyConversion( painter, viewConverter );
     const QRectF paintRect = viewConverter.viewToDocument( d->canvas->rect() );
 
     /* paint the selection */

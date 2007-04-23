@@ -873,6 +873,7 @@ void Canvas::paintEvent( QPaintEvent* event )
 //     painter.save();
     clipoutChildren( painter );
 
+    painter.save();
     painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
     painter.scale( d->view->zoomHandler()->zoomedResolutionX(), d->view->zoomHandler()->zoomedResolutionY() );
 
@@ -889,6 +890,7 @@ void Canvas::paintEvent( QPaintEvent* event )
     view()->sheetView( sheet )->paintCells( this, painter, paintRect, topLeft );
 
     // flake
+    painter.restore();
     d->shapeManager->paint( painter, *viewConverter(), false );
     d->toolProxy->paint( painter, *viewConverter() );
 
