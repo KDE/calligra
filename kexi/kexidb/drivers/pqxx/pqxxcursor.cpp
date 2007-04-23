@@ -99,7 +99,7 @@ bool pqxxSqlCursor::drv_open()
 			m_implicityStarted = true;
 		}
 
-		m_res = new pqxx::result(((pqxxSqlConnection*)connection())->m_trans->data->exec(m_sql.utf8()));
+		m_res = new pqxx::result(((pqxxSqlConnection*)connection())->m_trans->data->exec(std::string(m_sql.utf8())));
 		((pqxxSqlConnection*)connection())
 			->drv_commitTransaction(((pqxxSqlConnection*)connection())->m_trans);
 //		my_conn->m_trans->commit();

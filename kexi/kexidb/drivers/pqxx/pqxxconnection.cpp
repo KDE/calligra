@@ -277,7 +277,7 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 		//		m_trans = new pqxx::nontransaction(*m_pqxxsql);
 //		KexiDBDrvDbg << "About to execute" << endl;
 		//Create a result object through the transaction
-		d->res = new pqxx::result(m_trans->data->exec(statement.utf8()));
+		d->res = new pqxx::result(m_trans->data->exec(std::string(statement.utf8())));
 //		KexiDBDrvDbg << "Executed" << endl;
 		//Commit the transaction
 		if (implicityStarted) {

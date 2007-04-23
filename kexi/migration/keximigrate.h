@@ -179,8 +179,11 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		  (so e.g. keximdb driver does not need this). */
 //! @todo SQL-dependent!
 		virtual tristate drv_queryStringListFromSQL(
-			const QString& sqlStatement, uint columnNumber, QStringList& stringList, int numRecords = -1)
-		 { return cancelled; }
+			const QString& sqlStatement, uint columnNumber, QStringList& stringList, 
+			int numRecords = -1)
+		 { Q_UNUSED(sqlStatement); Q_UNUSED(columnNumber); Q_UNUSED(stringList);
+		   Q_UNUSED(numRecords); 
+		   return cancelled; }
 
 		/*! Fetches single string at column \a columnNumber from result obtained 
 		 by running \a sqlStatement.
@@ -201,7 +204,8 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 //! @todo SQL-dependent!
 		virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
 			KexiDB::RowData& data, bool &firstRecord)
-		 { return cancelled; }
+		 { Q_UNUSED(sqlStatement); Q_UNUSED(data); Q_UNUSED(firstRecord);
+		   return cancelled; }
 
 		//! Copy a table from source DB to target DB (driver specific)
 		//! - create copies of KexiDB tables

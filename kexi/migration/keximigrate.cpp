@@ -185,7 +185,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 		}
 	}
 
-	uint i=0;
+//	uint i=0;
 	// -- read table schemas and create them in memory (only for non-KexiDB-compat tables)
 	foreach (QStringList::ConstIterator, it, tables) {
 		if (destDriver->isSystemObjectName( *it ) //"kexi__objects", etc.

@@ -133,14 +133,14 @@ bool pqxxSqlDriver::isSystemDatabaseName( const QString& n ) const
 //
 QString pqxxSqlDriver::escapeString( const QString& str) const
 {
-    return QString(pqxx::Quote(str.ascii()).c_str());
+    return QString(pqxx::sqlesc(str.ascii()).c_str());
 }
 
 //==================================================================================
 //
 QCString pqxxSqlDriver::escapeString( const QCString& str) const
 {
-    return QCString(pqxx::Quote(QString(str).ascii()).c_str());
+    return QCString(pqxx::sqlesc(QString(str).ascii()).c_str());
 }
 
 //==================================================================================
