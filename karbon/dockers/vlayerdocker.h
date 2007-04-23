@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +27,6 @@ class KarbonView;
 class VDocument;
 class KoDocumentSectionView;
 class KoCanvasBase;
-class KoShapeManager;
 class KoShapeControllerBase;
 class KoShape;
 class KoShapeContainer;
@@ -76,7 +75,7 @@ private:
 class VDocumentModel : public KoDocumentSectionModel
 {
 public:
-    VDocumentModel( VDocument *document, KoShapeManager *shapeManager );
+    VDocumentModel( VDocument *document );
     void update();
     // from QAbstractItemModel
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -95,7 +94,6 @@ private:
     KoShape * childFromIndex( KoShapeContainer *parent, int row ) const;
     int indexFromChild( KoShapeContainer *parent, KoShape *child ) const;
     VDocument *m_document;
-    KoShapeManager *m_shapeManager;
     KoShape *m_shape;
     mutable QList<KoShape*> m_childs;
     mutable KoShapeContainer *m_lastContainer;

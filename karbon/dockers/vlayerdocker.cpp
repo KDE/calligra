@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -123,9 +123,7 @@ VLayerDocker::VLayerDocker( KoShapeControllerBase *shapeController, VDocument *d
 
     connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-
-    m_model = new VDocumentModel( m_document, canvasController->canvas()->shapeManager() );
+    m_model = new VDocumentModel( m_document );
     m_layerView->setItemsExpandable( true );
     m_layerView->setModel( m_model );
     m_layerView->setDisplayMode( KoDocumentSectionView::MinimalMode );
@@ -345,9 +343,8 @@ void VLayerDocker::extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers,
     }
 }
 
-VDocumentModel::VDocumentModel( VDocument *document, KoShapeManager *shapeManager )
+VDocumentModel::VDocumentModel( VDocument *document )
 : m_document( document )
-, m_shapeManager( shapeManager )
 , m_lastContainer( 0 )
 {
 }
@@ -466,13 +463,16 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
         case Qt::SizeHintRole: return shape->size();
         case ActiveRole:
         {
-            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-            if( ! m_shapeManager )
+            KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
+            KoSelection * selection = canvasController->canvas()->shapeManager()->selection();
+            if( ! selection )
                 return false;
+
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
             if( layer )
-                return (layer == m_shapeManager->selection()->activeLayer() );
+                return (layer == selection->activeLayer() );
             else
-                return m_shapeManager->selection()->isSelected( shape );
+                return selection->isSelected( shape );
         }
         case PropertiesRole: return QVariant::fromValue( properties( shape ) );
         case AspectRatioRole:
@@ -531,9 +531,12 @@ bool VDocumentModel::setData(const QModelIndex &index, const QVariant &value, in
         case ActiveRole:
             if (value.toBool())
             {
+                KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
+                KoSelection * selection = canvasController->canvas()->shapeManager()->selection();
+
                 KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-                if( layer )
-                    m_shapeManager->selection()->setActiveLayer( layer );
+                if( layer && selection )
+                    selection->setActiveLayer( layer );
             }
             break;
         default:
