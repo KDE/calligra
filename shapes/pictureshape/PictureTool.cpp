@@ -3,7 +3,8 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,15 +20,6 @@
 #include "PictureTool.h"
 #include "PictureShape.h"
 
-//   #include <QPainter>
-//   #include <QGridLayout>
-//   #include <QToolButton>
-//
-//   #include <kdebug.h>
-//   #include <klocale.h>
-//   #include <kiconloader.h>
-//   #include <KFileDialog>
-//
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
