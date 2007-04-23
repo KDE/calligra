@@ -290,6 +290,12 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 		//If all went well then return true, errors picked up by the catch block
 		ok = true;
 	}
+	catch(const pqxx::sql_error& sqlerr) {
+			KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL: sql_error exception - " << sqlerr.query().c_str() << endl;
+  }
+	catch (const pqxx::broken_connection& bcerr) {
+			KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL: broken_connection exception" << endl;
+  }
 	catch (const std::exception &e)
 	{
 		//If an error ocurred then put the error description into _dbError
