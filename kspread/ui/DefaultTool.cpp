@@ -149,23 +149,16 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
 
     // Get info about where the event occurred - this is duplicated
     // in ::mouseMoveEvent, needs to be separated into one function
-    double dwidth = d->canvas->view()->doc()->unzoomItX( d->canvas->width() );
-    double ev_PosX;
+    QPointF position = d->canvas->doc()->viewToDocument( event->pos() );
     if ( sheet->layoutDirection() == Qt::RightToLeft )
-    {
-        ev_PosX = dwidth - event->point.x() + d->canvas->xOffset();
-    }
-    else
-    {
-        ev_PosX = event->point.x() + d->canvas->xOffset();
-    }
-    double ev_PosY = event->point.y() + d->canvas->yOffset();
+        position.setX( d->canvas->doc()->viewToDocumentX( d->canvas->width() ) - position.x() );
+    position += QPointF( d->canvas->xOffset(), d->canvas->yOffset() );
 
     // In which cell did the user click ?
     double xpos;
     double ypos;
-    int col  = sheet->leftColumn( ev_PosX, xpos );
-    int row  = sheet->topRow( ev_PosY, ypos );
+    int col  = sheet->leftColumn( position.x(), xpos );
+    int row  = sheet->topRow( position.y(), ypos );
     // you cannot move marker when col > KS_colMax or row > KS_rowMax
     if ( col > KS_colMax || row > KS_rowMax )
     {
@@ -174,7 +167,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
         return;
     }
 
-    if (d->canvas->chooseMode() && d->canvas->highlightRangeSizeGripAt(ev_PosX,ev_PosY))
+    if (d->canvas->chooseMode() && d->canvas->highlightRangeSizeGripAt(position.x(),position.y()))
     {
         d->canvas->choice()->setActiveElement( QPoint( col, row ), d->canvas->editor() );
         d->mouseAction = Private::Resize;
@@ -191,7 +184,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
 //     d->scrollTimer->start( 50 );
 
     // Did we click in the lower right corner of the marker/marked-area ?
-    if ( d->canvas->selection()->selectionHandleArea().contains( QPointF( ev_PosX, ev_PosY ) ) )
+    if ( d->canvas->selection()->selectionHandleArea().contains( QPointF( position.x(), position.y() ) ) )
     {
         d->processClickSelectionHandle( event );
         return;
@@ -224,11 +217,11 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
 
         d->dragStart.setX( -1 );
 
-        if ( r1.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) )
-             && !r2.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) ) )
+        if ( r1.contains( QPoint( (int) position.x(), (int) position.y() ) )
+             && !r2.contains( QPoint( (int) position.x(), (int) position.y() ) ) )
         {
-            d->dragStart.setX( (int) ev_PosX );
-            d->dragStart.setY( (int) ev_PosY );
+            d->dragStart.setX( (int) position.x() );
+            d->dragStart.setY( (int) position.y() );
 
             return;
         }
@@ -395,19 +388,16 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
     if (!sheet)
         return;
 
-    double dwidth = d->canvas->view()->doc()->unzoomItX( d->canvas->width() );
-    double ev_PosX;
+    QPointF position = d->canvas->doc()->viewToDocument( event->pos() );
     if ( sheet->layoutDirection() == Qt::RightToLeft )
-        ev_PosX = dwidth - event->point.x() + d->canvas->xOffset();
-    else
-        ev_PosX = event->point.x() + d->canvas->xOffset();
-    double ev_PosY = event->point.y() + d->canvas->yOffset();
+        position.setX( d->canvas->doc()->viewToDocumentX( d->canvas->width() ) - position.x() );
+    position += QPointF( d->canvas->xOffset(), d->canvas->yOffset() );
 
     // In which cell did the user click ?
     double xpos;
     double ypos;
-    int col = sheet->leftColumn( ev_PosX, xpos );
-    int row  = sheet->topRow( ev_PosY, ypos );
+    int col = sheet->leftColumn( position.x(), xpos );
+    int row  = sheet->topRow( position.y(), ypos );
 
     // you cannot move marker when col > KS_colMax or row > KS_rowMax
     if ( col > KS_colMax || row > KS_rowMax )
@@ -427,7 +417,7 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
 
     //Check to see if the mouse is over a highlight range size grip and if it is, change the cursor
     //shape to a resize arrow
-    if (d->canvas->highlightRangeSizeGripAt(ev_PosX,ev_PosY))
+    if (d->canvas->highlightRangeSizeGripAt(position.x(),position.y()))
     {
         if ( sheet->layoutDirection() == Qt::RightToLeft )
             d->canvas->setCursor( Qt::SizeBDiagCursor );
@@ -463,12 +453,12 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
         if ( sheet->layoutDirection() == Qt::RightToLeft )
         {
             CellView cellView = d->canvas->view()->sheetView( sheet )->cellView( col, row );
-            anchor = cellView.testAnchor( cell, cell.width() - ev_PosX + xpos, ev_PosY - ypos );
+            anchor = cellView.testAnchor( cell, cell.width() - position.x() + xpos, position.y() - ypos );
         }
         else
         {
             CellView cellView = d->canvas->view()->sheetView( sheet )->cellView( col, row );
-            anchor = cellView.testAnchor( cell, ev_PosX - xpos, ev_PosY - ypos );
+            anchor = cellView.testAnchor( cell, position.x() - xpos, position.y() - ypos );
         }
         if ( !anchor.isEmpty() && anchor != d->anchor )
         {
@@ -480,12 +470,12 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
 
     // Test wether mouse is over the Selection.handle
     const QRectF selectionHandle = d->canvas->view()->selection()->selectionHandleArea();
-    if ( selectionHandle.contains( QPointF( ev_PosX, ev_PosY ) ) )
+    if ( selectionHandle.contains( QPointF( position.x(), position.y() ) ) )
     {
         //If the cursor is over the handle, than it might be already on the next cell.
         //Recalculate the cell position!
-        col  = sheet->leftColumn( ev_PosX - d->canvas->view()->doc()->unzoomItX( 2 ), xpos );
-        row  = sheet->topRow( ev_PosY - d->canvas->view()->doc()->unzoomItY( 2 ), ypos );
+        col  = sheet->leftColumn( position.x() - d->canvas->view()->doc()->unzoomItX( 2 ), xpos );
+        row  = sheet->topRow( position.y() - d->canvas->view()->doc()->unzoomItY( 2 ), ypos );
 
         if ( !sheet->isProtected() )
         {
@@ -500,8 +490,8 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
         if ( !sheet->isProtected() )
             d->canvas->setCursor( Qt::PointingHandCursor );
     }
-    else if ( r1.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) )
-              && !r2.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) ) )
+    else if ( r1.contains( QPoint( (int) position.x(), (int) position.y() ) )
+              && !r2.contains( QPoint( (int) position.x(), (int) position.y() ) ) )
     {
         d->canvas->setCursor( Qt::PointingHandCursor );
     }
