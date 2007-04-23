@@ -29,6 +29,7 @@
 #include <KoUnit.h>
 
 class KoGenStyles;
+class KoZoomHandler;
 
 namespace KSpread
 {
@@ -62,17 +63,17 @@ public:
     /**
      * @return the prinsheet width of the paper in zoomed points.
      */
-    float prinsheetWidthPts()const { return MM_TO_POINT( prinsheetWidth() / m_dZoom ); }
+    float prinsheetWidthPts() const;
 
     /**
      * @return the prinsheet height of the paper in millimeters.
      */
-    float prinsheetHeight()const { return m_paperHeight - m_topBorder - m_bottomBorder; }
+    float prinsheetHeight() const;
 
     /**
      * @return the prinsheet height of the paper in zoomed points.
      */
-    float prinsheetHeightPts()const { return MM_TO_POINT( prinsheetHeight() / m_dZoom ); }
+    float prinsheetHeightPts() const;
 
     /**
      * @return the height of the paper in millimeters.
@@ -81,7 +82,7 @@ public:
     /**
      * @return the height of the paper in zoomed points.
      */
-    float paperHeightPts()const { return MM_TO_POINT( m_paperHeight / m_dZoom ); }
+    float paperHeightPts() const;
     /**
      * @return the width of the paper in millimeters.
      */
@@ -89,7 +90,7 @@ public:
     /**
      * @return the width of the paper in zoomed points.
      */
-    float paperWidthPts()const { return MM_TO_POINT( m_paperWidth / m_dZoom ); }
+    float paperWidthPts() const;
 
     void setPaperHeight(float _val) { m_paperHeight=_val; }
     void setPaperWidth(float _val) { m_paperWidth=_val; }
@@ -101,7 +102,7 @@ public:
     /**
      * @return the left border in zoomed points
      */
-    float leftBorderPts()const { return MM_TO_POINT( m_leftBorder / m_dZoom ); }
+    float leftBorderPts() const;
     /**
      * @return the right border in millimeters
      */
@@ -109,7 +110,7 @@ public:
     /**
      * @return the right border in zoomed points
      */
-    float rightBorderPts()const { return MM_TO_POINT( m_rightBorder / m_dZoom ); }
+    float rightBorderPts() const;
     /**
      * @return the top border in millimeters
      */
@@ -117,7 +118,7 @@ public:
     /**
      * @return the top border in zoomed points
      */
-    float topBorderPts()const { return MM_TO_POINT( m_topBorder / m_dZoom ); }
+    float topBorderPts() const;
     /**
      * @return the bottom border in millimeters
      */
@@ -125,7 +126,7 @@ public:
     /**
      * @return the bottom border in zoomed points
      */
-    float bottomBorderPts()const { return MM_TO_POINT( m_bottomBorder / m_dZoom ); }
+    float bottomBorderPts() const;
 
     /**
      * @return the orientation of the paper.
@@ -423,7 +424,7 @@ public:
     /**
      * Returns the zoom level of the printout as double
      */
-    double zoom() const { return m_dZoom; }
+    double zoom() const;
 
     /**
      * Checks wether the page has content to print
@@ -657,7 +658,7 @@ private:
     /**
      * Zoom level of printout
      */
-    double m_dZoom;
+    KoZoomHandler* m_zoomHandler;
 
     /**
      * Limit of pages in X direction. 0 means no limit

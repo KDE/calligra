@@ -33,6 +33,7 @@
 #include "SheetPrint.h"
 
 #include <KoDocumentInfo.h>
+#include <KoZoomHandler.h>
 
 #include <kmessagebox.h>
 #include <kprinter.h>
@@ -87,7 +88,7 @@ SheetPrint::SheetPrint( Sheet* sheet )
     m_dPrintRepeatRowsHeight = 0.0;
     m_printRepeatColumns = qMakePair( 0, 0 );
     m_printRepeatRows = qMakePair( 0, 0 );
-    m_dZoom = 1.0;
+    m_zoomHandler = new KoZoomHandler();
     m_iPageLimitX = 0;
     m_iPageLimitY = 0;
 
@@ -96,6 +97,7 @@ SheetPrint::SheetPrint( Sheet* sheet )
 
 SheetPrint::~SheetPrint()
 {
+    delete m_zoomHandler;
     delete m_pSheetView;
 }
 
@@ -188,11 +190,11 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
 
     //Page empty, but maybe children on it?
 
-        QRect intView = QRect( QPoint( m_pDoc->zoomItXOld( m_pSheet->columnPosition( page_range.left() ) ),
-                                       m_pDoc->zoomItYOld( m_pSheet->rowPosition( page_range.top() ) ) ),
-                               QPoint( m_pDoc->zoomItXOld( m_pSheet->columnPosition( page_range.right() ) +
+        QRect intView = QRect( QPoint( m_zoomHandler->documentToViewX( m_pSheet->columnPosition( page_range.left() ) ),
+                                       m_zoomHandler->documentToViewY( m_pSheet->rowPosition( page_range.top() ) ) ),
+                               QPoint( m_zoomHandler->documentToViewX( m_pSheet->columnPosition( page_range.right() ) +
                                                         m_pSheet->columnFormat( page_range.right() )->width() ),
-                                       m_pDoc->zoomItYOld( m_pSheet->rowPosition( page_range.bottom() ) +
+                                       m_zoomHandler->documentToViewY( m_pSheet->rowPosition( page_range.bottom() ) +
                                                         m_pSheet->rowFormat( page_range.bottom() )->height() ) ) );
 
         Q3PtrListIterator<KoDocumentChild> it( m_pDoc->children() );
@@ -329,18 +331,18 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 
         for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pageNo )
         {
-            painter.setClipRect( 0, 0, m_pDoc->zoomItXOld( paperWidthPts() ),
-                                    m_pDoc->zoomItYOld( paperHeightPts() ) );
+            painter.setClipRect( 0, 0, m_zoomHandler->documentToViewX( paperWidthPts() ),
+                                    m_zoomHandler->documentToViewY( paperHeightPts() ) );
             printHeaderFooter( painter, pageNo );
 
-            painter.translate( m_pDoc->zoomItXOld( leftBorderPts() ),
-                            m_pDoc->zoomItYOld( topBorderPts() ) );
+            painter.translate( m_zoomHandler->documentToViewX( leftBorderPts() ),
+                            m_zoomHandler->documentToViewY( topBorderPts() ) );
 
             // Print the page
             printPage( painter, *it, *fit, *fito );
 
-            painter.translate( - m_pDoc->zoomItXOld( leftBorderPts() ),
-                            - m_pDoc->zoomItYOld( topBorderPts()  ) );
+            painter.translate( - m_zoomHandler->documentToViewX( leftBorderPts() ),
+                            - m_zoomHandler->documentToViewY( topBorderPts()  ) );
 
             if ( pageNo < (int)page_list.count() )
                 _printer->newPage();
@@ -362,6 +364,52 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
     return ( page_list.count() > 0 );
 }
 
+float SheetPrint::prinsheetWidthPts() const
+{
+    return MM_TO_POINT( prinsheetWidth() / (0.01*m_zoomHandler->zoomInPercent()) );
+}
+
+float SheetPrint::prinsheetHeight() const
+{
+    return m_paperHeight - m_topBorder - m_bottomBorder;
+}
+
+float SheetPrint::prinsheetHeightPts() const
+{
+    return MM_TO_POINT( prinsheetHeight() / (0.01*m_zoomHandler->zoomInPercent()) );
+}
+
+float SheetPrint::paperHeightPts() const
+{
+    return MM_TO_POINT( m_paperHeight / (0.01*m_zoomHandler->zoomInPercent()) );
+}
+
+float SheetPrint::paperWidthPts() const
+{
+    return MM_TO_POINT( m_paperWidth / (0.01*m_zoomHandler->zoomInPercent()) );
+}
+
+float SheetPrint::leftBorderPts() const
+{
+    return MM_TO_POINT( m_leftBorder / (0.01*m_zoomHandler->zoomInPercent()) );
+}
+
+float SheetPrint::rightBorderPts() const
+{
+    return MM_TO_POINT( m_rightBorder / (0.01*m_zoomHandler->zoomInPercent()) );
+}
+
+float SheetPrint::topBorderPts() const
+{
+    return MM_TO_POINT( m_topBorder / (0.01*m_zoomHandler->zoomInPercent()) );
+}
+
+float SheetPrint::bottomBorderPts() const
+{
+    return MM_TO_POINT( m_bottomBorder / (0.01*m_zoomHandler->zoomInPercent()) );
+}
+
+
 void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
                                    const QRectF& view, const QPointF _childOffset )
 {
@@ -370,10 +418,10 @@ void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
       << "  offsety: " << _childOffset.y() <<"  view-x: "<<view.x()<< endl;
 
     //Don't paint on the page borders
-    QRegion clipRegion( m_pDoc->zoomItXOld( leftBorderPts() ),
-                        m_pDoc->zoomItYOld( topBorderPts() ),
-                        m_pDoc->zoomItXOld( view.width() + _childOffset.x() ),
-                        m_pDoc->zoomItYOld( view.height() + _childOffset.y() ) );
+    QRegion clipRegion( m_zoomHandler->documentToViewX( leftBorderPts() ),
+                        m_zoomHandler->documentToViewY( topBorderPts() ),
+                        m_zoomHandler->documentToViewX( view.width() + _childOffset.x() ),
+                        m_zoomHandler->documentToViewY( view.height() + _childOffset.y() ) );
     _painter.setClipRegion( clipRegion );
 
     //
@@ -508,7 +556,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     //
     // Draw the children
     //
-    QRect zoomedView = m_pDoc->zoomRectOld( view );
+    QRect zoomedView = m_zoomHandler->documentToView( view ).toRect();
     //QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     //QPtrListIterator<EmbeddedObject> itObject( m_pDoc->embeddedObjects() );
 
@@ -542,8 +590,8 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     {
             painter.save();
 
-            painter.translate( -zoomedView.left() + m_pDoc->zoomItXOld( topLeft.x() ),
-                                -zoomedView.top() + m_pDoc->zoomItYOld( topLeft.y() ) );
+            painter.translate( -zoomedView.left() + m_zoomHandler->documentToViewX( topLeft.x() ),
+                                -zoomedView.top() + m_zoomHandler->documentToViewY( topLeft.y() ) );
 
             //obj->draw( &painter );
             painter.drawPixmap( m_pDoc->zoomRectOld( obj->geometry() ).topLeft(), *(*itObject)->p ); //draw the cached object
@@ -555,10 +603,10 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 #endif // KSPREAD_KOPART_EMBEDDING
 
     //Don't let obscuring cells and children overpaint this area
-    clipRegion -= QRegion ( m_pDoc->zoomItXOld( leftBorderPts() + topLeft.x() ),
-                            m_pDoc->zoomItYOld( topBorderPts() + topLeft.y() ),
-                            m_pDoc->zoomItXOld( xpos ),
-                            m_pDoc->zoomItYOld( ypos ) );
+    clipRegion -= QRegion ( m_zoomHandler->documentToViewX( leftBorderPts() + topLeft.x() ),
+                            m_zoomHandler->documentToViewY( topBorderPts() + topLeft.y() ),
+                            m_zoomHandler->documentToViewX( xpos ),
+                            m_zoomHandler->documentToViewY( ypos ) );
     painter.setClipRegion( clipRegion );
 }
 
@@ -566,56 +614,55 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 void SheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
 {
     double w;
-    double headFootDistance = MM_TO_POINT( 10.0 /*mm*/ ) / m_dZoom;
+    double headFootDistance = MM_TO_POINT( 10.0 /*mm*/ ) / (0.01*m_zoomHandler->zoomInPercent());
     QFont font( "Times" );
-    font.setPointSizeF( 0.01 * m_pDoc->zoomInPercent() *
-                            /* Font size of 10 */ 10.0 / m_dZoom );
+    font.setPointSizeF( 0.01 * m_zoomHandler->zoomInPercent() * /* Font size of 10 */ 10.0 );
     painter.setFont( font );
     QFontMetrics fm = painter.fontMetrics();
 
     // print head line left
-    w = fm.width( headLeft( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
+    w = fm.width( headLeft( pageNo, m_pSheet->sheetName() ) ) / (0.01*m_zoomHandler->zoomInPercent());
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItXOld( leftBorderPts() ),
-                          m_pDoc->zoomItYOld( headFootDistance ),
+        painter.drawText( m_zoomHandler->documentToViewX( leftBorderPts() ),
+                          m_zoomHandler->documentToViewY( headFootDistance ),
                           headLeft( pageNo, m_pSheet->sheetName() ) );
     // print head line middle
-    w = fm.width( headMid( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
+    w = fm.width( headMid( pageNo, m_pSheet->sheetName() ) ) / (0.01*m_zoomHandler->zoomInPercent());
     if ( w > 0 )
-        painter.drawText( (int) ( m_pDoc->zoomItXOld( leftBorderPts() ) +
-                          ( m_pDoc->zoomItXOld( prinsheetWidthPts() ) -
+        painter.drawText( (int) ( m_zoomHandler->documentToViewX( leftBorderPts() ) +
+                          ( m_zoomHandler->documentToViewX( prinsheetWidthPts() ) -
                             w ) / 2.0 ),
-                          m_pDoc->zoomItYOld( headFootDistance ),
+                          m_zoomHandler->documentToViewY( headFootDistance ),
                           headMid( pageNo, m_pSheet->sheetName() ) );
     // print head line right
-    w = fm.width( headRight( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
+    w = fm.width( headRight( pageNo, m_pSheet->sheetName() ) ) / (0.01*m_zoomHandler->zoomInPercent());
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItXOld( leftBorderPts() +
+        painter.drawText( m_zoomHandler->documentToViewX( leftBorderPts() +
                                            prinsheetWidthPts() ) - (int) w,
-                          m_pDoc->zoomItYOld( headFootDistance ),
+                          m_zoomHandler->documentToViewY( headFootDistance ),
                           headRight( pageNo, m_pSheet->sheetName() ) );
 
     // print foot line left
-    w = fm.width( footLeft( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
+    w = fm.width( footLeft( pageNo, m_pSheet->sheetName() ) ) / (0.01*m_zoomHandler->zoomInPercent());
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItXOld( leftBorderPts() ),
-                          m_pDoc->zoomItYOld( paperHeightPts() - headFootDistance ),
+        painter.drawText( m_zoomHandler->documentToViewX( leftBorderPts() ),
+                          m_zoomHandler->documentToViewY( paperHeightPts() - headFootDistance ),
                           footLeft( pageNo, m_pSheet->sheetName() ) );
     // print foot line middle
-    w = fm.width( footMid( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
+    w = fm.width( footMid( pageNo, m_pSheet->sheetName() ) ) / (0.01*m_zoomHandler->zoomInPercent());
     if ( w > 0 )
-        painter.drawText( (int) ( m_pDoc->zoomItXOld( leftBorderPts() ) +
-                          ( m_pDoc->zoomItXOld( prinsheetWidthPts() ) -
+        painter.drawText( (int) ( m_zoomHandler->documentToViewX( leftBorderPts() ) +
+                          ( m_zoomHandler->documentToViewX( prinsheetWidthPts() ) -
                             w ) / 2.0 ),
-                          m_pDoc->zoomItYOld( paperHeightPts() - headFootDistance ),
+                          m_zoomHandler->documentToViewY( paperHeightPts() - headFootDistance ),
                           footMid( pageNo, m_pSheet->sheetName() ) );
     // print foot line right
-    w = fm.width( footRight( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
+    w = fm.width( footRight( pageNo, m_pSheet->sheetName() ) ) / (0.01*m_zoomHandler->zoomInPercent());
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItXOld( leftBorderPts() +
+        painter.drawText( m_zoomHandler->documentToViewX( leftBorderPts() +
                                            prinsheetWidthPts() ) -
                                            (int) w,
-                          m_pDoc->zoomItYOld( paperHeightPts() - headFootDistance ),
+                          m_zoomHandler->documentToViewY( paperHeightPts() - headFootDistance ),
                           footRight( pageNo, m_pSheet->sheetName() ) );
 }
 
@@ -1333,10 +1380,10 @@ void SheetPrint::calculateZoomForPageLimitX()
     if( m_iPageLimitX == 0 )
         return;
 
-    double origZoom = m_dZoom;
+    double origZoom = (0.01*m_zoomHandler->zoomInPercent());
 
-    if( m_dZoom < 1.0 )
-        m_dZoom = 1.0;
+    if( (0.01*m_zoomHandler->zoomInPercent()) < 1.0 )
+        m_zoomHandler->setZoom( 1.0 );
 
     QRect printRange = cellsPrintRange();
     updateNewPageX( m_pSheet->rightColumn( m_pSheet->columnPosition( printRange.right() ) + prinsheetWidthPts() ) );
@@ -1348,19 +1395,19 @@ void SheetPrint::calculateZoomForPageLimitX()
     //calculating a factor for scaling the zoom down makes it lots faster
     double factor = (double)m_iPageLimitX/(double)currentPages +
                     1-(double)currentPages/((double)currentPages+1); //add possible error;
-    kDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
-    m_dZoom = m_dZoom*factor;
+    kDebug() << "Calculated factor for scaling (0.01*m_zoomHandler->zoomInPercent()): " << factor << endl;
+    m_zoomHandler->setZoom( (0.01*m_zoomHandler->zoomInPercent())*factor );
 
-    kDebug() << "New exact zoom: " << m_dZoom << endl;
+    kDebug() << "New exact zoom: " << (0.01*m_zoomHandler->zoomInPercent()) << endl;
 
-    if (m_dZoom < 0.01)
-        m_dZoom = 0.01;
-    if (m_dZoom > 1.0)
-        m_dZoom = 1.0;
+    if ((0.01*m_zoomHandler->zoomInPercent()) < 0.01)
+        m_zoomHandler->setZoom( 0.01 );
+    if ((0.01*m_zoomHandler->zoomInPercent()) > 1.0)
+        m_zoomHandler->setZoom( 1.0 );
 
-    m_dZoom = (((int)(m_dZoom*100 + 0.5))/100.0);
+    m_zoomHandler->setZoom( (((int)((0.01*m_zoomHandler->zoomInPercent())*100 + 0.5))/100.0) );
 
-    kDebug() << "New rounded zoom: " << m_dZoom << endl;
+    kDebug() << "New rounded zoom: " << (0.01*m_zoomHandler->zoomInPercent()) << endl;
 
     updatePrintRepeatColumnsWidth();
     updateNewPageListX( 0 );
@@ -1369,24 +1416,24 @@ void SheetPrint::calculateZoomForPageLimitX()
 
     kDebug() << "Number of pages with this zoom: " << currentPages << endl;
 
-    while( ( currentPages > m_iPageLimitX ) && ( m_dZoom > 0.01 ) )
+    while( ( currentPages > m_iPageLimitX ) && ( (0.01*m_zoomHandler->zoomInPercent()) > 0.01 ) )
     {
-        m_dZoom -= 0.01;
+        m_zoomHandler->setZoom( (0.01*m_zoomHandler->zoomInPercent()) - 0.01 );
         updatePrintRepeatColumnsWidth();
         updateNewPageListX( 0 );
         updateNewPageX( m_pSheet->rightColumn( m_pSheet->columnPosition( printRange.right() ) + prinsheetWidthPts() ) );
         currentPages = pagesX( printRange );
-        kDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
+        kDebug() << "Looping -0.01; current zoom: " << (0.01*m_zoomHandler->zoomInPercent()) << endl;
     }
 
-    if ( m_dZoom < origZoom )
+    if ( (0.01*m_zoomHandler->zoomInPercent()) < origZoom )
     {
-        double newZoom = m_dZoom;
-        m_dZoom += 1.0; //set it to something different
+        double newZoom = (0.01*m_zoomHandler->zoomInPercent());
+        m_zoomHandler->setZoom( (0.01*m_zoomHandler->zoomInPercent()) + 1.0 ); //set it to something different
         setZoom( newZoom, false );
     }
     else
-        m_dZoom = origZoom;
+        m_zoomHandler->setZoom( origZoom );
 }
 
 void SheetPrint::calculateZoomForPageLimitY()
@@ -1395,10 +1442,10 @@ void SheetPrint::calculateZoomForPageLimitY()
     if( m_iPageLimitY == 0 )
         return;
 
-    double origZoom = m_dZoom;
+    double origZoom = (0.01*m_zoomHandler->zoomInPercent());
 
-    if( m_dZoom < 1.0 )
-        m_dZoom = 1.0;
+    if( (0.01*m_zoomHandler->zoomInPercent()) < 1.0 )
+        m_zoomHandler->setZoom( 1.0 );
 
     QRect printRange = cellsPrintRange();
     updateNewPageY( m_pSheet->bottomRow( m_pSheet->rowPosition( printRange.bottom() ) + prinsheetHeightPts() ) );
@@ -1409,19 +1456,19 @@ void SheetPrint::calculateZoomForPageLimitY()
 
     double factor = (double)m_iPageLimitY/(double)currentPages +
                     1-(double)currentPages/((double)currentPages+1); //add possible error
-    kDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
-    m_dZoom = m_dZoom*factor;
+    kDebug() << "Calculated factor for scaling (0.01*m_zoomHandler->zoomInPercent()): " << factor << endl;
+    m_zoomHandler->setZoom( (0.01*m_zoomHandler->zoomInPercent())*factor );
 
-    kDebug() << "New exact zoom: " << m_dZoom << endl;
+    kDebug() << "New exact zoom: " << (0.01*m_zoomHandler->zoomInPercent()) << endl;
 
-    if (m_dZoom < 0.01)
-        m_dZoom = 0.01;
-    if (m_dZoom > 1.0)
-        m_dZoom = 1.0;
+    if ((0.01*m_zoomHandler->zoomInPercent()) < 0.01)
+        m_zoomHandler->setZoom( 0.01 );
+    if ((0.01*m_zoomHandler->zoomInPercent()) > 1.0)
+        m_zoomHandler->setZoom( 1.0 );
 
-    m_dZoom = (((int)(m_dZoom*100 + 0.5))/100.0);
+    m_zoomHandler->setZoom( (((int)((0.01*m_zoomHandler->zoomInPercent())*100 + 0.5))/100.0) );
 
-    kDebug() << "New rounded zoom: " << m_dZoom << endl;
+    kDebug() << "New rounded zoom: " << (0.01*m_zoomHandler->zoomInPercent()) << endl;
 
     updatePrintRepeatRowsHeight();
     updateNewPageListY( 0 );
@@ -1430,24 +1477,24 @@ void SheetPrint::calculateZoomForPageLimitY()
 
     kDebug() << "Number of pages with this zoom: " << currentPages << endl;
 
-    while( ( currentPages > m_iPageLimitY ) && ( m_dZoom > 0.01 ) )
+    while( ( currentPages > m_iPageLimitY ) && ( (0.01*m_zoomHandler->zoomInPercent()) > 0.01 ) )
     {
-        m_dZoom -= 0.01;
+        m_zoomHandler->setZoom( (0.01*m_zoomHandler->zoomInPercent()) - 0.01 );
         updatePrintRepeatRowsHeight();
         updateNewPageListY( 0 );
         updateNewPageY( m_pSheet->bottomRow( m_pSheet->rowPosition( printRange.bottom() ) + prinsheetHeightPts() ) );
         currentPages = pagesY( printRange );
-        kDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
+        kDebug() << "Looping -0.01; current zoom: " << (0.01*m_zoomHandler->zoomInPercent()) << endl;
     }
 
-    if ( m_dZoom < origZoom )
+    if ( (0.01*m_zoomHandler->zoomInPercent()) < origZoom )
     {
-        double newZoom = m_dZoom;
-        m_dZoom += 1.0; //set it to something different
+        double newZoom = (0.01*m_zoomHandler->zoomInPercent());
+        m_zoomHandler->setZoom( (0.01*m_zoomHandler->zoomInPercent()) + 1.0 ); //set it to something different
         setZoom( newZoom, false );
     }
     else
-        m_dZoom = origZoom;
+        m_zoomHandler->setZoom( origZoom );
 }
 
 void SheetPrint::setPrintGrid( bool _printGrid )
@@ -1708,12 +1755,12 @@ void SheetPrint::removeRow( int row, int nbRow )
 
 void SheetPrint::setZoom( double _zoom, bool checkPageLimit )
 {
-    if( m_dZoom == _zoom )
+    if( (0.01*m_zoomHandler->zoomInPercent()) == _zoom )
     {
         return;
     }
 
-    m_dZoom = _zoom;
+    m_zoomHandler->setZoom( _zoom );
     updatePrintRepeatColumnsWidth();
     updatePrintRepeatRowsHeight();
     updateNewPageListX( 0 );
@@ -1728,6 +1775,11 @@ void SheetPrint::setZoom( double _zoom, bool checkPageLimit )
     }
 
     m_pDoc->setModified( true );
+}
+
+double SheetPrint::zoom() const
+{
+    return m_zoomHandler->zoomInPercent()*0.01;
 }
 
 bool PrintNewPageEntry::operator==( PrintNewPageEntry const & entry ) const

@@ -27,6 +27,7 @@
 #include "RectStorage.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
+#include "View.h"
 
 #include "SheetView.h"
 
@@ -36,18 +37,18 @@ class SheetView::Private
 {
 public:
     const Sheet* sheet;
-    QPaintDevice* paintDevice;
+    const View* view;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
     QRegion cachedArea;
     CellView* defaultCellView;
 };
 
-SheetView::SheetView( const Sheet* sheet, QPaintDevice* paintDevice )
+SheetView::SheetView( const Sheet* sheet, const View* view )
     : d( new Private )
 {
     d->sheet = sheet;
-    d->paintDevice = paintDevice;
+    d->view = view;
     d->visibleRect = QRect(1,1,0,0);
     d->cache.setMaxCost( 10000 );
     d->defaultCellView = new CellView( this );
@@ -64,9 +65,14 @@ const Sheet* SheetView::sheet() const
     return d->sheet;
 }
 
+const View* SheetView::view() const
+{
+    return d->view;
+}
+
 QPaintDevice* SheetView::paintDevice() const
 {
-    return d->paintDevice;
+    return d->view->canvasWidget();
 }
 
 const CellView& SheetView::cellView( int col, int row )

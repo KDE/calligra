@@ -149,9 +149,9 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
 
     // Get info about where the event occurred - this is duplicated
     // in ::mouseMoveEvent, needs to be separated into one function
-    QPointF position = d->canvas->doc()->viewToDocument( event->pos() );
+    QPointF position = d->canvas->viewConverter()->viewToDocument( event->pos() );
     if ( sheet->layoutDirection() == Qt::RightToLeft )
-        position.setX( d->canvas->doc()->viewToDocumentX( d->canvas->width() ) - position.x() );
+        position.setX( d->canvas->viewConverter()->viewToDocumentX( d->canvas->width() ) - position.x() );
     position += QPointF( d->canvas->xOffset(), d->canvas->yOffset() );
 
     // In which cell did the user click ?
@@ -184,7 +184,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
 //     d->scrollTimer->start( 50 );
 
     // Did we click in the lower right corner of the marker/marked-area ?
-    if ( d->canvas->selection()->selectionHandleArea().contains( QPointF( position.x(), position.y() ) ) )
+    if ( d->canvas->selection()->selectionHandleArea(d->canvas->view()->zoomHandler()).contains( QPointF( position.x(), position.y() ) ) )
     {
         d->processClickSelectionHandle( event );
         return;
@@ -388,9 +388,9 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
     if (!sheet)
         return;
 
-    QPointF position = d->canvas->doc()->viewToDocument( event->pos() );
+    QPointF position = d->canvas->viewConverter()->viewToDocument( event->pos() );
     if ( sheet->layoutDirection() == Qt::RightToLeft )
-        position.setX( d->canvas->doc()->viewToDocumentX( d->canvas->width() ) - position.x() );
+        position.setX( d->canvas->viewConverter()->viewToDocumentX( d->canvas->width() ) - position.x() );
     position += QPointF( d->canvas->xOffset(), d->canvas->yOffset() );
 
     // In which cell did the user click ?
@@ -469,13 +469,13 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
     }
 
     // Test wether mouse is over the Selection.handle
-    const QRectF selectionHandle = d->canvas->view()->selection()->selectionHandleArea();
+    const QRectF selectionHandle = d->canvas->view()->selection()->selectionHandleArea(d->canvas->view()->zoomHandler());
     if ( selectionHandle.contains( QPointF( position.x(), position.y() ) ) )
     {
         //If the cursor is over the handle, than it might be already on the next cell.
         //Recalculate the cell position!
-        col  = sheet->leftColumn( position.x() - d->canvas->view()->doc()->unzoomItX( 2 ), xpos );
-        row  = sheet->topRow( position.y() - d->canvas->view()->doc()->unzoomItY( 2 ), ypos );
+        col  = sheet->leftColumn( position.x() - d->canvas->viewConverter()->viewToDocumentX( 2 ), xpos );
+        row  = sheet->topRow( position.y() - d->canvas->viewConverter()->viewToDocumentY( 2 ), ypos );
 
         if ( !sheet->isProtected() )
         {
@@ -551,9 +551,8 @@ void DefaultTool::keyPressEvent( QKeyEvent* event )
     if ( event->key() == KGlobalSettings::contextMenuKey() ) {
         int row = d->canvas->selection()->marker().y();
         int col = d->canvas->selection()->marker().x();
-        QPoint p( sheet->columnPosition(col), sheet->rowPosition(row) );
-        p = d->canvas->mapToGlobal(p);
-        d->canvas->view()->openPopupMenu( p );
+        QPointF p( sheet->columnPosition(col), sheet->rowPosition(row) );
+        d->canvas->view()->openPopupMenu( d->canvas->mapToGlobal(p.toPoint()) );
     }
     switch( event->key() )
     {

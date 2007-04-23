@@ -45,6 +45,9 @@
 #include <QRectF>
 #include <QTextLayout>
 
+// KOffice
+#include <KoZoomHandler.h>
+
 // KSpread
 #include "Canvas.h"
 #include "Condition.h"
@@ -56,6 +59,7 @@
 #include "SheetView.h"
 #include "StyleManager.h"
 #include "Value.h"
+#include "View.h"
 
 // Local
 #include "CellView.h"
@@ -169,7 +173,9 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     if ( cell.isDefault() ) return;
 
     d->layoutDirection = sheet->layoutDirection();
-    d->hidden = sheet->columnFormat( col )->hidden() || ( sheet->rowFormat( row )->height() <= sheet->doc()->unzoomItY( 2 ) );
+
+    d->hidden = sheet->columnFormat( col )->hidden() ||
+                ( sheet->rowFormat( row )->height() <= sheetView->view()->zoomHandler()->viewToDocumentY( 2 ) );
 
     // horizontal align
     if ( d->style.halign() == Style::HAlignUndefined )

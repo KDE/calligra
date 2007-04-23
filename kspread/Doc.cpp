@@ -61,6 +61,7 @@
 #include <KoVariable.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoZoomHandler.h>
 
 #include "Canvas.h"
 #include "Damages.h"
@@ -393,7 +394,9 @@ void Doc::saveConfig()
     if ( isEmbedded() ||!isReadWrite())
         return;
     KSharedConfigPtr config = Factory::global().config();
+#ifdef KSPREAD_DOC_ZOOM
     config->group( "Parameters" ).writeEntry( "Zoom", zoomInPercent() );
+#endif // KSPREAD_DOC_ZOOM
 }
 
 void Doc::initConfig()
@@ -409,7 +412,9 @@ void Doc::initConfig()
 #endif
 
     const int zoom = config->group( "Parameters" ).readEntry( "Zoom", 100 );
+#ifdef KSPREAD_DOC_ZOOM
     setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
+#endif // KSPREAD_DOC_ZOOM
 }
 
 int Doc::syntaxVersion() const
@@ -1478,11 +1483,6 @@ QStringList Doc::spellListIgnoreAll() const
   return d->spellListIgnoreAll;
 }
 
-void Doc::setZoomAndResolution( int zoom, int dpiX, int dpiY )
-{
-    KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
-}
-
 void Doc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 {
 /*    layout();
@@ -1531,6 +1531,7 @@ void Doc::enableRedo( bool _b )
 
 void Doc::paintContent( QPainter& painter, const QRect& rect)
 {
+#ifdef KSPREAD_DOC_ZOOM
 //     kDebug(36001) << "paintContent() called on " << rect << endl;
 
 //     ElapsedTime et( "Doc::paintContent1" );
@@ -1568,10 +1569,12 @@ void Doc::paintContent( QPainter& painter, const QRect& rect)
 
     // restore zoom
     setZoom( oldZoom );
+#endif // KSPREAD_DOC_ZOOM
 }
 
 void Doc::paintContent( QPainter& painter, const QRect& rect, Sheet* sheet, bool drawCursor )
 {
+#ifdef KSPREAD_DOC_ZOOM
     Q_UNUSED( drawCursor );
 
     if ( isLoading() )
@@ -1596,6 +1599,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, Sheet* sheet, bool
                        bottom_row - top_row + 1), sheet );
 
     paintCellRegions(painter, rect, 0, region);
+#endif // KSPREAD_DOC_ZOOM
 }
 
 void Doc::paintUpdates()
@@ -1614,6 +1618,7 @@ void Doc::paintUpdates()
 void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
                             View* view, const Region& region )
 {
+#ifdef KSPREAD_DOC_ZOOM
     //
     // Clip away children
     //
@@ -1646,6 +1651,7 @@ void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
     {
         paintRegion(painter, viewToDocument( viewRect ), view,(*it)->rect(), (*it)->sheet());
     }
+#endif // KSPREAD_DOC_ZOOM
 }
 
 void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
@@ -2298,13 +2304,14 @@ void Doc::repaint( EmbeddedObject *obj )
 void Doc::repaint( const QRectF& rect )
 {
     QRectF r;
-    foreach ( KoView* view, views() )
+    foreach ( KoView* koview, views() )
     {
-        Canvas* canvas = static_cast<View*>( view )->canvasWidget();
+        const View* view = static_cast<View*>( koview );
+        Canvas* canvas = view->canvasWidget();
 
-        r = documentToView( rect );
-        r.translate( -canvas->xOffset() * zoomedResolutionX(),
-                     -canvas->yOffset() * zoomedResolutionY() );
+        r = view->zoomHandler()->documentToView( rect );
+        r.translate( -canvas->xOffset() * view->zoomHandler()->zoomedResolutionX(),
+                     -canvas->yOffset() * view->zoomHandler()->zoomedResolutionY() );
         canvas->update( r.toRect() );
     }
 }

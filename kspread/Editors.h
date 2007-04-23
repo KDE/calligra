@@ -44,6 +44,8 @@ class QAbstractButton;
 class QTextCursor;
 class QTextEdit;
 
+class KoZoomHandler;
+
 namespace KSpread
 {
 class Canvas;
@@ -193,7 +195,7 @@ public:
 
     void handleKeyPressEvent( QKeyEvent* _ev );
     void handleIMEvent( QInputMethodEvent  * _ev );
-    void setEditorFont(QFont const & font, bool updateSize);
+    void setEditorFont(QFont const & font, bool updateSize, KoZoomHandler* zoomHandler);
 
     int cursorPosition() const;
     void setCursorPosition(int pos);

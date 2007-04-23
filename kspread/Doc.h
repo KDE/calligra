@@ -38,7 +38,6 @@
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
 #include <KoXmlReader.h>
-#include <KoZoomHandler.h>
 
 #include "Global.h"
 
@@ -56,7 +55,6 @@ class KoPictureCollection;
 class KoPictureKey;
 class KoStore;
 class KoXmlWriter;
-class KoZoomHandler;
 
 #define MIME_TYPE "application/x-kspread"
 
@@ -89,7 +87,7 @@ struct Reference
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler, public KoShapeControllerBase
+class KSPREAD_EXPORT Doc : public KoDocument, public KoShapeControllerBase
 {
   Q_OBJECT
   Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
@@ -570,15 +568,6 @@ public:
   virtual bool loadChildren( KoStore* _store );
 
   virtual void addView( KoView *_view );
-
-  /**
-   * Change the zoom factor to @p z (e.g. 150 for 150%)
-   * and/or change the resolution, given in DPI.
-   * This is done on startup and when printing.
-   * The same call combines both so that all the updating done behind
-   * the scenes is done only once, even if both zoom and DPI must be changed.
-   */
-  virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY );
 
   /**
    * updates all properties after zoom changed

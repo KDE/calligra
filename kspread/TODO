@@ -89,7 +89,7 @@ Things not in bugzilla
     consumption. Caching the attributes should make the painting
     way faster.
 
-  + Zooming							      1 ----
+  + Zooming							      1 DONE
     Make it view dependent and not document dependent.
 
   + Cell Storage						      1 STEF

@@ -30,6 +30,9 @@
 #include "Formula.h"
 #include "Functions.h"
 
+// KOffice
+#include <KoZoomHandler.h>
+
 // KDE
 #include <kdebug.h>
 #include <kdialog.h>
@@ -562,7 +565,7 @@ CellEditor::CellEditor( const Cell& _cell, Canvas* _parent, bool captureAllKeyEv
 
   // set font size according to zoom factor
   QFont font( _cell.style().font() );
-  font.setPointSizeF( 0.01 * _parent->doc()->zoomInPercent() * font.pointSizeF() );
+  font.setPointSizeF( 0.01 * _parent->view()->zoomHandler()->zoomInPercent() * font.pointSizeF() );
   d->textEdit->setFont( font );
 
   if (d->fontLength == 0)
@@ -827,10 +830,10 @@ void CellEditor::copy()
   d->textEdit->copy();
 }
 
-void CellEditor::setEditorFont(QFont const & font, bool updateSize)
+void CellEditor::setEditorFont(QFont const & font, bool updateSize, KoZoomHandler* zoomHandler)
 {
   QFont tmpFont( font );
-  tmpFont.setPointSizeF( 0.01 * canvas()->doc()->zoomInPercent() * tmpFont.pointSizeF() );
+  tmpFont.setPointSizeF( 0.01 * zoomHandler->zoomInPercent() * tmpFont.pointSizeF() );
   d->textEdit->setFont( tmpFont );
 
   if (updateSize)

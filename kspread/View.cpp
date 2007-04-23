@@ -105,6 +105,7 @@
 #include <KoZoomAction.h>
 #include <ktoolinvocation.h>
 #include <KoToolBoxFactory.h>
+#include <KoZoomHandler.h>
 
 // KSpread includes
 #include "CellStorage.h"
@@ -1760,7 +1761,7 @@ View::View( QWidget *_parent, Doc *_doc )
         setZoom( 100, true );
     }
 
-    d->actions->viewZoom->setZoom( d->doc->zoomInPercent() );
+    d->actions->viewZoom->setZoom( zoomHandler()->zoomInPercent() );
 
     // ## Might be wrong, if doc isn't loaded yet
     d->actions->selectStyle->setItems( d->doc->styleManager()->styleNames() );
@@ -2041,7 +2042,7 @@ SheetView* View::sheetView( const Sheet* sheet ) const
     if ( !d->sheetViews.contains( sheet ) )
     {
         kDebug(36004) << "View: Creating SheetView for " << sheet->sheetName() << endl;
-        d->sheetViews.insert( sheet, new SheetView( sheet, canvasWidget() ) );
+        d->sheetViews.insert( sheet, new SheetView( sheet, this ) );
         connect( sheet->cellStorage(), SIGNAL( inform( const QString& ) ),
                  this, SLOT( notify( const QString& ) ) );
     }
@@ -2708,7 +2709,7 @@ void View::updateEditWidget()
 
     if ( d->canvas->editor() )
     {
-      d->canvas->editor()->setEditorFont(style.font(), true);
+      d->canvas->editor()->setEditorFont(style.font(), true, zoomHandler());
       d->canvas->editor()->setFocus();
     }
 
@@ -3128,7 +3129,7 @@ void View::fontSelected( const QString & _font )
     if ( d->canvas->editor() )
     {
         const Style style = Cell( d->activeSheet, selection()->marker() ).style();
-        d->canvas->editor()->setEditorFont( style.font(), true );
+        d->canvas->editor()->setEditorFont( style.font(), true, zoomHandler() );
         d->canvas->editor()->setFocus();
     }
     else
@@ -3296,7 +3297,7 @@ void View::fontSizeSelected( int _size )
     if ( d->canvas->editor() )
     {
         Cell cell( d->activeSheet, d->selection->marker() );
-        d->canvas->editor()->setEditorFont( cell.style().font(), true );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true, zoomHandler() );
         d->canvas->editor()->setFocus();
     }
     else
@@ -3320,7 +3321,7 @@ void View::bold( bool b )
         int col = selection()->marker().x();
         int row = selection()->marker().y();
         Cell cell = Cell( d->activeSheet, col, row );
-        d->canvas->editor()->setEditorFont( cell.style().font(), true );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true, zoomHandler() );
     }
 }
 
@@ -3341,7 +3342,7 @@ void View::underline( bool b )
         int col = selection()->marker().x();
         int row = selection()->marker().y();
         Cell cell = Cell( d->activeSheet, col, row );
-        d->canvas->editor()->setEditorFont( cell.style().font(), true );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true, zoomHandler() );
     }
 }
 
@@ -3362,7 +3363,7 @@ void View::strikeOut( bool b )
         int col = selection()->marker().x();
         int row = selection()->marker().y();
         Cell cell = Cell( d->activeSheet, col, row );
-        d->canvas->editor()->setEditorFont( cell.style().font(), true );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true, zoomHandler() );
     }
 }
 
@@ -3384,7 +3385,7 @@ void View::italic( bool b )
         int col = selection()->marker().x();
         int row = selection()->marker().y();
         Cell cell = Cell( d->activeSheet, col, row );
-        d->canvas->editor()->setEditorFont( cell.style().font(), true );
+        d->canvas->editor()->setEditorFont( cell.style().font(), true, zoomHandler() );
     }
 }
 
@@ -4826,7 +4827,7 @@ void View::print( KPrinter &prt )
             d->canvas->deleteEditor( true ); // save changes
         }
 
-        int oldZoom = doc()->zoomInPercent();
+        int oldZoom = zoomHandler()->zoomInPercent();
 
         //Comment from KWord
         //   We don't get valid metrics from the printer - and we want a better resolution
@@ -4835,7 +4836,7 @@ void View::print( KPrinter &prt )
         int dpiX = prt.logicalDpiX();
         int dpiY = prt.logicalDpiY();
 
-        doc()->setZoomAndResolution( int( print->zoom() * 100 ), dpiX, dpiY );
+        zoomHandler()->setZoomAndResolution( int( print->zoom() * 100 ), dpiX, dpiY );
 
         //store the current setting in a temporary variable
         KoPageFormat::Orientation _orient = print->orientation();
@@ -4855,7 +4856,7 @@ void View::print( KPrinter &prt )
         //Restore original orientation
         print->setPaperOrientation( _orient );
 
-        doc()->setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
+        zoomHandler()->setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
         doc()->newZoomAndResolution( true, false );
 
         // Repaint at correct zoom
@@ -4888,7 +4889,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
       return;
 
     // Transform the view coordinates to document coordinates
-    QRectF unzoomedRect = doc()->viewToDocument( _geometry );
+    QRectF unzoomedRect = zoomHandler()->viewToDocument( _geometry );
     unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
 
 #ifdef KSPREAD_KOPART_EMBEDDING
@@ -4912,7 +4913,7 @@ void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
     return;
 
   // Transform the view coordinates to document coordinates
-  QRectF unzoomedRect = doc()->viewToDocument( _geometry );
+  QRectF unzoomedRect = zoomHandler()->viewToDocument( _geometry );
   unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
 
   InsertObjectCommand *cmd = new InsertObjectCommand( unzoomedRect, _e, d->canvas );
@@ -5099,7 +5100,7 @@ void View::togglePageBorders( bool mode )
 
 void View::viewZoom( KoZoomMode::Mode mode, double zoom )
 {
-    int oldZoom = doc()->zoomInPercent();
+    int oldZoom = zoomHandler()->zoomInPercent();
     int newZoom = qRound( zoom * 100 );
 
     bool ok = ( mode == KoZoomMode::ZOOM_CONSTANT );
@@ -5119,8 +5120,8 @@ void View::setZoom( int zoom, bool /*updateViews*/ )
   // Set the zoom in KoView (for embedded views)
   doc()->emitBeginOperation( false );
 
-  doc()->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
-  //KoView::setZoom( doc()->zoomedResolutionY() /* KoView only supports one zoom */ );
+  zoomHandler()->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
+  //KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
 
   doc()->refreshInterface();
   doc()->emitEndOperation( Region( 1, 1, KS_colMax, KS_rowMax ) );
@@ -5288,8 +5289,8 @@ KoDocument * View::hitTest( const QPoint& /*pos*/ )
 //     KoViewChild *viewChild;
 //
 //     QMatrix m = matrix();
-//     m.translate( d->canvas->xOffset() / doc()->zoomedResolutionX(),
-//                  d->canvas->yOffset() / doc()->zoomedResolutionY() );
+//     m.translate( d->canvas->xOffset() / zoomHandler()->zoomedResolutionX(),
+//                  d->canvas->yOffset() / zoomHandler()->zoomedResolutionY() );
 //
 //     KoDocumentChild *docChild = selectedChild();
 //     if ( docChild )
@@ -5363,7 +5364,7 @@ void View::refreshView()
     return;
 
   d->adjustActions( !sheet->isProtected() );
-  d->actions->viewZoom->setZoom( doc()->zoomInPercent() );
+  d->actions->viewZoom->setZoom( zoomHandler()->zoomInPercent() );
 
   bool active = sheet->getShowFormula();
   if ( sheet && !sheet->isProtected() )
@@ -5388,10 +5389,10 @@ void View::refreshView()
   d->canvas->updatePosWidget();
 
   QFont font( KoGlobal::defaultFont() );
-  d->hBorderWidget->setMinimumHeight( qRound( doc()->zoomItY( font.pointSizeF() + 3 ) ) );
-  d->vBorderWidget->setMinimumWidth( qRound( doc()->zoomItX( YBORDER_WIDTH ) ) );
-  d->selectAllButton->setMinimumHeight( qRound( doc()->zoomItY( font.pointSizeF() + 3 ) ) );
-  d->selectAllButton->setMinimumWidth( qRound( doc()->zoomItX( YBORDER_WIDTH ) ) );
+  d->hBorderWidget->setMinimumHeight( qRound( zoomHandler()->zoomItY( font.pointSizeF() + 3 ) ) );
+  d->vBorderWidget->setMinimumWidth( qRound( zoomHandler()->zoomItX( YBORDER_WIDTH ) ) );
+  d->selectAllButton->setMinimumHeight( qRound( zoomHandler()->zoomItY( font.pointSizeF() + 3 ) ) );
+  d->selectAllButton->setMinimumWidth( qRound( zoomHandler()->zoomItX( YBORDER_WIDTH ) ) );
 
   Qt::LayoutDirection sheetDir = sheet->layoutDirection();
   bool interfaceIsRTL = QApplication::isRightToLeft();
@@ -6928,8 +6929,8 @@ void View::menuCalc( bool )
 QMatrix View::matrix() const
 {
   QMatrix m;
-  m.scale( d->doc->zoomedResolutionX(),
-           d->doc->zoomedResolutionY() );
+  m.scale( zoomHandler()->zoomedResolutionX(),
+           zoomHandler()->zoomedResolutionY() );
   m.translate( - d->canvas->xOffset(), - d->canvas->yOffset() );
   return m;
 }
@@ -7010,7 +7011,7 @@ int View::canvasXOffset() const
   if (!d->activeSheet)
     return 0;
 
-  double zoomedResX = d->activeSheet->doc()->zoomedResolutionX();
+  double zoomedResX = zoomHandler()->zoomedResolutionX();
   return int( canvasWidget()->xOffset() * zoomedResX );
 }
 
@@ -7019,7 +7020,7 @@ int View::canvasYOffset() const
   if (!d->activeSheet)
    return 0;
 
-  double zoomedResY = d->activeSheet->doc()->zoomedResolutionY();
+  double zoomedResY = zoomHandler()->zoomedResolutionY();
   return int( canvasWidget()->yOffset() * zoomedResY );
 }
 

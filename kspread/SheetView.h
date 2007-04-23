@@ -20,7 +20,6 @@
 #ifndef KSPREAD_SHEET_VIEW
 #define KSPREAD_SHEET_VIEW
 
-class QPaintDevice;
 class QPainter;
 class QPointF;
 class QRect;
@@ -31,6 +30,7 @@ namespace KSpread
 class CellView;
 class Region;
 class Sheet;
+class View;
 
 /**
  * The SheetView controls the painting of the sheets' cells.
@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    explicit SheetView( const Sheet* sheet, QPaintDevice* paintDevice = 0 );
+    explicit SheetView( const Sheet* sheet, const View* view = 0 );
 
     /**
      * Destructor.
@@ -55,6 +55,11 @@ public:
      * \return the Sheet
      */
     const Sheet* sheet() const;
+
+    /**
+     * \return the view in which the Sheet is painted
+     */
+    const View* view() const;
 
     /**
      * \return the paint device on which the Sheet is painted
