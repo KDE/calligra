@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// $Id$
-
 #include <time.h>
 
 #include <QPixmap>

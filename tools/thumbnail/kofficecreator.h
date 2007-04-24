@@ -18,7 +18,7 @@
 */
 
 #ifndef _KWORDCREATOR_H_
-#define _KWORDCREATOR_H_ "$Id$"
+#define _KWORDCREATOR_H_ 
 
 #include <kio/thumbcreator.h>
 #include <kparts/part.h>
