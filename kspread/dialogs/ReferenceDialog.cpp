@@ -46,7 +46,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <Q3ListBox>
-#include <kbuttonbox.h>
+#include <k3buttonbox.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kdeversion.h>
@@ -74,7 +74,7 @@ reference::reference( View* parent, const char* /*name*/ )
   m_pRemove = new QPushButton(i18n("&Remove"), this);
   lay1->addWidget( m_pRemove );
   //m_pRemove->setEnabled(false);
-  KButtonBox *bb = new KButtonBox( this );
+  K3ButtonBox *bb = new K3ButtonBox( this );
   //  bb->addStretch();
   m_pEdit = bb->addButton( i18n("&Edit...") );
   m_pOk = bb->addButton( KStandardGuiItem::ok() );

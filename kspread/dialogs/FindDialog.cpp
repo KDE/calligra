@@ -119,8 +119,9 @@ bool FindOption::searchInAllSheet() const
 }
 
 FindDlg::FindDlg(QWidget *parent, const char *name, long options, const QStringList &findStrings, bool hasSelection )
-    : KFindDialog(parent,name,options,findStrings,hasSelection  )
+    : KFindDialog(parent,options,findStrings,hasSelection  )
 {
+    setObjectName( name );
     m_findOptions = new FindOption( findExtension() );
     connect( m_findOptions, SIGNAL( adjustSize() ), SLOT( slotAjustSize() ) );
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
@@ -143,8 +144,9 @@ bool FindDlg::searchInAllSheet() const
 
 
 SearchDlg::SearchDlg(QWidget *parent, const char *name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection )
-    : KReplaceDialog(parent,name,options,findStrings,replaceStrings,hasSelection  )
+    : KReplaceDialog(parent,options,findStrings,replaceStrings,hasSelection  )
 {
+    setObjectName( name );
     m_findOptions = new FindOption( findExtension() );
     connect( m_findOptions, SIGNAL( adjustSize() ), SLOT( slotAjustSize() ) );
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
