@@ -559,14 +559,35 @@ void TreeViewBase::contextMenuEvent ( QContextMenuEvent *event )
     emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
-void TreeViewBase::currentChanged( const QModelIndex &current, const QModelIndex &prev )
+void TreeViewBase::slotCurrentChanged( const QModelIndex &current, const QModelIndex &prev )
 {
-    QTreeView::currentChanged( current, prev );
     if ( current.isValid() ) {
-        kDebug()<<k_funcinfo<<current.row()<<", "<<current.column()<<endl;
-        scrollTo( current ); //FIXME why doesn't it work?
+        scrollTo( current );
     }
 }
+
+void TreeViewBase::setModel( QAbstractItemModel *model )
+{
+    if ( selectionModel() ) {
+        disconnect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotCurrentChanged( const QModelIndex&, const QModelIndex& ) ) );
+    }
+    QTreeView::setModel( model );
+    if ( selectionModel() ) {
+        connect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotCurrentChanged( const QModelIndex&, const QModelIndex& ) ) );
+    }
+}
+
+void TreeViewBase::setSelectionModel( QItemSelectionModel *model )
+{
+    if ( selectionModel() ) {
+        disconnect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotCurrentChanged( const QModelIndex&, const QModelIndex& ) ) );
+    }
+    QTreeView::setSelectionModel( model );
+    if ( selectionModel() ) {
+        connect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotCurrentChanged( const QModelIndex&, const QModelIndex& ) ) );
+    }
+}
+
 
 ItemModelBase *TreeViewBase::itemModel() const
 {
@@ -624,11 +645,8 @@ DoubleTreeViewBase::DoubleTreeViewBase( QWidget *parent )
     connect( m_leftview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
     connect( m_rightview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
 
-    connect( m_rightview->verticalScrollBar(), SIGNAL( valueChanged( int ) ), m_leftview->verticalScrollBar(), SLOT( value( int ) ) );
+    connect( m_rightview->verticalScrollBar(), SIGNAL( valueChanged( int ) ), m_leftview->verticalScrollBar(), SLOT( setValue( int ) ) );
     
-    connect( m_leftview, SIGNAL( currentChanged( QModelIndex ) ), this, SIGNAL( currentChanged( QModelIndex ) ) );
-    connect( m_rightview, SIGNAL( currentChanged( QModelIndex ) ), this, SIGNAL( currentChanged( QModelIndex ) ) );
-
     connect( m_leftview, SIGNAL( moveAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotToRightView( const QModelIndex & ) ) );
     connect( m_rightview, SIGNAL( moveBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotToLeftView( const QModelIndex & ) ) );
 }

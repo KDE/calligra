@@ -204,6 +204,9 @@ public:
     void setAcceptDropsOnView( bool mode ) { m_acceptDropsOnView = mode; }
 
     ItemModelBase *itemModel() const;
+    virtual void setModel( QAbstractItemModel *model );
+    
+    virtual void setSelectionModel( QItemSelectionModel *model );
     
 signals:
     void contextMenuRequested( QModelIndex, const QPoint& );
@@ -219,7 +222,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event);
     
 protected slots:
-    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
+    virtual void slotCurrentChanged ( const QModelIndex & current, const QModelIndex & previous );
     
 protected:
     bool m_arrowKeyNavigation;
