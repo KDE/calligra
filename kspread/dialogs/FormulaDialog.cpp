@@ -46,7 +46,7 @@
 #include "Functions.h"
 
 #include <kdebug.h>
-#include <kbuttonbox.h>
+
 #include <knumvalidator.h>
 #include <QComboBox>
 #include <QEvent>

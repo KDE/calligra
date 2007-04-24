@@ -27,7 +27,7 @@
 //Added by qt3to4:
 #include <QVBoxLayout>
 
-#include <kbuttonbox.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>

@@ -24,7 +24,7 @@
 
 #include <QVBoxLayout>
 #include <klocale.h>
-#include <kbuttonbox.h>
+
 #include <kdebug.h>
 #include <QRadioButton>
 #include <QCheckBox>

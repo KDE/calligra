@@ -29,7 +29,7 @@
 #include <QRadioButton>
 #include <QVBoxLayout>
 
-#include <kbuttonbox.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>

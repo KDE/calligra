@@ -28,7 +28,7 @@
 //Added by qt3to4:
 #include <QGridLayout>
 
-#include <kbuttonbox.h>
+
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kmessagebox.h>

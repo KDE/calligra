@@ -32,7 +32,7 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 
-#include <kbuttonbox.h>
+
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
