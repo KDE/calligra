@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006, 2007 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +28,8 @@
 #include <QXmlInputSource>
 #include <QXmlSimpleReader>
 #include <KoDom.h>
+#include <KoDocumentInfo.h>
+#include <KoOasisStore.h>
 
 typedef KGenericFactory<Odp2Kpr> Odp2KprFactory;
 K_EXPORT_COMPONENT_FACTORY( libodp2kpr, Odp2KprFactory( "kofficefilters" ) )
@@ -83,7 +85,15 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
 
     //now we can transform it.
 
-    //TODO
+    //Parse meta.xml directly
+    inpdev = m_chain->storageFile( "meta.xml", KoStore::Read );
+
+    KoXmlDocument metaDoc;
+    QString errorMessage;
+    KoDocumentInfo info;
+    if ( KoOasisStore::loadAndParse( inpdev, metaDoc, errorMessage, "meta.xml" /*just for debug message*/ ) ) {
+         info.loadOasis( metaDoc );
+    }
 
     // Write output file
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
@@ -93,7 +103,18 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
     }
     QByteArray cstring = outdoc.toByteArray(); // utf-8 already
     out->write( cstring.data(), cstring.length() );
+    out->close();
 
+    //Write documentinfo.xml
+    out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
+    if(!out) {
+        kError(30502) << "Unable to open output file!" << endl;
+        return KoFilter::StorageCreationError;
+    }
+    QDomDocument doc = info.save();
+    QByteArray s = doc.toByteArray(); // this is already Utf8!
+    out->write( cstring.data(), cstring.length() );
+    out->close();
     return KoFilter::OK;
 }
 
