@@ -147,6 +147,7 @@ KoFilter::ConversionStatus KprKword::convert( const QByteArray& from, const QByt
     }
     QByteArray cstring = outdoc.toByteArray(); // utf-8 already
     out->write( cstring.data(), cstring.length() );
+    out->close();
     return KoFilter::OK;
 }
 
