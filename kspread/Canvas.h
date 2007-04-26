@@ -383,7 +383,9 @@ public:
     void copyOasisObjects();
     //void insertOasisData();
 
-public slots:
+public Q_SLOTS:
+    void setDocumentOffset( const QPoint& offset );
+    void setDocumentSize( const QSizeF& size );
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
 
@@ -401,7 +403,8 @@ public slots:
      */
     void slotMaxRow( int maxRow );
 
-signals:
+Q_SIGNALS:
+    void documentSizeChanged( const QSize& );
     void objectSelectedChanged();
     void objectSizeChanged();
 

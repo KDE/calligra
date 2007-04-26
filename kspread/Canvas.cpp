@@ -235,7 +235,7 @@ KoShapeManager* Canvas::shapeManager() const
 
 void Canvas::updateCanvas( const QRectF& rc )
 {
-    QRect clipRect( viewConverter()->documentToView( rc ).toRect() );
+    QRect clipRect( viewConverter()->documentToView( rc.translated( -offset() ) ).toRect() );
     clipRect.adjust( -2, -2, 2, 2 ); // Resize to fit anti-aliasing
     update( clipRect );
 }
@@ -637,6 +637,20 @@ void Canvas::scrollToCell(QPoint location) const
   }
 }
 
+void Canvas::setDocumentOffset( const QPoint& offset )
+{
+    d->xOffset = viewConverter()->viewToDocumentX( offset.x() );
+    d->yOffset = viewConverter()->viewToDocumentY( offset.y() );
+    hBorderWidget()->scroll( offset.x(), 0 );
+    vBorderWidget()->scroll( 0, offset.y() );
+}
+
+void Canvas::setDocumentSize( const QSizeF& size )
+{
+    const QSize s = viewConverter()->documentToView( QRectF( QPoint(0,0), size ) ).size().toSize();
+    emit documentSizeChanged( s );
+}
+
 void Canvas::slotScrollHorz( int _value )
 {
     register Sheet * const sheet = activeSheet();
@@ -756,25 +770,25 @@ void Canvas::slotMaxRow( int _max_row )
 void Canvas::mousePressEvent( QMouseEvent* event )
 {
     // flake
-    d->toolProxy->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    d->toolProxy->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() ) + offset() );
 }
 
 void Canvas::mouseReleaseEvent( QMouseEvent* event )
 {
     // flake
-    d->toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    d->toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() ) + offset() );
 }
 
 void Canvas::mouseMoveEvent( QMouseEvent* event )
 {
     // flake
-    d->toolProxy->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    d->toolProxy->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() ) + offset() );
 }
 
 void Canvas::mouseDoubleClickEvent( QMouseEvent* event )
 {
     // flake
-    d->toolProxy->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() ) );
+    d->toolProxy->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() ) + offset() );
 }
 
 void Canvas::keyPressEvent ( QKeyEvent* event )
@@ -864,6 +878,7 @@ void Canvas::paintEvent( QPaintEvent* event )
     ElapsedTime et( "Painting cells", ElapsedTime::PrintOnlyTime );
 
     QPainter painter(this);
+    painter.save();
     painter.setClipRegion( event->region() );
 
     //Save clip region
@@ -878,7 +893,6 @@ void Canvas::paintEvent( QPaintEvent* event )
 //     painter.save();
     clipoutChildren( painter );
 
-    painter.save();
     painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
     painter.scale( d->view->zoomHandler()->zoomedResolutionX(), d->view->zoomHandler()->zoomedResolutionY() );
 
@@ -896,6 +910,8 @@ void Canvas::paintEvent( QPaintEvent* event )
 
     // flake
     painter.restore();
+    painter.translate( -viewConverter()->documentToView( offset() ) );
+    painter.setClipRegion( event->region().translated( viewConverter()->documentToView( offset() ).toPoint() ) );
     d->shapeManager->paint( painter, *viewConverter(), false );
     d->toolProxy->paint( painter, *viewConverter() );
 
@@ -2954,19 +2970,19 @@ void Canvas::equalizeColumn()
   d->view->hBorderWidget()->equalizeColumn(size);
 }
 
-QRect Canvas::viewToCellCoordinates( const QRectF& viewRegion ) const
+QRect Canvas::viewToCellCoordinates( const QRectF& viewRect ) const
 {
   register Sheet * const sheet = activeSheet();
   if (!sheet)
     return QRect();
 
-  const QRectF unzoomedRect = d->view->zoomHandler()->viewToDocument( viewRegion ).translated( xOffset(), yOffset() );
+  const QRectF rect = d->view->zoomHandler()->viewToDocument( viewRect ).translated( offset() );
 
   double tmp;
-  const int left = sheet->leftColumn( unzoomedRect.left(), tmp );
-  const int right = sheet->rightColumn( unzoomedRect.right() );
-  const int top = sheet->topRow( unzoomedRect.top(), tmp );
-  const int bottom = sheet->bottomRow( unzoomedRect.bottom() );
+  const int left = sheet->leftColumn( rect.left(), tmp );
+  const int right = sheet->rightColumn( rect.right() );
+  const int top = sheet->topRow( rect.top(), tmp );
+  const int bottom = sheet->bottomRow( rect.bottom() );
 
   return QRect( left, top, right - left + 1, bottom - top + 1 );
 }
@@ -3079,6 +3095,10 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 
 void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*/)
 {
+    // save painter state
+    painter.save();
+    painter.translate( offset() );
+
   const QList<QColor> colors = choice()->colors();
   int index = 0;
   Region::ConstIterator end(choice()->constEnd());
@@ -3122,6 +3142,9 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*
                               6 * unzoomedYPixel ) );
     index++;
   }
+
+    // restore painter state
+    painter.restore();
 }
 
 void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
@@ -3131,13 +3154,14 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
     if (d->cellEditor)
         return;
 
+    // save the painter state
+    painter.save();
+    painter.translate( offset() );
     // disable antialiasing
     painter.setRenderHint( QPainter::Antialiasing, false );
-    // save old clip region
-    const QRegion oldClipRegion = painter.clipRegion();
     // Extend the clip rect by one in each direction to avoid artefacts caused by rounding errors.
     // TODO Stefan: This unites the region's rects. May be bad. Check!
-    painter.setClipRegion( oldClipRegion.boundingRect().adjusted(-1,-1,1,1) );
+    painter.setClipRegion( painter.clipRegion().boundingRect().adjusted(-1,-1,1,1) );
 
     QLineF line;
     QPen pen( Qt::black, d->view->zoomHandler()->unzoomItX( 2 ) );
@@ -3255,10 +3279,8 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
             }
         }
     }
-    // restore clip region
-    painter.setClipRegion( oldClipRegion );
-    // restore antialiasing
-    painter.setRenderHint( QPainter::Antialiasing, true );
+    // restore painter state
+    painter.restore();
 }
 
 QRectF Canvas::cellCoordinatesToDocument( const QRect& cellRange ) const

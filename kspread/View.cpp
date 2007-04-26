@@ -1847,14 +1847,6 @@ void View::initView()
     d->viewLayout->setMargin(0);
     d->viewLayout->setSpacing(0);
 
-    // Vert. Scroll Bar
-    d->calcLabel  = 0;
-    d->vertScrollBar = new QScrollBar( this );
-    d->vertScrollBar->setRange( 0, 4096 );
-    d->vertScrollBar->setOrientation( Qt::Vertical );
-    d->vertScrollBar->setSingleStep(60);  //just random guess based on what feels okay
-    d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
-
     // Edit Bar
     d->toolWidget = new QFrame( this );
 
@@ -1882,6 +1874,13 @@ void View::initView()
     d->canvas = new Canvas( this );
     d->canvasController = new KoCanvasController( this );
     d->canvasController->setCanvas( d->canvas );
+    d->canvasController->setCanvasMode( KoCanvasController::Infinite );
+    d->canvasController->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    d->canvasController->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    connect( d->canvas, SIGNAL(documentSizeChanged(const QSize&)),
+             d->canvasController, SLOT(setDocumentSize(const QSize&)));
+    connect( d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
+             d->canvas, SLOT(setDocumentOffset(const QPoint&)));
     KoToolRegistry::instance()->add( new DefaultToolFactory( this ) );
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
@@ -1910,6 +1909,15 @@ void View::initView()
 
     connect( this, SIGNAL( invalidated() ), d->canvas, SLOT( update() ) );
 
+    // Vert. Scroll Bar
+    d->calcLabel  = 0;
+    d->vertScrollBar = new QScrollBar( this );
+    d->canvasController->setVerticalScrollBar( d->vertScrollBar );
+//     d->vertScrollBar->setRange( 0, 4096 );
+    d->vertScrollBar->setOrientation( Qt::Vertical );
+    d->vertScrollBar->setSingleStep(60);  //just random guess based on what feels okay
+    d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
+
     QWidget* bottomPart = new QWidget( this );
     d->tabScrollBarLayout = new QHBoxLayout( bottomPart );
     d->tabScrollBarLayout->setMargin(0);
@@ -1917,11 +1925,11 @@ void View::initView()
     d->tabBar = new KoTabBar( bottomPart );
     d->tabScrollBarLayout->addWidget( d->tabBar );
     d->horzScrollBar = new QScrollBar( bottomPart );
+    d->canvasController->setHorizontalScrollBar( d->horzScrollBar );
     d->tabScrollBarLayout->addWidget( d->horzScrollBar );
 
-    d->horzScrollBar->setRange( 0, 4096 );
+//     d->horzScrollBar->setRange( 0, 4096 );
     d->horzScrollBar->setOrientation( Qt::Horizontal );
-
     d->horzScrollBar->setSingleStep(60); //just random guess based on what feels okay
     d->horzScrollBar->setPageStep(60);
 
@@ -1939,7 +1947,7 @@ void View::initView()
     d->viewLayout->addWidget( d->selectAllButton, 1, 0 );
     d->viewLayout->addWidget( d->hBorderWidget, 1, 1, 1, 2 );
     d->viewLayout->addWidget( d->vBorderWidget, 2, 0 );
-    d->viewLayout->addWidget( d->canvas, 2, 1 );
+    d->viewLayout->addWidget( d->canvasController, 2, 1 );
     d->viewLayout->addWidget( d->vertScrollBar, 2, 2 );
     d->viewLayout->addWidget( bottomPart, 3, 0, 1, 3 );
 
@@ -1950,8 +1958,8 @@ void View::initView()
         connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
 
     // signal slot
-    connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
-    connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
+//     connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
+//     connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
 }
 
 Canvas* View::canvasWidget() const
@@ -3698,6 +3706,13 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
 
     const Sheet* oldSheet = d->activeSheet;
     d->activeSheet = sheet;
+
+    // Update document size change notification and tell the Canvas about the new size.
+    disconnect( oldSheet, SIGNAL(documentSizeChanged(const QSizeF&)),
+                d->canvas, SLOT(setDocumentSize(const QSizeF&)) );
+    connect( sheet, SIGNAL(documentSizeChanged(const QSizeF&)),
+             d->canvas, SLOT(setDocumentSize(const QSizeF&)) );
+    d->canvas->setDocumentSize( d->activeSheet->documentSize() );
 
     if ( d->activeSheet == 0 )
     {
