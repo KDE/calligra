@@ -90,7 +90,7 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
   connect( m_dialog->m_selectionOnly, SIGNAL( toggled( bool ) ),
            this, SLOT( selectionOnlyChanged( bool ) ) );
   connect( this,SIGNAL(okClicked()),SLOT(slotOk()));
-  connect( this,SIGNAL(cancelClicked()),this,SLOT(slotOk()));
+  connect( this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
 }
 
 CSVExportDialog::~CSVExportDialog()
