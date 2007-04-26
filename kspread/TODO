@@ -45,6 +45,14 @@ Things to do before the release of KOffice 2.0
 Item                                                               Prio Status
 ------------------------------------------------------------------------------
 
+Regressions
+-----------
+* Autofill							      1 ----
+  Fix it. Works, if you comment out the undo creation. Probably since
+  the KCommand to QUndoCommand.
+* Border (l,r,t,b & outline)					      1 ----
+  Redo does not work.
+
 General bugs
 ------------
 
