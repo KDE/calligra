@@ -11,16 +11,15 @@ set(karboncommands_SRCS
     vshapecmd.cc 
     vstrokecmd.cc 
     vtransformcmd.cc 
-    vinsertcmd.cc 
+    vinsertcmd.cc
+    KarbonBooleanCommand.cpp
     )
 
 kde4_automoc(${karboncommands_SRCS})
 
 kde4_add_library(karboncommands ${karboncommands_SRCS})
 
-
-
-install(TARGETS karboncommands  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS karboncommands DESTINATION ${LIB_INSTALL_DIR})
 
 
 

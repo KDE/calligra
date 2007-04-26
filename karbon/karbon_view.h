@@ -42,6 +42,7 @@
 #include <KoShapeDistributeCommand.h>
 #include <KoZoomMode.h>
 #include <karbon_export.h>
+#include "KarbonBooleanCommand.h"
 
 class QLabel;
 class QDropEvent;
@@ -144,6 +145,10 @@ public slots:
 	void combinePath();
 	void separatePath();
 
+    void intersectPaths();
+    void subtractPaths();
+    void unitePaths();
+
 	void configure();
 
 	void pageLayout();
@@ -195,6 +200,8 @@ private:
 	void selectionAlign(KoShapeAlignCommand::Align align);
 	void selectionDistribute(KoShapeDistributeCommand::Distribute distribute);
 
+    void booleanOperation( KarbonBooleanCommand::BooleanOperation operation );
+
 	KarbonPart		*m_part;
 	KarbonCanvas		*m_canvas;
 	KoCanvasController	*m_canvasController;
@@ -210,6 +217,9 @@ private:
 	KAction			*m_closePath;
 	KAction			*m_combinePath;
 	KAction			*m_separatePath;
+    KAction * m_intersectPath;
+    KAction * m_subtractPath;
+    KAction * m_unitePath;
 
 	// actions:
 	KSelectAction		*m_viewAction;

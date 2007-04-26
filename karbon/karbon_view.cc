@@ -900,6 +900,50 @@ KarbonView::separatePath()
 		m_canvas->addCommand( new KoPathSeparateCommand( part(), paths ) );
 }
 
+void KarbonView::intersectPaths()
+{
+    booleanOperation( KarbonBooleanCommand::Intersection );
+}
+
+void KarbonView::subtractPaths()
+{
+    booleanOperation( KarbonBooleanCommand::Subtraction );
+}
+
+void KarbonView::unitePaths()
+{
+    booleanOperation( KarbonBooleanCommand::Union );
+}
+
+void KarbonView::booleanOperation( KarbonBooleanCommand::BooleanOperation operation )
+{
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    QList<KoPathShape*> paths;
+
+    foreach( KoShape* shape, selectedShapes )
+    {
+        KoPathShape *path = dynamic_cast<KoPathShape*>( shape );
+        if( path )
+        {
+            paths << path;
+            selection->deselect( shape );
+        }
+    }
+
+    if( paths.size() == 2 )
+    {
+        KarbonBooleanCommand * cmd = new KarbonBooleanCommand( part() );
+        cmd->setFirstOperand( paths[0] );
+        cmd->setSecondOperand( paths[1] );
+        cmd->setOperation( operation );
+        m_canvas->addCommand( cmd );
+    }
+}
+
 void
 KarbonView::viewModeChanged()
 {
@@ -1117,7 +1161,25 @@ KarbonView::initActions()
 	m_separatePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
 	m_separatePath->setEnabled( false );
 	connect(m_separatePath, SIGNAL(triggered()), this, SLOT(separatePath()));
-	// path <-----
+
+    m_intersectPath = new KAction(i18n("Intersect Paths"), this);
+    actionCollection()->addAction("intersect_path", m_intersectPath );
+    //m_intersectPath->setShortcut(QKeySequence("Shift+Ctrl+K"));
+    m_intersectPath->setEnabled( false );
+    connect(m_intersectPath, SIGNAL(triggered()), this, SLOT(intersectPaths()));
+
+    m_subtractPath = new KAction(i18n("Subtract Paths"), this);
+    actionCollection()->addAction("subtract_path", m_subtractPath );
+    //m_subtractPath->setShortcut(QKeySequence("Shift+Ctrl+K"));
+    m_subtractPath->setEnabled( false );
+    connect(m_subtractPath, SIGNAL(triggered()), this, SLOT(subtractPaths()));
+
+    m_unitePath = new KAction(i18n("Unite Paths"), this);
+    actionCollection()->addAction("unite_path", m_unitePath );
+    //m_unitePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
+    m_unitePath->setEnabled( false );
+    connect(m_unitePath, SIGNAL(triggered()), this, SLOT(unitePaths()));
+    // path <-----
 
     m_configureAction  = new KAction(KIcon("configure"), i18n("Configure Karbon..."), this);
     actionCollection()->addAction("configure", m_configureAction );
@@ -1293,6 +1355,9 @@ KarbonView::selectionChanged()
     m_ungroupObjects->setEnabled( false );
     m_closePath->setEnabled( false );
     m_combinePath->setEnabled( false );
+    m_intersectPath->setEnabled( false );
+    m_subtractPath->setEnabled( false );
+    m_unitePath->setEnabled( false );
     m_deleteSelectionAction->setEnabled( count > 0 );
 
     kDebug(38000) << count << " shapes selected" << endl;
@@ -1342,6 +1407,9 @@ KarbonView::selectionChanged()
         //m_closePath->setEnabled( selectedPaths > 0 );
         m_combinePath->setEnabled( selectedPaths > 1 );
         m_separatePath->setEnabled( selectedPaths > 0 );
+        m_intersectPath->setEnabled( selectedPaths == 2 );
+        m_subtractPath->setEnabled( selectedPaths == 2 );
+        m_unitePath->setEnabled( selectedPaths == 2 );
     }
     else
     {
