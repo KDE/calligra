@@ -108,13 +108,12 @@ void RowFormat::setHeight( double height )
         return;
     }
 
-    // Lower maximum size by old height
-    d->sheet->adjustSizeMaxY ( - this->height() );
+    // Raise document height by new height and lower it by old height.
+    if ( !hidden() )
+        d->sheet->adjustDocumentHeight( height - d->height );
 
     d->height = height;
 
-    // Rise maximum size by new height
-    d->sheet->adjustSizeMaxY ( this->height() );
     d->sheet->print()->updatePrintRepeatRowsHeight();
     d->sheet->print()->updateNewPageListY ( row() );
 
@@ -239,7 +238,7 @@ void RowFormat::setHidden( bool _hide, bool repaint )
         if ( _hide )
         {
 	    // Lower maximum size by height of row
-            d->sheet->adjustSizeMaxY ( - height() );
+            d->sheet->adjustDocumentHeight( - height() );
             d->hide = _hide; //hide must be set after we requested the height
             d->sheet->emit_updateRow( this, d->row, repaint );
         }
@@ -247,7 +246,7 @@ void RowFormat::setHidden( bool _hide, bool repaint )
         {
 	    // Rise maximum size by height of row
             d->hide = _hide; //unhide must be set before we request the height
-            d->sheet->adjustSizeMaxY ( height() );
+            d->sheet->adjustDocumentHeight( height() );
             d->sheet->emit_updateRow( this, d->row, repaint );
         }
     }
@@ -333,13 +332,12 @@ void ColumnFormat::setWidth( double width )
         return;
     }
 
-    // Lower maximum size by old width
-    d->sheet->adjustSizeMaxX ( - this->width() );
+    // Raise document width by new width and lower it by old width.
+    if ( !hidden() )
+        d->sheet->adjustDocumentWidth( width - d->width );
 
     d->width = width;
 
-    // Rise maximum size by new width
-    d->sheet->adjustSizeMaxX ( this->width() );
     d->sheet->print()->updatePrintRepeatColumnsWidth();
     d->sheet->print()->updateNewPageListX ( column() );
 
@@ -465,7 +463,7 @@ void ColumnFormat::setHidden( bool _hide )
         if ( _hide )
         {
 	    // Lower maximum size by width of column
-            d->sheet->adjustSizeMaxX ( - width() );
+            d->sheet->adjustDocumentWidth( - width() );
             d->hide = _hide; //hide must be set after we requested the width
           //  d->sheet->emit_updateColumn( this, d->column );
         }
@@ -473,7 +471,7 @@ void ColumnFormat::setHidden( bool _hide )
         {
 	    // Rise maximum size by width of column
             d->hide = _hide; //unhide must be set before we request the width
-            d->sheet->adjustSizeMaxX ( width() );
+            d->sheet->adjustDocumentWidth( width() );
          //   d->sheet->emit_updateColumn( this, d->column );
         }
     }

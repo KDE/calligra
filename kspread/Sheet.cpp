@@ -269,8 +269,7 @@ public:
 
   // Max range of canvas in x and ye direction.
   //  Depends on KS_colMax/KS_rowMax and the width/height of all columns/rows
-  double sizeMaxX;
-  double sizeMaxY;
+  QSizeF documentSize;
 
 
   bool scrollBarUpdates;
@@ -328,8 +327,8 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
 
   d->maxColumn = 256;
   d->maxRow = 256;
-  d->sizeMaxX = KS_colMax * doc()->defaultColumnFormat()->width(); // default is max cols * default width
-  d->sizeMaxY = KS_rowMax * doc()->defaultRowFormat()->height(); // default is max rows * default height
+  d->documentSize = QSizeF( KS_colMax * doc()->defaultColumnFormat()->width(),
+                            KS_rowMax * doc()->defaultRowFormat()->height() );
 
   d->scrollBarUpdates = true;
 
@@ -585,14 +584,21 @@ SheetPrint* Sheet::print() const
     return d->print;
 }
 
-double Sheet::sizeMaxX() const
+QSizeF Sheet::documentSize() const
 {
-  return d->sizeMaxX;
+    return d->documentSize;
 }
 
-double Sheet::sizeMaxY() const
+void Sheet::adjustDocumentWidth( double deltaWidth )
 {
-  return d->sizeMaxY;
+    d->documentSize.rwidth() += deltaWidth;
+    emit documentSizeChanged( d->documentSize );
+}
+
+void Sheet::adjustDocumentHeight( double deltaHeight )
+{
+    d->documentSize.rheight() += deltaHeight;
+    emit documentSizeChanged( d->documentSize );
 }
 
 int Sheet::maxColumn() const
@@ -753,16 +759,6 @@ double Sheet::rowPosition( int _row ) const
     return y;
 }
 
-
-void Sheet::adjustSizeMaxX ( double _x )
-{
-    d->sizeMaxX += _x;
-}
-
-void Sheet::adjustSizeMaxY ( double _y )
-{
-    d->sizeMaxY += _y;
-}
 
 RowFormat* Sheet::firstRow() const
 {
@@ -951,16 +947,16 @@ void Sheet::removeShiftLeft( const QRect& rect )
 
 void Sheet::insertColumns( int col, int number )
 {
+    double deltaWidth = 0.0;
     for( int i=0; i<number; i++ )
     {
-        // Recalculate range max (minus size of last column)
-        d->sizeMaxX -= columnFormat( KS_colMax )->width();
-
+        deltaWidth -= columnFormat( KS_colMax )->width();
         d->columns.insertColumn( col );
-
-        //Recalculate range max (plus size of new column)
-        d->sizeMaxX += columnFormat( col+i )->width();
+        deltaWidth += columnFormat( col+i )->width();
     }
+    // Adjust document width (plus widths of new columns; minus widths of removed columns).
+    adjustDocumentWidth( deltaWidth );
+
     foreach ( Sheet* sheet, map()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( col, 1 ), true,
@@ -975,16 +971,16 @@ void Sheet::insertColumns( int col, int number )
 
 void Sheet::insertRows( int row, int number )
 {
+    double deltaHeight = 0.0;
     for( int i=0; i<number; i++ )
     {
-        // Recalculate range max (minus size of last row)
-        d->sizeMaxY -= rowFormat( KS_rowMax )->height();
-
+        deltaHeight -= rowFormat( KS_rowMax )->height();
         d->rows.insertRow( row );
-
-        //Recalculate range max (plus size of new row)
-        d->sizeMaxY += rowFormat( row )->height();
+        deltaHeight += rowFormat( row )->height();
     }
+    // Adjust document height (plus heights of new rows; minus heights of removed rows).
+    adjustDocumentHeight( deltaHeight );
+
     foreach ( Sheet* sheet, map()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( 1, row ), true,
@@ -999,16 +995,16 @@ void Sheet::insertRows( int row, int number )
 
 void Sheet::removeColumns( int col, int number )
 {
+    double deltaWidth = 0.0;
     for ( int i = 0; i < number; ++i )
     {
-        // Recalculate range max (minus size of removed column)
-        d->sizeMaxX -= columnFormat( col )->width();
-
+        deltaWidth -= columnFormat( col )->width();
         d->columns.removeColumn( col );
-
-        //Recalculate range max (plus size of new column)
-        d->sizeMaxX += columnFormat( KS_colMax )->width();
+        deltaWidth += columnFormat( KS_colMax )->width();
     }
+    // Adjust document width (plus widths of new columns; minus widths of removed columns).
+    adjustDocumentWidth( deltaWidth );
+
     foreach ( Sheet* sheet, map()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( col, 1 ), true,
@@ -1023,16 +1019,16 @@ void Sheet::removeColumns( int col, int number )
 
 void Sheet::removeRows( int row, int number )
 {
+    double deltaHeight = 0.0;
     for( int i=0; i<number; i++ )
     {
-        // Recalculate range max (minus size of removed row)
-        d->sizeMaxY -= rowFormat( row )->height();
-
+        deltaHeight -= rowFormat( row )->height();
         d->rows.removeRow( row );
-
-        //Recalculate range max (plus size of new row)
-        d->sizeMaxY += rowFormat( KS_rowMax )->height();
+        deltaHeight += rowFormat( KS_rowMax )->height();
     }
+    // Adjust document height (plus heights of new rows; minus heights of removed rows).
+    adjustDocumentHeight( deltaHeight );
+
     foreach ( Sheet* sheet, map()->sheetList() )
     {
       sheet->changeNameCellRef( QPoint( 1, row ), true,

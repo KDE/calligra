@@ -270,6 +270,11 @@ CellEditor* Canvas::editor() const
   return d->cellEditor;
 }
 
+QPointF Canvas::offset() const
+{
+    return QPointF( d->xOffset, d->yOffset );
+}
+
 double Canvas::xOffset() const
 {
   return d->xOffset;
@@ -589,7 +594,7 @@ void Canvas::scrollToCell(QPoint location) const
     else if ( xpos > maxX )
     {
       double horzScrollBarValue = xOffset() + xpos - maxX;
-      double horzScrollBarValueMax = sheet->sizeMaxX() - unzoomedWidth;
+      double horzScrollBarValueMax = sheet->documentSize().width() - unzoomedWidth;
 
       //We don't want to display any area > KS_colMax widths
       if ( horzScrollBarValue > horzScrollBarValueMax )
@@ -622,7 +627,7 @@ void Canvas::scrollToCell(QPoint location) const
   else if ( ypos > maxY )
   {
     double vertScrollBarValue = yOffset() + ypos - maxY;
-    double vertScrollBarValueMax = sheet->sizeMaxY() - unzoomedHeight;
+    double vertScrollBarValueMax = sheet->documentSize().height() - unzoomedHeight;
 
     //We don't want to display any area > KS_rowMax heights
     if ( vertScrollBarValue > vertScrollBarValueMax )
@@ -721,7 +726,7 @@ void Canvas::slotMaxColumn( int _max_column )
   double unzoomWidth = viewConverter()->viewToDocumentX( width() );
 
   //Don't go beyond the maximum column range (KS_colMax)
-  double sizeMaxX = sheet->sizeMaxX();
+  double sizeMaxX = sheet->documentSize().width();
   if ( xpos > sizeMaxX - xOffset() - unzoomWidth )
     xpos = sizeMaxX - xOffset() - unzoomWidth;
 
@@ -741,7 +746,7 @@ void Canvas::slotMaxRow( int _max_row )
   double unzoomHeight = viewConverter()->viewToDocumentY( height() );
 
   //Don't go beyond the maximum row range (KS_rowMax)
-  double sizeMaxY = sheet->sizeMaxY();
+  double sizeMaxY = sheet->documentSize().height();
   if ( ypos > sizeMaxY - yOffset() - unzoomHeight )
     ypos = sizeMaxY - yOffset() - unzoomHeight;
 
@@ -1143,9 +1148,9 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     {
         int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
 
-        if ( ( xOffset() + ev_Width ) > sheet->sizeMaxX() )
+        if ( ( xOffset() + ev_Width ) > sheet->documentSize().width() )
         {
-          horzScrollBar()->setRange( 0, (int) ( sheet->sizeMaxX() - ev_Width ) );
+          horzScrollBar()->setRange( 0, (int) ( sheet->documentSize().width() - ev_Width ) );
           if ( sheet->layoutDirection() == Qt::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
@@ -1155,9 +1160,9 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     {
         int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
 
-        if ( horzScrollBar()->maximum() == int( sheet->sizeMaxX() - ev_Width ) )
+        if ( horzScrollBar()->maximum() == int( sheet->documentSize().width() - ev_Width ) )
         {
-          horzScrollBar()->setRange( 0, (int) (sheet->sizeMaxX() - ev_Width ) );
+          horzScrollBar()->setRange( 0, (int) (sheet->documentSize().width() - ev_Width ) );
           if ( sheet->layoutDirection() == Qt::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
@@ -1166,17 +1171,17 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     // If we rise vertically, then check if we are still within the valid area (KS_rowMax)
     if ( _ev->size().height() > _ev->oldSize().height() )
     {
-        if ( ( yOffset() + ev_Height ) > sheet->sizeMaxY() )
+        if ( ( yOffset() + ev_Height ) > sheet->documentSize().height() )
         {
-            vertScrollBar()->setRange( 0, (int) (sheet->sizeMaxY() - ev_Height ) );
+            vertScrollBar()->setRange( 0, (int) (sheet->documentSize().height() - ev_Height ) );
         }
     }
     // If we lower vertically, then check if the range should represent the maximum range
     else if ( _ev->size().height() < _ev->oldSize().height() )
     {
-        if ( vertScrollBar()->maximum() == int( sheet->sizeMaxY() - ev_Height ) )
+        if ( vertScrollBar()->maximum() == int( sheet->documentSize().height() - ev_Height ) )
         {
-            vertScrollBar()->setRange( 0, (int) ( sheet->sizeMaxY() - ev_Height ) );
+            vertScrollBar()->setRange( 0, (int) ( sheet->documentSize().height() - ev_Height ) );
         }
     }
 }

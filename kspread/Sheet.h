@@ -697,26 +697,21 @@ public:
     double rowPosition( int _row ) const;
 
     /**
-     * @return the maximum horizontal size
+     * \return the document size
      */
-    double sizeMaxX() const;
-
-    /**
-     * @return the maximum vertical size
-     */
-    double sizeMaxY() const;
+    QSizeF documentSize() const;
 
     /**
      * Adjusts the internal reference of the sum of the widths of all columns.
      * Used in resizing of columns.
      */
-    void adjustSizeMaxX ( double _x );
+    void adjustDocumentWidth( double deltaWidth );
 
     /**
      * Adjusts the internal reference of the sum of the heights of all rows.
      * Used in resizing of rows.
      */
-    void adjustSizeMaxY ( double _y );
+    void adjustDocumentHeight( double deltaHeight );
 
     /**
      * Recalculates the current sheet.
@@ -1181,6 +1176,7 @@ signals:
     void sig_SheetRemoved( Sheet* sheet);
     void sig_SheetActivated( Sheet* );
     void sig_RefreshView( Sheet* );
+    void documentSizeChanged( const QSizeF& );
 
 protected slots:
   /** react on modification (add/remove) of a named area */

@@ -170,6 +170,8 @@ public:
      */
     double zoom() const;
 
+    QPointF offset() const;
+
     /**
      * @return the width of the columns before the current screen
      */
