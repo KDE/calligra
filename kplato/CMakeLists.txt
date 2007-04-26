@@ -8,7 +8,7 @@ endif(KDE4_BUILD_TESTS)
 
 set( KPLATO_INCLUDES
     ${KOFFICEUI_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/kdgantt
+    ${CMAKE_SOURCE_DIR}/kdgantt1
 )
 
 add_subdirectory( templates )
@@ -126,9 +126,9 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
 )
 
 kde4_automoc(${kplatoprivate_LIB_SRCS})
-kde4_automoc(${libkdgantt_SRCS})
+kde4_automoc(${libkdgantt1_SRCS})
 
-kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS})
+kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt1_SRCS})
 
 target_link_libraries(kplatoprivate kofficeui)
 
