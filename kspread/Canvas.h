@@ -386,6 +386,7 @@ public:
 public Q_SLOTS:
     void setDocumentOffset( const QPoint& offset );
     void setDocumentSize( const QSizeF& size );
+#if 0
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
 
@@ -402,6 +403,7 @@ public Q_SLOTS:
      * the scrollbar range will be increased accordingly.
      */
     void slotMaxRow( int maxRow );
+#endif
 
 Q_SIGNALS:
     void documentSizeChanged( const QSize& );

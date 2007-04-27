@@ -21,13 +21,14 @@
 #include <QList>
 #include <QRect>
 
+#include <KoViewConverter.h>
+
 #include "Canvas.h"
 #include "CellView.h"
 #include "Region.h"
 #include "RectStorage.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
-#include "View.h"
 
 #include "SheetView.h"
 
@@ -37,21 +38,26 @@ class SheetView::Private
 {
 public:
     const Sheet* sheet;
-    const View* view;
+    KoViewConverter* viewConverter;
+    QPaintDevice* paintDevice;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
     QRegion cachedArea;
     CellView* defaultCellView;
+    // The maximum accessed cell range used for the scrollbar ranges.
+    QSize accessedCellRange;
 };
 
-SheetView::SheetView( const Sheet* sheet, const View* view )
+SheetView::SheetView( const Sheet* sheet )
     : d( new Private )
 {
     d->sheet = sheet;
-    d->view = view;
+    d->viewConverter = 0;
+    d->paintDevice = 0;
     d->visibleRect = QRect(1,1,0,0);
     d->cache.setMaxCost( 10000 );
     d->defaultCellView = new CellView( this );
+    d->accessedCellRange =  sheet->usedArea().size().expandedTo( QSize( 256, 256 ) );
 }
 
 SheetView::~SheetView()
@@ -65,14 +71,28 @@ const Sheet* SheetView::sheet() const
     return d->sheet;
 }
 
-const View* SheetView::view() const
+void SheetView::setViewConverter( KoViewConverter* viewConverter )
 {
-    return d->view;
+    Q_ASSERT( viewConverter );
+    d->viewConverter = viewConverter;
+}
+
+KoViewConverter* SheetView::viewConverter() const
+{
+    Q_ASSERT( d->viewConverter );
+    return d->viewConverter;
+}
+
+void SheetView::setPaintDevice( QPaintDevice* paintDevice )
+{
+    Q_ASSERT( paintDevice );
+    d->paintDevice = paintDevice;
 }
 
 QPaintDevice* SheetView::paintDevice() const
 {
-    return d->view->canvasWidget();
+    Q_ASSERT( d->paintDevice );
+    return d->paintDevice;
 }
 
 const CellView& SheetView::cellView( int col, int row )
@@ -265,3 +285,20 @@ const CellView& SheetView::defaultCellView() const
 {
     return *d->defaultCellView;
 }
+
+void SheetView::updateAccessedCellRange( const QPoint& location )
+{
+    const QSize cellRange = d->accessedCellRange.expandedTo( QSize( location.x(), location.y() ) );
+    if ( d->accessedCellRange != cellRange || location.isNull() )
+    {
+        d->accessedCellRange = cellRange;
+        const QPoint max( cellRange.width(), cellRange.height() );
+        const double xpos = sheet()->columnPosition( qMin( KS_colMax, max.x() + 10 ) )
+                          + sheet()->columnFormat( qMin( KS_colMax, max.x() + 10 ) )->width();
+        const double ypos = sheet()->rowPosition( qMin( KS_rowMax, max.y() + 10 ) );
+                          + sheet()->rowFormat( qMin( KS_rowMax, max.y() + 10 ) )->height();
+        emit visibleSizeChanged( QSizeF( xpos, ypos ) );
+    }
+}
+
+#include "SheetView.moc"

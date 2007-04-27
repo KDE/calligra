@@ -144,8 +144,7 @@ Canvas::Canvas(View *view)
   d->defaultGridPen.setWidth( 1 );
   d->defaultGridPen.setStyle( Qt::SolidLine );
 
-  d->xOffset = 0.0;
-  d->yOffset = 0.0;
+  d->offset = QPointF( 0.0, 0.0 );
 
   d->view = view;
 
@@ -272,27 +271,17 @@ CellEditor* Canvas::editor() const
 
 QPointF Canvas::offset() const
 {
-    return QPointF( d->xOffset, d->yOffset );
+    return d->offset;
 }
 
 double Canvas::xOffset() const
 {
-  return d->xOffset;
+    return d->offset.x();
 }
 
 double Canvas::yOffset() const
 {
-  return d->yOffset;
-}
-
-void Canvas::setXOffset( double _xOffset )
-{
-  d->xOffset = _xOffset;
-}
-
-void Canvas::setYOffset( double _yOffset )
-{
-  d->yOffset = _yOffset;
+    return d->offset.y();
 }
 
 const QPen& Canvas::defaultGridPen() const
@@ -562,8 +551,7 @@ void Canvas::scrollToCell(QPoint location) const
     return;
 
     // Adjust the maximum accessed column and row for the scrollbars.
-    sheet->checkRangeHBorder( location.x() );
-    sheet->checkRangeVBorder( location.y() );
+    view()->sheetView( sheet )->updateAccessedCellRange( location );
 
   double  unzoomedWidth  = d->view->zoomHandler()->viewToDocumentX( width() );
   double  unzoomedHeight = d->view->zoomHandler()->viewToDocumentY( height() );
@@ -585,9 +573,9 @@ void Canvas::scrollToCell(QPoint location) const
     if ( xpos < minX )
     {
         if ( sheet->layoutDirection() == Qt::LeftToRight )
-            horzScrollBar()->setValue( (int) (xOffset() + xpos - minX ) );
+            horzScrollBar()->setValue( (int)d->view->zoomHandler()->documentToViewX( xOffset() + xpos - minX ) );
         else
-            horzScrollBar()->setValue( (int) ( horzScrollBar()->maximum() - (xOffset() + xpos - minX ) ) );
+            horzScrollBar()->setValue( ( horzScrollBar()->maximum() - (int)d->view->zoomHandler()->documentToViewX( xOffset() + xpos - minX ) ) );
     }
 
     // Do we need to scroll right?
@@ -601,9 +589,9 @@ void Canvas::scrollToCell(QPoint location) const
         horzScrollBarValue = horzScrollBarValueMax;
 
         if ( sheet->layoutDirection() == Qt::LeftToRight )
-            horzScrollBar()->setValue( (int) horzScrollBarValue );
+            horzScrollBar()->setValue( (int)d->view->zoomHandler()->documentToViewX( horzScrollBarValue ) );
         else
-            horzScrollBar()->setValue( (int) ( horzScrollBar()->maximum() - horzScrollBarValue ) );
+            horzScrollBar()->setValue( horzScrollBar()->maximum() - (int)d->view->zoomHandler()->documentToViewX( horzScrollBarValue ) );
     }
 
 #if 0
@@ -621,7 +609,7 @@ void Canvas::scrollToCell(QPoint location) const
 
   // do we need to scroll up
   if ( ypos < minY )
-    vertScrollBar()->setValue( (int) (yOffset() + ypos - minY ) );
+    vertScrollBar()->setValue( (int)d->view->zoomHandler()->documentToViewY( yOffset() + ypos - minY ) );
 
   // do we need to scroll down
   else if ( ypos > maxY )
@@ -633,16 +621,16 @@ void Canvas::scrollToCell(QPoint location) const
     if ( vertScrollBarValue > vertScrollBarValueMax )
       vertScrollBarValue = vertScrollBarValueMax;
 
-    vertScrollBar()->setValue( (int) vertScrollBarValue );
+    vertScrollBar()->setValue( (int) d->view->zoomHandler()->documentToViewY( vertScrollBarValue ) );
   }
 }
 
 void Canvas::setDocumentOffset( const QPoint& offset )
 {
-    d->xOffset = viewConverter()->viewToDocumentX( offset.x() );
-    d->yOffset = viewConverter()->viewToDocumentY( offset.y() );
-    hBorderWidget()->scroll( offset.x(), 0 );
-    vBorderWidget()->scroll( 0, offset.y() );
+    const QPoint delta = offset - viewConverter()->documentToView( d->offset ).toPoint();
+    d->offset = viewConverter()->viewToDocument( offset );
+    hBorderWidget()->scroll( delta.x(), 0 );
+    vBorderWidget()->scroll( 0, delta.y() );
 }
 
 void Canvas::setDocumentSize( const QSizeF& size )
@@ -651,6 +639,7 @@ void Canvas::setDocumentSize( const QSizeF& size )
     emit documentSizeChanged( s );
 }
 
+#if 0
 void Canvas::slotScrollHorz( int _value )
 {
     register Sheet * const sheet = activeSheet();
@@ -766,6 +755,7 @@ void Canvas::slotMaxRow( int _max_row )
 
   vertScrollBar()->setRange( 0, (int) ( ypos + yOffset() ) );
 }
+#endif
 
 void Canvas::mousePressEvent( QMouseEvent* event )
 {

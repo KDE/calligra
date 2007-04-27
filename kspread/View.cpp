@@ -2050,9 +2050,13 @@ SheetView* View::sheetView( const Sheet* sheet ) const
     if ( !d->sheetViews.contains( sheet ) )
     {
         kDebug(36004) << "View: Creating SheetView for " << sheet->sheetName() << endl;
-        d->sheetViews.insert( sheet, new SheetView( sheet, this ) );
+        d->sheetViews.insert( sheet, new SheetView( sheet ) );
+        d->sheetViews[ sheet ]->setPaintDevice( d->canvas );
+        d->sheetViews[ sheet ]->setViewConverter( zoomHandler() );
         connect( sheet->cellStorage(), SIGNAL( inform( const QString& ) ),
                  this, SLOT( notify( const QString& ) ) );
+        connect( d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
+                 d->canvas, SLOT(setDocumentSize(const QSizeF&)) );
     }
     return d->sheetViews[ sheet ];
 }
@@ -2610,8 +2614,8 @@ void View::initialPosition()
     // Set the initial X and Y offsets for the view (Native format loading)
     if ( !doc()->loadingInfo() )
     {
-        double offsetX = doc()->map()->initialXOffset();
-        double offsetY = doc()->map()->initialYOffset();
+        const int offsetX = (int)zoomHandler()->documentToViewX( doc()->map()->initialXOffset() );
+        const int offsetY = (int)zoomHandler()->documentToViewY( doc()->map()->initialYOffset() );
         // Set the initial position for the marker as stored in the XML file,
         // (1,1) otherwise
         int col = doc()->map()->initialMarkerColumn();
@@ -2620,10 +2624,9 @@ void View::initialPosition()
         int row = doc()->map()->initialMarkerRow();
         if ( row <= 0 )
             row = 1;
-        d->canvas->setXOffset( offsetX );
-        d->canvas->setYOffset( offsetY );
-        d->horzScrollBar->setValue( (int)offsetX );
-        d->vertScrollBar->setValue( (int)offsetY );
+        d->canvas->setDocumentOffset( QPoint( offsetX, offsetY ) );
+        d->horzScrollBar->setValue( offsetX );
+        d->vertScrollBar->setValue( offsetY );
         d->selection->initialize( QPoint(col, row) );
     }
 
@@ -3640,8 +3643,8 @@ void View::addSheet( Sheet * _t )
   // This will lead to bugs.
   connect( _t, SIGNAL( sig_updateChildGeometry( EmbeddedKOfficeObject* ) ),
                     SLOT( slotUpdateChildGeometry( EmbeddedKOfficeObject* ) ) );
-  connect( _t, SIGNAL( sig_maxColumn( int ) ), d->canvas, SLOT( slotMaxColumn( int ) ) );
-  connect( _t, SIGNAL( sig_maxRow( int ) ), d->canvas, SLOT( slotMaxRow( int ) ) );
+//   connect( _t, SIGNAL( sig_maxColumn( int ) ), d->canvas, SLOT( slotMaxColumn( int ) ) );
+//   connect( _t, SIGNAL( sig_maxRow( int ) ), d->canvas, SLOT( slotMaxRow( int ) ) );
 
   if ( !d->loading )
     updateBorderButton();
@@ -3707,18 +3710,14 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
     const Sheet* oldSheet = d->activeSheet;
     d->activeSheet = sheet;
 
-    // Update document size change notification and tell the Canvas about the new size.
-    disconnect( oldSheet, SIGNAL(documentSizeChanged(const QSizeF&)),
-                d->canvas, SLOT(setDocumentSize(const QSizeF&)) );
-    connect( sheet, SIGNAL(documentSizeChanged(const QSizeF&)),
-             d->canvas, SLOT(setDocumentSize(const QSizeF&)) );
-    d->canvas->setDocumentSize( d->activeSheet->documentSize() );
-
     if ( d->activeSheet == 0 )
     {
         doc()->emitEndOperation();
         return;
     }
+
+    // Tell the Canvas about the new visible sheet size.
+    sheetView( d->activeSheet )->updateAccessedCellRange();
 
     if ( oldSheet && oldSheet->layoutDirection() != d->activeSheet->layoutDirection() )
         refreshView();
@@ -3730,8 +3729,6 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
         d->vBorderWidget->repaint();
         d->hBorderWidget->repaint();
         d->selectAllButton->repaint();
-        d->canvas->slotMaxColumn( d->activeSheet->maxColumn() );
-        d->canvas->slotMaxRow( d->activeSheet->maxRow() );
     }
 
     /* see if there was a previous selection on this other sheet */
@@ -3752,10 +3749,10 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
     d->canvas->scrollToCell(newMarker);
     if (it3 != d->savedOffsets.end())
     {
-        d->canvas->setXOffset((*it3).x());
-        d->canvas->setYOffset((*it3).y());
-        d->horzScrollBar->setValue((int)(*it3).x());
-        d->vertScrollBar->setValue((int)(*it3).y());
+        const QPoint offset = zoomHandler()->documentToView( *it3 ).toPoint();
+        d->canvas->setDocumentOffset( offset );
+        d->horzScrollBar->setValue( offset.x() );
+        d->vertScrollBar->setValue( offset.y() );
     }
 
     d->actions->showPageBorders->setChecked( d->activeSheet->isShowPageBorders() );
@@ -3815,8 +3812,6 @@ void View::changeSheet( const QString& _name )
     d->vBorderWidget->repaint();
     d->hBorderWidget->repaint();
     d->selectAllButton->repaint();
-    d->canvas->slotMaxColumn( d->activeSheet->maxColumn() );
-    d->canvas->slotMaxRow( d->activeSheet->maxRow() );
     t->setRegionPaintDirty( d->canvas->visibleCells() );
     doc()->emitEndOperation();
 }

@@ -20,31 +20,36 @@
 #ifndef KSPREAD_SHEET_VIEW
 #define KSPREAD_SHEET_VIEW
 
+#include <QObject>
+
 class QPainter;
 class QPointF;
 class QRect;
 class QRectF;
+
+class KoViewConverter;
 
 namespace KSpread
 {
 class CellView;
 class Region;
 class Sheet;
-class View;
 
 /**
  * The SheetView controls the painting of the sheets' cells.
  * It caches a set of CellViews.
  */
-class KSPREAD_EXPORT SheetView
+class KSPREAD_EXPORT SheetView : public QObject
 {
+    Q_OBJECT
+
     friend class CellView;
 
 public:
     /**
      * Constructor.
      */
-    explicit SheetView( const Sheet* sheet, const View* view = 0 );
+    explicit SheetView( const Sheet* sheet );
 
     /**
      * Destructor.
@@ -57,9 +62,19 @@ public:
     const Sheet* sheet() const;
 
     /**
+     * Sets the KoViewConverter used by this SheetView.
+     */
+    void setViewConverter( KoViewConverter* viewConverter );
+
+    /**
      * \return the view in which the Sheet is painted
      */
-    const View* view() const;
+    KoViewConverter* viewConverter() const;
+
+    /**
+     * Sets the paint device used by this SheetView.
+     */
+    void setPaintDevice( QPaintDevice* paintDevice );
 
     /**
      * \return the paint device on which the Sheet is painted
@@ -95,6 +110,11 @@ public:
      */
     void paintCells( QPaintDevice* paintDevice, QPainter& painter, const QRectF& paintRect,
                      const QPointF& topLeft );
+
+    void updateAccessedCellRange( const QPoint& location = QPoint() );
+
+Q_SIGNALS:
+    void visibleSizeChanged( const QSizeF& );
 
 private:
     /**

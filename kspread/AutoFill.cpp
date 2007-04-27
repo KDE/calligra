@@ -746,8 +746,8 @@ void Sheet::autofill( const QRect& src, const QRect& dest )
 
     // update the max sroll range ONCE here
     enableScrollBarUpdates(true);
-    checkRangeHBorder(dest.right());
-    checkRangeVBorder(dest.bottom());
+//     checkRangeHBorder(dest.right());
+//     checkRangeVBorder(dest.bottom());
 
     setRegionPaintDirty( Region(dest) );
     emit sig_updateView( this );

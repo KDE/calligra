@@ -3096,11 +3096,6 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     loadOasisInsertStyles( autoStyles, cellStyleRegions, conditionalStyles,
                            QRect( 1, 1, maxColumn, rowIndex - 1 ) );
 
-    // initialize the scrollbars' values
-    const QRect usedArea = this->usedArea();
-    checkRangeHBorder( usedArea.width() );
-    checkRangeVBorder( usedArea.height() );
-
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
     {
         // e.g.: Sheet4.A1:Sheet4.E28
@@ -4606,11 +4601,6 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
         n = n.nextSibling();
     }
 
-    // initialize the scrollbars' values
-    const QRect usedArea = this->usedArea();
-    checkRangeHBorder( usedArea.width() );
-    checkRangeVBorder( usedArea.height() );
-
     // load print repeat columns
     KoXmlElement printrepeatcolumns = sheet.namedItem( "printrepeatcolumns" ).toElement();
     if ( !printrepeatcolumns.isNull() )
@@ -4954,24 +4944,6 @@ Sheet::~Sheet()
     delete d->cellStorage;
 
     delete d;
-}
-
-void Sheet::checkRangeHBorder ( int _column )
-{
-    if ( d->scrollBarUpdates && _column > d->maxColumn )
-    {
-      d->maxColumn = _column;
-      emit sig_maxColumn( _column );
-    }
-}
-
-void Sheet::checkRangeVBorder ( int _row )
-{
-    if ( d->scrollBarUpdates && _row > d->maxRow )
-    {
-      d->maxRow = _row;
-      emit sig_maxRow( _row );
-    }
 }
 
 

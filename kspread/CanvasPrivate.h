@@ -50,15 +50,12 @@ public:
 // FIXME Stefan: Still needed?
 //     QTimer* scrollTimer;
 
-    // Non visible range left from current screen
-    // Example: If the first visible column is 'E', then xOffset stores
+    // Non-visible range top-left from current screen
+    // Example: If the first visible column is 'E', then offset stores
     // the width of the invisible columns 'A' to 'D'.
-    double xOffset;
-
-    // Non visible range on top of the current screen
-    // Example: If the first visible row is '5', then yOffset stores
+    // Example: If the first visible row is '5', then offset stores
     // the height of the invisible rows '1' to '4'.
-    double yOffset;
+    QPointF offset;
 
     // Used to draw the grey grid that is usually only visible on the
     // screen, but not by printing on paper.

@@ -175,7 +175,7 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     d->layoutDirection = sheet->layoutDirection();
 
     d->hidden = sheet->columnFormat( col )->hidden() ||
-                ( sheet->rowFormat( row )->height() <= sheetView->view()->zoomHandler()->viewToDocumentY( 2 ) );
+                ( sheet->rowFormat( row )->height() <= sheetView->viewConverter()->viewToDocumentY( 2 ) );
 
     // horizontal align
     if ( d->style.halign() == Style::HAlignUndefined )
