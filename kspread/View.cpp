@@ -96,6 +96,8 @@
 #include <KoOasisStore.h>
 #include <KoOasisStyles.h>
 #include <KoPartSelectAction.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
 #include <KoTabBar.h>
 #include <KoToolBox.h>
 #include <KoToolManager.h>
@@ -3716,6 +3718,10 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
         return;
     }
 
+    // flake
+    // Change the active shape container (layer) and use its shapes.
+    d->canvas->shapeManager()->selection()->setActiveLayer( d->activeSheet );
+    d->canvas->shapeManager()->setShapes( d->activeSheet->iterator() );
     // Tell the Canvas about the new visible sheet size.
     sheetView( d->activeSheet )->updateAccessedCellRange();
 

@@ -373,19 +373,41 @@ void Doc::setDefaultRowHeight( double height )
 
 void Doc::addShape( KoShape* shape )
 {
+    if ( !shape )
+        return;
+    KoShape* parent = shape;
+    Sheet* sheet = 0;
+    while ( !sheet && ( parent = parent->parent() ) )
+    {
+        sheet = dynamic_cast<Sheet*>( parent );
+    }
+    Q_ASSERT( sheet );
+
     foreach ( KoView* view, views() )
     {
         Canvas* canvas = static_cast<View*>( view )->canvasWidget();
-        canvas->shapeManager()->add( shape );
+        if ( canvas->activeSheet() == sheet )
+            canvas->shapeManager()->add( shape );
     }
 }
 
 void Doc::removeShape( KoShape* shape )
 {
+    if ( !shape )
+        return;
+    KoShape* parent = shape;
+    Sheet* sheet = 0;
+    while ( !sheet && ( parent = parent->parent() ) )
+    {
+        sheet = dynamic_cast<Sheet*>( parent );
+    }
+    Q_ASSERT( sheet );
+
     foreach ( KoView* view, views() )
     {
         Canvas* canvas = static_cast<View*>( view )->canvasWidget();
-        canvas->shapeManager()->remove( shape );
+        if ( canvas->activeSheet() == sheet )
+            canvas->shapeManager()->remove( shape );
     }
 }
 

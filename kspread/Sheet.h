@@ -34,6 +34,7 @@
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
+#include <KoShapeLayer.h>
 #include <KoXmlReader.h>
 
 #include "Cell.h"
@@ -162,7 +163,7 @@ private:
 /**
  * A sheet contains several cells.
  */
-class KSPREAD_EXPORT Sheet : public QObject
+class KSPREAD_EXPORT Sheet : public QObject, public KoShapeLayer
 {
     Q_OBJECT
     Q_PROPERTY( QString sheetName READ sheetName )
