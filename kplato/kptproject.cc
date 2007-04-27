@@ -835,7 +835,7 @@ bool Project::moveTask( Node* node, Node *newParent, int newPos )
     }
     const Node *before = newParent->childNode( newPos );
     takeTask( node );
-    int i = before == 0 ? newParent->numChildren() : newParent->indexOf( before );
+    int i = before == 0 ? newParent->numChildren() : newPos;
     addSubTask( node, i, newParent );
     return true;
 }
