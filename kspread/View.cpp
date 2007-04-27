@@ -1818,11 +1818,11 @@ View::~View()
 
     delete d->actions;
     delete d->zoomHandler;
-    delete d->canvasController;
     // NOTE Stefan: Delete the Canvas explicitly, even if it has this view as
     //              parent. Otherwise, it leads to crashes, because it tries to
     //              access this View in some events (Bug #126492).
-    delete d->canvas;
+    //              The KoCanvasController takes ownership of the Canvas and does the deletion.
+    delete d->canvasController;
     delete d;
 }
 
