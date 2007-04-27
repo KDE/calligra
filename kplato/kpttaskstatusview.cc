@@ -159,7 +159,7 @@ void TaskStatusItemModel::clear()
             //FIXME: gives error msg:
             // Can't select indexes from different model or with different parents
             QModelIndex i = index( l );
-            beginRemoveRows( index( l ), 0, c );
+            beginRemoveRows( index( l ), 0, c-1 );
             l->clear();
             endRemoveRows();
         }
@@ -201,7 +201,7 @@ void TaskStatusItemModel::refresh()
     foreach ( NodeList *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
-            beginInsertRows( index( l ), 0, c );
+            beginInsertRows( index( l ), 0, c-1 );
             endInsertRows();
         }
     }
@@ -253,7 +253,7 @@ QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &
         return QModelIndex();
     }
     if ( ! parent.isValid() ) {
-        if ( row > m_top.count() ) {
+        if ( row >= m_top.count() ) {
             return QModelIndex();
         }
         return createIndex(row, column, m_top.value( row ) );
@@ -262,7 +262,9 @@ QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &
     if ( l == 0 ) {
         return QModelIndex();
     }
-    return createIndex(row, column, l->value( row ) );
+    QModelIndex i = createIndex(row, column, l->value( row ) );
+    Q_ASSERT( i.internalPointer() != 0 );
+    return i;
 }
 
 QModelIndex TaskStatusItemModel::index( const Node *node ) const
