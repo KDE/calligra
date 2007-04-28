@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.kruiselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,31 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef MUSIC_SHAPE
-#define MUSIC_SHAPE
+#ifndef MUSIC_STYLE_H
+#define MUSIC_STYLE_H
 
-#include <KoShape.h>
-#include <kurl.h>
-#define MusicShapeId "MusicShape"
+#include "core/Chord.h"
+#include <QtGui/QPen>
+#include <QtGui/QPainter>
 
-namespace MusicCore {
-    class Sheet;
-}
-class MusicStyle;
-
-class MusicShape : public KoShape
-{
+/**
+ * This class contains various methods that define how music is rendered. Currently all hardcoded
+ * implementations, but in the future this class would become pure virtual, with verious implementations.
+ */
+class MusicStyle {
 public:
-    MusicShape();
-    virtual ~MusicShape();
-
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-
-    virtual void resize( const QSizeF &newSize );
+    MusicStyle();
+    virtual ~MusicStyle();
+    virtual QPen staffLinePen();
+    virtual QPen stemPen();
+    virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration);
 private:
-    MusicCore::Sheet* m_sheet;
-    MusicStyle* m_style;
+    QPen m_staffLinePen, m_stemPen;
+    QFont m_font;
 };
 
-
-#endif // MUSIC_SHAPE
+#endif // MUSIC_STYLE_H

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.kruiselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,31 +16,44 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef MUSIC_SHAPE
-#define MUSIC_SHAPE
-
-#include <KoShape.h>
-#include <kurl.h>
-#define MusicShapeId "MusicShape"
+#include "Note.h"
 
 namespace MusicCore {
-    class Sheet;
-}
-class MusicStyle;
 
-class MusicShape : public KoShape
-{
+class Note::Private {
 public:
-    MusicShape();
-    virtual ~MusicShape();
-
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-
-    virtual void resize( const QSizeF &newSize );
-private:
-    MusicCore::Sheet* m_sheet;
-    MusicStyle* m_style;
+    Chord* chord;
+    Staff* staff;
+    int pitch;
+    int accidentals;
 };
 
+Note::Note(Chord* chord, Staff* staff, int pitch, int accidentals) : d(new Private)
+{
+    d->chord = chord;
+    d->staff = staff;
+    d->pitch = pitch;
+    d->accidentals = accidentals;
+}
 
-#endif // MUSIC_SHAPE
+Chord* Note::chord()
+{
+    return d->chord;
+}
+
+Staff* Note::staff()
+{
+    return d->staff;
+}
+
+int Note::pitch() const
+{
+    return d->pitch;
+}
+
+int Note::accidentals() const
+{
+    return d->accidentals;
+}
+
+} // namespace MusicCore

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.kruiselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,31 +16,32 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef MUSIC_SHAPE
-#define MUSIC_SHAPE
+#ifndef MUSIC_CORE_VOICE_H
+#define MUSIC_CORE_VOICE_H
 
-#include <KoShape.h>
-#include <kurl.h>
-#define MusicShapeId "MusicShape"
+#include <QtCore/QString>
 
 namespace MusicCore {
-    class Sheet;
-}
-class MusicStyle;
 
-class MusicShape : public KoShape
+class Part;
+class VoiceBar;
+class Bar;
+/**
+ * A voice contains the actual musical elements in a piece of music.
+ */
+class Voice
 {
 public:
-    MusicShape();
-    virtual ~MusicShape();
+    Part* part();
 
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-
-    virtual void resize( const QSizeF &newSize );
+    VoiceBar* bar(Bar* bar);
 private:
-    MusicCore::Sheet* m_sheet;
-    MusicStyle* m_style;
+    Voice(Part* part);
+    friend class Part;
+    class Private;
+    Private * const d;
 };
 
+} // namespace MusicCore
 
-#endif // MUSIC_SHAPE
+#endif // MUSIC_CORE_VOICE_H

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.kruiselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,31 +16,45 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef MUSIC_SHAPE
-#define MUSIC_SHAPE
+#ifndef MUSIC_CORE_CHORD_H
+#define MUSIC_CORE_CHORD_H
 
-#include <KoShape.h>
-#include <kurl.h>
-#define MusicShapeId "MusicShape"
+#include "MusicElement.h"
 
 namespace MusicCore {
-    class Sheet;
-}
-class MusicStyle;
 
-class MusicShape : public KoShape
+class Note;
+
+class Chord : public MusicElement
 {
 public:
-    MusicShape();
-    virtual ~MusicShape();
+    enum Duration {
+        HundredTwentyEighth,
+        SixtyFourth,
+        ThirtySecond,
+        Sixteenth,
+        Eighth,
+        Quarter,
+        Half,
+        Whole,
+        Breve
+    };
 
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    Duration duration() const;
+    int dots() const;
 
-    virtual void resize( const QSizeF &newSize );
+    int noteCount() const;
+    Note* note(int index);
+    Note* addNote(Staff* staff, int pitch, int accidentals = 0);
+
+    Chord(Duration duration, int dots = 0);
+    Chord(Staff* staff, Duration duration, int dots = 0);
+    virtual ~Chord();
 private:
-    MusicCore::Sheet* m_sheet;
-    MusicStyle* m_style;
+    class Private;
+    Private * const d;
 };
 
+} // namespace MusicCore
 
-#endif // MUSIC_SHAPE
+#endif // MUSIC_CORE_CHORD_H

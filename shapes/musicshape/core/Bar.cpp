@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.kruiselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,31 +16,41 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef MUSIC_SHAPE
-#define MUSIC_SHAPE
-
-#include <KoShape.h>
-#include <kurl.h>
-#define MusicShapeId "MusicShape"
+#include "Bar.h"
 
 namespace MusicCore {
-    class Sheet;
-}
-class MusicStyle;
 
-class MusicShape : public KoShape
+class Bar::Private
 {
 public:
-    MusicShape();
-    virtual ~MusicShape();
-
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-
-    virtual void resize( const QSizeF &newSize );
-private:
-    MusicCore::Sheet* m_sheet;
-    MusicStyle* m_style;
+    Sheet* sheet;
+    int index;
 };
 
+Bar::Bar(Sheet* sheet, int index) : d(new Private)
+{
+    d->sheet = sheet;
+    d->index = index;
+}
 
-#endif // MUSIC_SHAPE
+Bar::~Bar()
+{
+    delete d;
+}
+
+Sheet* Bar::sheet()
+{
+    return d->sheet;
+}
+
+int Bar::index() const
+{
+    return d->index;
+}
+
+void Bar::setIndex(int index)
+{
+    d->index = index;
+}
+
+} // namespace MusicCore

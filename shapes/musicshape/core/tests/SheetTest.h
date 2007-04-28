@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.kruiselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,31 +16,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef MUSIC_SHAPE
-#define MUSIC_SHAPE
+#ifndef MUSIC_CORE_SHEETTEST_H
+#define MUSIC_CORE_SHEETTEST_H
 
-#include <KoShape.h>
-#include <kurl.h>
-#define MusicShapeId "MusicShape"
+#include <QtCore/QObject>
 
 namespace MusicCore {
     class Sheet;
 }
-class MusicStyle;
 
-class MusicShape : public KoShape
+class SheetTest : public QObject
 {
-public:
-    MusicShape();
-    virtual ~MusicShape();
-
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-
-    virtual void resize( const QSizeF &newSize );
+    Q_OBJECT
+private slots:
+    void init();
+    void cleanup();
+    void testConstruction();
+    void testAddPart();
+    void testInsertPart();
+    void testRemovePart_index();
+    void testRemovePart_part();
+    void testAddPartGroup();
+    void testRemovePartGroup();
+    void testAddBar();
+    void testAddBars();
+    void testInsertBar();
+    void testRemoveBar();
+    void testRemoveBars();
 private:
-    MusicCore::Sheet* m_sheet;
-    MusicStyle* m_style;
+    MusicCore::Sheet* sheet;
 };
 
-
-#endif // MUSIC_SHAPE
+#endif

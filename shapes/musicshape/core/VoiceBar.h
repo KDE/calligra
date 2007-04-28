@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.kruiselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,31 +16,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef MUSIC_SHAPE
-#define MUSIC_SHAPE
-
-#include <KoShape.h>
-#include <kurl.h>
-#define MusicShapeId "MusicShape"
+#ifndef MUSIC_CORE_VOICEBAR_H
+#define MUSIC_CORE_VOICEBAR_H
 
 namespace MusicCore {
-    class Sheet;
-}
-class MusicStyle;
 
-class MusicShape : public KoShape
+class Voice;
+class Bar;
+class MusicElement;
+
+class VoiceBar
 {
 public:
-    MusicShape();
-    virtual ~MusicShape();
-
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-
-    virtual void resize( const QSizeF &newSize );
+    Voice* voice();
+    Bar* bar();
+    int elementCount() const;
+    MusicElement* element(int index);
+    void addElement(MusicElement* element);
+    void insertElement(MusicElement* element, int before);
+    void insertElement(MusicElement* element, MusicElement* before);
+    void removeElement(int index);
+    void removeElement(MusicElement* element);
 private:
-    MusicCore::Sheet* m_sheet;
-    MusicStyle* m_style;
+    VoiceBar(Voice* voice, Bar* bar);
+    ~VoiceBar();
+    friend class Voice;
+    class Private;
+    Private * const d;
 };
 
+} // namespace MusicCore
 
-#endif // MUSIC_SHAPE
+#endif // MUSIC_CORE_VOICEBAR_H
