@@ -1,0 +1,238 @@
+<ui version="4.0" >
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>695</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="projectGroupBox" >
+     <property name="title" >
+      <string>Project</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="leftMargin" >
+       <number>9</number>
+      </property>
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="1" >
+       <layout class="QVBoxLayout" >
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="labelCriticalPath" >
+            <property name="text" >
+             <string>Critical Path (Task Id) :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelResultCriticalPath" >
+            <property name="text" >
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="labelProjectFloat" >
+            <property name="text" >
+             <string>Project Float :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelResultProjectFloat" >
+            <property name="text" >
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QGroupBox" name="taskGroupBoxDetail" >
+     <property name="title" >
+      <string>Task details </string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="leftMargin" >
+       <number>9</number>
+      </property>
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QTreeWidget" name="treeWidgetTaskResult" >
+        <property name="horizontalScrollBarPolicy" >
+         <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+        <property name="itemsExpandable" >
+         <bool>false</bool>
+        </property>
+        <column>
+         <property name="text" >
+          <string>Id</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Task</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Early start date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Early finish date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Late start date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Late finish date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Float</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Free Margin</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QTreeWidget" name="treeWidget" >
+     <column>
+      <property name="text" >
+       <string>Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>State</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Overbooking</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Distribution</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Calculate</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
