@@ -104,9 +104,10 @@
 #include <KoToolRegistry.h>
 #include <Toolbox.h>
 #include <KoTemplateCreateDia.h>
-#include <KoZoomAction.h>
 #include <ktoolinvocation.h>
 #include <KoToolBoxFactory.h>
+#include <KoZoomAction.h>
+#include <KoZoomController.h>
 #include <KoZoomHandler.h>
 
 // KSpread includes
@@ -216,6 +217,7 @@ public:
     QFrame *toolWidget;
     Canvas *canvas;
     KoCanvasController* canvasController;
+    KoZoomController* zoomController;
     KoZoomHandler* zoomHandler;
     VBorder *vBorderWidget;
     HBorder *hBorderWidget;
@@ -490,7 +492,6 @@ public:
     QAction * inspector;
 
     // settings
-    KoZoomAction* viewZoom;
     KToggleAction* showStatusBar;
     KToggleAction* showTabBar;
     KToggleAction* showFormulaBar;
@@ -1228,11 +1229,6 @@ void View::Private::initActions()
   connect( actions->formulaSelection, SIGNAL( triggered( const QString& ) ),
       view, SLOT( formulaSelection( const QString& ) ) );
 
-    actions->viewZoom = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT, i18n( "Zoom" ), false, view );
-    ac->addAction( "view_zoom", actions->viewZoom );
-    connect( actions->viewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
-             view, SLOT( viewZoom( KoZoomMode::Mode, double ) ) );
-
   actions->consolidate  = new KAction(i18n("&Consolidate..."), view);
   ac->addAction("consolidate", actions->consolidate );
   connect(actions->consolidate, SIGNAL(triggered(bool)),view, SLOT( consolidate() ));
@@ -1763,8 +1759,6 @@ View::View( QWidget *_parent, Doc *_doc )
         setZoom( 100, true );
     }
 
-    d->actions->viewZoom->setZoom( zoomHandler()->zoomInPercent() );
-
     // ## Might be wrong, if doc isn't loaded yet
     d->actions->selectStyle->setItems( d->doc->styleManager()->styleNames() );
 
@@ -1819,6 +1813,7 @@ View::~View()
     d->insertHandler = 0;
 
     delete d->actions;
+    delete d->zoomController;
     delete d->zoomHandler;
     // NOTE Stefan: Delete the Canvas explicitly, even if it has this view as
     //              parent. Otherwise, it leads to crashes, because it tries to
@@ -1872,7 +1867,7 @@ void View::initView()
     d->formulaBarLayout->addWidget( d->okButton );
     d->formulaBarLayout->addSpacing( 4 );
 
-    // The widget on which we display the sheet
+    // Setup the Canvas and its controller.
     d->canvas = new Canvas( this );
     d->canvasController = new KoCanvasController( this );
     d->canvasController->setCanvas( d->canvas );
@@ -1883,13 +1878,22 @@ void View::initView()
              d->canvasController, SLOT(setDocumentSize(const QSize&)));
     connect( d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
              d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+
+    // Setup the tool dock widget.
     KoToolRegistry::instance()->add( new DefaultToolFactory( this ) );
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
     KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
     createDockWidget( &toolBoxFactory );
     KoToolManager::instance()->switchToolRequested( KSPREAD_DEFAULT_TOOL_ID );
+
+    // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
+    d->zoomController = new KoZoomController( d->canvasController, d->zoomHandler, actionCollection(), false );
+    d->zoomController->zoomAction()->setZoomModes( KoZoomMode::ZOOM_CONSTANT );
+    addStatusBarItem( d->zoomController->zoomAction()->createWidget( statusBar() ), 0, true );
+    connect( d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
+             this, SLOT(viewZoom(KoZoomMode::Mode, double)) );
 
     // The line-editor that appears above the sheet and allows to
     // edit the cells content. It knows about the two buttons.
@@ -2059,6 +2063,8 @@ SheetView* View::sheetView( const Sheet* sheet ) const
                  this, SLOT( notify( const QString& ) ) );
         connect( d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
                  d->canvas, SLOT(setDocumentSize(const QSizeF&)) );
+        connect( d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
+                 d->zoomController, SLOT(setDocumentSize(const QSizeF&)) );
     }
     return d->sheetViews[ sheet ];
 }
@@ -2765,7 +2771,6 @@ void View::updateReadWrite( bool readwrite )
     d->actions->hideSheet->setEnabled( true );
   }
   d->actions->gotoCell->setEnabled( true );
-  d->actions->viewZoom->setEnabled( true );
   d->actions->showPageBorders->setEnabled( true );
   d->actions->find->setEnabled( true);
   d->actions->replace->setEnabled( readwrite );
@@ -5116,17 +5121,11 @@ void View::togglePageBorders( bool mode )
 
 void View::viewZoom( KoZoomMode::Mode mode, double zoom )
 {
-    int oldZoom = zoomHandler()->zoomInPercent();
-    int newZoom = qRound( zoom * 100 );
-
-    bool ok = ( mode == KoZoomMode::ZOOM_CONSTANT );
-    if ( !ok || newZoom < 10 ) //zoom should be valid and >10
-        newZoom = oldZoom;
-    if ( newZoom != oldZoom )
-    {
-        d->canvas->closeEditor();
-        setZoom( newZoom, true );
-    }
+    Q_ASSERT( mode == KoZoomMode::ZOOM_CONSTANT );
+    d->canvas->closeEditor();
+    doc()->emitBeginOperation( false );
+    doc()->refreshInterface();
+    doc()->emitEndOperation(/* Region( 1, 1, KS_colMax, KS_rowMax ) */);
 }
 
 void View::setZoom( int zoom, bool /*updateViews*/ )
@@ -5380,7 +5379,6 @@ void View::refreshView()
     return;
 
   d->adjustActions( !sheet->isProtected() );
-  d->actions->viewZoom->setZoom( zoomHandler()->zoomInPercent() );
 
   bool active = sheet->getShowFormula();
   if ( sheet && !sheet->isProtected() )
