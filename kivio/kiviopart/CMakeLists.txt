@@ -21,7 +21,6 @@ set(kiviocommon_LIB_SRCS
    kivio_map.cpp 
    kivio_page.cpp 
    kivio_dlg_pageshow.cpp 
-   kivio_zoomaction.cpp 
    kivio_icon_view.cpp 
    kivio_spawner_drag.cpp 
    kivio_intra_stencil_data.cpp 

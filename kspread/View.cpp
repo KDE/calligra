@@ -576,11 +576,14 @@ void View::Private::initActions()
   ac->addAction("decreaseFontSize", actions->fontSizeDown );
   connect(actions->fontSizeDown, SIGNAL(triggered(bool)), view, SLOT( decreaseFontSize() ));
 
-
+#warning reenable a textcolor action
+/*
   actions->textColor = new TKSelectColorAction( i18n("Text Color"), TKSelectColorAction::TextColor, view, SLOT( changeTextColor() ),
       ac, "textColor",true );
+  ac->addAction("decreaseFontSize", actions->textColor );
+  connect(actions->textcolor, SIGNAL(changeColor()), view, SLOT( changeTextColor()));
   actions->textColor->setDefaultColor(QColor());
-
+*/
 
     // -- horizontal alignment --
     //
@@ -704,11 +707,14 @@ void View::Private::initActions()
 
   actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter"));
 
+#warning reenable a background color action
+/*
   actions->bgColor = new TKSelectColorAction( i18n("Background Color"),  TKSelectColorAction::FillColor, ac, "backgroundColor", true );
   connect(actions->bgColor, SIGNAL( activated() ),
                    view, SLOT( changeBackgroundColor() ) );
   actions->bgColor->setDefaultColor(QColor());
   actions->bgColor->setToolTip(i18n("Set the background color"));
+*/
 
   actions->borderLeft  = new KAction(KIcon( "border_left" ), i18n("Border Left"), view);
   ac->addAction("borderLeft", actions->borderLeft );
@@ -752,11 +758,13 @@ void View::Private::initActions()
 
   actions->borderOutline->setToolTip(i18n("Set a border to the outline of the selected area"));
 
+#warning reenable a bordercolor action
+/*
   actions->borderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, ac, "borderColor" );
   connect( actions->borderColor, SIGNAL( activated() ),
                     view, SLOT( changeBorderColor() ) );
   actions->borderColor->setToolTip( i18n( "Select a new border color" ) );
-
+*/
   actions->selectStyle  = new KSelectAction(i18n("St&yle"), view);
   ac->addAction("stylemenu", actions->selectStyle );
   actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
