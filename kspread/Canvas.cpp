@@ -635,7 +635,7 @@ void Canvas::setDocumentOffset( const QPoint& offset )
 
 void Canvas::setDocumentSize( const QSizeF& size )
 {
-    const QSize s = viewConverter()->documentToView( QRectF( QPoint(0,0), size ) ).size().toSize();
+    const QSize s = viewConverter()->documentToView( size ).toSize();
     emit documentSizeChanged( s );
 }
 
