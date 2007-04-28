@@ -109,7 +109,9 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     d->currentMasterPage = "Standard";
     if ( !loadPageLayout( d->currentMasterPage, context ) )
         return false;
-    Q_ASSERT( context.oasisStyles().masterPages().contains( d->currentMasterPage ) );
+    // It's quit possible that the following line asserts if we load e.g. an document
+    // that does not contain anything except a single table.
+    //Q_ASSERT( context.oasisStyles().masterPages().contains( d->currentMasterPage ) );
 
 #if 0 //1.6:
     KWOasisLoader oasisLoader( this );
@@ -266,16 +268,8 @@ bool KWOpenDocumentLoader::loadPageLayout(const QString& masterPageName, KoOasis
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName<<endl;
     const KoOasisStyles& styles = context.oasisStyles();
-    //Q_ASSERT( styles.masterPages().contains(masterPageName) );
-    if( ! styles.masterPages().contains(masterPageName) ) {
-        //TODO handle that case
-        kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout No such masterpage: "<<masterPageName<<endl;
-        return false;
-    }
     const QDomElement* masterPage = styles.masterPages()[ masterPageName ];
-    Q_ASSERT( masterPage );
     const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
-    Q_ASSERT( masterPageStyle );
     if ( masterPageStyle ) {
         KoPageLayout pageLayout = KoPageLayout::standardLayout();
         pageLayout.loadOasis( *masterPageStyle );
@@ -332,6 +326,11 @@ bool KWOpenDocumentLoader::loadPageLayout(const QString& masterPageName, KoOasis
         m_pageLayout = KoPageLayout::standardLayout();
         pageManager()->setDefaultPage(m_pageLayout);
     }
+#else
+    else {
+        KoPageLayout pageLayout = KoPageLayout::standardLayout();
+        d->document->setDefaultPageLayout(pageLayout);
+    }
 #endif
     return true;
 }
@@ -340,7 +339,6 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, Ko
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle masterPageName="<<masterPageName<<endl;
     const KoOasisStyles& styles = context.oasisStyles();
-    Q_ASSERT( styles.masterPages().contains(masterPageName) );
     const QDomElement *masterPage = styles.masterPages()[ masterPageName ];
     const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
 #if 0 //1.6:
