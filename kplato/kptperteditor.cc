@@ -27,6 +27,7 @@ void PertEditor::draw( Project &project)
     m_tasktree->clear();
     
     foreach(Node * currentNode, project.projectNode()->childNodeIterator()){
+	kDebug() << currentNode->type() << endl;
         if (currentNode->type()!=4){
             QTreeWidgetItem * item = new QTreeWidgetItem( m_tasktree );
             item->setText( 0, currentNode->name());
@@ -34,6 +35,7 @@ void PertEditor::draw( Project &project)
         }
         //kDebug() << "[void KPlato::PertEditor::draw( Project &project )] TASK FOUNDED" << endl;
     }
+    
 
 }
 
@@ -80,7 +82,8 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
 
     // connects used to refresh the kactionselector after an undo/redo
     connect( m_project, SIGNAL( relationRemoved(Relation *) ), SLOT( dispAvailableTasks(Relation *) ) );
-    connect( m_project, SIGNAL( relationAdded(Relation *) ), SLOT( dispAvailableTasks(Relation *) ) );}
+    connect( m_project, SIGNAL( relationAdded(Relation *) ), SLOT( dispAvailableTasks(Relation *) ) );
+    connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );}
 
 
 void PertEditor::dispAvailableTasks( Relation *rel ){
@@ -209,7 +212,10 @@ void PertEditor::loadRequiredTasksList(Node * taskNode){
         }
 }
 
+void PertEditor::slotUpdate(){
 
+ draw(m_part->getProject());
+}
 } // namespace KPlato
 
 #include "kptperteditor.moc"

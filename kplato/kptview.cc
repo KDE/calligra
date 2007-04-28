@@ -844,6 +844,7 @@ void View::createTaskeditor( ViewListItem *cat )
     connect( taskeditor, SIGNAL( moveTaskDown() ), SLOT( slotMoveTaskDown() ) );
     connect( taskeditor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
     connect( taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
+    
 
 
     connect( taskeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
@@ -905,7 +906,7 @@ void View::createDependencyEditor( ViewListItem *cat )
     m_tab->addWidget( perteditor );
 
     ViewListItem *i = m_viewlist->addView( cat, "PertEditor", i18n( "Pert" ), perteditor, getPart(), "task_editor" );
-    i->setToolTip( 0, i18n( "Edit task dependenies" ) );
+    i->setToolTip( 0, i18n( "Edit task dependencies" ) );
 
     perteditor->draw( getProject() );
 

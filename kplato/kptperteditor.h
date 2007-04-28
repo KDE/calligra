@@ -95,7 +95,7 @@ private slots:
     void dispAvailableTasks( Relation *rel );
     void addTaskInRequiredList(QListWidgetItem * currentItem);
     void removeTaskFromRequiredList(QListWidgetItem * currentItem);
-
+    void slotUpdate();
 
 
 private:

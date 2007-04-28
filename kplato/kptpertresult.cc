@@ -201,6 +201,7 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     QHeaderView *header=widget.treeWidgetTaskResult->header();
 
     m_part = part;
+    m_project = &m_part->getProject();
     m_node = m_part->getProject().projectNode();
 	
     (*header).resizeSection(0,60);
@@ -212,6 +213,8 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     (*header).resizeSection(6,80);
     (*header).resizeSection(7,80);
     draw( part->getProject() );
+    connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+
 
 
 }
@@ -245,6 +248,11 @@ void PertResult::testComplexGraph()
 	    complexGraph=true;
 	}
     } 
+}
+
+void PertResult::slotUpdate(){
+
+ draw(m_part->getProject());
 }
 
 } // namespace KPlato

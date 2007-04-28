@@ -145,7 +145,7 @@ ResourceAssignmentView::ResourceAssignmentView( Part *part, QWidget *parent): Vi
     m_taskList = (ResourcesList *)widget.m_taskList;
     m_part = part;
     m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
-
+    m_project = &m_part->getProject();
     draw(m_part->getProject());
 
     connect( m_resList, SIGNAL( itemSelectionChanged() ), SLOT( resSelectionChanged() ) );
@@ -415,6 +415,11 @@ void ResourceAssignmentView::setGuiActive( bool activate )
     kDebug()<<k_funcinfo<<activate<<endl;
 //    updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
+}
+
+void ResourceAssignmentView::slotUpdate(){
+
+ draw(m_part->getProject());
 }
 
 }  //KPlato namespace

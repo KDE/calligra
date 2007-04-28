@@ -1626,6 +1626,7 @@ void TaskEditor::slotAddTask()
         // insert under main project
         Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
         edit( m_view->itemModel()->insertSubtask( t, t->parentNode() ) );
+	kDebug()<<"test"<<t->type()<<endl;
         return;
     }
     Node *sib = selectedNode();

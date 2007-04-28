@@ -79,8 +79,13 @@ private:
     Ui::PertResult widget;
     Node * m_node;
     Part * m_part;
+    Project * m_project;
     bool complexGraph;
     QList<Node *> m_criticalPath;
+
+private slots:
+    void slotUpdate();
+
 };
 
 }  //KPlato namespace

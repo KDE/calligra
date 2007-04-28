@@ -122,6 +122,7 @@ namespace KPlato
         private:
             QSplitter *m_splitter;
             ResourcesList *m_resList;
+	    Project * m_project;
             ResourcesList *m_taskList;
             QTreeWidgetItem *m_selectedItem;
             QTreeWidgetItem *m_tasktreeroot;
@@ -139,6 +140,7 @@ namespace KPlato
 
         private slots:
             void slotRequestPopupMenu( const QPoint &p );
+	    void slotUpdate();
 
         public slots:
             /// Activate/deactivate the gui
