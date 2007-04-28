@@ -266,7 +266,12 @@ bool KWOpenDocumentLoader::loadPageLayout(const QString& masterPageName, KoOasis
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName<<endl;
     const KoOasisStyles& styles = context.oasisStyles();
-    Q_ASSERT( styles.masterPages().contains(masterPageName) );
+    //Q_ASSERT( styles.masterPages().contains(masterPageName) );
+    if( ! styles.masterPages().contains(masterPageName) ) {
+        //TODO handle that case
+        kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout No such masterpage: "<<masterPageName<<endl;
+        return false;
+    }
     const QDomElement* masterPage = styles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
     const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
