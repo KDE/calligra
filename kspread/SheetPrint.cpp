@@ -499,6 +499,8 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     paintRect.setTopLeft( topLeft );
     paintRect.setBottomRight( bottomRight );
 
+    m_pSheetView->setPaintDevice( painter.device() );
+    m_pSheetView->setViewConverter( m_zoomHandler );
     m_pSheetView->setPaintCellRange( printRect );
     m_pSheetView->paintCells( 0 /*paintDevice*/, painter, paintRect, topLeft );
 
