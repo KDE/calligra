@@ -132,18 +132,6 @@ void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout)
 	state()->layout=_writer->setLayout(state()->paragraph,layout);
 }
 
-void KHTMLReader::startOneNewLayOut(QString s)
-{
-  kdDebug() << "entering KHTMLReader::startOneNewLayOut" << endl;
-  static QString lastTag="bla";
-  if (s!=lastTag)
-  {
-    startNewLayout();
-    lastTag=s;
-  }
-  kdDebug() << "leaving KHTMLReader::startOneNewLayOut" << endl;
-}
-
 void KHTMLReader::completed() 
 {
 	kdDebug(30503) << "KHTMLReader::completed" << endl;
@@ -178,7 +166,8 @@ void KHTMLReader::parseNode(DOM::Node node)
 	kdDebug(30503) << "Entering parseNode" << endl;
         // check if this is a text node.
 	DOM::Text t=node;
-	if (!t.isNull()) {
+	if (!t.isNull()) 
+        {
 	   _writer->addText(state()->paragraph,t.data().string(),1,state()->in_pre_mode);
 	   return; // no children anymore...
 	}
@@ -700,7 +689,6 @@ bool KHTMLReader::parse_ul(DOM::Element e)
     }
     parseNode(items);
   }
-  startOneNewLayOut("ul");
   _list_depth--;
   kdDebug(30503) << "Leaving KHTMLReader::parse_ul" << endl;
   return false;
