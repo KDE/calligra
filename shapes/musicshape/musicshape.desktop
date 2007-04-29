@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Music Shape
+Name[x-test]=xxMusic Shapexx
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=musicshape
