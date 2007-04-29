@@ -354,7 +354,7 @@ public:
     KFontSizeAction* selectFontSize;
     QAction * fontSizeUp;
     QAction * fontSizeDown;
-    TKSelectColorAction* textColor;
+    //TKSelectColorAction* textColor;
     KToggleAction* alignLeft;
     KToggleAction* alignCenter;
     KToggleAction* alignRight;
@@ -373,7 +373,7 @@ public:
     QAction * upper;
     QAction * lower;
     QAction * firstLetterUpper;
-    TKSelectColorAction* bgColor;
+    //TKSelectColorAction* bgColor;
     QAction * borderLeft;
     QAction * borderRight;
     QAction * borderTop;
@@ -381,7 +381,7 @@ public:
     QAction * borderAll;
     QAction * borderOutline;
     QAction * borderRemove;
-    TKSelectColorAction* borderColor;
+    //TKSelectColorAction* borderColor;
     KSelectAction* selectStyle;
     QAction * createStyle;
 
@@ -1469,7 +1469,7 @@ void View::Private::adjustActions( bool mode )
   actions->showSelRows->setEnabled( mode );
   actions->formulaSelection->setEnabled( mode );
   //actions->textColor->setEnabled( mode );
-  actions->bgColor->setEnabled( mode );
+  //actions->bgColor->setEnabled( mode );
   actions->cellLayout->setEnabled( mode );
   actions->borderLeft->setEnabled( mode );
   actions->borderRight->setEnabled( mode );
@@ -1478,7 +1478,7 @@ void View::Private::adjustActions( bool mode )
   actions->borderAll->setEnabled( mode );
   actions->borderOutline->setEnabled( mode );
   actions->borderRemove->setEnabled( mode );
-  actions->borderColor->setEnabled( mode );
+  //actions->borderColor->setEnabled( mode );
   actions->removeSheet->setEnabled( mode );
   actions->autoSum->setEnabled( mode );
   actions->defaultFormat->setEnabled( mode );
@@ -2937,7 +2937,7 @@ void View::changeTextColor()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Text Color") );
-    manipulator->setFontColor( d->actions->textColor->color() );
+    //manipulator->setFontColor( d->actions->textColor->color() );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -2957,7 +2957,7 @@ void View::changeBackgroundColor()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Background Color") );
-    manipulator->setBackgroundColor( d->actions->bgColor->color() );
+    //manipulator->setBackgroundColor( d->actions->bgColor->color() );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -2976,7 +2976,7 @@ void View::changeBorderColor()
 {
   BorderColorManipulator* manipulator = new BorderColorManipulator();
   manipulator->setSheet( d->activeSheet );
-  manipulator->setColor( d->actions->borderColor->color() );
+  //manipulator->setColor( d->actions->borderColor->color() );
   manipulator->add( *selection() );
   manipulator->execute();
 }
@@ -3470,7 +3470,7 @@ void View::borderBottom()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    manipulator->setBottomBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    //manipulator->setBottomBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3490,10 +3490,12 @@ void View::borderRight()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
+#if 0
     if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
         manipulator->setLeftBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
     else
         manipulator->setRightBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+#endif
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3516,10 +3518,12 @@ void View::borderLeft()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
+#if 0
     if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
         manipulator->setRightBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
     else
         manipulator->setLeftBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+#endif
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3529,10 +3533,12 @@ void View::setSelectionLeftBorderColor( const QColor & color )
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
+#if 0
     if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
         manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
     else
         manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
+#endif
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3542,7 +3548,7 @@ void View::borderTop()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    manipulator->setTopBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    //manipulator->setTopBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3562,10 +3568,10 @@ void View::borderOutline()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    manipulator->setTopBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->setBottomBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->setLeftBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->setRightBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setTopBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setBottomBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setLeftBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setRightBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3588,12 +3594,12 @@ void View::borderAll()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    manipulator->setTopBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->setBottomBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->setLeftBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->setRightBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->setHorizontalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->setVerticalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setTopBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setBottomBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setLeftBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setRightBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setHorizontalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    //manipulator->setVerticalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -7139,7 +7145,7 @@ void View::insertSheet( Sheet* sheet )
 
 QColor View::borderColor() const
 {
-  return d->actions->borderColor->color();
+  return QColor();//d->actions->borderColor->color();
 }
 
 void View::updateShowSheetMenu()
