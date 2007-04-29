@@ -204,11 +204,6 @@ void KHTMLReader::parse_head(DOM::Element e) {
 	}
 }
 
-#define _PP(x) { \
-	if (e.tagName().lower() == #x) \
-		return parse_##x(e); \
-	}
-
 #define _PF(x,a,b,c) { \
 	if (e.tagName().lower() == #x) \
 	 	{ \
@@ -232,50 +227,49 @@ void KHTMLReader::parse_head(DOM::Element e) {
 		}
 
 
-bool KHTMLReader::parseTag(DOM::Element e) {
-        kdDebug(30503) << "Entering parseTag for " << e.tagName().lower() << endl;
-	_PP(a);
-	_PP(p);
-	_PP(br);
-	_PP(table);
-	_PP(pre);
-	_PP(ul);
-	_PP(ol);
-	_PP(font);
-	_PP(hr);
+bool KHTMLReader::parseTag(DOM::Element e) 
+{
+  kdDebug(30503) << "Entering parseTag for " << e.tagName().lower() << endl;
+  if (e.tagName().lower()=="a") { return parse_a(e); }
+  if (e.tagName().lower()=="p") { return parse_p(e); }
+  if (e.tagName().lower()=="br") { return parse_br(e); }
+  if (e.tagName().lower()=="ul") { return parse_ul(e); }
+  if (e.tagName().lower()=="ol") { return parse_ol(e); }
+  if (e.tagName().lower()=="hr") { return parse_hr(e); }
+  if (e.tagName().lower()=="pre") { return parse_pre(e); }
+  if (e.tagName().lower()=="font") { return parse_font(e); }
+  if (e.tagName().lower()=="table") { return parse_table(e); }
 
-	// FIXME we can get rid of these, make things tons more simple
-	// when khtml finally implements getComputedStyle
-	_PF(b,WEIGHT,value,75);
-	_PF(strong,WEIGHT,value,75);
-	_PF(u,UNDERLINE,value,1);
-	_PF(i,ITALIC,value,1);
+  // FIXME we can get rid of these, make things tons more simple
+  // when khtml finally implements getComputedStyle
+  _PF(b,WEIGHT,value,75);
+  _PF(strong,WEIGHT,value,75);
+  _PF(u,UNDERLINE,value,1);
+  _PF(i,ITALIC,value,1);
 
-	_PL(center,FLOW,align,center);
-	_PL(right,FLOW,align,right);
-	_PL(left,FLOW,align,left);
+  _PL(center,FLOW,align,center);
+  _PL(right,FLOW,align,right);
+  _PL(left,FLOW,align,left);
 
-	_PL(h1,NAME,value,h1);
-	_PL(h2,NAME,value,h2);
-	_PL(h3,NAME,value,h3);
-	_PL(h4,NAME,value,h4);
-	_PL(h5,NAME,value,h5);
-	_PL(h6,NAME,value,h6);
-        kdDebug(30503) << "Leaving parseTag" << endl;
+  _PL(h1,NAME,value,h1);
+  _PL(h2,NAME,value,h2);
+  _PL(h3,NAME,value,h3);
+  _PL(h4,NAME,value,h4);
+  _PL(h5,NAME,value,h5);
+  _PL(h6,NAME,value,h6);
+  kdDebug(30503) << "Leaving parseTag" << endl;
 
-	// Don't handle the content of comment- or script-nodes.
-	if(e.nodeType() == DOM::Node::COMMENT_NODE || e.tagName().lower() == "script") {
-		return false;
-	}
+  // Don't handle the content of comment- or script-nodes.
+  if(e.nodeType() == DOM::Node::COMMENT_NODE || e.tagName().lower() == "script") 
+  {
+    return false;
+  }
 
-	return true;
+  return true;
 }
 
-
-
-
-
-void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
+void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) 
+{
         kdDebug() << "Entering startNewParagraph" << endl;
 
 	QDomElement qf=state()->format;
@@ -291,9 +285,12 @@ void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 
 
 
-        if (qf.isNull() || (startnewformat==true)) {
+        if (qf.isNull() || (startnewformat==true)) 
+        {
 	        state()->format=_writer->startFormat(state()->paragraph/*,state()->format*/);
-	}  else {
+	}  
+        else 
+        {
 		state()->format=_writer->startFormat(state()->paragraph,qf);
 	}
 
@@ -303,7 +300,8 @@ void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 	  we do this by incrementing the 'environment depth' and changing the numbering type to 'no numbering'
 	 **/
 	QString ct=_writer->getLayoutAttribute(state()->paragraph,"COUNTER","type");
-	if ((!ct.isNull()) && (ct != "0")) {
+	if ((!ct.isNull()) && (ct != "0")) 
+        {
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","type","0");
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","0");
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext","");
@@ -373,27 +371,33 @@ bool KHTMLReader::parse_p(DOM::Element e)
 	return true;
 }
 
-bool KHTMLReader::parse_hr(DOM::Element /*e*/) {
+bool KHTMLReader::parse_hr(DOM::Element /*e*/) 
+{
 	startNewParagraph();
 	_writer->createHR(state()->paragraph);
 	startNewParagraph();
 	return true;
 }
 
-bool KHTMLReader::parse_br(DOM::Element /*e*/) {
+bool KHTMLReader::parse_br(DOM::Element /*e*/) 
+{
 	startNewParagraph(false,false); //keep the current format and layout
 	return false; // a BR tag has no childs.
 }
 
-static const QColor parsecolor(const QString& colorstring) {
+static const QColor parsecolor(const QString& colorstring) 
+{
       QColor color;
-      if (colorstring[0]=='#') {
+      if (colorstring[0]=='#') 
+      {
             color.setRgb(
             colorstring.mid(1,2).toInt(0,16),
             colorstring.mid(3,2).toInt(0,16),
             colorstring.mid(5,2).toInt(0,16)
             );
-      } else {
+      } 
+      else 
+      {
             QString colorlower=colorstring.lower();
             // Grays
             if (colorlower=="black")
@@ -430,7 +434,8 @@ static const QColor parsecolor(const QString& colorstring) {
                   color.setRgb(128,0,128);
             else if (colorlower=="teal")
                   color.setRgb(0,128,128);
-            else {
+            else 
+            {
                   // H'm, we have still not found the color!
                   // Let us see if QT can do better!
                   color.setNamedColor(colorstring);
@@ -439,7 +444,8 @@ static const QColor parsecolor(const QString& colorstring) {
       return colorstring;
 }
 
-void KHTMLReader::parseStyle(DOM::Element e) {
+void KHTMLReader::parseStyle(DOM::Element e) 
+{
   // styles are broken broken broken broken broken broken.
   //FIXME: wait until getComputedStyle is more than
   // 'return 0' in khtml
@@ -502,7 +508,8 @@ void KHTMLReader::parseStyle(DOM::Element e) {
 */
 }
 
-bool KHTMLReader::parse_table(DOM::Element e) {
+bool KHTMLReader::parse_table(DOM::Element e) 
+{
 	if(_writer->isInTable()) {
 		// We are already inside of a table. Tables in tables are not supported
 		// yet. So, just add that table-content as text.
@@ -584,12 +591,14 @@ bool KHTMLReader::parse_table(DOM::Element e) {
 	return false; // we do our own recursion
 }
 
-bool KHTMLReader::parse_img(DOM::Element /*e*/) {
+bool KHTMLReader::parse_img(DOM::Element /*e*/) 
+{
      	//QRect e=e.getRect();
     return true;
 }
 
-bool KHTMLReader::parse_pre(DOM::Element e) {
+bool KHTMLReader::parse_pre(DOM::Element e) 
+{
 #if 0 // see Bug #74601 (normal): kword doesn't recognize PRE-tags in HTML
 	//pushNewState();
 	/// \todo set fixed width font
@@ -610,11 +619,13 @@ bool KHTMLReader::parse_pre(DOM::Element e) {
 #endif
 }
 
-bool KHTMLReader::parse_ol(DOM::Element e) {
-	return parse_ul(e);
+bool KHTMLReader::parse_ol(DOM::Element e) 
+{
+  return parse_ul(e);
 }
 
-bool KHTMLReader::parse_font(DOM::Element e) {
+bool KHTMLReader::parse_font(DOM::Element e) 
+{
 	// fixme don't hardcode 12 font size ...
 	QString face=e.getAttribute("face").string();
         QColor color=parsecolor("#000000");
@@ -645,7 +656,7 @@ bool KHTMLReader::parse_ul(DOM::Element e)
   kdDebug(30503) << "Entering KHTMLReader::parse_ul" << endl;
   kdDebug(30503) << "_writer->getText(state()->paragraph)=" << _writer->getText(state()->paragraph) << endl;
   _list_depth++;
-  if (e.firstChild().nodeName().string().lower() != "li")  // e.g. <ul>this is indented<li>first listitem</li></ul>
+  if (e.firstChild().nodeName().string().lower() == "#text")  // e.g. <ul>this is indented<li>first listitem</li></ul>
   {
     _writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(_list_depth-1)); // indent
     startNewLayout();
