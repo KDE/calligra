@@ -119,19 +119,33 @@ void KHTMLReader::popState() {
 	delete(s);
 }
 
-void KHTMLReader::startNewLayout(bool startNewFormat) {
+void KHTMLReader::startNewLayout(bool startNewFormat) 
+{
 	QDomElement layout;
 	startNewLayout(startNewFormat,layout);
 }
 
-void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout) {
+void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout) 
+{
         kdDebug() << "entering startNewLayout" << endl;
 	startNewParagraph(startNewFormat,true);
 	state()->layout=_writer->setLayout(state()->paragraph,layout);
 }
 
+void KHTMLReader::startOneNewLayOut(QString s)
+{
+  kdDebug() << "entering KHTMLReader::startOneNewLayOut" << endl;
+  static QString lastTag="bla";
+  if (s!=lastTag)
+  {
+    startNewLayout();
+    lastTag=s;
+  }
+  kdDebug() << "leaving KHTMLReader::startOneNewLayOut" << endl;
+}
 
-void KHTMLReader::completed() {
+void KHTMLReader::completed() 
+{
 	kdDebug(30503) << "KHTMLReader::completed" << endl;
         qApp->exit_loop();
 	DOM::Document doc=_html->document(); // FIXME parse <HEAD> too
@@ -159,7 +173,8 @@ void KHTMLReader::completed() {
 }
 
 
-void KHTMLReader::parseNode(DOM::Node node) {
+void KHTMLReader::parseNode(DOM::Node node) 
+{
 	kdDebug(30503) << "Entering parseNode" << endl;
         // check if this is a text node.
 	DOM::Text t=node;
@@ -177,20 +192,21 @@ void KHTMLReader::parseNode(DOM::Node node) {
 
 	bool go_recursive=true;
 
-	if (!e.isNull()) {
+	if (!e.isNull()) 
+        {
                 // get the CSS information
                 parseStyle(e);
 	        // get the tag information
 	        go_recursive=parseTag(e);
 	}
-	if (go_recursive) {
-		for (DOM::Node q=node.firstChild(); !q.isNull(); q=q.nextSibling()) {
+	if (go_recursive) 
+        {
+		for (DOM::Node q=node.firstChild(); !q.isNull(); q=q.nextSibling()) 
+                {
 			parseNode(q);
 		}
 	} 
 	popState();
-
-
 }
 
 void KHTMLReader::parse_head(DOM::Element e) {
@@ -684,7 +700,7 @@ bool KHTMLReader::parse_ul(DOM::Element e)
     }
     parseNode(items);
   }
-  startNewLayout();
+  startOneNewLayOut("ul");
   _list_depth--;
   kdDebug(30503) << "Leaving KHTMLReader::parse_ul" << endl;
   return false;

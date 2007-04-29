@@ -77,6 +77,16 @@ private:
 
 	void startNewLayout(bool startNewFormat=false);
 	void startNewLayout(bool startNewFormat, QDomElement layout);
+
+        /**
+         * startOneNewLayOut
+         * Does a startNewLayout per s
+         * If you call startOneNewLayOut("ul") twice, only one startNewLayout will be done.
+         * This is needed e.g. if you have <ul><ul>content1</ul></ul>content2, only one 
+         * linebreak is inserted between content1 and content2.
+         */
+        void startOneNewLayOut(QString s);
+
         void startNewParagraph(bool startnewformat=true, bool startnewlayout=true);
         bool _it_worked;
 // -----------------------------------------------------
