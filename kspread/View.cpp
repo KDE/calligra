@@ -577,6 +577,7 @@ void View::Private::initActions()
   connect(actions->fontSizeDown, SIGNAL(triggered(bool)), view, SLOT( decreaseFontSize() ));
 
 #warning reenable a textcolor action
+//see also the for now disabled actions->textColor->setEnabled below
 /*
   actions->textColor = new TKSelectColorAction( i18n("Text Color"), TKSelectColorAction::TextColor, view, SLOT( changeTextColor() ),
       ac, "textColor",true );
@@ -1468,7 +1469,7 @@ void View::Private::adjustActions( bool mode )
   actions->showRow->setEnabled( mode );
   actions->showSelRows->setEnabled( mode );
   actions->formulaSelection->setEnabled( mode );
-  actions->textColor->setEnabled( mode );
+  //actions->textColor->setEnabled( mode );
   actions->bgColor->setEnabled( mode );
   actions->cellLayout->setEnabled( mode );
   actions->borderLeft->setEnabled( mode );
