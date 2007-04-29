@@ -5,18 +5,31 @@ include_directories( ${KOFFICEUI_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
+set( musiccore_SRCS
+    core/Sheet.cpp
+    core/Part.cpp
+    core/PartGroup.cpp
+    core/Staff.cpp
+    core/Voice.cpp
+    core/Bar.cpp
+    core/VoiceBar.cpp
+    core/MusicElement.cpp
+    core/Chord.cpp
+    core/Note.cpp
+)
+
 SET (musicshape_LIB_SRCS
 	MusicShape.cpp
 	MusicShapeFactory.cpp
 	MusicTool.cpp
 	MusicToolFactory.cpp
-    MusicStyle.cpp
+    MusicStyle.cpp ${musiccore_SRCS}
 	)
 
 kde4_automoc(${musicshape_LIB_SRCS})
 kde4_add_plugin(musicshape ${musicshape_LIB_SRCS})
 
-target_link_libraries(musicshape flake kofficeui musiccore)
+target_link_libraries(musicshape flake kofficeui)
 install(TARGETS musicshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
