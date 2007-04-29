@@ -87,7 +87,6 @@
 #include <kicon.h>
 
 // KOffice includes
-#include <tkcoloractions.h>
 #include <kdatatool.h>
 #include <KoCanvasController.h>
 #include <KoCharSelectDia.h>
