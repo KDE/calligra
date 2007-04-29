@@ -273,10 +273,9 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
+   <class>Q3ListBox</class>
+   <extends>Q3Frame</extends>
+   <header>q3listbox.h</header>
   </customwidget>
   <customwidget>
    <class>Q3ButtonGroup</class>
@@ -285,14 +284,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>Q3GroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>Qt3Support/Q3GroupBox</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Q3ListBox</class>
-   <extends>Q3Frame</extends>
-   <header>q3listbox.h</header>
   </customwidget>
   <customwidget>
    <class>K3ListBox</class>
@@ -300,6 +300,18 @@
    <header>k3listbox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>boolAllPages</tabstop>
+  <tabstop>boolFirstPage</tabstop>
+  <tabstop>boolSelectionPage</tabstop>
+  <tabstop>listPages</tabstop>
+  <tabstop>intHorizontal</tabstop>
+  <tabstop>kComboBox1</tabstop>
+  <tabstop>intVertical</tabstop>
+  <tabstop>kComboBox2</tabstop>
+  <tabstop>intWidth</tabstop>
+  <tabstop>intHeight</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
