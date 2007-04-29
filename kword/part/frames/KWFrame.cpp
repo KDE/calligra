@@ -92,5 +92,8 @@ void KWFrame::saveOdf(KoShapeSavingContext *context) {
 }
 
 void KWFrame::setShape(KoShape *shape) {
+    if(m_shape == shape) return;
+    m_shape->setApplicationData(0);
+    delete m_shape;
     m_shape = shape;
 }
