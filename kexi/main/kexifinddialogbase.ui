@@ -73,9 +73,6 @@
             <property name="text">
                 <string>&amp;Whole words only</string>
             </property>
-            <property name="accel">
-                <string>Alt+W</string>
-            </property>
         </widget>
         <widget class="QCheckBox" row="6" column="2">
             <property name="name">
@@ -134,9 +131,6 @@
                     <property name="text">
                         <string>&amp;Replace</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
-                    </property>
                 </widget>
                 <widget class="KPushButton">
                     <property name="name">
@@ -144,9 +138,6 @@
                     </property>
                     <property name="text">
                         <string>Replace All</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
                     </property>
                 </widget>
                 <spacer>
@@ -268,9 +259,6 @@
             </property>
             <property name="text">
                 <string>C&amp;ase sensitive</string>
-            </property>
-            <property name="accel">
-                <string>Alt+A</string>
             </property>
         </widget>
         <widget class="QLabel" row="8" column="0" rowspan="1" colspan="5">
