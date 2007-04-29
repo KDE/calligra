@@ -1,6 +1,7 @@
 project(kformula)
 
 add_subdirectory( pics )
+add_subdirectory( flake )
 
 include_directories( ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
 
