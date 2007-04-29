@@ -639,32 +639,43 @@ bool KHTMLReader::parse_font(DOM::Element e) {
         return true;
 }
 
-bool KHTMLReader::parse_ul(DOM::Element e) {
+bool KHTMLReader::parse_ul(DOM::Element e) 
+{
 // Parse the tag ul and all its subnodes. Take special care for the li tag.
-        _list_depth++;
-        for (DOM::Node items=e.firstChild();!items.isNull();items=items.nextSibling()) {
-                  if (items.nodeName().string().lower() == "li") {
-        			if (!(_writer->getText(state()->paragraph).isEmpty())) startNewLayout();
-                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
-                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
-                  		if (e.tagName().string().lower() == "ol")
-	                  		{
-	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","type","1");
-	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
-        	          		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
-	                  		}
-	                  	else
-	                  		{
-	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","type","10");
-	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","");
-        	          		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext","");
-	                  		}
-                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(_list_depth-1));
-                  }
-                  parseNode(items);
-        }
-	startNewLayout();
-        _list_depth--;
-	return false;
+  kdDebug(30503) << "Entering KHTMLReader::parse_ul" << endl;
+  kdDebug(30503) << "_writer->getText(state()->paragraph)=" << _writer->getText(state()->paragraph) << endl;
+  _list_depth++;
+  if (e.firstChild().nodeName().string().lower() != "li")  // e.g. <ul>this is indented<li>first listitem</li></ul>
+  {
+    _writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(_list_depth-1)); // indent
+    startNewLayout();
+  }
+  for (DOM::Node items=e.firstChild();!items.isNull();items=items.nextSibling()) 
+  {
+    if (items.nodeName().string().lower() == "li") 
+    {
+      if (!(_writer->getText(state()->paragraph).isEmpty())) startNewLayout();
+      _writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
+      _writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
+      if (e.tagName().string().lower() == "ol")
+      {
+	_writer->layoutAttribute(state()->paragraph,"COUNTER","type","1");
+	_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
+        _writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
+      }
+      else
+      {
+	_writer->layoutAttribute(state()->paragraph,"COUNTER","type","10");
+	_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","");
+        _writer->layoutAttribute(state()->paragraph,"COUNTER","righttext","");
+      }
+      _writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(_list_depth-1)); // indent
+    }
+    parseNode(items);
+  }
+  startNewLayout();
+  _list_depth--;
+  kdDebug(30503) << "Leaving KHTMLReader::parse_ul" << endl;
+  return false;
 }
 
