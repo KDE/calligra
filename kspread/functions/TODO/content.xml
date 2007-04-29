@@ -42,27 +42,27 @@
   </style:style>
   <style:style style:name="ce1" style:family="table-cell"/>
   <style:style style:name="ce2" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#7fff00" style:cell-protect="none" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="16pt" fo:font-weight="bold"/>
   </style:style>
   <style:style style:name="ce3" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt" fo:font-weight="bold"/>
   </style:style>
   <style:style style:name="ce4" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt" fo:font-weight="bold"/>
   </style:style>
   <style:style style:name="ce5" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="12pt"/>
   </style:style>
   <style:style style:name="ce6" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
   </style:style>
   <style:style style:name="ce7" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:text-align-source="fix" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:text-align-source="fix" style:vertical-align="middle"/>
    <style:paragraph-properties fo:text-align="center"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
   </style:style>
@@ -71,12 +71,12 @@
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
   </style:style>
   <style:style style:name="ce9" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:text-align-source="fix" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:text-align-source="fix" style:vertical-align="middle"/>
    <style:paragraph-properties fo:text-align="center"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
   </style:style>
   <style:style style:name="ce10" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:text-align-source="fix" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:text-align-source="fix" style:vertical-align="middle"/>
    <style:paragraph-properties fo:text-align="center"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
    <style:map style:apply-style-name="assigned" style:condition="cell-content()=assigned"/>
@@ -90,16 +90,16 @@
    <style:paragraph-properties fo:text-align="center"/>
   </style:style>
   <style:style style:name="ce12" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Sans" fo:font-size="10pt"/>
   </style:style>
   <style:style style:name="ce13" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:text-align-source="fix" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:text-align-source="fix" style:vertical-align="middle"/>
    <style:paragraph-properties fo:text-align="center"/>
    <style:text-properties fo:color="#000000" fo:font-family="Sans" fo:font-size="10pt"/>
   </style:style>
   <style:style style:name="ce14" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:text-align-source="fix" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:text-align-source="fix" style:vertical-align="middle"/>
    <style:paragraph-properties fo:text-align="center"/>
    <style:text-properties fo:color="#000000" fo:font-family="Sans" fo:font-size="10pt"/>
   </style:style>
@@ -109,7 +109,7 @@
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
   </style:style>
   <style:style style:name="ce16" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
   </style:style>
   <style:style style:name="ce17" style:family="table-cell">
@@ -117,7 +117,16 @@
    <style:paragraph-properties fo:text-align="center"/>
    <style:text-properties fo:color="#000000"/>
   </style:style>
-  <style:style style:name="ce18" style:data-style-name="N1" style:family="table-cell">
+  <style:style style:name="ce18" style:family="table-cell">
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:text-align-source="fix" style:vertical-align="middle"/>
+   <style:paragraph-properties fo:text-align="center"/>
+   <style:text-properties fo:color="#000000" fo:font-family="FreeSans" fo:font-size="11pt"/>
+  </style:style>
+  <style:style style:name="ce19" style:family="table-cell">
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:vertical-align="middle"/>
+   <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="16pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="ce20" style:data-style-name="N1" style:family="table-cell">
    <style:table-cell-properties style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
   </style:style>
@@ -6041,7 +6050,7 @@
    <text:p>x</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce11"/>
-  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce11">
+  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce18">
    <text:p>Stefan</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce10" table:formula="=IF([.F408]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E408]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D408]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C408]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
@@ -6059,7 +6068,7 @@
    <text:p>x</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce11"/>
-  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce11">
+  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce18">
    <text:p>Stefan</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce10" table:formula="=IF([.F409]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E409]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D409]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C409]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
@@ -6079,7 +6088,7 @@
   <table:table-cell office:value-type="string" office:string-value="Brad" table:style-name="ce7">
    <text:p>Brad</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce11">
+  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce18">
    <text:p>Stefan</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce10" table:formula="=IF([.F410]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E410]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D410]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C410]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
@@ -6112,7 +6121,7 @@
   <table:table-cell office:value-type="string" office:string-value="Brad" table:style-name="ce7">
    <text:p>Brad</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce11">
+  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce18">
    <text:p>Stefan</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce10" table:formula="=IF([.F412]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E412]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D412]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C412]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
@@ -6130,7 +6139,7 @@
    <text:p>x</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce11"/>
-  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce11">
+  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce18">
    <text:p>Stefan</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce10" table:formula="=IF([.F413]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E413]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D413]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C413]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
@@ -6168,7 +6177,7 @@
   <table:table-cell office:value-type="string" office:string-value="Brad" table:style-name="ce7">
    <text:p>Brad</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="string" office:string-value="Brad" table:style-name="ce11">
+  <table:table-cell office:value-type="string" office:string-value="Brad" table:style-name="ce18">
    <text:p>Brad</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce10" table:formula="=IF([.F415]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E415]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D415]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C415]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
@@ -6206,7 +6215,7 @@
   <table:table-cell office:value-type="string" office:string-value="Brad" table:style-name="ce9">
    <text:p>Brad</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce11">
+  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce18">
    <text:p>Stefan</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce10" table:formula="=IF([.F417]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E417]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D417]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C417]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
@@ -6257,7 +6266,7 @@
    <text:p>x</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce11"/>
-  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce11">
+  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce18">
    <text:p>Stefan</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce10" table:formula="=IF([.F420]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E420]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D420]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C420]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
@@ -6275,7 +6284,7 @@
    <text:p>x</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce11"/>
-  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce11">
+  <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce18">
    <text:p>Stefan</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce10" table:formula="=IF([.F421]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E421]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D421]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C421]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
@@ -6291,7 +6300,7 @@
  <table:table-column table:style-name="co8"/>
  <table:table-column/>
  <table:table-row table:style-name="ro1">
-  <table:table-cell office:value-type="string" office:string-value="Contributers" table:style-name="ce2">
+  <table:table-cell office:value-type="string" office:string-value="Contributers" table:style-name="ce19">
    <text:p>Contributers</text:p>
   </table:table-cell>
   <table:table-cell/>
@@ -6353,7 +6362,7 @@
  <table:table-column table:style-name="co9" table:number-columns-repeated="7"/>
  <table:table-column table:number-columns-repeated="12"/>
  <table:table-row table:style-name="ro1">
-  <table:table-cell office:value-type="string" office:string-value="Summary" table:style-name="ce2">
+  <table:table-cell office:value-type="string" office:string-value="Summary" table:style-name="ce19">
    <text:p>Summary</text:p>
   </table:table-cell>
   <table:table-cell/>
@@ -6383,8 +6392,7 @@
   <table:table-cell office:value-type="string" office:string-value="overall" table:style-name="ce3">
    <text:p>overall</text:p>
   </table:table-cell>
-  <table:table-cell/>
-  <table:table-cell/>
+  <table:table-cell table:number-columns-repeated="2"/>
   <table:table-cell office:value-type="string" office:string-value="OpenFormula Group" table:style-name="ce6">
    <text:p>OpenFormula Group</text:p>
   </table:table-cell>
@@ -6438,7 +6446,8 @@
   <table:table-cell office:value-type="float" office:value="61" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J3]:[.J4])">
    <text:p>61</text:p>
   </table:table-cell>
-  <table:table-cell table:number-columns-repeated="2"/>
+  <table:table-cell/>
+  <table:table-cell/>
   <table:table-cell office:value-type="string" office:string-value="Small" table:style-name="ce6">
    <text:p>Small</text:p>
   </table:table-cell>
@@ -6492,7 +6501,8 @@
   <table:table-cell office:value-type="float" office:value="90" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J5]:[.J6])">
    <text:p>90</text:p>
   </table:table-cell>
-  <table:table-cell table:number-columns-repeated="2"/>
+  <table:table-cell/>
+  <table:table-cell/>
   <table:table-cell office:value-type="string" office:string-value="OpenFormula Group" table:style-name="ce6">
    <text:p>OpenFormula Group</text:p>
   </table:table-cell>
@@ -6546,7 +6556,8 @@
   <table:table-cell office:value-type="float" office:value="80" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J7]:[.J8])">
    <text:p>80</text:p>
   </table:table-cell>
-  <table:table-cell table:number-columns-repeated="2"/>
+  <table:table-cell/>
+  <table:table-cell/>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
@@ -6600,7 +6611,8 @@
   <table:table-cell office:value-type="float" office:value="13" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J9]:[.J10])">
    <text:p>13</text:p>
   </table:table-cell>
-  <table:table-cell table:number-columns-repeated="2"/>
+  <table:table-cell/>
+  <table:table-cell/>
   <table:table-cell office:value-type="string" office:string-value="OpenFormula Group" table:style-name="ce6">
    <text:p>OpenFormula Group</text:p>
   </table:table-cell>
@@ -6654,7 +6666,8 @@
   <table:table-cell office:value-type="float" office:value="142" table:formula="=[.G9]-SUM([.G4]:[.G7])">
    <text:p>142</text:p>
   </table:table-cell>
-  <table:table-cell table:number-columns-repeated="2"/>
+  <table:table-cell/>
+  <table:table-cell/>
   <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
    <text:p>Large</text:p>
   </table:table-cell>
@@ -6708,7 +6721,8 @@
   <table:table-cell office:value-type="float" office:value="386" table:formula="=COUNTA(Status)">
    <text:p>386</text:p>
   </table:table-cell>
-  <table:table-cell table:number-columns-repeated="2"/>
+  <table:table-cell/>
+  <table:table-cell/>
   <table:table-cell office:value-type="string" office:string-value="OpenFormula Group" table:style-name="ce6">
    <text:p>OpenFormula Group</text:p>
   </table:table-cell>
@@ -6741,11 +6755,12 @@
   </table:table-cell>
  </table:table-row>
  <table:table-row>
+  <table:table-cell/>
   <table:table-cell table:number-columns-repeated="2"/>
   <table:table-cell table:number-columns-repeated="2"/>
   <table:table-cell table:number-columns-repeated="2"/>
   <table:table-cell/>
-  <table:table-cell table:number-columns-repeated="2"/>
+  <table:table-cell/>
   <table:table-cell office:value-type="string" office:string-value="Huge" table:style-name="ce6">
    <text:p>Huge</text:p>
   </table:table-cell>
@@ -6778,7 +6793,7 @@
   </table:table-cell>
  </table:table-row>
  <table:table-row>
-  <table:table-cell table:number-columns-repeated="2"/>
+  <table:table-cell/>
   <table:table-cell table:number-columns-repeated="2"/>
  </table:table-row>
  <table:table-row>
@@ -6808,138 +6823,138 @@
   <table:table-cell office:value-type="string" office:string-value="Small" table:style-name="ce6">
    <text:p>Small</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0491803278688525" table:style-name="ce18" table:formula="=[.B4]/[.$G4]">
-   <text:p>4,92 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0491803278688525" table:style-name="ce20" table:formula="=[.B4]/[.$G4]">
+   <text:p>4.92 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce18" table:formula="=[.C4]/[.$G4]">
-   <text:p>0,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce20" table:formula="=[.C4]/[.$G4]">
+   <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.786885245901639" table:style-name="ce18" table:formula="=[.D4]/[.$G4]">
-   <text:p>78,69 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.786885245901639" table:style-name="ce20" table:formula="=[.D4]/[.$G4]">
+   <text:p>78.69 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce18" table:formula="=[.E4]/[.$G4]">
-   <text:p>0,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce20" table:formula="=[.E4]/[.$G4]">
+   <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.163934426229508" table:style-name="ce18" table:formula="=[.F4]/[.$G4]">
-   <text:p>16,39 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.163934426229508" table:style-name="ce20" table:formula="=[.F4]/[.$G4]">
+   <text:p>16.39 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.158031088082902" table:style-name="ce18" table:formula="=[.G4]/[.$G$9]">
-   <text:p>15,80 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.158031088082902" table:style-name="ce20" table:formula="=[.G4]/[.$G$9]">
+   <text:p>15.80 %</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.533333333333333" table:style-name="ce18" table:formula="=[.B5]/[.$G5]">
-   <text:p>53,33 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.533333333333333" table:style-name="ce20" table:formula="=[.B5]/[.$G5]">
+   <text:p>53.33 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce18" table:formula="=[.C5]/[.$G5]">
-   <text:p>0,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce20" table:formula="=[.C5]/[.$G5]">
+   <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.411111111111111" table:style-name="ce18" table:formula="=[.D5]/[.$G5]">
-   <text:p>41,11 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.411111111111111" table:style-name="ce20" table:formula="=[.D5]/[.$G5]">
+   <text:p>41.11 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0222222222222222" table:style-name="ce18" table:formula="=[.E5]/[.$G5]">
-   <text:p>2,22 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0222222222222222" table:style-name="ce20" table:formula="=[.E5]/[.$G5]">
+   <text:p>2.22 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0333333333333333" table:style-name="ce18" table:formula="=[.F5]/[.$G5]">
-   <text:p>3,33 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0333333333333333" table:style-name="ce20" table:formula="=[.F5]/[.$G5]">
+   <text:p>3.33 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.233160621761658" table:style-name="ce18" table:formula="=[.G5]/[.$G$9]">
-   <text:p>23,32 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.233160621761658" table:style-name="ce20" table:formula="=[.G5]/[.$G$9]">
+   <text:p>23.32 %</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row>
   <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
    <text:p>Large</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.3875" table:style-name="ce18" table:formula="=[.B6]/[.$G6]">
-   <text:p>38,75 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.3875" table:style-name="ce20" table:formula="=[.B6]/[.$G6]">
+   <text:p>38.75 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce18" table:formula="=[.C6]/[.$G6]">
-   <text:p>0,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce20" table:formula="=[.C6]/[.$G6]">
+   <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.3" table:style-name="ce18" table:formula="=[.D6]/[.$G6]">
-   <text:p>30,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.3" table:style-name="ce20" table:formula="=[.D6]/[.$G6]">
+   <text:p>30.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0125" table:style-name="ce18" table:formula="=[.E6]/[.$G6]">
-   <text:p>1,25 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0125" table:style-name="ce20" table:formula="=[.E6]/[.$G6]">
+   <text:p>1.25 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.3" table:style-name="ce18" table:formula="=[.F6]/[.$G6]">
-   <text:p>30,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.3" table:style-name="ce20" table:formula="=[.F6]/[.$G6]">
+   <text:p>30.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.207253886010363" table:style-name="ce18" table:formula="=[.G6]/[.$G$9]">
-   <text:p>20,73 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.207253886010363" table:style-name="ce20" table:formula="=[.G6]/[.$G$9]">
+   <text:p>20.73 %</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row>
   <table:table-cell office:value-type="string" office:string-value="Huge" table:style-name="ce6">
    <text:p>Huge</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.153846153846154" table:style-name="ce18" table:formula="=[.B7]/[.$G7]">
-   <text:p>15,38 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.153846153846154" table:style-name="ce20" table:formula="=[.B7]/[.$G7]">
+   <text:p>15.38 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce18" table:formula="=[.C7]/[.$G7]">
-   <text:p>0,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce20" table:formula="=[.C7]/[.$G7]">
+   <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0769230769230769" table:style-name="ce18" table:formula="=[.D7]/[.$G7]">
-   <text:p>7,69 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0769230769230769" table:style-name="ce20" table:formula="=[.D7]/[.$G7]">
+   <text:p>7.69 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.153846153846154" table:style-name="ce18" table:formula="=[.E7]/[.$G7]">
-   <text:p>15,38 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.153846153846154" table:style-name="ce20" table:formula="=[.E7]/[.$G7]">
+   <text:p>15.38 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.615384615384615" table:style-name="ce18" table:formula="=[.F7]/[.$G7]">
-   <text:p>61,54 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.615384615384615" table:style-name="ce20" table:formula="=[.F7]/[.$G7]">
+   <text:p>61.54 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0336787564766839" table:style-name="ce18" table:formula="=[.G7]/[.$G$9]">
-   <text:p>3,37 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0336787564766839" table:style-name="ce20" table:formula="=[.G7]/[.$G$9]">
+   <text:p>3.37 %</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row>
   <table:table-cell office:value-type="string" office:string-value="N/A" table:style-name="ce16">
    <text:p>N/A</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0422535211267606" table:style-name="ce18" table:formula="=[.B8]/[.$G8]">
-   <text:p>4,23 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0422535211267606" table:style-name="ce20" table:formula="=[.B8]/[.$G8]">
+   <text:p>4.23 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce18" table:formula="=[.C8]/[.$G8]">
-   <text:p>0,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce20" table:formula="=[.C8]/[.$G8]">
+   <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.570422535211268" table:style-name="ce18" table:formula="=[.D8]/[.$G8]">
-   <text:p>57,04 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.570422535211268" table:style-name="ce20" table:formula="=[.D8]/[.$G8]">
+   <text:p>57.04 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.119718309859155" table:style-name="ce18" table:formula="=[.E8]/[.$G8]">
-   <text:p>11,97 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.119718309859155" table:style-name="ce20" table:formula="=[.E8]/[.$G8]">
+   <text:p>11.97 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.267605633802817" table:style-name="ce18" table:formula="=[.F8]/[.$G8]">
-   <text:p>26,76 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.267605633802817" table:style-name="ce20" table:formula="=[.F8]/[.$G8]">
+   <text:p>26.76 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.367875647668394" table:style-name="ce18" table:formula="=[.G8]/[.$G$9]">
-   <text:p>36,79 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.367875647668394" table:style-name="ce20" table:formula="=[.G8]/[.$G$9]">
+   <text:p>36.79 %</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row>
   <table:table-cell office:value-type="string" office:string-value="all" table:style-name="ce6">
    <text:p>all</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.233160621761658" table:style-name="ce18" table:formula="=[.B9]/[.$G9]">
-   <text:p>23,32 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.233160621761658" table:style-name="ce20" table:formula="=[.B9]/[.$G9]">
+   <text:p>23.32 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce18" table:formula="=[.C9]/[.$G9]">
-   <text:p>0,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce20" table:formula="=[.C9]/[.$G9]">
+   <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.494818652849741" table:style-name="ce18" table:formula="=[.D9]/[.$G9]">
-   <text:p>49,48 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.494818652849741" table:style-name="ce20" table:formula="=[.D9]/[.$G9]">
+   <text:p>49.48 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0569948186528497" table:style-name="ce18" table:formula="=[.E9]/[.$G9]">
-   <text:p>5,70 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0569948186528497" table:style-name="ce20" table:formula="=[.E9]/[.$G9]">
+   <text:p>5.70 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.215025906735751" table:style-name="ce18" table:formula="=[.F9]/[.$G9]">
-   <text:p>21,50 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.215025906735751" table:style-name="ce20" table:formula="=[.F9]/[.$G9]">
+   <text:p>21.50 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="1" table:style-name="ce18" table:formula="=SUM([.G4]:[.G8])/[.$G$9]">
-   <text:p>100,00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="1" table:style-name="ce20" table:formula="=SUM([.G4]:[.G8])/[.$G$9]">
+   <text:p>100.00 %</text:p>
   </table:table-cell>
  </table:table-row>
 </table:table>
