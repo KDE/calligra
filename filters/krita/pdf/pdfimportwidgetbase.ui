@@ -298,6 +298,16 @@
 </widget>
 <customwidgets>
 </customwidgets>
+<tabstops>
+    <tabstop>boolFirstPage</tabstop>
+    <tabstop>listPages</tabstop>
+    <tabstop>intHorizontal</tabstop>
+    <tabstop>kComboBox1</tabstop>
+    <tabstop>intVertical</tabstop>
+    <tabstop>kComboBox2</tabstop>
+    <tabstop>intWidth</tabstop>
+    <tabstop>intHeight</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
