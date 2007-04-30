@@ -25,6 +25,12 @@ class Voice;
 class Bar;
 class MusicElement;
 
+/**
+ *
+ * Once a MusicElement is added/inserted to a VoiceBar, the VoiceBar gets ownership of the element and will delete it
+ * when it is removed, or if the VoiceBar is deleted. So you should only add dynamicaly allocated elemenst to a voice
+ * bar.
+ */
 class VoiceBar
 {
 public:

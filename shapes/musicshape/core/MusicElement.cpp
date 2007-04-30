@@ -35,6 +35,7 @@ MusicElement::MusicElement() : d(new Private)
 
 MusicElement::~MusicElement()
 {
+    delete d;
 }
 
 VoiceBar* MusicElement::bar()

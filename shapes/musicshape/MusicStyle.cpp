@@ -69,3 +69,39 @@ void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Chord::Du
             break;
     }
 }
+
+void MusicStyle::renderRest(QPainter& painter, double x, double y, Chord::Duration duration)
+{
+    painter.setPen(QPen(Qt::SolidLine));
+    painter.setFont(m_font);
+    QPointF p(x, y);
+    switch (duration) {
+        case Chord::HundredTwentyEighth:
+            painter.drawText(p, QString(0xE10D));
+            break;
+        case Chord::SixtyFourth:
+            painter.drawText(p, QString(0xE10C));
+            break;
+        case Chord::ThirtySecond:
+            painter.drawText(p, QString(0xE10B));
+            break;
+        case Chord::Sixteenth:
+            painter.drawText(p, QString(0xE10A));
+            break;
+        case Chord::Eighth:
+            painter.drawText(p, QString(0xE109));
+            break;
+        case Chord::Quarter:
+            painter.drawText(p, QString(0xE107));
+            break;
+        case Chord::Half:
+            painter.drawText(p, QString(0xE101));
+            break;
+        case Chord::Whole:
+            painter.drawText(p, QString(0xE100));
+            break;
+        case Chord::Breve:
+            painter.drawText(p, QString(0xE106));
+            break;
+    }
+}

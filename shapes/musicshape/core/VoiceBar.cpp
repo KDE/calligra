@@ -38,6 +38,7 @@ VoiceBar::VoiceBar(Voice* voice, Bar* bar) : d(new Private)
 
 VoiceBar::~VoiceBar()
 {
+    Q_FOREACH(MusicElement* me, d->elements) delete me;
     delete d;
 }
 
@@ -105,7 +106,7 @@ void VoiceBar::removeElement(int index)
     Q_ASSERT( index >= 0 && index < elementCount() );
     MusicElement* e = d->elements.takeAt(index);
     Q_ASSERT( e->bar() == this );
-    e->setBar(0);
+    delete e;
 }
 
 void VoiceBar::removeElement(MusicElement* element)

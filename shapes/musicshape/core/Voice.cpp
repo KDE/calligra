@@ -35,6 +35,15 @@ public:
 Voice::Voice(Part* part) : d(new Private)
 {
     d->part = part;
+    for (int i = 0, c = part->sheet()->barCount(); i < c; i++) {
+        d->bars.append(new VoiceBar(this, part->sheet()->bar(i)));
+    }
+}
+
+Voice::~Voice()
+{
+    Q_FOREACH(VoiceBar* vb, d->bars) delete vb;
+    delete d;
 }
 
 Part* Voice::part()
@@ -42,15 +51,38 @@ Part* Voice::part()
     return d->part;
 }
 
+int Voice::barCount() const
+{
+    return d->bars.size();
+}
+
 VoiceBar* Voice::bar(Bar* bar)
 {
-    if (bar->index() >= d->bars.size()) {
-        for (int i = d->bars.size(); i <= bar->index(); i++) {
-            VoiceBar* vb = new VoiceBar(this, part()->sheet()->bar(i));
-            d->bars.append(vb);
-        }
+    return this->bar(bar->index());
+}
+
+VoiceBar* Voice::bar(int index)
+{
+    Q_ASSERT( index >= 0 && index < barCount() );
+    VoiceBar* vb = d->bars[index];
+    if (!vb) {
+        vb = d->bars[index] = new VoiceBar(this, part()->sheet()->bar(index));
     }
-    return d->bars[bar->index()];
+    return vb;
+}
+
+void Voice::insertBars(int before, int count)
+{
+    for (int i = 0; i < count; i++) {
+        d->bars.insert(before + i, new VoiceBar(this, part()->sheet()->bar(before + i)));
+    }
+}
+
+void Voice::removeBars(int before, int count)
+{
+    for (int i = 0; i < count; i++) {
+        delete d->bars.takeAt(before);
+    }
 }
 
 } // namespace MusicCore

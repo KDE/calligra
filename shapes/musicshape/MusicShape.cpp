@@ -69,7 +69,11 @@ MusicShape::MusicShape()
     voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 3));
     voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
     voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));
-    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Whole));
+    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Half));
+    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Quarter));
+    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Eighth));
+    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Sixteenth));
+    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Sixteenth));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 0));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 1));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 2));
@@ -103,6 +107,9 @@ static void paintStaff( QPainter& painter, MusicStyle* style, Staff *staff )
 static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, double& x )
 {
     if (chord->noteCount() == 0) { // a rest
+        Staff *s = chord->staff();
+        style->renderRest( painter, x, s->top() + (2 - (chord->duration() == Chord::Whole)) * s->lineSpacing(), chord->duration() );
+        x += 25;
         return;
     }
     Note *n = chord->note(0);

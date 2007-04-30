@@ -34,6 +34,7 @@ public:
     virtual QPen staffLinePen();
     virtual QPen stemPen();
     virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration);
+    virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration);
 private:
     QPen m_staffLinePen, m_stemPen;
     QFont m_font;

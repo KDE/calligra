@@ -36,6 +36,11 @@ Note::Note(Chord* chord, Staff* staff, int pitch, int accidentals) : d(new Priva
     d->accidentals = accidentals;
 }
 
+Note::~Note()
+{
+    delete d;
+}
+
 Chord* Note::chord()
 {
     return d->chord;

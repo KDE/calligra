@@ -26,11 +26,22 @@ class Sheet;
 class Bar
 {
 public:
+    /**
+     * Returns the sheet this bar is part of.
+     */
     Sheet* sheet();
+
+    /**
+     * Returns the index of this bar in the sheet it is part of.
+     */
     int index() const;
 private:
     Bar(Sheet* sheet, int index);
     ~Bar();
+    /**
+     * This method is called by the Sheet class to set the index of this bar whenever bars are inserted or removed
+     * before this bar.
+     */
     void setIndex(int index);
 
     friend class Sheet;

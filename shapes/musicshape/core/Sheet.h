@@ -43,6 +43,10 @@ public:
      * Constructor, this will create a sheet containing no parts.
      */
     Sheet();
+
+    /**
+     * Destructor.
+     */
     ~Sheet();
 
     /**
@@ -74,7 +78,18 @@ public:
      */
     Part* insertPart(int before, QString name);
 
+    /**
+     * Removes the part with the given index from this sheet.
+     *
+     * @param index the index of the part to remove
+     */
     void removePart(int index);
+
+    /**
+     * Removes the given part from this sheet.
+     *
+     * @param part the part to remove
+     */
     void removePart(Part* part);
 
     /**

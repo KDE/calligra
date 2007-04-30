@@ -38,6 +38,9 @@ Sheet::Sheet() : d(new Private)
 
 Sheet::~Sheet()
 {
+    Q_FOREACH(Part* p, d->parts) delete p;
+    Q_FOREACH(PartGroup* ph, d->partGroups) delete ph;
+    Q_FOREACH(Bar* b, d->bars) delete b;
     delete d;
 }
 
@@ -124,15 +127,23 @@ Bar* Sheet::bar(int index)
 
 void Sheet::addBars(int count)
 {
+    int bc = barCount();
     for (int i = 0, bc = barCount(); i < count; i++) {
 	d->bars.append(new Bar(this, bc + i));
+    }
+    Q_FOREACH(Part* p, d->parts) {
+        p->insertBars(bc, count);
     }
 }
 
 Bar* Sheet::addBar()
 {
-    Bar* bar = new Bar(this, barCount());
+    int bc = barCount();
+    Bar* bar = new Bar(this, bc);
     d->bars.append(bar);
+    Q_FOREACH(Part* p, d->parts) {
+        p->insertBars(bc, 1);
+    }
     return bar;
 }
 
@@ -144,12 +155,18 @@ Bar* Sheet::insertBar(int before)
     for (int i = before+1, count = barCount(); i < count; i++) {
         d->bars[i]->setIndex(i);
     }
+    Q_FOREACH(Part* p, d->parts) {
+        p->insertBars(before, 1);
+    }
     return bar;
 }
 
 void Sheet::removeBar(int index)
 {
     Q_ASSERT( index >= 0 && index < barCount() );
+    Q_FOREACH(Part* p, d->parts) {
+        p->removeBars(index, 1);
+    }
     Bar* bar = d->bars.takeAt(index);
     delete bar;
     for (int i = index, count = barCount(); i < count; i++) {
@@ -160,7 +177,9 @@ void Sheet::removeBar(int index)
 void Sheet::removeBars(int index, int count)
 {
     Q_ASSERT( index >= 0 && count > 0 && index + count <= barCount() );
-    // XXX silly implementation, could really use improvement I think
+    Q_FOREACH(Part* p, d->parts) {
+        p->removeBars(index, count);
+    }
     for (int i = 0; i < count; i++) {
         delete d->bars.takeAt(index);
     }

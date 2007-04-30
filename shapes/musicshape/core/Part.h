@@ -55,7 +55,8 @@ public:
 
     /**
      * Returns the short name of this part. In typical music the long name of a part is printed before the first
-     * staff system, and the short name will be printed in front of the other staff systems.
+     * staff system, and the short name will be printed in front of the other staff systems. If no short name has been
+     * specified, the normal name will be returned.
      */
     QString shortName() const;
 
@@ -111,6 +112,17 @@ private:
     Part(Sheet* sheet, QString name);
     ~Part();
     friend class Sheet;
+
+    /**
+     * This method is called by the Sheet class when bars are added or inserted to the piece of music. This is
+     * forwarded to all voices in this part to  synchronize the number of bars in those classes.
+     */
+    void insertBars(int before, int count);
+    /**
+     * This method is called by the Sheet class when bars are removed from the piece of music. This is forwarded
+     * to all voices in this part to make sure the bars and their content are removed from the voices.
+     */
+    void removeBars(int index, int count);
     class Private;
     Private * const d;
 };

@@ -41,6 +41,8 @@ Part::Part(Sheet* sheet, QString name) : d(new Private)
 
 Part::~Part()
 {
+    Q_FOREACH(Staff* s, d->staves) delete s;
+    Q_FOREACH(Voice* v, d->voices) delete v;
     delete d;
 }
 
@@ -115,6 +117,20 @@ Voice* Part::addVoice()
     Voice* voice = new Voice(this);
     d->voices.append(voice);
     return voice;
+}
+
+void Part::insertBars(int before, int count)
+{
+    Q_FOREACH(Voice* v, d->voices) {
+        v->insertBars(before, count);
+    }
+}
+
+void Part::removeBars(int before, int count)
+{
+    Q_FOREACH(Voice* v, d->voices) {
+        v->removeBars(before, count);
+    }
 }
 
 } // namespace

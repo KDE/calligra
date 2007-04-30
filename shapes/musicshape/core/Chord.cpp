@@ -44,6 +44,7 @@ Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
 
 Chord::~Chord()
 {
+    Q_FOREACH(Note* n, d->notes) delete n;
     delete d;
 }
 

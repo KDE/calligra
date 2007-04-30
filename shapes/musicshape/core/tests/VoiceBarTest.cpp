@@ -51,82 +51,80 @@ void VoiceBarTest::testConstruction()
 
 void VoiceBarTest::testAddElement()
 {
-    MusicElement elem1, elem2;
-    voiceBar->addElement(&elem1);
-    QCOMPARE(elem1.bar(), voiceBar);
+    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement();
+    voiceBar->addElement(elem1);
+    QCOMPARE(elem1->bar(), voiceBar);
     QCOMPARE(voiceBar->elementCount(), 1);
-    QCOMPARE(voiceBar->element(0), &elem1);
+    QCOMPARE(voiceBar->element(0), elem1);
 
-    voiceBar->addElement(&elem2);
+    voiceBar->addElement(elem2);
     QCOMPARE(voiceBar->elementCount(), 2);
-    QCOMPARE(voiceBar->element(1), &elem2);
-    QCOMPARE(voiceBar->element(0), &elem1);
+    QCOMPARE(voiceBar->element(1), elem2);
+    QCOMPARE(voiceBar->element(0), elem1);
 }
 
 void VoiceBarTest::testInsertElement_index()
 {
-    MusicElement elem1, elem2, elem3;
-    voiceBar->insertElement(&elem1, 0);
-    QCOMPARE(elem1.bar(), voiceBar);
+    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement(), *elem3 = new MusicElement();
+    voiceBar->insertElement(elem1, 0);
+    QCOMPARE(elem1->bar(), voiceBar);
     QCOMPARE(voiceBar->elementCount(), 1);
-    QCOMPARE(voiceBar->element(0), &elem1);
+    QCOMPARE(voiceBar->element(0), elem1);
 
-    voiceBar->insertElement(&elem2, 0);
+    voiceBar->insertElement(elem2, 0);
     QCOMPARE(voiceBar->elementCount(), 2);
-    QCOMPARE(voiceBar->element(0), &elem2);
-    QCOMPARE(voiceBar->element(1), &elem1);
+    QCOMPARE(voiceBar->element(0), elem2);
+    QCOMPARE(voiceBar->element(1), elem1);
 
-    voiceBar->insertElement(&elem3, 1);
+    voiceBar->insertElement(elem3, 1);
     QCOMPARE(voiceBar->elementCount(), 3);
-    QCOMPARE(voiceBar->element(0), &elem2);
-    QCOMPARE(voiceBar->element(1), &elem3);
-    QCOMPARE(voiceBar->element(2), &elem1);
+    QCOMPARE(voiceBar->element(0), elem2);
+    QCOMPARE(voiceBar->element(1), elem3);
+    QCOMPARE(voiceBar->element(2), elem1);
 }
 
 void VoiceBarTest::testInsertElement_element()
 {
-    MusicElement elem1, elem2, elem3;
-    voiceBar->addElement(&elem1);
+    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement(), *elem3 = new MusicElement();
+    voiceBar->addElement(elem1);
 
-    voiceBar->insertElement(&elem2, &elem1);
-    QCOMPARE(elem2.bar(), voiceBar);
+    voiceBar->insertElement(elem2, elem1);
+    QCOMPARE(elem2->bar(), voiceBar);
     QCOMPARE(voiceBar->elementCount(), 2);
-    QCOMPARE(voiceBar->element(0), &elem2);
-    QCOMPARE(voiceBar->element(1), &elem1);
+    QCOMPARE(voiceBar->element(0), elem2);
+    QCOMPARE(voiceBar->element(1), elem1);
 
-    voiceBar->insertElement(&elem3, &elem1);
+    voiceBar->insertElement(elem3, elem1);
     QCOMPARE(voiceBar->elementCount(), 3);
-    QCOMPARE(voiceBar->element(0), &elem2);
-    QCOMPARE(voiceBar->element(1), &elem3);
-    QCOMPARE(voiceBar->element(2), &elem1);
+    QCOMPARE(voiceBar->element(0), elem2);
+    QCOMPARE(voiceBar->element(1), elem3);
+    QCOMPARE(voiceBar->element(2), elem1);
 }
 
 void VoiceBarTest::testRemoveElement_index()
 {
-    MusicElement elem1, elem2, elem3;
-    voiceBar->addElement(&elem1);
-    voiceBar->addElement(&elem2);
-    voiceBar->addElement(&elem3);
+    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement(), *elem3 = new MusicElement();
+    voiceBar->addElement(elem1);
+    voiceBar->addElement(elem2);
+    voiceBar->addElement(elem3);
 
     voiceBar->removeElement(1);
-    QCOMPARE(elem2.bar(), (VoiceBar*) 0);
     QCOMPARE(voiceBar->elementCount(), 2);
-    QCOMPARE(voiceBar->element(0), &elem1);
-    QCOMPARE(voiceBar->element(1), &elem3);
+    QCOMPARE(voiceBar->element(0), elem1);
+    QCOMPARE(voiceBar->element(1), elem3);
 }
 
 void VoiceBarTest::testRemoveElement_element()
 {
-    MusicElement elem1, elem2, elem3;
-    voiceBar->addElement(&elem1);
-    voiceBar->addElement(&elem2);
-    voiceBar->addElement(&elem3);
+    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement(), *elem3 = new MusicElement();
+    voiceBar->addElement(elem1);
+    voiceBar->addElement(elem2);
+    voiceBar->addElement(elem3);
 
-    voiceBar->removeElement(&elem2);
-    QCOMPARE(elem2.bar(), (VoiceBar*) 0);
+    voiceBar->removeElement(elem2);
     QCOMPARE(voiceBar->elementCount(), 2);
-    QCOMPARE(voiceBar->element(0), &elem1);
-    QCOMPARE(voiceBar->element(1), &elem3);
+    QCOMPARE(voiceBar->element(0), elem1);
+    QCOMPARE(voiceBar->element(1), elem3);
 }
 
 QTEST_MAIN(VoiceBarTest)

@@ -49,10 +49,35 @@ public:
      */
     void setSpacing(double spacing);
 
+    /**
+     * Returns the vertical position of this staff relative to the top of the staff system.
+     */
     double top();
 
+    /**
+     * Returns the number of lines in this staff. Typical values are 5 for normal music, or 1 for a percussion part.
+     * The default value for this attribute is 5.
+     */
     int lineCount() const;
+
+    /**
+     * Sets the number of lines of this staff.
+     *
+     * @param lineCount the new number of lines in this staff.
+     */
+    void setLineCount(int lineCount);
+
+    /**
+     * Returns the distance in points between two lines of this staff.
+     */
     double lineSpacing() const;
+
+    /**
+     * Sets the distance in points between two lines of this staff.
+     *
+     * @param lineSpacing the new distance between two lines.
+     */
+    void setLineSpacing(double lineSpacing);
 private:
     Staff(Part* part);
     ~Staff();

@@ -98,7 +98,7 @@ public:
     /**
      * Returns true if the group should have common bar-lines.
      *
-     * XXX MusicXML has Mensurstrich as third option... what is that, and do I want that? :)
+     * XXX MusicXML has Mensurstrich as third option... perhaps nice to add later, and do I want that? :)
      */
     bool commonBarLines() const;
 
@@ -109,8 +109,16 @@ public:
      */
     void setCommonBarLines(bool commonBarLines);
 private:
+    /**
+     * Constructor private, as it should only be called by the Sheet class.
+     */
     PartGroup(Sheet* sheet, int firstPart, int lastPart);
+
+    /**
+     * Destructor private as it should only be called by the Sheet class.
+     */
     ~PartGroup();
+
     friend class Sheet;
     class Private;
     Private * const d;
