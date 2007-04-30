@@ -41,7 +41,7 @@ VideoShapePlugin::VideoShapePlugin( QObject * parent,  const QStringList & list 
 VideoShapeFactory::VideoShapeFactory( QObject* parent, const QStringList& list )
     : KoShapeFactory( parent, VideoShapeId, i18n( "Video Shape" ) )
 {
-    setToolTip( i18n( "A shape which display a video" ) );
+    setToolTip( i18n( "A shape which displays a video" ) );
     setIcon( "videoflake" );
 
 }
