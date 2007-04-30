@@ -51,7 +51,7 @@
 #include <QClipboard>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut) {
-    foreach(QKeySequence ks, KStandardShortcut::shortcut(shortcut)) {
+    foreach(QKeySequence ks, KStandardShortcut::shortcut(shortcut).toList()) {
         if(input == ks)
             return true;
     }
