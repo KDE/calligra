@@ -20,7 +20,7 @@
 #include "Toolbox.h"
 #include "KoDocumentChild.h"
 
-#include <kwm.h>
+#include <kwindowsystem.h>
 
 #include <QLayout>
 #include <QSpinBox>
@@ -36,7 +36,7 @@ ToolBox::ToolBox( QWidget* parent, const char* /*name*/ )
     : QFrame( parent, Qt::WType_TopLevel | Qt::WStyle_Tool )
 {
 #ifdef Q_OS_UNIX	
-    KWM::setType( winId(), NET::Toolbar );
+    KWindowSystem::setType( winId(), NET::Toolbar );
 #endif
     setFrameShape( Panel );
     setFrameShadow( Raised );
