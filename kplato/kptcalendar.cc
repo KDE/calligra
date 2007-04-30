@@ -33,7 +33,7 @@
 
 #include <kdatetime.h>
 #include <klocale.h>
-#include <ktimezones.h>
+#include <ktimezone.h>
 #include <ksystemtimezone.h>
 #include <kdebug.h>
 

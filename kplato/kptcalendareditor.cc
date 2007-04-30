@@ -54,7 +54,7 @@
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 #include <ksystemtimezone.h>
-#include <ktimezones.h>
+#include <ktimezone.h>
 #include <kabc/addressee.h>
 #include <kabc/vcardconverter.h>
 

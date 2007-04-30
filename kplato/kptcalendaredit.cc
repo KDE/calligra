@@ -43,7 +43,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <ksystemtimezone.h>
-#include <ktimezones.h>
+#include <ktimezone.h>
 
 namespace KPlato
 {

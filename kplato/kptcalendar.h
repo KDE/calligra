@@ -31,7 +31,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <ktimezones.h>
+#include <ktimezone.h>
 
 #include <KoXmlReader.h>
 
