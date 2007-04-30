@@ -428,12 +428,16 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id, bool
 	if (temp.isNull()) { kdDebug(30503) << "no text" << endl; return; }
 	QString oldtext=currentText.data();
 	int oldLength=oldtext.length();
-	if (keep_formatting) {
-		if (oldLength) {
+	if (keep_formatting) 
+        {
+		if (oldLength)  
+                {
 			++oldLength;
 			oldtext.append('\n');
 		}
-	} else {
+	}  
+        else 
+        {
 		if (oldLength)
 			++oldLength; // add new trailing space char
 		text=text.simplifyWhiteSpace(); // drop all unprintable chars
@@ -441,9 +445,12 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id, bool
 	QString newtext;
 	if (keep_formatting)
 		newtext=oldtext + text;
-	else {
+	else  
+        {
 		newtext=oldtext + " " + text;
-		newtext=newtext.simplifyWhiteSpace(); // strip possible new space at beginning.
+		// strip possible newline at beginning.
+                while (newtext.left(1)=="\n" || newtext.left(1)==" ") newtext=newtext.right(newtext.length()-1);
+
 	}
 	currentText.setData(newtext);
 	int newLength=text.length();
