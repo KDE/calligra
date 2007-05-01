@@ -628,7 +628,7 @@ void DefaultTool::keyPressEvent( QKeyEvent* event )
 
     //most process*Key methods call emitEndOperation, this only gets called in some situations
     // (after some move operations)
-    d->canvas->view()->doc()->emitEndOperation( Region( d->canvas->visibleCells() ) );
+    d->canvas->view()->doc()->emitEndOperation();
     return;
 }
 

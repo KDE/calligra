@@ -808,7 +808,7 @@ void CellEditor::slotCursorPositionChanged()
         }
       }
       setUpdateChoice(true);
-      d->canvas->doc()->emitEndOperation(*d->canvas->choice());
+      d->canvas->doc()->emitEndOperation();
       connect( d->canvas->choice(), SIGNAL(changed(const Region&)),
                d->canvas->view(), SLOT(slotScrollChoice(const Region&)) );
     }

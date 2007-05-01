@@ -285,18 +285,6 @@ public:
 
   /**
    * \ingroup Operations
-   * Convenience function.
-   * Marks the cells in @p region to get repainted and calls emitEndOperation().
-   * @see emitBeginOperation(bool)
-   * @see emitEndOperation()
-   * @see Sheet::setRegionPaintDirty
-   */
-  void emitEndOperation( const Region& region );
-
-  void emitEndOperation( const QRect& rect );
-
-  /**
-   * \ingroup Operations
    */
   void increaseNumOperation();
 

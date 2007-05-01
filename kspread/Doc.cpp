@@ -2095,18 +2095,6 @@ void Doc::emitEndOperation()
     paintUpdates();
 }
 
-void Doc::emitEndOperation( const Region& region )
-{
-  if (d->activeSheet)
-    d->activeSheet->setRegionPaintDirty(region);
-  Doc::emitEndOperation();
-}
-
-void Doc::emitEndOperation( const QRect& rect )
-{
-  emitEndOperation( Region( rect ) );
-}
-
 void Doc::updateBorderButton()
 {
   foreach ( KoView* view, views() )

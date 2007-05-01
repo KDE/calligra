@@ -5075,7 +5075,9 @@ void Sheet::setRegionPaintDirty( const Region & region )
     if ( region.isEmpty() || !region.isValid() )
         return;
 
+#if KSPREAD_KOPART_EMBEDDING
     d->paintDirtyList.add(region); // still needed for embedded object repainting
+#endif
     doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance ) );
 
 //     kDebug(36004) << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;

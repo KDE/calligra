@@ -2164,12 +2164,10 @@ void View::recalcWorkBook()
 
 void View::refreshLocale()
 {
-  doc()->emitBeginOperation(true);
   foreach ( Sheet* sheet, doc()->map()->sheetList() )
   {
     sheet->updateLocale();
   }
-  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::recalcWorkSheet()
@@ -3655,12 +3653,7 @@ void View::addSheet( Sheet * _t )
   if ( !d->loading )
     updateBorderButton();
 
-  if ( !d->activeSheet )
-  {
-    doc()->emitEndOperation();
-    return;
-  }
-  doc()->emitEndOperation( *selection() );
+  doc()->emitEndOperation();
 }
 
 void View::slotSheetRemoved( Sheet *_t )
@@ -3691,7 +3684,7 @@ void View::slotSheetRemoved( Sheet *_t )
     }
   }
 
-  doc()->emitEndOperation( *selection() );
+  doc()->emitEndOperation();
 }
 
 void View::removeAllSheets()
@@ -3780,14 +3773,14 @@ void View::slotSheetRenamed( Sheet* sheet, const QString& old_name )
 {
   doc()->emitBeginOperation( false );
   d->tabBar->renameTab( old_name, sheet->sheetName() );
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::slotSheetHidden( Sheet* )
 {
   doc()->emitBeginOperation(false);
   updateShowSheetMenu();
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::slotSheetShown( Sheet* )
@@ -3795,7 +3788,7 @@ void View::slotSheetShown( Sheet* )
   doc()->emitBeginOperation(false);
   d->tabBar->setTabs( doc()->map()->visibleSheets() );
   updateShowSheetMenu();
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::changeSheet( const QString& _name )
@@ -3915,7 +3908,7 @@ void View::insertSheet()
     d->actions->hideSheet->setEnabled( true );
   }
 
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::hideSheet()
@@ -3939,7 +3932,7 @@ void View::hideSheet()
   QUndoCommand* command = new HideSheetCommand( activeSheet() );
   doc()->addCommand( command );
 
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 
   d->tabBar->removeTab( d->activeSheet->sheetName() );
   d->tabBar->setActiveTab( sn );
@@ -4125,7 +4118,7 @@ void View::paste()
   {
     d->canvas->editor()->paste();
   }
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::specialPaste()
@@ -4140,7 +4133,7 @@ void View::specialPaste()
     {
       doc()->emitBeginOperation( false );
       d->activeSheet->recalc();
-      doc()->emitEndOperation( d->canvas->visibleCells() );
+      doc()->emitEndOperation();
     }
     calcStatusBarOp();
     updateEditWidget();
@@ -4270,7 +4263,7 @@ void View::subtotals()
     doc()->emitBeginOperation( false );
 
     d->selection->initialize( QRect(dlg.selection().topLeft(), dlg.selection().bottomRight()));//, dlg.sheet() );
-    doc()->emitEndOperation( selection );
+    doc()->emitEndOperation();
   }
 }
 
@@ -5105,7 +5098,7 @@ void View::toggleProtectSheet( bool mode )
    // d->activeSheet->setRegionPaintDirty( QRect(QPoint( 0, 0 ), QPoint( KS_colMax, KS_rowMax ) ) );
    refreshView();
    updateEditWidget();
-   doc()->emitEndOperation( d->canvas->visibleCells() );
+   doc()->emitEndOperation();
 }
 
 void View::togglePageBorders( bool mode )
@@ -5115,7 +5108,7 @@ void View::togglePageBorders( bool mode )
 
   doc()->emitBeginOperation( false );
   d->activeSheet->setShowPageBorders( mode );
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::viewZoom( KoZoomMode::Mode mode, double zoom )
@@ -5124,7 +5117,7 @@ void View::viewZoom( KoZoomMode::Mode mode, double zoom )
     d->canvas->closeEditor();
     doc()->emitBeginOperation( false );
     doc()->refreshInterface();
-    doc()->emitEndOperation(/* Region( 1, 1, KS_colMax, KS_rowMax ) */);
+    doc()->emitEndOperation();
 }
 
 void View::setZoom( int zoom, bool /*updateViews*/ )
@@ -5138,7 +5131,7 @@ void View::setZoom( int zoom, bool /*updateViews*/ )
   //KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
 
   doc()->refreshInterface();
-  doc()->emitEndOperation( Region( 1, 1, KS_colMax, KS_rowMax ) );
+  doc()->emitEndOperation();
 }
 
 void View::showStatusBar( bool b )
@@ -5169,7 +5162,7 @@ void View::preference()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->refreshPreference();
-    doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->emitEndOperation();
   }
 }
 
@@ -5466,7 +5459,7 @@ void View::slotPopupDeleteChild()
 //     doc()->emitBeginOperation(false);
 //     d->popupChildObject->sheet()->deleteChild( d->popupChildObject );
 //     d->popupChildObject = 0;
-//     doc()->emitEndOperation( d->canvas->visibleCells() );
+//     doc()->emitEndOperation();
 }
 
 void View::popupColumnMenu( const QPoint & _point )
@@ -6065,7 +6058,7 @@ void View::slotInsertCellCopy()
     doc()->emitBeginOperation( false );
     d->activeSheet->paste( d->selection->lastRange(), true,
                            Paste::Normal, Paste::OverWrite, true );
-    doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->emitEndOperation();
   }
   else
   {
@@ -6077,7 +6070,7 @@ void View::slotInsertCellCopy()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->recalc();
-    doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->emitEndOperation();
   }
   updateEditWidget();
 }
@@ -6149,7 +6142,7 @@ void View::equalizeRow()
   {
     doc()->emitBeginOperation( false );
     canvasWidget()->equalizeRow();
-    doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->emitEndOperation();
   }
 }
 
@@ -6164,7 +6157,7 @@ void View::equalizeColumn()
   {
     doc()->emitBeginOperation( false );
     canvasWidget()->equalizeColumn();
-    doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->emitEndOperation();
   }
 }
 
@@ -6472,7 +6465,7 @@ void View::insertObject()
   KoDocumentEntry e =  d->actions->insertPart->documentEntry();//KoPartSelectDia::selectPart( d->canvas );
   if ( e.isEmpty() )
   {
-    doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->emitEndOperation();
     return;
   }
 
@@ -6480,7 +6473,7 @@ void View::insertObject()
   delete d->insertHandler;
 
   d->insertHandler = new InsertPartHandler( this, d->canvas, e );
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::insertChart()
@@ -6506,7 +6499,7 @@ void View::insertChart()
   doc()->emitBeginOperation( false );
 
   d->insertHandler = new InsertChartHandler( this, d->canvas, vec[0] );
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 
@@ -6573,7 +6566,7 @@ void View::removeSheet()
     tbl->doc()->map()->takeSheet( tbl );
     doc()->takeSheet( tbl );
 #endif
-    doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->emitEndOperation();
   }
 }
 
@@ -6638,7 +6631,7 @@ void View::slotRename()
     doc()->emitBeginOperation(false);
     updateEditWidget();
     doc()->setModified( true );
-    doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->emitEndOperation();
   }
 }
 
@@ -6700,7 +6693,7 @@ void View::slotUpdateView( Sheet * _sheet, const Region& region )
 
   // doc()->emitBeginOperation( false );
   d->activeSheet->setRegionPaintDirty( region );
-  doc()->emitEndOperation( region );
+  doc()->emitEndOperation();
 }
 
 void View::slotUpdateView( EmbeddedObject *obj )
@@ -6718,7 +6711,7 @@ void View::slotUpdateHBorder( Sheet * _sheet )
 
   doc()->emitBeginOperation(false);
   d->hBorderWidget->update();
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::slotUpdateVBorder( Sheet *_sheet )
@@ -6731,7 +6724,7 @@ void View::slotUpdateVBorder( Sheet *_sheet )
 
   doc()->emitBeginOperation( false );
   d->vBorderWidget->update();
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::slotChangeSelection(const KSpread::Region& changedRegion)
@@ -6814,7 +6807,7 @@ void View::slotChangeChoice(const KSpread::Region& changedRegion)
   doc()->emitBeginOperation( false );
   d->canvas->updateEditor();
   d->activeSheet->setRegionPaintDirty( changedRegion );
-  doc()->emitEndOperation(/* *choice() */);
+  doc()->emitEndOperation();
   kDebug(36002) << "Choice: " << *choice() << endl;
 }
 
@@ -7042,7 +7035,7 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
   if ( d->activeSheet )
   {
-    doc()->emitEndOperation( d->canvas->visibleCells() );
+    doc()->emitEndOperation();
 
     if ( ev->activated() )
     {
@@ -7110,7 +7103,7 @@ void View::removeSheet( Sheet *_t )
   bool state = doc()->map()->visibleSheets().count() > 1;
   d->actions->removeSheet->setEnabled( state );
   d->actions->hideSheet->setEnabled( state );
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::insertSheet( Sheet* sheet )

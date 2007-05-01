@@ -1348,7 +1348,7 @@ void Canvas::processEnterKey(QKeyEvent* event)
      direction, not extends the selection
   */
   QRect r( moveDirection( direction, false ) );
-  d->view->doc()->emitEndOperation(/* Region(r) */);
+  d->view->doc()->emitEndOperation();
 }
 
 void Canvas::processArrowKey( QKeyEvent *event)
@@ -1403,7 +1403,7 @@ void Canvas::processArrowKey( QKeyEvent *event)
   }
 
   QRect r( moveDirection( direction, makingSelection ) );
-  d->view->doc()->emitEndOperation(/* Region(r) */);
+  d->view->doc()->emitEndOperation();
 }
 
 void Canvas::processEscapeKey(QKeyEvent * event)
@@ -1425,7 +1425,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
   event->setAccepted(true); // ?
   QPoint cursor = cursorPos();
 
-  d->view->doc()->emitEndOperation( Region(QRect( cursor, cursor )) );
+  d->view->doc()->emitEndOperation();
 
 #ifdef KSPREAD_KOPART_EMBEDDING
   if ( d->mousePressed /*&& toolEditMode == TEM_MOUSE */)
@@ -1528,7 +1528,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
 
     if ( selection()->marker() == destination )
     {
-      d->view->doc()->emitEndOperation( Region(QRect( destination, destination ) ) );
+      d->view->doc()->emitEndOperation();
       return false;
     }
 
@@ -1559,7 +1559,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
   if ( d->cellEditor )
   {
     QApplication::sendEvent( d->editWidget, event );
-    d->view->doc()->emitEndOperation( Region( QRect( marker, marker ) ) );
+    d->view->doc()->emitEndOperation();
     return false;
   }
   else
@@ -1577,7 +1577,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
     QPoint destination( col, marker.y() );
     if ( destination == marker )
     {
-      d->view->doc()->emitEndOperation( Region( QRect( destination, destination ) ) );
+      d->view->doc()->emitEndOperation();
       return false;
     }
 
@@ -1606,7 +1606,7 @@ bool Canvas::processPriorKey(QKeyEvent *event)
   QPoint destination(marker.x(), qMax(1, marker.y() - 10));
   if ( destination == marker )
   {
-    d->view->doc()->emitEndOperation( Region( QRect( destination, destination ) ) );
+    d->view->doc()->emitEndOperation();
     return false;
   }
 
@@ -1635,7 +1635,7 @@ bool Canvas::processNextKey(QKeyEvent *event)
 
   if ( marker == destination )
   {
-    d->view->doc()->emitEndOperation( Region( QRect( destination, destination ) ) );
+    d->view->doc()->emitEndOperation();
     return false;
   }
 
@@ -1658,7 +1658,7 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
 
   if ( isObjectSelected() )
   {
-    d->view->doc()->emitEndOperation( Region( visibleCells() ) );
+    d->view->doc()->emitEndOperation();
     d->view->deleteSelectedObjects();
     return;
   }
@@ -1666,9 +1666,7 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
   d->view->clearTextSelection();
   d->editWidget->setText( "" );
 
-  QPoint cursor = cursorPos();
-
-  d->view->doc()->emitEndOperation( Region( QRect( cursor, cursor ) ) );
+  d->view->doc()->emitEndOperation();
   return;
 }
 
@@ -1679,10 +1677,7 @@ void Canvas::processF2Key(QKeyEvent* /* event */)
     d->editWidget->setCursorPosition( d->cellEditor->cursorPosition() - 1 );
   d->editWidget->cursorForward( false );
 
-
-  QPoint cursor = cursorPos();
-
-  d->view->doc()->emitEndOperation( Region( QRect( cursor, cursor ) ) );
+  d->view->doc()->emitEndOperation();
   return;
 }
 
@@ -1696,39 +1691,33 @@ void Canvas::processF4Key(QKeyEvent* event)
 //    d->editWidget->setFocus();
     d->editWidget->setCursorPosition( d->cellEditor->cursorPosition() );
   }
-  QPoint cursor = cursorPos();
 
-  d->view->doc()->emitEndOperation( Region( QRect( cursor, cursor ) ) );
+  d->view->doc()->emitEndOperation();
   return;
 }
 
 void Canvas::processOtherKey(QKeyEvent *event)
 {
-  register Sheet * const sheet = activeSheet();
+    register Sheet * const sheet = activeSheet();
 
-  // No null character ...
-  if ( event->text().isEmpty() || !d->view->koDocument()->isReadWrite()
-       || !sheet || sheet->isProtected() )
-  {
-    event->setAccepted(true);
-  }
-  else
-  {
-    if ( !d->cellEditor && !d->chooseCell )
+    // No null character ...
+    if ( event->text().isEmpty() || !d->view->koDocument()->isReadWrite() ||
+         !sheet || sheet->isProtected() )
     {
-      // Switch to editing mode
-      createEditor();
-      d->cellEditor->handleKeyPressEvent( event );
+        event->setAccepted(true);
     }
-    else if ( d->cellEditor )
-      d->cellEditor->handleKeyPressEvent( event );
-  }
-
-  QPoint cursor = cursorPos();
-
-  d->view->doc()->emitEndOperation( Region( QRect( cursor, cursor ) ) );
-
-  return;
+    else
+    {
+        if ( !d->cellEditor && !d->chooseCell )
+        {
+            // Switch to editing mode
+            createEditor();
+            d->cellEditor->handleKeyPressEvent( event );
+        }
+        else if ( d->cellEditor )
+            d->cellEditor->handleKeyPressEvent( event );
+    }
+    d->view->doc()->emitEndOperation();
 }
 
 bool Canvas::processControlArrowKey( QKeyEvent *event )
@@ -2037,7 +2026,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
 
   if ( marker == destination )
   {
-    d->view->doc()->emitEndOperation( Region( QRect( destination, destination ) ) );
+    d->view->doc()->emitEndOperation();
     return false;
   }
 
@@ -2075,7 +2064,7 @@ void Canvas::processIMEvent( QIMEvent * event )
   else
     cursor = selection()->cursor();
 
-  d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
+  d->view->doc()->emitEndOperation();
 }
 #endif
 
