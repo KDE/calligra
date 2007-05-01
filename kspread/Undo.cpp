@@ -49,6 +49,7 @@ bool operator < (const QPoint& pointA , const QPoint& pointB)
 		return ( pointA.y() < pointB.y() );
 }
 
+#if 0
 /****************************************************************************
  *
  * Undo
@@ -164,7 +165,7 @@ QString Undo::getUndoName()
 	return QString("");
     return  m_stckUndo.top()->getName();
 }
-
+#endif
 
 /****************************************************************************
  *
@@ -748,6 +749,13 @@ void UndoPaperLayout::undo()
 
 void UndoPaperLayout::redo()
 {
+    // eat the first redo initiated by the QUndoStack
+    if ( m_firstRun )
+    {
+        m_firstRun = false;
+        return;
+    }
+
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
         return;
@@ -1481,6 +1489,13 @@ void UndoDelete::undo()
 
 void UndoDelete::redo()
 {
+    // eat the first redo initiated by the QUndoStack
+    if ( m_firstRun )
+    {
+        m_firstRun = false;
+        return;
+    }
+
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
@@ -1586,6 +1601,13 @@ void UndoDragDrop::undo()
 
 void UndoDragDrop::redo()
 {
+    // eat the first redo initiated by the QUndoStack
+    if ( m_firstRun )
+    {
+        m_firstRun = false;
+        return;
+    }
+
     Sheet * sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
@@ -1752,6 +1774,13 @@ void UndoResizeColRow::undo()
 
 void UndoResizeColRow::redo()
 {
+    // eat the first redo initiated by the QUndoStack
+    if ( m_firstRun )
+    {
+        m_firstRun = false;
+        return;
+    }
+
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
@@ -1812,7 +1841,6 @@ UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const 
     : UndoAction( _doc )
     , m_region( _selection )
     , m_sheetName( _sheet->sheetName() )
-    , m_firstRun( true )
 {
   name=i18n("Change Text");
 
@@ -2634,6 +2662,13 @@ void UndoCellPaste::undo()
 
 void UndoCellPaste::redo()
 {
+    // eat the first redo initiated by the QUndoStack
+    if ( m_firstRun )
+    {
+        m_firstRun = false;
+        return;
+    }
+
   Sheet* sheet = doc()->map()->findSheet( m_sheetName );
   if ( !sheet )
       return;

@@ -117,7 +117,7 @@ private:
 class UndoAction
 {
 public:
-    UndoAction( Doc *_doc ) { m_pDoc = _doc; m_pDoc->setModified(true); }
+    UndoAction( Doc *_doc ) : m_pDoc(_doc), m_firstRun(true) { m_pDoc->setModified(true); }
     virtual ~UndoAction() { }
 
     virtual void undo() = 0;
@@ -130,6 +130,7 @@ public:
 protected:
     Doc *m_pDoc;
     QString name;
+    bool m_firstRun;
 };
 
 class UndoInsertRemoveAction : public UndoAction
@@ -342,6 +343,7 @@ protected:
     QString m_sheetName;
 };
 
+#if 0
 class UndoChangeAngle : public UndoAction
 {
 public:
@@ -357,6 +359,7 @@ protected:
    UndoResizeColRow* m_resizeUndo;
 
 };
+#endif
 
 class UndoDelete : public UndoAction
 {
@@ -438,9 +441,9 @@ protected:
     QMap<QPoint,QString> m_lstTextCell;
     QMap<QPoint,QString> m_lstRedoTextCell;
     QString m_sheetName;
-    bool m_firstRun;
 };
 
+#if 0
 class UndoSort : public UndoAction
 {
 public:
@@ -484,8 +487,6 @@ protected:
     QString m_sheetName;
 };
 
-
-#if 0
 class UndoAutofill : public UndoAction
 {
 public:
@@ -605,7 +606,7 @@ protected:
     QString m_sheetName;
 };
 
-
+#if 0
 class UndoStyleCell : public UndoAction
 {
 public:
@@ -622,6 +623,7 @@ protected:
     QLinkedList<styleCell> m_lstRedoStyleCell;
     QString m_sheetName;
 };
+#endif
 
 class UndoInsertData : public UndoChangeAreaTextCell
 {
@@ -629,7 +631,7 @@ class UndoInsertData : public UndoChangeAreaTextCell
     UndoInsertData( Doc * _doc, Sheet * _sheet, QRect & _selection );
 };
 
-
+#if 0
 class Undo
 {
 public:
@@ -658,6 +660,7 @@ protected:
 
     Doc *m_pDoc;
 };
+#endif
 
 } // namespace KSpread
 
