@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
@@ -28,13 +28,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <math.h>
-
-#include <QList>
-#include <QRegExp>
-
-#include <kconfig.h>
-#include <kdebug.h>
+#include "AutoFillCommand.h"
 
 #include "Doc.h"
 #include "Localization.h"
@@ -42,7 +36,14 @@
 #include "Undo.h"
 #include "Value.h"
 #include "ValueConverter.h"
-#include "AutoFill.h"
+
+#include <kconfig.h>
+#include <kdebug.h>
+
+#include <QList>
+#include <QRegExp>
+
+#include <math.h>
 
 using namespace KSpread;
 
@@ -645,119 +646,133 @@ static void fillSequence( const QList<Cell>& _srcList,
  *
  **********************************************************************************/
 
-void Sheet::autofill( const QRect& src, const QRect& dest )
+
+
+AutoFillCommand::AutoFillCommand()
 {
-    if ( src.contains( dest ) )
-        return;
+}
 
-    doc()->emitBeginOperation();
+AutoFillCommand::~AutoFillCommand()
+{
+}
 
-    if ( !doc()->undoLocked() )
+void AutoFillCommand::setSourceRange( const QRect& range )
+{
+    m_sourceRange = range;
+}
+
+void AutoFillCommand::setTargetRange( const QRect& range )
+{
+    m_targetRange = range;
+}
+
+bool AutoFillCommand::mainProcessing()
+{
+    if ( m_sourceRange.contains( m_targetRange ) )
+        return false;
+
+    if ( m_reverse )
     {
-      UndoAutofill *undo = new UndoAutofill( doc(), this, dest );
-      doc()->addCommand( undo );
+        // reverse - use the stored value
+        AbstractDataManipulator::mainProcessing();
+        return true;
     }
 
     // disable the update of the max sroll range on each cell insertion
     // Bug 124806: creating series takes extremely long time
-    enableScrollBarUpdates(false);
+    m_sheet->enableScrollBarUpdates(false);
 
     // Fill from left to right
-    if ( src.left() == dest.left() && src.right() < dest.right() )
+    if ( m_sourceRange.left() == m_targetRange.left() && m_sourceRange.right() < m_targetRange.right() )
     {
-        for ( int y = src.top(); y <= src.bottom(); y++ )
+        for ( int y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++ )
         {
             int x;
             QList<Cell> destList;
-            for ( x = src.right() + 1; x <= dest.right(); x++ )
-                destList.append(Cell( this, x, y ) );
+            for ( x = m_sourceRange.right() + 1; x <= m_targetRange.right(); x++ )
+                destList.append(Cell( m_sheet, x, y ) );
             QList<Cell> srcList;
-            for ( x = src.left(); x <= src.right(); x++ )
-                srcList.append(Cell( this, x, y ) );
+            for ( x = m_sourceRange.left(); x <= m_sourceRange.right(); x++ )
+                srcList.append(Cell( m_sheet, x, y ) );
             AutoFillSequence seqList;
-            for ( x = src.left(); x <= src.right(); x++ )
-                seqList.append( new AutoFillSequenceItem(Cell( this, x, y ) ) );
+            for ( x = m_sourceRange.left(); x <= m_sourceRange.right(); x++ )
+                seqList.append( new AutoFillSequenceItem(Cell( m_sheet, x, y ) ) );
             fillSequence( srcList, destList, seqList );
             qDeleteAll( seqList );
         }
     }
 
     // Fill from top to bottom
-    if ( src.top() == dest.top() && src.bottom() < dest.bottom() )
+    if ( m_sourceRange.top() == m_targetRange.top() && m_sourceRange.bottom() < m_targetRange.bottom() )
     {
-        for ( int x = src.left(); x <= dest.right(); x++ )
+        for ( int x = m_sourceRange.left(); x <= m_targetRange.right(); x++ )
         {
             int y;
             QList<Cell> destList;
-            for ( y = src.bottom() + 1; y <= dest.bottom(); y++ )
-                destList.append(Cell( this, x, y ) );
+            for ( y = m_sourceRange.bottom() + 1; y <= m_targetRange.bottom(); y++ )
+                destList.append(Cell( m_sheet, x, y ) );
             QList<Cell> srcList;
-            for ( y = src.top(); y <= src.bottom(); y++ )
-                srcList.append(Cell( this, x, y ) );
+            for ( y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++ )
+                srcList.append(Cell( m_sheet, x, y ) );
             AutoFillSequence seqList;
-            for ( y = src.top(); y <= src.bottom(); y++ )
-                seqList.append( new AutoFillSequenceItem(Cell( this, x, y ) ) );
+            for ( y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++ )
+                seqList.append( new AutoFillSequenceItem(Cell( m_sheet, x, y ) ) );
             fillSequence( srcList, destList, seqList );
             qDeleteAll( seqList );
         }
     }
 
     // Fill from right to left
-    if ( src.left() == dest.right() && src.right() >= dest.right() )
+    if ( m_sourceRange.left() == m_targetRange.right() && m_sourceRange.right() >= m_targetRange.right() )
     {
-        for ( int y = dest.top(); y <= dest.bottom(); y++ )
+        for ( int y = m_targetRange.top(); y <= m_targetRange.bottom(); y++ )
         {
             int x;
             QList<Cell> destList;
-            for ( x = dest.left(); x < src.left(); x++ )
-                destList.append(Cell( this, x, y ) );
+            for ( x = m_targetRange.left(); x < m_sourceRange.left(); x++ )
+                destList.append(Cell( m_sheet, x, y ) );
             QList<Cell> srcList;
-            for ( x = src.left(); x <= src.right(); x++ )
-                srcList.append(Cell( this, x, y ) );
+            for ( x = m_sourceRange.left(); x <= m_sourceRange.right(); x++ )
+                srcList.append(Cell( m_sheet, x, y ) );
             AutoFillSequence seqList;
-            for ( x = src.left(); x <= src.right(); x++ )
-                seqList.append( new AutoFillSequenceItem(Cell( this, x, y ) ) );
+            for ( x = m_sourceRange.left(); x <= m_sourceRange.right(); x++ )
+                seqList.append( new AutoFillSequenceItem(Cell( m_sheet, x, y ) ) );
             fillSequence( srcList, destList, seqList, false );
             qDeleteAll( seqList );
         }
     }
 
     // Fill from bottom to top
-    if ( src.top() == dest.bottom() && src.bottom() >= dest.bottom() )
+    if ( m_sourceRange.top() == m_targetRange.bottom() && m_sourceRange.bottom() >= m_targetRange.bottom() )
     {
-        const int startVal = qMin( dest.left(), src.left() );
-        const int endVal = qMax( src.right(), dest.right() );
+        const int startVal = qMin( m_targetRange.left(), m_sourceRange.left() );
+        const int endVal = qMax( m_sourceRange.right(), m_targetRange.right() );
         for ( int x = startVal; x <= endVal; x++ )
         {
             int y;
             QList<Cell> destList;
-            for ( y = dest.top(); y < src.top(); y++ )
-                destList.append(Cell( this, x, y ) );
+            for ( y = m_targetRange.top(); y < m_sourceRange.top(); y++ )
+                destList.append(Cell( m_sheet, x, y ) );
             QList<Cell> srcList;
-            for ( y = src.top(); y <= src.bottom(); ++y )
-                srcList.append(Cell( this, x, y ) );
+            for ( y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y )
+                srcList.append(Cell( m_sheet, x, y ) );
             AutoFillSequence seqList;
-            for ( y = src.top(); y <= src.bottom(); y++ )
-                seqList.append( new AutoFillSequenceItem(Cell( this, x, y ) ) );
+            for ( y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++ )
+                seqList.append( new AutoFillSequenceItem(Cell( m_sheet, x, y ) ) );
             fillSequence( srcList, destList, seqList, false );
             qDeleteAll( seqList );
         }
     }
 
     // update the max sroll range ONCE here
-    enableScrollBarUpdates(true);
-//     checkRangeHBorder(dest.right());
-//     checkRangeVBorder(dest.bottom());
-
-    setRegionPaintDirty( Region(dest) );
-    emit sig_updateView( this );
-    // doc()->emitEndOperation();
+    m_sheet->enableScrollBarUpdates(true);
+    return true;
 }
 
-void Sheet::fillSequence( const QList<Cell>& _srcList,
-                          const QList<Cell>& _destList,
-                          const AutoFillSequence& _seqList,
-                          bool down )
+void AutoFillCommand::fillSequence( const QList<Cell>& _srcList,
+                                    const QList<Cell>& _destList,
+                                    const AutoFillSequence& _seqList,
+                                    bool down )
 {
     if ( _srcList.isEmpty() || _destList.isEmpty() )
         return;
@@ -779,12 +794,12 @@ void Sheet::fillSequence( const QList<Cell>& _srcList,
         if ( cell.isTime() )
         {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append( Value( QTime( 1, 0 ), doc() ).asFloat() );
+            deltaSequence.append( Value( QTime( 1, 0 ), m_sheet->doc() ).asFloat() );
         }
         else if ( cell.isDate() )
         {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append( Value( QDate( 0, 0, 1 ), doc() ).asInteger() );
+            deltaSequence.append( Value( QDate( 0, 0, 1 ), m_sheet->doc() ).asInteger() );
         }
         else
             deltaSequence.append( 0.0 );

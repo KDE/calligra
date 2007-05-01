@@ -65,6 +65,11 @@ class AbstractDataManipulator : public AbstractRegionCommand
     virtual bool preProcessing();
 
     /**
+     * Processes the region. Calls process(Element*).
+     */
+    virtual bool mainProcessing();
+
+    /**
      * Stops the undo recording and stores the old data.
      */
     virtual bool postProcessing();

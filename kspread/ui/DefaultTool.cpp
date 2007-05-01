@@ -68,6 +68,8 @@
 #include "Util.h"
 #include "View.h"
 
+#include "commands/AutoFillCommand.h"
+
 #include "DefaultTool.h"
 
 using namespace KSpread;
@@ -345,8 +347,11 @@ void DefaultTool::mouseReleaseEvent( KoPointerEvent* )
     }
     else if ( d->mouseAction == Private::AutoFill && !sheet->isProtected() )
     {
-        sheet->autofill( d->autoFillSource, selection->lastRange() );
-        d->canvas->view()->updateEditWidget();
+        AutoFillCommand* command = new AutoFillCommand();
+        command->setSheet( sheet );
+        command->setSourceRange( d->autoFillSource );
+        command->setTargetRange( selection->lastRange() );
+        command->execute();
     }
     // The user started the drag in the middle of a cell ?
     else if ( d->mouseAction == Private::Mark && !d->canvas->chooseMode() )

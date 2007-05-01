@@ -117,7 +117,6 @@ void AbstractRegionCommand::redo()
 
 void AbstractRegionCommand::undo()
 {
-    kDebug() << k_funcinfo << " " << m_name << endl;
   m_reverse = !m_reverse;
   redo();
   m_reverse = !m_reverse;

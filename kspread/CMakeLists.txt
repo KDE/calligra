@@ -20,6 +20,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/inter
 ########### next target ###############
 SET (commands_DIR_SRCS
 	commands/AbstractRegionCommand.cpp
+	commands/AutoFillCommand.cpp
 	commands/CommentCommand.cpp
 	commands/ConditionCommand.cpp
 	commands/DataManipulators.cpp
@@ -105,7 +106,6 @@ SET (ui_DIR_SRCS
 	)
 
 SET (kspreadcommon_LIB_SRCS
-	AutoFill.cpp
 	Border.cpp
 	Canvas.cpp
 	Cell.cpp

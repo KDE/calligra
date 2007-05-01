@@ -484,6 +484,7 @@ protected:
 };
 
 
+#if 0
 class UndoAutofill : public UndoAction
 {
 public:
@@ -500,7 +501,6 @@ protected:
     QString m_sheetName;
 };
 
-#if 0
 class UndoInsertCellCol : public UndoInsertRemoveAction
 {
 public:

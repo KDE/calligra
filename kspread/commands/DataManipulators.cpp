@@ -57,14 +57,9 @@ bool AbstractDataManipulator::process (Element* element)
       if (!wantChange (element, col, row))
         continue;
 
-      if (m_reverse) {
-        // reverse - use the stored value
-        m_sheet->cellStorage()->undo( m_undoData );
-      } else {
         val = newValue (element, col, row, &parse, &fmtType);
         if (parse)
           text = val.asString();
-      }
 
       // we have the data - set it !
       if (parse) {
@@ -96,6 +91,17 @@ bool AbstractDataManipulator::preProcessing()
         return false;
     m_sheet->cellStorage()->startUndoRecording();
     return true;
+}
+
+bool AbstractDataManipulator::mainProcessing()
+{
+    if ( m_reverse )
+    {
+        // reverse - use the stored value
+        m_sheet->cellStorage()->undo( m_undoData );
+        return true;
+    }
+    return AbstractRegionCommand::mainProcessing();
 }
 
 bool AbstractDataManipulator::postProcessing()

@@ -2086,7 +2086,6 @@ void UndoMergedCell::redo()
 
     doc()->setUndoLocked( false );
 }
-#endif
 
 /****************************************************************************
  *
@@ -2158,7 +2157,6 @@ void UndoAutofill::redo()
     doc()->setUndoLocked( false );
 }
 
-#if 0
 /****************************************************************************
  *
  * UndoInsertCellRow

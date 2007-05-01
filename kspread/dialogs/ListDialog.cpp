@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
 
-#include "AutoFill.h"
+#include "commands/AutoFillCommand.h"
 #include "Factory.h"
 #include "Localization.h"
 

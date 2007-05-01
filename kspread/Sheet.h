@@ -63,7 +63,6 @@ class Part;
 
 namespace KSpread
 {
-class AutoFillSequence;
 class Canvas;
 class Cell;
 class CellStorage;
@@ -1025,17 +1024,6 @@ public:
      */
     bool testAreaPasteInsert()const;
 
-    /**
-     * Assume that the retangle 'src' was already selected. Then the user clicked on the
-     * lower right corner of the marker and resized the area ( left mouse button ).
-     * Once he releases the mouse we have to autofill the region 'dest'. Mention that
-     * src.left() == dest.left() and src.top() == dest.top().
-     *
-     * @see mouseReleaseEvent
-     */
-    void autofill( const QRect& src, const QRect& dest );
-
-
     //
     //END UNSORTED METHODS
     //
@@ -1288,14 +1276,6 @@ protected:
      * \ingroup Embedding
      */
     void insertObject( EmbeddedObject *_obj );
-
-    /**
-     * @see autofill
-     */
-    void fillSequence( const QList<Cell>& _srcList,
-                       const QList<Cell>& _destList,
-                       const AutoFillSequence& _seqList,
-                       bool down = true );
 
     // helper function for areaIsEmpty
     bool cellIsEmpty( const Cell& cell, TestType _type );
