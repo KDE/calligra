@@ -1,6 +1,3 @@
-# Tests don't need to go into toplevel/bin, they are fine in the current dir.
-#set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. ${KOFFICEUI_INCLUDES} )
 
 #   macro(MUSICCORE_BUILD_TESTS)
@@ -17,9 +14,6 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. ${KOFFICEUI_INCLUDES} )
 #       VoiceBarTest
 #   )
 
-
-if(KDE4_BUILD_TESTS)
-
 ########### next target ###############
 
 set(SheetTest_test_SRCS
@@ -34,11 +28,8 @@ set(SheetTest_test_SRCS
 )
 
 kde4_automoc(${SheetTest_test_SRCS})
-
-kde4_add_executable(SheetTest RUN_UNINSTALLED ${SheetTest_test_SRCS})
-
+kde4_add_test(SheetTest ${SheetTest_test_SRCS})
 target_link_libraries(SheetTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
-
 add_test(shapes-musicshape-SheetTest ${EXECUTABLE_OUTPUT_PATH}/SheetTest)
 
 
@@ -51,12 +42,8 @@ set(VoiceBarTest_test_SRCS
 )
 
 kde4_automoc(${VoiceBarTest_test_SRCS})
-
-kde4_add_executable(VoiceBarTest RUN_UNINSTALLED ${VoiceBarTest_test_SRCS})
-
+kde4_add_test(VoiceBarTest ${VoiceBarTest_test_SRCS})
 target_link_libraries(VoiceBarTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
-
 add_test(shapes-musicshape-VoiceBarTest ${EXECUTABLE_OUTPUT_PATH}/VoiceBarTest)
 
 
-endif(KDE4_BUILD_TESTS)
