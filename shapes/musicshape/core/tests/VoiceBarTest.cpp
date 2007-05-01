@@ -29,17 +29,12 @@ using namespace MusicCore;
 
 void VoiceBarTest::init()
 {
-    sheet = new Sheet();
-    part = sheet->addPart("testpart");
-    sheet->addBars(1);
-    bar = sheet->bar(0);
-    voice = part->addVoice();
-    voiceBar = voice->bar(bar);
+    voiceBar = new VoiceBar();;
 }
 
 void VoiceBarTest::cleanup()
 {
-    delete sheet;
+    delete voiceBar;
 }
 
 void VoiceBarTest::testConstruction()

@@ -24,7 +24,6 @@
 #include "PartGroup.h"
 #include "Bar.h"
 #include "Voice.h"
-#include "VoiceBar.h"
 
 using namespace MusicCore;
 

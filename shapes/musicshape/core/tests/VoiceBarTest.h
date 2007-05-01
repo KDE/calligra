@@ -22,10 +22,6 @@
 #include <QtCore/QObject>
 
 namespace MusicCore {
-    class Sheet;
-    class Part;
-    class Bar;
-    class Voice;
     class VoiceBar;
 }
 
@@ -42,10 +38,6 @@ private slots:
     void testRemoveElement_index();
     void testRemoveElement_element();
 private:
-    MusicCore::Sheet* sheet;
-    MusicCore::Part* part;
-    MusicCore::Bar* bar;
-    MusicCore::Voice* voice;
     MusicCore::VoiceBar* voiceBar;
 
 };

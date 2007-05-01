@@ -31,7 +31,6 @@ set(SheetTest_test_SRCS
     ../Voice.cpp
     ../Staff.cpp
     ../VoiceBar.cpp
-    ../MusicElement.cpp
 )
 
 kde4_automoc(${SheetTest_test_SRCS})
@@ -47,12 +46,6 @@ add_test(shapes-musicshape-SheetTest ${EXECUTABLE_OUTPUT_PATH}/SheetTest)
 
 set(VoiceBarTest_test_SRCS
     VoiceBarTest.cpp
-    ../Sheet.cpp
-    ../Part.cpp
-    ../PartGroup.cpp
-    ../Bar.cpp
-    ../Voice.cpp
-    ../Staff.cpp
     ../VoiceBar.cpp
     ../MusicElement.cpp
 )
