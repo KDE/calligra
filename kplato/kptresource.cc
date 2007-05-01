@@ -34,7 +34,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <ksystemtimezone.h>
-#include <ktimezones.h>
+#include <ktimezone.h>
 
 //Added by qt3to4:
 #include <QList>
