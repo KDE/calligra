@@ -32,6 +32,7 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
+#include <kspread/CellStorage.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
 #include <kspread/Doc.h>
@@ -259,8 +260,8 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
       // Compute the highest row and column indexes containing non-empty cells,
       // respectively called CSVMaxRow CSVMaxCol.
       // The CSV will have CSVMaxRow rows, all with CSVMaxCol columns
-      int sheetMaxRow = sheet->maxRow();
-      int sheetMaxCol = sheet->maxColumn();
+      int sheetMaxRow = sheet->cellStorage()->rows();
+      int sheetMaxCol = sheet->cellStorage()->columns();
       int CSVMaxRow   = 0;
       int CSVMaxCol   = 0;
 

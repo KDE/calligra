@@ -2409,8 +2409,8 @@ bool View::spellSwitchToOtherSheet()
 
   if (d->spell.spellCheckSelection)
   {
-    d->spell.spellEndCellX = d->spell.currentSpellSheet->maxColumn();
-    d->spell.spellEndCellY = d->spell.currentSpellSheet->maxRow();
+    d->spell.spellEndCellX = d->spell.currentSpellSheet->cellStorage()->columns();
+    d->spell.spellEndCellY = d->spell.currentSpellSheet->cellStorage()->rows();
 
     d->spell.spellCurrCellX = d->spell.spellStartCellX - 1;
     d->spell.spellCurrCellY = d->spell.spellStartCellY;
@@ -3643,8 +3643,6 @@ void View::addSheet( Sheet * _t )
   // This will lead to bugs.
   connect( _t, SIGNAL( sig_updateChildGeometry( EmbeddedKOfficeObject* ) ),
                     SLOT( slotUpdateChildGeometry( EmbeddedKOfficeObject* ) ) );
-//   connect( _t, SIGNAL( sig_maxColumn( int ) ), d->canvas, SLOT( slotMaxColumn( int ) ) );
-//   connect( _t, SIGNAL( sig_maxRow( int ) ), d->canvas, SLOT( slotMaxRow( int ) ) );
 
   if ( !d->loading )
     updateBorderButton();
@@ -4366,7 +4364,7 @@ void View::initFindReplace()
 
     QRect region = ( d->findOptions & KFind::SelectedText )
                    ? d->selection->lastRange()
-                   : QRect( 1, 1, currentSheet->maxColumn(), currentSheet->maxRow() ); // All cells
+                   : QRect( 1, 1, currentSheet->cellStorage()->columns(), currentSheet->cellStorage()->rows() ); // All cells
 
     int colStart = !bck ? region.left() : region.right();
     int colEnd = !bck ? region.right() : region.left();
@@ -4471,7 +4469,7 @@ Cell View::findNextCell()
     bool forw = ! ( d->findOptions & KFind::FindBackwards );
     int col = d->findPos.x();
     int row = d->findPos.y();
-    int maxRow = sheet->maxRow();
+    int maxRow = sheet->cellStorage()->rows();
     //kDebug() << "findNextCell starting at " << col << ',' << row << "   forw=" << forw << endl;
 
     if ( d->directionValue == FindOption::Row )

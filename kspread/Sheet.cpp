@@ -272,8 +272,6 @@ public:
   QSizeF documentSize;
 
 
-  bool scrollBarUpdates;
-
   QPen emptyPen;
   QBrush emptyBrush;
   QColor emptyColor;
@@ -325,12 +323,8 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
 
-  d->maxColumn = 256;
-  d->maxRow = 256;
   d->documentSize = QSizeF( KS_colMax * doc()->defaultColumnFormat()->width(),
                             KS_rowMax * doc()->defaultRowFormat()->height() );
-
-  d->scrollBarUpdates = true;
 
   setHidden( false );
   d->showGrid=true;
@@ -599,16 +593,6 @@ void Sheet::adjustDocumentHeight( double deltaHeight )
 {
     d->documentSize.rheight() += deltaHeight;
     emit documentSizeChanged( d->documentSize );
-}
-
-int Sheet::maxColumn() const
-{
-  return d->maxColumn;
-}
-
-int Sheet::maxRow() const
-{
-  return d->maxRow;
 }
 
 const QPen& Sheet::emptyPen() const
@@ -2428,7 +2412,6 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
 
     // Save all cells.
     Cell cell;
-    enableScrollBarUpdates(false);
     for (int col = range.left(); col <= range.right(); ++col)
     {
       for (int row = range.top(); row <= range.bottom(); ++row)
@@ -2437,7 +2420,6 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
         root.appendChild(cell.save(dd, left - 1, top - 1, true, copy, era));
       }
     }
-    enableScrollBarUpdates(true);
   }
   return dd;
 }
@@ -4717,7 +4699,6 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
       emit sig_updateVBorder( this );
       emit sig_updateView( this );
     }
-    emit sig_maxRow(maxRow());
 }
 
 void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
@@ -4732,7 +4713,6 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
 
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
-    emit sig_maxColumn( maxColumn() );
 }
 
 bool Sheet::insertChart( const QRectF& rect, KoDocumentEntry& documentEntry,
@@ -4946,12 +4926,6 @@ Sheet::~Sheet()
     delete d;
 }
 
-
-void Sheet::enableScrollBarUpdates( bool _enable )
-{
-  d->scrollBarUpdates = _enable;
-}
-
 void Sheet::hideSheet(bool _hide)
 {
     setHidden(_hide);
@@ -5103,8 +5077,8 @@ const Region& Sheet::paintDirtyData() const
 #ifndef NDEBUG
 void Sheet::printDebug()
 {
-    int iMaxColumn = maxColumn();
-    int iMaxRow = maxRow();
+    int iMaxColumn = d->cellStorage->columns();
+    int iMaxRow = d->cellStorage->rows();
 
     kDebug(36001) << "Cell | Content  | DataT | Text" << endl;
     Cell cell;

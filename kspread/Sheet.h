@@ -1029,44 +1029,6 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to scrollbars
-    //
-
-    /**
-     * Returns the maximum column ever accessed.
-     * In an empty sheet it starts with 256.
-     */
-    int maxColumn() const ;
-
-    /**
-     * Checks if the argument _column is out of the current maximum range of the vertical border
-     * If this is the case, the current maximum value m_iMaxColumn is adjusted and the vertical border
-     * is resized.
-     * Use this function with care, as it involves a repaint of the border, when it is out of range.
-     */
-    void checkRangeHBorder ( int _column );
-
-    /**
-     * Returns the maximum row ever accessed.
-     * In an empty sheet it starts with 256.
-     */
-    int maxRow() const ;
-
-    /**
-     * Checks if the argument _row is out of the current maximum range of the horizontal border
-     * If this is the case, the current maximum value m_iMaxRow is adjusted and the horizontal border
-     * is resized.
-     * Use this function with care, as it involves a repaint of the border, when it is out of range.
-     */
-    void checkRangeVBorder ( int _row );
-
-    void enableScrollBarUpdates( bool _enable );
-
-    //
-    //END Methods related to scrollbars
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
     //BEGIN Methods related to painting
     //
 
@@ -1153,8 +1115,6 @@ signals:
     void sig_updateHBorder( Sheet *_sheet );
     void sig_updateVBorder( Sheet *_sheet );
     void sig_updateChildGeometry( EmbeddedKOfficeObject *_child );
-    void sig_maxColumn( int _max_column );
-    void sig_maxRow( int _max_row );
     /**
      * @see setSheetName
      */

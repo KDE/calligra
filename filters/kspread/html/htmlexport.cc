@@ -34,6 +34,7 @@
 #include <KoDocumentInfo.h>
 #include <kofficeversion.h>
 
+#include <kspread/CellStorage.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
 #include <kspread/Doc.h>
@@ -223,7 +224,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
 
     // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
     // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
-    int iMaxRow = sheet->maxRow();
+    int iMaxRow = sheet->cellStorage()->rows();
 
     if( !m_dialog->separateFiles() )
         str += "<a name=\"" + sheet->sheetName().toLower().trimmed() + "\">\n";
@@ -448,8 +449,8 @@ QString HTMLExport::fileName( const QString &base, const QString &sheetName, boo
 
 void HTMLExport::detectFilledCells( Sheet *sheet, int &rows, int &columns )
 {
-  int iMaxColumn = sheet->maxColumn();
-  int iMaxRow = sheet->maxRow();
+  int iMaxColumn = sheet->cellStorage()->columns();
+  int iMaxRow = sheet->cellStorage()->rows();
   rows = 0;
   columns = 0;
 

@@ -41,6 +41,7 @@
 
 // KSpread
 #include <kspread/Canvas.h>
+#include <kspread/CellStorage.h>
 #include <kspread/Currency.h>
 #include <kspread/Doc.h>
 #include <kspread/Map.h>
@@ -1132,12 +1133,12 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
         sheet.appendChild(tmp);
 
         tmp = gnumeric_doc.createElement("gmr:MaxCol");
-        tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->maxColumn())));
+        tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->cellStorage()->columns())));
         sheet.appendChild(tmp);
 
         tmp = gnumeric_doc.createElement("gmr:MaxRow");
 
-        tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->maxRow())));
+        tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->cellStorage()->rows())));
         sheet.appendChild(tmp);
 
         // Zoom value doesn't appear to be correct
@@ -1249,8 +1250,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
         // Either we get hold of Sheet::m_dctCells and apply the old method below
         // (for sorting) or, cleaner and already sorted, we use Sheet's API
         // (slower probably, though)
-        int iMaxColumn = table->maxColumn();
-        int iMaxRow = table->maxRow();
+        int iMaxColumn = table->cellStorage()->columns();
+        int iMaxRow = table->cellStorage()->rows();
 
         // this is just a bad approximation which fails for documents with less than 50 rows, but
         // we don't need any progress stuff there anyway :) (Werner)

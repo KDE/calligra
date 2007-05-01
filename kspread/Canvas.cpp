@@ -663,8 +663,6 @@ void Canvas::slotScrollHorz( int _value )
     if ( _value > ( xpos + d->xOffset ) )
         _value = (int) ( xpos + d->xOffset );
 
-    sheet->enableScrollBarUpdates( false );
-
     // Relative movement
     // NOTE Stefan: Always scroll by whole pixels, otherwise we'll get offsets.
     int dx = qRound( viewConverter()->documentToViewX( d->xOffset - _value ) );
@@ -680,8 +678,6 @@ void Canvas::slotScrollHorz( int _value )
         dx = -dx;
     scroll( dx, 0 );
     hBorderWidget()->scroll( dx, 0 );
-
-    sheet->enableScrollBarUpdates( true );
 }
 
 void Canvas::slotScrollVert( int _value )
@@ -701,8 +697,6 @@ void Canvas::slotScrollVert( int _value )
     if ( _value > ypos )
         _value = (int) ypos;
 
-    sheet->enableScrollBarUpdates( false );
-
     // Relative movement
     // NOTE Stefan: Always scroll by whole pixels, otherwise we'll get offsets.
     int dy = qRound( viewConverter()->documentToViewY( d->yOffset - _value ) );
@@ -714,8 +708,6 @@ void Canvas::slotScrollVert( int _value )
     d->yOffset -= viewConverter()->viewToDocumentY( dy );
     if ( d->yOffset < 0.05 )
         d->yOffset = 0.0;
-
-    sheet->enableScrollBarUpdates( true );
 }
 
 void Canvas::slotMaxColumn( int _max_column )

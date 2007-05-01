@@ -678,10 +678,6 @@ bool AutoFillCommand::mainProcessing()
         return true;
     }
 
-    // disable the update of the max sroll range on each cell insertion
-    // Bug 124806: creating series takes extremely long time
-    m_sheet->enableScrollBarUpdates(false);
-
     // Fill from left to right
     if ( m_sourceRange.left() == m_targetRange.left() && m_sourceRange.right() < m_targetRange.right() )
     {
@@ -763,9 +759,6 @@ bool AutoFillCommand::mainProcessing()
             qDeleteAll( seqList );
         }
     }
-
-    // update the max sroll range ONCE here
-    m_sheet->enableScrollBarUpdates(true);
     return true;
 }
 

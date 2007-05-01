@@ -1984,7 +1984,6 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
           table->setSheetName( name.text(), false, false );
         else
           table->setSheetName( "Sheet" + QString::number( num ), false, false );
-        table->enableScrollBarUpdates( false );
 
         //kDebug()<<" sheetElement.hasAttribute( DisplayFormulas ) :"<<sheetElement.hasAttribute( "DisplayFormulas" )<<endl;
         QString tmp;
@@ -2226,9 +2225,6 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         //=> not good for kspread.
         // Norbert: activated again, only cells with texts get modified, nothing else created
 	setStyleInfo(&sheet, table);
-
-	/* STYLE handling STOP */
-        table->enableScrollBarUpdates( true );
 
 	sheet = sheet.nextSibling();
         ++num;
