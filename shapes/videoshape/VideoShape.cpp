@@ -40,7 +40,7 @@ VideoShape::VideoShape(const KUrl&url)
   m_audiopath->addOutput( m_audiooutput );
 
   m_mediaobject->setTickInterval( 350 );
-  m_mediaobject->setUrl(url);
+  m_mediaobject->setCurrentSource(url);
 }
 
 VideoShape::~VideoShape()
@@ -55,12 +55,12 @@ void VideoShape::changePosition(int pos)
 
 void VideoShape::setCurrentUrl(const KUrl&url)
 {
-  m_mediaobject->setUrl(url);
+  m_mediaobject->setCurrentSource(url);
 }
 
 KUrl VideoShape::currentUrl() const
 {
-  return m_mediaobject->url();
+  return m_mediaobject->currentSource().url();
 }
 
 void VideoShape::resize( const QSizeF &newSize )

@@ -24,7 +24,7 @@
 #include <kurl.h>
 #define VideoShapeId "VideoShape"
 
-#include <phonon/ui/videowidget.h>
+#include <phonon/videowidget.h>
 #include <phonon/videopath.h>
 #include <phonon/audiooutput.h>
 #include <phonon/audiopath.h>
