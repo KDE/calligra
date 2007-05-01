@@ -1627,11 +1627,12 @@ void Doc::paintUpdates()
   {
     static_cast<View *>( view )->paintUpdates();
   }
-
+#ifdef KSPREAD_KOPART_EMBEDDING
   foreach ( Sheet* sheet, map()->sheetList() )
   {
     sheet->clearPaintDirtyData();
   }
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,

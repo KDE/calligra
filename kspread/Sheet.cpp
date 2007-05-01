@@ -5077,7 +5077,7 @@ void Sheet::setRegionPaintDirty( const Region & region )
 
 #if KSPREAD_KOPART_EMBEDDING
     d->paintDirtyList.add(region); // still needed for embedded object repainting
-#endif
+#endif // KSPREAD_KOPART_EMBEDDING
     doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance ) );
 
 //     kDebug(36004) << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
@@ -5088,6 +5088,7 @@ void Sheet::setRegionPaintDirty( const QRect& rect )
   setRegionPaintDirty( Region( rect ) );
 }
 
+#ifdef KSPREAD_KOPART_EMBEDDING
 void Sheet::clearPaintDirtyData()
 {
   d->paintDirtyList.clear();
@@ -5097,6 +5098,7 @@ const Region& Sheet::paintDirtyData() const
 {
   return d->paintDirtyList;
 }
+#endif // KSPREAD_KOPART_EMBEDDING
 
 #ifndef NDEBUG
 void Sheet::printDebug()
