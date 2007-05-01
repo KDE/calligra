@@ -90,6 +90,7 @@
 #include <kdatatool.h>
 #include <KoCanvasController.h>
 #include <KoCharSelectDia.h>
+#include <KoColor.h>
 #include <KoMainWindow.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStore.h>
@@ -354,7 +355,7 @@ public:
     KFontSizeAction* selectFontSize;
     QAction * fontSizeUp;
     QAction * fontSizeDown;
-    //TKSelectColorAction* textColor;
+    QAction* textColor;
     KToggleAction* alignLeft;
     KToggleAction* alignCenter;
     KToggleAction* alignRight;
@@ -373,7 +374,7 @@ public:
     QAction * upper;
     QAction * lower;
     QAction * firstLetterUpper;
-    //TKSelectColorAction* bgColor;
+    QAction* bgColor;
     QAction * borderLeft;
     QAction * borderRight;
     QAction * borderTop;
@@ -381,7 +382,7 @@ public:
     QAction * borderAll;
     QAction * borderOutline;
     QAction * borderRemove;
-    //TKSelectColorAction* borderColor;
+    QAction* borderColor;
     KSelectAction* selectStyle;
     QAction * createStyle;
 
@@ -575,15 +576,9 @@ void View::Private::initActions()
   ac->addAction("decreaseFontSize", actions->fontSizeDown );
   connect(actions->fontSizeDown, SIGNAL(triggered(bool)), view, SLOT( decreaseFontSize() ));
 
-#warning reenable a textcolor action
-//see also the for now disabled actions->textColor->setEnabled below
-/*
-  actions->textColor = new TKSelectColorAction( i18n("Text Color"), TKSelectColorAction::TextColor, view, SLOT( changeTextColor() ),
-      ac, "textColor",true );
-  ac->addAction("decreaseFontSize", actions->textColor );
-  connect(actions->textcolor, SIGNAL(changeColor()), view, SLOT( changeTextColor()));
-  actions->textColor->setDefaultColor(QColor());
-*/
+    actions->textColor = new KAction(KIcon("textcolor"), i18n("Text Color"), view);
+    ac->addAction("textColor", actions->textColor);
+    connect(actions->textColor, SIGNAL(triggered(bool)), view, SLOT( changeTextColor()));
 
     // -- horizontal alignment --
     //
@@ -707,14 +702,10 @@ void View::Private::initActions()
 
   actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter"));
 
-#warning reenable a background color action
-/*
-  actions->bgColor = new TKSelectColorAction( i18n("Background Color"),  TKSelectColorAction::FillColor, ac, "backgroundColor", true );
-  connect(actions->bgColor, SIGNAL( activated() ),
-                   view, SLOT( changeBackgroundColor() ) );
-  actions->bgColor->setDefaultColor(QColor());
-  actions->bgColor->setToolTip(i18n("Set the background color"));
-*/
+    actions->bgColor = new KAction(KIcon("color_fill"), i18n("Background Color"), view);
+    ac->addAction("backgroundColor", actions->bgColor);
+    connect(actions->bgColor, SIGNAL(triggered(bool)), view, SLOT(changeBackgroundColor()));
+    actions->bgColor->setToolTip(i18n("Set the background color"));
 
   actions->borderLeft  = new KAction(KIcon( "border_left" ), i18n("Border Left"), view);
   ac->addAction("borderLeft", actions->borderLeft );
@@ -758,13 +749,11 @@ void View::Private::initActions()
 
   actions->borderOutline->setToolTip(i18n("Set a border to the outline of the selected area"));
 
-#warning reenable a bordercolor action
-/*
-  actions->borderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, ac, "borderColor" );
-  connect( actions->borderColor, SIGNAL( activated() ),
-                    view, SLOT( changeBorderColor() ) );
-  actions->borderColor->setToolTip( i18n( "Select a new border color" ) );
-*/
+    actions->borderColor = new KAction(KIcon("color_line"), i18n("Border Color"), view);
+    ac->addAction("borderColor", actions->borderColor);
+    connect(actions->borderColor, SIGNAL(triggered(bool)), view, SLOT(changeBorderColor()));
+    actions->borderColor->setToolTip(i18n("Select a new border color"));
+
   actions->selectStyle  = new KSelectAction(i18n("St&yle"), view);
   ac->addAction("stylemenu", actions->selectStyle );
   actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
@@ -1468,8 +1457,8 @@ void View::Private::adjustActions( bool mode )
   actions->showRow->setEnabled( mode );
   actions->showSelRows->setEnabled( mode );
   actions->formulaSelection->setEnabled( mode );
-  //actions->textColor->setEnabled( mode );
-  //actions->bgColor->setEnabled( mode );
+  actions->textColor->setEnabled( mode );
+  actions->bgColor->setEnabled( mode );
   actions->cellLayout->setEnabled( mode );
   actions->borderLeft->setEnabled( mode );
   actions->borderRight->setEnabled( mode );
@@ -1478,7 +1467,7 @@ void View::Private::adjustActions( bool mode )
   actions->borderAll->setEnabled( mode );
   actions->borderOutline->setEnabled( mode );
   actions->borderRemove->setEnabled( mode );
-  //actions->borderColor->setEnabled( mode );
+  actions->borderColor->setEnabled( mode );
   actions->removeSheet->setEnabled( mode );
   actions->autoSum->setEnabled( mode );
   actions->defaultFormat->setEnabled( mode );
@@ -2937,7 +2926,7 @@ void View::changeTextColor()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Text Color") );
-    //manipulator->setFontColor( d->actions->textColor->color() );
+    manipulator->setFontColor( d->canvas->resourceProvider()->foregroundColor().toQColor() );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -2957,7 +2946,7 @@ void View::changeBackgroundColor()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Background Color") );
-    //manipulator->setBackgroundColor( d->actions->bgColor->color() );
+    manipulator->setBackgroundColor( d->canvas->resourceProvider()->backgroundColor().toQColor() );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -2976,7 +2965,7 @@ void View::changeBorderColor()
 {
   BorderColorManipulator* manipulator = new BorderColorManipulator();
   manipulator->setSheet( d->activeSheet );
-  //manipulator->setColor( d->actions->borderColor->color() );
+  manipulator->setColor( d->canvas->resourceProvider()->foregroundColor().toQColor() );
   manipulator->add( *selection() );
   manipulator->execute();
 }
@@ -3470,7 +3459,7 @@ void View::borderBottom()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    //manipulator->setBottomBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    manipulator->setBottomBorderPen( QPen( d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine ) );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3490,12 +3479,10 @@ void View::borderRight()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-#if 0
     if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
-        manipulator->setLeftBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+        manipulator->setLeftBorderPen( QPen( d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine ) );
     else
-        manipulator->setRightBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-#endif
+        manipulator->setRightBorderPen( QPen( d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine ) );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3518,12 +3505,10 @@ void View::borderLeft()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-#if 0
     if ( d->activeSheet->layoutDirection() == Qt::RightToLeft )
-        manipulator->setRightBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+        manipulator->setRightBorderPen( QPen(d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine ) );
     else
-        manipulator->setLeftBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-#endif
+        manipulator->setLeftBorderPen( QPen(d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine ) );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3548,7 +3533,7 @@ void View::borderTop()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    //manipulator->setTopBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    manipulator->setTopBorderPen( QPen( d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine ) );
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3568,10 +3553,10 @@ void View::borderOutline()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    //manipulator->setTopBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-    //manipulator->setBottomBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-    //manipulator->setLeftBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-    //manipulator->setRightBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setTopBorderPen(QPen( d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    manipulator->setBottomBorderPen(QPen( d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    manipulator->setLeftBorderPen(QPen( d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    manipulator->setRightBorderPen(QPen( d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -3594,12 +3579,12 @@ void View::borderAll()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
-    //manipulator->setTopBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    //manipulator->setBottomBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    //manipulator->setLeftBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    //manipulator->setRightBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    //manipulator->setHorizontalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    //manipulator->setVerticalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setTopBorderPen(QPen(d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    manipulator->setBottomBorderPen(QPen(d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    manipulator->setLeftBorderPen(QPen(d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    manipulator->setRightBorderPen(QPen(d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    manipulator->setHorizontalPen(QPen(d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
+    manipulator->setVerticalPen(QPen(d->canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     manipulator->add( *selection() );
     manipulator->execute();
 }
@@ -7145,7 +7130,7 @@ void View::insertSheet( Sheet* sheet )
 
 QColor View::borderColor() const
 {
-  return QColor();//d->actions->borderColor->color();
+    return d->canvas->resourceProvider()->foregroundColor().toQColor();
 }
 
 void View::updateShowSheetMenu()
