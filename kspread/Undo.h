@@ -438,6 +438,7 @@ protected:
     QMap<QPoint,QString> m_lstTextCell;
     QMap<QPoint,QString> m_lstRedoTextCell;
     QString m_sheetName;
+    bool m_firstRun;
 };
 
 class UndoSort : public UndoAction

@@ -1808,13 +1808,13 @@ void UndoResizeColRow::redo()
  ***************************************************************************/
 
 
-UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const Region &_selection ) :
-    UndoAction( _doc )
+UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const Region &_selection )
+    : UndoAction( _doc )
+    , m_region( _selection )
+    , m_sheetName( _sheet->sheetName() )
+    , m_firstRun( true )
 {
   name=i18n("Change Text");
-
-  m_region = _selection;
-  m_sheetName = _sheet->sheetName();
 
   createList( m_lstTextCell, _sheet );
 }
@@ -1970,6 +1970,13 @@ void UndoChangeAreaTextCell::undo()
 
 void UndoChangeAreaTextCell::redo()
 {
+    // eat the first redo initiated by the QUndoStack
+    if ( m_firstRun )
+    {
+        m_firstRun = false;
+        return;
+    }
+
     Sheet * sheet = doc()->map()->findSheet( m_sheetName );
 
     if ( !sheet )
