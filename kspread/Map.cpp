@@ -568,6 +568,10 @@ bool Map::checkPassword( QByteArray const & passwd ) const
   return ( passwd == d->strPassword );
 }
 
+void Map::setInitialActiveSheet( Sheet* sheet )
+{
+    d->initialActiveSheet = sheet;
+}
 
 Sheet* Map::initialActiveSheet()const
 {

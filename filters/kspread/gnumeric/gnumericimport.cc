@@ -2235,7 +2235,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
       }
 
     if ( selTable )
-      ksdoc->setDisplaySheet( selTable );
+      ksdoc->map()->setInitialActiveSheet( selTable );
 
     emit sigProgress(100);
     if ( bSuccess )

@@ -668,9 +668,6 @@ public:
     void addIgnoreWordAllList( const QStringList & _lst);
     QStringList spellListIgnoreAll() const ;
 
-    void setDisplaySheet(Sheet *_Sheet );
-    Sheet * displaySheet() const;
-
   /**
    * \ingroup OpenDocument
    * \ingroup NativeFormat

@@ -117,7 +117,6 @@ public:
     ColumnFormat* defaultColumnFormat;
     RowFormat* defaultRowFormat;
 
-  Sheet *activeSheet;
   LoadingInfo *loadingInfo;
   static QList<Doc*> s_docs;
   static int s_docId;
@@ -212,8 +211,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   d->defaultColumnFormat = new ColumnFormat();
   d->defaultRowFormat = new RowFormat();
-
-  d->activeSheet = 0;
 
   d->pageBorderColor = Qt::red;
   d->configLoadFromFile = false;
@@ -2088,10 +2085,8 @@ void Doc::emitEndOperation()
 
   QApplication::restoreOverrideCursor();
 
-  // Do this after the parent class emitEndOperation,
-  // because that allows updates on the view again.
-  // Only if we have dirty cells, trigger a repainting.
-  if (d->activeSheet && !d->activeSheet->paintDirtyData().isEmpty())
+    // Do this after the parent class emitEndOperation,
+    // because that allows updates on the view again.
     paintUpdates();
 }
 
@@ -2124,11 +2119,6 @@ void Doc::clearIgnoreWordAll( )
     d->spellListIgnoreAll.clear();
 }
 
-void Doc::setDisplaySheet(Sheet *_sheet )
-{
-    d->activeSheet = _sheet;
-}
-
 LoadingInfo * Doc::loadingInfo() const
 {
     return d->loadingInfo;
@@ -2138,11 +2128,6 @@ void Doc::deleteLoadingInfo()
 {
     delete d->loadingInfo;
     d->loadingInfo = 0;
-}
-
-Sheet * Doc::displaySheet() const
-{
-    return d->activeSheet;
 }
 
 void Doc::addView( KoView *_view )

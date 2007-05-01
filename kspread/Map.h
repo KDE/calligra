@@ -147,7 +147,9 @@ public:
    */
   Sheet* previousSheet( Sheet* );
 
-  Sheet* initialActiveSheet()  const;
+    Sheet* initialActiveSheet()  const;
+    void setInitialActiveSheet( Sheet* sheet );
+
   int    initialMarkerColumn() const;
   int    initialMarkerRow()    const;
   double initialXOffset()      const;

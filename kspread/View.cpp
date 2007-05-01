@@ -2592,11 +2592,7 @@ void View::initialPosition()
         d->savedOffsets = loadingInfo->scrollingOffsets();
     }
 
-    Sheet* sheet = 0;
-    if ( doc()->isEmbedded() )
-        sheet = doc()->displaySheet();
-    if ( !sheet )
-        sheet = doc()->map()->initialActiveSheet();
+    Sheet* sheet = doc()->map()->initialActiveSheet();
     if ( !sheet )
     {
         //activate first table which is not hiding
@@ -3725,7 +3721,6 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
     if ( oldSheet && oldSheet->layoutDirection() != d->activeSheet->layoutDirection() )
         refreshView();
 
-    doc()->setDisplaySheet( d->activeSheet );
     if ( updateSheet )
     {
         d->tabBar->setActiveTab( d->activeSheet->sheetName() );

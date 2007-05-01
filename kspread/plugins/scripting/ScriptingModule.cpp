@@ -103,7 +103,7 @@ QObject* ScriptingModule::view()
 
 QObject* ScriptingModule::currentSheet()
 {
-	KSpread::Sheet* sheet = kspreadDoc()->displaySheet();
+	KSpread::Sheet* sheet = kspreadView()->activeSheet();
 	return sheet ? sheet->findChild< KSpread::SheetAdaptor* >() : 0;
 }
 
