@@ -34,21 +34,36 @@ class Voice
 {
 public:
     /**
+     * Creates a new voice for the given part. This does not actually add the voice to the part, for that call the
+     * addVoice method of the part.
+     *
+     * @param part the part this voice belongs to
+     */
+    explicit Voice(Part* part);
+
+    /**
+     * Destructor.
+     */
+    ~Voice();
+
+    /**
      * Returns the part this voice is part of.
      */
     Part* part();
 
     /**
-     * Returns the number of bars in this voice. This should always return the same as part()->sheet()->barCount().
+     * Sets the part this voice belongs to. Do not call this method when the voice already is added to a part.
+     *
+     * @param part the new part this voice belongs to
      */
-    int barCount() const;
+    void setPart(Part* part);
 
     /**
      * Returns the bar with the given index in this voice.
      *
      * @param index the index of the bar to return.
      */
-    VoiceBar* bar(int index);
+//    VoiceBar* bar(int index);
 
     /**
      * Returns the bar in this voice that contains the elements in the given bar in this piece of music.
@@ -57,18 +72,6 @@ public:
      */
     VoiceBar* bar(Bar* bar);
 private:
-    Voice(Part* part);
-    ~Voice();
-    friend class Part;
-    /**
-     * This method is called by the part (and indirectly by the sheet) when bars are added to the piece.
-     */
-    void insertBars(int before, int count);
-    /**
-     * This method is called by the part (and indirectly by the sheet) when bars are removed from the piece. This
-     * method makes sure the bars are also removed from this voice.
-     */
-    void removeBars(int index, int count);
     class Private;
     Private * const d;
 };

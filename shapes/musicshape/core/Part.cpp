@@ -119,18 +119,4 @@ Voice* Part::addVoice()
     return voice;
 }
 
-void Part::insertBars(int before, int count)
-{
-    Q_FOREACH(Voice* v, d->voices) {
-        v->insertBars(before, count);
-    }
-}
-
-void Part::removeBars(int before, int count)
-{
-    Q_FOREACH(Voice* v, d->voices) {
-        v->removeBars(before, count);
-    }
-}
-
 } // namespace

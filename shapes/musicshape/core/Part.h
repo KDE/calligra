@@ -35,11 +35,27 @@ class Sheet;
  */
 class Part {
 public:
+    /**
+     * Creates a new part in the given sheet with the given name. The part is not added to the sheet, to do that
+     * either call Sheet::addPart(Part*) or use Sheet::addPart(QString) to create a new part.
+     */
+    Part(Sheet* sheet, QString name);
+
+    /**
+     * Destructor.
+     */
+    ~Part();
 
     /**
      * Returns the sheet this part is part of.
      */
     Sheet* sheet();
+
+    /**
+     * Changes the sheet this part is part of. Do not call this method after the part has been added to a sheet using
+     * the addPart method.
+     */
+    void setSheet(Sheet* sheet);
 
     /**
      * Return the name of this part.
@@ -109,20 +125,6 @@ public:
      */
     Voice* addVoice();
 private:
-    Part(Sheet* sheet, QString name);
-    ~Part();
-    friend class Sheet;
-
-    /**
-     * This method is called by the Sheet class when bars are added or inserted to the piece of music. This is
-     * forwarded to all voices in this part to  synchronize the number of bars in those classes.
-     */
-    void insertBars(int before, int count);
-    /**
-     * This method is called by the Sheet class when bars are removed from the piece of music. This is forwarded
-     * to all voices in this part to make sure the bars and their content are removed from the voices.
-     */
-    void removeBars(int index, int count);
     class Private;
     Private * const d;
 };

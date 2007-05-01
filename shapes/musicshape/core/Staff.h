@@ -33,9 +33,30 @@ class Staff
 {
 public:
     /**
+     * Creates a new staff in the given part. This does not actually add the staff to the part, to do that call the
+     * addStaff of the part.
+     *
+     * @param part the part in which to create a staff
+     */
+    Staff(Part* part);
+
+    /**
+     * Destructor.
+     */
+    ~Staff();
+
+    /**
      * Returns the part this staff is part of.
      */
     Part* part();
+
+    /**
+     * Sets the part this staff is part of. You should not call this method after adding the staff to a part using the
+     * addStaff method in the Part class.
+     *
+     * @param part the part that this staff is part of
+     */
+    void setPart(Part* part);
 
     /**
      * Returns the spacing in points between this staff and the staff above it.
@@ -79,9 +100,6 @@ public:
      */
     void setLineSpacing(double lineSpacing);
 private:
-    Staff(Part* part);
-    ~Staff();
-    friend class Part;
     class Private;
     Private * const d;
 };

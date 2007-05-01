@@ -32,6 +32,7 @@
 #include "core/VoiceBar.h"
 #include "core/Chord.h"
 #include "core/Note.h"
+#include "core/Clef.h"
 
 #include "MusicStyle.h"
 
@@ -57,6 +58,7 @@ MusicShape::MusicShape()
     Bar* b2 = m_sheet->addBar();
     Bar* b3 = m_sheet->addBar();
 
+    voice->bar(b1)->addElement(new Clef(staff, Clef::Trebble, 2, 0));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 0));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 1));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 2));
@@ -68,6 +70,7 @@ MusicShape::MusicShape()
     voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 2));
     voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 3));
     voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
+    voice2->bar(b1)->addElement(new Clef(staff2, Clef::Bass, 3, 0));
     voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Half));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Quarter));
@@ -104,7 +107,7 @@ static void paintStaff( QPainter& painter, MusicStyle* style, Staff *staff )
     }
 }
 
-static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, double& x )
+static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, double& x, Clef* clef )
 {
     if (chord->noteCount() == 0) { // a rest
         Staff *s = chord->staff();
@@ -114,10 +117,23 @@ static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, doub
     }
     Note *n = chord->note(0);
     Staff * s = n->staff();
-    int line = 10 - n->pitch();
+    int line = 14;
+    if (clef && clef->shape() == Clef::FClef) line = 4;
+    if (clef) {
+        line -= 2*clef->line();
+    } else {
+        line -= 4;
+    }
+    line = line - n->pitch();
     if (line > 9) { // lines under the bar
         painter.setPen(style->staffLinePen());
         for (int i = 10; i <= line; i+= 2) {
+            double y = s->top() + i * s->lineSpacing() / 2;
+            painter.drawLine(QPointF(x - 4, y), QPointF(x + 15, y));
+        }
+    } else if (line < -1) { // lines above the bar
+        painter.setPen(style->staffLinePen());
+        for (int i = -2; i >= line; i-= 2) {
             double y = s->top() + i * s->lineSpacing() / 2;
             painter.drawLine(QPointF(x - 4, y), QPointF(x + 15, y));
         }
@@ -125,6 +141,7 @@ static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, doub
 
     double stemLen = -7;
     double stemX = x + 11;
+    if (line < 4) { stemLen = 7; stemX = x; }
     painter.setPen(style->stemPen());
     painter.drawLine(QPointF(stemX, s->top() + line * s->lineSpacing() / 2),
                      QPointF(stemX, s->top() + (line + stemLen) * s->lineSpacing() / 2));
@@ -132,15 +149,28 @@ static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, doub
     x += 30;
 }
 
+static void paintClef( QPainter& painter, MusicStyle* style, Clef *c, double &x )
+{
+    Staff* s = c->staff();
+    style->renderClef( painter, x, s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
+    x += 30;
+}
+
 static void paintVoice( QPainter& painter, MusicStyle* style, Voice *voice )
 {
+    Clef* curClef = 0;
     for (int b = 0; b < voice->part()->sheet()->barCount(); b++) {
         VoiceBar* vb = voice->bar(voice->part()->sheet()->bar(b));
-        double x = 50 + 150 * b;
+        double x = 10 + 200 * b;
         for (int e = 0; e < vb->elementCount(); e++) {
             MusicElement *me = vb->element(e);
             Chord *c = dynamic_cast<Chord*>(me);
-            if (c) paintChord( painter, style, c, x );
+            if (c) paintChord( painter, style, c, x, curClef );
+            Clef *cl = dynamic_cast<Clef*>(me);
+            if (cl) {
+                paintClef( painter, style, cl, x );
+                curClef = cl;
+            }
         }
     }
 }
@@ -154,7 +184,7 @@ static void paintPart( QPainter& painter, MusicStyle* style, Part *part )
     int c = part->staffCount()-1;
     double lastStaff = part->staff(c)->top() + part->staff(c)->lineSpacing() * (part->staff(c)->lineCount()-1);
     for (int b = 0; b < part->sheet()->barCount(); b++) {
-        double x = 170 + 150 * b;
+        double x = 190 + 200 * b;
         painter.drawLine(QPointF(x, firstStaff), QPointF(x, lastStaff));
     }
     for (int i = 0; i < part->voiceCount(); i++) {

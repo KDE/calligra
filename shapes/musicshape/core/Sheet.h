@@ -70,6 +70,15 @@ public:
     Part* addPart(QString name);
 
     /**
+     * Adds an existing part to this sheet. The part should not have been added to any other sheet, as adding a
+     * part to a sheet gives the sheet ownership of the sheet. When the sheet is deleted, all parts in the sheet will
+     * also be deleted.
+     *
+     * @param part the part to add to the sheet
+     */
+    void addPart(Part* part);
+
+    /**
      * Inserts a new part into this sheet. The part will be inserted before the part with index before, and be names
      * name.
      *
@@ -79,18 +88,32 @@ public:
     Part* insertPart(int before, QString name);
 
     /**
-     * Removes the part with the given index from this sheet.
+     * Inserts an existing part into this sheet. The part  should not have been added to any other sheet, as adding
+     * a part to a sheet gives the sheet ownership of the sheet. When the sheet is deleted all parts in the sheet will
+     * also be deleted.
      *
-     * @param index the index of the part to remove
+     * @param index index of the part before which to insert the new part
+     * @param part the part to insert into the sheet
      */
-    void removePart(int index);
+    void insertPart(int before, Part* part);
 
     /**
-     * Removes the given part from this sheet.
+     * Removes the part with the given index from this sheet. If deletePart is true, the part will also be deleted, if
+     * not the caller of this method is expected to delete the part when it is no longer used.
+     *
+     * @param index the index of the part to remove
+     * @param deletePart should the part that is removed also be deleted
+     */
+    void removePart(int index, bool deletePart = true);
+
+    /**
+     * Removes the given part from this sheet. If deletePart is true, the part will also be deleted, if
+     * not the caller of this method is expected to delete the part when it is no longer used.
      *
      * @param part the part to remove
+     * @param deletePart should the part that is removed also be deleted
      */
-    void removePart(Part* part);
+    void removePart(Part* part, bool deletePart = true);
 
     /**
      * Returns the number of groups in this sheet.
@@ -113,7 +136,23 @@ public:
      */
     PartGroup* addPartGroup(int firstPart, int lastPart);
 
-    void removePartGroup(PartGroup* group);
+    /**
+     * Adds an existing part group to this sheet. A part group should only be added to one sheet as the sheet
+     * gains ownership of the group when it is added to the sheet. When the sheet is deleted, all part groups in
+     * it are also deleted.
+     *
+     * @param group the group to add to this sheet
+     */
+    void addPartGroup(PartGroup* group);
+
+    /**
+     * Removes a part group from this sheet. If deleteGroup is false the group is not only removed from the sheet but
+     * also deleted, otherwise the caller is responsible for cleaning up the group when it is no longer used.
+     *
+     * @param group the group to remove from this sheet
+     * @param deleteGroup should the group be deleted after removing it
+     */
+    void removePartGroup(PartGroup* group, bool deleteGroup = true);
 
     /**
      * Returns the number of bars/measures in this piece of music.
@@ -133,17 +172,51 @@ public:
      * @param count the number of bars to add to this sheet.
      */
     void addBars(int count);
+
+    /**
+     * Adds a new bar at the end of this piece of music.
+     */
     Bar* addBar();
+
+    /**
+     * Adds an existing bar at the end of this piece of music.
+     *
+     * @param bar the bar to add
+     */
+    void addBar(Bar* bar);
 
     /**
      * Inserts a new bar before the bar with index before.
      *
-     * @param before the index of the bar before which to insert the new bars.
+     * @param before the index of the bar before which to insert the new bar.
      */
     Bar* insertBar(int before);
 
-    void removeBar(int index);
-    void removeBars(int index, int count);
+    /**
+     * Inserts an existing bar before the bar with index before.
+     *
+     * @param before the index of the bar before which to insert the bar.
+     * @param bar the bar to insert
+     */
+    void insertBar(int before, Bar* bar);
+
+    /**
+     * Removes a bar from the sheet. If deleteBar is true the bar is not only removed but also deleted.
+     *
+     * @param index the index of the bar to remove
+     * @param deleteBar should the bar also be deleted
+     */
+    void removeBar(int index, bool deleteBar = true);
+
+    /**
+     * Removes one or more bars from the sheet. If deleteBar is true the bars are not only removed but also
+     * deleted.
+     *
+     * @param index the index of the first bar to remove
+     * @param count the number of bars to remove
+     * @param deleteBar should the bars also be deleted
+     */
+    void removeBars(int index, int count, bool deleteBar = true);
 private:
     class Private;
     Private * const d;

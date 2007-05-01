@@ -43,7 +43,6 @@ private slots:
     void testInsertBar();
     void testRemoveBar();
     void testRemoveBars();
-    void testVoiceBars();
 private:
     MusicCore::Sheet* sheet;
 };

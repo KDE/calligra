@@ -22,29 +22,46 @@
 namespace MusicCore {
 
 class Sheet;
+class Voice;
+class VoiceBar;
 
+/**
+ * A bar (in the US also known as a measure) is a part of a piece of music. A piece of music is a two-dimensional
+ * thing, with multiple staffs that are played concurrently and multiple bars that are played sequentially.
+ */
 class Bar
 {
 public:
+    /**
+     * Creates a new bar in the given sheet of music. The bar is not actually added to the sheet, to do that call
+     * the addBar method of the sheet.
+     *
+     * @param sheet the sheet to create a bar for
+     */
+    explicit Bar(Sheet* sheet);
+
+    /**
+     * Destructor.
+     */
+    ~Bar();
+
     /**
      * Returns the sheet this bar is part of.
      */
     Sheet* sheet();
 
     /**
-     * Returns the index of this bar in the sheet it is part of.
+     * Changes the sheet this bar is part of. This method should not be called after the bar has been added to a sheet.
      */
-    int index() const;
-private:
-    Bar(Sheet* sheet, int index);
-    ~Bar();
-    /**
-     * This method is called by the Sheet class to set the index of this bar whenever bars are inserted or removed
-     * before this bar.
-     */
-    void setIndex(int index);
+    void setSheet(Sheet* sheet);
 
-    friend class Sheet;
+    /**
+     * Returns a VoiceBar instance for a specific voice.
+     *
+     * @param voice the voice for which to return the VoiceBar
+     */
+    VoiceBar* voice(Voice* voice);
+private:
     class Private;
     Private * const d;
 };

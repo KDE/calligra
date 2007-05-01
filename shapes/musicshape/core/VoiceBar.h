@@ -26,27 +26,76 @@ class Bar;
 class MusicElement;
 
 /**
- *
- * Once a MusicElement is added/inserted to a VoiceBar, the VoiceBar gets ownership of the element and will delete it
- * when it is removed, or if the VoiceBar is deleted. So you should only add dynamicaly allocated elemenst to a voice
- * bar.
+ * A VoiceBar contains the music elements in a specific voice in a specific bar. A VoiceBar is in many ways
+ * simply a wrapper around a QList containging the actual music elements.
  */
 class VoiceBar
 {
 public:
-    Voice* voice();
-    Bar* bar();
-    int elementCount() const;
-    MusicElement* element(int index);
-    void addElement(MusicElement* element);
-    void insertElement(MusicElement* element, int before);
-    void insertElement(MusicElement* element, MusicElement* before);
-    void removeElement(int index);
-    void removeElement(MusicElement* element);
-private:
-    VoiceBar(Voice* voice, Bar* bar);
+    /**
+     * Creates a new empty voice bar.
+     */
+    VoiceBar();
+
+    /**
+     * Destructor.
+     */
     ~VoiceBar();
-    friend class Voice;
+
+    /**
+     * Returns the number of elements in the bar.
+     */
+    int elementCount() const;
+
+    /**
+     * Returns the element at the given index in this bar.
+     *
+     * @param index the index of the element to return
+     */
+    MusicElement* element(int index);
+
+    /**
+     * Adds an element to this bar. You should not add an element to more than one bar, because when the bar is deleted
+     * all elements in the bar are also deleted.
+     *
+     * @param elemnt the element to add to this bar
+     */
+    void addElement(MusicElement* element);
+
+    /**
+     * Inserts an element into this bar. You should not add an element to more than one bar, because when the bar is deleted
+     * all elements in the bar are also deleted.
+     *
+     * @param element the element to insert into the bar
+     * @param before the index of the element before which to insert the element
+     */
+    void insertElement(MusicElement* element, int before);
+
+    /**
+     * Inserts an element into the bar. You should not add an element to more than one bar, because when the bar is deleted
+     * all elements in the bar are also deleted.
+     *
+     * @param element the element to insert into the bar
+     * @param before the element before which to insert the element
+     */
+    void insertElement(MusicElement* element, MusicElement* before);
+
+    /**
+     * Removes an element from this bar. If deleteElement is true, the element is not only removed but also deleted.
+     *
+     * @param index the index of the element to remove
+     * @param deleteElement should the element not only be removed but also deleted
+     */
+    void removeElement(int index, bool deleteElement = true);
+
+    /**
+     * Removes an element from this bar. If deleteElement is true, the element is not only removed but also deleted.
+     *
+     * @param element the element to remove
+     * @param deleteElement should the element not only be removed but also deleted
+     */
+    void removeElement(MusicElement* element, bool deleteElement = true);
+private:
     class Private;
     Private * const d;
 };

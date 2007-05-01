@@ -70,19 +70,21 @@ Part* Sheet::insertPart(int before, QString name)
     return part;
 }
 
-void Sheet::removePart(int index)
+void Sheet::removePart(int index, bool deletePart)
 {
     Q_ASSERT( index >= 0 && index < partCount() );
     Part* part = d->parts.takeAt(index);
-    delete part;
+    if (deletePart) {
+        delete part;
+    }
 }
 
-void Sheet::removePart(Part* part)
+void Sheet::removePart(Part* part, bool deletePart)
 {
     Q_ASSERT( part && part->sheet() == this);
     int index = d->parts.indexOf(part);
     Q_ASSERT( index != -1 );
-    removePart(index);
+    removePart(index, deletePart);
 }
 
 int Sheet::partGroupCount() const
@@ -105,13 +107,15 @@ PartGroup* Sheet::addPartGroup(int firstPart, int lastPart)
     return group;
 }
 
-void Sheet::removePartGroup(PartGroup* group)
+void Sheet::removePartGroup(PartGroup* group, bool deleteGroup)
 {
     Q_ASSERT( group && group->sheet() == this );
     int index = d->partGroups.indexOf(group);
     Q_ASSERT( index != -1 );
     d->partGroups.removeAt(index);
-    delete group;
+    if (deleteGroup) {
+        delete group;
+    }
 }
 
 int Sheet::barCount() const
@@ -127,64 +131,43 @@ Bar* Sheet::bar(int index)
 
 void Sheet::addBars(int count)
 {
-    int bc = barCount();
-    for (int i = 0, bc = barCount(); i < count; i++) {
-	d->bars.append(new Bar(this, bc + i));
-    }
-    Q_FOREACH(Part* p, d->parts) {
-        p->insertBars(bc, count);
+    for (int i = 0; i < count; i++) {
+	d->bars.append(new Bar(this));
     }
 }
 
 Bar* Sheet::addBar()
 {
-    int bc = barCount();
-    Bar* bar = new Bar(this, bc);
+    Bar* bar = new Bar(this);
     d->bars.append(bar);
-    Q_FOREACH(Part* p, d->parts) {
-        p->insertBars(bc, 1);
-    }
     return bar;
 }
 
 Bar* Sheet::insertBar(int before)
 {
     Q_ASSERT( before >= 0 && before <= barCount() );
-    Bar* bar = new Bar(this, before);
+    Bar* bar = new Bar(this);
     d->bars.insert(before, bar);
-    for (int i = before+1, count = barCount(); i < count; i++) {
-        d->bars[i]->setIndex(i);
-    }
-    Q_FOREACH(Part* p, d->parts) {
-        p->insertBars(before, 1);
-    }
     return bar;
 }
 
-void Sheet::removeBar(int index)
+void Sheet::removeBar(int index, bool deleteBar)
 {
     Q_ASSERT( index >= 0 && index < barCount() );
-    Q_FOREACH(Part* p, d->parts) {
-        p->removeBars(index, 1);
-    }
     Bar* bar = d->bars.takeAt(index);
-    delete bar;
-    for (int i = index, count = barCount(); i < count; i++) {
-        d->bars[i]->setIndex(i);
+    if (deleteBar) {
+        delete bar;
     }
 }
 
-void Sheet::removeBars(int index, int count)
+void Sheet::removeBars(int index, int count, bool deleteBar)
 {
     Q_ASSERT( index >= 0 && count > 0 && index + count <= barCount() );
-    Q_FOREACH(Part* p, d->parts) {
-        p->removeBars(index, count);
-    }
     for (int i = 0; i < count; i++) {
-        delete d->bars.takeAt(index);
-    }
-    for (int i = index, n = barCount(); i < n; i++) {
-        d->bars[i]->setIndex(i);
+        Bar* b = d->bars.takeAt(index);
+        if (deleteBar) {
+            delete b;
+        }
     }
 }
 

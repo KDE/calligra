@@ -44,8 +44,8 @@ void VoiceBarTest::cleanup()
 
 void VoiceBarTest::testConstruction()
 {
-    QCOMPARE(voiceBar->voice(), voice);
-    QCOMPARE(voiceBar->bar(), bar);
+//    QCOMPARE(voiceBar->voice(), voice);
+  //  QCOMPARE(voiceBar->bar(), bar);
     QCOMPARE(voiceBar->elementCount(), 0);
 }
 
@@ -53,7 +53,6 @@ void VoiceBarTest::testAddElement()
 {
     MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement();
     voiceBar->addElement(elem1);
-    QCOMPARE(elem1->bar(), voiceBar);
     QCOMPARE(voiceBar->elementCount(), 1);
     QCOMPARE(voiceBar->element(0), elem1);
 
@@ -67,7 +66,6 @@ void VoiceBarTest::testInsertElement_index()
 {
     MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement(), *elem3 = new MusicElement();
     voiceBar->insertElement(elem1, 0);
-    QCOMPARE(elem1->bar(), voiceBar);
     QCOMPARE(voiceBar->elementCount(), 1);
     QCOMPARE(voiceBar->element(0), elem1);
 
@@ -89,7 +87,6 @@ void VoiceBarTest::testInsertElement_element()
     voiceBar->addElement(elem1);
 
     voiceBar->insertElement(elem2, elem1);
-    QCOMPARE(elem2->bar(), voiceBar);
     QCOMPARE(voiceBar->elementCount(), 2);
     QCOMPARE(voiceBar->element(0), elem2);
     QCOMPARE(voiceBar->element(1), elem1);

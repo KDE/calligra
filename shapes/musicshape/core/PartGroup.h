@@ -41,11 +41,27 @@ public:
         DefaultSymbol = None
     };
 
+    /**
+     * Create a new partgroup in the given sheet. The part group contains all parts from firstPart up to and
+     * including lastPart. Call Sheet::addPartGroup to actually add the part group to the sheet.
+     */
+    PartGroup(Sheet* sheet, int firstPart, int lastPart);
+
+    /**
+     * Destructor.
+     */
+    ~PartGroup();
 
     /**
      * Returns the sheet this group is part of.
      */
     Sheet* sheet();
+
+    /**
+     * Changes the sheet this group is part of. Do not call this method after the partgroup has been added to a
+     * sheet by calling the addPartGroup method.
+     */
+    void setSheet(Sheet* sheet);
 
     /**
      * Returns the index of the first part in this group.
@@ -109,17 +125,6 @@ public:
      */
     void setCommonBarLines(bool commonBarLines);
 private:
-    /**
-     * Constructor private, as it should only be called by the Sheet class.
-     */
-    PartGroup(Sheet* sheet, int firstPart, int lastPart);
-
-    /**
-     * Destructor private as it should only be called by the Sheet class.
-     */
-    ~PartGroup();
-
-    friend class Sheet;
     class Private;
     Private * const d;
 };

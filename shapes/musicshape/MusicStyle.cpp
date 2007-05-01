@@ -105,3 +105,21 @@ void MusicStyle::renderRest(QPainter& painter, double x, double y, Chord::Durati
             break;
     }
 }
+
+void MusicStyle::renderClef(QPainter& painter, double x, double y, Clef::ClefShape shape)
+{
+    painter.setPen(QPen(Qt::SolidLine));
+    painter.setFont(m_font);
+    QPointF p(x, y);
+    switch (shape) {
+        case Clef::GClef:
+            painter.drawText(p, QString(0xE195));
+            break;
+        case Clef::FClef:
+            painter.drawText(p, QString(0xE193));
+            break;
+        case Clef::CClef:
+            painter.drawText(p, QString(0xE191));
+            break;
+    }
+}

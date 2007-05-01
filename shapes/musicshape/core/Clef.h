@@ -16,34 +16,44 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef MUSIC_CORE_CLEF_H
+#define MUSIC_CORE_CLEF_H
+
 #include "MusicElement.h"
 
 namespace MusicCore {
 
-class MusicElement::Private
-{
+class Staff;
+
+class Clef : public MusicElement {
 public:
-    Staff* staff;
+    enum ClefShape {
+        GClef,
+        FClef,
+        CClef,
+        Trebble = GClef,
+        Bass = FClef,
+        Alto = CClef,
+        Tenor = CClef,
+        Soprano = CClef
+    };
+
+    Clef(ClefShape shape, int line, int octaveChange);
+    Clef(Staff* staff, ClefShape shape, int line, int octaveChange);
+    virtual ~Clef();
+
+    ClefShape shape() const;
+    void setShape(ClefShape shape);
+    int line() const;
+    void setLine(int line);
+    int octaveChange() const;
+    void setOctaveChange(int octaveChange) const;
+
+private:
+    class Private;
+    Private * const d;
 };
 
-MusicElement::MusicElement() : d(new Private)
-{
-    d->staff = 0;
-}
-
-MusicElement::~MusicElement()
-{
-    delete d;
-}
-
-Staff* MusicElement::staff()
-{
-    return d->staff;
-}
-
-void MusicElement::setStaff(Staff* staff)
-{
-    d->staff = staff;
-}
-
 } // namespace MusicCore
+
+#endif // MUSIC_CLEF_PART_H

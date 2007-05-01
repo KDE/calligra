@@ -20,6 +20,8 @@
 #define MUSIC_STYLE_H
 
 #include "core/Chord.h"
+#include "core/Clef.h"
+
 #include <QtGui/QPen>
 #include <QtGui/QPainter>
 
@@ -35,6 +37,7 @@ public:
     virtual QPen stemPen();
     virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration);
     virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration);
+    virtual void renderClef(QPainter& painter, double x, double y, MusicCore::Clef::ClefShape shape);
 private:
     QPen m_staffLinePen, m_stemPen;
     QFont m_font;

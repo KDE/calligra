@@ -24,18 +24,21 @@ namespace MusicCore {
 class VoiceBar;
 class Staff;
 
+/**
+ * This is the base class for all musical elements that can be added to a bar.
+ */
 class MusicElement
 {
 public:
+    /**
+     * Creates a new MusicElement.
+     */
     MusicElement();
     virtual ~MusicElement();
 
-    VoiceBar* bar();
     Staff* staff();
     void setStaff(Staff* staff);
 private:
-    void setBar(VoiceBar* bar);
-    friend class VoiceBar;
     class Private;
     Private * const d;
 };

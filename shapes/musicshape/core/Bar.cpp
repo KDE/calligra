@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Bar.h"
+#include "VoiceBar.h"
+#include <QtCore/QHash>
 
 namespace MusicCore {
 
@@ -24,13 +26,12 @@ class Bar::Private
 {
 public:
     Sheet* sheet;
-    int index;
+    QHash<Voice*, VoiceBar*> voices;
 };
 
-Bar::Bar(Sheet* sheet, int index) : d(new Private)
+Bar::Bar(Sheet* sheet) : d(new Private)
 {
     d->sheet = sheet;
-    d->index = index;
 }
 
 Bar::~Bar()
@@ -43,14 +44,14 @@ Sheet* Bar::sheet()
     return d->sheet;
 }
 
-int Bar::index() const
+VoiceBar* Bar::voice(Voice* voice)
 {
-    return d->index;
-}
-
-void Bar::setIndex(int index)
-{
-    d->index = index;
+    VoiceBar* vb = d->voices.value(voice);
+    if (!vb) {
+        vb = new VoiceBar();
+        d->voices.insert(voice, vb);
+    }
+    return vb;
 }
 
 } // namespace MusicCore

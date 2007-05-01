@@ -25,31 +25,17 @@ namespace MusicCore {
 class VoiceBar::Private
 {
 public:
-    Voice* voice;
-    Bar* bar;
     QList<MusicElement*> elements;
 };
 
-VoiceBar::VoiceBar(Voice* voice, Bar* bar) : d(new Private)
+VoiceBar::VoiceBar() : d(new Private)
 {
-    d->voice = voice;
-    d->bar = bar;
 }
 
 VoiceBar::~VoiceBar()
 {
     Q_FOREACH(MusicElement* me, d->elements) delete me;
     delete d;
-}
-
-Voice* VoiceBar::voice()
-{
-    return d->voice;
-}
-
-Bar* VoiceBar::bar()
-{
-    return d->bar;
 }
 
 int VoiceBar::elementCount() const
@@ -66,14 +52,6 @@ MusicElement* VoiceBar::element(int index)
 void VoiceBar::addElement(MusicElement* element)
 {
     Q_ASSERT( element );
-    VoiceBar * bar = element->bar();
-    if (bar == this) {
-        return;
-    }
-    if (bar) {
-        bar->removeElement(element);
-    }
-    element->setBar(this);
     d->elements.append(element);
 }
 
@@ -81,14 +59,6 @@ void VoiceBar::insertElement(MusicElement* element, int before)
 {
     Q_ASSERT( element );
     Q_ASSERT( before >= 0 && before <= elementCount() );
-    VoiceBar * bar = element->bar();
-    if (bar == this) {
-        return;
-    }
-    if (bar) {
-        bar->removeElement(element);
-    }
-    element->setBar(this);
     d->elements.insert(before, element);
 }
 
@@ -101,20 +71,21 @@ void VoiceBar::insertElement(MusicElement* element, MusicElement* before)
     insertElement(element, index);
 }
 
-void VoiceBar::removeElement(int index)
+void VoiceBar::removeElement(int index, bool deleteElement)
 {
     Q_ASSERT( index >= 0 && index < elementCount() );
     MusicElement* e = d->elements.takeAt(index);
-    Q_ASSERT( e->bar() == this );
-    delete e;
+    if (deleteElement) {
+        delete e;
+    }
 }
 
-void VoiceBar::removeElement(MusicElement* element)
+void VoiceBar::removeElement(MusicElement* element, bool deleteElement)
 {
     Q_ASSERT( element );
     int index = d->elements.indexOf(element);
     Q_ASSERT( index != -1 );
-    removeElement(index);
+    removeElement(index, deleteElement);
 }
 
 } // namespace MusicCore

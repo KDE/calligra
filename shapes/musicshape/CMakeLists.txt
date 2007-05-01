@@ -16,6 +16,7 @@ set( musiccore_SRCS
     core/MusicElement.cpp
     core/Chord.cpp
     core/Note.cpp
+    core/Clef.cpp
 )
 
 SET (musicshape_LIB_SRCS

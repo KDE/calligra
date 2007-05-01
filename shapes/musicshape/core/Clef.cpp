@@ -16,34 +16,66 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "MusicElement.h"
+#include "Clef.h"
 
 namespace MusicCore {
 
-class MusicElement::Private
-{
+class Clef::Private {
 public:
-    Staff* staff;
+    ClefShape shape;
+    int line;
+    int octaveChange;
 };
 
-MusicElement::MusicElement() : d(new Private)
+Clef::Clef(Clef::ClefShape shape, int line, int octaveChange) : d(new Private)
 {
-    d->staff = 0;
+    d->shape = shape;
+    d->line = line;
+    d->octaveChange = octaveChange;
 }
 
-MusicElement::~MusicElement()
+Clef::Clef(Staff* staff, Clef::ClefShape shape, int line, int octaveChange) : d(new Private)
+{
+    d->shape = shape;
+    d->line = line;
+    d->octaveChange = octaveChange;
+    setStaff(staff);
+}
+
+Clef::~Clef()
 {
     delete d;
 }
 
-Staff* MusicElement::staff()
+Clef::ClefShape Clef::shape() const
 {
-    return d->staff;
+    return d->shape;
 }
 
-void MusicElement::setStaff(Staff* staff)
+void Clef::setShape(ClefShape shape)
 {
-    d->staff = staff;
+    d->shape = shape;
+}
+
+int Clef::line() const
+{
+    return d->line;
+}
+
+void Clef::setLine(int line)
+{
+    d->line = line;
+}
+
+int Clef::octaveChange() const
+{
+    return d->octaveChange;
+}
+
+void Clef::setOctaveChange(int octaveChange) const
+{
+    d->octaveChange = octaveChange;
 }
 
 } // namespace MusicCore
+

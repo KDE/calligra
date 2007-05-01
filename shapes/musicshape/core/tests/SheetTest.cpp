@@ -121,7 +121,6 @@ void SheetTest::testAddBar()
     Bar* bar = sheet->addBar();
 
     QCOMPARE(bar->sheet(), sheet);
-    QCOMPARE(bar->index(), 0);
     QCOMPARE(sheet->barCount(), 1);
     QCOMPARE(sheet->bar(0), bar);
 }
@@ -132,9 +131,6 @@ void SheetTest::testAddBars()
 
     QCOMPARE(sheet->barCount(), 3);
     QCOMPARE(sheet->bar(0)->sheet(), sheet);
-    QCOMPARE(sheet->bar(0)->index(), 0);
-    QCOMPARE(sheet->bar(1)->index(), 1);
-    QCOMPARE(sheet->bar(2)->index(), 2);
 }
 
 void SheetTest::testInsertBar()
@@ -148,9 +144,6 @@ void SheetTest::testInsertBar()
     QCOMPARE(sheet->bar(0), b2);
     QCOMPARE(sheet->bar(1), b3);
     QCOMPARE(sheet->bar(2), b1);
-    QCOMPARE(sheet->bar(0)->index(), 0);
-    QCOMPARE(sheet->bar(1)->index(), 1);
-    QCOMPARE(sheet->bar(2)->index(), 2);
 }
 
 void SheetTest::testRemoveBar()
@@ -160,8 +153,6 @@ void SheetTest::testRemoveBar()
     sheet->removeBar(1);
 
     QCOMPARE(sheet->barCount(), 2);
-    QCOMPARE(sheet->bar(0)->index(), 0);
-    QCOMPARE(sheet->bar(1)->index(), 1);
     QCOMPARE(sheet->bar(1), b);
 }
 
@@ -172,61 +163,7 @@ void SheetTest::testRemoveBars()
     sheet->removeBars(1, 2);
 
     QCOMPARE(sheet->barCount(), 2);
-    QCOMPARE(sheet->bar(0)->index(), 0);
-    QCOMPARE(sheet->bar(1)->index(), 1);
     QCOMPARE(sheet->bar(1), b);
-}
-
-void SheetTest::testVoiceBars()
-{
-    Part *p = sheet->addPart("part 1");
-    Voice *v1 = p->addVoice();
-
-    QCOMPARE(v1->barCount(), 0);
-
-    Bar *b = sheet->addBar();
-    QCOMPARE(v1->barCount(), 1);
-    QCOMPARE(v1->bar(0)->bar(), b);
-    QCOMPARE(v1->bar(b)->bar(), b);
-
-    sheet->addBars(3);
-    QCOMPARE(v1->barCount(), 4);
-    QCOMPARE(v1->bar(3)->bar(), sheet->bar(3));
-    QCOMPARE(v1->bar(sheet->bar(2))->bar(), sheet->bar(2));
-
-    b = sheet->insertBar(1);
-    QCOMPARE(v1->barCount(), 5);
-    QCOMPARE(v1->bar(0)->bar(), sheet->bar(0));
-    QCOMPARE(v1->bar(1)->bar(), b);
-    QCOMPARE(v1->bar(b)->bar(), b);
-    QCOMPARE(v1->bar(2)->bar(), sheet->bar(2));
-
-    sheet->removeBar(0);
-    QCOMPARE(v1->barCount(), 4);
-    QCOMPARE(v1->bar(0)->bar(), b);
-    QCOMPARE(v1->bar(b)->bar(), b);
-    QCOMPARE(v1->bar(1)->bar(), sheet->bar(1));
-
-    sheet->removeBars(1, 2);
-    QCOMPARE(v1->barCount(), 2);
-    QCOMPARE(v1->bar(0)->bar(), b);
-    QCOMPARE(v1->bar(b)->bar(), b);
-    QCOMPARE(v1->bar(1)->bar(), sheet->bar(1));
-    QCOMPARE(v1->bar(sheet->bar(1))->bar(), sheet->bar(1));
-
-    Voice* v2 = p->addVoice();
-    QCOMPARE(v2->barCount(), 2);
-    QCOMPARE(v2->bar(0)->bar(), b);
-    QCOMPARE(v2->bar(b)->bar(), b);
-    QCOMPARE(v2->bar(1)->bar(), sheet->bar(1));
-    QCOMPARE(v2->bar(sheet->bar(1))->bar(), sheet->bar(1));
-
-    v2 = sheet->addPart("part2")->addVoice();
-    QCOMPARE(v2->barCount(), 2);
-    QCOMPARE(v2->bar(0)->bar(), b);
-    QCOMPARE(v2->bar(b)->bar(), b);
-    QCOMPARE(v2->bar(1)->bar(), sheet->bar(1));
-    QCOMPARE(v2->bar(sheet->bar(1))->bar(), sheet->bar(1));
 }
 
 QTEST_MAIN(SheetTest)
