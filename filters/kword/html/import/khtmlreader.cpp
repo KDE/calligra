@@ -616,10 +616,14 @@ bool KHTMLReader::parse_pre(DOM::Element e)
 #else
 	pushNewState();
 	state()->in_pre_mode=true;
-	for (DOM::Node q=e.firstChild(); !q.isNull(); q=q.nextSibling()) {
+        QString face=e.getAttribute("face").string();
+        _writer->formatAttribute(state()->paragraph,"FONT","name",QString("Courier"));
+	for (DOM::Node q=e.firstChild(); !q.isNull(); q=q.nextSibling()) 
+        {
 		parseNode(q); // parse everything...
 	}
 	popState();
+        _writer->formatAttribute(state()->paragraph,"FONT","name",face);
 	return false; // children are already handled.
 #endif
 }
@@ -631,28 +635,29 @@ bool KHTMLReader::parse_ol(DOM::Element e)
 
 bool KHTMLReader::parse_font(DOM::Element e) 
 {
-	// fixme don't hardcode 12 font size ...
-	QString face=e.getAttribute("face").string();
-        QColor color=parsecolor("#000000");
-        if (!e.getAttribute("color").string().isEmpty())
-        	color=parsecolor(e.getAttribute("color").string());
-        QString size=e.getAttribute("size").string();
-        int isize=-1;
-        if (size.startsWith("+"))
-        	isize=12+size.right(size.length()-1).toInt();
-        else if (size.startsWith("-"))
-        	isize=12-size.right(size.length()-1).toInt();
-        else
-	        isize=12+size.toInt();
+  kdDebug(30503) << "Entering parse_font" << endl;
+  // fixme don't hardcode 12 font size ...
+  QString face=e.getAttribute("face").string();
+  QColor color=parsecolor("#000000");
+  if (!e.getAttribute("color").string().isEmpty())
+    color=parsecolor(e.getAttribute("color").string());
+  QString size=e.getAttribute("size").string();
+  int isize=-1;
+  if (size.startsWith("+"))
+    isize=12+size.right(size.length()-1).toInt();
+  else if (size.startsWith("-"))
+    isize=12-size.right(size.length()-1).toInt();
+  else
+    isize=12+size.toInt();
 
-        _writer->formatAttribute(state()->paragraph,"FONT","name",face);
-        if ((isize>=0) && (isize != 12))
-        	_writer->formatAttribute(state()->paragraph,"SIZE","value",QString("%1").arg(isize));
+  _writer->formatAttribute(state()->paragraph,"FONT","name",face);
+  if ((isize>=0) && (isize != 12))
+    _writer->formatAttribute(state()->paragraph,"SIZE","value",QString("%1").arg(isize));
 
-        _writer->formatAttribute(state()->paragraph,"COLOR","red",QString("%1").arg(color.red()));
-        _writer->formatAttribute(state()->paragraph,"COLOR","green",QString("%1").arg(color.green()));
-        _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString("%1").arg(color.blue()));
-        return true;
+  _writer->formatAttribute(state()->paragraph,"COLOR","red",QString("%1").arg(color.red()));
+  _writer->formatAttribute(state()->paragraph,"COLOR","green",QString("%1").arg(color.green()));
+  _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString("%1").arg(color.blue()));
+  return true;
 }
 
 bool KHTMLReader::parse_ul(DOM::Element e) 
