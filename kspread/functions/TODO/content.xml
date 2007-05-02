@@ -40,9 +40,7 @@
   <style:style style:name="ro3" style:family="table-row">
    <style:table-row-properties fo:break-before="auto" style:row-height="12pt"/>
   </style:style>
-  <style:style style:name="ce1" style:family="table-cell"/>
   <style:style style:name="ce2" style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#7fff00" style:cell-protect="none" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="16pt" fo:font-weight="bold"/>
   </style:style>
   <style:style style:name="ce3" style:family="table-cell">
@@ -137,8 +135,8 @@
  <office:body>
   <office:spreadsheet>
    <table:table table:name="Formula Status" table:style-name="ta1">
- <table:table-column table:style-name="co1" table:default-cell-style-name="ce1"/>
- <table:table-column table:style-name="co2" table:default-cell-style-name="ce1"/>
+ <table:table-column table:style-name="co1"/>
+ <table:table-column table:style-name="co2"/>
  <table:table-column table:style-name="co3"/>
  <table:table-column table:style-name="co4"/>
  <table:table-column table:style-name="co5"/>
