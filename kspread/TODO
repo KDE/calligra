@@ -206,11 +206,13 @@ Things not in bugzilla
     - Insert cells							done
     - Delete cells							done
 
-  + Manipulators						      2 ----
-    Convert CellWorker/UndoActions/Commands to Manipulators.
-    - Copy								----
-    - Delete								----
-    - Cut								----
+  + Commands							      2 ----
+    Convert UndoActions and related logic to Commands.
+    - Copy								done
+      Can't be undone -> not necessary
+    - Delete								done
+    - Cut								done
+      Consists of Copy and Delete -> undoing by undoing Delete
     - Paste								----
     - Paste Special							----
     - Paste with insertion						----
