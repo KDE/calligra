@@ -56,7 +56,7 @@ public:
      * @param duration the duration of the chord
      * @param dots the number of dots of the chord, each dot multiplies the length of the chord by 1.5
      */
-    Chord(Duration duration, int dots = 0);
+    explicit Chord(Duration duration, int dots = 0);
     
     /**
      * This constructor is overloaded for convenience, to avoid having to call the setStaff method to set the staff

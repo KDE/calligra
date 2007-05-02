@@ -34,9 +34,23 @@ public:
      * Creates a new MusicElement.
      */
     MusicElement();
+    
+    /**
+     * Destructor.
+     */
     virtual ~MusicElement();
 
+    /**
+     * Returns the staff this music element should be displayed on. It can also be NULL, for example if the element
+     * should not be visible.
+     */
     Staff* staff();
+    
+    /**
+     * Sets the staff this element should be displayed on.
+     *
+     * @param staff the new staff this element should be displayed on
+     */
     void setStaff(Staff* staff);
 private:
     class Private;
