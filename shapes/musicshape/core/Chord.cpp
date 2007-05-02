@@ -53,9 +53,19 @@ Chord::Duration Chord::duration() const
     return d->duration;
 }
 
+void Chord::setDuration(Duration duration)
+{
+    d->duration = duration;
+}
+
 int Chord::dots() const
 {
     return d->dots;
+}
+
+void Chord::setDots(int dots)
+{
+    d->dots = dots;
 }
 
 int Chord::noteCount() const
@@ -71,10 +81,23 @@ Note* Chord::note(int index)
 
 Note* Chord::addNote(Staff* staff, int pitch, int accidentals)
 {
-    Note *n = new Note(this, staff, pitch, accidentals);
+    Note *n = new Note(staff, pitch, accidentals);
     d->notes.append(n);
     return n;
 }
 
+void Chord::addNote(Note* note)
+{
+    d->notes.append(note);
+}
+
+void Chord::removeNote(int index, bool deleteNote)
+{
+    Q_ASSERT( index >= 0 && index < noteCount() );
+    Note* n = d->notes.takeAt(index);
+    if (deleteNote) {
+        delete n;
+    }
+}
 
 } // namespace MusicCore

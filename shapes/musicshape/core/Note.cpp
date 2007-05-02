@@ -22,15 +22,13 @@ namespace MusicCore {
 
 class Note::Private {
 public:
-    Chord* chord;
     Staff* staff;
     int pitch;
     int accidentals;
 };
 
-Note::Note(Chord* chord, Staff* staff, int pitch, int accidentals) : d(new Private)
+Note::Note(Staff* staff, int pitch, int accidentals) : d(new Private)
 {
-    d->chord = chord;
     d->staff = staff;
     d->pitch = pitch;
     d->accidentals = accidentals;
@@ -39,11 +37,6 @@ Note::Note(Chord* chord, Staff* staff, int pitch, int accidentals) : d(new Priva
 Note::~Note()
 {
     delete d;
-}
-
-Chord* Note::chord()
-{
-    return d->chord;
 }
 
 Staff* Note::staff()

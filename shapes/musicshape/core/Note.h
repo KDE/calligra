@@ -21,19 +21,16 @@
 
 namespace MusicCore {
 
-class Chord;
 class Staff;
 
 class Note {
 public:
-    Chord* chord();
+    Note(Staff* staff, int pitch, int accidentals);
+    ~Note();
     Staff* staff();
     int pitch() const;
     int accidentals() const;
 private:
-    friend class Chord;
-    Note(Chord* chord, Staff* staff, int pitch, int accidentals);
-    ~Note();
     class Private;
     Private * const d;
 };
