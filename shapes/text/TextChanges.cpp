@@ -74,6 +74,7 @@ void TextChanges::changed(int position, const QString &former, const QString &la
 }
 
 bool TextChanges::hasText(int position, int length) const {
+    return false;
 }
 
 QMap<int, const TextChange*> TextChanges::changes() const {
