@@ -753,12 +753,6 @@ public:
 
     /**
      * @param selection the selection of cells to work on
-     * @param undo create undo entry, if @c true
-     */
-    void deleteSelection( Selection* selection, bool undo = true );
-
-    /**
-     * @param selection the selection of cells to work on
      */
     void copySelection( Selection* selection );
     /**
@@ -982,16 +976,24 @@ public:
     Sheet *findSheet( const QString & _name );
 
     /**
-     * Used by Undo.
-     * @see UndoDeleteColumn
+     * Insert the non-default column format \p columnFormat.
      */
-    void insertColumnFormat( ColumnFormat *_l );
+    void insertColumnFormat( ColumnFormat* columnFormat );
 
     /**
-     * Used by Undo.
-     * @see UndoDeleteRow
+     * Inserts the non-default row format \p rowFormat.
      */
-    void insertRowFormat( RowFormat *_l );
+    void insertRowFormat( RowFormat* rowFormat );
+
+    /**
+     * Deletes the column format at \p column.
+     */
+    void deleteColumnFormat( int column );
+
+    /**
+     * Deletes the row format at \p row.
+     */
+    void deleteRowFormat( int row );
 
     /**
      * @param era set this to true if you want to encode relative references

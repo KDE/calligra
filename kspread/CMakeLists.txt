@@ -25,6 +25,7 @@ SET (commands_DIR_SRCS
 	commands/ConditionCommand.cpp
 	commands/DataManipulators.cpp
 	commands/DefinePrintRangeCommand.cpp
+	commands/DeleteCommand.cpp
 # 	commands/EmbeddedObjectCommands.cpp
 	commands/LinkCommand.cpp
 	commands/MacroCommand.cpp

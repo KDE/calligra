@@ -90,6 +90,7 @@
 
 // commands
 #include "commands/DataManipulators.h"
+#include "commands/DeleteCommand.h"
 #include "commands/EmbeddedObjectCommands.h"
 #include "commands/MergeCommand.h"
 #include "commands/RowColumnManipulators.h"
@@ -1644,7 +1645,11 @@ void Sheet::cutSelection( Selection* selection )
 
     QApplication::clipboard()->setMimeData( mimeData );
 
-    deleteSelection( selection, true );
+    DeleteCommand* command = new DeleteCommand();
+    command->setName( i18n( "Cut" ) );
+    command->setSheet( this );
+    command->add( *selection );
+    command->execute();
 }
 
 void Sheet::paste( const QRect& pasteArea, bool makeUndo,
@@ -2149,64 +2154,6 @@ void Sheet::deleteCells(const Region& region)
     doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance | CellDamage::Value ) );
 
     doc()->setModified( true );
-}
-
-void Sheet::deleteSelection( Selection* selection, bool undo )
-{
-    if ( undo && !doc()->undoLocked() )
-    {
-        UndoDelete *undo = new UndoDelete( doc(), this, *selection );
-        doc()->addCommand( undo );
-    }
-
-  Region::ConstIterator endOfList = selection->constEnd();
-  for (Region::ConstIterator it = selection->constBegin(); it != endOfList; ++it)
-  {
-    QRect range = (*it)->rect();
-
-    // Entire rows selected ?
-    if ( Region::Range(range).isRow() )
-    {
-        for( int i = range.top(); i <= range.bottom(); ++i )
-        {
-            Cell cell = d->cellStorage->firstInRow( i );
-            QPoint cellPosition;
-            while( !cell.isNull() )
-            {
-                QPoint cellPosition = cell.cellPosition();
-                d->cellStorage->take( cellPosition.x(), cellPosition.y() );
-                cell = d->cellStorage->nextInRow( cellPosition.x(), cellPosition.y() );
-            }
-            d->rows.removeElement( i );
-        }
-
-        emit sig_updateVBorder( this );
-    }
-    // Entire columns selected ?
-    else if ( Region::Range(range).isColumn() )
-    {
-        for( int i = range.left(); i <= range.right(); ++i )
-        {
-            Cell cell = d->cellStorage->firstInColumn( i );
-            QPoint cellPosition;
-            while( !cell.isNull() )
-            {
-                QPoint cellPosition = cell.cellPosition();
-                d->cellStorage->take( cellPosition.x(), cellPosition.y() );
-                cell = d->cellStorage->nextInColumn( cellPosition.x(), cellPosition.y() );
-            }
-            d->columns.removeElement( i );
-        }
-
-        emit sig_updateHBorder( this );
-    }
-    else
-    {
-        setRegionPaintDirty( Region( range ) );
-        deleteCells( Region( range ) );
-    }
-  }
-    emit sig_updateView( this );
 }
 
 void Sheet::updateView()
@@ -4676,12 +4623,26 @@ Sheet* Sheet::findSheet( const QString & _name )
 
 void Sheet::insertColumnFormat( ColumnFormat *l )
 {
-  d->columns.insertElement( l, l->column() );
+    d->columns.insertElement( l, l->column() );
+    doc()->addDamage( new SheetDamage( this, SheetDamage::ColumnsChanged ) );
 }
 
 void Sheet::insertRowFormat( RowFormat *l )
 {
-  d->rows.insertElement( l, l->row() );
+    d->rows.insertElement( l, l->row() );
+    doc()->addDamage( new SheetDamage( this, SheetDamage::RowsChanged ) );
+}
+
+void Sheet::deleteColumnFormat( int column )
+{
+    d->columns.removeElement( column );
+    doc()->addDamage( new SheetDamage( this, SheetDamage::ColumnsChanged ) );
+}
+
+void Sheet::deleteRowFormat( int row )
+{
+    d->rows.removeElement( row );
+    doc()->addDamage( new SheetDamage( this, SheetDamage::RowsChanged ) );
 }
 
 void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )

@@ -1378,7 +1378,6 @@ void UndoSort::redo()
     sheet->updateView( Region(m_rctRect) );
     doc()->setUndoLocked( false );
 }
-#endif
 
 /****************************************************************************
  *
@@ -1531,6 +1530,7 @@ void UndoDelete::redo()
     sheet->refreshView( m_region ); // deletes the cells in region!
     doc()->setUndoLocked( false );
 }
+#endif
 
 /****************************************************************************
  *

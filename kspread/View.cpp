@@ -142,6 +142,7 @@
 #include "commands/CommentCommand.h"
 #include "commands/ConditionCommand.h"
 #include "commands/DataManipulators.h"
+#include "commands/DeleteCommand.h"
 #include "commands/EmbeddedObjectCommands.h"
 #include "commands/LinkCommand.h"
 #include "commands/MacroCommand.h"
@@ -787,16 +788,16 @@ void View::Private::initActions()
 
   actions->removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet"));
 
-  actions->deleteCell = new KAction(KIcon( "deletecell" ), i18n("Delete"), view);
-  ac->addAction("delete", actions->deleteCell );
-  connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( deleteSelection() ));
-  actions->deleteCell->setToolTip(i18n("Delete all contents and formatting of the current cell"));
+    actions->deleteCell = new KAction(KIcon("deletecell"), i18n("Delete"), view);
+    ac->addAction("delete", actions->deleteCell);
+    connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( deleteSelection()));
+    actions->deleteCell->setToolTip(i18n("Delete all contents and formatting of the current cell"));
 
-  actions->mergeCell = new KToolBarPopupAction(KIcon( "mergecell" ), i18n("Merge Cells"), view);
-  ac->addAction("mergecell", actions->mergeCell );
-  connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( mergeCell() ));
-  actions->mergeCell->setToolTip(i18n("Merge the selected region"));
-  actions->mergeCell->menu()->addAction( actions->mergeCell );
+    actions->mergeCell = new KToolBarPopupAction(KIcon("mergecell"), i18n("Merge Cells"), view);
+    ac->addAction("mergecell", actions->mergeCell);
+    connect(actions->mergeCell, SIGNAL(triggered(bool)), view, SLOT( mergeCell()));
+    actions->mergeCell->setToolTip(i18n("Merge the selected region"));
+    actions->mergeCell->menu()->addAction( actions->mergeCell );
 
   actions->mergeCellHorizontal  = new KAction(KIcon("mergecell-horizontal" ), i18n("Merge Cells Horizontally"), view);
   ac->addAction("mergecellHorizontal", actions->mergeCellHorizontal );
@@ -5869,21 +5870,18 @@ void View::slotActivateTool( int _id )
 
 void View::deleteSelection()
 {
-    if (!activeSheet()) return;
+    DeleteCommand* command = new DeleteCommand();
+    command->setSheet( activeSheet() );
+    command->add( *selection() );
+    command->execute();
 
+#ifdef KSPREAD_KOPART_EMBEDDING
     if ( canvasWidget()->isObjectSelected() )
     {
       deleteSelectedObjects();
       return;
     }
-
-    doc()->emitBeginOperation( false );
-    d->activeSheet->deleteSelection( selection() );
-    calcStatusBarOp();
-    updateEditWidget();
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
+#endif
 }
 
 void View::deleteSelectedObjects()
@@ -7230,6 +7228,10 @@ void View::handleDamages( const QList<Damage*>& damages )
                 d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
                 refreshView = true;
             }
+            if ( sheetDamage->changes() & SheetDamage::ColumnsChanged )
+                hBorderWidget()->update();
+            if ( sheetDamage->changes() & SheetDamage::RowsChanged )
+                vBorderWidget()->update();
             continue;
         }
 

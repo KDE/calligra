@@ -359,7 +359,6 @@ protected:
    UndoResizeColRow* m_resizeUndo;
 
 };
-#endif
 
 class UndoDelete : public UndoAction
 {
@@ -382,6 +381,7 @@ protected:
     QLinkedList<rowSize> m_lstRedoRow;
     QString m_sheetName;
 };
+#endif
 
 class UndoDragDrop : public UndoAction
 {

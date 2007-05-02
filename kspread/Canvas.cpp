@@ -108,6 +108,7 @@
 #include "View.h"
 
 // commands
+#include "commands/DeleteCommand.h"
 #include "commands/EmbeddedObjectCommands.h"
 #include "commands/StyleManipulators.h"
 
@@ -1111,7 +1112,10 @@ void Canvas::dropEvent( QDropEvent * _ev )
         d->view->doc()->addCommand( undo );
         makeUndo = false;
       }
-      sheet->deleteSelection( selection(), false );
+      DeleteCommand* command = new DeleteCommand();
+      command->setSheet( activeSheet() );
+      command->add( *selection() );
+      command->redo(); // no registering
     }
 
 

@@ -91,11 +91,13 @@ class SheetDamage : public Damage
 
     enum Change
     {
-      None              = 0x01,
-      ContentChanged    = 0x02,
-      PropertiesChanged = 0x04,
-      Hidden            = 0x10,
-      Shown             = 0x20
+      None              = 0x00,
+      ContentChanged    = 0x01,
+      PropertiesChanged = 0x02,
+      Hidden            = 0x04,
+      Shown             = 0x10,
+      ColumnsChanged    = 0x20,
+      RowsChanged       = 0x40
     };
     Q_DECLARE_FLAGS( Changes, Change )
 
