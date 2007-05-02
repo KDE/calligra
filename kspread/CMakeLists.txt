@@ -21,6 +21,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/inter
 SET (commands_DIR_SRCS
 	commands/AbstractRegionCommand.cpp
 	commands/AutoFillCommand.cpp
+	commands/AutoFormatCommand.cpp
 	commands/CommentCommand.cpp
 	commands/ConditionCommand.cpp
 	commands/DataManipulators.cpp

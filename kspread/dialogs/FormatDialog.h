@@ -76,7 +76,7 @@ private:
     };
     QList<Entry> m_entries;
 
-    Style* m_styles[ 16 ];
+    QList<Style*> m_styles;
 };
 
 } // namespace KSpread

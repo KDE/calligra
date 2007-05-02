@@ -169,7 +169,7 @@ Things not in bugzilla
       Remove only data rectangles, that are completely covered.
     - Seek & destroy R-Tree data rects, if they get empty after		done
       deletion of columns/rows, but store them for undo.
-    - Port FormatDialog.						----
+    - Port FormatDialog.						done
     - Port IncreaseIndentManipulator.					done
     - Port BorderColorManipulator.					done
     - Undo for insertion/deletion of columns/rows.			done

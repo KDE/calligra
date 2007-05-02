@@ -320,6 +320,7 @@ protected:
 };
 
 
+#if 0
 class UndoCellFormat : public UndoAction
 {
 public:
@@ -343,7 +344,6 @@ protected:
     QString m_sheetName;
 };
 
-#if 0
 class UndoChangeAngle : public UndoAction
 {
 public:
