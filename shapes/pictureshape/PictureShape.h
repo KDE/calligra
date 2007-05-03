@@ -33,6 +33,7 @@ public:
     virtual ~PictureShape();
 
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void saveOdf( KoShapeSavingContext * context );
 
 private:
     KoImageData *m_imageData;

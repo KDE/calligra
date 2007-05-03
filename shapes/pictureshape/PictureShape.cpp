@@ -43,3 +43,8 @@ void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) 
     painter.drawPixmap(target.toRect(), pm, QRect(0, 0, pm.width(), pm.height()));
 }
 
+void PictureShape::saveOdf(  KoShapeSavingContext * context )
+{
+    //TODO
+}
+
