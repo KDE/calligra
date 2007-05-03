@@ -105,7 +105,20 @@ void TestChangesDatabase::testMerge() {
     QCOMPARE(change->length(), 5);
     QCOMPARE(change->after(), QString("axbcd"));
 
+    changes.changed(2, "x", "ka");
+    QVERIFY(change->next() == 0);
+    QCOMPARE(change->length(), 6);
+    QCOMPARE(change->after(), QString("akabcd"));
+
     // TODO test the insertion of 2 changes and then the insertion of a 3th that makes it 1 change total
+
+    changes.inserted(8, "klm");
+    // means we now have;  'akabcd..klm'
+    QVERIFY(change->next() != 0);
+    changes.changed(6, "xykl", "baz");
+    // means we now have;  'akabcdbazm'
+    QVERIFY(change->next() == 0);
+    QCOMPARE(change->after(), QString("akabcdbazm"));
 }
 
 QTEST_MAIN(TestChangesDatabase)
