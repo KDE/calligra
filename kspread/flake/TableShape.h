@@ -39,8 +39,12 @@ public:
     void setColumns( int columns );
     void setRows( int rows );
 
+    /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    /// reimplemented
     virtual void resize( const QSizeF &size );
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext * context );
 
 protected:
     /**

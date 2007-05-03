@@ -209,7 +209,8 @@ public:
     KoTextShapeData * const textShapeData; // will be deleted by KoShape
 
 private:
-    void paint(QPainter&, const KoViewConverter&) {}
+    virtual void paint(QPainter&, const KoViewConverter&) {}
+    virtual void saveOdf( KoShapeSavingContext *) {}
 };
 
 KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)

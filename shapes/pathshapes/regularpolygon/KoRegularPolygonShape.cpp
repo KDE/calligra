@@ -104,3 +104,8 @@ void KoRegularPolygonShape::setPoints(int points)
 {
 	m_points = points;
 }
+
+void KoRegularPolygonShape::saveOdf( KoShapeSavingContext * context )
+{
+    // TODO
+}

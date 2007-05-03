@@ -41,3 +41,7 @@ void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &con
 const QPainterPath KWCopyShape::outline() const {
     return m_original->outline();
 }
+
+void KWCopyShape::saveOdf( KoShapeSavingContext * context ) {
+    // TODO
+}

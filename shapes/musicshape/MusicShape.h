@@ -34,9 +34,15 @@ public:
     MusicShape();
     virtual ~MusicShape();
 
+    /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
 
+    /// reimplemented
     virtual void resize( const QSizeF &newSize );
+
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext * context );
+
 private:
     MusicCore::Sheet* m_sheet;
     MusicStyle* m_style;

@@ -28,9 +28,13 @@ class KoRegularPolygonShape : public KoShape
 {
 public:
 	KoRegularPolygonShape();
-	void paint(QPainter &painter, const KoViewConverter &converter);
+    /// reimplemented
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 	void setPoints(int points);
-	const QPainterPath outline() const;
+    /// reimplemented
+    virtual const QPainterPath outline() const;
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext * context );
 
 protected:
 	int m_points;

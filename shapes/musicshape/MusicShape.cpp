@@ -212,3 +212,7 @@ void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
 }
 
 
+void MusicShape::saveOdf( KoShapeSavingContext * context )
+{
+    // TODO
+}

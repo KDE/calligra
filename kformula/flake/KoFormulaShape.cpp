@@ -82,5 +82,9 @@ void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
     m_formulaElement->writeMathML( writer, oasisFormat );
 }
 
+void KoFormulaShape::saveOdf( KoShapeSavingContext * context ) {
+    // TODO
+}
+
 } // namespace FormulaShape
 

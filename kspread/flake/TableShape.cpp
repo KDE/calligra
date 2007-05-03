@@ -159,3 +159,8 @@ Sheet* TableShape::sheet() const
 {
     return d->sheet();
 }
+
+void TableShape::saveOdf( KoShapeSavingContext * context )
+{
+}
+

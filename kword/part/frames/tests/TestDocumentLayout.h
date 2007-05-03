@@ -42,10 +42,8 @@ class MockTextShape : public KoShape {
     MockTextShape() {
         setUserData(new KoTextShapeData());
     }
-    void paint(QPainter &painter, const KoViewConverter &converter) {
-        Q_UNUSED(painter);
-        Q_UNUSED(converter);
-    }
+    virtual void paint(QPainter &, const KoViewConverter &) { }
+    virtual void saveOdf( KoShapeSavingContext *) {}
 };
 
 #endif

@@ -40,7 +40,8 @@ private:
     class MockShape : public KoShape {
         public:
             MockShape() : KoShape() {}
-            void paint(QPainter &p, const KoViewConverter&c) { Q_UNUSED(p); Q_UNUSED(c); }
+            virtual void paint(QPainter &, const KoViewConverter&) {}
+            virtual void saveOdf( KoShapeSavingContext *) {}
     };
 };
 

@@ -120,3 +120,9 @@ void VideoShape::pause()
  kDebug()<<" VideoShape::pause \n";
  m_mediaobject->pause();
 }
+
+void VideoShape::saveOdf( KoShapeSavingContext * context )
+{
+    // TODO
+}
+

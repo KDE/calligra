@@ -39,7 +39,10 @@ public:
     explicit VideoShape(const KUrl&url = KUrl());
     virtual ~VideoShape();
 
+    /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext * context );
 
     void play();
     void start();

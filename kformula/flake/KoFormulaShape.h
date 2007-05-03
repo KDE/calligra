@@ -75,6 +75,9 @@ public:
      */
     void saveMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext * context );
+
 private:
     /// The element at the highest level in the formula tree, contains all other elements
     BasicElement* m_formulaElement;
