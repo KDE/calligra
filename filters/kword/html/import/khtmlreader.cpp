@@ -32,7 +32,8 @@
 #include <dom/html_misc.h>
 #include <qregexp.h>
 
-KHTMLReader::KHTMLReader(KWDWriter *w){
+KHTMLReader::KHTMLReader(KWDWriter *w)
+{
 	_html=new KHTMLPart();
 	_writer=w;
 	_it_worked=false;
@@ -43,7 +44,8 @@ void qt_enter_modal( QWidget *widget );
 void qt_leave_modal( QWidget *widget );
 
 
-bool KHTMLReader::filter(KURL url) {
+bool KHTMLReader::filter(KURL url) 
+{
 	kdDebug(30503) << "KHTMLReader::filter" << endl;
 	QObject::connect(_html,SIGNAL(completed()),this,SLOT(completed()));
 
@@ -56,7 +58,8 @@ bool KHTMLReader::filter(KURL url) {
 	_html->setPluginsEnabled(false);
 	_html->setJavaEnabled(false);
 	_html->setMetaRefreshEnabled(false);
-	if (_html->openURL(url) == false) {
+	if (_html->openURL(url) == false) 
+        {
 		kdWarning(30503) << "openURL returned false" << endl;
 		return false;
 	}
@@ -69,8 +72,10 @@ bool KHTMLReader::filter(KURL url) {
 	return _it_worked;
 }
 
-HTMLReader_state *KHTMLReader::state() {
-	if (_state.count() == 0) {
+HTMLReader_state *KHTMLReader::state() 
+{
+	if (_state.count() == 0) 
+        {
 		HTMLReader_state *s=new HTMLReader_state;
 		s->frameset=_writer->mainFrameset();
 		s->paragraph = _writer->addParagraph(s->frameset);
@@ -82,7 +87,8 @@ HTMLReader_state *KHTMLReader::state() {
 	return _state.top();
 }
 
-HTMLReader_state *KHTMLReader::pushNewState() {
+HTMLReader_state *KHTMLReader::pushNewState() 
+{
         HTMLReader_state *s=new HTMLReader_state;
         s->frameset=state()->frameset;
         s->paragraph=state()->paragraph;
@@ -95,7 +101,8 @@ HTMLReader_state *KHTMLReader::pushNewState() {
 }
 
 
-void KHTMLReader::popState() {
+void KHTMLReader::popState() 
+{
         kdDebug(30503) << "Entering popState" << endl;
 
 	HTMLReader_state *s=_state.pop();
@@ -109,11 +116,12 @@ void KHTMLReader::popState() {
 	   if we go back into another frameset, we start a new paragraph.
 	 **/
 	if (s->frameset == state()->frameset)
-		{
-			state()->paragraph=s->paragraph;
-			if ((state()->layout != s->layout)) {
-                          if (_writer->getText(state()->paragraph).length()!=0) startNewLayout(false,state()->layout);
-			}
+	{
+		state()->paragraph=s->paragraph;
+		if ((state()->layout != s->layout)) 
+                {
+                  if (_writer->getText(state()->paragraph).length()!=0) startNewLayout(false,state()->layout);
+		}
 		state()->format=_writer->startFormat(state()->paragraph, state()->format);
 	}
 	delete(s);
@@ -140,14 +148,15 @@ void KHTMLReader::completed()
 	DOM::NodeList list=doc.getElementsByTagName("body");
 	DOM::Node docbody=list.item(0);
 
-	if (docbody.isNull()) {
+	if (docbody.isNull()) 
+        {
 		kdWarning(30503) << "no <BODY>, giving up" << endl;
 		_it_worked=false;
 		return;
 	}
 
 
-	parseNode(docbody);
+	parseNode(docbody); // start here (keyword: main)
 
 	list = doc.getElementsByTagName("head");
 	DOM::Node dochead=list.item(0);
@@ -198,7 +207,8 @@ void KHTMLReader::parseNode(DOM::Node node)
 	popState();
 }
 
-void KHTMLReader::parse_head(DOM::Element e) {
+void KHTMLReader::parse_head(DOM::Element e) 
+{
 	for (DOM::Element items=e.firstChild();!items.isNull();items=items.nextSibling()) {
 		if (items.tagName().string().lower() == "title") {
 			DOM::Text t=items.firstChild();
@@ -458,7 +468,6 @@ void KHTMLReader::parseStyle(DOM::Element e)
   DOM::CSSStyleDeclaration s1=e.style();
   DOM::Document doc=_html->document();
   DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
-
   kdDebug(30503) << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
   if ( s1.getPropertyValue("font-weight").string() == "bolder" )
   {
@@ -490,7 +499,7 @@ void KHTMLReader::parseStyle(DOM::Element e)
     }
   // done
   // process e.g. <style="text-align: center">this is in the center</style>
-    if ( s1.getPropertyValue("text-align").string() != QString() )
+    if ( s1.getPropertyValue("text-align").string() != QString() && s1.getPropertyValue("text-align").string() != QString("left") )
     {
       state()->layout=_writer->setLayout(state()->paragraph,state()->layout);
       _writer->layoutAttribute(state()->paragraph, "FLOW","align",s1.getPropertyValue("text-align").string());
