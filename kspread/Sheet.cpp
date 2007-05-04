@@ -1488,7 +1488,7 @@ class SetWordSpellingManipulator : public AbstractDataManipulator {
   void setString (QString str) {
     list = str.split ('\n');
     idx = 0;
-  };
+  }
   
  protected:
   int idx;

@@ -50,7 +50,7 @@ public:
     void  analyzeHeaders( const KDChartTableData& data );
     void  doSetData( const KDChartTableData&  data,
 		     bool  firstRowHeader,
-		     bool  firstRowHeader );
+		     bool  firstColHeader );
 
     bool showWizard( QString &area );
     void initLabelAndLegend();
