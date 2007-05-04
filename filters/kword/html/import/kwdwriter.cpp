@@ -405,21 +405,24 @@ QString KWDWriter::getLayoutAttribute(QDomElement paragraph, QString name, QStri
 
 QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, QString name, QString attrName, QString attr) 
 {
-        kdDebug() << "Entering KWDWriter::layoutAttribute" << endl;
-	QDomElement currentLayout=paragraph.elementsByTagName("LAYOUT").item(0).toElement();
-	QDomNodeList qdnl= currentLayout.elementsByTagName(name);
+  kdDebug() << "Entering KWDWriter::layoutAttribute name=" << name << " attrName=" << attrName << " attr=" << attr << endl;
+  QDomElement currentLayout=paragraph.elementsByTagName("LAYOUT").item(0).toElement();
+  QDomNodeList qdnl= currentLayout.elementsByTagName(name);
 
-	if (qdnl.length()) {
-	  QDomElement el;
-	  el=qdnl.item(0).toElement();
-	  el.setAttribute(attrName,attr);
-	  return el;
-	} else {
-	  QDomElement al=_doc->createElement(name);
-	  currentLayout.appendChild(al);
-	  al.setAttribute(attrName,attr);
-	  return al;
-	}
+  if (qdnl.length()) 
+  {
+    QDomElement el;
+    el=qdnl.item(0).toElement();
+    el.setAttribute(attrName,attr);
+    return el;
+  } 
+  else 
+  {
+    QDomElement al=_doc->createElement(name);
+    currentLayout.appendChild(al);
+    al.setAttribute(attrName,attr);
+    return al;
+  }
 }
 
 void KWDWriter::addText(QDomElement paragraph, QString text, int format_id, bool keep_formatting) {

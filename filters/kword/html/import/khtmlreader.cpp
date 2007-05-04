@@ -339,22 +339,29 @@ KHTMLReader::~KHTMLReader(){
 //==============================================================
 
 
-bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
-        kdDebug(30503) << "entering KHTMLReader::parse_CommonAttributes" << endl;
-        kdDebug(30503) << "tagName is " << e.tagName().string() << endl;
-        QString s=e.getAttribute("align").string();
-        if (!s.isEmpty()) 
-        {
-              _writer->formatAttribute(state()->paragraph,"FLOW","align",s);
-        }
-        QRegExp rx( "h[0-9]+" );
-        if ( 0 == rx.search( e.getAttribute("class").string() ) )
-        // example: <p class="h1" style="text-align:left; ">
-        {
-              _writer->layoutAttribute(state()->paragraph,"NAME","value",e.getAttribute("class").string());
-        }
-        kdDebug(30503) << "leaving parse_CommonAttributes" << endl;
-        return true;
+bool KHTMLReader::parse_CommonAttributes(DOM::Element e) 
+{
+  kdDebug(30503) << "entering KHTMLReader::parse_CommonAttributes" << endl;
+  kdDebug(30503) << "tagName is " << e.tagName().string() << endl;
+  QString s=e.getAttribute("align").string();
+  if (!s.isEmpty()) 
+  {
+    _writer->formatAttribute(state()->paragraph,"FLOW","align",s);
+  }
+  QRegExp rx( "h[0-9]+" );
+  if ( 0 == rx.search( e.getAttribute("class").string() ) )
+  // example: <p class="h1" style="text-align:left; ">
+  {
+    kdDebug(30503) << "laying out with " << e.getAttribute("class").string() << endl;
+    _writer->layoutAttribute(state()->paragraph,"NAME","value",e.getAttribute("class").string());
+  }
+  if ( e.getAttribute("class").string()=="Standard" )
+  {
+    kdDebug(30503) << "laying out with " << e.getAttribute("class").string() << endl;
+    _writer->layoutAttribute(state()->paragraph,"NAME","value",e.getAttribute("class").string());
+  }  
+  kdDebug(30503) << "leaving parse_CommonAttributes" << endl;
+  return true;
 }
 
 bool KHTMLReader::parse_a(DOM::Element e) {
