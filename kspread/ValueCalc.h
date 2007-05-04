@@ -67,11 +67,11 @@ class ValueCalc {
  public:
   explicit ValueCalc (ValueConverter* c);
 
-  ValueConverter *conv () { return converter; };
+  ValueConverter *conv () { return converter; }
 
   // some functions need access to the document
-  void setDoc (Doc *d) { _doc = d; };
-  Doc *doc () { return _doc; };
+  void setDoc (Doc *d) { _doc = d; }
+  Doc *doc () { return _doc; }
 
   /** basic arithmetic operations */
   Value add (const Value &a, const Value &b);

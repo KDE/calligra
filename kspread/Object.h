@@ -154,7 +154,7 @@ class EmbeddedObject
           , context( _context )
           , indexObj( _indexObj )
           , partIndexObj( _partIndexObj )
-          {};
+          {}
 
           KoXmlWriter &xmlWriter;
           KoGenStyles &context;

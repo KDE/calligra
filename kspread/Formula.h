@@ -111,7 +111,7 @@ class KSPREAD_EXPORT Token
      */
     QString text() const { return m_text; }
 
-    int pos() const { return m_pos; };
+    int pos() const { return m_pos; }
 
     /**
      * Returns true if token is a boolean token.
@@ -228,7 +228,7 @@ class KSPREAD_EXPORT Token
 class Tokens: public QVector<Token>
 {
 public:
-  Tokens(): QVector<Token>(), m_valid(true) {};
+  Tokens(): QVector<Token>(), m_valid(true) {}
   bool valid() const { return m_valid; }
   void setValid( bool v ){ m_valid = v; }
 protected:

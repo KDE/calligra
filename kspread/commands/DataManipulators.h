@@ -57,7 +57,7 @@ class AbstractDataManipulator : public AbstractRegionCommand
       Q_UNUSED(col)
       Q_UNUSED(row)
       return true;
-    };
+    }
 
     /**
      * Starts the undo recording.
@@ -89,9 +89,9 @@ class AbstractDFManipulator : public AbstractDataManipulator
     virtual bool process (Element* element);
 
     /** returns whether this manipulator changes formats */
-    bool changeFormat () { return m_changeformat; };
+    bool changeFormat () { return m_changeformat; }
     /** set whether this manipulator changes formats */
-    void setChangeFormat (bool chf) { m_changeformat = chf; };
+    void setChangeFormat (bool chf) { m_changeformat = chf; }
   protected:
     /** this method should return new format for a given cell */
     virtual Style newFormat (Element *element, int col, int row) = 0;
@@ -155,7 +155,7 @@ class KSPREAD_EXPORT FillManipulator : public AbstractDFManipulator {
 
     enum Direction { Up = 0, Down, Left, Right };
 
-    void setDirection (Direction d) { m_dir = d; };
+    void setDirection (Direction d) { m_dir = d; }
   protected:
     virtual Value newValue (Element *element, int col, int row,
         bool *parse, Format::Type *fmtType);
@@ -174,7 +174,7 @@ class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator {
       Lower,
       FirstUpper
     };
-    void changeMode (CaseMode mode) { m_mode = mode; };
+    void changeMode (CaseMode mode) { m_mode = mode; }
     void changeLowerCase ();
     void changeFirstUpper ();
   protected:

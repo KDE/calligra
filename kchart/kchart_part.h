@@ -139,7 +139,7 @@ class WizardExt : public KoChart::WizardExtension
 {
 public:
     WizardExt( KoChart::Part *part )
-        : KoChart::WizardExtension( part ) {};
+        : KoChart::WizardExtension( part ) {}
 
     virtual bool show( QString &area ) {
         return static_cast<KChartPart *>( part() )->showWizard( area );

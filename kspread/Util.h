@@ -75,10 +75,10 @@ public:
   bool operator== (const Point &cell) const;
   bool operator< (const Point &cell) const;
 
-  int row () const { return _pos.y(); };
-  int column () const { return _pos.x(); };
-  void setRow (int r) { _pos.setY (r); };
-  void setColumn (int c) { _pos.setX (c); };
+  int row () const { return _pos.y(); }
+  int column () const { return _pos.x(); }
+  void setRow (int r) { _pos.setY (r); }
+  void setColumn (int c) { _pos.setX (c); }
 
   /**
   * Sets the sheet which this point lies on.
@@ -157,10 +157,10 @@ public:
   /** Fills a Point with info (row,column,sheet) about the last point the range */
   void getEndPoint(Point* pt);
 
-  int startRow () const { return range().top(); };
-  int startCol () const { return range().left(); };
-  int endRow () const { return range().bottom(); };
-  int endCol () const { return range().right(); };
+  int startRow () const { return range().top(); }
+  int startCol () const { return range().left(); }
+  int endRow () const { return range().bottom(); }
+  int endCol () const { return range().right(); }
 
   /**
   * Changes the area on the spreadsheet represented by this range

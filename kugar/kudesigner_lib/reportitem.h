@@ -68,7 +68,6 @@ public:
     virtual void drawHolders( QPainter &painter );
     virtual void fastProperty()
     { }
-    ;
     bool intersects( ReportItem *item );
     QString escape( QString string );
 

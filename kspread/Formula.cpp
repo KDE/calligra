@@ -89,9 +89,9 @@ public:
   unsigned type;
   unsigned index;
 
-  Opcode(): type(Nop), index(0) {};
-  Opcode( unsigned t ): type(t), index(0) {};
-  Opcode( unsigned t, unsigned i ): type(t), index(i) {};
+  Opcode(): type(Nop), index(0) {}
+  Opcode( unsigned t ): type(t), index(0) {}
+  Opcode( unsigned t, unsigned i ): type(t), index(i) {}
 };
 
 class Formula::Private : public QSharedData
@@ -1311,7 +1311,7 @@ bool Formula::isNamedArea( const QString& expr ) const
 // Evaluates the formula, returns the result.
 
 struct stackEntry {
-  void reset () { row1 = col1 = row2 = col2 = -1; };
+  void reset () { row1 = col1 = row2 = col2 = -1; }
   Value val;
   int row1, col1, row2, col2;
 };

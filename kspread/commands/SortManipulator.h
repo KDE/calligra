@@ -38,17 +38,17 @@ class KSPREAD_EXPORT SortManipulator : public AbstractDFManipulator {
     virtual bool process (Element* element);
 
     /** true if rows are to be sorted, false if columns are */
-    void setSortRows (bool v) { m_rows = v; };
+    void setSortRows (bool v) { m_rows = v; }
     /** skip first row/column, as it contains headers */
-    void setSkipFirst (bool v) { m_skipfirst = v; };
+    void setSkipFirst (bool v) { m_skipfirst = v; }
     /** case sensitive sorting */
-    void setCaseSensitive (bool v) { m_cs = v; };
+    void setCaseSensitive (bool v) { m_cs = v; }
     /** set whether cell formats should be moved with data */
-    void setCopyFormat (bool v) { setChangeFormat (v); };
+    void setCopyFormat (bool v) { setChangeFormat (v); }
     /** set whether we will use a custom list */
-    void setUseCustomList (bool v) { m_usecustomlist = v; };
+    void setUseCustomList (bool v) { m_usecustomlist = v; }
     /** set a custom list that will be used */
-    void setCustomList (QStringList l) { m_customlist = l; };
+    void setCustomList (QStringList l) { m_customlist = l; }
 
     /** Add new sort type. Indexed from 0. Sort types are used in order
     in which they're added. */

@@ -2523,20 +2523,20 @@ private:
         SourceMode mode() const
             {
                 return _mode;
-            };
+            }
         uint chart() const
             {
                 return _chart;
-            };
+            }
 
         void setMode( SourceMode mode )
             {
                 _mode = mode;
-            };
+            }
         void setChart( uint chart )
             {
                 _chart = chart;
-            };
+            }
     private:
         SourceMode _mode;
         uint _chart;
