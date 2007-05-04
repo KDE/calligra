@@ -19,6 +19,15 @@
 */
 
 /* vsmallpreview.cc */
+
+#include "vsmallpreview.h"
+#include "vcolor.h"
+#include "vgradient.h"
+#include "vqpainter.h"
+#include "vpattern.h"
+
+#include <klocale.h>
+
 #include <QColor>
 #include <qframe.h>
 #include <QLabel>
@@ -29,16 +38,6 @@
 #include <QPointF>
 #include <QRectF>
 
-#include <klocale.h>
-
-#include "vcolor.h"
-#include "vfill.h"
-#include "vgradient.h"
-#include "vqpainter.h"
-#include "vpattern.h"
-#include "vstroke.h"
-
-#include "vsmallpreview.h"
 
 #define FRAMEWIDTH		40
 

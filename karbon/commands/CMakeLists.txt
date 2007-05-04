@@ -8,7 +8,6 @@ set(karboncommands_SRCS
     vlayercmd.cc
     vreplacingcmd.cc 
     vshapecmd.cc 
-    vstrokecmd.cc 
     vtransformcmd.cc 
     vinsertcmd.cc
     KarbonBooleanCommand.cpp

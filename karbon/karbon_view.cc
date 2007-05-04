@@ -5,7 +5,7 @@
    Copyright (C) 2002-2003,2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2002-2006 Stephan Binner <binner@kde.org>
    Copyright (C) 2002,2005 David Faure <faure@kde.org>
-   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoï¿½t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002,2005-2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2003 Dirk Mueller <mueller@kde.org>
    Copyright (C) 2003,2006 Stephan Kulow <coolo@kde.org>
@@ -93,6 +93,8 @@
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
+#include <KoShapeBorderCommand.h>
+#include <KoShapeBackgroundCommand.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
 #include <KoPathShape.h>
@@ -106,7 +108,6 @@
 // Commands.
 #include "vclipartcmd.h"
 #include "vfillcmd.h"
-#include "vstrokecmd.h"
 #include "vtransformcmd.h"
 #include "vinsertcmd.h"
 
@@ -324,43 +325,60 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	reorganizeGUI();
 }
 
-void
-KarbonView::dropEvent( QDropEvent *e )
+void KarbonView::dropEvent( QDropEvent *e )
 {
-	debugView("KarbonView::dropEvent()");
+    debugView("KarbonView::dropEvent()");
 
-	//Accepts QColor - from Color Manager's KColorPatch
-	VColor realcolor;
-	VObjectList selection;
+    VObjectList selection;
 
-	QColor color = KColorMimeData::fromMimeData( e->mimeData() );
-	if ( color.isValid() )
-	{
-		float r = color.red() / 255.0;
-		float g = color.green() / 255.0;
-		float b = color.blue() / 255.0;
+    //Accepts QColor - from Color Manager's KColorPatch
+    QColor color = KColorMimeData::fromMimeData( e->mimeData() );
+    if ( color.isValid() )
+    {
+        KoSelection * selection = m_canvas->shapeManager()->selection();
+        if( ! selection )
+            return;
 
-		realcolor.set( r, g, b );
+        if( ! part() )
+            return;
 
-		if( part() )
-			if( m_stylePreview->strokeIsSelected() )
-				part()->addCommand( new VStrokeCmd( &part()->document(), realcolor ), true );
-			else
-				part()->addCommand( new VFillCmd( &part()->document(), realcolor ), true );
-	}
-	else if( KarbonDrag::decode( e->mimeData(), selection, m_part->document() ) )
-	{
-		VObject *clipart = selection.first();
-		QPointF p( e->pos() );
-		p = m_canvas->viewConverter()->viewToDocument( p ); // TODO: or documentToView ?
-		QMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
+        if( m_stylePreview->strokeIsSelected() )
+        {
+            QList<KoShapeBorderModel*> borders;
+            QList<KoShape*> selectedShapes = selection->selectedShapes();
+            foreach( KoShape * shape, selectedShapes )
+            {
+                KoLineBorder * border = dynamic_cast<KoLineBorder*>( shape->border() );
+                KoLineBorder * newBorder = 0;
+                if( border )
+                {
+                    newBorder = new KoLineBorder( *border );
+                    newBorder->setColor( color );
+                }
+                else
+                {
+                    newBorder = new KoLineBorder( 1.0, color );
+                }
+                borders.append( newBorder );
+            }
+            m_canvas->addCommand( new KoShapeBorderCommand( selectedShapes, borders, 0 ) );
+        }
+        else
+            m_canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ), 0 ) );
+    }
+    else if( KarbonDrag::decode( e->mimeData(), selection, m_part->document() ) )
+    {
+        VObject *clipart = selection.first();
+        QPointF p( e->pos() );
+        p = m_canvas->viewConverter()->viewToDocument( p ); // TODO: or documentToView ?
+        QMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
 
-		VTransformCmd trafo( 0L, mat );
-		trafo.visit( *clipart );
-		VClipartCmd* cmd = new VClipartCmd( &m_part->document(), i18n( "Insert Clipart" ), clipart );
+        VTransformCmd trafo( 0L, mat );
+        trafo.visit( *clipart );
+        VClipartCmd* cmd = new VClipartCmd( &m_part->document(), i18n( "Insert Clipart" ), clipart );
 
-		m_part->addCommand( cmd, true );
-	}
+        m_part->addCommand( cmd, true );
+    }
 }
 
 void

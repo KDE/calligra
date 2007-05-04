@@ -24,6 +24,9 @@
 #ifndef VSMALLPREVIEW_H
 #define VSMALLPREVIEW_H
 
+#include "vstroke.h"
+#include "vfill.h"
+
 #include <QWidget>
 //Added by qt3to4:
 #include <QPaintEvent>
@@ -32,8 +35,6 @@
 
 class QFrame;
 class QLabel;
-class VFill;
-class VStroke;
 
 class VSmallPreview : public QWidget
 {

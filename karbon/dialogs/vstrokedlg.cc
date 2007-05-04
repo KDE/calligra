@@ -37,7 +37,6 @@
 #include "karbon_part.h"
 #include "vcolor.h"
 #include "vselection.h"
-#include "vstrokecmd.h"
 #include "vstroke.h"
 #include "vstrokedlg.h"
 #include "vcolortab.h"
@@ -77,7 +76,6 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	connect( m_typeOption, SIGNAL( clicked( int ) ), this, SLOT( slotTypeChanged( int ) ) );
 
 	m_capOption = new Q3VButtonGroup ( mainWidget );
-	//button = new QRadioButton ( i18n( "Butt" ), m_capOption );	                                                          
 	button = new QRadioButton ( m_capOption );
 	button->setPixmap( DesktopIcon( "cap_butt" ) );
 	m_capOption->insert( button );
