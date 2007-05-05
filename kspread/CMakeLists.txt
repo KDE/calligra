@@ -132,6 +132,7 @@ SET (kspreadcommon_LIB_SRCS
 	Localization.cpp
 	Map.cpp
 	MapAdaptor.cpp
+	Number.cpp
 # 	Numformat.cpp
 # 	Object.cpp
 # 	PropertyEditor.cpp
