@@ -21,13 +21,12 @@
 #include <QHash>
 #include <QLinkedList>
 
-#include <KoRTree.h>
-
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Formula.h"
 #include "Map.h"
 #include "Region.h"
+#include "RTree.h"
 #include "Sheet.h"
 #include "Value.h"
 
@@ -119,9 +118,7 @@ public:
     // stores providing regions ordered by their consuming cell locations
     QHash<Cell, Region> providers;
     // stores consuming cell locations ordered by their providing regions
-    class CellTree : public KoRTree<Cell>
-    { public: CellTree() : KoRTree<Cell>(8,4) {} };
-    QHash<Sheet*, CellTree*> consumers; // FIXME Stefan: Why is a QHash<Sheet*, CellTree> crashing?
+    QHash<Sheet*, RTree<Cell>*> consumers;
     // list of cells referencing a given named area
     QHash<QString, QHash<Cell, bool> > areaDeps;
     /*
@@ -287,6 +284,20 @@ KSpread::Region DependencyManager::consumingRegion(const Cell& cell) const
     return d->consumingRegion(cell);
 }
 
+KSpread::Region DependencyManager::reduceToProvidingRegion(const Region& region) const
+{
+    Region providingRegion;
+    QList< QPair<QRectF, Cell> > pairs;
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
+    {
+        pairs = d->consumers.value((*it)->sheet())->intersectingPairs((*it)->rect());
+        for (int i = 0; i < pairs.count(); ++i)
+            providingRegion.add(pairs[i].first.toRect() & (*it)->rect(), (*it)->sheet());
+    }
+    return providingRegion;
+}
+
 void DependencyManager::regionMoved( const Region& movedRegion, const Cell& destination )
 {
     Region::Point locationOffset( destination.cellPosition() - movedRegion.boundingRect().topLeft() );
@@ -373,16 +384,13 @@ void DependencyManager::Private::reset()
 
 KSpread::Region DependencyManager::Private::consumingRegion(const Cell& cell) const
 {
-    Sheet* const sheet = cell.sheet();
-
-    if (!consumers.contains(sheet))
+    if (!consumers.contains(cell.sheet()))
     {
         kDebug(36002) << "No consumer tree found for the cell's sheet." << endl;
         return Region();
     }
 
-    const KoRTree<Cell>* tree = consumers.value(sheet);
-    const QList<Cell> providers = tree->contains(cell.cellPosition());
+    const QList<Cell> providers = consumers.value(cell.sheet())->contains(cell.cellPosition());
 
     Region region;
     foreach ( const Cell& cell, providers )
@@ -423,7 +431,7 @@ void DependencyManager::Private::addDependencies(const Cell& cell, const Region&
         Sheet* sheet = (*it)->sheet();
         QRectF range = QRectF((*it)->rect()).adjusted(0, 0, -0.1, -0.1);
 
-        if ( !consumers.contains( sheet ) ) consumers.insert( sheet, new CellTree() );
+        if ( !consumers.contains( sheet ) ) consumers.insert( sheet, new RTree<Cell>() );
         consumers[sheet]->insert( range, cell );
     }
 }
@@ -444,7 +452,7 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
 
         if (consumers.contains(sheet))
         {
-            consumers[sheet]->remove( cell );
+            consumers[sheet]->remove( range, cell );
         }
     }
 
@@ -491,17 +499,18 @@ void DependencyManager::Private::generateDepths(const Region& region)
     {
         const QRect range = (*it)->rect();
         const Sheet* sheet = (*it)->sheet();
-        const int right = range.right();
         const int bottom = range.bottom();
-        for (int col = range.left(); col <= right; ++col)
+        for (int row = range.top(); row <= bottom; ++row)
         {
-            for (int row = range.top(); row <= bottom; ++row)
+            int col = 0;
+            Formula formula = sheet->formulaStorage()->firstInRow( row, &col );
+            if ( col > 0 && col < range.left() )
+                formula = sheet->formulaStorage()->nextInRow( col, row, &col );
+            else if ( col > range.right() )
+                col = 0;
+            while ( col != 0 )
             {
                 Cell cell( sheet,col, row);
-
-                // skip non-formula cells
-                if ( !cell.isFormula() )
-                    continue;
 
                 //prevent infinite recursion (circular dependencies)
                 if ( processedCells.contains( cell ) || cell.value() == Value::errorCIRCLE() )
@@ -528,6 +537,8 @@ void DependencyManager::Private::generateDepths(const Region& region)
 
                 // clear the compute reference depth flag
                 processedCells.remove( cell );
+
+                formula = sheet->formulaStorage()->nextInRow( col, row, &col );
             }
         }
     }

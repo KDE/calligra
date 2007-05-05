@@ -472,6 +472,19 @@ QRect CellStorage::lockedCells( int column, int row ) const
 
 void CellStorage::insertColumns( int position, int number )
 {
+    // Trigger a dependency update of the cells, which have a formula. (old positions)
+    // FIXME Stefan: Would it be better to directly alter the dependency tree?
+    // TODO Stefan: Optimize: Avoid the double creation of the sub-storages, but don't process
+    //              formulas, that will get out of bounds after the operation.
+    const Region invalidRegion(Region(QRect(QPoint(position, 1), QPoint(KS_colMax, KS_rowMax))));
+    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
+    Cell cell;
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertColumns( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertColumns( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertColumns( position, number );
@@ -496,10 +509,30 @@ void CellStorage::insertColumns( int position, int number )
         d->undoData->validities << validities;
         d->undoData->values     << values;
     }
+
+    // Trigger a dependency update of the cells, which have a formula. (new positions)
+    subStorage = d->formulaStorage->subStorage(invalidRegion);
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+    // Trigger a recalculation for the changed region.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Value));
 }
 
 void CellStorage::removeColumns( int position, int number )
 {
+    // Trigger a dependency update of the cells, which have a formula. (old positions)
+    const Region invalidRegion(Region(QRect(QPoint(position, 1), QPoint(KS_colMax, KS_rowMax))));
+    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
+    Cell cell;
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeColumns( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeColumns( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeColumns( position, number );
@@ -524,10 +557,30 @@ void CellStorage::removeColumns( int position, int number )
         d->undoData->validities << validities;
         d->undoData->values     << values;
     }
+
+    // Trigger a dependency update of the cells, which have a formula. (new positions)
+    subStorage = d->formulaStorage->subStorage(invalidRegion);
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+    // Trigger a recalculation for the changed region.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Value));
 }
 
 void CellStorage::insertRows( int position, int number )
 {
+    // Trigger a dependency update of the cells, which have a formula. (old positions)
+    const Region invalidRegion(Region(QRect(QPoint(1, position), QPoint(KS_colMax, KS_rowMax))));
+    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
+    Cell cell;
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertRows( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertRows( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertRows( position, number );
@@ -552,10 +605,30 @@ void CellStorage::insertRows( int position, int number )
         d->undoData->validities << validities;
         d->undoData->values     << values;
     }
+
+    // Trigger a dependency update of the cells, which have a formula. (new positions)
+    subStorage = d->formulaStorage->subStorage(invalidRegion);
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+    // Trigger a recalculation for the changed region.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Value));
 }
 
 void CellStorage::removeRows( int position, int number )
 {
+    // Trigger a dependency update of the cells, which have a formula. (old positions)
+    const Region invalidRegion(Region(QRect(QPoint(1, position), QPoint(KS_colMax, KS_rowMax))));
+    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
+    Cell cell;
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeRows( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeRows( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeRows( position, number );
@@ -580,10 +653,30 @@ void CellStorage::removeRows( int position, int number )
         d->undoData->validities << validities;
         d->undoData->values     << values;
     }
+
+    // Trigger a dependency update of the cells, which have a formula. (new positions)
+    subStorage = d->formulaStorage->subStorage(invalidRegion);
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+    // Trigger a recalculation for the changed region.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Value));
 }
 
 void CellStorage::removeShiftLeft( const QRect& rect )
 {
+    // Trigger a dependency update of the cells, which have a formula. (old positions)
+    const Region invalidRegion(Region(QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()))));
+    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
+    Cell cell;
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeShiftLeft( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeShiftLeft( rect );
@@ -608,10 +701,30 @@ void CellStorage::removeShiftLeft( const QRect& rect )
         d->undoData->validities << validities;
         d->undoData->values     << values;
     }
+
+    // Trigger a dependency update of the cells, which have a formula. (new positions)
+    subStorage = d->formulaStorage->subStorage(invalidRegion);
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+    // Trigger a recalculation for the changed region.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Value));
 }
 
 void CellStorage::insertShiftRight( const QRect& rect )
 {
+    // Trigger a dependency update of the cells, which have a formula. (old positions)
+    const Region invalidRegion(Region(QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()))));
+    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
+    Cell cell;
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftRight( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertShiftRight( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertShiftRight( rect );
@@ -636,10 +749,30 @@ void CellStorage::insertShiftRight( const QRect& rect )
         d->undoData->validities << validities;
         d->undoData->values     << values;
     }
+
+    // Trigger a dependency update of the cells, which have a formula. (new positions)
+    subStorage = d->formulaStorage->subStorage(invalidRegion);
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+    // Trigger a recalculation for the changed region.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Value));
 }
 
 void CellStorage::removeShiftUp( const QRect& rect )
 {
+    // Trigger a dependency update of the cells, which have a formula. (old positions)
+    const Region invalidRegion(Region(QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax))));
+    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
+    Cell cell;
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftUp( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeShiftUp( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeShiftUp( rect );
@@ -664,10 +797,30 @@ void CellStorage::removeShiftUp( const QRect& rect )
         d->undoData->validities << validities;
         d->undoData->values     << values;
     }
+
+    // Trigger a dependency update of the cells, which have a formula. (new positions)
+    subStorage = d->formulaStorage->subStorage(invalidRegion);
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+    // Trigger a recalculation for the changed region.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Value));
 }
 
 void CellStorage::insertShiftDown( const QRect& rect )
 {
+    // Trigger a dependency update of the cells, which have a formula. (old positions)
+    const Region invalidRegion(Region(QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax))));
+    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
+    Cell cell;
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftDown( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertShiftDown( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertShiftDown( rect );
@@ -692,6 +845,16 @@ void CellStorage::insertShiftDown( const QRect& rect )
         d->undoData->validities << validities;
         d->undoData->values     << values;
     }
+
+    // Trigger a dependency update of the cells, which have a formula. (new positions)
+    subStorage = d->formulaStorage->subStorage(invalidRegion);
+    for (int i = 0; i < subStorage.count(); ++i)
+    {
+        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
+        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+    // Trigger a recalculation for the changed region.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Value));
 }
 
 Cell CellStorage::firstInColumn( int col ) const

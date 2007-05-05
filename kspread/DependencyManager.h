@@ -69,6 +69,12 @@ public:
     Region consumingRegion( const Cell& cell ) const;
 
     /**
+     * Returns the region, that is reduced to those parts of \p region, that provide values.
+     * \return region providing values for others
+     */
+    Region reduceToProvidingRegion( const Region& region ) const;
+
+    /**
      * Adjusts formulas after cut & paste operations or column/row insertions/deletions.
      *
      * \param movedRegion the region, that was moved

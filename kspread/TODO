@@ -79,8 +79,10 @@ Things not in bugzilla
   - Fix loading order of columns, rows and cells		      1 done
 
 * OpenFormula compliance (Medium group)
-    see koffice/kspread/functions/TODO				      1 ----
-    see [2]
+  - implement all functions of the Small and Medium group	      1 ----
+    see koffice/kspread/functions/TODO
+  - implement the calculation settings				      1 ----
+    see section 8.5.2 in [1] and section 3.3 in [2]
 
 * Flake integration.
   + Provide a table shape					      1 ----
@@ -272,7 +274,7 @@ Things not in bugzilla
       reference depth is useless. Therefore, we have to respect the
       automatic recalc setting.
     - Move Cell::calc() to RecalcManager.				done
-    - Emit an appropriate Damage after cell/col/row insertion/deletion.	----
+    - Emit an appropriate Damage after cell/col/row insertion/deletion.	done
 
   + Named areas							      1 ----
     - Update on cell/col/row insertion/deletion.			----
