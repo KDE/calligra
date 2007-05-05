@@ -51,7 +51,6 @@
 #include "CellStorage.h"
 #include "Canvas.h"
 #include "Condition.h"
-// #include "Damages.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
 #include "Global.h"
@@ -770,13 +769,6 @@ void Cell::valueChanged()
     //              Either use CellDamage::Value for this and find a better name
     //              for the change that triggers recalculation. Or vice versa.
     updateChart( true );
-
-#if 0
-    CellDamage::Changes changes = CellDamage::Appearance;
-    if ( triggerRecalc )
-        changes |= CellDamage::Value;
-    doc()->addDamage( new CellDamage( *this, changes ) );
-#endif
 }
 
 
@@ -797,15 +789,6 @@ bool Cell::makeFormula()
     // parse the formula and check for errors
     if ( !formula().isValid() )
     {
-#if 0
-        // Update the dependencies.
-        if ( !sheet()->isLoading() )
-        {
-            kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
-            doc()->addDamage( new CellDamage( *this, CellDamage::Formula ) );
-        }
-#endif
-
         if (doc()->showMessageError())
         {
             QString tmp(i18n("Error in cell %1\n\n"));
@@ -815,12 +798,6 @@ bool Cell::makeFormula()
         setValue( Value::errorPARSE() );
         return false;
     }
-
-#if 0
-    // Update the dependencies and recalculate.
-    doc()->addDamage( new CellDamage( *this, CellDamage::Formula | CellDamage::Value ) );
-#endif
-
     return true;
 }
 
@@ -946,15 +923,6 @@ void Cell::setCellText( const QString& text )
 {
 //   kDebug() << k_funcinfo << endl;
 
-#if 0
-    // Enqueues a dependency update, if the old value is a formula.
-    if ( isFormula() && !sheet()->isLoading() )
-    {
-        kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
-        doc()->addDamage( new CellDamage( *this, CellDamage::Formula ) );
-    }
-#endif
-
     // empty string?
     if ( text.isEmpty() )
     {
@@ -982,12 +950,6 @@ void Cell::setCellText( const QString& text )
             setValue( Value::errorPARSE() );
             return;
         }
-
-#if 0
-        // Update the dependencies and recalculate.
-        doc()->addDamage( new CellDamage( *this, CellDamage::Formula | CellDamage::Value ) );
-#endif
-
         return;
     }
 
@@ -1778,12 +1740,6 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     KoXmlElement frame = KoDom::namedItemNS( element, KoXmlNS::draw, "frame" );
     if ( !frame.isNull() )
       loadOasisObjects( frame, oasisContext );
-
-#if 0
-    if (isFormula)   // formulas must be recalculated
-      doc()->addDamage( new CellDamage( *this, CellDamage::Formula |
-                                                                 CellDamage::Value ) );
-#endif
 
     return true;
 }
