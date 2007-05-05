@@ -76,17 +76,17 @@ void KWPageSettingsDialog::accept() {
 
     m_document->setStartPage(m_pageLayoutWidget->startPageNumber());
 
-    QDialog::accept();
+    KDialog::accept();
     deleteLater();
 }
 
 void KWPageSettingsDialog::reject() {
-    QDialog::reject();
+    KDialog::reject();
     deleteLater();
 }
 
 void KWPageSettingsDialog::showEvent (QShowEvent *e) {
-    QDialog::showEvent(e);
+    KDialog::showEvent(e);
     if(m_visited) return;
     m_visited = true;
     QTimer::singleShot(0, this, SLOT(visit()));
