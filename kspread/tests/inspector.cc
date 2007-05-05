@@ -32,7 +32,7 @@
 // KSpread
 #include "Cell.h"
 #include "DependencyManager.h"
-#include "Map.h"
+#include "Doc.h"
 #include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -155,7 +155,7 @@ void Inspector::Private::handleSheet()
 
 void Inspector::Private::handleDep()
 {
-  DependencyManager* manager = sheet->map()->dependencyManager();
+  DependencyManager* manager = sheet->doc()->dependencyManager();
   Region deps = manager->consumingRegion( cell );
 
   depView->clear();

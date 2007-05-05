@@ -24,6 +24,7 @@
 #include "Cell.h"
 #include "CellStorage.h"
 #include "DependencyManager.h"
+#include "Doc.h"
 #include "Formula.h"
 #include "Map.h"
 #include "Sheet.h"
@@ -86,12 +87,12 @@ void RecalcManager::Private::cellsToCalculate( const Region& region )
         return;
 
     // retrieve the cell depths
-    QHash<Cell, int> depths = map->dependencyManager()->depths();
+    QHash<Cell, int> depths = map->doc()->dependencyManager()->depths();
 
     // create the cell map ordered by depth
     QSet<Cell> cells;
     // only the providing regions are of interest
-    cellsToCalculate(map->dependencyManager()->reduceToProvidingRegion(region), cells);
+    cellsToCalculate(map->doc()->dependencyManager()->reduceToProvidingRegion(region), cells);
     const QSet<Cell>::ConstIterator end( cells.end() );
     for ( QSet<Cell>::ConstIterator it( cells.begin() ); it != end; ++it )
         this->cells.insertMulti( depths[*it], *it );
@@ -100,7 +101,7 @@ void RecalcManager::Private::cellsToCalculate( const Region& region )
 void RecalcManager::Private::cellsToCalculate( Sheet* sheet )
 {
     // retrieve the cell depths
-    QHash<Cell, int> depths = map->dependencyManager()->depths();
+    QHash<Cell, int> depths = map->doc()->dependencyManager()->depths();
 
     // NOTE Stefan: It's necessary, that the cells are filled in row-wise;
     //              beginning with the top left; ending with the bottom right.
@@ -155,7 +156,7 @@ void RecalcManager::Private::cellsToCalculate( const Region& region, QSet<Cell>&
                     cells.insert( cell );
 
                 // add its consumers to the list
-                cellsToCalculate( map->dependencyManager()->consumingRegion( cell ), cells );
+                cellsToCalculate( map->doc()->dependencyManager()->consumingRegion( cell ), cells );
             }
         }
     }

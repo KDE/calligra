@@ -811,7 +811,7 @@ void Sheet::recalc( bool force )
         return;
 
   // Recalculate cells
-  d->workbook->recalcManager()->recalcSheet(this);
+  doc()->recalcManager()->recalcSheet(this);
 
   //  emitEndOperation();
   emit sig_updateView( this );
@@ -819,7 +819,7 @@ void Sheet::recalc( bool force )
 
 void Sheet::slotAreaModified (const QString &name)
 {
-  d->workbook->dependencyManager()->areaModified (name);
+  doc()->dependencyManager()->areaModified (name);
 }
 
 void Sheet::refreshRemoveAreaName(const QString & _areaName)
@@ -1762,7 +1762,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
     if ( cutRegion.isValid() )
     {
       Cell destination( this, pasteArea.topLeft() );
-      map()->dependencyManager()->regionMoved( cutRegion, destination );
+      this->doc()->dependencyManager()->regionMoved( cutRegion, destination );
     }
   }
 

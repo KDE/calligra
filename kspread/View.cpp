@@ -2160,7 +2160,7 @@ void View::initCalcMenu()
 
 void View::recalcWorkBook()
 {
-    doc()->map()->recalcManager()->recalcMap();
+    doc()->recalcManager()->recalcMap();
 }
 
 void View::refreshLocale()
@@ -2175,7 +2175,7 @@ void View::recalcWorkSheet()
 {
     if ( !activeSheet() )
         return;
-    doc()->map()->recalcManager()->recalcSheet( activeSheet() );
+    doc()->recalcManager()->recalcSheet( activeSheet() );
 }
 
 

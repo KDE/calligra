@@ -62,6 +62,7 @@ namespace KSpread
 {
 class ColumnFormat;
 class Damage;
+class DependencyManager;
 class ValueParser;
 class ValueConverter;
 class ValueFormatter;
@@ -70,6 +71,7 @@ class Sheet;
 class Doc;
 class View;
 class Map;
+class RecalcManager;
 class Region;
 class RowFormat;
 class StyleManager;
@@ -165,6 +167,16 @@ public:
    * @return the Map that belongs to this Document
    */
   Map *map () const;
+
+  /**
+   * \return a pointer to the dependency manager
+   */
+  DependencyManager* dependencyManager() const;
+
+  /**
+   * \return a pointer to the recalculation manager
+   */
+  RecalcManager* recalcManager() const;
 
   /**
    * @return the StyleManager of this Document

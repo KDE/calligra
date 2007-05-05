@@ -33,11 +33,9 @@
 #include <KoXmlWriter.h>
 
 #include "Canvas.h"
-#include "DependencyManager.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
 #include "Localization.h"
-#include "RecalcManager.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "StyleManager.h"
@@ -54,8 +52,6 @@ class Map::Private
 {
 public:
   Doc* doc;
-  DependencyManager* dependencyManager;
-  RecalcManager* recalcManager;
 
   /**
    * List of all sheets in this map.
@@ -92,8 +88,6 @@ Map::Map ( Doc* doc, const char* name)
 {
   setObjectName( name ); // necessary for D-Bus
   d->doc = doc;
-  d->dependencyManager = new DependencyManager( this );
-  d->recalcManager = new RecalcManager( this );
   d->initialActiveSheet = 0;
   d->initialMarkerColumn = 0;
   d->initialMarkerRow = 0;
@@ -110,24 +104,12 @@ Map::~Map()
 {
   qDeleteAll( d->lstSheets );
   qDeleteAll( d->lstDeletedSheets );
-  delete d->dependencyManager;
-  delete d->recalcManager;
   delete d;
 }
 
 Doc* Map::doc() const
 {
   return d->doc;
-}
-
-DependencyManager* Map::dependencyManager() const
-{
-  return d->dependencyManager;
-}
-
-RecalcManager* Map::recalcManager() const
-{
-  return d->recalcManager;
 }
 
 void Map::setProtected( QByteArray const & passwd )

@@ -107,6 +107,8 @@ public:
 
   Map *map;
   KLocale *locale;
+  DependencyManager* dependencyManager;
+  RecalcManager* recalcManager;
   StyleManager *styleManager;
   ValueParser *parser;
   ValueFormatter *formatter;
@@ -201,6 +203,8 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   d->map = new Map( this, "Map" );
   d->locale = new Localization;
+  d->dependencyManager = new DependencyManager( d->map );
+  d->recalcManager = new RecalcManager( d->map );
   d->styleManager = new StyleManager();
 
   d->parser = new ValueParser( this );
@@ -275,6 +279,8 @@ Doc::~Doc()
 
   delete d->locale;
   delete d->map;
+  delete d->dependencyManager;
+  delete d->recalcManager;
   delete d->styleManager;
   delete d->parser;
   delete d->formatter;
@@ -321,6 +327,16 @@ KLocale *Doc::locale () const
 Map *Doc::map () const
 {
   return d->map;
+}
+
+DependencyManager* Doc::dependencyManager() const
+{
+    return d->dependencyManager;
+}
+
+RecalcManager* Doc::recalcManager() const
+{
+    return d->recalcManager;
 }
 
 StyleManager *Doc::styleManager () const
@@ -2234,14 +2250,14 @@ void Doc::handleDamages( const QList<Damage*>& damages )
 
     // First, update the dependencies.
     if ( !formulaChangedRegion.isEmpty() )
-        map()->dependencyManager()->regionChanged( formulaChangedRegion );
+        dependencyManager()->regionChanged( formulaChangedRegion );
     // Tell the RecalcManager which cells have had a value change.
     if ( !valueChangedRegion.isEmpty() )
-        map()->recalcManager()->regionChanged( valueChangedRegion );
+        recalcManager()->regionChanged( valueChangedRegion );
     if ( workbookChanges.testFlag( WorkbookDamage::Formula ) )
-        map()->dependencyManager()->updateAllDependencies( map() );
+        dependencyManager()->updateAllDependencies( map() );
     if ( workbookChanges.testFlag( WorkbookDamage::Value ) )
-        map()->recalcManager()->recalcMap();
+        recalcManager()->recalcMap();
 }
 
 void Doc::loadConfigFromFile()

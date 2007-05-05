@@ -317,7 +317,7 @@ void CellStorage::setValue( int column, int row, const Value& value )
         CellDamage::Changes changes = CellDamage::Appearance;
         // Trigger a recalculation of the consuming cells, only if we are not
         // already in a recalculation process.
-        if ( !d->sheet->map()->recalcManager()->isActive() )
+        if ( !d->sheet->doc()->recalcManager()->isActive() )
             changes |= CellDamage::Value;
         d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), changes ) );
         // recording undo?

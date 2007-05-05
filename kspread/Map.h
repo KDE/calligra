@@ -41,11 +41,9 @@ class KoOasisSettings;
 namespace KSpread
 {
 class Changes;
-class DependencyManager;
 class Doc;
 class GenValidationStyles;
 class MapAdaptor;
-class RecalcManager;
 class Sheet;
 class Style;
 
@@ -71,16 +69,6 @@ public:
    * \return the document this map belongs to
    */
   Doc* doc() const;
-
-  /**
-   * \return a pointer to the dependency manager
-   */
-  DependencyManager* dependencyManager() const;
-
-  /**
-   * \return a pointer to the recalculation manager
-   */
-  RecalcManager* recalcManager() const;
 
   /**
    * \ingroup OpenDocument
