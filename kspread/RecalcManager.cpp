@@ -91,8 +91,7 @@ void RecalcManager::Private::cellsToCalculate( const Region& region )
 
     // create the cell map ordered by depth
     QSet<Cell> cells;
-    // only the providing regions are of interest
-    cellsToCalculate(map->doc()->dependencyManager()->reduceToProvidingRegion(region), cells);
+    cellsToCalculate(region, cells);
     const QSet<Cell>::ConstIterator end( cells.end() );
     for ( QSet<Cell>::ConstIterator it( cells.begin() ); it != end; ++it )
         this->cells.insertMulti( depths[*it], *it );
