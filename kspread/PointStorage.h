@@ -594,7 +594,7 @@ public:
     {
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // row's empty?
-        if ( m_rows.value( row - 1 ) == m_rows.value( row ) )
+        if ( (row < m_rows.count()) && m_rows.value( row - 1 ) == m_rows.value( row ) )
         {
             if ( newCol )
                 *newCol = 0;

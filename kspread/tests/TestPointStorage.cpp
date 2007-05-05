@@ -732,6 +732,19 @@ void PointStorageTest::testFirstInRow()
     QCOMPARE( newCol,  0 );
     QCOMPARE( storage.firstInRow( 5, &newCol ), 11 );
     QCOMPARE( newCol,  1 );
+
+
+    storage.clear();
+    storage.m_data << 1;
+    storage.m_rows << 0 << 0;
+    storage.m_cols << 1;
+    // (  )
+    // ( 1)
+
+    QCOMPARE( storage.firstInRow( 1, &newCol ),  0 );
+    QCOMPARE( newCol,  0 );
+    QCOMPARE( storage.firstInRow( 2, &newCol ),  1 );
+    QCOMPARE( newCol,  1 );
 }
 
 void PointStorageTest::testLastInColumn()
