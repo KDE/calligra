@@ -66,7 +66,7 @@ public:
 
 const std::string AbiwordThroughAnalyzerFactory::authorFieldName( "content.author" );
 const std::string AbiwordThroughAnalyzerFactory::titleFieldName( "content.title" );
-const std::string AbiwordThroughAnalyzerFactory::abstractFieldName( "abstract" );
+const std::string AbiwordThroughAnalyzerFactory::abstractFieldName( "content.description" );
 
 void AbiwordThroughAnalyzerFactory::registerFields( FieldRegister& reg ) {
     authorField = reg.registerField( authorFieldName, FieldRegister::stringType, 1, 0 );

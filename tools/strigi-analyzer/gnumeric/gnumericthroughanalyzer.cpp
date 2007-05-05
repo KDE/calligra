@@ -64,7 +64,7 @@ public:
 
 const std::string GnumericThroughAnalyzerFactory::authorFieldName( "content.author" );
 const std::string GnumericThroughAnalyzerFactory::titleFieldName( "content.title" );
-const std::string GnumericThroughAnalyzerFactory::abstractFieldName( "abstract" );
+const std::string GnumericThroughAnalyzerFactory::abstractFieldName( "content.description" );
 
 void GnumericThroughAnalyzerFactory::registerFields( FieldRegister& reg ) {
     authorField = reg.registerField( authorFieldName, FieldRegister::stringType, 1, 0 );

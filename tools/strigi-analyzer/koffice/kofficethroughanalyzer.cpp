@@ -69,7 +69,7 @@ public:
 const std::string KOfficeThroughAnalyzerFactory::authorFieldName( "content.author" );
 const std::string KOfficeThroughAnalyzerFactory::titleFieldName( "content.title" );
 const std::string KOfficeThroughAnalyzerFactory::keywordsFieldName( "content.keyword" );
-const std::string KOfficeThroughAnalyzerFactory::abstractFieldName( "abstract" );
+const std::string KOfficeThroughAnalyzerFactory::abstractFieldName( "content.description" );
 const std::string KOfficeThroughAnalyzerFactory::editingCyclesFieldName( "editing cycles" );
 
 void KOfficeThroughAnalyzerFactory::registerFields( FieldRegister& reg ) {
