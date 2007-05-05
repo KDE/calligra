@@ -90,7 +90,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         if ( localName.isEmpty() )
             d->document->setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
         else
-            d->document->setErrorMessage( i18n( "This is not a word processing document, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+            d->document->setErrorMessage( i18n( "This is not a word processing document, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType( localName ) ) );
         return false;
     }
 
@@ -355,7 +355,7 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(const QString& masterPageName, Ko
         if ( properties.hasAttributeNS( "http://www.w3.org/1999/XSL/Format", "page-width" ) )
             setErrorMessage( i18n( "Invalid document. 'fo' has the wrong namespace. The application which produced this document is not OASIS-compliant." ) );
         else
-            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
+            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2", m_pageLayout.ptWidth, m_pageLayout.ptHeight ) );
         return false;
     }
 #endif
