@@ -291,10 +291,14 @@ KSpread::Region DependencyManager::reduceToProvidingRegion(const Region& region)
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
     {
+        if (!d->consumers.contains((*it)->sheet()))
+            continue;
         pairs = d->consumers.value((*it)->sheet())->intersectingPairs((*it)->rect());
         for (int i = 0; i < pairs.count(); ++i)
-            providingRegion.add(pairs[i].first.toRect() & (*it)->rect(), (*it)->sheet());
+            providingRegion.add(pairs[i].first.toRect()/* & (*it)->rect()*/, (*it)->sheet());
     }
+    if (providingRegion.isEmpty())
+        return region;
     return providingRegion;
 }
 
