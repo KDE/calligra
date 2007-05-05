@@ -23,7 +23,8 @@
 #include <KoListStyle.h>
 #include <KoParagraphStyle.h>
 
-#include <kdebug.h>
+#include <KDebug>
+#include <KLocale>
 #include <QTextList>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
@@ -152,6 +153,39 @@ http://en.wikipedia.org/wiki/Japanese_numerals
         default:
             return QString::number(n);
     }
+}
+
+QList<ListStyleItem> Lists::genericListStyleItems() {
+    QList<ListStyleItem> answer;
+    answer.append( ListStyleItem( i18n( "None" ), KoListStyle::NoItem) );
+    answer.append( ListStyleItem( i18n( "Arabic" ), KoListStyle::DecimalItem) );
+    answer.append( ListStyleItem( i18n( "Lower Alphabetical" ), KoListStyle::AlphaLowerItem) );
+    answer.append( ListStyleItem( i18n( "Upper Alphabetical" ), KoListStyle::UpperAlphaItem) );
+    answer.append( ListStyleItem( i18n( "Lower Roman" ), KoListStyle::RomanLowerItem) );
+    answer.append( ListStyleItem( i18n( "Upper Roman" ), KoListStyle::UpperRomanItem) );
+    answer.append( ListStyleItem( i18n( "Disc Bullet" ), KoListStyle::DiscItem) );
+    answer.append( ListStyleItem( i18n( "Square Bullet" ), KoListStyle::SquareItem) );
+    answer.append( ListStyleItem( i18n( "Box Bullet" ), KoListStyle::BoxItem) );
+    answer.append( ListStyleItem( i18n( "Circle Bullet" ), KoListStyle::CircleItem) );
+    return answer;
+}
+
+QList<ListStyleItem> Lists::otherlistStyleItems() {
+    QList<ListStyleItem> answer;
+    answer.append( ListStyleItem( i18n("Bengali"), KoListStyle::Bengali) );
+    answer.append( ListStyleItem( i18n("Gujarati"), KoListStyle::Gujarati) );
+    answer.append( ListStyleItem( i18n("Gurumukhi"), KoListStyle::Gurumukhi) );
+    answer.append( ListStyleItem( i18n("Kannada"), KoListStyle::Kannada) );
+    answer.append( ListStyleItem( i18n("Malayalam"), KoListStyle::Malayalam) );
+    answer.append( ListStyleItem( i18n("Oriya"), KoListStyle::Oriya) );
+    answer.append( ListStyleItem( i18n("Tamil"), KoListStyle::Tamil) );
+    answer.append( ListStyleItem( i18n("Telugu"), KoListStyle::Telugu) );
+    answer.append( ListStyleItem( i18n("Tibetan"), KoListStyle::Tibetan) );
+    answer.append( ListStyleItem( i18n("Thai"), KoListStyle::Thai) );
+    answer.append( ListStyleItem( i18n("Abjad"), KoListStyle::Abjad) );
+    answer.append( ListStyleItem( i18n("AbjadMinor"), KoListStyle::AbjadMinor) );
+    answer.append( ListStyleItem( i18n("ArabicAlphabet"), KoListStyle::ArabicAlphabet) );
+    return answer;
 }
 
 // ------------------- ListItemsHelper ------------

@@ -31,31 +31,11 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
 {
     widget.setupUi(this);
 
-    addStyle(i18n( "None" ), KoListStyle::NoItem);
-    addStyle(i18n( "Arabic" ), KoListStyle::DecimalItem);
-    addStyle(i18n( "Lower Alphabetical" ), KoListStyle::AlphaLowerItem);
-    addStyle(i18n( "Upper Alphabetical" ), KoListStyle::UpperAlphaItem);
-    addStyle(i18n( "Lower Roman" ), KoListStyle::RomanLowerItem);
-    addStyle(i18n( "Upper Roman" ), KoListStyle::UpperRomanItem);
-    addStyle(i18n( "Disc Bullet" ), KoListStyle::DiscItem);
-    addStyle(i18n( "Square Bullet" ), KoListStyle::SquareItem);
-    addStyle(i18n( "Box Bullet" ), KoListStyle::BoxItem);
-    addStyle(i18n( "Circle Bullet" ), KoListStyle::CircleItem);
-    addStyle(i18n( "Custom Bullet" ), KoListStyle::CustomCharItem);
-
-    addStyle(i18n("Bengali"), KoListStyle::Bengali);
-    addStyle(i18n("Gujarati"), KoListStyle::Gujarati);
-    addStyle(i18n("Gurumukhi"), KoListStyle::Gurumukhi);
-    addStyle(i18n("Kannada"), KoListStyle::Kannada);
-    addStyle(i18n("Malayalam"), KoListStyle::Malayalam);
-    addStyle(i18n("Oriya"), KoListStyle::Oriya);
-    addStyle(i18n("Tamil"), KoListStyle::Tamil);
-    addStyle(i18n("Telugu"), KoListStyle::Telugu);
-    addStyle(i18n("Tibetan"), KoListStyle::Tibetan);
-    addStyle(i18n("Thai"), KoListStyle::Thai);
-    addStyle(i18n("Abjad"), KoListStyle::Abjad);
-    addStyle(i18n("AbjadMinor"), KoListStyle::AbjadMinor);
-    addStyle(i18n("ArabicAlphabet"), KoListStyle::ArabicAlphabet);
+    foreach(Lists::ListStyleItem item, Lists::genericListStyleItems())
+        addStyle(item);
+    addStyle( Lists::ListStyleItem( i18n( "Custom Bullet" ), KoListStyle::CustomCharItem) );
+    foreach(Lists::ListStyleItem item, Lists::otherlistStyleItems())
+        addStyle(item);
 
     widget.alignment->addItem(i18nc("Automatic horizontal alignment", "Auto"));
     widget.alignment->addItem(i18n("Left"));
@@ -66,9 +46,9 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     connect(widget.customCharacter, SIGNAL(clicked(bool)), this, SLOT(customCharButtonPressed()));
 }
 
-void ParagraphBulletsNumbers::addStyle(const QString &text, KoListStyle::Style style) {
-    m_mapping.insert(widget.listTypes->count(), style);
-    widget.listTypes->addItem(text);
+void ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi) {
+    m_mapping.insert(widget.listTypes->count(), lsi.style);
+    widget.listTypes->addItem(lsi.name);
 }
 
 void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {

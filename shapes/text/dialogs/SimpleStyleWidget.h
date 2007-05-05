@@ -19,19 +19,33 @@
 #ifndef SIMPLESTYLEWIDGET_H
 #define SIMPLESTYLEWIDGET_H
 
-#include <QWidget>
-
 #include <ui_SimpleStyleWidget.h>
 
+#include <QWidget>
+#include <QTextBlock>
+
 class TextTool;
+class KoStyleManager;
 
 class SimpleStyleWidget : public QWidget {
     Q_OBJECT
 public:
     explicit SimpleStyleWidget(TextTool *tool, QWidget *parent = 0);
 
+public slots:
+    void setCurrentBlock(const QTextBlock &block);
+    void setStyleManager(KoStyleManager *sm);
+
+private slots:
+    void listStyleChanged(int row);
+
 private:
+    void fillListsCombobox();
+
     Ui::SimpleStyleWidget widget;
+    KoStyleManager *m_styleManager;
+    bool m_blockSignals;
+    QTextBlock m_currentBlock;
 };
 
 #endif

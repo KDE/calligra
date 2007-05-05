@@ -21,6 +21,7 @@
 #define PARAGRAPHBULLETSNUMBERS_H
 
 #include "ui_ParagraphBulletsNumbers.h"
+#include "../ListItemsHelper.h"
 
 #include <KoListStyle.h>
 
@@ -37,7 +38,7 @@ public:
 
     void save();
 
-    void addStyle(const QString &text, KoListStyle::Style style);
+    void addStyle(const Lists::ListStyleItem &lsi);
 
 private slots:
     void styleChanged(int);

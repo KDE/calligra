@@ -32,6 +32,7 @@
 #include <KoTextEditingPlugin.h>
 #include <KoTextEditingRegistry.h>
 #include <KoTextEditingFactory.h>
+#include <KoListStyle.h>
 #include <KoXmlWriter.h>
 
 #include <kdebug.h>
@@ -569,15 +570,16 @@ void TextTool::updateActions() {
 
     emit charFormatChanged(cf);
     emit blockFormatChanged(bf);
+    emit blockChanged(m_caret.block());
 }
 
 void TextTool::updateStyleManager() {
     Q_ASSERT(m_textShapeData);
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
     if(lay)
-        emit(styleManagerChanged(lay->styleManager()));
+        emit styleManagerChanged(lay->styleManager());
     else {
-        emit(styleManagerChanged(0));
+        emit styleManagerChanged(0);
         kWarning(32500) << "Shape does not have a KoTextDocumentLayout\n";
     }
 }
@@ -686,12 +688,15 @@ KoToolSelection* TextTool::selection() {
 
 QWidget *TextTool::createOptionWidget() {
     QTabWidget *widget = new QTabWidget();
-    widget->addTab(new SimpleStyleWidget(this, widget), i18n("Style"));
+    SimpleStyleWidget *ssw = new SimpleStyleWidget(this, widget);
+    widget->addTab(ssw, i18n("Style"));
     StylesWidget *paragTab = new StylesWidget(StylesWidget::ParagraphStyle, widget);
     widget->addTab(paragTab, i18n("Paragraph"));
     StylesWidget *charTab =new StylesWidget(StylesWidget::CharacterStyle, widget);
     widget->addTab(charTab, i18n("Character"));
 
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(blockChanged(const QTextBlock&)), ssw, SLOT(setCurrentBlock(const QTextBlock&)));
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), paragTab, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), charTab, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)),

@@ -78,6 +78,8 @@ signals:
     void charFormatChanged(const QTextCharFormat &format);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
     void blockFormatChanged(const QTextBlockFormat &format);
+    /// emitted every time a caret move leads to a different paragraph format being under the caret
+    void blockChanged(const QTextBlock &block);
 
 private slots:
     /// insert a non breaking space at the caret position
