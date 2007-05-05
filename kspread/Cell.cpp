@@ -491,25 +491,6 @@ void Cell::copyContent( const Cell& cell )
     sheet()->cellStorage()->setValue( d->column, d->row, cell.value() );
 }
 
-
-void Cell::move( int col, int row )
-{
-#if 0
-    // For the old position (the new is handled in valueChanged() at the end):
-    doc()->addDamage( new CellDamage( *this, CellDamage::Appearance | CellDamage::Value ) );
-#endif
-
-    // Unmerge cells
-    mergeCells( d->column, d->row, 0, 0 );
-
-    // move us
-    d->column = col;
-    d->row    = row;
-
-    // Cell value has been changed (because we're another cell now).
-    valueChanged ();
-}
-
 bool Cell::needsPrinting() const
 {
     if ( isDefault() )

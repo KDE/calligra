@@ -303,12 +303,6 @@ public:
     void setCellText( const QString& text );
 
     /**
-     * Moves around the cell. It cares about obscured and obscuring cells and
-     * forces, relayout, calculation and redrawing of the cell.
-     */
-    void move( int column, int row );
-
-    /**
      * \ingroup NativeFormat
      */
     bool load( const KoXmlElement& cell,
