@@ -16,54 +16,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Bar.h"
-#include "VoiceBar.h"
-#include <QtCore/QHash>
+#ifndef MUSIC_ENGRAVER_H
+#define MUSIC_ENGRAVER_H
 
 namespace MusicCore {
+    class Bar;
+    class Sheet;
+}
 
-class Bar::Private
-{
-public:
-    Sheet* sheet;
-    QHash<Voice*, VoiceBar*> voices;
-    double size;
+/**
+ * This class is responsible for layint out notes and other musical elements inside a bar, and for laying out bars
+ * withing staff systems.
+ */
+class Engraver {
+    public:
+        Engraver();
+        void engraveSheet(MusicCore::Sheet* sheet, bool engraveBars = true);
+        void engraveBar(MusicCore::Bar* bar);
 };
 
-Bar::Bar(Sheet* sheet) : d(new Private)
-{
-    d->sheet = sheet;
-    d->size = 100;
-}
-
-Bar::~Bar()
-{
-    delete d;
-}
-
-Sheet* Bar::sheet()
-{
-    return d->sheet;
-}
-
-VoiceBar* Bar::voice(Voice* voice)
-{
-    VoiceBar* vb = d->voices.value(voice);
-    if (!vb) {
-        vb = new VoiceBar();
-        d->voices.insert(voice, vb);
-    }
-    return vb;
-}
-
-double Bar::size() const
-{
-    return d->size;
-}
-
-void Bar::setSize(double size)
-{
-    d->size = size;
-}
-
-} // namespace MusicCore
+#endif // MUSIC_ENGRAVER_H

@@ -27,6 +27,7 @@ namespace MusicCore {
     class Sheet;
 }
 class MusicStyle;
+class Engraver;
 
 class MusicShape : public KoShape
 {
@@ -46,6 +47,7 @@ public:
 private:
     MusicCore::Sheet* m_sheet;
     MusicStyle* m_style;
+    Engraver* m_engraver;
 };
 
 

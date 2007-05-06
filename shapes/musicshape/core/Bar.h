@@ -61,6 +61,18 @@ public:
      * @param voice the voice for which to return the VoiceBar
      */
     VoiceBar* voice(Voice* voice);
+
+    /**
+     * Returns the size of the bar.
+     */
+    double size() const;
+
+    /**
+     * Sets the size of the bar.
+     *
+     * @param size the new size of the bar
+     */
+    void setSize(double size);
 private:
     class Private;
     Private * const d;

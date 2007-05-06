@@ -29,10 +29,16 @@ public:
     QList<Note*> notes;
 };
 
-Chord::Chord(Duration duration, int dots) : d(new Private)
+Chord::Chord(Duration duration, int dots) : MusicElement(), d(new Private)
 {
     d->duration = duration;
     d->dots = dots;
+
+    int baseLength = durationToTicks(duration);
+    for (int i = 0; i < dots; i++) {
+        baseLength += baseLength >> 1;
+    }
+    setLength(baseLength);
 }
 
 Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
@@ -98,6 +104,22 @@ void Chord::removeNote(int index, bool deleteNote)
     if (deleteNote) {
         delete n;
     }
+}
+
+int Chord::durationToTicks(Duration duration)
+{
+    switch (duration) {
+        case HundredTwentyEighth: return Note128Length;
+        case SixtyFourth:         return Note64Length;
+        case ThirtySecond:        return Note32Length;
+        case Sixteenth:           return Note16Length;
+        case Eighth:              return Note8Length;
+        case Quarter:             return QuarterLength;
+        case Half:                return HalfLength;
+        case Whole:               return WholeLength;
+        case Breve:               return DoubleWholeLength;
+    }
+    return 0;
 }
 
 } // namespace MusicCore

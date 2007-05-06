@@ -24,11 +24,17 @@ class MusicElement::Private
 {
 public:
     Staff* staff;
+    int length;
+    double x;
+    double y;
 };
 
-MusicElement::MusicElement() : d(new Private)
+MusicElement::MusicElement(int length) : d(new Private)
 {
     d->staff = 0;
+    d->length = length;
+    d->x = 0;
+    d->y = 0;
 }
 
 MusicElement::~MusicElement()
@@ -44,6 +50,36 @@ Staff* MusicElement::staff()
 void MusicElement::setStaff(Staff* staff)
 {
     d->staff = staff;
+}
+
+double MusicElement::x() const
+{
+    return d->x;
+}
+
+void MusicElement::setX(double x)
+{
+    d->x = x;
+}
+
+double MusicElement::y() const
+{
+    return d->y;
+}
+
+void MusicElement::setY(double y)
+{
+    d->y = y;
+}
+
+int MusicElement::length() const
+{
+    return d->length;
+}
+
+void MusicElement::setLength(int length)
+{
+    d->length = length;
 }
 
 } // namespace MusicCore

@@ -57,7 +57,7 @@ public:
      * @param dots the number of dots of the chord, each dot multiplies the length of the chord by 1.5
      */
     explicit Chord(Duration duration, int dots = 0);
-    
+
     /**
      * This constructor is overloaded for convenience, to avoid having to call the setStaff method to set the staff
      * when creating rests.
@@ -67,29 +67,29 @@ public:
      * @param dots the number of dots of the chord, each dot multiplies the length of the chord by 1.5
      */
     Chord(Staff* staff, Duration duration, int dots = 0);
-    
+
     /**
      * Destructor.
      */
     virtual ~Chord();
-    
+
     /**
      * Returns the duration of the chord.
      */
     Duration duration() const;
-    
+
     /**
      * Changes the duration of the chord.
      *
      * @param duration the new duration
      */
     void setDuration(Duration duration);
-    
+
     /**
      * Returns the number of dots of this chord. Each dot multiplies the duration by a factor 1.5.
      */
     int dots() const;
-    
+
     /**
      * Changes the number of dots of the chord.
      *
@@ -101,14 +101,14 @@ public:
      * Returns the number of notes in this chord.
      */
     int noteCount() const;
-    
+
     /**
      * Returns the note at the given index in this chord.
      *
      * @param index the index of the note to return
      */
     Note* note(int index);
-    
+
     /**
      * Adds a new note to this chord. The note will be drawn on the given staff and will have the given pitch and
      * accidentals.
@@ -126,7 +126,7 @@ public:
      * @param note the note to add
      */
     void addNote(Note* note);
-    
+
     /**
      * Removes a note from this chord. If deleteNote is true the note is not only removed, but also deleted.
      *
@@ -134,6 +134,11 @@ public:
      * @param deleteNote should the note not only be removed, but also deleted
      */
     void removeNote(int index, bool deleteNote = true);
+
+    /**
+     * This method converts a duration to a number of ticks.
+     */
+    static int durationToTicks(Duration duration);
 private:
     class Private;
     Private * const d;

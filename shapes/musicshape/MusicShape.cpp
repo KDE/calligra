@@ -18,10 +18,6 @@
  */
 #include "MusicShape.h"
 #include <QPainter>
-#include <QFrame>
-#include <QVBoxLayout>
-#include <QXmlInputSource>
-#include <QFile>
 #include <kdebug.h>
 #include <KoViewConverter.h>
 
@@ -33,8 +29,10 @@
 #include "core/Chord.h"
 #include "core/Note.h"
 #include "core/Clef.h"
+#include "core/Bar.h"
 
 #include "MusicStyle.h"
+#include "Engraver.h"
 
 using namespace MusicCore;
 
@@ -46,7 +44,7 @@ static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch)
     return c;
 }
 
-MusicShape::MusicShape()
+MusicShape::MusicShape() : m_engraver(new Engraver())
 {
     m_sheet = new Sheet();
     Part* part = m_sheet->addPart("Piano");
@@ -81,6 +79,7 @@ MusicShape::MusicShape()
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 1));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 2));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 0));
+    m_engraver->engraveSheet(m_sheet);
 
     m_style = new MusicStyle();
 }
@@ -107,12 +106,12 @@ static void paintStaff( QPainter& painter, MusicStyle* style, Staff *staff )
     }
 }
 
-static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, double& x, Clef* clef )
+static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, double x, Clef* clef )
 {
+    x = x + chord->x();
     if (chord->noteCount() == 0) { // a rest
         Staff *s = chord->staff();
         style->renderRest( painter, x, s->top() + (2 - (chord->duration() == Chord::Whole)) * s->lineSpacing(), chord->duration() );
-        x += 25;
         return;
     }
     Note *n = chord->note(0);
@@ -143,25 +142,24 @@ static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, doub
     double stemX = x + 11;
     if (line < 4) { stemLen = 7; stemX = x; }
     painter.setPen(style->stemPen());
-    painter.drawLine(QPointF(stemX, s->top() + line * s->lineSpacing() / 2),
-                     QPointF(stemX, s->top() + (line + stemLen) * s->lineSpacing() / 2));
-    style->renderNoteHead( painter, x, s->top() + line * s->lineSpacing() / 2, chord->duration() );
+    painter.drawLine(QPointF(stemX, chord->y() + s->top() + line * s->lineSpacing() / 2),
+                     QPointF(stemX, chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2));
+    style->renderNoteHead( painter, x, chord->y() + s->top() + line * s->lineSpacing() / 2, chord->duration() );
     x += 30;
 }
 
-static void paintClef( QPainter& painter, MusicStyle* style, Clef *c, double &x )
+static void paintClef( QPainter& painter, MusicStyle* style, Clef *c, double x )
 {
     Staff* s = c->staff();
-    style->renderClef( painter, x, s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
-    x += 30;
+    style->renderClef( painter, x + c->x(), s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
 }
 
 static void paintVoice( QPainter& painter, MusicStyle* style, Voice *voice )
 {
     Clef* curClef = 0;
+    double x = 0;
     for (int b = 0; b < voice->part()->sheet()->barCount(); b++) {
         VoiceBar* vb = voice->bar(voice->part()->sheet()->bar(b));
-        double x = 10 + 200 * b;
         for (int e = 0; e < vb->elementCount(); e++) {
             MusicElement *me = vb->element(e);
             Chord *c = dynamic_cast<Chord*>(me);
@@ -172,6 +170,7 @@ static void paintVoice( QPainter& painter, MusicStyle* style, Voice *voice )
                 curClef = cl;
             }
         }
+        x += voice->part()->sheet()->bar(b)->size();
     }
 }
 
@@ -183,8 +182,9 @@ static void paintPart( QPainter& painter, MusicStyle* style, Part *part )
     double firstStaff = part->staff(0)->top();
     int c = part->staffCount()-1;
     double lastStaff = part->staff(c)->top() + part->staff(c)->lineSpacing() * (part->staff(c)->lineCount()-1);
+    double x = 0;
     for (int b = 0; b < part->sheet()->barCount(); b++) {
-        double x = 190 + 200 * b;
+        x += part->sheet()->bar(b)->size();
         painter.drawLine(QPointF(x, firstStaff), QPointF(x, lastStaff));
     }
     for (int i = 0; i < part->voiceCount(); i++) {

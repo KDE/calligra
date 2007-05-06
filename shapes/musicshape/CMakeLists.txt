@@ -24,7 +24,9 @@ SET (musicshape_LIB_SRCS
 	MusicShapeFactory.cpp
 	MusicTool.cpp
 	MusicToolFactory.cpp
-    MusicStyle.cpp ${musiccore_SRCS}
+        MusicStyle.cpp
+        Engraver.cpp
+        ${musiccore_SRCS}
 	)
 
 kde4_automoc(${musicshape_LIB_SRCS})
