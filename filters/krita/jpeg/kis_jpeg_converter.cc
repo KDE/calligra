@@ -282,24 +282,24 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                     layer->paintDevice()->mirrorY();
                     break;
                 case 3:
-                    image()->rotate(180, 0);
+                    image()->rotate(M_PI, 0);
                     break;
                 case 4:
                     layer->paintDevice()->mirrorX();
                     break;
                 case 5:
-                    image()->rotate(90, 0);
+                    image()->rotate(M_PI/2, 0);
                     layer->paintDevice()->mirrorY();
                     break;
                 case 6:
-                    image()->rotate(90, 0);
+                    image()->rotate(M_PI/2, 0);
                     break;
                 case 7:
-                    image()->rotate(90, 0);
+                    image()->rotate(M_PI/2, 0);
                     layer->paintDevice()->mirrorX();
                     break;
                 case 8:
-                    image()->rotate(270, 0);
+                    image()->rotate(-M_PI/2+M_PI*2, 0);
                     break;
                 default:
                     break;
