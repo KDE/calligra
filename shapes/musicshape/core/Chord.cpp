@@ -45,6 +45,11 @@ Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
 {
     d->duration = duration;
     d->dots = dots;
+    int baseLength = durationToTicks(duration);
+    for (int i = 0; i < dots; i++) {
+        baseLength += baseLength >> 1;
+    }
+    setLength(baseLength);
     setStaff(staff);
 }
 

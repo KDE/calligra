@@ -70,11 +70,11 @@ MusicShape::MusicShape() : m_engraver(new Engraver())
     voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
     voice2->bar(b1)->addElement(new Clef(staff2, Clef::Bass, 3, 0));
     voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));
-    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Half));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Quarter));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Eighth));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Sixteenth));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Sixteenth));
+    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Half));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 0));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 1));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 2));

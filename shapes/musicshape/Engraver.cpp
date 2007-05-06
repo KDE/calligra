@@ -23,8 +23,13 @@
 #include "core/Part.h"
 #include "core/VoiceBar.h"
 #include "core/MusicElement.h"
+#include "core/Clef.h"
+
+#include <limits.h>
 
 #include <QtCore/QList>
+
+#include <kdebug.h>
 
 using namespace MusicCore;
 
@@ -58,7 +63,44 @@ void Engraver::engraveBar(Bar* bar)
         }
     }
 
-    double maxX = 0;
+    int nextTime[voices.size()];
+    int nextIndex[voices.size()];
+    // initialize stuff to 0
+    for (int i = 0; i < voices.size(); i++) {
+        nextTime[i] = 0;
+        nextIndex[i] = 0;
+    }
+
+    double x = 0;
+    // loop until all elements are placed
+    for (;;) {
+        // find earliest start time
+        int time = INT_MAX;
+        for (int i = 0; i < voices.size(); i++) {
+            if (nextIndex[i] < voices[i]->elementCount()) {
+                if (nextTime[i] < time) time = nextTime[i];
+            }
+        }
+        // none found, break
+        if (time == INT_MAX) break;
+
+        // now update all items with correct start time
+        for (int i = 0; i < voices.size(); i++) {
+            if (nextTime[i] == time && nextIndex[i] < voices[i]->elementCount()) {
+                double xpos = x + 30;
+                if (dynamic_cast<Clef*>(voices[i]->element(nextIndex[i]))) {
+                    xpos = x + 10;
+                }
+                voices[i]->element(nextIndex[i])->setX(xpos);
+                nextTime[i] += voices[i]->element(nextIndex[i])->length();
+                nextIndex[i]++;
+            }
+        }
+
+        x += 30;
+    }
+    bar->setSize(x + 30);
+    /*
     // now for a very simple engraver, simply layout all elements one after another
     Q_FOREACH(VoiceBar* vb, voices) {
         double x = 10;
@@ -67,7 +109,5 @@ void Engraver::engraveBar(Bar* bar)
             x += 30;
         }
         maxX = qMax(maxX, x);
-    }
-
-    bar->setSize(maxX + 20);
+    }*/
 }
