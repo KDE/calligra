@@ -72,7 +72,7 @@ void Engraver::engraveBar(Bar* bar)
         nextIndex[i] = 0;
     }
 
-    double x = 0;
+    double x = 0; // this is the end position of the last placed elements
     // loop until all elements are placed
     for (;;) {
         // find earliest start time

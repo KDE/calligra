@@ -75,4 +75,4 @@ private:
 
 } // namespace MusicCore
 
-#endif // MUSIC_CLEF_KEYSIGNATURE_H
+#endif // MUSIC_CORE_KEYSIGNATURE_H

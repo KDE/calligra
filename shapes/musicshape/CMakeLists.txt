@@ -18,6 +18,7 @@ set( musiccore_SRCS
     core/Note.cpp
     core/Clef.cpp
     core/KeySignature.cpp
+    core/TimeSignature.cpp
 )
 
 SET (musicshape_LIB_SRCS

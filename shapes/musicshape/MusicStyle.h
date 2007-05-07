@@ -39,6 +39,7 @@ public:
     virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration);
     virtual void renderClef(QPainter& painter, double x, double y, MusicCore::Clef::ClefShape shape);
     virtual void renderAccidental(QPainter& painter, double x, double y, int accidental);
+    virtual void renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number);
 private:
     QPen m_staffLinePen, m_stemPen;
     QFont m_font;

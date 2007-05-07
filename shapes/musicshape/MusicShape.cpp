@@ -31,6 +31,7 @@
 #include "core/Clef.h"
 #include "core/Bar.h"
 #include "core/KeySignature.h"
+#include "core/TimeSignature.h"
 
 #include "MusicStyle.h"
 #include "Engraver.h"
@@ -59,6 +60,7 @@ MusicShape::MusicShape() : m_engraver(new Engraver())
 
     voice->bar(b1)->addElement(new Clef(staff, Clef::Trebble, 2, 0));
     voice->bar(b1)->addElement(new KeySignature(staff, -4));
+    voice->bar(b1)->addElement(new TimeSignature(staff, 4, 4));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 0));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 1));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 2));
@@ -72,6 +74,7 @@ MusicShape::MusicShape() : m_engraver(new Engraver())
     voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
     voice2->bar(b1)->addElement(new Clef(staff2, Clef::Bass, 3, 0));
     voice2->bar(b1)->addElement(new KeySignature(staff2, 5));
+    voice2->bar(b1)->addElement(new TimeSignature(staff2, 4, 4, TimeSignature::Number));
     voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Quarter));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Eighth));
@@ -219,6 +222,15 @@ static void paintKeySignature( QPainter& painter, MusicStyle* style, KeySignatur
     paintBB( painter, ks, x, s->top() );
 }
 
+static void paintTimeSignature( QPainter& painter, MusicStyle* style, TimeSignature* ts, double x )
+{
+    Staff* s = ts->staff();
+    double hh = 0.5 * (s->lineCount() - 1) * s->lineSpacing();
+    style->renderTimeSignatureNumber( painter, x + ts->x(), s->top() + hh, ts->width(), ts->beats());
+    style->renderTimeSignatureNumber( painter, x + ts->x(), s->top() + 2*hh, ts->width(), ts->beat());
+    paintBB( painter, ts, x, s->top() );
+}
+
 static void paintVoice( QPainter& painter, MusicStyle* style, Voice *voice )
 {
     Clef* curClef = 0;
@@ -237,6 +249,10 @@ static void paintVoice( QPainter& painter, MusicStyle* style, Voice *voice )
             KeySignature *ks = dynamic_cast<KeySignature*>(me);
             if (ks) {
                 paintKeySignature( painter, style, ks, x, curClef );
+            }
+            TimeSignature* ts = dynamic_cast<TimeSignature*>(me);
+            if (ts) {
+                paintTimeSignature( painter, style, ts, x );
             }
         }
         x += voice->part()->sheet()->bar(b)->size();

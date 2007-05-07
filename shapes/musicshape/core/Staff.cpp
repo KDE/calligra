@@ -70,7 +70,7 @@ int Staff::lineCount() const
 
 double Staff::lineSpacing() const
 {
-    return 8;
+    return 8.5;
 }
 
 } // namespace MusicCore

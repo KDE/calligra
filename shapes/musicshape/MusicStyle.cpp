@@ -44,6 +44,7 @@ QPen MusicStyle::stemPen()
     return m_stemPen;
 }
 
+
 void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Chord::Duration duration)
 {
     painter.setPen(QPen(Qt::SolidLine));
@@ -147,4 +148,13 @@ void MusicStyle::renderAccidental(QPainter& painter, double x, double y, int acc
             break;
     }
 }
+#include "kdebug.h"
+void MusicStyle::renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number)
+{
+    painter.setPen(QPen(Qt::SolidLine));
+    painter.setFont(m_font);
+    QFontMetricsF m(m_font);
+    QString txt = QString::number(number);
 
+    painter.drawText(QPointF(x + (w - m.width(txt))/2, y), txt);
+}
