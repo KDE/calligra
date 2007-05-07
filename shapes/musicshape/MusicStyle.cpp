@@ -123,3 +123,28 @@ void MusicStyle::renderClef(QPainter& painter, double x, double y, Clef::ClefSha
             break;
     }
 }
+
+void MusicStyle::renderAccidental(QPainter& painter, double x, double y, int accidental)
+{
+    painter.setPen(QPen(Qt::SolidLine));
+    painter.setFont(m_font);
+    QPointF p(x, y);
+    switch (accidental) {
+        case 0:
+            painter.drawText(p, QString(0xE111));
+            break;
+        case 1:
+            painter.drawText(p, QString(0xE10E));
+            break;
+        case 2:
+            painter.drawText(p, QString(0xE114));
+            break;
+        case -1:
+            painter.drawText(p, QString(0xE112));
+            break;
+        case -2:
+            painter.drawText(p, QString(0xE114));
+            break;
+    }
+}
+

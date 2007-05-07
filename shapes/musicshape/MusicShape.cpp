@@ -30,6 +30,7 @@
 #include "core/Note.h"
 #include "core/Clef.h"
 #include "core/Bar.h"
+#include "core/KeySignature.h"
 
 #include "MusicStyle.h"
 #include "Engraver.h"
@@ -57,6 +58,7 @@ MusicShape::MusicShape() : m_engraver(new Engraver())
     Bar* b3 = m_sheet->addBar();
 
     voice->bar(b1)->addElement(new Clef(staff, Clef::Trebble, 2, 0));
+    voice->bar(b1)->addElement(new KeySignature(staff, -1));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 0));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 1));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 2));
@@ -69,6 +71,7 @@ MusicShape::MusicShape() : m_engraver(new Engraver())
     voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 3));
     voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
     voice2->bar(b1)->addElement(new Clef(staff2, Clef::Bass, 3, 0));
+    voice2->bar(b1)->addElement(new KeySignature(staff2, 1));
     voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Quarter));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Eighth));
@@ -154,6 +157,55 @@ static void paintClef( QPainter& painter, MusicStyle* style, Clef *c, double x )
     style->renderClef( painter, x + c->x(), s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
 }
 
+static void paintKeySignature( QPainter& painter, MusicStyle* style, KeySignature* ks, double x, Clef* clef )
+{
+    Staff * s = ks->staff();
+    double curx = x + ks->x();
+    // draw sharps
+    int idx = 3;
+    for (int i = 0; i < 7; i++) {
+        if (ks->accidentals(idx) > 0) {
+            int line = 14;
+            if (clef && clef->shape() == Clef::FClef) line = 4;
+            if (clef) {
+                line -= 2*clef->line();
+            } else {
+                line -= 4;
+            }
+            line = line - idx;
+            while (line < 0) line += 7;
+            while (line >= 6) line -= 7;
+
+            style->renderAccidental( painter, curx, s->top() + line * s->lineSpacing() / 2, 1 );
+
+            curx += 10;
+        }
+        idx = (idx + 4) % 7;
+    }
+
+    // draw flats
+    idx = 6;
+    for (int i = 0; i < 7; i++) {
+        if (ks->accidentals(idx) < 0) {
+            int line = 14;
+            if (clef && clef->shape() == Clef::FClef) line = 4;
+            if (clef) {
+                line -= 2*clef->line();
+            } else {
+                line -= 4;
+            }
+            line = line - idx;
+            while (line < 0) line += 7;
+            while (line >= 6) line -= 7;
+
+            style->renderAccidental( painter, curx, s->top() + line * s->lineSpacing() / 2, -1 );
+
+            curx += 10;
+        }
+        idx = (idx + 3) % 7;
+    }
+}
+
 static void paintVoice( QPainter& painter, MusicStyle* style, Voice *voice )
 {
     Clef* curClef = 0;
@@ -168,6 +220,10 @@ static void paintVoice( QPainter& painter, MusicStyle* style, Voice *voice )
             if (cl) {
                 paintClef( painter, style, cl, x );
                 curClef = cl;
+            }
+            KeySignature *ks = dynamic_cast<KeySignature*>(me);
+            if (ks) {
+                paintKeySignature( painter, style, ks, x, curClef );
             }
         }
         x += voice->part()->sheet()->bar(b)->size();

@@ -38,6 +38,7 @@ public:
     virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration);
     virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration);
     virtual void renderClef(QPainter& painter, double x, double y, MusicCore::Clef::ClefShape shape);
+    virtual void renderAccidental(QPainter& painter, double x, double y, int accidental);
 private:
     QPen m_staffLinePen, m_stemPen;
     QFont m_font;
