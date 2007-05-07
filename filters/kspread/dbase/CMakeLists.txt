@@ -13,7 +13,7 @@ kde4_add_plugin(dbaseimport WITH_PREFIX ${dbaseimport_PART_SRCS})
 
 
 
-target_link_libraries(dbaseimport kofficecore)
+target_link_libraries(dbaseimport komain)
 
 install(TARGETS dbaseimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

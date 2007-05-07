@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/komain ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -51,7 +51,7 @@ install( FILES  kexiqueryhandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/ke
 #
 #INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 #	-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/widget/tableview \
-#	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore \
+#	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/komain \
 #	-I$(top_srcdir)/kexi/kexidb $(all_includes)
 #
 #servicesdir=$(kde_servicesdir)/kexi

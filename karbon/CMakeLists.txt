@@ -74,7 +74,7 @@ kde4_automoc(${karboncommon_LIB_SRCS})
 
 kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 
-target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} kofficecore kofficeui kopainter kotext karbondockers karbonwidgets vpainter karboncore karbonshapes karboncommands karbonvisitors karbondialogs )
+target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} komain kofficeui kopainter kotext karbondockers karbonwidgets vpainter karboncore karbonshapes karboncommands karbonvisitors karbondialogs )
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})

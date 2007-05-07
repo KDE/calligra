@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/lib/koproperty/ ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/komain ${CMAKE_SOURCE_DIR}/lib/koproperty/ ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -96,7 +96,7 @@ install(TARGETS kexidatatable  DESTINATION ${LIB_INSTALL_DIR})
 #
 ## set the include path for X, qt and KDE
 #INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core \
-#	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/koproperty/ $(all_includes)
+#	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/komain -I$(top_srcdir)/lib/koproperty/ $(all_includes)
 #
 #METASOURCES = AUTO
 #

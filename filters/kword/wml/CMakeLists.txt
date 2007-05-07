@@ -13,7 +13,7 @@ kde4_add_plugin(wmlimport WITH_PREFIX ${wmlimport_PART_SRCS})
 
 
 
-target_link_libraries(wmlimport  ${KDE4_KDECORE_LIBS} kofficecore kwordexportfilters)
+target_link_libraries(wmlimport  ${KDE4_KDECORE_LIBS} komain kwordexportfilters)
 
 install(TARGETS wmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -28,7 +28,7 @@ kde4_add_plugin(wmlexport WITH_PREFIX ${wmlexport_PART_SRCS})
 
 
 
-target_link_libraries(wmlexport  ${KDE4_KDECORE_LIBS} kwordexportfilters kofficecore )
+target_link_libraries(wmlexport  ${KDE4_KDECORE_LIBS} kwordexportfilters komain )
 
 install(TARGETS wmlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

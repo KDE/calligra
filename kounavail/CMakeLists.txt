@@ -1,6 +1,6 @@
 
 
-include_directories( ${KOFFICECORE_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} )
 
 
 ########### next target ###############
@@ -13,7 +13,7 @@ kde4_add_plugin(kounavailpart WITH_PREFIX ${kounavailpart_PART_SRCS})
 
 
 
-target_link_libraries(kounavailpart  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kounavailpart  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kounavailpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 

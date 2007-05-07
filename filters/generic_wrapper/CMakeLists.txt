@@ -1,7 +1,7 @@
 
 
 include_directories(
-    ${KOFFICECORE_INCLUDES}
+    ${KOMAIN_INCLUDES}
     )
 
 
@@ -17,7 +17,7 @@ kde4_add_plugin(generickofilter WITH_PREFIX ${generickofilter_PART_SRCS})
 
 
 
-target_link_libraries(generickofilter  ${KDE4_KIO_LIBS} kofficecore )
+target_link_libraries(generickofilter  ${KDE4_KIO_LIBS} komain )
 
 install(TARGETS generickofilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

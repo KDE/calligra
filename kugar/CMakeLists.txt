@@ -3,7 +3,7 @@ project(kugar)
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/ 
 	${CMAKE_SOURCE_DIR}/libs/ 
-	${KOFFICECORE_INCLUDES})
+	${KOMAIN_INCLUDES})
 
 set(libkudesignercommon_SRCS 
 	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/band.cpp 

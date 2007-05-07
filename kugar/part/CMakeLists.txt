@@ -13,7 +13,7 @@ kde4_add_plugin(kugarpart WITH_PREFIX ${kugarpart_PART_SRCS})
 
 
 
-target_link_libraries(kugarpart  ${KDE4_KIO_LIBS} kugarlib ${KDE4_KPARTS_LIBS} ${KDE4_KDEPRINT_LIBS} kofficecore )
+target_link_libraries(kugarpart  ${KDE4_KIO_LIBS} kugarlib ${KDE4_KPARTS_LIBS} ${KDE4_KDEPRINT_LIBS} komain )
 
 install(TARGETS kugarpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -26,7 +26,7 @@ kde4_automoc(${kugar_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kugar ${kugar_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kugar  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kdeinit_kugar  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_kugar  DESTINATION ${LIB_INSTALL_DIR})
 

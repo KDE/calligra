@@ -16,7 +16,7 @@ kde4_add_plugin(oowriterimport WITH_PREFIX ${oowriterimport_PART_SRCS})
 
 
 
-target_link_libraries(oowriterimport  kofficecore)
+target_link_libraries(oowriterimport  komain)
 
 install(TARGETS oowriterimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -31,7 +31,7 @@ kde4_add_plugin(oowriterexport WITH_PREFIX ${oowriterexport_PART_SRCS})
 
 
 
-target_link_libraries(oowriterexport kofficecore kwordexportfilters  )
+target_link_libraries(oowriterexport komain kwordexportfilters  )
 
 install(TARGETS oowriterexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

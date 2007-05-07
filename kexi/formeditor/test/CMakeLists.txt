@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/komain ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -57,7 +57,7 @@ kde4_install_icons( ${ICON_INSTALL_DIR}   )
 ## set the include path for X, qt and KDE
 #INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/formeditor \
 #	-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/core \
-#	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore $(all_includes)
+#	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/komain $(all_includes)
 #
 #kformdesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 #

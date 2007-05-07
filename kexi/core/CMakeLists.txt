@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 ADD_DEFINITIONS( 
 -include ${CMAKE_SOURCE_DIR}/kexi/kexi_global.h
@@ -94,7 +94,7 @@ install(TARGETS kexicore  DESTINATION ${LIB_INSTALL_DIR})
 #	$(top_builddir)/lib/koproperty/libkoproperty.la
 #
 #INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
-#	-I$(top_srcdir)/lib/kofficecore \
+#	-I$(top_srcdir)/lib/komain \
 #	-I$(top_srcdir)/lib \
 #	-I$(top_srcdir)/kexi \
 #	$(all_includes)

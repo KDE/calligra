@@ -13,7 +13,7 @@ kde4_add_plugin(hancomwordimport WITH_PREFIX ${hancomwordimport_PART_SRCS})
 
 
 
-target_link_libraries(hancomwordimport  ${KDE4_KDECORE_LIBS} kstore kofficecore)
+target_link_libraries(hancomwordimport  ${KDE4_KDECORE_LIBS} kstore komain)
 
 install(TARGETS hancomwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

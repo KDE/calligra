@@ -84,7 +84,7 @@ kde4_automoc(${kivio_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kivio ${kivio_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_kivio  DESTINATION ${LIB_INSTALL_DIR})
 

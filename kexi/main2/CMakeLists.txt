@@ -1,8 +1,8 @@
 project(kexi)
 
 #include_directories( ${CMAKE_SOURCE_DIR}/interfaces ${KOTEXT_INCLUDES} )
-#include_directories( ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDES} )
-include_directories( ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/main2 ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDES} )
+#include_directories( ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES} )
+include_directories( ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/main2 ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES} )
 
 SET (keximain_LIB_SRCS
 	KexiFactory.cpp
@@ -16,7 +16,7 @@ kde4_add_library(keximain SHARED ${keximain_LIB_SRCS})
 
 target_link_libraries(keximain
 	${QT_QTSQL_LIBRARY}
-	kofficecore kofficeui
+	komain kofficeui
 	${KDE4_KDE3SUPPORT_LIBS}
 	)
 
@@ -29,7 +29,7 @@ set(kexi_KDEINIT_SRCS main.cpp )
 kde4_automoc(${kexi_KDEINIT_SRCS})
 kde4_add_kdeinit_executable( kexi ${kexi_KDEINIT_SRCS})
 #target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} kexicore keximain )
-target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} kofficecore keximain)
+target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} komain keximain)
 install(TARGETS kdeinit_kexi  DESTINATION ${LIB_INSTALL_DIR})
 target_link_libraries( kexi kdeinit_kexi )
 install(TARGETS kexi DESTINATION ${BIN_INSTALL_DIR})

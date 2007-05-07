@@ -13,7 +13,7 @@ kde4_add_plugin(palmdocimport WITH_PREFIX ${palmdocimport_PART_SRCS})
 
 
 
-target_link_libraries(palmdocimport kofficecore)
+target_link_libraries(palmdocimport komain)
 
 install(TARGETS palmdocimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -28,7 +28,7 @@ kde4_add_plugin(palmdocexport WITH_PREFIX ${palmdocexport_PART_SRCS})
 
 
 
-target_link_libraries(palmdocexport kofficecore kwordexportfilters)
+target_link_libraries(palmdocexport komain kwordexportfilters)
 
 install(TARGETS palmdocexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

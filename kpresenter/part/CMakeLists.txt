@@ -45,7 +45,7 @@ kde4_automoc(${kpresenter_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_kpresenter DESTINATION ${LIB_INSTALL_DIR})
 

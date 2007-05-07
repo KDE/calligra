@@ -2,7 +2,7 @@
 
 add_subdirectory( factories )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/koproperty ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KOPROPERTY_INCLUDES} ${KDE4_INCLUDES}  )
 
 ADD_DEFINITIONS( 
 -DMAKE_KFORMEDITOR_LIB
@@ -64,7 +64,7 @@ install( FILES  widgetfactory.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
 #  -I$(top_srcdir)/kexi/widget/tableview \
 #  -I$(top_srcdir)/kexi/core \
 #  -I$(top_srcdir)/kexi \
-#  -I$(top_srcdir)/lib/kofficecore \
+#  -I$(top_srcdir)/lib/komain \
 #  -I$(top_srcdir)/lib -I$(top_srcdir)/lib/koproperty $(all_includes)
 #
 #lib_LTLIBRARIES =  libkformdesigner.la

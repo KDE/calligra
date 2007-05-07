@@ -13,7 +13,7 @@ kde4_add_plugin(ooimpressimport WITH_PREFIX ${ooimpressimport_PART_SRCS})
 
 
 
-target_link_libraries(ooimpressimport  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(ooimpressimport  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS ooimpressimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -28,7 +28,7 @@ kde4_add_plugin(ooimpressexport WITH_PREFIX ${ooimpressexport_PART_SRCS})
 
 
 
-target_link_libraries(ooimpressexport  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(ooimpressexport  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS ooimpressexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -28,7 +28,7 @@
 class KConfig;
 
 #include <koffice_export.h>
-class KOFFICECORE_EXPORT KoGlobal
+class KOMAIN_EXPORT KoGlobal
 {
 public:
     /// For KoApplication

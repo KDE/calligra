@@ -154,7 +154,7 @@ add_subdirectory( pics )
 #
 #
 #
-#target_link_libraries(kpresenterpart  ${KDE4_KDE3SUPPORT_LIBS} kpresenterprivate kofficecore kofficeui)
+#target_link_libraries(kpresenterpart  ${KDE4_KDE3SUPPORT_LIBS} kpresenterprivate komain kofficeui)
 #
 #install(TARGETS kpresenterpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 #
@@ -167,7 +167,7 @@ add_subdirectory( pics )
 #
 #kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 #
-#target_link_libraries(kdeinit_kpresenter  ${KDE4_KDE3SUPPORT_LIBS} kofficecore kofficeui )
+#target_link_libraries(kdeinit_kpresenter  ${KDE4_KDE3SUPPORT_LIBS} komain kofficeui )
 #
 #install(TARGETS kdeinit_kpresenter  DESTINATION ${LIB_INSTALL_DIR})
 #

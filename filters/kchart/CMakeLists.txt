@@ -1,7 +1,7 @@
 
 
 include_directories(
-    ${KOFFICECORE_INCLUDES}
+    ${KOMAIN_INCLUDES}
 	)
 
 add_subdirectory( genericimageexport )

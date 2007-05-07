@@ -13,7 +13,7 @@ kde4_add_plugin(powerpointimport WITH_PREFIX ${powerpointimport_PART_SRCS})
 
 
 
-target_link_libraries(powerpointimport  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(powerpointimport  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS powerpointimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

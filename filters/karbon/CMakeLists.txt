@@ -1,6 +1,6 @@
 include_directories(
         ${KOTEXT_INCLUDES}
-        ${KOFFICECORE_INCLUDES}
+        ${KOMAIN_INCLUDES}
         ${KOPAINTER_INCLUDES}
 	${FLAKE_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon

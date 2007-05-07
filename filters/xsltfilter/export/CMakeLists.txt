@@ -18,7 +18,7 @@ kde4_add_plugin(xsltexport WITH_PREFIX ${xsltexport_PART_SRCS})
 
 
 
-target_link_libraries(xsltexport  ${KDE4_KIO_LIBS} kofficecore ${LIBXML2_LIBRARIES} ${LIBXSLT_LIBRARIES} )
+target_link_libraries(xsltexport  ${KDE4_KIO_LIBS} komain ${LIBXML2_LIBRARIES} ${LIBXSLT_LIBRARIES} )
 
 install(TARGETS xsltexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

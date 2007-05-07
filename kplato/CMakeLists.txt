@@ -160,7 +160,7 @@ kde4_automoc(${kplato_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kplato kofficecore )
+target_link_libraries(kdeinit_kplato komain )
 
 install(TARGETS kdeinit_kplato  DESTINATION ${LIB_INSTALL_DIR})
 

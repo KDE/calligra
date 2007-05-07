@@ -1,6 +1,6 @@
 
 
-include_directories( ${KOFFICECORE_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} )
 
 
 ########### next target ###############
@@ -17,7 +17,7 @@ kde4_automoc(${kwordexportfilters_LIB_SRCS})
 
 kde4_add_library(kwordexportfilters SHARED ${kwordexportfilters_LIB_SRCS})
 
-target_link_libraries(kwordexportfilters  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kwordexportfilters  ${KDE4_KDECORE_LIBS} komain )
 
 set_target_properties(kwordexportfilters PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kwordexportfilters  DESTINATION ${LIB_INSTALL_DIR})

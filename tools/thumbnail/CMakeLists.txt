@@ -1,4 +1,4 @@
-include_directories( ${KOFFICECORE_INCLUDES})
+include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
@@ -10,7 +10,7 @@ kde4_add_plugin(clipartthumbnail ${clipartthumbnail_SRCS})
 
 
 
-target_link_libraries(clipartthumbnail  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(clipartthumbnail  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS clipartthumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -25,7 +25,7 @@ kde4_add_plugin(kofficethumbnail ${kofficethumbnail_SRCS})
 
 
 
-target_link_libraries(kofficethumbnail  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kofficethumbnail  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kofficethumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 

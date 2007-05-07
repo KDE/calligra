@@ -35,7 +35,7 @@ kde4_automoc(${kformula_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kformula ${kformula_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kformula  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kdeinit_kformula  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_kformula  DESTINATION ${LIB_INSTALL_DIR})
 

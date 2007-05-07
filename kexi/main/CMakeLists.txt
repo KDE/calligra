@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/libs/kofficeui ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDES}  )
+include_directories( ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
 
 ADD_DEFINITIONS(
 -DKEXI_NO_CTXT_HELP=1
@@ -89,7 +89,7 @@ install(TARGETS keximain  DESTINATION ${LIB_INSTALL_DIR})
 #	-I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core \
 #	-I$(top_srcdir)/kexi/main \
 #	-I$(top_srcdir)/kexi/main/startup -I$(top_srcdir)/kexi/widget \
-#	-I$(top_srcdir)/kexi/migration -I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore \
+#	-I$(top_srcdir)/kexi/migration -I$(top_srcdir)/lib -I$(top_srcdir)/lib/komain \
 #	$(all_includes)
 #
 #noinst_HEADERS = ksplitter.h kexibrowser_p.h keximainwindowimpl_p.h

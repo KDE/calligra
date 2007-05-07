@@ -92,53 +92,53 @@ namespace KoPageFormat
      *
      * @note We return int instead of the enum to avoid including kprinter.h
      */
-    KOFFICECORE_EXPORT int /*KPrinter::PageSize*/ printerPageSize( KoFormat format );
+    KOMAIN_EXPORT int /*KPrinter::PageSize*/ printerPageSize( KoFormat format );
 
     /**
      * Returns the width (in mm) for a given page format and orientation
      * 'Custom' isn't supported by this function, obviously.
      */
-    KOFFICECORE_EXPORT double width( KoFormat format, KoOrientation orientation );
+    KOMAIN_EXPORT double width( KoFormat format, KoOrientation orientation );
 
     /**
      * Returns the height (in mm) for a given page format and orientation
      * 'Custom' isn't supported by this function, obviously.
      */
-    KOFFICECORE_EXPORT double height( KoFormat format, KoOrientation orientation );
+    KOMAIN_EXPORT double height( KoFormat format, KoOrientation orientation );
 
     /**
      * Returns the internal name of the given page format.
      * Use for saving.
      */
-    KOFFICECORE_EXPORT QString formatString( KoFormat format );
+    KOMAIN_EXPORT QString formatString( KoFormat format );
 
     /**
      * Convert a format string (internal name) to a page format value.
      * Use for loading.
      */
-    KOFFICECORE_EXPORT KoFormat formatFromString( const QString & string );
+    KOMAIN_EXPORT KoFormat formatFromString( const QString & string );
 
     /**
      * Returns the default format (based on the KControl settings)
      */
-    KOFFICECORE_EXPORT KoFormat defaultFormat();
+    KOMAIN_EXPORT KoFormat defaultFormat();
 
     /**
      * Returns the translated name of the given page format.
      * Use for showing the user.
      */
-    KOFFICECORE_EXPORT QString name( KoFormat format );
+    KOMAIN_EXPORT QString name( KoFormat format );
 
     /**
      * Lists the translated names of all the available formats
      */
-    KOFFICECORE_EXPORT QStringList allFormats();
+    KOMAIN_EXPORT QStringList allFormats();
 
     /**
      * Try to find the paper format for the given width and height (in mm).
      * Useful to some import filters.
      */
-    KOFFICECORE_EXPORT KoFormat guessFormat( double width, double height );
+    KOMAIN_EXPORT KoFormat guessFormat( double width, double height );
 }
 
 
@@ -195,12 +195,12 @@ struct KoPageLayout
     /**
      * Save this page layout to OASIS.
      */
-    KOFFICECORE_EXPORT KoGenStyle saveOasis() const;
+    KOMAIN_EXPORT KoGenStyle saveOasis() const;
 
     /**
      * Load this page layout from OASIS
      */
-    KOFFICECORE_EXPORT void loadOasis(const QDomElement &style);
+    KOMAIN_EXPORT void loadOasis(const QDomElement &style);
 #endif
 
     /**
@@ -208,7 +208,7 @@ struct KoPageLayout
      * default margins (2 cm), and portrait orientation.
      * @since 1.4
      */
-    static KOFFICECORE_EXPORT KoPageLayout standardLayout();
+    static KOMAIN_EXPORT KoPageLayout standardLayout();
 };
 
 /** structure for header-footer */

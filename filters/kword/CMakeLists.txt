@@ -3,7 +3,7 @@
 macro_optional_find_package(WPD)
 macro_optional_find_package(WV2)
 
-include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOFFICECORE_INCLUDES} )
+include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOMAIN_INCLUDES} )
 
 add_subdirectory( libexport )
 add_subdirectory( abiword )

@@ -24,7 +24,7 @@ kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 
 
 
-target_link_libraries(excelimport kofficecore)
+target_link_libraries(excelimport komain)
 
 install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

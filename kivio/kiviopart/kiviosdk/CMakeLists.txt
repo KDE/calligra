@@ -22,7 +22,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${CMAKE_SOURCE_D
 #INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
 #	-I$(top_builddir)/kivio/kiviopart/config \
 #	-I$(top_srcdir)/kivio/kiviopart\
-#	$(KOFFICECORE_INCLUDES) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) $(PYTHONINC)
+#	$(KOMAIN_INCLUDES) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) $(PYTHONINC)
 #
 #libkiviosdk_la_METASOURCES = AUTO
 #

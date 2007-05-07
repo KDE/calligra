@@ -1,4 +1,4 @@
-include_directories( ${KOFFICECORE_INCLUDES})
+include_directories( ${KOMAIN_INCLUDES})
 
 # build the analyzer as a module
 kde4_add_library(koffice MODULE kofficethroughanalyzer.cpp)

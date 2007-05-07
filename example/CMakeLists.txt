@@ -13,7 +13,7 @@ kde4_add_plugin(koexamplepart WITH_PREFIX ${koexamplepart_PART_SRCS})
 
 
 
-target_link_libraries(koexamplepart  ${KDE4_KPARTS_LIBS} kofficecore )
+target_link_libraries(koexamplepart  ${KDE4_KPARTS_LIBS} komain )
 
 install(TARGETS koexamplepart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -26,7 +26,7 @@ kde4_automoc(${koexample_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( koexample ${koexample_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_koexample  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kdeinit_koexample  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_koexample  DESTINATION ${LIB_INSTALL_DIR})
 

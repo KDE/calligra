@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/koproperty ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/koproperty ${CMAKE_SOURCE_DIR}/libs/komain ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -47,7 +47,7 @@ install( FILES  kformdesigner_containers.desktop kformdesigner_stdwidgets.deskto
 #
 #INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/formeditor \
 #	-I$(top_srcdir)/kexi/core \
-#	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/koproperty -I$(top_srcdir)/lib/kofficecore $(all_includes)
+#	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/koproperty -I$(top_srcdir)/lib/komain $(all_includes)
 #kde_module_LTLIBRARIES = kformdesigner_containers.la kformdesigner_stdwidgets.la
 #kformdesigner_containers_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 #kformdesigner_containers_la_SOURCES =  containerfactory.cpp

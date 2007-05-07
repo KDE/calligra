@@ -1,4 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOFFICECORE_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
+include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOMAIN_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
 
 MESSAGE(STATUS "reactivate svg genericimageexport when kpresenter will port")
 #add_subdirectory( svg )

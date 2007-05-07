@@ -26,7 +26,7 @@ kde4_add_plugin(kwordkword1dot3import WITH_PREFIX ${kwordkword1dot3import_PART_S
 
 
 
-target_link_libraries(kwordkword1dot3import  ${KDE4_KDECORE_LIBS} kstore kofficecore)
+target_link_libraries(kwordkword1dot3import  ${KDE4_KDECORE_LIBS} kstore komain)
 
 install(TARGETS kwordkword1dot3import  DESTINATION ${PLUGIN_INSTALL_DIR})
 

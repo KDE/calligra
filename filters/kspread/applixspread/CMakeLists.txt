@@ -13,7 +13,7 @@ kde4_add_plugin(applixspreadimport WITH_PREFIX ${applixspreadimport_PART_SRCS})
 
 
 
-target_link_libraries(applixspreadimport  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(applixspreadimport  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS applixspreadimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -172,7 +172,7 @@ kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
 target_link_libraries(kspreadcommon
 	${QT_QTSQL_LIBRARY}
-	kofficecore kofficeui kochart
+	komain kofficeui kochart
 	${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(kspreadcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
@@ -202,7 +202,7 @@ kde4_automoc(${kspread_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kspread  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kdeinit_kspread  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_kspread  DESTINATION ${LIB_INSTALL_DIR})
 

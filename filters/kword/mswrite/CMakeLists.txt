@@ -22,7 +22,7 @@ kde4_add_plugin(mswriteimport WITH_PREFIX ${mswriteimport_PART_SRCS})
 
 
 
-target_link_libraries(mswriteimport kofficecore)
+target_link_libraries(mswriteimport komain)
 
 install(TARGETS mswriteimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

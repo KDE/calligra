@@ -2,7 +2,7 @@ add_subdirectory( utils )
 add_subdirectory( tableview )
 add_subdirectory( relations )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/lib ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/lib ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -101,7 +101,7 @@ install(TARGETS kexiextendedwidgets  DESTINATION ${LIB_INSTALL_DIR})
 #INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/widget/tableview \
 #	$(LIB_KEXI_KMDI_INCLUDES) \
 #	-I$(top_srcdir)/kexi/core \
-#	-I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib $(all_includes)
+#	-I$(top_srcdir)/lib/komain -I$(top_srcdir)/lib $(all_includes)
 #
 #METASOURCES = AUTO
 #

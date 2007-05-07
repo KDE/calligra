@@ -3,7 +3,7 @@ if(KDE4_BUILD_TESTS)
 
 add_definitions(-DCOMPILING_TESTS)
 
-include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES} ${KDE4_INCLUDES}
+include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES} ${KDE4_INCLUDES}
     ${QT_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/part)
 
 ########### next target ###############

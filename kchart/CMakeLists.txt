@@ -81,7 +81,7 @@ kde4_automoc(${kchart_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kchart ${kchart_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kchart  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kdeinit_kchart  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_kchart  DESTINATION ${LIB_INSTALL_DIR})
 

@@ -14,7 +14,7 @@ kde4_add_plugin(kformula13import WITH_PREFIX ${kformula13import_PART_SRCS})
 
 
 
-target_link_libraries(kformula13import  ${KDE4_KDECORE_LIBS} kofficecore kformulalib )
+target_link_libraries(kformula13import  ${KDE4_KDECORE_LIBS} komain kformulalib )
 
 install(TARGETS kformula13import  DESTINATION ${PLUGIN_INSTALL_DIR})
 

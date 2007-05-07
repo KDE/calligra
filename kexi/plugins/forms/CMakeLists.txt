@@ -2,7 +2,7 @@
 
 add_subdirectory( widgets )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/koproperty ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/kexi/widget/tableview/private ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/koproperty ${CMAKE_SOURCE_DIR}/lib/komain ${CMAKE_SOURCE_DIR}/kexi/widget/tableview/private ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -117,7 +117,7 @@ install( FILES  kexiformhandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kex
 #		-I$(top_srcdir)/kexi/widget/utils \
 #		-I$(top_srcdir)/kexi/widget \
 #		-I$(top_srcdir)/kexi/formeditor \
-#		-I$(top_srcdir)/lib -I$(top_srcdir)/lib/koproperty -I$(top_srcdir)/lib/kofficecore \
+#		-I$(top_srcdir)/lib -I$(top_srcdir)/lib/koproperty -I$(top_srcdir)/lib/komain \
 #		-I$(top_srcdir)/kexi/widget/tableview/private \
 #		-I$(top_srcdir)/kexi/widget/tableview $(all_includes)
 #

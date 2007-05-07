@@ -5,7 +5,7 @@ kde4_automoc(${kpr2odp_PART_SRCS})
 
 kde4_add_plugin(kpr2odp WITH_PREFIX ${kpr2odp_PART_SRCS})
 
-target_link_libraries(kpr2odp  ${KDE4_KDECORE_LIBS} kofficecore)
+target_link_libraries(kpr2odp  ${KDE4_KDECORE_LIBS} komain)
 
 install(TARGETS kpr2odp  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -68,7 +68,7 @@ kde4_add_plugin(pdfimport WITH_PREFIX ${pdfimport_PART_SRCS})
 
 
 
-target_link_libraries(pdfimport  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(pdfimport  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS pdfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

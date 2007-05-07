@@ -19,7 +19,7 @@ kde4_add_plugin(mswordimport WITH_PREFIX ${mswordimport_PART_SRCS})
 
 
 
-target_link_libraries(mswordimport  ${KDE4_KDECORE_LIBS} ${WV2_LIBRARIES} kofficecore)
+target_link_libraries(mswordimport  ${KDE4_KDECORE_LIBS} ${WV2_LIBRARIES} komain)
 
 install(TARGETS mswordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
