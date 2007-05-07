@@ -28,6 +28,7 @@
 #include <limits.h>
 
 #include <QtCore/QList>
+#include <QtCore/QVarLengthArray>
 
 #include <kdebug.h>
 
@@ -63,8 +64,8 @@ void Engraver::engraveBar(Bar* bar)
         }
     }
 
-    int *nextTime = new int[voices.size()];
-    int *nextIndex = new int[voices.size()];
+    QVarLengthArray<int> nextTime(voices.size());
+    QVarLengthArray<int> nextIndex(voices.size());
     // initialize stuff to 0
     for (int i = 0; i < voices.size(); i++) {
         nextTime[i] = 0;
@@ -100,7 +101,4 @@ void Engraver::engraveBar(Bar* bar)
         x += 30;
     }
     bar->setSize(x + 30);
-
-    delete[] nextTime;
-    delete[] nextIndex;
 }
