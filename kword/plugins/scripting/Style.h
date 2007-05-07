@@ -213,6 +213,8 @@ namespace Scripting {
 
             /***** List *****/
 
+#if 0
+// No clue what the next two methods should do.  can't we use an enum if that is what this int is for?
             /** Return the style of listitems. */
             int listStyle(int liststyle) const {
                 return m_style->listStyle() ? m_style->listStyle()->style() : 0;
@@ -228,6 +230,7 @@ namespace Scripting {
                     m_style->setListStyle(s);
                 }
             }
+#endif
 
         private:
             KoParagraphStyle* m_style;
