@@ -27,6 +27,8 @@ SET ( textshape_SRCS
     dialogs/ParagraphSettingsDialog.cpp
     dialogs/ListsSpinBox.cpp
     dialogs/StyleManager.cpp
+
+    commands/ChangeListCommand.cpp
 )
 
 kde4_add_ui_files(textshape_SRCS
