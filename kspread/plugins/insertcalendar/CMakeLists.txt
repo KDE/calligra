@@ -1,6 +1,6 @@
 
 
-include_directories( ${KOFFICEUI_INCLUDES} ${KDE4_INCLUDES}  )
+include_directories( ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############

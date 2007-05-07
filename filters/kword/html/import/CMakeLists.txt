@@ -1,6 +1,6 @@
 
 
-include_directories(${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
+include_directories(${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES})
 
 
 ########### next target ###############

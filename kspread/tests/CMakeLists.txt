@@ -1,6 +1,6 @@
 if(KDE4_BUILD_TESTS)
 
-include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOFFICEUI_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES} )
 
 ########### next target ###############
 

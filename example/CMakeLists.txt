@@ -1,6 +1,6 @@
 project(example)
 
-include_directories( ${KOFFICEUI_INCLUDES} )
+include_directories( ${KOGUIUTILS_INCLUDES} )
 
 
 ########### next target: the part ###############

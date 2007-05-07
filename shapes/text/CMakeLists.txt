@@ -2,7 +2,7 @@ project( textPlugin)
 
 add_subdirectory( tests )
 
-include_directories( ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
@@ -43,7 +43,7 @@ kde4_add_ui_files(textshape_SRCS
 kde4_automoc(${textshape_SRCS})
 kde4_add_plugin(textshape ${textshape_SRCS})
 
-target_link_libraries(textshape flake kofficeui kotext)
+target_link_libraries(textshape flake koguiutils kotext)
 install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

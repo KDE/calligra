@@ -11,7 +11,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/kchart/kdchart1/ 
 	${CMAKE_SOURCE_DIR}/kchart/dialogs
 	${CMAKE_SOURCE_DIR}/interfaces 
-	${KOFFICEUI_INCLUDES} )
+	${KOGUIUTILS_INCLUDES} )
 
 
 ########### next target ###############
@@ -52,7 +52,7 @@ kde4_automoc(${kchartcommon_LIB_SRCS})
 
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
-target_link_libraries(kchartcommon  ${KDE4_KDE3SUPPORT_LIBS} kochart kofficeui kdchart )
+target_link_libraries(kchartcommon  ${KDE4_KDE3SUPPORT_LIBS} kochart koguiutils kdchart )
 
 set_target_properties(kchartcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})

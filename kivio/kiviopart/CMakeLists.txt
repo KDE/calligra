@@ -55,7 +55,7 @@ kde4_add_dcop_skels(kiviocommon_LIB_SRCS
 
 kde4_add_library(kiviocommon SHARED ${kiviocommon_LIB_SRCS})
 
-target_link_libraries(kiviocommon  ${KDE4_KDECORE_LIBS} tools kiviosdk kivioconfig ui kofficeui kopainter kotext )
+target_link_libraries(kiviocommon  ${KDE4_KDECORE_LIBS} tools kiviosdk kivioconfig ui koguiutils kopainter kotext )
 
 set_target_properties(kiviocommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kiviocommon  DESTINATION ${LIB_INSTALL_DIR})

@@ -1,7 +1,7 @@
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kspread 
 	${KOTEXT_INCLUDES} 
-	${KOFFICEUI_INCLUDES}
+	${KOGUIUTILS_INCLUDES}
 	${KOKROSS_INCLUDES}
 	)
 

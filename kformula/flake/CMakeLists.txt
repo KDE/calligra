@@ -2,7 +2,7 @@ add_subdirectory( pics )
 add_subdirectory( fonts ) 
 #add_subdirectory( tests )
 
-include_directories(${QT_INCLUDES} ${KOFFICEUI_INCLUDES} )
+include_directories(${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 set( formulashape_PART_SRCS
    KoFormulaShapePlugin.cpp
@@ -52,7 +52,7 @@ kde4_automoc(${formulashape_PART_SRCS})
 
 kde4_add_plugin(formulashape ${formulashape_PART_SRCS})
 
-target_link_libraries(formulashape  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} kofficeui)
+target_link_libraries(formulashape  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} koguiutils)
 
 #set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS formulashape  DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -79,7 +79,7 @@ class KoPageLayoutDiaPrivate;
 /**
  *  With this dialog the user can specify the layout of the paper during printing.
  */
-class KOFFICEUI_EXPORT KoPageLayoutDia : public KDialogBase
+class KOGUIUTILS_EXPORT KoPageLayoutDia : public KDialogBase
 {
     Q_OBJECT
 

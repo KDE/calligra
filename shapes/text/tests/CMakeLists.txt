@@ -1,6 +1,6 @@
 if(KDE4_BUILD_TESTS)
 
-include_directories( ${CMAKE_SOURCE_DIR}/shapes/text ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/shapes/text ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} )
 
 ########### next target ###############
 

@@ -43,7 +43,7 @@ class KoUnitDoubleBase;
  * \internal
  * \since 1.4 (change of behavior)
  */
-class KOFFICEUI_EXPORT KoUnitDoubleValidator : public KDoubleValidator
+class KOGUIUTILS_EXPORT KoUnitDoubleValidator : public KDoubleValidator
 {
 public:
     KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name = 0 );
@@ -59,7 +59,7 @@ private:
  * Base for the unit widgets
  * \since 1.4 (change of behavior)
  */
-class KOFFICEUI_EXPORT KoUnitDoubleBase
+class KOGUIUTILS_EXPORT KoUnitDoubleBase
 {
 public:
     KoUnitDoubleBase( KoUnit unit, unsigned int precision ) : m_unit( unit ), m_precision( precision ) {}
@@ -106,7 +106,7 @@ protected:
  * Spin box for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KOFFICEUI_EXPORT KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
+class KOGUIUTILS_EXPORT KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
     Q_OBJECT
 public:
@@ -156,7 +156,7 @@ private slots:
  * Line edit for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KOFFICEUI_EXPORT KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
+class KOGUIUTILS_EXPORT KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
 {
     Q_OBJECT
 public:
@@ -184,7 +184,7 @@ private:
  * Combo box for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KOFFICEUI_EXPORT KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
+class KOGUIUTILS_EXPORT KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
 {
     Q_OBJECT
 public:
@@ -220,7 +220,7 @@ protected:
  * Combo box (with spin control) for double precision numbers with unit display
  * \since 1.4 (change of behavior)
  */
-class KOFFICEUI_EXPORT KoUnitDoubleSpinComboBox : public QWidget
+class KOGUIUTILS_EXPORT KoUnitDoubleSpinComboBox : public QWidget
 {
     Q_OBJECT
 public:

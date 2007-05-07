@@ -13,7 +13,7 @@ kde4_add_plugin(karbonxamlexport WITH_PREFIX ${karbonxamlexport_PART_SRCS})
 
 
 
-target_link_libraries(karbonxamlexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
+target_link_libraries(karbonxamlexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
 
 install(TARGETS karbonxamlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -28,7 +28,7 @@ kde4_add_plugin(karbonxamlimport WITH_PREFIX ${karbonxamlimport_PART_SRCS})
 
 
 
-target_link_libraries(karbonxamlimport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
+target_link_libraries(karbonxamlimport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
 
 install(TARGETS karbonxamlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -47,12 +47,12 @@ install( FILES  karbon_xaml_export.desktop karbon_xaml_import.desktop  DESTINATI
 #
 #libkarbonxamlexport_la_LDFLAGS = $(KDE_PLUGIN)
 #libkarbonxamlexport_la_LIBADD = \
-#	$(LIB_KOFFICEUI) \
+#	$(LIB_KOGUIUTILS) \
 #	../../../karbon/libkarboncommon.la
 #
 #libkarbonxamlimport_la_LDFLAGS = $(KDE_PLUGIN)
 #libkarbonxamlimport_la_LIBADD = \
-#	$(LIB_KOFFICEUI) \
+#	$(LIB_KOGUIUTILS) \
 #	../../../karbon/libkarboncommon.la
 #
 #INCLUDES = \

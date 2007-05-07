@@ -13,7 +13,7 @@ kde4_add_plugin(karbonpngexport WITH_PREFIX ${karbonpngexport_PART_SRCS})
 
 
 
-target_link_libraries(karbonpngexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
+target_link_libraries(karbonpngexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
 
 install(TARGETS karbonpngexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -32,7 +32,7 @@ install( FILES  karbon_png_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 #
 #libkarbonpngexport_la_LDFLAGS = $(KDE_PLUGIN)
 #libkarbonpngexport_la_LIBADD = \
-#	$(LIB_KOFFICEUI) \
+#	$(LIB_KOGUIUTILS) \
 #	../../../karbon/libkarboncommon.la
 #
 #INCLUDES = \

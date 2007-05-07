@@ -13,7 +13,7 @@ kde4_add_plugin(karbonxcfexport WITH_PREFIX ${karbonxcfexport_PART_SRCS})
 
 
 
-target_link_libraries(karbonxcfexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
+target_link_libraries(karbonxcfexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
 
 install(TARGETS karbonxcfexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -32,7 +32,7 @@ install( FILES  karbon_xcf_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 #
 #libkarbonxcfexport_la_LDFLAGS = $(KDE_PLUGIN)
 #libkarbonxcfexport_la_LIBADD = \
-#	$(LIB_KOFFICEUI) \
+#	$(LIB_KOGUIUTILS) \
 #	../../../karbon/libkarboncommon.la
 #
 #INCLUDES = \

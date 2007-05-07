@@ -1,4 +1,4 @@
-include_directories( ${KOFFICEUI_INCLUDES} )
+include_directories( ${KOGUIUTILS_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
@@ -13,7 +13,7 @@ SET (pictureshape_LIB_SRCS
 kde4_automoc(${pictureshape_LIB_SRCS})
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
 
-target_link_libraries(pictureshape flake kofficeui)
+target_link_libraries(pictureshape flake koguiutils)
 install(TARGETS pictureshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

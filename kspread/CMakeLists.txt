@@ -14,7 +14,7 @@ add_subdirectory( functions )
 add_subdirectory( sheetstyles )
 add_subdirectory( templates )
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart1 ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} ${EIGEN_INCLUDE_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart1 ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${EIGEN_INCLUDE_DIR} )
 
 
 ########### next target ###############
@@ -172,7 +172,7 @@ kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
 target_link_libraries(kspreadcommon
 	${QT_QTSQL_LIBRARY}
-	komain kofficeui kochart
+	komain koguiutils kochart
 	${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(kspreadcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

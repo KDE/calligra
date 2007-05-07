@@ -3,7 +3,7 @@ project(kformula)
 add_subdirectory( pics )
 add_subdirectory( flake )
 
-include_directories( ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
+include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES})
 
 
 ########### next target ###############
@@ -22,7 +22,7 @@ kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
 
 
-target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kofficeui )
+target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} koguiutils )
 
 install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 

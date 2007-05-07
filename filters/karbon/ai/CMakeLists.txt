@@ -18,7 +18,7 @@ kde4_add_plugin(karbonaiimport WITH_PREFIX ${karbonaiimport_PART_SRCS})
 
 
 
-target_link_libraries(karbonaiimport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
+target_link_libraries(karbonaiimport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
 
 install(TARGETS karbonaiimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -36,7 +36,7 @@ install( FILES  karbon_ai_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 #kde_module_LTLIBRARIES = libkarbonaiimport.la
 #
 #libkarbonaiimport_la_LIBADD = \
-#	$(LIB_KOFFICEUI) \
+#	$(LIB_KOGUIUTILS) \
 #	../../../karbon/libkarboncommon.la
 #
 #libkarbonaiimport_la_LDFLAGS = \

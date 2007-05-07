@@ -1,6 +1,6 @@
 project(kpresenter)
 
-include_directories(${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES} ${KOPAGEAPP_INCLUDES})
+include_directories(${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} ${KOPAGEAPP_INCLUDES})
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KPRESENTER_TEST_EXPORT macro do something
@@ -20,7 +20,7 @@ kde4_automoc(${kpresenterprivate_LIB_SRCS})
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} kofficeui flake kotext kopageapp)
+target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} koguiutils flake kotext kopageapp)
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kpresenterprivate  DESTINATION ${LIB_INSTALL_DIR})

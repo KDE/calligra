@@ -13,7 +13,7 @@ kde4_add_plugin(karbonsvgexport WITH_PREFIX ${karbonsvgexport_PART_SRCS})
 
 
 
-target_link_libraries(karbonsvgexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
+target_link_libraries(karbonsvgexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
 
 install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -28,7 +28,7 @@ kde4_add_plugin(karbonsvgimport WITH_PREFIX ${karbonsvgimport_PART_SRCS})
 
 
 
-target_link_libraries(karbonsvgimport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
+target_link_libraries(karbonsvgimport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
 
 install(TARGETS karbonsvgimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -47,12 +47,12 @@ install( FILES  karbon_svg_export.desktop karbon_svg_import.desktop  DESTINATION
 #
 #libkarbonsvgexport_la_LDFLAGS = $(KDE_PLUGIN)
 #libkarbonsvgexport_la_LIBADD = \
-#	$(LIB_KOFFICEUI) \
+#	$(LIB_KOGUIUTILS) \
 #	../../../karbon/libkarboncommon.la
 #
 #libkarbonsvgimport_la_LDFLAGS = $(KDE_PLUGIN)
 #libkarbonsvgimport_la_LIBADD = \
-#	$(LIB_KOFFICEUI) \
+#	$(LIB_KOGUIUTILS) \
 #	../../../karbon/libkarboncommon.la
 #
 #INCLUDES = \

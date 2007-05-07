@@ -4,7 +4,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/kspread 
 	${CMAKE_SOURCE_DIR}/kword 
 	${KOTEXT_INCLUDES} 
-	${KOFFICEUI_INCLUDES} )
+	${KOGUIUTILS_INCLUDES} )
 
 
 ########### next target ###############

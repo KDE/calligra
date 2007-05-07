@@ -1,6 +1,6 @@
 
 
-include_directories(${KOFFICEUI_INCLUDES} ${KFORMULA_INCLUDES})
+include_directories(${KOGUIUTILS_INCLUDES} ${KFORMULA_INCLUDES})
 
 #add_subdirectory( png )
 #add_subdirectory( latex )

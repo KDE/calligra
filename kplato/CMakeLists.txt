@@ -9,7 +9,7 @@ endif(KDE4_BUILD_TESTS)
 include (../kdgantt/CMakeLists.txt)
 
 set( KPLATO_INCLUDES
-    ${KOFFICEUI_INCLUDES}
+    ${KOGUIUTILS_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kdgantt1
    ## ${CMAKE_BINARY_DIR}/kdgantt
 )
@@ -133,7 +133,7 @@ kde4_automoc(${libkdgantt1_SRCS})
 
 kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt1_SRCS}) #${libkdgantt_SRCS})
 
-target_link_libraries(kplatoprivate kofficeui)
+target_link_libraries(kplatoprivate koguiutils)
 
 set_target_properties(kplatoprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

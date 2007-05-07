@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. ${KOFFICEUI_INCLUDES} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. ${KOGUIUTILS_INCLUDES} )
 
 #   macro(MUSICCORE_BUILD_TESTS)
 #       foreach(_testname ${ARGN} ${musiccore_SRCS})

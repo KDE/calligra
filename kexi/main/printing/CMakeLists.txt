@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/main/printing ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/lib/kofficeui ${CMAKE_SOURCE_DIR}/lib/komain ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/main/printing ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/lib/koguiutils ${CMAKE_SOURCE_DIR}/lib/komain ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -31,7 +31,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/main/prin
 #libkeximainprinting_la_LDFLAGS = $(all_libraries) -Wnounresolved
 #libkeximainprinting_la_LIBADD = \
 #	$(top_builddir)/lib/komain/libkomain.la \
-#	$(top_builddir)/lib/kofficeui/libkofficeui.la \
+#	$(top_builddir)/lib/koguiutils/libkoguiutils.la \
 #	../../widget/libkexiextendedwidgets.la
 #
 #libkeximainprinting_la_METASOURCES = AUTO
@@ -42,8 +42,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/main/prin
 #
 #INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/main/printing \
 #	-I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi/widget \
-#	-I$(top_builddir)/lib/kofficeui -I$(top_srcdir)/lib/kofficeui \
+#	-I$(top_builddir)/lib/koguiutils -I$(top_srcdir)/lib/koguiutils \
 #	-I$(top_srcdir)/lib/komain \
 #	-I$(top_builddir)/kexi/widget $(all_includes)
 #
-##KDE_CXXFLAGS += -DSIMPLE_KOLIBS -DKOFFICECORE_EXPORT= -DKOFFICEUI_EXPORT=
+##KDE_CXXFLAGS += -DSIMPLE_KOLIBS -DKOFFICECORE_EXPORT= -DKOGUIUTILS_EXPORT=

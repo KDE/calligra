@@ -2,7 +2,7 @@
 
 
 include_directories(
-    ${KOMAIN_INCLUDES} ${KOFFICEUI_INCLUDES})
+    ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES})
 
 
 add_subdirectory( toolbar )
@@ -20,7 +20,7 @@ kde4_automoc(${kudesignercore_LIB_SRCS})
 
 kde4_add_library(kudesignercore SHARED ${kudesignercore_LIB_SRCS})
 
-target_link_libraries(kudesignercore  kofficeui ${KDE4_KPARTS_LIBS} komain koproperty ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
+target_link_libraries(kudesignercore  koguiutils ${KDE4_KPARTS_LIBS} komain koproperty ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
 
 set_target_properties(kudesignercore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kudesignercore  DESTINATION ${LIB_INSTALL_DIR})
@@ -36,7 +36,7 @@ kde4_add_plugin(kudesignerpart WITH_PREFIX ${kudesignerpart_PART_SRCS})
 
 
 
-target_link_libraries(kudesignerpart  kudesignercore kofficeui ${KDE4_KPARTS_LIBS} komain )
+target_link_libraries(kudesignerpart  kudesignercore koguiutils ${KDE4_KPARTS_LIBS} komain )
 
 install(TARGETS kudesignerpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 

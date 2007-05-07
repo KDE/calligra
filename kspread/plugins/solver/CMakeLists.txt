@@ -2,7 +2,7 @@ macro_optional_find_package(GSL)
 
 if(GSL_FOUND)
 
-include_directories( ${GSL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kspread ${KOFFICEUI_INCLUDES} )
+include_directories( ${GSL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES} )
 
 ########### next target ###############
 

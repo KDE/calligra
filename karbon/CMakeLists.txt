@@ -18,7 +18,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-karbon.h.cmake ${CMAKE_CURRENT
 include_directories( 
 		${KDE4_INCLUDE_DIR} 
 		${QT_INCLUDES} 
-		${KOFFICEUI_INCLUDES} 
+		${KOGUIUTILS_INCLUDES} 
 		${KOPAINTER_INCLUDES}
 		${CMAKE_BINARY_DIR}/karbon/
 		${CMAKE_SOURCE_DIR}/karbon/core 
@@ -74,7 +74,7 @@ kde4_automoc(${karboncommon_LIB_SRCS})
 
 kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 
-target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} komain kofficeui kopainter kotext karbondockers karbonwidgets vpainter karboncore karbonshapes karboncommands karbonvisitors karbondialogs )
+target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} komain koguiutils kopainter kotext karbondockers karbonwidgets vpainter karboncore karbonshapes karboncommands karbonvisitors karbondialogs )
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})

@@ -10,7 +10,7 @@ kde4_add_plugin(karbonepsexport WITH_PREFIX ${karbonepsexport_PART_SRCS})
 
 
 
-target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
+target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
 
 install(TARGETS karbonepsexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -25,7 +25,7 @@ kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
 
 
 
-target_link_libraries(karbonepsimport  ${KDE4_KDECORE_LIBS} kofficeui )
+target_link_libraries(karbonepsimport  ${KDE4_KDECORE_LIBS} koguiutils )
 
 install(TARGETS karbonepsimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -51,11 +51,11 @@ install(FILES  karbon_eps_export.desktop
 #	epsexportdlg.cc
 #
 #libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN)
-#libkarbonepsexport_la_LIBADD  = $(LIB_KOFFICEUI) ../../../karbon/libkarboncommon.la
+#libkarbonepsexport_la_LIBADD  = $(LIB_KOGUIUTILS) ../../../karbon/libkarboncommon.la
 #
 #libkarbonepsimport_la_SOURCES = epsimport.cc pscommentlexer.cc
 #libkarbonepsimport_la_LDFLAGS = $(KDE_PLUGIN)
-#libkarbonepsimport_la_LIBADD  = $(LIB_KOFFICEUI)
+#libkarbonepsimport_la_LIBADD  = $(LIB_KOGUIUTILS)
 #
 #INCLUDES = \
 #	$(KOFFICE_INCLUDES) \

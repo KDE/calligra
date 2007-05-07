@@ -3,7 +3,7 @@ project(kwordpart)
 add_subdirectory( frames/tests )
 add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
+include_directories( ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 ########### KWordPrivate library ###############
 
@@ -63,7 +63,7 @@ kde4_automoc(${kwordprivate_LIB_SRCS})
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
-target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake kofficeui kotext)
+target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake koguiutils kotext)
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KWORD_TEST_EXPORT macro do something

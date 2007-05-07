@@ -18,7 +18,7 @@ kde4_add_plugin(karbon_defaulttools ${karbon_defaulttools_PART_SRCS})
 
 
 
-target_link_libraries(karbon_defaulttools  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
+target_link_libraries(karbon_defaulttools  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} koguiutils karboncommon )
 
 install(TARGETS karbon_defaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
 

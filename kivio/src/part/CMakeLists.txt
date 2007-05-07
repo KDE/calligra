@@ -1,6 +1,6 @@
 project(kivio)
 
-include_directories(${KOFFICEUI_INCLUDES} ${KOPAGEAPP_INCLUDES})
+include_directories(${KOGUIUTILS_INCLUDES} ${KOPAGEAPP_INCLUDES})
 
 ### kivioprivate ###
 set(kivioprivate_LIB_SRCS
@@ -15,7 +15,7 @@ kde4_add_ui_files(kivioprivate_LIB_SRCS KivioShapeGeometry.ui)
 
 kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 
-target_link_libraries(kivioprivate  ${KDE4_KDECORE_LIBS} kofficeui flake kopageapp)
+target_link_libraries(kivioprivate  ${KDE4_KDECORE_LIBS} koguiutils flake kopageapp)
 
 set_target_properties(kivioprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kivioprivate  DESTINATION ${LIB_INSTALL_DIR})

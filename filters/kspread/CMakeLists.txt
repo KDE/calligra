@@ -2,7 +2,7 @@
 
 include_directories(
     ${KOTEXT_INCLUDES}
-    ${KOFFICEUI_INCLUDES}
+    ${KOGUIUTILS_INCLUDES}
 	)
 
 add_subdirectory( applixspread )
