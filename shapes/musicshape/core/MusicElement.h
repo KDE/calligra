@@ -77,6 +77,16 @@ public:
     void setY(double y);
 
     /**
+     * Returns the width of this musical element.
+     */
+    double width() const;
+
+    /**
+     * Returns the height of this musical element.
+     */
+    double height() const;
+
+    /**
      * Returns the duration of this musical elements in ticks.
      */
     int length() const;
@@ -104,6 +114,20 @@ protected:
      * @param length the new duration of this musical element
      */
     void setLength(int length);
+
+    /**
+     * Sets the width of this musical element.
+     *
+     * @param width the new width of this musical element
+     */
+    void setWidth(double width);
+
+    /**
+     * Sets the height of this musical element.
+     *
+     * @param height the new height of this musical element
+     */
+    void setHeight(double height);
 private:
     class Private;
     Private * const d;

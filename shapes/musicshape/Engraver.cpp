@@ -85,20 +85,20 @@ void Engraver::engraveBar(Bar* bar)
         // none found, break
         if (time == INT_MAX) break;
 
+        double maxEnd = x;
         // now update all items with correct start time
         for (int i = 0; i < voices.size(); i++) {
             if (nextTime[i] == time && nextIndex[i] < voices[i]->elementCount()) {
-                double xpos = x + 30;
-                if (dynamic_cast<Clef*>(voices[i]->element(nextIndex[i]))) {
-                    xpos = x + 10;
-                }
+                double xpos = x + 15;
                 voices[i]->element(nextIndex[i])->setX(xpos);
+                double xend = voices[i]->element(nextIndex[i])->width() + xpos;
+                if (xend > maxEnd) maxEnd = xend;
                 nextTime[i] += voices[i]->element(nextIndex[i])->length();
                 nextIndex[i]++;
             }
         }
 
-        x += 30;
+        x = maxEnd;
     }
-    bar->setSize(x + 30);
+    bar->setSize(x + 15);
 }

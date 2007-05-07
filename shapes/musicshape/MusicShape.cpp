@@ -58,7 +58,7 @@ MusicShape::MusicShape() : m_engraver(new Engraver())
     Bar* b3 = m_sheet->addBar();
 
     voice->bar(b1)->addElement(new Clef(staff, Clef::Trebble, 2, 0));
-    voice->bar(b1)->addElement(new KeySignature(staff, -1));
+    voice->bar(b1)->addElement(new KeySignature(staff, -4));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 0));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 1));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 2));
@@ -71,7 +71,7 @@ MusicShape::MusicShape() : m_engraver(new Engraver())
     voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 3));
     voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
     voice2->bar(b1)->addElement(new Clef(staff2, Clef::Bass, 3, 0));
-    voice2->bar(b1)->addElement(new KeySignature(staff2, 1));
+    voice2->bar(b1)->addElement(new KeySignature(staff2, 5));
     voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Quarter));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Eighth));
@@ -99,6 +99,16 @@ void MusicShape::resize( const QSizeF &newSize )
     KoShape::resize(newSize);
 }
 
+
+static void paintBB( QPainter& painter, MusicElement* me, double x, double y )
+{
+#if 0
+    painter.setPen(QPen(Qt::blue));
+    painter.drawLine(QPointF(x + me->x(), y + me->y() - 20), QPointF(x + me->x(), y + me->y() + 20));
+    painter.drawLine(QPointF(x + me->x() + me->width(), y + me->y() - 20), QPointF(x + me->x() + me->width(), y + me->y() + 20));
+#endif
+}
+
 static void paintStaff( QPainter& painter, MusicStyle* style, Staff *staff )
 {
     double dy = staff->lineSpacing();
@@ -115,6 +125,7 @@ static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, doub
     if (chord->noteCount() == 0) { // a rest
         Staff *s = chord->staff();
         style->renderRest( painter, x, s->top() + (2 - (chord->duration() == Chord::Whole)) * s->lineSpacing(), chord->duration() );
+        paintBB(painter, chord, x - chord->x(), s->top() + 2 * s->lineSpacing() / 2);
         return;
     }
     Note *n = chord->note(0);
@@ -148,13 +159,14 @@ static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, doub
     painter.drawLine(QPointF(stemX, chord->y() + s->top() + line * s->lineSpacing() / 2),
                      QPointF(stemX, chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2));
     style->renderNoteHead( painter, x, chord->y() + s->top() + line * s->lineSpacing() / 2, chord->duration() );
-    x += 30;
+    paintBB(painter, chord, x - chord->x(), s->top() + line * s->lineSpacing() / 2);
 }
 
 static void paintClef( QPainter& painter, MusicStyle* style, Clef *c, double x )
 {
     Staff* s = c->staff();
     style->renderClef( painter, x + c->x(), s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
+    paintBB( painter, c, x, s->top() + (s->lineCount() - c->line()) * s->lineSpacing());
 }
 
 static void paintKeySignature( QPainter& painter, MusicStyle* style, KeySignature* ks, double x, Clef* clef )
@@ -204,6 +216,7 @@ static void paintKeySignature( QPainter& painter, MusicStyle* style, KeySignatur
         }
         idx = (idx + 3) % 7;
     }
+    paintBB( painter, ks, x, s->top() );
 }
 
 static void paintVoice( QPainter& painter, MusicStyle* style, Voice *voice )

@@ -27,6 +27,8 @@ public:
     int length;
     double x;
     double y;
+    double width;
+    double height;
 };
 
 MusicElement::MusicElement(int length) : d(new Private)
@@ -35,6 +37,8 @@ MusicElement::MusicElement(int length) : d(new Private)
     d->length = length;
     d->x = 0;
     d->y = 0;
+    d->width = 0;
+    d->height = 0;
 }
 
 MusicElement::~MusicElement()
@@ -70,6 +74,26 @@ double MusicElement::y() const
 void MusicElement::setY(double y)
 {
     d->y = y;
+}
+
+double MusicElement::width() const
+{
+    return d->width;
+}
+
+void MusicElement::setWidth(double width)
+{
+    d->width = width;
+}
+
+double MusicElement::height() const
+{
+    return d->height;
+}
+
+void MusicElement::setHeight(double height)
+{
+    d->height = height;
 }
 
 int MusicElement::length() const

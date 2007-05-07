@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KeySignature.h"
+#include <cstdlib>
 
 namespace MusicCore {
 
@@ -70,6 +71,8 @@ void KeySignature::setAccidentals(int accidentals)
         d->accidentals[idx]--;
         idx = (idx + 3) % 7;
     }
+
+    setWidth(10 * std::abs(accidentals));
 }
 
 int KeySignature::accidentals(int pitch) const
