@@ -21,10 +21,12 @@
 #ifndef __VCONFIGUREDLG_H__
 #define __VCONFIGUREDLG_H__
 
+#include <KoUnit.h>
 
 #include <kpagedialog.h>
 #include <kvbox.h>
 #include <kconfig.h>
+#include <ksharedconfig.h>
 
 class KarbonView;
 class KIntNumInput;

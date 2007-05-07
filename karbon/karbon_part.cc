@@ -5,7 +5,7 @@
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002-2006 David Faure <faure@kde.org>
    Copyright (C) 2002 Stephan Kulow <coolo@kde.org>
-   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoï¿½t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2003 Thomas Nagy <tnagyemail-mail@yahoo.fr>
    Copyright (C) 2003,2006 Dirk Mueller <mueller@kde.org>
    Copyright (C) 2004 Brad Hards <bradh@frogmouth.net>
@@ -17,7 +17,7 @@
    Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2005 Johannes Schaub <johannes.schaub@kdemail.net>
-   Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
+   Copyright (C) 2006 Gï¿½bor Lehel <illissius@gmail.com>
    Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright (C) 2006 Jaison Lee <lee.jaison@gmail.com>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
@@ -40,18 +40,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "karbon_part.h"
+#include "karbon_factory.h"
+#include "karbon_view.h"
+#include "vglobal.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
+#include "vselection.h"
+#include "vcanvas.h"
+#include "vdocumentdocker.h"
+#include "vtoolcontroller.h"
+#include "vtool.h"
+#include "vcommand.h"
+#include "vtransformcmd.h"
 
-#include <qdom.h>
-#include <qfileinfo.h>
-#include <qpainter.h>
-#include <q3paintdevicemetrics.h>
-#include <QRectF>
-#include <Q3ValueList>
-
-#include <kconfig.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <ktemporaryfile.h>
+#include <KoApplication.h>
 #include <KoStoreDevice.h>
 #include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>
@@ -61,26 +64,24 @@
 #include <KoDom.h>
 #include <KoOasisSettings.h>
 #include <KoMainWindow.h>
-
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 
-#include "karbon_factory.h"
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "vcommand.h"
-#include "vglobal.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
-#include "vselection.h"
-#include "vcanvas.h"
-#include "vdocumentdocker.h"
-#include "vtoolcontroller.h"
-#include "KoApplication.h"
-#include "vtool.h"
-#include "commands/vtransformcmd.h"
+#include <kconfig.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <ktemporaryfile.h>
+
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <QtCore/QFileInfo>
+#include <QtCore/QRectF>
+#include <QtGui/QPainter>
+#include <Qt3Support/q3paintdevicemetrics.h>
+#include <Qt3Support/Q3ValueList>
+
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";

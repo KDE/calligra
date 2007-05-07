@@ -29,11 +29,12 @@
 #define __VSTROKEDOCKER_H__
 
 #include <KoLineBorder.h>
+#include <KoDockFactory.h>
+#include <KoUnit.h>
+#include <QtGui/QDockWidget>
 
-class QDockWidget;
 class QButtonGroup;
 class KoUnitDoubleSpinBox;
-class KoDockFactory;
 class KoShapeBorderModel;
 class KarbonLineStyleSelector;
 

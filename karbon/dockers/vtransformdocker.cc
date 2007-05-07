@@ -29,17 +29,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QLabel>
-#include <QLayout>
-#include <QWidget>
-#include <QDockWidget>
-#include <QMatrix>
-#include <QToolTip>
-#include <QGridLayout>
-#include <QPointF>
-#include <QRectF>
+#include "vtransformdocker.h"
 
-#include <klocale.h>
 #include <KoMainWindow.h>
 #include <KoDockFactory.h>
 #include <KoUnitWidgets.h>
@@ -54,9 +45,19 @@
 #include <KoShapeSizeCommand.h>
 #include <KoShapeContainer.h>
 
+#include <klocale.h>
+#include <knuminput.h>
 #include <kdebug.h>
 
-#include "vtransformdocker.h"
+#include <QLabel>
+#include <QLayout>
+#include <QWidget>
+#include <QDockWidget>
+#include <QMatrix>
+#include <QToolTip>
+#include <QGridLayout>
+#include <QPointF>
+#include <QRectF>
 
 VTransformDockerFactory::VTransformDockerFactory()
 {

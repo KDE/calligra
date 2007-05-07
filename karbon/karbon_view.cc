@@ -45,70 +45,8 @@
 
 #include "karbon_view.h"
 
-#include <q3dragobject.h>
-#include <QIcon>
-#include <QApplication>
-#include <QClipboard>
-#include <q3popupmenu.h>
-#include <QPainter>
-#include <QResizeEvent>
-#include <QPixmap>
-#include <Q3ValueList>
-#include <QEvent>
-#include <QDropEvent>
-#include <QGridLayout>
-#include <QToolBar>
-#include <QTimer>
-#include <QLabel>
-
-#include <kaction.h>
-#include <kcolormimedata.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include <kdeversion.h>
-#include <kprinter.h>
-#include <kcomponentdata.h>
-#include <kactioncollection.h>
-#include <kxmlguifactory.h>
-#include <kicon.h>
-#include <KoMainWindow.h>
-#include <KoToolBox.h>
-#include <KoCreateShapesTool.h>
-#include <KoFilterManager.h>
-#include <kstatusbar.h>
-#include <kfiledialog.h>
-#include <kstandardaction.h>
-#include <KoContextHelp.h>
-#include <KoUnitWidgets.h>
-// #include <KoPageLayoutDia.h>
-#include <KoRuler.h>
-#include <Kolinestyleaction.h>
-#include <KoToolManager.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
-#include <KoShapeContainer.h>
-#include <KoShapeGroup.h>
-#include <KoShapeUngroupCommand.h>
-#include <KoShapeCreateCommand.h>
-#include <KoShapeDeleteCommand.h>
-#include <KoShapeReorderCommand.h>
-#include <KoShapeBorderCommand.h>
-#include <KoShapeBackgroundCommand.h>
-#include <KoSelection.h>
-#include <KoZoomAction.h>
-#include <KoPathShape.h>
-#include <KoPathCombineCommand.h>
-#include <KoPathSeparateCommand.h>
-#include <KoToolBoxFactory.h>
-#include <KoShapeController.h>
-#include <KoZoomController.h>
-#include <KoParameterShape.h>
-
 // Commands.
 #include "vclipartcmd.h"
-#include "vfillcmd.h"
-#include "vtransformcmd.h"
 #include "vinsertcmd.h"
 
 // Dialogs.
@@ -122,9 +60,6 @@
 #include "vtransformdocker.h"
 #include "vlayerdocker.h"
 #include "KarbonStylePreviewDocker.h"
-#include <KoToolDocker.h>
-#include <KoToolDockerFactory.h>
-// ToolBars
 
 // Statusbar
 #include "vsmallpreview.h"
@@ -135,13 +70,76 @@
 #include "vglobal.h"
 #include "vselection.h"
 #include "vtoolcontroller.h"
-#include "vcomposite.h"
 #include "vpainterfactory.h"
-#include "vqpainter.h"
 #include "vtypebuttonbox.h"
 #include "vcanvas.h"
-#include "KoCanvasController.h"
 #include "karbon_drag.h"
+
+#include <KoMainWindow.h>
+#include <KoCanvasController.h>
+#include <KoCreateShapesTool.h>
+#include <KoFilterManager.h>
+#include <KoContextHelp.h>
+#include <KoUnitWidgets.h>
+// #include <KoPageLayoutDia.h>
+#include <KoRuler.h>
+#include <KoToolBox.h>
+#include <KoToolManager.h>
+#include <KoToolDocker.h>
+#include <KoToolDockerFactory.h>
+#include <KoShapeManager.h>
+#include <KoShapeController.h>
+#include <KoShapeContainer.h>
+#include <KoShapeGroup.h>
+#include <KoShapeUngroupCommand.h>
+#include <KoShapeCreateCommand.h>
+#include <KoShapeDeleteCommand.h>
+#include <KoShapeReorderCommand.h>
+#include <KoShapeBorderCommand.h>
+#include <KoShapeBackgroundCommand.h>
+#include <KoSelection.h>
+#include <KoZoomAction.h>
+#include <KoZoomHandler.h>
+#include <KoZoomController.h>
+#include <KoPathShape.h>
+#include <KoPathCombineCommand.h>
+#include <KoPathSeparateCommand.h>
+#include <KoToolBoxFactory.h>
+#include <KoParameterShape.h>
+
+// kde header
+#include <kaction.h>
+#include <kcolormimedata.h>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kmessagebox.h>
+#include <kdeversion.h>
+#include <kprinter.h>
+#include <kcomponentdata.h>
+#include <kactioncollection.h>
+#include <kxmlguifactory.h>
+#include <kicon.h>
+#include <kstatusbar.h>
+#include <kfiledialog.h>
+#include <kstandardaction.h>
+
+// qt header
+#include <QtGui/QIcon>
+#include <QtGui/QApplication>
+#include <QtGui/QClipboard>
+#include <QtGui/QPainter>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QPixmap>
+#include <QtGui/QDropEvent>
+#include <QtGui/QGridLayout>
+#include <QtGui/QToolBar>
+#include <QtGui/QLabel>
+#include <QtCore/QTimer>
+#include <QtCore/QEvent>
+#include <Qt3Support/q3dragobject.h>
+#include <Qt3Support/q3popupmenu.h>
+
+
 
 #include <unistd.h>
 
@@ -368,6 +366,7 @@ void KarbonView::dropEvent( QDropEvent *e )
     }
     else if( KarbonDrag::decode( e->mimeData(), selection, m_part->document() ) )
     {
+        /* TODO port to flake
         VObject *clipart = selection.first();
         QPointF p( e->pos() );
         p = m_canvas->viewConverter()->viewToDocument( p ); // TODO: or documentToView ?
@@ -378,6 +377,7 @@ void KarbonView::dropEvent( QDropEvent *e )
         VClipartCmd* cmd = new VClipartCmd( &m_part->document(), i18n( "Insert Clipart" ), clipart );
 
         m_part->addCommand( cmd, true );
+        */
     }
 }
 

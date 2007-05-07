@@ -20,21 +20,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QColor>
-#include <QPaintEvent>
-#include <QMouseEvent>
-#include <QEvent>
-#include <QPoint>
-#include <QRect>
-#include <QPainter>
-#include <QBrush>
-#include <QGradient>
+#include "vstrokefillpreview.h"
 
 #include <KoPathShape.h>
 #include <KoShapeBorderModel.h>
 #include <KoZoomHandler.h>
 
-#include "vstrokefillpreview.h"
+#include <QtCore/QEvent>
+#include <QtCore/QPoint>
+#include <QtCore/QRect>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
+#include <QtGui/QColor>
+#include <QtGui/QBrush>
+#include <QtGui/QGradient>
 
 #define PANEL_SIZEX 50.0
 #define PANEL_SIZEY 50.0

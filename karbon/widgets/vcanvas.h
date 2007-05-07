@@ -32,34 +32,25 @@
 #ifndef __VCANVAS_H__
 #define __VCANVAS_H__
 
-
-#include <QResizeEvent>
-#include <QEvent>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QPaintEvent>
-#include <QTabletEvent>
-#include <QWheelEvent>
-#include <QFocusEvent>
-#include <QWidget>
-#include <QList>
-
 #include <karbon_export.h>
+
 #include <KoCanvasBase.h>
-#include <KoZoomHandler.h>
-#include <KoViewConverter.h>
-#include <KoShape.h>
 
-#include <QBrush>
-#include <QPainter>
+#include <QtGui/QWidget>
+#include <QtCore/QList>
+#include <QtGui/QBrush>
 
-class QPointF;
-class QRectF;
+class VDocument;
+class KarbonPart;
 class KoViewConverter;
 class KoShapeManager;
 class KoToolProxy;
-class VDocument;
-class KarbonPart;
+class QRectF;
+class QPainter;
+class QPaintEvent;
+class QWheelEvent;
+class QTabletEvent;
+class QResizeEvent;
 
 class KarbonCanvas: public QWidget, public KoCanvasBase
 {

@@ -27,6 +27,11 @@
 #ifndef __VTRANSFORMDOCKER_H__
 #define __VTRANSFORMDOCKER_H__
 
+#include <KoUnit.h>
+#include <KoDockFactory.h>
+#include <QtGui/QDockWidget>
+
+class KDoubleSpinBox;
 class KoUnitDoubleSpinBox;
 class KoDockFactory;
 
@@ -42,31 +47,31 @@ public:
 
 class VTransformDocker : public QDockWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	VTransformDocker();
+    VTransformDocker();
 
 public slots:
-	void update();
-	virtual void setUnit( KoUnit unit );
+    void update();
+    void setUnit( KoUnit unit );
 
 private slots:
-	void translate();
-	void scale();
-	void enableSignals( bool enable );
-	void shearX();
-	void shearY();
-	void rotate();
+    void translate();
+    void scale();
+    void enableSignals( bool enable );
+    void shearX();
+    void shearY();
+    void rotate();
 
 private:
-	KoUnitDoubleSpinBox *m_x;
-	KoUnitDoubleSpinBox *m_y;
-	KoUnitDoubleSpinBox *m_width;
-	KoUnitDoubleSpinBox *m_height;
-	KDoubleSpinBox *m_rotate;
-	KDoubleSpinBox *m_shearX;
-	KDoubleSpinBox *m_shearY;
+    KoUnitDoubleSpinBox *m_x;
+    KoUnitDoubleSpinBox *m_y;
+    KoUnitDoubleSpinBox *m_width;
+    KoUnitDoubleSpinBox *m_height;
+    KDoubleSpinBox *m_rotate;
+    KDoubleSpinBox *m_shearX;
+    KDoubleSpinBox *m_shearY;
 };
 
 #endif

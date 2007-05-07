@@ -30,13 +30,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QDockWidget>
-#include <QColor>
-#include <QToolTip>
-#include <qevent.h>
-#include <QMouseEvent>
+#include "vcolordocker.h"
+#include "Karbon.h"
 
-#include <klocale.h>
 #include <KoUniColorChooser.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -50,10 +46,15 @@
 #include <KoColor.h>
 #include <KoShape.h>
 
-#include "Karbon.h"
-#include "vcolordocker.h"
-
+#include <klocale.h>
 #include <kdebug.h>
+
+#include <QtCore/QEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QDockWidget>
+#include <QtGui/QColor>
+#include <QtGui/QToolTip>
+
 
 VColorDockerFactory::VColorDockerFactory()
 {

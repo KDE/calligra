@@ -22,6 +22,7 @@
 
 #include <KoFactory.h>
 #include <karbon_export.h>
+
 class KAboutData;
 class KComponentData;
 

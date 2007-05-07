@@ -28,11 +28,12 @@
 #ifndef __VCOLORDOCKER_H__
 #define __VCOLORDOCKER_H__
 
-#include <QMouseEvent>
 #include <KoColor.h>
 #include <KoDockFactory.h>
 
-class QDockWidget;
+#include <QtGui/QMouseEvent>
+#include <QtGui/QDockWidget>
+
 class KarbonView;
 class KoUniColorChooser;
 

@@ -18,30 +18,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <float.h>
+#include "vconfiguredlg.h"
 
-#include <QCheckBox>
-#include <QLabel>
-#include <QLayout>
-#include <QGroupBox>
-#include <QComboBox>
-#include <QGridLayout>
+#include "karbon_view.h"
+#include "karbon_part.h"
+#include "karbon_factory.h"
+
+#include <KoGridData.h>
+#include <KoUnitWidgets.h>
 
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
-#include <KoUnitWidgets.h>
 #include <kcomponentdata.h>
 #include <kicon.h>
-#include <KoGridData.h>
 
-#include "karbon_view.h"
-#include "karbon_part.h"
-#include "karbon_factory.h"
+#include <QtGui/QCheckBox>
+#include <QtGui/QLabel>
+#include <QtGui/QLayout>
+#include <QtGui/QGroupBox>
+#include <QtGui/QComboBox>
+#include <QtGui/QGridLayout>
 
-#include "vconfiguredlg.h"
+#include <float.h>
 
 
 VConfigureDlg::VConfigureDlg( KarbonView* parent )

@@ -17,6 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "karbon_factory.h"
+#include "karbon_part.h"
+#include "karbon_resourceserver.h"
+#include "karbon_aboutdata.h"
+#include "karbon_tool_registry.h"
 
 #include <kaboutdata.h>
 #include <kglobal.h>
@@ -27,12 +32,6 @@
 #include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kparts/plugin.h>
-
-#include "karbon_factory.h"
-#include "karbon_part.h"
-#include "karbon_resourceserver.h"
-#include "karbon_aboutdata.h"
-#include "karbon_tool_registry.h"
 
 #include <kdebug.h>
 

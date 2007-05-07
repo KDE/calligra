@@ -27,16 +27,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QLabel>
-#include <QRadioButton>
-#include <QWidget>
-#include <QToolTip>
-#include <QGridLayout>
-#include <QDockWidget>
-#include <QButtonGroup>
+#include "vstrokedocker.h"
+#include "KarbonLineStyleSelector.h"
 
-#include <kiconloader.h>
-#include <klocale.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -47,9 +40,16 @@
 #include <KoShapeBorderModel.h>
 #include <KoSelection.h>
 
-#include "KarbonLineStyleSelector.h"
+#include <kiconloader.h>
+#include <klocale.h>
 
-#include "vstrokedocker.h"
+#include <QLabel>
+#include <QRadioButton>
+#include <QWidget>
+#include <QToolTip>
+#include <QGridLayout>
+#include <QDockWidget>
+#include <QButtonGroup>
 
 VStrokeDockerFactory::VStrokeDockerFactory()
 {

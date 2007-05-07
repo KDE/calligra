@@ -2,7 +2,7 @@
    Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
    Copyright (C) 2001-2002 Rob Buis <buis@kde.org>
    Copyright (C) 2002-2004, 2006 Laurent Montel <montel@kde.org>
-   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoï¿½t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2004 Waldo Bastian <bastian@kde.org>
    Copyright (C) 2004-2005 David Faure <faure@kde.org>
    Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
@@ -28,32 +28,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
-#include <QDropEvent>
-#include <QPaintEvent>
-#include <QResizeEvent>
-#include <QFocusEvent>
-#include <QMouseEvent>
-#include <QEvent>
-#include <QDragEnterEvent>
-#include <QSizeF>
-
-#include "karbon_drag.h"
 #include "vcanvas.h"
+#include "vdocument.h"
+#include "karbon_part.h"
 
-#include "KoZoomHandler.h"
-#include "KoShapeManager.h"
-#include "KoToolManager.h"
-#include "KoToolProxy.h"
-#include "KoTool.h"
-#include "KoPointerEvent.h"
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QFocusEvent>
+#include <QtGui/QMouseEvent>
+#include <QtCore/QEvent>
+#include <QtCore/QSizeF>
+
+#include <KoZoomHandler.h>
+#include <KoShapeManager.h>
+#include <KoToolProxy.h>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kcolormimedata.h>
-
-#include "vdocument.h"
-#include "karbon_part.h"
 
 class KarbonCanvas::KarbonCanvasPrivate
 {
