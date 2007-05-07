@@ -63,8 +63,8 @@ void Engraver::engraveBar(Bar* bar)
         }
     }
 
-    int nextTime[voices.size()];
-    int nextIndex[voices.size()];
+    int *nextTime = new int[voices.size()];
+    int *nextIndex = new int[voices.size()];
     // initialize stuff to 0
     for (int i = 0; i < voices.size(); i++) {
         nextTime[i] = 0;
@@ -100,14 +100,7 @@ void Engraver::engraveBar(Bar* bar)
         x += 30;
     }
     bar->setSize(x + 30);
-    /*
-    // now for a very simple engraver, simply layout all elements one after another
-    Q_FOREACH(VoiceBar* vb, voices) {
-        double x = 10;
-        for (int i = 0; i < vb->elementCount(); i++) {
-            vb->element(i)->setX(x);
-            x += 30;
-        }
-        maxX = qMax(maxX, x);
-    }*/
+
+    delete[] nextTime;
+    delete[] nextIndex;
 }
