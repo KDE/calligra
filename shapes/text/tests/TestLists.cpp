@@ -1,14 +1,12 @@
 #include "TestDocumentLayout.h"
 
-#include "styles/KoParagraphStyle.h"
-#include "styles/KoListStyle.h"
-#include "styles/KoStyleManager.h"
-#include "KoTextBlockData.h"
-//#include "KoTextBlockBorderData.h"
+#include <KoParagraphStyle.h>
+#include <KoListStyle.h>
+#include <KoListLevelProperties.h>
+#include <KoStyleManager.h>
+#include <KoTextBlockData.h>
 
 #include <QtGui>
-
-//#include <kdebug.h>
 
 void TestDocumentLayout::testBasicList() {
     initForNewTest("Base\nListItem\nListItem2: The quick brown fox jums over the lazy dog.\nNormal\nNormal");
@@ -62,23 +60,36 @@ void TestDocumentLayout::testNumberedList() {
     QVERIFY(block.isValid());
 
     KoListStyle listStyle;
-    listStyle.setStyle(KoListStyle::DecimalItem);
+    KoListLevelProperties llp = listStyle.level(1);
+    llp.setStyle(KoListStyle::DecimalItem);
+    listStyle.setLevel(llp);
     style.setListStyle(listStyle);
 
+    QTextList *previous = 0;
     for(int i=1; i <= 9; i++) {
         QVERIFY(block.isValid());
+        // qDebug() << "->" << block.text();
         style.applyStyle(block);
-        //qDebug() << "->" << block.text();
+        QTextList *textList = block.textList();
+        QVERIFY(textList);
+        if(previous == 0)
+            previous = textList;
+        else
+            QCOMPARE(textList, previous);
+        QCOMPARE(textList->format().intProperty(QTextListFormat::ListStyle), (int) (KoListStyle::DecimalItem));
         block = block.next();
     }
     layout->layout();
+
 
     QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
     QTextBlock blok = doc->begin().next();
     double indent = blok.layout()->lineAt(0).x();
     QVERIFY(indent > 0.0);
     for(int i=1; i <= 9; i++) {
-        //qDebug() << "=>" << blok.text();
+        // qDebug() << "=>" << blok.text();
+        QTextList *textList = blok.textList();
+        QVERIFY(textList);
         QCOMPARE(blok.layout()->lineAt(0).x(), indent); // all the same indent.
         blok = blok.next();
     }
@@ -87,7 +98,7 @@ void TestDocumentLayout::testNumberedList() {
     for(int i=9; i <= 12; i++) {
         QVERIFY(block.isValid());
         style.applyStyle(block);
-        //qDebug() << "->" << block.text();
+        // qDebug() << "->" << block.text();
         block = block.next();
     }
     layout->layout();
@@ -97,7 +108,7 @@ void TestDocumentLayout::testNumberedList() {
     double indent2 = blok.layout()->lineAt(0).x();
     QVERIFY(indent2 > indent); // since it takes an extra digit
     for(int i=2; i <= 12; i++) {
-        //qDebug() << "=>" << blok.text();
+        // qDebug() << "=>" << blok.text();
         QCOMPARE(blok.layout()->lineAt(0).x(), indent2); // all the same indent.
         blok = blok.next();
     }
@@ -112,15 +123,14 @@ void TestDocumentLayout::testNumberedList() {
         block = block.next();
     }
 
-    listStyle.setListItemSuffix(".");
-    listStyle.setStartValue(4);
-    style.setListStyle(listStyle);
+    llp.setListItemSuffix(".");
+    llp.setStartValue(4);
+    listStyle.setLevel(llp);
 
     QTextCursor cursor(doc);
     cursor.setPosition(40); // listItem4
     block = cursor.block();
     QVERIFY(block.textList() != 0);
-    style.applyStyle(block);
     QCOMPARE(block.textList()->format().intProperty(KoListStyle::StartValue), 4);
 
     QTextBlockFormat format = cursor.blockFormat();
@@ -148,8 +158,10 @@ void TestDocumentLayout::testInterruptedLists() {
 
     KoParagraphStyle style;
     KoListStyle listStyle;
-    listStyle.setStyle(KoListStyle::DecimalItem);
-    listStyle.setListItemSuffix(".");
+    KoListLevelProperties llp = listStyle.level(1);
+    llp.setStyle(KoListStyle::DecimalItem);
+    llp.setListItemSuffix(".");
+    listStyle.setLevel(llp);
     style.setListStyle(listStyle);
 
     QTextBlock block = doc->begin();
@@ -225,18 +237,31 @@ void TestDocumentLayout::testNestedLists() {
     styleManager->add(&h4);
 
     KoListStyle listStyle;
-    listStyle.setStyle(KoListStyle::DecimalItem);
-    listStyle.setLevel(1);
+    KoListLevelProperties llp = listStyle.level(1);
+    llp.setStyle(KoListStyle::DecimalItem);
+    listStyle.setLevel(llp);
     h1.setListStyle(listStyle);
-    listStyle.setLevel(2);
-    listStyle.setListItemSuffix(".");
-    h2.setListStyle(listStyle);
-    listStyle.setLevel(3);
-    listStyle.setListItemSuffix("");
-    h3.setListStyle(listStyle);
-    listStyle.setLevel(4);
-    listStyle.setDisplayLevel(2);
-    h4.setListStyle(listStyle);
+
+    KoListStyle listStyle2;
+    llp.setLevel(2);
+    llp.setListItemSuffix(".");
+    listStyle2.setLevel(llp);
+    h2.setListStyle(listStyle2);
+    // purpusfully leave this one out, as it should default to the only known one: // h2.setListLevel(2);
+
+    llp.setLevel(3);
+    llp.setListItemSuffix("");
+    KoListStyle listStyle3;
+    listStyle3.setLevel(llp);
+    h3.setListStyle(listStyle3);
+    h3.setListLevel(3);
+
+    KoListStyle listStyle4;
+    llp.setLevel(4);
+    llp.setDisplayLevel(2);
+    listStyle4.setLevel(llp);
+    h4.setListStyle(listStyle4);
+    h4.setListLevel(4);
 
     QTextBlock block = doc->begin().next();
     h1.applyStyle(block);
@@ -275,13 +300,13 @@ void TestDocumentLayout::testNestedLists() {
         //qDebug() << "text: " << block.text();
         //qDebug() << "expected: " << texts[i];
         QVERIFY(data);
+        //qDebug() << data->counterText();
+        QCOMPARE(data->counterText(), QString(texts[i++]));
         if(i < 3) {
             //qDebug() << "indent:" << data->counterWidth();
             QVERIFY (indent < data->counterWidth()); // deeper indent, larger width
             indent = data->counterWidth();
         }
-        //qDebug() << data->counterText();
-        QVERIFY(data->counterText() == texts[i++]);
         block = block.next();
     }
 }
@@ -295,13 +320,15 @@ void TestDocumentLayout::testAutoRestartList() {
     styleManager->add(&h2);
 
     KoListStyle listStyle;
-    listStyle.setStyle(KoListStyle::DecimalItem);
-    listStyle.setLevel(1);
+    KoListLevelProperties llp = listStyle.level(1);
+    llp.setStyle(KoListStyle::DecimalItem);
+    listStyle.setLevel(llp);
     h1.setListStyle(listStyle);
 
     KoListStyle listStyle2;
-    listStyle2.setStyle(KoListStyle::DecimalItem);
-    listStyle2.setLevel(2);
+    KoListLevelProperties llp2 = listStyle2.level(2);
+    llp2.setStyle(KoListStyle::DecimalItem);
+    listStyle2.setLevel(llp2);
     h2.setListStyle(listStyle2);
 
     QTextBlock block = doc->begin();
@@ -365,7 +392,9 @@ void TestDocumentLayout::testRestartNumbering() {
     KoParagraphStyle h1;
     styleManager->add(&h1);
     KoListStyle listStyle;
-    listStyle.setStyle(KoListStyle::DecimalItem);
+    KoListLevelProperties llp = listStyle.level(1);
+    llp.setStyle(KoListStyle::DecimalItem);
+    listStyle.setLevel(llp);
     h1.setListStyle(listStyle);
 
     QTextBlock block = doc->begin();

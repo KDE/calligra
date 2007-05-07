@@ -36,6 +36,7 @@
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 #include <KoListStyle.h>
+#include <KoListLevelProperties.h>
 #include <KoPageLayout.h>
 
 // KDE + Qt includes
@@ -858,7 +859,9 @@ void KWOpenDocumentLoader::loadList(const KoXmlElement& parent, KoOasisLoadingCo
     //style->loadOasis( context.styleStack() );
 
 KoListStyle *liststyle =  new KoListStyle();
-liststyle->setStyle(KoListStyle::DiscItem); //KoListStyle::DecimalItem);
+KoListLevelProperties llp;
+llp.setStyle(KoListStyle::DiscItem); //KoListStyle::DecimalItem);
+liststyle->setLevel(llp);
 //liststyle->setLevel( element.attribute("depth").toInt() + 1);
 paragstyle->setListStyle(*liststyle);
 

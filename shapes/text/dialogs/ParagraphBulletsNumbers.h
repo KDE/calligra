@@ -48,8 +48,8 @@ private:
     Ui::ParagraphBulletsNumbers widget;
 
     KoParagraphStyle *m_paragStyle;
-    KoListStyle *m_style;
     QHash<int, KoListStyle::Style> m_mapping;
+    int m_previousLevel;
 };
 
 #endif

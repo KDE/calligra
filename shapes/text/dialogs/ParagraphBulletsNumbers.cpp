@@ -20,14 +20,14 @@
 #include "ParagraphBulletsNumbers.h"
 
 #include <KoParagraphStyle.h>
+#include <KoListLevelProperties.h>
 #include <KoCharSelectDia.h>
 
 #include <KDebug>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     : QWidget(parent),
-    m_paragStyle(0),
-    m_style(0)
+    m_paragStyle(0)
 {
     widget.setupUi(this);
 
@@ -53,16 +53,19 @@ void ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi) {
 
 void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
     m_paragStyle = style;
-    m_style = style->listStyle();
-    widget.listPropertiesPane->setEnabled(m_style);
+    KoListStyle listStyle = style->listStyle();
+    widget.listPropertiesPane->setEnabled(listStyle.isValid());
     widget.customCharacter->setText("-");
-    if(m_style == 0) {
+    if(!listStyle.isValid()) {
         widget.listTypes->setCurrentRow(0);
         return;
     }
-    widget.prefix->setText(m_style->listItemPrefix());
-    widget.suffix->setText(m_style->listItemSuffix());
-    KoListStyle::Style s = m_style->style();
+
+    KoListLevelProperties llp = listStyle.level(m_paragStyle->listLevel());
+    m_previousLevel = llp.level();
+    widget.prefix->setText(llp.listItemPrefix());
+    widget.suffix->setText(llp.listItemSuffix());
+    KoListStyle::Style s = llp.style();
     foreach(int row, m_mapping.keys()) {
         if(m_mapping[row] == s) {
             widget.listTypes->setCurrentRow(row);
@@ -70,22 +73,22 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
         }
     }
     int align;
-kDebug() << "a: " << m_style->alignment() << endl;
-    if(m_style->alignment() == (Qt::AlignLeft | Qt::AlignAbsolute))
+kDebug() << "a: " << llp.alignment() << endl;
+    if(llp.alignment() == (Qt::AlignLeft | Qt::AlignAbsolute))
         align = 1;
-    else if(m_style->alignment() == (Qt::AlignRight | Qt::AlignAbsolute))
+    else if(llp.alignment() == (Qt::AlignRight | Qt::AlignAbsolute))
         align = 2;
-    else if(m_style->alignment() == Qt::AlignCenter)
+    else if(llp.alignment() == Qt::AlignCenter)
         align = 3;
     else
         align = 0;
 
     widget.alignment->setCurrentIndex(align);
-    widget.depth->setValue(m_style->level());
-    widget.levels->setValue(m_style->displayLevel());
-    widget.startValue->setValue(m_style->startValue());
+    widget.depth->setValue(llp.level());
+    widget.levels->setValue(llp.displayLevel());
+    widget.startValue->setValue(llp.startValue());
     if(s == KoListStyle::CustomCharItem)
-        widget.customCharacter->setText(m_style->bulletCharacter());
+        widget.customCharacter->setText(llp.bulletCharacter());
 
     // *** features not in GUI;
     // character style
@@ -97,22 +100,21 @@ void ParagraphBulletsNumbers::save() {
     Q_ASSERT(m_paragStyle);
     KoListStyle::Style style = m_mapping[widget.listTypes->currentRow()];
     if(style == KoListStyle::NoItem) {
-        m_style = 0;
         m_paragStyle->removeListStyle();
         return;
     }
-    if(m_style == 0) {
+    if(! m_paragStyle->listStyle().isValid()) {
         KoListStyle ls;
         m_paragStyle->setListStyle(ls);
-        m_style = m_paragStyle->listStyle();
-        Q_ASSERT(m_style);
     }
-    m_style->setStyle(style);
-    m_style->setLevel(widget.depth->value());
-    m_style->setDisplayLevel(widget.levels->value());
-    m_style->setStartValue(widget.startValue->value());
-    m_style->setListItemPrefix(widget.prefix->text());
-    m_style->setListItemSuffix(widget.suffix->text());
+    KoListStyle listStyle = m_paragStyle->listStyle();
+    KoListLevelProperties llp = listStyle.level(widget.depth->value());
+    llp.setStyle(style);
+    llp.setLevel(widget.depth->value());
+    llp.setDisplayLevel(widget.levels->value());
+    llp.setStartValue(widget.startValue->value());
+    llp.setListItemPrefix(widget.prefix->text());
+    llp.setListItemSuffix(widget.suffix->text());
 
     Qt::Alignment align;
     switch(widget.alignment->currentIndex()) {
@@ -123,7 +125,11 @@ void ParagraphBulletsNumbers::save() {
         default:
             Q_ASSERT(false);
     }
-    m_style->setAlignment(align);
+    llp.setAlignment(align);
+    if(llp.level() != m_previousLevel)
+        listStyle.removePropertiesForLevel(m_previousLevel);
+    listStyle.setLevel(llp);
+    m_paragStyle->setListLevel(llp.level());
 }
 
 void ParagraphBulletsNumbers::styleChanged(int index) {

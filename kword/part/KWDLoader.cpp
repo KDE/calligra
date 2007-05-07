@@ -32,6 +32,7 @@
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 #include <KoListStyle.h>
+#include <KoListLevelProperties.h>
 #include <KoTextShapeData.h>
 #include <KoTextAnchor.h>
 #include <KoTextDocumentLayout.h>
@@ -592,11 +593,11 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
 
                 QTextBlock block = cursor.block();
                 paragStyle.applyStyle(block);
-                if(style->listStyle() == 0 && paragStyle.listStyle()) {
+                if(!style->listStyle().isValid() && paragStyle.listStyle().isValid()) {
                     Q_ASSERT(block.textList());
                     // this parag has a parag specific list.  Lets see if we can merge it with
                     // previous ones.
-                    const int level = paragStyle.listStyle()->level();
+                    const int level = paragStyle.listLevel();
                     const QTextFormat format = block.textList()->format();
                     QTextBlock prev = block.previous();
                     bool merge = false;
@@ -762,31 +763,33 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
         style->setBreakBefore(true);
     element = layout.firstChildElement( "COUNTER" );
     if ( !element.isNull() ) {
-        KoListStyle *orig = style->listStyle();
+        KoListStyle orig = style->listStyle();
         KoListStyle *lstyle;
-        if(orig)
-            lstyle = new KoListStyle(*orig);
+        if(orig.isValid())
+            lstyle = new KoListStyle(orig);
         else
             lstyle = new KoListStyle();
 
+        KoListLevelProperties llp = lstyle->level( element.attribute("depth").toInt() + 1 );
+
         int type = element.attribute("type").toInt();
         switch(type) {
-           case 1: lstyle->setStyle(KoListStyle::DecimalItem); break;
-           case 2: lstyle->setStyle(KoListStyle::AlphaLowerItem); break;
-           case 3: lstyle->setStyle(KoListStyle::UpperAlphaItem); break;
-           case 4: lstyle->setStyle(KoListStyle::RomanLowerItem); break;
-           case 5: lstyle->setStyle(KoListStyle::UpperRomanItem); break;
+           case 1: llp.setStyle(KoListStyle::DecimalItem); break;
+           case 2: llp.setStyle(KoListStyle::AlphaLowerItem); break;
+           case 3: llp.setStyle(KoListStyle::UpperAlphaItem); break;
+           case 4: llp.setStyle(KoListStyle::RomanLowerItem); break;
+           case 5: llp.setStyle(KoListStyle::UpperRomanItem); break;
            case 6: {
-                lstyle->setStyle(KoListStyle::CustomCharItem);
+                llp.setStyle(KoListStyle::CustomCharItem);
                 QChar character( element.attribute("bullet", QString::number('*')).toInt() );
-                lstyle->setBulletCharacter(character);
+                llp.setBulletCharacter(character);
                 break;
             }
-           case 8: lstyle->setStyle(KoListStyle::CircleItem); break;
-           case 9: lstyle->setStyle(KoListStyle::SquareItem); break;
-           case 10: lstyle->setStyle(KoListStyle::DiscItem); break;
-           case 11: lstyle->setStyle(KoListStyle::BoxItem); break;
-           case 7: lstyle->setStyle(KoListStyle::CustomCharItem);
+           case 8: llp.setStyle(KoListStyle::CircleItem); break;
+           case 9: llp.setStyle(KoListStyle::SquareItem); break;
+           case 10: llp.setStyle(KoListStyle::DiscItem); break;
+           case 11: llp.setStyle(KoListStyle::BoxItem); break;
+           case 7: llp.setStyle(KoListStyle::CustomCharItem);
                 kWarning() << "According to spec COUNTER with type 7 is not supported, ignoring\n";
                 // fall through
            default: {
@@ -795,21 +798,20 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
             }
         }
         if(lstyle) { // was a valid type
-            lstyle->setLevel( element.attribute("depth").toInt() + 1);
-            lstyle->setStartValue( element.attribute("start", "1").toInt());
-            //lstyle->setConsecutiveNumbering( element.attribute("numberingtype") == "1");
-            lstyle->setListItemPrefix( element.attribute("lefttext"));
-            lstyle->setListItemSuffix( element.attribute("righttext"));
-            lstyle->setDisplayLevel( element.attribute("display-levels").toInt());
-            lstyle->setDisplayLevel( element.attribute("display-levels").toInt());
+            llp.setStartValue( element.attribute("start", "1").toInt());
+            llp.setListItemPrefix( element.attribute("lefttext"));
+            llp.setListItemSuffix( element.attribute("righttext"));
+            llp.setDisplayLevel( element.attribute("display-levels").toInt());
             switch(element.attribute("align", "0").toInt()) {
-                case 0: lstyle->setAlignment(Qt::AlignLeading); break; // align = auto
-                case 1: lstyle->setAlignment(Qt::AlignAbsolute | Qt::AlignLeft); break; // align = left
-                case 2: lstyle->setAlignment(Qt::AlignAbsolute | Qt::AlignRight); break; // align = right
+                case 0: llp.setAlignment(Qt::AlignLeading); break; // align = auto
+                case 1: llp.setAlignment(Qt::AlignAbsolute | Qt::AlignLeft); break; // align = left
+                case 2: llp.setAlignment(Qt::AlignAbsolute | Qt::AlignRight); break; // align = right
             }
             if(element.attribute("restart", "false") == "true")
                 style->setRestartListNumbering(true);
+            style->setListLevel(llp.level());
             style->setListStyle(*lstyle);
+            lstyle->setLevel(llp);
         }
         else
             style->removeListStyle();
