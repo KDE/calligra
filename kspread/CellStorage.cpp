@@ -875,7 +875,7 @@ Cell CellStorage::firstInColumn( int col ) const
     d->valueStorage->firstInColumn( col, &tmpRow );
     if ( tmpRow )
         newRow = newRow ? qMin( newRow, tmpRow ) : tmpRow;
-    if ( !tmpRow )
+    if ( !newRow )
         return Cell();
     return Cell( d->sheet, col, newRow );
 }
@@ -889,7 +889,7 @@ Cell CellStorage::firstInRow( int row ) const
     d->valueStorage->firstInRow( row, &tmpCol );
     if ( tmpCol )
         newCol = newCol ? qMin( newCol, tmpCol ) : tmpCol;
-    if ( !tmpCol )
+    if ( !newCol )
         return Cell();
     return Cell( d->sheet, newCol, row );
 }
@@ -902,7 +902,7 @@ Cell CellStorage::lastInColumn( int col ) const
     newRow = tmpRow;
     d->valueStorage->lastInColumn( col, &tmpRow );
     newRow = qMax( newRow, tmpRow );
-    if ( !tmpRow )
+    if ( !newRow )
         return Cell();
     return Cell( d->sheet, col, newRow );
 }
@@ -915,7 +915,7 @@ Cell CellStorage::lastInRow( int row ) const
     newCol = tmpCol;
     d->valueStorage->lastInRow( row, &tmpCol );
     newCol = qMax( newCol, tmpCol );
-    if ( !tmpCol )
+    if ( !newCol )
         return Cell();
     return Cell( d->sheet, newCol, row );
 }
@@ -929,7 +929,7 @@ Cell CellStorage::nextInColumn( int col, int row ) const
     d->valueStorage->nextInColumn( col, row, &tmpRow );
     if ( tmpRow )
         newRow = newRow ? qMin( newRow, tmpRow ) : tmpRow;
-    if ( !tmpRow )
+    if ( !newRow )
         return Cell();
     return Cell( d->sheet, col, newRow );
 }
@@ -943,7 +943,7 @@ Cell CellStorage::nextInRow( int col, int row ) const
     d->valueStorage->nextInRow( col, row, &tmpCol );
     if ( tmpCol )
         newCol = newCol ? qMin( newCol, tmpCol ) : tmpCol;
-    if ( !tmpCol )
+    if ( !newCol )
         return Cell();
     return Cell( d->sheet, newCol, row );
 }
@@ -956,7 +956,7 @@ Cell CellStorage::prevInColumn( int col, int row ) const
     newRow = tmpRow;
     d->valueStorage->prevInColumn( col, row, &tmpRow );
     newRow = qMax( newRow, tmpRow );
-    if ( !tmpRow )
+    if ( !newRow )
         return Cell();
     return Cell( d->sheet, col, newRow );
 }
@@ -969,7 +969,7 @@ Cell CellStorage::prevInRow( int col, int row ) const
     newCol = tmpCol;
     d->valueStorage->prevInRow( col, row, &tmpCol );
     newCol = qMax( newCol, tmpCol );
-    if ( !tmpCol )
+    if ( !newCol )
         return Cell();
     return Cell( d->sheet, newCol, row );
 }
