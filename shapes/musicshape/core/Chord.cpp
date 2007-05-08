@@ -96,11 +96,13 @@ Note* Chord::addNote(Staff* staff, int pitch, int accidentals)
 {
     Note *n = new Note(staff, pitch, accidentals);
     d->notes.append(n);
+    if (!this->staff()) setStaff(staff);
     return n;
 }
 
 void Chord::addNote(Note* note)
 {
+    if (!staff()) setStaff(note->staff());
     d->notes.append(note);
 }
 

@@ -135,4 +135,4 @@ private:
 
 } // namespace MusicCore
 
-#endif // MUSIC_COREMUSICELEMENT_H
+#endif // MUSIC_CORE_MUSICELEMENT_H

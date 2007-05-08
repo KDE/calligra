@@ -28,6 +28,7 @@ SET (musicshape_LIB_SRCS
 	MusicToolFactory.cpp
         MusicStyle.cpp
         Engraver.cpp
+        Renderer.cpp
         ${musiccore_SRCS}
 	)
 

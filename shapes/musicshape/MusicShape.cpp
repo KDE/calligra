@@ -35,6 +35,7 @@
 
 #include "MusicStyle.h"
 #include "Engraver.h"
+#include "Renderer.h"
 
 using namespace MusicCore;
 
@@ -46,7 +47,7 @@ static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch)
     return c;
 }
 
-MusicShape::MusicShape() : m_engraver(new Engraver())
+MusicShape::MusicShape() : m_style(new MusicStyle), m_engraver(new Engraver()), m_renderer(new MusicRenderer(m_style))
 {
     m_sheet = new Sheet();
     Part* part = m_sheet->addPart("Piano");
@@ -86,202 +87,19 @@ MusicShape::MusicShape() : m_engraver(new Engraver())
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 2));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 0));
     m_engraver->engraveSheet(m_sheet);
-
-    m_style = new MusicStyle();
 }
 
 MusicShape::~MusicShape()
 {
     delete m_sheet;
     delete m_style;
+    delete m_renderer;
 }
 
 void MusicShape::resize( const QSizeF &newSize )
 {
 //  kDebug()<<" MusicShape::resize( const QSizeF &newSize ) " << newSize << endl;
     KoShape::resize(newSize);
-}
-
-
-static void paintBB( QPainter& painter, MusicElement* me, double x, double y )
-{
-#if 0
-    painter.setPen(QPen(Qt::blue));
-    painter.drawLine(QPointF(x + me->x(), y + me->y() - 20), QPointF(x + me->x(), y + me->y() + 20));
-    painter.drawLine(QPointF(x + me->x() + me->width(), y + me->y() - 20), QPointF(x + me->x() + me->width(), y + me->y() + 20));
-#endif
-}
-
-static void paintStaff( QPainter& painter, MusicStyle* style, Staff *staff )
-{
-    double dy = staff->lineSpacing();
-    double y = staff->top();
-    painter.setPen(style->staffLinePen());
-    for (int i = 0; i < staff->lineCount(); i++) {
-        painter.drawLine(QPointF(0.0, y + i * dy), QPointF(1000.0, y + i * dy));
-    }
-}
-
-static void paintChord( QPainter& painter, MusicStyle* style, Chord* chord, double x, Clef* clef )
-{
-    x = x + chord->x();
-    if (chord->noteCount() == 0) { // a rest
-        Staff *s = chord->staff();
-        style->renderRest( painter, x, s->top() + (2 - (chord->duration() == Chord::Whole)) * s->lineSpacing(), chord->duration() );
-        paintBB(painter, chord, x - chord->x(), s->top() + 2 * s->lineSpacing() / 2);
-        return;
-    }
-    Note *n = chord->note(0);
-    Staff * s = n->staff();
-    int line = 14;
-    if (clef && clef->shape() == Clef::FClef) line = 4;
-    if (clef) {
-        line -= 2*clef->line();
-    } else {
-        line -= 4;
-    }
-    line = line - n->pitch();
-    if (line > 9) { // lines under the bar
-        painter.setPen(style->staffLinePen());
-        for (int i = 10; i <= line; i+= 2) {
-            double y = s->top() + i * s->lineSpacing() / 2;
-            painter.drawLine(QPointF(x - 4, y), QPointF(x + 15, y));
-        }
-    } else if (line < -1) { // lines above the bar
-        painter.setPen(style->staffLinePen());
-        for (int i = -2; i >= line; i-= 2) {
-            double y = s->top() + i * s->lineSpacing() / 2;
-            painter.drawLine(QPointF(x - 4, y), QPointF(x + 15, y));
-        }
-    }
-
-    double stemLen = -7;
-    double stemX = x + 11;
-    if (line < 4) { stemLen = 7; stemX = x; }
-    painter.setPen(style->stemPen());
-    painter.drawLine(QPointF(stemX, chord->y() + s->top() + line * s->lineSpacing() / 2),
-                     QPointF(stemX, chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2));
-    style->renderNoteHead( painter, x, chord->y() + s->top() + line * s->lineSpacing() / 2, chord->duration() );
-    paintBB(painter, chord, x - chord->x(), s->top() + line * s->lineSpacing() / 2);
-}
-
-static void paintClef( QPainter& painter, MusicStyle* style, Clef *c, double x )
-{
-    Staff* s = c->staff();
-    style->renderClef( painter, x + c->x(), s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
-    paintBB( painter, c, x, s->top() + (s->lineCount() - c->line()) * s->lineSpacing());
-}
-
-static void paintKeySignature( QPainter& painter, MusicStyle* style, KeySignature* ks, double x, Clef* clef )
-{
-    Staff * s = ks->staff();
-    double curx = x + ks->x();
-    // draw sharps
-    int idx = 3;
-    for (int i = 0; i < 7; i++) {
-        if (ks->accidentals(idx) > 0) {
-            int line = 14;
-            if (clef && clef->shape() == Clef::FClef) line = 4;
-            if (clef) {
-                line -= 2*clef->line();
-            } else {
-                line -= 4;
-            }
-            line = line - idx;
-            while (line < 0) line += 7;
-            while (line >= 6) line -= 7;
-
-            style->renderAccidental( painter, curx, s->top() + line * s->lineSpacing() / 2, 1 );
-
-            curx += 10;
-        }
-        idx = (idx + 4) % 7;
-    }
-
-    // draw flats
-    idx = 6;
-    for (int i = 0; i < 7; i++) {
-        if (ks->accidentals(idx) < 0) {
-            int line = 14;
-            if (clef && clef->shape() == Clef::FClef) line = 4;
-            if (clef) {
-                line -= 2*clef->line();
-            } else {
-                line -= 4;
-            }
-            line = line - idx;
-            while (line < 0) line += 7;
-            while (line >= 6) line -= 7;
-
-            style->renderAccidental( painter, curx, s->top() + line * s->lineSpacing() / 2, -1 );
-
-            curx += 10;
-        }
-        idx = (idx + 3) % 7;
-    }
-    paintBB( painter, ks, x, s->top() );
-}
-
-static void paintTimeSignature( QPainter& painter, MusicStyle* style, TimeSignature* ts, double x )
-{
-    Staff* s = ts->staff();
-    double hh = 0.5 * (s->lineCount() - 1) * s->lineSpacing();
-    style->renderTimeSignatureNumber( painter, x + ts->x(), s->top() + hh, ts->width(), ts->beats());
-    style->renderTimeSignatureNumber( painter, x + ts->x(), s->top() + 2*hh, ts->width(), ts->beat());
-    paintBB( painter, ts, x, s->top() );
-}
-
-static void paintVoice( QPainter& painter, MusicStyle* style, Voice *voice )
-{
-    Clef* curClef = 0;
-    double x = 0;
-    for (int b = 0; b < voice->part()->sheet()->barCount(); b++) {
-        VoiceBar* vb = voice->bar(voice->part()->sheet()->bar(b));
-        for (int e = 0; e < vb->elementCount(); e++) {
-            MusicElement *me = vb->element(e);
-            Chord *c = dynamic_cast<Chord*>(me);
-            if (c) paintChord( painter, style, c, x, curClef );
-            Clef *cl = dynamic_cast<Clef*>(me);
-            if (cl) {
-                paintClef( painter, style, cl, x );
-                curClef = cl;
-            }
-            KeySignature *ks = dynamic_cast<KeySignature*>(me);
-            if (ks) {
-                paintKeySignature( painter, style, ks, x, curClef );
-            }
-            TimeSignature* ts = dynamic_cast<TimeSignature*>(me);
-            if (ts) {
-                paintTimeSignature( painter, style, ts, x );
-            }
-        }
-        x += voice->part()->sheet()->bar(b)->size();
-    }
-}
-
-static void paintPart( QPainter& painter, MusicStyle* style, Part *part )
-{
-    for (int i = 0; i < part->staffCount(); i++) {
-        paintStaff(painter, style, part->staff(i));
-    }
-    double firstStaff = part->staff(0)->top();
-    int c = part->staffCount()-1;
-    double lastStaff = part->staff(c)->top() + part->staff(c)->lineSpacing() * (part->staff(c)->lineCount()-1);
-    double x = 0;
-    for (int b = 0; b < part->sheet()->barCount(); b++) {
-        x += part->sheet()->bar(b)->size();
-        painter.drawLine(QPointF(x, firstStaff), QPointF(x, lastStaff));
-    }
-    for (int i = 0; i < part->voiceCount(); i++) {
-        paintVoice(painter, style, part->voice(i));
-    }
-}
-
-static void paintSheet( QPainter& painter, MusicStyle* style, Sheet *sheet )
-{
-    for (int i = 0; i < sheet->partCount(); i++) {
-        paintPart(painter, style, sheet->part(i));
-    }
 }
 
 void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
@@ -293,9 +111,8 @@ void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
     painter.setClipping(true);
     painter.setClipRect(QRectF(0, 0, size().width(), size().height()));
 
-    paintSheet( painter, m_style, m_sheet );
+    m_renderer->renderSheet( painter, m_sheet );
 }
-
 
 void MusicShape::saveOdf( KoShapeSavingContext * context )
 {

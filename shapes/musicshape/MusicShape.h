@@ -26,6 +26,8 @@
 namespace MusicCore {
     class Sheet;
 }
+
+class MusicRenderer;
 class MusicStyle;
 class Engraver;
 
@@ -48,6 +50,7 @@ private:
     MusicCore::Sheet* m_sheet;
     MusicStyle* m_style;
     Engraver* m_engraver;
+    MusicRenderer* m_renderer;
 };
 
 
