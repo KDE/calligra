@@ -19,26 +19,77 @@
 
 #include "ChangeListCommand.h"
 
+#include <KoListLevelProperties.h>
+
 #include <KLocale>
+#include <KDebug>
 
 ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, QUndoCommand *parent)
-: QUndoCommand( parent )
+: QUndoCommand( parent ),
+    m_block(block),
+    m_listStyle(0)
 {
+    Q_ASSERT(block.isValid());
+    if(style != KoListStyle::NoItem) {
+        QTextBlock prev = block.previous();
+        if(prev.isValid() && prev.textList()) {
+            QTextListFormat format = prev.textList()->format();
+            if(format.intProperty(QTextListFormat::ListStyle) == static_cast<int> (style))
+                m_listStyle = KoListStyle::fromTextList(prev.textList());
+        }
+        QTextBlock next = block.next();
+        if(m_listStyle == 0 && next.isValid() && next.textList()) {
+            QTextListFormat format = next.textList()->format();
+            if(format.intProperty(QTextListFormat::ListStyle) == static_cast<int> (style))
+                m_listStyle = KoListStyle::fromTextList(next.textList());
+        }
+        if(m_listStyle == 0) { // create a new one
+            m_listStyle = new KoListStyle();
+            KoListLevelProperties llp;
+            if(block.textList()) // find out current list-level / etc
+                llp = KoListLevelProperties::fromTextList(block.textList());
+            else
+                 llp = m_listStyle->level(1);
+            llp.setStyle(style);
+            m_listStyle->setLevel(llp);
+        }
+    }
+
     setText( i18n("Change List") );
 }
 
-ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle style, QUndoCommand *parent)
-: QUndoCommand( parent )
+ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle style, bool exact, QUndoCommand *parent)
+: QUndoCommand( parent ),
+    m_block(block)
 {
+    if(! exact) {
+        // search for similar ones in the next / prev parags.
+        // TODO
+    }
+    if(m_listStyle == 0)
+        m_listStyle = new KoListStyle(style);
     setText( i18n("Change List") );
+}
+
+ChangeListCommand::~ChangeListCommand() {
+    delete m_listStyle;
 }
 
 void ChangeListCommand::redo()
 {
     QUndoCommand::redo();
+    if(m_listStyle == 0) { // no list item (anymore)
+        if(m_block.textList() == 0) // nothing to do!
+            return;
+        m_block.textList()->remove(m_block);
+        return;
+    }
+
+    m_listStyle->applyStyle(m_block);
 }
 
 void ChangeListCommand::undo()
 {
     QUndoCommand::undo();
+    // TODO
 }

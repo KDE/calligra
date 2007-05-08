@@ -2,6 +2,7 @@
 #include "../commands/ChangeListCommand.h"
 
 #include <KoListStyle.h>
+#include <KoListLevelProperties.h>
 
 #include <QTextDocument>
 #include <QTextCursor>
@@ -79,8 +80,6 @@ void TestChangeListCommand::removeList() {
     QVERIFY(block.textList());
     block = block.next();
     QVERIFY(block.textList() == 0);
-
-    // also test usecase of removing one in the middle.
 }
 
 void TestChangeListCommand::joinList() {
@@ -91,7 +90,7 @@ void TestChangeListCommand::joinList() {
     QTextBlock block = doc.begin().next();
     style.applyStyle(block);
     block = block.next();
-    block = block.next(); // skip one.
+    block = block.next(); // skip parag2
     style.applyStyle(block);
     block = block.next();
     style.applyStyle(block);
@@ -99,15 +98,53 @@ void TestChangeListCommand::joinList() {
     block = doc.begin().next();
     QTextList *tl = block.textList();
     QVERIFY(tl); // init, we should not have to test KoListStyle here ;)
-    block = block.next().next();
+    block = block.next(); // parag2
     QVERIFY(block.textList() == 0);
 
     ChangeListCommand clc(block, KoListStyle::DiscItem);
     clc.redo();
     QCOMPARE(block.textList(), tl);
+}
 
+void TestChangeListCommand::joinList2() {
+    // test usecase of joining with the one before and the one after based on similar styles.
+    QTextDocument doc;
+    QTextCursor cursor(&doc);
+    cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4");
+    KoListStyle style;
+    QTextBlock block = doc.begin().next().next();
+    style.applyStyle(block); // apply on parag2
 
-    // also test usecases of joining with the one before and the one after based on similar styles.
+    KoListStyle style2;
+    KoListLevelProperties llp = style2.level(1);
+    llp.setStyle(KoListStyle::DecimalItem);
+    style2.setLevel(llp);
+    block = block.next().next(); // parag4
+    style2.applyStyle(block);
+
+    // now apply the default 'DiscItem' on 'parag1' expecting it to join with the list already set on 'parag2'
+    block = doc.begin().next();
+    ChangeListCommand clc(block, KoListStyle::DiscItem);
+    clc.redo();
+    QTextList *tl = block.textList();
+    QVERIFY(tl);
+    block = block.next();
+    QCOMPARE(tl, block.textList());
+    QCOMPARE(tl->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DiscItem);
+
+    // now apply the 'DecimalItem' on 'parag3' and expect it to join with the list already set on 'parag4'
+    block = doc.end().previous(); // parag4
+    QCOMPARE(block.text(), QString("parag4"));
+    QTextList *numberedList = block.textList();
+    QVERIFY(numberedList);
+    block = block.previous(); // parag3
+    QVERIFY(block.textList() == 0);
+    ChangeListCommand clc2(block, KoListStyle::DecimalItem);
+    clc2.redo();
+    QVERIFY(block.textList());
+    QVERIFY(block.textList() != tl);
+    QVERIFY(block.textList() == numberedList);
+    QCOMPARE(numberedList->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DecimalItem);
 }
 
 QTEST_MAIN(TestChangeListCommand)

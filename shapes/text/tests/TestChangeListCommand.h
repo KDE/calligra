@@ -13,6 +13,7 @@ private slots:
     void addList();
     void removeList();
     void joinList();
+    void joinList2();
 };
 
 #endif
