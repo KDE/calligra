@@ -125,7 +125,7 @@ private slots:
     void addUndoCommand();
 
     /// signal for when a series of commands is started that together need to become 1 undo action.
-    void startMacro();
+    void startMacro(const QString &title);
     /// signal for when a series of commands has ended that together should be 1 undo action.
     void stopMacro();
 
@@ -174,6 +174,7 @@ private:
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
 
     QUndoCommand *m_currentCommand;
+    bool m_currentCommandHasChildren;
 };
 
 #endif

@@ -69,7 +69,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_allowAddUndoCommand(true),
     m_trackChanges(false),
     m_prevCursorPosition(-1),
-    m_currentCommand(0)
+    m_currentCommand(0),
+    m_currentCommandHasChildren(false)
 {
     m_actionFormatBold  = new QAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold );
@@ -206,7 +207,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     addAction("edit_selectall", action);
 
-    connect(&m_selectionHandler, SIGNAL(startMacro()), this, SLOT(startMacro()));
+    connect(&m_selectionHandler, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));
     connect(&m_selectionHandler, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
 }
 
@@ -762,8 +763,10 @@ void TextTool::addUndoCommand() {
         QPointer<QTextDocument> m_document;
         QPointer<TextTool> m_tool;
     };
-    if(m_currentCommand)
+    if(m_currentCommand) {
         new UndoTextCommand(m_textShapeData->document(), this, m_currentCommand);
+        m_currentCommandHasChildren = true;
+    }
     else
         m_canvas->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
 }
@@ -881,24 +884,30 @@ void TextTool::selectAll() {
     repaintSelection(0, m_caret.anchor());
 }
 
-void TextTool::startMacro() {
+void TextTool::startMacro(const QString &title) {
     if(m_currentCommand) return;
     class MacroCommand : public QUndoCommand {
       public:
-        MacroCommand() : QUndoCommand(i18n("Text")), m_first(true) {}
+        MacroCommand(const QString &title) : QUndoCommand(title), m_first(true) {}
         virtual void redo() {
             if(! m_first)
                 QUndoCommand::redo();
             m_first = false;
         }
+        virtual bool mergeWith (const QUndoCommand *) { return false; }
         bool m_first;
     };
-    m_currentCommand = new MacroCommand();
+    m_currentCommand = new MacroCommand(title);
+    m_currentCommandHasChildren = false;
 }
 
 void TextTool::stopMacro() {
     if(m_currentCommand == 0) return;
-    m_canvas->addCommand(m_currentCommand);
+    if(m_currentCommandHasChildren)
+        m_canvas->addCommand(m_currentCommand);
+    else
+        delete m_currentCommand;
+    m_currentCommand = 0;
 }
 
 
