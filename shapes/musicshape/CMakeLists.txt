@@ -22,15 +22,22 @@ set( musiccore_SRCS
 )
 
 SET (musicshape_LIB_SRCS
-	MusicShape.cpp
-	MusicShapeFactory.cpp
-	MusicTool.cpp
-	MusicToolFactory.cpp
-        MusicStyle.cpp
-        Engraver.cpp
-        Renderer.cpp
-        ${musiccore_SRCS}
-	)
+    MusicShape.cpp
+    MusicShapeFactory.cpp
+    MusicTool.cpp
+    MusicToolFactory.cpp
+    MusicStyle.cpp
+    Engraver.cpp
+    Renderer.cpp
+
+    dialogs/PartsWidget.cpp
+
+    ${musiccore_SRCS}
+)
+
+kde4_add_ui_files(musicshape_LIB_SRCS
+    dialogs/PartsWidget.ui
+)
 
 kde4_automoc(${musicshape_LIB_SRCS})
 kde4_add_plugin(musicshape ${musicshape_LIB_SRCS})

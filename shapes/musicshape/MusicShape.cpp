@@ -118,3 +118,8 @@ void MusicShape::saveOdf( KoShapeSavingContext * context )
 {
     // TODO
 }
+
+Sheet* MusicShape::sheet()
+{
+    return m_sheet;
+}

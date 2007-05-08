@@ -19,6 +19,7 @@
 #include <QPainter>
 #include <QGridLayout>
 #include <QToolButton>
+#include <QTabWidget>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -33,6 +34,8 @@
 
 #include "MusicTool.h"
 #include "MusicTool.moc"
+
+#include "dialogs/PartsWidget.h"
 
 MusicTool::MusicTool( KoCanvasBase* canvas )
     : KoTool( canvas ),
@@ -61,6 +64,7 @@ void MusicTool::activate (bool temporary)
         emit sigDone();
         return;
     }
+    emit sheetChanged(m_musicshape->sheet());
     useCursor( Qt::ArrowCursor, true );
 }
 
@@ -90,9 +94,16 @@ void MusicTool::mouseReleaseEvent( KoPointerEvent* )
 
 QWidget * MusicTool::createOptionWidget()
 {
-    QWidget *optionWidget = new QWidget();
+    QTabWidget *widget = new QTabWidget();
 
-    return optionWidget;
+    PartsWidget *pw = new PartsWidget(this, widget);
+    widget->addTab(pw, i18n("Parts"));
+
+    connect(this, SIGNAL(sheetChanged(MusicCore::Sheet*)), pw, SLOT(setSheet(MusicCore::Sheet*)));
+
+    if (m_musicshape) pw->setSheet(m_musicshape->sheet());
+
+    return widget;
 
 }
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.kruiselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,39 +16,25 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef MUSIC_TOOL
-#define MUSIC_TOOL
+#include "PartsWidget.h"
+#include "PartsWidget.moc"
 
-#include <KoTool.h>
-class MusicShape;
+#include "../core/Sheet.h"
+#include "../core/Part.h"
 
-class MusicTool : public KoTool
+using namespace MusicCore;
+
+PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
+    : QWidget(parent),
+    m_tool(tool)
 {
-  Q_OBJECT
-public:
-  explicit MusicTool( KoCanvasBase* canvas );
-  ~MusicTool();
+    widget.setupUi(this);
+}
 
-  virtual void paint( QPainter& painter, KoViewConverter& converter );
-
-  virtual void mousePressEvent( KoPointerEvent* event ) ;
-  virtual void mouseMoveEvent( KoPointerEvent* event );
-  virtual void mouseReleaseEvent( KoPointerEvent* event );
-
-  void activate (bool temporary=false);
-  void deactivate();
-
-protected:
-  /*
-   * Create default option widget
-   */
-    virtual QWidget * createOptionWidget();
-
-protected slots:
-signals:
-    void sheetChanged(MusicCore::Sheet* sheet);
-private:
-   MusicShape *m_musicshape;
-};
-
-#endif
+void PartsWidget::setSheet(Sheet* sheet)
+{
+    widget.partsList->clear();
+    for (int i = 0; i < sheet->partCount(); i++) {
+        widget.partsList->addItem(sheet->part(i)->name());
+    }
+}

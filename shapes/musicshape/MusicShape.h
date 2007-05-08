@@ -46,6 +46,7 @@ public:
     /// reimplemented
     virtual void saveOdf( KoShapeSavingContext * context );
 
+    MusicCore::Sheet* sheet();
 private:
     MusicCore::Sheet* m_sheet;
     MusicStyle* m_style;
