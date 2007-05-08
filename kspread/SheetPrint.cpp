@@ -283,6 +283,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
     m_uprintPages = page_list.count();
 
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
     //Cache all object so they only need to be repainted once.
     foreach ( EmbeddedObject* object, m_pDoc->embeddedObjects() )
     {
@@ -292,7 +293,6 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
            ( obj->getType() == OBJECT_CHART && m_bPrintCharts ) ) )
         continue;
 
-#ifdef KSPREAD_KOPART_EMBEDDING
       QRect zoomRectOld = m_pDoc->zoomRectOld( object->geometry() );
       QPixmap *p = new QPixmap( zoomRectOld.size() );
       QPainter painter(p);
@@ -308,8 +308,8 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
       m_printObjects.append( po );
       po->obj = object;
       po->p = p;
-#endif // KSPREAD_KOPART_EMBEDDING
     }
+#endif // KSPREAD_KOPART_EMBEDDING
 
     if ( page_list.count() == 0 )
     {
@@ -562,7 +562,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     //QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     //QPtrListIterator<EmbeddedObject> itObject( m_pDoc->embeddedObjects() );
 
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
     QList<PrintObject *>::iterator itObject;
     for ( itObject = m_printObjects.begin(); itObject != m_printObjects.end(); ++itObject ) {
           EmbeddedObject *obj = (*itObject)->obj;

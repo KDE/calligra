@@ -750,8 +750,10 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     if ( !store->close() ) // done with styles.xml
         return false;
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
     makeUsedPixmapList();
     d->m_pictureCollection.saveOasisToStore( store, d->usedPictures, manifestWriter);
+#endif // KSPREAD_KOPART_EMBEDDING
 
     if(!store->open("settings.xml"))
         return false;
@@ -784,7 +786,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 
     if ( saveFlag == SaveSelected )
     {
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
       foreach ( EmbeddedObject* object, d->embeddedObjects )
       {
         if ( object->getType() != OBJECT_CHART  && object->getType() != OBJECT_KOFFICE_PART )
@@ -1643,7 +1645,7 @@ void Doc::paintUpdates()
   {
     static_cast<View *>( view )->paintUpdates();
   }
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
   foreach ( Sheet* sheet, map()->sheetList() )
   {
     sheet->clearPaintDirtyData();
@@ -2281,9 +2283,9 @@ bool Doc::captureAllArrowKeys() const
 }
 
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
 void Doc::insertObject( EmbeddedObject * obj )
 {
-#ifdef KSPREAD_KOPART_EMBEDDING
   switch ( obj->getType() )
   {
     case OBJECT_KOFFICE_PART: case OBJECT_CHART:
@@ -2295,7 +2297,6 @@ void Doc::insertObject( EmbeddedObject * obj )
       ;
   }
   d->embeddedObjects.append( obj );
-#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 QList<EmbeddedObject*>& Doc::embeddedObjects()
@@ -2317,6 +2318,7 @@ void Doc::repaint( EmbeddedObject *obj )
         canvas->repaintObject( obj );
   }
 }
+#endif // KSPREAD_KOPART_EMBEDDING
 
 void Doc::repaint( const QRectF& rect )
 {
@@ -2381,6 +2383,7 @@ int Doc::defaultDecimalPrecision() const
     return d->precision;
 }
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
 void Doc::insertPixmapKey( KoPictureKey key )
 {
     if ( !d->usedPictures.contains( key ) )
@@ -2396,6 +2399,7 @@ void Doc::makeUsedPixmapList()
             insertPixmapKey( static_cast<EmbeddedPictureObject*>( object )->getKey() );
     }
 }
+#endif // KSPREAD_KOPART_EMBEDDING
 
 bool Doc::savingWholeDocument()
 {

@@ -2733,10 +2733,12 @@ void View::activateFormulaEditor()
 
 void View::objectSelectedChanged()
 {
+#if 0 // KSPREAD_KOPART_EMBEDDING
   if ( d->canvas->isObjectSelected() )
     d->actions->actionExtraProperties->setEnabled( true );
   else
     d->actions->actionExtraProperties->setEnabled( false );
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::updateReadWrite( bool readwrite )
@@ -3945,11 +3947,13 @@ void View::copySelection()
   if ( !d->activeSheet )
     return;
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
   if ( canvasWidget()->isObjectSelected() )
   {
     canvasWidget()->copyOasisObjects();
     return;
   }
+#endif // KSPREAD_KOPART_EMBEDDING
   if ( !d->canvas->editor() )
   {
     d->activeSheet->copySelection( selection() );
@@ -3975,12 +3979,12 @@ void View::cutSelection()
     //don't used this function when we edit a cell.
     doc()->emitBeginOperation(false);
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
     if ( canvasWidget()->isObjectSelected() )
     {
         canvasWidget()->copyOasisObjects();
         doc()->emitEndOperation();
 
-#ifdef KSPREAD_KOPART_EMBEDDING
         doc()->beginMacro( i18n( "Cut Objects" ) );
         foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
         {
@@ -3992,10 +3996,10 @@ void View::cutSelection()
         }
         canvasWidget()->setMouseSelectedObject( false );
         doc()->endMacro();
-#endif // KSPREAD_KOPART_EMBEDDING
 
         return;
     }
+#endif // KSPREAD_KOPART_EMBEDDING
     if ( !d->canvas->editor() )
     {
         d->activeSheet->cutSelection( selection() );
@@ -4021,7 +4025,9 @@ void View::paste()
 
   if ( mimeData->hasFormat( "application/vnd.oasis.opendocument.spreadsheet" ) )
   {
+#if 0 // KSPREAD_KOPART_EMBEDDING
     canvasWidget()->deselectAllObjects();
+#endif // KSPREAD_KOPART_EMBEDDING
     QByteArray returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
     QByteArray arr = mimeData->data( returnedTypeMime );
     if( arr.isEmpty() )
@@ -4086,12 +4092,14 @@ void View::paste()
   }
   else
   {
+#if 0 // KSPREAD_KOPART_EMBEDDING
     //TODO:  What if the clipboard data is available in both pixmap and OASIS format? (ie. for embedded parts)
     QPixmap clipboardPixmap = QApplication::clipboard()->pixmap( QClipboard::Clipboard );
     if (!clipboardPixmap.isNull())
     {
         d->activeSheet->insertPicture( markerDocumentPosition()  , clipboardPixmap );
     }
+#endif // KSPREAD_KOPART_EMBEDDING
   }
 
   doc()->emitBeginOperation( false );
@@ -4895,7 +4903,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     QRectF unzoomedRect = zoomHandler()->viewToDocument( _geometry );
     unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
 
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
     InsertObjectCommand *cmd = 0;
     if ( d->selection->isColumnOrRowSelected() )
     {
@@ -4911,7 +4919,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
 
 void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 {
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
   if ( !d->activeSheet )
     return;
 
@@ -4934,7 +4942,7 @@ QPointF View::markerDocumentPosition()
 
 void View::insertPicture()
 {
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
   //Note:  We don't use the usual insert handler here (which allows the user to drag-select the target area
   //for the object) because when inserting raster graphics, it is usually desireable to insert at 100% size,
   //since the graphic won't look right if inserted with an incorrect aspect ratio or if blurred due to the
@@ -5739,6 +5747,7 @@ void View::openPopupMenu( const QPoint & _point )
 
     d->popupMenu = new QMenu();
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
     EmbeddedObject *obj;
     if ( d->canvas->isObjectSelected() && ( obj = d->canvas->getObject( d->canvas->mapFromGlobal( _point ), d->activeSheet ) ) && obj->isSelected() )
     {
@@ -5752,6 +5761,7 @@ void View::openPopupMenu( const QPoint & _point )
       d->popupMenu->addAction( d->actions->actionExtraProperties );
       return;
     }
+#endif // KSPREAD_KOPART_EMBEDDING
 
     Cell cell = Cell( d->activeSheet, selection()->marker().x(), selection()->marker().y() );
 
@@ -5871,7 +5881,7 @@ void View::deleteSelection()
     command->add( *selection() );
     command->execute();
 
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
     if ( canvasWidget()->isObjectSelected() )
     {
       deleteSelectedObjects();
@@ -5882,7 +5892,7 @@ void View::deleteSelection()
 
 void View::deleteSelectedObjects()
 {
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
     doc()->beginMacro( i18n( "Remove Object" ) );
     foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
@@ -5894,7 +5904,7 @@ void View::deleteSelectedObjects()
     }
     canvasWidget()->setMouseSelectedObject( false );
     doc()->endMacro();
-#endif
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::adjust()
@@ -6162,7 +6172,7 @@ void View::extraProperties()
     if (!activeSheet())
       return;
     //d->canvas->setToolEditMode( TEM_MOUSE );
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
     d->m_propertyEditor = new PropertyEditor( this, "KPrPropertyEditor", d->activeSheet, doc() );
     d->m_propertyEditor->setWindowTitle( i18n( "Properties" ) );
 
@@ -6177,7 +6187,7 @@ void View::extraProperties()
 
 void View::propertiesOk()
 {
-#ifdef KSPREAD_KOPART_EMBEDDING
+#if 0 // KSPREAD_KOPART_EMBEDDING
     d->m_propertyEditor->executeCommand();
 #endif // KSPREAD_KOPART_EMBEDDING
 }
@@ -6682,7 +6692,9 @@ void View::slotUpdateView( Sheet * _sheet, const Region& region )
 
 void View::slotUpdateView( EmbeddedObject *obj )
 {
+#if 0 // KSPREAD_KOPART_EMBEDDING
   d->canvas->repaintObject( obj );
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::slotUpdateHBorder( Sheet * _sheet )
