@@ -20,12 +20,17 @@
 #ifndef CHANGELISTCOMMAND
 #define CHANGELISTCOMMAND
 
-#include <KoListStyle.h>
+#include "TextCommandBase.h"
 
-#include <QUndoCommand>
+#include <KoListStyle.h>
+#include <KoListLevelProperties.h>
+
 #include <QTextBlock>
 
-class ChangeListCommand : public QUndoCommand
+/**
+ * This command is useful to alter the list-association of a single textBlock.
+ */
+class ChangeListCommand : public TextCommandBase
 {
 public:
     /**
@@ -51,9 +56,17 @@ public:
     /// revert the actions done in redo
     virtual void undo();
 
+    /// reimplemnted from QUndoCommand
+    virtual int id() const { return 58450687; }
+    /// reimplemnted from QUndoCommand
+    virtual bool mergeWith (const QUndoCommand *other);
+
 private:
+    void storeOldProperties();
+
     QTextBlock m_block;
     KoListStyle *m_listStyle;
+    KoListLevelProperties m_formerProperties;
 };
 
 #endif

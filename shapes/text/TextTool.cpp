@@ -22,6 +22,7 @@
 #include "dialogs/SimpleStyleWidget.h"
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
+#include "commands/TextCommandBase.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -67,7 +68,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_allowActions(true),
     m_allowAddUndoCommand(true),
     m_trackChanges(false),
-    m_prevCursorPosition(-1)
+    m_prevCursorPosition(-1),
+    m_currentCommand(0)
 {
     m_actionFormatBold  = new QAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold );
@@ -719,8 +721,8 @@ void TextTool::addUndoCommand() {
     if(! m_allowAddUndoCommand) return;
     class UndoTextCommand : public QUndoCommand {
       public:
-        UndoTextCommand(QTextDocument *document, TextTool *tool)
-            : QUndoCommand(i18n("Text")),
+        UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent = 0)
+            : QUndoCommand(i18n("Text"), parent),
             m_document(document),
             m_tool(tool)
         {
@@ -757,7 +759,19 @@ void TextTool::addUndoCommand() {
         QPointer<QTextDocument> m_document;
         QPointer<TextTool> m_tool;
     };
-    m_canvas->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
+    if(m_currentCommand)
+        new UndoTextCommand(m_textShapeData->document(), this, m_currentCommand);
+    else
+        m_canvas->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
+}
+
+void TextTool::addCommand(QUndoCommand *command) {
+    m_currentCommand = command;
+    TextCommandBase *cmd = dynamic_cast<TextCommandBase*> (command);
+    m_canvas->addCommand(command); // will execute it.
+    if(cmd)
+        cmd->setTool(this);
+    m_currentCommand = 0;
 }
 
 void TextTool::nonbreakingSpace() {

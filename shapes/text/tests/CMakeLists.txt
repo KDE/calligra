@@ -32,6 +32,7 @@ add_test(shapes-text-TestChangesDatabase ${EXECUTABLE_OUTPUT_PATH}/TestChangesDa
 set(TestChangeListCommand_test_SRCS
     TestChangeListCommand.cpp
     ../commands/ChangeListCommand.cpp
+    ../commands/TextCommandBase.cpp
 )
 kde4_automoc(${TestChangeListCommand_test_SRCS})
 kde4_add_executable(TestChangeListCommand RUN_UNINSTALLED ${TestChangeListCommand_test_SRCS})

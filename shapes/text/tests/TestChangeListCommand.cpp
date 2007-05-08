@@ -147,6 +147,46 @@ void TestChangeListCommand::joinList2() {
     QCOMPARE(numberedList->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DecimalItem);
 }
 
+void TestChangeListCommand::splitList() {
+    // assume I start with;
+    // 1 paragA
+    // 1.1 paragB
+    // 1.2 paragC
+    // now I change parag 'B' to '1.a'  then C should have 1.1 as a numbering. I.e. we should split an existing list.
+
+    QTextDocument doc;
+    QTextCursor cursor(&doc);
+    cursor.insertText("Root\nparagA\nparagB\nparagC");
+    QTextBlock block = doc.begin().next();
+    KoListStyle style;
+    style.applyStyle(block); // apply on parag2
+
+    KoListStyle style2;
+    KoListLevelProperties llp = style2.level(2);
+    style2.setLevel(llp);
+    block = block.next();
+    style2.applyStyle(block);
+    block = block.next();
+    style2.applyStyle(block);
+
+    block = block.previous();
+    QTextList *tl = block.textList();
+    ChangeListCommand clc2(block, KoListStyle::DecimalItem);
+    clc2.redo();
+
+    block = doc.begin();
+    QVERIFY(block.textList() == 0);
+    block = block.next();
+    QVERIFY(block.textList());
+    block = block.next();
+    QTextList *newTextList = block.textList();
+    QVERIFY(newTextList != tl);
+    block = block.next();
+    QCOMPARE(block.textList(), tl);
+
+    QCOMPARE(newTextList->format().intProperty(KoListStyle::Level), 2);
+}
+
 QTEST_MAIN(TestChangeListCommand)
 
 #include <TestChangeListCommand.moc>

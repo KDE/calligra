@@ -29,6 +29,7 @@ SET ( textshape_SRCS
     dialogs/StyleManager.cpp
 
     commands/ChangeListCommand.cpp
+    commands/TextCommandBase.cpp
 )
 
 kde4_add_ui_files(textshape_SRCS

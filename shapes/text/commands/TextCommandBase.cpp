@@ -16,37 +16,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef SIMPLESTYLEWIDGET_H
-#define SIMPLESTYLEWIDGET_H
 
-#include <ui_SimpleStyleWidget.h>
+#include "TextCommandBase.h"
+#include "TextTool.h"
 
-#include <QWidget>
-#include <QTextBlock>
+void TextCommandBase::redo() {
+    QUndoCommand::redo();
+    if(m_tool)
+        m_tool->m_allowAddUndoCommand = false;
+}
 
-class TextTool;
-class KoStyleManager;
+void TextCommandBase::undo() {
+    QUndoCommand::undo();
+    if(m_tool)
+        m_tool->m_allowAddUndoCommand = false;
+}
 
-class SimpleStyleWidget : public QWidget {
-    Q_OBJECT
-public:
-    explicit SimpleStyleWidget(TextTool *tool, QWidget *parent = 0);
-
-public slots:
-    void setCurrentBlock(const QTextBlock &block);
-    void setStyleManager(KoStyleManager *sm);
-
-private slots:
-    void listStyleChanged(int row);
-
-private:
-    void fillListsCombobox();
-
-    Ui::SimpleStyleWidget widget;
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    QTextBlock m_currentBlock;
-    TextTool *m_tool;
-};
-
-#endif
+TextCommandBase::UndoRedoFinalizer::~UndoRedoFinalizer() {
+    if(m_tool)
+        m_tool->m_allowAddUndoCommand = true;
+}

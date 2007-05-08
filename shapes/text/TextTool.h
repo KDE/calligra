@@ -33,6 +33,7 @@ class KoStyleManager;
 class KoTextEditingPlugin;
 class UndoTextCommand;
 class ChangeTracker;
+class QUndoCommand;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -70,6 +71,9 @@ public:
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
     virtual QWidget *createOptionWidget();
+
+    /// add a command to the undo stack, executing it as well.
+    void addCommand(QUndoCommand *command);
 
 signals:
     /// emitted every time a different styleManager is set.
@@ -137,6 +141,7 @@ private:
 
 private:
     friend class UndoTextCommand;
+    friend class TextCommandBase;
     friend class ChangeTracker;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
@@ -162,6 +167,8 @@ private:
     QAction *m_actionFormatDecreaseIndent;
 
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
+
+    QUndoCommand *m_currentCommand;
 };
 
 #endif

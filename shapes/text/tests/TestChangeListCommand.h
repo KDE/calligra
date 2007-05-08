@@ -14,6 +14,7 @@ private slots:
     void removeList();
     void joinList();
     void joinList2();
+    void splitList();
 };
 
 #endif
