@@ -3809,7 +3809,6 @@ void View::changeSheet( const QString& _name )
     d->vBorderWidget->repaint();
     d->hBorderWidget->repaint();
     d->selectAllButton->repaint();
-    t->setRegionPaintDirty( d->canvas->visibleCells() );
     doc()->emitEndOperation();
 }
 
@@ -3979,7 +3978,6 @@ void View::cutSelection()
     if ( canvasWidget()->isObjectSelected() )
     {
         canvasWidget()->copyOasisObjects();
-        markSelectionAsDirty();
         doc()->emitEndOperation();
 
 #ifdef KSPREAD_KOPART_EMBEDDING
@@ -4008,8 +4006,6 @@ void View::cutSelection()
     {
         d->canvas->editor()->cut();
     }
-
-    markSelectionAsDirty();
     doc()->emitEndOperation();
 }
 
@@ -6188,15 +6184,12 @@ void View::propertiesOk()
 
 void View::styleDialog()
 {
-  StyleDialog dialog( this, doc()->styleManager() );
-  dialog.exec();
+    StyleDialog dialog( this, doc()->styleManager() );
+    dialog.exec();
 
-  d->actions->selectStyle->setItems( doc()->styleManager()->styleNames() );
-  if ( d->activeSheet )
-  {
-    d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
-  }
-  if ( d->canvas )
+    d->actions->selectStyle->setItems( doc()->styleManager()->styleNames() );
+    if (d->activeSheet)
+        doc()->addDamage(new CellDamage(d->activeSheet, Region(1, 1, KS_colMax, KS_rowMax), CellDamage::Appearance));
     d->canvas->repaint();
 }
 
@@ -6797,7 +6790,7 @@ void View::slotChangeChoice(const KSpread::Region& changedRegion)
   }
   doc()->emitBeginOperation( false );
   d->canvas->updateEditor();
-  d->activeSheet->setRegionPaintDirty( changedRegion );
+  doc()->addDamage(new SelectionDamage(changedRegion));
   doc()->emitEndOperation();
   kDebug(36002) << "Choice: " << *choice() << endl;
 }
@@ -7140,10 +7133,7 @@ void View::closeEditor()
 
 void View::markSelectionAsDirty()
 {
-    if (!d->activeSheet)
-      return;
-
-    d->activeSheet->setRegionPaintDirty( *selection() );
+    doc()->addDamage(new SelectionDamage(d->canvas->chooseMode() ? *choice() : *selection()));
 }
 
 void View::paintUpdates()

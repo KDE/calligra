@@ -420,7 +420,6 @@ protected:
      * Calls paintUpdates(), which repaints the dirty cells.
      * @see Doc::emitBeginOperation(bool)
      * @see Doc::emitEndOperation()
-     * @see Sheet::setRegionPaintDirty()
      * @see paintUpdates()
      * @reimp
      */

@@ -221,7 +221,6 @@ void StyleStorage::insert(const Region& region, const Style& style)
             regionChanged( (*it)->rect() );
         }
     }
-    d->sheet->setRegionPaintDirty( region );
 }
 
 QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertRows(int position, int number)
@@ -230,7 +229,6 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertRows(int position, int
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.insertRows(position, number);
-    d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
@@ -240,7 +238,6 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertColumns(int position, 
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.insertColumns(position, number);
-    d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
@@ -250,7 +247,6 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::removeRows(int position, int
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.removeRows(position, number);
-    d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
@@ -260,7 +256,6 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::removeColumns(int position, 
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.removeColumns(position, number);
-    d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
@@ -269,7 +264,6 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertShiftRight( const QRec
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.insertShiftRight( rect );
     regionChanged( invalidRect );
-    d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
@@ -278,7 +272,6 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertShiftDown( const QRect
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.insertShiftDown( rect );
     regionChanged( invalidRect );
-    d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
@@ -287,7 +280,6 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::removeShiftLeft( const QRect
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.removeShiftLeft( rect );
     regionChanged( invalidRect );
-    d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
@@ -296,7 +288,6 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::removeShiftUp( const QRect& 
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.removeShiftUp( rect );
     regionChanged( invalidRect );
-    d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 

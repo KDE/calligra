@@ -2103,8 +2103,6 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
   QString t = text.text();
   t = t.trimmed();
 
-  sheet()->setRegionPaintDirty( Region( cellPosition() ) );
-
   // A formula like =A1+A2 ?
   if( (!t.isEmpty()) && (t[0] == '=') )
   {
@@ -2382,8 +2380,6 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
             Q_ASSERT( 0 );
         }
 
-        sheet()->setRegionPaintDirty( Region( cellPosition() ) );
-
         return tmp_op;
     }
     else if ( ( new_text[0] == '=' && old_text[0] == '=' ) ||
@@ -2408,14 +2404,10 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
         }
 
         tmp_op = decodeFormula( tmp_op, d->column, d->row );
-        sheet()->setRegionPaintDirty( Region( cellPosition() ) );
-
         return tmp_op;
     }
 
     tmp = decodeFormula( new_text, d->column, d->row );
-    sheet()->setRegionPaintDirty( Region( cellPosition() ) );
-
     return tmp;
 }
 

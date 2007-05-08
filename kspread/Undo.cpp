@@ -1935,7 +1935,6 @@ void UndoChangeAreaTextCell::undo()
 
     doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
-    sheet->setRegionPaintDirty(m_region);
 
     kDebug() << "creating redo list..." << endl;
     createList( m_lstRedoTextCell, sheet );
@@ -2012,7 +2011,6 @@ void UndoChangeAreaTextCell::redo()
 
     doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
-    sheet->setRegionPaintDirty(m_region);
 
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)

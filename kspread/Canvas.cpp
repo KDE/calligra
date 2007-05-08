@@ -1442,7 +1442,6 @@ void Canvas::processEscapeKey(QKeyEvent * event)
         oldBoundingRect.translate( (int)( -xOffset()*d->view->zoomHandler()->zoomedResolutionX() ) ,
                             (int)( -yOffset() * d->view->zoomHandler()->zoomedResolutionY()) );
 
-        sheet->setRegionPaintDirty( Region(oldBoundingRect) );
         repaint( oldBoundingRect );
         repaintObject( d->m_resizeObject );
         d->m_ratio = 0.0;
@@ -2609,7 +2608,7 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
     return;
 
   //There may be highlighted areas on the sheet which will need to be erased
-  activeSheet()->setRegionPaintDirty( *choice() );
+  d->view->markSelectionAsDirty();
 
   d->editWidget->setEditMode( false );
 
@@ -2734,7 +2733,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
         if ( focus )
             d->cellEditor->setFocus();
 
-        sheet->setRegionPaintDirty( *selection() );
+        d->view->markSelectionAsDirty();
         repaint();
     }
 

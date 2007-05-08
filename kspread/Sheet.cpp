@@ -803,7 +803,6 @@ void Sheet::recalc( bool force )
 {
   ElapsedTime et( "Recalculating " + d->name, ElapsedTime::PrintOnlyTime );
   //  emitBeginOperation(true);
-  //  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
 
   //If automatic calculation is disabled, don't recalculate unless the force flag has been
   //set.
