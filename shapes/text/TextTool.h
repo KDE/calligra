@@ -124,6 +124,11 @@ private slots:
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();
 
+    /// signal for when a series of commands is started that together need to become 1 undo action.
+    void startMacro();
+    /// signal for when a series of commands has ended that together should be 1 undo action.
+    void stopMacro();
+
 private:
     void repaintCaret();
     void repaintSelection(int from, int to);

@@ -205,6 +205,9 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     addAction("edit_selectall", action);
+
+    connect(&m_selectionHandler, SIGNAL(startMacro()), this, SLOT(startMacro()));
+    connect(&m_selectionHandler, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
 }
 
 TextTool::~TextTool() {
@@ -876,6 +879,26 @@ void TextTool::selectAll() {
     m_caret.setPosition(lastBlock.position() + lastBlock.length() - 1);
     m_caret.setPosition(0, QTextCursor::KeepAnchor);
     repaintSelection(0, m_caret.anchor());
+}
+
+void TextTool::startMacro() {
+    if(m_currentCommand) return;
+    class MacroCommand : public QUndoCommand {
+      public:
+        MacroCommand() : QUndoCommand(i18n("Text")), m_first(true) {}
+        virtual void redo() {
+            if(! m_first)
+                QUndoCommand::redo();
+            m_first = false;
+        }
+        bool m_first;
+    };
+    m_currentCommand = new MacroCommand();
+}
+
+void TextTool::stopMacro() {
+    if(m_currentCommand == 0) return;
+    m_canvas->addCommand(m_currentCommand);
 }
 
 
