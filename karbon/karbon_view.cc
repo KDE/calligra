@@ -381,52 +381,22 @@ void KarbonView::dropEvent( QDropEvent *e )
     }
 }
 
-void
-KarbonView::print( KPrinter &printer )
+void KarbonView::print( KPrinter &printer )
 {
-	debugView("KarbonView::print(KPrinter)");
+    debugView("KarbonView::print(KPrinter)");
 
-	// TODO : ultimately use plain QPainter here as that is better suited to print system
-	//kDebug(38000) << "KarbonView::print" << endl;
+    const int resolution = 600;
+    printer.setResolution( resolution );
+    printer.setFullPage( true );
 
-    /*
+    KoZoomHandler zoomHandler;
+    zoomHandler.setZoomAndResolution( 100, resolution, resolution );
 
-	printer.setFullPage( true );
+    QPainter painter;
 
-	// we are using 72 dpi internally
-	double zoom = printer.logicalDpiX() / 72.0;
-
-    QSizeF pageSize = part()->document().pageSize();
-
-	QMatrix mat;
-	mat.scale( 1, -1 );
-    mat.translate( 0, -pageSize().height()*zoom );
-
-    QRectF rect( QPointF(0, 0), pageSize );
-
-    QPixmap img( pageSize.toSize() );
-
-	// first use the painter to draw into the pixmap
-	VQPainter kop( ( QPaintDevice * )&img, static_cast<int>( pageSize.width() ), static_cast<int>( pageSize.height() ) );
-
-	kop.setZoomFactor( zoom );
-	kop.setMatrix( mat );
-
-	kop.begin();
-
-	//part()->document().draw( &kop, &rect );
-
-	kop.end();
-
-	QPainter p;
-
-	// us qpainter to draw the pixmap
-	// note that it is looking unsmooth when previewing,
-	// but the print is actually ok as we are printing at 100% zoom anyway
-	p.begin( &printer );
-	p.drawPixmap( 0, 0, img );
-	p.end();
-    */
+    painter.begin( &printer );
+    m_canvas->shapeManager()->paint( painter, zoomHandler, true );
+    painter.end();
 }
 
 void
