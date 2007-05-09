@@ -1213,24 +1213,28 @@ ModifyRelationTypeCmd::ModifyRelationTypeCmd( Part *part, Relation *rel, Relatio
 {
 
     m_oldtype = rel->type();
-    Node *p = rel->parent() ->projectNode();
-    if ( p ) {
-        foreach ( Schedule * s, p->schedules() ) {
+    m_project = dynamic_cast<Project*>( rel->parent() ->projectNode() );
+    if ( m_project ) {
+        foreach ( Schedule * s, m_project->schedules() ) {
             addSchScheduled( s );
         }
     }
 }
 void ModifyRelationTypeCmd::execute()
 {
-    m_rel->setType( m_newtype );
-    setSchScheduled( false );
-    setCommandType( 1 );
+    if ( m_project ) {
+        m_project->setRelationType( m_rel, m_newtype );
+        setSchScheduled( false );
+        setCommandType( 1 );
+    }
 }
 void ModifyRelationTypeCmd::unexecute()
 {
-    m_rel->setType( m_oldtype );
-    setSchScheduled();
-    setCommandType( 1 );
+    if ( m_project ) {
+        m_project->setRelationType( m_rel, m_oldtype );
+        setSchScheduled();
+        setCommandType( 1 );
+    }
 }
 
 ModifyRelationLagCmd::ModifyRelationLagCmd( Part *part, Relation *rel, Duration lag, const QString& name )
@@ -1240,24 +1244,28 @@ ModifyRelationLagCmd::ModifyRelationLagCmd( Part *part, Relation *rel, Duration 
 {
 
     m_oldlag = rel->lag();
-    Node *p = rel->parent() ->projectNode();
-    if ( p ) {
-        foreach ( Schedule * s, p->schedules() ) {
+    m_project = dynamic_cast<Project*>( rel->parent() ->projectNode() );
+    if ( m_project ) {
+        foreach ( Schedule * s, m_project->schedules() ) {
             addSchScheduled( s );
         }
     }
 }
 void ModifyRelationLagCmd::execute()
 {
-    m_rel->setLag( m_newlag );
-    setSchScheduled( false );
-    setCommandType( 1 );
+    if ( m_project ) {
+        m_project->setRelationLag( m_rel, m_newlag );
+        setSchScheduled( false );
+        setCommandType( 1 );
+    }
 }
 void ModifyRelationLagCmd::unexecute()
 {
-    m_rel->setLag( m_oldlag );
-    setSchScheduled();
-    setCommandType( 1 );
+    if ( m_project ) {
+        m_project->setRelationLag( m_rel, m_oldlag );
+        setSchScheduled();
+        setCommandType( 1 );
+    }
 }
 
 AddResourceRequestCmd::AddResourceRequestCmd( Part *part, ResourceGroupRequest *group, ResourceRequest *request, const QString& name )

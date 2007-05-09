@@ -386,10 +386,10 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     m_units = element.attribute("units", "100").toInt();
     s = element.attribute("available-from");
     if (!s.isEmpty())
-        m_availableFrom = DateTime::fromString(s, timeSpec());
+        m_availableFrom = DateTime::fromString(s, status.projectSpec());
     s = element.attribute("available-until");
     if (!s.isEmpty())
-        m_availableUntil = DateTime::fromString(s, timeSpec());
+        m_availableUntil = DateTime::fromString(s, status.projectSpec());
         
     cost.normalRate = KGlobal::locale()->readMoney(element.attribute("normal-rate"));
     cost.overtimeRate = KGlobal::locale()->readMoney(element.attribute("overtime-rate"));

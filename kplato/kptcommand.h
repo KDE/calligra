@@ -575,6 +575,7 @@ public:
     void unexecute();
 
 private:
+    Project *m_project;
     Relation *m_rel;
     Relation::Type m_newtype;
     Relation::Type m_oldtype;
@@ -589,6 +590,7 @@ public:
     void unexecute();
 
 private:
+    Project *m_project;
     Relation *m_rel;
     Duration m_newlag;
     Duration m_oldlag;

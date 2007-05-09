@@ -634,7 +634,10 @@ const Calendar &Calendar::copy( const Calendar &calendar ) {
 
 void Calendar::init() {
     m_weekdays = new CalendarWeekdays();
-    m_spec = KDateTime::Spec( KSystemTimeZones::local() );
+    m_spec = KDateTime::Spec::LocalZone();
+    if ( m_spec.timeZone() == 0 ) {
+        m_spec.setType( new KTimeZone() );
+    }
 }
 
 void Calendar::setName(const QString& name)

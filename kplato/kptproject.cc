@@ -63,6 +63,10 @@ void Project::init()
 {
     m_currentViewScheduleId = -1;
     m_spec = KDateTime::Spec::LocalZone();
+    if ( m_spec.timeZone() == 0 ) {
+        m_spec.setType( new KTimeZone() );
+    }
+    kDebug()<<k_funcinfo<<m_spec.timeZone()<<endl;
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent
         m_constraintStartTime = DateTime( QDate::currentDate(), QTime(), m_spec );
@@ -1758,6 +1762,18 @@ void Project::takeRelation( Relation *rel )
     rel->parent() ->takeDependChildNode( rel );
     rel->child() ->takeDependParentNode( rel );
     emit relationRemoved( rel );
+}
+
+void Project::setRelationType( Relation *rel, Relation::Type type )
+{
+    rel->setType( type );
+    emit relationModified( rel );
+}
+
+void Project::setRelationLag( Relation *rel, const Duration &lag )
+{
+    rel->setLag( lag );
+    emit relationModified( rel );
 }
 
 #ifndef NDEBUG

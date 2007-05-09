@@ -412,6 +412,15 @@ public:
      */
     void takeRelation( Relation *rel );
     
+    /**
+     * Modify the @p type of the @p relation.
+     */
+    void setRelationType( Relation *relation, Relation::Type type );
+    /**
+     * Modify the @p lag of the @p relation.
+     */
+    void setRelationLag( Relation *relation, const Duration &lag );
+    
 signals:
     void currentScheduleChanged();
     void sigProgress( int );
@@ -469,14 +478,16 @@ signals:
      */
     void defaultCalendarChanged( Calendar *cal );
     
-    /// Emitted when the relation rel is about to be added.
+    /// Emitted when the relation @p rel is about to be added.
     void relationToBeAdded( Relation *rel, int parentIndex, int childIndex );
-    /// Emitted when the relation rel has been added.
+    /// Emitted when the relation @p rel has been added.
     void relationAdded( Relation *rel );
-    /// Emitted when the relation rel is about to be removed.
+    /// Emitted when the relation @p rel is about to be removed.
     void relationToBeRemoved( Relation *rel );
-    /// Emitted when the relation rel has been removed.
+    /// Emitted when the relation @p rel has been removed.
     void relationRemoved( Relation *rel );
+    /// Emitted when the relation @p rel has been modified.
+    void relationModified( Relation *rel );
     
 protected:
     /// Calculate the schedule.
