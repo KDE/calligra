@@ -23,6 +23,7 @@
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "commands/TextCommandBase.h"
+#include "commands/ChangeListCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -426,10 +427,17 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
     int destinationPosition = -1; // for those that the moveOperation is not implemented;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     if(event->key() == Qt::Key_Backspace) {
-        if(!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
-            m_caret.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-        m_caret.deletePreviousChar();
-        editingPluginEvents();
+        if(! m_caret.hasSelection() && m_caret.block().textList() && m_caret.block().length() == 1) {
+            // backspace on numbered, empty parag, removes numbering.
+            ChangeListCommand *clc = new ChangeListCommand(m_caret.block(), KoListStyle::NoItem);
+            addCommand(clc);
+        }
+        else {
+            if(!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
+                m_caret.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+            m_caret.deletePreviousChar();
+            editingPluginEvents();
+        }
     }
     else if(event->key() == Qt::Key_Delete) {
         if(!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.

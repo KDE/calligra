@@ -63,6 +63,7 @@ public:
 
 private:
     void storeOldProperties();
+    void recalcList(const QTextBlock &block) const;
 
     QTextBlock m_block;
     KoListStyle *m_listStyle;

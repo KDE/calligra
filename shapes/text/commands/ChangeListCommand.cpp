@@ -99,23 +99,26 @@ void ChangeListCommand::redo() {
     TextCommandBase::redo();
     UndoRedoFinalizer finalizer(m_tool);
     if(m_listStyle == 0) { // no list item (anymore)
-        if(m_block.textList() == 0) // nothing to do!
+        QTextList *list = m_block.textList();
+        if(list == 0) // nothing to do!
             return;
-        m_block.textList()->remove(m_block);
+        list->remove(m_block);
+        recalcList(list->item(0));
         return;
     }
 
     if(m_block.textList() && m_block.textList()->count() != 1) { // we need to split the list.
         QTextList *list = m_block.textList();
         list->remove(m_block);
-        QTextBlock tb = list->item(0); // force a recalc of the list now that I'm gone
-        KoTextBlockData *userData = dynamic_cast<KoTextBlockData*> (tb.userData());
-        if(userData)
-            userData->setCounterWidth(-1.0);
+        recalcList(list->item(0));
     }
     m_listStyle->applyStyle(m_block);
-    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*> (m_block.userData());
-    if(userData) // force a recalc of my listitem.
+    recalcList(m_block);
+}
+
+void ChangeListCommand::recalcList(const QTextBlock &block) const {
+    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*> (block.userData());
+    if(userData)
         userData->setCounterWidth(-1.0);
 }
 
