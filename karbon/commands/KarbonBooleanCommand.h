@@ -41,7 +41,7 @@ public:
      * @param controller the controller to used for removing/inserting.
      * @param parent the parent command used for macro commands
      */
-    KarbonBooleanCommand( KoShapeControllerBase *controller, QUndoCommand *parent = 0 );
+    explicit KarbonBooleanCommand( KoShapeControllerBase *controller, QUndoCommand *parent = 0 );
     virtual ~KarbonBooleanCommand();
     /// Sets the first operand of the boolean operation
     void setFirstOperand( KoPathShape* pathA );
