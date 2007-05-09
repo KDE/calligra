@@ -1,0 +1,70 @@
+<ui version="4.0" >
+ <class>PartDetailsDialog</class>
+ <widget class="QWidget" name="PartDetailsDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <layout class="QGridLayout" >
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>Name:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy" >
+        <cstring>nameEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLineEdit" name="nameEdit" />
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>Short name:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy" >
+        <cstring>shortNameEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="shortNameEdit" />
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Staves</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Voices</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

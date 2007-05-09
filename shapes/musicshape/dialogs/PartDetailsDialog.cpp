@@ -16,37 +16,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "PartsWidget.h"
 #include "PartDetailsDialog.h"
-
-#include "../core/Sheet.h"
 #include "../core/Part.h"
-
 using namespace MusicCore;
 
-PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
-    : QWidget(parent),
-    m_tool(tool)
+PartDetailsDialog::PartDetailsDialog(Part* part, QWidget* parent)
+    : KDialog(parent),
+    m_part(part)
 {
-    widget.setupUi(this);
+    setCaption(i18n("Part details"));
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    QWidget* w = new QWidget(this);
+    widget.setupUi(w);
+    setMainWidget(w);
 
-    connect(widget.partsList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(partDoubleClicked(QListWidgetItem*)));
+    widget.nameEdit->setText(part->name());
+    widget.shortNameEdit->setText(part->shortName());
 }
 
-void PartsWidget::setSheet(Sheet* sheet)
-{
-    widget.partsList->clear();
-    for (int i = 0; i < sheet->partCount(); i++) {
-        widget.partsList->addItem(sheet->part(i)->name());
-    }
-    m_sheet = sheet;
-}
 
-void PartsWidget::partDoubleClicked(QListWidgetItem* item)
-{
-    int row = widget.partsList->row(item);
-    PartDetailsDialog *dlg = new PartDetailsDialog(m_sheet->part(row), this);
-    dlg->show();
-}
-
-#include "PartsWidget.moc"
+#include "PartDetailsDialog.moc"

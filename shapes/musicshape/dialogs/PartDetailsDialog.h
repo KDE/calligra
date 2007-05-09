@@ -16,37 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "PartsWidget.h"
-#include "PartDetailsDialog.h"
+#ifndef PARTDETAILSDIALOG_H
+#define PARTDETAILSDIALOG_H
 
-#include "../core/Sheet.h"
-#include "../core/Part.h"
+#include "ui_PartDetailsDialog.h"
 
-using namespace MusicCore;
+#include <KDialog>
 
-PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
-    : QWidget(parent),
-    m_tool(tool)
-{
-    widget.setupUi(this);
-
-    connect(widget.partsList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(partDoubleClicked(QListWidgetItem*)));
+namespace MusicCore {
+    class Part;
 }
 
-void PartsWidget::setSheet(Sheet* sheet)
-{
-    widget.partsList->clear();
-    for (int i = 0; i < sheet->partCount(); i++) {
-        widget.partsList->addItem(sheet->part(i)->name());
-    }
-    m_sheet = sheet;
-}
+class PartDetailsDialog : public KDialog {
+    Q_OBJECT
+public:
+    explicit PartDetailsDialog(MusicCore::Part* part, QWidget *parent = 0);
 
-void PartsWidget::partDoubleClicked(QListWidgetItem* item)
-{
-    int row = widget.partsList->row(item);
-    PartDetailsDialog *dlg = new PartDetailsDialog(m_sheet->part(row), this);
-    dlg->show();
-}
+private slots:
 
-#include "PartsWidget.moc"
+private:
+    Ui::PartDetailsDialog widget;
+    MusicCore::Part *m_part;
+};
+
+#endif // PARTDETAILSDIALOG_H

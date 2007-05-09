@@ -18,6 +18,7 @@
  */
 #include "Staff.h"
 #include "Part.h"
+#include "Sheet.h"
 
 namespace MusicCore {
 
@@ -56,8 +57,14 @@ void Staff::setSpacing(double spacing)
 
 double Staff::top()
 {
+    int n = 0;
+    for (int i = 0; i < part()->sheet()->partCount(); i++) {
+        Part* p = part()->sheet()->part(i);
+        if (p != part()) n += p->staffCount();
+        else break;
+    }
     for (int i = 0; i < part()->staffCount(); i++) {
-        if (part()->staff(i) == this) return 30 + 100 * i;
+        if (part()->staff(i) == this) return 30 + 100 * (n+i);
     }
     Q_ASSERT(false);
     return 30;

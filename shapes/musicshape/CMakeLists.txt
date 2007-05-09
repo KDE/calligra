@@ -31,12 +31,14 @@ SET (musicshape_LIB_SRCS
     Renderer.cpp
 
     dialogs/PartsWidget.cpp
+    dialogs/PartDetailsDialog.cpp
 
     ${musiccore_SRCS}
 )
 
 kde4_add_ui_files(musicshape_LIB_SRCS
     dialogs/PartsWidget.ui
+    dialogs/PartDetailsDialog.ui
 )
 
 kde4_automoc(${musicshape_LIB_SRCS})

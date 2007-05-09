@@ -23,6 +23,7 @@
 
 #include <QWidget>
 
+class QListWidgetItem;
 class MusicTool;
 namespace MusicCore {
     class Sheet;
@@ -36,10 +37,11 @@ public:
 public slots:
     void setSheet(MusicCore::Sheet* sheet);
 private slots:
-
+    void partDoubleClicked(QListWidgetItem* item);
 private:
     Ui::PartsWidget widget;
     MusicTool *m_tool;
+    MusicCore::Sheet* m_sheet;
 };
 
 #endif // PARTSWIDGET_H
