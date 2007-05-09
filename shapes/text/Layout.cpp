@@ -234,6 +234,11 @@ bool Layout::nextParag() {
             m_blockData = dynamic_cast<KoTextBlockData*> (m_block.userData());
         }
     }
+    else if(m_blockData) { // make sure it is empty
+        m_blockData->setCounterText(QString());
+        m_blockData->setCounterSpacing(0.0);
+        m_blockData->setCounterWidth(0.0);
+    }
 
     updateBorders(); // fill the border inset member vars.
     m_y += m_borderInsets.top;
