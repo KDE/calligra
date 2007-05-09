@@ -53,12 +53,14 @@ ParagraphSettingsDialog::~ParagraphSettingsDialog() {
 
 void ParagraphSettingsDialog::accept() {
     if(m_style) {
+        emit startMacro(i18n("Paragraph Settings\n"));
         m_paragraphIndentSpacing->save();
         m_paragraphLayout->save();
         m_paragraphBulletsNumbers->save();
 
         QTextBlock block = m_cursor.block();
         m_style->applyStyle(block);
+        emit stopMacro();
     }
 
     QDialog::accept();

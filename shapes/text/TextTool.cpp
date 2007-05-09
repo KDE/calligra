@@ -860,6 +860,8 @@ void TextTool::formatParagraph() {
     ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(m_canvas->canvasWidget());
     dia->open(m_caret);
     dia->setUnit(m_canvas->unit());
+    connect(dia, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));
+    connect(dia, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
 
     dia->show();
 }
