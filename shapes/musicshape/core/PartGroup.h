@@ -26,7 +26,7 @@ namespace MusicCore {
 class Sheet;
 
 /**
- * A PartGroup can be used to group a consequetive number of parts together. This can for example be usefull
+ * A PartGroup can be used to group a consequetive number of parts together. This can for example be useful
  * to group all the string instruments. A group is defined by the indices of the first and last parts in the group.
  */
 class PartGroup

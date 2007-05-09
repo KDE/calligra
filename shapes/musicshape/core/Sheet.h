@@ -33,7 +33,7 @@ class Bar;
  * parts. A sheet can also contain zero or more part groups, which can be used to group similar parts
  * together (for example all string parts).
  *
- * A sheet also contains bars. Musical elements are always inserted in a specifc bar/part combination (where the
+ * A sheet also contains bars. Musical elements are always inserted in a specific bar/part combination (where the
  * part is further divided in a staff and a voice).
  */
 class Sheet
@@ -67,7 +67,7 @@ public:
      *
      * @param name the name of the part to create
      */
-    Part* addPart(QString name);
+    Part* addPart(const QString& name);
 
     /**
      * Adds an existing part to this sheet. The part should not have been added to any other sheet, as adding a
@@ -85,7 +85,7 @@ public:
      * @param before index of the part before which to insert a new part
      * @param name the name of the part to create
      */
-    Part* insertPart(int before, QString name);
+    Part* insertPart(int before, const QString& name);
 
     /**
      * Inserts an existing part into this sheet. The part  should not have been added to any other sheet, as adding

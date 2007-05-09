@@ -33,7 +33,7 @@ public:
     QList<Voice*> voices;
 };
 
-Part::Part(Sheet* sheet, QString name) : d(new Private)
+Part::Part(Sheet* sheet, const QString& name) : d(new Private)
 {
     d->sheet = sheet;
     d->name = name;
@@ -56,7 +56,7 @@ QString Part::name() const
     return d->name;
 }
 
-void Part::setName(QString name)
+void Part::setName(const QString& name)
 {
     d->name = name;
 }
@@ -70,7 +70,7 @@ QString Part::shortName() const
     }
 }
 
-void Part::setShortName(QString name)
+void Part::setShortName(const QString& name)
 {
     d->shortName = name;
 }

@@ -39,7 +39,7 @@ public:
      * Creates a new part in the given sheet with the given name. The part is not added to the sheet, to do that
      * either call Sheet::addPart(Part*) or use Sheet::addPart(QString) to create a new part.
      */
-    Part(Sheet* sheet, QString name);
+    Part(Sheet* sheet, const QString& name);
 
     /**
      * Destructor.
@@ -67,7 +67,7 @@ public:
      *
      * @param name the new name of the part
      */
-    void setName(QString name);
+    void setName(const QString& name);
 
     /**
      * Returns the short name of this part. In typical music the long name of a part is printed before the first
@@ -81,7 +81,7 @@ public:
      *
      * @param shortName the new short name of the part
      */
-    void setShortName(QString shortName);
+    void setShortName(const QString& shortName);
 
     /**
      * Returns the number of staves in this part.

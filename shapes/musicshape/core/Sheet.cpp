@@ -55,14 +55,14 @@ Part* Sheet::part(int index)
     return d->parts[index];
 }
 
-Part* Sheet::addPart(QString name)
+Part* Sheet::addPart(const QString& name)
 {
     Part* part = new Part(this, name);
     d->parts.append(part);
     return part;
 }
 
-Part* Sheet::insertPart(int before, QString name)
+Part* Sheet::insertPart(int before, const QString& name)
 {
     Q_ASSERT( before >= 0 && before <= partCount() );
     Part* part = new Part(this, name);
