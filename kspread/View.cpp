@@ -511,9 +511,10 @@ public:
 
 void View::Private::initActions()
 {
-  actions = new ViewActions;
+    actions = new ViewActions;
 
-  KActionCollection* ac = view->actionCollection();
+    KActionCollection* ac = view->actionCollection();
+    ac->addAssociatedWidget(view->canvasWidget());
 
   // -- cell formatting actions --
 
