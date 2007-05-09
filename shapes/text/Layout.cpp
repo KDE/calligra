@@ -173,7 +173,7 @@ bool Layout::nextParag() {
             return false;
         }
         double borderBottom = m_y;
-        if(!m_newShape) { // only add bottom of prev parag if we did not go to a new shape for this parag.
+        if(m_block.isValid() && !m_newShape) { // only add bottom of prev parag if we did not go to a new shape for this parag.
             if(m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysAfter ||
                     m_format.boolProperty(KoParagraphStyle::BreakAfter)) {
                 m_data->setEndPosition(m_block.position()-1);
