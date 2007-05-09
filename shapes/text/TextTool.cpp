@@ -487,11 +487,12 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             editingPluginEvents();
             ensureCursorVisible();
         }
-        else {
+        else { // insert the text
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
             m_caret.insertText(event->text());
             editingPluginEvents();
+            emit blockChanged(m_caret.block());
         }
     }
     if(moveOperation != QTextCursor::NoMove || destinationPosition != -1) {
