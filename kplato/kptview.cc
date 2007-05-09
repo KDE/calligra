@@ -86,6 +86,7 @@
 #include "kptganttview.h"
 //#include "kptreportview.h"
 #include "kpttaskeditor.h"
+#include "kptdependencyeditor.h"
 #include "kptperteditor.h"
 #include "kptpertresult.h"
 #include "kptdatetime.h"
@@ -592,8 +593,9 @@ View::View( Part* part, QWidget* parent )
     createAccountsEditor( cat );
     createResourceditor( cat );
     createTaskeditor( cat );
-    createScheduleEditor( cat );
     createDependencyEditor( cat );
+    createPertEditor( cat );
+    createScheduleEditor( cat );
 
     cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
     createTaskStatusView( cat );
@@ -739,6 +741,13 @@ View::View( Part* part, QWidget* parent )
     actionEditCalendar  = new KAction(KIcon( "edit" ), i18n("Edit Calendar..."), this);
     actionCollection()->addAction("edit_calendar", actionEditCalendar );
     connect( actionEditCalendar, SIGNAL( triggered( bool ) ), SLOT( slotEditCalendar() ) );
+
+    actionEditRelation  = new KAction(KIcon( "edit" ), i18n("Edit Dependency..."), this);
+    actionCollection()->addAction("edit_dependency", actionEditRelation );
+    connect( actionEditRelation, SIGNAL( triggered( bool ) ), SLOT( slotModifyRelation() ) );
+    actionDeleteRelation  = new KAction(KIcon( "edit-delete" ), i18n("Delete Dependency..."), this);
+    actionCollection()->addAction("delete_dependency", actionDeleteRelation );
+    connect( actionDeleteRelation, SIGNAL( triggered( bool ) ), SLOT( slotDeleteRelation() ) );
 
     // Viewlist popup
     connect( m_viewlist, SIGNAL( createKofficeDocument( KoDocumentEntry& ) ), SLOT( slotCreateKofficeDocument( KoDocumentEntry& ) ) );
@@ -901,6 +910,36 @@ void View::createScheduleEditor( ViewListItem *cat )
 }
 
 void View::createDependencyEditor( ViewListItem *cat )
+{
+    DependencyEditor *editor = new DependencyEditor( getPart(), m_tab );
+    m_tab->addWidget( editor );
+
+    ViewListItem *i = m_viewlist->addView( cat, "DependencyEditor", i18n( "Dependencies" ), editor, getPart(), "task_editor" );
+    i->setToolTip( 0, i18n( "Edit task dependenies" ) );
+
+    editor->draw( getProject() );
+
+    connect( editor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( editor, SIGNAL( addRelation( Node*, Node*, int ) ), SLOT( slotAddRelation( Node*, Node*, int ) ) );
+    connect( editor, SIGNAL( modifyRelation( Relation*, int ) ), SLOT( slotModifyRelation( Relation*, int ) ) );
+    connect( editor, SIGNAL( modifyRelation( Relation* ) ), SLOT( slotModifyRelation( Relation* ) ) );
+
+    connect( editor, SIGNAL( editNode( Node * ) ), SLOT( slotOpenNode( Node * ) ) );
+    connect( editor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
+    connect( editor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
+    connect( editor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
+    connect( editor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
+    connect( editor, SIGNAL( moveTaskUp() ), SLOT( slotMoveTaskUp() ) );
+    connect( editor, SIGNAL( moveTaskDown() ), SLOT( slotMoveTaskDown() ) );
+    connect( editor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
+    connect( editor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
+
+
+    connect( editor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+}
+
+void View::createPertEditor( ViewListItem *cat )
 {
     PertEditor *perteditor = new PertEditor( getPart(), m_tab );
     m_tab->addWidget( perteditor );
@@ -1952,6 +1991,30 @@ void View::slotModifyRelation( Relation *rel, int linkType )
         getPart() ->addCommand( new ModifyRelationTypeCmd( getPart(), rel, static_cast<Relation::Type>( linkType ) ) );
     } else {
         slotModifyRelation( rel );
+    }
+}
+
+void View::slotModifyRelation()
+{
+    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( v == 0 ) {
+        return;
+    }
+    Relation *rel = v->currentRelation();
+    if ( rel ) {
+        slotModifyRelation( rel );
+    }
+}
+
+void View::slotDeleteRelation()
+{
+    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( v == 0 ) {
+        return;
+    }
+    Relation *rel = v->currentRelation();
+    if ( rel ) {
+        getPart()->addCommand( new DeleteRelationCmd( getPart(), rel, i18n( "Delete Task Dependency" ) ) );
     }
 }
 

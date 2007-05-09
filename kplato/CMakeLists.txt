@@ -26,6 +26,7 @@ include_directories(${KPLATO_INCLUDES})
 ########### KPlato private library ###############
 
 set(kplatoprivate_LIB_SRCS
+    kptdependencyeditor.cc
     kptusedefforteditor.cc
     kpttaskstatusview.cc
     kptcalendareditor.cc

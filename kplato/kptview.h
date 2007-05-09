@@ -256,6 +256,8 @@ public slots:
     void slotModifyRelation( Relation *rel );
     void slotAddRelation( Node *par, Node *child, int linkType );
     void slotModifyRelation( Relation *rel, int linkType );
+    void slotModifyRelation();
+    void slotDeleteRelation();
 
     void slotExportGantt(); // testing
 
@@ -343,6 +345,7 @@ private:
     void createCalendarEditor( ViewListItem *cat );
     void createScheduleEditor( ViewListItem *cat );
     void createDependencyEditor( ViewListItem *cat );
+    void createPertEditor( ViewListItem *cat );
     void createPertResultView( ViewListItem *cat );
     void createTaskStatusView( ViewListItem *cat );
     void createGanttView( ViewListItem *cat );
@@ -432,7 +435,9 @@ private:
     KAction *actionDeleteTask;
     KAction *actionEditResource;
     KAction *actionEditCalendar;
-
+    KAction *actionEditRelation;
+    KAction *actionDeleteRelation;
+    
     //Test
     KAction *actNoInformation;
 

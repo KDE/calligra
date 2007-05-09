@@ -158,14 +158,19 @@ Node *Node::projectNode() {
 
 void Node::takeChildNode( Node *node) {
     //kDebug()<<k_funcinfo<<"find="<<m_nodes.indexOf(node)<<endl;
+    int t = type();
     int i = m_nodes.indexOf(node);
     if ( i != -1 ) {
         m_nodes.removeAt(i);
     }
     node->setParentNode(0);
+    if ( t != type() ) {
+        changed();
+    }
 }
 
 void Node::takeChildNode( int number ) {
+    int t = type();
     if (number >= 0 && number < m_nodes.size()) {
         Node *n = m_nodes.takeAt(number);
         //kDebug()<<k_funcinfo<<(n?n->id():"null")<<" : "<<(n?n->name():"")<<endl;
@@ -173,25 +178,39 @@ void Node::takeChildNode( int number ) {
             n->setParentNode( 0 );
         }
     }
+    if ( t != type() ) {
+        changed();
+    }
 }
 
 void Node::insertChildNode( int index, Node *node ) {
+    int t = type();
     if (index == -1)
         m_nodes.append(node);
     else
         m_nodes.insert(index,node);
     node->setParentNode( this );
+    if ( t != type() ) {
+        changed();
+    }
 }
 
 void Node::addChildNode( Node *node, Node *after) {
+    int t = type();
     int index = m_nodes.indexOf(after);
     if (index == -1) {
         m_nodes.append(node);
         node->setParentNode( this );
+        if ( t != type() ) {
+            changed();
+        }
         return;
     }
     m_nodes.insert(index+1, node);
     node->setParentNode(this);
+    if ( t != type() ) {
+        changed();
+    }
 }
 
 int Node::findChildNode( Node* node )

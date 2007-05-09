@@ -189,4 +189,8 @@
         <Action name="add_workinterval"/>
         <Action name="delete_workinterval"/>
     </Menu>
+    <Menu name="relation_popup">
+        <Action name="edit_dependency"/>
+        <Action name="delete_dependency"/>
+    </Menu>
 </kpartgui>

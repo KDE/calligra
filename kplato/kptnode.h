@@ -134,13 +134,13 @@ public:
     // of the table-building node is the house-building node.
 
     int numDependChildNodes() const { return m_dependChildNodes.count(); }
-    /// Adds relation to both this node and address node
+    /// Adds relation of type @p p to both this node and @p node
     virtual void addDependChildNode( Node *node, Relation::Type p=Relation::FinishStart);
-    /// Adds relation to both this node and address node
+    /// Adds relation of type @p p with @p lag to both this node and @p node
     virtual void addDependChildNode( Node *node, Relation::Type p, Duration lag);
-    /// Adds relation only to this node
+    /// Adds @p relation only to this node
     virtual bool addDependChildNode( Relation *relation);
-    /// Inserts relation to this node at index address index and appends relation to address node
+    /// Inserts relation to this node at index @p index and appends relation to @p node
     virtual void insertDependChildNode( unsigned int index, Node *node, Relation::Type p=Relation::FinishStart);
     /**
      * Takes the relation rel from this node only.
@@ -152,16 +152,16 @@ public:
     QList<Relation*> &dependChildNodes() { return m_dependChildNodes; }
 
     int numDependParentNodes() const { return m_dependParentNodes.count(); }
-    /// Adds relation to both this node and node
+    /// Adds relation if type @p to both this node and @p node
     virtual void addDependParentNode(Node *node, Relation::Type p=Relation::FinishStart);
-    /// Adds relation to both this node and node
+    /// Adds relation to both this node and @p node
     virtual void addDependParentNode( Node *node, Relation::Type p, Duration lag);
     /// Adds relation only to this node
     virtual bool addDependParentNode( Relation *relation);
-    /// Inserts relation to this node at index and appends relation to node
+    /// Inserts relation to this node at index and appends relation to @p node
     virtual void insertDependParentNode( unsigned int index, Node *node, Relation::Type p=Relation::FinishStart);
     /**
-     * Takes the relation rel from this node only.
+     * Takes the relation @p rel from this node only.
      */
     void takeDependParentNode( Relation *rel );
     Relation *getDependParentNode( int number ) {

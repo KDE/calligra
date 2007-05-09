@@ -38,6 +38,7 @@ class Project;
 class Node;
 class Resource;
 class ResourceGroup;
+class Relation;
 class Calendar;
 class Context;
 
@@ -76,7 +77,9 @@ public:
     virtual ResourceGroup* currentResourceGroup() const { return 0; }
     /// Reimplement if your view handles calendars
     virtual Calendar* currentCalendar() const { return 0; }
-
+    /// Reimplement if your view handles relations
+    virtual Relation *currentRelation() const { return 0; }
+    
     /// Returns the list of action lists that shall be plugged/unplugged
     QStringList actionListNames() const { return m_actionListMap.keys(); }
     /// Returns the list of actions associated with the action list name
