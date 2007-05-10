@@ -540,15 +540,6 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
                 painter->save();
                 decorateParagraph(painter, block);
                 painter->restore();
-                KoTextBlockBorderData *border = 0;
-                if(blockData)
-                    border = dynamic_cast<KoTextBlockBorderData*> (blockData->border());
-                if(lastBorder && lastBorder != border) {
-                    painter->save();
-                    lastBorder->paint(*painter);
-                    painter->restore();
-                }
-                lastBorder = border;
 
                 QVector<QTextLayout::FormatRange> selections;
                 foreach(QAbstractTextDocumentLayout::Selection selection, context.selections) {
@@ -567,6 +558,16 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
                     selections.append(fr);
                 }
                 layout->draw(painter, QPointF(0,0), selections);
+
+                KoTextBlockBorderData *border = 0;
+                if(blockData)
+                    border = dynamic_cast<KoTextBlockBorderData*> (blockData->border());
+                if(lastBorder && lastBorder != border) {
+                    painter->save();
+                    lastBorder->paint(*painter);
+                    painter->restore();
+                }
+                lastBorder = border;
             }
             else if(started) // when out of the cliprect, then we are done drawing.
                 break;
