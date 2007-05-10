@@ -751,6 +751,33 @@ void TestDocumentLayout::testDropCaps() {
     QCOMPARE(line.position(), QPointF(w + 9.0 ,0));
 }
 
+void TestDocumentLayout::testNonBreakableLines() {
+    initForNewTest(loremIpsum.left(97) + '\n' + loremIpsum);
+    QTextBlock block = doc->begin().next();
+    QTextCursor cursor(block);
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setNonBreakableLines(true);
+    cursor.setBlockFormat(format);
+
+    shape1->resize(QSizeF(200, 100));
+    KoShape *shape2 = new MockTextShape();
+    shape2->resize(QSizeF(120, 1000));
+    layout->addShape(shape2);
+
+    layout->layout();
+
+    block = doc->begin();
+    QTextLayout *l = block.layout();
+    // make sure parag1 is in shape 1.
+    for(int i=0; i < l->lineCount(); i++)
+        QVERIFY(l->lineAt(i).y() < 100.);
+
+    block = block.next();
+    l = block.layout();
+    QCOMPARE(l->lineAt(0).y(), 110.);
+}
+
+
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
 
 #include "TestDocumentLayout.moc"
