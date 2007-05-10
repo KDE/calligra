@@ -220,7 +220,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         styleElem.appendChild( element );
         //kDebug(30518) << k_funcinfo << "generating style " << styleName << endl;
 
-        QString followingStyle = m_styleStack.attributeNS( ooNS::style, "next-style-name" );
+        QString followingStyle = m_styleStack.property( ooNS::style, "next-style-name" );
         if ( !followingStyle.isEmpty() )
         {
             QDomElement element = doc.createElement( "FOLLOWING" );
@@ -1252,24 +1252,24 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
     // Both apps implement a "write property only if necessary" mechanism, I can't'
     // find a case that breaks yet.
 
-    if ( m_styleStack.hasAttributeNS( ooNS::fo, "color" ) ) { // 3.10.3
-        QColor color( m_styleStack.attributeNS( ooNS::fo, "color" ) ); // #rrggbb format
+    if ( m_styleStack.hasProperty( ooNS::fo, "color" ) ) { // 3.10.3
+        QColor color( m_styleStack.property( ooNS::fo, "color" ) ); // #rrggbb format
         QDomElement colorElem( doc.createElement( "COLOR" ) );
         colorElem.setAttribute( "red", color.red() );
         colorElem.setAttribute( "blue", color.blue() );
         colorElem.setAttribute( "green", color.green() );
         format.appendChild( colorElem );
     }
-    if ( m_styleStack.hasAttributeNS( ooNS::fo, "font-family" )  // 3.10.9
-         || m_styleStack.hasAttributeNS( ooNS::style, "font-name") ) // 3.10.8
+    if ( m_styleStack.hasProperty( ooNS::fo, "font-family" )  // 3.10.9
+         || m_styleStack.hasProperty( ooNS::style, "font-name") ) // 3.10.8
     {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
-        QString fontName = m_styleStack.attributeNS( ooNS::fo, "font-family" ).remove( "'" );
+        QString fontName = m_styleStack.property( ooNS::fo, "font-family" ).remove( "'" );
         if (fontName.isEmpty())
         {
             // ##### TODO. This is wrong. style:font-name refers to a font-decl entry.
             // We have to look it up there, and retrieve _all_ font attributes from it, not just the name.
-            fontName = m_styleStack.attributeNS( ooNS::style, "font-name" ).remove( "'" );
+            fontName = m_styleStack.property( ooNS::style, "font-name" ).remove( "'" );
         }
         // 'Thorndale' is not known outside OpenOffice so we substitute it
         // with 'Times New Roman' that looks nearly the same.
@@ -1282,16 +1282,16 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         fontElem.setAttribute( "name", fontName );
         format.appendChild( fontElem );
     }
-    if ( m_styleStack.hasAttributeNS( ooNS::fo, "font-size" ) ) { // 3.10.14
+    if ( m_styleStack.hasProperty( ooNS::fo, "font-size" ) ) { // 3.10.14
         double pointSize = m_styleStack.fontSize();
 
         QDomElement fontSize( doc.createElement( "SIZE" ) );
         fontSize.setAttribute( "value", qRound(pointSize) ); // KWord uses toInt()!
         format.appendChild( fontSize );
     }
-    if ( m_styleStack.hasAttributeNS( ooNS::fo, "font-weight" ) ) { // 3.10.24
+    if ( m_styleStack.hasProperty( ooNS::fo, "font-weight" ) ) { // 3.10.24
         QDomElement weightElem( doc.createElement( "WEIGHT" ) );
-        QString fontWeight = m_styleStack.attributeNS( ooNS::fo, "font-weight" );
+        QString fontWeight = m_styleStack.property( ooNS::fo, "font-weight" );
         int boldness = fontWeight.toInt();
         if ( fontWeight == "bold" )
             boldness = 75;
@@ -1301,20 +1301,20 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         format.appendChild( weightElem );
     }
 
-    if ( m_styleStack.hasAttributeNS( ooNS::fo, "font-style" ) ) // 3.10.19
-        if ( m_styleStack.attributeNS( ooNS::fo, "font-style" ) == "italic" ||
-             m_styleStack.attributeNS( ooNS::fo, "font-style" ) == "oblique" ) // no difference in kotext
+    if ( m_styleStack.hasProperty( ooNS::fo, "font-style" ) ) // 3.10.19
+        if ( m_styleStack.property( ooNS::fo, "font-style" ) == "italic" ||
+             m_styleStack.property( ooNS::fo, "font-style" ) == "oblique" ) // no difference in kotext
         {
             QDomElement italic = doc.createElement( "ITALIC" );
             italic.setAttribute( "value", 1 );
             format.appendChild( italic );
         }
 
-    bool wordByWord = (m_styleStack.hasAttributeNS( ooNS::fo, "score-spaces")) // 3.10.25
-                      && (m_styleStack.attributeNS( ooNS::fo, "score-spaces") == "false");
-    if( m_styleStack.hasAttributeNS( ooNS::style, "text-crossing-out" )) // 3.10.6
+    bool wordByWord = (m_styleStack.hasProperty( ooNS::fo, "score-spaces")) // 3.10.25
+                      && (m_styleStack.property( ooNS::fo, "score-spaces") == "false");
+    if( m_styleStack.hasProperty( ooNS::style, "text-crossing-out" )) // 3.10.6
     {
-        QString strikeOutType = m_styleStack.attributeNS( ooNS::style, "text-crossing-out" );
+        QString strikeOutType = m_styleStack.property( ooNS::style, "text-crossing-out" );
         QDomElement strikeOut = doc.createElement( "STRIKEOUT" );
         if( strikeOutType =="double-line")
         {
@@ -1337,10 +1337,10 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
         format.appendChild( strikeOut );
     }
-    if( m_styleStack.hasAttributeNS( ooNS::style, "text-position")) // 3.10.7
+    if( m_styleStack.hasProperty( ooNS::style, "text-position")) // 3.10.7
     {
         QDomElement vertAlign = doc.createElement( "VERTALIGN" );
-        QString text_position = m_styleStack.attributeNS( ooNS::style, "text-position");
+        QString text_position = m_styleStack.property( ooNS::style, "text-position");
         QString value;
         QString relativetextsize;
         OoUtils::importTextPosition( text_position, value, relativetextsize );
@@ -1349,17 +1349,17 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
             vertAlign.setAttribute( "relativetextsize", relativetextsize );
         format.appendChild( vertAlign );
     }
-    if ( m_styleStack.hasAttributeNS( ooNS::style, "text-underline" ) ) // 3.10.22
+    if ( m_styleStack.hasProperty( ooNS::style, "text-underline" ) ) // 3.10.22
     {
         QString underline;
         QString styleline;
-        OoUtils::importUnderline( m_styleStack.attributeNS( ooNS::style, "text-underline" ),
+        OoUtils::importUnderline( m_styleStack.property( ooNS::style, "text-underline" ),
                                   underline, styleline );
         QDomElement underLineElem = doc.createElement( "UNDERLINE" );
         underLineElem.setAttribute( "value", underline );
         underLineElem.setAttribute( "styleline", styleline );
 
-        QString underLineColor = m_styleStack.attributeNS( ooNS::style, "text-underline-color" ); // 3.10.23
+        QString underLineColor = m_styleStack.property( ooNS::style, "text-underline-color" ); // 3.10.23
         if ( !underLineColor.isEmpty() && underLineColor != "font-color" )
             underLineElem.setAttribute("underlinecolor", underLineColor);
         if ( wordByWord )
@@ -1367,11 +1367,11 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         format.appendChild( underLineElem );
     }
     // Small caps, lowercase, uppercase
-    if ( m_styleStack.hasAttributeNS( ooNS::fo, "font-variant" ) // 3.10.1
-         || m_styleStack.hasAttributeNS( ooNS::fo, "text-transform" ) ) // 3.10.2
+    if ( m_styleStack.hasProperty( ooNS::fo, "font-variant" ) // 3.10.1
+         || m_styleStack.hasProperty( ooNS::fo, "text-transform" ) ) // 3.10.2
     {
         QDomElement fontAttrib( doc.createElement( "FONTATTRIBUTE" ) );
-        bool smallCaps = m_styleStack.attributeNS( ooNS::fo, "font-variant" ) == "small-caps";
+        bool smallCaps = m_styleStack.property( ooNS::fo, "font-variant" ) == "small-caps";
         if ( smallCaps )
         {
             fontAttrib.setAttribute( "value", "smallcaps" );
@@ -1379,15 +1379,15 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         {
             // Both KWord and OO use "uppercase" and "lowercase".
             // TODO in KWord: "capitalize".
-            fontAttrib.setAttribute( "value", m_styleStack.attributeNS( ooNS::fo, "text-transform" ) );
+            fontAttrib.setAttribute( "value", m_styleStack.property( ooNS::fo, "text-transform" ) );
         }
         format.appendChild( fontAttrib );
     }
 
-    if (m_styleStack.hasAttributeNS( ooNS::fo, "language")) // 3.10.17
+    if (m_styleStack.hasProperty( ooNS::fo, "language")) // 3.10.17
     {
         QDomElement lang = doc.createElement("LANGUAGE");
-        QString tmp = m_styleStack.attributeNS( ooNS::fo, "language");
+        QString tmp = m_styleStack.property( ooNS::fo, "language");
         if (tmp=="en")
             lang.setAttribute("value", "en_US");
         else
@@ -1395,10 +1395,10 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         format.appendChild(lang);
     }
 
-    if (m_styleStack.hasAttributeNS( ooNS::style, "text-background-color")) // 3.10.28
+    if (m_styleStack.hasProperty( ooNS::style, "text-background-color")) // 3.10.28
     {
         QDomElement bgCol = doc.createElement("TEXTBACKGROUNDCOLOR");
-        QColor tmp = m_styleStack.attributeNS( ooNS::style, "text-background-color");
+        QColor tmp = m_styleStack.property( ooNS::style, "text-background-color");
         if (tmp != "transparent")
         {
             bgCol.setAttribute("red", tmp.red());
@@ -1408,10 +1408,10 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         }
     }
 
-    if (m_styleStack.hasAttributeNS( ooNS::fo, "text-shadow")) // 3.10.21
+    if (m_styleStack.hasProperty( ooNS::fo, "text-shadow")) // 3.10.21
     {
         QDomElement shadow = doc.createElement("SHADOW");
-        QString css = m_styleStack.attributeNS( ooNS::fo, "text-shadow");
+        QString css = m_styleStack.property( ooNS::fo, "text-shadow");
         // Workaround for OOo-1.1 bug: they forgot to save the color.
         QStringList tokens = QStringList::split(' ', css);
         if ( !tokens.isEmpty() ) {
@@ -1466,21 +1466,21 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
      *  OOo won't understand it. So that's for later, we keep our own attribute
      *  for now, so that export-import works.
      */
-    if ( m_styleStack.attributeNS( ooNS::style, "text-auto-align" ) == "true" )
+    if ( m_styleStack.property( ooNS::style, "text-auto-align" ) == "true" )
         flowElement.setAttribute( "align", "auto" );
     else
     {
-        if ( m_styleStack.hasAttributeNS( ooNS::fo, "text-align" ) ) // 3.11.4
-            flowElement.setAttribute( "align", Conversion::importAlignment( m_styleStack.attributeNS( ooNS::fo, "text-align" ) ) );
+        if ( m_styleStack.hasProperty( ooNS::fo, "text-align" ) ) // 3.11.4
+            flowElement.setAttribute( "align", Conversion::importAlignment( m_styleStack.property( ooNS::fo, "text-align" ) ) );
         else
             flowElement.setAttribute( "align", "auto" );
     }
     layoutElement.appendChild( flowElement );
 
-    if ( m_styleStack.hasAttributeNS( ooNS::fo, "writing-mode" ) ) // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
+    if ( m_styleStack.hasProperty( ooNS::fo, "writing-mode" ) ) // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
     {
         // LTR is lr-tb. RTL is rl-tb
-        QString writingMode = m_styleStack.attributeNS( ooNS::fo, "writing-mode" );
+        QString writingMode = m_styleStack.property( ooNS::fo, "writing-mode" );
         flowElement.setAttribute( "dir", writingMode=="rl-tb" || writingMode=="rl" ? "R" : "L" );
     }
 
@@ -1500,31 +1500,31 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
     OoUtils::importBorders( layoutElement, m_styleStack );
 
     // Page breaking. This isn't in OoUtils since it doesn't apply to KPresenter
-    if( m_styleStack.hasAttributeNS( ooNS::fo, "break-before") ||
-        m_styleStack.hasAttributeNS( ooNS::fo, "break-after") ||
-        m_styleStack.hasAttributeNS( ooNS::style, "break-inside") ||
-        m_styleStack.hasAttributeNS( ooNS::style, "keep-with-next") ||
-        m_styleStack.hasAttributeNS( ooNS::fo, "keep-with-next") )
+    if( m_styleStack.hasProperty( ooNS::fo, "break-before") ||
+        m_styleStack.hasProperty( ooNS::fo, "break-after") ||
+        m_styleStack.hasProperty( ooNS::style, "break-inside") ||
+        m_styleStack.hasProperty( ooNS::style, "keep-with-next") ||
+        m_styleStack.hasProperty( ooNS::fo, "keep-with-next") )
     {
         QDomElement pageBreak = doc.createElement( "PAGEBREAKING" );
-        if ( m_styleStack.hasAttributeNS( ooNS::fo, "break-before") ) { // 3.11.24
-            bool breakBefore = m_styleStack.attributeNS( ooNS::fo, "break-before" ) != "auto";
+        if ( m_styleStack.hasProperty( ooNS::fo, "break-before") ) { // 3.11.24
+            bool breakBefore = m_styleStack.property( ooNS::fo, "break-before" ) != "auto";
             // TODO in KWord: implement difference between "column" and "page"
             pageBreak.setAttribute("hardFrameBreak", breakBefore ? "true" : "false");
         }
-        else if ( m_styleStack.hasAttributeNS( ooNS::fo, "break-after") ) { // 3.11.24
-            bool breakAfter = m_styleStack.attributeNS( ooNS::fo, "break-after" ) != "auto";
+        else if ( m_styleStack.hasProperty( ooNS::fo, "break-after") ) { // 3.11.24
+            bool breakAfter = m_styleStack.property( ooNS::fo, "break-after" ) != "auto";
             // TODO in KWord: implement difference between "column" and "page"
             pageBreak.setAttribute("hardFrameBreakAfter", breakAfter ? "true" : "false");
         }
 
-        if ( m_styleStack.hasAttributeNS( ooNS::style, "break-inside" ) ) { // 3.11.7
-            bool breakInside = m_styleStack.attributeNS( ooNS::style, "break-inside" ) == "true";
+        if ( m_styleStack.hasProperty( ooNS::style, "break-inside" ) ) { // 3.11.7
+            bool breakInside = m_styleStack.property( ooNS::style, "break-inside" ) == "true";
             pageBreak.setAttribute("linesTogether", breakInside ? "false" : "true"); // opposite meaning
         }
-        if ( m_styleStack.hasAttributeNS( ooNS::fo, "keep-with-next" ) ) { // 3.11.31 (the doc said style:keep-with-next but DV said it's wrong)
+        if ( m_styleStack.hasProperty( ooNS::fo, "keep-with-next" ) ) { // 3.11.31 (the doc said style:keep-with-next but DV said it's wrong)
             // OASIS spec says it's "auto"/"always", not a boolean. Not sure which one OO uses.
-            QString val = m_styleStack.attributeNS( ooNS::fo, "keep-with-next" );
+            QString val = m_styleStack.property( ooNS::fo, "keep-with-next" );
             pageBreak.setAttribute("keepWithNext", ( val == "true" || val == "always" ) ? "true" : "false");
         }
         layoutElement.appendChild( pageBreak );
@@ -1617,7 +1617,7 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     if ( hasMinHeight )
         frameElementOut.setAttribute("min-height", height );
     frameElementOut.setAttribute( "z-index", object.attributeNS( ooNS::draw, "z-index", QString::null ) );
-    QPair<int, QString> attribs = Conversion::importWrapping( m_styleStack.attributeNS( ooNS::style, "wrap" ) );
+    QPair<int, QString> attribs = Conversion::importWrapping( m_styleStack.property( ooNS::style, "wrap" ) );
     frameElementOut.setAttribute("runaround", attribs.first );
     if ( !attribs.second.isEmpty() )
         frameElementOut.setAttribute("runaroundSide", attribs.second );
@@ -1627,8 +1627,8 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
 
     if ( isText ) {
         int overflowBehavior;
-        if ( m_styleStack.hasAttributeNS( ooNS::style, "overflow-behavior" ) ) { // OASIS extension
-            overflowBehavior = Conversion::importOverflowBehavior( m_styleStack.attributeNS( ooNS::style, "overflow-behavior" ) );
+        if ( m_styleStack.hasProperty( ooNS::style, "overflow-behavior" ) ) { // OASIS extension
+            overflowBehavior = Conversion::importOverflowBehavior( m_styleStack.property( ooNS::style, "overflow-behavior" ) );
         } else {
             // AutoCreateNewFrame not supported in OO-1.1. The presence of min-height tells if it's an auto-resized frame.
             overflowBehavior = hasMinHeight ? 0 /*AutoExtendFrame*/ : 2 /*Ignore, i.e. fixed size*/;
@@ -1645,10 +1645,10 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
 void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
 {
     // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
-    double paddingLeft = KoUnit::parseValue( m_styleStack.attributeNS( ooNS::fo, "padding", "left" ) );
-    double paddingRight = KoUnit::parseValue( m_styleStack.attributeNS( ooNS::fo, "padding", "right" ) );
-    double paddingTop = KoUnit::parseValue( m_styleStack.attributeNS( ooNS::fo, "padding", "top" ) );
-    double paddingBottom = KoUnit::parseValue( m_styleStack.attributeNS( ooNS::fo, "padding", "bottom" ) );
+    double paddingLeft = KoUnit::parseValue( m_styleStack.property( ooNS::fo, "padding", "left" ) );
+    double paddingRight = KoUnit::parseValue( m_styleStack.property( ooNS::fo, "padding", "right" ) );
+    double paddingTop = KoUnit::parseValue( m_styleStack.property( ooNS::fo, "padding", "top" ) );
+    double paddingBottom = KoUnit::parseValue( m_styleStack.property( ooNS::fo, "padding", "bottom" ) );
 
     if ( paddingLeft != 0 )
         frameElementOut.setAttribute( "bleftpt", paddingLeft );
@@ -1662,8 +1662,8 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
     // background color (3.11.25)
     bool transparent = false;
     QColor bgColor;
-    if ( m_styleStack.hasAttributeNS( ooNS::fo, "background-color" ) ) {
-        QString color = m_styleStack.attributeNS( ooNS::fo, "background-color" );
+    if ( m_styleStack.hasProperty( ooNS::fo, "background-color" ) ) {
+        QString color = m_styleStack.property( ooNS::fo, "background-color" );
         if ( color == "transparent" )
             transparent = true;
         else
@@ -1687,7 +1687,7 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(m_styleStack.attributeNS( ooNS::fo, "border", "left"), &width, &style, &color)) {
+        if (OoUtils::parseBorder(m_styleStack.property( ooNS::fo, "border", "left"), &width, &style, &color)) {
             frameElementOut.setAttribute( "lWidth", width );
             if ( color.isValid() ) { // should be always true, but who knows
                 frameElementOut.setAttribute( "lRed", color.red() );
@@ -1696,7 +1696,7 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
             }
             frameElementOut.setAttribute( "lStyle", style );
         }
-        if (OoUtils::parseBorder(m_styleStack.attributeNS( ooNS::fo, "border", "right"), &width, &style, &color)) {
+        if (OoUtils::parseBorder(m_styleStack.property( ooNS::fo, "border", "right"), &width, &style, &color)) {
             frameElementOut.setAttribute( "rWidth", width );
             if ( color.isValid() ) { // should be always true, but who knows
                 frameElementOut.setAttribute( "rRed", color.red() );
@@ -1705,7 +1705,7 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
             }
             frameElementOut.setAttribute( "rStyle", style );
         }
-        if (OoUtils::parseBorder(m_styleStack.attributeNS( ooNS::fo, "border", "top"), &width, &style, &color)) {
+        if (OoUtils::parseBorder(m_styleStack.property( ooNS::fo, "border", "top"), &width, &style, &color)) {
             frameElementOut.setAttribute( "tWidth", width );
             if ( color.isValid() ) { // should be always true, but who knows
                 frameElementOut.setAttribute( "tRed", color.red() );
@@ -1714,7 +1714,7 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
             }
             frameElementOut.setAttribute( "tStyle", style );
         }
-        if (OoUtils::parseBorder(m_styleStack.attributeNS( ooNS::fo, "border", "bottom"), &width, &style, &color)) {
+        if (OoUtils::parseBorder(m_styleStack.property( ooNS::fo, "border", "bottom"), &width, &style, &color)) {
             frameElementOut.setAttribute( "bWidth", width );
             if ( color.isValid() ) { // should be always true, but who knows
                 frameElementOut.setAttribute( "bRed", color.red() );
@@ -1752,8 +1752,8 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& obje
     m_styleStack.restore();
 
     // Obey draw:text-style-name
-    if ( m_styleStack.hasAttributeNS( ooNS::draw, "text-style-name" ) )
-        addStyles( m_styles[m_styleStack.attributeNS( ooNS::draw, "text-style-name" )] );
+    if ( m_styleStack.hasProperty( ooNS::draw, "text-style-name" ) )
+        addStyles( m_styles[m_styleStack.property( ooNS::draw, "text-style-name" )] );
 
     // Parse contents
     parseBodyOrSimilar( doc, object, framesetElement );

@@ -95,20 +95,20 @@ bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QCol
 
 void OoUtils::importIndents( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if ( styleStack.hasAttributeNS( ooNS::fo, "margin-left" ) || // 3.11.19
-         styleStack.hasAttributeNS( ooNS::fo, "margin-right" ) )
+    if ( styleStack.hasProperty( ooNS::fo, "margin-left" ) || // 3.11.19
+         styleStack.hasProperty( ooNS::fo, "margin-right" ) )
          // *text-indent must always be bound to either margin-left or margin-right
     {
-        double marginLeft = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-left" ) );
-        double marginRight = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-right" ) );
+        double marginLeft = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-left" ) );
+        double marginRight = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-right" ) );
         double first = 0;
-        if (styleStack.attributeNS( ooNS::style, "auto-text-indent") == "true") // style:auto-text-indent takes precedence
+        if (styleStack.property( ooNS::style, "auto-text-indent") == "true") // style:auto-text-indent takes precedence
             // ### "indented by a value that is based on the current font size"
             // ### and "requires margin-left and margin-right
             // ### but how much is the indent?
             first = 10;
-        else if (styleStack.hasAttributeNS( ooNS::fo, "text-indent"))
-            first = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "text-indent"));
+        else if (styleStack.hasProperty( ooNS::fo, "text-indent"))
+            first = KoUnit::parseValue( styleStack.property( ooNS::fo, "text-indent"));
 
         if ( marginLeft != 0 || marginRight != 0 || first != 0 )
         {
@@ -126,10 +126,10 @@ void OoUtils::importIndents( QDomElement& parentElement, const KoStyleStack& sty
 
 void OoUtils::importLineSpacing( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if( styleStack.hasAttributeNS( ooNS::fo, "line-height") )
+    if( styleStack.hasProperty( ooNS::fo, "line-height") )
     {
         // Fixed line height
-        QString value = styleStack.attributeNS( ooNS::fo, "line-height" ); // 3.11.1
+        QString value = styleStack.property( ooNS::fo, "line-height" ); // 3.11.1
         if ( value != "normal" )
         {
             QDomElement lineSpacing = parentElement.ownerDocument().createElement( "LINESPACING" );
@@ -153,9 +153,9 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const KoStyleStack&
         }
     }
     // Line-height-at-least is mutually exclusive with line-height
-    else if ( styleStack.hasAttributeNS( ooNS::style, "line-height-at-least") ) // 3.11.2
+    else if ( styleStack.hasProperty( ooNS::style, "line-height-at-least") ) // 3.11.2
     {
-        QString value = styleStack.attributeNS( ooNS::style, "line-height-at-least" );
+        QString value = styleStack.property( ooNS::style, "line-height-at-least" );
         // kotext has "at least" but that's for the linespacing, not for the entire line height!
         // Strange. kotext also has "at least" for the whole line height....
         // Did we make the wrong choice in kotext?
@@ -167,9 +167,9 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const KoStyleStack&
         parentElement.appendChild(lineSpacing);
     }
     // Line-spacing is mutually exclusive with line-height and line-height-at-least
-    else if ( styleStack.hasAttributeNS( ooNS::style, "line-spacing") ) // 3.11.3
+    else if ( styleStack.hasProperty( ooNS::style, "line-spacing") ) // 3.11.3
     {
-        double value = KoUnit::parseValue( styleStack.attributeNS( ooNS::style, "line-spacing" ) );
+        double value = KoUnit::parseValue( styleStack.property( ooNS::style, "line-spacing" ) );
         if ( value != 0.0 )
         {
             QDomElement lineSpacing = parentElement.ownerDocument().createElement( "LINESPACING" );
@@ -183,11 +183,11 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const KoStyleStack&
 
 void OoUtils::importTopBottomMargin( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if( styleStack.hasAttributeNS( ooNS::fo, "margin-top") || // 3.11.22
-        styleStack.hasAttributeNS( ooNS::fo, "margin-bottom"))
+    if( styleStack.hasProperty( ooNS::fo, "margin-top") || // 3.11.22
+        styleStack.hasProperty( ooNS::fo, "margin-bottom"))
     {
-        double mtop = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-top" ) );
-        double mbottom = KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-bottom" ) );
+        double mtop = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-top" ) );
+        double mbottom = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-bottom" ) );
         if( mtop != 0 || mbottom != 0 )
         {
             QDomElement offset = parentElement.ownerDocument().createElement( "OFFSETS" );
@@ -202,9 +202,9 @@ void OoUtils::importTopBottomMargin( QDomElement& parentElement, const KoStyleSt
 
 void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if ( !styleStack.hasChildNodeNS( ooNS::style, "tab-stops" ) ) // 3.11.10
+    if ( !styleStack.hasChildNode( ooNS::style, "tab-stops" ) ) // 3.11.10
         return;
-    KoXmlElement tabStops = styleStack.childNodeNS( ooNS::style, "tab-stops" );
+    KoXmlElement tabStops = styleStack.childNode( ooNS::style, "tab-stops" );
     //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
     for ( KoXmlNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
     {
@@ -258,12 +258,12 @@ void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& 
 
 void OoUtils::importBorders( QDomElement& parentElement, const KoStyleStack& styleStack )
 {
-    if (styleStack.hasAttributeNS( ooNS::fo, "border","left"))
+    if (styleStack.hasProperty( ooNS::fo, "border","left"))
     {
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(styleStack.attributeNS( ooNS::fo, "border", "left"), &width, &style, &color))
+        if (OoUtils::parseBorder(styleStack.property( ooNS::fo, "border", "left"), &width, &style, &color))
         {
             QDomElement lbElem = parentElement.ownerDocument().createElement("LEFTBORDER");
             lbElem.setAttribute("width", width);
@@ -277,12 +277,12 @@ void OoUtils::importBorders( QDomElement& parentElement, const KoStyleStack& sty
         }
     }
 
-    if (styleStack.hasAttributeNS( ooNS::fo, "border", "right"))
+    if (styleStack.hasProperty( ooNS::fo, "border", "right"))
     {
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(styleStack.attributeNS( ooNS::fo, "border", "right"), &width, &style, &color))
+        if (OoUtils::parseBorder(styleStack.property( ooNS::fo, "border", "right"), &width, &style, &color))
         {
             QDomElement lbElem = parentElement.ownerDocument().createElement("RIGHTBORDER");
             lbElem.setAttribute("width", width);
@@ -296,12 +296,12 @@ void OoUtils::importBorders( QDomElement& parentElement, const KoStyleStack& sty
         }
     }
 
-    if (styleStack.hasAttributeNS( ooNS::fo, "border", "top"))
+    if (styleStack.hasProperty( ooNS::fo, "border", "top"))
     {
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(styleStack.attributeNS( ooNS::fo, "border", "top"), &width, &style, &color))
+        if (OoUtils::parseBorder(styleStack.property( ooNS::fo, "border", "top"), &width, &style, &color))
         {
             QDomElement lbElem = parentElement.ownerDocument().createElement("TOPBORDER");
             lbElem.setAttribute("width", width);
@@ -315,12 +315,12 @@ void OoUtils::importBorders( QDomElement& parentElement, const KoStyleStack& sty
         }
     }
 
-    if (styleStack.hasAttributeNS( ooNS::fo, "border", "bottom"))
+    if (styleStack.hasProperty( ooNS::fo, "border", "bottom"))
     {
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(styleStack.attributeNS( ooNS::fo, "border", "bottom"), &width, &style, &color))
+        if (OoUtils::parseBorder(styleStack.property( ooNS::fo, "border", "bottom"), &width, &style, &color))
         {
             QDomElement lbElem = parentElement.ownerDocument().createElement("BOTTOMBORDER");
             lbElem.setAttribute("width", width);

@@ -205,12 +205,12 @@ void KWTableStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context, 
     styleStack.save();
     context.addStyles( &styleElem, "table-cell" ); // Load all parents - only because we don't support inheritance.
 
-    const QString frameStyleName = styleStack.attributeNS( KoXmlNS::koffice, "frame-style-name" );
+    const QString frameStyleName = styleStack.property( KoXmlNS::koffice, "frame-style-name" );
     m_frameStyle = frameStyles.findStyle( frameStyleName );
     if ( !m_frameStyle )
         kWarning(32001) << "Frame style " << frameStyleName << " not found!" << endl;
 
-    const QString paragraphStyleName = styleStack.attributeNS( KoXmlNS::koffice, "paragraph-style-name" );
+    const QString paragraphStyleName = styleStack.property( KoXmlNS::koffice, "paragraph-style-name" );
     m_paragStyle = paragraphStyles.findStyle( paragraphStyleName );
     if ( !m_paragStyle )
         kWarning(32001) << "Paragraph style " << paragraphStyleName << " not found!" << endl;

@@ -910,50 +910,50 @@ void EmbeddedPictureObject::loadOasisPictureEffect(KoOasisLoadingContext & conte
 {
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "color-mode" ) &&  ( styleStack.attributeNS( KoXmlNS::draw, "color-mode" )=="greyscale" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "color-mode" ) &&  ( styleStack.property( KoXmlNS::draw, "color-mode" )=="greyscale" ) )
     {
         grayscal = true;
     }
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "contrast" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "contrast" ) )
     {
-        QString str( styleStack.attributeNS( KoXmlNS::draw, "contrast" ) );
+        QString str( styleStack.property( KoXmlNS::draw, "contrast" ) );
         str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CONTRAST;
         val = ( int )( 255.0 *val/100.0 );
         m_ie_par1 = QVariant(val);
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "red" ) && styleStack.attributeNS( KoXmlNS::draw, "red" ) != "0%" )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "red" ) && styleStack.property( KoXmlNS::draw, "red" ) != "0%" )
     {
-        QString str( styleStack.attributeNS( KoXmlNS::draw, "red" ) );
+        QString str( styleStack.property( KoXmlNS::draw, "red" ) );
         str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CHANNEL_INTENSITY;
         m_ie_par1 = QVariant(val);
         m_ie_par2 = QVariant( ( int )KImageEffect::Red );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "green" ) && styleStack.attributeNS( KoXmlNS::draw, "green" ) != "0%" )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "green" ) && styleStack.property( KoXmlNS::draw, "green" ) != "0%" )
     {
-        QString str( styleStack.attributeNS( KoXmlNS::draw, "green" ) );
+        QString str( styleStack.property( KoXmlNS::draw, "green" ) );
         str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CHANNEL_INTENSITY;
         m_ie_par1 = QVariant(val);
         m_ie_par2 = QVariant( ( int )KImageEffect::Green );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "blue" ) && styleStack.attributeNS( KoXmlNS::draw, "blue" ) != "0%" )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "blue" ) && styleStack.property( KoXmlNS::draw, "blue" ) != "0%" )
     {
-        QString str( styleStack.attributeNS( KoXmlNS::draw, "blue" ) );
+        QString str( styleStack.property( KoXmlNS::draw, "blue" ) );
         str = str.remove( '%' );
         int val = str.toInt();
         m_effect = IE_CHANNEL_INTENSITY;
         m_ie_par1 = QVariant(val);
         m_ie_par2 = QVariant( ( int )KImageEffect::Blue );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "luminance" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "luminance" ) )
     {
-       QString str( styleStack.attributeNS( KoXmlNS::draw, "luminance" ) );
+       QString str( styleStack.property( KoXmlNS::draw, "luminance" ) );
        str = str.remove( '%' );
        bright = str.toInt();
     }

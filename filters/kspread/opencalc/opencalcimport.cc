@@ -1291,52 +1291,52 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
     // Laurent : Why we stored layout information as Millimeter ?!!!!!
     // kspread used point for all other attribute
     // I don't understand :(
-    if ( styleStack.hasAttributeNS( ooNS::fo, "page-width" ) )
+    if ( styleStack.hasProperty( ooNS::fo, "page-width" ) )
     {
-        width = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "page-width" ) ) );
+        width = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "page-width" ) ) );
     }
-    if ( styleStack.hasAttributeNS( ooNS::fo, "page-height" ) )
+    if ( styleStack.hasProperty( ooNS::fo, "page-height" ) )
     {
-        height = KoUnit::toMM( KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "page-height" ) ) );
+        height = KoUnit::toMM( KoUnit::parseValue( styleStack.property( ooNS::fo, "page-height" ) ) );
     }
-    if ( styleStack.hasAttributeNS( ooNS::fo, "margin-top" ) )
+    if ( styleStack.hasProperty( ooNS::fo, "margin-top" ) )
     {
-        top = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-top" ) ) );
+        top = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-top" ) ) );
     }
-    if ( styleStack.hasAttributeNS( ooNS::fo, "margin-bottom" ) )
+    if ( styleStack.hasProperty( ooNS::fo, "margin-bottom" ) )
     {
-        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-bottom" ) ) );
+        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-bottom" ) ) );
     }
-    if ( styleStack.hasAttributeNS( ooNS::fo, "margin-left" ) )
+    if ( styleStack.hasProperty( ooNS::fo, "margin-left" ) )
     {
-        left = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-left" ) ) );
+        left = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-left" ) ) );
     }
-    if ( styleStack.hasAttributeNS( ooNS::fo, "margin-right" ) )
+    if ( styleStack.hasProperty( ooNS::fo, "margin-right" ) )
     {
-        right = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( ooNS::fo, "margin-right" ) ) );
+        right = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-right" ) ) );
     }
-    if ( styleStack.hasAttributeNS( ooNS::style, "writing-mode" ) )
+    if ( styleStack.hasProperty( ooNS::style, "writing-mode" ) )
     {
-        kDebug(30518)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( ooNS::style, "writing-mode" )<<endl;
+        kDebug(30518)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasProperty( ooNS::style, "writing-mode" )<<endl;
     }
-    if ( styleStack.hasAttributeNS( ooNS::style, "print-orientation" ) )
+    if ( styleStack.hasProperty( ooNS::style, "print-orientation" ) )
     {
-        orientation = ( styleStack.attributeNS( ooNS::style, "print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
+        orientation = ( styleStack.property( ooNS::style, "print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
     }
-    if ( styleStack.hasAttributeNS( ooNS::style, "num-format" ) )
+    if ( styleStack.hasProperty( ooNS::style, "num-format" ) )
     {
-        kDebug(30518)<<" num-format :"<<styleStack.attributeNS( ooNS::style, "num-format" )<<endl;
+        kDebug(30518)<<" num-format :"<<styleStack.property( ooNS::style, "num-format" )<<endl;
         //todo fixme
     }
-        if ( styleStack.hasAttributeNS( ooNS::fo, "background-color" ) )
+        if ( styleStack.hasProperty( ooNS::fo, "background-color" ) )
     {
         //todo
-        kDebug(30518)<<" fo:background-color :"<<styleStack.attributeNS( ooNS::fo, "background-color" )<<endl;
+        kDebug(30518)<<" fo:background-color :"<<styleStack.property( ooNS::fo, "background-color" )<<endl;
     }
-    if ( styleStack.hasAttributeNS( ooNS::style, "print" ) )
+    if ( styleStack.hasProperty( ooNS::style, "print" ) )
     {
         //todo parsing
-        QString str = styleStack.attributeNS( ooNS::style, "print" );
+        QString str = styleStack.property( ooNS::style, "print" );
         kDebug(30518)<<" style:print :"<<str<<endl;
 
         if (str.contains( "headers" ) )
@@ -1372,9 +1372,9 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
             //todo it's not implemented
         }
     }
-    if ( styleStack.hasAttributeNS( ooNS::style, "table-centering" ) )
+    if ( styleStack.hasProperty( ooNS::style, "table-centering" ) )
     {
-        QString str = styleStack.attributeNS( ooNS::style, "table-centering" );
+        QString str = styleStack.property( ooNS::style, "table-centering" );
         //not implemented into kspread
         kDebug(30518)<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
 #if 0

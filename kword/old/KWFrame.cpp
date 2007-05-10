@@ -428,14 +428,14 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
 void KWFrame::loadBorderProperties( KoStyleStack& styleStack )
 {
     // padding. fo:padding for 4 values or padding-left/right/top/bottom
-    m_paddingLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "left" ) );
-    m_paddingRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "right" ) );
-    m_paddingTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "top" ) );
-    m_paddingBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "bottom" ) );
+    m_paddingLeft = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding", "left" ) );
+    m_paddingRight = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding", "right" ) );
+    m_paddingTop = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding", "top" ) );
+    m_paddingBottom = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding", "bottom" ) );
 
     // background color (3.11.25)
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
-        QString color = styleStack.attributeNS( KoXmlNS::fo, "background-color" );
+    if ( styleStack.hasProperty( KoXmlNS::fo, "background-color" ) ) {
+        QString color = styleStack.property( KoXmlNS::fo, "background-color" );
         if ( color == "transparent" )
             setBackground(QBrush( QColor(), Qt::NoBrush ));
         else
@@ -444,8 +444,8 @@ void KWFrame::loadBorderProperties( KoStyleStack& styleStack )
         }
     }
     // OOo compatibility: it uses background-transparency=100% instead of background-color="transparent"
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-transparency" ) ) {
-        QString transp = styleStack.attributeNS( KoXmlNS::fo, "background-transparency" );
+    if ( styleStack.hasProperty( KoXmlNS::fo, "background-transparency" ) ) {
+        QString transp = styleStack.property( KoXmlNS::fo, "background-transparency" );
         if ( transp == "100%" ) {
             QBrush bg = background();
             bg.setStyle( Qt::NoBrush );
@@ -456,10 +456,10 @@ void KWFrame::loadBorderProperties( KoStyleStack& styleStack )
     // borders (3.11.27)
     // can be none/hidden, solid and double. General form is the XSL/FO "width|style|color"
     {
-//       m_borderLeft.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "left") );
-//       m_borderRight.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "right") );
-//       m_borderTop.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "top") );
-//       m_borderBottom.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "bottom") );
+//       m_borderLeft.loadFoBorder( styleStack.property( KoXmlNS::fo, "border", "left") );
+//       m_borderRight.loadFoBorder( styleStack.property( KoXmlNS::fo, "border", "right") );
+//       m_borderTop.loadFoBorder( styleStack.property( KoXmlNS::fo, "border", "top") );
+//       m_borderBottom.loadFoBorder( styleStack.property( KoXmlNS::fo, "border", "bottom") );
     }
     // TODO more refined border spec for double borders (3.11.28)
 }
@@ -473,20 +473,20 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 
 #if 0 // not allowed in the current OASIS spec
     // margins, i.e. runAroundGap. fo:margin for 4 values or padding-left/right/top/bottom
-    m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "left" ) );
-    m_runAroundRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "right" ) );
-    m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "top" ) );
-    m_runAroundBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "bottom" ) );
+    m_runAroundLeft = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin", "left" ) );
+    m_runAroundRight = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin", "right" ) );
+    m_runAroundTop = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin", "top" ) );
+    m_runAroundBottom = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin", "bottom" ) );
 #endif
     // margins, i.e. runAroundGap. fo:margin-left/right/top/bottom
-    m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ) );
-    m_runAroundRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-right" ) );
-    m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-top" ) );
-    m_runAroundBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-bottom" ) );
+    m_runAroundLeft = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-left" ) );
+    m_runAroundRight = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-right" ) );
+    m_runAroundTop = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-top" ) );
+    m_runAroundBottom = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-bottom" ) );
 
     // This attribute isn't part of the OASIS spec. Doesn't matter since it doesn't affect rendering
     // of existing documents, only editing (and only KWord has this kind of option until now).
-    const QByteArray frameBehaviorOnNewPage = styleStack.attributeNS( KoXmlNS::koffice, "frame-behavior-on-new-page" ).toLatin1();
+    const QByteArray frameBehaviorOnNewPage = styleStack.property( KoXmlNS::koffice, "frame-behavior-on-new-page" ).toLatin1();
     if ( frameBehaviorOnNewPage == "followup" )
         m_newFrameBehavior = Reconnect;
     else if ( frameBehaviorOnNewPage == "copy" )
@@ -504,7 +504,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 
     KWFrame::RunAround runAround = KWFrame::RA_BOUNDINGRECT;
     KWFrame::RunAroundSide runAroundSide = KWFrame::RA_BIGGEST;
-    const QByteArray oowrap = styleStack.attributeNS( KoXmlNS::style, "wrap" ).toLatin1();
+    const QByteArray oowrap = styleStack.property( KoXmlNS::style, "wrap" ).toLatin1();
     if ( oowrap == "none" )        // 'no wrap' means 'avoid horizontal space'
         runAround = KWFrame::RA_SKIP;
     else if ( oowrap == "left" )

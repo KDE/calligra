@@ -307,38 +307,38 @@ void KPrPage::loadOasis(KoOasisContext & context )
 
     if ( !isMasterPage() )
     {
-        if ( !styleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
+        if ( !styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
         {
             // if non is set the fill style of the master slide is used: see OD 14.13.2 Drawing Page Style
             m_useMasterBackground = true;
         }
         //FIXME: fix it in old file format
-        if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "background-objects-visible" ) )
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "background-objects-visible" ) )
         {
-            const QString str = styleStack.attributeNS( KoXmlNS::presentation, "background-objects-visible" );
+            const QString str = styleStack.property( KoXmlNS::presentation, "background-objects-visible" );
             m_displayObjectFromMasterPage = ( str == "true" ) ? true : false;
         }
 
-        if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "background-visible" ) )
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "background-visible" ) )
         {
-            const QString str = styleStack.attributeNS( KoXmlNS::presentation, "background-visible" );
+            const QString str = styleStack.property( KoXmlNS::presentation, "background-visible" );
             m_displayBackground = ( str == "true" ) ? true : false;
         }
 
-        if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "visibility" ) )
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "visibility" ) )
         {
-            const QString str = styleStack.attributeNS( KoXmlNS::presentation, "visibility" );
+            const QString str = styleStack.property( KoXmlNS::presentation, "visibility" );
             if ( str=="hidden" )
                 slideSelected( false );
             else
                 kDebug()<<" presentation:visibility parameter not implemented :"<<str<<endl;
         }
 
-        if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "transition-speed" ) )
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "transition-speed" ) )
         {
             // this argument is not defined into kpresenter_doc and not into kprpage
             // TODO add it into each page.
-            QString speed = styleStack.attributeNS( KoXmlNS::presentation, "transition-speed" );
+            QString speed = styleStack.property( KoXmlNS::presentation, "transition-speed" );
             if ( speed == "slow" )
             {
                 m_pageEffectSpeed = ES_SLOW;
@@ -354,35 +354,35 @@ void KPrPage::loadOasis(KoOasisContext & context )
             else
                 kDebug()<<" transition-speed not defined :"<<speed<<endl;
         }
-        if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "duration" ))
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "duration" ))
         {
-            m_pageTimer = loadOasisTimer( styleStack.attributeNS( KoXmlNS::presentation, "duration") );
+            m_pageTimer = loadOasisTimer( styleStack.property( KoXmlNS::presentation, "duration") );
         }
-        if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "transition-type" ) )
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "transition-type" ) )
         {
             //Not defined into kpresenter
             //it's global for the moment.
-            kDebug()<<" presentation:transition-type :"<<styleStack.attributeNS( KoXmlNS::presentation, "transition-type" )<<endl;
+            kDebug()<<" presentation:transition-type :"<<styleStack.property( KoXmlNS::presentation, "transition-type" )<<endl;
         }
-        if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "display-header" ) )
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "display-header" ) )
         {
-            QString tmp = styleStack.attributeNS( KoXmlNS::presentation, "display-header" );
+            QString tmp = styleStack.property( KoXmlNS::presentation, "display-header" );
             setHeader( tmp =="true" ? true : false );
         }
-        if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "display-footer" ) )
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "display-footer" ) )
         {
-            QString tmp = styleStack.attributeNS( KoXmlNS::presentation, "display-footer" );
+            QString tmp = styleStack.property( KoXmlNS::presentation, "display-footer" );
             setFooter(tmp =="true" ? true : false);
         }
         //TODO presentation:display-date-time; presentation:display-page-number
-        if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "transition-style"))
+        if ( styleStack.hasProperty( KoXmlNS::presentation, "transition-style"))
         {
             //kDebug()<<" have a presentation:transition-style------------\n";
-            const QString effect = styleStack.attributeNS( KoXmlNS::presentation, "transition-style");
+            const QString effect = styleStack.property( KoXmlNS::presentation, "transition-style");
             QString additionalEffect;
-            if ( styleStack.hasAttributeNS( KoXmlNS::koffice, "additional-transition-style" ) )
+            if ( styleStack.hasProperty( KoXmlNS::koffice, "additional-transition-style" ) )
             {
-                additionalEffect = styleStack.attributeNS( KoXmlNS::koffice, "additional-transition-style" );
+                additionalEffect = styleStack.property( KoXmlNS::koffice, "additional-transition-style" );
             }
             kDebug() << "Transition name: " << effect << "additional name: " << additionalEffect << endl;
             PageEffect pef;
@@ -487,10 +487,10 @@ void KPrPage::loadOasis(KoOasisContext & context )
                 pef=PEF_RANDOM;
             setPageEffect( pef );
         }
-        if ( styleStack.hasChildNodeNS( KoXmlNS::presentation, "sound"))
+        if ( styleStack.hasChildNode( KoXmlNS::presentation, "sound"))
         {
             //kDebug()<<" presentation:sound !!!!!!!!!!!!!!!!!!!!!\n";
-            QDomElement sound = styleStack.childNodeNS( KoXmlNS::presentation, "sound");
+            QDomElement sound = styleStack.childNode( KoXmlNS::presentation, "sound");
             m_soundEffect = true;
             m_soundFileName = sound.attributeNS( KoXmlNS::xlink, "href", QString::null );
         }

@@ -244,9 +244,9 @@ void KPrBackGround::loadOasis(KoOasisContext & context )
     KoStyleStack& styleStack = context.styleStack();
     kDebug()<<"KPrBackGround::loadOasis()\n";
     styleStack.setTypeProperties( "drawing-page" );
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
     {
-        const QString fill = styleStack.attributeNS( KoXmlNS::draw, "fill" );
+        const QString fill = styleStack.property( KoXmlNS::draw, "fill" );
         kDebug(33001) <<"fill page type :" << fill << endl;
         if ( fill == "solid" || fill == "gradient" )
         {
@@ -270,7 +270,7 @@ void KPrBackGround::loadOasis(KoOasisContext & context )
         }
         else if ( fill == "bitmap" )
         {
-            QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-image-name" );
+            QString style = styleStack.property( KoXmlNS::draw, "fill-image-name" );
             QDomElement* draw =context.oasisStyles().drawStyles()[style];
 
             const QString href( draw->attributeNS( KoXmlNS::xlink, "href", QString::null) );
@@ -298,9 +298,9 @@ void KPrBackGround::loadOasis(KoOasisContext & context )
                 pictureCollection()->insertPicture( key, backPicture );
             }
 
-            if ( styleStack.hasAttributeNS( KoXmlNS::style, "repeat" ) )
+            if ( styleStack.hasProperty( KoXmlNS::style, "repeat" ) )
             {
-                QString repeat = styleStack.attributeNS( KoXmlNS::style, "repeat" );
+                QString repeat = styleStack.property( KoXmlNS::style, "repeat" );
                 if ( repeat == "stretch" )
                     setBackView( BV_ZOOM );
                 else if ( repeat == "no-repeat" )

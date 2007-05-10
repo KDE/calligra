@@ -313,9 +313,9 @@ void Style::loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoSt
 {
     Q_UNUSED( oasisStyles );
     kDebug(36003) << "\t paragraph-properties" << endl;
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "text-align" ) )
     {
-        QString str = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
+        QString str = styleStack.property( KoXmlNS::fo, "text-align" );
         if ( str == "center" )
             setHAlign( Style::Center );
         else if ( str == "end" )
@@ -331,9 +331,9 @@ void Style::loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoSt
 void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
 {
     QString str;
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "vertical-align" ) )
     {
-        str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
+        str = styleStack.property( KoXmlNS::style, "vertical-align" );
         if ( str == "bottom" )
             setVAlign( Style::Bottom );
         else if ( str =="top" )
@@ -343,10 +343,10 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
         else
         setVAlign( Style::VAlignUndefined );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "background-color" ) )
     {
-        QColor color( styleStack.attributeNS( KoXmlNS::fo, "background-color" ) );
-        if ( styleStack.attributeNS( KoXmlNS::fo, "background-color" ) == "transparent" )
+        QColor color( styleStack.property( KoXmlNS::fo, "background-color" ) );
+        if ( styleStack.property( KoXmlNS::fo, "background-color" ) == "transparent" )
             color = QColor(); // Transparent color found: invalidate it.
         if ( color.isValid() )
         {
@@ -355,13 +355,13 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
         }
     }
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" )&&( styleStack.attributeNS( KoXmlNS::fo, "wrap-option" )=="wrap" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "wrap-option" )&&( styleStack.property( KoXmlNS::fo, "wrap-option" )=="wrap" ) )
     {
         setWrapText( true );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "cell-protect" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "cell-protect" ) )
     {
-        str = styleStack.attributeNS( KoXmlNS::style, "cell-protect" );
+        str = styleStack.property( KoXmlNS::style, "cell-protect" );
         if ( str=="hidden-and-protected" )
         {
             setHideAll( true );
@@ -384,85 +384,85 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
 #endif
         }
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-content" ) &&
-         ( styleStack.attributeNS( KoXmlNS::style, "print-content" )=="false" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "print-content" ) &&
+         ( styleStack.property( KoXmlNS::style, "print-content" )=="false" ) )
     {
         setDontPrintText( true );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) &&
-         ( styleStack.attributeNS( KoXmlNS::style, "direction" )=="ttb" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "direction" ) &&
+         ( styleStack.property( KoXmlNS::style, "direction" )=="ttb" ) )
     {
         setVerticalText( true );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "rotation-angle" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "rotation-angle" ) )
     {
         bool ok;
-        int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
+        int a = styleStack.property( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
         kDebug(36003)<<" rotation-angle :"<<a<<endl;
         if ( a != 0 )
         {
             setAngle( -a  );
         }
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-left" ) )
     {
         //todo fix me
-        setIndentation( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
+        setIndentation( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-left" ),0.0 ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "border" ) )
     {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border" );
+        str=styleStack.property( KoXmlNS::fo, "border" );
         QPen pen = Oasis::decodePen( str );
         setLeftBorderPen( pen );
         setTopBorderPen( pen );
         setBottomBorderPen( pen );
         setRightBorderPen( pen );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-left" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "border-left" ) )
     {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border-left" );
+        str=styleStack.property( KoXmlNS::fo, "border-left" );
         setLeftBorderPen( Oasis::decodePen( str ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-right" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "border-right" ) )
     {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border-right" );
+        str=styleStack.property( KoXmlNS::fo, "border-right" );
         setRightBorderPen( Oasis::decodePen( str ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-top" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "border-top" ) )
     {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border-top" );
+        str=styleStack.property( KoXmlNS::fo, "border-top" );
         setTopBorderPen( Oasis::decodePen( str ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "border-bottom" ) )
     {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border-bottom" );
+        str=styleStack.property( KoXmlNS::fo, "border-bottom" );
         setBottomBorderPen( Oasis::decodePen( str ) );
     }
-    if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-tl-br" ) )
+    if (styleStack.hasProperty( KoXmlNS::style, "diagonal-tl-br" ) )
     {
-        str=styleStack.attributeNS( KoXmlNS::style, "diagonal-tl-br" );
+        str=styleStack.property( KoXmlNS::style, "diagonal-tl-br" );
         setFallDiagonalPen( Oasis::decodePen( str ) );
     }
-    if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-bl-tr" ) )
+    if (styleStack.hasProperty( KoXmlNS::style, "diagonal-bl-tr" ) )
     {
-        str=styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" );
+        str=styleStack.property( KoXmlNS::style, "diagonal-bl-tr" );
         setGoUpDiagonalPen( Oasis::decodePen( str ) );
     }
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "style-name" ) )
     {
-        kDebug(36003)<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+        kDebug(36003)<<" style name :"<<styleStack.property( KoXmlNS::draw, "style-name" )<<endl;
 
-        const KoXmlElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
+        const KoXmlElement * style = oasisStyles.findStyle( styleStack.property( KoXmlNS::draw, "style-name" ), "graphic" );
         kDebug(36003)<<" style :"<<style<<endl;
         if ( style )
         {
             KoStyleStack drawStyleStack;
             drawStyleStack.push( *style );
             drawStyleStack.setTypeProperties( "graphic" );
-            if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
+            if ( drawStyleStack.hasProperty( KoXmlNS::draw, "fill" ) )
             {
-                const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
+                const QString fill = drawStyleStack.property( KoXmlNS::draw, "fill" );
                 kDebug(36003)<<" load object gradient fill type :"<<fill<<endl;
 
                 if ( fill == "solid" || fill == "hatch" )
@@ -487,61 +487,61 @@ void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleSt
   // style:text-underline-color="font-color"
   // fo:font-weight="bold"
     kDebug(36003) << "\t text-properties" << endl;
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-family" ) )
     {
-        setFontFamily( styleStack.attributeNS( KoXmlNS::fo, "font-family" ) ); // FIXME Stefan: sanity check
+        setFontFamily( styleStack.property( KoXmlNS::fo, "font-family" ) ); // FIXME Stefan: sanity check
         kDebug(36003) << "\t\t fo:font-family: " << fontFamily() << endl;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) )
     {
-        setFontSize( (int) KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "font-size" ), 10.0 ) ); // FIXME Stefan: fallback to default
+        setFontSize( (int) KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "font-size" ), 10.0 ) ); // FIXME Stefan: fallback to default
         kDebug(36003) << "\t\t fo:font-size: " << fontSize() << endl;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-style" ) )
     {
-        if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ) // "normal", "oblique"
+        if ( styleStack.property( KoXmlNS::fo, "font-style" ) == "italic" ) // "normal", "oblique"
         {
             setFontItalic( true );
             kDebug(36003) << "\t\t fo:font-style: " << "italic" << endl;
         }
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-weight" ) )
     {
-        if ( styleStack.attributeNS( KoXmlNS::fo, "font-weight" ) == "bold" ) // "normal", "100", "200", ...
+        if ( styleStack.property( KoXmlNS::fo, "font-weight" ) == "bold" ) // "normal", "100", "200", ...
         {
             setFontBold( true );
             kDebug(36003) << "\t\t fo:font-weight: " << "bold" << endl;
         }
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "text-underline-style" ) )
     {
-        if ( styleStack.attributeNS( KoXmlNS::style, "text-underline-style" ) != "none" )
+        if ( styleStack.property( KoXmlNS::style, "text-underline-style" ) != "none" )
         {
             setFontUnderline( true );
             kDebug(36003) << "\t\t style:text-underline-style: " << "solid (actually: !none)" << endl;
         }
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-width" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "text-underline-width" ) )
     {
         //TODO
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-color" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "text-underline-color" ) )
     {
         //TODO
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) )
     {
-        QColor color = QColor( styleStack.attributeNS( KoXmlNS::fo, "color" ) );
+        QColor color = QColor( styleStack.property( KoXmlNS::fo, "color" ) );
         if ( color.isValid() )
         {
             setFontColor( color );
             kDebug(36003) << "\t\t fo:color: " << color.name() << endl;
         }
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "text-line-through-style" ) )
     {
-        if ( styleStack.attributeNS( KoXmlNS::style, "text-line-through-style" ) != "none"
-         /*&& styleStack.attributeNS("text-line-through-style")=="solid"*/ )
+        if ( styleStack.property( KoXmlNS::style, "text-line-through-style" ) != "none"
+         /*&& styleStack.property("text-line-through-style")=="solid"*/ )
         {
             setFontStrikeOut( true );
             kDebug(36003) << "\t\t text-line-through-style: " << "solid (actually: !none)" << endl;

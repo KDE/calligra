@@ -366,19 +366,19 @@ appendImage( doc, e, pictureElement, o );
 void
 OoDrawImport::appendPen( VObject &obj )
 {
-	if( m_styleStack.hasAttributeNS( ooNS::draw, "stroke" ) )
+	if( m_styleStack.hasProperty( ooNS::draw, "stroke" ) )
 	{
 		VStroke stroke;
 
-		if( m_styleStack.attributeNS( ooNS::draw, "stroke" ) == "none" )
+		if( m_styleStack.property( ooNS::draw, "stroke" ) == "none" )
 			stroke.setType( VStroke::none );
-		else if( m_styleStack.attributeNS( ooNS::draw, "stroke" ) == "solid" )
+		else if( m_styleStack.property( ooNS::draw, "stroke" ) == "solid" )
 			stroke.setType( VStroke::solid );
-		else if( m_styleStack.attributeNS( ooNS::draw, "stroke" ) == "dash" )
+		else if( m_styleStack.property( ooNS::draw, "stroke" ) == "dash" )
 		{
 			Q3ValueList<float> dashes;
 			stroke.setType( VStroke::solid );
-			QString style = m_styleStack.attributeNS( ooNS::draw, "stroke-dash" );
+			QString style = m_styleStack.property( ooNS::draw, "stroke-dash" );
 			if( style == "Ultrafine Dashed" ||
 				style == "Fine Dashed (var)" || style == "Dashed (var)" )
 				stroke.dashPattern().setArray( dashes << 2 << 2 );
@@ -392,17 +392,17 @@ OoDrawImport::appendPen( VObject &obj )
 			else if( style == "2 Dots 1 Dash" )
 				stroke.dashPattern().setArray( dashes << 2 << 1 );
 		}
-		if( m_styleStack.hasAttributeNS( ooNS::svg, "stroke-width" ) )
+		if( m_styleStack.hasProperty( ooNS::svg, "stroke-width" ) )
 		{
-			double lwidth = KoUnit::parseValue( m_styleStack.attributeNS( ooNS::svg, "stroke-width" ) );
+			double lwidth = KoUnit::parseValue( m_styleStack.property( ooNS::svg, "stroke-width" ) );
 			if( lwidth == 0 )
 				lwidth = 1.0;
 			stroke.setLineWidth( lwidth );
 		}
-		if( m_styleStack.hasAttributeNS( ooNS::svg, "stroke-color" ) )
+		if( m_styleStack.hasProperty( ooNS::svg, "stroke-color" ) )
 		{
 			VColor c;
-			parseColor( c, m_styleStack.attributeNS( ooNS::svg, "stroke-color" ) );
+			parseColor( c, m_styleStack.property( ooNS::svg, "stroke-color" ) );
 			stroke.setColor( c );
 		}
 
@@ -413,18 +413,18 @@ OoDrawImport::appendPen( VObject &obj )
 void
 OoDrawImport::appendBrush( VObject &obj )
 {
-	if( m_styleStack.hasAttributeNS( ooNS::draw, "fill" ) )
+	if( m_styleStack.hasProperty( ooNS::draw, "fill" ) )
 	{
-		const QString fill = m_styleStack.attributeNS( ooNS::draw, "fill" );
+		const QString fill = m_styleStack.property( ooNS::draw, "fill" );
 		VFill f;
 
 		if( fill == "solid" )
 		{
 			f.setType( VFill::solid );
-			if( m_styleStack.hasAttributeNS( ooNS::draw, "fill-color" ) )
+			if( m_styleStack.hasProperty( ooNS::draw, "fill-color" ) )
 			{
 				VColor c;
-				parseColor( c, m_styleStack.attributeNS( ooNS::draw, "fill-color" ) );
+				parseColor( c, m_styleStack.property( ooNS::draw, "fill-color" ) );
 				f.setColor( c );
 			}
 		}
@@ -433,7 +433,7 @@ OoDrawImport::appendBrush( VObject &obj )
 			VGradient gradient;
 			gradient.clearStops();
 			gradient.setRepeatMethod( VGradient::none );
-			QString style = m_styleStack.attributeNS( ooNS::draw, "fill-gradient-name" );
+			QString style = m_styleStack.property( ooNS::draw, "fill-gradient-name" );
 
 			QDomElement* draw = m_draws[style];
 			if( draw )
@@ -544,7 +544,7 @@ OoDrawImport::appendBrush( VObject &obj )
 /*else if( fill == "hatch" )
 {
 QDomElement brush = doc.createElement( "BRUSH" );
-QString style = m_styleStack.attributeNS( "fill-hatch-name" );
+QString style = m_styleStack.property( "fill-hatch-name" );
 if( style == "Black 0 Degrees" )
 brush.setAttribute( "style", 9 );
 else if( style == "Black 90 Degrees" )

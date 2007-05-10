@@ -3097,34 +3097,34 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     // Laurent : Why we stored layout information as Millimeter ?!!!!!
     // kspread used point for all other attribute
     // I don't understand :(
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "page-width" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "page-width" ) )
     {
-        width = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "page-width" ) ) );
+        width = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "page-width" ) ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "page-height" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "page-height" ) )
     {
-        height = KoUnit::toMM( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "page-height" ) ) );
+        height = KoUnit::toMM( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "page-height" ) ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-top" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-top" ) )
     {
-        top = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-top" ) ) );
+        top = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-top" ) ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-bottom" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-bottom" ) )
     {
-        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-bottom" ) ) );
+        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-bottom" ) ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-left" ) )
     {
-        left = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ) ) );
+        left = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-left" ) ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-right" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-right" ) )
     {
-        right = KoUnit::toMM(KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-right" ) ) );
+        right = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-right" ) ) );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "writing-mode" ) )
     {
-        kDebug(36003)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" )<<endl;
-        setLayoutDirection (( styleStack.attributeNS( KoXmlNS::style, "writing-mode" )=="lr-tb" ) ? Qt::LeftToRight : Qt::RightToLeft);
+        kDebug(36003)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasProperty( KoXmlNS::style, "writing-mode" )<<endl;
+        setLayoutDirection (( styleStack.property( KoXmlNS::style, "writing-mode" )=="lr-tb" ) ? Qt::LeftToRight : Qt::RightToLeft);
         //TODO
         //<value>lr-tb</value>
         //<value>rl-tb</value>
@@ -3136,28 +3136,28 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
         //<value>page</value>
 
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-orientation" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "print-orientation" ) )
     {
-        orientation = ( styleStack.attributeNS( KoXmlNS::style, "print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
+        orientation = ( styleStack.property( KoXmlNS::style, "print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "num-format" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "num-format" ) )
     {
         //not implemented into kspread
         //These attributes specify the numbering style to use.
         //If a numbering style is not specified, the numbering style is inherited from
         //the page style. See section 6.7.8 for information on these attributes
-        kDebug(36003)<<" num-format :"<<styleStack.attributeNS( KoXmlNS::style, "num-format" )<<endl;
+        kDebug(36003)<<" num-format :"<<styleStack.property( KoXmlNS::style, "num-format" )<<endl;
 
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "background-color" ) )
     {
         //TODO
-        kDebug(36003)<<" fo:background-color :"<<styleStack.attributeNS( KoXmlNS::fo, "background-color" )<<endl;
+        kDebug(36003)<<" fo:background-color :"<<styleStack.property( KoXmlNS::fo, "background-color" )<<endl;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "print" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "print" ) )
     {
         //todo parsing
-        QString str = styleStack.attributeNS( KoXmlNS::style, "print" );
+        QString str = styleStack.property( KoXmlNS::style, "print" );
         kDebug(36003)<<" style:print :"<<str<<endl;
 
         if (str.contains( "headers" ) )
@@ -3193,9 +3193,9 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
             //TODO it's not implemented
         }
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "table-centering" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "table-centering" ) )
     {
-        QString str = styleStack.attributeNS( KoXmlNS::style, "table-centering" );
+        QString str = styleStack.property( KoXmlNS::style, "table-centering" );
         //TODO not implemented into kspread
         kDebug(36003)<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
 #if 0
@@ -3285,17 +3285,17 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     styleStack.setTypeProperties("table-column"); //style for column
 
     double width = -1.0;
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "column-width" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "column-width" ) )
     {
-        width = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "column-width" ) , -1.0 );
+        width = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "column-width" ) , -1.0 );
         kDebug(36003)<<" style:column-width : width :"<<width<<endl;
         isNonDefaultColumn = true;
     }
 
     bool insertPageBreak = false;
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "break-before" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "break-before" ) )
     {
-        QString str = styleStack.attributeNS( KoXmlNS::fo, "break-before" );
+        QString str = styleStack.property( KoXmlNS::fo, "break-before" );
         if ( str == "page" )
         {
             insertPageBreak = true;
@@ -3418,9 +3418,9 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     }
 
     double height = -1.0;
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
+    if ( styleStack.hasProperty( KoXmlNS::style, "row-height" ) )
     {
-        height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ) , -1.0 );
+        height = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "row-height" ) , -1.0 );
     //    kDebug(36003)<<" properties style:row-height : height :"<<height<<endl;
         isNonDefaultRow = true;
     }
@@ -3439,9 +3439,9 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     }
 
     bool insertPageBreak = false;
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "break-before" ) )
+    if ( styleStack.hasProperty( KoXmlNS::fo, "break-before" ) )
     {
-        QString str = styleStack.attributeNS( KoXmlNS::fo, "break-before" );
+        QString str = styleStack.property( KoXmlNS::fo, "break-before" );
         if ( str == "page" )
         {
             insertPageBreak = true;

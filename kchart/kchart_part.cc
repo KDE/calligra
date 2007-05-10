@@ -923,7 +923,7 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,
     styleStack.setTypeProperties( "chart" ); // load chart properties
     loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
 
-    const QString fillColor = styleStack.attributeNS( KoXmlNS::draw, "fill-color" );
+    const QString fillColor = styleStack.property( KoXmlNS::draw, "fill-color" );
     kDebug() << "fillColor=" << fillColor << endl;
 
     styleStack.restore();

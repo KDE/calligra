@@ -982,9 +982,9 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
       KoStyleStack styleStack;
       styleStack.push( *defaultColumnStyle );
       styleStack.setTypeProperties( "table-column" );
-      if ( styleStack.hasAttributeNS( KoXmlNS::style, "column-width" ) )
+      if ( styleStack.hasProperty( KoXmlNS::style, "column-width" ) )
       {
-        const double width = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "column-width" ), -1.0 );
+        const double width = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "column-width" ), -1.0 );
         if ( width != -1.0 )
         {
 //           kDebug() << "\tstyle:column-width: " << width << endl;
@@ -1001,9 +1001,9 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
       KoStyleStack styleStack;
       styleStack.push( *defaultRowStyle );
       styleStack.setTypeProperties( "table-row" );
-      if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
+      if ( styleStack.hasProperty( KoXmlNS::style, "row-height" ) )
       {
-        const double height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ), -1.0 );
+        const double height = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "row-height" ), -1.0 );
         if ( height != -1.0 )
         {
 //           kDebug() << "\tstyle:row-height: " << height << endl;

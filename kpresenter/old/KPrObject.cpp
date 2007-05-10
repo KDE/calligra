@@ -127,9 +127,9 @@ void KPrStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QS
 
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw,attr.toLatin1() ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw,attr.toLatin1() ) )
     {
-        QString style = styleStack.attributeNS( KoXmlNS::draw, attr.toLatin1() );
+        QString style = styleStack.property( KoXmlNS::draw, attr.toLatin1() );
         //kDebug()<<" marker style is  : "<<style<<endl;
 
         //type not defined by default
@@ -850,10 +850,10 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
          ( element.hasAttribute( "type" ) && element.attribute( "type" ) == "4" ) )
     {
         kDebug()<<" text document !!!!!\n";
-        if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-shadow" ) &&
-             styleStack.attributeNS( KoXmlNS::fo, "text-shadow" ) != "none" )
+        if ( styleStack.hasProperty( KoXmlNS::fo, "text-shadow" ) &&
+             styleStack.property( KoXmlNS::fo, "text-shadow" ) != "none" )
         {
-            QString distance = styleStack.attributeNS( KoXmlNS::fo, "text-shadow" );
+            QString distance = styleStack.property( KoXmlNS::fo, "text-shadow" );
             distance.truncate( distance.find( ' ' ) );
             shadowDistance = (int)KoUnit::parseValue( distance );
             shadowDirection = SD_RIGHT_BOTTOM;
@@ -865,32 +865,32 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
 // draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:shadow="visible" draw:move-protect="true" draw:size-protect="true"
     //kpresenter doesn't have two attribute for protect move and protect size perhaps create two argument for 1.4
     styleStack.setTypeProperties( "graphic" );
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "move-protect" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "move-protect" ) )
     {
-        kDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attributeNS( KoXmlNS::draw, "move-protect" )<<endl;
-        protect = ( styleStack.attributeNS( KoXmlNS::draw, "move-protect" ) == "true" );
+        kDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.property( KoXmlNS::draw, "move-protect" )<<endl;
+        protect = ( styleStack.property( KoXmlNS::draw, "move-protect" ) == "true" );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "size-protect" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "size-protect" ) )
     {
-        kDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attributeNS( KoXmlNS::draw, "size-protect" )<<endl;
-        protect = ( styleStack.attributeNS( KoXmlNS::draw, "size-protect" ) == "true" );
+        kDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.property( KoXmlNS::draw, "size-protect" )<<endl;
+        protect = ( styleStack.property( KoXmlNS::draw, "size-protect" ) == "true" );
     }
 
     //not supported into kpresenter
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "textarea-vertical-align" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "textarea-vertical-align" ) )
     {
-        kDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attributeNS( KoXmlNS::draw, "textarea-vertical-align" )<<endl;
+        kDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.property( KoXmlNS::draw, "textarea-vertical-align" )<<endl;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "textarea-horizontal-align") )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "textarea-horizontal-align") )
     {
-        kDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attributeNS( KoXmlNS::draw, "textarea-horizontal-align" )<<endl;
+        kDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.property( KoXmlNS::draw, "textarea-horizontal-align" )<<endl;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "shadow" ) &&
-              styleStack.attributeNS( KoXmlNS::draw, "shadow") == "visible" )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "shadow" ) &&
+              styleStack.property( KoXmlNS::draw, "shadow") == "visible" )
     {
         // use the shadow attribute to indicate an object-shadow
-        double x = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::draw, "shadow-offset-x" ) );
-        double y = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::draw, "shadow-offset-y" ) );
+        double x = KoUnit::parseValue( styleStack.property( KoXmlNS::draw, "shadow-offset-x" ) );
+        double y = KoUnit::parseValue( styleStack.property( KoXmlNS::draw, "shadow-offset-y" ) );
         kDebug()<<" shadow x : "<<x<<" shadow y :"<<y<<endl;
         if ( x < 0 && y < 0 )
         {
@@ -932,8 +932,8 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             shadowDirection = SD_LEFT;
             shadowDistance = (int) fabs ( x );
         }
-        if ( styleStack.hasAttributeNS( KoXmlNS::draw, "shadow-color" ) )
-            shadowColor= QColor(styleStack.attributeNS( KoXmlNS::draw, "shadow-color" ) );
+        if ( styleStack.hasProperty( KoXmlNS::draw, "shadow-color" ) )
+            shadowColor= QColor(styleStack.property( KoXmlNS::draw, "shadow-color" ) );
         kDebug()<<" shadow color : "<<shadowColor.name()<<endl;
     }
 }
@@ -1845,15 +1845,15 @@ void KPrShadowObject::loadOasis(const QDomElement &element, KoOasisContext & con
     KPrObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "stroke" ))
+    if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ))
     {
-        if ( styleStack.attributeNS( KoXmlNS::draw, "stroke" ) == "none" )
+        if ( styleStack.property( KoXmlNS::draw, "stroke" ) == "none" )
             pen.setStyle(Qt::NoPen );
-        else if ( styleStack.attributeNS( KoXmlNS::draw, "stroke" ) == "solid" )
+        else if ( styleStack.property( KoXmlNS::draw, "stroke" ) == "solid" )
             pen.setStyle(Qt::SolidLine );
-        else if ( styleStack.attributeNS( KoXmlNS::draw, "stroke" ) == "dash" )
+        else if ( styleStack.property( KoXmlNS::draw, "stroke" ) == "dash" )
         {
-            QString style = styleStack.attributeNS( KoXmlNS::draw, "stroke-dash" );
+            QString style = styleStack.property( KoXmlNS::draw, "stroke-dash" );
 
             kDebug()<<" stroke style is  : "<<style<<endl;
             //type not defined by default
@@ -1895,10 +1895,10 @@ void KPrShadowObject::loadOasis(const QDomElement &element, KoOasisContext & con
             }
         }
         //FIXME witdh pen style is not good :(
-        if ( styleStack.hasAttributeNS( KoXmlNS::svg, "stroke-width" ) )
-            pen.setPointWidth( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::svg, "stroke-width" ) ) );
-        if ( styleStack.hasAttributeNS( KoXmlNS::svg, "stroke-color" ) )
-            pen.setColor( styleStack.attributeNS( KoXmlNS::svg, "stroke-color" ) );
+        if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-width" ) )
+            pen.setPointWidth( KoUnit::parseValue( styleStack.property( KoXmlNS::svg, "stroke-width" ) ) );
+        if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) )
+            pen.setColor( styleStack.property( KoXmlNS::svg, "stroke-color" ) );
     }
     else
         pen = defaultPen();

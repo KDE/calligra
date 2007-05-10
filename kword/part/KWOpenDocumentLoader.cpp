@@ -125,7 +125,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         KoStyleStack stack;
         stack.push( *defaultParagStyle );
         stack.setTypeProperties( "paragraph" );
-        QString tabStopVal = stack.attributeNS( KoXmlNS::style, "tab-stop-distance" );
+        QString tabStopVal = stack.property( KoXmlNS::style, "tab-stop-distance" );
         if ( !tabStopVal.isEmpty() ) m_tabStop = KoUnit::parseValue( tabStopVal );
     }
     m_initialEditing = 0;

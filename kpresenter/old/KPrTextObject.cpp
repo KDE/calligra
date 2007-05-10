@@ -265,19 +265,19 @@ void KPrTextObject::loadOasis(const QDomElement &element, KoOasisContext& contex
     //todo other attribute
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
-    if( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-top" ) )
-        btop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-top" ) );
-    if( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-bottom" ) )
-        bbottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-bottom" ) );
-    if( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-left") )
-        bleft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-left" ) );
-    if( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-right" ) )
-        bright = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-right" ) );
+    if( styleStack.hasProperty( KoXmlNS::fo, "padding-top" ) )
+        btop = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-top" ) );
+    if( styleStack.hasProperty( KoXmlNS::fo, "padding-bottom" ) )
+        bbottom = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-bottom" ) );
+    if( styleStack.hasProperty( KoXmlNS::fo, "padding-left") )
+        bleft = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-left" ) );
+    if( styleStack.hasProperty( KoXmlNS::fo, "padding-right" ) )
+        bright = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-right" ) );
     kDebug()<<" KPrTextObject::loadOasis : btp :"<<btop<<" bbottom :"<<bbottom<<" bleft :"<<bleft<<" bright :"<<bright<<endl;
     // vertical alignment
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "textarea-vertical-align" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "textarea-vertical-align" ) )
     {
-        QString alignment = styleStack.attributeNS( KoXmlNS::draw, "textarea-vertical-align" );
+        QString alignment = styleStack.property( KoXmlNS::draw, "textarea-vertical-align" );
         if ( alignment == "top" )
             m_textVertAlign= KP_TOP;
         else if ( alignment == "middle" )

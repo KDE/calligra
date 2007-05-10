@@ -1,4 +1,5 @@
-include_directories( ${KOMAIN_INCLUDES})
+include_directories( ${STRIGI_INCLUDE_DIR} ${KOMAIN_INCLUDES} )
+
 # build the analyzer as a module
 kde4_add_library(abiword MODULE abiwordthroughanalyzer.cpp)
 

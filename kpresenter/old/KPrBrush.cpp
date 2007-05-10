@@ -128,9 +128,9 @@ void KPrBrush::loadOasisFillStyle( KoOasisContext &context, const char * propert
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( propertyType );
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
+    if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
     {
-        const QString fill = styleStack.attributeNS( KoXmlNS::draw, "fill" );
+        const QString fill = styleStack.property( KoXmlNS::draw, "fill" );
         kDebug(33001) << " load object gradient fill type :" << fill << endl;
 
         if ( fill == "solid" || fill == "hatch" )
@@ -139,7 +139,7 @@ void KPrBrush::loadOasisFillStyle( KoOasisContext &context, const char * propert
         }
         else if ( fill == "gradient" )
         {
-            QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-gradient-name" );
+            QString style = styleStack.property( KoXmlNS::draw, "fill-gradient-name" );
             QDomElement* draw = context.oasisStyles().drawStyles()[style];
 
             if ( draw )

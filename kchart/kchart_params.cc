@@ -163,7 +163,7 @@ static const unsigned int numOasisChartTypes
     styleStack.setTypeProperties( "graphic" ); // load graphic-properties
     loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
 
-    const QString fillColor = styleStack.attributeNS( KoXmlNS::draw, "fill-color" );
+    const QString fillColor = styleStack.property( KoXmlNS::draw, "fill-color" );
     kDebug() << "fillColor=" << fillColor << endl;
 
     styleStack.restore();
@@ -177,17 +177,17 @@ void KChartParams::loadOasisFont( KoOasisLoadingContext& context, QFont& font, Q
     KoStyleStack& styleStack = context.styleStack();
     styleStack.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) ) { // 3.10.3
-        color.setNamedColor( styleStack.attributeNS( KoXmlNS::fo, "color" ) ); // #rrggbb format
+    if ( styleStack.hasProperty( KoXmlNS::fo, "color" ) ) { // 3.10.3
+        color.setNamedColor( styleStack.property( KoXmlNS::fo, "color" ) ); // #rrggbb format
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" )  // 3.10.9
-            || styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) ) { // 3.10.8
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-family" )  // 3.10.9
+            || styleStack.hasProperty( KoXmlNS::style, "font-name" ) ) { // 3.10.8
         // Hmm, the remove "'" could break it's in the middle of the fontname...
-        QString fontName = styleStack.attributeNS( KoXmlNS::fo, "font-family" ).remove( "'" );
+        QString fontName = styleStack.property( KoXmlNS::fo, "font-family" ).remove( "'" );
         if ( fontName.isEmpty() ) {
             // ##### TODO. This is wrong. style:font-name refers to a font-decl entry.
             // We have to look it up there, and retrieve _all_ font attributes from it, not just the name.
-            fontName = styleStack.attributeNS( KoXmlNS::style, "font-name" ).remove( "'" );
+            fontName = styleStack.property( KoXmlNS::style, "font-name" ).remove( "'" );
         }
         // 'Thorndale' is not known outside OpenOffice so we substitute it
         // with 'Times New Roman' that looks nearly the same.
@@ -197,13 +197,13 @@ void KChartParams::loadOasisFont( KoOasisLoadingContext& context, QFont& font, Q
         fontName.remove( QRegExp( "\\sCE$" ) ); // Arial CE -> Arial
         font.setFamily( fontName );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) ) { // 3.10.14
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) { // 3.10.14
         double pointSize = styleStack.fontSize();
         font.setPointSizeF( pointSize );
         kDebug(35001) << "font size: " << pointSize << endl;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24
-        QString fontWeight = styleStack.attributeNS( KoXmlNS::fo, "font-weight" );
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24
+        QString fontWeight = styleStack.property( KoXmlNS::fo, "font-weight" );
         int boldness;
         if ( fontWeight == "normal" )
             boldness = 50;
@@ -215,9 +215,9 @@ void KChartParams::loadOasisFont( KoOasisLoadingContext& context, QFont& font, Q
             boldness = fontWeight.toInt() / 10;
         font.setWeight( boldness );
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) ) { // 3.10.19
-        if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ||
-             styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
+    if ( styleStack.hasProperty( KoXmlNS::fo, "font-style" ) ) { // 3.10.19
+        if ( styleStack.property( KoXmlNS::fo, "font-style" ) == "italic" ||
+             styleStack.property( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
             font.setItalic( true );
         }
     }
@@ -462,7 +462,7 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
     styleStack.setTypeProperties( "chart" ); // load chart properties
     loadingContext.fillStyleStack( plotareaElem, KoXmlNS::chart, "style-name", "chart" );
 
-    if ( styleStack.attributeNS( KoXmlNS::chart, "three-dimensional" ) == "true" ) {
+    if ( styleStack.property( KoXmlNS::chart, "three-dimensional" ) == "true" ) {
 	setThreeDBars( true );
 	setThreeDLines( true );
 	setThreeDPies( true );
@@ -479,15 +479,15 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 
     case Bar:
 	// Find out subtype
-	tmp = styleStack.attributeNS( KoXmlNS::chart, "vertical" );
+	tmp = styleStack.property( KoXmlNS::chart, "vertical" );
 	// FIXME: Vertical is ignored. At least store it so we can
 	//        save it again even if we don't support it.
 
 	//kDebug(35001) << "  ======>  Vertical: " << tmp << "  <======" << endl;
 	// Set the bar chart subtype.
-	if ( styleStack.attributeNS( KoXmlNS::chart, "stacked" ) == "true" )
+	if ( styleStack.property( KoXmlNS::chart, "stacked" ) == "true" )
 	    setBarChartSubType( BarStacked );
-	else if ( styleStack.attributeNS( KoXmlNS::chart, "percentage" ) == "true" )
+	else if ( styleStack.property( KoXmlNS::chart, "percentage" ) == "true" )
 	    setBarChartSubType( BarPercent );
 	else
 	    setBarChartSubType( BarNormal );
@@ -504,9 +504,9 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 
     case Line:
 	// Set the line chart subtype.
-	if ( styleStack.attributeNS( KoXmlNS::chart, "stacked" ) == "true" )
+	if ( styleStack.property( KoXmlNS::chart, "stacked" ) == "true" )
 	    setLineChartSubType( LineStacked );
-	else if ( styleStack.attributeNS( KoXmlNS::chart, "percentage" ) == "true" )
+	else if ( styleStack.property( KoXmlNS::chart, "percentage" ) == "true" )
 	    setLineChartSubType( LinePercent );
 	else
 	    setLineChartSubType( LineNormal );
@@ -523,9 +523,9 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 
     case Area:
 	// Set the area chart subtype.
-	if ( styleStack.attributeNS( KoXmlNS::chart, "stacked" ) == "true" )
+	if ( styleStack.property( KoXmlNS::chart, "stacked" ) == "true" )
 	    setAreaChartSubType( AreaStacked );
-	else if ( styleStack.attributeNS( KoXmlNS::chart, "percentage" ) == "true" )
+	else if ( styleStack.property( KoXmlNS::chart, "percentage" ) == "true" )
 	    setAreaChartSubType( AreaPercent );
 	else
 	    setAreaChartSubType( AreaNormal );
@@ -568,7 +568,7 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 
     // chart:series-source     - "rows" or "columns"
     // "columns" is the default
-    if ( styleStack.attributeNS( KoXmlNS::chart, "series-source" ) == "rows" ) {
+    if ( styleStack.property( KoXmlNS::chart, "series-source" ) == "rows" ) {
       setDataDirection( DataRows );
     }
 
@@ -619,7 +619,7 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
     // chart:name       - either "primary-x" or "primary-y"
 
 #if 0
-    const QString fillColor = styleStack.attributeNS( KoXmlNS::draw,
+    const QString fillColor = styleStack.property( KoXmlNS::draw,
 						      "fill-color" );
     kDebug() << "fillColor=" << fillColor << endl;
 #endif

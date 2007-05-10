@@ -274,18 +274,18 @@ void KWFrameStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context )
     styleStack.save();
     context.addStyles( &styleElem, "graphic" ); // Load all parents - only because we don't support inheritance.
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
-        QString color = styleStack.attributeNS( KoXmlNS::fo, "background-color" );
+    if ( styleStack.hasProperty( KoXmlNS::fo, "background-color" ) ) {
+        QString color = styleStack.property( KoXmlNS::fo, "background-color" );
         if ( color == "transparent" )
             m_backgroundColor = QBrush( QColor(), Qt::NoBrush );
         else
             m_backgroundColor = QBrush( QColor( color ) /*, brush style is a dead feature, ignored */ );
     }
 
-    m_borderLeft.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "left") );
-    m_borderRight.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "right") );
-    m_borderTop.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "top") );
-    m_borderBottom.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "bottom") );
+    m_borderLeft.loadFoBorder( styleStack.property( KoXmlNS::fo, "border", "left") );
+    m_borderRight.loadFoBorder( styleStack.property( KoXmlNS::fo, "border", "right") );
+    m_borderTop.loadFoBorder( styleStack.property( KoXmlNS::fo, "border", "top") );
+    m_borderBottom.loadFoBorder( styleStack.property( KoXmlNS::fo, "border", "bottom") );
 
     styleStack.restore();
 }
