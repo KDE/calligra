@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui>
 <kpartplugin name="insertknotsplugin" library="karbon_insertknotsplugin">
 <MenuBar>
-	<Menu name="effects">
+	<Menu name="path">
 		<Action name="path_insert_knots"/>
 	</Menu>
 </MenuBar>

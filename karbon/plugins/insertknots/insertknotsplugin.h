@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002-2003,2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,53 +25,38 @@
 
 #include <kparts/plugin.h>
 #include <kdialog.h>
-#include <commands/vreplacingcmd.h>
 
-class VInsertKnotsDlg;
 class KarbonView;
+class VInsertKnotsDlg;
 
 class InsertKnotsPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	InsertKnotsPlugin( KarbonView *parent, const QStringList & );
-	virtual ~InsertKnotsPlugin() {}
+    InsertKnotsPlugin( KarbonView *parent, const QStringList & );
+    virtual ~InsertKnotsPlugin() {}
 
 private slots:
-	void slotInsertKnots();
+    void slotInsertKnots();
 
 private:
-	VInsertKnotsDlg	*m_insertKnotsDlg;
+    VInsertKnotsDlg * m_insertKnotsDlg;
 };
 
 class KIntSpinBox;
 
 class VInsertKnotsDlg : public KDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	VInsertKnotsDlg( QWidget* parent = 0L, const char* name = 0L );
+    VInsertKnotsDlg( QWidget* parent = 0L, const char* name = 0L );
 
-	uint knots() const;
-	void setKnots( uint value );
+    uint knots() const;
+    void setKnots( uint value );
 
 private:
-	KIntSpinBox* m_knots;
-};
-
-class VSubpath;
-
-class VInsertKnotsCmd : public VReplacingCmd
-{
-public:
-	VInsertKnotsCmd( VDocument* doc, uint knots );
-	virtual ~VInsertKnotsCmd() {}
-
-	virtual void visitVSubpath( VSubpath& path );
-
-protected:
-	uint m_knots;
+    KIntSpinBox * m_knots;
 };
 
 #endif
