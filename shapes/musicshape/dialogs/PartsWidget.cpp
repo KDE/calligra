@@ -19,8 +19,13 @@
 #include "PartsWidget.h"
 #include "PartDetailsDialog.h"
 
+#include "../MusicTool.h"
+#include "../MusicShape.h"
+
 #include "../core/Sheet.h"
 #include "../core/Part.h"
+
+#include "../commands/RemovePartCommand.h"
 
 using namespace MusicCore;
 
@@ -31,10 +36,16 @@ PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
     widget.setupUi(this);
 
     connect(widget.partsList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(partDoubleClicked(QListWidgetItem*)));
+    connect(widget.partsList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectionChanged(QListWidgetItem*,QListWidgetItem*)));
+    connect(widget.addPart, SIGNAL(clicked()), this, SLOT(addPart()));
+    connect(widget.removePart, SIGNAL(clicked()), this, SLOT(removePart()));
+    connect(widget.editPart, SIGNAL(clicked()), this, SLOT(editPart()));
 }
 
-void PartsWidget::setSheet(Sheet* sheet)
+void PartsWidget::setShape(MusicShape* shape)
 {
+    Sheet* sheet = shape->sheet();
+    m_shape = shape;
     widget.partsList->clear();
     for (int i = 0; i < sheet->partCount(); i++) {
         widget.partsList->addItem(sheet->part(i)->name());
@@ -46,6 +57,30 @@ void PartsWidget::partDoubleClicked(QListWidgetItem* item)
 {
     int row = widget.partsList->row(item);
     PartDetailsDialog *dlg = new PartDetailsDialog(m_sheet->part(row), this);
+    dlg->show();
+}
+
+void PartsWidget::selectionChanged(QListWidgetItem* current, QListWidgetItem* prev)
+{
+    widget.editPart->setEnabled(current);
+    widget.removePart->setEnabled(current);
+}
+
+void PartsWidget::addPart()
+{
+    kDebug() << "add part" << endl;
+}
+
+void PartsWidget::removePart()
+{
+    Part* part = m_sheet->part(widget.partsList->currentRow());
+
+    m_tool->addCommand(new RemovePartCommand(m_shape, part));
+}
+
+void PartsWidget::editPart()
+{
+    PartDetailsDialog *dlg = new PartDetailsDialog(m_sheet->part(widget.partsList->currentRow()));
     dlg->show();
 }
 

@@ -64,7 +64,7 @@ void MusicTool::activate (bool temporary)
         emit sigDone();
         return;
     }
-    emit sheetChanged(m_musicshape->sheet());
+    emit shapeChanged(m_musicshape);
     useCursor( Qt::ArrowCursor, true );
 }
 
@@ -91,6 +91,11 @@ void MusicTool::mouseReleaseEvent( KoPointerEvent* )
 {
 }
 
+void MusicTool::addCommand(QUndoCommand* command)
+{
+    m_canvas->addCommand(command);
+}
+
 
 QWidget * MusicTool::createOptionWidget()
 {
@@ -99,12 +104,11 @@ QWidget * MusicTool::createOptionWidget()
     PartsWidget *pw = new PartsWidget(this, widget);
     widget->addTab(pw, i18n("Parts"));
 
-    connect(this, SIGNAL(sheetChanged(MusicCore::Sheet*)), pw, SLOT(setSheet(MusicCore::Sheet*)));
+    connect(this, SIGNAL(shapeChanged(MusicShape*)), pw, SLOT(setShape(MusicShape*)));
 
-    if (m_musicshape) pw->setSheet(m_musicshape->sheet());
+    if (m_musicshape) pw->setShape(m_musicshape);
 
     return widget;
 
 }
-
 

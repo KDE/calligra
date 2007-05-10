@@ -33,6 +33,8 @@ SET (musicshape_LIB_SRCS
     dialogs/PartsWidget.cpp
     dialogs/PartDetailsDialog.cpp
 
+    commands/RemovePartCommand.cpp
+
     ${musiccore_SRCS}
 )
 

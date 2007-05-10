@@ -62,6 +62,13 @@ public:
     Part* part(int index);
 
     /**
+     * Returns the index of the given part, or -1 if the part is not found.
+     *
+     * @param part the part to search for
+     */
+    int partIndex(Part* part);
+
+    /**
      * Adds a new part to this sheet. The part will have the given name, and will be added after all currently
      * existing parts.
      *

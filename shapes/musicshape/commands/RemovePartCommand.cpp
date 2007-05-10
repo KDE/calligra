@@ -16,38 +16,32 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef PARTSWIDGET_H
-#define PARTSWIDGET_H
+#include "RemovePartCommand.h"
+#include "../core/Sheet.h"
+#include "../core/Part.h"
+#include "../MusicShape.h"
 
-#include "ui_PartsWidget.h"
+#include "klocale.h"
 
-#include <QWidget>
+using namespace MusicCore;
 
-class QListWidgetItem;
-class MusicTool;
-class MusicShape;
-namespace MusicCore {
-    class Sheet;
+RemovePartCommand::RemovePartCommand(MusicShape* shape, Part* part)
+    : m_sheet(part->sheet()),
+    m_part(part),
+    m_shape(shape),
+    m_partIndex(m_sheet->partIndex(part))
+{
+    setText(i18n("Remove part"));
 }
 
-class PartsWidget : public QWidget {
-    Q_OBJECT
-public:
-    explicit PartsWidget(MusicTool *tool, QWidget *parent = 0);
+void RemovePartCommand::redo()
+{
+    m_sheet->removePart(m_part, false);
+    m_shape->repaint();
+}
 
-public slots:
-    void setShape(MusicShape* shape);
-private slots:
-    void partDoubleClicked(QListWidgetItem* item);
-    void selectionChanged(QListWidgetItem* current, QListWidgetItem* prev);
-    void addPart();
-    void removePart();
-    void editPart();
-private:
-    Ui::PartsWidget widget;
-    MusicTool *m_tool;
-    MusicShape *m_shape;
-    MusicCore::Sheet* m_sheet;
-};
-
-#endif // PARTSWIDGET_H
+void RemovePartCommand::undo()
+{
+    m_sheet->insertPart(m_partIndex, m_part);
+    m_shape->repaint();
+}

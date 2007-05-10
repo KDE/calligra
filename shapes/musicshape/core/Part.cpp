@@ -51,6 +51,11 @@ Sheet* Part::sheet()
     return d->sheet;
 }
 
+void Part::setSheet(Sheet* sheet)
+{
+    d->sheet = sheet;
+}
+
 QString Part::name() const
 {
     return d->name;

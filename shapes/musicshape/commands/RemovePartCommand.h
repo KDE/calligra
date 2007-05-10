@@ -16,38 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef PARTSWIDGET_H
-#define PARTSWIDGET_H
+#ifndef REMOVEPARTCOMMAND_H
+#define REMOVEPARTCOMMAND_H
 
-#include "ui_PartsWidget.h"
+#include <QUndoCommand>
 
-#include <QWidget>
-
-class QListWidgetItem;
-class MusicTool;
-class MusicShape;
 namespace MusicCore {
     class Sheet;
+    class Part;
 }
+class MusicShape;
 
-class PartsWidget : public QWidget {
-    Q_OBJECT
+class RemovePartCommand : public QUndoCommand {
 public:
-    explicit PartsWidget(MusicTool *tool, QWidget *parent = 0);
-
-public slots:
-    void setShape(MusicShape* shape);
-private slots:
-    void partDoubleClicked(QListWidgetItem* item);
-    void selectionChanged(QListWidgetItem* current, QListWidgetItem* prev);
-    void addPart();
-    void removePart();
-    void editPart();
+    RemovePartCommand(MusicShape* shape, MusicCore::Part* part);
+    virtual void redo();
+    virtual void undo();
 private:
-    Ui::PartsWidget widget;
-    MusicTool *m_tool;
-    MusicShape *m_shape;
     MusicCore::Sheet* m_sheet;
+    MusicCore::Part* m_part;
+    MusicShape* m_shape;
+    int m_partIndex;
 };
 
-#endif // PARTSWIDGET_H
+#endif // REMOVEPARTCOMMAND_H

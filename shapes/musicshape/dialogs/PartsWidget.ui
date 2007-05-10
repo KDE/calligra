@@ -33,6 +33,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="editPart" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
        <property name="text" >
         <string>...</string>
        </property>
@@ -47,6 +50,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="removePart" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
        <property name="text" >
         <string>...</string>
        </property>

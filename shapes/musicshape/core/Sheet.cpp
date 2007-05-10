@@ -55,11 +55,23 @@ Part* Sheet::part(int index)
     return d->parts[index];
 }
 
+int Sheet::partIndex(Part* part)
+{
+    return d->parts.indexOf(part);
+}
+
 Part* Sheet::addPart(const QString& name)
 {
     Part* part = new Part(this, name);
     d->parts.append(part);
     return part;
+}
+
+void Sheet::addPart(Part* part)
+{
+    Q_ASSERT( part );
+    part->setSheet(this);
+    d->parts.append(part);
 }
 
 Part* Sheet::insertPart(int before, const QString& name)
@@ -68,6 +80,14 @@ Part* Sheet::insertPart(int before, const QString& name)
     Part* part = new Part(this, name);
     d->parts.insert(before, part);
     return part;
+}
+
+void Sheet::insertPart(int before, Part* part)
+{
+    Q_ASSERT( before >= 0 && before <= partCount() );
+    Q_ASSERT( part );
+    part->setSheet(this);
+    d->parts.insert(before, part);
 }
 
 void Sheet::removePart(int index, bool deletePart)

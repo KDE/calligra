@@ -21,6 +21,7 @@
 
 #include <KoTool.h>
 class MusicShape;
+class QUndoCommand;
 
 class MusicTool : public KoTool
 {
@@ -38,6 +39,7 @@ public:
   void activate (bool temporary=false);
   void deactivate();
 
+  void addCommand(QUndoCommand* command);
 protected:
   /*
    * Create default option widget
@@ -46,7 +48,7 @@ protected:
 
 protected slots:
 signals:
-    void sheetChanged(MusicCore::Sheet* sheet);
+    void shapeChanged(MusicShape* shape);
 private:
    MusicShape *m_musicshape;
 };
