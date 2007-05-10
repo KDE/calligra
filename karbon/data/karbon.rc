@@ -87,6 +87,7 @@
         <Action name="intersect_path"/>
         <Action name="subtract_path"/>
         <Action name="unite_path"/>
+        <Separator/>
 	</Menu>
 	<Menu name="effects">
 		<text>Effe&amp;cts</text>
