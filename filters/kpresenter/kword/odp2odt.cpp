@@ -24,6 +24,7 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoXmlNS.h>
+#include <KoOasisStore.h>
 #include <KoDocument.h>
 #include <KoDom.h>
 #include <klocale.h>
@@ -54,17 +55,9 @@ KoFilter::ConversionStatus Odp2Odt::convert( const QByteArray& from, const QByte
     }
 
     // Parse presentation content.xml
-    QXmlInputSource source( inpdev );
-    QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
     QString errorMsg;
-    int errorLine, errorColumn;
-    bool ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
-    if ( !ok )
+    if ( !KoOasisStore::loadAndParse( inpdev, doc, errorMsg, "content.xml" ) )
     {
-        kError(31000) << "Parsing error! Aborting!" << endl
-                      << " In line: " << errorLine << ", column: " << errorColumn << endl
-                      << " Error message: " << errorMsg << endl;
         return KoFilter::ParsingError;
     }
 
