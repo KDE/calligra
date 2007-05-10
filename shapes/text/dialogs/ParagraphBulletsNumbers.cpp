@@ -73,7 +73,6 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
         }
     }
     int align;
-kDebug() << "a: " << llp.alignment() << endl;
     if(llp.alignment() == (Qt::AlignLeft | Qt::AlignAbsolute))
         align = 1;
     else if(llp.alignment() == (Qt::AlignRight | Qt::AlignAbsolute))
