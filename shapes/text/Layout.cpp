@@ -32,7 +32,7 @@
 #include <KoShape.h>
 
 #include <kdeversion.h>
-#include <kdebug.h>
+#include <KDebug>
 #include <QTextList>
 #include <QStyle>
 
@@ -508,6 +508,7 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
     painter->setPen(context.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion();
     QTextBlock block = m_parent->document()->begin();
+    KoTextBlockBorderData *lastBorder = 0;
     bool started=false;
     while(block.isValid()) {
         QTextLayout *layout = block.layout();
@@ -539,6 +540,15 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
                 painter->save();
                 decorateParagraph(painter, block);
                 painter->restore();
+                KoTextBlockBorderData *border = 0;
+                if(blockData)
+                    border = dynamic_cast<KoTextBlockBorderData*> (blockData->border());
+                if(lastBorder && lastBorder != border) {
+                    painter->save();
+                    lastBorder->paint(*painter);
+                    painter->restore();
+                }
+                lastBorder = border;
 
                 QVector<QTextLayout::FormatRange> selections;
                 foreach(QAbstractTextDocumentLayout::Selection selection, context.selections) {
@@ -559,10 +569,12 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
                 layout->draw(painter, QPointF(0,0), selections);
             }
             else if(started) // when out of the cliprect, then we are done drawing.
-                return;
+                break;
         }
         block = block.next();
     }
+    if(lastBorder)
+        lastBorder->paint(*painter);
 }
 
 void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
@@ -657,14 +669,6 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
                 default:; // others we ignore.
             }
         }
-    }
-
-    KoTextBlockBorderData *border = dynamic_cast<KoTextBlockBorderData*> (data->border());
-    // TODO make sure we only paint a border-set one time.
-    if(border) {
-        painter->save();
-        border->paint(*painter);
-        painter->restore();
     }
 }
 
