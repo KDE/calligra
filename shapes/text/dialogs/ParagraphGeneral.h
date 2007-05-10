@@ -17,30 +17,37 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef STYLEMANAGER_H
-#define STYLEMANAGER_H
+#ifndef PARAGRAPHGENERAL_H
+#define PARAGRAPHGENERAL_H
 
-#include "ui_StyleManager.h"
+#include "ui_ParagraphGeneral.h"
 
 #include <QWidget>
 #include <QList>
 
 class KoStyleManager;
-class QListWidgetItem;
 class KoParagraphStyle;
+class ParagraphBulletsNumbers;
+class ParagraphIndentSpacing;
+class ParagraphLayout;
 
-class StyleManager : public QWidget {
+class ParagraphGeneral : public QWidget {
     Q_OBJECT
 public:
-    StyleManager(QWidget *parent = 0);
+    ParagraphGeneral(QWidget *parent = 0);
 
-    void setStyleManager(KoStyleManager *sm);
-
-private slots:
-    void setStyle(QListWidgetItem *item);
+    void setStyle(KoParagraphStyle *styl);
+    void setParagraphStyles(const QList<KoParagraphStyle*> styles);
 
 private:
-    Ui::StyleManager widget;
+    Ui::ParagraphGeneral widget;
+    bool m_blockSignals;
+
+    ParagraphIndentSpacing *m_paragraphIndentSpacing;
+    ParagraphLayout *m_paragraphLayout;
+    ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
+
+    KoParagraphStyle *m_style;
     KoStyleManager *m_styleManager;
     QList<KoParagraphStyle*> m_paragraphStyles;
 };

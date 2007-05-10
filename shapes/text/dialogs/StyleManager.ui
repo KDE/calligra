@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
+    <width>419</width>
     <height>318</height>
    </rect>
   </property>
@@ -30,97 +30,18 @@
     </widget>
    </item>
    <item rowspan="3" row="0" column="2" >
-    <widget class="QTabWidget" name="tabs" >
+    <widget class="QStackedWidget" name="stackedWidget" >
      <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-       <horstretch>99</horstretch>
+      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <widget class="QWidget" name="generalTab" >
-      <attribute name="title" >
-       <string>General</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <item row="0" column="0" colspan="2" >
-        <widget class="QLabel" name="label" >
-         <property name="text" >
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2" >
-        <widget class="QLineEdit" name="name" />
-       </item>
-       <item row="1" column="0" colspan="2" >
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
-          <string>Next style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2" >
-        <widget class="QComboBox" name="nextStyle" />
-       </item>
-       <item row="2" column="0" colspan="2" >
-        <widget class="QLabel" name="label_3" >
-         <property name="text" >
-          <string>Inherit style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2" >
-        <widget class="QComboBox" name="inheritStyle" />
-       </item>
-       <item row="3" column="0" colspan="3" >
-        <widget class="QCheckBox" name="useCharacterStyle" >
-         <property name="text" >
-          <string>Use named characterstyle</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>10</width>
-           <height>1</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="1" >
-        <widget class="QLabel" name="label_4" >
-         <property name="text" >
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2" >
-        <widget class="QComboBox" name="characterStyle" />
-       </item>
-       <item row="5" column="0" colspan="3" >
-        <widget class="QCheckBox" name="inToc" >
-         <property name="text" >
-          <string>Include in table of contents</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="3" >
-        <widget class="QGroupBox" name="previewPane" >
-         <property name="title" >
-          <string>Preview</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="ParagraphGeneral" name="paragraphStylePage" />
+     <widget class="QWidget" name="characterStylePage" />
     </widget>
    </item>
    <item row="1" column="0" >
@@ -153,6 +74,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ParagraphGeneral</class>
+   <extends>QWidget</extends>
+   <header>dialogs/ParagraphGeneral.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

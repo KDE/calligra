@@ -33,8 +33,8 @@
 ParagraphSettingsDialog::ParagraphSettingsDialog(QWidget *parent)
     : KPageDialog(parent),
     m_style(0),
-    m_ownStyle(false)
-,m_visited(false)
+    m_ownStyle(false),
+    m_visited(false)
 {
     setFaceType(KPageDialog::Tabbed);
     m_paragraphIndentSpacing = new ParagraphIndentSpacing (this);
