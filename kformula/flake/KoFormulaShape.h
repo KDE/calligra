@@ -22,7 +22,10 @@
 
 #include <KoShape.h>
 #include <QDomDocument>
+
+class KUrl;
 class KoXmlWriter;
+class KFormulaPartDocument;
 
 #define KoFormulaShapeId "FormulaShapeID"
 
@@ -75,6 +78,8 @@ public:
      */
     void saveMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
+    void importFormula( const KUrl& url);
+
     /// reimplemented
     virtual void saveOdf( KoShapeSavingContext * context );
 
@@ -84,6 +89,8 @@ private:
 
     /// The renderer that takes care of painting the shape's formula
     FormulaRenderer* m_formulaRenderer;
+
+    KFormulaPartDocument* m_document;
 };
 
 } // namespace FormulaShape

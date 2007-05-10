@@ -1,20 +1,38 @@
 project(kformula)
 
+set(KFORMULA_INCLUDES
+    ${CMAKE_SOURCE_DIR}/kformula
+    ${CMAKE_SOURCE_DIR}/kformula/flake
+    ${KOGUIUTILS_INCLUDES} 
+    ${KOTEXT_INCLUDES}
+    )
+
+include_directories(${KFORMULA_INCLUDES})
+
 add_subdirectory( pics )
 add_subdirectory( flake )
 
-include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES})
-
-
 ########### next target ###############
 
-set(kformulapart_PART_SRCS 
+set(kformulaprivate_LIB_SRCS
    KFormulaPartDocument.cpp 
    KFormulaPartView.cpp 
    KFormulaPartViewAdaptor.cpp
-   KFormulaPartFactory.cpp
+   KFormulaPartFactory.cpp 
    KFormulaCanvas.cpp 
    KFormulaConfigDialog.cpp )
+	
+kde4_automoc(${kformulaprivate_LIB_SRCS})
+
+kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
+
+target_link_libraries(kformulaprivate ${KDE4_KDECORELIBS} koguiutils)
+
+install(TARGETS kformulaprivate DESTINATION ${LIB_INSTALL_DIR})
+
+########### next target ###############
+
+set(kformulapart_PART_SRCS KFormulaPartFactoryInit.cpp )
 
 kde4_automoc(${kformulapart_PART_SRCS})
 
@@ -22,10 +40,9 @@ kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
 
 
-target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} koguiutils )
+target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kformulaprivate )
 
 install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
-
 
 ########### next target ###############
 

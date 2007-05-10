@@ -30,8 +30,6 @@
 
 #include <QStringList>
 
-K_EXPORT_COMPONENT_FACTORY( libkformulapart, KFormulaPartFactory )
-
 KComponentData* KFormulaPartFactory::s_global = 0;
 KAboutData* KFormulaPartFactory::s_aboutData = 0;
 

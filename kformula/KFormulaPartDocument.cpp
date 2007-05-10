@@ -23,6 +23,7 @@
 #include "KFormulaPartDocument.h"
 #include "KFormulaPartView.h"
 #include "KFormulaPartFactory.h"
+#include "FormulaElement.h"
 
 #include <QPainter>
 #include <QString>
@@ -86,7 +87,7 @@ bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWrite
 bool KFormulaPartDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&,
                                       const QDomDocument&, KoStore* )
 {
-    Q_UNUSED( doc );
+    m_formulaElement->readMathML( doc.documentElement() );
 /*    if ( document->loadOasis( doc ) )
     {
         m_commandHistory->clear();
@@ -97,9 +98,10 @@ bool KFormulaPartDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&,
     return false;
 }
 
-bool KFormulaPartDocument::loadXML(QIODevice *, const QDomDocument& )
+bool KFormulaPartDocument::loadXML(QIODevice *, const QDomDocument& doc)
 {
-    // this is done with a filter
+    // TODO: Check whether it's really MathML or old KFO format
+    m_formulaElement->readMathML( doc.documentElement() );
     return false;
 }
 

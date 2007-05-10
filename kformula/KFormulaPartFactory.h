@@ -21,6 +21,7 @@
 #define KFORMULAPARTFACTORY_H
 
 #include <KoFactory.h>
+#include "kformula_export.h"
 
 class KComponentData;
 class KAboutData;
@@ -35,7 +36,7 @@ class KAboutData;
  * Use createPartObject() to obtain a pointer to a new instance of the KFormulaPart.
  * With global you can access the current @ref KComponentData of KFormula
  */
-class KFormulaPartFactory : public KoFactory
+class KOFORMULA_EXPORT KFormulaPartFactory : public KoFactory
 {
     Q_OBJECT
 public:

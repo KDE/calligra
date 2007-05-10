@@ -20,11 +20,12 @@
 #include "KoFormulaShape.h"
 #include "FormulaElement.h"
 #include "FormulaRenderer.h"
+#include "KFormulaPartDocument.h"
 #include <KoXmlWriter.h>
 
 namespace FormulaShape {
 	
-KoFormulaShape::KoFormulaShape()
+KoFormulaShape::KoFormulaShape() :  m_document( 0 )
 {
     m_formulaElement = new FormulaElement();
     m_formulaRenderer = new FormulaRenderer();
@@ -67,8 +68,6 @@ BasicElement* KoFormulaShape::formulaElement() const
 
 void KoFormulaShape::loadMathML( const QDomDocument &doc, bool )
 {
-    Q_UNUSED( doc )
-
     delete m_formulaElement;                                // delete the old formula
     m_formulaElement = new FormulaElement();                // create a new root element
     m_formulaElement->readMathML( doc.documentElement() );  // and load the new formula
@@ -80,6 +79,13 @@ void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
 	return;                                        // do not save it
     
     m_formulaElement->writeMathML( writer, oasisFormat );
+}
+
+void KoFormulaShape::importFormula( const KUrl& url )
+{
+    delete m_document;
+    m_document = new KFormulaPartDocument();
+    m_document->openURL(url);
 }
 
 void KoFormulaShape::saveOdf( KoShapeSavingContext * context ) {

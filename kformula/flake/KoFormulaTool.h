@@ -34,6 +34,7 @@ class FormulaCursor;
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
 class KoFormulaTool : public KoTool {
+    Q_OBJECT
 public:
     explicit KoFormulaTool( KoCanvasBase *canvas );
     ~KoFormulaTool();
@@ -68,7 +69,17 @@ public slots:
 
     /// Called when this tool instance is deactivated
     void deactivate();
- 
+
+protected:
+    /*
+     * Create default option widget
+     */
+    virtual QWidget* createOptionWidget();
+
+protected slots:
+
+    void slotChangeUrl();
+	
 private:
     /// The FormulaShape the tool is manipulating
     KoFormulaShape* m_formulaShape;

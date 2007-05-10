@@ -27,11 +27,15 @@
 #include "KFormulaPartView.h"
 #include <QPainter>
 #include <k3command.h>
+#include "kformula_export.h"
 
 class QIODevice;
 class QDomDocument;
-class FormulaShape;
 class KoXmlWriter;
+
+namespace FormulaShape {
+    class FormulaElement;
+}
 
 /**
  * @short The document class for the KFormulaPart
@@ -42,7 +46,7 @@ class KoXmlWriter;
  * The actual data KFormulaPartDocument is maintaining is a list of FormulaShape.
  * 
  */
-class KFormulaPartDocument : public KoDocument, public KoShapeControllerBase {
+class KOFORMULA_EXPORT KFormulaPartDocument : public KoDocument, public KoShapeControllerBase {
 Q_OBJECT
 public:
     /// The basic constructor
@@ -86,8 +90,10 @@ protected:
     virtual KoView* createViewInstance(QWidget* parent);
 
 private:
+    FormulaShape::FormulaElement* m_formulaElement;
     /// The undo stack
     K3CommandHistory* m_commandHistory;
+
 };
 
 #endif
