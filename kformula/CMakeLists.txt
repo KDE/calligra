@@ -32,17 +32,16 @@ install(TARGETS kformulaprivate DESTINATION ${LIB_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kformulapart_PART_SRCS KFormulaPartFactoryInit.cpp )
+####### TODO: missing file
+#set(kformulapart_PART_SRCS KFormulaPartFactoryInit.cpp )
 
-kde4_automoc(${kformulapart_PART_SRCS})
+#kde4_automoc(${kformulapart_PART_SRCS})
 
-kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
+#kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
+#target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kformulaprivate )
 
-
-target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kformulaprivate )
-
-install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
+#install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
