@@ -27,6 +27,8 @@
 
 #include "../commands/RemovePartCommand.h"
 
+#include <KIcon>
+
 using namespace MusicCore;
 
 PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
@@ -34,6 +36,10 @@ PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
     m_tool(tool)
 {
     widget.setupUi(this);
+
+    widget.addPart->setIcon(KIcon("edit-add"));
+    widget.removePart->setIcon(KIcon("edit-delete"));
+    widget.editPart->setIcon(KIcon("edit"));
 
     connect(widget.partsList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(partDoubleClicked(QListWidgetItem*)));
     connect(widget.partsList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectionChanged(QListWidgetItem*,QListWidgetItem*)));
