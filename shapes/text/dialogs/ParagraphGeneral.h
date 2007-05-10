@@ -36,7 +36,7 @@ class ParagraphGeneral : public QWidget {
 public:
     ParagraphGeneral(QWidget *parent = 0);
 
-    void setStyle(KoParagraphStyle *styl);
+    void setStyle(KoParagraphStyle *style);
     void setParagraphStyles(const QList<KoParagraphStyle*> styles);
 
 private:

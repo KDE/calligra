@@ -29,6 +29,7 @@
 class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
+class QListWidgetItem;
 
 class StylesWidget : public QWidget {
     Q_OBJECT
@@ -39,9 +40,14 @@ public:
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
-    void itemSelected();
+    void itemSelected(QListWidgetItem *item);
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
+
+private slots:
+    void newStyleClicked();
+    void deleteStyleClicked();
+    void editStyle(QListWidgetItem *);
 
 signals:
     void paragraphStyleSelected(KoParagraphStyle *style);
@@ -52,8 +58,6 @@ private:
     Type m_type;
     KoStyleManager *m_styleManager;
 
-    typedef QPair<QString, int> Entry;
-    QList<Entry> m_items;
     QTextBlockFormat m_currentBlockFormat;
     QTextCharFormat m_currentCharFormat;
     bool m_blockSignals;

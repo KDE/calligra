@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "StylesWidget.h"
+#include "ParagraphGeneral.h"
 
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
@@ -31,7 +32,10 @@ StylesWidget::StylesWidget(Type type, QWidget *parent)
     m_blockSignals(false)
 {
     widget.setupUi(this);
-    connect(widget.styleList, SIGNAL(itemPressed(QListWidgetItem *)), this, SLOT(itemSelected()));
+    connect(widget.styleList, SIGNAL(itemPressed(QListWidgetItem *)), this, SLOT(itemSelected(QListWidgetItem*)));
+    connect(widget.newStyle, SIGNAL(pressed()), this, SLOT(newStyleClicked()));
+    connect(widget.deleteStyle, SIGNAL(pressed()), this, SLOT(deleteStyleClicked()));
+    connect(widget.styleList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(editStyle(QListWidgetItem*)));
 }
 
 void StylesWidget::setStyleManager(KoStyleManager *sm) {
@@ -42,21 +46,26 @@ void StylesWidget::setStyleManager(KoStyleManager *sm) {
     if(m_styleManager == 0)
         return;
 
-    if(m_type == CharacterStyle)
-        foreach(KoCharacterStyle *style, m_styleManager->characterStyles())
-            m_items.append(Entry(style->name(), style->styleId()));
-    else
-        foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())
-            m_items.append(Entry(style->name(), style->styleId()));
-
-    foreach(Entry entry, m_items)
-        widget.styleList->addItem(entry.first);
+    if(m_type == CharacterStyle) {
+        foreach(KoCharacterStyle *style, m_styleManager->characterStyles()) {
+            QListWidgetItem *item = new QListWidgetItem(style->name(), widget.styleList);
+            item->setData(99, style->styleId());
+            widget.styleList->addItem(item);
+        }
+    }
+    else {
+        foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
+            QListWidgetItem *item = new QListWidgetItem(style->name(), widget.styleList);
+            item->setData(99, style->styleId());
+            widget.styleList->addItem(item);
+        }
+    }
 }
 
-void StylesWidget::itemSelected() {
+void StylesWidget::itemSelected(QListWidgetItem *item) {
     if(m_blockSignals)
         return;
-    int styleId = m_items[widget.styleList->currentRow()].second;
+    int styleId = item->data(99).toInt();
 
     if(m_type == CharacterStyle)
         emit characterStyleSelected(m_styleManager->characterStyle(styleId));
@@ -70,12 +79,12 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format) {
     m_currentBlockFormat = format;
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     int index = 0;
-    foreach(Entry entry, m_items) {
-        if(entry.second == id)
+    while(index < widget.styleList->count()) {
+        if(widget.styleList->item(index)->data(99).toInt() == id)
             break;
         index++;
     }
-    if(index >= m_items.count()) // not here, so default to the first one.
+    if(index >= widget.styleList->count()) // not here, so default to the first one.
         index = 0;
     m_blockSignals = true;
     widget.styleList->setCurrentItem(widget.styleList->item(index));
@@ -90,12 +99,12 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format) {
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
     if(m_type == CharacterStyle) { // update the list-selection
         int index = 0;
-        foreach(Entry entry, m_items) {
-            if(entry.second == id)
+        while(index < widget.styleList->count()) {
+            if(widget.styleList->item(index)->data(99).toInt() == id)
                 break;
             index++;
         }
-        if(index >= m_items.count()) // not here, so default to the first one.
+        if(index >= widget.styleList->count()) // not here, so default to the first one.
             index = 0;
         m_blockSignals = true;
         widget.styleList->setCurrentItem(widget.styleList->item(index));
@@ -103,6 +112,33 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format) {
     }
     else { // if the characterStyle is not the same as our parag style's one, mark it.
         // TODO
+    }
+}
+
+void StylesWidget::newStyleClicked() {
+    // TODO
+}
+
+void StylesWidget::deleteStyleClicked() {
+    // TODO
+}
+
+void StylesWidget::editStyle(QListWidgetItem *item) {
+    QWidget *widget = 0;
+    if(m_type == CharacterStyle) {
+        //KoCharacterStyle *style = m_styleManager->characterStyle(item->data(99).toInt());
+        // TODO
+    }
+    else {
+        KoParagraphStyle *style = m_styleManager->paragraphStyle(item->data(99).toInt());
+        ParagraphGeneral *p = new ParagraphGeneral();
+        p->setStyle(style);
+        widget = p;
+    }
+    if(widget) {
+        KDialog *dia = new KDialog(this);
+        dia->setMainWidget(widget);
+        dia->show();
     }
 }
 
