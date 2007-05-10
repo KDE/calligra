@@ -22,6 +22,7 @@
 #include "dialogs/SimpleStyleWidget.h"
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
+#include "dialogs/StyleManagerDialog.h"
 #include "commands/TextCommandBase.h"
 #include "commands/ChangeListCommand.h"
 
@@ -204,6 +205,11 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     action->setCheckable(true);
     addAction("edit_record_changes", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleTrackChanges(bool)));
+
+    action = new QAction(i18n("Style Manager"), this);
+    action->setShortcut( Qt::ALT + Qt::CTRL + Qt::Key_S);
+    addAction("format_stylist", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     addAction("edit_selectall", action);
@@ -919,6 +925,15 @@ void TextTool::stopMacro() {
     else
         delete m_currentCommand;
     m_currentCommand = 0;
+}
+
+void TextTool::showStyleManager() {
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+    if(lay) {
+        StyleManagerDialog *dia = new StyleManagerDialog(m_canvas->canvasWidget());
+        dia->setStyleManager(lay->styleManager());
+        dia->show();
+    }
 }
 
 

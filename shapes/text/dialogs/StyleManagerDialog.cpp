@@ -17,33 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef STYLEMANAGER_H
-#define STYLEMANAGER_H
+#include "StyleManagerDialog.h"
+#include "StyleManager.h"
 
-#include "ui_StyleManager.h"
+StyleManagerDialog::StyleManagerDialog(QWidget *parent)
+    : KDialog(parent)
+{
+    m_styleManagerWidget = new StyleManager(this);
+    setMainWidget(m_styleManagerWidget);
+}
 
-#include <QWidget>
-#include <QList>
+StyleManagerDialog::~StyleManagerDialog() {
+}
 
-class KoStyleManager;
-class QListWidgetItem;
-class KoParagraphStyle;
+void StyleManagerDialog::accept() {
 
-class StyleManager : public QWidget {
-    Q_OBJECT
-public:
-    StyleManager(QWidget *parent = 0);
+    QDialog::accept();
+    deleteLater();
+}
 
-    void setStyleManager(KoStyleManager *sm);
+void StyleManagerDialog::reject() {
+    QDialog::reject();
+    deleteLater();
+}
 
-private slots:
-    void setStyle(QListWidgetItem *item);
+void StyleManagerDialog::setStyleManager(KoStyleManager *sm) {
+    m_styleManagerWidget->setStyleManager(sm);
+}
 
-private:
-    Ui::StyleManager widget;
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    QList<KoParagraphStyle*> m_paragraphStyles;
-};
 
-#endif
+#include <StyleManagerDialog.moc>

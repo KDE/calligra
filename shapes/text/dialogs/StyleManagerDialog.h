@@ -16,34 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef STYLEMANAGERDIALOG_H
+#define STYLEMANAGERDIALOG_H
 
-#ifndef STYLEMANAGER_H
-#define STYLEMANAGER_H
+#include <KDialog>
 
-#include "ui_StyleManager.h"
-
-#include <QWidget>
-#include <QList>
-
+class StyleManager;
 class KoStyleManager;
-class QListWidgetItem;
-class KoParagraphStyle;
 
-class StyleManager : public QWidget {
+class StyleManagerDialog : public KDialog {
     Q_OBJECT
 public:
-    StyleManager(QWidget *parent = 0);
+    explicit StyleManagerDialog(QWidget *parent);
+    ~StyleManagerDialog();
 
     void setStyleManager(KoStyleManager *sm);
 
-private slots:
-    void setStyle(QListWidgetItem *item);
-
 private:
-    Ui::StyleManager widget;
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    QList<KoParagraphStyle*> m_paragraphStyles;
+    void accept();
+    void reject();
+
+    StyleManager *m_styleManagerWidget;
 };
 
 #endif

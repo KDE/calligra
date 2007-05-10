@@ -27,6 +27,7 @@ SET ( textshape_SRCS
     dialogs/ParagraphSettingsDialog.cpp
     dialogs/ListsSpinBox.cpp
     dialogs/StyleManager.cpp
+    dialogs/StyleManagerDialog.cpp
 
     commands/ChangeListCommand.cpp
     commands/TextCommandBase.cpp

@@ -17,12 +17,70 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#define PARAGRAPH_STYLE 1000
+// #define CHARACTER_STYLE 1001
+
 #include "StyleManager.h"
 
+#include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
+
 StyleManager::StyleManager(QWidget *parent)
-    :QWidget(parent)
+    :QWidget(parent),
+    m_blockSignals(false)
 {
     widget.setupUi(this);
+    layout()->setMargin(0);
+
+    connect (widget.styles, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
+                this, SLOT(setStyle(QListWidgetItem*)));
+}
+
+void StyleManager::setStyleManager(KoStyleManager *sm) {
+    Q_ASSERT(sm);
+    m_blockSignals = true;
+    m_styleManager = sm;
+    widget.styles->clear();
+    bool defaultOne = true;
+    foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
+        if(defaultOne) {
+            defaultOne = false;
+            continue;
+        }
+        QListWidgetItem *item = new QListWidgetItem(style->name(), widget.styles, PARAGRAPH_STYLE);
+        item->setData(PARAGRAPH_STYLE, style->styleId());
+        widget.styles->addItem(item);
+        widget.nextStyle->addItem(style->name(), style->styleId());
+        m_paragraphStyles.append(style);
+    }
+
+    m_blockSignals = false;
+    widget.styles->setCurrentRow(0);
+}
+
+void StyleManager::setStyle(QListWidgetItem *item) {
+    m_blockSignals = true;
+    int styleId = item->data(PARAGRAPH_STYLE).toInt();
+    KoParagraphStyle *style = m_styleManager->paragraphStyle(styleId);
+    Q_ASSERT(style);
+
+    widget.inheritStyle->clear();
+    widget.inheritStyle->addItem(i18n("None"));
+    widget.inheritStyle->setCurrentIndex(0);
+    foreach(KoParagraphStyle *s, m_paragraphStyles) {
+        if(s->styleId() == styleId) continue; // can't inherit from myself.
+        widget.inheritStyle->addItem(s->name(), s->styleId());
+        if(s == style->parent())
+            widget.inheritStyle->setCurrentIndex( widget.inheritStyle->count()-1 );
+    }
+    widget.name->setText(style->name());
+    for(int i=0; i < widget.nextStyle->count(); i++) {
+        if(widget.nextStyle->itemData(i).toInt() == style->nextStyle()) {
+            widget.nextStyle->setCurrentIndex(i);
+            break;
+        }
+    }
+    m_blockSignals = false;
 }
 
 #include <StyleManager.moc>

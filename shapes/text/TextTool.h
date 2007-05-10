@@ -120,6 +120,8 @@ private slots:
     void toggleTrackChanges(bool);
     /// select all text in the current document.
     void selectAll();
+    /// show the style manager
+    void showStyleManager();
 
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();
