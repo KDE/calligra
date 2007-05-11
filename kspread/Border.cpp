@@ -44,13 +44,13 @@
 // Qt
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QTimer>
 #include <QLabel>
-#include <QScrollBar>
 #include <QPainter>
 #include <QRubberBand>
+#include <QScrollBar>
 #include <QStyle>
 #include <QTextLayout>
+#include <QTimer>
 #include <QToolTip>
 
 // KDE
@@ -61,9 +61,9 @@
 #include <KoZoomHandler.h>
 
 // KSpread
-#include "Cell.h"
 #include "Canvas.h"
 #include "CanvasPrivate.h"
+#include "Cell.h"
 #include "Doc.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
