@@ -45,6 +45,7 @@ KFormulaPartDocument::KFormulaPartDocument( QWidget *parentWidget, QObject* pare
     setComponentData( KFormulaPartFactory::global(), false );
 
     m_commandHistory = new K3CommandHistory( actionCollection() );
+    m_formulaElement = new FormulaShape::FormulaElement;
 /*    connect( m_commandHistory, SIGNAL( commandExecuted() ),
 		         this, SLOT( slotExecuted() ) );
     connect( m_commandHistory, SIGNAL( documentRestored() ),
@@ -95,14 +96,14 @@ bool KFormulaPartDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&,
         return true;
     }*/
     
-    return false;
+    return true;
 }
 
 bool KFormulaPartDocument::loadXML(QIODevice *, const QDomDocument& doc)
 {
     // TODO: Check whether it's really MathML or old KFO format
     m_formulaElement->readMathML( doc.documentElement() );
-    return false;
+    return true;
 }
 
 KoView* KFormulaPartDocument::createViewInstance( QWidget* parent )

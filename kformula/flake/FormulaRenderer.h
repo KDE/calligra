@@ -21,6 +21,7 @@
 #define FORMULARENDERER_H
 
 #include <QPainter>
+#include "kformula_export.h"
 
 namespace FormulaShape {
 
@@ -47,7 +48,7 @@ class BasicElement;
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
-class FormulaRenderer {
+class KOFORMULA_EXPORT FormulaRenderer {
 public:
     /// The constructor
     FormulaRenderer();

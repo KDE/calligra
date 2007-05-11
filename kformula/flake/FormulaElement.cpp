@@ -26,27 +26,8 @@
 
 namespace FormulaShape {
 
-FormulaElement::FormulaElement() : BasicElement( 0 )
+FormulaElement::FormulaElement() : RowElement( 0 )
 {
-}
-
-FormulaElement::~FormulaElement()
-{
-    foreach( BasicElement* tmpElement, m_childElements )    // delete all child elements
-	delete tmpElement;
-}
-
-const QList<BasicElement*> FormulaElement::childElements()
-{
-    return m_childElements;
-}
-
-void FormulaElement::paint( QPainter&, const AttributeManager* )
-{ /* Implement it so that BasicElement::paint() is not called */ }
-
-void FormulaElement::layout( const AttributeManager* am )
-{
-    Q_UNUSED( am )
 }
 
 void FormulaElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
@@ -73,11 +54,6 @@ void FormulaElement::moveDown( FormulaCursor* cursor, BasicElement* from )
     Q_UNUSED( from )
 }
 
-void FormulaElement::readMathML( const KoXmlElement& element )
-{
-    readMathMLAttributes( element );
-}
-
 void FormulaElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
 {
     if( oasisFormat )
@@ -85,9 +61,8 @@ void FormulaElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
     else
         writer->startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
 
-    foreach( BasicElement* tmpElement, m_childElements )
-        tmpElement->writeMathML( writer, oasisFormat );
-    
+	inherited::writeMathMLContent( writer, oasisFormat);
+	
     if( oasisFormat )
         writer->endElement();
     else

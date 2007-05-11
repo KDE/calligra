@@ -24,6 +24,7 @@
 
 #include <QString>
 #include <QStack>
+#include "kformula_export.h"
 
 class QPainter;
 
@@ -47,7 +48,7 @@ class BasicElement;
  * the currentElement() and position() methods it is possible to act with a special
  * place.
  */
-class FormulaCursor {
+class KOFORMULA_EXPORT FormulaCursor {
 public:
     /**
      * The constructor - set the FormulaCursor right to the beginning

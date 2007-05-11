@@ -22,7 +22,8 @@
 #ifndef FORMULAELEMENT_H
 #define FORMULAELEMENT_H
 
-#include "BasicElement.h"
+#include "RowElement.h"
+#include "kformula_export.h"
 
 namespace FormulaShape {
 
@@ -34,32 +35,11 @@ namespace FormulaShape {
  * It's functionality is reduced to layouting its children in a different way. It is
  * the element with highest size and can also dictate the size to all other elements. 
  */
-class FormulaElement : public BasicElement {
+class KOFORMULA_EXPORT FormulaElement : public RowElement {
+    typedef RowElement inherited;
 public:
     /// The standard constructor
     FormulaElement();
-
-    /// The standard destructor
-    ~FormulaElement();
-    
-    /**
-     * Obtain a list of all child elements of this element
-     * @return a QList with pointers to all child elements
-     */
-    const QList<BasicElement*> childElements();
-
-    /**
-     * Render the element to the given QPainter
-     * @param painter The QPainter to paint the element to
-     * @param am The AttributeManager used for painting
-     */
-    void paint( QPainter& painter, const AttributeManager* am );
-
-    /**
-     * Calculate size and position of the element
-     * @param am The AttributeManager used for calculating
-     */
-    void layout( const AttributeManager* am );
 
     /**
      * Move the FormulaCursor left
@@ -89,18 +69,12 @@ public:
      */
     void moveDown( FormulaCursor* cursor, BasicElement* from );
     
-    /// Read the element from MathML
-    void readMathML( const KoXmlElement& element );
-
     /// Save the element to MathML 
     void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
 
     /// @return The element's ElementType
     ElementType elementType() const;
 
-private:
-    /// The child elements of the FormulaElement 
-    QList<BasicElement*> m_childElements;
 };
 
 } // namespace FormulaShape

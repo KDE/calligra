@@ -23,6 +23,7 @@
 #ifndef BASICELEMENT_H
 #define BASICELEMENT_H
 
+#include "kformula_export.h"
 #include <KoXmlReader.h>
 #include <QHash>
 #include <QList>
@@ -74,7 +75,7 @@ enum ElementType {
  * changes and the latter calculates the size of the element. After a formula change
  * first calculateSize is called for all elements then layoutElement().
  */
-class BasicElement {
+class KOFORMULA_EXPORT BasicElement {
 public:
     /*
      * The standard constructor

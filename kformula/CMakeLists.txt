@@ -26,7 +26,7 @@ kde4_automoc(${kformulaprivate_LIB_SRCS})
 
 kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
 
-target_link_libraries(kformulaprivate ${KDE4_KDECORELIBS} koguiutils)
+target_link_libraries(kformulaprivate ${KDE4_KDECORELIBS} koguiutils kformulalib)
 
 install(TARGETS kformulaprivate DESTINATION ${LIB_INSTALL_DIR})
 
