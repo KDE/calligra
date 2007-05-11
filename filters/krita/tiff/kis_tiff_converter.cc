@@ -268,6 +268,8 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
 
     // Create the cmsTransform if needed
     cmsHTRANSFORM transform = 0;
+#if 0
+    // TODO: fixit
     if(profile && !profile->isSuitableForOutput())
     {
         kDebug(41008) << "The profile can't be used in krita, need conversion" << endl;
@@ -275,6 +277,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                                        cs->profile()->profile() , cs->colorSpaceType(),
                                        INTENT_PERCEPTUAL, 0);
     }
+#endif
 
 
     // Check if there is an alpha channel

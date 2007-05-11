@@ -179,16 +179,18 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-
+    // TODO fixit
     // Create the cmsTransform if needed
 
     cmsHTRANSFORM transform = 0;
+#if 0
     if(profile && !profile->isSuitableForOutput())
     {
         transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
                                        cs->profile()->profile() , cs->colorSpaceType(),
                                        INTENT_PERCEPTUAL, 0);
     }
+#endif
 
     // Creating the KisImageSP
     if( ! m_img) {
