@@ -1008,7 +1008,8 @@ if(parent.localName()!="span") {
                 charstyle1->applyStyle(&cursor);
             }
             else {
-                //style->characterStyle()->applyStyle(&cursor);
+                KoCharacterStyle charstyle1;
+                charstyle1.applyStyle(&cursor);
             }
 
             text = normalizeWhitespace(text.replace('\n', QChar(0x2028)), *stripLeadingSpace);
