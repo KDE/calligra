@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC>
+  <qresource>
+    <file alias="data">lineAnimate.csv</file>
+  </qresource>
+</RCC>

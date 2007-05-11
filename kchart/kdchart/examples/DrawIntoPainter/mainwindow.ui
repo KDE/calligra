@@ -1,0 +1,471 @@
+<ui version="4.0" >
+ <class>MainWindow</class>
+ <widget class="QWidget" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>735</width>
+    <height>702</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>KD Chart drawing into a foreign QPainter </string>
+  </property>
+  <property name="windowIcon" >
+   <iconset/>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="2" >
+    <widget class="QScrollBar" name="vSBar" >
+     <property name="maximum" >
+      <number>999</number>
+     </property>
+     <property name="singleStep" >
+      <number>10</number>
+     </property>
+     <property name="pageStep" >
+      <number>100</number>
+     </property>
+     <property name="value" >
+      <number>500</number>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QScrollBar" name="hSBar" >
+     <property name="maximum" >
+      <number>999</number>
+     </property>
+     <property name="singleStep" >
+      <number>10</number>
+     </property>
+     <property name="pageStep" >
+      <number>100</number>
+     </property>
+     <property name="value" >
+      <number>500</number>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QSplitter" name="splitter" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QFrame" name="chartFrame" >
+      <property name="minimumSize" >
+       <size>
+        <width>300</width>
+        <height>400</height>
+       </size>
+      </property>
+      <property name="frameShape" >
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow" >
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QCheckBox" name="paintValuesCB" >
+       <property name="text" >
+        <string>Display Data Values</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_3" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="lineTypeLB" >
+         <property name="text" >
+          <string>Line Chart Type:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="lineTypeCB" >
+         <item>
+          <property name="text" >
+           <string>Normal</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Stacked</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Percent</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_2" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="markersLB" >
+         <property name="text" >
+          <string>Markers:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="paintMarkersCB" >
+         <property name="text" >
+          <string>Paint Markers</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="markersStyleLB" >
+         <property name="text" >
+          <string>Markers Style</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="markersStyleCB" >
+         <item>
+          <property name="text" >
+           <string>Map</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Circle</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Square</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Diamond</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>1 Pixel</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>4 Pixels</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Ring</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Cross</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Fast Cross</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_4" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="markersSizeLB" >
+         <property name="text" >
+          <string>Markers Size:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="markersWidthLB" >
+             <property name="text" >
+              <string>Width:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="markersHeightLB" >
+             <property name="text" >
+              <string>Height</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QSpinBox" name="markersWidthSB" >
+             <property name="value" >
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="markersHeightSB" >
+             <property name="value" >
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_5" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="AreaChartLB" >
+         <property name="text" >
+          <string>Area Charts:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="displayAreasCB" >
+         <property name="text" >
+          <string>Display Areas</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="transparencyLB" >
+           <property name="text" >
+            <string>Transparency:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="transparencySB" >
+           <property name="maximum" >
+            <number>255</number>
+           </property>
+           <property name="value" >
+            <number>20</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="zoomingLB" >
+         <property name="text" >
+          <string>Zooming:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="zoomFactorLB" >
+           <property name="text" >
+            <string>Zoom Factor:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="zoomFactorSB" >
+           <property name="maximum" >
+            <double>9.900000000000000</double>
+           </property>
+           <property name="minimum" >
+            <double>0.010000000000000</double>
+           </property>
+           <property name="singleStep" >
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value" >
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_6" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="paintLegendCB" >
+       <property name="text" >
+        <string>Display Legend</string>
+       </property>
+       <property name="checked" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>170</width>
+         <height>16</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="savePB" >
+       <property name="text" >
+        <string>Save as PNG</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="DrawIntoPainter.qrc" />
+ </resources>
+ <connections/>
+</ui>

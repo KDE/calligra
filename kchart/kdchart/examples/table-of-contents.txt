@@ -1,0 +1,211 @@
+
+  KD Chart 2 examples
+  ===================
+  (Table of Contents)
+
+
+examples/Axis/ - adding axes and setting them up
+
+
+examples/Axis/Labels/ - how to specify/configure axis labels
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Set up a line diagram
+ - Create two axes, and add them to the diagram
+ - Configure and set the abscissa labels
+ - Set up a legend
+
+
+examples/Axis/Parameters/ - fine-tuning the axis parameters
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Set up a line diagram
+ - Create two axes, and add them to the diagram
+ - Display or hide data values
+ - Shift line chart types ( Normal / Stacked / Percent )
+ - Paint markers and change their style
+ - Display area charts with transparency
+ - Demonstrate zooming 
+ - Set up a legend and display it or hide it
+
+examples/Axis/Widget/ - ChartWidget together with axis
+
+   featuring:
+
+ - Set the data using a QVector of QPairs
+ - Configure the Axis and its labels 
+ - Configure the DataValueAttributes
+
+examples/Bars/Advanced - sub types of the bar diagram class
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Set up a Bar diagram
+ - Display or hide data values 
+ - Shift Bar chart types ( Normal / Stacked / Percent )
+ - Demonstrate Pen settings
+ - Display ThreeD Bars and set the depth
+
+examples/Bars/Parameters - sub types of the bar diagram class
+
+   featuring:
+
+ - Use of KDChart::Widget together with a QStandardItemModel
+ - Configure the BarAttributes (Bar width and Gap factors)
+ - Set up the DataValueAttributes
+ - Set up a surrounding Pen
+
+examples/Bars/Simple - display a simple bar widget
+
+   featuring:
+
+- Use of KDChart::Widget together with a QStandardItemModel
+
+examples/DrawIntoPainter - Demonstrate KDChart::paint method
+
+   featuring:
+
+ - Display or hide data values 
+ - Shift Line chart types ( Normal / Stacked / Percent )
+ - Set up and display Markers 
+ - Display areas of a chart and set up transparency
+ - Demonstrate zooming
+ - Display or hide legend
+ - Paint your chart into a png 
+
+examples/EmptyValues/ - having zero values in all cells
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Set up a Bar diagram
+ - Demonstrate how to handle a plane when the values in
+   the model are all zero
+
+examples/Grids/CartesianGrid - Grid configuration Cartesian plane
+
+   featuring:
+
+- Set up the GridAttributes ( Pen - step and subStepWidth etc...)
+- Configure and set up a Header and its attributes ( relative size, background etc..)
+
+examples/Grids/PolarGrid - Grid configuration Polar plane
+
+  featuring:
+
+- Set up the GridAttributes for a Polar diagram
+
+examples/HeadersFooters/ - adding headers and/or footers
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Headers and footers handling:  Add, edit, and remove one
+   or several headers / footers at different locations
+
+
+examples/Legends/ - positioning one or several legends
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Legends handling - Add, edit, and remove one or several
+   legends at different locations
+
+
+examples/Lines/ - sub types of the lines diagram class
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Display or hide data values
+ - Show the use of DataValueAttributes and TextAttributes 
+ - Shift line chart types ( Normal / Stacked / Percent )
+ - Highlight areas
+ - Animate highlighting of areas
+
+
+examples/ModelView - using Qt Interview with KD Chart 2
+
+   featuring:
+
+ - Use of KDChart::Chart together with a QStandardItemModel,
+   QItemSelectionModel, and a QTableView
+ - Load and save your data
+ - Select and change the values interactively 
+ - Pen settings
+
+
+examples/MultidimensionalData/ - diagrams with Y / X coordinates
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Demonstrate the use of several dataset in the data model
+   e.g setDatasetDimension( 2 ) informs the diagram that
+       two columns in the data model are used for a dataset.
+       0 + 1 == first dataset, and 2 + 3 == second dataset.
+ - Show usage of DataValueAttributes and MarkerAttributes
+
+
+examples/Pie/ - sub types of the pie diagram class
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Set up a pie diagram
+ - Demonstrate several configuration possibilities:
+     - start position
+     - exploding
+ - Animate exploding of pie slices
+
+
+examples/SharedAbscissa/ - one axis used by two diagrams
+
+   featuring:
+
+ - Use of KDChart::Chart together with a TableModel
+   (QAbstractTableModel)
+ - Show a chart with two diagrams having each its own model
+ - Demonstrate how to share the abscissa axis
+ - Display two diagrams on top of each other with different
+   ordinates in the same plane (left side/right side)
+
+
+examples/Widget/ - the convenience widget class
+
+   featuring:
+
+ - Use of KDChart::Widget  
+ - Add values and set datasets using a QVector 
+ - Headers and footers set up and configuration
+ - Set up the legends
+ - Specify the chart type
+
+
+examples/Zoom/ - mouse handling and zooming
+
+   featuring:
+
+ - Use of KDChart::Widget
+ - Use of KDChart::Widget  
+ - Add values and set datasets using a QVector 
+ - Headers and footers set up and configuration
+ - Set up the legends
+ - Show some zooming functionalities using mouse press event,
+   mouse wheel event, and key press event
+

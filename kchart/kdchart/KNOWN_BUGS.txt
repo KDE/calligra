@@ -1,0 +1,4 @@
+
+    For a list of known bugs (or pending implementation, resp.)
+    please read the file doc/MISSING.txt.
+

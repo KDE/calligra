@@ -1,0 +1,43 @@
+:  # copy from environment:
+  isEmpty( KDCHARTDIR ):KDCHARTDIR=$$(KDCHARTDIR)
+  !isEmpty( KDCHARTDIR ) {
+    unix:!macx:isEmpty(QMAKE_EXTENSION_SHLIB):QMAKE_EXTENSION_SHLIB=so
+    unix:macx:isEmpty(QMAKE_EXTENSION_SHLIB):QMAKE_EXTENSION_SHLIB=dylib
+    unix {
+      staticlib {
+        !exists( $$KDCHARTDIR/lib/libkdchart.a ):error( "Cannot find libkdchart.a in $KDCHARTDIR/lib" )
+      } else {
+	message( KDCHARTDIR is $$KDCHARTDIR) 
+        !exists( $$KDCHARTDIR/lib/libkdchart.$$QMAKE_EXTENSION_SHLIB ):error( "Cannot find libkdchart.$$QMAKE_EXTENSION_SHLIB in $KDCHARTDIR/lib" )
+      }
+    }
+
+# STOP! Only re-enable this after you have figured out a way to make it not break "make distclean"!
+# STOP!
+# STOP!
+    #win32:!exists( $$KDCHARTDIR/lib/kdchart.lib ):error( "Cannot find kdchart.lib in $KDCHARTDIR/lib" )
+    #!exists( $$KDCHARTDIR/include/KDChartGlobal ):error( "Cannot find KDChartGlobal in $KDCHARTDIR/include" )
+# ^^^ STOP!
+
+    LIBS += -L$$KDCHARTDIR/lib
+    unix {
+      !isEmpty(QMAKE_RPATH):LIBS += $$QMAKE_RPATH$$KDCHARTDIR/lib
+      LIBS += -lkdchart
+    }
+    win32 {
+      CONFIG(debug, debug|release) {
+        LIBS += -lkdchartd
+      } else {
+        LIBS += -lkdchart
+      }
+    }
+
+    INCLUDEPATH += $$KDCHARTDIR/include
+    DEPENDPATH += $$KDCHARTDIR/include
+
+    CONFIG += have_kdchart
+    DEFINES += HAVE_KDCHART
+
+  } else:equals( builddir, $$top_builddir ) {
+    message( "WARNING: kdchart not found. Please set KDCHARTDIR either as an environment variable or on the qmake command line if you want kdchart support")
+  }

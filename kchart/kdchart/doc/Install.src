@@ -1,0 +1,42 @@
+KD Chart 2.0 requires a Qt version >= 4 with XML support enabled.
+
+0) From the top directory of your KDChart installation run "qmake".
+
+   * Notice static builds (Windows): qmake "CONFIG+=staticlib" "CONFIG+=release" (or "CONFIG+=debug" ).
+  
+1) Unix
+
+set your LD_LIBRARY_PATH to point to your KD Chart installation lib directory.
+
+If you do not have LD_LIBRARY_PATH set already then use this line:
+LD_LIBRARY_PATH=/path/to/kdchart/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH
+
+The above has to be added into your .bashrc or similar to remain. It may also of course be run from a shell just before building KD Chart, but in this case your settings will only be available for this shell.
+
+2) MacOS
+Proceed as described above, but using DYLD_LIBRARY_PATH instead
+of LD_LIBRARY_PATH
+
+3) Windows 
+Add the path to KDChart lib into your LIB environment variable and the path 
+to KDChart bin into your PATH environment variable.
+
+Or run:
+set PATH=\path\to\kdchart\bin;%PATH%
+set LIB=\path\to\kdchart\lib;%LIB%
+
+
+4) Compile everything by typing:
+
+make    # Unix,
+nmake   # Windows
+
+
+5) Have a look at the examples applications it will get you started with KD Chart 2.0 and it's new API.
+
+
+Designer Plugins:
+Just run "make install" (Unix/Linux, Mac), or nmake install (Windows) from the plugins directory of your KDChart installation. Make sure that your environment variable are set (see above) before doing so.
+
+

@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC>
+  <qresource>
+    <file alias="data">../../tools/modeldata/KDChart-Test-Pie.csv</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,94 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>MainWindow</class>
+ <widget class="QWidget" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>720</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Axes </string>
+  </property>
+  <property name="windowIcon" >
+   <iconset/>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="2" >
+    <widget class="QScrollBar" name="vSBar" >
+     <property name="maximum" >
+      <number>999</number>
+     </property>
+     <property name="singleStep" >
+      <number>10</number>
+     </property>
+     <property name="pageStep" >
+      <number>100</number>
+     </property>
+     <property name="value" >
+      <number>500</number>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QScrollBar" name="hSBar" >
+     <property name="maximum" >
+      <number>999</number>
+     </property>
+     <property name="singleStep" >
+      <number>10</number>
+     </property>
+     <property name="pageStep" >
+      <number>100</number>
+     </property>
+     <property name="value" >
+      <number>500</number>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QSplitter" name="splitter" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QFrame" name="chartFrame" >
+      <property name="minimumSize" >
+       <size>
+        <width>300</width>
+        <height>400</height>
+       </size>
+      </property>
+      <property name="frameShape" >
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow" >
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="BarChart" />
+ </resources>
+ <connections/>
+</ui>
