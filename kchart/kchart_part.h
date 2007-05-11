@@ -116,8 +116,12 @@ private:
 
 private:
     // The chart and its contents
+#if 0
     KChartParams            *m_params;      // Everything about the chart
     KDChartTableData         m_currentData; // The data in the chart.
+#else
+    qwe
+#endif
     QStringList              m_rowLabels;
     QStringList              m_colLabels;
     //QString                  m_regionName;

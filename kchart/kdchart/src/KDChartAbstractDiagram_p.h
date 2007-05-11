@@ -43,6 +43,7 @@
 #include "KDChartPosition.h"
 #include "KDChartPainterSaver_p.h"
 #include "KDChartPaintContext.h"
+#include "KDChartAttributesModel.h"
 
 #include <QPoint>
 #include <QPointer>
@@ -206,6 +207,15 @@ public :
 
 typedef QVector<LineAttributesInfo> LineAttributesInfoList;
 typedef QVectorIterator<LineAttributesInfo> LineAttributesInfoListIterator;
+
+class PrivateAttributesModel : public AttributesModel 
+{
+    Q_OBJECT
+ public:
+    explicit PrivateAttributesModel( QAbstractItemModel* model, 
+                                     QObject * parent = 0 )
+        : AttributesModel(model,parent) {}
+};
 
 }
 #endif /* KDCHARTDIAGRAM_P_H */

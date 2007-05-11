@@ -37,7 +37,6 @@
 #include "KDChartMarkerAttributes.h"
 #include "KDChartAbstractDiagram.h"
 #include "KDChartAbstractDiagram_p.h"
-#include "KDChartAttributesModel.h"
 #include "KDChartAbstractThreeDAttributes.h"
 #include "KDChartThreeDLineAttributes.h"
 
@@ -46,14 +45,6 @@
 
 using namespace KDChart;
 
-namespace KDChart {
-  class PrivateAttributesModel : public AttributesModel {
-    Q_OBJECT
-  public:
-        explicit PrivateAttributesModel( QAbstractItemModel* model, QObject * parent = 0 )
-	  : AttributesModel(model,parent) {}
-  };
-}
 
 AbstractDiagram::Private::Private()
   : plane( 0 )
@@ -962,6 +953,3 @@ void AbstractDiagram::update() const
     if( d->plane )
         d->plane->update();
 }
-
-
-#include "KDChartAbstractDiagram.moc"

@@ -1,15 +1,16 @@
 
 project(kchart)
 
-add_subdirectory( kdchart1 )
-#add_subdirectory( kdchart )
+#add_subdirectory( kdchart1 )
+add_subdirectory( kdchart )
 add_subdirectory( toolbar )
 add_subdirectory( pics )
 add_subdirectory( templates )
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/kchart/kdchart1/ 
-	${CMAKE_SOURCE_DIR}/kchart/dialogs
+	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/examples/tools
+	${CMAKE_CURRENT_SOURCE_DIR}/dialogs
 	${CMAKE_SOURCE_DIR}/interfaces 
 	${KOGUIUTILS_INCLUDES} )
 
@@ -46,6 +47,8 @@ set(kchartcommon_LIB_SRCS
    dialogs/KCWizardSubtypePage.cc
    dialogs/KCWizardLabelsLegendPage.cc
    dialogs/KCWizardAxesPage.cc
+
+   kdchart/examples/tools/TableModel.cpp
 )
 
 kde4_automoc(${kchartcommon_LIB_SRCS})
