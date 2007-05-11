@@ -128,6 +128,7 @@ KexiEditor::KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *nam
 
 KexiEditor::~KexiEditor()
 {
+	delete d;
 }
 
 void KexiEditor::updateActions(bool activated)
