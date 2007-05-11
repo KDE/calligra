@@ -20,7 +20,6 @@
 #include "kptresourceassignmentview.h"
 #include "kptpart.h"
 #include "kptview.h"
-#include "kptcanvasitem.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"

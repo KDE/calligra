@@ -101,7 +101,6 @@
 #include "kptresourcesdialog.h"
 #include "kptcalendarlistdialog.h"
 #include "kptstandardworktimedialog.h"
-#include "kptcanvasitem.h"
 #include "kptconfigdialog.h"
 #include "kptwbsdefinitiondialog.h"
 #include "kptaccountsdialog.h"
@@ -109,8 +108,6 @@
 #include "kptresourceassignmentview.h"
 #include "kpttaskstatusview.h"
 
-#include "KDGanttView.h"
-#include "KDGanttViewTaskItem.h"
 #include "KPtViewAdaptor.h"
 
 #include <assert.h>
@@ -714,10 +711,6 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("tools_define_wbs", actionGenerateWBS );
     connect( actionGenerateWBS, SIGNAL( triggered( bool ) ), SLOT( slotGenerateWBS() ) );
 
-    // ------ Export (testing)
-    //actionExportGantt = new KAction(i18n("Export Ganttview"), "export_gantt", 0, this,
-    //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
-
     // ------ Settings
     actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlato..."), this);
     actionCollection()->addAction("configure", actionConfigure );
@@ -771,18 +764,12 @@ View::View( Part* part, QWidget* parent )
     action->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_C ) );
     //     new KAction("Print Test Debug", CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
 
-    QAction *actExportGantt  = new KAction(i18n("Export Gantt"), this);
-    actionCollection()->addAction("export_gantt", actExportGantt );
-    connect( actExportGantt, SIGNAL( triggered( bool ) ), SLOT( slotExportGantt() ) );
-    actExportGantt->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_G ) );
-
 
 #endif
     // Stupid compilers ;)
 #ifndef NDEBUG
     /*  Q_UNUSED( actPrintSelectedDebug );
         Q_UNUSED( actPrintCalendarDebug );*/
-    Q_UNUSED( actExportGantt );
 #endif
 
     m_progress = 0;
@@ -2015,21 +2002,6 @@ void View::slotDeleteRelation()
     Relation *rel = v->currentRelation();
     if ( rel ) {
         getPart()->addCommand( new DeleteRelationCmd( getPart(), rel, i18n( "Delete Task Dependency" ) ) );
-    }
-}
-
-// testing
-void View::slotExportGantt()
-{
-    //kDebug()<<k_funcinfo<<endl;
-    GanttView *gv = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( gv == 0 ) {
-        return ;
-    }
-    QString fn = KFileDialog::getSaveFileName( KUrl(), QString(), this );
-    if ( !fn.isEmpty() ) {
-        QFile f( fn );
-        gv->exportGantt( &f );
     }
 }
 

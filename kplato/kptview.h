@@ -259,8 +259,6 @@ public slots:
     void slotModifyRelation();
     void slotDeleteRelation();
 
-    void slotExportGantt(); // testing
-
     void slotRenameNode( Node *node, const QString& name );
 
     void slotPopupMenu( const QString& menuname, const QPoint &pos );
@@ -422,9 +420,6 @@ private:
     // ------ Tools
     KAction *actionDefineWBS;
     KAction *actionGenerateWBS;
-
-    // ------ Export (testing)
-    KAction *actionExportGantt;
 
     // ------ Settings
     KAction *actionConfigure;

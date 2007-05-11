@@ -10,8 +10,9 @@ include (../kdgantt/CMakeLists.txt)
 
 set( KPLATO_INCLUDES
     ${KOGUIUTILS_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/kdgantt1
-   ## ${CMAKE_BINARY_DIR}/kdgantt
+    ## ${CMAKE_SOURCE_DIR}/kdgantt1
+    ${CMAKE_SOURCE_DIR}/kdgantt
+    ${CMAKE_BINARY_DIR}/kdgantt
 )
 
 add_subdirectory( templates )
@@ -26,6 +27,7 @@ include_directories(${KPLATO_INCLUDES})
 ########### KPlato private library ###############
 
 set(kplatoprivate_LIB_SRCS
+    kptnodeitemmodel.cc
     kptdependencyeditor.cc
     kptusedefforteditor.cc
     kpttaskstatusview.cc
@@ -70,7 +72,6 @@ set(kplatoprivate_LIB_SRCS
     kptganttview.cc
     kptresourcespanel.cc
     kptrelationdialog.cc
-    kptcanvasitem.cc
     kptresourceview.cc
     kptrequestresourcespanel.cc
     kptresourcedialog.cc
@@ -130,9 +131,9 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
 )
 
 kde4_automoc(${kplatoprivate_LIB_SRCS})
-kde4_automoc(${libkdgantt1_SRCS})
+kde4_automoc(${libkdgantt_SRCS})
 
-kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt1_SRCS}) #${libkdgantt_SRCS})
+kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS}) #${libkdgantt_SRCS})
 
 target_link_libraries(kplatoprivate koguiutils)
 

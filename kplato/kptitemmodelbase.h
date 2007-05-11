@@ -258,6 +258,8 @@ public:
 
     void setStretchLastSection( bool );
     
+    void hideColumn( int col ) { m_leftview->hideColumn( col ); m_rightview->hideColumn( col ); }
+    
 signals:
     void contextMenuRequested( QModelIndex, const QPoint& );
     void currentChanged ( const QModelIndex & current, const QModelIndex & previous );

@@ -21,7 +21,6 @@
 
 #include "kptnode.h"
 #include "kptproject.h"
-#include "kptcanvasitem.h"
 
 #include <qdom.h>
 

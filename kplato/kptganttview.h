@@ -27,18 +27,10 @@
 #include <q3ptrlist.h>
 
 class QLayout;
-class Q3ListViewItem;
 class QPoint;
-class Q3ListView;
 class QLineEdit;
 class QSpinBox;
 class QSplitter;
-
-class KDGanttViewItem;
-class KDGanttViewSummaryItem;
-class KDGanttViewTaskItem;
-class KDGanttViewEventItem;
-class KDGanttViewTaskLink;
 
 class KAction;
 class KPrinter;
@@ -69,31 +61,18 @@ public:
     virtual void setZoom( double zoom );
     void show();
     virtual void setProject( Project *project );
-    virtual void draw();
     virtual void draw( Project &project );
-    virtual void drawChanges();
     virtual void drawChanges( Project &project );
-
-    /**
-     * Call draw() or drawChanges() before calling this.
-     */
-    void drawOnPainter( QPainter* painter, const QRect rect );
 
     Node *currentNode() const;
 
     void clear();
-    void print( KPrinter &prts );
-
-    void addTaskLink( KDGanttViewTaskLink *link );
-
-    bool exportGantt( QIODevice* device ); // testing
 
     virtual bool setContext( const Context &context );
     virtual void getContext( Context &context ) const;
 
     void setReadWriteMode( bool on );
     bool isReadWriteMode() const { return m_readWrite; }
-    KDGanttViewItem *currentItem() const { return m_currentItem; }
 
     bool showNoInformation() const { return m_showNoInformation; }
 
@@ -105,8 +84,6 @@ signals:
     void addRelation( Node *par, Node *child, int linkType );
     void itemDoubleClicked();
 
-    void itemRenamed( Node*, const QString& );
-
     /**
      * Requests a specific type of popup menu.
      * Usually a KPlato::View object is connected to this signal.
@@ -114,11 +91,6 @@ signals:
     void requestPopupMenu( const QString& menuname, const QPoint & pos );
 
 public slots:
-    /**
-     * Determines the correct type of popup menu and emits requestPopupMenu()
-     */
-    void popupMenuRequested( KDGanttViewItem * item, const QPoint & pos, int );
-
     void setShowExpected( bool on ) { m_showExpected = on; }
     void setShowOptimistic( bool on ) { m_showOptimistic = on; }
     void setShowPessimistic( bool on ) { m_showPessimistic = on; }
@@ -132,75 +104,12 @@ public slots:
     void setShowNoInformation( bool on ) { m_showNoInformation = on; }
     void setShowAppointments( bool on ) { m_showAppointments = on; }
 
-    /// Redraw current project
-    void slotRedraw();
-    /// Redraw current project if current schedule is sch
-    void slotRedraw( const MainSchedule *sch );
-
 private slots:
-    void currentItemChanged( KDGanttViewItem * );
-    void slotItemDoubleClicked( KDGanttViewItem* );
-    void slotItemRenamed( KDGanttViewItem*, int, const QString& );
-
-    void slotCreateTaskLink( KDGanttViewItem* from, int fc, KDGanttViewItem* to, int tc );
-
-    void slotGvItemClicked( KDGanttViewItem* );
-
-    void slotModifyLink( KDGanttViewTaskLink* link );
-
     void slotScheduleIdChanged( long id );
     
-protected:
-    int linkTypeToRelation( int fc, int tc );
-    void setRenameEnabled( Q3ListViewItem *item, bool on );
-private:
-    KDGanttViewItem *findItem( Node *node );
-    KDGanttViewItem *findItem( Node *node, KDGanttViewItem *item );
-    Node *getNode( KDGanttViewItem *item ) const;
-    bool isDrawn( KDGanttViewItem *item );
-    void setDrawn( KDGanttViewItem *item, bool state );
-    void resetDrawn( KDGanttViewItem *_item );
-    void removeNotDrawn( KDGanttViewItem *_item );
-    void deleteItem( KDGanttViewItem *item );
-    KDGanttViewItem *correctType( KDGanttViewItem *item, Node *node );
-    void correctPosition( KDGanttViewItem *item, Node *node );
-    KDGanttViewItem *correctParent( KDGanttViewItem *item, Node *node );
-
-    void updateChildren( Node *node );
-    void updateNode( Node *node );
-
-    void modifyChildren( Node *node );
-    void modifyNode( Node *node );
-    void modifyProject( KDGanttViewItem *item, Node *node );
-    void modifySummaryTask( KDGanttViewItem *item, Task *task );
-    void modifyTask( KDGanttViewItem *item, Task *task );
-    void modifyMilestone( KDGanttViewItem *item, Task *task );
-
-    KDGanttViewItem *addNode( KDGanttViewItem *parentItem, Node *node, KDGanttViewItem *after = 0 );
-
-    KDGanttViewItem *addProject( KDGanttViewItem *parentItem, Node *node, KDGanttViewItem *after = 0 );
-    KDGanttViewItem *addSubProject( KDGanttViewItem *parentItem, Node *node, KDGanttViewItem *after = 0 );
-    KDGanttViewItem *addSummaryTask( KDGanttViewItem *parentItem, Task *task, KDGanttViewItem *after = 0 );
-    KDGanttViewItem *addTask( KDGanttViewItem *parentItem, Task *task, KDGanttViewItem *after = 0 );
-    KDGanttViewItem *addMilestone( KDGanttViewItem *parentItem, Task *task, KDGanttViewItem *after = 0 );
-
-    void drawChildren( KDGanttViewItem *item, Node &node );
-    void drawProject( KDGanttViewItem *parentItem, Node *node );
-    void drawSubProject( KDGanttViewItem *parentItem, Node *node );
-    void drawSummaryTask( KDGanttViewItem *parentItem, Task *task );
-    void drawTask( KDGanttViewItem *parentItem, Task *task );
-    void drawMilestone( KDGanttViewItem *parentItem, Task *task );
-
-    void drawRelations();
-    void drawRelations( KDGanttViewItem *item );
-    void drawChildRelations( KDGanttViewItem *item );
-
-    void getContextClosedNodes( Context::Ganttview &context, KDGanttViewItem *item ) const;
-
 private:
     bool m_readWrite;
     int m_defaultFontSize;
-    KDGanttViewItem *m_currentItem;
     QSplitter *m_splitter;
     MyKDGanttView *m_gantt;
     TaskAppointmentsView *m_taskView;
@@ -216,8 +125,6 @@ private:
     bool m_showCriticalPath;
     bool m_showNoInformation;
     bool m_showAppointments;
-    bool m_firstTime;
-    Q3PtrList<KDGanttViewTaskLink> m_taskLinks;
     Project *m_project;
     long m_id;
 };

@@ -27,7 +27,7 @@
 #include "kptresource.h"
 #include "kptcontext.h"
 #include "kptganttview.h"
-#include "KDGanttViewTaskLink.h"
+//#include "KDGanttViewTaskLink.h"
 
 #include <KoZoomHandler.h>
 #include <KoStore.h>
@@ -287,8 +287,8 @@ void Part::slotDocumentRestored()
 
 void Part::paintContent( QPainter &painter, const QRect &rect)
 {
-    kDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
-    if ( isEmbedded() && m_embeddedGanttView && m_project ) {
+//    kDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
+/*    if ( isEmbedded() && m_embeddedGanttView && m_project ) {
         if ( m_embeddedContext ) {
             int ganttsize = m_embeddedContext->ganttview.ganttviewsize;
             int tasksize = m_embeddedContext->ganttview.taskviewsize;
@@ -310,7 +310,7 @@ void Part::paintContent( QPainter &painter, const QRect &rect)
         m_embeddedGanttView->clear();
         m_embeddedGanttView->draw( *m_project );
         m_embeddedGanttView->drawOnPainter( &painter, rect );
-    }
+    }*/
     // Need to draw only the document rectangle described in the parameter rect.
     //     int left = rect.left() / 20;
     //     int right = rect.right() / 20 + 1;
