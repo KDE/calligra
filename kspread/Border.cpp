@@ -1227,8 +1227,10 @@ void HBorder::paintSizeIndicator( int mouseX )
     m_rubberband->move( m_iResizePos, 0 );
 
     QString tmpSize;
-    if ( m_iResizePos != x )
-        tmpSize = i18n("Width: %1 %2", KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pView->zoomHandler()->unzoomItX( (sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x ), m_pView->doc()->unit() )), m_pView->doc()->unitName() );
+    double ww = (sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x;
+    double wu = KoUnit::toUserValue( ww , m_pView->doc()->unit() );
+    if ( wu > 0.01 )
+        tmpSize = i18n("Width: %1 %2", KGlobal::locale()->formatNumber( wu ), m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Column" );
 
