@@ -498,8 +498,10 @@ void VBorder::paintSizeIndicator( int mouseY )
     m_rubberband->move( 0, m_iResizePos );
 
     QString tmpSize;
-    if ( m_iResizePos != y )
-        tmpSize = i18n("Height: %1 %2", KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pView->zoomHandler()->unzoomItY( m_iResizePos - y ), m_pView->doc()->unit() ) ) , m_pView->doc()->unitName() );
+    double hh = m_pView->zoomHandler()->unzoomItY( m_iResizePos - y );
+    double hu = KoUnit::toUserValue( hh , m_pView->doc()->unit() );
+    if ( hu > 0.01 )
+        tmpSize = i18n("Height: %1 %2", KGlobal::locale()->formatNumber( hu ) , m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Row" );
 
