@@ -43,11 +43,13 @@
 
 // Qt
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QTimer>
 #include <QLabel>
 #include <QScrollBar>
 #include <QPainter>
 #include <QRubberBand>
+#include <QStyle>
 #include <QTextLayout>
 #include <QToolTip>
 
@@ -213,6 +215,8 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
 void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
     m_pView->disableAutoScroll();
+    if (m_lSize)
+      m_lSize->hide();
 //     if ( m_scrollTimer->isActive() )
 //         m_scrollTimer->stop();
 
@@ -501,24 +505,23 @@ void VBorder::paintSizeIndicator( int mouseY )
 
     if ( !m_lSize )
     {
-        m_lSize = new QLabel( m_pCanvas );
+        int screenNo = QApplication::desktop()->screenNumber( this );
+        m_lSize = new QLabel( QApplication::desktop()->screen( screenNo ) , Qt::ToolTip );
         m_lSize->setAlignment( Qt::AlignVCenter );
+        m_lSize->setAutoFillBackground( true );
         m_lSize->setPalette( QToolTip::palette() );
-        m_lSize->setText( tmpSize );
-        if ( sheet->layoutDirection() == Qt::RightToLeft )
-            m_lSize->move( m_pCanvas->width() - m_lSize->width() - 3, (int)y + 3 );
-        else
-            m_lSize->move( 3, (int)y + 3 );
-        m_lSize->show();
+        m_lSize->setMargin( 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize) );
+        m_lSize->setFrameShape( QFrame::Box );
+        m_lSize->setIndent(1);
     }
-    else
-    {
-        m_lSize->setText( tmpSize );
-        if ( sheet->layoutDirection() == Qt::RightToLeft )
-            m_lSize->move( m_pCanvas->width() - m_lSize->width() - 3, (int)y + 3 );
-        else
-            m_lSize->move( 3, (int)y + 3 );
-    }
+
+    m_lSize->setText( tmpSize );
+    m_lSize->adjustSize();
+    QPoint pos = ( sheet->layoutDirection() == Qt::RightToLeft ) ? QPoint(m_pCanvas->width() - m_lSize->width() - 3, (int)y + 3 ):
+        QPoint( 3, (int)y + 3 );
+    pos -= QPoint( 0, m_lSize->height() );
+    m_lSize->move( m_pCanvas->mapToGlobal(pos).x(), m_pCanvas->mapToGlobal(pos).y()  );
+    m_lSize->show();
 }
 
 void VBorder::updateRows( int from, int to )
@@ -852,6 +855,8 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
 void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
     m_pView->disableAutoScroll();
+    if (m_lSize)
+      m_lSize->hide();
 //     if ( m_scrollTimer->isActive() )
 //         m_scrollTimer->stop();
 
@@ -1229,24 +1234,23 @@ void HBorder::paintSizeIndicator( int mouseX )
 
     if ( !m_lSize )
     {
-        m_lSize = new QLabel( m_pCanvas );
+        int screenNo = QApplication::desktop()->screenNumber( this );
+        m_lSize = new QLabel( QApplication::desktop()->screen( screenNo ) , Qt::ToolTip );
         m_lSize->setAlignment( Qt::AlignVCenter );
+        m_lSize->setAutoFillBackground( true );
         m_lSize->setPalette( QToolTip::palette() );
-        m_lSize->setText( tmpSize );
-        if ( sheet->layoutDirection() == Qt::RightToLeft )
-            m_lSize->move( (int) x - m_lSize->width() - 3, 3 );
-        else
-            m_lSize->move( (int) x + 3, 3 );
-        m_lSize->show();
+        m_lSize->setMargin( 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize) );
+        m_lSize->setFrameShape( QFrame::Box );
+        m_lSize->setIndent(1);
     }
-    else
-    {
-        m_lSize->setText( tmpSize );
-        if ( sheet->layoutDirection() == Qt::RightToLeft )
-            m_lSize->move( (int) x - m_lSize->width() - 3, 3 );
-        else
-            m_lSize->move( (int) x + 3, 3 );
-    }
+
+    m_lSize->setText( tmpSize );
+    m_lSize->adjustSize();
+    QPoint pos = ( sheet->layoutDirection() == Qt::RightToLeft ) ? QPoint((int) x - 3 - m_lSize->width(), 3 ):
+        QPoint( (int) x + 3, 3 );
+    pos -= QPoint( 0, m_lSize->height() );
+    m_lSize->move( m_pCanvas->mapToGlobal(pos).x(), mapToGlobal(pos).y()  );
+    m_lSize->show();
 }
 
 void HBorder::updateColumns( int from, int to )
