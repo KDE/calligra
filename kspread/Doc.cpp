@@ -2158,8 +2158,9 @@ void Doc::addView( KoView *_view )
 
 void Doc::addDamage( Damage* damage )
 {
-    if ( isLoading() )
-        return;
+    // Do not create a new Damage, if we are in loading process. Check for it before
+    // calling this function. This prevents unnecessary memory allocations (new).
+    Q_ASSERT( !isLoading() );
     Q_CHECK_PTR( damage );
 
     if ( damage->type() == Damage::Cell )

@@ -199,8 +199,11 @@ void CellStorage::setFormula( int column, int row, const Formula& formula )
     // formula changed?
     if ( formula != old )
     {
-        // trigger an update of the dependencies and a recalculation
-        d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), CellDamage::Formula | CellDamage::Value ) );
+        if ( !d->sheet->doc()->isLoading() )
+        {
+            // trigger an update of the dependencies and a recalculation
+            d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), CellDamage::Formula | CellDamage::Value ) );
+        }
         // recording undo?
         if ( d->undoData )
         {
@@ -314,13 +317,16 @@ void CellStorage::setValue( int column, int row, const Value& value )
     // value changed?
     if ( value != old )
     {
-        // Always trigger a repainting.
-        CellDamage::Changes changes = CellDamage::Appearance;
-        // Trigger a recalculation of the consuming cells, only if we are not
-        // already in a recalculation process.
-        if ( !d->sheet->doc()->recalcManager()->isActive() )
-            changes |= CellDamage::Value;
-        d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), changes ) );
+        if ( !d->sheet->doc()->isLoading() )
+        {
+            // Always trigger a repainting.
+            CellDamage::Changes changes = CellDamage::Appearance;
+            // Trigger a recalculation of the consuming cells, only if we are not
+            // already in a recalculation process.
+            if ( !d->sheet->doc()->recalcManager()->isActive() )
+                changes |= CellDamage::Value;
+            d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), changes ) );
+        }
         // recording undo?
         if ( d->undoData )
             d->undoData->values << qMakePair( QPoint( column, row ), old );

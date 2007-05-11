@@ -31,7 +31,7 @@ DefaultToolFactory::DefaultToolFactory( QObject* parent )
     setToolTip( i18n( "KSpread default tool" ) );
     setIcon( "kspread" );
     setToolType( mainToolType() );
-    setPriority( 1 );
+    setPriority( 0 );
     setActivationShapeId( "flake/always" );
 }
 
