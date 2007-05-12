@@ -78,7 +78,11 @@ void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
     if( m_formulaElement->childElements().isEmpty() )  // if the formula is empty
 	return;                                        // do not save it
     
-    m_formulaElement->writeMathML( writer, oasisFormat );
+
+    if( oasisFormat )
+    { } // TODO write the correct namespace that is inherited to all children
+
+//    m_formulaElement->writeMathML( writer );
 }
 
 void KoFormulaShape::importFormula( const KUrl& url )
