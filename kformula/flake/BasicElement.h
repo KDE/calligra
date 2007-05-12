@@ -206,10 +206,10 @@ public:
     virtual QVariant attributesDefaultValue( const QString& attribute ) const;
     
     /// Read the element from MathML
-    virtual void readMathML( const KoXmlElement& element );
+    void readMathML( const KoXmlElement& element );
 
     /// Save the element to MathML 
-    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
 
     /// @returns MathML element tag name
     virtual QString elementName() const { return "mrow"; }
@@ -218,10 +218,13 @@ protected:
     /// Read all attributes loaded and add them to the m_attributes map 
     void readMathMLAttributes( const KoXmlElement& element );
 
+    /// Read all content from the node - reimplemented by child elements
+    virtual int readMathMLContent( KoXmlNode& node );
+
     /// Write all attributes of m_attributes to @p writer
     void writeMathMLAttributes( KoXmlWriter* writer ) const;
 
-    virtual int readMathMLContent( KoXmlNode& node );
+    /// Write all content to the KoXmlWriter - reimplemented by the child elements
     virtual void writeMathMLContent( KoXmlWriter* , bool ) const {};
 
 private:
