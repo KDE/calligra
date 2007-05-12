@@ -987,6 +987,13 @@ if(parent.localName()!="span") {
             QString text = node.toText().data();
             kDebug() << "  <text> localName=" << localName << " parent.localName="<<parent.localName()<<" text=" << text << endl;
 
+//TODO this hack set's back the cursor to the default format. That's needed since we the KoCharacterStyle
+//does only apply new styles while prev/not set styles are not touched at all. We need a more clean
+//solution for this.
+QTextCharFormat cf;
+//cursor.setBlockCharFormat(cf);
+cursor.setCharFormat(cf);
+
             int prevpos = cursor.position();
             //context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
             context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
