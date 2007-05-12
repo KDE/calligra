@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 2007 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,43 +17,41 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCPAGELAYOUT__
-#define __KCPAGELAYOUT__
 
-#include <kdialog.h>
+#ifndef KCHART_GLOBAL_H
+#define KCHART_GLOBAL_H
 
-class QLineEdit;
 
 namespace KChart
 {
 
-class KChartView;
-//class KChartParams;
+// Chart types for OpenDocument
 
-class KCPageLayout : public KDialog
-{
-    Q_OBJECT
-public:
-    KCPageLayout( KChartPart* _part, QWidget* parent);
-public slots:
-    void slotOk();
-    void slotApply();
-    void slotReset();
-protected:
-    void init();
-private:
-    QLineEdit *leftBorder;
-    QLineEdit *rightBorder;
-    QLineEdit *topBorder;
-    QLineEdit *bottomBorder;
-    KChartPart* part;
-    int oldGlobalLeadingRight;
-    int oldGlobalLeadingLeft;
-    int oldGlobalLeadingTop;
-    int oldGlobalLeadingBottom;
-signals:
-    void dataChanged();
-};
+typedef enum {
+    BarChartType,
+    LineChartType,
+    AreaChartType,
+    PieChartType,
+    HiLoChartType,
+    RingChartType,
+    PolarChartType,
+    BoxWhiskerChartType
+} OdfChartType;
+
+
+// Chart subtypes
+typedef enum {
+    BarNormalSubtype,
+    BarStackedSubtype,
+    BarPercentSubtype,
+} OdfChartSubtype;
+
+// Data direction
+typedef  enum {
+    DataRowsDirection    = 0,
+    DataColumnsDirection = 1
+} DataDirection;
+
 
 }  //KChart namespace
 

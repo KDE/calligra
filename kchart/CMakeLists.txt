@@ -9,6 +9,7 @@ add_subdirectory( templates )
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/src
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/examples/tools
 	${CMAKE_CURRENT_SOURCE_DIR}/dialogs
 	${CMAKE_SOURCE_DIR}/interfaces 
@@ -21,32 +22,32 @@ set(kchartcommon_LIB_SRCS
    kchart_factory.cc 
    kchart_part.cc 
    kchart_view.cc 
-   kchart_params.cc 
+   #kchart_params.cc 
    KChartViewAdaptor.cc 
-   KChartParamsAdaptor.cc 
+   #KChartParamsAdaptor.cc 
    kchartDataEditor.cc 
 
-   dialogs/KCConfigDialog.cc 
-   dialogs/KCConfigDataPage.cc 
-   dialogs/KCConfigSubtypePage.cc 
-   dialogs/KCConfigSubtypeBarPage.cc 
-   dialogs/KCConfigSubtypeLinePage.cc
-   dialogs/KCConfigSubtypePiePage.cc
-   dialogs/KCConfigSubtypePolarPage.cc
-   dialogs/KCConfigHeaderFooterPage.cc 
-   dialogs/KCConfigLegendPage.cc 
-   dialogs/KCConfigAxesPage.cc 
-   dialogs/KCConfigColorPage.cc 
-   dialogs/KCConfigFontPage.cc 
-   dialogs/KCConfigBackgroundPage.cc 
-   dialogs/KCPageLayout.cc 
-   dialogs/KCPrinterDialog.cc
-   dialogs/KCWizard.cc 
-   dialogs/KCWizardDataPage.cc
-   dialogs/KCWizardCharttype.cc
-   dialogs/KCWizardSubtypePage.cc
-   dialogs/KCWizardLabelsLegendPage.cc
-   dialogs/KCWizardAxesPage.cc
+   #dialogs/KCConfigDialog.cc 
+   #dialogs/KCConfigDataPage.cc 
+   #dialogs/KCConfigSubtypePage.cc 
+   #dialogs/KCConfigSubtypeBarPage.cc 
+   #dialogs/KCConfigSubtypeLinePage.cc
+   #dialogs/KCConfigSubtypePiePage.cc
+   #dialogs/KCConfigSubtypePolarPage.cc
+   #dialogs/KCConfigHeaderFooterPage.cc 
+   #dialogs/KCConfigLegendPage.cc 
+   #dialogs/KCConfigAxesPage.cc 
+   #dialogs/KCConfigColorPage.cc 
+   #dialogs/KCConfigFontPage.cc 
+   #dialogs/KCConfigBackgroundPage.cc 
+   #dialogs/KCPageLayout.cc 
+   #dialogs/KCPrinterDialog.cc
+   #dialogs/KCWizard.cc 
+   #dialogs/KCWizardDataPage.cc
+   #dialogs/KCWizardCharttype.cc
+   #dialogs/KCWizardSubtypePage.cc
+   #dialogs/KCWizardLabelsLegendPage.cc
+   #dialogs/KCWizardAxesPage.cc
 
    kdchart/examples/tools/TableModel.cpp
 )

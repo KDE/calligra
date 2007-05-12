@@ -12,13 +12,19 @@
 using std::cout;
 using std::cerr;
 
-#include "KDChart.h"
-#include "KDChartTable.h"
-
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
+#if 0
 #include "kchart_params.h"
+#include "KDChart.h"
+#include "KDChartTable.h"
+#else
+#include "TableModel.h"
+#include "KDChartChart"
+#include "KDChartAbstractDiagram" // Base class for the diagrams
+#include "KDChartAbstractCoordinatePlane"
+#endif
 #include "dialogs/KCWizard.h"
 
 #include <KoDom.h>
@@ -57,7 +63,12 @@ KChartPart::KChartPart( QWidget *parentWidget,
 			QObject* parent,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, parent, singleViewMode ),
+#if 0
     m_params( 0 ),
+#else
+    m_chart( 0 ),
+    m_currentData( 0 ),
+#endif
     m_rowLabels(), m_colLabels(),
     m_parentWidget( parentWidget )
 {
@@ -68,6 +79,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
 
     // Init some members that need it.
     {
+#if 0
 	// Create the chart parameters and let the default be a bar chart
 	// with 3D looks.
 	m_params = new KChartParams( this );
@@ -83,13 +95,26 @@ KChartPart::KChartPart( QWidget *parentWidget,
 
 	// Handle data in columns by default
 	m_params->setDataDirection( KChartParams::DataColumns );
+#else
+        m_type    = BarChartType;
+        m_subtype = BarNormalSubtype;
+
+        m_chart       = new KDChart::Chart();
+        // m_currentData = new TableModel();
+
+	// Handle data in columns by default
+        m_dataDirection   = DataRowsDirection;
+        m_firstRowAsLabel = false;
+        m_firstColAsLabel = false;
+#endif
     }
 
     (void)new WizardExt( this );
     m_bCanChangeValue = true;
 
     // Display parameters
-    m_displayData = m_currentData;
+    // FIXME
+    //m_displayData = m_currentData;
 
     // Set the size to minimal.
     initEmpty();
@@ -99,7 +124,12 @@ KChartPart::KChartPart( QWidget *parentWidget,
 KChartPart::~KChartPart()
 {
     //kDebug(35001) << "Part is going to be destroyed now!!!" << endl;
+#if 0
     delete m_params;
+#else
+    delete m_currentData;
+    delete m_chart;
+#endif
 }
 
 
@@ -122,17 +152,27 @@ void KChartPart::initNullChart()
 
     // Empty data.  Note, we don't use (0,0) or (1,1) for the size
     // here, because otherwise KDChart won't draw anything
+#if 0
     m_currentData.expand(2, 2);
     m_params->setFirstRowAsLabel(false);
     m_params->setFirstColAsLabel(false);
+#else
+    if ( m_currentData )
+        delete m_currentData;
+    m_currentData = new TableModel();
 
+    m_currentData->setDataHasVerticalHeaders( false );
+    m_currentData->setDataHasHorizontalHeaders( false );
+#endif
     // Fill column and row labels.
     m_colLabels << QString("");
     m_rowLabels << QString("");
 
     setChartDefaults();
 
+#if 0
     m_params->setDrawSolidExcessArrows(true);
+#endif
 }
 
 
@@ -144,30 +184,49 @@ void KChartPart::generateBarChartTemplate()
     kDebug()<<"KChartPart::initTestChart()\n";
 
     // Fill cells with data if there is none.
-    if (m_currentData.rows() == 0) {
+    if ( m_currentData->rowCount() == 0 ) {
         //kDebug(35001) << "Initialize with some data!!!" << endl;
+#if 0
         m_currentData.expand( 4, 4 );
         m_currentData.setUsedRows( 4 );
         m_currentData.setUsedCols( 4 );
+#endif
         for (row = 0; row < 4; row++) {
+            m_currentData->insertRow( row );
+
             for (col = 0; col < 4; col++) {
-                m_currentData.setCell(row, col,
-				      static_cast <double> (row + col));
+                // Only need to insert a column 
+                if ( row == 0 )
+                    m_currentData->insertColumn( col );
+
+                QModelIndex  index = m_currentData->index( row, col, QModelIndex() );
+                m_currentData->setData( index, static_cast <double>(row + col) ); 
 
 		// Fill column label, but only on the first iteration.
 		if (row == 0) {
+#if 0
 		    m_colLabels << i18n("Column %1",col + 1);
+#else
+                    m_currentData->setHeaderData( col, Qt::Horizontal,
+                                                  i18n("Column %1", col + 1) );
+#endif
 		}
             }
 
 	    // Fill row label.
+#if 0
 	    m_rowLabels << i18n("Row %1",row + 1);
+#else
+            m_currentData->setHeaderData( row, Qt::Vertical,
+                                          i18n("Row %1", row + 1) );
+#endif
 	}
     }
 
     setChartDefaults();
+
     // FIXME: Should this go into setChartDefaults()?
-    m_params->setDrawSolidExcessArrows(true);
+    //m_params->setDrawSolidExcessArrows(true);
 }
 
 
@@ -183,6 +242,7 @@ KoView* KChartPart::createViewInstance( QWidget* parent )
 
 void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 {
+#if 0
     int  numDatasets;
 
     // If params is 0, initDoc() has not been called.
@@ -211,11 +271,10 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
     xAxisParms.setAxisLabelStringLists( &longLabels, &shortLabels );
     m_params->setAxisParams(KDChartAxisParams::AxisPosBottom, xAxisParms);
 
-
     // Handle some types or subtypes of charts specially, notably:
     //  - Bar charts with lines in them
 
-    if ( m_params->chartType() == KChartParams::Bar) {
+    if ( chartType() == BarChartType ) {
 	if ( m_params->barNumLines() > 0 ) {
 
 	    // If this is a bar chart and the user wants a few lines in
@@ -248,9 +307,23 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 
     // We only need to draw the document rectangle "rect".
     KDChart::paint( &painter, m_params, &m_displayData, 0, &rect );
+
+#else
+    // Ok, we have now created a data set for display, and params with
+    // suitable legends and axis labels.  Now start the real painting.
+
+    // Make the chart use our model.
+    m_chart->coordinatePlane()->diagram()->setModel( m_currentData );
+
+   // ## TODO: support zooming
+
+    // We only need to draw the document rectangle "rect".
+    m_chart->paint( &painter, rect );
+#endif
 }
 
 
+#if 0
 // Create the data table m_displayData from m_currentData, taking into
 // account if the first row or line contains headers.  The chart type
 // HiLo demands special handling.
@@ -274,9 +347,9 @@ int  KChartPart::createDisplayData()
     int  numDatasets = 0;
 
     if ( !canChangeValue() ) {
-	if ( m_params->firstRowAsLabel() )
+	if ( firstRowAsLabel() )
 	    rowOffset++;
-	if ( m_params->firstColAsLabel() )
+	if ( firstColAsLabel() )
 	    colOffset++;
     }
 
@@ -286,7 +359,7 @@ int  KChartPart::createDisplayData()
     QVariant  value1;
     QVariant  value2;
     int       prop;
-    if (m_params->dataDirection() == KChartParams::DataRows) {
+    if ( dataDirection() == DataRows ) {
 	// Data is handled in rows.  This is the way KDChart works also.
 
 	numDatasets = m_currentData.usedRows() - rowOffset;
@@ -334,7 +407,7 @@ int  KChartPart::createDisplayData()
     //
     // Here we don't need to transpose, since we can start from the
     // newly generated displayData.
-    if (m_params->chartType() == KChartParams::HiLo) {
+    if ( chartType() == HiLo ) {
 	KDChartTableData  tmpData = m_displayData;
 
 	// Calculate the min, max, open and close values for each row.
@@ -365,8 +438,10 @@ int  KChartPart::createDisplayData()
 
     return numDatasets;
 }
+#endif
 
 
+#if 0
 void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
 					QStringList  &shortLabels )
 {
@@ -379,7 +454,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
     const uint rowLabelCount    = m_rowLabels.count();
 
     // Handle HiLo charts separately.
-    if (m_params->chartType() == KChartParams::HiLo) {
+    if ( chartType() == HiLo ) {
 
       // FIXME: In a HiLo chart, the Legend should be the same as the
       //        labels on the X Axis.  Should we disable one of them?
@@ -387,7 +462,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
 	// Set the correct X axis labels and legend.
 	longLabels.clear();
 	shortLabels.clear();
-	if (m_params->dataDirection() == KChartParams::DataRows) {
+	if ( dataDirection() == DataRows ) {
 
 	    // If data are in rows, then the X axis labels should be
 	    // taken from the row headers.
@@ -411,7 +486,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
 	    }
 	}
     }
-    else if (m_params->dataDirection() == KChartParams::DataRows) {
+    else if ( dataDirection() == DataRows ) {
 	// Data is handled in rows.  This is the way KDChart works also.
 
 	// Set X axis labels from column headers.
@@ -450,6 +525,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
         }
     }
 }
+#endif
 
 
 
@@ -461,18 +537,22 @@ void KChartPart::analyzeHeaders()
 #if 0
     analyzeHeaders( m_currentData );
 #else
-    doSetData( m_currentData,
-	       m_params->firstRowAsLabel(), m_params->firstColAsLabel());
+    doSetData( m_currentData, firstRowAsLabel(), firstColAsLabel() );
 #endif
 }
-
 
 // This function sets the data from an external source.  It is called,
 // for instance, when the chart is initialized from a spreadsheet in
 // KSpread.
 //
+#if 0
 void KChartPart::analyzeHeaders( const KDChartTableData& data )
+#else
+void KChartPart::analyzeHeaders( const TableModel &data )
+#endif
 {
+    Q_UNUSED( data );
+#if 0
     // FIXME(khz): replace this when automatic string detection works in KDChart
     // Does the top/left cell contain a string?
     bool isStringTopLeft = (data.cellVal( 0, 0 ).type() == QVariant::String);
@@ -519,18 +599,22 @@ void KChartPart::analyzeHeaders( const KDChartTableData& data )
 	 || isStringFirstCol && isStringFirstRow )
         hasRowHeader = true;
 
-    m_params->setFirstRowAsLabel( hasRowHeader );
-    m_params->setFirstColAsLabel( hasColHeader );
+    setFirstRowAsLabel( hasRowHeader );
+    setFirstColAsLabel( hasColHeader );
 
     doSetData(data, hasRowHeader, hasColHeader);
+#endif
 }
 
 
-
-void KChartPart::doSetData( const KDChartTableData&  data,
+void KChartPart::doSetData( const TableModel &data,
 			    bool  firstRowHeader,
 			    bool  firstColHeader )
 {
+    Q_UNUSED( data );
+    Q_UNUSED( firstRowHeader );
+    Q_UNUSED( firstColHeader );
+#if 0
     uint  rowStart = 0;
     uint  colStart = 0;
     uint  col;
@@ -579,25 +663,48 @@ void KChartPart::doSetData( const KDChartTableData&  data,
     //setChartDefaults();
 
     emit docChanged();
+#endif
 }
 
 
+// ----------------------------------------------------------------
+//                    The public interface
+
 void KChartPart::resizeData( int rows, int cols )
 {
+    Q_UNUSED( rows );
+    Q_UNUSED( cols );
+#if 0
     m_currentData.expand( rows, cols );
     m_currentData.setUsedRows( rows );
     m_currentData.setUsedCols( cols );
+#else
+#warning FIXME
+#endif
 }
 
 
 void KChartPart::setCellData( int row, int column, const QVariant &val)
 {
+    Q_UNUSED( row );
+    Q_UNUSED( column );
+    Q_UNUSED( val );
+#if 0
     m_currentData.setCell( row, column, val );
+#else
+#warning FIXME
+#endif
 }
+
+
+// ----------------------------------------------------------------
 
 
 bool KChartPart::showWizard( QString &area )
 {
+    // FIXME
+    Q_UNUSED( area );
+#if 0
     KCWizard  *wizard = new KCWizard( this, m_parentWidget, "wizard" );
 
     connect( wizard, SIGNAL(finished()), this, SLOT(slotModified()) );
@@ -608,6 +715,8 @@ bool KChartPart::showWizard( QString &area )
 
     delete wizard;
     return ret;
+#endif
+    return true;
 }
 
 
@@ -624,6 +733,7 @@ void KChartPart::initLabelAndLegend()
 
 void KChartPart::setChartDefaults()
 {
+#if 0
   //
   // Settings for the Y axis.
   //
@@ -655,6 +765,7 @@ void KChartPart::setChartDefaults()
   KDFrame frame;
   frame.setBackground( QBrush( QColor( 230, 222, 222 ) ) );
   m_params->setFrame( KDChartEnums::AreaInnermost, frame, 0, 0, 0, 0 );
+#endif
 }
 
 
@@ -669,6 +780,8 @@ void KChartPart::setChartDefaults()
 
 void KChartPart::loadConfig( KConfig *config )
 {
+    Q_UNUSED( config );
+#if 0
     KConfigGroup conf = config->group("ChartParameters");
 
     // TODO: the fonts
@@ -755,7 +868,7 @@ void KChartPart::loadConfig( KConfig *config )
     // 							 percent_labels);
     //   label_dist = conf.readEntry("label_dist", label_dist);
     //   label_line = conf.readEntry("label_line", label_line);
-    m_params->setChartType( (KChartParams::ChartType)conf.readEntry( "type", int(m_params->chartType() )) );
+    setChartType( (ChartType)conf.readEntry( "type", int(chartType() )) );
     //   other_threshold = conf.readEntry("other_threshold", other_threshold);
 
     //   backgroundPixmapName = conf.readPathEntry( "backgroundPixmapName" );
@@ -767,19 +880,25 @@ void KChartPart::loadConfig( KConfig *config )
     //   backgroundPixmapScaled = conf.readEntry( "backgroundPixmapScaled", true );
     //   backgroundPixmapCentered = conf.readEntry( "backgroundPixmapCentered", true );
     //   backgroundPixmapIntensity = conf.readEntry( "backgroundPixmapIntensity", 0.25 );
+#endif
 }
 
 
 void KChartPart::defaultConfig(  )
 {
+    //FIXME
+#if 0
     delete m_params;
     m_params = new KChartParams( this );
+#endif
     setChartDefaults();
 }
 
 
 void KChartPart::saveConfig( KConfig *config )
 {
+    Q_UNUSED( config );
+#if 0
     KConfigGroup conf = config->group("ChartParameters");
 
     // PENDING(kalle) Put some of these back in
@@ -861,6 +980,7 @@ void KChartPart::saveConfig( KConfig *config )
     //   conf.writeEntry( "backgroundPixmapCentered", backgroundPixmapCentered );
     //   conf.writeEntry( "backgroundPixmapIntensity", backgroundPixmapIntensity );
     conf.writeEntry( "lineMarker", (int) m_params->lineMarker());
+#endif
 }
 
 
@@ -873,6 +993,10 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,
 			    const KoXmlDocument& /*settings*/,
 			    KoStore            *store )
 {
+    Q_UNUSED( doc );
+    Q_UNUSED( oasisStyles );
+    Q_UNUSED( store );
+#if 0
     kDebug(35001) << "kchart loadOasis called" << endl;
 
     // Set some sensible defaults.
@@ -950,12 +1074,15 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,
             return false; // TODO setErrorMessage
     }
 
+#endif
     return true;
 }
 
 
 bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
 {
+    Q_UNUSED( tableElem );
+#if 0
     int          numberHeaderColumns = 0;
     KoXmlElement  tableHeaderColumns = KoDom::namedItemNS( tableElem,
 							  KoXmlNS::table,
@@ -1064,13 +1191,16 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
             ++row;
         }
     }
-
+#endif
     return true;
 }
 
 
 bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+    Q_UNUSED( store );
+    Q_UNUSED( manifestWriter );
+#if 0
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     KoOasisStore oasisStore( store );
 
@@ -1116,6 +1246,7 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
 #endif
 
+#endif
     return true;
 }
 
@@ -1123,7 +1254,10 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
 				KoGenStyles& mainStyles ) const
 {
+    Q_UNUSED( bodyWriter );
+
     Q_UNUSED( mainStyles );
+#if 0
 
     const int cols = m_currentData.usedCols()
                      ? qMin(m_currentData.usedCols(), m_currentData.cols())
@@ -1241,16 +1375,21 @@ void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
 
     bodyWriter->endElement(); // table:table-rows
     bodyWriter->endElement(); // table:table
+#endif
 }
 
 void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles ) const
 {
+    Q_UNUSED( contentWriter );
+    Q_UNUSED( mainStyles );
+#if 0
     Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:chart-properties" );
     }
 
+#endif
 }
 
 // ----------------------------------------------------------------
@@ -1259,6 +1398,7 @@ void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& 
 
 QDomDocument KChartPart::saveXML()
 {
+#if 0
     QDomElement  tmpElem;
 
     //kDebug(35001) << "kchart saveXML called" << endl;
@@ -1345,11 +1485,16 @@ QDomDocument KChartPart::saveXML()
     }
 
     return doc;
+#endif
+    return QDomDocument();
 }
 
 
 bool KChartPart::loadXML( QIODevice*, const KoXmlDocument& doc )
 {
+    Q_UNUSED( doc );
+
+#if 0
     kDebug(35001) << "kchart loadXML called" << endl;
 
     // First try to load the KDChart parameters.
@@ -1391,9 +1536,12 @@ bool KChartPart::loadXML( QIODevice*, const KoXmlDocument& doc )
     m_params->setDrawSolidExcessArrows(true);
 
     return result;
+#endif
+    return true;
 }
 
 
+#if 0
 // Load the auxiliary data.
 //
 // Currently, that means the data direction.
@@ -1499,10 +1647,11 @@ bool KChartPart::loadAuxiliary( const KoXmlDocument& doc )
 
     return true;
 }
+#endif
 
 
-bool KChartPart::loadData( const KoXmlDocument& doc,
-			   KDChartTableData& m_currentData )
+#if 0
+bool KChartPart::loadData( const KoXmlDocument& doc )
 {
     kDebug(35001) << "kchart loadData called" << endl;
 
@@ -1588,14 +1737,17 @@ bool KChartPart::loadData( const KoXmlDocument& doc,
     m_params->missing=tmpMissing;
     m_params->explode=tmpExp;
     */
+
     return true;
 }
+#endif
 
 
 // ----------------------------------------------------------------
 //         Save and Load real old KChart file format
 
 
+#if 0
 bool KChartPart::loadOldXML( const KoXmlDocument& doc )
 {
     kDebug(35001) << "kchart loadOldXML called" << endl;
@@ -1696,16 +1848,16 @@ bool KChartPart::loadOldXML( const KoXmlDocument& doc )
         switch(type)
         {
         case 1:
-            m_params->setChartType(KChartParams::Line);
+            setChartType( Line );
             break;
         case 2:
-            m_params->setChartType(KChartParams::Area);
+            setChartType( Area );
             break;
         case 3:
-            m_params->setChartType(KChartParams::Bar);
+            setChartType( Bar );
             break;
         case 4:
-            m_params->setChartType(KChartParams::HiLo);
+            setChartType( HiLo );
             break;
         case 5:
         case 6:
@@ -1717,35 +1869,35 @@ bool KChartPart::loadOldXML( const KoXmlDocument& doc )
                    KCHARTTYPE_COMBO_HLC_AREA,
             */
             /* line by default*/
-            m_params->setChartType(KChartParams::Line);
+            setChartType( Line );
             break;
         case 9:
-            m_params->setChartType(KChartParams::HiLo);
+            setChartType( HiLo );
             break;
         case 10:
-            m_params->setChartType(KChartParams::Bar);
+            setChartType( Bar );
             break;
         case 11:
-            m_params->setChartType(KChartParams::Area);
+            hartType( Area );
             break;
         case 12:
-            m_params->setChartType(KChartParams::Bar);
+            setChartType( Bar );
             break;
         case 13:
-            m_params->setChartType(KChartParams::Area);
+            setChartType( Area );
             break;
         case 14:
-            m_params->setChartType(KChartParams::Bar);
+            setChartType( Bar );
             break;
         case 15:
-            m_params->setChartType(KChartParams::Area);
+            setChartType( Area );
             break;
         case 16:
-            m_params->setChartType(KChartParams::Line);
+            setChartType( Line );
             break;
         case 17:
         case 18:
-            m_params->setChartType(KChartParams::Pie);
+            setChartType( Pie );
             break;
 
         }
@@ -2189,7 +2341,7 @@ bool KChartPart::loadOldXML( const KoXmlDocument& doc )
     return true;
 }
 
-
+#endif
 
 void  KChartPart::slotModified()
 {

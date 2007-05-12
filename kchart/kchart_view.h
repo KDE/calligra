@@ -12,7 +12,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-#include "KDChartAxisParams.h"
+//#include "KDChartAxisParams.h"
 
 
 class KAction;

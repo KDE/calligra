@@ -25,13 +25,13 @@
 #include <klocale.h>
 #include <QLabel>
 
-#include "kchart_params.h"
+#include "kchart_part.h"
 #include "KCPageLayout.h"
 
 namespace KChart
 {
 
-KCPageLayout::KCPageLayout( KChartParams* _params, QWidget* parent)
+KCPageLayout::KCPageLayout( KChartPart* _part, QWidget* parent)
 	: KDialog( parent )
 {
     setButtons( Ok | Cancel | User1 | Apply );

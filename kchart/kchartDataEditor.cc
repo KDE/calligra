@@ -19,7 +19,9 @@
 
 #include "KDChartAxisParams.h"
 
+#if 0
 #include "kchart_params.h"
+#endif
 #include "kchartDataEditor.h"
 #include "kchartDataEditor.moc"
 

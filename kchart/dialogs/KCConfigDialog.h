@@ -72,9 +72,9 @@ public:
     };
 
 
-    KCConfigDialog( KChartParams* params,
+    KCConfigDialog( KChartPart* part,
 		    QWidget* parent, int flags,
-		    KDChartTableData *dat );
+		    TableModel *data );
 
     void subtypePage();
 
@@ -82,7 +82,7 @@ signals:
     void dataChanged();
 
 protected:
-    KChartParams                 *m_params;
+    KChartPart                   *m_part;
 
     KCConfigDataPage             *m_dataPage;
     KCConfigSubtypePage          *m_subTypePage;

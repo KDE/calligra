@@ -6,21 +6,31 @@
 #define KCHART_PART_H
 
 
+#include "kchart_global.h"
+
 #include <kconfig.h>
 #include <KoXmlReader.h>
 
 #include <koChart.h>
+
+#if 0
 #include "kchart_params.h"
+#else
+#include "TableModel.h"         // In kdchart/examples/tools
+#include "KDChartChart.h"
+#endif
+
 #include "kchart_export.h"
 //Added by qt3to4:
 #include <QPixmap>
 
+//class KDChartTableData;
 class KoXmlWriter;
 class KoGenStyles;
+
+
 namespace KChart
 {
-
-class KChartParams;
 
 
 class KCHART_EXPORT KChartPart : public KoChart::Part
@@ -47,10 +57,17 @@ public:
 
     // ----------------------------------------------------------------
 
-    void  analyzeHeaders( const KDChartTableData& data );
+#if 0
+    void  analyzeHeaders( const KDChartTableData & data );
     void  doSetData( const KDChartTableData&  data,
 		     bool  firstRowHeader,
 		     bool  firstColHeader );
+#else
+    void  analyzeHeaders( const TableModel &data );
+    void  doSetData( const TableModel &data,
+		     bool  firstRowHeader,
+		     bool  firstColHeader );
+#endif
 
     bool showWizard( QString &area );
     void initLabelAndLegend();
@@ -58,10 +75,27 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
-    KChartParams::ChartType  chartType() const { return (KChartParams::ChartType) params()->chartType(); }
-    KDChartTableData  *data()                  { return &m_currentData; }
-    KChartParams      *params() const          { return m_params;       }
+    OdfChartType       chartType() const       { return m_type;       }
+    TableModel        *data()                  { return m_currentData; }
+#if 0
+    KChartParams      *params()    const       { return m_params;     }
+#else
+    KDChart::Chart    *chart()     const       { return m_chart;      }
+#endif
 
+    // Data in rows or columns.
+    DataDirection  dataDirection() const    { return m_dataDirection; }
+    void           setDataDirection( DataDirection _dir ) {
+	m_dataDirection = _dir;
+    }
+
+    // First row / column as data or label?
+    bool       firstRowAsLabel() const { return m_firstRowAsLabel; }
+    void       setFirstRowAsLabel( bool _val );
+    bool       firstColAsLabel() const { return m_firstColAsLabel; }
+    void       setFirstColAsLabel( bool _val );
+
+    // 
     QStringList       &rowLabelTexts()         { return m_rowLabels;  }
     QStringList       &colLabelTexts()         { return m_colLabels;  }
 
@@ -93,9 +127,11 @@ signals:
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
+#if 0
     bool  loadOldXML( const KoXmlDocument& doc );
     bool  loadAuxiliary( const KoXmlDocument& doc );
-    bool  loadData( const KoXmlDocument& doc, KDChartTableData& currentData );
+    bool  loadData( const KoXmlDocument& doc/* , KDChartTableData& currentData*/ );
+#endif
     bool  loadOasisData( const KoXmlElement& tableElem );
     void  saveOasisData( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
     void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles ) const;
@@ -116,12 +152,21 @@ private:
 
 private:
     // The chart and its contents
+    OdfChartType             m_type;
+    OdfChartSubtype          m_subtype;
 #if 0
     KChartParams            *m_params;      // Everything about the chart
     KDChartTableData         m_currentData; // The data in the chart.
 #else
-    qwe
+    KDChart::Chart          *m_chart;
+    TableModel              *m_currentData;
+
+    // Info about the data.
+    DataDirection  m_dataDirection; // Rows or Columns
+    bool           m_firstRowAsLabel;
+    bool           m_firstColAsLabel;
 #endif
+
     QStringList              m_rowLabels;
     QStringList              m_colLabels;
     //QString                  m_regionName;
@@ -133,7 +178,11 @@ private:
     QWidget                 *m_parentWidget;
 
     // Used when displaying.
+#if 0
     KDChartTableData         m_displayData;
+#else
+    TableModel               m_displayData;
+#endif
 
     QPixmap                  m_bufferPixmap;
 };
