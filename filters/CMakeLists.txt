@@ -41,7 +41,7 @@ if(SHOULD_BUILD_KSPREAD)
 endif(SHOULD_BUILD_KSPREAD)
 
 if(SHOULD_BUILD_KARBON)
-  #macro_optional_add_subdirectory(karbon)
+  macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
 if (SHOULD_BUILD_KRITA)
