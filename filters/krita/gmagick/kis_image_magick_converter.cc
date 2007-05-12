@@ -41,7 +41,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 
 #include "kis_types.h"
 #include "kis_global.h"
@@ -129,7 +129,7 @@ namespace {
         rawdata.resize(length);
         memcpy(rawdata.data(), profiledata, length);
 
-        KoColorProfile* p = new KoColorProfile(rawdata);
+        KoColorProfile* p = new KoIccColorProfile(rawdata);
         return p;
 
 #if 0
@@ -444,7 +444,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         KoColorProfile * colorProfile = profile(image);
         if (colorProfile)
         {
-            kDebug(41008) << "image has embedded profile: " << colorProfile -> productName() << "\n";
+            kDebug(41008) << "image has embedded profile: " << colorProfile -> name() << "\n";
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName, colorProfile);
         }
         else
