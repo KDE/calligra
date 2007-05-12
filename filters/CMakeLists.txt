@@ -31,7 +31,7 @@ set(liboofilter_SRCS
 add_subdirectory( generic_wrapper )
 add_subdirectory( libdialogfilter )
 add_subdirectory( liboofilter )
-add_subdirectory(kchart)
+#add_subdirectory(kchart)
 add_subdirectory(kword)
 add_subdirectory(kpresenter)
 #add_subdirectory(kformula)
