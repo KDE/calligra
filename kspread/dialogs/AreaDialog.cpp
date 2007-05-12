@@ -21,10 +21,12 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "AreaDialog.h"
+
 #include <QLayout>
 #include <QLabel>
 #include <QLineEdit>
-//Added by qt3to4:
 #include <QVBoxLayout>
 
 #include <kmessagebox.h>
@@ -34,8 +36,6 @@
 #include "Sheet.h"
 #include "View.h"
 #include "Selection.h"
-
-#include "AreaDialog.h"
 
 using namespace KSpread;
 

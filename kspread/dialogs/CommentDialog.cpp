@@ -21,14 +21,15 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "CommentDialog.h"
+
 #include <q3multilineedit.h>
 #include <QPushButton>
 #include <QLayout>
-//Added by qt3to4:
 #include <QVBoxLayout>
 
 #include <klocale.h>
-
 
 //KSpread includes
 #include "Cell.h"
@@ -37,8 +38,6 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "View.h"
-
-#include "CommentDialog.h"
 
 using namespace KSpread;
 

@@ -20,6 +20,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "CSVDialog.h"
+
 #include <QByteArray>
 #include <QMimeData>
 #include <QString>
@@ -38,8 +41,6 @@
 #include "View.h"
 
 #include "commands/DataManipulators.h"
-
-#include "CSVDialog.h"
 
 using namespace KSpread;
 

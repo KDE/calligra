@@ -17,9 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <Editors.h>
-
+// Local
 #include "SolverDialog.h"
+
+#include <Editors.h>
 
 using namespace KSpread::Plugins;
 

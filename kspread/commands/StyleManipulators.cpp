@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "StyleManipulators.h"
+
 #include <kdebug.h>
 
 #include "Cell.h"
@@ -25,8 +28,6 @@
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleStorage.h"
-
-#include "StyleManipulators.h"
 
 using namespace KSpread;
 

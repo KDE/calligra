@@ -20,7 +20,11 @@
 #ifndef KSPREAD_MANIPULATOR_ROWCOL
 #define KSPREAD_MANIPULATOR_ROWCOL
 
+#include <QSizeF>
+
 #include <klocale.h>
+
+#include <Style.h>
 
 #include "AbstractRegionCommand.h"
 

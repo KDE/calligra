@@ -17,12 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "TableToolFactory.h"
+
 #include <klocale.h>
 
 #include "TableShape.h"
 #include "TableTool.h"
-
-#include "TableToolFactory.h"
 
 using namespace KSpread;
 

@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Solver.h"
+
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <ktextedit.h>
@@ -25,14 +28,11 @@
 #include <Cell.h>
 #include <Doc.h>
 #include <Sheet.h>
-#include <Sheet.h>
 #include <Value.h>
 #include <View.h>
 #include <Region.h>
 
 #include "SolverDialog.h"
-
-#include "Solver.h"
 
 using namespace KSpread::Plugins;
 

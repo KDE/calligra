@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "RowColumnManipulators.h"
+
 #include <float.h>
 
 #include <QFontMetricsF>
@@ -27,8 +30,6 @@
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetView.h"
-
-#include "RowColumnManipulators.h"
 
 using namespace KSpread;
 

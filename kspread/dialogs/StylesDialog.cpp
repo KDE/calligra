@@ -18,6 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "StylesDialog.h"
+
 #include <q3header.h>
 
 #include <QMap>
@@ -35,8 +37,6 @@
 #include "Style.h"
 #include "StyleManager.h"
 #include "View.h"
-
-#include "StylesDialog.h"
 
 using namespace KSpread;
 

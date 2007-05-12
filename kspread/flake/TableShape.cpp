@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "TableShape.h"
+
 #include <QPainter>
 
 #include <kdebug.h>
@@ -27,8 +30,6 @@
 #include <RowColumnFormat.h>
 #include <Sheet.h>
 #include <SheetView.h>
-
-#include "TableShape.h"
 
 using namespace KSpread;
 

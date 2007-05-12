@@ -26,6 +26,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "ConsolidateDialog.h"
+
+
 #include <assert.h>
 
 //Qt Includes
@@ -36,7 +40,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-//Added by qt3to4:
 #include <Q3ListBox>
 
 //KDE Includes
@@ -58,8 +61,6 @@
 #include <Selection.h>
 #include <ValueConverter.h>
 #include <Cell.h>
-
-#include "ConsolidateDialog.h"
 
 using namespace KSpread;
 

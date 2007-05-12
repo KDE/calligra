@@ -25,6 +25,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "PreferenceDialog.h"
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
@@ -50,8 +53,6 @@
 #include "View.h"
 #include "Localization.h"
 #include "Editors.h"
-
-#include "PreferenceDialog.h"
 
 using namespace KSpread;
 

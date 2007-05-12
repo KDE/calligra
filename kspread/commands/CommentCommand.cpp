@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "CommentCommand.h"
+
 #include <QColor>
 
 #include <klocale.h>
@@ -24,8 +27,6 @@
 #include "CellStorage.h"
 #include "Sheet.h"
 #include "RectStorage.h"
-
-#include "CommentCommand.h"
 
 using namespace KSpread;
 

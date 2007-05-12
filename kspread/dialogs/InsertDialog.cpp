@@ -24,6 +24,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "InsertDialog.h"
+
 #include <q3buttongroup.h>
 
 #include <QRadioButton>
@@ -41,8 +44,6 @@
 // commands
 #include "commands/DataManipulators.h"
 #include "commands/RowColumnManipulators.h"
-
-#include "InsertDialog.h"
 
 using namespace KSpread;
 

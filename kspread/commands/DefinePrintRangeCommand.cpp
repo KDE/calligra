@@ -18,13 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "DefinePrintRangeCommand.h"
+
 #include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
-
-#include "DefinePrintRangeCommand.h"
 
 using namespace KSpread;
 

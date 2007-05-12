@@ -17,14 +17,15 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "SheetPropertiesDialog.h"
+
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kvbox.h>
 
 #include "Sheet.h"
-
-#include "SheetPropertiesDialog.h"
 
 using namespace KSpread;
 

@@ -20,6 +20,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "PasteInsertDialog.h"
+
 #include <q3buttongroup.h>
 
 #include <QVBoxLayout>
@@ -29,7 +32,6 @@
 #include <QRadioButton>
 #include <QCheckBox>
 
-#include "PasteInsertDialog.h"
 #include "Canvas.h"
 #include "Doc.h"
 #include "Sheet.h"

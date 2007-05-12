@@ -24,12 +24,13 @@
 #include <QString>
 #include <QUndoCommand>
 
+#include <Cell.h>
+
 /**
  * The KSpread namespace.
  */
 namespace KSpread
 {
-class Cell;
 class Doc;
 
 class LinkCommand : public QUndoCommand

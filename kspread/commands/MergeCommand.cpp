@@ -17,14 +17,15 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "MergeCommand.h"
+
 #include <klocale.h>
 #include <kmessagebox.h>
 
 #include "Cell.h"
 #include "Map.h"
 #include "Sheet.h"
-
-#include "MergeCommand.h"
 
 using namespace KSpread;
 

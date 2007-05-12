@@ -22,6 +22,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "GotoDialog.h"
+
 #include <QLabel>
 #include <QLayout>
 //Added by qt3to4:
@@ -35,8 +38,6 @@
 #include "Util.h"
 #include "View.h"
 #include "Selection.h"
-
-#include "GotoDialog.h"
 
 using namespace KSpread;
 

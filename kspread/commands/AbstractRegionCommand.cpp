@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "AbstractRegionCommand.h"
+
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -24,8 +27,6 @@
 #include "Doc.h"
 #include "Map.h"
 #include "Sheet.h"
-
-#include "AbstractRegionCommand.h"
 
 using namespace KSpread;
 

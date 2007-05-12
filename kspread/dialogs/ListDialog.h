@@ -24,6 +24,7 @@
 
 #include <kdialog.h>
 #include <kconfig.h>
+#include <ksharedconfig.h>
 
 class Q3ListBox;
 class Q3ListBoxItem;

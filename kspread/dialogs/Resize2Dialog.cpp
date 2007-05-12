@@ -23,12 +23,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Resize2Dialog.h"
+
 #include <float.h>
 
 // Qt
 #include <QLabel>
 #include <QLayout>
-//Added by qt3to4:
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
@@ -52,8 +54,6 @@
 
 // commands
 #include "commands/RowColumnManipulators.h"
-
-#include "Resize2Dialog.h"
 
 using namespace KSpread;
 

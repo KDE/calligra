@@ -16,6 +16,10 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+// Local
+#include "TableShapeFactory.h"
+
 #include <QStringList>
 
 #include <kgenericfactory.h>
@@ -27,8 +31,6 @@
 
 #include "TableShape.h"
 #include "TableToolFactory.h"
-
-#include "TableShapeFactory.h"
 
 using namespace KSpread;
 

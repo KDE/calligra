@@ -17,11 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "DefaultToolFactory.h"
+
 #include <klocale.h>
 
 #include "DefaultTool.h"
-
-#include "DefaultToolFactory.h"
 
 using namespace KSpread;
 

@@ -17,12 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "MacroCommand.h"
+
 #include <klocale.h>
 
 #include "Doc.h"
 #include "Sheet.h"
-
-#include "MacroCommand.h"
 
 using namespace KSpread;
 

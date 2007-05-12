@@ -23,12 +23,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "FormatDialog.h"
+
 #include <QComboBox>
 #include <QFile>
 #include <QLayout>
 #include <QLabel>
 #include <QPushButton>
-//Added by qt3to4:
 #include <QVBoxLayout>
 #include <QPixmap>
 
@@ -49,8 +51,6 @@
 #include "Selection.h"
 
 #include "commands/AutoFormatCommand.h"
-
-#include "FormatDialog.h"
 
 using namespace KSpread;
 

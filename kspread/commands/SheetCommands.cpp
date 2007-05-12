@@ -18,13 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "SheetCommands.h"
+
 #include "Damages.h"
 #include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"
-
-#include "SheetCommands.h"
 
 using namespace KSpread;
 

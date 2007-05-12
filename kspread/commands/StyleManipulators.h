@@ -20,9 +20,13 @@
 #ifndef KSPREAD_STYLE_MANIPULATOR
 #define KSPREAD_STYLE_MANIPULATOR
 
+#include <QPair>
+#include <QPen>
+
 #include <klocale.h>
 
 #include "AbstractRegionCommand.h"
+#include <Style.h>
 
 namespace KSpread
 {

@@ -17,13 +17,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "ConditionCommand.h"
+
 #include <klocale.h>
 
 #include "CellStorage.h"
 #include "Sheet.h"
 #include "RectStorage.h"
-
-#include "ConditionCommand.h"
 
 using namespace KSpread;
 

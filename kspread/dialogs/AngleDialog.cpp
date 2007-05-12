@@ -21,12 +21,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "AngleDialog.h"
+
 #include <QFrame>
 #include <QLayout>
 #include <QPushButton>
-//Added by qt3to4:
 #include <QVBoxLayout>
-
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -36,8 +37,6 @@
 #include <Doc.h>
 #include <Sheet.h>
 #include <View.h>
-
-#include "AngleDialog.h"
 
 using namespace KSpread;
 

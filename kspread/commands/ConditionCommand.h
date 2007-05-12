@@ -23,6 +23,7 @@
 #include <QLinkedList>
 
 #include "AbstractRegionCommand.h"
+#include "Condition.h"
 
 namespace KSpread
 {

@@ -40,6 +40,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "DefaultTool.h"
+
 #include <QGridLayout>
 #include <QLabel>
 #include <QPainter>
@@ -69,8 +72,6 @@
 #include "View.h"
 
 #include "commands/AutoFillCommand.h"
-
-#include "DefaultTool.h"
 
 using namespace KSpread;
 

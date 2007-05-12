@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "TableTool.h"
+
 #include <QGridLayout>
 #include <QLabel>
 #include <QPainter>
@@ -33,8 +36,6 @@
 #include "Global.h"
 
 #include "TableShape.h"
-
-#include "TableTool.h"
 
 using namespace KSpread;
 

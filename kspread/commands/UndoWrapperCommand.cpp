@@ -18,9 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Undo.h"
-
+// Local
 #include "UndoWrapperCommand.h"
+
+#include "Undo.h"
 
 using namespace KSpread;
 

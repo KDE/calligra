@@ -29,6 +29,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "LayoutDialog.h"
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -63,7 +66,6 @@
 #include "Canvas.h"
 #include "Cell.h"
 #include "CellStorage.h"
-#include "LayoutDialog.h"
 #include "Localization.h"
 #include "Sheet.h"
 #include "Style.h"

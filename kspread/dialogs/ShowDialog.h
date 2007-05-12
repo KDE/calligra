@@ -28,6 +28,7 @@
 #include <kdialog.h>
 
 class Q3ListBox;
+class Q3ListBoxItem;
 
 namespace KSpread
 {

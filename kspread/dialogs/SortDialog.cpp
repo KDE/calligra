@@ -26,6 +26,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "SortDialog.h"
 
 #include <q3buttongroup.h>
 
@@ -50,7 +52,6 @@
 #include <kmessagebox.h>
 #include <kvbox.h>
 
-#include "SortDialog.h"
 #include "Doc.h"
 #include "Map.h"
 #include "Selection.h"

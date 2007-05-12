@@ -24,15 +24,16 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "FormulaDialog.h"
+
 #include <q3textbrowser.h>
 #include <QTabWidget>
 #include <QApplication>
-//Added by qt3to4:
 #include <QCloseEvent>
 #include <QGridLayout>
 #include <QVBoxLayout>
 
-#include "FormulaDialog.h"
 #include "Cell.h"
 #include "Canvas.h"
 #include "Util.h"

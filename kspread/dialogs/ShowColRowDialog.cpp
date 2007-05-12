@@ -20,10 +20,12 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "ShowColRowDialog.h"
+
 // Qt
 #include <QLabel>
 #include <QVBoxLayout>
-//Added by qt3to4:
 #include <Q3ListBox>
 #include <q3tl.h>
 
@@ -39,9 +41,6 @@
 
 // commands
 #include "commands/RowColumnManipulators.h"
-
-// Local
-#include "ShowColRowDialog.h"
 
 using namespace KSpread;
 

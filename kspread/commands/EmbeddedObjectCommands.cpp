@@ -18,13 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "EmbeddedObjectCommands.h"
+
 #include "Canvas.h"
 #include "Doc.h"
 #include "Map.h"
 #include "Object.h"
 #include "Sheet.h"
-
-#include "EmbeddedObjectCommands.h"
 
 using namespace KSpread;
 

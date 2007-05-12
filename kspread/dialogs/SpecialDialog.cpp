@@ -21,6 +21,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "SpecialDialog.h"
+
 #include <QRadioButton>
 
 #include <klocale.h>
@@ -30,8 +33,6 @@
 #include "Sheet.h"
 #include "View.h"
 #include "Selection.h"
-
-#include "SpecialDialog.h"
 
 using namespace KSpread;
 

@@ -22,6 +22,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "ShowDialog.h"
+
 #include <QLabel>
 #include <QLayout>
 #include <QUndoCommand>
@@ -37,8 +40,6 @@
 
 // commands
 #include "commands/SheetCommands.h"
-
-#include "ShowDialog.h"
 
 using namespace KSpread;
 

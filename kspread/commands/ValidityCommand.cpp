@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "ValidityCommand.h"
+
 #include <QColor>
 
 #include <klocale.h>
@@ -24,8 +27,6 @@
 #include "CellStorage.h"
 #include "Sheet.h"
 #include "RectStorage.h"
-
-#include "ValidityCommand.h"
 
 using namespace KSpread;
 

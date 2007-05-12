@@ -19,6 +19,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "ListDialog.h"
+
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
@@ -37,8 +40,6 @@
 #include "commands/AutoFillCommand.h"
 #include "Factory.h"
 #include "Localization.h"
-
-#include "ListDialog.h"
 
 using namespace KSpread;
 

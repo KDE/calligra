@@ -30,6 +30,7 @@
 namespace KSpread
 {
 class Doc;
+class Sheet;
 
 /**
  * Class RenameSheetCommand implements a command for renaming a sheet.

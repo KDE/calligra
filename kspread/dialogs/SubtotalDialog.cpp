@@ -19,6 +19,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "SubtotalDialog.h"
+
 // Qt
 #include <QCheckBox>
 #include <QComboBox>
@@ -37,8 +40,6 @@
 
 // commands
 #include "commands/DataManipulators.h"
-
-#include "SubtotalDialog.h"
 
 using namespace KSpread;
 

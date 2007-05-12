@@ -19,8 +19,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Cell.h"
+// Local
 #include "DatabaseDialog.h"
+
+#include "Cell.h"
 #include "Doc.h"
 #include "Sheet.h"
 #include "Util.h"
@@ -54,7 +56,6 @@
 #include <QToolTip>
 #include <QVariant>
 #include <QWidget>
-//Added by qt3to4:
 #include <QTextEdit>
 
 using namespace KSpread;

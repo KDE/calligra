@@ -20,6 +20,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "ValidityDialog.h"
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
@@ -28,7 +31,6 @@
 #include <QTextEdit>
 #include <QLayout>
 #include <q3buttongroup.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QFrame>
@@ -46,8 +48,6 @@
 
 // commands
 #include "commands/ValidityCommand.h"
-
-#include "ValidityDialog.h"
 
 using namespace KSpread;
 

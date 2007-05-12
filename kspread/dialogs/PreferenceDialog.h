@@ -27,11 +27,16 @@
 #ifndef __kspread_dlg_preference__
 #define __kspread_dlg_preference__
 
-#include <kpagedialog.h>
-//Added by qt3to4:
+#include <QGroupBox>
 #include <QLabel>
-#include <kvbox.h>
+#include <QLineEdit>
+
 #include <kconfig.h>
+#include <kpagedialog.h>
+#include <ksharedconfig.h>
+#include <kvbox.h>
+
+#include <KoUnit.h>
 
 class KIntNumInput;
 class KDoubleNumInput;

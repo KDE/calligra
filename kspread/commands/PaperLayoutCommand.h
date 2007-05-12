@@ -21,6 +21,7 @@
 #ifndef KSPREAD_PAPER_LAYOUT_COMMAND
 #define KSPREAD_PAPER_LAYOUT_COMMAND
 
+#include <QPair>
 #include <QRect>
 #include <QString>
 #include <QUndoCommand>
