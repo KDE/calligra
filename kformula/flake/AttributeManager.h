@@ -116,15 +116,6 @@ public:
     ~AttributeManager();
 
     /**
-     * Obtain a value for attribute
-     * @param attribute A string with the attribute to look up
-     * @return QVariant with the value
-     */
-    QVariant valueOf( const QString& attribute ) const;
-
-    Align alignValueOf( const QString& attribute ) const;
-
-    /**
      * Inherit the attributes of an element
      * @param element The BasicElement to herit from
      */
@@ -133,12 +124,24 @@ public:
     /// Disenherit the attributes currently on top of the stack
     void disinheritAttributes();
 
+    /**
+     * Obtain a value for attribute
+     * @param attribute A string with the attribute to look up
+     * @return QVariant with the value
+     */
+    QVariant valueOf( const QString& attribute ) const;
+
+    Align alignValueOf( const QString& attribute ) const;
+
+    QList<Align> alignValuesOf( const QString& attribute ) const;
+
     /// Obtain the @r current scriptlevel
     int scriptLevel() const;
  
-    /// Obtain the @r current displystyle
+    /// Obtain the @r current displaystyle
     bool displayStyle() const;
 
+    /// Obtain the @r value 
     double mathSpaceValue( const QString& value ) const;
 
     /// Set the KoViewConverter to use

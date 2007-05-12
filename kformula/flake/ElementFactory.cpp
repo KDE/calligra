@@ -91,4 +91,60 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     return 0;
 }
 
+QString ElementFactory::elementName( ElementType type )
+{
+    if( type == Identifier )
+        return "mi";
+    else if( type == Operator )
+        return "mo";
+    else if( type == Number )
+        return "mn";
+    else if( type == Text )
+        return "mtext";
+    else if( type == Glyph )
+        return "mglyph";
+    else if( type == String )
+        return "ms";
+    else if( type == Space )
+        return "mspace";
+    else if( type == Row )
+        return "mrow";
+    else if( type == Fraction )
+        return "mfrac";
+    else if( type == Phantom )
+        return "mphantom";
+    else if( type == Style )
+        return "mstyle";
+    else if( type == Padded )
+        return "mpadded";
+    else if( type == Error )
+        return "merror";
+    else if( type == Fenced )
+        return "mfenced";
+    else if( type == Enclose )
+        return "menclose";
+    else if( type == Space )
+        return "mspace";
+    else if( type == UnderOver )
+        return "munderover";
+    else if( type == Under )
+        return "munder";
+    else if( type == Over )
+        return "mover";
+    else if( type == SubScript )
+        return "msub";
+    else if( type == SupScript )
+        return "msup";
+    else if( type == SubSupScript )
+        return "msubsup";
+    else if( type == MultiScript )
+        return "mmultiscripts";
+    else if( type == Root )
+        return "mroot";
+    else if( type == SquareRoot )
+        return "msqrt";
+    
+    return QString();
+}
+
 } // namespace FormulaShape

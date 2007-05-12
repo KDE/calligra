@@ -22,7 +22,7 @@
 #ifndef FORMULAELEMENT_H
 #define FORMULAELEMENT_H
 
-#include "RowElement.h"
+#include "BasicElement.h"
 #include "kformula_export.h"
 
 namespace FormulaShape {
@@ -35,8 +35,7 @@ namespace FormulaShape {
  * It's functionality is reduced to layouting its children in a different way. It is
  * the element with highest size and can also dictate the size to all other elements. 
  */
-class KOFORMULA_EXPORT FormulaElement : public RowElement {
-    typedef RowElement inherited;
+class KOFORMULA_EXPORT FormulaElement : public BasicElement {
 public:
     /// The standard constructor
     FormulaElement();
@@ -69,12 +68,15 @@ public:
      */
     void moveDown( FormulaCursor* cursor, BasicElement* from );
     
-    /// Save the element to MathML 
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
-
     /// @return The element's ElementType
     ElementType elementType() const;
 
+protected:
+    bool readMathMLContent( const KoXmlElement& parent );
+    void writeMathMLContent( KoXmlWriter* writer ) const;
+
+private:
+    QList<BasicElement*> m_childElements;
 };
 
 } // namespace FormulaShape

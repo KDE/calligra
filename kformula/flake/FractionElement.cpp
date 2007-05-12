@@ -156,31 +156,33 @@ void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
         parentElement()->moveDown( cursor, this );
 }
 
-void FractionElement::readMathML( const QDomElement& element )
+bool FractionElement::readMathMLContent( const KoXmlElement& parent )
 {
-    readMathMLAttributes( element );
+    int counter = 0;      // a counter to track if there are more than two elements
+    KoXmlElement tmp;
+    forEachElement( tmp, parent )
+    {
+        if( counter == 0 )
+        {
+            m_numerator = ElementFactory::createElement( tmp.localName(), this );
+            m_numerator->readMathML( tmp );
+        }
+        else if( counter == 1 )
+        {
+            m_denominator = ElementFactory::createElement( tmp.localName(), this );
+            m_denominator->readMathML( tmp );
+        }
+        else
+            return false;
+    }
 
-    if( element.childNodes().count() != 2 ) // a fraction element has always two children
-	return;
-    
-    QDomElement tmp = element.firstChildElement();  // create first the numerator
-    m_numerator = ElementFactory::createElement( tmp.tagName(), this );
-    m_numerator->readMathML( tmp );
-    
-    tmp = element.lastChildElement();               // then the denominator
-    m_denominator = ElementFactory::createElement( tmp.tagName(), this );
-    m_denominator->readMathML( tmp );
+    return true;
 }
 
-void FractionElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
+void FractionElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    writer->startElement( oasisFormat ? "math:mfrac": "mfrac" );
-    writeMathMLAttributes( writer );
-   
-    m_numerator->writeMathML( writer, oasisFormat );
-    m_denominator->writeMathML( writer, oasisFormat );
-
-    writer->endElement();
+    m_numerator->writeMathML( writer );
+    m_denominator->writeMathML( writer );
 }
 
 ElementType FractionElement::elementType() const

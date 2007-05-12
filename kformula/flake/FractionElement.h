@@ -87,11 +87,15 @@ public:
      */
     void moveDown( FormulaCursor* cursor, BasicElement* from );
     
-    void readMathML( const QDomElement& element );
-    
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
-
+    /// @return The element's ElementType
     ElementType elementType() const;
+
+protected:
+    /// Read all content from the node - reimplemented by child elements
+    bool readMathMLContent( const KoXmlElement& parent );
+
+    /// Write all content to the KoXmlWriter - reimplemented by the child elements
+    void writeMathMLContent( KoXmlWriter* writer ) const;   
 
 private:
     /// Layout the fraction in a bevelled way

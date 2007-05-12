@@ -24,34 +24,19 @@
 
 namespace FormulaShape {
 
-class IdentifierElement : public TokenElement {
-    typedef TokenElement inherited;
+/**
+ * @short Implementation of the MathML mi element
+ *
+ * The mi element represents an identifier and is defined in the section 3.2.3
+ * of the MathMl spec.
+ */
+class IdentifierElement : public BasicElement {
 public:
+    /// The standart constructor
     IdentifierElement( BasicElement* parent = 0 );
 
-    /**
-     * This is called by the container to get a command depending on
-     * the current cursor position (this is how the element gets chosen)
-     * and the request.
-     *
-     * @returns the command that performs the requested action with
-     * the containers active cursor.
-     */
-//    virtual KCommand* buildCommand( Container*, Request* );
-
-    virtual QString elementName() const { return "mi"; }
-
-protected:
-
-    /**
-     * Space around sequence
-     */
-    virtual luPt getSpaceBefore( const ContextStyle& context, 
-                                 ContextStyle::TextStyle tstyle,
-                                 double factor ) { return 0; }
-    virtual luPt getSpaceAfter( const ContextStyle& context, 
-                                 ContextStyle::TextStyle tstyle,
-                                double factor ) { return 0; }
+private:
+    /// The actual identifier
 };
 
 } // namespace FormulaShape

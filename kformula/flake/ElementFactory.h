@@ -28,12 +28,47 @@ namespace FormulaShape {
 
 class BasicElement;
 
+enum ElementType {
+    Basic,
+    Formula,
+    Row,
+    Identifier,
+    Number,
+    Operator,
+    Space,
+    Fraction,
+    Matrix,
+    MatrixRow,
+    MatrixEntry,
+    Under,
+    Over,
+    UnderOver,
+    MultiScript,
+    SupScript,
+    SubScript,
+    SubSupScript,
+    Root,
+    SquareRoot,
+    Text,
+    Style,
+    Padded,
+    Error,
+    Fenced,
+    Glyph,
+    String,
+    Enclose,
+    Phantom
+};
+
+
 /**
  * @short An implementation of the factory pattern to create element instances
  *
  * The creation of new BasicElement derived classes is an often done task. While
  * loading ElementFactory provides a very simple way to achieve an element by
  * passing its MathML name. Just use the static createElement() method.
+ * While saving the elementName() method is used to map the ElementType's to the
+ * according MathML names.
  *
  * @author Martin Pfeiffer
  */
@@ -49,6 +84,13 @@ public:
      * @return A pointer to the new BasicElement derived element
      */
     static BasicElement* createElement( const QString& tagName, BasicElement* parent );
+
+    /**
+     * Obtain the MathML name of a ElementType
+     * @param type The given ElementType to get the MathML name from
+     * @return The MathML name as QString
+     */
+    static QString elementName( ElementType type );
 };
 
 } // namespace FormulaShape

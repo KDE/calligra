@@ -42,6 +42,7 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
       // p.save !!!
       // p.setBrush( QBrush( m_attributeManager->valueOf( "mathbackground" ) ) );
       // p.setPen( m_attributeManager->valueOf( "mathcolor" ) );
+      // p.setFont();
     element->paint( p, m_attributeManager );
 
     if( element->childElements().isEmpty() )

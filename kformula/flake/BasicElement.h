@@ -24,6 +24,7 @@
 #define BASICELEMENT_H
 
 #include "kformula_export.h"
+#include "ElementFactory.h"
 #include <KoXmlReader.h>
 #include <QHash>
 #include <QList>
@@ -37,21 +38,6 @@ namespace FormulaShape {
 
 class AttributeManager;
 class FormulaCursor;
-
-enum ElementType {
-    Basic,
-    Formula,
-    Row,
-    Space,
-    Fraction,
-    Matrix,
-    MatrixRow,
-    MatrixEntry,
-    UnderOver,
-    MultiScript,
-    Root
-};
-
 
 /**
  * @short The base class for all elements of a formula
@@ -209,23 +195,20 @@ public:
     void readMathML( const KoXmlElement& element );
 
     /// Save the element to MathML 
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
-
-    /// @returns MathML element tag name
-    virtual QString elementName() const { return "mrow"; }
+    void writeMathML( KoXmlWriter* writer ) const;
 
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 
     void readMathMLAttributes( const KoXmlElement& element );
 
     /// Read all content from the node - reimplemented by child elements
-    virtual int readMathMLContent( KoXmlNode& node );
+    virtual bool readMathMLContent( const KoXmlElement& parent );
 
     /// Write all attributes of m_attributes to @p writer
     void writeMathMLAttributes( KoXmlWriter* writer ) const;
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    virtual void writeMathMLContent( KoXmlWriter* , bool ) const {};
+    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
 
 private:
     /// The element's parent element - might not be null except of FormulaElement

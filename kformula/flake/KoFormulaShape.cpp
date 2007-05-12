@@ -78,11 +78,22 @@ void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
     if( m_formulaElement->childElements().isEmpty() )  // if the formula is empty
 	return;                                        // do not save it
     
+/*
+    if( oasisFormat )
+    {
+        writer->startElement( "math:semantics" )
+    } // TODO write the correct namespace that is inherited to all children
+    else
+        writer->startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
+
+	inherited::writeMathMLContent( writer, oasisFormat);
+	
+    m_formulaElement->writeMathML( writer );
 
     if( oasisFormat )
-    { } // TODO write the correct namespace that is inherited to all children
-
-//    m_formulaElement->writeMathML( writer );
+        writer->endElement();
+    else
+        writer->endDocument();*/
 }
 
 void KoFormulaShape::importFormula( const KUrl& url )

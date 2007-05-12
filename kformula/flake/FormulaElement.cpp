@@ -22,11 +22,12 @@
 
 #include "FormulaElement.h"
 #include "FormulaCursor.h"
+#include "ElementFactory.h"
 #include <KoXmlWriter.h>
 
 namespace FormulaShape {
 
-FormulaElement::FormulaElement() : RowElement( 0 )
+FormulaElement::FormulaElement() : BasicElement( 0 )
 {
 }
 
@@ -54,21 +55,25 @@ void FormulaElement::moveDown( FormulaCursor* cursor, BasicElement* from )
     Q_UNUSED( from )
 }
 
-void FormulaElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
+bool FormulaElement::readMathMLContent( const KoXmlElement& parent )
 {
-    if( oasisFormat )
-        writer->startElement( "math:semantics" );
-    else
-        writer->startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
+    BasicElement* tmpElement = 0;
+    KoXmlElement tmp;
+    forEachElement( tmp, parent )
+    {
+        tmpElement = ElementFactory::createElement( tmp.localName(), this );
+        m_childElements << tmpElement;
+        tmpElement->readMathML( tmp );
+    }
 
-	inherited::writeMathMLContent( writer, oasisFormat);
-	
-    if( oasisFormat )
-        writer->endElement();
-    else
-        writer->endDocument();
+    return true;
 }
 
+void FormulaElement::writeMathMLContent( KoXmlWriter* writer ) const
+{
+    foreach( BasicElement* tmpChild, m_childElements )       // just write all
+        tmpChild->writeMathML( writer );                   // children elements
+}
 ElementType FormulaElement::elementType() const
 {
     return Formula;

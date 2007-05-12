@@ -39,8 +39,10 @@ MatrixElement::~MatrixElement()
 void MatrixElement::paint( QPainter& painter ) const
 {
     // TODO paint the frame, rowlines, columnlines
-    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
-        tmpRow->paint( painter );
+    // eventually paint the frame
+    if( != None )
+
+    rowlines
 }
 
 void MatrixElement::calculateSize()

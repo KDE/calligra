@@ -19,9 +19,73 @@
 
 #include "EncloseElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
-EncloseElement::EncloseElement( BasicElement* parent ) : SequenceElement( parent ) {
+EncloseElement::EncloseElement( BasicElement* parent ) : BasicElement( parent )
+{
+}
+
+void EncloseElement::paint( QPainter& painter, const AttributeManager* )
+{
+    painter.drawPath( m_enclosePath );
+}
+
+void EncloseElement::layout( AttributeManager* am )
+{
+    qreal width = m_enclosedRow.width();      
+    qreal height = m_enclosedRow.height();
+ 
+
+
+    // TODO: actuarial (how does it look?) - radical - circle (how to determine extends )
+
+    // longdiv
+        m_enclosePath.moveTo();
+        m_enclosePath.lineTo();
+
+    // left
+        m_enclosePath.moveTo( 0, 0 );
+        m_enclosePath.lineTo( 0, m_enclosedRow.height() );
+
+    // right
+        m_enclosePath.moveTo( m_enclosedRow.width(), 0 );
+        m_enclosePath.lineTo( m_enclosedRow.width(), m_enclosedPath.height() );
+
+    // top
+        m_enclosePath.moveTo( 0, 0 );
+        m_enclosePath.lineTo( m_enclosedRow.width(), 0 );
+
+    // bottom
+        m_enclosePath.moveTo( m_enclosedRow.height(), 0 );
+        m_enclosePath.lineTo( m_enclosedRow.height(), m_enclosedRow.width() );
+
+    // box - TODO spacing is missing - might look odd
+        m_enclosePath.addRect( 0, 0, m_enclosedRow.width(), m_enclosedRow.height() );
+
+    // roundedbox - TODO spacing is missing - might look odd
+        m_enclosePath.addRoundedRect( 0, 0, m_enclosedRow.width(),
+                                            m_enclosedRow.height(), 25 );
+
+    // updiagonalstrike
+        m_enclosePath.moveTo( 0, m_enclosedRow.height() );
+        m_enclosePath.lineTo( m_enclosedRow.width(), 0 );
+
+    // downdiagonalstrike
+        m_enclosePath.moveTo( 0, 0 );
+        m_enclosePath.lineTo( m_enclosedRow.width(), m_enclosedRow.height() );
+
+    // verticalstrike
+        m_enclosePath.moveTo( m_enclosedRow.width()/2, 0 );
+        m_enclosePath.lineTo( m_enclosedRow.width()/2, m_enclosedRow.height() );
+
+    // horizontalstrike
+        m_enclosePath.moveTo( 0, m_encloseRow.height()/2 );
+        m_enclosePath.lineTo( m_encloseRow.width(), m_encloseRow.height()/2 );
+
+    setWidth( width );
+    setHeight( height );
+    m_enclosedRow.
+    m_enclosePath.
 }
 
 void EncloseElement::readMathMLAttributes(const QDomElement& element)
@@ -36,4 +100,4 @@ void EncloseElement::writeMathMLAttributes( QDomElement& element ) const
     }
 }
 
-} // namespace KFormula
+} // namespace FormulaShape

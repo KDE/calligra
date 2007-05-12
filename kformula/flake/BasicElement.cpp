@@ -23,6 +23,7 @@
 #include "BasicElement.h"
 #include "FormulaCursor.h"
 #include "AttributeManager.h"
+#include "ElementFactory.h"
 #include <KoXmlWriter.h>
 #include <QPainter>
 
@@ -150,8 +151,7 @@ void BasicElement::moveDown( FormulaCursor* cursor, BasicElement* )
 void BasicElement::readMathML( const KoXmlElement& element )
 {
     readMathMLAttributes( element );
-    KoXmlNode node = element.firstChild();
-    readMathMLContent( node );
+    readMathMLContent( element );
 }
 
 void BasicElement::readMathMLAttributes( const KoXmlElement& element )
@@ -162,18 +162,17 @@ void BasicElement::readMathMLAttributes( const KoXmlElement& element )
     }
 }
 
-int BasicElement::readMathMLContent( KoXmlNode &node )
+bool BasicElement::readMathMLContent( const KoXmlElement& parent )
 {
-    Q_UNUSED( node )
-    return 1;
+    Q_UNUSED( parent )
+    return true;
 }
 
-void BasicElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
+void BasicElement::writeMathML( KoXmlWriter* writer ) const
 {
-    QString name = oasisFormat ? "math:"  + elementName() : elementName();
-    writer->startElement( name.toLatin1() );
+    writer->startElement( ElementFactory::elementName( elementType() ).toUtf8() );
     writeMathMLAttributes( writer );
-    writeMathMLContent( writer, oasisFormat );
+    writeMathMLContent( writer );
     writer->endElement();
 }
 
@@ -181,6 +180,11 @@ void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
 {
     foreach( QString value, m_attributes )
         writer->addAttribute( m_attributes.key( value ).toLatin1(), value );
+}
+
+void BasicElement::writeMathMLContent( KoXmlWriter* writer ) const
+{
+    Q_UNUSED( writer )   // this is just to be reimplemented
 }
 
 ElementType BasicElement::elementType() const

@@ -31,7 +31,7 @@ set( kformulalib_PART_SRCS
    TokenStyleElement.cpp
 #   StyleElement.cpp
    TokenElement.cpp
-   NumberElement.cpp
+#   NumberElement.cpp
    IdentifierElement.cpp
    OperatorElement.cpp
    OperatorDictionary.cpp
