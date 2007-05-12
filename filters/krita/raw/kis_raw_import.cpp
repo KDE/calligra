@@ -521,11 +521,11 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
 
     KoColorProfile * pf  = profile();
     if (m_page->chkProfile->isChecked()) {
-        if (!pf->filename().isNull()) {
+        if (!pf->fileName().isNull()) {
             // Use the user-set profile, if it's not an lcms internal
             // profile. This does not add the profile to the image, we
             // need to do that later.
-            args.append("-p \"" + pf->filename() + "\"");
+            args.append("-p \"" + pf->fileName() + "\"");
         }
     }
 
@@ -590,7 +590,7 @@ void KisRawImport::slotFillCmbProfiles()
     QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
-        m_page->cmbProfile->addItem(profile->productName());
+        m_page->cmbProfile->addItem(profile->name());
     }
 }
 

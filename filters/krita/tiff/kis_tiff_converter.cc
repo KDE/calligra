@@ -37,7 +37,7 @@
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 
@@ -245,7 +245,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         QByteArray rawdata;
         rawdata.resize(EmbedLen);
         memcpy(rawdata.data(), EmbedBuffer, EmbedLen);
-        profile = new KoColorProfile(rawdata);
+        profile = new KoIccColorProfile(rawdata);
     } else {
         kDebug(41008) << "No Profile found" << endl;
     }
@@ -254,7 +254,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     KoColorSpace* cs = 0;
     if (profile && profile->isSuitableForOutput())
     {
-        kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
+        kDebug(41008) << "image has embedded profile: " << profile -> name() << "\n";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
     }
     else
@@ -335,8 +335,9 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             KisAnnotationSP annotation;
             // XXX we hardcode icc, this is correct for lcms?
             // XXX productName(), or just "ICC Profile"?
-            if (!profile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+            KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+            if ( iccprofile and !iccprofile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
 
             m_img -> addAnnotation( annotation );
         }

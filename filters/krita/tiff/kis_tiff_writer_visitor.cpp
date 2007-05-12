@@ -22,7 +22,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
 
@@ -177,8 +177,12 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     KoColorProfile* profile = pd->colorSpace()->profile();
     if(profile)
     {
-        QByteArray ba = profile->rawData();
-        TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(),ba.data());
+        KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+        if(iccprofile)
+        {
+            QByteArray ba = iccprofile->rawData();
+            TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(),ba.data());
+        }
     }
     tsize_t stripsize = TIFFStripSize(image());
     tdata_t buff = _TIFFmalloc(stripsize);

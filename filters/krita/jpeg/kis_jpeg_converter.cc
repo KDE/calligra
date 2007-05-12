@@ -43,7 +43,7 @@ extern "C" {
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_meta_registry.h>
-#include <KoColorProfile.h>
+#include <colorprofiles/KoIccColorProfile.h>
 
 #include <kis_exif_io.h>
 
@@ -152,9 +152,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)profile_len);
 
         if (hProfile != (cmsHPROFILE) NULL) {
-            profile = new KoColorProfile( profile_rawdata);
+            profile = new KoIccColorProfile( profile_rawdata);
             Q_CHECK_PTR(profile);
-            kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
+//             kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
             if(!profile->isSuitableForOutput())
             {
                 kDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
@@ -166,7 +166,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
-        kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
+        kDebug(41008) << "image has embedded profile: " << profile -> name() << "\n";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
     }
     else
@@ -198,7 +198,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         Q_CHECK_PTR(m_img);
         if(profile && !profile->isSuitableForOutput())
         {
-            m_img -> addAnnotation( KisAnnotationSP(new KisAnnotation( profile->productName(), "", profile_rawdata)) );
+            m_img -> addAnnotation( KisAnnotationSP(new KisAnnotation( profile->name(), "", profile_rawdata)) );
         }
     }
 
