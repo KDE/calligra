@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "StyleStorage.h"
+
 #include <QCache>
 #include <QRegion>
 #include <QSet>
@@ -31,8 +34,6 @@
 
 // commands
 #include "commands/StyleManipulators.h"
-
-#include "StyleStorage.h"
 
 static const int g_maximumCachedStyles = 10000;
 

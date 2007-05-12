@@ -21,11 +21,17 @@
 #define KSPREAD_SHEET_VIEW
 
 #include <QObject>
+#include <QPoint>
+#include <QPointF>
+
+#include "kspread_export.h"
 
 class QPainter;
-class QPointF;
+class QPaintDevice;
 class QRect;
 class QRectF;
+class QSize;
+class QSizeF;
 
 class KoViewConverter;
 

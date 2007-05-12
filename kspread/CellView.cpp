@@ -38,6 +38,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "CellView.h"
+
 // Qt
 #include <QApplication>
 #include <QColor>
@@ -60,9 +63,6 @@
 #include "StyleManager.h"
 #include "Value.h"
 #include "View.h"
-
-// Local
-#include "CellView.h"
 
 using namespace KSpread;
 

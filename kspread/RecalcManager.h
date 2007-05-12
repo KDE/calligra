@@ -20,6 +20,8 @@
 #ifndef KSPREAD_RECALC_MANAGER
 #define KSPREAD_RECALC_MANAGER
 
+#include <Region.h>
+
 namespace KSpread
 {
 class Cell;

@@ -26,6 +26,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Doc.h"
+
 #include <unistd.h>
 #include <assert.h>
 #include <sys/types.h>
@@ -89,8 +92,6 @@
 
 // commands
 #include "commands/UndoWrapperCommand.h"
-
-#include "Doc.h"
 
 using namespace std;
 using namespace KSpread;

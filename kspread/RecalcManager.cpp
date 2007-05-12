@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "RecalcManager.h"
+
 #include <QHash>
 #include <QMap>
 
@@ -31,8 +34,6 @@
 #include "Region.h"
 #include "Value.h"
 #include "ValueFormatter.h"
-
-#include "RecalcManager.h"
 
 using namespace KSpread;
 

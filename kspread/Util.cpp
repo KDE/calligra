@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Util.h"
+
 #include <ctype.h>
 
 #include <QRegExp>
@@ -32,7 +35,6 @@
 #include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
-#include "Util.h"
 
 using namespace KSpread;
 

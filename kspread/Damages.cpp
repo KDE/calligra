@@ -18,13 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Damages.h"
+
 #include <QPoint>
 
 #include "Cell.h"
 #include "Sheet.h"
 #include "Region.h"
-
-#include "Damages.h"
 
 using namespace KSpread;
 

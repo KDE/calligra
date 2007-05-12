@@ -26,7 +26,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <kprinter.h> // has to be first
+// Local
+#include "View.h"
+
+#include <kprinter.h> // has to be first ??
 
 // standard C/C++ includes
 #include <assert.h>
@@ -194,9 +197,6 @@
 // KSpread DCOP
 #include "ViewAdaptor.h"
 #include <QtDBus/QtDBus>
-#include <kicon.h>
-
-#include "View.h"
 
 namespace KSpread
 {

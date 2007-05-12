@@ -25,8 +25,16 @@
 #include <QObject>
 #include <QPixmap>
 
-#include "kspread_export.h"
+#include <kprinter.h>
+#include <kmessagebox.h>
+
+#include <KoDocumentInfo.h>
+#include <KoPageFormat.h>
+#include <KoPageLayout.h>
 #include <KoUnit.h>
+#include <KoZoomHandler.h>
+
+#include "kspread_export.h"
 
 class KoGenStyles;
 class KoZoomHandler;
@@ -34,9 +42,11 @@ class KoZoomHandler;
 namespace KSpread
 {
 class Doc;
+class EmbeddedObject;
 class PrintNewPageEntry;
 class PrintObject;
 class Selection;
+class Sheet;
 class SheetView;
 
 class KSPREAD_EXPORT SheetPrint : public QObject

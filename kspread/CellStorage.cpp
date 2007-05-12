@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "CellStorage.h"
+
 #include <klocale.h>
 
 #include "Damages.h"
@@ -26,8 +29,6 @@
 #include "RecalcManager.h"
 #include "RectStorage.h"
 #include "StyleStorage.h"
-
-#include "CellStorage.h"
 
 using namespace KSpread;
 

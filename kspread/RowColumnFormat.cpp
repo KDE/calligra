@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "RowColumnFormat.h"
+
 #include <float.h>
 #include <iostream>
 #include <stdlib.h>
@@ -42,8 +45,6 @@
 #include "SheetPrint.h"
 #include "Style.h"
 #include "StyleManager.h"
-
-#include "RowColumnFormat.h"
 
 using namespace std;
 using namespace KSpread;

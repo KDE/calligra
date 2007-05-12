@@ -18,9 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
-
+// Locale
 #include "Currency.h"
+
+#include <klocale.h>
 
 using namespace KSpread;
 

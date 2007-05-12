@@ -40,6 +40,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Canvas.h"
+
 // std
 #include <assert.h>
 #include <float.h>
@@ -114,7 +117,6 @@
 
 #include "Border.h"
 #include "CanvasPrivate.h"
-#include "Canvas.h"
 
 #define MIN_SIZE 10
 

@@ -18,12 +18,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "ValueParser.h"
+
 #include "Doc.h"
 #include "Localization.h"
 #include "Style.h"
 #include "Value.h"
-
-#include "ValueParser.h"
 
 using namespace KSpread;
 

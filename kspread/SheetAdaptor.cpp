@@ -28,6 +28,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "SheetAdaptor.h"
+
 #include <kdebug.h>
 
 #include "Doc.h"
@@ -38,8 +41,6 @@
 // commands
 #include "commands/DataManipulators.h"
 #include "commands/RowColumnManipulators.h"
-
-#include "SheetAdaptor.h"
 
 using namespace KSpread;
 

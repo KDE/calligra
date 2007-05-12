@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Factory.h"
+
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -25,8 +28,6 @@
 #include "AboutData.h"
 #include "Doc.h"
 // #include "KSpreadAppIface.h"
-
-#include "Factory.h"
 
 using namespace KSpread;
 

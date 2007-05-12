@@ -31,7 +31,6 @@
 #include <KoStoreDevice.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
-#include <KoXmlReader.h>
 
 #include <QPen>
 

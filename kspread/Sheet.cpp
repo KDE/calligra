@@ -19,6 +19,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Sheet.h"
+
 #include <assert.h>
 #include <ctype.h>
 #include <float.h>
@@ -100,7 +103,6 @@
 #include <QtDBus/QtDBus>
 
 
-#include "Sheet.h"
 #include "Sheet.moc"
 
 #define NO_MODIFICATION_POSSIBLE \

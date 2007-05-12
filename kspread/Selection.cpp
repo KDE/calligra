@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Selection.h"
+
 #include <QRegExp>
 
 #include <kdebug.h>
@@ -29,8 +32,6 @@
 #include "Editors.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
-
-#include "Selection.h"
 
 // TODO Stefan: Substract points in selections
 // TODO Stefan: KPart signal (Events.h)

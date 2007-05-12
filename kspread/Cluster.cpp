@@ -18,14 +18,15 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Cluster.h"
+
 #include <stdlib.h>
 
 #include <kdebug.h>
 
 #include "Cell.h"
 #include "RowColumnFormat.h"
-
-#include "Cluster.h"
 
 using namespace KSpread;
 

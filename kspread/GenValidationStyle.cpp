@@ -18,13 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "GenValidationStyle.h"
+
 // KOffice
 #include <KoXmlWriter.h>
 
 // KSpread
 #include "Validity.h"
-
-#include "GenValidationStyle.h"
 
 using namespace KSpread;
 

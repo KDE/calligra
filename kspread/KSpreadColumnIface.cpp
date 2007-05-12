@@ -19,12 +19,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "KSpreadColumnIface.h"
+
 #include <QBrush>
 
 #include "Format.h"
 #include "KSpreadLayoutIface.h"
-
-#include "KSpreadColumnIface.h"
 
 using namespace KSpread;
 

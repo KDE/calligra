@@ -21,8 +21,13 @@
 #define KSPREAD_STYLE_STORAGE
 
 #include <QObject>
+#include <QPair>
+#include <QPoint>
+#include <QRect>
 
 #include "kspread_export.h"
+#include <Region.h>
+#include <Style.h>
 
 namespace KSpread
 {

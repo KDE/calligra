@@ -19,8 +19,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KSpreadLayoutIface.h"
+// Local
 #include "KSpreadRowIface.h"
+
+#include "KSpreadLayoutIface.h"
 #include "Format.h"
 #include <QBrush>
 

@@ -22,6 +22,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "MapAdaptor.h"
+
 #include <QList>
 
 #include <kdebug.h>
@@ -29,8 +32,6 @@
 #include "Doc.h"
 #include "Map.h"
 #include "Sheet.h"
-
-#include "MapAdaptor.h"
 
 using namespace KSpread;
 

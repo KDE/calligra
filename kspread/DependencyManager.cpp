@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "DependencyManager.h"
+
 #include <QHash>
 #include <QLinkedList>
 
@@ -29,8 +32,6 @@
 #include "RTree.h"
 #include "Sheet.h"
 #include "Value.h"
-
-#include "DependencyManager.h"
 
 using namespace KSpread;
 

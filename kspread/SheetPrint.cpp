@@ -19,6 +19,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "SheetPrint.h"
+
+#include <kprinter.h>
+
+#include <kdebug.h>
+#include <kmessagebox.h>
+
 #include "Doc.h"
 #include "Localization.h"
 #include "Object.h"
@@ -30,14 +38,8 @@
 
 #include "commands/DefinePrintRangeCommand.h"
 
-#include "SheetPrint.h"
-
 #include <KoDocumentInfo.h>
 #include <KoZoomHandler.h>
-
-#include <kmessagebox.h>
-#include <kprinter.h>
-#include <kdebug.h>
 
 #include <QLinkedList>
 #include <QPainter>

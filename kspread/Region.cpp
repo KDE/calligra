@@ -16,6 +16,9 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+// Local
+#include "Region.h"
+
 #include <QRegExp>
 #include <QStringList>
 
@@ -27,8 +30,6 @@
 #include "Map.h"
 #include "Sheet.h"
 #include "Util.h"
-
-#include "Region.h"
 
 namespace KSpread
 {

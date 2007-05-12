@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Functions.h"
+
 #include <QDomElement>
 #include <QDomNode>
 #include <QFile>
@@ -32,8 +35,6 @@
 #include "Formula.h"
 #include "Factory.h"
 #include "ValueCalc.h"
-
-#include "Functions.h"
 
 namespace KSpread
 {

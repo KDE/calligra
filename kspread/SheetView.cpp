@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "SheetView.h"
+
 #include <QCache>
 #include <QList>
 #include <QRect>
@@ -29,8 +32,6 @@
 #include "RectStorage.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
-
-#include "SheetView.h"
 
 using namespace KSpread;
 
