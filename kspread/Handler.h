@@ -21,13 +21,13 @@
 #ifndef KSPREAD_HANDLER_H
 #define KSPREAD_HANDLER_H
 
-#include <KoContainerHandler.h>
-
 #include <QPoint>
-//Added by qt3to4:
 #include <QEvent>
 
+#include <KoContainerHandler.h>
 #include <KoQueryTrader.h>
+
+#include <KUrl>
 
 class QWidget;
 

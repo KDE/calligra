@@ -41,6 +41,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Border.h"
+
 // Qt
 #include <QApplication>
 #include <QDesktopWidget>
@@ -70,9 +73,6 @@
 #include "Selection.h"
 #include "Undo.h"
 #include "View.h"
-
-// Local
-#include "Border.h"
 
 using namespace KSpread;
 

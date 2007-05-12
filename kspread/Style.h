@@ -28,6 +28,7 @@
 
 #include "Currency.h"
 #include "Format.h"
+#include "Global.h"
 
 class KoGenStyle;
 class KoGenStyles;

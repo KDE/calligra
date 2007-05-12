@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "GeneralProperty.h"
+
 #include <QCheckBox>
 #include <QVBoxLayout>
 
@@ -26,8 +29,6 @@
 
 #include <KoGeneralPropertyUi.h>
 #include <KoUnitWidgets.h>
-
-#include "GeneralProperty.h"
 
 using namespace KSpread;
 

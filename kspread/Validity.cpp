@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Validity.h"
+
 #include <float.h>
 
 // KDE
@@ -32,9 +35,6 @@
 #include "LoadingInfo.h"
 #include "Sheet.h"
 #include "Value.h"
-
-// Local
-#include "Validity.h"
 
 using namespace KSpread;
 

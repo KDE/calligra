@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Style.h"
+
 #include <QBrush>
 #include <QHash>
 #include <QPen>
@@ -37,8 +40,6 @@
 #include "Doc.h"
 #include "Global.h"
 #include "Util.h"
-
-#include "Style.h"
 
 using namespace KSpread;
 

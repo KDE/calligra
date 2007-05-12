@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Map.h"
+
 #include <stdlib.h>
 #include <time.h>
 
@@ -43,8 +46,6 @@
 
 #include "MapAdaptor.h"
 #include <QtDBus/QtDBus>
-
-#include "Map.h"
 
 using namespace KSpread;
 

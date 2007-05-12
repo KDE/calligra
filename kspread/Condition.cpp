@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Condition.h"
+
 #include <float.h>
 
 #include "Cell.h"
@@ -34,8 +37,6 @@
 #include <kdebug.h>
 #include <qdom.h>
 #include <QBuffer>
-
-#include "Condition.h"
 
 using namespace KSpread;
 

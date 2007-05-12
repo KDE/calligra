@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Undo.h"
 
 #include "Cell.h"
 #include "CellStorage.h"
@@ -34,8 +36,6 @@
 #include "commands/DataManipulators.h"
 #include "commands/RowColumnManipulators.h"
 
-#include "Undo.h"
-//Added by qt3to4:
 #include <QTextStream>
 #include <QByteArray>
 

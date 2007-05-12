@@ -18,15 +18,16 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Handler.h"
+
 #include <QPainter>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
 
 #include "View.h"
 
-#include "Handler.h"
 
 #define KS_MIN_RECTSIZE 3
 

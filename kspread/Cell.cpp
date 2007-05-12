@@ -38,6 +38,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "Cell.h"
+
 #include <stdlib.h>
 #include <ctype.h>
 #include <float.h>
@@ -66,12 +69,11 @@
 #include "StyleManager.h"
 #include "Util.h"
 #include "Value.h"
-#include "View.h"
-#include "Value.h"
 #include "Validity.h"
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
 #include "ValueParser.h"
+#include "View.h"
 
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
@@ -83,7 +85,6 @@
 
 #include <kdebug.h>
 
-#include "Cell.h"
 #include "CellView.h"
 
 using namespace KSpread;

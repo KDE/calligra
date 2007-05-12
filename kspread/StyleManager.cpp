@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// own header
+#include "StyleManager.h"
+
 #include <qdom.h>
 #include <QPen>
 #include <QStringList>
@@ -30,7 +33,6 @@
 #include "Condition.h"
 #include "Doc.h"
 #include "Style.h"
-#include "StyleManager.h"
 
 using namespace KSpread;
 
