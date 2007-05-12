@@ -542,7 +542,7 @@ void Canvas::validateSelection()
 }
 
 
-void Canvas::scrollToCell(QPoint location) const
+void Canvas::scrollToCell(const QPoint& location) const
 {
   register Sheet * const sheet = activeSheet();
   if (!sheet)

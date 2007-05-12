@@ -170,7 +170,7 @@ QPixmap EmbeddedObject::toPixmap()
     return QPixmap();
 }
 
-void EmbeddedObject::calculateRequiredZoom( QSize desiredSize, double& xZoom, double& yZoom)
+void EmbeddedObject::calculateRequiredZoom( const QSize& desiredSize, double& xZoom, double& yZoom)
 {
 	QSize actualSize = geometry().size().toSize();
 

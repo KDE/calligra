@@ -257,7 +257,7 @@ public:
    * completely.
    * \return the extended area
    */
-  QRect extendToMergedAreas(QRect area) const;
+  QRect extendToMergedAreas(const QRect& area) const;
 
   const QList<QColor>& colors() const;
 

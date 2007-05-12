@@ -39,8 +39,8 @@ class QDomDocument;
 
 class KLocale;
 
-bool util_isPointValid(QPoint point);
-bool util_isRectValid(QRect rect);
+bool util_isPointValid(const QPoint& point);
+bool util_isRectValid(const QRect& rect);
 
 namespace KSpread
 {
@@ -95,7 +95,7 @@ public:
   /**
   * Sets the position of this point (in rows and columns)
   */
-  void      setPos(QPoint pos);
+  void      setPos(const QPoint& pos);
   QPoint    pos() const;
 
   /**

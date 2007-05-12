@@ -58,7 +58,7 @@ public:
 
 protected:
     bool eventFilter( QObject*, QEvent* );
-    virtual void insertObject( QRect ) = 0;
+    virtual void insertObject( const QRect& ) = 0;
 
     View* m_view;
     QPoint m_geometryStart;
@@ -75,7 +75,7 @@ class InsertPartHandler : public InsertHandler
     HandlerType getType() { return Part; }
 
   private:
-    void insertObject( QRect );
+    void insertObject( const QRect& );
 
     KoDocumentEntry m_entry;
 };
@@ -89,7 +89,7 @@ class InsertChartHandler : public InsertHandler
     HandlerType getType() { return Chart; }
 
   private:
-    void insertObject( QRect );
+    void insertObject( const QRect& );
 
     KoDocumentEntry m_entry;
 };
@@ -102,7 +102,7 @@ class InsertPictureHandler : public InsertHandler
     HandlerType getType() { return Picture; }
 
   private:
-    void insertObject( QRect );
+    void insertObject( const QRect& );
 
     KUrl m_file;
 };

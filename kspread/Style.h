@@ -283,13 +283,13 @@ public:
     static QString saveOasisStyleNumericDate( KoGenStyles &mainStyles, Format::Type _style,
                                               const QString &_prefix, const QString &_suffix );
     static QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles, Format::Type _style,
-                                                  const QString &_prefix, const QString _suffix );
+                                                  const QString &_prefix, const QString &_suffix );
     static QString saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format::Type _style,
                                               const QString &_prefix, const QString &_suffix );
     static QString saveOasisStyleNumericCustom( KoGenStyles&mainStyles, Format::Type _style,
                                                 const QString &_prefix, const QString &_suffix );
     static QString saveOasisStyleNumericScientific( KoGenStyles&mainStyles, Format::Type _style,
-                                                    const QString &_prefix, const QString _suffix, int _precision );
+                                                    const QString &_prefix, const QString &_suffix, int _precision );
     static QString saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                                     const QString &_prefix, const QString &_suffix );
     static QString saveOasisStyleNumericMoney( KoGenStyles&mainStyles, Format::Type _style,

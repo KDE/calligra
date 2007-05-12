@@ -202,7 +202,7 @@ class EmbeddedObject
      * @param xZoom This will be set to the required X zoom factor
      * @param yZoom This will be set to the required Y zoom factor
      */
-    void calculateRequiredZoom( QSize desiredSize , double& xZoom, double& yZoom );
+    void calculateRequiredZoom( const QSize& desiredSize , double& xZoom, double& yZoom );
 
     QRectF m_geometry;
     Sheet *m_sheet;

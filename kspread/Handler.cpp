@@ -180,7 +180,7 @@ InsertPartHandler::InsertPartHandler( View* view, QWidget* widget, const KoDocum
 InsertPartHandler::~InsertPartHandler()
 {
 }
-void InsertPartHandler::insertObject( QRect r)
+void InsertPartHandler::insertObject( const QRect& r)
 {
   m_view->insertChild( r, m_entry );
 }
@@ -193,7 +193,7 @@ InsertChartHandler::InsertChartHandler( View* view, QWidget* widget, const KoDoc
 InsertChartHandler::~InsertChartHandler()
 {
 }
-void InsertChartHandler::insertObject( QRect r)
+void InsertChartHandler::insertObject( const QRect& r)
 {
   m_view->insertChart( r, m_entry );
 }
@@ -206,7 +206,7 @@ InsertPictureHandler::InsertPictureHandler( View* view, QWidget* widget, const K
 InsertPictureHandler::~InsertPictureHandler()
 {
 }
-void InsertPictureHandler::insertObject( QRect r)
+void InsertPictureHandler::insertObject( const QRect& r)
 {
   Q_UNUSED(r)
   //m_view->insertPicture(/* r,*/ m_file );

@@ -55,7 +55,7 @@ public Q_SLOTS: // METHODS
     virtual void hide();
     virtual void show();
 
-    virtual void setSelection(QRect selection);
+    virtual void setSelection(const QRect& selection);
     virtual QRect selection();
     virtual void find();
     virtual void replace();
@@ -111,20 +111,20 @@ public Q_SLOTS: // METHODS
     virtual void setSelectionVerticalText(bool enable);
     virtual void setSelectionComment(const QString& comment);
     virtual void setSelectionAngle(int value);
-    virtual void setSelectionTextColor(QColor txtColor );
-    virtual void setSelectionBgColor(QColor bgColor );
-    virtual void setSelectionBorderColor(QColor bdColor );
+    virtual void setSelectionTextColor(const QColor& txtColor );
+    virtual void setSelectionBgColor(const QColor& bgColor );
+    virtual void setSelectionBorderColor(const QColor& bdColor );
 
     virtual void deleteSelection();
     virtual void copySelection();
     virtual void cutSelection();
 
-    virtual void setLeftBorderColor(QColor color);
-    virtual void setTopBorderColor(QColor color);
-    virtual void setRightBorderColor(QColor color);
-    virtual void setBottomBorderColor(QColor color);
-    virtual void setAllBorderColor(QColor color);
-    virtual void setOutlineBorderColor(QColor color);
+    virtual void setLeftBorderColor(const QColor& color);
+    virtual void setTopBorderColor(const QColor& color);
+    virtual void setRightBorderColor(const QColor& color);
+    virtual void setBottomBorderColor(const QColor& color);
+    virtual void setAllBorderColor(const QColor& color);
+    virtual void setOutlineBorderColor(const QColor& color);
     virtual void removeBorder();
 
     virtual void increaseIndent();

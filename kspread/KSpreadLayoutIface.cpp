@@ -109,46 +109,46 @@ void LayoutIface::setPrefix(const QString &_prefix)
     layout->setPrefix( _prefix );
 }
 
-void LayoutIface::setFormatType(const QString Format::&Type)
+void LayoutIface::setFormatType(const QString& formatType)
 {
     FormatType format;
     layout->setPrecision(2);
-    if (Format::Type=="Generic")
+    if (formatType=="Generic")
         format = Format::Generic;
-    else Format::if(Type=="Number")
-        Format::format=Number;
-    else Format::if(Type=="Money")
-        Format::format=Money;
-    else Format::if(Type=="Percentage")
-        Format::format=Percentage;
-    else Format::if(Type=="Scientific")
-        Format::format=Scientific;
-    else Format::if(Type=="ShortDate")
-        Format::format=ShortDate;
-    else Format::if(Type=="TextDate")
-        Format::format=TextDate;
-    else Format::if(Type=="Time")
-        Format::format=Time;
-    else Format::if(Type=="SecondeTime")
-        Format::format=SecondeTime;
-    else Format::if(Type=="fraction_half")
-        format=fraction_half;
-    else Format::if(Type=="fraction_quarter")
-        format=fraction_quarter;
-    else Format::if(Type=="fraction_eighth")
-        format=fraction_eighth;
-    else Format::if(Type=="fraction_sixteenth")
-        format=fraction_sixteenth;
-    else Format::if(Type=="fraction_tenth")
-        format=fraction_tenth;
-    else Format::if(Type=="fraction_hundredth")
-        format=fraction_hundredth;
-    else Format::if(Type=="fraction_one_digit")
-        format=fraction_one_digit;
-    else Format::if(Type=="fraction_two_digits")
-        format=fraction_two_digits;
-    else Format::if(Type=="fraction_three_digits")
-        format=fraction_three_digits;
+    else if(formatType=="Number")
+        format = Format::Number;
+    else if(formatType=="Money")
+        format = Format::Money;
+    else if(formatType=="Percentage")
+        format = Format::Percentage;
+    else if(formatType=="Scientific")
+        format = Format::Scientific;
+    else if(formatType=="ShortDate")
+        format = Format::ShortDate;
+    else if(formatType=="TextDate")
+        format = Format::TextDate;
+    else if(formatType=="Time")
+        format = Format::Time;
+    else if(formatType=="SecondeTime")
+        format = Format::SecondeTime;
+    else if(formatType=="fraction_half")
+        format = Format::fraction_half;
+    else if(formatType=="fraction_quarter")
+        format = Format::fraction_quarter;
+    else if(formatType=="fraction_eighth")
+        format = Format::fraction_eighth;
+    else if(formatType=="fraction_sixteenth")
+        format = Format::fraction_sixteenth;
+    else if(formatType=="fraction_tenth")
+        format = Format::fraction_tenth;
+    else if(formatType=="fraction_hundredth")
+        format = Format::fraction_hundredth;
+    else if(formatType=="fraction_one_digit")
+        format = Format::fraction_one_digit;
+    else if(formatType=="fraction_two_digits")
+        format = Format::fraction_two_digits;
+    else if(formatType=="fraction_three_digits")
+        format = Format::fraction_three_digits;
     else
         Format::format=Generic;
     layout->setFormatType( format);

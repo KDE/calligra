@@ -288,7 +288,7 @@ void ViewAdaptor::copyAsText()
     m_view->copyAsText();
 }
 
-void ViewAdaptor::setSelection(QRect selection)
+void ViewAdaptor::setSelection(const QRect& selection)
 {
   m_view->selection()->initialize(selection);//,m_view->activeSheet());
 }
@@ -348,17 +348,17 @@ void ViewAdaptor::setSelectionAngle(int value)
   m_view->setSelectionAngle(value);
 }
 
-void ViewAdaptor::setSelectionTextColor( QColor txtColor )
+void ViewAdaptor::setSelectionTextColor( const QColor& txtColor )
 {
   m_view->setSelectionTextColor(txtColor);
 }
 
-void ViewAdaptor::setSelectionBgColor( QColor bgColor )
+void ViewAdaptor::setSelectionBgColor( const QColor& bgColor )
 {
   m_view->setSelectionBackgroundColor(bgColor);
 }
 
-void ViewAdaptor::setSelectionBorderColor( QColor bdColor )
+void ViewAdaptor::setSelectionBorderColor( const QColor& bdColor )
 {
   m_view->setSelectionBorderColor(bdColor);
 }
@@ -378,32 +378,32 @@ void ViewAdaptor::cutSelection()
   m_view->cutSelection();
 }
 
-void ViewAdaptor::setLeftBorderColor(QColor color)
+void ViewAdaptor::setLeftBorderColor(const QColor& color)
 {
   m_view->setSelectionLeftBorderColor(color);
 }
 
-void ViewAdaptor::setTopBorderColor(QColor color)
+void ViewAdaptor::setTopBorderColor(const QColor& color)
 {
   m_view->setSelectionTopBorderColor(color);
 }
 
-void ViewAdaptor::setRightBorderColor(QColor color)
+void ViewAdaptor::setRightBorderColor(const QColor& color)
 {
   m_view->setSelectionRightBorderColor(color);
 }
 
-void ViewAdaptor::setBottomBorderColor(QColor color)
+void ViewAdaptor::setBottomBorderColor(const QColor& color)
 {
   m_view->setSelectionBottomBorderColor(color);
 }
 
-void ViewAdaptor::setAllBorderColor(QColor color)
+void ViewAdaptor::setAllBorderColor(const QColor& color)
 {
   m_view->setSelectionAllBorderColor(color);
 }
 
-void ViewAdaptor::setOutlineBorderColor(QColor color)
+void ViewAdaptor::setOutlineBorderColor(const QColor& color)
 {
   m_view->setSelectionOutlineBorderColor(color);
 }

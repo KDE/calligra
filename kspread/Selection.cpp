@@ -858,12 +858,12 @@ QRect Selection::lastRange() const
   return cells().isEmpty() ? QRect(1,1,1,1) : cells().last()->rect();
 }
 
-QRect Selection::extendToMergedAreas(QRect area) const
+QRect Selection::extendToMergedAreas(const QRect& _area) const
 {
   if (!d->activeSheet)
-	  return area;
+	  return _area;
 
-  area = normalized( area );
+  QRect area = normalized( _area );
   Cell cell( d->activeSheet, area.left(), area.top() );
 
   if( Region::Range(area).isColumn() || Region::Range(area).isRow() )

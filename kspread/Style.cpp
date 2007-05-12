@@ -850,7 +850,7 @@ QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, Format::
 
 
 QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, Format::Type /*_style*/,
-        const QString &_prefix, const QString _suffix, int _precision )
+        const QString &_prefix, const QString &_suffix, int _precision )
 {
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -1046,7 +1046,7 @@ QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format::Type 
 
 
 QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, Format::Type formatType,
-        const QString &_prefix, const QString _suffix )
+        const QString &_prefix, const QString &_suffix )
 {
     //<number:number-style style:name="N71" style:family="data-style">
     //<number:fraction number:min-integer-digits="0" number:min-numerator-digits="2" number:min-denominator-digits="2"/>

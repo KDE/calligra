@@ -150,7 +150,7 @@ Point::Point(const QString & _str)
     init(_str);
 }
 
-void Point::setPos(QPoint pos)
+void Point::setPos(const QPoint& pos)
 {
     _pos=pos;
 }
@@ -314,7 +314,7 @@ void Point::init(const QString & _str)
     _pos = QPoint( x, y );
 }
 
-bool util_isPointValid( QPoint point )
+bool util_isPointValid( const QPoint& point )
 {
     if (    point.x() >= 0
         &&  point.y() >= 0
@@ -326,7 +326,7 @@ bool util_isPointValid( QPoint point )
         return false;
 }
 
-bool util_isRectValid( QRect rect )
+bool util_isRectValid( const QRect& rect )
 {
     if (    util_isPointValid( rect.topLeft() )
         &&  util_isPointValid( rect.bottomRight() )

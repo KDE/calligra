@@ -219,7 +219,7 @@ public:
      * Makes sure a cell is visible onscreen by scrolling up/down and left/right
      * @param location the cell coordinates to scroll to
      */
-    void scrollToCell(QPoint location) const;
+    void scrollToCell(const QPoint& location) const;
 
     /**
      * Creates a 'in-place' editor over the currently selected cell.
