@@ -56,12 +56,6 @@ public:
 
     /// @return The default value of the attribute for this element
     QVariant attributesDefaultValue( const QString& attribute ) const;
-    
-    /// Read the element from MathML
-    void readMathML( const KoXmlElement& element );
-
-    /// Save the element to MathML 
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false ) const;
 };
 
 } // namespace FormulaShape

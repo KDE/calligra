@@ -53,17 +53,6 @@ QVariant SpaceElement::attributesDefaultValue( const QString& attribute ) const
         return Auto;
 }
 
-void SpaceElement::readMathML( const KoXmlElement& element )
-{
-    Q_UNUSED( element )
-}
-
-void SpaceElement::writeMathML( KoXmlWriter* writer, bool oasisFormat ) const
-{
-    Q_UNUSED( writer )
-    Q_UNUSED( oasisFormat )
-}
-
 ElementType SpaceElement::elementType() const
 {
     return Space;
