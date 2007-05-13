@@ -20,33 +20,34 @@
 #ifndef GLYPHELEMENT_H
 #define GLYPHELEMENT_H
 
-#include "TextElement.h"
+#include "BasicElement.h"
+#include <QPainterPath>
 
 namespace FormulaShape {
 
-class GlyphElement : public TextElement {
-    typedef TextElement inherited;
+class GlyphElement : public BasicElement {
 public:
+    /// The standart constructor
     GlyphElement( BasicElement* parent = 0 );
 
-	/**
+    /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      */
-    virtual void paint( QPainter& painter, const AttributeManager* am );
+    void paint( QPainter& painter, const AttributeManager* am );
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( const AttributeManager* am );
-    
-    virtual QString elementName() const { return "mglyph"; }
+    void layout( const AttributeManager* am );
 
-  private:
+    /// @return The element's ElementType
+    ElementType elementType() const;
 
-	bool hasFont( const AttributeManager* am );
-
+private:
+    /// The content as QPainterPath - ready to paint
+    QPainterPath m_glyphPath;
 };
 
 } // namespace FormulaShape
