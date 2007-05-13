@@ -61,9 +61,9 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
 void FormulaRenderer::layoutElement( BasicElement* element )
 {
     m_attributeManager->inheritAttributes( element ); // inherit the styles
-    
+
     foreach( BasicElement* tmp, element->childElements() )
-        tmp->layout();                                // first layout all children
+        tmp->layout( m_attributeManager );                                // first layout all children
 
     element->layout( m_attributeManager );            // actually layout the element
     m_attributeManager->disinheritAttributes();
