@@ -89,30 +89,24 @@ void MatrixRowElement::moveDown( FormulaCursor* cursor, BasicElement* from )
     parentElement()->moveDown( cursor, from ); // just forward the call to MatrixElement
 }
 
-void MatrixRowElement::readMathML( const QDomElement& element )
+bool MatrixRowElement::readMathMLContent( const KoXmlElement& element )
 {
-    readMathMLAttributes( element );
-   
     MatrixEntryElement* tmpEntry = 0;
-    QDomElement tmp = element.firstChildElement();
-    while( !tmp.isNull() )
+    KoXmlElement tmp;
+    forEachElement( tmp, element )
     {
         tmpEntry = new MatrixEntryElement( this );
 	m_matrixEntryElements << tmpEntry;
 	tmpEntry->readMathML( tmp );
-	tmp = tmp.nextSiblingElement();
     }
+
+    return true;
 }
 
-void MatrixRowElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
+void MatrixRowElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    writer->startElement( oasisFormat ? "math:mtr" : "mtr" );
-    writeMathMLAttributes( writer );
-
     foreach( MatrixEntryElement* tmpEntry, m_matrixEntryElements )
-        tmpEntry->writeMathML( writer, oasisFormat );
-
-    writer->endElement();
+        tmpEntry->writeMathML( writer );
 }
 
 

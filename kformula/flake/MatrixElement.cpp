@@ -26,7 +26,7 @@
 #include <KoXmlWriter.h>
 #include <QPainter>
 
-namespace KFormula {
+namespace FormulaShape {
 
 MatrixElement::MatrixElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -128,30 +128,24 @@ void MatrixElement::moveUp( FormulaCursor* cursor, BasicElement* from )
     }
 }
 
-void MatrixElement::readMathML( const QDomElement& element )
-{
-    readMathMLAttributes( element );
-   
+bool MatrixElement::readMathMLContent( const KoXmlElement& element )
+{  
     MatrixRowElement* tmpElement = 0;
-    QDomElement tmp = element.firstChildElement();    // read each mtr element 
-    while( !tmp.isNull() )
+    KoXmlElement tmp;
+    forEachElement( tmp, element )   // iterate over the elements
     {
         tmpElement = new MatrixRowElement( this );
         m_matrixRowElements << tmpElement;
 	tmpElement->readMathML( tmp );
-	tmp = tmp.nextSiblingElement();
     }
+
+    return true;
 }
 
-void MatrixElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
+void MatrixElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    writer->startElement( oasisFormat ? "math:mtable" : "mtable" );
-    writeMathMLAttributes( writer );
-    
     foreach( MatrixRowElement* tmpRow, m_matrixRowElements )  // write each mtr element
-	tmpRow->writeMathML( writer, oasisFormat );
-    
-    writer->endElement();
+	tmpRow->writeMathML( writer );
 }
 
 int MatrixElement::indexOfRow( BasicElement* row ) const

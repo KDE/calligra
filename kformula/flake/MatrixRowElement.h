@@ -28,7 +28,7 @@
 
 #include "contextstyle.h"
 
-namespace KFormula {
+namespace FormulaShape {
 	
 class MatrixEntryElement;
 
@@ -36,8 +36,6 @@ class MatrixEntryElement;
  * @short Representing the MathML mtr element.
  */
 class MatrixRowElement : public BasicElement {
-    friend class KFCNewLine;
-
 public:
     /// The standard constructor
     MatrixRowElement( BasicElement* parent = 0 );
@@ -84,16 +82,6 @@ public:
      * @param from The BasicElement which was the last owner of the FormulaCursor
      */
     void moveDown( FormulaCursor* cursor, BasicElement* from );
-    
-    /// Read the element from MathML
-    void readMathML( const QDomElement& element );
-    
-    /// Save this element to MathML
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
-
-
-
-
 
     /**
      * Sets the cursor inside this element to its start position.
@@ -131,20 +119,11 @@ public:
 
 
 protected:
-    /// Returns the tag name of this element type.
-    virtual QString getTagName() const { return "MULTILINE"; }
+    /// Read all content from the node - reimplemented by child elements
+    bool readMathMLContent( const KoXmlElement& element );
 
-    /// Appends our attributes to the dom element.
-    virtual void writeDom(QDomElement element);
-
-    /// Reads our attributes from the element. Returns false if it failed.
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read. Returns false if it failed.
-     */
-    virtual bool readContentFromDom( QDomNode& node );
+    /// Write all content to the KoXmlWriter - reimplemented by the child elements
+    void writeMathMLContent( KoXmlWriter* writer ) const;
 
 private:
     /// The list of entries in this row of the matrix 

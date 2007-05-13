@@ -22,9 +22,9 @@
 #ifndef MATRIXENTRYELEMENT_H
 #define MATRIXENTRYELEMENT_H
 
-#include "SequenceElement.h"
+#include "BasicElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 	
 /**
  * @short The class representing an entry in a matrix
@@ -32,19 +32,13 @@ namespace KFormula {
  * The lines behaviour is (a little) different from that
  * of ordinary sequences. Its MathML tag is \<mtd\>.
  */
-class MatrixEntryElement : public SequenceElement {
+class MatrixEntryElement : public BasicElement {
 public:
     /// The standard constructor
     MatrixEntryElement( BasicElement* parent = 0 );
 
     /// @return a list of all children of this class                           
     const QList<BasicElement*> childElements();
-
-    void readMathML( const QDomElement& element );
-    
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
-
-
 
 
 
@@ -70,9 +64,10 @@ public:
          int tabPos( int i );
 
 private:
-    QList<BasicElement*> tabs;
+    /// The list of all child elements
+    QList<BasicElement*> m_childElements;
 };
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif

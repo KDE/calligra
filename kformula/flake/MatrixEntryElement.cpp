@@ -22,33 +22,39 @@
 #include <KoXmlWriter.h>
 
 #include "FormulaCursor.h"
-#include "SpaceElement.h"
-#include <klocale.h>
 
-namespace KFormula {
+namespace FormulaShape {
 
-MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : SequenceElement( parent )
+MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : BasicElement( parent )
 {
 }
 
 const QList<BasicElement*> MatrixEntryElement::childElements()
 {
-    return SequenceElement::childElements();
+    
 }
 
-void MatrixEntryElement::readMathML( const QDomElement& element )
+void MatrixEntryElement::layout( AttributeManager* am )
+{}
+
+bool MatrixEntryElement::readMathMLContent( const KoXmlElement& element )
 {
+    BasicElement* tmpElement = 0;
+    KoXmlElement tmp;
+    forEachElement( tmp, parent )
+    {
+        tmpElement = ElementFactory::createElement( tmp.localName(), this );
+        m_rowElements << tmpElement;
+        tmpElement->readMathML( tmp );
+    }
+
+    return true;
 }
 
-void MatrixEntryElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
+void MatrixEntryElement::writeMathMLContent( KoXmlWriter* writer )
 {
-    writer->startElement( oasisFormat ? "math:mtd" : "mtd" );
-    writeMathMLAttributes( writer );
-   
     foreach( BasicElement* tmpElement, childElements() )
 	tmpElement->writeMathML( writer, oasisFormat );
-    
-    writer->endElement();
 }
 
 

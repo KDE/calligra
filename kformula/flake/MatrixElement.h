@@ -24,7 +24,7 @@
 
 #include "BasicElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 class MatrixRowElement;
 class MatrixEntryElement;
@@ -38,9 +38,6 @@ class MatrixEntryElement;
  * to lay out their children correctly as they need to be synced.
  */
 class MatrixElement : public BasicElement {
-    friend class KFCRemoveColumn;
-    friend class KFCRemoveRow;
-
 public:
     /// The standard constructor
     MatrixElement( BasicElement* parent = 0);
@@ -90,15 +87,6 @@ public:
      * @param from The BasicElement which was the last owner of the FormulaCursor
      */
     void moveDown( FormulaCursor* cursor, BasicElement* from );
-    
-    /// Read the element from MathML
-    void readMathML( const QDomElement& element );
-    
-    /// Save this element to MathML
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
-
-
-
 
     /// Return the number of the rows of this matrix
 /*    int rows() const;
@@ -120,20 +108,11 @@ public:
 
 
 protected:
-    /// Returns the tag name of this element type.
-    virtual QString getTagName() const { return "MATRIX"; }
+    /// Read all content from the node - reimplemented by child elements
+    bool readMathMLContent( const KoXmlElement& element );
 
-    /// Appends our attributes to the dom element.
-    virtual void writeDom(QDomElement element);
-
-    /// Reads our attributes from the element. Returns false if it failed.
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read. Returns false if it failed.
-     */
-    virtual bool readContentFromDom(QDomNode& node);
+    /// Write all content to the KoXmlWriter - reimplemented by the child elements
+    void writeMathMLContent( KoXmlWriter* writer ) const;
 
 private:
     /// @return The index of @p row in m_matrixRowElements
