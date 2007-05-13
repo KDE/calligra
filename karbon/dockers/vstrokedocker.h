@@ -25,58 +25,63 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __VSTROKEDOCKER_H__
-#define __VSTROKEDOCKER_H__
+#ifndef KOSTROKEDOCKER_H
+#define KOSTROKEDOCKER_H
 
-#include <KoLineBorder.h>
 #include <KoDockFactory.h>
 #include <KoUnit.h>
 #include <QtGui/QDockWidget>
 
-class QButtonGroup;
-class KoUnitDoubleSpinBox;
 class KoShapeBorderModel;
-class KoLineStyleSelector;
 
-class VStrokeDockerFactory : public KoDockFactory
+/// the factory which creates the stroke docker
+class KoStrokeDockerFactory : public KoDockFactory
 {
 public:
-    VStrokeDockerFactory();
+    KoStrokeDockerFactory();
 
     virtual QString id() const;
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
     virtual QDockWidget* createDockWidget();
 };
 
-class VStrokeDocker : public QDockWidget
+/// A docker for setting properties of a line border
+class KoStrokeDocker : public QDockWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	 VStrokeDocker();
+    /// Creates the stroke docker
+    KoStrokeDocker();
+    virtual ~KoStrokeDocker();
 
 public slots:
-	virtual void setStroke( const KoShapeBorderModel * );
-	virtual void setUnit( KoUnit unit );
+    /// Sets the border to edit the properties of
+    virtual void setStroke( const KoShapeBorderModel * );
+    /// Sets the unit to be used for the line width editing
+    virtual void setUnit( KoUnit unit );
 
-private:
-	QButtonGroup *m_capGroup;
-	QButtonGroup *m_joinGroup;
-	KoUnitDoubleSpinBox *m_setLineWidth;
-	KoUnitDoubleSpinBox *m_miterLimit;
-    KoLineStyleSelector * m_lineStyle;
 private slots:
-	void slotCapChanged( int ID );
-	void slotJoinChanged( int ID );
-	void updateCanvas();
-	void updateDocker();
-	void widthChanged();
-	void miterLimitChanged();
+    /// line cap has changed
+    void slotCapChanged( int ID );
+    /// line join has changed
+    void slotJoinChanged( int ID );
+    /// apply line changes to the selected shape
+    void applyChanges();
+    /// update the controls setting the values from the border
+    void updateControls();
+    /// line width has changed
+    void widthChanged();
+    /// miter limit has changed
+    void miterLimitChanged();
+    /// line style has changed
     void styleChanged();
-
-protected:
-	KoLineBorder m_border;
+    /// blocks/unblocks child control signals
+    void blockChildSignals( bool block );
+private:
+    class Private;
+    Private * const d;
 };
 
-#endif
+#endif // KOSTROKEDOCKER_H
 
