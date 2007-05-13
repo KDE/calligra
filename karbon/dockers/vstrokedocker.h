@@ -36,7 +36,7 @@
 class QButtonGroup;
 class KoUnitDoubleSpinBox;
 class KoShapeBorderModel;
-class KarbonLineStyleSelector;
+class KoLineStyleSelector;
 
 class VStrokeDockerFactory : public KoDockFactory
 {
@@ -64,7 +64,7 @@ private:
 	QButtonGroup *m_joinGroup;
 	KoUnitDoubleSpinBox *m_setLineWidth;
 	KoUnitDoubleSpinBox *m_miterLimit;
-    KarbonLineStyleSelector * m_lineStyle;
+    KoLineStyleSelector * m_lineStyle;
 private slots:
 	void slotCapChanged( int ID );
 	void slotJoinChanged( int ID );

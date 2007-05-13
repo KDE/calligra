@@ -162,7 +162,7 @@ VStrokeDocker::VStrokeDocker()
 
     QLabel * styleLabel = new QLabel( i18n( "Style:" ), mainWidget );
     mainLayout->addWidget( styleLabel, 4, 0 );
-    m_lineStyle = new KarbonLineStyleSelector( mainWidget );
+    m_lineStyle = new KoLineStyleSelector( mainWidget );
     mainLayout->addWidget( m_lineStyle, 4, 1, 1, 3 );
 
     connect( m_lineStyle, SIGNAL(currentIndexChanged( int ) ), this, SLOT( styleChanged() ) );
