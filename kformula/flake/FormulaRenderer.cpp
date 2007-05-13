@@ -38,8 +38,7 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
 {
     m_attributeManager->inheritAttributes( element );
 
-      // TODO add more general painting code like: background, scriptlevel and so on
-      // p.save !!!
+      // TODO add more general painting code like: background, scriptlevel and so on!
       // p.setBrush( QBrush( m_attributeManager->valueOf( "mathbackground" ) ) );
       // p.setPen( m_attributeManager->valueOf( "mathcolor" ) );
       // p.setFont();
@@ -49,7 +48,12 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
         return;
     else
         foreach( BasicElement* tmpElement, element->childElements() )
+        {
+            p.save();
+            p.translate( tmpElement->origin() );
             paintElement( p, tmpElement );
+            p.restore();
+        }
 
     m_attributeManager->disinheritAttributes();
 }
