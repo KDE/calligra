@@ -88,7 +88,6 @@
 #include "kpttaskeditor.h"
 #include "kptdependencyeditor.h"
 #include "kptperteditor.h"
-#include "kptpertresult.h"
 #include "kptdatetime.h"
 #include "kptcommand.h"
 #include "kptrelation.h"
@@ -599,8 +598,8 @@ View::View( Part* part, QWidget* parent )
     createGanttView( cat );
     createResourceView( cat );
     createAccountsView( cat );
-    createPertResultView( cat );
     createResourceAssignmentView( cat );
+
 
     // Add child documents
     createChildDocumentViews();
@@ -786,6 +785,7 @@ View::View( Part* part, QWidget* parent )
     connect( &getProject(), SIGNAL( scheduleRemoved( const MainSchedule* ) ), SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     slotPlugScheduleActions();
 
+
     m_viewlist->setSelected( m_viewlist->findItem( "TaskEditor" ) );
     //kDebug()<<k_funcinfo<<" end "<<endl;
 }
@@ -940,19 +940,6 @@ void View::createPertEditor( ViewListItem *cat )
     m_updatePertEditor = true;
 
 }
-void View::createPertResultView( ViewListItem *cat )
-{
-    PertResult *pertresult = new PertResult( getPart(), m_tab );
-    m_tab->addWidget( pertresult );
-
-    ViewListItem *i = m_viewlist->addView( cat, "PertResultView", i18n( "Pert Result" ), pertresult , getPart(), "pert_result" );
-    i->setToolTip( 0, i18n( "PERT/CPM analizes" ) );
-
-    pertresult->draw( getProject() );
-
-    connect( pertresult, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-}
-
 void View::createTaskStatusView( ViewListItem *cat )
 {
     TaskStatusView *taskstatusview = new TaskStatusView( getPart(), m_tab );
@@ -2131,7 +2118,6 @@ void View::slotUpdate()
     m_updateAccountsview = true;
     m_updateResourceAssignmentView = true;
     m_updatePertEditor = true;
-    m_updatePertResult = true;
     updateView( m_tab->currentWidget() );
 }
 
@@ -2352,10 +2338,6 @@ void View::updateView( QWidget *widget )
     m_updateResourceAssignmentView = false;
 
     widget2 = m_viewlist->findView( "PertEditor" );
-        static_cast<ViewBase*>( widget2 ) -> draw( getProject() );
-
-
-    widget2 = m_viewlist->findView( "PertResultView" ) ;
         static_cast<ViewBase*>( widget2 ) -> draw( getProject() );
 
     QApplication::restoreOverrideCursor();

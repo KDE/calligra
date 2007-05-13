@@ -55,7 +55,6 @@ class ViewListWidget;
 class AccountsView;
 class GanttView;
 class PertEditor;
-class PertResult;
 class ResourceView;
 class AccountsEditor;
 class TaskEditor;
@@ -344,7 +343,6 @@ private:
     void createScheduleEditor( ViewListItem *cat );
     void createDependencyEditor( ViewListItem *cat );
     void createPertEditor( ViewListItem *cat );
-    void createPertResultView( ViewListItem *cat );
     void createTaskStatusView( ViewListItem *cat );
     void createGanttView( ViewListItem *cat );
     void createResourceView( ViewListItem *cat );
@@ -372,7 +370,6 @@ private:
     bool m_updateAccountsview;
     bool m_updateResourceAssignmentView;
     bool m_updatePertEditor;
-    bool m_updatePertResult;
 
     QLabel *m_estlabel;
     QProgressBar *m_progress;

@@ -106,6 +106,7 @@ set(kplatoprivate_LIB_SRCS
 )
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kptdurationwidget.ui
+    kptscheduleeditor.ui
     standardworktimedialogbase.ui
     kptwbsdefinitionpanelbase.ui
     kptaccountspanelbase.ui
@@ -125,7 +126,6 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kpttaskprogresspanelbase.ui
     kptconfigtaskpanelbase.ui
     kptperteditor.ui
-    kptpertresult.ui
     kptchartpanelbase.ui
     kptresourceassignmentview.ui
 )

@@ -18,6 +18,7 @@
 * Boston, MA 02110-1301, USA.
 */
 #include "kptpertresult.h"
+#include "kptscheduleeditor.h"
 #include <klocale.h>
 
 namespace KPlato
@@ -25,7 +26,7 @@ namespace KPlato
 
 void PertResult::draw( Project &project)
 {
-    widget.treeWidgetTaskResult->clear();
+    m_schedule->getUi().treeWidgetTaskResult->clear();
     KLocale * locale = KGlobal::locale();
     QList<Node*> list;
     QString res;
@@ -33,7 +34,7 @@ void PertResult::draw( Project &project)
     foreach(Node * currentNode, project.projectNode()->childNodeIterator()){
         if (currentNode->type()!=4){
  
-            QTreeWidgetItem * item = new QTreeWidgetItem(widget.treeWidgetTaskResult );
+            QTreeWidgetItem * item = new QTreeWidgetItem(m_schedule->getUi().treeWidgetTaskResult );
 	    item->setText(0, currentNode->id());
             item->setText(1, currentNode->name());
 	    item->setText(2,locale->formatDateTime(getStartEarlyDate(currentNode)));
@@ -43,7 +44,7 @@ void PertResult::draw( Project &project)
 	    item->setText(6,res.number(getTaskFloat(currentNode).days()));
 	    item->setText(7,res.number(getFreeMargin(currentNode).days()));
         }
-	widget.labelResultProjectFloat->setText(res.number(getProjectFloat(project).days()));
+	m_schedule->getUi().labelResultProjectFloat->setText(res.number(getProjectFloat(project).days()));
 
     }
     list=criticalPath();
@@ -54,7 +55,7 @@ void PertResult::draw( Project &project)
 	 it++;
 	 if(it!=list.end()) res+=" - ";
     }
-    widget.labelResultCriticalPath->setText(res);
+    m_schedule->getUi().labelResultCriticalPath->setText(res);
 }
 
 DateTime PertResult::getStartEarlyDate(Node * currentNode)
@@ -194,15 +195,17 @@ Duration PertResult::getTaskFloat(Node * currentNode)
 }
 
 //-----------------------------------
-PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
+PertResult::PertResult( Part *part, QWidget *parent,ScheduleEditor * Schedule): ViewBase( part, parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
-    widget.setupUi(this);
-    QHeaderView *header=widget.treeWidgetTaskResult->header();
 
     m_part = part;
+    m_schedule=Schedule;
     m_project = &m_part->getProject();
     m_node = m_part->getProject().projectNode();
+
+    QHeaderView *header=m_schedule->getUi().treeWidgetTaskResult->header();
+
 	
     (*header).resizeSection(0,60);
     (*header).resizeSection(1,120);
@@ -252,6 +255,10 @@ void PertResult::testComplexGraph()
 
 void PertResult::slotUpdate(){
 
+ draw(m_part->getProject());
+}
+
+void PertResult::Update(){
  draw(m_part->getProject());
 }
 

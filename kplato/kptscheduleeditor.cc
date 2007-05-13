@@ -32,6 +32,7 @@
 #include "kptschedule.h"
 #include "kptdatetime.h"
 #include "kptcontext.h"
+#include "kptpertresult.h"
 
 #include <QMenu>
 #include <QPainter>
@@ -641,11 +642,10 @@ ScheduleEditor::ScheduleEditor( Part *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();
-
-    QVBoxLayout * l = new QVBoxLayout( this );
-    l->setMargin( 0 );
-    m_editor = new ScheduleTreeView( part, this );
-    l->addWidget( m_editor );
+    widget.setupUi(this);
+    m_editor = new ScheduleTreeView(part,this);
+    resultPert= new PertResult(part,parent,this);
+    widget.vboxLayout->addWidget(m_editor);
     m_editor->setEditTriggers( m_editor->editTriggers() | QAbstractItemView::EditKeyPressed );
 
     connect( m_editor, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
@@ -750,6 +750,7 @@ void ScheduleEditor::slotCalculateSchedule()
         return;
     }
     sm->setRecalculate( sm->parentManager() );
+    resultPert->Update();
     emit calculateSchedule( m_editor->project(), sm );
 }
 
@@ -760,7 +761,6 @@ void ScheduleEditor::slotAddSchedule()
     if ( sm && sm->parentManager() ) {
         sm = sm->parentManager();
         ScheduleManager *m = m_editor->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        
         m_editor->part()->addCommand( new AddScheduleManagerCmd( m_editor->part(), sm, m, i18n( "Create sub-schedule" ) ) );
     } else {
         emit addScheduleManager( m_editor->project() );

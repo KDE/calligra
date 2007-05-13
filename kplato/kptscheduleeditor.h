@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 2006-2007 Dag Andersen <kplato@kde.org>
-
+  Copyright (C) 2006-2007 Menard Alexis <kplato@kde.org>
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
   License as published by the Free Software Foundation; either
@@ -23,9 +23,12 @@
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
 
+#include <ui_kptscheduleeditor.h>
+
 #include <QTreeWidget>
 
 #include "kptcontext.h"
+
 
 class QPoint;
 class QTreeWidgetItem;
@@ -42,6 +45,8 @@ class Project;
 class ScheduleManager;
 class MainSchedule;
 class Schedule;
+class PertResult;
+
 
 class ScheduleItemModel : public ItemModelBase
 {
@@ -109,6 +114,7 @@ protected:
 
 private:
     ScheduleManager *m_manager; // for sanety check
+    
 };
 
 class ScheduleTreeView : public TreeViewBase
@@ -158,7 +164,7 @@ public:
     void setupGui();
     virtual void draw( Project &project );
     virtual void draw();
-
+    ::Ui::Schedule getUi(){ return widget; };
     virtual void updateReadWrite( bool /*readwrite*/ ) {};
 
 signals:
@@ -184,12 +190,14 @@ private slots:
     void slotDeleteSelection();
     
 private:
+    ::Ui::Schedule widget;
     ScheduleTreeView *m_editor;
 
     KAction *actionCalculateSchedule;
     KAction *actionAddSchedule;
     KAction *actionAddSubSchedule;
     KAction *actionDeleteSelection;
+    PertResult * resultPert;
 };
 
 }  //KPlato namespace

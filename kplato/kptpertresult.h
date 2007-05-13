@@ -34,13 +34,13 @@
 
 #include <QtGui>
 
-
+#include <ui_kptscheduleeditor.h>
 
 
 #include "kptpart.h"
 #include "kpttask.h"
 
-#include <ui_kptpertresult.h>
+
 
 #include "kptnode.h"
 
@@ -54,13 +54,14 @@ namespace KPlato
 
 class View;
 class Project;
+class ScheduleEditor;
 
 class PertResult : public ViewBase
 {
     Q_OBJECT
 public:
 
-    PertResult( Part *part, QWidget *parent );
+    PertResult( Part *part, QWidget *parent,ScheduleEditor * Schedule);
     void draw( Project &project);
 
     QList<Node*> criticalPath();
@@ -73,10 +74,11 @@ public:
     Duration getFreeMargin(Node * currentNode);
     Duration getTaskFloat(Node * currentNode);
     void testComplexGraph();
+    void Update();
 
 
 private:
-    Ui::PertResult widget;
+    ScheduleEditor * m_schedule;
     Node * m_node;
     Part * m_part;
     Project * m_project;
