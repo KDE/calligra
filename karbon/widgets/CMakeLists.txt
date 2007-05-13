@@ -9,7 +9,6 @@ set(karbonwidgets_SRCS
     vselecttoolbar.cc
     vsmallpreview.cc
     vtypebuttonbox.cc
-    KarbonLineStyleSelector.cpp
     )
 
 kde4_automoc(${karbonwidgets_SRCS})

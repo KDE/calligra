@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonLineStyleSelector.h"
+#include "KoLineStyleSelector.h"
 
 #include <QPen>
 #include <QPainter>
@@ -229,4 +229,4 @@ QSize KoLineStyleItemDelegate::sizeHint( const QStyleOptionViewItem &, const QMo
     return QSize( 100, 15 );
 }
 
-#include "KarbonLineStyleSelector.moc"
+#include "KoLineStyleSelector.moc"

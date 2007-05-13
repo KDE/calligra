@@ -28,7 +28,6 @@
 */
 
 #include "vstrokedocker.h"
-#include "KarbonLineStyleSelector.h"
 
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -39,6 +38,7 @@
 #include <KoShapeBorderCommand.h>
 #include <KoShapeBorderModel.h>
 #include <KoSelection.h>
+#include <KoLineStyleSelector.h>
 
 #include <kiconloader.h>
 #include <klocale.h>

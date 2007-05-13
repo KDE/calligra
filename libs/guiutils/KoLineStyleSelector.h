@@ -20,14 +20,13 @@
 #ifndef _KOLINESTYLESELECTOR_H_
 #define _KOLINESTYLESELECTOR_H_
 
+#include <koguiutils_export.h>
 #include <QComboBox>
-
-#include <karbon_export.h>
 
 /**
  * A custom combobox widget for selecting line styles.
  */
-class KARBONBASE_EXPORT KoLineStyleSelector : public QComboBox
+class KOGUIUTILS_EXPORT KoLineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:
@@ -68,4 +67,4 @@ private:
     Private * const d;
 };
 
-#endif // _KoLineStyleSelector_H_
+#endif // _KOLINESTYLESELECTOR_H_
