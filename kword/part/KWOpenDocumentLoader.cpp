@@ -712,8 +712,29 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
     }
 
     //KoTextParag::loadOasisSpan
+    context.fillStyleStack( parent, KoXmlNS::text, "style-name", "text" );
+    QTextCharFormat cf = cursor.charFormat();               // Store the current cursor char format
+
+    context.styleStack().setTypeProperties( "paragraph" );
+    const QString textStyleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
+    const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "paragraph" );
+    KoCharacterStyle *charstyle1 = 0;
+    if( textStyleElem ) {
+        context.addStyles( textStyleElem, "paragraph" );
+        charstyle1 = d->document->styleManager()->characterStyle(textStyleName);
+        if( ! charstyle1 ) {
+            charstyle1 = new KoCharacterStyle();
+            charstyle1->setName(textStyleName);
+            charstyle1->loadOasis( context.styleStack() );
+            d->document->styleManager()->add(charstyle1);
+        }
+        charstyle1->applyStyle(&cursor);
+    }
     bool stripLeadingSpace = true;
     loadSpan(parent, context, cursor, &stripLeadingSpace);
+    cursor.setCharFormat(cf);                               // Restore the cursor char format
+
+
 
     QTextBlockFormat emptyTbf;
     QTextCharFormat emptyCf;
