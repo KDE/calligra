@@ -688,7 +688,8 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
         //d->currentMasterPage = masterPageName; // do this first to avoid recursion
         context.styleStack().save();
         context.styleStack().setTypeProperties( "paragraph" );
-        context.addStyles( paragraphStyle, "paragraph" );
+        if( paragraphStyle )
+            context.addStyles( paragraphStyle, "paragraph" );
         //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
 
         KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
@@ -782,7 +783,8 @@ void KWOpenDocumentLoader::loadHeading(const KoXmlElement& parent, KoOasisLoadin
         kDebug(32001) << "KWOpenDocumentLoader::loadBody styleName=" << styleName << endl;
         context.styleStack().save();
         context.styleStack().setTypeProperties( "paragraph" );
-        context.addStyles( paragraphStyle, "paragraph" );
+        if( paragraphStyle )
+            context.addStyles( paragraphStyle, "paragraph" );
         context.styleStack().restore();
         //loadPageLayout( masterPageName, context ); // page layout
 
