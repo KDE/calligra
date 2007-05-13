@@ -21,7 +21,7 @@
 
 namespace FormulaShape {
 
-IdentifierElement::IdentifierElement( BasicElement* parent ) : BasicElement( parent )
+IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
 } // namespace FormulaShape

@@ -81,6 +81,9 @@ public:
     /// reimplemented from KoDocument
     bool showEmbedInitDialog(QWidget* parent);
 
+	/// Return our Formula container
+	FormulaShape::FormulaElement* formulaElement() const { return m_formulaElement; }
+	
 protected slots:
     void commandExecuted();
     void documentRestored();

@@ -45,8 +45,8 @@ public:
 	virtual QString elementName() const { return "mtext"; }
 protected:
 
-	/// Read contents of the token element. Content should be unicode text strings
-	virtual int buildMathMLChildren(QList<BasicElement*>& list, QDomNode n);
+	/// Read contents of the token element. Content should be unicode text strings or mglyphs
+	virtual bool readMathMLContent( const KoXmlElement& parent );
 
 	/**
      * @returns true if the sequence contains only text.

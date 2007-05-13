@@ -24,8 +24,8 @@
 #include <KoXmlWriter.h>
 
 namespace FormulaShape {
-	
-KoFormulaShape::KoFormulaShape() :  m_document( 0 )
+
+KoFormulaShape::KoFormulaShape() :  m_document( 0 ), m_formulaElement( 0 )
 {
     m_formulaElement = new FormulaElement();
     m_formulaRenderer = new FormulaRenderer();
@@ -37,7 +37,7 @@ KoFormulaShape::~KoFormulaShape()
     delete m_formulaRenderer;
 }
 
-void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter ) 
+void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
     applyConversion( painter, converter );   // apply zooming and coordinate translation
     m_formulaRenderer->paintElement( painter, m_formulaElement );  // paint the formula
@@ -77,7 +77,7 @@ void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
 {
     if( m_formulaElement->childElements().isEmpty() )  // if the formula is empty
 	return;                                        // do not save it
-    
+
 /*
     if( oasisFormat )
     {
@@ -87,7 +87,7 @@ void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
         writer->startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
 
 	inherited::writeMathMLContent( writer, oasisFormat);
-	
+
     m_formulaElement->writeMathML( writer );
 
     if( oasisFormat )
@@ -99,8 +99,10 @@ void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
 void KoFormulaShape::importFormula( const KUrl& url )
 {
     delete m_document;
+	delete m_formulaElement;
     m_document = new KFormulaPartDocument();
     m_document->openURL(url);
+	m_formulaElement = m_document->formulaElement();
 }
 
 void KoFormulaShape::saveOdf( KoShapeSavingContext * context ) {

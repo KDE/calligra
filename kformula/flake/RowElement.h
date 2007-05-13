@@ -102,10 +102,14 @@ public:
 
 protected:
     /// Read the element contents from MathML
-    bool readMathMLContent( const KoXmlElement& parent );
+    virtual bool readMathMLContent( const KoXmlElement& parent );
 
     /// Save the element contents to MathML
-    void writeMathMLContent( KoXmlWriter* writer ) const;
+    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
+
+    void appendChild( BasicElement* child ) { m_rowElements << child; }
+
+    QList<BasicElement*> children() { return m_rowElements; }
 
 private:
     /// The sorted list of all elements in this row

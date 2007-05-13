@@ -94,28 +94,29 @@ void TokenElement::paint( QPainter& painter, const AttributeManager* am)
         painter.setPen( color.value<QColor>() );
     else
         painter.setPen( QColor( "black" ) );
-    
+
     // TODO: Default fonts should be read from settings
     // Font style handling
     painter.setFont( font( am ) );
     inherited::paint( painter, am );
 }
 
-int TokenElement::buildMathMLChildren(QList<BasicElement*>& list, QDomNode n) 
+bool TokenElement::readMathMLContent( const KoXmlElement& parent )
 {
-    while ( ! n.isNull() ) {
-        if ( n.isText() ) {
-            QString textelements = n.toText().data();
+    QDomNode tmp = parent.firstChild();
+    while( !tmp.isNull() ) {   // for each child element, create a element
+        if ( tmp.isText() ) {
+            QString textelements = tmp.toText().data();
             textelements = textelements.trimmed();
-                
+
             for (uint i = 0; i < textelements.length(); i++) {
                 TextElement* child = new TextElement(textelements[i]);
                 child->setParentElement( this );
-                list.append(child);
+                appendChild( child );
             }
         }
-        else if ( n.isEntityReference() ) {
-            QString entity = n.toEntityReference().nodeName();
+        else if ( tmp.isEntityReference() ) {
+            QString entity = tmp.toEntityReference().nodeName();
             const entityMap* begin = entities;
             const entityMap* end = entities + entityMap::size();
             const entityMap* pos = std::lower_bound( begin, end, entity.toAscii() );
@@ -125,13 +126,13 @@ int TokenElement::buildMathMLChildren(QList<BasicElement*>& list, QDomNode n)
             else {
                 TextElement* child = new TextElement( QChar( pos->unicode ) );
                 child->setParentElement(this);
-                list.append(child);
+                appendChild( child );
             }
         }
-        else if ( n.isElement() ) {
+        else if ( tmp.isElement() ) {
             m_textOnly = false;
             // Only mglyph element is allowed
-            QDomElement e = n.toElement();
+            QDomElement e = tmp.toElement();
             if ( e.tagName().toLower() != "mglyph" ) {
                 kWarning( DEBUGID ) << "Invalid element inside Token Element\n";
                 return -1;
@@ -143,19 +144,19 @@ int TokenElement::buildMathMLChildren(QList<BasicElement*>& list, QDomNode n)
                 return -1;
             }
             */
-            list.append( child );
+            appendChild( child );
         }
         else {
             kWarning() << "Invalid content in TokenElement\n";
         }
-        n = n.nextSibling();
+        tmp = tmp.nextSibling();
     }
 //	parse();
-	kWarning() << "Num of children " << list.count() << endl;
-    return 1;
+	kWarning() << "Num of children " << childElements().count() << endl;
+    return true;
 }
 
-luPt TokenElement::getSpaceBefore( const ContextStyle& context, 
+luPt TokenElement::getSpaceBefore( const ContextStyle& context,
                                    ContextStyle::TextStyle tstyle,
                                    double factor )
 {
@@ -165,7 +166,7 @@ luPt TokenElement::getSpaceBefore( const ContextStyle& context,
     return 0;
 }
 
-luPt TokenElement::getSpaceAfter( const ContextStyle& context, 
+luPt TokenElement::getSpaceAfter( const ContextStyle& context,
                                   ContextStyle::TextStyle tstyle,
                                   double factor )
 {

@@ -1,16 +1,16 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net> 
-  
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-  
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
-  
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -77,8 +77,10 @@ void KoFormulaTool::paint( QPainter &painter, KoViewConverter &converter)
 {
     Q_UNUSED( converter )
     // TODO do view conversions with converter
+	/* This is broken, fix it
     if( m_formulaCursor )
         m_formulaCursor->paint( painter );
+    */
 }
 
 void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
@@ -112,7 +114,7 @@ void KoFormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
     Q_UNUSED( event )
 
-    // TODO select whole element 
+    // TODO select whole element
 }
 
 void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
@@ -188,9 +190,9 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 
     m_formulaCursor->setWordMovement( event->modifiers() & Qt::ControlModifier );
     m_formulaCursor->setSelecting( event->modifiers() & Qt::ShiftModifier );
-    	    
+
     switch( event->key() )                           // map key to movement or action
-    { 
+    {
         case Qt::Key_Backspace:
             remove( true );
             break;
@@ -220,7 +222,7 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
                 return;
             insertText( event->text() );*/
     }
-    
+
     event->accept();
 }
 

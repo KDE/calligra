@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -44,9 +44,9 @@ void AttributeManager::inheritAttributes( const BasicElement* element )
     // check for the parent element and rebuild attribute heritage if needed
     if( m_attributeStack.isEmpty() ||
         element->parentElement() != m_attributeStack.first() )
-        buildHeritageOf( element ); 
+        buildHeritageOf( element );
     else
-    { 
+    {
         m_attributeStack.push( element );       // add the element to the stack
         alterScriptLevel( element );            // adapt the scritplevel
     }
@@ -55,7 +55,7 @@ void AttributeManager::inheritAttributes( const BasicElement* element )
 void AttributeManager::disinheritAttributes()
 {
     m_attributeStack.pop();   // remove it from stack
-    m_scriptLevelStack.pop();                         
+    m_scriptLevelStack.pop();
 }
 
 QVariant AttributeManager::valueOf( const QString& attribute ) const
@@ -73,8 +73,8 @@ QVariant AttributeManager::valueOf( const QString& attribute ) const
         if( !value.isEmpty() )
             return parseValue( value );
     }
-    
-    // if not, return the default value of the attribute 
+
+    // if not, return the default value of the attribute
     return m_attributeStack.first()->attributesDefaultValue( attribute );
 }
 
@@ -85,7 +85,7 @@ Align AttributeManager::alignValueOf( const QString& attribute ) const
         return Right;
     else if( tmpAlignValue == "left" )
         return Left;
-    else 
+    else
         return Center;
 }
 
@@ -106,8 +106,8 @@ QVariant AttributeManager::parseValue( const QString& value ) const
     // look if the value is color
     QColor tmpColor( value );
     if( tmpColor.isValid() )
-        return tmpColor;    
-    
+        return tmpColor;
+
     // all other values don't need special treatment
     return QVariant( value );
 }
@@ -147,13 +147,16 @@ void AttributeManager::alterScriptLevel( const BasicElement* element )
         else
             m_scriptLevelStack.push( value.toInt() );
     }
-    else if( element->parentElement()->elementType() == MultiScript ||
-             element->parentElement()->elementType() == UnderOver )
+    else if( element->parentElement() &&
+	         ( element->parentElement()->elementType() == MultiScript ||
+               element->parentElement()->elementType() == UnderOver ) )
         m_scriptLevelStack.push( m_scriptLevelStack.top()++ );
-    else if( element->parentElement()->elementType() == Fraction && 
+    else if( element->parentElement() &&
+	         element->parentElement()->elementType() == Fraction &&
              valueOf( "displaystyle" ).toBool() )
         m_scriptLevelStack.push( m_scriptLevelStack.top()++ );
-    else if( element->parentElement()->elementType() == Root && 
+    else if( element->parentElement() &&
+	         element->parentElement()->elementType() == Root &&
              element == element->parentElement()->childElements().value( 1 ) )
         m_scriptLevelStack.push( m_scriptLevelStack.top()+2 ); // only for roots index
     else
@@ -203,7 +206,7 @@ int AttributeManager::mathVariantValue( const QString& value ) const
     else if( value == "monospace" )
         return Monospace;
     else
-        return -1; 
+        return -1;
 }
 
 double AttributeManager::mathSpaceValue( const QString& value ) const

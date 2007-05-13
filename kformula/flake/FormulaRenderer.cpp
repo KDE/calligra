@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -46,11 +46,11 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
     element->paint( p, m_attributeManager );
 
     if( element->childElements().isEmpty() )
-        return;    
+        return;
     else
-        foreach( BasicElement* tmpElement, element->childElements() ) 
+        foreach( BasicElement* tmpElement, element->childElements() )
             paintElement( p, tmpElement );
-    
+
     m_attributeManager->disinheritAttributes();
 }
 

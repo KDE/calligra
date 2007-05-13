@@ -27,6 +27,8 @@
 #include <KoXmlWriter.h>
 #include <QPainter>
 
+#include <kdebug.h>
+
 namespace FormulaShape {
 
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
@@ -61,8 +63,9 @@ void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
 void BasicElement::removeChild( BasicElement* )
 { /* do nothing a BasicElement has no children */ }
 
-const QList<BasicElement*> BasicElement::childElements() 
+const QList<BasicElement*> BasicElement::childElements()
 {
+    kWarning() << "Returning no elements from BasicElement" << endl;
     return QList<BasicElement*>();
 }
 
@@ -70,19 +73,19 @@ BasicElement* BasicElement::childElementAt( const QPointF& p )
 {
     if( !m_boundingRect.contains( p ) )
         return 0;
-	  	
-    if( childElements().isEmpty() ) 
+
+    if( childElements().isEmpty() )
         return this;
-	      
+
     BasicElement* ownerElement = 0;
-    foreach( BasicElement* tmpElement, childElements() )  
+    foreach( BasicElement* tmpElement, childElements() )
     {
         ownerElement = tmpElement->childElementAt( p );
-	
+
         if( ownerElement )
             return ownerElement;
     }
-    
+
     return this;    // if no child contains the point, it's the FormulaElement itsself
 }
 

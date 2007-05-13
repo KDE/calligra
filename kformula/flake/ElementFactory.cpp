@@ -20,6 +20,8 @@
 */
 
 #include "ElementFactory.h"
+#include "kformuladefs.h"
+#include <kdebug.h>
 
 //#include "ActionElement.h"
 //#include "BracketElement.h"
@@ -27,7 +29,7 @@
 //#include "ErrorElement.h"
 #include "FractionElement.h"
 //#include "GlyphElement.h"
-//#include "IdentifierElement.h"
+#include "IdentifierElement.h"
 //#include "MatrixElement.h"
 //#include "MatrixRowElement.h"
 //#include "MatrixEntryElement.h"
@@ -41,7 +43,7 @@
 #include "SpaceElement.h"
 //#include "StringElement.h"
 //#include "StyleElement.h"
-//#include "TextElement.h"
+#include "TextElement.h"
 //#include "UnderOverElement.h"
 
 namespace FormulaShape {
@@ -49,9 +51,10 @@ namespace FormulaShape {
 BasicElement* ElementFactory::createElement( const QString& tagName,
                                              BasicElement* parent )
 {
-    //    if( tagName == "mi" )
-    //        return new IdentifierElement( parent );
-    //else if ( tagName == "mo" )           
+    kWarning( DEBUGID ) << "Creating element: " << tagName << endl;
+    if( tagName == "mi" )
+        return new IdentifierElement( parent );
+    //else if ( tagName == "mo" )
     //        return new OperatorElement( parent );
     //else if ( tagName == "mn" )
     //        return new NumberElement( parent );
@@ -65,15 +68,15 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     //        return new GlyphElement( parent );
      else if ( tagName == "mrow" )
           return new RowElement( parent );
-     else if ( tagName == "mfrac" )  
+     else if ( tagName == "mfrac" )
           return new FractionElement( parent );
     //else if ( tagName == "msqrt" || tagName == "mroot" )
     //      return new RootElement( parent );
     //else if ( tagName == "mstyle" )
     //      return new StyleElement( parent );
-    //else if ( tagName == "merror" ) 
+    //else if ( tagName == "merror" )
     //      return new ErrorElement( parent );
-    //else if ( tagName == "mpadded" )  
+    //else if ( tagName == "mpadded" )
     //      return new PaddedElement( parent );
     //else if ( tagName == "mphantom" )
     //      return new PhantomElement( parent );
@@ -143,7 +146,7 @@ QString ElementFactory::elementName( ElementType type )
         return "mroot";
     else if( type == SquareRoot )
         return "msqrt";
-    
+
     return QString();
 }
 

@@ -19,9 +19,11 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "kformuladefs.h"
 #include "RowElement.h"
 #include "ElementFactory.h"
 #include "FormulaCursor.h"
+#include <kdebug.h>
 #include <KoXmlWriter.h>
 #include <QPainter>
 
@@ -35,7 +37,7 @@ RowElement::~RowElement()
     qDeleteAll( m_rowElements );     // Delete all children
 }
 
-void RowElement::paint( QPainter& , const AttributeManager* )
+void RowElement::paint( QPainter& p, const AttributeManager* am)
 { /* There is nothing to paint but BasicElement::paint should not be called */ }
 
 void RowElement::layout( const AttributeManager* am )
@@ -98,6 +100,7 @@ void RowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
 
 const QList<BasicElement*> RowElement::childElements()
 {
+    kWarning( DEBUGID) << "Returning" << m_rowElements.count() << " elements from RowElement" << endl;
     return m_rowElements;
 }
 
@@ -112,11 +115,12 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
     KoXmlElement tmp;
     forEachElement( tmp, parent )
     {
-        tmpElement = ElementFactory::createElement( tmp.localName(), this );
+        tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         m_rowElements << tmpElement;
         tmpElement->readMathML( tmp );
     }
 
+	kWarning( DEBUGID ) << "Loaded " << m_rowElements.count() << " inside Row element" << endl;
     return true;
 }
 

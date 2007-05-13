@@ -27,7 +27,7 @@
 
 namespace FormulaShape {
 
-FormulaElement::FormulaElement() : BasicElement( 0 )
+FormulaElement::FormulaElement() : RowElement( 0 )
 {
 }
 
@@ -55,25 +55,6 @@ void FormulaElement::moveDown( FormulaCursor* cursor, BasicElement* from )
     Q_UNUSED( from )
 }
 
-bool FormulaElement::readMathMLContent( const KoXmlElement& parent )
-{
-    BasicElement* tmpElement = 0;
-    KoXmlElement tmp;
-    forEachElement( tmp, parent )
-    {
-        tmpElement = ElementFactory::createElement( tmp.localName(), this );
-        m_childElements << tmpElement;
-        tmpElement->readMathML( tmp );
-    }
-
-    return true;
-}
-
-void FormulaElement::writeMathMLContent( KoXmlWriter* writer ) const
-{
-    foreach( BasicElement* tmpChild, m_childElements )       // just write all
-        tmpChild->writeMathML( writer );                   // children elements
-}
 ElementType FormulaElement::elementType() const
 {
     return Formula;
