@@ -2,6 +2,8 @@
  * Copyright (C) 2005 David Faure <faure@kde.org>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -543,37 +545,6 @@ void KWOpenDocumentLoader::loadHeaderFooter(const QDomElement& masterPage, const
         }
     }
 
-#if 0 //1.6:
-    KWTextFrameSet *fs = new KWTextFrameSet( m_doc, headerTypeToFramesetName( localName, hasEvenOdd ) );
-    fs->setFrameSetInfo( headerTypeToFrameInfo( localName, hasEvenOdd ) );
-    m_doc->addFrameSet( fs, false );
-    if ( !style.isNull() ) context.styleStack().push( style );
-    KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
-    frame->loadCommonOasisProperties( context, fs, "header-footer" );
-    const QString minHeight = context.styleStack().attributeNS( KoXmlNS::fo, "min-height" );
-    if ( !minHeight.isEmpty() ) frame->setMinimumFrameHeight( KoUnit::parseValue( minHeight ) );
-    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
-    frame->setNewFrameBehavior( KWFrame::Copy );
-    fs->addFrame( frame );
-    if ( !style.isNull() ) context.styleStack().pop(); // don't let it be active when parsing the text
-    context.setUseStylesAutoStyles( true ); // use auto-styles from styles.xml, not those from content.xml
-    fs->loadOasisContent( headerFooter, context );
-    context.setUseStylesAutoStyles( false );
-    if ( isHeader ) m_doc->m_headerVisible = true; else m_doc->m_footerVisible = true;
-    if ( !headerStyle.isNull() ) { // The bottom margin of headers is what we call headerBodySpacing
-        context.styleStack().push( headerStyle );
-        context.styleStack().setTypeProperties( "header-footer" );
-        d->hf.ptHeaderBodySpacing = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-bottom" ) );
-        context.styleStack().pop();
-    }
-    if ( !footerStyle.isNull() ) { // The top margin of footers is what we call footerBodySpacing
-        context.styleStack().push( footerStyle );
-        context.styleStack().setTypeProperties( "header-footer" );
-        d->hf.ptFooterBodySpacing = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-top" ) );
-        context.styleStack().pop();
-    }
-    // TODO ptFootNoteBodySpacing
-#else
     // use auto-styles from styles.xml, not those from content.xml
     context.setUseStylesAutoStyles( true );
 
@@ -589,7 +560,6 @@ void KWOpenDocumentLoader::loadHeaderFooter(const QDomElement& masterPage, const
     frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
 
     QTextCursor cursor( fs->document() );
-    //cursor.insertText(fsTypeName); //TESTCASE
 
     if ( !leftElem.isNull() ) // if "header-left" or "footer-left" was defined, the content is within the leftElem
         loadBody(leftElem, context, cursor);
@@ -602,7 +572,6 @@ void KWOpenDocumentLoader::loadHeaderFooter(const QDomElement& masterPage, const
     context.setUseStylesAutoStyles( false );
 
     //TODO handle style, seems to be similar to what is done at KoPageLayout::loadOasis
-#endif
 }
 
 
@@ -734,8 +703,6 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
     bool stripLeadingSpace = true;
     loadSpan(parent, context, cursor, &stripLeadingSpace);
     cursor.setCharFormat(cf);                               // Restore the cursor char format
-
-
 
     QTextBlockFormat emptyTbf;
     QTextCharFormat emptyCf;
@@ -888,39 +855,27 @@ liststyle->setLevel(llp);
 //liststyle->setLevel( element.attribute("depth").toInt() + 1);
 paragstyle->setListStyle(*liststyle);
 
-//QTextBlockFormat emptyTbf1;
-//QTextCharFormat emptyCf1;
-//cursor.insertBlock(emptyTbf1, emptyCf1);
-    //QTextBlock block = cursor.block();
-    //paragstyle->applyStyle(block);
-    //liststyle->applyStyle( block );
+    //QTextBlockFormat emptyTbf1;
+    //QTextCharFormat emptyCf1;
+    //cursor.insertBlock(emptyTbf1, emptyCf1);
 
     //TESTCASE
-    //QTextListFormat listformat;
+    QTextListFormat listformat;
     //listformat.setIndent(2);
     //listformat.setStyle( QTextListFormat::ListDisc );
-    //QTextList* list = cursor.insertList(listformat);
+    QTextList* list = cursor.insertList(listformat);
 
     // Iterate over list items
     for(QDomNode n = parent.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        //cursor.insertBlock();
-        //list->add(cursor.block());
-
-        //QTextBlock block = cursor.block();
-        //paragstyle->applyStyle(block);
-        //liststyle->applyStyle( block );
-
-        //QTextBlock prev = cursor.block();
-        QDomElement listItem = n.toElement();
-        loadBody(listItem, context, cursor);
-
-//TODO merge all blocks added by the item to apply the style on all of them
-        //QTextBlock current = cursor.block();
-        //liststyle->applyStyle( current );
-
+        QDomElement e = n.toElement();
+        if( e.isNull() ) continue;
+        cursor.insertBlock();
+        loadBody(e, context, cursor);
+        //TODO merge all blocks added by the item to apply the style on all of them
         //for(QTextBlock b = prev; b.isValid() && b != current; b = b.next()) list->add(b);
+        list->add( cursor.block() );
     }
-delete liststyle;
+    //delete liststyle;
 
     QTextBlockFormat emptyTbf;
     QTextCharFormat emptyCf;
