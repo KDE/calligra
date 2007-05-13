@@ -862,7 +862,7 @@ paragstyle->setListStyle(*liststyle);
     //TESTCASE
     QTextListFormat listformat;
     //listformat.setIndent(2);
-    //listformat.setStyle( QTextListFormat::ListDisc );
+    listformat.setStyle( QTextListFormat::ListDisc );
     QTextList* list = cursor.insertList(listformat);
 
     // Iterate over list items
