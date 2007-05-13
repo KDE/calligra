@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KARBONLINESTYLESELECTOR_H_
-#define _KARBONLINESTYLESELECTOR_H_
+#ifndef _KOLINESTYLESELECTOR_H_
+#define _KOLINESTYLESELECTOR_H_
 
 #include <QComboBox>
 
@@ -27,11 +27,11 @@
 /**
  * A custom combobox widget for selecting line styles.
  */
-class KARBONBASE_EXPORT KarbonLineStyleSelector : public QComboBox
+class KARBONBASE_EXPORT KoLineStyleSelector : public QComboBox
 {
     Q_OBJECT
 public:
-    KarbonLineStyleSelector( QWidget * parent = 0 );
+    KoLineStyleSelector( QWidget * parent = 0 );
 
     /**
      * Adds a new line style to the combobox.
@@ -68,4 +68,4 @@ private:
     Private * const d;
 };
 
-#endif // _KARBONLINESTYLESELECTOR_H_
+#endif // _KoLineStyleSelector_H_

@@ -24,15 +24,12 @@
 #include <QAbstractListModel>
 #include <QAbstractItemDelegate>
 
-#include <kdebug.h>
-
-
 /// The line style model managing the style data
-class KarbonLineStyleModel : public QAbstractListModel
+class KoLineStyleModel : public QAbstractListModel
 {
 public:
-    KarbonLineStyleModel( QObject * parent = 0 );
-    virtual ~KarbonLineStyleModel() {}
+    KoLineStyleModel( QObject * parent = 0 );
+    virtual ~KoLineStyleModel() {}
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
@@ -48,35 +45,35 @@ private:
 
 
 /// The line style item delegate for rendering the styles
-class KarbonLineStyleItemDelegate : public QAbstractItemDelegate
+class KoLineStyleItemDelegate : public QAbstractItemDelegate
 {
 public:
-    KarbonLineStyleItemDelegate( QObject * parent = 0 );
-    ~KarbonLineStyleItemDelegate() {}
+    KoLineStyleItemDelegate( QObject * parent = 0 );
+    ~KoLineStyleItemDelegate() {}
     void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-class KarbonLineStyleSelector::Private
+class KoLineStyleSelector::Private
 {
 public:
     Private( QWidget * parent )
-    : model( new KarbonLineStyleModel( parent ) )
+    : model( new KoLineStyleModel( parent ) )
     {
     }
 
-    KarbonLineStyleModel * model;
+    KoLineStyleModel * model;
 };
 
 
-KarbonLineStyleSelector::KarbonLineStyleSelector( QWidget * parent )
+KoLineStyleSelector::KoLineStyleSelector( QWidget * parent )
     : QComboBox( parent ), d( new Private( this ) )
 {
     setModel( d->model );
-    setItemDelegate( new KarbonLineStyleItemDelegate( this ) );
+    setItemDelegate( new KoLineStyleItemDelegate( this ) );
 }
 
-void KarbonLineStyleSelector::paintEvent( QPaintEvent *pe )
+void KoLineStyleSelector::paintEvent( QPaintEvent *pe )
 {
     QComboBox::paintEvent( pe );
 
@@ -91,25 +88,25 @@ void KarbonLineStyleSelector::paintEvent( QPaintEvent *pe )
     painter.drawLine( r.left(), r.center().y(), r.right(), r.center().y() );
 }
 
-bool KarbonLineStyleSelector::addCustomStyle( const QVector<qreal> &style )
+bool KoLineStyleSelector::addCustomStyle( const QVector<qreal> &style )
 {
     return d->model->addCustomStyle( style );
 }
 
-void KarbonLineStyleSelector::setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes )
+void KoLineStyleSelector::setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes )
 {
     int index = d->model->setLineStyle( style, dashes );
     if( index >= 0 )
         setCurrentIndex( index );
 }
 
-Qt::PenStyle KarbonLineStyleSelector::lineStyle() const
+Qt::PenStyle KoLineStyleSelector::lineStyle() const
 {
     QPen pen = itemData( currentIndex(), Qt::DecorationRole ).value<QPen>();
     return pen.style();
 }
 
-QVector<qreal> KarbonLineStyleSelector::lineDashes() const
+QVector<qreal> KoLineStyleSelector::lineDashes() const
 {
     QPen pen = itemData( currentIndex(), Qt::DecorationRole ).value<QPen>();
     return pen.dashPattern();
@@ -117,7 +114,7 @@ QVector<qreal> KarbonLineStyleSelector::lineDashes() const
 
 //################## The Model #############################################
 
-KarbonLineStyleModel::KarbonLineStyleModel( QObject * parent )
+KoLineStyleModel::KoLineStyleModel( QObject * parent )
     : QAbstractListModel( parent ), m_hasTempStyle( false )
 {
     // add standard dash patterns
@@ -128,12 +125,12 @@ KarbonLineStyleModel::KarbonLineStyleModel( QObject * parent )
     }
 }
 
-int KarbonLineStyleModel::rowCount( const QModelIndex &/*parent*/ ) const
+int KoLineStyleModel::rowCount( const QModelIndex &/*parent*/ ) const
 {
     return m_styles.count() + ( m_hasTempStyle ? 1 : 0 );
 }
 
-QVariant KarbonLineStyleModel::data( const QModelIndex &index, int role ) const
+QVariant KoLineStyleModel::data( const QModelIndex &index, int role ) const
 {
     if( ! index.isValid() )
          return QVariant();
@@ -162,7 +159,7 @@ QVariant KarbonLineStyleModel::data( const QModelIndex &index, int role ) const
     }
 }
 
-bool KarbonLineStyleModel::addCustomStyle( const QVector<qreal> &style )
+bool KoLineStyleModel::addCustomStyle( const QVector<qreal> &style )
 {
     if( m_styles.contains( style ) )
         return false;
@@ -171,7 +168,7 @@ bool KarbonLineStyleModel::addCustomStyle( const QVector<qreal> &style )
     return true;
 }
 
-int KarbonLineStyleModel::setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes )
+int KoLineStyleModel::setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes )
 {
     // check if we select a standard or custom style
     if( style < Qt::CustomDashLine )
@@ -207,12 +204,12 @@ int KarbonLineStyleModel::setLineStyle( Qt::PenStyle style, const QVector<qreal>
 
 //################## The Delegate ##########################################
 
-KarbonLineStyleItemDelegate::KarbonLineStyleItemDelegate( QObject * parent )
+KoLineStyleItemDelegate::KoLineStyleItemDelegate( QObject * parent )
     : QAbstractItemDelegate( parent )
 {
 }
 
-void KarbonLineStyleItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+void KoLineStyleItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
 
@@ -227,7 +224,7 @@ void KarbonLineStyleItemDelegate::paint( QPainter * painter, const QStyleOptionV
     painter->restore();
 }
 
-QSize KarbonLineStyleItemDelegate::sizeHint( const QStyleOptionViewItem &, const QModelIndex & ) const
+QSize KoLineStyleItemDelegate::sizeHint( const QStyleOptionViewItem &, const QModelIndex & ) const
 {
     return QSize( 100, 15 );
 }
