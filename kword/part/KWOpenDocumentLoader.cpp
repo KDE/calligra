@@ -674,8 +674,7 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
         QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString() ) : QString();
         if ( masterPageName.isEmpty() )
             masterPageName = "Standard";
-
-        kDebug(32001) << "KWOpenDocumentLoader::loadSpan paragraphStyle.localName=" << (paragraphStyle ? paragraphStyle->localName() : "NULL") << " masterPageName=" << masterPageName << endl;
+        kDebug(32001) << "KWOpenDocumentLoader::loadParagraph paragraphStyle.localName=" << (paragraphStyle ? paragraphStyle->localName() : "NULL") << " masterPageName=" << masterPageName << endl;
 
         /*
         QString styleName = context.styleStack().userStyleName( "paragraph" );
@@ -690,11 +689,12 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
         context.styleStack().save();
         context.styleStack().setTypeProperties( "paragraph" );
         context.addStyles( paragraphStyle, "paragraph" );
+        //context.fillStyleStack( parent, KoXmlNS::text, "style-name", "paragraph" );
 
         KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
         if( ! style ) {
             style = d->document->styleManager()->defaultParagraphStyle();
-            kDebug(32001) << "KWOpenDocumentLoader::loadSpan using default style!" << endl;
+            kDebug(32001) << "KWOpenDocumentLoader::loadParagraph using default style!" << endl;
         }
         if ( style ) {
             style->loadOasis( context.styleStack() );
@@ -951,33 +951,79 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
     return text;
 }
 
+#if 0
+// First loadFrame test
+void KWOpenDocumentLoader::loadFrame (const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor, bool* stripLeadingSpace)
+{
+    float width, height;
+    QDomNamedNodeMap attrs = parent.attributes();
+    for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
+        kDebug() << "Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
+        if (attrs.item(iAttr).nodeName() == "svg:width") {
+            width = KoUnit::parseValue(attrs.item(iAttr).nodeValue());
+        } else if (attrs.item(iAttr).nodeName() == "svg:height") {
+            height = KoUnit::parseValue(attrs.item(iAttr).nodeValue());
+        }
+    }
+    for (KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
+    {
+        KoXmlElement ts = node.toElement();
+        const QString localName( ts.localName() );
+        const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
+        const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
+        
+        if (isDrawNS && localName == "image") {
+            attrs = ts.attributes();
+            QString href;
+            for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++) {
+                kDebug() << "Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
+                if (attrs.item(iAttr).localName() == "href") {
+                    href = attrs.item(iAttr).nodeValue();
+                }
+            }
+            if (context.store()->hasFile(href)) {
+                kDebug() << "Ok, picture available in the store" << endl;
+                if (context.store()->isOpen()) {
+                    kDebug() << "Shit, store already reading something" << endl;
+                } else {
+                    kDebug() << "Ok, I can handle it" << endl;
+                    if (context.store()->open(href)) {
+                        kDebug() << "Great, it's opened now" << endl;
+                        QImage img;
+                        if (img.load(context.store()->device(), "png")) {
+                            kDebug() << "Image1 : " << img.size() << endl;
+                            d->document->mainFrameSet()->document()->addResource(QTextDocument::ImageResource, href, img);
+                            /*kDebug() << d->document->mainFrameSet()->document()->resource(QTextDocument::ImageResource, href) << endl;
+                            QImage test = d->document->mainFrameSet()->document()->resource(QTextDocument::ImageResource, href).value<QImage>();
+                            kDebug() << "Image2 : " << test.size() << endl;*/
+                            cursor.insertImage(href);
+                        } else {
+                            kDebug() << "SHIT" << endl;
+                        }
+                        context.store()->close();
+                    }
+                }
+            } else {
+                kDebug() << "Sad, picture not available..." << endl;
+            }
+        } else {
+            kDebug() << "Sorry kid, this isn't handled currently" << endl;
+        }
+    }
+}
+#endif
+
 //1.6: KoTextParag::loadOasisSpan
 void KWOpenDocumentLoader::loadSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor, bool* stripLeadingSpace)
 {
     Q_ASSERT( stripLeadingSpace );
-    QString styleName = context.styleStack().userStyleName( "paragraph" );
-    kDebug(32001) << "KWOpenDocumentLoader::loadSpan styleName=" << styleName << endl;
-    KoParagraphStyle *style = d->document->styleManager()->paragraphStyle(styleName);
-    if ( !style ) {
-        kDebug(32001) << "KWOpenDocumentLoader::loadSpan: Unknown style. Using default!" << endl;
-        style = d->document->styleManager()->defaultParagraphStyle();
-    }
-
-#if 0 //1.6:
-//TODO get right of this dirty hack
-if(parent.localName()!="span") {
-    context.styleStack().setTypeProperties( "paragraph" );
-    style->loadOasis( context.styleStack() );
-    QTextBlock block = cursor.block();
-    style->applyStyle(block);
-}
-#endif
 
     for (KoXmlNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
         KoXmlElement ts = node.toElement();
         const QString localName( ts.localName() );
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
+        const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
 
         // allow loadSpanTag to modify the stylestack
         context.styleStack().save();
@@ -986,25 +1032,28 @@ if(parent.localName()!="span") {
         {
             QString text = node.toText().data();
             kDebug() << "  <text> localName=" << localName << " parent.localName="<<parent.localName()<<" text=" << text << endl;
+            text = normalizeWhitespace(text.replace('\n', QChar(0x2028)), *stripLeadingSpace);
 
-//TODO this hack set's back the cursor to the default format. That's needed since we the KoCharacterStyle
-//does only apply new styles while prev/not set styles are not touched at all. We need a more clean
-//solution for this.
-QTextCharFormat cf;
-//cursor.setBlockCharFormat(cf);
-cursor.setCharFormat(cf);
+            if ( text.isEmpty() )
+                *stripLeadingSpace = false;
+            else
+                *stripLeadingSpace = text[text.length() - 1].isSpace();
 
-            int prevpos = cursor.position();
-            //context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
-            context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
-            //const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString::null );
-            const QString textStyleName = parent.attributeNS( KoXmlNS::text, "style-name", QString() );
-            const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "text"/*"paragraph"*/ );
+            cursor.insertText( text );
+        }
+        else if ( isTextNS && localName == "span" ) // text:span
+        {
+            kDebug() << "  <span> localName=" << localName << endl;
+            context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
+            QTextCharFormat cf = cursor.charFormat();               // Store the current cursor char format
+
+            context.styleStack().setTypeProperties( "text" );
+            const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString() );
+            const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "text" );
             KoCharacterStyle *charstyle1 = 0;
             if( textStyleElem ) {
                 kDebug()<<"textStyleName="<<textStyleName<<endl;
-                context.addStyles( textStyleElem, "text"/*"paragraph"*/ );
-                //style->applyStyle(cursor);
+                context.addStyles( textStyleElem, "text" );
                 charstyle1 = d->document->styleManager()->characterStyle(textStyleName);
                 if( ! charstyle1 ) {
                     charstyle1 = new KoCharacterStyle();
@@ -1014,63 +1063,9 @@ cursor.setCharFormat(cf);
                 }
                 charstyle1->applyStyle(&cursor);
             }
-            else {
-                KoCharacterStyle charstyle1;
-                charstyle1.applyStyle(&cursor);
-            }
 
-            text = normalizeWhitespace(text.replace('\n', QChar(0x2028)), *stripLeadingSpace);
-
-            if ( text.isEmpty() )
-                *stripLeadingSpace = false;
-            else
-                *stripLeadingSpace = text[text.length() - 1].isSpace();
-
-            cursor.insertText( text );
-
-            int currentpos = cursor.position();
-            cursor.setPosition(prevpos, QTextCursor::MoveAnchor);
-            cursor.setPosition(currentpos, QTextCursor::KeepAnchor);
-            if( charstyle1 ) {
-                kDebug()<<"  5 => ///"<<endl;
-                kDebug()<<"  selectionStart="<<cursor.selectionStart()<<" selectionEnd="<<cursor.selectionEnd()<<" selectedText="<<cursor.selectedText()<<endl;
-                charstyle1->applyStyle(&cursor);
-            } else {
-                kDebug()<<"  6 => ///"<<endl;
-                /*KoCharacterStyle *charstyle2 = d->document->styleManager()->characterStyle( cursor.blockCharFormat().intProperty(KoCharacterStyle::StyleId) );
-                if(charstyle2) {
-                    QTextBlock block = cursor.block();
-                    charstyle2->applyStyle(block);
-                }*/
-                //QTextBlock block = cursor.block();
-                style->characterStyle()->applyStyle(&cursor);
-            }
-            cursor.setPosition(currentpos, QTextCursor::MoveAnchor);
-
-        }
-        else if ( isTextNS && localName == "span" ) // text:span
-        {
-            kDebug() << "  <span> localName=" << localName << endl;
-            //context.styleStack().save();
-            context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
-            //context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
-#if 0 //1.6:
-            const QString textStyleName = ts.attributeNS( KoXmlNS::text, "style-name", QString::null );
-            const KoXmlElement* textStyleElem = textStyleName.isEmpty() ? 0 : context.oasisStyles().findStyle( textStyleName, "text"/*"paragraph"*/ );
-            if ( textStyleElem ) {
-                context.styleStack().setTypeProperties( "text"/*"paragraph"*/ );
-                context.addStyles( textStyleElem, "text"/*"paragraph"*/ );
-                KoCharacterStyle *charstyle = d->document->styleManager()->characterStyle(textStyleName);
-                if( ! charstyle ) {
-                    charstyle = new KoCharacterStyle();
-                    charstyle->loadOasis( context.styleStack() );
-                    d->document->styleManager()->add(charstyle);
-                }
-                charstyle->applyStyle(&cursor);
-            }
-#endif
             loadSpan( ts, context, cursor, stripLeadingSpace ); // recurse
-            //context.styleStack().restore();
+            cursor.setCharFormat(cf);                               // Restore the cursor char format
         }
         else if ( isTextNS && localName == "s" ) // text:s
         {
@@ -1106,6 +1101,13 @@ cursor.setCharFormat(cf);
             }
         }
 #endif
+#endif
+#if 0 // Load Frame test disabled
+        else if ( isDrawNS && localName == "frame" ) // draw:frame
+        {
+            // We are opening a new frame...
+            loadFrame(ts, context, cursor, stripLeadingSpace);
+        }
 #endif
         else
         {

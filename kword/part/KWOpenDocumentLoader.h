@@ -87,6 +87,7 @@ private:
     void loadList(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
     void loadSection(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
     void loadSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor, bool* stripLeadingSpace);
+    //void loadFrame(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor, bool* stripLeadingSpace);
 
 private:
     /// \internal d-pointer class.
