@@ -58,13 +58,24 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
     m_attributeManager->disinheritAttributes();
 }
 
+void FormulaRenderer::layoutElement( BasicElement* element )
+{
+    m_attributeManager->inheritAttributes( element ); // inherit the styles
+    
+    foreach( BasicElement* tmp, element->childElements() )
+        tmp->layout();                                // first layout all children
+
+    element->layout( m_attributeManager );            // actually layout the element
+    m_attributeManager->disinheritAttributes();
+}
+
 void FormulaRenderer::update( QPainter& p, BasicElement* element )
 {
-    layoutElement( element );              // relayout the changed element
+    updateElementLayout( element );              // relayout the changed element
     paintElement( p, m_dirtyElement );     // and then repaint as much as needed
 }
 
-void FormulaRenderer::layoutElement( BasicElement* element )
+void FormulaRenderer::updateElementLayout( BasicElement* element )
 {
     m_attributeManager->inheritAttributes( element );   // rebuild the heritage tree
     QRectF tmpBoundingRect;

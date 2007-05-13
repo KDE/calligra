@@ -57,14 +57,14 @@ public:
     ~FormulaRenderer();
 
     /**
-     * Paint an element
+     * Paint an element and all its children
      * @param p The QPainter that should be used to paint the element
      * @param element The element to be painted
      */
     void paintElement( QPainter& p, BasicElement* element );
 
     /**
-     * Layout an element
+     * Layout an element and all its children
      * @param element The element to be layouted
      */
     void layoutElement( BasicElement* element );
@@ -75,6 +75,9 @@ public:
      * @param element The element that has changed
      */
     void update( QPainter& p, BasicElement* element );
+
+    /// Just for updating one elements layout after a change
+    void updateElementLayout( BasicElement* element );
 
 private:
     /// The attribute manager used for renderering and layouting
