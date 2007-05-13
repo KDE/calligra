@@ -253,7 +253,6 @@ void SubtotalDialog::fillColumnBoxes()
   Q3CheckListItem * item;
 
   QString text;
-  QString col( i18n( "Column '%1' ") );
 
   int index = 0;
   for ( int i = m_selection.left(); i <= r; ++i )
@@ -263,7 +262,7 @@ void SubtotalDialog::fillColumnBoxes()
 
     if ( text.length() > 0 )
     {
-      text = col.arg( Cell::columnName( i ) );
+      text = i18n( "Column '%1' ", Cell::columnName( i ) );
     }
 
     m_columnBox->insertItem( index++, text );

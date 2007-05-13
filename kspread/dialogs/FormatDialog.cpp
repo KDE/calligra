@@ -120,9 +120,7 @@ void FormatDialog::slotActivated( int index )
     QString img = Factory::global().dirs()->findResource( "sheet-styles", m_entries[ index ].image );
     if ( img.isEmpty() )
     {
-	QString str( i18n( "Could not find image %1." ) );
-	str = str.arg( m_entries[ index ].image );
-	KMessageBox::error( this, str );
+	KMessageBox::error( this, i18n( "Could not find image %1.", m_entries[ index ].image ) );
 
 	enableButtonOk(false);
 
@@ -132,9 +130,7 @@ void FormatDialog::slotActivated( int index )
     QPixmap pix( img );
     if ( pix.isNull() )
     {
-	QString str( i18n( "Could not load image %1." ) );
-	str = str.arg( img );
-	KMessageBox::error( this,str );
+	KMessageBox::error( this, i18n( "Could not load image %1.", img ) );
 
 	enableButtonOk(false);
 
@@ -149,9 +145,7 @@ void FormatDialog::slotOk()
     QString xml = Factory::global().dirs()->findResource( "sheet-styles", m_entries[ m_combo->currentIndex() ].xml );
     if ( xml.isEmpty() )
     {
-	QString str( i18n( "Could not find sheet-style XML file '%1'." ) );
-	str = str.arg( m_entries[ m_combo->currentIndex() ].xml );
-	KMessageBox::error( this, str );
+	KMessageBox::error( this, i18n( "Could not find sheet-style XML file '%1'.", m_entries[ m_combo->currentIndex() ].xml ) );
 	return;
     }
 
@@ -163,9 +157,7 @@ void FormatDialog::slotOk()
 
     if ( !parseXML( doc ) )
     {
-	QString str( i18n( "Parsing error in sheet-style XML file %1." ) );
-	str = str.arg( m_entries[ m_combo->currentIndex() ].xml );
-	KMessageBox::error( this, str );
+	KMessageBox::error( this, i18n( "Parsing error in sheet-style XML file %1.", m_entries[ m_combo->currentIndex() ].xml ) );
 	return;
     }
 

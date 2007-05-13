@@ -792,9 +792,7 @@ bool Cell::makeFormula()
     {
         if (doc()->showMessageError())
         {
-            QString tmp(i18n("Error in cell %1\n\n"));
-            tmp = tmp.arg( fullName() );
-            KMessageBox::error( 0, tmp );
+            KMessageBox::error( 0, i18n("Error in cell %1\n\n", fullName()) );
         }
         setValue( Value::errorPARSE() );
         return false;
@@ -944,9 +942,7 @@ void Cell::setCellText( const QString& text )
         {
             if (doc()->showMessageError())
             {
-                QString tmp(i18n("Error in cell %1\n\n"));
-                tmp = tmp.arg( fullName() );
-                KMessageBox::error( 0, tmp );
+                KMessageBox::error( 0, i18n("Error in cell %1\n\n", fullName()) );
             }
             setValue( Value::errorPARSE() );
             return;

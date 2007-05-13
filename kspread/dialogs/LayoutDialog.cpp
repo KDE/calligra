@@ -276,8 +276,8 @@ bool GeneralTab::checkParent( const QString & parentName )
     if ( !m_dlg->checkCircle( m_nameEdit->text(), parentName ) )
     {
       KMessageBox::sorry( this,
-                          i18n( "The style cannot inherit from '%1' because of recursive references." )
-                          .arg( m_parentBox->currentText() ) );
+                          i18n( "The style cannot inherit from '%1' because of recursive references.",
+                          m_parentBox->currentText() ) );
       return false;
     }
 
@@ -2131,10 +2131,8 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     if ( dlg->isRowSelected )
         width->setEnabled(false);
 
-    defaultWidth->setText(i18n("Default width (%1 %2)",
-                          QString::number(KoUnit::toUserValue(dlg->defaultWidthSize,
-                                          dlg->getDoc()->unit()), 'f', 2),
-                          dlg->getDoc()->unitName()));
+    double dw = KoUnit::toUserValue(dlg->defaultWidthSize, dlg->getDoc()->unit());
+    defaultWidth->setText(i18n("Default width (%1 %2)", dw, dlg->getDoc()->unitName()));
     if ( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
@@ -2151,10 +2149,8 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     if ( dlg->isColumnSelected )
         height->setEnabled(false);
 
-    defaultHeight->setText(i18n("Default height (%1 %2)",
-                           QString::number(KoUnit::toUserValue(dlg->defaultHeightSize,
-                                           dlg->getDoc()->unit()), 'f', 2),
-                           dlg->getDoc()->unitName()));
+    double dh =  KoUnit::toUserValue(dlg->defaultHeightSize, dlg->getDoc()->unit());
+    defaultHeight->setText(i18n("Default height (%1 %2)", dh, dlg->getDoc()->unitName()));
     if ( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
 
