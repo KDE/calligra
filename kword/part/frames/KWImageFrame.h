@@ -41,6 +41,7 @@ public:
 private:
     KoImageData m_imageData;
     bool m_fullKritaShape;
+    KWImageFrame::ImageQuality  m_quality;
 };
 
 #endif
