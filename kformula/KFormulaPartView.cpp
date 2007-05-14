@@ -79,7 +79,7 @@ void KFormulaPartView::setupActions()
 {
 /*    KGlobal::dirs()->addResourceType( "toolbar", KStandardDirs::kde_default("data") +
                                       "kformula/pics/" );
-	
+
     m_cutAction;
     m_copyAction;
     m_pasteAction;
@@ -123,7 +123,7 @@ void KFormulaPartView::slotShowTipOnStart()
 
 void KFormulaPartView::slotShowTip()
 {
-    KTipDialog::showTip( this, QString::null, true );
+    KTipDialog::showTip( this, "", true );
 }
 
 void KFormulaPartView::setEnabled( bool enabled )
