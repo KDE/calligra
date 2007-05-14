@@ -421,6 +421,8 @@ public:
     void setParentManager( ScheduleManager *sm );
     ScheduleManager *parentManager() const { return m_parent; }
     
+    long id() const { return m_expected == 0 ? -1 : m_expected->id(); }
+    
     int removeChild( const ScheduleManager *sm );
     void insertChild( ScheduleManager *sm, int index = -1 );
     const QList<ScheduleManager*> &children() const { return m_children; }

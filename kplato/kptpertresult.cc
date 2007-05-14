@@ -28,6 +28,9 @@ void PertResult::draw( Project &project)
 {
     kDebug() << "UPDATE PE" << endl;
     m_schedule->getUi().treeWidgetTaskResult->clear();
+    if ( current_schedule == -1 ) {
+        return;
+    }
     KLocale * locale = KGlobal::locale();
     QList<Node*> list;
     QString res;
@@ -259,6 +262,13 @@ void PertResult::slotUpdate(){
 
 void PertResult::Update(int id_schedule){
     current_schedule=id_schedule;
+    draw(m_part->getProject());
+}
+
+void PertResult::slotScheduleSelectionChanged( long id )
+{
+    kDebug()<<k_funcinfo<<id<<endl;
+    current_schedule = id;
     draw(m_part->getProject());
 }
 

@@ -174,6 +174,12 @@ signals:
     void deleteScheduleManager( Project*, ScheduleManager* );
     void SelectionScheduleChanged();
 
+    /**
+     * Emitted when schedule selection changes.
+     * @param id is the new schedule id. If -1, no schedule is selected.
+    */
+    void scheduleSelectionChanged( long id );
+    
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );

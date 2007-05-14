@@ -653,6 +653,8 @@ ScheduleEditor::ScheduleEditor( Part *part, QWidget *parent )
     connect( m_editor, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
     
     connect( m_editor, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    
+    connect( this, SIGNAL( scheduleSelectionChanged( long ) ), resultPert, SLOT( slotScheduleSelectionChanged( long ) ) );
 }
 
 void ScheduleEditor::draw( Project &project )
@@ -705,8 +707,9 @@ void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
     ScheduleManager *sm = 0;
     if ( ! list.isEmpty() ) {
         sm = m_editor->itemModel()->manager( list.first() );
-	//FIXME TAKE THE CORRECT SCHEDULE I DON'T KNOW HOW TAKE IT
-        //resultPert->Update(sm->schedules().last()->id());
+        emit scheduleSelectionChanged( sm->id() );
+    } else {
+        emit scheduleSelectionChanged( -1 );
     }
     slotEnableActions( sm );
     

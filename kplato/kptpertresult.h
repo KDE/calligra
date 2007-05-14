@@ -76,7 +76,9 @@ public:
     void testComplexGraph();
     void Update(int id_schedule);
 
-
+public slots:
+    void slotScheduleSelectionChanged( long id );
+    
 private:
     ScheduleEditor * m_schedule;
     Node * m_node;
@@ -84,7 +86,7 @@ private:
     Project * m_project;
     bool complexGraph;
     QList<Node *> m_criticalPath;
-    int current_schedule;
+    long current_schedule;
 
 private slots:
     void slotUpdate();
