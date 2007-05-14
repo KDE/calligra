@@ -41,7 +41,7 @@
 
 namespace FormulaShape {
 
-TextElement::TextElement( QChar ch, bool beSymbol, BasicElement* parent ) 
+TextElement::TextElement( QChar ch, bool beSymbol, BasicElement* parent )
     : BasicElement( parent ), m_character( ch ), symbol( beSymbol )
 {
 }
@@ -102,7 +102,8 @@ void TextElement::paint( QPainter& painter, const AttributeManager* am )
                           context.layoutUnitToPixelY( getHeight() ) );
         }
      */
-     painter.drawText( 0, 0, character() ); // FIXME
+     kWarning() << "Text position: " << origin() << endl;
+     painter.drawText( origin(), character() ); // FIXME
 }
 
 void TextElement::layout( const AttributeManager* am )
@@ -132,6 +133,10 @@ void TextElement::layout( const AttributeManager* am )
             setHeight( bound.height() );
             setBaseLine( -bound.top() );
 
+			kWarning() << "Width: " << fm.width( ch ) << endl;
+			kWarning() << "Height: " << bound.height() << endl;
+			kWarning() << "Baseline: " << -bound.top() << endl;
+
             // There are some glyphs in TeX that have
             // baseline==0. (\int, \sum, \prod)
             if ( baseLine() == 0 ) {
@@ -143,13 +148,13 @@ void TextElement::layout( const AttributeManager* am )
 }
 
 #warning "Port and remove obsolete code"
-#if 0  
+#if 0
 /**
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void TextElement::calcSizes( const ContextStyle& context, 
-                             ContextStyle::TextStyle tstyle, 
+void TextElement::calcSizes( const ContextStyle& context,
+                             ContextStyle::TextStyle tstyle,
                              ContextStyle::IndexStyle /*istyle*/,
                              StyleAttributes& style )
 {
