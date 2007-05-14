@@ -32,8 +32,12 @@ public:
     explicit PictureShape();
     virtual ~PictureShape();
 
+    // reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
-    virtual void saveOdf( KoShapeSavingContext * context );
+    // reimplemented
+    virtual void saveOdf( KoShapeSavingContext * context ) const;
+    // reimplemented
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 private:
     KoImageData *m_imageData;

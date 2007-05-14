@@ -43,7 +43,8 @@ class MockTextShape : public KoShape {
         setUserData(new KoTextShapeData());
     }
     virtual void paint(QPainter &, const KoViewConverter &) { }
-    virtual void saveOdf( KoShapeSavingContext *) {}
+    virtual void saveOdf( KoShapeSavingContext *) const {}
+    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return false; }
 };
 
 #endif

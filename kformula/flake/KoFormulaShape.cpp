@@ -106,8 +106,12 @@ void KoFormulaShape::importFormula( const KUrl& url )
 	m_formulaRenderer->layoutElement( m_formulaElement );
 }
 
-void KoFormulaShape::saveOdf( KoShapeSavingContext * context ) {
+void KoFormulaShape::saveOdf( KoShapeSavingContext * context ) const {
     // TODO
+}
+
+bool KoFormulaShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    return false; // TODO
 }
 
 } // namespace FormulaShape

@@ -50,7 +50,10 @@ public:
     void setDemoText(bool on);
     bool demoText() const { return m_demoText; }
 
-    virtual void saveOdf(KoShapeSavingContext * context);
+    // reimplemented
+    virtual void saveOdf(KoShapeSavingContext * context) const;
+    // reimplemented
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
     KoTextShapeData *textShapeData() { return m_textShapeData; }
 

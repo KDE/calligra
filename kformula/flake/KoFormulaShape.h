@@ -81,7 +81,9 @@ public:
     void importFormula( const KUrl& url);
 
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext * context );
+    virtual void saveOdf( KoShapeSavingContext * context ) const;
+    // reimplemented
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
 private:
     /// The element at the highest level in the formula tree, contains all other elements

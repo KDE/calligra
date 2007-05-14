@@ -28,7 +28,8 @@ class DummyShape : public KoShape {
 public:
     // TODO paint a 'placeholder' kind of picture to indicate that a plugin is missing.
     void paint(QPainter &, const KoViewConverter &) {}
-    void saveOdf(KoShapeSavingContext *) {}
+    void saveOdf(KoShapeSavingContext *) const { }
+    bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return false; }
 };
 
 static KoShape *createShape(const KoImageData &image) {
@@ -41,7 +42,8 @@ static KoShape *createShape(const KoImageData &image) {
 KWImageFrame::KWImageFrame(const KoImageData &image, KWFrameSet *parent)
     : KWFrame(createShape(image), parent),
     m_imageData(image),
-    m_fullKritaShape(false)
+    m_fullKritaShape(false),
+    m_quality(LowQuality)
 {
     shape()->setUserData(new KoImageData(m_imageData));
 }
@@ -53,5 +55,5 @@ void KWImageFrame::setImageQuality(KWImageFrame::ImageQuality quality) {
 }
 
 KWImageFrame::ImageQuality KWImageFrame::imageQuality() const {
+    return m_quality;
 }
-

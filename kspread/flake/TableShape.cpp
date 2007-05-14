@@ -161,7 +161,10 @@ Sheet* TableShape::sheet() const
     return d->sheet();
 }
 
-void TableShape::saveOdf( KoShapeSavingContext * context )
+void TableShape::saveOdf( KoShapeSavingContext * context ) const
 {
 }
 
+bool TableShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    return false; // TODO
+}

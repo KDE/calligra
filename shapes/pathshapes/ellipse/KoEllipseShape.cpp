@@ -46,7 +46,7 @@ KoEllipseShape::~KoEllipseShape()
 {
 }
 
-void KoEllipseShape::saveOdf( KoShapeSavingContext * context )
+void KoEllipseShape::saveOdf( KoShapeSavingContext * context ) const
 {
     context->xmlWriter().startElement("draw:ellipse");
     saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
@@ -73,6 +73,10 @@ void KoEllipseShape::saveOdf( KoShapeSavingContext * context )
     context->xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
     context->xmlWriter().endElement();
     saveOdfConnections(context);
+}
+
+bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    return false; // TODO
 }
 
 void KoEllipseShape::resize( const QSizeF &newSize )

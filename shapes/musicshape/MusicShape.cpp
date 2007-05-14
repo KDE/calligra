@@ -116,9 +116,13 @@ void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
     m_renderer->renderSheet( painter, m_sheet );
 }
 
-void MusicShape::saveOdf( KoShapeSavingContext * context )
+void MusicShape::saveOdf( KoShapeSavingContext * context ) const
 {
     // TODO
+}
+
+bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+    return false; // TODO
 }
 
 Sheet* MusicShape::sheet()
