@@ -50,8 +50,8 @@ class KOFORMULA_EXPORT KFormulaPartDocument : public KoDocument, public KoShapeC
 Q_OBJECT
 public:
     /// The basic constructor
-    KFormulaPartDocument( QWidget *parentWidget = 0, QObject* parent = 0,
-		           bool singleViewMode = false );
+    explicit KFormulaPartDocument( QWidget *parentWidget = 0, QObject* parent = 0,
+                                   bool singleViewMode = false );
     ~KFormulaPartDocument();
 
     // KoShapeControllerBase interface
