@@ -103,6 +103,7 @@ void KoFormulaShape::importFormula( const KUrl& url )
     m_document = new KFormulaPartDocument();
     m_document->openURL(url);
 	m_formulaElement = m_document->formulaElement();
+	m_formulaRenderer->layoutElement( m_formulaElement );
 }
 
 void KoFormulaShape::saveOdf( KoShapeSavingContext * context ) {
