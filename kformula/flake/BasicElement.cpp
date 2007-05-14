@@ -89,7 +89,7 @@ BasicElement* BasicElement::childElementAt( const QPointF& p )
     return this;    // if no child contains the point, it's the FormulaElement itsself
 }
 
-void BasicElement::setAttribute( const QString& name, QVariant value )
+void BasicElement::setAttribute( const QString& name, const QVariant& value )
 {
     if( name.isEmpty() || !value.canConvert( QVariant::String ) )
         return;

@@ -180,7 +180,7 @@ public:
      * @param name The name of the attribute to be set
      * @param value The value to set for the attribute
      */
-    void setAttribute( const QString& name, QVariant value );
+    void setAttribute( const QString& name, const QVariant& value );
 
     /// @return The value of the attribute if it is set for this element
     QString attribute( const QString& attribute ) const;
