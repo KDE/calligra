@@ -34,9 +34,6 @@ class IdentifierElement : public TokenElement {
 public:
     /// The standart constructor
     IdentifierElement( BasicElement* parent = 0 );
-
-private:
-    /// The actual identifier
 };
 
 } // namespace FormulaShape
