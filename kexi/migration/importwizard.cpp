@@ -626,7 +626,7 @@ QString ImportWizard::driverNameForSelectedSource()
 	}
 
 	return m_srcConn->selectedConnectionData() 
-		? m_srcConn->selectedConnectionData()->driverName : QString::null;
+		? m_srcConn->selectedConnectionData()->driverName : QString();
 }
 
 //===========================================================
@@ -901,7 +901,7 @@ void ImportWizard::next()
 				dbname = m_srcConn->selectedFileName();
 			else
 				dbname = m_srcConn->selectedConnectionData() 
-					? m_srcConn->selectedConnectionData()->serverInfoString() : QString::null;
+					? m_srcConn->selectedConnectionData()->serverInfoString() : QString();
 				if (!dbname.isEmpty())
 					dbname = QString(" \"%1\"").arg(dbname);
 			KMessageBox::error(this, i18n("Could not import database%1. This type is not supported.")

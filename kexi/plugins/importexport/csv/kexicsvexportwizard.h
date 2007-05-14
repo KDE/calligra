@@ -79,7 +79,7 @@ class KexiCSVExportWizard : public K3Wizard
 		bool readBoolEntry(const char *key, bool defaultValue);
 
 		//! Helper like \ref readBoolEntry(const char *, bool), but for QString values.
-		QString readEntry(const char *key, const QString& defaultValue = QString::null);
+		QString readEntry(const char *key, const QString& defaultValue = QString());
 
 		//! Helper, works like KGlobal::config()->writeEntry(const char*,bool) but if mode is Clipboard,
 		//! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy" 

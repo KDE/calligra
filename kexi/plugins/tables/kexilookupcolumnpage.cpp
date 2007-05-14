@@ -148,13 +148,13 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	d->rowSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(d->rowSourceLabel);
 
-	d->gotoRowSourceButton = new KexiSmallToolButton(contents, QString::null, "goto-page", "gotoRowSourceButton");
+	d->gotoRowSourceButton = new KexiSmallToolButton(contents, QString(), "goto-page", "gotoRowSourceButton");
 	d->gotoRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
 	QToolTip::add(d->gotoRowSourceButton, i18n("Go to selected row source"));
 	hlyr->addWidget(d->gotoRowSourceButton);
 	connect(d->gotoRowSourceButton, SIGNAL(clicked()), this, SLOT(slotGotoSelectedRowSource()));
 
-	d->clearRowSourceButton = new KexiSmallToolButton(contents, QString::null,
+	d->clearRowSourceButton = new KexiSmallToolButton(contents, QString(),
 		"clear_left", "clearRowSourceButton");
 	d->clearRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
 	QToolTip::add(d->clearRowSourceButton, i18n("Clear row source"));
@@ -176,7 +176,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	d->boundColumnLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(d->boundColumnLabel);
 
-	d->clearBoundColumnButton = new KexiSmallToolButton(contents, QString::null,
+	d->clearBoundColumnButton = new KexiSmallToolButton(contents, QString(),
 		"clear_left", "clearBoundColumnButton");
 	d->clearBoundColumnButton->setMinimumHeight(d->boundColumnLabel->minimumHeight());
 	QToolTip::add(d->clearBoundColumnButton, i18n("Clear bound column"));
@@ -198,7 +198,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	d->visibleColumnLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(d->visibleColumnLabel);
 
-	d->clearVisibleColumnButton = new KexiSmallToolButton(contents, QString::null,
+	d->clearVisibleColumnButton = new KexiSmallToolButton(contents, QString(),
 		"clear_left", "clearVisibleColumnButton");
 	d->clearVisibleColumnButton->setMinimumHeight(d->visibleColumnLabel->minimumHeight());
 	QToolTip::add(d->clearVisibleColumnButton, i18n("Clear visible column"));
@@ -274,7 +274,7 @@ void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
 void KexiLookupColumnPage::clearBoundColumnSelection()
 {
 	d->boundColumnCombo->setCurrentText("");
-	d->boundColumnCombo->setFieldOrExpression(QString::null);
+	d->boundColumnCombo->setFieldOrExpression(QString());
 	slotBoundColumnSelected();
 	d->clearBoundColumnButton->setEnabled(false);
 }
@@ -307,7 +307,7 @@ void KexiLookupColumnPage::slotBoundColumnSelected()
 void KexiLookupColumnPage::clearVisibleColumnSelection()
 {
 	d->visibleColumnCombo->setCurrentText("");
-	d->visibleColumnCombo->setFieldOrExpression(QString::null);
+	d->visibleColumnCombo->setFieldOrExpression(QString());
 	slotVisibleColumnSelected();
 	d->clearVisibleColumnButton->setEnabled(false);
 }

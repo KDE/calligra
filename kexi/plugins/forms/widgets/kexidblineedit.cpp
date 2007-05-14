@@ -125,7 +125,7 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 		}
 		else if (t == KexiDB::Field::DateTime) {
 			if (value.toString().isEmpty() ) {
-				setText( QString::null );
+				setText( QString() );
 			}
 			else {
 				setText(

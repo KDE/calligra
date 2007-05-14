@@ -70,13 +70,13 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 			uint options = KexiDB::Field::NoOptions,
 			uint length=0, uint precision=0,
 			QVariant defaultValue=QVariant(),
-			const QString& caption = QString::null,
-			const QString& description = QString::null,
+			const QString& caption = QString(),
+			const QString& description = QString(),
 			uint width = 0);
 
 		/*! Not db-aware, convenience ctor, simplified version of the above. */
 		KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, const QString& caption,
-			const QString& description = QString::null);
+			const QString& description = QString());
 
 		//! Db-aware version.
 		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& aColumnInfo,

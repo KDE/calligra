@@ -175,11 +175,11 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 		/*! Implemented for KexiMainWindow */
 		virtual tristate saveObject( KexiWindow *window,
-			const QString& messageWhenAskingForName = QString::null, bool dontAsk = false );
+			const QString& messageWhenAskingForName = QString(), bool dontAsk = false );
 
 		/*! Implemented for KexiMainWindow */
 		virtual tristate getNewObjectInfo( KexiPart::Item *partItem, KexiPart::Part *part, 
-			bool& allowOverwriting, const QString& messageWhenAskingForName = QString::null );
+			bool& allowOverwriting, const QString& messageWhenAskingForName = QString() );
 
 		/*! Implemented for KexiMainWindow */
 		virtual void highlightObject(const Q3CString& mime, const Q3CString& name);
@@ -201,7 +201,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		  'kexi --skip-dialog file.kexic' is executed (or the connection is opened 
 		  directly if there's no porject opened in the current Kexi main window. */
 		tristate openProject(const QString& aFileName, KexiDB::ConnectionData *cdata, 
-			const QString& dbName = QString::null,
+			const QString& dbName = QString(),
 			const Q3ValueList<KexiProjectData::ObjectInfo>& autoopenObjects = Q3ValueList<KexiProjectData::ObjectInfo>());
 
 		/*! Helper. Opens project pointed by \a aFileName.
@@ -211,7 +211,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 connection in Kexi::connset() for this filename. 
 		 \a fileNameForConnectionData can be empty. */
 		tristate openProject(const QString& aFileName, 
-			const QString& fileNameForConnectionData, const QString& dbName = QString::null);
+			const QString& fileNameForConnectionData, const QString& dbName = QString());
 
 		/*! Creates a new project usign template pointed by \a projectData.
 		 Application state (e.g. actions) is updated. 
@@ -528,7 +528,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		//! Shows "print" dialog for \a item and \a settings.
 		//! \return true on success.
 		bool printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings,
-			const QString& titleText = QString::null);
+			const QString& titleText = QString());
 		
 		/*! Shows "print preview" window for \a item. 
 		 The preview windoe is cached, so \a reload == true is sometimes needed 
@@ -540,7 +540,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		//! Shows "print preview" window. 
 		//! \return true on success.
 		bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, 
-			const QString& titleText = QString::null, bool reload = false);
+			const QString& titleText = QString(), bool reload = false);
 
 		/*! Implemented for KexiMainWindow. Helper for printItem() and printPreviewForItem().
 		 Also used by KexiFormEventAction.

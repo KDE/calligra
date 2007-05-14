@@ -32,7 +32,7 @@ class KexiStartupFileDialogBasePrivate;
 class KexiStartupFileDialogBase : public Q3FileDialog
 {
 public:
-	KexiStartupFileDialogBase(const QString & dirName, const QString & filter = QString::null, 
+	KexiStartupFileDialogBase(const QString & dirName, const QString & filter = QString(), 
 		QWidget * parent = 0, const char * name = 0, bool modal = false );
 	~KexiStartupFileDialogBase();
 
@@ -44,7 +44,7 @@ public:
 	void setMode( KFile::Mode m );
 	void setMode( unsigned int m );
 	QString currentFilter() const;
-	void setMimeFilter( const QStringList& mimeTypes, const QString& defaultType = QString::null );
+	void setMimeFilter( const QStringList& mimeTypes, const QString& defaultType = QString() );
 
 	KFile::Mode mode() const;
 

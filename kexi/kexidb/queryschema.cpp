@@ -54,7 +54,7 @@ QueryColumnInfo::~QueryColumnInfo()
 QString QueryColumnInfo::debugString() const
 {
 	return field->name() + 
-		( alias.isEmpty() ? QString::null 
+		( alias.isEmpty() ? QString() 
 			: (QString::fromLatin1(" AS ") + QString(alias)) );
 }
 
@@ -870,7 +870,7 @@ QString QuerySchema::debugString()
 		}
 	}
 	dbg += QString("-TABLE ALIASES:\n" + aliases);
-	QString where = d->whereExpr ? d->whereExpr->debugString() : QString::null;
+	QString where = d->whereExpr ? d->whereExpr->debugString() : QString();
 	if (!where.isEmpty())
 		dbg += (QString("\n-WHERE EXPRESSION:\n") + where);
 	if (!orderByColumnList().isEmpty())
@@ -1705,7 +1705,7 @@ void QuerySchema::addToWhereExpression(KexiDB::Field *field, const QVariant& val
 		KexiDBExpr_Relational, 
 		new ConstExpr( token, value ),
 		relation,
-		new VariableExpr((field->table() ? (field->table()->name()+".") : QString::null)+field->name())
+		new VariableExpr((field->table() ? (field->table()->name()+".") : QString())+field->name())
 	);
 	if (d->whereExpr) {
 		d->whereExpr = new BinaryExpr(

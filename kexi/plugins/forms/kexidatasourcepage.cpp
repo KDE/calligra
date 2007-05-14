@@ -90,7 +90,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_widgetDSLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_widgetDSLabel);
 
-	m_clearWidgetDSButton = new KexiSmallToolButton(contents, QString::null, "clear_left", "clearWidgetDSButton");
+	m_clearWidgetDSButton = new KexiSmallToolButton(contents, QString(), "clear_left", "clearWidgetDSButton");
 	m_clearWidgetDSButton->setMinimumHeight(m_widgetDSLabel->minimumHeight());
 	m_clearWidgetDSButton->setToolTip( i18n("Clear widget's data source"));
 	hlyr->addWidget(m_clearWidgetDSButton);
@@ -116,13 +116,13 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_dataSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_dataSourceLabel);
 
-	m_gotoButton = new KexiSmallToolButton(contents, QString::null, "goto-page", "gotoButton");
+	m_gotoButton = new KexiSmallToolButton(contents, QString(), "goto-page", "gotoButton");
 	m_gotoButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
 	m_gotoButton->setToolTip( i18n("Go to selected form's data source"));
 	hlyr->addWidget(m_gotoButton);
 	connect(m_gotoButton, SIGNAL(clicked()), this, SLOT(slotGotoSelected()));
 
-	m_clearDSButton = new KexiSmallToolButton(contents, QString::null, "clear_left", "clearDSButton");
+	m_clearDSButton = new KexiSmallToolButton(contents, QString(), "clear_left", "clearDSButton");
 	m_clearDSButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
 	m_clearDSButton->setToolTip( i18n("Clear form's data source"));
 	hlyr->addWidget(m_clearDSButton);
@@ -241,7 +241,7 @@ void KexiDataSourcePage::clearWidgetDataSourceSelection()
 {
 	if (!m_sourceFieldCombo->currentText().isEmpty()) {
 		m_sourceFieldCombo->setCurrentText("");
-		m_sourceFieldCombo->setFieldOrExpression(QString::null);
+		m_sourceFieldCombo->setFieldOrExpression(QString());
 		slotFieldSelected();
 	}
 	m_clearWidgetDSButton->setEnabled(false);

@@ -20,10 +20,8 @@
 #ifndef KEXIFIELDCOMBOBOX_H
 #define KEXIFIELDCOMBOBOX_H
 
-#include <qpixmap.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <kcombobox.h>
+#include <KComboBox>
+#include <kexi_export.h>
 
 namespace KexiDB {
 	class TableOrQuerySchema;
@@ -38,7 +36,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
 	Q_OBJECT
 
 	public:
-		KexiFieldComboBox(QWidget *parent, const char *name = 0);
+		KexiFieldComboBox(QWidget *parent);
 		virtual ~KexiFieldComboBox();
 
 //		/*! Sets table or query schema \a schema. 
@@ -78,7 +76,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
 		virtual void focusOutEvent( QFocusEvent *e );
 
 		class Private;
-		Private *d;
+		Private * const d;
 };
 
 #endif

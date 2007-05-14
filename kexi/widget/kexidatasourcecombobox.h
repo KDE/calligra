@@ -20,9 +20,8 @@
 #ifndef KEXIDATASOURCECOMBOBOX_H
 #define KEXIDATASOURCECOMBOBOX_H
 
-#include <kcombobox.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <KComboBox>
+#include <kexi_export.h>
 
 class KexiProject;
 namespace KexiPart {
@@ -38,8 +37,8 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 	Q_OBJECT
 
 	public:
-		KexiDataSourceComboBox(QWidget *parent, const char *name=0);
-		~KexiDataSourceComboBox();
+		KexiDataSourceComboBox(QWidget *parent);
+		virtual ~KexiDataSourceComboBox();
 
 		//! \return global project that is used to retrieve schema informationm for this combo box.
 		KexiProject* project() const;
@@ -76,7 +75,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 	protected slots:
 		void slotNewItemStored(KexiPart::Item& item);
 		void slotItemRemoved(const KexiPart::Item& item);
-		void slotItemRenamed(const KexiPart::Item& item, const Q3CString& oldName);
+		void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
 		void slotActivated( int index );
 		void slotReturnPressed(const QString & text);
 
@@ -84,7 +83,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 		virtual void focusOutEvent( QFocusEvent *e );
 
 		class Private;
-		Private *d;
+		Private * const d;
 };
 
 #endif

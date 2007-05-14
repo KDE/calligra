@@ -18,11 +18,11 @@
 */
 
 #include "kexisectionheader.h"
-#include "kexiviewbase.h"
 #include <kexiutils/utils.h>
+#include <KexiView.h>
 
 #include <qlabel.h>
-#include <qlayout.h>
+#include <QBoxLayout>
 #include <khbox.h>
 #include <qtooltip.h>
 //Added by qt3to4:
@@ -31,22 +31,22 @@
 #include <kiconloader.h>
 #include <kpushbutton.h>
 
-class KexiSectionHeader::BoxLayout : public Q3BoxLayout
+class KexiSectionHeader::BoxLayout : public QBoxLayout
 {
 	public:
-		BoxLayout( KexiSectionHeader* parent, Qt::Orientation d, int margin = 0, 
-			int spacing = -1, const char * name = 0 );
+		BoxLayout( KexiSectionHeader* parent, QBoxLayout::Direction d, int margin = 0, 
+			int spacing = -1 );
 		virtual void addItem( QLayoutItem * item );
-		QPointer<KexiViewBase> view;
+		QPointer<KexiView> view;
 };
 
 //==========================
 
 //! @internal
-class KexiSectionHeaderPrivate
+class KexiSectionHeader::Private
 {
 	public:
-		KexiSectionHeaderPrivate() 
+		Private() 
 		{
 		}
 	
@@ -58,18 +58,20 @@ class KexiSectionHeaderPrivate
 
 //==========================
 
-KexiSectionHeader::KexiSectionHeader(const QString &caption, Orientation o, QWidget* parent )
-	: QWidget(parent, )
-	, d( new KexiSectionHeaderPrivate() )
+KexiSectionHeader::KexiSectionHeader(const QString &caption, 
+	Qt::Orientation o, QWidget* parent )
+	: QWidget(parent)
+	, d( new Private() )
 {
 	setObjectName("KexiSectionHeader");
 	d->orientation = o;
-	d->lyr = new BoxLayout( this, d->orientation==Qt::Vertical ? Q3BoxLayout::TopToBottom : Q3BoxLayout::LeftToRight );
-	d->lyr->setAutoAdd(true);
+	d->lyr = new BoxLayout( this, 
+		d->orientation==Qt::Vertical ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight );
+#warning deprecated	d->lyr->setAutoAdd(true);
 	d->lbl_b = new KHBox(this);
 	d->lbl = new QLabel(QString(" ")+caption, d->lbl_b);
 	d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-	d->lbl->setFocusPolicy(StrongFocus);
+	d->lbl->setFocusPolicy(Qt::StrongFocus);
 	d->lbl->installEventFilter(this);
 	installEventFilter(this);
 	setCaption(caption);
@@ -141,18 +143,19 @@ QSize KexiSectionHeader::sizeHint() const
 
 //======================
 
-KexiSectionHeader::BoxLayout::BoxLayout( KexiSectionHeader* parent, Direction d, int margin, int spacing, const char * name )
- : Q3BoxLayout(parent, d, margin, spacing, name )
+KexiSectionHeader::BoxLayout::BoxLayout( KexiSectionHeader* parent, Direction d, int margin, 
+	int spacing )
+ : QBoxLayout(parent, d, margin, spacing )
 {
 }
 
 void KexiSectionHeader::BoxLayout::addItem( QLayoutItem * item )
 {
-	Q3BoxLayout::addItem( item );
+	QBoxLayout::addItem( item );
 	if (item->widget()) {
 		item->widget()->installEventFilter( mainWidget() );
-		if (item->widget()->inherits("KexiViewBase")) {
-			view = static_cast<KexiViewBase*>(item->widget());
+		if (dynamic_cast<KexiView*>(item->widget())) {
+			view = dynamic_cast<KexiView*>(item->widget());
 			KexiSectionHeader *sh = static_cast<KexiSectionHeader*>(mainWidget());
 			connect(view,SIGNAL(focus(bool)),sh,SLOT(slotFocus(bool)));
 			sh->d->lbl->setBuddy(item->widget());

@@ -131,7 +131,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 //		connect(m_chooser, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 //	}
 
-	setDataSource( QString::null ); //to initialize popup menu and actions availability
+	setDataSource( QString() ); //to initialize popup menu and actions availability
 }
 
 KexiDBImageBox::~KexiDBImageBox()
@@ -568,7 +568,7 @@ void KexiDBImageBox::updateActionStrings()
 				beautifiedImageBoxName = dataSource();
 			}
 			else {
-				beautifiedImageBoxName = columnInfo() ? columnInfo()->captionOrAliasOrName() : QString::null;
+				beautifiedImageBoxName = columnInfo() ? columnInfo()->captionOrAliasOrName() : QString();
 				/*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
 				 (see doc/dev/settings.txt) */
 				beautifiedImageBoxName = beautifiedImageBoxName[0].upper() + beautifiedImageBoxName.mid(1);

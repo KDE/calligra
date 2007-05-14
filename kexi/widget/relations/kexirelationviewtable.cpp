@@ -29,12 +29,11 @@
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qstyle.h>
-//Added by qt3to4:
 #include <QEvent>
-#include <Q3Frame>
 #include <QDropEvent>
 #include <Q3VBoxLayout>
 #include <QMouseEvent>
+#include <QStyleOptionFocusRect>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -50,17 +49,18 @@
 
 KexiRelationViewTableContainer::KexiRelationViewTableContainer(
 	KexiRelationView *parent, KexiDB::TableOrQuerySchema *schema)
- : Q3Frame(parent,"KexiRelationViewTableContainer" )
+ : QFrame(parent)
 // , m_table(t)
  , m_parent(parent)
 //	, m_mousePressed(false)
 {
+	setObjectName("KexiRelationViewTableContainer");
 
 //	setFixedSize(100, 150);
 //js:	resize(100, 150);
 	//setMouseTracking(true);
 
-	setFrameStyle( Q3Frame::WinPanel | Q3Frame::Raised );
+	setFrameStyle( QFrame::WinPanel | QFrame::Raised );
 
 	Q3VBoxLayout *lyr = new Q3VBoxLayout(this,4,1); //js: using Q*BoxLayout is a good idea
 
@@ -72,7 +72,8 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(
 	connect(m_tableHeader,SIGNAL(moved()),this,SLOT(moved()));
 	connect(m_tableHeader, SIGNAL(endDrag()), this, SIGNAL(endDrag()));
 
-	m_tableView = new KexiRelationViewTable(schema, parent, this, "KexiRelationViewTable");
+	m_tableView = new KexiRelationViewTable(schema, parent, this);
+	m_tableView->setObjectName("KexiRelationViewTable");
 	//m_tableHeader->setFocusProxy( m_tableView );
 	m_tableView->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 	
@@ -94,7 +95,8 @@ KexiDB::TableOrQuerySchema* KexiRelationViewTableContainer::schema() const
 	return m_tableView->schema();
 }
 
-void KexiRelationViewTableContainer::slotContextMenu(K3ListView *, Q3ListViewItem *, const QPoint &p)
+void KexiRelationViewTableContainer::slotContextMenu(K3ListView *, Q3ListViewItem *, 
+	const QPoint &p)
 {
 //	m_parent->executePopup(p);
 	emit contextMenuRequest( p );
@@ -214,7 +216,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev)
 {
 	if (ev->type()==QEvent::MouseMove)
 	{
-		if (m_dragging && static_cast<QMouseEvent*>(ev)->state()==Qt::LeftButton) {
+		if (m_dragging && static_cast<QMouseEvent*>(ev)->modifiers()==Qt::LeftButton) {
 			int diffX,diffY;
 			diffX=static_cast<QMouseEvent*>(ev)->globalPos().x()-m_grabX;
 			diffY=static_cast<QMouseEvent*>(ev)->globalPos().y()-m_grabY;
@@ -298,15 +300,17 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
 //=====================================================================================
 
 KexiRelationViewTable::KexiRelationViewTable(KexiDB::TableOrQuerySchema* tableOrQuerySchema, 
-	KexiRelationView *view, QWidget *parent, const char *name)
- : KexiFieldListView(parent, name, KexiFieldListView::ShowAsterisk)
+	KexiRelationView *view, QWidget *parent)
+ : KexiFieldListView(parent, KexiFieldListView::ShowAsterisk)
  , m_view(view)
 {
 	setSchema(tableOrQuerySchema);
 	header()->hide();
 
-	connect(this, SIGNAL(dropped(QDropEvent *, Q3ListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
-	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotContentsMoving(int,int)));
+	connect(this, SIGNAL(dropped(QDropEvent *, Q3ListViewItem *)),
+		this, SLOT(slotDropped(QDropEvent *)));
+	connect(this, SIGNAL(contentsMoving(int, int)),
+		this, SLOT(slotContentsMoving(int,int)));
 }
 
 KexiRelationViewTable::~KexiRelationViewTable()
@@ -321,7 +325,7 @@ QSize KexiRelationViewTable::sizeHint() const
 //		<< ", " << fm.width(schema()->name()+"  ") << endl; 
 
 	int maxWidth = -1;
-	const int iconWidth = IconSize(KIcon::Small) + fm.width("i")+20;
+	const int iconWidth = IconSize(K3Icon::Small) + fm.width("i")+20;
 	for (Q3ListViewItem *item = firstChild(); item; item = item->nextSibling())
 		maxWidth = qMax(maxWidth, iconWidth + fm.width(item->text(0)));
 
@@ -425,9 +429,15 @@ void KexiRelationViewTable::contentsMousePressEvent(QMouseEvent *ev)
 
 QRect KexiRelationViewTable::drawItemHighlighter(QPainter *painter, Q3ListViewItem *item)
 {
+#ifdef __GNUC__
+#warning TODO KexiRelationViewTable::drawItemHighlighter() OK?
+#endif
 	if (painter) {
-		style().drawPrimitive(QStyle::PE_FocusRect, painter, itemRect(item), colorGroup(),
-			QStyle::State_FocusAtBorder);
+		QStyleOptionFocusRect option;
+		option.initFrom(this);
+		option.rect = itemRect(item);
+		option.state |= QStyle::State_FocusAtBorder;
+		style()->drawPrimitive(QStyle::PE_FrameFocusRect, &option, painter, this);
 	}
 	return itemRect(item);
 }

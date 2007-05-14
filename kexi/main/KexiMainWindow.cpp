@@ -1518,7 +1518,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 		}
 		const bool specialDir = fname.isEmpty();
 	kDebug() << fname << "............." << endl;
-		KFileDialog dlg( specialDir ? startDir : QString::null, 
+		KFileDialog dlg( specialDir ? startDir : QString(), 
 			mimetypes.join(" "), this, "filedialog", true);
 		if ( !specialDir )
 			dlg.setSelection( fname ); // may also be a filename
@@ -1543,7 +1543,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 		return false;
 	}
 
-	return openProject(fname, 0, QString::null, projectData.autoopenObjects/*copy*/);
+	return openProject(fname, 0, QString(), projectData.autoopenObjects/*copy*/);
 }
 
 void KexiMainWindow::updateReadOnlyState()
@@ -1886,9 +1886,9 @@ void KexiMainWindow::initNavigator()
 	}
 	if(d->prj->isConnected()) {
 		QString partManagerErrorMessages;
-		d->nav->setProject( d->prj, QString::null/*all mimetypes*/, &partManagerErrorMessages );
+		d->nav->setProject( d->prj, QString()/*all mimetypes*/, &partManagerErrorMessages );
 		if (!partManagerErrorMessages.isEmpty()) {
-			showWarningContinueMessage(partManagerErrorMessages, QString::null,
+			showWarningContinueMessage(partManagerErrorMessages, QString(),
 				"dontShowWarningsRelatedToPluginsLoading");
 		}
 	}
@@ -2018,10 +2018,10 @@ void KexiMainWindow::slotCaptionForCurrentMDIChild(bool childrenMaximized)
 
 	if (childrenMaximized && view) {
 		setWindowTitle( d->curDialog->caption()
-			+ (d->appCaptionPrefix.isEmpty() ? QString::null : (QString::fromLatin1(" - ") + d->appCaptionPrefix)) );
+			+ (d->appCaptionPrefix.isEmpty() ? QString() : (QString::fromLatin1(" - ") + d->appCaptionPrefix)) );
 	}
 	else {
-		setWindowTitle( (d->appCaptionPrefix.isEmpty() ? QString::null : (d->appCaptionPrefix + QString::fromLatin1(" - ")))
+		setWindowTitle( (d->appCaptionPrefix.isEmpty() ? QString() : (d->appCaptionPrefix + QString::fromLatin1(" - ")))
 			+ d->origAppCaption );
 	}
 }
@@ -3256,7 +3256,7 @@ tristate KexiMainWindow::getNewObjectInfo(
 					+"</p><p>"+i18n("Do you want to replace it?")+"</p>", 0,
 					KGuiItem(i18n("&Replace"), "button_yes"),
 					KGuiItem(i18n("&Choose Other Name...")),
-					QString::null, KMessageBox::Notify|KMessageBox::Dangerous);
+					QString(), KMessageBox::Notify|KMessageBox::Dangerous);
 				if (res == KMessageBox::No)
 					continue;
 				else if (res == KMessageBox::Cancel)
@@ -3379,7 +3379,7 @@ tristate KexiMainWindow::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar, bo
 			"<p>"+dlg->part()->i18nMessage("Design of object \"%1\" has been modified.", dlg)
 			.arg(dlg->partItem()->name())+"</p><p>"+i18n("Do you want to save changes?")+"</p>"
 			+ additionalMessage /*may be empty*/,
-			QString::null,
+			QString(),
 			saveChanges,
 			discardChanges);
 		if (questionRes==KMessageBox::Cancel) {
@@ -3393,7 +3393,7 @@ tristate KexiMainWindow::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar, bo
 		if (questionRes==KMessageBox::Yes) {
 			//save it
 //			if (!dlg->storeData())
-			tristate res = saveObject( dlg, QString::null, true /*dontAsk*/ );
+			tristate res = saveObject( dlg, QString(), true /*dontAsk*/ );
 			if (!res || ~res) {
 //js:TODO show error info; (retry/ignore/cancel)
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -4093,7 +4093,7 @@ void KexiMainWindow::slotStartFeedbackAgent()
 	if ( wizard->exec() )
 	{
 		KToolInvocation::invokeMailer( "kexi-reports-dummy@kexi.org",
-			QString::null, QString::null,
+			QString(), QString(),
 			about->appName() + Q3CString( " [feedback]" ),
 			wizard->feedbackDocument().toString( 2 ).local8Bit() );
 	}
@@ -4122,7 +4122,7 @@ void KexiMainWindow::importantInfo(bool /*onStartup*/)
 		QString fname = locate("data", QString("kexi/readme_")+lang);
 		if (fname.isEmpty())//back to default
 			fname = locate("data", "kexi/readme_en");
-		KTipDialog tipDialog(new KTipDatabase(QString::null), 0);
+		KTipDialog tipDialog(new KTipDatabase(QString()), 0);
 		tipDialog.setCaption(i18n("Important Information"));
 		QObjectList *l = tipDialog.queryList( "KPushButton" );//hack: hide <- -> buttons
 		int i=0;
@@ -4270,7 +4270,7 @@ KexiMainWindow::initUserActions()
 
 void KexiMainWindow::slotToolsProjectMigration()
 {
-	showProjectMigrationWizard(QString::null, QString::null);
+	showProjectMigrationWizard(QString(), QString());
 }
 
 void KexiMainWindow::slotToolsCompactDatabase()
@@ -4453,7 +4453,7 @@ bool KexiMainWindow::printItem(KexiPart::Item* item, const QString& titleText)
 
 tristate KexiMainWindow::printItem(KexiPart::Item* item)
 {
-	return printItem(item, QString::null);
+	return printItem(item, QString());
 }
 
 bool KexiMainWindow::printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings,
@@ -4473,7 +4473,7 @@ bool KexiMainWindow::printPreviewForItem(KexiPart::Item* item, const QString& ti
 
 tristate KexiMainWindow::printPreviewForItem(KexiPart::Item* item)
 {
-	return printPreviewForItem(item, QString::null, 
+	return printPreviewForItem(item, QString(), 
 //! @todo store cached row data?
 		true/*reload*/);
 }
@@ -4565,13 +4565,13 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
 			const int questionRes = KMessageBox::warningYesNoCancel( this,
 				"<p>"+dlg->part()->i18nMessage("Design of object \"%1\" has been modified.", dlg)
 				.arg(item->name()) + "</p><p>" + question + "</p>",
-				QString::null, 
+				QString(), 
 				saveChanges,
 				doNotSave);
 			if (KMessageBox::Cancel == questionRes)
 				return cancelled;
 			if (KMessageBox::Yes == questionRes) {
-				tristate savingRes = saveObject( dlg, QString::null, true /*dontAsk*/ );
+				tristate savingRes = saveObject( dlg, QString(), true /*dontAsk*/ );
 				if (true != savingRes)
 					return savingRes;
 			}

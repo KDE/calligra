@@ -46,10 +46,10 @@ class KexiSimplePrintingCommand : public QObject
 
 	public slots:
 		bool print(const KexiSimplePrintingSettings& settings, 
-			const QString& aTitleText = QString::null);
-		bool print(const QString& aTitleText = QString::null);
+			const QString& aTitleText = QString());
+		bool print(const QString& aTitleText = QString());
 		bool showPrintPreview(const KexiSimplePrintingSettings& settings, 
-			const QString& aTitleText = QString::null, bool reload = false);
+			const QString& aTitleText = QString(), bool reload = false);
 //		void setPrintPreviewNeedsReloading();
 
 	signals:

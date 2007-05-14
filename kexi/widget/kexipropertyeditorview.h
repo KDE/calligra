@@ -21,14 +21,11 @@
 #ifndef KEXIPROPERTYEDITORVIEW_H
 #define KEXIPROPERTYEDITORVIEW_H
 
-//#include "kexiviewbase.h"
-#include <qwidget.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3CString>
+#include <QWidget>
+#include <kexi_export.h>
 
 class QLabel;
-class KexiMainWindow;
+class KexiMainWindowIface;
 
 namespace KoProperty {
 	class Editor;
@@ -50,7 +47,7 @@ namespace KoProperty {
 class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 {
 	public:
-		KexiObjectInfoLabel(QWidget* parent, const char* name = 0);
+		KexiObjectInfoLabel(QWidget* parent);
 		~KexiObjectInfoLabel();
 
 		void setObjectClassIcon(const QString& name);
@@ -87,7 +84,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget
 	Q_OBJECT
 
 	public:
-		KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget* parent);
+		KexiPropertyEditorView(KexiMainWindowIface *mainWin, QWidget* parent);
 		virtual ~KexiPropertyEditorView();
 
 		/*! Helper function. Updates \a infoLabel widget by reusing properties provided 
@@ -99,7 +96,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget
 		 hidden. */
 		static void updateInfoLabelForPropertySet(
 			KexiObjectInfoLabel *infoLabel, KoProperty::Set* set, 
-			const QString& textToDisplayForNullSet = QString::null);
+			const QString& textToDisplayForNullSet = QString());
 
 		virtual QSize sizeHint() const;
 		virtual QSize minimumSizeHint() const;
@@ -114,7 +111,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget
 
 	protected:
 		class Private;
-		Private *d;
+		Private * const d;
 };
 
 #endif

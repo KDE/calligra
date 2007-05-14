@@ -92,7 +92,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 //		 Omit \a statement if cursor is already initialized with statement 
 //		 at creation time. If \a statement is not empty, existing statement
 //		 (if any) is overwritten. */
-//		bool open( const QString& statement = QString::null );
+//		bool open( const QString& statement = QString() );
 
 		/*! Closes previously opened cursor. 
 			If the cursor is closed, nothing happens. */
@@ -199,9 +199,9 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		void setOrderByColumnList(const QStringList& columnNames);
 
 		/*! Convenience method, similar to setOrderByColumnList(const QStringList&). */
-		void setOrderByColumnList(const QString& column1, const QString& column2 = QString::null, 
-			const QString& column3 = QString::null, const QString& column4 = QString::null, 
-			const QString& column5 = QString::null);
+		void setOrderByColumnList(const QString& column1, const QString& column2 = QString(), 
+			const QString& column3 = QString(), const QString& column4 = QString(), 
+			const QString& column5 = QString());
 
 		/*! \return a list of fields contained in ORDER BY section of the query. 
 		 @see setOrderBy(const QStringList&) */

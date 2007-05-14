@@ -279,7 +279,7 @@ ConnectionDialog::setStatusOk(KexiTableItem *item)
 		(*item)[0] = "dialog-ok";
 	else {
 		m_pixmapLabel->setPixmap( QPixmap() );
-		m_textLabel->setText(QString::null);
+		m_textLabel->setText(QString());
 	}
 #endif
 }
@@ -303,7 +303,7 @@ ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 		(*item)[0] = "dialog-cancel";
 	else {
 		m_pixmapLabel->setPixmap( QPixmap() );
-		m_textLabel->setText(QString::null);
+		m_textLabel->setText(QString());
 	}
 #endif
 }
@@ -494,7 +494,7 @@ ConnectionDialog::removeItem()
 		return;
 
 	int confirm = KMessageBox::warningContinueCancel(parentWidget(),
-		QString("<qt>")+i18n("Do you want to delete this connection ?")+"</qt>", QString::null, KGuiItem(i18n("&Delete Connection")),
+		QString("<qt>")+i18n("Do you want to delete this connection ?")+"</qt>", QString(), KGuiItem(i18n("&Delete Connection")),
 		"dontAskBeforeDeleteConnection"/*config entry*/);
 	if(confirm == KMessageBox::Cancel)
 		return;

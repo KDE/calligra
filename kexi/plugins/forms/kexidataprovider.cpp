@@ -116,7 +116,7 @@ void KexiFormDataProvider::fillDataItems(KexiTableItem& row, bool cursorAtNewRow
 			<< " data=" << value << (indexForVisibleLookupValue!=-1 
 				? QString(" SPECIAL: indexForVisibleLookupValue=%1 visibleValue=%2")
 					.arg(indexForVisibleLookupValue).arg(visibleLookupValue.toString())
-				: QString::null)
+				: QString())
 			<< endl;
 		const bool displayDefaultValue = cursorAtNewRow && (value.isNull() && visibleLookupValue.isNull())
 			&& !itemIface->columnInfo()->field->defaultValue().isNull() 

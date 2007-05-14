@@ -104,7 +104,7 @@ void Object::setError( KexiDB::Object *obj, int code, const QString& prependMess
 			m_errno = code;
 			m_hasError = true;
 		}
-		m_errMsg = (prependMessage.isEmpty() ? QString::null : (prependMessage + " ")) 
+		m_errMsg = (prependMessage.isEmpty() ? QString() : (prependMessage + " ")) 
 			+ obj->errorMsg();
 		m_sql = obj->m_sql;
 		m_errorSql = obj->m_errorSql;

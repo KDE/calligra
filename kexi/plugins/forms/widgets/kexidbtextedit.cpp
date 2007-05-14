@@ -131,7 +131,7 @@ bool KexiDBTextEdit::cursorAtEnd()
 
 void KexiDBTextEdit::clear()
 {
-	setText(QString::null, QString::null);
+	setText(QString(), QString());
 }
 
 void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
@@ -175,7 +175,7 @@ void KexiDBTextEdit::setDisplayDefaultValue(QWidget* widget, bool displayDefault
 /*	m_slotTextChanged_enabled = false;
 		//for rich text...
 		const QString origText( text() );
-		KTextEdit::setText(QString::null);
+		KTextEdit::setText(QString());
 		setCurrentFont(params->font);
 		setColor(params->textColor);
 		KTextEdit::setText(origText);

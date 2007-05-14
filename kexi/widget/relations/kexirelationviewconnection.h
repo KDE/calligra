@@ -23,6 +23,7 @@
 
 #include <qstring.h>
 #include <qpointer.h>
+#include <kexi_export.h>
 
 class QPainter;
 class KexiRelationViewTableContainer;
@@ -33,7 +34,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 	public:
 
 		KexiRelationViewConnection(KexiRelationViewTableContainer *masterTbl, 
-			KexiRelationViewTableContainer *detailsTbl, struct SourceConnection &s, KexiRelationView *parent);
+			KexiRelationViewTableContainer *detailsTbl, struct SourceConnection &s,
+			KexiRelationView *parent);
 		~KexiRelationViewConnection();
 
 

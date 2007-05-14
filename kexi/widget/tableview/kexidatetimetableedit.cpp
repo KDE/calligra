@@ -69,7 +69,7 @@ void KexiDateTimeTableEdit::setValueInInternalEditor(const QVariant &value)
 			m_dateFormatter.dateToString( value.toDateTime().date() ) + " " +
 			m_timeFormatter.timeToString( value.toDateTime().time() ) );
 	else
-		m_lineedit->setText( QString::null );
+		m_lineedit->setText( QString() );
 }
 
 void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
@@ -141,7 +141,7 @@ void KexiDateTimeTableEdit::handleCopyAction(const QVariant& value, const QVaria
 		qApp->clipboard()->setText( m_dateFormatter.dateToString(value.toDateTime().date()) + " " 
 			+ m_timeFormatter.timeToString(value.toDateTime().time()) );
 	else
-		qApp->clipboard()->setText( QString::null );
+		qApp->clipboard()->setText( QString() );
 }
 
 void KexiDateTimeTableEdit::handleAction(const QString& actionName)

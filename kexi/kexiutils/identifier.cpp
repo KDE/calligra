@@ -55,10 +55,10 @@ inline QString char2Identifier(const QChar& c)
 QString KexiUtils::string2Identifier(const QString &s)
 {
 	if (s.isEmpty())
-		return QString::null;
+		return QString();
 	QString r, id = s.simplified();
 	if (id.isEmpty())
-		return QString::null;
+		return QString();
 	r.reserve(id.length());
 	id.replace(' ',"_");
 	QChar c = id[0];

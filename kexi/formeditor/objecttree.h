@@ -149,7 +149,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
 	public:
-		ObjectTree(const QString &className=QString::null, const QString &name=QString::null,
+		ObjectTree(const QString &className = QString(), const QString &name = QString(),
 			QWidget *widget=0, Container *container=0);
 		virtual ~ObjectTree();
 

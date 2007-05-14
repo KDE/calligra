@@ -21,7 +21,7 @@
 
 #include <kexidataawareobjectiface.h>
 #include <utils/kexisharedactionclient.h>
-#include <core/KexiMainWindow.h>
+#include <core/KexiMainWindowIface.h>
 
 #include <qlayout.h>
 //Added by qt3to4:
@@ -29,7 +29,7 @@
 
 #include <kmenu.h>
 
-KexiDataAwareView::KexiDataAwareView(KexiMainWindow *mainWin, QWidget *parent)
+KexiDataAwareView::KexiDataAwareView(KexiMainWindowIface *mainWin, QWidget *parent)
  : KexiView(parent)
  , KexiSearchAndReplaceViewInterface()
  , m_internalView(0)

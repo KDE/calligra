@@ -326,7 +326,7 @@ QString SQLiteConnection::serverResultName()
 #ifdef SQLITE2
 		QString::fromLatin1( sqlite_error_string(d->res) );
 #else //SQLITE3
-		QString::null; //fromLatin1( d->result_name );
+		QString(); //fromLatin1( d->result_name );
 #endif
 	return r.isEmpty() ? Connection::serverResultName() : r;
 }

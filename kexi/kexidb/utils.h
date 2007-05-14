@@ -285,7 +285,7 @@ namespace KexiDB
 	   or field name could become empty what is not allowed).
 
 	 If \a option is SetFieldNameIfNoTableName and \a string does not contain '.', 
-	 \a string is passed to \a fieldName and \a tableName is set to QString::null
+	 \a string is passed to \a fieldName and \a tableName is set to QString()
 	 without failure.
 
 	 If function fails, \a tableName and \a fieldName remain unchanged.
@@ -398,7 +398,7 @@ namespace KexiDB
 
 //! @todo reverse function for BLOBEscapeOctal is available: processBinaryData() in pqxxcursor.cpp - move it here
 	/*! \return a string containing escaped, printable representation of \a array.
-	 Escaping is controlled by \a type. For empty array QString::null is returned, 
+	 Escaping is controlled by \a type. For empty array, QString() is returned, 
 	 so if you want to use this function in an SQL statement, empty arrays should be 
 	 detected and "NULL" string should be put instead.
 	 This is helper, used in Driver::escapeBLOB() and KexiDB::variantToString(). */

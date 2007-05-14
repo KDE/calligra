@@ -172,7 +172,7 @@ KexiSubReport::setReportName(const QString &name)
 
 	// and load the sub form
 	QString data;
-	tristate res = view->connection()->loadDataBlock(id, data , QString::null);
+	tristate res = view->connection()->loadDataBlock(id, data , QString());
 	if(res != true)
 		return;
 

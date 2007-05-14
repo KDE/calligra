@@ -981,7 +981,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		else if ((*orderByColumnsIt).field()) {
 			//this will be presented as invisible field: create new row
 			field = (*orderByColumnsIt).field();
-			QString tableName( field->table() ? field->table()->name() : QString::null );
+			QString tableName( field->table() ? field->table()->name() : QString() );
 			rowItem = createNewRow( tableName, field->name(), false /* !visible*/);
 			d->dataTable->dataAwareObject()->insertItem(rowItem, row_num);
 			rowPropertySet = createPropertySet( row_num, tableName, field->name(), true /*newOne*/ );
@@ -1530,7 +1530,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				//pretty printed "alias: expr"
 				newValue = QString(alias) + ": " + fieldName;
 			}
-			(*set)["caption"].setValue(QString::null, saveOldValue);
+			(*set)["caption"].setValue(QString(), saveOldValue);
 			(*set)["table"].setValue(tableName, saveOldValue);
 			updatePropertiesVisibility(*set);
 		}
@@ -1721,18 +1721,18 @@ KexiQueryDesignerGuiEditor::createPropertySet( int row,
 	set->addProperty(prop = new KoProperty::Property("field", QVariant(fieldName)) );
 	prop->setVisible(false);//always hidden
 
-	set->addProperty(prop = new KoProperty::Property("caption", QVariant(QString::null), i18n("Caption") ) );
+	set->addProperty(prop = new KoProperty::Property("caption", QVariant(QString()), i18n("Caption") ) );
 #ifdef KEXI_NO_UNFINISHED
 		prop->setVisible(false);
 #endif
 
-	set->addProperty(prop = new KoProperty::Property("alias", QVariant(QString::null), i18n("Alias")) );
+	set->addProperty(prop = new KoProperty::Property("alias", QVariant(QString()), i18n("Alias")) );
 
 	set->addProperty(prop = new KoProperty::Property("visible", QVariant(true, 4)) );
 	prop->setVisible(false);
 
 /*TODO:
-	set->addProperty(prop = new KexiProperty("totals", QVariant(QString::null)) );
+	set->addProperty(prop = new KexiProperty("totals", QVariant(QString())) );
 	prop->setVisible(false);*/
 
 	//sorting
@@ -1743,7 +1743,7 @@ KexiQueryDesignerGuiEditor::createPropertySet( int row,
 		slist, nlist, *slist.at(0), i18n("Sorting")));
 	prop->setVisible(false);
 
-	set->addProperty(prop = new KoProperty::Property("criteria", QVariant(QString::null)) );
+	set->addProperty(prop = new KoProperty::Property("criteria", QVariant(QString())) );
 	prop->setVisible(false);
 
 	set->addProperty(prop = new KoProperty::Property("isExpression", QVariant(false, 1)) );

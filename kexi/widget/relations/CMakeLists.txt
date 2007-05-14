@@ -15,7 +15,10 @@ kde4_automoc(${kexirelationsview_LIB_SRCS})
 
 kde4_add_library(kexirelationsview SHARED ${kexirelationsview_LIB_SRCS})
 
-target_link_libraries(kexirelationsview  ${KDE4_KDECORE_LIBS} kexicore )
+target_link_libraries(kexirelationsview ${KDE4_KDECORE_LIBS}
+ kexicore
+ kexiextendedwidgets
+)
 
 set_target_properties(kexirelationsview PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kexirelationsview  DESTINATION ${LIB_INSTALL_DIR})

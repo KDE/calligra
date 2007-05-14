@@ -162,7 +162,7 @@ void KexiBoolTableEdit::handleCopyAction(const QVariant& value, const QVariant& 
 	if (value.type()==QVariant::Bool)
 		qApp->clipboard()->setText(value.toBool() ? "1" : "0");
 	else
-		qApp->clipboard()->setText(QString::null);
+		qApp->clipboard()->setText(QString());
 }
 
 int KexiBoolTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )

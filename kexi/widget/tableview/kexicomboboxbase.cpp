@@ -175,7 +175,7 @@ KexiTableItem* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(const QV
 //.trimmed() is not generic!
 
 	const bool valueIsText = v.type()==QVariant::String || v.type()==QVariant::CString; //most common case
-	const QString txt( valueIsText ? v.toString().trimmed().toLower() : QString::null );
+	const QString txt( valueIsText ? v.toString().trimmed().toLower() : QString() );
 	KexiTableViewData *lookupData = popup()->tableView()->data();
 	const int visibleColumn = lookupFieldSchema->visibleColumn( lookupData->columnsCount() );
 	if (-1 == visibleColumn)

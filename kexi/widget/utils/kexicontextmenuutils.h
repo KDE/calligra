@@ -62,7 +62,7 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
 		 Used in KexiDBWidgetContextMenuExtender::createTitle(QPopupMenu *menu) and KexiDBImageBox.
 		 \return true if the title has been updated. */
 		static bool updateTitle(QMenu *menu, const QString& title, 
-			const QString& iconName = QString::null);
+			const QString& iconName = QString());
 
 	public slots:
 		void updateActionsAvailability();

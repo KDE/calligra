@@ -77,6 +77,7 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
 	m_gridSize = 0;
 	m_outerAreaVisible = true;
 
+	m_delayedResize.setSingleShot( true );
 	connect(&m_delayedResize, SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
 	m_smodeSet = false;
 	if (m_preview) {
@@ -135,7 +136,7 @@ KexiScrollView::refreshContentsSizeLater(bool horizontal, bool vertical)
 	//if (horizontal)
 		setHScrollBarMode(Q3ScrollView::AlwaysOff);
 	updateScrollBars();
-	m_delayedResize.start( 100, true );
+	m_delayedResize.start( 100 );
 }
 
 void
@@ -257,14 +258,11 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 			tmpy = contentsY();
 
 		// we look for the max widget right() (or bottom()), which would be the limit for form resizing (not to hide widgets)
-		QObjectList *list = m_widget->queryList("QWidget", 0, true, false /* not recursive*/);
-		for(QObject *o = list->first(); o; o = list->next())
-		{
-			QWidget *w = (QWidget*)o;
+		const QList<QWidget*> list( m_widget->findChildren<QWidget*>() ); /* not recursive*/
+		foreach(QWidget *w, list) {
 			tmpx = qMax(tmpx, (w->geometry().right() + 10));
 			tmpy = qMax(tmpy, (w->geometry().bottom() + 10));
 		}
-		delete list;
 
 		int neww = -1, newh;
 		if(cursor().shape() == Qt::SizeHorCursor)
@@ -331,7 +329,8 @@ KexiScrollView::setupPixmapBuffer(QPixmap& pixmap, const QString& text, int line
 	if (!pixmap.isNull()) {
 		//create pixmap once
 		pixmap.fill( viewport()->paletteBackgroundColor() );
-		QPainter pb(&pixmap, this);
+		QPainter pb(&pixmap);
+		pb.initFrom(this);
 		pb.setPen(m_helpColor);
 		pb.setFont(m_helpFont);
 		pb.drawText(0, 0, txtw, txth, Qt::AlignCenter|Qt::AlignTop, text);

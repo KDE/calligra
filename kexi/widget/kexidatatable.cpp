@@ -22,8 +22,6 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -34,29 +32,26 @@
 
 #include "kexidatatableview.h"
 #include "kexidatatable.h"
-#include "kexidialogbase.h"
 
-KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
-	const char *name, bool dbAware)
+KexiDataTable::KexiDataTable(KexiMainWindowIface *mainWin, QWidget *parent, bool dbAware)
 // : KexiViewBase(mainWin, parent, name)
- : KexiDataAwareView( mainWin, parent, name )
+ : KexiDataAwareView( mainWin, parent )
 {
 	KexiTableView *view;
 	if (dbAware)
-		view = new KexiDataTableView(this, 
-			QString("%1_datatableview").arg(name ? name : "KexiDataTableView").latin1());
+		view = new KexiDataTableView(this);
 	else
-		view = new KexiTableView(0, this, 
-			QString("%1_tableview").arg(name ? name : "KexiTableView").latin1());
+		view = new KexiTableView(0, this);
+	view->setObjectName( "datatableview" );
 
 	KexiDataAwareView::init( view, view, view );
 }
 
-KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
-	KexiDB::Cursor *cursor, const char *name)
- : KexiDataAwareView( mainWin, parent, name )
+KexiDataTable::KexiDataTable(KexiMainWindowIface *mainWin, QWidget *parent, 
+	KexiDB::Cursor *cursor)
+ : KexiDataAwareView( mainWin, parent )
 {
-	KexiTableView *view = new KexiDataTableView(this, "view", cursor);
+	KexiTableView *view = new KexiDataTableView(this, cursor);
 	KexiDataAwareView::init( view, view, view );
 }
 

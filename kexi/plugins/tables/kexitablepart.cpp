@@ -188,7 +188,7 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(QWidget *parent, Ke
 	int r = KMessageBox::questionYesNo(parent, 
 		"<p>"+msg+"</p><p>"+openedObjectsStr+"</p><p>"
 		+i18n("Do you want to close all windows for these objects?"), 
-		QString::null, KGuiItem(i18n("Close windows"),"window-close"), KStdGuiItem::cancel());
+		QString(), KGuiItem(i18n("Close windows"),"window-close"), KStdGuiItem::cancel());
 	tristate res;
 	if (r == KMessageBox::Yes) {
 		//try to close every window

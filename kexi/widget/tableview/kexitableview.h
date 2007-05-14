@@ -340,7 +340,7 @@ public slots:
 	 was displayed (in this case, \a setText is usually not empty, what means
 	 that text will be set in the cell replacing previous value).
 	*/
-	virtual void startEditCurrentCell(const QString& setText = QString::null)
+	virtual void startEditCurrentCell(const QString& setText = QString())
 		{ KexiDataAwareObjectInterface::startEditCurrentCell(setText); }
 
 	/*! Deletes currently selected cell's contents, if allowed. 
@@ -557,7 +557,7 @@ protected:
 	virtual void editorShowFocus( int row, int col );
 
 	//! Creates editors and shows it, what usually means the beginning of a cell editing
-	virtual void createEditor(int row, int col, const QString& addText = QString::null, 
+	virtual void createEditor(int row, int col, const QString& addText = QString(), 
 		bool removeOld = false);
 
 	bool focusNextPrevChild(bool next);
@@ -567,7 +567,7 @@ protected:
 	 given action's shortcut - false is returned (beause action is already performed at main 
 	 window's level).
 	*/
-	bool shortCutPressed( QKeyEvent *e, const Q3CString &action_name );
+	bool shortCutPressed( QKeyEvent *e, const QString &action_name );
 
 #if 0 //we have now KexiActionProxy
 	/*! Updates visibility/accesibility of popup menu items,

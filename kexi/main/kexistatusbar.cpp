@@ -140,7 +140,7 @@ void KexiStatusBar::setCursorPosition(int line, int col)
 
 void KexiStatusBar::setReadOnlyFlag(bool readOnly)
 {
-	changeItem(readOnly ? i18n("Read only") : QString::null, m_readOnlyID);
+	changeItem(readOnly ? i18n("Read only") : QString(), m_readOnlyID);
 }
 
 #include "kexistatusbar.moc"

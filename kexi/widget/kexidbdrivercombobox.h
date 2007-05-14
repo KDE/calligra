@@ -20,11 +20,10 @@
 #ifndef KEXIDBDRIVERCOMBOBOX_H
 #define KEXIDBDRIVERCOMBOBOX_H
 
-#include <qwidget.h>
-#include <qmap.h>
+#include <QHash>
+#include <KComboBox>
 
-#include <kcombobox.h>
-
+#include <kexi_export.h>
 #include <kexidb/driver.h>
 
 //! \brief Combo box widget for selecting a database driver
@@ -41,9 +40,7 @@
 
 A more complete example can be found in 
 <a href="http://websvn.kde.org/trunk/koffice/kexi/tests/widgets/kexidbdrivercombotest.cpp?&view=auto">koffice/kexi/tests/widgets/</a>.
-
 */
-
 class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 {
 	Q_OBJECT
@@ -79,7 +76,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 		QStringList driverNames() const { return m_driverNames; }
 
 		/*! Get the name of the currrently selected driver.  If the combobox is empty,
-		    QString::null will be returned.
+		    QString() will be returned.
 
 		    \return the name of the currently selected driver */
 		QString selectedDriverName() const;
@@ -94,9 +91,8 @@ class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 		void setDriverName(const QString& driverName);
 
 	protected:
-		QMap<QString,QString> m_driversMap;
+		QHash<QString,QString> m_drivers; //!< a map: driver caption -> driver name
 		QStringList m_driverNames;
 };
 
 #endif
-

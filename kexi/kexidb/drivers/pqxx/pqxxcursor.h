@@ -52,7 +52,8 @@ public:
 //TODO	virtual QString serverErrorMsg() const;
 		
 protected:
-	pqxxSqlCursor(Connection* conn, const QString& statement = QString::null, uint options = NoOptions );
+	pqxxSqlCursor(Connection* conn, const QString& statement = QString(),
+		uint options = NoOptions );
 	pqxxSqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
 	virtual void drv_clearServerResult();
 	virtual void drv_appendCurrentRecordToBuffer();

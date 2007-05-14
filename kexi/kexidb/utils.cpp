@@ -390,8 +390,10 @@ ConnectionTestDialog::ConnectionTestDialog(QWidget* parent,
 	const KexiDB::ConnectionData& data,
 	KexiDB::MessageHandler& msgHandler)
  : KProgressDialog(parent, 
-	i18n("Test Connection"), i18n("<qt>Testing connection to <b>%1</b> database server...</qt>",
-		data.serverInfoString(true)), true /*modal*/)
+		i18n("Test Connection"), 
+		i18n("<qt>Testing connection to <b>%1</b> database server...</qt>",
+			data.serverInfoString(true))
+	)
  , m_thread(new ConnectionTestThread(this, data))
  , m_connData(data)
  , m_msgHandler(&msgHandler)
@@ -399,6 +401,7 @@ ConnectionTestDialog::ConnectionTestDialog(QWidget* parent,
  , m_errorObj(0)
  , m_stopWaiting(false)
 {
+	setModal(true);
 	showCancelButton(true);
 	progressBar()->setFormat(""); //hide %
 	progressBar()->setRange(0, 0); //to show busy indicator

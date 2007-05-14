@@ -20,8 +20,10 @@
 #ifndef KEXISMALLTOOLBUTTON_H
 #define KEXISMALLTOOLBUTTON_H
 
-#include <qtoolbutton.h>
-#include <kaction.h>
+#include <QToolButton>
+#include <QPointer>
+#include <KAction>
+#include <kexi_export.h>
 
 class QIcon;
 
@@ -32,10 +34,10 @@ class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
 
 	public:
 		KexiSmallToolButton(QWidget* parent, const QString& text, 
-			const QString& icon = QString::null, const char* name = 0);
+			const QString& icon = QString());
 
 		KexiSmallToolButton(QWidget* parent, const QString& text, 
-			const QIcon& iconSet, const char* name = 0);
+			const QIcon& icon);
 
 		KexiSmallToolButton(QWidget* parent, KAction *action);
 		
@@ -43,15 +45,14 @@ class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
 
 		void updateAction();
 
-		virtual void setIconSet( const QIcon& iconSet );
-		virtual void setIconSet( const QString& icon );
-		virtual void setTextLabel( const QString & newLabel, bool tipToo );
-		virtual void setTextLabel( const QString & newLabel ) { setTextLabel(newLabel, false); }
+		virtual void setIcon( const QIcon& icon );
+		virtual void setIcon( const QString& icon );
+		virtual void setText( const QString& text );
 
 	protected:
-		void update(const QString& text, const QIcon& iconSet, bool tipToo = false);
+		void update(const QString& text, const QIcon& icon, bool tipToo = false);
 		void init();
-		virtual void drawButton( QPainter *_painter );
+		virtual void paintEvent(QPaintEvent *pe);
 
 		QPointer<KAction> m_action;
 };

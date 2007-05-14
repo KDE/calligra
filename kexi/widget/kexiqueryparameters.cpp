@@ -26,7 +26,8 @@
 
 #include <kexidb/queryschemaparameter.h>
 #include <kexidb/utils.h>
-#include "utils/kexidatetimeformatter.h"
+#include <kexi_global.h>
+#warning TODO include "utils/kexidatetimeformatter.h"
 
 //static
 Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent, 
@@ -36,8 +37,10 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 	ok = false;
 	const KexiDB::QuerySchemaParameterList params( querySchema.parameters() );
 	Q3ValueList<QVariant> values;
-	const QString caption( i18n("Enter Query Parameter Value", "Enter Parameter Value") );
-	foreach(KexiDB::QuerySchemaParameterListConstIterator, it, params) {
+	const QString caption( i18nc("Enter Query Parameter Value", "Enter Parameter Value") );
+	for(KexiDB::QuerySchemaParameterListConstIterator it = params.constBegin();
+		it!=params.constEnd(); ++it)
+	{
 		switch ((*it).type) {
 		case KexiDB::Field::Byte:
 		case KexiDB::Field::ShortInteger:
@@ -56,7 +59,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 		}
 		case KexiDB::Field::Boolean: {
 			QStringList list;
-			list << i18n("Boolean True - Yes", "Yes") << i18n("Boolean False - No", "No");
+			list << i18nc("Boolean True - Yes", "Yes") << i18nc("Boolean False - No", "No");
 			const QString result = KInputDialog::getItem(
 				caption, (*it).message, list, 0/*current*/, false /*!editable*/, &ok, parent);
 			if (!ok || result.isEmpty())
@@ -65,45 +68,55 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 			break;
 		}
 		case KexiDB::Field::Date: {
+#warning TODO reenable when formatter is ported: case KexiDB::Field::Date:
+#if 0
 			KexiDateFormatter df;
 			const QString result = KInputDialog::getText( 
-				caption, (*it).message, QString::null, &ok, parent, 0/*name*/, 
+				caption, (*it).message, QString(), &ok, parent, 0/*name*/, 
 //! @todo add validator
 				0/*validator*/, df.inputMask() );
 			if (!ok)
 				return Q3ValueList<QVariant>(); //cancelled
 			values.append( df.stringToDate(result) );
+#endif
 			break;
 		}
 		case KexiDB::Field::DateTime: {
+#warning TODO reenable when formatter is ported: case KexiDB::Field::DateTime:
+#if 0
 			KexiDateFormatter df;
 			KexiTimeFormatter tf;
 			const QString result = KInputDialog::getText( 
-				caption, (*it).message, QString::null, &ok, parent, 0/*name*/, 
+				caption, (*it).message, QString(), &ok, parent, 0/*name*/, 
 //! @todo add validator
 				0/*validator*/, dateTimeInputMask(df, tf) );
 			if (!ok)
 				return Q3ValueList<QVariant>(); //cancelled
 			values.append( stringToDateTime(df, tf, result) );
+#endif
 			break;
 		}
 		case KexiDB::Field::Time: {
+#warning TODO reenable when formatter is ported: case KexiDB::Field::Time:
+#if 0
 			KexiTimeFormatter tf;
 			const QString result = KInputDialog::getText( 
-				caption, (*it).message, QString::null, &ok, parent, 0/*name*/, 
+				caption, (*it).message, QString(), &ok, parent, 0/*name*/, 
 //! @todo add validator
 				0/*validator*/, tf.inputMask() );
 			if (!ok)
 				return Q3ValueList<QVariant>(); //cancelled
 			values.append( tf.stringToTime(result) );
+#endif
 			break;
 		}
 		case KexiDB::Field::Float:
 		case KexiDB::Field::Double: {
 			// KInputDialog::getDouble() does not work well, use getText and double validator
 			KDoubleValidator validator(0);
-			const QString textResult = KInputDialog::getText( caption, (*it).message, QString::null, &ok, 
-				parent, 0, &validator);
+			const QString textResult(
+				KInputDialog::getText( caption, (*it).message, QString(),
+					&ok, parent, &validator) );
 			if (!ok || textResult.isEmpty())
 				return Q3ValueList<QVariant>(); //cancelled
 //! @todo this value will be still rounded: consider storing them as a decimal type 
@@ -117,7 +130,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 		case KexiDB::Field::Text:
 		case KexiDB::Field::LongText: {
 			const QString result = KInputDialog::getText( 
-				caption, (*it).message, QString::null, &ok, parent);
+				caption, (*it).message, QString(), &ok, parent);
 			if (!ok)
 				return Q3ValueList<QVariant>(); //cancelled
 			values.append( result );

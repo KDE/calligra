@@ -20,6 +20,7 @@
 #ifndef KEXICUSTOMPROPFACTORY_H
 #define KEXICUSTOMPROPFACTORY_H
 
+#include <kexi_export.h>
 #include <koproperty/property.h>
 #include <koproperty/factory.h>
 

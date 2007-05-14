@@ -38,7 +38,7 @@ namespace KexiDB {
 class KEXI_DB_EXPORT MessageTitle
 {
 	public:
-		MessageTitle(KexiDB::Object* o, const QString& msg = QString::null);
+		MessageTitle(KexiDB::Object* o, const QString& msg = QString());
 		~MessageTitle();
 	
 	protected:
@@ -69,11 +69,11 @@ class KEXI_DB_EXPORT MessageHandler
 
 		/*! Shows error message with \a title (it is not caption) and details. */
 		virtual void showErrorMessage(const QString &title, 
-			const QString &details = QString::null) = 0;
+			const QString &details = QString()) = 0;
 		
 		/*! Shows error message with \a msg text. Existing error message from \a obj object
 		 is also copied, if present. */
-		virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString::null) = 0;
+		virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString()) = 0;
 
 		/*! Interactively asks a question. For GUI version, KMessageBox class is used.
 		 See KMessageBox documentation for explanation of the parameters.
@@ -85,7 +85,7 @@ class KEXI_DB_EXPORT MessageHandler
 			KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
 			const KGuiItem &buttonYes=KStandardGuiItem::yes(), 
 			const KGuiItem &buttonNo=KStandardGuiItem::no(),
-			const QString &dontShowAskAgainName = QString::null,
+			const QString &dontShowAskAgainName = QString(),
 			int options = KMessageBox::Notify );
 
 	protected:

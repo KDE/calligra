@@ -132,7 +132,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
 
         ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
         int version = config.readEntry("version", 2); //KexiDBShortcutFile_version
-        data->setFileName(QString::null);
+        data->setFileName(QString());
         data->caption = config.readEntry("caption");
         data->description = config.readEntry("comment");
         QString dbname = config.readEntry("name");

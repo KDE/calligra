@@ -173,7 +173,7 @@ void KexiQueryDesignerSQLView::setStatusOk()
 {
 	d->pixmapStatus->setPixmap(d->statusPixmapOk);
 	setStatusText("<h2>"+i18n("The query is correct")+"</h2>");
-	d->history->addEvent(d->editor->text().trimmed(), true, QString::null);
+	d->history->addEvent(d->editor->text().trimmed(), true, QString());
 }
 
 void KexiQueryDesignerSQLView::setStatusError(const QString& msg)

@@ -22,21 +22,11 @@
 #ifndef KEXIEDITOR_H
 #define KEXIEDITOR_H
 
-#include <qwidget.h>
-#include "kexiviewbase.h"
-
-class KTextEdit;
-class KexiEditorPrivate;
-
-namespace KTextEditor
-{
-	class Document;
-	class View;
-}
+#include <KexiView.h>
 
 //! An text editor view that uses both KTextEditor and KTextEdit
 /*! It is used for SQL and script editor. */
-class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
+class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiView
 {
 	Q_OBJECT
 
@@ -52,7 +42,7 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 		*        will handle that for us.
 		* \param name The name this KexiEditor has. Used only for debugging.
 		*/
-		KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+		KexiEditor(KexiMainWindowIface *mainWin, QWidget *parent);
 
 		/**
 		* Destructor.
@@ -104,7 +94,7 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 		void slotConfigureEditor();
 
 	protected:
-		/*! Update the actions. This call is redirected to \a KexiViewBase::updateActions */
+		/*! Update the actions. This call is redirected to \a KexiView::updateActions */
 		virtual void updateActions(bool activated);
 
 	signals:
@@ -113,7 +103,8 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 
 	private:
 		/*! Private d-pointer class. */
-		KexiEditorPrivate *d;
+		class Private;
+		Private * const d;
 };
 
 #endif

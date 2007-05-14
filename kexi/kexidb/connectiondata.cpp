@@ -109,6 +109,6 @@ QString ConnectionData::serverInfoString(bool addUser) const
 
 	return ( (userName.isEmpty() || !addUser) ? QString("") : (userName+"@"))
 		+ (hostName.isEmpty() ? QString("localhost") : hostName)
-		+ (port!=0 ? (QString(":")+QString::number(port)) : QString::null);
+		+ (port!=0 ? (QString(":")+QString::number(port)) : QString());
 }
 

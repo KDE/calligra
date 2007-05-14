@@ -197,7 +197,7 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 {
 //#ifdef KEXI_KTEXTEDIT
 	if (multiLine) {
-		K3TextEdit *textedit = new K3TextEdit(text, QString::null, w->parentWidget());
+		K3TextEdit *textedit = new K3TextEdit(text, QString(), w->parentWidget());
 		textedit->setTextFormat(Qt::PlainText);
 		textedit->setAlignment(alignment);
 		if (dynamic_cast<Q3TextEdit*>(w)) {

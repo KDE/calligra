@@ -35,6 +35,8 @@
 class KexiWindow;
 class KexiProject;
 class KActionCollection;
+class KXMLGUIClient;
+class KXMLGUIFactory;
 namespace KexiPart {
 	class Item;
 }

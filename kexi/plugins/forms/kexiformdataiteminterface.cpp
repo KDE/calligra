@@ -40,7 +40,7 @@ KexiFormDataItemInterface::~KexiFormDataItemInterface()
 void KexiFormDataItemInterface::undoChanges()
 {
 //	m_disable_signalValueChanged = true;
-	setValueInternal(QString::null, false);
+	setValueInternal(QString(), false);
 //	m_disable_signalValueChanged = false;
 }
 

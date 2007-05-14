@@ -1469,7 +1469,7 @@ FormManager::showFormUICode()
 //kde4: needed?		m_uiCodeDialog->resize(700, 600);
 
 		m_currentUICodeDialogEditor = new KTextEdit(
-			QString::null, QString::null, m_uiCodeDialog);
+			QString(), QString(), m_uiCodeDialog);
 		m_uiCodeDialog->addPage(m_currentUICodeDialogEditor, i18n("Current"));
 		m_currentUICodeDialogEditor->setReadOnly(true);
 		QFont f( m_currentUICodeDialogEditor->font() );
@@ -1478,7 +1478,7 @@ FormManager::showFormUICode()
 		m_currentUICodeDialogEditor->setTextFormat(Qt::PlainText);
 
 		m_originalUICodeDialogEditor = new KTextEdit(
-			QString::null, QString::null, m_uiCodeDialog);
+			QString(), QString(), m_uiCodeDialog);
 		m_uiCodeDialog->addPage(m_originalUICodeDialogEditor, i18n("Original"));
 		m_originalUICodeDialogEditor->setReadOnly(true);
 		m_originalUICodeDialogEditor->setFont(f);

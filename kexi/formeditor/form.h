@@ -245,7 +245,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void emitChildRemoved(ObjectTreeItem *item);
 
 		/*! \return The filename of the UI file this Form was saved to,
-		or QString::null if the Form hasn't be saved yet. */
+		or empty string if the Form hasn't be saved yet. */
 		QString filename() const { return d->filename; }
 
 		//! Sets the filename of this Form to \a filename.

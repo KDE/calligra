@@ -22,7 +22,6 @@
 #include <kaction.h>
 
 KexiSharedActionClient::KexiSharedActionClient()
- : m_sharedActions(101, false)
 {
 }
 
@@ -30,10 +29,10 @@ KexiSharedActionClient::~KexiSharedActionClient()
 {
 }
 
-void KexiSharedActionClient::plugSharedAction(KAction* a)
+void KexiSharedActionClient::plugSharedAction(QAction* a)
 {
 	if (!a)
 		return;
-	m_sharedActions.insert(a->name(), a);
+	m_sharedActions.insert(a->objectName(), a);
 }
 

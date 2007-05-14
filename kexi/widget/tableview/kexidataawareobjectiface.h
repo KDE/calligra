@@ -358,7 +358,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual bool acceptEditor();
 
 		//! Creates editors and shows it, what usually means the beginning of a cell editing
-		virtual void createEditor(int row, int col, const QString& addText = QString::null, 
+		virtual void createEditor(int row, int col, const QString& addText = QString(), 
 			bool removeOld = false) = 0;
 
 		/*! Used when Return key is pressed on cell, the cell has been double clicked
@@ -367,7 +367,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 was displayed (in this case, \a setText is usually not empty, what means
 		 that text will be set in the cell replacing previous value).
 		*/
-		virtual void startEditCurrentCell(const QString& setText = QString::null);
+		virtual void startEditCurrentCell(const QString& setText = QString());
 
 		/*! Deletes currently selected cell's contents, if allowed. 
 		 In most cases delete is not accepted immediately but "row editing" mode is just started. */

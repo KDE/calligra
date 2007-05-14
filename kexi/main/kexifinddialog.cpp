@@ -148,7 +148,7 @@ QString KexiFindDialog::currentLookInColumnName() const
 {
 	int index = m_lookIn->currentIndex();
 	if (index <= 0 || index >= (int)d->lookInColumnNames.count())
-		return QString::null;
+		return QString();
 	else if (index == 1)
 		return "(field)";
 	return d->lookInColumnNames[index - 1/*"(All fields)"*/ - 1/*"(Current field)"*/];
@@ -241,7 +241,7 @@ void KexiFindDialog::setButtonsEnabled(bool enable)
 	m_btnReplace->setEnabled(enable);
 	m_btnReplaceAll->setEnabled(enable);
 	if (!enable)
-		setObjectNameForCaption(QString::null);
+		setObjectNameForCaption(QString());
 }
 
 void KexiFindDialog::setMessage(const QString& message)
@@ -252,7 +252,7 @@ void KexiFindDialog::setMessage(const QString& message)
 void KexiFindDialog::updateMessage( bool found )
 {
 	if (found)
-		setMessage(QString::null);
+		setMessage(QString());
 	else
 		setMessage(i18n("The search item was not found"));
 }

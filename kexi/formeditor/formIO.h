@@ -95,7 +95,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    \return true if saving succeeded.
 		    \todo Add errors code and error dialog
 		*/
-		static bool saveFormToFile(Form *form, const QString &filename=QString::null);
+		static bool saveFormToFile(Form *form, const QString &filename = QString());
 
 		/*! Saves the Form to the \a dest string. \a indent can be specified to apply indentation.
 		    \return true if saving succeeded.
@@ -120,7 +120,8 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		static bool loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src,
 			bool preview=false);
 
-		static bool loadFormFromString(Form *form, QWidget *container, QString &src, bool preview=false);
+		static bool loadFormFromString(Form *form, QWidget *container, QString &src, 
+			bool preview=false);
 
 		/*! Loads the .ui file \a filename in the Form \a form. If \a filename is null or not given,
 		    a Open File dialog will be shown to select the file to open.
@@ -128,12 +129,13 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    \return true if loading succeeded.
 		    \todo Add errors code and error dialog
 		*/
-		static bool loadFormFromFile(Form *form, QWidget *container, const QString &filename=QString::null);
+		static bool loadFormFromFile(Form *form, QWidget *container, 
+			const QString &filename = QString());
 
 		/*! Saves the widget associated to the ObjectTreeItem \a item into DOM document \a domDoc,
 		    with \a parent as parent node.
-		    It calls readPropertyValue() for each object property, readAttribute() for each attribute and
-		    itself to save child widgets.\n
+		    It calls readPropertyValue() for each object property, readAttribute() for each
+		    attribute and itself to save child widgets.
 		    \return true if saving succeeded.
 		    This is used to copy/paste widgets.
 		*/

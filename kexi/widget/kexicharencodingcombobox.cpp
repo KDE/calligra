@@ -28,7 +28,7 @@
 
 KexiCharacterEncodingComboBox::KexiCharacterEncodingComboBox( 
 	QWidget* parent, const QString& selectedEncoding )
- : KComboBox( parent, "KexiCharacterEncodingComboBox" )
+ : KComboBox( parent )
  , m_defaultEncodingAdded(false)
 {
 	QString defaultEncoding(QString::fromLatin1(KGlobal::locale()->encoding()));
@@ -39,24 +39,23 @@ KexiCharacterEncodingComboBox::KexiCharacterEncodingComboBox(
 		_selectedEncoding = QString::fromLatin1(KGlobal::locale()->encoding());
 
 	QStringList descEncodings(KGlobal::charsets()->descriptiveEncodingNames());
-	QStringList::ConstIterator it = descEncodings.constBegin();
 
-	for (uint id = 0; it!=descEncodings.constEnd(); ++it)
-	{
+	uint id = 0;
+	foreach( QString descEncoding, descEncodings) {
 		bool found = false;
-		QString name( KGlobal::charsets()->encodingForName( *it ) );
+		QString name( KGlobal::charsets()->encodingForName( descEncoding ) );
 		QTextCodec *codecForEnc = KGlobal::charsets()->codecForName(name, found);
 		if (found) {
-			insertItem(*it);
+			addItem(descEncoding);
 			if (codecForEnc->name() == defaultEncoding || name == defaultEncoding) {
-				defaultEncodingDescriptiveName = *it;
+				defaultEncodingDescriptiveName = descEncoding;
 				//remember, do not add, will be prepended later
 			}
 			else {
-				m_encodingDescriptionForName.insert(name, *it);
+				m_encodingDescriptionForName.insert(name, descEncoding);
 			}
 			if (codecForEnc->name() == _selectedEncoding || name == _selectedEncoding) {
-				setCurrentItem(id);
+				setCurrentIndex(id);
 			}
 			id++;
 		}
@@ -65,14 +64,14 @@ KexiCharacterEncodingComboBox::KexiCharacterEncodingComboBox(
 	//prepend default encoding, if present
 	if (!defaultEncodingDescriptiveName.isEmpty()) {
 		m_defaultEncodingAdded = true;
-		QString desc = i18n("Text encoding: Default", "Default: %1")
+		QString desc = i18nc("Text encoding: Default", "Default: %1")
 			.arg(defaultEncodingDescriptiveName);
 		insertItem( desc, 0 );
 		if (_selectedEncoding==defaultEncoding) {
-			setCurrentItem(0);
+			setCurrentIndex(0);
 		}
 		else
-			setCurrentItem(currentItem()+1);
+			setCurrentIndex(currentIndex()+1);
 		m_encodingDescriptionForName.insert(defaultEncoding, desc);
 	}
 }
@@ -99,16 +98,16 @@ void KexiCharacterEncodingComboBox::setSelectedEncoding(const QString& encodingN
 			"no such encoding \"" << encodingName << "\"" << endl;
 		return;
 	}
-	setCurrentText(desc);
+	setEditText(desc);
 }
 
 bool KexiCharacterEncodingComboBox::defaultEncodingSelected() const
 {
-	return m_defaultEncodingAdded && 0==currentItem();
+	return m_defaultEncodingAdded && 0==currentIndex();
 }
 
 void KexiCharacterEncodingComboBox::selectDefaultEncoding()
 {
 	if (m_defaultEncodingAdded)
-		setCurrentItem(0);
+		setCurrentIndex(0);
 }

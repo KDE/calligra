@@ -332,7 +332,7 @@ bool KexiStartupFileDialog::askForOverwriting(const QString& filePath, QWidget *
 	if (!fi.exists())
 		return true;
 	const int res = KMessageBox::warningYesNo( parent, i18n( "The file \"%1\" already exists.\n"
-		"Do you want to overwrite it?").arg( QDir::convertSeparators(filePath) ), QString::null, 
+		"Do you want to overwrite it?").arg( QDir::convertSeparators(filePath) ), QString(), 
 			i18n("Overwrite"), KStdGuiItem::no() );
 	if (res == KMessageBox::Yes)
 		return true;

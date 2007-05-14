@@ -886,7 +886,7 @@ QString FunctionExpr::debugString()
 
 QString FunctionExpr::toString(QuerySchemaParameterValueListIterator* params)
 {
-	return name + "(" + (args ? args->toString(params) : QString::null) + ")";
+	return name + "(" + (args ? args->toString(params) : QString()) + ")";
 }
 
 void FunctionExpr::getQueryParameters(QuerySchemaParameterList& params)

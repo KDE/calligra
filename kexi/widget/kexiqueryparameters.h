@@ -20,6 +20,7 @@
 #ifndef KEXIQUERYPARAMETERS_H
 #define KEXIQUERYPARAMETERS_H
 
+#include <kexi_export.h>
 #include <kexidb/queryschema.h>
 
 //! @short Utilities providing GUI for getting query parameters

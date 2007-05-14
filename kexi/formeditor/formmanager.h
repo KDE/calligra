@@ -362,11 +362,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		/*! Signal emitted when undo action activation changes.
 		 \a text is the full text of the action (including command name). */
-		void undoEnabled(bool enabled, const QString &text = QString::null);
+		void undoEnabled(bool enabled, const QString &text = QString());
 
 		/*! Signal emitted when redo action activation changes.
 		 \a text is the full text of the action (including command name). */
-		void redoEnabled(bool enabled, const QString &text = QString::null);
+		void redoEnabled(bool enabled, const QString &text = QString());
 
 		/*! Signal emitted when the user choose a signal in 'Events' menu
 		 in context menu, or in 'Events' in property editor.

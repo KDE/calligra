@@ -194,7 +194,7 @@ KexiQueryDesignerSQLHistory::slotEdit()
 QString
 KexiQueryDesignerSQLHistory::selectedStatement() const
 {
-	return m_selected ? m_selected->statement() : QString::null;
+	return m_selected ? m_selected->statement() : QString();
 }
 
 void

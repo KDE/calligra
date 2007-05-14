@@ -232,6 +232,6 @@ QString KexiTextFormatter::inputMask() const
 	else if (t==KexiDB::Field::DateTime) {
 		dateTimeInputMask( *d->dateFormatter, *d->timeFormatter );
 	}
-	return QString::null;
+	return QString();
 }
 

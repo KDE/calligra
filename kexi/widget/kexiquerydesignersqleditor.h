@@ -32,7 +32,7 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiEditor
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerSQLEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+		KexiQueryDesignerSQLEditor(KexiMainWindowIface *mainWin, QWidget *parent);
 		virtual ~KexiQueryDesignerSQLEditor();
 };
 

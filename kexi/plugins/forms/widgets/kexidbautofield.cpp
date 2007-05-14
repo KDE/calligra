@@ -89,7 +89,7 @@ KexiDBAutoField::KexiDBAutoField(QWidget *parent, const char *name, bool designM
  , d( new Private() )
 {
 	d->designMode = designMode;
-	init(QString::null/*i18n("Auto Field")*/, Auto, pos);
+	init(QString()/*i18n("Auto Field")*/, Auto, pos);
 }
 
 KexiDBAutoField::~KexiDBAutoField()

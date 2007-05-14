@@ -38,7 +38,7 @@ KexiNameWidget::KexiNameWidget( const QString& message, QWidget* parent)
  : QWidget(parent)
 {
 	setObjectName("KexiNameWidget");
-	init(message, QString::null, QString::null, QString::null, QString::null);
+	init(message, QString(), QString(), QString(), QString());
 }
 
 KexiNameWidget::KexiNameWidget(const QString& message, 

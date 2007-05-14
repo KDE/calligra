@@ -307,7 +307,7 @@ void KexiConnSelectorWidget::slotConnectionSelectionChanged()
 	}*/
 	m_remote->btn_edit->setEnabled(item);
 	m_remote->btn_remove->setEnabled(item);
-	m_remote->descriptionEdit->setText(item ? item->data()->description : QString::null);
+	m_remote->descriptionEdit->setText(item ? item->data()->description : QString());
 	emit connectionItemHighlighted(item);
 }
 
@@ -361,7 +361,7 @@ bool KexiConnSelectorWidget::confirmOverwrites() const
 void KexiConnSelectorWidget::slotRemoteAddBtnClicked()
 {
 	KexiDB::ConnectionData data;
-	KexiDBConnectionDialog dlg(data, QString::null,
+	KexiDBConnectionDialog dlg(data, QString(),
 		KGuiItem(i18n("&Add"), "dialog-ok", i18n("Add database connection")) );
 	dlg.setCaption(i18n("Add New Database Connection"));
 	if (QDialog::Accepted!=dlg.exec())
@@ -386,7 +386,7 @@ void KexiConnSelectorWidget::slotRemoteEditBtnClicked()
 	ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(m_remote->list->selectedItem());
 	if (!item)
 		return;
-	KexiDBConnectionDialog dlg(*item->data(), QString::null,
+	KexiDBConnectionDialog dlg(*item->data(), QString(),
 		KGuiItem(i18n("&Save"), "document-save", i18n("Save changes made to this database connection")) );
 	dlg.setCaption(i18n("Edit Database Connection"));
 	if (QDialog::Accepted!=dlg.exec())
@@ -410,7 +410,7 @@ void KexiConnSelectorWidget::slotRemoteRemoveBtnClicked()
 		return;
 	if (KMessageBox::Continue!=KMessageBox::warningContinueCancel(0, 
 		i18n("Do you want to remove database connection \"%1\" from the list of available connections?")
-		.arg(item->data()->serverInfoString(true)), QString::null, KStandardGuiItem::del(), QString::null, 
+		.arg(item->data()->serverInfoString(true)), QString(), KStandardGuiItem::del(), QString(), 
 		KMessageBox::Notify|KMessageBox::Dangerous))
 		return;
 

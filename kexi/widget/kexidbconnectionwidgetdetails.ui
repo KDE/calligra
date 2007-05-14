@@ -2,8 +2,8 @@
   <author></author>
   <comment></comment>
   <exportmacro></exportmacro>
-  <class>KexiDBConnectionWidgetDetailsBase</class>
-  <widget class="QWidget" name="KexiDBConnectionWidgetDetailsBase" >
+  <class>KexiDBConnectionWidgetDetails</class>
+  <widget class="QWidget" name="KexiDBConnectionWidgetDetails" >
     <property name="geometry" >
       <rect>
         <x>0</x>

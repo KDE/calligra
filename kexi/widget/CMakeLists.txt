@@ -13,7 +13,7 @@ set(kexiextendedwidgets_LIB_SRCS
    kexiquerydesignersqleditor.cpp 
    kexiqueryparameters.cpp
    kexisectionheader.cpp 
-   pixmapcollection.cpp 
+#   pixmapcollection.cpp 
    kexiscrollview.cpp 
    kexidbconnectionwidget.cpp 
    kexidbdrivercombobox.cpp 
@@ -33,7 +33,7 @@ set(kexiextendedwidgets_LIB_SRCS
 
 kde4_automoc(${kexiextendedwidgets_LIB_SRCS})
 
-kde4_add_ui_files(keximain_LIB_SRCS
+kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
 	kexiprjtypeselector.ui
 	kexidbconnectionwidget.ui
 	kexidbconnectionwidgetdetails.ui

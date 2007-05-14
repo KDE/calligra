@@ -1017,7 +1017,7 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 			}
 			else {
 				startEditCurrentCell();
-	//			createEditor(m_curRow, m_curCol, QString::null);
+	//			createEditor(m_curRow, m_curCol, QString());
 			}
 		}
 
@@ -1251,10 +1251,10 @@ static bool overrideEditorShortcutNeeded(QKeyEvent *e)
 	return e->key() == Qt::Key_Delete && e->modifiers()==Qt::ControlModifier;
 }
 
-bool KexiTableView::shortCutPressed( QKeyEvent *e, const Q3CString &action_name )
+bool KexiTableView::shortCutPressed( QKeyEvent *e, const QString &action_name )
 {
 	const int k = e->key();
-	KAction *action = m_sharedActions[action_name];
+	KAction *action = dynamic_cast<KAction*>( m_sharedActions[action_name] );
 	if (action) {
 		if (!action->isEnabled())//this action is disabled - don't process it!
 			return false;
@@ -1390,7 +1390,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	}
 	else if (k == Qt::Key_Backspace && nobtn) {
 		if (!ro && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
-			createEditor(curRow, curCol, QString::null, true);
+			createEditor(curRow, curCol, QString(), true);
 	}
 	else if (k == Qt::Key_Space) {
 		if (nobtn && !ro && columnEditable(curCol)) {

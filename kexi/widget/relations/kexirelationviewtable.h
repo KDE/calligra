@@ -21,10 +21,9 @@
 #ifndef KEXIRELATIONVIEWTABLE_H
 #define KEXIRELATIONVIEWTABLE_H
 
-#include <q3frame.h>
-#include <qstringlist.h>
-#include <qlabel.h>
-//Added by qt3to4:
+#include <QFrame>
+#include <QStringList>
+#include <QLabel>
 #include <QMouseEvent>
 #include <QEvent>
 #include <QDropEvent>
@@ -41,7 +40,7 @@ namespace KexiDB
 	class TableOrQuerySchema;
 }
 
-class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public Q3Frame
+class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 {
 	Q_OBJECT
 
@@ -100,7 +99,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTable : public KexiFieldListView
 
 	public:
 		KexiRelationViewTable(KexiDB::TableOrQuerySchema* tableOrQuerySchema, 
-			KexiRelationView *view, QWidget *parent, const char *name = 0);
+			KexiRelationView *view, QWidget *parent);
 //		KexiRelationViewTable(QWidget *parent, KexiRelationView *view, KexiDB::TableSchema *t, const char *name=0);
 		virtual ~KexiRelationViewTable();
 
@@ -134,7 +133,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainerHeader : public QLa
 {
 	Q_OBJECT
 	public:
-		KexiRelationViewTableContainerHeader(const QString& text,QWidget *parent);
+		KexiRelationViewTableContainerHeader(const QString& text, QWidget *parent);
 		virtual ~KexiRelationViewTableContainerHeader();
 
 		virtual void setFocus();

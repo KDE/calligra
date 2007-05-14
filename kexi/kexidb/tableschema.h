@@ -169,7 +169,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 	protected:
 		/*! Automatically retrieves table schema via connection. */
-		TableSchema(Connection *conn, const QString & name = QString::null);
+		TableSchema(Connection *conn, const QString & name = QString());
 
 		IndexSchema::List m_indices;
 

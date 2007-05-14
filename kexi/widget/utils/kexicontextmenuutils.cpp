@@ -63,7 +63,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
  : KMenu(parent)
  , d( new Private(this) )
 {
-	d->titleAction = addTitle(QString::null);
+	d->titleAction = addTitle(QString());
 
 	d->actionCollection.addAction( "insert",
 		d->insertFromFileAction = new KAction(

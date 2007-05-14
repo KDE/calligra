@@ -114,8 +114,8 @@ class ConnectionDataBase
 		/*!
 		\brief Password used for the connection.
 
-		Can be empty string or null. If it is empty (equal to ""), empty password is passed to the driver.
-		If it is null (QString::null), no password is passed to the driver.
+		Can be empty string or null. If it is empty (equal to ""), empty password is passed 
+		to the driver. If it is empty, no password is passed to the driver.
 		In this case, applications using KexiDB should ask for the password. */
 		QString password;
 

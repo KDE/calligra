@@ -541,7 +541,7 @@ void KexiCSVImportDialog::fillTable()
 	}
 	m_startAtLineLabel->setText(i18n( "Start at line%1:").arg(
 			m_allRowsLoadedInPreview ? QString(" (1-%1)").arg(count)
-			: QString::null //we do not know what's real count
+			: QString() //we do not know what's real count
 	));
 	updateRowCountInfo();
 
@@ -741,7 +741,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
  				if (!inGUI) {
 					//fill remaining empty fields (database wants them explicitly)
 					for (int additionalColumn = column; additionalColumn <= maxColumn; additionalColumn++) {
-						setText(row - m_startline, additionalColumn, QString::null, inGUI);
+						setText(row - m_startline, additionalColumn, QString(), inGUI);
 					}
 				}
 				nextRow = true;
@@ -1407,7 +1407,7 @@ void KexiCSVImportDialog::accept()
 			i18n("No Primary Key (autonumber) has been defined.\n"
 			"Should it be automatically defined on import (recommended)?\n\n"
 			"Note: An imported table without a Primary Key may not be editable (depending on database type)."),
-			QString::null, KGuiItem(i18n("Add Database Primary Key to a Table", "Add Primary Key"), "key"),
+			QString(), KGuiItem(i18n("Add Database Primary Key to a Table", "Add Primary Key"), "key"),
 			KGuiItem(i18n("Do Not Add Database Primary Key to a Table", "Do Not Add")))))
 	{
 		if (msgboxResult == KMessageBox::Cancel)
@@ -1528,7 +1528,7 @@ void KexiCSVImportDialog::accept()
 	if (m_file) {
 		if (!m_importingProgressDlg) {
 			m_importingProgressDlg = new KProgressDialog( this, "m_importingProgressDlg", 
-				i18n("Importing CSV Data"), QString::null, true );
+				i18n("Importing CSV Data"), QString(), true );
 		}
 		m_importingProgressDlg->setLabel(
 			i18n("Importing CSV Data from <nobr>\"%1\"</nobr> into \"%2\" table...")
@@ -1558,7 +1558,7 @@ void KexiCSVImportDialog::accept()
 		setText(row - m_startline, column, field, false /*!gui*/);
 		//fill remaining empty fields (database wants them explicitly)
 		for (int additionalColumn = column; additionalColumn <= maxColumn; additionalColumn++) {
-			setText(row - m_startline, additionalColumn, QString::null, false /*!gui*/);
+			setText(row - m_startline, additionalColumn, QString(), false /*!gui*/);
 		}
 		if (!saveRow(false /*!gui*/)) {
 			msg.showErrorMessage(m_conn);

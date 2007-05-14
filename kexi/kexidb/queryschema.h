@@ -176,10 +176,10 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		 (all the newly appended fields are removed in this case) */
 		bool appendFields(QuerySchema& querySchema,
 			const QString& field1, bool ascending1 = true, 
-			const QString& field2 = QString::null, bool ascending2 = true, 
-			const QString& field3 = QString::null, bool ascending3 = true, 
-			const QString& field4 = QString::null, bool ascending4 = true, 
-			const QString& field5 = QString::null, bool ascending5 = true);
+			const QString& field2 = QString(), bool ascending2 = true, 
+			const QString& field3 = QString(), bool ascending3 = true, 
+			const QString& field4 = QString(), bool ascending4 = true, 
+			const QString& field5 = QString(), bool ascending5 = true);
 
 		/*! Appends column \a columnInfo. Ascending sorting is set is \a ascending is true. */
 		void appendColumn(QueryColumnInfo& columnInfo, bool ascending = true);

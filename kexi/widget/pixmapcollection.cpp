@@ -36,7 +36,6 @@
 #include <kicondialog.h>
 #include <klineedit.h>
 #include <kicontheme.h>
-#include <kpixmapio.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -346,10 +345,7 @@ PixmapCollectionEditor::getPixmap(const QString &name)
 	if((pixmap.width() <= 48) && (pixmap.height() <= 48))
 		return pixmap;
 
-	KPixmapIO io;
-	QImage image = io.convertToImage(pixmap);
-	pixmap = io.convertToPixmap(image.scale(48, 48, Qt::KeepAspectRatio));
-	return pixmap;
+	return pixmap.scaled(48, 48, Qt::KeepAspectRatio);
 }
 
 void
@@ -423,10 +419,7 @@ PixmapCollectionChooser::getPixmap(const QString &name)
 		return pixmap;
 
 	// We scale the pixmap down to 48x48 to fit in the iconView
-	KPixmapIO io;
-	QImage image = io.convertToImage(pixmap);
-	pixmap = io.convertToPixmap(image.scale(48, 48, Qt::KeepAspectRatio));
-	return pixmap;
+	return pixmap.scaled(48, 48, Qt::KeepAspectRatio);
 }
 
 void

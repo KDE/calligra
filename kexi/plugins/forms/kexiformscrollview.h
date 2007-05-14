@@ -216,7 +216,7 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		virtual void updateGUIAfterSorting();
 
 		//! Implementation for KexiDataAwareObjectInterface
-		virtual void createEditor(int row, int col, const QString& addText = QString::null, 
+		virtual void createEditor(int row, int col, const QString& addText = QString(), 
 			bool removeOld = false);
 
 		//! Implementation for KexiDataAwareObjectInterface

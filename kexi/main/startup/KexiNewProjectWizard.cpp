@@ -135,7 +135,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 //	d->m_prjtype_sel->lv_types->setMinimumHeight(qMax(d->lvi_file->height(),d->lvi_server->height())+25);
 
 	//page: db title
-	m_db_title = new KexiDBTitlePage(QString::null, this, "KexiDBTitlePage");
+	m_db_title = new KexiDBTitlePage(QString(), this, "KexiDBTitlePage");
 	addPage(m_db_title, i18n("Select Project's Caption"));
 
 	//page: connection selector
@@ -342,8 +342,8 @@ void KexiNewProjectWizard::accept()
 			if (KMessageBox::Continue!=KMessageBox::warningContinueCancel( this, "<qt>"
 				+i18n("<b>A project with database name \"%1\" already exists</b>"
 				"<p>Do you want to delete it and create a new one?")
-				.arg( m_server_db_name->le_dbname->text() ), QString::null, KStandardGuiItem::del(), 
-				QString::null, KMessageBox::Notify|KMessageBox::Dangerous ))
+				.arg( m_server_db_name->le_dbname->text() ), QString(), KStandardGuiItem::del(), 
+				QString(), KMessageBox::Notify|KMessageBox::Dangerous ))
 			{
 				m_server_db_name->le_dbname->setFocus();
 				return;

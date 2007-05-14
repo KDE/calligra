@@ -121,7 +121,7 @@ KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction(
 RemoveFieldCommand::RemoveFieldCommand( KexiTableDesignerView* view, int fieldIndex, 
 	const KoProperty::Set* set)
  : Command(view)
- , m_alterTableAction( set ? (*set)["name"].value().toString() : QString::null, 
+ , m_alterTableAction( set ? (*set)["name"].value().toString() : QString(), 
 	set ? (*set)["uid"].value().toInt() : -1 )
  , m_set( set ? new KoProperty::Set(*set /*deep copy*/) : 0 )
  , m_fieldIndex(fieldIndex)

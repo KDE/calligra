@@ -368,7 +368,7 @@ void KexiRecordNavigator::setHBarGeometry( QScrollBar & hbar, int x, int y, int 
 
 void KexiRecordNavigator::setLabelText(const QString& text)
 {
-	m_textLabel->setText(text.isEmpty() ? QString::null : (QString::fromLatin1(" ")+text+" "));
+	m_textLabel->setText(text.isEmpty() ? QString() : (QString::fromLatin1(" ")+text+" "));
 }
 
 void KexiRecordNavigator::setInsertingButtonVisible(bool set)

@@ -53,7 +53,7 @@ class FormScript : public QObject
 		Kross::Api::ScriptContainer*   scriptContainer()  { return m_script; }
 
 		/*! \return The code of funtionName. If parameter is empty, it returns the full code of this form.*/
-		QString  getCode(const QString &functionName=QString::null);
+		QString  getCode(const QString &functionName=QString());
 		/*! Replaces the actual form code with the string \a code.
 		 Called eg by (future) script editor. */
 		void  setCode(const QString &code);

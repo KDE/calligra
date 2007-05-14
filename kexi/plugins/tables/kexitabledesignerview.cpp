@@ -120,7 +120,7 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 		d->data->setReadOnly(true);
 	d->data->setInsertingEnabled( false );
 
-	KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, QString::null,
+	KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, QString(),
 		i18n("Additional information about the field"));
 	col->setIcon( KexiUtils::colorizeIconToTextColor( SmallIcon("document-properties"), d->view->palette() ) );
 	col->setHeaderTextVisible(false);
@@ -190,11 +190,12 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 	plugSharedAction("edit_redo", this, SLOT(slotRedo()));
 	setAvailable("edit_undo", false);
 	setAvailable("edit_redo", false);
-	connect(d->history, SIGNAL(commandExecuted(KCommand*)), this, SLOT(slotCommandExecuted(KCommand*)));
+	connect(d->history, SIGNAL(commandExecuted(KCommand*)),
+		this, SLOT(slotCommandExecuted(KCommand*)));
 #endif
 
 #ifdef KEXI_DEBUG_GUI
-	KexiUtils::addAlterTableActionDebug(QString::null); //to create the tab
+	KexiUtils::addAlterTableActionDebug(QString()); //to create the tab
 	KexiUtils::connectPushButtonActionForDebugWindow( 
 		"simulateAlterTableExecution", this, SLOT(slotSimulateAlterTableExecution()));
 	KexiUtils::connectPushButtonActionForDebugWindow( 
@@ -325,13 +326,13 @@ KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, b
 	));
 	prop->setVisible(false);
 	set->addProperty(prop = new KoProperty::Property("this:useCaptionAsObjectName", 
-		QVariant(true, 1), QString::null)); //we want "caption" to be displayed in the header, not name
+		QVariant(true), QString())); //we want "caption" to be displayed in the header, not name
 	prop->setVisible(false);
 
 	//name
 	set->addProperty( prop 
 		= new KoProperty::Property("name", QVariant(field.name()), i18n("Name"), 
-		QString::null, KexiCustomPropertyFactory::Identifier) );
+		QString(), KexiCustomPropertyFactory::Identifier) );
 
 	//type
 	set->addProperty( prop 
@@ -400,7 +401,7 @@ KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, b
 
 	set->addProperty( prop 
 		= new KoProperty::Property("defaultValue", field.defaultValue(), i18n("Default Value"),
-			QString::null, 
+			QString(), 
 //! @todo use "Variant" type here when supported by KoProperty
 			(KoProperty::PropertyType)field.variantType()) );
 	prop->setOption("3rdState", i18n("None"));
@@ -429,11 +430,11 @@ KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, b
 	//- properties related to lookup columns (used and set by the "lookup column" tab in the property pane)
 	KexiDB::LookupFieldSchema *lookupFieldSchema = field.table() ? field.table()->lookupFieldSchema(field) : 0;
 	set->addProperty( prop = new KoProperty::Property("rowSource", 
-		lookupFieldSchema ? lookupFieldSchema->rowSource().name() : QString::null, i18n("Row Source")));
+		lookupFieldSchema ? lookupFieldSchema->rowSource().name() : QString(), i18n("Row Source")));
 	prop->setVisible(false);
 
 	set->addProperty( prop = new KoProperty::Property("rowSourceType", 
-		lookupFieldSchema ? lookupFieldSchema->rowSource().typeName() : QString::null, i18n("Row Source\nType")));
+		lookupFieldSchema ? lookupFieldSchema->rowSource().typeName() : QString(), i18n("Row Source\nType")));
 	prop->setVisible(false);
 
 	set->addProperty( prop
@@ -602,8 +603,8 @@ tristate KexiTableDesignerView::beforeSwitchTo(int mode, bool &dontStore)
 			int r = KMessageBox::warningYesNoCancel(this,
 				i18n("Saving changes for existing table design is now required.")
 				+ "\n" + d->messageForSavingChanges(emptyTable, /* skip warning? */!isPhysicalAlteringNeeded()), 
-				QString::null,
-				KStandardGuiItem::save(), KStandardGuiItem::discard(), QString::null, 
+				QString(),
+				KStandardGuiItem::save(), KStandardGuiItem::discard(), QString(), 
 				KMessageBox::Notify|KMessageBox::Dangerous);
 			if (r == KMessageBox::Cancel)
 				res = cancelled;
@@ -707,7 +708,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 			//'type' col will be cleared: clear all other columns as well
 			d->slotBeforeCellChanged_enabled = false;
 				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_ICON, QVariant());
-				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, QVariant(QString::null));
+				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, QVariant(QString()));
 				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_DESC, QVariant());
 			d->slotBeforeCellChanged_enabled = true;
 			return;
@@ -1214,7 +1215,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 				"Do you want to add primary key automatically now?</p>"
 				"<p>If you want to add a primary key by hand, press \"Cancel\" "
 				"to cancel saving table design.</p>").arg(schema.name()),
-				QString::null, KGuiItem(i18n("&Add Primary Key"), "key"), KStandardGuiItem::no(),
+				QString(), KGuiItem(i18n("&Add Primary Key"), "key"), KStandardGuiItem::no(),
 					"autogeneratePrimaryKeysOnTableDesignSaving");
 			if (questionRes==KMessageBox::Cancel) {
 				return cancelled;
@@ -1229,9 +1230,9 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 					KoProperty::Set *set = d->sets->at(i);
 					if (set) {
 						if ((*set)["name"].value().toString()
-							== pkFieldName.arg(idIndex==1?QString::null : QString::number(idIndex))
+							== pkFieldName.arg(idIndex==1?QString() : QString::number(idIndex))
 						|| (*set)["caption"].value().toString()
-							== pkFieldCaption.arg(idIndex==1?QString::null : QString::number(idIndex)))
+							== pkFieldCaption.arg(idIndex==1?QString() : QString::number(idIndex)))
 						{
 							//try next id index
 							i = 0;
@@ -1241,8 +1242,8 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 					}
 					i++;
 				}
-				pkFieldName = pkFieldName.arg(idIndex==1?QString::null : QString::number(idIndex));
-				pkFieldCaption = pkFieldCaption.arg(idIndex==1?QString::null : QString::number(idIndex));
+				pkFieldName = pkFieldName.arg(idIndex==1?QString() : QString::number(idIndex));
+				pkFieldCaption = pkFieldCaption.arg(idIndex==1?QString() : QString::number(idIndex));
 				//ok, add PK with such unique name
 				d->view->insertEmptyRow(0);
 				d->view->setCursorPosition(0, COLUMN_ID_CAPTION);
@@ -1711,7 +1712,7 @@ void KexiTableDesignerView::insertField(int row, const QString& caption, bool ad
 
 void KexiTableDesignerView::insertField(int row, KoProperty::Set& set, bool addCommand)
 {
-	insertFieldInternal(row, &set, QString::null, addCommand);
+	insertFieldInternal(row, &set, QString(), addCommand);
 }
 
 void KexiTableDesignerView::insertFieldInternal(int row, KoProperty::Set* set, //const KexiDB::Field& field, 

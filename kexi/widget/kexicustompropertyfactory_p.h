@@ -31,7 +31,7 @@ class KexiImagePropertyEdit : public KoProperty::PixmapEdit
 
 	public:
 		KexiImagePropertyEdit(KoProperty::Property *property, 
-			QWidget *parent=0, const char *name=0);
+			QWidget *parent = 0);
 		virtual ~KexiImagePropertyEdit();
 
 		virtual QVariant value() const;
@@ -59,7 +59,7 @@ class KexiIdentifierPropertyEdit : public KoProperty::StringEdit
 
 	public:
 		KexiIdentifierPropertyEdit(KoProperty::Property *property, 
-			QWidget *parent=0, const char *name=0);
+			QWidget *parent = 0);
 		virtual ~KexiIdentifierPropertyEdit();
 
 		/*! Reimplemented: sets \a value but it is converted to identifier

@@ -118,9 +118,9 @@ class KEXI_DB_EXPORT Object
 		 and default message for this will be set.
 		 Use this in KexiDB::Object subclasses to informa the world about your 
 		 object's state. */
-		virtual void setError(int code = ERR_OTHER, const QString &msg = QString::null );
+		virtual void setError(int code = ERR_OTHER, const QString &msg = QString() );
 
-		/*! \overload void setError(int code,  const QString &msg = QString::null )
+		/*! \overload void setError(int code,  const QString &msg = QString() )
 			Sets error code to ERR_OTHER. Use this if you don't care about 
 			setting error code.
 		*/
@@ -131,12 +131,12 @@ class KEXI_DB_EXPORT Object
 		virtual void setError( const QString &title, const QString &msg );
 		
 		/*! Copies the (localized) error message and code from other KexiDB::Object. */
-		void setError( KexiDB::Object *obj, const QString& prependMessage = QString::null );
+		void setError( KexiDB::Object *obj, const QString& prependMessage = QString() );
 
 		/*! Copies the (localized) error message and code from other KexiDB::Object 
 		 with custom error \a code. */
 		virtual void setError( KexiDB::Object *obj, int code, 
-			const QString& prependMessage = QString::null );
+			const QString& prependMessage = QString() );
 
 		/*! Interactively asks a question. Console or GUI can be used for this, 
 		 depending on installed message handler. For GUI version, KMessageBox class is used.
@@ -145,7 +145,7 @@ class KEXI_DB_EXPORT Object
 			KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
 			const KGuiItem &buttonYes=KStandardGuiItem::yes(), 
 			const KGuiItem &buttonNo=KStandardGuiItem::no(),
-			const QString &dontShowAskAgainName = QString::null,
+			const QString &dontShowAskAgainName = QString(),
 			int options = KMessageBox::Notify,
 			MessageHandler* msgHandler = 0 );
 

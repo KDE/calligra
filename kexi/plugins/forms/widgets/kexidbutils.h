@@ -45,7 +45,7 @@ class KexiDBWidgetContextMenuExtender : public QObject
 		 Used in createTitle(QPopupMenu *menu) and KexiDBImageBox.
 		 \return true is the title has been added. */
 		static bool updateContextMenuTitleForDataItem(QPopupMenu *menu, KexiDataItemInterface* iface, 
-			const QString& icon = QString::null);
+			const QString& icon = QString());
 
 	protected:
 		KexiDataItemInterface* m_iface;

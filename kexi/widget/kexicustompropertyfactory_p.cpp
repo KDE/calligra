@@ -27,8 +27,8 @@
 using namespace KoProperty;
 
 KexiImagePropertyEdit::KexiImagePropertyEdit(
-	Property *property, QWidget *parent, const char *name)
- : PixmapEdit(property, parent, name)
+	Property *property, QWidget *parent)
+ : PixmapEdit(property, parent)
  , m_id(0)
 {
 }
@@ -79,11 +79,12 @@ void KexiImagePropertyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const
 //----------------------------------------------------------------
 
 KexiIdentifierPropertyEdit::KexiIdentifierPropertyEdit(
-	Property *property, QWidget *parent, const char *name)
- : StringEdit(property, parent, name)
+	Property *property, QWidget *parent)
+ : StringEdit(property, parent)
 {
-	m_edit->setValidator( 
-		new KexiUtils::IdentifierValidator(m_edit, "KexiIdentifierPropertyEdit Validator") );
+	KexiUtils::IdentifierValidator *val = new KexiUtils::IdentifierValidator(m_edit);
+	m_edit->setValidator( val );
+	val->setObjectName("KexiIdentifierPropertyEdit Validator");
 }
 
 KexiIdentifierPropertyEdit::~KexiIdentifierPropertyEdit()

@@ -275,7 +275,7 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable, 
 	bool ok;
 	emptyTable = conn->isEmpty( *designerView->tempData()->table, ok ) && ok;
 	return i18n("Do you want to save the design now?")
-	+ ( (emptyTable || skipWarning) ? QString::null :
+	+ ( (emptyTable || skipWarning) ? QString() :
 		(QString("\n\n") + designerView->part()->i18nMessage(":additional message before saving design", 
 		designerView->parentDialog())) );
 }

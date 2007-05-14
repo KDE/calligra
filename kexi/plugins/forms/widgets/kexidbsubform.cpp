@@ -113,7 +113,7 @@ KexiDBSubForm::setFormName(const QString &name)
 
 	// and load the sub form
 	QString data;
-	tristate res = conn->loadDataBlock(id, data, QString::null);
+	tristate res = conn->loadDataBlock(id, data, QString());
 	if (res == true)
 		res = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
 	if(res != true) {

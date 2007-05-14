@@ -609,7 +609,7 @@ QString KexiStartupDialog::selectedFileName() const
 	else if (d->result == CreateFromTemplateResult && d->viewTemplates)
 		return d->viewTemplates->selectedFileName();
 	else
-		return QString::null;
+		return QString();
 }
 
 KexiDB::ConnectionData* KexiStartupDialog::selectedExistingConnection() const

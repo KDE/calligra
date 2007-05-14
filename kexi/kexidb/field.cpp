@@ -128,7 +128,7 @@ void Field::init()
 	m_precision = 0;
 	m_visibleDecimalPlaces = -1;
 	m_options = NoOptions;
-	m_defaultValue = QVariant(QString::null);
+	m_defaultValue = QVariant(QString());
 	m_order = -1;
 	m_width = 0;
 	m_expr = 0;

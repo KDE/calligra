@@ -2,8 +2,8 @@
   <author></author>
   <comment></comment>
   <exportmacro></exportmacro>
-  <class>KexiPrjTypeSelectorBase</class>
-  <widget class="QWidget" name="KexiPrjTypeSelectorBase" >
+  <class>KexiPrjTypeSelector</class>
+  <widget class="QWidget" name="KexiPrjTypeSelector" >
     <property name="geometry" >
       <rect>
         <x>0</x>

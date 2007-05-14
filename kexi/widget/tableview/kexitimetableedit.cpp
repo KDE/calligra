@@ -64,7 +64,7 @@ void KexiTimeTableEdit::setValueInInternalEditor(const QVariant &value)
 	if (value.isValid() && value.toTime().isValid()) 
 		m_lineedit->setText( m_formatter.timeToString( value.toTime() ) );
 	else
-		m_lineedit->setText( QString::null );
+		m_lineedit->setText( QString() );
 }
 
 void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
@@ -134,7 +134,7 @@ void KexiTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& 
 	if (!value.isNull() && value.toTime().isValid())
 		qApp->clipboard()->setText( m_formatter.timeToString(value.toTime()) );
 	else
-		qApp->clipboard()->setText( QString::null );
+		qApp->clipboard()->setText( QString() );
 }
 
 void KexiTimeTableEdit::handleAction(const QString& actionName)

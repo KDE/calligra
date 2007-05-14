@@ -23,6 +23,7 @@
 #include <q3frame.h>
 #include <qpixmap.h>
 #include <k3listview.h>
+#include <kexi_export.h>
 
 class K3ListViewItem;
 
@@ -44,8 +45,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public K3ListView
 			AllowMultiSelection = 4 //!< if set, multiple selection is allowed
 		};
 
-		KexiFieldListView(QWidget *parent, const char *name = 0, 
-			int options = ShowDataTypes | AllowMultiSelection );
+		KexiFieldListView(QWidget *parent, int options = ShowDataTypes | AllowMultiSelection );
 		virtual ~KexiFieldListView();
 
 		/*! Sets table or query schema \a schema. 

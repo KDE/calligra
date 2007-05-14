@@ -153,7 +153,7 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 					wid=KEXI_DEFAULT_DATA_COLUMN_WIDTH;//default col width in pixels
 //! @todo add col width configuration and storage
 				addHeaderColumn(it.current()->isHeaderTextVisible()
-					? it.current()->captionAliasOrName() : QString::null,
+					? it.current()->captionAliasOrName() : QString(),
 					f->description(), it.current()->icon(), wid);
 			}
 		}
@@ -1136,7 +1136,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 			m_editor->showWidget();
 			m_editor->setFocus();
 		}
-//		startEditCurrentCell(newval.type()==QVariant::String ? newval.toString() : QString::null);
+//		startEditCurrentCell(newval.type()==QVariant::String ? newval.toString() : QString());
 //		m_editor->setFocus();
 	}
 	return false;
@@ -1177,7 +1177,7 @@ void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()
 //		columnWidth(m_curCol), rowHeight());
 //OK?
 	ensureCellVisible(m_curRow+1, m_curCol);
-	createEditor(m_curRow, m_curCol, QString::null, false/*removeOld*/);
+	createEditor(m_curRow, m_curCol, QString(), false/*removeOld*/);
 	if (!m_editor)
 		return;
 	m_editor->clear();
@@ -1844,10 +1844,10 @@ int KexiDataAwareObjectInterface::showErrorMessageForResult(KexiDB::ResultInfo* 
 	QWidget *thisWidget = dynamic_cast<QWidget*>(this);
 	if (resultInfo->allowToDiscardChanges) {
 		return KMessageBox::questionYesNo(thisWidget, resultInfo->msg 
-			+ (resultInfo->desc.isEmpty() ? QString::null : ("\n"+resultInfo->desc)),
-			QString::null, 
+			+ (resultInfo->desc.isEmpty() ? QString() : ("\n"+resultInfo->desc)),
+			QString(), 
 			KGuiItem(i18nc("Correct Changes", "Correct"), 
-			QString::null, 
+			QString(), 
 			i18n("Correct changes")),
 			KGuiItem(i18n("Discard Changes")) );
 	}

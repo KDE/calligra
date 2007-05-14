@@ -22,8 +22,8 @@
 #include "kexiquerydesignersqleditor.h"
 
 KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
-	KexiMainWindow *mainWin, QWidget *parent, const char *name)
-	: KexiEditor(mainWin, parent, name)
+	KexiMainWindowIface *mainWin, QWidget *parent)
+	: KexiEditor(mainWin, parent)
 {
 	setHighlightMode("sql");
 }

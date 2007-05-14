@@ -93,7 +93,7 @@ void LookupFieldSchema::RowSource::setValues(const QStringList& values)
 QString LookupFieldSchema::RowSource::debugString() const
 {
 	return QString("rowSourceType:'%1' rowSourceName:'%2' rowSourceValues:'%3'\n")
-		.arg(typeName()).arg(name()).arg(m_values ? m_values->join("|") : QString::null);
+		.arg(typeName()).arg(name()).arg(m_values ? m_values->join("|") : QString());
 }
 
 void LookupFieldSchema::RowSource::debug() const

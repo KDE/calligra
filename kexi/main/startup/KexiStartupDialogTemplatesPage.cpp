@@ -73,7 +73,7 @@ KexiStartupDialogTemplatesPage::KexiStartupDialogTemplatesPage( QWidget * parent
 	: KListView(parent, "KexiStartupDialogTemplatesPage")
 	, m_popuplated(false)
 {
-	addColumn(QString::null);
+	addColumn(QString());
 	header()->hide();
 	setColumnWidthMode(0, Maximum);
 	setResizeMode(LastColumn);
@@ -135,7 +135,7 @@ void TemplatesPage::itemClicked(QIconViewItem *item) {
 QString KexiStartupDialogTemplatesPage::selectedFileName() const
 {
 	TemplateItem* templateItem = static_cast<TemplateItem*>(selectedItem());
-	return templateItem ? templateItem->filename : QString::null;
+	return templateItem ? templateItem->filename : QString();
 }
 
 QValueList<KexiProjectData::ObjectInfo>

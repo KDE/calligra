@@ -67,7 +67,7 @@ void KexiDateTableEdit::setValueInInternalEditor(const QVariant &value)
 	if (value.isValid() && value.toDate().isValid()) 
 		m_lineedit->setText( m_formatter.dateToString( value.toDate() ) );
 	else
-		m_lineedit->setText( QString::null );
+		m_lineedit->setText( QString() );
 }
 
 void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
@@ -139,7 +139,7 @@ void KexiDateTableEdit::handleCopyAction(const QVariant& value, const QVariant& 
 	if (!value.isNull() && value.toDate().isValid())
 		qApp->clipboard()->setText( m_formatter.dateToString(value.toDate()) );
 	else
-		qApp->clipboard()->setText( QString::null );
+		qApp->clipboard()->setText( QString() );
 }
 
 void KexiDateTableEdit::handleAction(const QString& actionName)

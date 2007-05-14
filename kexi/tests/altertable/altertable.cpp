@@ -64,7 +64,7 @@ void showError(const QString& msg)
  text in quotes is extracted, e.g. \"ab c\" is treat as one item "ab c"
  Returns flas on failure (e.g. end of file).
  Empty lines and lines or parts of lines with # (comments) are omitted. */
-tristate readLineFromTestFile(const QString& expectedCommandName = QString::null)
+tristate readLineFromTestFile(const QString& expectedCommandName = QString())
 {
 	QString s;
 	bool blockComment = false;

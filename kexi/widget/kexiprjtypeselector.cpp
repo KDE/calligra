@@ -24,14 +24,15 @@
 #include <kexidb/driver.h>
 
 KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent )
-	: Ui::KexiPrjTypeSelector( parent )
+	: QWidget( parent )
 {
 	setupUi(this);
 	setObjectName("KexiPrjTypeSelector");
 	QString none;
 	icon_file->setPixmap( 
-		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( 
-			KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), KIcon::Desktop, 48
+		KIconLoader::global()->loadIcon( 
+			KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName(),
+			K3Icon::Desktop, 48
 		)
 	);
 	icon_file->setFixedSize(icon_file->pixmap()->size()/2);

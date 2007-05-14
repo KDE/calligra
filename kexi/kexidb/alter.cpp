@@ -232,7 +232,7 @@ static AlterTableHandler::ActionDict* createActionDict(
 }
 
 static void debugAction(AlterTableHandler::ActionBase *action, int nestingLevel, 
-  bool simulate, const QString& prependString = QString::null, QString* debugTarget = 0)
+  bool simulate, const QString& prependString = QString(), QString* debugTarget = 0)
 {
 	QString debugString;
 	if (!debugTarget)
@@ -571,7 +571,7 @@ void AlterTableHandler::InsertFieldAction::setField(KexiDB::Field* field)
 	if (m_field)
 		delete m_field;
 	m_field = field;
-	setFieldName(m_field ? m_field->name() : QString::null);
+	setFieldName(m_field ? m_field->name() : QString());
 }
 
 void AlterTableHandler::InsertFieldAction::updateAlteringRequirements()

@@ -68,13 +68,13 @@ class SQLiteConnection : public Connection
 		/*! Creates new database using connection. Note: Do not pass \a dbName 
 			arg because for file-based engine (that has one database per connection)
 			it is defined during connection. */
-		virtual bool drv_createDatabase( const QString &dbName = QString::null );
+		virtual bool drv_createDatabase( const QString &dbName = QString() );
 
 		/*! Opens existing database using connection. Do not pass \a dbName 
 			arg because for file-based engine (that has one database per connection)
 			it is defined during connection. If you pass it, 
 			database file name will be changed. */
-		virtual bool drv_useDatabase( const QString &dbName = QString::null, bool *cancelled = 0, 
+		virtual bool drv_useDatabase( const QString &dbName = QString(), bool *cancelled = 0, 
 			MessageHandler* msgHandler = 0 );
 
 		virtual bool drv_closeDatabase();
@@ -82,7 +82,7 @@ class SQLiteConnection : public Connection
 		/*! Drops database from the server using connection.
 			After drop, database shouldn't be accessible 
 			anymore, so database file is just removed. See note from drv_useDatabase(). */
-		virtual bool drv_dropDatabase( const QString &dbName = QString::null );
+		virtual bool drv_dropDatabase( const QString &dbName = QString() );
 
 		//virtual bool drv_createTable( const KexiDB::Table& table );
 

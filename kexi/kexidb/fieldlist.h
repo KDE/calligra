@@ -115,15 +115,15 @@ class KEXI_DB_EXPORT FieldList
 		 Returned list can be usable e.g. as argument for Connection::insertRecord().
 		 0 is returned if at least one name cannot be found.
 		*/
-		FieldList* subList(const QString& n1, const QString& n2 = QString::null, 
-			const QString& n3 = QString::null, const QString& n4 = QString::null,
-			const QString& n5 = QString::null, const QString& n6 = QString::null,
-			const QString& n7 = QString::null, const QString& n8 = QString::null,
-			const QString& n9 = QString::null, const QString& n10 = QString::null,
-			const QString& n11 = QString::null, const QString& n12 = QString::null,
-			const QString& n13 = QString::null, const QString& n14 = QString::null,
-			const QString& n15 = QString::null, const QString& n16 = QString::null,
-			const QString& n17 = QString::null, const QString& n18 = QString::null
+		FieldList* subList(const QString& n1, const QString& n2 = QString(), 
+			const QString& n3 = QString(), const QString& n4 = QString(),
+			const QString& n5 = QString(), const QString& n6 = QString(),
+			const QString& n7 = QString(), const QString& n8 = QString(),
+			const QString& n9 = QString(), const QString& n10 = QString(),
+			const QString& n11 = QString(), const QString& n12 = QString(),
+			const QString& n13 = QString(), const QString& n14 = QString(),
+			const QString& n15 = QString(), const QString& n16 = QString(),
+			const QString& n17 = QString(), const QString& n18 = QString()
 		);
 
 		/*! Like above, but with a QStringList */
@@ -144,12 +144,12 @@ class KEXI_DB_EXPORT FieldList
 		 \a drvEscaping can be used to alter default escaping type.
 		*/
 		QString sqlFieldsList(Driver *driver, const QString& separator = QString::fromLatin1(","), 
-			const QString& tableAlias = QString::null,
+			const QString& tableAlias = QString(),
 			int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary);
 
 		/*! Like above, but this is convenient static function, so you can pass any \a list here. */
 		static QString sqlFieldsList(Field::List* list, Driver *driver,
-			const QString& separator = QString::fromLatin1(","), const QString& tableAlias = QString::null,
+			const QString& separator = QString::fromLatin1(","), const QString& tableAlias = QString(),
 			int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary);
 
 		/*! @internal Renames field \a oldName to \a newName. 

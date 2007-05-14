@@ -19,9 +19,9 @@
 
 #include "kexismalltoolbutton.h"
 
-#include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <qstyle.h>
+#include <QStyle>
+#include <QStyleOption>
+#include <QPainter>
 
 #include <kiconloader.h>
 #include <kglobalsettings.h>
@@ -29,25 +29,26 @@
 #include <core/kexi.h>
 
 KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
-	const QString& icon, const char* name)
- : QToolButton(parent, name)
+	const QString& icon)
+ : QToolButton(parent)
 {
 	init();
 	update(text, KIcon(icon));
 }
 
 KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
-	const QIcon& iconSet, const char* name)
- : QToolButton(parent, name)
+	const QIcon& icon)
+ : QToolButton(parent)
 {
 	init();
-	update(text, iconSet);
+	update(text, icon);
 }
 
 KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, KAction* action)
- : QToolButton(parent, action->name())
+ : QToolButton(parent)
  , m_action(action)
 {
+	setText(action->objectName());
 	init();
 	connect(this, SIGNAL(clicked()), action, SLOT(activate()));
 	connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)));
@@ -62,10 +63,17 @@ void KexiSmallToolButton::updateAction()
 {
 	if (!m_action)
 		return;
-	update(m_action->text(), m_action->iconSet(K3Icon::Small));
-	setAccel(m_action->shortcut());
-	this->setToolTip( m_action->toolTip());
-	Q3WhatsThis::add(this, m_action->whatsThis());
+	removeAction(m_action);
+	addAction(m_action);
+#ifdef __GNUC__
+#warning TODO KexiSmallToolButton::updateAction() OK?
+#endif
+#if 0
+	update(m_action->text(), m_action->icon());
+	setShortcut(m_action->shortcut());
+	setToolTip( m_action->toolTip());
+	setWhatsThis( m_action->whatsThis());
+#endif
 }
 
 void KexiSmallToolButton::init()
@@ -78,55 +86,58 @@ void KexiSmallToolButton::init()
 	setAutoRaise(true);
 }
 
-void KexiSmallToolButton::update(const QString& text, const QIcon& iconSet, bool tipToo)
+void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool tipToo)
 {
 	int width = 0;
 	if (text.isEmpty()) {
 		width = 10;
-		setUsesTextLabel(false);
+		setToolButtonStyle(Qt::ToolButtonIconOnly);
 	}
 	else {
 		width += QFontMetrics(font()).width(text+" ");
-		setUsesTextLabel(true);
-		setTextPosition(QToolButton::BesideIcon);
-		QToolButton::setTextLabel(text, tipToo);
+		setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+		QToolButton::setText(text);
+		if (tipToo)
+			setToolTip(text);
 	}
-	if (!iconSet.isNull()) {
+	if (!icon.isNull()) {
 		width += IconSize(K3Icon::Small);
-		QToolButton::setIconSet(iconSet);
+		QToolButton::setIcon(icon);
 	}
 	setFixedWidth( width );
 }
 
-void KexiSmallToolButton::setIconSet( const QIcon& iconSet )
+void KexiSmallToolButton::setIcon( const QIcon& icon )
 {
-	update(textLabel(), iconSet);
+	update(text(), icon);
 }
 
-void KexiSmallToolButton::setIconSet( const QString& icon )
+void KexiSmallToolButton::setIcon( const QString& icon )
 {
-	setIconSet( KIcon(icon) );
+	setIcon( KIcon(icon) );
 }
 
-void KexiSmallToolButton::setTextLabel( const QString & newLabel, bool tipToo )
+void KexiSmallToolButton::setText( const QString& text )
 {
-	Q_UNUSED( tipToo );
-
-	update(newLabel, iconSet());
+	update(text, icon());
 }
 
-void KexiSmallToolButton::drawButton( QPainter *_painter )
+void KexiSmallToolButton::paintEvent(QPaintEvent *pe)
 {
-	QToolButton::drawButton(_painter);
-	if (QToolButton::popup()) {
+#ifdef __GNUC__
+#warning TODO KexiSmallToolButton::drawButton() - painting OK?
+#endif
+	QToolButton::paintEvent(pe);
+	QPainter painter(this);
+	if (QToolButton::menu()) {
 		QStyle::State arrowFlags = QStyle::State_None;
+		QStyleOption option;
+		option.initFrom(this);
 		if (isDown())
-			arrowFlags |= QStyle::State_DownArrow;
+			option.state |= QStyle::State_DownArrow;
 		if (isEnabled())
-			arrowFlags |= QStyle::State_Enabled;
-		style().drawPrimitive(QStyle::PE_ArrowDown, _painter,
-			QRect(width()-7, height()-7, 5, 5), colorGroup(),
-			arrowFlags, QStyleOption() );
+			option.state |= QStyle::State_Enabled;
+		style()->drawPrimitive(QStyle::PE_IndicatorButtonDropDown, &option, &painter, this);
 	}
 }
 

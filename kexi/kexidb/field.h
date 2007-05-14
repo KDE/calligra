@@ -162,8 +162,8 @@ class KEXI_DB_EXPORT Field
 			uint options = NoOptions,
 			uint length=0, uint precision=0,
 			QVariant defaultValue=QVariant(),
-			const QString& caption = QString::null,
-			const QString& description = QString::null,
+			const QString& caption = QString(),
+			const QString& description = QString(),
 			uint width = 0);
 
 		/*! Copy constructor. */

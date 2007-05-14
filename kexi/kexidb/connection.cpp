@@ -1199,22 +1199,22 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 					QuerySchema *lookupQuery = querySchema.connection()->querySchema( rowSource.name() );
 					if (!lookupQuery) {
 						KexiDBWarn << "Connection::selectStatement(): !lookupQuery" << endl;
-						return QString::null;
+						return QString();
 					}
 					const QueryColumnInfo::Vector fieldsExpanded( lookupQuery->fieldsExpanded() );
 					if ((uint)lookupFieldSchema->boundColumn() >= fieldsExpanded.count()) {
 						KexiDBWarn << "Connection::selectStatement(): (uint)lookupFieldSchema->boundColumn() >= fieldsExpanded.count()" << endl;
-						return QString::null;
+						return QString();
 					}
 					QueryColumnInfo *boundColumnInfo = fieldsExpanded.at( lookupFieldSchema->boundColumn() );
 					if (!boundColumnInfo) {
 						KexiDBWarn << "Connection::selectStatement(): !boundColumnInfo" << endl;
-						return QString::null;
+						return QString();
 					}
 					Field *boundField = boundColumnInfo->field;
 					if (!boundField) {
 						KexiDBWarn << "Connection::selectStatement(): !boundField" << endl;
-						return QString::null;
+						return QString();
 					}
 					//add LEFT OUTER JOIN
 					if (!s_additional_joins.isEmpty())
@@ -1243,7 +1243,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 						if (fieldsExpanded.count() <= (*visibleColumnsIt)) {
 							KexiDBWarn << "Connection::selectStatement(): fieldsExpanded.count() <= (*visibleColumnsIt) : "
 								<< fieldsExpanded.count() << " <= " << *visibleColumnsIt << endl;
-							return QString::null;
+							return QString();
 						}
 						if (!expression.isEmpty())
 							expression += " || ' ' || ";
@@ -1500,7 +1500,7 @@ bool Connection::storeMainFieldSchema(Field *field)
 	bool first = true;
 	QString sql = "UPDATE kexi__fields SET ";
 	for (Field::ListIterator it( fl->fieldsIterator() ); (f = it.current()); ++it, ++valsIt) {
-		sql.append( (first ? QString::null : QString(", ")) +
+		sql.append( (first ? QString() : QString(", ")) +
 			f->name() + "=" + m_driver->valueToSQL( f, *valsIt ) );
 		if (first)
 			first = false;

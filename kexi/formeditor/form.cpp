@@ -433,8 +433,8 @@ void
 Form::clearCommandHistory()
 {
 	d->history->clear();
-	FormManager::self()->emitUndoEnabled(false, QString::null); 
-	FormManager::self()->emitRedoEnabled(false, QString::null); 
+	FormManager::self()->emitUndoEnabled(false, QString()); 
+	FormManager::self()->emitRedoEnabled(false, QString()); 
 }
 
 void

@@ -21,7 +21,7 @@
 
 #include "kexieditor.h"
 
-#include <keximainwindow.h>
+#include <KexiMainWindowIface.h>
 
 #include <qlayout.h>
 #include <q3frame.h>
@@ -42,10 +42,10 @@
 # include <ktexteditor/document.h>
 # include <ktexteditor/view.h>
 # include <ktexteditor/editorchooser.h>
-# include <ktexteditor/editinterface.h>
-# include <ktexteditor/viewcursorinterface.h>
-# include <ktexteditor/popupmenuinterface.h>
-# include <ktexteditor/undointerface.h>
+//# include <ktexteditor/editinterface.h>
+//# include <ktexteditor/viewcursorinterface.h>
+//# include <ktexteditor/popupmenuinterface.h>
+//# include <ktexteditor/undointerface.h>
 # include <ktexteditor/configinterface.h>
 # include <ktexteditor/highlightinginterface.h>
 #endif
@@ -70,14 +70,15 @@ public:
 		Q3ValueList<Q3CString> actions;
 		actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
 			<< "edit_undo" << "edit_redo" << "edit_select_all";
-		plugSharedActionsToExternalGUI(actions, dynamic_cast<KXMLGUIClient*>(obj));
+#warning TODO	plugSharedActionsToExternalGUI(actions, dynamic_cast<KXMLGUIClient*>(obj));
 #endif
 	}
 };
 
 //! @internal
-class KexiEditorPrivate {
+class KexiEditor::Private {
 	public:
+		Private() {}
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 		KTextEdit *view;
 #else
@@ -86,13 +87,13 @@ class KexiEditorPrivate {
 #endif
 };
 
-KexiEditor::KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
-	: KexiViewBase(mainWin, parent, name)
-	, d(new KexiEditorPrivate())
+KexiEditor::KexiEditor(KexiMainWindowIface *mainWin, QWidget *parent)
+	: KexiView(parent)
+	, d(new Private())
 {
 	Q3VBoxLayout *layout = new Q3VBoxLayout(this);
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
-	d->view = new KTextEdit( "", QString::null, this, "kexi_editor" );
+	d->view = new KTextEdit( "", QString(), this, "kexi_editor" );
 	//adjust font
 	connect(d->view, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 	QFont f("Courier");
@@ -107,19 +108,26 @@ KexiEditor::KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *nam
 	layout = new Q3VBoxLayout(fr);
 	layout->setMargin( 2 );
 
-	d->doc =  KTextEditor::EditorChooser::createDocument(fr);
+	KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
+	if (!editor)
+		return;
+//! @todo error handling!
+
+	d->doc = editor->createDocument(fr);
 	if (!d->doc)
 		return;
-	d->view = d->doc->createView(fr, 0L);
+	d->view = d->doc->createView(fr);
 
-	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( d->view );
+#warning TODO	Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container("edit", mainWin) );
+#warning TODO	d->view->setContextMenu(pop);
+/*	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( d->view );
 	if(popupInt) {
 		Q3PopupMenu *pop = (Q3PopupMenu*) mainWin->factory()->container("edit", mainWin);
 		if(pop) {
 			 //plugSharedAction("edit_undo", pop);
 			 popupInt->installPopup(pop);
 		}
-	}
+	}*/
 
 	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #endif
@@ -133,11 +141,12 @@ KexiEditor::KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *nam
 
 KexiEditor::~KexiEditor()
 {
+	delete d;
 }
 
 void KexiEditor::updateActions(bool activated)
 {
-	KexiViewBase::updateActions(activated);
+	KexiView::updateActions(activated);
 }
 
 bool KexiEditor::isAdvancedEditor()
@@ -156,23 +165,25 @@ QString KexiEditor::text()
 #else
 	if (!d->doc)
 		return QString();
-	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
-	return eIface->text();
+//	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
+//	return eIface->text();
+	return d->doc->text();
 #endif
 }
 
 void KexiEditor::setText(const QString &text)
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
-	const bool was_dirty = m_parentView ? m_parentView->dirty() : dirty();
+	const bool was_dirty = m_parentView ? m_parentView->idDirty() : idDirty();
 	d->view->setText(text);
 	setDirty(was_dirty);
 #else
 	if (!d->doc)
 		return;
-	const bool was_dirty = dirty();
-	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
-	eIface->setText(text);
+	const bool was_dirty = isDirty();
+//	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
+//	eIface->setText(text);
+	d->doc->setText(text);
 	setDirty(was_dirty);
 #endif
 }
@@ -181,7 +192,13 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
-	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( d->doc );
+	KTextEditor::HighlightingInterface *hiface
+		= qobject_cast<KTextEditor::HighlightingInterface*>( d->doc );
+	if (!hiface->setHighlighting(highlightmodename)) {
+//! @todo display warning
+		hiface->setHighlighting(QString()); // don't highlight
+	}
+/*	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( d->doc );
 	for(uint i = 0; i < hl->hlModeCount(); i++) {
 			//kDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
 			if (hl->hlModeName(i).contains(highlightmodename, false))  {
@@ -189,18 +206,19 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
 				return;
 			}
 	}
-	hl->setHlMode(0); // 0=None, don't highlight anything.
+	hl->setHlMode(0); // 0=None, don't highlight anything. */
 #endif
 }
 
 void KexiEditor::slotConfigureEditor()
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
-	//TODO show errormessage?
+//! @todo show configuration...
 #else
-	KTextEditor::ConfigInterface *config = KTextEditor::configInterface( d->doc );
-	if (config)
-		config->configDialog();
+	if (!d->doc)
+		return;
+	d->doc->editor()->configDialog(this);
+//! @todo use d->doc->editor()->writeConfig() or KTextEditor::ConfigInterface to save changes
 #endif
 }
 
@@ -221,19 +239,19 @@ void KexiEditor::jump(int character)
 #else
 	if (!d->doc)
 		return;
-	KTextEditor::EditInterface *ei = KTextEditor::editInterface(d->doc);
-	const int numRows = ei->numLines();
+//	KTextEditor::EditInterface *ei = KTextEditor::editInterface(d->doc);
+	const int numRows = d->doc->lines();
 	int row = 0, col = 0;
 	for (int ch = 0; row < numRows; row++) {
-		const int rowLen = ei->lineLength(row)+1;
+		const int rowLen = d->doc->lineLength(row)+1;
 		if ((ch + rowLen) > character) {
 			col = character-ch;
 			break;
 		}
 		ch += rowLen;
 	}
-	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface(d->view);
-	ci->setCursorPositionReal(row, col);
+//	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface(d->view);
+	d->view->setCursorPosition( KTextEditor::Cursor(row, col) );
 #endif
 }
 
@@ -242,8 +260,8 @@ void KexiEditor::setCursorPosition(int line, int col)
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	d->view->setCursorPosition(line, col);
 #else
-	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface( d->view );
-	ci->setCursorPosition(line, col);
+//	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface( d->view );
+	d->view->setCursorPosition( KTextEditor::Cursor(line, col) );
 #endif
 }
 
@@ -252,11 +270,12 @@ void KexiEditor::clearUndoRedo()
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	//TODO how to remove undo/redo from a KTextEdit?
 #else
+#warning TODO KexiEditor::clearUndoRedo()
+/*
 	KTextEditor::UndoInterface* u = KTextEditor::undoInterface( d->doc );
 	u->clearUndo();
-	u->clearRedo();
+	u->clearRedo();*/
 #endif
 }
 
 #include "kexieditor.moc"
-

@@ -24,7 +24,7 @@
 
 #include "kexidataawareview.h"
 
-class KexiMainWindow;
+class KexiMainWindowIface;
 class KexiDataTableView;
 class KexiTableView;
 class KexiTableViewData;
@@ -53,13 +53,12 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDataAwareView
 		 Otherwise, table will be not-db-aware, 
 		  and KexiTableView is used internally. In the latter case,
 		  data can be set by calling tableView()->setData(KexiTableViewData* data). */
-		KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0, 
-			bool dbAware = true);
+		KexiDataTable(KexiMainWindowIface *mainWin, QWidget *parent, bool dbAware = true);
 
 		/*! CTOR2: Creates db-aware, table view initialized with \a cursor. 
 		 KexiDataTableView is used internally. */
-		KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
-			KexiDB::Cursor *cursor, const char *name = 0);
+		KexiDataTable(KexiMainWindowIface *mainWin, QWidget *parent, 
+			KexiDB::Cursor *cursor);
 
 		virtual ~KexiDataTable();
 

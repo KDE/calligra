@@ -22,11 +22,10 @@
 #define KEXIBROWSER_H
 
 #include <k3listview.h>
-#include <q3asciidict.h>
-#include <q3intdict.h>
-//Added by qt3to4:
+#include <QHash>
 #include <QEvent>
 #include <Q3CString>
+#include <kexi_export.h>
 
 class Q3ListViewItem;
 class KIconLoader;
@@ -38,7 +37,7 @@ class K3ListView;
 class KToolBar;
 class KexiBrowserItem;
 class KexiView;
-class KexiMainWindow;
+class KexiMainWindowIface;
 class KexiSmallToolButton;
 class KexiBrowserListView;
 
@@ -65,7 +64,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 				| SingleClickOpensItemOptionEnabled //!< the default
 		};
 
-		KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features = DefaultFeatures);
+		KexiBrowser(QWidget* parent, KexiMainWindowIface *mainWin, int features = DefaultFeatures);
 		virtual ~KexiBrowser(); 
 
 		/*! Sets project \a prj for this browser. If \a partManagerErrorMessages is not NULL
@@ -74,7 +73,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		 items for only one mime type are displayed. In the latter case, no group (parent) 
 		 items are displayed.
 		 Previous items are removed. */
-		void setProject(KexiProject* prj, const QString& itemsMimeType = QString::null, 
+		void setProject(KexiProject* prj, const QString& itemsMimeType = QString(), 
 			QString* partManagerErrorMessages = 0);
 
 		/*! \return items' mime type previously set by setProject. Returns empty string 
@@ -84,7 +83,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 
 		KexiPart::Item* selectedPartItem() const;
 
-		void installEventFilter ( const QObject * filterObj );
+		void installEventFilter ( QObject * filterObj );
 		virtual bool eventFilter ( QObject *o, QEvent * e );
 
 		bool actionEnabled(const Q3CString& actionName) const;
@@ -135,7 +134,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		void slotExecuteItem(Q3ListViewItem *item);
 		void slotSelectionChanged(Q3ListViewItem* i);
 		void slotSettingsChanged(int);
-		void slotNewObjectPopupAboutToShow();
+		void slotNewObjectMenuAboutToShow();
 
 		void slotNewObject();
 		void slotOpenObject();
@@ -155,25 +154,26 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		void itemRenameDone();
 		KexiBrowserItem* addItem(KexiPart::Item& item, KexiBrowserItem *parent, KexiPart::Info* info);
 
-		KexiMainWindow *m_mainWin;
+		KexiMainWindowIface *m_mainWin;
 		int m_features;
 		KexiBrowserListView *m_list;
 		KActionCollection *m_actions;
-		Q3AsciiDict<KexiBrowserItem> m_baseItems;
-		Q3IntDict<KexiBrowserItem> m_normalItems;
-		KMenu *m_itemPopup, *m_partPopup;
+		QHash<QString, KexiBrowserItem*> m_baseItems;
+		QHash<int, KexiBrowserItem*> m_normalItems;
+		KMenu *m_itemMenu, *m_partMenu;
 		KAction *m_deleteAction, *m_renameAction, 
 			*m_newObjectAction, // *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction,
 			*m_executeAction,
 			*m_dataExportAction, *m_printAction, *m_pageSetupAction;
 		KActionMenu* m_exportActionMenu;
-		KMenu* m_newObjectPopup;
-		int m_itemPopupTitle_id, m_partPopupTitle_id, 
-			m_openAction_id, m_designAction_id, m_editTextAction_id,
-			m_executeAction_id,
-			m_exportActionMenu_id, m_exportActionMenu_id_sep,
-			m_printAction_id, m_pageSetupAction_id, m_pageSetupAction_id_sep;
+		KMenu* m_newObjectMenu;
+		QAction *m_itemMenuTitle, *m_partMenuTitle,
+			*m_exportActionMenu_sep, *m_pageSetupAction_sep;
+//		int m_openAction_id, m_designAction_id, m_editTextAction_id,
+			//m_executeAction_id,
+			//m_exportActionMenu_id, m_exportActionMenu_id_sep,
+			//m_printAction_id, m_pageSetupAction_id, m_pageSetupAction_id_sep;
 
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;

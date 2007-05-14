@@ -218,10 +218,10 @@ KFormDesignerKDevPart::setupActions()
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
 	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editConnections()), actionCollection(), "form_connections");
 
-	new KAction(i18n("Lay Out Widgets &Horizontally"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHBox()), actionCollection(), "layout_hbox");
-	new KAction(i18n("Lay Out Widgets &Vertically"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVBox()), actionCollection(), "layout_vbox");
-	new KAction(i18n("Lay Out Widgets in &Grid"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutGrid()), actionCollection(), "layout_grid");
-	new KAction(i18n("&Break Layout"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(breakLayout()), actionCollection(), "break_layout");
+	new KAction(i18n("Lay Out Widgets &Horizontally"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHBox()), actionCollection(), "layout_hbox");
+	new KAction(i18n("Lay Out Widgets &Vertically"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVBox()), actionCollection(), "layout_vbox");
+	new KAction(i18n("Lay Out Widgets in &Grid"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutGrid()), actionCollection(), "layout_grid");
+	new KAction(i18n("&Break Layout"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(breakLayout()), actionCollection(), "break_layout");
 
 	new KAction(i18n("Bring Widget to Front"), "raise", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(bringWidgetToFront()), actionCollection(), "format_raise");
 	new KAction(i18n("Send Widget to Back"), "lower", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(sendWidgetToBack()), actionCollection(), "format_lower");

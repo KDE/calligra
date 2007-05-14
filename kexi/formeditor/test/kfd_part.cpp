@@ -223,22 +223,22 @@ KFormDesignerPart::setupActions()
 	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editConnections()), actionCollection(), "form_connections");
 
 	KActionMenu *layoutMenu = new KActionMenu(i18n("Group Widgets"), "", actionCollection(), "layout_menu");
-	layoutMenu->insert(new KAction(i18n("&Horizontally"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHBox()), actionCollection(), "layout_hbox"));
-	layoutMenu->insert(new KAction(i18n("&Vertically"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVBox()), actionCollection(), "layout_vbox"));
-	layoutMenu->insert(new KAction(i18n("In &Grid"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutGrid()), actionCollection(), "layout_grid"));
-	layoutMenu->insert(new KAction(i18n("By &Rows"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHFlow()), actionCollection(), "layout_hflow"));
-	layoutMenu->insert(new KAction(i18n("By &Columns"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVFlow()), actionCollection(), "layout_vflow"));
-	layoutMenu->insert(new KAction(i18n("Horizontally in &Splitter"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHSplitter()), actionCollection(), "layout_hsplitter"));
-	layoutMenu->insert(new KAction(i18n("Verti&cally in Splitter"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVSplitter()), actionCollection(), "layout_vsplitter"));
-	new KAction(i18n("&Ungroup Widgets"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(breakLayout()), actionCollection(), "break_layout");
+	layoutMenu->insert(new KAction(i18n("&Horizontally"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHBox()), actionCollection(), "layout_hbox"));
+	layoutMenu->insert(new KAction(i18n("&Vertically"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVBox()), actionCollection(), "layout_vbox"));
+	layoutMenu->insert(new KAction(i18n("In &Grid"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutGrid()), actionCollection(), "layout_grid"));
+	layoutMenu->insert(new KAction(i18n("By &Rows"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHFlow()), actionCollection(), "layout_hflow"));
+	layoutMenu->insert(new KAction(i18n("By &Columns"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVFlow()), actionCollection(), "layout_vflow"));
+	layoutMenu->insert(new KAction(i18n("Horizontally in &Splitter"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHSplitter()), actionCollection(), "layout_hsplitter"));
+	layoutMenu->insert(new KAction(i18n("Verti&cally in Splitter"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVSplitter()), actionCollection(), "layout_vsplitter"));
+	new KAction(i18n("&Ungroup Widgets"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(breakLayout()), actionCollection(), "break_layout");
 
 /*
-	new KAction(i18n("Lay Out Widgets &Horizontally"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHBox()), actionCollection(), "layout_hbox");
-	new KAction(i18n("Lay Out Widgets &Vertically"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVBox()), actionCollection(), "layout_vbox");
-	new KAction(i18n("Lay Out Widgets in &Grid"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutGrid()), actionCollection(), "layout_grid");
-	new KAction(i18n("Lay Out Widgets H&orizontally in Splitter"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHSplitter()), actionCollection(), "layout_hsplitter");
-	new KAction(i18n("Lay Out Widgets Verti&cally in Splitter"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVSplitter()), actionCollection(), "layout_vsplitter");
-	new KAction(i18n("&Break Layout"), QString::null, KShortcut(0), KFormDesigner::FormManager::self(), SLOT(breakLayout()), actionCollection(), "break_layout");
+	new KAction(i18n("Lay Out Widgets &Horizontally"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHBox()), actionCollection(), "layout_hbox");
+	new KAction(i18n("Lay Out Widgets &Vertically"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVBox()), actionCollection(), "layout_vbox");
+	new KAction(i18n("Lay Out Widgets in &Grid"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutGrid()), actionCollection(), "layout_grid");
+	new KAction(i18n("Lay Out Widgets H&orizontally in Splitter"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutHSplitter()), actionCollection(), "layout_hsplitter");
+	new KAction(i18n("Lay Out Widgets Verti&cally in Splitter"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(layoutVSplitter()), actionCollection(), "layout_vsplitter");
+	new KAction(i18n("&Break Layout"), QString(), KShortcut(0), KFormDesigner::FormManager::self(), SLOT(breakLayout()), actionCollection(), "break_layout");
 */
 	new KAction(i18n("Bring Widget to Front"), "raise", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(bringWidgetToFront()), actionCollection(), "format_raise");
 	new KAction(i18n("Send Widget to Back"), "lower", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(sendWidgetToBack()), actionCollection(), "format_lower");

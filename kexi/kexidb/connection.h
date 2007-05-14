@@ -162,7 +162,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 if dbName is not specified, currently used database name is used
 		 (it is closed before dropping).
 		*/
-		bool dropDatabase( const QString &dbName = QString::null );
+		bool dropDatabase( const QString &dbName = QString() );
 
 		 /*! \return names of all the \a objecttype (see \a ObjectTypes in global.h)
 		 schemas stored in currently used database. KexiDB::AnyObjectType can be passed 
@@ -338,7 +338,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		virtual Cursor* prepareQuery( const QString& statement, uint cursor_options = 0) = 0;
 
-		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
+		/*! \overload prepareQuery( const QString& statement = QString(), uint cursor_options = 0)
 		 Prepares query described by \a query schema. \a params are values of parameters that
 		 will be inserted into places marked with [] before execution of the query.
 
@@ -356,7 +356,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 ) = 0;
 
-		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
+		/*! \overload prepareQuery( const QString& statement = QString(), uint cursor_options = 0)
 		 Statement is build from data provided by \a table schema, 
 		 it is like "select * from table_name".*/
 		Cursor* prepareQuery( TableSchema& table, uint cursor_options = 0);
@@ -737,14 +737,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 If there is already such record in the table, it's simply overwritten.
 		 \return true on success
 		 \sa loadDataBlock(). */
-		bool storeDataBlock( int objectID, const QString &dataString, const QString& dataID = QString::null );
+		bool storeDataBlock( int objectID, const QString &dataString, 
+			const QString& dataID = QString() );
 
 		/*! Removes (potentially large) string data (e.g. xml form's representation), 
 		 referenced by objectID, and pointed by optional \a dataID.
 		 \return true on success. Does not fail if the block does not exist.
 		 Note that if \a dataID is not specified, all data blocks for this dialog will be removed.
 		 \sa loadDataBlock() storeDataBlock(). */
-		bool removeDataBlock( int objectID, const QString& dataID = QString::null);
+		bool removeDataBlock( int objectID, const QString& dataID = QString());
 
 		class KEXI_DB_EXPORT TableSchemaChangeListenerInterface
 		{
@@ -908,11 +909,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual bool drv_databaseExists( const QString &dbName, bool ignoreErrors = true );
 
 		/*! For reimplemenation: creates new database using connection */
-		virtual bool drv_createDatabase( const QString &dbName = QString::null ) = 0;
+		virtual bool drv_createDatabase( const QString &dbName = QString() ) = 0;
 
 		/*! For reimplemenation: opens existing database using connection 
 		 \return true on success, false on failure and cancelled if user has cancelled this action. */
-		virtual bool drv_useDatabase( const QString &dbName = QString::null, bool *cancelled = 0, 
+		virtual bool drv_useDatabase( const QString &dbName = QString(), bool *cancelled = 0, 
 			MessageHandler* msgHandler = 0 ) = 0;
 
 		/*! For reimplemenation: closes previously opened database 
@@ -937,7 +938,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! For reimplemenation: drops database from the server
 			using connection. After drop, database shouldn't be accessible 
 			anymore. */
-		virtual bool drv_dropDatabase( const QString &dbName = QString::null ) = 0;
+		virtual bool drv_dropDatabase( const QString &dbName = QString() ) = 0;
 
 		/*! \return "CREATE TABLE ..." statement string needed for \a tableSchema
 		 creation in the database. 

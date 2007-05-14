@@ -21,12 +21,9 @@
 #ifndef KEXIRELATIONWIDGET_H
 #define KEXIRELATIONWIDGET_H
 
-//#include <qwidget.h>
-//#include "kexiactionproxy.h"
-#include "kexiviewbase.h"
-#include "kexirelationview.h"
-//Added by qt3to4:
 #include <Q3CString>
+#include <KexiView.h>
+#include "kexirelationview.h"
 
 class KComboBox;
 class KPushButton;
@@ -34,7 +31,7 @@ class KMenu;
 class KAction;
 class Q3ListViewItem;
 
-class KexiMainWindow;
+class KexiMainWindowIface;
 
 namespace KexiDB
 {
@@ -43,12 +40,12 @@ namespace KexiDB
 	class Reference;
 }
 
-class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
+class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiView
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationWidget(KexiMainWindow *win, QWidget *parent, const char *name=0);
+		KexiRelationWidget(KexiMainWindowIface *win, QWidget *parent);
 		virtual ~KexiRelationWidget();
 
 		//! \return a dictionary of added tables
@@ -122,7 +119,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 		void fillTablesCombo();
 
 	private:
-		KexiMainWindow *m_win;
+		KexiMainWindowIface *m_win;
 		KComboBox *m_tableCombo;
 		KPushButton *m_btnAdd;
 		KexiRelationView *m_relationView;
@@ -132,8 +129,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 			, *m_connectionPopup //over connection
 			, *m_areaPopup; //over outer area
 		KAction *m_openSelectedTableAction, *m_designSelectedTableAction;
-
-		int m_tableQueryPopupTitleID, m_connectionPopupTitleID;
+		QAction *m_tableQueryPopupTitle, *m_connectionPopupTitle;
 };
 
 #endif

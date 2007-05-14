@@ -68,7 +68,7 @@ class KexiCellEditorFactoryPrivate
 			return key;
 		}
 
-		void registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType = QString::null )
+		void registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType = QString() )
 		{
 			if (!items[ &item ])
 				items.insert( &item, &item );
@@ -81,10 +81,10 @@ class KexiCellEditorFactoryPrivate
 			KexiCellEditorFactoryItem *item = items_by_type[ key(type, subType) ];
 			if (item)
 				return item;
-			item = items_by_type[ key(type, QString::null) ];
+			item = items_by_type[ key(type, QString()) ];
 			if (item)
 				return item;
-			return items_by_type[ key( KexiDB::Field::InvalidType, QString::null ) ];
+			return items_by_type[ key( KexiDB::Field::InvalidType, QString() ) ];
 		}
 
 		Q3PtrDict<KexiCellEditorFactoryItem> items; //!< list of editor factory items (for later destroy)

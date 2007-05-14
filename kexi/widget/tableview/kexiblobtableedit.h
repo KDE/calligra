@@ -30,7 +30,6 @@
 #include "kexicelleditorfactory.h"
 
 class KTemporaryFile;
-class KProcess;
 class Q3TextEdit;
 
 class KexiBlobTableEdit : public KexiTableEdit

@@ -186,23 +186,23 @@ void KexiFormPart::initInstanceActions()
 	KActionMenu *menu = static_cast<KActionMenu*>(action);
 
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("&Horizontally"),
-		QString::null, 0, "formpart_layout_hbox"));
+		QString(), 0, "formpart_layout_hbox"));
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("&Vertically"),
-		QString::null, 0, "formpart_layout_vbox"));
+		QString(), 0, "formpart_layout_vbox"));
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("In &Grid"),
-		QString::null, 0, "formpart_layout_grid"));
+		QString(), 0, "formpart_layout_grid"));
 #ifdef KEXI_SHOW_SPLITTER_WIDGET
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Horizontally in &Splitter"),
-		QString::null, 0, "formpart_layout_hsplitter"));
+		QString(), 0, "formpart_layout_hsplitter"));
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally in Splitter"),
-		QString::null, 0, "formpart_layout_vsplitter"));
+		QString(), 0, "formpart_layout_vsplitter"));
 #endif
 
-	createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString::null, 0, "formpart_break_layout");
+	createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString(), 0, "formpart_break_layout");
 /*
-	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Horizontally"), QString::null, 0, "formpart_layout_hbox");
-	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Vertically"), QString::null, 0, "formpart_layout_vbox");
-	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets in &Grid"), QString::null, 0, "formpart_layout_grid");
+	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Horizontally"), QString(), 0, "formpart_layout_hbox");
+	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Vertically"), QString(), 0, "formpart_layout_vbox");
+	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets in &Grid"), QString(), 0, "formpart_layout_grid");
 */
 	createSharedAction(Kexi::DesignViewMode, i18n("Bring Widget to Front"), "raise", 0, "formpart_format_raise");
 	createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), "lower", 0, "formpart_format_lower");

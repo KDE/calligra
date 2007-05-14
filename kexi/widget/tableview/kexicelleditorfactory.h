@@ -45,12 +45,12 @@ class KEXIDATATABLE_EXPORT KexiCellEditorFactory
 		 Once registered, \a item object will be owned by the factory, so you shouldn't
 		 care about deleting it. */
 		static void registerItem( KexiCellEditorFactoryItem& item, uint type, 
-			const QString& subType = QString::null );
+			const QString& subType = QString() );
 
 		/*! \return item for \a type and (optional) \a subType. 
 		 If no item found, the one with empty subtype is tried.
 		 If still no item found, the default is tried. Eventually, may return NULL. */
-		static KexiCellEditorFactoryItem* item( uint type, const QString& subType = QString::null );
+		static KexiCellEditorFactoryItem* item( uint type, const QString& subType = QString() );
 
 //		static KexiTableEdit* createEditor(KexiDB::Field &f, Q3ScrollView* parent = 0);
 		/*! Creates a new editor for \a column. If \a parent is of Q3ScrollView, the new editor

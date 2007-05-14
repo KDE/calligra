@@ -36,19 +36,20 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kpushbutton.h>
+#include <KMenu>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
+#include <kexiutils/utils.h>
 
 #include <kexiproject.h>
-#include <keximainwindow.h>
+#include <KexiMainWindowIface.h>
 #include "kexirelationview.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
 
-KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent, 
-	const char *name)
-	: KexiViewBase(win, parent, name)
+KexiRelationWidget::KexiRelationWidget(KexiMainWindowIface *win, QWidget *parent)
+	: KexiView(parent)
 	, m_win(win)
 {
 	m_conn = m_win->project()->dbConnection();
@@ -57,14 +58,16 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	Q3GridLayout *g = new Q3GridLayout(this);
 	g->addLayout( hlyr, 0, 0 );
 
-	m_tableCombo = new KComboBox(this, "tables_combo");
+	m_tableCombo = new KComboBox(this);
+	m_tableCombo->setObjectName("tables_combo");
 	m_tableCombo->setMinimumWidth(QFontMetrics(font()).width("w")*20);
-	QLabel *lbl = new QLabel(m_tableCombo, i18n("Table")+": ", this);
-	lbl->setIndent(3);
 	m_tableCombo->setInsertPolicy(QComboBox::NoInsert);
+	m_tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
+	QLabel *lbl = new QLabel(i18n("Table")+": ", this);
+	lbl->setBuddy(m_tableCombo);
+	lbl->setIndent(3);
 	hlyr->addWidget(lbl);
 	hlyr->addWidget(m_tableCombo);
-	m_tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
 	fillTablesCombo();
 
 	m_btnAdd = new KPushButton(i18n("&Add"), this);
@@ -72,35 +75,45 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	hlyr->addStretch(1);
 	connect(m_btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
-	m_relationView = new KexiRelationView(this, "relation_view");
+	m_relationView = new KexiRelationView(this);
+	m_relationView->setObjectName("relation_view");
 	setViewWidget(m_relationView);
 	g->addWidget(m_relationView, 1, 0);
 	//m_relationView->setFocus();
 
 	//actions
-	m_tableQueryPopup = new KMenu(this, "m_popup");
-	m_tableQueryPopupTitleID = m_tableQueryPopup->insertTitle(SmallIcon("table"), "");
+	m_tableQueryPopup = new KMenu(this);
+	m_tableQueryPopup->setObjectName("m_popup");
+	m_tableQueryPopupTitle = m_tableQueryPopup->addTitle(KIcon("table"), QString());
 	connect(m_tableQueryPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
 
-	m_connectionPopup = new KMenu(this, "m_connectionPopup");
-	m_connectionPopupTitleID = m_connectionPopup->insertTitle("");
+	m_connectionPopup = new KMenu(this);
+	m_connectionPopup->setObjectName("m_connectionPopup");
+	m_connectionPopupTitle = m_connectionPopup->addTitle(QString());
 	connect(m_connectionPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
 
-	m_areaPopup = new KMenu(this, "m_areaPopup");
+	m_areaPopup = new KMenu(this);
+	m_areaPopup->setObjectName("m_areaPopup");
 	
-	m_openSelectedTableAction = new KAction(i18n("&Open Table"), SmallIcon("document-open"), KShortcut(),
-		this, SLOT(openSelectedTable()), this, "relationsview_openTable");
-	m_openSelectedTableAction->plug( m_tableQueryPopup );
-	m_designSelectedTableAction = new KAction(i18n("&Design Table"), SmallIcon("edit"), KShortcut(),
-		this, SLOT(designSelectedTable()), this, "relationsview_designTable");
-	m_designSelectedTableAction->plug( m_tableQueryPopup );
+	m_openSelectedTableAction = new KAction(KIcon("document-open"), i18n("&Open Table"), this);
+	m_openSelectedTableAction->setObjectName("relationsview_openTable");
+	connect(m_openSelectedTableAction, SIGNAL(triggered()),
+		this, SLOT(openSelectedTable()));
+		
+	m_tableQueryPopup->addAction(m_openSelectedTableAction);
+	
+	m_designSelectedTableAction = new KAction(KIcon("edit"), i18n("&Design Table"), this);
+	connect(m_designSelectedTableAction, SIGNAL(triggered()),
+		this, SLOT(designSelectedTable()));
+	m_designSelectedTableAction->setObjectName("relationsview_designTable");
+	m_tableQueryPopup->addAction(m_designSelectedTableAction);
 	m_tableQueryPopup->addSeparator();
 
 	KAction* hide_action = plugSharedAction("edit_delete", i18n("&Hide Table"), m_tableQueryPopup);
-	hide_action->setIconSet(QIcon());
+	hide_action->setIcon(KIcon());
 
-	plugSharedAction("edit_delete",m_connectionPopup);
-	plugSharedAction("edit_delete",this, SLOT(removeSelectedObject()));
+	plugSharedAction("edit_delete", m_connectionPopup);
+	plugSharedAction("edit_delete", this, SLOT(removeSelectedObject()));
 
 	connect(m_relationView, SIGNAL(tableViewGotFocus()),
 		this, SLOT(tableViewGotFocus()));
@@ -159,9 +172,9 @@ const ConnectionList* KexiRelationWidget::connections() const
 void
 KexiRelationWidget::slotAddTable()
 {
-	if (m_tableCombo->currentItem()==-1)
+	if (m_tableCombo->currentIndex()==-1)
 		return;
-	QString tname = m_tableCombo->text(m_tableCombo->currentItem());
+	const QString tname = m_tableCombo->itemText(m_tableCombo->currentIndex());
 	KexiDB::TableSchema *t = m_conn->tableSchema(tname);
 	addTable(t);
 }
@@ -180,22 +193,22 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 			this, SLOT(slotTableFieldDoubleClicked(Q3ListViewItem*,const QPoint&,int)));
 	}
 
-	const QString tname = t->name().lower();
+	const QString tname = t->name().toLower();
 	const int count = m_tableCombo->count();
 	int i = 0;
 	for (; i < count; i++ ) {
-		if (m_tableCombo->text(i).lower() == tname )
+		if (m_tableCombo->itemText(i).toLower() == tname )
 			break;
 	}
 	if (i<count) {
-		int oi = m_tableCombo->currentItem();
+		int oi = m_tableCombo->currentIndex();
 		kDebug()<<"KexiRelationWidget::slotAddTable(): removing a table from the combo box"<<endl;
 		m_tableCombo->removeItem(i);
 		if (m_tableCombo->count()>0) {
 			if (oi>=m_tableCombo->count()) {
 				oi=m_tableCombo->count()-1;
 			}
-			m_tableCombo->setCurrentItem(oi);
+			m_tableCombo->setCurrentIndex(oi);
 		}
 		else {
 			m_tableCombo->setEnabled(false);
@@ -216,9 +229,9 @@ KexiRelationWidget::addTable(const QString& t)
 {
 	for(int i=0; i < m_tableCombo->count(); i++)
 	{
-		if(m_tableCombo->text(i) == t)
+		if(m_tableCombo->itemText(i) == t)
 		{
-			m_tableCombo->setCurrentItem(i);
+			m_tableCombo->setCurrentIndex(i);
 			slotAddTable();
 		}
 	}
@@ -314,13 +327,13 @@ QSize KexiRelationWidget::sizeHint() const
 
 void KexiRelationWidget::slotTableHidden(KexiDB::TableSchema &table)
 {
-	const QString &t = table.name().lower();
+	const QString &t = table.name().toLower();
 	int i;
-	for (i=0; i<m_tableCombo->count() && t > m_tableCombo->text(i).lower(); i++)
+	for (i=0; i<m_tableCombo->count() && t > m_tableCombo->itemText(i).toLower(); i++)
 		;
-	m_tableCombo->insertItem(table.name(), i);
+	m_tableCombo->insertItem(i, table.name());
 	if (!m_tableCombo->isEnabled()) {
-		m_tableCombo->setCurrentItem(0);
+		m_tableCombo->setCurrentIndex(0);
 		m_tableCombo->setEnabled(true);
 		m_btnAdd->setEnabled(true);
 	}
@@ -332,11 +345,13 @@ void KexiRelationWidget::aboutToShowPopupMenu()
 {
 /*! @todo what about query? */
 	if (m_relationView->focusedTableView() && m_relationView->focusedTableView()->schema()->table()) {
-		m_tableQueryPopup->changeTitle(m_tableQueryPopupTitleID, SmallIcon("table"),
+		m_tableQueryPopupTitle->setIcon(KIcon("table"));
+		m_tableQueryPopupTitle->setText(
 			QString(m_relationView->focusedTableView()->schema()->name()) + " : " + i18n("Table"));
 	}
 	else if (m_relationView->selectedConnection()) {
-		m_connectionPopup->changeTitle( m_connectionPopupTitleID, 
+		m_connectionPopupTitle->setIcon(KIcon());
+		m_connectionPopupTitle->setText(
 			 m_relationView->selectedConnection()->toString() + " : " + i18n("Relationship") );
 	}
 }
@@ -344,7 +359,7 @@ void KexiRelationWidget::aboutToShowPopupMenu()
 void
 KexiRelationWidget::slotTableFieldDoubleClicked(Q3ListViewItem *i,const QPoint&,int)
 {
-	if (!sender()->isA("KexiRelationViewTable"))
+	if (!KexiUtils::objectIsA(sender(), "KexiRelationViewTable"))
 		return;
 	const KexiRelationViewTable* t = static_cast<const KexiRelationViewTable*>(sender());
 	const QStringList selectedFieldNames( t->selectedFieldNames() );
@@ -371,7 +386,7 @@ KexiRelationWidget::fillTablesCombo()
 	m_tableCombo->clear();
 	QStringList tmp = m_conn->tableNames();
 	tmp.sort();
-	m_tableCombo->insertStringList(tmp);
+	m_tableCombo->addItems(tmp);
 }
 
 void
@@ -379,8 +394,12 @@ KexiRelationWidget::objectCreated(const Q3CString &mime, const Q3CString& name)
 {
 	if (mime=="kexi/table" || mime=="kexi/query") {
 //! @todo query?
-		m_tableCombo->insertItem(QString(name));
-		m_tableCombo->listBox()->sort();
+		const int count = m_tableCombo->count();
+		QString strName(name);
+		int i = 0;
+		for (; i<count && m_tableCombo->itemText(i)<=strName; i++)
+			;
+		m_tableCombo->insertItem(i, QString(name));
 	}
 }
 
@@ -391,13 +410,13 @@ KexiRelationWidget::objectDeleted(const Q3CString &mime, const Q3CString& name)
 		QString strName(name);
 		for (int i=0; i<m_tableCombo->count(); i++) {
 //! @todo query?
-			if (m_tableCombo->text(i)==strName) {
+			if (m_tableCombo->itemText(i)==strName) {
 				m_tableCombo->removeItem(i);
-				if (m_tableCombo->currentItem()==i) {
+				if (m_tableCombo->currentIndex()==i) {
 					if (i==(m_tableCombo->count()-1))
-						m_tableCombo->setCurrentItem(i-1);
+						m_tableCombo->setCurrentIndex(i-1);
 					else
-						m_tableCombo->setCurrentItem(i);
+						m_tableCombo->setCurrentIndex(i);
 				}
 				break;
 			}
@@ -406,15 +425,21 @@ KexiRelationWidget::objectDeleted(const Q3CString &mime, const Q3CString& name)
 }
 
 void
-KexiRelationWidget::objectRenamed(const Q3CString &mime, const Q3CString& name, const Q3CString& newName)
+KexiRelationWidget::objectRenamed(const Q3CString &mime, const Q3CString& name, 
+	const Q3CString& newName)
 {
 	if (mime=="kexi/table" || mime=="kexi/query") {
 		QString strName(name);
-		for (int i=0; i<m_tableCombo->count(); i++) {
+		const int count = m_tableCombo->count();
+		for (int i=0; i<count; i++) {
 //! @todo query?
-			if (m_tableCombo->text(i)==strName) {
-				m_tableCombo->changeItem(QString(newName), i);
-				m_tableCombo->listBox()->sort();
+			if (m_tableCombo->itemText(i)==strName) {
+				m_tableCombo->removeItem(i);
+				QString strNewName( newName );
+				int j = 0;
+				for (; j<count && m_tableCombo->itemText(j)<=strNewName; j++)
+					;
+				m_tableCombo->insertItem(j, strNewName);
 				break;
 			}
 		}

@@ -746,7 +746,7 @@ InsertWidgetCommand::execute()
 		WidgetInfo *winfo = m_container->form()->library()->widgetInfoForClassName(m_class);
 		KMessageBox::sorry(FormManager::self()->activeForm() ? FormManager::self()->activeForm()->widget() : 0,
 				i18n("Could not insert widget of type \"%1\". A problem with widget's creation encountered.")
-				.arg(winfo ? winfo->name() : QString::null));
+				.arg(winfo ? winfo->name() : QString()));
 		kWarning() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
 		return;
 	}

@@ -29,7 +29,8 @@ class MySqlCursorData;
 
 class MySqlCursor: public Cursor {
 public:
-	MySqlCursor(Connection* conn, const QString& statement = QString::null, uint cursor_options = NoOptions );
+	MySqlCursor(Connection* conn, const QString& statement = QString(), 
+		uint cursor_options = NoOptions );
 	MySqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
 	virtual ~MySqlCursor();
 	virtual bool drv_open();

@@ -638,8 +638,8 @@ QuerySchema* buildSelectQuery(
 		}
 	}
 
-//	KexiDBDbg << "Select ColViews=" << (colViews ? colViews->debugString() : QString::null)
-//		<< " Tables=" << (tablesList ? tablesList->debugString() : QString::null) << endl;
+//	KexiDBDbg << "Select ColViews=" << (colViews ? colViews->debugString() : QString())
+//		<< " Tables=" << (tablesList ? tablesList->debugString() : QString()s) << endl;
 
 	CLEANUP;
 	return querySchema;

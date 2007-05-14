@@ -554,7 +554,7 @@ bool KexiDBLabel::cursorAtEnd()
 
 void KexiDBLabel::clear()
 {
-	setText(QString::null);
+	setText(QString());
 }
 
 bool KexiDBLabel::setProperty( const char * name, const QVariant & value )

@@ -20,11 +20,9 @@
 #ifndef KEXISECTIONHEADER_H
 #define KEXISECTIONHEADER_H
 
-#include <qwidget.h>
-//Added by qt3to4:
-#include <QEvent>
-
-class KexiSectionHeaderPrivate;
+#include <kexi_export.h>
+#include <QWidget>
+class QEvent;
 
 class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 {
@@ -48,7 +46,8 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 		void slotFocus(bool in);
 
 	protected:
-		KexiSectionHeaderPrivate *d;
+		class Private;
+		Private * const d;
 		friend class BoxLayout;
 };
 

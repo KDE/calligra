@@ -19,7 +19,7 @@
 */
 
 #include "kexipropertyeditorview.h"
-#include "keximainwindow.h"
+#include <KexiMainWindowIface.h>
 #include <koproperty/set.h>
 #include <koproperty/editor.h>
 #include <koproperty/property.h>
@@ -32,10 +32,9 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
-#include <Q3CString>
 
-KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent, const char* name)
- : QWidget(parent, name)
+KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent)
+ : QWidget(parent)
 {
 	Q3HBoxLayout *hlyr = new Q3HBoxLayout(this);
 	m_objectIconLabel = new QLabel(this);
@@ -107,18 +106,20 @@ class KexiPropertyEditorView::Private
 
 //------------------------------
 
-KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget* parent)
-	: QWidget(parent, "KexiPropertyEditorView")
+KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindowIface *mainWin, QWidget* parent)
+	: QWidget(parent)
 	, d(new Private())
 {
-	setCaption(i18n("Properties"));
+	setWindowTitle(i18n("Properties"));
 	//TODO: set a nice icon
-	setIcon(*mainWin->icon());
+#ifdef __GNUC__
+#warning TODO	setWindowIcon(*mainWin->windowIcon());
+#endif
 
 	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
 
 	//add object class info
-	d->objectInfoLabel = new KexiObjectInfoLabel(this, "KexiObjectInfoLabel");
+	d->objectInfoLabel = new KexiObjectInfoLabel(this);
 	lyr->addWidget(d->objectInfoLabel);
 
 	/*
@@ -136,7 +137,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget*
 	lyr->addWidget(d->editor);
 	setFocusProxy(d->editor);
 	d->objectInfoLabel->setBuddy(d->editor);
-	setFocusPolicy(WheelFocus);
+	setFocusPolicy(Qt::WheelFocus);
 
 	connect(d->editor, SIGNAL(propertySetChanged(KoProperty::Set*)), 
 		this, SLOT(slotPropertySetChanged(KoProperty::Set*)));

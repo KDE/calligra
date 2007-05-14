@@ -353,7 +353,7 @@ public:
 	{
 		QString msg;
 		if (actionType=="noaction")
-			msg = QString::null;
+			msg = QString();
 		// hardcoded, but it's not that bad
 		else if (actionType=="macro")
 			msg = i18n("&Select macro to be executed after clicking \"%1\" button:").arg(actionWidgetName);

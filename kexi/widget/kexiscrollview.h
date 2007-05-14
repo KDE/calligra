@@ -21,7 +21,9 @@
 #ifndef KEXISCROLLVIEW_H
 #define KEXISCROLLVIEW_H
 
-#include <q3scrollview.h>
+#include <kexi_export.h>
+
+#include <Q3ScrollView>
 #include <qtimer.h>
 //Added by qt3to4:
 #include <QMouseEvent>

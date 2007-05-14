@@ -20,9 +20,9 @@
 #ifndef KEXISHAREDACTIONCLIENT_H
 #define KEXISHAREDACTIONCLIENT_H
 
-#include <q3asciidict.h>
+#include <QHash>
+#include <QAction>
 
-class KAction;
 #include <kexi_export.h>
 
 //! The KexiSharedActionClient is an interface using application-wide (shared) actions.
@@ -39,11 +39,11 @@ class KEXIGUIUTILS_EXPORT KexiSharedActionClient
 		 performed at main window's level, so we should give up. Otherwise - default shortcut 
 		 will be used (example: Shift+Enter key for "data_save_row" action). \sa KexiTableView::shortCutPressed()
 		*/
-		void plugSharedAction(KAction* a);
+		void plugSharedAction(QAction* a);
 
 	protected:
 		//! Actions pluged for this widget using plugSharedAction(), available by name.
-		Q3AsciiDict<KAction> m_sharedActions;
+		QHash<QString,QAction*> m_sharedActions;
 };
 
 #endif

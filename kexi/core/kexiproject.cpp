@@ -94,7 +94,7 @@ class KexiProject::Private
 class KexiProject::ErrorTitle
 {
 	public:
-	ErrorTitle(KexiProject* p, const QString& msg = QString::null)
+	ErrorTitle(KexiProject* p, const QString& msg = QString())
 		: prj(p)
 		, prev_err_title(p->m_error_title)
 	{ 

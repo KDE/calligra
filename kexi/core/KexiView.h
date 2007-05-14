@@ -224,7 +224,7 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 		 \return true on success. Does not fail if the block doe not exists.
 		 Note that if \a dataID is not specified, all data blocks for this view will be removed.
 		 \sa storeDataBlock(). */
-		bool removeDataBlock( const QString& dataID = QString::null);
+		bool removeDataBlock( const QString& dataID = QString());
 
 		void setViewWidget(QWidget* w, bool focusProxy = false);
 

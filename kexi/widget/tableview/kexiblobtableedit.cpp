@@ -38,7 +38,6 @@
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
 #include <kservice.h>
-#include <kprocess.h>
 #include <kopenwith.h>
 #include <karrowbutton.h>
 #include <klocale.h>

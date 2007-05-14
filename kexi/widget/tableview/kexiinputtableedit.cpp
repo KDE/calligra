@@ -126,7 +126,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 	if (text.isEmpty()) {
 		if (m_origValue.toString().isEmpty()) {
 			//we have to set NULL initial value:
-			m_lineedit->setText(QString::null);
+			m_lineedit->setText(QString());
 		}
 	}
 	else {
@@ -343,7 +343,7 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 {
 	Q_UNUSED(visibleValue);
 //! @todo handle rich text?
-#warning TODO reenable	qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString::null) );
+#warning TODO reenable	qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString()) );
 }
 
 void KexiInputTableEdit::handleAction(const QString& actionName)
@@ -372,7 +372,7 @@ bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect&
 {
 	QString text; //tmp
 #warning TODO reenable	QString text( value.type()==QVariant::String ? value.toString()
-#warning TODO reenable		: m_textFormatter.valueToText(value, QString::null) );
+#warning TODO reenable		: m_textFormatter.valueToText(value, QString()) );
 	QRect internalRect(rect);
 	internalRect.setLeft(rect.x()+leftMargin());
 	internalRect.setWidth(internalRect.width()-rightMargin(focused)-2*3);

@@ -44,7 +44,8 @@ ObjectTreeViewItem::ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeIte
 }
 
 ObjectTreeViewItem::ObjectTreeViewItem(K3ListView *list, ObjectTreeItem *item)
- : K3ListViewItem(list, item ? item->name() : QString::null, item ? item->className() : QString::null)
+ : K3ListViewItem(list, item ? item->name() : QString(), 
+ 	item ? item->className() : QString())
 {
 	m_item = item;
 }

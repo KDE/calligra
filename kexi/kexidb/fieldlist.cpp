@@ -94,7 +94,7 @@ void FieldList::renameField(KexiDB::Field *field, const QString& newName)
 {
 	if (!field || field != m_fields_by_name[ field->name() ]) {
 		KexiDBFatal << "FieldList::renameField() no field found " 
-			<< (field ? QString("\"%1\"").arg(field->name()) : QString::null) << endl;
+			<< (field ? QString("\"%1\"").arg(field->name()) : QString()) << endl;
 		return;
 	}
 	m_fields_by_name.take( field->name() );
