@@ -135,6 +135,9 @@ public:
 
     QList<Align> alignValuesOf( const QString& attribute ) const;
 
+    /// @return The current font style - just a dummy atm
+    QFont font() const;
+
     /// Obtain the @r current scriptlevel
     int scriptLevel() const;
  

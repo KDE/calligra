@@ -202,7 +202,7 @@ protected:
     void readMathMLAttributes( const KoXmlElement& element );
 
     /// Read all content from the node - reimplemented by child elements
-    virtual bool readMathMLContent( const KoXmlElement& parent );
+    virtual bool readMathMLContent( const KoXmlElement& element );
 
     /// Write all attributes of m_attributes to @p writer
     void writeMathMLAttributes( KoXmlWriter* writer ) const;

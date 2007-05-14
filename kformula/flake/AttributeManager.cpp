@@ -163,6 +163,11 @@ void AttributeManager::alterScriptLevel( const BasicElement* element )
         m_scriptLevelStack.push( m_scriptLevelStack.top() );
 }
 
+QFont AttributeManager::font() const
+{
+    return QFont();
+}
+
 int AttributeManager::formValue( const QString& value ) const
 {
     if( value == "prefix" )

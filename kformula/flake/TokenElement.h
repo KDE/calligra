@@ -14,27 +14,31 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef TOKENELEMENT_H
 #define TOKENELEMENT_H
 
+#include "BasicElement.h"
 #include "FormulaCursor.h"
-#include "TokenStyleElement.h"
-#include "RowElement.h"
-#include "contextstyle.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace FormulaShape {
 
-class TokenElement : public TokenStyleElement {
-    typedef TokenStyleElement inherited;
+/**
+ * @short Baseclass for all token elements
+ *
+ * The MathML specification describes a number of token elements. The classes
+ * of these all derive from TokenElement except of mspace. Because of the huge
+ * similarity between the token elements loading, saving, painting and layouting
+ * code can mostly be shared. This is because token elements hold some text or
+ * string that has to be dealt with.
+ */
+class TokenElement : public BasicElement {
 public:
+    /// The standart constructor
     TokenElement( BasicElement* parent = 0 );
 
-	/// @return The font with style properties matching content attributes
-	QFont font( const AttributeManager* am);
-	
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
@@ -42,30 +46,27 @@ public:
      */
     virtual void paint( QPainter& painter, const AttributeManager* am );
 
-	virtual QString elementName() const { return "mtext"; }
-protected:
-
-	/// Read contents of the token element. Content should be unicode text strings or mglyphs
-	virtual bool readMathMLContent( const KoXmlElement& parent );
-
-	/**
-     * @returns true if the sequence contains only text.
-     */
-    virtual bool isTextOnly() const { return m_textOnly; }
-
     /**
-     * Space around sequence
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
      */
-    virtual luPt getSpaceBefore( const ContextStyle& context, 
-                                 ContextStyle::TextStyle tstyle,
-                                 double factor );
-    virtual luPt getSpaceAfter( const ContextStyle& context, 
-                                 ContextStyle::TextStyle tstyle,
-                                 double factor );
+    virtual void layout( const AttributeManager* am );
+
+protected:
+    /// Read contents of the token element. Content should be unicode text strings or mglyphs
+    bool readMathMLContent( const KoXmlElement& parent );
+
+    /// Write all content to the KoXmlWriter - reimplemented by the child elements
+    void writeMathMLContent( KoXmlWriter* writer ) const;
+
+    /// @return The string to be painted - probably a parsed rawString
+    virtual QString stringToRender( const QString& rawString ) const;
+
 private:
-    bool m_textOnly;
+    /// The raw string like it is read and written from MathML
+    QString m_rawString; 
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace FormulaShape
 
 #endif // TOKENELEMENT_H

@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of thShapee KDE project
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
@@ -22,7 +22,7 @@
 #include "ElementFactory.h"
 #include <KoXmlWriter.h>
 
-namespace KFormula {
+namespace FormulaShape {
 
 UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -44,152 +44,66 @@ const QList<BasicElement*> UnderOverElement::childElements()
     return tmp << m_baseElement << m_underElement << m_overElement;
 }
 
-/* 
- * TODO: Upgrade to new API
- */
-bool UnderOverElement::readAttributesFromMathMLDom( const QDomElement& element )
-{
-    /*
-    if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
-        return false;
-    }
-
-    QString tag = element.tagName().trimmed().lower();
-
-    if ( tag == "munder" || tag == "munderover" ) {
-        QString accentunderStr = element.attribute( "accentunder" ).trimmed().lower();
-        if ( ! accentunderStr.isNull() ) {
-            if ( accentunderStr == "true" ) {
-                m_customAccentUnder = true;
-                m_accentUnder = true;
-            }
-            else if ( accentunderStr == "false" ) {
-                m_customAccentUnder = true;
-                m_accentUnder = false;
-            }
-            else {
-                kWarning( DEBUGID ) << "Invalid value for attribute `accentunder': " 
-                                     << accentunderStr << endl;
-            }
-        }
-    }
-    if ( tag == "mover" || tag == "munderover" ) {
-        QString accentStr = element.attribute( "accent" ).trimmed().lower();
-        if ( ! accentStr.isNull() ) {
-            if ( accentStr == "true" ) {
-                m_customAccent = true;
-                m_accent = true;
-            }
-            else if ( accentStr == "false" ) {
-                m_customAccent = true;
-                m_accent = false;
-            }
-            else {
-                kWarning( DEBUGID ) << "Invalid value for attribute `accent': " 
-                                     << accentStr << endl;
-            }
-        }
-    }
-    */
-    return true;
-}
-
-void UnderOverElement::readMathML( const QDomElement& element )
-{
-    readMathMLAttributes( element );
-
-    if( element.childNodes().count() != 3 && element.childNodes().count() != 2 )
-	return;
-
-    QDomElement tmp = element.firstChildElement();
-    delete m_baseElement;
-    m_baseElement = ElementFactory::createElement( tmp.tagName(), this );
-    m_baseElement->readMathML( tmp );
-
-    tmp = tmp.nextSiblingElement();
-    if( element.tagName() == "mover" )
-    {
-	delete m_overElement;
-	m_overElement = ElementFactory::createElement( tmp.tagName(), this );
-        m_overElement->readMathML( tmp );
-    }
-    else
-    {
-	delete m_underElement;
-	m_underElement = ElementFactory::createElement( tmp.tagName(), this );
-        m_underElement->readMathML( tmp );
-    }
-
-    tmp = tmp.nextSiblingElement();
-    if( !tmp.isNull() )
-    {
-	delete m_overElement;
-	m_overElement = ElementFactory::createElement( tmp.tagName(), this );
-        m_overElement->readMathML( tmp );
-    }
-}
-
-/*
- * TODO: Upgrade to new API
- */
-void UnderOverElement::writeMathMLAttributes( KoXmlWriter* writer ) const
-{
-/*    
-    QString tag = elementName();
-    if ( tag == "munder" || tag == "munderover" ) {
-        if ( m_customAccentUnder ) {
-            element.setAttribute( "accentunder", m_accentUnder ? "true" : "false" );
-        }
-    }
-    if ( tag == "mover" || tag == "munderover" ) {
-        if ( m_customAccent ) {
-            element.setAttribute( "accent", m_accent ? "true" : "false" );
-        }
-    }
-*/
-}
-
-
-void UnderOverElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
-{
-    if( m_underElement->elementType() != Basic && m_overElement->elementType() == Basic )
-    {
-	writer->startElement( oasisFormat ? "math:munder" : "munder" );
-        writeMathMLAttributes( writer );
-        m_baseElement->writeMathML( writer, oasisFormat );
-        m_underElement->writeMathML( writer, oasisFormat );
-    }
-    if( m_overElement->elementType() != Basic && m_underElement->elementType() == Basic )
-    {
-	writer->startElement( oasisFormat ? "math:mover" : "mover" );
-        writeMathMLAttributes( writer );
-        m_baseElement->writeMathML( writer, oasisFormat );
-        m_overElement->writeMathML( writer, oasisFormat );
-    }
-    else
-    {
-    	writer->startElement( oasisFormat ? "math:munderover" : "munderover" );
-        writeMathMLAttributes( writer );
-        m_baseElement->writeMathML( writer, oasisFormat );
-        m_underElement->writeMathML( writer, oasisFormat );
-        m_overElement->writeMathML( writer, oasisFormat );
-    }
-
-    writer->endElement();
-}
-
-void UnderOverElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,
-                                  ContextStyle::IndexStyle istyle, StyleAttributes& style)
+void UnderOverElement::paint( QPainter& painter, const AttributeManager* am )
 {
 }
 
-void UnderOverElement::draw( QPainter& painter, const LuPixelRect& r,
-                             const ContextStyle& context,
-                             ContextStyle::TextStyle tstyle,
-                             ContextStyle::IndexStyle istyle,
-                             StyleAttributes& style,
-                             const LuPixelPoint& parentOrigin )
-{}
+void UnderOverElement::layout( const AttributeManager* am )
+{
+}
 
+void UnderOverElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
+{
+}
 
-} // namespace KFormula
+void UnderOverElement::moveRight( FormulaCursor* cursor, BasicElement* from )
+{
+}
+
+void UnderOverElement::moveUp( FormulaCursor* cursor, BasicElement* from )
+{
+}
+
+void UnderOverElement::moveDown( FormulaCursor* cursor, BasicElement* from )
+{
+}
+
+bool UnderOverElement::readMathMLContent( const KoXmlElement& element )
+{
+    BasicElement* tmpElement = 0;
+    KoXmlElement tmp;
+
+    forEachElement( tmp, element )
+    {
+        tmpElement = ElementFactory::createElement( tmp.tagName(), this );
+        if( !m_baseElement )
+            m_baseElement = tmpElement;
+        else if( !m_underElement && element.tagName().contains( "under" ) )
+            m_underElement = tmpElement;
+        else if( !m_overElement && element.tagName().contains( "over" ) )
+            m_overElement = tmpElement;
+    }
+}
+
+void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
+{
+    m_baseElement->writeMathML( writer );        // Just save the children in
+                                                 // the right order
+    if( m_underElement->elementType() != Basic )
+        m_underElement->writeMathML( writer );
+    
+    if( m_overElement->elementType() != Basic )
+        m_overElement->writeMathML( writer );
+}
+
+ElementType UnderOverElement::elementType() const
+{
+    if( m_underElement->elementType() != Basic && m_overElement->elementType() != Basic )
+        return UnderOver;
+    else if( m_underElement->elementType() != Basic )
+        return Under;
+    else if( m_overElement->elementType() != Basic )
+        return Over;
+}
+
+} // namespace FormulaShape

@@ -14,23 +14,19 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "OperatorElement.h"
 
-#include <qpainter.h>
+namespace FormulaShape {
 
-KFORMULA_NAMESPACE_BEGIN
+OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent )
+{}
 
-OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent ),
-                                                           m_form( InfixForm )
+ElementType OperatorElement::elementType() const
 {
+    return Operator;
 }
 
-void OperatorElement::setForm( FormType type )
-{
-    m_form = type;
-}
-
-KFORMULA_NAMESPACE_END
+} // namespace FormulaShape

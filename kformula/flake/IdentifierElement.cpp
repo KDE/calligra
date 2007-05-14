@@ -24,4 +24,10 @@ namespace FormulaShape {
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
+QString IdentifierElement::stringToRender( const QString& rawString ) const
+{
+    // TODO map symbolic constants
+    return rawString;
+}
+
 } // namespace FormulaShape

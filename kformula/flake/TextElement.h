@@ -23,78 +23,20 @@
 #ifndef TEXTELEMENT_H
 #define TEXTELEMENT_H
 
-#include <QFont>
-#include <QString>
-
-#include "BasicElement.h"
-
+#include "TokenElement.h"
 
 namespace FormulaShape {
-
-class SymbolTable;
  
 /**
  * @short Implementation of the MathML
  * An element that represents one char.
  */
-class TextElement : public BasicElement {
+class TextElement : public TokenElement {
 public:
     /// The standard constructor
-    explicit TextElement(QChar ch = ' ', bool beSymbol = false, BasicElement* parent = 0);
+    TextElement( BasicElement* parent = 0 );
 
-    /**
-     * Obtain a list of all child elements of this element
-     * @return a QList with pointers to all child elements
-     */
-    const QList<BasicElement*> childElements();
-
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
-
-    
-
-    /**
-     * @returns true if we don't want to see the element.
-     */
-    virtual bool isInvisible() const;
-
-    /**
-     * Render the element to the given QPainter
-     * @param painter The QPainter to paint the element to
-     */
-    virtual void paint( QPainter& painter, const AttributeManager* am );
-
-    /**
-     * Calculate the size of the element and the positions of its children
-     * @param am The AttributeManager providing information about attributes values
-     */
-    virtual void layout( const AttributeManager* am );
-    
-protected:
-    //Save/load support
-
-    virtual void writeMathMLContent( KoXmlWriter* , bool ) const ;
-
-    /**
-     * @returns the char that is used to draw with the given font.
-     */
-    QChar character() const { return m_character; }
-
-	void setStyle( QPainter& painter, const AttributeManager* am );
-
-    const SymbolTable& getSymbolTable() const;
-
-private:
-
-    /**
-     * Our content.
-     */
-    QChar m_character;
-
-    /**
-     * Whether this character is a symbol.
-     */
-    bool symbol;
-
+    ElementType elementType() const;
 };
 
 } // namespace FormulaShape

@@ -23,13 +23,11 @@
 
 #include "BasicElement.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 /**
- * @short 
+ * @short Implementation of the MathML mover, munder and moverunder elements
  *
- * 
- * @author Martin Pfeiffer <hubipete@gmx.net>
  */
 class UnderOverElement : public BasicElement {
 public:
@@ -37,53 +35,66 @@ public:
     UnderOverElement( BasicElement* parent = 0 );
 
     /// The standard destructor
-    virtual ~UnderOverElement();
+    ~UnderOverElement();
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements();
 
-    void insertInBaseElement( int index, BasicElement* element );
-    void insertInUnderElement( int index, BasicElement* element );
-    void insertInOverElement( int index, BasicElement* element );
-
-    void readMathML( const QDomElement& element );
-    
-    /// Saves the element to MathML
-    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
-
-    virtual void calcSizes( const ContextStyle& context,
-                            ContextStyle::TextStyle tstyle,
-                            ContextStyle::IndexStyle istyle,
-                            StyleAttributes& style );
-
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
-    
-private:
-//    virtual QString elementName() const ;
-    virtual void writeMathMLAttributes( KoXmlWriter* writer ) const ;
-/*
-    virtual void writeMathMLContent( QDomDocument& doc, 
-                                     QDomElement& element,
-                                     bool oasisFormat ) const ;
-*/
-
-    virtual bool readAttributesFromMathMLDom( const QDomElement& element );
     /**
-     * Reads our content from the MathML node. Sets the node to the next node
-     * that needs to be read. It is sometimes needed to read more than one node
-     * (e. g. for fence operators).
-     * Returns the number of nodes processed or -1 if it failed.
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
      */
-//    virtual int readContentFromMathMLDom( QDomNode& node );
+    void paint( QPainter& painter, const AttributeManager* am );
 
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
+    void layout( const AttributeManager* am );
+    
+    /**
+     * Move the FormulaCursor left
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveLeft( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor right 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveRight( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor up 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveUp( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor down 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    void moveDown( FormulaCursor* cursor, BasicElement* from );
+
+    /// @return The element's ElementType
+    ElementType elementType() const;
+   
+protected:
+    /// Read all content from the node - reimplemented by child elements
+    bool readMathMLContent( const KoXmlElement& element );
+
+    /// Write all content to the KoXmlWriter - reimplemented by the child elements
+    void writeMathMLContent( KoXmlWriter* writer ) const;   
+ 
+private:
     BasicElement* m_baseElement;
 
     BasicElement* m_underElement;

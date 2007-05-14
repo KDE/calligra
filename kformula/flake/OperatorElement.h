@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef OPERATORELEMENT_H
@@ -22,20 +22,16 @@
 
 #include "TokenElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace FormulaShape {
 
 class OperatorElement : public TokenElement {
-    typedef TokenElement inherited;
 public:
+    /// The standart constructor
     OperatorElement( BasicElement* parent = 0 );
-    void setForm( FormType type );
+    ElementType elementType() const;
 
-private:
-    virtual QString elementName() const { return "mo"; }
-
-    FormType m_form;
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace FormulaShape
 
 #endif // OPERATORELEMENT_H

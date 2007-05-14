@@ -13,30 +13,30 @@ set( kformulalib_PART_SRCS
    BasicElement.cpp 
    RowElement.cpp
    FormulaElement.cpp 
-#   MultiscriptElement.cpp
-#   UnderOverElement.cpp
-   TextElement.cpp 
-#   BracketElement.cpp 
-#   MatrixElement.cpp
-#   MatrixRowElement.cpp
-#   MatrixEntryElement.cpp
+   TextElement.cpp
    FractionElement.cpp
-#   RootElement.cpp
    SpaceElement.cpp
-#   EncloseElement.cpp
-#   ActionElement.cpp
-#   PaddedElement.cpp
    GlyphElement.cpp
-#   ErrorElement.cpp
-   TokenStyleElement.cpp
-#   StyleElement.cpp
-   TokenElement.cpp
-   NumberElement.cpp
    IdentifierElement.cpp
    OperatorElement.cpp
    OperatorDictionary.cpp
    Entities.cpp
    ElementFactory.cpp 
+#   MultiscriptElement.cpp
+   UnderOverElement.cpp
+#   BracketElement.cpp 
+#   MatrixElement.cpp
+#   MatrixRowElement.cpp
+#   MatrixEntryElement.cpp
+#   RootElement.cpp
+#   EncloseElement.cpp
+#   ActionElement.cpp
+#   PaddedElement.cpp
+#   ErrorElement.cpp
+   TokenStyleElement.cpp
+   StyleElement.cpp
+   TokenElement.cpp
+   NumberElement.cpp
 #   MatrixDialog.cc 
    contextstyle.cc 
    symboltable.cc 

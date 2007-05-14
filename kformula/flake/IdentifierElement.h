@@ -34,6 +34,10 @@ class IdentifierElement : public TokenElement {
 public:
     /// The standart constructor
     IdentifierElement( BasicElement* parent = 0 );
+
+protected:
+    /// @return The string to be painted - probably a parsed rawString
+    QString stringToRender( const QString& rawString ) const;   
 };
 
 } // namespace FormulaShape

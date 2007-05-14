@@ -26,6 +26,9 @@ class RowElement;
 
 namespace FormulaShape {
 
+/**
+ * @short Implementation of the MathML menclose element
+ */
 class EncloseElement : public BasicElement {
 public:
     /// The standart constructor
