@@ -27,6 +27,7 @@ include_directories(${KPLATO_INCLUDES})
 ########### KPlato private library ###############
 
 set(kplatoprivate_LIB_SRCS
+    kptsplitterview.cc
     kptnodeitemmodel.cc
     kptdependencyeditor.cc
     kptusedefforteditor.cc
