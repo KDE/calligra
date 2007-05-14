@@ -5,7 +5,7 @@
    Copyright (C) 2002-2003,2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2002-2006 Stephan Binner <binner@kde.org>
    Copyright (C) 2002,2005 David Faure <faure@kde.org>
-   Copyright (C) 2002 Beno�t Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002,2005-2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2003 Dirk Mueller <mueller@kde.org>
    Copyright (C) 2003,2006 Stephan Kulow <coolo@kde.org>
@@ -54,6 +54,7 @@
 
 // Dockers.
 #include "vcolordocker.h"
+#include "vstrokedocker.h"
 #include "vdocumentdocker.h"
 #include "vstrokedocker.h"
 #include "vstyledocker.h"
@@ -76,6 +77,7 @@
 #include "karbon_drag.h"
 
 #include <KoMainWindow.h>
+#include <KoLineBorder.h>
 #include <KoCanvasController.h>
 #include <KoCreateShapesTool.h>
 #include <KoFilterManager.h>
@@ -1440,8 +1442,8 @@ void KarbonView::createStrokeDock()
 {
 	debugView("KarbonView::createStrokeDock()");
 
-	VStrokeDockerFactory strokeFactory;
-	m_strokeDocker = qobject_cast<VStrokeDocker*>(createDockWidget(&strokeFactory));
+	KoStrokeDockerFactory strokeFactory;
+	m_strokeDocker = qobject_cast<KoStrokeDocker*>(createDockWidget(&strokeFactory));
 	connect( part(), SIGNAL( unitChanged( KoUnit ) ), m_strokeDocker, SLOT( setUnit( KoUnit ) ) );
 }
 

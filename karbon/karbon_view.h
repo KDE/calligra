@@ -4,7 +4,7 @@
    Copyright (C) 2002-2003,2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
    Copyright (C) 2002,2005 Laurent Montel <montel@kde.org>
    Copyright (C) 2002,2005,2007 David Faure <faure@kde.org>
-   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
@@ -60,7 +60,7 @@ class KoRuler;
 class KoZoomController;
 
 class VDocumentTab;
-class VStrokeDocker;
+class KoStrokeDocker;
 class VColorDocker;
 class VStyleDocker;
 class VTransformDocker;
@@ -234,7 +234,7 @@ private:
 	//dockers
 	VDocumentTab		*m_DocumentTab;
 	VColorDocker		*m_ColorManager;
-	VStrokeDocker		*m_strokeDocker;
+	KoStrokeDocker		*m_strokeDocker;
 	VStyleDocker		*m_styleDocker;
 	VTransformDocker	*m_TransformDocker;
 	VLayerDocker		*m_layerDocker;
