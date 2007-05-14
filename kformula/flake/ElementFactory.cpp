@@ -35,7 +35,7 @@
 //#include "MatrixEntryElement.h"
 //#include "MultiscriptElement.h"
 #include "NumberElement.h"
-//#include "OperatorElement.h"
+#include "OperatorElement.h"
 //#include "PaddedElement.h"
 //#include "PhantomElement.h"
 //#include "RootElement.h"
@@ -54,8 +54,8 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     kWarning( DEBUGID ) << "Creating element: " << tagName << endl;
     if( tagName == "mi" )
         return new IdentifierElement( parent );
-    //else if ( tagName == "mo" )
-    //        return new OperatorElement( parent );
+    else if ( tagName == "mo" )
+        return new OperatorElement( parent );
     else if ( tagName == "mn" )
         return new NumberElement( parent );
     //else if ( tagName == "mtext" )
