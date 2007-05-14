@@ -22,6 +22,8 @@
 
 #include <KoLineBorder.h>
 #include <KoProperties.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 #include <klocale.h>
 
@@ -33,6 +35,8 @@ KoEnhancedPathShapeFactory::KoEnhancedPathShapeFactory( QObject *parent )
 {
     setToolTip( i18n( "An enhanced path" ) );
     setIcon("enhancedpath");
+    setOdfElementNames( KoXmlNS::draw, QStringList( "custom-shape" ) );
+    setLoadingPriority( 1 );
 
     addCross();
     addArrow();
@@ -380,6 +384,11 @@ void KoEnhancedPathShapeFactory::addCircularArrow()
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
     t.properties->setProperty( "viewBox", QRectF( 0, 0, 21600, 21600 ) );
     addTemplate(t);
+}
+
+bool KoEnhancedPathShapeFactory::supports(const KoXmlElement & e) const
+{
+    return ( e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw );
 }
 
 #include "KoEnhancedPathShapeFactory.moc"

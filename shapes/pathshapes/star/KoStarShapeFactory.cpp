@@ -19,6 +19,8 @@
 #include <KoShapeFactory.h>
 #include <KoLineBorder.h>
 #include <KoProperties.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 #include "star/KoStarShapeFactory.h"
 #include "star/KoStarShape.h"
@@ -30,6 +32,8 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
 {
     setToolTip( i18n( "A star" ) );
     setIcon("star");
+    setOdfElementNames( KoXmlNS::draw, QStringList( "regular-polygon" ) );
+    setLoadingPriority( 1 );
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
@@ -103,6 +107,11 @@ KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
         star->setBackground( v.value<QColor>() );
 
     return star;
+}
+
+bool KoStarShapeFactory::supports(const KoXmlElement & e) const
+{
+    return ( e.localName() == "regular-polygon" && e.namespaceURI() == "KoXmlNS::draw" );
 }
 
 #include "KoStarShapeFactory.moc"
