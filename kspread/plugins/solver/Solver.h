@@ -26,6 +26,8 @@
 
 #include <kspread_export.h>
 
+#include <Cell.h>
+
 class QObject;
 class QStringList;
 
