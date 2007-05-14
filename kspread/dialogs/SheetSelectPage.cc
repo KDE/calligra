@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
+#include "SheetSelectPage.h"
+
 // standard C/C++ includes
 // Qt includes
 // KDE includes
@@ -25,8 +28,6 @@
 // KOffice includes
 // KSpread includes
 #include "ui_SheetSelectWidget.h"
-
-#include "SheetSelectPage.h"
 
 namespace KSpread
 {

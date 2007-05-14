@@ -20,6 +20,9 @@
 
 // built-in math functions
 
+// needed for RANDBINOM and so
+#include <math.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -30,9 +33,6 @@
 // these two are needed for SUBTOTAL:
 #include "Cell.h"
 #include "Sheet.h"
-
-// needed for RANDBINOM and so
-#include <math.h>
 
 // needed by MDETERM and MINVERSE
 #include <eigen/matrix.h>

@@ -17,9 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QDateTime>
-
+// Local
 #include "helper.h"
+
+#include <QDateTime>
 
 /*  DISABLED - we use KCalendarSystem instead
 void addMonths( QDate & date, int months )

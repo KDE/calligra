@@ -20,6 +20,7 @@
 #ifndef KSPREAD_SHEETSELECTPAGE
 #define KSPREAD_SHEETSELECTPAGE
 
+#include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
 
 namespace KSpread
