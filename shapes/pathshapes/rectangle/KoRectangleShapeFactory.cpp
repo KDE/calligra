@@ -30,7 +30,7 @@ KoRectangleShapeFactory::KoRectangleShapeFactory( QObject *parent )
 {
     setToolTip( i18n( "A rectangle" ) );
     setIcon("rectangle-koffice");
-    setOdfElementName( KoXmlNS::draw, "rect" );
+    setOdfElementNames( KoXmlNS::draw, QStringList( "rect" ) );
     setLoadingPriority( 1 );
 }
 
@@ -57,8 +57,5 @@ KoShape * KoRectangleShapeFactory::createShape( const KoProperties * params ) co
 
 bool KoRectangleShapeFactory::supports(const KoXmlElement & e) const
 {
-    if( e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw )
-        return true;
-    else
-        return false;
+    return ( e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw );
 }

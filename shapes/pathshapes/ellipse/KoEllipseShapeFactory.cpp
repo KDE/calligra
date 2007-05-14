@@ -32,7 +32,9 @@ KoEllipseShapeFactory::KoEllipseShapeFactory( QObject *parent )
 {
     setToolTip( i18n( "An ellipse" ) );
     setIcon("ellipse-shape");
-    setOdfElementName( KoXmlNS::draw, "ellipse" );
+    QStringList elementNames;
+    elementNames << "ellipse" << "circle";
+    setOdfElementNames( KoXmlNS::draw, elementNames );
     setLoadingPriority( 1 );
 }
 
@@ -52,7 +54,7 @@ KoShape * KoEllipseShapeFactory::createDefaultShape() const
     return ellipse;
 }
 
-KoShape * KoEllipseShapeFactory::createShape( const KoProperties * params ) const 
+KoShape * KoEllipseShapeFactory::createShape( const KoProperties * params ) const
 {
     Q_UNUSED(params);
     return new KoEllipseShape();
@@ -60,8 +62,6 @@ KoShape * KoEllipseShapeFactory::createShape( const KoProperties * params ) cons
 
 bool KoEllipseShapeFactory::supports(const KoXmlElement & e) const
 {
-    if( e.localName() == "ellipse" && e.namespaceURI() == KoXmlNS::draw )
-        return true;
-    else 
-        return false;
+    return ( e.localName() == "ellipse" || e.localName() == "circle" ) &&
+           ( e.namespaceURI() == KoXmlNS::draw );
 }
