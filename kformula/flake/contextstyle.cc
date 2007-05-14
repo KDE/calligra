@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "contextstyle.h"
+
 #include <QFontMetrics>
 #include <QPaintDevice>
 #include <QString>
@@ -27,7 +29,6 @@
 #include <KoGlobal.h>
 
 #include "fontstyle.h"
-#include "contextstyle.h"
 
 
 KFORMULA_NAMESPACE_BEGIN

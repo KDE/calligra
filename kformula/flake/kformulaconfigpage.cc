@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kformulaconfigpage.h"
+
 #include <QVariant>   // first for gcc 2.7.2
 #include <q3buttongroup.h>
 #include <QCheckBox>
@@ -49,7 +51,6 @@
 #include <kvbox.h>
 
 #include "contextstyle.h"
-#include "kformulaconfigpage.h"
 #include "symboltable.h"
 
 

@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "formulastring.h"
+
 #include <QLabel>
 #include <QStringList>
 #include <QTextEdit>
@@ -33,7 +35,6 @@
 #include <kpushbutton.h>
 #include <ktoolinvocation.h>
 
-#include "formulastring.h"
 #include "kformula_view.h"
 
 
@@ -46,7 +47,7 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     setWindowTitle( i18n( "Formula String" ) );
     setModal( modal );
     setSizeGripEnabled( true );
-    
+
     m_widgetLayout = new QVBoxLayout( this );
     m_buttonLayout = new QHBoxLayout( this );
     m_textEdit = new QTextEdit( this );
@@ -54,12 +55,12 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     m_btnHelp = new KPushButton( KStandardGuiItem::help(), this );
     m_btnOk = new KPushButton( KStandardGuiItem::ok(), this );
     m_btnCancel = new KPushButton( KStandardGuiItem::cancel(), this );
-    
+
     m_buttonLayout->addWidget( m_btnHelp );
     m_buttonLayout->addSpacing( 100 );
     m_buttonLayout->addWidget( m_btnOk );
     m_buttonLayout->addWidget( m_btnCancel );
-    
+
     m_widgetLayout->addWidget( m_textEdit );
     m_widgetLayout->addWidget( m_position );
     m_widgetLayout->addLayout( m_buttonLayout );
@@ -114,7 +115,7 @@ void FormulaString::helpButtonClicked()
 
 void FormulaString::cursorPositionChanged()
 {
-//    m_textEdit->	
+//    m_textEdit->
 //    m_position->setText( QString( "%1:%2" ).arg( para+1 ).arg( pos+1 ) );
 }
 

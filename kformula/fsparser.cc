@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "fsparser.h"
+
 #include <q3ptrlist.h>
 
 #include <kdebug.h>
@@ -25,8 +27,6 @@
 #include <kformuladefs.h>
 #include <kformuladocument.h>
 #include <symboltable.h>
-
-#include "fsparser.h"
 
 
 using namespace std;

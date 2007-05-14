@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
-
 #include "ErrorElement.h"
+
+#include <qpainter.h>
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -47,5 +47,5 @@ void ErrorElement::draw( QPainter& painter, const LuPixelRect& r,
                       context.getErrorColor() );
     inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
 }
-    
+
 KFORMULA_NAMESPACE_END

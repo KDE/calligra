@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kformulawidget.h"
+
 #include <iostream>
 
 #include <QPainter>
@@ -33,7 +35,6 @@
 #include <formulaelement.h>
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
-#include "kformulawidget.h"
 
 
 KFormulaWidget::KFormulaWidget(KFormula::Container* doc,

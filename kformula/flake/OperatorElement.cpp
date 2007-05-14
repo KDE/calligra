@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
-
 #include "OperatorElement.h"
+
+#include <qpainter.h>
 
 KFORMULA_NAMESPACE_BEGIN
 

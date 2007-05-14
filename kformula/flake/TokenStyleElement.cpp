@@ -17,12 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "TokenStyleElement.h"
+
 #include <qpainter.h>
 
 #include <kdebug.h>
 
 #include "BasicElement.h"
-#include "TokenStyleElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -38,7 +39,7 @@ QString TokenStyleElement::getHtmlColor( const QString& colorStr ){
 
     QString colorname = colorStr.toLower();
 
-    if ( colorname ==  "black" ) 
+    if ( colorname ==  "black" )
         return "#000000";
     if ( colorname == "silver" )
         return "#C0C0C0";

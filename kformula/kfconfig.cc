@@ -18,13 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kfconfig.h"
+
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
 #include <kicon.h>
 
-#include "kfconfig.h"
 #include "kformula_factory.h"
 #include "kformula_doc.h"
 #include "kformula_view.h"

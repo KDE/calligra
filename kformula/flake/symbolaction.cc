@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "symbolaction.h"
+
 #include <q3listbox.h>
 #include <QPainter>
 #include <Q3ComboBox>
@@ -27,8 +29,6 @@
 #include <ktoolbar.h>
 #include <kdebug.h>
 #include <kauthorized.h>
-
-#include "symbolaction.h"
 
 /*
  * The items for the SymbolCombos. *
@@ -118,7 +118,7 @@ void SymbolAction::plug( QWidget* w, int /*index*/ )
     if ( w->inherits( "KToolBar" ) )
     {
 #ifdef __GNUC__
-#warning "kde4: port it"			
+#warning "kde4: port it"
 #endif
 #if 0
 			KToolBar* bar = static_cast<KToolBar*>( w );
@@ -142,7 +142,7 @@ void SymbolAction::plug( QWidget* w, int /*index*/ )
     }
     else
 	 w->addAction( this ); // possibly insertAction is needed
-    
+
 }
 
 void SymbolAction::setSymbols( const QStringList &names, const QList<QFont>& fonts,
@@ -162,9 +162,9 @@ void SymbolAction::updateItems( int id )
     Q_UNUSED( id );
 
 #ifdef __GNUC__
-#warning "kde4: port it"			
+#warning "kde4: port it"
 #endif
-#if 0			
+#if 0
     QWidget *w = container( id );
     if ( w->inherits( "KToolBar" ) ) {
         QWidget *r = static_cast<KToolBar*>( w )->getWidget( itemId( id ) );
@@ -179,7 +179,7 @@ void SymbolAction::updateItems( int id )
             cb->setMinimumWidth( cb->sizeHint().width() );
         }
     }
-#endif		
+#endif
 }
 
 KFORMULA_NAMESPACE_END

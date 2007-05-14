@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "ElementFactory.h"
 #include "ActionElement.h"
+#include "ElementFactory.h"
 
 namespace KFormula {
 
@@ -33,12 +33,12 @@ void ActionElement::readMathMLAttributes(const QDomElement& element)
     QString selectionStr = element.attribute( "selection" );
     if ( ! selectionStr.isNull() ) {
         bool ok;
-        m_selection = selectionStr.toUInt( &ok ); 
+        m_selection = selectionStr.toUInt( &ok );
         if ( ! ok ) m_selection = 0;
     }
 }
 
-int ActionElement::buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n) 
+int ActionElement::buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n)
 {
 /*
     if ( ! n.isElement() )

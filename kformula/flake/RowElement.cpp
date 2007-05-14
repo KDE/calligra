@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kformuladefs.h"
 #include "RowElement.h"
+#include "kformuladefs.h"
 #include "ElementFactory.h"
 #include "FormulaCursor.h"
 #include <kdebug.h>

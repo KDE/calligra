@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "TokenElement.h"
+
 #include <algorithm>
 
 #include <qpainter.h>
@@ -26,7 +28,6 @@
 #include "Entities.h"
 #include "TextElement.h"
 #include "GlyphElement.h"
-#include "TokenElement.h"
 #include "FormulaElement.h"
 #include "ElementFactory.h"
 #include "AttributeManager.h"

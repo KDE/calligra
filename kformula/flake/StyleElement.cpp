@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "BasicElement.h"
 #include "StyleElement.h"
+#include "BasicElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -45,7 +45,7 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
     if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
         return false;
     }
-    
+
     QString scriptlevelStr = element.attribute( "scriptlevel" );
     if ( ! scriptlevelStr.isNull() ) {
         if ( scriptlevelStr[0] == '+' || scriptlevelStr[0] == '-' ) {
@@ -54,7 +54,7 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
         bool ok;
         m_scriptLevel = scriptlevelStr.toInt( &ok );
         if ( ! ok ) {
-            kWarning( DEBUGID ) << "Invalid scriptlevel attribute value: " 
+            kWarning( DEBUGID ) << "Invalid scriptlevel attribute value: "
                                  << scriptlevelStr << endl;
         }
         else {
@@ -76,7 +76,7 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
         bool ok;
         m_scriptSizeMultiplier = scriptsizemultiplierStr.toDouble( &ok );
         if ( ! ok ) {
-            kWarning( DEBUGID ) << "Invalid scriptsizemultiplier attribute value: " 
+            kWarning( DEBUGID ) << "Invalid scriptsizemultiplier attribute value: "
                                  << scriptsizemultiplierStr << endl;
         }
         else {
@@ -193,7 +193,7 @@ void StyleElement::setStyleSize( const ContextStyle& context, StyleAttributes& s
         style.setScriptSizeMultiplier( style.scriptSizeMultiplier() );
     }
 
-    // Get scriptminsize attribute in absolute units, so we don't depend on 
+    // Get scriptminsize attribute in absolute units, so we don't depend on
     // context to get the default value
     double basesize = context.layoutUnitPtToPt( context.getBaseSize() );
     double size = style.scriptMinSize();
@@ -209,7 +209,7 @@ void StyleElement::setStyleSize( const ContextStyle& context, StyleAttributes& s
     }
     style.setScriptMinSize( size );
 
-    style.setVeryVeryThinMathSpace( sizeFactor( context, 
+    style.setVeryVeryThinMathSpace( sizeFactor( context,
                                                 m_veryVeryThinMathSpaceType,
                                                 m_veryVeryThinMathSpace,
                                                 style.veryVeryThinMathSpace() ));
@@ -217,7 +217,7 @@ void StyleElement::setStyleSize( const ContextStyle& context, StyleAttributes& s
                                             m_veryThinMathSpace,
                                             style.veryThinMathSpace() ));
     style.setThinMathSpace( sizeFactor( context, m_thinMathSpaceType,
-                                        m_thinMathSpace, 
+                                        m_thinMathSpace,
                                         style.thinMathSpace() ));
     style.setMediumMathSpace( sizeFactor( context, m_mediumMathSpaceType,
                                           m_mediumMathSpace,
@@ -228,14 +228,14 @@ void StyleElement::setStyleSize( const ContextStyle& context, StyleAttributes& s
     style.setVeryThickMathSpace( sizeFactor( context, m_veryThickMathSpaceType,
                                              m_veryThickMathSpace,
                                              style.veryThickMathSpace() ));
-    style.setVeryVeryThickMathSpace( sizeFactor( context, 
+    style.setVeryVeryThickMathSpace( sizeFactor( context,
                                                  m_veryVeryThickMathSpaceType,
                                                  m_veryVeryThickMathSpace,
                                                  style.veryVeryThickMathSpace() ));
     inherited::setStyleSize( context, style );
 }
 
-double StyleElement::sizeFactor( const ContextStyle& context, SizeType st, 
+double StyleElement::sizeFactor( const ContextStyle& context, SizeType st,
                                  double length, double defvalue )
 {
     double basesize = context.layoutUnitPtToPt( context.getBaseSize() );

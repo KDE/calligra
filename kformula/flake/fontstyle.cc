@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "fontstyle.h"
+
 #include <QPainter>
 #include <QPen>
 #include <QFontDatabase>
@@ -30,8 +32,6 @@
 #include <kio/netaccess.h>
 #include <kio/copyjob.h>
 #include <kmessagebox.h>
-
-#include "fontstyle.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -134,7 +134,7 @@ void FontStyle::installFonts()
             }
         }
         KIO::copy( urlList, KUrl( "fonts:/Personal/" ), false );
-        KMessageBox::information(qApp->mainWidget(), 
+        KMessageBox::information(qApp->mainWidget(),
                                  i18n("Some fonts have been installed to assure that symbols in formulas are properly visualized. You must restart the application in order so that changes take effect"));
     }
     m_installed = true;
