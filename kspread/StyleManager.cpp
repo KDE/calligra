@@ -28,6 +28,7 @@
 #include <klocale.h>
 
 #include <KoOasisStyles.h>
+#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
 #include "Condition.h"
@@ -80,14 +81,14 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
         {
             // Load the default precision to be used, if the (default) cell style
             // is set to arbitrary precision.
-            QDomNode n = defStyle->firstChild();
+            KoXmlNode n = defStyle->firstChild();
             while ( !n.isNull() )
             {
                 if ( n.isElement() &&
                      n.namespaceURI() == KoXmlNS::style &&
                      n.localName() == "table-cell-properties" )
                 {
-                    QDomElement e = n.toElement();
+                    KoXmlElement e = n.toElement();
                     if ( n.toElement().hasAttributeNS( KoXmlNS::style, "decimal-places" ) )
                     {
                         bool ok;
