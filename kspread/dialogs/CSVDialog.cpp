@@ -171,7 +171,7 @@ void CSVDialog::accept()
   manipulator->execute ();
 
   m_pView->slotUpdateView( sheet );
-  QDialog::accept();
+  KoCsvImportDialog::accept();
 }
 
 QString CSVDialog::getText(int row, int col)
