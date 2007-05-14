@@ -34,7 +34,7 @@
 //#include "MatrixRowElement.h"
 //#include "MatrixEntryElement.h"
 //#include "MultiscriptElement.h"
-//#include "NumberElement.h"
+#include "NumberElement.h"
 //#include "OperatorElement.h"
 //#include "PaddedElement.h"
 //#include "PhantomElement.h"
@@ -56,13 +56,13 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
         return new IdentifierElement( parent );
     //else if ( tagName == "mo" )
     //        return new OperatorElement( parent );
-    //else if ( tagName == "mn" )
-    //        return new NumberElement( parent );
+    else if ( tagName == "mn" )
+        return new NumberElement( parent );
     //else if ( tagName == "mtext" )
     //        return new TokenElement( parent );
     //else if ( tagName == "ms" )
     //        return new StringElement( parent );
-/*  else*/ if ( tagName == "mspace" )
+    else if ( tagName == "mspace" )
         return new SpaceElement( parent );
     //else if ( tagName == "mglyph" )
     //        return new GlyphElement( parent );

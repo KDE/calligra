@@ -23,44 +23,11 @@
 
 namespace FormulaShape {
 
-NumberElement::NumberElement( BasicElement* parent ) : BasicElement( parent )
-{
-}
+NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent ) {}
 
-void NumberElement::paint( QPainter& painter, const AttributeManager* am )
+ElementType NumberElement::elementType() const
 {
+    return Number;
 }
-   
-void NumberElement::layout( const AttributeManager* am )
-{
-    // 
-}
-    
-void NumberElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
-{
-}
-    /**
-     * Move the FormulaCursor right 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveRight( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor up 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveUp( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor down 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveDown( FormulaCursor* cursor, BasicElement* from );
-
-    /// @return The element's ElementType
-    ElementType elementType() const;
 
 } // namespace FormulaShape

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,59 +28,16 @@ namespace FormulaShape {
  * @short Implementation of the MathML mn element
  *
  * The mn element represents a number and is defined in the section 3.2.4 of the
- * MathMl spec. The number element holds the number to be painted as a QString.
+ * MathML spec. The number element holds the number to be painted as a sequence
+ * of TextElement and/or GlyphElements.
  */
-class NumberElement : public BasicElement {
+class NumberElement : public TokenElement {
 public:
     /// Standart constructor
     NumberElement( BasicElement* parent = 0 );
 
-    /**
-     * Render the element to the given QPainter
-     * @param painter The QPainter to paint the element to
-     * @param am AttributeManager containing style info
-     */
-    void paint( QPainter& painter, const AttributeManager* am );
-
-    /**
-     * Calculate the size of the element and the positions of its children
-     * @param am The AttributeManager providing information about attributes values
-     */
-    void layout( const AttributeManager* am );
-    
-    /**
-     * Move the FormulaCursor left
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveLeft( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor right 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveRight( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor up 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveUp( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor down 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveDown( FormulaCursor* cursor, BasicElement* from );
-
     /// @return The element's ElementType
     ElementType elementType() const;
-
-private:
-    QString m_number;
 };
 
 } // namespace FormulaShape
