@@ -27,6 +27,7 @@
 
 #include "MusicShape.h"
 #include "MusicToolFactory.h"
+#include "SimpleEntryToolFactory.h"
 
 #include "MusicShapeFactory.h"
 
@@ -36,6 +37,7 @@ MusicShapePlugin::MusicShapePlugin( QObject * parent,  const QStringList & list 
 {
     KoShapeRegistry::instance()->add( new MusicShapeFactory( parent ) );
     KoToolRegistry::instance()->add( new MusicToolFactory( parent ) );
+    KoToolRegistry::instance()->add( new SimpleEntryToolFactory( parent ) );
 }
 
 

@@ -16,29 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <klocale.h>
+#ifndef SIMPLEENTRY_TOOL_FACTORY
+#define SIMPLEENTRY_TOOL_FACTORY
 
-#include "MusicShape.h"
-#include "MusicTool.h"
+#include <QStringList>
 
-#include "MusicToolFactory.h"
+#include <KoToolFactory.h>
 
-
-MusicToolFactory::MusicToolFactory( QObject* parent )
-    : KoToolFactory( parent, "MusicToolFactoryId", i18n( "Music Tool" ) )
+class SimpleEntryToolFactory : public KoToolFactory
 {
-    setToolTip( i18n( "Music editing tool, parts" ) );
-    setIcon( "musicshape" );
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( MusicShapeId );
-}
+public:
+    SimpleEntryToolFactory( QObject* parent );
+    ~SimpleEntryToolFactory();
 
-MusicToolFactory::~MusicToolFactory()
-{
-}
+    KoTool* createTool( KoCanvasBase* canvas );
+};
 
-KoTool* MusicToolFactory::createTool( KoCanvasBase* canvas )
-{
-    return new MusicTool( canvas );
-}
+
+#endif

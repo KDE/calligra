@@ -1,4 +1,5 @@
 add_subdirectory( fonts )
+add_subdirectory( pics )
 add_subdirectory( core )
 
 include_directories( ${KOGUIUTILS_INCLUDES} )
@@ -26,13 +27,16 @@ SET (musicshape_LIB_SRCS
     MusicShapeFactory.cpp
     MusicTool.cpp
     MusicToolFactory.cpp
+    SimpleEntryTool.cpp
+    SimpleEntryToolFactory.cpp
     MusicStyle.cpp
     Engraver.cpp
     Renderer.cpp
 
     dialogs/PartsWidget.cpp
     dialogs/PartDetailsDialog.cpp
-
+    dialogs/SimpleEntryWidget.cpp
+    
     commands/RemovePartCommand.cpp
 
     ${musiccore_SRCS}
@@ -41,6 +45,7 @@ SET (musicshape_LIB_SRCS
 kde4_add_ui_files(musicshape_LIB_SRCS
     dialogs/PartsWidget.ui
     dialogs/PartDetailsDialog.ui
+    dialogs/SimpleEntryWidget.ui
 )
 
 kde4_automoc(${musicshape_LIB_SRCS})

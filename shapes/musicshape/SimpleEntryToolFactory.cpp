@@ -19,26 +19,26 @@
 #include <klocale.h>
 
 #include "MusicShape.h"
-#include "MusicTool.h"
+#include "SimpleEntryTool.h"
 
-#include "MusicToolFactory.h"
+#include "SimpleEntryToolFactory.h"
 
 
-MusicToolFactory::MusicToolFactory( QObject* parent )
-    : KoToolFactory( parent, "MusicToolFactoryId", i18n( "Music Tool" ) )
+SimpleEntryToolFactory::SimpleEntryToolFactory( QObject* parent )
+    : KoToolFactory( parent, "SimpleEntryToolFactoryId", i18n( "Music Tool" ) )
 {
-    setToolTip( i18n( "Music editing tool, parts" ) );
+    setToolTip( i18n( "Music editing tool" ) );
     setIcon( "musicshape" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( MusicShapeId );
 }
 
-MusicToolFactory::~MusicToolFactory()
+SimpleEntryToolFactory::~SimpleEntryToolFactory()
 {
 }
 
-KoTool* MusicToolFactory::createTool( KoCanvasBase* canvas )
+KoTool* SimpleEntryToolFactory::createTool( KoCanvasBase* canvas )
 {
-    return new MusicTool( canvas );
+    return new SimpleEntryTool( canvas );
 }

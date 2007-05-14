@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.kruiselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,29 +16,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <klocale.h>
+#ifndef SIMPLEENTRYWIDGET_H
+#define SIMPLEENTRYWIDGET_H
 
-#include "MusicShape.h"
-#include "MusicTool.h"
+#include "ui_SimpleEntryWidget.h"
 
-#include "MusicToolFactory.h"
+#include <QWidget>
 
+class SimpleEntryTool;
 
-MusicToolFactory::MusicToolFactory( QObject* parent )
-    : KoToolFactory( parent, "MusicToolFactoryId", i18n( "Music Tool" ) )
-{
-    setToolTip( i18n( "Music editing tool, parts" ) );
-    setIcon( "musicshape" );
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( MusicShapeId );
-}
+class SimpleEntryWidget : public QWidget {
+    Q_OBJECT
+public:
+    explicit SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent = 0);
 
-MusicToolFactory::~MusicToolFactory()
-{
-}
+private slots:
+private:
+    Ui::SimpleEntryWidget widget;
+    SimpleEntryTool *m_tool;
+};
 
-KoTool* MusicToolFactory::createTool( KoCanvasBase* canvas )
-{
-    return new MusicTool( canvas );
-}
+#endif // SIMPLEENTRYWIDGET_H
