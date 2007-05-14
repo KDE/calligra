@@ -26,6 +26,7 @@ namespace KPlato
 
 void PertResult::draw( Project &project)
 {
+    kDebug() << "UPDATE PE" << endl;
     m_schedule->getUi().treeWidgetTaskResult->clear();
     KLocale * locale = KGlobal::locale();
     QList<Node*> list;
@@ -66,7 +67,7 @@ DateTime PertResult::getStartEarlyDate(Node * currentNode)
     if(currentNode->dependParentNodes().size()==0)
     {
         t=static_cast<Task *>(currentNode);
-        duration=t->startTime();
+        duration=t->startTime(current_schedule);
         duration.setDateOnly(true);
         return duration;
     }
@@ -78,9 +79,9 @@ DateTime PertResult::getStartEarlyDate(Node * currentNode)
             t=static_cast<Task *>((*it)->parent ());
             if(it==currentNode->dependParentNodes().begin())
 	    {
-	        duration=t->startTime( );
+	        duration=t->startTime(current_schedule);
 	    }
-	duration+=(t->endTime()-t->startTime());
+	duration+=(t->endTime(current_schedule)-t->startTime(current_schedule));
     	}
     duration.setDateOnly(true);
     return duration;
@@ -92,14 +93,14 @@ DateTime PertResult::getFinishEarlyDate(Node * currentNode)
     //it's the early start date + duration of the task
     Task * t;
     t=static_cast<Task *>(currentNode);
-    return (getStartEarlyDate(currentNode)+=(t->endTime()-t->startTime()));
+    return (getStartEarlyDate(currentNode)+=(t->endTime(current_schedule)-t->startTime(current_schedule)));
 }
  
 DateTime PertResult::getStartLateDate(Node * currentNode)
 {
     Task * t;
     t=static_cast<Task *>(currentNode);
-    return (getFinishLateDate(currentNode)-=(t->endTime()-t->startTime()));
+    return (getFinishLateDate(currentNode)-=(t->endTime(current_schedule)-t->startTime(current_schedule)));
 
 }
 
@@ -129,7 +130,7 @@ DateTime PertResult::getFinishLateDate(Node * currentNode)
     	{
             t=static_cast<Task *>((*it)->child ());
 	    duration=getFinishLateDate((*it)->child ());
-            duration-=((*it)->child ()->endTime()-(*it)->child ()->startTime());
+            duration-=((*it)->child ()->endTime(current_schedule)-(*it)->child ()->startTime());
 	    l.push_back(duration);
     	}
     
@@ -198,7 +199,7 @@ Duration PertResult::getTaskFloat(Node * currentNode)
 PertResult::PertResult( Part *part, QWidget *parent,ScheduleEditor * Schedule): ViewBase( part, parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
-
+    current_schedule=-1;
     m_part = part;
     m_schedule=Schedule;
     m_project = &m_part->getProject();
@@ -217,8 +218,6 @@ PertResult::PertResult( Part *part, QWidget *parent,ScheduleEditor * Schedule): 
     (*header).resizeSection(7,80);
     draw( part->getProject() );
     connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
-
-
 
 }
 
@@ -255,11 +254,12 @@ void PertResult::testComplexGraph()
 
 void PertResult::slotUpdate(){
 
- draw(m_part->getProject());
+    draw(m_part->getProject());
 }
 
-void PertResult::Update(){
- draw(m_part->getProject());
+void PertResult::Update(int id_schedule){
+    current_schedule=id_schedule;
+    draw(m_part->getProject());
 }
 
 } // namespace KPlato

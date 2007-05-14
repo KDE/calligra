@@ -705,8 +705,11 @@ void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
     ScheduleManager *sm = 0;
     if ( ! list.isEmpty() ) {
         sm = m_editor->itemModel()->manager( list.first() );
+	//FIXME TAKE THE CORRECT SCHEDULE I DON'T KNOW HOW TAKE IT
+        //resultPert->Update(sm->schedules().last()->id());
     }
     slotEnableActions( sm );
+    
 }
 
 void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
@@ -750,7 +753,7 @@ void ScheduleEditor::slotCalculateSchedule()
         return;
     }
     sm->setRecalculate( sm->parentManager() );
-    resultPert->Update();
+    resultPert->Update(-1);
     emit calculateSchedule( m_editor->project(), sm );
 }
 

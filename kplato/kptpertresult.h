@@ -74,7 +74,7 @@ public:
     Duration getFreeMargin(Node * currentNode);
     Duration getTaskFloat(Node * currentNode);
     void testComplexGraph();
-    void Update();
+    void Update(int id_schedule);
 
 
 private:
@@ -84,6 +84,7 @@ private:
     Project * m_project;
     bool complexGraph;
     QList<Node *> m_criticalPath;
+    int current_schedule;
 
 private slots:
     void slotUpdate();

@@ -172,7 +172,8 @@ signals:
     void calculateSchedule( Project*, ScheduleManager* );
     void addScheduleManager( Project* );
     void deleteScheduleManager( Project*, ScheduleManager* );
-    
+    void SelectionScheduleChanged();
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
