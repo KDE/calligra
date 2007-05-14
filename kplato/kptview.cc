@@ -963,7 +963,7 @@ void View::createGanttView( ViewListItem *cat )
     ViewListItem *i = m_viewlist->addView( cat, "GanttView", i18n( "Gantt" ), ganttview, getPart(), "gantt_chart" );
     i->setToolTip( 0, i18n( "View gantt chart" ) );
 
-    ganttview->draw( getProject() );
+    ganttview->setProject( &( getProject() ) );
 
     connect( ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -2315,12 +2315,6 @@ void View::updateView( QWidget *widget )
 
     mainWindow() ->toolBar( "report" ) ->hide();
     QWidget *widget2;
-
-    widget2 = m_viewlist->findView( "GanttView" ) ;
-    if ( m_updateGanttview )
-	static_cast<ViewBase*>( widget2 ) ->drawChanges( getProject() );
-        //setTaskActionsEnabled( widget2, true );
-    m_updateGanttview = false;
 
     widget2 = m_viewlist->findView( "ResourceView" ) ;
     if ( m_updateResourceview )
