@@ -73,16 +73,16 @@ private:
     /// find and load all framesets
     void loadFrameSets( const QDomElement &framesets );
     /// load one frameset
-    KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true , bool loadFootnote = true);
+    KWFrameSet *loadFrameSet( const QDomElement &framesetElem, bool loadFrames = true , bool loadFootnote = true);
     /// fill the data of fs with the info from the element
-    void fill(KWFrameSet *fs, QDomElement element);
+    void fill(KWFrameSet *fs, const QDomElement &element);
     /// fill the data of fs with the info from the element
-    void fill(KWTextFrameSet *fs, QDomElement framesetElem);
+    void fill(KWTextFrameSet *fs, const QDomElement &framesetElem);
     /// fill the data of style with the info from the element
-    void fill(KoParagraphStyle *style, QDomElement layoutElem);
-    void fill(KoCharacterStyle *style, QDomElement formatElem);
-    void fill(KWFrame *frame, QDomElement frameElem);
-    void fill(ImageKey *key, QDomElement keyElement);
+    void fill(KoParagraphStyle *style, const QDomElement &layoutElem);
+    void fill(KoCharacterStyle *style, const QDomElement &formatElem);
+    void fill(KWFrame *frame, const QDomElement &frameElem);
+    void fill(ImageKey *key, const QDomElement &keyElement);
 
     void insertAnchors();
 

@@ -382,7 +382,7 @@ void KWDLoader::loadFrameSets( const QDomElement &framesets ) {
     }
 }
 
-KWFrameSet *KWDLoader::loadFrameSet( QDomElement framesetElem, bool loadFrames, bool loadFootnote) {
+KWFrameSet *KWDLoader::loadFrameSet( const QDomElement &framesetElem, bool loadFrames, bool loadFootnote) {
     QString fsname = framesetElem.attribute("name");
 
     switch(framesetElem.attribute("frameType").toInt()) {
@@ -535,13 +535,13 @@ KWFrameSet *KWDLoader::loadFrameSet( QDomElement framesetElem, bool loadFrames, 
     }
 }
 
-void KWDLoader::fill(KWFrameSet *fs, QDomElement framesetElem) {
+void KWDLoader::fill(KWFrameSet *fs, const QDomElement &framesetElem) {
     //m_visible = static_cast<bool>( KWDocument::getAttribute( framesetElem, "visible", true ) ); // TODO
     //m_protectSize=static_cast<bool>( KWDocument::getAttribute( framesetElem, "protectSize", false ) ); TODO
 
 }
 
-void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
+void KWDLoader::fill(KWTextFrameSet *fs, const QDomElement &framesetElem) {
     fill(static_cast<KWFrameSet*>(fs), framesetElem);
     // <FRAME>
     QDomElement frameElem = framesetElem.firstChildElement();
@@ -697,7 +697,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
     }
 }
 
-void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
+void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
     QString align = layout.firstChildElement("FLOW").attribute("align", "auto");
     if(align == "left") {
         style->setAlignment( Qt::AlignLeft | Qt::AlignAbsolute );
@@ -899,7 +899,7 @@ QColor KWDLoader::colorFrom(const QDomElement &element) {
     return color;
 }
 
-void KWDLoader::fill(KoCharacterStyle *style, QDomElement formatElem) {
+void KWDLoader::fill(KoCharacterStyle *style, const QDomElement &formatElem) {
     QDomElement element = formatElem.firstChildElement( "COLOR" );
     if( !element.isNull() ) {
         QBrush fg = style->foreground();
@@ -963,7 +963,7 @@ void KWDLoader::fill(KoCharacterStyle *style, QDomElement formatElem) {
        //OFFSETFROMBASELINE
 }
 
-void KWDLoader::fill(KWFrame *frame, QDomElement frameElem) {
+void KWDLoader::fill(KWFrame *frame, const QDomElement &frameElem) {
     Q_ASSERT(frame);
     Q_ASSERT(frame->shape());
     QPointF origin( frameElem.attribute("left").toDouble(),
@@ -1020,7 +1020,7 @@ void KWDLoader::fill(KWFrame *frame, QDomElement frameElem) {
     }
 }
 
-void KWDLoader::fill(ImageKey *key, QDomElement keyElement) {
+void KWDLoader::fill(ImageKey *key, const QDomElement &keyElement) {
     key->year = keyElement.attribute("year");
     key->month = keyElement.attribute("month");
     key->day = keyElement.attribute("day");
