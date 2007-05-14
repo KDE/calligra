@@ -34,6 +34,10 @@
 
 class KoShapeBorderModel;
 
+// TODO move the docker to a plugin or into guiutils so other 
+// applications can use that too
+
+
 /// the factory which creates the stroke docker
 class KoStrokeDockerFactory : public KoDockFactory
 {
