@@ -20,6 +20,8 @@
 #include "KoEllipseShapeFactory.h"
 #include "KoEllipseShape.h"
 #include "KoLineBorder.h"
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 #include <klocale.h>
 
@@ -30,6 +32,8 @@ KoEllipseShapeFactory::KoEllipseShapeFactory( QObject *parent )
 {
     setToolTip( i18n( "An ellipse" ) );
     setIcon("ellipse-shape");
+    setOdfElementName( KoXmlNS::draw, "ellipse" );
+    setLoadingPriority( 1 );
 }
 
 KoShape * KoEllipseShapeFactory::createDefaultShape() const
@@ -54,3 +58,10 @@ KoShape * KoEllipseShapeFactory::createShape( const KoProperties * params ) cons
     return new KoEllipseShape();
 }
 
+bool KoEllipseShapeFactory::supports(const KoXmlElement & e) const
+{
+    if( e.localName() == "ellipse" && e.namespaceURI() == KoXmlNS::draw )
+        return true;
+    else 
+        return false;
+}

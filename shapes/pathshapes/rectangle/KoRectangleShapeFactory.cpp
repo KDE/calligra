@@ -20,14 +20,18 @@
 #include "KoRectangleShapeFactory.h"
 #include "KoRectangleShape.h"
 #include "KoLineBorder.h"
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 #include <klocale.h>
 
 KoRectangleShapeFactory::KoRectangleShapeFactory( QObject *parent )
-: KoShapeFactory( parent, KoRectangleShapeId, i18n( "A simple path shape" ) )
+: KoShapeFactory( parent, KoRectangleShapeId, i18n( "A rectangle shape" ) )
 {
     setToolTip( i18n( "A rectangle" ) );
     setIcon("rectangle-koffice");
+    setOdfElementName( KoXmlNS::draw, "rect" );
+    setLoadingPriority( 1 );
 }
 
 KoShape * KoRectangleShapeFactory::createDefaultShape() const
@@ -51,3 +55,10 @@ KoShape * KoRectangleShapeFactory::createShape( const KoProperties * params ) co
     return new KoRectangleShape();
 }
 
+bool KoRectangleShapeFactory::supports(const KoXmlElement & e) const
+{
+    if( e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw )
+        return true;
+    else
+        return false;
+}
