@@ -782,7 +782,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
  There can be many asterisks of 1st type defined for given single query.
  There can be one asterisk of 2nd type defined for given single query.
 */
-class KEXI_DB_EXPORT QueryAsterisk : protected Field
+class KEXI_DB_EXPORT QueryAsterisk : public Field
 {
 	public:
 		/*! Constructs query asterisk definition object.
@@ -810,6 +810,9 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		 \a table may be NULL - then the asterisk becames "all-tables" type asterisk. */
 		virtual void setTable(TableSchema *table);
 
+		/*! Reimplemented. */
+		virtual bool isQueryAsterisk() const  { return true; }
+
 		/*! This is convenience method that returns true 
 		 if the asterisk has "all-tables" type (2nd type).*/
 		bool isSingleTableAsterisk() const { return m_table!=NULL; }
@@ -819,7 +822,7 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		bool isAllTableAsterisk() const { return m_table==NULL; }
 		
 		/*! \return String for debugging purposes. */
-		virtual QString debugString();
+		virtual QString debugString() const;
 
 	protected:
 		//! \return a deep copy of this object. Used in FieldList(const FieldList& fl).

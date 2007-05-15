@@ -1842,7 +1842,7 @@ void QueryAsterisk::setTable(TableSchema *table)
 	m_table=table;
 }
 
-QString QueryAsterisk::debugString()
+QString QueryAsterisk::debugString() const
 {
 	QString dbg;
 	if (isAllTableAsterisk()) {
