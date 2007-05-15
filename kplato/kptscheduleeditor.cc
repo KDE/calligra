@@ -32,7 +32,6 @@
 #include "kptschedule.h"
 #include "kptdatetime.h"
 #include "kptcontext.h"
-#include "kptpertresult.h"
 
 #include <QMenu>
 #include <QPainter>
@@ -642,10 +641,11 @@ ScheduleEditor::ScheduleEditor( Part *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();
-    widget.setupUi(this);
+    
+    QVBoxLayout * l = new QVBoxLayout( this );
+    l->setMargin( 0 );
     m_editor = new ScheduleTreeView(part,this);
-    resultPert= new PertResult(part,parent,this);
-    widget.vboxLayout->addWidget(m_editor);
+    l->addWidget( m_editor );
     m_editor->setEditTriggers( m_editor->editTriggers() | QAbstractItemView::EditKeyPressed );
 
     connect( m_editor, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
@@ -654,7 +654,6 @@ ScheduleEditor::ScheduleEditor( Part *part, QWidget *parent )
     
     connect( m_editor, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
     
-    connect( this, SIGNAL( scheduleSelectionChanged( long ) ), resultPert, SLOT( slotScheduleSelectionChanged( long ) ) );
 }
 
 void ScheduleEditor::draw( Project &project )
@@ -707,9 +706,9 @@ void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
     ScheduleManager *sm = 0;
     if ( ! list.isEmpty() ) {
         sm = m_editor->itemModel()->manager( list.first() );
-        emit scheduleSelectionChanged( sm->id() );
+        emit scheduleSelectionChanged( sm );
     } else {
-        emit scheduleSelectionChanged( -1 );
+        emit scheduleSelectionChanged( 0 );
     }
     slotEnableActions( sm );
     
@@ -756,7 +755,6 @@ void ScheduleEditor::slotCalculateSchedule()
         return;
     }
     sm->setRecalculate( sm->parentManager() );
-    resultPert->Update(-1);
     emit calculateSchedule( m_editor->project(), sm );
 }
 

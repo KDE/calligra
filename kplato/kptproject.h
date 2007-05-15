@@ -422,6 +422,8 @@ public:
     void setRelationLag( Relation *relation, const Duration &lag );
     
 signals:
+    /// Emitted when a schedule has been calculated
+    void projectCalculated( ScheduleManager *sm );
     void currentScheduleChanged();
     void sigProgress( int );
     

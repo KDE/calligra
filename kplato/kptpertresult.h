@@ -34,13 +34,11 @@
 
 #include <QtGui>
 
-#include <ui_kptscheduleeditor.h>
+
 
 
 #include "kptpart.h"
 #include "kpttask.h"
-
-
 
 #include "kptnode.h"
 
@@ -51,18 +49,20 @@ class QTreeWidgetItem;
 
 namespace KPlato
 {
+#include "ui_kptpertresult.h"
 
 class View;
 class Project;
-class ScheduleEditor;
 
 class PertResult : public ViewBase
 {
     Q_OBJECT
 public:
 
-    PertResult( Part *part, QWidget *parent,ScheduleEditor * Schedule);
-    void draw( Project &project);
+    PertResult( Part *part, QWidget *parent );
+    void setProject( Project *project );
+    void draw( Project &project );
+    void draw();
 
     QList<Node*> criticalPath();
 
@@ -70,24 +70,27 @@ public:
     DateTime getFinishEarlyDate(Node * currentNode);
     DateTime getStartLateDate(Node * currentNode);
     DateTime getFinishLateDate(Node * currentNode);
-    Duration getProjectFloat(Project &project);
+    Duration getProjectFloat(Project *project);
     Duration getFreeMargin(Node * currentNode);
     Duration getTaskFloat(Node * currentNode);
     void testComplexGraph();
-    void Update(int id_schedule);
 
 public slots:
-    void slotScheduleSelectionChanged( long id );
+    void slotScheduleSelectionChanged( ScheduleManager *sm );
+    
+protected slots:
+    void slotProjectCalculated( ScheduleManager *sm );
+    void slotScheduleManagerToBeRemoved( ScheduleManager *sm );
     
 private:
-    ScheduleEditor * m_schedule;
     Node * m_node;
     Part * m_part;
     Project * m_project;
     bool complexGraph;
     QList<Node *> m_criticalPath;
-    long current_schedule;
-
+    ScheduleManager *current_schedule;
+    Ui::PertResult widget;
+    
 private slots:
     void slotUpdate();
 

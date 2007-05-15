@@ -23,8 +23,6 @@
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
 
-#include <ui_kptscheduleeditor.h>
-
 #include <QTreeWidget>
 
 #include "kptcontext.h"
@@ -45,7 +43,6 @@ class Project;
 class ScheduleManager;
 class MainSchedule;
 class Schedule;
-class PertResult;
 
 
 class ScheduleItemModel : public ItemModelBase
@@ -164,7 +161,6 @@ public:
     void setupGui();
     virtual void draw( Project &project );
     virtual void draw();
-    ::Ui::Schedule getUi(){ return widget; };
     virtual void updateReadWrite( bool /*readwrite*/ ) {};
 
 signals:
@@ -176,9 +172,9 @@ signals:
 
     /**
      * Emitted when schedule selection changes.
-     * @param id is the new schedule id. If -1, no schedule is selected.
+     * @param sm is the new schedule manager. If @p is 0, no schedule is selected.
     */
-    void scheduleSelectionChanged( long id );
+    void scheduleSelectionChanged( ScheduleManager *sm );
     
 public slots:
     /// Activate/deactivate the gui
@@ -197,14 +193,12 @@ private slots:
     void slotDeleteSelection();
     
 private:
-    ::Ui::Schedule widget;
     ScheduleTreeView *m_editor;
 
     KAction *actionCalculateSchedule;
     KAction *actionAddSchedule;
     KAction *actionAddSubSchedule;
     KAction *actionDeleteSelection;
-    PertResult * resultPert;
 };
 
 }  //KPlato namespace

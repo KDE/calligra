@@ -154,7 +154,7 @@ void Project::calculate( ScheduleManager &sm )
     }
     emit sigProgress( 100 );
     emit sigProgress( -1 );
-
+    emit projectCalculated( &sm );
 }
 
 void Project::calculate( Schedule *schedule )

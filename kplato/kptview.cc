@@ -106,6 +106,8 @@
 #include "kptchartdialog.h"
 #include "kptresourceassignmentview.h"
 #include "kpttaskstatusview.h"
+#include "kptsplitterview.h"
+#include "kptpertresult.h"
 
 #include "KPtViewAdaptor.h"
 
@@ -591,7 +593,7 @@ View::View( Part* part, QWidget* parent )
     createTaskeditor( cat );
     createDependencyEditor( cat );
     createPertEditor( cat );
-    createScheduleEditor( cat );
+    createScheduleHandler( cat );
 
     cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
     createTaskStatusView( cat );
@@ -877,6 +879,40 @@ void View::createCalendarEditor( ViewListItem *cat )
 
 }
 
+void View::createScheduleHandler( ViewListItem *cat )
+{
+    SplitterView *handler = new SplitterView( getPart(), m_tab );
+    m_tab->addWidget( handler );
+
+    ViewListItem *i = m_viewlist->addView( cat, "ScheduleHandler", i18n( "Schedules" ), handler, getPart(), "schedule_editor" );
+    i->setToolTip( 0, i18n( "Calculate and analyze project schedules" ) );
+
+    ScheduleEditor *e = createScheduleEditor( handler );
+    handler->addView( e );
+
+    PertResult *p = new PertResult( getPart(), handler );
+    handler->addView( p );
+
+    connect( e, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), p, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
+    
+    handler->draw( getProject() );
+
+    connect( handler, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+}
+
+ScheduleEditor *View::createScheduleEditor( QWidget *parent )
+{
+    ScheduleEditor *scheduleeditor = new ScheduleEditor( getPart(), parent );
+    
+    connect( scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
+    connect( scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
+
+    connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
+
+    return scheduleeditor;
+}
+
 void View::createScheduleEditor( ViewListItem *cat )
 {
     ScheduleEditor *scheduleeditor = new ScheduleEditor( getPart(), m_tab );
@@ -885,7 +921,7 @@ void View::createScheduleEditor( ViewListItem *cat )
     ViewListItem *i = m_viewlist->addView( cat, "ScheduleEditor", i18n( "Schedules" ), scheduleeditor, getPart(), "schedule_editor" );
     i->setToolTip( 0, i18n( "Calculate project schedules" ) );
 
-    scheduleeditor->draw( getProject() );
+    scheduleeditor->setProject( &( getProject() ) );
 
     connect( scheduleeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -895,6 +931,7 @@ void View::createScheduleEditor( ViewListItem *cat )
     connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
 
 }
+
 
 void View::createDependencyEditor( ViewListItem *cat )
 {
@@ -940,6 +977,7 @@ void View::createPertEditor( ViewListItem *cat )
     m_updatePertEditor = true;
 
 }
+
 void View::createTaskStatusView( ViewListItem *cat )
 {
     TaskStatusView *taskstatusview = new TaskStatusView( getPart(), m_tab );
@@ -2138,7 +2176,7 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    //kDebug()<<k_funcinfo<<ev->activated()<<endl;
+    kDebug()<<k_funcinfo<<ev->activated()<<endl;
     KoView::guiActivateEvent( ev );
     if ( ev->activated() ) {
         // plug my own actionlists, they may be gone
@@ -2153,9 +2191,25 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 KoDocument *View::hitTest( const QPoint &pos )
 {
+    // TODO: The gui handling can certainly be simplified (at least I think so),
+    // by someone who have a better understanding of all the possibilities of KParts
+    // than I have.
+    kDebug()<<k_funcinfo<<pos<<endl;
     // pos is in m_tab->currentWidget() coordinates
     QPoint gl = m_tab->currentWidget()->mapToGlobal(pos);
     if ( m_tab->currentWidget()->frameGeometry().contains( m_tab->currentWidget()->mapFromGlobal( gl ) ) ) {
+        if ( koDocument() == dynamic_cast<KoDocument*>(partManager()->activePart() ) ) {
+            // just activating new view on the same doc
+            SplitterView *sp = dynamic_cast<SplitterView*>( m_tab->currentWidget() );
+            if ( sp ) {
+                // Check which view has actually been hit (can aslo be the splitter)
+                ViewBase *v = sp->findView( pos );
+                if ( v ) {
+                    kDebug()<<k_funcinfo<<"Hit on: "<<v<<endl;
+                    v->setGuiActive( true );
+                }
+            }
+        }
         return koDocument()->hitTest( pos, this );
     }
     // get a 0 based geometry

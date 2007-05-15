@@ -340,6 +340,8 @@ private:
     void createResourceditor( ViewListItem *cat );
     void createAccountsEditor( ViewListItem *cat );
     void createCalendarEditor( ViewListItem *cat );
+    void createScheduleHandler( ViewListItem *cat );
+    ScheduleEditor *createScheduleEditor( QWidget *parent );
     void createScheduleEditor( ViewListItem *cat );
     void createDependencyEditor( ViewListItem *cat );
     void createPertEditor( ViewListItem *cat );
