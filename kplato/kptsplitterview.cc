@@ -22,6 +22,7 @@
 #include "kptpart.h"
 
 #include <QApplication>
+#include <QVBoxLayout>
 #include <QSplitter>
 
 namespace KPlato
@@ -29,19 +30,53 @@ namespace KPlato
 
 SplitterView::SplitterView(Part *doc, QWidget *parent)
     : ViewBase( doc, parent ),
-    m_part( doc ),
-    m_currentview( 0 )
+    m_activeview( 0 )
 {
+    QVBoxLayout *b = new QVBoxLayout( this );
     m_splitter = new QSplitter( this );
+    m_splitter->setOrientation( Qt::Vertical );
+    b->addWidget( m_splitter );
 }
     
 void SplitterView::addView( ViewBase *view )
 {
     m_splitter->addWidget( view );
-    connect ( view, SIGNAL( focusInEvent( QFocusEvent* ) ), SLOT( slotFocusChanged( QFocusEvent* ) ) );
-    connect ( view, SIGNAL( focusOutEvent( QFocusEvent* ) ), SLOT( slotFocusChanged( QFocusEvent* ) ) );
+    connect( view, SIGNAL( guiActivated( ViewBase*, bool ) ), this, SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 }
-    
+
+// reimp
+void SplitterView::setGuiActive( bool active ) // virtual slot
+{
+    if ( m_activeview ) {
+        m_activeview->setGuiActive( active );
+    } else {
+        emit guiActivated( this, active );
+    }
+}
+
+void SplitterView::slotGuiActivated( ViewBase *v, bool active )
+{
+    if ( active ) {
+        if ( m_activeview ) {
+            emit guiActivated( m_activeview, false );
+        }
+        m_activeview = v;
+    } else {
+        m_activeview = 0;
+    }
+    emit guiActivated( v, active );
+}
+
+ViewBase *SplitterView::findView( const QPoint &pos ) const
+{
+    for ( int i = 0; i < m_splitter->count(); ++i ) {
+        ViewBase *w = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
+        if ( w && w->frameGeometry().contains( pos ) ) {
+            return w;
+        }
+    }
+    return const_cast<SplitterView*>( this );
+}
 
 void SplitterView::setZoom(double zoom)
 {
@@ -116,20 +151,6 @@ QList<QAction*> SplitterView::actionList( const QString name ) const
     return QList<QAction*>();
 }
     
-void SplitterView::slotFocusChanged( QFocusEvent *event )
-{
-    if ( event->lostFocus() ) {
-        if ( m_currentview ) {
-            emit guiActivated( m_currentview, false );
-        }
-    } else if ( event->gotFocus() ) {
-        m_currentview = dynamic_cast<ViewBase*>( QApplication::focusWidget() );
-        if ( m_currentview ) {
-            emit guiActivated( m_currentview, true );
-        }
-    }
-}
-
 
 } // namespace KPlato
 

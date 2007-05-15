@@ -42,10 +42,10 @@ class Calendar;
 class Context;
 
 /**
- * SplitterView is a view with a QSplitter that can contain
+ * SplitterView is a view with a vertical QSplitter that can contain
  * other ViewBase based views.
- * This view is created by the main View and subviews are
- * then added, also by View.
+ * This view is created by the main View, and subviews can then be
+ * added with addView()
 */
 class SplitterView : public ViewBase
 {
@@ -55,8 +55,6 @@ public:
     SplitterView(Part *doc, QWidget *parent);
     /// Destructor
     virtual ~SplitterView() {};
-    /// Return the part (document) this view handles
-    Part *part() const { return m_part; }
     
     virtual void setZoom( double zoom );
     /// Set the project this view shall handle.
@@ -79,14 +77,18 @@ public:
     virtual void getContext( Context &/*context*/ ) const {}
     
     void addView( ViewBase *view );
-    
+    ViewBase *findView( const QPoint &pos ) const;
+
+public slots:
+    /// Activate/deactivate the gui (also of subviews)
+    virtual void setGuiActive( bool activate );
+
 protected slots:
-    void slotFocusChanged( QFocusEvent *event );
+    void slotGuiActivated( ViewBase *v, bool active );
     
 private:
-    Part *m_part;
-    ViewBase *m_currentview;
     QSplitter *m_splitter;
+    ViewBase *m_activeview;
 };
 
 
