@@ -27,6 +27,7 @@ class Bar::Private
 public:
     Sheet* sheet;
     QHash<Voice*, VoiceBar*> voices;
+    QPointF position;
     double size;
 };
 
@@ -54,6 +55,16 @@ VoiceBar* Bar::voice(Voice* voice)
         d->voices.insert(voice, vb);
     }
     return vb;
+}
+
+QPointF Bar::position() const
+{
+    return d->position;
+}
+
+void Bar::setPosition(QPointF position)
+{
+    d->position = position;
 }
 
 double Bar::size() const

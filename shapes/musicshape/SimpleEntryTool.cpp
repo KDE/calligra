@@ -39,10 +39,21 @@
 
 #include "dialogs/SimpleEntryWidget.h"
 
+#include "core/Sheet.h"
+#include "core/Part.h"
+#include "core/Staff.h"
+#include "core/Bar.h"
+#include "core/Voice.h"
+#include "core/VoiceBar.h"
+#include "core/Clef.h"
+
+using namespace MusicCore;
+
 SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     : KoTool( canvas ),
     m_musicshape(0),
-    m_duration(MusicCore::Chord::Quarter)
+    m_duration(MusicCore::Chord::Quarter),
+    m_voice(0)
 {
     QActionGroup* noteGroup = new QActionGroup(this);
     connect(noteGroup, SIGNAL(triggered(QAction*)), this, SLOT(noteLengthChanged(QAction*)));
@@ -147,8 +158,69 @@ void SimpleEntryTool::paint( QPainter& painter, KoViewConverter& viewConverter )
     m_musicshape->renderer()->renderNote(painter, m_duration, m_point.x(), m_point.y(), sl * 8.5, Qt::gray);
 }
 
-void SimpleEntryTool::mousePressEvent( KoPointerEvent* )
+void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 {
+    QPointF p = m_musicshape->transformationMatrix(0).inverted().map(event->point);
+    Sheet *sheet = m_musicshape->sheet();
+    
+    // find closest staff
+    Staff* closestStaff = 0;
+    double dist = 1e9;
+    for (int prt = 0; prt < sheet->partCount(); prt++) {
+        Part* part = sheet->part(prt);
+        for (int st = 0; st < part->staffCount(); st++) {
+            Staff* staff = part->staff(st);
+            double top = staff->top();
+            double bot = staff->top() + (staff->lineCount() - 1) * staff->lineSpacing();
+            if (fabs(top - p.y()) < dist) {
+                closestStaff = staff;
+                dist = fabs(top - p.y());
+            }
+            if (fabs(bot - p.y()) < dist) {
+                closestStaff = staff;
+                dist = fabs(bot - p.y());
+            }
+        }
+    }
+
+    int line = closestStaff->line(p.y() - closestStaff->top());
+    kDebug() << "part: " << closestStaff->part()->name() << endl;
+    kDebug() << "line: " << line << endl;
+
+    Part* part = closestStaff->part();
+    for (int i = part->voiceCount(); i <= m_voice; i++) {
+        part->addVoice();
+    }
+    Voice* voice = part->voice(m_voice);
+    
+    // find correct bar and last clef
+    Bar* bar = 0;
+    Clef* clef = 0;
+    for (int b = 0; b < sheet->barCount(); b++) {
+        Bar* bb = sheet->bar(b);
+        VoiceBar* vb = bb->voice(voice);
+        for (int i = 0; i < vb->elementCount(); i++) {
+            MusicElement* me = vb->element(i);
+            Clef* c = dynamic_cast<Clef*>(me);
+            if (c) clef = c;
+        }
+        if (bb->position().x() <= p.x() && bb->position().x() + bb->size() >= p.x()) {
+            bar = bb;
+            kDebug() << "bar: " << b << endl;
+            break;
+        }
+    }
+
+    if (!bar) return;
+    Chord* c = new Chord(closestStaff, m_duration);
+    if (clef) {
+        int pitch = clef->lineToPitch(line);
+        kDebug() << "pitch: " << pitch << endl;
+        c->addNote(closestStaff, pitch);
+    }
+    voice->bar(bar)->addElement(c);
+    m_musicshape->engrave();
+    m_musicshape->repaint();
 }
 
 void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
@@ -170,6 +242,8 @@ void SimpleEntryTool::addCommand(QUndoCommand* command)
 QWidget * SimpleEntryTool::createOptionWidget()
 {
     SimpleEntryWidget* widget = new SimpleEntryWidget(this);
+
+    connect(widget, SIGNAL(voiceChanged(int)), this, SLOT(voiceChanged(int)));
     
     return widget;
 }
@@ -179,4 +253,7 @@ void SimpleEntryTool::noteLengthChanged(QAction* action)
     m_duration = static_cast<MusicCore::Chord::Duration>(action->data().value<int>());
 }
 
-
+void SimpleEntryTool::voiceChanged(int voice)
+{
+    m_voice = voice;
+}

@@ -99,6 +99,14 @@ public:
      * @param lineSpacing the new distance between two lines.
      */
     void setLineSpacing(double lineSpacing);
+
+    /**
+     * Returns the closest line corresponding to the given y coordinate, where the coordinate should be relative
+     * to the top of the staff. 0 Is the bottom line, 2 the line above it, and so on.
+     *
+     * @param y the coordinate for which to return the closest line.
+     */
+    int line(double y) const;
 private:
     class Private;
     Private * const d;

@@ -19,6 +19,8 @@
 #ifndef MUSIC_CORE_BAR_H
 #define MUSIC_CORE_BAR_H
 
+#include <QtCore/QPointF>
+
 namespace MusicCore {
 
 class Sheet;
@@ -62,6 +64,16 @@ public:
      */
     VoiceBar* voice(Voice* voice);
 
+    /**
+     * Returns the top-left corner of the bounding box of the bar.
+     */
+    QPointF position() const;
+
+    /**
+     * Sets the top-left corner of the bounding box of this bar.
+     */
+    void setPosition(QPointF position);
+    
     /**
      * Returns the size of the bar.
      */

@@ -133,6 +133,30 @@
     </layout>
    </item>
    <item>
+    <widget class="QComboBox" name="voiceList" >
+     <item>
+      <property name="text" >
+       <string>Voice 1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Voice 2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Voice 3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Voice 4</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>

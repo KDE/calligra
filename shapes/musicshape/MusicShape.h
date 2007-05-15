@@ -50,6 +50,7 @@ public:
 
     MusicCore::Sheet* sheet();
     MusicRenderer* renderer();
+    void engrave();
 private:
     MusicCore::Sheet* m_sheet;
     MusicStyle* m_style;

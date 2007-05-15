@@ -34,6 +34,8 @@ SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     widget.note32Button->setDefaultAction(tool->action("note_32nd"));
     widget.note64Button->setDefaultAction(tool->action("note_64th"));
     widget.note128Button->setDefaultAction(tool->action("note_128th"));
+
+    connect(widget.voiceList, SIGNAL(currentIndexChanged(int)), this, SIGNAL(voiceChanged(int)));
 }
 
 #include "SimpleEntryWidget.moc"

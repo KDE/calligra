@@ -89,7 +89,7 @@ public:
     int line() const;
     
     /**
-     * Changes the line the clef is displayed on.
+     * Changes the line the clef is displayed on. The bottom line is 1, each higher line +1.
      *
      * @param line the new line this clef is displayed on
      */
@@ -106,6 +106,11 @@ public:
      * @param octaveChange the new octave change for this clef
      */
     void setOctaveChange(int octaveChange) const;
+
+    /**
+     * Returns the pitch for a given line.
+     */
+    int lineToPitch(int line) const;
 private:
     class Private;
     Private * const d;

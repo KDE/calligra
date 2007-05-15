@@ -20,6 +20,8 @@
 #include "Part.h"
 #include "Sheet.h"
 
+#include <math.h>
+
 namespace MusicCore {
 
 class Staff::Private
@@ -78,6 +80,13 @@ int Staff::lineCount() const
 double Staff::lineSpacing() const
 {
     return 8.5;
+}
+
+int Staff::line(double y) const
+{
+    y = (lineCount()-1) * lineSpacing() - y;
+    y /= lineSpacing() / 2;
+    return (int) round(y);
 }
 
 } // namespace MusicCore

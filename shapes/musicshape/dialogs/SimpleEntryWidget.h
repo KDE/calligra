@@ -29,7 +29,8 @@ class SimpleEntryWidget : public QWidget {
     Q_OBJECT
 public:
     explicit SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent = 0);
-
+signals:
+    void voiceChanged(int voice);
 private slots:
 private:
     Ui::SimpleEntryWidget widget;

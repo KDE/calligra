@@ -50,16 +50,20 @@ static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch)
 MusicShape::MusicShape() : m_style(new MusicStyle), m_engraver(new Engraver()), m_renderer(new MusicRenderer(m_style))
 {
     m_sheet = new Sheet();
-    Part* part = m_sheet->addPart("Violin");
-    part->addStaff();
-    part = m_sheet->addPart("Piano");
-    Staff* staff = part->addStaff();
-    Staff* staff2 = part->addStaff();
-    Voice* voice = part->addVoice();
-    Voice* voice2 = part->addVoice();
     Bar* b1 = m_sheet->addBar();
     Bar* b2 = m_sheet->addBar();
     Bar* b3 = m_sheet->addBar();
+    
+    Part* part = m_sheet->addPart("Violin");
+    Staff* staff = part->addStaff();
+    Voice* voice = part->addVoice();
+    voice->bar(b1)->addElement(new Clef(staff, Clef::Trebble, 2, 0));
+    
+    part = m_sheet->addPart("Piano");
+    staff = part->addStaff();
+    Staff* staff2 = part->addStaff();
+    voice = part->addVoice();
+    Voice* voice2 = part->addVoice();
 
     voice->bar(b1)->addElement(new Clef(staff, Clef::Trebble, 2, 0));
     voice->bar(b1)->addElement(new KeySignature(staff, -4));
@@ -134,3 +138,9 @@ MusicRenderer* MusicShape::renderer()
 {
     return m_renderer;
 }
+
+void MusicShape::engrave()
+{
+    m_engraver->engraveSheet(m_sheet);
+}
+

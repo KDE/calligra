@@ -47,6 +47,12 @@ void Engraver::engraveSheet(Sheet* sheet, bool engraveBars)
         }
     }
 
+    QPointF p(0, 0);
+    for (int i = 0; i < sheet->barCount(); i++) {
+        sheet->bar(i)->setPosition(p);
+        p.setX(p.x() + sheet->bar(i)->size());
+    }
+
     // now layout bars in staff systems
     // TODO
 }

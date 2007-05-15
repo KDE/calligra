@@ -70,19 +70,23 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff )
     for (int i = 0; i < staff->lineCount(); i++) {
         painter.drawLine(QPointF(0.0, y + i * dy), QPointF(1000.0, y + i * dy));
     }
+/*
+    painter.setPen(QPen(Qt::green));
+    painter.drawLine(QPointF(0, y - staff->spacing()), QPointF(100, y - staff->spacing()));
+    painter.drawLine(QPointF(0, y + dy * staff->lineCount() - dy + staff->spacing()), QPointF(100, y + dy * staff->lineCount() - dy + staff->spacing()));*/
 }
 
 void MusicRenderer::renderVoice(QPainter& painter, Voice *voice)
 {
     RenderState state;
     state.clef = 0;
-    double x = 0;
     for (int b = 0; b < voice->part()->sheet()->barCount(); b++) {
-        VoiceBar* vb = voice->bar(voice->part()->sheet()->bar(b));
+        Bar* bar = voice->part()->sheet()->bar(b);
+        QPointF p = bar->position();
+        VoiceBar* vb = voice->bar(bar);
         for (int e = 0; e < vb->elementCount(); e++) {
-            renderElement(painter, vb->element(e), x, 0, state);
+            renderElement(painter, vb->element(e), p.x(), p.y(), state);
         }
-        x += voice->part()->sheet()->bar(b)->size();
     }
 }
 

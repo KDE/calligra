@@ -55,6 +55,7 @@ class SimpleEntryTool : public KoTool
         
     protected slots:
         void noteLengthChanged(QAction* action);
+        void voiceChanged(int voice);
     private:
         MusicShape *m_musicshape;
         QAction *m_actionBreveNote;
@@ -68,6 +69,7 @@ class SimpleEntryTool : public KoTool
         QAction *m_actionNote128;
         MusicCore::Chord::Duration m_duration;
         QPointF m_point;
+        int m_voice;
 };
 
 #endif

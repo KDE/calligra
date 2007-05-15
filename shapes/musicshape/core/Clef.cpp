@@ -79,5 +79,10 @@ void Clef::setOctaveChange(int octaveChange) const
     d->octaveChange = octaveChange;
 }
 
+int Clef::lineToPitch(int line) const
+{
+    return line + 2 * d->line - 2;
+}
+
 } // namespace MusicCore
 
