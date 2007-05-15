@@ -1458,4 +1458,3 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 } //namespace KPlato
 
 #include "kptnodeitemmodel.moc"
-                 
