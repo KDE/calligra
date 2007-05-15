@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef STRINGELEMENT_H
@@ -22,28 +22,17 @@
 
 #include "TokenElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace FormulaShape {
 
 class StringElement : public TokenElement {
-    typedef TokenElement inherited;
 public:
+    /// The standart constructor
     StringElement( BasicElement* parent = 0 );
-	virtual int buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n);
 
-protected:
-    virtual bool readAttributesFromMathMLDom(const QDomElement& element);
-
-private:
-    virtual QString elementName() const { return "ms"; }
-    virtual void writeMathMLAttributes( QDomElement& element ) const ;
-    virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const ;
-
-    QString m_lquote;
-    QString m_rquote;
-    bool m_customLquote;
-    bool m_customRquote;
+    /// @return The element's ElementType
+    ElementType elementType() const;
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace FormulaShape
 
 #endif // STRINGELEMENT_H

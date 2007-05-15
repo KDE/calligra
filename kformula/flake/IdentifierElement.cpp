@@ -18,6 +18,9 @@
 */
 
 #include "IdentifierElement.h"
+#include "Entities.h"
+#include <algorithm>
+#include <kdebug.h>
 
 namespace FormulaShape {
 
@@ -26,7 +29,15 @@ IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( par
 
 QString IdentifierElement::stringToRender( const QString& rawString ) const
 {
-    // TODO map symbolic constants
+    const entityMap* begin = entities;
+    const entityMap* end = entities + entityMap::size();
+    const entityMap* pos = std::lower_bound( begin, end, rawString.toAscii() );
+
+    if ( pos == end || QString( pos->name ) != rawString )
+         kWarning() << "Invalid entity refererence: " << rawString << endl;
+    else
+         return QChar( pos->unicode );
+
     return rawString;
 }
 

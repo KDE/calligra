@@ -14,74 +14,19 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#include "textelement.h"
-#include "stringelement.h"
+#include "StringElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace FormulaShape {
 
-StringElement::StringElement( BasicElement* parent ) : TokenElement( parent ) {
-}
+StringElement::StringElement( BasicElement* parent ) : TokenElement( parent )
+{}
 
-bool StringElement::readAttributesFromMathMLDom(const QDomElement& element)
+ElementType StringElement::elementType() const
 {
-    if ( ! BasicElement::readAttributesFromMathMLDom( element ) ) {
-        return false;
-    }
-
-    if ( ! inherited::readAttributesFromMathMLDom( element ) ) {
-        return false;
-    }
-
-    m_lquote = element.attribute( "lquote" );
-    if ( ! m_lquote.isNull() ) {
-        m_customLquote = true;
-    }
-    m_rquote = element.attribute( "rquote" );
-    if ( ! m_rquote.isNull() ) {
-        m_customRquote = true;
-    }
-
-    return true;
+    return String;
 }
 
-int StringElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) 
-{
-    int count = inherited::buildChildrenFromMathMLDom( list, n );
-    if ( count == -1 )
-        return -1;
-    TextElement* child = new TextElement( '"' );
-    child->setParent( this );
-    child->setCharFamily( charFamily() );
-    child->setCharStyle( charStyle() );
-    insert( 0, child );
-    child = new TextElement( '"' );
-    child->setParent( this );
-    child->setCharFamily( charFamily() );
-    child->setCharStyle( charStyle() );
-    insert( countChildren(), child );
-    return count;
-}
-
-void StringElement::writeMathMLAttributes( QDomElement& element ) const
-{
-    inherited::writeMathMLAttributes( element );
-    if ( m_customLquote ) {
-        element.setAttribute( "lquote", m_lquote );
-    }
-    if ( m_customRquote ) {
-        element.setAttribute( "rquote", m_rquote );
-    }
-}
-
-void StringElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const
-{
-    for ( uint i = 1; i < countChildren() - 1; ++i ) {
-        const BasicElement* e = getChild( i );
-        e->writeMathML( doc, element, oasisFormat );
-    }
-}
-
-KFORMULA_NAMESPACE_END
+} // namespace FormulaShape

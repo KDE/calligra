@@ -47,7 +47,7 @@ def write_header( f ):
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 '''
 
@@ -56,7 +56,7 @@ def write_h( f ):
 #ifndef ENTITIES_H
 #define ENTITIES_H
 
-namespace KFormula {
+namespace FormulaShape {
 	
 struct entityMap {
     static int size();
@@ -69,7 +69,7 @@ struct entityMap {
 	
 extern const entityMap entities[];
 
-} // namespace KFormula
+} // namespace FormulaShape
 
 #endif // ENTITIES_H
 '''
@@ -78,7 +78,7 @@ def write_cc( fr, fw ):
 	print >> fw, '''
 #include "Entities.h"
 
-namespace KFormula {
+namespace FormulaShape {
 
 const entityMap entities[] = {'''
 
@@ -93,7 +93,7 @@ int entityMap::size()
     return sizeof( entities ) / sizeof( entityMap );
 }
 
-} // namespace KFormula
+} // namespace FormulaShape
 	'''
 	
 def name_cmp( a, b ):
