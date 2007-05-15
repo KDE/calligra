@@ -243,70 +243,63 @@ KarbonPart::saveXML()
 	return doc;
 }
 
-bool
-KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
+bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
                        const KoXmlDocument & settings, KoStore* store )
 {
-	kDebug(38000) << "Start loading OASIS document..." << doc.toString() << endl;
+    kDebug(38000) << "Start loading OASIS document..." << doc.toString() << endl;
 
-	QDomElement contents = doc.documentElement();
-	kDebug(38000) << "Start loading OASIS document..." << contents.text() << endl;
-	kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName() << endl;
-	kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI() << endl;
-	kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement() << endl;
-	QDomElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
-	kDebug(38000) << "Start loading OASIS document..." << body.text() << endl;
-	if( body.isNull() )
-	{
-		kDebug(38000) << "No office:body found!" << endl;
-		setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
-		return false;
-	}
+    QDomElement contents = doc.documentElement();
+    kDebug(38000) << "Start loading OASIS document..." << contents.text() << endl;
+    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName() << endl;
+    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI() << endl;
+    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement() << endl;
+    QDomElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
+    kDebug(38000) << "Start loading OASIS document..." << body.text() << endl;
+    if( body.isNull() )
+    {
+            kDebug(38000) << "No office:body found!" << endl;
+            setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
+            return false;
+    }
 
-	body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
-	if(body.isNull())
-	{
-		kDebug(38000) << "No office:drawing found!" << endl;
-		setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
-		return false;
-	}
+    body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
+    if(body.isNull())
+    {
+            kDebug(38000) << "No office:drawing found!" << endl;
+            setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
+            return false;
+    }
 
-	QDomElement page( KoDom::namedItemNS( body, KoXmlNS::draw, "page" ) );
-	if(page.isNull())
-	{
-		kDebug(38000) << "No office:drawing found!" << endl;
-		setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
-		return false;
-	}
+    QDomElement page( KoDom::namedItemNS( body, KoXmlNS::draw, "page" ) );
+    if(page.isNull())
+    {
+            kDebug(38000) << "No office:drawing found!" << endl;
+            setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
+            return false;
+    }
 
-	QString masterPageName = "Standard"; // use default layout as fallback
-	QDomElement *master = oasisStyles.masterPages()[ masterPageName ];
-	if ( !master ) //last test...
-		master = oasisStyles.masterPages()[ "Default" ];
-	Q_ASSERT( master );
-	const QDomElement *style = master ? oasisStyles.findStyle( master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
-	if( style )
-	{
-		m_pageLayout.loadOasis( *style );
-        m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
-	}
-	else
-		return false;
+    QString masterPageName = "Standard"; // use default layout as fallback
+    QDomElement *master = oasisStyles.masterPages()[ masterPageName ];
+    if ( !master ) //last test...
+            master = oasisStyles.masterPages()[ "Default" ];
+    Q_ASSERT( master );
+    const QDomElement *style = master ? oasisStyles.findStyle( master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
+    if( style )
+    {
+            m_pageLayout.loadOasis( *style );
+    m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+    }
+    else
+            return false;
 
-	KoOasisLoadingContext context( this, oasisStyles, store );
-	m_doc.loadOasis( page, context );
-	// do y-mirroring here
-	QMatrix mat;
-	mat.scale( 1, -1 );
-    mat.translate( 0, -m_doc.pageSize().height() );
-	VTransformCmd trafo( 0L, mat );
-	trafo.visit( m_doc );
+    KoOasisLoadingContext context( this, oasisStyles, store );
+    m_doc.loadOasis( page, context );
 
-	loadOasisSettings( settings );
+    loadOasisSettings( settings );
 
-    updateDocumentSize();
+    //updateDocumentSize();
 
-	return true;
+    return true;
 }
 
 void

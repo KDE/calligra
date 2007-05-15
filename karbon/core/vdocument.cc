@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
-   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoï¿½t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002-2006 Rob Buis <buis@kde.org>
    Copyright (C) 2002,2005 David Faure <faure@kde.org>
    Copyright (C) 2002 Laurent Montel <montel@kde.org>
@@ -11,7 +11,7 @@
    Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
-   Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
+   Copyright (C) 2006 Gï¿½bor Lehel <illissius@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,9 +35,13 @@
 
 #include <KoStore.h>
 #include <KoPageLayout.h>
+#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoSavingContext.h>
+#include <KoOasisLoadingContext.h>
+#include <KoOasisStyles.h>
 #include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoShapeLayer.h>
 
 #include <kdebug.h>
@@ -254,11 +258,31 @@ VDocument::loadDocumentContent( const QDomElement& doc )
 	}
 }
 
-bool
-VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+bool VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
-    // TODO implement loading layers
-    //return m_layers.first()->loadOasis( element, context );
+    qDeleteAll( d->layers );
+    d->layers.clear();
+
+    KoShapeLoadingContext shapeContext( context );
+
+    KoXmlElement layer;
+    forEachElement( layer, context.oasisStyles().layerSet() )
+    {
+        QString name = layer.attributeNS( KoXmlNS::draw, "name" );
+        QString title = layer.attributeNS( KoXmlNS::svg, "title" );
+
+        kDebug(38000) << "creating layer" << endl;
+        kDebug(38000) << "name: " << layer.attributeNS( KoXmlNS::draw, "name" ) << endl;
+        kDebug(38000) << "title: " << layer.attributeNS( KoXmlNS::svg, "title" ) << endl;
+        kDebug(38000) << "desc: " << layer.attributeNS( KoXmlNS::svg, "desc" ) << endl;
+
+        KoShapeLayer * l = new KoShapeLayer();
+        // set layer title, fall back to layer name
+        l->setName( title.isEmpty() ? name : title );
+        insertLayer( l );
+        // add layer by name into shape context
+        shapeContext.addLayer( l, name );
+    }
     return true;
 }
 
