@@ -19,7 +19,10 @@
 #ifndef SIMPLEENTRY_TOOL
 #define SIMPLEENTRY_TOOL
 
+#include <QPointF>
 #include <KoTool.h>
+#include "core/Chord.h"
+
 class MusicShape;
 class QUndoCommand;
 class QAction;
@@ -51,6 +54,7 @@ class SimpleEntryTool : public KoTool
         virtual QWidget * createOptionWidget();
         
     protected slots:
+        void noteLengthChanged(QAction* action);
     private:
         MusicShape *m_musicshape;
         QAction *m_actionBreveNote;
@@ -62,6 +66,8 @@ class SimpleEntryTool : public KoTool
         QAction *m_actionNote32;
         QAction *m_actionNote64;
         QAction *m_actionNote128;
+        MusicCore::Chord::Duration m_duration;
+        QPointF m_point;
 };
 
 #endif

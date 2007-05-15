@@ -49,6 +49,7 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
     MusicCore::Sheet* sheet();
+    MusicRenderer* renderer();
 private:
     MusicCore::Sheet* m_sheet;
     MusicStyle* m_style;

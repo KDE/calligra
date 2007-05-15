@@ -34,20 +34,22 @@ MusicStyle::~MusicStyle()
 {
 }
 
-QPen MusicStyle::staffLinePen()
+QPen MusicStyle::staffLinePen(QColor color)
 {
+    m_staffLinePen.setColor(color);
     return m_staffLinePen;
 }
 
-QPen MusicStyle::stemPen()
+QPen MusicStyle::stemPen(QColor color)
 {
+    m_stemPen.setColor(color);
     return m_stemPen;
 }
 
 
-void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Chord::Duration duration)
+void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Chord::Duration duration, QColor color)
 {
-    painter.setPen(QPen(Qt::SolidLine));
+    painter.setPen(QPen(color));
     painter.setFont(m_font);
     QPointF p(x, y);
     switch (duration) {
@@ -71,9 +73,9 @@ void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Chord::Du
     }
 }
 
-void MusicStyle::renderRest(QPainter& painter, double x, double y, Chord::Duration duration)
+void MusicStyle::renderRest(QPainter& painter, double x, double y, Chord::Duration duration, QColor color)
 {
-    painter.setPen(QPen(Qt::SolidLine));
+    painter.setPen(QPen(color));
     painter.setFont(m_font);
     QPointF p(x, y);
     switch (duration) {
@@ -107,9 +109,9 @@ void MusicStyle::renderRest(QPainter& painter, double x, double y, Chord::Durati
     }
 }
 
-void MusicStyle::renderClef(QPainter& painter, double x, double y, Clef::ClefShape shape)
+void MusicStyle::renderClef(QPainter& painter, double x, double y, Clef::ClefShape shape, QColor color)
 {
-    painter.setPen(QPen(Qt::SolidLine));
+    painter.setPen(QPen(color));
     painter.setFont(m_font);
     QPointF p(x, y);
     switch (shape) {
@@ -125,9 +127,9 @@ void MusicStyle::renderClef(QPainter& painter, double x, double y, Clef::ClefSha
     }
 }
 
-void MusicStyle::renderAccidental(QPainter& painter, double x, double y, int accidental)
+void MusicStyle::renderAccidental(QPainter& painter, double x, double y, int accidental, QColor color)
 {
-    painter.setPen(QPen(Qt::SolidLine));
+    painter.setPen(QPen(color));
     painter.setFont(m_font);
     QPointF p(x, y);
     switch (accidental) {
@@ -148,13 +150,37 @@ void MusicStyle::renderAccidental(QPainter& painter, double x, double y, int acc
             break;
     }
 }
-#include "kdebug.h"
-void MusicStyle::renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number)
+
+void MusicStyle::renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number, QColor color)
 {
-    painter.setPen(QPen(Qt::SolidLine));
+    painter.setPen(QPen(color));
     painter.setFont(m_font);
     QFontMetricsF m(m_font);
     QString txt = QString::number(number);
 
     painter.drawText(QPointF(x + (w - m.width(txt))/2, y), txt);
+}
+
+void MusicStyle::renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, QColor color)
+{
+    painter.setPen(QPen(color));
+    painter.setFont(m_font);
+    QPointF p(x, y);
+    switch (duration) {
+        case Chord::HundredTwentyEighth:
+            painter.drawText(p, QString(0xE18A)); // TODO: no 128 flag in emmentaler
+            break;
+        case Chord::SixtyFourth:
+            painter.drawText(p, QString(0xE18A));
+            break;
+        case Chord::ThirtySecond:
+            painter.drawText(p, QString(0xE189));
+            break;
+        case Chord::Sixteenth:
+            painter.drawText(p, QString(0xE188));
+            break;
+        case Chord::Eighth:
+            painter.drawText(p, QString(0xE187));
+            break;
+    }
 }

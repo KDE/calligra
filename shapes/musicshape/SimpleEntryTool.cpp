@@ -29,8 +29,10 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoPointerEvent.h>
 
 #include "MusicShape.h"
+#include "Renderer.h"
 
 #include "SimpleEntryTool.h"
 #include "SimpleEntryTool.moc"
@@ -39,55 +41,66 @@
 
 SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     : KoTool( canvas ),
-    m_musicshape(0)
+    m_musicshape(0),
+    m_duration(MusicCore::Chord::Quarter)
 {
     QActionGroup* noteGroup = new QActionGroup(this);
+    connect(noteGroup, SIGNAL(triggered(QAction*)), this, SLOT(noteLengthChanged(QAction*)));
     
     m_actionBreveNote = new QAction(KIcon("music-note-breve"), i18n("Double whole note"), this);
     addAction("note_breve", m_actionBreveNote);
     m_actionBreveNote->setCheckable(true);
     noteGroup->addAction(m_actionBreveNote);
+    m_actionBreveNote->setData(MusicCore::Chord::Breve);
     
     m_actionWholeNote = new QAction(KIcon("music-note-whole"), i18n("Whole note"), this);
     addAction("note_whole", m_actionWholeNote);
     m_actionWholeNote->setCheckable(true);
     noteGroup->addAction(m_actionWholeNote);
+    m_actionWholeNote->setData(MusicCore::Chord::Whole);
     
     m_actionHalfNote = new QAction(KIcon("music-note-half"), i18n("Half note"), this);
     addAction("note_half", m_actionHalfNote);
     m_actionHalfNote->setCheckable(true);
     noteGroup->addAction(m_actionHalfNote);
+    m_actionHalfNote->setData(MusicCore::Chord::Half);
     
     m_actionQuarterNote = new QAction(KIcon("music-note-quarter"), i18n("Quarter note"), this);
     addAction("note_quarter", m_actionQuarterNote);
     m_actionQuarterNote->setCheckable(true);
     noteGroup->addAction(m_actionQuarterNote);
+    m_actionQuarterNote->setData(MusicCore::Chord::Quarter);
     
     m_actionNote8 = new QAction(KIcon("music-note-eighth"), i18n("Eighth note"), this);
     addAction("note_eighth", m_actionNote8);
     m_actionNote8->setCheckable(true);
     noteGroup->addAction(m_actionNote8);
+    m_actionNote8->setData(MusicCore::Chord::Eighth);
     
     m_actionNote16 = new QAction(KIcon("music-note-16th"), i18n("16th note"), this);
     addAction("note_16th", m_actionNote16);
     m_actionNote16->setCheckable(true);
     noteGroup->addAction(m_actionNote16);
+    m_actionNote16->setData(MusicCore::Chord::Sixteenth);
     
     m_actionNote32 = new QAction(KIcon("music-note-32nd"), i18n("32nd note"), this);
     addAction("note_32nd", m_actionNote32);
     m_actionNote32->setCheckable(true);
     noteGroup->addAction(m_actionNote32);
+    m_actionNote32->setData(MusicCore::Chord::ThirtySecond);
     
     m_actionNote64 = new QAction(KIcon("music-note-64th"), i18n("64th note"), this);
     addAction("note_64th", m_actionNote64);
     m_actionNote64->setCheckable(true);
     noteGroup->addAction(m_actionNote64);
+    m_actionNote64->setData(MusicCore::Chord::SixtyFourth);
     
     m_actionNote128 = new QAction(KIcon("music-note-128th"), i18n("128th note"), this);
     addAction("note_128th", m_actionNote128);
     m_actionNote128->setCheckable(true);
     noteGroup->addAction(m_actionNote128);
-
+    m_actionNote128->setData(MusicCore::Chord::HundredTwentyEighth);
+    
     
     m_actionQuarterNote->setChecked(true);
 }
@@ -124,15 +137,24 @@ void SimpleEntryTool::deactivate()
 
 void SimpleEntryTool::paint( QPainter& painter, KoViewConverter& viewConverter )
 {
-    Q_UNUSED( viewConverter );
+    painter.setMatrix( painter.matrix() * m_musicshape->transformationMatrix(&viewConverter) );
+    KoShape::applyConversion( painter, viewConverter );
+
+    double sl = 3.5;
+    if (m_duration < MusicCore::Chord::Sixteenth) sl += 1;
+    if (m_duration < MusicCore::Chord::ThirtySecond) sl += 1;
+    
+    m_musicshape->renderer()->renderNote(painter, m_duration, m_point.x(), m_point.y(), sl * 8.5, Qt::gray);
 }
 
 void SimpleEntryTool::mousePressEvent( KoPointerEvent* )
 {
 }
 
-void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* )
+void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
 {
+    m_point = m_musicshape->transformationMatrix(0).inverted().map(event->point);
+    m_canvas->updateCanvas(QRectF(QPointF(event->point.x() - 100, event->point.y() - 100), QSizeF(200, 200)));
 }
 
 void SimpleEntryTool::mouseReleaseEvent( KoPointerEvent* )
@@ -151,4 +173,10 @@ QWidget * SimpleEntryTool::createOptionWidget()
     
     return widget;
 }
+
+void SimpleEntryTool::noteLengthChanged(QAction* action)
+{
+    m_duration = static_cast<MusicCore::Chord::Duration>(action->data().value<int>());
+}
+
 

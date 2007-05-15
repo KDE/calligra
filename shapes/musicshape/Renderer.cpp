@@ -211,3 +211,17 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, double x, Rende
                      QPointF(stemX, chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2));
     m_style->renderNoteHead( painter, x, chord->y() + s->top() + line * s->lineSpacing() / 2, chord->duration() );
 }
+
+void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, QColor color)
+{
+    m_style->renderNoteHead(painter, x, y, duration, color);
+
+    if (duration <= MusicCore::Chord::Half) {
+        painter.setPen(m_style->stemPen(color));
+        painter.drawLine(QPointF(x+11, y - stemLength), QPointF(x+11, y));
+    }
+    if (duration <= MusicCore::Chord::Eighth) {
+        m_style->renderNoteFlags(painter, x+11, y - stemLength, duration, color);
+    }
+}
+

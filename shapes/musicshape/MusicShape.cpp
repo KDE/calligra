@@ -129,3 +129,8 @@ Sheet* MusicShape::sheet()
 {
     return m_sheet;
 }
+
+MusicRenderer* MusicShape::renderer()
+{
+    return m_renderer;
+}
