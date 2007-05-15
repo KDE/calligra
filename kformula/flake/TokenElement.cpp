@@ -19,39 +19,105 @@
 
 #include "TokenElement.h"
 #include "AttributeManager.h"
+#include "ElementFactory.h"
 #include <KoXmlWriter.h>
 #include <QPainter>
-#include <QFontMetrics>
+#include <QFontMetricsF>
 
 namespace FormulaShape {
 
 TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )
 {}
 
-void TokenElement::paint( QPainter& painter, const AttributeManager* )
+const QList<BasicElement*> TokenElement::childElements()
 {
-     // Just draw the text
-     painter.drawText( 0, 0, stringToRender( m_rawString ) );
+    // only return the mglyph elements
+    QList<BasicElement*> tmpList;
+    foreach( BasicElement* tmp, m_content )
+        if( tmp != this )
+            tmpList << tmp;
+
+    return tmpList;
+}
+
+void TokenElement::paint( QPainter& painter, const AttributeManager* am )
+{
+     QPointF tmpOrigin;
+     int rawCounter = 0;
+     foreach( BasicElement* tmp, m_content )
+         if( tmp == this )
+         {
+             painter.drawText( tmpOrigin, stringToRender( m_rawStringList[ rawCounter ] ) );
+             rawCounter++;
+         }
+         else
+         {
+             tmp->paint( painter, am );
+             tmpOrigin = tmp->boundingRect().topRight(); // set origin for text
+         }
 }
 
 void TokenElement::layout( const AttributeManager* am )
 {
-    QFontMetrics fm( am->font() );
-    QRectF tmpRect = fm.boundingRect( stringToRender( m_rawString ) );
-    setWidth( tmpRect.width() );
-    setHeight( tmpRect.height() );
-    setBaseLine( height() );  // TODO is this correct ??
+    int rawCounter = 0;
+    double width = 0.0;
+    double height = 0.0;
+    QFontMetricsF fm( am->font() );
+    QRectF tmpRect;
+    foreach( BasicElement* tmp, m_content )
+        if( tmp == this )
+        {
+            tmpRect = fm.boundingRect( stringToRender( m_rawStringList[ rawCounter ] ) );
+            width += tmpRect.width();
+            height = qMax( height, tmp->height() );
+            rawCounter++;
+        }
+        else
+        {
+            tmp->setOrigin( QPointF( width, 0.0 ) );
+            width += tmp->width();
+            height = qMax( height, tmp->height() );
+        }
+
+    setWidth( width );
+    setHeight( height );
+    setBaseLine( height );  // TODO is this correct ??
 }
 
 bool TokenElement::readMathMLContent( const KoXmlElement& element )
 {
-    m_rawString = element.text();
+    // TODO check if that is right, as forEachElement might not iterate over
+    // the element with text, or consider them as TextNode.
+
+    KoXmlElement tmp;
+    BasicElement* tmpGlyph;
+    forEachElement( tmp, element )
+        if( tmp.isElement() )
+        {
+            tmpGlyph = ElementFactory::createElement( tmp.tagName(), this );
+            m_content << tmpGlyph;
+            tmpGlyph->readMathML( tmp );
+        }
+        else
+        {
+            m_rawStringList << tmp.text();
+            m_content << this;
+        }
+
     return true;
 }
 
 void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    writer->addTextNode( m_rawString );
+    int rawCounter = 0;
+    foreach( BasicElement* tmp, m_content )
+        if( tmp == this )
+        {
+            writer->addTextNode( m_rawStringList[ rawCounter ] );
+            rawCounter++;
+        }
+        else
+            tmp->writeMathML( writer );
 }
 
 QString TokenElement::stringToRender( const QString& rawString ) const

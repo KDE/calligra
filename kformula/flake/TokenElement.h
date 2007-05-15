@@ -21,9 +21,12 @@
 #define TOKENELEMENT_H
 
 #include "BasicElement.h"
-#include "FormulaCursor.h"
+#include <QList>
+#include <QStringList>
 
 namespace FormulaShape {
+
+class GlyphElement;
 
 /**
  * @short Baseclass for all token elements
@@ -38,6 +41,12 @@ class TokenElement : public BasicElement {
 public:
     /// The standart constructor
     TokenElement( BasicElement* parent = 0 );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    const QList<BasicElement*> childElements();
 
     /**
      * Render the element to the given QPainter
@@ -64,7 +73,10 @@ protected:
 
 private:
     /// The raw string like it is read and written from MathML
-    QString m_rawString; 
+    QStringList m_rawStringList;
+
+    /// A list of this pointers for raw strings and pointers to embedded GlyphElements
+    QList<BasicElement*> m_content;
 };
 
 } // namespace FormulaShape

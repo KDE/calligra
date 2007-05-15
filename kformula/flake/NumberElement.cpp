@@ -19,11 +19,11 @@
 */
 
 #include "NumberElement.h"
-#include "ElementFactory.h"
 
 namespace FormulaShape {
 
-NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent ) {}
+NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent )
+{}
 
 ElementType NumberElement::elementType() const
 {
