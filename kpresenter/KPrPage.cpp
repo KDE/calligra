@@ -166,9 +166,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                     listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
                 }
             }
-            if ( it.current()->getEffect3() != EF3_NONE ||
-                 it.current()->getDisappear() ||
-                 ! it.current()->getDisappearSoundEffectFileName().isEmpty())
+            if ( it.current()->getDisappear() )
             {
                 listAnimation *lstappear = new listAnimation;
                 lstappear->obj = it.current();
