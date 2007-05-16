@@ -23,8 +23,6 @@
 #include "BasicElement.h"
 #include <QPainterPath>
 
-namespace FormulaShape {
-
 class GlyphElement : public BasicElement {
 public:
     /// The standart constructor
@@ -49,7 +47,5 @@ private:
     /// The content as QPainterPath - ready to paint
     QPainterPath m_glyphPath;
 };
-
-} // namespace FormulaShape
 
 #endif // GLYPHELEMENT_H

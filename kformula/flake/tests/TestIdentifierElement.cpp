@@ -33,7 +33,7 @@ static QString loadAndSave(const QString& input)
 {
     QDomDocument doc;
     doc.setContent( input );
-    FormulaShape::IdentifierElement element;
+    IdentifierElement element;
     element.readMathML(doc.documentElement());
     QBuffer device;
     device.open(QBuffer::ReadWrite);

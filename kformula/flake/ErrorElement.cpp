@@ -21,8 +21,6 @@
 
 #include <qpainter.h>
 
-KFORMULA_NAMESPACE_BEGIN
-
 ErrorElement::ErrorElement( BasicElement* parent ) : SequenceElement( parent ) {
 }
 
@@ -47,5 +45,3 @@ void ErrorElement::draw( QPainter& painter, const LuPixelRect& r,
                       context.getErrorColor() );
     inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
 }
-
-KFORMULA_NAMESPACE_END

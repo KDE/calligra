@@ -23,8 +23,6 @@
 #include "kformuladefs.h"
 #include "RowElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
-
 /**
  * This class handles mathematical style attributes common to token elements,
  * as explained in MathML Spec, Section 3.2.2.
@@ -45,7 +43,5 @@ protected:
     QString getHtmlColor( const QString& colorStr );
 
 };
-
-KFORMULA_NAMESPACE_END
 
 #endif // TOKENSTYLEELEMENT_H

@@ -23,8 +23,6 @@
 #include "FormulaCursor.h"
 #include <klocale.h> 
 
-namespace KFormula {
-
 FormulaCommandAdd::FormulaCommandAdd( FormulaCursor* cursor, QList<BasicElement*> added )
                  : QUndoCommand()
 {
@@ -150,5 +148,3 @@ void FormulaCommandAttribute::undo()
 {
     m_ownerElement->setAttributes( m_oldAttributes );
 }
-
-} //namespace KFormula

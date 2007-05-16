@@ -27,8 +27,6 @@
 
 #include "Entities.h"
 
-KFORMULA_NAMESPACE_BEGIN
-
 const entityMap entities[] = {
      {"AElig", 0x000C6} ,
      {"Aacute", 0x000C1} ,
@@ -2033,5 +2031,3 @@ int entityMap::size()
     return sizeof( entities ) / sizeof( entityMap );
 }
 
-KFORMULA_NAMESPACE_END
-	

@@ -25,8 +25,6 @@
 #include "RowElement.h"
 #include "kformula_export.h"
 
-namespace FormulaShape {
-
 /**
  * @short The element of a formula at the highest position.
  *
@@ -72,7 +70,5 @@ public:
     ElementType elementType() const;
 
 };
-
-} // namespace FormulaShape
 
 #endif // FORMULAELEMENT_H

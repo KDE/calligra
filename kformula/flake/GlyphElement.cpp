@@ -23,8 +23,6 @@
 #include <QFontDatabase>
 #include <QPainter>
 
-namespace FormulaShape {
-
 GlyphElement::GlyphElement( BasicElement* parent ) : BasicElement( parent )
 {}
 
@@ -62,5 +60,3 @@ ElementType GlyphElement::elementType() const
 {
     return Glyph;
 }
-
-} // namespace FormulaShape

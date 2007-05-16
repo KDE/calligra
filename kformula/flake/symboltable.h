@@ -33,9 +33,6 @@
 
 class KConfig;
 
-namespace FormulaShape
-{
-
 class ContextStyle;
 struct UnicodeNameTable;
 	
@@ -141,7 +138,5 @@ private:
      */
     QFont backupFont;
 };
-
-}
 
 #endif // SYMBOLTABLE_H

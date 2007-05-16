@@ -22,8 +22,6 @@
 
 #include "TokenElement.h"
 
-namespace FormulaShape {
-
 /**
  * @short Implementation of the MathML mn element
  *
@@ -39,7 +37,5 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 };
-
-} // namespace FormulaShape
 
 #endif // NUMBERELEMENT_H

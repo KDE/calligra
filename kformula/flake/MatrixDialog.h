@@ -26,8 +26,6 @@
 
 #include "kformuladefs.h"
 
-KFORMULA_NAMESPACE_BEGIN
-
 /**
  * Dialog for entering matrix sizes.
  */
@@ -48,7 +46,5 @@ protected slots:
     void setWidth(int value);
     void setHeight(int value);
 };
-
-KFORMULA_NAMESPACE_END
 
 #endif // MATRIXDIALOG_H_INCLUDED

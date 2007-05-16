@@ -22,8 +22,6 @@
 
 #include "SequenceElement.h"
 
-namespace KFormula {
-
 class ErrorElement : public SequenceElement {
     typedef SequenceElement inherited;
 public:
@@ -45,7 +43,5 @@ private:
     virtual QString elementName() const { return "merror"; }
 
 };
-
-} // namespace KFormula
 
 #endif // ERRORELEMENT_H

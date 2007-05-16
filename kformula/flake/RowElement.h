@@ -24,8 +24,6 @@
 
 #include "BasicElement.h"
 
-namespace FormulaShape {
-
 /**
  * @short Implementation of the MathML mrow element
  *
@@ -115,8 +113,6 @@ private:
     /// The sorted list of all elements in this row
     QList<BasicElement*> m_rowElements;
 };
-
-} // namespace FormulaShape
 
 #endif // ROWELEMENT_H
 

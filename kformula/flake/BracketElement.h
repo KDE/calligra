@@ -28,8 +28,6 @@
 
 #include "BasicElement.h"
 
-namespace KFormula {
-
 class Artwork;
 class SequenceElement;
 
@@ -136,7 +134,5 @@ private:
     bool m_customLeft;
     bool m_customRight;
 };
-
-} // namespace KFormula
 
 #endif // BRACKETELEMENT_H

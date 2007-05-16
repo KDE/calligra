@@ -27,8 +27,6 @@
 
 #include <QPainterPath>
 
-namespace FormulaShape {
-
 class RowElement;
 
 /**
@@ -128,7 +126,5 @@ private:
     /// The QPainterPath that holds the lines for the root sign   
     QPainterPath m_rootPath;
 };
-
-} // namespace FormulaShape
 
 #endif // ROOTELEMENT_H

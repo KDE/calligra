@@ -45,7 +45,7 @@ KFormulaPartDocument::KFormulaPartDocument( QWidget *parentWidget, QObject* pare
     setComponentData( KFormulaPartFactory::global(), false );
 
     m_commandHistory = new K3CommandHistory( actionCollection() );
-    m_formulaElement = new FormulaShape::FormulaElement;
+    m_formulaElement = new FormulaElement;
 /*    connect( m_commandHistory, SIGNAL( commandExecuted() ),
 		         this, SLOT( slotExecuted() ) );
     connect( m_commandHistory, SIGNAL( documentRestored() ),

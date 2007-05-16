@@ -34,8 +34,6 @@
 class QPainter;
 class KoXmlWriter;
 
-namespace FormulaShape {
-
 class AttributeManager;
 class FormulaCursor;
 
@@ -223,7 +221,5 @@ private:
     /// The position of our base line from the upper border
     double m_baseLine;
 };
-
-} // namespace FormulaShape
 
 #endif // BASICELEMENT_H

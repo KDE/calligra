@@ -25,8 +25,6 @@
 
 #include <kdebug.h>
 
-namespace FormulaShape {
-
 RootElement::RootElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_radicand = new RowElement( this );
@@ -224,5 +222,3 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
 {
     kWarning() << "Element name: " << element.tagName() << endl;
 }
-
-} // namespace FormulaShape

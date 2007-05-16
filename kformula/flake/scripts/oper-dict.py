@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 """This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -75,8 +75,6 @@ def write_h( f ):
 #ifndef OPERATORDICTIONARY_H
 #define OPERATORDICTIONARY_H
 
-namespace KFormula {
-	
 struct DictionaryKey
 {
     int operator==( const DictionaryKey& right ) const {
@@ -114,16 +112,12 @@ struct OperatorDictionary {
 	
 extern const OperatorDictionary operators[];
 
-} // namespace KFormula
-
 #endif // OPERATORDICTIONARY_H
 '''
 
 def write_cc( fr, fw ):
 	print >> fw, '''
 #include "OperatorDictionary.h"
-
-namespace KFormula {
 
 const OperatorDictionary operators[] = {'''
 
@@ -138,8 +132,6 @@ int OperatorDictionary::size()
 {
     return sizeof( operators ) / sizeof( OperatorDictionary );
 }
-
-} // namespace KFormula
 	'''
 
 def get_entities():

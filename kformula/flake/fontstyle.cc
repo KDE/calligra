@@ -34,8 +34,6 @@
 #include <kmessagebox.h>
 
 
-KFORMULA_NAMESPACE_BEGIN
-
 #include "unicodetable.cc"
 
 bool FontStyle::m_installed = false;
@@ -886,5 +884,3 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
     }
 }
 #endif // 0
-
-KFORMULA_NAMESPACE_END

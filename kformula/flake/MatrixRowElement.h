@@ -28,8 +28,6 @@
 
 #include "contextstyle.h"
 
-namespace FormulaShape {
-	
 class MatrixEntryElement;
 
 /**
@@ -129,8 +127,6 @@ private:
     /// The list of entries in this row of the matrix 
     QList<MatrixEntryElement*> m_matrixEntryElements;
 };
-
-} // namespace KFormula
 
 #endif
 

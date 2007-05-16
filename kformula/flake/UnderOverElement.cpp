@@ -22,8 +22,6 @@
 #include "ElementFactory.h"
 #include <KoXmlWriter.h>
 
-namespace FormulaShape {
-
 UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_baseElement = new BasicElement( this );
@@ -105,5 +103,3 @@ ElementType UnderOverElement::elementType() const
     else if( m_overElement->elementType() != Basic )
         return Over;
 }
-
-} // namespace FormulaShape

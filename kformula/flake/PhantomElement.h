@@ -22,8 +22,6 @@
 
 #include "SequenceElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
-
 class PhantomElement : public SequenceElement {
     typedef SequenceElement inherited;
 public:
@@ -45,7 +43,5 @@ private:
     virtual QString elementName() const { return "mphantom"; }
 
 };
-
-KFORMULA_NAMESPACE_END
 
 #endif // PHANTOMELEMENT_H

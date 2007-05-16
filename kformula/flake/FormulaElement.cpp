@@ -25,8 +25,6 @@
 #include "ElementFactory.h"
 #include <KoXmlWriter.h>
 
-namespace FormulaShape {
-
 FormulaElement::FormulaElement() : RowElement( 0 )
 {
 }
@@ -59,5 +57,3 @@ ElementType FormulaElement::elementType() const
 {
     return Formula;
 }
-
-} // namespace FormulaShape

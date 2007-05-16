@@ -23,8 +23,6 @@
 #include "kformula_export.h"
 #include "TokenElement.h"
 
-namespace FormulaShape {
-
 /**
  * @short Implementation of the MathML mi element
  *
@@ -43,7 +41,5 @@ protected:
     /// @return The string to be painted - probably a parsed rawString
     QString stringToRender( const QString& rawString ) const;   
 };
-
-} // namespace FormulaShape
 
 #endif // IDENTIFIERELEMENT_H

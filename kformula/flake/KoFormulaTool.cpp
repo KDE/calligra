@@ -33,8 +33,6 @@
 #include <QLabel>
 #include "KoFormulaTool.moc"
 
-namespace FormulaShape {
-
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
                                                        m_formulaShape( 0 ),
                                                        m_formulaCursor( 0 )
@@ -272,6 +270,4 @@ void KoFormulaTool::slotChangeUrl()
         m_formulaShape->importFormula(url);
 }
 
-
-} // namespace FormulaShape
 

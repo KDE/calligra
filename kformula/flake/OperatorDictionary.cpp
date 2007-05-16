@@ -27,8 +27,6 @@
 
 #include "OperatorDictionary.h"
 
-KFORMULA_NAMESPACE_BEGIN
-
 const OperatorDictionary operators[] = {
      { {"!!", "postfix"},
 		"verythinmathspace" ,
@@ -4262,5 +4260,3 @@ int OperatorDictionary::size()
     return sizeof( operators ) / sizeof( OperatorDictionary );
 }
 
-KFORMULA_NAMESPACE_END
-	

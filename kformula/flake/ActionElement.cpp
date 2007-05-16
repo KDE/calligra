@@ -20,8 +20,6 @@
 #include "ActionElement.h"
 #include "ElementFactory.h"
 
-namespace KFormula {
-
 ActionElement::ActionElement( BasicElement* parent ) : SequenceElement( parent ),
                                                        m_selection( 0 )
 {
@@ -69,6 +67,4 @@ void ActionElement::writeMathMLAttributes( QDomElement& element ) const
         element.setAttribute( "selection", QString( "%1" ).arg( m_selection ) );
     }
 }
-
-} // namespace KFormula
 

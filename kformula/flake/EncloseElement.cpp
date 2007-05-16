@@ -19,8 +19,6 @@
 
 #include "EncloseElement.h"
 
-namespace FormulaShape {
-
 EncloseElement::EncloseElement( BasicElement* parent ) : BasicElement( parent )
 {
 }
@@ -99,5 +97,3 @@ void EncloseElement::writeMathMLAttributes( QDomElement& element ) const
         element.setAttribute( "notation", m_notation );
     }
 }
-
-} // namespace FormulaShape

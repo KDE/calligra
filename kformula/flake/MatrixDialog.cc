@@ -26,8 +26,6 @@
 #include <QGridLayout>
 #include <klocale.h>
 
-KFORMULA_NAMESPACE_BEGIN
-
 const int DEFAULT_SIZE = 3;
 const int MAX_SIZE = 200;
 
@@ -81,7 +79,4 @@ void MatrixDialog::setWidth(int value)
     w = value;
 }
 
-KFORMULA_NAMESPACE_END
-
-using namespace KFormula;
 #include "MatrixDialog.moc"

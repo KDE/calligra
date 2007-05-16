@@ -23,8 +23,6 @@
 
 #include "BasicElement.h"
 
-namespace KFormula {
-
 /**
  * @short Implementation of the msub, msup, msubsup and mmultiscript element
  */
@@ -115,7 +113,5 @@ private:
     virtual QString elementName() const { return "mmultiscript"; }
     virtual void writeMathMLContent( KoXmlWriter* writer, bool oasisFormat = false );
 };
-
-} // namespace KFormula
 
 #endif // MULTISCRIPTELEMENT_H

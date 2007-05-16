@@ -35,8 +35,6 @@
 #include "unicodetable.cc"
 
 
-KFORMULA_NAMESPACE_BEGIN
-
 #include "symbolfontmapping.cc"
 
 SymbolFontHelper::SymbolFontHelper()
@@ -143,5 +141,3 @@ QString SymbolTable::get_name( struct UnicodeNameTable entry ) const
     return entry.name;
 }
 
-
-KFORMULA_NAMESPACE_END

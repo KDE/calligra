@@ -26,7 +26,6 @@
 #include <QList>
 #include <QHash>
 
-namespace KFormula {
 class BasicElement;
 class FormulaCursor;
 
@@ -172,7 +171,5 @@ private:
     /// All attributes the element had before
     QHash<QString,QString> m_oldAttributes;
 };
-
-} //namespace KFormula
 
 #endif // FORMULACOMMAND_H

@@ -23,8 +23,6 @@
 #include "BasicElement.h"
 #include <QPainter>
 
-namespace FormulaShape {
-
 FormulaCursor::FormulaCursor( BasicElement* element )
               : m_wordMovement( false ),
                 m_selecting( false )
@@ -136,5 +134,3 @@ void FormulaCursor::setWordMovement( bool wordMovement )
 {
     m_wordMovement = wordMovement;
 }
-
-} // namespace FormulaShape

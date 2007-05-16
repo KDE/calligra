@@ -33,8 +33,6 @@
 #include "kformuladefs.h"
 
 
-KFORMULA_NAMESPACE_BEGIN
-
 class FontStyle;
 class SymbolTable;
 
@@ -322,7 +320,5 @@ private:
     FontStyle* m_fontStyle;
     QString m_fontStyleName;
 };
-
-KFORMULA_NAMESPACE_END
 
 #endif // CONTEXTSTYLE_H

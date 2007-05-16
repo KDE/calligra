@@ -24,8 +24,6 @@
 
 #include "BasicElement.h"
 
-namespace FormulaShape {
-	
 /**
  * @short The class representing an entry in a matrix
  * 
@@ -67,7 +65,5 @@ private:
     /// The list of all child elements
     QList<BasicElement*> m_childElements;
 };
-
-} // namespace FormulaShape
 
 #endif

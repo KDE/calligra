@@ -20,8 +20,6 @@
 
 #include "NumberElement.h"
 
-namespace FormulaShape {
-
 NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
@@ -29,5 +27,3 @@ ElementType NumberElement::elementType() const
 {
     return Number;
 }
-
-} // namespace FormulaShape

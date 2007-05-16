@@ -24,8 +24,6 @@
 
 class RowElement;
 
-namespace FormulaShape {
-
 /**
  * @short Implementation of the MathML menclose element
  */
@@ -96,7 +94,5 @@ private:
 
     QString m_notation;
 };
-
-} // namespace FormulaShape
 
 #endif // ENCLOSEELEMENT_H

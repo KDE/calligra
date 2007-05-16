@@ -26,8 +26,6 @@
 #include <QPainter>
 #include <QBrush>
 
-namespace FormulaShape {
-
 SpaceElement::SpaceElement( BasicElement* parent ) : BasicElement( parent )
 {}
 
@@ -57,5 +55,3 @@ ElementType SpaceElement::elementType() const
 {
     return Space;
 }
-
-} // namespace FormulaShape

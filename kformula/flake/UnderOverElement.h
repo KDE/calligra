@@ -23,8 +23,6 @@
 
 #include "BasicElement.h"
 
-namespace FormulaShape {
-
 /**
  * @short Implementation of the MathML mover, munder and moverunder elements
  *
@@ -101,7 +99,5 @@ private:
 
     BasicElement* m_overElement;
 };
-
-} // namespace KFormula
 
 #endif // UNDEROVERELEMENT_H

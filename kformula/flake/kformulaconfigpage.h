@@ -50,9 +50,6 @@ class K3ListView;
 class KPushButton;
 class KIntNumInput;
 
-KFORMULA_NAMESPACE_BEGIN
-
-
 class Document;
 
 class KOFORMULA_EXPORT ConfigurePage : public QObject
@@ -156,7 +153,5 @@ private:
 //     QValueVector<QString> usedFontList;
 // };
 
-
-KFORMULA_NAMESPACE_END
 
 #endif // kfconfigpages_h

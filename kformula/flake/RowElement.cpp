@@ -27,8 +27,6 @@
 #include <KoXmlWriter.h>
 #include <QPainter>
 
-namespace FormulaShape {
-
 RowElement::RowElement( BasicElement* parent ) : BasicElement( parent )
 {}
 
@@ -129,6 +127,4 @@ void RowElement::writeMathMLContent( KoXmlWriter* writer ) const
     foreach( BasicElement* tmpChild, m_rowElements )       // just write all
         tmpChild->writeMathML( writer );                   // children elements
 }
-
-} // namespace FormulaShape
 

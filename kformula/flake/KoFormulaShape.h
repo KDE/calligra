@@ -29,8 +29,6 @@ class KFormulaPartDocument;
 
 #define KoFormulaShapeId "FormulaShapeID"
 
-namespace FormulaShape {
-
 class BasicElement;
 class FormulaRenderer;
 
@@ -94,7 +92,5 @@ private:
 
     KFormulaPartDocument* m_document;
 };
-
-} // namespace FormulaShape
 
 #endif // KOFORMULASHAPE_H

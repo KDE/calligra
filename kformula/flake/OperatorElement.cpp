@@ -19,8 +19,6 @@
 
 #include "OperatorElement.h"
 
-namespace FormulaShape {
-
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
@@ -28,5 +26,3 @@ ElementType OperatorElement::elementType() const
 {
     return Operator;
 }
-
-} // namespace FormulaShape

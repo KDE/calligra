@@ -25,8 +25,6 @@
 #include "BasicElement.h"
 #include <QLineF>
 
-namespace FormulaShape {
-	
 /**
  * @short Implementation of the MathML mfrac element
  *
@@ -110,7 +108,5 @@ private:
     /// The line that separates the denominator and the numerator
     QLineF m_fractionLine;
 };
-
-} // namespace FormulaShape
 
 #endif // FRACTIONELEMENT_H

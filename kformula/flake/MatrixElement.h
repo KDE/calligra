@@ -24,8 +24,6 @@
 
 #include "BasicElement.h"
 
-namespace FormulaShape {
-
 class MatrixRowElement;
 class MatrixEntryElement;
 	
@@ -121,7 +119,5 @@ private:
     /// The rows a matrix contains
     QList<MatrixRowElement*> m_matrixRowElements;
 };
-
-} // namespace KFormula
 
 #endif // MATRIXELEMENT_H

@@ -20,8 +20,6 @@
 #include "MultiscriptElement.h"
 #include <KoXmlWriter.h>
 
-namespace KFormula {
-
 MultiscriptElement::MultiscriptElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_baseElement = new BasicElement( this );
@@ -67,5 +65,3 @@ void MultiscriptElement::draw( QPainter& painter, const LuPixelRect& r,
                                const LuPixelPoint& parentOrigin )
 {}
 
-
-} // namespace KFormula

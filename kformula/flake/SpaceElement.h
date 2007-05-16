@@ -25,8 +25,6 @@
 
 #include "BasicElement.h"
 
-namespace FormulaShape {
-
 /**
  * @short Implementation of the MathML mspace element
  *
@@ -57,7 +55,5 @@ public:
     /// @return The default value of the attribute for this element
     QVariant attributesDefaultValue( const QString& attribute ) const;
 };
-
-} // namespace FormulaShape
 
 #endif // SPACEELEMENT_H

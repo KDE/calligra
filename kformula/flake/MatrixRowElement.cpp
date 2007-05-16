@@ -30,8 +30,6 @@
 #include <QPainter>
 #include <QList>
 
-namespace KFormula {
-
 MatrixRowElement::MatrixRowElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_matrixEntryElements.append( new MatrixEntryElement( this ) );
@@ -367,5 +365,3 @@ bool MatrixRowElement::readContentFromDom(QDomNode& node)
     }
     return true;
 }
-
-} // namespace KFormula

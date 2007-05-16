@@ -30,8 +30,6 @@
 
 #include "kformuladefs.h"
 
-KFORMULA_NAMESPACE_BEGIN
-	
 struct DictionaryKey
 {
     int operator==( const DictionaryKey& right ) const {
@@ -68,8 +66,6 @@ struct OperatorDictionary {
 };
 	
 extern const OperatorDictionary operators[];
-
-KFORMULA_NAMESPACE_END
 
 #endif // OPERATORDICTIONARY_H
 

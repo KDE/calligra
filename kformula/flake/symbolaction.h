@@ -27,8 +27,6 @@
 #include "kformuladefs.h"
 #include <kselectaction.h>
 
-KFORMULA_NAMESPACE_BEGIN
-
 class SymbolAction : public KSelectAction
 {
 public:
@@ -42,7 +40,5 @@ private:
     QList<QFont> m_fonts;
     QVector<QChar> m_chars;
 };
-
-KFORMULA_NAMESPACE_END
 
 #endif // _SYMBOLACTION_H_

@@ -33,8 +33,6 @@
 #include "FormulaElement.h"
 #include "SequenceElement.h"
 
-namespace KFormula {
-
 BracketElement::BracketElement( BasicElement* parent ) : BasicElement( parent ),
                                                          left( 0 ),
                                                          right( 0 ),
@@ -520,5 +518,3 @@ void BracketElement::writeMathMLAttributes( QDomElement& element ) const
     }
 }
 */
-
-} // namespace KFormula

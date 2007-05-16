@@ -34,8 +34,6 @@
  * The items for the SymbolCombos. *
  */
 
-KFORMULA_NAMESPACE_BEGIN
-
 class SymbolComboItem : public Q3ListBoxItem
 {
 public:
@@ -181,5 +179,3 @@ void SymbolAction::updateItems( int id )
     }
 #endif
 }
-
-KFORMULA_NAMESPACE_END

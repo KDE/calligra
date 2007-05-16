@@ -22,8 +22,6 @@
 
 #include "SequenceElement.h"
 
-namespace KFormula {
-
 class PaddedElement : public SequenceElement {
     typedef SequenceElement inherited;
     enum SizeType { NoSize, RelativeSize, AbsoluteSize, PixelSize, WidthRelativeSize, HeightRelativeSize };
@@ -69,7 +67,5 @@ private:
     bool m_heightRelative;
     bool m_depthRelative;
 };
-
-} // namespace KFormula
 
 #endif // PADDEDELEMENT_H

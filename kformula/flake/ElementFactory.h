@@ -24,8 +24,6 @@
 
 #include <QString>
 
-namespace FormulaShape {
-
 class BasicElement;
 
 enum ElementType {
@@ -92,7 +90,5 @@ public:
      */
     static QString elementName( ElementType type );
 };
-
-} // namespace FormulaShape
 
 #endif // ELEMENTFACTORY_H

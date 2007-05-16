@@ -22,8 +22,6 @@
 #include <algorithm>
 #include <kdebug.h>
 
-namespace FormulaShape {
-
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
@@ -40,5 +38,3 @@ QString IdentifierElement::stringToRender( const QString& rawString ) const
 
     return rawString;
 }
-
-} // namespace FormulaShape

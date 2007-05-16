@@ -22,8 +22,6 @@
 
 #include "TokenElement.h"
 
-namespace FormulaShape {
-
 class StringElement : public TokenElement {
 public:
     /// The standart constructor
@@ -32,7 +30,5 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 };
-
-} // namespace FormulaShape
 
 #endif // STRINGELEMENT_H

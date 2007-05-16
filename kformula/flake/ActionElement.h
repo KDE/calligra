@@ -22,8 +22,6 @@
 
 #include "SequenceElement.h"
 
-namespace KFormula {
-
 /**
  * Support for action elements in MathML. According to MathML spec 
  * (Section 3.6.1.1), a MathML conformant application is not required to 
@@ -42,7 +40,5 @@ private:
     QString m_actionType;
     uint m_selection;
 };
-
-} // namespace KFormula
 
 #endif // ACTIONELEMENT_H

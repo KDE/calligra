@@ -28,8 +28,6 @@
 
 class QPainter;
 
-namespace FormulaShape {
-
 class BasicElement;
 
 /**
@@ -129,7 +127,5 @@ private:
     
     QStack<BasicElement*> m_selectedElements;
 };
-
-} // namespace FormulaShape
 
 #endif // FORMULACURSOR_H

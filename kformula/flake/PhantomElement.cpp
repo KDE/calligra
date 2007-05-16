@@ -19,8 +19,6 @@
 
 #include "phantomelement.h"
 
-KFORMULA_NAMESPACE_BEGIN
-
 PhantomElement::PhantomElement( BasicElement* parent ) : SequenceElement( parent ) 
 {
 }
@@ -35,5 +33,3 @@ void PhantomElement::draw( QPainter&, const LuPixelRect&, const ContextStyle&,
                            StyleAttributes&, const LuPixelPoint& )
 {
 }
-
-KFORMULA_NAMESPACE_END

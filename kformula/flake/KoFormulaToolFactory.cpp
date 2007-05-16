@@ -38,7 +38,7 @@ KoFormulaToolFactory::~KoFormulaToolFactory()
 
 KoTool* KoFormulaToolFactory::createTool( KoCanvasBase* canvas )
 {
-    return new FormulaShape::KoFormulaTool( canvas );
+    return new KoFormulaTool( canvas );
 }
 
 #include "KoFormulaToolFactory.moc"

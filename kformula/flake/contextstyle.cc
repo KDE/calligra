@@ -31,9 +31,6 @@
 #include "fontstyle.h"
 
 
-KFORMULA_NAMESPACE_BEGIN
-
-
 ContextStyle::ContextStyle()
     : symbolFont( "Symbol" ),
       defaultColor(Qt::black), numberColor(Qt::blue),
@@ -333,5 +330,3 @@ void ContextStyle::setup()
     QFontMetrics fm2( font );
     m_axisHeight = fm2.strikeOutPos();
 }
-
-KFORMULA_NAMESPACE_END

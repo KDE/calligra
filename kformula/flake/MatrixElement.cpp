@@ -26,8 +26,6 @@
 #include <KoXmlWriter.h>
 #include <QPainter>
 
-namespace FormulaShape {
-
 MatrixElement::MatrixElement( BasicElement* parent ) : BasicElement( parent )
 {
 }
@@ -297,5 +295,3 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
     }*/
     return true;
 }
-
-} // namespace KFormula

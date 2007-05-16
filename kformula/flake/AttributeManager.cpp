@@ -25,8 +25,6 @@
 #include <QFontMetricsF>
 #include <QColor>
 
-namespace FormulaShape {
-
 AttributeManager::AttributeManager()
 {
     m_viewConverter = 0;
@@ -292,5 +290,3 @@ void AttributeManager::setViewConverter( KoViewConverter* converter )
 {
     m_viewConverter = converter;
 }
-
-} // namespace FormulaShape

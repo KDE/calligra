@@ -54,9 +54,6 @@
 #include "symboltable.h"
 
 
-KFORMULA_NAMESPACE_BEGIN
-
-
 ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, KVBox* box, char* /*name*/ )
     : QObject( box->parent() ), m_document( document ), m_view( view ), m_config( config ), m_changed( false )
 {
@@ -546,7 +543,4 @@ void ConfigurePage::slotChanged()
 //     }
 // }
 
-KFORMULA_NAMESPACE_END
-
-using namespace KFormula;
 #include "kformulaconfigpage.moc"

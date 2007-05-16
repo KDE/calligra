@@ -30,8 +30,6 @@
 
 #include "kformuladefs.h"
 
-KFORMULA_NAMESPACE_BEGIN
-	
 struct entityMap {
     static int size();
     int operator<( const char* right ) const {
@@ -42,8 +40,6 @@ struct entityMap {
 };
 	
 extern const entityMap entities[];
-
-KFORMULA_NAMESPACE_END
 
 #endif // ENTITIES_H
 

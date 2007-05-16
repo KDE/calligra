@@ -24,8 +24,6 @@
 #include <QPainter>
 #include <QFontMetricsF>
 
-namespace FormulaShape {
-
 TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )
 {}
 
@@ -126,5 +124,3 @@ QString TokenElement::stringToRender( const QString& rawString ) const
 {
     return rawString;
 }
-
-} // namespace FormulaShape

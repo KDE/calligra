@@ -23,8 +23,6 @@
 #include <KoTool.h>
 #include <QStack>
 
-namespace FormulaShape {
-
 class KoFormulaShape;
 class BasicElement;
 class FormulaCursor;
@@ -87,7 +85,5 @@ private:
     /// The FormulaCursor the tool uses to move around in the formula
     FormulaCursor* m_formulaCursor;
 };
-
-} // namespace FormulaShape
 
 #endif

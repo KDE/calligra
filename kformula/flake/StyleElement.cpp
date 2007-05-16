@@ -19,8 +19,6 @@
 
 #include "StyleElement.h"
 
-namespace FormulaShape {
-
 StyleElement::StyleElement( BasicElement* parent ) : RowElement( parent )
 {}
 
@@ -28,5 +26,3 @@ ElementType StyleElement::elementType() const
 {
     return Style;
 }
-
-} // namespace FormulaShape

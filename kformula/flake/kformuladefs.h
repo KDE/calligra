@@ -28,11 +28,6 @@
 #include <QRectF>
 #include <QString>
 
-#define KFORMULA_NAMESPACE_BEGIN namespace FormulaShape {
-#define KFORMULA_NAMESPACE_END }
-
-KFORMULA_NAMESPACE_BEGIN
-
 const int DEBUGID = 40000;
 
 /**
@@ -385,7 +380,5 @@ public:
     CharFamily charFamily() const { return m_charFamily; }
 };
 
-
-KFORMULA_NAMESPACE_END
 
 #endif // FORMULADEFS_H

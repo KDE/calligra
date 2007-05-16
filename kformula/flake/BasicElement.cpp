@@ -29,8 +29,6 @@
 
 #include <kdebug.h>
 
-namespace FormulaShape {
-
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
     m_baseLine = 0.0;
@@ -250,5 +248,3 @@ BasicElement* BasicElement::parentElement() const
 {
     return m_parentElement;
 }
-
-} // namespace FormulaShape

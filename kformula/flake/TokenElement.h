@@ -25,8 +25,6 @@
 #include <QList>
 #include <QStringList>
 
-namespace FormulaShape {
-
 class GlyphElement;
 
 /**
@@ -79,7 +77,5 @@ private:
     /// A list of this pointers for raw strings and pointers to embedded GlyphElements
     QList<BasicElement*> m_content;
 };
-
-} // namespace FormulaShape
 
 #endif // TOKENELEMENT_H

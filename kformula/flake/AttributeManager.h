@@ -26,8 +26,6 @@
 class KoViewConverter;
 class QPaintDevice;
 
-namespace FormulaShape {
-
 class BasicElement;
 	
 enum MathVariant {
@@ -200,7 +198,5 @@ private:
     /// The QPaintDevice we are currently painting on - needed for em/ ex units
     QPaintDevice* m_paintDevice;
 };
-
-} // namespace FormulaShape
 
 #endif // ATTRIBUTEMANAGER_H

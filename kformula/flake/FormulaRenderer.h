@@ -23,8 +23,6 @@
 #include <QPainter>
 #include "kformula_export.h"
 
-namespace FormulaShape {
-
 class AttributeManager;
 class BasicElement;
 
@@ -86,7 +84,5 @@ private:
     /// Used by update() to store the highest element in the tree that needs repaint
     BasicElement* m_dirtyElement;
 };
-
-} // namespace FormulaShape
 
 #endif // FORMULARENDERER_H

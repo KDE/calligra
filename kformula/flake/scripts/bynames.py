@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 """This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -56,8 +56,6 @@ def write_h( f ):
 #ifndef ENTITIES_H
 #define ENTITIES_H
 
-namespace FormulaShape {
-	
 struct entityMap {
     static int size();
     int operator<( const char* right ) const {
@@ -69,16 +67,12 @@ struct entityMap {
 	
 extern const entityMap entities[];
 
-} // namespace FormulaShape
-
 #endif // ENTITIES_H
 '''
 
 def write_cc( fr, fw ):
 	print >> fw, '''
 #include "Entities.h"
-
-namespace FormulaShape {
 
 const entityMap entities[] = {'''
 
@@ -92,8 +86,6 @@ int entityMap::size()
 {
     return sizeof( entities ) / sizeof( entityMap );
 }
-
-} // namespace FormulaShape
 	'''
 	
 def name_cmp( a, b ):

@@ -19,8 +19,6 @@
 
 #include "PaddedElement.h"
 
-namespace KFormula {
-
 PaddedElement::PaddedElement( BasicElement* parent ) : SequenceElement( parent ),
                                                        m_widthType( NoSize ),
                                                        m_lspaceType( NoSize ),
@@ -294,5 +292,3 @@ luPixel PaddedElement::calcSize( const ContextStyle& context, SizeType type,
     }
     return value;
 }
-
-} // namespace KFormula

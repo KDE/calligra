@@ -25,8 +25,6 @@
 
 #include "BasicElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
-
 TokenStyleElement::TokenStyleElement( BasicElement* parent ) : RowElement( parent )
 {
 }
@@ -75,5 +73,3 @@ QString TokenStyleElement::getHtmlColor( const QString& colorStr ){
     return "#FFFFFF"; // ### Arbitrary selection of default color
 }
 
-
-KFORMULA_NAMESPACE_END

@@ -23,8 +23,6 @@
 
 #include "FormulaCursor.h"
 
-namespace FormulaShape {
-
 MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : BasicElement( parent )
 {
 }
@@ -183,5 +181,3 @@ int MatrixEntryElement::tabPos( int i )
     */
     return -1;
 }
-
-} // namespace KFormula

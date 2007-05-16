@@ -25,8 +25,6 @@
 #include <QFontMetrics>
 #include <QPainter>
 
-namespace FormulaShape {
-
 TextElement::TextElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
@@ -34,5 +32,3 @@ ElementType TextElement::elementType() const
 {
     return Text;
 }
-
-} // namespace FormulaShape

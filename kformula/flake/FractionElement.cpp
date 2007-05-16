@@ -26,8 +26,6 @@
 #include <KoXmlWriter.h>
 #include <QPainter>
 
-namespace FormulaShape {
-
 FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_numerator = new BasicElement( this );
@@ -189,5 +187,3 @@ ElementType FractionElement::elementType() const
 {
     return Fraction;
 }
-
-} // namespace FormulaShape

@@ -22,8 +22,6 @@
 
 #include "RowElement.h"
 
-namespace FormulaShape {
-
 /**
  * @short The implementation of the MathML mstyle element
  *
@@ -38,7 +36,5 @@ public:
 
     ElementType elementType() const;
 };
-
-} // namespace FormulaShape
 
 #endif // STYLEELEMENT_H

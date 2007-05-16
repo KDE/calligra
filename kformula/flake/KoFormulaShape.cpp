@@ -23,8 +23,6 @@
 #include "KFormulaPartDocument.h"
 #include <KoXmlWriter.h>
 
-namespace FormulaShape {
-
 KoFormulaShape::KoFormulaShape() :  m_document( 0 ), m_formulaElement( 0 )
 {
     m_formulaElement = new FormulaElement();
@@ -113,6 +111,4 @@ void KoFormulaShape::saveOdf( KoShapeSavingContext * context ) const {
 bool KoFormulaShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
     return false; // TODO
 }
-
-} // namespace FormulaShape
 

@@ -21,8 +21,6 @@
 #include "AttributeManager.h"
 #include "BasicElement.h"
 
-namespace FormulaShape {
-
 FormulaRenderer::FormulaRenderer()
 {
     m_dirtyElement = 0;
@@ -101,5 +99,3 @@ void FormulaRenderer::updateElementLayout( BasicElement* element )
         }
     }
 }
-
-} // namespace FormulaShape

@@ -33,9 +33,7 @@ class QIODevice;
 class QDomDocument;
 class KoXmlWriter;
 
-namespace FormulaShape {
-    class FormulaElement;
-}
+class FormulaElement;
 
 /**
  * @short The document class for the KFormulaPart
@@ -82,7 +80,7 @@ public:
     bool showEmbedInitDialog(QWidget* parent);
 
 	/// Return our Formula container
-	FormulaShape::FormulaElement* formulaElement() const { return m_formulaElement; }
+	FormulaElement* formulaElement() const { return m_formulaElement; }
 	
 protected slots:
     void commandExecuted();
@@ -93,7 +91,7 @@ protected:
     virtual KoView* createViewInstance(QWidget* parent);
 
 private:
-    FormulaShape::FormulaElement* m_formulaElement;
+    FormulaElement* m_formulaElement;
     /// The undo stack
     K3CommandHistory* m_commandHistory;
 

@@ -19,8 +19,6 @@
 
 #include "StringElement.h"
 
-namespace FormulaShape {
-
 StringElement::StringElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
@@ -28,5 +26,3 @@ ElementType StringElement::elementType() const
 {
     return String;
 }
-
-} // namespace FormulaShape

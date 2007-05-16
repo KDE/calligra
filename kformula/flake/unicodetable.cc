@@ -17,8 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-KFORMULA_NAMESPACE_BEGIN
-
 struct UnicodeNameTable { short unicode; const char* name; };
 
 static UnicodeNameTable greekTable[] = {
@@ -542,5 +540,3 @@ static UnicodeNameTable operatorTable[] = {
     { 0x22FF, "" },
     { 0, 0 }
 };
-
-KFORMULA_NAMESPACE_END

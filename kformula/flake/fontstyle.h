@@ -29,8 +29,6 @@
 #include "symboltable.h"
 
 
-KFORMULA_NAMESPACE_BEGIN
-
 class Artwork;
 class SymbolTable;
 
@@ -189,8 +187,5 @@ private:
 
     short cmChar;
 };
-
-
-KFORMULA_NAMESPACE_END
 
 #endif

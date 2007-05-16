@@ -46,8 +46,6 @@
 #include "TextElement.h"
 //#include "UnderOverElement.h"
 
-namespace FormulaShape {
-
 BasicElement* ElementFactory::createElement( const QString& tagName,
                                              BasicElement* parent )
 {
@@ -149,5 +147,3 @@ QString ElementFactory::elementName( ElementType type )
 
     return QString();
 }
-
-} // namespace FormulaShape

@@ -25,8 +25,6 @@
 
 #include "TokenElement.h"
 
-namespace FormulaShape {
- 
 /**
  * @short Implementation of the MathML
  * An element that represents one char.
@@ -38,7 +36,5 @@ public:
 
     ElementType elementType() const;
 };
-
-} // namespace FormulaShape
 
 #endif // TEXTELEMENT_H
