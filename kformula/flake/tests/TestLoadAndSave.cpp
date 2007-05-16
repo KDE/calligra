@@ -144,5 +144,53 @@ void TestLoadAndSave::mathVariant()
     identifierElement();
 }
 
+void TestLoadAndSave::mathSize_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    /*
+     * Test all possible values of mathsize attributes
+     */
+    addRow( "<mi mathsize=\"small\">x</mi>" );
+    addRow( "<mi mathsize=\"normal\">x</mi>" );
+    addRow( "<mi mathsize=\"big\">x</mi>" );
+    addRow( "<mi mathsize=\"10em\">x</mi>" );
+    addRow( "<mi mathsize=\"10ex\">x</mi>" );
+    addRow( "<mi mathsize=\"10px\">x</mi>" );
+    addRow( "<mi mathsize=\"10in\">x</mi>" );
+    addRow( "<mi mathsize=\"10cm\">x</mi>" );
+    addRow( "<mi mathsize=\"10mm\">x</mi>" );
+    addRow( "<mi mathsize=\"10pt\">x</mi>" );
+    addRow( "<mi mathsize=\"10pc\">x</mi>" );
+    addRow( "<mi mathsize=\"90%\">x</mi>" );
+    addRow( "<mi mathsize=\"1.2\">x</mi>" );
+
+    /*
+     * Unallowed mathsize values should be removed
+     */
+    addRow( "<mi mathsize=\"invalid\">x</mi>",
+            "<mi>x</mi>");
+    
+    /*
+     * It's better to store attribute names and values lowercase and avoid
+     * having to check whether it's upper or lower case on a per-use case,
+     * which is more error prone performance consuming.
+     */
+    addRow( "<mi mathsize=\"Normal\">x</mi>",
+            "<mi mathsize=\"normal\">x</mi>" );
+    addRow( "<mi mathsize=\"NORMAL\">x</mi>",
+            "<mi mathsize=\"normal\">x</mi>");
+    addRow( "<mi MATHSIZE=\"normal\">x</mi>",
+            "<mi mathsize=\"normal\">x</mi>" );
+    addRow( "<mi MathSize=\"normal\">x</mi>",
+            "<mi mathsize=\"normal\">x</mi>" );
+}
+
+void TestLoadAndSave::mathSize()
+{
+    identifierElement();
+}
+
 QTEST_MAIN(TestLoadAndSave)
 #include "TestLoadAndSave.moc"

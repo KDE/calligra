@@ -26,12 +26,17 @@ class TestLoadAndSave : public QObject
 {
     Q_OBJECT
 private slots:
+    // Token Elements
     void identifierElement_data();
     void identifierElement();
     void numberElement_data();
     void numberElement();
+
+    // Attributes of Token Elements
     void mathVariant_data();
     void mathVariant();
+    void mathSize_data();
+    void mathSize();
 };
 
 #endif // _TESTLOADANDSAVE_H_
