@@ -41,6 +41,19 @@ private slots:
     void mathColor();
     void mathBackground_data();
     void mathBackground();
+
+    // Deprecated Attributes of Token Elements
+    // fontfamily is not included since it's quite freeform
+    void fontSize_data();
+    void fontSize();
+    void fontWeight_data();
+    void fontWeight();
+    void fontStyle_data();
+    void fontStyle();
+    void color_data();
+    void color();
+    
+    
 };
 
 #endif // _TESTLOADANDSAVE_H_

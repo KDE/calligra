@@ -280,5 +280,168 @@ void TestLoadAndSave::mathBackground()
     identifierElement();
 }
 
+void TestLoadAndSave::fontSize_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    /*
+     * Test all possible values of fontsize attributes
+     */
+    addRow( "<mi fontsize=\"10em\">x</mi>" );
+    addRow( "<mi fontsize=\"10ex\">x</mi>" );
+    addRow( "<mi fontsize=\"10px\">x</mi>" );
+    addRow( "<mi fontsize=\"10in\">x</mi>" );
+    addRow( "<mi fontsize=\"10cm\">x</mi>" );
+    addRow( "<mi fontsize=\"10mm\">x</mi>" );
+    addRow( "<mi fontsize=\"10pt\">x</mi>" );
+    addRow( "<mi fontsize=\"10pc\">x</mi>" );
+    addRow( "<mi fontsize=\"90%\">x</mi>" );
+    addRow( "<mi fontsize=\"1.2\">x</mi>" );
+
+    /*
+     * Unallowed fontsize values should be removed
+     */
+    addRow( "<mi fontsize=\"invalid\">x</mi>",
+            "<mi>x</mi>");
+    
+    /*
+     * It's better to store attribute names and values lowercase and avoid
+     * having to check whether it's upper or lower case on a per-use case,
+     * which is more error prone performance consuming.
+     */
+    addRow( "<mi fontsize=\"10Em\">x</mi>",
+            "<mi fontsize=\"10em\">x</mi>" );
+    addRow( "<mi fontsize=\"10EM\">x</mi>",
+            "<mi fontsize=\"10em\">x</mi>");
+    addRow( "<mi FONTSIZE=\"10em\">x</mi>",
+            "<mi fontsize=\"10em\">x</mi>" );
+    addRow( "<mi FontSize=\"10em\">x</mi>",
+            "<mi fontsize=\"10em\">x</mi>" );
+}
+
+void TestLoadAndSave::fontSize()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::fontWeight_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    /*
+     * Test all possible values of fontweight attributes
+     */
+    addRow( "<mi fontweight=\"bold\">x</mi>" );
+    addRow( "<mi fontweight=\"normal\">x</mi>" );
+
+    /*
+     * Unallowed fontweight values should be removed
+     */
+    addRow( "<mi fontweight=\"invalid\">x</mi>",
+            "<mi>x</mi>");
+    
+    /*
+     * It's better to store attribute names and values lowercase and avoid
+     * having to check whether it's upper or lower case on a per-use case,
+     * which is more error prone performance consuming.
+     */
+    addRow( "<mi fontweight=\"Bold\">x</mi>",
+            "<mi fontweight=\"bold\">x</mi>" );
+    addRow( "<mi fontweight=\"BOLD\">x</mi>",
+            "<mi fontweight=\"bold\">x</mi>");
+    addRow( "<mi FONTWEIGHT=\"bold\">x</mi>",
+            "<mi fontweight=\"bold\">x</mi>" );
+    addRow( "<mi FontWeight=\"bold\">x</mi>",
+            "<mi fontweight=\"bold\">x</mi>" );
+}
+
+void TestLoadAndSave::fontWeight()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::fontStyle_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    /*
+     * Test all possible values of fontstyle attributes
+     */
+    addRow( "<mi fontstyle=\"italic\">x</mi>" );
+    addRow( "<mi fontstyle=\"normal\">x</mi>" );
+
+    /*
+     * Unallowed fontstyle values should be removed
+     */
+    addRow( "<mi fontstyle=\"invalid\">x</mi>",
+            "<mi>x</mi>");
+    
+    /*
+     * It's better to store attribute names and values lowercase and avoid
+     * having to check whether it's upper or lower case on a per-use case,
+     * which is more error prone performance consuming.
+     */
+    addRow( "<mi fontstyle=\"Italic\">x</mi>",
+            "<mi fontstyle=\"italic\">x</mi>" );
+    addRow( "<mi fontstyle=\"ITALIC\">x</mi>",
+            "<mi fontstyle=\"italic\">x</mi>");
+    addRow( "<mi FONTSTYLE=\"italic\">x</mi>",
+            "<mi fontstyle=\"italic\">x</mi>" );
+    addRow( "<mi FontStyle=\"italic\">x</mi>",
+            "<mi fontstyle=\"italic\">x</mi>" );
+}
+
+void TestLoadAndSave::fontStyle()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::color_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    /*
+     * Test all possible values of color attributes
+     */
+    addRow( "<mi color=\"white\">x</mi>" );
+    addRow( "<mi color=\"black\">x</mi>" );
+    addRow( "<mi color=\"green\">x</mi>" );
+    addRow( "<mi color=\"#abc\">x</mi>" );
+    addRow( "<mi color=\"#abcdef\">x</mi>" );
+
+    /*
+     * Unallowed color values should be removed
+     */
+    addRow( "<mi color=\"invalid\">x</mi>",
+            "<mi>x</mi>");
+    addRow( "<mi color=\"#abcdefg\">x</mi>",
+            "<mi>x</mi>");
+    
+    /*
+     * It's better to store attribute names and values lowercase and avoid
+     * having to check whether it's upper or lower case on a per-use case,
+     * which is more error prone performance consuming.
+     */
+    addRow( "<mi color=\"Black\">x</mi>",
+            "<mi color=\"black\">x</mi>" );
+    addRow( "<mi color=\"BLACK\">x</mi>",
+            "<mi color=\"black\">x</mi>");
+    addRow( "<mi COLOR=\"black\">x</mi>",
+            "<mi color=\"black\">x</mi>" );
+    addRow( "<mi Color=\"black\">x</mi>",
+            "<mi color=\"black\">x</mi>" );
+    addRow( "<mi Color=\"#ABC\">x</mi>",
+            "<mi color=\"#abc\">x</mi>" );
+}
+
+void TestLoadAndSave::color()
+{
+    identifierElement();
+}
+
 QTEST_MAIN(TestLoadAndSave)
 #include "TestLoadAndSave.moc"
