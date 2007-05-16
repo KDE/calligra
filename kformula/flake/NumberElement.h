@@ -21,6 +21,7 @@
 #define NUMBERELEMENT_H
 
 #include "TokenElement.h"
+#include "kformula_export.h"
 
 /**
  * @short Implementation of the MathML mn element
@@ -29,7 +30,7 @@
  * MathML spec. The number element holds the number to be painted as a sequence
  * of TextElement and/or GlyphElements.
  */
-class NumberElement : public TokenElement {
+class KOFORMULA_EXPORT NumberElement : public TokenElement {
 public:
     /// Standart constructor
     NumberElement( BasicElement* parent = 0 );

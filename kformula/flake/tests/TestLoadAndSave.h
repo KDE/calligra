@@ -17,17 +17,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _TESTBASICELEMENT_H_
-#define _TESTBASICELEMENT_H_
+#ifndef _TESTLOADANDSAVE_H_
+#define _TESTLOADANDSAVE_H_
 
 #include <QtCore/QObject>
 
-class TestIdentifierElement : public QObject
+class TestLoadAndSave : public QObject
 {
     Q_OBJECT
 private slots:
-    void loading_data();
-    void loading();
+    void identifierElement_data();
+    void identifierElement();
+    void numberElement_data();
+    void numberElement();
 };
 
-#endif // _TESTBASICELEMENT_H_
+#endif // _TESTLOADANDSAVE_H_

@@ -15,14 +15,14 @@ if( KDE4_BUILD_TESTS )
 
 ########### BasicElement Test ###############
 
-set(TestIdentifierElement_SRCS TestIdentifierElement.cpp)
+set(TestLoadAndSave_SRCS TestLoadAndSave.cpp)
 
-kde4_automoc(${TestIdentifierElement_SRCS})
+kde4_automoc(${TestLoadAndSave_SRCS})
 
-kde4_add_executable(TestIdentifierElement RUN_UNINSTALLED ${TestIdentifierElement_SRCS})
+kde4_add_executable(TestLoadAndSave RUN_UNINSTALLED ${TestLoadAndSave_SRCS})
 
-target_link_libraries(TestIdentifierElement kformulalib ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestLoadAndSave kformulalib ${QT_QTTEST_LIBRARY})
 
-add_test(kformula-IdentifierElement TestIdentifierElement)
+add_test(kformula-LoadAndSave TestLoadAndSave)
 
 endif( KDE4_BUILD_TESTS )
