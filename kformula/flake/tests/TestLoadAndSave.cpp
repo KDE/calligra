@@ -98,6 +98,56 @@ void TestLoadAndSave::numberElement()
     delete element;
 }
 
+void TestLoadAndSave::operatorElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::operatorElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::textElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::textElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::spaceElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::spaceElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::stringElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::stringElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::glyphElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::glyphElement()
+{
+    // TODO
+}
+
 void TestLoadAndSave::mathVariant_data()
 {
     QTest::addColumn<QString>("input");
@@ -441,6 +491,216 @@ void TestLoadAndSave::color_data()
 void TestLoadAndSave::color()
 {
     identifierElement();
+}
+
+void TestLoadAndSave::rowElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::rowElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::fractionElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::fractionElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::rootElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::rootElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::styleElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::styleElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::errorElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::errorElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::paddedElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::paddedElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::phantomElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::phantomElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::fencedElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::fencedElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::encloseElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::encloseElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::subElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::subElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::supElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::supElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::subsupElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::subsupElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::underElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::underElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::overElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::overElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::underoverElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::underoverElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::multiscriptsElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::multiscriptsElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::tableElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::tableElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::trElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::trElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::labeledtrElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::labeledtrElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::tdElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::tdElement()
+{
+    // TODO
+}
+
+void TestLoadAndSave::actionElement_data()
+{
+    // TODO
+}
+
+void TestLoadAndSave::actionElement()
+{
+    // TODO
 }
 
 QTEST_MAIN(TestLoadAndSave)
