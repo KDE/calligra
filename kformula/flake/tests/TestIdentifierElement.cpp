@@ -27,8 +27,6 @@
 
 #include "IdentifierElement.h"
 
-#include <kdebug.h>
-
 static QString loadAndSave(const QString& input)
 {
     QDomDocument doc;
@@ -58,8 +56,6 @@ void TestIdentifierElement::loading()
     QFETCH(QString, input);
     QFETCH(QString, output);
 
-    kWarning() << "input: " << input << endl;
-    kWarning() << "output: " << loadAndSave(output) << endl;
     QCOMPARE(input, loadAndSave(output));
 }
 
