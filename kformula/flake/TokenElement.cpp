@@ -84,9 +84,6 @@ void TokenElement::layout( const AttributeManager* am )
 
 bool TokenElement::readMathMLContent( const KoXmlElement& element )
 {
-    // TODO check if that is right, as forEachElement might not iterate over
-    // the element with text, or consider them as TextNode.
-
     BasicElement* tmpGlyph;
     KoXmlNode node = element.firstChild();
     while (! node.isNull() ) {
@@ -99,7 +96,7 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
         }
         else
         {
-            m_rawStringList << node.toText().data();
+            m_rawStringList << node.toText().data().trimmed();
             m_content << this;
         }
         node = node.nextSibling();
