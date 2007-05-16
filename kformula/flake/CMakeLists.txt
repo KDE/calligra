@@ -1,7 +1,3 @@
-add_subdirectory( pics ) 
-add_subdirectory( fonts ) 
-#add_subdirectory( tests )
-
 include_directories(${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 ########### KFormula Library ###############
@@ -74,3 +70,6 @@ target_link_libraries(formulashape  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} kogu
 install(TARGETS formulashape  DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES formulashape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
+add_subdirectory( pics ) 
+add_subdirectory( fonts ) 
+add_subdirectory( tests )
