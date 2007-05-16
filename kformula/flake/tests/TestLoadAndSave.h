@@ -30,6 +30,8 @@ private slots:
     void identifierElement();
     void numberElement_data();
     void numberElement();
+    void mathVariant_data();
+    void mathVariant();
 };
 
 #endif // _TESTLOADANDSAVE_H_
