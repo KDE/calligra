@@ -35,6 +35,9 @@ class KOFORMULA_EXPORT IdentifierElement : public TokenElement {
 public:
     /// The standart constructor
     IdentifierElement( BasicElement* parent = 0 );
+
+    /// @return The element's ElementType
+    virtual ElementType elementType() const { return Identifier; }
     
 protected:
     /// @return The string to be painted - probably a parsed rawString

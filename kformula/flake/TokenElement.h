@@ -67,7 +67,7 @@ protected:
     bool readMathMLContent( const KoXmlElement& parent );
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer ) const;
+    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
 
     /// @return The string to be painted - probably a parsed rawString
     virtual QString stringToRender( const QString& rawString ) const;

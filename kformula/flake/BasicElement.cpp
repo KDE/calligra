@@ -173,7 +173,8 @@ bool BasicElement::readMathMLContent( const KoXmlElement& parent )
 
 void BasicElement::writeMathML( KoXmlWriter* writer ) const
 {
-    writer->startElement( ElementFactory::elementName( elementType() ).toUtf8() );
+    QString name = ElementFactory::elementName( elementType() );
+    writer->startElement( name.latin1() );
     writeMathMLAttributes( writer );
     writeMathMLContent( writer );
     writer->endElement();

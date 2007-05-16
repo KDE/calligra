@@ -89,21 +89,23 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
     // TODO check if that is right, as forEachElement might not iterate over
     // the element with text, or consider them as TextNode.
 
-    KoXmlElement tmp;
     BasicElement* tmpGlyph;
-    forEachElement( tmp, element )
-        if( tmp.isElement() )
+    KoXmlNode node = element.firstChild();
+    while (! node.isNull() ) {
+        if( node.isElement() )
         {
+            KoXmlElement tmp = node.toElement();
             tmpGlyph = ElementFactory::createElement( tmp.tagName(), this );
             m_content << tmpGlyph;
             tmpGlyph->readMathML( tmp );
         }
         else
         {
-            m_rawStringList << tmp.text();
+            m_rawStringList << node.toText().data();
             m_content << this;
         }
-
+        node = node.nextSibling();
+    }
     return true;
 }
 
