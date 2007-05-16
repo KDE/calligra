@@ -192,5 +192,93 @@ void TestLoadAndSave::mathSize()
     identifierElement();
 }
 
+void TestLoadAndSave::mathColor_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    /*
+     * Test all possible values of mathcolor attributes
+     */
+    addRow( "<mi mathcolor=\"white\">x</mi>" );
+    addRow( "<mi mathcolor=\"black\">x</mi>" );
+    addRow( "<mi mathcolor=\"green\">x</mi>" );
+    addRow( "<mi mathcolor=\"#abc\">x</mi>" );
+    addRow( "<mi mathcolor=\"#abcdef\">x</mi>" );
+
+    /*
+     * Unallowed mathcolor values should be removed
+     */
+    addRow( "<mi mathcolor=\"invalid\">x</mi>",
+            "<mi>x</mi>");
+    addRow( "<mi mathcolor=\"#abcdefg\">x</mi>",
+            "<mi>x</mi>");
+    
+    /*
+     * It's better to store attribute names and values lowercase and avoid
+     * having to check whether it's upper or lower case on a per-use case,
+     * which is more error prone performance consuming.
+     */
+    addRow( "<mi mathcolor=\"Black\">x</mi>",
+            "<mi mathcolor=\"black\">x</mi>" );
+    addRow( "<mi mathcolor=\"BLACK\">x</mi>",
+            "<mi mathcolor=\"black\">x</mi>");
+    addRow( "<mi MATHCOLOR=\"black\">x</mi>",
+            "<mi mathcolor=\"black\">x</mi>" );
+    addRow( "<mi MathColor=\"black\">x</mi>",
+            "<mi mathcolor=\"black\">x</mi>" );
+    addRow( "<mi MathColor=\"#ABC\">x</mi>",
+            "<mi mathcolor=\"#abc\">x</mi>" );
+}
+
+void TestLoadAndSave::mathColor()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::mathBackground_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    /*
+     * Test all possible values of mathbackground attributes
+     */
+    addRow( "<mi mathbackground=\"white\">x</mi>" );
+    addRow( "<mi mathbackground=\"black\">x</mi>" );
+    addRow( "<mi mathbackground=\"green\">x</mi>" );
+    addRow( "<mi mathbackground=\"#abc\">x</mi>" );
+    addRow( "<mi mathbackground=\"#abcdef\">x</mi>" );
+
+    /*
+     * Unallowed mathbackground values should be removed
+     */
+    addRow( "<mi mathbackground=\"invalid\">x</mi>",
+            "<mi>x</mi>");
+    addRow( "<mi mathbackground=\"#abcdefg\">x</mi>",
+            "<mi>x</mi>");
+    
+    /*
+     * It's better to store attribute names and values lowercase and avoid
+     * having to check whether it's upper or lower case on a per-use case,
+     * which is more error prone performance consuming.
+     */
+    addRow( "<mi mathbackground=\"Black\">x</mi>",
+            "<mi mathbackground=\"black\">x</mi>" );
+    addRow( "<mi mathbackground=\"BLACK\">x</mi>",
+            "<mi mathbackground=\"black\">x</mi>");
+    addRow( "<mi MATHBACKGROUND=\"black\">x</mi>",
+            "<mi mathbackground=\"black\">x</mi>" );
+    addRow( "<mi MathBackground=\"black\">x</mi>",
+            "<mi mathbackground=\"black\">x</mi>" );
+    addRow( "<mi MathBackground=\"#ABC\">x</mi>",
+            "<mi mathbackground=\"#abc\">x</mi>" );
+}
+
+void TestLoadAndSave::mathBackground()
+{
+    identifierElement();
+}
+
 QTEST_MAIN(TestLoadAndSave)
 #include "TestLoadAndSave.moc"

@@ -37,6 +37,10 @@ private slots:
     void mathVariant();
     void mathSize_data();
     void mathSize();
+    void mathColor_data();
+    void mathColor();
+    void mathBackground_data();
+    void mathBackground();
 };
 
 #endif // _TESTLOADANDSAVE_H_
