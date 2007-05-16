@@ -20,6 +20,7 @@
 #ifndef IDENTIFIERELEMENT_H
 #define IDENTIFIERELEMENT_H
 
+#include "kformula_export.h"
 #include "TokenElement.h"
 
 namespace FormulaShape {
@@ -30,11 +31,11 @@ namespace FormulaShape {
  * The mi element represents an identifier and is defined in the section 3.2.3
  * of the MathMl spec.
  */
-class IdentifierElement : public TokenElement {
+class KOFORMULA_EXPORT IdentifierElement : public TokenElement {
 public:
     /// The standart constructor
     IdentifierElement( BasicElement* parent = 0 );
-
+    
 protected:
     /// @return The string to be painted - probably a parsed rawString
     QString stringToRender( const QString& rawString ) const;   

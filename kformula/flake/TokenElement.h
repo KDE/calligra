@@ -20,6 +20,7 @@
 #ifndef TOKENELEMENT_H
 #define TOKENELEMENT_H
 
+#include "kformula_export.h"
 #include "BasicElement.h"
 #include <QList>
 #include <QStringList>
@@ -37,7 +38,7 @@ class GlyphElement;
  * code can mostly be shared. This is because token elements hold some text or
  * string that has to be dealt with.
  */
-class TokenElement : public BasicElement {
+class KOFORMULA_EXPORT TokenElement : public BasicElement {
 public:
     /// The standart constructor
     TokenElement( BasicElement* parent = 0 );
