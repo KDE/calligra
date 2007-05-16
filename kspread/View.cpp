@@ -202,6 +202,8 @@ namespace KSpread
 {
 class ViewActions;
 
+K_GLOBAL_STATIC_WITH_ARGS(DefaultToolFactory, s_defaultToolFactory, (0))
+
 class View::Private
 {
 public:
@@ -1879,7 +1881,7 @@ void View::initView()
              d->canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     // Setup the tool dock widget.
-    KoToolRegistry::instance()->add( new DefaultToolFactory( this ) );
+    KoToolRegistry::instance()->add(s_defaultToolFactory);
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
     KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
