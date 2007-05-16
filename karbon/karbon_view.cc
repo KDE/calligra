@@ -1191,8 +1191,8 @@ KarbonView::mousePositionChanged( const QPoint &position )
     m_vertRuler->updateMouseCoordinate( viewPos.y() );
 
     QPointF documentPos = m_canvas->viewConverter()->viewToDocument( viewPos );
-    double x = KoUnit::toUserValue(documentPos.x(), part()->unit());
-    double y = KoUnit::toUserValue(documentPos.y(), part()->unit());
+    double x = part()->unit().toUserValue(documentPos.x());
+    double y = part()->unit().toUserValue(documentPos.y());
 
     m_cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)) );
 }

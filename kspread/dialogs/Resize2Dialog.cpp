@@ -128,7 +128,7 @@ void ResizeRow::slotDefault()
   if (!sheet)
     return;
   double points = sheet->rowFormat(0)->height();
-  m_pHeight->setValue(KoUnit::toUserValue(points, m_pView->doc()->unit()));
+  m_pHeight->setValue(m_pView->doc()->unit().toUserValue(points));
 }
 
 ResizeColumn::ResizeColumn( View* parent, const char* name )
@@ -203,7 +203,7 @@ void ResizeColumn::slotDefault()
   if (!sheet)
     return;
   double points = sheet->columnFormat(0)->width();
-  m_pWidth->setValue(KoUnit::toUserValue(points, m_pView->doc()->unit()));
+  m_pWidth->setValue(m_pView->doc()->unit().toUserValue(points));
 }
 
 

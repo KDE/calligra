@@ -499,7 +499,7 @@ void VBorder::paintSizeIndicator( int mouseY )
 
     QString tmpSize;
     double hh = m_pView->zoomHandler()->unzoomItY( m_iResizePos - y );
-    double hu = KoUnit::toUserValue( hh , m_pView->doc()->unit() );
+    double hu = m_pView->doc()->unit().toUserValue( hh );
     if ( hu > 0.01 )
         tmpSize = i18n("Height: %1 %2", KGlobal::locale()->formatNumber( hu ) , m_pView->doc()->unitName() );
     else
@@ -1230,7 +1230,7 @@ void HBorder::paintSizeIndicator( int mouseX )
 
     QString tmpSize;
     double ww = (sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x;
-    double wu = KoUnit::toUserValue( ww , m_pView->doc()->unit() );
+    double wu = m_pView->doc()->unit().toUserValue( ww );
     if ( wu > 0.01 )
         tmpSize = i18n("Width: %1 %2", KGlobal::locale()->formatNumber( wu ), m_pView->doc()->unitName() );
     else

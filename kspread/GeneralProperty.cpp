@@ -59,8 +59,8 @@ GeneralProperty::GeneralProperty( QWidget *parent, const char * /*name*/, Genera
     connect( m_ui->protect, SIGNAL( toggled( bool ) ), this, SLOT( slotProtectToggled( bool ) ) );
     connect( m_ui->keepRatio, SIGNAL( toggled( bool ) ), this, SLOT( slotKeepRatioToggled( bool ) ) );
 
-    double dStep = KoUnit::fromUserValue( 0.5, m_unit );
-    double dMax = KoUnit::fromUserValue( 9999, m_unit );
+    double dStep = m_unit.fromUserValue( 0.5 );
+    double dMax = m_unit.fromUserValue( 9999 );
     m_ui->xInput->setUnit( m_unit );
     m_ui->xInput->setMinMaxStep( 0, dMax, dStep );
 

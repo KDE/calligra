@@ -418,7 +418,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
   config = Factory::global().config();
   indentUnit = _view->doc()->unit();
     const KConfigGroup parameterGroup = config->group( "Parameters" );
-    double _indent = parameterGroup.readEntry( "Indent" , KoUnit::toUserValue( 10.0, indentUnit ) );
+    double _indent = parameterGroup.readEntry( "Indent" , indentUnit.toUserValue( 10.0 ) );
     bool bMsgError = parameterGroup.readEntry( "Msg error" ,false );
 
     m_oldNbRedo = config->group( "Misc" ).readEntry( "UndoRedo", m_oldNbRedo );
@@ -477,11 +477,11 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
 
 //   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
   valIndent = new KDoubleNumInput( tmpQGroupBox );
-  valIndent->setRange( KoUnit::toUserValue( 0.0, indentUnit ),
-                       KoUnit::toUserValue( 400.0, indentUnit ),
-                       KoUnit::toUserValue( 10.0, indentUnit) );
+  valIndent->setRange( indentUnit.toUserValue(0.0),
+                       indentUnit.toUserValue(400.0),
+                       indentUnit.toUserValue(10.0) );
 //   valIndent->setRange( 0.0, 100.0, 10.0 );
-  valIndent->setValue ( KoUnit::toUserValue( _indent, indentUnit ) );
+  valIndent->setValue ( indentUnit.toUserValue( _indent ) );
   valIndent->setWhatsThis( i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
   valIndent->setLabel(i18n("&Indentation step (%1):", KoUnit::unitName(indentUnit)));
 
@@ -583,7 +583,7 @@ void miscParameters::slotDefault()
 #if 0 // UNDOREDOLIMIT
   m_undoRedoLimit->setValue(30);
 #endif
-  valIndent->setValue( KoUnit::toUserValue( 10.0, indentUnit) );
+  valIndent->setValue( indentUnit.toUserValue( 10.0 ) );
   typeCompletion->setCurrentIndex(3);
   typeOfMove->setCurrentIndex(0);
   msgError->setChecked(false);
@@ -699,7 +699,7 @@ void miscParameters::apply()
         m_pView->doc()->setUnit(indentUnit);
         m_pView->doc()->setIndentValue( val );
         m_pView->doc()->setUnit(oldUnit);
-        parameterGroup.writeEntry( "Indent", KoUnit::fromUserValue( val, indentUnit ) );
+        parameterGroup.writeEntry( "Indent", indentUnit.fromUserValue( val ) );
     }
 
     bool active=msgError->isChecked();

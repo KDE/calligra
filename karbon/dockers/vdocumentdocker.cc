@@ -279,8 +279,8 @@ void
 VDocumentTab::updateDocumentInfo()
 {
     QSizeF pageSize = m_view->part()->document().pageSize();
-    m_width->setText( KoUnit::toUserStringValue( pageSize.width(), m_view->part()->unit() ) + m_view->part()->unitName() );
-    m_height->setText( KoUnit::toUserStringValue( pageSize.height(), m_view->part()->unit() ) + m_view->part()->unitName() );
+    m_width->setText( m_view->part()->unit().toUserStringValue( pageSize.width() ) + m_view->part()->unitName() );
+    m_height->setText( m_view->part()->unit().toUserStringValue( pageSize.height() ) + m_view->part()->unitName() );
     m_layers->setText( QString::number( m_view->part()->document().layers().count() ) );
 } // VDocumentTab::updateDocumentInfo
 
