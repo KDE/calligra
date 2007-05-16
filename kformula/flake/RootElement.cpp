@@ -20,14 +20,17 @@
 */
 
 #include "RootElement.h"
+#include "RowElement.h"
 #include "FormulaCursor.h"
+
+#include <kdebug.h>
 
 namespace FormulaShape {
 
 RootElement::RootElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_radicand = new BasicElement( this );
-    m_exponent = new BasicElement( this );
+    m_radicand = new RowElement( this );
+    m_exponent = 0;
 }
 
 RootElement::~RootElement()
@@ -44,6 +47,7 @@ const QList<BasicElement*> RootElement::childElements()
     return tmp << m_radicand;
 }
 
+/* FIXME
 void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
     BasicElement* tmp = cursor->currentElement();
@@ -64,6 +68,7 @@ void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
         delete tmp;
     }
 }
+ */
 
 void RootElement::removeChild( BasicElement* element )
 {
@@ -75,51 +80,46 @@ void RootElement::paint( QPainter& painter, const AttributeManager* am )
 
 void RootElement::layout( const AttributeManager* am )
 {
-    luPixel indexWidth = 0;
-    luPixel indexHeight = 0;
+    double indexWidth = 0.0;
+    double indexHeight = 0.0;
     if ( m_exponent) {
-        m_exponent->calcSizes( context,
-                               context.convertTextStyleIndex(tstyle),
-                               context.convertIndexStyleUpper(istyle),
-                               style );
-        indexWidth = m_exponent->getWidth();
-        indexHeight = m_exponent->getHeight();
+        indexWidth = m_exponent->width();
+        indexHeight = m_exponent->height();
     }
 
+    /* FIXME
     double factor = style.sizeFactor();
     luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, factor ) );
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     luPixel unit = (m_radicand->getHeight() + distY)/ 3;
+    */
+    double distX = 0.0;
+    double distY = 0.0;
+    double unit = m_radicand->height() / 3;
 
+    QPointF exponentOrigin(0, 0);
+    m_rootOffset = QPointF(0, 0);
     if (m_exponent) {
         if (indexWidth > unit) {
-            m_exponent->setX(0);
-            rootOffset.setX( indexWidth - unit );
+            m_rootOffset.setX( indexWidth - unit );
         }
         else {
-            m_exponent->setX( ( unit - indexWidth )/2 );
-            rootOffset.setX(0);
+            exponentOrigin.setX( ( unit - indexWidth )/2 );
         }
         if (indexHeight > unit) {
-            m_exponent->setY(0);
-            rootOffset.setY( indexHeight - unit );
+            m_rootOffset.setY( indexHeight - unit );
         }
         else {
-            m_exponent->setY( unit - indexHeight );
-            rootOffset.setY(0);
+            exponentOrigin.setY( unit - indexHeight );
         }
-    }
-    else {
-        rootOffset.setX(0);
-        rootOffset.setY(0);
+        m_exponent->setOrigin( exponentOrigin );
     }
 
-    setWidth( m_radicand->getWidth() + unit+unit/3+ rootOffset.x() + distX/2 );
-    setHeight( m_radicand->getHeight() + distY*2 + rootOffset.y() );
+    setWidth( m_radicand->width() + unit + unit/3 + m_rootOffset.x() + distX/2 );
+    setHeight( m_radicand->height() + distY*2 + m_rootOffset.y() );
 
-    m_radicand->setX( rootOffset.x() + unit+unit/3 );
-    m_radicand->setY( rootOffset.y() + distY );
-    setBaseline(m_radicand->getBaseline() + m_radicand->getY());
+    m_radicand->setOrigin( QPointF( m_rootOffset.x() + unit + unit/3, m_rootOffset.y() + distY ) );
+    setBaseLine(m_radicand->baseLine() + m_radicand->origin().y());
 }
 
 void RootElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
@@ -146,13 +146,12 @@ void RootElement::moveDown( FormulaCursor* cursor, BasicElement* from )
         parentElement()->moveDown( cursor, this );
 }
 
-void RootElement::calcSizes( const ContextStyle& context,
-                             ContextStyle::TextStyle tstyle, 
-                             ContextStyle::IndexStyle istyle,
-                             StyleAttributes& style )
+ElementType RootElement::elementType() const
 {
+    return Root;
 }
 
+/*
 void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                         const ContextStyle& context,
                         ContextStyle::TextStyle tstyle,
@@ -172,8 +171,8 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                           context.convertIndexStyleUpper(istyle), style, myPos);
     }
 
-    luPixel x = myPos.x() + rootOffset.x();
-    luPixel y = myPos.y() + rootOffset.y();
+    luPixel x = myPos.x() + m_rootOffset.x();
+    luPixel y = myPos.y() + m_rootOffset.y();
     //int distX = style.getDistanceX(tstyle);
     double factor = style.sizeFactor();
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
@@ -202,10 +201,12 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                       context.layoutUnitToPixelX( x ),
                       context.layoutUnitToPixelY( y+unit+unit/2 ) );
 }
+*/
 
+/*
 void RootElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-/*    if( m_exponent->elementType() == Basic )
+    if( m_exponent->elementType() == Basic )
         writer->startElement( oasisFormat ? "math:msqrt" : "msqrt" );
     else
         writer->startElement( oasisFormat ? "math:mroot" : "mroot" );
@@ -215,7 +216,13 @@ void RootElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
     if( m_exponent->elementType() != Basic )
         m_exponent->writeMathML( writer, oasisFormat );
 
-    writer->endElement();*/
+    writer->endElement();
+}
+*/
+
+bool RootElement::readMathMLContent( const KoXmlElement& element )
+{
+    kWarning() << "Element name: " << element.tagName() << endl;
 }
 
 } // namespace FormulaShape

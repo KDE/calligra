@@ -28,7 +28,7 @@ set( kformulalib_PART_SRCS
 #   MatrixElement.cpp
 #   MatrixRowElement.cpp
 #   MatrixEntryElement.cpp
-#   RootElement.cpp
+   RootElement.cpp
 #   EncloseElement.cpp
 #   ActionElement.cpp
 #   PaddedElement.cpp

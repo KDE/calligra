@@ -38,7 +38,7 @@
 #include "OperatorElement.h"
 //#include "PaddedElement.h"
 //#include "PhantomElement.h"
-//#include "RootElement.h"
+#include "RootElement.h"
 #include "RowElement.h"
 #include "SpaceElement.h"
 //#include "StringElement.h"
@@ -70,8 +70,8 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
           return new RowElement( parent );
      else if ( tagName == "mfrac" )
           return new FractionElement( parent );
-    //else if ( tagName == "msqrt" || tagName == "mroot" )
-    //      return new RootElement( parent );
+    else if ( tagName == "msqrt" || tagName == "mroot" )
+          return new RootElement( parent );
     //else if ( tagName == "mstyle" )
     //      return new StyleElement( parent );
     //else if ( tagName == "merror" )

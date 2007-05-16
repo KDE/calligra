@@ -25,7 +25,11 @@
 
 #include "BasicElement.h"
 
+#include <QPainterPath>
+
 namespace FormulaShape {
+
+class RowElement;
 
 /**
  * @short Implementation of the MathML mroot and msqrt elements 
@@ -49,7 +53,7 @@ public:
      * @param cursor The cursor holding the position where to inser
      * @param child A BasicElement to insert
      */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
+//    void insertChild( FormulaCursor* cursor, BasicElement* child );
    
     /**
      * Remove a child element
@@ -100,25 +104,26 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 
+    /*
     /// @return The value of the attribute if it is inherited
     QString inheritsAttribute( const QString& attribute ) const;
 
     /// @return The default value of the attribute for this element
     QVariant attributesDefaultValue( const QString& attribute ) const;
+    */
 
 protected:
-    /**
-     * Reads our content from the MathML node. Sets the node to the next node
-     * that needs to be read.
-     */
-//    virtual int readMathML( KoXmlNode& node );
+    virtual bool readMathMLContent( const KoXmlElement& element );
 
 private:
     /// The element that is the radicand of the root
-    BasicElement* m_radicand;
+    RowElement* m_radicand;
 
     /// The element that is the exponent of the root
-    BasicElement* m_exponent;
+    RowElement* m_exponent;
+
+    /// The point the artwork relates to.
+    QPointF m_rootOffset;
 
     /// The QPainterPath that holds the lines for the root sign   
     QPainterPath m_rootPath;
