@@ -159,7 +159,8 @@ void BasicElement::readMathMLAttributes( const KoXmlElement& element )
 {
     QStringList attributeList = KoXml::attributeNames( element );
     foreach( QString attributeName, attributeList ) {
-        m_attributes.insert( attributeName, element.attribute( attributeName ) );
+        m_attributes.insert( attributeName.toLower(),
+                             element.attribute( attributeName ).toLower() );
     }
 }
 
