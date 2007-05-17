@@ -76,6 +76,7 @@ private:
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
 
     void resetPrivate();
+    void applyTabs(QTextLine &line);
 
 private:
     KoStyleManager *m_styleManager;
@@ -91,6 +92,7 @@ private:
     KoInsets m_borderInsets;
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
+    QList<double> m_lotsOfTabs;
 
     // demoText feature
     bool m_demoText, m_endOfDemoText;

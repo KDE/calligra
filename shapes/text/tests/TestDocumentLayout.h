@@ -40,6 +40,12 @@ private slots:
     void testBasicLineSpacing2();
     /// Tests advanced linespacing options provided in our style.
     void testAdvancedLineSpacing();
+    void testDefaultTabs();
+    void testTabs();
+    void testMultilineTab();
+    void testRightTab();
+    void testCenteredTab();
+    void testAlignedTab();
 
 // Block styles
     /// Test top, left, right and bottom margins of paragraphs.

@@ -777,6 +777,119 @@ void TestDocumentLayout::testNonBreakableLines() {
     QCOMPARE(l->lineAt(0).y(), 110.);
 }
 
+void TestDocumentLayout::testDefaultTabs() {
+    initForNewTest("Foo\tBar\ta slightly longer text\tend.");
+    // test the indents to be based on the default tab positions
+    shape1->resize(QSizeF(400, 1000));
+    layout->layout();
+
+    QTextLayout *lay = doc->begin().layout();
+    QVERIFY(lay);
+    QCOMPARE(lay->lineCount(), 1);
+    QTextLine line = lay->lineAt(0);
+    QCOMPARE(line.cursorToX(4), 80.); // default tab is 80
+    QCOMPARE(line.cursorToX(8), 160.);
+    QCOMPARE(line.cursorToX(31), 320.);
+}
+
+void TestDocumentLayout::testTabs() {
+    initForNewTest("Foo\tBar.");
+    KoParagraphStyle style;
+    QList<KoText::Tab> tabs;
+    KoText::Tab tab;
+    tab.position = 150;
+    tabs.append(tab);
+    style.setTabPositions(tabs);
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+
+    layout->layout();
+
+    QTextLayout *lay = block.layout();
+    QVERIFY(lay);
+    QCOMPARE(lay->lineCount(), 1);
+    QTextLine line = lay->lineAt(0);
+    QVERIFY(line.naturalTextWidth() > 150);
+    QCOMPARE(line.cursorToX(4), 150.);
+}
+
+void TestDocumentLayout::testMultilineTab() {
+    initForNewTest(loremIpsum.left(30) +"\tBar.");
+    // test if this works on the second line.
+    layout->layout();
+
+    QTextLayout *lay = doc->begin().layout();
+    QVERIFY(lay);
+    QCOMPARE(lay->lineCount(), 2);
+    QTextLine line = lay->lineAt(1);
+    QCOMPARE(line.cursorToX(31), 80.);
+
+    KoParagraphStyle style;
+    QList<KoText::Tab> tabs;
+    KoText::Tab tab;
+    tab.position = 150;
+    tabs.append(tab);
+    style.setTabPositions(tabs);
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+
+    layout->layout();
+
+    line = lay->lineAt(1);
+    QCOMPARE(line.cursorToX(31), 150.);
+}
+
+void TestDocumentLayout::testRightTab() {
+    initForNewTest("Foo\t" + loremIpsum.left(30) + "\tBar baz\tText\tEnd\n");
+    KoParagraphStyle style;
+    QList<KoText::Tab> tabs;
+    KoText::Tab tab;
+    tab.position = 190;
+    tab.type = KoText::RightTab;
+    tabs.append(tab);
+    style.setTabPositions(tabs);
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+
+    layout->layout();
+    /*
+     I expect the output to be:
+        Foo Lorem ipsum dolor sit amet, XgXgectetuer
+        adiXiscing elit                  Bar Baz
+        Text                                 End
+
+     a) tab replaced with a single space due to the text not fitting before the tab.
+     b) tab takes space so the text until the 3th tab fits to the tab pos.
+     c) tab is after last tab (both auto and defined) and thus moves text to start of next line.
+     d) tab takes space so text until enter fits to tab pos.
+     */
+
+    QTextLayout *lay = doc->begin().layout();
+    QVERIFY(lay);
+    QCOMPARE(lay->lineCount(), 3);
+    QTextLine line = lay->lineAt(0);
+    double x = line.cursorToX(4);
+    QVERIFY(x + 2 < line.cursorToX(5)); // tab takes at least 2 pt (i.e. is converted to a space)
+    QVERIFY(x + 8 > line.cursorToX(5)); // tab takes at max 8 pt (i.e. is not taking more than a space)
+/*
+    Seems this is untestable due to Qt having a datastructure that does not allow this (tabs per parag, whil
+     I need them per line)....
+
+    QCOMPARE(lay->lineAt(1).cursorToX(42), 190.);
+    QCOMPARE(lay->lineAt(2).cursorToX(43), 0.);
+    QCOMPARE(lay->lineAt(2).cursorToX(52), 190.);
+*/
+}
+
+void TestDocumentLayout::testCenteredTab() {
+    initForNewTest("Foo\tBar.");
+    // test if centering the tab works.  We expect the center of 'Bar.' to be at the tab point.
+}
+
+void TestDocumentLayout::testAlignedTab() {
+    initForNewTest("Foo\tBar.");
+    // try the different delimiter characters to see if the alignment works there.
+}
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
 
