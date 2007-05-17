@@ -60,12 +60,16 @@ void TestLoadAndSave::identifierElement_data()
 
     addRow( "<mi>x</mi>" );
     addRow( "<mi>abc</mi>" );
-    addRow( "<mi> a b c </mi>",
-            "<mi>a b c</mi>" );
     addRow( "<MI>x</MI>",
             "<mi>x</mi>" );
+
+    // See section 2.4.6 Collapsing Whitespace in Input
+    addRow( "<mi> a b c </mi>",
+            "<mi>a b c</mi>" );
     addRow( "<mi> x <mglyph index=\"99\" alt=\"c\"> d </mi>",
-            "<mi>x<mglyph index=\"99\" alt=\"c\">d</mi>" );
+            "<mi>x <mglyph index=\"99\" alt=\"c\"> d</mi>" );
+    addRow( "<mi> x  y    z   </mi>",
+            "<mi>x y z</mi>" );
 }
 
 void TestLoadAndSave::identifierElement()
