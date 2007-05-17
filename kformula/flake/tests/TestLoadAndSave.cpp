@@ -289,6 +289,7 @@ void TestLoadAndSave::mathVariant_data()
     /*
      * Test all possible values of mathvariant attributes
      */
+    addRow( "<mi mathvariant=\"normal\">x</mi>" );
     addRow( "<mi mathvariant=\"bold\">x</mi>" );
     addRow( "<mi mathvariant=\"italic\">x</mi>" );
     addRow( "<mi mathvariant=\"bold-italic\">x</mi>" );
