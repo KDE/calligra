@@ -20,11 +20,14 @@
 
 #include "KoRectangleShape.h"
 
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+#include <KoXmlNS.h>
+#include <KoUnit.h>
+
 #include <QDebug>
 #include <QPainter>
 
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
 
 KoRectangleShape::KoRectangleShape()
 : m_cornerRadiusX( 0 )
@@ -45,6 +48,17 @@ KoRectangleShape::~KoRectangleShape()
 bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
     loadOdfAttributes( element, context, OdfMandatories | OdfSize );
+
+    QString cornerRadius = element.attributeNS( KoXmlNS::draw, "corner-radius", "" );
+    if( ! cornerRadius.isEmpty() )
+    {
+        float radius = KoUnit::parseValue( cornerRadius );
+        m_cornerRadiusX = radius / (0.5 * size().width() ) * 100;
+        m_cornerRadiusY = radius / (0.5 * size().height() ) * 100;
+    }
+
+    updatePath( size() );
+
     return true;
 }
 
