@@ -111,7 +111,7 @@ KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
 
 bool KoStarShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "regular-polygon" && e.namespaceURI() == "KoXmlNS::draw" );
+    return ( e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw );
 }
 
 #include "KoStarShapeFactory.moc"

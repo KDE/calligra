@@ -19,6 +19,9 @@
 
 #include "star/KoStarShape.h"
 
+#include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
+
 #include <QPainter>
 #include <math.h>
 
@@ -245,5 +248,37 @@ QPointF KoStarShape::computeCenter() const
             center += m_points[2*i]->point();
     }
     return center / static_cast<double>( m_cornerCount );
+}
+
+bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+    loadOdfAttributes( element, context, OdfMandatories | OdfSize );
+
+    QString corners = element.attributeNS( KoXmlNS::draw, "corners", "" );
+    if( ! corners.isEmpty() )
+        m_cornerCount = corners.toUInt();
+
+    m_convex = (element.attributeNS( KoXmlNS::draw, "concave", "false" ) == "false" );
+
+    m_radius[tip] = qMax( 0.5 * size().width(), 0.5 * size().height() );
+
+    if( m_convex )
+    {
+        m_radius[base] = m_radius[tip];
+    }
+    else
+    {
+        QString sharpness = element.attributeNS( KoXmlNS::draw, "sharpness", "" );
+        if( ! sharpness.isEmpty() && sharpness.right( 1 ) == "%" )
+        {
+            float percent = sharpness.left( sharpness.length()-1 ).toFloat();
+            m_radius[base] = m_radius[tip] * (100-percent)/100;
+        }
+    }
+
+    createPath();
+    resize( size() );
+
+    return true;
 }
 

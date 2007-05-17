@@ -98,7 +98,11 @@ public:
     /// Returns if the star represents a regular polygon.
     bool convex() const;
 
+    /// reimplemented
     virtual void resize( const QSizeF &newSize );
+    /// reimplemented
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+
 protected:
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
