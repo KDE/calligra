@@ -28,7 +28,7 @@
 //#include "EncloseElement.h"
 //#include "ErrorElement.h"
 #include "FractionElement.h"
-//#include "GlyphElement.h"
+#include "GlyphElement.h"
 #include "IdentifierElement.h"
 //#include "MatrixElement.h"
 //#include "MatrixRowElement.h"
@@ -56,17 +56,17 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
         return new OperatorElement( parent );
     else if ( tagName == "mn" )
         return new NumberElement( parent );
-    //else if ( tagName == "mtext" )
-    //        return new TokenElement( parent );
+    else if ( tagName == "mtext" )
+        return new TokenElement( parent );
     //else if ( tagName == "ms" )
     //        return new StringElement( parent );
     else if ( tagName == "mspace" )
         return new SpaceElement( parent );
-    //else if ( tagName == "mglyph" )
-    //        return new GlyphElement( parent );
-     else if ( tagName == "mrow" )
+    else if ( tagName == "mglyph" )
+        return new GlyphElement( parent );
+    else if ( tagName == "mrow" )
           return new RowElement( parent );
-     else if ( tagName == "mfrac" )
+    else if ( tagName == "mfrac" )
           return new FractionElement( parent );
     else if ( tagName == "msqrt" || tagName == "mroot" )
           return new RootElement( parent );

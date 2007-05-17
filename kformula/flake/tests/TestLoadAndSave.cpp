@@ -63,6 +63,8 @@ void TestLoadAndSave::identifierElement_data()
             "<mi>a b c</mi>" );
     addRow( "<MI>x</MI>",
             "<mi>x</mi>" );
+    addRow( "<mi> x <mglyph index=\"99\" alt=\"c\"> d </mi>",
+            "<mi>x<mglyph index=\"99\" alt=\"c\">d</mi>" );
 }
 
 void TestLoadAndSave::identifierElement()
