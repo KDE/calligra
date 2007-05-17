@@ -71,6 +71,10 @@ void TestLoadAndSave::identifierElement_data()
             "<mi>x <mglyph index=\"99\" alt=\"c\"> d</mi>" );
     addRow( "<mi> x  y    z   </mi>",
             "<mi>x y z</mi>" );
+
+    // Entities
+    addRow( "<mi>&CapitalDifferentialD;</mi>" );
+    addRow( "<mi>&DifferentialD;</mi>" );
 }
 
 void TestLoadAndSave::identifierElement()
@@ -94,6 +98,10 @@ void TestLoadAndSave::numberElement_data()
     addRow( "<mn>1 , 2</mn>" );
     addRow( "<mn> 12 </mn>",
             "<mn>12</mn>");
+
+    // Entities
+    addRow( "<mn>&ExponentialE;</mn>" );
+    addRow( "<mn>&ImaginaryI;</mn>" );
 }
 
 void TestLoadAndSave::numberElement()
@@ -228,7 +236,11 @@ void TestLoadAndSave::operatorElement_data()
     addRow( "<mo movablelimits=\"false\">+</mo>" );
     addRow( "<mo accent=\"true\">+</mo>" );
     addRow( "<mo accent=\"false\">+</mo>" );
-    
+
+    // Entities
+    addRow( "<mo>&InvisibleTimes;</mo>" );
+    addRow( "<mo>&InvisibleComma;</mo>" );
+    addRow( "<mo>&ApplyFunction;</mo>" );
 }
 
 void TestLoadAndSave::operatorElement()
