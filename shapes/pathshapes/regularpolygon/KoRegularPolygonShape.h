@@ -34,7 +34,7 @@ public:
     /// reimplemented
     virtual const QPainterPath outline() const;
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext * context ) const;
+    virtual void saveOdf( KoShapeSavingContext & context ) const;
     // reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 

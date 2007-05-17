@@ -124,28 +124,28 @@ bool KoEnhancedPathHandle::isPolar() const
     return m_polarX && m_polarY;
 }
 
-void KoEnhancedPathHandle::saveOdf( KoShapeSavingContext * context )
+void KoEnhancedPathHandle::saveOdf( KoShapeSavingContext & context ) const
 {
-    context->xmlWriter().startElement("draw:handle");
-    context->xmlWriter().addAttribute("draw:handle-position", m_positionX->toString() + ' ' + m_positionY->toString() );
+    context.xmlWriter().startElement("draw:handle");
+    context.xmlWriter().addAttribute("draw:handle-position", m_positionX->toString() + ' ' + m_positionY->toString() );
     if( isPolar() )
     {
-        context->xmlWriter().addAttribute("draw:handle-polar", m_polarX->toString() + ' ' + m_polarY->toString() );
+        context.xmlWriter().addAttribute("draw:handle-polar", m_polarX->toString() + ' ' + m_polarY->toString() );
         if( m_minRadius )
-            context->xmlWriter().addAttribute("draw:handle-radius-range-minimum", m_minRadius->toString() );
+            context.xmlWriter().addAttribute("draw:handle-radius-range-minimum", m_minRadius->toString() );
         if( m_maxRadius )
-            context->xmlWriter().addAttribute("draw:handle-radius-range-maximum", m_maxRadius->toString() );
+            context.xmlWriter().addAttribute("draw:handle-radius-range-maximum", m_maxRadius->toString() );
     }
     else
     {
         if( m_minimumX )
-            context->xmlWriter().addAttribute("draw:handle-range-x-minimum", m_minimumX->toString() );
+            context.xmlWriter().addAttribute("draw:handle-range-x-minimum", m_minimumX->toString() );
         if( m_maximumX )
-            context->xmlWriter().addAttribute("draw:handle-range-x-maximum", m_maximumX->toString() );
+            context.xmlWriter().addAttribute("draw:handle-range-x-maximum", m_maximumX->toString() );
         if( m_minimumY )
-            context->xmlWriter().addAttribute("draw:handle-range-y-minimum", m_minimumY->toString() );
+            context.xmlWriter().addAttribute("draw:handle-range-y-minimum", m_minimumY->toString() );
         if( m_maximumY )
-            context->xmlWriter().addAttribute("draw:handle-range-y-maximum", m_maximumY->toString() );
+            context.xmlWriter().addAttribute("draw:handle-range-y-maximum", m_maximumY->toString() );
     }
-    context->xmlWriter().endElement(); // draw:handle
+    context.xmlWriter().endElement(); // draw:handle
 }

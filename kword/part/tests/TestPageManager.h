@@ -41,7 +41,7 @@ private:
         public:
             MockShape() : KoShape() {}
             virtual void paint(QPainter &, const KoViewConverter&) {}
-            virtual void saveOdf( KoShapeSavingContext *) const {}
+            virtual void saveOdf( KoShapeSavingContext & ) const {}
             virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return false; }
     };
 };

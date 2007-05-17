@@ -42,11 +42,16 @@ KoRectangleShape::~KoRectangleShape()
 {
 }
 
-void KoRectangleShape::saveOdf( KoShapeSavingContext * context )
+bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    context->xmlWriter().startElement("draw:rect");
+    return true;
+}
+
+void KoRectangleShape::saveOdf( KoShapeSavingContext & context ) const
+{
+    context.xmlWriter().startElement("draw:rect");
     saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
-    context->xmlWriter().endElement();
+    context.xmlWriter().endElement();
     saveOdfConnections(context);
 }
 

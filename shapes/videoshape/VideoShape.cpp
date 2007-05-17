@@ -121,7 +121,7 @@ void VideoShape::pause()
  m_mediaobject->pause();
 }
 
-void VideoShape::saveOdf( KoShapeSavingContext * context ) const
+void VideoShape::saveOdf( KoShapeSavingContext & context ) const
 {
     // TODO
 }

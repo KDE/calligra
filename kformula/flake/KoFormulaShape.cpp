@@ -104,7 +104,7 @@ void KoFormulaShape::importFormula( const KUrl& url )
 	m_formulaRenderer->layoutElement( m_formulaElement );
 }
 
-void KoFormulaShape::saveOdf( KoShapeSavingContext * context ) const {
+void KoFormulaShape::saveOdf( KoShapeSavingContext & context ) const {
     // TODO
 }
 

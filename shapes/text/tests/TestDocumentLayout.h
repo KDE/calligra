@@ -99,7 +99,7 @@ class MockTextShape : public KoShape {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
-    virtual void saveOdf( KoShapeSavingContext *) const {}
+    virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
     KoTextDocumentLayout *layout;
 };

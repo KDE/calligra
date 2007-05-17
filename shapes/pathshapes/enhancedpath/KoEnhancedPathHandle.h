@@ -102,7 +102,7 @@ public:
     void setRadiusRange( KoEnhancedPathParameter *minRadius, KoEnhancedPathParameter *maxRadius );
 
     /// save to the given shape saving context
-    void saveOdf( KoShapeSavingContext * context );
+    void saveOdf( KoShapeSavingContext & context ) const;
 private:
     /// Returns if handle is polar
     bool isPolar() const;

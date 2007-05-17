@@ -85,7 +85,7 @@ public:
     double shapeToViewbox( double value ) const;
     double viewboxToShape( double value ) const;
 protected:
-    void saveOdf( KoShapeSavingContext * context );
+    void saveOdf( KoShapeSavingContext & context ) const;
     // from KoParameterShape
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     // from KoParameterShape

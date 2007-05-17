@@ -73,8 +73,8 @@ void KWFrame::copySettings(const KWFrame *frame) {
     shape()->copySettings(frame->shape());
 }
 
-void KWFrame::saveOdf(KoShapeSavingContext *context) {
-    KoXmlWriter &writer = context->xmlWriter();
+void KWFrame::saveOdf(KoShapeSavingContext & context) {
+    KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("draw:frame");
     /*
     ODF: 9.3 Frames

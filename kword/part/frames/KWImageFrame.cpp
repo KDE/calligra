@@ -28,7 +28,7 @@ class DummyShape : public KoShape {
 public:
     // TODO paint a 'placeholder' kind of picture to indicate that a plugin is missing.
     void paint(QPainter &, const KoViewConverter &) {}
-    void saveOdf(KoShapeSavingContext *) const { }
+    void saveOdf(KoShapeSavingContext &) const { }
     bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return false; }
 };
 

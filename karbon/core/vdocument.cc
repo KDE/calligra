@@ -174,7 +174,7 @@ void VDocument::saveOasis( KoStore * store, KoXmlWriter & docWriter, KoSavingCon
     KoShapeSavingContext shapeContext( docWriter, context );
 
     foreach( KoShapeLayer * layer, d->layers )
-        layer->saveOdf( &shapeContext );
+        layer->saveOdf( shapeContext );
 
     docWriter.endElement(); // draw:page
 }

@@ -120,7 +120,7 @@ void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
     m_renderer->renderSheet( painter, m_sheet );
 }
 
-void MusicShape::saveOdf( KoShapeSavingContext * context ) const
+void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 {
     // TODO
 }

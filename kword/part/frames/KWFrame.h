@@ -154,7 +154,7 @@ public:
      */
     virtual void copySettings(const KWFrame *frame);
 
-    void saveOdf(KoShapeSavingContext *context);
+    void saveOdf(KoShapeSavingContext & context);
 
 protected:
     /// replace the current set shape with the argument one.

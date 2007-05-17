@@ -62,8 +62,12 @@ public:
      */
     void setCornerRadiusY( double radius );
 
+    /// reimplemented
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext & context ) const;
 protected:
-    void saveOdf( KoShapeSavingContext * context );
 
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
