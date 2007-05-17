@@ -43,6 +43,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeLayer.h>
+#include <KoShapeRegistry.h>
 
 #include <kdebug.h>
 
@@ -283,6 +284,17 @@ bool VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &co
         // add layer by name into shape context
         shapeContext.addLayer( l, name );
     }
+
+    KoXmlElement child;
+    forEachElement( child, element )
+    {
+        kDebug(38000) << "loading shape " << child.localName() << endl;
+
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, shapeContext );
+        if( shape )
+            d->objects.append( shape );
+    }
+
     return true;
 }
 

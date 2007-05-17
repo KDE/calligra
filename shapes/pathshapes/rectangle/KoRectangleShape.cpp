@@ -44,6 +44,7 @@ KoRectangleShape::~KoRectangleShape()
 
 bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
+    loadOdfAttributes( element, context, OdfMandatories | OdfSize );
     return true;
 }
 
