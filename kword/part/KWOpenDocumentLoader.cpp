@@ -450,7 +450,7 @@ void KWOpenDocumentLoader::loadStyles(KoOasisLoadingContext& context, QList<KoXm
         //1.6: KoTextFormat::load
         KoCharacterStyle *charstyle = parastyle->characterStyle();
         context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
-        charstyle->loadOasis(context.styleStack()); // load the KoCharacterStyle from the stylestack
+        charstyle->loadOasis(context); // load the KoCharacterStyle from the context
 
         context.styleStack().restore();
     }
@@ -695,7 +695,7 @@ void KWOpenDocumentLoader::loadParagraph(const KoXmlElement& parent, KoOasisLoad
         if( ! charstyle1 ) {
             charstyle1 = new KoCharacterStyle();
             charstyle1->setName(textStyleName);
-            charstyle1->loadOasis( context.styleStack() );
+            charstyle1->loadOasis( context );
             d->document->styleManager()->add(charstyle1);
         }
         charstyle1->applyStyle(&cursor);
@@ -843,7 +843,7 @@ void KWOpenDocumentLoader::loadList(const KoXmlElement& parent, KoOasisLoadingCo
         paragstyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
         KoCharacterStyle *charstyle = paragstyle->characterStyle();
         context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
-        charstyle->loadOasis(context.styleStack()); // load the KoCharacterStyle from the stylestack
+        charstyle->loadOasis(context); // load the KoCharacterStyle from the context
     }
     //context.styleStack().setTypeProperties( "paragraph" );
     //style->loadOasis( context.styleStack() );
@@ -1036,7 +1036,7 @@ void KWOpenDocumentLoader::loadSpan(const KoXmlElement& parent, KoOasisLoadingCo
                 if( ! charstyle1 ) {
                     charstyle1 = new KoCharacterStyle();
                     charstyle1->setName(textStyleName);
-                    charstyle1->loadOasis( context.styleStack() );
+                    charstyle1->loadOasis( context );
                     d->document->styleManager()->add(charstyle1);
                 }
                 charstyle1->applyStyle(&cursor);
