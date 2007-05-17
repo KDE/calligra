@@ -23,6 +23,7 @@
 #define ROWELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 
 /**
  * @short Implementation of the MathML mrow element
@@ -38,7 +39,7 @@
  * do not handle it.
  * At the moment there is no linebreaking implementation in RowElement.
  */
-class RowElement : public BasicElement {
+class KOFORMULA_EXPORT RowElement : public BasicElement {
 public:
     /// The standard constructor
     RowElement( BasicElement* parent = 0 );

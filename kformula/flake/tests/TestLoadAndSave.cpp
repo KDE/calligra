@@ -28,6 +28,7 @@
 #include "BasicElement.h"
 #include "IdentifierElement.h"
 #include "NumberElement.h"
+#include "RowElement.h"
 
 static QString loadAndSave(BasicElement* element, const QString& input)
 {
@@ -497,12 +498,21 @@ void TestLoadAndSave::color()
 
 void TestLoadAndSave::rowElement_data()
 {
-    // TODO
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    addRow( "<mrow></mrow>" );
+    addRow( "<mrow>\n <mi>x</mi>\n</mrow>" );
 }
 
 void TestLoadAndSave::rowElement()
 {
-    // TODO
+    QFETCH(QString, input);
+    QFETCH(QString, output);
+
+    RowElement* element = new RowElement;
+    QCOMPARE(loadAndSave(element, input), output);
+    delete element;
 }
 
 void TestLoadAndSave::fractionElement_data()
