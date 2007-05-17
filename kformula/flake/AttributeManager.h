@@ -23,6 +23,9 @@
 #include <QStack>
 #include <QFont>
 #include <QVariant>
+
+#include "kformula_export.h"
+
 class KoViewConverter;
 class QPaintDevice;
 
@@ -105,7 +108,7 @@ enum LineBreak {
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
-class AttributeManager {
+class KOFORMULA_EXPORT AttributeManager {
 public:
     /// The constructor
     AttributeManager();

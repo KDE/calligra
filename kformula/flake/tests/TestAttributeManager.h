@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
-namespace FormulaShape {
-
 class AttributeManager;
 class BasicElement;
 
@@ -26,7 +24,5 @@ private:
     AttributeManager* m_attributeManager;
     BasicElement* m_basicElement;
 };
-
-}
 
 #endif

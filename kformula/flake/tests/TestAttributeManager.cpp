@@ -5,8 +5,6 @@
 #include <KoXmlReader.h>
 #include <QColor>
 
-namespace FormulaShape {
-
 void TestAttributeManager::initTestCase()
 {
     m_attributeManager = new AttributeManager();
@@ -37,4 +35,5 @@ void TestAttributeManager::testColorConversion()
     m_attributeManager->disinheritAttributes();
 }
 
-}
+QTEST_MAIN(TestAttributeManager)
+#include "TestAttributeManager.moc"
