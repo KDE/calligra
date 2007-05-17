@@ -28,6 +28,7 @@
 #include "BasicElement.h"
 #include "IdentifierElement.h"
 #include "NumberElement.h"
+#include "OperatorElement.h"
 #include "RowElement.h"
 
 static QString loadAndSave(BasicElement* element, const QString& input)
@@ -107,12 +108,137 @@ void TestLoadAndSave::numberElement()
 
 void TestLoadAndSave::operatorElement_data()
 {
-    // TODO
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    addRow( "<mo>+</mo>" );
+
+    // Check operator attributes. Section 3.2.5.2
+    addRow( "<mo form=\"prefix\">+</mo>" );
+    addRow( "<mo form=\"infix\">+</mo>" );
+    addRow( "<mo form=\"postfix\">+</mo>" );
+    addRow( "<mo fence=\"true\">+</mo>" );
+    addRow( "<mo fence=\"false\">+</mo>" );
+    addRow( "<mo separator=\"true\">+</mo>" );
+    addRow( "<mo separator=\"false\">+</mo>" );
+    addRow( "<mo lspace=\"10em\">+</mo>" );
+    addRow( "<mo lspace=\"10ex\">+</mo>" );
+    addRow( "<mo lspace=\"10px\">+</mo>" );
+    addRow( "<mo lspace=\"10in\">+</mo>" );
+    addRow( "<mo lspace=\"10cm\">+</mo>" );
+    addRow( "<mo lspace=\"10mm\">+</mo>" );
+    addRow( "<mo lspace=\"10pt\">+</mo>" );
+    addRow( "<mo lspace=\"10pc\">+</mo>" );
+    addRow( "<mo lspace=\"90%\">+</mo>" );
+    addRow( "<mo lspace=\"1.2\">+</mo>" );
+    addRow( "<mo lspace=\"veryverythinmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"verythinmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"thinmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"mediummathspace\">+</mo>" );
+    addRow( "<mo lspace=\"thickmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"verythickmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"veryverythickmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"negativeveryverythinmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"negativeverythinmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"negativethinmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"negativemediummathspace\">+</mo>" );
+    addRow( "<mo lspace=\"negativethickmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"negativeverythickmathspace\">+</mo>" );
+    addRow( "<mo lspace=\"negativeveryverythickmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"10em\">+</mo>" );
+    addRow( "<mo rspace=\"10ex\">+</mo>" );
+    addRow( "<mo rspace=\"10px\">+</mo>" );
+    addRow( "<mo rspace=\"10in\">+</mo>" );
+    addRow( "<mo rspace=\"10cm\">+</mo>" );
+    addRow( "<mo rspace=\"10mm\">+</mo>" );
+    addRow( "<mo rspace=\"10pt\">+</mo>" );
+    addRow( "<mo rspace=\"10pc\">+</mo>" );
+    addRow( "<mo rspace=\"90%\">+</mo>" );
+    addRow( "<mo rspace=\"1.2\">+</mo>" );
+    addRow( "<mo rspace=\"veryverythinmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"verythinmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"thinmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"mediummathspace\">+</mo>" );
+    addRow( "<mo rspace=\"thickmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"verythickmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"veryverythickmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"negativeveryverythinmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"negativeverythinmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"negativethinmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"negativemediummathspace\">+</mo>" );
+    addRow( "<mo rspace=\"negativethickmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"negativeverythickmathspace\">+</mo>" );
+    addRow( "<mo rspace=\"negativeveryverythickmathspace\">+</mo>" );
+    addRow( "<mo stretchy=\"true\">+</mo>" );
+    addRow( "<mo stretchy=\"false\">+</mo>" );
+    addRow( "<mo symmetric=\"true\">+</mo>" );
+    addRow( "<mo symmetric=\"false\">+</mo>" );
+    addRow( "<mo maxsize=\"10em\">+</mo>" );
+    addRow( "<mo maxsize=\"10ex\">+</mo>" );
+    addRow( "<mo maxsize=\"10px\">+</mo>" );
+    addRow( "<mo maxsize=\"10in\">+</mo>" );
+    addRow( "<mo maxsize=\"10cm\">+</mo>" );
+    addRow( "<mo maxsize=\"10mm\">+</mo>" );
+    addRow( "<mo maxsize=\"10pt\">+</mo>" );
+    addRow( "<mo maxsize=\"10pc\">+</mo>" );
+    addRow( "<mo maxsize=\"90%\">+</mo>" );
+    addRow( "<mo maxsize=\"1.2\">+</mo>" );
+    addRow( "<mo maxsize=\"veryverythinmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"verythinmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"thinmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"mediummathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"thickmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"verythickmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"veryverythickmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"negativeveryverythinmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"negativeverythinmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"negativethinmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"negativemediummathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"negativethickmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"negativeverythickmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"negativeveryverythickmathspace\">+</mo>" );
+    addRow( "<mo maxsize=\"infinity\">+</mo>" );
+    addRow( "<mo minsize=\"10em\">+</mo>" );
+    addRow( "<mo minsize=\"10ex\">+</mo>" );
+    addRow( "<mo minsize=\"10px\">+</mo>" );
+    addRow( "<mo minsize=\"10in\">+</mo>" );
+    addRow( "<mo minsize=\"10cm\">+</mo>" );
+    addRow( "<mo minsize=\"10mm\">+</mo>" );
+    addRow( "<mo minsize=\"10pt\">+</mo>" );
+    addRow( "<mo minsize=\"10pc\">+</mo>" );
+    addRow( "<mo minsize=\"90%\">+</mo>" );
+    addRow( "<mo minsize=\"1.2\">+</mo>" );
+    addRow( "<mo minsize=\"veryverythinmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"verythinmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"thinmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"mediummathspace\">+</mo>" );
+    addRow( "<mo minsize=\"thickmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"verythickmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"veryverythickmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"negativeveryverythinmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"negativeverythinmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"negativethinmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"negativemediummathspace\">+</mo>" );
+    addRow( "<mo minsize=\"negativethickmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"negativeverythickmathspace\">+</mo>" );
+    addRow( "<mo minsize=\"negativeveryverythickmathspace\">+</mo>" );
+    addRow( "<mo largeop=\"true\">+</mo>" );
+    addRow( "<mo largeop=\"false\">+</mo>" );
+    addRow( "<mo movablelimits=\"true\">+</mo>" );
+    addRow( "<mo movablelimits=\"false\">+</mo>" );
+    addRow( "<mo accent=\"true\">+</mo>" );
+    addRow( "<mo accent=\"false\">+</mo>" );
+    
 }
 
 void TestLoadAndSave::operatorElement()
 {
-    // TODO
+    QFETCH(QString, input);
+    QFETCH(QString, output);
+
+    OperatorElement* element = new OperatorElement;
+    QCOMPARE(loadAndSave(element, input), output);
+    delete element;
 }
 
 void TestLoadAndSave::textElement_data()

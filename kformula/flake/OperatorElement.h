@@ -21,8 +21,9 @@
 #define OPERATORELEMENT_H
 
 #include "TokenElement.h"
+#include "kformula_export.h"
 
-class OperatorElement : public TokenElement {
+class KOFORMULA_EXPORT OperatorElement : public TokenElement {
 public:
     /// The standart constructor
     OperatorElement( BasicElement* parent = 0 );
