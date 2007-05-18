@@ -103,6 +103,16 @@ public:
     {
         // special cases
         DefaultStyleKey,
+        /**
+         * The NamedStyleKey has two functions:
+         * \li In Style: On lookup the Style is composed (\see StyleStorage::composeStyle()).
+         *               For named styles just the style's name is stored. On lookup, these styles
+         *               are looked up in the StyleManager and their attributes, including all
+         *               attributes of the parents, are filled in the composed style. Additionally,
+         *               the name of the named style is stored in the NamedStyleKey attribute.
+         *               This is especially useful while saving the styles.
+         * \li In CustomStyle: It simply refers to the parent style.
+         */
         NamedStyleKey,
         // borders
         LeftPen,
