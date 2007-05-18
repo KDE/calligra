@@ -89,6 +89,7 @@ private:
     QTextLayout *blockLayout;
     QString loremIpsum;
     KoStyleManager *styleManager;
+    Layout *m_textLayout;
 };
 
 class MockTextShape : public KoShape {

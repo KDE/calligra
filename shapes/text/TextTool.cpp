@@ -32,6 +32,7 @@
 #include <KoPointerEvent.h>
 
 #include <KoTextDocumentLayout.h>
+#include <KoParagraphStyle.h>
 #include <KoTextEditingPlugin.h>
 #include <KoTextEditingRegistry.h>
 #include <KoTextEditingFactory.h>
@@ -488,7 +489,16 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             moveOperation = QTextCursor::NextWord;
 #ifndef NDEBUG
         else if(event->key() == Qt::Key_F12) {
-            m_caret.insertText(QString::fromUtf8("װעלט"));
+            KoParagraphStyle style;
+            QList<KoText::Tab> tabs;
+            KoText::Tab tab;
+            tab.position = 474;
+            tab.type = KoText::RightTab;
+            tabs.append(tab);
+            style.setTabPositions(tabs);
+            QTextBlock block = m_caret.block();
+            style.applyStyle(block);
+            m_caret.insertText(QString::fromUtf8("Foo\tLorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy fslkfj slfjsddf\tBarBaz\tText\tEnd"));
         }
 #endif
         else if((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {

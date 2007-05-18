@@ -34,6 +34,8 @@ void TestDocumentLayout::initForNewTest(const QString &initText) {
     Q_ASSERT(doc);
     layout = dynamic_cast<KoTextDocumentLayout*> (doc->documentLayout());
     Q_ASSERT(layout);
+    m_textLayout = new Layout(layout);
+    layout->setLayout(m_textLayout);
     styleManager = new KoStyleManager();
     layout->setStyleManager(styleManager);
 
@@ -781,11 +783,20 @@ void TestDocumentLayout::testDefaultTabs() {
     initForNewTest("Foo\tBar\ta slightly longer text\tend.");
     // test the indents to be based on the default tab positions
     shape1->resize(QSizeF(400, 1000));
+    m_textLayout->setTabSpacing(80.0);
     layout->layout();
 
-    QTextLayout *lay = doc->begin().layout();
+    QTextBlock block = doc->begin();
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    QTextLayout *lay = block.layout();
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
+
+    QTextOption textOption = lay->textOption();
+    textOption.setTabArray(data->tabLineData()[0].tabs);
+    lay->setTextOption(textOption);
+
     QTextLine line = lay->lineAt(0);
     QCOMPARE(line.cursorToX(4), 80.); // default tab is 80
     QCOMPARE(line.cursorToX(8), 160.);
@@ -803,26 +814,32 @@ void TestDocumentLayout::testTabs() {
     QTextBlock block = doc->begin();
     style.applyStyle(block);
 
-    layout->layout();
-
+    m_textLayout->start();
     QTextLayout *lay = block.layout();
     QVERIFY(lay);
-    QCOMPARE(lay->lineCount(), 1);
-    QTextLine line = lay->lineAt(0);
+    lay->beginLayout();
+    QTextLine line = lay->createLine();
+    line.setLineWidth(200.);
+    KoTextBlockData::TabLineData tabData = m_textLayout->applyTabs(line);
     QVERIFY(line.naturalTextWidth() > 150);
-    QCOMPARE(line.cursorToX(4), 150.);
+    QCOMPARE(tabData.tabs[0], 150.);
 }
 
 void TestDocumentLayout::testMultilineTab() {
-    initForNewTest(loremIpsum.left(30) +"\tBar.");
+    initForNewTest(loremIpsum.left(20) +"\tBar.");
     // test if this works on the second line.
-    layout->layout();
 
     QTextLayout *lay = doc->begin().layout();
     QVERIFY(lay);
-    QCOMPARE(lay->lineCount(), 2);
-    QTextLine line = lay->lineAt(1);
-    QCOMPARE(line.cursorToX(31), 80.);
+    m_textLayout->setTabSpacing(80.0);
+    m_textLayout->start();
+    lay->beginLayout();
+    QTextLine line = lay->createLine();
+    line.setLineWidth(200.);
+    KoTextBlockData::TabLineData tabData = m_textLayout->applyTabs(line);
+    QCOMPARE(tabData.tabs.count(), 2);
+    QCOMPARE(tabData.tabs[0], 80.);
+    lay->endLayout();
 
     KoParagraphStyle style;
     QList<KoText::Tab> tabs;
@@ -833,10 +850,15 @@ void TestDocumentLayout::testMultilineTab() {
     QTextBlock block = doc->begin();
     style.applyStyle(block);
 
-    layout->layout();
-
-    line = lay->lineAt(1);
-    QCOMPARE(line.cursorToX(31), 150.);
+    m_textLayout->start();
+    lay->beginLayout();
+    line = lay->createLine();
+    QVERIFY(line.isValid());
+    line.setLineWidth(200.);
+    tabData = m_textLayout->applyTabs(line);
+    QCOMPARE(tabData.tabs.count(), 1);
+    QCOMPARE(tabData.tabs[0], 150.);
+    lay->endLayout();
 }
 
 void TestDocumentLayout::testRightTab() {
@@ -850,8 +872,8 @@ void TestDocumentLayout::testRightTab() {
     style.setTabPositions(tabs);
     QTextBlock block = doc->begin();
     style.applyStyle(block);
+    QVERIFY(block.blockFormat().hasProperty(KoParagraphStyle::TabPositions)); // verify that applying works
 
-    layout->layout();
     /*
      I expect the output to be:
         Foo Lorem ipsum dolor sit amet, XgXgectetuer
@@ -864,21 +886,31 @@ void TestDocumentLayout::testRightTab() {
      d) tab takes space so text until enter fits to tab pos.
      */
 
+    m_textLayout->start();
     QTextLayout *lay = doc->begin().layout();
     QVERIFY(lay);
-    QCOMPARE(lay->lineCount(), 3);
-    QTextLine line = lay->lineAt(0);
+    lay->beginLayout();
+    QTextLine line = lay->createLine();
+    line.setLineWidth(200.);
+    KoTextBlockData::TabLineData tabData = m_textLayout->applyTabs(line);
     double x = line.cursorToX(4);
     QVERIFY(x + 2 < line.cursorToX(5)); // tab takes at least 2 pt (i.e. is converted to a space)
     QVERIFY(x + 8 > line.cursorToX(5)); // tab takes at max 8 pt (i.e. is not taking more than a space)
-/*
-    Seems this is untestable due to Qt having a datastructure that does not allow this (tabs per parag, whil
-     I need them per line)....
 
-    QCOMPARE(lay->lineAt(1).cursorToX(42), 190.);
-    QCOMPARE(lay->lineAt(2).cursorToX(43), 0.);
-    QCOMPARE(lay->lineAt(2).cursorToX(52), 190.);
-*/
+    line = lay->createLine();
+    line.setLineWidth(200.);
+    tabData = m_textLayout->applyTabs(line);
+    QVERIFY(tabData.tabs.count() >= 2);
+    QCOMPARE(tabData.tabLength.count(), tabData.tabs.count());
+    double wordLengh = line.cursorToX(42) - line.cursorToX(35);
+    QCOMPARE(tabData.tabs[0] + wordLengh, 190.);
+
+    line = lay->createLine();
+    line.setLineWidth(200.);
+    tabData = m_textLayout->applyTabs(line);
+    QCOMPARE(line.cursorToX(43), 0.);
+    wordLengh = line.cursorToX(51) - line.cursorToX(48);
+    QCOMPARE(tabData.tabs[0] + wordLengh, 190.);
 }
 
 void TestDocumentLayout::testCenteredTab() {

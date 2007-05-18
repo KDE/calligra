@@ -21,6 +21,7 @@
 #define LAYOUTHELPER_H
 
 #include <KoTextDocumentLayout.h>
+#include <KoTextBlockData.h>
 #include <KoInsets.h>
 
 #include <QTextLine>
@@ -66,6 +67,11 @@ public:
     /// reimplemented from superclass
     virtual void clearTillEnd();
 
+    /// reimplemented from superclass
+    virtual void setTabSpacing(double spacing) { m_defaultTabSizing = spacing; }
+
+    KoTextBlockData::TabLineData applyTabs(QTextLine &line);
+
 private:
     void updateBorders();
     double topMargin();
@@ -76,7 +82,6 @@ private:
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
 
     void resetPrivate();
-    void applyTabs(QTextLine &line);
 
 private:
     KoStyleManager *m_styleManager;
@@ -93,9 +98,13 @@ private:
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
     QList<double> m_lotsOfTabs;
+    QList<KoTextBlockData::TabLineData> m_currentParagTabsData;
 
     // demoText feature
     bool m_demoText, m_endOfDemoText;
+
+    // tab setting
+    double m_defaultTabSizing;
 };
 
 #endif
