@@ -1215,14 +1215,14 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
     bool hideFormula = false;
     bool isNotProtected = false;
 
-    if ( d->subStyles.contains( NotProtected ) && d->subStyles.contains( NotProtected ) )
-        isNotProtected = true;
+    if ( d->subStyles.contains( NotProtected ) )
+        isNotProtected = notProtected();
 
-    if ( d->subStyles.contains( HideAll ) && d->subStyles.contains( HideAll ) )
-        hideAll=true;
+    if ( d->subStyles.contains( HideAll ) )
+        hideAll = hideAll();
 
-    if ( d->subStyles.contains( HideFormula ) && d->subStyles.contains( HideFormula ) )
-        hideFormula = true;
+    if ( d->subStyles.contains( HideFormula ) )
+        hideFormula = hideFormula();
 
     if ( hideAll )
         style.addProperty( "style:cell-protect", "hidden-and-protected" );
@@ -1234,7 +1234,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
             style.addProperty( "style:cell-protect", "Formula.hidden" );
         else if ( hideFormula )
             style.addProperty( "style:cell-protect", "protected Formula.hidden" );
-        else if ( d->subStyles.contains( NotProtected ) && !d->subStyles.contains( NotProtected ) )
+        else if ( d->subStyles.contains( NotProtected ) && !isNotProtected )
             // write out, only if it is explicitly set
             style.addProperty( "style:cell-protect", "protected" );
     }
@@ -1408,17 +1408,17 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     if ( d->subStyles.contains( Indentation ) )
         format.setAttribute( "indent", indentation() );
 
-    if ( d->subStyles.contains( DontPrintText ) && d->subStyles.contains( DontPrintText ) )
-        format.setAttribute( "dontprinttext", "yes" );
+    if ( d->subStyles.contains( DontPrintText ) )
+        format.setAttribute( "dontprinttext", dontprinttext() ? "yes" : "no" );
 
-    if ( d->subStyles.contains( NotProtected ) && d->subStyles.contains( NotProtected ) )
-        format.setAttribute( "noprotection", "yes" );
+    if ( d->subStyles.contains( NotProtected ) )
+        format.setAttribute( "noprotection", notProtected() ? "yes" : "no" );
 
-    if ( d->subStyles.contains( HideAll ) && d->subStyles.contains( HideAll ) )
-        format.setAttribute( "hideall", "yes" );
+    if ( d->subStyles.contains( HideAll ) )
+        format.setAttribute( "hideall", hideAll() ? "yes" : "no" );
 
-    if ( d->subStyles.contains( HideFormula ) && d->subStyles.contains( HideFormula ) )
-        format.setAttribute( "hideformula", "yes" );
+    if ( d->subStyles.contains( HideFormula ) )
+        format.setAttribute( "hideformula", hideFormula() ? "yes" : "no" );
 
     if ( d->subStyles.contains( FontFamily ) )
         format.setAttribute( "font-family", fontFamily() );
