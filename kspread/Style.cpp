@@ -1219,10 +1219,10 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
         isNotProtected = notProtected();
 
     if ( d->subStyles.contains( HideAll ) )
-        hideAll = hideAll();
+        hideAll = this->hideAll();
 
     if ( d->subStyles.contains( HideFormula ) )
-        hideFormula = hideFormula();
+        hideFormula = this->hideFormula();
 
     if ( hideAll )
         style.addProperty( "style:cell-protect", "hidden-and-protected" );
@@ -1408,8 +1408,10 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     if ( d->subStyles.contains( Indentation ) )
         format.setAttribute( "indent", indentation() );
 
+#if 0
     if ( d->subStyles.contains( DontPrintText ) )
         format.setAttribute( "dontprinttext", dontprinttext() ? "yes" : "no" );
+#endif
 
     if ( d->subStyles.contains( NotProtected ) )
         format.setAttribute( "noprotection", notProtected() ? "yes" : "no" );
