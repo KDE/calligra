@@ -605,7 +605,6 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
         return false;
 
     KoStoreDevice dev( store );
-    KoXmlWriter* contentWriter = createOasisXmlWriter( &dev, "office:document-content" );
     KoGenStyles mainStyles;//for compile
 
     KTemporaryFile contentTmpFile;
@@ -616,6 +615,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
       return false;
     }
 
+    KoXmlWriter* contentWriter = createOasisXmlWriter( &dev, "office:document-content" );
     KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
 
 
