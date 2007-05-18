@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,12 +49,22 @@ bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCont
 {
     loadOdfAttributes( element, context, OdfMandatories | OdfSize );
 
-    QString cornerRadius = element.attributeNS( KoXmlNS::draw, "corner-radius", "" );
-    if( ! cornerRadius.isEmpty() )
+    if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) && element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
     {
-        float radius = KoUnit::parseValue( cornerRadius );
-        m_cornerRadiusX = radius / (0.5 * size().width() ) * 100;
-        m_cornerRadiusY = radius / (0.5 * size().height() ) * 100;
+        double rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx", "0" ) );
+        double ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry", "0" ) );
+        m_cornerRadiusX = rx / (0.5 * size().width() ) * 100;
+        m_cornerRadiusY = ry / (0.5 * size().height() ) * 100;
+    }
+    else
+    {
+        QString cornerRadius = element.attributeNS( KoXmlNS::draw, "corner-radius", "" );
+        if( ! cornerRadius.isEmpty() )
+        {
+            float radius = KoUnit::parseValue( cornerRadius );
+            m_cornerRadiusX = radius / (0.5 * size().width() ) * 100;
+            m_cornerRadiusY = radius / (0.5 * size().height() ) * 100;
+        }
     }
 
     updatePath( size() );
