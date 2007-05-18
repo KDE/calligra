@@ -57,6 +57,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 	KDataTool *tool = info->createTool();
 	if ( !tool ) {
 		kWarning() << "Could not create tool 'thesaurustool'!" << endl;
+                delete info;
 		return 2;
 	}
 
