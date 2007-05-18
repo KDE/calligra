@@ -65,11 +65,13 @@ public:
      */
     bool load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store);
 
-private:
+protected:
     virtual void loadSettings(KoOasisLoadingContext& context, const QDomDocument& settings);
     virtual bool loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName);
     virtual bool loadMasterPageStyle(KoOasisLoadingContext& context, const QString& masterPageName);
-    virtual void loadHeaderFooter(KoOasisLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
+
+private:
+    void loadHeaderFooter(KoOasisLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
 
 private:
     /// \internal d-pointer class.
