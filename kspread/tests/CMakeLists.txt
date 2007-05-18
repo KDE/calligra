@@ -206,6 +206,16 @@ target_link_libraries(TestTextFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 add_test(kspread-TextFunctions TestTextFunctions)
 
+########### target TestDatetimeFunctions ###############
 
+set(TestDatetimeFunctions_SRCS TestDatetimeFunctions.cpp)
+
+kde4_automoc(${TestDatetimeFunctions_SRCS})
+
+kde4_add_executable(TestDatetimeFunctions RUN_UNINSTALLED ${TestDatetimeFunctions_SRCS})
+
+target_link_libraries(TestDatetimeFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(kspread-DatetimeFunctions TestDatetimeFunctions)
 
 endif(KDE4_BUILD_TESTS)
