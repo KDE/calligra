@@ -337,8 +337,6 @@ protected:
     void insertSubStyle( const SharedSubStyle& subStyle );
     bool releaseSubStyle( Key key );
 
-    virtual int initialUsage() const { return 0; }
-
 private:
     friend class StyleManipulator;
     friend class StyleStorage;
@@ -404,9 +402,6 @@ public:
      * @return the number of references to this style.
      */
     int usage() const;
-
-protected:
-//     virtual void insertSubStyle( Key key, const QVariant& value );
 
 private:
     friend class StyleManager;

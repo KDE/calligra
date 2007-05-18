@@ -362,26 +362,16 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
     if ( styleStack.hasProperty( KoXmlNS::style, "cell-protect" ) )
     {
         str = styleStack.property( KoXmlNS::style, "cell-protect" );
-        if ( str=="hidden-and-protected" )
-        {
+        if ( str == "none" )
+            setNotProtected( true );
+        else if ( str == "hidden-and-protected" )
             setHideAll( true );
-        }
-        else if ( str == "protected formula-hidden" )
-        {
+        else if ( str == "protected formula-hidden" || str == "formula-hidden protected")
             setHideFormula( true );
-        }
-        else if ( str == "protected" )
-        {
-            setNotProtected( false );
-        }
         else if ( str =="formula-hidden" )
         {
-            //FIXME !!!!
-#if 0
             setNotProtected( true );
             setHideFormula( true );
-            setHideAll( false );
-#endif
         }
     }
     if ( styleStack.hasProperty( KoXmlNS::style, "print-content" ) &&
@@ -1408,10 +1398,8 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     if ( d->subStyles.contains( Indentation ) )
         format.setAttribute( "indent", indentation() );
 
-#if 0
     if ( d->subStyles.contains( DontPrintText ) )
-        format.setAttribute( "dontprinttext", dontprinttext() ? "yes" : "no" );
-#endif
+        format.setAttribute( "dontprinttext", printText() ? "no" : "yes" );
 
     if ( d->subStyles.contains( NotProtected ) )
         format.setAttribute( "noprotection", notProtected() ? "yes" : "no" );
@@ -2621,7 +2609,7 @@ bool CustomStyle::definesAll() const
 
 QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles ) const
 {
-    // If the type is undefined, we're called from Format
+    // If the type is undefined, we were called from Cell
     // and the OASIS style is not an automatic style.
     // TODO: As the user styles are already created, look them up
     //       in what way ever and return here.
@@ -2640,7 +2628,7 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles ) con
     // doing the real work
     saveOasisStyle( style, mainStyles );
 
-    // The lookup is done in the calling object (Format).
+    // The lookup is done in the calling object (Cell).
     if ( style.type() == Doc::STYLE_CELL_AUTO )
         return QString();
 
@@ -2708,15 +2696,6 @@ bool CustomStyle::loadXML( KoXmlElement const & style, QString const & name )
 
     return true;
 }
-
-#if 0
-void CustomStyle::insertSubStyle( Key key, const QVariant& value )
-{
-    SharedSubStyle subStyle = createSubStyle( key, value );
-    Q_ASSERT( subStyle );
-    Style::insertSubStyle( subStyle );
-}
-#endif
 
 int CustomStyle::usage() const
 {
