@@ -941,6 +941,7 @@ void TextTool::showStyleManager() {
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
     if(lay) {
         StyleManagerDialog *dia = new StyleManagerDialog(m_canvas->canvasWidget());
+        Q_ASSERT( lay->styleManager() );
         dia->setStyleManager(lay->styleManager());
         dia->show();
     }
