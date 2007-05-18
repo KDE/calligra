@@ -25,6 +25,7 @@
 #include <QObject>
 #include <KoStore.h>
 #include <KoXmlReader.h>
+#include <KoOpenDocumentLoader.h>
 
 class KWDocument;
 class KWTextFrameSet;
@@ -47,7 +48,7 @@ class QTextCursor;
 /**
  * Class that has a lot of the OpenDocument (ODF) loading code for KWord.
  */
-class KWOpenDocumentLoader : public QObject
+class KWOpenDocumentLoader : public KoOpenDocumentLoader
 {
     Q_OBJECT
 public:
@@ -55,7 +56,7 @@ public:
      * Constructor
      * @param parent the document this loader will work for.
      */
-    explicit KWOpenDocumentLoader(KWDocument *parent);
+    explicit KWOpenDocumentLoader(KWDocument *document);
     virtual ~KWOpenDocumentLoader();
 
     /**
@@ -64,30 +65,11 @@ public:
      */
     bool load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store);
 
-signals:
-    /**
-     * This signal is emitted during loading with a percentage within 1-100 range
-     * @param percent the progress as a percentage
-     */
-    void sigProgress(int percent);
-
 private:
-    void loadSettings(const QDomDocument& settings);
-    bool loadPageLayout(const QString& masterPageName, KoOasisLoadingContext& context);
-    bool loadMasterPageStyle(const QString& masterPageName, KoOasisLoadingContext& context);
-
-    void loadStyles(KoOasisLoadingContext& context, QList<KoXmlElement*> styleElements);
-    void loadAllStyles(KoOasisLoadingContext& context);
-
-    void loadHeaderFooter(const QDomElement& masterPage, const QDomElement& masterPageStyle, KoOasisLoadingContext& context, bool isHeader);
-
-    void loadBody(const QDomElement& bodyElem, KoOasisLoadingContext& context, QTextCursor& cursor);
-    void loadParagraph(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
-    void loadHeading(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
-    void loadList(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
-    void loadSection(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor);
-    void loadSpan(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor, bool* stripLeadingSpace);
-    //void loadFrame(const KoXmlElement& parent, KoOasisLoadingContext& context, QTextCursor& cursor, bool* stripLeadingSpace);
+    virtual void loadSettings(KoOasisLoadingContext& context, const QDomDocument& settings);
+    virtual bool loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName);
+    virtual bool loadMasterPageStyle(KoOasisLoadingContext& context, const QString& masterPageName);
+    virtual void loadHeaderFooter(KoOasisLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
 
 private:
     /// \internal d-pointer class.
