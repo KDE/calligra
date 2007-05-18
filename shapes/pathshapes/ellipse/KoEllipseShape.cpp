@@ -20,12 +20,13 @@
 
 #include "KoEllipseShape.h"
 
-#include <QDebug>
-#include <QPainter>
-#include <math.h>
-
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
+#include <KoUnit.h>
+
+#include <QPainter>
+#include <math.h>
 
 KoEllipseShape::KoEllipseShape()
 : m_startAngle( 0 )
@@ -75,8 +76,46 @@ void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfConnections(context);
 }
 
-bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
+bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
+    loadOdfAttributes( element, context, OdfMandatories );
+
+    QSizeF size;
+    size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
+    size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
+
+    if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) && element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
+    {
+        double rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx" ) );
+        double ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry" ) );
+        size = QSizeF( 2*rx, 2*ry );
+    }
+    resize( size );
+
+    QPointF pos;
+    pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+    pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
+
+    if( element.hasAttributeNS( KoXmlNS::svg, "cx" ) && element.hasAttributeNS( KoXmlNS::svg, "cy" ) )
+    {
+        double cx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cx" ) );
+        double cy = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cy" ) );
+        pos = QPointF( cx - 0.5 * size.width(), cy - 0.5 * size.height() );
+    }
+    setPosition( pos );
+
+    QString kind = element.attributeNS( KoXmlNS::draw, "kind", "full" );
+    if( kind == "section" )
+        setType( Pie );
+    else if( kind == "cut" )
+        setType( Chord );
+    else
+        setType( Arc );
+
+    setStartAngle( element.attributeNS( KoXmlNS::draw, "start-angle", "0" ).toDouble() );
+    setEndAngle( element.attributeNS( KoXmlNS::draw, "end-angle", "360" ).toDouble() );
+
+    return true;
 }
 
 void KoEllipseShape::resize( const QSizeF &newSize )
@@ -208,6 +247,7 @@ void KoEllipseShape::updatePath( const QSizeF &size )
 
 void KoEllipseShape::createPath( const QSizeF &size )
 {
+    clear();
     m_radii = QPointF( size.width() / 2.0, size.height() / 2.0 );
     m_center = QPointF( m_radii.x(), m_radii.y() );
     moveTo( QPointF( size.width(), m_radii.y() ) );
