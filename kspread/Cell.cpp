@@ -1273,14 +1273,19 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 
 QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles )
 {
-    Conditions conditions = this->conditions();
+    const Conditions conditions = this->conditions();
     if ( !conditions.isEmpty() )
     {
         // this has to be an automatic style
         currentCellStyle = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
         conditions.saveOasisConditions( currentCellStyle );
     }
-    return style().saveOasis( currentCellStyle, mainStyles );
+    const Style style = this->style();
+    if ( style.isDefault() )
+        return doc()->styleManager()->defaultStyle()->saveOasis( currentCellStyle, mainStyles );
+    else if ( style.hasAttribute( Style::NamedStyleKey ) )
+        return doc()->styleManager()->style( style.parentName() )->saveOasis( currentCellStyle, mainStyles );
+    return style.saveOasis( currentCellStyle, mainStyles );
 }
 
 

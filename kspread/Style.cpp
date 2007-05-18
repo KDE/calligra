@@ -143,7 +143,6 @@ class Style::Private : public QSharedData
 {
 public:
     QHash<Key, SharedSubStyle> subStyles;
-    StyleType type;
 };
 
 
@@ -1354,6 +1353,13 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     Q_UNUSED( force );
     Q_UNUSED( copy );
 
+    if ( d->subStyles.contains( NamedStyleKey ) )
+    {
+        // just save the name and we are done.
+        format.setAttribute( "style-name", parentName() );
+        return;
+    }
+
     if ( d->subStyles.contains( HorizontalAlignment ) && halign() != HAlignUndefined )
         format.setAttribute( "alignX", (int) halign() );
 
@@ -1496,14 +1502,14 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
     Q_UNUSED( mode );
     Q_UNUSED( paste );
 
-    bool ok;
-    if ( format.hasAttribute( "type" ) )
+    if ( format.hasAttribute( "style-name" ) )
     {
-        d->type = (StyleType) format.attribute( "type" ).toInt( &ok );
-        if ( !ok )
-            return false;
+        // Simply set the style name and we are done.
+        insertSubStyle( NamedStyleKey, format.attribute( "style-name" ) );
+        return true;
     }
 
+    bool ok;
     if ( format.hasAttribute( "alignX" ) )
     {
         HAlign a = (HAlign) format.attribute( "alignX" ).toInt( &ok );
@@ -2393,11 +2399,6 @@ void Style::dump() const
         subStyles()[i]->dump();
 }
 
-void Style::setType( StyleType type )
-{
-    d->type = type;
-}
-
 QList<SharedSubStyle> Style::subStyles() const
 {
     return d->subStyles.values();
@@ -2557,6 +2558,7 @@ class CustomStyle::Private : public QSharedData
 {
 public:
     QString name;
+    StyleType type;
 };
 
 
@@ -2570,6 +2572,8 @@ CustomStyle::CustomStyle()
     : Style()
     , d( new Private )
 {
+    d->name = "Default";
+    d->type = BUILTIN;
 }
 
 CustomStyle::CustomStyle( QString const & name, CustomStyle * parent )
@@ -2577,6 +2581,7 @@ CustomStyle::CustomStyle( QString const & name, CustomStyle * parent )
     , d( new Private )
 {
     d->name = name;
+    d->type = CUSTOM;
     if ( parent )
         setParentName( parent->name() );
 }
@@ -2587,12 +2592,13 @@ CustomStyle::~CustomStyle()
 
 Style::StyleType CustomStyle::type() const
 {
-    return AUTO;
+    return d->type;
 }
 
 void CustomStyle::setType( StyleType type )
 {
-    Style::setType( type );
+    Q_ASSERT( type != AUTO );
+    d->type = type;
 }
 
 const QString& CustomStyle::name() const

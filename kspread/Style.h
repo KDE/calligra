@@ -320,8 +320,6 @@ public:
     void dump() const;
 
 protected:
-    virtual void setType( StyleType type );
-
     QList<SharedSubStyle> subStyles() const;
 
     SharedSubStyle createSubStyle( Key key, const QVariant& value );
@@ -360,7 +358,7 @@ public:
     virtual ~CustomStyle();
 
     virtual StyleType type() const;
-    virtual void setType( StyleType type );
+    void setType( StyleType type );
 
     void setName( QString const & name );
     QString const & name() const;

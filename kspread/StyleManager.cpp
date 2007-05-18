@@ -180,57 +180,58 @@ QDomElement StyleManager::save( QDomDocument & doc )
 
 bool StyleManager::loadXML( KoXmlElement const & styles )
 {
-  KoXmlElement e = styles.firstChild().toElement();
-  while ( !e.isNull() )
-  {
-    QString name;
-    if ( e.hasAttribute( "name" ) )
-      name = e.attribute( "name" );
-
-    if ( name == "Default" )
+    bool ok = true;
+    KoXmlElement e = styles.firstChild().toElement();
+    while ( !e.isNull() )
     {
-      if ( !m_defaultStyle->loadXML( e, name ) )
-        return false;
-      m_defaultStyle->setType( Style::BUILTIN );
+        QString name;
+        if ( e.hasAttribute( "name" ) )
+            name = e.attribute( "name" );
+        Style::StyleType type = (Style::StyleType)(e.attribute( "type" ).toInt( &ok ));
+        if ( !ok )
+            return false;
+
+        if ( name == "Default" && type == Style::BUILTIN )
+        {
+            if ( !m_defaultStyle->loadXML( e, name ) )
+                return false;
+            m_defaultStyle->setType( Style::BUILTIN );
+        }
+        else if ( !name.isNull() )
+        {
+            CustomStyle* style = 0;
+            if ( e.hasAttribute( "parent" ) && e.attribute( "parent" ) == "Default" )
+                style = new CustomStyle( name, m_defaultStyle );
+            else
+                style = new CustomStyle( name );
+
+            if ( !style->loadXML( e, name ) )
+            {
+                delete style;
+                return false;
+            }
+
+            if ( style->type() == Style::AUTO )
+                style->setType( Style::CUSTOM );
+            insertStyle (style);
+            kDebug(36003) << "Style " << name << ": " << style << endl;
+        }
+
+        e = e.nextSibling().toElement();
     }
-    else if ( !name.isNull() )
-    {
-      CustomStyle * style = 0;
-      if ( e.hasAttribute( "parent" ) && e.attribute( "parent" ) == "Default" )
-        style = new CustomStyle( name, m_defaultStyle );
-      else
-        style = new CustomStyle( name );
 
-      if ( !style->loadXML( e, name ) )
-      {
-        delete style;
-        return false;
-      }
-
-      if ( style->type() == Style::AUTO )
-        style->setType( Style::CUSTOM );
-      insertStyle (style);
-      kDebug(36003) << "Style " << name << ": " << style << endl;
+    // reparent all styles
+    QStringList names = styleNames ();
+    QStringList::iterator it;
+    for (it = names.begin(); it != names.end(); ++it) {
+        if (*it != "Default") {
+            CustomStyle * styleData = style (*it);
+            if ( !styleData->parentName().isNull() && m_styles.value(styleData->parentName()) )
+                styleData->setParentName( m_styles.value(styleData->parentName())->name() );
+        }
     }
 
-    e = e.nextSibling().toElement();
-  }
-
-  defaultStyle()->setName( "Default" );
-  defaultStyle()->setType( Style::BUILTIN );
-  
-  // reparent all styles
-  QStringList names = styleNames ();
-  QStringList::iterator it;
-  for (it = names.begin(); it != names.end(); ++it) {
-    if (*it != "Default") {
-      CustomStyle * styleData = style (*it);
-      if (/* !styleData->parent() &&*/ !styleData->parentName().isNull() )
-        styleData->setParentName( m_styles[ styleData->parentName() ]->name() );
-    }
-  }
-
-  return true;
+    return true;
 }
 
 void StyleManager::resetDefaultStyle ()
