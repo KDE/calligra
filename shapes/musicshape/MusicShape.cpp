@@ -47,7 +47,10 @@ static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch)
     return c;
 }
 
-MusicShape::MusicShape() : m_style(new MusicStyle), m_engraver(new Engraver()), m_renderer(new MusicRenderer(m_style))
+MusicShape::MusicShape() 
+    : m_style(new MusicStyle),
+    m_engraver(new Engraver()),
+    m_renderer(new MusicRenderer(m_style))
 {
     m_sheet = new Sheet();
     Bar* b1 = m_sheet->addBar();
@@ -99,6 +102,7 @@ MusicShape::~MusicShape()
 {
     delete m_sheet;
     delete m_style;
+    delete m_engraver;
     delete m_renderer;
 }
 
