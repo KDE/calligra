@@ -27,7 +27,7 @@
 #include <QMatrix>
 
 #include "vobject.h"
-#include "svgpathparser.h"
+#include <KoSvgPathParser.h>
 #include "vfillrule.h"
 #include <karbon_export.h>
 
@@ -45,7 +45,7 @@ typedef Q3PtrListIterator<VSubpath> VSubpathListIterator;
  * A composite path consists of one or many subpaths.
  */
 
-class KARBONBASE_EXPORT VPath : public VObject, SVGPathParser
+class KARBONBASE_EXPORT VPath : public VObject, KoSvgPathParser
 {
 public:
 	VPath( VObject* parent, VState state = normal );

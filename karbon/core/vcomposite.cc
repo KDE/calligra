@@ -57,7 +57,7 @@ VPath::VPath( VObject* parent, VState state )
 }
 
 VPath::VPath( const VPath& composite )
-	: VObject( composite ), SVGPathParser()
+	: VObject( composite ), KoSvgPathParser()
 {
 	m_paths.setAutoDelete( true );
 
