@@ -16,4 +16,12 @@ kde4_add_executable(TestLoadAndSave RUN_UNINSTALLED ${TestLoadAndSave_SRCS})
 target_link_libraries(TestLoadAndSave kformulalib ${QT_QTTEST_LIBRARY})
 add_test(kformula-LoadAndSave TestLoadAndSave)
 
+########### Layout Test ###############
+
+set(TestLayout_SRCS TestLayout.cpp)
+kde4_automoc(${TestLayout_SRCS})
+kde4_add_executable(TestLayout RUN_UNINSTALLED ${TestLayout_SRCS})
+target_link_libraries(TestLayout kformulalib ${QT_QTTEST_LIBRARY})
+add_test(kformula-LoadAndSave TestLayout)
+
 endif( KDE4_BUILD_TESTS )
