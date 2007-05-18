@@ -90,6 +90,11 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
         double ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry" ) );
         size = QSizeF( 2*rx, 2*ry );
     }
+    else if( element.hasAttributeNS( KoXmlNS::svg, "r" ) )
+    {
+        double r = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "r" ) );
+        size = QSizeF( 2*r, 2*r );
+    }
     resize( size );
 
     QPointF pos;
