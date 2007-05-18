@@ -257,47 +257,53 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
     kDebug(38000) << "Start loading OASIS document..." << body.text() << endl;
     if( body.isNull() )
     {
-            kDebug(38000) << "No office:body found!" << endl;
-            setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
-            return false;
+        kDebug(38000) << "No office:body found!" << endl;
+        setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
+        return false;
     }
 
     body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
     if(body.isNull())
     {
-            kDebug(38000) << "No office:drawing found!" << endl;
-            setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
-            return false;
+        kDebug(38000) << "No office:drawing found!" << endl;
+        setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
+        return false;
     }
 
     QDomElement page( KoDom::namedItemNS( body, KoXmlNS::draw, "page" ) );
     if(page.isNull())
     {
-            kDebug(38000) << "No office:drawing found!" << endl;
-            setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
-            return false;
+        kDebug(38000) << "No office:drawing found!" << endl;
+        setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
+        return false;
     }
 
     QString masterPageName = "Standard"; // use default layout as fallback
     QDomElement *master = oasisStyles.masterPages()[ masterPageName ];
     if ( !master ) //last test...
-            master = oasisStyles.masterPages()[ "Default" ];
+        master = oasisStyles.masterPages()[ "Default" ];
     Q_ASSERT( master );
-    const QDomElement *style = master ? oasisStyles.findStyle( master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
-    if( style )
+
+    if( master )
     {
-            m_pageLayout.loadOasis( *style );
-    m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+        const QDomElement *style = oasisStyles.findStyle( 
+            master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
+        m_pageLayout.loadOasis( *style );
+        m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
     }
     else
-            return false;
+        return false;
 
     KoOasisLoadingContext context( this, oasisStyles, store );
     m_doc.loadOasis( page, context );
 
-    loadOasisSettings( settings );
+    if( m_doc.pageSize().isEmpty() )
+    {
+        QSizeF pageSize = m_doc.contentRect().united( QRectF(0,0,1,1) ).size();
+        m_doc.setPageSize( pageSize );
+    }
 
-    //updateDocumentSize();
+    loadOasisSettings( settings );
 
     return true;
 }

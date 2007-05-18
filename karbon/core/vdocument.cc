@@ -285,6 +285,12 @@ bool VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &co
         shapeContext.addLayer( l, name );
     }
 
+    // check if we have to insert a default layer
+    if( d->layers.count() == 0 )
+    {
+        insertLayer( new KoShapeLayer() );
+    }
+
     KoXmlElement child;
     forEachElement( child, element )
     {
@@ -292,7 +298,11 @@ bool VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &co
 
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, shapeContext );
         if( shape )
+        {
+            if( ! shape->parent() )
+                d->layers.first()->addChild( shape );
             d->objects.append( shape );
+        }
     }
 
     return true;
@@ -306,11 +316,18 @@ VDocument::accept( VVisitor& visitor )
 
 QRectF VDocument::boundingRect() const
 {
-    // initialize bounding rect with page size
-    QRectF bb( QPointF(0.0, 0.0), d->pageSize );
+    return contentRect().united( QRectF( QPointF(0,0), d->pageSize ) );
+}
+
+QRectF VDocument::contentRect() const
+{
+    QRectF bb;
     foreach( KoShape* layer, d->layers )
     {
-        bb = bb.unite(  layer->boundingRect() );
+        if( bb.isNull() )
+            bb = layer->boundingRect();
+        else
+            bb = bb.united(  layer->boundingRect() );
     }
 
     return bb;

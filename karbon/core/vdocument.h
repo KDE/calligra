@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
-   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002-2005 Rob Buis <buis@kde.org>
    Copyright (C) 2002,2005-2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2005,2007 David Faure <faure@kde.org>
@@ -223,8 +223,11 @@ public:
     bool saveAsPath() const;
     void saveAsPath( bool b );
 
-    /// Returns the bounding rectangle of the documents content
+    /// Returns the united bounding rectangle of the documents content and the document page
     QRectF boundingRect() const;
+
+    /// Returns the bounding rectangle of the documents content
+    QRectF contentRect() const;
 
     /// Returns the documents page size
     QSizeF pageSize() const;
