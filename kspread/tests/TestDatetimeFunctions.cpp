@@ -251,7 +251,7 @@ void TestDatetimeFunctions::testDAYS()
 
 void TestDatetimeFunctions::testDAYS360()
 {
-  // TODO Note: Lotus 1-2-3v9.8 has a function named DAYS but with different semantics.  It supports an optional ¡§Basis¡¨ parameter
+  // TODO Note: Lotus 1-2-3v9.8 has a function named DAYS but with different semantics.  It supports an optional "Basis" parameter
   // with many different options.  Without the optional parameter, it defaults to a 30/360 basis, not calendar days; thus, in Lotus 1-2-3v9.8,
   // DAYS(DATE(1993;4;16);  DATE(1993;9;25)) computes -159, not -162. 
 
@@ -274,7 +274,7 @@ void TestDatetimeFunctions::testEDATE()
 void TestDatetimeFunctions::testEOMONTH()
 {
   //
-  CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;01;31)", Value( TRUE ) );    // If zero, unchanged ¡V just returns end of that date's month. (January in this case)
+  CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;01;31)", Value( TRUE ) );    // If zero, unchanged V just returns end of that date's month. (January in this case)
   CHECK_EVAL( "EOMONTH(DATE(2006;01;01);0)=DATE(2006;01;31)", Value( TRUE ) );  // You can pass strings or serial numbers to EOMONTH
   CHECK_EVAL( "EOMONTH(\"2006-01-01\";2)=DATE(2006;03;31)", Value( TRUE ) );    // End of month of March is March 31.
   CHECK_EVAL( "EOMONTH(\"2006-01-01\";-2)=DATE(2005;11;30)", Value( TRUE ) );   // Nov. 30 is the last day of November
