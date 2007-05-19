@@ -53,7 +53,7 @@ class FunctionRepository::Private
 {
 public:
   QHash<QString, Function*> functions;
-  QHash<QString, FunctionDescription*> funcs;
+  QHash<QString, FunctionDescription*> descriptions;
   QStringList groups;
 };
 
@@ -227,7 +227,7 @@ FunctionRepository* FunctionRepository::self()
         Functions::ConstIterator end = s_self->d->functions.constEnd();
         for ( Functions::ConstIterator it = s_self->d->functions.constBegin(); it != end; ++it )
         {
-            if ( !s_self->d->funcs.contains( it.key() ) )
+            if ( !s_self->d->descriptions.contains( it.key() ) )
                 missingDescriptions << it.key();
         }
         if ( missingDescriptions.count() > 0 )
@@ -237,7 +237,7 @@ FunctionRepository* FunctionRepository::self()
                 kDebug() << "\t" << missingDescription << endl;
         }
 #endif
-        kDebug() << s_self->d->funcs.count() << " descriptions loaded." << endl;
+        kDebug() << s_self->d->descriptions.count() << " descriptions loaded." << endl;
         kDebug() << "Function repository ready." << endl;
     }
     return s_self;
@@ -251,7 +251,7 @@ FunctionRepository::FunctionRepository()
 FunctionRepository::~FunctionRepository()
 {
   qDeleteAll( d->functions );
-  qDeleteAll( d->funcs );
+  qDeleteAll( d->descriptions );
   delete d;
   s_self = 0;
 }
@@ -266,7 +266,7 @@ void FunctionRepository::add( FunctionDescription *desc )
 {
   if( !desc ) return;
   if( !d->functions.contains( desc->name() ) ) return;
-  d->funcs.insert (desc->name(), desc);
+  d->descriptions.insert (desc->name(), desc);
 }
 
 Function *FunctionRepository::function (const QString& name)
@@ -276,7 +276,7 @@ Function *FunctionRepository::function (const QString& name)
 
 FunctionDescription *FunctionRepository::functionInfo (const QString& name)
 {
-  return d->funcs.value( name.toUpper() );
+  return d->descriptions.value( name.toUpper() );
 }
 
 // returns names of function in certain group
@@ -284,7 +284,7 @@ QStringList FunctionRepository::functionNames( const QString& group )
 {
   QStringList lst;
 
-  foreach ( FunctionDescription* description, d->funcs )
+  foreach ( FunctionDescription* description, d->descriptions )
   {
     if (group.isNull() || (description->group() == group))
       lst.append (description->name());
@@ -339,7 +339,7 @@ void FunctionRepository::loadFile (const QString& filename)
           FunctionDescription* desc = new FunctionDescription( e2 );
           desc->setGroup (group);
           if ( d->functions.contains( desc->name() ) )
-            d->funcs.insert (desc->name(), desc);
+            d->descriptions.insert (desc->name(), desc);
           else
           {
             kDebug() << "Description for unknown function " << desc->name() << " found." << endl;
