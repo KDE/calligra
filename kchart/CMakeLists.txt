@@ -40,7 +40,7 @@ set(kchartcommon_LIB_SRCS
    #dialogs/KCConfigColorPage.cc 
    #dialogs/KCConfigFontPage.cc 
    #dialogs/KCConfigBackgroundPage.cc 
-   #dialogs/KCPageLayout.cc 
+   dialogs/KCPageLayout.cc 
    #dialogs/KCPrinterDialog.cc
    #dialogs/KCWizard.cc 
    #dialogs/KCWizardDataPage.cc
