@@ -22,7 +22,7 @@
 #if 0
 #include "KDChartAxisParams.h"
 #endif
-#include "KDChartChart.h"
+//#include "KDChartChart.h"
 
 #if 0
 #include "kchart_params.h"

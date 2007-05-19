@@ -1,3 +1,10 @@
+2007-05-20  Inge Wallin  <inge@lysator.liu.se>
+
+	KDChart1 -> KDChart2
+	* dialogs/KCPageLayout.cc (*): Make compile.
+	* CMakeLists.txt: enable dialogs/KCPageLayout.cc and
+	dialogs/KCPprinterDialog.cc
+
 2007-05-19  Inge Wallin  <inge@lysator.liu.se>
 
 	KDChart1 -> KDChart2

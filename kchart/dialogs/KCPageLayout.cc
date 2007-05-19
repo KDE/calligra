@@ -38,7 +38,7 @@ KCPageLayout::KCPageLayout( KChartPart* _part, QWidget* parent)
     setDefaultButton( Ok );
     setCaption( i18n( "Page Layout" ) );
 
-    params=_params;
+    part=_part;
 #if 0
     QWidget *page = new QWidget( this );
 #else
@@ -96,10 +96,13 @@ KCPageLayout::KCPageLayout( KChartPart* _part, QWidget* parent)
 
 void KCPageLayout::init()
 {
-    oldGlobalLeadingRight  = params->globalLeadingRight();
-    oldGlobalLeadingLeft   = params->globalLeadingLeft();
-    oldGlobalLeadingTop    = params->globalLeadingTop();
-    oldGlobalLeadingBottom = params->globalLeadingBottom();
+#if 0
+    oldGlobalLeadingRight  = part->globalLeadingRight();
+    oldGlobalLeadingLeft   = part->globalLeadingLeft();
+    oldGlobalLeadingTop    = part->globalLeadingTop();
+    oldGlobalLeadingBottom = part->globalLeadingBottom();
+#endif
+
     slotReset();
 }
 
@@ -111,8 +114,10 @@ void KCPageLayout::slotOk()
 
 void KCPageLayout::slotApply()
 {
-    params->setGlobalLeading( leftBorder->text().toInt(),topBorder->text().toInt() , rightBorder->text().toInt(), bottomBorder->text().toInt() );
+#if 0
+    part->setGlobalLeading( leftBorder->text().toInt(),topBorder->text().toInt() , rightBorder->text().toInt(), bottomBorder->text().toInt() );
     emit dataChanged();
+#endif
 }
 
 void KCPageLayout::slotReset()
