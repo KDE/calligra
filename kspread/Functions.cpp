@@ -191,11 +191,9 @@ FunctionRepository* FunctionRepository::self()
 {
   if( !s_self )
   {
-    kDebug() << "Creating function repository" << endl;
+    kDebug() << "Creating function repository ..." << endl;
 
     fr_sd.setObject( s_self, new FunctionRepository() );
-
-    kDebug() << "Registering functions" << endl;
 
     // register all existing functions
     RegisterBitopsFunctions();
@@ -212,7 +210,7 @@ FunctionRepository* FunctionRepository::self()
     RegisterTextFunctions();
     RegisterTrigFunctions();
 
-    kDebug() << s_self->d->functions.count() << " functions registered, loading descriptions" << endl;
+    kDebug() << s_self->d->functions.count() << " functions registered." << endl;
 
     // find all XML description files
     QStringList files = Factory::global().dirs()->findAllResources
@@ -222,10 +220,27 @@ FunctionRepository* FunctionRepository::self()
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
       s_self->loadFile (*it);
 
-    kDebug() << "All ok, repository ready" << endl;
-
-  }
-  return s_self;
+#ifndef NDEBUG
+        // Verify, that every function has a description.
+        QStringList missingDescriptions;
+        typedef QHash<QString, Function*> Functions;
+        Functions::ConstIterator end = s_self->d->functions.constEnd();
+        for ( Functions::ConstIterator it = s_self->d->functions.constBegin(); it != end; ++it )
+        {
+            if ( !s_self->d->funcs.contains( it.key() ) )
+                missingDescriptions << it.key();
+        }
+        if ( missingDescriptions.count() > 0 )
+        {
+            kDebug() << "No function descriptions found for:" << endl;
+            foreach( const QString& missingDescription, missingDescriptions )
+                kDebug() << "\t" << missingDescription << endl;
+        }
+#endif
+        kDebug() << s_self->d->funcs.count() << " descriptions loaded." << endl;
+        kDebug() << "Function repository ready." << endl;
+    }
+    return s_self;
 }
 
 FunctionRepository::FunctionRepository()
@@ -326,7 +341,10 @@ void FunctionRepository::loadFile (const QString& filename)
           if ( d->functions.contains( desc->name() ) )
             d->funcs.insert (desc->name(), desc);
           else
+          {
+            kDebug() << "Description for unknown function " << desc->name() << " found." << endl;
             delete desc;
+          }
         }
       }
       group = "";
