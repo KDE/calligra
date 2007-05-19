@@ -224,6 +224,12 @@ void TestTextFunctions::testSUBSTITUTE()
     CHECK_EVAL( "SUBSTITUTE(\"Hello\"; \"H\"; \"J\"; 0)", Value::errorVALUE() );
 }
 
+void TestTextFunctions::testT()
+{
+    CHECK_EVAL( "T(\"Hi\")", Value( "Hi" ) );
+    CHECK_EVAL( "T(5)",      Value( "" )   );
+}
+
 void TestTextFunctions::testTRIM()
 {
     CHECK_EVAL( "TRIM(\" Hi \")", Value( "Hi" ) );

@@ -52,6 +52,7 @@ private slots:
     void testRIGHT();
     void testSEARCH();
     void testSUBSTITUTE();
+    void testT();
     void testTRIM();
     void testUNICHAR();
     void testUNICODE();
