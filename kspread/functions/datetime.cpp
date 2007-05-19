@@ -387,7 +387,7 @@ Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
   else if (method == 1)
   {
     ++result;
-    result = result % 7;
+    if (result > 7) result = result % 7;
   }
 
   return Value (result);
@@ -520,7 +520,7 @@ Value func_days (valVector args, ValueCalc *calc, FuncExtra *)
   if (!date1.isValid() || !date2.isValid())
     return Value::errorVALUE();
 
-  return Value (date1.daysTo (date2));
+  return Value (date2.daysTo (date1));
 }
 
 // Function: DATE
@@ -566,27 +566,12 @@ Value func_time (valVector args, ValueCalc *calc, FuncExtra *)
   int m = calc->conv()->asInteger (args[1]).asInteger();
   int s = calc->conv()->asInteger (args[2]).asInteger();
 
-  /* normalize the data */
-  m += s / 60;
-  s = s % 60;
-  h += m / 60;
-  m = m % 60;
-  // we'll lose hours data that carries over into days
-  h = h % 24;
+  QTime res;
+  res = res.addSecs(60*60*h);
+  res = res.addSecs(60*m);
+  res = res.addSecs(s);
 
-  // now carry down hours/minutes for negative minutes/seconds
-  if (s < 0) {
-    s += 60;
-    m -= 1;
-  }
-  if (m < 0) {
-    m += 60;
-    h -= 1;
-  }
-  if (h < 0)
-    h += 24;
-
-  return Value( QTime (h, m, s), calc->doc() );
+  return Value( res, calc->doc() );
 }
 
 // Function: CURRENTDATE
@@ -1051,7 +1036,7 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
     days--;
   }
 
-  return Value( enddate.toString() );
+  return Value( enddate, calc->doc() );
 }
 
 // Function: NETWORKDAY

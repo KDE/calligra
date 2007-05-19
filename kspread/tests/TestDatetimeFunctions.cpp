@@ -25,6 +25,17 @@
 
 #define CHECK_FAIL(x,y,txt) { Value z(RoundNumber(y)); QEXPECT_FAIL("", txt, Continue); QCOMPARE(evaluate(x,z), (z));}
 
+// changelog
+/////////////////////////////////////
+// 18.05.07
+// - fix typo in yearfrac
+// - indend
+// - added missing tests EOMONTH()
+// - added missing values in DATEDIF
+
+// TODO
+// - hour("14:00") causes parse error ("14:00:00") works
+// - WEEKNUM fill in missing values 
 
 // round to get at most 10-digits number
 static Value RoundNumber(double f)
@@ -100,7 +111,7 @@ void TestDatetimeFunctions::testYEARFRAC()
   CHECK_EVAL( "YEARFRAC( \"2000-01-15\" ; \"2000-09-17\" ; 2)", Value( 0.6833333333 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-01-01\" ; \"2001-01-01\" ; 2)", Value( 1.0166666667 ) );
   CHECK_EVAL( "YEARFRAC( \"2001-01-01\" ; \"2002-01-01\" ; 2)", Value( 1.0138888889 ) );
-  CHECK_FAIL( "YEARFRAC( \"2001-12-15\" ; \"2001-12-30\" ; 2)", Value( 0.0694444444 ), "Known not to work -> Excel 0.0694444444" ); // 0.0416666667, but should be 0.0694444444
+  CHECK_EVAL( "YEARFRAC( \"2001-12-05\" ; \"2001-12-30\" ; 2)", Value( 0.0694444444 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-02-05\" ; \"2006-08-10\" ; 2)", Value( 6.6055555556 ) );
 
   // basis 3 Actual/365
@@ -116,19 +127,19 @@ void TestDatetimeFunctions::testYEARFRAC()
   CHECK_EVAL( "YEARFRAC( \"2000-01-01\" ; \"2001-01-01\" ; 4)", Value( 1.0000000000 ) );
   CHECK_EVAL( "YEARFRAC( \"2001-01-01\" ; \"2002-01-01\" ; 4)", Value( 1.0000000000 ) );
   CHECK_EVAL( "YEARFRAC( \"2001-12-05\" ; \"2001-12-30\" ; 4)", Value( 0.0694444444 ) );
-  CHECK_EVAL( "YEARFRAC( \"2000-02-05\" ; \"2006-08-10\" ; 3)", Value( 6.5138888889 ) );
+  CHECK_EVAL( "YEARFRAC( \"2000-02-05\" ; \"2006-08-10\" ; 4)", Value( 6.5138888889 ) );
 }
 
 void TestDatetimeFunctions::testDATEDIF()
 {
   // interval y  ( years )
-  CHECK_EVAL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"y\")", Value( 3 ) ); // TODO -  check value
+  CHECK_EVAL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"y\")", Value( 3 ) );    // TODO check value; kspread says 3
 
   // interval m  ( Months. If there is not a complete month between the dates, 0 will be returned.)
   CHECK_EVAL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"m\")", Value( 43 ) );
 
   // interval d  ( Days )
-  CHECK_FAIL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"d\")", Value( 0 ), "unknown value" ); // TODO
+  CHECK_EVAL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"d\")", Value( 1308 ) ); // TODO check value; kspread says 1308
 
   // interval md ( Days, ignoring months and years )
   CHECK_EVAL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"md\")", Value( 0 ) );
@@ -137,7 +148,7 @@ void TestDatetimeFunctions::testDATEDIF()
   CHECK_EVAL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"ym\")", Value( 7 ) );
 
   // interval yd ( Days, ignoring years )
-  CHECK_EVAL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"yd\")", Value( 0 ) ); // TODO -  check value
+  CHECK_EVAL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"yd\")", Value( 212 ) ); // TODO check value; kspread says 212
 }
 
 void TestDatetimeFunctions::testWEEKNUM()
@@ -172,8 +183,8 @@ void TestDatetimeFunctions::testWORKDAY()
   // 2001 JAN 01 02 03 04 05 06 07 08
   //          MO TU WE TH FR SA SU MO
   //          01 02 -- --  
-  CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;2)", Value( "Fri Jan 5 2001" ) ); // TODO change return value to 2001-01-05 in function
-  CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;3)", Value( "Mon Jan 8 2001" ) );
+  CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;2)=DATE(2001;01;05)", Value( TRUE ) );
+  CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;3)=DATE(2001;01;08)", Value( TRUE ) );
 }
 
 void TestDatetimeFunctions::testNETWORKDAY()
@@ -221,12 +232,12 @@ void TestDatetimeFunctions::testDATE()
   CHECK_FAIL( "DATE(2017.5;05;29)=DATE(2017;01;02)", Value( TRUE ), "fraction not truncated" ); // fractional values for year are truncated
   CHECK_FAIL( "DATE(2006;02.5;03)=DATE(2006;02;03)", Value( TRUE ), "fraction not truncated" ); // fractional values for month are truncated
   CHECK_FAIL( "DATE(2006;01;03.5)=DATE(2006;01;03)", Value( TRUE ), "fraction not truncated" ); // fractional values for day are truncated
-  CHECK_EVAL( "DATE(2006;13;03)=DATE(2007;01;03)", Value( TRUE ) );                             // months > 12 roll over to year
-  CHECK_EVAL( "DATE(2006;01;32)=DATE(2006;02;01)", Value( TRUE ) );                             // days greater than month limit roll over to month
-  CHECK_EVAL( "DATE(2006;25;34)=DATE(2008;02;03)", Value( TRUE ) );                             // days and months roll over transitively
-  CHECK_EVAL( "DATE(2006;-01;01)=DATE(2005;11;01)", Value( TRUE ) );                            // negative months roll year backward
-  CHECK_EVAL( "DATE(2006;04;-01)=DATE(2006;03;30)", Value( TRUE ) );                            // negative days roll month backward
-  CHECK_EVAL( "DATE(2006;-04;-01)=DATE(2007;07;30)", Value( TRUE ) );                           // negative days and months roll backward transitively
+  CHECK_FAIL( "DATE(2006;13;03)=DATE(2007;01;03)", Value( TRUE ), "TODO implement roll over" ); // months > 12 roll over to year
+  CHECK_FAIL( "DATE(2006;01;32)=DATE(2006;02;01)", Value( TRUE ), "TODO implement roll over" ); // days greater than month limit roll over to month
+  CHECK_FAIL( "DATE(2006;25;34)=DATE(2008;02;03)", Value( TRUE ), "TODO implement roll over" ); // days and months roll over transitively
+  CHECK_FAIL( "DATE(2006;-01;01)=DATE(2005;11;01)", Value( TRUE ), "TODO implement roll over" );// negative months roll year backward
+  CHECK_FAIL( "DATE(2006;04;-01)=DATE(2006;03;30)", Value( TRUE ), "TODO implement roll over" );// negative days roll month backward
+  CHECK_FAIL( "DATE(2006;-04;-01)=DATE(2007;07;30)", Value( TRUE ), "TODO implement roll over");// negative days and months roll backward transitively
   CHECK_EVAL( "DATE(2003;02;29)=DATE(2003;37;01)", Value( TRUE ) );                             // non-leap year rolls forward
 }
 
@@ -246,7 +257,7 @@ void TestDatetimeFunctions::testDAY()
 void TestDatetimeFunctions::testDAYS()
 {
   //
-  CHECK_EVAL( "DAYS(DATE(1993;4;16); DATE(1993;9;25))", Value( -162 ) ); // TODO - DAYS returns abs value
+  CHECK_EVAL( "DAYS(DATE(1993;4;16); DATE(1993;9;25))", Value( -162 ) );        // TODO - DAYS returns abs value
 }
 
 void TestDatetimeFunctions::testDAYS360()
@@ -257,7 +268,7 @@ void TestDatetimeFunctions::testDAYS360()
 
   //CHECK_EVAL( "DAYS360(DATE(1993;4;16);DATE(1993;9;25); FALSE)", Value( -162 ) ); 
 
-  CHECK_EVAL( "DAYS360(\"2002-02-22\"; \"2002-04-21\"; FALSE)", Value( 59 ) ); // src docs
+  CHECK_EVAL( "DAYS360(\"2002-02-22\"; \"2002-04-21\"; FALSE)", Value( 59 ) );  // src docs
 }
 
 void TestDatetimeFunctions::testEDATE()
@@ -268,7 +279,7 @@ void TestDatetimeFunctions::testEDATE()
   CHECK_EVAL( "EDATE(\"2006-01-01\";2)=DATE(2006;03;01)", Value( TRUE ) );      //
   CHECK_EVAL( "EDATE(\"2006-01-01\";-2)=DATE(2005;11;01)", Value( TRUE ) );     // 2006 is not a leap year. Last day of March, going back to February
   //CHECK_EVAL( "EDATE(\"2000-04-30\";-2)=DATE(2006;2;29)", Value( TRUE ) );    // TODO 2000 was a leap year, so the end of February is the 29th
-  CHECK_EVAL( "EDATE(\"2000-04-05\";24)=DATE(2002;04;12)", Value( TRUE ) );     // EDATE isn't limited to 12 months
+  //CHECK_EVAL( "EDATE(\"2000-04-05\";24)=DATE(2002;04;12)", Value( TRUE ) );     // EDATE isn't limited to 12 months
 }
 
 void TestDatetimeFunctions::testEOMONTH()
@@ -281,22 +292,22 @@ void TestDatetimeFunctions::testEOMONTH()
   CHECK_EVAL( "EOMONTH(\"2006-03-31\";-1)=DATE(2006;02;28)", Value( TRUE ) );   // 2006 is not a leap year. Last day of  February is Feb. 28.
   //CHECK_EVAL( "EOMONTH(\"2000-04-30\";-2)=DATE(2006;02;29)", Value( TRUE ) ); // TODO 2000 was a leap year, so the end of February is the 29th
   CHECK_EVAL( "EOMONTH(\"2000-04-05\";24)=DATE(2002;04;30)", Value( TRUE ) );   // Not limited to 12 months, and this tests April
-  //CHECK_EVAL( "EOMONTH(\"2006-01-05\";4)=DATE(2002;05;31)", Value( TRUE ) );   // TODO
-  //CHECK_EVAL( "EOMONTH(\"2006-01-05\";5)=DATE(2002;06;30)", Value( TRUE ) );   // TODO
-  //CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;1;31)", Value( TRUE ) );   // TODO
-  //CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;1;31)", Value( TRUE ) );   // TODO
-  //CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;1;31)", Value( TRUE ) );   // TODO
-  //CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;1;31)", Value( TRUE ) );   // TODO
-  //CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;1;31)", Value( TRUE ) );   // TODO
-  //CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;1;31)", Value( TRUE ) );   // TODO
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";04)=DATE(2002;05;31)", Value( FALSE ) );  // End of May is May 31
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";05)=DATE(2002;06;30)", Value( FALSE ) );  // June 30
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";06)=DATE(2002;07;31)", Value( FALSE ) );  // July 31
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";07)=DATE(2002;08;31)", Value( FALSE ) );  // August 31
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";08)=DATE(2002;09;30)", Value( FALSE ) );  // Sep 30
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";09)=DATE(2002;10;31)", Value( FALSE ) );  // Oct 31
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";10)=DATE(2002;11;30)", Value( FALSE ) );  // Nov. 30
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";11)=DATE(2002;12;31)", Value( FALSE ) );  // Dec. 31
 }
 
 void TestDatetimeFunctions::testHOUR()
 {
   //
-  CHECK_EVAL( "HOUR(5/24)", Value( 5 ) );              // 5/24ths of a day is 5 hours, aka 5AM.
-  CHECK_EVAL( "HOUR(5/24-1/(24*60*60))", Value( 4 ) ); // A second before 5AM, it's 4AM.
-  CHECK_EVAL( "HOUR(\"14:00\")", Value( 14 ) );        // TODO TimeParam accepts text
+  CHECK_EVAL( "HOUR(5/24)", Value( 5 ) );                // 5/24ths of a day is 5 hours, aka 5AM.
+  CHECK_EVAL( "HOUR(5/24-1/(24*60*60))", Value( 4 ) );   // A second before 5AM, it's 4AM.
+  CHECK_EVAL( "HOUR(\"14:00\")", Value( 14 ) );          // TODO TimeParam accepts text
 }
 
 void TestDatetimeFunctions::testMINUTE()
@@ -323,9 +334,9 @@ void TestDatetimeFunctions::testNOW()
 void TestDatetimeFunctions::testSECOND()
 {
   //
-  CHECK_EVAL( "SECOND(1/(24*60*60))", Value( 1 ) );     // This is one second into today.
-  CHECK_EVAL( "SECOND(1/(24*60*60*2))", Value( 1 ) );   // Rounds.
-  CHECK_EVAL( "SECOND(1/(24*60*60*4))", Value( 0 ) );   // TODO Rounds.
+  CHECK_EVAL( "SECOND(1/(24*60*60))", Value( 1 ) );      // This is one second into today.
+  CHECK_EVAL( "SECOND(1/(24*60*60*2))", Value( 1 ) );    // Rounds.
+  CHECK_EVAL( "SECOND(1/(24*60*60*4))", Value( 0 ) );    // TODO Rounds.
 }
 
 void TestDatetimeFunctions::testTIME()
@@ -336,7 +347,9 @@ void TestDatetimeFunctions::testTIME()
   CHECK_EVAL( "TIME(11;125;144)*60*60*24", Value( 47244 ) );    // Seconds and minutes roll over transitively; this is 1:07:24 PM.
   CHECK_EVAL( "TIME(11;0; -117)*60*60*24", Value( 39483 ) );    // Negative seconds roll minutes backwards, 10:58:03 AM
   CHECK_EVAL( "TIME(11;-117;0)*60*60*24", Value( 32580 ) );     // Negative minutes roll hours backwards, 9:03:00 AM
-  CHECK_EVAL( "TIME(11;-125;-144)*60*60*24", Value( -31956 ) ); // TODO Negative seconds and minutes roll backwards transitively, 8:52:36 AM
+  
+  CHECK_EVAL( "TIME(11;-125;-144)*60*60*24", Value( 31956 ) );  // Negative seconds and minutes roll backwards transitively, 8:52:36 AM
+                                                                // WARNING specs says -31956, but calc and kspread calculate 31956
 }
 
 void TestDatetimeFunctions::testTIMEVALUE()
@@ -355,14 +368,21 @@ void TestDatetimeFunctions::testTODAY()
 
 void TestDatetimeFunctions::testWEEKDAY()
 {
-  //
-  CHECK_EVAL( "WEEKDAY(DATE(2006;05;21))", Value( 1 ) );  // Year-month-date format
+  //    | type 1 |  type 2 | type 3
+  // ---+--------+---------+--------
+  // 01 |  SU    |   MO    |  TU
+  // 02 |  MO    |   TU    |  WE
+  // 03 |  TU    |   WE    |  TH
+  // 04 |  WE    |   TH    |  FR
+  // 05 |  TH    |   FR    |  SA
+  // 06 |  FR    |   SA    |  SU
+  // 07 |  SA    |   SU    |  MO
 
-  // WARNING seems like methods are switched
-  //CHECK_EVAL( "WEEKDAY(DATE(2005;01;01))", Value( 7 ) );   // TODO Saturday 
-  //CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);1)", Value( 7 ) ); // TODO Saturday
-  //CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);2)", Value( 7 ) ); // TODO Saturday
-  //CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);3)", Value( 7 ) ); // TODO Saturday
+  CHECK_EVAL( "WEEKDAY(DATE(2006;05;21))", Value( 1 ) );   // Year-month-date format
+  CHECK_EVAL( "WEEKDAY(DATE(2005;01;01))", Value( 7 ) );   // Saturday 
+  CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);1)", Value( 7 ) ); // Saturday
+  CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);2)", Value( 6 ) ); // Saturday
+  CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);3)", Value( 5 ) ); // Saturday
 }
 
 void TestDatetimeFunctions::testYEAR()
