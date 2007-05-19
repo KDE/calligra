@@ -47,14 +47,18 @@ enum Identifier {
 class KoEnhancedPathParameter
 {
 public:
-    KoEnhancedPathParameter();
+    explicit KoEnhancedPathParameter( KoEnhancedPathShape * parent );
     virtual ~KoEnhancedPathParameter();
     /// evaluates the parameter using the given path
-    virtual double evaluate( KoEnhancedPathShape *path ) = 0;
+    virtual double evaluate() = 0;
     /// modifies the parameter if possible, using the new value
-    virtual void modify( double value, KoEnhancedPathShape *path );
+    virtual void modify( double value );
     /// returns string representation of the parameter
     virtual QString toString() const = 0;
+protected:
+    KoEnhancedPathShape * parent();
+private:
+    KoEnhancedPathShape * m_parent;
 };
 
 /// A constant parameter, a fixed value (i.e. 5, 11.3, -7 )
@@ -62,8 +66,8 @@ class KoEnhancedPathConstantParameter : public KoEnhancedPathParameter
 {
 public:
     /// Constructs the constant parameter with the given value
-    explicit KoEnhancedPathConstantParameter( double value );
-    double evaluate( KoEnhancedPathShape *path );
+    KoEnhancedPathConstantParameter( double value, KoEnhancedPathShape * parent );
+    double evaluate();
     virtual QString toString() const;
 private:
     double m_value; ///< the constant value
@@ -74,10 +78,10 @@ class KoEnhancedPathNamedParameter : public KoEnhancedPathParameter
 {
 public:
     /// Constructs named parameter from given identifier
-    explicit KoEnhancedPathNamedParameter( Identifier identifier );
+    KoEnhancedPathNamedParameter( Identifier identifier, KoEnhancedPathShape * parent );
     /// Constructs named parameter from given identifier string
-    explicit KoEnhancedPathNamedParameter( const QString &identifier );
-    double evaluate( KoEnhancedPathShape *path );
+    KoEnhancedPathNamedParameter( const QString &identifier, KoEnhancedPathShape * parent );
+    double evaluate();
     /// Returns identfier type from given string
     static Identifier identifierFromString( const QString &text );
     virtual QString toString() const;
@@ -90,9 +94,9 @@ class KoEnhancedPathReferenceParameter : public KoEnhancedPathParameter
 {
 public:
     /// Constructs reference paramater from the fiven reference string
-    explicit KoEnhancedPathReferenceParameter( const QString &reference );
-    double evaluate( KoEnhancedPathShape *path );
-    virtual void modify( double value, KoEnhancedPathShape *path );
+    explicit KoEnhancedPathReferenceParameter( const QString &reference, KoEnhancedPathShape * parent );
+    double evaluate();
+    virtual void modify( double value );
     virtual QString toString() const;
 private:
     QString m_reference; ///< the reference, formula or modifier

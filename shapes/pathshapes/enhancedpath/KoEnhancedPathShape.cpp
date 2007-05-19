@@ -23,8 +23,13 @@
 #include "KoEnhancedPathHandle.h"
 #include "KoEnhancedPathFormula.h"
 
+#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <KoShapeSavingContext.h>
+#include <KoUnit.h>
+
+#include <kdebug.h>
 
 KoEnhancedPathShape::KoEnhancedPathShape( const QRectF &viewBox )
 : m_viewBox( viewBox ), m_viewBoxOffset( 0.0, 0.0 )
@@ -33,10 +38,24 @@ KoEnhancedPathShape::KoEnhancedPathShape( const QRectF &viewBox )
 
 KoEnhancedPathShape::~KoEnhancedPathShape()
 {
+    reset();
+}
+
+void KoEnhancedPathShape::reset()
+{
     qDeleteAll( m_commands );
+    m_commands.clear();
     qDeleteAll( m_enhancedHandles );
+    m_enhancedHandles.clear();
+    m_handles.clear();
     qDeleteAll( m_formulae );
+    m_formulae.clear();
     qDeleteAll( m_parameters );
+    m_parameters.clear();
+    m_modifiers.clear();
+    m_viewMatrix.reset();
+    m_viewBoxOffset = QPointF();
+    clear();
 }
 
 void KoEnhancedPathShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
@@ -45,7 +64,7 @@ void KoEnhancedPathShape::moveHandleAction( int handleId, const QPointF & point,
     KoEnhancedPathHandle *handle = m_enhancedHandles[ handleId ];
     if( handle )
     {
-        handle->setPosition( shapeToViewbox( point ), this );
+        handle->changePosition( shapeToViewbox( point ) );
         evaluateHandles();
     }
 }
@@ -55,7 +74,7 @@ void KoEnhancedPathShape::updatePath( const QSizeF & )
     clear();
 
     foreach( KoEnhancedPathCommand *cmd, m_commands )
-        cmd->execute( this );
+        cmd->execute();
 
     normalize();
 }
@@ -89,13 +108,13 @@ void KoEnhancedPathShape::evaluateHandles()
         m_handles.clear();
         uint handleCount = m_enhancedHandles.size();
         for( uint i = 0; i < handleCount; ++i )
-            m_handles.append( viewboxToShape( m_enhancedHandles[i]->position( this ) ) );
+            m_handles.append( viewboxToShape( m_enhancedHandles[i]->position() ) );
     }
     else
     {
         uint handleCount = m_enhancedHandles.size();
         for( uint i = 0; i < handleCount; ++i )
-            m_handles[i] = viewboxToShape( m_enhancedHandles[i]->position( this ) );
+            m_handles[i] = viewboxToShape( m_enhancedHandles[i]->position() );
     }
 }
 
@@ -133,8 +152,8 @@ double KoEnhancedPathShape::evaluateReference( const QString &reference )
         break;
         // maybe an identifier ?
         default:
-            KoEnhancedPathNamedParameter p( reference );
-            res = p.evaluate( this );
+            KoEnhancedPathNamedParameter p( reference, this );
+            res = p.evaluate();
         break;
     }
 
@@ -169,7 +188,7 @@ KoEnhancedPathParameter * KoEnhancedPathShape::parameter( const QString & text )
         KoEnhancedPathParameter *parameter = 0;
         QChar c = text[0];
         if( c.toAscii() == '$' || c.toAscii() == '?' )
-            parameter = new KoEnhancedPathReferenceParameter( text );
+            parameter = new KoEnhancedPathReferenceParameter( text, this );
         else
         {
             if( c.isDigit() )
@@ -177,13 +196,13 @@ KoEnhancedPathParameter * KoEnhancedPathShape::parameter( const QString & text )
                 bool success = false;
                 double constant = text.toDouble( &success );
                 if( success )
-                    parameter = new KoEnhancedPathConstantParameter( constant );
+                    parameter = new KoEnhancedPathConstantParameter( constant, this );
             }
             else
             {
                 Identifier identifier = KoEnhancedPathNamedParameter::identifierFromString( text );
                 if( identifier != IdentifierUnknown )
-                    parameter = new KoEnhancedPathNamedParameter( identifier );
+                    parameter = new KoEnhancedPathNamedParameter( identifier, this );
             }
         }
 
@@ -207,8 +226,6 @@ void KoEnhancedPathShape::addHandle( const QMap<QString,QVariant> &handle )
     if( handle.isEmpty() )
         return;
 
-    KoEnhancedPathHandle *newHandle = 0;
-
     if( ! handle.contains( "draw:handle-position" ) )
         return;
     QVariant position = handle.value("draw:handle-position");
@@ -217,7 +234,8 @@ void KoEnhancedPathShape::addHandle( const QMap<QString,QVariant> &handle )
     if( tokens.count() < 2 )
         return;
 
-    newHandle = new KoEnhancedPathHandle( parameter( tokens[0] ), parameter( tokens[1] ) );
+    KoEnhancedPathHandle *newHandle = new KoEnhancedPathHandle( this );
+    newHandle->setPosition( parameter( tokens[0] ), parameter( tokens[1] ) );
 
     // check if we have a polar handle
     if( handle.contains( "draw:handle-polar" ) )
@@ -279,7 +297,7 @@ void KoEnhancedPathShape::addCommand( const QString &command )
     if( tokens[0].length() != 1 )
         return;
 
-    KoEnhancedPathCommand * cmd = new KoEnhancedPathCommand( tokens[0][0] );
+    KoEnhancedPathCommand * cmd = new KoEnhancedPathCommand( tokens[0][0], this );
 
     for( int i = 1; i < tokenCount; ++i )
         cmd->addParameter( parameter( tokens[i] ) );
@@ -347,4 +365,133 @@ void KoEnhancedPathShape::saveOdf( KoShapeSavingContext & context ) const
     context.xmlWriter().endElement(); // draw:enhanced-geometry
     context.xmlWriter().endElement(); // draw:custom-shape
     saveOdfConnections(context);
+}
+
+bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
+    reset();
+
+    loadOdfAttributes( element, context, OdfMandatories );
+
+    KoXmlElement child;
+    forEachElement( child, element )
+    {
+        if( child.localName() == "enhanced-geometry" && child.namespaceURI() == KoXmlNS::draw )
+        {
+            // load the viewbox
+            QRectF viewBox = loadOdfViewbox( child );
+            if( ! viewBox.isEmpty() )
+                m_viewBox = viewBox;
+
+            // load the modifiers
+            QString modifiers = child.attributeNS( KoXmlNS::draw, "modifiers", "" );
+            if( ! modifiers.isEmpty() )
+            {
+                addModifiers( modifiers );
+            }
+
+            KoXmlElement grandChild;
+            forEachElement( grandChild, child )
+            {
+                if( grandChild.namespaceURI() != KoXmlNS::draw )
+                    continue;
+                if( grandChild.localName() == "equation" )
+                {
+                    QString name = grandChild.attributeNS( KoXmlNS::draw, "name" );
+                    QString formula = grandChild.attributeNS( KoXmlNS::draw, "formula" );
+                    kDebug() << "adding formula: " << formula << endl;
+                    addFormula( name, formula );
+                }
+                else if( grandChild.localName() == "handle" )
+                {
+                    KoEnhancedPathHandle * handle = new KoEnhancedPathHandle( this );
+                    if( handle->loadOdf( grandChild ) )
+                    {
+                        kDebug() << "adding handle: " << grandChild.text() << endl;
+                        m_enhancedHandles.append( handle );
+                        evaluateHandles();
+                    }
+                    else
+                        delete handle;
+                }
+
+            }
+            // load the enhanced path data
+            QString path = child.attributeNS( KoXmlNS::draw, "enhanced-path", "" );
+            if( ! path.isEmpty() )
+            {
+                parsePathData( path );
+            }
+        }
+    }
+
+    QPointF pos;
+    pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+    pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
+    setPosition( pos );
+    normalize();
+
+    QSizeF size;
+    size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
+    size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
+
+    resize( size );
+
+    return true;
+}
+
+void KoEnhancedPathShape::parsePathData( const QString & data )
+{
+    if( data.isEmpty() )
+        return;
+
+    QString d = data;
+    d = d.replace( ',', ' ' );
+    d = d.simplified();
+
+    const QByteArray buffer = d.toLatin1();
+    const char *ptr = buffer.constData();
+    const char *end = buffer.constData() + buffer.length() + 1;
+
+    char lastChar = ' ';
+
+    kDebug() << "parsing enhanced path data: " << data << endl;
+
+    QString cmdString;
+
+    while( ptr < end )
+    {
+        switch( *ptr )
+        {
+            case 'M':
+            case 'L':
+            case 'C':
+            case 'Z':
+            case 'N':
+            case 'F':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'A':
+            case 'B':
+            case 'W':
+            case 'V':
+            case 'X':
+            case 'Y':
+            case 'Q':
+                if( ! cmdString.isEmpty() && lastChar == ' ' )
+                {
+                    addCommand( cmdString );
+                    kDebug() << "added command: " << cmdString << endl;
+                }
+                kDebug() << "started new command: " << *ptr << endl;
+                cmdString = *ptr;
+                break;
+            default:
+                cmdString += *ptr;
+        }
+
+        lastChar = *ptr;
+        ptr++;
+    }
 }

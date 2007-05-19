@@ -32,6 +32,7 @@ class KoEnhancedPathHandle;
 class KoEnhancedPathFormula;
 class KoEnhancedPathParameter;
 class KoShapeSavingContext;
+class KoShapeLoadingContext;
 
 /**
  * An enhanced shape is a custom shape which can be defined
@@ -84,17 +85,24 @@ public:
     QPointF viewboxToShape( const QPointF & point ) const;
     double shapeToViewbox( double value ) const;
     double viewboxToShape( double value ) const;
+
+    /// Returns parameter from given textual representation
+    KoEnhancedPathParameter * parameter( const QString & text );
+
 protected:
     void saveOdf( KoShapeSavingContext & context ) const;
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     // from KoParameterShape
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     // from KoParameterShape
     void updatePath( const QSizeF &size );
 private:
-    /// Returns parameter from given textual representation
-    KoEnhancedPathParameter * parameter( const QString & text );
 
     void evaluateHandles();
+    void reset();
+
+    /// parses the enhanced path data
+    void parsePathData( const QString & data );
 
     typedef QMap<QString, KoEnhancedPathFormula*> FormulaStore;
     typedef QList<double> ModifierStore;

@@ -21,6 +21,7 @@
 #define KOENHANCEDPATHHANDLE_H
 
 #include <QPointF>
+#include <KoXmlReaderForward.h>
 
 class KoEnhancedPathShape;
 class KoEnhancedPathParameter;
@@ -34,22 +35,21 @@ class KoEnhancedPathHandle
 {
 public:
     /**
-     * Constructs a new handle with the given coordinate parameters.
+     * Constructs a new empty handle;
      *
-     * @param x the x-coordinate of the handle position
-     * @param y the y-coordinate of the handle position
-     */
-    KoEnhancedPathHandle( KoEnhancedPathParameter * x, KoEnhancedPathParameter * y );
+     * Note that an empty handle is not valid, as long as there are no
+     * positional parameters set with setPosition.
+    */
+    KoEnhancedPathHandle( KoEnhancedPathShape * parent );
 
     /// Destroys the handle
     ~KoEnhancedPathHandle();
 
     /**
      * Evaluates the position of the handle.
-     * @param path the enhanced path the handle is referenced from
      * @return the actual handle position
      */
-    QPointF position( KoEnhancedPathShape * path );
+    QPointF position();
 
     /**
      * Attemps to changes the position of the handle.
@@ -60,7 +60,20 @@ public:
      * @param position the new position the handle to set
      * @param path the enhanced path the handle is referenced from
      */
-    void setPosition( const QPointF &position, KoEnhancedPathShape * path );
+    void changePosition( const QPointF &position );
+
+    /// Returns if the handle has valid positional parameters.S
+    bool hasPosition() const;
+
+    /**
+     * Sets the positional parameters, making the handle valid.
+     *
+     * It replaces the actual positional parameters.
+     *
+     * @param positionX the x-coordinate of the handle position
+     * @param positionY the y-coordinate of the handle position
+     */
+    void setPosition( KoEnhancedPathParameter *positionX, KoEnhancedPathParameter *positionY );
 
     /**
      * Sets the range of the handles x-coordinate.
@@ -103,9 +116,12 @@ public:
 
     /// save to the given shape saving context
     void saveOdf( KoShapeSavingContext & context ) const;
+    /// load handle from given element
+    bool loadOdf( const KoXmlElement & element );
 private:
     /// Returns if handle is polar
     bool isPolar() const;
+    KoEnhancedPathShape * m_parent; ///< the enhanced path shape owning this handle
     KoEnhancedPathParameter * m_positionX; ///< the position x-coordinate 
     KoEnhancedPathParameter * m_positionY; ///< the position y-coordinate
     KoEnhancedPathParameter * m_minimumX;  ///< the minimum x-coordinate
