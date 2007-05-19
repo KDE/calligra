@@ -264,7 +264,9 @@ void TextTool::paint( QPainter &painter, KoViewConverter &converter) {
         pen.setColor(invert);
     }
     painter.setPen(pen);
-    block.layout()->drawCursor(&painter, QPointF(0,0), m_caret.position() - block.position());
+    const int posInParag = m_caret.position() - block.position();
+    KoTextDocumentLayout::updateTabsForLine(block, block.layout()->lineForTextPosition(posInParag).lineNumber());
+    block.layout()->drawCursor(&painter, QPointF(0,0), posInParag);
 }
 
 void TextTool::mousePressEvent( KoPointerEvent *event ) {
@@ -657,6 +659,7 @@ void TextTool::repaintCaret() {
         QRectF repaintRect;
         if(tl.isValid()) {
             repaintRect = tl.rect();
+            KoTextDocumentLayout::updateTabsForLine(block, tl.lineNumber());
             repaintRect.setX(tl.cursorToX(m_caret.position() - block.position()));
             repaintRect.setWidth(6);
         }
@@ -698,6 +701,7 @@ QRectF TextTool::textRect(int startPosition, int endPosition) {
     QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
     if(! line1.isValid())
         return QRectF();
+    KoTextDocumentLayout::updateTabsForLine(block, line1.lineNumber());
     double startX = line1.cursorToX(startPosition - block.position());
     if(startPosition == endPosition)
         return QRectF(startX, line1.y(), 1, line1.height());
@@ -706,6 +710,7 @@ QRectF TextTool::textRect(int startPosition, int endPosition) {
     QTextLine line2 = block2.layout()->lineForTextPosition(endPosition - block2.position());
     if(! line2.isValid())
         return QRectF();
+    KoTextDocumentLayout::updateTabsForLine(block2, line2.lineNumber());
     double endX = line2.cursorToX(endPosition - block2.position());
 
     if(line1.textStart() + block.position() == line2.textStart()+ block2.position() )
