@@ -17,7 +17,12 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
+#include <TableModel.h>
+
+#if 0
 #include "KDChartAxisParams.h"
+#endif
+#include "KDChartChart.h"
 
 #if 0
 #include "kchart_params.h"
@@ -319,8 +324,11 @@ void kchartDataEditor::addDocs()
 // The data is taken from the KDChart data.  This method is never
 // called when the chart is a part of a spreadsheet.
 //
-void kchartDataEditor::setData( KChartParams *params, KDChartTableData *dat )
+void kchartDataEditor::setData( KChartPart *part, TableModel *dat )
 {
+    Q_UNUSED( part );
+    Q_UNUSED( dat );
+#if 0
     unsigned int  rowsCount;
     unsigned int  colsCount;
 
@@ -379,6 +387,7 @@ void kchartDataEditor::setData( KChartParams *params, KDChartTableData *dat )
     // Set column widths.  The default is a little too wide.
     for (unsigned int col = 0; col < colsCount + 1; col++) 
 	m_table->setColumnWidth(col, COLUMNWIDTH);
+#endif
 
     // and resize the widget to a good size.
     resize(600, 300);
@@ -387,8 +396,11 @@ void kchartDataEditor::setData( KChartParams *params, KDChartTableData *dat )
 
 // Get the data from the data editor and put it back into the chart.
 //
-void kchartDataEditor::getData( KChartParams *params, KDChartTableData *dat )
-{	
+void kchartDataEditor::getData( KChartPart *part, TableModel *dat )
+{
+    Q_UNUSED( part );
+    Q_UNUSED( dat );
+#if 0
     //Number of rows used as headers
     int labelRows = headerRows();
     //Number of columns used as headers	
@@ -435,6 +447,8 @@ void kchartDataEditor::getData( KChartParams *params, KDChartTableData *dat )
 #if 1
     params->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
     params->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
+#endif
+
 #endif
 }
 

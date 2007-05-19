@@ -3,6 +3,7 @@
 
 
 #include <q3strlist.h>
+#include <q3table.h>
 #include <QSpinBox>
 //Added by qt3to4:
 #include <QLabel>
@@ -10,11 +11,14 @@
 
 #include <kdialog.h>
 
+
 #include "kchart_part.h"
 
 class QLabel;
 class QSpinBox;
 class QCheckBox;
+
+class TableModel;
 
 
 namespace KChart
@@ -77,8 +81,13 @@ class kchartDataEditor : public KDialog
     Q_OBJECT
 public:
     kchartDataEditor(QWidget* parent = 0);
+#if 0
     void setData(KChartParams *params, KDChartTableData *dat);
     void getData(KChartParams *params, KDChartTableData *dat);
+#else
+    void setData(KChartPart *part, TableModel *data);
+    void getData(KChartPart *part, TableModel *data);
+#endif
     void setRowLabels(const QStringList &rowLabels);
     void getRowLabels(QStringList &rowLabels);
     void setColLabels(const QStringList &colLabels);

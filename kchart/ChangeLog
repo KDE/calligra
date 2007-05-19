@@ -1,6 +1,10 @@
 2007-05-19  Inge Wallin  <inge@lysator.liu.se>
 
-	* kchart_view.cc (): Make compile with new KDChart.
+	KDChart1 -> KDChart2
+	* kchartDataEditor.{h,cc}: Make compile with new KDChart.
+
+	KDChart1 -> KDChart2
+	* kchart_view.cc: Make compile with new KDChart.
 
 2007-05-12  Inge Wallin  <inge@lysator.liu.se>	
 
