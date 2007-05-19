@@ -210,3 +210,5 @@ void TableModel::clear()
     m_rows.resize( 0 );
     reset();
 }
+
+#include "TableModel.moc"
