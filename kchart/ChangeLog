@@ -1,3 +1,13 @@
+2007-05-19  Inge Wallin  <inge@lysator.liu.se>
+
+	* kchart_view.cc (): Make compile with new KDChart.
+
+2007-05-12  Inge Wallin  <inge@lysator.liu.se>	
+
+	* Import New KDChart
+	* Fix a number of files to compile with it. Most features are
+	disabled, though.
+	
 2007-03-25  Inge Wallin  <inge@lysator.liu.se>
 
 	Qt3 -> Qt4

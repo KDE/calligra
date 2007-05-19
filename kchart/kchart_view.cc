@@ -646,6 +646,8 @@ void KChartView::setupPrinter( KPrinter &printer )
 
 void KChartView::print(KPrinter &printer)
 {
+    Q_UNUSED( printer );
+#if 0                           // Disable printing for now.
     printer.setFullPage( false );
 
     QPainter painter;
@@ -672,8 +674,8 @@ void KChartView::print(KPrinter &printer)
 		   ((KChartPart*)koDocument())->data(),
 		   0, 		// regions
 		   &rect);
-
     painter.end();
+#endif
 }
 
 
@@ -683,8 +685,7 @@ void KChartView::print(KPrinter &printer)
 void KChartView::importData()
 {
     // Get the name of the file to open.
-    QString filename = 
-KFileDialog::getOpenFileName(KUrl(QString()),// startDir
+    QString filename = KFileDialog::getOpenFileName(KUrl(QString()),// startDir
 						    QString(),// filter
 						    0,
 						    i18n("Import Data"));
@@ -695,8 +696,8 @@ KFileDialog::getOpenFileName(KUrl(QString()),// startDir
     // Check to see if we can read the file.
     QFile  inFile(filename);
     if (!inFile.open(QIODevice::ReadOnly)) {
-	KMessageBox::sorry( 0, i18n("The file %1 could not be read."
-			    ,filename) );
+	KMessageBox::sorry( 0, i18n("The file %1 could not be read.",
+                                    filename) );
 	inFile.close();
 	return;
     }
@@ -708,16 +709,17 @@ KFileDialog::getOpenFileName(KUrl(QString()),// startDir
     dialog->setData(inData);
 
     if ( !dialog->exec() ) {
-	kDebug(35001) << "Cancel was pressed" << endl;
+	// kDebug(35001) << "Cancel was pressed" << endl;
 	return;
     }
 
-    kDebug(35001) << "OK was pressed" << endl;
+    //kDebug(35001) << "OK was pressed" << endl;
 
+#if 0
     uint  rows = dialog->rows();
     uint  cols = dialog->cols();
 
-    kDebug(35001) << "Rows: " << rows << "  Cols: " << cols << endl;
+    //kDebug(35001) << "Rows: " << rows << "  Cols: " << cols << endl;
 
     bool  hasRowHeaders = ( rows > 1 && dialog->firstRowContainHeaders() );
     bool  hasColHeaders = ( cols > 1 && dialog->firstColContainHeaders() );
@@ -755,6 +757,9 @@ KFileDialog::getOpenFileName(KUrl(QString()),// startDir
 
     ((KChartPart*)koDocument())->doSetData( data,
 					    hasRowHeaders, hasColHeaders );
+#else
+    TableModel        data();
+#endif
 }
 
 
