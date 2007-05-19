@@ -537,72 +537,98 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
     QTextBlock block = m_parent->document()->begin();
     KoTextBlockBorderData *lastBorder = 0;
     bool started=false;
+    int selectionStart = -1, selectionEnd = -1;
+    if(context.selections.count()) {
+        QTextCursor cursor = context.selections[0].cursor;
+        selectionStart = cursor.position();
+        selectionEnd = cursor.anchor();
+        if(selectionStart > selectionEnd)
+            qSwap(selectionStart, selectionEnd);
+    }
+
     while(block.isValid()) {
         QTextLayout *layout = block.layout();
 
-        // the following line is simpler, but due to a Qt bug doesn't work. Try to see if enabling this for Qt4.3
-        // will not paint all paragraphs.
-        //if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
-        if(layout->lineCount() >= 1) {
-            QTextLine first = layout->lineAt(0);
-            QTextLine last = layout->lineAt(layout->lineCount()-1);
-            QRectF parag(qMin(first.x(), last.x()), first.y(), qMax(first.width(), last.width()), last.y() + last.height());
+        if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
+            started=true;
+            painter->save();
+            decorateParagraph(painter, block);
+            painter->restore();
+
+#if 0       // code for drawing using the normal QTextLayout::draw().  Can't use it due to tabs.
+
+            QVector<QTextLayout::FormatRange> selections;
+            foreach(QAbstractTextDocumentLayout::Selection selection, context.selections) {
+                QTextCursor cursor = selection.cursor;
+                int begin = cursor.position();
+                int end = cursor.anchor();
+                if(begin > end)
+                    qSwap(begin, end);
+
+               if(end < block.position() || begin > block.position() + block.length())
+                   continue; // selection does not intersect this block.
+                QTextLayout::FormatRange fr;
+                fr.start = begin - block.position();
+                fr.length = end - begin;
+                fr.format = selection.format;
+                selections.append(fr);
+            }
+            layout->draw(painter, QPointF(0,0), selections);
+#endif
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
-            if(blockData) {
-                KoTextBlockBorderData *border = blockData->border();
-                if(blockData->hasCounterData()) {
-                    if(layout->textOption().textDirection() == Qt::RightToLeft)
-                        parag.setRight(parag.right() + blockData->counterWidth() + blockData->counterSpacing());
-                    else
-                        parag.setLeft(blockData->counterPosition().x());
-                }
-                if(border) {
-                    KoInsets insets;
-                    border->applyInsets(insets, parag.top(), true);
-                    parag.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-                }
-            }
-            if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(parag.toRect())).isEmpty()) {
-                started=true;
+            drawParagraph(painter, layout, blockData, selectionStart - block.position(), selectionEnd - block.position());
+
+            KoTextBlockBorderData *border = 0;
+            if(blockData)
+                border = dynamic_cast<KoTextBlockBorderData*> (blockData->border());
+            if(lastBorder && lastBorder != border) {
                 painter->save();
-                decorateParagraph(painter, block);
+                lastBorder->paint(*painter);
                 painter->restore();
-
-                QVector<QTextLayout::FormatRange> selections;
-                foreach(QAbstractTextDocumentLayout::Selection selection, context.selections) {
-                    QTextCursor cursor = selection.cursor;
-                    int begin = cursor.position();
-                    int end = cursor.anchor();
-                    if(begin > end)
-                        qSwap(begin, end);
-
-                   if(end < block.position() || begin > block.position() + block.length())
-                       continue; // selection does not intersect this block.
-                    QTextLayout::FormatRange fr;
-                    fr.start = begin - block.position();
-                    fr.length = end - begin;
-                    fr.format = selection.format;
-                    selections.append(fr);
-                }
-                layout->draw(painter, QPointF(0,0), selections);
-
-                KoTextBlockBorderData *border = 0;
-                if(blockData)
-                    border = dynamic_cast<KoTextBlockBorderData*> (blockData->border());
-                if(lastBorder && lastBorder != border) {
-                    painter->save();
-                    lastBorder->paint(*painter);
-                    painter->restore();
-                }
-                lastBorder = border;
             }
-            else if(started) // when out of the cliprect, then we are done drawing.
-                break;
+            lastBorder = border;
         }
+        else if(started) // when out of the cliprect, then we are done drawing.
+            break;
         block = block.next();
     }
     if(lastBorder)
         lastBorder->paint(*painter);
+}
+
+void Layout::drawParagraph(QPainter *painter, QTextLayout *layout, KoTextBlockData *data, int selectionStart, int selectionEnd) {
+    // this method replaces QTextLayout::draw() because we need to do some stuff per line for tabs. :/
+    QList<KoTextBlockData::TabLineData> tabsData;
+    if(data)
+        tabsData = data->tabLineData();
+    QTextOption textOption = layout->textOption();
+
+    for(int i=0; i < layout->lineCount(); i++) {
+        KoTextBlockData::TabLineData tabs;
+        if(tabsData.count() > i) {
+            tabs = tabsData[i];
+            textOption.setTabArray(tabs.tabs);
+            layout->setTextOption(textOption);
+        }
+        QTextLine line = layout->lineAt(i);
+        if(line.textStart() < selectionEnd && line.textStart() + line.textLength() > selectionStart) {
+            // paint selection!
+            const double x1 = line.cursorToX(qMax(selectionStart, line.textStart()));
+            const double x2 = line.cursorToX(qMin(selectionEnd, line.textStart() + line.textLength()));
+            QRectF rect(line.position().x() + x1, line.position().y(), x2 - x1, line.height());
+            painter->fillRect(rect, QBrush(QColor(255, 255, 0, 130))); // TODO use proper selection color
+        }
+
+        line.draw(painter, layout->position());
+
+        for(int x=0; x < tabs.tabLength.count(); x++) {
+            const double pos = tabs.tabs[x] - tabs.tabLength[x];
+            QRectF tabArea(layout->position() + line.position() + QPointF(pos, 0),
+                    QSizeF(tabs.tabLength[x], line.ascent()));
+            // TODO properly draw the tab areas.
+            //painter->fillRect(tabArea, QBrush(QColor(255, 0, 0, 130)));
+        }
+    }
 }
 
 void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
@@ -776,7 +802,9 @@ bool Layout::previousParag() {
 }
 
 KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
-//kDebug() << "applyTabs (" << line.textStart() << ")--------------------\n";
+#ifdef DEBUG_TABS
+    kDebug() << "applyTabs (" << line.textStart() << ")--------------------\n";
+#endif
     Q_ASSERT(m_block.layout());
     QTextOption textOption = m_block.layout()->textOption();
     QVariant variant = m_format.property(KoParagraphStyle::TabPositions);
@@ -868,19 +896,22 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
 //kDebug() << "  startSection: " << startSection << ", endSection: " << endSection << endl;
 
             if(m_previousTab.type == KoText::RightTab) {
-                if(startSection > m_line.width()) // tab found will not end up in line.
+                if(startSection > m_line.width()) { // tab found will not end up in line.
                     m_tabData.tabs.append(m_line.width());
+                    m_tabData.tabLength.append(0);
+                }
                 else if(currentNotInLine || endSection > m_previousTab.position)
                     // aligned text doesn't fit, so make the tab a normal space.
 { //kDebug() << "currentNotInLine" << endl;
                     m_tabData.tabs.append(startSection + 4); // TODO replace 4 with width of a space
+                    m_tabData.tabLength.append(4);
 }
                 else {
 //kDebug() << "    " << m_previousTab.position << " " << m_previousTab.position - (endSection - startSection) << endl;
                     m_tabData.tabs.append(m_previousTab.position - (endSection - startSection));
                     m_offset += m_previousTab.position - endSection;
+                    m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition));
                 }
-                m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition));
             }
             // else center TODO
             // else
@@ -910,7 +941,11 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
     }
 
     if(tabsHelper.tabLineData().tabs.count() > 0) {
-// foreach(double t, tabsHelper.tabLineData().tabs) { printf("tab: %0.4f\n", t); }
+#ifdef DEBUG_TABS
+{ KoTextBlockData::TabLineData foo = tabsHelper.tabLineData(); Q_ASSERT(foo.tabs.count() == foo.tabLength.count());
+ for(int i=0; i < foo.tabs.count(); i++){ printf("tab: %0.4f, length: %0.4f\n", foo.tabs[i], foo.tabLength[i]); }
+}
+#endif
         textOption.setTabArray(tabsHelper.tabLineData().tabs);
         m_block.layout()->setTextOption(textOption);
 
