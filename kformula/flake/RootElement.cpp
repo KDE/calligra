@@ -201,24 +201,15 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 */
 
-/*
-void RootElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
+void RootElement::writeMathMLContent( KoXmlWriter* writer )
 {
-    if( m_exponent->elementType() == Basic )
-        writer->startElement( oasisFormat ? "math:msqrt" : "msqrt" );
-    else
-        writer->startElement( oasisFormat ? "math:mroot" : "mroot" );
-
-    writeMathMLAttributes( writer );
-    m_radicand->writeMathML( writer, oasisFormat );
+    m_radicand->writeMathML( writer );
     if( m_exponent->elementType() != Basic )
-        m_exponent->writeMathML( writer, oasisFormat );
-
-    writer->endElement();
+        m_exponent->writeMathML( writer );
 }
-*/
 
 bool RootElement::readMathMLContent( const KoXmlElement& element )
 {
     kWarning() << "Element name: " << element.tagName() << endl;
+    return true;
 }
