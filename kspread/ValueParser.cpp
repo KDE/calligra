@@ -296,31 +296,6 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
         if ( *ok )
             value = Value( complex<double>( real, imag ) );
     }
-    else if ( ( str.count( ':' ) == 1 ) || ( str.count( ':' ) == 2 ) )
-    {
-        // perhaps a time?
-        QStringList sections = str.split( ':' );
-        double hours = sections[0].toDouble(ok);
-        if ( !( *ok ) ) {
-            return Value::errorVALUE();
-        }
-        double minutes = sections[1].toDouble(ok);
-        if ( !( *ok ) ) {
-            return Value::errorVALUE();
-        }
-        double seconds = 0.0;
-        if ( sections.count() == 3 ) {
-            seconds = sections[2].toDouble(ok);
-            if ( !( *ok ) ) {
-                return Value::errorVALUE();
-            }
-            minutes += ( seconds/60.0 );
-        }
-        hours += ( minutes / 60.0 );
-        double val = hours / 24.0;
-        // kDebug( 37000) << "val: " << val << endl;
-        value = Value( val );
-    }
     else // real number
     {
         // First try to understand the number using the m_doc->locale()
@@ -428,7 +403,7 @@ Value ValueParser::tryParseTime( const QString& str, bool *ok ) const
   Value val;
 
   QDateTime tmpTime = readTime (str, true, &valid, duration);
-  if (!tmpTime.isValid())
+  if (!valid)
     tmpTime = readTime (str, false, &valid, duration);
 
   if (!valid)

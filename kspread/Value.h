@@ -464,4 +464,21 @@ inline kdbgstream operator<<( kdbgstream str, const KSpread::Value& v )
     return str;
 }
 
+inline kdbgstream operator<<( kdbgstream stream, const KSpread::Value::Format& f )
+{
+    switch ( f )
+    {
+        case KSpread::Value::fmt_None:     stream << "None";     break;
+        case KSpread::Value::fmt_Boolean:  stream << "Boolean";  break;
+        case KSpread::Value::fmt_Number:   stream << "Number";   break;
+        case KSpread::Value::fmt_Percent:  stream << "Percent";  break;
+        case KSpread::Value::fmt_Money:    stream << "Money";    break;
+        case KSpread::Value::fmt_DateTime: stream << "DateTime"; break;
+        case KSpread::Value::fmt_Date:     stream << "Date";     break;
+        case KSpread::Value::fmt_Time:     stream << "Time";     break;
+        case KSpread::Value::fmt_String:   stream << "String";   break;
+    }
+    return stream;
+}
+
 #endif // KSPREAD_VALUE_H
