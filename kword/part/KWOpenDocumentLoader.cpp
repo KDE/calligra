@@ -48,6 +48,7 @@
 #include <QTextBlock>
 #include <QTextList>
 #include <klocale.h>
+#include <QTimer>
 
 /// \internal d-pointer class.
 class KWOpenDocumentLoader::Private
@@ -57,6 +58,14 @@ class KWOpenDocumentLoader::Private
         KWDocument *document;
         /// Current master-page name (OASIS loading)
         QString currentMasterPage;
+
+        /// The progress value.
+        int bodyProgressLevel;
+        int bodyProgressTotal;
+        int bodyProgressValue;
+
+        int lastElapsed;
+        QTime dt;
 };
 
 KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
@@ -64,17 +73,45 @@ KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
     , d(new Private())
 {
     d->document = document;
+
+    d->bodyProgressTotal = 0;
+    d->bodyProgressValue = 0;
+
+    d->lastElapsed = 0;
+    d->dt.start();
     connect(this, SIGNAL(sigProgress(int)), d->document, SIGNAL(sigProgress(int)));
 }
 
 KWOpenDocumentLoader::~KWOpenDocumentLoader() {
+    kDebug(32001) << "Loading took " << (float)(d->dt.elapsed()) / 1000 << " seconds" << endl;
     delete d;
+}
+
+void KWOpenDocumentLoader::startBody(int total)
+{
+    d->bodyProgressTotal += total;
+}
+
+void KWOpenDocumentLoader::processBody()
+{
+    d->bodyProgressValue++;
+    if( d->dt.elapsed() >= d->lastElapsed + 1000 ) { // update only once per second
+        d->lastElapsed = d->dt.elapsed();
+        Q_ASSERT( d->bodyProgressTotal > 0 );
+        const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
+        emit sigProgress( percent );
+    }
+}
+
+void KWOpenDocumentLoader::endBody(int total)
+{
+    d->bodyProgressTotal -= total;
+    d->bodyProgressValue -= total;
 }
 
 //1.6: KWDocument::loadOasis
 bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store) {
-    QTime dt;
-    dt.start();
+
     emit sigProgress( 0 );
     kDebug(32001) << "========================> KWOpenDocumentLoader::load START" << endl;
 
@@ -227,7 +264,14 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
 
     QTextCursor cursor( fs->document() );
+
+    d->bodyProgressTotal = 0;
+    d->bodyProgressValue = 0;
+    //connect(fs->document(), SIGNAL(blockCountChanged(int)), this, SLOT(slotBlockCountChanged(int)));
+//kDebug()<<"================> "<<body.childNodes().count()<<endl;
     loadBody(context, body, cursor);
+    //disconnect(fs->document(), SIGNAL(blockCountChanged(int)), this, SLOT(slotBlockCountChanged(int)));
+
 #endif
 
     if ( !loadMasterPageStyle(context, d->currentMasterPage) )
@@ -244,7 +288,6 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
 #endif
 
     kDebug(32001) << "========================> KWOpenDocumentLoader::load END" << endl;
-    kDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
     emit sigProgress(100);
     return true;
 }

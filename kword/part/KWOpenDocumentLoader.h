@@ -70,8 +70,19 @@ protected:
     virtual bool loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName);
     virtual bool loadMasterPageStyle(KoOasisLoadingContext& context, const QString& masterPageName);
 
+    virtual void startBody(int total);
+    virtual void processBody();
+    virtual void endBody(int total);
+
 private:
     void loadHeaderFooter(KoOasisLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
+
+Q_SIGNALS:
+    /**
+    * This signal is emitted during loading with a percentage within 1-100 range
+    * \param percent the progress as a percentage
+    */
+    void sigProgress(int percent);
 
 private:
     /// \internal d-pointer class.
