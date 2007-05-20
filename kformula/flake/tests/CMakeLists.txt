@@ -8,6 +8,14 @@ kde4_add_executable( TestAttributeManager RUN_UNINSTALLED ${TestAttributeManager
 target_link_libraries( TestAttributeManager kformulalib ${QT_QTTEST_LIBRARY} )
 add_test(kformula-AttributeManager TestAttributeManager )
 
+########### Load Test ###############
+
+set(TestLoad_SRCS TestLoad.cpp)
+kde4_automoc(${TestLoad_SRCS})
+kde4_add_executable(TestLoad RUN_UNINSTALLED ${TestLoad_SRCS})
+target_link_libraries(TestLoad kformulalib ${QT_QTTEST_LIBRARY})
+add_test(kformula-Load TestLoad)
+
 ########### Load and Save Test ###############
 
 set(TestLoadAndSave_SRCS TestLoadAndSave.cpp)
