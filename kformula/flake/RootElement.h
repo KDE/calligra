@@ -24,6 +24,7 @@
 #define ROOTELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 
 #include <QPainterPath>
 
@@ -32,7 +33,7 @@ class RowElement;
 /**
  * @short Implementation of the MathML mroot and msqrt elements 
  */
-class RootElement : public BasicElement {
+class KOFORMULA_EXPORT RootElement : public BasicElement {
 public:
     /// The standard constructor
     RootElement( BasicElement* parent = 0 );

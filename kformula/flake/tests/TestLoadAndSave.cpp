@@ -30,6 +30,7 @@
 #include "NumberElement.h"
 #include "OperatorElement.h"
 #include "RowElement.h"
+#include "RootElement.h"
 
 static QString loadAndSave(BasicElement* element, const QString& input)
 {
@@ -670,12 +671,22 @@ void TestLoadAndSave::fractionElement()
 
 void TestLoadAndSave::rootElement_data()
 {
-    // TODO
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
+    addRow( "<msqrt><mi>x</mi></msqrt>" );
+
+    addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>" );
 }
 
 void TestLoadAndSave::rootElement()
 {
-    // TODO
+    QFETCH(QString, input);
+    QFETCH(QString, output);
+
+    RootElement* element = new RootElement;
+    QCOMPARE(loadAndSave(element, input), output);
+    delete element;
 }
 
 void TestLoadAndSave::styleElement_data()
