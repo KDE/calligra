@@ -20,6 +20,7 @@
 #include "KoEnhancedPathParameter.h"
 #include "KoEnhancedPathFormula.h"
 #include "KoEnhancedPathShape.h"
+#include <KoUnit.h>
 #include <math.h>
 
 QString identifierData[] = {
@@ -129,8 +130,10 @@ double KoEnhancedPathNamedParameter::evaluate()
             return viewBox.height();
         break;
         case IdentifierLogwidth:
+            return KoUnit::toMillimeter( viewBox.width() ) * 100;
         break;
         case IdentifierLogheight:
+            return KoUnit::toMillimeter( viewBox.height() ) * 100;
         break;
         default:
             return 0.0;
