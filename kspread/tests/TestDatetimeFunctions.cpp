@@ -308,6 +308,11 @@ void TestDatetimeFunctions::testHOUR()
   CHECK_EVAL( "HOUR(5/24)", Value( 5 ) );                // 5/24ths of a day is 5 hours, aka 5AM.
   CHECK_EVAL( "HOUR(5/24-1/(24*60*60))", Value( 4 ) );   // A second before 5AM, it's 4AM.
   CHECK_EVAL( "HOUR(\"14:00\")", Value( 14 ) );          // TODO TimeParam accepts text
+  CHECK_EVAL( "HOUR(\"9:00\")", Value( 9 ) );
+  CHECK_EVAL( "HOUR(\"09:00\")", Value( 9 ) );
+  CHECK_EVAL( "HOUR(\"23:00\")", Value( 23 ) );
+  CHECK_EVAL( "HOUR(\"11:00 PM\")", Value( 23 ) );
+  CHECK_EVAL( "HOUR(\"11:00 AM\")", Value( 11 ) );
 }
 
 void TestDatetimeFunctions::testMINUTE()
