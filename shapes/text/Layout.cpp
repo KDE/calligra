@@ -289,11 +289,7 @@ bool Layout::nextParag() {
     layout = m_block.layout();
     QTextOption options = layout->textOption();
     options.setTabArray(m_lotsOfTabs);
-#if QT_VERSION < KDE_MAKE_VERSION(4,3,0)
-    options.setWrapMode(QTextOption::WrapAnywhere);
-#else
     options.setWrapMode(QTextOption::WordWrap);
-#endif
     options.setAlignment( QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, m_format.alignment()) );
     if(m_isRtl)
         options.setTextDirection(Qt::RightToLeft);
