@@ -72,7 +72,6 @@ protected:
 
     virtual void startBody(int total);
     virtual void processBody();
-    virtual void endBody(int total);
 
 private:
     void loadHeaderFooter(KoOasisLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);

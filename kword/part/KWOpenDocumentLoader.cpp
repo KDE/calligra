@@ -60,7 +60,6 @@ class KWOpenDocumentLoader::Private
         QString currentMasterPage;
 
         /// The progress value.
-        int bodyProgressLevel;
         int bodyProgressTotal;
         int bodyProgressValue;
 
@@ -73,10 +72,8 @@ KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
     , d(new Private())
 {
     d->document = document;
-
     d->bodyProgressTotal = 0;
     d->bodyProgressValue = 0;
-
     d->lastElapsed = 0;
     d->dt.start();
     connect(this, SIGNAL(sigProgress(int)), d->document, SIGNAL(sigProgress(int)));
@@ -101,12 +98,6 @@ void KWOpenDocumentLoader::processBody()
         const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
         emit sigProgress( percent );
     }
-}
-
-void KWOpenDocumentLoader::endBody(int total)
-{
-    d->bodyProgressTotal -= total;
-    d->bodyProgressValue -= total;
 }
 
 //1.6: KWDocument::loadOasis
