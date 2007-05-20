@@ -210,6 +210,25 @@ void RootElement::writeMathMLContent( KoXmlWriter* writer )
 
 bool RootElement::readMathMLContent( const KoXmlElement& element )
 {
-    kWarning() << "Element name: " << element.tagName() << endl;
+    // TODO: msqrt
+    if ( element.tagName() == "mroot" ) {
+        KoXmlElement child = element.firstChildElement();
+        if ( child.isNull() ) {
+            kWarning( DEBUGID ) << "Empty content in RootElement." << endl;
+            return false;
+        }
+        if ( ! m_radicand->readMathMLChild( child ) )
+            return false;
+        child = child.nextSiblingElement();
+        if ( child.isNull() ) {
+            kWarning( DEBUGID ) << "Empty index in RootElement." << endl;
+            return false;
+        }
+        m_exponent = new RowElement( this );
+        if ( !  m_exponent->readMathMLChild( child ) ) {
+            delete m_exponent;
+            return false;
+        }
+    }
     return true;
 }

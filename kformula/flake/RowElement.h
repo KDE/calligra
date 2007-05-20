@@ -99,6 +99,13 @@ public:
      */
     virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
 
+    /**
+     * Read the content of a MathML child. This is used for inferred mrows.
+     * In such cases, the first element to read is not the parent, but a
+     * valid child.
+     */
+    bool readMathMLChild( const KoXmlElement& element );
+
 protected:
     /// Read the element contents from MathML
     virtual bool readMathMLContent( const KoXmlElement& parent );

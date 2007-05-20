@@ -89,6 +89,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     //else if ( tagName == "mmultiscripts" )
     //      return new MultiscriptElement( parent );
 
+    kWarning( DEBUGID ) << "Do not know how to create the following element: " << tagName << endl;
     return 0;
 }
 

@@ -122,6 +122,14 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
     return true;
 }
 
+bool RowElement::readMathMLChild( const KoXmlElement& element )
+{
+    BasicElement* tmpElement = ElementFactory::createElement( element.tagName(), this );
+    if ( ! tmpElement ) return false;
+    m_rowElements << tmpElement;
+    tmpElement->readMathML( element );
+}
+
 void RowElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     foreach( BasicElement* tmpChild, m_rowElements )       // just write all
