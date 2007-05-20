@@ -575,10 +575,11 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
             }
             layout->draw(painter, QPointF(0,0), selections);
 #endif
-            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
-            drawParagraph(painter, layout, blockData, selectionStart - block.position(), selectionEnd - block.position());
+            //drawParagraph(painter, layout, blockData, selectionStart - block.position(), selectionEnd - block.position());
+            drawParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position());
 
             KoTextBlockBorderData *border = 0;
+            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
             if(blockData)
                 border = dynamic_cast<KoTextBlockBorderData*> (blockData->border());
             if(lastBorder && lastBorder != border) {
@@ -596,12 +597,21 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
         lastBorder->paint(*painter);
 }
 
-void Layout::drawParagraph(QPainter *painter, QTextLayout *layout, KoTextBlockData *data, int selectionStart, int selectionEnd) {
+void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd) {
     // this method replaces QTextLayout::draw() because we need to do some stuff per line for tabs. :/
+    QTextLayout *layout = block.layout();
     QList<KoTextBlockData::TabLineData> tabsData;
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
     if(data)
         tabsData = data->tabLineData();
     QTextOption textOption = layout->textOption();
+
+    QList<KoText::Tab> tabFormat;
+    QVariant variant = block.blockFormat().property(KoParagraphStyle::TabPositions);
+    if(! variant.isNull())
+        foreach(QVariant tab, qvariant_cast<QList<QVariant> >(variant))
+            tabFormat.append(tab.value<KoText::Tab>());
+
 
     for(int i=0; i < layout->lineCount(); i++) {
         KoTextBlockData::TabLineData tabs;
@@ -621,12 +631,40 @@ void Layout::drawParagraph(QPainter *painter, QTextLayout *layout, KoTextBlockDa
 
         line.draw(painter, layout->position());
 
-        for(int x=0; x < tabs.tabLength.count(); x++) {
+        for(int x=0; x < tabs.tabLength.count() && x < tabFormat.count(); x++) {
             const double pos = tabs.tabs[x] - tabs.tabLength[x];
             QRectF tabArea(layout->position() + line.position() + QPointF(pos, 0),
                     QSizeF(tabs.tabLength[x], line.ascent()));
-            // TODO properly draw the tab areas.
-            //painter->fillRect(tabArea, QBrush(QColor(255, 0, 0, 130)));
+
+            KoText::Tab tab = tabFormat[x];
+            QPen pen;
+            switch(tab.leaderStyle) {
+            case QTextCharFormat::SingleUnderline: pen = QPen(Qt::SolidLine); break;
+            case QTextCharFormat::DashUnderline: pen = QPen(Qt::DashLine); break;
+            case QTextCharFormat::DotLine: pen = QPen(Qt::DotLine); break;
+            case QTextCharFormat::DashDotLine: pen = QPen(Qt::DashDotLine); break;
+            case QTextCharFormat::DashDotDotLine: pen = QPen(Qt::DashDotDotLine); break;
+            case QTextCharFormat::WaveUnderline:
+                // TODO
+                continue;
+            case QTextCharFormat::NoUnderline:
+                // fall through
+            default:
+                continue; // do nothing!
+            }
+
+            painter->save();
+            if(tab.leaderColor.isValid())
+                pen.setColor(tab.leaderColor);
+            else { // fetch color from text
+                QTextCursor cursor(block);
+                cursor.setPosition(line.xToCursor(tabArea.left()));
+                QTextCharFormat cf = cursor.blockCharFormat();
+                pen.setColor(cf.foreground().color());
+            }
+            painter->setPen(pen);
+            painter->drawLine(qRound(tabArea.left()), qRound(tabArea.bottom()), (int) tabArea.right(), (int) tabArea.bottom());
+            painter->restore();
         }
     }
 }

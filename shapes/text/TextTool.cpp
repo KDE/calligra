@@ -496,6 +496,8 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             KoText::Tab tab;
             tab.position = 474;
             tab.type = KoText::RightTab;
+            tab.leaderStyle = QTextCharFormat::SingleUnderline;
+            tab.leaderColor = QColor(Qt::red);
             tabs.append(tab);
             style.setTabPositions(tabs);
             QTextBlock block = m_caret.block();

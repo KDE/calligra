@@ -80,7 +80,7 @@ private:
     void cleanupShape(KoShape *daShape);
     void nextShape();
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
-    void drawParagraph(QPainter *painter, QTextLayout *layout, KoTextBlockData *data, int selectionStart, int selectionEnd);
+    void drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd);
 
     void resetPrivate();
 
