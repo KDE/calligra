@@ -862,7 +862,7 @@ void TestDocumentLayout::testMultilineTab() {
 }
 
 void TestDocumentLayout::testRightTab() {
-    initForNewTest("Foo\t" + loremIpsum.left(30) + "\tBar baz\tText\tEnd\n");
+    initForNewTest("Foo\t" + loremIpsum.left(32) + "\tBar baz\tText\tEnd\n");
     KoParagraphStyle style;
     QList<KoText::Tab> tabs;
     KoText::Tab tab;
@@ -902,15 +902,53 @@ void TestDocumentLayout::testRightTab() {
     tabData = m_textLayout->applyTabs(line);
     QVERIFY(tabData.tabs.count() >= 2);
     QCOMPARE(tabData.tabLength.count(), tabData.tabs.count());
-    double wordLengh = line.cursorToX(42) - line.cursorToX(35);
+    double wordLengh = line.cursorToX(44) - line.cursorToX(37);
     QCOMPARE(tabData.tabs[0] + wordLengh, 190.);
 
     line = lay->createLine();
     line.setLineWidth(200.);
     tabData = m_textLayout->applyTabs(line);
-    QCOMPARE(line.cursorToX(43), 0.);
-    wordLengh = line.cursorToX(51) - line.cursorToX(48);
+    QCOMPARE(line.cursorToX(45), 0.);
+    wordLengh = line.cursorToX(53) - line.cursorToX(50);
     QCOMPARE(tabData.tabs[0] + wordLengh, 190.);
+
+
+    // mix tabs
+    tabs.clear();
+    tab = KoText::Tab();
+    tab.position = 100;
+    tabs.append(tab);
+    tab = KoText::Tab();
+    tab.position = 190;
+    tab.type = KoText::RightTab;
+    tabs.append(tab);
+    style.setTabPositions(tabs);
+    block = doc->begin();
+    style.applyStyle(block);
+
+    m_textLayout->start();
+    lay = block.layout();
+    lay->beginLayout();
+    line = lay->createLine();
+    line.setLineWidth(200.);
+    tabData = m_textLayout->applyTabs(line);
+    QCOMPARE(tabData.tabs.count(), 1);
+    QCOMPARE(tabData.tabLength.count(), 1);
+    QCOMPARE(tabData.tabs[0], 100.);
+
+    line = lay->createLine();
+    line.setLineWidth(200.);
+    tabData = m_textLayout->applyTabs(line);
+    QVERIFY(tabData.tabs.count() >= 2);
+    QCOMPARE(tabData.tabLength.count(), tabData.tabs.count());
+    wordLengh = line.cursorToX(44) - line.cursorToX(37);
+    QCOMPARE(tabData.tabs[0] + wordLengh, 190.);
+
+    line = lay->createLine();
+    line.setLineWidth(200.);
+    tabData = m_textLayout->applyTabs(line);
+    QCOMPARE(line.cursorToX(45), 0.);
+    QCOMPARE(tabData.tabs[0], 100.);
 }
 
 void TestDocumentLayout::testCenteredTab() {

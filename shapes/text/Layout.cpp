@@ -631,12 +631,23 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
 
         line.draw(painter, layout->position());
 
-        for(int x=0; x < tabs.tabLength.count() && x < tabFormat.count(); x++) {
-            const double pos = tabs.tabs[x] - tabs.tabLength[x];
+        for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps
+            const double tabStop = tabs.tabs[x];
+            const double pos = tabStop - tabs.tabLength[x];
             QRectF tabArea(layout->position() + line.position() + QPointF(pos, 0),
                     QSizeF(tabs.tabLength[x], line.ascent()));
 
-            KoText::Tab tab = tabFormat[x];
+            KoText::Tab tab;
+            // choose the one with a position just bigger (or equal) to tabstop.
+            for(int i = tabFormat.count()-1; i >= 0; i--) {
+                KoText::Tab t = tabFormat[i];
+                if(tabStop > t.position)
+                    break;
+                tab = t;
+            }
+            if(tab.position == 0) // can't do anything if there is no tab-defintion
+                continue;
+
             QPen pen;
             switch(tab.leaderStyle) {
             case QTextCharFormat::SingleUnderline: pen = QPen(Qt::SolidLine); break;
@@ -654,6 +665,8 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             }
 
             painter->save();
+            pen.setCapStyle(Qt::FlatCap);
+            pen.setWidthF(1.); // TODO set proper width
             if(tab.leaderColor.isValid())
                 pen.setColor(tab.leaderColor);
             else { // fetch color from text
@@ -663,7 +676,8 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                 pen.setColor(cf.foreground().color());
             }
             painter->setPen(pen);
-            painter->drawLine(qRound(tabArea.left()), qRound(tabArea.bottom()), (int) tabArea.right(), (int) tabArea.bottom());
+            const int y = qRound(tabArea.bottom() - pen.widthF() / 2.0);
+            painter->drawLine(qRound(tabArea.left()), y, (int) tabArea.right(), y);
             painter->restore();
         }
     }
@@ -897,23 +911,24 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
             if(! m_initialized) {
                 m_initialized = true;
                 foreach(QVariant tab, qvariant_cast<QList<QVariant> >(m_variant))
-{// KoText::Tab foo = tab.value<KoText::Tab>(); kDebug() << "  found tab : " << foo.position << endl;
+{//KoText::Tab foo = tab.value<KoText::Tab>(); kDebug() << "  found tab : " << foo.position << endl;
                     m_tabs.append(tab.value<KoText::Tab>());
 }
             }
-            double pos = m_line.cursorToX(cursorPosition-1);
+            double pos = m_line.cursorToX(cursorPosition) + m_offset;
             foreach(KoText::Tab tab, m_tabs) {
                 if(tab.position >= pos) {
                     if(tab.type == KoText::LeftTab) {
                         m_tabData.tabs.append(tab.position);
-                        m_tabData.tabLength.append(tab.position - pos);
+                        const double length = tab.position - pos;
+                        m_tabData.tabLength.append(length);
+                        m_offset += length;
+                        return;
                     }
-                    else { // delay the rest until we know where the break off point is.
-                        m_dirty = true;
-                        m_previousPosition = cursorPosition;
-                        m_previousTab = tab;
-                    }
-                    return;
+                    // delay the rest until we know where the break off point is.
+                    m_dirty = true;
+                    m_previousPosition = cursorPosition;
+                    m_previousTab = tab;
                 }
             }
         }
@@ -938,17 +953,17 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
                     m_tabData.tabs.append(m_line.width());
                     m_tabData.tabLength.append(0);
                 }
-                else if(currentNotInLine || endSection > m_previousTab.position)
+                else if(currentNotInLine || endSection > m_previousTab.position) {
                     // aligned text doesn't fit, so make the tab a normal space.
-{ //kDebug() << "currentNotInLine" << endl;
                     m_tabData.tabs.append(startSection + 4); // TODO replace 4 with width of a space
                     m_tabData.tabLength.append(4);
-}
+                    m_offset += 4;
+                }
                 else {
 //kDebug() << "    " << m_previousTab.position << " " << m_previousTab.position - (endSection - startSection) << endl;
                     m_tabData.tabs.append(m_previousTab.position - (endSection - startSection));
+                    m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition) - m_offset);
                     m_offset += m_previousTab.position - endSection;
-                    m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition));
                 }
             }
             // else center TODO
