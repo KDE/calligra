@@ -1,6 +1,6 @@
 /* libwpg
+ * Copyright (C) 2007 Ariya Hidayat (ariya@kde.org)
  * Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
- * Copyright (C) 2004 Marc Oude Kotte (marc@solcon.nl)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -13,8 +13,8 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02111-1301 USA
  *
  * For further information visit http://libwpg.sourceforge.net
@@ -24,20 +24,45 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef __LIBWPG_H__
-#define __LIBWPG_H__
+#ifndef __WPGBITMAP_H__
+#define __WPGBITMAP_H__
 
-
-#include "WPGraphics.h"
-#include "WPGPaintInterface.h"
-
-#include "WPGColor.h"
-#include "WPGPen.h"
-#include "WPGBrush.h"
-#include "WPGGradient.h"
-#include "WPGPath.h"
-#include "WPGPoint.h"
 #include "WPGRect.h"
-#include "WPGBitmap.h"
+#include "WPGColor.h"
 
-#endif
+namespace libwpg
+{
+
+class WPGBitmap
+{
+public:
+	WPGRect rect;
+
+	WPGBitmap(int width, int height);
+
+	WPGBitmap(const WPGBitmap&);
+
+	WPGBitmap& operator=(const WPGBitmap&);
+
+	void copyFrom(const WPGBitmap&);
+
+	~WPGBitmap();
+
+	// return width in pixel
+	const int width() const;
+
+	// return height in pixel
+	const int height() const;
+
+	WPGColor pixel(int x, int y) const;
+
+	void setPixel(int x, int y, const WPGColor& color);
+
+private:
+	class Private;
+	Private* const d;
+};
+
+} // namespace libwpg
+
+#endif // __WPGBITMAP_H__
