@@ -34,8 +34,7 @@
 // - added missing values in DATEDIF
 
 // TODO
-// - hour("14:00") causes parse error ("14:00:00") works
-// - WEEKNUM fill in missing values 
+// - WEEKNUM fill in missing values
 
 // round to get at most 10-digits number
 static Value RoundNumber(double f)
@@ -307,7 +306,7 @@ void TestDatetimeFunctions::testHOUR()
   //
   CHECK_EVAL( "HOUR(5/24)", Value( 5 ) );                // 5/24ths of a day is 5 hours, aka 5AM.
   CHECK_EVAL( "HOUR(5/24-1/(24*60*60))", Value( 4 ) );   // A second before 5AM, it's 4AM.
-  CHECK_EVAL( "HOUR(\"14:00\")", Value( 14 ) );          // TODO TimeParam accepts text
+  CHECK_EVAL( "HOUR(\"14:00\")", Value( 14 ) );          // TimeParam accepts text
   CHECK_EVAL( "HOUR(\"9:00\")", Value( 9 ) );
   CHECK_EVAL( "HOUR(\"09:00\")", Value( 9 ) );
   CHECK_EVAL( "HOUR(\"23:00\")", Value( 23 ) );
@@ -341,7 +340,7 @@ void TestDatetimeFunctions::testSECOND()
   //
   CHECK_EVAL( "SECOND(1/(24*60*60))", Value( 1 ) );      // This is one second into today.
   CHECK_EVAL( "SECOND(1/(24*60*60*2))", Value( 1 ) );    // Rounds.
-  CHECK_EVAL( "SECOND(1/(24*60*60*4))", Value( 0 ) );    // TODO Rounds.
+  CHECK_EVAL( "SECOND(1/(24*60*60*4))", Value( 0 ) );    // Rounds.
 }
 
 void TestDatetimeFunctions::testTIME()

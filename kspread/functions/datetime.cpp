@@ -364,7 +364,7 @@ Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
   }
   else
     time = QTime::currentTime ();
-  return Value (time.second ());
+  return Value(time.second() + qRound(time.msec() * 0.001));
 }
 
 // Function: WEEKDAY
