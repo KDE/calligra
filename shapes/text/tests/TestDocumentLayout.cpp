@@ -954,11 +954,58 @@ void TestDocumentLayout::testRightTab() {
 void TestDocumentLayout::testCenteredTab() {
     initForNewTest("Foo\tBar.");
     // test if centering the tab works.  We expect the center of 'Bar.' to be at the tab point.
+    KoParagraphStyle style;
+    QList<KoText::Tab> tabs;
+    KoText::Tab tab;
+    tab.position = 150;
+    tab.type = KoText::CenterTab;
+    tabs.append(tab);
+    style.setTabPositions(tabs);
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+
+    m_textLayout->start();
+    QTextLayout *lay = doc->begin().layout();
+    lay->beginLayout();
+    QTextLine line = lay->createLine();
+    line.setLineWidth(200.);
+    KoTextBlockData::TabLineData tabData = m_textLayout->applyTabs(line);
+
+    double wordLength = line.cursorToX(9)- line.cursorToX(4);
+    QCOMPARE(tabData.tabs.count(), 1);
+    QCOMPARE(tabData.tabs[0], 150 - wordLength / 2.0);
+    QCOMPARE(tabData.tabLength.count(), 1);
+    QCOMPARE(tabData.tabLength[0], (150 - wordLength / 2.0) - line.cursorToX(3));
 }
 
 void TestDocumentLayout::testAlignedTab() {
-    initForNewTest("Foo\tBar.");
+    initForNewTest("Foo\tBar. Barrabas");
     // try the different delimiter characters to see if the alignment works there.
+
+    KoParagraphStyle style;
+    QList<KoText::Tab> tabs;
+    KoText::Tab tab;
+    tab.position = 100;
+    tab.type = KoText::DelimiterTab;
+    tab.delimiter = QChar('.');
+    tabs.append(tab);
+    style.setTabPositions(tabs);
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+
+    m_textLayout->start();
+    QTextLayout *lay = doc->begin().layout();
+    lay->beginLayout();
+    QTextLine line = lay->createLine();
+    line.setLineWidth(200.);
+    KoTextBlockData::TabLineData tabData = m_textLayout->applyTabs(line);
+
+    double length = line.cursorToX(7)- line.cursorToX(4); // the 'Bar' section.
+    length += (line.cursorToX(8) - line.cursorToX(7)) / 2.0; // half of the '.' character
+    QCOMPARE(tabData.tabs.count(), 1);
+    QCOMPARE(tabData.tabs[0], 100 - length);
+    QCOMPARE(tabData.tabLength.count(), 1);
+    QCOMPARE(tabData.tabLength[0], (100 - length) - line.cursorToX(3));
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)

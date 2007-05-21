@@ -870,6 +870,11 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
         }
         return data;
     }
+    Qt::Alignment paragAlign = textOption.alignment();
+    if(paragAlign != Qt::AlignLeft) {
+        textOption.setAlignment(Qt::AlignLeft);
+        layout->setTextOption(textOption);
+    }
 
 #ifdef DEBUG_TABS
 {
@@ -894,12 +899,13 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
 
     class TabsHelper {
       public:
-        TabsHelper(const QTextLine &line, const QVariant &variant)
+        TabsHelper(const QTextLine &line, const QVariant &variant, const QString &paragText)
             : m_line(line),
             m_initialized(false),
             m_dirty(false),
             m_variant(variant),
-            m_offset(0.) {}
+            m_offset(0.),
+            m_paragText(paragText) {}
 
         void insertTab(int cursorPosition) {
 //kDebug() << "insertTab " << cursorPosition << endl;
@@ -944,17 +950,16 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
             const bool currentNotInLine = cursorPosition > m_line.textStart() + m_line.textLength();
 //kDebug() << "  startSection: " << startSection << ", endSection: " << endSection << endl;
 
-            if(m_previousTab.type == KoText::RightTab) {
-                if(startSection > m_line.width()) { // tab found will not end up in line.
-                    m_tabData.tabs.append(m_line.width());
-                    m_tabData.tabLength.append(0);
-                }
-                else if(currentNotInLine || endSection > m_previousTab.position) {
-                    // aligned text doesn't fit, so make the tab a normal space.
-                    m_tabData.tabs.append(startSection + 4); // TODO replace 4 with width of a space
-                    m_tabData.tabLength.append(4);
-                    m_offset += 4;
-                }
+            bool convertToSpace = false;
+            if(startSection > m_line.width()) { // tab found will not end up in line.
+                m_tabData.tabs.append(m_line.width());
+                m_tabData.tabLength.append(0);
+            }
+            else if(currentNotInLine) // aligned portion is too big for line
+                convertToSpace = true;
+            else if(m_previousTab.type == KoText::RightTab) {
+                if(endSection > m_previousTab.position)
+                    convertToSpace = true;
                 else {
 //kDebug() << "    " << m_previousTab.position << " " << m_previousTab.position - (endSection - startSection) << endl;
                     m_tabData.tabs.append(m_previousTab.position - (endSection - startSection));
@@ -962,8 +967,29 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
                     m_offset += m_previousTab.position - endSection;
                 }
             }
-            // else center TODO
-            // else
+            else if(m_previousTab.type == KoText::CenterTab) {
+//kDebug() << "    " << m_previousTab.position << " " << m_previousTab.position - (endSection - startSection) << endl;
+                // TODO check fit
+                m_tabData.tabs.append(m_previousTab.position - (endSection - startSection) / 2.0);
+                m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition) + m_offset);
+                m_offset += m_previousTab.position + (endSection - startSection) / 2.0 - endSection;
+            }
+            else if(m_previousTab.type == KoText::DelimiterTab) {
+                // TODO check fit
+                const int index = m_paragText.indexOf(m_previousTab.delimiter, m_previousPosition);
+                const double charPos = m_line.cursorToX(index);
+                const double wantedPos = m_offset + charPos + (m_line.cursorToX(index + 1) - charPos)  / 2.0; // half on the char
+                m_tabData.tabs.append(m_previousTab.position - (wantedPos - startSection));
+                m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition) + m_offset);
+                m_offset += m_tabData.tabLength.last() - 1;
+            }
+
+            if(convertToSpace) { // aligned text doesn't fit, so make the tab a normal space.
+                m_tabData.tabs.append(startSection + 4); // TODO replace 4 with width of a space
+                m_tabData.tabLength.append(4);
+                m_offset += 4 - 1;
+            }
+
             m_dirty = false;
         }
 
@@ -975,10 +1001,11 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
         int m_previousPosition;
         double m_offset;
         KoTextBlockData::TabLineData m_tabData;
+        const QString m_paragText;
     };
-    TabsHelper tabsHelper(line, variant);
 
     QString paragText = m_block.text();
+    TabsHelper tabsHelper(line, variant, paragText);
 
     const int end = line.textStart() + line.textLength();
     for(int i=line.textStart(); i < paragText.length(); i++) {
@@ -989,13 +1016,14 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
         }
     }
 
-    if(tabsHelper.tabLineData().tabs.count() > 0) {
+    if(paragAlign != Qt::AlignLeft || tabsHelper.tabLineData().tabs.count() > 0) {
 #ifdef DEBUG_TABS
 { KoTextBlockData::TabLineData foo = tabsHelper.tabLineData(); Q_ASSERT(foo.tabs.count() == foo.tabLength.count());
  for(int i=0; i < foo.tabs.count(); i++){ printf("tab: %0.4f, length: %0.4f\n", foo.tabs[i], foo.tabLength[i]); }
 }
 #endif
         textOption.setTabArray(tabsHelper.tabLineData().tabs);
+        textOption.setAlignment(paragAlign);
         m_block.layout()->setTextOption(textOption);
 
         line.setLineWidth(line.width()); // relayout line
