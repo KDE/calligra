@@ -1335,6 +1335,27 @@ double Project::actualCostTo( const QDate &date, long id ) const
     return c;
 }
 
+double Project::bcwp( long id ) const
+{
+    //kDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    foreach (Node *n, childNodeIterator()) {
+        c += n->bcwp(id);
+    }
+    return c;
+}
+
+double Project::bcwp( const QDate &date, long id ) const
+{
+    kDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    foreach (Node *n, childNodeIterator()) {
+        c += n->bcwp( date, id );
+    }
+    return c;
+}
+
+
 void Project::addCalendar( Calendar *calendar, Calendar *parent )
 {
     Q_ASSERT( calendar != 0 );

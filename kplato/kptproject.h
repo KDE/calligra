@@ -231,6 +231,11 @@ public:
      * @param id Identity of the schedule to be used.
      */
     virtual double actualCostTo( const QDate &date, long id = -1  ) const;
+    
+    /// Budgeted Cost of Work Performed
+    virtual double bcwp( long id = -1 ) const;
+    /// Budgeted Cost of Work Performed ( up to @p date )
+    virtual double bcwp( const QDate &date, long id = -1 ) const;
 
     Calendar *defaultCalendar() const { return m_defaultCalendar; }
     void setDefaultCalendar( Calendar *cal );

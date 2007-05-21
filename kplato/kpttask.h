@@ -157,6 +157,8 @@ public:
     QDate entryDate() const;
     /// Returns the percentFinished of the latest entry
     int percentFinished() const;
+    /// Returns the percentFinished on @p date
+    int percentFinished( const QDate &date ) const;
     /// Returns the estimated remaining effort
     Duration remainingEffort() const;
     /// Returns the total actual effort
@@ -293,6 +295,11 @@ public:
     virtual double actualCost(const QDate &/*date*/, long id = -1 ) const;
     /// Actual cost up to and including date
     virtual double actualCostTo(const QDate &/*date*/, long id = -1 ) const;
+
+    /// Budgeted Cost of Work Performed
+    virtual double bcwp( long id = -1 ) const;
+    /// Budgeted Cost of Work Performed ( up to @p date )
+    virtual double bcwp( const QDate &date, long id = -1 ) const;
 
     /// Effort based performance index
     double effortPerformanceIndex(const QDate &date, bool *error=0) const;

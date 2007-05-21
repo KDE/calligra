@@ -292,7 +292,12 @@ public:
     /// Actual cost up to and including date
     virtual double actualCostTo(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0; }
     
-    /// Effort based performance index
+    /// Budgeted Cost of Work Performed
+    virtual double bcwp( long id ) const { Q_UNUSED(id); return 0.0; }
+    /// Budgeted Cost of Work Performed ( up to @p date )
+    virtual double bcwp( const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0.0; }
+    
+            /// Effort based performance index
     double effortPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) const { return 0.0; }
     /// Cost performance index
     double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) const { return 0.0; }

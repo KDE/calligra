@@ -553,6 +553,35 @@ double Task::actualCostTo(const QDate &date, long id) const {
     return m_completion.actualCostTo( date );
 }
 
+double Task::bcwp( long id ) const
+{
+    //kDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    if (type() == Node::Type_Summarytask) {
+        foreach (Node *n, childNodeIterator()) {
+            c += n->bcwp(id);
+        }
+        return c;
+    }
+    return plannedCost( id ) * (double)m_completion.percentFinished() / 100.0;
+}
+
+double Task::bcwp( const QDate &date, long id ) const
+{
+    //kDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    if (type() == Node::Type_Summarytask) {
+        foreach (Node *n, childNodeIterator()) {
+            c += n->bcwp( date, id );
+        }
+        return c;
+    }
+    c = plannedCostTo( date, id ) * (double)m_completion.percentFinished( date ) / 100.0;
+    kDebug()<<k_funcinfo<<m_name<<"("<<id<<")"<<date<<"="<<c<<endl;
+    return c;
+}
+
+
 //FIXME Handle summarytasks
 double Task::effortPerformanceIndex(const QDate &date, bool *error) const {
     double res = 0.0;
@@ -1993,17 +2022,31 @@ void Completion::addEntry( const QDate &date, Entry *entry )
     
 QDate Completion::entryDate() const
 {
-     return m_entries.isEmpty() ? QDate() : m_entries.keys().last();
+    return m_entries.isEmpty() ? QDate() : m_entries.keys().last();
 }
 
 int Completion::percentFinished() const
 {
-     return m_entries.isEmpty() ? 0 : m_entries.values().last()->percentFinished;
+    return m_entries.isEmpty() ? 0 : m_entries.values().last()->percentFinished;
 }
-    
+
+int Completion::percentFinished( const QDate &date ) const
+{
+    int x = 0;
+    foreach ( QDate d, m_entries.keys() ) {
+        if ( d <= date ) {
+            x = m_entries[ d ]->percentFinished;
+        }
+        if ( d >= date ) {
+            break;
+        }
+    }
+    return x;
+}
+
 Duration Completion::remainingEffort() const
 {
-     return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->remainingEffort;
+    return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->remainingEffort;
 }
 
 Duration Completion::actualEffort() const
