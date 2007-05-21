@@ -60,7 +60,7 @@
         </layout>
       </item>
       <item>
-        <widget class="Q3GroupBox" name="groupBox3" >
+        <widget class="QGroupBox" name="groupBox3" >
           <property name="title" >
             <string>Sheet Selection</string>
           </property>
@@ -177,7 +177,7 @@
         </widget>
       </item>
       <item>
-        <widget class="Q3GroupBox" name="groupBox2" >
+        <widget class="QGroupBox" name="groupBox2" >
           <property name="title" >
             <string>Layout</string>
           </property>

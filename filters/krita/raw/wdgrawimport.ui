@@ -138,7 +138,7 @@
         </spacer>
       </item>
       <item rowspan="2" row="2" column="1" colspan="3" >
-        <widget class="Q3GroupBox" name="grpColorSettings" >
+        <widget class="QGroupBox" name="grpColorSettings" >
           <property name="title" >
             <string>Color Settings</string>
           </property>
