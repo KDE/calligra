@@ -25,15 +25,15 @@
 #include "kis_tiff_stream.h"
 
 
-KisTIFFYCbCrReaderTarget8Bit::KisTIFFYCbCrReaderTarget8Bit( KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position ) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_hsub(hsub), m_vsub(vsub), m_position(position)
+KisTIFFYCbCrReaderTarget8Bit::KisTIFFYCbCrReaderTarget8Bit( KisPaintDeviceSP device, quint32 width, quint32 height,quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position ) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_hsub(hsub), m_vsub(vsub), m_position(position)
 {
     // Initialize the buffer
-    qint32 imagewidth = device->image()->width();
-    if(2*(imagewidth / 2) != imagewidth) imagewidth++;
-    m_bufferWidth = imagewidth / m_hsub;
-    qint32 imageheight = device->image()->height();
-    if(2*(imageheight / 2) != imageheight) imageheight++;
-    m_bufferHeight = imageheight / m_vsub;
+    m_imageWidth = width;
+    if(2*(m_imageWidth / 2) != m_imageWidth) m_imageWidth++;
+    m_bufferWidth = m_imageWidth / m_hsub;
+    m_imageHeight = height;
+    if(2*(m_imageHeight / 2) != m_imageHeight) m_imageHeight++;
+    m_bufferHeight = m_imageHeight / m_vsub;
     m_bufferCb = new quint8[ m_bufferWidth * m_bufferHeight ];
     m_bufferCr = new quint8[ m_bufferWidth * m_bufferHeight ];
 }
@@ -81,8 +81,8 @@ uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels( quint32 x, quint32 y, qui
 
 void KisTIFFYCbCrReaderTarget8Bit::finalize()
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, paintDevice()->image()->width());
-    for(int y = 0; y < paintDevice()->image()->height(); y++)
+    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, m_imageWidth);
+    for(uint y = 0; y < m_imageHeight; y++)
     {
         int x = 0;
         while(!it.isDone())
@@ -97,15 +97,15 @@ void KisTIFFYCbCrReaderTarget8Bit::finalize()
     }
 }
 
-KisTIFFYCbCrReaderTarget16Bit::KisTIFFYCbCrReaderTarget16Bit( KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position ) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_hsub(hsub), m_vsub(vsub), m_position(position)
+KisTIFFYCbCrReaderTarget16Bit::KisTIFFYCbCrReaderTarget16Bit( KisPaintDeviceSP device, quint32 width, quint32 height,quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position ) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_hsub(hsub), m_vsub(vsub), m_position(position)
 {
     // Initialize the buffer
-    qint32 imagewidth = device->image()->width();
-    if(2*(imagewidth / 2) != imagewidth) imagewidth++;
-    m_bufferWidth = imagewidth / m_hsub;
-    qint32 imageheight = device->image()->height();
-    if(2*(imageheight / 2) != imageheight) imageheight++;
-    m_bufferHeight = imageheight / m_vsub;
+    m_imageWidth = width;
+    if(2*(m_imageWidth / 2) != m_imageWidth) m_imageWidth++;
+    m_bufferWidth = m_imageWidth / m_hsub;
+    m_imageHeight = height;
+    if(2*(m_imageHeight / 2) != m_imageHeight) m_imageHeight++;
+    m_bufferHeight = m_imageHeight / m_vsub;
     m_bufferCb = new quint16[ m_bufferWidth * m_bufferHeight ];
     m_bufferCr = new quint16[ m_bufferWidth * m_bufferHeight ];
 }
@@ -153,8 +153,8 @@ uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels( quint32 x, quint32 y, qu
 
 void KisTIFFYCbCrReaderTarget16Bit::finalize()
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, paintDevice()->image()->width());
-    for(int y = 0; y < paintDevice()->image()->height(); y++)
+    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, m_imageWidth);
+    for(uint y = 0; y < m_imageHeight; y++)
     {
         int x = 0;
         while(!it.isDone())
