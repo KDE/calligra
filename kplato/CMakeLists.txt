@@ -100,7 +100,6 @@ set(kplatoprivate_LIB_SRCS
     kptwbsdefinition.cc
     KPtViewAdaptor.cc
     kptresourceassignmentview.cc
-    kptchartdialog.cc
     kptchartpanel.cc
     kptchartwidget.cc
     kptchart.cc
