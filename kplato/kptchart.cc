@@ -45,42 +45,22 @@ namespace KPlato
         }
     }
 
-
-    void Chart::api(QVector<QPointF> & BCWP, QVector<QPointF> & BCWS, QVector<QPointF> & ACWP ,QVector<QPointF> & BCWP_display, QVector<QPointF> & BCWS_display, QVector<QPointF> & ACWP_display ,const int n_curve, int maximumHeight, int maximumWidth)
+    void Chart::api(QVector<QPointF> &data, QVector<QPointF> &display, const QSize &size )
     {
-        
-
-        if(n_curve==ChartWidget::BCWP)
-        {
-            reCalculateY(BCWP,BCWP_display,ChartWidget::BCWP,maximumHeight);
-            reCalculateX(BCWP,BCWP_display,ChartWidget::BCWP,maximumWidth);
-        }
-        if(n_curve==ChartWidget::BCWS)
-        {
-            kDebug()<<"api() BCWS:"<<BCWS<<", "<<BCWS_display<<endl;
-            reCalculateY(BCWS,BCWS_display,ChartWidget::BCWS,maximumHeight);
-            reCalculateX(BCWS,BCWS_display,ChartWidget::BCWS,maximumWidth);
-            kDebug()<<"api() BCWS:"<<BCWS<<", "<<BCWS_display<<endl;
-        }
-        if(n_curve==ChartWidget::ACWP)
-        {
-            kDebug()<<"api() ACWP:"<<ACWP<<", "<<ACWP_display<<endl;
-            //calculatePlannedCost();
-            reCalculateY(ACWP,ACWP_display,ChartWidget::ACWP,maximumHeight);
-            //timeToPercent(ACWP);
-            reCalculateX(ACWP,ACWP_display,ChartWidget::ACWP,maximumWidth);
-            kDebug()<<"api() ACWP:"<<ACWP<<", "<<ACWP_display<<endl;
-        }
+        kDebug()<<"api() :"<<data<<", "<<display<<endl;
+        reCalculateY( data, display, size.height() );
+        reCalculateX( data, display, size.width() );
+        kDebug()<<"api():"<<data<<", "<<display<<endl;
     }
 
 
     /* Calculate the new value of every Y-axis when the window hab been re-sized */
-    void Chart::reCalculateY(QVector<QPointF> & vect, QVector<QPointF> & vect_display,const int n_curve, int maximumHeight)// WORKS, TESTED
+    void Chart::reCalculateY(QVector<QPointF> & vect, QVector<QPointF> & vect_display, int maximumHeight)// WORKS, TESTED
     {    
         float inverse;
         float tmp;
         
-        //kDebug()<<k_funcinfo<<maximumHeight<<endl;
+        kDebug()<<k_funcinfo<<maximumHeight<<endl;
         QVector<QPointF>::iterator it= vect.begin();
         QVector<QPointF>::iterator it_display= vect_display.begin();
         while (it != vect.end())
@@ -92,7 +72,7 @@ namespace KPlato
         }
     }
     /* Calculate the new value of X-axis when the window had been re-sized */
-    void Chart::reCalculateX(QVector<QPointF> & vect, QVector<QPointF> & vect_display,const int n_curve, int maximumWidth)// WORKS, TESTED
+    void Chart::reCalculateX(QVector<QPointF> & vect, QVector<QPointF> & vect_display, int maximumWidth)// WORKS, TESTED
     {
         float tmp; 
         //kDebug()<<k_funcinfo<<maximumWidth<<endl;
@@ -190,7 +170,7 @@ namespace KPlato
                 totalYPercent=(BCWS.last()).y();
             }
         }
-    //kDebug()<<"TOTALyPERCENT : "<<totalYPercent<<endl;
+    kDebug()<<"TOTALyPERCENT : "<<totalYPercent<<endl;
     return(totalYPercent);
     }
 
@@ -272,7 +252,7 @@ namespace KPlato
         //kDebug()<<"calculateActualCost() "<<weeks<<vect<<endl;
         QVector<QPointF>::iterator it= vect.begin();
         QVector<QDate>::iterator it_weeks = weeks.begin();
-	float sum=0;
+        float sum=0;
         it->setY(sum);
         it++;
         while(it != vect.end())
@@ -294,6 +274,24 @@ namespace KPlato
         //kDebug()<<"calculateActualCost() "<<vect<<endl;
     }
 
+    void Chart::calculateBCWP(QVector<QPointF> & vect,QVector<QDate> weeks,Project & p)
+    {
+        kDebug()<<"calculateBCWP() "<<weeks<<vect<<endl;
+        QVector<QPointF>::iterator it= vect.begin();
+        QVector<QDate>::iterator it_weeks = weeks.begin();
+        float sum=0;
+        it->setY(sum);
+        it++;
+        while(it != vect.end())
+        {
+            sum = (float)p.bcwp((*it_weeks), p.currentViewScheduleId()); // up to date
+            it->setY(sum);
+            it++;
+            it_weeks++;
+        }
+        kDebug()<<"calculateBCWP() "<<vect<<endl;
+    }
+
     void Chart::initXCurvesVectors(QVector<QDate> weeks,QVector<QPointF> & BCWP, QVector<QPointF> & BCWS, QVector<QPointF> & ACWP )
     {
         for(int i=0;i<weeks.size();i++)
@@ -307,7 +305,7 @@ namespace KPlato
 
     void Chart::calculateWeeks(QVector<QDate> & weeks,Project & p)
     {
-        Schedule *s = p.findSchedule( p.currentViewScheduleId() );
+        //Schedule *s = p.findSchedule( p.currentViewScheduleId() );
         //kDebug()<<k_funcinfo<<weeks.count()<<" Schedule: "<<(s==0?"None":s->name()+QString(", %1").arg(s->type()))<<endl;
         QDate myDate = p.startTime( p.currentViewScheduleId() ).date();
         while(myDate < p.endTime( p.currentViewScheduleId() ).date())

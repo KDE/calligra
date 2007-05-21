@@ -45,9 +45,9 @@ namespace KPlato
 
             Chart();
             void init_display(QVector<QPointF>& , QVector<QPointF>& , QVector<QPointF>&, int);
-            void api(QVector<QPointF>& , QVector<QPointF>& , QVector<QPointF>&,QVector<QPointF>& , QVector<QPointF>& , QVector<QPointF>& ,const int , int , int );
-            void reCalculateY(QVector<QPointF> &,QVector<QPointF> &,const int,int);
-            void reCalculateX(QVector<QPointF> &,QVector<QPointF> &,const int,int);
+            void api(QVector<QPointF>& data, QVector<QPointF>& display, const QSize &size );
+            void reCalculateY(QVector<QPointF> &data, QVector<QPointF> &display, int height);
+            void reCalculateX(QVector<QPointF> &data,QVector<QPointF> &display, int width);
             void setMaxCost(QVector<QPointF>);
             //void setMaxTime(QVector<QDate>);
             float setMaxYPercent(QVector<QPointF>, QVector<QPointF>, QVector<QPointF>);
@@ -57,6 +57,7 @@ namespace KPlato
 
             void calculatePlannedCost(QVector<QPointF> &,QVector<QDate> ,Project &);
             void calculateActualCost(QVector<QPointF> &,QVector<QDate> ,Project &);
+            void calculateBCWP(QVector<QPointF> &,QVector<QDate> ,Project &);
 
             void initXCurvesVectors(QVector<QDate> ,QVector<QPointF> & , QVector<QPointF> & , QVector<QPointF> & );
             void calculateWeeks(QVector<QDate> & ,Project & );
