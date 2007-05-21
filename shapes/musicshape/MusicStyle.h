@@ -33,14 +33,14 @@ class MusicStyle {
 public:
     MusicStyle();
     virtual ~MusicStyle();
-    virtual QPen staffLinePen(QColor color = Qt::black);
-    virtual QPen stemPen(QColor color = Qt::black);
-    virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, QColor color = Qt::black);
-    virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, QColor color = Qt::black);
-    virtual void renderClef(QPainter& painter, double x, double y, MusicCore::Clef::ClefShape shape, QColor color = Qt::black);
-    virtual void renderAccidental(QPainter& painter, double x, double y, int accidental, QColor color = Qt::black);
-    virtual void renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number, QColor color = Qt::black);
-    virtual void renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, QColor color = Qt::black);
+    virtual QPen staffLinePen(const QColor& color = Qt::black);
+    virtual QPen stemPen(const QColor& color = Qt::black);
+    virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, const QColor& color = Qt::black);
+    virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, const QColor& color = Qt::black);
+    virtual void renderClef(QPainter& painter, double x, double y, MusicCore::Clef::ClefShape shape, const QColor& color = Qt::black);
+    virtual void renderAccidental(QPainter& painter, double x, double y, int accidental, const QColor& color = Qt::black);
+    virtual void renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number, const QColor& color = Qt::black);
+    virtual void renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, const QColor& color = Qt::black);
 private:
     QPen m_staffLinePen, m_stemPen;
     QFont m_font;

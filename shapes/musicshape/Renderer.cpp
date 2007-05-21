@@ -216,7 +216,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, double x, Rende
     m_style->renderNoteHead( painter, x, chord->y() + s->top() + line * s->lineSpacing() / 2, chord->duration() );
 }
 
-void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, QColor color)
+void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, const QColor& color)
 {
     m_style->renderNoteHead(painter, x, y, duration, color);
 

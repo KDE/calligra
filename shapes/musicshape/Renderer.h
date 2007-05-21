@@ -55,7 +55,7 @@ public:
     void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, double x, RenderState& state);
     void renderTimeSignature(QPainter& painter, MusicCore::TimeSignature* timeSignature, double x);
     void renderChord(QPainter& painter, MusicCore::Chord* chord, double x, RenderState& state);
-    void renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, QColor color = Qt::black);
+    void renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, const QColor& color = Qt::black);
 private:
     MusicStyle* m_style;
     bool m_debug;
