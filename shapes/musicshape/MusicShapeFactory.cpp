@@ -17,10 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <QStringList>
+#include <QFontDatabase>
 
 #include <kgenericfactory.h>
 #include <klocale.h>
-
+#include <kstandarddirs.h>
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
@@ -51,12 +52,19 @@ MusicShapeFactory::MusicShapeFactory( QObject* parent )
 
 KoShape* MusicShapeFactory::createDefaultShape() const
 {
-    MusicShape* shape = new MusicShape();
-    return shape;
+    return createShape(0);
 }
 
 KoShape* MusicShapeFactory::createShape( const KoProperties* params ) const
 {
+    static bool loadedFont = false;
+    if (!loadedFont) {
+        QString fontFile = KStandardDirs::locate("data", "musicshape/fonts/Emmentaler-14.ttf");
+        if (QFontDatabase::addApplicationFont(fontFile) == -1) {
+            kWarning() << "Could not load emmentaler font" << endl;
+        }
+        loadedFont = true;
+    }
     MusicShape* shape = new MusicShape();
     return shape;
 }
