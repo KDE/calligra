@@ -182,8 +182,8 @@ void TestDatetimeFunctions::testWORKDAY()
   // 2001 JAN 01 02 03 04 05 06 07 08
   //          MO TU WE TH FR SA SU MO
   //          01 02 -- --  
-  CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;2)=DATE(2001;01;05)", Value( TRUE ) );
-  CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;3)=DATE(2001;01;08)", Value( TRUE ) );
+  CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;2)=DATE(2001;01;05)", Value( true ) );
+  CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;3)=DATE(2001;01;08)", Value( true ) );
 }
 
 void TestDatetimeFunctions::testNETWORKDAY()
@@ -225,25 +225,25 @@ void TestDatetimeFunctions::testDATE()
 {
   //
   CHECK_EVAL( "DATE(2005;12;31)-DATE(1904;01;01)",   Value( 37255) );
-  CHECK_EVAL( "DATE(2004;02;29)=DATE(2004;02;28)+1", Value( TRUE ) ); // leap year
-  CHECK_EVAL( "DATE(2000;02;29)=DATE(2000;02;28)+1", Value( TRUE ) ); // leap year
-  CHECK_EVAL( "DATE(2005;03;01)=DATE(2005;02;28)+1", Value( TRUE ) ); // no leap year
-  CHECK_EVAL( "DATE(2017.5;01;02)=DATE(2017;01;02)", Value( TRUE ) ); // fractional values for year are truncated
-  CHECK_EVAL( "DATE(2006; 2.5; 3)=DATE(2006; 2; 3)", Value( TRUE ) ); // fractional values for month are truncated
-  CHECK_EVAL( "DATE(2006;01;03.5)=DATE(2006;01;03)", Value( TRUE ) ); // fractional values for day are truncated
-  CHECK_EVAL( "DATE(2006;13;03)=DATE(2007;01;03)",   Value( TRUE ) ); // months > 12 roll over to year
-  CHECK_EVAL( "DATE(2006;01;32)=DATE(2006;02;01)",   Value( TRUE ) ); // days greater than month limit roll over to month
-  CHECK_EVAL( "DATE(2006;25;34)=DATE(2008;02;03)",   Value( TRUE ) ); // days and months roll over transitively
-  CHECK_EVAL( "DATE(2006;-01;01)=DATE(2005;11;01)",  Value( TRUE ) ); // negative months roll year backward
-  CHECK_EVAL( "DATE(2006;04;-01)=DATE(2006;03;30)",  Value( TRUE ) ); // negative days roll month backward
-  CHECK_EVAL( "DATE(2006;-4;-1)=DATE(2005;07;30)",   Value( TRUE ) ); // negative days and months roll backward transitively
-  CHECK_EVAL( "DATE(2003;2;29)=DATE(2003;03;01)",    Value( TRUE ) ); // non-leap year rolls forward
+  CHECK_EVAL( "DATE(2004;02;29)=DATE(2004;02;28)+1", Value( true ) ); // leap year
+  CHECK_EVAL( "DATE(2000;02;29)=DATE(2000;02;28)+1", Value( true ) ); // leap year
+  CHECK_EVAL( "DATE(2005;03;01)=DATE(2005;02;28)+1", Value( true ) ); // no leap year
+  CHECK_EVAL( "DATE(2017.5;01;02)=DATE(2017;01;02)", Value( true ) ); // fractional values for year are truncated
+  CHECK_EVAL( "DATE(2006; 2.5; 3)=DATE(2006; 2; 3)", Value( true ) ); // fractional values for month are truncated
+  CHECK_EVAL( "DATE(2006;01;03.5)=DATE(2006;01;03)", Value( true ) ); // fractional values for day are truncated
+  CHECK_EVAL( "DATE(2006;13;03)=DATE(2007;01;03)",   Value( true ) ); // months > 12 roll over to year
+  CHECK_EVAL( "DATE(2006;01;32)=DATE(2006;02;01)",   Value( true ) ); // days greater than month limit roll over to month
+  CHECK_EVAL( "DATE(2006;25;34)=DATE(2008;02;03)",   Value( true ) ); // days and months roll over transitively
+  CHECK_EVAL( "DATE(2006;-01;01)=DATE(2005;11;01)",  Value( true ) ); // negative months roll year backward
+  CHECK_EVAL( "DATE(2006;04;-01)=DATE(2006;03;30)",  Value( true ) ); // negative days roll month backward
+  CHECK_EVAL( "DATE(2006;-4;-1)=DATE(2005;07;30)",   Value( true ) ); // negative days and months roll backward transitively
+  CHECK_EVAL( "DATE(2003;2;29)=DATE(2003;03;01)",    Value( true ) ); // non-leap year rolls forward
 }
 
 void TestDatetimeFunctions::testDATEVALUE()
 {
   //
-  CHECK_EVAL( "DATEVALUE(\"2004-12-25\")=DATE(2004;12;25)", Value( TRUE ) );
+  CHECK_EVAL( "DATEVALUE(\"2004-12-25\")=DATE(2004;12;25)", Value( true ) );
 }
 
 void TestDatetimeFunctions::testDAY()
@@ -273,32 +273,32 @@ void TestDatetimeFunctions::testDAYS360()
 void TestDatetimeFunctions::testEDATE()
 {
   //
-  CHECK_EVAL( "EDATE(\"2006-01-01\";0)=DATE(2006;01;01)", Value( TRUE ) );      // If zero, unchanged.
-  CHECK_EVAL( "EDATE(DATE(2006;01;01);0)=DATE(2006;01;01)", Value( TRUE ) );    // You can pass strings or serial numbers to EDATE
-  CHECK_EVAL( "EDATE(\"2006-01-01\";2)=DATE(2006;03;01)", Value( TRUE ) );      //
-  CHECK_EVAL( "EDATE(\"2006-01-01\";-2)=DATE(2005;11;01)", Value( TRUE ) );     // 2006 is not a leap year. Last day of March, going back to February
-  //CHECK_EVAL( "EDATE(\"2000-04-30\";-2)=DATE(2006;2;29)", Value( TRUE ) );    // TODO 2000 was a leap year, so the end of February is the 29th
-  //CHECK_EVAL( "EDATE(\"2000-04-05\";24)=DATE(2002;04;12)", Value( TRUE ) );     // EDATE isn't limited to 12 months
+  CHECK_EVAL( "EDATE(\"2006-01-01\";0)=DATE(2006;01;01)", Value( true ) );      // If zero, unchanged.
+  CHECK_EVAL( "EDATE(DATE(2006;01;01);0)=DATE(2006;01;01)", Value( true ) );    // You can pass strings or serial numbers to EDATE
+  CHECK_EVAL( "EDATE(\"2006-01-01\";2)=DATE(2006;03;01)", Value( true ) );      //
+  CHECK_EVAL( "EDATE(\"2006-01-01\";-2)=DATE(2005;11;01)", Value( true ) );     // 2006 is not a leap year. Last day of March, going back to February
+  //CHECK_EVAL( "EDATE(\"2000-04-30\";-2)=DATE(2006;2;29)", Value( true ) );    // TODO 2000 was a leap year, so the end of February is the 29th
+  //CHECK_EVAL( "EDATE(\"2000-04-05\";24)=DATE(2002;04;12)", Value( true ) );     // EDATE isn't limited to 12 months
 }
 
 void TestDatetimeFunctions::testEOMONTH()
 {
   //
-  CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;01;31)", Value( TRUE ) );    // If zero, unchanged V just returns end of that date's month. (January in this case)
-  CHECK_EVAL( "EOMONTH(DATE(2006;01;01);0)=DATE(2006;01;31)", Value( TRUE ) );  // You can pass strings or serial numbers to EOMONTH
-  CHECK_EVAL( "EOMONTH(\"2006-01-01\";2)=DATE(2006;03;31)", Value( TRUE ) );    // End of month of March is March 31.
-  CHECK_EVAL( "EOMONTH(\"2006-01-01\";-2)=DATE(2005;11;30)", Value( TRUE ) );   // Nov. 30 is the last day of November
-  CHECK_EVAL( "EOMONTH(\"2006-03-31\";-1)=DATE(2006;02;28)", Value( TRUE ) );   // 2006 is not a leap year. Last day of  February is Feb. 28.
-  //CHECK_EVAL( "EOMONTH(\"2000-04-30\";-2)=DATE(2006;02;29)", Value( TRUE ) ); // TODO 2000 was a leap year, so the end of February is the 29th
-  CHECK_EVAL( "EOMONTH(\"2000-04-05\";24)=DATE(2002;04;30)", Value( TRUE ) );   // Not limited to 12 months, and this tests April
-  CHECK_EVAL( "EOMONTH(\"2006-01-05\";04)=DATE(2002;05;31)", Value( FALSE ) );  // End of May is May 31
-  CHECK_EVAL( "EOMONTH(\"2006-01-05\";05)=DATE(2002;06;30)", Value( FALSE ) );  // June 30
-  CHECK_EVAL( "EOMONTH(\"2006-01-05\";06)=DATE(2002;07;31)", Value( FALSE ) );  // July 31
-  CHECK_EVAL( "EOMONTH(\"2006-01-05\";07)=DATE(2002;08;31)", Value( FALSE ) );  // August 31
-  CHECK_EVAL( "EOMONTH(\"2006-01-05\";08)=DATE(2002;09;30)", Value( FALSE ) );  // Sep 30
-  CHECK_EVAL( "EOMONTH(\"2006-01-05\";09)=DATE(2002;10;31)", Value( FALSE ) );  // Oct 31
-  CHECK_EVAL( "EOMONTH(\"2006-01-05\";10)=DATE(2002;11;30)", Value( FALSE ) );  // Nov. 30
-  CHECK_EVAL( "EOMONTH(\"2006-01-05\";11)=DATE(2002;12;31)", Value( FALSE ) );  // Dec. 31
+  CHECK_EVAL( "EOMONTH(\"2006-01-01\";0)=DATE(2006;01;31)", Value( true ) );    // If zero, unchanged V just returns end of that date's month. (January in this case)
+  CHECK_EVAL( "EOMONTH(DATE(2006;01;01);0)=DATE(2006;01;31)", Value( true ) );  // You can pass strings or serial numbers to EOMONTH
+  CHECK_EVAL( "EOMONTH(\"2006-01-01\";2)=DATE(2006;03;31)", Value( true ) );    // End of month of March is March 31.
+  CHECK_EVAL( "EOMONTH(\"2006-01-01\";-2)=DATE(2005;11;30)", Value( true ) );   // Nov. 30 is the last day of November
+  CHECK_EVAL( "EOMONTH(\"2006-03-31\";-1)=DATE(2006;02;28)", Value( true ) );   // 2006 is not a leap year. Last day of  February is Feb. 28.
+  //CHECK_EVAL( "EOMONTH(\"2000-04-30\";-2)=DATE(2006;02;29)", Value( true ) ); // TODO 2000 was a leap year, so the end of February is the 29th
+  CHECK_EVAL( "EOMONTH(\"2000-04-05\";24)=DATE(2002;04;30)", Value( true ) );   // Not limited to 12 months, and this tests April
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";04)=DATE(2002;05;31)", Value( false ) );  // End of May is May 31
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";05)=DATE(2002;06;30)", Value( false ) );  // June 30
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";06)=DATE(2002;07;31)", Value( false ) );  // July 31
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";07)=DATE(2002;08;31)", Value( false ) );  // August 31
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";08)=DATE(2002;09;30)", Value( false ) );  // Sep 30
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";09)=DATE(2002;10;31)", Value( false ) );  // Oct 31
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";10)=DATE(2002;11;30)", Value( false ) );  // Nov. 30
+  CHECK_EVAL( "EOMONTH(\"2006-01-05\";11)=DATE(2002;12;31)", Value( false ) );  // Dec. 31
 }
 
 void TestDatetimeFunctions::testHOUR()
@@ -331,8 +331,8 @@ void TestDatetimeFunctions::testMONTH()
 void TestDatetimeFunctions::testNOW()
 {
   //
-  CHECK_EVAL( "NOW()>DATE(2006;1;3)", Value( TRUE ) );   // NOW constantly changes, but we know it's beyond this date.
-  CHECK_EVAL( "INT(NOW())=TODAY()", Value( TRUE ) );     
+  CHECK_EVAL( "NOW()>DATE(2006;1;3)", Value( true ) );   // NOW constantly changes, but we know it's beyond this date.
+  CHECK_EVAL( "INT(NOW())=TODAY()", Value( true ) );
 }
 
 void TestDatetimeFunctions::testSECOND()
@@ -359,15 +359,15 @@ void TestDatetimeFunctions::testTIME()
 void TestDatetimeFunctions::testTIMEVALUE()
 {
   //
-  //CHECK_EVAL( "TIMEVALUE(\"06:05\")=TIME(6;5;0)", Value( TRUE ) ); // TODO
-  CHECK_EVAL( "TIMEVALUE(\"06:05:07\")=TIME(6;5;7)", Value( TRUE ) );
+  //CHECK_EVAL( "TIMEVALUE(\"06:05\")=TIME(6;5;0)", Value( true ) ); // TODO
+  CHECK_EVAL( "TIMEVALUE(\"06:05:07\")=TIME(6;5;7)", Value( true ) );
 }
 
 void TestDatetimeFunctions::testTODAY()
 {
   //
-  CHECK_EVAL( "TODAY()>DATE(2006;1;3)", Value( TRUE ) ); // Every date TODAY() changes, but we know it's beyond this date.
-  CHECK_EVAL( "INT(TODAY())=TODAY()", Value( TRUE ) );   
+  CHECK_EVAL( "TODAY()>DATE(2006;1;3)", Value( true ) ); // Every date TODAY() changes, but we know it's beyond this date.
+  CHECK_EVAL( "INT(TODAY())=TODAY()", Value( true ) );
 }
 
 void TestDatetimeFunctions::testWEEKDAY()
