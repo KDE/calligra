@@ -77,7 +77,7 @@ QDockWidget* KoStrokeDockerFactory::createDockWidget()
 class KoStrokeDocker::Private
 {
 public:
-    Private() {};
+    Private() {}
     QButtonGroup * capGroup;
     QButtonGroup * joinGroup;
     KoUnitDoubleSpinBox * setLineWidth;

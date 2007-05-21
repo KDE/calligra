@@ -53,7 +53,7 @@ public:
     /// Contructor
     ViewBase(Part *doc, QWidget *parent);
     /// Destructor
-    virtual ~ViewBase() {};
+    virtual ~ViewBase() {}
     /// Return the part (document) this view handles
     Part *part() const;
     

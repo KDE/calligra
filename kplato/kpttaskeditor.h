@@ -83,7 +83,7 @@ public:
     QList<Node*> selectedNodes() const ;
     Node *selectedNode() const;
 
-    virtual void updateReadWrite( bool /*readwrite*/ ) {};
+    virtual void updateReadWrite( bool /*readwrite*/ ) {}
 
 signals:
     void requestPopupMenu( const QString&, const QPoint & );

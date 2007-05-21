@@ -54,7 +54,7 @@ public:
     /// Contructor
     SplitterView(Part *doc, QWidget *parent);
     /// Destructor
-    virtual ~SplitterView() {};
+    virtual ~SplitterView() {}
     
     virtual void setZoom( double zoom );
     /// Set the project this view shall handle.

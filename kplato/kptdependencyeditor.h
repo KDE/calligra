@@ -68,7 +68,7 @@ public:
     
     DependencyScene *itemScene() const;
     virtual void createPath() {}
-    virtual void createPath( const QPointF &sp, int type, const QPointF &sp, int type );
+    virtual void createPath( const QPointF &sp, int stype, const QPointF &dp, int dtype );
     virtual QPointF startPoint() const { return QPointF(); }
     virtual QPointF endPoint() const { return QPointF(); }
 
@@ -377,7 +377,7 @@ public:
     
     virtual Relation *currentRelation() const;
 
-    virtual void updateReadWrite( bool /*readwrite*/ ) {};
+    virtual void updateReadWrite( bool /*readwrite*/ ) {}
 
 signals:
     void requestPopupMenu( const QString&, const QPoint & );
