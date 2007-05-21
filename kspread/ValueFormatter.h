@@ -49,13 +49,6 @@ public:
     const Doc* doc() const;
 
     /**
-     * Creates a textual representation of the Value in \p cell with \p formatType
-     * as formatting.
-     * \param formatType the value format, e.g. number, date
-     */
-    QString formatText ( const Cell* cell, Format::Type formatType );
-
-    /**
      * Creates a textual representation of \p value with the explicit given
      * formattings.
      * \param formatType the value format, e.g. number, date

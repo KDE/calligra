@@ -429,14 +429,6 @@ public:
     //
     //////////////////////
 
-    /**
-     * Return the format of this cell.
-     * Convenience method for Format::getFormatType
-     * Note that this is "how the user would like the data to be displayed if possible".
-     * If he selects a date format, and the cell contains a string, we won't apply that format.
-     */
-    Format::Type formatType() const;
-
     /** returns true, if cell format is of date type or content is a date */
     bool isDate() const;
     /** returns true, if cell format is of time type or content is a time */

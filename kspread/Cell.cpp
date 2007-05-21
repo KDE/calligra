@@ -382,14 +382,18 @@ QString Cell::displayText() const
         return QString();
 
     QString string;
+    const Style style = effectiveStyle();
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
     if ( isFormula() && sheet()->getShowFormula()
-           && !( sheet()->isProtected() && style().hideFormula() ) || isEmpty() )
+           && !( sheet()->isProtected() && style.hideFormula() ) || isEmpty() )
         string = inputText();
     else
-        string = doc()->formatter()->formatText(this, formatType());
-
+    {
+        string = doc()->formatter()->formatText(value(), style.formatType(), style.precision(),
+                                                style.floatFormat(), style.prefix(),
+                                                style.postfix(), style.currency().symbol());
+    }
     return string;
 }
 
@@ -802,11 +806,12 @@ bool Cell::makeFormula()
 
 int Cell::defineAlignX()
 {
-    int align = style().halign();
+    const Style style = effectiveStyle();
+    int align = style.halign();
     if ( align == Style::HAlignUndefined )
     {
         //numbers should be right-aligned by default, as well as BiDi text
-        if ((formatType() == Format::Text) || value().isString())
+        if ((style.formatType() == Format::Text) || value().isString())
             align = (displayText().isRightToLeft()) ? Style::Right : Style::Left;
         else
         {
@@ -1013,25 +1018,16 @@ void Cell::setLink( const QString& link )
         setCellText( link );
 }
 
-Format::Type Cell::formatType() const
-{
-    return style().formatType();
-}
-
 bool Cell::isDate() const
 {
-    Format::Type ft = formatType();
-
-    return (Format::isDate (ft) || ((ft == Format::Generic) &&
-            (value().format() == Value::fmt_Date)));
+    const Format::Type t = style().formatType();
+    return (Format::isDate(t) || ((t == Format::Generic) && (value().format() == Value::fmt_Date)));
 }
 
 bool Cell::isTime() const
 {
-    Format::Type ft = formatType();
-
-    return (Format::isTime (ft) || ((ft == Format::Generic) &&
-            (value().format() == Value::fmt_Time)));
+    const Format::Type t = style().formatType();
+    return (Format::isTime(t) || ((t == Format::Generic) && (value().format() == Value::fmt_Time)));
 }
 
 
@@ -2213,7 +2209,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         */
         int precision = t.length() - t.indexOf('.') - 1;
 
-        if ( formatType() == Format::Percentage )
+        if ( style().formatType() == Format::Percentage )
         {
           if (value().isInteger())
             t = locale->formatNumber( value().asInteger() * 100 );

@@ -44,27 +44,13 @@ const Doc* ValueFormatter::doc() const
     return m_converter->doc();
 }
 
-QString ValueFormatter::formatText (const Cell *cell, Format::Type fmtType)
+QString ValueFormatter::formatText(const Value &value, Format::Type fmtType, int precision,
+                                   Style::FloatFormat floatFormat, const QString &prefix,
+                                   const QString &postfix, const QString &currencySymbol)
 {
-  if ( cell->value().isError() )
-    return cell->value().errorMessage();
+  if (value.isError())
+    return value.errorMessage();
 
-  QString str;
-
-  Style::FloatFormat floatFormat = cell->style().floatFormat();
-  int precision = cell->style().precision();
-  QString prefix = cell->style().prefix();
-  QString postfix = cell->style().postfix();
-  Currency currency = cell->style().currency();
-
-  return formatText (cell->value(), fmtType, precision,
-      floatFormat, prefix, postfix, currency.symbol());
-}
-
-QString ValueFormatter::formatText (const Value &value,
-    Format::Type fmtType, int precision, Style::FloatFormat floatFormat,
-    const QString &prefix, const QString &postfix, const QString &currencySymbol)
-{
   //if we have an array, use its first element
   if (value.isArray())
     return formatText (value.element (0, 0), fmtType, precision,
