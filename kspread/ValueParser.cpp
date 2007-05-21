@@ -395,59 +395,51 @@ Value ValueParser::tryParseDate( const QString& str, bool *ok ) const
 
 Value ValueParser::tryParseTime( const QString& str, bool *ok ) const
 {
-  if (ok)
-    *ok = false;
+    bool valid = false;
+    bool duration = false;
 
-  bool valid    = false;
-  bool duration = false;
-  Value val;
+    QDateTime tmpTime = readTime(str, true, &valid, duration);
+    if (!valid)
+        tmpTime = readTime(str, false, &valid, duration);
 
-  QDateTime tmpTime = readTime (str, true, &valid, duration);
-  if (!valid)
-    tmpTime = readTime (str, false, &valid, duration);
-
-  if (!valid)
-  {
-    QTime tm;
-    if (m_doc->locale()->use12Clock())
+    if (!valid)
     {
-      QString stringPm = ki18n("pm").toString(m_doc->locale());
-      QString stringAm = ki18n("am").toString(m_doc->locale());
-      int pos=0;
-      if((pos=str.indexOf(stringPm))!=-1)
-      {
-          QString tmp=str.mid(0,str.length()-stringPm.length());
-          tmp=tmp.simplified();
-          tm = m_doc->locale()->readTime(tmp+' '+stringPm, &valid);
-          if (!valid)
-              tm = m_doc->locale()->readTime(tmp+":00 "+stringPm, &valid);
-      }
-      else if((pos=str.indexOf(stringAm))!=-1)
-      {
-          QString tmp = str.mid(0,str.length()-stringAm.length());
-          tmp = tmp.simplified();
-          tm = m_doc->locale()->readTime (tmp + ' ' + stringAm, &valid);
-          if (!valid)
-              tm = m_doc->locale()->readTime (tmp + ":00 " + stringAm, &valid);
-      }
-      if (valid)
-          tmpTime.setTime(tm);
+        const QString stringPm = ki18n("pm").toString(m_doc->locale());
+        const QString stringAm = ki18n("am").toString(m_doc->locale());
+        int pos = 0;
+        if ((pos = str.indexOf(stringPm, 0, Qt::CaseInsensitive)) != -1)
+        {
+            // cut off 'PM'
+            QString tmp = str.mid(0, str.length() - stringPm.length());
+            tmp = tmp.simplified();
+            // try again
+            tmpTime = readTime(tmp, true, &valid, duration);
+            if (!valid)
+                tmpTime = readTime(tmp, false, &valid, duration);
+            if (valid && tmpTime.time().hour() > 11)
+                valid = false;
+            else if (valid)
+                tmpTime = tmpTime.addSecs(43200); // add 12 hours
+        }
+        else if ((pos = str.indexOf(stringAm, 0, Qt::CaseInsensitive)) != -1)
+        {
+            // cut off 'AM'
+            QString tmp = str.mid(0, str.length() - stringAm.length());
+            tmp = tmp.simplified();
+            // try again
+            tmpTime = readTime(tmp, true, &valid, duration);
+            if (!valid)
+                tmpTime = readTime(tmp, false, &valid, duration);
+            if (valid && tmpTime.time().hour() > 11)
+                valid = false;
+        }
     }
-  }
-  if (valid)
-  {
-    if ( duration )
-    {
-      val = Value( tmpTime, doc() );
-    }
-    else
-      val = Value( tmpTime.time(), doc() );
-  }
 
-  if (ok)
-    *ok = valid;
-
-  return val;
+    if (ok)
+        *ok = valid;
+    if (valid)
+        return duration ? Value( tmpTime, doc() ) : Value( tmpTime.time(), doc() );
+    return Value();
 }
 
 QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
