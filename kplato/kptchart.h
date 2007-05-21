@@ -37,7 +37,6 @@ namespace KPlato
     class Chart
     {
         private:
-            float sizeSave[3][2];
             float totalYPercent;
             float totalCostPlanned;
             float totalTimePlanned;

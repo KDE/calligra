@@ -65,6 +65,8 @@ public:
 
     ChartWidget(Project &, QWidget *parent=0, const char *name=0);
   
+    void draw( Project &project );
+    
     void drawBasicChart(QPainter & painter);
     void paintEvent(QPaintEvent * ev);
     void drawBCWP();

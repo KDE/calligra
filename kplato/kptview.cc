@@ -73,6 +73,7 @@
 #include "kptaccountsview.h"
 #include "kptaccountseditor.h"
 #include "kptcalendareditor.h"
+#include "kptchartview.h"
 #include "kptfactory.h"
 #include "kptmilestoneprogressdialog.h"
 #include "kptnode.h"
@@ -103,7 +104,6 @@
 #include "kptconfigdialog.h"
 #include "kptwbsdefinitiondialog.h"
 #include "kptaccountsdialog.h"
-#include "kptchartdialog.h"
 #include "kptresourceassignmentview.h"
 #include "kpttaskstatusview.h"
 #include "kptsplitterview.h"
@@ -601,7 +601,7 @@ View::View( Part* part, QWidget* parent )
     createResourceView( cat );
     createAccountsView( cat );
     createResourceAssignmentView( cat );
-
+    createChartView( cat );
 
     // Add child documents
     createChildDocumentViews();
@@ -668,10 +668,6 @@ View::View( Part* part, QWidget* parent )
     actionEditMainProject  = new KAction(KIcon( "edit" ), i18n("Edit Main Project..."), this);
     actionCollection()->addAction("project_edit", actionEditMainProject );
     connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
-
-    actionChartIndicators  = new KAction(KIcon( "edit" ), i18n("Chart Indicators..."), this);
-    actionCollection()->addAction("chart_indicators", actionChartIndicators );
-    connect( actionChartIndicators, SIGNAL( triggered( bool ) ), SLOT( slotChartDisplay() ) );
 
     actionEditStandardWorktime  = new KAction(KIcon( "edit" ), i18n("Edit Standard Worktime..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
@@ -1059,6 +1055,20 @@ void View::createResourceAssignmentView( ViewListItem *cat )
     connect( resourceAssignmentView, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( resourceAssignmentView, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+}
+
+void View::createChartView( ViewListItem *cat )
+{
+    ChartView *v = new ChartView( getPart(), m_tab );
+    m_tab->addWidget( v );
+
+    ViewListItem *i = m_viewlist->addView( cat, "PerformanceChart", i18n( "Performance Chart" ), v, getPart(), "chart" );
+    i->setToolTip( 0, i18n( "Cost and schedule monitoring" ) );
+
+    v->setProject( &( getProject() ) );
+
+    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
 }
 
@@ -1647,18 +1657,6 @@ void View::slotConfigure()
     delete dia;
 }
 
-
-void View::slotChartDisplay()
-{
-    ChartDialog * dia = new ChartDialog(getProject());
-    if ( dia->exec()  == QDialog::Accepted) {
-       // K3Command * cmd = dia->buildCommand( getPart() );
-      //  if ( cmd ) {
-        //    getPart() ->addCommand( cmd );
-       // }
-    }
-    delete dia;
-}
 
 Calendar *View::currentCalendar()
 {

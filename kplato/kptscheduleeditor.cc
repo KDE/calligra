@@ -266,7 +266,7 @@ QModelIndex ScheduleItemModel::index( const ScheduleManager *manager ) const
 
 int ScheduleItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return 5;
+    return 7;
 }
 
 int ScheduleItemModel::rowCount( const QModelIndex &parent ) const
@@ -472,6 +472,52 @@ bool ScheduleItemModel::setCalculateAll( const QModelIndex &index, const QVarian
     return false;
 }
 
+QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) const
+{
+    ScheduleManager *sm = manager ( index );
+    if ( sm == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::EditRole: 
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( sm->expected() ) {
+                return sm->expected()->start().dateTime();
+            }
+            break;
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) const
+{
+    ScheduleManager *sm = manager ( index );
+    if ( sm == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::EditRole: 
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( sm->expected() ) {
+                return sm->expected()->end().dateTime();
+            }
+            break;
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
 {
     //kDebug()<<k_funcinfo<<index.row()<<", "<<index.column()<<endl;
@@ -482,6 +528,8 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case 2: result = allowOverbooking( index, role ); break;
         case 3: result = usePert( index, role ); break;
         case 4: result = calculateAll( index, role ); break;
+        case 5: result = projectStart(  index, role ); break;
+        case 6: result = projectEnd( index, role ); break;
         default:
             kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
             return QVariant();
@@ -507,6 +555,8 @@ bool ScheduleItemModel::setData( const QModelIndex &index, const QVariant &value
         case 2: return setAllowOverbooking( index, value, role );
         case 3: return setUsePert( index, value, role );
         case 4: return setCalculateAll( index, value, role );
+        case 5: return false;
+        case 6: return false;
         default:
             qWarning("data: invalid display value column %d", index.column());
             break;
@@ -524,6 +574,8 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
                 case 2: return i18n( "Overbooking" );
                 case 3: return i18n( "Distribution" );
                 case 4: return i18n( "Calculate" );
+                case 5: return i18n( "Start" );
+                case 6: return i18n( "Finish" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -585,6 +637,7 @@ ScheduleTreeView::ScheduleTreeView( Part *part, QWidget *parent )
     : TreeViewBase( parent ),
     m_part( part )
 {
+    header()->setStretchLastSection ( false );
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setModel( new ScheduleItemModel( part ) );
     setSelectionModel( new QItemSelectionModel( model() ) );

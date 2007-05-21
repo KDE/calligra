@@ -27,17 +27,11 @@ namespace KPlato
 
 ChartPanel::ChartPanel(Project &p, QWidget *parent) : ChartPanelBase(parent)
 {
-    chart = new ChartWidget(p,horizontalLayout_2,"MyChartWidget");
-    hboxLayout->setMargin(0);
-    hboxLayout->setSpacing(0);
-    hboxLayout->addWidget(chart,1,0);
-
-    horizontalLayout_2->setMinimumSize(610, 350);
-    horizontalLayout_2->setGeometry(QRect(0, 0, 610, 350));
-
-    verticalLayout->setGeometry(QRect(0, 365, 610, 80));
-    verticalLayout->setMinimumSize(610,80);
-
+    //frame->setBackgroundRole( QPalette::Base );
+    chart = new ChartWidget(p, chartFrame );
+    QHBoxLayout *l = new QHBoxLayout( chartFrame );
+    l->addWidget( chart );
+    
     //chart->update();
     connect(curve2,SIGNAL(clicked()),SLOT(slotBCWP()));
     connect(curve1,SIGNAL(clicked()),SLOT(slotBCWS()));
@@ -48,12 +42,9 @@ ChartPanel::ChartPanel(Project &p, QWidget *parent) : ChartPanelBase(parent)
     is_acwp_draw=false;
 }
 
-void ChartPanel::resizeEvent(QResizeEvent* ev)
+void ChartPanel::draw( Project &project )
 {
-    chart->setMaximumWidth((ev->size()).width());
-    chart->setMaximumHeight((ev->size()).height()-100);
-    horizontalLayout_2->setGeometry(QRect(0, 0, (ev->size()).width(), (ev->size()).height()-100));
-    verticalLayout->setGeometry(QRect(10, (ev->size()).height()-80, 610, 80));
+    chart->draw( project );
 }
 
 void ChartPanel::slotBCWP()

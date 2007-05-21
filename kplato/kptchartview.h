@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Frédéric Lambert <konkistadorr@gmail.com>
+   Copyright (C) 2007 Dag Andersen <kplato@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,29 +17,36 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTCHARTDIALOG_H
-#define KPTCHARTDIALOG_H
+#ifndef KPTCHARTVIEW_H
+#define KPTCHARTVIEW_H
 
-#include <kdialog.h>
-#include "kptchartpanel.h"
+#include "kptviewbase.h"
+
 class QWidget;
-
-class K3Command;
 
 namespace KPlato
 {
 
-//class KChart;
+class ChartPanel;
 class Part;
+class Project;
 
-class ChartDialog : public KDialog {
+class ChartView : public ViewBase 
+{
     Q_OBJECT
 public:
-    explicit ChartDialog(Project &p,QWidget *parent=0, const char *name=0);
-   ~ChartDialog();
-    void resizeEvent(QResizeEvent* ev);
-    ChartPanel * m_panel;
+    explicit ChartView( Part *part, QWidget *parent=0 );
     
+    virtual void setProject( Project *project );
+    
+protected slots:
+    void slotCurrentViewScheduleIdChanged( long );
+    void slotNodeChanged( Node* );
+    
+private:
+    ChartPanel *m_panel;
+    Project *m_project;
+
 };
 
 } //namespace KPlato

@@ -30,18 +30,23 @@ namespace KPlato
 
 ChartWidget::ChartWidget(Project &p, QWidget *parent, const char *name) : QWidget(parent,name)
 {
-    kDebug() << "ChartWidget :: Constructor"<<endl;
-    setMaximumSize(610,350);
-
+    kDebug() << "------------> ChartWidget :: Constructor"<<endl;
     is_bcwp_draw=false;
     is_bcws_draw=true;
     is_acwp_draw=false;
 
-
+    draw( p );
+    
     kDebug() << "ChartWidget :: Constructor Ended"<<endl;
 
-    //Calculer ici les indicateurs relatifs au projet!!!
-
+}
+ 
+void ChartWidget::draw( Project &p ) 
+{
+    weeks.clear();
+    bcwpPoints.clear();
+    bcwsPoints.clear();
+    acwpPoints.clear();
     chartEngine.calculateWeeks(weeks,p);
     chartEngine.initXCurvesVectors(weeks,bcwpPoints,bcwsPoints,acwpPoints);
 
@@ -61,12 +66,15 @@ ChartWidget::ChartWidget(Project &p, QWidget *parent, const char *name) : QWidge
     chartEngine.timeToPercent(acwpPoints);
     chartEngine.timeToPercent(bcwsPoints);
 
+    bcwpPoints_display.clear();
+    bcwsPoints_display.clear();
+    acwpPoints_display.clear();
     chartEngine.init_display(bcwpPoints_display,bcwsPoints_display,acwpPoints_display,weeks.size());
 }
 
 void ChartWidget::paintEvent(QPaintEvent * ev)
 {
-   
+   kDebug()<<k_funcinfo<<size()<<endl;
     //this->updateGeometry();
     QPainter painter(this);
 
@@ -118,7 +126,7 @@ void ChartWidget::drawBasicChart(QPainter & painter)
    /* attributes :  chartEngine1er : par rapport au coté, 2eme : par rapport au haut !  */
     painter.drawText(2, 10,"Budget");
     //painter.drawText(size().width()-15, size().height()-20,"Time");
-    painter.drawText(size().width()-70,size().height(),"Time");
+    //painter.drawText(size().width()-70,size().height(),"Time");
 
     //Y
     painter.drawLine(QLine(LEFTMARGIN,TOPMARGIN,LEFTMARGIN,size().height()-BOTTOMMARGIN));
@@ -146,18 +154,23 @@ void ChartWidget::drawBasicChart(QPainter & painter)
        MarginX_base = (size().width()-(RIGHTMARGIN+LEFTMARGIN))/(weeks.size()-1);
    }
    float MarginX=0;
-   QVector<QPointF>::iterator it_time = bcwsPoints.begin();
    int i=0;
    while(i<weeks.size())
    {
-        int n=sprintf(Xchar,"%d",(int)it_time->x());
-        char * Xaffichage =strcat(Xchar,"%");
-        painter.drawText(MarginX+LEFTMARGIN,size().height()-BOTTOMMARGIN+19,Xaffichage);
-        painter.drawLine(QLine(MarginX+LEFTMARGIN,size().height()-BOTTOMMARGIN,MarginX+LEFTMARGIN,size().height()-BOTTOMMARGIN+4));
+        QString txt = weeks[ i ].toString();
+        
+        int x = MarginX+LEFTMARGIN;
+        int y1 = size().height()-BOTTOMMARGIN;
+        int y2 = y1+4;
+        painter.drawLine(QLine( x, y1, x, y2 ) );
+        
+        QRect r = painter.boundingRect( QRect(), Qt::AlignLeft, txt );
+        x = QMAX( 0, x - r.width()/2 );
+        painter.drawText( x, y2+10, txt );
+        
         MarginX+=MarginX_base;
         strcpy(Xchar,"");
         i++;
-        it_time++;
    }
 }
 

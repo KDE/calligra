@@ -109,6 +109,9 @@ protected:
     QVariant calculateAll( const QModelIndex &index, int role ) const;
     bool setCalculateAll( const QModelIndex &index, const QVariant &value, int role );
 
+    QVariant projectStart( const QModelIndex &index, int role ) const;
+    QVariant projectEnd( const QModelIndex &index, int role ) const;
+
 private:
     ScheduleManager *m_manager; // for sanety check
     

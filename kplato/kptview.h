@@ -235,8 +235,6 @@ public slots:
 
     void slotViewAccounts();
 
-    void slotChartDisplay();
-
     void slotViewCalendarEditor();
 
     void slotViewTaskEditor();
@@ -350,6 +348,7 @@ private:
     void createResourceView( ViewListItem *cat );
     void createAccountsView( ViewListItem *cat );
     void createResourceAssignmentView( ViewListItem *cat );
+    void createChartView( ViewListItem *cat );
 
     void createChildDocumentViews();
     ViewListItem *createChildDocumentView( DocumentChild *ch );
@@ -408,7 +407,6 @@ private:
     KAction *actionEditCalendarList;
     KAction *actionEditAccounts;
     KAction *actionEditResources;
-    KAction *actionChartIndicators;
 
     // ------ Reports
     KAction *actionFirstpage;
