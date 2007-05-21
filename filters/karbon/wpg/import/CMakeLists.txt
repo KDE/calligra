@@ -23,7 +23,12 @@ set(libwpg_SRCS
 )
 
 
-set(wpgimport_PART_SRCS WPGImport.cpp ${libwpg_SRCS})
+set(wpgimport_PART_SRCS 
+WPGImport.cpp 
+OdgExporter.cxx
+FileOutputHandler.cxx
+GraphicsElement.cxx
+${libwpg_SRCS})
 
 kde4_automoc(${wpgimport_PART_SRCS})
 

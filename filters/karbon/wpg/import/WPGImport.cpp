@@ -20,8 +20,9 @@
 #include <WPGImport.h>
 #include <WPGImport.moc>
 
+#include <QBuffer>
+#include <QByteArray>
 #include <QString>
-#include <QDate>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -34,6 +35,9 @@
 
 #include <libwpg.h>
 #include <WPGStreamImplementation.h>
+
+#include "FileOutputHandler.hxx"
+#include "OdgExporter.hxx"
 
 #include <iostream>
 
@@ -49,12 +53,35 @@ WPGImport::~WPGImport()
 {
 }
 
+static QByteArray createManifest()
+{
+  KoXmlWriter* manifestWriter;
+  QByteArray manifestData;
+  QBuffer manifestBuffer( &manifestData );
+
+  manifestBuffer.open( QIODevice::WriteOnly );
+  manifestWriter = new KoXmlWriter( &manifestBuffer );
+
+  manifestWriter->startDocument( "manifest:manifest" );
+  manifestWriter->startElement( "manifest:manifest" );
+  manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
+  manifestWriter->addManifestEntry( "/", "application/vnd.oasis.opendocument.graphics" );
+  //manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+  manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+  manifestWriter->endElement();
+  manifestWriter->endDocument();
+  delete manifestWriter;
+
+  return manifestData;
+}
+
+
 KoFilter::ConversionStatus WPGImport::convert( const QByteArray& from, const QByteArray& to )
 {
   if ( from != "application/x-wpg" )
     return KoFilter::NotImplemented;
 
-  if ( to != "image/svg+xml" )
+  if ( to != "application/vnd.oasis.opendocument.graphics" )
     return KoFilter::NotImplemented;
 
 
@@ -72,49 +99,59 @@ KoFilter::ConversionStatus WPGImport::convert( const QByteArray& from, const QBy
   if (!libwpg::WPGraphics::isSupported(input))
   {
     std::cerr << "ERROR: Unsupported file format (unsupported version) or file is encrypted!" << std::endl;
+    delete input;
     return KoFilter::NotImplemented;
   }
 
-  libwpg::WPGString output;
-  if (!libwpg::WPGraphics::generateSVG(input, output))
+  // do the conversion
+  std::ostringstream tmpStringStream;
+  FileOutputHandler tmpHandler(tmpStringStream);
+  OdgExporter exporter(&tmpHandler);
+  libwpg::WPGraphics::parse(input, &exporter);
+  delete input;
+
+
+  // create output store
+  KoStore* storeout;
+  storeout = KoStore::createStore( m_chain->outputFile(), KoStore::Write,
+    "application/vnd.oasis.opendocument.graphics", KoStore::Zip );
+
+  if ( !storeout )
   {
-    std::cerr << "ERROR: SVG Generation failed!" << std::endl;
-    return KoFilter::NotImplemented;
+    kWarning() << "Couldn't open the requested file." << endl;
+    return KoFilter::FileNotFound;
   }
-
-
-  QFile file(  m_chain->outputFile().toLocal8Bit() );
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    std::cerr << "ERROR: SVG Generation failed!" << std::endl;
-    return KoFilter::NotImplemented;
-  }
-
-  QTextStream out(&file);
-  out << output.cstr();
-
 
 #if 0
-  d->inputFile = m_chain->inputFile();
-  d->outputFile = m_chain->outputFile();
-
-  // open inputFile
-  d->workbook = new Swinder::Workbook;
-  if( !d->workbook->load( d->inputFile.toLocal8Bit() ) )
+  if ( !storeout->open( "styles.xml" ) )
   {
-    delete d->workbook;
-    d->workbook = 0;
-    return KoFilter::StupidError;
+    kWarning() << "Couldn't open the file 'styles.xml'." << endl;
+    return KoFilter::CreationError;
   }
-
-  if( d->workbook->isPasswordProtected() )
-  {
-    delete d->workbook;
-    d->workbook = 0;
-    return KoFilter::PasswordProtected;
-  }
+  //storeout->write( createStyles() );
+  storeout->close();
 #endif
 
+  if ( !storeout->open( "content.xml" ) )
+  {
+    kWarning() << "Couldn't open the file 'content.xml'." << endl;
+    return KoFilter::CreationError;
+  }
+  storeout->write(tmpStringStream.str().c_str());
+  storeout->close();
+
+  // store document manifest
+  storeout->enterDirectory( "META-INF" );
+  if ( !storeout->open( "manifest.xml" ) )
+  {
+     kWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
+     return KoFilter::CreationError;
+  }
+  storeout->write( createManifest() );
+  storeout->close();
+
+  // we are done!
+  delete storeout;
 
   return KoFilter::OK;
 }

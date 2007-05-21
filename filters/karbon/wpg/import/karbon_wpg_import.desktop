@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon WPG Import Filter
-X-KDE-Export=image/svg+xml
+X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=application/x-wpg
 X-KDE-Weight=1
 X-KDE-Library=libwpgimport
