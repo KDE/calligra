@@ -530,10 +530,17 @@ Value func_date (valVector args, ValueCalc *calc, FuncExtra *)
   int m = calc->conv()->asInteger (args[1]).asInteger();
   int d = calc->conv()->asInteger (args[2]).asInteger();
 
-  QDate _date;
-  if( _date.setYMD (y, m, d))
-    return Value( _date, calc->doc() );
-  return Value::errorVALUE();
+  if ( m == 0 || d == 0 )
+    return Value::errorVALUE(); // month or day zero is not allowed
+  else
+  {
+    QDate tmpDate(y,1,1);
+    tmpDate = tmpDate.addMonths(m-1);
+    tmpDate = tmpDate.addDays(d-1);
+
+    //kDebug() << "func_date:: date = " << tmpDate << endl;
+    return Value( tmpDate, calc->doc() );
+  }
 }
 
 // Function: DAY

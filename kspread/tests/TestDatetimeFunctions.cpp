@@ -225,20 +225,20 @@ void TestDatetimeFunctions::testDATE2UNIX()
 void TestDatetimeFunctions::testDATE()
 {
   //
-  CHECK_EVAL( "DATE(2005;12;31)-DATE(1904;01;01)", Value( 37255 ) );
-  CHECK_EVAL( "DATE(2004;02;29)=DATE(2004;02;28)+1", Value( TRUE ) );                           // leap year
-  CHECK_EVAL( "DATE(2000;02;29)=DATE(2000;02;28)+1", Value( TRUE ) );                           // leap year
-  CHECK_EVAL( "DATE(2005;03;01)=DATE(2005;02;28)+1", Value( TRUE ) );                           // no leap year
-  CHECK_FAIL( "DATE(2017.5;05;29)=DATE(2017;01;02)", Value( TRUE ), "fraction not truncated" ); // fractional values for year are truncated
-  CHECK_FAIL( "DATE(2006;02.5;03)=DATE(2006;02;03)", Value( TRUE ), "fraction not truncated" ); // fractional values for month are truncated
-  CHECK_FAIL( "DATE(2006;01;03.5)=DATE(2006;01;03)", Value( TRUE ), "fraction not truncated" ); // fractional values for day are truncated
-  CHECK_FAIL( "DATE(2006;13;03)=DATE(2007;01;03)", Value( TRUE ), "TODO implement roll over" ); // months > 12 roll over to year
-  CHECK_FAIL( "DATE(2006;01;32)=DATE(2006;02;01)", Value( TRUE ), "TODO implement roll over" ); // days greater than month limit roll over to month
-  CHECK_FAIL( "DATE(2006;25;34)=DATE(2008;02;03)", Value( TRUE ), "TODO implement roll over" ); // days and months roll over transitively
-  CHECK_FAIL( "DATE(2006;-01;01)=DATE(2005;11;01)", Value( TRUE ), "TODO implement roll over" );// negative months roll year backward
-  CHECK_FAIL( "DATE(2006;04;-01)=DATE(2006;03;30)", Value( TRUE ), "TODO implement roll over" );// negative days roll month backward
-  CHECK_FAIL( "DATE(2006;-04;-01)=DATE(2007;07;30)", Value( TRUE ), "TODO implement roll over");// negative days and months roll backward transitively
-  CHECK_EVAL( "DATE(2003;02;29)=DATE(2003;37;01)", Value( TRUE ) );                             // non-leap year rolls forward
+  CHECK_EVAL( "DATE(2005;12;31)-DATE(1904;01;01)",   Value( 37255) );
+  CHECK_EVAL( "DATE(2004;02;29)=DATE(2004;02;28)+1", Value( TRUE ) ); // leap year
+  CHECK_EVAL( "DATE(2000;02;29)=DATE(2000;02;28)+1", Value( TRUE ) ); // leap year
+  CHECK_EVAL( "DATE(2005;03;01)=DATE(2005;02;28)+1", Value( TRUE ) ); // no leap year
+  CHECK_EVAL( "DATE(2017.5;01;02)=DATE(2017;01;02)", Value( TRUE ) ); // fractional values for year are truncated
+  CHECK_EVAL( "DATE(2006; 2.5; 3)=DATE(2006; 2; 3)", Value( TRUE ) ); // fractional values for month are truncated
+  CHECK_EVAL( "DATE(2006;01;03.5)=DATE(2006;01;03)", Value( TRUE ) ); // fractional values for day are truncated
+  CHECK_EVAL( "DATE(2006;13;03)=DATE(2007;01;03)",   Value( TRUE ) ); // months > 12 roll over to year
+  CHECK_EVAL( "DATE(2006;01;32)=DATE(2006;02;01)",   Value( TRUE ) ); // days greater than month limit roll over to month
+  CHECK_EVAL( "DATE(2006;25;34)=DATE(2008;02;03)",   Value( TRUE ) ); // days and months roll over transitively
+  CHECK_EVAL( "DATE(2006;-01;01)=DATE(2005;11;01)",  Value( TRUE ) ); // negative months roll year backward
+  CHECK_EVAL( "DATE(2006;04;-01)=DATE(2006;03;30)",  Value( TRUE ) ); // negative days roll month backward
+  CHECK_EVAL( "DATE(2006;-4;-1)=DATE(2005;07;30)",   Value( TRUE ) ); // negative days and months roll backward transitively
+  CHECK_EVAL( "DATE(2003;2;29)=DATE(2003;03;01)",    Value( TRUE ) ); // non-leap year rolls forward
 }
 
 void TestDatetimeFunctions::testDATEVALUE()
