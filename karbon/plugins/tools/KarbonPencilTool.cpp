@@ -133,10 +133,6 @@ void KarbonPencilTool::deactivate()
     m_shape = 0;
 }
 
-void KarbonPencilTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
-{
-}
-
 void KarbonPencilTool::addPoint( const QPointF & point )
 {
     if( ! m_shape )

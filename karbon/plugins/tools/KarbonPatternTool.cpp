@@ -29,6 +29,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoShape.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoPointerEvent.h>
 
@@ -199,7 +200,7 @@ void KarbonPatternTool::deactivate()
         shape->repaint();
 }
 
-void KarbonPatternTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
+void KarbonPatternTool::resourceChanged( int key, const QVariant & res )
 {
     switch( key )
     {

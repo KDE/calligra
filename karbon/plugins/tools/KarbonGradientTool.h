@@ -53,7 +53,7 @@ protected:
     virtual QWidget * createOptionWidget();
 
 private Q_SLOTS:
-    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
+    virtual void resourceChanged( int key, const QVariant & res );
     void initialize();
     void gradientChanged();
 private:

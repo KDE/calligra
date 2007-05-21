@@ -46,7 +46,6 @@ protected:
     virtual QWidget * createOptionWidget();
 
 private slots:
-    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
     void selectMode( int mode );
     void setOptimize( int state );
     void setDelta( double delta );

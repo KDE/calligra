@@ -92,6 +92,7 @@
 // KOffice includes
 #include <kdatatool.h>
 #include <KoCanvasController.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoCharSelectDia.h>
 #include <KoColor.h>
 #include <KoMainWindow.h>

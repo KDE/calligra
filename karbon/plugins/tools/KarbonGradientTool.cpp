@@ -27,6 +27,7 @@
 
 #include <KoShape.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
@@ -207,7 +208,7 @@ void KarbonGradientTool::deactivate()
     qDeleteAll( m_gradients );
 }
 
-void KarbonGradientTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
+void KarbonGradientTool::resourceChanged( int key, const QVariant & res )
 {
     switch( key )
     {

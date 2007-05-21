@@ -52,7 +52,7 @@ protected:
     virtual QWidget * createOptionWidget();
 
 private slots:
-    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
+    virtual void resourceChanged( int key, const QVariant & res );
     void slotButtonClicked( int button );
     void patternSelected( QTableWidgetItem * item );
     void importPattern();
