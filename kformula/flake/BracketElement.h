@@ -2,6 +2,7 @@
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
 		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,10 +27,11 @@
 #include <QSize>
 #include <QList>
 
+#include "kformuladefs.h"
 #include "BasicElement.h"
 
 class Artwork;
-class SequenceElement;
+class RowElement;
 
 
 /**
@@ -45,67 +47,36 @@ public:
 
 
     /**
-     * @returns the type of this element. Used for
-     * parsing a sequence.
-     */
-    virtual TokenType getTokenType() const { return BRACKET; }
-
-    /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
     const QList<BasicElement*> childElements();
 	
+    /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
+     */
+    virtual void paint( QPainter& painter, const AttributeManager* am );
 
     /**
-     * Calculates our width and height and
-     * our children's parentPosition.
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
      */
-    virtual void calcSizes( const ContextStyle& context,
-                            ContextStyle::TextStyle tstyle,
-                            ContextStyle::IndexStyle istyle,
-                            StyleAttributes& style );
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-					   StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
-
+    virtual void layout( const AttributeManager* am );
+    
+    /// @return The element's ElementType
+    virtual ElementType elementType() const;
+    
 protected:
     
-    //Save/load support
+    /// Read all content from the node - reimplemented from BasicElement
     virtual bool readMathMLContent( const KoXmlElement& element );
     
+    /// Write all content to the KoXmlWriter - reimplemented from BasicElement
     virtual void writeMathMLContent( KoXmlWriter* writer) const;
 
-    virtual QString elementName() const { return "mfenced"; }
-
-    /**
-     * Returns the tag name of this element type.
-     */
-    virtual QString getTagName() const { return "BRACKET"; }
-
-    /**
-     * Reads our attributes from the element.
-     * Returns false if it failed.
-     */
-    virtual bool readAttributesFromDom(QDomElement element);
-
-    virtual void writeDom(QDomElement element);
-
 private:
-
-    /**
-     * @return a LaTex string for the given symbol
-     */
-     QString latexString(char);
 
     /**
      * Set left and right types in operator fences

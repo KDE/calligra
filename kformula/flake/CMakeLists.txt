@@ -20,7 +20,7 @@ set( kformulalib_PART_SRCS
    ElementFactory.cpp 
 #   MultiscriptElement.cpp
    UnderOverElement.cpp
-#   BracketElement.cpp 
+   BracketElement.cpp 
 #   MatrixElement.cpp
 #   MatrixRowElement.cpp
 #   MatrixEntryElement.cpp
