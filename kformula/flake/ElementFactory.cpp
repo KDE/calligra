@@ -125,8 +125,6 @@ QString ElementFactory::elementName( ElementType type )
         return "mfenced";
     else if( type == Enclose )
         return "menclose";
-    else if( type == Space )
-        return "mspace";
     else if( type == UnderOver )
         return "munderover";
     else if( type == Under )
