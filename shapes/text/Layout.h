@@ -26,6 +26,7 @@
 
 #include <QTextLine>
 #include <QTextBlock>
+#include <QHash>
 
 class KoStyleManager;
 class KoTextBlockData;
@@ -57,6 +58,8 @@ public:
     virtual bool previousParag();
     virtual double documentOffsetInShape();
     virtual bool setFollowupShape(KoShape *shape);
+    /// called by the KoTextDocumentLayout to notify the LayoutState of a successfully resized inline object
+    virtual void registerInlineObject(const QTextInlineObject &inlineObject);
 
     /// paint the document
     virtual void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext & context);
@@ -81,6 +84,7 @@ private:
     void nextShape();
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
     void drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd);
+    double inlineCharHeight(const QTextFragment &fragment);
 
     void resetPrivate();
 
@@ -100,6 +104,7 @@ private:
     KoTextDocumentLayout *m_parent;
     QList<double> m_lotsOfTabs;
     QList<KoTextBlockData::TabLineData> m_currentParagTabsData;
+    QHash<int, double> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
 
     // demoText feature
     bool m_demoText, m_endOfDemoText;

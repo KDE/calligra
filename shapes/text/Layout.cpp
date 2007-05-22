@@ -111,6 +111,7 @@ bool Layout::addLine(QTextLine &line) {
     m_currentParagTabsData.append(applyTabs(line));
 
     double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+    double objectHeight = 0.0;
     bool useFixedLineHeight = height != 0.0;
     if(! useFixedLineHeight) {
         const bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
@@ -121,12 +122,13 @@ bool Layout::addLine(QTextLine &line) {
                 height = m_block.charFormat().fontPointSize();
             else {
                 // read max font height
-                height = qMax(height,
-                        m_fragmentIterator.fragment().charFormat().fontPointSize());
+                height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+                objectHeight= qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
                 while(! (m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
                                m_block.position() + line.textStart() + line.textLength() -1))) {
                     m_fragmentIterator++;
                     height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+                    objectHeight= qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
                 }
             }
             if(height < 0.01) height = 12; // default size for uninitialized styles.
@@ -165,7 +167,7 @@ bool Layout::addLine(QTextLine &line) {
             else if(linespacing == 0.0)
                 linespacing = height * 0.2; // default
         }
-        height += linespacing;
+        height = qMax(height, objectHeight) + linespacing;
     }
 
     double minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
@@ -181,6 +183,7 @@ bool Layout::addLine(QTextLine &line) {
 }
 
 bool Layout::nextParag() {
+    m_inlineObjectHeights.clear();
     if(layout) { // guard against first time
         layout->endLayout();
         m_block = m_block.next();
@@ -1053,5 +1056,15 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
     }
 
     return tabsHelper.tabLineData();
+}
+
+void Layout::registerInlineObject(const QTextInlineObject &inlineObject) {
+    m_inlineObjectHeights.insert(inlineObject.textPosition(), inlineObject.height());
+}
+
+double Layout::inlineCharHeight(const QTextFragment &fragment) {
+    if(m_inlineObjectHeights.contains(fragment.position()))
+        return m_inlineObjectHeights[fragment.position()];
+    return 0.0;
 }
 
