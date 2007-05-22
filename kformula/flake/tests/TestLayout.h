@@ -29,6 +29,10 @@ private slots:
     // Token Elements
     void identifierElement_data();
     void identifierElement();
+
+    // General Layout Elements
+    void fencedElement_data();
+    void fencedElement();
 };
 
 #endif // _TESTLAYOUT_H_

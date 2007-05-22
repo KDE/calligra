@@ -27,6 +27,7 @@
 
 #include "AttributeManager.h"
 #include "IdentifierElement.h"
+#include "BracketElement.h"
 
 static QRectF layout(BasicElement* element, const QString& input)
 {
@@ -74,6 +75,37 @@ void TestLayout::identifierElement()
     QFETCH(QRectF, output);
 
     IdentifierElement* element = new IdentifierElement;
+    QCOMPARE(layout(element, input), output);
+    delete element;
+}
+
+void TestLayout::fencedElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QRectF>("output");
+
+    addRow( "<mfenced></mfenced>",
+            "()");
+    addRow( "<mfenced><mi>x</mi></mfenced>",
+            "(x)");
+    addRow( "<mfenced><mi>x</mi><mi>y</mi></mfenced>",
+            "(x,y)");
+    addRow( "<mfenced open=\"[\"></mfenced>",
+            "[)");
+    addRow( "<mfenced open=\"[\" close=\"}\"></mfenced>",
+            "[}");
+    addRow( "<mfenced open=\"[\" close=\"}\"></mfenced>",
+            "[}");
+    addRow( "<mfenced separators=\";.\"><mi>x</mi><mi>y</mi><mi>z</mi></mfenced>",
+            "(x;y.z)");
+}
+
+void TestLayout::fencedElement()
+{
+    QFETCH(QString, input);
+    QFETCH(QRectF, output);
+
+    BracketElement* element = new BracketElement;
     QCOMPARE(layout(element, input), output);
     delete element;
 }

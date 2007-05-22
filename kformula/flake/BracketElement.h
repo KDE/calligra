@@ -29,6 +29,7 @@
 
 #include "kformuladefs.h"
 #include "BasicElement.h"
+#include "kformula_export.h"
 
 class Artwork;
 class RowElement;
@@ -37,7 +38,7 @@ class RowElement;
 /**
  * A left and/or right bracket around one child.
  */
-class BracketElement : public BasicElement {
+class KOFORMULA_EXPORT BracketElement : public BasicElement {
 public:
 
     enum { contentPos };
