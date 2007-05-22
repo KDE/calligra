@@ -737,7 +737,11 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style> ( listFormat.style() );
         if(listStyle == KoListStyle::SquareItem || listStyle == KoListStyle::DiscItem ||
-                listStyle == KoListStyle::CircleItem || listStyle == KoListStyle::BoxItem) {
+                listStyle == KoListStyle::CircleItem || listStyle == KoListStyle::BoxItem ||
+                listStyle == KoListStyle::MinusItem ||
+                listStyle == KoListStyle::HeavyCheckMarkItem || listStyle == KoListStyle::BallotXItem ||
+                listStyle == KoListStyle::RightArrowItem || listStyle == KoListStyle::RightArrowHeadItem
+        ) {
             QFontMetricsF fm(cf.font(), m_parent->paintDevice());
 #if 0
 // helper lines to show the anatomy of this font.
@@ -771,6 +775,11 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
                 case KoListStyle::BoxItem:
                     painter->drawRect(QRectF(x, y, width, width));
                     break;
+                case KoListStyle::MinusItem:
+                case KoListStyle::HeavyCheckMarkItem:
+                case KoListStyle::BallotXItem:
+                case KoListStyle::RightArrowItem:
+                case KoListStyle::RightArrowHeadItem:
                 default:; // others we ignore.
             }
         }
