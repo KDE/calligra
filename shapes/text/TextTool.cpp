@@ -352,7 +352,7 @@ void TextTool::setShapeData(KoTextShapeData *data) {
         }
         m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
     }
-    if(m_trackChanges) {
+    if(m_textShapeData && m_trackChanges) {
         if(m_changeTracker == 0)
             m_changeTracker = new ChangeTracker(this);
         m_changeTracker->setDocument(m_textShapeData->document());
