@@ -30,11 +30,13 @@ private slots:
     void identifierElement_data();
     void identifierElement();
 
-    // General layout eleemnts
+    // General layout elements
     void rowElement_data();
     void rowElement();
     void rootElement_data();
     void rootElement();
+    void fencedElement_data();
+    void fencedElement();
     
 };
 

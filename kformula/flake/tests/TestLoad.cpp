@@ -31,6 +31,7 @@
 #include "OperatorElement.h"
 #include "RowElement.h"
 #include "RootElement.h"
+#include "BracketElement.h"
 
 static void load(BasicElement* element, const QString& input)
 {
@@ -127,6 +128,31 @@ void TestLoad::rootElement()
     QFETCH(int, outputRecursive);
 
     RootElement* element = new RootElement;
+    load( element, input );
+    QCOMPARE( element->childElements().count() , output);
+    QCOMPARE( count( element->childElements() ), outputRecursive );
+    
+    delete element;
+}
+
+void TestLoad::fencedElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    addRow( "<mfenced></mfenced>", 0 );
+    addRow( "<mfenced><mi>x</mi></mfenced>", 1, 2 );           // Inferred mrow
+    addRow( "<mfenced><mi>x</mi><mn>2</mn></mfenced>", 1, 4 ); // Inferred mrow and separator
+}
+
+void TestLoad::fencedElement()
+{
+    QFETCH(QString, input);
+    QFETCH(int, output);
+    QFETCH(int, outputRecursive);
+
+    BracketElement* element = new BracketElement;
     load( element, input );
     QCOMPARE( element->childElements().count() , output);
     QCOMPARE( count( element->childElements() ), outputRecursive );
