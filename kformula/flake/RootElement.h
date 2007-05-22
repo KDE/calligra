@@ -113,7 +113,10 @@ public:
     */
 
 protected:
+    /// Read root contents - reimplemented from BasicElement
     virtual bool readMathMLContent( const KoXmlElement& element );
+
+    /// Write root contents - reimplemented from BasicElement
     virtual void writeMathMLContent( KoXmlWriter* writer ) const;
 
 private:
