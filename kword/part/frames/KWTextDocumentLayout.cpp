@@ -387,6 +387,7 @@ void KWTextDocumentLayout::layout() {
                 }
                 // set the page number of the shape.
                 KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (currentShape->userData());
+                Q_ASSERT(data);
                 data->setPageNumber( m_frameSet->pageManager()->pageNumber(currentShape));
             }
         }
