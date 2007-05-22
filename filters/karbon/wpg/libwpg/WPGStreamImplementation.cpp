@@ -196,10 +196,9 @@ bool WPGFileStream::isOLEStream()
 		d->buffer << d->file.rdbuf();
 	Storage *tmpStorage = new Storage( d->buffer );
 	Stream tmpStream( tmpStorage, name );
-	if (!tmpStorage || (tmpStorage->result() != Storage::Ok)  || !tmpStream.size())
+	if ((tmpStorage->result() != Storage::Ok)  || !tmpStream.size())
 	{
-		if (tmpStorage)
-			delete tmpStorage;
+		delete tmpStorage;
 		return (WPXInputStream*)0;
 	}
 	
@@ -214,8 +213,7 @@ bool WPGFileStream::isOLEStream()
 	/* something went wrong here and we do not trust the
 	   resulting buffer */
 	{
-		if (tmpStorage)
-			delete tmpStorage;
+		delete tmpStorage;
 		return (WPXInputStream*)0;
 	}
 
@@ -330,10 +328,9 @@ bool WPGMemoryStream::isOLEStream()
 {
 	Storage *tmpStorage = new Storage( d->buffer );
 	Stream tmpStream( tmpStorage, name );
-	if (!tmpStorage || (tmpStorage->result() != Storage::Ok)  || !tmpStream.size())
+	if ((tmpStorage->result() != Storage::Ok)  || !tmpStream.size())
 	{
-		if (tmpStorage)
-			delete tmpStorage;
+		delete tmpStorage;
 		return (WPXInputStream*)0;
 	}
 
@@ -348,8 +345,7 @@ bool WPGMemoryStream::isOLEStream()
 	/* something went wrong here and we do not trust the
 	   resulting buffer */
 	{
-		if (tmpStorage)
-			delete tmpStorage;
+		delete tmpStorage;
 		return (WPXInputStream*)0;
 	}
 
