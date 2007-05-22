@@ -1059,7 +1059,7 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
 }
 
 void Layout::registerInlineObject(const QTextInlineObject &inlineObject) {
-    m_inlineObjectHeights.insert(inlineObject.textPosition(), inlineObject.height());
+    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), inlineObject.height());
 }
 
 double Layout::inlineCharHeight(const QTextFragment &fragment) {
