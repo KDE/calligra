@@ -678,6 +678,7 @@ void TextTool::repaintSelection(int startPosition, int endPosition) {
         Q_ASSERT(lay);
         foreach(KoShape* shape, lay->shapes()) {
             TextShape *textShape = dynamic_cast<TextShape*> (shape);
+            Q_ASSERT(textShape);
             if(textShape->textShapeData()->position() >= startPosition &&
                     textShape->textShapeData()->endPosition() <= endPosition)
                 shapes.append(textShape);
@@ -900,8 +901,8 @@ void TextTool::formatParagraph() {
 
 void TextTool::toggleTrackChanges(bool on) {
     m_trackChanges = on;
-    if(on){
-        if(m_textShapeData && m_changeTracker == 0)
+    if(m_textShapeData && on){
+        if(m_changeTracker == 0)
             m_changeTracker = new ChangeTracker(this);
         if(m_changeTracker)
             m_changeTracker->setDocument(m_textShapeData->document());
