@@ -114,7 +114,7 @@ public:
 
 protected:
     virtual bool readMathMLContent( const KoXmlElement& element );
-    virtual void writeMathMLContent( KoXmlWriter* writer );
+    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
 
 private:
     /// The element that is the radicand of the root

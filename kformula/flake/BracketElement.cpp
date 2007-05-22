@@ -183,11 +183,12 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
 #endif
 }
 
-void BracketElement::readMathMLContent( const KoXmlElement& element )
+bool BracketElement::readMathMLContent( const KoXmlElement& element )
 {
+    return false;
 }
     
-void BracketElement::writeMathMLContent( KoXmlWriter* writer, bool oasisFormat )
+void BracketElement::writeMathMLContent( KoXmlWriter* writer) const
 {
 }
 

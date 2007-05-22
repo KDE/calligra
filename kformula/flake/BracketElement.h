@@ -81,9 +81,9 @@ public:
 protected:
     
     //Save/load support
-    virtual void readMathMLContent( const KoXmlElement& element );
+    virtual bool readMathMLContent( const KoXmlElement& element );
     
-    virtual void writeMathMLContent( KoXmlWriter* writer, bool oasisFormat = false );
+    virtual void writeMathMLContent( KoXmlWriter* writer) const;
 
     virtual QString elementName() const { return "mfenced"; }
 
