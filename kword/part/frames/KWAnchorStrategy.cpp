@@ -117,6 +117,7 @@ recalcFrom = 0; // TODO ???
             Q_ASSERT(false); // new enum added?
     }
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (m_anchor->shape()->parent()->userData());
+    Q_ASSERT(data);
     switch(m_anchor->verticalAlignment()) {
         case KoTextAnchor::TopOfFrame:
             recalcFrom = qMax(recalcFrom, data->position());
