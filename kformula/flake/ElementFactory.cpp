@@ -95,54 +95,56 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
 
 QString ElementFactory::elementName( ElementType type )
 {
-    if( type == Identifier )
+    switch ( type ) {
+    case Identifier:
         return "mi";
-    else if( type == Operator )
+    case Operator:
         return "mo";
-    else if( type == Number )
+    case Number:
         return "mn";
-    else if( type == Text )
+    case Text:
         return "mtext";
-    else if( type == Glyph )
+    case Glyph:
         return "mglyph";
-    else if( type == String )
+    case String:
         return "ms";
-    else if( type == Space )
+    case Space:
         return "mspace";
-    else if( type == Row )
+    case Row:
         return "mrow";
-    else if( type == Fraction )
+    case Fraction:
         return "mfrac";
-    else if( type == Phantom )
+    case Phantom:
         return "mphantom";
-    else if( type == Style )
+    case Style:
         return "mstyle";
-    else if( type == Padded )
+    case Padded:
         return "mpadded";
-    else if( type == Error )
+    case Error:
         return "merror";
-    else if( type == Fenced )
+    case Fenced:
         return "mfenced";
-    else if( type == Enclose )
+    case Enclose:
         return "menclose";
-    else if( type == UnderOver )
+    case UnderOver:
         return "munderover";
-    else if( type == Under )
+    case Under:
         return "munder";
-    else if( type == Over )
+    case Over:
         return "mover";
-    else if( type == SubScript )
+    case SubScript:
         return "msub";
-    else if( type == SupScript )
+    case SupScript:
         return "msup";
-    else if( type == SubSupScript )
+    case SubSupScript:
         return "msubsup";
-    else if( type == MultiScript )
+    case MultiScript:
         return "mmultiscripts";
-    else if( type == Root )
+    case Root:
         return "mroot";
-    else if( type == SquareRoot )
+    case SquareRoot:
         return "msqrt";
+    }
 
     return QString();
 }
