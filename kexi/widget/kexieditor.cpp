@@ -42,12 +42,7 @@
 # include <ktexteditor/document.h>
 # include <ktexteditor/view.h>
 # include <ktexteditor/editorchooser.h>
-//# include <ktexteditor/editinterface.h>
-//# include <ktexteditor/viewcursorinterface.h>
-//# include <ktexteditor/popupmenuinterface.h>
-//# include <ktexteditor/undointerface.h>
 # include <ktexteditor/configinterface.h>
-# include <ktexteditor/highlightinginterface.h>
 #endif
 
 /** Used for the shared action framework to redirect shared actions like
@@ -192,11 +187,9 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
-	KTextEditor::HighlightingInterface *hiface
-		= qobject_cast<KTextEditor::HighlightingInterface*>( d->doc );
-	if (!hiface->setHighlighting(highlightmodename)) {
+	if (!d->doc->setHighlightingMode(highlightmodename)) {
 //! @todo display warning
-		hiface->setHighlighting(QString()); // don't highlight
+		d->doc->setHighlightingMode(QString()); // don't highlight
 	}
 /*	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( d->doc );
 	for(uint i = 0; i < hl->hlModeCount(); i++) {
