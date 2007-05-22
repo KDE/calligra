@@ -187,9 +187,9 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
-	if (!d->doc->setHighlightingMode(highlightmodename)) {
+	if (!d->doc->setMode(highlightmodename)) {
 //! @todo display warning
-		d->doc->setHighlightingMode(QString()); // don't highlight
+		d->doc->setMode(QString()); // don't highlight
 	}
 /*	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( d->doc );
 	for(uint i = 0; i < hl->hlModeCount(); i++) {
