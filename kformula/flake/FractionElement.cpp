@@ -172,6 +172,7 @@ bool FractionElement::readMathMLContent( const KoXmlElement& parent )
         }
         else
             return false;
+        counter++;
     }
 
     return true;
