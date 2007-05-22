@@ -843,6 +843,9 @@ bool Layout::previousParag() {
             if(m_data != 0)
                 break;
         }
+        Q_ASSERT(m_data); // should never happen since the first shape is always a proper shape.
+        if(m_data == 0)
+            return false;
 
         m_shapeBorder = shape->borderInsets();
     }
