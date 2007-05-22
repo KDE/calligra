@@ -43,6 +43,7 @@ KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
         case KoTextAnchor::Right:
         case KoTextAnchor::Center: {
             KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (anchor->shape()->parent()->userData());
+            Q_ASSERT(data);
             m_knowledgePoint = data->position();
             break;
         }
@@ -62,6 +63,7 @@ KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
         case KoTextAnchor::TopOfFrame:
         case KoTextAnchor::BottomOfFrame: {
             KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (anchor->shape()->parent()->userData());
+            Q_ASSERT(data);
             m_knowledgePoint = qMax(m_knowledgePoint, data->position() + 1);
             break;
         }
