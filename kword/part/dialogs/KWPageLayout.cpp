@@ -68,6 +68,7 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
 }
 
 void KWPageLayout::sizeChanged(int row) {
+    if(row < 0) return;
     if(! m_allowSignals) return;
     m_allowSignals = false;
     m_pageLayout.format = static_cast<KoPageFormat::Format> (row);
