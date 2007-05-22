@@ -17,7 +17,7 @@ KAboutData * newKarbonAboutData()
 		I18N_NOOP( "Karbon14" ),
 		version,
 		description,
-		KAboutData::License_GPL,
+		KAboutData::License_LGPL,
 		I18N_NOOP( "(c) 2001-2007, The Karbon Developers" ),
 		I18N_NOOP( "You are invited to participate in any way." ),
 		"http://www.koffice.org/karbon/");
