@@ -20,52 +20,13 @@
 #ifndef PADDEDELEMENT_H
 #define PADDEDELEMENT_H
 
-#include "SequenceElement.h"
+#include "RowElement.h"
 
-class PaddedElement : public SequenceElement {
-    typedef SequenceElement inherited;
-    enum SizeType { NoSize, RelativeSize, AbsoluteSize, PixelSize, WidthRelativeSize, HeightRelativeSize };
+class PaddedElement : public RowElement {
+    typedef RowElement inherited;
 public:
     PaddedElement( BasicElement* parent = 0 );
 
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     */
-    virtual void calcSizes( const ContextStyle& style,
-						    ContextStyle::TextStyle tstyle,
-						    ContextStyle::IndexStyle istyle,
-							StyleAttributes& style );
-
-protected:
-    virtual bool readAttributesFromMathMLDom(const QDomElement& element);
-
-private:
-    virtual QString elementName() const { return "mpadded"; }
-    virtual void writeMathMLAttributes( QDomElement& element ) const ;
-
-    double readSizeAttribute( const QString& str, SizeType* st, bool* relative );
-    double getSize( const QString& str, SizeType* st );
-    double str2size( const QString& str, SizeType* st, SizeType type );
-    void writeSizeAttribute( QDomElement element, const QString& str,
-                             SizeType st, bool relative, double s ) const ;
-    luPixel calcSize( const ContextStyle& context, SizeType type,
-                      bool relative, double length, luPixel width,
-                      luPixel height, luPixel defvalue );
-
-    SizeType m_widthType;
-    double m_width;
-    SizeType m_lspaceType;
-    double m_lspace;
-    SizeType m_heightType;
-    double m_height;
-    SizeType m_depthType;
-    double m_depth;
-
-    bool m_widthRelative;
-    bool m_lspaceRelative;
-    bool m_heightRelative;
-    bool m_depthRelative;
 };
 
 #endif // PADDEDELEMENT_H

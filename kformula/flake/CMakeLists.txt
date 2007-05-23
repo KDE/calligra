@@ -27,7 +27,7 @@ set( kformulalib_PART_SRCS
    RootElement.cpp
 #   EncloseElement.cpp
 #   ActionElement.cpp
-#   PaddedElement.cpp
+   PaddedElement.cpp
    ErrorElement.cpp
    TokenStyleElement.cpp
    StyleElement.cpp
