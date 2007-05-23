@@ -46,6 +46,8 @@ private slots:
     // General layout elements
     void rowElement_data();
     void rowElement();
+    void fracElement_data();
+    void fracElement();
     void rootElement_data();
     void rootElement();
     void fencedElement_data();

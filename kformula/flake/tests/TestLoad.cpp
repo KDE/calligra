@@ -34,6 +34,7 @@
 #include "StringElement.h"
 #include "GlyphElement.h"
 #include "RowElement.h"
+#include "FractionElement.h"
 #include "RootElement.h"
 #include "BracketElement.h"
 
@@ -268,6 +269,43 @@ void TestLoad::rowElement_data()
     
 }
 
+void TestLoad::fracElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mfrac><mi>x</mi><mi>y</mi></mrow>", 2 );
+
+    // More complex content
+    addRow( "<mfrac linethickness=\"2\">"
+            " <mfrac>"
+            "  <mi> a </mi>"
+            "  <mi> b </mi>"
+            " </mfrac>"
+            " <mfrac>"
+            "  <mi> c </mi>"
+            "  <mi> d </mi>"
+            " </mfrac>"
+            "</mfrac>", 2, 6 );
+
+    addRow( "<mfrac>"
+            " <mn> 1 </mn>"
+            " <mrow>"
+            "  <msup>"
+            "   <mi> x </mi>"
+            "   <mn> 3 </mn>"
+            "  </msup>"
+            "  <mo> + </mo>"
+            "  <mfrac>"
+            "   <mi> x </mi>"
+            "   <mn> 3 </mn>"
+            "  </mfrac>"
+            " </mrow>"
+            "</mfrac>", 2, 9 );
+}
+
 void TestLoad::rootElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -327,6 +365,11 @@ void TestLoad::glyphElement()
 void TestLoad::rowElement()
 {
     test( new RowElement );
+}
+
+void TestLoad::fracElement()
+{
+    test( new FractionElement );
 }
 
 void TestLoad::rootElement()

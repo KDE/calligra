@@ -23,6 +23,7 @@
 #define FRACTIONELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 #include <QLineF>
 
 /**
@@ -32,7 +33,7 @@
  * FractionElement holds two child elements that are the numerator and the
  * denominator.
  */
-class FractionElement : public BasicElement {
+class KOFORMULA_EXPORT FractionElement : public BasicElement {
 public:
     /// The standard constructor
     FractionElement( BasicElement* parent = 0 );
