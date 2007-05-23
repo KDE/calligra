@@ -62,6 +62,20 @@ static void addRow( const QString& input, int output, int outputRecursive )
     QTest::newRow("Load") << input << output << outputRecursive;
 }
 
+void test( BasicElement* element )
+{
+    QFETCH(QString, input);
+    QFETCH(int, output);
+    QFETCH(int, outputRecursive);
+
+    load( element, input );
+    QCOMPARE( element->childElements().count() , output );
+    QCOMPARE( count( element->childElements() ), outputRecursive );
+    
+    delete element;
+}
+
+
 void TestLoad::identifierElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -72,19 +86,6 @@ void TestLoad::identifierElement_data()
     addRow( "<mi>x<mglyph fontfamily=\"serif\" alt=\"a\" index=\"97\"></mi>", 1);
 }
 
-void TestLoad::identifierElement()
-{
-    QFETCH(QString, input);
-    QFETCH(int, output);
-    QFETCH(int, outputRecursive);
-
-    IdentifierElement* element = new IdentifierElement;
-    load( element, input );
-    QCOMPARE( element->childElements().count() , output );
-    QCOMPARE( count( element->childElements() ), outputRecursive );
-    
-    delete element;
-}
 
 void TestLoad::rowElement_data()
 {
@@ -97,20 +98,6 @@ void TestLoad::rowElement_data()
     addRow( "<mrow><mi>x</mi><mo>=</mo><mn>3</mn></mrow>", 3 );
 }
 
-void TestLoad::rowElement()
-{
-    QFETCH(QString, input);
-    QFETCH(int, output);
-    QFETCH(int, outputRecursive);
-
-    RowElement* element = new RowElement;
-    load( element, input );
-    QCOMPARE( element->childElements().count() , output );
-    QCOMPARE( count( element->childElements() ), outputRecursive );
-    
-    delete element;
-}
-
 void TestLoad::rootElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -119,20 +106,6 @@ void TestLoad::rootElement_data()
 
     addRow( "<msqrt><mi>x</mi></msqrt>", 1, 2 );
     addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>", 2, 4 );
-}
-
-void TestLoad::rootElement()
-{
-    QFETCH(QString, input);
-    QFETCH(int, output);
-    QFETCH(int, outputRecursive);
-
-    RootElement* element = new RootElement;
-    load( element, input );
-    QCOMPARE( element->childElements().count() , output);
-    QCOMPARE( count( element->childElements() ), outputRecursive );
-    
-    delete element;
 }
 
 void TestLoad::fencedElement_data()
@@ -146,18 +119,24 @@ void TestLoad::fencedElement_data()
     addRow( "<mfenced><mi>x</mi><mn>2</mn></mfenced>", 1, 4 ); // Inferred mrow and separator
 }
 
+void TestLoad::identifierElement()
+{
+    test( new IdentifierElement );
+}
+
+void TestLoad::rowElement()
+{
+    test( new RowElement );
+}
+
+void TestLoad::rootElement()
+{
+    test( new RootElement );
+}
+
 void TestLoad::fencedElement()
 {
-    QFETCH(QString, input);
-    QFETCH(int, output);
-    QFETCH(int, outputRecursive);
-
-    BracketElement* element = new BracketElement;
-    load( element, input );
-    QCOMPARE( element->childElements().count() , output);
-    QCOMPARE( count( element->childElements() ), outputRecursive );
-    
-    delete element;
+    test( new BracketElement );
 }
 
 QTEST_MAIN(TestLoad)
