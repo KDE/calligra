@@ -29,6 +29,10 @@ private slots:
     // Token Elements
     void identifierElement_data();
     void identifierElement();
+    void numberElement_data();
+    void numberElement();
+    void operatorElement_data();
+    void operatorElement();
 
     // General layout elements
     void rowElement_data();

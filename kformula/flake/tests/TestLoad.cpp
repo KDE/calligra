@@ -82,10 +82,74 @@ void TestLoad::identifierElement_data()
     QTest::addColumn<int>("output");
     QTest::addColumn<int>("outputRecursive");
 
-    addRow( "<mi>x</mi>", 0);
+    // Empty content
+    addRow( "<mi></mi>", 0 );
+
+    // Basic content
+    addRow( "<mi>x</mi>", 0 );
+    addRow( "<mi>sin</mi>", 0 );
+
+    // Glyph element contents
     addRow( "<mi>x<mglyph fontfamily=\"serif\" alt=\"a\" index=\"97\"></mi>", 1);
+    addRow( "<mi> <mglyph fontfamily=\"serif\" alt=\"sin\" index=\"97\"> </mi>", 1);
+    addRow( "<mi> <mglyph fontfamily=\"serif\" alt=\"x\" index=\"97\"> "
+            "     <mglyph fontfamily=\"serif\" alt=\"y\" index=\"97\"> </mi>", 2);
+
+    // Be sure attributes don't break anything
+    addRow( "<mi mathvariant=\"bold\">x</mi>", 0 );
+    addRow( "<mi fontsize=\"18pt\">x</mi>", 0 );
+
+    // Be sure content with entity references don't break anything
+    addRow( "<mi> &pi; </mi>", 0 );
+    addRow( "<mi> &ImaginaryI; </mi>", 0 );
 }
 
+void TestLoad::numberElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mn> 3 </mn>", 0 );
+    addRow( "<mn> 1,000,000.11 </mn>", 0 );
+    addRow( "<mn> 1.000.000,11 </mn>", 0 );
+
+    // Glyph element contents
+    addRow( "<mn>12<mglyph fontfamnly=\"serif\" alt=\"8\" index=\"56\"></mn>", 1);
+    addRow( "<mn> <mglyph fontfamnly=\"serif\" alt=\"8\" index=\"56\"> </mn>", 1);
+    addRow( "<mn> <mglyph fontfamnly=\"serif\" alt=\"8\" index=\"56\"> "
+            "     <mglyph fontfamnly=\"serif\" alt=\"7\" index=\"55\"> </mn>", 2);
+
+    // Be sure attributes don't break anything
+    addRow( "<mn mathvariant=\"bold\">1</mn>", 0 );
+    addRow( "<mn fontsize=\"18pt\">1</mn>", 0 );
+}
+
+void TestLoad::operatorElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mo>+</mo>", 0 );
+    addRow( "<mo> ++ </mo>", 0 );
+
+    // Glyph element contents
+    addRow( "<mo>+<mglyph fontfamoly=\"serif\" alt=\"+\" index=\"43\"></mo>", 1);
+    addRow( "<mo> <mglyph fontfamoly=\"serif\" alt=\"+\" index=\"43\"> </mo>", 1);
+    addRow( "<mo> <mglyph fontfamoly=\"serif\" alt=\"+\" index=\"43\"> "
+            "     <mglyph fontfamoly=\"serif\" alt=\"=\" index=\"61\"> </mo>", 2);
+
+    // Be sure attributes don't break anything
+    addRow( "<mo mathvariant=\"bold\">+</mo>", 0 );
+    addRow( "<mo fontsize=\"18pt\">+</mo>", 0 );
+
+    // Be sure content with entity references don't break anything
+    addRow( "<mo> &sum; </mo>", 0 );
+    addRow( "<mo> &InvisibleTimes; </mo>", 0 );
+}
 
 void TestLoad::rowElement_data()
 {
@@ -122,6 +186,16 @@ void TestLoad::fencedElement_data()
 void TestLoad::identifierElement()
 {
     test( new IdentifierElement );
+}
+
+void TestLoad::numberElement()
+{
+    test( new NumberElement );
+}
+
+void TestLoad::operatorElement()
+{
+    test( new OperatorElement );
 }
 
 void TestLoad::rowElement()
