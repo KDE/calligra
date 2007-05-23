@@ -36,6 +36,7 @@
 #include "RowElement.h"
 #include "FractionElement.h"
 #include "RootElement.h"
+#include "StyleElement.h"
 #include "BracketElement.h"
 
 static void load(BasicElement* element, const QString& input)
@@ -333,6 +334,22 @@ void TestLoad::rootElement_data()
             "</msqrt", 1, 13 );
 }
 
+void TestLoad::styleElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mstyle><mrow></mrow></mstyle>", 1 );
+    addRow( "<mstyle><mi>x</mi></mstyle>", 1, 2 );
+    addRow( "<mstyle><mrow><mi>x</mi></mrow></mstyle>", 1, 2 );
+
+    // Be sure attributes don't break anything
+    addRow( "<mstyle mathvariant=\"bold\"><mi>x</mi></mstyle>", 1, 2 );
+    addRow( "<mstyle thinmathspace=\"0.5em\"><mi>x</mi></mstyle>", 1, 2 );
+}
+
 void TestLoad::fencedElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -392,6 +409,11 @@ void TestLoad::fracElement()
 void TestLoad::rootElement()
 {
     test( new RootElement );
+}
+
+void TestLoad::styleElement()
+{
+    test( new StyleElement );
 }
 
 void TestLoad::fencedElement()

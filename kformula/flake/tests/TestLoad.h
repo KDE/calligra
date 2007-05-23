@@ -50,6 +50,8 @@ private slots:
     void fracElement();
     void rootElement_data();
     void rootElement();
+    void styleElement_data();
+    void styleElement();
     void fencedElement_data();
     void fencedElement();
     

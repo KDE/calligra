@@ -21,6 +21,7 @@
 #define STYLEELEMENT_H
 
 #include "RowElement.h"
+#include "kformula_export.h"
 
 /**
  * @short The implementation of the MathML mstyle element
@@ -29,7 +30,7 @@
  * Basically it holds children like a row but it is able to apply almost any style on
  * them.
  */
-class StyleElement : public RowElement {
+class KOFORMULA_EXPORT StyleElement : public RowElement {
 public:
     /// The standart constructor
     StyleElement( BasicElement* parent = 0 );
