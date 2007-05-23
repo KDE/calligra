@@ -233,9 +233,39 @@ void TestLoad::rowElement_data()
     QTest::addColumn<int>("output");
     QTest::addColumn<int>("outputRecursive");
 
+    // Basic content
     addRow( "<mrow></mrow>", 0 );
     addRow( "<mrow><mi>x</mi></mrow>", 1 );
     addRow( "<mrow><mi>x</mi><mo>=</mo><mn>3</mn></mrow>", 3 );
+
+    // More complex content
+    addRow( "<mrow><mrow></mrow></mrow>", 1 );
+    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>", 1, 2 );
+    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>", 1, 2 );
+
+    addRow( "<mrow>"
+            " <mrow>"
+            "  <mn> 2 </mn>"
+            "  <mo> &InvisibleTimes; </mo>"
+            "  <mi> x </mi>"
+            " </mrow>"
+            " <mo> + </mo>"
+            " <mi> y </mi>"
+            " <mo> - </mo>"
+            " <mi> z </mi>"
+            "</mrow>", 5, 8 );
+
+    addRow( "<mrow>"
+            " <mo> ( </mo>"
+            " <mrow>"
+            "  <mi> x </mi>"
+            "  <mo> , </mo>"
+            "  <mi> y </mi>"
+            " </mrow>"
+            " <mo> ) </mo>"
+            "</mrow>", 3, 6 );
+
+    
 }
 
 void TestLoad::rootElement_data()
