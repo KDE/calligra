@@ -20,10 +20,11 @@
 #ifndef GLYPHELEMENT_H
 #define GLYPHELEMENT_H
 
+#include "kformula_export.h"
 #include "BasicElement.h"
 #include <QPainterPath>
 
-class GlyphElement : public BasicElement {
+class KOFORMULA_EXPORT GlyphElement : public BasicElement {
 public:
     /// The standart constructor
     GlyphElement( BasicElement* parent = 0 );

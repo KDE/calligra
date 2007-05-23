@@ -21,8 +21,9 @@
 #define STRINGELEMENT_H
 
 #include "TokenElement.h"
+#include "kformula_export.h"
 
-class StringElement : public TokenElement {
+class KOFORMULA_EXPORT StringElement : public TokenElement {
 public:
     /// The standart constructor
     StringElement( BasicElement* parent = 0 );

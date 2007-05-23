@@ -33,6 +33,15 @@ private slots:
     void numberElement();
     void operatorElement_data();
     void operatorElement();
+    void textElement_data();
+    void textElement();
+    void spaceElement_data();
+    void spaceElement();
+    void stringElement_data();
+    void stringElement();
+    void glyphElement_data();
+    void glyphElement();
+    
 
     // General layout elements
     void rowElement_data();

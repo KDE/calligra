@@ -29,6 +29,10 @@
 #include "IdentifierElement.h"
 #include "NumberElement.h"
 #include "OperatorElement.h"
+#include "TextElement.h"
+#include "SpaceElement.h"
+#include "StringElement.h"
+#include "GlyphElement.h"
 #include "RowElement.h"
 #include "RootElement.h"
 #include "BracketElement.h"
@@ -151,6 +155,78 @@ void TestLoad::operatorElement_data()
     addRow( "<mo> &InvisibleTimes; </mo>", 0 );
 }
 
+void TestLoad::textElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mtext>text</mtext>", 0 );
+    addRow( "<mtext> more text </mtext>", 0 );
+
+    // Glyph element contents
+    addRow( "<mtext>tex<mglyph fontfamtextly=\"serif\" alt=\"t\" index=\"116\"></mtext>", 1);
+    addRow( "<mtext> <mglyph fontfamtextly=\"serif\" alt=\"t\" index=\"116\"> </mtext>", 1);
+    addRow( "<mtext>te <mglyph fontfamtextly=\"serif\" alt=\"x\" index=\"120\"> "
+            "     <mglyph fontfamtextly=\"serif\" alt=\"t\" index=\"116\"> </mtext>", 2);
+
+    // Be sure attributes don't break anything
+    addRow( "<mtext mathvariant=\"bold\">text</mtext>", 0 );
+    addRow( "<mtext fontsize=\"18pt\">text</mtext>", 0 );
+
+    // Be sure content with entity references don't break anything
+    addRow( "<mtext> &ThinSpace; </mtext>", 0 );
+    addRow( "<mtext> &ThinSpace;&ThickSpace; </mtext>", 0 );
+}
+
+void TestLoad::spaceElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Space element does not have content
+    addRow( "<mspace/>", 0 );
+    addRow( "<mspace width=\0.5em\"/>", 0 );
+    addRow( "<mspace linebreak=\"newline\"/>", 0 );
+}
+
+void TestLoad::stringElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<ms>text</ms>", 0 );
+    addRow( "<ms> more text </ms>", 0 );
+
+    // Glyph element contents
+    addRow( "<ms>tex<mglyph fontfamsly=\"serif\" alt=\"t\" index=\"116\"></ms>", 1);
+    addRow( "<ms> <mglyph fontfamsly=\"serif\" alt=\"t\" index=\"116\"> </ms>", 1);
+    addRow( "<ms>te <mglyph fontfamsly=\"serif\" alt=\"x\" index=\"120\"> "
+            "     <mglyph fontfamsly=\"serif\" alt=\"t\" index=\"116\"> </ms>", 2);
+
+    // Be sure attributes don't break anything
+    addRow( "<ms mathvariant=\"bold\">text</ms>", 0 );
+    addRow( "<ms fontsize=\"18pt\">text</ms>", 0 );
+
+    // Be sure content with entity references don't break anything
+    addRow( "<ms> &amp; </ms>", 0 );
+    addRow( "<ms> &amp;amp; </ms>", 0 );
+}
+
+void TestLoad::glyphElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Glyph element does not have content
+    addRow( "<mglyph fontfamily=\"serif\" index=\"97\" alt=\"a\"/>", 0 );
+}
+
 void TestLoad::rowElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -196,6 +272,26 @@ void TestLoad::numberElement()
 void TestLoad::operatorElement()
 {
     test( new OperatorElement );
+}
+
+void TestLoad::textElement()
+{
+    test( new TextElement );
+}
+
+void TestLoad::spaceElement()
+{
+    test( new SpaceElement );
+}
+
+void TestLoad::stringElement()
+{
+    test( new StringElement );
+}
+
+void TestLoad::glyphElement()
+{
+    test( new GlyphElement );
 }
 
 void TestLoad::rowElement()

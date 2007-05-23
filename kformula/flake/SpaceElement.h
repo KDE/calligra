@@ -24,6 +24,7 @@
 #define SPACEELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 
 /**
  * @short Implementation of the MathML mspace element
@@ -32,7 +33,7 @@
  * FormulaShape currently does not implement linebreaking the linebreaking
  * attributes of SpaceElement are ignored.
  */
-class SpaceElement : public BasicElement {
+class KOFORMULA_EXPORT SpaceElement : public BasicElement {
 public:
     /// The standard constructor
     SpaceElement( BasicElement* parent = 0 );
