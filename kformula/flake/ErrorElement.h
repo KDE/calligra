@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,28 +20,19 @@
 #ifndef ERRORELEMENT_H
 #define ERRORELEMENT_H
 
-#include "SequenceElement.h"
+#include "RowElement.h"
 
-class ErrorElement : public SequenceElement {
-    typedef SequenceElement inherited;
+class KOFORMULA_EXPORT ErrorElement : public RowElement {
+    typedef RowElement inherited;
 public:
     ErrorElement( BasicElement* parent = 0 );
 
     /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
      */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-					   StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
-
-private:
-    virtual QString elementName() const { return "merror"; }
-
+    virtual void paint( QPainter& painter, const AttributeManager* am );
 };
 
 #endif // ERRORELEMENT_H

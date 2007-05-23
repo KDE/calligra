@@ -52,6 +52,8 @@ private slots:
     void rootElement();
     void styleElement_data();
     void styleElement();
+    void errorElement_data();
+    void errorElement();
     void fencedElement_data();
     void fencedElement();
     

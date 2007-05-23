@@ -37,6 +37,7 @@
 #include "FractionElement.h"
 #include "RootElement.h"
 #include "StyleElement.h"
+#include "ErrorElement.h"
 #include "BracketElement.h"
 
 static void load(BasicElement* element, const QString& input)
@@ -350,6 +351,29 @@ void TestLoad::styleElement_data()
     addRow( "<mstyle thinmathspace=\"0.5em\"><mi>x</mi></mstyle>", 1, 2 );
 }
 
+void TestLoad::errorElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<merror><mrow></mrow></merror>", 1 );
+    addRow( "<merror><mi>x</mi></merror>", 1, 2 );
+    addRow( "<merror><mrow><mi>x</mi></mrow></merror>", 1, 2 );
+
+    // More complex content
+    addRow( "<merror>"
+            " <mtext> Unrecognized element: mfraction;"
+            "         arguments were:  "
+            " </mtext>"
+            " <mrow> <mn> 1 </mn> <mo> + </mo> <msqrt> <mn> 5 </mn> </msqrt> </mrow>"
+            " <mtext>  and  </mtext>"
+            " <mn> 2 </mn>"
+            "</merror>", 1, 9 );
+
+}
+
 void TestLoad::fencedElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -414,6 +438,11 @@ void TestLoad::rootElement()
 void TestLoad::styleElement()
 {
     test( new StyleElement );
+}
+
+void TestLoad::errorElement()
+{
+    test( new ErrorElement );
 }
 
 void TestLoad::fencedElement()

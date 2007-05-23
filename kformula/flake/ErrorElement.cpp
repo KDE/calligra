@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,9 +19,9 @@
 
 #include "ErrorElement.h"
 
-#include <qpainter.h>
+#include <QPainter>
 
-ErrorElement::ErrorElement( BasicElement* parent ) : SequenceElement( parent ) {
+ErrorElement::ErrorElement( BasicElement* parent ) : RowElement( parent ) {
 }
 
 /**
@@ -29,19 +29,7 @@ ErrorElement::ErrorElement( BasicElement* parent ) : SequenceElement( parent ) {
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void ErrorElement::draw( QPainter& painter, const LuPixelRect& r,
-                        const ContextStyle& context,
-                        ContextStyle::TextStyle tstyle,
-                        ContextStyle::IndexStyle istyle,
-                        StyleAttributes& style,
-                        const LuPixelPoint& parentOrigin )
+void ErrorElement::paint( QPainter& painter, const AttributeManager* am )
 {
-    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-
-    painter.fillRect( context.layoutUnitToPixelX( myPos.x() ),
-                      context.layoutUnitToPixelY( myPos.y() ),
-                      context.layoutUnitToPixelX( getWidth() ),
-                      context.layoutUnitToPixelY( getHeight() ),
-                      context.getErrorColor() );
-    inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
+    painter.fillRect( origin().x(), origin().y(), width(), height(), QColor( "red" ) );//context.getErrorColor() );
 }
