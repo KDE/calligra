@@ -312,8 +312,25 @@ void TestLoad::rootElement_data()
     QTest::addColumn<int>("output");
     QTest::addColumn<int>("outputRecursive");
 
+    // Basic content
     addRow( "<msqrt><mi>x</mi></msqrt>", 1, 2 );
     addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>", 2, 4 );
+
+    // More complex content
+    addRow( "<msqrt>"
+            " <mi> x </mi>"
+            " <mroot>"
+            "  <mrow>"
+            "   <mn> 2 </mn>"
+            "   <mo> &InvisibleTimes </mn>"
+            "   <mi> y </mi>"
+            "  </mrow>"
+            "  <mfrac>"
+            "   <mn> 1 </mn>"
+            "   <mn> 2 </mn>"
+            "  </frac>"
+            " </mroot>"
+            "</msqrt", 1, 13 );
 }
 
 void TestLoad::fencedElement_data()
