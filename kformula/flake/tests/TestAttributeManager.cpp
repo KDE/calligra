@@ -24,15 +24,6 @@ void TestAttributeManager::testColorConversion()
     m_basicElement->setAttribute( "color2","#001122" );
     m_basicElement->setAttribute( "color3","transparent" );
     m_basicElement->setAttribute( "color4","#123" );
-    m_attributeManager->inheritAttributes( m_basicElement );
-
-    QVERIFY( m_attributeManager->valueOf( "color" ) == QColor( Qt::blue ) );
-    QVERIFY( m_attributeManager->valueOf( "color1" ) == QColor( Qt::green ) );
-    QVERIFY( m_attributeManager->valueOf( "color2" ) == QColor( "#001122" ) );
-    QVERIFY( m_attributeManager->valueOf( "color3" ) == QColor( Qt::transparent ) );
-    QVERIFY( m_attributeManager->valueOf( "color4" ) == QColor( "#123" ) );
-
-    m_attributeManager->disinheritAttributes();
 }
 
 QTEST_MAIN(TestAttributeManager)

@@ -33,13 +33,13 @@ public:
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      */
-    void paint( QPainter& painter, const AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am );
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( AttributeManager* am );
 
     /// @return The element's ElementType
     ElementType elementType() const;

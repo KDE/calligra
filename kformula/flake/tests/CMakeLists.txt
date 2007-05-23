@@ -2,11 +2,11 @@ if( KDE4_BUILD_TESTS )
 
 ########### AttributeManager Test ###############
 
-set( TestAttributeManager_SRCS TestAttributeManager.cpp )
-kde4_automoc( ${TestAttributeManager_SRCS} )
-kde4_add_executable( TestAttributeManager RUN_UNINSTALLED ${TestAttributeManager_SRCS} )
-target_link_libraries( TestAttributeManager kformulalib ${QT_QTTEST_LIBRARY} )
-add_test(kformula-AttributeManager TestAttributeManager )
+ set( TestAttributeManager_SRCS TestAttributeManager.cpp )
+ kde4_automoc( ${TestAttributeManager_SRCS} )
+ kde4_add_executable( TestAttributeManager RUN_UNINSTALLED ${TestAttributeManager_SRCS} )
+ target_link_libraries( TestAttributeManager kformulalib ${QT_QTTEST_LIBRARY} )
+ add_test(kformula-AttributeManager TestAttributeManager )
 
 ########### Load Test ###############
 

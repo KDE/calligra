@@ -45,13 +45,13 @@ public:
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      */
-    void paint( QPainter& painter, const AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am );
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( AttributeManager* am );
 
     /**
      * Obtain a list of all child elements of this element
@@ -98,7 +98,7 @@ protected:
 
 private:
     /// Layout the fraction in a bevelled way
-    void layoutBevelledFraction( const AttributeManager* am );
+    void layoutBevelledFraction( AttributeManager* am );
 
     /// The element representing the fraction's numerator
     BasicElement* m_numerator;

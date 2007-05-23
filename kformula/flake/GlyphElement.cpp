@@ -26,14 +26,14 @@
 GlyphElement::GlyphElement( BasicElement* parent ) : BasicElement( parent )
 {}
 
-void GlyphElement::paint( QPainter& painter, const AttributeManager* )
+void GlyphElement::paint( QPainter& painter, AttributeManager* )
 {
     painter.drawPath( m_glyphPath );
 }
 
-void GlyphElement::layout( const AttributeManager* am )
+void GlyphElement::layout( AttributeManager* am )
 {
-    QString fontFamily = am->valueOf( "fontfamily" ).toString();
+    QString fontFamily = am->stringOf( "fontfamily", this );
     QFontDatabase db;
     QFont tmpFont;
     QString tmpString;
@@ -42,11 +42,11 @@ void GlyphElement::layout( const AttributeManager* am )
     if( db.families().contains( fontFamily ) )
     {
         tmpFont.setFamily( fontFamily );
-        tmpString += QChar( am->valueOf( "index" ).toUInt() ); 
+        tmpString += QChar( am->intOf( "index", this ) ); 
     }
     else // if not found paint alt text
     {
-        tmpString = am->valueOf( "alt" ).toString();
+        tmpString = am->stringOf( "alt", this );
     }
 
     m_glyphPath = QPainterPath();

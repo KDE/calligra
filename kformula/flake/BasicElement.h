@@ -41,8 +41,8 @@ class FormulaCursor;
  * @short The base class for all elements of a formula
  *
  * The BasicElement class is constructed with a parent and normally an element in a
- * formula has a parent. The only exception is the @see FormulaElement which is the
- * root of the element tree and has no parent element.
+ * formula has a parent. The only exception is FormulaElement which is the root of
+ * the element tree and has no parent element.
  * Most of the elements have children but the number of it can be fixed or variable
  * and the type of child element is not certain. So with the childElements() method you
  * can obtain a list of all direct children of an element. Note that the returned list
@@ -101,13 +101,13 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, const AttributeManager* am );
+    virtual void paint( QPainter& painter, AttributeManager* am );
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( const AttributeManager* am );
+    virtual void layout( AttributeManager* am );
     
     /**
      * Move the FormulaCursor left
@@ -187,7 +187,7 @@ public:
     virtual QString inheritsAttribute( const QString& attribute ) const;
 
     /// @return The default value of the attribute for this element
-    virtual QVariant attributesDefaultValue( const QString& attribute ) const;
+    virtual QString attributesDefaultValue( const QString& attribute ) const;
     
     /// Read the element from MathML
     void readMathML( const KoXmlElement& element );

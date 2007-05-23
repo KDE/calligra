@@ -20,12 +20,8 @@
 #ifndef ATTRIBUTEMANAGER_H
 #define ATTRIBUTEMANAGER_H
 
-#include <QStack>
 #include <QFont>
-#include <QVariant>
-
 #include "kformula_export.h"
-
 class KoViewConverter;
 class QPaintDevice;
 
@@ -45,7 +41,8 @@ enum MathVariant {
     BoldSansSerif,
     SansSerifItalic,
     SansSerifBoldItalic,
-    Monospace    
+    Monospace,
+    InvalidMathVariant
 };
 
 enum NamedSpaces { 
@@ -62,21 +59,28 @@ enum NamedSpaces {
     MediumMathSpace,
     ThickMathSpace,
     VeryThickMathSpace,
-    VeryVeryThickMathSpace
+    VeryVeryThickMathSpace,
+    InvalidNameSpace
 };
 
 /** Enum encoding all possibilities to align */
 enum Align {
     Left /**< Align to the left*/,
     Center /**< Align to the center*/,
-    Right /**< Align to the right*/
+    Right /**< Align to the right*/,
+    Top /**< Align to the top*/,
+    Bottom /**< Align to the bottom*/,
+    BaseLine /**< Align to the baseline*/,
+    Axis /**< Align to the axis*/,
+    InvalidAlign
 };
 
 /** Enum encoding all states of  mo's form attribute */
 enum Form {
     Prefix /**< mo is a prefix*/,
     Infix /**< mo is a infix - used for all cases where it's not prefix or postfix*/,
-    Postfix /**< mo is a postfix*/
+    Postfix /**< mo is a postfix*/,
+    InvalidForm
 };
 
 /** Enum encoding all states of mspace's linebreak attribute */
@@ -86,7 +90,8 @@ enum LineBreak {
     IndentingNewLine /**< Start a new line and do indent*/,
     NoBreak /**< Do not allow a linebreak here*/,
     GoodBreak /**< If a linebreak is needed on the line, here is a good spot*/,
-    BadBreak /**< If a linebreak is needed on the line, try to avoid breaking here*/
+    BadBreak /**< If a linebreak is needed on the line, try to avoid breaking here*/,
+    InvalidLineBreak
 };
 
 /**
@@ -98,13 +103,10 @@ enum LineBreak {
  * class that manages conversion and heritage of the attributes during the painting
  * phase. These are the two main tasks of AttributeManager.
  * The AttributeManager is always called when an element needs a value to work with.
- * The AttributeManager looks for that value in its stack according to the heritage
- * and if it does not find an appropriated value it returns a default.
- * The AttributeManager stores its stacked BasicElements in a QList rather than a
- * QStack because the former is faster doing a prepend().
- * For conversion from QString to a QVariant mostly the build in QVariant methods
- * are used. For the rest that can not be converted using QVariant the parseValue()
- * method is used.
+ * The AttributeManager looks for that value first in the asking element's own
+ * attribute list. If nothing is found the AttributeManager looks for a parent element
+ * that might inherit the right value. If AttributeManager has no success again it
+ * returns the default value for that attribute.
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
@@ -116,54 +118,67 @@ public:
     /// The destructor
     ~AttributeManager();
 
-    /**
-     * Inherit the attributes of an element
-     * @param element The BasicElement to herit from
-     */
-    void inheritAttributes( const BasicElement* element );
+    /// @return The MathVariant value for @p element
+    MathVariant mathVariant( BasicElement* element );
 
-    /// Disenherit the attributes currently on top of the stack
-    void disinheritAttributes();
+    /// @return The foreground color for @p element
+    QColor mathColor( BasicElement* element );
+
+    /// @return The background color for @p element
+    QColor mathBackground( BasicElement* element );
+
+    /// @return The value of the mathSize attribute for @p element
+    double mathSize( BasicElement* element );
+
+    /// @return The current font style - just a dummy atm
+    QFont font( BasicElement* element );
+
+    /// Obtain the @r current scriptlevel
+    int scriptLevel( BasicElement* element );
+ 
+    /// Obtain the @r current displaystyle
+    bool displayStyle( BasicElement* element );
 
     /**
      * Obtain a value for attribute
      * @param attribute A string with the attribute to look up
      * @return QVariant with the value
      */
-    QVariant valueOf( const QString& attribute ) const;
+    QString stringOf( const QString& attribute, BasicElement* element );
 
-    Align alignValueOf( const QString& attribute ) const;
+    Align alignOf( const QString& attribute, BasicElement* element );
 
-    QList<Align> alignValuesOf( const QString& attribute ) const;
+    QList<Align> alignListOf( const QString& attribute, BasicElement* element );
 
-    /// @return The current font style - just a dummy atm
-    QFont font() const;
+    bool boolOf( const QString& attribute, BasicElement* element );
 
-    /// Obtain the @r current scriptlevel
-    int scriptLevel() const;
- 
-    /// Obtain the @r current displaystyle
-    bool displayStyle() const;
+    double doubleOf( const QString& attribute, BasicElement* element );
 
+    int intOf( const QString& attribute, BasicElement* element );
+/*
+    Qt::PenStyle lineOf( const QString& attribute, const BasicElement* element );
+
+    QList< Qt::PenStyle > lineListOf( const QString attribute,
+                                      const BasicElement* element );
+*/
     /// Obtain the @r value 
-    double mathSpaceValue( const QString& value ) const;
+    double mathSpaceValue( const QString& value );
 
     /// Set the KoViewConverter to use
     void setViewConverter( KoViewConverter* converter );
 
 protected:
-    /**
-     * Alter the current scriptlevel on the stack's top
-     * @param element The BasicElement that effects the changes to the scriptLevel
-     */
-    void alterScriptLevel( const BasicElement* element );
-    QVariant parseValue( const QString& value ) const;
+    /// Find a value for @p attribute that applies to @p element
+    QString findValue( const QString& attribute, BasicElement* element );
 
-    /**
-     * Fill the heritage stack with all the attributes valid for element
-     * @param element The BasicElement to build up the heritage stack for
-     */
-    void buildHeritageOf( const BasicElement* element );
+    /// @return The Form value that was passed as QString @p value
+    Form parseForm( const QString& value ) const;
+
+    /// @return The Align value that was passed as QString @p value
+    Align parseAlign( const QString& value ) const;
+
+    /// Parse the given @p element according to its affect on the scriptlevel
+    void parseScriptLevel( BasicElement* element );
 
     /**
      * Calculates the pt values of a passes em or ex value
@@ -171,29 +186,14 @@ protected:
      * @param isEm Indicates whether to calculate an ex or em value
      * @return The calculated pt value
      */
-    double calculateEmExUnits( double value, bool isEm ) const;
-
-    QVariant parseMetrics( const QString& value ) const;
-
-    int formValue( const QString& value ) const;
-
-    int mathVariantValue( const QString& value ) const;
-
-    int alignValue( const QString& value ) const;
-
+    double calculateEmExUnits( double value, bool isEm );
 
 private:
-    /// The stack of attribute heritage, the topmost element is the currently active
-    QStack<const BasicElement*> m_attributeStack;
+    /// The current BasicElement that asks for a value
+    BasicElement* m_currentElement;
 
-    /// The stack for the current scriptlevel
-    QStack<int> m_scriptLevelStack;
-
-    /// The current font
-    QFont m_currentFont; 
-
-    /// The currently questioned attribute's name
-    QString m_attribute;
+    /// The last calculated scriptLevel
+    int m_cachedScriptLevel;
 
     /// The KoViewConverter used to determine the point values of pixels
     KoViewConverter* m_viewConverter;

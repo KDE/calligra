@@ -52,13 +52,13 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, const AttributeManager* am );
+    virtual void paint( QPainter& painter, AttributeManager* am );
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( const AttributeManager* am );
+    virtual void layout( AttributeManager* am );
 
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs

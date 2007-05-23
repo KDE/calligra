@@ -38,10 +38,10 @@ FractionElement::~FractionElement()
     delete m_denominator;
 }
 
-void FractionElement::paint( QPainter& painter, const AttributeManager* am )
+void FractionElement::paint( QPainter& painter, AttributeManager* am )
 {
     QPen pen( painter.pen() );
-    pen.setWidthF( am->valueOf( "linethickness" ).toDouble() );
+    pen.setWidthF( am->doubleOf( "linethickness", this ) );
 
     painter.save();
     painter.setPen( pen );                           // set the line width
@@ -49,9 +49,9 @@ void FractionElement::paint( QPainter& painter, const AttributeManager* am )
     painter.restore();
 }
 
-void FractionElement::layout( const AttributeManager* am )
+void FractionElement::layout( AttributeManager* am )
 {
-    if( am->valueOf( "bevelled" ).toBool() )
+    if( am->boolOf( "bevelled", this ) )
     {
         layoutBevelledFraction( am );
         return;
@@ -59,10 +59,10 @@ void FractionElement::layout( const AttributeManager* am )
 
     QPointF numeratorOrigin;
     QPointF denominatorOrigin;
-    double linethickness = am->valueOf( "linethickness" ).toDouble();
+    double linethickness = am->doubleOf( "linethickness", this );
     double distY = am->mathSpaceValue( "thinmathspace" );
-    Align numalign = am->alignValueOf( "numalign" ); 
-    Align denomalign = am->alignValueOf( "denomalign" ); 
+    Align numalign = am->alignOf( "numalign", this ); 
+    Align denomalign = am->alignOf( "denomalign", this ); 
     
     setWidth( qMax( m_numerator->width(), m_denominator->width() ) );
     setHeight( m_numerator->height() + m_denominator->height() +
@@ -89,12 +89,12 @@ void FractionElement::layout( const AttributeManager* am )
                              QPointF( width(), baseLine() ) );
 }
 
-void FractionElement::layoutBevelledFraction( const AttributeManager* am )
+void FractionElement::layoutBevelledFraction( AttributeManager* am )
 {
     // the shown line should have a width that has 1/3 of the height
     // the line is heigher as the content by 2*thinmathspace = 2*borderY
 
-    double borderY = am->valueOf( "thinmathspace" ).toDouble();
+    double borderY = am->mathSpaceValue( "thinmathspace" );
     setHeight( m_numerator->height() + m_denominator->height() + 2*borderY );
     setWidth( m_numerator->width() + m_denominator->width() + height()/3 );
     setBaseLine( height()/2 );

@@ -38,7 +38,7 @@ const QList<BasicElement*> TokenElement::childElements()
     return tmpList;
 }
 
-void TokenElement::paint( QPainter& painter, const AttributeManager* am )
+void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
      QPointF tmpOrigin;
      int rawCounter = 0;
@@ -55,12 +55,12 @@ void TokenElement::paint( QPainter& painter, const AttributeManager* am )
          }
 }
 
-void TokenElement::layout( const AttributeManager* am )
+void TokenElement::layout( AttributeManager* am )
 {
     int rawCounter = 0;
     double width = 0.0;
     double height = 0.0;
-    QFontMetricsF fm( am->font() );
+    QFontMetricsF fm( am->font( this ) );
     QRectF tmpRect;
     foreach( BasicElement* tmp, m_content )
         if( tmp == this )

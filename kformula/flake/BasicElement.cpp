@@ -42,14 +42,14 @@ BasicElement::~BasicElement()
     m_attributes.clear();
 }
 
-void BasicElement::paint( QPainter& painter, const AttributeManager* )
+void BasicElement::paint( QPainter& painter, AttributeManager* )
 {
     // draw a blue rectangle
     painter.setPen( QPen( Qt::blue ) );
     painter.drawRect( m_boundingRect );
 }
 
-void BasicElement::layout( const AttributeManager* )
+void BasicElement::layout( AttributeManager* )
 { /* do nothing */ }
 
 void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
@@ -112,9 +112,9 @@ QString BasicElement::inheritsAttribute( const QString& ) const
     return QString();   // do nothing
 }
 
-QVariant BasicElement::attributesDefaultValue( const QString& ) const
+QString BasicElement::attributesDefaultValue( const QString& ) const
 {
-    return QVariant();  // do nothing
+    return QString();  // do nothing
 }
 
 void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )

@@ -34,8 +34,6 @@ FormulaRenderer::~FormulaRenderer()
 
 void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
 {
-    m_attributeManager->inheritAttributes( element );
-
       // TODO add more general painting code like: background, scriptlevel and so on!
       // p.setBrush( QBrush( m_attributeManager->valueOf( "mathbackground" ) ) );
       // p.setPen( m_attributeManager->valueOf( "mathcolor" ) );
@@ -52,8 +50,6 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
             paintElement( p, tmpElement );
             p.restore();
         }
-
-    m_attributeManager->disinheritAttributes();
 }
 
 void FormulaRenderer::layoutElement( BasicElement* element )
@@ -77,7 +73,6 @@ void FormulaRenderer::update( QPainter& p, BasicElement* element )
 
 void FormulaRenderer::updateElementLayout( BasicElement* element )
 {
-    m_attributeManager->inheritAttributes( element );   // rebuild the heritage tree
     QRectF tmpBoundingRect;
     bool parentLayoutAffected = true;
     BasicElement* tmpElement = element;
@@ -93,9 +88,6 @@ void FormulaRenderer::updateElementLayout( BasicElement* element )
             m_dirtyElement = tmpElement;
         }
         else
-        {
             tmpElement = tmpElement->parentElement();   // prepare layouting the parent
-            m_attributeManager->disinheritAttributes();
-        }
     }
 }

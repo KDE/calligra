@@ -29,26 +29,26 @@
 SpaceElement::SpaceElement( BasicElement* parent ) : BasicElement( parent )
 {}
 
-void SpaceElement::paint( QPainter& painter, const AttributeManager* )
+void SpaceElement::paint( QPainter& painter, AttributeManager* )
 {
     painter.setBrush( QBrush( Qt::lightGray, Qt::DiagCrossPattern ) );
     painter.drawRect( boundingRect() );
 }
 
-void SpaceElement::layout( const AttributeManager* am )
+void SpaceElement::layout( AttributeManager* am )
 {
-    double height =  am->valueOf( "height" ).toDouble(); 
-    setHeight( height + am->valueOf( "depth" ).toDouble() );
-    setWidth( am->valueOf( "width" ).toDouble() );
+    double height =  am->doubleOf( "height", this ); 
+    setHeight( height + am->doubleOf( "depth", this ) );
+    setWidth( am->doubleOf( "width", this ) );
     setBaseLine( height );
 }
 
-QVariant SpaceElement::attributesDefaultValue( const QString& attribute ) const
+QString SpaceElement::attributesDefaultValue( const QString& attribute ) const
 {
     if( attribute == "width" || attribute == "height" || attribute == "depth" )
-        return 0.0;
+        return "0.0";
     else
-        return Auto;
+        return "auto";
 }
 
 ElementType SpaceElement::elementType() const
