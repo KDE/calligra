@@ -38,6 +38,7 @@ DivineProportionShape::~DivineProportionShape() {
 
 void DivineProportionShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
     applyConversion(painter, converter);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(QColor(172, 196, 206)));
     QRectF rect(QPointF(0,0), size());
     divideVertical(painter, rect, false);
