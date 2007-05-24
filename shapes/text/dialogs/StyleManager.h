@@ -28,6 +28,7 @@
 class KoStyleManager;
 class QListWidgetItem;
 class KoParagraphStyle;
+class KoCharacterStyle;
 
 class StyleManager : public QWidget {
     Q_OBJECT
@@ -37,12 +38,13 @@ public:
     void setStyleManager(KoStyleManager *sm);
 
 private slots:
-    void setStyle(QListWidgetItem *item);
+    void setStyle(QListWidgetItem *item, QListWidgetItem *previous);
 
 private:
     Ui::StyleManager widget;
     KoStyleManager *m_styleManager;
     QList<KoParagraphStyle*> m_paragraphStyles;
+    QList<KoCharacterStyle*> m_characterStyles;
 };
 
 #endif

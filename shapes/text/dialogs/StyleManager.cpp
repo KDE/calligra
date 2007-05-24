@@ -18,12 +18,13 @@
  */
 
 #define PARAGRAPH_STYLE 1000
-// #define CHARACTER_STYLE 1001
+#define CHARACTER_STYLE 1001
 
 #include "StyleManager.h"
 
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
+#include <KoCharacterStyle.h>
 
 StyleManager::StyleManager(QWidget *parent)
     :QWidget(parent)
@@ -32,7 +33,7 @@ StyleManager::StyleManager(QWidget *parent)
     layout()->setMargin(0);
 
     connect (widget.styles, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-                this, SLOT(setStyle(QListWidgetItem*)));
+                this, SLOT(setStyle(QListWidgetItem*, QListWidgetItem*)));
 }
 
 void StyleManager::setStyleManager(KoStyleManager *sm) {
@@ -50,16 +51,56 @@ void StyleManager::setStyleManager(KoStyleManager *sm) {
         widget.styles->addItem(item);
         m_paragraphStyles.append(style);
     }
+    QListWidgetItem *separator = new QListWidgetItem(widget.styles);
+    separator->setBackgroundColor(QColor(Qt::black)); // TODO use theme
+    separator->setSizeHint(QSize(20, 2));
+    defaultOne = true;
+    foreach(KoCharacterStyle *style, m_styleManager->characterStyles()) {
+        if(defaultOne) {
+            defaultOne = false;
+            continue;
+        }
+        if(separator)
+            widget.styles->addItem(separator);
+        separator = 0;
+
+        QListWidgetItem *item = new QListWidgetItem(style->name(), widget.styles, CHARACTER_STYLE);
+        item->setData(CHARACTER_STYLE, style->styleId());
+        widget.styles->addItem(item);
+        m_characterStyles.append(style);
+    }
+    delete separator;
 
     widget.paragraphStylePage->setParagraphStyles(m_paragraphStyles);
     widget.styles->setCurrentRow(0);
 }
 
-void StyleManager::setStyle(QListWidgetItem *item) {
+void StyleManager::setStyle(QListWidgetItem *item, QListWidgetItem *previous) {
     int styleId = item->data(PARAGRAPH_STYLE).toInt();
-    KoParagraphStyle *style = m_styleManager->paragraphStyle(styleId);
-    // TODO copy so we can press cancel
-    widget.paragraphStylePage->setStyle(style);
+    if(styleId > 0) {
+        // TODO copy so we can press cancel
+        KoParagraphStyle *style = m_styleManager->paragraphStyle(styleId);
+        widget.paragraphStylePage->setStyle(style);
+        widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
+    }
+    else {
+        styleId = item->data(CHARACTER_STYLE).toInt();
+        if(styleId > 0) {
+            KoCharacterStyle *style = m_styleManager->characterStyle(styleId);
+            //widget.characterStylePage->setStyle(style);
+            widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
+        }
+        else {
+            // separator clicked.
+            const int row = widget.styles->row(item);
+            if(widget.styles->row(previous) == row + 1) // moving up.
+                widget.styles->setCurrentRow(row -1);
+            else if(widget.styles->row(previous) == row - 1) // moving down.
+                widget.styles->setCurrentRow(row +1);
+            else
+                widget.styles->setCurrentItem(previous);
+        }
+    }
 }
 
 #include <StyleManager.moc>
