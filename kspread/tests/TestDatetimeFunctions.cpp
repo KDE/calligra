@@ -312,6 +312,21 @@ void TestDatetimeFunctions::testHOUR()
   CHECK_EVAL( "HOUR(\"11:00 AM\")", Value( 11 ) );
 }
 
+void TestDatetimeFunctions::testISOWEEKNUM()
+{
+  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);1)", Value( 1 ) );  // January 1, 1995 was a Sunday
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);2)", Value( 52 ) ); // January 1, 1995 was a Sunday, so if Monday is the beginning of the week,
+                                                             // then it's week 52 of the previous year
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1))", Value( 52 ) );   // Default is Monday is beginning of week (per ISO)
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21))", Value( 20 ) );  // ref OOo-2.2.0 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);1)", Value( 21 ) );// ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);2)", Value( 20 ) );// ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;1))", Value( 53 ) );   // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;2))", Value( 53 ) );   // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2006;1;1))", Value( 52 ) );   // ref OOo-2.2.0
+}
+
 void TestDatetimeFunctions::testMINUTE()
 {
   //

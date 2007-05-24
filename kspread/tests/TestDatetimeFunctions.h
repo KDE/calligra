@@ -48,6 +48,7 @@ private slots:
   void testEDATE();
   void testEOMONTH();
   void testHOUR();
+  void testISOWEEKNUM();
   void testMINUTE();
   void testMONTH();
   void testNOW();
