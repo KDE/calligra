@@ -38,7 +38,10 @@
 #include "RootElement.h"
 #include "StyleElement.h"
 #include "ErrorElement.h"
+#include "PaddedElement.h"
+#include "PhantomElement.h"
 #include "BracketElement.h"
+#include "EncloseElement.h"
 
 static void load(BasicElement* element, const QString& input)
 {
@@ -374,6 +377,38 @@ void TestLoad::errorElement_data()
 
 }
 
+void TestLoad::paddedElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mpadded><mrow></mrow></mpadded>", 1 );
+    addRow( "<mpadded><mi>x</mi></mpadded>", 1, 2 );
+    addRow( "<mpadded><mrow><mi>x</mi></mrow></mpadded>", 1, 2 );
+
+    // Be sure attributes don't break anything
+    addRow( "<mpadded width=\"+0.8em\"><mi>x</mi></mpadded>", 1, 2 );
+    addRow( "<mpadded depth=\"1.2\"><mi>x</mi></mpadded>", 1, 2 );
+}
+
+void TestLoad::phantomElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mphantom><mrow></mrow></mphantom>", 1 );
+    addRow( "<mphantom><mi>x</mi></mphantom>", 1, 2 );
+    addRow( "<mphantom><mrow><mi>x</mi></mrow></mphantom>", 1, 2 );
+
+    // Be sure attributes don't break anything
+    addRow( "<mphantom width=\"+0.8em\"><mi>x</mi></mphantom>", 1, 2 );
+    addRow( "<mphantom depth=\"1.2\"><mi>x</mi></mphantom>", 1, 2 );
+}
+
 void TestLoad::fencedElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -383,6 +418,22 @@ void TestLoad::fencedElement_data()
     addRow( "<mfenced></mfenced>", 0 );
     addRow( "<mfenced><mi>x</mi></mfenced>", 1, 2 );           // Inferred mrow
     addRow( "<mfenced><mi>x</mi><mn>2</mn></mfenced>", 1, 4 ); // Inferred mrow and separator
+}
+
+void TestLoad::encloseElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<menclose><mrow></mrow></menclose>", 1 );
+    addRow( "<menclose><mi>x</mi></menclose>", 1, 2 );
+    addRow( "<menclose><mrow><mi>x</mi></mrow></menclose>", 1, 2 );
+
+    // Be sure attributes don't break anything
+    addRow( "<menclose notation=\"longdiv\"><mi>x</mi></menclose>", 1, 2 );
+    addRow( "<menclose notation=\"downdiagonalstrike\"><mi>x</mi></menclose>", 1, 2 );
 }
 
 void TestLoad::identifierElement()
@@ -445,9 +496,24 @@ void TestLoad::errorElement()
     test( new ErrorElement );
 }
 
+void TestLoad::paddedElement()
+{
+    test( new BracketElement );
+}
+
+void TestLoad::phantomElement()
+{
+    test( new PhantomElement );
+}
+
 void TestLoad::fencedElement()
 {
     test( new BracketElement );
+}
+
+void TestLoad::encloseElement()
+{
+    test( new EncloseElement );
 }
 
 QTEST_MAIN(TestLoad)

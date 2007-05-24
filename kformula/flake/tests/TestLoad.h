@@ -54,8 +54,14 @@ private slots:
     void styleElement();
     void errorElement_data();
     void errorElement();
+    void paddedElement_data();
+    void paddedElement();
+    void phantomElement_data();
+    void phantomElement();
     void fencedElement_data();
     void fencedElement();
+    void encloseElement_data();
+    void encloseElement();
     
 };
 

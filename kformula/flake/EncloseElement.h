@@ -21,6 +21,7 @@
 #define ENCLOSEELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 #include <QPainterPath>
 
 class RowElement;
@@ -28,7 +29,7 @@ class RowElement;
 /**
  * @short Implementation of the MathML menclose element
  */
-class EncloseElement : public BasicElement {
+class KOFORMULA_EXPORT EncloseElement : public BasicElement {
 public:
     /// The standart constructor
     EncloseElement( BasicElement* parent = 0 );

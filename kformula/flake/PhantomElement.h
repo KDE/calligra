@@ -21,8 +21,9 @@
 #define PHANTOMELEMENT_H
 
 #include "RowElement.h"
+#include "kformula_export.h"
 
-class PhantomElement : public RowElement {
+class KOFORMULA_EXPORT PhantomElement : public RowElement {
 public:
     PhantomElement( BasicElement* parent = 0 );
 

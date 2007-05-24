@@ -21,8 +21,9 @@
 #define PADDEDELEMENT_H
 
 #include "RowElement.h"
+#include "kformula_export.h"
 
-class PaddedElement : public RowElement {
+class KOFORMULA_EXPORT PaddedElement : public RowElement {
     typedef RowElement inherited;
 public:
     PaddedElement( BasicElement* parent = 0 );
