@@ -372,7 +372,7 @@ void TestDatetimeFunctions::testTIME()
 void TestDatetimeFunctions::testTIMEVALUE()
 {
   //
-  //CHECK_EVAL( "TIMEVALUE(\"06:05\")=TIME(6;5;0)", Value( true ) ); // TODO
+  CHECK_EVAL( "TIMEVALUE(\"06:05\")=TIME(6;5;0)", Value( true ) );
   CHECK_EVAL( "TIMEVALUE(\"06:05:07\")=TIME(6;5;7)", Value( true ) );
 }
 
