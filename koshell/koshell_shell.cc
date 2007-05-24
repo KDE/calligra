@@ -646,7 +646,7 @@ bool KoShellWindow::saveAllPages()
 void KoShellWindow::saveSettings()
 {
   KoShellSettings::setSidebarWidth( m_pLayout->sizes().first() );
-  KoShellSettings::writeConfig();
+  KoShellSettings::self()->writeConfig();
 }
 
 QString KoShellWindow::configFile() const
