@@ -40,7 +40,7 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
       // p.setFont();
     element->paint( p, m_attributeManager );
 
-    if( element->childElements().isEmpty() )
+    if( element->childElements().isEmpty() || element->elementType() == Phantom )
         return;
     else
         foreach( BasicElement* tmpElement, element->childElements() )
