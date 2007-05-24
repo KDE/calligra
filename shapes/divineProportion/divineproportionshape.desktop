@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=DivineProportion Shape
+ServiceTypes=KOffice/Flake
+Type=Service
+X-KDE-Library=divineproportionshape
+X-Flake-Version=1
