@@ -726,29 +726,33 @@ bool DependencyScene::connectionIsValid( DependencyConnectorItem *pred, Dependen
 void DependencyScene::connectorEntered( DependencyConnectorItem *item, bool entered )
 {
     //kDebug()<<k_funcinfo<<entered<<endl;
+    //TODO special cursor
     item->setCursor( Qt::UpArrowCursor );
     if ( ! entered ) {
+        // when we leave a connector we don't have a successor
         m_connectionitem->setSuccConnector( 0 );
         return;
     }
     if ( m_connectionitem->predConnector == item ) {
+        // when inside the predecessor, clicking is allowed (deselects connector)
         item->setCursor( Qt::UpArrowCursor );
         return;
     }
-    if ( item == 0 ) {
-        return;
-    }
     if ( ! m_connectionitem->isVisible() ) {
+        // we are not in connection mode
         return;
     }
     if ( m_connectionitem->predConnector == 0 ) {
+        // nothing we can do if we don't have a predecessor (shouldn't happen)
         return;
     }
     if ( item->parentItem() == m_connectionitem->predConnector->parentItem() ) {
+        // not allowed to connect to the same node
         item->setCursor( Qt::ForbiddenCursor );
         return;
     }
     if ( ! ( connectionIsValid( m_connectionitem->predConnector, item ) ) ) {
+        // invalid connection (circular dependency, connecting to parent node, etc)
         item->setCursor( Qt::ForbiddenCursor );
         return;
     }
