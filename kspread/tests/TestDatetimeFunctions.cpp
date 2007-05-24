@@ -207,19 +207,17 @@ void TestDatetimeFunctions::testNETWORKDAY()
   CHECK_EVAL( "NETWORKDAY(DATE(2008;02;25);DATE(2008;03;04))", Value( 6 ) );
 }
 
-#if 0
 void TestDatetimeFunctions::testUNIX2DATE()
 {
-  // 01/01/2001 = 946681200
-  CHECK_EVAL( "UNIX2DATE(DATE(2000;01;01))", Value( 946681200 ) ); // TODO
+  // 01/01/2001 = 946684800
+  CHECK_EVAL( "UNIX2DATE(946684800)=DATE(2000;01;01)", Value( true ) ); // TODO result of various unix-timestamp calculator is 946681200 (UTC?)
 }
 
 void TestDatetimeFunctions::testDATE2UNIX()
 {
-  //
-  CHECK_EVAL( "DATE2UNIX(946681200)", Value( "01/01/2000" ) ); // TODO
+  // 946681200 = 01/01/2001
+  CHECK_EVAL( "DATE2UNIX(DATE(2000;01;01))=946684800", Value( true ) ); // TODO
 }
-#endif
 
 void TestDatetimeFunctions::testDATE()
 {

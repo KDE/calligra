@@ -38,8 +38,8 @@ private slots:
   void testWEEKNUM();
   void testWORKDAY();
   void testNETWORKDAY();
-  //void testUNIX2DATE();
-  //void testDATE2UNIX();
+  void testUNIX2DATE();
+  void testDATE2UNIX();
   void testDATE();
   void testDATEVALUE();
   void testDAY();
