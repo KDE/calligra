@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,22 +14,23 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#include "phantomelement.h"
+#include "PhantomElement.h"
+#include "ElementFactory.h"
 
-PhantomElement::PhantomElement( BasicElement* parent ) : SequenceElement( parent ) 
+PhantomElement::PhantomElement( BasicElement* parent ) : RowElement( parent ) 
 {
 }
 
-/**
- * Draws the whole element including its children.
- * The `parentOrigin' is the point this element's parent starts.
- * We can use our parentPosition to get our own origin then.
- */
-void PhantomElement::draw( QPainter&, const LuPixelRect&, const ContextStyle&,
-                           ContextStyle::TextStyle, ContextStyle::IndexStyle,
-                           StyleAttributes&, const LuPixelPoint& )
+void PhantomElement::paint( QPainter& painter, AttributeManager* am )
 {
+    Q_UNUSED( painter );
+    Q_UNUSED( am );
+}
+
+ElementType PhantomElement::elementType() const
+{
+    return Phantom;
 }

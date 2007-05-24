@@ -20,27 +20,21 @@
 #ifndef PHANTOMELEMENT_H
 #define PHANTOMELEMENT_H
 
-#include "SequenceElement.h"
+#include "RowElement.h"
 
-class PhantomElement : public SequenceElement {
-    typedef SequenceElement inherited;
+class PhantomElement : public RowElement {
 public:
     PhantomElement( BasicElement* parent = 0 );
 
     /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
      */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-					   StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
+    virtual void paint( QPainter& painter, AttributeManager* am );
 
 private:
-    virtual QString elementName() const { return "mphantom"; }
+    virtual ElementType elementType() const;
 
 };
 

@@ -34,6 +34,7 @@ set( kformulalib_PART_SRCS
    TokenElement.cpp
    NumberElement.cpp
    StringElement.cpp
+   PhantomElement.cpp
 #   MatrixDialog.cc 
    contextstyle.cc 
    symboltable.cc 
