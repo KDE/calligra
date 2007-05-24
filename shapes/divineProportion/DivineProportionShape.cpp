@@ -95,3 +95,11 @@ void DivineProportionShape::divideVertical(QPainter &painter, const QRectF &rect
     divideHorizontal(painter, QRectF(QPointF( left ? rect.left() : offset, rect.top()),
                 QSizeF(rect.width() - x, rect.height())), top, !left);
 }
+
+void DivineProportionShape::setOrientation(Orientation orientation) {
+kDebug() << "setOrientation " << orientation << endl;
+    if(m_orientation == orientation)
+        return;
+    m_orientation = orientation;
+    repaint();
+}

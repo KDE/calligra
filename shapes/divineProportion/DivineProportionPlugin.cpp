@@ -30,7 +30,7 @@ K_EXPORT_COMPONENT_FACTORY(divineproportionshape, KGenericFactory<DivineProporti
 DivineProportionPlugin::DivineProportionPlugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
-    //KoToolRegistry::instance()->add(new DivineProportionToolFactory(parent));
+    KoToolRegistry::instance()->add(new DivineProportionToolFactory(parent));
     KoShapeRegistry::instance()->add(new DivineProportionShapeFactory(parent));
 }
 

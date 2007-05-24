@@ -31,7 +31,7 @@ public:
     DivineProportionShape();
     virtual ~DivineProportionShape();
 
-    // Define where the dissapearing point is.
+    // Define where the disappearing point is.
     enum Orientation {
         BottomRight,
         BottomLeft,
@@ -48,7 +48,7 @@ public:
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
-    void setOrientation(Orientation orientation) { m_orientation = orientation; }
+    void setOrientation(Orientation orientation);
     Orientation orientation() const { return m_orientation; }
 
 private:

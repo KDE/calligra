@@ -24,6 +24,8 @@
 
 #include <KoTool.h>
 
+class QAction;
+
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
@@ -46,6 +48,24 @@ public:
     virtual void activate (bool temporary=false);
     /// reimplemented from superclass
     virtual void deactivate();
+    /// reimplemented from superclass
+    virtual QWidget *createOptionWidget();
+
+private slots:
+    void topLeftOrientationToggled(bool on);
+    void topRightOrientationToggled(bool on);
+    void bottomLeftOrientationToggled(bool on);
+    void bottomRightOrientationToggled(bool on);
+
+private:
+    void updateActions();
+
+    DivineProportionShape *m_currentShape;
+
+    QAction *m_topLeftOrientation;
+    QAction *m_topRightOrientation;
+    QAction *m_bottomLeftOrientation;
+    QAction *m_bottomRightOrientation;
 };
 
 #endif
