@@ -26,9 +26,9 @@
 
 #include <math.h>
 
-
 DivineProportionShape::DivineProportionShape()
-    : DivineProportion( (1 + sqrt(5)) / 2.0)
+    : DivineProportion( (1 + sqrt(5)) / 2.0),
+    m_orientation(TopRight)
 {
     setShapeId(DivineProportionShape_SHAPEID);
 }
@@ -41,11 +41,28 @@ void DivineProportionShape::paintDecorations(QPainter &painter, const KoViewConv
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(QColor(172, 196, 206)));
     QRectF rect(QPointF(0,0), size());
-    divideVertical(painter, rect, false);
+    bool top, left;
+    switch(m_orientation) {
+        case BottomRight: top = false, left = false; break;
+        case BottomLeft: top = false, left = true; break;
+        case TopRight: top = true, left = false; break;
+        case TopLeft: top = true, left = true; break;
+    }
+    divideVertical(painter, rect, top, left);
 
     painter.setPen(QPen(QColor(173, 123, 134)));
-    painter.drawLine(QPointF(rect.width() / DivineProportion, 0), rect.bottomRight());
-    painter.drawLine(rect.bottomLeft(), rect.topRight());
+    const double x1 = rect.width() / DivineProportion;
+    const double x2 = rect.width() - x1;
+    if(top && !left || !top && left) {
+        painter.drawLine(rect.bottomLeft(), rect.topRight());
+        painter.drawLine(QPointF(x1, 0), rect.bottomRight());
+        painter.drawLine(QPointF(0,0), QPointF(x2, rect.bottom()));
+    }
+    else {
+        painter.drawLine(rect.topLeft(), rect.bottomRight());
+        painter.drawLine(QPointF(x2, 0), rect.bottomLeft());
+        painter.drawLine(QPointF(x1, rect.bottom()), rect.topRight());
+    }
 }
 
 void DivineProportionShape::saveOdf(KoShapeSavingContext & context) const {
@@ -56,8 +73,8 @@ bool DivineProportionShape::loadOdf( const KoXmlElement & element, KoShapeLoadin
     return false; // TODO
 }
 
-void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &rect, bool top) {
-    if(rect.height() < 5)
+void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &rect, bool top, bool left) {
+    if(rect.height() < 2)
         return;
     const double y = rect.height() / DivineProportion;
     const double offset = top ? rect.bottom() - y : rect.top() + y;
@@ -65,16 +82,16 @@ void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &re
     // draw horizontal line.
     painter.drawLine(QPointF(rect.left(), offset), QPointF(rect.right(), offset));
     divideVertical(painter, QRectF( QPointF(rect.left(), top ? rect.top() : offset),
-                QSizeF(rect.width(), rect.height() - y)), top);
+                QSizeF(rect.width(), rect.height() - y)), !top, left);
 }
 
-void DivineProportionShape::divideVertical(QPainter &painter, const QRectF &rect, bool left) {
-    if(rect.width() < 5)
+void DivineProportionShape::divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left) {
+    if(rect.width() < 2)
         return;
     const double x = rect.width() / DivineProportion;
     const double offset = left ? rect.right() - x : rect.left() + x;
     // draw vertical line
     painter.drawLine(QPointF(offset, rect.top()), QPointF(offset, rect.bottom()));
     divideHorizontal(painter, QRectF(QPointF( left ? rect.left() : offset, rect.top()),
-                QSizeF(rect.width() - x, rect.height())), !left);
+                QSizeF(rect.width() - x, rect.height())), top, !left);
 }

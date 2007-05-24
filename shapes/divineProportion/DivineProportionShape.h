@@ -31,6 +31,14 @@ public:
     DivineProportionShape();
     virtual ~DivineProportionShape();
 
+    // Define where the dissapearing point is.
+    enum Orientation {
+        BottomRight,
+        BottomLeft,
+        TopRight,
+        TopLeft
+    };
+
     /// reimplemented to be empty (this shape is fully non-printing)
     void paint(QPainter &, const KoViewConverter &) {}
     /// reimplemented
@@ -40,11 +48,15 @@ public:
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
+    void setOrientation(Orientation orientation) { m_orientation = orientation; }
+    Orientation orientation() const { return m_orientation; }
+
 private:
-    void divideHorizontal(QPainter &painter, const QRectF &rect, bool left);
-    void divideVertical(QPainter &painter, const QRectF &rect, bool top);
+    void divideHorizontal(QPainter &painter, const QRectF &rect, bool top, bool left);
+    void divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left);
 
     const double DivineProportion;
+    Orientation m_orientation;
 };
 
 #endif
