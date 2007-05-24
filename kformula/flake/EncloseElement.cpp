@@ -18,6 +18,7 @@
 */
 
 #include "EncloseElement.h"
+#include <QPainter>
 
 EncloseElement::EncloseElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -28,15 +29,17 @@ void EncloseElement::paint( QPainter& painter, const AttributeManager* )
     painter.drawPath( m_enclosePath );
 }
 
-void EncloseElement::layout( AttributeManager* am )
+void EncloseElement::layout( const AttributeManager* am )
 {
+    /*
     qreal width = m_enclosedRow.width();      
     qreal height = m_enclosedRow.height();
- 
+    */
 
 
     // TODO: actuarial (how does it look?) - radical - circle (how to determine extends )
 
+    /*
     // longdiv
         m_enclosePath.moveTo();
         m_enclosePath.lineTo();
@@ -84,16 +87,5 @@ void EncloseElement::layout( AttributeManager* am )
     setHeight( height );
     m_enclosedRow.
     m_enclosePath.
-}
-
-void EncloseElement::readMathMLAttributes(const QDomElement& element)
-{
-    m_notation = element.attribute( "notation" );
-}
-
-void EncloseElement::writeMathMLAttributes( QDomElement& element ) const
-{
-    if ( ! m_notation.isNull() ) {
-        element.setAttribute( "notation", m_notation );
-    }
+    */
 }
