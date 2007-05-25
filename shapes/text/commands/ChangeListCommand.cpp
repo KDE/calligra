@@ -103,7 +103,9 @@ void ChangeListCommand::redo() {
         if(list == 0) // nothing to do!
             return;
         list->remove(m_block);
-        recalcList(list->item(0));
+        list = m_block.textList();
+        if( list )
+            recalcList(list->item(0));
         return;
     }
 
