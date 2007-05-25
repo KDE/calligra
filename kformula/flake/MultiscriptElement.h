@@ -22,11 +22,12 @@
 #define MULTISCRIPTELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 
 /**
  * @short Implementation of the msub, msup, msubsup and mmultiscript element
  */
-class MultiscriptElement : public BasicElement {
+class KOFORMULA_EXPORT MultiscriptElement : public BasicElement {
 public:
     /// The standard constructor
     MultiscriptElement( BasicElement* parent = 0 );

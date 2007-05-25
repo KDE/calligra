@@ -42,6 +42,7 @@
 #include "PhantomElement.h"
 #include "BracketElement.h"
 #include "EncloseElement.h"
+#include "MultiscriptElement.h"
 
 static void load(BasicElement* element, const QString& input)
 {
@@ -436,6 +437,38 @@ void TestLoad::encloseElement_data()
     addRow( "<menclose notation=\"downdiagonalstrike\"><mi>x</mi></menclose>", 1, 2 );
 }
 
+void TestLoad::subElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<msub><mrow></mrow><mrow></mrow></msub>", 2 );
+    addRow( "<msub><mi>x</mi><mi>y</mi></msub>", 2, 4 );
+    addRow( "<msub><mrow><mi>x</mi></mrow><mi>y</mi></msub>", 2, 4 );
+    addRow( "<msub><mi>x</mi><mrow><mi>y</mi></mrow></msub>", 2, 4 );
+    addRow( "<msub><mrow><mi>x</mi></mrow><mrow><mi>y</mi></mrow></msub>", 2, 4 );
+
+    // More complex content
+    addRow( "<msup>"
+            " <mrow>"
+            "  <mo> ( </mo>"
+            "  <mrow>"
+            "   <mi> x </mi>"
+            "   <mo> + </mo>"
+            "   <mi> y </mi>"
+            "  </mrow>"
+            "  <mo> ) </mo>"
+            " </mrow>"
+            " <mn> 2 </mn>"
+            "</msup>", 2, 8 );
+
+    // Be sure attributes don't break anything
+    addRow( "<msub subscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi></msub>", 2, 4 );
+    addRow( "<msub subscriptshift=\"1.5\"><mi>x</mi><mi>y</mi></msub>", 2, 4 );
+}
+
 void TestLoad::identifierElement()
 {
     test( new IdentifierElement );
@@ -514,6 +547,11 @@ void TestLoad::fencedElement()
 void TestLoad::encloseElement()
 {
     test( new EncloseElement );
+}
+
+void TestLoad::subElement()
+{
+    test( new MultiscriptElement );
 }
 
 QTEST_MAIN(TestLoad)

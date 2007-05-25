@@ -62,6 +62,10 @@ private slots:
     void fencedElement();
     void encloseElement_data();
     void encloseElement();
+
+    // Script and Limit Elements
+    void subElement_data();
+    void subElement();
     
 };
 
