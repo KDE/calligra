@@ -43,25 +43,7 @@ const QList<BasicElement*> MultiscriptElement::childElements()
     return QList<BasicElement*>();
 }
 
-void MultiscriptElement::readMathML( const QDomElement& element )
+void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
+    m_baseElement->writeMathML( writer );
 }
-
-void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer, bool oasisFormat )
-{
-    m_baseElement->writeMathML( writer, oasisFormat );
-}
-
-void MultiscriptElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,
-                                    ContextStyle::IndexStyle istyle, StyleAttributes& style )
-{
-}
-
-void MultiscriptElement::draw( QPainter& painter, const LuPixelRect& r,
-                               const ContextStyle& context,
-                               ContextStyle::TextStyle tstyle,
-                               ContextStyle::IndexStyle istyle,
-                               StyleAttributes& style,
-                               const LuPixelPoint& parentOrigin )
-{}
-

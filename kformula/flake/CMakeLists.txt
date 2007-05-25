@@ -18,7 +18,7 @@ set( kformulalib_PART_SRCS
    OperatorDictionary.cpp
    Entities.cpp
    ElementFactory.cpp 
-#   MultiscriptElement.cpp
+   MultiscriptElement.cpp
    UnderOverElement.cpp
    BracketElement.cpp 
 #   MatrixElement.cpp

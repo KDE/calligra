@@ -40,58 +40,6 @@ public:
      */
     const QList<BasicElement*> childElements();
 
-    /**
-     * Insert a new child at the cursor position
-     * @param cursor The cursor holding the position where to inser
-     * @param child A BasicElement to insert
-     */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
-   
-    /**
-     * Remove a child element
-     * @param element The BasicElement to remove
-     */ 
-    void removeChild( BasicElement* element );
-
-    /**
-     * Render the element to the given QPainter
-     * @param painter The QPainter to paint the element to
-     */
-    void paint( QPainter& painter, const AttributeManager* am );
-
-    /**
-     * Calculate the size of the element and the positions of its children
-     * @param am The AttributeManager providing information about attributes values
-     */
-    void layout( const AttributeManager* am );
-    
-    /**
-     * Move the FormulaCursor left
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveLeft( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor right 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveRight( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor up 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveUp( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor down 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-
-    void readMathML( const QDomElement& element );
     
 private:
     /// The BasicElement representing the base element of the multiscript
@@ -111,7 +59,7 @@ private:
 
 
     virtual QString elementName() const { return "mmultiscript"; }
-    virtual void writeMathMLContent( KoXmlWriter* writer, bool oasisFormat = false );
+    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
 };
 
 #endif // MULTISCRIPTELEMENT_H
