@@ -564,6 +564,47 @@ void TestLoad::underElement_data()
     addRow( "<munder accentunder=\"false\"><mi>x</mi><mi>y</mi></munder>", 2, 4 );
 }
 
+void TestLoad::overElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mover><mrow></mrow><mrow></mrow></mover>", 2 );
+    addRow( "<mover><mi>x</mi><mi>y</mi></mover>", 2, 4 );
+    addRow( "<mover><mrow><mi>x</mi></mrow><mi>y</mi></mover>", 2, 4 );
+    addRow( "<mover><mi>x</mi><mrow><mi>y</mi></mrow></mover>", 2, 4 );
+    addRow( "<mover><mrow><mi>x</mi></mrow><mrow><mi>y</mi></mrow></mover>", 2, 4 );
+
+    // More complex content
+    addRow( "<mover accent=\"true\">"
+            " <mrow>"
+            "  <mi> x </mi>"
+            "  <mo> + </mo>"
+            "  <mi> y </mi>"
+            "  <mo> + </mo>"
+            "  <mi> z </mi>"
+            " </mrow>"
+            " <mo> &OverBrace; </mo>"
+            "</mover>", 2, 8);
+
+    addRow( "<mover accent=\"false\">"
+            " <mrow>"
+            "  <mi> x </mi>"
+            "  <mo> + </mo>"
+            "  <mi> y </mi>"
+            "  <mo> + </mo>"
+            "  <mi> z </mi>"
+            " </mrow>"
+            " <mo> &OverBrace; </mo>"
+            "</mover>", 2, 8 );
+
+    // Be sure attributes don't break anything
+    addRow( "<mover accent=\"true\"><mi>x</mi><mi>y</mi></mover>", 2, 4 );
+    addRow( "<mover accent=\"false\"><mi>x</mi><mi>y</mi></mover>", 2, 4 );
+}
+
 void TestLoad::identifierElement()
 {
     test( new IdentifierElement );
@@ -660,6 +701,11 @@ void TestLoad::subsupElement()
 }
 
 void TestLoad::underElement()
+{
+    test( new UnderOverElement );
+}
+
+void TestLoad::overElement()
 {
     test( new UnderOverElement );
 }

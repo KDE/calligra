@@ -72,6 +72,8 @@ private slots:
     void subsupElement();
     void underElement_data();
     void underElement();
+    void overElement_data();
+    void overElement();
     
 };
 
