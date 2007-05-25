@@ -208,8 +208,17 @@ public:
     
     virtual void setSelectionModel( QItemSelectionModel *model );
     
+    void setStretchLastSection( bool );
+    
+    void mapToSection( int column, int section );
+    int section( int col ) const;
+
 signals:
-    void contextMenuRequested( QModelIndex, const QPoint& );
+    /// Context menu requested from viewport at global position @p pos
+    void contextMenuRequested( QModelIndex, const QPoint &pos );
+    /// Context menu requested from header at global position @p pos
+    void headerContextMenuRequested( const QPoint &pos );
+    
     void moveAfterLastColumn( const QModelIndex & );
     void moveBeforeFirstColumn( const QModelIndex & );
     
@@ -223,6 +232,7 @@ protected:
     
 protected slots:
     virtual void slotCurrentChanged ( const QModelIndex & current, const QModelIndex & previous );
+    void slotHeaderContextMenuRequested( const QPoint& );
     
 protected:
     bool m_arrowKeyNavigation;
@@ -259,9 +269,25 @@ public:
     void setStretchLastSection( bool );
     
     void hideColumn( int col ) { m_leftview->hideColumn( col ); m_rightview->hideColumn( col ); }
+    void showColumn( int col ) { 
+        if ( col == 0 ) m_leftview->showColumn( col );
+        else m_rightview->showColumn( col );
+    }
+    bool isColumnHidden( int col ) const { return m_rightview->isColumnHidden( col ); }
+    
+    TreeViewBase *masterView() const { return m_leftview; }
+    TreeViewBase *slaveView() const { return m_rightview; }
     
 signals:
-    void contextMenuRequested( QModelIndex, const QPoint& );
+    /// Context menu requested from the viewport, pointer over @p index at global position @p pos
+    void contextMenuRequested( QModelIndex index, const QPoint& pos );
+    /// Context menu requested from master- or slave header at global position @p pos
+    void headerContextMenuRequested( const QPoint &pos );
+    /// Context menu requested from master header at global position @p pos
+    void masterHeaderContextMenuRequested( const QPoint &pos );
+    /// Context menu requested from slave header at global position @p pos
+    void slaveHeaderContextMenuRequested( const QPoint &pos );
+    
     void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
     void selectionChanged( const QModelIndexList );
     
@@ -275,6 +301,8 @@ protected slots:
     void slotToRightView( const QModelIndex &index );
     void slotToLeftView( const QModelIndex &index );
     
+    void slotRightHeaderContextMenuRequested( const QPoint &pos );
+    void slotLeftHeaderContextMenuRequested( const QPoint &pos );
 
 protected:
     TreeViewBase *m_leftview;

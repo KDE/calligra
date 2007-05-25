@@ -178,6 +178,8 @@ protected:
 
 private slots:
     void slotContextMenuRequested( Node *node, const QPoint& pos );
+    void slotHeaderContextMenuRequested( const QPoint& );
+    void slotOptions();
     
     void slotAddTask();
 
@@ -188,6 +190,8 @@ private:
 
     KAction *actionAddTask;
 
+    // View options context menu
+    KAction *actionOptions;
 };
 
 

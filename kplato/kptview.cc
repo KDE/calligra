@@ -542,7 +542,14 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
         lst.append( m_separator );
         lst += m_parts;
     } else if ( m_contextitem->type() == ViewListItem::ItemType_SubView ) {
-        lst = m_view;
+        ViewBase *v = dynamic_cast<ViewBase*>( m_contextitem->view() );
+        if ( v ) {
+            lst = v->contextActionList();
+            if ( ! lst.isEmpty() ) {
+                lst.append( m_separator );
+            }
+        }
+        lst += m_view;
         lst.append( m_separator );
         lst += m_parts;
     } else if ( m_contextitem->type() == ViewListItem::ItemType_ChildDocument ) {

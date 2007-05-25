@@ -27,6 +27,7 @@ include_directories(${KPLATO_INCLUDES})
 ########### KPlato private library ###############
 
 set(kplatoprivate_LIB_SRCS
+    kptitemviewsettup.cc
     kptsplitterview.cc
     kptnodeitemmodel.cc
     kptdependencyeditor.cc
@@ -106,6 +107,7 @@ set(kplatoprivate_LIB_SRCS
     kptchartview.cc
 )
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
+    kptitemviewsettings.ui
     kptdurationwidget.ui
     kptpertresult.ui
     standardworktimedialogbase.ui

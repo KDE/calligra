@@ -92,6 +92,9 @@ public:
     /// Gets context info from this view. Reimplement.
     virtual void getContext( Context &/*context*/ ) const {}
     
+    virtual QList<QAction*> contextActionList() const { return m_contextActionList; }
+    void addContextAction( QAction *action ) { m_contextActionList.append( action ); }
+    
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -104,6 +107,8 @@ protected:
     /// List of all menu/toolbar actions (used for plug/unplug)
     QMap<QString, QList<QAction*> > m_actionListMap;
 
+    /// List of actions that will be shown in the view selectors context menu
+    QList<QAction*> m_contextActionList;
 };
 
 

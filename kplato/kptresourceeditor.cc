@@ -32,6 +32,7 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptcontext.h"
+#include "kptitemviewsettup.h"
 
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -1099,6 +1100,9 @@ ResourceEditor::ResourceEditor( Part *part, QWidget *parent )
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    
+    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+
 }
 
 void ResourceEditor::draw( Project &project )
@@ -1137,6 +1141,15 @@ void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
         }
     }
     emit requestPopupMenu( name, pos );
+}
+
+void ResourceEditor::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug()<<k_funcinfo<<endl;
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
 }
 
 Resource *ResourceEditor::currentResource() const
@@ -1209,7 +1222,19 @@ void ResourceEditor::setupGui()
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
     addAction( name, actionDeleteSelection );
     
+    // Add the context menu actions for the view options
+    actionOptions = new KAction(KIcon("options"), i18n("Options"), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
 }
+
+void ResourceEditor::slotOptions()
+{
+    kDebug()<<k_funcinfo<<endl;
+    ItemViewSettupDialog dlg( m_view->slaveView() );
+    dlg.exec();
+}
+
 
 void ResourceEditor::slotAddResource()
 {

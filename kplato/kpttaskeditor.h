@@ -64,7 +64,6 @@ signals:
     void currentColumnChanged( QModelIndex, QModelIndex );
     
 protected slots:
-    void headerContextMenuRequested( const QPoint &pos );
     void slotActivated( const QModelIndex index );
     
 };
@@ -121,6 +120,10 @@ private slots:
     void slotMoveTaskUp();
     void slotMoveTaskDown();
 
+    void slotOptions();
+    
+    void slotHeaderContextMenuRequested( const QPoint& );
+    
 private:
     void edit( QModelIndex index );
 
@@ -136,6 +139,8 @@ private:
     KAction *actionIndentTask;
     KAction *actionUnindentTask;
 
+    // View options context menu
+    KAction *actionOptions;
 };
 
 

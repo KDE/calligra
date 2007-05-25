@@ -25,6 +25,7 @@
 #include "kptfactory.h"
 #include "kptproject.h"
 #include "kptview.h"
+#include "kptitemviewsettup.h"
 
 #include <QAbstractItemModel>
 #include <QApplication>
@@ -61,7 +62,6 @@ namespace KPlato
 NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
-//    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setModel( new NodeItemModel( part ) );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -75,7 +75,6 @@ NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
     // Don't show start- and endtime in editor
     hideColumn( 18 );
     hideColumn( 19 );
-//    connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
     
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
@@ -84,11 +83,6 @@ NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
 void NodeTreeView::slotActivated( const QModelIndex index )
 {
     kDebug()<<k_funcinfo<<index.column()<<endl;
-}
-
-void NodeTreeView::headerContextMenuRequested( const QPoint &pos )
-{
-//    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at "<<pos<<endl;
 }
 
 //-----------------------------------
@@ -114,6 +108,8 @@ TaskEditor::TaskEditor( Part *part, QWidget *parent )
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
     
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+
+    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void TaskEditor::draw( Project &project )
@@ -208,6 +204,15 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
     emit requestPopupMenu( name, pos );
 }
 
+void TaskEditor::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug()<<k_funcinfo<<endl;
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
+
 void TaskEditor::slotEnableActions()
 {
     updateActionsEnabled( true );
@@ -280,6 +285,17 @@ void TaskEditor::setupGui()
     connect(actionMoveTaskDown, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskDown()));
     addAction( name, actionMoveTaskDown );
 
+    // Add the context menu actions for the view options
+    actionOptions = new KAction(KIcon("options"), i18n("Options"), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
+}
+
+void TaskEditor::slotOptions()
+{
+    kDebug()<<k_funcinfo<<endl;
+    ItemViewSettupDialog dlg( m_view->slaveView() );
+    dlg.exec();
 }
 
 void TaskEditor::slotAddTask()

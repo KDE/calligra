@@ -193,6 +193,8 @@ protected:
 
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotHeaderContextMenuRequested( const QPoint &pos );
+    void slotOptions();
     
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
@@ -209,6 +211,8 @@ private:
     KAction *actionAddGroup;
     KAction *actionDeleteSelection;
 
+    // View options context menu
+    KAction *actionOptions;
 };
 
 }  //KPlato namespace

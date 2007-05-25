@@ -420,6 +420,16 @@ TreeViewBase::TreeViewBase( QWidget *parent )
     m_acceptDropsOnView( false )
 {
     setAlternatingRowColors ( true );
+
+    header()->setContextMenuPolicy( Qt::CustomContextMenu );
+
+    connect( header(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+}
+
+void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
+{
+    kDebug()<<k_funcinfo<<endl;
+    emit headerContextMenuRequested( header()->mapToGlobal( pos ) );
 }
 
 QModelIndex TreeViewBase::nextColumn( const QModelIndex &curr ) const
@@ -594,6 +604,21 @@ ItemModelBase *TreeViewBase::itemModel() const
     return static_cast<ItemModelBase*>( model() );
 }
 
+void TreeViewBase::setStretchLastSection( bool mode )
+{
+    header()->setStretchLastSection( mode );
+}
+
+void TreeViewBase::mapToSection( int col, int section )
+{
+    header()->moveSection( header()->visualIndex( col ), section );
+}
+
+int TreeViewBase::section( int col ) const
+{
+    return header()->visualIndex( col );
+}
+
 void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
 {
     //kDebug()<<k_funcinfo<<endl;
@@ -644,6 +669,9 @@ DoubleTreeViewBase::DoubleTreeViewBase( QWidget *parent )
     
     connect( m_leftview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
     connect( m_rightview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
+
+    connect( m_leftview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotLeftHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_rightview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotRightHeaderContextMenuRequested( const QPoint& ) ) );
 
     connect( m_rightview->verticalScrollBar(), SIGNAL( valueChanged( int ) ), m_leftview->verticalScrollBar(), SLOT( setValue( int ) ) );
     
@@ -784,6 +812,20 @@ void DoubleTreeViewBase::setAcceptDrops( bool mode )
 void DoubleTreeViewBase::setAcceptDropsOnView( bool mode )
 {
     m_leftview->setAcceptDropsOnView( mode );
+}
+
+void DoubleTreeViewBase::slotRightHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug()<<k_funcinfo<<endl;
+    emit slaveHeaderContextMenuRequested( pos );
+    emit headerContextMenuRequested( pos );
+}
+
+void DoubleTreeViewBase::slotLeftHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug()<<k_funcinfo<<endl;
+    emit masterHeaderContextMenuRequested( pos );
+    emit headerContextMenuRequested( pos );
 }
 
 

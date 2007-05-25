@@ -21,6 +21,7 @@
 
 #include "kptglobal.h"
 #include "kptitemmodelbase.h"
+#include "kptitemviewsettup.h"
 #include "kptcommand.h"
 #include "kptfactory.h"
 #include "kptproject.h"
@@ -851,7 +852,19 @@ TaskStatusView::TaskStatusView( Part *part, QWidget *parent )
     m_view->itemModel()->setProject( &(part->getProject()) );
     
     connect( m_view, SIGNAL( contextMenuRequested( Node* , const QPoint& ) ), this, SLOT( slotContextMenuRequested( Node* , const QPoint& ) ) );
+
+    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
+
+void TaskStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug()<<k_funcinfo<<endl;
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
+
 
 Node *TaskStatusView::currentNode() const 
 {
@@ -914,7 +927,19 @@ void TaskStatusView::setupGui()
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, actionAddTask );
     
+    // Add the context menu actions for the view options
+    actionOptions = new KAction(KIcon("options"), i18n("Options"), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
 }
+
+void TaskStatusView::slotOptions()
+{
+    kDebug()<<k_funcinfo<<endl;
+    ItemViewSettupDialog dlg( m_view, true/*includeColumn0*/ );
+    dlg.exec();
+}
+
 
 void TaskStatusView::slotAddTask()
 {
