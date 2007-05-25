@@ -74,6 +74,8 @@ private slots:
     void underElement();
     void overElement_data();
     void overElement();
+    void underOverElement_data();
+    void underOverElement();
     
 };
 
