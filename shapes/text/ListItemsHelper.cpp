@@ -166,7 +166,12 @@ QList<ListStyleItem> Lists::genericListStyleItems() {
     answer.append( ListStyleItem( i18n( "Disc Bullet" ), KoListStyle::DiscItem) );
     answer.append( ListStyleItem( i18n( "Square Bullet" ), KoListStyle::SquareItem) );
     answer.append( ListStyleItem( i18n( "Box Bullet" ), KoListStyle::BoxItem) );
+    answer.append( ListStyleItem( i18n( "Rhombus Bullet" ), KoListStyle::RhombusItem) );
     answer.append( ListStyleItem( i18n( "Circle Bullet" ), KoListStyle::CircleItem) );
+    answer.append( ListStyleItem( i18n( "Check Mark Bullet" ), KoListStyle::HeavyCheckMarkItem) );
+    answer.append( ListStyleItem( i18n( "Ballot X Bullet" ), KoListStyle::BallotXItem) );
+    answer.append( ListStyleItem( i18n( "Rightwards Arrow Bullet" ), KoListStyle::RightArrowItem) );
+    answer.append( ListStyleItem( i18n( "Rightwards Arrow Head Bullet" ), KoListStyle::RightArrowHeadItem) );
     return answer;
 }
 
