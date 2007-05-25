@@ -47,15 +47,15 @@
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QTextList>
+#include <QPointer>
 #include <klocale.h>
-#include <QTimer>
 
 /// \internal d-pointer class.
 class KWOpenDocumentLoader::Private
 {
     public:
         /// The KWord document.
-        KWDocument *document;
+        QPointer<KWDocument> document;
         /// Current master-page name (OASIS loading)
         QString currentMasterPage;
 
@@ -101,8 +101,8 @@ void KWOpenDocumentLoader::processBody()
 }
 
 //1.6: KWDocument::loadOasis
-bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store) {
-
+bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store)
+{
     emit sigProgress( 0 );
     kDebug(32001) << "========================> KWOpenDocumentLoader::load START" << endl;
 
