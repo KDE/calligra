@@ -80,7 +80,7 @@ public slots:
     
 protected slots:
     void slotProjectCalculated( ScheduleManager *sm );
-    void slotScheduleManagerToBeRemoved( ScheduleManager *sm );
+    void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
     
 private:
     Node * m_node;

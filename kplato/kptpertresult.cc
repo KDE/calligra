@@ -279,7 +279,7 @@ void PertResult::slotProjectCalculated( ScheduleManager *sm )
     }
 }
 
-void PertResult::slotScheduleManagerToBeRemoved( ScheduleManager *sm )
+void PertResult::slotScheduleManagerToBeRemoved( const ScheduleManager *sm )
 {
     if ( sm == current_schedule ) {
         current_schedule = 0;
@@ -291,12 +291,12 @@ void PertResult::setProject( Project *project )
 {
     if ( m_project ) {
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
-        disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
     }
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
-        connect( m_project, SIGNAL( scheduleManagerToBeRemoved( ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
     }
 }
 

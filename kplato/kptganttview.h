@@ -77,7 +77,6 @@ public:
     bool showNoInformation() const { return m_showNoInformation; }
 
 signals:
-    void enableActions( bool );
     void modifyRelation( Relation *rel ) ;
     void addRelation( Node *par, Node *child );
     void modifyRelation( Relation *rel, int linkType ) ;

@@ -957,11 +957,6 @@ void View::createDependencyEditor( ViewListItem *cat )
     connect( editor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
     connect( editor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
     connect( editor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
-    connect( editor, SIGNAL( moveTaskUp() ), SLOT( slotMoveTaskUp() ) );
-    connect( editor, SIGNAL( moveTaskDown() ), SLOT( slotMoveTaskDown() ) );
-    connect( editor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
-    connect( editor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
-
 
     connect( editor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 }
@@ -1007,13 +1002,12 @@ void View::createGanttView( ViewListItem *cat )
     ganttview->setProject( &( getProject() ) );
 
     connect( ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-
-    connect( ganttview, SIGNAL( enableActions( bool ) ), SLOT( setTaskActionsEnabled( bool ) ) );
+/*  TODO: Review these
     connect( ganttview, SIGNAL( addRelation( Node*, Node*, int ) ), SLOT( slotAddRelation( Node*, Node*, int ) ) );
     connect( ganttview, SIGNAL( modifyRelation( Relation*, int ) ), SLOT( slotModifyRelation( Relation*, int ) ) );
     connect( ganttview, SIGNAL( modifyRelation( Relation* ) ), SLOT( slotModifyRelation( Relation* ) ) );
     connect( ganttview, SIGNAL( itemDoubleClicked() ), SLOT( slotOpenNode() ) );
-    connect( ganttview, SIGNAL( itemRenamed( Node*, const QString& ) ), this, SLOT( slotRenameNode( Node*, const QString& ) ) );
+    connect( ganttview, SIGNAL( itemRenamed( Node*, const QString& ) ), this, SLOT( slotRenameNode( Node*, const QString& ) ) );*/
     connect( ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
 
