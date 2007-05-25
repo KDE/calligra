@@ -49,12 +49,12 @@ DivineProportionTool::DivineProportionTool(KoCanvasBase *canvas)
     m_bottomRightOrientation  = new QAction(KIcon("golden-ratio-bottomleft"), i18n("Bottom Right"), this);
     m_bottomRightOrientation->setCheckable(true);
     group->addAction(m_bottomRightOrientation);
-    connect( m_bottomRightOrientation, SIGNAL(toggled(bool)), this, SLOT(bottomLeftOrientationToggled(bool)) );
+    connect( m_bottomRightOrientation, SIGNAL(toggled(bool)), this, SLOT(bottomRightOrientationToggled(bool)) );
 
     m_bottomLeftOrientation  = new QAction(KIcon("golden-ratio-bottomright"), i18n("Bottom Left"), this);
     m_bottomLeftOrientation->setCheckable(true);
     group->addAction(m_bottomLeftOrientation);
-    connect( m_bottomLeftOrientation, SIGNAL(toggled(bool)), this, SLOT(bottomRightOrientationToggled(bool)) );
+    connect( m_bottomLeftOrientation, SIGNAL(toggled(bool)), this, SLOT(bottomLeftOrientationToggled(bool)) );
 
 }
 
@@ -97,10 +97,12 @@ void DivineProportionTool::deactivate() {
 }
 
 void DivineProportionTool::updateActions() {
-    m_topLeftOrientation->setChecked(m_currentShape->orientation() == DivineProportionShape::TopLeft);
-    m_topRightOrientation->setChecked(m_currentShape->orientation() == DivineProportionShape::TopRight);
-    m_bottomLeftOrientation->setChecked(m_currentShape->orientation() == DivineProportionShape::BottomLeft);
-    m_bottomRightOrientation->setChecked(m_currentShape->orientation() == DivineProportionShape::BottomRight);
+    switch(m_currentShape->orientation()) {
+        case DivineProportionShape::BottomRight: m_bottomRightOrientation->setChecked(true); break;
+        case DivineProportionShape::BottomLeft: m_bottomLeftOrientation->setChecked(true); break;
+        case DivineProportionShape::TopRight: m_topRightOrientation->setChecked(true); break;
+        case DivineProportionShape::TopLeft: m_topLeftOrientation->setChecked(true); break;
+    }
 }
 
 void DivineProportionTool::topLeftOrientationToggled(bool on) {

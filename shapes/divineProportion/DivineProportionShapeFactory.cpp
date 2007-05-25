@@ -18,9 +18,9 @@
  */
 #include "DivineProportionShapeFactory.h"
 #include "DivineProportionShape.h"
+#include "Intro.h"
 
 #include <klocale.h>
-//#include <KoShape.h>
 
 DivineProportionShapeFactory::DivineProportionShapeFactory(QObject *parent)
     : KoShapeFactory(parent, DivineProportionShape_SHAPEID, i18n("DivineProportion"))
@@ -37,12 +37,10 @@ KoShape *DivineProportionShapeFactory::createShape(const KoProperties * /*params
     return createDefaultShape();
 }
 
-#if 0
 QList<KoShapeConfigWidgetBase*> DivineProportionShapeFactory::createShapeOptionPanels() {
     QList<KoShapeConfigWidgetBase*> answer;
-    answer.append(new OrientationPanel());
+    answer.append(new Intro());
     return answer;
 }
-#endif
 
 #include "DivineProportionShapeFactory.moc"

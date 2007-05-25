@@ -8,10 +8,12 @@ SET ( divineProportionShape_SRCS
     DivineProportionShapeFactory.cpp
     DivineProportionTool.cpp
     DivineProportionToolFactory.cpp
+    Intro.cpp
 )
 
-#kde4_add_ui_files(divineProportionShape_SRCS
-#)
+kde4_add_ui_files(divineProportionShape_SRCS
+    Intro.ui
+)
 
 kde4_automoc(${divineProportionShape_SRCS})
 kde4_add_plugin(divineproportionshape ${divineProportionShape_SRCS})

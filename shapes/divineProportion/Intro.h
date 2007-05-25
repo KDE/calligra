@@ -16,26 +16,26 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef INTRO_H
+#define INTRO_H
 
-#ifndef SHAPEFACTORY_H
-#define SHAPEFACTORY_H
+#include <ui_Intro.h>
 
-#include <KoShapeFactory.h>
+class DivineProportionShape;
 
-class KoShape;
+#include <KoShapeConfigWidgetBase.h>
 
-class DivineProportionShapeFactory : public KoShapeFactory {
-    Q_OBJECT
-
+class Intro : public KoShapeConfigWidgetBase {
 public:
-    /// constructor
-    explicit DivineProportionShapeFactory(QObject *parent);
-    ~DivineProportionShapeFactory() {}
+    Intro();
 
-    KoShape *createDefaultShape() const;
-    KoShape *createShape(const KoProperties * params) const;
+    virtual void open(KoShape *shape);
+    virtual void save();
+    virtual KAction *createAction();
 
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+private:
+    Ui::Intro widget;
+    DivineProportionShape *m_shape;
 };
 
 #endif
