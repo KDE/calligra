@@ -301,6 +301,11 @@ Q_ASSERT(otherData);
             case KoListStyle::SquareItem:
             case KoListStyle::DiscItem:
             case KoListStyle::CircleItem:
+            case KoListStyle::HeavyCheckMarkItem:
+            case KoListStyle::BallotXItem:
+            case KoListStyle::RightArrowItem:
+            case KoListStyle::RightArrowHeadItem:
+            case KoListStyle::RhombusItem:
             case KoListStyle::BoxItem: {
                 calcWidth = false;
                 item = ' ';

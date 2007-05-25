@@ -738,7 +738,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style> ( listFormat.style() );
         if(listStyle == KoListStyle::SquareItem || listStyle == KoListStyle::DiscItem ||
                 listStyle == KoListStyle::CircleItem || listStyle == KoListStyle::BoxItem ||
-                listStyle == KoListStyle::MinusItem ||
+                listStyle == KoListStyle::RhombusItem ||
                 listStyle == KoListStyle::HeavyCheckMarkItem || listStyle == KoListStyle::BallotXItem ||
                 listStyle == KoListStyle::RightArrowItem || listStyle == KoListStyle::RightArrowHeadItem
         ) {
@@ -775,7 +775,11 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
                 case KoListStyle::BoxItem:
                     painter->drawRect(QRectF(x, y, width, width));
                     break;
-                case KoListStyle::MinusItem:
+                case KoListStyle::RhombusItem:
+                    painter->translate(QPointF(x+width,y));
+                    painter->rotate(45.0);
+                    painter->fillRect(QRectF(0, 0, width, width), QBrush(Qt::black));
+                    break;
                 case KoListStyle::HeavyCheckMarkItem:
                 case KoListStyle::BallotXItem:
                 case KoListStyle::RightArrowItem:
