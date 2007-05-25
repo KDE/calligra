@@ -885,6 +885,35 @@ void Formula::compile( const Tokens& tokens ) const
     // unknown token is invalid
     if( tokenType == Token::Unknown ) break;
 
+    // are we entering a function ?
+    // if stack already has: id (
+    if( syntaxStack.itemCount() >= 2 )
+    {
+        Token par = syntaxStack.top();
+        Token id = syntaxStack.top( 1 );
+        if( par.asOperator() == Token::LeftPar )
+        if( id.isIdentifier() )
+        {
+          argStack.push( argCount );
+          argCount = 1;
+        }
+     }
+
+#ifdef KSPREAD_INLINE_ARRAYS
+    // are we entering an inline array ?
+    // if stack already has: {
+    if( syntaxStack.itemCount() >= 1 )
+    {
+        Token bra = syntaxStack.top();
+        if( bra.asOperator() == Token::CurlyBra )
+        {
+          argStack.push( argCount );
+          argStack.push( 1 ); // row count
+          argCount = 1;
+        }
+     }
+#endif
+
     // for constants, push immediately to stack
     // generate code to load from a constant
     if ( ( tokenType == Token::Integer ) || ( tokenType == Token::Float ) ||
@@ -909,41 +938,6 @@ void Formula::compile( const Tokens& tokens ) const
       else
         d->codes.append( Opcode( Opcode::Ref, d->constants.count()-1 ) );
     }
-
-    // are we entering a function ?
-    // if token is operator, and stack already has: id ( arg
-    if( tokenType == Token::Operator )
-    if( syntaxStack.itemCount() >= 3 )
-    {
-        Token arg = syntaxStack.top();
-        Token par = syntaxStack.top( 1 );
-        Token id = syntaxStack.top( 2 );
-        if( !arg.isOperator() )
-        if( par.asOperator() == Token::LeftPar )
-        if( id.isIdentifier() )
-        {
-          argStack.push( argCount );
-          argCount = 1;
-        }
-     }
-
-#ifdef KSPREAD_INLINE_ARRAYS
-    // are we entering an inline array ?
-    // if token is operator, and stack already has: { arg
-    if( tokenType == Token::Operator )
-    if( syntaxStack.itemCount() >= 2 )
-    {
-        Token arg = syntaxStack.top();
-        Token bra = syntaxStack.top( 1 );
-        if( !arg.isOperator() )
-        if( bra.asOperator() == Token::CurlyBra )
-        {
-          argStack.push( argCount );
-          argStack.push( 1 ); // row count
-          argCount = 1;
-        }
-     }
-#endif
 
      // special case for percentage
     if( tokenType == Token::Operator )
@@ -1035,7 +1029,7 @@ void Formula::compile( const Tokens& tokens ) const
             syntaxStack.pop();
             syntaxStack.push( arg );
             d->codes.append( Opcode( Opcode::Function, argCount ) );
-            // FIXME Stefan: breaks on function cascades
+            Q_ASSERT(!argStack.empty());
             argCount = argStack.empty() ? 0 : argStack.pop();
           }
         }
@@ -1058,6 +1052,8 @@ void Formula::compile( const Tokens& tokens ) const
             syntaxStack.pop();
             syntaxStack.push( Token( Token::Integer ) );
             d->codes.append( Opcode( Opcode::Function, 0 ) );
+            Q_ASSERT(!argStack.empty());
+            argCount = argStack.empty() ? 0 : argStack.pop();
           }
         }
 
@@ -1133,6 +1129,7 @@ void Formula::compile( const Tokens& tokens ) const
             d->constants.append( Value( (int)argCount ) ); // cols
             d->constants.append( Value( rowCount ) );
             d->codes.append( Opcode( Opcode::Array, d->constants.count()-2 ) );
+            Q_ASSERT(!argStack.empty());
             argCount = argStack.empty() ? 0 : argStack.pop();
           }
         }

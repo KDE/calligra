@@ -257,6 +257,9 @@ void TestFormula::testString()
 
 void TestFormula::testFunction()
 {
+  // function with no arguments
+  CHECK_EVAL( "TRUE()", Value( true ) );
+
   //the built-in sine function
   CHECK_EVAL ("SIN(0)", Value(0));
   CHECK_EVAL ("2+sin(\"2\"-\"2\")", Value(2));
