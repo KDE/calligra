@@ -68,6 +68,8 @@ private slots:
     void subElement();
     void supElement_data();
     void supElement();
+    void subsupElement_data();
+    void subsupElement();
     
 };
 

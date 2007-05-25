@@ -501,6 +501,27 @@ void TestLoad::supElement_data()
     addRow( "<msup superscriptshift=\"1.5\"><mi>x</mi><mi>y</mi></msup>", 2, 4 );
 }
 
+void TestLoad::subsupElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<msubsup><mrow></mrow><mrow></mrow><mrow></mrow></msubsup>", 3 );
+    addRow( "<msubsup><mi>x</mi><mi>y</mi><mi>z</mi></msubsup>", 3, 6 );
+    addRow( "<msubsup><mrow><mi>x</mi></mrow><mi>y</mi><mi>z</mi></msubsup>", 3, 6 );
+    addRow( "<msubsup><mi>x</mi><mrow><mi>y</mi></mrow><mi>z</mi></msubsup>", 3, 6 );
+    addRow( "<msubsup><mrow><mi>x</mi></mrow><mrow><mi>y</mi></mrow><mi>z</mi></msubsup>", 3, 6 );
+    addRow( "<msubsup><mrow><mi>x</mi></mrow><mi>y</mi><mrow><mi>z</mi></mrow></msubsup>", 3, 6 );
+    addRow( "<msubsup><mi>x</mi><mrow><mi>y</mi></mrow><mrow><mi>z</mi></mrow></msubsup>", 3, 6 );
+    addRow( "<msubsup><mrow><mi>x</mi></mrow><mrow><mi>y</mi></mrow><mrow><mi>z</mi></mrow></msubsup>", 3, 6 );
+
+    // Be sure attributes don't break anything
+    addRow( "<msubsup subscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi><mi>z</mi></msubsup>", 3, 6 );
+    addRow( "<msubsup superscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi><mi>z</mi></msubsup>", 3, 6 );
+}
+
 void TestLoad::identifierElement()
 {
     test( new IdentifierElement );
@@ -587,6 +608,11 @@ void TestLoad::subElement()
 }
 
 void TestLoad::supElement()
+{
+    test( new MultiscriptElement );
+}
+
+void TestLoad::subsupElement()
 {
     test( new MultiscriptElement );
 }
