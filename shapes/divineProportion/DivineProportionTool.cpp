@@ -29,31 +29,33 @@
 #include <QAction>
 #include <QGridLayout>
 #include <QToolButton>
+#include <QCheckBox>
 
 DivineProportionTool::DivineProportionTool(KoCanvasBase *canvas)
     : KoTool(canvas),
     m_currentShape(0)
 {
     QActionGroup *group = new QActionGroup(this);
-    m_topLeftOrientation  = new QAction(KIcon("golden-ratio-topleft"), i18n("TopLeft"), this);
+    m_topLeftOrientation  = new QAction(KIcon("golden-ratio-topleft"), i18n("Top Left"), this);
     m_topLeftOrientation->setCheckable(true);
     group->addAction(m_topLeftOrientation);
     connect( m_topLeftOrientation, SIGNAL(toggled(bool)), this, SLOT(topLeftOrientationToggled(bool)) );
 
-    m_topRightOrientation  = new QAction(KIcon("golden-ratio-topleft"), i18n("TopLeft"), this);
+    m_topRightOrientation  = new QAction(KIcon("golden-ratio-topright"), i18n("Top Right"), this);
     m_topRightOrientation->setCheckable(true);
     group->addAction(m_topRightOrientation);
     connect( m_topRightOrientation, SIGNAL(toggled(bool)), this, SLOT(topRightOrientationToggled(bool)) );
 
-    m_bottomRightOrientation  = new QAction(KIcon("golden-ratio-topleft"), i18n("TopLeft"), this);
+    m_bottomRightOrientation  = new QAction(KIcon("golden-ratio-bottomleft"), i18n("Bottom Right"), this);
     m_bottomRightOrientation->setCheckable(true);
     group->addAction(m_bottomRightOrientation);
     connect( m_bottomRightOrientation, SIGNAL(toggled(bool)), this, SLOT(bottomLeftOrientationToggled(bool)) );
 
-    m_bottomLeftOrientation  = new QAction(KIcon("golden-ratio-topleft"), i18n("TopLeft"), this);
+    m_bottomLeftOrientation  = new QAction(KIcon("golden-ratio-bottomright"), i18n("Bottom Left"), this);
     m_bottomLeftOrientation->setCheckable(true);
     group->addAction(m_bottomLeftOrientation);
     connect( m_bottomLeftOrientation, SIGNAL(toggled(bool)), this, SLOT(bottomRightOrientationToggled(bool)) );
+
 }
 
 DivineProportionTool::~DivineProportionTool() {
@@ -121,6 +123,11 @@ void DivineProportionTool::bottomRightOrientationToggled(bool on) {
         m_currentShape->setOrientation(DivineProportionShape::BottomRight);
 }
 
+void DivineProportionTool::setPrintable(bool on) {
+    if(m_currentShape)
+        m_currentShape->setPrintable(on);
+}
+
 QWidget *DivineProportionTool::createOptionWidget() {
     QWidget *widget = new QWidget();
     QGridLayout *layout = new QGridLayout(widget);
@@ -136,10 +143,13 @@ QWidget *DivineProportionTool::createOptionWidget() {
     QToolButton *brButton = new QToolButton(widget);
     brButton->setDefaultAction(m_bottomRightOrientation);
     layout->addWidget(brButton, 1, 1);
+    QCheckBox *cb = new QCheckBox(i18n("Print the help lines"), widget);
+    layout->addWidget(cb, 2, 0, 1, 3);
+    connect( cb, SIGNAL(toggled(bool)), this, SLOT(setPrintable(bool)) );
 
     layout->setSpacing(0);
     layout->setMargin(6);
-    layout->setRowStretch(2, 1);
+    layout->setRowStretch(3, 1);
     layout->setColumnStretch(2, 1);
     return widget;
 }

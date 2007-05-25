@@ -28,7 +28,8 @@
 
 DivineProportionShape::DivineProportionShape()
     : DivineProportion( (1 + sqrt(5)) / 2.0),
-    m_orientation(TopRight)
+    m_orientation(TopRight),
+    m_printable(false)
 {
     setShapeId(DivineProportionShape_SHAPEID);
 }
@@ -36,9 +37,22 @@ DivineProportionShape::DivineProportionShape()
 DivineProportionShape::~DivineProportionShape() {
 }
 
+void DivineProportionShape::paint(QPainter &painter, const KoViewConverter &converter) {
+    if(m_printable) {
+        applyConversion(painter, converter);
+        draw(painter);
+    }
+}
+
 void DivineProportionShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
-    applyConversion(painter, converter);
-    painter.setRenderHint(QPainter::Antialiasing);
+    if(!m_printable) {
+        applyConversion(painter, converter);
+        painter.setRenderHint(QPainter::Antialiasing);
+        draw(painter);
+    }
+}
+
+void DivineProportionShape::draw(QPainter &painter) {
     painter.setPen(QPen(QColor(172, 196, 206)));
     QRectF rect(QPointF(0,0), size());
     bool top, left;
@@ -97,9 +111,16 @@ void DivineProportionShape::divideVertical(QPainter &painter, const QRectF &rect
 }
 
 void DivineProportionShape::setOrientation(Orientation orientation) {
-kDebug() << "setOrientation " << orientation << endl;
     if(m_orientation == orientation)
         return;
     m_orientation = orientation;
     repaint();
 }
+
+void DivineProportionShape::setPrintable(bool on) {
+    if(m_printable == on)
+        return;
+    m_printable = on;
+    repaint();
+}
+

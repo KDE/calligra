@@ -56,6 +56,7 @@ private slots:
     void topRightOrientationToggled(bool on);
     void bottomLeftOrientationToggled(bool on);
     void bottomRightOrientationToggled(bool on);
+    void setPrintable(bool on);
 
 private:
     void updateActions();

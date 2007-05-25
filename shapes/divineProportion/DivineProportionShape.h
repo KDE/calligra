@@ -40,7 +40,7 @@ public:
     };
 
     /// reimplemented to be empty (this shape is fully non-printing)
-    void paint(QPainter &, const KoViewConverter &) {}
+    void paint(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
     /// reimplemented
@@ -51,12 +51,17 @@ public:
     void setOrientation(Orientation orientation);
     Orientation orientation() const { return m_orientation; }
 
+    void setPrintable(bool on);
+    bool printable() const { return m_printable; }
+
 private:
     void divideHorizontal(QPainter &painter, const QRectF &rect, bool top, bool left);
     void divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left);
+    void draw(QPainter &painter);
 
     const double DivineProportion;
     Orientation m_orientation;
+    bool m_printable;
 };
 
 #endif
