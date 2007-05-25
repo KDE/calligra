@@ -626,6 +626,36 @@ void TestLoad::underOverElement_data()
     addRow( "<munderover accentunder=\"false\"><mi>x</mi><mi>y</mi><mi>z</mi></munderover>", 3, 6 );
 }
 
+void TestLoad::multiscriptsElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 6 );
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 6 );
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><none/></mmultiscripts>", 3, 6 );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 3, 6 );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 3, 6 );
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><none/><none/></mmultiscripts>", 3, 6 );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/><mprescripts/><none/><none/></mmultiscripts>", 5, 10 );
+    addRow( "<mmultiscripts><mi>x</mi><mi>x</mi><none/><mprescripts/><mi>y</mi><none/></mmultiscripts>", 5, 10 );
+
+    // More complex content
+    addRow( "<mmultiscripts>"
+            " <mi> R </mi>"
+            " <mi> i </mi>"
+            " <none/>"
+            " <none/>"
+            " <mi> j </mi>"
+            " <mi> k </mi>"
+            " <none/>"
+            " <mi> l </mi>"
+            " <none/>"
+            " </mmultiscripts>", 9, 18 );
+}
+
 void TestLoad::identifierElement()
 {
     test( new IdentifierElement );
@@ -734,6 +764,11 @@ void TestLoad::overElement()
 void TestLoad::underOverElement()
 {
     test( new UnderOverElement );
+}
+
+void TestLoad::multiscriptsElement()
+{
+    test( new MultiscriptElement );
 }
 
 QTEST_MAIN(TestLoad)

@@ -76,7 +76,8 @@ private slots:
     void overElement();
     void underOverElement_data();
     void underOverElement();
-    
+    void multiscriptsElement_data();
+    void multiscriptsElement();
 };
 
 #endif // _TESTLOAD_H_
