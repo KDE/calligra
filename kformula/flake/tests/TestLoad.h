@@ -66,6 +66,8 @@ private slots:
     // Script and Limit Elements
     void subElement_data();
     void subElement();
+    void supElement_data();
+    void supElement();
     
 };
 
