@@ -102,9 +102,9 @@ void ChangeListCommand::redo() {
         QTextList *list = m_block.textList();
         if(list == 0) // nothing to do!
             return;
+        bool shouldReset = list->count() > 1;
         list->remove(m_block);
-        list = m_block.textList();
-        if( list )
+        if( shouldReset )
             recalcList(list->item(0));
         return;
     }
