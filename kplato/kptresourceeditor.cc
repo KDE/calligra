@@ -912,7 +912,7 @@ QObject *ResourceItemModel::object( const QModelIndex &index ) const
     return o;
 }
 
-void ResourceItemModel::slotCalendarChanged( const Calendar* cal )
+void ResourceItemModel::slotCalendarChanged( Calendar* cal )
 {
     foreach ( Resource *r, m_project->resourceList() ) {
         if ( r->calendar( true ) == 0 ) {

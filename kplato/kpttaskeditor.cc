@@ -76,7 +76,6 @@ NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
     hideColumn( 18 );
     hideColumn( 19 );
     
-    connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
 }
 
