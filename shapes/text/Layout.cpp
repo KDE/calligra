@@ -762,28 +762,47 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
                 width *= percent / 100.0;
             y -= width / 10.; // move it up just slightly
             double x = qMax(1., data->counterPosition().x() + fm.width(listFormat.stringProperty( KoListStyle::ListItemPrefix )));
-            switch( listStyle ) {
-                case KoListStyle::SquareItem:
+                switch( listStyle ) {
+                case KoListStyle::SquareItem: {
                     painter->fillRect(QRectF(x, y, width, width), QBrush(Qt::black));
-                    break;
+                } break;
                 case KoListStyle::DiscItem:
                     painter->setBrush(QBrush(Qt::black));
                     // fall through!
-                case KoListStyle::CircleItem:
+                case KoListStyle::CircleItem: {
                     painter->drawEllipse(QRectF(x, y, width, width));
-                    break;
-                case KoListStyle::BoxItem:
+                } break;
+                case KoListStyle::BoxItem: {
                     painter->drawRect(QRectF(x, y, width, width));
-                    break;
-                case KoListStyle::RhombusItem:
-                    painter->translate(QPointF(x+width,y));
+                } break;
+                case KoListStyle::RhombusItem: {
+                    painter->translate(QPointF(x+(width/2.0),y));
                     painter->rotate(45.0);
                     painter->fillRect(QRectF(0, 0, width, width), QBrush(Qt::black));
-                    break;
-                case KoListStyle::HeavyCheckMarkItem:
-                case KoListStyle::BallotXItem:
-                case KoListStyle::RightArrowItem:
-                case KoListStyle::RightArrowHeadItem:
+                } break;
+                case KoListStyle::RightArrowItem: {
+                    const double half = width/2.0;
+                    painter->translate(QPointF(x,y));
+                    QPointF points[] = { QPointF(half,0), QPointF(width,half), QPointF(half,width) };
+                    painter->drawPolyline(points,3);
+                    painter->drawLine(QLineF(0,half,width,half));
+                } break;
+                case KoListStyle::RightArrowHeadItem: {
+                    painter->translate(QPointF(x,y));
+                    QPointF points[] = { QPointF(0,0), QPointF(width,width/2.0), QPointF(0,width) };
+                    painter->drawPolyline(points,3);
+                } break;
+                case KoListStyle::HeavyCheckMarkItem: {
+                    const double half = width/2.0;
+                    painter->translate(QPointF(x,y));
+                    QPointF points[] = { QPointF(half,half), QPointF(half,width), QPointF(width,0) };
+                    painter->drawPolyline(points,3);
+                } break;
+                case KoListStyle::BallotXItem: {
+                    painter->translate(QPointF(x,y));
+                    painter->drawLine(QLineF(0.0,0.0,width,width));
+                    painter->drawLine(QLineF(0.0,width,width,0.0));
+                } break;
                 default:; // others we ignore.
             }
         }
