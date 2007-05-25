@@ -87,7 +87,6 @@ void ItemViewSettup::changed()
 void ItemViewSettup::slotOk()
 {
     kDebug()<<k_funcinfo<<endl;
-    ItemModelBase *model = m_view->itemModel();
     QListWidget *lst = selector->availableListWidget();
     for ( int r = 0; r < lst->count(); ++r ) {
         int c = static_cast<Item*>( lst->item( r ) )->column();

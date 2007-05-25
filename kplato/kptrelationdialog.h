@@ -53,7 +53,7 @@ class AddRelationDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AddRelationDialog(Relation *rel, QWidget *p, const QString& caption=QString(), ButtonCodes buttons=Ok|Cancel, const char *n=0);
+    AddRelationDialog(Relation *rel, QWidget *p, const QString& caption=QString(), ButtonCodes buttons=Ok|Cancel);
 
     virtual K3Command *buildCommand(Part *part);
     int selectedRelationType() const;
@@ -78,7 +78,7 @@ class ModifyRelationDialog : public AddRelationDialog
 {
     Q_OBJECT
 public:
-    explicit ModifyRelationDialog(Relation *rel, QWidget *p=0, const char *n=0);
+    explicit ModifyRelationDialog(Relation *rel, QWidget *p=0);
 
     virtual K3Command *buildCommand(Part *part);
     bool relationIsDeleted() { return m_deleted; }

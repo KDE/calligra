@@ -1085,7 +1085,7 @@ Project& View::getProject() const
     return getPart() ->getProject();
 }
 
-void View::setZoom( double zoom )
+void View::setZoom( double )
 {
     //TODO
 }
@@ -1506,18 +1506,8 @@ void View::slotPlugScheduleActions()
     slotViewSchedule( ca );
 }
 
-void View::slotProgressChanged( int value )
+void View::slotProgressChanged( int )
 {
-/*    if ( m_progress == 0 ) {
-        return;
-    }
-    if ( value < 0 ) {
-        disconnect( sender(), SIGNAL( sigProgress( int ) ), this, SLOT(slotProgressChanged( int ) ) );
-        m_progress->hide();
-        return;
-    }
-    m_progress->show();
-    m_progress->setValue( value );*/
 }
 
 void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
@@ -2350,7 +2340,7 @@ QWidget *View::canvas() const
     return m_tab->currentWidget();//KoView::canvas();
 }
 
-void View::slotCurrentChanged( int index )
+void View::slotCurrentChanged( int )
 {
     kDebug()<<k_funcinfo<<m_tab->currentIndex()<<endl;
     ViewListItem *item = m_viewlist->findItem( m_tab->currentWidget() );
@@ -2361,7 +2351,7 @@ void View::slotCurrentChanged( int index )
     item->setSelected( true );
 }
 
-void View::updateView( QWidget *widget )
+void View::updateView( QWidget * )
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
     //setScheduleActionsEnabled();

@@ -323,18 +323,6 @@ int ResourceItemModel::rowCount( const QModelIndex &parent ) const
     return 0;
 }
 
-bool ResourceItemModel::insertRows( int row, int count, const QModelIndex &parent )
-{
-//TODO
-    return false;
-}
-
-bool ResourceItemModel::removeRows( int row, int count, const QModelIndex &parent )
-{
-//TODO
-    return false;
-}
-
 QVariant ResourceItemModel::name( const Resource *res, int role ) const
 {
     //kDebug()<<k_funcinfo<<res->name()<<", "<<role<<endl;
@@ -735,7 +723,7 @@ bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, i
 }
 
 
-QVariant ResourceItemModel::notUsed( const ResourceGroup *res, int role ) const
+QVariant ResourceItemModel::notUsed( const ResourceGroup *, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
@@ -898,10 +886,6 @@ QVariant ResourceItemModel::headerData( int section, Qt::Orientation orientation
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-void ResourceItemModel::sort( int column, Qt::SortOrder order )
-{
-}
-
 QObject *ResourceItemModel::object( const QModelIndex &index ) const
 {
     QObject *o = 0;
@@ -912,7 +896,7 @@ QObject *ResourceItemModel::object( const QModelIndex &index ) const
     return o;
 }
 
-void ResourceItemModel::slotCalendarChanged( Calendar* cal )
+void ResourceItemModel::slotCalendarChanged( Calendar* )
 {
     foreach ( Resource *r, m_project->resourceList() ) {
         if ( r->calendar( true ) == 0 ) {
@@ -1039,11 +1023,6 @@ void ResourceTreeView::slotActivated( const QModelIndex index )
     kDebug()<<k_funcinfo<<index.column()<<endl;
 }
 
-void ResourceTreeView::headerContextMenuRequested( const QPoint &pos )
-{
-//    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at "<<pos<<endl;
-}
-
 QObject *ResourceTreeView::currentObject() const
 {
     return itemModel()->object( selectionModel()->currentIndex() );
@@ -1162,13 +1141,13 @@ ResourceGroup *ResourceEditor::currentResourceGroup() const
     return qobject_cast<ResourceGroup*>( m_view->currentObject() );
 }
 
-void ResourceEditor::slotCurrentChanged(  const QModelIndex &curr )
+void ResourceEditor::slotCurrentChanged(  const QModelIndex & )
 {
     //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
 //    slotEnableActions();
 }
 
-void ResourceEditor::slotSelectionChanged( const QModelIndexList list)
+void ResourceEditor::slotSelectionChanged( const QModelIndexList )
 {
     //kDebug()<<k_funcinfo<<list.count()<<endl;
     updateActionsEnabled();
@@ -1186,11 +1165,9 @@ void ResourceEditor::updateActionsEnabled(  bool on )
     QList<ResourceGroup*> groupList = m_view->selectedGroups();
     bool nogroup = groupList.isEmpty();
     bool group = groupList.count() == 1;
-    bool groups = groupList.count() > 1;
     QList<Resource*> resourceList = m_view->selectedResources();
     bool noresource = resourceList.isEmpty(); 
     bool resource = resourceList.count() == 1;
-    bool resources = resourceList.count() > 1;
     
     bool any = !nogroup || !noresource;
     
@@ -1201,8 +1178,6 @@ void ResourceEditor::updateActionsEnabled(  bool on )
 
 void ResourceEditor::setupGui()
 {
-    KActionCollection *coll = actionCollection();
-    
     QString name = "resourceeditor_edit_list";
     actionAddResource  = new KAction(KIcon( "document-new" ), i18n("Add Resource..."), this);
     actionCollection()->addAction("add_resource", actionAddResource );

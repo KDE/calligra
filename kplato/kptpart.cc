@@ -285,7 +285,7 @@ void Part::slotDocumentRestored()
 }
 
 
-void Part::paintContent( QPainter &painter, const QRect &rect)
+void Part::paintContent( QPainter &, const QRect &)
 {
 //    kDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
 /*    if ( isEmbedded() && m_embeddedGanttView && m_project ) {
@@ -446,7 +446,7 @@ void DocumentChild::setActivated( bool act, QWidget *w )
     }
 }
 
-KoDocument* DocumentChild::hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix )
+KoDocument* DocumentChild::hitTest( const QPoint& , KoView* view, const QMatrix& )
 {
     if ( document()->views().contains( view ) ) {
         return document();

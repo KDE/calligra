@@ -301,7 +301,7 @@ void DurationWidget::handleLostFocus(
         v = v - (tmp.toUInt() * leftScale);
         newValue = KGlobal::locale()->formatNumber(v);
     }
-    int point = newValue.find(m_decimalPoint);
+    int point = newValue.indexOf(m_decimalPoint);
     if (point != -1)
     {
         //HACK doubles may be rounded(at fractions > 6 digits on my system)
@@ -417,7 +417,7 @@ double DurationWidget::power(double m, int e) {
 }
 
 double DurationWidget::fraction(const QString& number, int *exp) {
-    int point = number.find(m_decimalPoint);
+    int point = number.indexOf(m_decimalPoint);
     if (point == -1) {
         return 0.0;
     }

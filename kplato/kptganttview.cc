@@ -55,7 +55,7 @@ namespace KPlato
 class MyKDGanttView : public KDGantt::View
 {
 public:
-    MyKDGanttView( Part *part, QWidget *parent, const char *name )
+    MyKDGanttView( Part *part, QWidget *parent )
         : KDGantt::View( parent )
     {
         KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
@@ -97,7 +97,7 @@ protected:
     NodeItemModel *m_model;
 };
 
-GanttView::GanttView( Part *part, QWidget *parent, bool readWrite, const char* name )
+GanttView::GanttView( Part *part, QWidget *parent, bool readWrite )
         : ViewBase( part, parent ),
         m_readWrite( readWrite ),
         m_taskView( 0 ),
@@ -112,7 +112,7 @@ GanttView::GanttView( Part *part, QWidget *parent, bool readWrite, const char* n
     l->addWidget( m_splitter );
     m_splitter->setOrientation( Qt::Vertical );
 
-    m_gantt = new MyKDGanttView( part, m_splitter, "Gantt view" );
+    m_gantt = new MyKDGanttView( part, m_splitter );
 
     m_showExpected = true;
     m_showOptimistic = false;
@@ -134,7 +134,7 @@ GanttView::GanttView( Part *part, QWidget *parent, bool readWrite, const char* n
 
 }
 
-void GanttView::setZoom( double zoom )
+void GanttView::setZoom( double )
 {
     //kDebug() << "setting gantt zoom: " << zoom << endl;
     //m_gantt->setZoomFactor(zoom,true); NO!!! setZoomFactor() is something else

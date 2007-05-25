@@ -28,10 +28,9 @@
 namespace KPlato
 {
 
-CalendarListDialogBase::CalendarListDialogBase( QWidget* parent, const char* name, Qt::WFlags fl )
+CalendarListDialogBase::CalendarListDialogBase( QWidget* parent )
     : QWidget(parent)
 {
-    setObjectName(name);
     setupUi(this);
     QVBoxLayout *l = new QVBoxLayout(calendarBox);
     calendar = new CalendarEdit(calendarBox);

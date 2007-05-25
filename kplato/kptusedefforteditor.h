@@ -47,7 +47,7 @@ public:
     virtual QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     virtual int columnCount( const QModelIndex &parent = QModelIndex() ) const;
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex parent(const QModelIndex &child) const { return QModelIndex(); }
+    virtual QModelIndex parent(const QModelIndex &) const { return QModelIndex(); }
     QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     
     void setCompletion( Completion *completion );

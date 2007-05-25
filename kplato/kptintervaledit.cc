@@ -34,7 +34,7 @@
 namespace KPlato
 {
 
-IntervalEdit::IntervalEdit(QWidget *parent, const char *name)
+IntervalEdit::IntervalEdit(QWidget *parent)
     : IntervalEditImpl(parent)
 {
     //kDebug()<<k_funcinfo<<endl;

@@ -760,9 +760,10 @@ Node *Node::siblingAfter() {
 Node *Node::childAfter(Node *node)
 {
     //kDebug()<<k_funcinfo<<endl;
-    uint index = m_nodes.indexOf(node);
+    int index = m_nodes.indexOf(node);
     if (index < m_nodes.count()-1) {
-        return m_nodes.at(index+1);    }
+        return m_nodes.at(index+1);
+    }
     return 0;
 }
 

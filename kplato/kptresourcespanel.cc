@@ -381,7 +381,7 @@ void ResourcesPanel::slotResourceChanged() {
 }
 
 /* Select another resource */
-void ResourcesPanel::slotCurrentChanged(QListWidgetItem *curr, QListWidgetItem* prev) {
+void ResourcesPanel::slotCurrentChanged(QListWidgetItem *curr, QListWidgetItem* ) {
     if (curr && !curr->isSelected()) {
         curr->setSelected(true);
     }
@@ -393,7 +393,6 @@ bool ResourcesPanel::ok() {
 
 K3Command *ResourcesPanel::buildCommand(Part *part) {
     K3MacroCommand *m=0;
-    GroupItem *gitem;
 
     QString cmdName = "Modify resourcegroups";
     foreach (GroupItem *gitem, m_deletedGroupItems) {
@@ -438,7 +437,7 @@ K3Command *ResourcesPanel::buildCommand(Part *part) {
     return m;
 }
 
-void ResourcesPanel::slotGroupChanged(QTreeWidgetItem *ci, int col) {
+void ResourcesPanel::slotGroupChanged(QTreeWidgetItem *ci, int) {
     if (ci == 0)
         return;
     //kDebug()<<k_funcinfo<<ci->text(0)<<", "<<col<<endl;

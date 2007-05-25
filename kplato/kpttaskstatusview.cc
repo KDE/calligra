@@ -96,25 +96,25 @@ void TaskStatusItemModel::slotReset()
     refresh();
 }
 
-void TaskStatusItemModel::slotNodeToBeInserted( Node *parent, int row )
+void TaskStatusItemModel::slotNodeToBeInserted( Node *, int )
 {
     //kDebug()<<k_funcinfo<<node->name()<<endl;
     clear();
 }
 
-void TaskStatusItemModel::slotNodeInserted( Node *node )
+void TaskStatusItemModel::slotNodeInserted( Node */*node*/ )
 {
     //kDebug()<<k_funcinfo<<node->getParent->name()<<"-->"<<node->name()<<endl;
     refresh();
 }
 
-void TaskStatusItemModel::slotNodeToBeRemoved( Node *node )
+void TaskStatusItemModel::slotNodeToBeRemoved( Node */*node*/ )
 {
     //kDebug()<<k_funcinfo<<node->name()<<endl;
     clear();
 }
 
-void TaskStatusItemModel::slotNodeRemoved( Node *node )
+void TaskStatusItemModel::slotNodeRemoved( Node */*node*/ )
 {
     //kDebug()<<k_funcinfo<<node->name()<<endl;
     refresh();
@@ -183,7 +183,6 @@ void TaskStatusItemModel::refresh()
             continue;
         }
         Task *t = static_cast<Task*>( n );
-        uint st = t->state( m_id );
         const Completion &c = t->completion();
         if ( c.isFinished() ) {
             if ( c.finishTime().date() > begin && c.finishTime().date() <= m_now ) {
@@ -531,7 +530,7 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
     return QVariant();
 }
 
-bool TaskStatusItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
+bool TaskStatusItemModel::setData( const QModelIndex &, const QVariant &, int )
 {
     return false;
 }
@@ -574,7 +573,7 @@ QVariant TaskStatusItemModel::alignment( int column ) const
     return QVariant();
 }
 
-QItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget *parent ) const
+QItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget */*parent*/ ) const
 {
     switch ( column ) {
         default: return 0;
@@ -582,7 +581,7 @@ QItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget *parent 
     return 0;
 }
 
-int TaskStatusItemModel::columnCount( const QModelIndex &parent ) const
+int TaskStatusItemModel::columnCount( const QModelIndex & ) const
 {
     return 10;
 }
@@ -633,72 +632,13 @@ QMimeData *TaskStatusItemModel::mimeData( const QModelIndexList & indexes ) cons
     return m;
 }
 
-bool TaskStatusItemModel::dropAllowed( Node *on, const QMimeData *data )
+bool TaskStatusItemModel::dropAllowed( Node *, const QMimeData * )
 {
-/*    if ( !data->hasFormat("application/x-vnd.kde.kplato.nodeitemmodel.internal") ) {
-        return false;
-    }
-    if ( on == m_project ) {
-        return true;
-    }
-    QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
-    QDataStream stream(&encodedData, QIODevice::ReadOnly);
-    NodeList lst = nodeList( stream );
-    foreach ( Node *n, lst ) {
-        if ( on == n || on->isChildOf( n ) ) {
-            return false;
-        }
-    }
-    lst = removeChildNodes( lst );
-    foreach ( Node *n, lst ) {
-        if ( ! m_project->canMoveTask( n, on ) ) {
-            return false;
-        }
-    }*/
     return false;
 }
 
-bool TaskStatusItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+bool TaskStatusItemModel::dropMimeData( const QMimeData *, Qt::DropAction , int , int , const QModelIndex & )
 {
-    kDebug()<<k_funcinfo<<action<<endl;
-/*    if (action == Qt::IgnoreAction) {
-        return true;
-    }
-    if ( !data->hasFormat( "application/x-vnd.kde.kplato.nodeitemmodel.internal" ) ) {
-        return false;
-    }
-    if ( action == Qt::MoveAction ) {
-        kDebug()<<k_funcinfo<<"MoveAction"<<endl;
-        
-        QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
-        QDataStream stream(&encodedData, QIODevice::ReadOnly);
-        Node *par = 0;
-        if ( parent.isValid() ) {
-            par = node( parent );
-        } else {
-            par = m_project;
-        }
-        NodeList lst = nodeList( stream );
-        NodeList nodes = removeChildNodes( lst ); // children goes with their parent
-        foreach ( Node *n, nodes ) {
-            if ( ! m_project->canMoveTask( n, par ) ) {
-                //kDebug()<<k_funcinfo<<"Can't move task: "<<n->name()<<endl;
-                return false;
-            }
-        }
-        int offset = 0;
-        K3MacroCommand *cmd = 0;
-        foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Move tasks" ) );
-            cmd->addCommand( new NodeMoveCmd( m_part, m_project, n, par, row + offset ) );
-            offset++;
-        }
-        if ( cmd ) {
-            m_part->addCommand( cmd );
-        }
-        //kDebug()<<k_funcinfo<<row<<", "<<column<<" parent="<<parent.row()<<", "<<parent.column()<<": "<<par->name()<<endl;
-        return true;
-    }*/
     return false;
 }
 
@@ -715,7 +655,6 @@ NodeList *TaskStatusItemModel::list( const QModelIndex &index ) const
 
 Node *TaskStatusItemModel::node( const QModelIndex &index ) const
 {
-    Node *n = m_project;
     if ( index.isValid() ) {
         foreach ( NodeList *l, m_top ) {
             int row = l->indexOf( static_cast<Node*>( index.internalPointer() ) );
@@ -727,7 +666,7 @@ Node *TaskStatusItemModel::node( const QModelIndex &index ) const
     return 0;
 }
 
-void TaskStatusItemModel::slotNodeChanged( Node *node )
+void TaskStatusItemModel::slotNodeChanged( Node *)
 {
     kDebug()<<k_funcinfo<<endl;
     refresh();
@@ -919,8 +858,6 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
 
 void TaskStatusView::setupGui()
 {
-    KActionCollection *coll = actionCollection();
-    
     QString name = "taskeditor_add_list";
     actionAddTask  = new KAction(KIcon( "add_task" ), i18n("Add Task..."), this);
     actionCollection()->addAction("add_task", actionAddTask );

@@ -229,7 +229,7 @@ QModelIndex AccountItemModel::index( const Account *account ) const
 
 }
 
-int AccountItemModel::columnCount( const QModelIndex &parent ) const
+int AccountItemModel::columnCount( const QModelIndex & ) const
 {
     return 2;
 }
@@ -244,18 +244,6 @@ int AccountItemModel::rowCount( const QModelIndex &parent ) const
         return m_project->accounts().accountList().count();
     }
     return par->accountList().count();
-}
-
-bool AccountItemModel::insertRows( int row, int count, const QModelIndex &parent )
-{
-//TODO
-    return false;
-}
-
-bool AccountItemModel::removeRows( int row, int count, const QModelIndex &parent )
-{
-//TODO
-    return false;
 }
 
 QVariant AccountItemModel::name( const Account *a, int role ) const
@@ -380,10 +368,6 @@ QVariant AccountItemModel::headerData( int section, Qt::Orientation orientation,
         }
     }
     return ItemModelBase::headerData(section, orientation, role);
-}
-
-void AccountItemModel::sort( int column, Qt::SortOrder order )
-{
 }
 
 Account *AccountItemModel::account( const QModelIndex &index ) const
@@ -617,7 +601,6 @@ void AccountsEditor::updateActionsEnabled(  bool on )
 
 void AccountsEditor::setupGui()
 {
-    KActionCollection *coll = actionCollection();
     QString name = "accountseditor_edit_list";
     
     actionAddSubAccount  = new KAction(KIcon( "document-new" ), i18n("Add Subaccount"), this);

@@ -45,7 +45,7 @@ RelationPanel::RelationPanel(QWidget *parent)
         l->addWidget(lag);
 }
     
-AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, const QString& caption, ButtonCodes buttons, const char *n)
+AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, const QString& caption, ButtonCodes buttons)
     : KDialog(p)
 {
     setCaption( caption );
@@ -57,7 +57,7 @@ AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, const QString& c
     m_relation = rel;
     m_panel = new RelationPanel(this);
     setMainWidget(m_panel);
-    m_panel->setActiveWindow();
+    m_panel->activateWindow();
 
     m_panel->fromName->setText(rel->parent()->name());
     m_panel->toName->setText(rel->child()->name());
@@ -127,8 +127,8 @@ int AddRelationDialog::selectedRelationType() const {
 
 //////////////////
 
-ModifyRelationDialog::ModifyRelationDialog(Relation *rel, QWidget *p, const char *n)
-    : AddRelationDialog(rel, p, i18n("Edit Relationship"), Ok|Cancel|User1, n)
+ModifyRelationDialog::ModifyRelationDialog(Relation *rel, QWidget *p)
+    : AddRelationDialog(rel, p, i18n("Edit Relationship"), Ok|Cancel|User1)
 {
     setButtonText( KDialog::User1, i18n("Delete") );
     m_deleted = false;

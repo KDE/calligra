@@ -37,7 +37,7 @@ class CalendarListDialogBase : public QWidget, public Ui_CalendarListPanel
 {
     Q_OBJECT
 public:
-    explicit CalendarListDialogBase( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+    explicit CalendarListDialogBase( QWidget* parent = 0 );
 
     CalendarEdit* calendar;
 

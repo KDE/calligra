@@ -48,7 +48,7 @@
 namespace KPlato
 {
 
-CalendarEdit::CalendarEdit (QWidget *parent, const char */*name*/)
+CalendarEdit::CalendarEdit (QWidget *parent)
     : CalendarEditBase(parent),
       m_calendar(0),
       m_changed( false )
@@ -322,7 +322,7 @@ void CalendarEdit::slotSelectionCleared() {
 }
 
 //----------------------------------------------------
-CalendarEditDialog::CalendarEditDialog(Project &p, Calendar *cal, QWidget *parent, const char *name)
+CalendarEditDialog::CalendarEditDialog(Project &p, Calendar *cal, QWidget *parent)
     : KDialog( parent),
       project(p),
       original( cal ),

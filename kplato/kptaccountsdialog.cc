@@ -26,7 +26,7 @@
 namespace KPlato
 {
 
-AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p, const char *n)
+AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p)
     : KDialog(p)
 {
     setCaption( i18n("Edit Accounts") );

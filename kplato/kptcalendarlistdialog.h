@@ -87,7 +87,7 @@ private:
 class CalendarListDialog : public KDialog {
     Q_OBJECT
 public:
-    explicit CalendarListDialog(Project &project, QWidget *parent=0, const char *name=0);
+    explicit CalendarListDialog(Project &project, QWidget *parent=0);
     
     K3Command *buildCommand(Part *part);
 

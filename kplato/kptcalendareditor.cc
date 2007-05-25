@@ -135,7 +135,7 @@ void CalendarItemModel::slotCalendarToBeRemoved( const Calendar *calendar )
     beginRemoveRows( index( calendar->parentCal() ), row, row );
 }
 
-void CalendarItemModel::slotCalendarRemoved( const Calendar *calendar )
+void CalendarItemModel::slotCalendarRemoved( const Calendar * )
 {
     //kDebug()<<k_funcinfo<<calendar->name()<<endl;
     endRemoveRows();
@@ -272,7 +272,7 @@ QModelIndex CalendarItemModel::index( const Calendar *calendar) const
 
 }
 
-int CalendarItemModel::columnCount( const QModelIndex &parent ) const
+int CalendarItemModel::columnCount( const QModelIndex & ) const
 {
     return 2;
 }
@@ -287,18 +287,6 @@ int CalendarItemModel::rowCount( const QModelIndex &parent ) const
         return m_project->calendars().count();
     }
     return par->calendars().count();
-}
-
-bool CalendarItemModel::insertRows( int row, int count, const QModelIndex &parent )
-{
-//TODO
-    return false;
-}
-
-bool CalendarItemModel::removeRows( int row, int count, const QModelIndex &parent )
-{
-//TODO
-    return false;
 }
 
 QVariant CalendarItemModel::name( const Calendar *a, int role ) const
@@ -445,7 +433,7 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-void CalendarItemModel::sort( int column, Qt::SortOrder order )
+void CalendarItemModel::sort( int , Qt::SortOrder  )
 {
 }
 
@@ -496,7 +484,7 @@ QMimeData *CalendarItemModel::mimeData( const QModelIndexList & indexes ) const
     return m;
 }
 
-bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int /*row*/, int /*column*/, const QModelIndex &parent )
 {
     kDebug()<<k_funcinfo<<action<<endl;
     if (action == Qt::IgnoreAction) {
@@ -622,7 +610,7 @@ CalendarDayItemModel::~CalendarDayItemModel()
 {
 }
 
-void CalendarDayItemModel::slotDayToBeAdded( CalendarDay *day, int row )
+void CalendarDayItemModel::slotDayToBeAdded( CalendarDay *, int row )
 {
     // only dates, weekdays are not added
     beginInsertRows( createIndex( 1, 0, typeDate ), row, row );
@@ -643,13 +631,13 @@ void CalendarDayItemModel::slotDayToBeRemoved( CalendarDay *day )
     //kDebug()<<k_funcinfo<<day->date()<<", "<<row<<endl;
 }
 
-void CalendarDayItemModel::slotDayRemoved( CalendarDay *day )
+void CalendarDayItemModel::slotDayRemoved( CalendarDay * )
 {
     //kDebug()<<k_funcinfo<<day->date()<<endl;
     endRemoveRows();
 }
 
-void CalendarDayItemModel::slotWorkIntervalToBeAdded( CalendarDay *day, TimeInterval *ti, int row )
+void CalendarDayItemModel::slotWorkIntervalToBeAdded( CalendarDay *day, TimeInterval *, int row )
 {
     int r = m_calendar->indexOfWeekday( day );
     if ( r == -1 ) {
@@ -1093,7 +1081,6 @@ bool CalendarDayItemModel::setIntervalStart( TimeInterval *ti, const QVariant &v
             if ( start > t.second ) {
                 t.second = start;
             }
-            CalendarDay *d = parentDay( ti );
             m_part->addCommand( new CalendarModifyTimeIntervalCmd( m_part, m_calendar, t, ti,  "Modify Calendar Working Interval" ) );
             return true;
         }
@@ -1144,7 +1131,6 @@ bool CalendarDayItemModel::setIntervalEnd( TimeInterval *ti, const QVariant &val
             if ( end < t.first ) {
                 t.first = end;
             }
-            CalendarDay *d = parentDay( ti );
             m_part->addCommand( new CalendarModifyTimeIntervalCmd( m_part, m_calendar, t, ti,  "Modify Calendar Working Interval" ) );
             return true;
         }
@@ -1313,7 +1299,7 @@ QVariant CalendarDayItemModel::headerData( int section, Qt::Orientation orientat
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-void CalendarDayItemModel::sort( int column, Qt::SortOrder order )
+void CalendarDayItemModel::sort( int , Qt::SortOrder  )
 {
 }
 
@@ -1777,24 +1763,24 @@ Calendar *CalendarEditor::currentCalendar() const
     return m_calendarview->currentCalendar();
 }
 
-void CalendarEditor::slotCurrentCalendarChanged(  const QModelIndex &curr )
+void CalendarEditor::slotCurrentCalendarChanged(  const QModelIndex & )
 {
     //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
     m_dayview->setCurrentCalendar( currentCalendar() );
 }
 
-void CalendarEditor::slotCalendarSelectionChanged( const QModelIndexList list)
+void CalendarEditor::slotCalendarSelectionChanged( const QModelIndexList )
 {
     //kDebug()<<k_funcinfo<<list.count()<<endl;
     updateActionsEnabled( true );
 }
 
-void CalendarEditor::slotCurrentDayChanged(  const QModelIndex &curr )
+void CalendarEditor::slotCurrentDayChanged(  const QModelIndex & )
 {
     //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
 }
 
-void CalendarEditor::slotDaySelectionChanged( const QModelIndexList list)
+void CalendarEditor::slotDaySelectionChanged( const QModelIndexList )
 {
     //kDebug()<<k_funcinfo<<list.count()<<endl;
     updateActionsEnabled( true );

@@ -88,7 +88,7 @@ public:
     int weekday;
 };
 
-StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, const char *name)
+StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
     : KDialog(parent),
       project(p)
 {

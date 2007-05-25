@@ -569,7 +569,7 @@ void TreeViewBase::contextMenuEvent ( QContextMenuEvent *event )
     emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
-void TreeViewBase::slotCurrentChanged( const QModelIndex &current, const QModelIndex &prev )
+void TreeViewBase::slotCurrentChanged( const QModelIndex &current, const QModelIndex & )
 {
     if ( current.isValid() ) {
         scrollTo( current );

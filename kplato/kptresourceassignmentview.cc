@@ -179,8 +179,8 @@ void ResourceAssignmentView::updateTasks()
 {
     Q_ASSERT(m_selectedItem);
     /*Find Selected Item*/
-    Resource* ItemRes;
-    ResourceGroup* ItemGrp;
+    Resource* ItemRes = 0;
+    ResourceGroup* ItemGrp = 0;
 
     QString name = m_selectedItem->text(0);
     QString type = m_selectedItem->text(1);

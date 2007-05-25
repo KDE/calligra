@@ -167,7 +167,7 @@ void AccountsPanel::refreshDefaultAccount() {
     //kDebug()<<k_funcinfo<<"size="<<accountsComboBox->count()<<endl;
 }
 
-void AccountsPanel::slotItemChanged(QTreeWidgetItem* item, int col) {
+void AccountsPanel::slotItemChanged(QTreeWidgetItem*, int ) {
     //kDebug()<<k_funcinfo<<item->text(0)<<", "<<col<<endl;
     emit changed(true);
 }

@@ -174,7 +174,7 @@ int WBSDefinition::defaultCodeIndex() const {
 }
 
 bool WBSDefinition::setDefaultCode(uint index) {
-    if (index >= m_codeLists.size()) {
+    if ((int)index >= m_codeLists.size()) {
         return false;
     }
     m_defaultDef.code = m_codeLists[index].first;

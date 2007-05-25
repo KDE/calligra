@@ -145,7 +145,7 @@ bool GroupLVItem::isNull() const {
     return true;
 }
 
-RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool baseline)
+RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool)
     : TaskResourcesPanelBase(parent),
       m_task(task),
       m_worktime(0),

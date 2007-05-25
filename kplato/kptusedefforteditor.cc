@@ -147,7 +147,7 @@ int UsedEffortItemModel::columnCount(const QModelIndex & parent ) const
     return c;
 }
 
-int UsedEffortItemModel::rowCount(const QModelIndex & parent ) const
+int UsedEffortItemModel::rowCount(const QModelIndex & ) const
 {
     int rows = 0;
     if ( m_completion ) {

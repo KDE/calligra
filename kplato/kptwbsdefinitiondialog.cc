@@ -29,7 +29,7 @@
 namespace KPlato
 {
 
-WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p, const char *n)
+WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p)
     : KDialog(p)
 {
     setCaption( i18n("WBS Definition") );

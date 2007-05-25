@@ -172,7 +172,7 @@ private:
 };
 
 //----------------------------------------------------
-CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *name)
+CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent)
     : KDialog( parent),
       project(p)
 {
@@ -282,7 +282,7 @@ void CalendarListDialogImpl::setBaseCalendars() {
     }
 }
 
-void CalendarListDialogImpl::slotItemChanged(QTreeWidgetItem *ci, int col) {
+void CalendarListDialogImpl::slotItemChanged(QTreeWidgetItem *ci, int) {
     if (ci == 0)
         return;
     //kDebug()<<k_funcinfo<<ci->text(0)<<", "<<col<<endl;

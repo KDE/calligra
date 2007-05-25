@@ -100,37 +100,20 @@ void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manag
     m_manager = 0;
 }
 
-void ScheduleItemModel::slotScheduleToBeInserted( const ScheduleManager *manager, int row )
+void ScheduleItemModel::slotScheduleToBeInserted( const ScheduleManager *, int /*row*/ )
 {
-    //kDebug()<<k_funcinfo<<manager->name()<<" row="<<row<<endl;
-/*    Q_ASSERT( m_manager == 0 );
-    m_manager = const_cast<ScheduleManager*>(manager);
-    beginInsertRows( index( manager ), row, row );*/
 }
 
-void ScheduleItemModel::slotScheduleInserted( const MainSchedule *schedule )
+void ScheduleItemModel::slotScheduleInserted( const MainSchedule * )
 {
-    //kDebug()<<k_funcinfo<<schedule<<"<--"<<schedule->manager()<<endl;
-/*    Q_ASSERT( schedule->manager() == m_manager );
-    endInsertRows();
-    m_manager = 0;*/
 }
 
-void ScheduleItemModel::slotScheduleToBeRemoved( const MainSchedule *schedule )
+void ScheduleItemModel::slotScheduleToBeRemoved( const MainSchedule * )
 {
-/*    Q_ASSERT( m_manager == 0 );
-    m_manager = const_cast<ScheduleManager*>(schedule->manager());
-    int row = index( schedule ).row();
-    //kDebug()<<k_funcinfo<<schedule->name()<<", "<<row<<" man="<<index( schedule->manager() ).row()<<endl;
-    beginRemoveRows( index( schedule->manager() ), row, row );*/
 }
 
-void ScheduleItemModel::slotScheduleRemoved( const MainSchedule *schedule )
+void ScheduleItemModel::slotScheduleRemoved( const MainSchedule * )
 {
-    //kDebug()<<k_funcinfo<<schedule->name()<<endl;
-/*    Q_ASSERT( schedule->manager() == m_manager );
-    endRemoveRows();
-    m_manager = 0;*/
 }
 
 void ScheduleItemModel::setProject( Project *project )
@@ -188,14 +171,8 @@ void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
 }
 
 
-void ScheduleItemModel::slotScheduleChanged( MainSchedule *sch )
+void ScheduleItemModel::slotScheduleChanged( MainSchedule * )
 {
-/*    if ( sch == 0 ) {
-        return;
-    }
-    int r = sch->manager()->indexOf( sch );
-    //kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
-    emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );*/
 }
 
 
@@ -344,7 +321,7 @@ QVariant ScheduleItemModel::state( const QModelIndex &index, int role ) const
     return QVariant();
 }
 
-bool ScheduleItemModel::setState( const QModelIndex &index, const QVariant &value, int role )
+bool ScheduleItemModel::setState( const QModelIndex &, const QVariant &, int role )
 {
     switch ( role ) {
         case Qt::EditRole:
@@ -611,7 +588,7 @@ void ScheduleItemModel::sort( int column, Qt::SortOrder order )
 {
 }
 
-QMimeData * ScheduleItemModel::mimeData( const QModelIndexList &indexes ) const
+QMimeData * ScheduleItemModel::mimeData( const QModelIndexList & ) const
 {
     return 0;
 }
@@ -747,7 +724,7 @@ void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
     emit requestPopupMenu( name, pos );*/
 }
 
-void ScheduleEditor::slotCurrentChanged(  const QModelIndex &curr )
+void ScheduleEditor::slotCurrentChanged(  const QModelIndex & )
 {
     //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
 }
@@ -775,7 +752,6 @@ void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
 
 void ScheduleEditor::setupGui()
 {
-    KActionCollection *coll = actionCollection();
     QString name = "scheduleeditor_edit_list";
     
     actionCalculateSchedule  = new KAction(KIcon( "project_calculate" ), i18n("Calculate Schedule..."), this);

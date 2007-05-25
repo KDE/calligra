@@ -278,13 +278,13 @@ void TaskProgressPanelImpl::enableWidgets() {
 }
 
 
-void TaskProgressPanelImpl::slotPercentFinishedChanged( int value ) {
+void TaskProgressPanelImpl::slotPercentFinishedChanged( int ) {
     slotCalculateEffort();
 }
 
 void TaskProgressPanelImpl::slotCalculateEffort()
 {
-    remainingEffort->setValue(scheduledEffort * ( 100.0 - (double)percentFinished->value() ) / 100.0 );
+    remainingEffort->setValue(scheduledEffort * (int)( ( 100.0 - (double)percentFinished->value() ) / 100.0 ) );
     actualEffort->setValue( scheduledEffort - remainingEffort->value() );
 }
 

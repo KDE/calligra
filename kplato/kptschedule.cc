@@ -173,7 +173,7 @@ void Schedule::setScheduled( bool on )
     changed( this );
 }
 
-TimeInterval Schedule::available( const DateTime &date, const TimeInterval &interval ) const
+TimeInterval Schedule::available( const DateTime &, const TimeInterval &interval ) const
 {
     return TimeInterval( interval.first, interval.second );
 }

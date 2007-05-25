@@ -96,7 +96,6 @@ void DependencyLinkItemBase::createPath( const QPointF &sp, int starttype, const
         return;
     }
     qreal hgap = itemScene()->horizontalGap();
-    qreal vgap = itemScene()->verticalGap();
     
     bool up = sp.y() > ep.y();
     bool right = sp.x() < ep.x();
@@ -240,6 +239,8 @@ void DependencyLinkItem::createPath()
         case Relation::FinishFinish:
             stype = DependencyNodeItem::Finish; etype = DependencyNodeItem::Finish;
             break;
+        default:
+            break;
     }
     DependencyLinkItemBase::createPath( sp, stype, ep, etype );
 }
@@ -260,7 +261,7 @@ QPointF DependencyLinkItem::endPoint() const
     return succItem->connectorPoint( DependencyNodeItem::Start );
 }
 
-void DependencyLinkItem::hoverEnterEvent( QGraphicsSceneHoverEvent *event )
+void DependencyLinkItem::hoverEnterEvent( QGraphicsSceneHoverEvent */*event*/ )
 {
     //kDebug()<<k_funcinfo<<endl;
     setZValue( zValue() + 1 );
@@ -270,7 +271,7 @@ void DependencyLinkItem::hoverEnterEvent( QGraphicsSceneHoverEvent *event )
     update();
 }
 
-void DependencyLinkItem::hoverLeaveEvent( QGraphicsSceneHoverEvent *event )
+void DependencyLinkItem::hoverLeaveEvent( QGraphicsSceneHoverEvent */*event*/ )
 {
     setZValue( zValue() - 1 );
     setPen( m_pen );
@@ -353,9 +354,6 @@ void DependencyCreatorItem::createPath( const QPointF &ep )
         return;
     }
     QPointF sp = predConnector->connectorPoint();
-    bool up = sp.y() > ep.y();
-    qreal hgap = itemScene()->horizontalGap();
-    qreal vgap = itemScene()->verticalGap();
     
     QPainterPath link( sp );
     link.lineTo( ep );
@@ -400,13 +398,13 @@ QPointF DependencyConnectorItem::connectorPoint() const
     return QPointF( r.x()+r.width(), r.y() + r.height()/2 );
 }
 
-void DependencyConnectorItem::hoverEnterEvent( QGraphicsSceneHoverEvent *event )
+void DependencyConnectorItem::hoverEnterEvent( QGraphicsSceneHoverEvent */*event*/ )
 {
     //kDebug()<<k_funcinfo<<endl;
     itemScene()->connectorEntered( this, true );
 }
 
-void DependencyConnectorItem::hoverLeaveEvent( QGraphicsSceneHoverEvent *event )
+void DependencyConnectorItem::hoverLeaveEvent( QGraphicsSceneHoverEvent */*event*/ )
 {
     //kDebug()<<k_funcinfo<<endl;
     itemScene()->connectorEntered( this, false );
@@ -1118,7 +1116,7 @@ void DependencyView::slotNodeChanged( Node *node )
     } else kDebug()<<k_funcinfo<<"Node does not exist!"<<endl;
 }
 
-void DependencyView::setItemExpanded( int x, bool mode )
+void DependencyView::setItemExpanded( int , bool )
 {
 }
 
@@ -1132,12 +1130,6 @@ void DependencyView::createItems()
     createItems( m_project );
 
     createLinks();
-    QList<QGraphicsItem*> lst = itemScene()->itemList( DependencyLinkItem::Type );
-    //kDebug()<<k_funcinfo<<"No of links: "<<lst.count()<<endl;
-    foreach( QGraphicsItem *i, lst ) {
-        DependencyLinkItem *dep = static_cast<DependencyLinkItem*>(i);
-        //kDebug()<<k_funcinfo<<dep->predItem->text()<<" -> "<<dep->succItem->text()<<" visible="<<dep->isVisible()<<endl;
-    }
 }
 
 DependencyNodeItem *DependencyView::createItem( Node *node )
@@ -1244,13 +1236,13 @@ void DependencyEditor::setGuiActive( bool activate )
     }*/
 }
 
-void DependencyEditor::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
+void DependencyEditor::slotCurrentChanged(  const QModelIndex &, const QModelIndex & )
 {
     //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
     slotEnableActions();
 }
 
-void DependencyEditor::slotSelectionChanged(  QList<QGraphicsItem*> lst )
+void DependencyEditor::slotSelectionChanged(  QList<QGraphicsItem*> )
 {
     //kDebug()<<k_funcinfo<<lst.count()<<endl;
     slotEnableActions();
@@ -1352,7 +1344,6 @@ void DependencyEditor::updateActionsEnabled( bool on )
     actionDeleteTask->setEnabled( on && p && selectedNodeCount() > 0 );
     
     o = ( on && p && selectedNodeCount() == 1 );
-    Node *n = selectedNode();
     
     actionAddSubtask->setEnabled( o );
 }
@@ -1363,22 +1354,22 @@ void DependencyEditor::setupGui()
     
     QString name = "taskeditor_add_list";
     actionAddTask  = new KAction(KIcon( "add_task" ), i18n("Add Task..."), this);
-    actionCollection()->addAction("add_task", actionAddTask );
+    coll->addAction("add_task", actionAddTask );
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, actionAddTask );
     
     actionAddSubtask  = new KAction(KIcon( "add_sub_task" ), i18n("Add Sub-Task..."), this);
-    actionCollection()->addAction("add_sub_task", actionAddSubtask );
+    coll->addAction("add_sub_task", actionAddSubtask );
     connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, actionAddSubtask );
     
     actionAddMilestone  = new KAction(KIcon( "add_milestone" ), i18n("Add Milestone..."), this);
-    actionCollection()->addAction("add_milestone", actionAddMilestone );
+    coll->addAction("add_milestone", actionAddMilestone );
     connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
     addAction( name, actionAddMilestone );
     
     actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
-    actionCollection()->addAction("delete_task", actionDeleteTask );
+    coll->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
     addAction( name, actionDeleteTask );
 }

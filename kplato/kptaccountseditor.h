@@ -62,16 +62,12 @@ public:
 
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
-    virtual bool insertRows( int row, int count, const QModelIndex & parent = QModelIndex() );
-    virtual bool removeRows( int row, int count, const QModelIndex & parent = QModelIndex() );
 
     virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
     virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
 
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-
-    virtual void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
 
     Account *account( const QModelIndex &index ) const;
     QModelIndex insertAccount( Account *account, Account *parent = 0 );

@@ -130,6 +130,8 @@ void Relation::save(QDomElement &element) const {
         case StartStart:
             type = "Start-Start";
             break;
+        default:
+            break;
     }
     me.setAttribute("type", type);
     me.setAttribute("lag", m_lag.toString());

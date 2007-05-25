@@ -35,7 +35,7 @@ class Part;
 class ResourcesDialog : public KDialog {
     Q_OBJECT
 public:
-    explicit ResourcesDialog(Project &project, QWidget *parent=0, const char *name=0);
+    explicit ResourcesDialog(Project &project, QWidget *parent=0);
 
     K3Command *buildCommand(Part *part);
     

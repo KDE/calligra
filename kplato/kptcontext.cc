@@ -43,7 +43,7 @@ bool Context::load(QDomElement &element) {
     actionViewPessimistic = element.attribute("view-pessimistic").toInt();
 
     QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
+    for (int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "gantt-view") {
@@ -60,12 +60,12 @@ bool Context::load(QDomElement &element) {
                 ganttview.showNoInformation = e.attribute("show-noinformation").toInt();
 
                 QDomNodeList list = e.childNodes();
-                for (unsigned int i=0; i<list.count(); ++i) {
+                for (int i=0; i<list.count(); ++i) {
                     if (list.item(i).isElement()) {
                         QDomElement g = list.item(i).toElement();
                         if (g.tagName() == "closed-nodes") {
                             QDomNodeList list = g.childNodes();
-                            for (unsigned int i=0; i<list.count(); ++i) {
+                            for (int i=0; i<list.count(); ++i) {
                                 if (list.item(i).isElement()) {
                                     QDomElement ei = list.item(i).toElement();
                                     if (ei.tagName() == "node") {
@@ -84,12 +84,12 @@ bool Context::load(QDomElement &element) {
                 accountsview.cumulative = e.attribute("cumulative").toInt();
 
                 QDomNodeList list = e.childNodes();
-                for (unsigned int i=0; i<list.count(); ++i) {
+                for (int i=0; i<list.count(); ++i) {
                     if (list.item(i).isElement()) {
                         QDomElement g = list.item(i).toElement();
                         if (g.tagName() == "closed-items") {
                             QDomNodeList list = g.childNodes();
-                            for (unsigned int i=0; i<list.count(); ++i) {
+                            for (int i=0; i<list.count(); ++i) {
                                 if (list.item(i).isElement()) {
                                     QDomElement ei = list.item(i).toElement();
                                     if (ei.tagName() == "account") {

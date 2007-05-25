@@ -693,7 +693,6 @@ DateTime Task::calculateForward(int use) {
         return DateTime();
     }
     Schedule *cs = m_currentSchedule;
-    bool pert = cs->usePert();
     cs->setCalculationMode( Schedule::CalculateForward );
     // calculate all predecessors
     if (!dependParentNodes().isEmpty()) {
@@ -904,7 +903,6 @@ DateTime Task::calculateBackward(int use) {
     }
     Schedule *cs = m_currentSchedule;
     cs->setCalculationMode( Schedule::CalculateBackward );
-    bool pert = cs->usePert();
     // calculate all successors
     if (!dependChildNodes().isEmpty()) {
         DateTime time = calculateSuccessors(dependChildNodes(), use);
@@ -1100,7 +1098,6 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     }
     Schedule *cs = m_currentSchedule;
     cs->setCalculationMode( Schedule::Scheduling );
-    bool pert = cs->usePert();
     cs->startTime = earliest > cs->earlyStart ? earliest : cs->earlyStart;
     // First, calculate all my own predecessors
     DateTime time = schedulePredeccessors(dependParentNodes(), use);
@@ -1356,7 +1353,6 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
     }
     Schedule *cs = m_currentSchedule;
     cs->setCalculationMode( Schedule::Scheduling );
-    bool pert = cs->usePert();
     cs->endTime = latest < cs->lateFinish ? latest : cs->lateFinish;
     // First, calculate all my own successors
     DateTime time = scheduleSuccessors(dependChildNodes(), use);
@@ -2195,7 +2191,7 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
         }
     } else {
         QDomNodeList list = element.childNodes();
-        for (unsigned int i=0; i<list.count(); ++i) {
+        for ( int i=0; i<list.count(); ++i) {
             if (list.item(i).isElement()) {
                 QDomElement e = list.item(i).toElement();
                 if (e.tagName() == "completion-entry") {
@@ -2212,7 +2208,7 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                     addEntry( date, entry );
                 } else if (e.tagName() == "used-effort") {
                     QDomNodeList list = e.childNodes();
-                    for (unsigned int n=0; n<list.count(); ++n) {
+                    for (int n=0; n<list.count(); ++n) {
                         if (list.item(n).isElement()) {
                             QDomElement el = list.item(n).toElement();
                             if (el.tagName() == "resource") {
@@ -2314,7 +2310,7 @@ bool Completion::UsedEffort::loadXML(KoXmlElement &element, XMLLoaderObject & )
 {
     //kDebug()<<k_funcinfo<<endl;
     QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
+    for (int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "actual-effort") {

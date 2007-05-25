@@ -253,20 +253,6 @@ QModelIndex NodeItemModel::index( const Node *node ) const
     return QModelIndex();
 }
 
-bool NodeItemModel::insertRows( int row, int count, const QModelIndex &parent )
-{
-    //TODO
-    kDebug()<<k_funcinfo<<endl;
-    return true;
-}
-
-bool NodeItemModel::removeRows( int row, int count, const QModelIndex &parent )
-{
-    //TODO
-    kDebug()<<k_funcinfo<<endl;
-    return true;
-}
-    
 QVariant NodeItemModel::name( const Node *node, int role ) const
 {
     switch ( role ) {
@@ -1220,7 +1206,7 @@ QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) cons
     return 0;
 }
 
-int NodeItemModel::columnCount( const QModelIndex &parent ) const
+int NodeItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
     return 20;
 }
@@ -1229,10 +1215,6 @@ int NodeItemModel::rowCount( const QModelIndex &parent ) const
 {
     Node *p = node( parent );
     return p->numChildren();
-}
-
-void NodeItemModel::sort( int column, Qt::SortOrder order )
-{
 }
 
 Qt::DropActions NodeItemModel::supportedDropActions() const
@@ -1358,7 +1340,7 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
     return lst;
 }
 
-bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
     //kDebug()<<k_funcinfo<<action<<endl;
     if (action == Qt::IgnoreAction) {

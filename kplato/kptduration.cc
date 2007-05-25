@@ -130,7 +130,6 @@ QString Duration::toString(Format format) const {
     unsigned hours;
     unsigned minutes;
     unsigned seconds;
-    double f;
     QString result;
 
     switch (format) {
@@ -204,7 +203,7 @@ Duration::Duration Duration::fromString(const QString &s, Format format, bool *o
     switch (format) {
         case Format_Hour: {
             matcher.setPattern("^(\\d*)h(\\d*)m$" );
-            int pos = matcher.search(s);
+            int pos = matcher.indexIn(s);
             if (pos > -1) {
                 tmp.addHours(matcher.cap(1).toUInt());
                 tmp.addMinutes(matcher.cap(2).toUInt());
@@ -214,7 +213,7 @@ Duration::Duration Duration::fromString(const QString &s, Format format, bool *o
         }
         case Format_DayTime: {
             matcher.setPattern("^(\\d*) (\\d*):(\\d*):(\\d*)\\.(\\d*)$" );
-            int pos = matcher.search(s);
+            int pos = matcher.indexIn(s);
             if (pos > -1) {
                 tmp.addDays(matcher.cap(1).toUInt());
                 tmp.addHours(matcher.cap(2).toUInt());

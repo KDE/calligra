@@ -40,7 +40,7 @@ class Project;
 class CalendarEdit : public CalendarEditBase {
     Q_OBJECT
 public:
-    explicit CalendarEdit (QWidget *parent=0, const char *name=0);
+    explicit CalendarEdit (QWidget *parent=0);
 
     Calendar *getCalendar() { return m_calendar; }
     void setCalendar(Calendar *cal, const QString &tz, bool disable);
@@ -76,7 +76,7 @@ class CalendarEditDialog : public KDialog
 {
     Q_OBJECT
 public:
-    CalendarEditDialog(Project &project, Calendar *calendar, QWidget *parent=0, const char *name=0);
+    CalendarEditDialog(Project &project, Calendar *calendar, QWidget *parent=0);
     ~CalendarEditDialog();
     
     K3Command *buildCommand(Part *part);

@@ -73,7 +73,7 @@ private:
 class StandardWorktimeDialog : public KDialog {
     Q_OBJECT
 public:
-    explicit StandardWorktimeDialog(Project &project, QWidget *parent=0, const char *name=0);
+    explicit StandardWorktimeDialog(Project &project, QWidget *parent=0);
     
     K3MacroCommand *buildCommand(Part *part);
 
