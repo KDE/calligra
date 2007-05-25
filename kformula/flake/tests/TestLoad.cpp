@@ -43,6 +43,7 @@
 #include "BracketElement.h"
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
+#include "UnderOverElement.h"
 
 static void load(BasicElement* element, const QString& input)
 {
@@ -522,6 +523,47 @@ void TestLoad::subsupElement_data()
     addRow( "<msubsup superscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi><mi>z</mi></msubsup>", 3, 6 );
 }
 
+void TestLoad::underElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<munder><mrow></mrow><mrow></mrow></munder>", 2 );
+    addRow( "<munder><mi>x</mi><mi>y</mi></munder>", 2, 4 );
+    addRow( "<munder><mrow><mi>x</mi></mrow><mi>y</mi></munder>", 2, 4 );
+    addRow( "<munder><mi>x</mi><mrow><mi>y</mi></mrow></munder>", 2, 4 );
+    addRow( "<munder><mrow><mi>x</mi></mrow><mrow><mi>y</mi></mrow></munder>", 2, 4 );
+
+    // More complex content
+    addRow( "<munder accentunder=\"true\">"
+            " <mrow>"
+            "  <mi> x </mi>"
+            "  <mo> + </mo>"
+            "  <mi> y </mi>"
+            "  <mo> + </mo>"
+            "  <mi> z </mi>"
+            " </mrow>"
+            " <mo> &UnderBrace; </mo>"
+            "</munder>", 2, 8);
+
+    addRow( "<munder accentunder=\"false\">"
+            " <mrow>"
+            "  <mi> x </mi>"
+            "  <mo> + </mo>"
+            "  <mi> y </mi>"
+            "  <mo> + </mo>"
+            "  <mi> z </mi>"
+            " </mrow>"
+            " <mo> &UnderBrace; </mo>"
+            "</munder>", 2, 8 );
+
+    // Be sure attributes don't break anything
+    addRow( "<munder accentunder=\"true\"><mi>x</mi><mi>y</mi></munder>", 2, 4 );
+    addRow( "<munder accentunder=\"false\"><mi>x</mi><mi>y</mi></munder>", 2, 4 );
+}
+
 void TestLoad::identifierElement()
 {
     test( new IdentifierElement );
@@ -615,6 +657,11 @@ void TestLoad::supElement()
 void TestLoad::subsupElement()
 {
     test( new MultiscriptElement );
+}
+
+void TestLoad::underElement()
+{
+    test( new UnderOverElement );
 }
 
 QTEST_MAIN(TestLoad)

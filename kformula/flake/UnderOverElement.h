@@ -22,12 +22,13 @@
 #define UNDEROVERELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 
 /**
  * @short Implementation of the MathML mover, munder and moverunder elements
  *
  */
-class UnderOverElement : public BasicElement {
+class KOFORMULA_EXPORT UnderOverElement : public BasicElement {
 public:
     /// The standard constructor
     UnderOverElement( BasicElement* parent = 0 );
