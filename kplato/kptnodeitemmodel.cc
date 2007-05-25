@@ -86,7 +86,7 @@ void NodeItemModel::slotNodeInserted( Node *node )
 
 void NodeItemModel::slotNodeToBeRemoved( Node *node )
 {
-    kDebug()<<k_funcinfo<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<node->name()<<endl;
     Q_ASSERT( m_node == 0 );
     m_node = node;
     int row = index( node ).row();
@@ -225,12 +225,12 @@ bool NodeItemModel::hasChildren( const QModelIndex &parent ) const
 QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
-        kDebug()<<k_funcinfo<<"No index for "<<row<<", "<<column<<endl;
+        //kDebug()<<k_funcinfo<<"No index for "<<row<<", "<<column<<endl;
         return QModelIndex();
     }
     Node *p = node( parent );
     if ( row >= p->numChildren() ) {
-        kDebug()<<k_funcinfo<<p->name()<<" row too high "<<row<<", "<<column<<endl;
+        //kDebug()<<k_funcinfo<<p->name()<<" row too high "<<row<<", "<<column<<endl;
         return QModelIndex();
     }
     // now get the internal pointer for the index
@@ -246,10 +246,10 @@ QModelIndex NodeItemModel::index( const Node *node ) const
     }
     Node *par = node->parentNode();
     if ( par ) {
-        kDebug()<<k_funcinfo<<par<<"-->"<<node<<endl;
+        //kDebug()<<k_funcinfo<<par<<"-->"<<node<<endl;
         return createIndex( par->indexOf( node ), 0, const_cast<Node*>(node) );
     }
-    kDebug()<<k_funcinfo<<node<<endl;
+    //kDebug()<<k_funcinfo<<node<<endl;
     return QModelIndex();
 }
 
@@ -423,7 +423,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     }
                     if ( cmd == 0 ) cmd = new K3MacroCommand( c );
                     cmd->addCommand( new AddResourceRequestCmd( m_part, g, new ResourceRequest( r, 100 ) ) );
-                    kDebug()<<k_funcinfo<<"add request: "<<r->name()<<" group: "<<g<<endl;
+                    //kDebug()<<k_funcinfo<<"add request: "<<r->name()<<" group: "<<g<<endl;
                 }
             }
             if ( cmd ) {
@@ -472,7 +472,7 @@ bool NodeItemModel::setDescription( Node *node, const QVariant &value, int role 
 
 QVariant NodeItemModel::type( const Node *node, int role ) const
 {
-    kDebug()<<k_funcinfo<<node->name()<<", "<<role<<endl;
+    //kDebug()<<k_funcinfo<<node->name()<<", "<<role<<endl;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -527,7 +527,7 @@ bool NodeItemModel::setConstraint( Node *node, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
             Node::ConstraintType v = Node::ConstraintType( value.toInt() );
-            kDebug()<<k_funcinfo<<v<<endl;
+            //kDebug()<<k_funcinfo<<v<<endl;
             if ( v == node->constraint() ) {
                 return false;
             }
@@ -856,7 +856,7 @@ bool NodeItemModel::setRunningAccount( Node *node, const QVariant &value, int ro
 {
     switch ( role ) {
         case Qt::EditRole:
-            kDebug()<<k_funcinfo<<node->name()<<endl;
+            //kDebug()<<k_funcinfo<<node->name()<<endl;
             QStringList lst = runningAccount( node, Role::EnumList ).toStringList();
             if ( value.toInt() >= lst.count() ) {
                 return false;
@@ -878,7 +878,7 @@ QVariant NodeItemModel::startupAccount( const Node *node, int role ) const
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
                 Account *a = node->startupAccount();
-                kDebug()<<k_funcinfo<<node->name()<<": "<<a<<endl;
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<a<<endl;
                 return a == 0 ? i18n( "None" ) : a->name();
             }
             break;
@@ -904,14 +904,14 @@ bool NodeItemModel::setStartupAccount( Node *node, const QVariant &value, int ro
 {
     switch ( role ) {
         case Qt::EditRole:
-            kDebug()<<k_funcinfo<<node->name()<<endl;
+            //kDebug()<<k_funcinfo<<node->name()<<endl;
             QStringList lst = startupAccount( node, Role::EnumList ).toStringList();
             if ( value.toInt() >= lst.count() ) {
                 return false;
             }
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->startupAccount();
-            kDebug()<<k_funcinfo<<(value.toInt())<<"; "<<(lst.at( value.toInt()))<<": "<<a<<endl;
+            //kDebug()<<k_funcinfo<<(value.toInt())<<"; "<<(lst.at( value.toInt()))<<": "<<a<<endl;
             if ( old != a ) {
                 m_part->addCommand( new NodeModifyStartupAccountCmd( m_part, *node, old, a, i18n( "Modify Startup Account" ) ) );
             }
@@ -984,7 +984,7 @@ bool NodeItemModel::setShutdownAccount( Node *node, const QVariant &value, int r
 {
     switch ( role ) {
         case Qt::EditRole:
-            kDebug()<<k_funcinfo<<node->name()<<endl;
+            //kDebug()<<k_funcinfo<<node->name()<<endl;
             QStringList lst = shutdownAccount( node, Role::EnumList ).toStringList();
             if ( value.toInt() >= lst.count() ) {
                 return false;
@@ -1036,7 +1036,7 @@ QVariant NodeItemModel::startTime( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-            kDebug()<<k_funcinfo<<node->name()<<", "<<role<<endl;
+            //kDebug()<<k_funcinfo<<node->name()<<", "<<role<<endl;
             return node->startTime( m_project->currentViewScheduleId() ).dateTime();
             break;
         case Qt::EditRole:
@@ -1052,7 +1052,7 @@ QVariant NodeItemModel::endTime( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-            kDebug()<<k_funcinfo<<node->name()<<", "<<role<<endl;
+            //kDebug()<<k_funcinfo<<node->name()<<", "<<role<<endl;
             return node->endTime( m_project->currentViewScheduleId() ).dateTime();
             break;
         case Qt::EditRole:
@@ -1069,7 +1069,7 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
     QVariant result;
     Node *n = node( index );
     if ( n != 0 ) {
-        if ( role > 1000 ) kDebug()<<k_funcinfo<<n->name()<<", "<<role<<endl;
+        //if ( role > 1000 ) kDebug()<<k_funcinfo<<n->name()<<", "<<role<<endl;
         switch ( index.column() ) {
             case 0: result = name( n, role ); break;
             case 1: result = type( n, role ); break;
@@ -1092,7 +1092,7 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
             case 18: result = startTime( n, role ); break;
             case 19: result = endTime( n, role ); break;
             default:
-                kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
+                //kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
                 return QVariant();
         }
         if ( result.isValid() ) {
@@ -1254,7 +1254,7 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
     QList<int> rows;
     foreach (QModelIndex index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            kDebug()<<k_funcinfo<<index.row()<<endl;
+            //kDebug()<<k_funcinfo<<index.row()<<endl;
             Node *n = node( index );
             if ( n ) {
                 rows << index.row();
@@ -1268,7 +1268,7 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
 
 bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     Node *dn = node( index );
     if ( dn == 0 ) {
         kError()<<k_funcinfo<<"no node to drop on!"<<endl;
@@ -1334,13 +1334,13 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
         bool ins = true;
         foreach ( Node *n, lst ) {
             if ( node->isChildOf( n ) ) {
-                kDebug()<<k_funcinfo<<node->name()<<" is child of "<<n->name()<<endl;
+                //kDebug()<<k_funcinfo<<node->name()<<" is child of "<<n->name()<<endl;
                 ins = false;
                 break;
             }
         }
         if ( ins ) {
-            kDebug()<<k_funcinfo<<" insert "<<node->name()<<endl;
+            //kDebug()<<k_funcinfo<<" insert "<<node->name()<<endl;
             lst << node;
         }
     }
@@ -1349,7 +1349,7 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
     foreach ( Node *node, nl ) {
         foreach ( Node *n, nlst ) {
             if ( n->isChildOf( node ) ) {
-                kDebug()<<k_funcinfo<<n->name()<<" is child of "<<node->name()<<endl;
+                //kDebug()<<k_funcinfo<<n->name()<<" is child of "<<node->name()<<endl;
                 int i = nodes.indexOf( n );
                 lst.removeAt( i );
             }
@@ -1360,7 +1360,7 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
 
 bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
 {
-    kDebug()<<k_funcinfo<<action<<endl;
+    //kDebug()<<k_funcinfo<<action<<endl;
     if (action == Qt::IgnoreAction) {
         return true;
     }
@@ -1368,7 +1368,7 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
         return false;
     }
     if ( action == Qt::MoveAction ) {
-        kDebug()<<k_funcinfo<<"MoveAction"<<endl;
+        //kDebug()<<k_funcinfo<<"MoveAction"<<endl;
         
         QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
@@ -1436,7 +1436,7 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
         //kDebug()<<k_funcinfo<<"Inserted: "<<account->name()<<endl;
         return createIndex( row, 0, node );
     }
-    kDebug()<<k_funcinfo<<"Can't find "<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<"Can't find "<<node->name()<<endl;
     return QModelIndex();
 }
 
@@ -1451,7 +1451,7 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
         //kDebug()<<k_funcinfo<<"Inserted: "<<account->name()<<endl;
         return createIndex( row, 0, node );
     }
-    kDebug()<<k_funcinfo<<"Can't find "<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<"Can't find "<<node->name()<<endl;
     return QModelIndex();
 }
 

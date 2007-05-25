@@ -1053,7 +1053,7 @@ void Node::setStartupCost(double cost)
 
 void Node::setStartupAccount(Account *acc)
 {
-    kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
     m_startupAccount = acc;
     changed();
 }
@@ -1066,14 +1066,14 @@ void Node::setShutdownCost(double cost)
 
 void Node::setShutdownAccount(Account *acc)
 {
-    kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
     m_shutdownAccount = acc;
     changed();
 }
 
 void Node::setRunningAccount(Account *acc)
 {
-    kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
     m_runningAccount = acc;
     changed();
 }
@@ -1286,7 +1286,7 @@ double Estimate::scale( const Duration &value, Duration::Unit unit, QList<double
     v /= lst[1];
     if (unit == Duration::Unit_h) return v;
     v /= lst[0];
-    kDebug()<<k_funcinfo<<value.toString()<<", "<<unit<<"="<<v<<endl;
+    //kDebug()<<k_funcinfo<<value.toString()<<", "<<unit<<"="<<v<<endl;
     return v;
 }
 
@@ -1318,7 +1318,7 @@ Duration Estimate::scale( double value, Duration::Unit unit, const QList<double>
         case Duration::Unit_ms:
             break; // nothing
     }
-    kDebug()<<k_funcinfo<<value<<", "<<unit<<"="<<v<<endl;
+    //kDebug()<<k_funcinfo<<value<<", "<<unit<<"="<<v<<endl;
     return Duration( v, Duration::Unit_ms );
 }
 

@@ -2175,7 +2175,7 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    kDebug()<<k_funcinfo<<ev->activated()<<endl;
+    //kDebug()<<k_funcinfo<<ev->activated()<<endl;
     KoView::guiActivateEvent( ev );
     if ( ev->activated() ) {
         // plug my own actionlists, they may be gone

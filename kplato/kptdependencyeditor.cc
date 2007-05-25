@@ -91,7 +91,7 @@ DependencyScene *DependencyLinkItemBase::itemScene() const
 
 void DependencyLinkItemBase::createPath( const QPointF &sp, int starttype, const QPointF &ep, int endtype )
 {
-    if ( predItem && succItem ) kDebug()<<k_funcinfo<<predItem->text()<<" -> "<<succItem->text()<<" visible="<<isVisible()<<endl;
+    //if ( predItem && succItem ) kDebug()<<k_funcinfo<<predItem->text()<<" -> "<<succItem->text()<<" visible="<<isVisible()<<endl;
     if ( ! isVisible() ) {
         return;
     }
@@ -185,7 +185,7 @@ DependencyLinkItem::DependencyLinkItem( DependencyNodeItem *predecessor, Depende
 {
     setZValue( 500.0 );
     setAcceptsHoverEvents( true );
-    kDebug()<<k_funcinfo<<predecessor->text()<<"("<<predecessor->column()<<") - "<<successor->text()<<endl;
+    //kDebug()<<k_funcinfo<<predecessor->text()<<"("<<predecessor->column()<<") - "<<successor->text()<<endl;
     predItem->addChildRelation( this );
     succItem->addParentRelation( this );
     succItem->setColumn();
@@ -224,7 +224,7 @@ void DependencyLinkItem::createPath()
 {
     setVisible( predItem->isVisible() && succItem->isVisible() );
     if ( ! isVisible() ) {
-        kDebug()<<k_funcinfo<<"Visible="<<isVisible()<<": "<<predItem->node()->name()<<" - "<<succItem->node()->name()<<endl;
+        //kDebug()<<k_funcinfo<<"Visible="<<isVisible()<<": "<<predItem->node()->name()<<" - "<<succItem->node()->name()<<endl;
         return;
     }
     QPointF sp = startPoint();
@@ -280,7 +280,7 @@ void DependencyLinkItem::hoverLeaveEvent( QGraphicsSceneHoverEvent *event )
 
 void DependencyLinkItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QGraphicsItem::GraphicsItemFlags f = flags();
     if ( itemScene()->connectionMode() ) {
         itemScene()->clearConnection();
@@ -552,7 +552,7 @@ void DependencyNodeItem::setExpanded( bool mode )
 void DependencyNodeItem::setItemVisible( bool show )
 {
     setVisible( show );
-    kDebug()<<k_funcinfo<<isVisible()<<", "<<node()->name()<<endl;
+    //kDebug()<<k_funcinfo<<isVisible()<<", "<<node()->name()<<endl;
     foreach ( DependencyLinkItem *i, m_parentrelations ) {
         i->setItemVisible( show );
     }
@@ -670,7 +670,7 @@ DependencyLinkItem *DependencyNodeItem::takeChildRelation( DependencyLinkItem *r
 
 void DependencyNodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QGraphicsItem::GraphicsItemFlags f = flags();
     if ( itemScene()->connectionMode() ) {
         itemScene()->clearConnection();
@@ -689,13 +689,13 @@ DependencyScene::DependencyScene( QWidget *parent )
 {
     m_connectionitem = new DependencyCreatorItem();
     addItem( m_connectionitem );
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_connectionitem->hide();
 }
 
 DependencyScene::~DependencyScene()
 {
-    kDebug()<<k_funcinfo<<" DELETED "<<endl;
+    //kDebug()<<k_funcinfo<<" DELETED "<<endl;
 }
 
 void DependencyScene::setFromItem( DependencyConnectorItem *item )
@@ -804,12 +804,12 @@ void DependencyScene::clear()
     qDeleteAll( items() );
     m_connectionitem->clear();
     addItem( m_connectionitem );
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 
 void DependencyScene::setItemVisible( DependencyNodeItem *item, bool show )
 {
-    kDebug()<<k_funcinfo<<"Visible count="<<m_visibleItems.count()<<" total="<<m_allItems.count()<<endl;
+    //kDebug()<<k_funcinfo<<"Visible count="<<m_visibleItems.count()<<" total="<<m_allItems.count()<<endl;
     item->setItemVisible( show );
     int row = m_allItems.indexOf( item );
     if ( row == -1 ) {
@@ -824,7 +824,7 @@ void DependencyScene::setItemVisible( DependencyNodeItem *item, bool show )
         if ( itm->isVisible() ) {
             m_visibleItems.insert( i, itm );
             if ( i >= row ) {
-                kDebug()<<k_funcinfo<<itm->text()<<": "<<viewrow<<endl;
+                //kDebug()<<k_funcinfo<<itm->text()<<": "<<viewrow<<endl;
                 itm->setRow( viewrow );
             }
             ++viewrow;
@@ -865,7 +865,7 @@ DependencyNodeItem *DependencyScene::createItem( Node *node )
     if ( item->scene() != this ) {
         addItem( item );
     }
-    kDebug()<<k_funcinfo<<item->text()<<item<<endl;
+    //kDebug()<<k_funcinfo<<item->text()<<item<<endl;
     item->setRectangle( QRectF( itemX(), itemY(), itemWidth(), itemHeight() ) );
     m_allItems.insert( i+1, item );
     setItemVisible( item, true );
@@ -912,7 +912,7 @@ void DependencyScene::createLink( DependencyNodeItem *parent, Relation *rel )
     }
     DependencyLinkItem *dep = new DependencyLinkItem( parent, child, rel );
     addItem( dep );
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     dep->createPath();
 }
 
@@ -947,7 +947,7 @@ void DependencyScene::singleConnectorClicked( DependencyConnectorItem *item )
 
 void DependencyScene::multiConnectorClicked( DependencyConnectorItem *item )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     singleConnectorClicked( item );
 }
 
@@ -959,7 +959,7 @@ void DependencyScene::clearConnection()
 
 void DependencyScene::mousePressEvent( QGraphicsSceneMouseEvent *mouseEvent )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QGraphicsScene::mousePressEvent( mouseEvent );
     if ( ! mouseEvent->isAccepted() ) {
         clearConnection();
@@ -968,14 +968,14 @@ void DependencyScene::mousePressEvent( QGraphicsSceneMouseEvent *mouseEvent )
 
 void DependencyScene::mouseDoubleClickEvent ( QGraphicsSceneMouseEvent *event )
 {
-    kDebug()<<k_funcinfo<<event->pos()<<event->scenePos()<<event->screenPos()<<endl;
+    //kDebug()<<k_funcinfo<<event->pos()<<event->scenePos()<<event->screenPos()<<endl;
     QGraphicsScene::mouseDoubleClickEvent( event );
     emit itemDoubleClicked( itemAt( event->scenePos() ) );
 }
 
 void DependencyScene::contextMenuEvent ( QGraphicsSceneContextMenuEvent *event )
 {
-    kDebug()<<k_funcinfo<<event->pos()<<event->scenePos()<<event->screenPos()<<endl;
+    //kDebug()<<k_funcinfo<<event->pos()<<event->scenePos()<<event->screenPos()<<endl;
     emit contextMenuRequested( itemAt( event->scenePos() ), event->screenPos() );
 }
 
@@ -1067,7 +1067,7 @@ void DependencyView::slotRelationAdded( Relation* rel )
         DependencyNodeItem *c = findItem( rel->child() );
         DependencyLinkItem *r = new DependencyLinkItem( p, c, rel );
         scene()->addItem( r );
-        kDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo<<endl;
         r->createPath();
         r->setVisible( c->isVisible() && p->isVisible() );
     } else kDebug()<<k_funcinfo<<"Relation already exists!"<<endl;
@@ -1084,14 +1084,14 @@ void DependencyView::slotRelationRemoved( Relation* rel )
 
 void DependencyView::slotRelationModified( Relation* rel )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     slotRelationRemoved( rel );
     slotRelationAdded( rel );
 }
 
 void DependencyView::slotNodeAdded( Node *node )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     DependencyNodeItem *item = findItem( node );
     if ( item == 0 ) {
         item = createItem( node );
@@ -1105,7 +1105,7 @@ void DependencyView::slotNodeRemoved( Node *node )
     DependencyNodeItem *item = findItem( node );
     if ( item ) {
         itemScene()->setItemVisible( item, false );
-        kDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo<<endl;
     } else kDebug()<<k_funcinfo<<"Node does not exist!"<<endl;
 }
 
@@ -1133,10 +1133,10 @@ void DependencyView::createItems()
 
     createLinks();
     QList<QGraphicsItem*> lst = itemScene()->itemList( DependencyLinkItem::Type );
-    kDebug()<<k_funcinfo<<"No of links: "<<lst.count()<<endl;
+    //kDebug()<<k_funcinfo<<"No of links: "<<lst.count()<<endl;
     foreach( QGraphicsItem *i, lst ) {
         DependencyLinkItem *dep = static_cast<DependencyLinkItem*>(i);
-        kDebug()<<k_funcinfo<<dep->predItem->text()<<" -> "<<dep->succItem->text()<<" visible="<<dep->isVisible()<<endl;
+        //kDebug()<<k_funcinfo<<dep->predItem->text()<<" -> "<<dep->succItem->text()<<" visible="<<dep->isVisible()<<endl;
     }
 }
 
@@ -1148,7 +1148,7 @@ DependencyNodeItem *DependencyView::createItem( Node *node )
 void DependencyView::createItems( Node *node )
 {
     if ( node != m_project ) {
-        kDebug()<<k_funcinfo<<node->name()<<" ("<<node->numChildren()<<")"<<endl;
+        //kDebug()<<k_funcinfo<<node->name()<<" ("<<node->numChildren()<<")"<<endl;
         DependencyNodeItem *i = createItem( node );
         if ( i == 0 ) {
             return;
@@ -1161,7 +1161,7 @@ void DependencyView::createItems( Node *node )
 
 void DependencyView::createLinks()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     itemScene()->createLinks();
 }
 
@@ -1187,7 +1187,7 @@ DependencyEditor::DependencyEditor( Part *part, QWidget *parent )
 
 void DependencyEditor::slotItemDoubleClicked( QGraphicsItem *item )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if ( item && item->type() == DependencyLinkItem::Type ) {
         emit modifyRelation( static_cast<DependencyLinkItem*>( item )->relation );
         return;
@@ -1200,7 +1200,7 @@ void DependencyEditor::slotItemDoubleClicked( QGraphicsItem *item )
 
 void DependencyEditor::slotCreateRelation( DependencyConnectorItem *pred, DependencyConnectorItem *succ )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     Node *par = pred->node();
     Node *ch = succ->node();
     Relation::Type type = Relation::None;
@@ -1217,10 +1217,10 @@ void DependencyEditor::slotCreateRelation( DependencyConnectorItem *pred, Depend
     }
     Relation *rel = ch->findRelation( par );
     if ( rel == 0 ) {
-        kDebug()<<k_funcinfo<<"New: "<<par->name()<<" -> "<<ch->name()<<", "<<type<<endl;
+        //kDebug()<<k_funcinfo<<"New: "<<par->name()<<" -> "<<ch->name()<<", "<<type<<endl;
         emit addRelation( par, ch, type );
     } else if ( rel->type() != type ) {
-        kDebug()<<k_funcinfo<<"Mod: "<<par->name()<<" -> "<<ch->name()<<", "<<type<<endl;
+        //kDebug()<<k_funcinfo<<"Mod: "<<par->name()<<" -> "<<ch->name()<<", "<<type<<endl;
         emit modifyRelation( rel, type );
     }
 }
@@ -1236,7 +1236,7 @@ void DependencyEditor::draw()
 
 void DependencyEditor::setGuiActive( bool activate )
 {
-    kDebug()<<k_funcinfo<<activate<<endl;
+    //kDebug()<<k_funcinfo<<activate<<endl;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
 /*    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -1246,13 +1246,13 @@ void DependencyEditor::setGuiActive( bool activate )
 
 void DependencyEditor::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
 {
-    kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
+    //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
     slotEnableActions();
 }
 
 void DependencyEditor::slotSelectionChanged(  QList<QGraphicsItem*> lst )
 {
-    kDebug()<<k_funcinfo<<lst.count()<<endl;
+    //kDebug()<<k_funcinfo<<lst.count()<<endl;
     slotEnableActions();
 }
 
@@ -1299,14 +1299,14 @@ Relation *DependencyEditor::currentRelation() const {
 
 void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoint& pos )
 {
-    kDebug()<<k_funcinfo<<item<<", "<<pos<<endl;
+    //kDebug()<<k_funcinfo<<item<<", "<<pos<<endl;
     QString name;
     if ( item == 0 ) {
         return;
     } else if ( item->type() == DependencyNodeItem::Type ) {
         m_currentnode = static_cast<DependencyNodeItem*>( item )->node();
         if ( m_currentnode == 0 ) {
-            kDebug()<<k_funcinfo<<"No node"<<endl;
+            //kDebug()<<k_funcinfo<<"No node"<<endl;
             return;
         }
         switch ( m_currentnode->type() ) {
@@ -1320,7 +1320,7 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
             default:
                 name = "node_popup";
         }
-        kDebug()<<k_funcinfo<<m_currentnode->name()<<" : "<<pos<<endl;
+        //kDebug()<<k_funcinfo<<m_currentnode->name()<<" : "<<pos<<endl;
     } else if ( item->type() == DependencyLinkItem::Type ) {
         m_currentrelation = static_cast<DependencyLinkItem*>( item )->relation;
         if ( m_currentrelation == 0 ) {
@@ -1328,7 +1328,7 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
         }
         name = "relation_popup";
     }
-    kDebug()<<k_funcinfo<<name<<endl;
+    //kDebug()<<k_funcinfo<<name<<endl;
     if ( ! name.isEmpty() ) {
         emit requestPopupMenu( name, pos );
     }
@@ -1385,7 +1385,7 @@ void DependencyEditor::setupGui()
 
 void DependencyEditor::slotAddTask()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_currentnode = selectedNode();
     emit addTask();
     m_currentnode = 0;
@@ -1393,7 +1393,7 @@ void DependencyEditor::slotAddTask()
 
 void DependencyEditor::slotAddMilestone()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_currentnode = selectedNode(); // sibling
     emit addMilestone();
     m_currentnode = 0;
@@ -1401,7 +1401,7 @@ void DependencyEditor::slotAddMilestone()
 
 void DependencyEditor::slotAddSubtask()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_currentnode = selectedNode();
     if ( m_currentnode == 0 ) {
         return;

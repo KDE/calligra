@@ -577,7 +577,7 @@ double Task::bcwp( const QDate &date, long id ) const
         return c;
     }
     c = plannedCostTo( date, id ) * (double)m_completion.percentFinished( date ) / 100.0;
-    kDebug()<<k_funcinfo<<m_name<<"("<<id<<")"<<date<<"="<<c<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<"("<<id<<")"<<date<<"="<<c<<endl;
     return c;
 }
 
@@ -1601,7 +1601,7 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
     Duration eff;
     if ( m_currentSchedule->recalculate() && m_completion.isStarted() ) {
         eff = m_completion.remainingEffort();
-        kDebug()<<k_funcinfo<<m_name<<": recalculate, effort="<<eff.toDouble(Duration::Unit_h)<<endl;
+        //kDebug()<<k_funcinfo<<m_name<<": recalculate, effort="<<eff.toDouble(Duration::Unit_h)<<endl;
         if ( eff == 0 || m_completion.isFinished() ) {
             return eff;
         }
@@ -2112,7 +2112,7 @@ void Completion::setNote( const QString &str )
 
 double Completion::actualCost( const QDate &date ) const
 {
-    kDebug()<<k_funcinfo<<date<<endl;
+    //kDebug()<<k_funcinfo<<date<<endl;
     double c = 0.0;
     foreach ( const Resource *r, m_usedEffort.keys() ) {
         double nc = r->normalRate();

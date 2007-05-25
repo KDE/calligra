@@ -49,7 +49,7 @@ void ViewBase::updateReadWrite( bool /*readwrite*/ )
 
 void ViewBase::setGuiActive( bool active ) // virtual slot
 {
-    kDebug()<<k_funcinfo<<active<<endl;
+    //kDebug()<<k_funcinfo<<active<<endl;
     emit guiActivated( this, active );
 }
 

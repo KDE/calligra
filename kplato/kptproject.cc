@@ -66,7 +66,7 @@ void Project::init()
     if ( m_spec.timeZone() == 0 ) {
         m_spec.setType( new KTimeZone() );
     }
-    kDebug()<<k_funcinfo<<m_spec.timeZone()<<endl;
+    //kDebug()<<k_funcinfo<<m_spec.timeZone()<<endl;
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent
         m_constraintStartTime = DateTime( QDate::currentDate(), QTime(), m_spec );
@@ -1347,7 +1347,7 @@ double Project::bcwp( long id ) const
 
 double Project::bcwp( const QDate &date, long id ) const
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     foreach (Node *n, childNodeIterator()) {
         c += n->bcwp( date, id );
