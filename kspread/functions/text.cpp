@@ -644,7 +644,7 @@ Value func_t (valVector args, ValueCalc *calc, FuncExtra *)
   if ( args[0].isString() )
     return calc->conv()->asString (args[0]);
   else
-    return Value::empty();
+    return Value("");
 }
 
 // Function: TEXT
