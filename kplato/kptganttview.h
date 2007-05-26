@@ -102,10 +102,11 @@ public slots:
     void setShowCriticalPath( bool on ) { m_showCriticalPath = on; }
     void setShowNoInformation( bool on ) { m_showNoInformation = on; }
     void setShowAppointments( bool on ) { m_showAppointments = on; }
+    void update();
 
 private slots:
     void slotScheduleIdChanged( long id );
-    
+
 private:
     bool m_readWrite;
     int m_defaultFontSize;

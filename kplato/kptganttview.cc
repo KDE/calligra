@@ -38,6 +38,8 @@
 
 #include "kdganttview.h"
 
+#include "kdganttconstraintmodel.h"
+
 #include <kdebug.h>
 
 #include <QHeaderView>
@@ -92,7 +94,11 @@ public:
     }
     NodeItemModel *itemModel() const { return m_model; }
     void setProject( Project *project ) { m_model->setProject( project ); }
-
+    void update()
+{
+    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<"POULOU"<<endl;
+}
 protected:
     NodeItemModel *m_model;
 };
@@ -131,7 +137,8 @@ GanttView::GanttView( Part *part, QWidget *parent, bool readWrite )
     m_taskView->hide();
 
     setReadWriteMode( readWrite );
-
+    //connect( m_gantt->constraintModel(), SIGNAL( constraintAdded( const Constraint& )), this, SLOT( update() ) );
+    kDebug() <<m_gantt->constraintModel()<< endl;
 }
 
 void GanttView::setZoom( double )
@@ -189,7 +196,7 @@ Node *GanttView::currentNode() const
 
 bool GanttView::setContext( const Context &c )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
     const Context::Ganttview &context = c.ganttview;
     
     Q3ValueList<int> list = m_splitter->sizes();
@@ -208,7 +215,6 @@ bool GanttView::setContext( const Context &c )
     m_showCriticalTasks = context.showCriticalTasks;
     m_showCriticalPath = context.showCriticalPath;
     m_showNoInformation = context.showNoInformation;
-
     //TODO this does not work yet!
     //     getContextClosedNodes(context, m_gantt->firstChild());
     //     for (QStringList::ConstIterator it = context.closedNodes.begin(); it != context.closedNodes.end(); ++it) {
@@ -244,6 +250,12 @@ void GanttView::getContext( Context &c ) const
 void GanttView::setReadWriteMode( bool on )
 {
     m_readWrite = on;
+}
+
+void GanttView::update()
+{
+    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<"POULOU"<<endl;
 }
 
 }  //KPlato namespace

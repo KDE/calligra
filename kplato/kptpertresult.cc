@@ -101,14 +101,22 @@ DateTime PertResult::getFinishEarlyDate(Node * currentNode)
     //it's the early start date + duration of the task
     Task * t;
     t=static_cast<Task *>(currentNode);
-    return (getStartEarlyDate(currentNode)+=(t->endTime(current_schedule->id())-t->startTime(current_schedule->id())));
+    DateTime duration;
+    duration=getStartEarlyDate(currentNode);
+    duration+=(t->endTime(current_schedule->id())-t->startTime(current_schedule->id()));
+    duration.setDateOnly(true);
+    return (duration);
 }
  
 DateTime PertResult::getStartLateDate(Node * currentNode)
 {
     Task * t;
+    DateTime duration;
     t=static_cast<Task *>(currentNode);
-    return (getFinishLateDate(currentNode)-=(t->endTime(current_schedule->id())-t->startTime(current_schedule->id())));
+    duration=getFinishLateDate(currentNode);
+    duration-=(t->endTime(current_schedule->id())-t->startTime(current_schedule->id()));
+    duration.setDateOnly(true);
+    return (duration);
 
 }
 
