@@ -666,6 +666,44 @@ void TestLoad::multiscriptsElement_data()
             " </mmultiscripts>", 9, 18 );
 }
 
+void TestLoad::trElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mtr><mtd></mtd></mtr>", 1, 2 );
+    addRow( "<mtr><mtd><mrow></mrow></mtd></mtr>", 1, 2 );
+    addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>", 1, 3 );
+    addRow( "<mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr>", 1, 3 );
+
+    // More complex ccontent
+    addRow( "<mtr id='e-is-m-c-square'>"
+            " <mtd>"
+            "  <mrow>"
+            "   <mi>E</mi>"
+            "   <mo>=</mo>"
+            "   <mrow>"
+            "    <mi>m</mi>"
+            "    <mo>&it;</mo>"
+            "    <msup>"
+            "     <mi>c</mi>"
+            "     <mn>2</mn>"
+            "    </msup>"
+            "   </mrow>"
+            "  </mrow>"
+            " </mtd>"
+            " <mtd>"
+            "  <mtext> (2.1) </mtext>"
+            " </mtd>"
+            "</mtr>", 2, 15 );
+    
+    // Be sure attributes don't break anything
+    addRow( "<mtr rowalign=\"top\"><mi>x</mi></mtr>", 1, 2 );
+    addRow( "<mtr groupalign=\"left\"><mi>x</mi></mtr>", 1, 2 );
+}
+    
 void TestLoad::labeledtrElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -837,6 +875,11 @@ void TestLoad::underOverElement()
 void TestLoad::multiscriptsElement()
 {
     test( new MultiscriptElement );
+}
+
+void TestLoad::trElement()
+{
+    test( new MatrixRowElement );
 }
 
 void TestLoad::labeledtrElement()
