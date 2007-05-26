@@ -92,8 +92,7 @@ void PertEditor::dispAvailableTasks( Relation *rel ){
 
 
 void PertEditor::dispAvailableTasks(){
-    /*for (int i=0;i< list_nodeNotView.size();i++)
-	list_nodeNotView.removeFirst();*/
+
     list_nodeNotView.clear();
 
     list_nodeNotView.begin();
@@ -114,7 +113,9 @@ void PertEditor::dispAvailableTasks(){
         {
             // Checks if the curent node is not a milestone
             // and if it isn't the same as the selected task in the m_tasktree
-            if ( currentNode->type() != Node::Type_Milestone and currentNode->name() != selectedTaskName
+            if ( currentNode->type() != Node::Type_Milestone 
+		and currentNode->type() != Node::Type_Summarytask 
+		and currentNode->name() != selectedTaskName
                 and  !list_nodeNotView.contains(currentNode)
                 and (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty())
             {
@@ -132,15 +133,9 @@ void PertEditor::dispAvailableTasks(){
                     fakeItem->setForeground(*fakeItemBrush);
                     fakeItem->setFlags(Qt::ItemIsEnabled);
                 m_assignList->availableListWidget()->addItem(fakeItem);
-                
             }
         }
-        //remove all nodes from list_nodeParent
-        /*for (int i=0;i< list_nodeNotView.size();i++)
-        {
-            list_nodeNotView.removeFirst();
-        }
-        list_nodeNotView.begin();*/
+
         list_nodeNotView.clear();
     }
     else
@@ -165,8 +160,6 @@ QList<Node*> PertEditor::listNodeNotView(Node * node)
 }
 
 
-
-
 Node * PertEditor::itemToNode(QString itemName, Node * startNode){
     Node * result = 0;
     if (startNode->numChildren() > 0){
@@ -189,7 +182,6 @@ void PertEditor::addTaskInRequiredList(QListWidgetItem * currentItem){
     AddRelationCmd * addCmd= new AddRelationCmd(m_part,m_rel,currentItem->text());
     m_part->addCommand( addCmd );
 
-    //emit refreshAvailableTaskList();
 }
 
 void PertEditor::removeTaskFromRequiredList(QListWidgetItem * currentItem){
