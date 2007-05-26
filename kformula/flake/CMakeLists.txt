@@ -23,7 +23,7 @@ set( kformulalib_PART_SRCS
    BracketElement.cpp 
 #   MatrixElement.cpp
 #   MatrixRowElement.cpp
-#   MatrixEntryElement.cpp
+   MatrixEntryElement.cpp
    RootElement.cpp
    EncloseElement.cpp
 #   ActionElement.cpp

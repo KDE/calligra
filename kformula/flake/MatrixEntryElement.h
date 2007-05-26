@@ -37,33 +37,33 @@ public:
 
     /// @return a list of all children of this class                           
     const QList<BasicElement*> childElements();
-
-
-
-
-    /// Calculates our width and height and our children's parentPosition.
-    virtual void calcSizes( const ContextStyle& context, 
-                            ContextStyle::TextStyle tstyle,
-                            ContextStyle::IndexStyle istyle,
-                            StyleAttributes& style );
 	
     virtual void registerTab( BasicElement* tab );
-	
-	 int tabCount() const { return tabs.count(); }
-	 BasicElement* tab( int i ) { return tabs.at( i ); }
-		 
-         /// Change the width of tab i and move all elements after it.
-         void moveTabTo( int i, luPixel pos );
 
-	 /// Return the greatest tab number less than pos.
-	 int tabBefore( int pos );
+    /*
+    int tabCount() const { return tabs.count(); }
+    BasicElement* tab( int i ) { return tabs.at( i ); }
+    */
+
+    /// Change the width of tab i and move all elements after it.
+    void moveTabTo( int i, QPointF pos );
+
+    /// Return the greatest tab number less than pos.
+    int tabBefore( int pos );
 	 
-         /// Return the position of tab i.
-         int tabPos( int i );
+    /// Return the position of tab i.
+    int tabPos( int i );
+
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
+    virtual void layout( AttributeManager* am );
 
 private:
     /// The list of all child elements
     QList<BasicElement*> m_childElements;
+
 };
 
 #endif

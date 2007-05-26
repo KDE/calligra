@@ -35,42 +35,9 @@ const QList<BasicElement*> MatrixEntryElement::childElements()
 void MatrixEntryElement::layout( AttributeManager* am )
 {}
 
-bool MatrixEntryElement::readMathMLContent( const KoXmlElement& element )
-{
-    BasicElement* tmpElement = 0;
-    KoXmlElement tmp;
-    forEachElement( tmp, parent )
-    {
-        tmpElement = ElementFactory::createElement( tmp.localName(), this );
-        m_rowElements << tmpElement;
-        tmpElement->readMathML( tmp );
-    }
-
-    return true;
-}
-
-void MatrixEntryElement::writeMathMLContent( KoXmlWriter* writer )
-{
-    foreach( BasicElement* tmpElement, childElements() )
-	tmpElement->writeMathML( writer, oasisFormat );
-}
-
-
-
-
-void MatrixEntryElement::calcSizes( const ContextStyle& context, 
-                                    ContextStyle::TextStyle tstyle,
-                                    ContextStyle::IndexStyle istyle,
-                                    StyleAttributes& style )
-{
-    tabs.clear();
-    SequenceElement::calcSizes( context, tstyle, istyle, style );
-}
-
-
 void MatrixEntryElement::registerTab( BasicElement* tab )
 {
-    tabs.append( tab );
+    //tabs.append( tab );
 }
 
 /*
@@ -140,7 +107,7 @@ KCommand* MatrixEntryElement::input( Container* container, QChar ch )
 }
 */
 
-void MatrixEntryElement::moveTabTo( int i, luPixel pos )
+void MatrixEntryElement::moveTabTo( int i, QPointF pos )
 {
 /*    BasicElement* marker = tab( i );
     luPixel diff = pos - marker->getX();
@@ -157,6 +124,7 @@ void MatrixEntryElement::moveTabTo( int i, luPixel pos )
 
 int MatrixEntryElement::tabBefore( int pos )
 {
+    /*
     if ( tabs.isEmpty() ) {
         return -1;
     }
@@ -171,6 +139,7 @@ int MatrixEntryElement::tabBefore( int pos )
         }
     }
     return static_cast<int>( tabNum )-1;
+    */
 }
 
 int MatrixEntryElement::tabPos( int i )
