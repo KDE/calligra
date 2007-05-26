@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,25 +20,20 @@
 #ifndef ACTIONELEMENT_H
 #define ACTIONELEMENT_H
 
-#include "SequenceElement.h"
+#include "RowElement.h"
 
 /**
  * Support for action elements in MathML. According to MathML spec 
  * (Section 3.6.1.1), a MathML conformant application is not required to 
  * recognize any single actiontype.
  */
-class ActionElement : public SequenceElement {
+class ActionElement : public RowElement {
 public:
     ActionElement( BasicElement* parent = 0 );
-    virtual int buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n);
 
 private:
-    virtual void readMathMLAttributes(const QDomElement& element);
-    virtual QString elementName() const { return "maction"; }
-    virtual void writeMathMLAttributes( QDomElement& element ) const ;
-
-    QString m_actionType;
-    uint m_selection;
+    /// @return The element's ElementType
+    virtual ElementType elementType() const;
 };
 
 #endif // ACTIONELEMENT_H

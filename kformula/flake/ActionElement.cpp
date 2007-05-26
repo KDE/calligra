@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,51 +20,11 @@
 #include "ActionElement.h"
 #include "ElementFactory.h"
 
-ActionElement::ActionElement( BasicElement* parent ) : SequenceElement( parent ),
-                                                       m_selection( 0 )
+ActionElement::ActionElement( BasicElement* parent ) : RowElement( parent )
 {
 }
 
-void ActionElement::readMathMLAttributes(const QDomElement& element)
+ElementType ActionElement::elementType() const
 {
-    m_actionType = element.attribute( "actiontype" );
-    QString selectionStr = element.attribute( "selection" );
-    if ( ! selectionStr.isNull() ) {
-        bool ok;
-        m_selection = selectionStr.toUInt( &ok );
-        if ( ! ok ) m_selection = 0;
-    }
+    return Action;
 }
-
-int ActionElement::buildChildrenFromMathMLDom(QList<BasicElement*>& list, QDomNode n)
-{
-/*
-    if ( ! n.isElement() )
-        return -1;
-    QDomElement e = n.toElement();
-    QString tag = e.tagName().lower();
-    BasicElement* child = getCreationStrategy()->createElement( tag, e );
-    if ( child == 0 )
-        return -1;
-    child->setParent( this );
-    if ( child->buildFromMathMLDom( e ) == -1 ) {
-        delete child;
-        return -1;
-    }
-    list.append( child );
-    parse();
-    return 1;
-*/
-    return 0;
-}
-
-void ActionElement::writeMathMLAttributes( QDomElement& element ) const
-{
-    if ( ! m_actionType.isNull() ) {
-        element.setAttribute( "actiontype", m_actionType );
-    }
-    if ( m_selection ) {
-        element.setAttribute( "selection", QString( "%1" ).arg( m_selection ) );
-    }
-}
-

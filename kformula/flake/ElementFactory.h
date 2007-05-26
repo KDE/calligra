@@ -55,7 +55,8 @@ enum ElementType {
     Glyph,
     String,
     Enclose,
-    Phantom
+    Phantom,
+    Action
 };
 
 
