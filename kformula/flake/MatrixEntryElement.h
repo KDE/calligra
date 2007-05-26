@@ -23,6 +23,7 @@
 #define MATRIXENTRYELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 
 /**
  * @short The class representing an entry in a matrix
@@ -30,7 +31,7 @@
  * The lines behaviour is (a little) different from that
  * of ordinary sequences. Its MathML tag is \<mtd\>.
  */
-class MatrixEntryElement : public BasicElement {
+class KOFORMULA_EXPORT MatrixEntryElement : public BasicElement {
 public:
     /// The standard constructor
     MatrixEntryElement( BasicElement* parent = 0 );

@@ -44,6 +44,7 @@
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
 #include "UnderOverElement.h"
+#include "MatrixEntryElement.h"
 
 static void load(BasicElement* element, const QString& input)
 {
@@ -664,6 +665,23 @@ void TestLoad::multiscriptsElement_data()
             " </mmultiscripts>", 9, 18 );
 }
 
+void TestLoad::tdElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mtd></mtd>", 1 );
+    addRow( "<mtd><mrow></mrow></mtd>", 1 );
+    addRow( "<mtd><mi>x</mi></mtd>", 1, 2 );
+    addRow( "<mtd><mrow><mi>x</mi></mrow></mtd>", 1, 2 );
+
+    // Be sure attributes don't break anything
+    addRow( "<mtd rowspan=\"3\"><mi>x</mi></mtd>", 1, 2 );
+    addRow( "<mtd groupalign=\"left\"><mi>x</mi></mtd>", 1, 2 );
+}
+    
 void TestLoad::identifierElement()
 {
     test( new IdentifierElement );
@@ -777,6 +795,11 @@ void TestLoad::underOverElement()
 void TestLoad::multiscriptsElement()
 {
     test( new MultiscriptElement );
+}
+
+void TestLoad::tdElement()
+{
+    test( new MatrixEntryElement );
 }
 
 QTEST_MAIN(TestLoad)

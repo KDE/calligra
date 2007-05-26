@@ -78,6 +78,10 @@ private slots:
     void underOverElement();
     void multiscriptsElement_data();
     void multiscriptsElement();
+
+    // Tables and Matrices
+    void tdElement_data();
+    void tdElement();
 };
 
 #endif // _TESTLOAD_H_
