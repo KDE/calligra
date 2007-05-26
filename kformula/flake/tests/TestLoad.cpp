@@ -287,7 +287,7 @@ void TestLoad::fracElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<mfrac><mi>x</mi><mi>y</mi></mrow>", 2, 4 );
+    addRow( "<mfrac><mi>x</mi><mi>y</mi></mfrac>", 2, 4 );
 
     // More complex content
     addRow( "<mfrac linethickness=\"2\">"
