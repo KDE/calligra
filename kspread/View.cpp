@@ -102,6 +102,7 @@
 #include <KoPartSelectAction.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoSwatchWidget.h>
 #include <KoTabBar.h>
 #include <KoToolBox.h>
 #include <KoToolManager.h>
@@ -1868,6 +1869,11 @@ void View::initView()
     d->okButton = d->newIconButton( "ok", true, d->toolWidget );
     d->formulaBarLayout->addWidget( d->okButton );
     d->formulaBarLayout->addSpacing( 4 );
+
+/****** FIXME TEST new swatch widget (simply remove these lines when testing is done) ****/
+    d->formulaBarLayout->addWidget( new KoSwatchWidget(d->toolWidget) );
+    d->formulaBarLayout->addSpacing( 4 );
+/****** FIXME TEST end *********/
 
     // Setup the Canvas and its controller.
     d->canvas = new Canvas( this );
