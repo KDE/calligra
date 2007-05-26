@@ -162,12 +162,16 @@ bool FractionElement::readMathMLContent( const KoXmlElement& parent )
     {
         if( counter == 0 )
         {
-            m_numerator = ElementFactory::createElement( tmp.localName(), this );
+            delete m_numerator;
+            m_numerator = ElementFactory::createElement( tmp.tagName(), this );
+            if ( ! m_numerator ) return false;
             m_numerator->readMathML( tmp );
         }
         else if( counter == 1 )
         {
-            m_denominator = ElementFactory::createElement( tmp.localName(), this );
+            delete m_denominator;
+            m_denominator = ElementFactory::createElement( tmp.tagName(), this );
+            if ( ! m_denominator ) return false;
             m_denominator->readMathML( tmp );
         }
         else
