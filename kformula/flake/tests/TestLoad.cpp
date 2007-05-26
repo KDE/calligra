@@ -44,6 +44,7 @@
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
 #include "UnderOverElement.h"
+#include "MatrixRowElement.h"
 #include "MatrixEntryElement.h"
 
 static void load(BasicElement* element, const QString& input)
@@ -665,6 +666,47 @@ void TestLoad::multiscriptsElement_data()
             " </mmultiscripts>", 9, 18 );
 }
 
+void TestLoad::labeledtrElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mlabeledtr><mrow></mrow></mlabeledtr>", 1 );
+    addRow( "<mlabeledtr><mi>x</mi></mlabeledtr>", 1, 2 );
+    addRow( "<mlabeledtr><mrow></mrow><mtd></mtd></mlabeledtr>", 2, 3 );
+    addRow( "<mlabeledtr><mi>x</mi><mtd><mtd></mlabeledtr>", 2, 4 );
+    addRow( "<mlabeledtr><mrow><mi>x</mi></mrow><mtd><mrow></mrow></mtd></mlabeledtr>", 2, 4 );
+    addRow( "<mlabeledtr><mrow><mi>x</mi></mrow><mtd><mi>x</mi></mtd></mlabeledtr>", 2, 5 );
+    addRow( "<mlabeledtr><mrow><mi>x</mi></mrow><mtd><mrow><mi>x</mi></mrow></mtd></mlabeledtr>", 2, 5 );
+
+    // More complex ccontent
+    addRow( "<mlabeledtr id='e-is-m-c-square'>"
+            " <mtd>"
+            "  <mtext> (2.1) </mtext>"
+            " </mtd>"
+            " <mtd>"
+            "  <mrow>"
+            "   <mi>E</mi>"
+            "   <mo>=</mo>"
+            "   <mrow>"
+            "    <mi>m</mi>"
+            "    <mo>&it;</mo>"
+            "    <msup>"
+            "     <mi>c</mi>"
+            "     <mn>2</mn>"
+            "    </msup>"
+            "   </mrow>"
+            "  </mrow>"
+            " </mtd>"
+            "</mlabeledtr>", 2, 15 );
+    
+    // Be sure attributes don't break anything
+    addRow( "<mlabeledtr rowalign=\"top\"><mi>x</mi></mlabeledtr>", 1, 2 );
+    addRow( "<mlabeledtr groupalign=\"left\"><mi>x</mi></mlabeledtr>", 1, 2 );
+}
+    
 void TestLoad::tdElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -795,6 +837,11 @@ void TestLoad::underOverElement()
 void TestLoad::multiscriptsElement()
 {
     test( new MultiscriptElement );
+}
+
+void TestLoad::labeledtrElement()
+{
+    test( new MatrixRowElement );
 }
 
 void TestLoad::tdElement()

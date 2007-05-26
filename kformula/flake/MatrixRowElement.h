@@ -24,6 +24,7 @@
 #define MATRIXROWELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 
 
 #include "contextstyle.h"
@@ -33,7 +34,7 @@ class MatrixEntryElement;
 /**
  * @short Representing the MathML mtr element.
  */
-class MatrixRowElement : public BasicElement {
+class KOFORMULA_EXPORT MatrixRowElement : public BasicElement {
 public:
     /// The standard constructor
     MatrixRowElement( BasicElement* parent = 0 );
