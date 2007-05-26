@@ -44,6 +44,7 @@
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
 #include "UnderOverElement.h"
+#include "MatrixElement.h"
 #include "MatrixRowElement.h"
 #include "MatrixEntryElement.h"
 
@@ -666,6 +667,45 @@ void TestLoad::multiscriptsElement_data()
             " </mmultiscripts>", 9, 18 );
 }
 
+void TestLoad::tableElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<mtable></mtable>", 0 );
+    addRow( "<mtable><mtr></mtr></mtable>", 1 );
+    addRow( "<mtable><mtr><mtd></mtd></mtr></mtable>", 1, 3 );
+    addRow( "<mtable><mtr><mtd><mrow></mrow></mtd></mtr></mtable>", 1, 3 );
+    addRow( "<mtable><mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr></mtable>", 1, 4 );
+    addRow( "<mtable><mlabeledtr><mrow></mrow></mlabeledtr></mtable>", 1, 2 );
+    addRow( "<mtable><mlabeledtr><mrow></mrow><mtd></mtd></mlabeledtr></mtable>", 1, 4 );
+
+    // More complex content
+    addRow( "<mtable>"
+            " <mtr>"
+            "  <mtd> <mn>1</mn> </mtd>"
+            "  <mtd> <mn>0</mn> </mtd>"
+            "  <mtd> <mn>0</mn> </mtd>"
+            " </mtr>"
+            " <mtr>"
+            "  <mtd> <mn>0</mn> </mtd>"
+            "  <mtd> <mn>1</mn> </mtd>"
+            "  <mtd> <mn>0</mn> </mtd>"
+            " </mtr>"
+            " <mtr>"
+            "  <mtd> <mn>0</mn> </mtd>"
+            "  <mtd> <mn>0</mn> </mtd>"
+            "  <mtd> <mn>1</mn> </mtd>"
+            " </mtr>"
+            "</mtable>", 3, 31 );
+
+    // Be sure attributes don't break anything
+    addRow( "<mtable align=\"top\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 4 );
+    addRow( "<mtable rowalign=\"center\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 4 );
+}
+
 void TestLoad::trElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -875,6 +915,11 @@ void TestLoad::underOverElement()
 void TestLoad::multiscriptsElement()
 {
     test( new MultiscriptElement );
+}
+
+void TestLoad::tableElement()
+{
+    test( new MatrixElement );
 }
 
 void TestLoad::trElement()

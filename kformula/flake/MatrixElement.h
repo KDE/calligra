@@ -23,6 +23,7 @@
 #define MATRIXELEMENT_H
 
 #include "BasicElement.h"
+#include "kformula_export.h"
 
 class MatrixRowElement;
 class MatrixEntryElement;
@@ -35,7 +36,7 @@ class MatrixEntryElement;
  * MatrixElement takes care that the different MatrixRowElements are informed how
  * to lay out their children correctly as they need to be synced.
  */
-class MatrixElement : public BasicElement {
+class KOFORMULA_EXPORT MatrixElement : public BasicElement {
 public:
     /// The standard constructor
     MatrixElement( BasicElement* parent = 0);

@@ -80,6 +80,8 @@ private slots:
     void multiscriptsElement();
 
     // Tables and Matrices
+    void tableElement_data();
+    void tableElement();
     void trElement_data();
     void trElement();
     void labeledtrElement_data();
