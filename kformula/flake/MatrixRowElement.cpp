@@ -2,7 +2,7 @@
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
    Copyright (C) 2001 Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -112,12 +112,12 @@ void MatrixRowElement::writeMathMLContent( KoXmlWriter* writer ) const
 
 void MatrixRowElement::goInside( FormulaCursor* cursor )
 {
-    m_matrixEntryElements.at( 0 )->goInside( cursor );
+//    m_matrixEntryElements.at( 0 )->goInside( cursor );
 }
 
 
 
-
+#if 0
 void MatrixRowElement::calcSizes( const ContextStyle& context,
                                   ContextStyle::TextStyle tstyle,
                                   ContextStyle::IndexStyle istyle,
@@ -212,6 +212,7 @@ void MatrixRowElement::draw( QPainter& painter, const LuPixelRect& r,
         line->draw( painter, r, context, tstyle, istyle, style, myPos );
     }
 }
+#endif
 
 void MatrixRowElement::insert( FormulaCursor* cursor,
                                QList<BasicElement*>& newChildren,
@@ -287,81 +288,4 @@ void MatrixRowElement::selectChild(FormulaCursor* cursor, BasicElement* child)
         cursor->setTo( this, pos );
         //content.at( pos )->moveRight( cursor, this );
     }*/
-}
-
-
-/**
- * Appends our attributes to the dom element.
- */
-void MatrixRowElement::writeDom(QDomElement element)
-{
-    BasicElement::writeDom(element);
-
-    int lineCount = m_matrixEntryElements.count();
-    element.setAttribute( "LINES", lineCount );
-
-    QDomDocument doc = element.ownerDocument();
-    for ( int i = 0; i < lineCount; ++i ) {
-        QDomElement tmp = m_matrixEntryElements.at( i )->getElementDom(doc);
-        element.appendChild(tmp);
-    }
-}
-
-
-
-
-
-
-/**
- * Reads our attributes from the element.
- * Returns false if it failed.
- */
-bool MatrixRowElement::readAttributesFromDom(QDomElement element)
-{
-    if (!BasicElement::readAttributesFromDom(element)) {
-        return false;
-    }
-    int lineCount = 0;
-    QString lineCountStr = element.attribute("LINES");
-    if(!lineCountStr.isNull()) {
-        lineCount = lineCountStr.toInt();
-    }
-    if (lineCount == 0) {
-        kWarning( DEBUGID ) << "lineCount <= 0 in MultilineElement." << endl;
-        return false;
-    }
-
-    m_matrixEntryElements.clear();
-    for ( int i = 0; i < lineCount; ++i ) {
-        MatrixEntryElement* element = new MatrixEntryElement(this);
-        m_matrixEntryElements.append(element);
-    }
-    return true;
-}
-
-/**
- * Reads our content from the node. Sets the node to the next node
- * that needs to be read.
- * Returns false if it failed.
- */
-bool MatrixRowElement::readContentFromDom(QDomNode& node)
-{
-    if (!BasicElement::readContentFromDom(node)) {
-        return false;
-    }
-
-    int lineCount = m_matrixEntryElements.count();
-    int i = 0;
-    while ( !node.isNull() && i < lineCount ) {
-        if ( node.isElement() ) {
-            SequenceElement* element = m_matrixEntryElements.at( i );
-            QDomElement e = node.toElement();
-            if ( !element->buildFromDom( e ) ) {
-                return false;
-            }
-            ++i;
-        }
-        node = node.nextSibling();
-    }
-    return true;
 }
