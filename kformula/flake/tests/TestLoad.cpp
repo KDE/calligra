@@ -320,7 +320,10 @@ void TestLoad::rootElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
+    addRow( "<msqrt></msqrt>", 1 );
+    addRow( "<msqrt><mrow></mrow></msqrt>", 1 );
     addRow( "<msqrt><mi>x</mi></msqrt>", 1, 2 );
+    addRow( "<msqrt><mrow><mi>x</mi></mrow></msqrt>", 1, 2 );
     addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>", 2, 4 );
 
     // More complex content
@@ -347,6 +350,7 @@ void TestLoad::styleElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
+    addRow( "<mstyle></mstyle>", 1 );
     addRow( "<mstyle><mrow></mrow></mstyle>", 1 );
     addRow( "<mstyle><mi>x</mi></mstyle>", 1, 2 );
     addRow( "<mstyle><mrow><mi>x</mi></mrow></mstyle>", 1, 2 );
@@ -363,6 +367,7 @@ void TestLoad::errorElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
+    addRow( "<merror></merror>", 1 );
     addRow( "<merror><mrow></mrow></merror>", 1 );
     addRow( "<merror><mi>x</mi></merror>", 1, 2 );
     addRow( "<merror><mrow><mi>x</mi></mrow></merror>", 1, 2 );
@@ -386,6 +391,7 @@ void TestLoad::paddedElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
+    addRow( "<mpadded></mpadded>", 1 );
     addRow( "<mpadded><mrow></mrow></mpadded>", 1 );
     addRow( "<mpadded><mi>x</mi></mpadded>", 1, 2 );
     addRow( "<mpadded><mrow><mi>x</mi></mrow></mpadded>", 1, 2 );
@@ -402,6 +408,7 @@ void TestLoad::phantomElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
+    addRow( "<mphantom></mphantom>", 1 );
     addRow( "<mphantom><mrow></mrow></mphantom>", 1 );
     addRow( "<mphantom><mi>x</mi></mphantom>", 1, 2 );
     addRow( "<mphantom><mrow><mi>x</mi></mrow></mphantom>", 1, 2 );
@@ -429,6 +436,7 @@ void TestLoad::encloseElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
+    addRow( "<menclose></menclose>", 1 );
     addRow( "<menclose><mrow></mrow></menclose>", 1 );
     addRow( "<menclose><mi>x</mi></menclose>", 1, 2 );
     addRow( "<menclose><mrow><mi>x</mi></mrow></menclose>", 1, 2 );
