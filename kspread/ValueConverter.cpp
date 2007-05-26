@@ -82,7 +82,6 @@ Value ValueConverter::asBoolean (const Value &value) const
 Value ValueConverter::asInteger (const Value &value) const
 {
   Value val;
-  bool ok;
 
   switch (value.type()) {
     case Value::Empty:
@@ -101,10 +100,10 @@ Value ValueConverter::asInteger (const Value &value) const
       val = Value(value.asInteger());
     break;
     case Value::String:
-      val = Value((int) m_parser->tryParseNumber
-          (value.asString(), &ok).asFloat());
-      if (!ok)
+      val = m_parser->parse(value.asString());
+      if (!val.isNumber())
         val = Value(0);
+      val = Value(val.asInteger());
     break;
     case Value::Array:
       val = asInteger (value.element (0, 0));
@@ -123,7 +122,6 @@ Value ValueConverter::asInteger (const Value &value) const
 Value ValueConverter::asFloat (const Value &value) const
 {
   Value val;
-  bool ok;
 
   switch (value.type()) {
     case Value::Empty:
@@ -142,9 +140,10 @@ Value ValueConverter::asFloat (const Value &value) const
       val = Value(value.asFloat());
     break;
     case Value::String:
-      val = m_parser->tryParseNumber (value.asString(), &ok);
-      if (!ok)
+      val = m_parser->parse(value.asString());
+      if (!val.isNumber())
         val = Value(0.0);
+      val = Value(val.asFloat());
     break;
     case Value::Array:
       val = asFloat (value.element (0, 0));
@@ -163,7 +162,6 @@ Value ValueConverter::asFloat (const Value &value) const
 Value ValueConverter::asComplex( const Value &value ) const
 {
     Value val;
-    bool ok;
 
     switch (value.type())
     {
@@ -181,9 +179,10 @@ Value ValueConverter::asComplex( const Value &value ) const
             val = value;
             break;
         case Value::String:
-            val = m_parser->tryParseNumber (value.asString(), &ok);
-            if (!ok)
+            val = m_parser->parse(value.asString());
+            if (!val.isNumber())
                 val = Value( complex<double>( 0.0, 0.0 ) );
+            val = Value(val.asComplex());
             break;
         case Value::Array:
             val = asComplex( value.element( 0, 0 ) );
@@ -202,7 +201,6 @@ Value ValueConverter::asComplex( const Value &value ) const
 Value ValueConverter::asNumeric (const Value &value) const
 {
     Value val;
-    bool ok;
 
     switch (value.type())
     {
@@ -218,8 +216,8 @@ Value ValueConverter::asNumeric (const Value &value) const
             val = value;
             break;
         case Value::String:
-            val = m_parser->tryParseNumber (value.asString(), &ok);
-            if (!ok)
+            val = m_parser->parse(value.asString());
+            if (!val.isNumber())
                 val = Value(0.0);
             break;
         case Value::Array:
