@@ -38,12 +38,9 @@ void MatrixElement::paint( QPainter& painter ) const
 {
     // TODO paint the frame, rowlines, columnlines
     // eventually paint the frame
-    if( != None )
-
-    rowlines
 }
 
-void MatrixElement::calculateSize()
+void MatrixElement::layout( AttributeManager* am )
 {
     // TODO implement rowspacing
     double tmpHeight = 0.0;
@@ -51,7 +48,7 @@ void MatrixElement::calculateSize()
     QPointF tmpOrigin = origin();
     foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
     {
-        tmpRow->calculateSize();
+        tmpRow->layout( am );
         tmpWidth = qMax( tmpRow->width(), tmpWidth );
 	tmpHeight += tmpRow->height();
 	tmpRow->setOrigin( tmpOrigin );
@@ -72,9 +69,10 @@ const QList<BasicElement*> MatrixElement::childElements()
 
 void MatrixElement::moveRight( FormulaCursor* cursor, BasicElement* from )
 {
+    /*
     if( from == parentElement() )
     {
-        if( parentElement()->elementType() == Sequence )
+        if( parentElement()->elementType() == Row )
             m_matrixRowElements.first()->moveRight( cursor, this ); // enter the matrix
 	else
             cursor->setCursorTo( this, 0 );
@@ -83,13 +81,15 @@ void MatrixElement::moveRight( FormulaCursor* cursor, BasicElement* from )
         m_matrixRowElements.first()->moveRight( cursor, this );
     else
         parentElement()->moveRight( cursor, this );
+    */
 }
 
 void MatrixElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
 {
+    /*
     if( from == parentElement() )
     {
-        if( parentElement()->elementType() == Sequence )
+        if( parentElement()->elementType() == Row )
             m_matrixRowElements.last()->moveLeft( cursor, this ); // enter the matrix
 	else
             cursor->setCursorTo( this, 1 );
@@ -98,10 +98,12 @@ void MatrixElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
         m_matrixRowElements.last()->moveLeft( cursor, this );
     else
         parentElement()->moveLeft( cursor, this );
+    */
 }
 
 void MatrixElement::moveDown( FormulaCursor* cursor, BasicElement* from )
 {
+    /*
     if( cursor->currentElement() == this )
         parentElement()->moveDown( cursor, this );
     else if( cursor->currentElement()->elementType() == MatrixEntry )
@@ -111,10 +113,12 @@ void MatrixElement::moveDown( FormulaCursor* cursor, BasicElement* from )
 	if( m_matrixRowElements.count() > row++ )
             cursor->setCursorTo( m_matrixRowElements[ row++ ]->entryAt( pos ), 0 );
     }
+    */
 }
 
 void MatrixElement::moveUp( FormulaCursor* cursor, BasicElement* from )
 {
+    /*
     if( cursor->currentElement() == this )
         parentElement()->moveUp( cursor, this );
     else if( cursor->currentElement()->elementType() == MatrixEntry )
@@ -124,6 +128,7 @@ void MatrixElement::moveUp( FormulaCursor* cursor, BasicElement* from )
 	if( 0 < row )
             cursor->setCursorTo( m_matrixRowElements[ row-- ]->entryAt( pos ), 0 );
     }
+    */
 }
 
 bool MatrixElement::readMathMLContent( const KoXmlElement& element )
@@ -202,96 +207,3 @@ bool MatrixElement::searchElement(BasicElement* element, int& row, int& column)
     return false;
 }
 */
-
-/**
- * Appends our attributes to the dom element.
- */
-void MatrixElement::writeDom(QDomElement element)
-{
-/*    BasicElement::writeDom(element);
-
-    element.setAttribute( "ROWS", rows() );
-    element.setAttribute( "COLUMNS", cols() );
-
-    QDomDocument doc = element.ownerDocument();
-
-    for (int r = 0; r < rows(); r++) {
-        for (int c = 0; c < cols(); c++) {
-    	    QDomElement tmp = matrixEntryAt( r, c )->getElementDom(doc);
-            element.appendChild( tmp );
-	}
-        element.appendChild( doc.createComment( "end of row" ) );
-    }*/
-}
-
-/**
- * Reads our attributes from the element.
- * Returns false if it failed.
- */
-bool MatrixElement::readAttributesFromDom(QDomElement element)
-{
-/*    if (!BasicElement::readAttributesFromDom(element)) {
-        return false;
-    }
-    int rows = 0;
-    QString rowStr = element.attribute("ROWS");
-    if(!rowStr.isNull()) {
-        rows = rowStr.toInt();
-    }
-    if (rows == 0) {
-        kWarning( DEBUGID ) << "Rows <= 0 in MatrixElement." << endl;
-        return false;
-    }
-
-    QString columnStr = element.attribute("COLUMNS");
-    int cols = 0;
-    if(!columnStr.isNull()) {
-        cols = columnStr.toInt();
-    }
-    if (cols == 0) {
-        kWarning( DEBUGID ) << "Columns <= 0 in MatrixElement." << endl;
-        return false;
-    }
-
-    content.clear();
-    for (int r = 0; r < rows; r++) {
-        QList<MatrixSequenceElement*>* list = new QList<MatrixSequenceElement*>;
-//        list->setAutoDelete(true);
-        content.append(list);
-        for (int c = 0; c < cols; c++) {
-            MatrixSequenceElement* element = new MatrixSequenceElement(this);
-            list->append(element);
-	}
-    }*/
-    return true;
-}
-
-/**
- * Reads our content from the node. Sets the node to the next node
- * that needs to be read.
- * Returns false if it failed.
- */
-bool MatrixElement::readContentFromDom(QDomNode& node)
-{
-/*    if (!BasicElement::readContentFromDom(node))
-        return false;
-
-    int r = 0;
-    int c = 0;
-    while ( !node.isNull() && r < rows() ) {
-        if ( node.isElement() ) {
-            SequenceElement* element = matrixEntryAt( r, c );
-            QDomElement e = node.toElement();
-            if ( !element->buildFromDom( e ) ) {
-                return false;
-            }
-            c++;
-            if ( c == cols() ) {
-                c = 0;
-                r++;
-            }
-        }
-        node = node.nextSibling();
-    }*/
-    return true;
-}

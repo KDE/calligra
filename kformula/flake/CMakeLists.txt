@@ -21,7 +21,7 @@ set( kformulalib_PART_SRCS
    MultiscriptElement.cpp
    UnderOverElement.cpp
    BracketElement.cpp 
-#   MatrixElement.cpp
+   MatrixElement.cpp
    MatrixRowElement.cpp
    MatrixEntryElement.cpp
    RootElement.cpp
