@@ -47,6 +47,7 @@
 #include "MatrixElement.h"
 #include "MatrixRowElement.h"
 #include "MatrixEntryElement.h"
+#include "ActionElement.h"
 
 static void load(BasicElement* element, const QString& input)
 {
@@ -866,6 +867,19 @@ void TestLoad::tdElement_data()
     addRow( "<mtd groupalign=\"left\"><mi>x</mi></mtd>", 1, 2 );
 }
     
+void TestLoad::actionElement_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<int>("output");
+    QTest::addColumn<int>("outputRecursive");
+
+    // Basic content
+    addRow( "<maction actiontype=\"toggle\" selection=\"positive-integer><mrow></mrow><mrow></mrow></maction>", 2 );
+    addRow( "<maction actiontype=\"statusline\" <mrow></mrow><mrow></mrow></maction>", 2 );
+    addRow( "<maction actiontype=\"tooltip\" <mrow></mrow><mrow></mrow></maction>", 2 );
+    addRow( "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"><mrow></mrow></maction>", 1 );
+}
+        
 void TestLoad::identifierElement()
 {
     test( new IdentifierElement );
@@ -999,6 +1013,11 @@ void TestLoad::labeledtrElement()
 void TestLoad::tdElement()
 {
     test( new MatrixEntryElement );
+}
+
+void TestLoad::actionElement()
+{
+    test( new ActionElement );
 }
 
 QTEST_MAIN(TestLoad)

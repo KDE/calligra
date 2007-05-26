@@ -21,13 +21,14 @@
 #define ACTIONELEMENT_H
 
 #include "RowElement.h"
+#include "kformula_export.h"
 
 /**
  * Support for action elements in MathML. According to MathML spec 
  * (Section 3.6.1.1), a MathML conformant application is not required to 
  * recognize any single actiontype.
  */
-class ActionElement : public RowElement {
+class KOFORMULA_EXPORT ActionElement : public RowElement {
 public:
     ActionElement( BasicElement* parent = 0 );
 

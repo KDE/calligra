@@ -88,6 +88,10 @@ private slots:
     void labeledtrElement();
     void tdElement_data();
     void tdElement();
+
+    // Enlivening expressions
+    void actionElement_data();
+    void actionElement();
 };
 
 #endif // _TESTLOAD_H_
