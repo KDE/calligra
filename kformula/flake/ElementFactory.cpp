@@ -144,6 +144,16 @@ QString ElementFactory::elementName( ElementType type )
         return "mroot";
     case SquareRoot:
         return "msqrt";
+    case Matrix:
+        return "mtable";
+    case MatrixRow:
+        return "mtr"; // TODO: Check for mlabeledtr
+    case MatrixEntry:
+        return "mtd";
+    case Action:
+        return "maction";
+    default:
+        kWarning( DEBUGID ) << "Invalid elemnet type\n";
     }
 
     return QString();
