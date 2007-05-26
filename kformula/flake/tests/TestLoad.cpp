@@ -704,6 +704,69 @@ void TestLoad::tableElement_data()
     // Be sure attributes don't break anything
     addRow( "<mtable align=\"top\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 4 );
     addRow( "<mtable rowalign=\"center\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 4 );
+
+    // Content with alignment elements
+    addRow( "<mtable groupalign=\"{decimalpoint left left decimalpoint left left decimalpoint}\">"
+            " <mtr>"
+            "  <mtd>"
+            "   <mrow>"
+            "    <mrow>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 8.44 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> x </mi>"
+            "     </mrow>"
+            "     <maligngroup/>"
+            "     <mo> + </mo>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 55 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> y </mi>"
+            "     </mrow>"
+            "    </mrow>"
+            "    <maligngroup/>"
+            "    <mo> = </mo>"
+            "    <maligngroup/>"
+            "    <mn> 0 </mn>"
+            "   </mrow>"
+            "  </mtd>"
+            " </mtr>"
+            " <mtr>"
+            "  <mtd>"
+            "   <mrow>"
+            "    <mrow>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 3.1 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> x </mi>"
+            "     </mrow>"
+            "     <maligngroup/>"
+            "     <mo> - </mo>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 0.7 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> y </mi>"
+            "     </mrow>"
+            "    </mrow>"
+            "    <maligngroup/>"
+            "    <mo> = </mo>"
+            "    <maligngroup/>"
+            "    <mrow>"
+            "     <mo> - </mo>"
+            "     <mn> 1.1 </mn>"
+            "    </mrow>"
+            "   </mrow>"
+            "  </mtd>"
+            " </mtr>"
+            "</mtable>", 2, 32 );
 }
 
 void TestLoad::trElement_data()
@@ -713,6 +776,7 @@ void TestLoad::trElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
+    addRow( "<mtr></mtr>", 0 );
     addRow( "<mtr><mtd></mtd></mtr>", 1, 2 );
     addRow( "<mtr><mtd><mrow></mrow></mtd></mtr>", 1, 2 );
     addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>", 1, 3 );
