@@ -80,6 +80,8 @@ public:
     QWidget *canvasWidget();
     /// reimplemented from KoCanvasBase
     void updateCanvas(const QRectF& rc);
+    /// reimplemented from KoCanvasBase
+    virtual void updateInputMethodInfo();
 
     /// Enables/disables showing page margins
     void setShowPageMargins( bool on );

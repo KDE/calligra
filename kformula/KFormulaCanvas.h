@@ -72,7 +72,10 @@ public:
 
     /// reimplemented method from superclass
     KoUnit unit();
-    
+
+    /// reimplemented method from superclass
+    virtual void updateInputMethodInfo();
+
 protected:
     void mousePressEvent( QMouseEvent* event );
     void mouseReleaseEvent( QMouseEvent* event );

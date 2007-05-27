@@ -361,5 +361,9 @@ QRectF KarbonCanvas::documentViewRect()
     return viewRect;
 }
 
+void KarbonCanvas::updateInputMethodInfo() {
+    updateMicroFocus();
+}
+
 #include "vcanvas.moc"
 

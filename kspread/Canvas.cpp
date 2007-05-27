@@ -3511,4 +3511,8 @@ int Canvas::metric( PaintDeviceMetric metric ) const
     return QWidget::metric( metric );
 }
 
+void Canvas::updateInputMethodInfo() {
+    updateMicroFocus();
+}
+
 #include "Canvas.moc"

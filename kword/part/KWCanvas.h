@@ -78,6 +78,8 @@ public:
     virtual KoToolProxy * toolProxy() { return m_toolProxy; }
     /// reimplemented method from superclass
     virtual void clipToDocument(const KoShape *shape, QPointF &move) const;
+    /// reimplemented method from superclass
+    virtual void updateInputMethodInfo();
     // getters
     /// return the document that this canvas works on
     KWDocument *document() const { return m_document; }
@@ -121,6 +123,11 @@ protected:
     virtual void wheelEvent( QWheelEvent *e );
     /// reimplemented method from superclass
     virtual bool event(QEvent *event);
+    /// reimplemented method from superclass
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    /// reimplemented method from superclass
+    void inputMethodEvent(QInputMethodEvent *event);
+
 
 private slots:
     /// Called whenever there was a page added/removed or simply resized.

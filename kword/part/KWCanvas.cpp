@@ -56,6 +56,7 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
 
     m_toolProxy = new KoToolProxy(this, this);
     setAttribute(Qt::WA_OpaquePaintEvent, true);
+    setAttribute(Qt::WA_InputMethodEnabled, true);
 }
 
 KWCanvas::~KWCanvas()
@@ -148,6 +149,14 @@ void KWCanvas::keyPressEvent( QKeyEvent *e ) {
     m_toolProxy->keyPressEvent(e);
 }
 
+QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const {
+    return m_toolProxy->inputMethodQuery(query);
+}
+
+void KWCanvas::updateInputMethodInfo() {
+    updateMicroFocus();
+}
+
 void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
 #ifndef NDEBUG
     // Debug keys
@@ -192,6 +201,10 @@ void KWCanvas::tabletEvent( QTabletEvent *e )
 void KWCanvas::wheelEvent( QWheelEvent *e )
 {
     m_toolProxy->wheelEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
+}
+
+void KWCanvas::inputMethodEvent(QInputMethodEvent *event) {
+    m_toolProxy->inputMethodEvent(event);
 }
 
 bool KWCanvas::event (QEvent *event) {

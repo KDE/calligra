@@ -141,3 +141,7 @@ KoToolProxy* KFormulaCanvas::toolProxy()
     return m_toolProxy;
 }
 
+void KFormulaCanvas::updateInputMethodInfo()
+{
+    updateMicroFocus();
+}

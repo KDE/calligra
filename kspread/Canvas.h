@@ -145,6 +145,8 @@ public:
     QWidget* canvasWidget() { return this; }
     /// reimplemented method from KoCanvasBase
     KoUnit unit();
+    /// reimplemented method from KoCanvasBase
+    virtual void updateInputMethodInfo();
 
     KSpread::EditWidget* editWidget() const;
     KSpread::CellEditor* editor() const;
