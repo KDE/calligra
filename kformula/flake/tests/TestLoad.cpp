@@ -70,12 +70,16 @@ static int count( const QList<BasicElement*>& list )
 
 static void addRow( const QString& input, int output )
 {
-    QTest::newRow("Load") << input << output << output;
+    static int counter = 0;
+    QString name = "Load " + QString::number( ++counter );
+    QTest::newRow( name.toLatin1() ) << input << output << output;
 }
 
 static void addRow( const QString& input, int output, int outputRecursive )
 {
-    QTest::newRow("Load") << input << output << outputRecursive;
+    static int counter = 0;
+    QString name = "LoadRecursive " + QString::number( ++counter ); 
+    QTest::newRow( name.toLatin1() ) << input << output << outputRecursive;
 }
 
 void test( BasicElement* element )
