@@ -250,7 +250,7 @@ bool BorderColorManipulator::preProcessing()
             m_undoData += undoData;
         }
     }
-    return AbstractRegionCommand::preProcessing(); // for protection check
+    return AbstractRegionCommand::preProcessing();
 }
 
 bool BorderColorManipulator::mainProcessing()

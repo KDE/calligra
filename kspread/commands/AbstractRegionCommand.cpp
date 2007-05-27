@@ -20,8 +20,10 @@
 // Local
 #include "AbstractRegionCommand.h"
 
+#include <QApplication>
+
 #include <klocale.h>
-#include <kmessagebox.h>
+#include <kpassivepopup.h>
 
 #include "Cell.h"
 #include "Doc.h"
@@ -55,7 +57,8 @@ AbstractRegionCommand::AbstractRegionCommand()
     m_reverse(false),
     m_firstrun(true),
     m_register(true),
-    m_success(true)
+    m_success(true),
+    m_checkLock(false)
 {
 }
 
@@ -66,6 +69,8 @@ AbstractRegionCommand::~AbstractRegionCommand()
 bool AbstractRegionCommand::execute()
 {
     if ( !m_firstrun )
+        return false;
+    if ( !isApproved() )
         return false;
     // registering in undo history?
     if ( m_register )
@@ -123,13 +128,8 @@ void AbstractRegionCommand::undo()
   m_reverse = !m_reverse;
 }
 
-bool AbstractRegionCommand::preProcessing()
+bool AbstractRegionCommand::isApproved() const
 {
-    // If the sheet's protection is not enabled, cell protection statue will not take effect.
-    if ( !m_sheet->isProtected() )
-        return true;
-
-    bool notProtected = true;
     Region::ConstIterator endOfList( constEnd() );
     for ( Region::ConstIterator it = constBegin(); it != endOfList; ++it )
     {
@@ -140,21 +140,26 @@ bool AbstractRegionCommand::preProcessing()
             for ( int row = range.top(); row <= range.bottom(); ++row )
             {
                 Cell cell( m_sheet, col, row );
-                if ( !cell.style().notProtected() )
+                if ( m_sheet->isProtected() && !cell.style().notProtected() )
                 {
-                    notProtected = false;
-                    break;
+                    KPassivePopup::message( i18n( "Processing is not possible, "
+                                                  "because some cells are protected." ),
+                                            QApplication::activeWindow() );
+                    return false;
                 }
-            }
-            if ( !notProtected )
-            {
-                KMessageBox::error( 0, i18n( "Processing is not possible, "
-                                             "because some cells are protected." ) );
-                break;
+
+                // check for matrix locks
+                if ( m_checkLock && cell.isLocked() )
+                {
+                    KPassivePopup::message( i18n( "Processing is not possible, because some "
+                                                  "cells are locked as elements of a matrix." ),
+                                            QApplication::activeWindow() );
+                    return false;
+                }
             }
         }
     }
-    return notProtected;
+    return true;
 }
 
 bool AbstractRegionCommand::mainProcessing()

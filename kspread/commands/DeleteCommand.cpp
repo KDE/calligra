@@ -30,7 +30,8 @@ using namespace KSpread;
 
 DeleteCommand::DeleteCommand()
 {
-    m_name = i18n( "Delete" );
+    setText( i18n( "Delete" ) );
+    m_checkLock = true;
 }
 
 DeleteCommand::~DeleteCommand()

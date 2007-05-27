@@ -314,9 +314,6 @@ public:
      */
     void undo( CellStorageUndoData* undoData );
 
-Q_SIGNALS:
-    void inform( const QString& message );
-
 private:
     // do not allow assignment
     CellStorage& operator=( const CellStorage& );

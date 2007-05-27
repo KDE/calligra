@@ -300,12 +300,6 @@ Value CellStorage::valueRegion( const Region& region ) const
 
 void CellStorage::setValue( int column, int row, const Value& value )
 {
-    if ( isLocked( column, row ) )
-    {
-        emit inform( i18n( "The cell is currently locked as element of a matrix." ) );
-        return;
-    }
-
     // release any lock
     unlockCells( column, row );
 
@@ -431,7 +425,6 @@ bool CellStorage::isLocked( int column, int row ) const
 
 void CellStorage::lockCells( const QRect& rect )
 {
-    kDebug() << k_funcinfo << endl;
     // Start by unlocking the cells that we lock right now
     const QPair<QRectF,bool> pair = d->matrixStorage->containedPair( rect.topLeft() ); // FIXME
     if ( !pair.first.isNull() )

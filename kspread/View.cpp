@@ -2067,8 +2067,6 @@ SheetView* View::sheetView( const Sheet* sheet ) const
         d->sheetViews.insert( sheet, new SheetView( sheet ) );
         d->sheetViews[ sheet ]->setPaintDevice( d->canvas );
         d->sheetViews[ sheet ]->setViewConverter( zoomHandler() );
-        connect( sheet->cellStorage(), SIGNAL( inform( const QString& ) ),
-                 this, SLOT( notify( const QString& ) ) );
         connect( d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
                  d->canvas, SLOT(setDocumentSize(const QSizeF&)) );
         connect( d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
@@ -2580,11 +2578,6 @@ void View::spellCheckerFinished()
     configDlg.openPage( PreferenceDialog::KS_SPELLING);
     configDlg.exec();
   }
-}
-
-void View::notify( const QString& message )
-{
-    KPassivePopup::message( message, vBorderWidget() );
 }
 
 void View::initialPosition()

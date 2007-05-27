@@ -30,7 +30,7 @@ using namespace KSpread;
 
 AutoFormatCommand::AutoFormatCommand()
 {
-    m_name = i18n( "Auto-Format" );
+    setText( i18n( "Auto-Format" ) );
 }
 
 AutoFormatCommand::~AutoFormatCommand()

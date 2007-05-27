@@ -36,6 +36,7 @@ MergeCommand::MergeCommand()
     m_mergeVertical(false),
     m_unmerger(0)
 {
+    m_checkLock = true;
 }
 
 MergeCommand::~MergeCommand()
@@ -229,7 +230,7 @@ bool MergeCommand::preProcessing()
       }
     }
   }
-  return AbstractRegionCommand::preProcessing(); // for protection check
+  return AbstractRegionCommand::preProcessing();
 }
 
 bool MergeCommand::postProcessing()

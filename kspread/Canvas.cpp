@@ -1119,7 +1119,8 @@ void Canvas::dropEvent( QDropEvent * _ev )
       DeleteCommand* command = new DeleteCommand();
       command->setSheet( activeSheet() );
       command->add( *selection() );
-      command->redo(); // no registering
+      command->setRegisterUndo( false );
+      command->execute();
     }
 
 

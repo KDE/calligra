@@ -193,7 +193,7 @@ bool HideShowManipulator::preProcessing()
     add(region);
   }
 
-  return AbstractRegionCommand::preProcessing(); // for protection check
+  return AbstractRegionCommand::preProcessing();
 }
 
 bool HideShowManipulator::postProcessing()
@@ -365,7 +365,7 @@ bool AdjustColumnRowManipulator::preProcessing()
   {
     if (!m_newHeights.isEmpty() || !m_newWidths.isEmpty())
     {
-      return AbstractRegionCommand::preProcessing(); // for protection check
+      return AbstractRegionCommand::preProcessing();
     }
 //     createUndo();
 

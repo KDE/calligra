@@ -227,22 +227,24 @@ void RecalcManager::recalc()
         if ( !cells.value( c ).formula().isValid() )
             continue;
 
+        const Sheet* sheet = cells.value( c ).sheet();
+
         // evaluate the formula and set the result
         Value result = cells.value( c ).formula().eval();
         if ( result.isArray() && ( result.columns() > 1 || result.rows() > 1 ) )
         {
             const QRect rect = cells.value( c ).lockedCells();
-            kDebug() << rect << endl;
+            // unlock
+            sheet->cellStorage()->unlockCells( rect.left(), rect.top() );
             for ( int row = rect.top(); row <= rect.bottom(); ++row )
             {
                 for ( int col = rect.left(); col <= rect.right(); ++col )
                 {
-                    kDebug() << result.element( col - rect.left(), row - rect.top() ) << endl;
-                    Cell( cells.value( c ).sheet(), col, row ).setValue( result.element( col - rect.left(), row - rect.top() ) );
+                    Cell( sheet, col, row ).setValue( result.element( col - rect.left(), row - rect.top() ) );
                 }
             }
             // relock
-            cells.value( c ).sheet()->cellStorage()->lockCells( rect );
+            sheet->cellStorage()->lockCells( rect );
         }
         else
             Cell( cells.value( c ) ).setValue( result );

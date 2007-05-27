@@ -35,6 +35,7 @@ using namespace KSpread;
 
 AbstractDataManipulator::AbstractDataManipulator ()
 {
+    m_checkLock = true;
 }
 
 AbstractDataManipulator::~AbstractDataManipulator ()
@@ -86,11 +87,8 @@ bool AbstractDataManipulator::preProcessing()
     // not the first run - data already stored ...
     if ( !m_firstrun )
         return true;
-    // protection check
-    if ( !AbstractRegionCommand::preProcessing() )
-        return false;
     m_sheet->cellStorage()->startUndoRecording();
-    return true;
+    return AbstractRegionCommand::preProcessing();
 }
 
 bool AbstractDataManipulator::mainProcessing()
@@ -152,7 +150,7 @@ DataManipulator::DataManipulator()
     , m_expandMatrix( false )
 {
   // default name for DataManipulator, can be changed using setName
-  m_name = i18n ("Change Value");
+  setText( i18n ("Change Value") );
 }
 
 DataManipulator::~DataManipulator ()
@@ -197,8 +195,6 @@ bool DataManipulator::process( Element* element )
     {
         if ( !m_reverse )
             m_sheet->cellStorage()->lockCells( element->rect() );
-//         else
-//             m_sheet->cellStorage()->unlockCells( element->rect().left(), element->rect().top() );
     }
     return true;
 }
@@ -325,7 +321,7 @@ FillManipulator::FillManipulator ()
 {
   m_dir = Down;
   m_changeformat = true;
-  m_name = i18n ("Fill Selection");
+  setText( i18n("Fill Selection") );
 }
 
 FillManipulator::~FillManipulator ()
@@ -362,7 +358,7 @@ Style FillManipulator::newFormat (Element *element, int col, int row)
 CaseManipulator::CaseManipulator ()
 {
   m_mode = Upper;
-  m_name = i18n ("Change Case");
+  setText( i18n ("Change Case") );
 }
 
 CaseManipulator::~CaseManipulator ()
@@ -410,6 +406,7 @@ ShiftManipulator::ShiftManipulator()
     : AbstractRegionCommand()
     , m_mode( Insert )
 {
+    m_checkLock = true;
 }
 
 void ShiftManipulator::setReverse( bool reverse )

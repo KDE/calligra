@@ -39,7 +39,7 @@ SortManipulator::SortManipulator()
   m_cs = false;
   m_usecustomlist = false;
 
-  m_name = i18n ("Sort Data");
+  setText( i18n("Sort Data") );
 }
 
 SortManipulator::~SortManipulator ()

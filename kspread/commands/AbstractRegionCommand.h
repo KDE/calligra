@@ -59,8 +59,8 @@ public:
     /**
      * Executes the actual operation and adds the manipulator to the undo history, if desired.
      * \return \c true if the command was executed successfully
-     * \return \c false if the command fails or if the command was already executed once
-     * \see setRegisterUndo
+     * \return \c false if the command fails, was already executed once or is not approved
+     * \see setRegisterUndo, isApproved
      */
     bool execute();
 
@@ -110,7 +110,7 @@ protected:
      * \return \c true if the sheet is not protected or all cells are not protected
      * \return \c false if any of the cells is protected
      */
-    virtual bool preProcessing();
+    virtual bool preProcessing() { return true; }
 
     /**
      * Processes the region. Calls process(Element*).
@@ -122,6 +122,13 @@ protected:
      */
     virtual bool postProcessing() { return true; }
 
+    /**
+     * Checks all cells, that should be processed, for protection and matrix locks.
+     * \return \c true if execution is approved
+     * \return \c false otherwise
+     */
+    bool isApproved() const;
+
 protected:
     Sheet*  m_sheet;
     QString m_name;
@@ -129,6 +136,7 @@ protected:
     bool    m_firstrun  : 1;
     bool    m_register  : 1;
     bool    m_success   : 1;
+    bool    m_checkLock : 1;
 };
 
 } // namespace KSpread
