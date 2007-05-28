@@ -52,7 +52,7 @@ KarbonPencilTool::~KarbonPencilTool()
 {
 }
 
-void KarbonPencilTool::paint( QPainter &painter, KoViewConverter &converter )
+void KarbonPencilTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
     if( ! m_shape )
         return;

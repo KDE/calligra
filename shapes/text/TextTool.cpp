@@ -223,7 +223,7 @@ TextTool::~TextTool() {
     qDeleteAll(m_textEditingPlugins);
 }
 
-void TextTool::paint( QPainter &painter, KoViewConverter &converter) {
+void TextTool::paint( QPainter &painter, const KoViewConverter &converter) {
     QTextBlock block = m_caret.block();
     if(! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
         return;
@@ -550,6 +550,31 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
     updateSelectionHandler();
 }
 
+QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const {
+    switch(query) {
+    case Qt::ImMicroFocus: {
+        // The rectangle covering the area of the input cursor in widget coordinates.
+        QRectF rect = textRect(m_caret.position(), m_caret.position());
+        rect.moveTop(rect.top() - m_textShapeData->documentOffset());
+        rect = m_textShape->transformationMatrix(&converter).mapRect(rect);
+        return rect.toRect();
+    }
+    case Qt::ImFont:
+        // The currently used font for text input.
+        return m_caret.charFormat().font();
+    case Qt::ImCursorPosition:
+        // The logical position of the cursor within the text surrounding the input area (see ImSurroundingText).
+        return m_caret.position() - m_caret.block().position();
+    case Qt::ImSurroundingText:
+        // The plain text around the input area, for example the current paragraph.
+        return m_caret.block().text();
+    case Qt::ImCurrentSelection:
+        // The currently selected text.
+        return m_caret.selectedText();
+    }
+    return QVariant();
+}
+
 void TextTool::ensureCursorVisible() {
     if(m_textShapeData->endPosition() < m_caret.position() || m_textShapeData->position() > m_caret.position()) {
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
@@ -697,7 +722,7 @@ void TextTool::repaintSelection(int startPosition, int endPosition) {
     }
 }
 
-QRectF TextTool::textRect(int startPosition, int endPosition) {
+QRectF TextTool::textRect(int startPosition, int endPosition) const {
     if(startPosition > endPosition)
         qSwap(startPosition, endPosition);
     QTextBlock block = m_textShapeData->document()->findBlock(startPosition);

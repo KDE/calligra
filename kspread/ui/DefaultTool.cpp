@@ -129,7 +129,7 @@ DefaultTool::~DefaultTool()
     delete d;
 }
 
-void DefaultTool::paint( QPainter& painter, KoViewConverter& viewConverter )
+void DefaultTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
 {
     KoShape::applyConversion( painter, viewConverter );
     const QRectF paintRect = viewConverter.viewToDocument( d->canvas->rect() );

@@ -37,7 +37,7 @@ class SimpleEntryTool : public KoTool
         explicit SimpleEntryTool( KoCanvasBase* canvas );
         ~SimpleEntryTool();
         
-        virtual void paint( QPainter& painter, KoViewConverter& converter );
+        virtual void paint( QPainter& painter, const KoViewConverter& converter );
         
         virtual void mousePressEvent( KoPointerEvent* event ) ;
         virtual void mouseMoveEvent( KoPointerEvent* event );

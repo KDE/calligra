@@ -41,7 +41,7 @@ public:
     virtual ~GradientStrategy() {}
 
     /// painting of the gradient editing handles
-    virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0;
+    virtual void paint( QPainter &painter, const KoViewConverter &converter ) = 0;
 
     /// selects handle at the given position
     virtual bool selectHandle( const QPointF &mousePos );
@@ -74,7 +74,7 @@ public:
     const QGradient * gradient();
 protected:
     /// paints a handle at the given position
-    void paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position );
+    void paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position );
     /// checks if given mouse position is inside the handle rect at the specified position
     bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos );
     /// creates an updated background brush from the actual data
@@ -95,7 +95,7 @@ class LinearGradientStrategy : public GradientStrategy
 {
 public:
     LinearGradientStrategy( KoShape *shape, const QLinearGradient *gradient );
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 private:
     virtual QBrush background();
     enum Handles { start, stop };
@@ -106,7 +106,7 @@ class RadialGradientStrategy : public GradientStrategy
 {
 public:
     RadialGradientStrategy( KoShape *shape, const QRadialGradient *gradient );
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 private:
     virtual QBrush background();
     enum Handles { center, focal, radius };
@@ -117,7 +117,7 @@ class ConicalGradientStrategy : public GradientStrategy
 {
 public:
     ConicalGradientStrategy( KoShape *shape, const QConicalGradient *gradient );
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 private:
     virtual QBrush background();
     enum Handles { center, direction };

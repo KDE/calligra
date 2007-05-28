@@ -37,7 +37,7 @@ public:
     explicit KoFormulaTool( KoCanvasBase *canvas );
     ~KoFormulaTool();
 
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
 
     void mousePressEvent( KoPointerEvent *event ) ;
     

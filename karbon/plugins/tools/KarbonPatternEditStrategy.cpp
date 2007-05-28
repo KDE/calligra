@@ -53,7 +53,7 @@ KarbonPatternEditStrategy::~KarbonPatternEditStrategy()
 {
 }
 
-void KarbonPatternEditStrategy::paint( QPainter &painter, KoViewConverter &converter ) const
+void KarbonPatternEditStrategy::paint( QPainter &painter, const KoViewConverter &converter ) const
 {
     QPointF centerPoint = m_matrix.map( m_origin + m_handles[center] );
     QPointF directionPoint = m_matrix.map( m_origin + m_handles[direction] );
@@ -64,7 +64,7 @@ void KarbonPatternEditStrategy::paint( QPainter &painter, KoViewConverter &conve
     paintHandle( painter, converter, directionPoint );
 }
 
-void KarbonPatternEditStrategy::paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position ) const
+void KarbonPatternEditStrategy::paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position ) const
 {
     QRectF handleRect = converter.viewToDocument( QRectF( m_handleRadius, m_handleRadius, 2*m_handleRadius, 2*m_handleRadius ) );
     handleRect.moveCenter( position );

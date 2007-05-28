@@ -106,12 +106,12 @@ KoShapeManager * KarbonCanvas::shapeManager() const
     return d->shapeManager;
 }
 
-KoViewConverter * KarbonCanvas::viewConverter()
+const KoViewConverter * KarbonCanvas::viewConverter() const
 {
     return &d->zoomHandler;
 }
 
-KoToolProxy * KarbonCanvas::toolProxy()
+KoToolProxy * KarbonCanvas::toolProxy() const
 {
     return d->toolProxy;
 }
@@ -244,7 +244,7 @@ void KarbonCanvas::wheelEvent( QWheelEvent *e )
 
 QVariant KarbonCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    return d->toolProxy->inputMethodQuery(query);
+    return d->toolProxy->inputMethodQuery(query, *(viewConverter()) );
 }
 
 void KarbonCanvas::inputMethodEvent(QInputMethodEvent *event)
@@ -330,7 +330,7 @@ QRect KarbonCanvas::viewToWidget( const QRect& r ) const {
     return r.translated( d->origin );
 }
 
-KoUnit KarbonCanvas::unit() {
+KoUnit KarbonCanvas::unit() const {
     return d->document->unit();
 }
 

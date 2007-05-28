@@ -45,7 +45,7 @@ public:
     ~TextTool();
 
     /// reimplemented from superclass
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
     /// reimplemented from superclass
     virtual void mousePressEvent( KoPointerEvent *event ) ;
@@ -71,6 +71,8 @@ public:
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
     virtual QWidget *createOptionWidget();
+    /// reimplemented from superclass
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
     /// add a command to the undo stack, executing it as well.
     void addCommand(QUndoCommand *command);
@@ -135,7 +137,7 @@ private:
     void repaintCaret();
     void repaintSelection(int from, int to);
     void ensureCursorVisible();
-    QRectF textRect(int startPosition, int endPosition);
+    QRectF textRect(int startPosition, int endPosition) const;
     int pointToPosition(const QPointF & point) const;
     void updateSelectionHandler();
     void updateActions();

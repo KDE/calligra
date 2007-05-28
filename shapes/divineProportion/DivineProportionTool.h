@@ -36,7 +36,7 @@ public:
     ~DivineProportionTool();
 
     /// reimplemented from superclass
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
     /// reimplemented from superclass
     virtual void mousePressEvent( KoPointerEvent *event ) ;

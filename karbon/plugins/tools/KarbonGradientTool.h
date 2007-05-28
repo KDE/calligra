@@ -38,7 +38,7 @@ public:
     explicit KarbonGradientTool(KoCanvasBase *canvas);
     ~KarbonGradientTool();
 
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
     void repaintDecorations();
 
     void mousePressEvent( KoPointerEvent *event ) ;

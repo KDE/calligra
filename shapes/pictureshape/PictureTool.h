@@ -31,7 +31,7 @@ public:
     explicit PictureTool( KoCanvasBase* canvas );
 
     /// reimplemented from KoTool
-    virtual void paint( QPainter& , KoViewConverter& ) {}
+    virtual void paint( QPainter& , const KoViewConverter& ) {}
     /// reimplemented from KoTool
     virtual void mousePressEvent( KoPointerEvent* ) {}
     /// reimplemented from KoTool

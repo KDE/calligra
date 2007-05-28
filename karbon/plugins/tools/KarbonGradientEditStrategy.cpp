@@ -63,7 +63,7 @@ bool GradientStrategy::selectHandle( const QPointF &mousePos )
     return false;
 }
 
-void GradientStrategy::paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position )
+void GradientStrategy::paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position )
 {
     QRectF handleRect = converter.viewToDocument( QRectF( m_handleRadius, m_handleRadius, 2*m_handleRadius, 2*m_handleRadius ) );
     handleRect.moveCenter( position );
@@ -133,7 +133,7 @@ LinearGradientStrategy::LinearGradientStrategy( KoShape *shape, const QLinearGra
     m_handles.append( gradient->finalStop() );
 }
 
-void LinearGradientStrategy::paint( QPainter &painter, KoViewConverter &converter )
+void LinearGradientStrategy::paint( QPainter &painter, const KoViewConverter &converter )
 {
     QPointF startPoint = m_matrix.map( m_handles[start] );
     QPointF stopPoint = m_matrix.map( m_handles[stop] );
@@ -161,7 +161,7 @@ RadialGradientStrategy::RadialGradientStrategy( KoShape *shape, const QRadialGra
     m_handles.append( gradient->center() + QPointF( gradient->radius(), 0 ) );
 }
 
-void RadialGradientStrategy::paint( QPainter &painter, KoViewConverter &converter )
+void RadialGradientStrategy::paint( QPainter &painter, const KoViewConverter &converter )
 {
     QPointF centerPoint = m_matrix.map( m_handles[center] );
     QPointF radiusPoint = m_matrix.map( m_handles[radius] );
@@ -194,7 +194,7 @@ ConicalGradientStrategy::ConicalGradientStrategy( KoShape *shape, const QConical
     m_handles.append( gradient->center() + scale * QPointF( cos( angle ), -sin( angle ) ) );
 }
 
-void ConicalGradientStrategy::paint( QPainter &painter, KoViewConverter &converter )
+void ConicalGradientStrategy::paint( QPainter &painter, const KoViewConverter &converter )
 {
     QPointF centerPoint = m_matrix.map( m_handles[center] );
     QPointF directionPoint = m_matrix.map( m_handles[direction] );

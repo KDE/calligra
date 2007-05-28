@@ -57,7 +57,7 @@ TableTool::~TableTool()
     delete d;
 }
 
-void TableTool::paint( QPainter& painter, KoViewConverter& viewConverter )
+void TableTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
 {
     Q_UNUSED( painter );
     Q_UNUSED( viewConverter );

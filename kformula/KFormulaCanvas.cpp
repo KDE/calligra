@@ -121,7 +121,7 @@ void KFormulaCanvas::updateCanvas( const QRectF& rc )
     update( viewConverter()->documentToView( rc ).toRect() );
 }
     
-KoViewConverter* KFormulaCanvas::viewConverter()
+const KoViewConverter* KFormulaCanvas::viewConverter() const
 {
     return m_view->viewConverter();
 }
@@ -131,12 +131,12 @@ QWidget* KFormulaCanvas::canvasWidget()
     return this;
 }
 
-KoUnit KFormulaCanvas::unit()
+KoUnit KFormulaCanvas::unit() const
 {
     return KoUnit( KoUnit::Centimeter );  // return this as default
 }
 
-KoToolProxy* KFormulaCanvas::toolProxy()
+KoToolProxy* KFormulaCanvas::toolProxy() const
 {
     return m_toolProxy;
 }

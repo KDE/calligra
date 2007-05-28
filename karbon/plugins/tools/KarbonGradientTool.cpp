@@ -48,7 +48,7 @@ KarbonGradientTool::~KarbonGradientTool()
     delete m_gradient;
 }
 
-void KarbonGradientTool::paint( QPainter &painter, KoViewConverter &converter )
+void KarbonGradientTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
     painter.setBrush( Qt::green ); //TODO make configurable
     painter.setPen( Qt::blue ); //TODO make configurable

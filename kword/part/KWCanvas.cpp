@@ -105,7 +105,7 @@ void KWCanvas::updateCanvas(const QRectF& rc) {
     }
 }
 
-KoViewConverter *KWCanvas::viewConverter() {
+const KoViewConverter *KWCanvas::viewConverter() const {
     return m_view->viewConverter();
 }
 
@@ -150,7 +150,7 @@ void KWCanvas::keyPressEvent( QKeyEvent *e ) {
 }
 
 QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const {
-    return m_toolProxy->inputMethodQuery(query);
+    return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 
 void KWCanvas::updateInputMethodInfo() {

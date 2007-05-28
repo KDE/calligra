@@ -69,13 +69,13 @@ public:
     /// reimplemented method from superclass
     virtual void updateCanvas(const QRectF& rc);
     /// reimplemented method from superclass
-    virtual KoViewConverter *viewConverter();
+    virtual const KoViewConverter *viewConverter() const;
     /// reimplemented method from superclass
     virtual QWidget* canvasWidget() { return this; }
     /// reimplemented method from superclass
-    virtual KoUnit unit() { return document()->unit(); }
+    virtual KoUnit unit() const { return document()->unit(); }
     /// reimplemented method from superclass
-    virtual KoToolProxy * toolProxy() { return m_toolProxy; }
+    virtual KoToolProxy * toolProxy() const { return m_toolProxy; }
     /// reimplemented method from superclass
     virtual void clipToDocument(const KoShape *shape, QPointF &move) const;
     /// reimplemented method from superclass

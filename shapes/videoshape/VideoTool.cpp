@@ -70,7 +70,7 @@ void VideoTool::deactivate()
   m_videoshape = 0;
 }
 
-void VideoTool::paint( QPainter& painter, KoViewConverter& viewConverter )
+void VideoTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
 {
     Q_UNUSED( viewConverter );
 }

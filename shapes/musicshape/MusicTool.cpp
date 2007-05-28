@@ -74,7 +74,7 @@ void MusicTool::deactivate()
   m_musicshape = 0;
 }
 
-void MusicTool::paint( QPainter& painter, KoViewConverter& viewConverter )
+void MusicTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
 {
     Q_UNUSED( viewConverter );
 }

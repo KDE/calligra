@@ -242,17 +242,17 @@ void Canvas::updateCanvas( const QRectF& rc )
     update( clipRect );
 }
 
-KoViewConverter* Canvas::viewConverter()
+const KoViewConverter* Canvas::viewConverter() const
 {
     return view()->zoomHandler();
 }
 
-KoUnit Canvas::unit()
+KoUnit Canvas::unit() const
 {
     return doc()->unit();
 }
 
-KoToolProxy* Canvas::toolProxy()
+KoToolProxy* Canvas::toolProxy() const
 {
     return d->toolProxy;
 }

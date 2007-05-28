@@ -138,13 +138,13 @@ public:
     /// reimplemented method from KoCanvasBase
     void updateCanvas( const QRectF& rc );
     /// reimplemented method from KoCanvasBase
-    KoToolProxy* toolProxy();
+    virtual KoToolProxy* toolProxy() const;
     /// reimplemented method from KoCanvasBase
-    KoViewConverter* viewConverter();
+    virtual const KoViewConverter* viewConverter() const;
     /// reimplemented method from KoCanvasBase
     QWidget* canvasWidget() { return this; }
     /// reimplemented method from KoCanvasBase
-    KoUnit unit();
+    virtual KoUnit unit() const;
     /// reimplemented method from KoCanvasBase
     virtual void updateInputMethodInfo();
 

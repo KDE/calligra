@@ -37,7 +37,7 @@ public:
     explicit KarbonPatternTool(KoCanvasBase *canvas);
     ~KarbonPatternTool();
 
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
     void repaintDecorations();
 
     void mousePressEvent( KoPointerEvent *event ) ;

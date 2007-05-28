@@ -31,7 +31,7 @@ public:
     explicit KarbonPencilTool(KoCanvasBase *canvas);
     ~KarbonPencilTool();
 
-    void paint( QPainter &painter, KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
     void repaintDecorations();
 
     void mousePressEvent( KoPointerEvent *event ) ;

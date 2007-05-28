@@ -146,7 +146,7 @@ void SimpleEntryTool::deactivate()
     m_musicshape = 0;
 }
 
-void SimpleEntryTool::paint( QPainter& painter, KoViewConverter& viewConverter )
+void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
 {
     painter.setMatrix( painter.matrix() * m_musicshape->transformationMatrix(&viewConverter) );
     KoShape::applyConversion( painter, viewConverter );

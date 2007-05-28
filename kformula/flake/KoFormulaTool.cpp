@@ -71,7 +71,7 @@ void KoFormulaTool::deactivate()
     m_formulaCursor = 0;
 }
 
-void KoFormulaTool::paint( QPainter &painter, KoViewConverter &converter)
+void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED( converter )
     // TODO do view conversions with converter

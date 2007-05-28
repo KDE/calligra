@@ -661,7 +661,7 @@ KarbonPart::removeShape( KoShape* shape )
 void KarbonPart::updateDocumentSize()
 {
     KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
-    KoViewConverter * viewConverter = canvasController->canvas()->viewConverter();
+    const KoViewConverter * viewConverter = canvasController->canvas()->viewConverter();
     QSize documentSize = viewConverter->documentToView( m_doc.boundingRect() ).size().toSize();
     canvasController->setDocumentSize( documentSize );
 }

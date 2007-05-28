@@ -39,7 +39,7 @@ public:
     ~KarbonPatternEditStrategy();
 
     /// painting of the pattern editing handles
-    void paint( QPainter &painter, KoViewConverter &converter ) const;
+    void paint( QPainter &painter, const KoViewConverter &converter ) const;
 
     /// selects handle at the given position
     bool selectHandle( const QPointF &mousePos );
@@ -74,7 +74,7 @@ public:
 private:
 
     /// paints a singale handle
-    void paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position ) const;
+    void paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position ) const;
 
     /// checks if mouse position is inside handle rect
     bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos ) const;

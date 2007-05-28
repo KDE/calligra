@@ -59,19 +59,19 @@ public:
     KoShapeManager* shapeManager() const;
 
     /// reimplemented method from superclass
-    KoToolProxy* toolProxy();
+    KoToolProxy* toolProxy() const;
     
     /// reimplemented method from superclass
     void updateCanvas( const QRectF& rc );
     
     /// reimplemented method from superclass
-    KoViewConverter* viewConverter();
+    const KoViewConverter* viewConverter() const;
     
     /// reimplemented method from superclass
     QWidget* canvasWidget();
 
     /// reimplemented method from superclass
-    KoUnit unit();
+    KoUnit unit() const;
 
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();

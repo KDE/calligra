@@ -65,15 +65,15 @@ public:
     /// reimplemented from KoCanvasBase
     virtual bool snapToGrid() const;
     /// reimplemented from KoCanvasBase
-    virtual KoUnit unit();
+    virtual KoUnit unit() const;
     /// reimplemented from KoCanvasBase
     void addCommand(QUndoCommand *command);
     /// reimplemented from KoCanvasBase
     KoShapeManager *shapeManager() const;
     /// reimplemented from KoCanvasBase
-    KoViewConverter *viewConverter();
+    const KoViewConverter *viewConverter() const;
     /// reimplemented from KoCanvasBase
-    KoToolProxy * toolProxy();
+    KoToolProxy * toolProxy() const;
     /// reimplemented from KoCanvasBase
     virtual QPoint documentOrigin();
     /// reimplemented from KoCanvasBase

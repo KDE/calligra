@@ -58,7 +58,7 @@ KarbonPatternTool::~KarbonPatternTool()
 {
 }
 
-void KarbonPatternTool::paint( QPainter &painter, KoViewConverter &converter )
+void KarbonPatternTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
     painter.setBrush( Qt::green ); //TODO make configurable
     painter.setPen( Qt::blue ); //TODO make configurable
