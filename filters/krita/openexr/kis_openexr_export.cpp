@@ -38,6 +38,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_undo_adapter.h"
+#include "kis_group_layer.h"
 // #include "kis_rgb_f32_colorspace.h"
 // #include "kis_rgb_f16half_colorspace.h"
 
@@ -88,7 +89,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     img -> flatten();
 
-    KisPaintLayerSP layer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(img->activeLayer().data()));
+    KisPaintLayerSP layer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(img->rootLayer()->firstChild().data()));
     Q_ASSERT(layer);
 
     doc -> undoAdapter() -> setUndo(undo);
