@@ -93,6 +93,7 @@ KarbonCanvas::KarbonCanvas( KarbonPart *p )
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus); // allow to receive keyboard input
     adjustOrigin();
+    setAttribute(Qt::WA_InputMethodEnabled, true);
 }
 
 KarbonCanvas::~KarbonCanvas()
@@ -239,6 +240,16 @@ void KarbonCanvas::tabletEvent( QTabletEvent *e )
 void KarbonCanvas::wheelEvent( QWheelEvent *e )
 {
     d->toolProxy->wheelEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
+}
+
+QVariant KarbonCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    return d->toolProxy->inputMethodQuery(query);
+}
+
+void KarbonCanvas::inputMethodEvent(QInputMethodEvent *event)
+{
+    d->toolProxy->inputMethodEvent(event);
 }
 
 void KarbonCanvas::resizeEvent( QResizeEvent * )

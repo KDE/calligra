@@ -124,9 +124,9 @@ protected:
     /// reimplemented method from superclass
     virtual bool event(QEvent *event);
     /// reimplemented method from superclass
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     /// reimplemented method from superclass
-    void inputMethodEvent(QInputMethodEvent *event);
+    virtual void inputMethodEvent(QInputMethodEvent *event);
 
 
 private slots:

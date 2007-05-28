@@ -142,6 +142,10 @@ protected:
     void tabletEvent( QTabletEvent *e );
     void wheelEvent( QWheelEvent *e );
     void resizeEvent( QResizeEvent *e );
+    /// reimplemented method from superclass
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    /// reimplemented method from superclass
+    virtual void inputMethodEvent(QInputMethodEvent *event);
 
     QPoint widgetToView( const QPoint& p ) const;
     QRect widgetToView( const QRect& r ) const;
