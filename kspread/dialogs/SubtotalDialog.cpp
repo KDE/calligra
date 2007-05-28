@@ -219,7 +219,7 @@ void SubtotalDialog::removeSubtotalLines()
       if ( !cell.isFormula() )
         continue;
 
-      text = cell.inputText();
+      text = cell.userInput();
       if ( text.indexOf( "SUBTOTAL" ) != -1 )
       {
         containsSubtotal = true;
@@ -309,7 +309,7 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
         m_selection.setHeight( m_selection.height() + 1 );
 
         Cell cell = Cell( m_pSheet, mainCol, row + 1 );
-        cell.setCellText( text );
+        cell.parseUserInput( text );
         Style style;
         style.setFontBold( true );
         style.setFontItalic( true );
@@ -333,7 +333,7 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
     formula += ')';
 
     Cell cell = Cell( m_pSheet, column, row + 1 );
-    cell.setCellText( formula );
+    cell.parseUserInput( formula );
     Style style;
     style.setFontBold( true );
     style.setFontItalic( true );

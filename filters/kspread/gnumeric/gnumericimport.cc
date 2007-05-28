@@ -1812,7 +1812,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                 QString target = hyperlink.toElement().attribute( "target" );
                                 QString tip = hyperlink.toElement().attribute( "tip" );
                                 if ( !tip.isEmpty() )
-                                    kspread_cell.setCellText( tip );
+                                    kspread_cell.parseUserInput( tip );
                                 if ( linkType=="GnmHLinkURL" )
                                 {
                                     if ( !target.startsWith( "http://" ) )

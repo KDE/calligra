@@ -654,7 +654,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     {
       kDebug(30518) << "Formula found" << endl;
 
-      QString formula( convertFormula( cell.inputText() ) );
+      QString formula( convertFormula( cell.userInput() ) );
       cellElem.setAttribute( "table:formula", formula );
     }
     else if ( !cell.link().isEmpty() )
@@ -668,7 +668,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
        else
            linkref.setAttribute( "xlink:href", tmp  );
 
-       linkref.appendChild( doc.createTextNode( cell.inputText() ) );
+       linkref.appendChild( doc.createTextNode( cell.userInput() ) );
 
        link.appendChild( linkref );
        cellElem.appendChild( link );

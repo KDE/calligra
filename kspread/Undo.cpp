@@ -204,7 +204,7 @@ void UndoInsertRemoveAction::undoFormulaReference()
             Cell cell( sheet, (*it).col(), (*it).row() );
             if ( !cell.isNull() )
             {
-                cell.setCellText( (*it).formula() );
+                cell.parseUserInput( (*it).formula() );
             }
         }
     }
@@ -1225,7 +1225,7 @@ void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutCol
           tmplayout.row = y;
           tmplayout.l   = new Format( sheet, 0 );
           tmplayout.l->copy( *(Cell( sheet, x, y )->format()) );
-          tmplayout.text = cell.inputText();
+          tmplayout.text = cell.userInput();
           list.append(tmplayout);
         }
       }
@@ -1312,11 +1312,11 @@ void UndoSort::undo()
     Cell cell( sheet, (*it2).col,(*it2).row );
     if ( (*it2).text.isEmpty() )
     {
-      if(!cell.inputText().isEmpty())
-        cell.setCellText( "" );
+      if(!cell.userInput().isEmpty())
+        cell.parseUserInput( "" );
     }
     else
-      cell.setCellText( (*it2).text );
+      cell.parseUserInput( (*it2).text );
 
     cell.format()->copy( *(*it2).l );
     cell.setLayoutDirtyFlag();
@@ -1364,11 +1364,11 @@ void UndoSort::redo()
 
       if ( (*it2).text.isEmpty() )
       {
-        if(!cell.inputText().isEmpty())
-          cell.setCellText( "" );
+        if(!cell.userInput().isEmpty())
+          cell.parseUserInput( "" );
       }
       else
-        cell.setCellText( (*it2).text );
+        cell.parseUserInput( (*it2).text );
 
       cell.format()->copy( *(*it2).l );
       cell.setLayoutDirtyFlag();
@@ -1872,7 +1872,7 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
             //tmpText.col = col;
             //tmpText.row = cell.row();
             //tmpText.text = cell.text();
-            map.insert( QPoint(col,cell.row()) , cell.inputText() );
+            map.insert( QPoint(col,cell.row()) , cell.userInput() );
           }
           cell = sheet->cellStorage()->nextInColumn( col, cell.row() );
         }
@@ -1892,7 +1892,7 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
             //tmpText.col = cell.column();
             //tmpText.row = row;
             //tmpText.text = cell.text();
-            map.insert( QPoint(cell.column(),row) , cell.inputText() );
+            map.insert( QPoint(cell.column(),row) , cell.userInput() );
           }
           cell = sheet->cellStorage()->nextInRow( cell.column(), row );
         }
@@ -1913,8 +1913,8 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
             //textOfCell tmpText;
             //tmpText.col  = x;
             //tmpText.row  = cell.row();
-            //tmpText.text = cell.inputText();
-            map.insert( QPoint(x,cell.row()) , cell.inputText());
+            //tmpText.text = cell.userInput();
+            map.insert( QPoint(x,cell.row()) , cell.userInput());
           }
           cell = sheet->cellStorage()->nextInColumn( x, cell.row() );
         }
@@ -1956,7 +1956,7 @@ void UndoChangeAreaTextCell::undo()
           const QPoint location(x,y);
 
           if ( m_lstTextCell.contains(location) )
-                cell.setCellText( m_lstTextCell[location] );
+                cell.parseUserInput( m_lstTextCell[location] );
           else
                 cell.setValue( Value( QString("") ) );
 
@@ -1965,11 +1965,11 @@ void UndoChangeAreaTextCell::undo()
           for( it = m_lstTextCell.begin(); it != m_lstTextCell.end(); ++it )
             if ( (*it).col == x && (*it).row == y && !found )
             {
-              cell.setCellText( (*it).text );
+              cell.parseUserInput( (*it).text );
               found = true;
             }
           if( !found )
-            cell.setCellText( "", true );*/
+            cell.parseUserInput( "", true );*/
         }
 
     }
@@ -1981,11 +1981,11 @@ void UndoChangeAreaTextCell::undo()
         Cell cell( sheet, it2.key().x(), it2.key().y() );
         if ( it2.value().isEmpty() )
         {
-          if ( !cell.inputText().isEmpty() )
-            cell.setCellText( "" );
+          if ( !cell.userInput().isEmpty() )
+            cell.parseUserInput( "" );
         }
         else
-          cell.setCellText( it2.value() );
+          cell.parseUserInput( it2.value() );
       }
     }
     }
@@ -2028,7 +2028,7 @@ void UndoChangeAreaTextCell::redo()
           const QPoint location(x,y);
 
           if (m_lstRedoTextCell.contains(location))
-                  cell.setCellText( m_lstRedoTextCell[location] );
+                  cell.parseUserInput( m_lstRedoTextCell[location] );
           else
                   cell.setValue( Value( QString("") ) );
           /*bool found = false;
@@ -2036,11 +2036,11 @@ void UndoChangeAreaTextCell::redo()
           for( it = m_lstRedoTextCell.begin(); it != m_lstRedoTextCell.end(); ++it )
             if ( (*it).col == x && (*it).row == y && !found )
             {
-              cell.setCellText( (*it).text );
+              cell.parseUserInput( (*it).text );
               found = true;
             }
           if( !found )
-            cell.setCellText( "", true );*/
+            cell.parseUserInput( "", true );*/
         }
 
     }
@@ -2052,11 +2052,11 @@ void UndoChangeAreaTextCell::redo()
         Cell cell( sheet, it2.key().x(), it2.key().y() );
         if ( it2.value().isEmpty() )
         {
-          if ( !cell.inputText().isEmpty() )
-            cell.setCellText( "" );
+          if ( !cell.userInput().isEmpty() )
+            cell.parseUserInput( "" );
         }
         else
-          cell.setCellText( it2.value() );
+          cell.parseUserInput( it2.value() );
       }
     }
     }

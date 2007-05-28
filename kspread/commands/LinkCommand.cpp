@@ -31,7 +31,7 @@ using namespace KSpread;
 LinkCommand::LinkCommand( const Cell& c, const QString& text, const QString& link )
 {
   cell = c;
-  oldText = cell.inputText();
+  oldText = cell.userInput();
   oldLink = cell.link();
   newText = text;
   newLink = link;
@@ -45,7 +45,7 @@ void LinkCommand::redo()
   if( !cell ) return;
 
   if( !newText.isEmpty() )
-    cell.setCellText( newText );
+    cell.parseUserInput( newText );
   cell.setLink( newLink  );
 
   doc->addDamage( new CellDamage( cell, CellDamage::Appearance ) );
@@ -55,7 +55,7 @@ void LinkCommand::undo()
 {
   if( !cell ) return;
 
-  cell.setCellText( oldText );
+  cell.parseUserInput( oldText );
   cell.setLink( oldLink );
 
   doc->addDamage( new CellDamage( cell, CellDamage::Appearance ) );

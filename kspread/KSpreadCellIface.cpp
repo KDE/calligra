@@ -72,7 +72,7 @@ void CellIface::setText( const QString& text )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setCellText( text );
+    cell->parseUserInput( text );
 }
 
 QString CellIface::visibleContentAsString() const

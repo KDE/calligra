@@ -1310,7 +1310,7 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
             cell = Cell( this, col, row );
             if ( !cell.isDefault() && !cell.isPartOfMerged() && !cell.isFormula() )
             {
-                QString text = cell.inputText();
+                QString text = cell.userInput();
                 cellRegion.setTop( row );
                 cellRegion.setLeft( col );
                 if (!dialog.replace( text, cellRegion ))
@@ -1339,7 +1339,7 @@ bool Sheet::cellIsEmpty( const Cell& cell, TestType _type)
     switch( _type )
     {
     case Text :
-      if ( !cell.inputText().isEmpty())
+      if ( !cell.userInput().isEmpty())
         return false;
       break;
     case Validity:
@@ -2230,7 +2230,7 @@ void Sheet::dissociateCells(const Region& region)
 bool Sheet::testListChoose(Selection* selection)
 {
    const QPoint marker( selection->marker() );
-   const QString text = Cell( this, marker ).inputText();
+   const QString text = Cell( this, marker ).userInput();
 
    Region::ConstIterator end( selection->constEnd() );
    for ( Region::ConstIterator it( selection->constBegin() ); it != end; ++it )
@@ -2247,7 +2247,7 @@ bool Sheet::testListChoose(Selection* selection)
                 !cell.value().asString().isEmpty() &&
                 !cell.isTime() && !cell.isDate() )
            {
-             if ( cell.inputText() != text )
+             if ( cell.userInput() != text )
                return true;
            }
          }
@@ -4952,8 +4952,8 @@ void Sheet::updateLocale()
     for ( int c = 0; c < valueStorage()->count(); ++c )
     {
         Cell cell( this, valueStorage()->col( c ), valueStorage()->row( c ) );
-        QString text = cell.inputText();
-        cell.setCellText( text );
+        QString text = cell.userInput();
+        cell.parseUserInput( text );
     }
     emit sig_updateView( this );
     //  doc()->emitEndOperation();
@@ -5069,7 +5069,7 @@ void Sheet::printDebug()
                 cellDescr += " | ";
                 cellDescr += cell.value().type();
                 cellDescr += " | ";
-                cellDescr += cell.inputText();
+                cellDescr += cell.userInput();
                 if ( cell.isFormula() )
                     cellDescr += QString("  [result: %1]").arg( cell.value().asString() );
                 kDebug(36001) << cellDescr << endl;

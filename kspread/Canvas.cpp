@@ -2739,7 +2739,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
     }
 
     if ( !clear && !cell.isNull() )
-        d->cellEditor->setText( cell.inputText() );
+        d->cellEditor->setText( cell.userInput() );
 
     return true;
 }

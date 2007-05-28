@@ -164,7 +164,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
 
                cell = Cell( sheet, col + 1, row + 1 );
                cell.setStyle( *s );
-               cell.setCellText( text );
+               cell.parseUserInput( text );
 
                Style style;
                style.setFormatType (Format::Generic);
@@ -195,7 +195,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         cell = Cell( sheet,  col + 1, row + 1 );
                         cell.setStyle( *s );
                         cell.setValue(Value(d));
-                        cell.setInputText(text);
+                        cell.setUserInput(text);
                     }
                     Style style;
                     style.setPrecision( 2 );
@@ -221,7 +221,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         cell = Cell( sheet, col + 1, row + 1 );
                         cell.setStyle( *s );
                         cell.setValue(Value(d));
-                        cell.setInputText(tmp);
+                        cell.setUserInput(tmp);
                     }
                     Style style;
                     style.setPrecision( 2 );
@@ -247,7 +247,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         cell = Cell( sheet, col + 1, row + 1 );
                         cell.setStyle( *s );
                         cell.setValue(Value(d));
-                        cell.setInputText(tmp);
+                        cell.setUserInput(tmp);
                     }
                     Style style;
                     style.setPrecision( 2 );
@@ -258,7 +258,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
              {
               cell = Cell( sheet, col + 1, row + 1 );
               cell.setStyle( *s );
-              cell.setCellText( text );
+              cell.parseUserInput( text );
               Style style;
               style.setFormatType( Format::ShortDate );
               cell.setStyle(style);

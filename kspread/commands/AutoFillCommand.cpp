@@ -81,9 +81,9 @@ AutoFillSequenceItem::AutoFillSequenceItem( const Cell& cell )
         m_DValue = cell.value().asFloat();
         m_Type = FLOAT;
     }
-    else if ( !cell.inputText().isEmpty() )
+    else if ( !cell.userInput().isEmpty() )
     {
-        m_String = cell.inputText();
+        m_String = cell.userInput();
         m_Type = STRING;
 
         if ( month == 0 )
@@ -588,30 +588,30 @@ static void fillSequence( const QList<Cell>& _srcList,
         {
             const Value timeValue = cell.doc()->converter()->asTime( Value( variant.toDouble() ) );
             cell.setValue(timeValue);
-            cell.setInputText(cell.doc()->converter()->asString(timeValue).asString());
+            cell.setUserInput(cell.doc()->converter()->asString(timeValue).asString());
         }
         else if ( _seqList.value( s )->type() == AutoFillSequenceItem::DATE )
         {
             const Value dateValue = cell.doc()->converter()->asDate( Value( variant.toInt() ) );
             cell.setValue(dateValue);
-            cell.setInputText(cell.doc()->converter()->asString(dateValue).asString());
+            cell.setUserInput(cell.doc()->converter()->asString(dateValue).asString());
         }
         else if ( _seqList.value( s )->type() == AutoFillSequenceItem::FORMULA )
         {
             // Special handling for formulas
-            cell.setCellText( cell.decodeFormula( _seqList.value( s )->getString() ) );
+            cell.parseUserInput( cell.decodeFormula( _seqList.value( s )->getString() ) );
         }
         else if ( variant.type() == QVariant::Double )
         {
             const Value value(variant.toDouble());
             cell.setValue(value);
-            cell.setInputText(cell.doc()->converter()->asString(value).asString());
+            cell.setUserInput(cell.doc()->converter()->asString(value).asString());
         }
         else if ( variant.type() == QVariant::Int )
         {
             const Value value(variant.toInt());
             cell.setValue(value);
-            cell.setInputText(cell.doc()->converter()->asString(value).asString());
+            cell.setUserInput(cell.doc()->converter()->asString(value).asString());
         }
         else if ( variant.type() == QVariant::String )
         {
@@ -620,17 +620,17 @@ static void fillSequence( const QList<Cell>& _srcList,
             if ( pos!=-1 )
             {
                 const int num = number.cap( 1 ).toInt() + 1;
-                cell.setCellText( variant.toString().replace( number, QString::number( num ) ) );
+                cell.parseUserInput( variant.toString().replace( number, QString::number( num ) ) );
             }
             else if ( !_srcList.at( s ).link().isEmpty() )
             {
-                cell.setCellText( variant.toString() );
+                cell.parseUserInput( variant.toString() );
                 cell.setLink( _srcList.at( s ).link() );
             }
             else
             {
                 cell.setValue( Value( variant.toString() ) );
-                cell.setInputText(variant.toString());
+                cell.setUserInput(variant.toString());
             }
         }
 

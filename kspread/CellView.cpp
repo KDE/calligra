@@ -122,7 +122,7 @@ public:
     Qt::LayoutDirection layoutDirection : 1;
 
     // This is the text we want to display. Not necessarily the same
-    // as the user input, e.g. Cell::inputText()="1" and displayText="1.00".
+    // as the user input, e.g. Cell::userInput()="1" and displayText="1.00".
     // Also holds the value, that we got from calculation.
     QString displayText;
 };

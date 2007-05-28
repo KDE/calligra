@@ -269,6 +269,8 @@ public:
      * In addition to this, it calculates the outstring and sets the dirty
      * flags so that a redraw is forced.
      * \param value the new value
+     *
+     * \see setUserInput, parseUserInput
      */
     void setValue( const Value& value );
 
@@ -276,22 +278,27 @@ public:
      * Return the text the user entered. This could be a value (e.g. "14.03")
      * or a formula (e.g. "=SUM(A1:A10)")
      */
-    QString inputText() const;
+    QString userInput() const;
 
     /**
-     * Sets the input text.
-     * If it's a formula, creates a formula object and sets the input text as
-     * its expression. Otherwise, sets the input text as string value.
-     * \internal
+     * Sets the user input without parsing it.
+     * If \p text is a formula, creates a formula object and sets \p text as
+     * its expression. Otherwise, simply stores \p text as user input.
+     *
+     * \see parseUserInput, setValue
      */
-    void setInputText( const QString& string );
+    void setUserInput( const QString& text );
 
     /**
-     * Parses \p text and sets the appropriate formatting.
-     * The high-level method for setting text, when the user inputs it.
-     * It will revert back to the old text, if testValidity() returns action==stop.
+     * Sets the user input and parses it.
+     * If \p text is a formula, creates a formula object and sets \p text as
+     * its expression. Otherwise, parses \p text, creates an appropriate value,
+     * including the proper type, validates the value and, if accepted, stores
+     * \p text as the user input and the value as the cell's value.
+     *
+     * \see setUserInput, setValue
      */
-    void setCellText( const QString& text );
+    void parseUserInput( const QString& text );
 
     /**
      * \ingroup NativeFormat
@@ -364,10 +371,9 @@ public:
     void copyContent( const Cell& cell );
 
     /**
-     * Copies the format and the content. It does not copy the row and column indices.
-     * Besides that all persistent attributes are copied. setCellText() is called to set the real
-     * content.
+     * Copies the format and the content from \p cell .
      *
+     * @see copyContent( const Cell& cell )
      * @see copyFormat( const Cell& cell )
      */
     void copyAll( const Cell& cell);

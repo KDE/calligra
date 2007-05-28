@@ -2304,7 +2304,7 @@ void View::spellCheckerReady()
       // check text only
       if ( currentCell.value().isString() )
       {
-        d->spell.kspell->check( currentCell.inputText(), true );
+        d->spell.kspell->check( currentCell.userInput(), true );
 
         return;
       }
@@ -2345,7 +2345,7 @@ void View::spellCheckerReady()
       d->spell.spellCurrCellX = x;
       d->spell.spellCurrCellY = y;
 
-      d->spell.kspell->check( cell.inputText(), true );
+      d->spell.kspell->check( cell.userInput(), true );
 
       return;
     }
@@ -2479,7 +2479,7 @@ void View::spellCheckerCorrected( const QString & old, const QString & corr, uns
   if ( !cell )
     return;
 
-  QString content (cell.inputText());
+  QString content (cell.userInput());
   content.replace (pos, old.length(), corr);
 
   DataManipulator *manipulator = new DataManipulator;
@@ -2684,7 +2684,7 @@ void View::updateEditWidgetOnPress()
     else if ( d->activeSheet->isProtected() && style.hideAll() )
         d->editWidget->setText( "" );
     else
-        d->editWidget->setText( cell.inputText() );
+        d->editWidget->setText( cell.userInput() );
 
     d->adjustActions( cell );
 }
@@ -2714,7 +2714,7 @@ void View::updateEditWidget()
     else if ( d->activeSheet->isProtected() && style.hideAll() )
         d->editWidget->setText( "" );
     else
-        d->editWidget->setText( cell.inputText() );
+        d->editWidget->setText( cell.userInput() );
 
     if ( d->activeSheet->isProtected() && !style.notProtected() )
       d->editWidget->setEnabled( false );
@@ -4408,7 +4408,7 @@ void View::findNext()
             if ( d->typeValue == FindOption::Note )
                 findObj->setData( cell.comment() );
             else
-                findObj->setData( cell.inputText() );
+                findObj->setData( cell.userInput() );
             d->findPos = QPoint( cell.column(), cell.row() );
             //kDebug() << "setData(cell " << d->findPos << ')' << endl;
         }
@@ -4600,8 +4600,8 @@ void View::replace()
     // Refresh the editWidget
     // TODO - after a replacement only?
     Cell cell = Cell( activeSheet(), selection()->marker() );
-    if ( cell.inputText() != 0 )
-        d->editWidget->setText( cell.inputText() );
+    if ( cell.userInput() != 0 )
+        d->editWidget->setText( cell.userInput() );
     else
         d->editWidget->setText( "" );
 #endif
@@ -4628,7 +4628,7 @@ void View::slotReplace( const QString &newText, int, int, int )
 
     // ...now I remember, update it!
     if ( d->typeValue == FindOption::Value )
-        cell.setCellText( newText );
+        cell.parseUserInput( newText );
     else if ( d->typeValue == FindOption::Note )
         cell.setComment( newText );
 }
@@ -4678,7 +4678,7 @@ void View::removeHyperlink()
     doc()->addCommand( command );
 
   canvasWidget()->setFocus();
-  d->editWidget->setText( cell.inputText() );
+  d->editWidget->setText( cell.userInput() );
 }
 
 void View::insertHyperlink()
@@ -4695,7 +4695,7 @@ void View::insertHyperlink()
     dlg->setWindowTitle( i18n( "Insert Link" ) );
     if ( !cell.isNull() )
     {
-      dlg->setText( cell.inputText() );
+      dlg->setText( cell.userInput() );
       if( !cell.link().isEmpty() )
       {
         dlg->setWindowTitle( i18n( "Edit Link" ) );
@@ -4712,7 +4712,7 @@ void View::insertHyperlink()
 
         //refresh editWidget
       canvasWidget()->setFocus();
-      d->editWidget->setText( cell.inputText() );
+      d->editWidget->setText( cell.userInput() );
     }
     delete dlg;
 }
@@ -5649,7 +5649,7 @@ void View::slotListChoosePopupMenu( )
   d->popupListChoose = new QMenu();
   QRect lastRange( d->selection->lastRange() );
   Cell cell( d->activeSheet, d->selection->marker() );
-  QString tmp = cell.inputText();
+  QString tmp = cell.userInput();
   QStringList itemList;
 
   for ( int col = lastRange.left(); col <= lastRange.right(); ++col )
@@ -5661,10 +5661,10 @@ void View::slotListChoosePopupMenu( )
            && !( col == selection()->marker().x()
                  && cell.row() == selection()->marker().y()) )
       {
-        if ( cell.value().isString() && cell.inputText() != tmp && !cell.inputText().isEmpty() )
+        if ( cell.value().isString() && cell.userInput() != tmp && !cell.userInput().isEmpty() )
         {
-          if ( itemList.indexOf( cell.inputText() ) == -1 )
-            itemList.append(cell.inputText());
+          if ( itemList.indexOf( cell.userInput() ) == -1 )
+            itemList.append(cell.userInput());
         }
       }
 
@@ -5729,7 +5729,7 @@ void View::slotItemSelected( QAction* action )
   int x = selection()->marker().x();
   int y = selection()->marker().y();
   Cell cell( d->activeSheet, x, y );
-  if (tmp == cell.inputText())
+  if (tmp == cell.userInput())
     return;
 
   DataManipulator *manipulator = new DataManipulator;
@@ -5929,7 +5929,7 @@ void View::clearTextSelection()
   DataManipulator* manipulator = new DataManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setName( i18n( "Clear Text" ) );
-  // parsing gets set only so that setCellText is called as it should be,
+  // parsing gets set only so that parseUserInput is called as it should be,
   // no actual parsing shall be done
   manipulator->setParsing( true );
   manipulator->setValue( Value( "" ) );

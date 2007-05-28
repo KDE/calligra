@@ -265,7 +265,7 @@ KoFilter::ConversionStatus Leader::doSpreadCell(const Cell& spreadCell, int colu
 	docSpreadCellProperty["height"] = QString::number(spreadCell->height());
 	docSpreadCellProperty["empty"] = (spreadCell->isEmpty()==0?"false":"true");
 	if (!spreadCell->isEmpty()) {
-		docSpreadCellProperty["text"] = spreadCell->inputText();
+		docSpreadCellProperty["text"] = spreadCell->userInput();
 		docSpreadCellProperty["strouttext"] = spreadCell->displayText();
 		docSpreadCellProperty["action"] = spreadCell->action();
 		docSpreadCellProperty["date"] = (spreadCell->isDate()==0?"false":"true");

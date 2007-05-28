@@ -264,7 +264,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
                 nonempty_cells++;
             QString text;
             QColor bgcolor = style.fontColor();
-            // FIXME: some formatting seems to be missing with cell.inputText(), e.g.
+            // FIXME: some formatting seems to be missing with cell.userInput(), e.g.
             // "208.00" in KSpread will be "208" in HTML (not always?!)
             bool link = false;
 
@@ -272,11 +272,11 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             {
                 if ( Util::localReferenceAnchor(cell.link()) )
                 {
-                    text = cell.inputText();
+                    text = cell.userInput();
                 }
                 else
                 {
-                    text = " <A href=\"" + cell.link() + "\">" + cell.inputText() + "</A>";
+                    text = " <A href=\"" + cell.link() + "\">" + cell.userInput() + "</A>";
                     link = true;
                 }
             }
@@ -285,11 +285,11 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
 #if 0
             switch( cell.content() ) {
             case Cell::Text:
-                text = cell.inputText();
+                text = cell.userInput();
                 break;
             case Cell::RichText:
             case Cell::VisualFormula:
-                text = cell.inputText(); // untested
+                text = cell.userInput(); // untested
                 break;
             case Cell::Formula:
                 cell.calc( true ); // Incredible, cells are not calculated if the document was just opened

@@ -376,7 +376,7 @@ void DependencyManager::updateFormula( const Cell& cell, const Region::Element* 
             expression.append( token.text() );
         }
     }
-    Cell( cell ).setCellText( expression );
+    Cell( cell ).parseUserInput( expression );
 }
 
 void DependencyManager::Private::reset()

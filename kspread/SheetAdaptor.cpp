@@ -92,7 +92,7 @@ QPoint SheetAdaptor::cellLocation( const QString& cellname )
 QString SheetAdaptor::text( int x, int y )
 {
     Cell cell = Cell( m_sheet, x, y);
-    return cell.inputText();
+    return cell.userInput();
 }
 
 QString SheetAdaptor::text( const QString& cellname )

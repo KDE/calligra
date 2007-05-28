@@ -713,7 +713,7 @@ bool Validity::testValidity( const Cell* cell ) const
     if ( d->restriction != None )
     {
         //fixme
-        if ( d->allowEmptyCell && cell->inputText().isEmpty() )
+        if ( d->allowEmptyCell && cell->userInput().isEmpty() )
             return true;
 
         if ( cell->value().isNumber() &&

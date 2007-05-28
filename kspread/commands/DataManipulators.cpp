@@ -72,12 +72,12 @@ bool AbstractDataManipulator::process (Element* element)
             style.setFormatType (fmtType);
             cell.setStyle( style );
         }
-        cell.setCellText (text);
+        cell.parseUserInput (text);
       } else {
         if ( !val.isEmpty() )
         {
           cell.setValue(val);
-          cell.setInputText(cell.doc()->converter()->asString(val).asString());
+          cell.setUserInput(cell.doc()->converter()->asString(val).asString());
           if ( fmtType != Format::None )
           {
             Style style;

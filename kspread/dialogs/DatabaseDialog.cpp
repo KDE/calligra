@@ -690,7 +690,7 @@ void DatabaseDialog::accept()
       for ( i = 0; i < count; ++i )
       {
         cell = Cell( sheet, left + i, top + y );
-        cell.setCellText( query.value( i ).toString() );
+        cell.parseUserInput( query.value( i ).toString() );
       }
       ++y;
     }
@@ -706,7 +706,7 @@ void DatabaseDialog::accept()
       for ( i = 0; i < count; ++i )
       {
         cell = Cell( sheet, left + i, top + y );
-        cell.setCellText( query.value( i ).toString() );
+        cell.parseUserInput( query.value( i ).toString() );
       }
       ++y;
 

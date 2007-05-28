@@ -93,7 +93,7 @@ TableShape::TableShape( int columns, int rows )
     setColumns( columns );
     setRows( rows );
 
-    Cell( sheet(), 1, 1 ).setCellText( "42" );
+    Cell( sheet(), 1, 1 ).parseUserInput( "42" );
 }
 
 TableShape::~TableShape()
