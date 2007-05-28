@@ -559,7 +559,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
 
       if ( !cell )
         cell = Cell( table, columns, row );
-      cell.parseUserInput( formula );
+      cell.setUserInput( formula );
     }
     if ( e.hasAttributeNS( ooNS::table, "validation-name" ) )
     {
@@ -572,7 +572,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
         cell = Cell( table, columns, row );
       Style style;
 
-      cell.parseUserInput( text );
+      cell.setUserInput( text );
 
       QString value = e.attributeNS( ooNS::table, "value", QString::null );
       QString type  = e.attributeNS( ooNS::table, "value-type", QString::null );

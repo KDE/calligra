@@ -1484,7 +1484,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         // TODO Stefan: merge this into Oasis::decodeFormula
         checkForNamedAreas( oasisFormula );
         oasisFormula = Oasis::decodeFormula( oasisFormula, locale() );
-        parseUserInput( oasisFormula );
+        setUserInput( oasisFormula );
     }
     else if ( !userInput().isEmpty() && userInput().at(0) == '=' ) //prepend ' to the text to avoid = to be painted
         setUserInput( userInput().prepend('\'') );
@@ -1671,7 +1671,16 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
 #endif
         }
         else
+        {
             kDebug(36003)<<" type of value found : "<<valuetype<<endl;
+            // Set the value by parsing the user input.
+            parseUserInput(userInput());
+        }
+    }
+    else // no value-type attribute
+    {
+        // Set the value by parsing the user input.
+        parseUserInput(userInput());
     }
 
     //
@@ -1754,8 +1763,8 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
                 {
                     QString link = textA.attributeNS( KoXmlNS::xlink, "href", QString() );
                     cellText = textA.text();
-                    parseUserInput( cellText );
-                    setValue( Value(cellText) );
+                    setUserInput( cellText );
+                    // The value will be set later in loadOasis().
                     if ( (!link.isEmpty()) && (link[0]=='#') )
                         link=link.remove( 0, 1 );
                     setLink( link );
@@ -1766,8 +1775,8 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
 
     if (!cellText.isNull())
     {
-        parseUserInput( cellText );
-        setValue( Value(cellText) );
+        setUserInput( cellText );
+        // The value will be set later in loadOasis().
     }
 
     //Enable word wrapping if multiple lines of text have been found.

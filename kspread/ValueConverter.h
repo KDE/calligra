@@ -32,7 +32,7 @@ class ValueParser;
 /**
  * Converts between the different Value types.
  */
-class ValueConverter
+class KSPREAD_EXPORT ValueConverter
 {
 public:
     /**

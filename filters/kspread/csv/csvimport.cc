@@ -42,6 +42,7 @@
 #include <kspread/StyleManager.h>
 #include <kspread/Cell.h>
 #include <kspread/Value.h>
+#include <kspread/ValueConverter.h>
 
 #include <csvdialog.h>
 
@@ -195,8 +196,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         cell = Cell( sheet,  col + 1, row + 1 );
                         cell.setStyle( *s );
                         cell.setValue(Value(d));
-                        cell.setUserInput(text);
                     }
+                    cell.setUserInput(text);
                     Style style;
                     style.setPrecision( 2 );
                     cell.setStyle(style);
@@ -221,8 +222,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         cell = Cell( sheet, col + 1, row + 1 );
                         cell.setStyle( *s );
                         cell.setValue(Value(d));
-                        cell.setUserInput(tmp);
                     }
+                    cell.setUserInput(tmp);
                     Style style;
                     style.setPrecision( 2 );
                     cell.setStyle(style);
@@ -247,8 +248,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         cell = Cell( sheet, col + 1, row + 1 );
                         cell.setStyle( *s );
                         cell.setValue(Value(d));
-                        cell.setUserInput(tmp);
                     }
+                    cell.setUserInput(tmp);
                     Style style;
                     style.setPrecision( 2 );
                     cell.setStyle(style);
@@ -258,7 +259,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
              {
               cell = Cell( sheet, col + 1, row + 1 );
               cell.setStyle( *s );
-              cell.parseUserInput( text );
+              cell.setUserInput(text);
+              cell.setValue(ksdoc->converter()->asDate(Value(text)));
               Style style;
               style.setFormatType( Format::ShortDate );
               cell.setStyle(style);
@@ -268,6 +270,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
              {
               cell = Cell( sheet, col + 1, row + 1 );
               cell.setStyle( *s );
+              cell.setUserInput(text);
               cell.setValue( Value( text ) );
               Style style;
               style.setFormatType( Format::Money );
