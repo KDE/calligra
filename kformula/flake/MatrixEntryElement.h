@@ -36,9 +36,6 @@ public:
     /// The standard constructor
     MatrixEntryElement( BasicElement* parent = 0 );
 
-    /// @return a list of all children of this class                           
-    const QList<BasicElement*> childElements();
-	
     virtual void registerTab( BasicElement* tab );
 
     /*

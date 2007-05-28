@@ -27,11 +27,6 @@ MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : BasicElement( p
 {
 }
 
-const QList<BasicElement*> MatrixEntryElement::childElements()
-{
-    
-}
-
 void MatrixEntryElement::layout( AttributeManager* am )
 {}
 
