@@ -197,6 +197,9 @@ Value ValueParser::readNumber( const QString& _str, bool *ok ) const
     return Value();
   }
 
+  // log10(2^63) ~= 18
+  if (isInt && major.length() > 19) isInt = false;
+
   QString tot;
   if (neg) tot = '-';
   tot += major;
