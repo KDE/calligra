@@ -240,7 +240,7 @@ public:
     QAbstractButton *cancelButton;
     KSpread::EditWidget *editWidget;
     QGridLayout* viewLayout;
-    QHBoxLayout* tabScrollBarLayout;
+    QGridLayout* tabScrollBarLayout;
 
     // all UI actions
     ViewActions* actions;
@@ -1933,14 +1933,14 @@ void View::initView()
     d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
 
     QWidget* bottomPart = new QWidget( this );
-    d->tabScrollBarLayout = new QHBoxLayout( bottomPart );
+    d->tabScrollBarLayout = new QGridLayout( bottomPart );
     d->tabScrollBarLayout->setMargin(0);
     d->tabScrollBarLayout->setSpacing(0);
-    d->tabBar = new KoTabBar( bottomPart );
-    d->tabScrollBarLayout->addWidget( d->tabBar );
-    d->horzScrollBar = new QScrollBar( bottomPart );
+    d->tabBar = new KoTabBar( 0 );
+    d->tabScrollBarLayout->addWidget( d->tabBar, 0, 0 );
+    d->horzScrollBar = new QScrollBar( 0 );
     d->canvasController->setHorizontalScrollBar( d->horzScrollBar );
-    d->tabScrollBarLayout->addWidget( d->horzScrollBar );
+    d->tabScrollBarLayout->addWidget( d->horzScrollBar, 0, 1, 2, 1, Qt::AlignVCenter);
 
 //     d->horzScrollBar->setRange( 0, 4096 );
     d->horzScrollBar->setOrientation( Qt::Horizontal );
@@ -1955,15 +1955,22 @@ void View::initView()
     connect( d->tabBar, SIGNAL( doubleClicked() ),
       this, SLOT( slotRename() ) );
 
+    int extent = this->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+    if (style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents)) {
+        extent += style()->pixelMetric(QStyle::PM_DefaultFrameWidth) * 2;
+    }
+
     d->viewLayout->setColumnStretch( 1, 10 );
     d->viewLayout->setRowStretch( 2, 10 );
     d->viewLayout->addWidget( d->toolWidget, 0, 0, 1, 3 );
     d->viewLayout->addWidget( d->selectAllButton, 1, 0 );
-    d->viewLayout->addWidget( d->hBorderWidget, 1, 1, 1, 2 );
+    d->viewLayout->addWidget( d->hBorderWidget, 1, 1, 1, 1 );
     d->viewLayout->addWidget( d->vBorderWidget, 2, 0 );
     d->viewLayout->addWidget( d->canvasController, 2, 1 );
-    d->viewLayout->addWidget( d->vertScrollBar, 2, 2 );
-    d->viewLayout->addWidget( bottomPart, 3, 0, 1, 3 );
+    d->viewLayout->addWidget( d->vertScrollBar, 1, 2, 2, 1, Qt::AlignHCenter);
+    d->viewLayout->addWidget( bottomPart, 3, 0, 1, 2 );
+    d->viewLayout->setColumnMinimumWidth(2, extent);
+    d->viewLayout->setRowMinimumHeight(3, extent);
 
     KStatusBar * sb = statusBar();
     d->calcLabel = sb ? new QLabel( sb ) : 0;
@@ -5410,14 +5417,12 @@ void View::refreshView()
   {
     d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
     d->viewLayout->setOriginCorner( Qt::TopLeftCorner );
-    d->tabScrollBarLayout->setDirection( QBoxLayout::LeftToRight );
     d->tabBar->setReverseLayout( interfaceIsRTL );
   }
   else
   {
     d->formulaBarLayout->setDirection( QBoxLayout::RightToLeft );
     d->viewLayout->setOriginCorner( Qt::TopRightCorner );
-    d->tabScrollBarLayout->setDirection( QBoxLayout::RightToLeft );
     d->tabBar->setReverseLayout( !interfaceIsRTL );
   }
 }
