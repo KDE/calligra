@@ -99,7 +99,7 @@ protected:
     /**
      * A helper function to read numbers and distinguish integers and FPs.
      */
-    double readNumber( const QString &_str, bool* ok, bool* isInt = 0 ) const;
+    Value readNumber( const QString &_str, bool* ok ) const;
 
     /**
      * A helper function to read the imaginary part of a complex number.

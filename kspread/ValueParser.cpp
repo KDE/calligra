@@ -119,8 +119,9 @@ Value ValueParser::tryParseBool( const QString& str, bool *ok ) const
   return val;
 }
 
-double ValueParser::readNumber( const QString& _str, bool *ok, bool *isInt ) const
+Value ValueParser::readNumber( const QString& _str, bool *ok ) const
 {
+  bool isInt = false;
   QString str = _str.trimmed();
   bool neg = str.indexOf(m_doc->locale()->negativeSign()) == 0;
   if (neg)
@@ -146,14 +147,9 @@ double ValueParser::readNumber( const QString& _str, bool *ok, bool *isInt ) con
   {
     major = str.left(pos);
     minor = str.mid(pos + m_doc->locale()->decimalSymbol().length());
-    if (isInt) *isInt = false;
+    isInt = false;
   }
-  else if ( ( pos = str.indexOf( m_doc->locale()->decimalSymbol() ) ) != -1 )
-  {
-    major = str.left(pos);
-    minor = str.mid(pos + m_doc->locale()->decimalSymbol().length());
-    if (isInt) *isInt = false;
-  } else if ( ( ( pos = str.indexOf( ' ' ) ) != -1 ) &&
+  else if ( ( ( pos = str.indexOf( ' ' ) ) != -1 ) &&
               ( ( fracPos = str.indexOf( '/' ) ) != -1 ) ) {
     // try to parse fractions of this form:
     // [0-9]+ [0-9]+/[1-9][0-9]?
@@ -173,7 +169,7 @@ double ValueParser::readNumber( const QString& _str, bool *ok, bool *isInt ) con
   else
   {
     major = str;
-    if (isInt) *isInt = true;
+    isInt = (EPos == -1); // only, if no exponential part was found
   }
 
   // Remove thousand separators
@@ -189,7 +185,7 @@ double ValueParser::readNumber( const QString& _str, bool *ok, bool *isInt ) con
          || (lastpos>0 && pos-lastpos!=3))   // Must have exactly 3 digits between two separators
     {
       if (ok) *ok = false;
-      return 0.0;
+      return Value();
     }
 
     lastpos = pos;
@@ -198,15 +194,15 @@ double ValueParser::readNumber( const QString& _str, bool *ok, bool *isInt ) con
   if (lastpos>0 && major.length()-lastpos!=3)   // Must have exactly 3 digits after the last separator
   {
     if (ok) *ok = false;
-    return 0.0;
+    return Value();
   }
 
   QString tot;
   if (neg) tot = '-';
+  tot += major;
+  if (!isInt) tot += '.' + minor + exponentialPart;
 
-  tot += major + '.' + minor + exponentialPart;
-
-  return tot.toDouble(ok);
+  return isInt ? Value(tot.toLongLong(ok)) : Value(tot.toDouble(ok));
 }
 
 double ValueParser::readImaginary( const QString& str, bool* ok ) const
@@ -226,7 +222,7 @@ double ValueParser::readImaginary( const QString& str, bool* ok ) const
             imag = 1.0;
         }
         else
-            imag = readNumber( str.mid( 1 ), ok );
+            imag = readNumber( str.mid( 1 ), ok ).asFloat();
     }
     else if ( str[str.length()-1] == 'i' || str[str.length()-1] == 'j' )
     {
@@ -242,7 +238,7 @@ double ValueParser::readImaginary( const QString& str, bool* ok ) const
             imag = -1.0;
         }
         else
-            imag = readNumber( str.left( str.length()-1 ), ok );
+            imag = readNumber( str.left( str.length()-1 ), ok ).asFloat();
     }
     else
         *ok = false;
@@ -254,7 +250,7 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
     Value value;
     if ( str.endsWith( '%' ) ) // percentage
     {
-        const double val = readNumber( str.left( str.length()-1 ).trimmed(), ok );
+        const double val = readNumber( str.left( str.length()-1 ).trimmed(), ok ).asFloat();
         if ( *ok )
         {
             //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
@@ -276,7 +272,7 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
             imag = readImaginary( str.mid( sepPos + 1 ).trimmed(), ok );
             // real part
             if ( *ok )
-                real = readNumber( str.left( sepPos ).trimmed(), ok );
+                real = readNumber( str.left( sepPos ).trimmed(), ok ).asFloat();
         }
         else if ( ( sepPos = str.indexOf( minus, minus.length() ) ) != -1 )
         {
@@ -284,7 +280,7 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
             imag = -readImaginary( str.mid( sepPos + 1 ).trimmed(), ok );
             // real part
             if ( *ok )
-                real = readNumber( str.left( sepPos ).trimmed(), ok );
+                real = readNumber( str.left( sepPos ).trimmed(), ok ).asFloat();
         }
         else
         {
@@ -298,20 +294,7 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
             value = Value( complex<double>( real, imag ) );
     }
     else // real number
-    {
-        // First try to understand the number using the m_doc->locale()
-        bool isInt = false;
-        double val = readNumber( str, ok, &isInt );
-        if ( *ok )
-        {
-            //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
-            //    "' successfully parsed as number: " << val << endl;
-            if ( isInt )
-                value = Value( static_cast<qint64>( val ) );
-            else
-                value = Value( val );
-        }
-    }
+        value = readNumber( str, ok );
     return value;
 }
 
