@@ -194,12 +194,6 @@ public:
     static QString columnName( uint column );
 
     /**
-     * Return the text the user entered. This could be a value (e.g. "14.03")
-     * or a formula (e.g. "=SUM(A1:A10)")
-     */
-    QString inputText() const;
-
-    /**
      * \return the output text, e.g. the result of a formula
      */
     QString displayText() const;
@@ -279,21 +273,18 @@ public:
     void setValue( const Value& value );
 
     /**
-     * Sets the value for this cell and its formatting and input text, if
-     * appropriate. Can therefore be used as a replacement for setCellText,
-     * if we don't need to parse.
-     *
-     * If \p inputText is empty and the cell has NO formula, the input text
-     * is created from \p value .
-     *
-     * \param value the new cell value
-     * \param fmtType the formatting type
-     * \param inputText the new input text
-     *
-     * \note Calls setValue() after setting the formatting and input text.
+     * Return the text the user entered. This could be a value (e.g. "14.03")
+     * or a formula (e.g. "=SUM(A1:A10)")
      */
-    void setCellValue (const Value& value, Format::Type fmtType = Format::None,
-                       const QString& inputText = QString());
+    QString inputText() const;
+
+    /**
+     * Sets the input text.
+     * If it's a formula, creates a formula object and sets the input text as
+     * its expression. Otherwise, sets the input text as string value.
+     * \internal
+     */
+    void setInputText( const QString& string );
 
     /**
      * Parses \p text and sets the appropriate formatting.
@@ -675,14 +666,6 @@ private:
      * @return the OASIS style's name
      */
     QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles );
-
-    /**
-     * Sets the input text.
-     * If it's a formula, creates a formula object and sets the input text as
-     * its expression. Otherwise, sets the input text as string value.
-     * \internal
-     */
-    void setInputText( const QString& string );
 };
 
 inline uint qHash( const Cell& cell )

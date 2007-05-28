@@ -27,6 +27,7 @@
 #include "Doc.h"
 #include "Sheet.h"
 #include "ValueCalc.h"
+#include "ValueConverter.h"
 
 #include <float.h>
 #include <math.h>
@@ -62,9 +63,9 @@ bool AbstractDataManipulator::process (Element* element)
         if (parse)
           text = val.asString();
 
+      Cell cell = Cell( m_sheet, col, row);
       // we have the data - set it !
       if (parse) {
-        Cell cell = Cell( m_sheet, col, row);
         if (fmtType != Format::None)
         {
             Style style;
@@ -75,7 +76,14 @@ bool AbstractDataManipulator::process (Element* element)
       } else {
         if ( !val.isEmpty() )
         {
-          Cell( m_sheet, col, row ).setCellValue( val, fmtType );
+          cell.setValue(val);
+          cell.setInputText(cell.doc()->converter()->asString(val).asString());
+          if ( fmtType != Format::None )
+          {
+            Style style;
+            style.setFormatType(fmtType);
+            cell.setStyle(style);
+          }
         }
       }
     }

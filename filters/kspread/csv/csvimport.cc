@@ -194,7 +194,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     {
                         cell = Cell( sheet,  col + 1, row + 1 );
                         cell.setStyle( *s );
-                        cell.setCellValue( Value( d ), Format::Number, text );
+                        cell.setValue(Value(d));
+                        cell.setInputText(text);
                     }
                     Style style;
                     style.setPrecision( 2 );
@@ -219,7 +220,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     {
                         cell = Cell( sheet, col + 1, row + 1 );
                         cell.setStyle( *s );
-                        cell.setCellValue( Value( d ), Format::Number, tmp );
+                        cell.setValue(Value(d));
+                        cell.setInputText(tmp);
                     }
                     Style style;
                     style.setPrecision( 2 );
@@ -244,7 +246,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     {
                         cell = Cell( sheet, col + 1, row + 1 );
                         cell.setStyle( *s );
-                        cell.setCellValue( Value( d ), Format::Number, tmp );
+                        cell.setValue(Value(d));
+                        cell.setInputText(tmp);
                     }
                     Style style;
                     style.setPrecision( 2 );

@@ -587,12 +587,14 @@ static void fillSequence( const QList<Cell>& _srcList,
         if ( _seqList.value( s )->type() == AutoFillSequenceItem::TIME )
         {
             const Value timeValue = cell.doc()->converter()->asTime( Value( variant.toDouble() ) );
-            cell.setCellValue( timeValue );
+            cell.setValue(timeValue);
+            cell.setInputText(cell.doc()->converter()->asString(timeValue).asString());
         }
         else if ( _seqList.value( s )->type() == AutoFillSequenceItem::DATE )
         {
             const Value dateValue = cell.doc()->converter()->asDate( Value( variant.toInt() ) );
-            cell.setCellValue( dateValue );
+            cell.setValue(dateValue);
+            cell.setInputText(cell.doc()->converter()->asString(dateValue).asString());
         }
         else if ( _seqList.value( s )->type() == AutoFillSequenceItem::FORMULA )
         {
@@ -600,9 +602,17 @@ static void fillSequence( const QList<Cell>& _srcList,
             cell.setCellText( cell.decodeFormula( _seqList.value( s )->getString() ) );
         }
         else if ( variant.type() == QVariant::Double )
-            cell.setCellValue( Value( variant.toDouble() ) );
+        {
+            const Value value(variant.toDouble());
+            cell.setValue(value);
+            cell.setInputText(cell.doc()->converter()->asString(value).asString());
+        }
         else if ( variant.type() == QVariant::Int )
-            cell.setCellValue( Value( variant.toInt() ) );
+        {
+            const Value value(variant.toInt());
+            cell.setValue(value);
+            cell.setInputText(cell.doc()->converter()->asString(value).asString());
+        }
         else if ( variant.type() == QVariant::String )
         {
             QRegExp number( "(\\d+)" );
@@ -618,7 +628,10 @@ static void fillSequence( const QList<Cell>& _srcList,
                 cell.setLink( _srcList.at( s ).link() );
             }
             else
-                cell.setCellValue( Value( variant.toString() ) );
+            {
+                cell.setValue( Value( variant.toString() ) );
+                cell.setInputText(variant.toString());
+            }
         }
 
         // copy the style of the source cell

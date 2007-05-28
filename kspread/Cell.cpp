@@ -431,25 +431,6 @@ void Cell::setValue( const Value& value )
     valueChanged();
 }
 
-void Cell::setCellValue (const Value &value, Format::Type fmtType, const QString &txt)
-{
-    if ( !txt.isNull() )
-    {
-        setInputText( txt );
-        if ( isFormula() )
-            makeFormula();
-    }
-    else if ( !isFormula() )
-        setInputText( doc()->converter()->asString( value ).asString() );
-    if ( fmtType != Format::None )
-    {
-        Style style;
-        style.setFormatType( fmtType );
-        setStyle( style );
-    }
-    setValue( value );
-}
-
 // FIXME: Continue commenting and cleaning here (ingwa)
 
 
@@ -1525,45 +1506,40 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     //
     if( element.hasAttributeNS( KoXmlNS::office, "value-type" ) )
     {
-        QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString() );
+        const QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString() );
         kDebug(36003)<<"  value-type: " << valuetype << endl;
         if( valuetype == "boolean" )
         {
-          QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString() ).toLower();
+            const QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString() ).toLower();
             if( ( val == "true" ) || ( val == "false" ) )
-            {
-                bool value = val == "true";
-                setCellValue( Value(value) );
-            }
+                setValue( Value( val == "true" ) );
         }
 
         // integer and floating-point value
         else if( valuetype == "float" )
         {
             bool ok = false;
-            double value = element.attributeNS( KoXmlNS::office, "value", QString() ).toDouble( &ok );
-            if( ok )
-                setCellValue( Value(value) );
-
-            if ( !isFormula && inputText().isEmpty())
-            {
-                QString str = locale()->formatNumber( value, 15 );
-                setCellText( str );
-            }
+            const Value value(element.attributeNS(KoXmlNS::office, "value", QString()).toDouble(&ok));
+            if (ok)
+                setValue(value);
+            if (!isFormula && inputText().isEmpty())
+                setInputText(doc()->converter()->asString(value).asString());
         }
 
         // currency value
         else if( valuetype == "currency" )
         {
             bool ok = false;
-            double value = element.attributeNS( KoXmlNS::office, "value", QString() ).toDouble( &ok );
-            if( ok )
+            Value value(element.attributeNS(KoXmlNS::office, "value", QString()).toDouble(&ok));
+            if (ok)
             {
-                setCellValue( Value(value), Format::Money );
+                value.setFormat( Value::fmt_Money );
+                setValue( value );
 
                 if (element.hasAttributeNS( KoXmlNS::office, "currency" ) )
                 {
                   Currency currency(element.attributeNS( KoXmlNS::office, "currency", QString() ) );
+                  // FIXME Stefan: Only set it, if it differs from the default currency.
                   Style style;
                   style.setCurrency( currency );
                   setStyle( style );
@@ -1573,21 +1549,19 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         else if( valuetype == "percentage" )
         {
             bool ok = false;
-            double percent = element.attributeNS( KoXmlNS::office, "value", QString() ).toDouble( &ok );
-            if( ok )
+            Value value(element.attributeNS(KoXmlNS::office, "value", QString()).toDouble(&ok));
+            if (ok)
             {
-                Value value( percent );
-                value.setFormat( Value::fmt_Percent );
-                setCellValue( value );
-
-                if ( !isFormula && inputText().isEmpty())
-                {
-                    QString str = locale()->formatNumber( percent, 15 );
-                    setCellText( str );
-                }
+                value.setFormat(Value::fmt_Percent);
+                setValue(value);
+                if (!isFormula && inputText().isEmpty())
+                    setInputText(doc()->converter()->asString(value).asString());
+// FIXME Stefan: Should be handled by Value::Format. Verify and remove!
+#if 0
                 Style style;
                 style.setFormatType( Format::Percentage );
                 setStyle( style );
+#endif
             }
         }
         else if ( valuetype == "date" )
@@ -1621,10 +1595,13 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
 
             if ( ok )
             {
-                setCellValue( Value( QDate( year, month, day ), doc() ) );
+                setValue( Value( QDate( year, month, day ), doc() ) );
+// FIXME Stefan: Should be handled by Value::Format. Verify and remove!
+#if 0
                 Style style;
                 style.setFormatType( Format::ShortDate );
                 setStyle( style );
+#endif
                 kDebug(36003) << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
 
@@ -1668,10 +1645,13 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             {
                 // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell.setValue( kval );
-                setCellValue( Value( QTime( hours % 24, minutes, seconds ), doc() ) );
+                setValue( Value( QTime( hours % 24, minutes, seconds ), doc() ) );
+// FIXME Stefan: Should be handled by Value::Format. Verify and remove!
+#if 0
                 Style style;
                 style.setFormatType( Format::Time );
                 setStyle( style );
+#endif
             }
         }
         else if( valuetype == "string" )
@@ -1681,11 +1661,14 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             {
                 //if there is not string-value entry don't overwrite value stored into <text:p>
                 value = element.attributeNS( KoXmlNS::office, "string-value", QString() );
-                setCellValue( Value(value) );
+                setValue( Value(value) );
             }
+// FIXME Stefan: Should be handled by Value::Format. Verify and remove!
+#if 0
             Style style;
             style.setFormatType( Format::Text );
             setStyle( style );
+#endif
         }
         else
             kDebug(36003)<<" type of value found : "<<valuetype<<endl;
@@ -2005,8 +1988,6 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
       if ((pm == Paste::Result) && (txt[0] == '='))
         // paste text of the element, if we want to paste result
         // and the source cell contains a formula
-        // note that we mustn't use setCellValue after this, or else we lose
-        // all the formulas ...
           setInputText( result.text() );
       else
           //otherwise copy everything
@@ -2044,8 +2025,12 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         {
           bool ok = false;
           double dd = t.toDouble( &ok );
-          if ( ok )
-            setValue ( Value(dd) );
+          if (ok)
+          {
+              Value value(dd);
+              value.setFormat(Value::fmt_Date);
+              setValue(value);
+          }
           else
           {
             int pos   = t.indexOf( '/' );
@@ -2064,8 +2049,12 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         {
           bool ok = false;
           double dd = t.toDouble( &ok );
-          if ( ok )
-            setCellValue( Value(dd) );
+          if (ok)
+          {
+              Value value(dd);
+              value.setFormat(Value::fmt_Time);
+              setValue(value);
+          }
           else
           {
             int hours   = -1;
@@ -2181,14 +2170,9 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
 
     if ( newStyleLoading )
     {
-      sheet()->cellStorage()->setValue( d->column, d->row, Value() );
-
       // boolean ?
       if( dataType == "Bool" )
-      {
-        bool val = (t.toLower() == "true");
-        setCellValue (Value(val));
-      }
+        setValue(Value(t.toLower() == "true"));
 
       // number ?
       else if( dataType == "Num" )
