@@ -167,6 +167,8 @@ bool MergeCommand::preProcessing()
 
   if (m_firstrun)
   {
+    setText( name() );
+
     // reduce the region to the region occupied by merged cells
     Region mergedCells;
     ConstIterator endOfList = constEnd();

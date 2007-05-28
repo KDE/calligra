@@ -56,10 +56,11 @@ bool CondtionCommand::mainProcessing()
     return AbstractRegionCommand::mainProcessing();
 }
 
-QString CondtionCommand::name() const
+void CondtionCommand::setConditionList(  const QLinkedList<Conditional>& list )
 {
+    m_conditions.setConditionList( list );
     if ( m_conditions.isEmpty() )
-        return i18n( "Remove Conditional Formatting" );
+        setText( i18n( "Remove Conditional Formatting" ) );
     else
-        return i18n( "Add Conditional Formatting" );
+        setText( i18n( "Add Conditional Formatting" ) );
 }

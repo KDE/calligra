@@ -34,12 +34,11 @@ class CommentCommand : public AbstractRegionCommand
 {
 public:
     CommentCommand();
-    void setComment( const QString& comment ) { m_comment = comment; }
+    void setComment( const QString& comment );
 
 protected:
     virtual bool process(Element* element);
     virtual bool mainProcessing();
-    virtual QString name() const;
 
 private:
     QString m_comment;

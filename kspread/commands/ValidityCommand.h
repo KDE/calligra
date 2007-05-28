@@ -36,12 +36,11 @@ class ValidityCommand : public AbstractRegionCommand
 {
 public:
     ValidityCommand();
-    void setValidity( Validity validity ) { m_validity = validity; }
+    void setValidity( Validity validity );
 
 protected:
     virtual bool process(Element* element);
     virtual bool mainProcessing();
-    virtual QString name() const;
 
 private:
     Validity m_validity;

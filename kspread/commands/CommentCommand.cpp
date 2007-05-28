@@ -58,10 +58,11 @@ bool CommentCommand::mainProcessing()
     return AbstractRegionCommand::mainProcessing();
 }
 
-QString CommentCommand::name() const
+void CommentCommand::setComment( const QString& comment )
 {
+    m_comment = comment;
     if ( m_comment.isEmpty() )
-        return i18n( "Remove Comment" );
+        setText( i18n( "Remove Comment" ) );
     else
-        return i18n( "Add Comment" );
+        setText( i18n( "Add Comment" ) );
 }

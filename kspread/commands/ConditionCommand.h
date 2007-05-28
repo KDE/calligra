@@ -37,12 +37,11 @@ class CondtionCommand : public AbstractRegionCommand
 {
 public:
     CondtionCommand();
-    void setConditionList( const QLinkedList<Conditional>& list ) { m_conditions.setConditionList( list ); }
+    void setConditionList( const QLinkedList<Conditional>& list );
 
 protected:
     virtual bool process(Element* element);
     virtual bool mainProcessing();
-    virtual QString name() const;
 
 private:
     Conditions m_conditions;

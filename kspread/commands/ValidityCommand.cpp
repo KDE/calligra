@@ -58,10 +58,11 @@ bool ValidityCommand::mainProcessing()
     return AbstractRegionCommand::mainProcessing();
 }
 
-QString ValidityCommand::name() const
+void ValidityCommand::setValidity( Validity validity )
 {
+    m_validity = validity;
     if ( m_validity.isEmpty() )
-        return i18n( "Remove Validity Check" );
+        setText( i18n( "Remove Validity Check" ) );
     else
-        return i18n( "Add Validity Check" );
+        setText( i18n( "Add Validity Check" ) );
 }
