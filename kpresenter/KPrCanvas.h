@@ -363,7 +363,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void alignVertical( VerticalAlignmentType _type );
     void savePicture();
 
-    void dropImage( QMimeSource * data, bool resizeImageToOriginalSize = false , int posX = 10, int posX=10 );
+    void dropImage( QMimeSource * data, bool resizeImageToOriginalSize = false , int posX = 10, int posY=10 );
     KoGuides & guideLines() { return m_gl; }
 
     /**

@@ -213,7 +213,7 @@ class KOFFICEUI_EXPORT KoContextHelpAction : public KToggleAction
 	Q_OBJECT
 
 	public:
-		KoContextHelpAction( KActionCollection* parent, QWidget* parent = 0 );
+		KoContextHelpAction( KActionCollection* parentCollection, QWidget* parent = 0 );
 		virtual ~KoContextHelpAction();
 
 	public slots:

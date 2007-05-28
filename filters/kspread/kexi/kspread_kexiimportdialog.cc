@@ -233,3 +233,4 @@ int KSpreadKexiImportDialog::conversion()
     else
         return -1;
 }
+

@@ -6,6 +6,7 @@
 #ifdef __DECCXX
 #include <fstream.h>      // needed for filebuf
 #endif
+#include <string.h>
 
 #ifdef USE_QT
 

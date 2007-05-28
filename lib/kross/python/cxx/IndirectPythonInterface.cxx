@@ -1,6 +1,7 @@
 //
 //	IndirectPythonInterface.cxx
 //
+#undef _XOPEN_SOURCE
 #include "IndirectPythonInterface.hxx"
 
 namespace Py

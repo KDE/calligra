@@ -72,7 +72,7 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes( const ContextStyle& style,
+    virtual void calcSizes( const ContextStyle& cstyle,
 						    ContextStyle::TextStyle tstyle,
 						    ContextStyle::IndexStyle istyle,
 							StyleAttributes& style );
@@ -83,7 +83,7 @@ public:
      * We can use our parentPosition to get our own origin then.
      */
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& cstyle,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
 					   StyleAttributes& style,
