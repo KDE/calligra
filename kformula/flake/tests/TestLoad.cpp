@@ -359,13 +359,13 @@ void TestLoad::styleElement_data()
 
     // Basic content
     addRow( "<mstyle></mstyle>", 0 );
-    addRow( "<mstyle><mrow></mrow></mstyle>", 1 );
-    addRow( "<mstyle><mi>x</mi></mstyle>", 1, 2 );
-    addRow( "<mstyle><mrow><mi>x</mi></mrow></mstyle>", 1, 2 );
+    addRow( "<mstyle><mrow></mrow></mstyle>", 0 );
+    addRow( "<mstyle><mi>x</mi></mstyle>", 1 );
+    addRow( "<mstyle><mrow><mi>x</mi></mrow></mstyle>", 1 );
 
     // Be sure attributes don't break anything
-    addRow( "<mstyle mathvariant=\"bold\"><mi>x</mi></mstyle>", 1, 2 );
-    addRow( "<mstyle thinmathspace=\"0.5em\"><mi>x</mi></mstyle>", 1, 2 );
+    addRow( "<mstyle mathvariant=\"bold\"><mi>x</mi></mstyle>", 1 );
+    addRow( "<mstyle thinmathspace=\"0.5em\"><mi>x</mi></mstyle>", 1 );
 }
 
 void TestLoad::errorElement_data()
