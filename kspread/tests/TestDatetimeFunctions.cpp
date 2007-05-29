@@ -168,12 +168,10 @@ void TestDatetimeFunctions::testWEEKNUM()
 
   // type 2
   CHECK_EVAL( "WEEKNUM(DATE(2000;05;21);2)", Value( 21 ) );
-#if 0
-  CHECK_EVAL( "WEEKNUM(DATE(2005;01;01);2)", Value( 22 ) ); // TODO -  check value
-  CHECK_EVAL( "WEEKNUM(DATE(2000;01;02);2)", Value( 22 ) ); // TODO -  check value
-  CHECK_EVAL( "WEEKNUM(DATE(2000;01;03);2)", Value( 22 ) ); // TODO -  check value
-  CHECK_EVAL( "WEEKNUM(DATE(2000;01;04);2)", Value( 22 ) ); // TODO -  check value
-#endif
+  CHECK_EVAL( "WEEKNUM(DATE(2005;01;01);2)", Value( 01 ) ); // ref. OOo-2.2.0 = 1
+  CHECK_EVAL( "WEEKNUM(DATE(2000;01;02);2)", Value( 01 ) ); // ref. OOo-2.2.0 = 1
+  CHECK_EVAL( "WEEKNUM(DATE(2000;01;03);2)", Value( 02 ) ); // ref. OOo-2.2.0 = 2
+  CHECK_EVAL( "WEEKNUM(DATE(2000;01;04);2)", Value( 02 ) ); // ref. OOo-2.2.0 = 2
   CHECK_EVAL( "WEEKNUM(DATE(2008;03;09);2)", Value( 10 ) );
 }
 
