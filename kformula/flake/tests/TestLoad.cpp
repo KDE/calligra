@@ -110,10 +110,10 @@ void TestLoad::identifierElement_data()
     addRow( "<mi>sin</mi>", 0 );
 
     // Glyph element contents
-    addRow( "<mi>x<mglyph fontfamily=\"serif\" alt=\"a\" index=\"97\"></mi>", 1);
-    addRow( "<mi> <mglyph fontfamily=\"serif\" alt=\"sin\" index=\"97\"> </mi>", 1);
-    addRow( "<mi> <mglyph fontfamily=\"serif\" alt=\"x\" index=\"97\"> "
-            "     <mglyph fontfamily=\"serif\" alt=\"y\" index=\"97\"> </mi>", 2);
+    addRow( "<mi>x<mglyph fontfamily=\"serif\" alt=\"a\" index=\"97\"/></mi>", 1);
+    addRow( "<mi> <mglyph fontfamily=\"serif\" alt=\"sin\" index=\"97\"/> </mi>", 1);
+    addRow( "<mi> <mglyph fontfamily=\"serif\" alt=\"x\" index=\"97\"/> "
+            "     <mglyph fontfamily=\"serif\" alt=\"y\" index=\"97\"/> </mi>", 2);
 
     // Be sure attributes don't break anything
     addRow( "<mi mathvariant=\"bold\">x</mi>", 0 );
@@ -136,10 +136,10 @@ void TestLoad::numberElement_data()
     addRow( "<mn> 1.000.000,11 </mn>", 0 );
 
     // Glyph element contents
-    addRow( "<mn>12<mglyph fontfamnly=\"serif\" alt=\"8\" index=\"56\"></mn>", 1);
-    addRow( "<mn> <mglyph fontfamnly=\"serif\" alt=\"8\" index=\"56\"> </mn>", 1);
-    addRow( "<mn> <mglyph fontfamnly=\"serif\" alt=\"8\" index=\"56\"> "
-            "     <mglyph fontfamnly=\"serif\" alt=\"7\" index=\"55\"> </mn>", 2);
+    addRow( "<mn>12<mglyph fontfamnly=\"serif\" alt=\"8\" index=\"56\"/></mn>", 1);
+    addRow( "<mn> <mglyph fontfamnly=\"serif\" alt=\"8\" index=\"56\"/> </mn>", 1);
+    addRow( "<mn> <mglyph fontfamnly=\"serif\" alt=\"8\" index=\"56\"/> "
+            "     <mglyph fontfamnly=\"serif\" alt=\"7\" index=\"55\"/> </mn>", 2);
 
     // Be sure attributes don't break anything
     addRow( "<mn mathvariant=\"bold\">1</mn>", 0 );
@@ -157,10 +157,10 @@ void TestLoad::operatorElement_data()
     addRow( "<mo> ++ </mo>", 0 );
 
     // Glyph element contents
-    addRow( "<mo>+<mglyph fontfamoly=\"serif\" alt=\"+\" index=\"43\"></mo>", 1);
-    addRow( "<mo> <mglyph fontfamoly=\"serif\" alt=\"+\" index=\"43\"> </mo>", 1);
-    addRow( "<mo> <mglyph fontfamoly=\"serif\" alt=\"+\" index=\"43\"> "
-            "     <mglyph fontfamoly=\"serif\" alt=\"=\" index=\"61\"> </mo>", 2);
+    addRow( "<mo>+<mglyph fontfamoly=\"serif\" alt=\"+\" index=\"43\"/></mo>", 1);
+    addRow( "<mo> <mglyph fontfamoly=\"serif\" alt=\"+\" index=\"43\"/> </mo>", 1);
+    addRow( "<mo> <mglyph fontfamoly=\"serif\" alt=\"+\" index=\"43\"/> "
+            "     <mglyph fontfamoly=\"serif\" alt=\"=\" index=\"61\"/> </mo>", 2);
 
     // Be sure attributes don't break anything
     addRow( "<mo mathvariant=\"bold\">+</mo>", 0 );
@@ -182,10 +182,10 @@ void TestLoad::textElement_data()
     addRow( "<mtext> more text </mtext>", 0 );
 
     // Glyph element contents
-    addRow( "<mtext>tex<mglyph fontfamtextly=\"serif\" alt=\"t\" index=\"116\"></mtext>", 1);
-    addRow( "<mtext> <mglyph fontfamtextly=\"serif\" alt=\"t\" index=\"116\"> </mtext>", 1);
-    addRow( "<mtext>te <mglyph fontfamtextly=\"serif\" alt=\"x\" index=\"120\"> "
-            "     <mglyph fontfamtextly=\"serif\" alt=\"t\" index=\"116\"> </mtext>", 2);
+    addRow( "<mtext>tex<mglyph fontfamtextly=\"serif\" alt=\"t\" index=\"116\"/></mtext>", 1);
+    addRow( "<mtext> <mglyph fontfamtextly=\"serif\" alt=\"t\" index=\"116\"/> </mtext>", 1);
+    addRow( "<mtext>te <mglyph fontfamtextly=\"serif\" alt=\"x\" index=\"120\"/> "
+            "     <mglyph fontfamtextly=\"serif\" alt=\"t\" index=\"116\"/> </mtext>", 2);
 
     // Be sure attributes don't break anything
     addRow( "<mtext mathvariant=\"bold\">text</mtext>", 0 );
@@ -219,10 +219,10 @@ void TestLoad::stringElement_data()
     addRow( "<ms> more text </ms>", 0 );
 
     // Glyph element contents
-    addRow( "<ms>tex<mglyph fontfamsly=\"serif\" alt=\"t\" index=\"116\"></ms>", 1);
-    addRow( "<ms> <mglyph fontfamsly=\"serif\" alt=\"t\" index=\"116\"> </ms>", 1);
-    addRow( "<ms>te <mglyph fontfamsly=\"serif\" alt=\"x\" index=\"120\"> "
-            "     <mglyph fontfamsly=\"serif\" alt=\"t\" index=\"116\"> </ms>", 2);
+    addRow( "<ms>tex<mglyph fontfamsly=\"serif\" alt=\"t\" index=\"116\"/></ms>", 1);
+    addRow( "<ms> <mglyph fontfamsly=\"serif\" alt=\"t\" index=\"116\"/> </ms>", 1);
+    addRow( "<ms>te <mglyph fontfamsly=\"serif\" alt=\"x\" index=\"120\"/> "
+            "     <mglyph fontfamsly=\"serif\" alt=\"t\" index=\"116\"/> </ms>", 2);
 
     // Be sure attributes don't break anything
     addRow( "<ms mathvariant=\"bold\">text</ms>", 0 );
