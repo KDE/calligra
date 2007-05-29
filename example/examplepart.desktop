@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KOffice Example Component
 Name[ar]=مكوّن KOffice مثالي
+Name[be]=Прыклад кампанента KOffice
 Name[bg]=Примерен модул за KOffice
 Name[ca]=Component KOffice d'exemple
 Name[cs]=Ukázková KOffice komponenta
@@ -39,7 +40,7 @@ Name[ru]=Пример компонента KOffice
 Name[se]=KOffice-ovdamearkaoassi
 Name[sl]=Vzorčna komponenta KOffice
 Name[sr]=Пример KOffice-ове компоненте
-Name[sr@Latn]=Primer KOffice-ove komponente
+Name[sr@latin]=Primer KOffice-ove komponente
 Name[sv]=Koffice-exempelkomponent
 Name[ta]=K office  எடுத்துக்காட்டு பயன்பாடுகள் 
 Name[tg]=Мисоли Барномаи KOffice

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Generic KOffice Filter
 Name[ar]=مِرْشَح نوعيّ لـ KOffice
+Name[be]=Фільтр KOffice
 Name[bg]=Общ филтър за KOffice
 Name[br]=Sil KOffice rummel
 Name[ca]=Filtre genèric de KOffice
@@ -40,7 +41,7 @@ Name[ru]=Фильтр KOffice
 Name[se]=Oppalaš KOffice-silli
 Name[sl]=Generični filter za KOffice
 Name[sr]=KOffice-ов генерички филтер
-Name[sr@Latn]=KOffice-ov generički filter
+Name[sr@latin]=KOffice-ov generički filter
 Name[sv]=Generellt Koffice-filter
 Name[uk]=Загальний фільтр KOffice
 Name[uz]=KOffice умумий филтери
