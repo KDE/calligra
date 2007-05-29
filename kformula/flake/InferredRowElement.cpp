@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,12 +17,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "StyleElement.h"
+#include "InferredRowElement.h"
 
-StyleElement::StyleElement( BasicElement* parent ) : InferredRowElement( parent )
-{}
-
-ElementType StyleElement::elementType() const
+InferredRowElement::InferredRowElement( BasicElement* parent ) : RowElement( parent )
 {
-    return Style;
 }
+
+
+bool InferredRowElement::readMathMLContent( const KoXmlElement& parent )
+{
+    // Check for inferred mrows
+    KoXmlElement element = parent.firstChildElement();
+    if ( ! element.isNull() && element.tagName().toLower() == "mrow"
+         && element.nextSiblingElement().isNull() ) {
+        return inherited::readMathMLContent( element );
+    }
+    return inherited::readMathMLContent( parent );
+}
+
+

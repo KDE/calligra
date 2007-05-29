@@ -17,25 +17,31 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef STYLEELEMENT_H
-#define STYLEELEMENT_H
+#ifndef INFERREDROWELEMENT_H
+#define INFERREDROWELEMENT_H
 
-#include "InferredRowElement.h"
-#include "kformula_export.h"
+#include "RowElement.h"
 
 /**
- * @short The implementation of the MathML mstyle element
+ * @short Implementation of an inferred mrow element
  *
- * This class is a very thin wrapper around RowElement just implementing elementType.
- * Basically it holds children like a row but it is able to apply almost any style on
- * them.
+ * Some elements are allowed to have a variable number of children.
+ * In those cases, elements are supposed to work as if they effectively
+ * had an mrow element and those children were children of that inferred
+ * mrow element. This class is an specialization of RowElement that handles
+ * inferred mrows.
+ * Thus, if an element allows inferred mrows should inherit from
+ * InferredRowElement instead of RowElement.
  */
-class KOFORMULA_EXPORT StyleElement : public InferredRowElement {
+class InferredRowElement : public RowElement {
+    typedef RowElement inherited;
 public:
-    /// The standart constructor
-    StyleElement( BasicElement* parent = 0 );
+    /// The standard constructor
+    InferredRowElement( BasicElement* parent = 0 );
 
-    ElementType elementType() const;
+protected:
+    /// Read the element contents from MathML
+    virtual bool readMathMLContent( const KoXmlElement& parent );
 };
-
-#endif // STYLEELEMENT_H
+    
+#endif // INFERREDROWELEMENT_H
