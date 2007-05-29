@@ -946,7 +946,7 @@ void TestLoad::errorElement()
 
 void TestLoad::paddedElement()
 {
-    test( new BracketElement );
+    test( new PaddedElement );
 }
 
 void TestLoad::phantomElement()
