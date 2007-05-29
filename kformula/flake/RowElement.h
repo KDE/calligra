@@ -57,7 +57,7 @@ public:
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( const AttributeManager* am );
+    virtual void layout( AttributeManager* am );
 
     /**
      * Insert a new child at the cursor position - reimplemented from BasicElement

@@ -67,7 +67,7 @@ void TokenElement::layout( AttributeManager* am )
         {
             tmpRect = fm.boundingRect( stringToRender( m_rawStringList[ rawCounter ] ) );
             width += tmpRect.width();
-            height = qMax( height, tmp->height() );
+            height = qMax( height, tmpRect.height() );
             rawCounter++;
         }
         else

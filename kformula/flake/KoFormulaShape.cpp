@@ -38,6 +38,7 @@ KoFormulaShape::~KoFormulaShape()
 void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
     applyConversion( painter, converter );   // apply zooming and coordinate translation
+    m_formulaRenderer->layoutElement( m_formulaElement );
     m_formulaRenderer->paintElement( painter, m_formulaElement );  // paint the formula
 }
 

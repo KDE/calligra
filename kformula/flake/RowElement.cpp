@@ -38,24 +38,25 @@ RowElement::~RowElement()
 void RowElement::paint( QPainter& p, const AttributeManager* am)
 { /* There is nothing to paint but BasicElement::paint should not be called */ }
 
-void RowElement::layout( const AttributeManager* am )
+void RowElement::layout( AttributeManager* am )
 {
+ kDebug() << "layout Row" << endl;
     Q_UNUSED( am )          // there are no attributes that can be processed here
 
     if( m_rowElements.isEmpty() )  // do not do anything if there are no children
         return;
 
-    QPointF origin = boundingRect().topLeft();
+    QPointF origin;
     double width = 0.0;
     double topToBaseline = 0.0;
     double baselineToBottom = 0.0;
     foreach( BasicElement* child, m_rowElements  )  // iterate through the children
     {
-        child->setOrigin( origin );    // set their origin
+        kDebug() << "new origin:" << QPointF( width, 0.0 ) << endl;
+        child->setOrigin( QPointF( width, 0.0 ) );    // set their origin
         topToBaseline = qMax( topToBaseline, child->baseLine() );
         baselineToBottom = qMax( baselineToBottom, child->height()-child->baseLine() );
         width += child->width();       // add their width
-        origin += QPointF( width, 0 ); // and move the current origin
     }
 
     setWidth( width );

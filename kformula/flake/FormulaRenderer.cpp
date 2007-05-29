@@ -20,6 +20,7 @@
 #include "FormulaRenderer.h"
 #include "AttributeManager.h"
 #include "BasicElement.h"
+#include <kdebug.h>
 
 FormulaRenderer::FormulaRenderer()
 {
@@ -38,31 +39,31 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
       // p.setBrush( QBrush( m_attributeManager->valueOf( "mathbackground" ) ) );
       // p.setPen( m_attributeManager->valueOf( "mathcolor" ) );
       // p.setFont();
+    
+    p.save();
+    p.translate( element->origin() );
+    kDebug() << element->origin() << endl;
     element->paint( p, m_attributeManager );
 
     if( element->childElements().isEmpty() || element->elementType() == Phantom )
+    {
+        p.restore();
         return;
+    }
     else
         foreach( BasicElement* tmpElement, element->childElements() )
-        {
-            p.save();
-            p.translate( tmpElement->origin() );
             paintElement( p, tmpElement );
-            p.restore();
-        }
+
+    p.restore();
 }
 
 void FormulaRenderer::layoutElement( BasicElement* element )
 {
-/*
-    m_attributeManager->inheritAttributes( element ); // inherit the styles
-
     foreach( BasicElement* tmp, element->childElements() )
-        tmp->layout( m_attributeManager );                                // first layout all children
+        layoutElement( tmp );              // first layout all children
 
-    element->layout( m_attributeManager );            // actually layout the element
-    m_attributeManager->disinheritAttributes();
-*/
+    kDebug() << "layoutElement" << endl;
+    element->layout( m_attributeManager );      // actually layout the element
 }
 
 void FormulaRenderer::update( QPainter& p, BasicElement* element )
