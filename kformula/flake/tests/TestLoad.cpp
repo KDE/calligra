@@ -358,7 +358,7 @@ void TestLoad::styleElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<mstyle></mstyle>", 1 );
+    addRow( "<mstyle></mstyle>", 0 );
     addRow( "<mstyle><mrow></mrow></mstyle>", 1 );
     addRow( "<mstyle><mi>x</mi></mstyle>", 1, 2 );
     addRow( "<mstyle><mrow><mi>x</mi></mrow></mstyle>", 1, 2 );
