@@ -252,7 +252,7 @@ void TestDatetimeFunctions::testDAY()
 void TestDatetimeFunctions::testDAYS()
 {
   //
-  CHECK_EVAL( "DAYS(DATE(1993;4;16); DATE(1993;9;25))", Value( -162 ) );        // TODO - DAYS returns abs value
+  CHECK_EVAL( "DAYS(DATE(1993;4;16); DATE(1993;9;25))", Value( -162 ) );        //
 }
 
 void TestDatetimeFunctions::testDAYS360()
@@ -263,7 +263,7 @@ void TestDatetimeFunctions::testDAYS360()
 
   //CHECK_EVAL( "DAYS360(DATE(1993;4;16);DATE(1993;9;25); FALSE)", Value( -162 ) ); 
 
-  CHECK_EVAL( "DAYS360(\"2002-02-22\"; \"2002-04-21\"; FALSE)", Value( 59 ) );  // src docs
+  CHECK_EVAL( "DAYS360(\"2002-02-22\"; \"2002-04-21\"; FALSE)", Value( 59 ) );  // ref. docs
 }
 
 void TestDatetimeFunctions::testEDATE()
