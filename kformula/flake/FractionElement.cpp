@@ -28,8 +28,8 @@
 
 FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_numerator = new BasicElement( this );
-    m_denominator = new BasicElement( this );
+    m_numerator = new RowElement( this );
+    m_denominator = new RowElement( this );
 }
 
 FractionElement::~FractionElement()
@@ -115,6 +115,7 @@ const QList<BasicElement*> FractionElement::childElements()
 
 void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
+    /*
     BasicElement* tmp = cursor->currentElement();
     if( tmp == m_numerator && m_numerator->elementType() == Basic )
         m_numerator = child;
@@ -122,10 +123,12 @@ void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
         m_denominator = child;
 
     delete tmp;       // finally delete the old BasicElement
+    */
 }
    
 void FractionElement::removeChild( BasicElement* element )
 {
+    /*
     if( element == m_numerator )         
     {
         delete m_numerator;                      // delete the numerator and
@@ -136,6 +139,7 @@ void FractionElement::removeChild( BasicElement* element )
         delete m_denominator;
         m_denominator = new BasicElement( this );
     }
+    */
 }
 
 void FractionElement::moveUp( FormulaCursor* cursor, BasicElement* from )
@@ -158,21 +162,12 @@ bool FractionElement::readMathMLContent( const KoXmlElement& parent )
 {
     int counter = 0;      // a counter to track if there are more than two elements
     KoXmlElement tmp;
-    forEachElement( tmp, parent )
-    {
-        if( counter == 0 )
-        {
-            delete m_numerator;
-            m_numerator = ElementFactory::createElement( tmp.tagName(), this );
-            if ( ! m_numerator ) return false;
-            m_numerator->readMathML( tmp );
+    forEachElement( tmp, parent ) {
+        if( counter == 0 ) {
+            if ( ! m_numerator->readMathMLChild( tmp ) ) return false;
         }
-        else if( counter == 1 )
-        {
-            delete m_denominator;
-            m_denominator = ElementFactory::createElement( tmp.tagName(), this );
-            if ( ! m_denominator ) return false;
-            m_denominator->readMathML( tmp );
+        else if( counter == 1 ) {
+            if ( ! m_denominator->readMathMLChild( tmp ) ) return false;
         }
         else
             return false;
