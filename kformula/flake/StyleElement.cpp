@@ -26,3 +26,14 @@ ElementType StyleElement::elementType() const
 {
     return Style;
 }
+
+bool StyleElement::readMathMLContent( const KoXmlElement& parent )
+{
+    // Check for inferred mrows
+    KoXmlElement element = parent.firstChildElement();
+    if ( ! element.isNull() && element.tagName().toLower() == "mrow"
+         && element.nextSiblingElement().isNull() ) {
+        return inherited::readMathMLContent( element );
+    }
+    return inherited::readMathMLContent( parent );
+}

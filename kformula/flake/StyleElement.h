@@ -31,11 +31,15 @@
  * them.
  */
 class KOFORMULA_EXPORT StyleElement : public RowElement {
+    typedef RowElement inherited;
 public:
     /// The standart constructor
     StyleElement( BasicElement* parent = 0 );
 
     ElementType elementType() const;
+
+private:
+    virtual bool readMathMLContent( const KoXmlElement& parent );
 };
 
 #endif // STYLEELEMENT_H
