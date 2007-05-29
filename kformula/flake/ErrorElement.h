@@ -20,9 +20,9 @@
 #ifndef ERRORELEMENT_H
 #define ERRORELEMENT_H
 
-#include "RowElement.h"
+#include "InferredRowElement.h"
 
-class KOFORMULA_EXPORT ErrorElement : public RowElement {
+class KOFORMULA_EXPORT ErrorElement : public InferredRowElement {
     typedef RowElement inherited;
 public:
     ErrorElement( BasicElement* parent = 0 );

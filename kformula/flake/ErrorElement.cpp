@@ -21,7 +21,7 @@
 
 #include <QPainter>
 
-ErrorElement::ErrorElement( BasicElement* parent ) : RowElement( parent ) {
+ErrorElement::ErrorElement( BasicElement* parent ) : InferredRowElement( parent ) {
 }
 
 /**

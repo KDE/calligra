@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,16 +20,14 @@
 #ifndef ENCLOSEELEMENT_H
 #define ENCLOSEELEMENT_H
 
-#include "BasicElement.h"
+#include "InferredRowElement.h"
 #include "kformula_export.h"
 #include <QPainterPath>
-
-class RowElement;
 
 /**
  * @short Implementation of the MathML menclose element
  */
-class KOFORMULA_EXPORT EncloseElement : public BasicElement {
+class KOFORMULA_EXPORT EncloseElement : public InferredRowElement {
 public:
     /// The standart constructor
     EncloseElement( BasicElement* parent = 0 );
@@ -49,9 +47,6 @@ public:
     
 
 private:
-    /// The RowElement that is enclosed
-    RowElement* m_enclosedRow;
-
     /// The QPainterPath holding what the enclose element has to paint
     QPainterPath m_enclosePath;
 

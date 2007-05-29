@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,11 +20,11 @@
 #ifndef PADDEDELEMENT_H
 #define PADDEDELEMENT_H
 
-#include "RowElement.h"
+#include "InferredRowElement.h"
 #include "kformula_export.h"
 
-class KOFORMULA_EXPORT PaddedElement : public RowElement {
-    typedef RowElement inherited;
+class KOFORMULA_EXPORT PaddedElement : public InferredRowElement {
+    typedef InferredRowElement inherited;
 public:
     PaddedElement( BasicElement* parent = 0 );
 

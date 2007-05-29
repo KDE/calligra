@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,10 +20,10 @@
 #ifndef PHANTOMELEMENT_H
 #define PHANTOMELEMENT_H
 
-#include "RowElement.h"
+#include "InferredRowElement.h"
 #include "kformula_export.h"
 
-class KOFORMULA_EXPORT PhantomElement : public RowElement {
+class KOFORMULA_EXPORT PhantomElement : public InferredRowElement {
 public:
     PhantomElement( BasicElement* parent = 0 );
 

@@ -20,7 +20,7 @@
 #include "PhantomElement.h"
 #include "ElementFactory.h"
 
-PhantomElement::PhantomElement( BasicElement* parent ) : RowElement( parent ) 
+PhantomElement::PhantomElement( BasicElement* parent ) : InferredRowElement( parent ) 
 {
 }
 

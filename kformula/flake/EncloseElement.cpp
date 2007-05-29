@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 #include "EncloseElement.h"
 #include <QPainter>
 
-EncloseElement::EncloseElement( BasicElement* parent ) : BasicElement( parent )
+EncloseElement::EncloseElement( BasicElement* parent ) : InferredRowElement( parent )
 {
 }
 
