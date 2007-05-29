@@ -2,6 +2,7 @@
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
 		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -228,6 +229,27 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
         if ( !  m_exponent->readMathMLChild( child ) ) {
             delete m_exponent;
             return false;
+        }
+    }
+    else {
+        KoXmlElement child = element.firstChildElement();
+        if ( m_radicand ) {
+            delete m_radicand;
+        }
+        if ( m_exponent ) {
+            delete m_exponent;
+            m_exponent = 0;
+        }
+        m_radicand = new RowElement( this );
+        if ( ! child.isNull() && child.tagName().toLower() == "mrow" ) {
+            // Inferred mrow
+            child = child.firstChildElement();
+        }
+        if ( ! child.isNull() ) {
+            if ( ! m_radicand->readMathMLChild( child ) ) {
+                delete m_radicand;
+                return false;
+            }
         }
     }
     return true;
