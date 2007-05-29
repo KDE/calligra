@@ -375,10 +375,10 @@ void TestLoad::errorElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<merror></merror>", 1 );
-    addRow( "<merror><mrow></mrow></merror>", 1 );
-    addRow( "<merror><mi>x</mi></merror>", 1, 2 );
-    addRow( "<merror><mrow><mi>x</mi></mrow></merror>", 1, 2 );
+    addRow( "<merror></merror>", 0 );
+    addRow( "<merror><mrow></mrow></merror>", 0 );
+    addRow( "<merror><mi>x</mi></merror>", 1 );
+    addRow( "<merror><mrow><mi>x</mi></mrow></merror>", 1 );
 
     // More complex content
     addRow( "<merror>"
@@ -388,7 +388,7 @@ void TestLoad::errorElement_data()
             " <mrow> <mn> 1 </mn> <mo> + </mo> <msqrt> <mn> 5 </mn> </msqrt> </mrow>"
             " <mtext>  and  </mtext>"
             " <mn> 2 </mn>"
-            "</merror>", 1, 9 );
+            "</merror>", 4, 8 );
 
 }
 
@@ -399,14 +399,14 @@ void TestLoad::paddedElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<mpadded></mpadded>", 1 );
-    addRow( "<mpadded><mrow></mrow></mpadded>", 1 );
-    addRow( "<mpadded><mi>x</mi></mpadded>", 1, 2 );
-    addRow( "<mpadded><mrow><mi>x</mi></mrow></mpadded>", 1, 2 );
+    addRow( "<mpadded></mpadded>", 0);
+    addRow( "<mpadded><mrow></mrow></mpadded>", 0 );
+    addRow( "<mpadded><mi>x</mi></mpadded>", 1 );
+    addRow( "<mpadded><mrow><mi>x</mi></mrow></mpadded>", 1 );
 
     // Be sure attributes don't break anything
-    addRow( "<mpadded width=\"+0.8em\"><mi>x</mi></mpadded>", 1, 2 );
-    addRow( "<mpadded depth=\"1.2\"><mi>x</mi></mpadded>", 1, 2 );
+    addRow( "<mpadded width=\"+0.8em\"><mi>x</mi></mpadded>", 1 );
+    addRow( "<mpadded depth=\"1.2\"><mi>x</mi></mpadded>", 1 );
 }
 
 void TestLoad::phantomElement_data()
@@ -416,14 +416,14 @@ void TestLoad::phantomElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<mphantom></mphantom>", 1 );
-    addRow( "<mphantom><mrow></mrow></mphantom>", 1 );
-    addRow( "<mphantom><mi>x</mi></mphantom>", 1, 2 );
-    addRow( "<mphantom><mrow><mi>x</mi></mrow></mphantom>", 1, 2 );
+    addRow( "<mphantom></mphantom>", 0 );
+    addRow( "<mphantom><mrow></mrow></mphantom>", 0 );
+    addRow( "<mphantom><mi>x</mi></mphantom>", 1 );
+    addRow( "<mphantom><mrow><mi>x</mi></mrow></mphantom>", 1 );
 
     // Be sure attributes don't break anything
-    addRow( "<mphantom width=\"+0.8em\"><mi>x</mi></mphantom>", 1, 2 );
-    addRow( "<mphantom depth=\"1.2\"><mi>x</mi></mphantom>", 1, 2 );
+    addRow( "<mphantom width=\"+0.8em\"><mi>x</mi></mphantom>", 1 );
+    addRow( "<mphantom depth=\"1.2\"><mi>x</mi></mphantom>", 1 );
 }
 
 void TestLoad::fencedElement_data()
@@ -444,14 +444,14 @@ void TestLoad::encloseElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<menclose></menclose>", 1 );
-    addRow( "<menclose><mrow></mrow></menclose>", 1 );
-    addRow( "<menclose><mi>x</mi></menclose>", 1, 2 );
-    addRow( "<menclose><mrow><mi>x</mi></mrow></menclose>", 1, 2 );
+    addRow( "<menclose></menclose>", 0 );
+    addRow( "<menclose><mrow></mrow></menclose>", 0 );
+    addRow( "<menclose><mi>x</mi></menclose>", 1 );
+    addRow( "<menclose><mrow><mi>x</mi></mrow></menclose>", 1 );
 
     // Be sure attributes don't break anything
-    addRow( "<menclose notation=\"longdiv\"><mi>x</mi></menclose>", 1, 2 );
-    addRow( "<menclose notation=\"downdiagonalstrike\"><mi>x</mi></menclose>", 1, 2 );
+    addRow( "<menclose notation=\"longdiv\"><mi>x</mi></menclose>", 1 );
+    addRow( "<menclose notation=\"downdiagonalstrike\"><mi>x</mi></menclose>", 1 );
 }
 
 void TestLoad::subElement_data()
