@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,8 @@
 
 #include "BasicElement.h"
 #include "kformula_export.h"
+
+class RowElement;
 
 /**
  * @short Implementation of the MathML mover, munder and moverunder elements
@@ -94,11 +96,11 @@ protected:
     void writeMathMLContent( KoXmlWriter* writer ) const;   
  
 private:
-    BasicElement* m_baseElement;
+    RowElement* m_baseElement;
 
-    BasicElement* m_underElement;
+    RowElement* m_underElement;
 
-    BasicElement* m_overElement;
+    RowElement* m_overElement;
 };
 
 #endif // UNDEROVERELEMENT_H

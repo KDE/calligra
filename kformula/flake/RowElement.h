@@ -106,9 +106,9 @@ public:
      */
     bool readMathMLChild( const KoXmlElement& element );
 
-protected:
     /// Read the element contents from MathML
     virtual bool readMathMLContent( const KoXmlElement& parent );
+protected:
 
     /// Save the element contents to MathML
     virtual void writeMathMLContent( KoXmlWriter* writer ) const;

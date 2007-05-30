@@ -1,6 +1,6 @@
 /* This file is part of thShapee KDE project
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
-   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,13 +20,16 @@
 
 #include "UnderOverElement.h"
 #include "ElementFactory.h"
+#include "RowElement.h"
+#include "kformuladefs.h"
+#include <kdebug.h>
 #include <KoXmlWriter.h>
 
 UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_baseElement = new BasicElement( this );
-    m_underElement = new BasicElement( this );
-    m_overElement = new BasicElement( this );
+    m_baseElement = new RowElement( this );
+    m_underElement = 0;
+    m_overElement = 0;
 }
 
 UnderOverElement::~UnderOverElement()
@@ -66,21 +69,55 @@ void UnderOverElement::moveDown( FormulaCursor* cursor, BasicElement* from )
 {
 }
 
-bool UnderOverElement::readMathMLContent( const KoXmlElement& element )
+bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
 {
     BasicElement* tmpElement = 0;
-    KoXmlElement tmp;
-
-    forEachElement( tmp, element )
-    {
-        tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-        if( !m_baseElement )
-            m_baseElement = tmpElement;
-        else if( !m_underElement && element.tagName().contains( "under" ) )
-            m_underElement = tmpElement;
-        else if( !m_overElement && element.tagName().contains( "over" ) )
-            m_overElement = tmpElement;
+    KoXmlElement child = parent.firstChildElement();
+    QString name = parent.tagName().toLower();
+    
+    if ( child.isNull() ) {
+        kWarning( DEBUGID ) << "Empty content in " << name << " element\n";
+        return false;
     }
+    delete m_baseElement;
+    m_baseElement = new RowElement( this );
+    if ( child.tagName().toLower() == "mrow" ) { // Inferred mrow ?
+        if ( ! m_baseElement->readMathMLContent( child ) ) return false;
+    }
+    else {
+        if ( ! m_baseElement->readMathMLChild( child ) ) return false;
+    }
+    if ( name.contains( "under" ) ) {
+        child = child.nextSiblingElement();
+        if ( child.isNull() ) {
+            kWarning( DEBUGID ) << "Empty underscript in " << name << " element\n";
+            return false;
+        }
+        delete m_underElement;
+        m_underElement = new RowElement( this );
+        if ( child.tagName().toLower() == "mrow" ) { // Inferred mrow ?
+            if ( ! m_underElement->readMathMLContent( child ) ) return false;
+        }
+        else {
+            if ( ! m_underElement->readMathMLChild( child ) ) return false;
+        }
+    }
+    if ( name.contains( "over" ) ) {
+        child = child.nextSiblingElement();
+        if ( child.isNull() ) {
+            kWarning( DEBUGID ) << "Empty overscript in " << name << " element\n";
+            return false;
+        }
+        delete m_overElement;
+        m_overElement = new RowElement( this );
+        if ( child.tagName().toLower() == "mrow" ) { // Inferred mrow ?
+            if ( ! m_overElement->readMathMLContent( child ) ) return false;
+        }
+        else {
+            if ( ! m_overElement->readMathMLChild( child ) ) return false;
+        }
+    }
+    return true;
 }
 
 void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
