@@ -75,10 +75,6 @@ void Config::save() {
 
     KConfigGroup config = Factory::global().config()->group("Task defaults");
 
-//     config->setGroup( "Behavior" );
-//     config->writeEntry("CalculationMode",m_behavior.calculationMode);
-//     config->writeEntry("AllowOverbooking",m_behavior.allowOverbooking);
-
     config.writeEntry("Leader", m_taskDefaults.leader());
     config.writeEntry("Description", m_taskDefaults.description());
     config.writeEntry("ConstraintType", (int)m_taskDefaults.constraint());

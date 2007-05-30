@@ -40,9 +40,8 @@
 
 #include <QLayout>
 #include <QLabel>
-#include <qdatetime.h>
-#include <q3datetimeedit.h>
-#include <q3groupbox.h>
+#include <QDateTime>
+#include <QTimeEdit>
 #include <QPushButton>
 #include <QSpinBox>
 
@@ -203,9 +202,9 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p, const char *n)
     connect(estimateType, SIGNAL(activated(int)), SLOT(estimationTypeChanged(int)));
     connect(scheduleType, SIGNAL(activated(int)), SLOT(scheduleTypeChanged(int)));
     connect(scheduleStartDate, SIGNAL(changed(QDate)), SLOT(startDateChanged()));
-    connect(scheduleStartTime, SIGNAL(valueChanged(const QTime&)), SLOT(startTimeChanged(const QTime&)));
+    connect(scheduleStartTime, SIGNAL(timeChanged(const QTime&)), SLOT(startTimeChanged(const QTime&)));
     connect(scheduleEndDate, SIGNAL(changed(QDate)), SLOT(endDateChanged()));
-    connect(scheduleEndTime, SIGNAL(valueChanged(const QTime&)), SLOT(endTimeChanged(const QTime&)));
+    connect(scheduleEndTime, SIGNAL(timeChanged(const QTime&)), SLOT(endTimeChanged(const QTime&)));
     connect(estimate, SIGNAL(valueChanged()), SLOT(checkAllFieldsFilled()));
     connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
     connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
