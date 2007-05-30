@@ -146,7 +146,7 @@ double KoEnhancedPathShape::evaluateReference( const QString &reference )
             {
                 KoEnhancedPathFormula * formula = formulaIt.value();
                 if( formula )
-                    res = formula->evaluate( this );
+                    res = formula->evaluate();
             }
         }
         break;
@@ -218,7 +218,7 @@ void KoEnhancedPathShape::addFormula( const QString &name, const QString &formul
     if( name.isEmpty() || formula.isEmpty() )
         return;
 
-    m_formulae[name] = new KoEnhancedPathFormula( formula );
+    m_formulae[name] = new KoEnhancedPathFormula( formula, this );
 }
 
 void KoEnhancedPathShape::addHandle( const QMap<QString,QVariant> &handle )

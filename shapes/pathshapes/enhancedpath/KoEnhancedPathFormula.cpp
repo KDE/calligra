@@ -96,16 +96,17 @@ public:
 };
 
 
-KoEnhancedPathFormula::KoEnhancedPathFormula( const QString &text )
-: m_valid( false), m_compiled( false ), m_error( ErrorNone ), m_text( text )
+KoEnhancedPathFormula::KoEnhancedPathFormula( const QString &text, KoEnhancedPathShape * parent )
+: m_valid( false), m_compiled( false ), m_error( ErrorNone ), m_text( text ), m_parent( parent )
 {
+    Q_ASSERT( m_parent );
 }
 
 KoEnhancedPathFormula::~KoEnhancedPathFormula()
 {
 }
 
-double KoEnhancedPathFormula::evaluate( KoEnhancedPathShape * path )
+double KoEnhancedPathFormula::evaluate()
 {
     // shortcut
     if( m_error != ErrorNone )
@@ -202,7 +203,7 @@ double KoEnhancedPathFormula::evaluate( KoEnhancedPathShape * path )
             // push function name if it is a function, else push evaluated reference
             Function function = matchFunction( reference );
             if( FunctionUnknown == function )
-                stack.push( QVariant( path->evaluateReference( reference ) ) );
+                stack.push( QVariant( m_parent->evaluateReference( reference ) ) );
             else
                 stack.push( function );
         }

@@ -120,7 +120,7 @@ public:
     };
 
     /// Constructs a new formula from the specified string representation
-    explicit KoEnhancedPathFormula( const QString &text );
+    KoEnhancedPathFormula( const QString &text, KoEnhancedPathShape * parent );
 
     /// Destroys the formula
     ~KoEnhancedPathFormula();
@@ -131,7 +131,7 @@ public:
      * @param path the path to use as input
      * @return the evaluated result
      */
-    double evaluate( KoEnhancedPathShape * path );
+    double evaluate();
 
     /// Returns the last occurred error
     Error error() { return m_error; }
@@ -164,6 +164,7 @@ private:
     QString m_text; ///< the formula text representation
     QList<QVariant> m_constants; ///< constant values
     QList<Opcode> m_codes; ///< the compiled byte code
+    KoEnhancedPathShape * m_parent;
 };
 
 #endif // KOENHANCEDPATHFORMULA_H
