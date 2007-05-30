@@ -42,7 +42,16 @@ UnderOverElement::~UnderOverElement()
 const QList<BasicElement*> UnderOverElement::childElements()
 {
     QList<BasicElement*> tmp;
-    return tmp << m_baseElement << m_underElement << m_overElement;
+    if ( m_baseElement ) {
+        tmp << m_baseElement;
+    }
+    if ( m_underElement ) {
+        tmp << m_underElement;
+    }
+    if ( m_overElement ) {
+        tmp << m_overElement;
+    }
+    return tmp;
 }
 
 void UnderOverElement::paint( QPainter& painter, const AttributeManager* am )
