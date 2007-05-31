@@ -49,7 +49,7 @@ class KWScriptingPart::Private
 {
     public:
         KWView* view;
-        KoScriptingGuiClient* guiclient;
+        QPointer<KoScriptingGuiClient> guiclient;
         Scripting::Module* module;
         Private() : module(0) {}
         ~Private() { delete module; }
@@ -74,18 +74,6 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
 
     d->module = new Scripting::Module();
     d->module->setView(d->view);
-
-    // Setup the actions Kross provides and KSpread likes to have.
-    KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
-    actionCollection()->addAction("executescriptfile", execaction);
-    connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowExecuteScriptFile()));
-
-    KAction* manageraction  = new KAction(i18n("Script Manager..."), this);
-    actionCollection()->addAction("configurescripts", manageraction);
-    connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowScriptManager()));
-
-    QAction* scriptmenuaction = d->guiclient->action("scripts");
-    actionCollection()->addAction("scripts", scriptmenuaction);
 
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));

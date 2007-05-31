@@ -48,7 +48,7 @@ class ScriptingPart::Private
 {
 	public:
 		KoScriptingGuiClient* guiclient;
-		ScriptingModule* module;
+		QPointer<ScriptingModule> module;
 
 		Private() : module(0) {}
 		~Private() {}
@@ -68,20 +68,8 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 
 	// Create the Kross GUIClient which is the higher level to let
 	// Kross deal with scripting code.
-	d->guiclient = new KoScriptingGuiClient(this, this);
+	d->guiclient = new KoScriptingGuiClient(this, view);
 	//d->guiclient ->setXMLFile(locate("data","kspreadplugins/scripting.rc"), true);
-
-	// Setup the actions Kross provides and KSpread likes to have.
-    KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
-    actionCollection()->addAction("executescriptfile", execaction );
-	connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowExecuteScriptFile()));
-
-    KAction* manageraction  = new KAction(i18n("Script Manager..."), this);
-    actionCollection()->addAction("configurescripts", manageraction );
-	connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(slotShowScriptManager()));
-
-	QAction* scriptmenuaction = d->guiclient->action("scripts");
-	actionCollection()->addAction("scripts", scriptmenuaction);
 
 	// Publish the ScriptingModule which offers access to KSpread internals.
 	ScriptingModule* module = Kross::Manager::self().hasObject("KSpread")
