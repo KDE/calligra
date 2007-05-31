@@ -37,6 +37,7 @@
 #include <kross/ui/model.h>
 // koffice
 #include <KoScriptingDocker.h>
+#include <KoScriptingGuiClient.h>
 // kword
 #include <KWView.h>
 
@@ -48,7 +49,7 @@ class KWScriptingPart::Private
 {
     public:
         KWView* view;
-        Kross::GUIClient* guiclient;
+        KoScriptingGuiClient* guiclient;
         Scripting::Module* module;
         Private() : module(0) {}
         ~Private() { delete module; }
@@ -68,7 +69,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
 
     // Create the Kross GUIClient which is the higher level to let
     // Kross deal with scripting code.
-    d->guiclient = new Kross::GUIClient(this, this);
+    d->guiclient = new KoScriptingGuiClient(this, this);
     //d->guiclient ->setXMLFile(locate("data","kspreadplugins/scripting.rc"), true);
 
     d->module = new Scripting::Module();

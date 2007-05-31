@@ -22,20 +22,21 @@
 
 #include "ScriptingPart.h"
 #include "ScriptingModule.h"
-
+// Qt
 #include <QApplication>
 #include <QFileInfo>
-
+// KDE
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kcmdlineargs.h>
 #include <kurl.h>
-
+// KSpread
 #include <Doc.h>
 #include <View.h>
-
-//#define KROSS_MAIN_EXPORT KDE_EXPORT
+// KOffice
+#include <KoScriptingGuiClient.h>
+// Kross
 #include <kross/core/manager.h>
 #include <kross/ui/guiclient.h>
 
@@ -46,7 +47,7 @@ K_EXPORT_COMPONENT_FACTORY( krossmodulekspread, KSpreadScriptingFactory( "krossm
 class ScriptingPart::Private
 {
 	public:
-		Kross::GUIClient* guiclient;
+		KoScriptingGuiClient* guiclient;
 		ScriptingModule* module;
 
 		Private() : module(0) {}
@@ -67,7 +68,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 
 	// Create the Kross GUIClient which is the higher level to let
 	// Kross deal with scripting code.
-	d->guiclient = new Kross::GUIClient(this, this);
+	d->guiclient = new KoScriptingGuiClient(this, this);
 	//d->guiclient ->setXMLFile(locate("data","kspreadplugins/scripting.rc"), true);
 
 	// Setup the actions Kross provides and KSpread likes to have.
