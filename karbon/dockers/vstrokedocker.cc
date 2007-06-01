@@ -294,6 +294,7 @@ void KoStrokeDocker::blockChildSignals( bool block )
     d->capGroup->blockSignals( block );
     d->joinGroup->blockSignals( block );
     d->miterLimit->blockSignals( block );
+    d->lineStyle->blockSignals( block );
 }
 
 #include "vstrokedocker.moc"
