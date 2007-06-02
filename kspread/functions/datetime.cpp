@@ -882,12 +882,13 @@ Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *)
 
 // Function: YEARFRAC
 //
-// 		basis    descritption day-count
-// default: 	0	 US (NASD) system. 30 days/month, 360 days/year (30/360)
-//		1	 Actual/actual (Euro), also known as AFB
-//		2	 Actual/360
-//		3	 Actual/365
-//		4	 European 30/360
+//            | basis  |  descritption day-count
+// -----------|--------|--------------------------------------------------------
+// default:   |   0    |  US (NASD) system. 30 days/month, 360 days/year (30/360)
+//            |   1    |  Actual/actual (Euro), also known as AFB
+//            |   2    |  Actual/360
+//            |   3    |  Actual/365
+//            |   4    |  European 30/360
 //
 Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -1020,10 +1021,10 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
   //
   int days = calc->conv()->asInteger (args[1]).asInteger();
 
-  QDate date0 = calc->doc()->referenceDate(); 	// referenceDate
-  QDate enddate = startdate;			// enddate
-  valVector holidays; 				// stores holidays
-  int sign=1; 					// sign 1 = forward, -1 = backward
+  QDate date0 = calc->doc()->referenceDate();   // referenceDate
+  QDate enddate = startdate;                    // enddate
+  valVector holidays;                           // stores holidays
+  int sign=1;                                   // sign 1 = forward, -1 = backward
 
   if ( days < 0 )
   {
@@ -1049,36 +1050,41 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
       Value holiargs = args[2];
 
       for (unsigned r = 0; r < rows; ++r)
-	for (unsigned c = 0; c < cols; ++c)
-	{
-	  // only append if element is a valid date
-	  if (!holiargs.element(c+col1, r+row1).isEmpty())
-	  {
-	    Value v (calc->conv()->asDate (holiargs.element(c+col1, r+row1)));
-	    if (v.isError())
-	      return Value::errorVALUE();
+      {
+        for (unsigned c = 0; c < cols; ++c)
+        {
+          // only append if element is a valid date
+          if (!holiargs.element(c+col1, r+row1).isEmpty())
+          {
+            Value v (calc->conv()->asDate (holiargs.element(c+col1, r+row1)));
+            if (v.isError())
+              return Value::errorVALUE();
 
-	    if (v.asDate( calc->doc() ).isValid())
-	      holidays.append( v );
-	  }
-	}
-    } else
-    { // no array parameter
+            if (v.asDate( calc->doc() ).isValid())
+              holidays.append( v );
+          }
+        } // cols
+      }   // rows
+    }
+    else
+    {
+      // no array parameter
       if (args[2].isString())
-      {// isString
+      {
+        // isString
         Value v( calc->conv()->asDate (args[2]) );
-	if (v.isError())
-	  return Value::errorVALUE();
+        if (v.isError())
+          return Value::errorVALUE();
 
-	if (v.asDate( calc->doc() ).isValid())
-	  holidays.append( v );
-
+        if (v.asDate( calc->doc() ).isValid())
+          holidays.append( v );
       } else
-      {// isNumber
+      {
+        // isNumber
         int hdays = calc->conv()->asInteger (args[2]).asInteger();
 
         if ( hdays < 0 )
-	  return Value::errorVALUE();
+          return Value::errorVALUE();
         days = days + hdays;
       }
     }
