@@ -79,7 +79,7 @@ int Staff::lineCount() const
 
 double Staff::lineSpacing() const
 {
-    return 8.5;
+    return 5;
 }
 
 int Staff::line(double y) const

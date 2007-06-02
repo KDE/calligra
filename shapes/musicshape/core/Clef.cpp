@@ -32,7 +32,7 @@ Clef::Clef(Clef::ClefShape shape, int line, int octaveChange) : d(new Private)
     d->shape = shape;
     d->line = line;
     d->octaveChange = octaveChange;
-    setWidth(23);
+    setWidth(13);
 }
 
 Clef::Clef(Staff* staff, Clef::ClefShape shape, int line, int octaveChange) : d(new Private)
@@ -40,7 +40,7 @@ Clef::Clef(Staff* staff, Clef::ClefShape shape, int line, int octaveChange) : d(
     d->shape = shape;
     d->line = line;
     d->octaveChange = octaveChange;
-    setWidth(23);
+    setWidth(13);
     setStaff(staff);
 }
 

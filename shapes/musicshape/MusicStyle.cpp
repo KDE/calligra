@@ -21,11 +21,11 @@ using namespace MusicCore;
 
 MusicStyle::MusicStyle() : m_font("Emmentaler")
 {
-    m_font.setPixelSize(35);
-    m_staffLinePen.setWidthF(0.8);
+    m_font.setPixelSize(20);
+    m_staffLinePen.setWidthF(0.5);
     m_staffLinePen.setCapStyle(Qt::RoundCap);
     m_staffLinePen.setColor(Qt::black);
-    m_stemPen.setWidthF(1.2);
+    m_stemPen.setWidthF(0.7);
     m_stemPen.setCapStyle(Qt::RoundCap);
     m_stemPen.setColor(Qt::black);
 }

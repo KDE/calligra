@@ -72,7 +72,7 @@ void KeySignature::setAccidentals(int accidentals)
         idx = (idx + 3) % 7;
     }
 
-    setWidth(10 * std::abs(accidentals));
+    setWidth(6 * std::abs(accidentals));
 }
 
 int KeySignature::accidentals(int pitch) const

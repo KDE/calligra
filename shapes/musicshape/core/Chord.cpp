@@ -39,7 +39,7 @@ Chord::Chord(Duration duration, int dots) : MusicElement(), d(new Private)
         baseLength += baseLength >> 1;
     }
     setLength(baseLength);
-    setWidth(12);
+    setWidth(7);
 }
 
 Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
@@ -52,7 +52,7 @@ Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
     }
     setLength(baseLength);
     setStaff(staff);
-    setWidth(12);
+    setWidth(7);
 }
 
 Chord::~Chord()

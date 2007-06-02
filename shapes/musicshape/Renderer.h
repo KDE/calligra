@@ -48,13 +48,13 @@ public:
     void renderSheet(QPainter& painter, MusicCore::Sheet* sheet);
     void renderPart(QPainter& painter, MusicCore::Part* part);
     void renderStaff(QPainter& painter, MusicCore::Staff* staff);
-    void renderVoice(QPainter& painter, MusicCore::Voice* voice);
-    void renderElement(QPainter& painter, MusicCore::MusicElement* element, double x, double y, RenderState& state);
+    void renderVoice(QPainter& painter, MusicCore::Voice* voice, const QColor& color = Qt::black);
+    void renderElement(QPainter& painter, MusicCore::MusicElement* element, double x, double y, RenderState& state, const QColor& color = Qt::black);
 
     void renderClef(QPainter& painter, MusicCore::Clef* clef, double x, RenderState& state);
     void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, double x, RenderState& state);
     void renderTimeSignature(QPainter& painter, MusicCore::TimeSignature* timeSignature, double x);
-    void renderChord(QPainter& painter, MusicCore::Chord* chord, double x, RenderState& state);
+    void renderChord(QPainter& painter, MusicCore::Chord* chord, double x, RenderState& state, const QColor& color = Qt::black);
     void renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, const QColor& color = Qt::black);
 private:
     MusicStyle* m_style;

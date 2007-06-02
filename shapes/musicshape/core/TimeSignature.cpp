@@ -59,7 +59,7 @@ void TimeSignature::setBeats(int beats)
     d->beats = beats;
     int beatsLen = QString::number(d->beats).length();
     int beatLen = QString::number(d->beat).length();
-    setWidth(15 * qMax(beatsLen, beatLen));
+    setWidth(8 * qMax(beatsLen, beatLen));
 }
 
 int TimeSignature::beat() const
@@ -72,7 +72,7 @@ void TimeSignature::setBeat(int beat)
     d->beat = beat;
     int beatsLen = QString::number(d->beats).length();
     int beatLen = QString::number(d->beat).length();
-    setWidth(15 * qMax(beatsLen, beatLen));
+    setWidth(8 * qMax(beatsLen, beatLen));
 }
 
 TimeSignature::TimeSignatureType TimeSignature::type() const

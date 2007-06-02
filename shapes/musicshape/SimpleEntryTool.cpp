@@ -151,11 +151,19 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
     painter.setMatrix( painter.matrix() * m_musicshape->transformationMatrix(&viewConverter) );
     KoShape::applyConversion( painter, viewConverter );
 
+    Sheet* sheet = m_musicshape->sheet();
+    for (int i = 0; i < sheet->partCount(); i++) {
+        Part* p = sheet->part(i);
+        if (p->voiceCount() > m_voice) {
+            m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), Qt::red);
+        }
+    }
+    
     double sl = 3.5;
     if (m_duration < MusicCore::Chord::Sixteenth) sl += 1;
     if (m_duration < MusicCore::Chord::ThirtySecond) sl += 1;
     
-    m_musicshape->renderer()->renderNote(painter, m_duration, m_point.x(), m_point.y(), sl * 8.5, Qt::gray);
+    m_musicshape->renderer()->renderNote(painter, m_duration, m_point.x(), m_point.y(), sl * 5, Qt::gray);
 }
 
 void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
@@ -184,8 +192,6 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     }
 
     int line = closestStaff->line(p.y() - closestStaff->top());
-    kDebug() << "part: " << closestStaff->part()->name() << endl;
-    kDebug() << "line: " << line << endl;
 
     Part* part = closestStaff->part();
     for (int i = part->voiceCount(); i <= m_voice; i++) {
@@ -206,7 +212,6 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
         }
         if (bb->position().x() <= p.x() && bb->position().x() + bb->size() >= p.x()) {
             bar = bb;
-            kDebug() << "bar: " << b << endl;
             break;
         }
     }
@@ -215,7 +220,6 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     Chord* c = new Chord(closestStaff, m_duration);
     if (clef) {
         int pitch = clef->lineToPitch(line);
-        kDebug() << "pitch: " << pitch << endl;
         c->addNote(closestStaff, pitch);
     }
     voice->bar(bar)->addElement(c);
