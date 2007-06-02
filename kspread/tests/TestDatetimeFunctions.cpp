@@ -34,6 +34,9 @@
 // - added missing values in DATEDIF
 // 02.06.07
 // - added Isoweeknum tests starts on sunday
+// - added WEEKINYEAR unittests
+// - added ISLEAPYEAR unittests
+// - added DAYSINMONTH unittests
 
 // TODO
 // - WEEKNUM fill in missing values
@@ -152,6 +155,24 @@ void TestDatetimeFunctions::testDATEDIF()
   CHECK_EVAL( "DATEDIF(DATE(1990;2;15); DATE(1993;9;15); \"yd\")", Value( 212 ) ); // TODO check value; kspread says 212
 }
 
+void TestDatetimeFunctions::testISLEAPYEAR()
+{
+  // only every 400 years ...
+  CHECK_EVAL( "ISLEAPYEAR(1900)", Value( false ) );
+  CHECK_EVAL( "ISLEAPYEAR(2000)", Value( true  ) );
+  CHECK_EVAL( "ISLEAPYEAR(2100)", Value( false ) );
+  CHECK_EVAL( "ISLEAPYEAR(2200)", Value( false ) );
+  CHECK_EVAL( "ISLEAPYEAR(2300)", Value( false ) );
+  CHECK_EVAL( "ISLEAPYEAR(2400)", Value( true  ) );
+  CHECK_EVAL( "ISLEAPYEAR(1900)", Value( false ) );
+  // and every 4th year
+  CHECK_EVAL( "ISLEAPYEAR(2000)", Value( true  ) );
+  CHECK_EVAL( "ISLEAPYEAR(2001)", Value( false ) );
+  CHECK_EVAL( "ISLEAPYEAR(2002)", Value( false ) );
+  CHECK_EVAL( "ISLEAPYEAR(2003)", Value( false ) );
+  CHECK_EVAL( "ISLEAPYEAR(2004)", Value( true  ) );
+}
+
 void TestDatetimeFunctions::testWEEKNUM()
 {
   // type default ( type 1 )
@@ -262,6 +283,28 @@ void TestDatetimeFunctions::testDAYS()
 {
   //
   CHECK_EVAL( "DAYS(DATE(1993;4;16); DATE(1993;9;25))", Value( -162 ) );        //
+}
+
+void TestDatetimeFunctions::testDAYSINMONTH()
+{
+  // non leapyear
+  CHECK_EVAL( "DAYSINMONTH(1995;01)", Value( 31 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;02)", Value( 28 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;03)", Value( 31 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;04)", Value( 30 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;05)", Value( 31 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;06)", Value( 30 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;07)", Value( 31 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;08)", Value( 31 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;09)", Value( 30 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;10)", Value( 31 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;11)", Value( 30 ) );
+  CHECK_EVAL( "DAYSINMONTH(1995;12)", Value( 31 ) );
+
+  // leapyear
+  CHECK_EVAL( "DAYSINMONTH(2000;02)", Value( 29 ) );
+  CHECK_EVAL( "DAYSINMONTH(1900;02)", Value( 28 ) ); // non leapyear
+  CHECK_EVAL( "DAYSINMONTH(2004;02)", Value( 29 ) );
 }
 
 void TestDatetimeFunctions::testDAYS360()

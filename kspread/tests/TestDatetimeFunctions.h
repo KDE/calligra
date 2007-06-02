@@ -35,6 +35,7 @@ Q_OBJECT
 private slots:
   void testYEARFRAC();
   void testDATEDIF();
+  void testISLEAPYEAR();
   void testWEEKNUM();
   void testWEEKSINYEAR();
   void testWORKDAY();
@@ -45,6 +46,7 @@ private slots:
   void testDATEVALUE();
   void testDAY();
   void testDAYS();
+  void testDAYSINMONTH();
   void testDAYS360();
   void testEDATE();
   void testEOMONTH();
