@@ -36,6 +36,7 @@ private slots:
   void testYEARFRAC();
   void testDATEDIF();
   void testWEEKNUM();
+  void testWEEKSINYEAR();
   void testWORKDAY();
   void testNETWORKDAY();
   void testUNIX2DATE();

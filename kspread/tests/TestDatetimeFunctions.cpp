@@ -177,6 +177,13 @@ void TestDatetimeFunctions::testWEEKNUM()
   CHECK_EVAL( "WEEKNUM(DATE(2008;03;09);2)", Value( 10 ) );
 }
 
+void TestDatetimeFunctions::testWEEKSINYEAR()
+{
+  //
+  CHECK_EVAL( "WEEKSINYEAR(1995)", Value( 52 ) );
+  CHECK_EVAL( "WEEKSINYEAR(1992)", Value( 53 ) );
+}
+
 void TestDatetimeFunctions::testWORKDAY()
 {
   // 2001 JAN 01 02 03 04 05 06 07 08
