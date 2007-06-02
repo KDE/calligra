@@ -765,13 +765,14 @@ Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *)
 
 // Function: DATEDIF
 //
-// 		interval difference type	descrition
-// default: 	m	 months
-//		d	 days
-//		y	 complete years
-//		ym	 months excluding years
-//		yd	 days excluding years
-//		md	 days excluding months and years
+// interval difference |  type descrition
+// --------------------|----------------------------------
+// default: m          |  months
+//              d      |  days
+//              y      |  complete years
+//              ym     |  months excluding years
+//              yd     |  days excluding years
+//              md     |  days excluding months and years
 //
 Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -802,7 +803,8 @@ Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *)
   QDate Temp1, Temp2;
 
   //QDate date0(1899,12,30); // referenceDate
-   QDate date0 = calc->doc()->referenceDate();
+  QDate date0 = calc->doc()->referenceDate();
+  
   if ( date2 < date1 )
   {
     // exchange values and set sign
