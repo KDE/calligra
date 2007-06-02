@@ -76,22 +76,22 @@ class KSPREAD_EXPORT Number {
     void operator*= (double n);
     void operator/= (double n);
 
-    void operator++ () { return operator+= (1); };
-    void operator-- () { return operator-= (1); };
+    void operator++ () { return operator+= (1); }
+    void operator-- () { return operator-= (1); }
 
     // comparison
     bool operator<= (const Number &n) const;
     bool operator< (const Number &n) const;
     bool operator== (const Number &n) const;
-    bool operator!= (const Number &n) const { return (!operator== (n)); };
-    bool operator>= (const Number &n) const { return (!operator< (n)); };
-    bool operator> (const Number &n) const { return (!operator<= (n)); };
+    bool operator!= (const Number &n) const { return (!operator== (n)); }
+    bool operator>= (const Number &n) const { return (!operator< (n)); }
+    bool operator> (const Number &n) const { return (!operator<= (n)); }
     bool operator<= (double n) const;
     bool operator< (double n) const;
     bool operator== (double n) const;
-    bool operator!= (double n) const { return (!operator== (n)); };
-    bool operator>= (double n) const { return (!operator< (n)); };
-    bool operator> (double n) const { return (!operator<= (n)); };
+    bool operator!= (double n) const { return (!operator== (n)); }
+    bool operator>= (double n) const { return (!operator< (n)); }
+    bool operator> (double n) const { return (!operator<= (n)); }
 
     // absolute value
     Number abs () const;
@@ -134,38 +134,38 @@ class KSPREAD_EXPORT Number {
 
 // external operators, so that we can do things like 4+a without having to create temporary objects
 // not provided for complex numbers, as we won't be using them often like that
-Number operator+ (double n1, const Number &n2) { return n2 + n1; };
-Number operator- (double n1, const Number &n2) { return (n2 - n1).neg(); };
-Number operator* (double n1, const Number &n2) { return n2 * n1; };
-Number operator/ (double n1, const Number &n2) { return Number(n1) / n2; /* TODO optimise perhaps */ };
-bool operator<= (double n1, const Number &n2) { return (n2 >= n1); };
-bool operator< (double n1, const Number &n2) { return (n2 > n1); };
-bool operator== (double n1, const Number &n2) { return (n2 == n1); };
-bool operator!= (double n1, const Number &n2) { return (n2 != n1); };
-bool operator>= (double n1, const Number &n2) { return (n2 <= n1); };
-bool operator> (double n1, const Number &n2) { return (n2 < n1); };
+Number operator+ (double n1, const Number &n2) { return n2 + n1; }
+Number operator- (double n1, const Number &n2) { return (n2 - n1).neg(); }
+Number operator* (double n1, const Number &n2) { return n2 * n1; }
+Number operator/ (double n1, const Number &n2) { return Number(n1) / n2; /* TODO optimise perhaps */ }
+bool operator<= (double n1, const Number &n2) { return (n2 >= n1); }
+bool operator< (double n1, const Number &n2) { return (n2 > n1); }
+bool operator== (double n1, const Number &n2) { return (n2 == n1); }
+bool operator!= (double n1, const Number &n2) { return (n2 != n1); }
+bool operator>= (double n1, const Number &n2) { return (n2 <= n1); }
+bool operator> (double n1, const Number &n2) { return (n2 < n1); }
 
 // external versions of the functions
-Number abs (const Number &n) { return n.abs(); };
-Number neg (const Number &n) { return n.neg(); };
-Number pow (const Number &n, const Number &exp) { return n.pow (exp); };
-Number pow (const Number &n, double exp) { return n.pow (exp); };
-Number log (const Number &n, double base) { return n.log (base); };
-Number ln (const Number &n) { return n.ln (); };
-Number sin (const Number &n) { return n.sin(); };
-Number cos (const Number &n) { return n.cos(); };
-Number tg (const Number &n) { return n.tg(); };
-Number cotg (const Number &n) { return n.cotg(); };
-Number asin (const Number &n) { return n.asin(); };
-Number acos (const Number &n) { return n.acos(); };
-Number atg (const Number &n) { return n.atg(); };
-Number atan2 (const Number &y, const Number &x) { return Number::atan2(y, x); };
-Number sinh (const Number &n) { return n.sinh(); };
-Number cosh (const Number &n) { return n.cosh(); };
-Number tgh (const Number &n) { return n.tg(); };
-Number asinh (const Number &n) { return n.asinh(); };
-Number acosh (const Number &n) { return n.acosh(); };
-Number atgh (const Number &n) { return n.atgh(); };
+Number abs (const Number &n) { return n.abs(); }
+Number neg (const Number &n) { return n.neg(); }
+Number pow (const Number &n, const Number &exp) { return n.pow (exp); }
+Number pow (const Number &n, double exp) { return n.pow (exp); }
+Number log (const Number &n, double base) { return n.log (base); }
+Number ln (const Number &n) { return n.ln (); }
+Number sin (const Number &n) { return n.sin(); }
+Number cos (const Number &n) { return n.cos(); }
+Number tg (const Number &n) { return n.tg(); }
+Number cotg (const Number &n) { return n.cotg(); }
+Number asin (const Number &n) { return n.asin(); }
+Number acos (const Number &n) { return n.acos(); }
+Number atg (const Number &n) { return n.atg(); }
+Number atan2 (const Number &y, const Number &x) { return Number::atan2(y, x); }
+Number sinh (const Number &n) { return n.sinh(); }
+Number cosh (const Number &n) { return n.cosh(); }
+Number tgh (const Number &n) { return n.tg(); }
+Number asinh (const Number &n) { return n.asinh(); }
+Number acosh (const Number &n) { return n.acosh(); }
+Number atgh (const Number &n) { return n.atgh(); }
 
 } // namespace KSpread
 
