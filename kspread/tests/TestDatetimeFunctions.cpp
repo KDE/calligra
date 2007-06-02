@@ -32,6 +32,8 @@
 // - indend
 // - added missing tests EOMONTH()
 // - added missing values in DATEDIF
+// 02.06.07
+// - added Isoweeknum tests starts on sunday
 
 // TODO
 // - WEEKNUM fill in missing values
@@ -312,17 +314,51 @@ void TestDatetimeFunctions::testHOUR()
 
 void TestDatetimeFunctions::testISOWEEKNUM()
 {
-  //
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);1)", Value( 1 ) );  // January 1, 1995 was a Sunday
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);2)", Value( 52 ) ); // January 1, 1995 was a Sunday, so if Monday is the beginning of the week,
-                                                             // then it's week 52 of the previous year
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1))", Value( 52 ) );   // Default is Monday is beginning of week (per ISO)
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21))", Value( 20 ) );  // ref OOo-2.2.0 
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);1)", Value( 21 ) );// ref OOo-2.2.0
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);2)", Value( 20 ) );// ref OOo-2.2.0
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;1))", Value( 53 ) );   // ref OOo-2.2.0
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;2))", Value( 53 ) );   // ref OOo-2.2.0
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2006;1;1))", Value( 52 ) );   // ref OOo-2.2.0
+  // ODF-tests
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);1)", Value( 1 ) );    // January 1, 1995 was a Sunday
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);2)", Value( 52 ) );   // January 1, 1995 was a Sunday, so if Monday is the beginning of the week,
+                                                               // then it's week 52 of the previous year
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1))", Value( 52 ) );     // Default is Monday is beginning of week (per ISO)
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21))", Value( 20 ) );    // ref OOo-2.2.0 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);1)", Value( 21 ) );  // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);2)", Value( 20 ) );  // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;1))", Value( 53 ) );     // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;2))", Value( 53 ) );     // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2006;1;1))", Value( 52 ) );     // ref OOo-2.2.0
+
+  // method 2 - week begins on sunday
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;01);2)", Value( 52 ) ); // January 1, 1995 was a Sunday
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;02);2)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;03);2)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;04);2)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;05);2)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;06);2)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;07);2)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;08);2)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;09);2)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;10);2)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;11);2)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;12);2)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;13);2)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;14);2)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;15);2)", Value( 2 ) );  //
+  
+  // method 1 - week begins on monday
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;01);1)", Value( 1 ) );  // January 1, 1995 was a Sunday
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;02);1)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;03);1)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;04);1)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;05);1)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;06);1)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;07);1)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;08);1)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;09);1)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;10);1)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;11);1)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;12);1)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;13);1)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;14);1)", Value( 2 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;15);1)", Value( 3 ) );  //
 }
 
 void TestDatetimeFunctions::testMINUTE()

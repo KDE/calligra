@@ -137,6 +137,7 @@ void RegisterDateTimeFunctions()
   f = new Function ("ISLEAPYEAR",  func_isLeapYear);
   repo->add (f);
   f = new Function ("ISOWEEKNUM",  func_isoWeekNum);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("MINUTE",  func_minute);
   f->setParamCount (0, 1);
@@ -666,13 +667,65 @@ Value func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: ISOWEEKNUM
+//
+//              method  startday name of day
+// default:     1       1        sunday
+//              2       0        monday
+//
 Value func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date = calc->conv()->asDate (args[0]).asDate( calc->doc() );
   if (!date.isValid())
       return Value::errorVALUE();
+   
+  int method = 2; // default method = 2
+  if (args.count() > 1)
+      method = calc->conv()->asInteger (args[1]).asInteger();
 
-  return Value (date.weekNumber());
+  if ( method < 1 || method > 2 )
+      return Value::errorVALUE();
+  
+  int startday=1;
+  if (method != 1)
+    startday=0;
+  
+  int weeknum;
+  int day;                   // current date
+  int day4;                  // 4th of jan.
+  int day0;                  // offset to 4th of jan.
+
+  // date to find
+  day = date.toJulianDay(); 
+ 
+  // 4th of jan. of current year
+  day4 = QDate(date.year(),1,4).toJulianDay();
+
+  // difference in days to the 4th of jan including correction of startday
+  day0 = QDate::fromJulianDay(day4-1+startday).dayOfWeek();
+
+  // do we need to count from last year?
+  if (day < day4-day0)
+  { // recalculate day4 and day0
+    day4 = QDate(date.year()-1,1,4).toJulianDay(); // 4th of jan. last year
+    day0 = QDate::fromJulianDay(day4-1+startday).dayOfWeek();
+  }
+
+  // calc weeeknum
+  weeknum = (day - (day4-day0)) / 7 +1;
+
+  // if weeknum is greater 51, we have to do some extra checks
+  if (weeknum >= 52)
+  {
+    day4 = QDate(date.year()+1,1,4).toJulianDay(); // 4th of jan. next year
+    day0 = QDate::fromJulianDay(day4-1+startday).dayOfWeek();
+
+    if(day >= day4 - day0)
+    { // recalculate weeknum
+      weeknum = (day - (day4-day0)) / 7 + 1;
+    }
+  }
+
+  return Value( weeknum );
 }
 
 // Function: WEEKNUM
