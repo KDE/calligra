@@ -3,6 +3,7 @@ project(kchart)
 
 #add_subdirectory( kdchart1 )
 add_subdirectory( kdchart )
+add_subdirectory( shape )
 add_subdirectory( toolbar )
 add_subdirectory( pics )
 add_subdirectory( templates )

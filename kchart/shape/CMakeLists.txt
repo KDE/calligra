@@ -1,0 +1,19 @@
+include_directories( ${CMAKE_SOURCE_DIR}/kchart ${KOGUIUTILS_INCLUDES} )
+
+########### Flake Plugin library ###############
+
+SET (chartshape_LIB_SRCS
+	ChartShape.cpp
+	ChartShapeFactory.cpp
+	)
+
+kde4_automoc(${chartshape_LIB_SRCS})
+kde4_add_plugin(chartshape ${chartshape_LIB_SRCS})
+
+target_link_libraries(chartshape kdchart flake)
+install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
+
+########### install files ###############
+
+install( FILES chartshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )
