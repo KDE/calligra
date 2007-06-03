@@ -79,9 +79,9 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
 
     // Add the scripting docker widget
-    KoScriptingDockerFactory factory(d->view, d->guiclient);
-    QDockWidget* dock = d->view->createDockWidget(&factory);
-    Q_UNUSED(dock);
+    //KoScriptingDockerFactory factory(d->view, d->guiclient);
+    //QDockWidget* dock = d->view->createDockWidget(&factory);
+    //Q_UNUSED(dock);
 
     // Add variables
     Kross::ActionCollection* actioncollection = Kross::Manager::self().actionCollection();
