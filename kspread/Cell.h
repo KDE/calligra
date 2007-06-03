@@ -642,11 +642,6 @@ private:
     QSharedDataPointer<Private> d;
 
     /**
-     * Triggers the events, that are necessary after a value change.
-     */
-    void valueChanged();
-
-    /**
      * \ingroup NativeFormat
      */
     bool loadCellData(const KoXmlElement &text, Paste::Operation op);

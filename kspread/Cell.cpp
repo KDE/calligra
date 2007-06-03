@@ -406,29 +406,18 @@ const Value Cell::value() const
 }
 
 
-// Set the value of this cell.  It also clears all errors if the value
-// itself is not an error.
-//
-// In addition to this, it calculates the outstring and sets the dirty
-// flags so that a redraw is forced.
+// Set the value of this cell.
 //
 void Cell::setValue( const Value& value )
 {
-//   kDebug() << k_funcinfo << endl;
-
-  //If the value has not changed then we don't need to do anything
-  //(ie. no need to relayout, update dependent cells etc.),
-  //unless this cell contains a formula, in which case its dependancies might have changed
-  //even though the value has not.  For example, if this cell was previously empty (and its value is
-  //therefore empty) and a new dependency upon an empty cell has been added.  The new value would still
-  //be empty, but the dependencies need to be updated (via the call to valueChanged() below).
-  if ( ( this->value() == value ) && ( !isFormula() ) )
-    return;
-
     sheet()->cellStorage()->setValue( d->column, d->row, value );
 
-    // Value of the cell has changed - trigger necessary actions
-    valueChanged();
+    // TODO Stefan: Use a Damage for this.
+    //              Not the same CellDamage change as for recalculation:
+    //              The updating of the chart should happen on each value change.
+    //              Either use CellDamage::Value for this and find a better name
+    //              for the change that triggers recalculation. Or vice versa.
+    updateChart( true );
 }
 
 // FIXME: Continue commenting and cleaning here (ingwa)
@@ -745,19 +734,6 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
 
     return erg;
 }
-
-
-void Cell::valueChanged()
-{
-    // TODO Stefan: Use a Damage for this.
-    //              Not the same CellDamage change as for recalculation:
-    //              The updating of the chart should happen on each value change.
-    //              Either use CellDamage::Value for this and find a better name
-    //              for the change that triggers recalculation. Or vice versa.
-    updateChart( true );
-}
-
-
 
 
 // ----------------------------------------------------------------
