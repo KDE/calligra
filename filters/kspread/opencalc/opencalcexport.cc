@@ -786,9 +786,10 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
   QString language;
   QString country;
   QString charSet;
+  QString modifier; 
 
   QString l( locale->language() );
-  KLocale::splitLocale( l, language, country, charSet );
+  KLocale::splitLocale( l, language, country, modifier, charSet );
   QFont font( ksdoc->styleManager()->defaultStyle()->font() );
   m_styles.addFont( font, true );
 
