@@ -1,0 +1,45 @@
+This is keximdb, the MDB file migration driver for Kexi.
+
+MDB files are the native database format of MS Access (and 
+also some other MS applications).  This driver can be used
+by Kexi's migration framework to convert simple Access 
+databases in to native Kexi databases.
+
+Requirements:
+To compile the following software is needed:
+  * the kdelibs development files;
+  * the kexi development files;
+  * GLib 2.0 development files; and
+  * g++, gcc, make, ...
+These will may be packaged for your distribution with names
+similar to kdelibs-devel, libkexi-devel and libglib2.0-devel.
+You should not need the libkexi-devel package if you have compiled
+and installed Kexi from source.
+
+Installation:
+If you downloaded this packages as a source tarball
+(in a file called something like keximdb-X.Y.tar.gz),
+then it can be compiled and installed as follows:
+  ./configure --enable-debug
+  make
+  make install
+
+Note that the --enable-debug option is recommended for now.
+
+Further Information:
+If you have any problems, feel free to contact the author
+using the e-mail address below, or post your question to the
+koffice-devel list, or ask on the #kexi IRC channel...
+
+Please contact the Kexi developers if you intend to package
+this software for your distribution.  (Note that we already 
+have some packaging scripts for Debian and related distributions
+in the KDE subversion repository). 
+
+More information about this package is available on Kexi's
+website at:
+http://www.kexi-project.org/wiki/wiki/?MDBDriver
+
+
+Martin Ellis
+martin.ellis@kdemail.net

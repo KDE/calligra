@@ -1,0 +1,11 @@
+--- mdbtools.ansi/libmdb/money.c	2005-09-23 16:30:23.265178336 +0100
++++ mdbtools/libmdb/money.c	2005-09-23 16:31:33.359522376 +0100
+@@ -43,7 +43,7 @@
+  */
+ char *mdb_money_to_string(MdbHandle *mdb, int start)
+ {
+-	const int num_bytes = 8;
++	#define num_bytes 8
+ 	int i;
+ 	int neg=0;
+ 	unsigned char multiplier[MAXPRECISION], temp[MAXPRECISION];

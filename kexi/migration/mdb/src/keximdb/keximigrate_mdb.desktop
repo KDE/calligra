@@ -1,0 +1,24 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MS Access (MDB) Migration Driver for Kexi
+Name[da]=MS Access (MDB) Migrationsdriver for Kexi
+Name[de]=MS Access (MDB) Migrationstreiber für for Kexi
+Name[es]=Controlador de migración de MS Access (MDB) Migration para Kexi
+Name[et]=Kexi MS Access'i (MDB) migreerumise draiver
+Name[fr]=Pilote de migration MS Access (MDB) vers Kexi
+Name[gl]=Controlador de Migrazón de MS Access (MDB) para Kexi
+Name[it]=tool di migrazione Ms Access per Kexi
+Name[ja]=Kexi のための MS Access (MDB) 移行ドライバ
+Name[pt]=Controlador de Migração do MS Access (MDB) para o Kexi
+Name[pt_BR]=Controlador de Migração do MS Access (MDB) para o Kexi
+Name[sv]=MS Access (MDB) överföringsdrivrutin för Kexi
+Name[tr]=Kexi için MS Access Taşınma Sürücüsü
+Name[xx]=xxMS Access (MDB) Migration Driver for Kexixx
+X-KDE-Library=keximigrate_mdb
+ServiceTypes=Kexi/MigrationDriver
+Type=Service
+InitialPreference=8
+X-Kexi-MigrationDriverName=Access
+X-Kexi-MigrationDriverType=File
+X-Kexi-FileDBDriverMime=application/x-msaccess
+X-Kexi-KexiMigrationVersion=1.1

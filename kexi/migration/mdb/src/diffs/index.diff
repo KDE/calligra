@@ -1,0 +1,18 @@
+--- mdbtools.ansi/libmdb/index.c	2005-12-20 01:38:22.603239240 +0000
++++ mdbtools/libmdb/index.c	2005-12-20 02:06:59.094292936 +0000
+@@ -120,13 +120,13 @@
+ 		if (IS_JET4(mdb)) cur_pos += 4;
+ 		do {
+ 			pidx = g_ptr_array_index (table->indices, idx_num++);
+-		} while (pidx && pidx->index_type==2);
++		} while (pidx && pidx!=(MdbIndex*)0xbaadf00d /*(js) temp? hack*/&& pidx->index_type==2);
+ 
+ 		/* if there are more real indexes than index entries left after
+ 		   removing type 2's decrement real indexes and continue.  Happens
+ 		   on Northwind Orders table.
+ 		*/
+-		if (!pidx) {
++		if (!pidx || pidx==(MdbIndex*)0xbaadf00d /*(js) temp? hack*/) {
+ 			table->num_real_idxs--;
+ 			continue;
+ 		}

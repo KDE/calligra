@@ -1,0 +1,57 @@
+#MIN_CONFIG(3.0)
+
+AM_INIT_AUTOMAKE(keximdb, 0.1)
+AC_C_BIGENDIAN
+AC_CHECK_KDEMAXPATHLEN
+
+dnl ----------------------------------------------------------------------
+dnl These checks based on those in arts configure.in.in
+
+dnl Check for pkg-config
+AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+
+if test "$PKG_CONFIG" = "no"; then
+  AC_MSG_ERROR([This package requires pkg-config.])
+fi
+
+dnl Check for Glib-2.0
+# GLIB_CFLAGS:  cflags for compiling glib dependant sources
+# GLIB_LIBADD:  glib libraries (-l options)
+# GLIB_LDFLAGS: flags containing path to glib libraries (-L options)
+
+GLIB_PACKAGES="glib-2.0"
+GLIB_VERSION="2.4"
+AC_MSG_CHECKING(for GLib-2.0 (at least $GLIB_VERSION))
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.15 ; then
+  if $PKG_CONFIG --atleast-version $GLIB_VERSION $GLIB_PACKAGES >/dev/null 2>&1 ; then
+    GLIB_CFLAGS="`$PKG_CONFIG --cflags $GLIB_PACKAGES`"
+    GLIB_LIBADD="`$PKG_CONFIG --libs-only-l --libs-only-other $GLIB_PACKAGES`"
+    GLIB_LDFLAGS="`$PKG_CONFIG --libs-only-L $GLIB_PACKAGES`"
+    AC_MSG_RESULT(yes)
+  fi
+else
+  if $PKG_CONFIG --atleast-version $GLIB_VERSION $GLIB_PACKAGES >/dev/null 2>&1 ; then
+    GLIB_CFLAGS="`$PKG_CONFIG --cflags $GLIB_PACKAGES`"
+    GLIB_LIBADD="`$PKG_CONFIG --libs-only-l $GLIB_PACKAGES`"
+    GLIB_LDFLAGS="`$PKG_CONFIG --libs-only-L $GLIB_PACKAGES`"
+    AC_MSG_RESULT(yes)
+    AC_MSG_WARN([building keximdb with pkg-config < 0.15 is untested.])
+  fi
+fi
+
+if test -z "$GLIB_LIBADD"; then
+  AC_MSG_RESULT(not installed)
+  AC_ERROR([Please install glib-2.0 (see http://www.gtk.org).])
+  DO_NOT_COMPILE="$DO_NOT_COMPILE keximdb"
+fi
+
+# Build without optimisation.  Anything higher than -O0 here causes
+# a crash in mdb_read_indices on Northwind.
+CFLAGS=`echo "$CFLAGS" | sed 's/ -O2 / -O0 /g'`
+
+
+AC_SUBST(GLIB_CFLAGS)
+AC_SUBST(GLIB_LIBADD)
+AC_SUBST(GLIB_LDFLAGS)
+dnl ----------------------------------------------------------------------

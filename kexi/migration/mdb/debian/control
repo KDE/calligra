@@ -1,0 +1,19 @@
+Source: keximdb
+Priority: optional
+Maintainer: Martin Ellis <martin.ellis@kdemail.net>
+Build-Depends: debhelper (>= 4.0.0), autotools-dev, koffice-dev (>= 1:1.6.0), libglib2.0-dev
+Standards-Version: 3.7.2
+Section: kde
+
+Package: kexi-mdb-plugin
+Section: kde
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: MS Access (MDB) driver for Kexi
+ MDB migration driver for converting MS Access databases in MDB files
+ into KexiDB databases.
+ .
+ This driver allows Kexi, the KOffice database program, to convert MDB
+ database files to Kexi databases via the Tools->Migration->Import Database
+ menu option.  Note that this package does not allow MDB files to be opened
+ directly - they must be converted to a Kexi database first.

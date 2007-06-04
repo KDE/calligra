@@ -1,0 +1,109 @@
+--- mdbtools.ansi/libmdb/data.c	2006-05-10 20:29:52.344041264 +0100
++++ mdbtools/libmdb/data.c	2006-05-10 20:28:47.344922632 +0100
+@@ -470,7 +470,7 @@
+ 			return 0;
+ 		}
+ 		if (col->bind_ptr)
+-			memcpy(col->bind_ptr, buf + row_start + 4, len - 4);
++			memcpy(col->bind_ptr, (char*)buf + row_start + 4, len - 4);
+ 		col->cur_blob_pg_row = mdb_get_int32(buf, row_start);
+ 
+ 		return len;
+@@ -494,7 +494,7 @@
+ 	if (ole_len & 0x80000000) {
+ 		/* inline ole field, if we can satisfy it, then do it */
+ 		len = col->cur_value_len - MDB_MEMO_OVERHEAD;
+-		if (chunk_size >= len) {
++		if ((size_t)chunk_size >= len) {
+ 			if (col->bind_ptr) 
+ 				memcpy(col->bind_ptr, 
+ 					&mdb->pg_buf[col->cur_value_start + 
+@@ -517,7 +517,7 @@
+ 		mdb_debug(MDB_DEBUG_OLE,"start %d len %d", row_start, len);
+ 
+ 		if (col->bind_ptr) {
+-			memcpy(col->bind_ptr, buf + row_start, len);
++			memcpy(col->bind_ptr, (char*)buf + row_start, len);
+ 			if (mdb_get_option(MDB_DEBUG_OLE))
+ 				buffer_dump(col->bind_ptr, 0, 16);
+ 		}
+@@ -530,7 +530,7 @@
+ 			return 0;
+ 		}
+ 		if (col->bind_ptr) 
+-			memcpy(col->bind_ptr, buf + row_start + 4, len - 4);
++			memcpy(col->bind_ptr, (char*)buf + row_start + 4, len - 4);
+ 		col->cur_blob_pg_row = mdb_get_int32(buf, row_start);
+ 
+ 		return len;
+@@ -573,7 +573,7 @@
+ 			pg_row & 0xff, row_start, len);
+ 
+ 		if (dest)
+-			memcpy(dest, buf + row_start, len);
++			memcpy(dest, (char*)buf + row_start, len);
+ 		return len;
+ 	} else if ((ole_len & 0xff000000) == 0) { 
+ 		/* multi-page */
+@@ -629,7 +629,7 @@
+ 
+ 	if (memo_len & 0x80000000) {
+ 		/* inline memo field */
+-		mdb_unicode2ascii(mdb, pg_buf + start + MDB_MEMO_OVERHEAD,
++		mdb_unicode2ascii(mdb, (char*)pg_buf + start + MDB_MEMO_OVERHEAD,
+ 			size - MDB_MEMO_OVERHEAD, text, MDB_BIND_SIZE);
+ 		return text;
+ 	} else if (memo_len & 0x40000000) {
+@@ -647,7 +647,7 @@
+ 			pg_row & 0xff, row_start, len);
+ 		buffer_dump(buf, row_start, len);
+ #endif
+-		mdb_unicode2ascii(mdb, buf + row_start, len, text, MDB_BIND_SIZE);
++		mdb_unicode2ascii(mdb, (char*)buf + row_start, len, text, MDB_BIND_SIZE);
+ 		return text;
+ 	} else if ((memo_len & 0xff000000) == 0) { 
+ 		/* multi-page memo field */
+@@ -672,7 +672,7 @@
+ 			if (tmpoff + len - 4 > memo_len) {
+ 				break;
+ 			}
+-			memcpy(tmp + tmpoff, buf + row_start + 4, len - 4);
++			memcpy(tmp + tmpoff, (char*)buf + row_start + 4, len - 4);
+ 			tmpoff += len - 4;
+ 		} while (( pg_row = mdb_get_int32(buf, row_start) ));
+ 		if (tmpoff < memo_len) {
+@@ -691,15 +691,20 @@
+ mdb_num_to_string(MdbHandle *mdb, int start, int datatype, int prec, int scale)
+ {
+ 	char *text;
++	int negative;
+ 	gint32 l;
+ 
+ 	memcpy(&l, mdb->pg_buf+start+13, 4);
+-
+-	text = (char *) g_malloc(prec+2);
+-	sprintf(text, "%0*" G_GINT32_FORMAT, prec, GINT32_FROM_LE(l));
++	negative = (*(mdb->pg_buf+start) & 0x80) ? 1 : 0;
++	text = (char *) g_malloc(prec+2+negative);
++	if (negative) {
++		sprintf(text, "-%0*" G_GINT32_FORMAT, prec, GINT32_FROM_LE(l));
++	} else {
++		sprintf(text, "%0*" G_GINT32_FORMAT, prec, GINT32_FROM_LE(l));
++	}
+ 	if (scale) {
+-		memmove(text+prec-scale, text+prec-scale+1, scale+1);
+-		text[prec-scale] = '.';
++		memmove(text+prec-scale+1+negative, text+prec-scale+negative, scale+1);
++		text[prec-scale+negative] = '.';
+ 	}
+ 	return text;
+ }
+@@ -852,7 +857,7 @@
+ 				text = g_strdup("");
+ 			} else {
+ 				text = (char *) g_malloc(MDB_BIND_SIZE);
+-				mdb_unicode2ascii(mdb, buf + start,
++				mdb_unicode2ascii(mdb, (char*)buf + start,
+ 					size, text, MDB_BIND_SIZE);
+ 			}
+ 		break;

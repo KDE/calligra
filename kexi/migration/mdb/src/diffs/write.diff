@@ -1,0 +1,120 @@
+--- mdbtools.ansi/libmdb/write.c	2005-09-23 16:30:23.299173168 +0100
++++ mdbtools/libmdb/write.c	2005-09-23 16:31:00.406531992 +0100
+@@ -33,19 +33,19 @@
+ _mdb_put_int16(void *buf, guint32 offset, guint32 value)
+ {
+ 	value = GINT32_TO_LE(value);
+-	memcpy(buf + offset, &value, 2);
++	memcpy((char*)buf + offset, &value, 2);
+ }
+ void
+ _mdb_put_int32(void *buf, guint32 offset, guint32 value)
+ {
+ 	value = GINT32_TO_LE(value);
+-	memcpy(buf + offset, &value, 4);
++	memcpy((char*)buf + offset, &value, 4);
+ }
+ void
+ _mdb_put_int32_msb(void *buf, guint32 offset, guint32 value)
+ {
+ 	value = GINT32_TO_BE(value);
+-	memcpy(buf + offset, &value, 4);
++	memcpy((char*)buf + offset, &value, 4);
+ }
+ ssize_t
+ mdb_write_pg(MdbHandle *mdb, unsigned long pg)
+@@ -56,7 +56,7 @@
+ 
+ 	fstat(mdb->f->fd, &status);
+ 	/* is page beyond current size + 1 ? */
+-	if (status.st_size < offset + mdb->fmt->pg_size) {
++	if ((size_t)status.st_size < (offset + mdb->fmt->pg_size)) {
+ 		fprintf(stderr,"offset %lu is beyond EOF\n",offset);
+ 		return 0;
+ 	}
+@@ -170,7 +170,7 @@
+ 	}
+ 
+ 	bitmask_sz = (row_cols + 7) / 8;
+-	nullmask = pg_buf + row_end - bitmask_sz + 1;
++	nullmask = (char*)pg_buf + row_end - bitmask_sz + 1;
+ 
+ 	/* read table of variable column locations */
+ 	row_var_cols = IS_JET4(mdb) ?
+@@ -211,7 +211,7 @@
+ 		 && (fixed_cols_found < row_fixed_cols)) {
+ 			col_start = col->fixed_offset + col_count_size;
+ 			fields[i].start = row_start + col_start;
+-			fields[i].value = pg_buf + row_start + col_start;
++			fields[i].value = (char*)pg_buf + row_start + col_start;
+ 			fields[i].siz = col->col_size;
+ 			fixed_cols_found++;
+ 		/* Use col->var_col_num because a deleted column is still
+@@ -220,7 +220,7 @@
+ 		 && (col->var_col_num < row_var_cols)) {
+ 			col_start = var_col_offsets[col->var_col_num];
+ 			fields[i].start = row_start + col_start;
+-			fields[i].value = pg_buf + row_start + col_start;
++			fields[i].value = (char*)pg_buf + row_start + col_start;
+ 			fields[i].siz = var_col_offsets[(col->var_col_num)+1] -
+ 		                col_start;
+ 		} else {
+@@ -601,14 +601,14 @@
+ 		for (i=0;i<num_rows;i++) {
+ 			mdb_find_row(mdb, i, &row_start, &row_size);
+ 			pos -= row_size;
+-			memcpy(new_pg + pos, mdb->pg_buf + row_start, row_size);
++			memcpy((char*)new_pg + pos, mdb->pg_buf + row_start, row_size);
+ 			_mdb_put_int16(new_pg, (fmt->row_count_offset + 2) + (i*2), pos);
+ 		}
+ 	}
+ 
+ 	/* add our new row */
+ 	pos -= new_row_size;
+-	memcpy(new_pg + pos, row_buffer, new_row_size);
++	memcpy((char*)new_pg + pos, row_buffer, new_row_size);
+ 	/* add row to the row offset table */
+ 	_mdb_put_int16(new_pg, (fmt->row_count_offset + 2) + (num_rows*2), pos);
+ 
+@@ -715,20 +715,20 @@
+ 	for (i=0;i<row;i++) {
+ 		mdb_find_row(mdb, i, &row_start, &row_size);
+ 		pos -= row_size;
+-		memcpy(new_pg + pos, mdb->pg_buf + row_start, row_size);
++		memcpy((char*)new_pg + pos, mdb->pg_buf + row_start, row_size);
+ 		_mdb_put_int16(new_pg, rco + 2 + i*2, pos);
+ 	}
+ 	
+ 	/* our row */
+ 	pos -= new_row_size;
+-	memcpy(new_pg + pos, new_row, new_row_size);
++	memcpy((char*)new_pg + pos, new_row, new_row_size);
+ 	_mdb_put_int16(new_pg, rco + 2 + row*2, pos);
+ 	
+ 	/* rows after */
+ 	for (i=row+1;i<num_rows;i++) {
+ 		mdb_find_row(mdb, i, &row_start, &row_size);
+ 		pos -= row_size;
+-		memcpy(new_pg + pos, mdb->pg_buf + row_start, row_size);
++		memcpy((char*)new_pg + pos, mdb->pg_buf + row_start, row_size);
+ 		_mdb_put_int16(new_pg, rco + 2 + i*2, pos);
+ 	}
+ 
+@@ -807,7 +807,7 @@
+ 			buffer_dump(key_hash, 0, col->col_size);
+ 		}
+ 
+-		memcpy(new_pg + ipg->offset, mdb->pg_buf + ipg->offset, ipg->len);
++		memcpy((char*)new_pg + ipg->offset, mdb->pg_buf + ipg->offset, ipg->len);
+ 		ipg->offset += ipg->len;
+ 		ipg->len = 0;
+ 
+@@ -827,7 +827,7 @@
+ 		printf("--------\n");
+ 	}
+ 	((char *)new_pg)[ipg->offset] = 0x7f;
+-	memcpy(new_pg + ipg->offset + 1, key_hash, col->col_size);
++	memcpy((char*)new_pg + ipg->offset + 1, key_hash, col->col_size);
+ 	pg_row = (pgnum << 8) | ((rownum-1) & 0xff);
+ 	_mdb_put_int32_msb(new_pg, ipg->offset + 5, pg_row);
+ 	ipg->idx_starts[row++] = ipg->offset + ipg->len;

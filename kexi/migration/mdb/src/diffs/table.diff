@@ -1,0 +1,36 @@
+--- mdbtools.ansi/libmdb/table.c	2005-12-20 01:38:22.632234832 +0000
++++ mdbtools/libmdb/table.c	2005-12-20 02:06:59.102291720 +0000
+@@ -95,7 +95,7 @@
+ 	/* grab a copy of the usage map */
+ 	pg_row = mdb_get_int32(pg_buf, fmt->tab_usage_map_offset);
+ 	mdb_find_pg_row(mdb, pg_row, &buf, &row_start, &(table->map_sz));
+-	table->usage_map = g_memdup(buf + row_start, table->map_sz);
++	table->usage_map = g_memdup((char*)buf + row_start, table->map_sz);
+ 	if (mdb_get_option(MDB_DEBUG_USAGE)) 
+ 		buffer_dump(buf, row_start, table->map_sz);
+ 	mdb_debug(MDB_DEBUG_USAGE,"usage map found on page %ld row %d start %d len %d",
+@@ -104,7 +104,7 @@
+ 	/* grab a copy of the free space page map */
+ 	pg_row = mdb_get_int32(pg_buf, fmt->tab_free_map_offset);
+ 	mdb_find_pg_row(mdb, pg_row, &buf, &row_start, &(table->freemap_sz));
+-	table->free_usage_map = g_memdup(buf + row_start, table->freemap_sz);
++	table->free_usage_map = g_memdup((char*)buf + row_start, table->freemap_sz);
+ 	mdb_debug(MDB_DEBUG_USAGE,"free map found on page %ld row %d start %d len %d\n",
+ 		pg_row >> 8, pg_row & 0xff, row_start, table->freemap_sz);
+ 
+@@ -298,6 +298,7 @@
+ 	return table->columns;
+ }
+ 
++#if !MDB_NO_BACKENDS
+ void mdb_table_dump(MdbCatalogEntry *entry)
+ {
+ MdbTableDef *table;
+@@ -357,6 +358,7 @@
+ 		printf("\n");
+ 	}
+ }
++#endif
+ 
+ int mdb_is_user_table(MdbCatalogEntry *entry)
+ {

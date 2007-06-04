@@ -1,0 +1,102 @@
+--- mdbtools.ansi/include/mdbtools.h	2005-12-17 15:59:19.000000000 +0000
++++ mdbtools/include/mdbtools.h	2005-12-20 01:38:39.603654784 +0000
+@@ -154,13 +154,16 @@
+ #define IS_JET4(mdb) (mdb->f->jet_version==MDB_VER_JET4)
+ #define IS_JET3(mdb) (mdb->f->jet_version==MDB_VER_JET3)
+ 
++#if !MDB_NO_BACKENDS
+ /* hash to store registered backends */
+ extern GHashTable	*mdb_backends;
++#endif
+ 
+ /* forward declarations */
+ typedef struct mdbindex MdbIndex;
+ typedef struct mdbsargtree MdbSargNode;
+ 
++#if !MDB_NO_BACKENDS
+ typedef struct {
+ 	char *name;
+ 	unsigned char needs_length; /* or precision */
+@@ -171,11 +174,14 @@
+ typedef struct {
+ 	 MdbBackendType *types_table;
+ } MdbBackend;
++#endif
+ 
++#if !MDB_NO_STATS
+ typedef struct {
+ 	gboolean collect;
+ 	unsigned long pg_reads;
+ } MdbStatistics;
++#endif
+ 
+ typedef struct {
+ 	int           fd;
+@@ -184,9 +190,13 @@
+ 	guint32		jet_version;
+ 	guint32		db_key;
+ 	char		db_passwd[14];
++#if !MDB_NO_BACKENDS
+ 	MdbBackend	*default_backend;
+ 	char			*backend_name;
++#endif
++#if !MDB_NO_STATS
+ 	MdbStatistics	*stats;
++#endif
+ 	/* free map */
+ 	int  map_sz;
+ 	unsigned char *free_map;
+@@ -225,11 +235,16 @@
+ 	unsigned char alt_pg_buf[MDB_PGSIZE];
+ 	unsigned int  num_catalog;
+ 	GPtrArray	*catalog;
++#if !MDB_NO_BACKENDS
+ 	MdbBackend	*default_backend;
+ 	char		*backend_name;
++#endif
+ 	MdbFormatConstants *fmt;
++#if !MDB_NO_STATS
+ 	MdbStatistics *stats;
++#endif
+ #ifdef HAVE_ICONV
++	char*	jet3_iconv_code;
+ 	iconv_t	iconv_in;
+ 	iconv_t	iconv_out;
+ #endif
+@@ -406,6 +421,7 @@
+ extern long   mdb_pg_get_int32(MdbHandle *mdb, int offset);
+ extern float  mdb_pg_get_single(MdbHandle *mdb, int offset);
+ extern double mdb_pg_get_double(MdbHandle *mdb, int offset);
++extern void mdb_set_encoding(MdbHandle *mdb, const char *encoding_name);
+ extern MdbHandle *mdb_open(const char *filename, MdbFileFlags flags);
+ extern void mdb_close(MdbHandle *mdb);
+ extern MdbHandle *mdb_clone_handle(MdbHandle *mdb);
+@@ -454,6 +470,7 @@
+ /* dump.c */
+ extern void buffer_dump(const void *buf, int start, size_t len);
+ 
++#if !MDB_NO_BACKENDS
+ /* backend.c */
+ extern char *mdb_get_coltype_string(MdbBackend *backend, int col_type);
+ extern int  mdb_coltype_takes_length(MdbBackend *backend, int col_type);
+@@ -462,6 +479,7 @@
+ extern void mdb_remove_backends();
+ extern int  mdb_set_default_backend(MdbHandle *mdb, const char *backend_name);
+ extern char *mdb_get_relationships(MdbHandle *mdb);
++#endif
+ 
+ /* sargs.c */
+ extern int mdb_test_sargs(MdbTableDef *table, MdbField *fields, int num_fields);
+@@ -489,10 +507,12 @@
+ void mdb_index_page_reset(MdbIndexPage *ipg);
+ extern int mdb_index_pack_bitmap(MdbHandle *mdb, MdbIndexPage *ipg);
+ 
++#if !MDB_NO_STATS
+ /* stats.c */
+ extern void mdb_stats_on(MdbHandle *mdb);
+ extern void mdb_stats_off(MdbHandle *mdb);
+ extern void mdb_dump_stats(MdbHandle *mdb);
++#endif
+ 
+ /* like.c */
+ extern int mdb_like_cmp(char *s, char *r);

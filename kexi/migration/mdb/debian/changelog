@@ -1,0 +1,21 @@
+keximdb (1.1.0-1) unstable; urgency=low
+
+  * Update for KOffice 1.6 packages.
+
+ -- Martin Ellis <martin.ellis@kdemail.net>  Wed, 18 Oct 2006 21:22:27 +0100
+
+keximdb (1.0.2-1) unstable; urgency=low
+
+  * Update for KOffice 1.5 packages
+  * libkexi-dev is gone, using koffice-dev
+  * Update standards version to 3.7.2
+  * Update copyright: new description, and update FSF address
+
+ -- Martin Ellis <martin.ellis@kdemail.net>  Fri, 14 Jul 2006 17:08:59 +0100
+
+keximdb (0.9-1) UNRELEASED; urgency=low
+
+  * Initial Release.
+
+ -- Martin Ellis <martin.ellis@kdemail.net>  Mon, 30 May 2005 16:29:07 +0000
+
