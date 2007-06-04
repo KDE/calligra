@@ -25,7 +25,7 @@ namespace MusicCore {
 
 class Voice;
 class Bar;
-class MusicElement;
+class VoiceElement;
 
 /**
  * A VoiceBar contains the music elements in a specific voice in a specific bar. A VoiceBar is in many ways
@@ -54,7 +54,7 @@ public:
      *
      * @param index the index of the element to return
      */
-    MusicElement* element(int index);
+    VoiceElement* element(int index);
 
     /**
      * Adds an element to this bar. You should not add an element to more than one bar, because when the bar is deleted
@@ -62,7 +62,7 @@ public:
      *
      * @param elemnt the element to add to this bar
      */
-    void addElement(MusicElement* element);
+    void addElement(VoiceElement* element);
 
     /**
      * Inserts an element into this bar. You should not add an element to more than one bar, because when the bar is deleted
@@ -71,7 +71,7 @@ public:
      * @param element the element to insert into the bar
      * @param before the index of the element before which to insert the element
      */
-    void insertElement(MusicElement* element, int before);
+    void insertElement(VoiceElement* element, int before);
 
     /**
      * Inserts an element into the bar. You should not add an element to more than one bar, because when the bar is deleted
@@ -80,7 +80,7 @@ public:
      * @param element the element to insert into the bar
      * @param before the element before which to insert the element
      */
-    void insertElement(MusicElement* element, MusicElement* before);
+    void insertElement(VoiceElement* element, VoiceElement* before);
 
     /**
      * Removes an element from this bar. If deleteElement is true, the element is not only removed but also deleted.
@@ -96,7 +96,7 @@ public:
      * @param element the element to remove
      * @param deleteElement should the element not only be removed but also deleted
      */
-    void removeElement(MusicElement* element, bool deleteElement = true);
+    void removeElement(VoiceElement* element, bool deleteElement = true);
 private:
     class Private;
     Private * const d;

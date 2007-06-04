@@ -23,7 +23,7 @@
 #include "Sheet.h"
 #include "Part.h"
 #include "Voice.h"
-#include "MusicElement.h"
+#include "VoiceElement.h"
 
 using namespace MusicCore;
 
@@ -46,7 +46,7 @@ void VoiceBarTest::testConstruction()
 
 void VoiceBarTest::testAddElement()
 {
-    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement();
+    VoiceElement *elem1 = new VoiceElement(), *elem2 = new VoiceElement();
     voiceBar->addElement(elem1);
     QCOMPARE(voiceBar->elementCount(), 1);
     QCOMPARE(voiceBar->element(0), elem1);
@@ -59,7 +59,7 @@ void VoiceBarTest::testAddElement()
 
 void VoiceBarTest::testInsertElement_index()
 {
-    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement(), *elem3 = new MusicElement();
+    VoiceElement *elem1 = new VoiceElement(), *elem2 = new VoiceElement(), *elem3 = new VoiceElement();
     voiceBar->insertElement(elem1, 0);
     QCOMPARE(voiceBar->elementCount(), 1);
     QCOMPARE(voiceBar->element(0), elem1);
@@ -78,7 +78,7 @@ void VoiceBarTest::testInsertElement_index()
 
 void VoiceBarTest::testInsertElement_element()
 {
-    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement(), *elem3 = new MusicElement();
+    VoiceElement *elem1 = new VoiceElement(), *elem2 = new VoiceElement(), *elem3 = new VoiceElement();
     voiceBar->addElement(elem1);
 
     voiceBar->insertElement(elem2, elem1);
@@ -95,7 +95,7 @@ void VoiceBarTest::testInsertElement_element()
 
 void VoiceBarTest::testRemoveElement_index()
 {
-    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement(), *elem3 = new MusicElement();
+    VoiceElement *elem1 = new VoiceElement(), *elem2 = new VoiceElement(), *elem3 = new VoiceElement();
     voiceBar->addElement(elem1);
     voiceBar->addElement(elem2);
     voiceBar->addElement(elem3);
@@ -108,7 +108,7 @@ void VoiceBarTest::testRemoveElement_index()
 
 void VoiceBarTest::testRemoveElement_element()
 {
-    MusicElement *elem1 = new MusicElement(), *elem2 = new MusicElement(), *elem3 = new MusicElement();
+    VoiceElement *elem1 = new VoiceElement(), *elem2 = new VoiceElement(), *elem3 = new VoiceElement();
     voiceBar->addElement(elem1);
     voiceBar->addElement(elem2);
     voiceBar->addElement(elem3);

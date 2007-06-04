@@ -29,7 +29,7 @@ public:
     QList<Note*> notes;
 };
 
-Chord::Chord(Duration duration, int dots) : MusicElement(), d(new Private)
+Chord::Chord(Duration duration, int dots) : VoiceElement(), d(new Private)
 {
     d->duration = duration;
     d->dots = dots;

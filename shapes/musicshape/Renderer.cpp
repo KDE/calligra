@@ -90,7 +90,7 @@ void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, const QColor& c
     }
 }
 
-void MusicRenderer::renderElement(QPainter& painter, MusicElement* me, double x, double y, RenderState& state, const QColor& color)
+void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, double x, double y, RenderState& state, const QColor& color)
 {
     double top = y;
     if (me->staff()) top += me->staff()->top();

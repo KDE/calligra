@@ -206,7 +206,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
         Bar* bb = sheet->bar(b);
         VoiceBar* vb = bb->voice(voice);
         for (int i = 0; i < vb->elementCount(); i++) {
-            MusicElement* me = vb->element(i);
+            VoiceElement* me = vb->element(i);
             Clef* c = dynamic_cast<Clef*>(me);
             if (c) clef = c;
         }

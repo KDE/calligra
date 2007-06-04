@@ -22,7 +22,7 @@
 #include "core/Voice.h"
 #include "core/Part.h"
 #include "core/VoiceBar.h"
-#include "core/MusicElement.h"
+#include "core/VoiceElement.h"
 #include "core/Clef.h"
 
 #include <limits.h>

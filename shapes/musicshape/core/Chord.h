@@ -19,7 +19,7 @@
 #ifndef MUSIC_CORE_CHORD_H
 #define MUSIC_CORE_CHORD_H
 
-#include "MusicElement.h"
+#include "VoiceElement.h"
 
 namespace MusicCore {
 
@@ -31,7 +31,7 @@ class Note;
  * staff should be set to know on which staff to display the rest. When the chord contains notes the notes can have
  * their own staff, so you could have one chord spreading multiple staves (with all staves in the same part).
  */
-class Chord : public MusicElement
+class Chord : public VoiceElement
 {
 public:
     /**

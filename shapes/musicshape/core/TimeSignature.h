@@ -19,7 +19,7 @@
 #ifndef MUSIC_CORE_TIMESIGNATURE_H
 #define MUSIC_CORE_TIMESIGNATURE_H
 
-#include "MusicElement.h"
+#include "VoiceElement.h"
 
 namespace MusicCore {
 
@@ -28,7 +28,7 @@ class Staff;
 /**
  * This class represents a time signature.
  */
-class TimeSignature : public MusicElement {
+class TimeSignature : public VoiceElement {
 public:
     enum TimeSignatureType {
         Classical,

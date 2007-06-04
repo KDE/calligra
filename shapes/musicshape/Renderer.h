@@ -30,7 +30,7 @@ namespace MusicCore {
     class Part;
     class Staff;
     class Voice;
-    class MusicElement;
+    class VoiceElement;
     class Clef;
     class KeySignature;
     class TimeSignature;
@@ -49,7 +49,7 @@ public:
     void renderPart(QPainter& painter, MusicCore::Part* part);
     void renderStaff(QPainter& painter, MusicCore::Staff* staff);
     void renderVoice(QPainter& painter, MusicCore::Voice* voice, const QColor& color = Qt::black);
-    void renderElement(QPainter& painter, MusicCore::MusicElement* element, double x, double y, RenderState& state, const QColor& color = Qt::black);
+    void renderElement(QPainter& painter, MusicCore::VoiceElement* element, double x, double y, RenderState& state, const QColor& color = Qt::black);
 
     void renderClef(QPainter& painter, MusicCore::Clef* clef, double x, RenderState& state);
     void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, double x, RenderState& state);

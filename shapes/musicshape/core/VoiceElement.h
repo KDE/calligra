@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef MUSIC_CORE_MUSICELEMENT_H
-#define MUSIC_CORE_MUSICELEMENT_H
+#ifndef MUSIC_CORE_VOICEELEMENT_H
+#define MUSIC_CORE_VOICEELEMENT_H
 
 namespace MusicCore {
 
@@ -25,20 +25,20 @@ class VoiceBar;
 class Staff;
 
 /**
- * This is the base class for all musical elements that can be added to a bar.
+ * This is the base class for all musical elements that can be added to a voice.
  */
-class MusicElement
+class VoiceElement
 {
 public:
     /**
-     * Creates a new MusicElement.
+     * Creates a new VoiceElement.
      */
-    explicit MusicElement(int length = 0);
+    explicit VoiceElement(int length = 0);
 
     /**
      * Destructor.
      */
-    virtual ~MusicElement();
+    virtual ~VoiceElement();
 
     /**
      * Returns the staff this music element should be displayed on. It can also be NULL, for example if the element
@@ -135,4 +135,4 @@ private:
 
 } // namespace MusicCore
 
-#endif // MUSIC_CORE_MUSICELEMENT_H
+#endif // MUSIC_CORE_VOICEELEMENT_H

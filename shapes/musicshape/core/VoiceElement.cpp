@@ -16,11 +16,11 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "MusicElement.h"
+#include "VoiceElement.h"
 
 namespace MusicCore {
 
-class MusicElement::Private
+class VoiceElement::Private
 {
 public:
     Staff* staff;
@@ -31,7 +31,7 @@ public:
     double height;
 };
 
-MusicElement::MusicElement(int length) : d(new Private)
+VoiceElement::VoiceElement(int length) : d(new Private)
 {
     d->staff = 0;
     d->length = length;
@@ -41,67 +41,67 @@ MusicElement::MusicElement(int length) : d(new Private)
     d->height = 0;
 }
 
-MusicElement::~MusicElement()
+VoiceElement::~VoiceElement()
 {
     delete d;
 }
 
-Staff* MusicElement::staff()
+Staff* VoiceElement::staff()
 {
     return d->staff;
 }
 
-void MusicElement::setStaff(Staff* staff)
+void VoiceElement::setStaff(Staff* staff)
 {
     d->staff = staff;
 }
 
-double MusicElement::x() const
+double VoiceElement::x() const
 {
     return d->x;
 }
 
-void MusicElement::setX(double x)
+void VoiceElement::setX(double x)
 {
     d->x = x;
 }
 
-double MusicElement::y() const
+double VoiceElement::y() const
 {
     return d->y;
 }
 
-void MusicElement::setY(double y)
+void VoiceElement::setY(double y)
 {
     d->y = y;
 }
 
-double MusicElement::width() const
+double VoiceElement::width() const
 {
     return d->width;
 }
 
-void MusicElement::setWidth(double width)
+void VoiceElement::setWidth(double width)
 {
     d->width = width;
 }
 
-double MusicElement::height() const
+double VoiceElement::height() const
 {
     return d->height;
 }
 
-void MusicElement::setHeight(double height)
+void VoiceElement::setHeight(double height)
 {
     d->height = height;
 }
 
-int MusicElement::length() const
+int VoiceElement::length() const
 {
     return d->length;
 }
 
-void MusicElement::setLength(int length)
+void VoiceElement::setLength(int length)
 {
     d->length = length;
 }

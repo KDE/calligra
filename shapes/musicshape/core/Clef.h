@@ -19,7 +19,7 @@
 #ifndef MUSIC_CORE_CLEF_H
 #define MUSIC_CORE_CLEF_H
 
-#include "MusicElement.h"
+#include "VoiceElement.h"
 
 namespace MusicCore {
 
@@ -29,7 +29,7 @@ class Staff;
  * This class represents a clef music element. This same class is used both for clef changes at the start of bars as for
  * mid-bar clef changes.
  */
-class Clef : public MusicElement {
+class Clef : public VoiceElement {
 public:
     /**
      * The various supported shapes for a clef. Currently ownly G, F and C clefs are supported.

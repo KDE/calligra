@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "VoiceBar.h"
-#include "MusicElement.h"
+#include "VoiceElement.h"
 #include <QtCore/QList>
 
 namespace MusicCore {
@@ -25,7 +25,7 @@ namespace MusicCore {
 class VoiceBar::Private
 {
 public:
-    QList<MusicElement*> elements;
+    QList<VoiceElement*> elements;
 };
 
 VoiceBar::VoiceBar() : d(new Private)
@@ -34,7 +34,7 @@ VoiceBar::VoiceBar() : d(new Private)
 
 VoiceBar::~VoiceBar()
 {
-    Q_FOREACH(MusicElement* me, d->elements) delete me;
+    Q_FOREACH(VoiceElement* me, d->elements) delete me;
     delete d;
 }
 
@@ -43,26 +43,26 @@ int VoiceBar::elementCount() const
     return d->elements.size();
 }
 
-MusicElement* VoiceBar::element(int index)
+VoiceElement* VoiceBar::element(int index)
 {
     Q_ASSERT( index >= 0 && index < elementCount() );
     return d->elements[index];
 }
 
-void VoiceBar::addElement(MusicElement* element)
+void VoiceBar::addElement(VoiceElement* element)
 {
     Q_ASSERT( element );
     d->elements.append(element);
 }
 
-void VoiceBar::insertElement(MusicElement* element, int before)
+void VoiceBar::insertElement(VoiceElement* element, int before)
 {
     Q_ASSERT( element );
     Q_ASSERT( before >= 0 && before <= elementCount() );
     d->elements.insert(before, element);
 }
 
-void VoiceBar::insertElement(MusicElement* element, MusicElement* before)
+void VoiceBar::insertElement(VoiceElement* element, VoiceElement* before)
 {
     Q_ASSERT( element );
     Q_ASSERT( before );
@@ -74,13 +74,13 @@ void VoiceBar::insertElement(MusicElement* element, MusicElement* before)
 void VoiceBar::removeElement(int index, bool deleteElement)
 {
     Q_ASSERT( index >= 0 && index < elementCount() );
-    MusicElement* e = d->elements.takeAt(index);
+    VoiceElement* e = d->elements.takeAt(index);
     if (deleteElement) {
         delete e;
     }
 }
 
-void VoiceBar::removeElement(MusicElement* element, bool deleteElement)
+void VoiceBar::removeElement(VoiceElement* element, bool deleteElement)
 {
     Q_ASSERT( element );
     int index = d->elements.indexOf(element);
