@@ -35,13 +35,13 @@ KexiCSVImportExportPart::~KexiCSVImportExportPart()
 {
 }
 
-QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass, KexiMainWindow* mainWin, 
- QWidget *parent, const char *objName, QMap<QString,QString>* args )
+QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
+	QWidget *parent, const char *objName, QMap<QString,QString>* args )
 {
 	if (0==qstrcmp(widgetClass, "KexiCSVImportDialog")) {
 		KexiCSVImportDialog::Mode mode = (args && (*args)["sourceType"]=="file")
 			? KexiCSVImportDialog::File : KexiCSVImportDialog::Clipboard;
-		KexiCSVImportDialog *dlg = new KexiCSVImportDialog( mode, mainWin, parent, objName );
+		KexiCSVImportDialog *dlg = new KexiCSVImportDialog( mode, parent, objName );
 		m_cancelled = dlg->cancelled();
 		if (m_cancelled) {
 			delete dlg;
@@ -55,7 +55,7 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass, KexiMain
 		KexiCSVExport::Options options;
 		if (!options.assign( *args ))
 			return 0;
-		KexiCSVExportWizard *dlg = new KexiCSVExportWizard( options, mainWin, parent, objName);
+		KexiCSVExportWizard *dlg = new KexiCSVExportWizard( options, parent, objName);
 		m_cancelled = dlg->cancelled();
 		if (m_cancelled) {
 			delete dlg;
@@ -66,7 +66,7 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass, KexiMain
 	return 0;
 }
 
-bool KexiCSVImportExportPart::executeCommand(KexiMainWindow* mainWin, const char* commandName, 
+bool KexiCSVImportExportPart::executeCommand(const char* commandName, 
 	QMap<QString,QString>* args)
 {
 	if (0==qstrcmp(commandName, "KexiCSVExport")) {
@@ -74,7 +74,7 @@ bool KexiCSVImportExportPart::executeCommand(KexiMainWindow* mainWin, const char
 		if (!options.assign( *args ))
 			return false;
 		KexiDB::TableOrQuerySchema tableOrQuery(
-			mainWin->project()->dbConnection(), options.itemId);
+			KexiMainWindowIface::global()->project()->dbConnection(), options.itemId);
 		QTextStream *stream = 0;
 		if (args->contains("textStream"))
 			stream = KexiUtils::stringToPtr<QTextStream>( (*args)["textStream"] );

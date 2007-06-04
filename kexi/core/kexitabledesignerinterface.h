@@ -20,6 +20,7 @@
 #ifndef KEXITABLEDESIGNERINTERFACE_H
 #define KEXITABLEDESIGNERINTERFACE_H
 
+#include <kexi_export.h>
 #include <koproperty/property.h>
 #include <kexiutils/tristate.h>
 
@@ -36,10 +37,10 @@ namespace KoProperty {
  KexiTableDesignerInterface is implemented by KexiTableDesignerView, so it's enough
  to use dynamic_cast:
  \code
- KexiDialogBase *dlg = KexiMainWindowImpl::self()->currentDialog();
- if (dlg) {
+ KexiWindow *window = KexiMainWindow::self()->currentWindow();
+ if (window) {
    KexiTableDesignerInterface* designerIface 
-     = dynamic_cast<KexiTableDesignerInterface*>( dlg->selectedView() );
+     = dynamic_cast<KexiTableDesignerInterface*>( window->selectedView() );
    if (designerIface) {
      //for example, delete row #3
      designerIface->deleteRow( 3, true );

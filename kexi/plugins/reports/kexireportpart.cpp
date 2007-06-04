@@ -21,11 +21,11 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include "kexiviewbase.h"
-#include "keximainwindow.h"
+#include <KexiView.h>
+#include <KexiMainWindowIface.h>
 #include "kexiproject.h"
 #include <kexipartitem.h>
-#include <kexidialogbase.h>
+#include <KexiWindow.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/fieldlist.h>
@@ -45,8 +45,8 @@
 
 KFormDesigner::WidgetLibrary* KexiReportPart::static_reportsLibrary = 0L;
 
-KexiReportPart::KexiReportPart(QObject *parent, const char *name, const QStringList &l)
- : KexiPart::Part(parent, name, l)
+KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
+ : KexiPart::Part(parent, l)
 {
 	// REGISTERED ID:
 	m_registeredPartID = (int)KexiPart::ReportObjectType;
@@ -93,45 +93,45 @@ void
 KexiReportPart::initInstanceActions()
 {
 	KFormDesigner::FormManager::self()->createActions(
-		library(), actionCollectionForMode(Kexi::DesignViewMode));
+		library(), actionCollectionForMode(Kexi::DesignViewMode), guiClient());
 }
 
-KexiDialogTempData*
-KexiReportPart::createTempData(KexiDialogBase* dialog)
+KexiWindowData*
+KexiReportPart::createWindowData(KexiWindow* window)
 {
-	return new KexiReportPart::TempData(dialog);
+	return new KexiReportPart::TempData(window);
 }
 
-KexiViewBase*
-KexiReportPart::createView(QWidget *parent, KexiDialogBase* dialog,
+KexiView*
+KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 	KexiPart::Item &item, int, QMap<QString,QString>*)
 {
 	kexipluginsdbg << "KexiReportPart::createView()" << endl;
-	KexiMainWindow *win = dialog->mainWin();
+	KexiMainWindow *win = KexiMainWindowIface::global();
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return 0;
 
-	KexiReportView *view = new KexiReportView(win, parent, item.name().latin1(),
+	KexiReportView *view = new KexiReportView(win, parent, item.name().toLatin1(),
 		win->project()->dbConnection() );
 
 	return view;
 }
 
-QString
-KexiReportPart::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
+KLocalizedString KexiReportPart::i18nMessage(
+	const QString& englishMessage, KexiWindow* window) const
 {
-	Q_UNUSED(dlg);
+	Q_UNUSED(window);
 	if (englishMessage=="Design of object \"%1\" has been modified.")
-		return i18n("Design of report \"%1\" has been modified.");
+		return ki18n(I18N_NOOP("Design of report \"%1\" has been modified."));
 	if (englishMessage=="Object \"%1\" already exists.")
-		return i18n("Report \"%1\" already exists.");
-	return englishMessage;
+		return ki18n(I18N_NOOP("Report \"%1\" already exists."));
+	return Part::i18nMessage(englishMessage, window);
 }
 
 //---------------
 
 KexiReportPart::TempData::TempData(QObject* parent)
- : KexiDialogTempData(parent)
+ : KexiWindowData(parent)
 {
 }
 

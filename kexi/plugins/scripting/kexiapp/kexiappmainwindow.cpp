@@ -29,7 +29,7 @@
 
 using namespace Scripting;
 
-KexiAppMainWindow::KexiAppMainWindow(KexiMainWindow* mainwindow)
+KexiAppMainWindow::KexiAppMainWindow(KexiMainWindowIface* mainwindow)
     : QObject()
     , m_mainwindow(mainwindow)
 {
@@ -67,7 +67,7 @@ Kross::Api::Object::Ptr KexiAppMainWindow::getConnection()
 Kross::Api::List* KexiAppMainWindow::getPartItems(const QString& mimetype)
 {
     if(mimetype.isNull()) return 0; // just to be sure...
-    KexiPart::ItemDict* items = d->project()->itemsForMimeType( mimetype.latin1() );
+    KexiPart::ItemDict* items = d->project()->itemsForMimeType( mimetype.toLatin1() );
     if(! items) return 0;
     return new Kross::Api::ListT<KexiAppPartItem>( *items );
 }

@@ -64,7 +64,7 @@ class KEXI_DB_EXPORT MessageHandler
 		 but you do not need to display two message boxes but only one (higher level with details).
 		 All you need is to call enableMessages(false) before action that can fail
 		 and restore messages by enableMessages(true) after the action. 
-		 See KexiMainWindowImpl::renameObject() implementation for example. */
+		 See KexiMainWindow::renameObject() implementation for example. */
 		inline void enableMessages(bool enable) { m_enableMessages = enable; }
 
 		/*! Shows error message with \a title (it is not caption) and details. */

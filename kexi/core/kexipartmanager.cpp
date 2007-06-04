@@ -18,10 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <klibloader.h>
-//#include <ktrader.h>
-//#include <kservicetypetrader.h>
-#include <kmimetypetrader.h>
+#include <KLibLoader>
+#include <KServiceType>
+#include <KMimeTypeTrader>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kparts/componentfactory.h>
@@ -41,37 +40,43 @@ Manager::Manager(QObject *parent)
  : QObject(parent)
 {
 	m_lookupDone = false;
-#if 0 //sebsauer 20061121
-	m_partlist.setAutoDelete(true);
-	m_partsByMime.setAutoDelete(false);
-	m_parts.setAutoDelete(false);//KApp will remove parts
-#endif
+	m_lookupResult = false;
 	m_nextTempProjectPartID = -1;
 }
 
-void
-Manager::lookup()
+Manager::~Manager()
+{
+	qDeleteAll(m_partlist);
+}
+
+bool Manager::lookup()
 {
 //js: TODO: allow refreshing!!!! (will need calling removeClient() by Part objects)
 	if (m_lookupDone)
-		return;
+		return m_lookupResult;
 	m_lookupDone = true;
+	m_lookupResult = false;
 	m_partlist.clear();
 	m_partsByMime.clear();
 	m_parts.clear();
+	
+	if (!KServiceType::serviceType("Kexi/Handler")) {
+		kWarning() << "KexiPart::Manager::lookup(): No 'Kexi/Handler' service type installed! Aborting." << endl;
+		setError(i18n("No \"%1\" service type installed! Check your Kexi installation. Aborting.",
+			QString("Kexi/Handler")));
+		return false;
+	}
 	KService::List tlist = KMimeTypeTrader::self()->query("Kexi/Handler", 
 		"[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
-	
-	KConfig conf("kexirc");
-	KConfigGroup cg = conf.group("Parts");
+
+	KConfigGroup cg( KGlobal::config()->group("Parts") );
 	QStringList sl_order = cg.readEntry("Order").split( "," );//we'll set parts in defined order
 	const int size = qMax( tlist.count(), sl_order.count() );
 	QList<KService::Ptr> ordered;
 	int offset = size; //we will insert not described parts from #offset
 	
 	//compute order
-	foreach(KService::Ptr ptr, tlist)
-	{
+	foreach(KService::Ptr ptr, tlist) {
 		QString mime = ptr->property("X-Kexi-TypeMime").toString();
 		kDebug() << "Manager::lookup(): " << mime << endl;
 //<TEMP>: disable some parts if needed
@@ -102,133 +107,77 @@ Manager::lookup()
 			m_partlist.append(info);
 		}
 	}
+	m_lookupResult = true;
+	return true;
 }
 
-Manager::~Manager()
-{
-}
-
-Part *
-Manager::part(Info *i)
+Part* Manager::part(Info *i)
 {
 	clearError();
 	if(!i)
 		return 0;
-
-//	kDebug() << "Manager::part( id = " << i->projectPartID() << " )" << endl;
 
 	if (i->isBroken()) {
 			setError(i->errorMessage());
 			return 0;
 	}
 
-	Part *p = m_parts[i->projectPartID()];
-	
-	if(!p) {
-//		kDebug() << "Manager::part().." << endl;
+	Part *p = m_parts.value(i->projectPartID());
+	if (!p) {
 		int error=0;
 		p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error);
 		if(!p) {
 			kDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
 			kDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
-			i->setBroken(true, i18n("Error while loading plugin \"%1\"").arg(i->objectName()));
+			i->setBroken(true, i18n("Error while loading plugin \"%1\"", i->objectName()));
 			setError(i->errorMessage());
 			return 0;
 		}
 		if (p->m_registeredPartID>0) {
 			i->setProjectPartID( p->m_registeredPartID );
 		}
-
 		p->setInfo(i);
-		m_parts.insert(i->projectPartID(),p);
+		p->setObjectName( QString("%1 part").arg(i->objectName()) );
+		m_parts.insert(i->projectPartID(), p);
 		emit partLoaded(p);
 	}
-	else {
-//		kDebug() << "Manager::part(): cached: " << i->groupName() << endl;
-	}
-
-//	kDebug() << "Manager::part(): fine!" << endl;
 	return p;
 }
 
-#if 0
-void
-Manager::unloadPart(Info *i)
+Part* Manager::partForMimeType(const QString &mimeType)
 {
-	m_parts.setAutoDelete(true);
-	m_parts.remove(i->projectPartID());
-	m_parts.setAutoDelete(false);
-/*	if (!p)
-		return;
-	m_partsByMime.take(i->mime());
-	m_partlist.removeRef(p);*/
+	return mimeType.isEmpty() ? 0 : part(m_partsByMime.value(mimeType));
 }
 
-void 
-Manager::unloadAllParts()
+Info* Manager::infoForMimeType(const QString &mimeType)
 {
-//	m_partsByMime.clear();
-	m_parts.setAutoDelete(true);
-	m_parts.clear();
-	m_parts.setAutoDelete(false);
-//	m_partlist.clear();
-}
-#endif
-
-/*void 
-Manager::removeClients( KexiMainWindow *win )
-{
-	if (!win)
-		return;
-	QIntDictIterator<Part> it(m_parts);
-	for (;i.current();++it) {
-		i.current()->removeClient(win->guiFactory());
-	}
-}*/
-
-Part *
-Manager::partForMimeType(const QString &mimeType)
-{
-	return mimeType.isEmpty() ? 0 : part(m_partsByMime[mimeType.toLatin1()]);
-}
-
-Info *
-Manager::infoForMimeType(const QString &mimeType)
-{
-	Info *i = mimeType.isEmpty() ? 0 : m_partsByMime[mimeType.toLatin1()];
+	Info *i = mimeType.isEmpty() ? 0 : m_partsByMime.value(mimeType);
 	if (i)
 		return i;
-	setError(i18n("No plugin for mime type \"%1\"").arg(mimeType));
+	setError(i18n("No plugin for mime type \"%1\"", mimeType));
 	return 0;
 }
 
-
-bool
-Manager::checkProject(KexiDB::Connection *conn)
+bool Manager::checkProject(KexiDB::Connection *conn)
 {
 	clearError();
 //	QString errmsg = i18n("Invalid project contents.");
 
-//TODO: catch errors!
-	if(!conn->isDatabaseUsed()) {
+//! @todo catch errors!
+	if (!conn->isDatabaseUsed()) {
 		setError(conn);
 		return false;
 	}
 
-	KexiDB::Cursor *cursor = conn->executeQuery("SELECT * FROM kexi__parts");//, KexiDB::Cursor::Buffered);
-	if(!cursor) {
+	KexiDB::Cursor *cursor = conn->executeQuery("SELECT * FROM kexi__parts"); 
+	if (!cursor) {
 		setError(conn);
 		return false;
 	}
 
-//	int id=0;
-//	QStringList parts_found;
-	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
-	{
-//		id++;
+	for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
 		Info *i = infoForMimeType(cursor->value(2).toString());
-		if(!i)
-		{
+		if(!i) {
 			Missing m;
 			m.name = cursor->value(1).toString();
 			m.mime = cursor->value(2).toString();
@@ -236,33 +185,13 @@ Manager::checkProject(KexiDB::Connection *conn)
 
 			m_missing.append(m);
 		}
-		else
-		{
+		else {
 			i->setProjectPartID(cursor->value(0).toInt());
 			i->setIdStoredInPartDatabase(true);
-//			parts_found+=cursor->value(2).toString();
 		}
 	}
 
 	conn->deleteCursor(cursor);
-
-#if 0 //js: moved to Connection::createDatabase()
-	//add missing default part entries
-	KexiDB::TableSchema *ts = conn->tableSchema("kexi__parts");
-	if (!ts)
-		return false;
-	KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
-	if (!fl)
-		return false;
-	if (!parts_found.contains("kexi/table")) {
-		if (!conn->insertRecord(*fl, QVariant(1), QVariant("Tables"), QVariant("kexi/table"), QVariant("http://")))
-			return false;
-	}
-	if (!parts_found.contains("kexi/query")) {
-		if (!conn->insertRecord(*fl, QVariant(2), QVariant("Queries"), QVariant("kexi/query"), QVariant("http://")))
-			return false;
-	}
-#endif
 	return true;
 }
 

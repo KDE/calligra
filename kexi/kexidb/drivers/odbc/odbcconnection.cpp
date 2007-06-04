@@ -92,9 +92,9 @@ bool ODBCConnection::drv_connect()
 		return false;
 	}
 	
-	result = SQLConnect( d->connectionHandle, (unsigned char*) d->connData.hostName.latin1(),
-		d->connData.hostName.length(), (unsigned char*) d->connData.userName.latin1(),
-		d->connData.userName.length(), (unsigned char*) d->connData.password.latin1(),
+	result = SQLConnect( d->connectionHandle, (unsigned char*) d->connData.hostName.toLatin1(),
+		d->connData.hostName.length(), (unsigned char*) d->connData.userName.toLatin1(),
+		d->connData.userName.length(), (unsigned char*) d->connData.password.toLatin1(),
 		d->connData.password.length() );
 	if ( result != SQL_SUCCESS && result != SQL_SUCCESS_WITH_INFO )
 	{

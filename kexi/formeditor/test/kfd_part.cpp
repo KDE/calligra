@@ -283,7 +283,7 @@ KFormDesignerPart::createBlankForm()
 	QString n = i18n("Form") + QString::number(++m_count);
 	Form *form = new Form(formsLibrary(), false/*!designMode, we need to set it early enough*/);
 	form->setObjectName( n );
-	FormWidgetBase *w = new FormWidgetBase(this, m_workspace, n.latin1());
+	FormWidgetBase *w = new FormWidgetBase(this, m_workspace, n.toLatin1());
 
 	w->setCaption(n);
 	w->setIcon(SmallIcon("form"));
@@ -299,7 +299,7 @@ void
 KFormDesignerPart::open()
 {
 	m_openingFile = true;
-	KUrl url = KFileDialog::getOpenURL("::kformdesigner", i18n("*.ui|Qt Designer UI Files"), m_workspace->topLevelWidget());
+	KUrl url = KFileDialog::getOpenURL("kfiledialog:///kformdesigner", i18n("*.ui|Qt Designer UI Files"), m_workspace->topLevelWidget());
 	if(!url.isEmpty())
 		ReadWritePart::openURL(url);
 	m_openingFile = false;
@@ -334,7 +334,7 @@ KFormDesignerPart::saveFile()
 void
 KFormDesignerPart::saveAs()
 {
-	KUrl url = KFileDialog::getSaveURL("::kformdesigner", i18n("*.ui|Qt Designer UI Files"), 
+	KUrl url = KFileDialog::getSaveURL("kfiledialog:///kformdesigner", i18n("*.ui|Qt Designer UI Files"), 
 		m_workspace->topLevelWidget());
 	if(url.isEmpty())
 		return;
@@ -347,7 +347,7 @@ KFormDesignerPart::closeForm(Form *form)
 {
 	int res = KMessageBox::questionYesNoCancel( m_workspace->topLevelWidget(),
 		i18n( "The form \"%1\" has been modified.\n"
-		"Do you want to save your changes or discard them?" ).arg( form->objectTree()->name() ),
+		"Do you want to save your changes or discard them?", form->objectTree()->name() ),
 		i18n( "Close Form" ), KStandardGuiItem::save(), KStandardGuiItem::discard() );
 
 	if(res == KMessageBox::Yes)

@@ -77,7 +77,7 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 		if (KexiUtils::findParent<KexiDBForm>(obj, "KexiDBSubForm"))
 			continue;
 #endif
-		QString dataSource( formDataItem->dataSource().lower() );
+		QString dataSource( formDataItem->dataSource().toLower() );
 		if (dataSource.isEmpty())
 			continue;
 		kexipluginsdbg << obj->name() << endl;
@@ -211,7 +211,7 @@ void KexiFormDataProvider::invalidateDataSources( const Q3Dict<char>& invalidSou
 	//todo
 	//WRONG: not only used data sources can be fetched!
 	//			m_fieldNumbersForDataItems.insert( it.current(), 
-	//				m_usedDataSources.findIndex(it.current()->dataSource().lower()) );
+	//				m_usedDataSources.findIndex(it.current()->dataSource().toLower()) );
 		}
 	}
 	else {//!query
@@ -276,7 +276,7 @@ void KexiFormDataProvider::invalidateDataSources( const Q3Dict<char>& invalidSou
 	                                         // because setColumnInfo() can activate it
 	for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current();) {
 		KexiFormDataItemInterface * item = it.current();
-		if (invalidSources[ item->dataSource().lower() ]) {
+		if (invalidSources[ item->dataSource().toLower() ]) {
 			item->setInvalidState( QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?") );
 			m_dataItems.remove(item);
 			continue;
@@ -306,7 +306,7 @@ void KexiFormDataProvider::invalidateDataSources( const Q3Dict<char>& invalidSou
 				}
 			}
 		}
-		tmpUsedDataSources.replace( item->dataSource().lower(), (char*)1 );
+		tmpUsedDataSources.replace( item->dataSource().toLower(), (char*)1 );
 		++it;
 	}
 	m_disableFillDuplicatedDataItems = false;

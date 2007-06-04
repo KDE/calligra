@@ -1,10 +1,25 @@
 project(kexi)
 
-# todo: add -DDB_TEMPLATES to KDE_CXXFLAGS
+IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
+	INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
+ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
+
+ADD_DEFINITIONS(
+	-DKEXI_NO_CURSOR_PROPERTY 
+	-DKEXI_NO_CTXT_HELP
+	-DKEXI_NO_SUBFORM
+	-DKEXI_DB_COMBOBOX_WIDGET
+	-DDB_TEMPLATES
+)
+
+#if compile_kross
+#  SCRIPTINGDEFINES=-DKEXI_SCRIPTS_SUPPORT
+#endif
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} 
+	${KDE4_INCLUDES} ${QT_INCLUDES} )
 
 add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )
@@ -20,10 +35,21 @@ add_subdirectory( main )
 #add_subdirectory( main2 )
 
 add_subdirectory( migration )
-#add_subdirectory( plugins )
+add_subdirectory( plugins )
 add_subdirectory( tests )
 
 ########### next target ###############
+
+set(kexi_SRCS main.cpp )
+kde4_automoc(${kexi_SRCS})
+kde4_add_executable(kexi ${kexi_SRCS})
+target_link_libraries(kexi 
+	${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KDEPRINT_LIBS} 
+	kexidb
+	keximain
+	
+)
+install(TARGETS kexi DESTINATION ${BIN_INSTALL_DIR})
 
 # that functionality got moved to kexi/main2/CMakeLists.txt
 #set(kexi_KDEINIT_SRCS main.cpp )
@@ -40,7 +66,7 @@ add_subdirectory( tests )
 #install( FILES  kexi.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/Office)
 
 #install(FILES kexi.rc kexi_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kexi)
-install(FILES kexipart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+#install(FILES kexipart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kexi.desktop DESTINATION ${XDG_APPS_DIR})
 #install(FILES kexi.kcfg DESTINATION  ${KCFG_INSTALL_DIR} )
 

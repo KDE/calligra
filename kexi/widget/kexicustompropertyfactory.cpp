@@ -57,7 +57,7 @@ class IdentifierCustomProperty : public CustomProperty
 		{
 			Q_UNUSED(rememberOldValue);
 			if (!value.toString().isEmpty())
-				m_value = KexiUtils::string2Identifier(value.toString()).lower();
+				m_value = KexiUtils::string2Identifier(value.toString()).toLower();
 		}
 		virtual QVariant value() const { return m_value; }
 		virtual bool handleValue() const {

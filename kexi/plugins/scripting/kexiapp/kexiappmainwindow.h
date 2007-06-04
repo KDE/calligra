@@ -24,7 +24,7 @@
 #include <qvariant.h>
 
 // Forward declarations.
-class KexiMainWindow;
+class KexiMainWindowIface;
 class KexiProject;
 
 namespace Scripting {
@@ -39,12 +39,12 @@ namespace Scripting {
     {
             Q_OBJECT
         public:
-            KexiAppMainWindow(KexiMainWindow* mainwindow);
+            KexiAppMainWindow(KexiMainWindowIface* mainwindow);
             virtual ~KexiAppMainWindow();
             KexiProject* project();
 
         private:
-            KexiMainWindow* m_mainwindow;
+            KexiMainWindowIface* m_mainwindow;
 
             bool isConnected();
 

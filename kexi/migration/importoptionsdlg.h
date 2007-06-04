@@ -20,7 +20,7 @@
 #ifndef KEXIMIGRATIONOPTIONSDIALOG_H
 #define KEXIMIGRATIONOPTIONSDIALOG_H
 
-#include <kdialogbase.h>
+#include <KDialog>
 
 class QCheckBox;
 class KexiCharacterEncodingComboBox;
@@ -30,11 +30,12 @@ namespace KexiMigration {
 //! @short Import Options dialog.
 //! It is currently used for MDB driver only
 //! @todo Hardcoded. Move such code to KexiMigrate drivers.
-class OptionsDialog : public KDialogBase
+class OptionsDialog : public KDialog
 {
 	Q_OBJECT
 	public:
-		OptionsDialog( const QString& databaseFile, const QString& selectedEncoding, QWidget* parent = 0 );
+		OptionsDialog( const QString& databaseFile, const QString& selectedEncoding,
+			QWidget* parent = 0 );
 		virtual ~OptionsDialog();
 
 		KexiCharacterEncodingComboBox* encodingComboBox() const;

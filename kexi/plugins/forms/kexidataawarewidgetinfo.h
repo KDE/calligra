@@ -20,7 +20,7 @@
 #ifndef KEXIDATAAWAREWIDGETINFO_H
 #define KEXIDATAAWAREWIDGETINFO_H
 
-#include <widgetfactory.h>
+#include <formeditor/widgetfactory.h>
 
 //! A widget info for data-aware widgets
 /*! Used within factories just like KFormDesigner::WidgetInfo,

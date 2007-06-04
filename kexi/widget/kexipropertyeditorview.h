@@ -25,7 +25,6 @@
 #include <kexi_export.h>
 
 class QLabel;
-class KexiMainWindowIface;
 
 namespace KoProperty {
 	class Editor;
@@ -84,7 +83,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget
 	Q_OBJECT
 
 	public:
-		KexiPropertyEditorView(KexiMainWindowIface *mainWin, QWidget* parent);
+		KexiPropertyEditorView(QWidget* parent);
 		virtual ~KexiPropertyEditorView();
 
 		/*! Helper function. Updates \a infoLabel widget by reusing properties provided 

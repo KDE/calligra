@@ -127,7 +127,7 @@ void KexiStatusBar::setStatus(const QString &str)
 void KexiStatusBar::setCursorPosition(int line, int col)
 {
 //	m_status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
-	changeItem(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col), m_msgID);
+	changeItem(i18n(" Line: %1 Col: %2 ", line+1, col), m_msgID);
 }
 
 /*void KexiStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)

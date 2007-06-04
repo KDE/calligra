@@ -20,23 +20,18 @@
 #ifndef KEXIDBTITLEPAGE_H
 #define KEXIDBTITLEPAGE_H
 
-#include "KexiDBTitlePageBase.h"
+#include "ui_KexiDBTitlePage.h"
+#include <QWidget>
+#include <kexi_export.h>
 
 //! @short A helper widget used to displaying a line edit with a label and layout
-class KEXIMAIN_EXPORT KexiDBTitlePage : public KexiDBTitlePageBase
+class KEXIMAIN_EXPORT KexiDBTitlePage : public QWidget, public Ui_KexiDBTitlePage
 {
-	Q_OBJECT
-
-public:
-	//! Constructs title page. \a labelText can be provided to change default 
-	//! "Project caption:" label.
-	KexiDBTitlePage( const QString& labelText, QWidget* parent = 0, const char* name = 0 );
-	~KexiDBTitlePage();
-	
-protected slots:
-	virtual void languageChange() { KexiDBTitlePageBase::languageChange(); }
-
+	public:
+		//! Constructs title page. \a labelText can be provided to change default 
+		//! "Project caption:" label.
+		KexiDBTitlePage( const QString& labelText, QWidget* parent = 0 );
+		~KexiDBTitlePage();
 };
 
 #endif // KEXIDBTITLEPAGE_H
-

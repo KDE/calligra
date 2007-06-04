@@ -51,13 +51,12 @@ namespace KexiPart
 		QString url;
 	};
 
-	typedef QMap<QString, Info*> PartInfoDict;
-	typedef Q3DictIterator<Info> PartInfoDictIterator;
-	typedef Q3ValueList<Missing> MissingList;
-	typedef Q3PtrList<Info> PartInfoList;
-	typedef Q3PtrListIterator<Info> PartInfoListIterator;
-	typedef Q3IntDict<Part> PartDict;
-//	typedef QPtrList<DataSource> DataSourceList;
+	typedef QHash<QString, Info*> PartInfoDict;
+	typedef QHash<QString, Info*>::iterator PartInfoDictIterator;
+	typedef QList<Missing> MissingList;
+	typedef QList<Info*> PartInfoList;
+	typedef QList<Info*>::iterator PartInfoListIterator;
+	typedef QHash<int, Part*> PartDict;
 
 /**
  * @short KexiPart's manager: looks up and instantiates them
@@ -76,9 +75,10 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 		~Manager();
 
 		/**
-		 * queries ktrader and creates a list of available parts
+		 * Queries ktrader and creates a list of available parts.
+		 * \return false is required servicetype was not found (what means the installation is broken).
 		 */
-		void lookup();
+		bool lookup();
 
 		/**
 		 * \return a part object for specified mime type. Dlopens a part using KexiPart::Info
@@ -130,6 +130,7 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 		MissingList m_missing;
 		int m_nextTempProjectPartID;
 		bool m_lookupDone : 1;
+		bool m_lookupResult : 1;
 
 		friend class StaticPart;
 };
@@ -137,4 +138,3 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 }
 
 #endif
-

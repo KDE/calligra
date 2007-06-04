@@ -22,9 +22,9 @@
 #include "kexiscriptpart.h"
 #include "kexiscriptdesignview.h"
 
-#include "kexiviewbase.h"
-#include "keximainwindow.h"
-#include "kexiproject.h"
+#include <KexiView.h"
+#include <KexiMainWindowIface.h>
+#include <kexiproject.h>
 
 #include <kross/main/manager.h>
 #include <kross/main/scriptaction.h>
@@ -47,8 +47,8 @@ class KexiScriptPart::Private
 		Kross::Api::ScriptGUIClient* scriptguiclient;
 };
 
-KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringList &l)
-	: KexiPart::Part(parent, name, l)
+KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
+	: KexiPart::Part(parent, l)
 	, d( new Private() )
 {
 	d->scriptguiclient = 0;
@@ -93,7 +93,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 
 		const QString dontAskAgainName = "askExecuteScript";
 		KSharedConfig::Ptr config = KGlobal::config();
-		QString dontask = config->readEntry(dontAskAgainName).lower();
+		QString dontask = config->readEntry(dontAskAgainName).toLower();
 
 		bool exec = (dontask == "yes");
 		if( !exec && dontask != "no" ) {
@@ -162,7 +162,7 @@ void KexiScriptPart::initInstanceActions()
 	createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", 0, "script_config_editor");
 }
 
-KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item, int viewMode, QMap<QString,QString>*)
+KexiView* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item, int viewMode, QMap<QString,QString>*)
 {
 	QString partname = item.name();
 	if( ! partname.isNull() ) {
@@ -176,7 +176,7 @@ KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog
 			d->scriptguiclient->addActionCollection("projectscripts", collection);
 		}
 
-		const char* name = partname.latin1();
+		const char* name = partname.toLatin1();
 		Kross::Api::ScriptAction::Ptr scriptaction = collection->action(name);
 		if(! scriptaction) {
 			scriptaction = new Kross::Api::ScriptAction(partname);
@@ -190,13 +190,14 @@ KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog
 	return 0;
 }
 
-QString KexiScriptPart::i18nMessage(const Q3CString& englishMessage) const
+KLocalizedString KexiScriptPart::i18nMessage(
+	const QString& englishMessage, KexiWindow* window) const
 {
 	if (englishMessage=="Design of object \"%1\" has been modified.")
-		return i18n("Design of script \"%1\" has been modified.");
+		return ki18n(I18N_NOOP("Design of script \"%1\" has been modified."));
 	if (englishMessage=="Object \"%1\" already exists.")
-		return i18n("Script \"%1\" already exists.");
-	return englishMessage;
+		return ki18n(I18N_NOOP("Script \"%1\" already exists."));
+	return Part::i18nMessage(englishMessage, window);
 }
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_script, KGenericFactory<KexiScriptPart>("kexihandler_script") )

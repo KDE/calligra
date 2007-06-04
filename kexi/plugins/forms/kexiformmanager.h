@@ -25,7 +25,6 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class KCommand;
 class KexiFormView;
 
 //! @internal

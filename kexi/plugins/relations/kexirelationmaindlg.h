@@ -20,18 +20,17 @@
 #ifndef KEXIRELATIONMAINDLG_H
 #define KEXIRELATIONMAINDLG_H
 
-#include <kexiviewbase.h>
+#include <KexiView.h>
 
-class KexiMainWindow;
 class KexiRelationWidget;
 
-class KexiRelationMainDlg : public KexiViewBase
+class KexiRelationMainDlg : public KexiView
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
-		~KexiRelationMainDlg();
+		KexiRelationMainDlg(QWidget *parent);
+		virtual ~KexiRelationMainDlg();
 
 		virtual QSize sizeHint() const;
 

@@ -28,30 +28,36 @@
 
 #include <core/kexi.h>
 
-KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
-	const QString& icon)
+KexiSmallToolButton::KexiSmallToolButton(QWidget* parent)
  : QToolButton(parent)
 {
 	init();
-	update(text, KIcon(icon));
+	update(QString(), KIcon());
 }
 
-KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
-	const QIcon& icon)
+KexiSmallToolButton::KexiSmallToolButton(const QString& text, QWidget* parent)
+ : QToolButton(parent)
+{
+	init();
+	update(text, KIcon());
+}
+
+KexiSmallToolButton::KexiSmallToolButton(const KIcon& icon, const QString& text,
+	QWidget* parent)
  : QToolButton(parent)
 {
 	init();
 	update(text, icon);
 }
 
-KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, KAction* action)
+KexiSmallToolButton::KexiSmallToolButton(KAction* action, QWidget* parent)
  : QToolButton(parent)
  , m_action(action)
 {
-	setText(action->objectName());
+	setText(m_action->objectName());
 	init();
-	connect(this, SIGNAL(clicked()), action, SLOT(activate()));
-	connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)));
+//	connect(this, SIGNAL(clicked()), action, SLOT(activate()));
+//	connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)));
 	updateAction();
 }
 
@@ -61,24 +67,24 @@ KexiSmallToolButton::~KexiSmallToolButton()
 
 void KexiSmallToolButton::updateAction()
 {
+	setDefaultAction(0);
+	setDefaultAction(m_action);
+/*
 	if (!m_action)
 		return;
 	removeAction(m_action);
 	addAction(m_action);
-#ifdef __GNUC__
-#warning TODO KexiSmallToolButton::updateAction() OK?
-#endif
-#if 0
-	update(m_action->text(), m_action->icon());
+	update(m_action->text(), KIcon(m_action->icon()));
 	setShortcut(m_action->shortcut());
 	setToolTip( m_action->toolTip());
-	setWhatsThis( m_action->whatsThis());
-#endif
+	setWhatsThis( m_action->whatsThis());*/
 }
 
 void KexiSmallToolButton::init()
 {
-	setPaletteBackgroundColor(palette().active().background());
+//	QPalette palette(this->palette());
+// 	palette.setColor(backgroundRole(), ??);
+//	setPalette(palette);
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	QFont f(KGlobalSettings::toolBarFont());
 	f.setPixelSize(Kexi::smallFont().pixelSize());
@@ -86,7 +92,7 @@ void KexiSmallToolButton::init()
 	setAutoRaise(true);
 }
 
-void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool tipToo)
+void KexiSmallToolButton::update(const QString& text, const KIcon& icon, bool tipToo)
 {
 	int width = 0;
 	if (text.isEmpty()) {
@@ -107,7 +113,7 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool ti
 	setFixedWidth( width );
 }
 
-void KexiSmallToolButton::setIcon( const QIcon& icon )
+void KexiSmallToolButton::setIcon( const KIcon& icon )
 {
 	update(text(), icon);
 }
@@ -119,7 +125,7 @@ void KexiSmallToolButton::setIcon( const QString& icon )
 
 void KexiSmallToolButton::setText( const QString& text )
 {
-	update(text, icon());
+	update(text, KIcon(icon()));
 }
 
 void KexiSmallToolButton::paintEvent(QPaintEvent *pe)

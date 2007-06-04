@@ -23,10 +23,9 @@
 
 #include <q3scrollview.h>
 #include <qtimer.h>
-//Added by qt3to4:
 #include <QResizeEvent>
 
-#include <kexiviewbase.h>
+#include <KexiView.h>
 
 #include "kexiscrollview.h"
 #include "kexireportpart.h"
@@ -56,12 +55,12 @@ class KEXIREPORTUTILS_EXPORT KexiReportScrollView : public KexiScrollView
 
 
 //! The FormPart's view
-/*! This class presents a single view used inside KexiDialogBase.
+/*! This class presents a single view used inside KexiWindow.
  It takes care of saving/loading report, of enabling actions when needed.
  One KexiReportView object is instantiated for data view mode (preview == true in constructor),
  and second KexiReportView object is instantiated for design view mode
  (preview == false in constructor). */
-class KEXIREPORTUTILS_EXPORT KexiReportView : public KexiViewBase
+class KEXIREPORTUTILS_EXPORT KexiReportView : public KexiView
 {
 	Q_OBJECT
 
@@ -107,7 +106,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportView : public KexiViewBase
 		virtual tristate storeData(bool dontAsk = false);
 
 		KexiReportPart::TempData* tempData() const {
-			return static_cast<KexiReportPart::TempData*>(parentDialog()->tempData()); }
+			return static_cast<KexiReportPart::TempData*>(parentWindow()->tempData()); }
 		KexiReportPart* reportPart() const { return static_cast<KexiReportPart*>(part()); }
 
 		void disableWidgetActions();

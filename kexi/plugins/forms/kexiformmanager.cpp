@@ -58,7 +58,7 @@ KAction* KexiFormManager::action( const char* name )
 	KActionCollection *col = m_part->actionCollectionForMode(Kexi::DesignViewMode);
 	if (!col)
 		return 0;
-	Q3CString n( translateName( name ).latin1() );
+	Q3CString n( translateName( name ).toLatin1() );
 	KAction *a = col->action(n);
 	if (a)
 		return a;
@@ -72,7 +72,7 @@ KAction* KexiFormManager::action( const char* name )
 	KexiFormView* formViewWidget = dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
 	if (!formViewWidget)
 		return 0;
-	return formViewWidget->parentDialog()->mainWin()->actionCollection()->action(n);
+	return KexiMainWindowIface::global()->actionCollection()->action(n);
 }
 
 KexiFormView* KexiFormManager::activeFormViewWidget() const
@@ -94,7 +94,7 @@ void KexiFormManager::enableAction( const char* name, bool enable )
 		return;
 //	if (QString(name)=="layout_menu")
 //		kDebug() << "!!!!!!!!!!! " << enable << endl;
-	formViewWidget->setAvailable(translateName( name ).latin1(), enable);
+	formViewWidget->setAvailable(translateName( name ).toLatin1(), enable);
 }
 
 void KexiFormManager::setFormDataSource(const Q3CString& mime, const Q3CString& name)
@@ -108,13 +108,14 @@ void KexiFormManager::setFormDataSource(const Q3CString& mime, const Q3CString& 
 //	setPropertyValueInDesignMode(formWidget, "dataSource", name);
 
 	Q3CString oldDataSourceMimeType( formWidget->dataSourceMimeType() );
-	Q3CString oldDataSource( formWidget->dataSource().latin1() );
+	Q3CString oldDataSource( formWidget->dataSource().toLatin1() );
 	if (mime!=oldDataSourceMimeType || name!=oldDataSource) {
 		QMap<Q3CString, QVariant> propValues;
 		propValues.insert("dataSource", name);
 		propValues.insert("dataSourceMimeType", mime);
 		KFormDesigner::CommandGroup *group 
-			= new KFormDesigner::CommandGroup(i18n("Set Form's Data Source to \"%1\"").arg(name), propertySet());
+			= new KFormDesigner::CommandGroup(
+				i18n("Set Form's Data Source to \"%1\"", name), propertySet());
 		propertySet()->createPropertyCommandsInDesignMode(formWidget, propValues, group, true /*addToActiveForm*/);
 	}
 
@@ -132,7 +133,7 @@ void KexiFormManager::setFormDataSource(const Q3CString& mime, const Q3CString& 
 
 	//active form isn't selected: change it's data source and mime type by hand
 	QCString oldDataSourceMimeType( formWidget->dataSourceMimeType() );
-	QCString oldDataSource( formWidget->dataSource().latin1() );
+	QCString oldDataSource( formWidget->dataSource().toLatin1() );
 
 	if (mime!=oldDataSourceMimeType || name!=oldDataSource) {
 		formWidget->setDataSourceMimeType(mime);
@@ -204,7 +205,7 @@ void KexiFormManager::slotHistoryCommandExecuted()
 			KexiDBForm* formWidget = dynamic_cast<KexiDBForm*>(activeForm()->widget());
 			if (!formWidget)
 				return;
-			Q3PtrListIterator<KCommand> it(group->commands());
+			Q3PtrListIterator<K3Command> it(group->commands());
 			const KFormDesigner::PropertyCommand* pc1 = dynamic_cast<const KFormDesigner::PropertyCommand*>(it.current());
 			++it;
 			const KFormDesigner::PropertyCommand* pc2 = dynamic_cast<const KFormDesigner::PropertyCommand*>(it.current());
@@ -213,7 +214,7 @@ void KexiFormManager::slotHistoryCommandExecuted()
 				const QMap<Q3CString, QVariant>::const_iterator it2( pc2->oldValues().constBegin() );
 				if (it1.key()==formWidget->name() && it2.key()==formWidget->name())
 					static_cast<KexiFormPart*>(m_part)->dataSourcePage()->setDataSource(
-						formWidget->dataSourceMimeType(), formWidget->dataSource().latin1());
+						formWidget->dataSourceMimeType(), formWidget->dataSource().toLatin1());
 			}
 		}
 	}

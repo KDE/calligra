@@ -48,11 +48,10 @@
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
 
-KexiRelationWidget::KexiRelationWidget(KexiMainWindowIface *win, QWidget *parent)
+KexiRelationWidget::KexiRelationWidget(QWidget *parent)
 	: KexiView(parent)
-	, m_win(win)
 {
-	m_conn = m_win->project()->dbConnection();
+	m_conn = KexiMainWindowIface::global()->project()->dbConnection();
 
 	Q3HBoxLayout *hlyr = new Q3HBoxLayout(0);
 	Q3GridLayout *g = new Q3GridLayout(this);
@@ -306,7 +305,8 @@ void KexiRelationWidget::openSelectedTable()
 	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->schema()->table())
 		return;
 	bool openingCancelled;
-	m_win->openObject("kexi/table", m_relationView->focusedTableView()->schema()->name(), 
+	KexiMainWindowIface::global()->openObject(
+		"kexi/table", m_relationView->focusedTableView()->schema()->name(), 
 		Kexi::DataViewMode, openingCancelled);
 }
 
@@ -316,7 +316,8 @@ void KexiRelationWidget::designSelectedTable()
 	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->schema()->table())
 		return;
 	bool openingCancelled;
-	m_win->openObject("kexi/table", m_relationView->focusedTableView()->schema()->name(), 
+	KexiMainWindowIface::global()->openObject(
+		"kexi/table", m_relationView->focusedTableView()->schema()->name(), 
 		Kexi::DesignViewMode, openingCancelled);
 }
 

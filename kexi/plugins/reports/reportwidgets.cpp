@@ -159,7 +159,7 @@ KexiSubReport::setReportName(const QString &name)
 
 	// we check if there is a form with this name
 	int id = KexiDB::idForObjectName(*(view->connection()), name, KexiPart::ReportObjectType);
-	if((id == 0) || (id == view->parentDialog()->id())) // == our form
+	if((id == 0) || (id == view->window()->id())) // == our form
 		return; // because of recursion when loading
 
 	// we create the container widget

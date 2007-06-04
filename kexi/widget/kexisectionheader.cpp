@@ -25,10 +25,9 @@
 #include <QBoxLayout>
 #include <khbox.h>
 #include <qtooltip.h>
-//Added by qt3to4:
 #include <QEvent>
 
-#include <kiconloader.h>
+#include <KIcon>
 #include <kpushbutton.h>
 
 class KexiSectionHeader::BoxLayout : public QBoxLayout
@@ -67,14 +66,14 @@ KexiSectionHeader::KexiSectionHeader(const QString &caption,
 	d->orientation = o;
 	d->lyr = new BoxLayout( this, 
 		d->orientation==Qt::Vertical ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight );
-#warning deprecated	d->lyr->setAutoAdd(true);
 	d->lbl_b = new KHBox(this);
+	d->lyr->addWidget(d->lbl_b);
 	d->lbl = new QLabel(QString(" ")+caption, d->lbl_b);
 	d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	d->lbl->setFocusPolicy(Qt::StrongFocus);
 	d->lbl->installEventFilter(this);
 	installEventFilter(this);
-	setCaption(caption);
+	setWindowTitle(caption);
 }
 
 KexiSectionHeader::~KexiSectionHeader()
@@ -82,10 +81,18 @@ KexiSectionHeader::~KexiSectionHeader()
 	delete d;
 }
 
-void KexiSectionHeader::addButton(const QString& icon, const QString& toolTip,
+void KexiSectionHeader::setWidget( QWidget * widget )
+{
+	QLayoutItem *item = d->lyr->itemAt(1); //for sanity
+	if (item)
+		d->lyr->removeItem(item);
+	d->lyr->addWidget(widget);
+}
+
+void KexiSectionHeader::addButton(const KIcon& icon, const QString& toolTip,
 	const QObject * receiver, const char * member)
 {
-	KPushButton *btn = new KPushButton(d->lbl_b);
+	KPushButton *btn = new KPushButton(icon, QString(), d->lbl_b);
 	btn->setFlat(true);
 	btn->setFocusPolicy(Qt::NoFocus);
 	btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -93,15 +100,12 @@ void KexiSectionHeader::addButton(const QString& icon, const QString& toolTip,
 		connect(btn, SIGNAL(clicked()), receiver, member);
 	}
 
-	if (!icon.isEmpty()) {
-		QIcon iset = KIcon(icon);
-		btn->setIconSet( iset );
+	if (!icon.isNull()) {
 		QFontMetrics fm(d->lbl->font());
 		btn->setMaximumHeight( qMax(fm.height(), 16) );
 	}
-	if (!toolTip.isEmpty()) {
+	if (!toolTip.isEmpty())
 		btn->setToolTip( toolTip);
-	}
 }
 
 bool KexiSectionHeader::eventFilter( QObject *o, QEvent *e )

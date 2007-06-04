@@ -45,7 +45,7 @@ class KexiScriptPart : public KexiPart::Part
          * \param name The name this part has.
          * \param args Optional list of arguments passed to this part.
          */
-        KexiScriptPart(QObject *parent, const char *name, const QStringList& args);
+        KexiScriptPart(QObject *parent, const QStringList& args);
 
         /**
          * Destructor.
@@ -61,7 +61,8 @@ class KexiScriptPart : public KexiPart::Part
         /**
          * \return the i18n message for the passed \p englishMessage string.
          */
-        virtual QString i18nMessage(const Q3CString& englishMessage) const;
+        virtual KLocalizedString i18nMessage(const QString& englishMessage,
+        	KexiWindow* window) const;
 
     protected:
 
@@ -73,7 +74,7 @@ class KexiScriptPart : public KexiPart::Part
          * \param item The \a KexiPart::Item this view is for.
          * \param viewMode The viewmode we like to have a view for.
          */
-        virtual KexiViewBase* createView(QWidget *parent,
+        virtual KexiView* createView(QWidget *parent,
                                          KexiDialogBase* dialog,
                                          KexiPart::Item& item,
                                          int viewMode = Kexi::DesignViewMode,

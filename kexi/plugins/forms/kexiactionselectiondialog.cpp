@@ -20,18 +20,18 @@
 #include "kexiactionselectiondialog.h"
 #include "kexiactionselectiondialog_p.h"
 
-#include <keximainwindow.h>
 #include <kexipartitem.h>
 #include <kexiproject.h>
 #include <kexipartinfo.h>
 #include <kexipart.h>
 #include <kexiactioncategories.h>
+#include <KexiMainWindowIface.h>
 
 #include <klistview.h>
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kstdguiitem.h>
+#include <kstandardguiitem.h>
 #include <kpushbutton.h>
 
 #include <qbitmap.h>
@@ -119,9 +119,8 @@ void ActionsListViewBase::selectAction(const QString& actionName)
 
 //---------------------------------------
 
-KActionsListViewBase::KActionsListViewBase(QWidget* parent, KexiMainWindow* mainWin)
+KActionsListViewBase::KActionsListViewBase(QWidget* parent)
 	: ActionsListViewBase(parent)
-	, m_mainWin(mainWin)
 {
 }
 
@@ -131,7 +130,7 @@ void KActionsListViewBase::init()
 {
 	setSorting(0);
 	const QPixmap noIcon( KexiUtils::emptyIcon(KIcon::Small) );
-	KActionPtrList sharedActions( m_mainWin->allActions() );
+	KActionPtrList sharedActions( KexiMainWindowIface::global()->allActions() );
 	const Kexi::ActionCategories *acat = Kexi::actionCategories();
 	foreach (KActionPtrList::ConstIterator, it, sharedActions) {
 //			kDebug() << (*it)->name() << " " << (*it)->text() << endl;
@@ -160,8 +159,8 @@ void KActionsListViewBase::init()
 class KActionsListView : public KActionsListViewBase
 {
 public:
-	KActionsListView(QWidget* parent, KexiMainWindow* mainWin)
-		: KActionsListViewBase(parent, mainWin)
+	KActionsListView(QWidget* parent)
+		: KActionsListViewBase(parent)
 	{
 	}
 	virtual ~KActionsListView() {}
@@ -176,8 +175,8 @@ public:
 class CurrentFormActionsListView : public KActionsListViewBase
 {
 public:
-	CurrentFormActionsListView(QWidget* parent, KexiMainWindow* mainWin)
-		: KActionsListViewBase(parent, mainWin)
+	CurrentFormActionsListView(QWidget* parent)
+		: KActionsListViewBase(parent)
 	{
 	}
 	virtual ~CurrentFormActionsListView() {}
@@ -356,12 +355,15 @@ public:
 			msg = QString();
 		// hardcoded, but it's not that bad
 		else if (actionType=="macro")
-			msg = i18n("&Select macro to be executed after clicking \"%1\" button:").arg(actionWidgetName);
+			msg = i18n(
+				"&Select macro to be executed after clicking \"%1\" button:", actionWidgetName);
 		else if (actionType=="script")
-			msg = i18n("&Select script to be executed after clicking \"%1\" button:").arg(actionWidgetName);
+			msg = i18n(
+				"&Select script to be executed after clicking \"%1\" button:", actionWidgetName);
 		//default: table/query/form/report...
 		else
-			msg = i18n("&Select object to be opened after clicking \"%1\" button:").arg(actionWidgetName);
+			msg = i18n(
+				"&Select object to be opened after clicking \"%1\" button:", actionWidgetName);
 		selectActionToBeExecutedLbl->setText(msg);
 	}
 
@@ -377,7 +379,6 @@ public:
 		actionToExecuteLbl->show();
 	}
 
-	KexiMainWindow* mainWin;
 	QString actionWidgetName;
 	ActionCategoriesListView* actionCategoriesListView; //!< for column #1
 	QWidget *kactionPageWidget;
@@ -398,15 +399,16 @@ public:
 
 //-------------------------------------
 
-KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
-	const KexiFormEventAction::ActionData& action, const Q3CString& actionWidgetName)
-	: KDialogBase(parent, "actionSelectorDialog", true, i18n("Assigning Action to Command Button"), 
+KexiActionSelectionDialog::KexiActionSelectionDialog(
+	QWidget *parent, const KexiFormEventAction::ActionData& action, 
+	const Q3CString& actionWidgetName)
+	: KDialogBase(parent, "actionSelectorDialog", true, 
+		i18n("Assigning Action to Command Button"), 
 		KDialogBase::Ok | KDialogBase::Cancel )
 	, d( new KexiActionSelectionDialogPrivate() )
 {
-	d->mainWin = mainWin;
 	d->actionWidgetName = actionWidgetName;
-	setButtonOK( KGuiItem(i18n("Assign action", "&Assign"), "dialog-ok", i18n("Assign action")) );
+	setButtonOK( KGuiItem(i18nc("Assign action", "&Assign"), "dialog-ok", i18n("Assign action")) );
 
 	QWidget *mainWidget = new QWidget( this );
 	mainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -455,7 +457,8 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
 
 	// 2nd column: list of actions/objects
-	d->objectsListView = new KexiBrowser(d->secondAnd3rdColumnMainWidget, d->mainWin, 0/*features*/);
+	d->objectsListView = new KexiBrowser(d->secondAnd3rdColumnMainWidget,
+		KexiMainWindowIface::global(), 0/*features*/);
 	d->secondAnd3rdColumnGrLyr->addWidget(d->objectsListView, 1, 0);
 	connect(d->objectsListView, SIGNAL(selectionChanged(KexiPart::Item*)),
 		this, SLOT(slotItemForOpeningOrExecutingSelected(KexiPart::Item*)));
@@ -512,7 +515,8 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 			// to determine whether the Kexi-plugin is installed and whether we like to show 
 			// it in our list of actions.
 		{
-			KexiPart::Item *item = d->mainWin->project()->item(partInfo, actionArg);
+			KexiPart::Item *item = KexiMainWindowIface::global()->project()->item(
+				partInfo, actionArg);
 			if (d->objectsListView && item) {
 				d->objectsListView->selectItem(*item);
 				QString actionOption( action.option );
@@ -582,16 +586,17 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
 	if (simpleItem) {
 		d->updateSelectActionToBeExecutedMessage(simpleItem->data);
 		QString selectActionToBeExecutedMsg(
-			i18n("&Select action to be executed after clicking \"%1\" button:")); // msg for a label
+			I18N_NOOP("&Select action to be executed after clicking \"%1\" button:")); // msg for a label
 		if (simpleItem->data == "kaction") {
 			if (!d->kactionPageWidget) {
 				//create lbl+list view with a vlayout
 				d->kactionPageWidget = new QWidget();
 				d->kactionPageWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 				Q3VBoxLayout *vlyr = new Q3VBoxLayout(d->kactionPageWidget, 0, KDialog::spacingHint());
-				d->kactionListView = new KActionsListView(d->kactionPageWidget, d->mainWin);
+				d->kactionListView = new KActionsListView(d->kactionPageWidget);
 				d->kactionListView->init();
-				QLabel *lbl = new QLabel(d->kactionListView, selectActionToBeExecutedMsg.arg(d->actionWidgetName),
+				QLabel *lbl = new QLabel(d->kactionListView,
+					selectActionToBeExecutedMsg.arg(d->actionWidgetName),
 					d->kactionPageWidget);
 				lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::WordBreak);
 				lbl->setMinimumHeight(lbl->fontMetrics().height()*2);
@@ -614,7 +619,7 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
 				d->currentFormActionsPageWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 				Q3VBoxLayout *vlyr = new Q3VBoxLayout(d->currentFormActionsPageWidget, 0, KDialog::spacingHint());
 				d->currentFormActionsListView = new CurrentFormActionsListView(
-					d->currentFormActionsPageWidget, d->mainWin);
+					d->currentFormActionsPageWidget);
 				d->currentFormActionsListView->init();
 				QLabel *lbl = new QLabel(d->currentFormActionsListView, 
 					selectActionToBeExecutedMsg.arg(d->actionWidgetName), d->currentFormActionsPageWidget);
@@ -646,8 +651,9 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
 	KexiBrowserItem* browserItem = dynamic_cast<KexiBrowserItem*>(item);
 	if (browserItem) {
 		d->updateSelectActionToBeExecutedMessage(browserItem->info()->objectName());
-		if (d->objectsListView->itemsMimeType().latin1()!=browserItem->info()->mimeType()) {
-			d->objectsListView->setProject(d->mainWin->project(), browserItem->info()->mimeType());
+		if (d->objectsListView->itemsMimeType().toLatin1()!=browserItem->info()->mimeType()) {
+			d->objectsListView->setProject(
+				KexiMainWindowIface::global()->project(), browserItem->info()->mimeType());
 			d->actionToExecuteListView->showActionsForMimeType( browserItem->info()->mimeType() );
 			d->setActionToExecuteSectionVisible(false);
 		}
@@ -661,11 +667,6 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
 	}
 	d->actionCategoriesListView->update();
 	updateOKButtonStatus();
-}
-
-KexiMainWindow* KexiActionSelectionDialog::mainWin() const
-{
-	return d->mainWin;
 }
 
 KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const

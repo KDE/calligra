@@ -513,11 +513,11 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
 	}
 	else if (classname == "KexiDBSubForm") {
 		// open the form in design mode
-		KexiMainWindow *mainWin = KexiUtils::findParent<KexiMainWindow>(w, "KexiMainWindow");
 		KexiDBSubForm *subform = static_cast<KexiDBSubForm*>(w);
-		if(mainWin) {
+		if (KexiMainWindowIface::global()) {
 			bool openingCancelled;
-			mainWin->openObject("kexi/form", subform->formName(), Kexi::DesignViewMode, 
+			KexiMainWindowIface::global()->openObject(
+				"kexi/form", subform->formName(), Kexi::DesignViewMode, 
 				openingCancelled);
 		}
 		return true;

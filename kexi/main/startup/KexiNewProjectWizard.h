@@ -21,26 +21,43 @@
 #define KexiNewProjectWizard_H
 
 #include "kexidbconnectionset.h"
+#include "ui_KexiNewPrjTypeSelector.h"
+#include "ui_KexiOpenExistingFile.h"
+#include "ui_KexiServerDBNamePage.h"
 #include <kexidb/connectiondata.h>
 
 #include <k3wizard.h>
 
 class Q3ListViewItem;
 
-class KexiNewPrjTypeSelector;
+class KexiNewPrjTypeSelector : public QWidget, public Ui::KexiNewPrjTypeSelector
+{
+	public:
+		KexiNewPrjTypeSelector(QWidget* parent);
+};
+
+class KexiOpenExistingFile : public QWidget, public Ui::KexiOpenExistingFile
+{
+	public:
+		KexiOpenExistingFile(QWidget* parent);
+};
+
+class KexiServerDBNamePage : public QWidget, public Ui::KexiServerDBNamePage
+{
+	public:
+		KexiServerDBNamePage(QWidget* parent);
+};
+
 class KexiConnSelectorWidget;
-class KexiNewProjectWizardPrivate;
 class KexiDBTitlePage;
-class KexiServerDBNamePage;
 class KexiProjectSelectorWidget;
 
 class KEXIMAIN_EXPORT KexiNewProjectWizard : public K3Wizard
 {
 	Q_OBJECT
 	public:
-		KexiNewProjectWizard(KexiDBConnectionSet& conn_set, QWidget *parent=0, 
-			const char *name=0, bool modal=false, Qt::WFlags f=0);
-		~KexiNewProjectWizard();
+		KexiNewProjectWizard(KexiDBConnectionSet& conn_set, QWidget *parent=0);
+		virtual ~KexiNewProjectWizard();
 	
 		/*! \return name for a new project's database if server-based project 
 		 type was selected. Returns file name if file-based project was selected. */
@@ -83,7 +100,8 @@ class KEXIMAIN_EXPORT KexiNewProjectWizard : public K3Wizard
 		KexiConnSelectorWidget *m_conn_sel;
 		QWidget *m_conn_sel_widget;
 		
-		KexiNewProjectWizardPrivate *d;
+		class Private;
+		Private * const d;
 };
 
 #endif

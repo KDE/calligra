@@ -19,11 +19,12 @@
 
 #include "KexiDBTitlePage.h"
 
-#include <qlabel.h>
+#include <QLabel>
 
-KexiDBTitlePage::KexiDBTitlePage( const QString& labelText, QWidget* parent, const char* name )
- : KexiDBTitlePageBase( parent, name )
+KexiDBTitlePage::KexiDBTitlePage( const QString& labelText, QWidget* parent )
+ : QWidget( parent )
 {
+	setupUi(this);
 	if (!labelText.isEmpty())
 		label->setText(labelText);
 }
@@ -31,5 +32,3 @@ KexiDBTitlePage::KexiDBTitlePage( const QString& labelText, QWidget* parent, con
 KexiDBTitlePage::~KexiDBTitlePage()
 {
 }
-
-#include "KexiDBTitlePage.moc"

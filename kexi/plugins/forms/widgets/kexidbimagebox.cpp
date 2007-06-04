@@ -31,7 +31,7 @@
 #include <qpainter.h>
 
 #include <kdebug.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
@@ -167,7 +167,7 @@ void KexiDBImageBox::setValueInternal( const QVariant& add, bool removeOld, bool
 	if (ok) {
 		///unused (m_valueMimeType is not available unless the px is inserted) QString type( KImageIO::typeForMime(m_valueMimeType) );
 		///ok = KImageIO::canRead( type );
-		ok = loadPixmap ? m_pixmap.loadFromData(m_value) : true; //, type.latin1());
+		ok = loadPixmap ? m_pixmap.loadFromData(m_value) : true; //, type.toLatin1());
 		if (!ok) {
 			//! @todo inform about error?
 		}
@@ -371,7 +371,7 @@ void KexiDBImageBox::handleAboutToSaveAsAction(QString& origFilename, QString& f
 		if (!origFilename.isEmpty())
 			origFilename = QString("/") + origFilename;
 		if (!m_data.mimeType().isEmpty())
-			fileExtension = KImageIO::typeForMime(m_data.mimeType()).lower();
+			fileExtension = KImageIO::typeForMime(m_data.mimeType()).toLower();
 	}
 }
 
@@ -571,9 +571,10 @@ void KexiDBImageBox::updateActionStrings()
 				beautifiedImageBoxName = columnInfo() ? columnInfo()->captionOrAliasOrName() : QString();
 				/*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
 				 (see doc/dev/settings.txt) */
-				beautifiedImageBoxName = beautifiedImageBoxName[0].upper() + beautifiedImageBoxName.mid(1);
+				beautifiedImageBoxName = beautifiedImageBoxName[0].toUpper() + beautifiedImageBoxName.mid(1);
 			}
-			QToolTip::add(m_chooser, i18n("Click to show actions for \"%1\" image box").arg(beautifiedImageBoxName));
+			QToolTip::add(m_chooser, 
+				i18n("Click to show actions for \"%1\" image box", beautifiedImageBoxName));
 		}
 	}
 }

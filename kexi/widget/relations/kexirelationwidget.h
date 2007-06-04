@@ -45,7 +45,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiView
 	Q_OBJECT
 
 	public:
-		KexiRelationWidget(KexiMainWindowIface *win, QWidget *parent);
+		KexiRelationWidget(QWidget *parent);
 		virtual ~KexiRelationWidget();
 
 		//! \return a dictionary of added tables
@@ -119,7 +119,6 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiView
 		void fillTablesCombo();
 
 	private:
-		KexiMainWindowIface *m_win;
 		KComboBox *m_tableCombo;
 		KPushButton *m_btnAdd;
 		KexiRelationView *m_relationView;

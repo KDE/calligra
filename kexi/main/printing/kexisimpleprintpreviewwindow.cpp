@@ -165,7 +165,7 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
  , m_pageNumber(-1)
  , m_pagesCount(-1)
 {
-	setCaption(i18n("%1 - Print Preview - %2").arg(previewName).arg(KEXI_APP_NAME));
+	setCaption(i18n("%1 - Print Preview - %2", previewName, KEXI_APP_NAME));
 	setIcon(DesktopIcon("document-print-preview"));
 	Q3VBoxLayout *lyr = new Q3VBoxLayout(this, 6);
 
@@ -323,7 +323,8 @@ void KexiSimplePrintPreviewWindow::goToPage(int pageNumber)
 	m_navToolbar->setItemEnabled(m_idPrevious, pageNumber > 0);
 	m_navToolbar->setItemEnabled(m_idFirst, pageNumber > 0);
 	static_cast<QLabel*>(m_navToolbar->getWidget(m_idPageNumberLabel))->setText(
-		i18n("Page (number) of (total)", "Page %1 of %2").arg(m_pageNumber+1).arg(m_engine.pagesCount()));
+		i18nc(
+			"Page (number) of (total)", "Page %1 of %2", m_pageNumber+1, m_engine.pagesCount()));
 }
 
 void KexiSimplePrintPreviewWindow::setFullWidth()

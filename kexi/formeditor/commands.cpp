@@ -144,9 +144,10 @@ QString
 PropertyCommand::name() const
 {
 	if(m_oldvalues.count() >= 2)
-		return i18n("Change \"%1\" property for multiple widgets" ).arg(QString(m_property));
+		return i18n("Change \"%1\" property for multiple widgets", QString(m_property));
 	else
-		return i18n("Change \"%1\" property for widget \"%2\"" ).arg(QString(m_property)).arg(QString(m_oldvalues.begin().key()));
+		return i18n("Change \"%1\" property for widget \"%2\"",
+			QString(m_property), QString(m_oldvalues.begin().key()));
 }
 
 void
@@ -660,8 +661,7 @@ LayoutPropertyCommand::unexecute()
 QString
 LayoutPropertyCommand::name() const
 {
-	return i18n("Change layout of widget \"%1\"")
-		.arg(QString(m_oldvalues.begin().key()));
+	return i18n("Change layout of widget \"%1\"", QString(m_oldvalues.begin().key()));
 }
 
 void
@@ -745,8 +745,7 @@ InsertWidgetCommand::execute()
 		FormManager::self()->stopInsert();
 		WidgetInfo *winfo = m_container->form()->library()->widgetInfoForClassName(m_class);
 		KMessageBox::sorry(FormManager::self()->activeForm() ? FormManager::self()->activeForm()->widget() : 0,
-				i18n("Could not insert widget of type \"%1\". A problem with widget's creation encountered.")
-				.arg(winfo ? winfo->name() : QString()));
+				i18n("Could not insert widget of type \"%1\". A problem with widget's creation encountered.", winfo ? winfo->name() : QString()));
 		kWarning() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
 		return;
 	}
@@ -835,7 +834,7 @@ QString
 InsertWidgetCommand::name() const
 {
 	if(!m_name.isEmpty())
-		return i18n("Insert widget \"%1\"").arg(QString(m_name));
+		return i18n("Insert widget \"%1\"", QString(m_name));
 	else
 		return i18n("Insert widget");
 }
@@ -1045,7 +1044,7 @@ BreakLayoutCommand::unexecute()
 QString
 BreakLayoutCommand::name() const
 {
-	return i18n("Break Layout: \"%1\"").arg(m_name);
+	return i18n("Break Layout: \"%1\"", m_name);
 }
 
 void

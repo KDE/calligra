@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="12">
+<kpartgui name="kexiformpartinst" version="13">
 
 <MenuBar>
   <Menu name="edit">
@@ -53,6 +53,7 @@
    <Separator/>
    <Action name="other_widgets_menu"/>
    <ActionList name="library_widgets" />
+   <Merge/>
 </ToolBar>
 <ToolBar name="format" fullWidth="false" noMerge="1">
 <text>Format</text>

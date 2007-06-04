@@ -21,13 +21,15 @@
 #define KEXITABLEDESIGNER_COMMANDS_H
 
 #include <qmap.h>
-#include <qdict.h>
-#include <qptrlist.h>
-#include <qptrdict.h>
+#include <q3dict.h>
+#include <q3ptrlist.h>
+#include <q3ptrdict.h>
 #include <qvariant.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
-#include <kcommand.h>
+#include <k3command.h>
 #include <kexidb/alter.h>
 #include <koproperty/set.h>
 
@@ -37,12 +39,12 @@ class QWidget;
 class QRect;
 class QPoint;
 class QStringList;
-class QCString;
+class Q3CString;
 
 namespace KexiTableDesignerCommands {
 
 //! @short Base class for all Table Designer's commands
-class Command : public KCommand
+class Command : public K3Command
 {
 	public:
 		Command(KexiTableDesignerView* view);
@@ -55,7 +57,7 @@ class Command : public KCommand
 		virtual QString debugString() { return name(); }
 
 	protected:
-		QGuardedPtr<KexiTableDesignerView> m_view;
+		QPointer<KexiTableDesignerView> m_view;
 };
 
 //! @short Undo/redo command used for when changing a property for a table field
@@ -70,9 +72,10 @@ class ChangeFieldPropertyCommand : public Command
 		 on execute() and unexecute().
 		*/
 		ChangeFieldPropertyCommand( KexiTableDesignerView* view,
-			const KoProperty::Set& set, const QCString& propertyName, 
+			const KoProperty::Set& set, const Q3CString& propertyName, 
 			const QVariant& oldValue, const QVariant& newValue,
-			KoProperty::Property::ListData* const oldListData = 0, KoProperty::Property::ListData* const newListData = 0);
+			KoProperty::Property::ListData* const oldListData = 0, 
+			KoProperty::Property::ListData* const newListData = 0);
 
 		virtual ~ChangeFieldPropertyCommand();
 
@@ -150,7 +153,7 @@ class ChangePropertyVisibilityCommand : public Command
 		 (it's invalid but allowed in design time). 
 		*/
 		ChangePropertyVisibilityCommand( KexiTableDesignerView* view,
-			const KoProperty::Set& set, const QCString& propertyName, 
+			const KoProperty::Set& set, const Q3CString& propertyName, 
 			bool visible);
 
 		virtual ~ChangePropertyVisibilityCommand();

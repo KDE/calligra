@@ -33,9 +33,8 @@
 #include "kexidatatableview.h"
 #include "kexidatatable.h"
 
-KexiDataTable::KexiDataTable(KexiMainWindowIface *mainWin, QWidget *parent, bool dbAware)
-// : KexiViewBase(mainWin, parent, name)
- : KexiDataAwareView( mainWin, parent )
+KexiDataTable::KexiDataTable(QWidget *parent, bool dbAware)
+ : KexiDataAwareView( parent )
 {
 	KexiTableView *view;
 	if (dbAware)
@@ -47,9 +46,8 @@ KexiDataTable::KexiDataTable(KexiMainWindowIface *mainWin, QWidget *parent, bool
 	KexiDataAwareView::init( view, view, view );
 }
 
-KexiDataTable::KexiDataTable(KexiMainWindowIface *mainWin, QWidget *parent, 
-	KexiDB::Cursor *cursor)
- : KexiDataAwareView( mainWin, parent )
+KexiDataTable::KexiDataTable(QWidget *parent, KexiDB::Cursor *cursor)
+ : KexiDataAwareView( parent )
 {
 	KexiTableView *view = new KexiDataTableView(this, cursor);
 	KexiDataAwareView::init( view, view, view );

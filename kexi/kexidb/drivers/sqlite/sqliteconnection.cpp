@@ -263,8 +263,8 @@ bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 	Q_UNUSED(dbName); // Each database is one single SQLite file.
 	const QString filename = data()->fileName();
 	if (QFile(filename).exists() && !QDir().remove(filename)) {
-		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\".")
-			.arg(QDir::convertSeparators(filename)) + " "
+		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\".",
+			QDir::convertSeparators(filename)) + " "
 			+ i18n("Check the file's permissions and whether it is already opened and locked by another application."));
 		return false;
 	}

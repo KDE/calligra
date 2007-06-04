@@ -20,17 +20,18 @@
 #ifndef KEXI_TEMPLLOADER_H
 #define KEXI_TEMPLLOADER_H
 
-#include <qpixmap.h>
+#include <QPixmap>
+#include <QList>
 #include "kexiprojectdata.h"
 
 //! A structure providing information about single kexi database template file
 struct KEXICORE_EXPORT KexiTemplateInfo
 {
-	typedef Q3ValueList<KexiTemplateInfo> List;
+	typedef QList<KexiTemplateInfo> List;
 
 	QString filename, name, description;
 	QPixmap icon;
-	Q3ValueList<KexiProjectData::ObjectInfo> autoopenObjects;
+	QList<KexiProjectData::ObjectInfo> autoopenObjects;
 };
 
 //! Handles retrieving information about templates

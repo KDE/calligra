@@ -22,14 +22,15 @@
 #include <qlabel.h>
 #include <qsplitter.h>
 #include <qmetaobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
 #include <kmessagebox.h>
-#include <kaccelmanager.h>
 
 #include <koproperty/property.h>
+#include <kexi_global.h>
 
 #include "kexitabledesignercommands.h"
 
@@ -37,7 +38,7 @@ using namespace KexiTableDesignerCommands;
 
 
 Command::Command(KexiTableDesignerView* view)
- : KCommand()
+ : K3Command()
  , m_view(view)
 {
 }
@@ -48,9 +49,12 @@ Command::~Command()
 
 //--------------------------------------------------------
 
-ChangeFieldPropertyCommand::ChangeFieldPropertyCommand( KexiTableDesignerView* view,
-	const KoProperty::Set& set, const QCString& propertyName, const QVariant& oldValue, const QVariant& newValue,
-	KoProperty::Property::ListData* const oldListData, KoProperty::Property::ListData* const newListData)
+ChangeFieldPropertyCommand::ChangeFieldPropertyCommand( 
+	KexiTableDesignerView* view,
+	const KoProperty::Set& set, const Q3CString& propertyName, 
+	const QVariant& oldValue, const QVariant& newValue,
+	KoProperty::Property::ListData* const oldListData, 
+	KoProperty::Property::ListData* const newListData)
  : Command(view)
  , m_alterTableAction(
 		propertyName=="name" ? oldValue.toString() : set.property("name").value().toString(), 
@@ -71,9 +75,11 @@ ChangeFieldPropertyCommand::~ChangeFieldPropertyCommand()
 
 QString ChangeFieldPropertyCommand::name() const
 {
-	return i18n("Change \"%1\" property for table field from \"%2\" to \"%3\"")
-		.arg(m_alterTableAction.propertyName()).arg(m_oldValue.toString())
-		.arg(m_alterTableAction.newValue().toString());
+	return i18n(
+		"Change \"%1\" property for table field from \"%2\" to \"%3\"",
+		m_alterTableAction.propertyName(),
+		m_oldValue.toString(),
+		m_alterTableAction.newValue().toString());
 }
 
 QString ChangeFieldPropertyCommand::debugString()
@@ -96,7 +102,7 @@ void ChangeFieldPropertyCommand::execute()
 {
 	m_view->changeFieldProperty( 
 		m_alterTableAction.uid(),
-		m_alterTableAction.propertyName().latin1(),
+		m_alterTableAction.propertyName().toLatin1(),
 		m_alterTableAction.newValue(), m_listData );
 }
 
@@ -104,7 +110,7 @@ void ChangeFieldPropertyCommand::unexecute()
 {
 	m_view->changeFieldProperty( 
 		m_alterTableAction.uid(),
-		m_alterTableAction.propertyName().latin1(),
+		m_alterTableAction.propertyName().toLatin1(),
 		m_oldValue, m_oldListData );
 }
 
@@ -136,7 +142,7 @@ RemoveFieldCommand::~RemoveFieldCommand()
 QString RemoveFieldCommand::name() const
 {
 	if (m_set)
-		return i18n("Remove table field \"%1\"").arg(m_alterTableAction.fieldName());
+		return i18n("Remove table field \"%1\"", m_alterTableAction.fieldName());
 
 	return QString("Remove empty row at position %1").arg(m_fieldIndex);
 }
@@ -192,7 +198,7 @@ InsertFieldCommand::~InsertFieldCommand()
 
 QString InsertFieldCommand::name() const
 {
-	return i18n("Insert table field \"%1\"").arg(m_set["caption"].value().toString());
+	return i18n("Insert table field \"%1\"", m_set["caption"].value().toString());
 }
 
 void InsertFieldCommand::execute()
@@ -213,7 +219,7 @@ KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction()
 //--------------------------------------------------------
 
 ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand( KexiTableDesignerView* view,
-	const KoProperty::Set& set, const QCString& propertyName, bool visible)
+	const KoProperty::Set& set, const Q3CString& propertyName, bool visible)
  : Command(view)
  , m_alterTableAction(set.property("name").value().toString(), propertyName, visible, set["uid"].value().toInt())
 // , m_fieldUID(set["uid"].value().toInt())
@@ -238,7 +244,7 @@ void ChangePropertyVisibilityCommand::execute()
 {
 	m_view->changePropertyVisibility( 
 		m_alterTableAction.uid(),
-		m_alterTableAction.propertyName().latin1(),
+		m_alterTableAction.propertyName().toLatin1(),
 		m_alterTableAction.newValue().toBool() );
 }
 
@@ -246,7 +252,7 @@ void ChangePropertyVisibilityCommand::unexecute()
 {
 	m_view->changePropertyVisibility( 
 		m_alterTableAction.uid(),
-		m_alterTableAction.propertyName().latin1(),
+		m_alterTableAction.propertyName().toLatin1(),
 		m_oldVisibility );
 }
 

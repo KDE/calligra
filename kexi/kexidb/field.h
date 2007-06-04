@@ -30,6 +30,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3PtrList>
+#include <QStringList>
 #include "kexidb/kexidb_export.h"
 namespace KexiDB {
 
@@ -85,6 +86,7 @@ class KEXI_DB_EXPORT Field
 		enum Type
 		{
 			InvalidType = 0, /*!< Unsupported/Unimplemented type */
+			FirstType = 1, /*! First type */
 			Byte = 1,        /*!< 1 byte, signed or unsigned */
 			ShortInteger = 2,/*!< 2 bytes, signed or unsigned */
 			Integer = 3,     /*!< 4 bytes, signed or unsigned */
@@ -178,6 +180,9 @@ class KEXI_DB_EXPORT Field
 		 not greater than Field::LastType) */
 		static QString typeName(uint type);
 
+		/*! \return list of all available i18n'd type names. */
+		static QStringList typeNames();
+
 		/*! \return type string for \a type, e.g. "Integer" for Integer type 
 		 (not-i18n'd, \a type has to be an element from Field::Type, 
 		 not greater than Field::LastType) */
@@ -195,6 +200,9 @@ class KEXI_DB_EXPORT Field
 		/*! \return a i18n'd group name for \a typeGroup 
 		 (\a typeGroup has to be an element from Field::TypeGroup) */
 		static QString typeGroupName(uint typeGroup);
+
+		/*! \return list of all available i18n'd type group names. */
+		static QStringList typeGroupNames();
 
 		/*! \return type group string for \a typeGroup, e.g. "IntegerGroup" for IntegerGroup type 
 		 (not-i18n'd, \a type has to be an element from Field::Type, 
@@ -601,6 +609,7 @@ class KEXI_DB_EXPORT Field
 				FieldTypeNames();
 				void init();
 			QMap<QString,Type> str2num;
+			QStringList names;
 			protected:
 				bool m_initialized : 1;
 		};
@@ -611,6 +620,7 @@ class KEXI_DB_EXPORT Field
 				FieldTypeGroupNames();
 				void init();
 			QMap<QString,TypeGroup> str2num;
+			QStringList names;
 			protected:
 				bool m_initialized : 1;
 		};

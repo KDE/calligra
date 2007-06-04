@@ -29,7 +29,7 @@
 #include <widgetpropertyset.h>
 #include <container.h>
 
-#include <kexidialogbase.h>
+#include <KexiWindow.h>
 //#include <kexidatasourcewizard.h>
 #include <kexidb/fieldlist.h>
 #include <kexidb/connection.h>
@@ -83,9 +83,8 @@ KexiReportScrollView::slotResizingStarted()
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-KexiReportView::KexiReportView(KexiMainWindow *win, QWidget *parent, const char *name,
-	KexiDB::Connection *conn)
- : KexiViewBase(win, parent, name), m_propertySet(0), m_conn(conn)
+KexiReportView::KexiReportView(QWidget *parent, KexiDB::Connection *conn)
+ : KexiView(parent), m_propertySet(0), m_conn(conn)
  , m_resizeMode(KexiReportView::ResizeDefault)
 {
 	Q3HBoxLayout *l = new Q3HBoxLayout(this);
@@ -190,10 +189,10 @@ KexiReportView::initForm()
 
 	// Show the form wizard if this is a new Form
 //	KexiDB::FieldList *fields = 0;
-	if(parentDialog()->id() < 0)
-	{
+	if (parentWindow()->id() < 0) {
 #ifndef NO_DSWIZARD
-		KexiDataSourceWizard *w = new KexiDataSourceWizard(mainWin(), (QWidget*)mainWin(), "datasource_wizard");
+		KexiDataSourceWizard *w = new KexiDataSourceWizard(KexiMainWindow::self(),
+			KexiMainWindowIface::global()->thisWidget());
 		if(!w->exec())
 			fields = 0;
 		else
@@ -223,7 +222,7 @@ KexiReportView::loadForm()
 
 //@todo also load m_resizeMode !
 
-	kexipluginsdbg << "KexiReportForm::loadForm() Loading the form with id : " << parentDialog()->id() << endl;
+	kexipluginsdbg << "KexiReportForm::loadForm() Loading the form with id : " << parentWindow()->id() << endl;
 	// If we are previewing the Form, use the tempData instead of the form stored in the db
 	if(viewMode()==Kexi::DataViewMode && !tempData()->tempForm.isNull() ) {
 		KFormDesigner::FormIO::loadFormFromString(form(), m_reportform, tempData()->tempForm);
@@ -299,13 +298,13 @@ void
 KexiReportView::slotDirty(KFormDesigner::Form *dirtyForm, bool isDirty)
 {
 	if(dirtyForm == form())
-		KexiViewBase::setDirty(isDirty);
+		KexiView::setDirty(isDirty);
 }
 
 KexiDB::SchemaData*
 KexiReportView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
-	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
+	KexiDB::SchemaData *s = KexiView::storeNewData(sdata, cancel);
 	kexipluginsdbg << "KexiReportForm::storeNewData(): new id:" << s->id() << endl;
 
 	if (!s || cancel) {
@@ -325,7 +324,8 @@ tristate
 KexiReportView::storeData(bool dontAsk)
 {
 	Q_UNUSED(dontAsk)
-	kexipluginsdbg << "KexiReportForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
+	kexipluginsdbg << "KexiReportForm::storeData(): " << parentWindow()->partItem()->name() 
+		<< " [" << parentWindow()->id() << "]" << endl;
 	QString data;
 	KFormDesigner::FormIO::saveFormToString(tempData()->form, data);
 	if (!storeDataBlock(data))
@@ -437,7 +437,7 @@ KexiReportView::preferredSizeHint(const QSize& otherSize)
 	return (m_reportform->size()
 			+QSize(m_scrollView->verticalScrollBar()->isVisible() ? m_scrollView->verticalScrollBar()->width()*3/2 : 10,
 			 m_scrollView->horizontalScrollBar()->isVisible() ? m_scrollView->horizontalScrollBar()->height()*3/2 : 10))
-		.expandedTo( KexiViewBase::preferredSizeHint(otherSize) );
+		.expandedTo( KexiView::preferredSizeHint(otherSize) );
 }
 
 void
@@ -449,14 +449,14 @@ KexiReportView::resizeEvent( QResizeEvent *e )
 			e->size().height()!=e->oldSize().height()
 		);
 	}
-	KexiViewBase::resizeEvent(e);
+	KexiView::resizeEvent(e);
 	m_scrollView->updateNavPanelGeometry();
 }
 
 void
 KexiReportView::show()
 {
-	KexiViewBase::show();
+	KexiView::show();
 
 //moved from KexiFormScrollView::show():
 

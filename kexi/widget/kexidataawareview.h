@@ -45,11 +45,11 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiView,
 	Q_OBJECT
 
 	public:
-		KexiDataAwareView(KexiMainWindowIface *mainWin, QWidget *parent);
+		KexiDataAwareView(QWidget *parent);
 		
 		virtual ~KexiDataAwareView();
 
-		QWidget* mainWidget();
+		QWidget* mainWidget() const;
 
 		virtual QSize minimumSizeHint() const;
 		

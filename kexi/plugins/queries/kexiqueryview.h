@@ -34,8 +34,8 @@ class KexiQueryView : public KexiDataTable
 	Q_OBJECT
 
 	public:
-		KexiQueryView(KexiMainWindow *win, QWidget *parent, const char *name=0);
-		~KexiQueryView();
+		KexiQueryView(QWidget *parent);
+		virtual ~KexiQueryView();
 
 	protected:
 		virtual tristate afterSwitchFrom(int mode);
@@ -51,7 +51,7 @@ class KexiQueryView : public KexiDataTable
 		tristate executeQuery(KexiDB::QuerySchema *query);
 
 		class Private;
-		Private *d;
+		Private * const d;
 };
 
 #endif

@@ -1,4 +1,7 @@
-include_directories( ${KOGUIUTILS_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
+include_directories( ${KOGUIUTILS_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core 
+${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup
+${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
+${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
 
 ADD_DEFINITIONS(
 -DKEXI_NO_CTXT_HELP=1
@@ -23,10 +26,10 @@ startup/KexiStartup.cpp
 startup/KexiDBTitlePage.cpp
 startup/KexiStartupDialogTemplatesPage.cpp
 
-printing/kexisimpleprintingengine.cpp
-printing/kexisimpleprintingpagesetup.cpp
-printing/kexisimpleprintingpart.cpp
-printing/kexisimpleprintpreviewwindow.cpp
+#todo printing/kexisimpleprintingengine.cpp
+#todo printing/kexisimpleprintingpagesetup.cpp
+#todo printing/kexisimpleprintingpart.cpp
+#todo printing/kexisimpleprintpreviewwindow.cpp
 
 )
 
@@ -44,7 +47,7 @@ kde4_add_ui_files(keximain_LIB_SRCS
 
 kde4_add_library(keximain SHARED ${keximain_LIB_SRCS})
 
-target_link_libraries(keximain  ${KDE4_KDECORE_LIBS} kexidb kexicore kexiutils keximainstartup keximainprinting koproperty kexiextendedwidgets ${KDE4_KNEWSTUFF_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
+target_link_libraries(keximain  ${KDE4_KDECORE_LIBS} kexidb kexicore kexiutils koproperty kexiextendedwidgets ${KDE4_KNEWSTUFF_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
 
 set_target_properties(keximain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS keximain  DESTINATION ${LIB_INSTALL_DIR})

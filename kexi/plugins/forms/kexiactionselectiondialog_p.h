@@ -39,13 +39,12 @@ class KActionsListViewBase : public ActionsListViewBase
 {
 	Q_OBJECT
 	public:
-		KActionsListViewBase(QWidget* parent, KexiMainWindow* mainWin);
+		KActionsListViewBase(QWidget* parent);
 		virtual ~KActionsListViewBase();
 		void init();
 		virtual bool isActionVisible(const char* actionName, int actionCategories) const = 0;
 
 	protected:
-		KexiMainWindow* m_mainWin;
 };
 
 #endif

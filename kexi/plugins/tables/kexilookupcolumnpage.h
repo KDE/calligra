@@ -20,11 +20,14 @@
 #define KEXILOOKUPCOLUMNPAGE_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <Q3CString>
+#include <QLabel>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
 #include <koproperty/set.h>
 
-class KCommand;
 class KexiObjectInfoLabel;
 class KexiDataSourceComboBox;
 class KexiFieldComboBox;
@@ -33,7 +36,7 @@ class KexiProject;
 class KexiSmallToolButton;
 class QToolButton;
 class QLabel;
-class QFrame;
+class Q3Frame;
 
 //! @short A page within table designer's property pane, providing lookup column editor.
 /*! It's data model is basically KexiDB::LookupFieldSchema class, but the page does 
@@ -61,7 +64,7 @@ class KexiLookupColumnPage : public QWidget
 
 	signals:
 		//! Signal emitted when helper button 'Go to selected row sourcesource' is clicked.
-		void jumpToObjectRequested(const QCString& mime, const QCString& name);
+		void jumpToObjectRequested(const Q3CString& mime, const Q3CString& name);
 
 //		/*! Signal emitted when current bound column has been changed. */
 //		void boundColumnChanged(const QString& string, const QString& caption,
@@ -78,11 +81,11 @@ class KexiLookupColumnPage : public QWidget
 		void updateBoundColumnWidgetsAvailability();
 
 		//! Used instead of m_propertySet->changeProperty() to honor m_propertySetEnabled
-		void changeProperty(const QCString &property, const QVariant &value);
+		void changeProperty(const Q3CString &property, const QVariant &value);
 
 	private:
 		class Private;
-		Private* d;
+		Private* const d;
 };
 
 #endif

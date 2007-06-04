@@ -64,7 +64,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 				| SingleClickOpensItemOptionEnabled //!< the default
 		};
 
-		KexiBrowser(QWidget* parent, KexiMainWindowIface *mainWin, int features = DefaultFeatures);
+		KexiBrowser(QWidget* parent, int features = DefaultFeatures);
 		virtual ~KexiBrowser(); 
 
 		/*! Sets project \a prj for this browser. If \a partManagerErrorMessages is not NULL
@@ -154,7 +154,6 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		void itemRenameDone();
 		KexiBrowserItem* addItem(KexiPart::Item& item, KexiBrowserItem *parent, KexiPart::Info* info);
 
-		KexiMainWindowIface *m_mainWin;
 		int m_features;
 		KexiBrowserListView *m_list;
 		KActionCollection *m_actions;

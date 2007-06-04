@@ -910,5 +910,5 @@ bool FunctionExpr::validate(ParseInfo& parseInfo)
 
 bool FunctionExpr::isBuiltInAggregate(const Q3CString& fname)
 {
-	return builtInAggregates().contains(fname.upper());
+	return builtInAggregates().contains(fname.toUpper());
 }

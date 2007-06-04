@@ -26,7 +26,7 @@
 class QVariant;
 class QStringList;
 
-//! @short An interface used by Kexi views (KexiViewBase) supporting search/replace features
+//! @short An interface used by Kexi views (KexiView) supporting search/replace features
 class KEXICORE_EXPORT KexiSearchAndReplaceViewInterface
 {
 	public:

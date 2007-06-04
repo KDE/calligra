@@ -21,7 +21,7 @@
 #ifndef KEXIQUERYDESIGNERSQL_H
 #define KEXIQUERYDESIGNERSQL_H
 
-#include <kexiviewbase.h>
+#include <KexiView.h>
 #include "kexiquerypart.h"
 //Added by qt3to4:
 #include <QEvent>
@@ -34,12 +34,12 @@ class KexiQueryDesignerSQLViewPrivate;
  and SQL history/status widget splitted vertically. 
  Depending on user's will, the widget can be in "sql history" 
  mode or in "sql status" mode. */
-class KexiQueryDesignerSQLView : public KexiViewBase
+class KexiQueryDesignerSQLView : public KexiView
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+		KexiQueryDesignerSQLView(QWidget *parent);
 		virtual ~KexiQueryDesignerSQLView();
 
 		QString sqlText() const;
@@ -76,7 +76,7 @@ class KexiQueryDesignerSQLView : public KexiViewBase
 
 	private:
 		class Private;
-		Private *d;
+		Private * const d;
 
 		friend class KexiQueryView; // for storeNewData() and storeData() only
 };

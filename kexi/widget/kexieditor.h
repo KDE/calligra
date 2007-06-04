@@ -35,14 +35,12 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiView
 		/**
 		* Constructor.
 		* 
-		* \param mainWin The \a KexiMainWindow instance this KexiEditor
-		*        belongs too.
 		* \param parent The parent \a QWidget this KexiEditor is child
 		*        of.  You don't need to free the KexiEditor cause Qt 
 		*        will handle that for us.
 		* \param name The name this KexiEditor has. Used only for debugging.
 		*/
-		KexiEditor(KexiMainWindowIface *mainWin, QWidget *parent);
+		KexiEditor(QWidget *parent);
 
 		/**
 		* Destructor.

@@ -51,13 +51,14 @@
 
 KexiSimplePrintingCommand::KexiSimplePrintingCommand(
 	KexiMainWindow* mainWin, int objectId, QObject* parent)
- : QObject(parent, "KexiSimplePrintCommand")
+ : QObject(parent)
  , m_previewEngine(0)
  , m_mainWin(mainWin)
  , m_objectId(objectId)
  , m_previewWindow(0)
  , m_printPreviewNeedsReloading(false)
 {
+	setObjectName("KexiSimplePrintCommand");
 	connect(this, SIGNAL(showPageSetupRequested(KexiPart::Item*)), 
 		m_mainWin, SLOT(showPageSetupForItem(KexiPart::Item*)));
 }
@@ -357,7 +358,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 		m_contents->headerTitleLineEdit->setText( m_item->captionOrName() );
 		if (m_item->mimeType()=="kexi/query") {
 			m_contents->openDataLink->setText( i18n("Open This Query") );
-			m_origCaptionLabelText = i18n("<h2>Page setup for printing \"%1\" query data</h2>");
+			m_origCaptionLabelText = I18N_NOOP("<h2>Page setup for printing \"%1\" query data</h2>");
 		}
 		m_contents->captionLabel->setText( m_origCaptionLabelText.arg(m_item->name()) );
 	}

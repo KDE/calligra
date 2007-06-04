@@ -23,74 +23,73 @@
 #include "ui_KexiProjectSelector.h"
 #include "kexiprojectset.h"
 
-#include <kdialogbase.h>
+#include <KPageDialog>
 #include <q3widgetstack.h>
 
 class KexiNewFileDBWidget;
-class KexiProjectSelectorWidgetPrivate;
 
 /*! Widget that allows to select a kexi project (or database)
 */
-class KEXIMAIN_EXPORT KexiProjectSelectorWidget : private Ui::KexiProjectSelector
+class KEXIMAIN_EXPORT KexiProjectSelectorWidget : public QWidget, private Ui_KexiProjectSelector
 {
 	Q_OBJECT
 
-public:
+	public:
 //	enum ConnType { FileBased=1, ServerBased=2 };
 
-	/*! Constructs a project selector widget.  
-	 If \a showProjectNameColumn is true (the default)
-	 project names' column is visible. If \a showConnectionColumns is true (the default)
-	 information about database driver and connection columns are added.
-	 \a prj_set may be NULL - you can assign a set later with setProjectSet().
-	*/
-	KexiProjectSelectorWidget( QWidget* parent = 0, 
-		KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
-		bool showConnectionColumns = true );
-    
-	virtual ~KexiProjectSelectorWidget();
+		/*! Constructs a project selector widget.  
+		If \a showProjectNameColumn is true (the default)
+		project names' column is visible. If \a showConnectionColumns is true (the default)
+		information about database driver and connection columns are added.
+		\a prj_set may be NULL - you can assign a set later with setProjectSet().
+		*/
+		KexiProjectSelectorWidget( QWidget* parent = 0, 
+			KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
+			bool showConnectionColumns = true );
+		
+		virtual ~KexiProjectSelectorWidget();
+		
+		/*! \return data of selected project. Returns NULL if no selection has been made.
+		*/
+		KexiProjectData* selectedProjectData() const;
 	
-	/*! \return data of selected project. Returns NULL if no selection has been made.
-	*/
-	KexiProjectData* selectedProjectData() const;
-
-	/*! Assigns a new project set \a prj_set. Old project set is not destoyed 
-	 - it is just left unassigned. 
-	 If new project set is in error state (Object::error() == true), nothing is displayed. */
-	void setProjectSet( KexiProjectSet* prj_set );
+		/*! Assigns a new project set \a prj_set. Old project set is not destoyed 
+		- it is just left unassigned. 
+		If new project set is in error state (Object::error() == true), nothing is displayed. */
+		void setProjectSet( KexiProjectSet* prj_set );
+		
+		/*! \return currently assigned project set or NULL if no project set is assigned. */
+		inline KexiProjectSet *projectSet() { return m_prj_set; }
 	
-	/*! \return currently assigned project set or NULL if no project set is assigned. */
-	inline KexiProjectSet *projectSet() { return m_prj_set; }
-
-	/*! Sets selectable state on or off. In this state one project item can be selected
-	 and executed by mouse double clicking or return key pressing. 
-	 The property is true by default. */
-	void setSelectable(bool set);
+		/*! Sets selectable state on or off. In this state one project item can be selected
+		and executed by mouse double clicking or return key pressing. 
+		The property is true by default. */
+		void setSelectable(bool set);
+		
+		/*! \return  if a witget has selectable state set. */
+		bool isSelectable() const;
 	
-	/*! \return  if a witget has selectable state set. */
-	bool isSelectable() const;
-
-public slots:
+		QLabel *label() const;
+		
+	signals:
+		void projectExecuted(KexiProjectData*);
+		void selectionChanged(KexiProjectData*);
 	
-signals:
-	void projectExecuted(KexiProjectData*);
-	void selectionChanged(KexiProjectData*);
-
-protected slots:
-	void slotItemExecuted(Q3ListViewItem*);
-	void slotItemSelected();
-	virtual void languageChange() { KexiProjectSelectorBase::languageChange(); }
-
-protected:
-	KexiProjectSet *m_prj_set;
+	protected slots:
+		void slotItemExecuted(Q3ListViewItem*);
+		void slotItemSelected();
 	
-	KexiProjectSelectorWidgetPrivate *d;
-	
-	friend class ProjectDataLVItem;
+	protected:
+		KexiProjectSet *m_prj_set;
+		
+		class Private;
+		Private * const d;
+		
+		friend class ProjectDataLVItem;
 };
 
 /*! Dialog container for KexiProjectSelectorWidget */
-class KexiProjectSelectorDialog : public KDialog
+class KexiProjectSelectorDialog : public KPageDialog
 {
 	Q_OBJECT
 public:

@@ -459,7 +459,7 @@ void KexiRecordNavigator::showEditingIndicator(bool show)
 		return;
 	if (d->editingIndicatorVisible) {
 		QPixmap pix;
-		pix.convertFromImage( *KexiRecordMarker::penImage() );
+		pix.fromImage( *KexiRecordMarker::penImage() );
 		d->editingIndicatorLabel->setPixmap( pix );
 		d->editingIndicatorLabel->setToolTip( i18n("Editing indicator") );
 	}

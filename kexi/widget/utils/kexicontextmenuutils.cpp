@@ -140,7 +140,7 @@ void KexiImageContextMenu::insertFromFile()
 	//save last visited path
 //	KUrl url(fileName);
 	if (url.isLocalFile())
-		KRecentDirs::add(":LastVisitedImagePath", url.directory());
+		KRecentDirs::add("kfiledialog:///LastVisitedImagePath", url.directory());
 #endif
 
 	emit insertFromFileRequested(url);
@@ -185,7 +185,7 @@ void KexiImageContextMenu::saveAs()
 	if (fileName.isEmpty())
 		return;
 	
-	if (QFileInfo(fileName).extension().isEmpty())
+	if (QFileInfo(fileName).completeSuffix().isEmpty())
 		fileName += (QString(".")+fileExtension);
 	kDebug() << fileName << endl;
 	KUrl url;
@@ -194,14 +194,14 @@ void KexiImageContextMenu::saveAs()
 #ifdef Q_WS_WIN
 	//save last visited path
 	if (url.isLocalFile())
-		KRecentDirs::add(":LastVisitedImagePath", url.directory());
+		KRecentDirs::add("kfiledialog:///LastVisitedImagePath", url.directory());
 #endif
 
 	QFile f(fileName);
 	if (f.exists() && KMessageBox::Yes != KMessageBox::warningYesNo(this, 
-		"<qt>"+i18n("File \"%1\" already exists."
-		"<p>Do you want to replace it with a new one?")
-		.arg(QDir::convertSeparators(fileName))+"</qt>",0, 
+		"<qt>"+
+		i18n("File \"%1\" already exists.<p>Do you want to replace it with a new one?",
+			QDir::convertSeparators(fileName))+"</qt>",0, 
 		KGuiItem(i18n("&Replace")), KGuiItem(i18n("&Don't Replace"))))
 	{
 		return;
@@ -290,9 +290,9 @@ bool KexiContextMenuUtils::updateTitle(QMenu *menu, const QString& objectName,
 
 /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
  (see doc/dev/settings.txt) */
-	QString realTitle( i18nc("Object name : Object type", "%1 : %2")
-		.arg( objectName[0].upper() + objectName.mid(1) )
-		.arg( objectTypeName ));
+	QString realTitle( i18nc("Object name : Object type", "%1 : %2",
+		objectName[0].toUpper() + objectName.mid(1),
+		objectTypeName ));
 
 	action->setIcon(KIcon(iconName));
 	action->setText(realTitle);

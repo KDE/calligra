@@ -28,7 +28,7 @@ class KoPageLayoutSize;
 class KexiSimplePrintPreviewWindow;
 
 /*! @short A command for simple printing and print preview. 
- This class is instantiated in KexiMainWindowImpl so there's:
+ This class is instantiated in KexiMainWindow so there's:
  - a single print preview window per part item regardless of a way how user invoked
     the 'print preview' command (using 'File->Print Preview' command or 'Print Preview' button 
     of the 'Page Setup' dialog)

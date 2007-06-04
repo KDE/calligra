@@ -30,7 +30,12 @@
 
 #include <QPointer>
 
-class KexiConnSelectorBase;
+class KexiConnSelectorBase : public QWidget, public Ui_KexiConnSelector
+{
+	public:
+		KexiConnSelectorBase(QWidget* parent);
+		~KexiConnSelectorBase();
+};
 
 //! helper class
 class ConnectionDataLVItem : public Q3ListViewItem
@@ -52,7 +57,7 @@ class KexiConnSelectorWidgetPrivate;
 
 /*! Widget that allows to select a database connection (without choosing database itself)
 */
-class KEXIMAIN_EXPORT KexiConnSelectorWidget : private Ui::KexiConnSelector
+class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 {
 	Q_OBJECT
 
@@ -139,7 +144,8 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : private Ui::KexiConnSelector
 		ConnectionDataLVItem* addConnectionData( KexiDB::ConnectionData* data );
 		ConnectionDataLVItem* selectedConnectionDataItem() const;
 		
-		KexiConnSelectorWidgetPrivate *d;
+		class Private;
+		Private * const d;
 };
 
 #endif // KEXICONNSELECTOR_H

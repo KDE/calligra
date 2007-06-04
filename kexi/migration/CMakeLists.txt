@@ -1,17 +1,21 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/main/startup ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core
+	${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
+	${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_BINARY_DIR}/kexi/main
+	${KDE4_INCLUDES}
+)
 
 INCLUDE (FindMySQL)
 IF (MYSQL_FOUND)
-#   add_subdirectory( mysql )
+	add_subdirectory( mysql )
 ENDIF (MYSQL_FOUND)
 
 INCLUDE (FindPostgreSQL)
 INCLUDE (FindPqxx)
 IF (POSTGRESQL_FOUND AND PQXX_FOUND)
-#   add_subdirectory( pqxx )
+	add_subdirectory( pqxx )
 ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
+
+add_subdirectory( mdb )
 
 ########### next target ###############
 

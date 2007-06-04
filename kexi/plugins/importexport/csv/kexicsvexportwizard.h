@@ -30,7 +30,6 @@
 class QCheckBox;
 class Q3GroupBox;
 class KPushButton;
-class KexiMainWindow;
 class KexiStartupFileDialog;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
@@ -47,8 +46,8 @@ class KexiCSVExportWizard : public K3Wizard
 	Q_OBJECT
 
 	public:
-		KexiCSVExportWizard( const KexiCSVExport::Options& options, KexiMainWindow* mainWin, 
-			QWidget * parent = 0, const char * name = 0 );
+		KexiCSVExportWizard( const KexiCSVExport::Options& options, 
+			QWidget * parent = 0 );
 
 		virtual ~KexiCSVExportWizard();
 
@@ -96,7 +95,6 @@ class KexiCSVExportWizard : public K3Wizard
 		KexiCSVExport::Options m_options;
 //		Mode m_mode;
 //		int m_itemId;
-		KexiMainWindow* m_mainWin;
 		KexiStartupFileDialog* m_fileSavePage;
 		QWidget* m_exportOptionsPage;
 		KPushButton *m_showOptionsButton;

@@ -39,7 +39,7 @@ class KMenu;
 class KActionCollection;
 class KAction;
 class KToggleAction;
-class KDialog;
+class KPageDialog;
 class KTextEdit;
 class KXMLGUIClient;
 class KXmlGuiWindow;
@@ -395,7 +395,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void deleteWidgetLaterTimeout();
 
 		/*! Slot called when a buddy is chosen in the buddy list. Sets the label buddy. */
-		void buddyChosen(int id);
+		void buddyChosen(QAction* action);
 
 		/*! Slot called when the user chooses an item in signal (or slot) menu.
 		 The \ref createdConnection() is updated, and the connection created
@@ -477,13 +477,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		KActionCollection *m_collection;
 		QActionGroup* m_widgetActionGroup;
 		KToggleAction *m_pointer, *m_dragConnection, *m_snapToGrid;
+		QPointer<QAction> m_menuNoBuddy;
 
 		//! Used to delayed widgets deletion
 		QTimer m_deleteWidgetLater_timer;
 		Q3PtrList<QWidget> m_deleteWidgetLater_list;
 
 #ifdef KEXI_DEBUG_GUI
-		KDialog *m_uiCodeDialog;
+		KPageDialog *m_uiCodeDialog;
 		KTextEdit *m_currentUICodeDialogEditor;
 		KTextEdit *m_originalUICodeDialogEditor;
 #endif

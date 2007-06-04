@@ -21,19 +21,15 @@
 #ifndef KEXIQUERYPART_H
 #define KEXIQUERYPART_H
 
-#include <qmap.h>
-//Added by qt3to4:
+#include <QMap>
 #include <Q3CString>
 
-#include <kexidialogbase.h>
 #include <kexipart.h>
 #include <kexipartitem.h>
-//#include <kexipartdatasource.h>
-
+#include <KexiWindowData.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/connection.h>
 
-class KexiMainWin;
 namespace KexiDB
 {
 	class QuerySchema;
@@ -48,17 +44,17 @@ class KexiQueryPart : public KexiPart::Part
 	Q_OBJECT
 
 	public:
-		KexiQueryPart(QObject *parent, const char *name, const QStringList &);
+		KexiQueryPart(QObject *parent, const QStringList &);
 		virtual ~KexiQueryPart();
 
-		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
+		virtual bool remove(KexiPart::Item &item);
 
-		//! @short Temporary data kept in memory while switching between Query Dialog's views
-		class TempData : public KexiDialogTempData, 
+		//! @short Temporary data kept in memory while switching between Query Window's views
+		class TempData : public KexiWindowData, 
 		                 public KexiDB::Connection::TableSchemaChangeListenerInterface
 		{
 			public:
-				TempData(KexiDialogBase* parent, KexiDB::Connection *conn);
+				TempData(KexiWindow* parent, KexiDB::Connection *conn);
 				virtual ~TempData();
 				virtual tristate closeListener();
 				void clearQuery();
@@ -67,7 +63,7 @@ class KexiQueryPart : public KexiPart::Part
 
 				/*! Assigns query \a query for this data.
 				 Existing query (available using query()) is deleted but only 
-				 if it is not owned by parent dialog (i.e. != KexiDialogBase::schemaData()).
+				 if it is not owned by parent window (i.e. != KexiWindow::schemaData()).
 				 \a query can be 0. 
 				 If \a query is equal to existing query, nothing is performed.
 				*/
@@ -93,18 +89,19 @@ class KexiQueryPart : public KexiPart::Part
 				KexiDB::QuerySchema *m_query;
 		};
 
-		virtual QString i18nMessage(const Q3CString& englishMessage, 
-			KexiDialogBase* dlg) const;
+		virtual KLocalizedString i18nMessage(const QString& englishMessage, 
+			KexiWindow* window) const;
 
 		/*! Renames stored data pointed by \a item to \a newName. 
 		 Reimplemented to mark the query obsolete by using KexiDB::Connection::setQuerySchemaObsolete(). */
-		virtual tristate rename(KexiMainWindow * win, KexiPart::Item & item, const QString& newName);
+		virtual tristate rename(KexiPart::Item & item, const QString& newName);
 
 	protected:
-		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
+		virtual KexiWindowData* createWindowData(KexiWindow* window);
 
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
+		virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode,
+			QMap<QString,QString>* staticObjectArgs = 0);
 
 //		virtual void initPartActions( KActionCollection *col );
 //		virtual void initInstanceActions( int mode, KActionCollection *col );
@@ -112,7 +109,7 @@ class KexiQueryPart : public KexiPart::Part
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
-		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, 
+		virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, 
 			const KexiDB::SchemaData& sdata, int viewMode);
 };
 

@@ -25,7 +25,7 @@
 #include <KAction>
 #include <kexi_export.h>
 
-class QIcon;
+class KIcon;
 
 //! A small tool button with icon and optional text
 class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
@@ -33,24 +33,24 @@ class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
 	Q_OBJECT
 
 	public:
-		KexiSmallToolButton(QWidget* parent, const QString& text, 
-			const QString& icon = QString());
+		KexiSmallToolButton(QWidget* parent = 0);
 
-		KexiSmallToolButton(QWidget* parent, const QString& text, 
-			const QIcon& icon);
+		KexiSmallToolButton(const QString& text, QWidget* parent = 0);
 
-		KexiSmallToolButton(QWidget* parent, KAction *action);
+		KexiSmallToolButton(const KIcon& icon, const QString& text, QWidget* parent = 0);
+
+		KexiSmallToolButton(KAction *action, QWidget* parent = 0);
 		
 		virtual ~KexiSmallToolButton();
 
 		void updateAction();
 
-		virtual void setIcon( const QIcon& icon );
+		virtual void setIcon( const KIcon& icon );
 		virtual void setIcon( const QString& icon );
 		virtual void setText( const QString& text );
 
 	protected:
-		void update(const QString& text, const QIcon& icon, bool tipToo = false);
+		void update(const QString& text, const KIcon& icon, bool tipToo = false);
 		void init();
 		virtual void paintEvent(QPaintEvent *pe);
 

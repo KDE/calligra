@@ -21,8 +21,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-//#include <qapplication.h>
-//#include <main/keximainwindowimpl.h>
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
 
@@ -46,7 +44,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
     return 0;
 
     /*
-    int result = KexiMainWindowImpl::create(argc, argv);
+    int result = KexiMainWindow::create(argc, argv);
     if (!qApp)
         return result;
 

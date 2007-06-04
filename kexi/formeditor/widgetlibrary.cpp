@@ -748,7 +748,7 @@ WidgetFactory::CreateWidgetOptions WidgetLibrary::showOrientationSelectionPopup(
 
 	KMenu* popup = new KMenu(parent);
 	popup->setObjectName("orientationSelectionPopup");
-	popup->addTitle(SmallIcon(wclass->pixmap()), i18n("Insert Widget: %1").arg(wclass->name()));
+	popup->addTitle(SmallIcon(wclass->pixmap()), i18n("Insert Widget: %1", wclass->name()));
 	QAction* horizAction = popup->addAction(iconHorizontal, textHorizontal);
 	QAction* vertAction = popup->addAction(iconVertical, textVertical);
 	popup->addSeparator();

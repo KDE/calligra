@@ -27,7 +27,6 @@
 
 #include "kexiactionproxy.h"
 
-class KexiMainWindow;
 class KexiWindow;
 
 namespace KoProperty {
@@ -49,7 +48,7 @@ namespace KexiDB {
  KexiPart::createView() method. See query or table part code for examples.
 
  KexiView object can be also allocated without attaching it KexiWindow,
- especially withinn dock window. see KexiMainWindowImpl::initNavigator() to see example
+ especially within dock window. see KexiMainWindow::initNavigator() to see example
  how KexiBrowser does this.
 */
 class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy

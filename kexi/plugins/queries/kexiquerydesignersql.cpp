@@ -20,14 +20,20 @@
 
 #include <qsplitter.h>
 #include <qlayout.h>
-#include <qhbox.h>
-#include <qvbox.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
 #include <qtimer.h>
+#include <qlabel.h>
+#include <qpalette.h>
+#include <Q3SimpleRichText>
 
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
+#include <KToggleAction>
+#include <KAction>
+#include <KMenu>
 
 #include <kexiutils/utils.h>
 #include <kexidb/driver.h>
@@ -35,7 +41,8 @@
 #include <kexidb/parser/parser.h>
 
 #include <kexiproject.h>
-#include <keximainwindow.h>
+#include <KexiMainWindowIface.h>
+#include <KexiWindow.h>
 
 #include "kexiquerydesignersqleditor.h"
 #include "kexiquerydesignersqlhistory.h"
@@ -74,8 +81,8 @@ class KexiQueryDesignerSQLView::Private
 		KexiQueryDesignerSQLEditor *editor;
 		KexiQueryDesignerSQLHistory *history;
 		QLabel *pixmapStatus, *lblStatus;
-		QHBox *status_hbox;
-		QVBox *history_section;
+		Q3HBox *status_hbox;
+		Q3VBox *history_section;
 		KexiSectionHeader *head, *historyHead;
 		QPixmap statusPixmapOk, statusPixmapErr, statusPixmapInfo;
 		QSplitter *splitter;
@@ -99,14 +106,17 @@ class KexiQueryDesignerSQLView::Private
 
 //===================
 
-KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
- : KexiViewBase(mainWin, parent, name)
+KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
+ : KexiView(parent)
  , d( new Private() )
 {
 	d->splitter = new QSplitter(this);
-	d->splitter->setOrientation(Vertical);
-	d->head = new KexiSectionHeader(i18n("SQL Query Text"), Vertical, d->splitter);
-	d->editor = new KexiQueryDesignerSQLEditor(mainWin, d->head, "sqle");
+	d->splitter->setOrientation(Qt::Vertical);
+	d->head = new KexiSectionHeader(i18n("SQL Query Text"), Qt::Vertical, d->splitter);
+	d->splitter->setStretchFactor(
+		d->splitter->indexOf(d->head), 1/*stretch*/);
+	d->editor = new KexiQueryDesignerSQLEditor(d->head);
+	d->editor->setObjectName("sqleditor");
 //	d->editor->installEventFilter(this);//for keys
 	connect(d->editor, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 	addChildView(d->editor);
@@ -114,42 +124,58 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	d->splitter->setFocusProxy(d->editor);
 	setFocusProxy(d->editor);
 
-	d->history_section = new QVBox(d->splitter);
+	d->history_section = new Q3VBox(d->splitter);
 
-	d->status_hbox = new QHBox(d->history_section);
+	d->status_hbox = new Q3HBox(d->history_section);
 	d->status_hbox->installEventFilter(this);
-	d->splitter->setResizeMode(d->history_section, QSplitter::KeepSize);
+	d->splitter->setStretchFactor(
+		d->splitter->indexOf(d->history_section), 0/*KeepSize*/);
 	d->status_hbox->setSpacing(0);
 	d->pixmapStatus = new QLabel(d->status_hbox);
 	d->pixmapStatus->setFixedWidth(d->statusPixmapOk.width()*3/2);
-	d->pixmapStatus->setAlignment(AlignHCenter | AlignTop);
+	d->pixmapStatus->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 	d->pixmapStatus->setMargin(d->statusPixmapOk.width()/4);
-	d->pixmapStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
+// Qt3:	d->pixmapStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
+	QPalette pal(d->pixmapStatus->palette());
+	pal.setBrush(QPalette::Active, QPalette::Background, 
+		pal.brush(QPalette::Active, QPalette::Base));
+	d->pixmapStatus->setPalette(pal);
 
 	d->lblStatus = new QLabel(d->status_hbox);
-	d->lblStatus->setAlignment(AlignLeft | AlignTop | WordBreak);
+	d->lblStatus->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+	d->lblStatus->setWordWrap(true);
 	d->lblStatus->setMargin(d->statusPixmapOk.width()/4);
 	d->lblStatus->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding );
 	d->lblStatus->resize(d->lblStatus->width(),d->statusPixmapOk.width()*3);
-	d->lblStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
+// Qt3:	d->lblStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
+	pal = d->lblStatus->palette();
+	pal.setBrush(QPalette::Active, QPalette::Background, 
+		pal.brush(QPalette::Active, QPalette::Base));
+	d->lblStatus->setPalette(pal);
 
 	QHBoxLayout *b = new QHBoxLayout(this);
 	b->addWidget(d->splitter);
 
 	plugSharedAction("querypart_check_query", this, SLOT(slotCheckQuery())); 
 	plugSharedAction("querypart_view_toggle_history", this, SLOT(slotUpdateMode()));
-	d->action_toggle_history = static_cast<KToggleAction*>( sharedAction( "querypart_view_toggle_history" ) );
+	d->action_toggle_history = static_cast<KToggleAction*>( 
+		sharedAction( "querypart_view_toggle_history" ) );
 
-	d->historyHead = new KexiSectionHeader(i18n("SQL Query History"), Vertical, d->history_section);
+	d->historyHead = new KexiSectionHeader(i18n("SQL Query History"), 
+		Qt::Vertical, d->history_section);
 	d->historyHead->installEventFilter(this);
-	d->history = new KexiQueryDesignerSQLHistory(d->historyHead, "sql_history");
+	d->history = new KexiQueryDesignerSQLHistory(d->historyHead);
+	d->history->setObjectName("sql_history");
+	d->historyHead->setWidget(d->history);
 
-	static const QString msg_back = i18n("Back to Selected Query");
-	static const QString msg_clear = i18n("Clear History");
-	d->historyHead->addButton("select_item", msg_back, this, SLOT(slotSelectQuery()));
-	d->historyHead->addButton("edit-clear", msg_clear, d->history, SLOT(clear()));
-	d->history->popupMenu()->insertItem(SmallIcon("select_item"), msg_back, this, SLOT(slotSelectQuery()));
-	d->history->popupMenu()->insertItem(SmallIcon("edit-clear"), msg_clear, d->history, SLOT(clear()));
+	const QString msg_back( i18n("Back to Selected Query"));
+	const QString msg_clear( i18n("Clear History") );
+	d->historyHead->addButton(KIcon("select_item"), msg_back, this, SLOT(slotSelectQuery()));
+	d->historyHead->addButton(KIcon("edit-clear"), msg_clear, d->history, SLOT(clear()));
+	d->history->popupMenu()->addAction(KIcon("select_item"), msg_back,
+		this, SLOT(slotSelectQuery()));
+	d->history->popupMenu()->addAction(KIcon("edit-clear"), msg_clear, 
+		d->history, SLOT(clear()));
 	connect(d->history, SIGNAL(currentItemDoubleClicked()), this, SLOT(slotSelectQuery()));
 
 	d->heightForHistoryMode = -1; //height() / 2;
@@ -186,15 +212,16 @@ void KexiQueryDesignerSQLView::setStatusError(const QString& msg)
 void KexiQueryDesignerSQLView::setStatusEmpty()
 {
 	d->pixmapStatus->setPixmap(d->statusPixmapInfo);
-	setStatusText(i18n("Please enter your query and execute \"Check query\" function to verify it."));
+	setStatusText(
+		i18n("Please enter your query and execute \"Check query\" function to verify it."));
 }
 
 void KexiQueryDesignerSQLView::setStatusText(const QString& text)
 {
 	if (!d->action_toggle_history->isChecked()) {
-		QSimpleRichText rt(text, d->lblStatus->font());
+		Q3SimpleRichText rt(text, d->lblStatus->font());
 		rt.setWidth(d->lblStatus->width());
-		QValueList<int> sz = d->splitter->sizes();
+		QList<int> sz( d->splitter->sizes() );
 		const int newHeight = rt.height()+d->lblStatus->margin()*2;
 		if (sz[1]<newHeight) {
 			sz[1] = newHeight;
@@ -204,8 +231,7 @@ void KexiQueryDesignerSQLView::setStatusText(const QString& text)
 	}
 }
 
-tristate
-KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
+tristate KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 {
 //TODO
 	dontStore = true;
@@ -222,7 +248,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 			}
 		}
 		else {
-			const bool designViewWasVisible = parentDialog()->viewForMode(mode)!=0;
+			const bool designViewWasVisible = window()->viewForMode(mode)!=0;
 			//should we check SQL text?
 			if (designViewWasVisible 
 				&& !d->justSwitchedFromNoViewMode //unchanged, but we should check SQL text
@@ -233,7 +259,8 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 			else {
 				//yes: parse SQL text
 				if (!slotCheckQuery()) {
-					if (KMessageBox::No==KMessageBox::warningYesNo(this, "<p>"+i18n("The query you entered is incorrect.")
+					if (KMessageBox::No==KMessageBox::warningYesNo(this, 
+						"<p>"+i18n("The query you entered is incorrect.")
 						+"</p><p>"+i18n("Do you want to cancel any changes made to this SQL text?")+"</p>"
 						+"</p><p>"+i18n("Answering \"No\" allows you to make corrections.")+"</p>"))
 					{
@@ -260,7 +287,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 	//TODO
 	/*
 	if (d->doc) {
-		KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
+		KexiDB::Parser *parser = new KexiDB::Parser(KexiMainWindowIface::global()->project()->dbConnection());
 		parser->parse(getQuery());
 		d->doc->setSchema(parser->select());
 
@@ -274,7 +301,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 	}
 
 	setDirty(true);*/
-//	if (parentDialog()->hasFocus())
+//	if (window()->hasFocus())
 	d->editor->setFocus();
 	return true;
 }
@@ -293,7 +320,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 	KexiQueryPart::TempData * temp = tempData();
 	KexiDB::QuerySchema *query = temp->query();
 	if (!query) {//try to just get saved schema, instead of temporary one
-		query = dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
+		query = dynamic_cast<KexiDB::QuerySchema *>(window()->schemaData());
 	}
 
 	if (mode!=0/*failure only if it is switching from prev. view*/ && !query) {
@@ -310,7 +337,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 	// Use query with Kexi keywords (but not driver-specific keywords) escaped.
 		temp->setQuery( query );
 //		temp->query = query;
-		KexiDB::Connection* conn = mainWin()->project()->dbConnection();
+		KexiDB::Connection* conn = KexiMainWindowIface::global()->project()->dbConnection();
 		KexiDB::Connection::SelectStatementOptions options;
 		options.identifierEscaping = KexiDB::Driver::EscapeKexi;
 		options.addVisibleLookupColumns = false;
@@ -342,7 +369,7 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
 
 	kDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()" << endl;
 	//KexiQueryPart::TempData * temp = tempData();
-	KexiDB::Parser *parser = mainWin()->project()->sqlParser();
+	KexiDB::Parser *parser = KexiMainWindowIface::global()->project()->sqlParser();
 	const bool ok = parser->parse( sqlText );
 	delete d->parsedQuery;
 	d->parsedQuery = parser->query();
@@ -366,7 +393,7 @@ void KexiQueryDesignerSQLView::slotUpdateMode()
 
 	d->eventFilterForSplitterEnabled = false;
 
-	QValueList<int> sz = d->splitter->sizes();
+	QList<int> sz = d->splitter->sizes();
 	d->action_toggle_history_was_checked = d->action_toggle_history->isChecked();
 	int heightToSet = -1;
 	if (d->action_toggle_history->isChecked()) {
@@ -374,7 +401,7 @@ void KexiQueryDesignerSQLView::slotUpdateMode()
 		d->historyHead->show();
 		d->history->show();
 		if (d->heightForHistoryMode==-1)
-			d->heightForHistoryMode = m_dialog->height() / 2;
+			d->heightForHistoryMode = window()->height() / 2;
 		heightToSet = d->heightForHistoryMode;
 		d->heightForStatusMode = sz[1]; //remember
 	}
@@ -417,7 +444,7 @@ bool KexiQueryDesignerSQLView::eventFilter( QObject *o, QEvent *e )
 			d->heightForStatusMode = d->status_hbox->height();
 		}
 	}
-	return KexiViewBase::eventFilter(o, e);
+	return KexiView::eventFilter(o, e);
 }
 
 void KexiQueryDesignerSQLView::updateActions(bool activated)
@@ -427,7 +454,7 @@ void KexiQueryDesignerSQLView::updateActions(bool activated)
 	}
 	setAvailable("querypart_check_query", true);
 	setAvailable("querypart_view_toggle_history", true);
-	KexiViewBase::updateActions(activated);
+	KexiView::updateActions(activated);
 }
 
 void KexiQueryDesignerSQLView::slotSelectQuery()
@@ -441,7 +468,7 @@ void KexiQueryDesignerSQLView::slotSelectQuery()
 KexiQueryPart::TempData *
 KexiQueryDesignerSQLView::tempData() const
 {	
-	return dynamic_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+	return dynamic_cast<KexiQueryPart::TempData*>(window()->data());
 }
 
 KexiDB::SchemaData*
@@ -464,9 +491,9 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 		}
 
 		(KexiDB::SchemaData&)*query = sdata; //copy main attributes
-		ok = m_mainWin->project()->dbConnection()->storeObjectSchemaData( *query, true /*newObject*/ );
+		ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData( *query, true /*newObject*/ );
 		if (ok) {
-			m_dialog->setId( query->id() );
+			window()->setId( query->id() );
 			ok = storeDataBlock( d->editor->text(), "sql" );
 		}
 	}
@@ -481,10 +508,11 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 			0, KStandardGuiItem::yes(), KStandardGuiItem::no(), "askBeforeSavingInvalidQueries"/*config entry*/)==KMessageBox::Yes);
 		if (ok) {
 			(KexiDB::SchemaData&)*query = sdata; //copy main attributes
-			ok = m_mainWin->project()->dbConnection()->storeObjectSchemaData( *query, true /*newObject*/ );
+			ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData( 
+				*query, true /*newObject*/ );
 		}
 		if (ok) {
-			m_dialog->setId( query->id() );
+			window()->setId( query->id() );
 			ok = storeDataBlock( d->editor->text(), "sql" );
 		}
 //#else
@@ -500,7 +528,7 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 
 tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
 {
-	tristate res = KexiViewBase::storeData(dontAsk);
+	tristate res = KexiView::storeData(dontAsk);
 	if (~res)
 		return res;
 	if (res == true) {
@@ -539,4 +567,3 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
 }*/
 
 #include "kexiquerydesignersql.moc"
-

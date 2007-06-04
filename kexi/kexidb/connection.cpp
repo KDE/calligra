@@ -1844,7 +1844,8 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 		}
 
 		// the new table owns the previous table's id:
-		if (!executeSQL(QString::fromLatin1("UPDATE kexi__objects SET o_id=%1 WHERE o_id=%2 AND o_type=%3")
+		if (!executeSQL(
+			QString::fromLatin1("UPDATE kexi__objects SET o_id=%1 WHERE o_id=%2 AND o_type=%3")
 			.arg(origID).arg(tableSchema.id()).arg((int)TableObjectType)))
 		{
 			return false;
@@ -2371,7 +2372,8 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		}
 	}
 	//existing object:
-	return executeSQL(QString("UPDATE kexi__objects SET o_type=%2, o_caption=%3, o_desc=%4 WHERE o_id=%1")
+	return executeSQL(
+		QString::fromLatin1("UPDATE kexi__objects SET o_type=%2, o_caption=%3, o_desc=%4 WHERE o_id=%1")
 		.arg(sdata.id()).arg(sdata.type())
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.caption()))
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())) );
@@ -2783,8 +2785,8 @@ KexiDB::Field* Connection::setupField( const RowData &data )
 		return 0;
 
 	if (!KexiUtils::isIdentifier( data.at(2).toString() )) {
-		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"")
-			.arg( data.at(2).toString() ));
+		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"",
+			data.at(2).toString() ));
 		ok = false;
 		return 0;
 	}
@@ -2875,7 +2877,8 @@ TableSchema* Connection::tableSchema( const QString& tableName )
 	//not found: retrieve schema
 	RowData data;
 	if (true!=querySingleRecord(QString::fromLatin1(
-		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE lower(o_name)='%1' AND o_type=%2")
+		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE lower(o_name)='%1'"
+		" AND o_type=%2")
 			.arg(m_tableName).arg(KexiDB::TableObjectType), data))
 		return 0;
 
@@ -2911,7 +2914,8 @@ bool Connection::storeDataBlock( int objectID, const QString &dataString, const 
 {
 	if (objectID<=0)
 		return false;
-	QString sql(QString::fromLatin1("SELECT kexi__objectdata.o_id FROM kexi__objectdata WHERE o_id=%1").arg(objectID));
+	QString sql(QString::fromLatin1(
+		"SELECT kexi__objectdata.o_id FROM kexi__objectdata WHERE o_id=%1").arg(objectID));
 	QString sql_sub( KexiDB::sqlWhere(m_driver, KexiDB::Field::Text, "o_sub_id", dataID) );
 
 	bool ok, exists;
@@ -2981,7 +2985,8 @@ QuerySchema* Connection::querySchema( const QString& queryName )
 	//not found: retrieve schema
 	RowData data;
 	if (true!=querySingleRecord(QString::fromLatin1(
-		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE lower(o_name)='%1' AND o_type=%2")
+		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE lower(o_name)='%1'"
+		" AND o_type=%2")
 			.arg(m_queryName).arg(KexiDB::QueryObjectType), data))
 		return 0;
 
@@ -2997,7 +3002,8 @@ QuerySchema* Connection::querySchema( int queryId )
 	clearError();
 	RowData data;
 	if (true!=querySingleRecord(QString::fromLatin1(
-		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE o_id=%1").arg(queryId), data))
+		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE o_id=%1")
+			.arg(queryId), data))
 		return 0;
 
 	return setupQuerySchema(data);

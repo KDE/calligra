@@ -64,7 +64,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 This method is used by focusWindow() to look up widgets hierarchy 
 		 for widget that can accept shared actions. 
 		 Default implementation always returns false. 
-		 You can reimplement it e.g. like in KexiMainWindowImpl::acceptsSharedActions():
+		 You can reimplement it e.g. like in KexiMainWindow::acceptsSharedActions():
 		 \code
 			return o->inherits("KexiWindow") || o->inherits("KexiView");
 		 \endcode
@@ -106,7 +106,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 (thus part-actions are untouched when the focus is e.g. in the Property Editor.
 
 		 Call this method when it is known that some actions need invalidation 
-		 (e.g. when new window is activated). See how it is used in KexiMainWindowImpl.
+		 (e.g. when new window is activated). See how it is used in KexiMainWindow.
 		*/
 		virtual void invalidateSharedActions(QObject *o);
 

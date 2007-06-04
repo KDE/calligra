@@ -23,13 +23,11 @@
 
 #include "kexipartmanager.h"
 
-class KexiMainWindowImpl;
 class KexiProject;
 class KexiWindow;
 
 namespace KexiPart
 {
-
 	class Manager;
 	class Item;
 	class Part;
@@ -117,7 +115,6 @@ class KEXICORE_EXPORT Info
 
 		friend class Manager;
 		friend class ::KexiProject;
-		friend class ::KexiMainWindowImpl;
 		friend class ::KexiWindow;
 
 		/**
@@ -147,7 +144,7 @@ class KEXICORE_EXPORT Info
 		bool isIdStoredInPartDatabase() const;
 
 		class Private;
-		Private *d;
+		Private * const d;
 };
 
 /*! \return "create" KAction's name for part defined by \a info. 

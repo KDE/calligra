@@ -937,7 +937,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 				if (!m_errorMessagePopup) {
 //					m_errorMessagePopup->close();
 					m_errorMessagePopup = new KexiArrowTip(
-						i18n("Error: %1").arg(m_editor->columnInfo()->field->typeName())+"?", 
+						i18n("Error: %1", m_editor->columnInfo()->field->typeName())+"?", 
 						dynamic_cast<QWidget*>(this));
 					m_errorMessagePopup->move( 
 						par->mapToGlobal(edit->pos()) + QPoint(6, edit->height() + 0) );
@@ -1329,7 +1329,7 @@ tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
 			tableName.append("\"");
 		}
 		if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(dynamic_cast<QWidget*>(this),
-				i18n("Do you want to clear the contents of table %1?").arg(tableName),
+				i18n("Do you want to clear the contents of table %1?", tableName),
 				0, KGuiItem(i18n("&Clear Contents")) ))
 			return cancelled;
 	}

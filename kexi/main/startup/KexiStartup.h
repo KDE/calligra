@@ -33,7 +33,6 @@
 class KexiProjectData;
 class KexiProjectData;
 class KCmdLineArgs;
-class KexiStartupHandlerPrivate;
 namespace KexiDB {
 	class ConnectionData;
 }
@@ -123,9 +122,10 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 //		void slotShowConnectionDetails();
 
 	protected:
-		bool getAutoopenObjects(KCmdLineArgs *args, const Q3CString &action_name);
+		bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
 
-		KexiStartupHandlerPrivate *d;
+		class Private;
+		Private * const d;
 };
 
 namespace Kexi

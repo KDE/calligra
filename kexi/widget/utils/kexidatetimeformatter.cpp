@@ -251,7 +251,7 @@ QTime KexiTimeFormatter::stringToTime( const QString& str ) const
 			min = m_hmsRegExp->cap(2).toInt();
 			sec = m_hmsRegExp->cap(3).toInt();
 			if (m_ampmpos >= 0 && m_hmsRegExp->numCaptures()>3)
-				pm = m_hmsRegExp->cap(4).trimmed().lower()=="pm";
+				pm = m_hmsRegExp->cap(4).trimmed().toLower()=="pm";
 			tryWithoutSeconds = false;
 		}
 	}
@@ -262,7 +262,7 @@ QTime KexiTimeFormatter::stringToTime( const QString& str ) const
 		min = m_hmRegExp->cap(2).toInt();
 		sec = 0;
 		if (m_ampmpos >= 0 && m_hmRegExp->numCaptures()>2)
-			pm = m_hmsRegExp->cap(4).lower()=="pm";
+			pm = m_hmsRegExp->cap(4).toLower()=="pm";
 	}
 
 	if (pm && hour < 12)

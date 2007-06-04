@@ -23,10 +23,8 @@
 
 #include <q3scrollview.h>
 #include <qdatetime.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <qmap.h>
-#include <q3simplerichtext.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 
 class Q3SimpleRichText;
@@ -35,7 +33,8 @@ class KMenu;
 class HistoryEntry
 {
 	public:
-		HistoryEntry(bool success, const QTime &time, const QString &statement, /*int y,*/ const QString &error = QString());
+		HistoryEntry(bool success, const QTime &time, 
+			const QString &statement, /*int y,*/ const QString &error = QString());
 		~HistoryEntry();
 
 		QRect	geometry(int y, int width, QFontMetrics f);
@@ -59,14 +58,14 @@ class HistoryEntry
 		bool	m_selected;
 };
 
-typedef Q3PtrList<HistoryEntry> History;
+typedef QList<HistoryEntry*> History;
 
 class KexiQueryDesignerSQLHistory : public Q3ScrollView
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerSQLHistory(QWidget *parent, const char *name=0);
+		KexiQueryDesignerSQLHistory(QWidget *parent);
 		virtual ~KexiQueryDesignerSQLHistory();
 
 		KMenu* popupMenu() const;

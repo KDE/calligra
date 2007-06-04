@@ -23,7 +23,6 @@
 #include <qwidget.h>
 #include <kaction.h>
 
-class KexiMainWindow;
 namespace KexiPart {
 	class Info;
 }
@@ -45,9 +44,8 @@ class KEXIFORMUTILS_EXPORT KexiFormEventHandler
 		/*! Sets \a mainWidget to be a main widget for this handler.
 		 Also find widgets having action assigned and connects them 
 		 to appropriate actions. 
-		 For now, all of them must be KexiPushButton). 
-		 \a mainWin is used to get action list. */
-		void setMainWidgetForEventHandling(KexiMainWindow *mainWin, QWidget* mainWidget);
+		 For now, all of them must be KexiPushButton). */
+		void setMainWidgetForEventHandling(QWidget* mainWidget);
 
 	protected:
 		QWidget *m_mainWidget;
@@ -84,7 +82,7 @@ class KEXIFORMUTILS_EXPORT KexiFormEventAction : public KAction
 				                //!< @see ActionToExecuteListView::showActionsForMimeType()
 		};
 
-		KexiFormEventAction(KexiMainWindow *mainWin, QObject* parent, const QString& actionName, 
+		KexiFormEventAction(QObject* parent, const QString& actionName, 
 			const QString& objectName, const QString& actionOption);
 		virtual ~KexiFormEventAction();
 
@@ -94,7 +92,6 @@ class KEXIFORMUTILS_EXPORT KexiFormEventAction : public KAction
 		virtual void activate();
 
 	private:
-		KexiMainWindow *m_mainWin;
 		QString m_actionName, m_objectName, m_actionOption;
 };
 

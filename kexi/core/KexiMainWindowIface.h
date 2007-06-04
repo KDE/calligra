@@ -43,7 +43,7 @@ namespace KexiPart {
 
 /**
  * @short Kexi's main window interface
- * This interface is implemented by KexiMainWindowImpl class.
+ * This interface is implemented by KexiMainWindow class.
  * KexiMainWindow offers simple features what lowers cross-dependency (and also avoids
  * circular dependencies between Kexi modules).
  */
@@ -61,7 +61,7 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		KexiMainWindowIface();
 		virtual ~KexiMainWindowIface();
 
-		//! \return KexiMainWindowImpl global singleton (if it is instantiated)
+//		//! \return KexiMainWindowImpl global singleton (if it is instantiated)
 #warning TODO static KexiMainWindowImpl* global()
 		static KexiMainWindowIface* global() { return 0; }
 		
@@ -95,7 +95,7 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		/*! Registers window \a window for watching and adds it to the main window's stack. */
 		virtual void registerChild(KexiWindow *window) = 0;
 
-		virtual Q3PopupMenu* findPopupMenu(const char *popupName) = 0;
+//2.0 disabled		virtual Q3PopupMenu* findPopupMenu(const char *popupName) = 0;
 
 		/*! Generates ID for private "document" like Relations window.
 		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
@@ -107,7 +107,7 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		/*! \return a list of all actions defined by application.
 		 Not all of them are shared. Don't use plug these actions
 		 in your windows by hand but user methods from KexiView! */
-		virtual QList<KAction*> allActions() const = 0;
+//2.0 disabled		virtual QList<KAction*> allActions() const = 0;
 
 		/*! \return currently active window or 0 if there is no active window. */
 		virtual KexiWindow* currentWindow() const = 0;
@@ -115,20 +115,18 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		/*! \return true if this window is in the User Mode. */
 		virtual bool userMode() const = 0;
 
-#warning SIGNALS...
-#if 0
-	signals:
+//	signals:
 		//! Emitted to make sure the project can be close. 
 		//! Connect a slot here and set \a cancel to true to cancel the closing.
-		void acceptProjectClosingRequested(bool& cancel);
+		virtual void acceptProjectClosingRequested(bool& cancel) = 0;
 
 		//! Emitted before closing the project (and destroying all it's data members).
 		//! You can do you cleanup of your structures here. 
-		void beforeProjectClosing();
+		virtual void beforeProjectClosing() = 0;
 
 		//! Emitted after closing the project. 
-		void projectClosed();
-#endif
+		virtual void projectClosed() = 0;
+//#endif
 
 //	public slots:
 		/*! Creates new object of type defined by \a info part info. 

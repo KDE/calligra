@@ -19,7 +19,7 @@
 
 #include "kexifinddialog.h"
 
-#include <kstdguiitem.h>
+#include <kstandardguiitem.h>
 #include <kstdaction.h>
 #include <kpushbutton.h>
 #include <kcombobox.h>
@@ -185,7 +185,8 @@ void KexiFindDialog::setCurrentLookInColumnName(const QString& columnName)
 	else {
 		index = d->lookInColumnNames.indexOf( columnName );
 		if (index == -1) {
-			kWarning() << QString("KexiFindDialog::setCurrentLookInColumn(%1) column name not found on the list")
+			kWarning() << QString(
+				"KexiFindDialog::setCurrentLookInColumn(%1) column name not found on the list")
 				.arg(columnName) << endl;
 			return;
 		}
@@ -225,13 +226,13 @@ void KexiFindDialog::setObjectNameForCaption(const QString& name)
 		if (name.isEmpty())
 			setWindowTitle(i18n("Replace"));
 		else
-			setWindowTitle(i18n("Replace in \"%1\"").arg(name));
+			setWindowTitle(i18n("Replace in \"%1\"", name));
 	}
 	else {
 		if (name.isEmpty())
 			setWindowTitle(i18n("Find"));
 		else
-			setWindowTitle(i18n("Find in \"%1\"").arg(name));
+			setWindowTitle(i18n("Find in \"%1\"", name));
 	}
 }
 

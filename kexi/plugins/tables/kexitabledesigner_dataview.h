@@ -28,7 +28,7 @@ class KexiTableDesigner_DataView : public KexiDataTable
 	Q_OBJECT
 
 	public:
-		KexiTableDesigner_DataView(KexiMainWindow *win, QWidget *parent);
+		KexiTableDesigner_DataView(QWidget *parent);
 
 		virtual ~KexiTableDesigner_DataView();
 

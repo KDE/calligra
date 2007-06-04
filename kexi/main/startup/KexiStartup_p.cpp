@@ -71,8 +71,8 @@ tristate SQLite2ToSQLite3Migration::run()
 		return false;
 
 	m_dlg = new KProgressDialog(0, 0, QString(), 
-		i18n("Saving \"%1\" project file to a new \"%2\" database format...")
-		.arg(QDir::convertSeparators(QFileInfo(m_filePath).fileName())).arg("SQLite3")
+		i18n("Saving \"%1\" project file to a new \"%2\" database format...",
+			QDir::convertSeparators(QFileInfo(m_filePath).fileName()), "SQLite3")
 	);
 	m_dlg->setModal(true);
 	connect(m_dlg, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));

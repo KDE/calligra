@@ -236,7 +236,7 @@ QString LoadIconDialog::iconName()
 /// Pixmap Collection Editor Dialog
 PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWidget *parent)
 : KDialogBase(parent, "pixcollection_dialog", true,
-	i18n("Edit Pixmap Collection: %1").arg(collection->collectionName()), Close, Close, false)
+	i18n("Edit Pixmap Collection: %1", collection->collectionName()), Close, Close, false)
 {
 	m_collection = collection;
 	QFrame *frame = makeMainWidget();
@@ -300,7 +300,7 @@ PixmapCollectionEditor::newItemByName()
 void
 PixmapCollectionEditor::newItemByPath()
 {
-	KUrl url = KFileDialog::getImageOpenURL("::kexi", parentWidget());
+	KUrl url = KFileDialog::getImageOpenURL("kfiledialog:///kexi", parentWidget());
 	if(url.isEmpty())
 		return;
 	QString name = m_collection->addPixmapPath(url);
@@ -315,8 +315,8 @@ PixmapCollectionEditor::removeItem()
 	  return;
 
 	int confirm = KMessageBox::questionYesNo(parentWidget(), QString("<qt>")+
-		i18n("Do you want to remove item \"%1\" from collection \"%2\"?")
-		.arg(item->text()).arg(m_collection->collectionName()) + "</qt>");
+		i18n("Do you want to remove item \"%1\" from collection \"%2\"?",
+			item->text(), m_collection->collectionName()) + "</qt>");
 	if(confirm == KMessageBox::No)
 		return;
 
@@ -374,8 +374,9 @@ PixmapCollectionEditor::displayMenu(Q3IconViewItem *it, const QPoint &p)
 
 //// A Dialog to choose a pixmap from the PixmapCollection
 PixmapCollectionChooser::PixmapCollectionChooser(PixmapCollection *collection, const QString &selectedItem, QWidget *parent)
-: KDialogBase(parent, "pixchoose_dialog", true, i18n("Select Pixmap From %1").arg(collection->collectionName()),
-   User1|Ok|Cancel, Ok, false, KGuiItem(i18n("Edit Collection...")))
+: KDialogBase(parent, "pixchoose_dialog", true, 
+	i18n("Select Pixmap From %1", collection->collectionName()),
+	User1|Ok|Cancel, Ok, false, KGuiItem(i18n("Edit Collection...")))
 {
 	m_collection = collection;
 	setInitialSize(QSize(400, 200), true);

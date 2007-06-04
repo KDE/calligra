@@ -28,10 +28,9 @@
 #include <Q3CString>
 #include <QDropEvent>
 
-#include <kexiviewbase.h>
+#include <KexiView.h>
 #include "kexiquerypart.h"
 
-class KexiMainWindow;
 class KexiTableViewData;
 class KexiDataTable;
 class KexiTableItem;
@@ -60,12 +59,12 @@ namespace KexiDB
 }
 
 //! Design view of the Query Designer
-class KexiQueryDesignerGuiEditor : public KexiViewBase
+class KexiQueryDesignerGuiEditor : public KexiView
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+		KexiQueryDesignerGuiEditor(QWidget *parent);
 		virtual ~KexiQueryDesignerGuiEditor();
 
 //		KexiDB::QuerySchema	*schema();

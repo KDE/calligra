@@ -31,7 +31,6 @@
 #include <q3vbox.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <Q3StrList>
 #include <Q3PtrList>
 
 #include <klocale.h>
@@ -53,6 +52,7 @@
 #include <ktextedit.h>
 #include <ktabwidget.h>
 #include <kfontdialog.h>
+#include <KPageDialog>
 
 #include <kdeversion.h>
 //#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9) && !defined(Q_WS_WIN)
@@ -153,6 +153,7 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 	m_treeview = 0;
 	m_emitSelectionSignalsUpdatesPropertySet = false;
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
+	m_menuNoBuddy = 0;
 
 	m_deleteWidgetLater_list.setAutoDelete(true);
 	connect( &m_deleteWidgetLater_timer, SIGNAL(timeout()), this, SLOT(deleteWidgetLaterTimeout()));
@@ -878,7 +879,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	if (!multiple) {
 		if(w == container->form()->widget()) {
 			icon = SmallIcon("form");
-			titleText = i18n("%1 : Form").arg(w->objectName());
+			titleText = i18n("%1 : Form", w->objectName());
 		}
 		else {
 			icon = SmallIcon(
@@ -919,7 +920,9 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	separatorNeeded = true;
 
 	// We create the buddy menu
-	if(!multiple && w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != Qt::RichText))
+	if (!multiple && w->inherits("QLabel")
+		&& ((QLabel*)w)->text().contains("&")
+		&& (((QLabel*)w)->textFormat() != Qt::RichText))
 	{
 		if (separatorNeeded)
 			m_popup->addSeparator();
@@ -927,25 +930,25 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		KMenu *sub = new KMenu(w);
 		QWidget *buddy = ((QLabel*)w)->buddy();
 
-		sub->insertItem(i18n("No Buddy"), MenuNoBuddy);
-		if(!buddy)
-			sub->setItemChecked(MenuNoBuddy, true);
+		m_menuNoBuddy = sub->addAction(i18n("No Buddy"));
+		if (!buddy)
+			m_menuNoBuddy->setChecked(true);
 		sub->addSeparator();
 
 		// add all the widgets that can have focus
-		for(ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it)
-		{
-			int index = sub->insertItem(
-				SmallIcon(container->form()->library()->iconName(it.current()->className().toLatin1())),
-				it.current()->name());
-			if(it.current()->widget() == buddy)
-				sub->setItemChecked(index, true);
+		for (ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it) {
+			QAction* action = sub->addAction(
+				KIcon(
+					container->form()->library()->iconName(it.current()->className().toLatin1()) ),
+				it.current()->name() );
+			if (it.current()->widget() == buddy)
+				action->setChecked(true);
 		}
 
-		/*int id =*/ m_popup->insertItem(i18n("Choose Buddy..."), sub);
+		QAction *subAction = m_popup->addMenu(sub);
+		subAction->setText(i18n("Choose Buddy..."));
 //		menuIds->append(id);
-		connect(sub, SIGNAL(activated(int)), this, SLOT(buddyChosen(int)));
-
+		connect(sub, SIGNAL(triggered(QAction*)), this, SLOT(buddyChosen(QAction*)));
 		separatorNeeded = true;
 	}
 
@@ -958,15 +961,18 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 
 		// We create the signals menu
 		KMenu *sigMenu = new KMenu();
-		Q3StrList list = w->metaObject()->signalNames(true);
-		QStrListIterator it(list);
-		for(; it.current() != 0; ++it)
-			sigMenu->insertItem(*it);
+//ported	Q3StrList list = w->metaObject()->signalNames(true);
+		QList<QMetaMethod> list(
+			KexiUtils::methodsForMetaObjectWithParents( w->metaObject(), QMetaMethod::Signal,
+				QMetaMethod::Public) );
+		foreach ( QMetaMethod m, list )
+			sigMenu->addAction(m.signature());
 
-		int id = m_popup->insertItem(KIcon(""), i18n("Events"), sigMenu);
+		QAction *eventsSubMenuAction = m_popup->addMenu(sigMenu);
+		eventsSubMenuAction->setText(i18n("Events"));
 //		menuIds->append(id);
-		if(list.isEmpty())
-			m_popup->setItemEnabled(id, false);
+		if (list.isEmpty())
+			eventsSubMenuAction->setEnabled(false);
 		connect(sigMenu, SIGNAL(triggered(QAction*)),
 			this, SLOT(menuSignalChosen(QAction*)));
 		separatorNeeded = true;
@@ -974,16 +980,15 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 #endif
 
 	// Other items
-	if(!multiple)
-	{
+	if(!multiple) {
 		QAction* lastAction = 0;
 		if (separatorNeeded) {
 			lastAction = m_popup->addSeparator();
 		}
-		const uint oldIndex = m_popup->count()-1;
+		const uint oldIndex = m_popup->actions().count()-1;
 		container->form()->library()
 			->createMenuActions(w->metaObject()->className(), w, m_popup, container);
-		if (oldIndex == (m_popup->count()-1)) {
+		if (oldIndex == uint(m_popup->actions().count()-1)) {
 //			for (uint i=oldIndex; i<m_popup->count(); i++) {
 //				int id = m_popup->idAt( i );
 //				if (id!=-1)
@@ -1016,19 +1021,18 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 }
 
 void
-FormManager::buddyChosen(int id)
+FormManager::buddyChosen(QAction *action)
 {
-	if(!m_menuWidget)
+	if(!m_menuWidget || !action)
 		return;
 	QLabel *label = static_cast<QLabel*>((QWidget*)m_menuWidget);
 
-	if(id == MenuNoBuddy)
-	{
+	if (action == m_menuNoBuddy) {
 		label->setBuddy(0);
 		return;
 	}
 
-	ObjectTreeItem *item = activeForm()->objectTree()->lookup(m_popup->text(id));
+	ObjectTreeItem *item = activeForm()->objectTree()->lookup(action->text());
 	if(!item || !item->widget())
 		return;
 	label->setBuddy(item->widget());
@@ -1122,8 +1126,7 @@ FormManager::createLayout(int layoutType)
 		kWarning() << "FormManager::createLayout(): list is empty!" << endl;
 		return;
 	}
-	if(list->count() == 1)
-	{
+	if(list->count() == 1) {
 		ObjectTreeItem *item = m_active->objectTree()->lookup(list->first()->objectName());
 		if(!item || !item->container() || !m_propSet->contains("layout"))
 			return;
@@ -1132,8 +1135,7 @@ FormManager::createLayout(int layoutType)
 	}
 
 	QWidget *parent = list->first()->parentWidget();
-	for(QWidget *w = list->first(); w; w = list->next())
-	{
+	for(QWidget *w = list->first(); w; w = list->next()) {
 		kDebug() << "comparing widget " << w->objectName() << " whose parent is " << w->parentWidget()->objectName() << " insteaed of " << parent->objectName() << endl;
 		if(w->parentWidget() != parent)
 		{
@@ -1435,9 +1437,10 @@ void
 FormManager::deleteWidgetLater( QWidget *w )
 {
 	w->hide();
-	w->reparent(0, Qt::WType_TopLevel, QPoint(0,0));
+	w->setParent(0, Qt::WType_TopLevel);
 	m_deleteWidgetLater_list.append( w );
-	m_deleteWidgetLater_timer.start( 100, true );
+	m_deleteWidgetLater_timer.setSingleShot( true );
+	m_deleteWidgetLater_timer.start( 100 );
 }
 
 void
@@ -1461,34 +1464,32 @@ FormManager::showFormUICode()
 
 	if (!m_uiCodeDialog) {
 		m_uiCodeDialog = new KPageDialog();
-		m_uiCodeDialog->setFaceType(KPageDialog::Tabbed);
 		m_uiCodeDialog->setObjectName("ui_dialog");
-		m_uiCodeDialog->setModal(true)
+		m_uiCodeDialog->setFaceType(KPageDialog::Tabbed);
+		m_uiCodeDialog->setModal(true);
 		m_uiCodeDialog->setCaption(i18n("Form's UI Code"));
 		m_uiCodeDialog->setButtons(KDialog::Close);
 //kde4: needed?		m_uiCodeDialog->resize(700, 600);
 
-		m_currentUICodeDialogEditor = new KTextEdit(
-			QString(), QString(), m_uiCodeDialog);
+		m_currentUICodeDialogEditor = new KTextEdit(m_uiCodeDialog);
 		m_uiCodeDialog->addPage(m_currentUICodeDialogEditor, i18n("Current"));
 		m_currentUICodeDialogEditor->setReadOnly(true);
 		QFont f( m_currentUICodeDialogEditor->font() );
 		f.setFamily("courier");
 		m_currentUICodeDialogEditor->setFont(f);
-		m_currentUICodeDialogEditor->setTextFormat(Qt::PlainText);
+		//Qt3: m_currentUICodeDialogEditor->setTextFormat(Qt::PlainText);
 
-		m_originalUICodeDialogEditor = new KTextEdit(
-			QString(), QString(), m_uiCodeDialog);
+		m_originalUICodeDialogEditor = new KTextEdit(m_uiCodeDialog);
 		m_uiCodeDialog->addPage(m_originalUICodeDialogEditor, i18n("Original"));
 		m_originalUICodeDialogEditor->setReadOnly(true);
 		m_originalUICodeDialogEditor->setFont(f);
-		m_originalUICodeDialogEditor->setTextFormat(Qt::PlainText);
+		//Qt3: m_originalUICodeDialogEditor->setTextFormat(Qt::PlainText);
 	}
-	m_currentUICodeDialogEditor->setText( uiCode );
+	m_currentUICodeDialogEditor->setPlainText( uiCode );
 	//indent and set our original doc as well:
 	QDomDocument doc;
 	doc.setContent( activeForm()->m_recentlyLoadedUICode );
-	m_originalUICodeDialogEditor->setText( doc.toString( 3 ) );
+	m_originalUICodeDialogEditor->setPlainText( doc.toString( 3 ) );
 	m_uiCodeDialog->show();
 #endif
 }

@@ -22,8 +22,9 @@
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>
 #include <kexidb/cursor.h>
-#include <keximainwindow.h>
+#include <KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
+#include <KexiWindow.h>
 
 #include "kexiqueryview.h"
 #include "kexiquerydesignersql.h"
@@ -50,8 +51,8 @@ class KexiQueryView::Private
 
 //---------------------------------------------------------------------------------
 
-KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, const char *name)
- : KexiDataTable(win, parent, name)
+KexiQueryView::KexiQueryView(QWidget *parent)
+ : KexiDataTable(parent)
  , d( new Private() )
 {
 	tableView()->setInsertingEnabled(false); //default
@@ -76,16 +77,17 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 	{
 		KexiUtils::WaitCursorRemover remover;
 		params = KexiQueryParameters::getParameters(this, 
-			*mainWin()->project()->dbConnection()->driver(), *query, ok);
+			*KexiMainWindowIface::global()->project()->dbConnection()->driver(), *query, ok);
 	}
 	if (!ok) {//input cancelled
 		return cancelled;
 	}
-	d->cursor = mainWin()->project()->dbConnection()->executeQuery(*query, params);
+	d->cursor = KexiMainWindowIface::global()->project()->dbConnection()->executeQuery(*query, params);
 	if (!d->cursor) {
-		parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), 
+		window()->setStatus(
+			KexiMainWindowIface::global()->project()->dbConnection(), 
 			i18n("Query executing failed."));
-		//todo: also provide server result and sql statement
+//! @todo also provide server result and sql statement
 		return false;
 	}
 	setData(d->cursor);
@@ -108,13 +110,13 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 tristate KexiQueryView::afterSwitchFrom(int mode)
 {
 	if (mode==Kexi::NoViewMode) {
-		KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
+		KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(window()->schemaData());
 		const tristate result = executeQuery(querySchema);
 		if (true != result)
 			return result;
 	}
 	else if (mode==Kexi::DesignViewMode || Kexi::TextViewMode) {
-		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window()->data());
 
 		//remember what view we should use to store data changes, if needed
 //		if (temp->queryChangedInPreviousView)
@@ -131,7 +133,7 @@ tristate KexiQueryView::afterSwitchFrom(int mode)
 
 KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
-	KexiViewBase * view = parentDialog()->viewThatRecentlySetDirtyFlag();
+	KexiView * view = window()->viewThatRecentlySetDirtyFlag();
 	if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
 		return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(sdata, cancel);
 	if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
@@ -141,7 +143,7 @@ KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata,
 
 tristate KexiQueryView::storeData(bool dontAsk)
 {
-	KexiViewBase * view = parentDialog()->viewThatRecentlySetDirtyFlag();
+	KexiView * view = window()->viewThatRecentlySetDirtyFlag();
 	if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
 		return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeData(dontAsk);
 	if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
@@ -151,4 +153,3 @@ tristate KexiQueryView::storeData(bool dontAsk)
 
 
 #include "kexiqueryview.moc"
-

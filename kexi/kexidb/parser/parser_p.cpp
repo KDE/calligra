@@ -337,7 +337,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 
 		int tablePosition = -1;
 		if (!ts) {//try to find tableAlias
-			tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.latin1() );
+			tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.toLatin1() );
 			if (tablePosition>=0) {
 				ts = parseInfo.querySchema->tables()->at(tablePosition);
 				if (ts) {
@@ -577,7 +577,7 @@ QuerySchema* buildSelectQuery(
 				}
 				kDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column "
 					<< columnNum << endl;
-				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
+				querySchema->setColumnAlias(columnNum, aliasVariable->name.toLatin1());
 			}*/
 
 			if (moveNext) {
@@ -617,8 +617,8 @@ QuerySchema* buildSelectQuery(
 						if (!orderByColumnList.appendColumn( *querySchema,
 							(*it).ascending, (*it).columnNumber-1 ))
 						{
-							setError(i18n("Could not define sorting - no column at position %1")
-								.arg((*it).columnNumber));
+							setError(i18n("Could not define sorting - no column at position %1",
+								(*it).columnNumber));
 							CLEANUP;
 							return 0;
 						}
@@ -627,7 +627,7 @@ QuerySchema* buildSelectQuery(
 						Field * f = querySchema->findTableField((*it).aliasOrName);
 						if (!f) {
 							setError(i18n("Could not define sorting - "
-								"column name or alias \"%1\" does not exist").arg((*it).aliasOrName));
+								"column name or alias \"%1\" does not exist", (*it).aliasOrName));
 							CLEANUP;
 							return 0;
 						}

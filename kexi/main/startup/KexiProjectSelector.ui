@@ -2,8 +2,8 @@
   <author></author>
   <comment></comment>
   <exportmacro></exportmacro>
-  <class>KexiProjectSelectorBase</class>
-  <widget class="QWidget" name="KexiProjectSelectorBase" >
+  <class>KexiProjectSelector</class>
+  <widget class="QWidget" name="KexiProjectSelector" >
     <property name="geometry" >
       <rect>
         <x>0</x>

@@ -38,7 +38,7 @@ KexiDynamicQueryParameterDialog::KexiDynamicQueryParameterDialog(QWidget *parent
 
 	for (KexiDataProvider::ParameterList::const_iterator it=list.begin();
 		it!=list.end();++it) {
-		QLineEdit *le=new QLineEdit(m_mainView,(*it).name.utf8());
+		QLineEdit *le=new QLineEdit(m_mainView,(*it).name.toUtf8());
 		le->setText((*values)[(*it).name]);
 	}
 

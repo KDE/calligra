@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIMAINWINDOWIMPL_H
-#define KEXIMAINWINDOWIMPL_H
+#ifndef KEXIMAINWINDOW_H
+#define KEXIMAINWINDOW_H
 
 #include <KMainWindow>
 #include <core/KexiMainWindowIface.h>
@@ -61,9 +61,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		KexiMainWindow(QWidget *parent = 0);
 		virtual ~KexiMainWindow();
 
-#warning TODO	virtual KActionCollection* actionCollection() const;
-		virtual KActionCollection* actionCollection() const {
-			return KMainWindow::actionCollection(); }
+		virtual KActionCollection* actionCollection() const;
 
 #warning TODO virtual QWidget* focusWidget() const;
 		virtual QWidget* focusWidget() const { return QMainWindow::focusWidget(); }
@@ -88,7 +86,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
 		static int create(int argc, char *argv[], KAboutData* aboutdata = 0);
 
-		//! \return KexiMainWindowImpl singleton (if it is instantiated)
+		//! \return KexiMainWindow singleton (if it is instantiated)
 		static KexiMainWindow* self();
 
 		//! Project data of currently opened project or NULL if no project here yet.
@@ -119,23 +117,23 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
 		//! \return popup menu for \a popupName name.
-		virtual Q3PopupMenu* findPopupMenu(const char *popupName);
+//2.0 disabled		virtual Q3PopupMenu* findPopupMenu(const char *popupName);
 
 		/*! Implemented for KexiMainWindow. */
-		virtual QList<KAction*> allActions() const;
+//2.0 disabled		virtual QList<KAction*> allActions() const;
 
-		/*! \return currently active window od 0 if there is no active window. 
-		 Implemented for KexiMainWindow. */
+		/*! \return currently active window od 0 if there is no active window.
+		 Implemented for KexiWindow. */
 		virtual KexiWindow* currentWindow() const;
 
 		/*! Reimplemented */
-		virtual void readProperties(const KConfigGroup &config);
-		virtual void saveProperties(KConfigGroup &config);
+		virtual void readProperties(KConfig *config);
+		virtual void saveProperties(KConfig *config);
 		virtual void saveGlobalProperties( KConfig* sessionConfig );
 
 	public slots:
 		/*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.
-			Just calls closeDialog(). Use closeDialog() if you need, not this one. */
+			Just calls closeWindow(). Use closeWindow() if you need, not this one. */
 #warning TODO virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true);
 
 		/*! Reimplemented for internal reasons. */
@@ -242,6 +240,17 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
 
 	signals:
+		//! Emitted to make sure the project can be close. 
+		//! Connect a slot here and set \a cancel to true to cancel the closing.
+		virtual void acceptProjectClosingRequested(bool& cancel);
+
+		//! Emitted before closing the project (and destroying all it's data members).
+		//! You can do you cleanup of your structures here. 
+		virtual void beforeProjectClosing();
+
+		//! Emitted after closing the project. 
+		virtual void projectClosed();
+
 		//! Emitted after opening a project, even after slotAutoOpenObjectsLater().
 		void projectOpened();
 
@@ -306,12 +315,11 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 \a cancelled will be set to true (false otherwise). 
 		 \a shortcutFileName, if not 0, will be set to a shortcut filename 
 		 (in case when server database project was selected). */
-		KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true, 
-			QString *shortcutFileName = 0);
+		KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true, QString *shortcutFileName = 0);
 
-		void setWindowMenu(Q3PopupMenu *menu);
+#warning TODO		void setWindowMenu(Q3PopupMenu *menu);
 
-		/*! \return focused kexi window (KexiDialogBase or KexiDockBase subclass) */
+		/*! \return focused kexi window (KexiWindow or KexiDockBase subclass) */
 //		QWidget* focusWindow() const;
 
 		/*! Reimplemented from KexiSharedActionHost:
@@ -337,7 +345,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 		/*! Helper. Removes and/or adds GUI client for current window's view;
 		 on switching to other window (activeWindowChanged())
-		 or on switching to other view within the same dialog (switchToViewMode()). */
+		 or on switching to other view within the same window (switchToViewMode()). */
 		void updateWindowViewGUIClient(KXMLGUIClient *viewClient);
 
 		/*! Helper. Updates setup of property panel's tabs. Used when switching
@@ -345,16 +353,13 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		void updateCustomPropertyPanelTabs(KexiWindow *prevWindow, int prevViewMode);
 
 		/*! @overload void updateCustomPropertyPanelTabs(KexiWindow *prevWindow, int prevViewMode) */
-		void updateCustomPropertyPanelTabs(
-			KexiPart::Part *prevWindowPart, int prevViewMode, KexiPart::Part *curWindowPart, int curViewMode );
+		void updateCustomPropertyPanelTabs( KexiPart::Part *prevWindowPart, int prevViewMode, KexiPart::Part *curWindowPart, int curViewMode );
 
 		/*! Used in openProject when running another Kexi process is required. */
-		tristate openProjectInExternalKexiInstance(const QString& aFileName, 
-			KexiDB::ConnectionData *cdata, const QString& dbName);
+		tristate openProjectInExternalKexiInstance(const QString& aFileName, KexiDB::ConnectionData *cdata, const QString& dbName);
 
 		/*! Used in openProject when running another Kexi process is required. */
-		tristate openProjectInExternalKexiInstance(const QString& aFileName, 
-			const QString& fileNameForConnectionData, const QString& dbName);
+		tristate openProjectInExternalKexiInstance(const QString& aFileName, const QString& fileNameForConnectionData, const QString& dbName);
 
 	protected slots:
 
@@ -362,15 +367,15 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		void slotAutoOpenObjectsLater();
 
 		/*! This slot is called if a window changes */
-#warning TODO 		void activeWindowChanged(KMdiChildView *dlg);
+#warning TODO		void activeWindowChanged(KMdiChildView *dlg);
 
-		/*! Tthis slot is called if a window gets colsed and will unregister stuff */
-#warning TODO 		void childClosed(KMdiChildView *dlg);
+		/*! This slot is called if a window gets colsed and will unregister stuff */
+#warning TODO		void childClosed(KMdiChildView *dlg);
 
 		void slotPartLoaded(KexiPart::Part* p);
 
 		void slotCaptionForCurrentMDIChild(bool childrenMaximized);
-#warning TODO void slotNoMaximizedChildFrmLeft(KMdiChildFrm*);
+#warning TODO		void slotNoMaximizedChildFrmLeft(KMdiChildFrm*);
 		void slotLastChildViewClosed();
 		void slotChildViewIsDetachedNow(QWidget*);
 
@@ -382,8 +387,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 This differs from openObject() signal in that if the object is already opened
 		 in view mode other than \a viewMode, the mode is not changed.
 		 \sa KexiBrowser::openOrActivateItem() */
-		KexiWindow* openObjectFromNavigator(KexiPart::Item* item, int viewMode, 
-			bool &openingCancelled);
+		KexiWindow* openObjectFromNavigator(KexiPart::Item* item, int viewMode, bool &openingCancelled);
 
 		//! For convenience
 		KexiWindow* openObjectFromNavigator(KexiPart::Item* item, int viewMode);
@@ -400,7 +404,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		}
 
 		//! For convenience
-		KexiWindow* openObject(KexiPart::Item *item, int viewMode, 
+		KexiWindow* openObject(KexiPart::Item *item, int viewMode,
 			QMap<QString,QString>* staticObjectArgs = 0)
 		{
 			bool openingCancelled;
@@ -422,7 +426,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 and also optionally application's caption. */
 		virtual void slotObjectRenamed(const KexiPart::Item &item, const Q3CString& oldName);
 
-		virtual void fillWindowMenu();
+#warning TODO		virtual void fillWindowMenu();
 
 		void invalidateSharedActions();
 		void invalidateSharedActionsLater();
@@ -480,7 +484,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		void slotStartFeedbackAgent();
 		void slotImportFile();
 		void slotImportServer();
-
+		
 		//! There are performed all actions that need to be done immediately after  ctro (using timer)
 		void slotLastActions();
 
@@ -492,21 +496,20 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		/*! Handles changes in 'dirty' flag for windows. */
 		void slotDirtyFlagChanged(KexiWindow*);
 
-#warning TODO 		void slotMdiModeHasBeenChangedTo(KMdi::MdiMode);
+#warning TODO		void slotMdiModeHasBeenChangedTo(KMdi::MdiMode);
 
 		//! reimplemented to add "restart is required" message box
-		virtual void switchToIDEAlMode();
-		void switchToIDEAlMode(bool showMessage);
-		virtual void switchToChildframeMode();
-		void switchToChildframeMode(bool showMessage);
+//2.0: unused		virtual void switchToIDEAlMode();
+//2.0: unused		void switchToIDEAlMode(bool showMessage);
+//2.0: unused		virtual void switchToChildframeMode();
+//2.0: unused		void switchToChildframeMode(bool showMessage);
 
 		/*! Shows Project Migration Wizard. \return true on successful migration, 
 		 cancelled on cancellation, and false on failure.
 		 If \a mimeType and \a databaseName are not empty, the wizard will only ask about 
 		 parameters of destination project and skip pages related to source project. 
 		 \a cdata connection data can be also provided to preselect server-based connections. */
-		tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName,
-			const KexiDB::ConnectionData *cdata = 0);
+		tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName, const KexiDB::ConnectionData *cdata = 0);
 
 		//! Receives "selectionChanged()" signal from navigator to update some actions.
 		void slotPartItemSelectedInNavigator(KexiPart::Item* item);
@@ -515,7 +518,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 on \a item. \return true on success */
 		tristate executeItem(KexiPart::Item* item);
 
-		//! Shows "exports as data table" dialog for \a item.
+		//! Shows "export as data table" dialog for \a item.
 		tristate exportItemAsDataTable(KexiPart::Item* item);
 
 		//! Shows "copy special as data table" dialog for \a item.
@@ -527,25 +530,22 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 		//! Shows "print" dialog for \a item and \a settings.
 		//! \return true on success.
-		bool printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings,
-			const QString& titleText = QString());
+#warning TODO reenable when ported		bool printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString());
 		
 		/*! Shows "print preview" window for \a item. 
 		 The preview windoe is cached, so \a reload == true is sometimes needed 
 		 if data or print settings have changed in the meantime.
 		 \return true on success. */
-		bool printPreviewForItem(KexiPart::Item* item, const QString& titleText, 
-			bool reload);
+		bool printPreviewForItem(KexiPart::Item* item, const QString& titleText, bool reload);
 
 		//! Shows "print preview" window. 
 		//! \return true on success.
-		bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, 
-			const QString& titleText = QString(), bool reload = false);
+#warning TODO reenable when ported		bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString(), bool reload = false);
 
 		/*! Implemented for KexiMainWindow. Helper for printItem() and printPreviewForItem().
 		 Also used by KexiFormEventAction.
 		 \return true on success and cancelled when the action was cancelled. */
-		tristate printActionForItem(KexiPart::Item* item, PrintActionType action);
+#warning TODO reenable when ported		tristate printActionForItem(KexiPart::Item* item, PrintActionType action);
 
 	private:
 		class MessageHandler;

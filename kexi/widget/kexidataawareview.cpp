@@ -21,15 +21,13 @@
 
 #include <kexidataawareobjectiface.h>
 #include <utils/kexisharedactionclient.h>
-#include <core/KexiMainWindowIface.h>
 
 #include <qlayout.h>
-//Added by qt3to4:
 #include <Q3VBoxLayout>
 
 #include <kmenu.h>
 
-KexiDataAwareView::KexiDataAwareView(KexiMainWindowIface *mainWin, QWidget *parent)
+KexiDataAwareView::KexiDataAwareView(QWidget *parent)
  : KexiView(parent)
  , KexiSearchAndReplaceViewInterface()
  , m_internalView(0)
@@ -166,7 +164,7 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
 	setAvailable("data_sort_za", sorting);
 }
 
-QWidget* KexiDataAwareView::mainWidget() 
+QWidget* KexiDataAwareView::mainWidget() const
 {
 	return m_internalView;
 }

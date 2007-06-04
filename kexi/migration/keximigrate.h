@@ -29,11 +29,9 @@
 
 #include <kgenericfactory.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <Q3CString>
-#include <Q3PtrList>
 #include <QPointer>
+#include <QList>
 
 class KexiProject;
 namespace Kexi
@@ -136,7 +134,7 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
 		//! \return a list of property names available for this driver.
-		Q3ValueList<Q3CString> propertyNames() const;
+		QList<Q3CString> propertyNames() const;
 
 		/*! \return true is driver is valid. Checks if KexiMigrate::versionMajor() 
 		 and KexiMigrate::versionMinor() are matching. 
@@ -148,7 +146,7 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 
 	protected:
 		//! Used by MigrateManager.
-		KexiMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
+		KexiMigrate(QObject *parent, const QStringList &args = QStringList());
 
 		//! Connect to source database (driver specific)
 		virtual bool drv_connect() = 0;
@@ -183,8 +181,11 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		  (so e.g. keximdb driver does not need this). */
 //! @todo SQL-dependent!
 		virtual tristate drv_queryStringListFromSQL(
-			const QString& sqlStatement, uint columnNumber, QStringList& stringList, int numRecords = -1)
-		 { return cancelled; }
+			const QString& sqlStatement, uint columnNumber, QStringList& stringList, 
+			int numRecords = -1)
+		 { Q_UNUSED(sqlStatement); Q_UNUSED(columnNumber); Q_UNUSED(stringList);
+		   Q_UNUSED(numRecords); 
+		   return cancelled; }
 
 		/*! Fetches single string at column \a columnNumber from result obtained 
 		 by running \a sqlStatement.
@@ -205,7 +206,8 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 //! @todo SQL-dependent!
 		virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
 			KexiDB::RowData& data, bool &firstRecord)
-		 { return cancelled; }
+		 { Q_UNUSED(sqlStatement); Q_UNUSED(data); Q_UNUSED(firstRecord);
+		   return cancelled; }
 
 		//! Copy a table from source DB to target DB (driver specific)
 		//! - create copies of KexiDB tables
@@ -269,16 +271,12 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		bool tableNames(QStringList& tablenames);
 
 		//! Create the target database project
-		KexiProject* createProject(Kexi::ObjectStatus* result);
-
-//		//Private data members
-//		//! Flag indicating whether data should be copied
-//		bool m_keepData;
+//		KexiProject* createProject(Kexi::ObjectStatus* result);
 
 		//! Table schemas from source DB
-		Q3PtrList<KexiDB::TableSchema> m_tableSchemas;
+		QList<KexiDB::TableSchema*> m_tableSchemas;
 
-		QPtrList<KexiDB::TableSchema> m_kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport;
+		QList<KexiDB::TableSchema*> m_kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport;
 
 		/*! Estimate size of migration job
 		 Calls drv_getTableSize for each table to be copied.

@@ -24,11 +24,13 @@
 #include <kexiutils/utils.h>
 #include "kexitableview.h"
 #include "kexidatatableview.h"
-#include "keximainwindow.h"
+#include <KexiMainWindowIface.h>
+#include <kexi_global.h>
 
-KexiTableDesigner_DataView::KexiTableDesigner_DataView(KexiMainWindow *win, QWidget *parent)
- : KexiDataTable(win, parent, "KexiTableDesigner_DataView", true/*db-aware*/)
+KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
+ : KexiDataTable(parent, true/*db-aware*/)
 {
+	setObjectName("KexiTableDesigner_DataView");
 }
 
 KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
@@ -36,7 +38,7 @@ KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
 	if (dynamic_cast<KexiDataTableView*>(tableView()) 
 		&& dynamic_cast<KexiDataTableView*>(tableView())->cursor())
 	{
-		mainWin()->project()->dbConnection()->deleteCursor( 
+		KexiMainWindowIface::global()->project()->dbConnection()->deleteCursor( 
 			dynamic_cast<KexiDataTableView*>(tableView())->cursor() );
 	}
 }
@@ -62,7 +64,9 @@ tristate KexiTableDesigner_DataView::afterSwitchFrom(int mode)
 
 	if (tempData()->tableSchemaChangedInPreviousView) {
 		KexiUtils::WaitCursor wait;
-		KexiDB::Cursor *c = mainWin()->project()->dbConnection()->prepareQuery(*tempData()->table);
+		KexiDB::Cursor *c 
+			= KexiMainWindowIface::global()->project()->dbConnection()->prepareQuery(
+				*tempData()->table);
 		if (!c)
 			return false;
 		setData(c);
@@ -73,7 +77,7 @@ tristate KexiTableDesigner_DataView::afterSwitchFrom(int mode)
 
 KexiTablePart::TempData* KexiTableDesigner_DataView::tempData() const
 {
-	return static_cast<KexiTablePart::TempData*>(parentDialog()->tempData());
+	return static_cast<KexiTablePart::TempData*>(window()->data());
 }
 
 #include "kexitabledesigner_dataview.moc"

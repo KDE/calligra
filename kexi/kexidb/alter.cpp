@@ -110,22 +110,22 @@ AlterTableHandler::FieldActionBase::~FieldActionBase()
 
 //--------------------------------------------------------
 
-static KStaticDeleter< QMap<Q3CString,int> > KexiDB_alteringTypeForProperty_deleter;
-QMap<Q3CString,int> *KexiDB_alteringTypeForProperty = 0;
+static KStaticDeleter< QMap<QByteArray,int> > KexiDB_alteringTypeForProperty_deleter;
+QMap<QByteArray,int> *KexiDB_alteringTypeForProperty = 0;
 
 //! @internal
-int AlterTableHandler::alteringTypeForProperty(const Q3CString& propertyName)
+int AlterTableHandler::alteringTypeForProperty(const QByteArray& propertyName)
 {
 	if (!KexiDB_alteringTypeForProperty) {
 		KexiDB_alteringTypeForProperty_deleter.setObject( KexiDB_alteringTypeForProperty, 
-			new QMap<Q3CString,int>() );
+			new QMap<QByteArray,int>() );
 #define I(name, type) \
-	KexiDB_alteringTypeForProperty->insert(Q3CString(name).toLower(), (int)AlterTableHandler::type)
+	KexiDB_alteringTypeForProperty->insert(QByteArray(name).toLower(), (int)AlterTableHandler::type)
 #define I2(name, type1, type2) \
 	flag = (int)AlterTableHandler::type1|(int)AlterTableHandler::type2; \
 	if (flag & AlterTableHandler::PhysicalAlteringRequired) \
 		flag |= AlterTableHandler::MainSchemaAlteringRequired; \
-	KexiDB_alteringTypeForProperty->insert(Q3CString(name).toLower(), flag)
+	KexiDB_alteringTypeForProperty->insert(QByteArray(name).toLower(), flag)
 
 	/* useful links: 
 		http://dev.mysql.com/doc/refman/5.0/en/create-table.html
@@ -181,8 +181,9 @@ int AlterTableHandler::alteringTypeForProperty(const Q3CString& propertyName)
 	if (res == 0) {
 		if (KexiDB::isExtendedTableFieldProperty(propertyName))
 			return (int)ExtendedSchemaAlteringRequired;
-		KexiDBWarn << QString("AlterTableHandler::alteringTypeForProperty(): property \"%1\" not found!")
-			.arg(propertyName) << endl;
+		KexiDBWarn << 
+			QString("AlterTableHandler::alteringTypeForProperty(): property \"%1\" not found!")
+			.arg(QString(propertyName)) << endl;
 	}
 	return res;
 	return (*KexiDB_alteringTypeForProperty)[propertyName.toLower()]; 
@@ -210,7 +211,7 @@ AlterTableHandler::ChangeFieldPropertyAction::~ChangeFieldPropertyAction()
 void AlterTableHandler::ChangeFieldPropertyAction::updateAlteringRequirements()
 {
 //	m_alteringRequirements = ???;
-	setAlteringRequirements( alteringTypeForProperty( m_propertyName.latin1() ) );
+	setAlteringRequirements( alteringTypeForProperty( m_propertyName.toLatin1() ) );
 }
 
 QString AlterTableHandler::ChangeFieldPropertyAction::debugString(const DebugOptions& debugOptions)
@@ -330,10 +331,10 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
 			// (m_order is the same as in newAction)
 			// replace prev. rename action (if any)
 			actionsLikeThis->remove( "name" );
-			ActionDict *adict = fieldActions[ fieldName().latin1() ];
+			ActionDict *adict = fieldActions[ fieldName().toLatin1() ];
 			if (!adict)
 				adict = createActionDict( fieldActions, fieldName() );
-			adict->insert(m_propertyName.latin1(), newRenameAction);*/
+			adict->insert(m_propertyName.toLatin1(), newRenameAction);*/
 		}
 		else {
 			ActionBase *removeActionForThisField = actionsLikeThis ? actionsLikeThis->find( ":remove:" ) : 0;
@@ -349,7 +350,7 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
 					= new AlterTableHandler::ChangeFieldPropertyAction( *this );
 				KexiDBDbg << "ChangeFieldPropertyAction::simplifyActions(): insert into '"
 					<< fieldName() << "' dict:"  << newRenameAction->debugString() << endl;
-				actionsLikeThis->insert( m_propertyName.latin1(), newRenameAction );
+				actionsLikeThis->insert( m_propertyName.toLatin1(), newRenameAction );
 				return;
 			}
 		}
@@ -373,21 +374,21 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
 	// so, e.g. [ setCaption(A, "captionA"), setCaption(A, "captionB") ]
 	//  becomes: [ setCaption(A, "captionB") ]
 	// because adding this action does nothing
-	ActionDict *nextActionsLikeThis = fieldActions[ uid() ]; //fieldName().latin1() ];
-	if (!nextActionsLikeThis || !nextActionsLikeThis->find( m_propertyName.latin1() )) { 
+	ActionDict *nextActionsLikeThis = fieldActions[ uid() ]; //fieldName().toLatin1() ];
+	if (!nextActionsLikeThis || !nextActionsLikeThis->find( m_propertyName.toLatin1() )) { 
 		//no such action, add this
 		AlterTableHandler::ChangeFieldPropertyAction* newAction 
 			= new AlterTableHandler::ChangeFieldPropertyAction( *this );
 		if (!nextActionsLikeThis)
 			nextActionsLikeThis = createActionDict( fieldActions, uid() );//fieldName() );
-		nextActionsLikeThis->insert( m_propertyName.latin1(), newAction );
+		nextActionsLikeThis->insert( m_propertyName.toLatin1(), newAction );
 	}
 }
 
 bool AlterTableHandler::ChangeFieldPropertyAction::shouldBeRemoved(ActionDictDict &fieldActions)
 {
 	Q_UNUSED(fieldActions);
-	return fieldName().lower() == m_newValue.toString().lower();
+	return fieldName().toLower() == m_newValue.toString().toLower();
 }
 
 tristate AlterTableHandler::ChangeFieldPropertyAction::updateTableSchema(TableSchema &table, Field* field,
@@ -395,8 +396,8 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::updateTableSchema(TableSc
 {
 	//1. Simpler cases first: changes that do not affect table schema at all
 	// "caption", "description", "width", "visibleDecimalPlaces"
-	if (SchemaAlteringRequired & alteringTypeForProperty(m_propertyName.latin1())) {
-		bool result = KexiDB::setFieldProperty(*field, m_propertyName.latin1(), newValue());
+	if (SchemaAlteringRequired & alteringTypeForProperty(m_propertyName.toLatin1())) {
+		bool result = KexiDB::setFieldProperty(*field, m_propertyName.toLatin1(), newValue());
 		return result;
 	}
 
@@ -423,8 +424,8 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::execute(Connection &conn,
 	bool result;
 	//1. Simpler cases first: changes that do not affect table schema at all
 	// "caption", "description", "width", "visibleDecimalPlaces"
-	if (SchemaAlteringRequired & alteringTypeForProperty(m_propertyName.latin1())) {
-		result = KexiDB::setFieldProperty(*field, m_propertyName.latin1(), newValue());
+	if (SchemaAlteringRequired & alteringTypeForProperty(m_propertyName.toLatin1())) {
+		result = KexiDB::setFieldProperty(*field, m_propertyName.toLatin1(), newValue());
 		return result;
 	}
 
@@ -466,7 +467,7 @@ return true;
 		 "autoIncrement", "indexed", 
 
 
-	bool result = KexiDB::setFieldProperty(*field, m_propertyName.latin1(), newValue());
+	bool result = KexiDB::setFieldProperty(*field, m_propertyName.toLatin1(), newValue());
 */
 	return result;
 }
@@ -514,7 +515,7 @@ void AlterTableHandler::RemoveFieldAction::simplifyActions(ActionDictDict &field
 	//! @todo not checked
 	AlterTableHandler::RemoveFieldAction* newAction 
 			= new AlterTableHandler::RemoveFieldAction( *this );
-	ActionDict *actionsLikeThis = fieldActions[ uid() ]; //fieldName().latin1() ];
+	ActionDict *actionsLikeThis = fieldActions[ uid() ]; //fieldName().toLatin1() ];
 	if (!actionsLikeThis)
 		actionsLikeThis = createActionDict( fieldActions, uid() ); //fieldName() );
 	actionsLikeThis->insert( ":remove:", newAction ); //special
@@ -608,7 +609,7 @@ QString AlterTableHandler::InsertFieldAction::debugString(const DebugOptions& de
 void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &fieldActions)
 {
 	// Try to find actions related to this action
-	ActionDict *actionsForThisField = fieldActions[ uid() ]; //m_field->name().latin1() ];
+	ActionDict *actionsForThisField = fieldActions[ uid() ]; //m_field->name().toLatin1() ];
 
 	ActionBase *removeActionForThisField = actionsForThisField ? actionsForThisField->find( ":remove:" ) : 0;
 	if (removeActionForThisField) {
@@ -619,7 +620,7 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
 	}
 	if (actionsForThisField) {
 		//collect property values that have to be changed in this field
-		QMap<Q3CString, QVariant> values;
+		QMap<QByteArray, QVariant> values;
 		for (ActionDictIterator it(*actionsForThisField); it.current();) {
 			ChangeFieldPropertyAction* changePropertyAction = dynamic_cast<ChangeFieldPropertyAction*>(it.current());
 			if (changePropertyAction) {
@@ -627,9 +628,9 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
 				if (changePropertyAction->propertyName()=="name") {
 					setFieldName(changePropertyAction->newValue().toString());
 				}
-				values.insert( changePropertyAction->propertyName().latin1(), changePropertyAction->newValue() );
+				values.insert( changePropertyAction->propertyName().toLatin1(), changePropertyAction->newValue() );
 				//the subsequent "change property" action is no longer needed
-				actionsForThisField->remove(changePropertyAction->propertyName().latin1());
+				actionsForThisField->remove(changePropertyAction->propertyName().toLatin1());
 			}
 			else {
 				++it;
@@ -894,7 +895,8 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
 	if (args.simulate)
 		KexiUtils::addAlterTableActionDebug(dbg, 0);
 #endif
-	dbg = QString("** Ordered, simplified actions (%1, was %2):").arg(currentActionsCount).arg(allActionsCount);
+	dbg = QString("** Ordered, simplified actions (%1, was %2):")
+		.arg(currentActionsCount).arg(allActionsCount);
 	KexiDBDbg << dbg << endl;
 #ifdef KEXI_DEBUG_GUI
 	if (args.simulate)

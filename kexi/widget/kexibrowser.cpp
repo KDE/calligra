@@ -72,9 +72,8 @@ KexiBrowserView::KexiBrowserView(KexiMainWindow *mainWin)
 	setFocusProxy(m_browser);
 }*/
 
-KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindowIface *mainWin, int features)
+KexiBrowser::KexiBrowser(QWidget* parent, int features)
  : QWidget(parent)
- , m_mainWin(mainWin)
  , m_features(features)
  , m_actions( new KActionCollection(this) )
  , m_prevSelectedPart(0)
@@ -84,9 +83,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindowIface *mainWin, int feat
 // , m_enableExecuteArea(true)
 {
 	setWindowTitle(i18n("Project Navigator"));
-#ifdef __GNUC__
-#warning TODO	setWindowIcon(*m_mainWin->icon());
-#endif
+	setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
 	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
 	KexiFlowLayout *buttons_flyr = new KexiFlowLayout(lyr);
@@ -135,11 +132,11 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindowIface *mainWin, int feat
 //	m_openAction->plug(m_toolbar);
 	KexiSmallToolButton *btn;
 	if (m_features & Toolbar) {
-		btn = new KexiSmallToolButton(this, m_openAction);
+		btn = new KexiSmallToolButton(m_openAction, this);
 		buttons_flyr->add(btn);
 	}
 
-	if (m_mainWin->userMode()) {
+	if (KexiMainWindowIface::global()->userMode()) {
 //! @todo some of these actions can be supported once we deliver ACLs...
 		m_deleteAction = 0;
 		m_renameAction = 0;
@@ -170,7 +167,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindowIface *mainWin, int feat
 		m_designAction->setWhatsThis(i18n("Starts designing of the object selected in the list"));
 		connect(m_designAction, SIGNAL(triggered()), this, SLOT(slotDesignObject()));
 		if (m_features & Toolbar) {
-			btn = new KexiSmallToolButton(this, m_designAction);
+			btn = new KexiSmallToolButton(m_designAction, this);
 			buttons_flyr->add(btn);
 		}
 
@@ -184,7 +181,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindowIface *mainWin, int feat
 		m_newObjectAction->setObjectName("new_object");
 		connect(m_newObjectAction, SIGNAL(triggered()), this, SLOT(slotNewObject()));
 		if (m_features & Toolbar) {
-			m_newObjectToolButton = new KexiSmallToolButton(this, "", QIcon());
+			m_newObjectToolButton = new KexiSmallToolButton(this);
 			m_newObjectToolButton->setObjectName("new_object");
 			m_newObjectMenu = new KMenu(this);
 			m_newObjectMenu->setObjectName("newObjectMenu");
@@ -197,7 +194,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindowIface *mainWin, int feat
 			connect(m_newObjectToolButton, SIGNAL(clicked()), this, SLOT(slotNewObject()));
 			buttons_flyr->add(m_newObjectToolButton);
 
-			m_deleteObjectToolButton = new KexiSmallToolButton(this, m_deleteAction);
+			m_deleteObjectToolButton = new KexiSmallToolButton(m_deleteAction, this);
 			m_deleteObjectToolButton->setText(QString());
 			buttons_flyr->add(m_deleteObjectToolButton);
 		}
@@ -230,7 +227,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindowIface *mainWin, int feat
 	m_pageSetupAction->setWhatsThis(
 		i18n("Shows page setup for printing the active table or query."));
 
-	if (m_mainWin->userMode()) {
+	if (KexiMainWindowIface::global()->userMode()) {
 //! @todo some of these actions can be supported once we deliver ACLs...
 		m_partMenu = 0;
 	}
@@ -309,8 +306,8 @@ void KexiBrowser::setProject(KexiProject* prj, const QString& itemsMimeType,
 	m_itemsMimeType = itemsMimeType;
 	m_list->setRootIsDecorated(m_itemsMimeType.isEmpty());
 
-	KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList();
-	for (KexiPart::Info *info = pl->first(); info; info = pl->next()) {
+	KexiPart::PartInfoList* plist = Kexi::partManager().partInfoList();
+	foreach (KexiPart::Info *info, *plist) {
 		if (!info->isVisibleInNavigator())
 			continue;
 		if (!m_itemsMimeType.isEmpty() && info->mimeType()!=m_itemsMimeType.toLatin1())
@@ -540,14 +537,15 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 	m_prevSelectedPart = part;
 		if (part) {
 			if (m_newObjectAction) {
-				m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceCaption() ));
+				m_newObjectAction->setText(
+					i18n("&Create Object: %1...", part->instanceCaption() ));
 				m_newObjectAction->setIcon( KIcon(part->info()->createItemIcon()) );
 				if (m_features & Toolbar) {
 					m_newObjectToolButton->setIcon( KIcon(part->info()->createItemIcon()) );
 					m_newObjectToolButton->setToolTip(
-						i18n("Create object: %1").arg( part->instanceCaption().toLower() ));
+						i18n("Create object: %1", part->instanceCaption().toLower() ));
 					m_newObjectToolButton->setWhatsThis(
-						i18n("Creates a new object: %1").arg( part->instanceCaption().toLower() ));
+						i18n("Creates a new object: %1", part->instanceCaption().toLower() ));
 				}
 			}
 		} else {
@@ -776,11 +774,12 @@ void KexiBrowser::slotNewObjectMenuAboutToShow()
 {
 	if ((m_features & Toolbar) && m_newObjectMenu && m_newObjectMenu->isEmpty()) {
 		//preload items
-		KexiPart::PartInfoList *list = Kexi::partManager().partInfoList(); //this list is properly sorted
-		for (KexiPart::PartInfoListIterator it(*list); it.current(); ++it) {
+		KexiPart::PartInfoList *plist
+			= Kexi::partManager().partInfoList(); //this list is properly sorted
+		foreach (KexiPart::Info *info, *plist) {
 			//add an item to "New object" toolbar menu 
-			QAction *action = m_mainWin->actionCollection()->action( 
-				KexiPart::nameForCreateAction(*it.current()) );
+			QAction *action = KexiMainWindowIface::global()->actionCollection()->action( 
+				KexiPart::nameForCreateAction(*info) );
 			if (action) {
 				m_newObjectMenu->addAction(action);
 			}

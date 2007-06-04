@@ -266,19 +266,19 @@ InsertPageCommand::execute()
 	QWidget *parent = m_form->objectTree()->lookup(m_parentname)->widget();
 	if(m_name.isEmpty()) {
 		m_name = container->form()->objectTree()->generateUniqueName(
-			container->form()->library()->displayName("QWidget").latin1(),
+			container->form()->library()->displayName("QWidget").toLatin1(),
 			/*!numberSuffixRequired*/false);
 	}
 
-	QWidget *page = container->form()->library()->createWidget("QWidget", parent, m_name.latin1(), container);
-//	QWidget *page = new ContainerWidget(parent, m_name.latin1());
+	QWidget *page = container->form()->library()->createWidget("QWidget", parent, m_name.toLatin1(), container);
+//	QWidget *page = new ContainerWidget(parent, m_name.toLatin1());
 //	new KFormDesigner::Container(container, page, parent);
 
 	Q3CString classname = parent->className();
 	if(classname == "KFDTabWidget")
 	{
 		TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
-		QString n = i18n("Page %1").arg(tab->count() + 1);
+		QString n = i18n("Page %1", tab->count() + 1);
 		tab->addTab(page, n);
 		tab->showPage(page);
 

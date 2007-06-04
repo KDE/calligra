@@ -26,7 +26,7 @@
 #include <kexiutils/tristate.h>
 
 class KexiTableDesignerInterface;
-class KexiDialogBase;
+class KexiWindow;
 
 class AlterTableTester : public QObject
 {
@@ -42,19 +42,19 @@ class AlterTableTester : public QObject
 
 	private:
 		bool changeFieldProperty(KexiTableDesignerInterface* designerIface);
-		bool getSchemaDump(KexiDialogBase* dlg, QString& schemaDebugString);
-		bool showSchema(KexiDialogBase* dlg, bool copyToClipboard);
-		bool checkSchema(KexiDialogBase* dlg);
-		bool getActionsDump(KexiDialogBase* dlg, QString& actionsDebugString);
-		bool showActions(KexiDialogBase* dlg, bool copyToClipboard);
-		bool checkActions(KexiDialogBase* dlg);
-		bool checkInternal(KexiDialogBase* dlg, QString& debugString, 
+		bool getSchemaDump(KexiWindow* window, QString& schemaDebugString);
+		bool showSchema(KexiWindow* window, bool copyToClipboard);
+		bool checkSchema(KexiWindow* window);
+		bool getActionsDump(KexiWindow* window, QString& actionsDebugString);
+		bool showActions(KexiWindow* window, bool copyToClipboard);
+		bool checkActions(KexiWindow* window);
+		bool checkInternal(KexiWindow* window, QString& debugString, 
 			const QString& endCommand, bool skipColons);
-		bool saveTableDesign(KexiDialogBase* dlg);
-		bool getTableDataDump(KexiDialogBase* dlg, QString& dataString);
-		bool showTableData(KexiDialogBase* dlg, bool copyToClipboard);
-		bool checkTableData(KexiDialogBase* dlg);
-		bool closeWindow(KexiDialogBase* dlg);
+		bool saveTableDesign(KexiWindow* window);
+		bool getTableDataDump(KexiWindow* window, QString& dataString);
+		bool showTableData(KexiWindow* window, bool copyToClipboard);
+		bool checkTableData(KexiWindow* window);
+		bool closeWindow(KexiWindow* window);
 
 		QUrlOperator m_copyOperator;
 		bool m_finishedCopying;

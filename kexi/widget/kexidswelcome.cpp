@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
-#include <kstdguiitem.h>
+#include <kstandardguiitem.h>
 #include <kdeversion.h>
 
 #include "kexidatasourcewizard.h"
@@ -62,7 +62,7 @@ KexiDSWelcome::setUseWizard(bool use)
 #endif
 	if(use)
 	{
-		KGuiItem forward = KStdGuiItem::forward(KStdGuiItem::UseRTL);
+		KGuiItem forward = KStandardGuiItem::forward(KStandardGuiItem::UseRTL);
 
 		if(useIcons)
 			m_wiz->nextButton()->setIconSet( forward.iconSet() );

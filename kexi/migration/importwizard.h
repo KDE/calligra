@@ -28,20 +28,20 @@
 #include <kexiutils/tristate.h> 
 #include "migratemanager.h"
 
-//Added by qt3to4:
+#include <QProgressBar>
 #include <Q3VBoxLayout>
 #include <QLabel>
 #include <Q3HBoxLayout>
 
 class QLabel;
 class QCheckBox;
-class QPushButton;
 class Q3HBoxLayout;
 class Q3VBoxLayout;
 class Q3VButtonGroup;
 class KComboBox;
 class K3ListView;
 class KLineEdit;
+class KPushButton;
 class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;
@@ -140,8 +140,8 @@ private:
 	bool m_fileBasedDstWasPresented, m_setupFileBasedSrcNeeded, 
 		m_importExecuted; //!< used in import()
 	KexiProjectSet* m_prjSet;
-	QProgress *m_progressBar;
-	QPushButton* m_importOptionsButton;
+	QProgressBar *m_progressBar;
+	KPushButton* m_importOptionsButton;
 	QMap<QString,QString> *m_args;
 	QString m_predefinedDatabaseName, m_predefinedMimeType;
 	KexiDB::ConnectionData *m_predefinedConnectionData;

@@ -70,7 +70,7 @@ set(kexidb_LIB_SRCS
    lookupfieldschema.cpp 
    simplecommandlineapp.cpp
    fieldvalidator.cpp
-#temp. disabled   alter.cpp
+   alter.cpp
 )
 
 kde4_automoc(${kexidb_LIB_SRCS})

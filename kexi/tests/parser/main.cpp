@@ -21,13 +21,13 @@ int main(int argc, char **argv)
 {
 	kDebug() << "main()" << endl;
 	QFileInfo info=QFileInfo(argv[0]);
-	prgname = info.baseName().latin1();
+	prgname = info.baseName().toLatin1();
 	KComponentData componentData( prgname );
 	if (argc<2) {
 		return 1;
 	}
 	Q3CString drv_name(argv[1]);
-	Q3CString db_name = QString(argv[2]).lower().latin1();
+	Q3CString db_name = QString(argv[2]).toLower().toLatin1();
 
 	KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
 	QStringList names = manager.driverNames();

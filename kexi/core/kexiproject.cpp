@@ -113,8 +113,6 @@ KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler
  , d(new Private())
 {
 	d->data = pdata;
-//! @todo partmanager is outside project, so can be initialised just once:
-	Kexi::partManager().lookup();
 }
 
 KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler, 
@@ -129,8 +127,6 @@ KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler
 		kWarning() << "KexiProject::KexiProject(): passed connection's data ("
 			<< conn->data()->serverInfoString() << ") is not compatible with project's conn. data ("
 			<< d->data->connectionData()->serverInfoString() << ")" << endl;
-//! @todo partmanager is outside project, so can be initialised just once:
-	Kexi::partManager().lookup();
 }
 
 KexiProject::~KexiProject()
@@ -174,11 +170,15 @@ KexiProject::open()
 tristate
 KexiProject::openInternal(bool *incompatibleWithKexi)
 {
+	if (!Kexi::partManager().lookup()) {
+		setError( &Kexi::partManager() );
+		return cancelled;
+	}
 	if (incompatibleWithKexi)
 		*incompatibleWithKexi = false;
 	kDebug() << "KexiProject::open(): " << d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
 	KexiDB::MessageTitle et(this, 
-		i18n("Could not open project \"%1\".").arg(d->data->databaseName()));
+		i18n("Could not open project \"%1\".", d->data->databaseName()));
 	
 	if (!createConnection()) {
 		kDebug() << "KexiProject::open(): !createConnection()" << endl;
@@ -223,7 +223,7 @@ tristate
 KexiProject::create(bool forceOverwrite)
 {
 	KexiDB::MessageTitle et(this, 
-		i18n("Could not create project \"%1\".").arg(d->data->databaseName()));
+		i18n("Could not create project \"%1\".", d->data->databaseName()));
 		
 	if (!createConnection())
 		return false;
@@ -733,7 +733,7 @@ KexiWindow* KexiProject::openObject(KexiPart::Item& item,
 	KexiWindow *window  = part->openInstance(item, viewMode, staticObjectArgs);
 	if (!window) {
 		if (part->lastOperationStatus().error())
-			setError(i18n("Opening object \"%1\" failed.").arg(item.name())+"<br>"
+			setError(i18n("Opening object \"%1\" failed.", item.name())+"<br>"
 				+part->lastOperationStatus().message, 
 				part->lastOperationStatus().description);
 		return 0;
@@ -813,14 +813,14 @@ bool KexiProject::renameObject( KexiPart::Item& item, const QString& _newName )
 			return false;
 		}
 		if (this->itemForMimeType(item.mimeType(), newName)!=0) {
-			setError( i18n("Could not use this name. Object with name \"%1\" already exists.")
-				.arg(newName) );
+			setError( i18n("Could not use this name. Object with name \"%1\" already exists.",
+				newName) );
 			return false;
 		}
 	}
 
 	KexiDB::MessageTitle et(this, 
-		i18n("Could not rename object \"%1\".").arg(item.name()) );
+		i18n("Could not rename object \"%1\".", item.name()) );
 	if (!checkWritable())
 		return false;
 	KexiPart::Part *part = findPartFor(item);
@@ -958,8 +958,8 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
 //! @todo move to KexiMessageHandler
 		if (KMessageBox::Yes != KMessageBox::warningYesNo(0, "<qt>"+i18n(
 			"The project %1 already exists.\n"
-			"Do you want to replace it with a new, blank one?")
-				.arg(prj->data()->infoString())+"\n"+warningNoUndo+"</qt>",
+			"Do you want to replace it with a new, blank one?",
+				prj->data()->infoString())+"\n"+warningNoUndo+"</qt>",
 			QString(), KGuiItem(i18n("Replace")), KStandardGuiItem::cancel() ))
 //todo add serverInfoString() for server-based prj
 		{
@@ -984,7 +984,8 @@ tristate KexiProject::dropProject(KexiProjectData* data,
 	KexiDB::MessageHandler* handler, bool dontAsk)
 {
 	if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0, 
-		i18n("Do you want to drop the project \"%1\"?").arg(static_cast< KexiDB::SchemaData* >(data)->objectName())+"\n"+warningNoUndo ))
+		i18n("Do you want to drop the project \"%1\"?", 
+			static_cast< KexiDB::SchemaData* >(data)->objectName())+"\n"+warningNoUndo ))
 		return cancelled;
 
 	KexiProject prj( new KexiProjectData(*data), handler );

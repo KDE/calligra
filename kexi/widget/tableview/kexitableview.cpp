@@ -1757,7 +1757,7 @@ void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 /*	QStringList::ConstIterator it, end( d->dropFilters.constEnd() ); 
 	for( it = d->dropFilters.constBegin(); it != end; it++)
 	{
-		if(e->provides((*it).latin1()))
+		if(e->provides((*it).toLatin1()))
 		{
 			e->acceptAction(true);
 			return;

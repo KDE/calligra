@@ -29,13 +29,13 @@
 
 #include <kexidb/connection.h>
 
-#include "keximainwindow.h"
+#include <KexiMainWindowIface.h>
 #include "kexiproject.h"
 #include "kexirelationwidget.h"
 #include "kexirelationview.h"
 
-KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *parent, const char *name)
- : KexiViewBase(mainWin, parent, name)
+KexiRelationMainDlg::KexiRelationMainDlg(QWidget *parent)
+ : KexiView(parent)
 {
 	kDebug() << "KexiRelationMainDlg()" << endl;
 //	setIcon(SmallIcon("relation"));
@@ -43,7 +43,7 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *paren
 	setCaption( i18n("Relationships") );
 //	setDocID( win->generatePrivateDocID() );
 
-	m_rel = new KexiRelationWidget(mainWin, this);
+	m_rel = new KexiRelationWidget(this);
 	//the view can receive some our actions
 	addActionProxyChild( m_rel );
 //	addActionProxyChild( m_view->relationView() );
@@ -52,7 +52,7 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *paren
 	g->addWidget(m_rel);
 
 	//show all tables
-	KexiDB::Connection *conn = mainWin->project()->dbConnection();
+	KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 	QStringList tables = conn->tableNames();
 	for (QStringList::ConstIterator it = tables.constBegin(); it!=tables.constEnd(); ++it) {
 		m_rel->addTable( *it );

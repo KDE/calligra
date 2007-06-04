@@ -17,7 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef KEXIWINDOWDATA_H
+#define KEXIWINDOWDATA_H
+
 #include <QObject>
+#include <kexi_export.h>
 
 //! Privides temporary data shared between KexiWindow's views (KexiView's)
 /*! Designed for reimplementation, if needed. */
@@ -42,3 +46,5 @@ class KEXICORE_EXPORT KexiWindowData : public QObject
 		*/
 		bool proposeOpeningInTextViewModeBecauseOfProblems : 1;
 };
+
+#endif

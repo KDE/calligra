@@ -387,7 +387,8 @@ Form::changeName(const Q3CString &oldname, const Q3CString &newname)
 	if(!d->topTree->rename(oldname, newname)) // rename failed
 	{
 		KMessageBox::sorry(widget()->topLevelWidget(),
-			i18n("Renaming widget \"%1\" to \"%2\" failed.").arg(QString(oldname)).arg(QString(newname)));
+			i18n("Renaming widget \"%1\" to \"%2\" failed.", 
+				QString(oldname), QString(newname)));
 //moved to WidgetPropertySet::slotChangeProperty()
 //		KMessageBox::sorry(widget()->topLevelWidget(),
 //		i18n("A widget with this name already exists. "

@@ -22,7 +22,7 @@
 #ifndef _KEXI_ABOU_DATA_
 #define _KEXI_ABOU_DATA_
 
-#include <kaboutdata.h>
+#include <KAboutData>
 
 namespace Kexi {
 

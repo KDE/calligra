@@ -180,6 +180,11 @@ QString Field::typeName(uint type)
 	return (type <= LastType) ? m_typeNames.at(type) : QString::number(type);
 }
 
+QStringList Field::typeNames()
+{
+	return m_typeNames.names;
+}
+
 QString Field::typeString(uint type)
 {
 	m_typeNames.init();
@@ -192,10 +197,16 @@ QString Field::typeGroupName(uint typeGroup)
 	return (typeGroup <= LastTypeGroup) ? m_typeGroupNames.at(typeGroup) : typeGroupString(typeGroup);
 }
 
+QStringList Field::typeGroupNames()
+{
+	m_typeGroupNames.names;
+}
+
 QString Field::typeGroupString(uint typeGroup)
 {
 	m_typeGroupNames.init();
-	return (typeGroup <= LastTypeGroup) ? m_typeGroupNames.at((int)LastTypeGroup+1 + typeGroup) : QString("TypeGroup%1").arg(typeGroup);
+	return (typeGroup <= LastTypeGroup)
+		? m_typeGroupNames.at((int)LastTypeGroup+1 + typeGroup) : QString("TypeGroup%1").arg(typeGroup);
 }
 
 Field::Type Field::typeForString(const QString& typeString)
@@ -669,10 +680,12 @@ void Field::setCustomProperty(const QByteArray& propertyName, const QVariant& va
 //-------------------------------------------------------
 #define ADDTYPE(type, i18, str) this->at(Field::type) = i18; \
 	this->at(Field::type+Field::LastType+1) = str; \
-	str2num.insert(QString::fromLatin1(str).toLower(), type)
+	str2num.insert(QString::fromLatin1(str).toLower(), type); \
+	names.append(i18)
 #define ADDGROUP(type, i18, str) this->at(Field::type) = i18; \
 	this->at(Field::type+Field::LastTypeGroup+1) = str; \
-	str2num.insert(QString::fromLatin1(str).toLower(), type)
+	str2num.insert(QString::fromLatin1(str).toLower(), type); \
+	names.append(i18)
 
 Field::FieldTypeNames::FieldTypeNames()
  : Q3ValueVector<QString>()

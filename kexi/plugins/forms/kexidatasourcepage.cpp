@@ -33,7 +33,6 @@
 #include <klocale.h>
 
 #include <kdebug.h>
-#include <kpopupmenu.h>
 
 #include <widget/kexipropertyeditorview.h>
 #include <widget/kexidatasourcecombobox.h>
@@ -75,7 +74,6 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_noDataSourceAvailableLabel->setAlignment(Qt::TextWordWrap | Qt::AlignBottom | Qt::AlignLeft);
 	contentsVlyr->addWidget(m_noDataSourceAvailableLabel);
 
-	//Widget's Data Source
 	//-Widget's Data Source
 	Q3HBoxLayout *hlyr = new Q3HBoxLayout(contentsVlyr);
 #if 0
@@ -90,7 +88,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_widgetDSLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_widgetDSLabel);
 
-	m_clearWidgetDSButton = new KexiSmallToolButton(contents, QString(), "clear_left", "clearWidgetDSButton");
+	m_clearWidgetDSButton = new KexiSmallToolButton(
+		KIcon("clear_left"), QString(), contents);
+	m_clearWidgetDSButton->setObjectName("clearWidgetDSButton");
 	m_clearWidgetDSButton->setMinimumHeight(m_widgetDSLabel->minimumHeight());
 	m_clearWidgetDSButton->setToolTip( i18n("Clear widget's data source"));
 	hlyr->addWidget(m_clearWidgetDSButton);
@@ -116,13 +116,17 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_dataSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_dataSourceLabel);
 
-	m_gotoButton = new KexiSmallToolButton(contents, QString(), "goto-page", "gotoButton");
+	m_gotoButton = new KexiSmallToolButton(
+		KIcon("goto-page", QString(), contents);
+	m_gotoButton->setObjectName("gotoButton");
 	m_gotoButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
 	m_gotoButton->setToolTip( i18n("Go to selected form's data source"));
 	hlyr->addWidget(m_gotoButton);
 	connect(m_gotoButton, SIGNAL(clicked()), this, SLOT(slotGotoSelected()));
 
-	m_clearDSButton = new KexiSmallToolButton(contents, QString(), "clear_left", "clearDSButton");
+	m_clearDSButton = new KexiSmallToolButton(
+		KIcon("clear_left"), QString(), contents);
+	m_clearDSButton->setObjectName("clearDSButton");
 	m_clearDSButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
 	m_clearDSButton->setToolTip( i18n("Clear form's data source"));
 	hlyr->addWidget(m_clearDSButton);
@@ -178,8 +182,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_availableFieldsLabel->setMinimumHeight(IconSize(K3Icon::Small));
 	hlyr->addWidget(m_availableFieldsLabel);
 
-	m_addField = new KexiSmallToolButton(contents, i18n("Insert selected field into form", "Insert"), 
-		"add_field", "addFieldButton");
+	m_addField = new KexiSmallToolButton(
+		KIcon("add_field"), i18n("Insert selected field into form", "Insert"), contents);
+	m_addField->setObjectName("addFieldButton");
 	m_addField->setMinimumHeight(m_availableFieldsLabel->minimumHeight());
 //	m_addField->setTextPosition(QToolButton::Right);
 	m_addField->setFocusPolicy(StrongFocus);
@@ -249,10 +254,10 @@ void KexiDataSourcePage::clearWidgetDataSourceSelection()
 
 void KexiDataSourcePage::slotGotoSelected()
 {
-	Q3CString mime = m_dataSourceCombo->selectedMimeType().latin1();
+	Q3CString mime = m_dataSourceCombo->selectedMimeType().toLatin1();
 	if (mime=="kexi/table" || mime=="kexi/query") {
 		if (m_dataSourceCombo->isSelectionValid())
-			emit jumpToObjectRequested(mime, m_dataSourceCombo->selectedName().latin1());
+			emit jumpToObjectRequested(mime, m_dataSourceCombo->selectedName().toLatin1());
 	}
 }
 
@@ -281,7 +286,7 @@ void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourceMimeType, c
 void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
 {
 	Q_UNUSED(string);
-	const bool enable = m_dataSourceCombo->isSelectionValid(); //!string.isEmpty() && m_dataSourceCombo->selectedName() == string.latin1();
+	const bool enable = m_dataSourceCombo->isSelectionValid(); //!string.isEmpty() && m_dataSourceCombo->selectedName() == string.toLatin1();
 	if (!enable) {
 		clearDataSourceSelection( m_dataSourceCombo->selectedName().isEmpty()/*alsoClearComboBox*/ );
 	}
@@ -297,9 +302,9 @@ void KexiDataSourcePage::slotDataSourceChanged()
 {
 	if (!m_dataSourceCombo->project())
 		return;
-	Q3CString mime = m_dataSourceCombo->selectedMimeType().latin1();
+	Q3CString mime = m_dataSourceCombo->selectedMimeType().toLatin1();
 	bool dataSourceFound = false;
-	Q3CString name = m_dataSourceCombo->selectedName().latin1();
+	Q3CString name = m_dataSourceCombo->selectedName().toLatin1();
 	if ((mime=="kexi/table" || mime=="kexi/query") && m_dataSourceCombo->isSelectionValid()) {
 		KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
 			m_dataSourceCombo->project()->dbConnection(), name, mime=="kexi/table");

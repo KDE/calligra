@@ -21,8 +21,8 @@
 #include <qpainter.h>
 #include <qclipboard.h>
 #include <qregexp.h>
-//Added by qt3to4:
 #include <QMouseEvent>
+#include <q3simplerichtext.h>
 
 #include <kmenu.h>
 #include <klocale.h>
@@ -30,96 +30,91 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kapplication.h>
+#include <KIcon>
 
 #include "kexiquerydesignersqlhistory.h"
 
-KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent, const char *name)
- : Q3ScrollView(parent, name)
+KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent)
+ : Q3ScrollView(parent)
 {
-	viewport()->setPaletteBackgroundColor(Qt::white);
+	QPalette pal(viewport()->palette());
+	pal.setBrush(QPalette::Active, QPalette::Background, QBrush(Qt::white));
+	viewport()->setPalette(pal);
 
 	m_selected = 0;
 	m_history = new History();
-	m_history->setAutoDelete(true);
 
 	m_popup = new KMenu(this);
-	m_popup->insertItem(SmallIcon("edit-copy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
+	m_popup->addAction(KIcon("edit-copy"), i18n("Copy to Clipboard"),
+		this, SLOT(slotToClipboard()));
 }
 
 KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
 {
+	qDeleteAll(*m_history);
 }
 
-void
-KexiQueryDesignerSQLHistory::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
+void KexiQueryDesignerSQLHistory::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
 	QRect clipping(cx, cy, cw, ch);
 
-	int y = 0;
-	for(HistoryEntry *it = m_history->first(); it; it = m_history->next())
-	{
-//		it->drawItem(p, visibleWidth());
-		if(clipping.intersects(it->geometry(y, visibleWidth(), fontMetrics())))
-		{
-			p->saveWorldMatrix();
-			p->translate(0, y);
-			it->drawItem(p, visibleWidth(), colorGroup());
-			p->restoreWorldMatrix();
+	qreal y = 0.0;
+	foreach (HistoryEntry *historyEntry, *m_history) {
+		if (clipping.intersects(historyEntry->geometry((int)y, visibleWidth(), fontMetrics()))) {
+			//Qt3 p->saveWorldMatrix();
+			p->translate(0.0, y);
+			historyEntry->drawItem(p, visibleWidth(), colorGroup());
+			//Qt3 p->restoreWorldMatrix();
+			p->resetTransform();
 		}
-		y += it->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
+		y += qreal( historyEntry->geometry(y, visibleWidth(), fontMetrics()).height() ) + 5.0;
 	}
 }
 
-void
-KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
+void KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
 {
 	int y = 0;
 	HistoryEntry *popupHistory = 0;
 	int pos;
-	for(Q3PtrListIterator<HistoryEntry> it(*m_history); it.current(); ++it)
-	{
-		if(it.current()->isSelected())
-		{
+	foreach (HistoryEntry *historyEntry, *m_history) {
+		if (historyEntry->isSelected()) {
 			//clear
-			it.current()->setSelected(false, colorGroup());
-			updateContents(it.current()->geometry(y, visibleWidth(), fontMetrics()));
+			historyEntry->setSelected(false, colorGroup());
+			updateContents(historyEntry->geometry(y, visibleWidth(), fontMetrics()));
 		}
 
-		if(it.current()->geometry(y, visibleWidth(), fontMetrics()).contains(e->pos()))
-		{
-			popupHistory = it.current();
+		if (historyEntry->geometry(y, visibleWidth(), fontMetrics()).contains(e->pos())) {
+			popupHistory = historyEntry;
 			pos = y;
 		}
-		y += it.current()->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
+		y += historyEntry->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
 	}
 
 	//now do update
 	if (popupHistory) {
-			if (m_selected && m_selected != popupHistory) {
-				m_selected->setSelected(false, colorGroup());
-				updateContents(m_selected->geometry(pos, visibleWidth(), fontMetrics()));
-			}
-			m_selected = popupHistory;
-			m_selected->setSelected(true, colorGroup());
+		if (m_selected && m_selected != popupHistory) {
+			m_selected->setSelected(false, colorGroup());
 			updateContents(m_selected->geometry(pos, visibleWidth(), fontMetrics()));
-			if(e->button() == Qt::RightButton) {
-				m_popup->exec(e->globalPos());
-			}
+		}
+		m_selected = popupHistory;
+		m_selected->setSelected(true, colorGroup());
+		updateContents(m_selected->geometry(pos, visibleWidth(), fontMetrics()));
+		if(e->button() == Qt::RightButton) {
+			m_popup->exec(e->globalPos());
+		}
 	}
 }
 
-void
-KexiQueryDesignerSQLHistory::contentsMouseDoubleClickEvent(QMouseEvent * e)
+void KexiQueryDesignerSQLHistory::contentsMouseDoubleClickEvent(QMouseEvent * e)
 {
 	contentsMousePressEvent(e);
 	if (m_selected)
 		emit currentItemDoubleClicked();
 }
 
-void
-KexiQueryDesignerSQLHistory::addEvent(const QString& q, bool s, const QString &error)
+void KexiQueryDesignerSQLHistory::addEvent(const QString& q, bool s, const QString &error)
 {
-	HistoryEntry *he=m_history->last();
+	HistoryEntry *he = m_history->last();
 	if (he) {
 		if (he->statement()==q) {
 			he->updateTime(QTime::currentTime());
@@ -130,16 +125,14 @@ KexiQueryDesignerSQLHistory::addEvent(const QString& q, bool s, const QString &e
 	addEntry(new HistoryEntry(s, QTime::currentTime(), q, error));
 }
 
-void
-KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
+void KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 {
 	m_history->append(e);
 //	m_history->prepend(e);
 
 	int y = 0;
-	for(HistoryEntry *it = m_history->first(); it; it = m_history->next())
-	{
-		y += it->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
+	foreach (HistoryEntry *historyEntry, *m_history) {
+		y += historyEntry->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
 	}
 
 	resizeContents(visibleWidth() - 1, y);
@@ -176,8 +169,7 @@ KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *)
 	p.exec(pos);
 }*/
 
-void
-KexiQueryDesignerSQLHistory::slotToClipboard()
+void KexiQueryDesignerSQLHistory::slotToClipboard()
 {
 	if(!m_selected)
 		return;
@@ -185,20 +177,17 @@ KexiQueryDesignerSQLHistory::slotToClipboard()
 	QApplication::clipboard()->setText(m_selected->statement(), QClipboard::Clipboard);
 }
 
-void
-KexiQueryDesignerSQLHistory::slotEdit()
+void KexiQueryDesignerSQLHistory::slotEdit()
 {
 	emit editRequested(m_selected->statement());
 }
 
-QString
-KexiQueryDesignerSQLHistory::selectedStatement() const
+QString KexiQueryDesignerSQLHistory::selectedStatement() const
 {
 	return m_selected ? m_selected->statement() : QString();
 }
 
-void
-KexiQueryDesignerSQLHistory::setHistory(History *h)
+void KexiQueryDesignerSQLHistory::setHistory(History *h)
 {
 	m_history = h;
 	update();
@@ -207,7 +196,7 @@ KexiQueryDesignerSQLHistory::setHistory(History *h)
 void KexiQueryDesignerSQLHistory::clear()
 {
 	m_selected = 0;
-	m_history->clear();
+	qDeleteAll(*m_history);
 	updateContents();
 }
 
@@ -218,7 +207,8 @@ KMenu* KexiQueryDesignerSQLHistory::popupMenu() const
 
 //==================================
 
-HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &statement, /*int ,*/ const QString &err)
+HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, 
+	const QString &statement, /*int ,*/ const QString &err)
 {
 	m_succeed = succeed;
 	m_execTime = execTime;
@@ -228,8 +218,12 @@ HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &s
 	highlight(QColorGroup());
 }
 
-void
-HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
+HistoryEntry::~HistoryEntry()
+{
+	delete m_formated;
+}
+
+void HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
 {
 	p->setPen(QColor(200, 200, 200));
 	p->setBrush(QColor(200, 200, 200));
@@ -266,15 +260,12 @@ HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
 	m_formated->draw(p, content.x(), content.y(), content, cg);
 }
 
-void
-HistoryEntry::highlight(const QColorGroup &cg)
+void HistoryEntry::highlight(const QColorGroup &cg)
 {
-	QString statement;
 	QString text;
 	bool quote = false;
 	bool dblquote = false;
-
-	statement = m_statement;
+	QString statement( m_statement );
 	statement.replace("<", "&lt;");
 	statement.replace(">", "&gt;");
 	statement.replace("\r\n", "<br>"); //(js) first win32 specific pair
@@ -283,62 +274,55 @@ HistoryEntry::highlight(const QColorGroup &cg)
 	statement.replace("\t", "&nbsp;&nbsp;&nbsp;");
 
 	// getting quoting...
-	if(!m_selected)
-	{
-		for(int i=0; i < (int)statement.length(); i++)
-		{
+	if(!m_selected) {
+		for (int i=0; i < (int)statement.length(); i++) {
 			QString beginTag;
 			QString endTag;
-			QChar curr = QChar(statement[i]);
+			QChar curr( statement[i] );
 
-			if(curr == "'" && !dblquote && QChar(statement[i-1]) != "\\")
-			{
-				if(!quote)
-				{
+			if (curr == '\'' && !dblquote && statement[i-1] != '\\') {
+				if(!quote) {
 					quote = true;
 					beginTag += "<font color=\"#ff0000\">";
 				}
-				else
-				{
+				else {
 					quote = false;
 					endTag += "</font>";
 				}
 			}
-			if(curr == "\"" && !quote && QChar(statement[i-1]) != "\\")
-			{
-				if(!dblquote)
-				{
+			if(curr == '"' && !quote && statement[i-1] != '\\') {
+				if(!dblquote) {
 					dblquote = true;
 					beginTag += "<font color=\"#ff0000\">";
 				}
-				else
-				{
+				else {
 					dblquote = false;
 					endTag += "</font>";
 				}
 			}
-			if(QRegExp("[0-9]").exactMatch(QString(curr)) && !quote && !dblquote)
-			{
+			if (QRegExp("[0-9]").exactMatch(QString(curr)) && !quote && !dblquote) {
 				beginTag += "<font color=\"#0000ff\">";
 				endTag += "</font>";
 			}
-
 			text += beginTag + curr + endTag;
 		}
 	}
-	else
-	{
+	else {
 		text = QString("<font color=\"%1\">%2").arg(cg.highlightedText().name()).arg(statement);
 	}
 
-	QRegExp keywords("\\b(SELECT|UPDATE|INSERT|DELETE|DROP|FROM|WHERE|AND|OR|NOT|NULL|JOIN|LEFT|RIGHT|ON|INTO|TABLE)\\b");
+//! @todo reuse KTextEditor's SQL highlighting or KexiDB parser's set of reserved words
+	QRegExp keywords("\\b(SELECT|UPDATE|INSERT|DELETE|DROP|FROM|WHERE|AND|OR|NOT|"
+		"NULL|JOIN|LEFT|RIGHT|ON|INTO|TABLE)\\b");
 	keywords.setCaseSensitive(false);
 	text = text.replace(keywords, "<b>\\1</b>");
 
-	if(!m_error.isEmpty())
+	if (!m_error.isEmpty()) {
 //		text += ("<br>"+i18n("Error: %1").arg(m_error));
 //		text += QString("<br><font face=\"") + KGlobalSettings::generalFont().family() + QString("\" size=\"-1\">") + i18n("Error: %1").arg(m_error) + "</font>";
-		text += QString("<br><font face=\"") + KGlobalSettings::generalFont().family() + QString("\">") + i18n("Error: %1").arg(m_error) + "</font>";
+		text += QString("<br><font face=\"") + KGlobalSettings::generalFont().family() 
+			+ QString("\">") + i18n("Error: %1", m_error) + "</font>";
+	}
 
 	kDebug() << "HistoryEntry::highlight() text:" << text << endl;
 //	m_formated = new QSimpleRichText(text, QFont("courier", 8));
@@ -364,12 +348,9 @@ HistoryEntry::geometry(int y, int width, QFontMetrics f)
 	return QRect(0, y, width, m_formated->height() + 21);
 }
 
-void HistoryEntry::updateTime(const QTime &execTime) {
-	m_execTime=execTime;
-}
-
-HistoryEntry::~HistoryEntry()
+void HistoryEntry::updateTime(const QTime &execTime)
 {
+	m_execTime = execTime;
 }
 
 #include "kexiquerydesignersqlhistory.moc"

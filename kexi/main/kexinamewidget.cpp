@@ -117,7 +117,7 @@ void KexiNameWidget::slotCaptionTxtChanged(const QString &capt)
 		m_le_name_autofill=true;
 	if (m_le_name_autofill) {
 		m_le_name_txtchanged_disable = true;
-		le_name->setText( string2Identifier(capt).lower() );
+		le_name->setText( string2Identifier(capt).toLower() );
 		m_le_name_txtchanged_disable = false;
 	}
 }
@@ -178,7 +178,7 @@ QString KexiNameWidget::captionText() const
 
 QString KexiNameWidget::nameText() const
 {
-	return le_name->text().lower();
+	return le_name->text().toLower();
 }
 
 bool KexiNameWidget::checkValidity()

@@ -23,19 +23,24 @@
 #include <kexi_export.h>
 #include <QWidget>
 class QEvent;
+class KIcon;
 
+//! @short A section header widget acting as a splitter with caption and buttons
+/*! see KexiQueryDesignerGuiEditor for example useage. */
 class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 {
 	Q_OBJECT
 	public:
-		class BoxLayout;
-
 		KexiSectionHeader(const QString &caption, Qt::Orientation o, 
 			QWidget* parent = 0 );
 
 		virtual ~KexiSectionHeader();
 
-		void addButton(const QString& icon, const QString& toolTip,
+		//! Sets child widget wisible below (or on the right hand) of the section header.
+		//! A widget previously set is removed from the layout.
+		void setWidget( QWidget * widget );
+		
+		void addButton(const KIcon& icon, const QString& toolTip,
 			const QObject * receiver, const char * member);
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
@@ -48,6 +53,7 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 	protected:
 		class Private;
 		Private * const d;
+		class BoxLayout;
 		friend class BoxLayout;
 };
 

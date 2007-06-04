@@ -19,7 +19,7 @@
 
 #include "kexidbutils.h"
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kiconloader.h>
 
 #include <kexidb/queryschema.h>

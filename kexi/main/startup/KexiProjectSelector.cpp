@@ -40,10 +40,10 @@
 #include <assert.h>
 
 //! @internal
-class KexiProjectSelectorWidgetPrivate
+class KexiProjectSelectorWidget::Private
 {
 public:
-	KexiProjectSelectorWidgetPrivate()
+	Private()
 	{
 		selectable = true;
 	}
@@ -99,17 +99,18 @@ public:
  */
 KexiProjectSelectorWidget::KexiProjectSelectorWidget( QWidget* parent, 
 	KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns )
-	: Ui::KexiProjectSelectorBase( parent )
-	,m_prj_set(prj_set)
-	,d(new KexiProjectSelectorWidgetPrivate())
+	: QWidget( parent )
+	, m_prj_set(prj_set)
+	, d(new Private())
 {
 	setupUi(this);
-	setObjectName("KexiProjectSelectorDialog");
+	setObjectName("KexiProjectSelectorWidget");
 	d->showProjectNameColumn = showProjectNameColumn;
 	d->showConnectionColumns = showConnectionColumns;
-	QString none, iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
-	d->fileicon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
-	setIcon( d->fileicon );
+	const QString iconname( 
+		KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName() );
+	d->fileicon = KIconLoader::global()->loadIcon( iconname, K3Icon::Desktop );
+	setWindowIcon( KIcon(iconname) );
 	d->dbicon = SmallIcon("database");
 //	list->setHScrollBarMode( QScrollView::AlwaysOn );
 
@@ -124,9 +125,12 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget( QWidget* parent,
 
 	//show projects
 	setProjectSet( m_prj_set );
-	connect(list,SIGNAL(doubleClicked(Q3ListViewItem*)),this,SLOT(slotItemExecuted(Q3ListViewItem*)));
-	connect(list,SIGNAL(returnPressed(Q3ListViewItem*)),this,SLOT(slotItemExecuted(Q3ListViewItem*)));
-	connect(list,SIGNAL(selectionChanged()),this,SLOT(slotItemSelected()));
+	connect(list,SIGNAL(doubleClicked(Q3ListViewItem*)),
+		this,SLOT(slotItemExecuted(Q3ListViewItem*)));
+	connect(list,SIGNAL(returnPressed(Q3ListViewItem*)),
+		this,SLOT(slotItemExecuted(Q3ListViewItem*)));
+	connect(list,SIGNAL(selectionChanged()),
+		this,SLOT(slotItemSelected()));
 }
 
 /*!  
@@ -218,11 +222,16 @@ bool KexiProjectSelectorWidget::isSelectable() const
 	return d->selectable;
 }
 
+QLabel *KexiProjectSelectorWidget::label() const
+{
+	return Ui_KexiProjectSelector::label;
+}
+
 /*================================================================*/
 
 KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, 
 	KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
-	: KDialog( parent )
+	: KPageDialog( parent )
 {
 	setCaption( i18n("Open Recent Project") );
 	init(prj_set, showProjectNameColumn, showConnectionColumns);
@@ -231,16 +240,17 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent,
 KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, 
 	const KexiDB::ConnectionData& cdata, 
 	bool showProjectNameColumn, bool showConnectionColumns)
-	: KDialog( paent )
+	: KPageDialog( parent )
 {
 	setCaption( i18n("Open Project") );
-	KexiProjectSet *prj_set = new KexiProjectSet( cdata );
+	KexiDB::ConnectionData _cdata(cdata);
+	KexiProjectSet *prj_set = new KexiProjectSet( _cdata );
 	init(prj_set, showProjectNameColumn, showConnectionColumns);
 	setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), "document-open", 
 		i18n("Open Database Connection")));
 	
-	m_sel->label->setText( i18n("Select a project on <b>%1</b> database server to open:")
-		.arg(cdata.serverInfoString(false)) );
+	m_sel->label()->setText( i18n("Select a project on <b>%1</b> database server to open:",
+		_cdata.serverInfoString(false)) );
 }
 
 KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
@@ -257,16 +267,16 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
 		//! @todo re-add Help when doc is available
 		Help | 
 #endif
-		Ok | Cancel, Ok
+		Ok | Cancel
 	);
+	setDefaultButton(Ok);
  	setFaceType(Plain);
 	setSizeGripEnabled(true);
 	
-	Q3VBoxLayout *lyr = new Q3VBoxLayout(plainPage(), 0, KDialog::spacingHint(), "lyr");
-	m_sel = new KexiProjectSelectorWidget(plainPage(), "sel", 
-		prj_set, showProjectNameColumn, showConnectionColumns);
-	lyr->addWidget(m_sel);
-	setWindowIcon(*m_sel->icon());
+	m_sel = new KexiProjectSelectorWidget(this, prj_set, 
+		showProjectNameColumn, showConnectionColumns);
+	setMainWidget(m_sel);
+	setWindowIcon(m_sel->windowIcon());
 	m_sel->setFocus();
 	
 	connect(m_sel,SIGNAL(projectExecuted(KexiProjectData*)),
@@ -287,13 +297,13 @@ void KexiProjectSelectorDialog::slotProjectExecuted(KexiProjectData*)
 
 void KexiProjectSelectorDialog::slotProjectSelectionChanged(KexiProjectData* pdata)
 {
-	enableButtonOK(pdata);
+	enableButtonOk(pdata);
 }
 
 void KexiProjectSelectorDialog::showEvent( QShowEvent * event )
 {
-	KDialog::showEvent(event);
-	KDialog::centerOnScreen(this);
+	KPageDialog::showEvent(event);
+	KPageDialog::centerOnScreen(this);
 }
 
 #include "KexiProjectSelector.moc"

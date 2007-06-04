@@ -33,7 +33,7 @@ LibActionWidget::LibActionWidget(WidgetInfo *w, KActionCollection *c)
 {
 	setObjectName( QString("library_widget_" + w->className()) );
 	FormManager::self()->widgetActionGroup()->addAction( this );
-//	kDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).latin1() << endl;
+//	kDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).toLatin1() << endl;
 	m_className = w->className();
 //kde4 not needed	setExclusiveGroup("LibActionWidgets");
 	setToolTip(w->name());

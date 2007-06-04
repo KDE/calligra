@@ -41,8 +41,8 @@ class KexiScriptEditor::Private
         Private() : scriptaction(0) {}
 };
 
-KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
-    : KexiEditor(mainWin, parent, name)
+KexiScriptEditor::KexiScriptEditor(QWidget *parent)
+    : KexiEditor(parent)
     , d( new Private() )
 {
 }

@@ -57,7 +57,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 
     // ### TODO: are all the QString::trimmed really necessary?
     const QString number ( s.left( res ).trimmed() );
-    const QString unitName ( regexp.cap( 1 ).trimmed().lower() );
+    const QString unitName ( regexp.cap( 1 ).trimmed().toLower() );
 
     kDebug(30004) << "Split:" << number << ":" << unitName << ":" << endl;
 

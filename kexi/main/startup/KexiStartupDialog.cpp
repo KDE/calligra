@@ -21,9 +21,8 @@
 #include "KexiStartupDialogTemplatesPage.h"
 #include "kexi.h"
 #include "KexiProjectSelector.h"
-#include "KexiOpenExistingFile.h"
 #include "KexiConnSelector.h"
-#include "KexiConnSelectorBase.h"
+#include <kexiutils/utils.h>
 
 #include <qlayout.h>
 #include <qtabwidget.h>
@@ -31,77 +30,84 @@
 #include <qcheckbox.h>
 #include <qpoint.h>
 #include <qobject.h>
-#include <qvgroupbox.h>
+#include <q3vgroupbox.h>
 #include <qapplication.h>
 #include <qtooltip.h>
 #include <q3widgetstack.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 #include <QPixmap>
 #include <QLabel>
 #include <Q3Frame>
 #include <QKeyEvent>
 #include <QEvent>
+#include <QListView>
 
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kpushbutton.h>
-#include <kjanuswidget.h>
 #include <kglobalsettings.h>
 #include <ktextedit.h>
-#include <kfileiconview.h>
-#include <kfileitem.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kmimetype.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>
+#include <KIconLoader>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define KEXI_STARTUP_SHOW_TEMPLATES
 #define KEXI_STARTUP_SHOW_RECENT
 #endif
 
+#define DB_TEMPLATES
+
 //! @internal
-class KexiStartupDialogPrivate {
+class KexiStartupDialog::Private {
 public:
-	KexiStartupDialogPrivate()
+	Private()
 		: pageTemplates(0), pageOpenExisting(0), pageOpenRecent(0)
-		, pageTemplatesID(-1)
-		, pageOpenExistingID(-1)
-		, pageOpenRecentID(-1)
+		, templPageWidgetItem_BlankDatabase(0)
+		, templPageWidgetItem_ImportExisting(0)
+		, templPageWidgetItem_CreateFromTemplate(0)
+//		, pageTemplatesID(-1)
+//		, pageOpenExistingID(-1)
+//		, pageOpenRecentID(-1)
 	{
 		result = 0;
-		QString none, iconname;
-		iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
-		kexi_sqlite_icon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
-		iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->icon(none,0);
-		kexi_shortcut_icon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
+		QString iconname(
+			KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName() );
+		kexi_sqlite_icon = KIconLoader::global()->loadIcon( iconname, K3Icon::Desktop );
+		iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->iconName();
+		kexi_shortcut_icon = KIconLoader::global()->loadIcon( iconname, K3Icon::Desktop );
 		prj_selector = 0;
 		chkDoNotShow = 0;
 		openExistingConnWidget = 0;
 		templatesWidget = 0;
-		templatesWidget_IconListBox = 0;
+		templatesWidget_IconListView = 0;
 	}
-	~KexiStartupDialogPrivate()
-	{}
+	~Private()
+	{
+	}
 
 	int dialogType, dialogOptions;
 
-	Q3Frame *pageTemplates, *pageOpenExisting, *pageOpenRecent;
-	int pageTemplatesID;
-	int pageOpenExistingID, pageOpenRecentID;
-	int templatesSectionID_blank, templatesSectionID_import;
-#ifdef DB_TEMPLATES
-	int templatesSectionID_templates; //, templatesSectionID_custom2;
-#endif
+	KPageWidgetItem *pageTemplates, *pageOpenExisting, *pageOpenRecent;
+	
+	// subpages within "templates" page
+	KPageWidgetItem *templPageWidgetItem_BlankDatabase,
+		*templPageWidgetItem_ImportExisting, *templPageWidgetItem_CreateFromTemplate;
+	//int pageTemplatesID;
+	//int pageOpenExistingID, pageOpenRecentID;
+	//int templatesSectionID_blank, templatesSectionID_import;
+//#ifdef DB_TEMPLATES
+//	int templatesSectionID_templates; //, templatesSectionID_custom2;
+//#endif
 	QCheckBox *chkDoNotShow;
 
 	//widgets for template tab:
-	KJanusWidget* templatesWidget;
-	QObject *templatesWidget_IconListBox;//helper
+	KPageWidget* templatesWidget;
+	QListView *templatesWidget_IconListView;//helper
 
 	Q3WidgetStack *viewBlankTempl;
 	KexiStartupDialogTemplatesPage *viewTemplates;
@@ -148,22 +154,17 @@ KexiStartupDialog::KexiStartupDialog(
 	KexiDBConnectionSet& connSet, KexiProjectSet& recentProjects,
 	QWidget *parent )
  : KPageDialog( parent )
- , d(new KexiStartupDialogPrivate())
+ , d(new Private())
 {
-	setFaceType(
-		(dialogType==KexiStartupDialog::Templates
-		|| dialogType==KexiStartupDialog::OpenExisting
-		|| dialogType==KexiStartupDialog::OpenRecent)
-		? Plain : Tabbed
-	);
+ 	d->singlePage = dialogType==KexiStartupDialog::Templates
+		|| dialogType==KexiStartupDialog::OpenExisting || dialogType==KexiStartupDialog::OpenRecent;
+	setFaceType( d->singlePage ? Plain : Tabbed );
 	setCaption( captionForDialogType(dialogType) );
 	setButtons( Help | Ok | Cancel );
-	
 	d->recentProjects = &recentProjects;
 	d->connSet = &connSet;
 	d->dialogType = dialogType;
 	d->dialogOptions = dialogOptions;
- 	d->singlePage = dlgSinglePage(dialogType);
 
 	if (dialogType==OpenExisting) {//this dialog has "open" tab only!
 		setWindowIcon(DesktopIcon("document-open"));
@@ -172,32 +173,41 @@ KexiStartupDialog::KexiStartupDialog(
 	}
 
 	setSizeGripEnabled(true);
-	int id=0;
+//	int id=0;
+	KPageWidgetItem *firstPage = 0;
 	if (d->dialogType & Templates) {
 		setupPageTemplates();
-		d->pageTemplatesID = id++;
+		//d->pageTemplatesID = id++;
 		d->templatesWidget->setFocus();
+		if (!firstPage)
+			firstPage = d->pageTemplates;
 	}
 	if (d->dialogType & OpenExisting) {
 		setupPageOpenExisting();
-		d->pageOpenExistingID = id++;
+//		d->pageOpenExistingID = id++;
 		if (d->singlePage)
 			d->openExistingConnWidget->setFocus();
+		if (!firstPage)
+			firstPage = d->pageOpenExisting;
 	}
 #ifdef KEXI_STARTUP_SHOW_RECENT
 	if (d->dialogType & OpenRecent) {
 		setupPageOpenRecent();
-		d->pageOpenRecentID = id++;
+//		d->pageOpenRecentID = id++;
 		if (d->singlePage)
 			d->prj_selector->setFocus();
+		if (!firstPage)
+			firstPage = d->pageOpenRecent;
 	}
 #endif
 
 	if (!d->singlePage) {
-		connect(this, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT(slotPageShown(QWidget*)));
+		connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
+			this, SLOT(slotCurrentPageChanged(KPageWidgetItem*, KPageWidgetItem*)));
 		d->templatesWidget->setFocus();
 	}
-	showPage(0);
+	connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+	setCurrentPage(firstPage);
 	adjustSize();
 }
 
@@ -208,8 +218,8 @@ KexiStartupDialog::~KexiStartupDialog()
 
 bool KexiStartupDialog::shouldBeShown()
 {
-	KGlobal::config()->setGroup("Startup");
-	return KGlobal::config()->readBoolEntry("ShowStartupDialog",true);
+	KConfigGroup group = KGlobal::config()->group("Startup");
+	return group.readEntry<bool>("ShowStartupDialog", true);
 }
 
 void KexiStartupDialog::show()
@@ -220,7 +230,7 @@ void KexiStartupDialog::show()
 	d->result=-1;
 
 	KDialog::centerOnScreen(this);
-	KDialogBase::show();
+	KPageDialog::show();
 }
 
 int KexiStartupDialog::result() const
@@ -238,20 +248,22 @@ void KexiStartupDialog::done(int r)
 
 	if (r==QDialog::Rejected) {
 		d->result = CancelResult;
-	} else {
-		const int idx = activePageIndex();
-		if (idx == d->pageTemplatesID) {
-			const int templateIdx = d->templatesWidget->activePageIndex();
-			if (templateIdx == d->templatesSectionID_blank)
+	}
+	else {
+		KPageWidgetItem *currentPageWidgetItem = currentPage();
+		
+		if (currentPageWidgetItem == d->pageTemplates) {
+			KPageWidgetItem *currenTemplatesPageWidgetItem = d->templatesWidget->currentPage();
+			if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase)
 				d->result = CreateBlankResult;
 #ifdef DB_TEMPLATES
-			else if (templateIdx == d->templatesSectionID_templates)
+			else if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_CreateFromTemplate)
 				d->result = CreateFromTemplateResult;
 #endif
-			else if (templateIdx == d->templatesSectionID_import)
+			else if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting)
 				d->result = ImportResult;
 		}
-		else if (idx == d->pageOpenExistingID) {
+		else if (currentPageWidgetItem == d->pageOpenExisting) {
 			// return file or connection:
 			if (d->openExistingConnWidget->selectedConnectionType()==KexiConnSelectorWidget::FileBased) {
 				if (!d->openExistingFileDlg->checkFileName())
@@ -266,87 +278,110 @@ void KexiStartupDialog::done(int r)
 			}
 			d->result = OpenExistingResult;
 		}
-		else {
+		else if (currentPageWidgetItem == d->pageOpenRecent) {
 			d->result = OpenRecentResult;
 		}
+		else
+			return;
 	}
 
 	//save settings
-	KGlobal::config()->setGroup("Startup");
+	KConfigGroup group = KGlobal::config()->group("Startup");
 	if (d->openExistingConnWidget)
-		KGlobal::config()->writeEntry("OpenExistingType", 
+		group.writeEntry("OpenExistingType", 
 		(d->openExistingConnWidget->selectedConnectionType() == KexiConnSelectorWidget::FileBased) 
 			? "File" : "Server");
 	if (d->chkDoNotShow)
-		KGlobal::config()->writeEntry("ShowStartupDialog",!d->chkDoNotShow->isChecked());
+		group.writeEntry("ShowStartupDialog",!d->chkDoNotShow->isChecked());
 
-	KGlobal::config()->sync();
+	group.sync();
 
-	KDialogBase::done(r);
+	KPageDialog::done(r);
 }
 
 void KexiStartupDialog::reject()
 {
 //	d->result = CancelResult;
-	KDialogBase::reject();
+	KPageDialog::reject();
 }
 
 void KexiStartupDialog::setupPageTemplates()
 {
-	d->pageTemplates = addPage( i18n("&Create Project") );
-	Q3VBoxLayout *lyr = new Q3VBoxLayout( d->pageTemplates, 0, KDialogBase::spacingHint() );
+	QFrame *pageTemplatesFrame = new QFrame(this);
+	d->pageTemplates = addPage( pageTemplatesFrame, i18n("&Create Project") );
+	QVBoxLayout *lyr = new QVBoxLayout( pageTemplatesFrame );
+	lyr->setSpacing( KDialog::spacingHint() );
 
-	d->templatesWidget = new KJanusWidget(
-		d->pageTemplates, "templatesWidget", KJanusWidget::IconList);
+//	d->templatesWidget = new KJanusWidget(
+//		d->pageTemplates, "templatesWidget", KJanusWidget::IconList);
+	d->templatesWidget = new KPageWidget(pageTemplatesFrame);
+	d->templatesWidget->setObjectName("templatesWidget");
+	d->templatesWidget->setFaceType(KPageWidget::List);
 	{//aaa! dirty hack
-		d->templatesWidget_IconListBox = d->templatesWidget->child(0,"KListBox");
-		if (d->templatesWidget_IconListBox)
-			d->templatesWidget_IconListBox->installEventFilter(this);
+//		d->templatesWidget_IconListBox = d->templatesWidget->child(0,"KListBox");
+#ifdef __GNUC__
+#warning OK for KPageWidget?
+#endif
+		d->templatesWidget_IconListView
+			= KexiUtils::findFirstChild<QListView*>(d->templatesWidget, "QListView");
+		if (d->templatesWidget_IconListView)
+			d->templatesWidget_IconListView->installEventFilter(this);
 	}
 	lyr->addWidget(d->templatesWidget);
-	connect(d->templatesWidget, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT(slotPageShown(QWidget*)));
+	connect(d->templatesWidget, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
+		this, SLOT(slotCurrentTemplatesubpageChanged(KPageWidgetItem*, KPageWidgetItem*)));
 
 	if (d->dialogOptions & CheckBoxDoNotShowAgain) {
-		d->chkDoNotShow = new QCheckBox(i18n("Do not show me this dialog again"), d->pageTemplates, "chkDoNotShow");
+		d->chkDoNotShow = new QCheckBox(i18n("Do not show me this dialog again"), pageTemplatesFrame);
+		d->chkDoNotShow->setObjectName("chkDoNotShow");
 		lyr->addWidget(d->chkDoNotShow);
 	}
 
 	//template groups:
-	Q3Frame *templPageFrame;
-	Q3VBoxLayout *tmplyr;
-	int itemID = 0; //used just to set up templatesSectionID_*
-
+	QFrame *templPageWidget = 0;
+	QVBoxLayout *tmplyr;
+	//int itemID = 0; //used just to set up templatesSectionID_*
+	
 	//- page "blank db"
-	d->templatesSectionID_blank = itemID++;
+//	d->templatesSectionID_blank = itemID++;
 	QString clickMsg( "\n\n" + i18n("Click \"OK\" button to proceed.") );
-	templPageFrame = d->templatesWidget->addPage(
-		i18n("Blank Database"), i18n("New Blank Database Project"), DesktopIcon("empty") );
-	tmplyr = new Q3VBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
+	templPageWidget = new QFrame(d->templatesWidget); 
+	d->templPageWidgetItem_BlankDatabase = d->templatesWidget->addPage(templPageWidget, 
+		i18nc("Keep this text narrow: split to multiple rows if needed", "Blank Database"));
+	d->templPageWidgetItem_BlankDatabase->setHeader(i18n("New Blank Database Project"));
+	d->templPageWidgetItem_BlankDatabase->setIcon(KIcon("empty"));
+	tmplyr = new QVBoxLayout(templPageWidget);
+	tmplyr->setSpacing(KDialog::spacingHint());
 	QLabel *lbl_blank = new QLabel( 
-		i18n("Kexi will create a new blank database project.")+clickMsg, templPageFrame );
-	lbl_blank->setAlignment(Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap);
+		i18n("Kexi will create a new blank database project.")+clickMsg, templPageWidget );
+	lbl_blank->setAlignment(Qt::AlignLeft|Qt::AlignTop);
+	lbl_blank->setWordWrap(true);
 	lbl_blank->setMargin(0);
 	tmplyr->addWidget( lbl_blank );
 	tmplyr->addStretch(1);
 
 #ifdef DB_TEMPLATES
 	//- page "templates"
-	d->templatesSectionID_templates = itemID++;
+//	d->templatesSectionID_templates = itemID++;
 	QString none;
 	QString kexi_sqlite_icon_name 
-		= KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
-	templPageFrame = d->templatesWidget->addPage (
-		i18nc("Keep this text narrow: split to multiple rows if needed", "Create From\nTemplate"), 
-		i18n("New Database Project From Template"), DesktopIcon(kexi_sqlite_icon_name) );
-	tmplyr = new Q3VBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
+		= KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName();
+	templPageWidget = new QFrame(d->templatesWidget); 
+	d->templPageWidgetItem_CreateFromTemplate = d->templatesWidget->addPage(templPageWidget, 
+		i18nc("Keep this text narrow: split to multiple rows if needed", "Create From\nTemplate"));
+	d->templPageWidgetItem_CreateFromTemplate->setHeader(i18n("New Database Project From Template"));
+	d->templPageWidgetItem_CreateFromTemplate->setIcon(KIcon(kexi_sqlite_icon_name));
+	tmplyr = new QVBoxLayout(templPageWidget);
+	tmplyr->setSpacing(KDialog::spacingHint());
 	QLabel *lbl_templ = new QLabel( 
 		i18n("Kexi will create a new database project using selected template.\n"
-		"Select template and click \"OK\" button to proceed."), templPageFrame );
-	lbl_templ->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::WordBreak);
+		"Select template and click \"OK\" button to proceed."), templPageWidget );
+	lbl_templ->setAlignment(Qt::AlignAuto|Qt::AlignTop);
+	lbl_templ->setWordWrap(true);
 	lbl_templ->setMargin(0);
 	tmplyr->addWidget( lbl_templ );
 
-	d->viewTemplates = new KexiStartupDialogTemplatesPage( templPageFrame );
+	d->viewTemplates = new KexiStartupDialogTemplatesPage( templPageWidget );
 	tmplyr->addWidget( d->viewTemplates );
 	connect(d->viewTemplates,SIGNAL(selected(const QString&)),
 		this,SLOT(templateSelected(const QString&)));
@@ -357,7 +392,7 @@ void KexiStartupDialog::setupPageTemplates()
 /*later
 	templPageFrame = d->templatesWidget->addPage (
 		i18n("Personal Databases"), i18n("New Personal Database Project Templates"), DesktopIcon("user-home") );
-	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
+	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialog::spacingHint());
 	d->viewPersonalTempl = new TemplatesPage( Vertical, templPageFrame, "personal_page" );
 	tmplyr->addWidget( d->viewPersonalTempl );
 	connect(d->viewPersonalTempl->templates,SIGNAL(doubleClicked(QIconViewItem*)),this,SLOT(templateItemExecuted(QIconViewItem*)));
@@ -371,7 +406,7 @@ void KexiStartupDialog::setupPageTemplates()
 	templPageFrame = d->templatesWidget->addPage (
 		i18n("Business Databases"), i18n("New Business Database Project Templates"),
 		DesktopIcon( "business_user" ));
-	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
+	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialog::spacingHint());
 	d->viewBusinessTempl = new TemplatesPage( Vertical, templPageFrame, "business_page" );
 	tmplyr->addWidget( d->viewBusinessTempl );
 	connect(d->viewBusinessTempl->templates,SIGNAL(doubleClicked(QIconViewItem*)),this,SLOT(templateItemExecuted(QIconViewItem*)));
@@ -381,31 +416,42 @@ void KexiStartupDialog::setupPageTemplates()
 #endif //DB_TEMPLATES
 
 	//- page "import db"
-	d->templatesSectionID_import = itemID++;
-	templPageFrame = d->templatesWidget->addPage(
-		i18n("Import Existing\nDatabase"), i18n("Import Existing Database as New Database Project"), 
-		DesktopIcon("database_import") );
-	tmplyr = new Q3VBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
+//	d->templatesSectionID_import = itemID++;
+	templPageWidget = new QFrame(d->templatesWidget); 
+	d->templPageWidgetItem_ImportExisting = d->templatesWidget->addPage(templPageWidget,
+		i18nc("Keep this text narrow: split to multiple rows if needed", "Import Existing\nDatabase"));
+	d->templPageWidgetItem_ImportExisting->setHeader(
+		i18n("Import Existing Database as New Database Project"));
+	d->templPageWidgetItem_ImportExisting->setIcon(KIcon("database_import"));
+	tmplyr = new QVBoxLayout(templPageWidget);
+	tmplyr->setSpacing(KDialog::spacingHint());
 	QLabel *lbl_import = new QLabel( 
-		i18n("Kexi will import the structure and data of an existing database as a new database project.")
-		+clickMsg, templPageFrame );
-	lbl_import->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::WordBreak);
+		i18n("Kexi will import the structure and data of an existing database "
+			"as a new database project.") + clickMsg, templPageWidget );
+	lbl_import->setAlignment(Qt::AlignAuto|Qt::AlignTop);
+	lbl_import->setWordWrap(true);
 	lbl_import->setMargin(0);
 	tmplyr->addWidget( lbl_import );
 	tmplyr->addStretch(1);
 }
 
-void KexiStartupDialog::slotPageShown(QWidget *page)
+void KexiStartupDialog::slotCurrentPageChanged(KPageWidgetItem* current, 
+	KPageWidgetItem* before)
 {
-	int idx = d->templatesWidget->pageIndex(page);
-//	K3IconView *templ = 0;
-	if (idx==d->templatesSectionID_blank) {//blank
-//		kDebug() << "blank" << endl;
+	Q_UNUSED(before);
+	updateDialogOKButton(current);
+}
+
+void KexiStartupDialog::slotCurrentTemplatesubpageChanged(KPageWidgetItem* current, 
+	KPageWidgetItem* before)
+{
+	Q_UNUSED(before);
+	if (current == d->templPageWidgetItem_BlankDatabase) {//blank
 	}
-	else if (idx==d->templatesSectionID_import) {
+	else if (current == d->templPageWidgetItem_ImportExisting) {
 	}
 #ifdef DB_TEMPLATES
-	else if (idx==d->templatesSectionID_templates) {
+	else if (current == d->templPageWidgetItem_CreateFromTemplate) {
 		d->viewTemplates->populate();
 	}
 /*later?		KIconView *templ = d->viewTemplates->templates;
@@ -486,49 +532,53 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 }
 #endif // 0
 
+/*
 void KexiStartupDialog::tabShown(QWidget *w)
 {
-//	kDebug() << "KexiStartupDialog::tabShown " << (long)w << " "<< long(d->pageTemplates)<<endl;
-
 	updateDialogOKButton(w);
 
 	if (w==d->pageOpenExisting) {
 		d->openExistingConnWidget->setFocus();
 	}
-}
+}*/
 
-void KexiStartupDialog::updateDialogOKButton(QWidget *w)
+void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
 {
-	if (!w) {
-		int idx = activePageIndex();
+	if (!pageWidgetItem) {
+		pageWidgetItem = currentPage();
+/*		int idx = activePageIndex();
 		if (idx==d->pageTemplatesID)
 			w = d->pageTemplates;
 		else if (idx==d->pageOpenExistingID)
 			w = d->pageOpenExisting;
 		else if (idx==d->pageOpenRecentID)
-			w = d->pageOpenRecent;
+			w = d->pageOpenRecent;*/
 
-		if (!w)
+		if (!pageWidgetItem)
 			return;
 	}
 	bool enable = true;
-	if (w==d->pageTemplates) {
-		int t_id = d->templatesWidget->activePageIndex();
+	if (pageWidgetItem == d->pageTemplates) {
+		//int t_id = d->templatesWidget->activePageIndex();
+		KPageWidgetItem *currenTemplatesPageWidgetItem = d->templatesWidget->currentPage();
 #ifdef DB_TEMPLATES
-		enable = (t_id==d->templatesSectionID_blank || d->templatesSectionID_import
-			|| (t_id==d->templatesSectionID_templates && !d->viewTemplates->selectedFileName().isEmpty()));
+		enable = 
+			currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
+			|| currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting
+			|| (currenTemplatesPageWidgetItem == d->templPageWidgetItem_CreateFromTemplate && !d->viewTemplates->selectedFileName().isEmpty());
 #else
-		enable = (t_id==d->templatesSectionID_blank || d->templatesSectionID_import);
+		enable = currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
+			|| currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting;
 #endif
 	}
-	else if (w==d->pageOpenExisting) {
+	else if (pageWidgetItem == d->pageOpenExisting) {
 //		enable = !d->openExistingFileDlg->currentURL().path().isEmpty();
 		enable = 
 			(d->openExistingConnWidget->selectedConnectionType()==KexiConnSelectorWidget::FileBased)
 			? !d->openExistingFileDlg->currentFileName().isEmpty()
 			: (bool)d->openExistingConnWidget->selectedConnectionData();
 	}
-	else if (w==d->pageOpenRecent) {
+	else if (pageWidgetItem == d->pageOpenRecent) {
 		enable = (d->prj_selector->selectedProjectData()!=0);
 	}
 	enableButton(Ok,enable);
@@ -541,18 +591,21 @@ void KexiStartupDialog::updateDialogOKButton(QWidget *w)
 
 void KexiStartupDialog::setupPageOpenExisting()
 {
-	if (d->singlePage)
-		d->pageOpenExisting = plainPage();
-	else
-		d->pageOpenExisting = addPage( i18n("Open &Existing Project") );
-	Q3VBoxLayout *lyr = new Q3VBoxLayout( d->pageOpenExisting, 0, KDialogBase::spacingHint() );
+//	if (d->singlePage)
+	QWidget *pageOpenExistingWidget = new QFrame(this);
+	d->pageOpenExisting = addPage( pageOpenExistingWidget, i18n("Open &Existing Project") );
+
+	QVBoxLayout *lyr = new QVBoxLayout( pageOpenExistingWidget );
+	lyr->setSpacing( KDialog::spacingHint() );
 
 	d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet, 
 		":OpenExistingOrCreateNewProject",
-		d->pageOpenExisting, "KexiConnSelectorWidget");
+		pageOpenExistingWidget);
+	d->openExistingConnWidget->setObjectName("KexiConnSelectorWidget");
 	d->openExistingConnWidget->hideConnectonIcon();
 	lyr->addWidget( d->openExistingConnWidget );
-	if (KGlobal::config()->readEntry("OpenExistingType","File")=="File")
+	KConfigGroup group = KGlobal::config()->group("Startup");
+	if (group.readEntry("OpenExistingType","File")=="File")
 		d->openExistingConnWidget->showSimpleConn();
 	else {
 		d->openExistingConnWidget->showSimpleConn();
@@ -575,19 +628,18 @@ void KexiStartupDialog::connectionItemForOpenExistingExecuted(ConnectionDataLVIt
 
 void KexiStartupDialog::connectionItemForOpenExistingHighlighted(ConnectionDataLVItem *item)
 {
-	actionButton(KDialogBase::Ok)->setEnabled(item);
+	enableButtonOk(item);
 }
 
 void KexiStartupDialog::slotOk() {
 //	kDebug()<<"KexiStartupDialog::slotOk()"<<endl;
-	if (activePageIndex()==d->pageOpenExistingID) {
+	if (currentPage()==d->pageOpenExisting) {
 		if (d->openExistingFileDlg) {
 			if (d->openExistingFileDlg->okButton())
 				d->openExistingFileDlg->okButton()->animateClick();
 //			return;
 		}
 	}
-	KDialogBase::slotOk();
 }
 
 void KexiStartupDialog::showSimpleConnForOpenExisting()
@@ -622,16 +674,19 @@ void KexiStartupDialog::existingFileSelected(const QString &f)
 	if (f.isEmpty())
 		return;
 	d->existingFileToOpen=f;
-	updateDialogOKButton(d->openExistingFileDlg);
+	updateDialogOKButton(0);//d->openExistingFileDlg);
 }
 
 void KexiStartupDialog::setupPageOpenRecent()
 {
 #ifdef KEXI_STARTUP_SHOW_RECENT
-	d->pageOpenRecent = addPage( i18n("Open &Recent Project") );
-	Q3VBoxLayout *lyr = new Q3VBoxLayout( d->pageOpenRecent, 0, KDialogBase::spacingHint() );
-	lyr->addWidget( d->prj_selector = new KexiProjectSelectorWidget(
-		d->pageOpenRecent, "prj_selector", d->recentProjects ) );
+	QWidget *pageOpenRecentWidget = new QFrame(this);
+	d->pageOpenRecent = addPage( pageOpenRecentWidget, i18n("Open &Recent Project") );
+	QVBoxLayout *lyr = new QVBoxLayout( pageOpenRecentWidget );
+	lyr->setSpacing( KDialog::spacingHint() );
+	lyr->addWidget( d->prj_selector 
+		= new KexiProjectSelectorWidget( pageOpenRecentWidget, d->recentProjects ) 
+	);
 	connect(d->prj_selector,SIGNAL(projectExecuted(KexiProjectData*)),
 		this,SLOT(recentProjectItemExecuted(KexiProjectData*)));
 #endif
@@ -639,7 +694,7 @@ void KexiStartupDialog::setupPageOpenRecent()
 
 KexiProjectData* KexiStartupDialog::selectedProjectData() const
 {
-	if (activePageIndex()==d->pageOpenRecentID) {
+	if (currentPage()==d->pageOpenRecent) {
 		return d->prj_selector->selectedProjectData();
 	}
 	return 0;
@@ -656,31 +711,32 @@ void KexiStartupDialog::recentProjectItemExecuted(KexiProjectData *data)
 //! used for accepting templates dialog with just return key press
 bool KexiStartupDialog::eventFilter( QObject *o, QEvent *e )
 {
-	if (o==d->templatesWidget_IconListBox && d->templatesWidget_IconListBox) {
+	if (o==d->templatesWidget_IconListView && d->templatesWidget_IconListView) {
 		if (e->type()==QEvent::KeyPress 
 			&& (static_cast<QKeyEvent*>(e)->key()==Qt::Key_Enter || static_cast<QKeyEvent*>(e)->key()==Qt::Key_Return)
 			|| e->type()==QEvent::MouseButtonDblClick) 
 		{
-			const int t_id = d->templatesWidget->activePageIndex();
-			if (t_id==d->templatesSectionID_blank || t_id==d->templatesSectionID_import) {
-
+			KPageWidgetItem *currenTemplatesPageWidgetItem = d->templatesWidget->currentPage();
+			if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
+				|| currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting)
+			{
 				accept();
 			}
 		}
 	}
-	return KDialogBase::eventFilter(o,e);
+	return KPageDialog::eventFilter(o,e);
 }
 
 // internal reimplementation
-int KexiStartupDialog::activePageIndex() const
+/*int KexiStartupDialog::activePageIndex() const
 {
 	if (!d->singlePage) {
-//		kDebug() << "int KexiStartupDialog::activePageIndex()" << KDialogBase::activePageIndex() << endl;
-		return KDialogBase::activePageIndex();
+//		kDebug() << "int KexiStartupDialog::activePageIndex()" << KDialog::activePageIndex() << endl;
+		return KDialog::activePageIndex();
 	}
 	kDebug() << "int KexiStartupDialog::activePageIndex() == " << 0 << endl;
 	return 0; //there is always "plain page" #0 selected
-}
+}*/
 
 void KexiStartupDialog::templateSelected(const QString& fileName)
 {

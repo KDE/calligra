@@ -21,7 +21,7 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <kdialogbase.h>
+#include <KDialog>
 #include <k3listview.h>
 #include <ktabwidget.h>
 #include <kiconloader.h>
@@ -29,11 +29,11 @@
 #include <kapplication.h>
 #include <kconfig.h>
 
-#include <kexiviewbase.h>
-#include <keximainwindow.h>
+#include <KexiView.h>
+#include <KexiMainWindowIface.h>
 #include <kexiproject.h>
 #include <kexipartitem.h>
-#include <kexidialogbase.h>
+#include <KexiWindow>
 #include <kexidatasourcecombobox.h>
 #include <kexidb/connection.h>
 #include <kexidb/fieldlist.h>
@@ -54,8 +54,6 @@
 #include "kexiformmanager.h"
 #include "kexiformpart.h"
 #include "kexidatasourcepage.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 //! @todo #define KEXI_SHOW_SPLITTER_WIDGET
 
@@ -99,8 +97,10 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	// Only create form manager if it's not yet created.
 	// KexiReportPart could have created it already.
 	KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
-	if (!formManager)
-		formManager = new KexiFormManager(this, "kexi_form_and_report_manager");
+	if (!formManager) {
+		formManager = new KexiFormManager(this);
+		formManager->setObjectName("kexi_form_and_report_manager");
+	}
 
 	// Create and store a handle to forms' library. Reports will have their own library too.
 /* @todo add configuration for supported factory groups */
@@ -229,25 +229,24 @@ void KexiFormPart::initInstanceActions()
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Widest"), "aowidest", 0, "formpart_adjust_width_big") );
 }
 
-KexiDialogTempData*
-KexiFormPart::createTempData(KexiDialogBase* dialog)
+KexiWindowData*
+KexiFormPart::createWindowData(KexiWindow* window)
 {
-	return new KexiFormPart::TempData(dialog);
+	return new KexiFormPart::TempData(window);
 }
 
-KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
+KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
 	KexiPart::Item &item, int viewMode, QMap<QString,QString>*)
 {
 	Q_UNUSED( viewMode );
 
 	kexipluginsdbg << "KexiFormPart::createView()" << endl;
-	KexiMainWindow *win = dialog->mainWin();
+	KexiMainWindow *win = KexiMainWindowIface::global();
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return 0;
 
-	KexiFormView *view = new KexiFormView(win, parent, item.name().latin1(),
-		win->project()->dbConnection() );
-
+	KexiFormView *view = new KexiFormView(parent, win->project()->dbConnection() );
+	view->setObjectName(item.name().toLatin1());
 	return view;
 }
 
@@ -430,8 +429,7 @@ void KexiFormPart::slotAssignAction()
 	if (!formViewWidget)
 		return;
 
-	KexiMainWindow * mainWin = formViewWidget->parentDialog()->mainWin();
-	KexiActionSelectionDialog dlg(mainWin, dbform, data, 
+	KexiActionSelectionDialog dlg(dbform, data, 
 		propSet->property("name").value().toCString());
 
 	if(dlg.exec() == QDialog::Accepted) {
@@ -442,16 +440,16 @@ void KexiFormPart::slotAssignAction()
 	}
 }
 
-QString
-KexiFormPart::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
+KLocalizedString KexiFormPart::i18nMessage(
+	const QString& englishMessage, KexiWindow* window) const
 {
-	Q_UNUSED(dlg);
+	Q_UNUSED(window);
 	if (englishMessage=="Design of object \"%1\" has been modified.")
-		return i18n("Design of form \"%1\" has been modified.");
+		return ki18n(I18N_NOOP("Design of form \"%1\" has been modified."));
 	if (englishMessage=="Object \"%1\" already exists.")
-		return i18n("Form \"%1\" already exists.");
+		return ki18n(I18N_NOOP("Form \"%1\" already exists."));
 
-	return englishMessage;
+	return Part::i18nMessage(englishMessage, window);
 }
 
 void
@@ -484,14 +482,16 @@ KexiDataSourcePage* KexiFormPart::dataSourcePage() const
 	return d->dataSourcePage;
 }
 
-void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin)
+void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
 	if (!d->objectTreeView) {
-		d->objectTreeView = new KFormDesigner::ObjectTreeView(0, "KexiFormPart:ObjectTreeView");
+		d->objectTreeView = new KFormDesigner::ObjectTreeView(0);
+		d->objectTreeView->setObjectName("KexiFormPart:ObjectTreeView");
 		KFormDesigner::FormManager::self()->setObjectTreeView(d->objectTreeView); //important: assign to manager
-		d->dataSourcePage = new KexiDataSourcePage(0, "dataSourcePage");
+		d->dataSourcePage = new KexiDataSourcePage(0);
+		d->dataSourcePage->setObjectName("dataSourcePage");
 		connect(d->dataSourcePage, SIGNAL(jumpToObjectRequested(const Q3CString&, const Q3CString&)),
-			mainWin, SLOT(highlightObject(const Q3CString&, const Q3CString&)));
+			KexiMainWindowIface::global(), SLOT(highlightObject(const Q3CString&, const Q3CString&)));
 		connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(const Q3CString&, const Q3CString&)),
 			KFormDesigner::FormManager::self(), SLOT(setFormDataSource(const Q3CString&, const Q3CString&)));
 		connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
@@ -500,7 +500,7 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow*
 			KFormDesigner::FormManager::self(), SLOT(insertAutoFields(const QString&, const QString&, const QStringList&)));
 	}
 
-	KexiProject *prj = mainWin->project();
+	KexiProject *prj = KexiMainWindowIface::global()->project();
 	d->dataSourcePage->setProject(prj);
 
 	tab->addTab( d->dataSourcePage, KIcon("database"), "");
@@ -541,7 +541,7 @@ void KexiFormPart::slotWidgetCreatedByFormsLibrary(QWidget* widget)
 //----------------
 
 KexiFormPart::TempData::TempData(QObject* parent)
- : KexiDialogTempData(parent)
+ : KexiWindowData(parent)
 {
 }
 

@@ -34,16 +34,17 @@
 
 static DebugWindowDialog* debugWindow = 0;
 static KTabWidget* debugWindowTab = 0;
-static KListView* kexiDBDebugPage = 0;
-static KListView* kexiAlterTableActionDebugPage = 0;
+static K3ListView* kexiDBDebugPage = 0;
+static K3ListView* kexiAlterTableActionDebugPage = 0;
 
 QWidget *KexiUtils::createDebugWindow(QWidget *parent)
 {
 	// (this is internal code - do not use i18n() here)
 	debugWindow = new DebugWindowDialog(parent);
 	debugWindow->setSizeGripEnabled( true );
-	QBoxLayout *lyr = new QVBoxLayout(debugWindow, KDialogBase::marginHint());
-	debugWindowTab = new KTabWidget(debugWindow, "debugWindowTab");
+	QBoxLayout *lyr = new QVBoxLayout(debugWindow, KDialog::marginHint());
+	debugWindowTab = new KTabWidget(debugWindow);
+	debugWindowTab->setObjectName("debugWindowTab");
 	lyr->addWidget( debugWindowTab );
 	debugWindow->resize(900, 600);
 	debugWindow->setIcon( DesktopIcon("document-properties") );
@@ -66,14 +67,15 @@ void KexiUtils::addKexiDBDebug(const QString& text)
 		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
 		hbox->addWidget(btn_clear);
 
-		kexiDBDebugPage = new KListView(page, "kexiDbDebugPage");
+		kexiDBDebugPage = new K3ListView(page);
+		kexiDBDebugPage->setObjectName("kexiDbDebugPage");
 		QObject::connect(btn_clear, SIGNAL(clicked()), kexiDBDebugPage, SLOT(clear()));
 		vbox->addWidget(kexiDBDebugPage);
 		kexiDBDebugPage->addColumn("");
 		kexiDBDebugPage->header()->hide();
 		kexiDBDebugPage->setSorting(-1);
 		kexiDBDebugPage->setAllColumnsShowFocus ( true );
-		kexiDBDebugPage->setColumnWidthMode( 0, QListView::Maximum );
+		kexiDBDebugPage->setColumnWidthMode( 0, Q3ListView::Maximum );
 		kexiDBDebugPage->setRootIsDecorated( true );
 		debugWindowTab->addTab( page, "KexiDB" );
 		debugWindowTab->showPage(page);
@@ -82,7 +84,7 @@ void KexiUtils::addKexiDBDebug(const QString& text)
 	//add \n after (about) every 30 characters
 //TODO	QString realText
 
-	KListViewItem * li = new KListViewItem( kexiDBDebugPage, kexiDBDebugPage->lastItem(), text );
+	K3ListViewItem * li = new K3ListViewItem( kexiDBDebugPage, kexiDBDebugPage->lastItem(), text );
 	li->setMultiLinesEnabled( true );
 }
 
@@ -103,17 +105,18 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
 		hbox->addWidget(btn_clear);
 		KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "exec"), page);
-		btn_sim->setName("simulateAlterTableExecution");
+		btn_sim->setObjectName("simulateAlterTableExecution");
 		hbox->addWidget(btn_sim);
 
-		kexiAlterTableActionDebugPage = new KListView(page, "kexiAlterTableActionDebugPage");
+		kexiAlterTableActionDebugPage = new K3ListView(page);
+		kexiAlterTableActionDebugPage->setObjectName("kexiAlterTableActionDebugPage");
 		QObject::connect(btn_clear, SIGNAL(clicked()), kexiAlterTableActionDebugPage, SLOT(clear()));
 		vbox->addWidget(kexiAlterTableActionDebugPage);
 		kexiAlterTableActionDebugPage->addColumn("");
 		kexiAlterTableActionDebugPage->header()->hide();
 		kexiAlterTableActionDebugPage->setSorting(-1);
 		kexiAlterTableActionDebugPage->setAllColumnsShowFocus ( true );
-		kexiAlterTableActionDebugPage->setColumnWidthMode( 0, QListView::Maximum );
+		kexiAlterTableActionDebugPage->setColumnWidthMode( 0, Q3ListView::Maximum );
 		kexiAlterTableActionDebugPage->setRootIsDecorated( true );
 		debugWindowTab->addTab( page, "AlterTable Actions" );
 		debugWindowTab->showPage(page);
@@ -121,10 +124,10 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 	}
 	if (text.isEmpty()) //don't move up!
 		return;
-	KListViewItem * li;
+	K3ListViewItem * li;
 	int availableNestingLevels = 0;
 	// compute availableNestingLevels
-	QListViewItem * lastItem = kexiAlterTableActionDebugPage->lastItem();
+	Q3ListViewItem * lastItem = kexiAlterTableActionDebugPage->lastItem();
 	//kDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString()) << endl;
 	while (lastItem) {
 		lastItem = lastItem->parent();
@@ -140,20 +143,20 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 	}
 	//kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString()) << endl;
 	if (lastItem) {
-		QListViewItem *after = lastItem->firstChild(); //find last child so we can insert a new item after it
+		Q3ListViewItem *after = lastItem->firstChild(); //find last child so we can insert a new item after it
 		while (after && after->nextSibling())
 			after = after->nextSibling();
 		if (after)
-			li = new KListViewItem( lastItem, after, text ); //child, after
+			li = new K3ListViewItem( lastItem, after, text ); //child, after
 		else
-			li = new KListViewItem( lastItem, text ); //1st child
+			li = new K3ListViewItem( lastItem, text ); //1st child
 	}
 	else {
 		lastItem = kexiAlterTableActionDebugPage->lastItem();
 		while (lastItem && lastItem->parent())
 			lastItem = lastItem->parent();
 		//kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString()) << endl;
-		li = new KListViewItem( kexiAlterTableActionDebugPage, lastItem, text ); //after
+		li = new K3ListViewItem( kexiAlterTableActionDebugPage, lastItem, text ); //after
 	}
 	li->setOpen(true);
 	li->setMultiLinesEnabled( true );
@@ -163,7 +166,8 @@ void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName,
 	const QObject *receiver, const char* slot)
 {
 	if (debugWindow) {
-		KPushButton* btn = findFirstChild<KPushButton>(debugWindow, "KPushButton", actionName);
+		KPushButton* btn = KexiUtils::findFirstChild<KPushButton*>(
+			debugWindow, "KPushButton", actionName);
 		if (btn)
 			QObject::connect(btn, SIGNAL(clicked()), receiver, slot);
 	}

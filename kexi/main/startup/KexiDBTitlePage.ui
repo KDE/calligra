@@ -2,8 +2,8 @@
   <author></author>
   <comment></comment>
   <exportmacro></exportmacro>
-  <class>KexiDBTitlePageBase</class>
-  <widget class="QWidget" name="KexiDBTitlePageBase" >
+  <class>KexiDBTitlePage</class>
+  <widget class="QWidget" name="KexiDBTitlePage" >
     <property name="geometry" >
       <rect>
         <x>0</x>

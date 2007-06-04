@@ -324,7 +324,7 @@ class KFORMEDITOR_EXPORT CommandGroup : public Command
 		CommandGroup( const QString & name, WidgetPropertySet *propSet );
 		virtual ~CommandGroup();
 
-		/*! Like KmacroCommand::addCommand(KCommand*) 
+		/*! Like KMacroCommand::addCommand(KCommand*) 
 		 but if \a allowExecute is false, \a command will not be executed 
 		 as a subcommand when CommandGroup::execute() is called. 
 
@@ -334,7 +334,7 @@ class KFORMEDITOR_EXPORT CommandGroup : public Command
 		 before executing CommandGroup::execute().
 		 
 		 If \a allowExecute is true, this method behaves exactly like 
-		 KmacroCommand::addCommand(KCommand*).
+		 KMacroCommand::addCommand(KCommand*).
 
 		 Note that unexecute() doesn't check \a allowExecute flag: 
 		 all subcommands will be unexecuted (in reverse order 

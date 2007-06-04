@@ -581,7 +581,7 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 		@todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
 		(see doc/dev/settings.txt) */
 			if (!text.isEmpty()) {
-				realText = text[0].upper() + text.mid(1);
+				realText = text[0].toUpper() + text.mid(1);
 				if (d->widgetType!=Boolean) {
 //! @todo ":" suffix looks weird for checkbox; remove this condition when [x] is displayed _after_ label
 //! @todo support right-to-left layout where position of ":" is inverted

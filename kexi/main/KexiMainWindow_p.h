@@ -33,6 +33,7 @@ public:
 //		: dialogs(401)
 		: wnd(w)
 	{
+		actionCollection=new KActionCollection(w);
 		propEditor=0;
 //2.0: unused				propEditorToolWindow=0;
 //2.0: unused				propEditorTabWidget=0;
@@ -218,8 +219,8 @@ void updatePropEditorDockWidthInfo() {
 
 	void showStartProcessMsg(const QStringList& args)
 	{
-		wnd->showErrorMessage(i18n("Could not start %1 application.").arg(KEXI_APP_NAME),
-			i18n("Command \"%1\" failed.").arg(args.join(" ")));
+		wnd->showErrorMessage(i18n("Could not start %1 application.", QString(KEXI_APP_NAME)),
+			i18n("Command \"%1\" failed.", args.join(" ")));
 	}
 
 	void hideMenuItem(const QString& menuName, const QString& itemText, bool alsoSeparator)
@@ -227,17 +228,25 @@ void updatePropEditorDockWidthInfo() {
 		Q3PopupMenu *pm = popups[menuName.toLatin1()];
 		if (!pm)
 			return;
-		uint i=0;
-		const uint c = pm->count();
-		for (;i<c;i++) {
-			kDebug() << pm->text( pm->idAt(i) ) <<endl;
-			if (pm->text( pm->idAt(i) ).toLower().trimmed()==itemText.toLower().trimmed())
+		const QList<QAction*> actions( pm->actions() );
+		bool nowHideSeparator = false;
+		foreach( QAction *action, actions ) {
+			kDebug() << action->text() << endl;
+			if (nowHideSeparator) {
+				if (action->isSeparator())
+					action->setVisible(false);
 				break;
-		}
-		if (i<c) {
-			pm->setItemVisible( pm->idAt(i), false );
-			if (alsoSeparator)
-				pm->setItemVisible( pm->idAt(i+1), false ); //also separator
+			}
+			else if (action->text().toLower().trimmed() == itemText.toLower().trimmed()) {
+#ifdef __GNUC__
+#warning OK? this should only hide menu item, not global action... action->setVisible(false);
+#endif
+				action->setVisible(false);
+				if (alsoSeparator)
+					nowHideSeparator = true; //continue look to find separtator, if present
+				else
+					break;
+			}
 		}
 	}
 	
@@ -247,14 +256,13 @@ void updatePropEditorDockWidthInfo() {
 		Q3PopupMenu *pm = popups[menuName.toLatin1()];
 		if (!pm)
 			return;
-		uint i=0;
-		const uint c = pm->count();
-		for (;i<c;i++) {
-			if (pm->text( pm->idAt(i) ).toLower().trimmed()==itemText.toLower().trimmed())
+		const QList<QAction*> actions( pm->actions() );
+		foreach( QAction *action, actions ) {
+			if (action->text().toLower().trimmed()==itemText.toLower().trimmed()) {
+				action->setEnabled(false);
 				break;
+			}
 		}
-		if (i<c)
-			pm->setItemEnabled( pm->idAt(i), false );
 	}
 
 	void updatePropEditorVisibility(int viewMode)
@@ -418,6 +426,7 @@ void updatePropEditorDockWidthInfo() {
 	}
 
 		KexiMainWindow *wnd;
+		KActionCollection *actionCollection;
 		KexiStatusBar *statusBar;
 		KexiProject *prj;
 		KSharedConfig::Ptr config;
@@ -553,12 +562,12 @@ void updatePropEditorDockWidthInfo() {
 		QList<KexiWindow*> windowsToClose;
 
 		//! Opened page setup dialogs, used by printOrPrintPreviewForItem().
-		QHash<int, KexiWindow*> pageSetupDialogs;
+		QHash<int, KexiWindow*> pageSetupWindows;
 
 		/*! A map from Kexi dialog to "print setup" part item's ID of the data item
-		 used by closeDialog() to find an ID of the data item, so the entry 
-		 can be removed from pageSetupDialogs dictionary. */
-		QMap<int, int> pageSetupDialogItemID2dataItemID_map;
+		 used by closeWindow() to find an ID of the data item, so the entry 
+		 can be removed from pageSetupWindows dictionary. */
+		QMap<int, int> pageSetupWindowItemID2dataItemID_map;
 
 		//! Used in several places to show info dialog at startup (only once per session)
 		//! before displaying other stuff

@@ -22,7 +22,7 @@
 #include <main/startup/KexiStartupFileDialog.h>
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
-#include <core/keximainwindow.h>
+#include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>
 #include <core/kexipartmanager.h>
@@ -51,12 +51,11 @@
 
 
 KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
-	KexiMainWindow* mainWin, QWidget * parent, const char * name )
+	QWidget * parent )
  : K3Wizard(parent, name)
  , m_options(options)
 // , m_mode(mode)
 // , m_itemId(itemId)
- , m_mainWin(mainWin)
  , m_fileSavePage(0)
  , m_defaultsBtn(0)
  , m_rowCount(-1)
@@ -75,7 +74,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 	QString infoLblFromText;
 	KexiGUIMessageHandler msgh(this);
 	m_tableOrQuery = new KexiDB::TableOrQuerySchema(
-		m_mainWin->project()->dbConnection(), m_options.itemId);
+		KexiMainWindowIface::global()->project()->dbConnection(), m_options.itemId);
 	if (m_tableOrQuery->table()) {
 		if (m_options.mode==KexiCSVExport::Clipboard) {
 			setCaption(i18n("Copy Data From Table to Clipboard"));
@@ -97,7 +96,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 		}
 	}
 	else {
-		msgh.showErrorMessage(m_mainWin->project()->dbConnection(),
+		msgh.showErrorMessage(KexiMainWindowIface::global()->project()->dbConnection(),
 			i18n("Could not open data for exporting."));
 		m_cancelled = true;
 		return;
@@ -109,7 +108,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 	// 1. File Save Page
 	if (m_options.mode==KexiCSVExport::File) {
 		m_fileSavePage = new KexiStartupFileDialog(
-			":CSVImportExport", //startDir
+			"kfiledialog:///CSVImportExport", //startDir
 			KexiStartupFileDialog::Custom | KexiStartupFileDialog::SavingFileBasedDB,
 			this, "m_fileSavePage");
 		m_fileSavePage->setMinimumHeight(kapp->desktop()->height()/2);
@@ -262,9 +261,9 @@ void KexiCSVExportWizard::showPage ( QWidget * page )
 		int columns = KexiDB::fieldCount(*m_tableOrQuery);
 		text += "\n";
 		if (m_rowCount>0)
-			text += i18n("(rows: %1, columns: %2)").arg(m_rowCount).arg(columns);
+			text += i18n("(rows: %1, columns: %2)", m_rowCount, columns);
 		else
-			text += i18n("(columns: %1)").arg(columns);
+			text += i18n("(columns: %1)", columns);
 		m_infoLblFrom->setLabelText(text);
 		QFontMetrics fm(m_infoLblFrom->fileNameLabel()->font());
 		m_infoLblFrom->fileNameLabel()->setFixedHeight( fm.height() * 2 + fm.lineSpacing() );

@@ -12,6 +12,7 @@ ADD_DEFINITIONS(
 set(kexicore_LIB_SRCS 
    kexi_global.cpp 
    kexi.cpp 
+   kexiaboutdata.cpp 
 #   keximdi.cpp
    KexiMainWindowIface.cpp
    kexidbconnectionset.cpp 

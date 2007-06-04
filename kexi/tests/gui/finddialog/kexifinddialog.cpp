@@ -19,7 +19,7 @@
 
 #include "kexifinddialog.h"
 
-#include <kstdguiitem.h>
+#include <kstandardguiitem.h>
 #include <kpushbutton.h>
 #include <kcombobox.h>
 #include <klocale.h>
@@ -31,8 +31,8 @@ KexiFindDialog::KexiFindDialog( bool replaceMode, QWidget* parent, const char* n
  : KexiFindDialogBase(parent, name, modal)
  , m_replaceMode(true)
 {
-	m_btnFind->setIconSet(KStdGuiItem::find().iconSet());
-	m_btnClose->setIconSet(KStdGuiItem::close().iconSet());
+	m_btnFind->setIconSet(KStandardGuiItem::find().iconSet());
+	m_btnClose->setIconSet(KStandardGuiItem::close().iconSet());
 	setReplaceMode(replaceMode);
 	m_lookIn->insertItem(i18n("(All columns)"));
 }

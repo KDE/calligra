@@ -51,7 +51,7 @@ KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h
 void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 {
 	QWidget *w = host->focusWindow(); //focusWidget();
-//	while (w && !w->inherits("KexiDialogBase") && !w->inherits("KexiDockBase"))
+//	while (w && !w->inherits("KexiWindow") && !w->inherits("KexiDockBase"))
 //		w = w->parentWidget();
 
 	KexiActionProxy *proxy = w ? actionProxies[ w ] : 0;
@@ -149,7 +149,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 {
 	if (!d)
 		return;
-	//KDE3: bool insideDialogBase = o && (o->inherits("KexiDialogBase") || 0 != KexiUtils::findParent<KexiDialogBase>(o, "KexiDialogBase"));
+	//KDE3: bool insideWindow = o && (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow>(o, "KexiWindow"));
 	bool insideKexiWindow = o 
 		&& (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow*>(o));
 

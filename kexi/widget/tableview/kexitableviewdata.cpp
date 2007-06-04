@@ -656,8 +656,8 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 			//check it
 			if (val->isNull() && !f->isAutoIncrement()) {
 				//NOT NULL violated
-				m_result.msg = i18n("\"%1\" column requires a value to be entered.")
-					.arg(f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();
+				m_result.msg = i18n("\"%1\" column requires a value to be entered.",
+					f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();
 				m_result.desc = i18n("The column's constraint is declared as NOT NULL.");
 				m_result.column = col;
 				return false;
@@ -667,8 +667,8 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 			GET_VALUE;
 			if (!f->isAutoIncrement() && (val->isNull() || KexiDB::isEmptyValue( f, *val ))) {
 				//NOT EMPTY violated
-				m_result.msg = i18n("\"%1\" column requires a value to be entered.")
-					.arg(f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();
+				m_result.msg = i18n("\"%1\" column requires a value to be entered.",
+					f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();
 				m_result.desc = i18n("The column's constraint is declared as NOT EMPTY.");
 				m_result.column = col;
 				return false;
@@ -687,9 +687,9 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 
 /*			if (desc)
 			*desc = 
-js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
+js: TODO: use KexiMainWindow::showErrorMessage(const QString &title, KexiDB::Object *obj)
 	after it will be moved somewhere to kexidb (this will require moving other 
-	  showErrorMessage() methods from KexiMainWindowImpl to libkexiutils....)
+	  showErrorMessage() methods from KexiMainWindow to libkexiutils....)
 	then: just call: *desc = KexiDB::errorMessage(m_cursor);
 */
 				return false;

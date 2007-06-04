@@ -20,11 +20,11 @@
 #ifndef KexiStartupDialogTemplatesPage_h
 #define KexiStartupDialogTemplatesPage_h
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <core/kexiprojectdata.h>
 
 /*! Helper class for displaying templates set with description. */
-class KEXIMAIN_EXPORT KexiStartupDialogTemplatesPage : public KListView
+class KEXIMAIN_EXPORT KexiStartupDialogTemplatesPage : public K3ListView
 {
 	Q_OBJECT
 	
@@ -36,7 +36,7 @@ class KEXIMAIN_EXPORT KexiStartupDialogTemplatesPage : public KListView
 
 		QString selectedFileName() const;
 
-		QValueList<KexiProjectData::ObjectInfo> autoopenObjectsForSelectedTemplate() const;
+		QList<KexiProjectData::ObjectInfo> autoopenObjectsForSelectedTemplate() const;
 
 		void populate();
 
@@ -44,7 +44,7 @@ class KEXIMAIN_EXPORT KexiStartupDialogTemplatesPage : public KListView
 		void selected(const QString& filename);
 
 	protected slots:
-		void slotExecuted(QListViewItem* item);
+		void slotExecuted(Q3ListViewItem* item);
 
 //		void itemClicked(QIconViewItem *item);
 	

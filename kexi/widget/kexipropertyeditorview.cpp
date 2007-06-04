@@ -106,15 +106,13 @@ class KexiPropertyEditorView::Private
 
 //------------------------------
 
-KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindowIface *mainWin, QWidget* parent)
+KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
 	: QWidget(parent)
 	, d(new Private())
 {
 	setWindowTitle(i18n("Properties"));
 	//TODO: set a nice icon
-#ifdef __GNUC__
-#warning TODO	setWindowIcon(*mainWin->windowIcon());
-#endif
+	setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
 	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
 

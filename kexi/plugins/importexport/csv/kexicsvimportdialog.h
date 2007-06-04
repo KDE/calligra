@@ -64,7 +64,6 @@ class KComboBox;
 class KIntSpinBox;
 class KProgressDialog;
 
-class KexiMainWindow;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
@@ -92,8 +91,7 @@ class KexiCSVImportDialog : public KDialogBase
 		enum Header { TEXT, NUMBER, DATE, CURRENCY };
 
 		//! @todo what about making it kexidb-independent?
-		KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QWidget * parent, 
-		  const char * name = 0/*, QRect const & rect*/);
+		KexiCSVImportDialog(Mode mode, QWidget * parent);
 
 		virtual ~KexiCSVImportDialog();
 
@@ -121,8 +119,6 @@ class KexiCSVImportDialog : public KDialogBase
 		QCheckBox* m_ignoreDuplicates;
 		QCheckBox* m_1stRowForFieldNames;
 		QCheckBox* m_primaryKeyField;
-
-		KexiMainWindow* m_mainWin;
 
 		void detectTypeAndUniqueness(int row, int col, const QString& text);
 		void setText(int row, int col, const QString& text, bool inGUI);

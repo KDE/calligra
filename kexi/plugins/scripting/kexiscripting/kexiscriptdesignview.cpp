@@ -67,10 +67,12 @@ class KexiScriptDesignViewPrivate
         KTextBrowser* statusbrowser;
 };
 
-KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, Kross::Api::ScriptAction* scriptaction)
-    : KexiViewBase(mainWin, parent, "KexiScriptDesignView")
+KexiScriptDesignView::KexiScriptDesignView(
+	QWidget *parent, Kross::Api::ScriptAction* scriptaction)
+    : KexiView(parent)
     , d( new KexiScriptDesignViewPrivate() )
 {
+    setObjectName("KexiScriptDesignView");
     d->scriptaction = scriptaction;
     d->updatesProperties = false;
 
@@ -79,7 +81,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     Q3HBoxLayout* layout = new Q3HBoxLayout(this);
     layout->addWidget(splitter);
 
-    d->editor = new KexiScriptEditor(mainWin, splitter, "ScriptEditor");
+    d->editor = new KexiScriptEditor(splitter);
     splitter->setFocusProxy(d->editor);
     addChildView(d->editor);
     setViewWidget(d->editor);
@@ -167,7 +169,7 @@ void KexiScriptDesignView::updateProperties()
         for( it = options.constBegin(); it != end; ++it) {
             Kross::Api::InterpreterInfo::Option* option = it.data();
             KoProperty::Property* prop = new KoProperty::Property(
-                    it.key().latin1(), // name
+                    it.key().toLatin1(), // name
                     d->scriptaction->getOption(it.key(), option->value), // value
                     option->name, // caption
                     option->comment, // description
@@ -287,7 +289,7 @@ bool KexiScriptDesignView::loadData()
 
 KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
-    KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
+    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, cancel);
     kexipluginsdbg << "KexiScriptDesignView::storeNewData(): new id:" << s->id() << endl;
 
     if(!s || cancel) {
@@ -298,7 +300,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
     if(! storeData()) {
         kWarning() << "KexiScriptDesignView::storeNewData Failed to store the data." << endl;
         //failure: remove object's schema data to avoid garbage
-        KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+        KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         conn->removeObject( s->id() );
         delete s;
         return 0;
@@ -309,7 +311,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
 
 tristate KexiScriptDesignView::storeData(bool /*dontAsk*/)
 {
-    kexipluginsdbg << "KexiScriptDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
+    kexipluginsdbg << "KexiScriptDesignView::storeData(): " << window()->partItem()->name() << " [" << window()->id() << "]" << endl;
 
     QDomDocument domdoc("script");
     QDomElement scriptelem = domdoc.createElement("script");

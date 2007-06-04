@@ -26,10 +26,12 @@
 
 #include <kexidatatable.h>
 #include "kexitablepart.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 class KexiTableItem;
 class KexiTableDesignerViewPrivate;
-class KCommand;
+class K3Command;
 class CommandGroup;
 
 namespace KoProperty {
@@ -59,7 +61,7 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 
 	public:
 		/*! Creates a new alter table dialog. */
-		KexiTableDesignerView(KexiMainWindow *win, QWidget *parent);
+		KexiTableDesignerView(QWidget *parent);
 
 		virtual ~KexiTableDesignerView();
 
@@ -97,19 +99,19 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 		 If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
 		 If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
 		virtual void changeFieldPropertyForRow( int row,
-		 const QCString& propertyName, const QVariant& newValue, 
+		 const Q3CString& propertyName, const QVariant& newValue, 
 		 KoProperty::Property::ListData* const listData, bool addCommand );
 
 		/*! Changes property \a propertyName to \a newValue.
 		 Works exactly like changeFieldPropertyForRow() except the field is pointed by \a fieldUID.
 		 Used by ChangeFieldPropertyCommand to change field's property. */
-		void changeFieldProperty( int fieldUID, const QCString& propertyName, 
+		void changeFieldProperty( int fieldUID, const Q3CString& propertyName, 
 			const QVariant& newValue, KoProperty::Property::ListData* const listData = 0, 
 			bool addCommand = false );
 
 		/*! Changes visibility of property \a propertyName to \a visible for a field pointed by \a fieldUID.
 		 Used by ChangePropertyVisibilityCommand. */
-		void changePropertyVisibility( int fieldUID, const QCString& propertyName, bool visible );
+		void changePropertyVisibility( int fieldUID, const Q3CString& propertyName, bool visible );
 
 		/*! Builds table field's schema by looking at the \a set. */
 		KexiDB::Field * buildField( const KoProperty::Set &set ) const;
@@ -165,7 +167,7 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 		void slotRedo();
 
 		/*! Reaction on command execution from the command history */
-		void slotCommandExecuted(KCommand *command);
+		void slotCommandExecuted(K3Command *command);
 
 		/*! Simulates real execution of the Alter Table. For debugging. */
 		void slotSimulateAlterTableExecution();
@@ -192,12 +194,12 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 
 //		void removeCurrentPropertySet();
 
-		/*! Reimplemented from KexiViewBase, because tables creation is more complex. 
+		/*! Reimplemented from KexiView, because tables creation is more complex. 
 		 No table schema altering is required, so just buildSchema() is used to create a new schema.
 		*/
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
-		/*! Reimplemented from KexiViewBase, because table storage is more complex. 
+		/*! Reimplemented from KexiView, because table storage is more complex. 
 		 Table schema altering may be required, so just buildSchema() is used to create a new schema.
 		*/
 		virtual tristate storeData(bool dontAsk = false);
@@ -228,13 +230,13 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 
 		/*! Adds history command \a command to the undo/redo buffer. 
 		 If \a execute is true, the command is executed afterwards. */
-		void addHistoryCommand( KCommand* command, bool execute );
+		void addHistoryCommand( K3Command* command, bool execute );
 
 		//! Updates undo/redo shared actions availability by looking at command history's action
 		void updateUndoRedoActions();
 
 #ifdef KEXI_DEBUG_GUI
-		void debugCommand( KCommand* command, int nestingLevel );
+		void debugCommand( K3Command* command, int nestingLevel );
 #endif
 
 		/*! Inserts a new \a field for \a row. 
@@ -252,7 +254,7 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 		bool isPhysicalAlteringNeeded();
 
 	private:
-		KexiTableDesignerViewPrivate *d;
+		KexiTableDesignerViewPrivate * const d;
 };
 
 #endif

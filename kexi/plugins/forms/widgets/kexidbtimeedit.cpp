@@ -76,8 +76,8 @@ void KexiDBTimeEdit::setValueInternal(const QVariant &add, bool removeOld)
 	QTime t;
 	QString addString(add.toString());
 	if (removeOld) {
-		if (!addString.isEmpty() && addString[0].latin1()>='0' && addString[0].latin1() <='9') {
-			setNumberOnFocus = addString[0].latin1()-'0';
+		if (!addString.isEmpty() && addString[0].toLatin1()>='0' && addString[0].toLatin1() <='9') {
+			setNumberOnFocus = addString[0].toLatin1()-'0';
 			t = QTime(setNumberOnFocus, 0, 0);
 		}
 	}

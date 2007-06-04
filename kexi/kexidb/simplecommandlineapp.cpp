@@ -142,7 +142,7 @@ SimpleCommandLineApp::SimpleCommandLineApp(
 			userAtHost += "@";
 		userAtHost += (d->connData.hostName.isEmpty() ? "localhost" : d->connData.hostName);
 		QTextStream cout(stdout,IO_WriteOnly);
-		cout << i18n("Enter password for %1: ").arg(userAtHost);
+		cout << i18n("Enter password for %1: ", userAtHost);
 //! @todo make use of pty/tty here! (and care about portability)
 		QTextStream cin(stdin,QIODevice::ReadOnly);
 		cin >> d->connData.password;

@@ -159,6 +159,10 @@ class KEXICORE_EXPORT KexiWindow
 		virtual void attachToGUIClient();
 		virtual void detachFromGUIClient();
 
+		//! \return true if the window is attached within the main window
+#warning TODO isAttached()
+		bool isAttached() const { return true; }
+
 		/*! True if contents (data) of the dialog is dirty and need to be saved
 		 This may or not be used, depending if changes in the dialog
 		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
@@ -193,11 +197,11 @@ class KEXICORE_EXPORT KexiWindow
 		 views */
 		KexiWindowData *data() const;
 
-		/*! Called primarily by KexiMainWindowImpl to activate dialog.
+		/*! Called primarily by KexiMainWindow to activate dialog.
 		 Selected view (if present) is also informed about activation. */
 		void activate();
 
-		/*! Called primarily by KexiMainWindowImpl to deactivate dialog.
+		/*! Called primarily by KexiMainWindow to deactivate dialog.
 		 Selected view (if present) is also informed about deactivation. */
 		void deactivate();
 
@@ -206,7 +210,7 @@ class KEXICORE_EXPORT KexiWindow
 
 		void updateCaption();
 
-		/*! Internal. Called by KexiMainWindowImpl::saveObject().
+		/*! Internal. Called by KexiMainWindow::saveObject().
 		 Tells this dialog to save changes of the existing object
 		 to the backend. If \a dontAsk is true, no question dialog will
 		 be shown to the user. The default is false.
@@ -214,7 +218,7 @@ class KEXICORE_EXPORT KexiWindow
 		 \return true on success, false on failure and cancelled when storing has been cancelled. */
 		tristate storeData(bool dontAsk = false);
 
-		/*! Internal. Called by KexiMainWindowImpl::saveObject().
+		/*! Internal. Called by KexiMainWindow::saveObject().
 		 Tells this dialog to create and store data of the new object
 		 to the backend.
 		 Object's schema data has been never stored,
@@ -266,7 +270,7 @@ class KEXICORE_EXPORT KexiWindow
 			QMap<QString,QString>* staticObjectArgs,
 			bool& proposeOpeningInTextViewModeBecauseOfProblems);
 
-		void registerDialog();
+		void registerWindow();
 
 		virtual void closeEvent( QCloseEvent * e );
 
@@ -295,7 +299,6 @@ class KEXICORE_EXPORT KexiWindow
 		bool m_destroying : 1; //!< true after entering to the dctor
 
 		friend class KexiMainWindow;
-//		friend class KexiMainWindowImpl;
 		friend class KexiPart::Part;
 		friend class KexiInternalPart;
 		friend class KexiView;

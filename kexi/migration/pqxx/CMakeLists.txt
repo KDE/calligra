@@ -1,7 +1,6 @@
-
-
 include_directories( ${POSTGRESQL_INCLUDE_DIR} ${PQXX_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
+ADD_DEFINITIONS( ${KDE4_ENABLE_EXCEPTIONS} )
 
 ########### next target ###############
 

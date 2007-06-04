@@ -73,7 +73,7 @@ KexiSimplePrintingSettings KexiSimplePrintingSettings::load()
 	if (config->hasKey("pageFormat"))
 		settings.pageLayout.format = KoPageFormat::formatFromString( 
 			config->readEntry("pageFormat" ) );
-	if (config->readEntry("pageOrientation", "portrait").lower()=="landscape")
+	if (config->readEntry("pageOrientation", "portrait").toLower()=="landscape")
 		settings.pageLayout.orientation = PG_LANDSCAPE;
 	else
 		settings.pageLayout.orientation = PG_PORTRAIT;
@@ -327,10 +327,10 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 		//footer
 		QString pageNumString;
 		if (m_pagesCount>0)
-			pageNumString = i18n("Page (number) of (total)", "Page %1 of %2")
-				.arg(pageNumber+1).arg(m_pagesCount);
+			pageNumString = i18nc("Page (number) of (total)", "Page %1 of %2",
+				pageNumber+1, m_pagesCount);
 		else
-			pageNumString = i18n("Page %1").arg(pageNumber+1);
+			pageNumString = i18n("Page %1", pageNumber+1);
 		painter.drawText((int)m_leftMargin, 
 			(int)m_topMargin + m_pageHeight - m_mainLineSpacing, 
 			m_pageWidth, m_mainLineSpacing,

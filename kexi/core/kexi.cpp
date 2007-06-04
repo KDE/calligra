@@ -310,7 +310,7 @@ void Kexi::initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData)
 {
 	KAboutData *about = aboutData;
 	if (!about) {
-#if 0 //sebsauer 20061123
+#if 1 //sebsauer 20061123
 		about = Kexi::createAboutData();
 #else
 		about = 0;
@@ -327,15 +327,13 @@ void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text)
 {
 	QString msg;
 	if (feature_name.isEmpty())
-		msg = i18n("This function is not available for version %1 of %2 application.")
-			.arg(KEXI_VERSION_STRING)
-			.arg(KEXI_APP_NAME); 
+		msg = i18n("This function is not available for version %1 of %2 application.",
+			QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME)); 
 	else {
 		QString feature_name_(feature_name);
-		msg = i18n("\"%1\" function is not available for version %2 of %3 application.")
-			.arg(feature_name_.replace("&",""))
-			.arg(KEXI_VERSION_STRING)
-			.arg(KEXI_APP_NAME);
+		msg = i18n(
+			"\"%1\" function is not available for version %2 of %3 application.",
+			feature_name_.replace("&",""), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
 	}
 
 	QString extra_text_(extra_text);

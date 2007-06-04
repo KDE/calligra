@@ -110,10 +110,11 @@ bool Driver::isValid()
 		|| KexiDB::version().minor != version().minor)
 	{
 		setError(ERR_INCOMPAT_DRIVER_VERSION,
-		i18n("Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
-			objectName(),
-			QString("%1.%2").arg(version().major).arg(version().minor),
-			QString("%1.%2").arg(KexiDB::version().major).arg(KexiDB::version().minor)));
+			i18n(
+				"Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
+				objectName(),
+				QString("%1.%2").arg(version().major).arg(version().minor),
+				QString("%1.%2").arg(KexiDB::version().major).arg(KexiDB::version().minor)));
 		return false;
 	}
 

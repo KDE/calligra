@@ -23,7 +23,7 @@
 #ifndef KEXISCRIPTDESIGNVIEW_H
 #define KEXISCRIPTDESIGNVIEW_H
 
-#include <kexiviewbase.h>
+#include <KexiView.h>
 
 #include <koproperty/set.h>
 #include <koproperty/property.h>
@@ -38,12 +38,12 @@ namespace Kross { namespace Api {
 }}
 
 /**
- * The KexiScriptDesignView class provides the \a KexiViewBase to
+ * The KexiScriptDesignView class provides the KexiView to
  * manage script modules in the design-view. The design-view
  * is used to be able to view and edit the scripting code via
  * a \a KexiScriptEditor instance.
  */
-class KexiScriptDesignView : public KexiViewBase
+class KexiScriptDesignView : public KexiView
 {
         Q_OBJECT
 
@@ -52,7 +52,7 @@ class KexiScriptDesignView : public KexiViewBase
         /**
          * Constructor.
          */
-        KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, Kross::Api::ScriptAction* scriptaction);
+        KexiScriptDesignView(QWidget *parent, Kross::Api::ScriptAction* scriptaction);
 
         /**
          * Destructor.

@@ -71,11 +71,11 @@ class KEXICORE_EXPORT Item
 		 that is used when new item is created in-memory-only,
 		 so we need to indicate for KexiProject about that state. 
 		 By default this flag is false. 
-		 Used by KexiMainWindowImpl::newObject(). */
+		 Used by KexiMainWindow::newObject(). */
 		bool neverSaved() const { return m_neverSaved; }
 
 		/*! \sa neverSaved().
-		 Used by KexiMainWindowImpl::newObject(). */
+		 Used by KexiMainWindow::newObject(). */
 		void setNeverSaved(bool set) { m_neverSaved = set; }
 
 		bool isNull() const { return m_id==0; }

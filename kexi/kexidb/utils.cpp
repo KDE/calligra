@@ -181,7 +181,8 @@ void KexiDB::getHTMLErrorMesage(Object* obj, ResultInfo *result)
 int KexiDB::idForObjectName( Connection &conn, const QString& objName, int objType )
 {
 	RowData data;
-	if (true!=conn.querySingleRecord(QString("select o_id from kexi__objects where lower(o_name)='%1' and o_type=%2")
+	if (true!=conn.querySingleRecord(
+		QString::fromLatin1("select o_id from kexi__objects where lower(o_name)='%1' and o_type=%2")
 		.arg(objName.toLower()).arg(objType), data))
 		return 0;
 	bool ok;
@@ -811,7 +812,8 @@ bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, con
 		}
 		else {
 			if (!field.table()) {
-				KexiDBWarn << QString("KexiDB::setFieldProperty() Cannot set \"%1\" property - no table assinged for field!")
+				KexiDBWarn << QString(
+					"KexiDB::setFieldProperty() Cannot set \"%1\" property - no table assinged for field!")
 					.arg(QString(propertyName)) << endl;
 			}
 			else {

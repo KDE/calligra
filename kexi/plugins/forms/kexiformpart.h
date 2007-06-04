@@ -27,7 +27,6 @@
 
 #include <kexi.h>
 #include <kexipart.h>
-#include <kexidialogbase.h>
 #include <kexiblobbuffer.h>
 
 namespace KFormDesigner
@@ -61,7 +60,7 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
-		class TempData : public KexiDialogTempData
+		class TempData : public KexiWindowData
 		{
 			public:
 				TempData(QObject* parent);
@@ -78,18 +77,18 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 				QMap<Q3CString, KexiBLOBBuffer::Id_t> unsavedLocalBLOBsByName;
 		};
 
-		virtual QString i18nMessage(const Q3CString& englishMessage, 
-			KexiDialogBase* dlg) const;
+		virtual KLocalizedString i18nMessage(const QString& englishMessage, 
+			KexiWindow* window) const;
 
 	protected:
-		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
+		virtual KexiWindowData* createWindowData(KexiWindow* window);
 
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog,
+		virtual KexiView* createView(QWidget *parent, KexiWindow* window,
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		virtual void initPartActions();
 		virtual void initInstanceActions();
-		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin);
+		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
 		static KFormDesigner::WidgetLibrary* static_formsLibrary;
 

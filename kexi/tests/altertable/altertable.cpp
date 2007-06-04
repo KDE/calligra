@@ -29,10 +29,10 @@
 
 #include <kdebug.h>
 
-#include <main/keximainwindowimpl.h>
+#include <main/KexiMainWindow.h>
 #include <core/kexiaboutdata.h>
-#include <core/kexidialogbase.h>
-#include <core/kexiviewbase.h>
+#include <core/KexiWindow.h>
+#include <core/KexiView.h>
 #include <core/kexipartitem.h>
 #include <core/kexitabledesignerinterface.h>
 #include <core/kexiinternalpart.h>
@@ -50,7 +50,7 @@ QString origDbFilename, dbFilename;
 int variableI = 1; // simple variable 'i' support
 int newArgc;
 char** newArgv;
-KexiMainWindowImpl* win = 0;
+KexiMainWindow* win = 0;
 KexiProject* prj = 0;
 
 void showError(const QString& msg)
@@ -147,7 +147,7 @@ bool checkItemsNumber(int expectedNumberOfItems, int optionalNumberOfItems = -1)
 
 QVariant::Type typeNameToQVariantType(const QCString& name_)
 {
-	QCString name( name_.lower() );
+	QCString name( name_.toLower() );
 	if (name=="string")
 		return QVariant::String;
 	if (name=="int")
@@ -174,7 +174,7 @@ QVariant::Type typeNameToQVariantType(const QCString& name_)
 // casts string to QVariant
 bool castStringToQVariant( const QString& string, const QCString& type, QVariant& result )
 {
-	if (string.lower()=="<null>") {
+	if (string.toLower()=="<null>") {
 		result = QVariant();
 		return true;
 	}
@@ -240,8 +240,8 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
 	if (!checkItemsNumber(5))
 		return false;
 	QVariant newValue;
-	QCString propertyName( testFileLine[2].latin1() );
-	QCString propertyType( testFileLine[3].latin1() );
+	QCString propertyName( testFileLine[2].toLatin1() );
+	QCString propertyType( testFileLine[3].toLatin1() );
 	QString propertyValueString(testFileLine[4]);
 	if (propertyName=="type")
 		newValue = (int)KexiDB::Field::typeForString(testFileLine[4]);
@@ -271,10 +271,10 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
 }
 
 //helper
-bool AlterTableTester::getSchemaDump(KexiDialogBase* dlg, QString& schemaDebugString)
+bool AlterTableTester::getSchemaDump(KexiWindow* window, QString& schemaDebugString)
 {
 	KexiTableDesignerInterface* designerIface 
-		= dynamic_cast<KexiTableDesignerInterface*>( dlg->selectedView() );
+		= dynamic_cast<KexiTableDesignerInterface*>( window->selectedView() );
 	if (!designerIface)
 		return false;
 
@@ -290,23 +290,23 @@ bool AlterTableTester::getSchemaDump(KexiDialogBase* dlg, QString& schemaDebugSt
 	return true;
 }
 
-bool AlterTableTester::showSchema(KexiDialogBase* dlg, bool copyToClipboard)
+bool AlterTableTester::showSchema(KexiWindow* window, bool copyToClipboard)
 {
 	QString schemaDebugString;
-	if (!getSchemaDump(dlg, schemaDebugString))
+	if (!getSchemaDump(window, schemaDebugString))
 		return false;
 	if (copyToClipboard)
 		QApplication::clipboard()->setText( schemaDebugString );
 	else
-		kDebug() << QString("Schema for '%1' table:\n").arg(dlg->partItem()->name())
+		kDebug() << QString("Schema for '%1' table:\n").arg(window->partItem()->name())
 			+ schemaDebugString + "\nendSchema" << endl;
 	return true;
 }
 
-bool AlterTableTester::checkInternal(KexiDialogBase* dlg,
+bool AlterTableTester::checkInternal(KexiWindow* window,
 	QString& debugString, const QString& endCommand, bool skipColonsAndStripWhiteSpace)
 {
-	Q_UNUSED(dlg);
+	Q_UNUSED(window);
 	QTextStream resultStream(&debugString, IO_ReadOnly);
 	// Load expected result, compare
 	QString expectedLine, resultLine;
@@ -348,73 +348,73 @@ bool AlterTableTester::checkInternal(KexiDialogBase* dlg,
 	return true;
 }
 
-bool AlterTableTester::checkSchema(KexiDialogBase* dlg)
+bool AlterTableTester::checkSchema(KexiWindow* window)
 {
 	QString schemaDebugString;
-	if (!getSchemaDump(dlg, schemaDebugString))
+	if (!getSchemaDump(window, schemaDebugString))
 		return false;
-	bool result = checkInternal(dlg, schemaDebugString, "endSchema", true /*skipColonsAndStripWhiteSpace*/);
-	kDebug() << QString("Schema check for table '%1': %2").arg(dlg->partItem()->name())
+	bool result = checkInternal(window, schemaDebugString, "endSchema", true /*skipColonsAndStripWhiteSpace*/);
+	kDebug() << QString("Schema check for table '%1': %2").arg(window->partItem()->name())
 		.arg(result ? "OK" : "Failed") << endl;
 	return result;
 }
 
-bool AlterTableTester::getActionsDump(KexiDialogBase* dlg, QString& actionsDebugString)
+bool AlterTableTester::getActionsDump(KexiWindow* window, QString& actionsDebugString)
 {
 	KexiTableDesignerInterface* designerIface 
-		= dynamic_cast<KexiTableDesignerInterface*>( dlg->selectedView() );
+		= dynamic_cast<KexiTableDesignerInterface*>( window->selectedView() );
 	if (!designerIface)
 		return false;
 	tristate result = designerIface->simulateAlterTableExecution(&actionsDebugString);
 	if (true!=result) {
-		showError( QString("Computing simplified actions for table '%1'  failed.").arg(dlg->partItem()->name()) );
+		showError( QString("Computing simplified actions for table '%1'  failed.").arg(window->partItem()->name()) );
 		return false;
 	}
 	return true;
 }
 
-bool AlterTableTester::showActions(KexiDialogBase* dlg, bool copyToClipboard)
+bool AlterTableTester::showActions(KexiWindow* window, bool copyToClipboard)
 {
 	QString actionsDebugString;
-	if (!getActionsDump(dlg, actionsDebugString))
+	if (!getActionsDump(window, actionsDebugString))
 		return false;
 	if (copyToClipboard)
 		QApplication::clipboard()->setText( actionsDebugString );
 	else
-		kDebug() << QString("Simplified actions for altering table '%1':\n").arg(dlg->partItem()->name())
+		kDebug() << QString("Simplified actions for altering table '%1':\n").arg(window->partItem()->name())
 			+ actionsDebugString+"\n" << endl;
 	return true;
 }
 
-bool AlterTableTester::checkActions(KexiDialogBase* dlg)
+bool AlterTableTester::checkActions(KexiWindow* window)
 {
 	QString actionsDebugString;
-	if (!getActionsDump(dlg, actionsDebugString))
+	if (!getActionsDump(window, actionsDebugString))
 		return false;
-	bool result = checkInternal(dlg, actionsDebugString, "endActions", true /*skipColonsAndStripWhiteSpace*/);
-		kDebug() << QString("Actions check for table '%1': %2").arg(dlg->partItem()->name())
+	bool result = checkInternal(window, actionsDebugString, "endActions", true /*skipColonsAndStripWhiteSpace*/);
+		kDebug() << QString("Actions check for table '%1': %2").arg(window->partItem()->name())
 		.arg(result ? "OK" : "Failed") << endl;
 	return result;
 }
 
-bool AlterTableTester::saveTableDesign(KexiDialogBase* dlg)
+bool AlterTableTester::saveTableDesign(KexiWindow* window)
 {
 	KexiTableDesignerInterface* designerIface 
-		= dynamic_cast<KexiTableDesignerInterface*>( dlg->selectedView() );
+		= dynamic_cast<KexiTableDesignerInterface*>( window->selectedView() );
 	if (!designerIface)
 		return false;
 	tristate result = designerIface->executeRealAlterTable();
 	if (true!=result) {
-		showError( QString("Saving design of table '%1' failed.").arg(dlg->partItem()->name()) );
+		showError( QString("Saving design of table '%1' failed.").arg(window->partItem()->name()) );
 		return false;
 	}
 	return true;
 }
 
-bool AlterTableTester::getTableDataDump(KexiDialogBase* dlg, QString& dataString)
+bool AlterTableTester::getTableDataDump(KexiWindow* window, QString& dataString)
 {
 	KexiTableDesignerInterface* designerIface 
-		= dynamic_cast<KexiTableDesignerInterface*>( dlg->selectedView() );
+		= dynamic_cast<KexiTableDesignerInterface*>( window->selectedView() );
 	if (!designerIface)
 		return false;
 
@@ -425,7 +425,7 @@ bool AlterTableTester::getTableDataDump(KexiDialogBase* dlg, QString& dataString
 	args["delimiter"]="\t";
 	args["textQuote"]="\"";
 	args["itemId"] = QString::number( 
-		prj->dbConnection()->tableSchema( dlg->partItem()->name() )->id() );
+		prj->dbConnection()->tableSchema( window->partItem()->name() )->id() );
 	if (!KexiInternalPart::executeCommand("csv_importexport", win, "KexiCSVExport", &args)) {
 		showError( "Error exporting table contents." );
 		return false;
@@ -433,35 +433,35 @@ bool AlterTableTester::getTableDataDump(KexiDialogBase* dlg, QString& dataString
 	return true;
 }
 
-bool AlterTableTester::showTableData(KexiDialogBase* dlg, bool copyToClipboard)
+bool AlterTableTester::showTableData(KexiWindow* window, bool copyToClipboard)
 {
 	QString dataString;
-	if (!getTableDataDump(dlg, dataString))
+	if (!getTableDataDump(window, dataString))
 		return false;
 	if (copyToClipboard)
 		QApplication::clipboard()->setText( dataString );
 	else
-		kDebug() << QString("Contents of table '%1':\n").arg(dlg->partItem()->name())+dataString+"\n" << endl;
+		kDebug() << QString("Contents of table '%1':\n").arg(window->partItem()->name())+dataString+"\n" << endl;
 	return true;
 }
 
-bool AlterTableTester::checkTableData(KexiDialogBase* dlg)
+bool AlterTableTester::checkTableData(KexiWindow* window)
 {
 	QString dataString;
-	if (!getTableDataDump(dlg, dataString))
+	if (!getTableDataDump(window, dataString))
 		return false;
-	bool result = checkInternal(dlg, dataString, "endTableData", false /*!skipColonsAndStripWhiteSpace*/);
-		kDebug() << QString("Table '%1' contents: %2").arg(dlg->partItem()->name())
+	bool result = checkInternal(window, dataString, "endTableData", false /*!skipColonsAndStripWhiteSpace*/);
+		kDebug() << QString("Table '%1' contents: %2").arg(window->partItem()->name())
 			.arg(result ? "OK" : "Failed") << endl;
 	return result;
 }
 
-bool AlterTableTester::closeWindow(KexiDialogBase* dlg)
+bool AlterTableTester::closeWindow(KexiWindow* window)
 {
-	if (!dlg)
+	if (!window)
 		return true;
-	QString name = dlg->partItem()->name();
-	tristate result = true == win->closeDialog(dlg, true/*layoutTaskBar*/, true/*doNotSaveChanges*/);
+	QString name = window->partItem()->name();
+	tristate result = true == win->closeDialog(window, true/*layoutTaskBar*/, true/*doNotSaveChanges*/);
 	kDebug() << QString("Closing window for table '%1': %2").arg(name)
 		.arg(result==true ? "OK" : (result==false ? "Failed" : "Cancelled")) << endl;
 	return result == true;
@@ -496,13 +496,13 @@ tristate AlterTableTester::run(bool &closeAppRequested)
 		return false;
 	}
 	bool openingCancelled;
-	KexiDialogBase* dlg = win->openObject(item, Kexi::DesignViewMode, openingCancelled);
-	if (!dlg) {
+	KexiWindow* window = win->openObject(item, Kexi::DesignViewMode, openingCancelled);
+	if (!window) {
 		showError(QString("Could not open table '%1'").arg(item->name()));
 		return false;
 	}
 	KexiTableDesignerInterface* designerIface 
-		= dynamic_cast<KexiTableDesignerInterface*>( dlg->selectedView() );
+		= dynamic_cast<KexiTableDesignerInterface*>( window->selectedView() );
 	if (!designerIface)
 		return false;
 
@@ -511,7 +511,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
 		= KexiUtils::findFirstChild<QWidget>(qApp->mainWidget(), "KexiPropertyEditorView");
 	if (propeditor)
 		propeditor->hide();
-	dlg->hide();
+	window->hide();
 
 	bool designTable = true;
 	while (!testFileStream.atEnd()) {
@@ -525,7 +525,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
 				if (!checkItemsNumber(1))
 					return false;
 				//end of the design session: unhide the window and propeditor
-				dlg->show();
+				window->show();
 				if (propeditor)
 					propeditor->show();
 				designTable = false;
@@ -583,37 +583,37 @@ tristate AlterTableTester::run(bool &closeAppRequested)
 		else {
 			//top-level commands available outside of "designTable"
 			if (command=="showSchema") {
-				if (!checkItemsNumber(1, 2) || !showSchema(dlg, testFileLine[1]=="clipboard"))
+				if (!checkItemsNumber(1, 2) || !showSchema(window, testFileLine[1]=="clipboard"))
 					return false;
 				continue;
 			}
 			else if (command=="checkSchema") {
-				if (!checkItemsNumber(1) || !checkSchema(dlg))
+				if (!checkItemsNumber(1) || !checkSchema(window))
 					return false;
 				continue;
 			}
 			else if (command=="showActions") {
-				if (!checkItemsNumber(1, 2) || !showActions(dlg, testFileLine[1]=="clipboard"))
+				if (!checkItemsNumber(1, 2) || !showActions(window, testFileLine[1]=="clipboard"))
 					return false;
 				continue;
 			}
 			else if (command=="checkActions") {
-				if (!checkItemsNumber(1) || !checkActions(dlg))
+				if (!checkItemsNumber(1) || !checkActions(window))
 					return false;
 				continue;
 			}
 			else if (command=="saveTableDesign") {
-				if (!checkItemsNumber(1) || !saveTableDesign(dlg))
+				if (!checkItemsNumber(1) || !saveTableDesign(window))
 					return false;
 				continue;
 			}
 			else if (command=="showTableData") {
-				if (!checkItemsNumber(1, 2) || !showTableData(dlg, testFileLine[1]=="clipboard"))
+				if (!checkItemsNumber(1, 2) || !showTableData(window, testFileLine[1]=="clipboard"))
 					return false;
 				continue;
 			}
 			else if (command=="checkTableData") {
-				if (!checkItemsNumber(1) || !checkTableData(dlg))
+				if (!checkItemsNumber(1) || !checkTableData(window))
 					return false;
 				continue;
 			}
@@ -626,14 +626,14 @@ tristate AlterTableTester::run(bool &closeAppRequested)
 			break;
 		}
 		else if (command=="closeWindow") {
-			if (!checkItemsNumber(1) || !closeWindow(dlg))
+			if (!checkItemsNumber(1) || !closeWindow(window))
 				return false;
 			else
-				dlg = 0;
+				window = 0;
 			continue;
 		}
 		else if (command=="quit") {
-			if (!checkItemsNumber(1) || !closeWindow(dlg))
+			if (!checkItemsNumber(1) || !closeWindow(window))
 				return false;
 			closeAppRequested = true;
 			kDebug() << QString("Quitting the application...") << endl;
@@ -692,11 +692,11 @@ int main(int argc, char *argv[])
 
 	KAboutData* aboutdata = Kexi::createAboutData();
 	aboutdata->setProgramName( "Kexi Alter Table Test" );
-	int result = KexiMainWindowImpl::create(newArgc, newArgv, aboutdata);
+	int result = KexiMainWindow::create(newArgc, newArgv, aboutdata);
 	if (!qApp)
 		return quit(result);
 
-	win = KexiMainWindowImpl::self();
+	win = KexiMainWindow::self();
 	AlterTableTester tester;
 	//QObject::connect(win, SIGNAL(projectOpened()), &tester, SLOT(run()));
 

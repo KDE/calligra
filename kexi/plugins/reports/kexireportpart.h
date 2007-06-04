@@ -23,8 +23,6 @@
 
 #include <kexi.h>
 #include <kexipart.h>
-#include <kexidialogbase.h>
-//Added by qt3to4:
 #include <Q3CString>
 
 namespace KFormDesigner
@@ -46,7 +44,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 	Q_OBJECT
 
 	public:
-		KexiReportPart(QObject *parent, const char *name, const QStringList &);
+		KexiReportPart(QObject *parent, const QStringList &);
 		virtual ~KexiReportPart();
 
 		//! \return a pointer to Reports Widget Library.
@@ -56,7 +54,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
-		class TempData : public KexiDialogTempData
+		class TempData : public KexiWindowData
 		{
 			public:
 				TempData(QObject* parent);
@@ -68,14 +66,15 @@ class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
 		};
 
-		virtual QString i18nMessage(const Q3CString& englishMessage, 
-			KexiDialogBase* dlg) const;
+		virtual KLocalizedString i18nMessage(const QString& englishMessage, 
+			KexiWindow* window) const;
 
 	protected:
-		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
-
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog,
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
+		virtual KexiWindowData* createWindowData(KexiWindow* window);
+		
+		virtual KexiView* createView(QWidget *parent, KexiWindow* window,
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode,
+			QMap<QString,QString>* staticObjectArgs = 0);
 
 		virtual void initPartActions();
 		virtual void initInstanceActions();

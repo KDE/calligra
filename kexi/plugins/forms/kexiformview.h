@@ -27,14 +27,12 @@
 #include <QResizeEvent>
 #include <QDropEvent>
 
-#include <kexiviewbase.h>
 #include <widget/kexidataawareview.h>
 
 #include "kexiformpart.h"
 #include <core/kexiblobbuffer.h>
 
 class KexiFormPart;
-class KexiMainWindow;
 class KexiDBForm;
 class KexiTableItem;
 class KexiTableViewData;
@@ -49,7 +47,7 @@ namespace KFormDesigner
 /*! The KexiFormView can display data provided "by hand"
  or from KexiDB-compatible database source.
 
- This class provides a single view used inside KexiDialogBase.
+ This class provides a single view used inside KexiWindow.
  It takes care of saving/loading form, of enabling actions when needed.
  One KexiFormView object is instantiated for data view mode
  and a second KexiFormView object is instantiated for design view mode.
@@ -68,9 +66,7 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 			NoResize = 2 /*! @todo */
 		};
 
-//		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn);
-		KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0,
-			bool dbAware = true);
+		KexiFormView(QWidget *parent, bool dbAware = true);
 		virtual ~KexiFormView();
 
 //		KexiDB::Connection* connection() { return m_conn; }
@@ -144,7 +140,7 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		virtual tristate storeData(bool dontAsk = false);
 
 		KexiFormPart::TempData* tempData() const {
-			return dynamic_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }
+			return dynamic_cast<KexiFormPart::TempData*>(window()->data()); }
 		KexiFormPart* formPart() const { return dynamic_cast<KexiFormPart*>(part()); }
 
 //moved to formmanager		void disableWidgetActions();
@@ -177,7 +173,7 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		virtual void addNewRecordRequested();*/
 
 		/*! Called after loading the form contents (before showing it).
-		 Also called when the form window (KexiDialogBase) is detached
+		 Also called when the form window (KexiWindow) is detached
 		 (in KMDI's Child Frame mode), because otherwise tabstop ordering can get broken. */
 		void updateTabStopsOrder();
 
@@ -187,7 +183,7 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		/*! @internal */
 		void updateDataSourcePage();
 
-		/*! Reimplemented after KexiViewBase.
+		/*! Reimplemented after KexiView.
 		 Updates actions (e.g. availability). */
 // todo		virtual void updateActions(bool activated);
 

@@ -24,7 +24,6 @@
 #include <kdialogbase.h>
 #include "kexiformeventhandler.h"
 
-class KexiMainWindow;
 class K3ListView;
 namespace KexiPart {
 	class Item;
@@ -39,16 +38,13 @@ class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 {
 	Q_OBJECT
 	public:
-		KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
+		KexiActionSelectionDialog(QWidget *parent, 
 			const KexiFormEventAction::ActionData& action, const Q3CString& actionWidgetName);
 		~KexiActionSelectionDialog();
 
 		/*! \return selected action data or empty action if dialog has been rejected 
 		 or "No action" has been selected. */
 		KexiFormEventAction::ActionData currentAction() const;
-
-		//! \return the \a KexiMainWindow instance.
-		KexiMainWindow* mainWin() const;
 
 		virtual bool eventFilter(QObject *o, QEvent *e);
 

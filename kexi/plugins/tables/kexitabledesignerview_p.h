@@ -21,7 +21,9 @@
 #define KEXIALTERTABLEDIALOG_P_H
 
 #include "kexitabledesignerview.h"
-#include <kcommand.h>
+#include <QList>
+#include <K3Command>
+#include <Q3CString>
 
 class KexiDataAwarePropertySet;
 
@@ -34,28 +36,28 @@ class KexiDataAwarePropertySet;
 /*! @internal
  Command group, reimplemented to get access to commands().
  We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
-class CommandGroup : public KMacroCommand
+class CommandGroup : public K3MacroCommand
 {
 	public:
 		CommandGroup( const QString & name )
-			: KMacroCommand(name)
+			: K3MacroCommand(name)
 		{}
 		virtual ~CommandGroup() {} 
-		const QPtrList<KCommand>& commands() const { return m_commands; }
+		const QList<K3Command*> commands() const { return K3MacroCommand::commands(); }
 };
 
 /*! @internal
  Command history, reimplemented to get access to commands().
  We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
-class CommandHistory : public KCommandHistory
+class CommandHistory : public K3CommandHistory
 {
 	Q_OBJECT
 	public:
 		CommandHistory(KActionCollection *actionCollection, bool withMenus = true);
 
-		const QPtrList<KCommand>& commands() const { return m_commandsToUndo; }
+		const QList<K3Command*>& commands() const { return m_commandsToUndo; }
 
-		void addCommand(KCommand *command, bool execute = true);
+		void addCommand(K3Command *command, bool execute = true);
 
 		void clear();
 
@@ -64,7 +66,7 @@ class CommandHistory : public KCommandHistory
 		virtual void redo();
 
 	protected:
-		QPtrList<KCommand> m_commandsToUndo, m_commandsToRedo;
+		QList<K3Command*> m_commandsToUndo, m_commandsToRedo;
 };
 
 //----------------------------------------------
@@ -96,14 +98,14 @@ class KexiTableDesignerViewPrivate
 
 		 addHistoryCommand_in_slotPropertyChanged_enabled is then set back to the original state.
 		 */
-		void setPropertyValueIfNeeded( const KoProperty::Set& set, const QCString& propertyName, 
+		void setPropertyValueIfNeeded( const KoProperty::Set& set, const Q3CString& propertyName, 
 			const QVariant& newValue, CommandGroup* commandGroup, 
 			bool forceAddCommand = false, bool rememberOldValue = true,
 			QStringList* const slist = 0, QStringList* const nlist = 0);
 
 		/*! Like above but allows to specify \a oldValue. */
 		void setPropertyValueIfNeeded( 
-			const KoProperty::Set& set, const QCString& propertyName, 
+			const KoProperty::Set& set, const Q3CString& propertyName, 
 			const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup, 
 			bool forceAddCommand = false, bool rememberOldValue = true,
 			QStringList* const slist = 0, QStringList* const nlist = 0);
@@ -142,7 +144,7 @@ class KexiTableDesignerViewPrivate
 
 		KToggleAction *action_toggle_pkey;
 
-		KPopupTitle *contextMenuTitle;
+		QAction *contextMenuTitle;
 
 		int uniqueIdCounter;
 
@@ -183,9 +185,9 @@ class KexiTableDesignerViewPrivate
 		KActionCollection* historyActionCollection;
 		CommandHistory* history;
 
-		//! A cache used in KexiTableDesignerView::buildField() to quickly identify 
+		//! A set used in KexiTableDesignerView::buildField() to quickly identify 
 		//! properties internal to the designer
-		Q3AsciiDict<char> internalPropertyNames;
+		QSet<QByteArray> internalPropertyNames;
 };
 
 #endif

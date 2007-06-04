@@ -92,15 +92,15 @@ KexiDBSubForm::setFormName(const QString &name)
 		pw = pw->parentWidget();
 	}
 
-	if (!view || !view->parentDialog() || !view->parentDialog()->mainWin()
-		|| !view->parentDialog()->mainWin()->project()->dbConnection())
+	if (!view || !view->window() || !view->window()->mainWin()
+		|| !KexiMainWindowIface::global()->project()->dbConnection())
 		return;
 
-	KexiDB::Connection *conn = view->parentDialog()->mainWin()->project()->dbConnection();
+	KexiDB::Connection *conn = view->window()->mainWin()->project()->dbConnection();
 
 	// we check if there is a form with this name
 	int id = KexiDB::idForObjectName(*conn, name, KexiPart::FormObjectType);
-	if((id == 0) || (id == view->parentDialog()->id())) // == our form
+	if((id == 0) || (id == view->window()->id())) // == our form
 		return; // because of recursion when loading
 
 	// we create the container widget

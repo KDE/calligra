@@ -21,8 +21,8 @@
 #include "kexirelationpartimpl.h"
 
 #include <kexirelationwidget.h>
-#include <kexidialogbase.h>
-#include <keximainwindow.h>
+#include <KexiWindow.h>
+#include <KexiMainWindowIface.h>
 
 #include <kgenericfactory.h>
 #include <kiconloader.h>
@@ -61,7 +61,7 @@ KexiRelationPartImpl::createDialog(KexiMainWindow* mainWin, const char *)
 	return dlg;
 }*/
 
-KexiViewBase *
+KexiView *
 KexiRelationPartImpl::createView(KexiMainWindow* mainWin, QWidget *parent, const char *)
 {
 //	kDebug() << "KexiRelationPartImpl::createDialog()" << endl;

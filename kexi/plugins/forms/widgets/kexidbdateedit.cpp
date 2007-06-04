@@ -104,8 +104,8 @@ void KexiDBDateEdit::setValueInternal(const QVariant &add, bool removeOld)
 	QDate d;
 	QString addString(add.toString());
 	if (removeOld) {
-		if (!addString.isEmpty() && addString[0].latin1()>='0' && addString[0].latin1() <='9') {
-			setNumberOnFocus = addString[0].latin1()-'0';
+		if (!addString.isEmpty() && addString[0].toLatin1()>='0' && addString[0].toLatin1() <='9') {
+			setNumberOnFocus = addString[0].toLatin1()-'0';
 			d = QDate(setNumberOnFocus*1000, 1, 1);
 		}
 	}

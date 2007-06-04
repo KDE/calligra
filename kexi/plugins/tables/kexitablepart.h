@@ -24,12 +24,11 @@
 
 #include <kexi.h>
 #include <kexipart.h>
-#include <kexidialogbase.h>
-//#include <kexipartdatasource.h>
+#include <KexiWindow.h>
+#include <KexiWindowData.h>
 #include <kexipartitem.h>
 #include <kexidb/fieldlist.h>
 
-class KexiMainWin;
 class KexiLookupColumnPage;
 
 class KexiTablePart : public KexiPart::Part
@@ -37,17 +36,17 @@ class KexiTablePart : public KexiPart::Part
 	Q_OBJECT
 
 	public:
-		KexiTablePart(QObject *parent, const char *name, const QStringList &);
+		KexiTablePart(QObject *parent, const QStringList &);
 		virtual ~KexiTablePart();
 
-		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
+		virtual bool remove(KexiPart::Item &item);
 
-		virtual tristate rename(KexiMainWindow *win, KexiPart::Item &item, 
+		virtual tristate rename(KexiPart::Item &item, 
 			const QString& newName);
 
 //		virtual KexiPart::DataSource *dataSource();
 
-		class TempData : public KexiDialogTempData
+		class TempData : public KexiWindowData
 		{
 			public:
 				TempData(QObject* parent);
@@ -61,27 +60,27 @@ class KexiTablePart : public KexiPart::Part
 			QWidget *parent, KexiDB::Connection& conn, 
 			KexiDB::TableSchema& table, const QString& msg);
 
-		virtual QString i18nMessage(const QCString& englishMessage, 
-			KexiDialogBase* dlg) const;
+		virtual KLocalizedString i18nMessage(const QString& englishMessage, 
+			KexiWindow* window) const;
 
 		KexiLookupColumnPage* lookupColumnPage() const;
 
 	protected:
-		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
+		virtual KexiWindowData* createWindowData(KexiWindow* window);
 
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
+		virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
-		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin);
+		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
-		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
+		virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata, int viewMode);
 
 	private:
 		class Private;
-		Private* d;
+		Private* const d;
 };
 
 #if 0

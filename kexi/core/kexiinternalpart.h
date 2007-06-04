@@ -116,7 +116,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		static const KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const char* partName);
 
 		/*! \return true if the part can create only one (unique) dialog. */
-		inline bool uniqueDialog() const { return m_uniqueDialog; }
+		inline bool uniqueWindow() const { return m_uniqueWindow; }
 
 		/*! \return true if the part creation has been cancelled (eg. by a user)
 		 so it wasn't an error. Internal part's impelmentation should set it to true when needed. 
@@ -143,7 +143,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		//! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
 		QPointer<QWidget> m_uniqueWidget; 
 		
-		bool m_uniqueDialog : 1; //!< true if createDialogInstance() should return only one dialog
+		bool m_uniqueWindow : 1; //!< true if createWidgetInstance() should return only one window
 
 		bool m_cancelled : 1; //!< Used in cancelled()
 };

@@ -1400,7 +1400,7 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 				const QVariant val( readPropertyValue(node.firstChild(), w, name) );
 				kDebug() << val.toStringList() << endl;
 				item->addSubproperty( name.toLatin1(), val );
-				//subwidget->setProperty(name.latin1(), val);
+				//subwidget->setProperty(name.toLatin1(), val);
 				item->addModifiedProperty( name.toLatin1(), val );
 				continue;
 			}

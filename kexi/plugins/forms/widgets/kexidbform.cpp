@@ -27,12 +27,11 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QFocusEvent>
-#include <Q3PtrList>
+#include <QList>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <Q3ValueList>
 
 #include <kdebug.h>
 
@@ -86,20 +85,24 @@ class KexiDBForm::Private
 		//! Sets orderedFocusWidgetsIterator member to a position pointing to \a widget
 		void setOrderedFocusWidgetsIteratorTo( QWidget *widget )
 		{
-			if (orderedFocusWidgetsIterator.current() == widget)
+			if (*orderedFocusWidgetsIterator == widget)
 				return;
-			orderedFocusWidgetsIterator.toFirst();
-			while (orderedFocusWidgetsIterator.current() && orderedFocusWidgetsIterator.current()!=widget)
+			orderedFocusWidgetsIterator = orderedFocusWidgets.begin();
+			while (orderedFocusWidgetsIterator!=orderedFocusWidgets.end()
+				&& *orderedFocusWidgetsIterator!=widget)
+			{
 				++orderedFocusWidgetsIterator;
+			}
 		}
 
 		KexiDataAwareObjectInterface* dataAwareObject;
 		//! ordered list of focusable widgets (can be both data-widgets or buttons, etc.)
-		Q3PtrList<QWidget> orderedFocusWidgets; 
+		QList<QWidget*> orderedFocusWidgets;
 		//! ordered list of data-aware widgets
-		Q3PtrList<QWidget> orderedDataAwareWidgets;
-		QMap<KexiDataItemInterface*, uint> indicesForDataAwareWidgets; //!< a subset of orderedFocusWidgets mapped to indices
-		Q3PtrListIterator<QWidget> orderedFocusWidgetsIterator;
+		QList<QWidget*> orderedDataAwareWidgets;
+		//! a subset of orderedFocusWidgets mapped to indices
+		QHash<KexiDataItemInterface*, uint> indicesForDataAwareWidgets;
+		QList<QWidget*>::iterator orderedFocusWidgetsIterator;
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
 		QRect prev_rect; //!< previously selected rectangle
 //		QGuardedPtr<QWidget> widgetFocusedBeforePopup;
@@ -148,13 +151,13 @@ static void repaintAll(QWidget *w)
 void
 KexiDBForm::drawRect(const QRect& r, int type)
 {
-	Q3ValueList<QRect> l;
+	QList<QRect> l;
 	l.append(r);
 	drawRects(l, type);
 }
 
 void
-KexiDBForm::drawRects(const Q3ValueList<QRect> &list, int type)
+KexiDBForm::drawRects(const QList<QRect> &list, int type)
 {
 	QPainter p;
 	p.begin(this, true);
@@ -174,13 +177,12 @@ KexiDBForm::drawRects(const Q3ValueList<QRect> &list, int type)
 	p.setRasterOp(XorROP);
 
 	d->prev_rect = QRect();
-	Q3ValueList<QRect>::ConstIterator endIt = list.constEnd();
-	for(Q3ValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
-		p.drawRect(*it);
+	foreach (const QRect& r, list) {
+		p.drawRect(r);
 		if (d->prev_rect.isValid())
-			d->prev_rect = d->prev_rect.unite(*it);
+			d->prev_rect = d->prev_rect.unite(r);
 		else
-			d->prev_rect = *it;
+			d->prev_rect = r;
 	}
 
 	if (!unclipped)
@@ -300,12 +302,12 @@ void KexiDBForm::setAutoTabStops(bool set)
 	d->autoTabStops = set;
 }
 
-Q3PtrList<QWidget>* KexiDBForm::orderedFocusWidgets() const
+QList<QWidget*>* KexiDBForm::orderedFocusWidgets() const
 {
 	return &d->orderedFocusWidgets;
 }
 
-Q3PtrList<QWidget>* KexiDBForm::orderedDataAwareWidgets() const
+QList<QWidget*>* KexiDBForm::orderedDataAwareWidgets() const
 {
 	return &d->orderedDataAwareWidgets;
 }
@@ -376,9 +378,11 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 
 void KexiDBForm::updateTabStopsOrder()
 {
-	for (Q3PtrListIterator<QWidget> it( d->orderedFocusWidgets ); it.current();) {
+	for (QList<QWidget*>::iterator it( d->orderedFocusWidgets.begin() );
+		it!=d->orderedFocusWidgets.end(); )
+	{
 		if (! (it.current()->focusPolicy() & Qt::TabFocus))
-			d->orderedFocusWidgets.remove( it.current() );
+			it = d->orderedFocusWidgets.erase( it );
 		else
 			++it;
 	}
@@ -386,8 +390,8 @@ void KexiDBForm::updateTabStopsOrder()
 
 void KexiDBForm::updateReadOnlyFlags()
 {
-	for (QPtrListIterator<QWidget> it(d->orderedDataAwareWidgets); it.current(); ++it) {
-		KexiFormDataItemInterface* dataItem = dynamic_cast<KexiFormDataItemInterface*>( it.current() );
+	foreach (QWidget *w, d->orderedDataAwareWidgets) {
+		KexiFormDataItemInterface* dataItem = dynamic_cast<KexiFormDataItemInterface*>( w );
 		if (dataItem && !dataItem->dataSource().isEmpty()) {
 			if (dataAwareObject()->isReadOnly()) {
 				dataItem->setReadOnly( true );
@@ -520,10 +524,10 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 						if (d->orderedFocusWidgets.first() && realWidget == d->orderedFocusWidgets.last()) {
 							if (wasAtFirstWidget)
 								break;
-							d->orderedFocusWidgetsIterator.toFirst();
+							d->orderedFocusWidgetsIterator = d->orderedFocusWidgets.begin();
 							wasAtFirstWidget = true;
 						}
-						else if (realWidget == d->orderedFocusWidgetsIterator.current()) {
+						else if (realWidget == *d->orderedFocusWidgetsIterator) {
 							++d->orderedFocusWidgetsIterator; //next
 						}
 						else
@@ -531,7 +535,8 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					}
 					else {//backtab
 						if (d->orderedFocusWidgets.last() && realWidget == d->orderedFocusWidgets.first()) {
-							d->orderedFocusWidgetsIterator.toLast();
+							d->orderedFocusWidgetsIterator 
+								= d->orderedFocusWidgets.begin() + (d->orderedFocusWidgets.count()-1);
 						}
 						else if (realWidget == d->orderedFocusWidgetsIterator.current()) {
 							--d->orderedFocusWidgetsIterator; //prev
@@ -540,7 +545,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 							return true; //ignore
 					}
 
-					widgetToFocus = d->orderedFocusWidgetsIterator.current();
+					widgetToFocus = *d->orderedFocusWidgetsIterator;
 
 					QObject *pageFor_widgetToFocus = 0;
 					KFormDesigner::TabWidget *tabWidgetFor_widgetToFocus 
@@ -568,8 +573,8 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					else {//backtab
 						KexiUtils::unsetFocusWithReason(widgetToUnfocus, QFocusEvent::Backtab);
 						//set focus, see above note
-						KexiUtils::setFocusWithReason(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Backtab);
-						kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+						KexiUtils::setFocusWithReason(*d->orderedFocusWidgetsIterator, QFocusEvent::Backtab);
+						kexipluginsdbg << "focusing " << *d->orderedFocusWidgetsIterator->name() << endl;
 					}
 				}
 				return true;

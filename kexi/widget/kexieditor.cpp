@@ -82,13 +82,13 @@ class KexiEditor::Private {
 #endif
 };
 
-KexiEditor::KexiEditor(KexiMainWindowIface *mainWin, QWidget *parent)
+KexiEditor::KexiEditor(QWidget *parent)
 	: KexiView(parent)
 	, d(new Private())
 {
 	Q3VBoxLayout *layout = new Q3VBoxLayout(this);
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
-	d->view = new KTextEdit( "", QString(), this, "kexi_editor" );
+	d->view = new KTextEdit( "", QString(), this );
 	//adjust font
 	connect(d->view, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 	QFont f("Courier");

@@ -22,14 +22,9 @@
 #include <core/kexi.h>
 #include <core/kexitemplateloader.h>
 #include "KexiProjectSelector.h"
-#include "KexiOpenExistingFile.h"
 #include "KexiConnSelector.h"
-#include "KexiConnSelectorBase.h"
 
-#include <qheader.h>
-
-#include <kdebug.h>
-#include <kiconloader.h>
+#include <QPixmap>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define KEXI_STARTUP_SHOW_TEMPLATES
@@ -49,13 +44,13 @@
 }*/
 
 //! @internal
-class TemplateItem : public KListViewItem
+class TemplateItem : public K3ListViewItem
 {
 	public:
-		TemplateItem(QListView* parent, const QString& aFilename, 
+		TemplateItem(Q3ListView* parent, const QString& aFilename, 
 			const QString& name, const QString& description, const QPixmap& icon, 
-			const QValueList<KexiProjectData::ObjectInfo>& aAutoopenObjects)
-		: KListViewItem(parent, name + "\n" + description)
+			const QList<KexiProjectData::ObjectInfo>& aAutoopenObjects)
+		: K3ListViewItem(parent, name + "\n" + description)
 		, autoopenObjects(aAutoopenObjects)
 		, filename(aFilename)
 		{
@@ -63,22 +58,23 @@ class TemplateItem : public KListViewItem
 		}
 		~TemplateItem() {}
 
-	QValueList<KexiProjectData::ObjectInfo> autoopenObjects;
+	QList<KexiProjectData::ObjectInfo> autoopenObjects;
 	QString filename;
 };
 
 //-----------------------
 
 KexiStartupDialogTemplatesPage::KexiStartupDialogTemplatesPage( QWidget * parent )
-	: KListView(parent, "KexiStartupDialogTemplatesPage")
+	: K3ListView(parent)
 	, m_popuplated(false)
 {
+	setObjectName("KexiStartupDialogTemplatesPage");
 	addColumn(QString());
 	header()->hide();
 	setColumnWidthMode(0, Maximum);
 	setResizeMode(LastColumn);
 	setItemMargin(6);
-	connect(this,SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)));
+	connect(this,SIGNAL(executed(Q3ListViewItem*)), this, SLOT(slotExecuted(Q3ListViewItem*)));
 }
 
 KexiStartupDialogTemplatesPage::~KexiStartupDialogTemplatesPage()
@@ -91,9 +87,9 @@ void KexiStartupDialogTemplatesPage::populate()
 		return;
 	m_popuplated = true;
 	KexiTemplateInfo::List list = KexiTemplateLoader::loadListInfo();
-	foreach( QValueList<KexiTemplateInfo>::ConstIterator, it, list ) {
-		new TemplateItem(this, (*it).filename, (*it).name, 
-			(*it).description, (*it).icon, (*it).autoopenObjects);
+	foreach( const KexiTemplateInfo& info, list ) {
+		new TemplateItem(this, info.filename, info.name, 
+			info.description, info.icon, info.autoopenObjects);
 	}
 	if (firstChild())
 		setSelected(firstChild(), true);
@@ -138,14 +134,14 @@ QString KexiStartupDialogTemplatesPage::selectedFileName() const
 	return templateItem ? templateItem->filename : QString();
 }
 
-QValueList<KexiProjectData::ObjectInfo>
+QList<KexiProjectData::ObjectInfo>
 KexiStartupDialogTemplatesPage::autoopenObjectsForSelectedTemplate() const
 {
 	TemplateItem* templateItem = static_cast<TemplateItem*>(selectedItem());
-	return templateItem ? templateItem->autoopenObjects : QValueList<KexiProjectData::ObjectInfo>();
+	return templateItem ? templateItem->autoopenObjects : QList<KexiProjectData::ObjectInfo>();
 }
 
-void KexiStartupDialogTemplatesPage::slotExecuted(QListViewItem* item)
+void KexiStartupDialogTemplatesPage::slotExecuted(Q3ListViewItem* item)
 {
 	TemplateItem* templateItem = static_cast<TemplateItem*>(item);
 	if (!templateItem)

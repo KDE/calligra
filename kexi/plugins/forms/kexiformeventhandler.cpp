@@ -28,8 +28,7 @@
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
 #include <kexidb/queryschema.h>
-#include <keximainwindow.h>
-#include <kexidialogbase.h>
+#include <KexiMainWindowIface.h>
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
@@ -68,9 +67,9 @@ KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
 
 //-------------------------------------
 
-KexiFormEventAction::KexiFormEventAction(KexiMainWindow *mainWin, QObject* parent, 
+KexiFormEventAction::KexiFormEventAction(QObject* parent, 
 	const QString& actionName, const QString& objectName, const QString& actionOption)
- : KAction(parent), m_mainWin(mainWin), m_actionName(actionName), m_objectName(objectName)
+ : KAction(parent), m_actionName(actionName), m_objectName(objectName)
  , m_actionOption(actionOption)
 {
 }
@@ -81,7 +80,7 @@ KexiFormEventAction::~KexiFormEventAction()
 
 void KexiFormEventAction::activate()
 {
-	KexiProject* project = m_mainWin->project();
+	KexiProject* project = KexiMainWindowIface::global()->project();
 	if (!project)
 		return;
 	KexiPart::Part* part = Kexi::partManager().partForMimeType( 
@@ -96,40 +95,40 @@ void KexiFormEventAction::activate()
 		if (part->info()->isExecuteSupported())
 			part->execute(item, parent());
 		else
-			m_mainWin->openObject(item, Kexi::DataViewMode, actionCancelled);
+			KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, actionCancelled);
 	}
 	else {
 //! @todo react on failure...
 		if (m_actionOption == "open")
-			m_mainWin->openObject(item, Kexi::DataViewMode, actionCancelled);
+			KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, actionCancelled);
 		else if (m_actionOption == "execute")
 			part->execute(item, parent());
 		else if (m_actionOption == "print") {
 			if (part->info()->isPrintingSupported())
-				m_mainWin->printItem(item);
+				KexiMainWindowIface::global()->printItem(item);
 		}
 		else if (m_actionOption == "printPreview") {
 			if (part->info()->isPrintingSupported())
-				m_mainWin->printPreviewForItem(item);
+				KexiMainWindowIface::global()->printPreviewForItem(item);
 		}
 		else if (m_actionOption == "pageSetup") {
 			if (part->info()->isPrintingSupported())
-				m_mainWin->showPageSetupForItem(item);
+				KexiMainWindowIface::global()->showPageSetupForItem(item);
 		}
 		else if (m_actionOption == "exportToCSV"
 			|| m_actionOption == "copyToClipboardAsCSV")
 		{
 			if (part->info()->isDataExportSupported())
-				m_mainWin->executeCustomActionForObject(item, m_actionOption);
+				KexiMainWindowIface::global()->executeCustomActionForObject(item, m_actionOption);
 		}
 		else if (m_actionOption == "new")
-			m_mainWin->newObject( part->info(), actionCancelled );
+			KexiMainWindowIface::global()->newObject( part->info(), actionCancelled );
 		else if (m_actionOption == "design")
-			m_mainWin->openObject(item, Kexi::DesignViewMode, actionCancelled);
+			KexiMainWindowIface::global()->openObject(item, Kexi::DesignViewMode, actionCancelled);
 		else if (m_actionOption == "editText")
-			m_mainWin->openObject(item, Kexi::TextViewMode, actionCancelled);
+			KexiMainWindowIface::global()->openObject(item, Kexi::TextViewMode, actionCancelled);
 		else if (m_actionOption == "close") {
-			tristate res = m_mainWin->closeObject(item);
+			tristate res = KexiMainWindowIface::global()->closeObject(item);
 			if (~res)
 				actionCancelled = true;
 		}
@@ -147,7 +146,7 @@ KexiFormEventHandler::~KexiFormEventHandler()
 {
 }
 
-void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin, QWidget* mainWidget)
+void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
 {
 	m_mainWidget = mainWidget;
 	if (!m_mainWidget)
@@ -171,14 +170,14 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 		if (!ok)
 			continue;
 		if (actionType=="kaction" || actionType=="currentForm") {
-			KAction *action = mainWin->actionCollection()->action( actionArg.latin1() );
+			KAction *action = KexiMainWindowIface::global()->actionCollection()->action( actionArg.toLatin1() );
 			if (!action)
 				continue;
 			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) ); //safety
 			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 		}
 		else if (partInfo) { //'open or execute' action
-			KexiFormEventAction* action = new KexiFormEventAction(mainWin, obj, actionType, actionArg, 
+			KexiFormEventAction* action = new KexiFormEventAction(obj, actionType, actionArg, 
 				data.option);
 			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );

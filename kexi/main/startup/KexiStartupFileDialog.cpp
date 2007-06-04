@@ -37,11 +37,12 @@
 #include <kmimetype.h>
 #include <kfile.h>
 #include <kurlcombobox.h>
+#include <KToolBar>
 
 KexiStartupFileDialog::KexiStartupFileDialog(
 		const QString& startDirOrVariable, int mode,
-		QWidget *parent, const char *name)
-	:  KexiStartupFileDialogBase(startDirOrVariable, "", parent, name, 0)
+		QWidget *parent)
+	:  KexiStartupFileDialogBase(startDirOrVariable, ""/*filter*/, parent)
 	, m_confirmOverwrites(true)
 	, m_filtersUpdated(false)
 {
@@ -49,7 +50,9 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 	setMode( mode );
 	
 	QPoint point( 0, 0 );
-	reparent( parentWidget(), point );
+#ifdef __GNUC__
+#warning NEEDED? reparent( parentWidget(), point );
+#endif
 
 	if (layout())
 		layout()->setMargin(0);
@@ -58,32 +61,24 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 
 	//dirty hack to customize filedialog view:
 	{
-		QObjectList *l = queryList( "QPushButton" );
-		QObjectListIt it( *l );
-		QObject *obj;
-		while ( (obj = it.current()) != 0 ) {
-			++it;
-			static_cast<QPushButton*>(obj)->hide();
-		}
-		delete l;
-	}
-	{
-		QObjectList *l = queryList("QWidget");
-		QObjectListIt it( *l );
-		QObject *obj;
-		while ( (obj = it.current()) != 0 ) {
-			++it;
-			static_cast<QWidget*>(obj)->installEventFilter(this);
-		}
-		delete l;
+		QList<QPushButton*> l = findChildren<QPushButton*>();
+		foreach (QPushButton* btn, l)
+			btn->hide();
+		QList<QWidget*> wl = findChildren<QWidget*>();
+		foreach (QWidget* w, wl)
+			w->installEventFilter(this);
 	}	
 	
 #ifdef Q_WS_WIN
 	if (startDirOrVariable.startsWith(":"))
 		m_lastVisitedPathsVariable = startDirOrVariable; //store for later use
 #else
-	toggleSpeedbar(false);
-	setFocusProxy( locationEdit );//locationWidget() );
+//	toggleSpeedbar(false);
+#ifdef __GNUC__
+#warning OK?	toolBar()->hide();
+#endif
+	toolBar()->hide();
+	setFocusProxy( locationEdit() );
 #endif
 }
 
@@ -145,21 +140,21 @@ void KexiStartupFileDialog::updateFilters()
 
 	if (normalOpeningMode || normalSavingMode) {
 		mime = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() );
-		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
+		if (mime && m_excludedMimeTypes.contains(mime->name(), Qt::CaseInsensitive)) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
 	}
 	if (normalOpeningMode || m_mode & SavingServerBasedDB) {
 		mime = KMimeType::mimeType("application/x-kexiproject-shortcut");
-		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
+		if (mime && m_excludedMimeTypes.contains(mime->name(), Qt::CaseInsensitive)) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
 	}
 	if (normalOpeningMode || m_mode & SavingServerBasedDB) {
 		mime = KMimeType::mimeType("application/x-kexi-connectiondata");
-		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
+		if (mime && m_excludedMimeTypes.contains(mime->name(), Qt::CaseInsensitive)) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
@@ -168,23 +163,23 @@ void KexiStartupFileDialog::updateFilters()
 //! @todo hardcoded for MSA:
 	if (normalOpeningMode) {
 		mime = KMimeType::mimeType("application/vnd.ms-access");
-		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
+		if (mime && m_excludedMimeTypes.contains(mime->name(), Qt::CaseInsensitive)) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
 	}
 
-	foreach (QStringList::ConstIterator, it, m_additionalMimeTypes) {
-		if (*it == "all/allfiles")
+	foreach (QString mimeName, m_additionalMimeTypes) {
+		if (mimeName == "all/allfiles")
 			continue;
-		if (m_excludedMimeTypes.find(*it)!=m_excludedMimeTypes.end())
+		if (m_excludedMimeTypes.contains(mimeName, Qt::CaseInsensitive))
 			continue;
-		filter += KexiUtils::fileDialogFilterString(*it);
-		mime = KMimeType::mimeType(*it);
+		filter += KexiUtils::fileDialogFilterString(mimeName);
+		mime = KMimeType::mimeType(mimeName);
 		allfilters += mime->patterns();
 	}
 
-	if (m_excludedMimeTypes.find("all/allfiles")==m_excludedMimeTypes.end())
+	if (m_excludedMimeTypes.contains("all/allfiles", Qt::CaseInsensitive))
 		filter += KexiUtils::fileDialogFilterString("all/allfiles");
 //	mime = KMimeType::mimeType("all/allfiles");
 //	if (mime) {
@@ -192,16 +187,8 @@ void KexiStartupFileDialog::updateFilters()
 //			+ "|" + mime->comment()+ " (*)\n";
 //	}
 	//remove duplicates made because upper- and lower-case extenstions are used:
-	QStringList allfiltersUnique;
-	Q3Dict<char> uniqueDict(499, false);
-	foreach (QStringList::ConstIterator, it, allfilters) {
-//		kDebug() << *it << endl;
-		uniqueDict.insert(*it, (char*)1);
-	}
-	foreach_dict (Q3DictIterator<char>, it, uniqueDict) {
-		allfiltersUnique += it.currentKey();
-	}
-	allfiltersUnique.sort();
+	QStringList allfiltersUnique = allfilters.toSet().toList();
+	qSort(allfiltersUnique);
 	
 	if (allfiltersUnique.count()>1) {//prepend "all supoported files" entry
 		filter.prepend(allfilters.join(" ")+"|" + i18n("All Supported Files")
@@ -244,14 +231,14 @@ QString KexiStartupFileDialog::currentFileName()
 //	QString path = QFileInfo(selectedFile()).dirPath(true) + "/" + m_lineEdit->text();
 #else
 //	QString path = locationEdit->currentText().trimmed(); //url.path().trimmed(); that does not work, if the full path is not in the location edit !!!!!
-	QString path=KexiStartupFileDialogBase::selectedURL().path();
-	kDebug() << "prev selectedURL() == " << path <<endl;
-	kDebug() << "locationEdit == " << locationEdit->currentText().trimmed() <<endl;
+	QString path( KexiStartupFileDialogBase::selectedFile() );
+	kDebug() << "prev selectedFile() == " << path <<endl;
+	kDebug() << "locationEdit == " << locationEdit()->currentText().trimmed() <<endl;
 	//make sure user-entered path is acceped:
-	setSelection( locationEdit->currentText().trimmed() );
+	setSelection( locationEdit()->currentText().trimmed() );
 	
-	path=KexiStartupFileDialogBase::selectedURL().path();
-	kDebug() << "selectedURL() == " << path <<endl;
+	path = KexiStartupFileDialogBase::selectedFile();
+	kDebug() << "selectedFile() == " << path <<endl;
 	
 #endif
 	
@@ -302,8 +289,8 @@ bool KexiStartupFileDialog::checkFileName()
 		QFileInfo fi(path);
 		if (mode() & KFile::ExistingOnly) {
 			if ( !fi.exists() ) {
-				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" does not exist." )
-					.arg( QDir::convertSeparators(path) ) );
+				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" does not exist.",
+					QDir::convertSeparators(path) ) );
 				return false;
 			}
 			else if (mode() & KFile::File) {
@@ -312,8 +299,8 @@ bool KexiStartupFileDialog::checkFileName()
 					return false;
 				}
 				else if (!fi.isReadable()) {
-					KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" is not readable." )
-						.arg( QDir::convertSeparators(path) ) );
+					KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" is not readable.",
+						QDir::convertSeparators(path) ) );
 					return false;
 				}
 			}
@@ -331,9 +318,10 @@ bool KexiStartupFileDialog::askForOverwriting(const QString& filePath, QWidget *
 	QFileInfo fi(filePath);
 	if (!fi.exists())
 		return true;
-	const int res = KMessageBox::warningYesNo( parent, i18n( "The file \"%1\" already exists.\n"
-		"Do you want to overwrite it?").arg( QDir::convertSeparators(filePath) ), QString(), 
-			i18n("Overwrite"), KStdGuiItem::no() );
+	const int res = KMessageBox::warningYesNo( parent, 
+		i18n( "The file \"%1\" already exists.\n"
+		"Do you want to overwrite it?", QDir::convertSeparators(filePath) ), QString(), 
+			KGuiItem(i18n("Overwrite")), KStandardGuiItem::no() );
 	if (res == KMessageBox::Yes)
 		return true;
 	return false;
@@ -405,7 +393,7 @@ void KexiStartupFileDialog::setFocus()
 #ifdef Q_WS_WIN
 	m_lineEdit->setFocus();
 #else
-	locationEdit->setFocus();
+	locationEdit()->setFocus();
 #endif
 }
 

@@ -233,7 +233,7 @@ KexiView* KexiWindow::viewThatRecentlySetDirtyFlag() const
 	return d->viewThatRecentlySetDirtyFlag;
 }
 
-void KexiWindow::registerDialog()
+void KexiWindow::registerWindow()
 {
 	if (d->isRegistered)
 		return;
@@ -245,7 +245,7 @@ void KexiWindow::registerDialog()
 		m_parentWindow->detachWindow(this, true);
 	}
 	else */
-#warning KexiWindow::registerDialog()
+#warning KexiWindow::registerWindow()
 //kde4 todo		KexiMainWindo::global()->addWindow(this, KexiMdiMainFrm::StandardAdd);
 }
 
@@ -486,7 +486,7 @@ tristate KexiWindow::switchToViewMode( int newViewMode,
 			<< prevViewMode << " restored." << endl;
 		const Kexi::ObjectStatus status(*this);
 		setStatus(KexiMainWindowIface::global()->project()->dbConnection(), 
-			i18n("Switching to other view failed (%1).").arg(Kexi::nameForViewMode(newViewMode)),"");
+			i18n("Switching to other view failed (%1).", Kexi::nameForViewMode(newViewMode)),"");
 		append( status );
 		d->currentViewMode = prevViewMode;
 		return false;

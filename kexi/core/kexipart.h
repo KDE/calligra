@@ -66,7 +66,7 @@ class KEXICORE_EXPORT Part : public QObject
 
 	public:
 		/*! Constructor. */
-		Part(QObject *parent, const char *name, const QStringList &);
+		Part(QObject *parent, const QStringList &);
 		/*! Destructor. */
 		virtual ~Part();
 
@@ -197,10 +197,36 @@ class KEXICORE_EXPORT Part : public QObject
 		 In special cases, \a englishMessage can start with ":", 
 		 to indicate that empty string will be generated if 
 		 a part does not offer a message for such \a englishMessage.
-		 This is used e.g. in KexiMainWindowImpl::closeDialog().
-		 */
-		virtual QString i18nMessage(const QString& englishMessage, 
+		 This is used e.g. in KexiMainWindow::closeWindow().
+		 
+		 Note: As number of %n parameters is unspecified,
+		 you should add appropriate number of parameters using .subs(). 
+		 to result of results of i18nMessage().
+		 In your your implementation, you should use ki18n(I18N_NOOP())
+		 or ki18nc(I18N_NOOP2()) instead of i18n() or i18nc().
+		 Example:
+		 @code
+		  QString tableName = "Employees";
+		 	QString translated 
+		 	 = part->i18nMessage("Design of object \"%1\" has been modified.")
+		 	  .subs(tableName).toString();
+		 @endcode */
+		virtual KLocalizedString i18nMessage(const QString& englishMessage, 
 			KexiWindow *window) const;
+
+		/*! @internal 
+		 Creates GUIClients for this part, attached to the main window.
+		 This method is called by KexiMainWindow. */
+		void createGUIClients();
+
+		/*! @internal
+		 This method can be reimplemented to setup additional tabs 
+		 in the property editor panel. Default implementation does nothing. 
+		 This method is called whenever current window (KexiWindow) is switched and
+		 type (mime type) of its contents differs from previous one. 
+		 For example, if a user switched from Table Designer to Form Designer,
+		 additional tab containing Form Designer's object tree should be shown. */
+		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
 	signals: 
 		void newObjectRequest( KexiPart::Info *info );
@@ -211,10 +237,6 @@ class KEXICORE_EXPORT Part : public QObject
 	protected:
 		//! Used by StaticPart
 		Part(QObject* parent, StaticInfo *info);
-
-		//! Creates GUIClients for this part, attached to the main window
-		//! This method is called from KexiMainWindow
-		void createGUIClients();
 
 #if 0
 		/*! For reimplementation. Create here all part actions (KAction or similar). 
@@ -277,14 +299,6 @@ class KEXICORE_EXPORT Part : public QObject
 		void setActionAvailable(const char *action_name, bool avail);
 
 		inline void setInfo(Info *info) { m_info = info; }
-
-		/*! This method can be reimplemented to setup additional tabs 
-		 in the property editor panel. Default implementation does nothing. 
-		 This method is called whenever current window (KexiWindow) is switched and
-		 type (mime type) of its contents differs from previous one. 
-		 For example, if a user switched from Table Designer to Form Designer,
-		 additional tab containing Form Designer's object tree should be shown. */
-		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
 		//! Set of i18n'd action names for, initialised on KexiPart::Part subclass ctor
 		//! The names are useful because the same action can have other name for each part

@@ -19,12 +19,11 @@
 
 #include "KexiNewProjectWizard.h"
 
+#include "ui_KexiNewPrjTypeSelector.h"
+#include "ui_KexiOpenExistingFile.h"
+#include "ui_KexiServerDBNamePage.h"
 #include "KexiConnSelector.h"
-#include "KexiConnSelectorBase.h"
-#include "KexiNewPrjTypeSelector.h"
-#include "KexiOpenExistingFile.h"
 #include "KexiDBTitlePage.h"
-#include "KexiServerDBNamePage.h"
 #include "KexiProjectSelector.h"
 #include "kexi.h"
 
@@ -52,18 +51,37 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
+KexiNewPrjTypeSelector::KexiNewPrjTypeSelector(QWidget* parent)
+	: QWidget(parent)
+{
+	setupUi(this);
+}
+
+KexiOpenExistingFile::KexiOpenExistingFile(QWidget* parent)
+	: QWidget(parent)
+{
+	setupUi(this);
+};
+
+KexiServerDBNamePage::KexiServerDBNamePage(QWidget* parent)
+	: QWidget(parent)
+{
+	setupUi(this);
+}
+
+
 //! @internal
-class KexiNewProjectWizardPrivate
+class KexiNewProjectWizard::Private
 {
 	public:
-	KexiNewProjectWizardPrivate()
+	Private()
 	{
 		le_dbname_txtchanged_disable = false;
 		le_dbname_autofill = true;
 //		conndata_to_show = 0;
 //		project_set_to_show = 0;
 	}
-	~KexiNewProjectWizardPrivate()
+	~Private()
 	{
 //		delete conndata_to_show;
 //		delete project_set_to_show;
@@ -86,29 +104,31 @@ class KexiNewProjectWizardPrivate
 };
 
 KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
-	QWidget *parent, const char *name, bool modal, Qt::WFlags f)
-: K3Wizard(parent, name, modal, f)
-, d(new KexiNewProjectWizardPrivate() )
+	QWidget *parent)
+: K3Wizard(parent)
+, d(new Private() )
 {
 	d->msgHandler = new KexiGUIMessageHandler(this);
-	setIcon( DesktopIcon("document-new") );
-	setCaption( i18n("Creating New Project") );
+	setWindowIcon( KIcon("document-new") );
+	setWindowTitle( i18n("Creating New Project") );
 	finishButton()->setText(i18n("Create"));
 
 	//page: type selector
-	m_prjtype_sel = new KexiNewPrjTypeSelector(this, "KexiNewPrjTypeSelector");
+	m_prjtype_sel = new KexiNewPrjTypeSelector(this);
+	m_prjtype_sel->setObjectName("KexiNewPrjTypeSelector");
 //	lv_types = new K3ListView(m_prjtype_sel, "types listview");
 //	m_prjtype_sel->lv_types->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 2));
 	m_prjtype_sel->lv_types->setShadeSortColumn(false);
 	m_prjtype_sel->lv_types->header()->hide();
 	m_prjtype_sel->lv_types->setSorting(-1);
 	m_prjtype_sel->lv_types->setAlternateBackground(QColor()); //disable altering
-	m_prjtype_sel->lv_types->setItemMargin( KDialogBase::marginHint() );
+	m_prjtype_sel->lv_types->setItemMargin( KDialog::marginHint() );
 	QString none;
 	d->lvi_file = new K3ListViewItem( m_prjtype_sel->lv_types, i18n("New Project Stored in File") );
 	d->lvi_file->setPixmap(0, 
-		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( 
-			KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), K3Icon::Desktop 
+		KIconLoader::global()->loadIcon( KMimeType::mimeType( 
+			KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName(),
+			K3Icon::Desktop 
 		)
 	);
 	d->lvi_file->setMultiLinesEnabled( true );
@@ -123,9 +143,12 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 //	d->chk_server_txt = i18n("Always &use database server for creating new projects.")
 //		+"\n"+txt_dns;
 
-	connect(m_prjtype_sel->lv_types,SIGNAL(executed(Q3ListViewItem*)),this,SLOT(slotLvTypesExecuted(Q3ListViewItem*)));
-	connect(m_prjtype_sel->lv_types,SIGNAL(returnPressed(Q3ListViewItem*)),this,SLOT(slotLvTypesExecuted(Q3ListViewItem*)));
-	connect(m_prjtype_sel->lv_types,SIGNAL(selectionChanged( Q3ListViewItem*)),this,SLOT(slotLvTypesSelected(Q3ListViewItem*)));
+	connect(m_prjtype_sel->lv_types, SIGNAL(executed(Q3ListViewItem*)),
+		this, SLOT(slotLvTypesExecuted(Q3ListViewItem*)));
+	connect(m_prjtype_sel->lv_types, SIGNAL(returnPressed(Q3ListViewItem*)),
+		this, SLOT(slotLvTypesExecuted(Q3ListViewItem*)));
+	connect(m_prjtype_sel->lv_types, SIGNAL(selectionChanged(Q3ListViewItem*)),
+		this,SLOT(slotLvTypesSelected(Q3ListViewItem*)));
 
 //	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertWidget(1,d->m_prjtype_sel->lv_types);
 //	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertStretch(3,1);
@@ -135,16 +158,19 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 //	d->m_prjtype_sel->lv_types->setMinimumHeight(qMax(d->lvi_file->height(),d->lvi_server->height())+25);
 
 	//page: db title
-	m_db_title = new KexiDBTitlePage(QString(), this, "KexiDBTitlePage");
+	m_db_title = new KexiDBTitlePage(QString(), this);
+	m_db_title->setObjectName("KexiDBTitlePage");
 	addPage(m_db_title, i18n("Select Project's Caption"));
 
 	//page: connection selector
 	m_conn_sel_widget = new QWidget(this);
 	Q3VBoxLayout* conn_sel_lyr = new Q3VBoxLayout(m_conn_sel_widget);
-	QLabel *conn_sel_label = new QLabel(i18n("Enter a new Kexi project's file name:"), m_conn_sel_widget);
-	conn_sel_label->setAlignment(Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap);
+	QLabel *conn_sel_label = new QLabel(i18n("Enter a new Kexi project's file name:"),
+		m_conn_sel_widget);
+	conn_sel_label->setAlignment(Qt::AlignLeft|Qt::AlignTop);
+	conn_sel_label->setWordWrap(true);
 	conn_sel_lyr->addWidget( conn_sel_label );
-	conn_sel_lyr->addSpacing(KDialogBase::spacingHint());
+	conn_sel_lyr->addSpacing(KDialog::spacingHint());
 
 	m_conn_sel = new KexiConnSelectorWidget(conn_set, ":OpenExistingOrCreateNewProject", 
 		m_conn_sel_widget);
@@ -177,8 +203,10 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	addPage(m_conn_sel_widget, i18n("Select Project's Location"));
 
 	//page: server db name
-	m_server_db_name = new KexiServerDBNamePage(this, "KexiServerDBNamePage");
-	d->server_db_name_dblist_lbl_txt = i18n("Existing project databases on <b>%1</b> database server:");
+	m_server_db_name = new KexiServerDBNamePage(this);
+	m_server_db_name->setObjectName("KexiServerDBNamePage");
+	d->server_db_name_dblist_lbl_txt
+		= I18N_NOOP("Existing project databases on <b>%1</b> database server:");
 	connect(m_server_db_name->le_caption, SIGNAL(textChanged(const QString&)),
 		this,SLOT(slotServerDBCaptionTxtChanged(const QString&)));
 	connect(m_server_db_name->le_dbname, SIGNAL(textChanged(const QString&)),
@@ -188,7 +216,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	connect(m_server_db_name->le_dbname, SIGNAL(returnPressed()),
 		this,SLOT(accept()));
 	m_server_db_name->le_caption->setText(i18n("New database"));
-	m_server_db_name->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this, "id_val"));
+	m_server_db_name->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this));
 	m_project_selector = new KexiProjectSelectorWidget(
 		m_server_db_name->frm_dblist, 0, false, false );
 	GLUE_WIDGET(m_project_selector, m_server_db_name->frm_dblist);
@@ -300,8 +328,9 @@ void KexiNewProjectWizard::next()
 				KMessageBox::information(this, i18n("Select server connection for a new project."));
 				return;
 			}
-			m_project_selector->label->setText(
-				d->server_db_name_dblist_lbl_txt.arg(m_conn_sel->selectedConnectionData()->serverInfoString(false)) );
+			m_project_selector->label()->setText(
+				d->server_db_name_dblist_lbl_txt
+					.arg(m_conn_sel->selectedConnectionData()->serverInfoString(false)) );
 			m_server_db_name->le_caption->setFocus();
 
 		}
@@ -313,7 +342,7 @@ void KexiNewProjectWizard::accept()
 {
 	if (m_prjtype_sel->lv_types->currentItem()==d->lvi_file) {//FILE:
 		//check if new db file name is ok
-		kDebug() << "********** sender() " << sender()->className() << endl;
+		kDebug() << "********** sender() " << sender()->metaObject()->className() << endl;
 		if (sender()==finishButton()) { /*(only if signal does not come from filedialog)*/
 			kDebug() << "********** sender()==finishButton() ********" << endl;
 //			if (!m_conn_sel->m_fileDlg->checkURL()) {
@@ -339,10 +368,11 @@ void KexiNewProjectWizard::accept()
 		//check for duplicated dbname
 		if (m_conn_sel->confirmOverwrites() && m_project_selector->projectSet() && m_project_selector->projectSet()
 			->findProject( m_server_db_name->le_dbname->text() )) {
-			if (KMessageBox::Continue!=KMessageBox::warningContinueCancel( this, "<qt>"
-				+i18n("<b>A project with database name \"%1\" already exists</b>"
-				"<p>Do you want to delete it and create a new one?")
-				.arg( m_server_db_name->le_dbname->text() ), QString(), KStandardGuiItem::del(), 
+			if (KMessageBox::Continue!=KMessageBox::warningContinueCancel( this,
+				"<qt>"+i18n("<b>A project with database name \"%1\" already exists</b>"
+				"<p>Do you want to delete it and create a new one?",
+					m_server_db_name->le_dbname->text() ), QString(), 
+				KStandardGuiItem::del(), KStandardGuiItem::cancel(),
 				QString(), KMessageBox::Notify|KMessageBox::Dangerous ))
 			{
 				m_server_db_name->le_dbname->setFocus();
@@ -417,6 +447,4 @@ void KexiNewProjectWizard::setConfirmOverwrites(bool set)
 	m_conn_sel->setConfirmOverwrites(set);
 }
 
-
 #include "KexiNewProjectWizard.moc"
-

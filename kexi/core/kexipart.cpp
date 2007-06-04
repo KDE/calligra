@@ -66,7 +66,7 @@ public:
 				singleStatusString.prepend(QString("\n\n")+i18n("Details:")+" ");
 			if (KMessageBox::No==KMessageBox::questionYesNo(0, 
 				((viewMode == Kexi::DesignViewMode) 
-					? i18n("Object \"%1\" could not be opened in Design View.").arg(item.name())
+					? i18n("Object \"%1\" could not be opened in Design View.", item.name())
 					: i18n("Object could not be opened in Data View."))+"\n"
 				+ i18n("Do you want to open it in Text View?") + singleStatusString, 0, 
 				KStandardGuiItem::open(), KStandardGuiItem::cancel()))
@@ -86,13 +86,12 @@ public:
 
 using namespace KexiPart;
 
-Part::Part(QObject *parent, const char *name, const QStringList &)
+Part::Part(QObject *parent, const QStringList &)
 : QObject(parent)
 , m_guiClient(0)
 , m_registeredPartID(-1) //no registered ID by default
 , d(new PartPrivate())
 {
-	setObjectName(name);
 	m_info = 0;
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 	m_supportedUserViewModes = Kexi::DataViewMode;
@@ -276,8 +275,8 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, int viewMode,
 				m_status = Kexi::ObjectStatus( KexiMainWindowIface::global()->project()->dbConnection(), 
 					i18n("Could not load object's definition."), i18n("Object design may be corrupted."));
 			m_status.append( 
-				Kexi::ObjectStatus(i18n("You can delete \"%1\" object and create it again.")
-				.arg(item.name()), QString()) );
+				Kexi::ObjectStatus(i18n("You can delete \"%1\" object and create it again.",
+					item.name()), QString()) );
 
 			window->close();
 			delete window;
@@ -316,7 +315,7 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, int viewMode,
 		delete window;
 		return 0;
 	}
-	window->registerDialog(); //ok?
+	window->registerWindow(); //ok?
 	window->show();
 
 #warning Part::openInstance(): resize window->resize(window->sizeHint()) for standalone windows
@@ -354,7 +353,7 @@ bool Part::loadDataBlock(KexiWindow *window, QString &dataString, const QString&
 		window->id(), dataString, dataID ))
 	{
 		m_status = Kexi::ObjectStatus( KexiMainWindowIface::global()->project()->dbConnection(), 
-			i18n("Could not load object's data."), i18n("Data identifier: \"%1\".").arg(dataID) );
+			i18n("Could not load object's data."), i18n("Data identifier: \"%1\".", dataID) );
 		m_status.append( *window );
 		return false;
 	}
@@ -382,12 +381,12 @@ KexiWindowData* Part::createWindowData(KexiWindow* window)
 	return new KexiWindowData(window);
 }
 
-QString Part::i18nMessage(const QString& englishMessage, KexiWindow* window) const
+KLocalizedString Part::i18nMessage(const QString& englishMessage, KexiWindow* window) const
 {
 	Q_UNUSED(window);
 	if( QString(englishMessage).startsWith(":") )
-		return QString();
-	return englishMessage;
+		return KLocalizedString();
+	return ki18n(englishMessage.latin1());
 }
 
 void Part::setupCustomPropertyPanelTabs(KTabWidget *)
@@ -417,11 +416,13 @@ tristate Part::rename(KexiPart::Item &item, const QString& newName)
 
 
 GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix)
- : QObject(part, 
-   (part->info()->objectName() 
-    + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString())).toLatin1() )
+ : QObject(part)
  , KXMLGUIClient(*KexiMainWindowIface::global()->guiClient())
 {
+	setObjectName(
+		part->info()->objectName() 
+    + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString()) );
+	
 	if(!KexiMainWindowIface::global()->project()->data()->userMode())
 		setXMLFile(QString::fromLatin1("kexi")+part->info()->objectName()
 			+"part"+(partInstanceClient?"inst":"")+"ui.rc");

@@ -28,7 +28,6 @@
 #include <kexidb/utils.h>
 #include <koproperty/set.h>
 
-class KCommand;
 class KexiObjectInfoLabel;
 class KexiDataSourceComboBox;
 class KexiFieldComboBox;
