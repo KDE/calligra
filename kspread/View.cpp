@@ -105,12 +105,14 @@
 #include <KoColorSetWidget.h>
 #include <KoTabBar.h>
 #include <KoToolBox.h>
+#include <KoToolBoxFactory.h>
+#include <KoToolDocker.h>
+#include <KoToolDockerFactory.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>
 #include <Toolbox.h>
 #include <KoTemplateCreateDia.h>
 #include <ktoolinvocation.h>
-#include <KoToolBoxFactory.h>
 #include <KoZoomAction.h>
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
@@ -1894,6 +1896,11 @@ void View::initView()
     KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
     createDockWidget( &toolBoxFactory );
     KoToolManager::instance()->switchToolRequested( KSPREAD_DEFAULT_TOOL_ID );
+
+    // Setup the tool options dock widget.
+    KoToolDockerFactory toolDockerFactory;
+    KoToolDocker *td =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
+    connect(d->canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), td, SLOT(newOptionWidget(QWidget*)));
 
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
