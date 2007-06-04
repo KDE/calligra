@@ -23,9 +23,10 @@
 
 #include <mdbtools.h>
 
-#include "kexidb/keximigrate.h"
-#include "kexidb/field.h"
-#include "kexidb/connection.h"
+#include <kexidb/keximigrate.h>
+#include <kexidb/field.h>
+#include <kexidb/connection.h>
+#include <Q3CString>
 
 namespace KexiMigration
 {
@@ -36,36 +37,49 @@ namespace KexiMigration
 		KEXIMIGRATION_DRIVER
 		
 		public:
-			MDBMigrate(QObject *parent, const char *name, const QStringList& args = QStringList());
+			MDBMigrate(QObject *parent, const QStringList& args = QStringList());
 			virtual ~MDBMigrate();
 			
+			//! Convert an MDB type to a KexiDB type, prompting user if necessary.
 			KexiDB::Field::Type type(int type);
+			
+			//! Get the table definition for a given table name
+			/*! Look up the table definition for the given table.  This only returns a ptr
+					to the MdbTableDef - it doesn't load e.g. the column data.
+					Remember to mdb_free_tabledef the table definition when it's finished
+					with.
+					\return the table definition, or null if no matching table was found
+			*/
 			MdbTableDef* getTableDef(const QString& tableName);
+			
 			QVariant toQVariant(const char* data, unsigned int len, int type);
+			
 			bool getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef);
 
 			//! Reimplemented to add support for "sourceDatabaseHasNonUnicodeEncoding" property
 			//! @todo this should be in Connection class but Migration framework has no such yet!
-			virtual QVariant propertyValue( const QCString& propName );
+			virtual QVariant propertyValue( const Q3CString& propName );
 
 		protected:
-			//Driver specific function to return table names
+			//! Driver specific function to return table names
 			virtual bool drv_tableNames(QStringList& tablenames);
 			
-			//Driver specific implementation to read a table schema
+			//! Driver specific implementation to read a table schema
 			virtual bool drv_readTableSchema(
 				const QString& originalName, KexiDB::TableSchema& tableSchema);
 			
-			//Driver specific connection implementation
+			//! Driver specific connection implementation
 			virtual bool drv_connect();
+			
+			//! Disconnect from the db backend
 			virtual bool drv_disconnect();
 
+			/*! Copy MDB table to KexiDB database */
 			virtual bool drv_copyTable(const QString& srcTable, 
-			                           KexiDB::Connection *destConn,
-			                           KexiDB::TableSchema* dstTable);
+				KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
 			virtual bool drv_progressSupported() { return true; }
-			virtual bool drv_getTableSize(const QString& table, Q_ULLONG& size);
+			virtual bool drv_getTableSize(const QString& table, qulonglong& size);
 
 		private:
 			void initBackend();
