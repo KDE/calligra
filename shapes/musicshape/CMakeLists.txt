@@ -15,6 +15,7 @@ set( musiccore_SRCS
     core/Bar.cpp
     core/VoiceBar.cpp
     core/VoiceElement.cpp
+    core/StaffElement.cpp
     core/Chord.cpp
     core/Note.cpp
     core/Clef.cpp

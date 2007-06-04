@@ -27,21 +27,12 @@ public:
     int octaveChange;
 };
 
-Clef::Clef(Clef::ClefShape shape, int line, int octaveChange) : d(new Private)
+Clef::Clef(Staff* staff, int startTime, Clef::ClefShape shape, int line, int octaveChange) : StaffElement(staff, startTime), d(new Private)
 {
     d->shape = shape;
     d->line = line;
     d->octaveChange = octaveChange;
     setWidth(13);
-}
-
-Clef::Clef(Staff* staff, Clef::ClefShape shape, int line, int octaveChange) : d(new Private)
-{
-    d->shape = shape;
-    d->line = line;
-    d->octaveChange = octaveChange;
-    setWidth(13);
-    setStaff(staff);
 }
 
 Clef::~Clef()
@@ -81,7 +72,15 @@ void Clef::setOctaveChange(int octaveChange) const
 
 int Clef::lineToPitch(int line) const
 {
-    return line + 2 * d->line - 2;
+    int pitch = 0;
+    switch (d->shape) {
+        case GClef: pitch = 4; break;
+        case FClef: pitch = -6; break;
+        case CClef: pitch = 0; break;
+    }
+    // d->line is the line which has pitch 'pitch' (not counting spaces between lines)
+    // 'line' is the position (including spaces between lines) of which to know the pitch
+    return line - 2 * d->line + 2 + pitch;
 }
 
 } // namespace MusicCore

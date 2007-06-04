@@ -18,7 +18,10 @@
  */
 #include "Bar.h"
 #include "VoiceBar.h"
+#include "StaffElement.h"
+
 #include <QtCore/QHash>
+#include <QtCore/QList>
 
 namespace MusicCore {
 
@@ -29,6 +32,7 @@ public:
     QHash<Voice*, VoiceBar*> voices;
     QPointF position;
     double size;
+    QList<StaffElement*> staffElements;
 };
 
 Bar::Bar(Sheet* sheet) : d(new Private)
@@ -75,6 +79,49 @@ double Bar::size() const
 void Bar::setSize(double size)
 {
     d->size = size;
+}
+
+int Bar::staffElementCount(Staff* staff) const
+{
+    Q_ASSERT( staff );
+    int cnt = 0;
+    foreach (StaffElement* e, d->staffElements) {
+        if (e->staff() == staff) {
+            cnt++;
+        }
+    }
+    return cnt;
+}
+
+StaffElement* Bar::staffElement(Staff* staff, int index)
+{
+    Q_ASSERT( staff );
+    int cnt = 0;
+    foreach (StaffElement* e, d->staffElements) {
+        if (e->staff() == staff) {
+            if (cnt == index) return e;
+            cnt++;
+        }
+    }
+    Q_ASSERT( false );
+    return 0;
+}
+
+void Bar::addStaffElement(StaffElement* element)
+{
+    Q_ASSERT( element );
+    d->staffElements.append(element);
+}
+
+void Bar::removeStaffElement(StaffElement* element, bool deleteElement)
+{
+    Q_ASSERT( element );
+    int index = d->staffElements.indexOf(element);
+    Q_ASSERT( index != -1 );
+    d->staffElements.removeAt(index);
+    if (deleteElement) {
+        delete element;
+    }
 }
 
 } // namespace MusicCore

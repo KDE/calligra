@@ -19,7 +19,7 @@
 #ifndef MUSIC_CORE_CLEF_H
 #define MUSIC_CORE_CLEF_H
 
-#include "VoiceElement.h"
+#include "StaffElement.h"
 
 namespace MusicCore {
 
@@ -29,7 +29,7 @@ class Staff;
  * This class represents a clef music element. This same class is used both for clef changes at the start of bars as for
  * mid-bar clef changes.
  */
-class Clef : public VoiceElement {
+class Clef : public StaffElement {
 public:
     /**
      * The various supported shapes for a clef. Currently ownly G, F and C clefs are supported.
@@ -46,17 +46,6 @@ public:
     };
 
     /**
-     * Create a new clef instance, not specifiying on which staff to add the clef. To add the clef to a staff, later
-     * call the setStaff method. The clef will have the given shape, and will be drawn on the given line. Optionally
-     * you can also specify a number of octaves the notes should be shifted from what is shown.
-     *
-     * @param shape the shape of the new clef
-     * @param line the line at which to draw the clef
-     * @param octaveChange the octaveChange to apply to notes following this clef
-     */
-    Clef(ClefShape shape, int line, int octaveChange = 0);
-    
-    /**
      * Convenience constructor that removes the need to call setStaff after creating the clef to set the staff.
      *
      * @param staff the staff on which the clef should be shown
@@ -64,7 +53,7 @@ public:
      * @param line the line at which to draw the clef
      * @param octaveChange the octaveChange to apply to notes following this clef
      */
-    Clef(Staff* staff, ClefShape shape, int line, int octaveChange = 0);
+    Clef(Staff* staff, int startTime, ClefShape shape, int line, int octaveChange = 0);
     
     /**
      * Destructor.

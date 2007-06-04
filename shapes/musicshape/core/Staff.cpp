@@ -19,8 +19,12 @@
 #include "Staff.h"
 #include "Part.h"
 #include "Sheet.h"
+#include "Bar.h"
+#include "StaffElement.h"
+#include "Clef.h"
 
 #include <math.h>
+#include <limits.h>
 
 namespace MusicCore {
 
@@ -87,6 +91,24 @@ int Staff::line(double y) const
     y = (lineCount()-1) * lineSpacing() - y;
     y /= lineSpacing() / 2;
     return (int) round(y);
+}
+
+Clef* Staff::lastClefChange(int bar, int time, Clef* oldClef)
+{
+    for (int b = bar; b >= 0; b--) {
+        Bar* curBar = part()->sheet()->bar(b);
+        for (int i = curBar->staffElementCount(this)-1; i >= 0; i--) {
+            StaffElement* e = curBar->staffElement(this, i);
+            if (e->startTime() <= time) {
+                Clef* c = dynamic_cast<Clef*>(e);
+                if (c) return c;
+            }
+        }
+
+        if (oldClef) return oldClef;
+        time = INT_MAX;
+    }
+    return 0;
 }
 
 } // namespace MusicCore

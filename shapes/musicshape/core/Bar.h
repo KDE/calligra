@@ -26,6 +26,8 @@ namespace MusicCore {
 class Sheet;
 class Voice;
 class VoiceBar;
+class Staff;
+class StaffElement;
 
 /**
  * A bar (in the US also known as a measure) is a part of a piece of music. A piece of music is a two-dimensional
@@ -85,6 +87,11 @@ public:
      * @param size the new size of the bar
      */
     void setSize(double size);
+
+    int staffElementCount(Staff* staff) const;
+    StaffElement* staffElement(Staff* staff, int index);
+    void addStaffElement(StaffElement* element);
+    void removeStaffElement(StaffElement* element, bool deleteElement = true);
 private:
     class Private;
     Private * const d;

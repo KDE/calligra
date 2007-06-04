@@ -60,7 +60,7 @@ MusicShape::MusicShape()
     Part* part = m_sheet->addPart("Violin");
     Staff* staff = part->addStaff();
     Voice* voice = part->addVoice();
-    voice->bar(b1)->addElement(new Clef(staff, Clef::Trebble, 2, 0));
+    b1->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
     
     part = m_sheet->addPart("Piano");
     staff = part->addStaff();
@@ -68,7 +68,7 @@ MusicShape::MusicShape()
     voice = part->addVoice();
     Voice* voice2 = part->addVoice();
 
-    voice->bar(b1)->addElement(new Clef(staff, Clef::Trebble, 2, 0));
+    b1->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
     voice->bar(b1)->addElement(new KeySignature(staff, -4));
     voice->bar(b1)->addElement(new TimeSignature(staff, 4, 4));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 0));
@@ -82,7 +82,7 @@ MusicShape::MusicShape()
     voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 2));
     voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 3));
     voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
-    voice2->bar(b1)->addElement(new Clef(staff2, Clef::Bass, 3, 0));
+    b1->addStaffElement(new Clef(staff2, 0, Clef::Bass, 3, 0));
     voice2->bar(b1)->addElement(new KeySignature(staff2, 5));
     voice2->bar(b1)->addElement(new TimeSignature(staff2, 4, 4, TimeSignature::Number));
     voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));

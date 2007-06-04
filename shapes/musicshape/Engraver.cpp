@@ -78,6 +78,24 @@ void Engraver::engraveBar(Bar* bar)
         nextIndex[i] = 0;
     }
 
+    // collect staff elements in all staffs
+    int staffCount = 0;
+    for (int p = 0; p < sheet->partCount(); p++) {
+        staffCount += sheet->part(p)->staffCount();
+    }
+
+    QVarLengthArray<QList<StaffElement*> > staffElements(staffCount);
+
+    for (int st = 0, p = 0; p < sheet->partCount(); p++) {
+        Part* part = sheet->part(p);
+        for (int s = 0; s < part->staffCount(); s++, st++) {
+            Staff* staff = part->staff(s);
+            for (int i = 0; i < bar->staffElementCount(staff); i++) {
+                staffElements[st].append(bar->staffElement(staff, i));
+            }
+        }
+    }
+
     double x = 0; // this is the end position of the last placed elements
     // loop until all elements are placed
     for (;;) {
@@ -88,22 +106,45 @@ void Engraver::engraveBar(Bar* bar)
                 if (nextTime[i] < time) time = nextTime[i];
             }
         }
+
+        bool staffElement = false;
+        for (int s = 0; s < staffCount; s++) {
+            if (staffElements[s].size() > 0) {
+                if (staffElements[s][0]->startTime() <= time) {
+                    time = staffElements[s][0]->startTime();
+                    staffElement = true;
+                }
+            }
+        }
+        
         // none found, break
         if (time == INT_MAX) break;
 
         double maxEnd = x;
         // now update all items with correct start time
-        for (int i = 0; i < voices.size(); i++) {
-            if (nextTime[i] == time && nextIndex[i] < voices[i]->elementCount()) {
-                double xpos = x + 15;
-                voices[i]->element(nextIndex[i])->setX(xpos);
-                double xend = voices[i]->element(nextIndex[i])->width() + xpos;
-                if (xend > maxEnd) maxEnd = xend;
-                nextTime[i] += voices[i]->element(nextIndex[i])->length();
-                nextIndex[i]++;
+        if (staffElement) {
+            for (int s = 0; s < staffCount; s++) {
+                if (staffElements[s].size() > 0 && staffElements[s][0]->startTime() == time) {
+                    StaffElement* se = staffElements[s].takeAt(0);
+                    double xpos = x + 15;
+                    se->setX(xpos);
+                    double xend = se->width() + xpos;
+                    if (xend > maxEnd) maxEnd = xend;
+                }
+            }
+        } else {
+            for (int i = 0; i < voices.size(); i++) {
+                if (nextTime[i] == time && nextIndex[i] < voices[i]->elementCount()) {
+                    double xpos = x + 15;
+                    voices[i]->element(nextIndex[i])->setX(xpos);
+                    double xend = voices[i]->element(nextIndex[i])->width() + xpos;
+                    if (xend > maxEnd) maxEnd = xend;
+                    nextTime[i] += voices[i]->element(nextIndex[i])->length();
+                    nextIndex[i]++;
+                }
             }
         }
-
+        
         x = maxEnd;
     }
     bar->setSize(x + 15);

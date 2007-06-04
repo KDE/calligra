@@ -33,7 +33,7 @@
 
 using namespace MusicCore;
 
-MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(true)
+MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(false)
 {
 }
 
@@ -70,6 +70,13 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff )
     for (int i = 0; i < staff->lineCount(); i++) {
         painter.drawLine(QPointF(0.0, y + i * dy), QPointF(1000.0, y + i * dy));
     }
+    for (int b = 0; b < staff->part()->sheet()->barCount(); b++) {
+        Bar* bar = staff->part()->sheet()->bar(b);
+        QPointF p = bar->position();
+        for (int e = 0; e < bar->staffElementCount(staff); e++) {
+            renderStaffElement(painter, bar->staffElement(staff, e), p.x(), p.y());
+        }
+    }
 /*
     painter.setPen(QPen(Qt::green));
     painter.drawLine(QPointF(0, y - staff->spacing()), QPointF(100, y - staff->spacing()));
@@ -85,6 +92,9 @@ void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, const QColor& c
         QPointF p = bar->position();
         VoiceBar* vb = voice->bar(bar);
         for (int e = 0; e < vb->elementCount(); e++) {
+            if (vb->element(e)->staff()) {
+                state.clef = vb->element(e)->staff()->lastClefChange(b, 0, state.clef);
+            }
             renderElement(painter, vb->element(e), p.x(), p.y(), state, color);
         }
     }
@@ -103,19 +113,31 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, double x,
     // TODO: make this less hacky
     Chord *c = dynamic_cast<Chord*>(me);
     if (c) renderChord(painter, c, x, state, color);
-    Clef *cl = dynamic_cast<Clef*>(me);
-    if (cl) renderClef(painter, cl, x, state);
     KeySignature *ks = dynamic_cast<KeySignature*>(me);
     if (ks) renderKeySignature(painter, ks, x, state);
     TimeSignature* ts = dynamic_cast<TimeSignature*>(me);
     if (ts) renderTimeSignature( painter, ts, x);
 }
 
-void MusicRenderer::renderClef(QPainter& painter, Clef *c, double x, RenderState& state)
+void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, double x, double y)
+{
+    double top = y;
+    top += se->staff()->top();
+    if (m_debug) {
+        painter.setPen(QPen(Qt::blue));
+        painter.drawLine(QPointF(x + se->x(), top + se->y() - 20), QPointF(x + se->x(), top + se->y() + 20));
+        painter.drawLine(QPointF(x + se->x() + se->width(), top + se->y() - 20), QPointF(x + se->x() + se->width(), top + se->y() + 20));
+    }
+
+    Clef *cl = dynamic_cast<Clef*>(se);
+    if (cl) renderClef(painter, cl, x);
+}
+
+
+void MusicRenderer::renderClef(QPainter& painter, Clef *c, double x)
 {
     Staff* s = c->staff();
     m_style->renderClef(painter, x + c->x(), s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
-    state.clef = c;
 }
 
 void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, double x, RenderState& state)

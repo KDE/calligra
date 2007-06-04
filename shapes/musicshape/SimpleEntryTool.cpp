@@ -192,34 +192,34 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     }
 
     int line = closestStaff->line(p.y() - closestStaff->top());
-
+    kDebug() << "line: " << line << endl;
+    
     Part* part = closestStaff->part();
     for (int i = part->voiceCount(); i <= m_voice; i++) {
         part->addVoice();
     }
     Voice* voice = part->voice(m_voice);
     
-    // find correct bar and last clef
+    // find correct bar
     Bar* bar = 0;
-    Clef* clef = 0;
+    int barIdx = -1;
     for (int b = 0; b < sheet->barCount(); b++) {
         Bar* bb = sheet->bar(b);
-        VoiceBar* vb = bb->voice(voice);
-        for (int i = 0; i < vb->elementCount(); i++) {
-            VoiceElement* me = vb->element(i);
-            Clef* c = dynamic_cast<Clef*>(me);
-            if (c) clef = c;
-        }
         if (bb->position().x() <= p.x() && bb->position().x() + bb->size() >= p.x()) {
             bar = bb;
+            barIdx = b;
             break;
         }
     }
 
     if (!bar) return;
+
+    Clef* clef = closestStaff->lastClefChange(barIdx, INT_MAX);
+    
     Chord* c = new Chord(closestStaff, m_duration);
     if (clef) {
         int pitch = clef->lineToPitch(line);
+        kDebug() << "pitch: " << pitch << endl;
         c->addNote(closestStaff, pitch);
     }
     voice->bar(bar)->addElement(c);

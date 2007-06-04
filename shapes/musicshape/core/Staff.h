@@ -24,6 +24,7 @@
 namespace MusicCore {
 
 class Part;
+class Clef;
 
 /**
  * A Staff is purely used for displaying/formatting. The staff class is used to indicate on what staff
@@ -107,6 +108,13 @@ public:
      * @param y the coordinate for which to return the closest line.
      */
     int line(double y) const;
+
+    /**
+     * Returns the last Clef element in this staff that is at or before the given time in the given bar. If oldClef is
+     * specified and no clef changes are found in the given bar, this method returns oldClef instead of searching for
+     * older clef changes.
+     */
+    Clef* lastClefChange(int bar, int time, Clef* oldClef = 0);
 private:
     class Private;
     Private * const d;

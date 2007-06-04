@@ -25,6 +25,8 @@ set(SheetTest_test_SRCS
     ../Voice.cpp
     ../Staff.cpp
     ../VoiceBar.cpp
+    ../StaffElement.cpp
+    ../Clef.cpp
 )
 
 kde4_automoc(${SheetTest_test_SRCS})
