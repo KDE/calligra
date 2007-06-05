@@ -57,12 +57,15 @@ public:
     // reimplemented from QUndoCommand
     virtual void undo();
 
+    /// Sets the m_allowAddUndoCommand of the associated tool
+    void setAllow(bool set);
 protected:
     class UndoRedoFinalizer {
       public:
-        UndoRedoFinalizer(TextTool *tool) : m_tool(tool) {}
+        UndoRedoFinalizer(TextCommandBase* parent, TextTool *tool) : m_parent(parent), m_tool(tool) {}
         ~UndoRedoFinalizer();
       private:
+        TextCommandBase* m_parent;
         TextTool *m_tool;
     };
 

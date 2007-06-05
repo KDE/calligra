@@ -97,7 +97,7 @@ ChangeListCommand::~ChangeListCommand() {
 
 void ChangeListCommand::redo() {
     TextCommandBase::redo();
-    UndoRedoFinalizer finalizer(m_tool);
+    UndoRedoFinalizer finalizer(this, m_tool);
     if(m_listStyle == 0) { // no list item (anymore)
         QTextList *list = m_block.textList();
         if(list == 0) // nothing to do!
@@ -126,7 +126,7 @@ void ChangeListCommand::recalcList(const QTextBlock &block) const {
 
 void ChangeListCommand::undo() {
     TextCommandBase::undo();
-    UndoRedoFinalizer finalizer(m_tool);
+    UndoRedoFinalizer finalizer(this, m_tool);
 
     if(m_formerProperties.style() == KoListStyle::NoItem)
         return;

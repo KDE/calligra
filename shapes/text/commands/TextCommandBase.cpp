@@ -32,7 +32,12 @@ void TextCommandBase::undo() {
         m_tool->m_allowAddUndoCommand = false;
 }
 
+void TextCommandBase::setAllow(bool set) {
+    if (m_tool)
+        m_tool->m_allowAddUndoCommand = set;
+}
+
 TextCommandBase::UndoRedoFinalizer::~UndoRedoFinalizer() {
-    if(m_tool)
-        m_tool->m_allowAddUndoCommand = true;
+    if(m_parent)
+        m_parent->setAllow(true);
 }
