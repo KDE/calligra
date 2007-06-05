@@ -198,8 +198,8 @@
 #include "dialogs/LinkDialog.h"
 #include "dialogs/SheetPropertiesDialog.h"
 
-// KSpread DCOP
-#include "ViewAdaptor.h"
+// D-Bus
+#include "interfaces/ViewAdaptor.h"
 #include <QtDBus/QtDBus>
 
 namespace KSpread

@@ -44,7 +44,8 @@
 #include "StyleManager.h"
 #include "View.h"
 
-#include "MapAdaptor.h"
+// D-Bus
+#include "interfaces/MapAdaptor.h"
 #include <QtDBus/QtDBus>
 
 using namespace KSpread;

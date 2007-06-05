@@ -98,8 +98,8 @@
 #include "commands/MergeCommand.h"
 #include "commands/RowColumnManipulators.h"
 
-
-#include "SheetAdaptor.h"
+// D-Bus
+#include "interfaces/SheetAdaptor.h"
 #include <QtDBus/QtDBus>
 
 

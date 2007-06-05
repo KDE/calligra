@@ -31,11 +31,11 @@
 
 #include <Doc.h>
 #include <View.h>
-#include <ViewAdaptor.h>
+#include <interfaces/ViewAdaptor.h>
 #include <Sheet.h>
-#include <SheetAdaptor.h>
+#include <interfaces/SheetAdaptor.h>
 #include <Map.h>
-#include <MapAdaptor.h>
+#include <interfaces/MapAdaptor.h>
 #include <KoDocumentAdaptor.h>
 #include <KoApplicationAdaptor.h>
 

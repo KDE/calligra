@@ -102,6 +102,12 @@ SET (functions_DIR_SRCS
 	functions/trig.cpp
 	)
 
+SET (interfaces_DIR_SRCS
+	interfaces/MapAdaptor.cpp
+	interfaces/SheetAdaptor.cpp
+	interfaces/ViewAdaptor.cpp
+	)
+
 SET (ui_DIR_SRCS
 	ui/DefaultTool.cpp
 	ui/DefaultToolFactory.cpp
@@ -131,7 +137,6 @@ SET (kspreadcommon_LIB_SRCS
 	Handler.cpp
 	Localization.cpp
 	Map.cpp
-	MapAdaptor.cpp
 	Number.cpp
 # 	Numformat.cpp
 # 	Object.cpp
@@ -141,7 +146,6 @@ SET (kspreadcommon_LIB_SRCS
 	RowColumnFormat.cpp
 	Selection.cpp
 	Sheet.cpp
-	SheetAdaptor.cpp
 	SheetPrint.cpp
 	SheetView.cpp
 	RectStorage.cpp
@@ -158,11 +162,11 @@ SET (kspreadcommon_LIB_SRCS
 	ValueFormatter.cpp
 	ValueParser.cpp
 	View.cpp
-	ViewAdaptor.cpp
 	tests/inspector.cc
 	${commands_DIR_SRCS}
 	${dialogs_DIR_SRCS}
 	${functions_DIR_SRCS}
+	${interfaces_DIR_SRCS}
 	${ui_DIR_SRCS}
 	)
 
