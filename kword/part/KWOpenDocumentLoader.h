@@ -39,7 +39,7 @@ class KWTextFrameSet;
 //class KoCharacterStyle;
 //class KoStore;
 class KoOasisStyles;
-class KoOasisLoadingContext;
+class KoOpenDocumentLoadingContext;
 
 class QDomDocument;
 class QTextCursor;
@@ -66,15 +66,15 @@ public:
     bool load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store);
 
 protected:
-    virtual void loadSettings(KoOasisLoadingContext& context, const QDomDocument& settings);
-    virtual bool loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName);
-    virtual bool loadMasterPageStyle(KoOasisLoadingContext& context, const QString& masterPageName);
+    virtual void loadSettings(KoOpenDocumentLoadingContext& context, const QDomDocument& settings);
+    virtual bool loadPageLayout(KoOpenDocumentLoadingContext& context, const QString& masterPageName);
+    virtual bool loadMasterPageStyle(KoOpenDocumentLoadingContext& context, const QString& masterPageName);
 
     virtual void startBody(int total);
     virtual void processBody();
 
 private:
-    void loadHeaderFooter(KoOasisLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
+    void loadHeaderFooter(KoOpenDocumentLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
 
 Q_SIGNALS:
     /**

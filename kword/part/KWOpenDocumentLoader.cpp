@@ -130,7 +130,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
 
     // TODO check versions and mimetypes etc.
 
-    KoOasisLoadingContext context( d->document, styles, store );
+    KoOpenDocumentLoadingContext context( d->document, styles, store );
 
     KoColumns columns;
     columns.columns = 1;
@@ -283,7 +283,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     return true;
 }
 
-void KWOpenDocumentLoader::loadSettings(KoOasisLoadingContext& context, const QDomDocument& settingsDoc)
+void KWOpenDocumentLoader::loadSettings(KoOpenDocumentLoadingContext& context, const QDomDocument& settingsDoc)
 {
     Q_UNUSED(context);
     if ( settingsDoc.isNull() )
@@ -305,7 +305,7 @@ void KWOpenDocumentLoader::loadSettings(KoOasisLoadingContext& context, const QD
     //1.6: d->document->variableCollection()->variableSetting()->loadOasis( settings );
 }
 
-bool KWOpenDocumentLoader::loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName)
+bool KWOpenDocumentLoader::loadPageLayout(KoOpenDocumentLoadingContext& context, const QString& masterPageName)
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName<<endl;
     const KoOasisStyles& styles = context.oasisStyles();
@@ -376,7 +376,7 @@ bool KWOpenDocumentLoader::loadPageLayout(KoOasisLoadingContext& context, const 
     return true;
 }
 
-bool KWOpenDocumentLoader::loadMasterPageStyle(KoOasisLoadingContext& context, const QString& masterPageName)
+bool KWOpenDocumentLoader::loadMasterPageStyle(KoOpenDocumentLoadingContext& context, const QString& masterPageName)
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle masterPageName="<<masterPageName<<endl;
     const KoOasisStyles& styles = context.oasisStyles();
@@ -408,7 +408,7 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(KoOasisLoadingContext& context, c
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
-void KWOpenDocumentLoader::loadHeaderFooter(KoOasisLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader)
+void KWOpenDocumentLoader::loadHeaderFooter(KoOpenDocumentLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader)
 {
     // Not OpenDocument compliant element to define the first header/footer.
     QDomElement firstElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
