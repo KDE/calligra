@@ -21,6 +21,7 @@
 
 #include "core/Chord.h"
 #include <QColor>
+#include <QPointF>
 
 class MusicStyle;
 class QPainter;
@@ -56,7 +57,7 @@ public:
     void renderClef(QPainter& painter, MusicCore::Clef* clef, double x);
     void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, double x, RenderState& state);
     void renderTimeSignature(QPainter& painter, MusicCore::TimeSignature* timeSignature, double x);
-    void renderChord(QPainter& painter, MusicCore::Chord* chord, double x, RenderState& state, const QColor& color = Qt::black);
+    void renderChord(QPainter& painter, MusicCore::Chord* chord, QPointF ref, RenderState& state, const QColor& color = Qt::black);
     void renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, const QColor& color = Qt::black);
 private:
     MusicStyle* m_style;

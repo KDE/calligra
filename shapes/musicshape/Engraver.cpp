@@ -24,6 +24,7 @@
 #include "core/VoiceBar.h"
 #include "core/VoiceElement.h"
 #include "core/Clef.h"
+#include "core/Staff.h"
 
 #include <limits.h>
 
@@ -38,7 +39,7 @@ Engraver::Engraver()
 {
 }
 
-void Engraver::engraveSheet(Sheet* sheet, bool engraveBars)
+void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
 {
     if (engraveBars) {
         // engrave all bars in the sheet
@@ -49,6 +50,11 @@ void Engraver::engraveSheet(Sheet* sheet, bool engraveBars)
 
     QPointF p(0, 0);
     for (int i = 0; i < sheet->barCount(); i++) {
+        if (p.x() + sheet->bar(i)->size() > size.width()) {
+            p.setX(0);
+            Part* prt = sheet->part(sheet->partCount()-1);
+            p.setY(p.y() + prt->staff(prt->staffCount()-1)->top() + 50);
+        }
         sheet->bar(i)->setPosition(p);
         p.setX(p.x() + sheet->bar(i)->size());
     }

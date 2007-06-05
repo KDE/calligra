@@ -19,6 +19,8 @@
 #ifndef MUSIC_ENGRAVER_H
 #define MUSIC_ENGRAVER_H
 
+#include <QtCore/QSizeF>
+
 namespace MusicCore {
     class Bar;
     class Sheet;
@@ -31,7 +33,7 @@ namespace MusicCore {
 class Engraver {
     public:
         Engraver();
-        void engraveSheet(MusicCore::Sheet* sheet, bool engraveBars = true);
+        void engraveSheet(MusicCore::Sheet* sheet, QSizeF size, bool engraveBars = true);
         void engraveBar(MusicCore::Bar* bar);
 };
 

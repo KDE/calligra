@@ -95,7 +95,7 @@ MusicShape::MusicShape()
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 1));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 2));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 0));
-    m_engraver->engraveSheet(m_sheet);
+    m_engraver->engraveSheet(m_sheet, QSizeF(1e9, 1e9), true);
 }
 
 MusicShape::~MusicShape()
@@ -110,6 +110,8 @@ void MusicShape::resize( const QSizeF &newSize )
 {
 //  kDebug()<<" MusicShape::resize( const QSizeF &newSize ) " << newSize << endl;
     KoShape::resize(newSize);
+
+    m_engraver->engraveSheet(m_sheet, newSize, false);
 }
 
 void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
@@ -145,6 +147,6 @@ MusicRenderer* MusicShape::renderer()
 
 void MusicShape::engrave()
 {
-    m_engraver->engraveSheet(m_sheet);
+    m_engraver->engraveSheet(m_sheet, size());
 }
 
