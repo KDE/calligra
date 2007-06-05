@@ -17,47 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PARAGRAPHGENERAL_H
-#define PARAGRAPHGENERAL_H
+#ifndef NEWSTYLEWIDGET_H
+#define NEWSTYLEWIDGET_H
 
-#include "ui_ParagraphGeneral.h"
+#include "ui_NewStyleWidget.h"
 
 #include <QWidget>
-#include <QList>
 
-class KoStyleManager;
 class KoParagraphStyle;
-class KoUnit;
-class ParagraphBulletsNumbers;
-class ParagraphIndentSpacing;
-class ParagraphLayout;
+class KoCharacterStyle;
 
-class ParagraphGeneral : public QWidget {
+class NewStyleWidget : public QWidget {
     Q_OBJECT
 public:
-    ParagraphGeneral(QWidget *parent = 0);
-
-    void setStyle(KoParagraphStyle *style);
-    void setParagraphStyles(const QList<KoParagraphStyle*> styles);
-    void setUnit(const KoUnit &unit);
-
-    void save();
-
-    void switchToGeneralTab();
+    NewStyleWidget(QWidget *parent = 0);
 
 signals:
-    void nameChanged(const QString &name);
+    void newParagraphStyle(KoParagraphStyle *style);
+    void newCharacterStyle(KoCharacterStyle *style);
+
+private slots:
+    void createButtonPressed();
 
 private:
-    Ui::ParagraphGeneral widget;
-    bool m_blockSignals;
-
-    ParagraphIndentSpacing *m_paragraphIndentSpacing;
-    ParagraphLayout *m_paragraphLayout;
-    ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
-
-    KoParagraphStyle *m_style;
-    QList<KoParagraphStyle*> m_paragraphStyles;
+    Ui::NewStyleWidget widget;
 };
 
 #endif

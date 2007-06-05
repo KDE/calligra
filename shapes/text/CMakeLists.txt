@@ -29,6 +29,7 @@ SET ( textshape_SRCS
     dialogs/StyleManager.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp
+    dialogs/NewStyleWidget.cpp
 
     commands/ChangeListCommand.cpp
     commands/TextCommandBase.cpp
@@ -42,6 +43,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ParagraphBulletsNumbers.ui
     dialogs/StyleManager.ui
     dialogs/ParagraphGeneral.ui
+    dialogs/NewStyleWidget.ui
 )
 
 kde4_automoc(${textshape_SRCS})

@@ -42,6 +42,11 @@ public:
 
 private slots:
     void setStyle(QListWidgetItem *item, QListWidgetItem *previous);
+    void buttonNewPressed();
+    void buttonDeletePressed();
+    void setStyleName(const QString &name);
+    void addParagraphStyle(KoParagraphStyle*);
+    void addCharacterStyle(KoCharacterStyle*);
 
 private:
     Ui::StyleManager widget;

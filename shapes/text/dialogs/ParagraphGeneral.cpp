@@ -111,4 +111,8 @@ void ParagraphGeneral::save() {
     }
 }
 
+void ParagraphGeneral::switchToGeneralTab() {
+    widget.tabs->setCurrentIndex(0);
+}
+
 #include <ParagraphGeneral.moc>

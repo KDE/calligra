@@ -34,6 +34,13 @@ StyleManager::StyleManager(QWidget *parent)
 
     connect (widget.styles, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
                 this, SLOT(setStyle(QListWidgetItem*, QListWidgetItem*)));
+    connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
+    connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
+
+    connect(widget.paragraphStylePage, SIGNAL(nameChanged(const QString&)), this, SLOT(setStyleName(const QString&)));
+
+    connect(widget.createPage, SIGNAL(newParagraphStyle(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
+    //connect(widget.createPage, SIGNAL(newCharacterStyle(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
 }
 
 void StyleManager::setStyleManager(KoStyleManager *sm) {
@@ -113,8 +120,36 @@ void StyleManager::setUnit(const KoUnit &unit) {
     widget.paragraphStylePage->setUnit(unit);
 }
 
+
 void StyleManager::save() {
     widget.paragraphStylePage->save();
+}
+
+
+void StyleManager::buttonNewPressed() {
+    widget.stackedWidget->setCurrentWidget(widget.createPage);
+    // that widget will emit a new style which we will add using addParagraphStyle or addCharacterStyle
+}
+
+void StyleManager::addParagraphStyle(KoParagraphStyle *style) {
+    QListWidgetItem *item = new QListWidgetItem(style->name(), 0, PARAGRAPH_STYLE);
+m_styleManager->add(style); // TODO assign dummy id.
+    item->setData(PARAGRAPH_STYLE, style->styleId());
+    widget.styles->insertItem(m_paragraphStyles.count(), item);
+    m_paragraphStyles.append(style);
+    widget.styles->setCurrentItem(item);
+    widget.paragraphStylePage->switchToGeneralTab();
+}
+
+void StyleManager::addCharacterStyle(KoCharacterStyle *style) {
+}
+
+void StyleManager::buttonDeletePressed() {
+
+}
+
+void StyleManager::setStyleName(const QString &name) {
+    widget.styles->currentItem()->setText(name);
 }
 
 #include <StyleManager.moc>
