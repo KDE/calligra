@@ -37,7 +37,7 @@
 #include <kspread/Sheet.h>
 #include <kspread/Doc.h>
 #include <kspread/Value.h>
-#include <kspread/View.h>
+#include <kspread/ui/View.h>
 #include <kspread/Selection.h>
 
 #include <csvexportdialog.h>

@@ -40,7 +40,7 @@
 #include <KoDocumentInfo.h>
 
 // KSpread
-#include <kspread/Canvas.h>
+#include <kspread/ui/Canvas.h>
 #include <kspread/CellStorage.h>
 #include <kspread/Currency.h>
 #include <kspread/Doc.h>
@@ -49,7 +49,7 @@
 #include <kspread/SheetPrint.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Validity.h>
-#include <kspread/View.h>
+#include <kspread/ui/View.h>
 
 using namespace KSpread;
 
