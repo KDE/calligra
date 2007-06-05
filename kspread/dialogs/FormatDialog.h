@@ -38,11 +38,9 @@
 
 class QComboBox;
 class QLabel;
-class QDomDocument;
 
 namespace KSpread
 {
-class Sheet;
 class Style;
 class View;
 

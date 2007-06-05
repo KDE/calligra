@@ -46,7 +46,7 @@ class Part;
 
 namespace KSpread
 {
-
+class Canvas;
 class Doc;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;

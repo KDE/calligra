@@ -50,20 +50,17 @@ class QDropEvent;
 class QEvent;
 class QFocusEvent;
 class QKeyEvent;
-class QLabel;
 class QMouseEvent;
 class QPainter;
 class QPaintEvent;
 class QPen;
 class QResizeEvent;
 class QScrollBar;
-class QTimer;
 class QWheelEvent;
 
 namespace KSpread
 {
 class Cell;
-class CellView;
 class EditWidget;
 class Canvas;
 class HBorder;
@@ -72,12 +69,10 @@ class Sheet;
 class Doc;
 class Point;
 class Range;
-class Region;
 class View;
 class Selection;
 class CellEditor;
 class LocationEditWidget;
-class ComboboxLocationEditWidget;
 class EmbeddedObject;
 
 

@@ -30,7 +30,6 @@
 
 class KoStore;
 class KoOasisLoadingContext;
-class KoOasisStyles;
 
 class QDomElement;
 class QDomDocument;
@@ -40,10 +39,7 @@ class KoOasisSettings;
 
 namespace KSpread
 {
-class Changes;
 class Doc;
-class GenValidationStyles;
-class MapAdaptor;
 class Sheet;
 class Style;
 

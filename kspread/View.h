@@ -70,7 +70,6 @@ class View;
 class ComboboxLocationEditWidget;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;
-class ViewAdaptor;
 
 
 /** @class View

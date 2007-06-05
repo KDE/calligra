@@ -24,7 +24,6 @@
 
 namespace KSpread
 {
-class Sheet;
 
 /**
  * \class MergeCommand

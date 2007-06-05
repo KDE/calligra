@@ -29,11 +29,9 @@
 
 #include "ui_SpecialPasteWidget.h"
 
-class QRadioButton;
 
 namespace KSpread
 {
-class Sheet;
 class View;
 
 class SpecialPasteDialog : public KDialog, public Ui::SpecialPasteWidget

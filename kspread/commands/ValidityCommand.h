@@ -26,7 +26,6 @@
 
 namespace KSpread
 {
-class Sheet;
 
 /**
  * \class ValidityCommand

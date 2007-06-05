@@ -29,7 +29,6 @@
 #include <kdialog.h>
 
 class QRadioButton;
-class QCheckBox;
 class KDoubleNumInput;
 
 namespace KSpread

@@ -28,7 +28,6 @@
 
 class Q3ListBox;
 class Q3ListBoxItem;
-class QLineEdit;
 class Q3MultiLineEdit;
 class QPushButton;
 

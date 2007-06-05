@@ -31,7 +31,6 @@ class KLineEdit;
 
 namespace KSpread
 {
-class Sheet;
 class View;
 
 class GotoDialog : public KDialog

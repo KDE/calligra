@@ -47,7 +47,6 @@ class KLineEdit;
 namespace KSpread
 {
 class FunctionDescription;
-class Sheet;
 class View;
 
 class FormulaDialog : public KDialog

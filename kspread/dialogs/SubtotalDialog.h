@@ -30,7 +30,6 @@
 
 #include "ui_SubtotalWidget.h"
 
-class QLineEdit;
 
 namespace KSpread
 {

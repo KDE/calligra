@@ -44,7 +44,6 @@ class QFrame;
 class QGridLayout;
 class QHBoxLayout;
 class QLabel;
-class QLineEdit;
 class QPushButton;
 class QVBoxLayout;
 
@@ -52,7 +51,6 @@ namespace KSpread
 {
 class Point;
 class RegionSelector;
-class Sheet;
 class View;
 
 class GoalSeekDialog : public KDialog

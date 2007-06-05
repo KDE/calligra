@@ -41,7 +41,6 @@
 class KTextEdit;
 class QFont;
 class QAbstractButton;
-class QTextCursor;
 class QTextEdit;
 
 class KoZoomHandler;
@@ -53,7 +52,6 @@ class Cell;
 class CellEditor;
 class LocationEditWidget;
 class Region;
-class Sheet;
 class Tokens;
 class View;
 

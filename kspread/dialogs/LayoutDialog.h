@@ -58,8 +58,6 @@ class KoUnitDoubleSpinBox;
 class QPixmap;
 class QRadioButton;
 class QPushButton;
-class QDate;
-class QTime;
 class QLabel;
 class QWidget;
 class KLineEdit;

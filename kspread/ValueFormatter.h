@@ -28,7 +28,6 @@
 
 namespace KSpread
 {
-class Cell;
 class Doc;
 class Value;
 class ValueConverter;

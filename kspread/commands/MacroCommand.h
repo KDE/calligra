@@ -26,7 +26,6 @@
 
 namespace KSpread
 {
-class Sheet;
 
 /**
  * The macro manipulator holds a set of manipulators and calls them all at once.

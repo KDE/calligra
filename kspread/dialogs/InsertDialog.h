@@ -29,13 +29,11 @@
 
 #include <kdialog.h>
 
-class QCheckBox;
 class QRadioButton;
 class QRect;
 
 namespace KSpread
 {
-class Sheet;
 class View;
 
 class InsertDialog : public KDialog

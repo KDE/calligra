@@ -27,7 +27,6 @@
 
 namespace KSpread
 {
-class Sheet;
 
 /**
  * \class CondtionCommand

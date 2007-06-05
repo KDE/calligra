@@ -34,7 +34,6 @@ class KoToolProxy;
 namespace KSpread
 {
 class CellEditor;
-class CellWindow;
 class ComboboxLocationEditWidget;
 class EditWidget;
 class View;

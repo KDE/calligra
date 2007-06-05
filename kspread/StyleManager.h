@@ -36,9 +36,7 @@ namespace KSpread
 {
 class Conditions;
 class Doc;
-class Sheet;
 class StyleDialog;
-class View;
 
 /**
  * \class StyleManager

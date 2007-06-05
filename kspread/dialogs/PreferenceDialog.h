@@ -48,7 +48,6 @@ class KColorButton;
 
 namespace KSpread
 {
-class Sheet;
 class View;
 
 class parameterLocale :  public QObject

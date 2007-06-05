@@ -26,12 +26,10 @@
 
 #include <kdialog.h>
 
-class QPushButton;
 class Q3MultiLineEdit;
 
 namespace KSpread
 {
-class Sheet;
 class View;
 
 class CommentDialog : public KDialog

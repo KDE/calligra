@@ -37,7 +37,6 @@ class KoGenStyle;
 namespace KSpread
 {
 class Cell;
-class Sheet;
 class Style;
 class StyleManager;
 

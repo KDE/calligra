@@ -28,7 +28,6 @@
 namespace KSpread
 {
 class Region;
-class Sheet;
 
 /**
  * Manages the dependencies between cells caused by references in formulas.

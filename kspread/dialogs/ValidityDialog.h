@@ -32,12 +32,10 @@ class QLabel;
 class QLineEdit;
 class QTextEdit;
 class QComboBox;
-class QPushButton;
 class QCheckBox;
 
 namespace KSpread
 {
-class Sheet;
 class View;
 
 class DlgValidity : public KPageDialog

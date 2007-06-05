@@ -48,7 +48,6 @@ class QRectF;
 namespace KSpread
 {
 class Cell;
-class Conditions;
 class Sheet;
 class SheetView;
 class Style;

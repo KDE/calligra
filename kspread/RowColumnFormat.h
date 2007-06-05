@@ -34,13 +34,7 @@
 
 class QDomElement;
 class QDomDocument;
-class DCOPObject;
-class KLocale;
 class KoGenStyle;
-class KoGenStyles;
-class KoOasisLoadingContext;
-class KoOasisStyles;
-class KoStyleStack;
 
 namespace KSpread
 {

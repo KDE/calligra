@@ -28,7 +28,6 @@
 class KoGenStyle;
 class KoGenStyles;
 class KoOasisContext;
-class QDomElement;
 
 class KSpreadBrush
 {

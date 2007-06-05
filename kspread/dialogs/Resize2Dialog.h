@@ -28,7 +28,6 @@
 
 #include <kdialog.h>
 
-class KDoubleNumInput;
 class KoUnitDoubleSpinBox;
 
 namespace KSpread

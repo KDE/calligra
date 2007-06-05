@@ -48,8 +48,6 @@
 class QDomElement;
 class QDomDocument;
 class QFont;
-class QFontMetrics;
-class QPainter;
 class QRect;
 class QPoint;
 
@@ -57,22 +55,16 @@ class KLocale;
 class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
-class KSParseNode;
-class KoOasisStyles;
 class KoOasisLoadingContext;
 
 namespace KSpread
 {
-class CellView;
-class Canvas;
-class ConditionalDialog;
 class Doc;
 class Formula;
 class GenValidationStyles;
 class Sheet;
 class Validity;
 class Value;
-class View;
 
 /**
  * An accessor to the actual cell data.

@@ -42,11 +42,9 @@
 #include "Global.h"
 
 class QDomElement;
-class QPainter;
 class QUndoCommand;
 class QWidget;
 
-class KPrinter;
 class KoDocumentEntry;
 class KoStyleStack;
 class KoGenStyles;
@@ -63,7 +61,6 @@ class Part;
 
 namespace KSpread
 {
-class Canvas;
 class Cell;
 class CellStorage;
 class ColumnFormat;
@@ -91,7 +88,6 @@ class ValueStorage;
 class View;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;
-class SheetAdaptor;
 
 /********************************************************************
  *

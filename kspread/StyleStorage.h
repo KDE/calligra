@@ -35,7 +35,6 @@ namespace KSpread
 class Sheet;
 class Style;
 class StyleManager;
-class StyleManipulator;
 class SubStyle;
 
 /**

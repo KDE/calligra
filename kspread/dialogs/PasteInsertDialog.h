@@ -25,12 +25,10 @@
 
 #include <kdialog.h>
 
-class QCheckBox;
 class QRadioButton;
 
 namespace KSpread
 {
-class Sheet;
 class View;
 
 class PasteInsertDialog : public KDialog
