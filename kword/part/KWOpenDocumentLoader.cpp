@@ -27,7 +27,7 @@
 #include "frames/KWTextFrame.h"
 
 // koffice
-#include <KoOasisLoadingContext.h>
+#include <KoOpenDocumentLoadingContext.h>
 #include <KoOasisStyles.h>
 #include <KoOasisSettings.h>
 #include <KoXmlNS.h>
