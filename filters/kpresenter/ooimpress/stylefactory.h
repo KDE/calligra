@@ -32,13 +32,13 @@ class StrokeDashStyle
 {
 public:
     explicit StrokeDashStyle( int style );
-    ~StrokeDashStyle() {};
+    ~StrokeDashStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
-    QString name() const { return m_name; };
+    QString name() const { return m_name; }
 
 private:
-    StrokeDashStyle() {};
+    StrokeDashStyle() {}
 
     QString m_name, m_style, m_dots1, m_dots2, m_dots1_length, m_dots2_length,
         m_distance;
@@ -48,13 +48,13 @@ class GradientStyle
 {
 public:
     GradientStyle( QDomElement & gradient, int index );
-    ~GradientStyle() {};
+    ~GradientStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
-    QString name() const { return m_name; };
+    QString name() const { return m_name; }
 
 private:
-    GradientStyle() {};
+    GradientStyle() {}
 
     QString m_name, m_style, m_cx, m_cy, m_start_color, m_end_color,
         m_start_intensity, m_end_intensity, m_angle, m_border;
@@ -64,13 +64,13 @@ class MarkerStyle
 {
 public:
     explicit MarkerStyle( int style );
-    ~MarkerStyle() {};
+    ~MarkerStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
-    QString name() const { return m_name; };
+    QString name() const { return m_name; }
 
 private:
-    MarkerStyle() {};
+    MarkerStyle() {}
 
     QString m_name, m_viewBox, m_d;
 };
@@ -79,13 +79,13 @@ class HatchStyle
 {
 public:
     HatchStyle( int style, QString & color );
-    ~HatchStyle() {};
+    ~HatchStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
-    QString name() const { return m_name; };
+    QString name() const { return m_name; }
 
 private:
-    HatchStyle() {};
+    HatchStyle() {}
 
     QString m_name, m_style, m_color, m_distance, m_rotation;
 };
@@ -94,12 +94,12 @@ class FillImageStyle
 {
 public:
     explicit FillImageStyle( QString & name );
-    ~FillImageStyle() {};
+    ~FillImageStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
 
 private:
-    FillImageStyle() {};
+    FillImageStyle() {}
 
     QString m_name, m_href, m_type, m_show, m_actuate;
 };
@@ -108,15 +108,15 @@ class PageMasterStyle
 {
 public:
     PageMasterStyle( QDomElement & e, const uint index );
-    ~PageMasterStyle() {};
+    ~PageMasterStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
     bool operator==( const PageMasterStyle & pageMasterStyle ) const;
-    QString name() const { return m_name; };
-    QString style() const { return m_style; };
+    QString name() const { return m_name; }
+    QString style() const { return m_style; }
 
 private:
-    PageMasterStyle() {};
+    PageMasterStyle() {}
 
     QString m_name, m_page_width, m_page_height, m_orientation, m_style;
     QString m_margin_top, m_margin_bottom, m_margin_left, m_margin_right;
@@ -126,14 +126,14 @@ class PageStyle
 {
 public:
     PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint index );
-    ~PageStyle() {};
+    ~PageStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
     bool operator==( const PageStyle & pageStyle ) const;
-    QString name() const { return m_name; };
+    QString name() const { return m_name; }
 
 private:
-    PageStyle() {};
+    PageStyle() {}
 
     QString m_name, m_bg_visible, m_bg_objects_visible, m_fill, m_fill_color,
         m_fill_image_name, m_fill_image_width, m_fill_image_height,
@@ -145,14 +145,14 @@ class TextStyle
 {
 public:
     TextStyle( QDomElement & e, const uint index );
-    ~TextStyle() {};
+    ~TextStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
     bool operator==( const TextStyle & textStyle ) const;
-    QString name() const { return m_name; };
+    QString name() const { return m_name; }
 
 private:
-    TextStyle() {};
+    TextStyle() {}
 
     QString m_name, m_font_size, m_font_family, m_font_family_generic,
         m_color, m_font_pitch, m_font_style, m_font_weight, m_text_shadow,
@@ -177,14 +177,14 @@ public:
                   const char * line_height, const char * text_align,
                   const char * fill, const char * fill_color,
                   const char * enable_numbering );
-    ~GraphicStyle() {};
+    ~GraphicStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
     bool operator==( const GraphicStyle & graphicStyle ) const;
-    QString name() const { return m_name; };
+    QString name() const { return m_name; }
 
 private:
-    GraphicStyle() {};
+    GraphicStyle() {}
 
     QString m_name, m_stroke, m_stroke_color, m_stroke_width, m_shadow,
         m_shadow_offset_x, m_shadow_offset_y, m_shadow_color, m_margin_left,
@@ -201,14 +201,14 @@ class ParagraphStyle
 {
 public:
     ParagraphStyle( QDomElement & e, const uint index );
-    ~ParagraphStyle() {};
+    ~ParagraphStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
     bool operator==( const ParagraphStyle & paragraphStyle ) const;
-    QString name() const { return m_name; };
+    QString name() const { return m_name; }
 
 private:
-    ParagraphStyle() {};
+    ParagraphStyle() {}
     QString parseBorder( QDomElement e );
 
     QString m_name, m_margin_left, m_margin_right, m_text_indent, m_text_align,
@@ -221,14 +221,14 @@ class ListStyle
 {
 public:
     ListStyle( QDomElement & e, const uint index );
-    ~ListStyle() {};
+    ~ListStyle() {}
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
     bool operator==( const ListStyle & listStyle ) const;
-    QString name() const { return m_name; };
+    QString name() const { return m_name; }
 
 private:
-    ListStyle() {};
+    ListStyle() {}
 
     typedef enum {
         LLS_NUMBER,

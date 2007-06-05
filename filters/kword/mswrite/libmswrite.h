@@ -207,7 +207,7 @@ namespace MSWrite
 		virtual bool writePageNew (const int /*pageNumberClaimed*/ = 0)
 		{
 			return true;
-		};
+		}
 		virtual bool writePageBreak (void)
 		{
 			return writeText ((const Byte *) "\xc");	// i.e. (char)12

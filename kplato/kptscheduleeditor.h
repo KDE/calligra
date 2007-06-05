@@ -164,7 +164,7 @@ public:
     void setupGui();
     virtual void draw( Project &project );
     virtual void draw();
-    virtual void updateReadWrite( bool /*readwrite*/ ) {};
+    virtual void updateReadWrite( bool /*readwrite*/ ) {}
 
 signals:
     void requestPopupMenu( const QString&, const QPoint& );

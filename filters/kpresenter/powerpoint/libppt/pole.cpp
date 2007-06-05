@@ -32,6 +32,8 @@
 #include <string>
 #include <vector>
 
+#include <string.h>
+
 #include "pole.h"
 
 // enable to activate debugging output

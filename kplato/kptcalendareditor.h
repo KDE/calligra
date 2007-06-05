@@ -309,7 +309,7 @@ public:
     virtual void draw( Project &project );
     virtual void draw();
 
-    virtual void updateReadWrite( bool /*readwrite*/ ) {};
+    virtual void updateReadWrite( bool /*readwrite*/ ) {}
 
     virtual Calendar *currentCalendar() const;
     

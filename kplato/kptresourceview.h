@@ -59,7 +59,7 @@ public:
     class DrawableItem
     {
     public:
-        DrawableItem( int level, int ypos, QTreeWidgetItem *item ) { y = ypos; l = level; i = item; };
+        DrawableItem( int level, int ypos, QTreeWidgetItem *item ) { y = ypos; l = level; i = item; }
         int y;
         int l;
         QTreeWidgetItem * i;

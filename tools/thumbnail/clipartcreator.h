@@ -25,7 +25,7 @@
 class ClipartCreator : public ThumbCreator
 {
 public:
-    ClipartCreator() {};
+    ClipartCreator() {}
     virtual bool create(const QString &path, int, int, QImage &img);
     virtual Flags flags() const;
 };

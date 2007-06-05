@@ -51,8 +51,8 @@ typedef Q3ValueList<WMLFormat> WMLFormatList;
 class WMLParser
 {
   public:
-    WMLParser(){};
-    virtual ~WMLParser(){};
+    WMLParser(){}
+    virtual ~WMLParser(){}
     virtual void parse( const char* filename );
 
     virtual bool doOpenDocument();

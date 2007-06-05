@@ -34,9 +34,9 @@
 class AbiProps
 {
 public:
-    AbiProps() {};
-    AbiProps(QString newValue) : m_value(newValue) {};
-    virtual ~AbiProps() {};
+    AbiProps() {}
+    AbiProps(QString newValue) : m_value(newValue) {}
+    virtual ~AbiProps() {}
 public:
     inline QString getValue(void) const { return m_value; }
 private:
@@ -46,8 +46,8 @@ private:
 class AbiPropsMap : public QMap<QString,AbiProps>
 {
 public:
-    AbiPropsMap() {};
-    virtual ~AbiPropsMap() {};
+    AbiPropsMap() {}
+    virtual ~AbiPropsMap() {}
 public:
     bool setProperty(const QString& newName, const QString& newValue);
     void splitAndAddAbiProps(const QString& strProps);
