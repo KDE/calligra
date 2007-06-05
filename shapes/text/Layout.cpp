@@ -463,7 +463,7 @@ void Layout::updateBorders() {
     m_borderInsets.bottom += m_format.doubleProperty(KoParagraphStyle::BottomPadding);
     m_borderInsets.right += m_format.doubleProperty(KoParagraphStyle::RightPadding);
 
-    KoTextBlockBorderData border(QRectF(this->x() - listIndent() - m_borderInsets.left, m_y + topMargin(), width() + m_borderInsets.left + m_borderInsets.right, 1.));
+    KoTextBlockBorderData border(QRectF(this->x() - listIndent(), m_y + m_borderInsets.top + topMargin(), width(), 1.));
     border.setEdge(border.Left, m_format, KoParagraphStyle::LeftBorderStyle,
         KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
         KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);
