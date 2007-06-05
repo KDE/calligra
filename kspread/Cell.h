@@ -100,7 +100,7 @@ public:
     Cell( const Cell& other );
 
     /**
-     * @see #sheetDies
+     * Destructor.
      */
     ~Cell();
 
@@ -120,13 +120,13 @@ public:
     KLocale* locale() const;
 
     /**
-     * Returns true if this is a default cell (with row and column equal to zero).
-     * Normally, cell constructed within a sheet can't be a default cell.
+     * Returns true, if this is a default cell, i.e. if the cell has no value, formula, link and
+     * does not merge any other cells.
      */
     bool isDefault() const;
 
     /**
-     * Returns true if this cell has no content, i.e no text and no formula.
+     * Returns true, if this cell has no content, i.e no value and no formula.
      */
     bool isEmpty() const;
 
@@ -141,12 +141,12 @@ public:
     bool isFormula() const;
 
     /**
-     * Returns the cell's column. This could be 0 if the cell is the default cell.
+     * Returns the cell's column.
      */
     int column() const;
 
     /**
-     * Returns the cell's row. This could be 0 if the cell is the default cell.
+     * Returns the cell's row.
      */
     int row() const;
 
@@ -448,7 +448,7 @@ public:
     bool isPartOfMerged() const;
 
     /**
-     * \return the merging cell (might be null)
+     * \return the merging cell (might be this cell)
      */
     Cell masterCell() const;
 
