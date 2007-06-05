@@ -37,6 +37,9 @@ public:
 
     void setStyleManager(KoStyleManager *sm);
 
+    void setUnit(const KoUnit &unit);
+    void save();
+
 private slots:
     void setStyle(QListWidgetItem *item, QListWidgetItem *previous);
 

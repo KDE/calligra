@@ -23,6 +23,7 @@
 
 class StyleManager;
 class KoStyleManager;
+class KoUnit;
 
 class StyleManagerDialog : public KDialog {
     Q_OBJECT
@@ -31,6 +32,8 @@ public:
     ~StyleManagerDialog();
 
     void setStyleManager(KoStyleManager *sm);
+
+    void setUnit(const KoUnit &unit);
 
 private:
     void accept();

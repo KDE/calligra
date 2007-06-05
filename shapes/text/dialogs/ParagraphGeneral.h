@@ -27,6 +27,7 @@
 
 class KoStyleManager;
 class KoParagraphStyle;
+class KoUnit;
 class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
 class ParagraphLayout;
@@ -38,6 +39,12 @@ public:
 
     void setStyle(KoParagraphStyle *style);
     void setParagraphStyles(const QList<KoParagraphStyle*> styles);
+    void setUnit(const KoUnit &unit);
+
+    void save();
+
+signals:
+    void nameChanged(const QString &name);
 
 private:
     Ui::ParagraphGeneral widget;
@@ -48,7 +55,6 @@ private:
     ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
 
     KoParagraphStyle *m_style;
-    KoStyleManager *m_styleManager;
     QList<KoParagraphStyle*> m_paragraphStyles;
 };
 

@@ -132,6 +132,7 @@ void StylesWidget::editStyle(QListWidgetItem *item) {
     else {
         KoParagraphStyle *style = m_styleManager->paragraphStyle(item->data(99).toInt());
         ParagraphGeneral *p = new ParagraphGeneral();
+        // TODO get KoUnit from somewhere and set that on p
         p->setStyle(style);
         widget = p;
     }

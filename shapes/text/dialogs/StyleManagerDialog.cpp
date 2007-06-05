@@ -31,7 +31,7 @@ StyleManagerDialog::~StyleManagerDialog() {
 }
 
 void StyleManagerDialog::accept() {
-
+    m_styleManagerWidget->save();
     QDialog::accept();
     deleteLater();
 }
@@ -45,5 +45,8 @@ void StyleManagerDialog::setStyleManager(KoStyleManager *sm) {
     m_styleManagerWidget->setStyleManager(sm);
 }
 
+void StyleManagerDialog::setUnit(const KoUnit &unit) {
+    m_styleManagerWidget->setUnit(unit);
+}
 
 #include <StyleManagerDialog.moc>

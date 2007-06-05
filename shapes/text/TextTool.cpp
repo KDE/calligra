@@ -976,6 +976,7 @@ void TextTool::showStyleManager() {
         StyleManagerDialog *dia = new StyleManagerDialog(m_canvas->canvasWidget());
         Q_ASSERT( lay->styleManager() );
         dia->setStyleManager(lay->styleManager());
+        dia->setUnit(m_canvas->unit());
         dia->show();
     }
 }
