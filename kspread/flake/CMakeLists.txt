@@ -1,4 +1,8 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES} )
+include_directories(
+	${CMAKE_SOURCE_DIR}/kspread
+	${CMAKE_SOURCE_DIR}/kspread/ui
+	${KOGUIUTILS_INCLUDES}
+	)
 
 ########### Flake Plugin library ###############
 

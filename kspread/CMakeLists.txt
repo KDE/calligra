@@ -14,7 +14,12 @@ add_subdirectory( functions )
 add_subdirectory( sheetstyles )
 add_subdirectory( templates )
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart1 ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${EIGEN_INCLUDE_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
+                     ${CMAKE_CURRENT_SOURCE_DIR}/ui
+                     ${CMAKE_SOURCE_DIR}/interfaces
+                     ${KOTEXT_INCLUDES}
+                     ${KOGUIUTILS_INCLUDES}
+                     ${EIGEN_INCLUDE_DIR} )
 
 
 ########### next target ###############
@@ -109,16 +114,19 @@ SET (interfaces_DIR_SRCS
 	)
 
 SET (ui_DIR_SRCS
+	ui/Border.cpp
+	ui/Canvas.cpp
+	ui/CellView.cpp
 	ui/DefaultTool.cpp
 	ui/DefaultToolFactory.cpp
+	ui/Editors.cpp
+	ui/SheetView.cpp
+	ui/View.cpp
 	)
 
 SET (kspreadcommon_LIB_SRCS
-	Border.cpp
-	Canvas.cpp
 	Cell.cpp
 	CellStorage.cpp
-	CellView.cpp
 	Cluster.cpp
 	Condition.cpp
 	Currency.cpp
@@ -126,7 +134,6 @@ SET (kspreadcommon_LIB_SRCS
 	DependencyManager.cpp
 	Digest.cpp
 	Doc.cpp
-	Editors.cpp
 	Events.cpp
 	Factory.cpp
 	Format.cpp
@@ -147,7 +154,6 @@ SET (kspreadcommon_LIB_SRCS
 	Selection.cpp
 	Sheet.cpp
 	SheetPrint.cpp
-	SheetView.cpp
 	RectStorage.cpp
 	Style.cpp
 	StyleManager.cpp
@@ -161,7 +167,6 @@ SET (kspreadcommon_LIB_SRCS
 	ValueConverter.cpp
 	ValueFormatter.cpp
 	ValueParser.cpp
-	View.cpp
 	tests/inspector.cc
 	${commands_DIR_SRCS}
 	${dialogs_DIR_SRCS}

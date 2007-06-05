@@ -121,6 +121,7 @@
 #include "CellStorage.h"
 #include "CellView.h"
 #include "Damages.h"
+#include "DefaultToolFactory.h"
 #include "DependencyManager.h"
 #include "Digest.h"
 #include "inspector.h"
@@ -189,8 +190,6 @@
 #include "dialogs/SubtotalDialog.h"
 #include "dialogs/ValidityDialog.h"
 #include "dialogs/FindDialog.h"
-
-#include "ui/DefaultToolFactory.h"
 
 #include "PropertyEditor.h"
 #include "GeneralProperty.h"

@@ -62,7 +62,7 @@
 #include "Cell.h"
 #include "CellView.h"
 #include "Canvas.h"
-#include "CanvasPrivate.h"
+#include "Canvas_p.h"
 #include "Doc.h"
 #include "Global.h"
 #include "Selection.h"

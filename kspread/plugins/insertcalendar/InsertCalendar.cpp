@@ -25,10 +25,10 @@
 
 #include "InsertCalendarDialog.h"
 
-#include "../../View.h"
-#include "../../Doc.h"
-#include "../../Selection.h"
-#include "../../Sheet.h"
+#include "View.h"
+#include "Doc.h"
+#include "Selection.h"
+#include "Sheet.h"
 
 #include <kcalendarsystem.h>
 #include <kaboutdata.h>

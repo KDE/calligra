@@ -116,7 +116,7 @@
 #include "commands/StyleManipulators.h"
 
 #include "Border.h"
-#include "CanvasPrivate.h"
+#include "Canvas_p.h"
 
 #define MIN_SIZE 10
 

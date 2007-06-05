@@ -65,7 +65,7 @@
 
 // KSpread
 #include "Canvas.h"
-#include "CanvasPrivate.h"
+#include "Canvas_p.h"
 #include "Cell.h"
 #include "Doc.h"
 #include "RowColumnFormat.h"

@@ -1,6 +1,7 @@
-
-
-include_directories( ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kspread
+                     ${CMAKE_SOURCE_DIR}/kspread/ui
+                     ${KOGUIUTILS_INCLUDES}
+                     ${KDE4_INCLUDES} )
 
 
 ########### next target ###############
