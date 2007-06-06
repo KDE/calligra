@@ -601,6 +601,18 @@ void TestDocumentLayout::testParagraphBorders() {
     //qDebug() << blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - ( 9.0 + 14.4 + 10 + 5.0 * 2)) < ROUNDING);
 
+    // borders are positioned outside the padding, lets check that to be the case.
+    block = doc->begin();
+    KoTextBlockData *data  = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    KoTextBlockBorderData *border = data->border();
+    QVERIFY(border);
+    QCOMPARE(border->hasBorders(), true);
+    QRectF borderOutline = border->rect();
+    QCOMPARE(borderOutline.top(), 0.);
+    QCOMPARE(borderOutline.left(), 0.);
+    QCOMPARE(borderOutline.right(), 200.);
+
     // double borders.  Specify an additional width for each side.
     bf.setProperty(KoParagraphStyle::LeftBorderStyle, KoParagraphStyle::BorderDouble);
     bf.setProperty(KoParagraphStyle::TopBorderStyle, KoParagraphStyle::BorderDouble);
