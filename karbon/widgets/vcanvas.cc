@@ -334,7 +334,7 @@ KoUnit KarbonCanvas::unit() const {
     return d->document->unit();
 }
 
-QPoint KarbonCanvas::documentOrigin()
+QPoint KarbonCanvas::documentOrigin() const
 {
     return d->origin;
 }

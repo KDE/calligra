@@ -75,7 +75,7 @@ public:
     /// reimplemented from KoCanvasBase
     KoToolProxy * toolProxy() const;
     /// reimplemented from KoCanvasBase
-    virtual QPoint documentOrigin();
+    virtual QPoint documentOrigin() const;
     /// reimplemented from KoCanvasBase
     QWidget *canvasWidget();
     /// reimplemented from KoCanvasBase
