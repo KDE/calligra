@@ -63,6 +63,10 @@ struct KisJPEGOptions {
     bool progressive;
 };
 
+namespace KisMetaData {
+    class Store;
+};
+
 class KisJPEGConverter : public KisProgressSubject {
         Q_OBJECT
     public:
@@ -70,7 +74,7 @@ class KisJPEGConverter : public KisProgressSubject {
         virtual ~KisJPEGConverter();
     public:
         KisImageBuilder_Result buildImage(const KUrl& uri);
-        KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisExifInfo* exifInfo);
+        KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
         /** Retrieve the constructed image
         */
         KisImageSP image();

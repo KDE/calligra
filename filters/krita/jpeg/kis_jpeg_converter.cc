@@ -43,14 +43,13 @@ extern "C" {
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_meta_registry.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_store.h>
+
 #include <colorprofiles/KoIccColorProfile.h>
 
-#include <kis_exif_io.h>
-
-extern "C" {
-#include <libexif/exif-loader.h>
-#include <libexif/exif-utils.h>
-}
+#include <kis_exiv2_io.h>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
@@ -204,8 +203,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
 
-    // Read exif information if any
-
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
 
@@ -272,42 +269,45 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
             continue; /* no Exif header */
         kDebug(41008) << "Found exif information of length : "<< marker->data_length << endl;
-        KisExifIO exifIO(layer->paintDevice()->exifInfo());
-        exifIO.readExifFromMem( marker->data , marker->data_length );
+        KisExiv2IO exiv2IO;
+        QByteArray byteArray( (const char*)marker->data , marker->data_length );
+        exiv2IO.loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
         // Interpret orientation tag
-        ExifValue v;
-        if( layer->paintDevice()->exifInfo()->getValue("Orientation", v) && v.type() == ExifValue::EXIF_TYPE_SHORT)
+        if( layer->metaData()->containsEntry("http://ns.adobe.com/tiff/1.0/", "Orientation"))
         {
-            switch(v.asShort(0)) //
+            KisMetaData::Entry& entry = layer->metaData()->getEntry("http://ns.adobe.com/tiff/1.0/", "Orientation");
+            if(entry.value().type() == KisMetaData::Value::Variant)
             {
-                case 2:
-                    layer->paintDevice()->mirrorY();
-                    break;
-                case 3:
-                    image()->rotate(M_PI, 0);
-                    break;
-                case 4:
-                    layer->paintDevice()->mirrorX();
-                    break;
-                case 5:
-                    image()->rotate(M_PI/2, 0);
-                    layer->paintDevice()->mirrorY();
-                    break;
-                case 6:
-                    image()->rotate(M_PI/2, 0);
-                    break;
-                case 7:
-                    image()->rotate(M_PI/2, 0);
-                    layer->paintDevice()->mirrorX();
-                    break;
-                case 8:
-                    image()->rotate(-M_PI/2+M_PI*2, 0);
-                    break;
-                default:
-                    break;
+                switch(entry.value().asVariant().toInt() )
+                {
+                    case 2:
+                        layer->paintDevice()->mirrorY();
+                        break;
+                    case 3:
+                        image()->rotate(M_PI, 0);
+                        break;
+                    case 4:
+                        layer->paintDevice()->mirrorX();
+                        break;
+                    case 5:
+                        image()->rotate(M_PI/2, 0);
+                        layer->paintDevice()->mirrorY();
+                        break;
+                    case 6:
+                        image()->rotate(M_PI/2, 0);
+                        break;
+                    case 7:
+                        image()->rotate(M_PI/2, 0);
+                        layer->paintDevice()->mirrorX();
+                        break;
+                    case 8:
+                        image()->rotate(-M_PI/2+M_PI*2, 0);
+                        break;
+                    default:
+                        break;
+                }
             }
-            v.setValue(0, (quint16)1);
-            layer->paintDevice()->exifInfo()->setValue("Orientation", v);
+            entry.value().setVariant(1);
         }
         break;
     }
@@ -352,7 +352,7 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisExifInfo* exifInfo)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -408,22 +408,22 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Start compression
     jpeg_start_compress(&cinfo, true);
     // Save exif information if any available
-    if(exifInfo)
+    
+    if(not layer->metaData()->empty())
     {
         kDebug(41008) << "Trying to save exif information" << endl;
-        KisExifIO exifIO(exifInfo);
-        unsigned char* exif_data;
-        unsigned int exif_size;
-        exifIO.saveExifToMem( &exif_data, &exif_size);
-        kDebug(41008) << "Exif information size is " << exif_size << endl;
-        if (exif_size < MAX_DATA_BYTES_IN_MARKER)
+        KisExiv2IO exiv2IO;
+        QBuffer buffer;
+        exiv2IO.saveTo( metaData, &buffer);
+        
+        kDebug(41008) << "Exif information size is " << buffer.data().size() << endl;
+        if (buffer.data().size() < MAX_DATA_BYTES_IN_MARKER)
         {
-            jpeg_write_marker(&cinfo, JPEG_APP0 + 1, exif_data, exif_size);
+            jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)buffer.data().data(), buffer.data().size());
         } else {
-            kDebug(41008) << "exif information couldn't be saved." << endl;
+            kDebug(41008) << "exif information couldn't be saved." << endl; // TODO: warn the user ?
         }
     }
-
 
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;

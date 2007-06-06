@@ -38,6 +38,8 @@
 #include "kis_jpeg_converter.h"
 #include "kis_wdg_options_jpeg.h"
 
+#include "kis_meta_data_store.h"
+
 class KisExternalLayer;
 
 class KisExifInfoVisitor : public KisLayerVisitor
@@ -56,8 +58,10 @@ class KisExifInfoVisitor : public KisLayerVisitor
 
         virtual bool visit(KisPaintLayer* layer) {
             m_countPaintLayer++;
-            if( layer->paintDevice()->hasExifInfo())
-                m_exifInfo = layer->paintDevice()->exifInfo();
+            if(not layer->metaData()->empty())
+            {
+                m_exifInfo = layer->metaData();
+            }
             return true;
         };
         virtual bool visit(KisGroupLayer* layer)
@@ -73,9 +77,9 @@ class KisExifInfoVisitor : public KisLayerVisitor
         virtual bool visit(KisAdjustmentLayer* ) {  return true; };
     public:
         inline uint countPaintLayer() { return m_countPaintLayer; }
-        inline KisExifInfo* exifInfo() {return m_exifInfo; }
+        inline KisMetaData::Store* exifInfo() {return m_exifInfo; }
     private:
-        KisExifInfo* m_exifInfo;
+        KisMetaData::Store* m_exifInfo;
         uint m_countPaintLayer;
 };
 
@@ -144,7 +148,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     KisExifInfoVisitor eIV;
     eIV.visit( img->rootLayer().data() );
 
-    KisExifInfo* eI = 0;
+    KisMetaData::Store* eI = 0;
     if(eIV.countPaintLayer() == 1)
         eI = eIV.exifInfo();
 
