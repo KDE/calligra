@@ -24,6 +24,7 @@
 #include "BasicElement.h"
 #include <QList>
 #include <QStringList>
+#include <QPainterPath>
 
 class GlyphElement;
 
@@ -76,6 +77,9 @@ private:
 
     /// A list of this pointers for raw strings and pointers to embedded GlyphElements
     QList<BasicElement*> m_content;
+
+    /// A painter path holding text content for fast painting
+    QPainterPath m_contentPath;
 };
 
 #endif // TOKENELEMENT_H

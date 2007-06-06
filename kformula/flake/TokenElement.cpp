@@ -40,46 +40,37 @@ const QList<BasicElement*> TokenElement::childElements()
 
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
-     QPointF tmpOrigin;
-     int rawCounter = 0;
-     foreach( BasicElement* tmp, m_content )
-         if( tmp == this )
-         {
-             painter.drawText( tmpOrigin, stringToRender( m_rawStringList[ rawCounter ] ) );
-             rawCounter++;
-         }
-         else
-         {
+     painter.drawPath( m_contentPath );        // draw content 
+
+     foreach( BasicElement* tmp, m_content )   // draw possible mglyph elements
+         if( tmp != this )
              tmp->paint( painter, am );
-             tmpOrigin = tmp->boundingRect().topRight(); // set origin for text
-         }
 }
 
 void TokenElement::layout( AttributeManager* am )
 {
+    m_contentPath = QPainterPath();
     int rawCounter = 0;
-    double width = 0.0;
-    double height = 0.0;
-    QFontMetricsF fm( am->font( this ) );
-    QRectF tmpRect;
     foreach( BasicElement* tmp, m_content )
         if( tmp == this )
         {
-            tmpRect = fm.boundingRect( stringToRender( m_rawStringList[ rawCounter ] ) );
-            width += tmpRect.width();
-            height = qMax( height, tmpRect.height() );
+            m_contentPath.addText( 0.0, 0.0, am->font( this ),
+                                   stringToRender( m_rawStringList[ rawCounter ] ) );
             rawCounter++;
         }
         else
         {
-            tmp->setOrigin( QPointF( width, 0.0 ) );
-            width += tmp->width();
-            height = qMax( height, tmp->height() );
+            tmp->setOrigin( QPointF( m_contentPath.boundingRect().width(), 0.0 ) );
+            m_contentPath.moveTo( tmp->origin().x() + tmp->width(), 0.0 );
         }
 
-    setWidth( width );
-    setHeight( height );
-    setBaseLine( height );  // TODO is this correct ??
+    setWidth( m_contentPath.boundingRect().width() );
+    setHeight( m_contentPath.boundingRect().height() );
+    setBaseLine( height() );  // TODO is this correct ??
+
+    QMatrix tmpMatrix;
+    tmpMatrix.translate( 0, m_contentPath.boundingRect().height() );
+    m_contentPath = tmpMatrix.map( m_contentPath );
 }
 
 bool TokenElement::readMathMLContent( const KoXmlElement& element )
