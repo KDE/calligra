@@ -299,11 +299,11 @@ void KarbonCanvas::adjustOrigin()
     // if there are margins left around the zoomed document rect then
     // distribute them evenly on both sides
     int widthDiff = size().width() - documentRect.width();
-    if( widthDiff > 0.0 )
-        d->origin.rx() += static_cast<int>( 0.5 * widthDiff );
+    if( widthDiff > 0 )
+        d->origin.rx() += widthDiff;
     int heightDiff = size().height() - documentRect.height();
-    if( heightDiff > 0.0 )
-        d->origin.ry() += static_cast<int>( 0.5 * heightDiff );
+    if( heightDiff > 0 )
+        d->origin.ry() += heightDiff;
 
     // check if the origin has changed and emit signal if it has
     if( d->origin != oldOrigin )
