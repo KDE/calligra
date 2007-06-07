@@ -30,6 +30,10 @@ SET ( textshape_SRCS
     dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp
     dialogs/NewStyleWidget.cpp
+    dialogs/CharacterGeneral.cpp
+    dialogs/CharacterHighlighting.cpp
+    dialogs/CharacterDecorations.cpp
+    dialogs/CharacterStyleOptions.cpp
 
     commands/ChangeListCommand.cpp
     commands/TextCommandBase.cpp
@@ -44,6 +48,10 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/StyleManager.ui
     dialogs/ParagraphGeneral.ui
     dialogs/NewStyleWidget.ui
+    dialogs/CharacterGeneral.ui
+    dialogs/CharacterDecorations.ui
+    dialogs/CharacterHighlighting.ui
+    dialogs/CharacterStyleOptions.ui
 )
 
 kde4_automoc(${textshape_SRCS})

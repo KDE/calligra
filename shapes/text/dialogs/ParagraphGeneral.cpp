@@ -36,9 +36,9 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
     m_paragraphLayout = new ParagraphLayout (this);
     m_paragraphBulletsNumbers = new ParagraphBulletsNumbers (this);
 
-    widget.tabs->addTab(m_paragraphIndentSpacing, "Indent/Spacing");
-    widget.tabs->addTab(m_paragraphLayout, "General Layout");
-    widget.tabs->addTab(m_paragraphBulletsNumbers, "Bullets/Numbers");
+    widget.tabs->addTab(m_paragraphIndentSpacing, i18n("Indent/Spacing"));
+    widget.tabs->addTab(m_paragraphLayout, i18n("General Layout"));
+    widget.tabs->addTab(m_paragraphBulletsNumbers, i18n("Bullets/Numbers"));
 
     connect(widget.name, SIGNAL(textChanged (const QString &)), this, SIGNAL(nameChanged(const QString&)));
 }

@@ -38,10 +38,10 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="ParagraphGeneral" name="paragraphStylePage" />
-     <widget class="QWidget" name="characterStylePage" />
+     <widget class="CharacterGeneral" name="characterStylePage" />
      <widget class="NewStyleWidget" name="createPage" />
     </widget>
    </item>
@@ -86,6 +86,12 @@
    <class>NewStyleWidget</class>
    <extends>QWidget</extends>
    <header>dialogs/NewStyleWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CharacterGeneral</class>
+   <extends>QWidget</extends>
+   <header>dialogs/CharacterGeneral.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

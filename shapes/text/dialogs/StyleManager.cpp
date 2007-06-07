@@ -85,8 +85,8 @@ void StyleManager::setStyleManager(KoStyleManager *sm) {
 void StyleManager::setStyle(QListWidgetItem *item, QListWidgetItem *previous) {
     int styleId = item->data(PARAGRAPH_STYLE).toInt();
     if(styleId > 0) {
-        //widget.characterStylePage->save();
-        //widget.characterStylePage->setStyle(0);
+        widget.characterStylePage->save();
+        widget.characterStylePage->setStyle(0);
         // TODO copy so we can press cancel
         widget.paragraphStylePage->save();
         KoParagraphStyle *style = m_styleManager->paragraphStyle(styleId);
@@ -96,11 +96,11 @@ void StyleManager::setStyle(QListWidgetItem *item, QListWidgetItem *previous) {
     else {
         widget.paragraphStylePage->save();
         widget.paragraphStylePage->setStyle(0);
-        //widget.characterStylePage->save();
+        widget.characterStylePage->save();
         styleId = item->data(CHARACTER_STYLE).toInt();
         if(styleId > 0) {
             KoCharacterStyle *style = m_styleManager->characterStyle(styleId);
-            //widget.characterStylePage->setStyle(style);
+            widget.characterStylePage->setStyle(style);
             widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
         }
         else {
@@ -118,6 +118,7 @@ void StyleManager::setStyle(QListWidgetItem *item, QListWidgetItem *previous) {
 
 void StyleManager::setUnit(const KoUnit &unit) {
     widget.paragraphStylePage->setUnit(unit);
+    widget.characterStylePage->setUnit(unit);
 }
 
 
