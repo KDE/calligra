@@ -270,7 +270,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             continue; /* no Exif header */
         kDebug(41008) << "Found exif information of length : "<< marker->data_length << endl;
         KisExiv2IO exiv2IO;
-        QByteArray byteArray( (const char*)marker->data , marker->data_length );
+        QByteArray byteArray( (const char*)marker->data + 6, marker->data_length - 6);
         exiv2IO.loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
         // Interpret orientation tag
         if( layer->metaData()->containsEntry("http://ns.adobe.com/tiff/1.0/", "Orientation"))
@@ -409,17 +409,35 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     jpeg_start_compress(&cinfo, true);
     // Save exif information if any available
     
-    if(not layer->metaData()->empty())
+    if(metaData and not metaData->empty())
     {
         kDebug(41008) << "Trying to save exif information" << endl;
         KisExiv2IO exiv2IO;
+        
+//                 if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 ||
+//             GETJOCTET (marker->data[1]) != (JOCTET) 0x78 ||
+//             GETJOCTET (marker->data[2]) != (JOCTET) 0x69 ||
+//             GETJOCTET (marker->data[3]) != (JOCTET) 0x66 ||
+//             GETJOCTET (marker->data[4]) != (JOCTET) 0x00 ||
+//             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
+
         QBuffer buffer;
         exiv2IO.saveTo( metaData, &buffer);
         
         kDebug(41008) << "Exif information size is " << buffer.data().size() << endl;
-        if (buffer.data().size() < MAX_DATA_BYTES_IN_MARKER)
+        QByteArray header(6,0);
+        header[0] = 0x45;
+        header[1] = 0x78;
+        header[2] = 0x69;
+        header[3] = 0x66;
+        header[4] = 0x00;
+        header[5] = 0x00;
+        
+        QByteArray data = buffer.data();
+        data.prepend(header);
+        if (data.size() < MAX_DATA_BYTES_IN_MARKER)
         {
-            jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)buffer.data().data(), buffer.data().size());
+            jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)data.data(), data.size());
         } else {
             kDebug(41008) << "exif information couldn't be saved." << endl; // TODO: warn the user ?
         }
