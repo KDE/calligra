@@ -20,6 +20,7 @@
 #include "KoEnhancedPathCommand.h"
 #include "KoEnhancedPathParameter.h"
 #include "KoEnhancedPathShape.h"
+#include <KoPathPoint.h>
 #include <math.h>
 
 // radian to degree factor

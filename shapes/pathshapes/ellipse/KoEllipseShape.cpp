@@ -20,6 +20,7 @@
 
 #include "KoEllipseShape.h"
 
+#include <KoPathPoint.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>

@@ -19,6 +19,7 @@
 
 #include "star/KoStarShape.h"
 
+#include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 
