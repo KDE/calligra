@@ -191,7 +191,7 @@ void KoStarShape::updatePath( const QSizeF &size )
 
 void KoStarShape::createPath()
 {
-    if( m_subpaths.size() )
+    if( !m_subpaths.isEmpty() )
     {
         foreach( KoPathPoint *p, *m_subpaths[0] )
             delete p;
