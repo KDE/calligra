@@ -37,7 +37,6 @@ public:
     CharacterGeneral(QWidget *parent = 0);
 
     void setStyle(KoCharacterStyle *style);
-    void setUnit(const KoUnit &unit);
 
     void save();
 

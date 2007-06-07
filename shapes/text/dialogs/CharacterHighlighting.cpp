@@ -21,6 +21,7 @@
 #include "CharacterHighlighting.h"
 
 #include <KoText.h>
+#include <KoCharacterStyle.h>
 
 CharacterHighlighting::CharacterHighlighting( QWidget* parent)
     : QWidget ( parent)
@@ -38,9 +39,13 @@ void CharacterHighlighting::underlineChanged(int item) {
     widget.underlineColor->setEnabled(item != 0);
 }
 
-void CharacterHighlighting::open(const QTextCharFormat &format) {
+void CharacterHighlighting::open(KoCharacterStyle *style) {
+    m_style = style;
+    if(m_style == 0)
+        return;
+
     widget.underlineStyle->setCurrentIndex(1);
-    switch(format.underlineStyle()) {
+    switch(style->underlineStyle()) {
         case QTextCharFormat::SingleUnderline:
             widget.underlineLineStyle->setCurrentIndex(0);
             break;
@@ -64,14 +69,16 @@ void CharacterHighlighting::open(const QTextCharFormat &format) {
             break;
     }
     underlineChanged(widget.underlineStyle->currentIndex());
-    widget.underlineColor->setColor(format.underlineColor());
+    widget.underlineColor->setColor(style->underlineColor());
 
-    widget.strikethrough->setChecked(format.fontStrikeOut());
+    widget.strikethrough->setChecked(style->fontStrikeOut());
 }
 
-void CharacterHighlighting::save(QTextCharFormat &format) const {
+void CharacterHighlighting::save() {
+    if(m_style == 0)
+        return;
     switch(widget.underlineStyle->currentIndex()) {
-        case 0: format.setUnderlineStyle(QTextCharFormat::NoUnderline); break;
+        case 0: m_style->setUnderlineStyle(QTextCharFormat::NoUnderline); break;
         case 1:
             QTextCharFormat::UnderlineStyle style;
             switch(widget.underlineLineStyle->currentIndex()) {
@@ -85,18 +92,18 @@ void CharacterHighlighting::save(QTextCharFormat &format) const {
                     style = QTextCharFormat::SingleUnderline; break;
                     kWarning() << "Unknown items in the underlineLineStyle combobox!\n";
             }
-            format.setUnderlineStyle(style);
-            format.setUnderlineColor(widget.underlineColor->color());
+            m_style->setUnderlineStyle(style);
+            m_style->setUnderlineColor(widget.underlineColor->color());
             break;
-        case 2: // unsupported by Qt right now :(  TODO
-            format.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-            format.setUnderlineColor(widget.underlineColor->color());
+        case 2: // double underlining unsupported by Qt right now :(  TODO
+            m_style->setUnderlineStyle(QTextCharFormat::SingleUnderline);
+            m_style->setUnderlineColor(widget.underlineColor->color());
             break;
         default:
             kWarning() << "Unknown items in the underlineStyle combobox!\n";
     }
 
-    format.setFontStrikeOut(widget.strikethrough->isChecked());
+    m_style->setFontStrikeOut(widget.strikethrough->isChecked());
 }
 
 #include "CharacterHighlighting.moc"

@@ -20,8 +20,11 @@
 
 #include "CharacterDecorations.h"
 
+#include <KoCharacterStyle.h>
+
 CharacterDecorations::CharacterDecorations( QWidget* parent )
-    : QWidget( parent )
+    : QWidget( parent ),
+    m_style(0)
 {
     widget.setupUi(this);
 
@@ -34,26 +37,35 @@ CharacterDecorations::CharacterDecorations( QWidget* parent )
     widget.shadowGroupBox->setVisible(false);
 }
 
-void CharacterDecorations::open(const QTextCharFormat &format) {
+void CharacterDecorations::open(KoCharacterStyle *style) {
+    m_style = style;
+    if(m_style == 0)
+        return;
     m_textColorChanged = false;
     m_backgroundColorChanged = false;
-    m_textColorReset = ! format.hasProperty(QTextFormat::ForegroundBrush);
-    if(!m_textColorReset)
-        widget.textColor->setColor(format.foreground().color());
-    m_backgroundColorReset = ! format.hasProperty(QTextFormat::BackgroundBrush);
-    if(!m_backgroundColorReset)
-        widget.backgroundColor->setColor(format.background().color());
+    m_textColorReset = ! style->hasProperty(QTextFormat::ForegroundBrush);
+    if(m_textColorReset)
+        clearTextColor();
+    else
+        widget.textColor->setColor(style->foreground().color());
+    m_backgroundColorReset = !style->hasProperty(QTextFormat::BackgroundBrush);
+    if(m_backgroundColorReset)
+        clearBackgroundColor();
+    else
+        widget.backgroundColor->setColor(style->background().color());
 }
 
-void CharacterDecorations::save(QTextCharFormat &format) const {
+void CharacterDecorations::save() {
+    if(m_style == 0)
+        return;
     if(m_backgroundColorReset)
-        format.clearBackground();
+        m_style->clearBackground();
     else if(m_backgroundColorChanged)
-        format.setBackground(QBrush(widget.backgroundColor->color()));
+        m_style->setBackground(QBrush(widget.backgroundColor->color()));
     if(m_textColorReset)
-        format.clearForeground();
+        m_style->clearForeground();
     else if(m_textColorChanged)
-        format.setForeground(QBrush(widget.textColor->color()));
+        m_style->setForeground(QBrush(widget.textColor->color()));
 }
 
 void CharacterDecorations::clearTextColor() {

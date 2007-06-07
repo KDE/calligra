@@ -19,8 +19,7 @@
 */
 
 #include "CharacterStyleOptions.h"
-#include "styles/KoCharacterStyle.h"
-
+#include <KoCharacterStyle.h>
 #include <QButtonGroup>
 
 enum Position {
@@ -31,7 +30,7 @@ enum Position {
 };
 
 CharacterStyleOptions::CharacterStyleOptions( bool withSubSuperScript, QWidget* parent)
-        : QWidget( parent)
+        : QWidget( parent), m_style(0)
 {
     widget.setupUi(this);
 
@@ -49,8 +48,11 @@ CharacterStyleOptions::CharacterStyleOptions( bool withSubSuperScript, QWidget* 
     widget.offsetLabel->setVisible(false);
 }
 
-void CharacterStyleOptions::open(const QTextCharFormat &format) {
-    switch(format.verticalAlignment()) {
+void CharacterStyleOptions::open(KoCharacterStyle *style) {
+    m_style = style;
+    if(m_style == 0)
+        return;
+    switch(style->verticalAlignment()) {
         case QTextCharFormat::AlignSuperScript:
             m_buttonGroup->button(Superscript)->setChecked(true);
             break;
@@ -62,10 +64,12 @@ void CharacterStyleOptions::open(const QTextCharFormat &format) {
             m_buttonGroup->button(Normal)->setChecked(true);
     }
 
-    widget.hyphenate->setChecked(format.boolProperty(KoCharacterStyle::HasHyphenation));
+    widget.hyphenate->setChecked(style->hasHyphenation());
 }
 
-void CharacterStyleOptions::save(QTextCharFormat &format) const {
+void CharacterStyleOptions::save() {
+    if(m_style == 0)
+        return;
     QTextCharFormat::VerticalAlignment va;
 
     switch(m_buttonGroup->checkedId()) {
@@ -81,9 +85,8 @@ void CharacterStyleOptions::save(QTextCharFormat &format) const {
             va = QTextCharFormat::AlignNormal;
             // TODO also handle custom
     }
-    format.setVerticalAlignment(va);
-
-    format.setProperty(KoCharacterStyle::HasHyphenation, widget.hyphenate->isChecked());
+    m_style->setVerticalAlignment(va);
+    m_style->setHasHyphenation(widget.hyphenate->isChecked());
 }
 
 #include "CharacterStyleOptions.moc"

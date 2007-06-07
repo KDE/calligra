@@ -63,14 +63,20 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style) {
         return;
     m_blockSignals = true;
 
-    m_blockSignals = false;
-}
+    widget.name->setText(style->name());
+    m_fontChooser->setFont(style->font());
+    m_styleOptions->open(style);
+    m_characterDecorations->open(style);
+    m_characterHighlighting->open(style);
 
-void CharacterGeneral::setUnit(const KoUnit &unit) {
+    m_blockSignals = false;
 }
 
 void CharacterGeneral::save() {
     if(m_style == 0) return;
+    m_characterDecorations->save();
+    m_characterHighlighting->save();
+    m_styleOptions->save();
 }
 
 void CharacterGeneral::switchToGeneralTab() {

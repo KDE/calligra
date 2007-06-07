@@ -38,7 +38,20 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" >
-       <item row="0" column="0" >
+       <item row="0" column="0" colspan="2" >
+        <widget class="QLabel" name="label_2" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>&lt;b>Character style properties&lt;/b></string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
         <widget class="QLabel" name="label" >
          <property name="text" >
           <string>Name:</string>
@@ -48,21 +61,8 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QLineEdit" name="name" />
-       </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
-          <string>Next style:</string>
-         </property>
-         <property name="buddy" >
-          <cstring>nextStyle</cstring>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1" >
-        <widget class="QComboBox" name="nextStyle" />
+        <widget class="QLineEdit" name="name" />
        </item>
        <item row="2" column="0" colspan="2" >
         <widget class="QGroupBox" name="previewPane" >

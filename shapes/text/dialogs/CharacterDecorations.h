@@ -23,7 +23,7 @@
 
 #include "ui_CharacterDecorations.h"
 
-#include <QTextCharFormat>
+class KoCharacterStyle;
 
 class CharacterDecorations : public QWidget
 {
@@ -33,8 +33,8 @@ public:
     explicit CharacterDecorations( QWidget* parent=0);
     ~CharacterDecorations() {}
 
-    void open(const QTextCharFormat &format);
-    void save(QTextCharFormat &format) const;
+    void open(KoCharacterStyle *style);
+    void save();
 
 private slots:
     void clearTextColor();
@@ -47,6 +47,8 @@ private:
 
     bool m_textColorChanged, m_textColorReset;
     bool m_backgroundColorChanged, m_backgroundColorReset;
+
+    KoCharacterStyle *m_style;
 };
 
 #endif

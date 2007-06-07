@@ -118,7 +118,6 @@ void StyleManager::setStyle(QListWidgetItem *item, QListWidgetItem *previous) {
 
 void StyleManager::setUnit(const KoUnit &unit) {
     widget.paragraphStylePage->setUnit(unit);
-    widget.characterStylePage->setUnit(unit);
 }
 
 

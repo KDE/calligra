@@ -18,14 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kolayouttab_h__
-#define __kolayouttab_h__
+#ifndef CHARACTERSTYLEOPTIONS_H
+#define CHARACTERSTYLEOPTIONS_H
 
 #include "ui_KoLayoutTab.h"
 
-#include <QTextCharFormat>
-
 class QButtonGroup;
+class KoCharacterStyle;
 
 class CharacterStyleOptions : public QWidget
 {
@@ -35,12 +34,14 @@ public:
     explicit CharacterStyleOptions( bool withSubSuperScript, QWidget* parent=0);
     ~CharacterStyleOptions() {}
 
-    void open(const QTextCharFormat &format);
-    void save(QTextCharFormat &format) const;
+    void open(KoCharacterStyle *style);
+    void save();
 
 private:
     Ui::KoLayoutTabBase widget;
     QButtonGroup *m_buttonGroup;
+
+    KoCharacterStyle *m_style;
 };
 
 #endif

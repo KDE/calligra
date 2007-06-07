@@ -23,7 +23,7 @@
 
 #include "ui_CharacterHighlighting.h"
 
-#include <QTextCharFormat>
+class KoCharacterStyle;
 
 class CharacterHighlighting : public QWidget
 {
@@ -33,14 +33,16 @@ public:
     explicit CharacterHighlighting(QWidget* parent=0);
     ~CharacterHighlighting() {}
 
-    void open(const QTextCharFormat &format);
-    void save(QTextCharFormat &format) const;
+    void open(KoCharacterStyle *style);
+    void save();
 
 private slots:
     void underlineChanged( int item );
 
 private:
     Ui::CharacterHighlighting widget;
+
+    KoCharacterStyle *m_style;
 };
 
 #endif
