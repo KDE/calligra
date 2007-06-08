@@ -34,7 +34,6 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QDockWidget>
 
-class KarbonView;
 class KoUniColorChooser;
 
 class VColorDockerFactory : public KoDockFactory

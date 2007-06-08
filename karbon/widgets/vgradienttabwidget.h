@@ -34,7 +34,6 @@ class VGradientWidget;
 class K3ListBox;
 class KIntNumInput;
 class QPushButton;
-class Q3GroupBox;
 class KarbonResourceServer;
 
 /**

@@ -25,7 +25,6 @@
 #include <kxyselector.h>
 #include <kselector.h>
 
-class QColor;
 class KHueSaturationSelector;
 class KIntSpinBox;
 class KGradientSelector;

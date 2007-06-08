@@ -28,7 +28,6 @@
 
 
 class VPath;
-class VCursor;
 
 class VShapeTool : public VTool
 {

@@ -24,7 +24,6 @@
 #include <q3valuevector.h>
 #include <karbon_export.h>
 class KActionCollection;
-class VTool;
 class KarbonView;
 class KarbonAbstractToolFactory;
 

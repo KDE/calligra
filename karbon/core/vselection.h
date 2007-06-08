@@ -30,7 +30,6 @@
 #include <karbon_export.h>
 
 class QPointF;
-class QObject;
 class VPainter;
 class VVisitor;
 class VSegment;

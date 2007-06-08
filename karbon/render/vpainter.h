@@ -31,8 +31,6 @@
 class QMatrix;
 class QPaintDevice;
 class QColor;
-class QPen;
-class QBrush;
 class QImage;
 
 class VStroke;

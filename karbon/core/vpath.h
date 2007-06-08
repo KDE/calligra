@@ -27,7 +27,6 @@
 #include <karbon_export.h>
 
 class QDomElement;
-class QMatrix;
 class VSubpathIteratorList;
 class VSegment;
 class VVisitor;

@@ -32,7 +32,6 @@ class KActionCollection;
 class KarbonPart;
 class KarbonView;
 class QEvent;
-class QWidget;
 class VPainter;
 class VToolController;
 

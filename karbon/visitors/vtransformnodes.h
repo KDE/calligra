@@ -25,7 +25,6 @@
 #include "vvisitor.h"
 
 
-class VSegment;
 
 
 class KARBONBASE_EXPORT VTransformNodes : public VVisitor

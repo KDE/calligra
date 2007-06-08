@@ -25,7 +25,6 @@
 
 class VColor;
 class VColorTab;
-class VFill;
 
 class VColorDlg : public KDialog
 {

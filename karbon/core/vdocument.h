@@ -43,7 +43,6 @@
 class QDomDocument;
 class QDomElement;
 class VSelection;
-class KoPageLayout;
 class KoShape;
 class KoSavingContext;
 class KoShapeLayer;

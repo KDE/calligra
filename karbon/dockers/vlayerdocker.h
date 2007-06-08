@@ -23,10 +23,8 @@
 #include <KoDocumentSectionModel.h>
 #include <KoDockFactory.h>
 
-class KarbonView;
 class VDocument;
 class KoDocumentSectionView;
-class KoCanvasBase;
 class KoShapeControllerBase;
 class KoShape;
 class KoShapeContainer;

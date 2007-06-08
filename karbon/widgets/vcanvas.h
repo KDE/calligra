@@ -40,7 +40,6 @@
 #include <QtCore/QList>
 #include <QtGui/QBrush>
 
-class VDocument;
 class KarbonPart;
 class KoViewConverter;
 class KoShapeManager;

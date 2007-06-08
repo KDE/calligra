@@ -40,7 +40,6 @@
 #include "vdocument.h"
 #include "karbon_export.h"
 
-class QRectF;
 class QRect;
 class VCommand;
 class VDocument;
