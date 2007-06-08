@@ -22,7 +22,6 @@
 
 #include <KoPAViewMode.h>
 
-class QWidget;
 
 class KOPAGEAPP_EXPORT KPrViewModePresentation : public KoPAViewMode
 {
