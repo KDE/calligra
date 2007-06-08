@@ -973,9 +973,9 @@ void TextTool::stopMacro() {
 void TextTool::showStyleManager() {
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
     if(lay) {
-        StyleManagerDialog *dia = new StyleManagerDialog(m_canvas->canvasWidget());
         Q_ASSERT( lay->styleManager() );
         if( ! lay->styleManager() ) return; //don't crash
+        StyleManagerDialog *dia = new StyleManagerDialog(m_canvas->canvasWidget());
         dia->setStyleManager(lay->styleManager());
         dia->setUnit(m_canvas->unit());
         dia->show();
