@@ -25,7 +25,7 @@
 #include <QObject>
 #include <KoStore.h>
 #include <KoXmlReader.h>
-#include <KoOpenDocumentLoader.h>
+#include <KoTextLoader.h>
 
 class KWDocument;
 class KWTextFrameSet;
@@ -39,7 +39,7 @@ class KWTextFrameSet;
 //class KoCharacterStyle;
 //class KoStore;
 class KoOasisStyles;
-class KoOpenDocumentLoadingContext;
+class KoTextLoadingContext;
 
 class QDomDocument;
 class QTextCursor;
@@ -48,7 +48,7 @@ class QTextCursor;
 /**
  * Class that has a lot of the OpenDocument (ODF) loading code for KWord.
  */
-class KWOpenDocumentLoader : public KoOpenDocumentLoader
+class KWOpenDocumentLoader : public KoTextLoader
 {
     Q_OBJECT
 public:
@@ -66,15 +66,15 @@ public:
     bool load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store);
 
 protected:
-    virtual void loadSettings(KoOpenDocumentLoadingContext& context, const QDomDocument& settings);
-    virtual bool loadPageLayout(KoOpenDocumentLoadingContext& context, const QString& masterPageName);
-    virtual bool loadMasterPageStyle(KoOpenDocumentLoadingContext& context, const QString& masterPageName);
+    virtual void loadSettings(KoTextLoadingContext& context, const QDomDocument& settings);
+    virtual bool loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName);
+    virtual bool loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName);
 
     virtual void startBody(int total);
     virtual void processBody();
 
 private:
-    void loadHeaderFooter(KoOpenDocumentLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
+    void loadHeaderFooter(KoTextLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
 
 Q_SIGNALS:
     /**
