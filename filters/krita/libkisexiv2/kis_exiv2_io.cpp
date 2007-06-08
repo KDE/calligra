@@ -356,10 +356,10 @@ bool KisExiv2IO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice)
     {
         const KisMetaData::Entry& entry = *it;
         QString exivKey = "";
-        if(entry.schema()->uri() == KisMetaData::Schema::TIFFSchema->uri())
+        if(entry.schema()->uri() == KisMetaData::Schema::TIFFSchemaUri)
         {
             exivKey = "Exif.Image." + entry.name();
-        } else if(entry.schema()->uri() == KisMetaData::Schema::EXIFSchema->uri())
+        } else if(entry.schema()->uri() == KisMetaData::Schema::EXIFSchemaUri)
         { // Seperate between exif and gps
             if( entry.name().left(3) == "GPS")
             {
@@ -368,7 +368,7 @@ bool KisExiv2IO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice)
             {
                 exivKey = "Exif.Photo." + entry.name();
             }
-        } else if(entry.schema()->uri() == KisMetaData::Schema::DublinCoreSchema->uri())
+        } else if(entry.schema()->uri() == KisMetaData::Schema::DublinCoreSchemaUri)
         {
             if(entry.name() == "description")
             {
@@ -380,7 +380,7 @@ bool KisExiv2IO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice)
             {
                 exivKey = "Exif.Image.Copyright";
             }
-        } else if(entry.schema()->uri() == KisMetaData::Schema::XMPSchema->uri())
+        } else if(entry.schema()->uri() == KisMetaData::Schema::XMPSchemaUri)
         {
             if(entry.name() == "ModifyDate")
             {
@@ -389,7 +389,7 @@ bool KisExiv2IO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice)
             {
                 exivKey = "Exif.Image.Software";
             }
-        } else if(entry.schema()->uri() == KisMetaData::Schema::MakerNoteSchema->uri())
+        } else if(entry.schema()->uri() == KisMetaData::Schema::MakerNoteSchemaUri)
         {
             if(entry.name() == "RawData")
             {
@@ -452,10 +452,10 @@ bool KisExiv2IO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice)
     Exiv2::ExifData exifData;
     exifData.load((const Exiv2::byte*)arr.data(), arr.size());
     kDebug() << "There are " << exifData.count() << " entries in the exif section" << endl;
-    const KisMetaData::Schema* tiffSchema = store->createSchema(KisMetaData::Schema::TIFFSchema);
-    const KisMetaData::Schema* exifSchema = store->createSchema(KisMetaData::Schema::EXIFSchema);
-    const KisMetaData::Schema* dcSchema = store->createSchema(KisMetaData::Schema::DublinCoreSchema);
-    const KisMetaData::Schema* xmpSchema = store->createSchema(KisMetaData::Schema::XMPSchema);
+    const KisMetaData::Schema* tiffSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
+    const KisMetaData::Schema* exifSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::EXIFSchemaUri);
+    const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+    const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
     for(Exiv2::ExifMetadata::const_iterator it = exifData.begin();
         it != exifData.end(); ++it)
     {
@@ -464,7 +464,7 @@ bool KisExiv2IO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice)
         {
             kDebug() << it->key().c_str() << " is ignored" << endl;
         } if(it->key() == "Exif.Photo.MakerNote") {
-            const KisMetaData::Schema* makerNoteSchema = store->createSchema(KisMetaData::Schema::MakerNoteSchema);
+            const KisMetaData::Schema* makerNoteSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
             store->addEntry(KisMetaData::Entry("RawData", makerNoteSchema, exivValueToKMDValue(it->getValue())));
         } else if(it->key() == "Exif.Image.DateTime")
         { // load as xmp:ModifyDate
