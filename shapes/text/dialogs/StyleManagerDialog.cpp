@@ -32,12 +32,12 @@ StyleManagerDialog::~StyleManagerDialog() {
 
 void StyleManagerDialog::accept() {
     m_styleManagerWidget->save();
-    QDialog::accept();
+    KDialog::accept();
     deleteLater();
 }
 
 void StyleManagerDialog::reject() {
-    QDialog::reject();
+    KDialog::reject();
     deleteLater();
 }
 

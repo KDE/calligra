@@ -927,8 +927,8 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
         if(number.length() == 1)
             line2 += "  ";
         else if(number.length() == 2)
-            line2 += " ";
-        line2 += " "+ number;
+            line2 += ' ';
+        line2 += ' '+ number;
     }
     kDebug() << line1 << endl;
     kDebug() << line2 << endl;
@@ -1079,8 +1079,8 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
             if(number.length() == 1)
                 line2 += "  ";
             else if(number.length() == 2)
-                line2 += " ";
-            line2 += " "+ number;
+                line2 += ' ';
+            line2 += ' '+ number;
         }
         kDebug() << line1 << endl;
         kDebug() << line2 << endl;

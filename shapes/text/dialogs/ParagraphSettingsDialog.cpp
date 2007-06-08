@@ -63,12 +63,12 @@ void ParagraphSettingsDialog::accept() {
         emit stopMacro();
     }
 
-    QDialog::accept();
+    KDialog::accept();
     deleteLater();
 }
 
 void ParagraphSettingsDialog::reject() {
-    QDialog::reject();
+    KDialog::reject();
     deleteLater();
 }
 
@@ -90,7 +90,7 @@ void ParagraphSettingsDialog::setUnit(const KoUnit &unit) {
 }
 
 void ParagraphSettingsDialog::showEvent (QShowEvent *e) {
-    QDialog::showEvent(e);
+    KDialog::showEvent(e);
     if(m_visited) return;
     m_visited = true;
     QTimer::singleShot(0, this, SLOT(visit()));
