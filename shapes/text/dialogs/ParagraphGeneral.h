@@ -25,7 +25,6 @@
 #include <QWidget>
 #include <QList>
 
-class KoStyleManager;
 class KoParagraphStyle;
 class KoUnit;
 class ParagraphBulletsNumbers;

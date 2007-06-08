@@ -25,7 +25,6 @@
 #include <QWidget>
 
 class KoCharacterStyle;
-class KoUnit;
 class CharacterStyleOptions;
 class CharacterDecorations;
 class CharacterHighlighting;

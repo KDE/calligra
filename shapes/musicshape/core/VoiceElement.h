@@ -21,7 +21,6 @@
 
 namespace MusicCore {
 
-class VoiceBar;
 class Staff;
 
 /**

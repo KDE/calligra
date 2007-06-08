@@ -23,7 +23,6 @@
 #include <QString>
 
 class KoEnhancedPathShape;
-class KoEnhancedPathFormula;
 
 /// the different possible identifiers, taken from the odf spec
 enum Identifier {

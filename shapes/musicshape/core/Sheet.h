@@ -25,7 +25,6 @@ namespace MusicCore {
 
 class Part;
 class PartGroup;
-class Staff;
 class Bar;
 
 /**

@@ -22,7 +22,6 @@
 
 #include <KoShapeFactory.h>
 
-class QStringList;
 class KoShape;
 
 class PictureShapeFactory : public KoShapeFactory
