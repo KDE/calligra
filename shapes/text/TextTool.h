@@ -31,6 +31,7 @@
 
 class KoStyleManager;
 class KoTextEditingPlugin;
+class KoBookmarkManager;
 class UndoTextCommand;
 class ChangeTracker;
 class QUndoCommand;
@@ -116,6 +117,10 @@ private slots:
     void textDefaultFormat();
     /// see KoTextSelectionHandler::insertIndexMarker
     void insertIndexMarker();
+    /// insert a bookmark on current text cursor location or selection
+    void addBookmark();
+    /// go to previously bookmarked text cursor location or selection
+    void selectBookmark();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
     /// When enabled, make the change tracker record changes made while typing
@@ -157,6 +162,7 @@ private:
     QTextCursor m_caret;
     ChangeTracker *m_changeTracker;
     KoTextSelectionHandler m_selectionHandler;
+    KoBookmarkManager *m_bookmarkManager;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
     bool m_trackChanges;

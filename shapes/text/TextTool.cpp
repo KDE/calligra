@@ -23,6 +23,8 @@
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "dialogs/StyleManagerDialog.h"
+#include "dialogs/CreateNewBookmarkDialog.h"
+#include "dialogs/SelectBookmarkDialog.h"
 #include "commands/TextCommandBase.h"
 #include "commands/ChangeListCommand.h"
 
@@ -36,6 +38,8 @@
 #include <KoTextEditingPlugin.h>
 #include <KoTextEditingRegistry.h>
 #include <KoTextEditingFactory.h>
+#include <KoBookmark.h>
+#include <KoBookmarkManager.h>
 #include <KoListStyle.h>
 #include <KoXmlWriter.h>
 
@@ -175,6 +179,14 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     action->setShortcut( Qt::SHIFT+Qt::Key_Return);
     connect(action, SIGNAL(triggered()), this, SLOT( lineBreak() ));
 
+    action = new QAction(i18n("Bookmark..."), this);
+    addAction("add_bookmark", action);
+    connect(action, SIGNAL(triggered()), this, SLOT( addBookmark() ));
+
+    action = new QAction(i18n("Select Bookmark..."), this);
+    addAction("select_bookmark", action);
+    connect(action, SIGNAL(triggered()), this, SLOT( selectBookmark() ));
+
     action  = new QAction(i18n("Font..."), this);
     addAction("format_font", action );
     action->setShortcut( Qt::ALT + Qt::CTRL + Qt::Key_F);
@@ -217,6 +229,8 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
 
     connect(&m_selectionHandler, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));
     connect(&m_selectionHandler, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+
+    m_bookmarkManager = new KoBookmarkManager();
 }
 
 TextTool::~TextTool() {
@@ -912,6 +926,48 @@ void TextTool::textDefaultFormat() {
 void TextTool::insertIndexMarker() {
     // TODO handle result when we figure out how to report errors from a tool.
     m_selectionHandler.insertIndexMarker();
+}
+
+void TextTool::addBookmark() {
+    QString name;
+    CreateNewBookmarkDialog *dia = new CreateNewBookmarkDialog(m_bookmarkManager->bookmarkNameList(), m_canvas->canvasWidget());
+    if (dia->exec() == QDialog::Accepted)
+        name = dia->newBookmarkName();
+    else
+        return;
+    delete dia;
+
+    KoBookmark *bookmark = m_selectionHandler.addBookmark(m_textShape);
+    m_bookmarkManager->insert(name, bookmark);
+}
+
+void TextTool::selectBookmark() {
+    QString name;
+    SelectBookmarkDialog *dia = new SelectBookmarkDialog(m_bookmarkManager->bookmarkNameList(), m_canvas->canvasWidget());
+    if (dia->exec() == QDialog::Accepted)
+        name = dia->selectedBookmarkName();
+    else
+        return;
+    delete dia;
+
+    if (m_caret.hasSelection())
+        repaintSelection(m_caret.position(), m_caret.anchor()); // erase selection
+    else
+        repaintCaret();
+
+    KoBookmark *bookmark = m_bookmarkManager->retrieveBookmark(name);
+    KoShape *shape = bookmark->shape();
+    if (!(shape == m_textShape)) {
+        m_textShape = static_cast<TextShape *>(shape);
+        setShapeData(m_textShape->textShapeData());
+        updateSelectionHandler();
+    }
+
+    if (m_selectionHandler.selectBookmark(bookmark))
+        repaintSelection(m_caret.selectionStart(), m_caret.selectionEnd());
+    else
+        repaintCaret();
+    // TODO: set canvas focus and go to correct page (KWORD)
 }
 
 void TextTool::formatParagraph() {

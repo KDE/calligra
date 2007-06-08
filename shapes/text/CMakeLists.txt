@@ -34,6 +34,8 @@ SET ( textshape_SRCS
     dialogs/CharacterHighlighting.cpp
     dialogs/CharacterDecorations.cpp
     dialogs/CharacterStyleOptions.cpp
+    dialogs/CreateNewBookmarkDialog.cpp
+    dialogs/SelectBookmarkDialog.cpp
 
     commands/ChangeListCommand.cpp
     commands/TextCommandBase.cpp
@@ -52,6 +54,8 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/CharacterDecorations.ui
     dialogs/CharacterHighlighting.ui
     dialogs/CharacterStyleOptions.ui
+    dialogs/CreateNewBookmark.ui
+    dialogs/SelectBookmark.ui
 )
 
 kde4_automoc(${textshape_SRCS})
