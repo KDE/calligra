@@ -25,13 +25,11 @@
 
 #include "kpttask.h"
 
-class K3Command;
 
 namespace KPlato
 {
 
 class Completion;
-class Duration;
 class Resource;
 
 class UsedEffortItemModel : public QAbstractItemModel

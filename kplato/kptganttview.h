@@ -26,14 +26,9 @@
 
 #include <q3ptrlist.h>
 
-class QLayout;
 class QPoint;
-class QLineEdit;
-class QSpinBox;
 class QSplitter;
 
-class KAction;
-class KPrinter;
 
 namespace KPlato
 {
@@ -46,7 +41,6 @@ class Task;
 class Part;
 class Project;
 class Relation;
-class MainSchedule;
 
 class GanttView : public ViewBase
 {

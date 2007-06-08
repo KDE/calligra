@@ -31,9 +31,7 @@
 #include "kpteffortcostmap.h"
 #include "kptdoublelistviewbase.h"
 
-class QComboBox;
 class QPushButton;
-class QSplitter;
 class QTreeWidgetItem;
 class QLabel;
 class QPushButton;
@@ -49,11 +47,8 @@ class Account;
 class View;
 class Project;
 class Resource;
-class Node;
 
-class ResourceGroup;
 class Resource;
-class ResourceItemPrivate;
 
 class AccountsView : public ViewBase
 {

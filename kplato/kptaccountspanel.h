@@ -30,12 +30,10 @@ class QTreeWidgetItem;
 class QWidget;
 
 class K3Command;
-class K3MacroCommand;
 
 namespace KPlato
 {
 
-class AccountItem;
 class Account;
 class Accounts;
 class Part;

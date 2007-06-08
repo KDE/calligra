@@ -42,7 +42,6 @@ class DocumentChild;
 class View;
 class Project;
 class MainProjectDialog;
-class ResourceGroup;
 class Context;
 class GanttView;
 

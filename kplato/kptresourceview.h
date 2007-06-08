@@ -29,7 +29,6 @@ class QPoint;
 class QTreeWidgetItem;
 class QSplitter;
 
-class KToggleAction;
 class KPrinter;
 
 namespace KPlato
@@ -40,7 +39,6 @@ class View;
 class Part;
 class Project;
 class Resource;
-class Node;
 
 class ResourceAppointmentsView;
 class ResourceGroup;

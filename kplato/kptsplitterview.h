@@ -34,11 +34,7 @@ namespace KPlato
 class View;
 class Part;
 class Project;
-class Node;
 class Resource;
-class ResourceGroup;
-class Relation;
-class Calendar;
 class Context;
 
 /**

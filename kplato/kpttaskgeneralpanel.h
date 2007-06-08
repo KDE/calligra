@@ -31,7 +31,6 @@ namespace KPlato
 {
 
 class TaskGeneralPanel;
-class RequestResourcesPanel;
 class Part;
 class Task;
 class StandardWorktime;

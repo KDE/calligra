@@ -23,20 +23,9 @@
 
 #include <kpagedialog.h>
 
-class Duration;
 
-class KLineEdit;
 class K3Command;
-class KTextEdit;
-class KComboBox;
-class KDoubleNumInput;
 
-class Q3DateTimeEdit;
-class QSpinBox;
-class Q3ButtonGroup;
-class Q3ListBox;
-class Q3Table;
-class QDateTime;
 
 //TODO ui files are not in the KPlato namespace!!
 

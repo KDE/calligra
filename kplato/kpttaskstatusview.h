@@ -23,7 +23,6 @@
 #include "kptitemmodelbase.h"
 #include "kptviewbase.h"
 
-class QTreeWidgetItem;
 
 class KAction;
 

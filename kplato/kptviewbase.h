@@ -23,8 +23,6 @@
 #include <KoView.h>
 #include <QMap>
 
-class KParts::GUIActivateEvent;
-class KXMLGUIFactory;
 
 class QWidget;
 

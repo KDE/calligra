@@ -23,13 +23,10 @@
 #include "kptconfigbehaviorpanelbase.h"
 #include "kptconfig.h"
 
-class K3MacroCommand;
 
 namespace KPlato
 {
 
-class ConfigBehaviourPanelBase;
-class Part;
 
 class ConfigBehaviorPanel : public ConfigBehaviorPanelBase {
     Q_OBJECT

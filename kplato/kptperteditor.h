@@ -62,12 +62,8 @@
 #include <kactioncollection.h>
 
 #include <kdebug.h>
-class QPoint;
 class QTreeWidgetItem;
-class QSplitter;
 
-class KToggleAction;
-class KPrinter;
 
 namespace KPlato
 {

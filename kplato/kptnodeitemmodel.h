@@ -24,7 +24,6 @@
 
 #include <QItemDelegate>
 
-class QListWidget;
 class QMimeData;
 class QModelIndex;
 

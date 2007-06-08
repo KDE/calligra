@@ -38,10 +38,7 @@
 
 #include "KoView.h"
 
-class QListWidget;
-class QMimeData;
 class QModelIndex;
-class QTreeWidgetItem;
 
 class KAction;
 

@@ -26,7 +26,6 @@
 #include <kdialog.h>
 
 class Q3ButtonGroup;
-class QAbstractButton;
 class K3Command;
 
 namespace KPlato
@@ -35,10 +34,8 @@ namespace KPlato
 class RelationPanel;
 class DurationWidget;
 
-class Node;
 class Relation;
 class Part;
-class ModifyRelationTypeCmd;
 
 class RelationPanel : public QWidget, public Ui_RelationPanel
 {

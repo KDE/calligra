@@ -27,11 +27,8 @@
 #include <QHash>
 
 class QTreeWidget;
-class QTreeWidgetItem;
 class QWidget;
 
-class K3Command;
-class K3MacroCommand;
 
 
 namespace KPlato

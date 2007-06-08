@@ -43,7 +43,6 @@ class KTimeZone;
 namespace KPlato
 {
 
-class Part;
 class Schedule;
 class StandardWorktime;
 class ScheduleManager;

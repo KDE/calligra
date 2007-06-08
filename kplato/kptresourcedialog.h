@@ -30,7 +30,6 @@
 
 class K3Command;
 
-class QTime;
 class QString;
 
 namespace KPlato

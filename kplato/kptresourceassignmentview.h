@@ -79,26 +79,20 @@
 
 
 
-class QLayout;
-class Q3ListViewItem;
 class QPoint;
-class Q3ListView;
 class QLineEdit;
 class QSpinBox;
 class QSplitter;
 
 class QTreeWidgetItem;
 
-class KAction;
-class KPrinter;
 
  
 namespace KPlato
 {
     class ResourcesList;
     
-    class ResourceItemPrivate;
-
+    
     class ResourcesList : public QTreeWidget
     {
         Q_OBJECT

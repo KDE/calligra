@@ -31,22 +31,15 @@
 #include <kdebug.h>
 
 class QDomElement;
-class QTime;
 
 namespace KPlato
 {
 
-class Risk;
 class Effort;
 class Appointment;
-class Task;
 class Node;
-class Project;
 class Resource;
 class ResourceRequest;
-class ResourceGroupRequest;
-class Calendar;
-class ResourceRequestCollection;
 class EffortCostMap;
 class Schedule;
 class XMLLoaderObject;

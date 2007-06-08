@@ -36,7 +36,6 @@
 #include <KoXmlReader.h>
 
 class QDomElement;
-class QDateTime;
 class QTime;
 class QDate;
 class QString;

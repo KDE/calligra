@@ -29,11 +29,7 @@
 
 
 class QPoint;
-class QTreeWidgetItem;
-class QSplitter;
 
-class KToggleAction;
-class KPrinter;
 
 namespace KPlato
 {

@@ -36,7 +36,6 @@
 
 class QTime;
 
-class KTimeZone;
 
 /// The main namespace.
 namespace KPlato
@@ -53,7 +52,6 @@ class ResourceRequest;
 class ResourceGroupRequest;
 class Calendar;
 class ResourceRequestCollection;
-class EffortCostMap;
 class Schedule;
 class Schedule;
 class ResourceSchedule;

@@ -31,13 +31,11 @@
 class QTableWidgetItem;
 
 class K3Command;
-class K3MacroCommand;
 
 namespace KPlato
 {
 
 class Account;
-class Accounts;
 class Task;
 class ResourceGroup;
 class Resource;
@@ -45,7 +43,6 @@ class ResourceGroupRequest;
 class ResourceRequest;
 class StandardWorktime;
 class Part;
-class Duration;
 
 class ResourceTableItem {
 public:

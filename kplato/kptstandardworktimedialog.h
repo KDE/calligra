@@ -36,7 +36,6 @@ namespace KPlato
 
 class Project;
 class Part;
-class IntervalEditImpl;
 
 class StandardWorktimeDialogImpl : public QWidget, public Ui::StandardWorktimeDialogBase {
     Q_OBJECT

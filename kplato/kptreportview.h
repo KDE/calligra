@@ -30,13 +30,11 @@
 
 #include <k3listview.h>
 
-class KAction;
 class KPrinter;
 
 namespace Kugar
 {
-  class MReportViewer;
-} // Kugar namespace
+  } // Kugar namespace
 
 //class QString;
 class QStringList;

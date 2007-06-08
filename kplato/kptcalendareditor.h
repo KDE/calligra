@@ -30,14 +30,8 @@
 #include "kptcontext.h"
 
 class QPoint;
-class QTreeWidgetItem;
-class QSplitter;
-class QDropEvent;
 class QDragMoveEvent;
-class QDragEnterEvent;
 
-class KToggleAction;
-class KPrinter;
 
 namespace KPlato
 {

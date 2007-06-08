@@ -38,7 +38,6 @@ class QComboBox;
 class Q3ButtonGroup;
 class QPushButton;
 class Q3ListView;
-class Q3ListViewItem;
 class Q3TimeEdit;
 
 namespace KPlato

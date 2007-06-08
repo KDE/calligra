@@ -26,28 +26,22 @@
 
 #include <QLabel>
 
-class QComboBox;
-class Q3DateEdit;
 class QPushButton;
-class QSplitter;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QLabel;
 class QPushButton;
 
 class K3ListView;
-class K3ListViewItem;
 class KPrinter;
 
 namespace KPlato
 {
 
 class View;
-class Project;
 class Resource;
 class Node;
 
-class ResourceGroup;
 class Resource;
 
 class ResourceAppointmentsView : public DoubleListViewBase

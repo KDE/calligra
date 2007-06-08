@@ -30,7 +30,6 @@ class QStringList;
 namespace KPlato
 {
 
-class Part;
 
 class WBSDefinition {
 

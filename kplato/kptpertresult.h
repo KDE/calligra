@@ -45,7 +45,6 @@
 
 #include <kdebug.h>
 
-class QTreeWidgetItem;
 
 namespace KPlato
 {

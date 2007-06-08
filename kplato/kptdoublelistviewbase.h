@@ -35,7 +35,6 @@ namespace KPlato
 {
 
 class View;
-class Project;
 
 class ListView : public QTreeWidget
 {

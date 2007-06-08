@@ -32,7 +32,6 @@ namespace KPlato
 
 class Project;
 class GroupItem;
-class ResourcesPanelResourceItem;
 class ResourcesPanelGroupLVItem;
 class Part;
 

@@ -24,11 +24,8 @@
 #include "kptdoublelistviewbase.h"
 #include "kpteffortcostmap.h"
 
-class QComboBox;
 class QPushButton;
-class QSplitter;
 class QTreeWidgetItem;
-class QLabel;
 class QPushButton;
 
 class KPrinter;
@@ -36,13 +33,10 @@ class KPrinter;
 namespace KPlato
 {
 
-class Project;
 class Resource;
 class Task;
 
-class ResourceGroup;
 class Resource;
-class ResourceItemPrivate;
 
 class TaskAppointmentsView : public DoubleListViewBase
 {

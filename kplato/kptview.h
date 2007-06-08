@@ -37,11 +37,8 @@ class QSplitter;
 
 class KPrinter;
 class KAction;
-class KActionMenu;
-class KSelectAction;
 class KToggleAction;
 class QLabel;
-class KSeparatorAction;
 
 class KoView;
 
@@ -59,7 +56,6 @@ class ResourceView;
 class AccountsEditor;
 class TaskEditor;
 class CalendarEditor;
-class ResourceEditor;
 class ScheduleEditor;
 class ScheduleManager;
 

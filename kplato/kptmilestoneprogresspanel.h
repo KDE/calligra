@@ -29,7 +29,6 @@ namespace KPlato
 {
 
 class Part;
-class StandardWorktime;
 
 class MilestoneProgressPanelImpl : public QWidget, public Ui_MilestoneProgressPanelBase {
     Q_OBJECT

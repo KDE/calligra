@@ -35,7 +35,6 @@ namespace KPlato
 
 class Node;
 class Project;
-class PertCanvas;
 
 /**
   * The relation class couples 2 nodes together which are dependent on each other.
