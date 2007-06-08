@@ -84,14 +84,11 @@ const KComponentData &Factory::global()
     {
       s_global = new KComponentData(aboutData());
 
-      s_global->dirs()->addResourceType( "kspread_template",
-                                          KStandardDirs::kde_default("data") + "kspread/templates/");
+      s_global->dirs()->addResourceType( "kspread_template", "data", "kspread/templates/");
+      s_global->dirs()->addResourceType( "toolbar", "data", "koffice/toolbar/");
+      s_global->dirs()->addResourceType( "functions", "data", "kspread/functions/");
+      s_global->dirs()->addResourceType( "sheet-styles", "data", "kspread/sheetstyles/");
 
-      s_global->dirs()->addResourceType( "toolbar",
-				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
-      s_global->dirs()->addResourceType( "functions", KStandardDirs::kde_default("data") + "kspread/functions/");
-      s_global->dirs()->addResourceType( "sheet-styles", KStandardDirs::kde_default("data") + "kspread/sheetstyles/");
-      
     }
     return *s_global;
 }
@@ -104,7 +101,7 @@ KIconLoader* Factory::iconLoader()
       s_iconLoader = new KIconLoader(global().componentName(), global().dirs());
       s_iconLoader->addAppDir("koffice");
   }
-  
+
   return s_iconLoader;
 }
 

@@ -81,11 +81,9 @@ const KComponentData &Factory::global()
         s_global = new KComponentData( aboutData() );
 
         // Add any application-specific resource directories here
-	s_global->dirs()->addResourceType("kplato_template",
-					  KStandardDirs::kde_default("data") + "kplato/templates/");
-	s_global->dirs()->addResourceType( "expression", KStandardDirs::kde_default("data") + "kplato/expression/");
-	s_global->dirs()->addResourceType("toolbar",
-					  KStandardDirs::kde_default("data") + "koffice/toolbar/");
+	s_global->dirs()->addResourceType("kplato_template", "data", "kplato/templates/");
+	s_global->dirs()->addResourceType( "expression", "data", "kplato/expression/");
+	s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
 
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");

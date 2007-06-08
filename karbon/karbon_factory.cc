@@ -110,18 +110,11 @@ const KComponentData &KarbonFactory::componentData()
 		s_instance = new KComponentData( aboutData() );
 		// Add any application-specific resource directories here
 
-		s_instance->dirs()->addResourceType( "kis_brushes",
-											  KStandardDirs::kde_default( "data" ) + "krita/brushes/" );
-
-		s_instance->dirs()->addResourceType( "kis_pattern",
-											  KStandardDirs::kde_default( "data" ) + "krita/patterns/" );
-
-		s_instance->dirs()->addResourceType( "karbon_gradient",
-											  KStandardDirs::kde_default( "data" ) + "karbon/gradients/" );
-
-		s_instance->dirs()->addResourceType( "karbon_clipart",
-											  KStandardDirs::kde_default( "data" ) + "karbon/cliparts/" );
-		s_instance->dirs()->addResourceType( "karbon_template", KStandardDirs::kde_default("data") + "karbon/templates/" );
+		s_instance->dirs()->addResourceType( "kis_brushes", "data", "krita/brushes/" );
+		s_instance->dirs()->addResourceType( "kis_pattern", "data","krita/patterns/" );
+		s_instance->dirs()->addResourceType( "karbon_gradient", "data","karbon/gradients/" );
+		s_instance->dirs()->addResourceType( "karbon_clipart", "data", "karbon/cliparts/" );
+		s_instance->dirs()->addResourceType( "karbon_template", "data", "karbon/templates/" );
 		// Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
 	}

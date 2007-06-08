@@ -71,7 +71,7 @@ const KComponentData &KWFactory::componentData()
       s_instance = new KComponentData( aboutData() );
 
       s_instance->dirs()->addResourceType( "kword_template",
-              KStandardDirs::kde_default("data") + "kword/templates/");
+                                           "data", "kword/templates/");
 
       KIconLoader::global()->addAppDir("koffice");
     }

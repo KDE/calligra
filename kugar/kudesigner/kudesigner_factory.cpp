@@ -88,7 +88,7 @@ const KComponentData &KudesignerFactory::global()
         s_global = new KComponentData( aboutData() );
         // Add any application-specific resource directories here
         s_global->dirs() ->addResourceType( "kudesigner_template",
-                                            KStandardDirs::kde_default( "data" ) + "kudesigner/templates/" );
+                                            "data", "kudesigner/templates/" );
 
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global() ->addAppDir( "koffice" );

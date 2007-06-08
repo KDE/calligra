@@ -2811,8 +2811,7 @@ void View::createTemplate()
                                            tempFile.fileName(), pix, this );
 
   Factory::global().dirs()->addResourceType("kspread_template",
-                                                       KStandardDirs::kde_default( "data" ) +
-                                                       "kspread/templates/");
+                                            "data", "kspread/templates/");
 }
 
 void View::sheetFormat()
