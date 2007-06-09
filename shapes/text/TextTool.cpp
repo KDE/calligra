@@ -967,7 +967,7 @@ void TextTool::selectBookmark() {
         repaintSelection(m_caret.selectionStart(), m_caret.selectionEnd());
     else
         repaintCaret();
-    // TODO: set canvas focus and go to correct page (KWORD)
+    ensureCursorVisible();
 }
 
 void TextTool::formatParagraph() {
