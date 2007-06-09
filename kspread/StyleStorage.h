@@ -52,22 +52,32 @@ public:
     virtual ~StyleStorage();
 
     /**
+     * Composes the style for \p point. All substyles intersecting \p point are considered.
      * \return the Style at the position \p point .
      */
     Style contains(const QPoint& point) const;
 
     /**
+     * Composes the style for \p rect. Only substyles which fill out \p rect completely are
+     * considered. In contrast to intersects(const QRect&).
+     * Especially useful on saving cell styles assigned to columns or rows.
      * \return the Style for the area \p rect .
+     * \see intersects
      */
     Style contains(const QRect& rect) const;
 
     /**
+     * Composes the style for \p rect. All substyles which intersect \p rect are considered.
+     * In contrast to contains(const QRect&).
      * \return the Style for the area \p rect .
+     * \see contains
      */
     Style intersects(const QRect& rect) const;
 
     /**
-     *
+     * Collects all substyle/range pairs, that intersect \p rect. With this data one can
+     * reconstruct the former state of the storage after modification.
+     * \return all substyle/range pairs intersecting \p rect
      */
     QList< QPair<QRectF,SharedSubStyle> > undoData(const Region& rect) const;
 

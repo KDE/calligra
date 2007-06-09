@@ -78,7 +78,8 @@ public:
     /**
      * Constructor.
      * Creates the null cell.
-     * \note Accessing the sheet(), column() or row() of this cell will fail.
+     * \note Accessing the sheet(), column() or row() methods or any related method, that makes use
+     * of the former, will fail.
      */
     Cell();
 
@@ -546,20 +547,6 @@ public:
      * @return @c false on error.
      */
     bool makeFormula();
-
-    /**
-     * Resets the used style to the default. Clears any conditional styles and
-     * any content validity checks.
-     */
-    void defaultStyle();
-
-    //
-    //END 
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //BEGIN 
-    //
 
     /**
      * return align X when align is undefined
