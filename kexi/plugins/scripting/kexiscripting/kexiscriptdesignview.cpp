@@ -86,7 +86,8 @@ KexiScriptDesignView::KexiScriptDesignView(
     addChildView(d->editor);
     setViewWidget(d->editor);
 
-    d->statusbrowser = new KTextBrowser(splitter, "ScriptStatusBrowser");
+    d->statusbrowser = new KTextBrowser(splitter);
+    d->statusbrowser->setObjectName("ScriptStatusBrowser");
     d->statusbrowser->setReadOnly(true);
     d->statusbrowser->setTextFormat(Q3TextBrowser::RichText);
     //d->browser->setWordWrap(QTextEdit::WidgetWidth);
