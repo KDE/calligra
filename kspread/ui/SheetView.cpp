@@ -39,7 +39,7 @@ class SheetView::Private
 {
 public:
     const Sheet* sheet;
-    KoViewConverter* viewConverter;
+    const KoViewConverter* viewConverter;
     QPaintDevice* paintDevice;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
@@ -72,13 +72,13 @@ const Sheet* SheetView::sheet() const
     return d->sheet;
 }
 
-void SheetView::setViewConverter( KoViewConverter* viewConverter )
+void SheetView::setViewConverter( const KoViewConverter* viewConverter )
 {
     Q_ASSERT( viewConverter );
     d->viewConverter = viewConverter;
 }
 
-KoViewConverter* SheetView::viewConverter() const
+const KoViewConverter* SheetView::viewConverter() const
 {
     Q_ASSERT( d->viewConverter );
     return d->viewConverter;

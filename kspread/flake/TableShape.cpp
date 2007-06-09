@@ -140,6 +140,8 @@ void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
 
     // painting cell contents
     d->sheetView->setPaintCellRange( QRect( 1, 1, d->columns, d->rows ) );
+    d->sheetView->setPaintDevice( painter.device() );
+    d->sheetView->setViewConverter( &converter );
     d->sheetView->paintCells( 0 /*paintDevice*/, painter, paintRect, QPointF( 0.0, 0.0 ) );
 }
 

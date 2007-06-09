@@ -70,12 +70,12 @@ public:
     /**
      * Sets the KoViewConverter used by this SheetView.
      */
-    void setViewConverter( KoViewConverter* viewConverter );
+    void setViewConverter( const KoViewConverter* viewConverter );
 
     /**
      * \return the view in which the Sheet is painted
      */
-    KoViewConverter* viewConverter() const;
+    const KoViewConverter* viewConverter() const;
 
     /**
      * Sets the paint device used by this SheetView.
