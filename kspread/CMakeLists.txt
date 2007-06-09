@@ -27,6 +27,7 @@ SET (chart_DIR_SRCS
 	chart/ChartConfigFactory.cpp
 	chart/ChartDatabaseSelector.cpp
 	chart/ChartDialog.cpp
+	chart/TableModel.cpp
 	)
 
 kde4_add_ui_files(chart_DIR_SRCS
