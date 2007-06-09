@@ -313,6 +313,8 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
     // suitable legends and axis labels.  Now start the real painting.
 
     // Make the chart use our model.
+    Q_ASSERT( m_chart->coordinatePlane() );
+    Q_ASSERT( m_chart->coordinatePlane()->diagram() );
     m_chart->coordinatePlane()->diagram()->setModel( m_currentData );
 
    // ## TODO: support zooming

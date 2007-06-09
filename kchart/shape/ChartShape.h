@@ -24,14 +24,21 @@
 
 #define ChartShapeId "ChartShape"
 
+namespace KDChart
+{
+    class Chart;
+}
+
 namespace KChart
 {
 
 class ChartShape : public KoShape
 {
 public:
-    explicit ChartShape( int columns = 2, int rows = 8 );
+    explicit ChartShape();
     virtual ~ChartShape();
+
+    KDChart::Chart* chart() const;
 
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );

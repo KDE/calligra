@@ -9,7 +9,7 @@ add_subdirectory( pics )
 add_subdirectory( templates )
 
 include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/include
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/src
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/examples/tools
 	${CMAKE_CURRENT_SOURCE_DIR}/dialogs

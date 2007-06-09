@@ -27,6 +27,7 @@
 #include <kchart_export.h>
 
 class KoShape;
+class KoShapeConfigWidgetBase;
 
 class KCHART_EXPORT ChartShapePlugin : public QObject
 {
@@ -46,6 +47,8 @@ public:
 
     KoShape* createDefaultShape() const;
     KoShape* createShape( const KoProperties* params ) const;
+
+    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 
 #endif // KCHART_CHART_SHAPE_FACTORY

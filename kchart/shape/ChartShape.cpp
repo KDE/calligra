@@ -21,7 +21,7 @@
 #include "ChartShape.h"
 
 // KChart
-#include "kdchart/src/KDChartChart.h"
+#include "KDChartChart.h"
 
 // KOffice
 #include <KoViewConverter.h>
@@ -41,7 +41,7 @@ public:
 };
 
 
-ChartShape::ChartShape( int columns, int rows )
+ChartShape::ChartShape()
     : d( new Private )
 {
     d->chart = new KDChart::Chart();
@@ -51,6 +51,11 @@ ChartShape::~ChartShape()
 {
     delete d->chart;
     delete d;
+}
+
+KDChart::Chart* ChartShape::chart() const
+{
+    return d->chart;
 }
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )

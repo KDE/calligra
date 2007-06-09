@@ -30,6 +30,7 @@
 #include <KoShapeRegistry.h>
 
 #include "ChartShape.h"
+#include "ChartTypeConfigWidget.h"
 
 using namespace KChart;
 
@@ -46,19 +47,6 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
 {
     setToolTip( i18n( "A shape that shows a chart" ) );
     setIcon( "kchart" );
-
-#if 0
-    KoShapeTemplate t;
-    t.name = "Simple table";
-    t.toolTip = "Table shape containing some cells";
-    KoProperties *props = new KoProperties();
-    t.properties = props;
-    props->setProperty( "columns", 2 );
-    props->setProperty( "rows", 2 );
-    addTemplate( t );
-
-
-#endif
 }
 
 KoShape* ChartShapeFactory::createDefaultShape() const
@@ -69,8 +57,19 @@ KoShape* ChartShapeFactory::createDefaultShape() const
 
 KoShape* ChartShapeFactory::createShape( const KoProperties* params ) const
 {
+    Q_UNUSED( params );
     ChartShape* shape = new ChartShape();
     return shape;
+}
+
+QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
+{
+    QList<KoShapeConfigWidgetBase*> answer;
+    answer.append(new ChartTypeConfigWidget());
+    // TODO Stefan: SubType
+    // TODO Stefan: Labels/Legend
+    // TODO Stefan: Axes
+    return answer;
 }
 
 #include "ChartShapeFactory.moc"

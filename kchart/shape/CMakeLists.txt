@@ -1,10 +1,13 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kchart ${KOGUIUTILS_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/kchart
+                     ${CMAKE_SOURCE_DIR}/kchart/kdchart/src
+                     ${KOGUIUTILS_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
 SET (chartshape_LIB_SRCS
 	ChartShape.cpp
 	ChartShapeFactory.cpp
+	ChartTypeConfigWidget.cpp
 	)
 
 kde4_automoc(${chartshape_LIB_SRCS})
