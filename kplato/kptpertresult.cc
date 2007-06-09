@@ -31,7 +31,7 @@ void PertResult::draw( Project &project)
 
 void PertResult::draw()
 {
-    kDebug() << "UPDATE PE" << endl;
+    //kDebug() << "UPDATE PE" << endl;
     widget.treeWidgetTaskResult->clear();
     if ( current_schedule == 0 || current_schedule->id() == -1 ) {
         return;
@@ -73,28 +73,6 @@ DateTime PertResult::getStartEarlyDate(Node * currentNode)
     Task * t;
     t=static_cast<Task *>(currentNode);
     //if the task has no parent so the early date start is 0
-    /*if(currentNode->dependParentNodes().size()==0)
-    {
-        t=static_cast<Task *>(currentNode);
-        duration=t->startTime(current_schedule->id());
-        duration.setDateOnly(true);
-        return duration;
-    }
-    else
-    {
-    //if the task have parents so we add duration of all parent task
-    	for (QList<Relation*>::iterator it=currentNode->dependParentNodes().begin();it!=currentNode->dependParentNodes().end();it++)
-    	{
-            t=static_cast<Task *>((*it)->parent ());
-            if(it==currentNode->dependParentNodes().begin())
-	    {
-	        duration=t->startTime(current_schedule->id());
-	    }
-	duration+=(t->endTime(current_schedule->id())-t->startTime(current_schedule->id()));
-    	}
-    duration.setDateOnly(true);
-    return duration;
-    }*/
     duration=t->earlyStart(current_schedule->id());
     duration.setDateOnly(true);
     return duration;
@@ -106,9 +84,6 @@ DateTime PertResult::getFinishEarlyDate(Node * currentNode)
     Task * t;
     t=static_cast<Task *>(currentNode);
     DateTime duration;
-    
-    /*duration=getStartEarlyDate(currentNode);
-    duration+=(t->endTime(current_schedule->id())-t->startTime(current_schedule->id()));*/
 
     duration=t->earlyFinish(current_schedule->id());
     duration.setDateOnly(true);
@@ -120,8 +95,6 @@ DateTime PertResult::getStartLateDate(Node * currentNode)
     Task * t;
     DateTime duration;
     t=static_cast<Task *>(currentNode);
-    /*duration=getFinishLateDate(currentNode);
-    duration-=(t->endTime(current_schedule->id())-t->startTime(current_schedule->id()));*/
     duration=t->lateStart(current_schedule->id());
     duration.setDateOnly(true);
     return (duration);
@@ -134,45 +107,6 @@ DateTime PertResult::getFinishLateDate(Node * currentNode)
     DateTime duration;
     Task * t;
     t=static_cast<Task *>(currentNode);
-    /*QList<DateTime> l;
-    if(currentNode->dependChildNodes().size()==0)
-    {
-        t=static_cast<Task *>(currentNode);
-        if(complexGraph!=true)
-        {
-            duration=getFinishEarlyDate(currentNode);
-        }
-        else
-	{
-	    duration=getStartEarlyDate(currentNode);
-	}
-	duration.setDateOnly(true);
-        return duration;
-    }
-    else
-    {
-    	for (QList<Relation*>::iterator it=currentNode->dependChildNodes().begin();it!=currentNode->dependChildNodes().end();it++)
-    	{
-            t=static_cast<Task *>((*it)->child ());
-	    duration=getFinishLateDate((*it)->child ());
-            duration-=((*it)->child ()->endTime(current_schedule->id())-(*it)->child ()->startTime());
-	    l.push_back(duration);
-    	}
-    
-    	for (QList<DateTime>::iterator it=l.begin();it!=l.end();it++)
-    	{
-	    if(it==l.begin())
-	    {
-	    	duration=(*it);
-	    }
-	    if((*it)<duration)
-	    {
-		duration=(*it);
-	    }
-	}
-    duration.setDateOnly(true);
-    return duration;
-    }*/
     duration=t->lateFinish(current_schedule->id());
     duration.setDateOnly(true);
     return duration;

@@ -170,7 +170,7 @@ namespace KPlato
                 totalYPercent=(BCWS.last()).y();
             }
         }
-    kDebug()<<"TOTALyPERCENT : "<<totalYPercent<<endl;
+    kDebug()<<"TOTAL PERCENT : "<<totalYPercent<<endl;
     return(totalYPercent);
     }
 
