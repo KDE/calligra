@@ -14,23 +14,22 @@
 #include <kvbox.h>
 
 #include "ChartShape.h"
-#include "KDChartWidget.h"
 
 namespace KChart
 {
 
-KChartButton::KChartButton(QWidget *parent, const QString & _text, const QPixmap &_pixmap)
-: KVBox(parent)
+KChartButton::KChartButton(QWidget *parent, const QString & _text, const KIcon &_icon)
+    : KVBox(parent)
 {
-// The button
-m_button = new QPushButton(this);
-m_button->setIcon( QIcon( _pixmap ) );
-m_button->setCheckable( true );
+    // The button
+    m_button = new QPushButton(this);
+    m_button->setIcon( _icon );
+    m_button->setCheckable( true );
 
-// The text
-QLabel *label = new QLabel(_text, this);
-label->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    // The text
+    QLabel *label = new QLabel(_text, this);
+    label->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
 }
 
 KChartButton::~KChartButton()
@@ -43,7 +42,7 @@ KChartButton::~KChartButton()
 class ChartTypeConfigWidget::Private
 {
 public:
-    enum ChartType { NoType, Bar, Line, Pie, Ring, Polar };
+    enum ChartType { Bar, Line, Area, HiLo, BoxWhisker, Pie, Ring, Polar };
 
     ChartShape* shape;
     ChartType type;
@@ -69,17 +68,19 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
     d->layout->setRowStretch( 1, 0 );
     d->layout->setRowStretch( 2, 0 );
 
-    addButton( i18n( "Bar" ),            "chart_bar",    KDChart::Widget::Bar );
-    addButton( i18n( "Lines" ),          "chart_line",   KDChart::Widget::Line );
-//     addButton( i18n( "Area" ),           "chart_area",   KDChart::Widget::Area );
-// 
-//     addButton( i18n("HiLo"),             "chart_hilo",   KDChart::Widget::HiLo );
-//     addButton( i18n("Box & Whisker "),   "chart_boxwhisker", KDChart::Widget::BoxWhisker );
+    setObjectName( i18n( "Chart Type" ) );
+
+    addButton( i18n( "Bar" ),            "chart_bar",    Private::Bar );
+    addButton( i18n( "Lines" ),          "chart_line",   Private::Line );
+    addButton( i18n( "Area" ),           "chart_area",   Private::Area );
+
+    addButton( i18n("HiLo"),             "chart_hilo",   Private::HiLo );
+    addButton( i18n("Box & Whisker "),   "chart_boxwhisker", Private::BoxWhisker );
     incPos();
 
-    addButton( i18n( "Pie" ),            "chart_pie",    KDChart::Widget::Pie );
-    addButton( i18n( "Ring" ),           "chart_ring",   KDChart::Widget::Ring );
-    addButton( i18n( "Polar" ),          "chart_polar",  KDChart::Widget::Polar);
+    addButton( i18n( "Pie" ),            "chart_pie",    Private::Pie );
+    addButton( i18n( "Ring" ),           "chart_ring",   Private::Ring );
+    addButton( i18n( "Polar" ),          "chart_polar",  Private::Polar);
 
     // Make the button for the current type selected.
 //     QPushButton *current = ((QPushButton*)d->typeBG->button( d->shape->params()->chartType() ));
@@ -115,10 +116,7 @@ void ChartTypeConfigWidget::addButton(const QString &name,
                                                 const QString &icon_name,
                                                 int type)
 {
-    KChartButton *button = new KChartButton( this, name,
-                                            BarIcon( icon_name,
-                                                    K3Icon::SizeMedium,
-                                                    K3Icon::DefaultState ) );
+    KChartButton *button = new KChartButton( this, name, KIcon( icon_name ) );
     d->layout->addWidget(button, d->rowPos, d->colPos);
     d->typeBG->addButton( button->button(), type );
 
