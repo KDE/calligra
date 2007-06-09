@@ -23,6 +23,16 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
 
 
 ########### next target ###############
+SET (chart_DIR_SRCS
+	chart/ChartConfigFactory.cpp
+	chart/ChartDatabaseSelector.cpp
+	chart/ChartDialog.cpp
+	)
+
+kde4_add_ui_files(chart_DIR_SRCS
+	chart/ChartDatabaseSelector.ui
+	)
+
 SET (commands_DIR_SRCS
 	commands/AbstractRegionCommand.cpp
 	commands/AutoFillCommand.cpp
@@ -168,6 +178,7 @@ SET (kspreadcommon_LIB_SRCS
 	ValueFormatter.cpp
 	ValueParser.cpp
 	tests/inspector.cc
+	${chart_DIR_SRCS}
 	${commands_DIR_SRCS}
 	${dialogs_DIR_SRCS}
 	${functions_DIR_SRCS}

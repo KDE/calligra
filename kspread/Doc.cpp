@@ -59,7 +59,10 @@
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
 #include <KoOasisStyles.h>
+#include <KoShapeConfigFactory.h>
+#include <KoShapeFactory.h>
 #include <KoShapeManager.h>
+#include <KoShapeRegistry.h>
 #include <KoStoreDevice.h>
 #include <KoVariable.h>
 #include <KoXmlNS.h>
@@ -92,6 +95,10 @@
 
 // commands
 #include "commands/UndoWrapperCommand.h"
+
+// chart shape
+#include "kchart/shape/ChartShape.h"
+#include "chart/ChartDialog.h"
 
 using namespace std;
 using namespace KSpread;
@@ -262,6 +269,14 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->refYear = 1930;
   d->refDate = QDate( 1899, 12, 30 );
   d->precision = 8;
+
+    // Init chart shape factory with KSpread's specific configuration panels.
+    QList<KoShapeConfigFactory*> panels = ChartDialog::panels();
+    foreach (QString id, KoShapeRegistry::instance()->keys())
+    {
+        if ( id == ChartShapeId )
+            KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
+    }
 
     connect( this, SIGNAL( damagesFlushed( const QList<Damage*>& ) ),
              this, SLOT( handleDamages( const QList<Damage*>& ) ) );
