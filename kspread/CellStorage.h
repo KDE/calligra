@@ -29,6 +29,7 @@
 #include "Formula.h"
 #include "Global.h"
 #include "PointStorage.h"
+#include "chart/TableModel.h"
 #include "Validity.h"
 #include "Value.h"
 
@@ -48,6 +49,8 @@ class Sheet;
 class StyleStorage;
 class ValidityStorage;
 class ValueStorage;
+
+typedef TableModel Binding;
 
 /**
  * The cell storage.
@@ -85,6 +88,12 @@ public:
      * Removes all data at \p col , \p row .
      */
     void take( int col, int row );
+
+    /**
+     * \return the binding associated with the Cell at \p column , \p row .
+     */
+    Binding binding( int column, int row ) const;
+    void setBinding( const Region& region, const Binding& binding );
 
     /**
      * \return the comment associated with the Cell at \p column , \p row .

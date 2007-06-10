@@ -30,6 +30,7 @@
 #include "Region.h"
 #include "RTree.h"
 #include "Sheet.h"
+#include "chart/TableModel.h"
 #include "Validity.h"
 
 #include "database/DatabaseRange.h"
@@ -43,8 +44,9 @@ inline uint qHash( const QPoint& point )
 
 namespace KSpread
 {
-
 class Sheet;
+
+typedef TableModel Binding;
 
 /**
  * A custom rectangular storage.
@@ -411,6 +413,19 @@ void RectStorage<T>::invalidateCache( const QRect& invRect )
         }
     }
 }
+
+
+
+class BindingStorage : public QObject, public RectStorage<Binding>
+{
+    Q_OBJECT
+public:
+    explicit BindingStorage( Sheet* sheet ) : RectStorage<Binding>( sheet ) {}
+
+protected Q_SLOTS:
+    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
+    virtual void garbageCollection() { RectStorage<Binding>::garbageCollection(); }
+};
 
 
 

@@ -38,8 +38,18 @@ TableModel::TableModel( QObject* parent )
 {
 }
 
+TableModel::TableModel( const TableModel& other )
+    : d( other.d )
+{
+}
+
 TableModel::~TableModel()
 {
+}
+
+bool TableModel::isEmpty() const
+{
+    return d->region.isEmpty();
 }
 
 QVariant TableModel::headerData( int section, Qt::Orientation orientation, int role ) const
@@ -114,6 +124,21 @@ void TableModel::setRegion( const Region& region )
 {
     Q_ASSERT( region.isContiguous() );
     d->region = region;
+}
+
+void TableModel::operator=( const TableModel& other )
+{
+    d = other.d;
+}
+
+bool TableModel::operator==( const TableModel& other ) const
+{
+    return d == other.d;
+}
+
+bool TableModel::operator<( const TableModel& other ) const
+{
+    return d < other.d;
 }
 
 #include "TableModel.moc"

@@ -38,7 +38,10 @@ class TableModel : public QAbstractTableModel
 
 public:
     TableModel( QObject* parent = 0 );
+    TableModel( const TableModel& other );
     ~TableModel();
+
+    bool isEmpty() const;
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
@@ -46,6 +49,10 @@ public:
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
 
     void setRegion( const Region& region );
+
+    void operator=( const TableModel& other );
+    bool operator==( const TableModel& other ) const;
+    bool operator<( const TableModel& other ) const;
 
 private:
     class Private;

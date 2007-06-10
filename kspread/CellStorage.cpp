@@ -62,6 +62,7 @@ public:
         return true;
     }
 
+    QList< QPair<QRectF,Binding> >          bindings;
     QList< QPair<QRectF,QString> >          comments;
     QList< QPair<QRectF,Conditions> >       conditions;
     QList< QPair<QRectF,DatabaseRange> >    databases;
@@ -80,6 +81,7 @@ class CellStorage::Private
 public:
     Private( Sheet* sheet )
         : sheet( sheet )
+        , bindingStorage( new BindingStorage( sheet ) )
         , commentStorage( new CommentStorage( sheet ) )
         , conditionsStorage( new ConditionsStorage( sheet ) )
         , databaseRangeStorage( new DatabaseRangeStorage( sheet ) )
@@ -95,6 +97,7 @@ public:
 
     ~Private()
     {
+        delete bindingStorage;
         delete commentStorage;
         delete conditionsStorage;
         delete databaseRangeStorage;
@@ -109,6 +112,7 @@ public:
     }
 
     Sheet*                  sheet;
+    BindingStorage*         bindingStorage;
     CommentStorage*         commentStorage;
     ConditionsStorage*      conditionsStorage;
     DatabaseRangeStorage*   databaseRangeStorage;
@@ -160,6 +164,20 @@ void CellStorage::take( int col, int row )
         d->undoData->userInputs << qMakePair( QPoint( col, row ), oldUserInput );
         d->undoData->values     << qMakePair( QPoint( col, row ), oldValue );
     }
+}
+
+Binding CellStorage::binding( int column, int row ) const
+{
+    return d->bindingStorage->contains( QPoint( column, row ) );
+}
+
+void CellStorage::setBinding( const Region& region, const Binding& binding )
+{
+    // recording undo?
+    if ( d->undoData )
+        d->undoData->bindings << d->bindingStorage->undoData( region );
+
+    d->bindingStorage->insert( region, binding );
 }
 
 QString CellStorage::comment( int column, int row ) const
@@ -514,6 +532,7 @@ void CellStorage::insertColumns( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
 
+    QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertColumns( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertColumns( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertColumns( position, number );
     QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->insertColumns( position, number );
@@ -528,6 +547,7 @@ void CellStorage::insertColumns( int position, int number )
     // recording undo?
     if ( d->undoData )
     {
+        d->undoData->bindings   << bindings;
         d->undoData->comments   << comments;
         d->undoData->conditions << conditions;
         d->undoData->databases  << databases;
@@ -565,6 +585,7 @@ void CellStorage::removeColumns( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
 
+    QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeColumns( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeColumns( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeColumns( position, number );
     QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->removeColumns( position, number );
@@ -579,6 +600,7 @@ void CellStorage::removeColumns( int position, int number )
     // recording undo?
     if ( d->undoData )
     {
+        d->undoData->bindings   << bindings;
         d->undoData->comments   << comments;
         d->undoData->conditions << conditions;
         d->undoData->databases  << databases;
@@ -616,6 +638,7 @@ void CellStorage::insertRows( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
 
+    QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertRows( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertRows( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertRows( position, number );
     QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->insertRows( position, number );
@@ -630,6 +653,7 @@ void CellStorage::insertRows( int position, int number )
     // recording undo?
     if ( d->undoData )
     {
+        d->undoData->bindings   << bindings;
         d->undoData->comments   << comments;
         d->undoData->conditions << conditions;
         d->undoData->databases  << databases;
@@ -667,6 +691,7 @@ void CellStorage::removeRows( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
 
+    QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeRows( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeRows( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeRows( position, number );
     QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->removeRows( position, number );
@@ -681,6 +706,7 @@ void CellStorage::removeRows( int position, int number )
     // recording undo?
     if ( d->undoData )
     {
+        d->undoData->bindings   << bindings;
         d->undoData->comments   << comments;
         d->undoData->conditions << conditions;
         d->undoData->databases  << databases;
@@ -718,6 +744,7 @@ void CellStorage::removeShiftLeft( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
 
+    QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->removeShiftLeft( rect );
@@ -732,6 +759,7 @@ void CellStorage::removeShiftLeft( const QRect& rect )
     // recording undo?
     if ( d->undoData )
     {
+        d->undoData->bindings   << bindings;
         d->undoData->comments   << comments;
         d->undoData->conditions << conditions;
         d->undoData->databases  << databases;
@@ -769,6 +797,7 @@ void CellStorage::insertShiftRight( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
 
+    QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertShiftRight( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftRight( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertShiftRight( rect );
     QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->insertShiftRight( rect );
@@ -783,6 +812,7 @@ void CellStorage::insertShiftRight( const QRect& rect )
     // recording undo?
     if ( d->undoData )
     {
+        d->undoData->bindings   << bindings;
         d->undoData->comments   << comments;
         d->undoData->conditions << conditions;
         d->undoData->databases  << databases;
@@ -820,6 +850,7 @@ void CellStorage::removeShiftUp( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
 
+    QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftUp( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftUp( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeShiftUp( rect );
     QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->removeShiftUp( rect );
@@ -834,6 +865,7 @@ void CellStorage::removeShiftUp( const QRect& rect )
     // recording undo?
     if ( d->undoData )
     {
+        d->undoData->bindings   << bindings;
         d->undoData->comments   << comments;
         d->undoData->conditions << conditions;
         d->undoData->databases  << databases;
@@ -871,6 +903,7 @@ void CellStorage::insertShiftDown( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
 
+    QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertShiftDown( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftDown( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertShiftDown( rect );
     QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->insertShiftDown( rect );
@@ -885,6 +918,7 @@ void CellStorage::insertShiftDown( const QRect& rect )
     // recording undo?
     if ( d->undoData )
     {
+        d->undoData->bindings   << bindings;
         d->undoData->comments   << comments;
         d->undoData->conditions << conditions;
         d->undoData->databases  << databases;
@@ -1021,6 +1055,7 @@ Cell CellStorage::prevInRow( int col, int row ) const
 int CellStorage::columns() const
 {
     int max = 0;
+    max = qMax( max, d->bindingStorage->usedArea().right() );
     max = qMax( max, d->commentStorage->usedArea().right() );
     max = qMax( max, d->conditionsStorage->usedArea().right() );
     max = qMax( max, d->fusionStorage->usedArea().right() );
@@ -1035,6 +1070,7 @@ int CellStorage::columns() const
 int CellStorage::rows() const
 {
     int max = 0;
+    max = qMax( max, d->bindingStorage->usedArea().bottom() );
     max = qMax( max, d->commentStorage->usedArea().bottom() );
     max = qMax( max, d->conditionsStorage->usedArea().bottom() );
     max = qMax( max, d->fusionStorage->usedArea().bottom() );
@@ -1137,6 +1173,8 @@ void CellStorage::undo( CellStorageUndoData* data )
         d->matrixStorage->insert( Region(data->matrices[i].first.toRect()), data->matrices[i].second );
     for ( int i = 0; i < data->styles.count(); ++i )
         d->styleStorage->insert( data->styles[i].first.toRect(), data->styles[i].second );
+    for ( int i = 0; i < data->bindings.count(); ++i )
+        setBinding( Region(data->bindings[i].first.toRect()), data->bindings[i].second );
     for ( int i = 0; i < data->comments.count(); ++i )
         setComment( Region(data->comments[i].first.toRect()), data->comments[i].second );
     for ( int i = 0; i < data->conditions.count(); ++i )
