@@ -101,13 +101,12 @@ public:
    *        \li (was used for selection painting, which is now in QPaintDevice)
    * \param paintCoordinate the top left coordinate (scroll offset dependent)
    * \param cellCoordinate the cell position (should be removed!)
-   * \param mergedCellsPainted a list of merged cells already painted
    * \param cell the Cell (should be removed!)
    */
   void paintCellContents( const QRectF& paintRegion, QPainter& painter,
                           QPaintDevice* paintDevice, const QPointF& paintCoordinate,
                           const QPoint & cellCoordinate,
-                          QLinkedList<QPoint> &mergedCellsPainted, const Cell& cell );
+                          const Cell& cell, SheetView* sheetView );
 
   /**
    * \ingroup Painting
@@ -117,14 +116,12 @@ public:
    * \param paintCoordinate the top left coordinate (scroll offset dependent)
    * \param cellCoordinate the cell position (should be removed!)
    * \param cellRange the cell range, that is painted (should be removed!)
-   * \param mergedCellsPainted a list of merged cells already painted
    * \param cell the Cell (should be removed!)
    * \param sheetView the SheetView (should be removed!)
    */
   void paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                          const QPointF& paintCoordinate,
                          const QPoint& cellCoordinate, const QRect& cellRange,
-                         QLinkedList<QPoint> &mergedCellsPainted,
                          const Cell& cell, SheetView* sheetView );
 
   /**
@@ -363,7 +360,8 @@ private:
      * @see paintCell()
      * @internal
      */
-    void paintFilterButton( QPainter& painter, const QRectF& cellRect, const Cell& cell );
+    void paintFilterButton( QPainter& painter, const QRectF& cellRect,
+                            const Cell& cell, SheetView* sheetView );
 
     /**
      * Tells this view that the Cell at \p col , \p row obscures this one.

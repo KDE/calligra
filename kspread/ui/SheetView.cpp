@@ -144,7 +144,6 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     //              d->visibleRect are traversed. This may appear suboptimal at the first look, but
     //              ensures that the borders are not erased by the background of adjacent cells.
 
-    QLinkedList<QPoint> mergedCellsPainted;
 // kDebug() << "paintRect: " << paintRect << endl;
 // kDebug() << "topLeft: " << topLeft << endl;
     // 1. Paint the cell background
@@ -188,9 +187,8 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
-            cellView.paintCellContents( paintRect, painter, paintDevice, offset,
-                                        QPoint( col, row ), mergedCellsPainted,
-                                        Cell( sheet(), col, row ) );
+            cellView.paintCellContents( paintRect, painter, paintDevice, offset, QPoint( col, row ),
+                                        Cell( sheet(), col, row ), this );
             offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
         }
         offset.setY( topLeft.y() );
@@ -235,7 +233,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
             CellView cellView = this->cellView( col, row );
             cellView.paintCellBorders( paintRect, painter, offset,
                                        QPoint( col, row ), d->visibleRect,
-                                       mergedCellsPainted, Cell( sheet(), col, row ), this );
+                                       Cell( sheet(), col, row ), this );
             offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
         }
         offset.setY( topLeft.y() );

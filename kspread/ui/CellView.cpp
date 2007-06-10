@@ -248,10 +248,8 @@ QString CellView::testAnchor( const Cell& cell, double x, double y ) const
 void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
                                   QPaintDevice* paintDevice, const QPointF& coordinate,
                                   const QPoint& cellRef,
-                                  QLinkedList<QPoint> &mergedCellsPainted, const Cell& cell )
+                                  const Cell& cell, SheetView* sheetView )
 {
-    Q_UNUSED( mergedCellsPainted );
-
     if ( d->hidden )
         return;
     if ( d->merged )
@@ -274,7 +272,7 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
 #if 1 // KSPREAD_FILTER_FEATURE
     // 0. Paint possible filter button
     if ( !dynamic_cast<QPrinter*>( painter.device() ) )
-        paintFilterButton( painter, cellRect, cell );
+        paintFilterButton( painter, cellRect, cell, sheetView );
 #endif // KSPREAD_FILTER_FEATURE
 
     // 1. Paint possible comment indicator.
@@ -317,10 +315,8 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
 void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                                  const QPointF& paintCoordinate,
                                  const QPoint& cellCoordinate, const QRect& cellRegion,
-                                 QLinkedList<QPoint> &mergedCellsPainted, const Cell& cell, SheetView* sheetView )
+                                 const Cell& cell, SheetView* sheetView )
 {
-    Q_UNUSED( mergedCellsPainted );
-
     // The parameter cellCoordinate should be *this
     Q_ASSERT( ( (cellCoordinate.x() == cell.column()) && (cellCoordinate.y() == cell.row())) );
 
@@ -1633,7 +1629,8 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
     }
 }
 
-void CellView::paintFilterButton( QPainter& painter, const QRectF& cellRect, const Cell& cell )
+void CellView::paintFilterButton( QPainter& painter, const QRectF& cellRect,
+                                  const Cell& cell, SheetView* sheetView )
 {
     const DatabaseRange databaseRange = cell.databaseRange();
     if ( databaseRange.isEmpty() )
@@ -1654,11 +1651,12 @@ void CellView::paintFilterButton( QPainter& painter, const QRectF& cellRect, con
     options.editable = true;
     options.fontMetrics = painter.fontMetrics();
     options.frame = false;
-    options.rect = /*cell.doc()->documentToView*/( cellRect ).toRect();
+    options.rect = sheetView->viewConverter()->documentToView( cellRect ).toRect();
 //     options.subControls = QStyle::SC_ComboBoxEditField | QStyle::SC_ComboBoxArrow;
 
     painter.save();
-//     painter.scale( 1.0 / cell.doc()->zoomedResolutionX(), 1.0 / cell.doc()->zoomedResolutionY() );
+    painter.scale( sheetView->viewConverter()->viewToDocumentX( 1.0 ),
+                   sheetView->viewConverter()->viewToDocumentY( 1.0 ) );
     QApplication::style()->drawComplexControl( QStyle::CC_ComboBox, &options, &painter );
     painter.restore();
 }
