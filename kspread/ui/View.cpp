@@ -83,7 +83,7 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <ktoolbarpopupaction.h>
-#include <kparts/partmanager.h>
+#include <kparts/event.h>
 #include <k3listview.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
@@ -129,7 +129,6 @@
 #include "Border.h"
 #include "Canvas.h"
 #include "Editors.h"
-#include "Events.h"
 #include "Global.h"
 #include "Handler.h"
 #include "Localization.h"

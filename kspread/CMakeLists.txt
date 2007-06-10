@@ -155,7 +155,6 @@ SET (kspreadcommon_LIB_SRCS
 	DependencyManager.cpp
 	Digest.cpp
 	Doc.cpp
-	Events.cpp
 	Factory.cpp
 	Format.cpp
 	Formula.cpp
@@ -166,7 +165,6 @@ SET (kspreadcommon_LIB_SRCS
 	Localization.cpp
 	Map.cpp
 	Number.cpp
-# 	Numformat.cpp
 # 	Object.cpp
 # 	PropertyEditor.cpp
 	RecalcManager.cpp

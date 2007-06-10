@@ -34,7 +34,6 @@
 #include "Sheet.h"
 
 // TODO Stefan: Substract points in selections
-// TODO Stefan: KPart signal (Events.h)
 
 using namespace KSpread;
 
