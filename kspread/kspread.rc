@@ -121,6 +121,10 @@
  </Menu>
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
+  <Menu name="Filter"><text>Filter</text>
+    <Action name="autoFilter"/>
+    <Action name="customFilter"/>
+  </Menu>
   <Action name="textToColumns"/>
   <Separator/>
   <Action name="insertColumn"/>

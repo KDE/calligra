@@ -37,6 +37,7 @@ kde4_add_ui_files(chart_DIR_SRCS
 SET (commands_DIR_SRCS
 	commands/AbstractRegionCommand.cpp
 	commands/AutoFillCommand.cpp
+	commands/AutoFilterCommand.cpp
 	commands/AutoFormatCommand.cpp
 	commands/CommentCommand.cpp
 	commands/ConditionCommand.cpp
@@ -54,6 +55,15 @@ SET (commands_DIR_SRCS
 	commands/StyleManipulators.cpp
 	commands/UndoWrapperCommand.cpp
 	commands/ValidityCommand.cpp
+	)
+
+SET (database_DIR_SRCS
+	database/Filter.cpp
+	database/DatabaseRange.cpp
+	database/DatabaseSource.cpp
+	database/DatabaseSourceQuery.cpp
+	database/DatabaseSourceSql.cpp
+	database/DatabaseSourceTable.cpp
 	)
 
 SET (dialogs_DIR_SRCS
@@ -181,6 +191,7 @@ SET (kspreadcommon_LIB_SRCS
 	tests/inspector.cc
 	${chart_DIR_SRCS}
 	${commands_DIR_SRCS}
+	${database_DIR_SRCS}
 	${dialogs_DIR_SRCS}
 	${functions_DIR_SRCS}
 	${interfaces_DIR_SRCS}

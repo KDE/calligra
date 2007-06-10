@@ -297,6 +297,11 @@ void Cell::setConditions( const Conditions& conditions )
     sheet()->cellStorage()->setConditions( Region(cellPosition()), conditions );
 }
 
+DatabaseRange Cell::databaseRange() const
+{
+    return sheet()->cellStorage()->databaseRange( d->column, d->row );
+}
+
 Formula Cell::formula() const
 {
     return sheet()->cellStorage()->formula( d->column, d->row );

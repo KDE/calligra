@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,29 +17,24 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CHART_DATABASE_SELECTOR
-#define KSPREAD_CHART_DATABASE_SELECTOR
-
-#include <KoShapeConfigWidgetBase.h>
+#ifndef KSPREAD_DATABASE_SOURCE
+#define KSPREAD_DATABASE_SOURCE
 
 namespace KSpread
 {
 
-/// A widget that is shown for 1 textframe to connect it to a frameset
-class ChartDatabaseSelector : public KoShapeConfigWidgetBase
+class DatabaseSource
 {
-    Q_OBJECT
 public:
-    /// constructor
-    explicit ChartDatabaseSelector();
-    ~ChartDatabaseSelector();
+    /**
+     * Constructor.
+     */
+    DatabaseSource();
 
-    /// reimplemented
-    void open(KoShape *shape);
-    /// reimplemented
-    void save();
-    /// reimplemented
-    KAction *createAction();
+    /**
+     * Destructor.
+     */
+    virtual ~DatabaseSource();
 
 private:
     class Private;
@@ -49,4 +43,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CHART_DATABASE_SELECTOR
+#endif // KSPREAD_DATABASE_SOURCE

@@ -328,6 +328,7 @@ public Q_SLOTS:
     void validity();
     void insertSeries();
     void sort();
+    void autoFilter();
     void insertHyperlink();
     void removeHyperlink();
     void goalSeek();

@@ -147,6 +147,7 @@
 #include "ValueConverter.h"
 
 // commands
+#include "commands/AutoFilterCommand.h"
 #include "commands/CommentCommand.h"
 #include "commands/ConditionCommand.h"
 #include "commands/DataManipulators.h"
@@ -448,6 +449,7 @@ public:
     QAction * sort;
     QAction * sortDec;
     QAction * sortInc;
+    QAction * autoFilter;
     QAction * fillRight;
     QAction * fillLeft;
     QAction * fillUp;
@@ -1088,7 +1090,6 @@ void View::Private::initActions()
   actions->sort  = new KAction(i18n("&Sort..."), view);
   ac->addAction("sort", actions->sort );
   connect(actions->sort, SIGNAL(triggered(bool)),view, SLOT( sort() ));
-
   actions->sort->setToolTip(i18n("Sort a group of cells"));
 
   actions->sortDec  = new KAction(KIcon( "sort_decrease" ), i18n("Sort &Decreasing"), view);
@@ -1100,6 +1101,13 @@ void View::Private::initActions()
   ac->addAction("sortInc", actions->sortInc );
   connect(actions->sortInc, SIGNAL(triggered(bool)), view, SLOT( sortInc() ));
   actions->sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order"));
+
+#if 1 // KSPREAD_FILTER_FEATURE
+  actions->autoFilter = new KAction( i18n("&Auto-Filter"), view );
+  ac->addAction( "autoFilter", actions->autoFilter );
+  connect( actions->autoFilter, SIGNAL(triggered(bool)), view, SLOT(autoFilter()) );
+  actions->autoFilter->setToolTip( i18n( "Add an automatic filter to a cell range" ) );
+#endif // KSPREAD_FILTER_FEATURE
 
   actions->paperLayout  = new KAction(i18n("Page Layout..."), view);
   ac->addAction("paperLayout", actions->paperLayout );
@@ -4677,6 +4685,14 @@ void View::sort()
 
     SortDialog dlg( this, "Sort" );
     dlg.exec();
+}
+
+void View::autoFilter()
+{
+    AutoFilterCommand* command = new AutoFilterCommand();
+    command->setSheet( d->activeSheet );
+    command->add( *selection() );
+    command->execute();
 }
 
 void View::removeHyperlink()

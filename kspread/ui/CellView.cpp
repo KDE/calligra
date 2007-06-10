@@ -46,6 +46,7 @@
 #include <QColor>
 #include <QPainter>
 #include <QRectF>
+#include <QStyleOptionComboBox>
 #include <QTextLayout>
 
 // KOffice
@@ -53,6 +54,7 @@
 
 // KSpread
 #include "Canvas.h"
+#include "CellStorage.h"
 #include "Condition.h"
 #include "Doc.h"
 #include "RowColumnFormat.h"
@@ -268,6 +270,12 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     const QRectF cellRect( coordinate, QSizeF( d->width, d->height ) );
     if ( !cellRect.intersects( paintRect ) )
         return;
+
+#if 1 // KSPREAD_FILTER_FEATURE
+    // 0. Paint possible filter button
+    if ( !dynamic_cast<QPrinter*>( painter.device() ) )
+        paintFilterButton( painter, cellRect, cell );
+#endif // KSPREAD_FILTER_FEATURE
 
     // 1. Paint possible comment indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
@@ -1623,6 +1631,36 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
         painter.setPen( goUpDiagonalPen );
         painter.drawLine( QLineF( cellRect.x(), cellRect.bottom(), cellRect.right(), cellRect.y() ) );
     }
+}
+
+void CellView::paintFilterButton( QPainter& painter, const QRectF& cellRect, const Cell& cell )
+{
+    const DatabaseRange databaseRange = cell.databaseRange();
+    if ( databaseRange.isEmpty() )
+        return;
+    if ( databaseRange.horizontallyOriented() )
+    {
+        if ( databaseRange.range().firstRange().left() != cell.column() )
+            return;
+    }
+    else // if ( databaseRange.verticallyOriented() )
+    {
+        if ( databaseRange.range().firstRange().top() != cell.row() )
+            return;
+    }
+
+    QStyleOptionComboBox options;
+    options.direction = d->layoutDirection;
+    options.editable = true;
+    options.fontMetrics = painter.fontMetrics();
+    options.frame = false;
+    options.rect = /*cell.doc()->documentToView*/( cellRect ).toRect();
+//     options.subControls = QStyle::SC_ComboBoxEditField | QStyle::SC_ComboBoxArrow;
+
+    painter.save();
+//     painter.scale( 1.0 / cell.doc()->zoomedResolutionX(), 1.0 / cell.doc()->zoomedResolutionY() );
+    QApplication::style()->drawComplexControl( QStyle::CC_ComboBox, &options, &painter );
+    painter.restore();
 }
 
 

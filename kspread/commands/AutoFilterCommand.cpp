@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,35 +17,33 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CHART_DATABASE_SELECTOR
-#define KSPREAD_CHART_DATABASE_SELECTOR
+#include <klocale.h>
 
-#include <KoShapeConfigWidgetBase.h>
+#include "CellStorage.h"
+#include "Sheet.h"
 
-namespace KSpread
+#include "database/DatabaseRange.h"
+
+#include "AutoFilterCommand.h"
+
+using namespace KSpread;
+
+AutoFilterCommand::AutoFilterCommand()
+    : AbstractRegionCommand()
 {
+    setText( i18n( "Auto-Filter" ) );
+}
 
-/// A widget that is shown for 1 textframe to connect it to a frameset
-class ChartDatabaseSelector : public KoShapeConfigWidgetBase
+AutoFilterCommand::~AutoFilterCommand()
 {
-    Q_OBJECT
-public:
-    /// constructor
-    explicit ChartDatabaseSelector();
-    ~ChartDatabaseSelector();
+}
 
-    /// reimplemented
-    void open(KoShape *shape);
-    /// reimplemented
-    void save();
-    /// reimplemented
-    KAction *createAction();
+void AutoFilterCommand::redo()
+{
+    m_sheet->cellStorage()->setDatabaseRange( *this, DatabaseRange( "" ) );
+}
 
-private:
-    class Private;
-    Private * const d;
-};
-
-} // namespace KSpread
-
-#endif // KSPREAD_CHART_DATABASE_SELECTOR
+void AutoFilterCommand::undo()
+{
+    m_sheet->cellStorage()->setDatabaseRange( *this, DatabaseRange() );
+}

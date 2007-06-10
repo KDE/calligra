@@ -358,6 +358,14 @@ private:
   void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect );
 
     /**
+     * \ingroup Painting
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
+    void paintFilterButton( QPainter& painter, const QRectF& cellRect, const Cell& cell );
+
+    /**
      * Tells this view that the Cell at \p col , \p row obscures this one.
      * If this view is destructed, the SheetView deletes the obscuring CellView.
      * If the obscuring CellView is destructed, the SheetView deletes this view.

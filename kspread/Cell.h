@@ -45,6 +45,8 @@
 #include "Global.h"
 #include "Format.h"
 
+#include "database/DatabaseRange.h"
+
 class QDomElement;
 class QDomDocument;
 class QFont;
@@ -204,6 +206,11 @@ public:
     Conditions conditions() const;
 
     void setConditions( const Conditions& conditions );
+
+    /**
+     * \return the database range associated with this cell
+     */
+    DatabaseRange databaseRange() const;
 
     /**
      * The cell's formula. Usable to analyze the formula's tokens.

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,35 +17,31 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CHART_DATABASE_SELECTOR
-#define KSPREAD_CHART_DATABASE_SELECTOR
+#ifndef KSPREAD_AUTOFILTER_COMMAND
+#define KSPREAD_AUTOFILTER_COMMAND
 
-#include <KoShapeConfigWidgetBase.h>
+#include "AbstractRegionCommand.h"
 
 namespace KSpread
 {
 
-/// A widget that is shown for 1 textframe to connect it to a frameset
-class ChartDatabaseSelector : public KoShapeConfigWidgetBase
+class AutoFilterCommand : public AbstractRegionCommand
 {
-    Q_OBJECT
 public:
-    /// constructor
-    explicit ChartDatabaseSelector();
-    ~ChartDatabaseSelector();
+    /**
+     * Constructor.
+     */
+    AutoFilterCommand();
 
-    /// reimplemented
-    void open(KoShape *shape);
-    /// reimplemented
-    void save();
-    /// reimplemented
-    KAction *createAction();
+    /**
+     * Destructor.
+     */
+    virtual ~AutoFilterCommand();
 
-private:
-    class Private;
-    Private * const d;
+    virtual void redo();
+    virtual void undo();
 };
 
 } // namespace KSpread
 
-#endif // KSPREAD_CHART_DATABASE_SELECTOR
+#endif // KSPREAD_AUTOFILTER_COMMAND

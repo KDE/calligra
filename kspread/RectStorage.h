@@ -32,6 +32,8 @@
 #include "Sheet.h"
 #include "Validity.h"
 
+#include "database/DatabaseRange.h"
+
 static const int g_garbageCollectionTimeOut = 100;
 
 inline uint qHash( const QPoint& point )
@@ -434,6 +436,19 @@ public:
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
     virtual void garbageCollection() { RectStorage<Conditions>::garbageCollection(); }
+};
+
+
+
+class DatabaseRangeStorage : public QObject, public RectStorage<DatabaseRange>
+{
+    Q_OBJECT
+public:
+    explicit DatabaseRangeStorage( Sheet* sheet ) : RectStorage<DatabaseRange>( sheet ) {}
+
+protected Q_SLOTS:
+    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
+    virtual void garbageCollection() { RectStorage<DatabaseRange>::garbageCollection(); }
 };
 
 
