@@ -90,7 +90,7 @@ SET (dialogs_DIR_SRCS
 	dialogs/Resize2Dialog.cpp
 	dialogs/SeriesDialog.cpp
 	dialogs/SheetPropertiesDialog.cpp
-	dialogs/SheetSelectPage.cc
+	dialogs/SheetSelectPage.cpp
 	dialogs/ShowDialog.cpp
 	dialogs/ShowColRowDialog.cpp
 	dialogs/SortDialog.cpp
@@ -186,7 +186,7 @@ SET (kspreadcommon_LIB_SRCS
 	ValueConverter.cpp
 	ValueFormatter.cpp
 	ValueParser.cpp
-	tests/inspector.cc
+	tests/inspector.cpp
 	${chart_DIR_SRCS}
 	${commands_DIR_SRCS}
 	${database_DIR_SRCS}
