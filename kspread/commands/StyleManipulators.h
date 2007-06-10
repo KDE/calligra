@@ -23,10 +23,8 @@
 #include <QPair>
 #include <QPen>
 
-#include <klocale.h>
-
 #include "AbstractRegionCommand.h"
-#include <Style.h>
+#include "Style.h"
 
 namespace KSpread
 {
@@ -117,7 +115,7 @@ protected:
     virtual bool preProcessing();
     virtual bool mainProcessing();
     virtual bool postProcessing();
-    virtual QString name() const { return i18n( "Change Border Color" ); }
+    virtual QString name() const;
 
 private:
     QColor m_color;

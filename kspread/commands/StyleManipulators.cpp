@@ -21,6 +21,7 @@
 #include "StyleManipulators.h"
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "Cell.h"
 #include "CellStorage.h"
@@ -320,6 +321,10 @@ bool BorderColorManipulator::postProcessing()
     return true;
 }
 
+QString BorderColorManipulator::name() const
+{
+    return i18n( "Change Border Color" );
+}
 
 
 /***************************************************************************

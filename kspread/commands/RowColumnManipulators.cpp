@@ -25,6 +25,8 @@
 #include <QFontMetricsF>
 #include <QWidget>
 
+#include <klocale.h>
+
 #include "CellStorage.h"
 #include "CellView.h"
 #include "RowColumnFormat.h"
@@ -56,6 +58,11 @@ bool ResizeColumnManipulator::process(Element* element)
   return true;
 }
 
+QString ResizeColumnManipulator::name() const
+{
+    return i18n("Resize Column");
+}
+
 
 
 /***************************************************************************
@@ -79,6 +86,11 @@ bool ResizeRowManipulator::process(Element* element)
     rl->setHeight( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
   }
   return true;
+}
+
+QString ResizeRowManipulator::name() const
+{
+    return i18n("Resize Row");
 }
 
 

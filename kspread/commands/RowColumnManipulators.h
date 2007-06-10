@@ -22,8 +22,6 @@
 
 #include <QSizeF>
 
-#include <klocale.h>
-
 #include <Style.h>
 
 #include "AbstractRegionCommand.h"
@@ -48,7 +46,7 @@ class CellStorageUndoData;
     protected:
       virtual bool process(Element*);
 
-      virtual QString name() const { return i18n("Resize Column"); }
+      virtual QString name() const;
 
     private:
       double m_newSize;
@@ -73,7 +71,7 @@ class ResizeRowManipulator : public AbstractRegionCommand
   protected:
     virtual bool process(Element*);
 
-    virtual QString name() const { return i18n("Resize Row"); }
+    virtual QString name() const;
 
   private:
     double m_newSize;
