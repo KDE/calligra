@@ -29,6 +29,13 @@ http://www.koffice.org/kspread
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
+import os, datetime, sys, traceback, urlparse
+
+try:
+    import Kross
+except:
+    raise "Failed to import the Kross module."
+
 class Config:
     """ Some configurations for the htmlexport.py script. """
 
@@ -115,7 +122,6 @@ class Reader:
         is used mainly for testing purposes. """
 
         def __init__(self):
-            import datetime
             self.filename = ''
             self.infos = {
                 'Title' : 'Some Title',
@@ -158,15 +164,12 @@ class Reader:
                 self.embeddedInKSpread = True
             except ImportError:
                 try:
-                    import Kross
                     self.kspread = Kross.module("kspread")
                 except ImportError:
                     raise "Failed to import the Kross module. Please run this script with \"kross thisscriptfile.py\""
 
             application = self.kspread.application()
             self.document = self.kspread.document()
-
-            import os, datetime
 
             global Config
             self.filename = ''
@@ -204,7 +207,6 @@ class Reader:
             print "Sheetnames: %s" % self.kspread.sheetNames()
 
         def extractFileFromUrl(self, url):
-            import urlparse
             (scheme, netloc, path, params, query, fragment) = urlparse.urlparse(url)
             return path
 
@@ -212,7 +214,6 @@ class Reader:
             return self.embeddedInKSpread or (self.filename and self.filename != '')
 
         def setFile(self, filename):
-            import os
             path = self.extractFileFromUrl(filename)
             if not os.path.isfile(path):
                 raise "No such file \"%s\" to read from." % filename
@@ -357,7 +358,6 @@ class Dialog:
     should be written, document-informations or the style. """
 
     def __init__(self, exporter):
-        import Kross, os
         self.exporter = exporter
 
         self.forms = Kross.module("forms")
@@ -366,24 +366,24 @@ class Dialog:
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         if not self.exporter.reader.hasFile():
-            openpage = self.dialog.addPage("Open","Read from OpenDocument Spreadsheet File","fileopen")
+            openpage = self.dialog.addPage("Open","Read from OpenDocument Spreadsheet File","document-open")
             self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kspreadhtmlexportopen")
             self.openwidget.setMode("Opening")
             self.openwidget.setFilter("*.ods|OpenDocument Spreadsheet Files\n*|All Files")
 
         if not self.exporter.writer.hasFile():
-            savepage = self.dialog.addPage("Save","Save to HTML File","filesave")
+            savepage = self.dialog.addPage("Save","Save to HTML File","document-save")
             self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadhtmlexportsave")
             self.savewidget.setMode("Saving")
             self.savewidget.setFilter("*.html *.htm *.xhtml|HTML Documents\n*|All Files")
 
-        infospage = self.dialog.addPage("Infos","HTML Document Informations","messagebox_info")
+        infospage = self.dialog.addPage("Infos","HTML Document Informations","document-properties")
         self.infoswidget = self.forms.createWidgetFromUIFile(infospage, os.path.join(self.exporter.currentpath, "htmlexportinfos.ui"))
         for i in self.exporter.reader.infos.keys():
             w = self.infoswidget[i]
             w.setText( self.exporter.reader.infos[i] )
 
-        layoutpage = self.dialog.addPage("Styles","Style of the HTML Document","colorize")
+        layoutpage = self.dialog.addPage("Styles","Style of the HTML Document","color-fill")
         layoutwidget = self.forms.createWidgetFromUI(layoutpage,
             '<ui version="4.0" >'
             ' <class>Form</class>'
@@ -407,7 +407,6 @@ class Dialog:
         self.dialog.delayedDestruct()
 
     def show(self):
-        import os
         result = self.dialog.exec_loop()
         if result:
 
@@ -453,13 +452,6 @@ class Exporter:
     export-process together into one task. """
 
     def __init__(self, scriptaction):
-        import os, sys, traceback
-
-        try:
-            import Kross
-        except:
-            raise "Failed to import the Kross module."
-
         self.scriptaction = scriptaction
         self.currentpath = self.scriptaction.currentPath()
 

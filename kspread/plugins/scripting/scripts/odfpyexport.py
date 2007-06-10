@@ -236,7 +236,7 @@ class OdfPyExport:
             dialog.setFaceType("List") #Auto Plain List Tree Tabbed
             try:
                 if not writeOdfFile:
-                    savepage = dialog.addPage("Save","Save to OpenDocument File","filesave")
+                    savepage = dialog.addPage("Save","Save to OpenDocument File","document-save")
                     self.savewidget = forms.createFileWidget(savepage, "kfiledialog:///kspreadodfpyexport")
                     self.savewidget.setMode("Saving")
 
