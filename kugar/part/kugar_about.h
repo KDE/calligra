@@ -44,7 +44,7 @@ KAboutData *newKugarAboutData()
     aboutData->addAuthor( "Keith Davis (Mutiny Bay Software)",
                           I18N_NOOP( "Original author of Metaphrast" ), "info@mutinybaysoftware.com",
                           "http://www.mutinybaysoftware.com" );
-    aboutData->setTranslator( I18N_NOOP( "_:NAME OF TRANSLATORS\nNames" ), I18N_NOOP( "_:EMAIL OF TRANSLATORS\ne-mail" ) );
+    aboutData->setTranslator( ki18nc( "NAME OF TRANSLATORS", "Your names" ), ki18nc( "EMAIL OF TRANSLATORS", "Your emails" ) );
     return aboutData;
 }
 #endif
