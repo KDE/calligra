@@ -42,6 +42,7 @@
 
 // Local
 #include "Canvas.h"
+#include "Canvas_p.h"
 
 // std
 #include <assert.h>
@@ -94,6 +95,7 @@
 #include <KoZoomHandler.h>
 
 // KSpread
+#include "Border.h"
 #include "CellStorage.h"
 #include "CellView.h"
 #include "Doc.h"
@@ -114,9 +116,6 @@
 #include "commands/DeleteCommand.h"
 #include "commands/EmbeddedObjectCommands.h"
 #include "commands/StyleManipulators.h"
-
-#include "Border.h"
-#include "Canvas_p.h"
 
 #define MIN_SIZE 10
 
