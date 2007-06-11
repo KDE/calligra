@@ -48,8 +48,8 @@ KAboutData * newKudesignerAboutData()
                           I18N_NOOP( "Fast property editing for report items" ),
                           "per.winkvist@cellnetwork.com",
                           "" );
-    aboutData->setTranslator( I18N_NOOP( "_:NAME OF TRANSLATORS\nNames" ),
-                              I18N_NOOP( "_:EMAIL OF TRANSLATORS\ne-mail" ) );
+    aboutData->setTranslator( ki18nc( "NAME OF TRANSLATORS", "Your names" ),
+                              ki18nc( "EMAIL OF TRANSLATORS", "Your emails" ) );
     return aboutData;
 }
 
