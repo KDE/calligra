@@ -386,7 +386,7 @@ KLocalizedString Part::i18nMessage(const QString& englishMessage, KexiWindow* wi
 	Q_UNUSED(window);
 	if( QString(englishMessage).startsWith(":") )
 		return KLocalizedString();
-	return ki18n(englishMessage.latin1());
+	return ki18n(englishMessage.toLatin1());
 }
 
 void Part::setupCustomPropertyPanelTabs(KTabWidget *)

@@ -21,12 +21,12 @@
 #define _KEXI_DYNAMIC_QUERY_PARAMETER_DIALOG_H_
 
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kexidataprovider.h>
 
 class Q3VBox;
 
-class KexiDynamicQueryParameterDialog : public KDialogBase
+class KexiDynamicQueryParameterDialog : public KDialog
 {
 	Q_OBJECT
 public:

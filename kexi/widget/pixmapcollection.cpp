@@ -155,7 +155,7 @@ PixmapCollection::load(QDomNode node)
 
 //// A dialog to load a KDE icon by its name
 LoadIconDialog::LoadIconDialog(QWidget *parent)
-: KDialogBase(parent, "loadicon_dialog", true, i18n("Load KDE Icon by Name"), Ok|Cancel, Ok, false)
+: KDialog(parent, "loadicon_dialog", true, i18n("Load KDE Icon by Name"), Ok|Cancel, Ok, false)
 {
 	QFrame *frame = makeMainWidget();
 	Q3GridLayout *l = new Q3GridLayout(frame, 2, 3, 0, 6);
@@ -235,7 +235,7 @@ QString LoadIconDialog::iconName()
 
 /// Pixmap Collection Editor Dialog
 PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWidget *parent)
-: KDialogBase(parent, "pixcollection_dialog", true,
+: KDialog(parent, "pixcollection_dialog", true,
 	i18n("Edit Pixmap Collection: %1", collection->collectionName()), Close, Close, false)
 {
 	m_collection = collection;
@@ -374,7 +374,7 @@ PixmapCollectionEditor::displayMenu(Q3IconViewItem *it, const QPoint &p)
 
 //// A Dialog to choose a pixmap from the PixmapCollection
 PixmapCollectionChooser::PixmapCollectionChooser(PixmapCollection *collection, const QString &selectedItem, QWidget *parent)
-: KDialogBase(parent, "pixchoose_dialog", true, 
+: KDialog(parent, "pixchoose_dialog", true, 
 	i18n("Select Pixmap From %1", collection->collectionName()),
 	User1|Ok|Cancel, Ok, false, KGuiItem(i18n("Edit Collection...")))
 {

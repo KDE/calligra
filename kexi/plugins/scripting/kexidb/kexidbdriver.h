@@ -21,7 +21,6 @@
 #define SCRIPTING_KEXIDBDRIVER_H
 
 #include <qstring.h>
-//#include <qguardedptr.h>
 #include <qobject.h>
 
 #include <kexidb/driver.h>

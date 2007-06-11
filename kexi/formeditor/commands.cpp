@@ -1542,7 +1542,7 @@ CommandGroup::~CommandGroup()
 	delete m_subCommands;
 }
 
-const QList<K3Command*>& CommandGroup::commands() const
+const QList<K3Command*> CommandGroup::commands() const
 {
 	return m_subCommands->commands();
 }

@@ -37,14 +37,16 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 
 	public:
-		KexiDBTextEdit(QWidget *parent, const char *name=0);
+		KexiDBTextEdit(QWidget *parent);
 		virtual ~KexiDBTextEdit();
 
-		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline QString dataSource() const
+			{ return KexiFormDataItemInterface::dataSource(); }
+		inline QString dataSourceMimeType() const
+			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -80,10 +82,12 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 		virtual void keyPressEvent( QKeyEvent *ke );
 
 	public slots:
-		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSource(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSource(ds); }
+		inline void setDataSourceMimeType(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		virtual void setReadOnly( bool readOnly );
-		virtual void setText( const QString & text, const QString & context );
+//Qt4		virtual void setText( const QString & text, const QString & context );
 
 		//! Reimplemented, so "undo" means the same as "cancelEditor" action
 //! @todo enable "real" undo internally so user can use ctrl+z while editing
@@ -104,7 +108,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 	protected:
 		virtual void paintEvent ( QPaintEvent * );
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
-		QPopupMenu * createPopupMenu(const QPoint & pos);
+		QMenu * createPopupMenu(const QPoint & pos);
 
 		//! Used for extending context menu
 		KexiDBWidgetContextMenuExtender m_menuExtender;

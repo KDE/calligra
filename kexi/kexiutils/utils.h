@@ -49,26 +49,29 @@ namespace KexiUtils
 
 	//! \return parent object of \a o that is of type \a type or NULL if no such parent
 	template<class type>
-	inline type findParent(QObject* o)
+	inline type findParent(QObject* o, const char* className = 0)
 	{
 		if (!o)
 			return 0;
-		while ( ((o=o->parent()) && !::qobject_cast< type >(o) ) )
-			;
-		return ::qobject_cast< type >(o);
+		while ((o=o->parent())) {
+			if (::qobject_cast< type >(o) && (!className || o->inherits(className)))
+				return ::qobject_cast< type >(o);
+		}
+		return 0;
 	}
 
-	//! Const version of findParent()
+/*	//! Const version of findParent()
 	template<class type>
-	inline const type findParentConst(const QObject* const o, const char* className)
+	inline const type findParentConst(const QObject* o, const char* className = 0)
 	{
-		const QObject * obj = o;
-		if (!obj || !className || className[0]=='\0')
+		if (!o) // || !className || className[0]=='\0')
 			return 0;
-		while ( ((obj=obj->parent())) && !obj->inherits(className) )
-			;
-		return ::qobject_cast< const type >(obj);
-	}
+		while ((o=o->parent())) {
+			if (dynamic_cast< type >(o) && (!className || o->inherits(className)))
+				return dynamic_cast< type >(o);
+		}
+		return 0;
+	}*/
 
 	/*! \return first found child of \a o, inheriting \a className.
 	 If objName is 0 (the default), all object names match. 
@@ -267,11 +270,6 @@ namespace KexiUtils
 		const QObject *receiver, const char* slot);
 #endif
 
-	//! Draws pixmap on painter \a p using predefined parameters.
-	//! Used in KexiDBImageBox and KexiBlobTableEdit.
-	KEXIUTILS_EXPORT void drawPixmap( QPainter& p, int lineWidth, const QRect& rect,
-		const QPixmap& pixmap, int alignment, bool scaledContents, bool keepAspectRatio);
-
 	//! @internal
 	KEXIUTILS_EXPORT QString ptrToStringInternal(void* ptr, uint size);
 	//! @internal
@@ -296,6 +294,36 @@ namespace KexiUtils
 
 	//! Unsets focus for widget \a widget with reason \a reason.
 	KEXIUTILS_EXPORT void unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason);
+	
+	//! @short A convenience class that simplifies usage of QWidget::getContentsMargins() and QWidget::setContentsMargins
+	class KEXIUTILS_EXPORT WidgetMargins
+	{
+		public:
+			//! Creates object with all margins set to 0
+			WidgetMargins();
+			//! Creates object with margins copied from \a widget
+			WidgetMargins(QWidget *widget);
+			//! Creates object with margins set to given values
+			WidgetMargins(int _left, int _top, int _right, int _bottom);
+			//! Creates object with all margins set to commonMargin
+			WidgetMargins(int commonMargin);
+			//! Copies margins from \a widget to this object
+			void copyFromWidget(QWidget *widget);
+			//! Creates margins from this object copied to \a widget
+			void copyToWidget(QWidget *widget);
+			//! Adds the given margins \a margins to this object, and returns a reference to this object
+			WidgetMargins& operator+= ( const WidgetMargins& margins );
+			
+		int left, top, right, bottom;
+	};
+	
+	//! \return the sum of \a margins1 and \a margins1; each component is added separately.
+	const WidgetMargins operator+ ( const WidgetMargins& margins1, const WidgetMargins& margins2 );
+
+	//! Draws pixmap on painter \a p using predefined parameters.
+	//! Used in KexiDBImageBox and KexiBlobTableEdit.
+	KEXIUTILS_EXPORT void drawPixmap( QPainter& p, const WidgetMargins& margins, const QRect& rect,
+		const QPixmap& pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio);
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here

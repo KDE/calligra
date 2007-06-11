@@ -160,8 +160,9 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 			if (w->pixmap().isEmpty())
 				w->setPixmap( inheritedClass->pixmap() );
 			//ok?
-			foreach3 (Q3ValueList<Q3CString>::ConstIterator, it_alt, inheritedClass->m_alternateNames) {
-				w->addAlternateClassName( *it_alt, inheritedClass->isOverriddenClassName( *it_alt ) );
+			foreach (const Q3CString& alternateName, inheritedClass->m_alternateNames) {
+				w->addAlternateClassName(
+					alternateName, inheritedClass->isOverriddenClassName( alternateName ) );
 			}
 			if (w->includeFileName().isEmpty())
 				w->setIncludeFileName( inheritedClass->includeFileName() );
@@ -390,7 +391,7 @@ WidgetLibrary::createWidget(const Q3CString &classname, QWidget *parent, const c
 }
 
 bool
-WidgetLibrary::createMenuActions(const Q3CString &c, QWidget *w, KMenu *menu,
+WidgetLibrary::createMenuActions(const Q3CString &c, QWidget *w, QMenu *menu,
 	KFormDesigner::Container *container)
 {
 	loadFactories();

@@ -25,7 +25,6 @@
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QLabel>
-#include <Q3CString>
 #include <kexidb/field.h>
 #include <formeditor/container.h>
 #include <formeditor/widgetwithsubpropertiesinterface.h>
@@ -51,7 +50,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 	Q_PROPERTY(QColor backgroundLabelColor READ backgroundLabelColor WRITE setBackgroundLabelColor DESIGNABLE true RESET unsetPalette)
 	Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly )
 	Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition DESIGNABLE true)
 	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
@@ -66,16 +65,19 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		enum LabelPosition { Left = 300, Top, NoLabel };
 
 		KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos, 
-			QWidget *parent = 0, const char *name = 0, bool designMode = true);
-		KexiDBAutoField(QWidget *parent = 0, const char *name = 0, bool designMode = true,
+			QWidget *parent = 0, bool designMode = true);
+		KexiDBAutoField(QWidget *parent = 0, bool designMode = true,
 			LabelPosition pos = Left);
 
 		virtual ~KexiDBAutoField();
 
-		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline QString dataSource() const
+			{ return KexiFormDataItemInterface::dataSource(); }
+		inline QString dataSourceMimeType() const
+			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual void setDataSource( const QString &ds );
-		virtual void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		virtual void setDataSourceMimeType(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
 		virtual void setInvalidState(const QString& text);

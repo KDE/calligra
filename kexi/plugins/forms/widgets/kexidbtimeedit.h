@@ -34,15 +34,17 @@ class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public Q3TimeEdit, public KexiFormDa
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
 	public:
-		KexiDBTimeEdit(const QTime &time, QWidget *parent, const char *name=0);
+		KexiDBTimeEdit(const QTime &time, QWidget *parent);
 		virtual ~KexiDBTimeEdit();
 
-		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline QString dataSource() const
+			{ return KexiFormDataItemInterface::dataSource(); }
+		inline QString dataSourceMimeType() const
+			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -69,8 +71,10 @@ class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public Q3TimeEdit, public KexiFormDa
 		virtual void  setEnabled(bool enabled);
 
 	public slots:
-		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSource(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSource(ds); }
+		inline void setDataSourceMimeType(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		virtual void setReadOnly(bool set);
 
 	protected slots:

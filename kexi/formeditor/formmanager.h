@@ -104,7 +104,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  These actions are automatically connected to \ref insertWidget() slot.
 		  \return a QPtrList of the created actions.
 		 */
-		ActionList createActions(WidgetLibrary *lib, KActionCollection* collection, KXMLGUIClient *client);
+		ActionList createActions(WidgetLibrary *lib, KActionCollection* collection,
+			KXMLGUIClient *client);
 
 		/*! Enables or disables actions \a name.
 		 KFD uses KPart's, action collection here.
@@ -112,7 +113,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		virtual void enableAction( const char* name, bool enable ) = 0;
 
 		/*! \return action for \a name. @see enableAction() */
-		virtual KAction* action(const char* name) = 0;
+		virtual QAction* action(const char* name) = 0;
 
 		bool isPasteEnabled();
 

@@ -340,7 +340,7 @@ void KexiLookupColumnPage::slotRowSourceChanged()
 {
 	if (!d->rowSourceCombo->project())
 		return;
-	QString mime = d->rowSourceCombo->selectedMimeType();
+	QString mime( d->rowSourceCombo->selectedMimeType() );
 	bool rowSourceFound = false;
 	QString name = d->rowSourceCombo->selectedName();
 	if ((mime=="kexi/table" || mime=="kexi/query") && d->rowSourceCombo->isSelectionValid()) {

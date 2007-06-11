@@ -59,7 +59,7 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
 		KActionCollection* actionCollection() const;
 
 		/*! Updates title for context menu.
-		 Used in KexiDBWidgetContextMenuExtender::createTitle(QPopupMenu *menu) and KexiDBImageBox.
+		 Used in KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu) and KexiDBImageBox.
 		 \return true if the title has been updated. */
 		static bool updateTitle(QMenu *menu, const QString& title, 
 			const QString& iconName = QString());

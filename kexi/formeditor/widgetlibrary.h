@@ -35,7 +35,7 @@ template<class type> class Q3PtrList;
 template<class type> class Q3ValueVector;
 class KActionCollection;
 class KAction;
-class KMenu;
+class QMenu;
 class QWidget;
 class QVariant;
 class QDomDocument;
@@ -92,7 +92,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, Container *c,
 			int options = WidgetFactory::DefaultOptions);
 
-		bool createMenuActions(const Q3CString &c, QWidget *w, KMenu *menu,
+		bool createMenuActions(const Q3CString &c, QWidget *w, QMenu *menu,
 			KFormDesigner::Container *container);
 
 		/** 

@@ -1237,8 +1237,8 @@ void KexiDB::getLimitsForType(Field::Type type, int &minValue, int &maxValue)
 void KexiDB::debugRowData(const RowData& rowData)
 {
 	KexiDBDbg << QString("ROW DATA (%1 columns):").arg(rowData.count()) << endl;
-	foreach3(RowData::ConstIterator, it, rowData)
-		KexiDBDbg << "- " << (*it) << endl;
+	foreach (const QVariant& value, rowData)
+		KexiDBDbg << "- " << value << endl;
 }
 
 Field::Type KexiDB::maximumForIntegerTypes(Field::Type t1, Field::Type t2)

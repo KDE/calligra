@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3popupmenu.h>
 #include <q3scrollview.h>
 #include <qcursor.h>
 #include <qpainter.h>
@@ -45,8 +44,6 @@
 #include <kexidb/connection.h>
 #include <kexipart.h>
 #include <formeditor/widgetlibrary.h>
-#include <kexigradientwidget.h>
-#include <keximainwindow.h>
 #include <kexiutils/utils.h>
 #include <widget/kexicustompropertyfactory.h>
 #include <widget/utils/kexicontextmenuutils.h>
@@ -69,12 +66,14 @@
 
 #include "kexidbfactory.h"
 #include <core/kexi.h>
+#include <kexi_global.h>
+#include <KexiMainWindowIface.h>
 
 
 //////////////////////////////////////////
 
-KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringList &)
- : KFormDesigner::WidgetFactory(parent, name)
+KexiDBFactory::KexiDBFactory(QObject *parent, const QStringList &)
+ : KFormDesigner::WidgetFactory(parent)
 {
 	KFormDesigner::WidgetInfo *wi;
 	wi = new KexiDataAwareWidgetInfo(this);
@@ -82,7 +81,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setClassName("KexiDBForm");
 	wi->setName(i18n("Form"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "form"));
 	wi->setDescription(i18n("A data-aware form widget"));
 	addClass(wi);
@@ -94,7 +93,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("KexiSubForm", true/*override*/); //older
 	wi->setName(i18n("Sub Form"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "subForm"));
 	wi->setDescription(i18n("A form widget included in another Form"));
 	wi->setAutoSyncForProperty( "formName", false );
@@ -110,7 +109,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setIncludeFileName("klineedit.h");
 	wi->setName(i18n("Text Box"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "textBox"));
 	wi->setDescription(i18n("A widget for entering and displaying text"));
 	addClass(wi);
@@ -124,19 +123,20 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setIncludeFileName("ktextedit.h");
 	wi->setName(i18n("Text Editor"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "textEditor"));
 	wi->setDescription(i18n("A multiline text editor"));
 	addClass(wi);
 
 	wi = new KFormDesigner::WidgetInfo(
-		this, "containers", "Q3Frame" /*we are inheriting to get i18n'd strings already translated there*/);
+		this, "containers", "QFrame" /*we are inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("frame");
 	wi->setClassName("KexiFrame");
+	wi->addAlternateClassName("QFrame", true/*override*/);
 	wi->addAlternateClassName("Q3Frame", true/*override*/);
 	wi->setName(i18n("Frame"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "frame"));
 	wi->setDescription(i18n("A simple frame widget"));
 	addClass(wi);
@@ -147,9 +147,9 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setClassName("KexiDBLabel");
 	wi->addAlternateClassName("QLabel", true/*override*/);
 	wi->addAlternateClassName("KexiLabel", true/*override*/); //older
-	wi->setName(i18n("Text Label", "Label"));
+	wi->setName(i18nc("Text Label", "Label"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "label"));
 	wi->setDescription(i18n("A widget for displaying text"));
 	addClass(wi);
@@ -163,7 +163,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("KexiImageBox", true/*override*/); //older
 	wi->setName(i18n("Image Box"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "image"));
 	wi->setDescription(i18n("A widget for displaying images"));
 //	wi->setCustomTypeForProperty("pixmapData", KexiCustomPropertyFactory::PixmapData);
@@ -182,7 +182,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("KComboBox", true/*override*/);
 	wi->setName(i18n("Combo Box"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "comboBox"));
 	wi->setDescription(i18n("A combo box widget"));
 	addClass(wi);
@@ -194,7 +194,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("QCheckBox", true/*override*/);
 	wi->setName(i18n("Check Box"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "checkBox"));
 	wi->setDescription(i18n("A check box with text label"));
 	addClass(wi);
@@ -206,7 +206,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("KexiDBFieldEdit", true/*override*/); //older
 	wi->setName(i18n("Auto Field"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 	"It must _not_ contain white spaces and non latin1 characters", "autoField"));
 	wi->setDescription(i18n("A widget containing an automatically selected editor "
 		"and a label to edit the value of a database field of any type."));
@@ -287,7 +287,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("KexiPushButton");
 	wi->setName(i18n("Command Button"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. "
+		i18nc("Widget name. This string will be used to name widgets of this class. "
 		"It must _not_ contain white spaces and non latin1 characters.", "button"));
 	wi->setDescription(i18n("A command button to execute actions"));
 	addClass(wi);
@@ -298,11 +298,11 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propDesc["onClickActionOption"] = i18n("On Click Option");
 	m_propDesc["autoTabStops"] = i18n("Auto Tab Order");
 	m_propDesc["shadowEnabled"] = i18n("Shadow Enabled");
-	m_propDesc["on"] = i18n("On: button", "On");
+	m_propDesc["on"] = i18nc("On: button", "On");
 
 	m_propDesc["widgetType"] = i18n("Editor Type");
 	//for autofield's type: inherit i18n from KexiDB
-	m_propValDesc["Auto"] = i18n("AutoField editor's type", "Auto"); 
+	m_propValDesc["Auto"] = i18nc("AutoField editor's type", "Auto"); 
 	m_propValDesc["Text"] = KexiDB::Field::typeName(KexiDB::Field::Text);
 	m_propValDesc["Integer"] = KexiDB::Field::typeName(KexiDB::Field::Integer);
 	m_propValDesc["Double"] = KexiDB::Field::typeName(KexiDB::Field::Double);
@@ -310,26 +310,26 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propValDesc["Date"] = KexiDB::Field::typeName(KexiDB::Field::Date);
 	m_propValDesc["Time"] = KexiDB::Field::typeName(KexiDB::Field::Time);
 	m_propValDesc["DateTime"] = KexiDB::Field::typeName(KexiDB::Field::DateTime);
-	m_propValDesc["MultiLineText"] = i18n("AutoField editor's type", "Multiline Text");
-	m_propValDesc["ComboBox"] = i18n("AutoField editor's type", "Drop-Down List"); 
-	m_propValDesc["Image"] = i18n("AutoField editor's type", "Image");
+	m_propValDesc["MultiLineText"] = i18nc("AutoField editor's type", "Multiline Text");
+	m_propValDesc["ComboBox"] = i18nc("AutoField editor's type", "Drop-Down List"); 
+	m_propValDesc["Image"] = i18nc("AutoField editor's type", "Image");
 
 //	m_propDesc["labelCaption"] = i18n("Label Text");
 	m_propDesc["autoCaption"] = i18n("Auto Label");
 	m_propDesc["foregroundLabelColor"] = i18n("Label Text Color");
-	m_propDesc["backgroundLabelColor"] = i18n("(a property name, keep the text narrow!)", 
+	m_propDesc["backgroundLabelColor"] = i18nc("(a property name, keep the text narrow!)", 
 		"Label Background\nColor");
 
 	m_propDesc["labelPosition"] = i18n("Label Position");
-	m_propValDesc["Left"] = i18n("Label Position", "Left");
-	m_propValDesc["Top"] = i18n("Label Position", "Top");
-	m_propValDesc["NoLabel"] = i18n("Label Position", "No Label");
+	m_propValDesc["Left"] = i18nc("Label Position", "Left");
+	m_propValDesc["Top"] = i18nc("Label Position", "Top");
+	m_propValDesc["NoLabel"] = i18nc("Label Position", "No Label");
 
 	m_propDesc["sizeInternal"] = i18n("Size");
 //	m_propDesc["pixmap"] = i18n("Image");
 	m_propDesc["pixmapId"] = i18n("Image");
 	m_propDesc["scaledContents"] = i18n("Scaled Contents");
-	m_propDesc["keepAspectRatio"] = i18n("Keep Aspect Ratio (short)", "Keep Ratio");
+	m_propDesc["keepAspectRatio"] = i18nc("Keep Aspect Ratio (short)", "Keep Ratio");
 
 	//hide classes that are replaced by db-aware versions
 	hideClass("KexiPictureLabel");
@@ -338,16 +338,16 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	//used in labels, frames...
 	m_propDesc["frameColor"] = i18n("Frame Color");
 	m_propDesc["dropDownButtonVisible"] = 
-		i18n("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)", 
+		i18nc("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)", 
 			"Drop-Down\nButton Visible");
 
 	//for checkbox
-	m_propValDesc["TristateDefault"] = i18n("Tristate checkbox, default", "Default");
-	m_propValDesc["TristateOn"] = i18n("Tristate checkbox, yes", "Yes");
-	m_propValDesc["TristateOff"] = i18n("Tristate checkbox, no", "No");
+	m_propValDesc["TristateDefault"] = i18nc("Tristate checkbox, default", "Default");
+	m_propValDesc["TristateOn"] = i18nc("Tristate checkbox, yes", "Yes");
+	m_propValDesc["TristateOff"] = i18nc("Tristate checkbox, no", "No");
 	
 	//for combobox
-	m_propDesc["editable"] = i18n("Editable combobox", "Editable");
+	m_propDesc["editable"] = i18nc("Editable combobox", "Editable");
 }
 
 KexiDBFactory::~KexiDBFactory()
@@ -363,42 +363,43 @@ KexiDBFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 	QWidget *w=0;
 	QString text( container->form()->library()->textForWidgetName(n, c) );
 	const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
+	bool createContainer = false;
 
 	if(c == "KexiDBSubForm")
-		w = new KexiDBSubForm(container->form(), p, n);
+		w = new KexiDBSubForm(container->form(), p);
 	else if(c == "KexiDBLineEdit")
 	{
-		w = new KexiDBLineEdit(p, n);
+		w = new KexiDBLineEdit(p);
 		if (designMode)
 			w->setCursor(QCursor(Qt::ArrowCursor));
 	}
 	else if(c == "KexiDBTextEdit")
 	{
-		w = new KexiDBTextEdit(p, n);
+		w = new KexiDBTextEdit(p);
 		if (designMode)
 			w->setCursor(QCursor(Qt::ArrowCursor));
 	}
-	else if(c == "Q3Frame" || c == "KexiFrame")
+	else if(c == "Q3Frame" || c == "QFrame" || c == "KexiFrame")
 	{
-		w = new KexiFrame(p, n);
-		new KFormDesigner::Container(container, w, container);
+		w = new KexiFrame(p);
+		createContainer = true;
 	}
 	else if(c == "KexiDBLabel")
-		w = new KexiDBLabel(text, p, n);
+		w = new KexiDBLabel(text, p);
 #ifndef KEXI_NO_IMAGEBOX_WIDGET
 	else if(c == "KexiDBImageBox") {
-		w = new KexiDBImageBox(designMode, p, n);
+		w = new KexiDBImageBox(designMode, p);
 		connect(w, SIGNAL(idChanged(long)), this, SLOT(slotImageBoxIdChanged(long)));
 	}
 #endif
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
 	else if(c == "KexiDBAutoField")
-		w = new KexiDBAutoField(p, n, designMode);
+		w = new KexiDBAutoField(p, designMode);
 #endif
 	else if(c == "KexiDBCheckBox")
-		w = new KexiDBCheckBox(text, p, n);
+		w = new KexiDBCheckBox(text, p);
 	else if(c == "KexiDBComboBox")
-		w = new KexiDBComboBox(p, n, designMode);
+		w = new KexiDBComboBox(p, designMode);
 /*	else if(c == "KexiDBTimeEdit")
 		w = new KexiDBTimeEdit(QTime::currentTime(), p, n);
 	else if(c == "KexiDBDateEdit")
@@ -410,19 +411,23 @@ KexiDBFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 //	else if(c == "KexiDBDoubleSpinBox")
 //		w = new KexiDBDoubleSpinBox(p, n);
 	else if(c == "KPushButton" || c == "KexiPushButton")
-		w = new KexiPushButton(text, p, n);
+		w = new KexiPushButton(text, p);
 
+	if (w)
+		w->setObjectName(n);
+	if (createContainer)
+		(void)new KFormDesigner::Container(container, w, container);
 	return w;
 }
 
 bool
-KexiDBFactory::createMenuActions(const Q3CString &classname, QWidget *w, QPopupMenu *menu,
+KexiDBFactory::createMenuActions(const Q3CString &classname, QWidget *w, QMenu *menu,
 		   KFormDesigner::Container *)
 {
 	if(classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton")
 	{
 /*! @todo also call createMenuActions() for inherited factory! */
-		m_assignAction->plug( menu );
+		menu->addAction( m_assignAction );
 		return true;
 	}
 	else if(classname == "KexiDBImageBox")
@@ -430,19 +435,18 @@ KexiDBFactory::createMenuActions(const Q3CString &classname, QWidget *w, QPopupM
 		KexiDBImageBox *imageBox = static_cast<KexiDBImageBox*>(w);
 		imageBox->contextMenu()->updateActionsAvailability();
 		KActionCollection *ac = imageBox->contextMenu()->actionCollection();
-		KMenu *subMenu = new KMenu();
+		QMenu *subMenu = menu->addMenu(i18n("&Image"));
 //! @todo make these actions undoable/redoable
-		menu->insertItem(i18n("&Image"), subMenu);
-		ac->action("insert")->plug(subMenu);
-		ac->action("file_save_as")->plug(subMenu);
+		subMenu->addAction( ac->action("insert") );
+		subMenu->addAction( ac->action("file_save_as") );
 		subMenu->addSeparator();
-		ac->action("edit_cut")->plug(subMenu);
-		ac->action("edit_copy")->plug(subMenu);
-		ac->action("edit_paste")->plug(subMenu);
-		ac->action("delete")->plug(subMenu);
+		subMenu->addAction( ac->action("edit_cut") );
+		subMenu->addAction( ac->action("edit_copy") );
+		subMenu->addAction( ac->action("edit_paste") );
+		subMenu->addAction( ac->action("delete") );
 		if (ac->action("properties")) {
 			subMenu->addSeparator();
-			ac->action("properties")->plug(subMenu);
+			subMenu->addAction( ac->action("properties") );
 		}
 	}
 	return false;
@@ -452,16 +456,15 @@ void
 KexiDBFactory::createCustomActions(KActionCollection* col)
 {
 	//this will create shared instance action for design mode (special collection is provided)
-	m_assignAction = new KAction( i18n("&Assign Action..."), KIcon("form_action"),
-		0, 0, 0, col, "widget_assign_action");
+	col->addAction( "widget_assign_action",
+		m_assignAction = new KAction( KIcon("form_action"), i18n("&Assign Action..."), this) );
 }
 
 bool
 KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
-	if(classname == "KexiDBLineEdit")
-	{
+	if (classname == "KexiDBLineEdit") {
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
 		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
@@ -478,21 +481,20 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
 			textedit->geometry(), textedit->alignment(), true, true);
 		//copy a few properties
 		KTextEdit *ed = dynamic_cast<KTextEdit *>( editor(w) );
-		ed->setWrapPolicy(textedit->wrapPolicy());
-		ed->setWordWrap(textedit->wordWrap());
+		ed->setLineWrapMode(textedit->lineWrapMode());
+		ed->setLineWrapColumnOrWidth(textedit->lineWrapColumnOrWidth());
+		ed->setWordWrapMode(textedit->wordWrapMode());
 		ed->setTabStopWidth(textedit->tabStopWidth());
-		ed->setWrapColumnOrWidth(textedit->wrapColumnOrWidth());
-		ed->setLinkUnderline(textedit->linkUnderline());
+#warning TODO Qt4:		ed->setLinkUnderline(textedit->linkUnderline());
 		ed->setTextFormat(textedit->textFormat());
-		ed->setHScrollBarMode(textedit->hScrollBarMode());
-		ed->setVScrollBarMode(textedit->vScrollBarMode());
+#warning TODO Qt4:		ed->setHScrollBarMode(textedit->hScrollBarMode());
+#warning TODO Qt4:		ed->setVScrollBarMode(textedit->vScrollBarMode());
 		return true;
 	}
 	else if ( classname == "KexiDBLabel" ) {
 		KexiDBLabel *label = static_cast<KexiDBLabel*>(w);
 		m_widget = w;
-		if(label->textFormat() == RichText)
-		{
+		if(label->textFormat() == Qt::RichText) {
 			QString text = label->text();
 			if ( editRichText( label, text ) )
 			{
@@ -503,11 +505,10 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
 			if ( classname == "KexiDBLabel" )
 				w->resize(w->sizeHint());
 		}
-		else
-		{
+		else {
 			createEditor(classname, label->text(), label, container,
 				label->geometry(), label->alignment(), 
-				false, label->alignment() & Qt::WordBreak /*multiline*/);
+				false, label->wordWrap() /*multiline*/);
 		}
 		return true;
 	}
@@ -529,7 +530,7 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
 		return true;
 	}
 #endif
-	else if(classname == "KexiDBAutoField") {
+	else if (classname == "KexiDBAutoField") {
 		if(static_cast<KexiDBAutoField*>(w)->hasAutoCaption())
 			return false; // caption is auto, abort editing
 		QLabel *label = static_cast<KexiDBAutoField*>(w)->label();
@@ -539,7 +540,9 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
 	else if (classname == "KexiDBCheckBox") {
 		KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(w);
 		QRect r( cb->geometry() );
-		r.setLeft( r.left() + 2 + cb->style().subRect( QStyle::SR_CheckBoxIndicator, cb ).width() );
+		r.setLeft( 
+			r.left() + 2
+			+ cb->style()->subElementRect( QStyle::SE_CheckBoxIndicator, 0, cb ).width() );
 		createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
 		return true;
 	}
@@ -677,7 +680,7 @@ KexiDBFactory::changeText(const QString &text)
 		return false;
 	if (!form->selectedWidget())
 		return false;
-	Q3CString n( form->selectedWidget()->className() );
+	Q3CString n( form->selectedWidget()->metaObject()->className() );
 //	QWidget *w = WidgetFactory::widget();
 	if(n == "KexiDBAutoField") {
 		changeProperty("caption", text, form);
@@ -704,7 +707,8 @@ KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
 
 	// (js) heh, porting to KFormDesigner::FormManager::self() singleton took me entire day of work...
 	KFormDesigner::Form *form = KFormDesigner::FormManager::self()->activeForm();
-	KexiFormView *formView = form ? KexiUtils::findParent<KexiFormView>((QWidget*)form->widget(), "KexiFormView") : 0;
+	KexiFormView *formView = form
+		? KexiUtils::findParent<KexiFormView*>((QWidget*)form->widget()) : 0;
 	if (formView) {
 		changeProperty("pixmapId", (uint)/*! @todo unsafe */id, form);
 //old		formView->setUnsavedLocalBLOB(m_widget, id);

@@ -19,14 +19,11 @@
 #ifndef KEXIDATASOURCEPAGE_H
 #define KEXIDATASOURCEPAGE_H
 
-#include <qwidget.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3Frame>
-#include <Q3CString>
+#include <QWidget>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
 #include <koproperty/set.h>
+#include <kexi_export.h>
 
 class KexiObjectInfoLabel;
 class KexiDataSourceComboBox;
@@ -35,7 +32,6 @@ class KexiFieldListView;
 class KexiProject;
 class QToolButton;
 class QLabel;
-class Q3Frame;
 
 //! A page within form designer's property tabbed pane, providing data source editor
 class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
@@ -43,7 +39,7 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 	Q_OBJECT
 
 	public:
-		KexiDataSourcePage(QWidget *parent, const char *name = 0);
+		KexiDataSourcePage(QWidget *parent);
 		virtual ~KexiDataSourcePage();
 
 		KexiDataSourceComboBox* dataSourceCombo() const { return m_dataSourceCombo; }
@@ -56,17 +52,17 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 
 		//! Sets data source of a currently selected form. 
 		//! This is performed on form initialization and on activating.
-		void setDataSource(const Q3CString& mimeType, const Q3CString& name);
+		void setDataSource(const QString& mimeType, const QString& name);
 
 		//! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
 		void assignPropertySet(KoProperty::Set* propertySet);
 
 	signals:
 		//! Signal emitted when helper button 'go to selected data source' is clicked.
-		void jumpToObjectRequested(const Q3CString& mime, const Q3CString& name);
+		void jumpToObjectRequested(const QString& mime, const QString& name);
 
 		//! Signal emitted when form's data source has been changed. It's connected to the Form Manager.
-		void formDataSourceChanged(const Q3CString& mime, const Q3CString& name);
+		void formDataSourceChanged(const QString& mime, const QString& name);
 
 		/*! Signal emitted when current widget's data source (field/expression)
 		 has been changed. It's connected to the Form Manager. 
@@ -98,7 +94,7 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 			*m_widgetDSLabel, *m_availableFieldsLabel,
 			*m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
 		QToolButton *m_clearWidgetDSButton, *m_clearDSButton, *m_gotoButton, *m_addField;
-		Q3Frame *m_dataSourceSeparator;
+//		QFrame *m_dataSourceSeparator;
 		QString m_noDataSourceAvailableSingleText, m_noDataSourceAvailableMultiText;
 		bool m_insideClearDataSourceSelection : 1;
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
@@ -108,8 +104,7 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 #endif
 
 		//! Used only in assignPropertySet() to check whether we already have the set assigned
-		QCString m_currentObjectName;
-		//QGuardedPtr<KoProperty::Set> m_propertySet;
+		QString m_currentObjectName;
 };
 
 #endif

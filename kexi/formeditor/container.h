@@ -88,7 +88,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		Container* toplevel();
 
 		//! \return The form this Container belongs to.
-		Form* form() const { return m_form; }
+		Form* form() const;
 
 		//! \return The watched widget.
 		QWidget* widget() const { return m_container; }
@@ -216,11 +216,12 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QRect m_insertRect;
 		ObjectTreeItem *m_tree;
 
-		QPointer<Form> m_form;
 		bool m_mousePressEventReceived;
 		QMouseEvent m_mouseReleaseEvent;
 		QPointer<QObject> m_objectForMouseReleaseEvent;
 
+		class Private;
+		Private * const d;
 		friend class InsertWidgetCommand;
 		friend class PasteWidgetCommand;
 		friend class DeleteWidgetCommand;

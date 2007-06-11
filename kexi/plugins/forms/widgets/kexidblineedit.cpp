@@ -25,7 +25,7 @@
 #include <knumvalidator.h>
 #include <kdatetable.h>
 
-#include <qpopupmenu.h>
+#include <qmenu.h>
 #include <qpainter.h>
 
 #include <kexiutils/utils.h>
@@ -53,12 +53,10 @@ class KexiDBLineEdit_ReadOnlyValidator : public QValidator
 
 //-----
 
-KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
- : KLineEdit(parent, name)
+KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
+ : KLineEdit(parent)
  , KexiDBTextWidgetInterface()
  , KexiFormDataItemInterface()
-//moved , m_dateFormatter(0)
-//moved , m_timeFormatter(0)
  , m_menuExtender(this, this)
  , m_internalReadOnly(false)
  , m_slotTextChanged_enabled(true)
@@ -75,8 +73,6 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
 
 KexiDBLineEdit::~KexiDBLineEdit()
 {
-//moved	delete m_dateFormatter;
-//moved	delete m_timeFormatter;
 }
 
 void KexiDBLineEdit::setInvalidState( const QString& displayText )
@@ -90,99 +86,16 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-#if 0 //moved to KexiTextFormatter
-	QVariant value;
-	if (removeOld)
-		value = add;
-	else {
-		if (add.toString().isEmpty())
-			value = m_origValue;
-		else
-			value = m_origValue.toString() + add.toString();
-	}
-
-	if (m_columnInfo) {
-		const KexiDB::Field::Type t = m_columnInfo->field->type();
-		if (t == KexiDB::Field::Boolean) {
-			//! @todo temporary solution for booleans!
-			setText( value.toBool() ? "1" : "0" );
-			return;
-		}
-		else if (t == KexiDB::Field::Date) {
-			setText( dateFormatter()->dateToString( value.toString().isEmpty() ? QDate() : value.toDate() ) );
-			setCursorPosition(0); //ok?
-			return;
-		}
-		else if (t == KexiDB::Field::Time) {
-			setText( 
-				timeFormatter()->timeToString( 
-					//hack to avoid converting null variant to valid QTime(0,0,0)
-					value.toString().isEmpty() ? value.toTime() : QTime(99,0,0) 
-				)
-			);
-			setCursorPosition(0); //ok?
-			return;
-		}
-		else if (t == KexiDB::Field::DateTime) {
-			if (value.toString().isEmpty() ) {
-				setText( QString() );
-			}
-			else {
-				setText(
-					dateFormatter()->dateToString( value.toDateTime().date() ) + " " +
-					timeFormatter()->timeToString( value.toDateTime().time() )
-				);
-			}
-			setCursorPosition(0); //ok?
-			return;
-		}
-	}
-#endif	
 	m_slotTextChanged_enabled = false;
-	setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
-//	 setText( value.toString() );
-	 setCursorPosition(0); //ok?
+#warning reenable when formatter is ported	setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
+	setCursorPosition(0); //ok?
 	m_slotTextChanged_enabled = true;
 }
 
 QVariant KexiDBLineEdit::value()
 {
-	return m_textFormatter.textToValue( text() );
-#if 0 // moved to KexiTextFormatter
-	if (! m_columnInfo)
-		return QVariant();
-	const KexiDB::Field::Type t = m_columnInfo->field->type();
-	switch (t) {
-	case KexiDB::Field::Text:
-	case KexiDB::Field::LongText:
-		return text();
-	case KexiDB::Field::Byte:
-	case KexiDB::Field::ShortInteger:
-		return text().toShort();
-//! @todo uint, etc?
-	case KexiDB::Field::Integer:
-		return text().toInt();
-	case KexiDB::Field::BigInteger:
-		return text().toLongLong();
-	case KexiDB::Field::Boolean:
-		//! @todo temporary solution for booleans!
-		return text() == "1" ? QVariant(true,1) : QVariant(false,0);
-	case KexiDB::Field::Date:
-		return dateFormatter()->stringToVariant( text() );
-	case KexiDB::Field::Time:
-		return timeFormatter()->stringToVariant( text() );
-	case KexiDB::Field::DateTime:
-		return stringToDateTime(*dateFormatter(), *timeFormatter(), text());
-	case KexiDB::Field::Float:
-		return text().toFloat();
-	case KexiDB::Field::Double:
-		return text().toDouble();
-	default:
-		return QVariant();
-	}
-//! @todo more data types!
-	return text();
-#endif
+#warning reenable when formatter is ported return m_textFormatter.textToValue( text() );
+	return "";
 }
 
 void KexiDBLineEdit::slotTextChanged(const QString&)
@@ -199,47 +112,14 @@ bool KexiDBLineEdit::valueIsNull()
 
 bool KexiDBLineEdit::valueIsEmpty()
 {
-	return m_textFormatter.valueIsEmpty( text() );
-#if 0 // moved to KexiTextFormatter
-	if (text().isEmpty())
-		return true;
-
-	if (m_columnInfo) {
-		const KexiDB::Field::Type t = m_columnInfo->field->type();
-		if (t == KexiDB::Field::Date || )
-			return dateFormatter()->isEmpty( text() );
-		else if (t == KexiDB::Field::Time)
-			return timeFormatter()->isEmpty( text() );
-		else if (t == KexiDB::Field::Time)
-			return dateTimeIsEmpty( *dateFormatter(), *timeFormatter(), text() );
-	}
-
-//! @todo
-	return text().isEmpty();
-#endif
+#warning reenable when formatter is ported	return m_textFormatter.valueIsEmpty( text() );
+	return true;
 }
 
 bool KexiDBLineEdit::valueIsValid()
 {
-	return m_textFormatter.valueIsValid( text() );
-#if 0 // moved to KexiTextFormatter
-	if (!m_columnInfo)
-		return true;
-//! @todo fix for fields with "required" property = true
-	if (valueIsEmpty()/*ok?*/)
-		return true;
-
-	const KexiDB::Field::Type t = m_columnInfo->field->type();
-	if (t == KexiDB::Field::Date)
-		return dateFormatter()->stringToVariant( text() ).isValid();
-	else if (t == KexiDB::Field::Time)
-		return timeFormatter()->stringToVariant( text() ).isValid();
-	else if (t == KexiDB::Field::DateTime)
-		return dateTimeIsValid( *dateFormatter(), *timeFormatter(), text() );
-
-//! @todo
+#warning reenable when formatter is ported	return m_textFormatter.valueIsValid( text() );
 	return true;
-#endif
 }
 
 bool KexiDBLineEdit::isReadOnly() const
@@ -255,9 +135,15 @@ void KexiDBLineEdit::setReadOnly( bool readOnly )
 #else
 	m_internalReadOnly = readOnly;
 	if (m_internalReadOnly) {
+		if (m_readWriteValidator)
+			disconnect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
+				this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
 		m_readWriteValidator = validator();
+		if (m_readWriteValidator)
+			connect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
+				this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
 		if (!m_readOnlyValidator)
-		m_readOnlyValidator = new KexiDBLineEdit_ReadOnlyValidator(this);
+			m_readOnlyValidator = new KexiDBLineEdit_ReadOnlyValidator(this);
 		setValidator( m_readOnlyValidator );
 	}
 	else {
@@ -268,9 +154,14 @@ void KexiDBLineEdit::setReadOnly( bool readOnly )
 #endif
 }
 
-QPopupMenu * KexiDBLineEdit::createPopupMenu()
+void KexiDBLineEdit::slotReadWriteValidatorDestroyed(QObject*)
 {
-	QPopupMenu *contextMenu = KLineEdit::createPopupMenu();
+	m_readWriteValidator = 0;
+}
+
+QMenu * KexiDBLineEdit::createPopupMenu()
+{
+	QMenu *contextMenu = KLineEdit::createStandardContextMenu();
 	m_menuExtender.createTitle(contextMenu);
 	return contextMenu;
 }
@@ -301,7 +192,7 @@ void KexiDBLineEdit::clear()
 void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
 	KexiFormDataItemInterface::setColumnInfo(cinfo);
-	m_textFormatter.setField( cinfo ? cinfo->field : 0 );
+#warning reenable when formatter is ported	m_textFormatter.setField( cinfo ? cinfo->field : 0 );
 
 	if (!cinfo)
 		return;
@@ -309,22 +200,9 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 //! @todo handle input mask (via QLineEdit::setInputMask()) using a special KexiDB::FieldInputMask class
 	setValidator( new KexiDB::FieldValidator(*cinfo->field, this) );
 
-#if 0 // moved to KexiTextFormatter
-	if (t==KexiDB::Field::Date) {
-//! @todo use KDateWidget?
-		setInputMask( dateFormatter()->inputMask() );
-	}
-	else if (t==KexiDB::Field::Time) {
-//! @todo use KTimeWidget
-//		setInputMask("00:00:00");
-		setInputMask( timeFormatter()->inputMask() );
-	}
-	else if (t==KexiDB::Field::DateTime) {
-		setInputMask( 
-			dateTimeInputMask( *dateFormatter(), *timeFormatter() ) );
-	}
-#endif
-	const QString inputMask( m_textFormatter.inputMask() );
+	const QString inputMask
+#warning reenable when formatter is ported:	(m_textFormatter.inputMask())
+	;
 	if (!inputMask.isEmpty())
 		setInputMask( inputMask );
 
@@ -350,8 +228,7 @@ bool KexiDBLineEdit::event( QEvent * e )
 	KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
 	if (e->type()==QEvent::FocusOut) {
 		QFocusEvent *fe = static_cast<QFocusEvent *>(e);
-//		if (fe->reason()!=QFocusEvent::ActiveWindow && fe->reason()!=QFocusEvent::Popup) {
-		if (fe->reason()==QFocusEvent::Tab || fe->reason()==QFocusEvent::Backtab) {
+		if (fe->reason()==Qt::TabFocusReason || fe->reason()==Qt::BacktabFocusReason) {
 		//display aligned to left after loosing the focus (only if this is tab/backtab event)
 //! @todo add option to set cursor at the beginning
 			setCursorPosition(0); //ok?

@@ -21,8 +21,7 @@
 #define KexiDBTextWidgetInterface_H
 
 #include <widget/utils/kexidisplayutils.h>
-//Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 #include <QEvent>
 
 namespace KexiDB {
@@ -43,7 +42,8 @@ class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
 		void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
 
 		//! Called from paintEvent( QPaintEvent *pe ) method of the data aware widget.
-		void paint( Q3Frame *w, QPainter *p, bool textIsEmpty, int alignment, bool hasFocus );
+		void paint( QWidget *w, QPainter *p, bool textIsEmpty, Qt::Alignment alignment, 
+			bool hasFocus );
 
 		//! Called from event( QEvent * e ) method of the data aware widget.
 		void event( QEvent * e, QWidget *w, bool textIsEmpty );

@@ -20,10 +20,11 @@
 #ifndef KexiFrame_H
 #define KexiFrame_H
 
-#include <q3frame.h>
+#include <QFrame>
+#include <kexi_export.h>
 
 //! @short Frame widget for Kexi forms
-class KEXIFORMUTILS_EXPORT KexiFrame : public Q3Frame
+class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame
 {
 	Q_OBJECT
 //todo	Q_ENUMS( Shape Shadow )
@@ -32,7 +33,7 @@ class KEXIFORMUTILS_EXPORT KexiFrame : public Q3Frame
 //todo	Q_OVERRIDE( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
 
 	public:
-		KexiFrame( QWidget * parent, const char * name = 0, WFlags f = 0 );
+		KexiFrame( QWidget * parent, Qt::WindowFlags f = 0 );
 		virtual ~KexiFrame();
 
 		virtual const QColor& frameColor() const;
@@ -78,7 +79,7 @@ class KEXIFORMUTILS_EXPORT KexiFrame : public Q3Frame
 		virtual void drawFrame( QPainter * );
 
 		class Private;
-		Private *d;
+		Private * const d;
 };
 
 #endif

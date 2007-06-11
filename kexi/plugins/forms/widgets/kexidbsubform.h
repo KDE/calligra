@@ -31,7 +31,7 @@ class KEXIFORMUTILS_EXPORT KexiDBSubForm : public Q3ScrollView
 	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
 
 	public:
-		KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent, const char *name);
+		KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent);
 		~KexiDBSubForm() {}
 
 		//! \return the name of the subform to display inside this widget

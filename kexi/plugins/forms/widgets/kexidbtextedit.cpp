@@ -29,8 +29,8 @@
 #include <QPaintEvent>
 #include <qpainter.h>
 
-KexiDBTextEdit::KexiDBTextEdit(QWidget *parent, const char *name)
- : KTextEdit(parent, name)
+KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
+ : KTextEdit(parent)
  , KexiDBTextWidgetInterface()
  , KexiFormDataItemInterface()
  , m_menuExtender(this, this)
@@ -50,26 +50,28 @@ void KexiDBTextEdit::setInvalidState( const QString& displayText )
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & Qt::TabFocus)
 		setFocusPolicy(Qt::ClickFocus);
-	KTextEdit::setText(displayText);
+	KTextEdit::setPlainText(displayText);
 }
 
 void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
+//! @todo how about rich text?
 	if (m_columnInfo && m_columnInfo->field->type()==KexiDB::Field::Boolean) {
 //! @todo temporary solution for booleans!
-		KTextEdit::setText( add.toBool() ? "1" : "0" );
+		KTextEdit::setPlainText( add.toBool() ? "1" : "0" );
 	}
 	else {
 		if (removeOld)
-			KTextEdit::setText( add.toString() );
+			KTextEdit::setPlainText( add.toString() );
 		else
-			KTextEdit::setText( m_origValue.toString() + add.toString() );
+			KTextEdit::setPlainText( m_origValue.toString() + add.toString() );
 	}
 }
 
 QVariant KexiDBTextEdit::value()
 {
-	return text();
+//! @todo how about rich text?
+	return toPlainText();
 }
 
 void KexiDBTextEdit::slotTextChanged()
@@ -81,12 +83,12 @@ void KexiDBTextEdit::slotTextChanged()
 
 bool KexiDBTextEdit::valueIsNull()
 {
-	return text().isNull();
+	return toPlainText().isNull();
 }
 
 bool KexiDBTextEdit::valueIsEmpty()
 {
-	return text().isEmpty();
+	return toPlainText().isEmpty();
 }
 
 bool KexiDBTextEdit::isReadOnly() const
@@ -97,18 +99,23 @@ bool KexiDBTextEdit::isReadOnly() const
 void KexiDBTextEdit::setReadOnly( bool readOnly )
 {
 	KTextEdit::setReadOnly( readOnly );
+#warning TODO KexiDBTextEdit::setReadOnly() - bg color
+#if 0//TODO
 	QPalette p = palette();
-	QColor c(readOnly ? lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
+	QColor c(readOnly 
+		? lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
 	setPaper( c );
 	p.setColor(QColorGroup::Base, c);
 	p.setColor(QColorGroup::Background, c);
 	setPalette( p );
+#endif
 }
 
+/* Qt4 
 void KexiDBTextEdit::setText( const QString & text, const QString & context )
 {
 	KTextEdit::setText(text, context);
-}
+}*/
 
 QWidget* KexiDBTextEdit::widget()
 {
@@ -117,21 +124,17 @@ QWidget* KexiDBTextEdit::widget()
 
 bool KexiDBTextEdit::cursorAtStart()
 {
-	int para, index;
-	getCursorPosition ( &para, &index );
-	return para==0 && index==0;
+	return textCursor().atStart();
 }
 
 bool KexiDBTextEdit::cursorAtEnd()
 {
-	int para, index;
-	getCursorPosition ( &para, &index );
-	return (paragraphs()-1)==para && (paragraphLength(paragraphs()-1)-1)==index;
+	return textCursor().atEnd();
 }
 
 void KexiDBTextEdit::clear()
 {
-	setText(QString(), QString());
+	document()->clear();
 }
 
 void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
@@ -146,12 +149,13 @@ void KexiDBTextEdit::paintEvent ( QPaintEvent *pe )
 {
 	KTextEdit::paintEvent( pe );
 	QPainter p(this);
-	KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), hasFocus() );
+	KexiDBTextWidgetInterface::paint( this, &p, toPlainText().isEmpty(), alignment(), hasFocus() );
 }
 
-QPopupMenu * KexiDBTextEdit::createPopupMenu(const QPoint & pos)
+QMenu * KexiDBTextEdit::createPopupMenu(const QPoint & pos)
 {
-	QPopupMenu *contextMenu = KTextEdit::createPopupMenu(pos);
+	Q_UNUSED(pos);
+	QMenu *contextMenu = KTextEdit::createStandardContextMenu();//pos);
 	m_menuExtender.createTitle(contextMenu);
 	return contextMenu;
 }
@@ -184,12 +188,12 @@ void KexiDBTextEdit::setDisplayDefaultValue(QWidget* widget, bool displayDefault
 
 void KexiDBTextEdit::moveCursorToEnd()
 {
-	KTextEdit::setCursorPosition(paragraphs()-1, paragraphLength( paragraphs()-1 ));
+	moveCursor( QTextCursor::End );
 }
 
 void KexiDBTextEdit::moveCursorToStart()
 {
-	KTextEdit::setCursorPosition(0 /*para*/, 0 /*index*/);
+	moveCursor( QTextCursor::Start );
 }
 
 void KexiDBTextEdit::selectAll()
@@ -200,7 +204,9 @@ void KexiDBTextEdit::selectAll()
 void KexiDBTextEdit::keyPressEvent( QKeyEvent *ke )
 {
 	// for instance, Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
-	if (KStdAccel::tabNext().contains( KKey(ke) ) || KStdAccel::tabPrev().contains( KKey(ke) )) {
+	if (KStandardShortcut::tabNext().contains( QKeySequence(ke->key()|ke->modifiers()) )
+		|| KStandardShortcut::tabPrev().contains( QKeySequence(ke->key()|ke->modifiers()) ) )
+	{
 		ke->ignore();
 		return;
 	}

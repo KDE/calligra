@@ -48,13 +48,12 @@
 #include <QTextStream>
 #include <Q3GridLayout>
 #include <Q3CString>
-#include <Q3ValueList>
 #include <QPixmap>
 #include <QToolTip>
 
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -63,6 +62,7 @@
 #include <kcharsets.h>
 #include <knuminput.h>
 #include <kactivelabel.h>
+#include <KProgressDialog>
 
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
@@ -79,6 +79,7 @@
 
 #include "kexicsvimportdialog.h"
 #include "kexicsvwidgets.h"
+#include <kexi_global.h>
 
 #ifdef Q_WS_WIN
 #include <krecentdirs.h>
@@ -95,7 +96,7 @@
 #include <q3tl.h>
 #endif
 
-#define _IMPORT_ICON "table" /*todo: change to "file_import" or so*/
+#define _IMPORT_ICON KIcon("table") /*todo: change to "file_import" or so*/
 #define _TEXT_TYPE 0
 #define _NUMBER_TYPE 1
 #define _DATE_TYPE 2
@@ -136,29 +137,13 @@ public:
 void installRecursiveEventFilter(QObject *filter, QObject *object)
 {
 	object->installEventFilter(filter);
-
-	if (!object->children())
-		return;
-
-	QObjectList list = *object->children();
-	for(QObject *obj = list.first(); obj; obj = list.next())
+	QList<QObject*> list( object->children() );
+	foreach (QObject *obj, list)
 		installRecursiveEventFilter(filter, obj);
 }
 
 KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, QWidget * parent)
- : KDialogBase( 
-	KDialogBase::Plain, 
-	i18n( "Import CSV Data File" )
-//! @todo use "Paste CSV Data From Clipboard" caption for mode==Clipboard
-	,
-	(mode==File ? User1 : (ButtonCode)0) |Ok|Cancel, 
-	Ok,
-	parent, 
-	name ? name : "KexiCSVImportDialog", 
-	true, 
-	false,
-	KGuiItem( i18n("&Options"))
-  ),
+ : KDialog( parent ),
 	m_cancelled( false ),
 	m_adjustRows( true ),
 	m_startline( 0 ),
@@ -176,9 +161,19 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, QWidget * parent)
 	m_allRowsLoadedInPreview(false),
 	m_stoppedAt_MAX_BYTES_TO_PREVIEW(false)
 {
-	setWFlags(getWFlags() | Qt::WStyle_Maximize | Qt::WStyle_SysMenu);
+	setWindowFlags(windowFlags() | Qt::WStyle_Maximize | Qt::WStyle_SysMenu);
+	setCaption( i18n( "Import CSV Data File" ) );
+	setWindowIcon(_IMPORT_ICON);
+//! @todo use "Paste CSV Data From Clipboard" caption for mode==Clipboard
+	setButtons( (mode==File ? User1 : (ButtonCode)0) |Ok |Cancel);
+	setDefaultButton(Ok);
+	setObjectName("KexiCSVImportDialog");
+	setModal(true);
+	setSizeGripEnabled( true );
+	setButtonText(User1, i18n("&Options"));
+
 	hide();
-	setButtonOK(KGuiItem( i18n("&Import..."), _IMPORT_ICON));
+	setButtonGuiItem(Ok, KGuiItem( i18n("&Import..."), _IMPORT_ICON));
 
 	m_typeNames.resize(5);
 	m_typeNames[0] = i18n("text");
@@ -187,33 +182,34 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, QWidget * parent)
 	m_typeNames[3] = i18n("time");
 	m_typeNames[4] = i18n("date/time");
 
-	KGlobal::config()->setGroup("ImportExport");
-	m_maximumRowsForPreview = KGlobal::config()->readEntry("MaximumRowsForPreviewInImportDialog", MAX_ROWS_TO_PREVIEW);
-	m_maximumBytesForPreview = KGlobal::config()->readEntry("MaximumBytesForPreviewInImportDialog", MAX_BYTES_TO_PREVIEW);
+	KConfigGroup importExportGroup( KGlobal::config()->group("ImportExport") );
+	m_maximumRowsForPreview = importExportGroup.readEntry(
+		"MaximumRowsForPreviewInImportDialog", MAX_ROWS_TO_PREVIEW);
+	m_maximumBytesForPreview = importExportGroup.readEntry(
+		"MaximumBytesForPreviewInImportDialog", MAX_BYTES_TO_PREVIEW);
 
 	m_pkIcon = SmallIcon("key");
 
-	m_uniquenessTest.setAutoDelete(true);
-
-	setIcon(DesktopIcon(_IMPORT_ICON));
-	setSizeGripEnabled( true );
+//Qt3	m_uniquenessTest.setAutoDelete(true);
 
 //	m_encoding = QString::fromLatin1(KGlobal::locale()->encoding());
 //	m_trimmedInTextValuesChecked = true;
 	m_file = 0;
 	m_inputStream = 0;
+	QWidget *plainPage = new QWidget(this);
+	setMainWidget(plainPage);
 	
-	Q3VBoxLayout *lyr = new Q3VBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(plainPage, 0, KDialog::spacingHint());
 
 	m_infoLbl = new KexiCSVInfoLabel(
 		m_mode==File ? i18n("Preview of data from file:")
 		: i18n("Preview of data from clipboard:"),
-		plainPage()
+		plainPage
 	);
 	lyr->addWidget( m_infoLbl );
 
-	QWidget* page = new QFrame( plainPage(), "page" );
-	Q3GridLayout *glyr= new Q3GridLayout( page, 4, 5, 0, KDialogBase::spacingHint(), "glyr");
+	QWidget* page = new QFrame( plainPage );
+	Q3GridLayout *glyr= new Q3GridLayout( page, 4, 5, 0, KDialog::spacingHint());
 	lyr->addWidget( page );
 
 	// Delimiter: comma, semicolon, tab, space, other
@@ -221,44 +217,53 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, QWidget * parent)
 	m_detectDelimiter = true;
 	glyr->addMultiCellWidget( m_delimiterWidget, 1, 2, 0, 0 );
 
-	QLabel *delimiterLabel = new QLabel(m_delimiterWidget, i18n("Delimiter:"), page);
+	QLabel *delimiterLabel = new QLabel(i18n("Delimiter:"), page);
+	delimiterLabel->setBuddy(m_delimiterWidget);
 	delimiterLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	glyr->addMultiCellWidget( delimiterLabel, 0, 0, 0, 0 );
 
 	// Format: number, text, currency,
 	m_formatComboText = i18n( "Format for column %1:" );
-	m_formatCombo = new KComboBox(page, "m_formatCombo");
-	m_formatCombo->insertItem(i18n("Text"));
-	m_formatCombo->insertItem(i18n("Number"));
-	m_formatCombo->insertItem(i18n("Date"));
-	m_formatCombo->insertItem(i18n("Time"));
-	m_formatCombo->insertItem(i18n("Date/Time"));
+	m_formatCombo = new KComboBox(page);
+	m_formatCombo->setObjectName("m_formatCombo");
+	m_formatCombo->addItem(i18n("Text"));
+	m_formatCombo->addItem(i18n("Number"));
+	m_formatCombo->addItem(i18n("Date"));
+	m_formatCombo->addItem(i18n("Time"));
+	m_formatCombo->addItem(i18n("Date/Time"));
 	glyr->addMultiCellWidget( m_formatCombo, 1, 1, 1, 1 );
 
-	m_formatLabel = new QLabel(m_formatCombo, "", page);
+	m_formatLabel = new QLabel(page);
+	m_formatLabel->setBuddy(m_formatCombo);
 	m_formatLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	glyr->addWidget( m_formatLabel, 0, 1 );
 
-	m_primaryKeyField = new QCheckBox( i18n( "Primary key" ), page, "m_primaryKeyField" );
+	m_primaryKeyField = new QCheckBox( i18n( "Primary key" ), page );
+	m_primaryKeyField->setObjectName("m_primaryKeyField");
 	glyr->addWidget( m_primaryKeyField, 2, 1 );
 	connect(m_primaryKeyField, SIGNAL(toggled(bool)), this, SLOT(slotPrimaryKeyFieldToggled(bool)));
 
 	m_comboQuote = new KexiCSVTextQuoteComboBox( page );
 	glyr->addWidget( m_comboQuote, 1, 2 );
 
-	TextLabel2 = new QLabel( m_comboQuote, i18n( "Text quote:" ), page, "TextLabel2" );
+	TextLabel2 = new QLabel( i18n( "Text quote:" ), page );
+	TextLabel2->setBuddy(m_comboQuote);
+	TextLabel2->setObjectName("TextLabel2");
 	TextLabel2->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
 	TextLabel2->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	glyr->addWidget( TextLabel2, 0, 2 );
 
-	m_startAtLineSpinBox = new KIntSpinBox( page, "m_startAtLineSpinBox" );
-	m_startAtLineSpinBox->setMinValue(1);
+	m_startAtLineSpinBox = new KIntSpinBox( page );
+	m_startAtLineSpinBox->setObjectName("m_startAtLineSpinBox");
+	m_startAtLineSpinBox->setMinimum(1);
 	m_startAtLineSpinBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	m_startAtLineSpinBox->setMinimumWidth(QFontMetrics(m_startAtLineSpinBox->font()).width("8888888"));
+	m_startAtLineSpinBox->setMinimumWidth(
+		QFontMetrics(m_startAtLineSpinBox->font()).width("8888888"));
 	glyr->addWidget( m_startAtLineSpinBox, 1, 3 );
 
-	m_startAtLineLabel = new QLabel( m_startAtLineSpinBox, "", 
-		page, "TextLabel3" );
+	m_startAtLineLabel = new QLabel( page );
+	m_startAtLineLabel->setBuddy(m_startAtLineSpinBox);
+	m_startAtLineLabel->setObjectName("m_startAtLineLabel");
 	m_startAtLineLabel->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
 	m_startAtLineLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	glyr->addWidget( m_startAtLineLabel, 0, 3 );
@@ -266,18 +271,24 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, QWidget * parent)
 	QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
 	glyr->addItem( spacer_2, 0, 4 );
 
-	m_ignoreDuplicates = new QCheckBox( page, "m_ignoreDuplicates" );
+	m_ignoreDuplicates = new QCheckBox( page );
+	m_ignoreDuplicates->setObjectName("m_ignoreDuplicates");
 	m_ignoreDuplicates->setText( i18n( "Ignore duplicated delimiters" ) );
 	glyr->addMultiCellWidget( m_ignoreDuplicates, 2, 2, 2, 4 );
 
-	m_1stRowForFieldNames = new QCheckBox( page, "m_1stRowForFieldNames" );
+	m_1stRowForFieldNames = new QCheckBox( page );
+	m_1stRowForFieldNames->setObjectName("m_1stRowForFieldNames");
 	m_1stRowForFieldNames->setText( i18n( "First row contains column names" ) );
 	glyr->addMultiCellWidget( m_1stRowForFieldNames, 3, 3, 2, 4 );
 
-	m_table = new KexiCSVImportDialogTable( plainPage(), "m_table" );
+	m_table = new KexiCSVImportDialogTable( plainPage );
+	m_table->setObjectName("m_table");
 	lyr->addWidget( m_table );
 
-	m_table->setSizePolicy( QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding, 1, 1) );
+	QSizePolicy spolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+	spolicy.setHorizontalStretch(1);
+	spolicy.setVerticalStretch(1);
+	m_table->setSizePolicy(spolicy);
 	m_table->setNumRows( 0 );
 	m_table->setNumCols( 0 );
 
@@ -316,7 +327,7 @@ if ( m_mode == Clipboard )
 		//! @todo remove
 		QString recentDir = KGlobalSettings::documentPath();
 		m_fname = Q3FileDialog::getOpenFileName( 
-			KFileDialog::getStartURL("kfiledialog:///CSVImportExport", recentDir).path(),
+			KFileDialog::getStartUrl("kfiledialog:///CSVImportExport", recentDir).path(),
 			KexiUtils::fileDialogFilterStrings(mimetypes, false),
 			page, "KexiCSVImportDialog", caption);
 		if ( !m_fname.isEmpty() ) {
@@ -327,13 +338,12 @@ if ( m_mode == Clipboard )
 				KRecentDirs::add("kfiledialog:///CSVImportExport", url.directory());
 		}
 #else
-		m_fname = KFileDialog::getOpenFileName("kfiledialog:///CSVImportExport", mimetypes.join(" "), 
-			this, caption);
+		m_fname = KFileDialog::getOpenFileName(
+			KUrl("kfiledialog:///CSVImportExport"), mimetypes.join(" "), this, caption);
 #endif
 		//cancel action !
-		if ( m_fname.isEmpty() )
-		{
-			actionButton( Ok )->setEnabled( false );
+		if ( m_fname.isEmpty() ) {
+			enableButtonOk( false );
 			m_cancelled = true;
 			if (parentWidget())
 				parentWidget()->raise();
@@ -341,7 +351,7 @@ if ( m_mode == Clipboard )
 		}
 	}
 	else if (m_mode == Clipboard) {
-		Q3CString subtype("plain");
+		QString subtype("plain");
 		m_clipboardData = QApplication::clipboard()->text(subtype, QClipboard::Clipboard);
 /* debug
 		for (int i=0;QApplication::clipboard()->data(QClipboard::Clipboard)->format(i);i++)
@@ -357,11 +367,11 @@ if ( m_mode == Clipboard )
 	m_importingProgressDlg = 0;
 	if (m_mode == File) {
 		m_loadingProgressDlg = new KProgressDialog(
-			this, "m_loadingProgressDlg", i18n("Loading CSV Data"), 
-			i18n("Loading CSV Data from \"%1\"..."
-				QDir::convertSeparators(m_fname)),
-			true);
-		m_loadingProgressDlg->progressBar()->setTotalSteps( m_maximumRowsForPreview+1 );
+			this, i18n("Loading CSV Data"), 
+			i18n("Loading CSV Data from \"%1\"...", QDir::toNativeSeparators(m_fname)));
+		m_loadingProgressDlg->setObjectName("m_loadingProgressDlg");
+		m_loadingProgressDlg->setModal(true);
+		m_loadingProgressDlg->progressBar()->setMaximum( m_maximumRowsForPreview );
 		m_loadingProgressDlg->show();
 	}
 
@@ -448,8 +458,8 @@ bool KexiCSVImportDialog::openData()
 		delete m_file;
 		m_file = 0;
 		KMessageBox::sorry( this, i18n("Cannot open input file <nobr>\"%1\"</nobr>.",
-			QDir::convertSeparators(m_fname)) );
-		actionButton( Ok )->setEnabled( false );
+			QDir::toNativeSeparators(m_fname)) );
+		enableButtonOk( false );
 		m_cancelled = true;
 		if (parentWidget())
 			parentWidget()->raise();
@@ -468,9 +478,7 @@ void KexiCSVImportDialog::fillTable()
 	KexiUtils::WaitCursor wc(true);
 	repaint();
 	m_blockUserEvents = true;
-	QPushButton *pb = actionButton(KDialogBase::Cancel);
-	if (pb)
-		pb->setEnabled(true); //allow to cancel
+	enableButtonCancel(true);
 	KexiUtils::WaitCursor wait;
 
 	if (m_table->numRows()>0) //to accept editor
@@ -485,7 +493,7 @@ void KexiCSVImportDialog::fillTable()
 
 	m_detectedTypes.clear();
 	m_detectedTypes.resize(1024, _NO_TYPE_YET);//_TEXT_TYPE);
-	m_uniquenessTest.clear();
+	qDeleteAll(m_uniquenessTest);
 	m_uniquenessTest.resize(1024);
 	m_1stRowForFieldNamesDetected = true;
 
@@ -535,7 +543,7 @@ void KexiCSVImportDialog::fillTable()
 	const int count = qMax(0, m_table->numRows()-1+m_startline);
 	m_allRowsLoadedInPreview = count < m_maximumRowsForPreview && !m_stoppedAt_MAX_BYTES_TO_PREVIEW;
 	if (m_allRowsLoadedInPreview) {
-		m_startAtLineSpinBox->setMaxValue(count);
+		m_startAtLineSpinBox->setMaximum(count);
 		m_startAtLineSpinBox->setValue(m_startline+1);
 	}
 	m_startAtLineLabel->setText(
@@ -551,13 +559,14 @@ void KexiCSVImportDialog::fillTable()
 	m_table->horizontalScrollBar()->repaint();//avoid missing repaint
 }
 
-QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(QTextStream& inputStream)
+QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(
+	QTextStream& inputStream)
 {
-	m_file->at(0);
+	m_file->seek(0);
 
 	// try to detect delimiter
 	// \t has priority, then ; then ,
-	const QIODevice::Offset origOffset = inputStream.device()->at();
+	const qint64 origOffset = inputStream.device()->pos();
 	QChar c, prevChar=0;
 	int detectedDelimiter = 0;
 	bool insideQuote = false;
@@ -570,7 +579,7 @@ QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(QTextStr
 	const int CH_SEMICOLON = 199; // ;
 	const int CH_COMMA = 198; // ,
 
-	Q3ValueList<int> tabsPerLine, semicolonsPerLine, commasPerLine;
+	QList<int> tabsPerLine, semicolonsPerLine, commasPerLine;
 	int tabs = 0, semicolons = 0, commas = 0;
 	int line = 0;
 	for (uint i=0; !inputStream.atEnd() && i < MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER; i++) {
@@ -610,11 +619,11 @@ QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(QTextStr
 		prevChar = c;
 	}
 
-	inputStream.device()->at(origOffset); //restore orig. offset
+	inputStream.device()->seek(origOffset); //restore orig. offset
 
 	//now, try to find a delimiter character that exists the same number of times in all the checked lines
 	//this detection method has priority over others
-	Q3ValueList<int>::ConstIterator it;
+	QList<int>::ConstIterator it;
 	if (tabsPerLine.count()>1) {
 		tabs = tabsPerLine.isEmpty() ? 0 : tabsPerLine.first();
 		for (it=tabsPerLine.constBegin(); it!=tabsPerLine.constEnd(); ++it) {
@@ -668,12 +677,12 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	const bool hadInputStream = m_inputStream!=0;
 	delete m_inputStream;
 	if ( m_mode == Clipboard ) {
-		m_inputStream = new QTextStream(m_clipboardData, QIODevice::ReadOnly);
+		m_inputStream = new QTextStream(&m_clipboardData, QIODevice::ReadOnly);
 		if (!hadInputStream)
 			m_delimiterWidget->setDelimiter(KEXICSV_DEFAULT_CLIPBOARD_DELIMITER);
 	}
 	else {
-		m_file->at(0); //always seek at 0 because loadRows() is called many times
+		m_file->seek(0); //always seek at 0 because loadRows() is called many times
 		m_inputStream = new QTextStream(m_file);
 		if (m_options.defaultEncodingExplicitySet) {
 			QTextCodec *codec = KGlobal::charsets()->codecForName(m_options.encoding);
@@ -690,9 +699,12 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	m_stoppedAt_MAX_BYTES_TO_PREVIEW = false;
 	int progressStep = 0;
 	if (m_importingProgressDlg)
-		progressStep = qMax( 1, m_importingProgressDlg->progressBar()->totalSteps()/200 );
+		progressStep = qMax( 
+			1,
+			(m_importingProgressDlg->progressBar()->maximum()-m_importingProgressDlg->progressBar()->minimum()+1)/200
+		);
 	int offset = 0;
-	for (;!m_inputStream->atEnd(); offset++)
+	for (;!m_inputStream->atEnd(); offset++) 
 	{
 //disabled: this breaks wide spreadsheets
 //	if (column >= m_maximumRowsForPreview)
@@ -702,7 +714,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			//update progr. bar dlg on final exporting
 			m_importingProgressDlg->progressBar()->setValue(offset);
 			qApp->processEvents();
-			if (m_importingProgressDlg->wasCanceled()) {
+			if (m_importingProgressDlg->wasCancelled()) {
 				delete m_importingProgressDlg;
 				m_importingProgressDlg = 0;
 				return ::cancelled;
@@ -898,7 +910,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 		if (!m_importingProgressDlg && row % 20 == 0) {
 			qApp->processEvents();
 			//only for GUI mode:
-			if (!m_firstFillTableCall && m_loadingProgressDlg && m_loadingProgressDlg->wasCanceled()) {
+			if (!m_firstFillTableCall && m_loadingProgressDlg && m_loadingProgressDlg->wasCancelled()) {
 				delete m_loadingProgressDlg;
 				m_loadingProgressDlg = 0;
 				m_dialogCancelled = true;
@@ -933,14 +945,17 @@ void KexiCSVImportDialog::updateColumnText(int col)
 {
 	QString colName;
 	if (col<(int)m_columnNames.count() && (m_1stRowForFieldNames->isChecked() || m_changedColumnNames[col]))
+	{
 		colName = m_columnNames[ col ];
+	}
 	if (colName.isEmpty()) {
 		colName = i18n("Column %1", col+1); //will be changed to a valid identifier on import
 		m_changedColumnNames[ col ] = false;
 	}
 	int detectedType = m_detectedTypes[col];
-	if (detectedType==_FP_NUMBER_TYPE)
+	if (detectedType==_FP_NUMBER_TYPE) {
 		detectedType=_NUMBER_TYPE; //we're simplifying that for now
+	}
 	else if (detectedType==_NO_TYPE_YET) {
 		m_detectedTypes[col]=_TEXT_TYPE; //entirely empty column
 		detectedType=_TEXT_TYPE;
@@ -951,10 +966,10 @@ void KexiCSVImportDialog::updateColumnText(int col)
 	m_table->horizontalHeader()->adjustHeaderSize();
 
 	//check uniqueness
-	Q3ValueList<int> *list = m_uniquenessTest[col];
+	QList<int> *list = m_uniquenessTest[col];
 	if (m_primaryKeyColumn==-1 && list && !list->isEmpty()) {
-		qHeapSort(*list);
-		Q3ValueList<int>::ConstIterator it=list->constBegin();
+		qSort(*list);
+		QList<int>::ConstIterator it=list->constBegin();
 		int prevValue = *it;
 		++it;
 		for(; it!=list->constEnd() && prevValue!=(*it); ++it)
@@ -1026,7 +1041,7 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 			if (row==1 || type==_NO_TYPE_YET) {
 				bool detected = text.isEmpty();
 				if (!detected) {
-					const QStringList dateTimeList( QStringList::split(" ", text) );
+					const QStringList dateTimeList( text.split(" ") );
 					bool ok = dateTimeList.count()>=2;
 //! @todo also support ISODateTime's "T" separator?
 //! @todo also support timezones?
@@ -1053,10 +1068,10 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 		//default: text type (already set)
 	}
 	//check uniqueness for this value
-	Q3ValueList<int> *list = m_uniquenessTest[col];
+	QList<int> *list = m_uniquenessTest[col];
 	if (row==1 && (!list || !list->isEmpty()) && !text.isEmpty() && _NUMBER_TYPE == m_detectedTypes[col]) {
 		if (!list) {
-			list = new Q3ValueList<int>();
+			list = new QList<int>();
 			m_uniquenessTest.insert(col, list);
 		}
 		list->append( intValue );
@@ -1092,7 +1107,8 @@ bool KexiCSVImportDialog::parseTime(const QString& text, QTime& time)
 	if (time.isValid())
 		return true;
 	if (m_timeRegExp2.exactMatch(text)) { //hh:mm:ss
-		time = QTime(m_timeRegExp2.cap(1).toInt(), m_timeRegExp2.cap(3).toInt(), m_timeRegExp2.cap(5).toInt());
+		time = QTime(m_timeRegExp2.cap(1).toInt(), 
+			m_timeRegExp2.cap(3).toInt(), m_timeRegExp2.cap(5).toInt());
 		return true;
 	}
 	return false;
@@ -1114,11 +1130,11 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 		}
 		else if (detectedType==_FP_NUMBER_TYPE) {
 			//replace ',' with '.'
-			QCString t(text.toLatin1());
+			QByteArray t(text.toLatin1());
 			const int textLen = t.length();
 			for (int i=0; i<textLen; i++) {
-				if (t.at(i)==',') {
-					t.at(i) = '.';
+				if (t[i]==',') {
+					t[i] = '.';
 					break;
 				}
 			}
@@ -1135,9 +1151,9 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 				*m_importingStatement << time;
 		}
 		else if (detectedType==_DATETIME_TYPE) {
-			QStringList dateTimeList( QStringList::split(" ", text) );
+			QStringList dateTimeList( text.split(" ") );
 			if (dateTimeList.count()<2)
-				dateTimeList = QStringList::split("T", text); //also support ISODateTime's "T" separator
+				dateTimeList = text.split("T"); //also support ISODateTime's "T" separator
 //! @todo also support timezones?
 			if (dateTimeList.count()>=2) {
 				//try all combinations
@@ -1166,7 +1182,9 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 
 	if (m_1stRowForFieldNames->isChecked()) {
 		if ((row+m_startline)==1) {//this is for column name
-			if ((col-1) < (int)m_changedColumnNames.size() && false==m_changedColumnNames[col-1]) {
+			if ((col-1) < (int)m_changedColumnNames.size()
+				&& !(bool)m_changedColumnNames[col-1])
+			{
 				//this column has no custom name entered by a user
 				//-get the name from the data cell
 				QString colName(text.simplified());
@@ -1202,7 +1220,8 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 		m_adjustRows=true;
 	}
 
-	m_table->setText(row - 1, col - 1, (m_options.trimmedInTextValuesChecked ? text.trimmed() : text));
+	m_table->setText(row - 1, col - 1, 
+		(m_options.trimmedInTextValuesChecked ? text.trimmed() : text));
 	m_table->verticalHeader()->setLabel(row-1, QString::number(row-1));
 
 	detectTypeAndUniqueness(row-1, col-1, text);
@@ -1304,7 +1323,7 @@ void KexiCSVImportDialog::currentCellChanged(int, int col)
 	if (type==_FP_NUMBER_TYPE)
 		type=_NUMBER_TYPE; //we're simplifying that for now
 
-	m_formatCombo->setCurrentItem( type );
+	m_formatCombo->setCurrentIndex( type );
 	m_formatLabel->setText( m_formatComboText.arg(col+1) );
 	m_primaryKeyField->setEnabled( _NUMBER_TYPE == m_detectedTypes[col]);
 	m_primaryKeyField->blockSignals(true); //block to disable executing slotPrimaryKeyFieldToggled()
@@ -1355,10 +1374,10 @@ void KexiCSVImportDialog::accept()
 	//get suggested name based on the file name
 	QString suggestedName;
 	if (m_mode==File) {
-		suggestedName = KUrl::fromPathOrURL(m_fname).fileName();
+		suggestedName = KUrl(m_fname).fileName();
 		//remove extension
 		if (!suggestedName.isEmpty()) {
-			const int idx = suggestedName.findRev(".");
+			const int idx = suggestedName.lastIndexOf(".");
 			if (idx!=-1)
 				suggestedName = suggestedName.mid(0, idx ).simplified();
 		}
@@ -1408,8 +1427,8 @@ void KexiCSVImportDialog::accept()
 			i18n("No Primary Key (autonumber) has been defined.\n"
 			"Should it be automatically defined on import (recommended)?\n\n"
 			"Note: An imported table without a Primary Key may not be editable (depending on database type)."),
-			QString(), KGuiItem(i18n("Add Database Primary Key to a Table", "Add Primary Key"), "key"),
-			KGuiItem(i18n("Do Not Add Database Primary Key to a Table", "Do Not Add")))))
+			QString(), KGuiItem(i18nc("Add Database Primary Key to a Table", "Add Primary Key"), "key"),
+			KGuiItem(i18nc("Do Not Add Database Primary Key to a Table", "Do Not Add")))))
 	{
 		if (msgboxResult == KMessageBox::Cancel)
 			_ERR; //cancel accepting
@@ -1421,13 +1440,13 @@ void KexiCSVImportDialog::accept()
 		QString fieldName("id");
 		QString fieldCaption("Id");
 
-		QStringList colnames;
+		QSet<QString> colnames;
 		for (uint col = 0; col < numCols; col++)
-			colnames.append( m_table->text(0, col).toLower().simplified() );
+			colnames.insert( m_table->text(0, col).toLower().simplified() );
 
-		if (colnames.find(fieldName)!=colnames.end()) {
+		if (colnames.contains(fieldName)) {
 			int num = 1;
-			while (colnames.find(fieldName+QString::number(num))!=colnames.end())
+			while (colnames.contains(fieldName+QString::number(num)))
 				num++;
 			fieldName += QString::number(num);
 			fieldCaption += QString::number(num);
@@ -1528,13 +1547,15 @@ void KexiCSVImportDialog::accept()
 
 	if (m_file) {
 		if (!m_importingProgressDlg) {
-			m_importingProgressDlg = new KProgressDialog( this, "m_importingProgressDlg", 
-				i18n("Importing CSV Data"), QString(), true );
+			m_importingProgressDlg = new KProgressDialog( this,
+				i18n("Importing CSV Data"), QString() );
+			m_importingProgressDlg->setObjectName("m_importingProgressDlg");
+			m_importingProgressDlg->setModal(true);
 		}
-		m_importingProgressDlg->setLabel(
-			i18n("Importing CSV Data from <nobr>\"%1\"</nobr> into \"%2\" table...")
-				QDir::convertSeparators(m_fname), m_destinationTableSchema->name());
-		m_importingProgressDlg->progressBar()->setTotalSteps( QFileInfo(*m_file).size() );
+		m_importingProgressDlg->setLabelText(
+			i18n("Importing CSV Data from <nobr>\"%1\"</nobr> into \"%2\" table...",
+				QDir::toNativeSeparators(m_fname), m_destinationTableSchema->name()) );
+		m_importingProgressDlg->progressBar()->setMaximum( QFileInfo(*m_file).size()-1 );
 		m_importingProgressDlg->show();
 	}
 
@@ -1590,11 +1611,11 @@ int KexiCSVImportDialog::getHeader(int col)
 {
 	QString header = m_table->horizontalHeader()->label(col);
 
-	if (header == i18n("Text type for column", "Text"))
+	if (header == i18nc("Text type for column", "Text"))
 		return TEXT;
-	else if (header == i18n("Numeric type for column", "Number"))
+	else if (header == i18nc("Numeric type for column", "Number"))
 		return NUMBER;
-	else if (header == i18n("Currency type for column", "Currency"))
+	else if (header == i18nc("Currency type for column", "Currency"))
 		return CURRENCY;
 	else
 		return DATE;
@@ -1613,7 +1634,7 @@ void KexiCSVImportDialog::ignoreDuplicatesChanged(int)
 void KexiCSVImportDialog::slot1stRowForFieldNamesChanged(int)
 {
 	m_adjustRows=true;
-	if (m_1stRowForFieldNames->isChecked() && m_startline>0 && m_startline>=(m_startAtLineSpinBox->maxValue()-1))
+	if (m_1stRowForFieldNames->isChecked() && m_startline>0 && m_startline>=(m_startAtLineSpinBox->maximum()-1))
 		m_startline--;
 	fillTable();
 }
@@ -1664,12 +1685,12 @@ void KexiCSVImportDialog::updateRowCountInfo()
 	if (m_allRowsLoadedInPreview) {
 		m_infoLbl->setCommentText( 
 			i18nc("row count", "(rows: %1)", m_table->numRows()-1+m_startline ) );
-		QToolTip::remove( m_infoLbl );
+		m_infoLbl->commentLabel()->setToolTip(QString());
 	}
 	else {
 		m_infoLbl->setCommentText( 
 			i18nc("row count", "(rows: more than %1)",  m_table->numRows()-1+m_startline ) );
-		QToolTip::add( m_infoLbl->commentLabel(), i18n("Not all rows are visible on this preview") );
+		m_infoLbl->commentLabel()->setToolTip(i18n("Not all rows are visible on this preview"));
 	}
 }
 

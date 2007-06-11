@@ -49,7 +49,7 @@ class KEXIGUIUTILS_EXPORT KexiDisplayUtils
 
 		//! Paints autonumber sign using \a par parameters
 		static void paintAutonumberSign(const DisplayParameters& par, QPainter* painter, 
-			int x, int y, int width, int height, int align, bool overrideColor = false);
+			int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor = false);
 
 		//! Initializes display parameters for default value
 		static void initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget);

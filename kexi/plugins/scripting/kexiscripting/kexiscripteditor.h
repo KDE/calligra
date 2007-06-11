@@ -42,7 +42,7 @@ class KexiScriptEditor : public KexiEditor
         /**
          * Constructor.
          */
-        KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+        KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent);
 
         /**
          * Destructor.

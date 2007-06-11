@@ -84,8 +84,8 @@ void MultiValidator::addSubvalidator( QValidator* validator, bool owned )
 QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 {
 	State s;
-	foreach3( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
-		s = (*it)->validate(input, pos);
+	foreach ( QValidator* validator, m_subValidators ) {
+		s = validator->validate(input, pos);
 		if (s==Intermediate || s==Invalid)
 			return s;
 	}
@@ -94,8 +94,8 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 
 void MultiValidator::fixup ( QString & input ) const
 {
-	foreach3( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators )
-		(*it)->fixup(input);
+	foreach ( QValidator* validator, m_subValidators )
+		validator->fixup(input);
 }
 
 Validator::Result MultiValidator::internalCheck(
@@ -104,9 +104,9 @@ Validator::Result MultiValidator::internalCheck(
 {
 	Result r;
 	bool warning = false;
-	foreach3( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
-		if (dynamic_cast<Validator*>(*it))
-			r = dynamic_cast<Validator*>(*it)->internalCheck(valueName, v, message, details);
+	foreach ( QValidator* validator, m_subValidators ) {
+		if (dynamic_cast<Validator*>(validator))
+			r = dynamic_cast<Validator*>(validator)->internalCheck(valueName, v, message, details);
 		else
 			r = Ok; //ignore
 		if (r==Error)

@@ -72,7 +72,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportView : public KexiView
 			NoResize = 2 /*! @todo */
 		};
 
-		KexiReportView(KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn);
+		KexiReportView(KexiMainWindow *win, QWidget *parent, KexiDB::Connection *conn);
 		virtual ~KexiReportView();
 
 		KexiDB::Connection* connection() { return m_conn; }

@@ -32,8 +32,8 @@
 #include <kexiutils/utils.h>
 #include <kexidb/queryschema.h>
 
-KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent, const char *name)
- : QWidget(parent, name), KexiFormDataItemInterface()
+KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent)
+ : QWidget(parent), KexiFormDataItemInterface()
 {
 	m_invalidState = false;
 	m_cleared = false;

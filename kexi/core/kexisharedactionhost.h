@@ -32,6 +32,7 @@
 
 class KShortcut;
 class KGuiItem;
+class KActionCollection;
 class KexiMainWindowIface;
 class KexiActionProxy;
 class KexiSharedActionHostPrivate;

@@ -43,7 +43,7 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 	Q_OVERRIDE(bool autoCaption DESIGNABLE false)
 
 	public:
-		KexiDBComboBox(QWidget *parent, const char *name=0, bool designMode = true);
+		KexiDBComboBox(QWidget *parent, bool designMode = true);
 		virtual ~KexiDBComboBox();
 
 		//! Implemented for KexiComboBoxBase: form has no 'related data' model (only the full database model)

@@ -22,7 +22,6 @@
 #define KEXIMAINWINDOWIFACE_H
 
 #include <qmap.h>
-#include <Q3PopupMenu>
 #include <Q3CString>
 
 #include <kmainwindow.h>
@@ -107,7 +106,7 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		/*! \return a list of all actions defined by application.
 		 Not all of them are shared. Don't use plug these actions
 		 in your windows by hand but user methods from KexiView! */
-//2.0 disabled		virtual QList<KAction*> allActions() const = 0;
+		virtual QList<QAction*> allActions() const = 0;
 
 		/*! \return currently active window or 0 if there is no active window. */
 		virtual KexiWindow* currentWindow() const = 0;

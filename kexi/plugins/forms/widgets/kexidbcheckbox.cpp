@@ -23,13 +23,13 @@
 #include <kexiutils/utils.h>
 #include <kexidb/queryschema.h>
 
-KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent, const char *name)
- : QCheckBox(text, parent, name), KexiFormDataItemInterface()
+KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent)
+ : QCheckBox(text, parent), KexiFormDataItemInterface()
  , m_invalidState(false)
  , m_tristateChanged(false)
  , m_tristate(TristateDefault)
 {
-	setFocusPolicy(QWidget::StrongFocus);
+	setFocusPolicy(Qt::StrongFocus);
 	updateTristate();
 	connect(this, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
 }
@@ -41,7 +41,7 @@ KexiDBCheckBox::~KexiDBCheckBox()
 void KexiDBCheckBox::setInvalidState( const QString& displayText )
 {
 	setEnabled(false);
-	setState(NoChange);
+	setCheckState(Qt::PartiallyChecked);
 	m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & Qt::TabFocus)
@@ -57,8 +57,7 @@ KexiDBCheckBox::setEnabled(bool enabled)
 	QCheckBox::setEnabled(enabled);
 }
 
-void
-KexiDBCheckBox::setReadOnly(bool readOnly)
+void KexiDBCheckBox::setReadOnly(bool readOnly)
 {
 	setEnabled(!readOnly);
 }
@@ -68,13 +67,13 @@ void KexiDBCheckBox::setValueInternal(const QVariant &add, bool removeOld)
 	Q_UNUSED(add);
 	Q_UNUSED(removeOld);
 	if (isTristateInternal())
-		setState( m_origValue.isNull() ? NoChange : (m_origValue.toBool() ? On : Off) );
+		setCheckState( m_origValue.isNull() 
+			? Qt::PartiallyChecked: (m_origValue.toBool() ? Qt::Checked : Qt::Unchecked) );
 	else
-		setState( m_origValue.toBool() ? On : Off );
+		setCheckState( m_origValue.toBool() ? Qt::Checked : Qt::Unchecked );
 }
 
-QVariant
-KexiDBCheckBox::value()
+QVariant KexiDBCheckBox::value()
 {
 	if (state()==NoChange)
 		return QVariant();
@@ -119,7 +118,7 @@ bool KexiDBCheckBox::cursorAtEnd()
 
 void KexiDBCheckBox::clear()
 {
-	setState(NoChange);
+	setCheckState(Qt::PartiallyChecked);
 }
 
 void KexiDBCheckBox::setTristate(KexiDBCheckBox::Tristate tristate)

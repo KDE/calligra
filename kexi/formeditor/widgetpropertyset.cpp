@@ -569,8 +569,8 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 				// We store old values for each widget
 				QMap<Q3CString, QVariant> list;
 	//			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
-				foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets)
-					list.insert((*it)->objectName().toLatin1(), (*it)->property(property));
+				foreach (const QPointer<QWidget>& widget, d->widgets)
+					list.insert(widget->objectName().toLatin1(), widget->property(property));
 
 				d->lastCommand = new PropertyCommand(this, list, value, property);
 				KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
@@ -578,16 +578,16 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 		}
 
 //			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
-		foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
+		foreach (const QPointer<QWidget>& widget, d->widgets) {
 			if (!alterLastCommand) {
 				ObjectTreeItem *tree
 					= KFormDesigner::FormManager::self()->activeForm()->objectTree()
-						->lookup((*it)->objectName());
+						->lookup(widget->objectName());
 				if (tree && p.isModified())
-					tree->addModifiedProperty(property, (*it)->property(property));
+					tree->addModifiedProperty(property, widget->property(property));
 			}
-			(*it)->setProperty(property, value);
-			emitWidgetPropertyChanged((*it), property, value);
+			widget->setProperty(property, value);
+			emitWidgetPropertyChanged(widget, property, value);
 		}
 	}
 }
@@ -662,13 +662,13 @@ void
 WidgetPropertySet::saveEnabledProperty(bool value)
 {
 //	for(QWidget *w = d->widgets.first(); w; w = d->widgets.next()) {
-	foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
+	foreach (const QPointer<QWidget>& widget, d->widgets) {
 		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()
-			->lookup((*it)->objectName());
+			->lookup(widget->objectName());
 		if(tree->isEnabled() == value)
 			continue;
 
-		QPalette p( (*it)->palette() );
+		QPalette p( widget->palette() );
 		if (!d->origActiveColors)
 			d->origActiveColors = new QColorGroup( p.active() );
 		if (value) {
@@ -681,10 +681,10 @@ WidgetPropertySet::saveEnabledProperty(bool value)
 			cg.setColor(QColorGroup::Base, cg.color(QColorGroup::Background));
 			p.setActive(cg);
 		}
-		(*it)->setPalette(p);
+		widget->setPalette(p);
 
 		tree->setEnabled(value);
-		emit widgetPropertyChanged((*it), "enabled", QVariant(value));
+		emit widgetPropertyChanged(widget, "enabled", QVariant(value));
 	}
 }
 
@@ -729,10 +729,13 @@ WidgetPropertySet::slotPropertyReset(KoProperty::Set& set, KoProperty::Property&
 
 	// We use the old value in modifProp for each widget
 //	for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())  {
-	foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
-		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->objectName());
-		if(tree->modifiedProperties()->contains(property.name()))
-			(*it)->setProperty(property.name(), tree->modifiedProperties()->find(property.name()).value());
+	foreach (const QPointer<QWidget>& widget, d->widgets) {
+		ObjectTreeItem *tree
+			= KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(
+				widget->objectName() );
+		if (tree->modifiedProperties()->contains(property.name()))
+			widget->setProperty(
+				property.name(), tree->modifiedProperties()->find(property.name()).value());
 	}
 }
 
@@ -741,8 +744,8 @@ WidgetPropertySet::slotWidgetDestroyed()
 {
 //	if(d->widgets.contains(QPointer<const QWidget>( dynamic_cast<const QWidget*>(sender()) ))) {
 	//only clear this set if it contains the destroyed widget
-	foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
-		if (dynamic_cast<const QWidget*>(sender()) == *it) {
+	foreach (const QPointer<QWidget>& widget, d->widgets) {
+		if (dynamic_cast<const QWidget*>(sender()) == widget) {
 			clearSet();
 			break;
 		}
@@ -772,8 +775,8 @@ WidgetPropertySet::eventFilter(QObject *o, QEvent *ev)
 			d->lastGeoCommand->setPos(static_cast<QMoveEvent*>(ev)->pos());
 		else  {
 			QStringList list;
-			foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets)
-				list.append((*it)->objectName());
+			foreach (const QPointer<QWidget>& widget, d->widgets)
+				list.append(widget->objectName());
 
 			d->lastGeoCommand = new GeometryPropertyCommand(this, list, static_cast<QMoveEvent*>(ev)->oldPos());
 			if (KFormDesigner::FormManager::self()->activeForm())

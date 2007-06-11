@@ -21,10 +21,7 @@
 #include "kexiformdataiteminterface.h"
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
-#include <q3frame.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <QEvent>
 
 KexiDBTextWidgetInterface::KexiDBTextWidgetInterface()
  : m_autonumberDisplayParameters(0)
@@ -45,21 +42,27 @@ void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QW
 	}
 }
 
-void KexiDBTextWidgetInterface::paint( Q3Frame *w, QPainter* p, bool textIsEmpty, int alignment, bool hasFocus )
+void KexiDBTextWidgetInterface::paint( 
+	QWidget *w, QPainter* p, bool textIsEmpty, Qt::Alignment alignment, bool hasFocus )
 {
 	KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(w);
 	KexiDB::QueryColumnInfo *columnInfo = dataItemIface ? dataItemIface->columnInfo() : 0;
 	if (columnInfo && columnInfo->field && dataItemIface->cursorAtNewRow() && textIsEmpty) {
-		const int margin = w->lineWidth() + w->midLineWidth();
+		int addMargin = 0;
+		if (dynamic_cast<QFrame*>(w))
+			addMargin += dynamic_cast<QFrame*>(w)->lineWidth() + dynamic_cast<QFrame*>(w)->midLineWidth();
 		if (columnInfo->field->isAutoIncrement() && m_autonumberDisplayParameters) {
 			if (w->hasFocus()) {
 				p->setPen(
 					KexiUtils::blendedColors(
 						m_autonumberDisplayParameters->textColor, w->palette().active().base(), 1, 3));
 			}
+			KexiUtils::WidgetMargins margins(w);
 			KexiDisplayUtils::paintAutonumberSign(*m_autonumberDisplayParameters, p,
-				2 + margin + w->margin(), margin, w->width() - margin*2 -2-2, 
-				w->height() - margin*2 -2, alignment, hasFocus);
+				2 + addMargin + margins.left,
+				addMargin + margins.top,
+				w->width() - margins.left - margins.right -2-2, 
+				w->height() - margins.top - margins.bottom -2, alignment, hasFocus);
 		}
 	}
 }

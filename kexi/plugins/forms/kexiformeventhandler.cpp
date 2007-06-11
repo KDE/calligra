@@ -20,10 +20,11 @@
 #include "kexiformeventhandler.h"
 
 #include <qwidget.h>
-#include <qobject.h>
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kactioncollection.h>
+#include <kaction.h>
 
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
@@ -32,6 +33,7 @@
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
+#include <kexiproject.h>
 
 KexiFormEventAction::ActionData::ActionData()
 {
@@ -45,7 +47,7 @@ bool KexiFormEventAction::ActionData::isEmpty() const
 KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
 	QString& actionType, QString& actionArg, bool& ok) const
 {
-	const int idx = string.find(':');
+	const int idx = string.indexOf(':');
 	ok = false;
 	if (idx==-1)
 		return 0;
@@ -154,14 +156,14 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
 
 	//find widgets whose will work as data items
 //! @todo look for other widgets too
-	QObjectList *l = m_mainWidget->queryList( "KexiPushButton" );
-	QObjectListIt it( *l );
-	QObject *obj;
-	for ( ; (obj = it.current()) != 0; ++it ) {
+	QList<QWidget*> widgets( m_mainWidget->findChildren<QWidget*>() );
+	foreach ( QWidget *widget, widgets) {
+		if (!widget->inherits("KexiPushButton"))
+			continue;
 		bool ok;
 		KexiFormEventAction::ActionData data;
-		data.string = obj->property("onClickAction").toString();
-		data.option = obj->property("onClickActionOption").toString();
+		data.string = widget->property("onClickAction").toString();
+		data.option = widget->property("onClickActionOption").toString();
 		if (data.isEmpty())
 			continue;
 
@@ -170,18 +172,18 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
 		if (!ok)
 			continue;
 		if (actionType=="kaction" || actionType=="currentForm") {
-			KAction *action = KexiMainWindowIface::global()->actionCollection()->action( actionArg.toLatin1() );
+			QAction *action = KexiMainWindowIface::global()->actionCollection()->action(
+				actionArg );
 			if (!action)
 				continue;
-			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) ); //safety
-			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
+			QObject::disconnect( widget, SIGNAL(clicked()), action, SLOT(activate()) ); //safety
+			QObject::connect( widget, SIGNAL(clicked()), action, SLOT(activate()) );
 		}
 		else if (partInfo) { //'open or execute' action
-			KexiFormEventAction* action = new KexiFormEventAction(obj, actionType, actionArg, 
+			KexiFormEventAction* action = new KexiFormEventAction(widget, actionType, actionArg, 
 				data.option);
-			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
-			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
+			QObject::disconnect( widget, SIGNAL(clicked()), action, SLOT(activate()) );
+			QObject::connect( widget, SIGNAL(clicked()), action, SLOT(activate()) );
 		}
 	}
-	delete l;
 }

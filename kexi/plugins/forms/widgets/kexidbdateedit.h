@@ -36,7 +36,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	// properties copied from QDateEdit
 	Q_ENUMS( Order )
 	Q_PROPERTY( Order order READ order WRITE setOrder DESIGNABLE true)
@@ -49,11 +49,13 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 	public:
 		enum Order { DMY = Q3DateEdit::DMY, MDY = Q3DateEdit::MDY, YMD = Q3DateEdit::YMD,  YDM = Q3DateEdit::YDM };
 
-		KexiDBDateEdit(const QDate &date, QWidget *parent, const char *name=0);
+		KexiDBDateEdit(const QDate &date, QWidget *parent);
 		virtual ~KexiDBDateEdit();
 
-		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline QString dataSource() const
+			{ return KexiFormDataItemInterface::dataSource(); }
+		inline QString dataSourceMimeType() const
+			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -94,8 +96,10 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 		void  dateChanged(const QDate &date);
 
 	public slots:
-		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSource(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSource(ds); }
+		inline void setDataSourceMimeType(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		inline void setDate(const QDate& date)  { m_edit->setDate(date); }
 		virtual void setReadOnly(bool set);
 

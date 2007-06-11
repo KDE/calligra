@@ -26,11 +26,10 @@
 #include <formeditor/objecttree.h>
 #include <formeditor/commands.h>
 #include <widget/utils/kexirecordmarker.h>
+#include <kexi_global.h>
 
 #include <kmenu.h>
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
  : KexiScrollView(parent, preview)
@@ -53,7 +52,8 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 
 	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 
-	m_popupMenu = new KMenu(this, "contextMenu");
+	m_popupMenu = new KMenu(this);
+	m_popupMenu->setObjectName("m_popupMenu");
 
 //	setFocusPolicy(NoFocus);
 }
@@ -376,7 +376,7 @@ void KexiFormScrollView::slotRowInserted(KexiTableItem *item, uint row, bool rep
 	//! @todo
 }
 
-void KexiFormScrollView::slotRowsDeleted( const Q3ValueList<int> & )
+void KexiFormScrollView::slotRowsDeleted( const QList<int> & )
 {
 	//! @todo
 }
@@ -403,22 +403,24 @@ int KexiFormScrollView::columns() const
 bool KexiFormScrollView::columnEditable(int col)
 {
 	kexipluginsdbg << "KexiFormScrollView::columnEditable(" << col << ")" << endl;
-	foreach_list (Q3PtrListIterator<KexiFormDataItemInterface>, it, m_dataItems) {
-		kexipluginsdbg << (dynamic_cast<QWidget*>(it.current()) ? dynamic_cast<QWidget*>(it.current())->name() : "" ) 
-			<< " " << it.current()->dataSource() << endl;
+	foreach (KexiFormDataItemInterface *dataItemIface, m_dataItems) {
+		kexipluginsdbg << (dynamic_cast<QWidget*>(dataItemIface)
+		? dynamic_cast<QWidget*>(dataItemIface)->objectName() : "" ) 
+			<< " " << dataItemIface->dataSource() << endl;
 	}
 	kexipluginsdbg << "-- focus widgets --" << endl;
-	foreach_list (Q3PtrListIterator<QWidget>, it, *dbFormWidget()->orderedFocusWidgets()) {
-		kexipluginsdbg << it.current()->name() << endl;
+	foreach (QWidget* widget, *dbFormWidget()->orderedFocusWidgets()) {
+		kexipluginsdbg << widget->objectName() << endl;
 	}
 	kexipluginsdbg << "-- data-aware widgets --" << endl;
-	foreach_list (Q3PtrListIterator<QWidget>, it, *dbFormWidget()->orderedDataAwareWidgets()) {
-		kexipluginsdbg << it.current()->name() << endl;
+	foreach (QWidget *widget, *dbFormWidget()->orderedDataAwareWidgets()) {
+		kexipluginsdbg << widget->objectName() << endl;
 	}
 
 	//int index = dbFormWidget()->indexForDataItem( item );
 //	KexiFormDataItemInterface *item1 = dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedFocusWidgets()->at( col ));
-	KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at( col ));
+	KexiFormDataItemInterface *item
+		= dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at( col ));
 
 	if (!item || item->isReadOnly())
 		return false;
@@ -509,17 +511,17 @@ bool KexiFormScrollView::cancelEditor()
 
 void KexiFormScrollView::updateAfterCancelRowEdit()
 {
-	for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-		if (dynamic_cast<QWidget*>(it.current())) {
+	foreach (KexiFormDataItemInterface *dataItemIface, m_dataItems) {
+		if (dynamic_cast<QWidget*>(dataItemIface)) {
 			kexipluginsdbg << "KexiFormScrollView::updateAfterCancelRowEdit(): "
-				<< dynamic_cast<QWidget*>(it.current())->className() << " " 
-				<< dynamic_cast<QWidget*>(it.current())->name() << endl;
+				<< dynamic_cast<QWidget*>(dataItemIface)->className() << " " 
+				<< dynamic_cast<QWidget*>(dataItemIface)->objectName() << endl;
 		}
-		KexiFormDataItemInterface *itemIface = it.current();
-		const bool displayDefaultValue = shouldDisplayDefaultValueForItem(itemIface);
-		itemIface->undoChanges();
-		if (itemIface->hasDisplayedDefaultValue() != displayDefaultValue)
-			itemIface->setDisplayDefaultValue( dynamic_cast<QWidget*>(itemIface), displayDefaultValue );
+		const bool displayDefaultValue = shouldDisplayDefaultValueForItem(dataItemIface);
+		dataItemIface->undoChanges();
+		if (dataItemIface->hasDisplayedDefaultValue() != displayDefaultValue)
+			dataItemIface->setDisplayDefaultValue(
+				dynamic_cast<QWidget*>(dataItemIface), displayDefaultValue );
 	}
 	recordNavigator()->showEditingIndicator(false);
 	dbFormWidget()->editedItem = 0;

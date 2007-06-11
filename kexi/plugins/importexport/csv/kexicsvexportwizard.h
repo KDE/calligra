@@ -21,6 +21,7 @@
 #define KEXI_CSVEXPORTWIZARD_H
 
 #include <k3wizard.h>
+#include <KConfigGroup>
 
 #include "kexicsvexport.h"
 
@@ -63,7 +64,7 @@ class KexiCSVExportWizard : public K3Wizard
 
 	protected:
 		//! reimplemented to add "Defaults" button on the left hand
-		virtual void layOutButtonRow( Q3HBoxLayout * layout );
+		virtual void layOutButtonRow( QHBoxLayout * layout );
 
 		//! \return default delimiter depending on mode.
 		QString defaultDelimiter() const;
@@ -106,6 +107,7 @@ class KexiCSVExportWizard : public K3Wizard
 		KexiCharacterEncodingComboBox *m_characterEncodingCombo;
 		QCheckBox* m_addColumnNamesCheckBox, *m_alwaysUseCheckBox;
 		KexiDB::TableOrQuerySchema* m_tableOrQuery;
+		KConfigGroup m_importExportGroup;
 		int m_rowCount; //!< Cached row count for a table/query.
 		bool m_rowCountDetermined : 1;
 		bool m_cancelled : 1;

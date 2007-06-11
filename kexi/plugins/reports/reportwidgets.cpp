@@ -33,8 +33,8 @@
 #include "kexireportview.h"
 #include "reportwidgets.h"
 
-Label::Label(const QString &text, QWidget *parent, const char *name)
-: QLabel(text, parent, name)
+Label::Label(const QString &text, QWidget *parent)
+: QLabel(text, parent)
 {
 	setPaletteBackgroundColor(Qt::white);
 }
@@ -118,7 +118,7 @@ ReportLine::paintEvent (QPaintEvent *ev)
 ////////////////////////////////////////////////////////////////////
 
 
-PicLabel::PicLabel(const QPixmap &pix, QWidget *parent, const char *name)
+PicLabel::PicLabel(const QPixmap &pix, QWidget *parent)
  : QLabel(parent, name)
 {
 	setPixmap(pix);
@@ -136,8 +136,8 @@ PicLabel::setProperty(const char *name, const QVariant &value)
 
 ////////////////////////////////////////////////////////////////////
 
-KexiSubReport::KexiSubReport(QWidget *parent, const char *name)
-: Q3ScrollView(parent, name), m_form(0), m_widget(0)
+KexiSubReport::KexiSubReport(QWidget *parent)
+: Q3ScrollView(parent), m_form(0), m_widget(0)
 {
 	setFrameStyle(Q3Frame::Plain | Q3Frame::Box);
 	viewport()->setPaletteBackgroundColor(Qt::white);

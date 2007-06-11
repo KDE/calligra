@@ -20,10 +20,8 @@
 #ifndef KEXIFORMMANAGER_H
 #define KEXIFORMMANAGER_H
 
-#include <formmanager.h>
+#include <formeditor/formmanager.h>
 #include <kexipart.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class KexiFormView;
 
@@ -37,12 +35,12 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 		KexiFormManager(KexiPart::Part *parent, const char* name = 0);
 		virtual ~KexiFormManager();
 
-		virtual KAction* action( const char* name );
+		virtual QAction* action( const char* name );
 		virtual void enableAction( const char* name, bool enable );
 
 	public slots:
 		//! Receives signal from KexiDataSourcePage about changed form's data source
-		void setFormDataSource(const Q3CString& mime, const Q3CString& name);
+		void setFormDataSource(const QString& mime, const QString& name);
 
 		/*! Receives signal from KexiDataSourcePage about changed widget's data source.
 		 This is because we couldn't pass objects like KexiDB::QueryColumnInfo.
@@ -75,7 +73,7 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 
 QString KexiFormManager::translateName( const char* name ) const
 {
-	QString n( name );
+	QString n( QString::fromLatin1( name ) );
 	//translate to our name space:
 	if (n.startsWith("align_") || n.startsWith("adjust_") || n.startsWith("layout_")
 		|| n=="format_raise" || n=="format_raise" || n=="taborder" | n=="break_layout")

@@ -35,7 +35,7 @@
 #include <QResizeEvent>
 #include <Q3VBoxLayout>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -72,7 +72,7 @@ void KexiSimplePrintPreviewView::paintEvent( QPaintEvent *pe )
 
 //--------------------------
 
-#define KexiSimplePrintPreviewScrollView_MARGIN KDialogBase::marginHint()
+#define KexiSimplePrintPreviewScrollView_MARGIN KDialog::marginHint()
 
 KexiSimplePrintPreviewScrollView::KexiSimplePrintPreviewScrollView(
 	KexiSimplePrintPreviewWindow *window)

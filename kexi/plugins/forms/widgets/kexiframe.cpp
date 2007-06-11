@@ -21,8 +21,6 @@
 
 #include <qpainter.h>
 #include <qdrawutil.h>
-//Added by qt3to4:
-#include <Q3Frame>
 #include <kexiutils/utils.h>
 
 //! @internal
@@ -45,15 +43,15 @@ class KexiFrame::Private
 
 //=========================================================
 
-KexiFrame::KexiFrame( QWidget * parent, const char * name, WFlags f )
-	: Q3Frame(parent, name, f)
+KexiFrame::KexiFrame( QWidget * parent, Qt::WindowFlags f )
+	: QFrame(parent, f)
 	, d( new Private() )
 {
 	//defaults
 	d->frameColor = palette().active().foreground();
 //! @todo obtain these defaults from current template's style...
 	setLineWidth(2);
-	setFrameStyle(Q3Frame::StyledPanel|Q3Frame::Raised);
+	setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
 }
 
 KexiFrame::~KexiFrame()
@@ -63,17 +61,17 @@ KexiFrame::~KexiFrame()
 
 void KexiFrame::dragMoveEvent( QDragMoveEvent *e )
 {
-	Q3Frame::dragMoveEvent(e);
+	QFrame::dragMoveEvent(e);
 	emit handleDragMoveEvent(e);
 }
 
 void KexiFrame::dropEvent( QDropEvent *e )
 {
-	Q3Frame::dropEvent(e);
+	QFrame::dropEvent(e);
 	emit handleDropEvent(e);
 }
 
 #define ClassName KexiFrame
-#define SuperClassName Q3Frame
+#define SuperClassName QFrame
 #include "kexiframeutils_p.cpp"
 #include "kexiframe.moc"

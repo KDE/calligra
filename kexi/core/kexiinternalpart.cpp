@@ -55,8 +55,10 @@ class KexiInternalPartManager
 					if (msgHdr)
 						msgHdr->showErrorMessage(i18n("Could not load \"%1\" plugin.", partName));
 				}
-				else
+				else {
+					part->setObjectName(partName);
 					m_parts.insert(partName, part);
+				}
 			}
 			return part;
 		}
@@ -70,12 +72,11 @@ KexiInternalPartManager internalPartManager;
 
 //----------------------------------------------
 
-KexiInternalPart::KexiInternalPart(QObject *parent, const char *name, const QStringList &)
+KexiInternalPart::KexiInternalPart(QObject *parent, const QStringList &)
  : QObject(parent)
  , m_uniqueWindow(true)
  , m_cancelled(false)
 {
-	setObjectName(name);
 }
 
 KexiInternalPart::~KexiInternalPart()

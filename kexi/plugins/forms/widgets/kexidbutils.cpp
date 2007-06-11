@@ -48,43 +48,52 @@ KexiDBWidgetContextMenuExtender::~KexiDBWidgetContextMenuExtender()
 {
 }
 
-void KexiDBWidgetContextMenuExtender::createTitle(QPopupMenu *menu)
+void KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu)
 {
 	if (!menu)
 		return;
 	m_contextMenu = menu;
-	KPopupTitle *titleItem = new KPopupTitle();
-	const int id = m_contextMenu->insertItem(titleItem, -1, 0);
-	m_contextMenu->setItemEnabled(id, false);
+	KMenu *kmenu = dynamic_cast<KMenu*>(menu);
+#warning TODO KexiDBWidgetContextMenuExtender::createTitle() what to do to insert title into KMenu?
+	if (!kmenu)
+		return;
+	m_titleAction = kmenu->addTitle(QString(), m_contextMenu->actions().first());
+	
 	QString icon;
 	if (dynamic_cast<QWidget*>(m_iface))
-		icon = KexiFormPart::library()->iconName(dynamic_cast<QWidget*>(m_iface)->className());
+		icon = KexiFormPart::library()->iconName(
+			dynamic_cast<QWidget*>(m_iface)->metaObject()->className());
 
 	m_contextMenuHasTitle = m_iface->columnInfo() ?
-		KexiContextMenuUtils::updateTitle(m_contextMenu, 
+		KexiContextMenuUtils::updateTitle(kmenu, 
 			m_iface->columnInfo()->captionOrAliasOrName(), 
 			KexiDB::simplifiedTypeName(*m_iface->columnInfo()->field), icon)
 		: false;
 
 	if (!m_contextMenuHasTitle)
-		m_contextMenu->removeItem(id);
+		kmenu->removeAction(m_titleAction);
 	updatePopupMenuActions();
 }
 
 void KexiDBWidgetContextMenuExtender::updatePopupMenuActions()
 {
-	if (m_contextMenu) {
-		enum { IdUndo, IdRedo, IdSep1, IdCut, IdCopy, IdPaste, IdClear, IdSep2, IdSelectAll }; //from qlineedit.h
-		const bool readOnly = m_iface->isReadOnly();
-		const int id = m_contextMenu->idAt(m_contextMenuHasTitle ? 1 : 0);
-
+	if (!m_contextMenu)
+		return;
+	const bool readOnly = m_iface->isReadOnly();
+	
+	foreach ( QAction* action, m_contextMenu->actions() ) {
+		const QString text( action->text() );
+		if (text == QObject::tr("Cu&t")/*do not use i18n()!*/
+			|| text == QObject::tr("&Copy")
+			|| text == QObject::tr("&Paste")
+			|| text == QObject::tr("Delete"))
+		{
+			action->setEnabled(!readOnly);
+		}
+		else if (text == QObject::tr("&Redo")) {
 //! @todo maybe redo will be enabled one day?
-		m_contextMenu->removeItem(id-(int)IdRedo);
-
-		// update cut/copy/paste
-		m_contextMenu->setItemEnabled(id-(int)IdCut, !readOnly);
-		m_contextMenu->setItemEnabled(id-(int)IdPaste, !readOnly);
-		m_contextMenu->setItemEnabled(id-(int)IdClear, !readOnly);
+			action->setVisible(false);
+		}
 	}
 }
 

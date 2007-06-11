@@ -917,7 +917,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 //			autonumber = true;
 //		if (autonumber) {
 			KexiDisplayUtils::paintAutonumberSign(d->autonumberSignDisplayParameters, p, 
-				x, y_offset, w - x - x - ((align & Qt::AlignLeft)?2:0), h, align);
+				x, y_offset, w - x - x - ((align & Qt::AlignLeft)?2:0), h, (Qt::Alignment)align);
 //		}
 		}
 	}

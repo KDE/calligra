@@ -27,7 +27,7 @@
 #include "kexiaddparamwidget.h"
 
 KexiAddParamDialog::KexiAddParamDialog(QWidget *parent)
- : KDialogBase(parent, "kexiaddparamdialog", true, i18n("Add Parameter"), KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true)
+ : KDialog(parent, "kexiaddparamdialog", true, i18n("Add Parameter"), KDialog::Ok|KDialog::Cancel, KDialog::Ok, true)
 {
 	m_wid=new KexiAddParamWidget(makeVBoxMainWidget());
 	for (int i=1;i<=KexiDataProvider::Parameter::maxType;i++)

@@ -21,7 +21,7 @@
 #ifndef KexiDBLineEdit_H
 #define KexiDBLineEdit_H
 
-//Added by qt3to4:
+#include <QValidator>
 #include <QEvent>
 #include <Q3CString>
 #include <QPaintEvent>
@@ -31,8 +31,7 @@
 #include "kexiformdataiteminterface.h"
 #include "kexidbtextwidgetinterface.h"
 #include "kexidbutils.h"
-#include <widget/tableview/kexitextformatter.h>
-#include <widget/utils/kexidatetimeformatter.h>
+#warning reenable when formatter is ported #include <widget/tableview/kexitextformatter.h>
 
 class KexiDBWidgetContextMenuExtender;
 
@@ -52,15 +51,16 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_OVERRIDE(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
 
 	public:
-		KexiDBLineEdit(QWidget *parent, const char *name=0);
+		KexiDBLineEdit(QWidget *parent);
 		virtual ~KexiDBLineEdit();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline QString dataSourceMimeType() const
+			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -104,8 +104,10 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		virtual bool keyPressed(QKeyEvent *ke);
 
 	public slots:
-		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSource(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSource(ds); }
+		inline void setDataSourceMimeType(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		virtual void setReadOnly( bool readOnly );
 
 		//! Reimplemented, so "undo" means the same as "cancelEditor" action
@@ -122,43 +124,29 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 
 	protected slots:
 		void slotTextChanged(const QString&);
+		
+		//! Used to protecte m_readWriteValidator against after validator is destroyed
+		void slotReadWriteValidatorDestroyed(QObject*);
 
 	protected:
 		virtual void paintEvent ( QPaintEvent * );
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 		virtual bool event ( QEvent * );
 
-#if 0
-//moved to KexiTextFormatter
-		inline KexiDateFormatter* dateFormatter() {
-			return m_dateFormatter ? m_dateFormatter : m_dateFormatter = new KexiDateFormatter();
-		}
-
-		inline KexiTimeFormatter* timeFormatter() {
-			return m_timeFormatter ? m_timeFormatter : m_timeFormatter = new KexiTimeFormatter();
-		}
-#endif
-
-		virtual QPopupMenu * createPopupMenu();
+		virtual QMenu * createPopupMenu();
 
 		//! Implemented for KexiSubwidgetInterface
 		virtual bool appendStretchRequired(KexiDBAutoField* autoField) const;
 
-#if 0
-//moved to KexiTextFormatter
-		//! Used for date and date/time types
-		KexiDateFormatter* m_dateFormatter;
-		//! Used for time and date/time types
-		KexiTimeFormatter* m_timeFormatter;
-#endif
 		//! Used to format text
-		KexiTextFormatter m_textFormatter;
+#warning reenable when formatter is ported		KexiTextFormatter m_textFormatter;
 
 		//! Used for read only flag to disable editing
-		QGuardedPtr<const QValidator> m_readOnlyValidator;
+		QPointer<QValidator> m_readOnlyValidator;
 
-		//! Used to remember the previous validator used forf r/w mode, after setting the read only flag
-		QGuardedPtr<const QValidator> m_readWriteValidator;
+		//! Used to remember the previous validator used for r/w mode, after setting
+		//! the read only flag
+		const QValidator* m_readWriteValidator;
 
 		//! Used for extending context menu
 		KexiDBWidgetContextMenuExtender m_menuExtender;

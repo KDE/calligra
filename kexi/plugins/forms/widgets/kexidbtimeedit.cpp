@@ -29,8 +29,8 @@
 #include <kdatetable.h>
 #include <kexiutils/utils.h>
 
-KexiDBTimeEdit::KexiDBTimeEdit(const QTime &time, QWidget *parent, const char *name)
- : Q3TimeEdit(time, parent, name), KexiFormDataItemInterface()
+KexiDBTimeEdit::KexiDBTimeEdit(const QTime &time, QWidget *parent)
+ : Q3TimeEdit(time, parent), KexiFormDataItemInterface()
 {
 	m_invalidState = false;
 	setAutoAdvance(true);

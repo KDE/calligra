@@ -109,7 +109,7 @@ class KFDPart_FormManager : public KFormDesigner::FormManager
 		{
 		}
 
-		virtual KAction* action( const char* name)
+		virtual QAction* action( const char* name)
 		{
 			return m_part->actionCollection()->action( name );
 		}
@@ -551,7 +551,7 @@ static void repaintAll(QWidget *w)
 }
 
 void
-FormWidgetBase::drawRects(const Q3ValueList<QRect> &list, int type)
+FormWidgetBase::drawRects(const QList<QRect> &list, int type)
 {
 	QPainter p;
 	p.begin(this, true);
@@ -570,10 +570,9 @@ FormWidgetBase::drawRects(const Q3ValueList<QRect> &list, int type)
 	p.setRasterOp(XorROP);
 
 	prev_rect = QRect();
-	Q3ValueList<QRect>::ConstIterator endIt = list.constEnd();
-	for(Q3ValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
-		p.drawRect(*it);
-		prev_rect = prev_rect.unite(*it);
+	foreach (const QRect& rect, list) {
+		p.drawRect(rect);
+		prev_rect = prev_rect.unite(rect);
 	}
 
 	if (!unclipped)

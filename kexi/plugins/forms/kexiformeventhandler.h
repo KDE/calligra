@@ -22,6 +22,7 @@
 
 #include <qwidget.h>
 #include <kaction.h>
+#include <kexi_export.h>
 
 namespace KexiPart {
 	class Info;

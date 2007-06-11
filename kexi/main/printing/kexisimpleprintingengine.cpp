@@ -495,7 +495,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 		if (ftype!=KexiDB::Field::BLOB || v.isNull() || !v.isValid())
 			rect = QRect( painter.fontMetrics().boundingRect( 
 				rect.x(), rect.y(), rect.width(), rect.height(),
-				Qt::AlignAuto|Qt::WordBreak, text) );
+				Qt::AlignAuto|Qt::TextWordBreak, text) );
 		if (!text.isEmpty() && paint) {
 //			kdDebug() << "print engine: painter.drawText: "
 //				<< rect.x() <<" "<< rect.y() <<" "<< m_pageWidth - m_maxFieldNameWidth - cellMargin*2 
@@ -504,7 +504,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 //				rect.x(), rect.y(), rect.width(), rect.height(),
 				rect.x(), rect.y(), m_pageWidth - m_maxFieldNameWidth - cellMargin*2,
 				int(m_topMargin + m_pageHeight - (int)y),
-				Qt::AlignTop|Qt::WordBreak, text);
+				Qt::AlignTop|Qt::TextWordBreak, text);
 		}
 		if (m_settings->addTableBorders) {
 			if (paint) {

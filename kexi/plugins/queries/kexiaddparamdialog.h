@@ -20,11 +20,11 @@
 #ifndef KEXIADDPARAMDIALOG_H
 #define KEXIADDPARAMDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KexiAddParamWidget;
 
-class KexiAddParamDialog : public KDialogBase
+class KexiAddParamDialog : public KDialog
 {
 	Q_OBJECT
 	

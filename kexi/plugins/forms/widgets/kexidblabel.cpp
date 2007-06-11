@@ -54,12 +54,13 @@ class KexiDBInternalLabel : public QLabel {
 		virtual ~KexiDBInternalLabel();
 
 	protected:
+//		virtual void paintEvent( QPaintEvent * event );
 		void updateFrame();
 
 		QImage makeShadow( const QImage& textImage, const QColor &bgColor, const QRect& boundingRect );
 		QRect getBounding( const QImage &image, const QRect& startRect );
 //		double defaultDecay( QImage& source, int i, int j );
-		KPixmap getShadowPixmap();
+		QPixmap getShadowPixmap();
 
 		QRect m_shadowRect;
 		KexiDBLabel *m_parentLabel;
@@ -69,10 +70,11 @@ KexiDBInternalLabel::KexiDBInternalLabel( KexiDBLabel* parent )
 	: QLabel( parent )
 	, m_parentLabel(parent)
 {
-	int a = alignment() | Qt::TextWordWrap;
+	Qt::Alignment a = alignment();
 	a &= (0xffffff ^ Qt::AlignVertical_Mask);
 	a |= Qt::AlignTop;
 	setAlignment( a );
+	setWordWrap( true );
 	updateFrame();
 }
 
@@ -102,7 +104,6 @@ KexiDBInternalLabel::~KexiDBInternalLabel()
 QImage KexiDBInternalLabel::makeShadow( const QImage& textImage, 
 	const QColor &bgColor, const QRect& boundingRect )
 {
-	QImage result;
 	QString origText( text() );
 
 	// create a new image for for the shaddow
@@ -125,14 +126,8 @@ QImage KexiDBInternalLabel::makeShadow( const QImage& textImage,
 	/*
 	 *	This is the source pixmap
 	 */
-	QImage img = textImage.convertDepth( 32 );
-
-	/*
-	 *	Resize the image if necessary
-	 */
-	if ( ( result.width() != w ) || ( result.height() != h ) ) {
-		result.create( w, h, 32 );
-	}
+	QImage img = textImage.convertToFormat( QImage::Format_ARGB32 );
+	QImage result( w, h, QImage::Format_ARGB32 );
 
 //	result.fill( 0 ); // all black
 	double realOpacity = SHADOW_OPACITY + qMin(50.0/double(256.0-qGray(bgColor.rgb())), 50.0);
@@ -141,7 +136,7 @@ QImage KexiDBInternalLabel::makeShadow( const QImage& textImage,
 	if (colorGroup().background()==Qt::red)//_s>=250 && _v>=250) //for colors like cyan or red, make the result more white
 		realOpacity += 50.0;
 	result.fill( (int)realOpacity );
-	result.setAlphaBuffer( true );
+	//Qt4: ARGB32 already set in convertToFormat: result.setAlphaBuffer( true );
 
 	for ( int i = startX; i < effectWidth; i++ ) {
 		for ( int j = startY; j < effectHeight; j++ ) {
@@ -179,7 +174,7 @@ QImage KexiDBInternalLabel::makeShadow( const QImage& textImage,
 	return result;
 }
 
-KPixmap KexiDBInternalLabel::getShadowPixmap() {
+QPixmap KexiDBInternalLabel::getShadowPixmap() {
 	/*!
 	* Backup the default color used to draw text.
 	*/
@@ -188,13 +183,13 @@ KPixmap KexiDBInternalLabel::getShadowPixmap() {
 	/*!
 	* Temporary storage for the generated shadow
 	*/
-	KPixmap finalPixmap, tempPixmap;
+	QPixmap tempPixmap;
 	QImage shadowImage, tempImage;
 	QPainter painter;
 
 	m_shadowRect = QRect();
 
-	tempPixmap.resize( size() );
+	tempPixmap = QPixmap( size() );
 	tempPixmap.fill( Qt::black );
 	tempPixmap.setMask( tempPixmap.createHeuristicMask( true ) );
 
@@ -208,7 +203,7 @@ KPixmap KexiDBInternalLabel::getShadowPixmap() {
 	*/
 	painter.begin( &tempPixmap );
 	painter.setFont( font() );
-	drawContents( &painter );
+#warning Qt4 TODO	drawContents( &painter );
 	painter.end();
 	setPaletteForegroundColor( textColor );
 
@@ -217,7 +212,6 @@ KPixmap KexiDBInternalLabel::getShadowPixmap() {
 	* This will fit around the unmodified text.
 	*/
 	shadowImage = tempPixmap;
-	tempPixmap.setMask( QBitmap() );
 
 	/*!
 	Get the first bounding rect.
@@ -241,7 +235,7 @@ KPixmap KexiDBInternalLabel::getShadowPixmap() {
 		qGray( colorGroup().background().rgb() ) < 127 ? Qt::white : Qt::black,
 		m_shadowRect );
 	if (shadowImage.isNull())
-		return KPixmap();
+		return QPixmap();
 
 	/*!
 	Now get the final bounding rect.
@@ -251,7 +245,7 @@ KPixmap KexiDBInternalLabel::getShadowPixmap() {
 	/*!
 	Paint the labels background in a new pixmap.
 	*/
-	finalPixmap.resize( size() );
+	QPixmap finalPixmap( size() );
 	painter.begin( &finalPixmap );
 	painter.fillRect( 0, 0, finalPixmap.width(), finalPixmap.height(),
 		palette().brush(
@@ -263,7 +257,8 @@ KPixmap KexiDBInternalLabel::getShadowPixmap() {
 	Copy the part of the background the shadow will be on
 	to another pixmap.
 	*/
-	tempPixmap.resize( m_shadowRect.size() );
+	tempPixmap = QPixmap( m_shadowRect.size() );
+	tempPixmap.setMask( QBitmap() );
 	if (!finalPixmap.isNull()) {
 		bitBlt( &tempPixmap, 0, 0, &finalPixmap,
 			m_shadowRect.x() + SHADOW_OFFSET_X,
@@ -297,7 +292,7 @@ KPixmap KexiDBInternalLabel::getShadowPixmap() {
 	Now move the rect.
 	Don't do this before the shadow is copied from shadowImage!
 	*/
-	m_shadowRect.moveBy( SHADOW_OFFSET_X, SHADOW_OFFSET_Y );
+	m_shadowRect.translate( SHADOW_OFFSET_X, SHADOW_OFFSET_Y );
 
 	return finalPixmap;
 }
@@ -389,7 +384,7 @@ class KexiDBLabel::Private
 		{
 		}
 		~Private() {}
-		KPixmap shadowPixmap;
+		QPixmap shadowPixmap;
 		QPoint shadowPosition;
 		KexiDBInternalLabel* internalLabel;
 		QTimer* timer;
@@ -401,8 +396,8 @@ class KexiDBLabel::Private
 
 //=========================================================
 
-KexiDBLabel::KexiDBLabel( QWidget *parent, const char *name, Qt::WFlags f )
-	: QLabel( parent, name, f )
+KexiDBLabel::KexiDBLabel( QWidget *parent, Qt::WFlags f )
+	: QLabel( parent, f )
 	, KexiDBTextWidgetInterface()
 	, KexiFormDataItemInterface()
 	, d( new Private() )
@@ -410,8 +405,8 @@ KexiDBLabel::KexiDBLabel( QWidget *parent, const char *name, Qt::WFlags f )
 	init();
 }
 
-KexiDBLabel::KexiDBLabel( const QString& text, QWidget *parent, const char *name, Qt::WFlags f )
-	: QLabel( parent, name, f )
+KexiDBLabel::KexiDBLabel( const QString& text, QWidget *parent, Qt::WFlags f )
+	: QLabel( parent, f )
 	, KexiDBTextWidgetInterface()
 	, KexiFormDataItemInterface()
 	, d( new Private() )
@@ -435,13 +430,16 @@ void KexiDBLabel::init()
 	setAlignment( d->internalLabel->alignment() );
 }
 
-void KexiDBLabel::updatePixmapLater() {
+void KexiDBLabel::updatePixmapLater()
+{
 	if (d->resizeEvent) {
 		if (!d->timer) {
-			d->timer = new QTimer(this, "KexiDBLabelTimer");
+			d->timer = new QTimer(this);
+			d->timer->setObjectName("KexiDBLabelTimer");
 			connect(d->timer, SIGNAL(timeout()), this, SLOT(updatePixmap()));
 		}
-		d->timer->start(100, true);
+		d->timer->setSingleShot(true);
+		d->timer->start(100);
 		d->resizeEvent = false;
 		return;
 	}
@@ -450,7 +448,8 @@ void KexiDBLabel::updatePixmapLater() {
 	updatePixmap();
 }
 
-void KexiDBLabel::updatePixmap() {
+void KexiDBLabel::updatePixmap()
+{
 	/*!
 	Whatever has changed in KexiDBLabel,
 	every parameter is set to our private-label.
@@ -461,7 +460,7 @@ void KexiDBLabel::updatePixmap() {
 	d->internalLabel->setPalette( palette() );
 	d->internalLabel->setAlignment( alignment() );
 //	d->shadowPixmap = KPixmap(); //parallel repaints won't hurt us cause incomplete pixmap
-	KPixmap shadowPixmap = d->internalLabel->getShadowPixmap();
+	QPixmap shadowPixmap( d->internalLabel->getShadowPixmap() );
 	if (shadowPixmap.isNull())
 		return;
 	d->shadowPixmap = shadowPixmap;
@@ -626,11 +625,14 @@ void KexiDBLabel::setPaletteForegroundColor ( const QColor& color )
 	d->foregroundColor = color;
 }*/
 
-void KexiDBLabel::frameChanged() {
+#warning TODO 
+/*TODO
+void KexiDBLabel::frameChanged()
+{
 	d->pixmapDirty = true;
 	d->internalLabel->updateFrame();
-	Q3Frame::frameChanged();
-}
+	QFrame::frameChanged();
+}*/
 
 void KexiDBLabel::showEvent( QShowEvent* e ) {
 	d->pixmapDirty = true;

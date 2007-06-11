@@ -29,38 +29,39 @@
 
 #include <klocale.h>
 #include <klineedit.h>
-#include <kdialogbase.h>
-#include <k3activelabel.h>
+#include <kdialog.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
+#include <kio/global.h>
 
 #define KEXICSV_OTHER_DELIMITER_INDEX 4
 
 KexiCSVDelimiterWidget::KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget * parent )
- : QWidget(parent, "KexiCSVDelimiterWidget")
+ : QWidget(parent)
  , m_availableDelimiters(KEXICSV_OTHER_DELIMITER_INDEX)
-
 {
 	Q3BoxLayout *lyr = 
 		lineEditOnBottom ? 
-		(Q3BoxLayout *)new Q3VBoxLayout( this, 0, KDialogBase::spacingHint() )
-		: (Q3BoxLayout *)new Q3HBoxLayout( this, 0, KDialogBase::spacingHint() );
+		(Q3BoxLayout *)new Q3VBoxLayout( this, 0, KDialog::spacingHint() )
+		: (Q3BoxLayout *)new Q3HBoxLayout( this, 0, KDialog::spacingHint() );
 
 	m_availableDelimiters[0]=KEXICSV_DEFAULT_FILE_DELIMITER;
 	m_availableDelimiters[1]=";";
 	m_availableDelimiters[2]="\t";
 	m_availableDelimiters[3]=" ";
 
-	m_combo = new KComboBox(this, "KexiCSVDelimiterComboBox");
-	m_combo->insertItem( i18n("Comma \",\"") ); //<-- KEXICSV_DEFAULT_FILE_DELIMITER
-	m_combo->insertItem( i18n( "Semicolon \";\"" ) );
-	m_combo->insertItem( i18n( "Tabulator" ) );
-	m_combo->insertItem( i18n( "Space \" \"" ) );
-	m_combo->insertItem( i18n( "Other" ) );
+	m_combo = new KComboBox(this);
+	m_combo->setObjectName("KexiCSVDelimiterComboBox");
+	m_combo->addItem( i18n( "Comma \",\"") ); //<-- KEXICSV_DEFAULT_FILE_DELIMITER
+	m_combo->addItem( i18n( "Semicolon \";\"" ) );
+	m_combo->addItem( i18n( "Tabulator" ) );
+	m_combo->addItem( i18n( "Space \" \"" ) );
+	m_combo->addItem( i18n( "Other" ) );
 	lyr->addWidget(m_combo);
 	setFocusProxy(m_combo);
 
-	m_delimiterEdit = new KLineEdit( this, "m_delimiterEdit" );
+	m_delimiterEdit = new KLineEdit(this);
+	m_delimiterEdit->setObjectName("m_delimiterEdit");
 //  m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_delimiterEdit->sizePolicy().hasHeightForWidth() ) );
 	m_delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
 	m_delimiterEdit->setMaxLength(1);
@@ -104,7 +105,7 @@ void KexiCSVDelimiterWidget::slotDelimiterChangedInternal(int index)
 
 void KexiCSVDelimiterWidget::slotDelimiterLineEditReturnPressed()
 {
-	if (m_combo->currentItem() != KEXICSV_OTHER_DELIMITER_INDEX)
+	if (m_combo->currentIndex() != KEXICSV_OTHER_DELIMITER_INDEX)
 		return;
 	slotDelimiterChangedInternal(KEXICSV_OTHER_DELIMITER_INDEX);
 }
@@ -116,34 +117,34 @@ void KexiCSVDelimiterWidget::slotDelimiterLineEditTextChanged( const QString & )
 
 void KexiCSVDelimiterWidget::setDelimiter(const QString& delimiter)
 {
-	Q3ValueVector<QString>::ConstIterator it = m_availableDelimiters.constBegin();
+	QVector<QString>::ConstIterator it = m_availableDelimiters.constBegin();
 	int index = 0;
 	for (; it != m_availableDelimiters.constEnd(); ++it, index++) {
 		if (*it == delimiter) {
-			m_combo->setCurrentItem(index);
+			m_combo->setCurrentIndex(index);
 			slotDelimiterChangedInternal(index);
 			return;
 		}
 	}
 	//else: set other (custom) delimiter
 	m_delimiterEdit->setText(delimiter);
-	m_combo->setCurrentItem(KEXICSV_OTHER_DELIMITER_INDEX);
+	m_combo->setCurrentIndex(KEXICSV_OTHER_DELIMITER_INDEX);
 	slotDelimiterChangedInternal(KEXICSV_OTHER_DELIMITER_INDEX);
 }
 
 //----------------------------------------------------
 
 KexiCSVTextQuoteComboBox::KexiCSVTextQuoteComboBox( QWidget * parent )
- : KComboBox(parent, "KexiCSVTextQuoteComboBox")
+ : KComboBox(parent)
 {
-	insertItem( "\"" );
-	insertItem( "'" );
-	insertItem( i18n( "None" ) );
+	addItem( "\"" );
+	addItem( "'" );
+	addItem( i18n( "None" ) );
 }
 
 QString KexiCSVTextQuoteComboBox::textQuote() const
 {
-	if (currentItem()==2)
+	if (currentIndex()==2)
 		return QString();
 	return currentText();
 }
@@ -151,46 +152,57 @@ QString KexiCSVTextQuoteComboBox::textQuote() const
 void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
 {
 	if (textQuote=="\"" || textQuote=="'")
-		setCurrentText(textQuote);
+		setEditText(textQuote);
 	else if (textQuote.isEmpty())
-		setCurrentText(i18n( "None" ));
+		setEditText(i18n( "None" ));
 }
 
 //----------------------------------------------------
 
 KexiCSVInfoLabel::KexiCSVInfoLabel( const QString& labelText, QWidget* parent )
- : QWidget(parent, "KexiCSVInfoLabel")
+ : QWidget(parent)
 {
-	Q3VBoxLayout *vbox = new Q3VBoxLayout( this, 0, KDialogBase::spacingHint() );
+	Q3VBoxLayout *vbox = new Q3VBoxLayout( this, 0, KDialog::spacingHint() );
 	Q3HBoxLayout *hbox = new Q3HBoxLayout( this );
 	vbox->addLayout(hbox);
 	m_leftLabel = new QLabel(labelText, this);
 	m_leftLabel->setMinimumWidth(130);
 	m_leftLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-	m_leftLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
+	m_leftLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+	m_leftLabel->setWordWrap(true);
 	hbox->addWidget(m_leftLabel);
 	m_iconLbl = new QLabel(this);
 	m_iconLbl->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_iconLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-	m_fnameLbl = new K3ActiveLabel(this);
-	m_fnameLbl->setFocusPolicy(NoFocus);
+	m_fnameLbl = new QLabel(this);
+	m_fnameLbl->setOpenExternalLinks(true);
+	m_fnameLbl->setTextInteractionFlags(Qt::TextSelectableByMouse|Qt::TextSelectableByKeyboard);
+	m_fnameLbl->setFocusPolicy(Qt::NoFocus);
 	m_fnameLbl->setTextFormat(Qt::PlainText);
 	m_fnameLbl->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding,1,0));
 	m_fnameLbl->setLineWidth(1);
 	m_fnameLbl->setFrameStyle(Q3Frame::Box);
-	m_fnameLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
+	m_fnameLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+	m_fnameLbl->setWordWrap(true);
 	hbox->addSpacing(5);
 	hbox->addWidget(m_iconLbl);
-	hbox->addWidget(m_fnameLbl, 1, Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
+	hbox->addWidget(m_fnameLbl, 1, Qt::AlignVCenter | Qt::AlignLeft
+#warning TODO | Qt::TextWordWrap
+	);
 	hbox->addSpacing(10);
-	m_commentLbl = new K3ActiveLabel(this);
-	m_commentLbl->setFocusPolicy(NoFocus);
+	m_commentLbl = new QLabel(this);
+	m_commentLbl->setOpenExternalLinks(true);
+	m_commentLbl->setTextInteractionFlags(Qt::TextSelectableByMouse|Qt::TextSelectableByKeyboard);
+	m_commentLbl->setFocusPolicy(Qt::NoFocus);
 	m_commentLbl->setTextFormat(Qt::PlainText);
 	m_commentLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 	m_commentLbl->setLineWidth(1);
 	m_commentLbl->setFrameStyle(QFrame::Box);
-	m_commentLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
-	hbox->addWidget(m_commentLbl, 0, Qt::AlignVCenter | Qt::AlignRight | Qt::TextWordWrap);
+	m_commentLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+	m_commentLbl->setWordWrap(true);
+	hbox->addWidget(m_commentLbl, 0, Qt::AlignVCenter | Qt::AlignRight
+#warning TODO | Qt::TextWordWrap
+	);
 
 	m_separator = new Q3Frame(this);
 	m_separator->setFrameShape(Q3Frame::HLine);
@@ -203,7 +215,7 @@ void KexiCSVInfoLabel::setFileName( const QString& fileName )
 	m_fnameLbl->setText( QDir::convertSeparators(fileName) );
 	if (!fileName.isEmpty()) {
 		m_iconLbl->setPixmap( 
-			KMimeType::pixmapForURL(KUrl::fromPathOrURL(fileName), 0, K3Icon::Desktop) );
+			KIO::pixmapForUrl(KUrl(fileName), 0, K3Icon::Desktop) );
 	}
 }
 

@@ -40,7 +40,7 @@ class KexiSubReport : public Q3ScrollView
 	Q_PROPERTY(QString reportName READ reportName WRITE setReportName DESIGNABLE true);
 
 	public:
-		KexiSubReport(QWidget *parent, const char *name);
+		KexiSubReport(QWidget *parent);
 		~KexiSubReport() {}
 
 		//! \return the name of the subreport inside the db
@@ -60,7 +60,7 @@ class Label : public QLabel
 	Q_OBJECT
 
 	public:
-		Label(const QString &text, QWidget *parent, const char *name);
+		Label(const QString &text, QWidget *parent);
 		~Label() {}
 };
 
@@ -70,7 +70,7 @@ class PicLabel : public QLabel
 	Q_OBJECT
 
 	public:
-		PicLabel(const QPixmap &pix, QWidget *parent, const char *name);
+		PicLabel(const QPixmap &pix, QWidget *parent);
 		~PicLabel() {}
 
 		virtual bool setProperty(const char *name, const QVariant &value);
@@ -90,7 +90,7 @@ class ReportLine : public QWidget
 			DashDot = Qt::DashDotLine, DashDotDot =  Qt::DashDotDotLine };
 		enum CapStyle { Flat = Qt::FlatCap, Square = Qt::SquareCap, Round = Qt::RoundCap };
 
-		ReportLine(QWidget *parent, const char *name);
+		ReportLine(QWidget *parent);
 		~ReportLine(){;}
 
 		ReportLineStyle lineStyle() const;

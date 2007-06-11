@@ -28,8 +28,8 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const char *name, const QStringList &args)
- : KexiInternalPart(parent, name, args)
+KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const QStringList &args)
+ : KexiInternalPart(parent, args)
 {
 	kDebug() << "KexiRelationPartImpl()" << endl;
 }
@@ -62,14 +62,15 @@ KexiRelationPartImpl::createDialog(KexiMainWindow* mainWin, const char *)
 }*/
 
 KexiView *
-KexiRelationPartImpl::createView(KexiMainWindow* mainWin, QWidget *parent, const char *)
+KexiRelationPartImpl::createView(QWidget *parent, const char *)
 {
 //	kDebug() << "KexiRelationPartImpl::createDialog()" << endl;
 //	KexiDialogBase * dlg = new KexiDialogBase(mainWin, i18n("Relations"));
 //	dlg->setIcon(SmallIcon("relation"));
 //	dlg->setDocID( mainWin->generatePrivateDocID() );
 
-	KexiRelationMainDlg *view = new KexiRelationMainDlg(mainWin, parent, "relations");
+	KexiRelationMainDlg *view = new KexiRelationMainDlg(parent);
+	view->setObjectName("relations");
 //	dlg->addView(view);
 //	dlg->show();
 //	dlg->registerDialog();
@@ -82,4 +83,3 @@ K_EXPORT_COMPONENT_FACTORY( kexihandler_relation,
 	KGenericFactory<KexiRelationPartImpl>("kexihandler_relation") )
 
 #include "kexirelationpartimpl.moc"
-

@@ -119,7 +119,7 @@ void KexiDisplayUtils::initDisplayForDefaultValue(DisplayParameters& par, QWidge
 }
 
 void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters& par, QPainter* painter, 
-	int x, int y, int width, int height, int align, bool overrideColor)
+	int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor)
 {
 	painter->save();
 	
@@ -128,44 +128,44 @@ void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters& par, QPainte
 		painter->setPen(par.textColor);
 
 //	int text_x = x;
-	if (!(align & Qt::AlignVertical_Mask))
-		align |= Qt::AlignVCenter;
-	if (!(align & Qt::AlignHorizontal_Mask))
-		align |= Qt::AlignLeft;
+	if (!(alignment & Qt::AlignVertical_Mask))
+		alignment |= Qt::AlignVCenter;
+	if (!(alignment & Qt::AlignHorizontal_Mask))
+		alignment |= Qt::AlignLeft;
 
 	int y_pixmap_pos = 0;
-	if (align & Qt::AlignVCenter) {
+	if (alignment & Qt::AlignVCenter) {
 		y_pixmap_pos = qMax(0, y+1 + (height - KexiDisplayUtils_autonum->height())/2);
 	}
-	else if (align & Qt::AlignTop) {
+	else if (alignment & Qt::AlignTop) {
 		y_pixmap_pos = y + qMax(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
 	}
-	else if (align & Qt::AlignBottom) {
+	else if (alignment & Qt::AlignBottom) {
 		y_pixmap_pos = y+1 + height - KexiDisplayUtils_autonum->height() 
 			- qMax(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
 	}
 
-	if (align & (Qt::AlignLeft | Qt::AlignJustify)) {
+	if (alignment & (Qt::AlignLeft | Qt::AlignJustify)) {
 //		text_x = x + KexiDisplayUtils_autonum->width() + 2;
 		if (!overrideColor) {
 			painter->drawPixmap( x, y_pixmap_pos, *KexiDisplayUtils_autonum );
 			x += (KexiDisplayUtils_autonum->width() + 4);
 		}
 	}
-	else if (align & Qt::AlignRight) {
+	else if (alignment & Qt::AlignRight) {
 		if (!overrideColor) {
 			painter->drawPixmap( x + width - par.textWidth - KexiDisplayUtils_autonum->width() - 4,
 				y_pixmap_pos, *KexiDisplayUtils_autonum );
 		}
 	}
-	else if (align & Qt::AlignCenter) {
+	else if (alignment & Qt::AlignCenter) {
 		//! @todo
 		if (!overrideColor)
 			painter->drawPixmap( x + (width - par.textWidth)/2 - KexiDisplayUtils_autonum->width() - 4,
 				y_pixmap_pos, *KexiDisplayUtils_autonum );
 	}
 
-	painter->drawText(x, y, width, height, align, i18n("(autonumber)"));
+	painter->drawText(x, y, width, height, alignment, i18n("(autonumber)"));
 
 	painter->restore();
 }

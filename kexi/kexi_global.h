@@ -37,13 +37,6 @@
 #define kexicorewarn kWarning(44020)
 #define kexipluginswarn kWarning(44021)
 
-/* useful macros */
-#undef foreach3
-
-/*! a shortcut for iterating over lists or maps, eg. QMap, QValueList */
-#define foreach3(_class, _variable, _list) \
-	for (_class _variable = (_list).constBegin(); _variable!=(_list).constEnd(); ++_variable)
-
 /*! nonconst version of foreach iterator */
 #define foreach_nonconst(_class, _variable, _list) \
 	for (_class _variable = (_list).begin(); _variable!=(_list).end(); ++_variable)

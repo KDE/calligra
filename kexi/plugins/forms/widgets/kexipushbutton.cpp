@@ -20,8 +20,8 @@
 
 #include "kexipushbutton.h"
 
-KexiPushButton::KexiPushButton( const QString & text, QWidget * parent, const char * name )
-: KPushButton(text, parent, name)
+KexiPushButton::KexiPushButton( const QString & text, QWidget * parent )
+: KPushButton(text, parent)
 {
 }
 

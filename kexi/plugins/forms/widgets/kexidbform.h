@@ -48,18 +48,20 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops DESIGNABLE true)
 	//original "size" property is not designable, so here's a custom (not storable) replacement
 	Q_PROPERTY( QSize sizeInternal READ sizeInternal WRITE resizeInternal DESIGNABLE true STORED false )
 	public:
-		KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject, const char *name="kexi_dbform");
+		KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject);
 		virtual ~KexiDBForm();
 
 		KexiDataAwareObjectInterface* dataAwareObject() const;
 
-		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline QString dataSource() const
+			{ return KexiFormDataItemInterface::dataSource(); }
+		inline QString dataSourceMimeType() const
+			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
 
 		//! no effect
 		QVariant value() { return QVariant(); }
@@ -100,8 +102,9 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 
 	public slots:
 		void setAutoTabStops(bool set);
-		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const Q3CString &ds)
+		inline void setDataSource(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSource(ds); }
+		inline void setDataSourceMimeType(const QString &ds)
 			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 		//! This implementation just disables read only widget

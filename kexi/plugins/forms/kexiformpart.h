@@ -23,11 +23,11 @@
 #define KEXIFORMPART_H
 
 #include <qdom.h>
-#include <q3cstring.h>
 
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexiblobbuffer.h>
+#include <KexiWindowData.h>
 
 namespace KFormDesigner
 {
@@ -50,7 +50,7 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 	Q_OBJECT
 
 	public:
-		KexiFormPart(QObject *parent, const char *name, const QStringList &);
+		KexiFormPart(QObject *parent, const QStringList &);
 		virtual ~KexiFormPart();
 
 		//! \return a pointer to Forms Widget Library.
@@ -68,13 +68,14 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 				QPointer<KFormDesigner::Form> form;
 				QPointer<KFormDesigner::Form> previewForm;
 				QString tempForm;
-				QPoint scrollViewContentsPos; //!< to preserve contents pos after switching to other view
+				QPoint scrollViewContentsPos; //!< to preserve contents pos after switching 
+				                              //!< to other view
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
 				//! Used in KexiFormView::setUnsavedLocalBLOBs()
-				QMap<QWidget*, KexiBLOBBuffer::Id_t> unsavedLocalBLOBs;
+				QHash<QWidget*, KexiBLOBBuffer::Id_t> unsavedLocalBLOBs;
 				//! Used when loading a form from (temporary) XML in Data View 
 				//! to get unsaved blobs collected at design mode.
-				QMap<Q3CString, KexiBLOBBuffer::Id_t> unsavedLocalBLOBsByName;
+				QHash<QByteArray, KexiBLOBBuffer::Id_t> unsavedLocalBLOBsByName;
 		};
 
 		virtual KLocalizedString i18nMessage(const QString& englishMessage, 

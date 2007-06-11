@@ -39,6 +39,7 @@
 #include "kexipushbutton.h"
 #include "kexidbform.h"
 
+#include <kexi_global.h>
 #include <kexidb/queryschema.h>
 #include <formeditor/utils.h>
 #include <kexiutils/utils.h>
@@ -72,8 +73,8 @@ class KexiDBAutoField::Private
 //-------------------------------------
 
 KexiDBAutoField::KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos, 
-	QWidget *parent, const char *name, bool designMode)
- : QWidget(parent, name)
+	QWidget *parent, bool designMode)
+ : QWidget(parent)
  , KexiFormDataItemInterface()
  , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
  , d( new Private() )
@@ -82,8 +83,8 @@ KexiDBAutoField::KexiDBAutoField(const QString &text, WidgetType type, LabelPosi
 	init(text, type, pos);
 }
 
-KexiDBAutoField::KexiDBAutoField(QWidget *parent, const char *name, bool designMode, LabelPosition pos)
- : QWidget(parent, name)
+KexiDBAutoField::KexiDBAutoField(QWidget *parent, bool designMode, LabelPosition pos)
+ : QWidget(parent)
  , KexiFormDataItemInterface()
  , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
  , d( new Private() )
@@ -153,19 +154,19 @@ KexiDBAutoField::createEditor()
 		case Date:
 		case Time:
 		case DateTime:
-			newSubwidget = new KexiDBLineEdit( this, QCString("KexiDBAutoField_KexiDBLineEdit:")+name() );
+			newSubwidget = new KexiDBLineEdit( this );
 			break;
 		case MultiLineText:
-			newSubwidget = new KexiDBTextEdit( this, QCString("KexiDBAutoField_KexiDBTextEdit:")+name() );
+			newSubwidget = new KexiDBTextEdit( this );
 			break;
 		case Boolean:
-			newSubwidget = new KexiDBCheckBox(dataSource(), this, QCString("KexiDBAutoField_KexiDBCheckBox:")+name());
+			newSubwidget = new KexiDBCheckBox(dataSource(), this);
 			break;
 		case Image:
-			newSubwidget = new KexiDBImageBox(d->designMode, this, QCString("KexiDBAutoField_KexiDBImageBox:")+name());
+			newSubwidget = new KexiDBImageBox(d->designMode, this);
 			break;
 		case ComboBox:
-			newSubwidget = new KexiDBComboBox(this, Q3CString("KexiDBAutoField_KexiDBComboBox:")+name(), d->designMode);
+			newSubwidget = new KexiDBComboBox( this, d->designMode );
 			break;
 		default:
 			newSubwidget = 0;
@@ -175,8 +176,9 @@ KexiDBAutoField::createEditor()
 	}
 
 	setSubwidget( newSubwidget ); //this will also allow to declare subproperties, see KFormDesigner::WidgetWithSubpropertiesInterface
-	if(newSubwidget) {
-		newSubwidget->setName( QCString("KexiDBAutoField_") + newSubwidget->className() );
+	if (newSubwidget) {
+		newSubwidget->setObjectName( 
+			QString::fromLatin1("KexiDBAutoField_") + newSubwidget->metaObject()->className() );
 		dynamic_cast<KexiDataItemInterface*>(newSubwidget)->setParentDataItemInterface(this);
 		dynamic_cast<KexiFormDataItemInterface*>(newSubwidget)
 			->setColumnInfo(columnInfo()); //needed at least by KexiDBImageBox
@@ -232,21 +234,21 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 		m_subwidget->show();
 	//! \todo support right-to-left layout where positions are inverted
 	if (position==Top || position==Left) {
-		int align = d->label->alignment();
+		Qt::Alignment align = d->label->alignment();
 		if(position == Top) {
 			d->layout = (QBoxLayout*) new QVBoxLayout(this);
-			align |= AlignVertical_Mask;
-			align ^= AlignVertical_Mask;
-			align |= AlignTop;
+			align |= Qt::AlignVertical_Mask;
+			align ^= Qt::AlignVertical_Mask;
+			align |= Qt::AlignTop;
 		}
 		else {
 			d->layout = (QBoxLayout*) new QHBoxLayout(this);
-			align |= AlignVertical_Mask;
-			align ^= AlignVertical_Mask;
-			align |= AlignVCenter;
+			align |= Qt::AlignVertical_Mask;
+			align ^= Qt::AlignVertical_Mask;
+			align |= Qt::AlignVCenter;
 		}
 		d->label->setAlignment(align);
-		if(d->widgetType == Boolean 
+		if (d->widgetType == Boolean 
 			|| (d->widgetType == Auto && fieldTypeInternal() == KexiDB::Field::InvalidType && !d->designMode))
 		{
 			d->label->hide();
@@ -254,8 +256,8 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 		else {
 			d->label->show();
 		}
-		d->layout->addWidget(d->label, 0, position == Top ? int(Qt::AlignLeft) : 0);
-		if(position == Left && d->widgetType != Boolean)
+		d->layout->addWidget(d->label, 0, position == Top ? Qt::AlignLeft : QFlags<Qt::AlignmentFlag>(0));
+		if (position == Left && d->widgetType != Boolean)
 			d->layout->addSpacing(KexiDBAutoField_SPACING);
 		d->layout->addWidget(m_subwidget, 1);
 		KexiSubwidgetInterface *subwidgetInterface = dynamic_cast<KexiSubwidgetInterface*>((QWidget*)m_subwidget);
@@ -265,11 +267,11 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 			if (subwidgetInterface->subwidgetStretchRequired(this)) {
 				QSizePolicy sizePolicy( m_subwidget->sizePolicy() );
 				if(position == Left) {
-					sizePolicy.setHorData( QSizePolicy::Minimum );
+					sizePolicy.setHorizontalPolicy( QSizePolicy::Minimum );
 					d->label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 				}
 				else {
-					sizePolicy.setVerData( QSizePolicy::Minimum );
+					sizePolicy.setVerticalPolicy( QSizePolicy::Minimum );
 					d->label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 				}
 				m_subwidget->setSizePolicy(sizePolicy);
@@ -300,9 +302,9 @@ KexiDBAutoField::setInvalidState( const QString &text )
 		return;
 	d->widgetType = Auto;
 	createEditor();
-	setFocusPolicy(QWidget::NoFocus);
+	setFocusPolicy(Qt::NoFocus);
 	if (m_subwidget)
-		m_subwidget->setFocusPolicy(QWidget::NoFocus);
+		m_subwidget->setFocusPolicy(Qt::NoFocus);
 //! @todo or set this to editor's text?
 	d->label->setText( text );
 }
@@ -570,7 +572,7 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 	bool unbound = false;
 	if (d->autoCaption && (d->widgetType==Auto || dataSource().isEmpty())) {
 		if (d->designMode)
-			realText = QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", "(unbound)");
+			realText = QString::fromLatin1(name())+" "+i18nc("Unbound Auto Field", "(unbound)");
 		else
 			realText.clear();
 		unbound = true;
@@ -593,10 +595,13 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 			realText = text;
 	}
 
-	if (unbound)
-		d->label->setAlignment( Qt::AlignCenter | Qt::WordBreak );
-	else
+	if (unbound) {
 		d->label->setAlignment( Qt::AlignCenter );
+		d->label->setWordWrap( true );
+	}
+	else {
+		d->label->setAlignment( Qt::AlignCenter );
+	}
 //	QWidget* widgetToAlterForegroundColor;
 	if(d->widgetType == Boolean) {
 		static_cast<QCheckBox*>((QWidget*)m_subwidget)->setText(realText);
@@ -667,7 +672,7 @@ KexiDBAutoField::sizeHint() const
 }
 
 void
-KexiDBAutoField::setFocusPolicy( FocusPolicy policy )
+KexiDBAutoField::setFocusPolicy( Qt::FocusPolicy policy )
 {
 	d->focusPolicyChanged = true;
 	QWidget::setFocusPolicy(policy);
@@ -682,10 +687,8 @@ KexiDBAutoField::updateInformationAboutUnboundField()
 	if ( (d->autoCaption && (dataSource().isEmpty() || dataSourceMimeType().isEmpty()))
 		|| (!d->autoCaption && d->caption.isEmpty()) )
 	{
-		d->label->setText( QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", " (unbound)") );
+		d->label->setText( QString::fromLatin1(name())+" "+i18nc("Unbound Auto Field", " (unbound)") );
 	}
-//	else
-//		d->label->setText( QString::fromLatin1(name())+" "+i18n(" (unbound)") );
 }
 
 /*void

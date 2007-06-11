@@ -357,7 +357,7 @@ class KFORMEDITOR_EXPORT CommandGroup : public Command
 		/*! \return a list of all subcommands of this group. 
 		 Note that if a given subcommand is a group itself, 
 		 it will not be expanded to subcommands on this list. */
-		const QList< K3Command*>& commands() const;
+		const QList< K3Command*> commands() const;
 
 		/*! Resets all 'allowExecute' flags that was set in addCommand().
 		 Call this after calling CommandGroup::execute() to ensure that

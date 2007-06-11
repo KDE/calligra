@@ -22,8 +22,8 @@
 
 #include <qlineedit.h>
 
-KexiDBDoubleSpinBox::KexiDBDoubleSpinBox(QWidget *parent, const char *name)
- : KDoubleSpinBox(parent, name) , KexiFormDataItemInterface()
+KexiDBDoubleSpinBox::KexiDBDoubleSpinBox(QWidget *parent)
+ : KDoubleSpinBox(parent) , KexiFormDataItemInterface()
 {
 	connect(this, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged()));
 }
@@ -41,7 +41,7 @@ void KexiDBDoubleSpinBox::setInvalidState( const QString& displayText )
 	if (focusPolicy() & Qt::TabFocus)
 		setFocusPolicy(Qt::ClickFocus);
 	setSpecialValueText(displayText);
-	KDoubleSpinBox::setValue(minValue());
+	KDoubleSpinBox::setValue(minimum());
 }
 
 void

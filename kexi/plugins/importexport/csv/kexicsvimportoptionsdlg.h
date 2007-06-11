@@ -20,7 +20,7 @@
 #ifndef KEXICSVOPTIONSDIALOG_H
 #define KEXICSVOPTIONSDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <qcheckbox.h>
 
 class KexiCharacterEncodingComboBox;
@@ -41,7 +41,7 @@ class KexiCSVImportOptions
 };
 
 //! @short CSV Options dialog
-class KexiCSVImportOptionsDialog : public KDialogBase
+class KexiCSVImportOptionsDialog : public KDialog
 {
 	Q_OBJECT
 	public:

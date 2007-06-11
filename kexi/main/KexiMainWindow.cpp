@@ -325,7 +325,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 //2.0: unused
 #if 0 
 	{//store menu popups list
-		QObjectList *l = queryList( "QPopupMenu" );
+		QObjectList *l = queryList( "QMenu" );
 		for (QObjectListIt it( *l ); it.current(); ++it ) {
 			//kDebug() << "name=" <<it.current()->name() << " cname="<<it.current()->className()<<endl;
 			//KexiMainWindow::eventFilter() will filter our popups:
@@ -357,7 +357,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 #warning TODO userMode
 #if 0 
 	if (!isFakingSDIApplication()/* && !userMode()*/) {
-//		QPopupMenu *menu = (QPopupMenu*) child( "window", "KMenu" );
+//		QMenu *menu = (QMenu*) child( "window", "KMenu" );
 		Q3PopupMenu *menu = d->popups["window"];
 		unsigned int count = menuBar()->count();
 		if (menu)
@@ -367,7 +367,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 	}
 	if (userMode()) {
 		//hide "insert" menu and disable "project_import", "edit_paste_special" menus
-		QPopupMenu *menu = d->popups["insert"];
+		QMenu *menu = d->popups["insert"];
 		if (menu) {
 			for (uint i=0; i < menuBar()->count(); i++) {
 				if (menuBar()->text( menuBar()->idAt(i) ) == i18n("&Insert")) {
@@ -547,12 +547,12 @@ Q3PopupMenu* KexiMainWindow::findPopupMenu(const char *popupName)
 	return d->popups[popupName];
 }
 
-QList<KAction*> KexiMainWindow::allActions() const
+#endif //0
+
+QList<QAction*> KexiMainWindow::allActions() const
 {
 	return actionCollection()->actions();
 }
-
-#endif //0
 
 KActionCollection *KexiMainWindow::actionCollection() const
 {
@@ -1515,7 +1515,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 			this, "CreateProjectFromTemplate", caption);
 		if ( !fname.isEmpty() ) {
 			//save last visited path
-			KURL url;
+			KUrl url;
 			url.setPath( fname );
 			if (url.isLocalFile())
 				KRecentDirs::add(startDir, url.directory());
@@ -3519,7 +3519,7 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	}*/
 
 	QWidget *focus_w = 0;
-	if (obj->inherits("QPopupMenu")) {
+	if (obj->inherits("QMenu")) {
 		/* Fixes for popup menus behaviour:
 		 For hiding/showing: focus previously (d->focus_before_popup)
 		 focused window, if known, otherwise focus currently focused one.

@@ -894,7 +894,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 
 	m_popup->addTitle(icon, titleText);
 
-	KAction *a;
+	QAction *a;
 #define PLUG_ACTION(_name, forceVisible) \
 	{ a = action(_name); \
 	if (a && (forceVisible || a->isEnabled())) { \

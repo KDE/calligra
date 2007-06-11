@@ -23,8 +23,8 @@
 
 #include <kgenericfactory.h>
 
-KexiMigrationPart::KexiMigrationPart(QObject *parent, const char *name, const QStringList &args)
- : KexiInternalPart(parent, name, args)
+KexiMigrationPart::KexiMigrationPart(QObject *parent, const QStringList &args)
+ : KexiInternalPart(parent, args)
 {
 }
 

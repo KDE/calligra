@@ -33,11 +33,11 @@
 #include <kexidb/tableschema.h>
 
 #include "kexirelationviewconnection.h"
+#include "kexirelationviewtable.h"
 
 class Q3Frame;
 
 class KexiRelationViewTable;
-class KexiRelationViewTableContainer;
 class KAction;
 class KMenu;
 

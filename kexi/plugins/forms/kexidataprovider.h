@@ -21,11 +21,8 @@
 #define KEXIFORMDATAPROVIDER_H
 
 #include "kexiformdataiteminterface.h"
-#include <q3ptrdict.h>
-#include <qdict.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include <QSet>
+#include <QList>
 
 class KexiTableItem;
 namespace KexiDB {
@@ -77,7 +74,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 		 \a invalidSources is the set of data sources that should 
 		 be omitted for fillDataItems(). 
 		 Used by KexiFormView::initDataSource(). */
-		void invalidateDataSources( const Q3Dict<char>& invalidSources, 
+		void invalidateDataSources( const QSet<QString>& invalidSources, 
 			KexiDB::QuerySchema* query = 0 );
 
 		/*! Fills the same data provided by \a value to every data item (other than \a item) 
@@ -87,9 +84,9 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 
 	protected:
 		QWidget *m_mainWidget;
-		Q3PtrDict<char> *m_duplicatedItems;
+		QSet<KexiDB::Field*> *m_duplicatedItems;
 		typedef QMap<KexiFormDataItemInterface*,uint> KexiFormDataItemInterfaceToIntMap;
-		Q3PtrList<KexiFormDataItemInterface> m_dataItems;
+		QList<KexiFormDataItemInterface*> m_dataItems;
 		QStringList m_usedDataSources;
 		KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;
 		bool m_disableFillDuplicatedDataItems : 1;

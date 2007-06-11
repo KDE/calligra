@@ -22,7 +22,6 @@
 #define KEXIFORMVIEW_H
 
 #include <qtimer.h>
-//Added by qt3to4:
 #include <QDragMoveEvent>
 #include <QResizeEvent>
 #include <QDropEvent>
@@ -30,6 +29,8 @@
 #include <widget/kexidataawareview.h>
 
 #include "kexiformpart.h"
+#include <core/KexiWindow.h>
+#include <core/KexiWindowData.h>
 #include <core/kexiblobbuffer.h>
 
 class KexiFormPart;
@@ -215,7 +216,6 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 
 		//! Used in setFocusInternal()
 		QPointer<QWidget> m_setFocusInternalOnce;
-
 	
 		/*! Stores geometry of widget recently inserted using insertAutoFields() method.
 		 having this information, we'r eable to compute position for a newly 
@@ -223,9 +223,6 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		 (the position is specified when a widget is inserted with mouse drag & dropping
 		 but not with clicking of 'Insert fields' button from Data Source pane) */
 		QRect m_widgetGeometryForRecentInsertAutoFields;
-
-		//! Used in setUnsavedLocalBLOBs()
-//		QMap<QWidget*, KexiBLOBBuffer::Id_t> m_unsavedLocalBLOBs;
 };
 
 #endif

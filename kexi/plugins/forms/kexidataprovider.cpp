@@ -20,9 +20,6 @@
 #include "kexidataprovider.h"
 
 #include <qwidget.h>
-#include <qobject.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -32,6 +29,7 @@
 #include <widget/tableview/kexicomboboxbase.h>
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
+#include <kexi_global.h>
 
 #include "widgets/kexidbform.h"
 
@@ -58,61 +56,60 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 		return;
 
 	//find widgets whose will work as data items
-	QObjectList *l = m_mainWidget->queryList( "QWidget" );
-	QObjectListIt it( *l );
-	QObject *obj;
-	Q3Dict<char> tmpSources;
-	for ( ; (obj = it.current()) != 0; ++it ) {
-		KexiFormDataItemInterface* const formDataItem = dynamic_cast<KexiFormDataItemInterface*>(obj);
+	const QList<QWidget*> widgets( m_mainWidget->findChildren<QWidget*>() );
+	QSet<QString> tmpSources;
+	foreach ( QWidget *widget, widgets ) {
+		KexiFormDataItemInterface* const formDataItem = dynamic_cast<KexiFormDataItemInterface*>(widget);
 		if (!formDataItem)
 			continue;
 		if (formDataItem->parentInterface()) //item with parent interface: collect parent instead...
 			continue;
 #if 0 //! @todo reenable when subform is moved to KexiDBForm
-		KexiDBForm *dbForm = KexiUtils::findParent<KexiDBForm>(obj, "KexiDBForm"); //form's surface...
+		KexiDBForm *dbForm = KexiUtils::findParent<KexiDBForm>(widget, "KexiDBForm"); //form's surface...
 		if (dbForm!=m_mainWidget) //only set data for this form's data items
 			continue;
 #else
 		//tmp: reject widgets within subforms
-		if (KexiUtils::findParent<KexiDBForm>(obj, "KexiDBSubForm"))
+		if (KexiUtils::findParent<const KexiDBForm*>(widget, "KexiDBSubForm"))
 			continue;
 #endif
 		QString dataSource( formDataItem->dataSource().toLower() );
 		if (dataSource.isEmpty())
 			continue;
-		kexipluginsdbg << obj->name() << endl;
+		kexipluginsdbg << widget->objectName() << endl;
 		m_dataItems.append( formDataItem );
 		formDataItem->installListener( this );
-		tmpSources.replace( dataSource, (char*)1 );
+		tmpSources.insert( dataSource );
 	}
-	delete l;
 	//now we've got a set (unique list) of field names in tmpSources
 	//remember it in m_usedDataSources
-	for (Q3DictIterator<char> it(tmpSources); it.current(); ++it) {
-		m_usedDataSources += it.currentKey();
+	foreach (const QString& source, tmpSources) {
+		m_usedDataSources += source;
 	}
 }
 
 void KexiFormDataProvider::fillDataItems(KexiTableItem& row, bool cursorAtNewRow)
 {
 	kexipluginsdbg << "KexiFormDataProvider::fillDataItems() cnt=" << row.count() << endl;
-	for (KexiFormDataItemInterfaceToIntMap::ConstIterator it = m_fieldNumbersForDataItems.constBegin(); 
+	for (KexiFormDataItemInterfaceToIntMap::ConstIterator it
+		 = m_fieldNumbersForDataItems.constBegin(); 
 		it!=m_fieldNumbersForDataItems.constEnd(); ++it)
 	{
 		KexiFormDataItemInterface *itemIface = it.key();
 		if (!itemIface->columnInfo()) {
-			kexipluginsdbg << "KexiFormDataProvider::fillDataItems(): itemIface->columnInfo() == 0" << endl;
+			kexipluginsdbg << "KexiFormDataProvider::fillDataItems(): itemIface->columnInfo() == 0"
+				<< endl;
 			continue;
 		}
 		//1. Is this a value with a combo box (lookup)?
 		int indexForVisibleLookupValue = itemIface->columnInfo()->indexForVisibleLookupValue();
 		if (indexForVisibleLookupValue<0 && indexForVisibleLookupValue>=(int)row.count()) //sanity
 			indexForVisibleLookupValue = -1; //no
-		const QVariant value(row.at(it.data()));
+		const QVariant value( row.at(it.value()) );
 		QVariant visibleLookupValue;
 		if (indexForVisibleLookupValue!=-1 && (int)row.size()>indexForVisibleLookupValue)
 			visibleLookupValue = row.at(indexForVisibleLookupValue);
-		kexipluginsdbg << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.data() 
+		kexipluginsdbg << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.value() 
 			<< " data=" << value << (indexForVisibleLookupValue!=-1 
 				? QString(" SPECIAL: indexForVisibleLookupValue=%1 visibleValue=%2")
 					.arg(indexForVisibleLookupValue).arg(visibleLookupValue.toString())
@@ -141,35 +138,35 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 	if (!m_duplicatedItems) {
 		//build (once) a set of duplicated data items (having the same fields assigned)
 		//so we can later check if an item is duplicated with a cost of o(1)
-		QMap<KexiDB::Field*,int> tmpDuplicatedItems;
-		QMapIterator<KexiDB::Field*,int> it_dup;
-		for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-			if (!it.current()->columnInfo() || !it.current()->columnInfo()->field)
+		QHash<KexiDB::Field*,int> tmpDuplicatedItems;
+		QHash<KexiDB::Field*,int>::const_iterator it_dup;
+		foreach (KexiFormDataItemInterface *dataItemIface, m_dataItems) {
+			if (!dataItemIface->columnInfo() || !dataItemIface->columnInfo()->field)
 				continue;
-			kDebug() << " ** " << it.current()->columnInfo()->field->name() << endl;
-			it_dup = tmpDuplicatedItems.find( it.current()->columnInfo()->field );
+			kDebug() << " ** " << dataItemIface->columnInfo()->field->name() << endl;
+			it_dup = tmpDuplicatedItems.constFind( dataItemIface->columnInfo()->field );
 			uint count;
-			if (it_dup==tmpDuplicatedItems.end())
+			if (it_dup == tmpDuplicatedItems.constEnd())
 				count = 0;
 			else
-				count = it_dup.data();
-			tmpDuplicatedItems.insert( it.current()->columnInfo()->field, ++count );
+				count = it_dup.value();
+			tmpDuplicatedItems.insert( dataItemIface->columnInfo()->field, ++count );
 		}
-		m_duplicatedItems = new Q3PtrDict<char>(101);
-		for (it_dup = tmpDuplicatedItems.begin(); it_dup!=tmpDuplicatedItems.end(); ++it_dup) {
-			if (it_dup.data() > 1) {
-				m_duplicatedItems->insert( it_dup.key(), (char*)1 );
-				kexipluginsdbg << "duplicated item: " << static_cast<KexiDB::Field*>(it_dup.key())->name() 
-					<< " (" << it_dup.data() << " times)" << endl;
+		m_duplicatedItems = new QSet<KexiDB::Field*>();
+		for (it_dup = tmpDuplicatedItems.constBegin(); it_dup!=tmpDuplicatedItems.constEnd(); ++it_dup) {
+			if (it_dup.value() > 1) {
+				m_duplicatedItems->insert( it_dup.key() );
+				kexipluginsdbg << "duplicated item: " << static_cast<KexiDB::Field*>(it_dup.key())->name()
+					<< " (" << it_dup.value() << " times)" << endl;
 			}
 		}
 	}
-	if (item->columnInfo() && m_duplicatedItems->find( item->columnInfo()->field )) {
-		for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-			if (it.current()!=item && item->columnInfo()->field == it.current()->columnInfo()->field) {
+	if (item->columnInfo() && m_duplicatedItems->contains( item->columnInfo()->field )) {
+		foreach (KexiFormDataItemInterface *dataItemIface, m_dataItems) {
+			if (dataItemIface != item && item->columnInfo()->field == dataItemIface->columnInfo()->field) {
 				kexipluginsdbg << "- setting a copy of value for item '" 
-					<< dynamic_cast<QObject*>(it.current())->name() << "' == " << value << endl;
-				it.current()->setValue( value );
+					<< dynamic_cast<QObject*>(dataItemIface)->objectName() << "' == " << value << endl;
+				dataItemIface->setValue( value );
 			}
 		}
 	}
@@ -185,7 +182,7 @@ bool KexiFormDataProvider::cursorAtNewRow() const
 	return false;
 }
 
-void KexiFormDataProvider::invalidateDataSources( const Q3Dict<char>& invalidSources,
+void KexiFormDataProvider::invalidateDataSources( const QSet<QString>& invalidSources,
  KexiDB::QuerySchema* query)
 {
 	//fill m_fieldNumbersForDataItems mapping from data item to field number
@@ -197,21 +194,23 @@ void KexiFormDataProvider::invalidateDataSources( const Q3Dict<char>& invalidSou
 		fieldsExpanded = query->fieldsExpanded( KexiDB::QuerySchema::WithInternalFields );
 //		dataFieldsCount = fieldsExpanded.count();
 		QMap<KexiDB::QueryColumnInfo*,int> columnsOrder( query->columnsOrder() );
-		for (QMapConstIterator<KexiDB::QueryColumnInfo*,int> it = columnsOrder.constBegin(); it!=columnsOrder.constEnd(); ++it) {
-			kexipluginsdbg << "query->columnsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
+		for (QMap<KexiDB::QueryColumnInfo*,int>::const_iterator it
+			 = columnsOrder.constBegin(); it!=columnsOrder.constEnd(); ++it) {
+			kexipluginsdbg << "query->columnsOrder()[ " << it.key()->field->name() << " ] = "
+				<< it.value() << endl;
 		}
-		for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-			KexiFormDataItemInterface *item = it.current();
-			KexiDB::QueryColumnInfo* ci = query->columnInfo( it.current()->dataSource() );
+		foreach (KexiFormDataItemInterface *item, m_dataItems) {
+			KexiDB::QueryColumnInfo* ci = query->columnInfo( item->dataSource() );
 			int index = ci ? columnsOrder[ ci ] : -1;
 			kexipluginsdbg << "query->columnsOrder()[ " << (ci ? ci->field->name() : "") << " ] = " << index 
-				<< " (dataSource: " << item->dataSource() << ", name=" << dynamic_cast<QObject*>(item)->name() << ")" << endl;
+				<< " (dataSource: " << item->dataSource() << ", name="
+				<< dynamic_cast<QObject*>(item)->objectName() << ")" << endl;
 			if (index!=-1 && !m_fieldNumbersForDataItems[ item ])
 				m_fieldNumbersForDataItems.insert( item, index );
 	//todo
 	//WRONG: not only used data sources can be fetched!
-	//			m_fieldNumbersForDataItems.insert( it.current(), 
-	//				m_usedDataSources.findIndex(it.current()->dataSource().toLower()) );
+	//			m_fieldNumbersForDataItems.insert( item, 
+	//				m_usedDataSources.findIndex(item->dataSource().toLower()) );
 		}
 	}
 	else {//!query
@@ -262,7 +261,7 @@ void KexiFormDataProvider::invalidateDataSources( const Q3Dict<char>& invalidSou
 //	m_fieldNumbersForDataItems = newFieldNumbersForDataItems;
 
 	//update data sources set (some of them may be removed)
-	Q3Dict<char> tmpUsedDataSources(1013);
+	QSet<QString> tmpUsedDataSources;
 
 	if (query)
 		query->debug();
@@ -274,18 +273,20 @@ void KexiFormDataProvider::invalidateDataSources( const Q3Dict<char>& invalidSou
 	//i = 0;
 	m_disableFillDuplicatedDataItems = true; // temporary disable fillDuplicatedDataItems()
 	                                         // because setColumnInfo() can activate it
-	for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current();) {
-		KexiFormDataItemInterface * item = it.current();
-		if (invalidSources[ item->dataSource().toLower() ]) {
-			item->setInvalidState( QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?") );
-			m_dataItems.remove(item);
+	KexiFormDataItemInterface *item;
+	for (QList<KexiFormDataItemInterface*>::iterator it( m_dataItems.begin() ); 
+		(item = *it);)
+	{
+		if (invalidSources.contains( item->dataSource().toLower() )) {
+			item->setInvalidState( QString::fromLatin1("#%1?").arg(i18n("NAME")) );
+			it = m_dataItems.erase(it);
 			continue;
 		}
 		uint fieldNumber = m_fieldNumbersForDataItems[ item ];
 		if (query) {
 			KexiDB::QueryColumnInfo *ci = fieldsExpanded[fieldNumber];
 			item->setColumnInfo(ci);
-			kexipluginsdbg << "- item=" << dynamic_cast<QObject*>(item)->name() 
+			kexipluginsdbg << "- item=" << dynamic_cast<QObject*>(item)->objectName() 
 				<< " dataSource=" << item->dataSource()
 				<< " field=" << ci->field->name() << endl;
 			const int indexForVisibleLookupValue = ci->indexForVisibleLookupValue();
@@ -299,19 +300,20 @@ void KexiFormDataProvider::invalidateDataSources( const Q3Dict<char>& invalidSou
 					{
 						// m_mainWidget (dbform) should filter the (just created using setVisibleColumnInfo()) 
 						// combo box' internal editor (actually, only if the combo is in 'editable' mode)
-						dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()->installEventFilter(m_mainWidget);
+						dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()
+							->installEventFilter(m_mainWidget);
 					}
 					kexipluginsdbg << " ALSO SET visibleColumn=" << visibleColumnInfo->debugString() 
 						<< "\n at position " << indexForVisibleLookupValue << endl;
 				}
 			}
 		}
-		tmpUsedDataSources.replace( item->dataSource().toLower(), (char*)1 );
+		tmpUsedDataSources.insert( item->dataSource().toLower() );
 		++it;
 	}
 	m_disableFillDuplicatedDataItems = false;
 	m_usedDataSources.clear();
-	foreach_list(Q3DictIterator<char>, it, tmpUsedDataSources) {
-		m_usedDataSources += it.currentKey();
+	foreach (const QString& source, tmpUsedDataSources) {
+		m_usedDataSources += source;
 	}
 }

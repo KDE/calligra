@@ -30,8 +30,6 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 
-#include <kpixmap.h>
-
 #include "../kexiformdataiteminterface.h"
 #include "../kexidbtextwidgetinterface.h"
 #include <widget/utils/kexidisplayutils.h>
@@ -48,7 +46,7 @@ class KexiDBInternalLabel;
 class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface {
 		Q_OBJECT
 		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
-		Q_PROPERTY( Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true )
+		Q_PROPERTY( QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true )
 		Q_PROPERTY( bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true )
 		Q_OVERRIDE( QPixmap pixmap DESIGNABLE false )
 		Q_OVERRIDE( bool scaledContents DESIGNABLE false )
@@ -56,12 +54,13 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 		Q_PROPERTY( QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true )
 
 	public:
-		KexiDBLabel( QWidget *parent, const char *name = 0, Qt::WFlags f = 0 );
-		KexiDBLabel( const QString& text, QWidget *parent, const char *name = 0, Qt::WFlags f = 0 );
+		KexiDBLabel( QWidget *parent, Qt::WFlags f = 0 );
+		KexiDBLabel( const QString& text, QWidget *parent, Qt::WFlags f = 0 );
 		virtual ~KexiDBLabel();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline QString dataSourceMimeType() const {
+			return KexiFormDataItemInterface::dataSourceMimeType(); }
 
 		virtual QVariant value();
 
@@ -95,9 +94,11 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 
 	public slots:
 		//! Sets the datasource to \a ds
-		inline void setDataSource( const QString &ds ) { KexiFormDataItemInterface::setDataSource( ds ); }
+		inline void setDataSource( const QString &ds )
+			{ KexiFormDataItemInterface::setDataSource( ds ); }
 
-		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSourceMimeType(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 		virtual void setText( const QString& text );
 
@@ -130,7 +131,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 		virtual void enabledChange( bool enabled );
 
 		virtual void paletteChange( const QPalette& oldPal );
-		virtual void frameChanged();
+#warning TODO virtual void frameChanged();
 		virtual void showEvent( QShowEvent* e );
 
 		//! Reimplemented to paint using real frame color instead of froeground. 

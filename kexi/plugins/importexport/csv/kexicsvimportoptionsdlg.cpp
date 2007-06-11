@@ -36,8 +36,8 @@
 
 KexiCSVImportOptions::KexiCSVImportOptions()
 {
-	KGlobal::config()->setGroup("ImportExport");
-	encoding = KGlobal::config()->readEntry("DefaultEncodingForImportingCSVFiles");
+	KConfigGroup importExportGroup( KGlobal::config()->group("ImportExport") );
+	encoding = importExportGroup.readEntry("DefaultEncodingForImportingCSVFiles");
 	if (encoding.isEmpty()) {
 		encoding = QString::fromLatin1(KGlobal::locale()->encoding());
 		defaultEncodingExplicitySet = false;
@@ -46,7 +46,7 @@ KexiCSVImportOptions::KexiCSVImportOptions()
 		defaultEncodingExplicitySet = true;
 
 	trimmedInTextValuesChecked 
-		= KGlobal::config()->readBoolEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", true);
+		= importExportGroup.readEntry<bool>("StripBlanksOffOfTextValuesWhenImportingCSVFiles", true);
 }
 
 KexiCSVImportOptions::~KexiCSVImportOptions()
@@ -69,37 +69,39 @@ bool KexiCSVImportOptions::operator!= ( const KexiCSVImportOptions & opt ) const
 
 KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog( 
 	const KexiCSVImportOptions& options, QWidget* parent )
- : KDialogBase( 
-	KDialogBase::Plain, 
-	i18n( "CSV Import Options" ),
-	Ok|Cancel, 
-	Ok,
-	parent, 
-	"KexiCSVImportOptionsDialog", 
-	true, 
-	false
- )
+ : KDialog( parent )
 {
-	Q3GridLayout *lyr = new Q3GridLayout( plainPage(), 5, 3, 
-		KDialogBase::marginHint(), KDialogBase::spacingHint());
+	setCaption(i18n( "CSV Import Options" ));
+	setButtons(Ok|Cancel);
+	setDefaultButton(Ok);
+	setObjectName("KexiCSVImportOptionsDialog");
+	setModal(true);
+	QWidget *plainPage = new QWidget(this);
+	setMainWidget(plainPage);
+	
+	Q3GridLayout *lyr = new Q3GridLayout( plainPage, 5, 3, 
+		KDialog::marginHint(), KDialog::spacingHint());
 
-	m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage(), options.encoding);
+	m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage, options.encoding);
 	lyr->addWidget( m_encodingComboBox, 0, 1 );
 
-	QLabel* lbl = new QLabel( m_encodingComboBox, i18n("Text encoding:"), plainPage());
+	QLabel* lbl = new QLabel( m_encodingComboBox, i18n("Text encoding:"), plainPage);
 	lyr->addWidget( lbl, 0, 0 );
 
-	lyr->addItem( new QSpacerItem( 20, KDialogBase::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed ), 2, 1 );
-	lyr->addItem( new QSpacerItem( 121, KDialogBase::spacingHint(), QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 2 );
+	lyr->addItem( new QSpacerItem( 
+		20, KDialog::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed ), 2, 1 );
+	lyr->addItem( new QSpacerItem(
+		121, KDialog::spacingHint(), QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 2 );
 
 	m_chkAlwaysUseThisEncoding = new QCheckBox(
-		i18n("Always use this encoding when importing CSV data files"), plainPage());
+		i18n("Always use this encoding when importing CSV data files"), plainPage);
 	lyr->addWidget( m_chkAlwaysUseThisEncoding, 1, 1 );
 
 	m_chkStripWhiteSpaceInTextValues = new QCheckBox(
-		i18n("Strip leading and trailing blanks off of text values"), plainPage());
+		i18n("Strip leading and trailing blanks off of text values"), plainPage);
 	lyr->addWidget( m_chkStripWhiteSpaceInTextValues, 3, 1 );
-	lyr->addItem( new QSpacerItem( 20, KDialogBase::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding ), 4, 1 );
+	lyr->addItem( new QSpacerItem(
+		20, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding ), 4, 1 );
 
 	//update widgets
 	if (options.defaultEncodingExplicitySet) {
@@ -126,17 +128,17 @@ KexiCSVImportOptions KexiCSVImportOptionsDialog::options() const
 
 void KexiCSVImportOptionsDialog::accept()
 {
-	KGlobal::config()->setGroup("ImportExport");
+	KConfigGroup importExportGroup( KGlobal::config()->group("ImportExport") );
 	if (m_chkAlwaysUseThisEncoding->isChecked())
-		KGlobal::config()->writeEntry("DefaultEncodingForImportingCSVFiles", 
+		importExportGroup.writeEntry("DefaultEncodingForImportingCSVFiles", 
 			m_encodingComboBox->selectedEncoding());
 	else
-		KGlobal::config()->deleteEntry("DefaultEncodingForImportingCSVFiles");
+		importExportGroup.deleteEntry("DefaultEncodingForImportingCSVFiles");
 
-	KGlobal::config()->writeEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", 
+	importExportGroup.writeEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", 
 		m_chkStripWhiteSpaceInTextValues->isChecked());
 
-	KDialogBase::accept();
+	KDialog::accept();
 }
 
 #include "kexicsvimportoptionsdlg.moc"

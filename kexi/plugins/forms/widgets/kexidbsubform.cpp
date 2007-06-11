@@ -23,6 +23,8 @@
 #include "kexidbform.h"
 #include "../kexiformview.h"
 #include <kexidb/utils.h>
+#include <KexiMainWindowIface.h>
+#include <kexiutils/utils.h>
 #include <formeditor/formIO.h>
 #include <formeditor/objecttree.h>
 #include <formeditor/utils.h>
@@ -30,9 +32,10 @@
 #include <formeditor/formmanager.h>
 //Added by qt3to4:
 #include <Q3Frame>
+#include <QSet>
 
-KexiDBSubForm::KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent, const char *name)
-: Q3ScrollView(parent, name), m_parentForm(parentForm), m_form(0), m_widget(0)
+KexiDBSubForm::KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent)
+: Q3ScrollView(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
 	setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
@@ -78,25 +81,25 @@ KexiDBSubForm::setFormName(const QString &name)
 
 	QWidget *pw = parentWidget();
 	KexiFormView *view = 0;
-	QStringList list;
-	while(pw) {
-		if(pw->isA("KexiDBSubForm")) {
-			if(list.contains(pw->name())) {
+	QSet<QString> names;
+	while (pw) {
+		if (KexiUtils::objectIsA(pw, "KexiDBSubForm")) {
+			if (names.contains(pw->objectName())) {
 //! @todo error message
 				return; // Be sure to don't run into a endless-loop cause of recursive subforms.
 			}
-			list.append(pw->name());
+			names.insert(pw->objectName());
 		}
-		else if(! view && pw->isA("KexiFormView"))
+		else if (! view && KexiUtils::objectIsA(pw, "KexiFormView")) {
 			view = static_cast<KexiFormView*>(pw); // we need a KexiFormView*
+		}
 		pw = pw->parentWidget();
 	}
 
-	if (!view || !view->window() || !view->window()->mainWin()
-		|| !KexiMainWindowIface::global()->project()->dbConnection())
+	if (!view || !view->window() || !KexiMainWindowIface::global()->project()->dbConnection())
 		return;
 
-	KexiDB::Connection *conn = view->window()->mainWin()->project()->dbConnection();
+	KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 
 	// we check if there is a form with this name
 	int id = KexiDB::idForObjectName(*conn, name, KexiPart::FormObjectType);
@@ -108,7 +111,8 @@ KexiDBSubForm::setFormName(const QString &name)
 	m_widget = new KexiDBFormBase(viewport(), "KexiDBSubForm_widget");
 	m_widget->show();
 	addChild(m_widget);
-	m_form = new KFormDesigner::Form(KexiFormPart::library(), this->name());
+	m_form = new KFormDesigner::Form(KexiFormPart::library());
+	m_form->setObjectName(QString("KFormDesigner::Form_")+objectName());
 	m_form->createToplevel(m_widget);
 
 	// and load the sub form
@@ -126,7 +130,7 @@ KexiDBSubForm::setFormName(const QString &name)
 	m_form->setDesignMode(false);
 
 	// Install event filters on the whole newly created form
-	KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::name());
+	KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::objectName());
 	KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
 }
 

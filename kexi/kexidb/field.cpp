@@ -199,7 +199,7 @@ QString Field::typeGroupName(uint typeGroup)
 
 QStringList Field::typeGroupNames()
 {
-	m_typeGroupNames.names;
+	return m_typeGroupNames.names;
 }
 
 QString Field::typeGroupString(uint typeGroup)
@@ -629,7 +629,9 @@ QString Field::debugString() const
 	if (m_customProperties && !m_customProperties->isEmpty()) {
 		dbg += QString(" CUSTOM PROPERTIES (%1): ").arg(m_customProperties->count());
 		bool first = true;
-		foreach3 (CustomPropertiesMap::ConstIterator, it, *m_customProperties) {
+		for (CustomPropertiesMap::ConstIterator it(m_customProperties->constBegin());
+			it!=m_customProperties->constEnd(); ++it)
+		{
 			if (first)
 				first = false;
 			else

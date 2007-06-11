@@ -34,7 +34,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportForm : public QWidget, public KFormDesign
 	Q_OBJECT
 
 	public:
-		KexiReportForm(QWidget *parent, const char *name="kexi_dbform");
+		KexiReportForm(QWidget *parent);
 		virtual ~KexiReportForm();
 
 		/*QString datasource() const { return m_ds; }

@@ -42,13 +42,13 @@ QWidget *KexiUtils::createDebugWindow(QWidget *parent)
 	// (this is internal code - do not use i18n() here)
 	debugWindow = new DebugWindowDialog(parent);
 	debugWindow->setSizeGripEnabled( true );
-	QBoxLayout *lyr = new QVBoxLayout(debugWindow, KDialog::marginHint());
+	QBoxLayout *lyr = new QVBoxLayout(debugWindow);
 	debugWindowTab = new KTabWidget(debugWindow);
 	debugWindowTab->setObjectName("debugWindowTab");
 	lyr->addWidget( debugWindowTab );
 	debugWindow->resize(900, 600);
-	debugWindow->setIcon( DesktopIcon("document-properties") );
-	debugWindow->setCaption("Kexi Internal Debugger");
+	debugWindow->setWindowIcon( KIcon("document-properties") );
+	debugWindow->setWindowTitle("Kexi Internal Debugger");
 	debugWindow->show();
 	return debugWindow;
 }
@@ -78,7 +78,7 @@ void KexiUtils::addKexiDBDebug(const QString& text)
 		kexiDBDebugPage->setColumnWidthMode( 0, Q3ListView::Maximum );
 		kexiDBDebugPage->setRootIsDecorated( true );
 		debugWindowTab->addTab( page, "KexiDB" );
-		debugWindowTab->showPage(page);
+		debugWindowTab->setCurrentWidget(page);
 		kexiDBDebugPage->show();
 	}
 	//add \n after (about) every 30 characters
@@ -100,7 +100,7 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 		vbox->addLayout(hbox);
 		hbox->addStretch(1);
 		KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", "document-save"), page);
-		btn_exec->setName("executeRealAlterTable");
+		btn_exec->setObjectName("executeRealAlterTable");
 		hbox->addWidget(btn_exec);
 		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
 		hbox->addWidget(btn_clear);
@@ -119,7 +119,7 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 		kexiAlterTableActionDebugPage->setColumnWidthMode( 0, Q3ListView::Maximum );
 		kexiAlterTableActionDebugPage->setRootIsDecorated( true );
 		debugWindowTab->addTab( page, "AlterTable Actions" );
-		debugWindowTab->showPage(page);
+		debugWindowTab->setCurrentWidget(page);
 		page->show();
 	}
 	if (text.isEmpty()) //don't move up!

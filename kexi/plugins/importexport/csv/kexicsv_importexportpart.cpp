@@ -20,14 +20,14 @@
 #include "kexicsv_importexportpart.h"
 #include "kexicsvimportdialog.h"
 #include "kexicsvexportwizard.h"
-#include <core/keximainwindow.h>
+#include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <kexiutils/utils.h>
 
 #include <kgenericfactory.h>
 
-KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const char *name, const QStringList &args)
- : KexiInternalPart(parent, name, args)
+KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const QStringList &args)
+ : KexiInternalPart(parent, args)
 {
 }
 
@@ -41,7 +41,8 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
 	if (0==qstrcmp(widgetClass, "KexiCSVImportDialog")) {
 		KexiCSVImportDialog::Mode mode = (args && (*args)["sourceType"]=="file")
 			? KexiCSVImportDialog::File : KexiCSVImportDialog::Clipboard;
-		KexiCSVImportDialog *dlg = new KexiCSVImportDialog( mode, parent, objName );
+		KexiCSVImportDialog *dlg = new KexiCSVImportDialog( mode, parent );
+		dlg->setObjectName(objName);
 		m_cancelled = dlg->cancelled();
 		if (m_cancelled) {
 			delete dlg;
@@ -55,7 +56,8 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
 		KexiCSVExport::Options options;
 		if (!options.assign( *args ))
 			return 0;
-		KexiCSVExportWizard *dlg = new KexiCSVExportWizard( options, parent, objName);
+		KexiCSVExportWizard *dlg = new KexiCSVExportWizard( options, parent );
+		dlg->setObjectName(objName);
 		m_cancelled = dlg->cancelled();
 		if (m_cancelled) {
 			delete dlg;

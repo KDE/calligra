@@ -391,8 +391,8 @@ void KexiUtils::simpleDecrypt(QString& string)
 		string[i] = QChar( string[i].unicode() - 47 - i );
 }
 
-void KexiUtils::drawPixmap( QPainter& p, int lineWidth, const QRect& rect, 
-	const QPixmap& pixmap, int alignment, bool scaledContents, bool keepAspectRatio)
+void KexiUtils::drawPixmap( QPainter& p, const WidgetMargins& margins, const QRect& rect, 
+	const QPixmap& pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio)
 {
 #warning TODO KexiUtils::drawPixmap
 #if 0 //todo
@@ -527,6 +527,58 @@ void KexiUtils::unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason)
 	//QFocusEvent::setReason(reason);
 	QCoreApplication::sendEvent( widget, &fe );
 	//QFocusEvent::resetReason();
+}
+
+//--------
+
+KexiUtils::WidgetMargins::WidgetMargins()
+ : left(0), top(0), right(0), bottom(0)
+{
+}
+
+KexiUtils::WidgetMargins::WidgetMargins(QWidget *widget)
+{
+	copyFromWidget(widget);
+}
+	
+KexiUtils::WidgetMargins::WidgetMargins(int _left, int _top, int _right, int _bottom)
+ : left(_left), top(_top), right(_right), bottom(_bottom)
+{
+}
+
+KexiUtils::WidgetMargins::WidgetMargins(int commonMargin)
+ : left(commonMargin), top(commonMargin), right(commonMargin), bottom(commonMargin)
+{
+}
+	
+void KexiUtils::WidgetMargins::copyFromWidget(QWidget *widget)
+{
+	Q_ASSERT(widget);
+	widget->getContentsMargins( &left, &top, &right, &bottom );
+}
+
+void KexiUtils::WidgetMargins::copyToWidget(QWidget *widget)
+{
+	widget->setContentsMargins( left, top, right, bottom );
+}
+
+WidgetMargins& KexiUtils::WidgetMargins::operator+= ( const WidgetMargins& margins )
+{
+	left += margins.left;
+	top += margins.top;
+	right += margins.right;
+	bottom += margins.bottom;
+	return *this;
+}
+
+const WidgetMargins KexiUtils::operator+ (
+	const WidgetMargins& margins1, const WidgetMargins & margins2 )
+{
+	return WidgetMargins(
+		margins1.left+margins1.left,
+		margins1.top+margins1.top,
+		margins1.right+margins1.right,
+		margins1.bottom+margins1.bottom);
 }
 
 #include "utils_p.moc"

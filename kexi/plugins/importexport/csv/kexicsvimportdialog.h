@@ -29,7 +29,7 @@
 #define KEXI_CSVDIALOG_H
 
 #include <q3valuevector.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <q3ptrvector.h>
 #include <qregexp.h>
 #include <qbitarray.h>
@@ -42,7 +42,7 @@
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <kexiutils/tristate.h>
 #include <kexidb/connection.h>
@@ -82,7 +82,7 @@ class KexiCSVInfoLabel;
  * The different purposed mentioned above is determined
  * using mode, which can be Column, File, or Clipboard respectively.
 */
-class KexiCSVImportDialog : public KDialogBase
+class KexiCSVImportDialog : public KDialog
 {
 	Q_OBJECT
 
@@ -158,8 +158,8 @@ class KexiCSVImportDialog : public KDialogBase
 		  (escaped) quotes.
 		2. While scanning the data, for every row following number of tabs, semicolons and commas
 		  (only these outside of the quotes) are computed. On every line the values are appended
-		  to a separate list (Q3ValueList<int>).
-		3. After scanning, all the values are checked on the Q3ValueList<int> of tabs. 
+		  to a separate list (QList<int>).
+		3. After scanning, all the values are checked on the QList<int> of tabs. 
 		  If the list has more one element (so there was more than one row) and all the values 
 		  (numbers of tabs) are equal, it's very probable the tab is a delimiter. 
 		  So, this character is returned as a delimiter.
@@ -188,7 +188,7 @@ class KexiCSVImportDialog : public KDialogBase
 
 		//! m_detectedUniqueColumns[i]==true means that i-th column has unique values
 		//! (only for numeric type)
-		Q3PtrVector< Q3ValueList<int> > m_uniquenessTest;
+		QVector< QList<int>* > m_uniquenessTest;
 
 		QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp;
 		Q3ValueVector<QString> m_typeNames, m_columnNames;
@@ -211,7 +211,7 @@ class KexiCSVImportDialog : public KDialogBase
 		KexiDB::Connection *m_conn; //!< (temp) database connection used for importing
 		KexiDB::TableSchema *m_destinationTableSchema;  //!< (temp) dest. table schema used for importing
 		KexiDB::PreparedStatement::Ptr m_importingStatement;
-		Q3ValueList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
+		QList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
 		bool m_implicitPrimaryKeyAdded; //!< (temp) used for importing
 		bool m_allRowsLoadedInPreview; //!< we need to know whether all rows were loaded or it's just a partial data preview
 		bool m_stoppedAt_MAX_BYTES_TO_PREVIEW; //!< used to compute m_allRowsLoadedInPreview

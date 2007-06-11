@@ -1,7 +1,4 @@
 
-
-add_subdirectory( widgets )
-
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/koproperty ${CMAKE_SOURCE_DIR}/lib/komain ${CMAKE_SOURCE_DIR}/kexi/widget/tableview/private ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${KDE4_INCLUDES}  )
 
 
@@ -12,8 +9,6 @@ set(kexihandler_form_PART_SRCS kexiforms.cpp )
 kde4_automoc(${kexihandler_form_PART_SRCS})
 
 kde4_add_plugin(kexihandler_form ${kexihandler_form_PART_SRCS})
-
-
 
 target_link_libraries(kexihandler_form  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils kexidatatable kexiextendedwidgets kformdesigner koproperty kexiformutils )
 
@@ -48,13 +43,33 @@ set(kexiformutils_LIB_SRCS
    kexiformmanager.cpp 
    kexidatasourcepage.cpp 
    kexiformpart.cpp 
-   kexiformview.cpp )
+   kexiformview.cpp
+
+	widgets/kexidbutils.cpp
+	widgets/kexidbautofield.cpp
+	widgets/kexidbform.cpp
+	widgets/kexidbsubform.cpp
+	widgets/kexidblabel.cpp
+	widgets/kexidbimagebox.cpp
+	widgets/kexipushbutton.cpp
+	widgets/kexiframe.cpp
+	widgets/kexidblineedit.cpp
+	widgets/kexidbcheckbox.cpp
+	widgets/kexidbtextedit.cpp
+	widgets/kexidbcombobox.cpp
+)
+
+#obsolete	widgets/kexidbdoublespinbox.cpp
+#obsolete	widgets/kexidbintspinbox.cpp
+#obsolete	widgets/kexidbdatetimeedit.cpp
+#obsolete	widgets/kexidbtimeedit.cpp
+#obsolete	widgets/kexidbdateedit.cpp
 
 kde4_automoc(${kexiformutils_LIB_SRCS})
 
 kde4_add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 
-target_link_libraries(kexiformutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets kexiformutilswidgets kformdesigner )
+target_link_libraries(kexiformutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets  kformdesigner )
 
 set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kexiformutils  DESTINATION ${LIB_INSTALL_DIR})

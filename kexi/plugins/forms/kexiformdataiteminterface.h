@@ -23,8 +23,6 @@
 #include <widget/utils/kexidisplayutils.h>
 #include <kexidataiteminterface.h>
 #include <qwidget.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 namespace KexiDB {
 	class Field;
@@ -49,12 +47,12 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		 Data source mime type means here types like "kexi/table" or "kexi/query"
 		 in.the data source is set to object (as within form or subform) or is empty
 		 if the data source is set to table field or query column. */
-		inline Q3CString dataSourceMimeType() const { return m_dataSourceMimeType; }
+		inline QString dataSourceMimeType() const { return m_dataSourceMimeType; }
 
 		/*! Sets the mime type of the data source for this widget.
 		 Data source usually means here a "kexi/table" or "kexi/query".
 		 @see dataSourceMimeType() */
-		inline void setDataSourceMimeType(const Q3CString &ds) { m_dataSourceMimeType = ds; }
+		inline void setDataSourceMimeType(const QString &ds) { m_dataSourceMimeType = ds; }
 
 		/*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
 		 is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
@@ -135,7 +133,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 
 	protected:
 		QString m_dataSource;
-		Q3CString m_dataSourceMimeType;
+		QString m_dataSourceMimeType;
 		KexiDB::QueryColumnInfo* m_columnInfo;
 		KexiDisplayUtils::DisplayParameters *m_displayParametersForEnteredValue; //!< used in setDisplayDefaultValue()
 		KexiDisplayUtils::DisplayParameters *m_displayParametersForDefaultValue; //!< used in setDisplayDefaultValue()

@@ -23,8 +23,8 @@
 #include <qlineedit.h>
 #include <knumvalidator.h>
 
-KexiDBIntSpinBox::KexiDBIntSpinBox(QWidget *parent, const char *name)
- : KIntSpinBox(parent, name) , KexiFormDataItemInterface()
+KexiDBIntSpinBox::KexiDBIntSpinBox(QWidget *parent)
+ : KIntSpinBox(parent) , KexiFormDataItemInterface()
 {
 	connect(this, SIGNAL(valueChanged(int)), this, SLOT(slotValueChanged()));
 }

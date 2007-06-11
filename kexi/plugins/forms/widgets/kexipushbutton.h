@@ -32,7 +32,7 @@ class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 	Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption DESIGNABLE true)
 
 	public:
-		KexiPushButton( const QString & text, QWidget * parent, const char * name = 0 );
+		KexiPushButton( const QString & text, QWidget * parent );
 		~KexiPushButton();
 
 	public slots:
@@ -40,13 +40,16 @@ class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 		//! @see KexiFormPart::slotAssignAction()
 		//! @see KexiFormEventAction::ActionData
 		QString onClickAction() const { return m_onClickActionData.string; }
-		void setOnClickAction(const QString& actionString) { m_onClickActionData.string = actionString; }
+		void setOnClickAction(const QString& actionString)
+			{ m_onClickActionData.string = actionString; }
 
-		//! action option allowing to select whether the object should be opened in data view mode or printed, etc.
-		//! @see KexiFormPart::slotAssignAction()
-		//! @see KexiFormEventAction::ActionData
+		/*! action option allowing to select whether the object should be opened 
+		 data view mode or printed, etc.
+		 @see KexiFormPart::slotAssignAction()
+		 @see KexiFormEventAction::ActionData */
 		QString onClickActionOption() const { return m_onClickActionData.option; }
-		void setOnClickActionOption(const QString& option) { m_onClickActionData.option = option; }
+		void setOnClickActionOption(const QString& option)
+			{ m_onClickActionData.option = option; }
 
 	protected:
 		KexiFormEventAction::ActionData m_onClickActionData;

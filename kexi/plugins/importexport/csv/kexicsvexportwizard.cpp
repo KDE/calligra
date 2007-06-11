@@ -39,6 +39,7 @@
 #include <Q3GridLayout>
 #include <QLabel>
 #include <Q3HBoxLayout>
+#include <QDesktopWidget>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -52,12 +53,13 @@
 
 KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 	QWidget * parent )
- : K3Wizard(parent, name)
+ : K3Wizard(parent)
  , m_options(options)
 // , m_mode(mode)
 // , m_itemId(itemId)
  , m_fileSavePage(0)
  , m_defaultsBtn(0)
+ , m_importExportGroup( KGlobal::config()->group("ImportExport") )
  , m_rowCount(-1)
  , m_rowCountDetermined(false)
  , m_cancelled(false)
@@ -106,15 +108,17 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 	// Setup pages
 
 	// 1. File Save Page
-	if (m_options.mode==KexiCSVExport::File) {
+	if (m_options.mode==KexiCSVExport::File) {	
 		m_fileSavePage = new KexiStartupFileDialog(
 			"kfiledialog:///CSVImportExport", //startDir
 			KexiStartupFileDialog::Custom | KexiStartupFileDialog::SavingFileBasedDB,
-			this, "m_fileSavePage");
-		m_fileSavePage->setMinimumHeight(kapp->desktop()->height()/2);
+			this);
+		m_fileSavePage->setObjectName("m_fileSavePage");
+		m_fileSavePage->setMinimumHeight(kapp->desktop()->availableGeometry().height()/2);
 		m_fileSavePage->setAdditionalFilters( csvMimeTypes() );
 		m_fileSavePage->setDefaultExtension("csv");
-		m_fileSavePage->setLocationText( KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()) );
+		m_fileSavePage->setLocationText(
+			KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()) );
 		connect(m_fileSavePage, SIGNAL(rejected()), this, SLOT(reject()));
 		addPage(m_fileSavePage, i18n("Enter Name of File You Want to Save Data To"));
 	}
@@ -122,7 +126,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 	// 2. Export options
 	m_exportOptionsPage = new QWidget(this, "m_exportOptionsPage");
 	Q3GridLayout *exportOptionsLyr = new Q3GridLayout( m_exportOptionsPage, 6, 3,
-		KDialogBase::marginHint(), KDialogBase::spacingHint(), "exportOptionsLyr");
+		KDialog::marginHint(), KDialog::spacingHint(), "exportOptionsLyr");
 	m_infoLblFrom = new KexiCSVInfoLabel( infoLblFromText, m_exportOptionsPage );
 	KexiPart::Info *partInfo = Kexi::partManager().infoForMimeType(
 		m_tableOrQuery->table() ? "kexi/table" : "kexi/query");
@@ -146,14 +150,16 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 	m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 	// -<options section>
-	m_exportOptionsSection = new Q3GroupBox(1, Vertical, i18n("Options"), m_exportOptionsPage, 
-		"m_exportOptionsSection");
+	m_exportOptionsSection = new Q3GroupBox(1, Qt::Vertical, i18n("Options"), m_exportOptionsPage);
+	m_exportOptionsSection->setObjectName("m_exportOptionsSection");
 	m_exportOptionsSection->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	exportOptionsLyr->addMultiCellWidget(m_exportOptionsSection, 3, 3, 0, 1);
 	QWidget *exportOptionsSectionWidget 
-		= new QWidget(m_exportOptionsSection, "exportOptionsSectionWidget");
+		= new QWidget(m_exportOptionsSection);
+	exportOptionsSectionWidget->setObjectName("exportOptionsSectionWidget");
 	Q3GridLayout *exportOptionsSectionLyr = new Q3GridLayout( exportOptionsSectionWidget, 5, 2, 
-		0, KDialogBase::spacingHint(), "exportOptionsLyr");
+		0, KDialog::spacingHint());
+	exportOptionsLyr->setObjectName("exportOptionsLyr");
 
 	// -delimiter
 	m_delimiterWidget = new KexiCSVDelimiterWidget(false, //!lineEditOnBottom
@@ -201,12 +207,14 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 		new QSpacerItem( 0, 0, QSizePolicy::Preferred, QSizePolicy::MinimumExpanding), 5, 5, 0, 1 );
 
 //	addPage(m_exportOptionsPage, i18n("Set Export Options"));
-	addPage(m_exportOptionsPage, m_options.mode==KexiCSVExport::Clipboard ? i18n("Copying") : i18n("Exporting"));
+	addPage(m_exportOptionsPage, 
+		m_options.mode==KexiCSVExport::Clipboard ? i18n("Copying") : i18n("Exporting"));
 	setFinishEnabled(m_exportOptionsPage, true);
 
 	// load settings
-	KGlobal::config()->setGroup("ImportExport");
-	if (m_options.mode!=KexiCSVExport::Clipboard && readBoolEntry("ShowOptionsInCSVExportDialog", false)) {
+	if (m_options.mode!=KexiCSVExport::Clipboard
+		&& readBoolEntry("ShowOptionsInCSVExportDialog", false))
+	{
 		show();
 		slotShowOptionsButtonClicked();
 	}
@@ -307,7 +315,6 @@ void KexiCSVExportWizard::done(int result)
 	}
 
 	//store options
-	KGlobal::config()->setGroup("ImportExport");
 	if (m_options.mode!=KexiCSVExport::Clipboard)
 		writeEntry("ShowOptionsInCSVExportDialog", m_exportOptionsSection->isVisible());
 	const bool store = m_alwaysUseCheckBox->isChecked();
@@ -323,11 +330,13 @@ void KexiCSVExportWizard::done(int result)
 	else
 		deleteEntry("DefaultTextQuoteForExportingCSVFiles");
 	if (store && !m_characterEncodingCombo->defaultEncodingSelected())
-		writeEntry("DefaultEncodingForExportingCSVFiles", m_characterEncodingCombo->selectedEncoding());
+		writeEntry(
+			"DefaultEncodingForExportingCSVFiles", m_characterEncodingCombo->selectedEncoding());
 	else
 		deleteEntry("DefaultEncodingForExportingCSVFiles");
 	if (store && !m_addColumnNamesCheckBox->isChecked())
-		writeEntry("AddColumnNamesForExportingCSVFiles", m_addColumnNamesCheckBox->isChecked());
+		writeEntry(
+			"AddColumnNamesForExportingCSVFiles", m_addColumnNamesCheckBox->isChecked());
 	else
 		deleteEntry("AddColumnNamesForExportingCSVFiles");
 
@@ -352,7 +361,7 @@ void KexiCSVExportWizard::slotShowOptionsButtonClicked()
 	}
 }
 
-void KexiCSVExportWizard::layOutButtonRow( Q3HBoxLayout * layout )
+void KexiCSVExportWizard::layOutButtonRow( QHBoxLayout * layout )
 {
 	Q3Wizard::layOutButtonRow( layout );
 
@@ -394,27 +403,27 @@ static QString convertKey(const char *key, KexiCSVExport::Mode mode)
 
 bool KexiCSVExportWizard::readBoolEntry(const char *key, bool defaultValue)
 {
-	return KGlobal::config()->readBoolEntry(convertKey(key, m_options.mode), defaultValue);
+	return m_importExportGroup.readEntry<bool>(convertKey(key, m_options.mode), defaultValue);
 }
 
 QString KexiCSVExportWizard::readEntry(const char *key, const QString& defaultValue)
 {
-	return KGlobal::config()->readEntry(convertKey(key, m_options.mode), defaultValue);
+	return m_importExportGroup.readEntry(convertKey(key, m_options.mode), defaultValue);
 }
 
 void KexiCSVExportWizard::writeEntry(const char *key, const QString& value)
 {
-	KGlobal::config()->writeEntry(convertKey(key, m_options.mode), value);
+	m_importExportGroup.writeEntry(convertKey(key, m_options.mode), value);
 }
 
 void KexiCSVExportWizard::writeEntry(const char *key, bool value)
 {
-	KGlobal::config()->writeEntry(convertKey(key, m_options.mode), value);
+	m_importExportGroup.writeEntry(convertKey(key, m_options.mode), value);
 }
 
 void KexiCSVExportWizard::deleteEntry(const char *key)
 {
-	KGlobal::config()->deleteEntry(convertKey(key, m_options.mode));
+	m_importExportGroup.deleteEntry(convertKey(key, m_options.mode));
 }
 
 QString KexiCSVExportWizard::defaultDelimiter() const

@@ -20,7 +20,7 @@
 #ifndef KEXIACTIONSELECTIONDIALOG_P_H
 #define KEXIACTIONSELECTIONDIALOG_P_H
 
-#include <klistview.h>
+#include <k3listview.h>
 
 //! @internal
 class ActionsListViewBase : public K3ListView

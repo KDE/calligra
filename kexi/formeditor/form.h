@@ -62,7 +62,7 @@ class KFORMEDITOR_EXPORT FormWidget
 		 using double-buffering. \a type can be 1 (selection rect)
 		 or 2 (insert rect, dotted). */
 
-		virtual void drawRects(const Q3ValueList<QRect> &list, int type) = 0;
+		virtual void drawRects(const QList<QRect> &list, int type) = 0;
 
 		virtual void drawRect(const QRect &r, int type) = 0;
 

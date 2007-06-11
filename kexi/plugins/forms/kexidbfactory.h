@@ -40,14 +40,14 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 	Q_OBJECT
 
 	public:
-		KexiDBFactory(QObject *parent, const char *name, const QStringList &args);
+		KexiDBFactory(QObject *parent, const QStringList &args);
 		virtual ~KexiDBFactory();
 
 		virtual QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, 
 			KFormDesigner::Container *container, int options = DefaultOptions );
 
 		virtual void createCustomActions(KActionCollection* col);
-		virtual bool createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
+		virtual bool createMenuActions(const Q3CString &classname, QWidget *w, QMenu *menu,
 		   KFormDesigner::Container *container);
 		virtual bool startEditing(const Q3CString &classname, QWidget *w, KFormDesigner::Container *container);
 		virtual bool previewWidget(const Q3CString &, QWidget *, KFormDesigner::Container *);

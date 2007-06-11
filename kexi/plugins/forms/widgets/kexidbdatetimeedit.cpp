@@ -31,8 +31,8 @@
 #include <kdatetable.h>
 #include <kexiutils/utils.h>
 
-KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *parent, const char *name)
- : QWidget(parent, name), KexiFormDataItemInterface()
+KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *parent)
+ : QWidget(parent), KexiFormDataItemInterface()
 {
 	m_invalidState = false;
 	m_cleared = false;

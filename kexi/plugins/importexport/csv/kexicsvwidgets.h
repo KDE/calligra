@@ -20,15 +20,12 @@
 #ifndef KEXI_CSVWIDGETS_H
 #define KEXI_CSVWIDGETS_H
 
-#include <q3valuevector.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3Frame>
-#include <kcombobox.h>
+#include <QVector>
+#include <KComboBox>
 
 class KLineEdit;
-class K3ActiveLabel;
 class QLabel;
+class QFrame;
 
 #define KEXICSV_DEFAULT_FILE_TEXT_QUOTE "\""
 #define KEXICSV_DEFAULT_CLIPBOARD_TEXT_QUOTE ""
@@ -64,14 +61,13 @@ class KexiCSVInfoLabel : public QWidget
 		void setIcon(const QString& iconName);
 
 		QLabel* leftLabel() const { return m_leftLabel; }
-		K3ActiveLabel* fileNameLabel() const { return m_fnameLbl; }
-		K3ActiveLabel* commentLabel() const { return m_commentLbl; }
-		Q3Frame* separator() const { return m_separator; }
+		QLabel* fileNameLabel() const { return m_fnameLbl; }
+		QLabel* commentLabel() const { return m_commentLbl; }
+		QFrame* separator() const { return m_separator; }
 
 	protected:
-		QLabel *m_leftLabel, *m_iconLbl;
-		K3ActiveLabel *m_fnameLbl, *m_commentLbl;
-		Q3Frame* m_separator;
+		QLabel *m_leftLabel, *m_iconLbl, *m_fnameLbl, *m_commentLbl;
+		QFrame* m_separator;
 };
 
 //! @short A combo box widget providing a list of possible delimiters
@@ -98,7 +94,7 @@ class KexiCSVDelimiterWidget : public QWidget
 
 	protected:
 		QString m_delimiter;
-		Q3ValueVector<QString> m_availableDelimiters;
+		QVector<QString> m_availableDelimiters;
 		KComboBox* m_combo;
 		KLineEdit* m_delimiterEdit;
 };

@@ -51,7 +51,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 	Q_OBJECT
 
 	public:
-		KexiInternalPart(QObject *parent, const char *name, const QStringList &);
+		KexiInternalPart(QObject *parent, const QStringList &);
 		virtual ~KexiInternalPart();
 	
 //		KexiWindow *instance();

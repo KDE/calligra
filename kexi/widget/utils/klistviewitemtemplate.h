@@ -22,7 +22,7 @@
 
 #include <k3listview.h>
 
-//! QListViewItem class with ability for storing additional data member
+//! List view item class with ability for storing additional data member
 template<class type>
 class KListViewItemTemplate : public K3ListViewItem
 {
@@ -39,7 +39,7 @@ class KListViewItemTemplate : public K3ListViewItem
 		 : K3ListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8), data(_data) {}
 		KListViewItemTemplate(type _data, Q3ListViewItem *parent, QString label1, QString label2=QString(), QString label3=QString(), QString label4=QString(), QString label5=QString(), QString label6=QString(), QString label7=QString(), QString label8=QString())
 		 : K3ListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8), data(_data) {}
-		KListViewItemTemplate(type _data, Q3ListView *parent, Q3ListViewItem *after, QString label1, QString label2=QString(), QString label3=QString(), QString label4=QString(), QString label5=QString(), QString label6=QString)(, QString label7=QString(), QString label8=QString())
+		KListViewItemTemplate(type _data, Q3ListView *parent, Q3ListViewItem *after, QString label1, QString label2=QString(), QString label3=QString(), QString label4=QString(), QString label5=QString(), QString label6=QString(), QString label7=QString(), QString label8=QString())
 		 : K3ListViewItem(parent, after, label1, label2, label3, label4, label5, label6, label7, label8), data(_data) {}
 		KListViewItemTemplate(type _data, Q3ListViewItem *parent, Q3ListViewItem *after, QString label1, QString label2=QString(), QString label3=QString(), QString label4=QString(), QString label5=QString(), QString label6=QString(), QString label7=QString(), QString label8=QString())
 		 : K3ListViewItem(parent, after, label1, label2, label3, label4, label5, label6, label7, label8), data(_data) {}

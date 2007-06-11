@@ -20,7 +20,7 @@
 #ifndef KDBWIDGETS_UTILS_H
 #define KDBWIDGETS_UTILS_H
 
-#include <qpopupmenu.h>
+#include <QMenu>
 #include <kexidataiteminterface.h>
 
 QColor lighterGrayBackgroundColor(const QPalette& palette);
@@ -35,21 +35,22 @@ class KexiDBWidgetContextMenuExtender : public QObject
 		~KexiDBWidgetContextMenuExtender();
 
 		//! Creates title for context menu \a menu
-		void createTitle(QPopupMenu *menu);
+		void createTitle(QMenu *menu);
 
 		//! Enables or disables context menu actions that can modify the value.
 		//! The menu has to be previously provided by createTitle().
 		void updatePopupMenuActions();
 
 		/*! Updates title for context menu based on data item \a iface caption or name
-		 Used in createTitle(QPopupMenu *menu) and KexiDBImageBox.
+		 Used in createTitle(QMenu *menu) and KexiDBImageBox.
 		 \return true is the title has been added. */
-		static bool updateContextMenuTitleForDataItem(QPopupMenu *menu, KexiDataItemInterface* iface, 
+		static bool updateContextMenuTitleForDataItem(QMenu *menu, KexiDataItemInterface* iface, 
 			const QString& icon = QString());
 
 	protected:
 		KexiDataItemInterface* m_iface;
-		QGuardedPtr<QPopupMenu> m_contextMenu;
+		QPointer<QMenu> m_contextMenu;
+		QPointer<QAction> m_titleAction;
 		bool m_contextMenuHasTitle; //!< true if KPopupTitle has been added to the context menu.
 };
 

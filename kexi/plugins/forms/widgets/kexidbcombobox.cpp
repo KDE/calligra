@@ -29,8 +29,8 @@
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qdrawutil.h>
-#include <qptrdict.h>
 #include <qcursor.h>
+#include <QSet>
 
 #include <kexidb/queryschema.h>
 #include <widget/tableview/kexicomboboxpopup.h>
@@ -44,7 +44,6 @@ class KexiDBComboBox::Private
 		Private()
 		 : popup(0)
 		 , visibleColumnInfo(0)
-		 , subWidgetsWithDisabledEvents(0)
 		 , isEditable(false)
 		 , buttonPressed(false)
 		 , mouseOver(false)
@@ -62,7 +61,8 @@ class KexiDBComboBox::Private
 	QSize sizeHint; //!< A cache for KexiDBComboBox::sizeHint(), 
 	                //!< rebuilt by KexiDBComboBox::fontChange() and KexiDBComboBox::styleChange()
 	KexiDB::QueryColumnInfo* visibleColumnInfo;
-	Q3PtrDict<char> *subWidgetsWithDisabledEvents; //! used to collect subwidget and its children (if isEditable is false)
+	//! used for collecting subwidgets and their childrens (if isEditable is false)
+	QSet<QWidget*> *subWidgetsWithDisabledEvents;
 	bool isEditable : 1; //!< true is the combo box is editable
 	bool buttonPressed : 1;
 	bool mouseOver : 1;
@@ -72,13 +72,13 @@ class KexiDBComboBox::Private
 
 //-------------------------------------
 
-KexiDBComboBox::KexiDBComboBox(QWidget *parent, const char *name, bool designMode)
- : KexiDBAutoField(parent, name, designMode, NoLabel)
+KexiDBComboBox::KexiDBComboBox(QWidget *parent, bool designMode)
+ : KexiDBAutoField(parent, designMode, NoLabel)
  , KexiComboBoxBase()
  , d(new Private())
 {
 	setMouseTracking(true);
-	setFocusPolicy(WheelFocus);
+	setFocusPolicy(Qt::WheelFocus);
 	installEventFilter(this);
 	d->designMode = designMode;
 	d->paintedCombo = new KComboBox(this);
@@ -131,22 +131,26 @@ void KexiDBComboBox::paintEvent( QPaintEvent * )
 		cg.setColor(QColorGroup::Base, paletteBackgroundColor()); //update base color using (reimplemented) bg color
 	p.setPen(cg.text());
 
-	QStyle::SFlags flags = QStyle::Style_Default;
+	QStyleOptionComboBox option;
+	option.initFrom(d->paintedCombo);
+
 	if (isEnabled())
-		flags |= QStyle::Style_Enabled;
+		option.state |= QStyle::State_Enabled;
 	if (hasFocus())
-		flags |= QStyle::Style_HasFocus;
+		option.state |= QStyle::State_HasFocus;
 	if (d->mouseOver)
-		flags |= QStyle::Style_MouseOver;
+		option.state |= QStyle::State_MouseOver;
 
 	if ( width() < 5 || height() < 5 ) {
 		qDrawShadePanel( &p, rect(), cg, false, 2, &cg.brush( QColorGroup::Button ) );
 		return;
 	}
 
+#warning TODO KexiDBComboBox::paintEvent()
+#if 0 //TODO
 //! @todo support reverse layout
 //bool reverse = QApplication::reverseLayout();
-	style().drawComplexControl( QStyle::CC_ComboBox, &p, d->paintedCombo /*this*/, rect(), cg,
+	style()->drawComplexControl( QStyle::CC_ComboBox, &option, &p, d->paintedCombo /*this*/
 		flags, (uint)QStyle::SC_All, 
 		(d->buttonPressed ? QStyle::SC_ComboBoxArrow : QStyle::SC_None )
 	);
@@ -157,22 +161,25 @@ void KexiDBComboBox::paintEvent( QPaintEvent * )
 	else { //not editable: we need to paint the current item
 		QRect editorGeometry( this->editorGeometry() );
 		if ( hasFocus() ) {
-			if (0==qstrcmp(style().name(), "windows")) //a hack
+			if (0==qstrcmp(style()->name(), "windows")) //a hack
 				p.fillRect( editorGeometry, cg.brush( QColorGroup::Highlight ) );
-			QRect r( QStyle::visualRect( style().subRect( QStyle::SR_ComboBoxFocusRect, d->paintedCombo ), this ) );
+			QRect r( QStyle::visualRect( style()->subRect( QStyle::SR_ComboBoxFocusRect, d->paintedCombo ), this ) );
 			r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //enlare by 1 pixel each side to avoid covering by the subwidget
-			style().drawPrimitive( QStyle::PE_FocusRect, &p, 
+			style()->drawPrimitive( QStyle::PE_FocusRect, &p, 
 				r, cg, flags | QStyle::Style_FocusAtBorder, QStyleOption(cg.highlight()));
 		}
 		//todo
 	}
+#endif
 }
 
 QRect KexiDBComboBox::editorGeometry() const
 {
+#warning KexiDBComboBox::editorGeometry() OK?
 	QRect r( QStyle::visualRect(
-		style().querySubControlMetrics(QStyle::CC_ComboBox, d->paintedCombo,
-		QStyle::SC_ComboBoxEditField), d->paintedCombo ) );
+		qApp->layoutDirection(), 
+		d->paintedCombo->geometry(),
+		style()->subControlRect(QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxEditField, d->paintedCombo) ) );
 	
 	//if ((height()-r.bottom())<6)
 	//	r.setBottom(height()-6);
@@ -194,15 +201,14 @@ void KexiDBComboBox::createEditor()
 			if (d->subWidgetsWithDisabledEvents)
 				d->subWidgetsWithDisabledEvents->clear();
 			else
-				d->subWidgetsWithDisabledEvents = new Q3PtrDict<char>();
-			d->subWidgetsWithDisabledEvents->insert(m_subwidget, (char*)1);
+				d->subWidgetsWithDisabledEvents = new QSet<QWidget*>();
+			d->subWidgetsWithDisabledEvents->insert(m_subwidget);
 			m_subwidget->installEventFilter(this);
-			QObjectList *l = m_subwidget->queryList( "QWidget" );
-			for ( QObjectListIt it( *l ); it.current(); ++it ) {
-				d->subWidgetsWithDisabledEvents->insert(it.current(), (char*)1);
-				it.current()->installEventFilter(this);
+			QList<QWidget*> widgets( m_subwidget->findChildren<QWidget*>() );
+			foreach ( QWidget *widget, widgets ) {
+				d->subWidgetsWithDisabledEvents->insert(widget);
+				widget->installEventFilter(this);
 			}
-			delete l;
 		}
 	}
 	updateGeometry();
@@ -211,7 +217,7 @@ void KexiDBComboBox::createEditor()
 void KexiDBComboBox::setLabelPosition(LabelPosition position)
 {
 	if(m_subwidget) {
-		if (-1 != m_subwidget->metaObject()->findProperty("frameShape", true))
+		if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(m_subwidget, "frameShape"))
 			m_subwidget->setProperty("frameShape", QVariant((int)QFrame::NoFrame));
 		m_subwidget->setGeometry( editorGeometry() );
 	}
@@ -220,9 +226,9 @@ void KexiDBComboBox::setLabelPosition(LabelPosition position)
 //		if (subwidgetInterface && subwidgetInterface->subwidgetStretchRequired(this)) {
 			QSizePolicy sizePolicy( this->sizePolicy() );
 			if(position == Left)
-				sizePolicy.setHorData( QSizePolicy::Minimum );
+				sizePolicy.setHorizontalPolicy( QSizePolicy::Minimum );
 			else
-				sizePolicy.setVerData( QSizePolicy::Minimum );
+				sizePolicy.setVerticalPolicy( QSizePolicy::Minimum );
 			//m_subwidget->setSizePolicy(sizePolicy);
 			setSizePolicy(sizePolicy);
 		//}
@@ -232,8 +238,11 @@ void KexiDBComboBox::setLabelPosition(LabelPosition position)
 QRect KexiDBComboBox::buttonGeometry() const
 {
 	QRect arrowRect( 
-		style().querySubControlMetrics( QStyle::CC_ComboBox, d->paintedCombo, QStyle::SC_ComboBoxArrow) );
-	arrowRect = QStyle::visualRect(arrowRect, d->paintedCombo);
+		style()->subControlRect( 
+			QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxArrow, d->paintedCombo) );
+#warning KexiDBComboBox::buttonGeometry() OK?
+	arrowRect = QStyle::visualRect(
+		qApp->layoutDirection(), d->paintedCombo->geometry(), arrowRect);
 	arrowRect.setHeight( qMax(  height() - (2 * arrowRect.y()), arrowRect.height() ) ); // a fix for Motif style
 	return arrowRect;
 }
@@ -271,9 +280,9 @@ bool KexiDBComboBox::handleMousePressEvent(QMouseEvent *e)
 bool KexiDBComboBox::handleKeyPressEvent(QKeyEvent *ke)
 {
 	const int k = ke->key();
-	const bool dropDown = (ke->state() == Qt::NoButton && ((k==Qt::Key_F2 && !d->isEditable) || k==Qt::Key_F4))
-		|| (ke->state() == Qt::AltButton && k==Qt::Key_Down);
-	const bool escPressed = ke->state() == Qt::NoButton && k==Qt::Key_Escape;
+	const bool dropDown = (ke->modifiers() == Qt::NoModifier && ((k==Qt::Key_F2 && !d->isEditable) || k==Qt::Key_F4))
+		|| (ke->modifiers() == Qt::AltModifier && k==Qt::Key_Down);
+	const bool escPressed = ke->modifiers() == Qt::NoModifier && k==Qt::Key_Escape;
 	const bool popupVisible =  popup() && popup()->isVisible();
 	if ((dropDown || escPressed) && popupVisible) {
 		popup()->hide();
@@ -303,13 +312,17 @@ bool KexiDBComboBox::keyPressed(QKeyEvent *ke)
 
 	const int k = ke->key();
 	const bool popupVisible =  popup() && popup()->isVisible();
-	const bool escPressed = ke->state() == Qt::NoButton && k==Qt::Key_Escape;
+	const bool escPressed = ke->modifiers() == Qt::NoModifier && k==Qt::Key_Escape;
 	if (escPressed && popupVisible) {
 		popup()->hide();
 		return true;
 	}
-	if (ke->state() == Qt::NoButton && (k==Qt::Key_PageDown || k==Qt::Key_PageUp) && popupVisible)
+	if (ke->modifiers() == Qt::NoModifier
+		&& (k==Qt::Key_PageDown || k==Qt::Key_PageUp)
+		&& popupVisible)
+	{
 		return true;
+	}
 	return false;
 }
 
@@ -370,7 +383,7 @@ bool KexiDBComboBox::eventFilter( QObject *o, QEvent *e )
 			}
 		}
 	}
-	else if (!d->isEditable && d->subWidgetsWithDisabledEvents && d->subWidgetsWithDisabledEvents->find(o)) {
+	else if (!d->isEditable && d->subWidgetsWithDisabledEvents && d->subWidgetsWithDisabledEvents->contains(dynamic_cast<QWidget*>(o))) {
 		if (e->type()==QEvent::MouseButtonPress) {
 			// clicking the subwidget should mean the same as clicking the combo box (i.e. show the popup)
 			if (handleMousePressEvent(static_cast<QMouseEvent*>(e)))
@@ -396,8 +409,8 @@ void KexiDBComboBox::setPaletteBackgroundColor( const QColor & color )
 	KexiDBAutoField::setPaletteBackgroundColor(color);
 	QPalette pal(palette());
 	QColorGroup cg(pal.active());
-	pal.setColor(QColorGroup::Base, red);
-	pal.setColor(QColorGroup::Background, red);
+	pal.setColor(QColorGroup::Base, Qt::red);
+	pal.setColor(QColorGroup::Background, Qt::red);
 	pal.setActive(cg);
 	QWidget::setPalette(pal);
 	update();
@@ -509,8 +522,10 @@ QSize KexiDBComboBox::sizeHint() const
 
 	const int maxWidth = 7 * fontMetrics().width(QChar('x')) + 18;
 	const int maxHeight = qMax( fontMetrics().lineSpacing(), 14 ) + 2;
-	d->sizeHint = (style().sizeFromContents(QStyle::CT_ComboBox, d->paintedCombo,
-		QSize(maxWidth, maxHeight)).expandedTo(QApplication::globalStrut()));
+	QStyleOptionComboBox option;
+	option.initFrom(d->paintedCombo);
+	d->sizeHint = (style()->sizeFromContents(
+		QStyle::CT_ComboBox, &option, QSize(maxWidth, maxHeight), d->paintedCombo).expandedTo(QApplication::globalStrut()));
 
 	return d->sizeHint;
 }

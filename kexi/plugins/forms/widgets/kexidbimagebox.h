@@ -24,10 +24,8 @@
 #include "kexiformdataiteminterface.h"
 #include "kexiframe.h"
 #include "kexidbutils.h"
-//Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QPixmap>
-#include <Q3CString>
 #include <QPaintEvent>
 #include <kexiblobbuffer.h>
 
@@ -44,7 +42,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 {
 	Q_OBJECT
 	Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource )
-	Q_PROPERTY( Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType )
+	Q_PROPERTY( QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType )
 	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly )
 //	Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
 //	Q_PROPERTY( QByteArray pixmapData READ pixmapData WRITE setPixmapData )
@@ -52,7 +50,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 	Q_PROPERTY( uint storedPixmapId READ storedPixmapId WRITE setStoredPixmapId DESIGNABLE false STORED true )
 	Q_PROPERTY( bool scaledContents READ hasScaledContents WRITE setScaledContents )
 	Q_PROPERTY( bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio )
-	Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
+	Q_PROPERTY( Qt::Alignment alignment READ alignment WRITE setAlignment )
 //	Q_PROPERTY( QString originalFileName READ originalFileName WRITE setOriginalFileName DESIGNABLE false )
 //	Q_OVERRIDE( FocusPolicy focusPolicy READ focusPolicy WRITE setFocusPolicy )
 	Q_PROPERTY( bool dropDownButtonVisible READ dropDownButtonVisible WRITE setDropDownButtonVisible )
@@ -60,11 +58,13 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 	Q_OVERRIDE( FocusPolicy focusPolicy READ focusPolicyInternal WRITE setFocusPolicy )
 
 	public:
-		KexiDBImageBox( bool designMode, QWidget *parent, const char *name = 0 );
+		KexiDBImageBox( bool designMode, QWidget *parent);
 		virtual ~KexiDBImageBox();
 
-		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline QString dataSource() const
+			{ return KexiFormDataItemInterface::dataSource(); }
+		inline QString dataSourceMimeType() const
+			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
 
 		virtual QVariant value(); // { return m_value.data(); }
 
@@ -99,7 +99,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 
 //		bool designMode() const { return m_designMode; }
 
-		int alignment() const { return m_alignment; }
+		Qt::Alignment alignment() const { return m_alignment; }
 
 		bool keepAspectRatio() const { return m_keepAspectRatio; }
 
@@ -131,14 +131,17 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		/*! Overriden to change the policy behaviour a bit:
 		 NoFocus is returned regardless the real focus flag 
 		 if the data source is empty (see dataSource()). */
-		FocusPolicy focusPolicy() const;
+#ifdef __GNUC__
+#warning TODO focusPolicy() is not virtual!
+#endif
+		Qt::FocusPolicy focusPolicy() const;
 
 		//! \return the internal focus policy value, i.e. the one unrelated to data source presence.
-		FocusPolicy focusPolicyInternal() const;
+		Qt::FocusPolicy focusPolicyInternal() const;
 
 		/*! Sets the internal focus policy value. 
 		 "Internal" means that if there is no data source set, real policy becomes NoFocus. */
-		virtual void setFocusPolicy( FocusPolicy policy );
+		virtual void setFocusPolicy( Qt::FocusPolicy policy );
 
 	public slots:
 		void setPixmapId(uint id);
@@ -148,7 +151,8 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		//! Sets the datasource to \a ds
 		virtual void setDataSource( const QString &ds );
 
-		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSourceMimeType(const QString &ds)
+			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 		virtual void setReadOnly(bool set);
 
@@ -162,7 +166,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 
 		void setScaledContents(bool set);
 
-		void setAlignment(int alignment);
+		void setAlignment(Qt::Alignment alignment);
 
 		void setKeepAspectRatio(bool set);
 
@@ -188,7 +192,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 	protected slots:
 		void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
 
-		void handleInsertFromFileAction(const KURL& url);
+		void handleInsertFromFileAction(const KUrl& url);
 		void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
 		void handleSaveAsAction(const QString& fileName);
 		void handleCutAction();
@@ -262,8 +266,8 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 //moved		KAction *m_insertFromFileAction, *m_saveAsAction, *m_cutAction, *m_copyAction, *m_pasteAction,
 //			*m_deleteAction, *m_propertiesAction;
 //		QTimer m_clickTimer;
-		int m_alignment;
-		FocusPolicy m_focusPolicyInternal; //!< Used for focusPolicyInternal()
+		Qt::Alignment m_alignment;
+		Qt::FocusPolicy m_focusPolicyInternal; //!< Used for focusPolicyInternal()
 		bool m_designMode : 1;
 		bool m_readOnly : 1;
 		bool m_scaledContents : 1;

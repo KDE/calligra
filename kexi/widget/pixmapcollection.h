@@ -29,7 +29,7 @@
 #include <QPixmap>
 
 #include <kicontheme.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <k3iconview.h>
 #include <kurl.h>
 
@@ -75,7 +75,7 @@ class KEXIEXTWIDGETS_EXPORT PixmapCollection : public QObject
 };
 
 //! A dialog to edit the contents of a PixmapCollection
-class KEXIEXTWIDGETS_EXPORT PixmapCollectionEditor : public KDialogBase
+class KEXIEXTWIDGETS_EXPORT PixmapCollectionEditor : public KDialog
 {
 	Q_OBJECT
 
@@ -103,7 +103,7 @@ class KEXIEXTWIDGETS_EXPORT PixmapCollectionEditor : public KDialogBase
 };
 
 //! A dialog to choose an icon in a PixmapCollection
-class KEXIEXTWIDGETS_EXPORT PixmapCollectionChooser : public KDialogBase
+class KEXIEXTWIDGETS_EXPORT PixmapCollectionChooser : public KDialog
 {
 	Q_OBJECT
 
@@ -125,7 +125,7 @@ class KEXIEXTWIDGETS_EXPORT PixmapCollectionChooser : public KDialogBase
 };
 
 //! A simple dialog to choose a KDE icon
-class KEXIEXTWIDGETS_EXPORT LoadIconDialog : public KDialogBase
+class KEXIEXTWIDGETS_EXPORT LoadIconDialog : public KDialog
 {
 	Q_OBJECT
 

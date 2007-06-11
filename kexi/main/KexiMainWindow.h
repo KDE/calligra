@@ -120,7 +120,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 //2.0 disabled		virtual Q3PopupMenu* findPopupMenu(const char *popupName);
 
 		/*! Implemented for KexiMainWindow. */
-//2.0 disabled		virtual QList<KAction*> allActions() const;
+		virtual QList<QAction*> allActions() const;
 
 		/*! \return currently active window od 0 if there is no active window.
 		 Implemented for KexiWindow. */

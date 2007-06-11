@@ -103,10 +103,10 @@ bool MDBMigrate::drv_connect()
 	}
 	
 	// Setting source encoding
-	if ( !m_properties[ nonUnicodePropId ].toCString().isEmpty() ) {
-		Q3CString encoding = m_properties[ nonUnicodePropId ].toCString();
+	if ( !m_properties[ nonUnicodePropId ].toString().isEmpty() ) {
+		const QByteArray encoding( m_properties[ nonUnicodePropId ].toByteArray() );
 	
-		mdb_set_encoding( m_mdb, (const char*) encoding );
+		mdb_set_encoding( m_mdb, encoding.constData() );
 		kDebug() << "non-unicode encoding set to \""
 							<< encoding
 							<< "\"" << endl;
@@ -411,7 +411,7 @@ bool MDBMigrate::getPrimaryKey( KexiDB::TableSchema* table, MdbTableDef* tableDe
 	kDebug() << kdLoc << "num_keys " << idx->num_keys << endl;
 	
 	//! Create the KexiDB IndexSchema ...
-	QByteArray key_col_num(idx->num_keys);
+	QVector<int> key_col_num(idx->num_keys);
 	
 	// MDBTools counts columns from 1 - subtract 1 where necessary
 	KexiDB::IndexSchema* p_idx = new KexiDB::IndexSchema(table);

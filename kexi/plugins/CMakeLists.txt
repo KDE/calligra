@@ -1,10 +1,10 @@
 
 add_subdirectory( tables )
 add_subdirectory( queries )
-#add_subdirectory( forms )
-#add_subdirectory( migration )
-#add_subdirectory( importexport )
-#add_subdirectory( relations )
+add_subdirectory( forms )
+add_subdirectory( migration )
+add_subdirectory( importexport )
+add_subdirectory( relations )
 
 # disabled for now till ported to Kross2
 #add_subdirectory(scripting)

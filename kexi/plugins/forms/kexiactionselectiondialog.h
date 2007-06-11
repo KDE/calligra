@@ -20,11 +20,11 @@
 #ifndef KEXIACTIONSELECTIONDIALOG_H
 #define KEXIACTIONSELECTIONDIALOG_H
 
-#include <Q3CString>
-#include <kdialogbase.h>
+#include <KDialog>
 #include "kexiformeventhandler.h"
 
 class K3ListView;
+class Q3ListViewItem;
 namespace KexiPart {
 	class Item;
 }
@@ -34,12 +34,12 @@ namespace KexiPart {
  - application's global actions like "edit->copy" (KAction-based)
  - opening/printing/executing of selected object (table/query/form/script/macrto, etc.)
 */
-class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
+class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialog
 {
 	Q_OBJECT
 	public:
 		KexiActionSelectionDialog(QWidget *parent, 
-			const KexiFormEventAction::ActionData& action, const Q3CString& actionWidgetName);
+			const KexiFormEventAction::ActionData& action, const QString& actionWidgetName);
 		~KexiActionSelectionDialog();
 
 		/*! \return selected action data or empty action if dialog has been rejected 
@@ -61,8 +61,8 @@ class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 	protected:
 		void updateOKButtonStatus();
 
-		class KexiActionSelectionDialogPrivate;
-		KexiActionSelectionDialogPrivate* d;
+		class Private;
+		Private* const d;
 };
 
 #endif
