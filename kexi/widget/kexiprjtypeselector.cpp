@@ -30,7 +30,7 @@ KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent )
 	setObjectName("KexiPrjTypeSelector");
 	QString none;
 	icon_file->setPixmap( 
-		KIconLoader::global()->loadIcon( 
+		KIconLoader::global()->loadMimeTypeIcon( 
 			KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName(),
 			K3Icon::Desktop, 48
 		)

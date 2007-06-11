@@ -54,6 +54,7 @@
 #include <ktextbrowser.h>
 #include <kconfig.h>
 #include <KIconLoader>
+#include <kexi_global.h>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define KEXI_STARTUP_SHOW_TEMPLATES
@@ -77,9 +78,10 @@ public:
 		result = 0;
 		QString iconname(
 			KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName() );
-		kexi_sqlite_icon = KIconLoader::global()->loadIcon( iconname, K3Icon::Desktop );
+		kexi_sqlite_icon = KIconLoader::global()->loadMimeTypeIcon( iconname, K3Icon::Desktop );
 		iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->iconName();
-		kexi_shortcut_icon = KIconLoader::global()->loadIcon( iconname, K3Icon::Desktop );
+		kexi_shortcut_icon = KIconLoader::global()->loadMimeTypeIcon(
+			iconname, K3Icon::Desktop );
 		prj_selector = 0;
 		chkDoNotShow = 0;
 		openExistingConnWidget = 0;

@@ -124,9 +124,10 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	m_prjtype_sel->lv_types->setAlternateBackground(QColor()); //disable altering
 	m_prjtype_sel->lv_types->setItemMargin( KDialog::marginHint() );
 	QString none;
-	d->lvi_file = new K3ListViewItem( m_prjtype_sel->lv_types, i18n("New Project Stored in File") );
+	d->lvi_file = new K3ListViewItem(
+		m_prjtype_sel->lv_types, i18n("New Project Stored in File") );
 	d->lvi_file->setPixmap(0, 
-		KIconLoader::global()->loadIcon( KMimeType::mimeType( 
+		KIconLoader::global()->loadMimeTypeIcon( KMimeType::mimeType( 
 			KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName(),
 			K3Icon::Desktop 
 		)

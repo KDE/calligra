@@ -205,6 +205,9 @@
       </item>
       <item row="0" column="1" colspan="6" >
        <widget class="Q3Frame" name="frmEngine" >
+        <property name="focusPolicy" >
+         <enum>Qt::StrongFocus</enum>
+        </property>
         <property name="frameShape" >
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -422,7 +425,7 @@
   </customwidget>
   <customwidget>
    <class>KIntNumInput</class>
-   <extends>KNumInput</extends>
+   <extends>QWidget</extends>
    <header>knuminput.h</header>
   </customwidget>
   <customwidget>
@@ -438,17 +441,17 @@
  </customwidgets>
  <tabstops>
   <tabstop>lblEngine</tabstop>
+  <tabstop>frmEngine</tabstop>
   <tabstop>localhostRBtn</tabstop>
+  <tabstop>remotehostRBtn</tabstop>
   <tabstop>hostEdit</tabstop>
   <tabstop>chkPortDefault</tabstop>
-  <tabstop>customPortEdit</tabstop>
   <tabstop>userEdit</tabstop>
   <tabstop>passwordEdit</tabstop>
   <tabstop>chkSavePassword</tabstop>
   <tabstop>nameCombo</tabstop>
   <tabstop>btnLoadDBList</tabstop>
   <tabstop>titleEdit</tabstop>
-  <tabstop>frmEngine</tabstop>
  </tabstops>
  <includes>
   <include location="local" >knuminput.h</include>

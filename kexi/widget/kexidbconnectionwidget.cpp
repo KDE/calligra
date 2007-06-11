@@ -77,9 +77,11 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent )
 	Q3VBoxLayout *driversComboLyr = new Q3VBoxLayout(frmEngine);
 	m_driversCombo = new KexiDBDriverComboBox(frmEngine, Kexi::driverManager().driversInfo(), 
 		KexiDBDriverComboBox::ShowServerDrivers);
-	lblEngine->setBuddy( m_driversCombo );
-	lblEngine->setFocusProxy( m_driversCombo );
+	//lblEngine->setFocusProxy( m_driversCombo );
 	driversComboLyr->addWidget( m_driversCombo );
+	frmEngine->setFocusProxy( m_driversCombo );
+	lblEngine->setBuddy( m_driversCombo );
+	QWidget::setTabOrder(lblEngine, m_driversCombo);
 
 #ifdef NO_LOAD_DB_LIST
 	btnLoadDBList->hide();
@@ -236,7 +238,7 @@ KexiDBConnectionWidgetDetails::KexiDBConnectionWidgetDetails( QWidget* parent )
  : QWidget(parent)
 {
 	setupUi(this);
-	customSocketEdit->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
+	customSocketEdit->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
 }
 
 KexiDBConnectionWidgetDetails::~KexiDBConnectionWidgetDetails()
