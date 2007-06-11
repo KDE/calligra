@@ -25,7 +25,7 @@
 #include <q3intdict.h>
 #include <q3ptrlist.h>
 
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 namespace KexiDB
 {

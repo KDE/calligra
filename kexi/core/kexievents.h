@@ -25,7 +25,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 class QDomNode;
 class QObject;

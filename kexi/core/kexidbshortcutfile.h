@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 class KexiProjectData;
 namespace KexiDB { class ConnectionData; }

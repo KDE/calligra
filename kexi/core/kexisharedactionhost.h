@@ -28,7 +28,7 @@
 #include <kstandardaction.h>
 #include <kaction.h>
 
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 class KShortcut;
 class KGuiItem;

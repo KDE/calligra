@@ -27,7 +27,7 @@
 
 #include <kurl.h>
 
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 namespace KexiDB
 {

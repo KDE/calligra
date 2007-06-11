@@ -23,7 +23,7 @@
 #ifndef KEXIRECORDMARKER_H
 #define KEXIRECORDMARKER_H
 
-#include "../../kexi_export.h"
+#include <kexi_export.h>
 #include <QWidget>
 #include <QPaintEvent>
 

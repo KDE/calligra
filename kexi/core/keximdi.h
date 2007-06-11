@@ -26,7 +26,7 @@
 #include <kxmlguiwindow.h>
 //#include <kxmlguiclient.h>
 
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 class KexiMdiMainFrm;
 

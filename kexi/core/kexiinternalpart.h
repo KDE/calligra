@@ -26,7 +26,7 @@
 #include <QVariant>
 #include <QDialog>
 
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 class KexiWindow;
 class KexiView;

@@ -21,7 +21,7 @@
 #define KEXI_STARTUPDATA_H
 
 #include <qstring.h>
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 class KexiProjectData;
 

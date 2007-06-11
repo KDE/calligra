@@ -31,7 +31,7 @@
 #include <kservice.h>
 
 #include <kexidb/object.h>
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 namespace KexiDB
 {

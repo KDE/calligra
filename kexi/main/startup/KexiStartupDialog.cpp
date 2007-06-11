@@ -61,8 +61,6 @@
 #define KEXI_STARTUP_SHOW_RECENT
 #endif
 
-#define DB_TEMPLATES
-
 //! @internal
 class KexiStartupDialog::Private {
 public:

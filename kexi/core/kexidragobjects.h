@@ -26,7 +26,7 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
-#include "../kexi_export.h"
+#include <kexi_export.h>
 
 class QString;
 class QStringList;
