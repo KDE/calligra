@@ -21,26 +21,18 @@
 #ifndef KWSCRIPTINGPART_H
 #define KWSCRIPTINGPART_H
 
-#include <kparts/plugin.h>
-
-namespace Kross {
-    class Action;
-    class GUIClient;
-}
+#include <KoScriptingPart.h>
 
 /**
 * The KWScriptingPart class implements a KPart component
 * to integrate scripting into KWord.
 */
-class KWScriptingPart : public KParts::Plugin
+class KWScriptingPart : public KoScriptingPart
 {
         Q_OBJECT
     public:
         KWScriptingPart(QObject* parent, const QStringList&);
         virtual ~KWScriptingPart();
-    private Q_SLOTS:
-        void started(Kross::Action*);
-        void finished(Kross::Action*);
     private:
         /// \internal d-pointer class.
         class Private;

@@ -56,8 +56,8 @@ namespace Scripting {
     };
 }
 
-Module::Module()
-    : KoScriptingModule("KWord")
+Module::Module(QObject* parent)
+    : KoScriptingModule(parent, "KWord")
     , d( new Private() )
 {
     d->doc = 0;

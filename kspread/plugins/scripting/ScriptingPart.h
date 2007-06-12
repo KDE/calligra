@@ -23,14 +23,13 @@
 #ifndef SCRIPTINGPART_H
 #define SCRIPTINGPART_H
 
-#include <kparts/plugin.h>
-#include <View.h>
+#include <KoScriptingPart.h>
 
 /**
 * The ScriptingPart class implements a KPart component
 * to integrate scripting into KSpread.
 */
-class ScriptingPart : public KParts::Plugin
+class ScriptingPart : public KoScriptingPart
 {
 		Q_OBJECT
 	public:

@@ -56,8 +56,8 @@ class ScriptingModule::Private
 		QStringList functionnames;
 };
 
-ScriptingModule::ScriptingModule()
-	: KoScriptingModule("KSpread")
+ScriptingModule::ScriptingModule(QObject* parent)
+	: KoScriptingModule(parent, "KSpread")
 	, d( new Private() )
 {
 	d->doc = 0;

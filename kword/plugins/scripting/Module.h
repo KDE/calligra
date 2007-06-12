@@ -72,7 +72,7 @@ namespace Scripting {
     {
             Q_OBJECT
         public:
-            explicit Module();
+            explicit Module(QObject* parent = 0);
             virtual ~Module();
 
             KWDocument* kwDoc();

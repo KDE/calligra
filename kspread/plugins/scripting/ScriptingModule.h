@@ -44,7 +44,7 @@ class ScriptingModule : public KoScriptingModule
 {
 		Q_OBJECT
 	public:
-		ScriptingModule();
+		ScriptingModule(QObject* parent = 0);
 		virtual ~ScriptingModule();
 
         KSpread::View* kspreadView();

@@ -34,11 +34,9 @@
 // KSpread
 #include <Doc.h>
 #include <View.h>
-// KOffice
-#include <KoScriptingGuiClient.h>
 // Kross
 #include <kross/core/manager.h>
-#include <kross/ui/guiclient.h>
+//#include <kross/ui/guiclient.h>
 
 typedef KGenericFactory< ScriptingPart > KSpreadScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( krossmodulekspread, KSpreadScriptingFactory( "krossmodulekspread" ) )
@@ -47,30 +45,26 @@ K_EXPORT_COMPONENT_FACTORY( krossmodulekspread, KSpreadScriptingFactory( "krossm
 class ScriptingPart::Private
 {
 	public:
-		KoScriptingGuiClient* guiclient;
-		QPointer<ScriptingModule> module;
-
-		Private() : module(0) {}
-		~Private() {}
+		//KoScriptingGuiClient* guiclient;
+		//QPointer<ScriptingModule> module;
 };
 
-ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
-    : KParts::Plugin(parent)
+ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
+    : KoScriptingPart(new ScriptingModule(parent), list)
     , d(new Private())
 {
 	setComponentData(ScriptingPart::componentData());
 	setXMLFile(KStandardDirs::locate("data","kspread/kpartplugins/scripting.rc"), true);
-
 	kDebug() << "Scripting plugin. Class: " << metaObject()->className() << ", Parent: " << parent->metaObject()->className() << endl;
 
-	KSpread::View* view = dynamic_cast< KSpread::View* >(parent);
-	Q_ASSERT(view);
-
+	//KSpread::View* view = dynamic_cast< KSpread::View* >(parent);
+	//Q_ASSERT(view);
 	// Create the Kross GUIClient which is the higher level to let
 	// Kross deal with scripting code.
-	d->guiclient = new KoScriptingGuiClient(this, view);
+	//d->guiclient = new KoScriptingGuiClient(this, view);
 	//d->guiclient ->setXMLFile(locate("data","kspreadplugins/scripting.rc"), true);
 
+    /*
 	// Publish the ScriptingModule which offers access to KSpread internals.
 	ScriptingModule* module = Kross::Manager::self().hasObject("KSpread")
 		? dynamic_cast< ScriptingModule* >( Kross::Manager::self().object("KSpread") )
@@ -80,6 +74,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 		Kross::Manager::self().addObject(module, "KSpread");
 	}
 	module->setView(view);
+    */
 
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	foreach(QByteArray ba, args->getOptionList("scriptfile")) {
