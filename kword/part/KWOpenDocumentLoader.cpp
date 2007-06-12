@@ -34,20 +34,9 @@
 #include <KoDom.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
-#include <KoStyleManager.h>
-#include <KoParagraphStyle.h>
-#include <KoCharacterStyle.h>
-#include <KoListStyle.h>
-#include <KoListLevelProperties.h>
-#include <KoPageLayout.h>
 
 // KDE + Qt includes
-#include <QDomDocument>
-#include <QTextDocument>
 #include <QTextCursor>
-#include <QTextBlock>
-#include <QTextList>
-#include <QPointer>
 #include <klocale.h>
 
 /// \internal d-pointer class.
