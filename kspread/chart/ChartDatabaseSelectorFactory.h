@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CHART_CONFIG_FACTORY
-#define KSPREAD_CHART_CONFIG_FACTORY
+#ifndef CHART_DATABASE_SELECTOR_FACTORY
+#define CHART_DATABASE_SELECTOR_FACTORY
 
 #include <KoShapeConfigFactory.h>
 
@@ -27,13 +27,14 @@ class KoShape;
 
 namespace KSpread
 {
+class Doc;
 
 /// factory to create a ChartDatabaseSelector widget
 class ChartDatabaseSelectorFactory : public KoShapeConfigFactory
 {
 public:
     /// constructor
-    ChartDatabaseSelectorFactory() {}
+    ChartDatabaseSelectorFactory( Doc* doc ) : m_doc( doc ) {}
     ~ChartDatabaseSelectorFactory() {}
 
     /// reimplemented method from superclass
@@ -47,8 +48,9 @@ public:
     int sortingOrder() const { return 1; }
 
 private:
+    Doc* m_doc;
 };
 
 } // namespace KSpread
 
-#endif // KSPREAD_CHART_CONFIG_FACTORY
+#endif // CHART_DATABASE_SELECTOR_FACTORY

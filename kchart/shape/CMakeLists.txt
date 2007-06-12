@@ -1,5 +1,6 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kchart
                      ${CMAKE_SOURCE_DIR}/kchart/kdchart/src
+                     ${CMAKE_SOURCE_DIR}/interfaces
                      ${KOGUIUTILS_INCLUDES} )
 
 ########### Flake Plugin library ###############
@@ -13,7 +14,7 @@ SET (chartshape_LIB_SRCS
 kde4_automoc(${chartshape_LIB_SRCS})
 kde4_add_plugin(chartshape ${chartshape_LIB_SRCS})
 
-target_link_libraries(chartshape kdchart flake)
+target_link_libraries(chartshape kdchart kochart flake)
 install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

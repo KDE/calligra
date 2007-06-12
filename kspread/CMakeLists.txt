@@ -24,7 +24,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
 
 ########### next target ###############
 SET (chart_DIR_SRCS
-	chart/ChartConfigFactory.cpp
+	chart/ChartDatabaseSelectorFactory.cpp
 	chart/ChartDatabaseSelector.cpp
 	chart/ChartDialog.cpp
 	chart/TableModel.cpp

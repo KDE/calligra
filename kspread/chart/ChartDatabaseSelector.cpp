@@ -22,20 +22,28 @@
 
 #include "ui_ChartDatabaseSelector.h"
 
-#include "kchart/shape/ChartShape.h"
+#include "KoShape.h"
+
+#include "koChart.h"
+
+#include "Doc.h"
+#include "Region.h"
+#include "TableModel.h"
 
 using namespace KSpread;
 
 class ChartDatabaseSelector::Private
 {
 public:
-    KChart::ChartShape* shape;
+    Doc* doc;
+    KoChart::ChartInterface* shape;
     Ui::ChartDatabaseSelector widget;
 };
 
-ChartDatabaseSelector::ChartDatabaseSelector()
+ChartDatabaseSelector::ChartDatabaseSelector( Doc* doc )
     : d( new Private )
 {
+    d->doc = doc;
     d->shape = 0;
     d->widget.setupUi(this);
 }
@@ -47,11 +55,17 @@ ChartDatabaseSelector::~ChartDatabaseSelector()
 
 void ChartDatabaseSelector::open(KoShape* shape)
 {
-//     d->shape = dynamic_cast<KChart::ChartShape*>( shape );
+    d->shape = dynamic_cast<KoChart::ChartInterface*>( shape );
 }
 
 void ChartDatabaseSelector::save()
 {
+    const Region region( d->doc->map(), d->widget.m_cellRegion->text(), 0 );
+    if ( !region.isValid() )
+        return;
+    TableModel* tableModel = new TableModel();
+    tableModel->setRegion( region );
+    d->shape->setModel( tableModel );
 }
 
 KAction* ChartDatabaseSelector::createAction()

@@ -22,7 +22,11 @@
 
 #include <KoShape.h>
 
+#include "koChart.h"
+
 #define ChartShapeId "ChartShape"
+
+class QAbstractItemModel;
 
 namespace KDChart
 {
@@ -32,18 +36,19 @@ namespace KDChart
 namespace KChart
 {
 
-class ChartShape : public KoShape
+class ChartShape : public KoShape, public KoChart::ChartInterface
 {
 public:
-    explicit ChartShape();
+    ChartShape();
     virtual ~ChartShape();
 
     KDChart::Chart* chart() const;
 
     /// reimplemented
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void setModel( QAbstractItemModel* model );
+
     /// reimplemented
-    virtual void resize( const QSizeF &size );
+    virtual void paint( QPainter& painter, const KoViewConverter& converter );
     /// reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;
     /// reimplemented

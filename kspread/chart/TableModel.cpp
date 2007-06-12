@@ -24,6 +24,8 @@
 #include "Sheet.h"
 #include "Value.h"
 
+#include <kdebug.h>
+
 using namespace KSpread;
 
 class TableModel::Private : public QSharedData
@@ -79,6 +81,7 @@ int TableModel::columnCount( const QModelIndex& parent ) const
 
 QVariant TableModel::data( const QModelIndex& index, int role ) const
 {
+    kDebug() << k_funcinfo << ": " << index.column() << ", " << index.row() << endl;
     Q_UNUSED( role );
     if ( d->region.isEmpty() )
         return QVariant();
@@ -122,7 +125,8 @@ QVariant TableModel::data( const QModelIndex& index, int role ) const
 
 void TableModel::setRegion( const Region& region )
 {
-    Q_ASSERT( region.isContiguous() );
+    Q_ASSERT( region.isEmpty() || region.isContiguous() );
+    kDebug() << "Creating TableModel for " << region.name() << endl;
     d->region = region;
 }
 

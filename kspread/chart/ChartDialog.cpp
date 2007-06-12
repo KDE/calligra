@@ -22,7 +22,7 @@
 
 #include "kchart/shape/ChartShape.h"
 
-#include "ChartConfigFactory.h"
+#include "ChartDatabaseSelectorFactory.h"
 
 using namespace KSpread;
 
@@ -46,10 +46,10 @@ void ChartDialog::cancelClicked()
 }
 
 // static
-QList<KoShapeConfigFactory*> ChartDialog::panels()
+QList<KoShapeConfigFactory*> ChartDialog::panels( Doc* doc )
 {
     QList<KoShapeConfigFactory*> answer;
-    answer.append(new ChartDatabaseSelectorFactory());
+    answer.append(new ChartDatabaseSelectorFactory( doc ));
     return answer;
 }
 

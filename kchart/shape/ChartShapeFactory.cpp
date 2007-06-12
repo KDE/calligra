@@ -30,6 +30,7 @@
 #include <KoShapeRegistry.h>
 
 #include "ChartShape.h"
+#include "ChartDataConfigFactory.h"
 #include "ChartTypeConfigWidget.h"
 
 using namespace KChart;
@@ -47,6 +48,11 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
 {
     setToolTip( i18n( "A shape that shows a chart" ) );
     setIcon( "kchart" );
+    // default 'app specific' config pages
+    // i.e. unless an app defines other config pages, these are used.
+    QList<KoShapeConfigFactory*> panelFactories;
+//     panelFactories.append( new ChartDataConfigFactory() );
+    setOptionPanels( panelFactories );
 }
 
 KoShape* ChartShapeFactory::createDefaultShape() const

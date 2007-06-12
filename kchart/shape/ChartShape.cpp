@@ -21,7 +21,10 @@
 #include "ChartShape.h"
 
 // KChart
+#include "KDChartAbstractCoordinatePlane.h"
+#include "KDChartBarDiagram.h"
 #include "KDChartChart.h"
+#include "KDChartLineDiagram.h"
 
 // KOffice
 #include <KoViewConverter.h>
@@ -30,6 +33,7 @@
 #include <kdebug.h>
 
 // Qt
+#include <QAbstractItemModel>
 #include <QPainter>
 
 using namespace KChart;
@@ -38,6 +42,8 @@ class ChartShape::Private
 {
 public:
     KDChart::Chart* chart;
+    KDChart::AbstractDiagram* diagram;
+    QAbstractItemModel* model;
 };
 
 
@@ -45,10 +51,16 @@ ChartShape::ChartShape()
     : d( new Private )
 {
     d->chart = new KDChart::Chart();
+    d->diagram = new KDChart::LineDiagram();
+    d->model = 0;
+
+    d->chart->coordinatePlane()->replaceDiagram( d->diagram );
 }
 
 ChartShape::~ChartShape()
 {
+    delete d->model;
+    delete d->diagram;
     delete d->chart;
     delete d;
 }
@@ -56,6 +68,16 @@ ChartShape::~ChartShape()
 KDChart::Chart* ChartShape::chart() const
 {
     return d->chart;
+}
+
+void ChartShape::setModel( QAbstractItemModel* model )
+{
+    kDebug() << k_funcinfo << endl;
+    d->model = model;
+    d->chart->coordinatePlane()->takeDiagram( d->diagram );
+    d->diagram->setModel( model );
+    d->chart->coordinatePlane()->replaceDiagram( d->diagram );
+    kDebug() << k_funcinfo << " END" << endl;
 }
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
@@ -66,15 +88,7 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
     painter.setClipRect( paintRect, Qt::IntersectClip );
 
     // painting chart contents
-    d->chart->paint( &painter, /*converter.documentToView*/( paintRect ).toRect() );
-}
-
-void ChartShape::resize( const QSizeF& newSize )
-{
-    if ( size() == newSize )
-        return;
-
-    KoShape::resize( newSize );
+    d->chart->paint( &painter, paintRect.toRect() );
 }
 
 void ChartShape::saveOdf( KoShapeSavingContext & context ) const

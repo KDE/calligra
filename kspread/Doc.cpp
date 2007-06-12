@@ -271,7 +271,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->precision = 8;
 
     // Init chart shape factory with KSpread's specific configuration panels.
-    QList<KoShapeConfigFactory*> panels = ChartDialog::panels();
+    QList<KoShapeConfigFactory*> panels = ChartDialog::panels( this );
     foreach (QString id, KoShapeRegistry::instance()->keys())
     {
         if ( id == ChartShapeId )

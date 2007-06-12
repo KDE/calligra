@@ -24,6 +24,7 @@ using std::cerr;
 #include "KDChartChart"
 #include "KDChartAbstractDiagram" // Base class for the diagrams
 #include "KDChartAbstractCoordinatePlane"
+#include "KDChartBarDiagram"
 #endif
 #include "dialogs/KCWizard.h"
 
@@ -314,6 +315,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 
     // Make the chart use our model.
     Q_ASSERT( m_chart->coordinatePlane() );
+    m_chart->coordinatePlane()->replaceDiagram( new KDChart::BarDiagram() );
     Q_ASSERT( m_chart->coordinatePlane()->diagram() );
     m_chart->coordinatePlane()->diagram()->setModel( m_currentData );
 

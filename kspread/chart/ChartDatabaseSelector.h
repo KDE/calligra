@@ -25,14 +25,15 @@
 
 namespace KSpread
 {
+class Doc;
 
-/// A widget that is shown for 1 textframe to connect it to a frameset
+/// A widget that is shown for selecting the cell region providding the chart data
 class ChartDatabaseSelector : public KoShapeConfigWidgetBase
 {
     Q_OBJECT
 public:
     /// constructor
-    explicit ChartDatabaseSelector();
+    explicit ChartDatabaseSelector( Doc* doc );
     ~ChartDatabaseSelector();
 
     /// reimplemented

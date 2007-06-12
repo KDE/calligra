@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "ChartConfigFactory.h"
+#include "ChartDatabaseSelectorFactory.h"
 
 #include <klocale.h>
 
@@ -30,7 +30,7 @@ using namespace KSpread;
 
 KoShapeConfigWidgetBase* ChartDatabaseSelectorFactory::createConfigWidget(KoShape* shape)
 {
-    ChartDatabaseSelector* widget = new ChartDatabaseSelector();
+    ChartDatabaseSelector* widget = new ChartDatabaseSelector( m_doc );
     widget->open(shape);
     return widget;
 }
