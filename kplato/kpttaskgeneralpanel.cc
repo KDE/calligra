@@ -210,7 +210,7 @@ void TaskGeneralPanel::scheduleTypeChanged(int value)
         if (estimateType->currentIndex() == 1/*duration*/){
             setEstimateScales(24);
             estimate->setEnabled(false);
-            setEstimate( DateTime( endDateTime(), KDateTime::Spec::UTC) - DateTime( startDateTime(),  KDateTime::Spec::UTC ) );
+            setEstimate( DateTime( endDateTime(), KDateTime::UTC) - DateTime( startDateTime(), KDateTime::UTC ) );
         }
     } else {
         setEstimateScales(m_dayLength);
