@@ -1,8 +1,0 @@
-<KrossScripting>
-    <ScriptAction
-      name="importxhtml"
-      text="Import Data From XHTML File"
-      icon="fileimport"
-      interpreter="python"
-      file="ImportXHTML.py" />
-</KrossScripting>
