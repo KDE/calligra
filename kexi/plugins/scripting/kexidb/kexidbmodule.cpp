@@ -113,7 +113,8 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         mimename = KMimeType::findByUrl(filename)->name();
 
     if(mimename == "application/x-kexiproject-shortcut" || mimename == "application/x-kexi-connectiondata") {
-        KConfig config(filename, true, false);
+        KConfig config(filename, KConfig::NoGlobals);
+
         QString groupkey;
         foreach(QString s, config.groupList()) {
             if(s.toLower()!="file information") {

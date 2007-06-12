@@ -7,7 +7,7 @@ add_subdirectory( importexport )
 add_subdirectory( relations )
 
 # disabled for now till ported to Kross2
-#add_subdirectory(scripting)
+add_subdirectory(scripting)
 #add_subdirectory(macros)
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(REPORTS)")
