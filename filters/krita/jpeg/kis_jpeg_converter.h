@@ -65,7 +65,7 @@ struct KisJPEGOptions {
 
 namespace KisMetaData {
     class Store;
-};
+}
 
 class KisJPEGConverter : public KisProgressSubject {
         Q_OBJECT
