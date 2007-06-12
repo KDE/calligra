@@ -31,8 +31,6 @@ add_subdirectory( data )
 add_subdirectory( pics )
 
 add_subdirectory( main )
-# The main2 directory contains some new mainwindow-code based on KoDocument+KoView
-#add_subdirectory( main2 )
 
 add_subdirectory( migration )
 add_subdirectory( plugins )
