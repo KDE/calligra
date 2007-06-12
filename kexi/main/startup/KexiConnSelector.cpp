@@ -36,8 +36,6 @@
 #include <ktoolbar.h>
 #include <kmenu.h>
 
-#include <kactionclasses.h>
-
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>

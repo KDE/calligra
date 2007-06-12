@@ -22,6 +22,9 @@
 
 #include <kdemacros.h>
 
+/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
+#if defined _WIN32 || defined _WIN64
+
 #ifdef MAKE_KEXI_DB_LIB
 # define KEXI_DB_EXPORT KDE_EXPORT
 #elif defined(KDE_MAKE_LIB)
@@ -36,6 +39,13 @@
 # define KEXIMIGR_EXPORT  KDE_IMPORT
 #else
 # define KEXIMIGR_EXPORT //for apps
+#endif
+
+#else /* UNIX */
+
+# define KEXI_DB_EXPORT KDE_EXPORT
+# define KEXIMIGR_EXPORT  KDE_EXPORT
+
 #endif
 
 /* -- compile-time settings -- */

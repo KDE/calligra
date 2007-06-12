@@ -22,6 +22,9 @@
 
 #include <kexidb/kexidb_export.h>
 
+/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
+#if defined _WIN32 || defined _WIN64
+
 #ifdef MAKE_KEXICORE_LIB
 # define KEXICORE_EXPORT KDE_EXPORT
 #elif defined(KDE_MAKE_LIB)
@@ -164,6 +167,30 @@
 # else
 #  define KOMACRO_EXPORT
 # endif
+#endif
+
+#else /* UNIX */
+
+# define KEXICORE_EXPORT KDE_EXPORT
+# define KEXIMAIN_EXPORT KDE_EXPORT
+# define KEXITABLEFILTERS_EXPORT  KDE_EXPORT
+# define KEXIDATATABLE_EXPORT  KDE_EXPORT
+# define KEXIEXTWIDGETS_EXPORT  KDE_EXPORT
+# define KFORMEDITOR_EXPORT  KDE_EXPORT
+# define KEXIPRJWIZARD_EXPORT  KDE_EXPORT
+# define KEXIFILTER_EXPORT  KDE_EXPORT
+# define KEXIWIDGETS_EXPORT  KDE_EXPORT
+# define KEXIUUID_EXPORT  KDE_EXPORT
+# define KEXIRELATIONSVIEW_EXPORT  KDE_EXPORT
+# define KEXIGUIUTILS_EXPORT KDE_EXPORT
+# define KROSS_MAIN_EXPORT KDE_EXPORT
+# define KEXIFORMUTILS_EXPORT KDE_EXPORT
+# define KEXIREPORTUTILS_EXPORT KDE_EXPORT
+/* temporary */
+/* #define KOPROPERTY_EXPORT KDE_EXPORT*/
+/* temporary */
+# define KOMACRO_EXPORT KDE_EXPORT
+
 #endif
 
 /* additional default options */

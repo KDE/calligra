@@ -73,7 +73,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 	public:
 		/*! Helpful for retrieving info about driver from using 
 		 KexiDB::DriverManager::driversInfo() without loading driver libraries. */
-		class Info {
+		class KEXI_DB_EXPORT Info {
 			public:
 			Info();
 			QString name, caption, comment, fileDBMimeType;
