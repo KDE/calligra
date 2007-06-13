@@ -71,7 +71,7 @@ void CharacterHighlighting::open(KoCharacterStyle *style) {
     underlineChanged(widget.underlineStyle->currentIndex());
     widget.underlineColor->setColor(style->underlineColor());
 
-    widget.strikethrough->setChecked(style->fontStrikeOut());
+    widget.strikethrough->setChecked(style->fontStrikeOutStyle() != Qt::NoPen);
 }
 
 void CharacterHighlighting::save() {
@@ -103,7 +103,10 @@ void CharacterHighlighting::save() {
             kWarning() << "Unknown items in the underlineStyle combobox!\n";
     }
 
-    m_style->setFontStrikeOut(widget.strikethrough->isChecked());
+    if (widget.strikethrough->isChecked())
+        m_style->setFontStrikeOutStyle(Qt::SolidLine);
+    else
+        m_style->setFontStrikeOutStyle(Qt::NoPen);
 }
 
 #include "CharacterHighlighting.moc"

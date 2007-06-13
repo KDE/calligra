@@ -636,6 +636,19 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         }
 
         line.draw(painter, layout->position());
+        
+        QTextCharFormat fmt = block.charFormat();
+        if (fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle) != 0) {
+            double x1 = line.cursorToX(line.textStart());
+            double x2 = line.cursorToX(line.textStart() + line.textLength());
+            double y = line.position().y() + line.height()/2;
+            QPen penBackup = painter->pen();
+            QPen pen = painter->pen();
+            pen.setStyle((Qt::PenStyle) fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle));
+            painter->setPen((Qt::PenStyle) fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle));
+            painter->drawLine(x1, y, x2, y);
+            painter->setPen(penBackup);
+        }
 
         for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps
             const double tabStop = tabs.tabs[x];
@@ -693,7 +706,7 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
     if(data == 0)
         return;
-
+    
     QTextList *list = block.textList();
     if(list && data->hasCounterData()) {
         QTextListFormat listFormat = list->format();

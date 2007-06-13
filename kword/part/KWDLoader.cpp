@@ -922,7 +922,8 @@ void KWDLoader::fill(KoCharacterStyle *style, const QDomElement &formatElem) {
     if( !element.isNull() ) {
         QString value = element.attribute("value", "0");
         // TODO store other properties
-        style->setFontStrikeOut(value != "0");
+        if (value != "0")
+            style->setFontStrikeOutStyle(Qt::SolidLine);
     }
     element = formatElem.firstChildElement( "UNDERLINE" );
     if( !element.isNull() ) {
