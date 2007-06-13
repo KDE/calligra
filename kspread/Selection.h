@@ -381,7 +381,7 @@ private:
 
 } // namespace KSpread
 
-Q_DECLARE_METATYPE( KSpread::Selection* );
+Q_DECLARE_METATYPE( KSpread::Selection* )
 
 /***************************************************************************
   kDebug support
