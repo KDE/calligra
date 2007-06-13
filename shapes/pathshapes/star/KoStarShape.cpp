@@ -192,14 +192,7 @@ void KoStarShape::updatePath( const QSizeF &size )
 
 void KoStarShape::createPath()
 {
-    if( !m_subpaths.isEmpty() )
-    {
-        foreach( KoPathPoint *p, *m_subpaths[0] )
-            delete p;
-        delete m_subpaths[0];
-        m_subpaths.clear();
-    }
-
+    clear();
     double radianStep = M_PI / static_cast<double>(m_cornerCount);
 
     QPointF center = QPointF( m_radius[tip], m_radius[tip] );
