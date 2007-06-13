@@ -402,16 +402,59 @@ void TestDocumentLayout::testBasicTextAlignments() {
 }
 
 void TestDocumentLayout::testTextAlignments() {
-    // TODO
-    // justified
-    // justified, last line
-    // RTL text
+    // TODO justified & justified, last line
+    initForNewTest("Left\nRight\nﺵﻻﺆﻴﺜﺒ\nﺵﻻﺆﻴﺜﺒ\nLast Line.");
+    KoParagraphStyle start;
+    start.setAlignment(Qt::AlignLeading);
+    KoParagraphStyle end;
+    end.setAlignment(Qt::AlignTrailing);
 
-    initForNewTest(loremIpsum);
-    KoParagraphStyle style;
-    style.setAlignment(Qt::AlignJustify);
+    KoParagraphStyle startRTL;
+    startRTL.setAlignment(Qt::AlignLeading);
+    startRTL.setTextProgressionDirection(KoParagraphStyle::RightLeftTopBottom);
+    KoParagraphStyle endRTL;
+    endRTL.setAlignment(Qt::AlignTrailing);
+    endRTL.setTextProgressionDirection(KoParagraphStyle::RightLeftTopBottom);
+
     QTextBlock block = doc->begin();
-    style.applyStyle(block);
+    start.applyStyle(block);
+    block = block.next();
+    end.applyStyle(block);
+    block = block.next();
+    startRTL.applyStyle(block);
+    block = block.next();
+    endRTL.applyStyle(block);
+    block = block.next();
+    endRTL.applyStyle(block);
+
+    layout->layout();
+
+    // line 'Left'
+    QRectF rect = blockLayout->lineAt(0).naturalTextRect();
+    QCOMPARE(rect.x(), 0.);
+
+    // line 'Right'
+    block = doc->begin().next();
+    rect = block.layout()->lineAt(0).naturalTextRect();
+    QCOMPARE(rect.right(), 200.);
+    QVERIFY(rect.left() > 0.);
+
+    // line with align Leading and RTL progression
+    block = block.next();
+    rect = block.layout()->lineAt(0).naturalTextRect();
+    QCOMPARE(rect.right(), 200.);
+    QVERIFY(rect.left() > 0.); // expect right alignment
+
+    // line with align tailing and RTL progression
+    block = block.next();
+    rect = block.layout()->lineAt(0).naturalTextRect();
+    QCOMPARE(rect.x(), 0.); // expect left alignment
+
+    // non RTL _text_ but RTL progression as well as align trailing
+    block = block.next();
+    rect = block.layout()->lineAt(0).naturalTextRect();
+    QCOMPARE(rect.x(), 0.); // expect left alignment
+    // TODO can we check if the dot is the left most painted char?
 }
 
 void TestDocumentLayout::testPageBreak() {

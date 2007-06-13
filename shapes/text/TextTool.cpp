@@ -447,7 +447,7 @@ void TextTool::mouseReleaseEvent( KoPointerEvent *event ) {
 }
 
 void TextTool::keyPressEvent(QKeyEvent *event) {
-    int destinationPosition = -1; // for those that the moveOperation is not implemented;
+    int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     if(event->key() == Qt::Key_Backspace) {
         if(! m_caret.hasSelection() && m_caret.block().textList() && m_caret.block().length() == 1) {
@@ -533,6 +533,14 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
             m_caret.insertText(event->text());
+            QTextBlock block = m_caret.block();
+            if(m_prevCursorPosition == block.position()) { // we just started a new paragraph
+                if(block.text().isRightToLeft()) {
+                    QTextBlockFormat format = m_caret.blockFormat();
+                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::RightLeftTopBottom);
+                    m_caret.setBlockFormat(format);
+                }
+            }
             editingPluginEvents();
             emit blockChanged(m_caret.block());
         }
