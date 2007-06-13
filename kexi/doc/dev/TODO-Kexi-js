@@ -311,6 +311,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
    (for now only types based that use KexiInputTableEdit (Text, Integer..) allows data entry using keyboard
 
 - display error message on top of table view if data fetching failed
+- add a vertical [A B ... Z] shortcut list for text-based sorting, like on "My Connections" page of linkedin.com
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -1096,3 +1097,6 @@ Startup templates
 
 Find/Replace REPLACE
 - use this for replace: virtual bool columnEditable(int col);
+
+TODO
+- compare KexiUtils' tristate class with http://boost.org/doc/html/tribool.html
