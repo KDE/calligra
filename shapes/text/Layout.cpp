@@ -228,6 +228,8 @@ bool Layout::nextParag() {
     layout = 0;
     m_blockData = 0;
     m_currentParagTabsData.clear();
+    if(m_data == 0) // no shape to layout, so stop here.
+        return true;
     if(! m_block.isValid()) {
         QTextBlock block = m_block.previous(); // last correct one.
         m_data->setEndPosition(block.position() + block.length());
