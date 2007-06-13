@@ -234,7 +234,6 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     KWTextFrameSet *fs = new KWTextFrameSet( d->document, type );
     fs->setAllowLayout(false);
     fs->setName( i18n( "Main Text Frameset" ) );
-    d->document->addFrameSet(fs);
     //fs->loadOasisContent( body, context );
 
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
@@ -242,6 +241,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     KoShape *shape = factory->createDefaultShape();
     KWTextFrame *frame = new KWTextFrame(shape, fs);
     frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
+    d->document->addFrameSet(fs);
 
     QTextCursor cursor( fs->document() );
 
@@ -481,12 +481,12 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
     KWTextFrameSet *fs = new KWTextFrameSet( d->document, fsType );
     fs->setAllowLayout(false);
     fs->setName(fsTypeName);
-    d->document->addFrameSet(fs);
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
     KoShape *shape = factory->createDefaultShape();
     KWTextFrame *frame = new KWTextFrame(shape, fs);
     frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
+    d->document->addFrameSet(fs);
 
     QTextCursor cursor( fs->document() );
 
