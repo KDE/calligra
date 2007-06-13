@@ -1895,6 +1895,11 @@ void View::initView()
     connect( d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
              d->canvas, SLOT(setDocumentOffset(const QPoint&)));
 
+    // Let the selection pointer become a canvas resource.
+    QVariant variant;
+    variant.setValue<Selection*>( d->selection );
+    d->canvas->resourceProvider()->setResource( Canvas::Selection, variant );
+
     // Setup the tool dock widget.
     KoToolRegistry::instance()->add(s_defaultToolFactory);
     KoToolManager::instance()->addController( d->canvasController );

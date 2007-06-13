@@ -3139,7 +3139,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
     QPen pen( Qt::black, d->view->zoomHandler()->unzoomItX( 2 ) );
     painter.setPen( pen );
 
-    const Selection* selection = this->selection();
+    const KSpread::Selection* selection = this->selection();
     const QRect currentRange = Region::normalized( QRect( selection->anchor(), selection->marker() ) );
     const QRect effMarker = selection->extendToMergedAreas( QRect( selection->marker(), selection->marker() ) );
     const QRectF markerRegion = viewConverter()->viewToDocument( cellCoordinatesToView( effMarker ) );

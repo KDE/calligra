@@ -81,7 +81,6 @@ int TableModel::columnCount( const QModelIndex& parent ) const
 
 QVariant TableModel::data( const QModelIndex& index, int role ) const
 {
-    kDebug() << k_funcinfo << ": " << index.column() << ", " << index.row() << endl;
     Q_UNUSED( role );
     if ( d->region.isEmpty() )
         return QVariant();
@@ -120,6 +119,7 @@ QVariant TableModel::data( const QModelIndex& index, int role ) const
         default:
             break;
     }
+    kDebug() << k_funcinfo << index.column() << ", " << index.row() << ", " << variant << endl;
     return variant;
 }
 

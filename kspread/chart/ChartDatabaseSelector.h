@@ -43,6 +43,9 @@ public:
     /// reimplemented
     KAction *createAction();
 
+protected:
+    virtual void showEvent( QShowEvent* event );
+
 private:
     class Private;
     Private * const d;

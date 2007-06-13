@@ -23,6 +23,7 @@
 
 #include <QColor>
 #include <QList>
+#include <QMetaType>
 #include <QObject>
 
 #include <kdebug.h>
@@ -380,6 +381,7 @@ private:
 
 } // namespace KSpread
 
+Q_DECLARE_METATYPE( KSpread::Selection* );
 
 /***************************************************************************
   kDebug support

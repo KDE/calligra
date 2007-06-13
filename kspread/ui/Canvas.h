@@ -36,6 +36,7 @@
 #include <QWidget>
 
 #include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
 
 #include "kspread_export.h"
 
@@ -115,29 +116,37 @@ public:
         EditWidget   ///< the line edit located above the canvas
     };
 
-    explicit Canvas (View *_view);
-    ~Canvas( );
+    /**
+     * KSpread specific canvas resources
+     */
+    enum Resources
+    {
+        Selection = KoCanvasResource::KSpreadStart  ///< the cell selection
+    };
+
+    explicit Canvas( View* view );
+    ~Canvas();
 
     View* view() const;
     Doc* doc() const;
 
     // KoCanvasBase interface methods.
     /// reimplemented method from KoCanvasBase
-    void gridSize( double* horizontal, double* vertical ) const;
+    virtual void gridSize( double* horizontal, double* vertical ) const;
     /// reimplemented method from KoCanvasBase
-    bool snapToGrid() const;
+    virtual bool snapToGrid() const;
     /// reimplemented method from KoCanvasBase
-    void addCommand( QUndoCommand* command );
+    virtual void addCommand( QUndoCommand* command );
     /// reimplemented method from KoCanvasBase
-    KoShapeManager* shapeManager() const;
+    virtual KoShapeManager* shapeManager() const;
     /// reimplemented method from KoCanvasBase
-    void updateCanvas( const QRectF& rc );
+    virtual void updateCanvas( const QRectF& rc );
     /// reimplemented method from KoCanvasBase
     virtual KoToolProxy* toolProxy() const;
     /// reimplemented method from KoCanvasBase
     virtual const KoViewConverter* viewConverter() const;
     /// reimplemented method from KoCanvasBase
-    QWidget* canvasWidget() { return this; }
+    virtual QWidget* canvasWidget() { return this; }
     /// reimplemented method from KoCanvasBase
     virtual KoUnit unit() const;
     /// reimplemented method from KoCanvasBase
@@ -149,12 +158,12 @@ public:
     /**
      * @return the usual selection of cells
      */
-    Selection* selection() const;
+    KSpread::Selection* selection() const;
 
     /**
      * @return a selection of cells used in formulas
      */
-    Selection* choice() const;
+    KSpread::Selection* choice() const;
 
     /**
      * @return the pen, the default grid is painted with (light gray)

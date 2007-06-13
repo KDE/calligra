@@ -22,12 +22,15 @@
 
 #include "ui_ChartDatabaseSelector.h"
 
+#include "KoCanvasResourceProvider.h"
 #include "KoShape.h"
 
 #include "koChart.h"
 
+#include "Canvas.h"
 #include "Doc.h"
 #include "Region.h"
+#include "Selection.h"
 #include "TableModel.h"
 
 using namespace KSpread;
@@ -36,14 +39,17 @@ class ChartDatabaseSelector::Private
 {
 public:
     Doc* doc;
+    Selection* selection;
     KoChart::ChartInterface* shape;
     Ui::ChartDatabaseSelector widget;
 };
 
 ChartDatabaseSelector::ChartDatabaseSelector( Doc* doc )
-    : d( new Private )
+    : KoShapeConfigWidgetBase()
+    , d( new Private )
 {
     d->doc = doc;
+    d->selection = 0;
     d->shape = 0;
     d->widget.setupUi(this);
 }
@@ -60,7 +66,7 @@ void ChartDatabaseSelector::open(KoShape* shape)
 
 void ChartDatabaseSelector::save()
 {
-    const Region region( d->doc->map(), d->widget.m_cellRegion->text(), 0 );
+    const Region region( d->doc->map(), d->widget.m_cellRegion->text(), d->selection->activeSheet() );
     if ( !region.isValid() )
         return;
     TableModel* tableModel = new TableModel();
@@ -72,5 +78,14 @@ KAction* ChartDatabaseSelector::createAction()
 {
     return 0;
 }
+
+void ChartDatabaseSelector::showEvent( QShowEvent* event )
+{
+    Q_UNUSED( event );
+    Q_ASSERT( m_resourceProvider );
+    d->selection = m_resourceProvider->resource( Canvas::Selection ).value<Selection*>();
+    d->widget.m_cellRegion->setText( d->selection->Region::name() );
+}
+
 
 #include "ChartDatabaseSelector.moc"
