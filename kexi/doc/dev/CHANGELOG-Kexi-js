@@ -23,6 +23,7 @@ TODO: use KCompletionBox in (editable/noneditable) comboboxes
 2007-06-13
 Startup
 - use KFileWidget in startup dialogs
+= fixed behaviour of the open file dialog
 
 2007-06-11
 Kexi 2.0

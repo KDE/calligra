@@ -56,6 +56,7 @@
 #include <ktextbrowser.h>
 #include <kconfig.h>
 #include <KIconLoader>
+#include <KUrl>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define KEXI_STARTUP_SHOW_RECENT
@@ -124,7 +125,7 @@ public:
 	KexiDBConnectionSet *connSet;
 	KexiStartupFileWidget *openExistingFileWidget; //! embedded file widget
 	KexiConnSelectorWidget *openExistingConnWidget;
-	QString existingFileToOpen; //! helper for returning a file name to open
+//	KUrl existingUrlToOpen; //! helper for returning a file name to open
 	KexiDB::ConnectionData* selectedExistingConnection; //! helper for returning selected connection
 
 	//! used for "open recent"
@@ -226,7 +227,7 @@ void KexiStartupDialog::showEvent( QShowEvent *e )
 {
 	KPageDialog::showEvent(e);
 	//just some cleanup
-	d->existingFileToOpen.clear();
+	//d->existingUrlToOpen = KUrl();
 	d->result=-1;
 
 	KDialog::centerOnScreen(this);
@@ -269,10 +270,11 @@ void KexiStartupDialog::done(int r)
 			{
 				if (!d->openExistingFileWidget->checkSelectedFile())
 					return;
-				d->existingFileToOpen = d->openExistingFileWidget->selectedFile();
+//kde4				d->existingFileToOpen = d->openExistingFileWidget->selectedFile();
+				d->openExistingFileWidget->accept();
 				d->selectedExistingConnection = 0;
 			} else {
-				d->existingFileToOpen.clear();
+				//d->existingUrlToOpen = KUrl();
 				d->selectedExistingConnection
 					= d->openExistingConnWidget->selectedConnectionData();
 			}
@@ -573,11 +575,13 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
 #endif
 	}
 	else if (pageWidgetItem == d->pageOpenExisting) {
+		kexidbg << "d->openExistingFileWidget->highlightedFile(): " << d->openExistingFileWidget->highlightedFile();
 		enable = 
 			(d->openExistingConnWidget->selectedConnectionType()==KexiConnSelectorWidget::FileBased)
-			? !d->openExistingFileWidget->selectedFile().isEmpty()
+//kde4			? !d->openExistingFileWidget->selectedFile().isEmpty()
+			? !d->openExistingFileWidget->highlightedFile().isEmpty()
 			: (bool)d->openExistingConnWidget->selectedConnectionData();
-kexidbg << d->openExistingFileWidget->selectedFile() << "--------------" <<endl;
+//kexidbg << d->openExistingFileWidget->selectedFile() << "--------------" <<endl;
 	}
 	else if (pageWidgetItem == d->pageOpenRecent) {
 		enable = (d->prj_selector->selectedProjectData()!=0);
@@ -599,10 +603,13 @@ void KexiStartupDialog::setupPageOpenExisting()
 	QVBoxLayout *lyr = new QVBoxLayout( pageOpenExistingWidget );
 	lyr->setSpacing( KDialog::spacingHint() );
 	lyr->setMargin( 0 );
+	QString recentDirClass;
+KFileWidget::getStartUrl( KUrl("kfiledialog:///OpenExistingOrCreateNewProject"),
+                               recentDirClass );
+kexidbg << recentDirClass << endl;
 
 	d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet, 
-		":OpenExistingOrCreateNewProject",
-		pageOpenExistingWidget);
+		"kfiledialog:///OpenExistingOrCreateNewProject", pageOpenExistingWidget);
 	d->openExistingConnWidget->setObjectName("KexiConnSelectorWidget");
 	d->openExistingConnWidget->hideConnectonIcon();
 	lyr->addWidget( d->openExistingConnWidget );
@@ -615,8 +622,8 @@ void KexiStartupDialog::setupPageOpenExisting()
 	}
 	d->openExistingFileWidget = d->openExistingConnWidget->fileWidget;
 	connect(d->openExistingFileWidget,SIGNAL(accepted()),this,SLOT(accept()));
-	connect(d->openExistingFileWidget,SIGNAL(selectionChanged()),
-		this,SLOT(existingFileSelectionChanged()));
+	connect(d->openExistingFileWidget,SIGNAL(fileHighlighted()),
+		this,SLOT(existingFileHighlighted()));
 	connect(d->openExistingConnWidget,SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
 		this,SLOT(connectionItemForOpenExistingExecuted(ConnectionDataLVItem*)));
 	connect(d->openExistingConnWidget,SIGNAL(connectionItemHighlighted(ConnectionDataLVItem*)),
@@ -661,7 +668,7 @@ void KexiStartupDialog::showAdvancedConnForOpenExisting()
 QString KexiStartupDialog::selectedFileName() const
 {
 	if (d->result == OpenExistingResult)
-		return d->existingFileToOpen;
+		return d->openExistingFileWidget->highlightedFile();
 	else if (d->result == CreateFromTemplateResult && d->viewTemplates)
 		return d->viewTemplates->selectedFileName();
 	else
@@ -673,9 +680,10 @@ KexiDB::ConnectionData* KexiStartupDialog::selectedExistingConnection() const
 	return d->selectedExistingConnection;
 }
 
-void KexiStartupDialog::existingFileSelectionChanged()
+void KexiStartupDialog::existingFileHighlighted()
 {
-	d->existingFileToOpen = d->openExistingFileWidget->selectedFile();
+kexidbg << "KexiStartupDialog::existingFileHighlighted(): " << endl;
+	//d->existingUrlToOpen = KUrl(fileName);
 	updateDialogOKButton(0);
 }
 

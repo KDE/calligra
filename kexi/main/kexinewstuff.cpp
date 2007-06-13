@@ -58,7 +58,7 @@ KexiNewStuff::install(const QString &fileName)
 	}
 	const KArchiveDirectory *archiveDir = archive.directory();
 	const QString destDir = KFileDialog::getExistingDirectory(
-		":DownloadExampleDatabases", parentWidget(),
+		"kfiledialog:///DownloadExampleDatabases", parentWidget(),
 		i18n("Choose Directory Where to Install Example Database"));
 	if (destDir.isEmpty()) {
 		kDebug() << QString("KexiNewStuff::install: Destination-directory is empty.") << endl;

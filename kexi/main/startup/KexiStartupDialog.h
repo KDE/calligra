@@ -126,10 +126,10 @@ class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog
 		KexiDB::ConnectionData* selectedExistingConnection() const;
 	
 	public slots:
-	
-	protected slots:
 		virtual void done(int r);
 		virtual void reject();
+	
+	protected slots:
 		virtual void slotOk();
 		
 		//! slot activated when one of the top-level tabs is shown
@@ -153,7 +153,7 @@ class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog
 	
 		//! helper
 		void recentProjectItemExecuted(KexiProjectData *data);
-		void existingFileSelectionChanged();
+		void existingFileHighlighted();
 		void showSimpleConnForOpenExisting();
 		void showAdvancedConnForOpenExisting();
 		void connectionItemForOpenExistingExecuted(ConnectionDataLVItem *item);

@@ -71,7 +71,7 @@ class KEXIMAIN_EXPORT KexiStartupFileWidget : public KFileWidget
 		void setExcludedFilters(const QSet<QString>& mimeTypes);
 	
 	//	KUrl currentURL();
-		virtual QString selectedFile() const;
+		virtual QString highlightedFile() const;
 	
 	//#ifndef Q_WS_WIN
 	//	KUrlComboBox *locationWidget() const;
@@ -108,11 +108,13 @@ class KEXIMAIN_EXPORT KexiStartupFileWidget : public KFileWidget
 	
 	signals:
 		//entered file name is accepted
-		void accepted();
+//alread avail. in KFileWidget		void accepted();
+		void fileHighlighted();
 		void rejected();
 		
 	protected slots:
 		virtual void reject();
+		void slotExistingFileHighlighted(const QString& fileName);
 	
 	private:
 		void updateFilters();

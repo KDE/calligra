@@ -175,8 +175,8 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	conn_sel_lyr->addWidget( conn_sel_label );
 	conn_sel_lyr->addSpacing(KDialog::spacingHint());
 
-	m_conn_sel = new KexiConnSelectorWidget(conn_set, ":OpenExistingOrCreateNewProject", 
-		m_conn_sel_widget);
+	m_conn_sel = new KexiConnSelectorWidget(conn_set,
+		"kfiledialog:///OpenExistingOrCreateNewProject", m_conn_sel_widget);
 	conn_sel_lyr->addWidget( m_conn_sel );
 
 	//"Select database server connection"

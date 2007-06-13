@@ -57,6 +57,7 @@ class KexiStartupFileWidget::Private
 	QString defaultExtension;
 	bool confirmOverwrites : 1;
 	bool filtersUpdated : 1;
+	KUrl highlightedUrl;
 };
 
 //------------------
@@ -92,6 +93,9 @@ KexiStartupFileWidget::KexiStartupFileWidget(
 //	toggleSpeedbar(false);
 	setFocusProxy( locationEdit() );
 #endif
+	
+	connect(this,SIGNAL(fileHighlighted(const QString&)),
+		this,SLOT(slotExistingFileHighlighted(const QString&)));
 }
 
 KexiStartupFileWidget::~KexiStartupFileWidget()
@@ -100,6 +104,19 @@ KexiStartupFileWidget::~KexiStartupFileWidget()
 //Qt4 #ifdef Q_WS_WIN
 //	saveLastVisitedPath(currentFileName());
 //#endif
+}
+
+void KexiStartupFileWidget::slotExistingFileHighlighted(const QString& fileName)
+{
+kexidbg << fileName << endl;
+	d->highlightedUrl = KUrl(fileName);
+	//updateDialogOKButton(0);
+	emit fileHighlighted();
+}
+
+QString KexiStartupFileWidget::highlightedFile() const
+{
+	return d->highlightedUrl.path();
 }
 
 void KexiStartupFileWidget::setMode(Mode mode)
@@ -232,6 +249,7 @@ void KexiStartupFileWidget::showEvent( QShowEvent * event )
 	KFileWidget::showEvent(event);
 }
 
+/*TODO
 QString KexiStartupFileWidget::selectedFile() const
 {
 //Qt4	setResult( QDialog::Accepted ); // selectedURL tests for it
@@ -252,8 +270,8 @@ QString KexiStartupFileWidget::selectedFile() const
 	kDebug() << "locationEdit == " << locationEdit()->currentText().trimmed() <<endl;
 	//make sure user-entered path is acceped:
 #warning TODO?	setSelection( locationEdit()->currentText().trimmed() );
-	
-	path = KFileWidget::selectedFile();
+//	path = KFileWidget::selectedFile();
+	path = locationEdit()->currentText().trimmed();
 	kDebug() << "selectedFile() == " << path <<endl;
 	
 #endif
@@ -284,29 +302,30 @@ QString KexiStartupFileWidget::selectedFile() const
 	kDebug() << "KexiStartupFileWidget::currentFileName() == " << path <<endl;
 	return path;
 }
+*/
 
 bool KexiStartupFileWidget::checkSelectedFile()
 {
-	accept();
+	//accept();
 
 //	KUrl url = currentURL();
 //	QString path = url.path().trimmed();
-	QString path = selectedFile().trimmed();
+//	QString path = selectedFile().trimmed();
 	
 //	if (url.fileName().trimmed().isEmpty()) {
-	if (path.isEmpty()) {
+	if (d->highlightedUrl.isEmpty()) {
 		KMessageBox::error( this, i18n( "Enter a filename." ));
 		return false;
 	}
 	
-	kDebug() << "KexiStartupFileWidget::checkURL() path: " << path  << endl;
+	kDebug() << "KexiStartupFileWidget::checkURL() path: " << d->highlightedUrl  << endl;
 //	kDebug() << "KexiStartupFileWidget::checkURL() fname: " << url.fileName() << endl;
 //todo	if ( url.isLocalFile() ) {
-		QFileInfo fi(path);
+		QFileInfo fi(d->highlightedUrl.path());
 		if (mode() & KFile::ExistingOnly) {
 			if ( !fi.exists() ) {
 				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" does not exist.",
-					QDir::convertSeparators(path) ) );
+					QDir::convertSeparators(d->highlightedUrl.path()) ) );
 				return false;
 			}
 			else if (mode() & KFile::File) {
@@ -316,12 +335,12 @@ bool KexiStartupFileWidget::checkSelectedFile()
 				}
 				else if (!fi.isReadable()) {
 					KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" is not readable.",
-						QDir::convertSeparators(path) ) );
+						QDir::convertSeparators(d->highlightedUrl.path()) ) );
 					return false;
 				}
 			}
 		}
-		else if (d->confirmOverwrites && !askForOverwriting( path, this )) {
+		else if (d->confirmOverwrites && !askForOverwriting( d->highlightedUrl.path(), this )) {
 			return false;
 		}
 //	}
@@ -345,6 +364,11 @@ bool KexiStartupFileWidget::askForOverwriting(const QString& filePath, QWidget *
 
 void KexiStartupFileWidget::accept()
 {
+	kexidbg << "KexiStartupFileWidget::accept()..." << endl;
+	
+	KFileWidget::accept();
+//	kexidbg << selectedFile() << endl;
+	
 //	locationEdit->setFocus();
 //	QKeyEvent ev(QEvent::KeyPress, Qt::Key_Enter, '\n', 0);
 //	QApplication::sendEvent(locationEdit, &ev);
@@ -352,6 +376,7 @@ void KexiStartupFileWidget::accept()
 	
 //	kDebug() << "KexiStartupFileWidget::accept() m_lastUrl == " << m_lastUrl.path() << endl;
 //	if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (I do not know why this is)
+/*
 	if (d->lastFileName==selectedFile()) {//(js) to prevent more multiple kjob signals (I do not know why this is)
 //		m_lastUrl=KUrl();
 		d->lastFileName.clear();
@@ -368,7 +393,7 @@ void KexiStartupFileWidget::accept()
 
 #ifdef Q_WS_WIN
 	saveLastVisitedPath(d->lastFileName);
-#endif
+#endif*/
 }
 
 void KexiStartupFileWidget::reject()
