@@ -423,3 +423,34 @@ void TestDocumentLayout::testRestartNumbering() {
         block = block.next();
     }
 }
+
+void TestDocumentLayout::testRightToLeftList() {
+    initForNewTest("a\nb\nc");
+
+    KoParagraphStyle h1;
+    h1.setTextProgressionDirection(KoParagraphStyle::RightLeftTopBottom);
+    styleManager->add(&h1);
+    KoListStyle listStyle;
+    KoListLevelProperties llp = listStyle.level(1);
+    llp.setStyle(KoListStyle::DecimalItem);
+    listStyle.setLevel(llp);
+    h1.setListStyle(listStyle);
+
+    QTextBlock block = doc->begin();
+    h1.applyStyle(block);
+    block = block.next();
+    h1.applyStyle(block);
+    block = block.next();
+    h1.applyStyle(block);
+    block = block.next();
+
+    layout->layout();
+
+    block = doc->begin();
+    while(block.isValid()) {
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+        QVERIFY(data);
+        QVERIFY(data->counterPosition().x() > 100);
+        block = block.next();
+    }
+}

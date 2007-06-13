@@ -532,14 +532,16 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         else { // insert the text
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
+            const bool paragEmtpy = m_caret.atBlockStart();
             m_caret.insertText(event->text());
-            QTextBlock block = m_caret.block();
-            if(m_prevCursorPosition == block.position()) { // we just started a new paragraph
-                if(block.text().isRightToLeft()) {
-                    QTextBlockFormat format = m_caret.blockFormat();
+            if(paragEmtpy) { // we just started a new paragraph
+                QTextBlock block = m_caret.block();
+                QTextBlockFormat format = m_caret.blockFormat();
+                if(block.text().isRightToLeft())
                     format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::RightLeftTopBottom);
-                    m_caret.setBlockFormat(format);
-                }
+                else // remove previously set one if needed.
+                    format.clearProperty(KoParagraphStyle::TextProgressionDirection);
+                m_caret.setBlockFormat(format);
             }
             editingPluginEvents();
             emit blockChanged(m_caret.block());
@@ -552,6 +554,17 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             repaintSelection(m_caret.position(), m_caret.anchor()); // will erase selection
         else if(! m_caret.hasSelection())
             repaintCaret();
+        QTextBlockFormat format = m_caret.blockFormat();
+
+
+    KoParagraphStyle::Direction dir = static_cast<KoParagraphStyle::Direction> (format.intProperty(KoParagraphStyle::TextProgressionDirection));
+    bool isRtl;
+    if(dir == KoParagraphStyle::AutoDirection)
+        isRtl = m_caret.block().text().isRightToLeft();
+    else
+        isRtl =  dir == KoParagraphStyle::RightLeftTopBottom;
+
+ kDebug() << "isRtl: " << isRtl << endl;
         // TODO if RTL toggle direction of cursor movement.
         int prevPosition = m_caret.position();
         if(moveOperation != QTextCursor::NoMove)

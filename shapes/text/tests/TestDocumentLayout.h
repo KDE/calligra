@@ -68,7 +68,7 @@ private slots:
     void testRomanNumbering();
     void testUpperAlphaNumbering();
     void testRestartNumbering();
-
+    void testRightToLeftList();
 
 
 // relativeBulletSize
