@@ -25,6 +25,7 @@
 #include "KexiConnSelector.h"
 #include "KexiDBTitlePage.h"
 #include "KexiProjectSelector.h"
+#include "KexiStartupFileWidget.h"
 #include "kexi.h"
 
 #include <kexiutils/identifier.h>
@@ -41,6 +42,7 @@
 #include <kurlcombobox.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
+#include <kurlcombobox.h>
 
 #include <qobject.h>
 #include <qlabel.h>
@@ -191,12 +193,8 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 
 	m_conn_sel->showSimpleConn();
 	//anyway, db files will be _saved_
-	m_conn_sel->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
-//	m_conn_sel->m_fileDlg->setMode( KFile::LocalOnly | KFile::File );
-//	m_conn_sel->m_fileDlg->setOperationMode( KFileDialog::Saving );
-////js	connect(m_conn_sel->m_fileDlg,SIGNAL(rejected()),this,SLOT(reject()));
-//	connect(m_conn_sel->m_fileDlg,SIGNAL(fileHighlighted(const QString&)),this,SLOT(slotFileHighlighted(const QString&)));
-	connect(m_conn_sel->m_fileDlg,SIGNAL(accepted()),this,SLOT(accept()));
+	m_conn_sel->fileWidget->setMode( KexiStartupFileWidget::SavingFileBasedDB );
+#warning TODO KFileWidget	connect(m_conn_sel->m_fileDlg,SIGNAL(accepted()),this,SLOT(accept()));
 	m_conn_sel->showAdvancedConn();
 	connect(m_conn_sel,SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
 		this,SLOT(next()));
@@ -279,7 +277,7 @@ void KexiNewProjectWizard::showPage(QWidget *page)
 			QString fn = KexiUtils::string2FileName( m_db_title->le_caption->text() );
 			if (!fn.endsWith(".kexi"))
 				fn += ".kexi";
-			m_conn_sel->m_fileDlg->setLocationText(fn);
+			m_conn_sel->fileWidget->setLocationText( fn );
 			setFinishEnabled(m_conn_sel_widget,true);
 			m_conn_sel->setFocus();
 		}
@@ -346,8 +344,7 @@ void KexiNewProjectWizard::accept()
 		kDebug() << "********** sender() " << sender()->metaObject()->className() << endl;
 		if (sender()==finishButton()) { /*(only if signal does not come from filedialog)*/
 			kDebug() << "********** sender()==finishButton() ********" << endl;
-//			if (!m_conn_sel->m_fileDlg->checkURL()) {
-			if (!m_conn_sel->m_fileDlg->checkFileName()) {
+			if (!m_conn_sel->fileWidget->checkSelectedFile()) {
 				return;
 			}
 		}

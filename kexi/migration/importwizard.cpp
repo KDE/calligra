@@ -30,6 +30,7 @@
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3VButtonGroup>
+#include <QDir>
 
 #include <kcombobox.h>
 #include <kmessagebox.h>
@@ -53,6 +54,7 @@
 #include <kexitextmsghandler.h>
 #include <widget/kexicharencodingcombobox.h>
 #include <widget/kexiprjtypeselector.h>
+#include <main/startup/KexiStartupFileWidget.h>
 
 
 using namespace KexiMigration;
@@ -216,12 +218,12 @@ void ImportWizard::setupSrcConn()
 	m_srcConn->hideConnectonIcon();
 	m_srcConn->showSimpleConn();
 
-	QStringList excludedFilters;
+	QSet<QString> excludedFilters;
 //! @todo remove when support for kexi files as source prj is added in migration
 	excludedFilters += KexiDB::Driver::defaultFileBasedDriverMimeType();
 	excludedFilters += "application/x-kexiproject-shortcut";
 	excludedFilters += "application/x-kexi-connectiondata";
-	m_srcConn->m_fileDlg->setExcludedFilters(excludedFilters);
+	m_srcConn->fileWidget->setExcludedFilters(excludedFilters);
 
 //	m_srcConn->hideHelpers();
 	vbox->addWidget(m_srcConn);
@@ -304,7 +306,7 @@ void ImportWizard::setupDst()
 //	m_dstConn->hideHelpers();
 	m_dstConn->showSimpleConn();
 	//anyway, db files will be _saved_
-	m_dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
+	m_dstConn->fileWidget->setMode( KexiStartupFileWidget::SavingFileBasedDB );
 //	m_dstConn->hideHelpers();
 //	m_dstConn->m_file->btn_advanced->hide();
 //	m_dstConn->m_file->label->hide();
@@ -434,18 +436,18 @@ void ImportWizard::arriveSrcConnPage()
 //	checkIfSrcTypeFileBased(m_srcTypeCombo->currentText());
 //	if (fileBasedSrcSelected()) {
 //moved		m_srcConn->showSimpleConn();
-		/*! @todo KexiStartupFileDialog needs "open file" and "open server" modes
+		/*! @todo KexiStartupFileWidget needs "open file" and "open server" modes
 		in addition to just "open" */
 		if (m_setupFileBasedSrcNeeded) {
 			m_setupFileBasedSrcNeeded = false;
-			QStringList additionalMimeTypes;
+			QSet<QString> additionalMimeTypes;
 	/* moved
 			if (m_srcTypeCombo->currentText().contains("Access")) {
 	//! @todo tmp: hardcoded!
 				additionalMimeTypes << "application/vnd.ms-access";
 			}*/
-			m_srcConn->m_fileDlg->setMode(KexiStartupFileDialog::Opening);
-			m_srcConn->m_fileDlg->setAdditionalFilters(additionalMimeTypes);
+			m_srcConn->fileWidget->setMode(KexiStartupFileWidget::Opening);
+			m_srcConn->fileWidget->setAdditionalFilters(additionalMimeTypes);
 /*moved			if (m_srcTypeCombo->currentText().contains("Access")) {
 	//! @todo tmp: hardcoded!
 	#ifdef Q_WS_WIN
@@ -517,10 +519,10 @@ void ImportWizard::arriveDstPage()
 //	checkIfDstTypeFileBased(m_dstTypeCombo->currentText());
 	if(fileBasedDstSelected()) {
 		m_dstConn->showSimpleConn();
-		m_dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
+		m_dstConn->fileWidget->setMode( KexiStartupFileWidget::SavingFileBasedDB );
 		if (!m_fileBasedDstWasPresented) {
 			//without extension - it will be added automatically
-			m_dstConn->m_fileDlg->setLocationText(m_dstNewDBNameLineEdit->text());
+			m_dstConn->fileWidget->setLocationText(m_dstNewDBNameLineEdit->text());
 		}
 		m_fileBasedDstWasPresented = true;
 	} else {
@@ -530,13 +532,6 @@ void ImportWizard::arriveDstPage()
 }
 
 void ImportWizard::arriveImportingPage() {
-//	checkIfDstTypeFileBased(m_dstTypeCombo->currentText());
-/*moved	if (m_fileBasedDstWasPresented) {
-		if (!m_dstConn->m_fileDlg->checkFileName()) {
-			back();
-			return;
-		}
-	}*/
 	m_importingPage->hide();
 	if (checkUserInput()) {
 		setNextEnabled(m_importingPage, true);
@@ -923,7 +918,7 @@ void ImportWizard::next()
 	}
 	else if (currentPage() == m_dstPage) {
 		if (m_fileBasedDstWasPresented) {
-			if (fileBasedDstSelected() && !m_dstConn->m_fileDlg->checkFileName())
+			if (fileBasedDstSelected() && !m_dstConn->fileWidget->checkSelectedFile())
 				return;
 		}
 	}

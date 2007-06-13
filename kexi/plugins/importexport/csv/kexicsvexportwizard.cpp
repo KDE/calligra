@@ -19,7 +19,7 @@
 
 #include "kexicsvexportwizard.h"
 #include "kexicsvwidgets.h"
-#include <main/startup/KexiStartupFileDialog.h>
+#include <main/startup/KexiStartupFileWidget.h>
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
 #include <core/KexiMainWindowIface.h>
@@ -49,7 +49,7 @@
 #include <kdebug.h>
 #include <ksavefile.h>
 #include <kglobal.h>
-
+#include <KDialog>
 
 KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 	QWidget * parent )
@@ -109,13 +109,13 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 
 	// 1. File Save Page
 	if (m_options.mode==KexiCSVExport::File) {	
-		m_fileSavePage = new KexiStartupFileDialog(
-			"kfiledialog:///CSVImportExport", //startDir
-			KexiStartupFileDialog::Custom | KexiStartupFileDialog::SavingFileBasedDB,
+		m_fileSavePage = new KexiStartupFileWidget(
+			KUrl("kfiledialog:///CSVImportExport"), //startDir
+			KexiStartupFileWidget::Custom | KexiStartupFileWidget::SavingFileBasedDB,
 			this);
 		m_fileSavePage->setObjectName("m_fileSavePage");
 		m_fileSavePage->setMinimumHeight(kapp->desktop()->availableGeometry().height()/2);
-		m_fileSavePage->setAdditionalFilters( csvMimeTypes() );
+		m_fileSavePage->setAdditionalFilters( csvMimeTypes().toSet() );
 		m_fileSavePage->setDefaultExtension("csv");
 		m_fileSavePage->setLocationText(
 			KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()) );
@@ -259,7 +259,7 @@ void KexiCSVExportWizard::showPage ( QWidget * page )
 	}
 	else if (page==m_exportOptionsPage) {
 		if (m_options.mode==KexiCSVExport::File)
-			m_infoLblTo->setFileName( m_fileSavePage->currentFileName() );
+			m_infoLblTo->setFileName( m_fileSavePage->selectedFile() );
 		QString text = m_tableOrQuery->captionOrName();
 		if (!m_rowCountDetermined) {
 			//do this costly operation only once
@@ -290,7 +290,7 @@ void KexiCSVExportWizard::showPage ( QWidget * page )
 void KexiCSVExportWizard::next()
 {
 	if (currentPage() == m_fileSavePage) {
-		if (!m_fileSavePage->checkFileName())
+		if (!m_fileSavePage->checkSelectedFile())
 			return;
 		K3Wizard::next();
 		finishButton()->setFocus();
@@ -303,7 +303,7 @@ void KexiCSVExportWizard::done(int result)
 {
 	if (QDialog::Accepted == result) {
 		if (m_fileSavePage)
-			m_options.fileName = m_fileSavePage->currentFileName();
+			m_options.fileName = m_fileSavePage->selectedFile();
 		m_options.delimiter = m_delimiterWidget->delimiter();
 		m_options.textQuote = m_textQuote->textQuote();
 		m_options.addColumnNames = m_addColumnNamesCheckBox->isChecked();

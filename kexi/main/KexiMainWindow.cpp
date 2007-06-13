@@ -109,7 +109,7 @@
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectWizard.h"
 #include "startup/KexiStartupDialog.h"
-#include "startup/KexiStartupFileDialog.h"
+#include "startup/KexiStartupFileWidget.h"
 #include "kexinamedialog.h"
 #include "printing/kexisimpleprintingpart.h"
 #include "printing/kexisimpleprintingpagesetup.h"
@@ -1547,7 +1547,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 #endif
 		if ( fname.isEmpty() )
 			return cancelled;
-		if (KexiStartupFileDialog::askForOverwriting(fname, this))
+		if (KexiStartupFileWidget::askForOverwriting(fname, this))
 			break;
 	}
 	

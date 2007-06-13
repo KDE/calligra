@@ -22,13 +22,14 @@
 
 #include <kexidbconnectionset.h>
 #include <kexidb/driver.h>
-#include "KexiStartupFileDialog.h"
 #include "ui_KexiConnSelector.h"
 
 #include <KDialog>
 #include <k3listview.h>
 
 #include <QPointer>
+
+class KexiStartupFileWidget;
 
 class KexiConnSelectorBase : public QWidget, public Ui_KexiConnSelector
 {
@@ -51,9 +52,6 @@ class ConnectionDataLVItem : public Q3ListViewItem
 	protected:
 		KexiDB::ConnectionData *m_data;
 };
-
-
-class KexiConnSelectorWidgetPrivate;
 
 /*! Widget that allows to select a database connection (without choosing database itself)
 */
@@ -107,7 +105,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 		
 		KexiConnSelectorBase *m_remote;
 //		KexiOpenExistingFile *m_file;
-		KexiStartupFileDialog *m_fileDlg;
+		KexiStartupFileWidget *fileWidget;
 
 		/*! If true, user will be asked to accept overwriting existing project. 
 		 This is true by default. */

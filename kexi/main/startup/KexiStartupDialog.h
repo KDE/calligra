@@ -125,9 +125,6 @@ class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog
 		*/
 		KexiDB::ConnectionData* selectedExistingConnection() const;
 	
-		/*! Reimplemented for internal reasons */	
-		virtual void show();
-	
 	public slots:
 	
 	protected slots:
@@ -156,7 +153,7 @@ class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog
 	
 		//! helper
 		void recentProjectItemExecuted(KexiProjectData *data);
-		void existingFileSelected(const QString &f);
+		void existingFileSelectionChanged();
 		void showSimpleConnForOpenExisting();
 		void showAdvancedConnForOpenExisting();
 		void connectionItemForOpenExistingExecuted(ConnectionDataLVItem *item);
@@ -164,6 +161,7 @@ class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog
 	
 	protected:
 		virtual bool eventFilter( QObject *o, QEvent *e );
+		virtual void showEvent( QShowEvent *e );
 		
 		//! helper: updates a state of dialog's OK button
 		void updateDialogOKButton(KPageWidgetItem *pageWidgetItem);

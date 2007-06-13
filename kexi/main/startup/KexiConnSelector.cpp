@@ -18,6 +18,7 @@
  */
 
 #include "KexiConnSelector.h"
+#include "KexiStartupFileWidget.h"
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/connectiondata.h>
@@ -45,10 +46,10 @@
 #include <q3groupbox.h>
 #include <q3widgetstack.h>
 #include <q3buttongroup.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QPixmap>
-#include <Q3Frame>
+#include <QFrame>
+#include <QStackedWidget>
 
 KexiConnSelectorBase::KexiConnSelectorBase(QWidget* parent)
  : QWidget(parent)
@@ -102,7 +103,7 @@ public:
 	QWidget* openExistingWidget;
 	KexiPrjTypeSelector* prjTypeSelector;
 	QString startDirOrVariable;
-	Q3WidgetStack *stack;
+	QStackedWidget *stack;
 	QPointer<KexiDBConnectionSet> conn_set;
 	KexiDB::DriverManager manager;
 	bool conn_sel_shown : 1;//! helper
@@ -124,12 +125,13 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	//const QPixmap icon = KIconLoader::global()->loadIcon( iconname, K3Icon::Desktop, 48 );
 	setWindowIcon( KIcon(iconname) );
 
-	Q3VBoxLayout* globalLyr = new Q3VBoxLayout( this );
+	QBoxLayout* globalLyr = new QVBoxLayout( this );
 
 	//create header with radio buttons
 	d->openExistingWidget = new QWidget(this);
 	d->openExistingWidget->setObjectName("openExistingWidget");
-	Q3VBoxLayout* openExistingWidgetLyr = new Q3VBoxLayout( d->openExistingWidget );
+	QVBoxLayout* openExistingWidgetLyr = new QVBoxLayout( d->openExistingWidget );
+	openExistingWidgetLyr->setMargin(0);
 //	QLabel* lbl = new QLabel(i18n("<b>Select existing Kexi project to open:</b>"), openExistingWidget);
 //	openExistingWidgetLyr->addWidget( lbl );
 	d->prjTypeSelector = new KexiPrjTypeSelector( d->openExistingWidget );
@@ -137,19 +139,19 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 		this,SLOT(slotPrjTypeSelected(int)));
 	openExistingWidgetLyr->addWidget( d->prjTypeSelector );
 	openExistingWidgetLyr->addSpacing( KDialog::spacingHint() );
-	Q3Frame* line = new Q3Frame( d->openExistingWidget );
-	line->setFrameShape( Q3Frame::HLine );
-	line->setFrameShadow( Q3Frame::Sunken );
+	QFrame* line = new QFrame( d->openExistingWidget );
+	line->setFrameShape( QFrame::HLine );
+	line->setFrameShadow( QFrame::Sunken );
 	openExistingWidgetLyr->addWidget( line );
 	globalLyr->addWidget(d->openExistingWidget);
 
-	d->stack = new Q3WidgetStack(this);
+	d->stack = new QStackedWidget(this);
 	d->stack->setObjectName("stack");
-	globalLyr->addWidget(d->stack);
+	globalLyr->addWidget(d->stack, 1);
 
 //	m_file = new KexiOpenExistingFile( this, "KexiOpenExistingFile");
 //	m_file->btn_advanced->setIconSet( KIcon("arrow-down") );
-	m_fileDlg = 0;
+	fileWidget = 0;
 		
 //	addWidget(m_file);
 //	connect(m_file->btn_advanced,SIGNAL(clicked()),this,SLOT(showAdvancedConn()));
@@ -219,7 +221,7 @@ void KexiConnSelectorWidget::slotPrjTypeSelected(int id)
 			m_remote->list->setFocus();
 			slotConnectionSelectionChanged();
 		}
-		d->stack->raiseWidget(m_remote);
+		d->stack->setCurrentWidget(m_remote);
 	}
 }
 
@@ -235,31 +237,27 @@ void KexiConnSelectorWidget::showSimpleConn()
 {
 	d->prjTypeSelector->buttonGroup->setButton(1);
 	if (!d->file_sel_shown) {
-		d->file_sel_shown=true;
-		m_fileDlg = new KexiStartupFileDialog( d->startDirOrVariable, KexiStartupFileDialog::Opening,
-			d->stack);
-		m_fileDlg->setObjectName("openExistingFileDlg");
-		m_fileDlg->setConfirmOverwrites( d->confirmOverwrites );
-//		static_cast<QVBoxLayout*>(m_file->layout())->insertWidget( 2, m_fileDlg );
-		d->stack->addWidget(m_fileDlg);
+		d->file_sel_shown = true;
+		fileWidget = new KexiStartupFileWidget( 
+			KUrl(d->startDirOrVariable), KexiStartupFileWidget::Opening, d->stack );
+		fileWidget->setOperationMode( KAbstractFileWidget::Opening );
+		fileWidget->setObjectName("openExistingFileWidget");
+		fileWidget->setConfirmOverwrites( d->confirmOverwrites );
+		d->stack->addWidget(fileWidget);
 
 		for (QWidget *w = parentWidget(); w; w=w->parentWidget()) {
 			if (w->windowType()==Qt::Dialog) {
-//#ifndef Q_WS_WIN
-				connect(m_fileDlg, SIGNAL(rejected()),
-					qobject_cast<QDialog*>(w), SLOT(reject()));
-//#endif
-//				connect(m_fileDlg,SIGNAL(cancelled()),static_cast<QDialog*>(w),SLOT(reject()));
+#warning TODO KFileWidget				connect(m_fileDlg, SIGNAL(rejected()), qobject_cast<QDialog*>(w), SLOT(reject()));
 				break;
 			}
 		}
 	}
-	d->stack->raiseWidget(m_fileDlg);
+	d->stack->setCurrentWidget(fileWidget);
 }
 
 int KexiConnSelectorWidget::selectedConnectionType() const
 {
-	return (d->stack->visibleWidget()==m_fileDlg) ? FileBased : ServerBased;
+	return (d->stack->currentWidget()==fileWidget) ? FileBased : ServerBased;
 }
 
 /*ConnectionDataLVItem* KexiConnSelectorWidget::selectedConnectionDataItem() const
@@ -289,14 +287,14 @@ QString KexiConnSelectorWidget::selectedFileName()
 {
 	if (selectedConnectionType()!=KexiConnSelectorWidget::FileBased)
 		return QString();
-	return m_fileDlg->currentFileName();
+	return fileWidget->selectedFile();
 }
 
 void KexiConnSelectorWidget::setSelectedFileName(const QString& fileName)
 {
 	if (selectedConnectionType()!=KexiConnSelectorWidget::FileBased)
 		return;
-	return m_fileDlg->setSelection(fileName);
+	return fileWidget->setSelection(fileName);
 }
 
 void KexiConnSelectorWidget::slotConnectionItemExecuted(Q3ListViewItem *item)
@@ -335,8 +333,8 @@ Q3ListView* KexiConnSelectorWidget::connectionsList() const
 void KexiConnSelectorWidget::setFocus()
 {
 	QWidget::setFocus();
-	if (d->stack->visibleWidget()==m_fileDlg)
-		m_fileDlg->setFocus(); //m_fileDlg->locationWidget()->setFocus();
+	if (d->stack->currentWidget()==fileWidget)
+		fileWidget->setFocus(); //m_fileDlg->locationWidget()->setFocus();
 	else
 		m_remote->list->setFocus();
 }
@@ -358,8 +356,8 @@ void KexiConnSelectorWidget::hideHelpers()
 void KexiConnSelectorWidget::setConfirmOverwrites(bool set)
 {
 	d->confirmOverwrites = set;
-	if (m_fileDlg)
-		m_fileDlg->setConfirmOverwrites( d->confirmOverwrites );
+	if (fileWidget)
+		fileWidget->setConfirmOverwrites( d->confirmOverwrites );
 }
 
 bool KexiConnSelectorWidget::confirmOverwrites() const

@@ -19,7 +19,6 @@
 
 #include "kexicsvexport.h"
 #include "kexicsvwidgets.h"
-#include <main/startup/KexiStartupFileDialog.h>
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
 #include <core/KexiMainWindowIface.h>

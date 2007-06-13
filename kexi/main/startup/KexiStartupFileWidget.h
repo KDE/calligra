@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,22 +17,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KexiStartupFileDialog_h_
-#define _KexiStartupFileDialog_h_
+#ifndef _KexiStartupFileWidget_h_
+#define _KexiStartupFileWidget_h_
 
-#include <kfiledialog.h>
+#include <QSet>
+#include <kfilewidget.h>
 #include <kexi_export.h>
-
-#ifdef Q_WS_WIN
-# include "KexiStartupFileDialogBase_win.h"
-#else
-  typedef KFileDialog KexiStartupFileDialogBase;
-#endif
 
 class QEvent;
 
 //! @short Widget for opening/saving files supported by Kexi
-class KEXIMAIN_EXPORT KexiStartupFileDialog : public KexiStartupFileDialogBase
+/*! For simplicity, initially the widget has hidden the preview pane. */
+class KEXIMAIN_EXPORT KexiStartupFileWidget : public KFileWidget
 {
 	Q_OBJECT
 	
@@ -43,17 +39,18 @@ class KEXIMAIN_EXPORT KexiStartupFileDialog : public KexiStartupFileDialogBase
 		- SavingServerBasedDB saves server-based (shortcut) file
 		- CustomOpening can be used for opening other files, like CSV
 		*/
-		typedef enum Mode { 
+		enum ModeFlag { 
 			Opening = 1,
 			SavingFileBasedDB = 2,
 			SavingServerBasedDB = 4,
 			Custom = 256
 		};
+		Q_DECLARE_FLAGS(Mode, ModeFlag)
 		
-		KexiStartupFileDialog(
-			const QString& startDirOrVariable, int mode, QWidget *parent=0);
+		KexiStartupFileWidget(
+			const KUrl &startDirOrVariable, Mode mode, QWidget *parent);
 	
-		virtual ~KexiStartupFileDialog();
+		virtual ~KexiStartupFileWidget();
 	
 		/*! Helper. Displays "The file %1 already exists. Do you want to overwrite it?" yes/no message box.
 		\a parent is used as a parent of the KMessageBox.
@@ -61,20 +58,20 @@ class KEXIMAIN_EXPORT KexiStartupFileDialog : public KexiStartupFileDialogBase
 		false in user do not want to overwrite. */
 		static bool askForOverwriting(const QString& filePath, QWidget *parent = 0);
 	
-		void setMode(int mode);
+		void setMode(Mode mode);
 	
-		QStringList additionalFilters() const;
+		QSet<QString> additionalFilters() const;
 	
 		//! Sets additional filters list, e.g. "text/x-csv"
-		void setAdditionalFilters(const QStringList &mimeTypes);
+		void setAdditionalFilters(const QSet<QString>& mimeTypes);
 	
-		QStringList excludedFilters() const;
+		QSet<QString> excludedFilters() const;
 	
 		//! Excludes filters list
-		void setExcludedFilters(const QStringList &mimeTypes);
+		void setExcludedFilters(const QSet<QString>& mimeTypes);
 	
 	//	KUrl currentURL();
-		QString currentFileName();
+		virtual QString selectedFile() const;
 	
 	//#ifndef Q_WS_WIN
 	//	KUrlComboBox *locationWidget() const;
@@ -87,24 +84,23 @@ class KEXIMAIN_EXPORT KexiStartupFileDialog : public KexiStartupFileDialogBase
 		//! if user didn't provided one. This method is usable when there is 
 		//! more than one filter so there is no rule what extension should be selected
 		//! (by default first one is selected).
-		void setDefaultExtension(const QString& ext) { m_defaultExtension = ext; }
+		void setDefaultExtension(const QString& ext);
 		
 		/*! \return true if the current URL meets requies constraints 
 		(i.e. exists or doesn't exist);
 		shows appropriate message box if needed. */
-		bool checkFileName();
+		bool checkSelectedFile();
 	//	bool checkURL();
 	
 		/*! If true, user will be asked to accept overwriting existing file. 
 		This is true by default. */
-		void setConfirmOverwrites(bool set) { m_confirmOverwrites = set; }
+		void setConfirmOverwrites(bool set);
 	
-		virtual bool eventFilter ( QObject * watched, QEvent * e );
+		//virtual bool eventFilter ( QObject * watched, QEvent * e );
 	
 	public slots:
-		virtual void show();
-	
-		virtual void setFocus();
+		virtual void showEvent( QShowEvent * event );
+		virtual void focusInEvent( QFocusEvent * );
 	
 		// Typing a file that doesn't exist closes the file dialog, we have to
 		// handle this case better here.
@@ -121,13 +117,10 @@ class KEXIMAIN_EXPORT KexiStartupFileDialog : public KexiStartupFileDialogBase
 	private:
 		void updateFilters();
 	
-	//	KUrl m_lastUrl;
-		QString m_lastFileName;
-		int m_mode;
-		QStringList m_additionalMimeTypes, m_excludedMimeTypes;
-		QString m_defaultExtension;
-		bool m_confirmOverwrites : 1;
-		bool m_filtersUpdated : 1;
+		class Private;
+		Private * const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiStartupFileWidget::Mode)
 
 #endif
