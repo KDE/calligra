@@ -18,6 +18,63 @@ Legend:
 TODO: fix displaying default values in comboboxes (form and tableview)
 TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
+===================== Kexi 2.0 Alpha =====================
+
+2007-06-13
+Startup
+- use KFileWidget in startup dialogs
+
+2007-06-11
+Kexi 2.0
+- * Kexi source code compiles with Qt4 *
+- ported plugins: forms/, relations/, migration/, importexport/, queries/
+- updated widget/, formeditor/, main/
+  More info at http://kexi-project.org/wiki/wikiview/index.php?Porting%20to%20Qt4
+- mimetype icons moved to KDE4-compatible hicolor
+
+2007-05-29
+Core
+- added "No Kexi/Handler service type installed" error message 
+  to avoid crashes when installation is broken.
+
+2007-04-26
+Fixed pgsql driver build
+
+TODO: compile in rel mode, reupload
+TODO: forms are not imported well from pgsql to sqlite (e.g. New_database)
+TODO: importing from pgsql to pgsql does not work
+TODO: query sql view: fix & in 'SQL Query History'
+
+2007-05-14
+Kexi 2.0
+- widget/* largely ported and compiles
+- removed many warnings
+- update for current kdelibs
+
+2007-04-23
+KexiDB, Project Migration
+- remove usage of older API function (from Debian, thanks)
+  http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=420477
+- fixed a bug because of error in pqxx docs:
+  pqxx::sqlesc() is not the same as pqxx::Quote()
+
+2007-04-20
+Main Window
+- fixed a bug in "Do you want to permanently delete..." message
+CCMAIL:144436-done@bugs.kde.org
+
+Kexi 2.0
+- updates for kexicore/, kexiutils/, formeditor/
+- main/ compiles (older main window mostly ifdef'd)
+- widget/utils ported, compiles
+- many things widget/ compiles
+- widget/tableview compiles
+
+2007-04-11
+Forms
+- forms having parameter query as data source now ask for parameters
+2.0: merged
+
 2007-03-21, 22
 Table Designer
 - clear command history after successful saving of the design

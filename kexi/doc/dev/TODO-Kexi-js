@@ -311,6 +311,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
    (for now only types based that use KexiInputTableEdit (Text, Integer..) allows data entry using keyboard
 
 - display error message on top of table view if data fetching failed
+- add a vertical [A B ... Z] shortcut list for text-based sorting, like on "My Connections" page of linkedin.com
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -878,6 +879,15 @@ CSV Import TODO:
 - add "skip empty columns" and "skip empty rows" option
 - (advanced) there can be a column that is a result of exporting combo box visible values;
   in this case add option for normalizing the table using existing (or new) lookup table
+- add clear message when :
+-- primary key cannot be set because of non-unique values
+-- number cannot be set because non-number values
+-- etc.
+- add "fix non-unique valuesID /add missing ID values" option for PK column
+- add option for skipping particular columns
+- add option for filtering import results afterwards:
+-- to limit number of rows stored in db and 
+-- to process columns using expressions
 
 CSV Export TODO:
 - add progress bar and wizard
@@ -1087,3 +1097,6 @@ Startup templates
 
 Find/Replace REPLACE
 - use this for replace: virtual bool columnEditable(int col);
+
+TODO
+- compare KexiUtils' tristate class with http://boost.org/doc/html/tribool.html
