@@ -564,7 +564,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
     else
         isRtl =  dir == KoParagraphStyle::RightLeftTopBottom;
 
- kDebug() << "isRtl: " << isRtl << endl;
+ //kDebug() << "isRtl: " << isRtl << endl;
         // TODO if RTL toggle direction of cursor movement.
         int prevPosition = m_caret.position();
         if(moveOperation != QTextCursor::NoMove)

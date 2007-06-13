@@ -461,6 +461,7 @@ void Layout::resetPrivate() {
 }
 
 void Layout::updateBorders() {
+    Q_ASSERT(m_data);
     m_borderInsets = m_data->shapeMargins();
     m_borderInsets.top += m_format.doubleProperty(KoParagraphStyle::TopPadding);
     m_borderInsets.left += m_format.doubleProperty(KoParagraphStyle::LeftPadding);
