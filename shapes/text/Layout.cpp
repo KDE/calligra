@@ -643,9 +643,11 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             double x2 = line.cursorToX(line.textStart() + line.textLength());
             double y = line.position().y() + line.height()/2;
             QPen penBackup = painter->pen();
+            QColor color = fmt.colorProperty(KoCharacterStyle::FontStrikeOutColor);
             QPen pen = painter->pen();
+            pen.setColor(color);
             pen.setStyle((Qt::PenStyle) fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle));
-            painter->setPen((Qt::PenStyle) fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle));
+            painter->setPen(pen);
             painter->drawLine(x1, y, x2, y);
             painter->setPen(penBackup);
         }
