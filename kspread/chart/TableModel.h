@@ -37,7 +37,7 @@ class TableModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    TableModel( QObject* parent = 0 );
+    explicit TableModel( QObject* parent = 0 );
     TableModel( const TableModel& other );
     ~TableModel();
 

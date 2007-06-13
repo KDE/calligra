@@ -1897,7 +1897,7 @@ void View::initView()
 
     // Let the selection pointer become a canvas resource.
     QVariant variant;
-    variant.setValue<Selection*>( d->selection );
+    variant.setValue<void*>( d->selection );
     d->canvas->resourceProvider()->setResource( Canvas::Selection, variant );
 
     // Setup the tool dock widget.

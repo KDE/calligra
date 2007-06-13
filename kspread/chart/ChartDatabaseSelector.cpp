@@ -83,7 +83,7 @@ void ChartDatabaseSelector::showEvent( QShowEvent* event )
 {
     Q_UNUSED( event );
     Q_ASSERT( m_resourceProvider );
-    d->selection = m_resourceProvider->resource( Canvas::Selection ).value<Selection*>();
+    d->selection = static_cast<Selection*>( m_resourceProvider->resource( Canvas::Selection ).value<void*>() );
     d->widget.m_cellRegion->setText( d->selection->Region::name() );
 }
 
