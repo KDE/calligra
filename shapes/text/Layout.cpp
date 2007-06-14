@@ -648,12 +648,32 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             QPen pen = painter->pen();
             pen.setColor(color);
             pen.setWidth(painter->fontMetrics().lineWidth());
-            pen.setStyle((Qt::PenStyle) fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle));
-            painter->setPen(pen);
-            painter->drawLine(QPointF(x1, y), QPointF(x2, y));
+            if (fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle) == 6) {
+                // Ok, try the waves :)
+                pen.setStyle(Qt::SolidLine);
+                painter->setPen(pen);
+                int x = x1;
+                int halfWaveWidth = 2 * painter->fontMetrics().lineWidth();
+                int halfWaveLength = 6 * painter->fontMetrics().lineWidth();
+                int startAngle = 0 * 16;
+                int middleAngle = 180 * 16;
+                int endAngle = 180 * 16;
+                while (x < x2) {
+                    QRectF rectangle1(x, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
+                    painter->drawArc(rectangle1, startAngle, middleAngle);
+                    if (x + halfWaveLength > x2)
+                        break;
+                    QRectF rectangle2(x + halfWaveLength, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
+                    painter->drawArc(rectangle2, middleAngle, endAngle);
+                    x = x + 2*halfWaveLength;
+                }
+            } else {
+                pen.setStyle((Qt::PenStyle) fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle));
+                painter->setPen(pen);
+                painter->drawLine(x1, y, x2, y);
+            }
             painter->setPen(penBackup);
         }
-
         for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps
             const double tabStop = tabs.tabs[x];
             const double pos = tabStop - tabs.tabLength[x];
