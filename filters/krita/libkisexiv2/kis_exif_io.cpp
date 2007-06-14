@@ -346,7 +346,7 @@ KisExifIO::KisExifIO() : d(new Private)
 {
 }
 
-bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice)
+bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::ExifData exifData;
@@ -440,12 +440,12 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice)
     return true;
 }
 
-bool KisExifIO::canSaveAllEntries(KisMetaData::Store* /*store*/)
+bool KisExifIO::canSaveAllEntries(KisMetaData::Store* /*store*/) const
 {
     return false; // It's a known fact that exif can't save all information, but TODO: write the check
 }
 
-bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice)
+bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     ioDevice->open(QIODevice::ReadOnly);
     QByteArray arr = ioDevice->readAll();

@@ -46,10 +46,9 @@ extern "C" {
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
 
 #include <colorprofiles/KoIccColorProfile.h>
-
-#include <kis_exif_io.h>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
@@ -269,9 +268,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
             continue; /* no Exif header */
         kDebug(41008) << "Found exif information of length : "<< marker->data_length << endl;
-        KisExifIO exiv2IO;
+        KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->get("exif");
+        Q_ASSERT(exifIO);
         QByteArray byteArray( (const char*)marker->data + 6, marker->data_length - 6);
-        exiv2IO.loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
+        exifIO->loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
         // Interpret orientation tag
         if( layer->metaData()->containsEntry("http://ns.adobe.com/tiff/1.0/", "Orientation"))
         {
@@ -412,17 +412,12 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     if(metaData and not metaData->empty())
     {
         kDebug(41008) << "Trying to save exif information" << endl;
-        KisExifIO exiv2IO;
         
-//                 if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 ||
-//             GETJOCTET (marker->data[1]) != (JOCTET) 0x78 ||
-//             GETJOCTET (marker->data[2]) != (JOCTET) 0x69 ||
-//             GETJOCTET (marker->data[3]) != (JOCTET) 0x66 ||
-//             GETJOCTET (marker->data[4]) != (JOCTET) 0x00 ||
-//             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
+        KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->get("exif");
+        Q_ASSERT(exifIO);
 
         QBuffer buffer;
-        exiv2IO.saveTo( metaData, &buffer);
+        exifIO->saveTo( metaData, &buffer);
         
         kDebug(41008) << "Exif information size is " << buffer.data().size() << endl;
         QByteArray header(6,0);

@@ -1,15 +1,10 @@
 
 
-include_directories(${CMAKE_SOURCE_DIR}/filters/krita/libkisexiv2 ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata)
-
-set(libkisexiv2_LIB_SRCS
-    ${CMAKE_SOURCE_DIR}/filters/krita/libkisexiv2/kis_exif_io.cpp
-    )
+include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
 set(libkritaconverter_LIB_SRCS
     kis_jpeg_converter.cc
     iccjpeg.c
-    ${libkisexiv2_LIB_SRCS}
     )
 
 set(kritajpegimport_PART_SRCS
@@ -23,7 +18,7 @@ kde4_add_plugin(kritajpegimport WITH_PREFIX ${kritajpegimport_PART_SRCS})
 
 
 
-target_link_libraries(kritajpegimport kritaui jpeg exiv2)
+target_link_libraries(kritajpegimport kritaui jpeg kisexiv2) # link against kisexiv2 to ensure the availability of reading/writing EXIF and IPTC tags
 
 install(TARGETS kritajpegimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -42,7 +37,7 @@ kde4_add_plugin(kritajpegexport WITH_PREFIX ${kritajpegexport_PART_SRCS})
 
 
 
-target_link_libraries(kritajpegexport kritaui jpeg exiv2)
+target_link_libraries(kritajpegexport kritaui jpeg kisexiv2) # link against kisexiv2 to ensure the availability of reading/writing EXIF and IPTC tags
 
 install(TARGETS kritajpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

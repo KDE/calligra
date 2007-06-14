@@ -16,20 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_EXIV2_IO_H_
-#define _KIS_EXIV2_IO_H_
+#ifndef _KIS_IPTC_IO_H_
+#define _KIS_IPTC_IO_H_
 
 #include <kis_meta_data_io_backend.h>
 
 #include <klocale.h>
 
-class KisExifIO : public KisMetaData::IOBackend {
+class KisIptcIO : public KisMetaData::IOBackend {
     struct Private;
     public:
-        KisExifIO();
-        virtual ~KisExifIO() {}
-        virtual QString id() const { return "exif"; }
-        virtual QString name() const { return i18n("Exif"); }
+        KisIptcIO();
+        virtual ~KisIptcIO() {}
+        virtual QString id() const { return "iptc"; }
+        virtual QString name() const { return i18n("Iptc"); }
         virtual BackendType type() const { return Binary; }
         virtual bool supportSaving() const { return true; }
         virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const;
