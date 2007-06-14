@@ -1059,7 +1059,7 @@ static Value convert( const Eigen::MatrixX<double>& eMatrix )
 Value func_mdeterm( valVector args, ValueCalc* calc, FuncExtra* )
 {
     Value matrix = args[0];
-    if ( matrix.columns() != matrix.rows() )
+    if ( matrix.columns() != matrix.rows() || matrix.rows() < 1 )
         return Value::errorVALUE();
 
     const Eigen::MatrixXd eMatrix = convert( matrix, calc );
@@ -1071,7 +1071,7 @@ Value func_mdeterm( valVector args, ValueCalc* calc, FuncExtra* )
 Value func_minverse( valVector args, ValueCalc* calc, FuncExtra* )
 {
     Value matrix = args[0];
-    if ( matrix.columns() != matrix.rows() )
+    if ( matrix.columns() != matrix.rows() || matrix.rows() < 1 )
         return Value::errorVALUE();
 
     Eigen::MatrixXd eMatrix = convert( matrix, calc ),
