@@ -465,11 +465,6 @@ void Layout::resetPrivate() {
 void Layout::updateBorders() {
     Q_ASSERT(m_data);
     m_borderInsets = m_data->shapeMargins();
-    m_borderInsets.top += m_format.doubleProperty(KoParagraphStyle::TopPadding);
-    m_borderInsets.left += m_format.doubleProperty(KoParagraphStyle::LeftPadding);
-    m_borderInsets.bottom += m_format.doubleProperty(KoParagraphStyle::BottomPadding);
-    m_borderInsets.right += m_format.doubleProperty(KoParagraphStyle::RightPadding);
-
     KoTextBlockBorderData border(QRectF(this->x() - listIndent(), m_y + m_borderInsets.top + topMargin(), width(), 1.));
     border.setEdge(border.Left, m_format, KoParagraphStyle::LeftBorderStyle,
         KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
@@ -516,6 +511,12 @@ void Layout::updateBorders() {
         if(m_blockData)
             m_blockData->setBorder(0); // remove an old one, if there was one.
     }
+
+    // add padding inside the border
+    m_borderInsets.top += m_format.doubleProperty(KoParagraphStyle::TopPadding);
+    m_borderInsets.left += m_format.doubleProperty(KoParagraphStyle::LeftPadding);
+    m_borderInsets.bottom += m_format.doubleProperty(KoParagraphStyle::BottomPadding);
+    m_borderInsets.right += m_format.doubleProperty(KoParagraphStyle::RightPadding);
 }
 
 double Layout::topMargin() {
@@ -649,7 +650,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             pen.setWidth(painter->fontMetrics().lineWidth());
             pen.setStyle((Qt::PenStyle) fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle));
             painter->setPen(pen);
-            painter->drawLine(x1, y, x2, y);
+            painter->drawLine(QPointF(x1, y), QPointF(x2, y));
             painter->setPen(penBackup);
         }
 
