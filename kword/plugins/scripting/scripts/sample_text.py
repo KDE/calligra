@@ -11,6 +11,9 @@ doc = KWord.mainFrameSet().document()
 doc.setDefaultStyleSheet(
     (
         "li { margin-left:1em; }"
+        ".my1 { text-transform: lowercase; }"
+        ".my2 { text-transform: uppercase; }"
+        ".my3 { text-transform: capitalize; }"
     )
 )
 
@@ -19,6 +22,11 @@ doc.setHtml(
     (
         "<h1><font color=\"blue\">Python Sample: Text</font></h1>"
         "<p><i>italic</i> and <b>bold</b> and <u>underlined</u> and a <a href=\"test\">link</a></p>."
+
+        "<div class='my1'>lOwErCaSe</div>"
+        "<div class='my2'>uPpErCaSe</div>"
+        "<div class='my3'>capitalize</div>"
+
         "<ul>"
         "<li>Time: <b>%s</b></li>"
         "<li>Operating System: <b>%s</b></li>"
