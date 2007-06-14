@@ -20,10 +20,13 @@
 #include "kis_jpeg_converter.h"
 
 #include <stdio.h>
+#include <stdint.h>
 
 extern "C" {
 #include <iccjpeg.h>
 }
+
+#include <exiv2/jpgimage.hpp>
 
 #include <QFile>
 
@@ -54,6 +57,8 @@ extern "C" {
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
 #define MAX_BYTES_IN_MARKER  65533  /* maximum data len of a JPEG marker */
 #define MAX_DATA_BYTES_IN_MARKER  (MAX_BYTES_IN_MARKER - ICC_OVERHEAD_LEN)
+
+const char photoshopMarker[] = "Photoshop 3.0\0";
 
 namespace {
 
@@ -268,7 +273,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
             continue; /* no Exif header */
         kDebug(41008) << "Found exif information of length : "<< marker->data_length << endl;
-        KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->get("exif");
+        KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
         Q_ASSERT(exifIO);
         QByteArray byteArray( (const char*)marker->data + 6, marker->data_length - 6);
         exifIO->loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
@@ -312,6 +317,47 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         break;
     }
 
+    kDebug(41008) << "Looking for IPTC information" << endl;
+    
+    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
+        kDebug(41008) << "Marker is " << marker->marker << endl;
+        if (marker->marker != (JOCTET) (JPEG_APP0 + 13) ||
+            marker->data_length < 14)
+            continue; /* IPTC data is in an APP13 marker of at least 16 octets */
+
+        if( memcmp(marker->data, photoshopMarker, 14) != 0 )
+        {
+            for(int i = 0; i < 14; i++)
+            {
+                kDebug() << (int)(*(marker->data+2+i)) << " " << (int)(photoshopMarker[i]) << endl;
+            }
+            kDebug(41008) << "No photoshop marker" << endl;
+            break; /* No IPTC Header */
+        }
+        
+        kDebug(41008) << "Found Photoshop information of length : "<< marker->data_length << endl;
+        KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+        Q_ASSERT(iptcIO);
+        const Exiv2::byte *record = 0;
+        uint32_t sizeIptc = 0;
+        uint32_t sizeHdr = 0;
+        // Find actual Iptc data within the APP13 segment
+        if (!Exiv2::Photoshop::locateIptcIrb((Exiv2::byte*)(marker->data + 14),
+                                marker->data_length - 14, &record, &sizeHdr, &sizeIptc ) )
+        {
+            if (sizeIptc) {
+                // Decode the IPTC data
+                QByteArray byteArray( (const char*)(record + sizeHdr), sizeIptc );
+                iptcIO->loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
+            } else {
+                kDebug() << "IPTC Not found in Photoshop marker" << endl;
+            }
+        }
+        break;
+    }
+    // Dump loaded metadata
+    layer->metaData()->debugDump();
+    
     // Finish decompression
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
@@ -413,7 +459,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     {
         kDebug(41008) << "Trying to save exif information" << endl;
         
-        KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->get("exif");
+        KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
         Q_ASSERT(exifIO);
 
         QBuffer buffer;
