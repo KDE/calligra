@@ -1547,9 +1547,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         }
         else if ( valuetype == "date" )
         {
-            QString value = element.attributeNS( KoXmlNS::office, "value", QString() );
-            if ( value.isEmpty() )
-                value = element.attributeNS( KoXmlNS::office, "date-value", QString() );
+            QString value = element.attributeNS( KoXmlNS::office, "date-value", QString() );
             kDebug(36003) << "Type: date, value: " << value << endl;
 
             // "1980-10-15"
@@ -1589,9 +1587,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         }
         else if ( valuetype == "time" )
         {
-            QString value = element.attributeNS( KoXmlNS::office, "value", QString() );
-            if ( value.isEmpty() )
-                value = element.attributeNS( KoXmlNS::office, "time-value", QString() );
+            QString value = element.attributeNS( KoXmlNS::office, "time-value", QString() );
             kDebug(36003) << "Type: time: " << value << endl;
             // "PT15H10M12S"
             int hours = 0, minutes = 0, seconds = 0;
@@ -1637,12 +1633,15 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         }
         else if( valuetype == "string" )
         {
-            QString value = element.attributeNS( KoXmlNS::office, "value", QString() );
-            if ( value.isEmpty() && element.hasAttributeNS( KoXmlNS::office, "string-value" ))
+            if ( element.hasAttributeNS( KoXmlNS::office, "string-value" ))
             {
-                //if there is not string-value entry don't overwrite value stored into <text:p>
-                value = element.attributeNS( KoXmlNS::office, "string-value", QString() );
+                QString value = element.attributeNS( KoXmlNS::office, "string-value", QString() );
                 setValue( Value(value) );
+            }
+            else
+            {
+                // use the paragraph(s) read in before
+                setValue(Value(userInput()));
             }
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
 #if 0
@@ -1653,13 +1652,14 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         }
         else
         {
-            kDebug(36003)<<" type of value found : "<<valuetype<<endl;
+            kDebug(36003) << "  Unknown type. Parsing user input." << endl;
             // Set the value by parsing the user input.
             parseUserInput(userInput());
         }
     }
     else // no value-type attribute
     {
+        kDebug(36003) << "  No value type specified. Parsing user input." << endl;
         // Set the value by parsing the user input.
         parseUserInput(userInput());
     }
