@@ -17,9 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QString>
-
 #include "DatabaseSourceSql.h"
+
+#include <QString>
 
 using namespace KSpread;
 

@@ -17,12 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "DatabaseRange.h"
+
 #include <QString>
 
 #include "DatabaseSource.h"
 #include "Region.h"
-
-#include "DatabaseRange.h"
 
 using namespace KSpread;
 

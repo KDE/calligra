@@ -17,14 +17,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "AutoFilterCommand.h"
+
 #include <klocale.h>
 
 #include "CellStorage.h"
 #include "Sheet.h"
 
 #include "database/DatabaseRange.h"
-
-#include "AutoFilterCommand.h"
 
 using namespace KSpread;
 
