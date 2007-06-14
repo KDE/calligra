@@ -108,7 +108,7 @@ void ChartTypeConfigWidget::open( KoShape* shape )
 
 void ChartTypeConfigWidget::save()
 {
-    d->shape->chart()->coordinatePlane()->replaceDiagram( new KDChart::BarDiagram() );
+//     d->shape->chart()->coordinatePlane()->replaceDiagram( new KDChart::BarDiagram() );
 }
 
 KAction* ChartTypeConfigWidget::createAction()
