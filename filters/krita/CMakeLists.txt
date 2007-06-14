@@ -9,9 +9,9 @@ macro_optional_find_package(PopplerQt4)
 include_directories(${KRITA_INCLUDES})
 
 add_subdirectory( raw )
-  add_subdirectory(libkisexiv2)
-if(EXIV2_FOUND)
 
+if(EXIV2_FOUND)
+  add_subdirectory(libkisexiv2)
 endif(EXIV2_FOUND)
 
 if(JPEG_FOUND AND EXIV2_FOUND)
