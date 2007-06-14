@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_exiv2_io.h"
+#include "kis_exif_io.h"
 
 #include <exiv2/exif.hpp>
 
@@ -34,7 +34,7 @@
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_schema.h>
 
-struct KisExiv2IO::Private {
+struct KisExifIO::Private {
 };
 
 // ---- Generic convertion functions ---- //
@@ -341,12 +341,12 @@ Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
 }
 
 
-// ---- Implementation of KisExiv2IO ----//
-KisExiv2IO::KisExiv2IO() : d(new Private)
+// ---- Implementation of KisExifIO ----//
+KisExifIO::KisExifIO() : d(new Private)
 {
 }
 
-bool KisExiv2IO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice)
+bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice)
 {
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::ExifData exifData;
@@ -440,12 +440,12 @@ bool KisExiv2IO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice)
     return true;
 }
 
-bool KisExiv2IO::canSaveAllEntries(KisMetaData::Store* /*store*/)
+bool KisExifIO::canSaveAllEntries(KisMetaData::Store* /*store*/)
 {
     return false; // It's a known fact that exif can't save all information, but TODO: write the check
 }
 
-bool KisExiv2IO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice)
+bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice)
 {
     ioDevice->open(QIODevice::ReadOnly);
     QByteArray arr = ioDevice->readAll();

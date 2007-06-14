@@ -49,7 +49,7 @@ extern "C" {
 
 #include <colorprofiles/KoIccColorProfile.h>
 
-#include <kis_exiv2_io.h>
+#include <kis_exif_io.h>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
@@ -269,7 +269,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
             continue; /* no Exif header */
         kDebug(41008) << "Found exif information of length : "<< marker->data_length << endl;
-        KisExiv2IO exiv2IO;
+        KisExifIO exiv2IO;
         QByteArray byteArray( (const char*)marker->data + 6, marker->data_length - 6);
         exiv2IO.loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
         // Interpret orientation tag
@@ -412,7 +412,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     if(metaData and not metaData->empty())
     {
         kDebug(41008) << "Trying to save exif information" << endl;
-        KisExiv2IO exiv2IO;
+        KisExifIO exiv2IO;
         
 //                 if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 ||
 //             GETJOCTET (marker->data[1]) != (JOCTET) 0x78 ||

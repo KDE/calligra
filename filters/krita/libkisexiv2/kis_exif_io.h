@@ -21,11 +21,11 @@
 
 #include <kis_meta_data_io_backend.h>
 
-class KisExiv2IO : public KisMetaData::IOBackend {
+class KisExifIO : public KisMetaData::IOBackend {
     struct Private;
     public:
-        KisExiv2IO();
-        virtual ~KisExiv2IO() {}
+        KisExifIO();
+        virtual ~KisExifIO() {}
         virtual BackendType type() { return Binary; }
         virtual bool supportSaving() { return true; }
         virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice);

@@ -3,7 +3,7 @@
 include_directories(${CMAKE_SOURCE_DIR}/filters/krita/libkisexiv2 ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
 set(libkisexiv2_LIB_SRCS
-    ${CMAKE_SOURCE_DIR}/filters/krita/libkisexiv2/kis_exiv2_io.cpp
+    ${CMAKE_SOURCE_DIR}/filters/krita/libkisexiv2/kis_exif_io.cpp
     )
 
 set(libkritaconverter_LIB_SRCS
