@@ -84,6 +84,12 @@ InputStream* KOfficeThroughAnalyzer::connectInputStream( InputStream* in ) {
     if( !in )
         return in;
 
+    return in;
+
+    // Disabled.  See comments in Gnumeric's through analyzer about DOM
+    // usage.
+
+#if 0
     const char *c;
     int nread = in->read( c, in->size(), in->size() );
     in->reset( 0 );
@@ -123,6 +129,8 @@ InputStream* KOfficeThroughAnalyzer::connectInputStream( InputStream* in ) {
                    aboutNode.namedItem( "editing-cycles" ).toElement().text().toInt() );
 
     return in;
+#endif 
+
 }
 
 class Factory : public AnalyzerFactoryFactory {

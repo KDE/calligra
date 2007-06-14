@@ -76,11 +76,27 @@ InputStream* GnumericThroughAnalyzer::connectInputStream( InputStream* in ) {
     if( !in )
         return in;
 
+    // Disabled because constructing a DOM document for every stream
+    // passed through this analyzer is very inefficient in terms of 
+    // processing time and memory usage.
+    //
+    // If the stream is more than a few megabytes in size then it will 
+    // cause the search indexing daemon to grind to a horrible halt
+    // and consume vast amounts of memory. 
+    //
+    // An XML reading approach which consumes little memory ( eg. SAX )
+    // relative to the file size needs to be used instead.
+
+    return in;
+
+#if 0
     const char *c;
     int nread = in->read( c, in->size(), in->size() );
     in->reset( 0 );
     if( nread == -2 )
         return in;
+
+
 
     QDomDocument doc;
     if( !doc.setContent( QByteArray( c, in->size() ) ) )
@@ -122,8 +138,8 @@ InputStream* GnumericThroughAnalyzer::connectInputStream( InputStream* in ) {
 
     // set abstract information
     idx->addValue( factory->abstractField, (const char*)abstract.toUtf8());
+#endif
 
-    return in;
 }
 
 class Factory : public AnalyzerFactoryFactory {

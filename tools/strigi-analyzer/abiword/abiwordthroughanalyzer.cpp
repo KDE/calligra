@@ -77,6 +77,14 @@ void AbiwordThroughAnalyzerFactory::registerFields( FieldRegister& reg ) {
 InputStream* AbiwordThroughAnalyzer::connectInputStream( InputStream* input ) {
     if( !input )
 	return input;
+
+
+    // Disabled.
+    // See comments in the Gnumeric analyzer's connectInputStream() method about
+    // DOM usage.  
+
+    return input;
+#if 0
     const string& path = idx->path();
     QString f(path.c_str());
 
@@ -163,6 +171,7 @@ InputStream* AbiwordThroughAnalyzer::connectInputStream( InputStream* input ) {
 
     delete in;
     return input;
+#endif
 }
 
 class Factory : public AnalyzerFactoryFactory {
