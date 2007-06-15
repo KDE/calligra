@@ -1004,8 +1004,17 @@ void KWView::insertFrameBreak() {
 }
 
 void KWView::editDeleteFrame() {
-    QUndoCommand *cmd = kwcanvas()->shapeController()->removeShapes(
-            kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection));
+    QList<KoShape*> frames;
+    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+        if(frame) {
+            KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+            if(fs && fs->textFrameSetType() != KWord::OtherTextFrameSet)
+                continue; // can't delete auto-generated frames
+        }
+        frames.append(shape);
+    }
+    QUndoCommand *cmd = kwcanvas()->shapeController()->removeShapes(frames);
     m_document->addCommand(cmd);
 }
 
@@ -1125,6 +1134,16 @@ void KWView::selectionChanged()
     m_actionFormatFrameSet->setEnabled( shape != 0 );
     if(shape)
         m_currentPage = m_document->pageManager()->page(shape);
+    m_actionEditDelFrame->setEnabled(false);
+    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+        Q_ASSERT(frame);
+        KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+        if(fs == 0 || fs->textFrameSetType() == KWord::OtherTextFrameSet) {
+            m_actionEditDelFrame->setEnabled(true);
+            break;
+        }
+    }
 }
 
 #include "KWView.moc"
