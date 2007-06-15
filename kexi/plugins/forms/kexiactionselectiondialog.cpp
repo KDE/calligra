@@ -467,7 +467,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
 	d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
 
 	// 2nd column: list of actions/objects
-	d->objectsListView = new KexiBrowser(d->secondAnd3rdColumnMainWidget, 0/*features*/);
+	d->objectsListView = new KexiBrowser(d->secondAnd3rdColumnMainWidget, KexiBrowser::NoFeatures);
 	d->secondAnd3rdColumnGrLyr->addWidget(d->objectsListView, 1, 0);
 	connect(d->objectsListView, SIGNAL(selectionChanged(KexiPart::Item*)),
 		this, SLOT(slotItemForOpeningOrExecutingSelected(KexiPart::Item*)));

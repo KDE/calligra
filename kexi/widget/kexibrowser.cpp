@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -72,7 +72,7 @@ KexiBrowserView::KexiBrowserView(KexiMainWindow *mainWin)
 	setFocusProxy(m_browser);
 }*/
 
-KexiBrowser::KexiBrowser(QWidget* parent, int features)
+KexiBrowser::KexiBrowser(QWidget* parent, Features features)
  : QWidget(parent)
  , m_features(features)
  , m_actions( new KActionCollection(this) )

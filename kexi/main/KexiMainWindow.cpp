@@ -421,6 +421,8 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 #ifdef KEXI_ADD_CUSTOM_KexiMainWindow
 # include "KexiMainWindow_ctor.h"
 #endif
+	
+	setAutoSaveSettings(QLatin1String("MainWindow"), /*saveWindowSize*/true);
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -1742,10 +1744,10 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 	}*/
 
 	//	if (!d->prj->data()->autoopenObjects.isEmpty())
-	d->restoreNavigatorWidth();
+//2.0	d->restoreNavigatorWidth();
 
 	if (d->nav) {
-		d->nav->updateGeometry();
+#warning NEEDED?		d->nav->updateGeometry();
 	}
 	qApp->processEvents();
 	emit projectOpened();
@@ -1875,6 +1877,7 @@ void KexiMainWindow::setupProjectNavigator()
 
 	if (!d->nav) {
 		d->navDockWidget = new QDockWidget(i18n("Project Navigator"), this);
+		d->navDockWidget->setObjectName("ProjectNavigatorDockWidget");
 		addDockWidget( Qt::LeftDockWidgetArea, d->navDockWidget, Qt::Vertical );
 		d->nav = new KexiBrowser(this);
 		d->nav->installEventFilter(this);
@@ -1957,13 +1960,17 @@ void KexiMainWindow::setupPropertyEditor()
 {
 	if (!d->propEditor) {
 //TODO: FIX LAYOUT PROBLEMS
-		d->propEditorTabWidget = new KTabWidget(this);
-		d->propEditorTabWidget->hide();
+		
+		d->propEditorDockWidget = new QDockWidget(i18n("Property Editor"), this);
+		d->propEditorDockWidget->setObjectName("PropertyEditorDockWidget");
+		addDockWidget( Qt::RightDockWidgetArea, d->propEditorDockWidget, Qt::Vertical );
+		d->propEditorTabWidget = new KTabWidget(d->propEditorDockWidget);
+//		d->propEditorTabWidget->hide();
 		d->propEditor = new KexiPropertyEditorView(d->propEditorTabWidget);
 		d->propEditorTabWidget->setWindowTitle(d->propEditor->windowTitle());
 		d->propEditorTabWidget->addTab(d->propEditor, i18n("Properties"));
 		d->propEditor->installEventFilter(this);
-#warning TODO		d->propEditorToolWindow = addToolWindow(d->propEditorTabWidget, KDockWidget::DockRight, getMainDockWidget(), 20);
+		d->propEditorDockWidget->setWidget( d->propEditorTabWidget );
 
 		KConfigGroup propertyEditorGroup( d->config->group("PropertyEditor") );
 		int size = propertyEditorGroup.readEntry<int>("FontSize", -1);
@@ -2121,6 +2128,8 @@ KexiMainWindow::queryExit()
 void
 KexiMainWindow::restoreSettings()
 {
+	return;
+
 	KConfigGroup mainWindowGroup( d->config->group("MainWindow") );
 
 	// Saved settings
@@ -2177,6 +2186,7 @@ KexiMainWindow::restoreSettings()
 void
 KexiMainWindow::storeSettings()
 {
+	return;
 	kDebug() << "KexiMainWindow::storeSettings()" << endl;
 
 //	saveWindowSize( d->config ); //componentData().config() );

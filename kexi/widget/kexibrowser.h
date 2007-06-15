@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -55,7 +55,8 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 	Q_OBJECT
 
 	public:
-		enum Features {
+		enum Feature {
+			NoFeatures = 0,
 			Writable = 1, //!< the browser supports actions that modify the project (e.g. delete, rename)
 			ContextMenus = 2, //!< the browser supports context menu
 			Toolbar = 4, //!< the browser displays 
@@ -63,8 +64,9 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 			DefaultFeatures = Writable | ContextMenus | Toolbar 
 				| SingleClickOpensItemOptionEnabled //!< the default
 		};
+		Q_DECLARE_FLAGS(Features, Feature)
 
-		KexiBrowser(QWidget* parent, int features = DefaultFeatures);
+		KexiBrowser(QWidget* parent, Features features = DefaultFeatures);
 		virtual ~KexiBrowser(); 
 
 		/*! Sets project \a prj for this browser. If \a partManagerErrorMessages is not NULL
@@ -154,7 +156,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		void itemRenameDone();
 		KexiBrowserItem* addItem(KexiPart::Item& item, KexiBrowserItem *parent, KexiPart::Info* info);
 
-		int m_features;
+		Features m_features;
 		KexiBrowserListView *m_list;
 		KActionCollection *m_actions;
 		QHash<QString, KexiBrowserItem*> m_baseItems;
@@ -181,5 +183,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		bool m_singleClick : 1;
 		bool m_readOnly : 1;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiBrowser::Features)
 
 #endif

@@ -204,7 +204,7 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 void
 WidgetLibrary::lookupFactories()
 {
-	KService::List tlist = KServiceTypeTrader::self()->query("Kexi/DBDriver");
+	KService::List tlist = KServiceTypeTrader::self()->query("KFormDesigner/WidgetFactory");
 	KService::List::ConstIterator it(tlist.constBegin()), end( tlist.constEnd() );
 	for(; it != end; ++it) {
 		KService::Ptr ptr = (*it);

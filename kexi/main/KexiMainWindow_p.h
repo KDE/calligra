@@ -300,10 +300,10 @@ void updatePropEditorDockWidthInfo() {
 #endif
 	}
 
-	void restoreNavigatorWidth()
-	{
 //2.0: unused
 #if 0
+	void restoreNavigatorWidth()
+	{
 #if defined(KDOCKWIDGET_P)
 			if (wnd->mdiMode()==KMdi::ChildframeMode || wnd->mdiMode()==KMdi::TabPageMode) {
 				KDockWidget *dw = (KDockWidget *)nav->parentWidget();
@@ -333,8 +333,8 @@ void updatePropEditorDockWidthInfo() {
 			}
 #endif
 
-#endif
 	}
+#endif
 
 	template<class type>
 	type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name)
@@ -448,6 +448,7 @@ void updatePropEditorDockWidthInfo() {
 		KexiBrowser *nav;
 		QDockWidget *navDockWidget;
 		KTabWidget *propEditorTabWidget;
+		QDockWidget *propEditorDockWidget;
 		//! poits to kexi part which has been previously used to setup proppanel's tabs using 
 		//! KexiPart::setupCustomPropertyPanelTabs(), in updateCustomPropertyPanelTabs().
 		QPointer<KexiPart::Part> partForPreviouslySetupPropertyPanelTabs;
