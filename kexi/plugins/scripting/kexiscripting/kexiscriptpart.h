@@ -77,7 +77,7 @@ class KexiScriptPart : public KexiPart::Part
         virtual KexiView* createView(QWidget *parent,
                                          KexiDialogBase* dialog,
                                          KexiPart::Item& item,
-                                         int viewMode = Kexi::DesignViewMode,
+                                         Kexi::ViewMode viewMode = Kexi::DesignViewMode,
                                          QMap<QString,QString>* staticObjectArgs = 0);
 
         /**

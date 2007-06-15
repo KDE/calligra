@@ -43,7 +43,7 @@ KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
 	}
 }
 
-tristate KexiTableDesigner_DataView::beforeSwitchTo(int mode, bool &dontStore)
+tristate KexiTableDesigner_DataView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
 	Q_UNUSED( dontStore );
 
@@ -58,7 +58,7 @@ tristate KexiTableDesigner_DataView::beforeSwitchTo(int mode, bool &dontStore)
 	return true;
 }
 
-tristate KexiTableDesigner_DataView::afterSwitchFrom(int mode)
+tristate KexiTableDesigner_DataView::afterSwitchFrom(Kexi::ViewMode mode)
 {
 	Q_UNUSED( mode );
 

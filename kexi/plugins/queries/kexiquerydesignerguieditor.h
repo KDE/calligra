@@ -81,8 +81,8 @@ class KexiQueryDesignerGuiEditor : public KexiView
 		void initTableRows(); //!< Called to have all rows empty.
 //unused		void addRow(const QString &tbl, const QString &field);
 //		void			restore();
-		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
-		virtual tristate afterSwitchFrom(int mode);
+		virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 		virtual tristate storeData(bool dontAsk = false);

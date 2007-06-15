@@ -93,7 +93,7 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 		virtual bool isDirty() const;
 
 		/*! \return the view mode for this view. */
-		int viewMode() const;
+		Kexi::ViewMode viewMode() const;
 
 		/*! Reimpelmented from KexiActionProxy.
 		 \return shared action with name \a action_name for this view.
@@ -138,7 +138,7 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 		 (probably after showing some info messages), you need to return cancelled.
 		 Set \a dontStore to true (it's false by default) if you want to avoid data storing
 		 by storeData() or storeNewData(). */
-		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
+		virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
 
 		/*! called by KexiWindow::switchToViewMode() right after window is switched to new mode
 		 By default does nothing. Reimplement this if you need to do something
@@ -146,7 +146,7 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 		 \return true if you accept or false if a error occupied and view shouldn't change
 		 If there is no error but switching should be just cancelled
 		 (probably after showing some info messages), you need to return cancelled. */
-		virtual tristate afterSwitchFrom(int mode);
+		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
 		virtual void closeEvent( QCloseEvent * e );
 

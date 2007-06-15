@@ -720,7 +720,7 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
 }
 
 KexiWindow* KexiProject::openObject(KexiPart::Item& item, 
-	int viewMode, QMap<QString,QString>* staticObjectArgs)
+	Kexi::ViewMode viewMode, QMap<QString,QString>* staticObjectArgs)
 {
 	clearError();
 	if (viewMode!=Kexi::DataViewMode && data()->userMode())
@@ -742,7 +742,7 @@ KexiWindow* KexiProject::openObject(KexiPart::Item& item,
 }
 
 KexiWindow* KexiProject::openObject(const QString &mimeType, 
-	const QString& name, int viewMode)
+	const QString& name, Kexi::ViewMode viewMode)
 {
 	KexiPart::Item *it = itemForMimeType(mimeType, name);
 	return it ? openObject(*it, viewMode) : 0;

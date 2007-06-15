@@ -85,7 +85,7 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 		virtual KexiWindowData* createWindowData(KexiWindow* window);
 
 		virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
+			KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		virtual void initPartActions();
 		virtual void initInstanceActions();

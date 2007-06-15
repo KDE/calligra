@@ -44,30 +44,27 @@
 class KexiScriptPart::Private
 {
 	public:
+		Private() : scriptguiclient(0) {}
+		~Private() { delete scriptguiclient; }
+
 		Kross::Api::ScriptGUIClient* scriptguiclient;
 };
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
-	: KexiPart::Part(parent, l)
+	: KexiPart::Part((int)KexiPart::ScriptObjectType, parent, l)
 	, d( new Private() )
 {
-	d->scriptguiclient = 0;
-
-	// REGISTERED ID:
-	m_registeredPartID = (int)KexiPart::ScriptObjectType;
-
-	m_names["instanceName"] 
-		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+	setTranslatedString("instanceName",
+		i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
-		"script");
-	m_names["instanceCaption"] = i18n("Script");
-	m_supportedViewModes = Kexi::DesignViewMode;
+		"script"));
+	setTranslatedString("instanceCaption", i18n("Script"));
+	setSupportedViewModes(Kexi::DesignViewMode);
 }
 
 KexiScriptPart::~KexiScriptPart()
 {
-	delete d->scriptguiclient;
 	delete d;
 }
 
@@ -82,7 +79,8 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 
 	KexiDialogBase* dialog = new KexiDialogBase(m_mainWin);
 	dialog->setId( item->identifier() );
-	KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>( createView(dialog, dialog, *item, Kexi::DesignViewMode) );
+	KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>( 
+		createView(dialog, dialog, *item, Kexi::DesignViewMode) );
 	if(! view) {
 		kWarning() << "KexiScriptPart::execute: Failed to create a view." << endl;
 		return false;
@@ -162,7 +160,8 @@ void KexiScriptPart::initInstanceActions()
 	createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", 0, "script_config_editor");
 }
 
-KexiView* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item, int viewMode, QMap<QString,QString>*)
+KexiView* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item,
+	Kexi::ViewMode viewMode, QMap<QString,QString>*)
 {
 	QString partname = item.name();
 	if( ! partname.isNull() ) {

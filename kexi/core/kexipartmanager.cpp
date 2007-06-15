@@ -66,7 +66,7 @@ bool Manager::lookup()
 			QString("Kexi/Handler")));
 		return false;
 	}
-	KService::List tlist = KMimeTypeTrader::self()->query("Kexi/Handler", 
+	KService::List tlist = KServiceTypeTrader::self()->query("Kexi/Handler", 
 		"[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
 
 	KConfigGroup cg( KGlobal::config()->group("Parts") );
@@ -133,8 +133,8 @@ Part* Manager::part(Info *i)
 			setError(i->errorMessage());
 			return 0;
 		}
-		if (p->m_registeredPartID>0) {
-			i->setProjectPartID( p->m_registeredPartID );
+		if (p->registeredPartID() > 0) {
+			i->setProjectPartID( p->registeredPartID() );
 		}
 		p->setInfo(i);
 		p->setObjectName( QString("%1 part").arg(i->objectName()) );

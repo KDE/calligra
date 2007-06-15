@@ -579,7 +579,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 }
 
 tristate
-KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
+KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
 	kexipluginsdbg << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode << endl;
 
@@ -627,7 +627,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 }
 
 tristate
-KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
+KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
 {
 	const bool was_dirty = isDirty();
 	KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();

@@ -49,8 +49,10 @@ namespace Kexi
 		DesignViewMode = 2,
 		TextViewMode = 4 //!< Also known as SQL View Mode
 	};
+	Q_DECLARE_FLAGS(ViewModes, ViewMode)
+	
 	//! i18n'ed name of view mode \a m
-	KEXICORE_EXPORT QString nameForViewMode(int m);
+	KEXICORE_EXPORT QString nameForViewMode(ViewMode mode);
 
 	//! A set of known connections
 	KEXICORE_EXPORT KexiDBConnectionSet& connset();
@@ -135,6 +137,8 @@ namespace Kexi
 	KEXICORE_EXPORT QString msgYouCanImproveData();
 
 }//namespace Kexi
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 
 //! Displays information that feature "feature_name" is not availabe in the current application version
 KEXICORE_EXPORT void KEXI_UNFINISHED(

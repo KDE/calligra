@@ -21,6 +21,14 @@ TODO: use KCompletionBox in (editable/noneditable) comboboxes
 ===================== Kexi 2.0 Alpha =====================
 
 2007-06-13
+Main Window
+- display Project Navigator
+- display tabs for windows as central widget
+Core
+= widely use Kexi::ViewMode enums instead of int
+= a fix for loading Kexi Parts
+
+2007-06-13
 Startup
 - use KFileWidget in startup dialogs
 = fixed behaviour of the open file dialog

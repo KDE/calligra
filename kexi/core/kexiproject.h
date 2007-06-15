@@ -179,11 +179,11 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 \a staticObjectArgs can be passed for static object 
 		 (only works when part for this item is of type KexiPart::StaticPart) */
 		KexiWindow* openObject(KexiPart::Item& item, 
-			int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
+			Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		//! For convenience
 		KexiWindow* openObject(const QString &mimeType, 
-			const QString& name, int viewMode = Kexi::DataViewMode);
+			const QString& name, Kexi::ViewMode viewMode = Kexi::DataViewMode);
 
 		/*! Remove a part instance pointed by \a item.
 		 \return true on success. */

@@ -444,7 +444,7 @@ KexiFormView::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload,
 }
 
 tristate
-KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
+KexiFormView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
 	if (mode!=viewMode()) {
 		if (viewMode()==Kexi::DataViewMode) {
@@ -482,8 +482,7 @@ KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 	return true;
 }
 
-tristate
-KexiFormView::afterSwitchFrom(int mode)
+tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
 {
 	if (mode == 0 || mode == Kexi::DesignViewMode) {
 		if (window()->neverSaved()) {

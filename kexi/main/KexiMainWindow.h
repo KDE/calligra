@@ -48,6 +48,17 @@ namespace KexiPart {
 class KXMLGUIClient;
 class KXMLGUIFactory;
 
+#include <KTabWidget>
+
+//! @internal tab widget acting as central widget for KexiMainWindow
+class KexiMainWindowTabWidget : public KTabWidget
+{
+	public:
+		KexiMainWindowTabWidget(QWidget *parent);
+		virtual ~KexiMainWindowTabWidget();
+		
+};
+
 /**
  * @short Kexi's main window implementation
  */
@@ -69,16 +80,16 @@ class KEXIMAIN_EXPORT KexiMainWindow
 #warning TODO 	virtual void plugActionList(const QString& name,
 		virtual void plugActionList(const QString& name,
 			const QList<KAction *>& actionList) {}
-			
+
 #warning TODO KXMLGUIClient* guiClient() const;
-		virtual KXMLGUIClient* guiClient() const { return 0; }
+		virtual KXMLGUIClient* guiClient() const;
 
 #warning TODO virtual void unplugActionList (const QString &name);
 		virtual void unplugActionList (const QString &name) {};
   	
   	//! Implemented by KMainWindow
 #warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory();
-		virtual KXMLGUIFactory * guiFactory() { return 0; }
+		virtual KXMLGUIFactory* guiFactory();
 
 
 		/*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
@@ -87,7 +98,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		static int create(int argc, char *argv[], KAboutData* aboutdata = 0);
 
 		//! \return KexiMainWindow singleton (if it is instantiated)
-		static KexiMainWindow* self();
+//		static KexiMainWindow* self();
 
 		//! Project data of currently opened project or NULL if no project here yet.
 		virtual KexiProject *project();
@@ -112,7 +123,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		/*! \return true if opening of item \a item in \a viewMode mode is allowed. 
 		 userMode() is taken into account as well 
 		 as KexiPart::Part::supportedUserViewModes() for \a  item. */
-		bool openingAllowed(KexiPart::Item* item, int viewMode);
+		bool openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode);
 
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
@@ -158,13 +169,13 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 \a openingCancelled is set to true is opening has been cancelled. 
 		 \a errorMessage, if not 0, points to a string that can be set to error message
 		 if one encountered. */
-		virtual KexiWindow* openObject(KexiPart::Item *item, int viewMode, 
+		virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode, 
 			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0,
 			QString* errorMessage = 0);
 
 		//! For convenience
 		virtual KexiWindow* openObject(const Q3CString& mime, const QString& name, 
-			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0);
+			Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0);
 
 		/*! Closes the object for \a item. 
 		 \return true on success (closing can be dealyed though), false on failure and cancelled 
@@ -255,30 +266,28 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		void projectOpened();
 
 	protected:
-		/*! Initialises the User Mode: constructs window according to kexi__final database
+		/*! Setups the User Mode: constructs window according to kexi__final database
 		 and loads the specified part.
 		 \return true on success or false if e.g. kexi__final does not exist
 		 or a fatal exception happened */
-		bool initUserMode(KexiProjectData *projectData);
+		bool setupUserMode(KexiProjectData *projectData);
 
-		/*!
-		 Creates navigator (if it's not yet created),
-		 lookups items for current project and fills the nav. with not-opened items
-		 */
-		void initNavigator();
+		/*! Creates the Project Navigator (if it's not yet created),
+		 lookups items for current project and fills the nav. with not-opened items */
+		void setupProjectNavigator();
 
-		void initContextHelp();
+		void setupContextHelp();
 
-		void initPropertyEditor();
+		void setupPropertyEditor();
 
 		//! reimplementation of events
 //		virtual void	closeEvent(QCloseEvent *);
 
 		/*! Creates standard actions like new, open, save ... */
-		void initActions();
+		void setupActions();
 
 		/*! Creates user project-wide actions */
-		void initUserActions();
+		void setupUserActions();
 
 		/*! Sets up the window from user settings (e.g. mdi mode). */
 		void restoreSettings();
@@ -341,7 +350,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		virtual bool queryExit();
 
 		/*! Helper: switches to view \a mode. */
-		bool switchToViewMode(int viewMode);
+		bool switchToViewMode(Kexi::ViewMode viewMode);
 
 		/*! Helper. Removes and/or adds GUI client for current window's view;
 		 on switching to other window (activeWindowChanged())
@@ -350,10 +359,11 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 		/*! Helper. Updates setup of property panel's tabs. Used when switching
 		 from \a prevWindow window to a current window.	*/
-		void updateCustomPropertyPanelTabs(KexiWindow *prevWindow, int prevViewMode);
+		void updateCustomPropertyPanelTabs(KexiWindow *prevWindow, Kexi::ViewMode prevViewMode);
 
 		/*! @overload void updateCustomPropertyPanelTabs(KexiWindow *prevWindow, int prevViewMode) */
-		void updateCustomPropertyPanelTabs( KexiPart::Part *prevWindowPart, int prevViewMode, KexiPart::Part *curWindowPart, int curViewMode );
+		void updateCustomPropertyPanelTabs( KexiPart::Part *prevWindowPart, 
+			Kexi::ViewMode prevViewMode, KexiPart::Part *curWindowPart, Kexi::ViewMode curViewMode );
 
 		/*! Used in openProject when running another Kexi process is required. */
 		tristate openProjectInExternalKexiInstance(const QString& aFileName, KexiDB::ConnectionData *cdata, const QString& dbName);
@@ -387,10 +397,11 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 This differs from openObject() signal in that if the object is already opened
 		 in view mode other than \a viewMode, the mode is not changed.
 		 \sa KexiBrowser::openOrActivateItem() */
-		KexiWindow* openObjectFromNavigator(KexiPart::Item* item, int viewMode, bool &openingCancelled);
+		KexiWindow* openObjectFromNavigator(KexiPart::Item* item, 
+			Kexi::ViewMode viewMode, bool &openingCancelled);
 
 		//! For convenience
-		KexiWindow* openObjectFromNavigator(KexiPart::Item* item, int viewMode);
+		KexiWindow* openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode viewMode);
 
 		/*! Creates new object of type defined by \a info part info. 
 		 \a openingCancelled is set to true is opening has been cancelled. 
@@ -404,7 +415,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		}
 
 		//! For convenience
-		KexiWindow* openObject(KexiPart::Item *item, int viewMode,
+		KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
 			QMap<QString,QString>* staticObjectArgs = 0)
 		{
 			bool openingCancelled;

@@ -53,18 +53,22 @@ class KexiWindow::Private
 		, isRegistered(false)
 		, disableDirtyChanged(false)
 		{
-			supportedViewModes = 0; //will be set by KexiPart
-			openedViewModes = 0;
+			supportedViewModes = Kexi::NoViewMode; //will be set by KexiPart
+			openedViewModes = Kexi::NoViewMode;
 			currentViewMode = Kexi::NoViewMode; //no view available yet
-			creatingViewsMode = -1;
+			creatingViewsMode = Kexi::NoViewMode;
 			id = -1;
 			item = 0;
 		}
 		
-		QMap<int, int> indexForView;
-		int supportedViewModes;
-		int openedViewModes;
-		int currentViewMode;
+		inline int indexForView( int mode ) const
+			{ return indicesForViews.value(mode); }
+		inline void setIndexForView( Kexi::ViewMode mode, int idx )
+			{ indicesForViews.insert((int)mode, idx); }
+		
+		Kexi::ViewMode supportedViewModes;
+		Kexi::ViewModes openedViewModes;
+		Kexi::ViewMode currentViewMode;
 		
 //		KexiMainWindow *parentWindow;
 #ifdef KEXI_NO_CTXT_HELP
@@ -83,16 +87,19 @@ class KexiWindow::Private
 
 		/*! Created view's mode - helper for switchToViewMode(),
 		 KexiView ctor uses that info. >0 values are useful. */
-		int creatingViewsMode;
+		Kexi::ViewMode creatingViewsMode;
 
 		bool isRegistered : 1;
 		bool disableDirtyChanged : 1; //!< used in setDirty(), affects dirtyChanged()
+		
+	protected:
+		QHash<int, int> indicesForViews;
 };
 
 //----------------------------------------------------------
 
 KexiWindow::KexiWindow(/*const QString &caption, */ QWidget *parent,
-	int supportedViewModes, KexiPart::Part& part,	KexiPart::Item& item)
+	Kexi::ViewModes supportedViewModes, KexiPart::Part& part,	KexiPart::Item& item)
 // : KexiMdiChildView(parent, caption)
  : QStackedWidget(parent)
  , KexiActionProxy(this, KexiMainWindowIface::global())
@@ -148,20 +155,20 @@ KexiView *KexiWindow::selectedView() const
 	return static_cast<KexiView*>( currentWidget() );
 }
 
-KexiView *KexiWindow::viewForMode(int mode) const
+KexiView *KexiWindow::viewForMode(Kexi::ViewMode mode) const
 {
-	return static_cast<KexiView*>( widget( d->indexForView[mode] ) );
+	return static_cast<KexiView*>( widget( d->indexForView(mode) ) );
 }
 
 void KexiWindow::addView(KexiView *view)
 {
-	addView(view,0);
+	addView(view, Kexi::NoViewMode);
 }
 
-void KexiWindow::addView(KexiView *view, int mode)
+void KexiWindow::addView(KexiView *view, Kexi::ViewMode mode)
 {
 	const int idx = addWidget(view);
-	d->indexForView[ mode ] = idx;
+	d->setIndexForView( mode, idx );
 
 	//set focus proxy inside this view
 	QWidget *ch = KexiUtils::findFirstChild<QWidget*>(view, "QWidget");
@@ -171,7 +178,7 @@ void KexiWindow::addView(KexiView *view, int mode)
 	d->openedViewModes |= mode;
 }
 
-void KexiWindow::removeView(int mode)
+void KexiWindow::removeView(Kexi::ViewMode mode)
 {
 	KexiView *view = viewForMode(mode);
 	if (view)
@@ -213,17 +220,17 @@ KexiPart::Item *KexiWindow::partItem() const
 	return d->item;
 }
 
-bool KexiWindow::supportsViewMode( int mode ) const
+bool KexiWindow::supportsViewMode( Kexi::ViewMode mode ) const
 {
 	return d->supportedViewModes & mode;
 }
 
-int KexiWindow::supportedViewModes() const
+Kexi::ViewModes KexiWindow::supportedViewModes() const
 {
 	return d->supportedViewModes;
 }
 
-int KexiWindow::currentViewMode() const
+Kexi::ViewMode KexiWindow::currentViewMode() const
 {
 	return d->currentViewMode;
 }
@@ -331,7 +338,7 @@ bool KexiWindow::isDirty() const
 	int m = d->openedViewModes, mode = 1;
 	while (m>0) {
 		if (m & 1) {
-			if (static_cast<KexiView*>(widget( d->indexForView[mode] ))->isDirty())
+			if (static_cast<KexiView*>(widget( d->indexForView(mode) ))->isDirty())
 				return true;
 		}
 		m >>= 1;
@@ -346,7 +353,7 @@ void KexiWindow::setDirty(bool dirty)
 	int m = d->openedViewModes, mode = 1;
 	while (m>0) {
 		if (m & 1) {
-			static_cast<KexiView*>(widget( d->indexForView[mode] ))->setDirty(dirty);
+			static_cast<KexiView*>(widget( d->indexForView(mode) ))->setDirty(dirty);
 		}
 		m >>= 1;
 		mode <<= 1;
@@ -369,7 +376,7 @@ QString KexiWindow::itemIcon()
 
 KexiPart::GUIClient* KexiWindow::guiClient() const
 {
-	if (!d->part || d->currentViewMode<1)
+	if (!d->part || d->currentViewMode == 0)
 		return 0;
 	return d->part->instanceGuiClient(d->currentViewMode);
 }
@@ -378,17 +385,18 @@ KexiPart::GUIClient* KexiWindow::commonGUIClient() const
 {
 	if (!d->part)
 		return 0;
-	return d->part->instanceGuiClient(0);
+	return d->part->instanceGuiClient(Kexi::AllViewModes);
 }
 
-bool KexiWindow::isDesignModePreloadedForTextModeHackUsed(int newViewMode) const
+bool KexiWindow::isDesignModePreloadedForTextModeHackUsed(Kexi::ViewMode newViewMode) const
 {
 	return newViewMode==Kexi::TextViewMode 
 		&& !viewForMode(Kexi::DesignViewMode) 
 		&& supportsViewMode(Kexi::DesignViewMode);
 }
 
-tristate KexiWindow::switchToViewMode( int newViewMode, 
+tristate KexiWindow::switchToViewMode(
+	Kexi::ViewMode newViewMode, 
 	QMap<QString,QString>* staticObjectArgs,
 	bool& proposeOpeningInTextViewModeBecauseOfProblems)
 {
@@ -433,9 +441,9 @@ tristate KexiWindow::switchToViewMode( int newViewMode,
 
 	//get view for viewMode
 	KexiView *newView 
-		= (widget( d->indexForView[newViewMode] ) 
-			&& widget( d->indexForView[newViewMode] )->inherits("KexiView"))
-		? static_cast<KexiView*>(widget( d->indexForView[newViewMode] )) : 0;
+		= (widget( d->indexForView(newViewMode) ) 
+			&& widget( d->indexForView(newViewMode) )->inherits("KexiView"))
+		? static_cast<KexiView*>(widget( d->indexForView(newViewMode) )) : 0;
 	if (!newView) {
 		KexiUtils::setWaitCursor();
 		//ask the part to create view for the new mode
@@ -452,10 +460,10 @@ tristate KexiWindow::switchToViewMode( int newViewMode,
 				<< d->currentViewMode << " restored." << endl;
 			return false;
 		}
-		d->creatingViewsMode = -1;
+		d->creatingViewsMode = Kexi::NoViewMode;
 		addView(newView, newViewMode);
 	}
-	const int prevViewMode = d->currentViewMode;
+	const Kexi::ViewMode prevViewMode = d->currentViewMode;
 	res = true;
 	if (designModePreloadedForTextModeHack) {
 		d->currentViewMode = Kexi::NoViewMode; //SAFE?
@@ -499,7 +507,7 @@ tristate KexiWindow::switchToViewMode( int newViewMode,
 	if (view)
 		takeActionProxyChild( view ); //take current proxy child
 	addActionProxyChild( newView ); //new proxy child
-	setCurrentIndex( d->indexForView[newViewMode] );
+	setCurrentIndex( d->indexForView(newViewMode) );
 	newView->propertySetSwitched();
 	KexiMainWindowIface::global()->invalidateSharedActions( newView );
 	QTimer::singleShot(10, newView, SLOT(setFocus())); //newView->setFocus(); //js ok?
@@ -507,7 +515,7 @@ tristate KexiWindow::switchToViewMode( int newViewMode,
 	return true;
 }
 
-tristate KexiWindow::switchToViewMode( int newViewMode )
+tristate KexiWindow::switchToViewMode(Kexi::ViewMode newViewMode)
 {
 	bool dummy;
 	return switchToViewMode( newViewMode, 0, dummy );
@@ -779,7 +787,7 @@ void KexiWindow::sendAttachedStateToCurrentView()
 		v->windowAttached();
 }
 
-int KexiWindow::creatingViewsMode() const
+Kexi::ViewMode KexiWindow::creatingViewsMode() const
 {
 	return d->creatingViewsMode;
 }

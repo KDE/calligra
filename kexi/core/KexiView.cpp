@@ -40,7 +40,7 @@ class KexiView::Private
 		: viewWidget(0)
 		, parentView(0)
 		, newlyAssignedID(-1)
-		, viewMode(0) //unknown!
+		, viewMode(Kexi::NoViewMode) //unknown!
 		, isDirty(false)
 		{
 		}
@@ -60,7 +60,7 @@ class KexiView::Private
 
 		/*! Mode for this view. Initialized by KexiWindow::switchToViewMode().
 		 Can be useful when single class is used for more than one view (e.g. KexiDBForm). */
-		int viewMode;
+		Kexi::ViewMode viewMode;
 
 		QList<KexiView*> children;
 
@@ -102,7 +102,7 @@ bool KexiView::isDirty() const
 	return d->isDirty;
 }
 
-int KexiView::viewMode() const
+Kexi::ViewMode KexiView::viewMode() const
 {
 	return d->viewMode;
 }
@@ -112,14 +112,14 @@ KexiPart::Part* KexiView::part() const
 	return d->window ? d->window->part() : 0;
 }
 
-tristate KexiView::beforeSwitchTo(int mode, bool & dontStore)
+tristate KexiView::beforeSwitchTo(Kexi::ViewMode mode, bool & dontStore)
 {
 	Q_UNUSED(mode);
 	Q_UNUSED(dontStore);
 	return true;
 }
 
-tristate KexiView::afterSwitchFrom(int mode)
+tristate KexiView::afterSwitchFrom(Kexi::ViewMode mode)
 {
 	Q_UNUSED(mode);
 	return true;

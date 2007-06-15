@@ -50,8 +50,8 @@ class KexiQueryDesignerSQLView : public KexiView
 	protected:
 		KexiQueryPart::TempData * tempData() const;
 
-		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
-		virtual tristate afterSwitchFrom(int mode);
+		virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 		virtual tristate storeData(bool dontAsk = false);
 

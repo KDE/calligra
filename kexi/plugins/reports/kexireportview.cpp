@@ -246,7 +246,7 @@ KexiReportView::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload)
 }
 
 tristate
-KexiReportView::beforeSwitchTo(int mode, bool &dontStore)
+KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
 	if (mode!=viewMode() && viewMode()!=Kexi::DataViewMode) {
 		//remember our pos
@@ -263,7 +263,7 @@ KexiReportView::beforeSwitchTo(int mode, bool &dontStore)
 }
 
 tristate
-KexiReportView::afterSwitchFrom(int mode)
+KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 {
 	if (mode != 0 && mode != Kexi::DesignViewMode) {
 		//preserve contents pos after switching to other view

@@ -58,21 +58,18 @@ class KexiTablePart::Private
 };
 
 KexiTablePart::KexiTablePart(QObject *parent, const QStringList &l)
- : KexiPart::Part(parent, l)
+ : KexiPart::Part( (int)KexiPart::TableObjectType, parent, l)
  , d(new Private())
 {
-	// REGISTERED ID:
-	m_registeredPartID = (int)KexiPart::TableObjectType;
-
 	kDebug() << "KexiTablePart::KexiTablePart()" << endl;
-	m_names["instanceName"] 
-		= i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+	setTranslatedString("instanceName",
+		i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
-		"table");
-	m_names["instanceCaption"] = i18n("Table");
-	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
-//js TODO: also add Kexi::TextViewMode when we'll have SQL ALTER TABLE EDITOR!!!
+		"table"));
+	setTranslatedString("instanceCaption", i18n("Table"));
+	setSupportedViewModes( Kexi::DataViewMode | Kexi::DesignViewMode );
+//! @todo js: also add Kexi::TextViewMode when we'll have SQL ALTER TABLE EDITOR!!!
 }
 
 KexiTablePart::~KexiTablePart()
@@ -100,7 +97,7 @@ KexiWindowData* KexiTablePart::createWindowData(KexiWindow* window)
 }
 
 KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window, 
-	KexiPart::Item &item, int viewMode, QMap<QString,QString>*)
+	KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QString>*)
 {
 	KexiMainWindowIface *win = KexiMainWindowIface::global();
 	if (!win || !win->project() || !win->project()->dbConnection())
@@ -162,7 +159,8 @@ tristate KexiTablePart::rename(KexiPart::Item & item,
 }
 
 KexiDB::SchemaData*
-KexiTablePart::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata, int viewMode)
+KexiTablePart::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+	Kexi::ViewMode viewMode)
 {
 	Q_UNUSED( viewMode );
 	return KexiMainWindowIface::global()->project()->dbConnection()->tableSchema( sdata.name() );

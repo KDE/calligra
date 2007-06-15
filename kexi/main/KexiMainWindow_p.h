@@ -33,14 +33,22 @@ public:
 //		: dialogs(401)
 		: wnd(w)
 	{
-		actionCollection=new KActionCollection(w);
+		dummy_KXMLGUIClient = new KXMLGUIClient();
+		dummy_KXMLGUIFactory = new KXMLGUIFactory(0);
+		
+		actionCollection = new KActionCollection(w);
 		propEditor=0;
 //2.0: unused				propEditorToolWindow=0;
 //2.0: unused				propEditorTabWidget=0;
-		userMode = false;
+		KexiProjectData *pdata = Kexi::startupHandler().projectData();
+		userMode = Kexi::startupHandler().forcedUserMode() /* <-- simply forced the user mode */
+		/* project has 'user mode' set as default and not 'design mode' override is found: */
+		|| (pdata && pdata->userMode() && !Kexi::startupHandler().forcedDesignMode());
+		isProjectNavigatorVisible = Kexi::startupHandler().isProjectNavigatorVisible();
 		nav=0;
 //2.0: unused				navToolWindow=0;
 		prj = 0;
+		config = KGlobal::config();
 		curWindowGUIClient=0;
 		curWindowViewGUIClient=0;
 		closedWindowGUIClient=0;
@@ -191,7 +199,7 @@ public:
 	{
 		if (curWindow.isNull())
 			return;
-		KToggleAction *ta = actions_for_view_modes.value( curWindow->currentViewMode() );
+		KToggleAction *ta = actions_for_view_modes.value( (int)curWindow->currentViewMode() );
 		if (ta)
 			ta->setChecked(true);
 //		if (!last_checked_mode)
@@ -265,7 +273,7 @@ void updatePropEditorDockWidthInfo() {
 		}
 	}
 
-	void updatePropEditorVisibility(int viewMode)
+	void updatePropEditorVisibility(Kexi::ViewMode viewMode)
 	{
 #warning TODO updatePropEditorVisibility
 #if 0 //TODO reenable
@@ -425,7 +433,11 @@ void updatePropEditorDockWidthInfo() {
 		return dynamic_cast<KexiSearchAndReplaceViewInterface*>(view);
 	}
 
+		KXMLGUIClient* dummy_KXMLGUIClient;
+		KXMLGUIFactory* dummy_KXMLGUIFactory;
+
 		KexiMainWindow *wnd;
+		KexiMainWindowTabWidget *tabWidget;
 		KActionCollection *actionCollection;
 		KexiStatusBar *statusBar;
 		KexiProject *prj;
@@ -434,6 +446,7 @@ void updatePropEditorDockWidthInfo() {
 		KexiContextHelp *ctxHelp;
 #endif
 		KexiBrowser *nav;
+		QDockWidget *navDockWidget;
 		KTabWidget *propEditorTabWidget;
 		//! poits to kexi part which has been previously used to setup proppanel's tabs using 
 		//! KexiPart::setupCustomPropertyPanelTabs(), in updateCustomPropertyPanelTabs().

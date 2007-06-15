@@ -60,9 +60,8 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		KexiMainWindowIface();
 		virtual ~KexiMainWindowIface();
 
-//		//! \return KexiMainWindowImpl global singleton (if it is instantiated)
-#warning TODO static KexiMainWindowImpl* global()
-		static KexiMainWindowIface* global() { return 0; }
+		//! \return KexiMainWindowImpl global singleton (if it is instantiated)
+		static KexiMainWindowIface* global();
 		
 		QWidget* thisWidget() { return dynamic_cast<QWidget*>(this); }
 
@@ -134,13 +133,13 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		virtual bool newObject( KexiPart::Info *info, bool& openingCancelled ) = 0;
 
 		//! Opens object pointed by \a item in a view \a viewMode
-		virtual KexiWindow* openObject(KexiPart::Item *item, int viewMode,
+		virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
 			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0,
 			QString* errorMessage = 0) = 0;
 
 		//! For convenience
 		virtual KexiWindow* openObject(const Q3CString& mime, const QString& name, 
-			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
+			Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		/*! Closes the object for \a item. 
 		 \return true on success (closing can be dealyed though), false on failure and cancelled 

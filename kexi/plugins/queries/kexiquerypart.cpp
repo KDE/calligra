@@ -40,18 +40,15 @@
 //------------------------------------------------
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const QStringList &l)
- : KexiPart::Part(parent, l)
+ : KexiPart::Part((int)KexiPart::QueryObjectType, parent, l)
 {
-	// REGISTERED ID:
-	m_registeredPartID = (int)KexiPart::QueryObjectType;
-
-	m_names["instanceName"] 
-		= i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+	setTranslatedString("instanceName",
+		i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
-		"query");
-	m_names["instanceCaption"] = i18n("Query");
-	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode;
+		"query"));
+	setTranslatedString("instanceCaption", i18n("Query"));
+	setSupportedViewModes( Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode );
 }
 
 KexiQueryPart::~KexiQueryPart()
@@ -68,7 +65,7 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
 }
 
 KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPart::Item &item, 
-	int viewMode, QMap<QString,QString>*)
+	Kexi::ViewMode viewMode, QMap<QString,QString>*)
 {
 	Q_UNUSED( item );
 	Q_UNUSED( window );
@@ -165,7 +162,7 @@ void KexiQueryPart::initInstanceActions()
 }
 
 KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
-	KexiWindow *window, const KexiDB::SchemaData& sdata, int viewMode)
+	KexiWindow *window, const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode)
 {
 	KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window->data());
 	QString sqlText;

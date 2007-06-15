@@ -82,21 +82,18 @@ class KexiFormPart::Private
 };
 
 KexiFormPart::KexiFormPart(QObject *parent, const QStringList &l)
- : KexiPart::Part(parent, l)
+ : KexiPart::Part((int)KexiPart::FormObjectType, parent, l)
  , d(new Private())
 {
-	// REGISTERED ID:
-	m_registeredPartID = (int)KexiPart::FormObjectType;
-
 	kexipluginsdbg << "KexiFormPart::KexiFormPart()" << endl;
-	m_names["instanceName"]
-		= i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+	setTranslatedString("instanceName",
+		i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.",
-		"form");
-	m_names["instanceCaption"] = i18n("Form");
-	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
-	m_newObjectsAreDirty = true;
+		"form"));
+	setTranslatedString("instanceCaption", i18n("Form"));
+	setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
+	setNewObjectsAreDirty(true);
 
 	// Only create form manager if it's not yet created.
 	// KexiReportPart could have created it already.
@@ -266,7 +263,7 @@ KexiFormPart::createWindowData(KexiWindow* window)
 }
 
 KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
-	KexiPart::Item &item, int viewMode, QMap<QString,QString>*)
+	KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QString>*)
 {
 	Q_UNUSED( window );
 	Q_UNUSED( viewMode );

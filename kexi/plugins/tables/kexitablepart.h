@@ -69,14 +69,15 @@ class KexiTablePart : public KexiPart::Part
 		virtual KexiWindowData* createWindowData(KexiWindow* window);
 
 		virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
+			KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
 		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
-		virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata, int viewMode);
+		virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+			Kexi::ViewMode viewMode);
 
 	private:
 		class Private;

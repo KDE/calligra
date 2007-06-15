@@ -100,7 +100,7 @@ class KexiQueryPart : public KexiPart::Part
 		virtual KexiWindowData* createWindowData(KexiWindow* window);
 
 		virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode,
+			KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
 			QMap<QString,QString>* staticObjectArgs = 0);
 
 //		virtual void initPartActions( KActionCollection *col );
@@ -110,7 +110,7 @@ class KexiQueryPart : public KexiPart::Part
 		virtual void initInstanceActions();
 
 		virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, 
-			const KexiDB::SchemaData& sdata, int viewMode);
+			const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode);
 };
 
 #endif

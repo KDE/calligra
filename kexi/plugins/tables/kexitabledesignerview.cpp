@@ -601,7 +601,7 @@ void KexiTableDesignerView::switchPrimaryKey(KoProperty::Set &propertySet,
 	propertyBufferSwitched();
 }*/
 
-tristate KexiTableDesignerView::beforeSwitchTo(int mode, bool &dontStore)
+tristate KexiTableDesignerView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
 	if (!d->view->acceptRowEdit())
 		return false;
@@ -652,7 +652,7 @@ tristate KexiTableDesignerView::beforeSwitchTo(int mode, bool &dontStore)
 	return res;
 }
 
-tristate KexiTableDesignerView::afterSwitchFrom(int mode)
+tristate KexiTableDesignerView::afterSwitchFrom(Kexi::ViewMode mode)
 {
 	if (mode==Kexi::NoViewMode || mode==Kexi::DataViewMode) {
 		initData();

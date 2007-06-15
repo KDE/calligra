@@ -147,12 +147,12 @@ QFont Kexi::smallFont(QWidget *init)
 }
 
 //--------------------------------------------------------------------------------
-QString Kexi::nameForViewMode(int m)
+QString Kexi::nameForViewMode(ViewMode mode)
 {
-	if (m==NoViewMode) return i18n("No View");
-	else if (m==DataViewMode) return i18n("Data View");
-	else if (m==DesignViewMode) return i18n("Design View");
-	else if (m==TextViewMode) return i18n("Text View");
+	if (mode==NoViewMode) return i18n("No View");
+	else if (mode==DataViewMode) return i18n("Data View");
+	else if (mode==DesignViewMode) return i18n("Design View");
+	else if (mode==TextViewMode) return i18n("Text View");
 
 	return i18n("Unknown");
 }

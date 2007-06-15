@@ -46,20 +46,18 @@
 KFormDesigner::WidgetLibrary* KexiReportPart::static_reportsLibrary = 0L;
 
 KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
- : KexiPart::Part(parent, l)
+ : KexiPart::Part((int)KexiPart::ReportObjectType, parent, l)
 {
-	// REGISTERED ID:
-	m_registeredPartID = (int)KexiPart::ReportObjectType;
-
 	kexipluginsdbg << "KexiReportPart::KexiReportPart()" << endl;
-	m_names["instanceName"] 
-		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+	setTranslatedString("instanceName",
+		i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
-		"report");
-	m_names["instanceCaption"] = i18n("Report");
-	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
-
+		"report"));
+	setTranslatedString("instanceCaption", i18n("Report"));
+	setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
+	setNewObjectsAreDirty(true);
+	
 	// Only create form manager if it's not yet created.
 	// KexiFormPart could have created is already.
 	KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
@@ -104,7 +102,7 @@ KexiReportPart::createWindowData(KexiWindow* window)
 
 KexiView*
 KexiReportPart::createView(QWidget *parent, KexiWindow* window,
-	KexiPart::Item &item, int, QMap<QString,QString>*)
+	KexiPart::Item &item, Kexi::ViewMode mode, QMap<QString,QString>*)
 {
 	kexipluginsdbg << "KexiReportPart::createView()" << endl;
 	KexiMainWindow *win = KexiMainWindowIface::global();

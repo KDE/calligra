@@ -133,8 +133,8 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 //moved to formmanager		void setRedoEnabled(bool enabled);
 
 	protected:
-		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
-		virtual tristate afterSwitchFrom(int mode);
+		virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 		virtual KoProperty::Set* propertySet() { return m_propertySet; }
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);

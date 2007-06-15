@@ -22,12 +22,21 @@
 
 #include <kdebug.h>
 
+//K_GLOBAL_STATIC(KexiMainWindow, kexiMainWindow)
+#warning not threadsafe
+KexiMainWindowIface* kexiMainWindow = 0;
+
 KexiMainWindowIface::KexiMainWindowIface()
  : KexiSharedActionHost(this)
 {
+	kexiMainWindow = this; //for singleton
 }
 
 KexiMainWindowIface::~KexiMainWindowIface()
 {
 }
 
+KexiMainWindowIface* KexiMainWindowIface::global()
+{
+	return kexiMainWindow;
+}

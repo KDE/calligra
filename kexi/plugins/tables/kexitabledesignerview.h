@@ -184,9 +184,9 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 		 \return newly created property set. */
 		KoProperty::Set* createPropertySet( int row, const KexiDB::Field& field, bool newOne = false );
 
-		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
+		virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
 
-		virtual tristate afterSwitchFrom(int mode);
+		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
 		/*! \return property set associated with currently selected row (i.e. field)
 		 or 0 if current row is empty. */

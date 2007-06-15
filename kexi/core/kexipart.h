@@ -65,9 +65,8 @@ class KEXICORE_EXPORT Part : public QObject
 	Q_OBJECT
 
 	public:
-		/*! Constructor. */
-		Part(QObject *parent, const QStringList &);
-		/*! Destructor. */
+		Part(int partID, QObject *parent, const QStringList &);
+		
 		virtual ~Part();
 
 //! @todo make it protected, outside world should use KexiProject
@@ -92,22 +91,22 @@ class KEXICORE_EXPORT Part : public QObject
 		 or Kexi::DesignViewMode in case of Kexi::PartStaticPart object.
 		 This information is used to set supported view modes for every 
 		 KexiView-derived object created by this KexiPart. */
-		inline int supportedViewModes() const { return m_supportedViewModes; }
-
+		Kexi::ViewModes supportedViewModes() const;
+		
 		/*! \return supported modes for dialogs created by this part in "user mode", i.e. a combination
 		 of Kexi::ViewMode enum elements.
 		 Set this member in your KexiPart subclass' ctor, if you need to override the default value
 		 that equals Kexi::DataViewMode. or 0 in case of Kexi::PartStaticPart object.
 		 This information is used to set supported view modes for every 
 		 KexiView-derived object created by this KexiPart. */
-		inline int supportedUserViewModes() const { return m_supportedUserViewModes; }
+		Kexi::ViewModes supportedUserViewModes() const;
 
 //! @todo make it protected, outside world should use KexiProject
 		/*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode. 
 		 \a viewMode is one of Kexi::ViewMode enum. 
 		 \a staticObjectArgs can be passed for static Kexi Parts. */
 		KexiWindow* openInstance(KexiPart::Item &item, 
-			int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
+			Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 //! @todo make it protected, outside world should use KexiProject
 		/*! Removes any stored data pointed by \a item (example: table is dropped for table part). 
@@ -148,7 +147,7 @@ class KEXICORE_EXPORT Part : public QObject
 		/*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be 
 		 used inside \a dialog. */
 		virtual KexiView* createView(QWidget *parent, KexiWindow *window, 
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0) = 0;
+			KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		/*! i18n'd instance name usable for displaying in gui as object's name.
 		 The name is valid identifier - contains latin1 lowercase characters only.
@@ -161,16 +160,15 @@ class KEXICORE_EXPORT Part : public QObject
 		 to service's .desktop file. */
 		QString instanceCaption() const;
 
-		inline Info *info() const { return m_info; }
+		Info *info() const;
 
 		/*! \return part's GUI Client, so you can 
 		 create part-wide actions using this client. */
-		inline GUIClient *guiClient() const { return m_guiClient; }
+		GUIClient *guiClient() const;
 
 		/*! \return part's GUI Client, so you can 
 		 create instance-wide actions using this client. */
-		inline GUIClient *instanceGuiClient(int mode = 0) const
-			{ return m_instanceGuiClients[mode]; }
+		GUIClient *instanceGuiClient(Kexi::ViewMode mode = Kexi::AllViewModes) const;
 
 #if 0
 		/**
@@ -181,9 +179,9 @@ class KEXICORE_EXPORT Part : public QObject
 #endif
 
 		/*! \return action collection for mode \a viewMode. */
-		KActionCollection* actionCollectionForMode(int viewMode) const;
+		KActionCollection* actionCollectionForMode(Kexi::ViewMode viewMode) const;
 
-		const Kexi::ObjectStatus& lastOperationStatus() const { return m_status; }
+		const Kexi::ObjectStatus& lastOperationStatus() const;
 
 		/*! \return i18n'd message translated from \a englishMessage.
 		 This method is useful for messages like: 
@@ -265,7 +263,7 @@ class KEXICORE_EXPORT Part : public QObject
 		virtual void initInstanceActions();
 
 		virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, 
-			const KexiDB::SchemaData& sdata, int viewMode);
+			const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode);
 
 		bool loadDataBlock( KexiWindow *window, QString &dataString, const QString& dataID = QString());
 
@@ -274,12 +272,12 @@ class KEXICORE_EXPORT Part : public QObject
 		 See KexiSharedActionHost::createSharedAction() for details.
 		 Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
 		 that subclass allocated instead just KAction (what is the default). */
-		KAction* createSharedAction(int mode, const QString &text, 
+		KAction* createSharedAction(Kexi::ViewMode mode, const QString &text, 
 			const QString &pix_name, const KShortcut &cut, const char *name, 
 			const char *subclassName = 0);
 
 		/*! Convenience version of above method - creates shared toggle action. */
-		KAction* createSharedToggleAction(int mode, const QString &text,
+		KAction* createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
 			const QString &pix_name, const KShortcut &cut, const char *name);
 
 		/*! Creates shared action for action collection declared 
@@ -298,39 +296,32 @@ class KEXICORE_EXPORT Part : public QObject
 
 		void setActionAvailable(const char *action_name, bool avail);
 
-		inline void setInfo(Info *info) { m_info = info; }
+		void setInfo(Info *info);
+		
+		int registeredPartID() const;
+		
+		/*! Sets translated string for name, e.g. "instanceName" -&gt; "table" 
+		 and "instanceCaption" -&gt; "Table" for the table plugin.
+		 This is a flexible way for customizing translatable strings. */
+		void setTranslatedString(const QByteArray& name, const QString& translatedString);
 
-		//! Set of i18n'd action names for, initialised on KexiPart::Part subclass ctor
-		//! The names are useful because the same action can have other name for each part
-		//! E.g. "New table" vs "New query" can have different forms for some languages...
-		QMap<QString,QString> m_names;
-
-		/*! Supported modes for dialogs created by this part.
-		 @see supportedViewModes() */
-		int m_supportedViewModes;
-
-		/*! Supported modes for dialogs created by this part in "user mode".
+		/*! Sets supported modes for windows created by this part in "user mode".
 		 The default is Kexi::DataViewMode. It is altered in classes like KexiSimplePrintingPart.
 		 @see supportedUserViewModes() */
-		int m_supportedUserViewModes;
+		void setSupportedUserViewModes(Kexi::ViewModes modes);
 
-		Info *m_info;
-		GUIClient *m_guiClient;
-		QMap<int, GUIClient*> m_instanceGuiClients;
-//moved to singleton		KexiMainWindow* m_mainWin;
-		Kexi::ObjectStatus m_status;
+		/*! Sets supported view modes for this part. */
+		void setSupportedViewModes(Kexi::ViewModes modes);
 
-		/*! If you're implementing a new part, set this to value >0 in your ctor 
-		 if you have well known (ie registered ID) for your part.
-		 So far, table, query, form, report and script part have defined their IDs 
-		 (see KexiPart::ObjectTypes). */
-		int m_registeredPartID;
+		/*! True if newly created, unsaved objects are dirty. False by default.
+		 You can change it in your subclass' constructor using setNewObjectsAreDirty(bool set). */
+		bool newObjectsAreDirty() const ;
 
-		/*! True if newwly created, unsaved objects are dirty. False by default.
-		 You can change it in your subclass' constructor.	*/
-		bool m_newObjectsAreDirty : 1;
+		//! Changes "newObjectsAreDirty" flag. */
+		void setNewObjectsAreDirty(bool set);
 
-		PartPrivate *d;
+		class Private;
+		Private * const d;
 
 	friend class Manager;
 	//friend class KexiMainWindowIface;

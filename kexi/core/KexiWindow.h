@@ -72,7 +72,7 @@ class KEXICORE_EXPORT KexiWindow
 
 		/*! \return a view for a given \a mode or 0 if there's no such mode available (or opened).
 		 This does not open mode if it's not opened. */
-		KexiView *viewForMode(int mode) const;
+		KexiView *viewForMode(Kexi::ViewMode mode) const;
 
 		//! Adds \a view for the dialog. It will be the _only_ view (of unspecified mode) for the dialog
 		void addView(KexiView *view);
@@ -132,13 +132,13 @@ class KEXICORE_EXPORT KexiWindow
 		 The flags are used e.g. for testing by KexiMainWindow, if actions
 		 of switching to given view mode is available.
 		 This member is intialised in KexiPart that creates this window object. */
-		bool supportsViewMode( int mode ) const;
+		bool supportsViewMode(Kexi::ViewMode mode) const;
 
 		/*! \return information about supported view modes. */
-		int supportedViewModes() const;
+		Kexi::ViewModes supportedViewModes() const;
 
 		/*! \return current view mode for this dialog. */
-		int currentViewMode() const;
+		Kexi::ViewMode currentViewMode() const;
 
 		/*! Switches this dialog to \a newViewMode.
 		 \a viewMode is one of Kexi::ViewMode enum elements.
@@ -146,7 +146,7 @@ class KEXICORE_EXPORT KexiWindow
 		 True is returned also if user has cancelled switching
 		 (rarely, but for any reason) - cancelled is returned.
 		 */
-		tristate switchToViewMode( int newViewMode );
+		tristate switchToViewMode(Kexi::ViewMode newViewMode);
 
 		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
@@ -257,7 +257,7 @@ class KEXICORE_EXPORT KexiWindow
 
 	protected:
 		//! Used by KexiPart::Part
-		KexiWindow(QWidget *parent, int supportedViewModes, KexiPart::Part& part,
+		KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes, KexiPart::Part& part,
 			KexiPart::Item& item);
 
 		//! Used by KexiInternalPart
@@ -266,7 +266,7 @@ class KEXICORE_EXPORT KexiWindow
 		/*! Used by Part::openInstance(),
 		 like switchToViewMode( int newViewMode ), but passed \a staticObjectArgs.
 		 Only used for parts of class KexiPart::StaticPart. */
-		tristate switchToViewMode( int newViewMode,
+		tristate switchToViewMode(Kexi::ViewMode newViewMode,
 			QMap<QString,QString>* staticObjectArgs,
 			bool& proposeOpeningInTextViewModeBecauseOfProblems);
 
@@ -275,19 +275,19 @@ class KEXICORE_EXPORT KexiWindow
 		virtual void closeEvent( QCloseEvent * e );
 
 		//! \internal
-		void addView(KexiView *view, int mode);
+		void addView(KexiView *view, Kexi::ViewMode mode);
 
 		//! \internal
-		void removeView(int mode);
+		void removeView(Kexi::ViewMode mode);
 
 		//! Used by \a view to inform the dialog about changing state of the "dirty" flag.
 		void dirtyChanged(KexiView* view);
 
-		bool isDesignModePreloadedForTextModeHackUsed(int newViewMode) const;
+		bool isDesignModePreloadedForTextModeHackUsed(Kexi::ViewMode newViewMode) const;
 
 		/*! Created view's mode - helper for switchToViewMode(),
 		 KexiView ctor uses that info. >0 values are useful. */
-		int creatingViewsMode() const;
+		Kexi::ViewMode creatingViewsMode() const;
 
 		/*! Sets temporary data shared between views. */
 		void setData(KexiWindowData* data);

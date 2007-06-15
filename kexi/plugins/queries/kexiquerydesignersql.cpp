@@ -231,7 +231,7 @@ void KexiQueryDesignerSQLView::setStatusText(const QString& text)
 	}
 }
 
-tristate KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
+tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
 //TODO
 	dontStore = true;
@@ -307,7 +307,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 }
 
 tristate
-KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
+KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
 {
 	kDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
 //	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
