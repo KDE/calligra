@@ -52,5 +52,5 @@ InitialPreference=8
 X-Kexi-DriverName=SQLite2
 X-Kexi-DriverType=File
 X-Kexi-FileDBDriverMimeList=application/x-sqlite2,application/x-kexiproject-sqlite2,application/x-kexiproject-sqlite,application/x-hk_classes-sqlite2
-X-Kexi-KexiDBVersion=1.8
+X-Kexi-KexiDBVersion=1.9
 X-Kexi-DoNotAllowProjectImportingTo=true

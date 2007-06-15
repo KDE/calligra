@@ -33,7 +33,7 @@
  use KexiDB::versionMajor() and KexiDB::versionMinor() instead to get real version.
 */
 #define KEXIDB_VERSION_MAJOR 1
-#define KEXIDB_VERSION_MINOR 8
+#define KEXIDB_VERSION_MINOR 9
 
 /*! KexiDB implementation version. @see KEXIDB_VERSION_MAJOR, KEXIDB_VERSION_MINOR */
 #define KEXIDB_VERSION KexiDB::DatabaseVersionInfo(KEXIDB_VERSION_MAJOR, KEXIDB_VERSION_MINOR)

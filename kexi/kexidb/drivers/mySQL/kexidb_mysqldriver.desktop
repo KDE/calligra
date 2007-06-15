@@ -9,4 +9,4 @@ Type=Service
 InitialPreference=8
 X-Kexi-DriverName=MySQL
 X-Kexi-DriverType=Network
-X-Kexi-KexiDBVersion=1.8
+X-Kexi-KexiDBVersion=1.9

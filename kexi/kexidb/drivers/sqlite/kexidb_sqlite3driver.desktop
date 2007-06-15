@@ -52,4 +52,4 @@ InitialPreference=8
 X-Kexi-DriverName=SQLite3
 X-Kexi-DriverType=File
 X-Kexi-FileDBDriverMimeList=application/x-sqlite3,application/x-kexiproject-sqlite3,application/x-hk_classes-sqlite3
-X-Kexi-KexiDBVersion=1.8
+X-Kexi-KexiDBVersion=1.9
