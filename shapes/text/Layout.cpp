@@ -640,7 +640,9 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         line.draw(painter, layout->position());
         
         QTextCharFormat fmt = block.charFormat();
-        if (fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle) != 0) {
+        int fontStrikeOutStyle = fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle);
+        int fontStrikeOutType = fmt.intProperty(KoCharacterStyle::FontStrikeOutType);
+        if ((fontStrikeOutStyle != Qt::NoPen) && (fontStrikeOutType != KoCharacterStyle::None)) {
             double x1 = line.cursorToX(line.textStart());
             double x2 = line.cursorToX(line.textStart() + line.textLength());
             double y = line.position().y() + line.height()/2;
@@ -649,7 +651,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             QPen pen = painter->pen();
             pen.setColor(color);
             pen.setWidth(painter->fontMetrics().lineWidth());
-            if (fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle) == 6) {
+            if (fontStrikeOutStyle == 6) {
                 // Ok, try the waves :)
                 pen.setStyle(Qt::SolidLine);
                 painter->setPen(pen);
@@ -661,17 +663,41 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                 int endAngle = 180 * 16;
                 while (x < x2) {
                     QRectF rectangle1(x, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
-                    painter->drawArc(rectangle1, startAngle, middleAngle);
+                    if (fontStrikeOutType == KoCharacterStyle::Double) {
+                        painter->translate(0, -pen.width());
+                        painter->drawArc(rectangle1, startAngle, middleAngle);
+                        painter->translate(0, 2*pen.width());
+                        painter->drawArc(rectangle1, startAngle, middleAngle);
+                        painter->translate(0, -pen.width());
+                    } else {
+                        painter->drawArc(rectangle1, startAngle, middleAngle);
+                    }
                     if (x + halfWaveLength > x2)
                         break;
                     QRectF rectangle2(x + halfWaveLength, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
-                    painter->drawArc(rectangle2, middleAngle, endAngle);
+                    if (fontStrikeOutType == KoCharacterStyle::Double) {
+                        painter->translate(0, -pen.width());
+                        painter->drawArc(rectangle2, middleAngle, endAngle);
+                        painter->translate(0, 2*pen.width());
+                        painter->drawArc(rectangle2, middleAngle, endAngle);
+                        painter->translate(0, -pen.width());
+                    } else {
+                        painter->drawArc(rectangle2, middleAngle, endAngle);
+                    }
                     x = x + 2*halfWaveLength;
                 }
             } else {
-                pen.setStyle((Qt::PenStyle) fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle));
+                pen.setStyle((Qt::PenStyle) fontStrikeOutStyle);
                 painter->setPen(pen);
-                painter->drawLine(x1, y, x2, y);
+                if (fontStrikeOutType == KoCharacterStyle::Double) {
+                    painter->translate(0, -pen.width());
+                    painter->drawLine(x1, y, x2, y);
+                    painter->translate(0, 2*pen.width());
+                    painter->drawLine(x1, y, x2, y);
+                    painter->translate(0, -pen.width());
+                } else {
+                    painter->drawLine(x1, y, x2, y);
+                }
             }
             painter->setPen(penBackup);
         }
