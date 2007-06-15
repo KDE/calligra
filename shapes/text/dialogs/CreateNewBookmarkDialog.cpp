@@ -19,12 +19,13 @@
 
 #include "CreateNewBookmarkDialog.h"
 
-CreateNewBookmark::CreateNewBookmark(QList<QString> nameList, QWidget *parent)
+CreateNewBookmark::CreateNewBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
+    widget.bookmarkName->setCompleter(0);
     widget.bookmarkName->insertItems(0, nameList);
-    widget.bookmarkName->clearEditText();
+    widget.bookmarkName->setEditText(suggestedName);
     connect( widget.bookmarkName, SIGNAL( editTextChanged(const QString &) ), this, SIGNAL( bookmarkNameChanged(const QString &) ) );
 }
 
@@ -33,16 +34,22 @@ QString CreateNewBookmark::bookmarkName()
     return widget.bookmarkName->currentText();
 }
 
-CreateNewBookmarkDialog::CreateNewBookmarkDialog(QList<QString> nameList, QWidget *parent)
-    : KDialog(parent)
+CreateNewBookmarkDialog::CreateNewBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
+    : KDialog(parent),
+    m_nameList(nameList)
 {
-    ui = new CreateNewBookmark( nameList, this );
+    if (suggestedName.isEmpty() || m_nameList.contains(suggestedName)) {
+        enableButtonOk( false );
+        ui = new CreateNewBookmark( nameList, "", this );
+    }
+    else {
+        ui = new CreateNewBookmark( nameList, suggestedName, this );
+    }
     setMainWidget( ui );
     setCaption(i18n("Create New Bookmark") );
     setModal( true );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonOk( false );
     showButtonSeparator( true );
     connect( ui, SIGNAL( bookmarkNameChanged(const QString &) ), this, SLOT( nameChanged(const QString &) ) );
 }
@@ -54,7 +61,10 @@ QString CreateNewBookmarkDialog::newBookmarkName()
 
 void CreateNewBookmarkDialog::nameChanged(const QString &bookmarkName)
 {
-    enableButtonOk( !bookmarkName.isEmpty() );
+    if (!m_nameList.contains(bookmarkName))
+        enableButtonOk( !bookmarkName.isEmpty() );
+    else
+        enableButtonOk( false );
 }
 
 #include <CreateNewBookmarkDialog.moc>

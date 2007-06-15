@@ -33,9 +33,17 @@ public:
 
 signals:
     void bookmarkSelectionChanged(int currentRow);
+    void bookmarkNameChanged(const QString &oldName, const QString &newName);
+    void bookmarkItemDeleted(const QString &deletedName);
+    void bookmarkItemDoubleClicked(QListWidgetItem *item);
+     
+private slots:
+    void slotBookmarkRename();
+    void slotBookmarkDelete();
 
 private:
     Ui::SelectBookmark widget;
+    QWidget *parentWidget;
 };
 
 class SelectBookmarkDialog : public KDialog {
@@ -44,8 +52,13 @@ public:
     SelectBookmarkDialog(QList<QString> nameList, QWidget *parent = 0);
     QString selectedBookmarkName();
 
+signals:
+    void nameChanged(const QString &oldName, const QString &newName);
+    void bookmarkDeleted(const QString &deletedName);
+
 private slots:
     void selectionChanged(int currentRow);
+    void bookmarkDoubleClicked(QListWidgetItem *item);
 
 private:
     SelectBookmark *ui;

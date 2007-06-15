@@ -138,6 +138,10 @@ private slots:
     /// signal for when a series of commands has ended that together should be 1 undo action.
     void stopMacro();
 
+private slots:
+    /// delete previously bookmarked text cursor location or selection
+    void deleteBookmark(const QString &name);
+
 private:
     void repaintCaret();
     void repaintSelection(int from, int to);
