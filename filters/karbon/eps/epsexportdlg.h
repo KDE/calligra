@@ -31,7 +31,7 @@ class EpsExportDlg : public KDialog
 	Q_OBJECT
 
 public:
-	EpsExportDlg( QWidget* parent = 0L, const char* name = 0L );
+	explicit EpsExportDlg( QWidget* parent = 0L, const char* name = 0L );
 
 	uint psLevel() const;
 

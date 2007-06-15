@@ -33,7 +33,7 @@ class XFIGImportFactory :
 {
     Q_OBJECT
 public:
-    XFIGImportFactory(QObject* parent = 0, const char* name = 0);
+    explicit XFIGImportFactory(QObject* parent = 0, const char* name = 0);
     virtual ~XFIGImportFactory();
 
     virtual QObject* createObject(QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList());

@@ -162,7 +162,8 @@ namespace MSWrite
 			Decorative	= 0x50,	OldEnglish	= 0x50
 		};
 
-		Font (const Byte *name = NULL, const Byte family = DontCare);
+		explicit Font (const Byte *name = NULL, 
+			       const Byte family = DontCare);
 		virtual ~Font ();
 
 		Font &operator= (const Font &rhs);
