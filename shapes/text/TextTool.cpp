@@ -84,24 +84,24 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_bold", m_actionFormatBold );
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
-    connect( m_actionFormatBold, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(bold(bool)) );
+    connect( m_actionFormatBold, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(bold(bool)) );
 
     m_actionFormatItalic  = new QAction(KIcon("format-text-italic"), i18n("Italic"), this);
     addAction("format_italic", m_actionFormatItalic );
     m_actionFormatItalic->setShortcut( Qt::CTRL + Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
-    connect( m_actionFormatItalic, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(italic(bool)) );
+    connect( m_actionFormatItalic, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(italic(bool)) );
 
     m_actionFormatUnderline  = new QAction(KIcon("format-text-underline"), i18n("Underline"), this);
     addAction("format_underline", m_actionFormatUnderline );
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
-    connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(underline(bool)) );
+    connect( m_actionFormatUnderline, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(underline(bool)) );
 
     m_actionFormatStrikeOut  = new QAction(KIcon("format-text-strikethrough"), i18n("Strike Out"), this);
     addAction("format_strike", m_actionFormatStrikeOut );
     m_actionFormatStrikeOut->setCheckable(true);
-    connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), &m_selectionHandler, SLOT(strikeOut(bool)) );
+    connect( m_actionFormatStrikeOut, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(strikeOut(bool)) );
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
     m_actionAlignLeft  = new QAction(KIcon("text-left"), i18n("Align Left"), this);
@@ -109,38 +109,38 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
-    connect(m_actionAlignLeft, SIGNAL(toggled(bool)), this, SLOT(alignLeft()));
+    connect(m_actionAlignLeft, SIGNAL(triggered(bool)), this, SLOT(alignLeft()));
 
     m_actionAlignRight  = new QAction(KIcon("text-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight );
     m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
-    connect(m_actionAlignRight, SIGNAL(toggled(bool)), this, SLOT(alignRight()));
+    connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
 
     m_actionAlignCenter  = new QAction(KIcon("text-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter );
     m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
     m_actionAlignCenter->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignCenter);
-    connect(m_actionAlignCenter, SIGNAL(toggled(bool)), this, SLOT(alignCenter()));
+    connect(m_actionAlignCenter, SIGNAL(triggered(bool)), this, SLOT(alignCenter()));
 
     m_actionAlignBlock  = new QAction(KIcon("format-justify-fill"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock );
     m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
-    connect(m_actionAlignBlock, SIGNAL(toggled(bool)), this, SLOT(alignBlock()));
+    connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
 
     m_actionFormatSuper = new QAction(KIcon("text-super"), i18n("Superscript"), this);
     addAction("format_super", m_actionFormatSuper );
     m_actionFormatSuper->setCheckable(true);
-    connect(m_actionFormatSuper, SIGNAL(toggled(bool)), this, SLOT(superScript(bool)));
+    connect(m_actionFormatSuper, SIGNAL(triggered(bool)), this, SLOT(superScript(bool)));
 
     m_actionFormatSub = new QAction(KIcon("text-sub"), i18n("Subscript"), this);
     addAction("format_sub", m_actionFormatSub );
     m_actionFormatSub->setCheckable(true);
-    connect(m_actionFormatSub, SIGNAL(toggled(bool)), this, SLOT(subScript(bool)));
+    connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));
 
     m_actionFormatIncreaseIndent = new QAction(
             KIcon(QApplication::isRightToLeft() ? "format-indent-less" : "format-indent-more"),
@@ -218,7 +218,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     action = new QAction(i18n("Record"), this);
     action->setCheckable(true);
     addAction("edit_record_changes", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleTrackChanges(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleTrackChanges(bool)));
 
     action = new QAction(i18n("Style Manager"), this);
     action->setShortcut( Qt::ALT + Qt::CTRL + Qt::Key_S);

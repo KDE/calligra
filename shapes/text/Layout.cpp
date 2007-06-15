@@ -449,8 +449,9 @@ void Layout::resetPrivate() {
         shapeNumber++;
     }
     Q_ASSERT(shapeNumber >= 0);
-    if(shapes.count() == 0)
+    if(shapes.count() == 0 || shapes.count() < shapeNumber)
         return;
+    Q_ASSERT(shapeNumber < shapes.count());
     shape = shapes[shapeNumber];
     m_demoText = (static_cast<TextShape*> (shape))->demoText();
     m_data = dynamic_cast<KoTextShapeData*> (shape->userData());

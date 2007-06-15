@@ -58,8 +58,9 @@ void ParagraphSettingsDialog::accept() {
         m_paragraphLayout->save();
         m_paragraphBulletsNumbers->save();
 
-        QTextBlock block = m_cursor.block();
-        m_style->applyStyle(block);
+        QTextBlockFormat format;
+        m_style->applyStyle(format);
+        m_cursor.mergeBlockFormat(format);
         emit stopMacro();
     }
 
