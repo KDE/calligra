@@ -34,7 +34,6 @@
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
-#include <KoShapeLayer.h>
 #include <KoXmlReader.h>
 
 #include "Cell.h"
@@ -79,6 +78,7 @@ class RowFormat;
 class Selection;
 class Sheet;
 class SheetPrint;
+class SheetShapeContainer;
 class Style;
 class StyleStorage;
 class UndoInsertRemoveAction;
@@ -158,7 +158,7 @@ private:
 /**
  * A sheet contains several cells.
  */
-class KSPREAD_EXPORT Sheet : public QObject, public KoShapeLayer
+class KSPREAD_EXPORT Sheet : public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString sheetName READ sheetName )
@@ -189,6 +189,11 @@ public:
      * \return the document this sheet belongs to
      */
     Doc* doc() const;
+
+    /**
+     * \return the shape container of this sheet
+     */
+    SheetShapeContainer* shapeContainer() const;
 
     //////////////////////////////////////////////////////////////////////////
     //

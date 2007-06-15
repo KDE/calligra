@@ -83,6 +83,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
+#include "SheetShapeContainer.h"
 #include "SheetView.h"
 #include "StyleManager.h"
 #include "Undo.h"
@@ -405,17 +406,17 @@ void Doc::addShape( KoShape* shape )
     if ( !shape )
         return;
     KoShape* parent = shape;
-    Sheet* sheet = 0;
-    while ( !sheet && ( parent = parent->parent() ) )
+    SheetShapeContainer* shapeContainer = 0;
+    while ( !shapeContainer && ( parent = parent->parent() ) )
     {
-        sheet = dynamic_cast<Sheet*>( parent );
+        shapeContainer = dynamic_cast<SheetShapeContainer*>( parent );
     }
-    Q_ASSERT( sheet );
+    Q_ASSERT( shapeContainer );
 
     foreach ( KoView* view, views() )
     {
         Canvas* canvas = static_cast<View*>( view )->canvasWidget();
-        if ( canvas->activeSheet() == sheet )
+        if ( canvas->activeSheet()->shapeContainer() == shapeContainer )
             canvas->shapeManager()->add( shape );
     }
 }
@@ -425,17 +426,17 @@ void Doc::removeShape( KoShape* shape )
     if ( !shape )
         return;
     KoShape* parent = shape;
-    Sheet* sheet = 0;
-    while ( !sheet && ( parent = parent->parent() ) )
+    SheetShapeContainer* shapeContainer = 0;
+    while ( !shapeContainer && ( parent = parent->parent() ) )
     {
-        sheet = dynamic_cast<Sheet*>( parent );
+        shapeContainer = dynamic_cast<SheetShapeContainer*>( parent );
     }
-    Q_ASSERT( sheet );
+    Q_ASSERT( shapeContainer );
 
     foreach ( KoView* view, views() )
     {
         Canvas* canvas = static_cast<View*>( view )->canvasWidget();
-        if ( canvas->activeSheet() == sheet )
+        if ( canvas->activeSheet()->shapeContainer() == shapeContainer )
             canvas->shapeManager()->remove( shape );
     }
 }

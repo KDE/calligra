@@ -137,6 +137,7 @@
 #include "RecalcManager.h"
 #include "Selection.h"
 #include "SheetPrint.h"
+#include "SheetShapeContainer.h"
 #include "SheetView.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -3741,8 +3742,8 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
 
     // flake
     // Change the active shape container (layer) and use its shapes.
-    d->canvas->shapeManager()->selection()->setActiveLayer( d->activeSheet );
-    d->canvas->shapeManager()->setShapes( d->activeSheet->iterator() );
+    d->canvas->shapeManager()->selection()->setActiveLayer( d->activeSheet->shapeContainer() );
+    d->canvas->shapeManager()->setShapes( d->activeSheet->shapeContainer()->iterator() );
     // Tell the Canvas about the new visible sheet size.
     sheetView( d->activeSheet )->updateAccessedCellRange();
 

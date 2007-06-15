@@ -172,6 +172,7 @@ SET (kspreadcommon_LIB_SRCS
 	RowColumnFormat.cpp
 	Selection.cpp
 	Sheet.cpp
+	SheetShapeContainer.cpp
 	SheetPrint.cpp
 	RectStorage.cpp
 	Style.cpp

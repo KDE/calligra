@@ -60,6 +60,9 @@
 #include <KoOasisSettings.h>
 #include <KoOasisStyles.h>
 #include <KoQueryTrader.h>
+#include <KoSavingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>
@@ -81,6 +84,7 @@
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "SheetPrint.h"
+#include "SheetShapeContainer.h"
 #include "SheetView.h"
 #include "RectStorage.h"
 #include "Style.h"
@@ -251,6 +255,7 @@ public:
   CellStorage* cellStorage;
   RowCluster rows;
   ColumnCluster columns;
+  SheetShapeContainer* shapeContainer;
 
   // hold the print object
   SheetPrint* print;
@@ -325,6 +330,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->cellStorage = new CellStorage( this );
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
+  d->shapeContainer = new SheetShapeContainer(this);
 
   d->documentSize = QSizeF( KS_colMax * doc()->defaultColumnFormat()->width(),
                             KS_rowMax * doc()->defaultRowFormat()->height() );
@@ -366,6 +372,11 @@ Map* Sheet::map() const
 Doc* Sheet::doc() const
 {
   return d->workbook->doc();
+}
+
+SheetShapeContainer* Sheet::shapeContainer() const
+{
+    return d->shapeContainer;
 }
 
 Qt::LayoutDirection Sheet::layoutDirection() const
@@ -2836,7 +2847,6 @@ void Sheet::replaceMacro( QString & text, const QString & old, const QString & n
     text = text.replace( n, old.length(), newS );
 }
 
-
 QString Sheet::getPart( const KoXmlNode & part )
 {
   QString result;
@@ -2995,7 +3005,10 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     kDebug(36003)<<" table-row found :index row after "<<rowIndex<<endl;
                 }
                 else if ( rowElement.localName() == "shapes" )
-                    loadOasisObjects( rowElement, oasisContext );
+                {
+                    KoShapeLoadingContext shapeLoadingContext( oasisContext );
+                    d->shapeContainer->loadOdf( rowElement, shapeLoadingContext );
+                }
             }
 
             // don't need it anymore
@@ -3896,9 +3909,13 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
         xmlWriter.addAttribute( "table:print-ranges", range );
     }
 
-    saveOasisObjects( store, xmlWriter, mainStyles, indexObj, partIndexObj );
     const QRect usedArea = this->usedArea();
     saveOasisColRowCell( xmlWriter, mainStyles, usedArea.width(), usedArea.height(), valStyle );
+
+    KoSavingContext context( mainStyles );
+    KoShapeSavingContext shapeSavingContext( xmlWriter, context );
+    d->shapeContainer->saveOdf( shapeSavingContext );
+
     xmlWriter.endElement();
     return true;
 }
@@ -4894,6 +4911,7 @@ Sheet::~Sheet()
 
     delete d->print;
     delete d->cellStorage;
+    delete d->shapeContainer;
 
     delete d;
 }
