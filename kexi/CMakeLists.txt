@@ -19,7 +19,7 @@ ADD_DEFINITIONS(
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} 
-	${KDE4_INCLUDES} ${QT_INCLUDES} )
+	${KDE4_INCLUDES} ${QT_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/ )
 
 add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )
