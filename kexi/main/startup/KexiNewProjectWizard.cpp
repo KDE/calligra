@@ -63,7 +63,7 @@ KexiOpenExistingFile::KexiOpenExistingFile(QWidget* parent)
 	: QWidget(parent)
 {
 	setupUi(this);
-};
+}
 
 KexiServerDBNamePage::KexiServerDBNamePage(QWidget* parent)
 	: QWidget(parent)
