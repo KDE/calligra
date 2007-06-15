@@ -281,7 +281,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
                 exivKey = "Exif.Photo.MakerNote";
             }
         }
-        if(exivKey == "")
+        if(exivKey.isEmpty())
         {
             kDebug() << entry.qualifiedName() << " is unsavable to EXIF" << endl;
         } else {
