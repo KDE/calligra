@@ -224,7 +224,6 @@ void ChartBinding::cellChanged( const Cell& /*changedCell*/ )
 class Sheet::Private
 {
 public:
-
   Map* workbook;
 
   SheetAdaptor* dbus;
@@ -239,7 +238,6 @@ public:
 
   // password of protected sheet
   QByteArray password;
-
 
   bool showGrid;
   bool showFormula;
@@ -271,21 +269,13 @@ public:
   // Doing so costs some time, so by default it should be turned off.
   bool showPageBorders;
 
-  // The highest row and column ever accessed by the user.
-  int maxRow;
-  int maxColumn;
-
-  // Max range of canvas in x and ye direction.
+  // Max range of canvas in x and y direction.
   //  Depends on KS_colMax/KS_rowMax and the width/height of all columns/rows
   QSizeF documentSize;
-
 
   QPen emptyPen;
   QBrush emptyBrush;
   QColor emptyColor;
-
-  int scrollPosX;
-  int scrollPosY;
 };
 
 int Sheet::s_id = 0;
