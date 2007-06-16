@@ -607,6 +607,62 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
         lastBorder->paint(*painter);
 }
 
+static void drawDecorationLine (QPainter *painter, QColor color, KoCharacterStyle::LineType type, Qt::PenStyle style, const double x1, const double x2, const double y) {
+    QPen penBackup = painter->pen();
+    QPen pen = painter->pen();
+    pen.setColor(color);
+    pen.setWidth(painter->fontMetrics().lineWidth());
+    if (style == 6) {
+        // Ok, try the waves :)
+        pen.setStyle(Qt::SolidLine);
+        painter->setPen(pen);
+        int x = x1;
+        int halfWaveWidth = 2 * painter->fontMetrics().lineWidth();
+        int halfWaveLength = 6 * painter->fontMetrics().lineWidth();
+        int startAngle = 0 * 16;
+        int middleAngle = 180 * 16;
+        int endAngle = 180 * 16;
+        while (x < x2) {
+            QRectF rectangle1(x, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
+            if (type == KoCharacterStyle::DoubleLine) {
+                painter->translate(0, -pen.width());
+                painter->drawArc(rectangle1, startAngle, middleAngle);
+                painter->translate(0, 2*pen.width());
+                painter->drawArc(rectangle1, startAngle, middleAngle);
+                painter->translate(0, -pen.width());
+            } else {
+                painter->drawArc(rectangle1, startAngle, middleAngle);
+            }
+            if (x + halfWaveLength > x2)
+                break;
+            QRectF rectangle2(x + halfWaveLength, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
+            if (type == KoCharacterStyle::DoubleLine) {
+                painter->translate(0, -pen.width());
+                painter->drawArc(rectangle2, middleAngle, endAngle);
+                painter->translate(0, 2*pen.width());
+                painter->drawArc(rectangle2, middleAngle, endAngle);
+                painter->translate(0, -pen.width());
+            } else {
+                painter->drawArc(rectangle2, middleAngle, endAngle);
+            }
+            x = x + 2*halfWaveLength;
+        }
+    } else {
+        pen.setStyle(style);
+        painter->setPen(pen);
+        if (type == KoCharacterStyle::DoubleLine) {
+            painter->translate(0, -pen.width());
+            painter->drawLine(x1, y, x2, y);
+            painter->translate(0, 2*pen.width());
+            painter->drawLine(x1, y, x2, y);
+            painter->translate(0, -pen.width());
+        } else {
+            painter->drawLine(x1, y, x2, y);
+        }
+    }
+    painter->setPen(penBackup);
+}
+
 void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd) {
     // this method replaces QTextLayout::draw() because we need to do some stuff per line for tabs. :/
     QTextLayout *layout = block.layout();
@@ -642,67 +698,29 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         line.draw(painter, layout->position());
         
         QTextCharFormat fmt = block.charFormat();
-        int fontStrikeOutStyle = fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle);
-        int fontStrikeOutType = fmt.intProperty(KoCharacterStyle::FontStrikeOutType);
+        Qt::PenStyle fontStrikeOutStyle = (Qt::PenStyle) fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
+        KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::StrikeOutType);
         if ((fontStrikeOutStyle != Qt::NoPen) && (fontStrikeOutType != KoCharacterStyle::NoLine)) {
             double x1 = line.cursorToX(line.textStart());
             double x2 = line.cursorToX(line.textStart() + line.textLength());
             double y = line.position().y() + line.height()/2;
-            QPen penBackup = painter->pen();
-            QColor color = fmt.colorProperty(KoCharacterStyle::FontStrikeOutColor);
-            QPen pen = painter->pen();
-            pen.setColor(color);
-            pen.setWidth(painter->fontMetrics().lineWidth());
-            if (fontStrikeOutStyle == 6) {
-                // Ok, try the waves :)
-                pen.setStyle(Qt::SolidLine);
-                painter->setPen(pen);
-                int x = x1;
-                int halfWaveWidth = 2 * painter->fontMetrics().lineWidth();
-                int halfWaveLength = 6 * painter->fontMetrics().lineWidth();
-                int startAngle = 0 * 16;
-                int middleAngle = 180 * 16;
-                int endAngle = 180 * 16;
-                while (x < x2) {
-                    QRectF rectangle1(x, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
-                    if (fontStrikeOutType == KoCharacterStyle::DoubleLine) {
-                        painter->translate(0, -pen.width());
-                        painter->drawArc(rectangle1, startAngle, middleAngle);
-                        painter->translate(0, 2*pen.width());
-                        painter->drawArc(rectangle1, startAngle, middleAngle);
-                        painter->translate(0, -pen.width());
-                    } else {
-                        painter->drawArc(rectangle1, startAngle, middleAngle);
-                    }
-                    if (x + halfWaveLength > x2)
-                        break;
-                    QRectF rectangle2(x + halfWaveLength, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
-                    if (fontStrikeOutType == KoCharacterStyle::DoubleLine) {
-                        painter->translate(0, -pen.width());
-                        painter->drawArc(rectangle2, middleAngle, endAngle);
-                        painter->translate(0, 2*pen.width());
-                        painter->drawArc(rectangle2, middleAngle, endAngle);
-                        painter->translate(0, -pen.width());
-                    } else {
-                        painter->drawArc(rectangle2, middleAngle, endAngle);
-                    }
-                    x = x + 2*halfWaveLength;
-                }
-            } else {
-                pen.setStyle((Qt::PenStyle) fontStrikeOutStyle);
-                painter->setPen(pen);
-                if (fontStrikeOutType == KoCharacterStyle::DoubleLine) {
-                    painter->translate(0, -pen.width());
-                    painter->drawLine(x1, y, x2, y);
-                    painter->translate(0, 2*pen.width());
-                    painter->drawLine(x1, y, x2, y);
-                    painter->translate(0, -pen.width());
-                } else {
-                    painter->drawLine(x1, y, x2, y);
-                }
-            }
-            painter->setPen(penBackup);
+            QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
+            
+            drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
         }
+        
+        Qt::PenStyle fontUnderLineStyle = (Qt::PenStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
+        KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);
+        if ((fontUnderLineStyle != Qt::NoPen) && (fontUnderLineType != KoCharacterStyle::NoLine)) {
+            double x1 = line.cursorToX(line.textStart());
+            double x2 = line.cursorToX(line.textStart() + line.textLength());
+            double y = line.position().y() + line.height() - painter->fontMetrics().underlinePos();
+            QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
+            
+            drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
+        }
+
+        
         for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps
             const double tabStop = tabs.tabs[x];
             const double pos = tabStop - tabs.tabLength[x];
