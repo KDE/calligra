@@ -644,7 +644,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         QTextCharFormat fmt = block.charFormat();
         int fontStrikeOutStyle = fmt.intProperty(KoCharacterStyle::FontStrikeOutStyle);
         int fontStrikeOutType = fmt.intProperty(KoCharacterStyle::FontStrikeOutType);
-        if ((fontStrikeOutStyle != Qt::NoPen) && (fontStrikeOutType != KoCharacterStyle::None)) {
+        if ((fontStrikeOutStyle != Qt::NoPen) && (fontStrikeOutType != KoCharacterStyle::NoLine)) {
             double x1 = line.cursorToX(line.textStart());
             double x2 = line.cursorToX(line.textStart() + line.textLength());
             double y = line.position().y() + line.height()/2;
@@ -665,7 +665,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                 int endAngle = 180 * 16;
                 while (x < x2) {
                     QRectF rectangle1(x, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
-                    if (fontStrikeOutType == KoCharacterStyle::Double) {
+                    if (fontStrikeOutType == KoCharacterStyle::DoubleLine) {
                         painter->translate(0, -pen.width());
                         painter->drawArc(rectangle1, startAngle, middleAngle);
                         painter->translate(0, 2*pen.width());
@@ -677,7 +677,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                     if (x + halfWaveLength > x2)
                         break;
                     QRectF rectangle2(x + halfWaveLength, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
-                    if (fontStrikeOutType == KoCharacterStyle::Double) {
+                    if (fontStrikeOutType == KoCharacterStyle::DoubleLine) {
                         painter->translate(0, -pen.width());
                         painter->drawArc(rectangle2, middleAngle, endAngle);
                         painter->translate(0, 2*pen.width());
@@ -691,7 +691,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             } else {
                 pen.setStyle((Qt::PenStyle) fontStrikeOutStyle);
                 painter->setPen(pen);
-                if (fontStrikeOutType == KoCharacterStyle::Double) {
+                if (fontStrikeOutType == KoCharacterStyle::DoubleLine) {
                     painter->translate(0, -pen.width());
                     painter->drawLine(x1, y, x2, y);
                     painter->translate(0, 2*pen.width());
