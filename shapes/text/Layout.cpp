@@ -135,7 +135,7 @@ bool Layout::addLine(QTextLine &line) {
         }
     }
 
-    if(m_data->documentOffset() + shape->size().height() < m_y + height + m_shapeBorder.bottom) {
+    if(m_data->documentOffset() + shape->size().height() < m_y + line.height() + m_shapeBorder.bottom) {
         // line does not fit.
         m_data->setEndPosition(m_block.position() + line.textStart()-1);
 
@@ -147,6 +147,8 @@ bool Layout::addLine(QTextLine &line) {
             m_block.layout()->beginLayout();
             ignoreLine = true;
         }
+        if(m_data->endPosition() == -1) // no text at all fit in the shape!
+            m_data->setEndPosition( m_data->position() );
         nextShape();
         if(m_data)
             m_data->setPosition(m_block.position() + ignoreLine?0:line.textStart());
@@ -449,7 +451,7 @@ void Layout::resetPrivate() {
         shapeNumber++;
     }
     Q_ASSERT(shapeNumber >= 0);
-    if(shapes.count() == 0 || shapes.count() < shapeNumber)
+    if(shapes.count() == 0 || shapes.count() <= shapeNumber)
         return;
     Q_ASSERT(shapeNumber < shapes.count());
     shape = shapes[shapeNumber];
