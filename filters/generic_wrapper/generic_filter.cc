@@ -31,6 +31,7 @@
 #include <ktemporaryfile.h>
 #include <kservicetypetrader.h>
 #include "generic_filter.h"
+#include <kshell.h>
 
 typedef KGenericFactory<GenericFilter> GenericFilterFactory;
 K_EXPORT_COMPONENT_FACTORY( libgenerickofilter, GenericFilterFactory )
@@ -95,8 +96,8 @@ KoFilter::ConversionStatus GenericFilter::doImport()
     }
     else
     {
-        QString exec = m_exec + ' ' + K3Process::quote(m_chain->inputFile()) + ' '
-                       + K3Process::quote(m_chain->outputFile());
+        QString exec = m_exec + ' ' + KShell::quoteArg(m_chain->inputFile()) + ' '
+                       + KShell::quoteArg(m_chain->outputFile());
         system(QFile::encodeName(exec));
 
         kDebug() << "Executing: " << exec << endl;
