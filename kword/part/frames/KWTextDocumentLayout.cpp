@@ -442,7 +442,7 @@ void KWTextDocumentLayout::layout() {
                         iter--;
                         lastFrame = dynamic_cast<KWTextFrame*> (*iter);
                     } while(lastFrame == 0);
-                    KoTextShapeData *data = static_cast<KoTextShapeData*> (lastFrame->shape()->userData());
+                    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (lastFrame->shape()->userData());
                     Q_ASSERT( data );
                     double spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
                     if(spaceLeft > 0)

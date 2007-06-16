@@ -65,5 +65,6 @@ void KWTextFrame::autoShrink(double requestedHeight) {
     }
     // TODO make the following work for rotated / skewed frames as well.  The position should be updated.
     shape()->resize(QSizeF(size.width(), qMax(requestedHeight, m_minimumFrameHeight)));
+    m_lastHeight = size.height();
 }
 
