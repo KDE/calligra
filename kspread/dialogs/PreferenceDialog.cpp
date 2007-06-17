@@ -81,17 +81,17 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   KVBox *page4 = new KVBox();
   p4 = addPage(page4, i18n("Misc"));
-  p4->setIcon( KIcon( BarIcon("misc",K3Icon::SizeMedium) ) );
+  p4->setIcon( KIcon( BarIcon("edit",K3Icon::SizeMedium) ) );
   _miscParameter = new  miscParameters(parent,page4 );
 
   KVBox *page5 = new KVBox();
   p5 = addPage(page5, i18n("Color"));
-  p5->setIcon( KIcon( BarIcon("colorize",K3Icon::SizeMedium) ) );
+  p5->setIcon( KIcon( BarIcon("color-fill",K3Icon::SizeMedium) ) );
   _colorParameter=new colorParameters(parent,page5 );
 
   KVBox *page6 = new KVBox();
   p6 = addPage(page6, i18n("Page Layout"));
-  p6->setIcon( KIcon( BarIcon("edit",K3Icon::SizeMedium) ) );
+  p6->setIcon( KIcon( BarIcon("datashow",K3Icon::SizeMedium) ) );
   _layoutPage=new configureLayoutPage(parent,page6 );
 
   KVBox *page7 = new KVBox();
