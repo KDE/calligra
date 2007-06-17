@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Icon=
 Name=Path Shapes
+Name[de]=Pfad-Form
+Name[ja]=パスシェイプ
 Name[x-test]=xxPath Shapesxx
 ServiceTypes=KOffice/Shape
 Type=Service

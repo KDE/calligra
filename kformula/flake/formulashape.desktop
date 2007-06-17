@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Formula Shape
+Name[de]=Formel-Form
+Name[ja]=数式シェイプ
 Name[x-test]=xxFormula Shapexx
 ServiceTypes=KOffice/Flake
 Type=Service

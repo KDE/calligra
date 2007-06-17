@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Music Shape
+Name[de]=Musik-Form
+Name[ja]=音楽シェイプ
 Name[x-test]=xxMusic Shapexx
 ServiceTypes=KOffice/Shape
 Type=Service

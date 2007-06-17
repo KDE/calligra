@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Shape
+Name[de]=Text-Form
+Name[ja]=テキストシェイプ
 Name[x-test]=xxText Shapexx
 ServiceTypes=KOffice/Flake
 Type=Service

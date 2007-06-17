@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Chart Shape
+Name[de]=Diagramm-Form
+Name[ja]=グラフシェイプ
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=chartshape

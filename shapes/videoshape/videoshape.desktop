@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Video Shape
+Name[de]=Video-Form
+Name[ja]=動画シェイプ
 Name[x-test]=xxVideo Shapexx
 ServiceTypes=KOffice/Shape
 Type=Service

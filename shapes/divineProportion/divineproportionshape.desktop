@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=DivineProportion Shape
+Name[de]=Göttliche-Teilung-Form
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=divineproportionshape

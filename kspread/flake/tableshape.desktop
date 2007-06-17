@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Table Shape
+Name[de]=Tabellen-Form
 Name[x-test]=xxTable Shapexx
 ServiceTypes=KOffice/Shape
 Type=Service

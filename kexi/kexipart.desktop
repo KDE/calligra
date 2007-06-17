@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Database Component
+Name[de]=KOffice-Komponente für Datenbanken
+Name[ja]=KOffice データベースコンポーネント
 Name[uk]=Компонент бази даних KOffice
 Name[x-test]=xxKOffice Database Componentxx
 X-KDE-Library=libkexipart
