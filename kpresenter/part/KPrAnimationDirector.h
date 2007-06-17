@@ -38,7 +38,7 @@ class KPrAnimationDirector : public QObject
 {
     Q_OBJECT
 public:
-	KPrAnimationDirector( KoPAView * view, const QList<KoPAPageBase*> & pages );
+    KPrAnimationDirector( KoPAView * view, const QList<KoPAPageBase*> & pages );
     virtual ~KPrAnimationDirector();
 
     void paintEvent( QPaintEvent* event );
