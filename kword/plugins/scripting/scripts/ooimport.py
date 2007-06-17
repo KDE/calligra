@@ -264,7 +264,7 @@ class ImportDialog:
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        openpage = self.dialog.addPage("Open","Import File","fileopen")
+        openpage = self.dialog.addPage("Open","Import File","document-open")
         openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kwordooimport")
         openwidget.setMode("Opening")
         filters = [
@@ -292,7 +292,7 @@ class ImportDialog:
         filters.append("*|All Files")
         openwidget.setFilter("\n".join(filters))
 
-        configpage = self.dialog.addPage("Connect","OpenOffice.org UNO Connection","connect_no")
+        configpage = self.dialog.addPage("Connect","OpenOffice.org UNO Connection","connect-no")
         configwidget = self.forms.createWidgetFromUIFile(configpage, os.path.join(action.currentPath(),"ooimportconfig.ui"))
 
         if self.dialog.exec_loop():

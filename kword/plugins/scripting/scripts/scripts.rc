@@ -1,9 +1,23 @@
 <KrossScripting>
 
     <script
+        name="pyimportfile"
+        text="Import File..."
+        comment="Python script to import content from a text or html file"
+        interpreter="python"
+        file="extensions/importfile.py" />
+
+    <script
+        name="pyexportfile"
+        text="Export File..."
+        comment="Python script to export content to a text or html file"
+        interpreter="python"
+        file="extensions/exportfile.py" />
+
+    <script
         name="pyooimport"
-        text="Import file with OpenOffice.org"
-        comment="Uses PyUNO to import a file using OpenOffice.org"
+        text="Import File with OO.org"
+        comment="Python script to import content using OpenOffice.org PyUNO"
         interpreter="python"
         file="extensions/ooimport.py" />
 
@@ -12,36 +26,23 @@
         scripting variables are displayed in the Insert=>Variable menu and
         they are able to map functions like to get the variable content or to
         create an options widget for a variable from within scripts.
-    //-->
     <collection name="variables" text="Variables" comment="Scripting variables for KWord" enabled="false">
-
-        <!--
             This script reads the value of a variable from an external file.
-        //-->
         <script
             name="pyvariablereadfile"
             text="Read From File..."
             comment="Python script to read a variable from a file"
             interpreter="python"
             file="variables/variable_readfile.py">
-
-            <!--
                 This is the default value the variable has.
-            //-->
             <property name="value">The Value</property>
-
-            <!--
                 Map a getValue-request to a scripting function.
-            //-->
             <property name="getValue">callbackGetValue</property>
-
-            <!--
                 Map a createOptionsWidget-request to a scripting function.
-            //-->
             <property name="createOptionsWidget">callbackCreateOptionsWidget</property>
         </script>
-
     </collection>
+    //-->
 
     <!--
         The "samples" collection provides misc example scripts to demonstrate
@@ -49,18 +50,6 @@
     //-->
     <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KWord">
 
-        <script
-            name="pysampleimportfile"
-            text="Import File..."
-            comment="Python script to import content from a file"
-            interpreter="python"
-            file="samples/sample_importfile.py" />
-        <script
-            name="pysampleexportfile"
-            text="Export File..."
-            comment="Python script to export content to a file"
-            interpreter="python"
-            file="samples/sample_exportfile.py" />
         <script
             name="pysampleinsertshape"
             text="Insert Shape..."

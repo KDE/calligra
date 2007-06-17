@@ -44,7 +44,7 @@ class ExportFile:
         self.dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
 
         try:
-            savepage = self.dialog.addPage("Save","Export File","filesave")
+            savepage = self.dialog.addPage("Save","Export File","document-save")
             savewidget = forms.createFileWidget(savepage, "kfiledialog:///kwordsampleexportfile")
             savewidget.setMode("Saving")
             #savewidget.minimumWidth = 540

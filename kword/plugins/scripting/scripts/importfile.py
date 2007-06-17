@@ -49,7 +49,7 @@ class ImportFile:
         self.dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
 
         try:
-            openpage = self.dialog.addPage("Open","Import File","fileopen")
+            openpage = self.dialog.addPage("Open","Import File","document-open")
             openwidget = forms.createFileWidget(openpage, "kfiledialog:///kwordsampleimportfile")
             openwidget.setMode("Opening")
             #openwidget.minimumWidth = 540
