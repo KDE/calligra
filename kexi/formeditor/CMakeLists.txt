@@ -40,7 +40,7 @@ kde4_automoc(${kformdesigner_LIB_SRCS})
 kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 
 target_link_libraries(kformdesigner koproperty kexiutils
- ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KPARTS_LIBS} )
+ ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KPARTS_LIBS} )
 # todo: add kexiextendedwidgets kexiguiutils kexidatatable
 
 
