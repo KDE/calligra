@@ -53,26 +53,14 @@ void KPrView::initActions()
        setXMLFile( "kpresenter.rc" );
 
     // do special kpresenter stuff here
-    m_actionViewMode  = new KToggleAction( i18n( "View Mode" ), this );
-    actionCollection()->addAction( "view_mode", m_actionViewMode );
-    connect( m_actionViewMode, SIGNAL( triggered( bool ) ), this, SLOT( changeViewMode( bool ) ) );
+    m_actionStartPresentation  = new KAction( i18n( "Start Presentation" ), this );
+    actionCollection()->addAction( "view_mode", m_actionStartPresentation );
+    connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
 }
 
-void KPrView::changeViewMode( bool mode )
+void KPrView::startPresentation()
 {
-    if ( m_normalMode == 0 )
-    {
-        m_normalMode = viewMode();
-    }
-
-    if ( mode )
-    {
-        setViewMode( m_presentationMode );
-    }
-    else
-    {
-        setViewMode( m_normalMode );
-    }
+    setViewMode( m_presentationMode );
 }
 
 

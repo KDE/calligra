@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,34 +17,40 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRVIEW_H
-#define KPRVIEW_H
+#include "KPrPageEffect.h"
 
-#include <QObject>
+#include <QWidget>
 
-#include <KoPAView.h>
-
-class KPrDocument;
-class KPrViewModePresentation;
-
-class KPrView : public KoPAView
+KPrPageEffect::KPrPageEffect( const QPixmap &px1, const QPixmap &px2, QWidget * w )
+: m_px1( px1 )
+, m_px2( px2 )
+, m_widget( w )
+, m_finish( false )
+, m_lastPos( 0, 0 )
 {
-    Q_OBJECT
-public:
-    explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
-    ~KPrView();
+    Q_ASSERT( px1.size() == px2.size() );
+    Q_ASSERT( px1.size() == m_widget->size() );
+    m_widget->setAttribute( Qt::WA_OpaquePaintEvent );
+}
 
-protected:    
-    void initGUI();
-    void initActions();
+KPrPageEffect::~KPrPageEffect()
+{
+    m_widget->setAttribute( Qt::WA_OpaquePaintEvent, false );
+}
 
-protected slots:
-    void startPresentation();
+void KPrPageEffect::next( int currentTime )
+{
+    Q_UNUSED( currentTime );
+    m_widget->update();
+}
 
-private:
-    KAction *m_actionStartPresentation;
-    KPrViewModePresentation *m_presentationMode;
-    KoPAViewMode *m_normalMode;
-};
+void KPrPageEffect::finish()
+{
+    m_finish = true;
+    m_widget->update();
+}
 
-#endif /* KPRVIEW_H */
+int KPrPageEffect::duration()
+{
+    return m_timeLine.duration();
+}

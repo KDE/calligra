@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,34 +17,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRVIEW_H
-#define KPRVIEW_H
+#ifndef KPRCOVERDOWNEFFECT_H
+#define KPRCOVERDOWNEFFECT_H
 
-#include <QObject>
+#include "KPrPageEffect.h"
 
-#include <KoPAView.h>
-
-class KPrDocument;
-class KPrViewModePresentation;
-
-class KPrView : public KoPAView
+class KPrCoverDownEffect : public KPrPageEffect
 {
-    Q_OBJECT
 public:
-    explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
-    ~KPrView();
+	KPrCoverDownEffect( const QPixmap &px1, const QPixmap &px2, QWidget * w );
 
-protected:    
-    void initGUI();
-    void initActions();
-
-protected slots:
-    void startPresentation();
-
+    virtual bool paint( QPainter &p, int currentTime );
 private:
-    KAction *m_actionStartPresentation;
-    KPrViewModePresentation *m_presentationMode;
-    KoPAViewMode *m_normalMode;
+    int m_count;
 };
 
-#endif /* KPRVIEW_H */
+#endif // KPRCOVERDOWNEFFECT_H
+

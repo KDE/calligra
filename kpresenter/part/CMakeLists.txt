@@ -13,6 +13,9 @@ set( kpresenterprivate_LIB_SRCS
      KPrDocument.cpp
      KPrView.cpp
      KPrViewModePresentation.cpp
+     KPrAnimationDirector.cpp
+     pageeffects/KPrPageEffect.cpp
+     pageeffects/KPrCoverDownEffect.cpp
    )
 
 kde4_automoc(${kpresenterprivate_LIB_SRCS})

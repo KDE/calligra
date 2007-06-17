@@ -22,8 +22,9 @@
 
 #include <KoPAViewMode.h>
 
+#include "KPrAnimationDirector.h"
 
-class KOPAGEAPP_EXPORT KPrViewModePresentation : public KoPAViewMode
+class KPrViewModePresentation : public KoPAViewMode
 {
 public:
 	KPrViewModePresentation( KoPAView * view, KoPACanvas * m_canvas );
@@ -43,6 +44,8 @@ public:
     void deactivate();
 private:
     KoPAViewMode * m_savedViewMode;
+    QWidget * m_savedParent;
+    KPrAnimationDirector * m_animationDirector;
 };
 
 #endif /* KPRVIEWMODEPRESENTATION_H */
