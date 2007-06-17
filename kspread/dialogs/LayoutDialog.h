@@ -30,9 +30,6 @@
 #ifndef __kspread_dlg_layout_h__
 #define __kspread_dlg_layout_h__
 
-//Added by qt3to4:
-#include <q3tabdialog.h>
-
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
@@ -43,6 +40,7 @@
 
 #include <kcompletion.h>
 #include <knuminput.h>
+#include <kpagedialog.h>
 
 #include "Doc.h"
 #include "RowColumnFormat.h"
@@ -624,7 +622,7 @@ protected:
     CellFormatPagePosition *positionPage;
     CellFormatPagePattern *patternPage;
     CellFormatPageProtection *protectPage;
-    Q3TabDialog *tab;
+    KPageDialog* dialog; 
 
     Doc   * m_doc;
     Sheet * m_sheet;

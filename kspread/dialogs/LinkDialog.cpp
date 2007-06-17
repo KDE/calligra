@@ -105,7 +105,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for external file
     d->filePage = new QWidget();
     d->p3 = addPage( d->filePage, i18n( "File" ) );
-    d->p3->setIcon( KIcon( BarIcon( "folder-open",K3Icon::SizeMedium ) ) );
+    d->p3->setIcon( KIcon( BarIcon( "document-open",K3Icon::SizeMedium ) ) );
     QVBoxLayout* fLayout = new QVBoxLayout( d->filePage );
     fLayout->setMargin( marginHint() );
     fLayout->setSpacing( spacingHint() );

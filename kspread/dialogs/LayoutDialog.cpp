@@ -786,46 +786,48 @@ void CellFormatDialog::init()
     formatRedAlwaysSignedPixmap  = paintFormatPixmap( "+123.456", Qt::black, "-123.456", Qt::red );
   }
 
-  tab = new Q3TabDialog( (QWidget*)m_pView, 0, true );
-  //tab->setGeometry( tab->x(), tab->y(), 420, 400 );
+  dialog = new KPageDialog( (QWidget*)m_pView );
+  dialog->setCaption( i18n( "Cell Format" ) );
+  dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+  dialog->setFaceType( KPageDialog::Tabbed );
+  dialog->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
 
   if ( m_style )
   {
-    generalPage = new GeneralTab( tab, this );
-    tab->addTab( generalPage, i18n( "&General" ) );
+    generalPage = new GeneralTab( dialog, this );
+
+    KPageWidgetItem* item = dialog->addPage( generalPage, i18n( "&General" ) );
+    //item->setHeader( i18n( "&General" ) );
+    Q_UNUSED(item);
   }
 
-  floatPage = new CellFormatPageFloat( tab, this );
-  tab->addTab( floatPage, i18n("&Data Format") );
+  floatPage = new CellFormatPageFloat( dialog, this );
+  dialog->addPage( floatPage, i18n("&Data Format") );
 
-  fontPage = new CellFormatPageFont( tab, this );
-  tab->addTab( fontPage, i18n("&Font") );
+  fontPage = new CellFormatPageFont( dialog, this );
+  dialog->addPage( fontPage, i18n("&Font") );
 
   //  miscPage = new CellFormatPageMisc( tab, this );
   //  tab->addTab( miscPage, i18n("&Misc") );
 
-  positionPage = new CellFormatPagePosition( tab, this);
-  tab->addTab( positionPage, i18n("&Position") );
+  positionPage = new CellFormatPagePosition( dialog, this);
+  dialog->addPage( positionPage, i18n("&Position") );
 
-  borderPage = new CellFormatPageBorder( tab, this );
-  tab->addTab( borderPage, i18n("&Border") );
+  borderPage = new CellFormatPageBorder( dialog, this );
+  dialog->addPage( borderPage, i18n("&Border") );
 
-  patternPage=new CellFormatPagePattern(tab,this);
-  tab->addTab( patternPage,i18n("Back&ground"));
+  patternPage=new CellFormatPagePattern(dialog,this);
+  dialog->addPage( patternPage,i18n("Back&ground") );
 
-  protectPage = new CellFormatPageProtection( tab, this );
-  tab->addTab( protectPage, i18n("&Cell Protection") );
+  protectPage = new CellFormatPageProtection( dialog, this );
+  dialog->addPage( protectPage, i18n("&Cell Protection") );
 
-  tab->setCancelButton( i18n( "&Cancel" ) );
-  tab->setOkButton( i18n( "&OK" ) );
+  //tab->adjustSize();
+  //connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
+  connect( dialog, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 
-  tab->setWindowTitle( i18n( "Cell Format" ) );
-
-  tab->adjustSize();
-
-  connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
-
-  tab->exec();
+  dialog->exec();
+  //tab->exec();
 }
 
 QPixmap * CellFormatDialog::paintFormatPixmap( const char * _string1, const QColor & _color1,
@@ -856,7 +858,7 @@ QPixmap * CellFormatDialog::paintFormatPixmap( const char * _string1, const QCol
 
 int CellFormatDialog::exec()
 {
-  return ( tab->exec() );
+  return ( dialog->exec() );
 }
 
 void CellFormatDialog::applyStyle()
