@@ -54,6 +54,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     // TODO language
 
     connect(widget.name, SIGNAL(textChanged (const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    connect(widget.name, SIGNAL(textChanged (const QString &)), this, SLOT(setName(const QString&)));
     //connect( m_fontChooser, SIGNAL( fontSelected( const QFont & ) ), this, SIGNAL( fontChanged( const QFont & ) ) );
 }
 
@@ -81,6 +82,10 @@ void CharacterGeneral::save() {
 
 void CharacterGeneral::switchToGeneralTab() {
     widget.tabs->setCurrentIndex(0);
+}
+
+void CharacterGeneral::setName(const QString &name) {
+    m_style->setName(name);
 }
 
 #include <CharacterGeneral.moc>

@@ -44,6 +44,9 @@ public:
 signals:
     void nameChanged(const QString &name);
 
+private slots:
+    void setName(const QString &name);
+
 private:
     Ui::CharacterGeneral widget;
     bool m_blockSignals;

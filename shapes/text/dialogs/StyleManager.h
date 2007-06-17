@@ -34,6 +34,7 @@ class StyleManager : public QWidget {
     Q_OBJECT
 public:
     StyleManager(QWidget *parent = 0);
+    ~StyleManager();
 
     void setStyleManager(KoStyleManager *sm);
 
@@ -52,7 +53,9 @@ private:
     Ui::StyleManager widget;
     KoStyleManager *m_styleManager;
     QList<KoParagraphStyle*> m_paragraphStyles;
-    QList<KoCharacterStyle*> m_characterStyles;
+
+    QMap<int, KoParagraphStyle*> m_alteredParagraphStyles;
+    QMap<int, KoCharacterStyle*> m_alteredCharacterStyles;
 };
 
 #endif
