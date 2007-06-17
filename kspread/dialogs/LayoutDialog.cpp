@@ -790,6 +790,7 @@ void CellFormatDialog::init()
   dialog->setCaption( i18n( "Cell Format" ) );
   dialog->setButtons( KDialog::Ok | KDialog::Cancel );
   dialog->setFaceType( KPageDialog::Tabbed );
+  dialog->setMinimumWidth(600);
   dialog->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
 
   if ( m_style )
