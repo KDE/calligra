@@ -923,7 +923,7 @@ void KWDLoader::fill(KoCharacterStyle *style, const QDomElement &formatElem) {
         QString value = element.attribute("value", "0");
         // TODO store other properties
         if (value != "0")
-            style->setFontStrikeOutStyle(Qt::SolidLine);
+            style->setStrikeOutStyle(Qt::SolidLine);
     }
     element = formatElem.firstChildElement( "UNDERLINE" );
     if( !element.isNull() ) {
@@ -950,7 +950,7 @@ void KWDLoader::fill(KoCharacterStyle *style, const QDomElement &formatElem) {
             underline = QTextCharFormat::DashDotDotLine;
 
         //style->setFontUnderline(underline != QTextCharFormat::NoUnderline);
-        style->setUnderlineStyle(underline);
+        style->setUnderlineStyle((Qt::PenStyle) underline);
     }
     element = formatElem.firstChildElement( "TEXTBACKGROUNDCOLOR" );
     if( !element.isNull() ) {
