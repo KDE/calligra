@@ -43,15 +43,6 @@ public:
     */
    QString disappearSoundEffectFileName() const;
 
-
-   void setShapeName( const QString &_name);
-   
-   /**
-    * Return shape name
-    * @param return shape name.
-    */
-   QString shapeName() const;
-
 #if 0 //TODO
    void loadOasis(const QDomElement &element, KoOasisContext & context,  KPrLoadingInfo *info);
    virtual bool saveOasisObject( KPOasisSaveContext &sc ) const;
@@ -62,7 +53,6 @@ private:
    int m_disappearTimer;
    QString m_a_soundFileName;
    QString m_d_soundFileName;
-   QString m_shapeName;
 };
 
 

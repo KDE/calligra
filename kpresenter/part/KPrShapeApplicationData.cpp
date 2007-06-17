@@ -43,14 +43,3 @@ QString KPrShapeApplicationData::disappearSoundEffectFileName() const
 {
   return m_d_soundFileName;
 }
-
-
-void KPrShapeApplicationData::setShapeName( const QString &_name)
-{
-    m_shapeName = _name;
-}
-
-QString KPrShapeApplicationData::shapeName() const
-{
-    return m_shapeName;
-}
