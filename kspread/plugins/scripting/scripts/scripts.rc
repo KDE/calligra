@@ -1,5 +1,11 @@
 <KrossScripting>
     <script
+            name="pycsvexport"
+            text="CSV Export"
+            comment="Export an OpenDocument Spreadsheet File to a CSV File"
+            interpreter="python"
+            file="extensions/csvexport.py" />
+    <script
             name="pyhtmlexport"
             text="HTML Export"
             comment="Export an OpenDocument Spreadsheet File to a HTML File"
