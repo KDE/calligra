@@ -105,7 +105,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for external file
     d->filePage = new QWidget();
     d->p3 = addPage( d->filePage, i18n( "File" ) );
-    d->p3->setIcon( KIcon( BarIcon( "document-new",K3Icon::SizeMedium ) ) );
+    d->p3->setIcon( KIcon( BarIcon( "folder-open",K3Icon::SizeMedium ) ) );
     QVBoxLayout* fLayout = new QVBoxLayout( d->filePage );
     fLayout->setMargin( marginHint() );
     fLayout->setSpacing( spacingHint() );
@@ -144,7 +144,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link to another cell
     d->cellPage = new QWidget();
     d->p4 = addPage( d->cellPage, i18n( "Cell" ) );
-    d->p4->setIcon( KIcon( BarIcon( "misc",K3Icon::SizeMedium ) ) );
+    d->p4->setIcon( KIcon( BarIcon( "table",K3Icon::SizeMedium ) ) );
     QVBoxLayout* cLayout = new QVBoxLayout( d->cellPage );
     cLayout->setSpacing( spacingHint() );
     cLayout->addWidget( new QLabel( i18n("Text to display:" ), d->cellPage ) );
