@@ -23,7 +23,6 @@
 #include <KoView.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
-#include <KoZoomMode.h>
 #include <KoShapeReorderCommand.h>
 
 #include <QWidget>
@@ -35,10 +34,8 @@ class KWGui;
 class KWPage;
 
 class KoShape;
-class KoZoomAction;
+class KoZoomController;
 class KToggleAction;
-
-class QResizeEvent;
 
 /**
  * KWords view class. Following the broad model-view-controller idea this class
@@ -82,26 +79,13 @@ public:
      */
     KWCanvas *kwcanvas() const;
 
-    /// Return the zoom handler for this view.
+    /// Return the view converter for this view.
     KoViewConverter *viewConverter() { return &m_zoomHandler; }
-    void setZoom( int zoom ); ///< change the zoom value
-
-protected:
-    /// overwritten method from superclass
-    void resizeEvent( QResizeEvent *e );
-
-    /// overwritten method from superclass
-    void showEvent(QShowEvent *event);
 
 private:
     void setupActions();
-    /// Update the menu to have the choices the current viewmode provide.
-    void changeZoomMenu();
-    void updateZoomControls();
 
 private slots:
-    void viewZoom( KoZoomMode::Mode mode, double zoom );
-    void updateZoom();
     void editFrameProperties();
 
     void selectionChanged();
@@ -134,9 +118,9 @@ private:
     KWCanvas *m_canvas;
     KWDocument *m_document;
     KoZoomHandler m_zoomHandler;
+    KoZoomController *m_zoomController;
     KWPage *m_currentPage;
 
-    KoZoomAction *m_actionViewZoom;
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;
     KAction *m_actionFormatFont;

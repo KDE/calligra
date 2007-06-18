@@ -70,7 +70,7 @@ public:
     QRectF viewToDocument( const QRectF & rect ) const;
 
     /** Size of the contents area, in pixels */
-    virtual QSize contentsSize() = 0;
+    virtual QSizeF contentsSize() const = 0;
 
     /** Should selected text be drawn as such? */
     virtual bool drawSelections() { return true; }

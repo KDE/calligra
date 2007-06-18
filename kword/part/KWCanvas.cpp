@@ -72,8 +72,7 @@ void KWCanvas::pageSetupChanged() {
 }
 
 void KWCanvas::updateSize() {
-    QSize size = m_viewMode->contentsSize();
-    emit documentSize(size);
+    emit documentSize(m_viewMode->contentsSize());
 }
 
 void KWCanvas::setDocumentOffset(const QPoint &offset) {

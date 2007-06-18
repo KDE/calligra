@@ -44,7 +44,7 @@ public:
 
     QPointF documentToView( const QPointF & point ) const;
     QPointF viewToDocument( const QPointF & point ) const;
-    QSize contentsSize();
+    virtual QSizeF contentsSize() const { return m_contents; }
 
     /// return a string identification of this viewMode
     static const QString viewMode() { return "ModeNormal"; }

@@ -100,7 +100,7 @@ signals:
      * @see KWViewMode::contentsSize
      * @param size the content area size, in pixels.
      */
-    void documentSize(const QSize &size);
+    void documentSize(const QSizeF &size);
 
 protected:
     /// reimplemented method from superclass

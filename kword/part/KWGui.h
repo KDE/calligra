@@ -77,6 +77,8 @@ public:
      */
     void updateRulers() const;
 
+    KoCanvasController *canvasController() const { return m_canvasController; }
+
 private slots:
     void pageSetupChanged();
     void updateMousePos(const QPoint &point);

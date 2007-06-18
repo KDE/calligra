@@ -40,8 +40,8 @@ KWViewModePreview::KWViewModePreview( KWCanvas* canvas )
 {
 }
 
-QSize KWViewModePreview::contentsSize() {
-    return QSize();
+QSizeF KWViewModePreview::contentsSize() const {
+    return QSizeF();
 }
 
 QPointF KWViewModePreview::documentToView( const QPointF & point ) const {

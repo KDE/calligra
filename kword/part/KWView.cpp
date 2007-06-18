@@ -50,6 +50,7 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoTextAnchor.h>
 #include <KoShapeGroupCommand.h>
+#include <KoZoomController.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -83,6 +84,15 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     setupActions();
 
     connect( kwcanvas()->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+
+    m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), true);
+    KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
+    if ( m_canvas->viewMode()->hasPages() )
+        modes |= KoZoomMode::ZOOM_PAGE;
+    m_zoomController->zoomAction()->setZoomModes(modes);
+    connect(m_canvas, SIGNAL(documentSize(const QSizeF &)), m_zoomController, SLOT(setDocumentSize(const QSizeF&)));
+    m_canvas->updateSize(); // to emit the doc size at least once
+    m_zoomController->setZoom(m_document->zoomMode(), m_document->zoom() / 100.);
 }
 
 KWView::~KWView() {
@@ -101,21 +111,6 @@ void KWView::updateReadWrite(bool readWrite) {
 }
 
 void KWView::setupActions() {
-    KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
-
-    if ( kwcanvas() && kwcanvas()->viewMode()->hasPages() )
-        modes |= KoZoomMode::ZOOM_PAGE;
-
-    m_actionViewZoom = new KoZoomAction( modes, i18n("Zoom"), false, this );
-    actionCollection()->addAction("view_zoom", m_actionViewZoom);
-    actionCollection()->addAction(KStandardAction::ZoomIn,  "zoom_in", m_actionViewZoom, SLOT(zoomIn()));
-    actionCollection()->addAction(KStandardAction::ZoomOut,  "zoom_out", m_actionViewZoom, SLOT(zoomOut()));
-    m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
-    m_zoomHandler.setZoomMode( m_document->zoomMode() );
-    m_zoomHandler.setZoom( m_document->zoom() );
-    connect( m_actionViewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, double ) ),
-            this, SLOT( viewZoom( KoZoomMode::Mode, double ) ) );
-
     m_actionFormatFrameSet  = new KAction(i18n("Frame/Frameset Properties"), this);
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet );
     m_actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties" ) );
@@ -841,87 +836,7 @@ This saves problems with finding out which we missed near the end.
 */
 }
 
-void KWView::setZoom( int zoom ) {
-    m_zoomHandler.setZoom( zoom );
-    m_document->setZoom( zoom ); // for persistency reasons
-
-    if( m_actionViewZoom ) {
-        m_actionViewZoom->setEffectiveZoom( zoom );
-    }
-
-    //if ( statusBar() )
-    //    m_sbZoomLabel->setText( ' ' + QString::number( zoom ) + "% " );
-
-    // Also set the zoom in KoView (for embedded views)
-    //kDebug(32003) << "KWView::setZoom " << zoom << " setting koview zoom to " << m_zoomHandler.zoomedResolutionY() << endl;
-    kwcanvas()->updateSize();
-    m_gui->updateRulers();
-}
-
-void KWView::viewZoom( KoZoomMode::Mode mode, double zoom )
-{
-    //kDebug(32003) << " viewZoom '" << KoZoomMode::toString( mode ) << ", " << zoom << "'" << endl;
-
-    if ( !m_currentPage )
-        return;
-
-    int newZoom = zoom*100;
-
-    if ( mode == KoZoomMode::ZOOM_WIDTH ) {
-        m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_WIDTH);
-        newZoom = qRound( static_cast<double>(m_gui->viewportSize().width() * 100 ) /
-                (m_zoomHandler.resolutionX() * m_currentPage->width() ) ) - 1;
-
-        if(newZoom != m_zoomHandler.zoomInPercent() || m_gui->horizontalScrollBarVisible()) {
-            // we have to do this twice to take into account a possibly appearing vertical scrollbar
-            QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
-        }
-    }
-    else if ( mode == KoZoomMode::ZOOM_PAGE ) {
-        m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_PAGE);
-        double height = m_zoomHandler.resolutionY() * m_currentPage->height();
-        double width = m_zoomHandler.resolutionX() * m_currentPage->width();
-        QSize viewport = m_gui->viewportSize();
-        newZoom = qMin( qRound( static_cast<double>(viewport.height() * 100 ) / height ),
-                     qRound( static_cast<double>(viewport.width()* 100 ) / width ) ) - 1;
-    }
-    else {
-        m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_CONSTANT);
-    }
-
-    if( newZoom < 10 || newZoom == m_zoomHandler.zoomInPercent()) //zoom should be valid and >10
-        return;
-
-    setZoom( newZoom );
-    canvas()->setFocus();
-}
-
-void KWView::changeZoomMenu() {
-    KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
-
-    if ( kwcanvas() && kwcanvas()->viewMode()->hasPages() )
-        modes |= KoZoomMode::ZOOM_PAGE;
-
-    m_actionViewZoom->setZoomModes( modes );
-}
-
-void KWView::updateZoom( ) {
-    viewZoom( m_zoomHandler.zoomMode(), m_zoomHandler.zoomInPercent()/100.0 );
-}
-
-void KWView::resizeEvent( QResizeEvent *e )
-{
-    QWidget::resizeEvent( e );
-
-    if ( m_zoomHandler.zoomMode() != KoZoomMode::ZOOM_CONSTANT )
-        updateZoom();
-}
-
-void KWView::showEvent(QShowEvent *event) {
-    Q_UNUSED(event);
-    QTimer::singleShot( 1000, this, SLOT( updateZoom() ) );
-}
-
+// -------------------- Actions -----------------------
 void KWView::editFrameProperties() {
     QList<KWFrame*> frames;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes()) {
@@ -937,7 +852,6 @@ void KWView::editFrameProperties() {
     delete frameDialog;
 }
 
-// -------------------- Actions -----------------------
 void KWView::print() {
 // options;
 //   DPI
@@ -1132,8 +1046,10 @@ void KWView::selectionChanged()
 {
     KoShape *shape = kwcanvas()->shapeManager()->selection()-> firstSelectedShape();
     m_actionFormatFrameSet->setEnabled( shape != 0 );
-    if(shape)
+    if(shape) {
         m_currentPage = m_document->pageManager()->page(shape);
+        m_zoomController->setPageSize(m_currentPage->rect().size());
+    }
     m_actionEditDelFrame->setEnabled(false);
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());

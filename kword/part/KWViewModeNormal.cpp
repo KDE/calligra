@@ -125,11 +125,6 @@ void KWViewModeNormal::updatePageCache() {
     m_contents = QSizeF(width, bottom);
 }
 
-QSize KWViewModeNormal::contentsSize() {
-    QPointF size = canvas()->viewConverter()->documentToView(QPointF(m_contents.width(), m_contents.height()));
-    return QSize(qRound(size.x()), qRound(size.y()));
-}
-
 QPointF KWViewModeNormal::documentToView( const QPointF & point ) const {
     const KWPageManager *pageManager = canvas()->document()->pageManager();
     KWPage *page = pageManager->page(point);

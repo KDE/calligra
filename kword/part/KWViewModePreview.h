@@ -37,7 +37,7 @@ public:
 
     QPointF documentToView( const QPointF & point ) const;
     QPointF viewToDocument( const QPointF & point ) const;
-    QSize contentsSize();
+    virtual QSizeF contentsSize() const;
 
     /**
      * The preview can show several pages in a row for easy overview.
