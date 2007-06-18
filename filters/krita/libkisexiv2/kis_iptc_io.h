@@ -37,6 +37,8 @@ class KisIptcIO : public KisMetaData::IOBackend {
         virtual bool supportLoading() const { return true; }
         virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;
     private:
+        void initMappingsTable() const;
+    private:
         Private* const d;
 };
 

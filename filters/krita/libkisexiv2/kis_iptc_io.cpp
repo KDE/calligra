@@ -27,7 +27,42 @@
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_schema.h>
 
+struct IPTCToKMD {
+    QString exivTag;
+    QString namespaceUri;
+    QString name;
+};
+
+static const IPTCToKMD mappings[] = {
+    { "Iptc.Application2.City", KisMetaData::Schema::PhotoshopSchemaUri, "City" },
+    { "Iptc.Application2.Copyright", KisMetaData::Schema::DublinCoreSchemaUri, "rights" },
+    { "Iptc.Application2.CountryName", KisMetaData::Schema::PhotoshopSchemaUri, "Country" },
+    { "Iptc.Application2.CountryCode", KisMetaData::Schema::PhotoshopSchemaUri, "" },
+    { "Iptc.Application2.Byline", KisMetaData::Schema::DublinCoreSchemaUri, "Creator" },
+    { "Iptc.Application2.BylineTitle", KisMetaData::Schema::PhotoshopSchemaUri, "AuthorsPosition" },
+    { "Iptc.Application2.DateCreated", KisMetaData::Schema::PhotoshopSchemaUri, "DateCreated" },
+    { "Iptc.Application2.Caption", KisMetaData::Schema::DublinCoreSchemaUri, "description" },
+    { "Iptc.Application2.Writer", KisMetaData::Schema::PhotoshopSchemaUri, "CaptionWriter" },
+    { "Iptc.Application2.Headline", KisMetaData::Schema::PhotoshopSchemaUri, "Headline" },
+    { "Iptc.Application2.SpecialInstructions", KisMetaData::Schema::PhotoshopSchemaUri, "Instructions" },
+    { "Iptc.Application2.ObjectAttribute", KisMetaData::Schema::IPTCSchemaUri, "IntellectualGenre" },
+    { "Iptc.Application2.TransmissionReference", KisMetaData::Schema::PhotoshopSchemaUri, "JobID" },
+    { "Iptc.Application2.Keywords", KisMetaData::Schema::DublinCoreSchemaUri, "subject" },
+    { "Iptc.Application2.SubLocation", KisMetaData::Schema::IPTCSchemaUri, "Location" },
+    { "Iptc.Application2.Credit", KisMetaData::Schema::PhotoshopSchemaUri, "Credit" },
+    { "Iptc.Application2.ProvinceState", KisMetaData::Schema::PhotoshopSchemaUri, "State" },
+    { "Iptc.Application2.Source", KisMetaData::Schema::PhotoshopSchemaUri, "Source" },
+    { "Iptc.Application2.Subject", KisMetaData::Schema::IPTCSchemaUri, "SubjectCode" },
+    { "Iptc.Application2.ObjectName", KisMetaData::Schema::DublinCoreSchemaUri, "Title" },
+    { "Iptc.Application2.Urgency", KisMetaData::Schema::PhotoshopSchemaUri, "Urgency" },
+    { "Iptc.Application2.Category", KisMetaData::Schema::PhotoshopSchemaUri, "Category" },
+    { "Iptc.Application2.SuppCategory", KisMetaData::Schema::PhotoshopSchemaUri, "SupplementalCategory" },
+    { "", "", "" } // indicates the end of the array
+};
+
 struct KisIptcIO::Private {
+    QHash<QString, IPTCToKMD> iptcToKMD;
+    QHash<QString, IPTCToKMD> kmdToIPTC;
 };
 
 // ---- Implementation of KisExifIO ----//
@@ -35,8 +70,26 @@ KisIptcIO::KisIptcIO() : d(new Private)
 {
 }
 
+void KisIptcIO::initMappingsTable() const
+{
+    // For some reason, initializing the tables in the constructor makes the it crash
+    if(d->iptcToKMD.size() == 0)
+    {
+        for(int i = 0; not mappings[i].exivTag.isEmpty(); i++)
+        {
+            kDebug() << i << endl;
+            d->iptcToKMD[mappings[i].exivTag] = mappings[i];
+            d->kmdToIPTC[
+                    KisMetaData::SchemaRegistry::instance()
+                        ->schemaFromUri(mappings[i].namespaceUri)
+                        ->generateQualifiedName( mappings[i].name) ] = mappings[i];
+        }
+    }
+}
+
 bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
+    initMappingsTable();
     return false;
 }
 
@@ -45,67 +98,25 @@ bool KisIptcIO::canSaveAllEntries(KisMetaData::Store* store) const
     return false;
 }
 
-#define ADD_ENTRY(name, schema) \
-    store->addEntry(KisMetaData::Entry(name, schema, exivValueToKMDValue(it->getValue())));
-
 bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
+    initMappingsTable();
     kDebug() << "Loading IPTC Tags" << endl;
     ioDevice->open(QIODevice::ReadOnly);
     QByteArray arr = ioDevice->readAll();
     Exiv2::IptcData iptcData;
     iptcData.load((const Exiv2::byte*)arr.data(), arr.size());
     kDebug() << "There are " << iptcData.count() << " entries in the IPTC section" << endl;
-    // Get schemas
-    const KisMetaData::Schema* xmpRightsSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPRightsSchemaUri);
-    const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
-    const KisMetaData::Schema* photoshopSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::PhotoshopSchemaUri);
-    const KisMetaData::Schema* iptcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::IPTCSchemaUri);
     for(Exiv2::IptcMetadata::const_iterator it = iptcData.begin();
         it != iptcData.end(); ++it)
     {
         kDebug() << "Reading info for key " << it->key().c_str() << endl;
-        if(it->tagName() == "City" or it->tagName() == "Country" or it->tagName() == "DateCreated" or it->tagName() == "Headline" or it->tagName() == "Instructions" or it->tagName() == "Source")
+        if(d->iptcToKMD.contains(it->key().c_str()))
         {
-            ADD_ENTRY(it->tagName().c_str(), photoshopSchema)
-        } else if(it->tagName() == "JobID")
-        {
-            ADD_ENTRY("TransmissionReference", photoshopSchema);
-        } else if(it->tagName() == "Provider")
-        {
-            ADD_ENTRY("Credit", photoshopSchema);
-        } else if(it->tagName() == "Province-State")
-        {
-            ADD_ENTRY("State", photoshopSchema);
-        } else if(it->tagName() == "RightsUsageTerms")
-        {
-            ADD_ENTRY("UsageTerms", xmpRightsSchema);
-        } else if(it->tagName() == "CopyrightNotice")
-        {
-            ADD_ENTRY("rights", dcSchema);
-        } else if(it->tagName() == "Description")
-        {
-            ADD_ENTRY("description", dcSchema);
-        } else if(it->tagName() == "Keywords")
-        {
-            ADD_ENTRY("subject", dcSchema);
-        } else if(it->tagName() == "DescriptionWriter")
-        {
-            ADD_ENTRY("CaptionWriter", photoshopSchema);
-        } else if(it->tagName() == "Title")
-        {
-            ADD_ENTRY("title", dcSchema);
-        } else if(it->tagName() == "Creator")
-        {
-            ADD_ENTRY("creator", dcSchema);
-        } else if(it->tagName() == "CreatorContactInfo")
-        {
-            // TODO
-        } else if(it->tagName() == "CreatorJobTitle" )
-        {
-            ADD_ENTRY("AuthorsPosition", photoshopSchema)
-        } else {
-            ADD_ENTRY(it->tagName().c_str(), iptcSchema);
+            const IPTCToKMD& iptcToKMd = d->iptcToKMD[it->key().c_str()];
+            store->addEntry(KisMetaData::Entry(iptcToKMd.name,
+                            KisMetaData::SchemaRegistry::instance()->schemaFromUri(iptcToKMd.namespaceUri),
+                            exivValueToKMDValue(it->getValue())));
         }
     }
     return false;
