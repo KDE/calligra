@@ -457,14 +457,18 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         else {
             if(!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
                 m_caret.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-            m_caret.deletePreviousChar();
+            // if the cursor position (no selection) has inline object, the character + inline object
+            // is deleted by the InlineTextObjectManager
+            if (!m_selectionHandler.deleteInlineObjects(true) || m_caret.hasSelection())
+                m_caret.deletePreviousChar();
             editingPluginEvents();
         }
     }
     else if(event->key() == Qt::Key_Delete) {
         if(!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.
             m_caret.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-        m_caret.deleteChar();
+        if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection())
+            m_caret.deleteChar();
         editingPluginEvents();
     }
     else if((event->key() == Qt::Key_Left) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
@@ -523,12 +527,16 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             return;
         }
         else if(event->text().at(0) == '\r') {
+            if (m_caret.hasSelection())
+                m_selectionHandler.deleteInlineObjects();
             m_selectionHandler.nextParagraph();
             updateActions();
             editingPluginEvents();
             ensureCursorVisible();
         }
         else { // insert the text
+            if (m_caret.hasSelection())
+                m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
             const bool paragEmtpy = m_caret.atBlockStart();
@@ -967,8 +975,7 @@ void TextTool::addBookmark() {
     }
     delete dia;
 
-    KoBookmark *bookmark = m_selectionHandler.addBookmark(m_textShape);
-    manager->insert(name, bookmark);
+    m_selectionHandler.addBookmark(name, m_textShape);
 }
 
 void TextTool::selectBookmark() {
@@ -1005,10 +1012,15 @@ void TextTool::selectBookmark() {
         updateSelectionHandler();
     }
 
-    if (m_selectionHandler.selectBookmark(bookmark))
+    if (bookmark->hasSelection()) {
+        m_caret.setPosition(bookmark->position());
+        m_caret.setPosition(bookmark->endBookmark()->position() + 1, QTextCursor::KeepAnchor);
         repaintSelection(m_caret.selectionStart(), m_caret.selectionEnd());
-    else
+    }
+    else {
+        m_caret.setPosition(bookmark->position() + 1);
         repaintCaret();
+    }
     ensureCursorVisible();
 }
 
@@ -1017,7 +1029,7 @@ void TextTool::deleteBookmark(const QString &name) {
         TextShape *prevShape = m_textShape;
         QTextCursor copyCursor = m_caret;
         int startPosition;
-        int endPosition;
+        int endPosition = -1;
 
         KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_textShapeData->document()->documentLayout());
         Q_ASSERT(layout);
@@ -1032,16 +1044,18 @@ void TextTool::deleteBookmark(const QString &name) {
             updateSelectionHandler();
         }
         
-        m_caret.setPosition(bookmark->position());
-        m_caret.deleteChar();
-
         if (bookmark->hasSelection()) {
             KoBookmark *endBookmark = bookmark->endBookmark();
-            m_caret.setPosition(endBookmark->position() - 1);
-            m_caret.deleteChar();
+            endPosition = endBookmark->position() - 1;
         }
 
-        manager->remove(name);
+        m_caret.setPosition(bookmark->position());
+        m_selectionHandler.deleteInlineObjects(false);
+
+        if (endPosition != -1) {
+            m_caret.setPosition(endPosition);
+            m_selectionHandler.deleteInlineObjects(false);
+        }
 
         startPosition = copyCursor.selectionStart();
         endPosition = copyCursor.selectionEnd();
@@ -1063,7 +1077,6 @@ void TextTool::deleteBookmark(const QString &name) {
         }
     }
 }
-
 
 void TextTool::formatParagraph() {
     ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(m_canvas->canvasWidget());

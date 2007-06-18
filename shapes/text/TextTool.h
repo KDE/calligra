@@ -139,7 +139,7 @@ private slots:
     void stopMacro();
 
 private slots:
-    /// delete previously bookmarked text cursor location or selection
+    /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
 
 private:
