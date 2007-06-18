@@ -36,7 +36,6 @@
 #include <View.h>
 // Kross
 #include <kross/core/manager.h>
-//#include <kross/ui/guiclient.h>
 
 typedef KGenericFactory< ScriptingPart > KSpreadScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( krossmodulekspread, KSpreadScriptingFactory( "krossmodulekspread" ) )

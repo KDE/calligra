@@ -36,7 +36,6 @@
 #include <kross/core/interpreter.h>
 #include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
-#include <kross/ui/guiclient.h>
 #include <kross/ui/model.h>
 // koffice
 #include <KoDockRegistry.h>
