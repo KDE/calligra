@@ -474,7 +474,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             quint8 opacity = OPACITY_OPAQUE;
             const ImageAttribute * attr = GetImageAttribute(image, "[layer-opacity]");
             if (attr != 0) {
-                opacity = quint8_MAX - Downscale(QString(attr->value).toInt());
+                opacity = quint8_MAX - ScaleQuantumToChar(QString(attr->value).toInt());
             }
 
             KisPaintLayerSP layer = 0;
@@ -528,17 +528,17 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                         while (!hiter.isDone())
                         {
                             quint8 *ptr= hiter.rawData();
-                            *(ptr++) = Downscale(pp->red); // cyan
-                            *(ptr++) = Downscale(pp->green); // magenta
-                            *(ptr++) = Downscale(pp->blue); // yellow
-                            *(ptr++) = Downscale(indexes[x]); // Black
+                            *(ptr++) = ScaleQuantumToChar(pp->red); // cyan
+                            *(ptr++) = ScaleQuantumToChar(pp->green); // magenta
+                            *(ptr++) = ScaleQuantumToChar(pp->blue); // yellow
+                            *(ptr++) = ScaleQuantumToChar(indexes[x]); // Black
 // XXX: Warning! This ifdef messes up the paren matching big-time!
 #ifdef HAVE_MAGICK6
                             if (image->matte != MagickFalse) {
 #else
                             if (image->matte == true) {
 #endif
-                                *(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
+                                *(ptr++) = OPACITY_OPAQUE - ScaleQuantumToChar(pp->opacity);
                             }
                             else {
                                 *(ptr++) = OPACITY_OPAQUE;
@@ -572,10 +572,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                             {
                                 quint8 *ptr= hiter.rawData();
                                 // XXX: not colorstrategy and bitdepth independent
-                                *(ptr++) = Downscale(pp->blue);
-                                *(ptr++) = Downscale(pp->green);
-                                *(ptr++) = Downscale(pp->red);
-                                *(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
+                                *(ptr++) = ScaleQuantumToChar(pp->blue);
+                                *(ptr++) = ScaleQuantumToChar(pp->green);
+                                *(ptr++) = ScaleQuantumToChar(pp->red);
+                                *(ptr++) = OPACITY_OPAQUE - ScaleQuantumToChar(pp->opacity);
 
                                 pp++;
                                 ++hiter;
@@ -602,8 +602,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                             {
                                 quint8 *ptr= hiter.rawData();
                                 // XXX: not colorstrategy and bitdepth independent
-                                *(ptr++) = Downscale(pp->blue);
-                                *(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
+                                *(ptr++) = ScaleQuantumToChar(pp->blue);
+                                *(ptr++) = OPACITY_OPAQUE - ScaleQuantumToChar(pp->opacity);
 
                                 pp++;
                                 ++hiter;
@@ -806,13 +806,13 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                     while (!it.isDone()) {
 
                         const quint8 * d = it.rawData();
-                        pp -> red = Upscale(d[PIXEL_CYAN]);
-                        pp -> green = Upscale(d[PIXEL_MAGENTA]);
-                        pp -> blue = Upscale(d[PIXEL_YELLOW]);
+                        pp -> red = ScaleCharToQuantum(d[PIXEL_CYAN]);
+                        pp -> green = ScaleCharToQuantum(d[PIXEL_MAGENTA]);
+                        pp -> blue = ScaleCharToQuantum(d[PIXEL_YELLOW]);
                         if (alpha)
-                            pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_CMYK_ALPHA]);
+                            pp -> opacity = ScaleCharToQuantum(OPACITY_OPAQUE - d[PIXEL_CMYK_ALPHA]);
 
-                        indexes[x]= Upscale(d[PIXEL_BLACK]);
+                        indexes[x]= ScaleCharToQuantum(d[PIXEL_BLACK]);
 
                         x++;
                         pp++;
@@ -842,11 +842,11 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                     while (!it.isDone()) {
 
                         const quint8 * d = it.rawData();
-                        pp -> red = Upscale(d[PIXEL_RED]);
-                        pp -> green = Upscale(d[PIXEL_GREEN]);
-                        pp -> blue = Upscale(d[PIXEL_BLUE]);
+                        pp -> red = ScaleCharToQuantum(d[PIXEL_RED]);
+                        pp -> green = ScaleCharToQuantum(d[PIXEL_GREEN]);
+                        pp -> blue = ScaleCharToQuantum(d[PIXEL_BLUE]);
                         if (alpha)
-                            pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
+                            pp -> opacity = ScaleCharToQuantum(OPACITY_OPAQUE - d[PIXEL_ALPHA]);
 
                         pp++;
                         ++it;
@@ -873,11 +873,11 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 else {
                     while (!it.isDone()) {
                         const quint8 * d = it.rawData();
-                        pp -> red = Upscale(d[PIXEL_GRAY]);
-                        pp -> green = Upscale(d[PIXEL_GRAY]);
-                        pp -> blue = Upscale(d[PIXEL_GRAY]);
+                        pp -> red = ScaleCharToQuantum(d[PIXEL_GRAY]);
+                        pp -> green = ScaleCharToQuantum(d[PIXEL_GRAY]);
+                        pp -> blue = ScaleCharToQuantum(d[PIXEL_GRAY]);
                         if (alpha)
-                            pp -> opacity = Upscale(OPACITY_OPAQUE - d[PIXEL_GRAY_ALPHA]);
+                            pp -> opacity = ScaleCharToQuantum(OPACITY_OPAQUE - d[PIXEL_GRAY_ALPHA]);
 
                         pp++;
                         ++it;
