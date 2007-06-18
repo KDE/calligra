@@ -23,8 +23,11 @@
 StyleManagerDialog::StyleManagerDialog(QWidget *parent)
     : KDialog(parent)
 {
+    setButtons(Ok | Cancel | Apply);
     m_styleManagerWidget = new StyleManager(this);
     setMainWidget(m_styleManagerWidget);
+
+    connect(this, SIGNAL(applyClicked()), m_styleManagerWidget, SLOT(save()));
 }
 
 StyleManagerDialog::~StyleManagerDialog() {

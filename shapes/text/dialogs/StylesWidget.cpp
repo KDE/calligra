@@ -41,10 +41,17 @@ StylesWidget::StylesWidget(Type type, QWidget *parent)
 void StylesWidget::setStyleManager(KoStyleManager *sm) {
     if(sm == m_styleManager)
         return;
+    if(m_styleManager) {
+        disconnect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
+        disconnect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
+        disconnect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
+        disconnect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
+    }
     m_styleManager = sm;
     widget.styleList->clear();
     if(m_styleManager == 0)
         return;
+
 
     if(m_type == CharacterStyle) {
         foreach(KoCharacterStyle *style, m_styleManager->characterStyles()) {
@@ -52,6 +59,8 @@ void StylesWidget::setStyleManager(KoStyleManager *sm) {
             item->setData(99, style->styleId());
             widget.styleList->addItem(item);
         }
+        connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
+        connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
     else {
         foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
@@ -59,6 +68,8 @@ void StylesWidget::setStyleManager(KoStyleManager *sm) {
             item->setData(99, style->styleId());
             widget.styleList->addItem(item);
         }
+        connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
+        connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
     }
 }
 
@@ -141,6 +152,30 @@ void StylesWidget::editStyle(QListWidgetItem *item) {
         dia->setMainWidget(widget);
         dia->show();
     }
+}
+
+void StylesWidget::addParagraphStyle(KoParagraphStyle *style) {
+    Q_ASSERT(m_type == ParagraphStyle);
+    QListWidgetItem *item = new QListWidgetItem(style->name(), widget.styleList);
+    item->setData(99, style->styleId());
+    widget.styleList->addItem(item);
+}
+
+void StylesWidget::addCharacterStyle(KoCharacterStyle *style) {
+    Q_ASSERT(m_type == CharacterStyle);
+    QListWidgetItem *item = new QListWidgetItem(style->name(), widget.styleList);
+    item->setData(99, style->styleId());
+    widget.styleList->addItem(item);
+}
+
+void StylesWidget::removeParagraphStyle(KoParagraphStyle *style) {
+    Q_ASSERT(m_type == ParagraphStyle);
+    // TODO
+}
+
+void StylesWidget::removeCharacterStyle(KoCharacterStyle *style) {
+    Q_ASSERT(m_type == CharacterStyle);
+    // TODO
 }
 
 #include <StylesWidget.moc>

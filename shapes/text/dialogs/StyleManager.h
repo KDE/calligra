@@ -39,6 +39,8 @@ public:
     void setStyleManager(KoStyleManager *sm);
 
     void setUnit(const KoUnit &unit);
+
+public slots:
     void save();
 
 private slots:
@@ -48,6 +50,8 @@ private slots:
     void setStyleName(const QString &name);
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
+    void removeParagraphStyle(KoParagraphStyle*);
+    void removeCharacterStyle(KoCharacterStyle*);
 
 private:
     Ui::StyleManager widget;
@@ -56,6 +60,8 @@ private:
 
     QMap<int, KoParagraphStyle*> m_alteredParagraphStyles;
     QMap<int, KoCharacterStyle*> m_alteredCharacterStyles;
+
+    bool m_blockSignals;
 };
 
 #endif

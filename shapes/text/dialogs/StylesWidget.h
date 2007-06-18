@@ -48,6 +48,10 @@ private slots:
     void newStyleClicked();
     void deleteStyleClicked();
     void editStyle(QListWidgetItem *);
+    void addParagraphStyle(KoParagraphStyle*);
+    void addCharacterStyle(KoCharacterStyle*);
+    void removeParagraphStyle(KoParagraphStyle*);
+    void removeCharacterStyle(KoCharacterStyle*);
 
 signals:
     void paragraphStyleSelected(KoParagraphStyle *style);
