@@ -93,6 +93,11 @@ Exiv2::Value* variantToExivValue( const QVariant& variant, Exiv2::TypeId type )
             return new Exiv2::ValueType<int16_t>(variant.toInt(0));
         case Exiv2::signedLong:
             return new Exiv2::ValueType<int32_t>(variant.toInt(0));
+        case Exiv2::date:
+        {
+            QDate date = variant.toDate();
+            return new Exiv2::DateValue( date.year(), date.month(), date.day() );
+        }
         case Exiv2::asciiString:
             if(variant.type() == QVariant::DateTime)
             {
@@ -112,6 +117,7 @@ Exiv2::Value* variantToExivValue( const QVariant& variant, Exiv2::TypeId type )
         case Exiv2::comment:
             return new Exiv2::CommentValue(qPrintable(variant.toString()));
         default:
+            kDebug() << "Unhandled type: " << type << endl;
             Q_ASSERT(false);
             return 0;
     }

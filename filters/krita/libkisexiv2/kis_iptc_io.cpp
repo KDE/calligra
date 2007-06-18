@@ -77,7 +77,6 @@ void KisIptcIO::initMappingsTable() const
     {
         for(int i = 0; not mappings[i].exivTag.isEmpty(); i++)
         {
-            kDebug() << i << endl;
             d->iptcToKMD[mappings[i].exivTag] = mappings[i];
             d->kmdToIPTC[
                     KisMetaData::SchemaRegistry::instance()
@@ -90,7 +89,24 @@ void KisIptcIO::initMappingsTable() const
 bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     initMappingsTable();
-    return false;
+    ioDevice->open(QIODevice::WriteOnly);
+    Exiv2::IptcData iptcData;
+    for(QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin();
+        it != store->end(); ++it )
+    {
+        const KisMetaData::Entry& entry = *it;
+        if(d->kmdToIPTC.contains(entry.qualifiedName()))
+        {
+            QString iptcKeyStr = d->kmdToIPTC[ entry.qualifiedName() ].exivTag;
+            Exiv2::IptcKey iptcKey(qPrintable(iptcKeyStr));
+            iptcData.add(iptcKey, kmdValueToExivValue( entry.value(),
+                         Exiv2::IptcDataSets::dataSetType( iptcKey.tag(), iptcKey.record()) ) );
+        }
+    }
+    Exiv2::DataBuf rawData = iptcData.copy();
+    ioDevice->write( (const char*) rawData.pData_, rawData.size_);
+    ioDevice->close();
+    return true;
 }
 
 bool KisIptcIO::canSaveAllEntries(KisMetaData::Store* store) const

@@ -59,6 +59,9 @@ extern "C" {
 #define MAX_DATA_BYTES_IN_MARKER  (MAX_BYTES_IN_MARKER - ICC_OVERHEAD_LEN)
 
 const char photoshopMarker[] = "Photoshop 3.0\0";
+const char photoshopBimId_[] = "8BIM";
+const uint16_t photoshopIptc = 0x0404;
+const QByteArray photoshopIptc_((char*)&photoshopIptc, 2);
 
 namespace {
 
@@ -329,7 +332,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         {
             for(int i = 0; i < 14; i++)
             {
-                kDebug() << (int)(*(marker->data+2+i)) << " " << (int)(photoshopMarker[i]) << endl;
+                kDebug() << (int)(*(marker->data+i)) << " " << (int)(photoshopMarker[i]) << endl;
             }
             kDebug(41008) << "No photoshop marker" << endl;
             break; /* No IPTC Header */
@@ -453,34 +456,70 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     // Start compression
     jpeg_start_compress(&cinfo, true);
-    // Save exif information if any available
+    // Save exif and iptc information if any available
     
     if(metaData and not metaData->empty())
     {
-        kDebug(41008) << "Trying to save exif information" << endl;
-        
-        KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
-        Q_ASSERT(exifIO);
-
-        QBuffer buffer;
-        exifIO->saveTo( metaData, &buffer);
-        
-        kDebug(41008) << "Exif information size is " << buffer.data().size() << endl;
-        QByteArray header(6,0);
-        header[0] = 0x45;
-        header[1] = 0x78;
-        header[2] = 0x69;
-        header[3] = 0x66;
-        header[4] = 0x00;
-        header[5] = 0x00;
-        
-        QByteArray data = buffer.data();
-        data.prepend(header);
-        if (data.size() < MAX_DATA_BYTES_IN_MARKER)
+        // Save EXIF
         {
-            jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)data.data(), data.size());
-        } else {
-            kDebug(41008) << "exif information couldn't be saved." << endl; // TODO: warn the user ?
+            kDebug(41008) << "Trying to save exif information" << endl;
+            
+            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+            Q_ASSERT(exifIO);
+    
+            QBuffer buffer;
+            exifIO->saveTo( metaData, &buffer);
+            
+            kDebug(41008) << "Exif information size is " << buffer.data().size() << endl;
+            QByteArray header(6,0);
+            header[0] = 0x45;
+            header[1] = 0x78;
+            header[2] = 0x69;
+            header[3] = 0x66;
+            header[4] = 0x00;
+            header[5] = 0x00;
+            
+            QByteArray data = buffer.data();
+            data.prepend(header);
+            if (data.size() < MAX_DATA_BYTES_IN_MARKER)
+            {
+                jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)data.data(), data.size());
+            } else {
+                kDebug(41008) << "EXIF information couldn't be saved." << endl; // TODO: warn the user ?
+            }
+        }
+        // Save IPTC
+        {
+            kDebug(41008) << "Trying to save exif information" << endl;
+            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+            Q_ASSERT(iptcIO);
+    
+            QBuffer buffer;
+            iptcIO->saveTo( metaData, &buffer);
+            
+            QByteArray header;
+            header.append( photoshopMarker );
+            header.append( QByteArray(1, 0) ); // Null terminated string
+            header.append( photoshopBimId_ );
+            header.append( photoshopIptc_ );
+            header.append( QByteArray(2, 0) );
+            qint32 size = buffer.size();
+            QByteArray sizeArray(4,0);
+            sizeArray[0] = (char)((size & 0xff000000) >> 24);
+            sizeArray[1] = (char)((size & 0x00ff0000) >> 16);
+            sizeArray[2] = (char)((size & 0x0000ff00) >> 8);
+            sizeArray[3] =  (char)(size & 0x000000ff);
+            header.append( sizeArray);
+            
+            kDebug(41008) << "IPTC information size is " << buffer.data().size() << " and header is of size = " << header.size() << endl;
+            QByteArray data = buffer.data();
+            data.prepend(header);
+            if (data.size() < MAX_DATA_BYTES_IN_MARKER)
+            {
+                jpeg_write_marker(&cinfo, JPEG_APP0 + 13, (const JOCTET*)data.data(), data.size());
+            } else {
+                kDebug(41008) << "IPTC information couldn't be saved." << endl; // TODO: warn the user ?
+            }
         }
     }
 
