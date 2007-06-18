@@ -8,7 +8,7 @@
    <style:table-row-properties style:row-height="13pt"/>
   </style:default-style>
   <style:default-style style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
   </style:default-style>
   <style:style style:name="custom-style1" style:display-name="assigned" style:family="table-cell">
