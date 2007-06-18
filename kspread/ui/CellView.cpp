@@ -515,36 +515,43 @@ void CellView::paintCellBackground( QPainter& painter, const QPointF& paintCoord
     // disable antialiasing
     painter.setRenderHint( QPainter::Antialiasing, false );
 
+    // FIXME Stefan: Still needed?
     // Handle printers separately.
     if ( dynamic_cast<QPrinter*>(painter.device()) )
     {
         //bad hack but there is a qt bug
         //so I can print backgroundcolor
-        QBrush brush( d->style.backgroundColor() );
-        if ( !d->style.backgroundColor().isValid() )
-            brush.setColor( Qt::white );
+        QBrush brush(Qt::white);
+        if (d->style.backgroundColor().isValid() &&
+            d->style.backgroundColor() != QApplication::palette().base().color())
+        {
+            brush.setColor(d->style.backgroundColor());
+        }
+        painter.fillRect(cellRect, brush);
 
-        painter.fillRect( cellRect, brush );
+        if (d->style.backgroundBrush().style() != Qt::NoBrush)
+        {
+            // Draw the background pattern.
+            painter.fillRect(cellRect, d->style.backgroundBrush());
+        }
         return;
     }
 
-    if ( d->style.backgroundColor().isValid() )
-        painter.setBackground( d->style.backgroundColor() );
-    else
-        painter.setBackground( QApplication::palette().base().color() );
-
-    // Erase the background of the cell.
-    painter.eraseRect( cellRect );
-
-    // Get a background brush
-    const QBrush brush = d->style.backgroundBrush();
-
-    // Draw background pattern if necessary.
-    if ( brush.style() != Qt::NoBrush )
-        painter.fillRect( cellRect, brush );
+    if (d->style.backgroundColor().isValid() &&
+        d->style.backgroundColor() != QApplication::palette().base().color())
+    {
+        // Simply fill the cell with its background color,
+        painter.fillRect(cellRect, d->style.backgroundColor());
+    }
 
     // restore antialiasing
     painter.setRenderHint( QPainter::Antialiasing, true );
+
+    if (d->style.backgroundBrush().style() != Qt::NoBrush)
+    {
+        // Draw the background pattern.
+        painter.fillRect(cellRect, d->style.backgroundBrush());
+    }
 }
 
 

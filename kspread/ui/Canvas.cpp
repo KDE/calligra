@@ -134,6 +134,7 @@ Canvas::Canvas(View *view)
 {
   setAttribute( Qt::WA_OpaquePaintEvent );
   setAttribute( Qt::WA_StaticContents );
+  setBackgroundRole(QPalette::Base);
 
   d->cellEditor = 0;
   d->chooseCell = false;
@@ -882,13 +883,12 @@ void Canvas::paintEvent( QPaintEvent* event )
     painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
     painter.scale( d->view->zoomHandler()->zoomedResolutionX(), d->view->zoomHandler()->zoomedResolutionY() );
 
-    QRectF paintRect = viewConverter()->viewToDocument( rect() );
-//     paintRect.translate( -xOffset(), -yOffset() );
+    // erase background
+    const QRectF paintRect = viewConverter()->viewToDocument(rect());
+    painter.fillRect(paintRect, painter.background());
 
-    /* paint any visible cell that has the paintDirty flag */
+    // paint visible cells
     const QRect visibleRect = visibleCells();
-// kDebug() << "visibleCells: " << visibleRect << endl;
-// kDebug() << "offset: " << xOffset() << ", " << yOffset() << endl;
     const QPointF topLeft( sheet->columnPosition(visibleRect.left()) - xOffset(),
                            sheet->rowPosition(visibleRect.top()) - yOffset() );
     view()->sheetView( sheet )->setPaintCellRange( visibleRect );
@@ -901,8 +901,6 @@ void Canvas::paintEvent( QPaintEvent* event )
     d->shapeManager->paint( painter, *viewConverter(), false );
     d->toolProxy->paint( painter, *viewConverter() );
 
-    //restore clip region with children area
-//     painter.restore();
     event->accept();
 }
 
