@@ -5,120 +5,78 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
-    <height>295</height>
+    <width>478</width>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>PDFImportWidget</string>
   </property>
-  <widget class="Q3ButtonGroup" name="buttonGroup1" >
-   <property name="geometry" >
-    <rect>
-     <x>11</x>
-     <y>11</y>
-     <width>199</width>
-     <height>273</height>
-    </rect>
-   </property>
-   <property name="title" >
-    <string>Pages</string>
-   </property>
-   <property name="orientation" >
-    <enum>Qt::Vertical</enum>
-   </property>
-   <layout class="QVBoxLayout" >
-    <property name="spacing" >
-     <number>6</number>
-    </property>
-    <property name="leftMargin" >
-     <number>11</number>
-    </property>
-    <property name="topMargin" >
-     <number>11</number>
-    </property>
-    <property name="rightMargin" >
-     <number>11</number>
-    </property>
-    <property name="bottomMargin" >
-     <number>11</number>
-    </property>
-    <item>
-     <widget class="QRadioButton" name="boolAllPages" >
-      <property name="text" >
-       <string>&amp;All pages</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="boolFirstPage" >
-      <property name="text" >
-       <string>&amp;First page</string>
-      </property>
-      <property name="checked" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="boolSelectionPage" >
-      <property name="text" >
-       <string>&amp;Selection of page</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="K3ListBox" name="listPages" >
-      <property name="selectionMode" >
-       <enum>Q3ListBox::Multi</enum>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QGroupBox" name="groupBox1" >
-   <property name="geometry" >
-    <rect>
-     <x>216</x>
-     <y>11</y>
-     <width>301</width>
-     <height>273</height>
-    </rect>
-   </property>
-   <property name="title" >
-    <string>Dimensions</string>
-   </property>
-   <layout class="QGridLayout" >
-    <property name="leftMargin" >
-     <number>0</number>
-    </property>
-    <property name="topMargin" >
-     <number>0</number>
-    </property>
-    <property name="rightMargin" >
-     <number>0</number>
-    </property>
-    <property name="bottomMargin" >
-     <number>0</number>
-    </property>
-    <property name="horizontalSpacing" >
-     <number>0</number>
-    </property>
-    <property name="verticalSpacing" >
-     <number>0</number>
-    </property>
-    <item row="0" column="0" >
-     <widget class="QLabel" name="textLabel1" >
-      <property name="text" >
-       <string>Resolution:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" >
-     <layout class="QHBoxLayout" >
+  <layout class="QHBoxLayout" >
+   <item>
+    <widget class="Q3ButtonGroup" name="buttonGroup1" >
+     <property name="title" >
+      <string>Pages</string>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <layout class="QVBoxLayout" >
       <property name="spacing" >
        <number>6</number>
       </property>
+      <property name="leftMargin" >
+       <number>11</number>
+      </property>
+      <property name="topMargin" >
+       <number>11</number>
+      </property>
+      <property name="rightMargin" >
+       <number>11</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="boolAllPages" >
+        <property name="text" >
+         <string>&amp;All pages</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="boolFirstPage" >
+        <property name="text" >
+         <string>&amp;First page</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="boolSelectionPage" >
+        <property name="text" >
+         <string>&amp;Selection of page</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="K3ListBox" name="listPages" >
+        <property name="selectionMode" >
+         <enum>Q3ListBox::Multi</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox1" >
+     <property name="title" >
+      <string>Dimensions</string>
+     </property>
+     <layout class="QGridLayout" >
       <property name="leftMargin" >
        <number>0</number>
       </property>
@@ -131,24 +89,24 @@
       <property name="bottomMargin" >
        <number>0</number>
       </property>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
+      <property name="horizontalSpacing" >
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing" >
+       <number>0</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="textLabel1" >
+        <property name="text" >
+         <string>Resolution:</string>
         </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
       </item>
-      <item>
-       <layout class="QGridLayout" >
+      <item row="1" column="0" >
+       <layout class="QHBoxLayout" >
+        <property name="spacing" >
+         <number>6</number>
+        </property>
         <property name="leftMargin" >
          <number>0</number>
         </property>
@@ -161,100 +119,120 @@
         <property name="bottomMargin" >
          <number>0</number>
         </property>
-        <property name="horizontalSpacing" >
-         <number>6</number>
-        </property>
-        <property name="verticalSpacing" >
-         <number>6</number>
-        </property>
-        <item row="1" column="0" >
-         <widget class="QLabel" name="intVerticalqsdf" >
-          <property name="text" >
-           <string>Vertical:</string>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
           </property>
-         </widget>
-        </item>
-        <item row="0" column="2" >
-         <widget class="KComboBox" name="kComboBox1" />
-        </item>
-        <item row="0" column="1" >
-         <widget class="QSpinBox" name="intHorizontal" />
-        </item>
-        <item row="1" column="1" >
-         <widget class="QSpinBox" name="intVertical" />
-        </item>
-        <item row="0" column="0" >
-         <widget class="QLabel" name="textLabel5" >
-          <property name="text" >
-           <string>Horizontal:</string>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Fixed</enum>
           </property>
-         </widget>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
-        <item row="1" column="2" >
-         <widget class="KComboBox" name="kComboBox2" />
+        <item>
+         <layout class="QGridLayout" >
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>6</number>
+          </property>
+          <property name="verticalSpacing" >
+           <number>6</number>
+          </property>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="intVerticalqsdf" >
+            <property name="text" >
+             <string>Vertical:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="KComboBox" name="kComboBox1" />
+          </item>
+          <item row="0" column="1" >
+           <widget class="QSpinBox" name="intHorizontal" >
+            <property name="minimum" >
+             <number>1</number>
+            </property>
+            <property name="maximum" >
+             <number>999</number>
+            </property>
+            <property name="value" >
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QSpinBox" name="intVertical" >
+            <property name="minimum" >
+             <number>1</number>
+            </property>
+            <property name="maximum" >
+             <number>999</number>
+            </property>
+            <property name="value" >
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="textLabel5" >
+            <property name="text" >
+             <string>Horizontal:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" >
+           <widget class="KComboBox" name="kComboBox2" />
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>31</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="textLabel2" >
+        <property name="text" >
+         <string>Size:</string>
         </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>31</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
       </item>
-     </layout>
-    </item>
-    <item row="2" column="0" >
-     <widget class="QLabel" name="textLabel2" >
-      <property name="text" >
-       <string>Size:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" >
-     <layout class="QHBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="leftMargin" >
-       <number>0</number>
-      </property>
-      <property name="topMargin" >
-       <number>0</number>
-      </property>
-      <property name="rightMargin" >
-       <number>0</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>0</number>
-      </property>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
+      <item row="3" column="0" >
+       <layout class="QHBoxLayout" >
+        <property name="spacing" >
+         <number>6</number>
         </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QGridLayout" >
         <property name="leftMargin" >
          <number>0</number>
         </property>
@@ -267,67 +245,107 @@
         <property name="bottomMargin" >
          <number>0</number>
         </property>
-        <property name="horizontalSpacing" >
-         <number>6</number>
-        </property>
-        <property name="verticalSpacing" >
-         <number>6</number>
-        </property>
-        <item row="1" column="1" >
-         <widget class="QSpinBox" name="intHeight" />
-        </item>
-        <item row="0" column="0" >
-         <widget class="QLabel" name="intWidthzqffs" >
-          <property name="text" >
-           <string>Width:</string>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
           </property>
-         </widget>
-        </item>
-        <item row="0" column="1" >
-         <widget class="QSpinBox" name="intWidth" />
-        </item>
-        <item row="1" column="0" >
-         <widget class="QLabel" name="intHeightqsdfq" >
-          <property name="text" >
-           <string>Height:</string>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Fixed</enum>
           </property>
-         </widget>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QGridLayout" >
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>6</number>
+          </property>
+          <property name="verticalSpacing" >
+           <number>6</number>
+          </property>
+          <item row="1" column="1" >
+           <widget class="QSpinBox" name="intHeight" >
+            <property name="maximum" >
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="intWidthzqffs" >
+            <property name="text" >
+             <string>Width:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QSpinBox" name="intWidth" >
+            <property name="maximum" >
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="intHeightqsdfq" >
+            <property name="text" >
+             <string>Height:</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>51</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
-      <item>
+      <item row="4" column="0" >
        <spacer>
         <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Expanding</enum>
+         <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeHint" >
          <size>
-          <width>51</width>
-          <height>20</height>
+          <width>20</width>
+          <height>40</height>
          </size>
         </property>
        </spacer>
       </item>
      </layout>
-    </item>
-    <item row="4" column="0" >
-     <spacer>
-      <property name="orientation" >
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" >
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-   </layout>
-  </widget>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>

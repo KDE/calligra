@@ -48,7 +48,6 @@ Name[eo]=Krito
 Name[km]= Krita
 Name[ne]=क्रिता
 Name[x-test]=xxKritaxx
-NoDisplay=true
 Path=
 StartupNotify=true
 Terminal=false
