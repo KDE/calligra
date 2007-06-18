@@ -697,29 +697,37 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
 
         line.draw(painter, layout->position());
         
-        QTextCharFormat fmt = block.charFormat();
-        Qt::PenStyle fontStrikeOutStyle = (Qt::PenStyle) fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
-        KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::StrikeOutType);
-        if ((fontStrikeOutStyle != Qt::NoPen) && (fontStrikeOutType != KoCharacterStyle::NoLine)) {
-            double x1 = line.cursorToX(line.textStart());
-            double x2 = line.cursorToX(line.textStart() + line.textLength());
-            double y = line.position().y() + line.height()/2;
-            QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
+        QTextBlock::iterator it;
+        int beginningPosition = 0;
+        for (it = block.begin(); !(it.atEnd()); ++it) {
+            QTextFragment currentFragment = it.fragment();
+            if (currentFragment.isValid()) {
+                if (beginningPosition == 0)
+                    beginningPosition = currentFragment.position();
+                if (layout->isValidCursorPosition(currentFragment.position() - beginningPosition)) {
+                    double x1 = line.cursorToX(currentFragment.position() - beginningPosition);
+                    double x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - beginningPosition);
+                    QTextCharFormat fmt = currentFragment.charFormat();
+                    Qt::PenStyle fontStrikeOutStyle = (Qt::PenStyle) fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
+                    KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::StrikeOutType);
+                    if ((fontStrikeOutStyle != Qt::NoPen) && (fontStrikeOutType != KoCharacterStyle::NoLine)) {
+                        double y = line.position().y() + line.height()/2;
+                        QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
             
-            drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
-        }
+                        drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
+                    }
         
-        Qt::PenStyle fontUnderLineStyle = (Qt::PenStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
-        KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);
-        if ((fontUnderLineStyle != Qt::NoPen) && (fontUnderLineType != KoCharacterStyle::NoLine)) {
-            double x1 = line.cursorToX(line.textStart());
-            double x2 = line.cursorToX(line.textStart() + line.textLength());
-            double y = line.position().y() + line.height() - painter->fontMetrics().underlinePos();
-            QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
+                    Qt::PenStyle fontUnderLineStyle = (Qt::PenStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
+                    KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);
+                    if ((fontUnderLineStyle != Qt::NoPen) && (fontUnderLineType != KoCharacterStyle::NoLine)) {
+                        double y = line.position().y() + line.height() - painter->fontMetrics().underlinePos();
+                        QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
             
-            drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
+                        drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
+                    }
+                }
+            }
         }
-
         
         for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps
             const double tabStop = tabs.tabs[x];
