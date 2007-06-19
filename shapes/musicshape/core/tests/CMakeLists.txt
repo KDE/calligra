@@ -30,7 +30,7 @@ set(SheetTest_test_SRCS
 )
 
 kde4_automoc(${SheetTest_test_SRCS})
-kde4_add_test(SheetTest ${SheetTest_test_SRCS})
+kde4_add_unit_test(SheetTest ${SheetTest_test_SRCS})
 target_link_libraries(SheetTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 add_test(shapes-musicshape-SheetTest ${EXECUTABLE_OUTPUT_PATH}/SheetTest)
 
@@ -44,7 +44,7 @@ set(VoiceBarTest_test_SRCS
 )
 
 kde4_automoc(${VoiceBarTest_test_SRCS})
-kde4_add_test(VoiceBarTest ${VoiceBarTest_test_SRCS})
+kde4_add_unit_test(VoiceBarTest ${VoiceBarTest_test_SRCS})
 target_link_libraries(VoiceBarTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 add_test(shapes-musicshape-VoiceBarTest ${EXECUTABLE_OUTPUT_PATH}/VoiceBarTest)
 
