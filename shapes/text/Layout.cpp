@@ -607,12 +607,12 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
         lastBorder->paint(*painter);
 }
 
-static void drawDecorationLine (QPainter *painter, QColor color, KoCharacterStyle::LineType type, Qt::PenStyle style, const double x1, const double x2, const double y) {
+static void drawDecorationLine (QPainter *painter, QColor color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const double x1, const double x2, const double y) {
     QPen penBackup = painter->pen();
     QPen pen = painter->pen();
     pen.setColor(color);
     pen.setWidth(painter->fontMetrics().lineWidth());
-    if (style == 6) {
+    if (style == KoCharacterStyle::WaveLine) {
         // Ok, try the waves :)
         pen.setStyle(Qt::SolidLine);
         painter->setPen(pen);
@@ -648,7 +648,10 @@ static void drawDecorationLine (QPainter *painter, QColor color, KoCharacterStyl
             x = x + 2*halfWaveLength;
         }
     } else {
-        pen.setStyle(style);
+        if (style == KoCharacterStyle::LongDashLine)
+            pen.setStyle(Qt::SolidLine);
+        else
+            pen.setStyle((Qt::PenStyle)style);
         painter->setPen(pen);
         if (type == KoCharacterStyle::DoubleLine) {
             painter->translate(0, -pen.width());
@@ -708,18 +711,18 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                     double x1 = line.cursorToX(currentFragment.position() - beginningPosition);
                     double x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - beginningPosition);
                     QTextCharFormat fmt = currentFragment.charFormat();
-                    Qt::PenStyle fontStrikeOutStyle = (Qt::PenStyle) fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
+                    KoCharacterStyle::LineStyle fontStrikeOutStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
                     KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::StrikeOutType);
-                    if ((fontStrikeOutStyle != Qt::NoPen) && (fontStrikeOutType != KoCharacterStyle::NoLine)) {
+                    if ((fontStrikeOutStyle != KoCharacterStyle::NoLineStyle) && (fontStrikeOutType != KoCharacterStyle::NoLineType)) {
                         double y = line.position().y() + line.height()/2;
                         QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
             
                         drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
                     }
         
-                    Qt::PenStyle fontUnderLineStyle = (Qt::PenStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
+                    KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
                     KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);
-                    if ((fontUnderLineStyle != Qt::NoPen) && (fontUnderLineType != KoCharacterStyle::NoLine)) {
+                    if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) && (fontUnderLineType != KoCharacterStyle::NoLineType)) {
                         double y = line.position().y() + line.height() - painter->fontMetrics().underlinePos();
                         QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
             

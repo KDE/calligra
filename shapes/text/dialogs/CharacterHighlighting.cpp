@@ -71,7 +71,7 @@ void CharacterHighlighting::open(KoCharacterStyle *style) {
     underlineChanged(widget.underlineStyle->currentIndex());
     widget.underlineColor->setColor(style->underlineColor());
 
-    widget.strikethrough->setChecked(style->strikeOutStyle() != Qt::NoPen);
+    widget.strikethrough->setChecked(style->strikeOutStyle() != KoCharacterStyle::NoLineStyle);
 }
 
 void CharacterHighlighting::save() {
@@ -79,8 +79,8 @@ void CharacterHighlighting::save() {
         return;
     switch(widget.underlineStyle->currentIndex()) {
         case 0:
-            m_style->setUnderlineType(KoCharacterStyle::NoLine);
-            m_style->setUnderlineStyle(Qt::NoPen);
+            m_style->setUnderlineType(KoCharacterStyle::NoLineType);
+            m_style->setUnderlineStyle(KoCharacterStyle::NoLineStyle);
             break;
         case 1:
             m_style->setUnderlineType(KoCharacterStyle::SingleLine);
@@ -96,12 +96,12 @@ void CharacterHighlighting::save() {
                     style = QTextCharFormat::SingleUnderline; break;
                     kWarning() << "Unknown items in the underlineLineStyle combobox!\n";
             }
-            m_style->setUnderlineStyle((Qt::PenStyle) style);
+            m_style->setUnderlineStyle((KoCharacterStyle::LineStyle) style);
             m_style->setUnderlineColor(widget.underlineColor->color());
             break;
         case 2: // double underlining unsupported by Qt right now :(  TODO
             m_style->setUnderlineType(KoCharacterStyle::DoubleLine);
-            m_style->setUnderlineStyle(Qt::SolidLine);
+            m_style->setUnderlineStyle(KoCharacterStyle::SolidLine);
             m_style->setUnderlineColor(widget.underlineColor->color());
             break;
         default:
@@ -109,9 +109,9 @@ void CharacterHighlighting::save() {
     }
 
     if (widget.strikethrough->isChecked())
-        m_style->setStrikeOutStyle(Qt::SolidLine);
+        m_style->setStrikeOutStyle(KoCharacterStyle::SolidLine);
     else
-        m_style->setStrikeOutStyle(Qt::NoPen);
+        m_style->setStrikeOutStyle(KoCharacterStyle::NoLineStyle);
 }
 
 #include "CharacterHighlighting.moc"
