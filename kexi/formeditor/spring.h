@@ -31,8 +31,6 @@ class QDomDocument;
 namespace KFormDesigner {
 
 class ObjectTreeItem;
-class Container;
-class WidgetLibrary;
 
 }
 

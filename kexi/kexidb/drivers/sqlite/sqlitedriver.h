@@ -30,7 +30,6 @@ namespace KexiDB
 {
 
 class Connection;
-class DriverManager;
 class SQLiteDriverPrivate;
 
 //! SQLite database driver.

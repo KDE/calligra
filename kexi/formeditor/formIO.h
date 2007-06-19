@@ -37,7 +37,6 @@ class QString;
 class QDomElement;
 class QDomNode;
 class QDomDocument;
-class QDomText;
 class QVariant;
 class QLabel;
 
@@ -58,7 +57,6 @@ class KFORMEDITOR_EXPORT CustomWidget : public QWidget
 
 namespace KFormDesigner {
 
-class WidgetPropertySet;
 class Form;
 class ObjectTreeItem;
 class Container;

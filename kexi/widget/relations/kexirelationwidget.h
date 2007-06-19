@@ -31,13 +31,11 @@ class KMenu;
 class KAction;
 class Q3ListViewItem;
 
-class KexiMainWindowIface;
 
 namespace KexiDB
 {
 	class Connection;
 	class TableSchema;
-	class Reference;
 }
 
 class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiView

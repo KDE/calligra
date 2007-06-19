@@ -28,13 +28,7 @@
 #include <kexidb/utils.h>
 #include <koproperty/set.h>
 
-class KexiObjectInfoLabel;
-class KexiDataSourceComboBox;
-class KexiFieldComboBox;
-class KexiFieldListView;
 class KexiProject;
-class KexiSmallToolButton;
-class QToolButton;
 class QLabel;
 class Q3Frame;
 

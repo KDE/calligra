@@ -33,7 +33,6 @@
 #include <Q3CString>
 
 class KexiProjectData;
-class KexiActionProxy;
 class KexiSimplePrintingSettings;
 
 namespace KexiDB {

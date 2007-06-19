@@ -37,7 +37,6 @@ class QLayout;
 namespace KFormDesigner {
 
 class Container;
-class WidgetLibrary;
 class ObjectTreeItem;
 class Form;
 

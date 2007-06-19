@@ -36,7 +36,6 @@ namespace KexiDB {
 
 class DriverManagerInternal;
 class Connection;
-class ConnectionData;
 
 //! Database driver management, e.g. finding and loading drivers.
 class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object

@@ -36,7 +36,6 @@ namespace KexiDB
 	class Connection;
 }
 
-class KexiProject;
 
 //! @short Kexi Query Designer Plugin.
 class KexiQueryPart : public KexiPart::Part

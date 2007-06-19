@@ -25,7 +25,6 @@
 
 class QWidget;
 class KoUnitDoubleSpinBox;
-class KoPagePreview;
 
 class KoPageLayoutHeader : public KoPageLayoutHeaderBase {
     Q_OBJECT

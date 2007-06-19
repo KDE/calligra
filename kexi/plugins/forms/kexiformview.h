@@ -35,8 +35,6 @@
 
 class KexiFormPart;
 class KexiDBForm;
-class KexiTableItem;
-class KexiTableViewData;
 class KexiFormScrollView;
 namespace KexiDB { class Cursor; }
 namespace KFormDesigner

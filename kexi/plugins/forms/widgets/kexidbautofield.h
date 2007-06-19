@@ -30,7 +30,6 @@
 #include <formeditor/widgetwithsubpropertiesinterface.h>
 #include "kexiformdataiteminterface.h"
 
-class Q3BoxLayout;
 class QLabel;
 
 //! Universal "Auto Field" widget for Kexi forms

@@ -32,7 +32,6 @@
 #include <k3command.h>
 #include "utils.h"
 
-class QWidget;
 class QRect;
 class QPoint;
 class QStringList;

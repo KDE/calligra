@@ -42,8 +42,6 @@
 
 namespace KexiDB
 {
-	class DriverManager;
-	class Driver;
 	class Connection;
 	class Parser;
 }

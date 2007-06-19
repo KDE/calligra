@@ -30,8 +30,6 @@
 #include <QKeyEvent>
 #include <QEvent>
 
-class KPushButton;
-class KLineEdit;
 class KexiComboBoxPopup;
 class KexiTableItem;
 class KexiTableViewColumn;

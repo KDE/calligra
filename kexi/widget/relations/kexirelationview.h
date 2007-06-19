@@ -38,12 +38,9 @@
 class Q3Frame;
 
 class KexiRelationViewTable;
-class KAction;
-class KMenu;
 
 namespace KexiDB
 {
-	class Reference;
 	class Connection;
 }
 

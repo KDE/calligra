@@ -25,8 +25,6 @@
 #include "kexiinputtableedit.h"
 #include <kexidb/lookupfieldschema.h>
 
-class KPushButton;
-class KLineEdit;
 class KexiComboBoxPopup;
 class KexiTableItem;
 class KexiTableViewColumn;

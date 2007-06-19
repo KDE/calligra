@@ -27,7 +27,6 @@ namespace KexiDB
 {
 	class QuerySchema;
 }
-class KexiMainWindow;
 
 class KexiQueryView : public KexiDataTable
 {

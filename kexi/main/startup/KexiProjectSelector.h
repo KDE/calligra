@@ -26,7 +26,6 @@
 #include <KPageDialog>
 #include <q3widgetstack.h>
 
-class KexiNewFileDBWidget;
 
 /*! Widget that allows to select a kexi project (or database)
 */

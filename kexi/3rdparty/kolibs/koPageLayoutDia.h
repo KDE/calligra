@@ -28,11 +28,7 @@
 #include <kdialogbase.h>
 #include <KoPageLayout.h>
 
-class Q3ButtonGroup;
-class QComboBox;
 class QLineEdit;
-class QCheckBox;
-class KoUnitDoubleSpinBox;
 class KoPageLayoutColumns;
 class KoPageLayoutSize;
 class KoPageLayoutHeader;

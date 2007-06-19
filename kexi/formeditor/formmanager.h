@@ -42,7 +42,6 @@ class KToggleAction;
 class KPageDialog;
 class KTextEdit;
 class KXMLGUIClient;
-class KXmlGuiWindow;
 
 namespace KoProperty {
 	class Editor;

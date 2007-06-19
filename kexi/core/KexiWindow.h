@@ -40,8 +40,6 @@
 class KexiMainWindow;
 class KexiWindowData;
 class KexiView;
-class KActionCollection;
-class KexiContextHelpInfo;
 namespace KexiPart {
 	class Part;
 }

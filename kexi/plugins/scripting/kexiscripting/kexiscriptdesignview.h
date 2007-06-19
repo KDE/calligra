@@ -29,7 +29,6 @@
 #include <koproperty/property.h>
 
 // Forward declarations.
-class KexiScriptContainer;
 class KexiScriptEditor;
 class KexiScriptDesignViewPrivate;
 

@@ -30,7 +30,6 @@ namespace KexiDB
 {
 
 class Connection;
-class DriverManager;
 
 //! PostgreSQL database driver.
 class pqxxSqlDriver : public Driver

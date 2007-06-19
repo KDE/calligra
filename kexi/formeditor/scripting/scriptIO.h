@@ -22,7 +22,6 @@
 
 #include <qdom.h>
 
-class QString;
 class QObject;
 class Event;
 class EventList;

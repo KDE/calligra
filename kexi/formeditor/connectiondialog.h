@@ -36,7 +36,6 @@ namespace KexiDB {
 }
 
 class QLabel;
-class Q3Button;
 class KexiTableView;
 class KexiTableViewData;
 class KexiTableItem;

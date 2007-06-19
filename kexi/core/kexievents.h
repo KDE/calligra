@@ -27,7 +27,6 @@
 
 #include <kexi_export.h>
 
-class QDomNode;
 class QObject;
 
 //! A simple class to store events

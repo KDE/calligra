@@ -34,7 +34,6 @@ namespace KexiDB
 class Connection;
 class QuerySchema;
 class TableSchema;
-class Field;
 
 /**
  * Provides detailed i18n'ed error description about the \a Parser .

@@ -31,8 +31,7 @@ class KAction;
 
 namespace KFormDesigner {
 	class Form;
-	class FormManager;
-}
+	}
 
 //! Kexi Factory (DB widgets + subform)
 class KexiDBFactory : public KFormDesigner::WidgetFactory

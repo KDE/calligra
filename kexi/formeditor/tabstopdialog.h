@@ -26,7 +26,6 @@
 
 class Q3ListViewItem;
 class QCheckBox;
-class QToolButton;
 class KPushButton;
 
 namespace KFormDesigner {

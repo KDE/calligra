@@ -52,12 +52,8 @@
 class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
-class Q3ButtonGroup;
 class QCheckBox;
 class QLabel;
-class QLineEdit;
-class QPushButton;
-class QRadioButton;
 class Q3Table;
 class QFile;
 class KComboBox;

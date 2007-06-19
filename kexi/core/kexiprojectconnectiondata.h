@@ -24,7 +24,6 @@
 
 class QDomElement;
 class QDomDocument;
-class KoStore;
 /**
  * This class aims to provide
  * methods to store/load database settings

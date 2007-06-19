@@ -54,20 +54,14 @@
 #include <widget/utils/kexisharedactionclient.h>
 #include "kexidataawareobjectiface.h"
 
-class KMenu;
 class KPrinter;
 class KAction;
 
-class KexiTableHeader;
 class KexiTableItem;
 class KexiTableView;
 class KexiTableEdit;
 class KexiTableViewPrivate;
-class KActionCollection;
 
-namespace KexiDB {
-	class RowEditBuffer;
-}
 
 //! minimum column width in pixels
 #define KEXITV_MINIMUM_COLUMN_WIDTH 10

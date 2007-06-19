@@ -27,7 +27,6 @@
 class KexiDataTableView;
 class KexiTableView;
 class KexiTableViewData;
-class KMenu;
 
 namespace KexiDB
 {

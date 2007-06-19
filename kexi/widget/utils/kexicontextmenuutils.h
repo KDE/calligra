@@ -26,7 +26,6 @@
 #include <KUrl>
 
 class KActionCollection;
-class KexiDataItemInterface;
 
 //! @short A set of helpers for updating popup menu titles
 /*! The functions set meaningful titles like "Emploee : Image".

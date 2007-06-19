@@ -47,11 +47,8 @@
 #include <kmenu.h>
 #include <kaction.h>
 
-class KexiTableItem;
-class KexiTableRM;
 class KexiTableEdit;
 class QLabel;
-class KexiTableViewHeader;
 
 //! @short a dynamic tooltip for table view cells
 /*! @internal */

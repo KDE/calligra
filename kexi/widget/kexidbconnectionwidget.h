@@ -28,7 +28,6 @@
 #include <KTabWidget>
 #include <KDialog>
 
-class KTextEdit;
 class KPushButton;
 class KexiDBDriverComboBox;
 class KexiDBConnectionTabWidget;

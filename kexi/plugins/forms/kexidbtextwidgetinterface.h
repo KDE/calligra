@@ -27,7 +27,6 @@
 namespace KexiDB {
 	class QueryColumnInfo;
 }
-class Q3Frame;
 
 //! @short An interface providing common text editor's functionality
 /*! Widgets (e.g. KexiDBLineEdit, KexiDBTextEdit) implementing KexiFormDataItemInterface 

@@ -23,7 +23,6 @@
 #include <KDialog>
 #include "kexiformeventhandler.h"
 
-class K3ListView;
 class Q3ListViewItem;
 namespace KexiPart {
 	class Item;

@@ -30,7 +30,6 @@
 #include <koproperty/set.h>
 #include <koproperty/property.h>
 
-class QMetaObject;
 class QWidget;
 class QEvent;
 

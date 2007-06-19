@@ -30,7 +30,6 @@
 namespace KexiDB
 {
 class Connection;
-class ConnectionData;
 
 //! @short A tool for handling altering database table schema. 
 /*! In relational (and other) databases, table schema altering is not an easy task.

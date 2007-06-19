@@ -9,7 +9,6 @@ namespace KexiDB
 {
 	class Cursor;
 }
-class KexiMainWindow;
 class KActionCollection;
 
 /*! action that can be defined by a user for a special scope e.g. main, form ...

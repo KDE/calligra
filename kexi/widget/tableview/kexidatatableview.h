@@ -25,8 +25,6 @@
 #include "kexitableview.h"
 
 class KexiTableItem;
-class QVariant;
-class KXMLGUIClient;
 
 namespace KexiDB {
 	class Cursor;

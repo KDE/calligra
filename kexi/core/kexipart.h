@@ -40,8 +40,7 @@ namespace KexiPart
 	class Info;
 	class Item;
 	class GUIClient;
-	class PartPrivate;
-	class StaticInfo;
+		class StaticInfo;
 
 /*! Official (registered) type IDs for objects like table, query, form... */
 enum ObjectTypes {

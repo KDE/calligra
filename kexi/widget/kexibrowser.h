@@ -28,7 +28,6 @@
 #include <kexi_export.h>
 
 class Q3ListViewItem;
-class KIconLoader;
 class KMenu;
 class KAction;
 class KActionMenu;
@@ -36,8 +35,6 @@ class KActionCollection;
 class K3ListView;
 class KToolBar;
 class KexiBrowserItem;
-class KexiView;
-class KexiMainWindowIface;
 class KexiSmallToolButton;
 class KexiBrowserListView;
 

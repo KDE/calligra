@@ -27,7 +27,6 @@
 #include <QEvent>
 
 class KexiQueryDesignerSQLEditor;
-class KexiQueryDesignerSQLViewPrivate;
 
 //! The KexiQueryDesignerSQLView class for editing Queries in text mode.
 /*! It is a view containing SQL text editor 

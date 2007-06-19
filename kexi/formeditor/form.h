@@ -32,7 +32,6 @@
 #include "objecttree.h"
 
 class QWidget;
-class QDomElement;
 class KActionCollection;
 class K3CommandHistory;
 class K3Command;
@@ -41,7 +40,6 @@ class PixmapCollection;
 namespace KFormDesigner {
 
 class Container;
-class WidgetPropertySet;
 class WidgetLibrary;
 class FormManager;
 class ObjectTree;

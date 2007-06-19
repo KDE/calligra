@@ -32,8 +32,6 @@ namespace KexiDB
 {
 
 class Connection;
-class DriverManager;
-class ODBCDriverPrivate;
 
 //! ODBC database driver.
 /*!

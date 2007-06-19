@@ -35,10 +35,7 @@
 
 #include "kexitabledesignerview.h"
 
-class QWidget;
-class QRect;
 class QPoint;
-class QStringList;
 class Q3CString;
 
 namespace KexiTableDesignerCommands {

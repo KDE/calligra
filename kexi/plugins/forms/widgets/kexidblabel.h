@@ -35,8 +35,6 @@
 #include <widget/utils/kexidisplayutils.h>
 
 class QPainter;
-class QTimer;
-class KexiDBInternalLabel;
 
 //! @short An extended, data-aware, read-only text label.
 /*! It's text may have a drop-shadow.

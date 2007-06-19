@@ -24,13 +24,6 @@
 #include <kexistaticpart.h>
 #include <kexipartitem.h>
 
-namespace KexiDB
-{
-	class QuerySchema;
-	class Connection;
-}
-
-class KexiProject;
 
 //! @short Internal Kexi Simple Printing Plugin.
 class KexiSimplePrintingPart : public KexiPart::StaticPart

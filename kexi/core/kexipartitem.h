@@ -27,10 +27,6 @@
 
 #include <kexi_export.h>
 
-namespace KexiDB
-{
-	class Connection;
-}
 
 namespace KexiPart
 {

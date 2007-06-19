@@ -31,12 +31,8 @@
 #include <KexiView.h>
 #include "kexiquerypart.h"
 
-class KexiTableViewData;
-class KexiDataTable;
 class KexiTableItem;
 class KexiRelationWidget;
-class KexiSectionHeader;
-class KexiDataAwarePropertySet;
 class KexiRelationViewTableContainer;
 class KexiRelationViewConnection;
 
