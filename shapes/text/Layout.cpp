@@ -809,13 +809,42 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
             cf = cursor.charFormat();
         }
 
+        if(! data->counterText().isEmpty()) {
+            QFont font(cf.font(), m_parent->paintDevice());
+            QTextLayout layout(data->counterText(), font, m_parent->paintDevice());
+            layout.setCacheEnabled(true);
+            QList<QTextLayout::FormatRange> layouts;
+            QTextLayout::FormatRange format;
+            format.start=0;
+            format.length=data->counterText().length();
+            format.format = cf;
+            layouts.append(format);
+            layout.setAdditionalFormats(layouts);
+
+            Qt::Alignment align = static_cast<Qt::Alignment> (listFormat.intProperty(KoListStyle::Alignment));
+            if(align == 0)
+                align = Qt::AlignLeft;
+            else if(align != Qt::AlignAuto)
+                align |= Qt::AlignAbsolute;
+            QTextOption option( align );
+            option.setTextDirection(block.layout()->textOption().textDirection());
+            if(option.textDirection() == Qt::RightToLeft || data->counterText().isRightToLeft())
+                option.setAlignment(Qt::AlignRight);
+            layout.setTextOption(option);
+            layout.beginLayout();
+            QTextLine line = layout.createLine();
+            line.setLineWidth(data->counterWidth() - data->counterSpacing());
+            layout.endLayout();
+            layout.draw(painter, data->counterPosition());
+        }
+
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style> ( listFormat.style() );
         if(listStyle == KoListStyle::SquareItem || listStyle == KoListStyle::DiscItem ||
                 listStyle == KoListStyle::CircleItem || listStyle == KoListStyle::BoxItem ||
                 listStyle == KoListStyle::RhombusItem ||
                 listStyle == KoListStyle::HeavyCheckMarkItem || listStyle == KoListStyle::BallotXItem ||
                 listStyle == KoListStyle::RightArrowItem || listStyle == KoListStyle::RightArrowHeadItem
-        ) { // bullet list
+        ) {
             QFontMetricsF fm(cf.font(), m_parent->paintDevice());
 #if 0
 // helper lines to show the anatomy of this font.
@@ -879,34 +908,6 @@ painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, dat
                 } break;
                 default:; // others we ignore.
             }
-        }
-        else if(! data->counterText().isEmpty()) { // numbered list
-            QFont font(cf.font(), m_parent->paintDevice());
-            QTextLayout layout(data->counterText(), font, m_parent->paintDevice());
-            layout.setCacheEnabled(true);
-            QList<QTextLayout::FormatRange> layouts;
-            QTextLayout::FormatRange format;
-            format.start=0;
-            format.length=data->counterText().length();
-            format.format = cf;
-            layouts.append(format);
-            layout.setAdditionalFormats(layouts);
-
-            Qt::Alignment align = static_cast<Qt::Alignment> (listFormat.intProperty(KoListStyle::Alignment));
-            if(align == 0)
-                align = Qt::AlignLeft;
-            else if(align != Qt::AlignAuto)
-                align |= Qt::AlignAbsolute;
-            QTextOption option( align );
-            option.setTextDirection(block.layout()->textOption().textDirection());
-            if(option.textDirection() == Qt::RightToLeft || data->counterText().isRightToLeft())
-                option.setAlignment(Qt::AlignRight);
-            layout.setTextOption(option);
-            layout.beginLayout();
-            QTextLine line = layout.createLine();
-            line.setLineWidth(data->counterWidth() - data->counterSpacing());
-            layout.endLayout();
-            layout.draw(painter, data->counterPosition());
         }
     }
 }
