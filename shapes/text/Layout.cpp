@@ -704,11 +704,11 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         line.draw(painter, layout->position());
         
         QTextBlock::iterator it;
-        int beginningPosition = 0;
+        int beginningPosition = -1;
         for (it = block.begin(); !(it.atEnd()); ++it) {
             QTextFragment currentFragment = it.fragment();
             if (currentFragment.isValid()) {
-                if (beginningPosition == 0)
+                if (beginningPosition == -1)
                     beginningPosition = currentFragment.position();
                 if (layout->isValidCursorPosition(currentFragment.position() - beginningPosition)) {
                     double x1 = line.cursorToX(currentFragment.position() - beginningPosition);
