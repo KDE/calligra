@@ -39,7 +39,7 @@ class WPGXParser
 public:
 	WPGXParser(WPXInputStream *input, libwpg::WPGPaintInterface* painter);
 	WPGXParser(const WPGXParser& parser);
-	virtual ~WPGXParser() {};
+	virtual ~WPGXParser() {}
 	virtual bool parse() = 0;
 	
 	unsigned char readU8();

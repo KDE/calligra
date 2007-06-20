@@ -36,6 +36,8 @@
 #include <string>
 #include <vector>
 
+#include <string.h>
+
 #include "WPGOLEStream.h"
 // #include "libwpg_utils.h"
 
@@ -94,7 +96,7 @@ class DirEntry
 {
   public:
     DirEntry() : valid(false), name(), dir(false), size(0), start(0),
-    	prev(0), next(0), child(0) {};
+    	prev(0), next(0), child(0) {}
     bool valid;            // false if invalid (should be skipped)
     std::string name;      // the name, not in unicode anymore 
     bool dir;              // true if directory   

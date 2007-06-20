@@ -129,7 +129,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		 \return true if \a ke should be accepted by the widget item.
 		 This method is used e.g. in KexiDBImageBox for Key_Escape to if the popup is visible,
 		 so the key press won't be consumed to perform "cancel editing". */
-		virtual bool keyPressed(QKeyEvent *ke) { Q_UNUSED(ke); return false; };
+		virtual bool keyPressed(QKeyEvent *ke) { Q_UNUSED(ke); return false; }
 
 	protected:
 		QString m_dataSource;

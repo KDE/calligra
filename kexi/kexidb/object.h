@@ -155,7 +155,7 @@ class KEXI_DB_EXPORT Object
 		 For reimplementation. By default does nothing.
 		 \sa serverErrorMsg()
 		*/
-		virtual void drv_clearServerResult() {};
+		virtual void drv_clearServerResult() {}
 
 		//! used to store of actually executed SQL statement
 		QString m_sql, m_errorSql;

@@ -48,9 +48,9 @@ class KisTIFFPostProcessor {
         KisTIFFPostProcessor(uint8 nbcolorssamples) : m_nbcolorssamples(nbcolorssamples) { }
 		virtual ~KisTIFFPostProcessor() {}
     public:
-        virtual void postProcess8bit( quint8* ) { };
-        virtual void postProcess16bit( quint16* ) { };
-        virtual void postProcess32bit( quint32* ) { };
+        virtual void postProcess8bit( quint8* ) { }
+        virtual void postProcess16bit( quint16* ) { }
+        virtual void postProcess32bit( quint32* ) { }
     protected:
         inline uint8 nbColorsSamples() { return m_nbcolorssamples; }
     private:
@@ -142,7 +142,7 @@ class KisTIFFReaderBase {
         /**
          * This function is called when all data has been read and should be used for any postprocessing.
          */
-        virtual void finalize() { };
+        virtual void finalize() { }
     protected:
         inline KisPaintDeviceSP paintDevice() { return m_device; }
         inline quint8 alphaPos() { return m_alphapos; }

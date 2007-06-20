@@ -54,7 +54,7 @@ class KEXICORE_EXPORT KexiStartupData
 		KexiStartupData();
 		virtual ~KexiStartupData();
 		
-		virtual bool init() { return true; };
+		virtual bool init() { return true; }
 
 		Action action() const;
 

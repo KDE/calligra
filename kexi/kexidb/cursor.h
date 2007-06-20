@@ -253,7 +253,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 
 	protected:
 		//! possible results of row fetching, used for m_result
-		typedef enum FetchResult { FetchError=0, FetchOK=1, FetchEnd=2 };
+		enum FetchResult { FetchError=0, FetchOK=1, FetchEnd=2 };
 
 		/*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
 		Cursor(Connection* conn, const QString& statement, uint options = NoOptions );

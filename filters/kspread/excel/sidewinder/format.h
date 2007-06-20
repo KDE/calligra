@@ -43,7 +43,7 @@ public:
   /**
    * Constructs a default color with the RGB value (0, 0, 0), i.e black.
    */
-  Color(){ red = green = blue = 0; };
+  Color(){ red = green = blue = 0; }
 
   /**
    * Creates a copy of another color.

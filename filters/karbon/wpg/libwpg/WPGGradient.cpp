@@ -47,7 +47,7 @@ class WPGGradientPrivate
 public:
     WPGGradientPrivate() :
         gradientStops(std::vector<WPGGradientStop>()),
-        angle(0.0) {};
+        angle(0.0) {}
 	std::vector<WPGGradientStop> gradientStops;
 	double angle;
 };

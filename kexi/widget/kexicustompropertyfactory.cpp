@@ -34,7 +34,7 @@ class PixmapIdCustomProperty : public CustomProperty
 		PixmapIdCustomProperty(Property *parent)
 			: CustomProperty(parent) {
 		}
-		virtual ~PixmapIdCustomProperty() {};
+		virtual ~PixmapIdCustomProperty() {}
 		virtual void setValue(const QVariant &value, bool rememberOldValue) { 
 			Q_UNUSED( value );
 			Q_UNUSED( rememberOldValue); 
@@ -52,7 +52,7 @@ class IdentifierCustomProperty : public CustomProperty
 		IdentifierCustomProperty(Property *parent)
 			: CustomProperty(parent) {
 		}
-		virtual ~IdentifierCustomProperty() {};
+		virtual ~IdentifierCustomProperty() {}
 		virtual void setValue(const QVariant &value, bool rememberOldValue)
 		{
 			Q_UNUSED(rememberOldValue);

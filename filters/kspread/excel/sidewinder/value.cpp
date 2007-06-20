@@ -47,7 +47,7 @@ class ValueData
       s = UString::null;
       type = Value::Empty;
       ref();
-      };
+      }
 
     // destroys data
     ~ValueData(){

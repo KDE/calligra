@@ -223,9 +223,9 @@ public:
    */
   static Record* create( unsigned type );
 
-  void setVersion( unsigned v ){ ver = v; };
+  void setVersion( unsigned v ){ ver = v; }
 
-  unsigned version(){ return ver; };
+  unsigned version(){ return ver; }
 
   /**
     Sets the data for this record.

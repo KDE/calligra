@@ -48,7 +48,7 @@ class KisExifInfoVisitor : public KisLayerVisitor
         KisExifInfoVisitor() :
             m_exifInfo(0),
             m_countPaintLayer(0)
-        { };
+        { }
     public:
 
         virtual bool visit(KisExternalLayer*)
@@ -63,7 +63,7 @@ class KisExifInfoVisitor : public KisLayerVisitor
                 m_exifInfo = layer->metaData();
             }
             return true;
-        };
+        }
         virtual bool visit(KisGroupLayer* layer)
         {
             kDebug(41008) << "Visiting on grouplayer " << layer->name() << "\n";
@@ -74,7 +74,7 @@ class KisExifInfoVisitor : public KisLayerVisitor
             }
             return true;
         }
-        virtual bool visit(KisAdjustmentLayer* ) {  return true; };
+        virtual bool visit(KisAdjustmentLayer* ) {  return true; }
     public:
         inline uint countPaintLayer() { return m_countPaintLayer; }
         inline KisMetaData::Store* exifInfo() {return m_exifInfo; }

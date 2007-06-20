@@ -84,7 +84,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		virtual KXMLGUIClient* guiClient() const;
 
 #warning TODO virtual void unplugActionList (const QString &name);
-		virtual void unplugActionList (const QString &name) {};
+		virtual void unplugActionList (const QString &name) {}
   	
   	//! Implemented by KMainWindow
 #warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory();

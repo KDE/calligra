@@ -63,7 +63,7 @@ class KEXIUTILS_EXPORT StyleProxy : public QStyle
 		virtual void polish( QApplication *a ) { m_style->polish(a); }
 		virtual void unpolish( QApplication *a ) { m_style->unpolish(a); }
 
-		virtual void polish( QPalette &p ) { m_style->polish(p); };
+		virtual void polish( QPalette &p ) { m_style->polish(p); }
 
 		virtual QRect itemTextRect(const QFontMetrics &fm, const QRect &r,
 			int flags, bool enabled, const QString &text) const

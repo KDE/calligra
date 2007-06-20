@@ -77,7 +77,7 @@ class KEXICORE_EXPORT KexiDataProviderDrag : public Q3StoredDrag
 	public:
 		KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName, 
 		QWidget *parent=0, const char *name=0);
-		~KexiDataProviderDrag() { };
+		~KexiDataProviderDrag() { }
 
 		static bool canDecode( QDragMoveEvent* e);
 		static bool decode( QDropEvent* e, QString& sourceMimeType, QString& sourceName);

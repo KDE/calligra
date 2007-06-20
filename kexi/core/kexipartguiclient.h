@@ -34,7 +34,7 @@ namespace KexiPart
 class GUIClient : public QObject, public KXMLGUIClient
 {
 	public:
-		virtual ~GUIClient() {};
+		virtual ~GUIClient() {}
 
 		inline Part *part() { return static_cast<Part*>(QObject::parent()); }
 

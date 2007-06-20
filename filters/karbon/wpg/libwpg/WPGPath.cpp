@@ -34,7 +34,7 @@ namespace libwpg
 class WPGPathPrivate
 {
 public:
-    WPGPathPrivate() : elements(std::vector<WPGPathElement>()) {};
+    WPGPathPrivate() : elements(std::vector<WPGPathElement>()) {}
 	std::vector<WPGPathElement> elements;
 };
 

@@ -7,6 +7,8 @@
 #include <fstream.h>      // needed for filebuf
 #endif
 
+#include <string.h>
+
 #ifdef USE_QT
 
 #include <QBuffer>

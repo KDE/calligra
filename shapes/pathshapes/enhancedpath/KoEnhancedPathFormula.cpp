@@ -90,9 +90,9 @@ public:
   unsigned type;
   unsigned index;
 
-  Opcode(): type(Nop), index(0) {};
-  Opcode( unsigned t ): type(t), index(0) {};
-  Opcode( unsigned t, unsigned i ): type(t), index(i) {};
+  Opcode(): type(Nop), index(0) {}
+  Opcode( unsigned t ): type(t), index(0) {}
+  Opcode( unsigned t, unsigned i ): type(t), index(i) {}
 };
 
 

@@ -142,15 +142,15 @@ class KEXICORE_EXPORT KexiDataItemInterface
 
 		/*! Moves cursor after the last character (or element). 
 		 For implementation in items supporting text cursor's movement; by default does nothing. */
-		virtual void moveCursorToEnd() {};
+		virtual void moveCursorToEnd() {}
 
 		/*! Moves cursor before the first character (or element). 
 		 For implementation in items supporting text cursor's movement; by default does nothing. */
-		virtual void moveCursorToStart() {};
+		virtual void moveCursorToStart() {}
 
 		/*! Selects all characters (or elements) of the item. 
 		 For implementation in items supporting text or elements; by default does nothing. */
-		virtual void selectAll() {};
+		virtual void selectAll() {}
 
 		//! clears item's data, so the data will contain NULL data
 		virtual void clear() = 0;
@@ -231,7 +231,7 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		/*! Used to perform some actions before signalValueChanged() call. 
 		 We need this because the intrface is not QObject and thus has got no real signals. 
 		 Used in KexiDBComboBox. */
-		virtual void beforeSignalValueChanged() {};
+		virtual void beforeSignalValueChanged() {}
 
 		KexiDataItemChangesListener* listener();
 

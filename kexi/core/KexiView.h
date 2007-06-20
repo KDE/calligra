@@ -241,13 +241,13 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 		 - it is called by KexiWindow::youAreDetached().
 		 Default implementation does nothing.
 		 Implement it if you want to perform some appropriate actions. */
-		virtual void windowDetached() {};
+		virtual void windowDetached() {}
 
 		/*! Allows to react on parent window's attaching (only for KMDI's ChildFrame mode)
 		 - it is called by KexiWindow::youAreAttached().
 		 Default implementation does nothing.
 		 Implement it if you want to perform some appropriate actions. */
-		virtual void windowAttached() {};
+		virtual void windowAttached() {}
 
 		QString m_defaultIconName;
 

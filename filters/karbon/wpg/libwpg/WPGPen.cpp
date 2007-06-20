@@ -32,7 +32,7 @@ namespace libwpg
 class WPGDashArrayPrivate
 {
 public:
-    WPGDashArrayPrivate() : dashes(std::vector<double>()) {};
+    WPGDashArrayPrivate() : dashes(std::vector<double>()) {}
 	std::vector<double> dashes;
 };
 }

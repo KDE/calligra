@@ -48,7 +48,7 @@ namespace KexiUtils {
 class KEXIUTILS_EXPORT Validator : public QValidator
 {
 	public:
-		typedef enum Result { Error = 0, Ok = 1, Warning = 2 };
+		enum Result { Error = 0, Ok = 1, Warning = 2 };
 
 		Validator(QObject * parent = 0);
 		virtual ~Validator();

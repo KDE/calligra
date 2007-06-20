@@ -26,6 +26,6 @@ class DivineProportionPlugin : public QObject {
 
 public:
     DivineProportionPlugin(QObject * parent, const QStringList &);
-    ~DivineProportionPlugin() {};
+    ~DivineProportionPlugin() {}
 };
 #endif

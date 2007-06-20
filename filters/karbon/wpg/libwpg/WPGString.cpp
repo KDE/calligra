@@ -31,7 +31,7 @@ namespace libwpg
 class WPGStringPrivate
 {
 public:
-	WPGStringPrivate() : str() {};
+	WPGStringPrivate() : str() {}
 	std::string str;
 };
 

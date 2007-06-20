@@ -34,7 +34,7 @@ class WPGPointArrayPrivate
 {
 public:
     WPGPointArrayPrivate() :
-        points(std::vector<WPGPoint>()) {};
+        points(std::vector<WPGPoint>()) {}
 	std::vector<WPGPoint> points;
 };
 

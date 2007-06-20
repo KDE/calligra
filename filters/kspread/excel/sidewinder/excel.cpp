@@ -25,8 +25,8 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <stdio.h> // memcpy
 #include <stdlib.h>
+#include <string.h>
 
 #include "pole.h"
 #include "swinder.h"

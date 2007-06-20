@@ -26,6 +26,6 @@ class TextPlugin : public QObject {
 
 public:
     TextPlugin(QObject * parent, const QStringList &);
-    ~TextPlugin() {};
+    ~TextPlugin() {}
 };
 #endif

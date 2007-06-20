@@ -303,7 +303,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		/*! Creates custom actions. Reimplement this if you need to add some 
 		 actions coming from the factory. */
-		virtual void createCustomActions(KActionCollection *col) { Q_UNUSED(col); };
+		virtual void createCustomActions(KActionCollection *col) { Q_UNUSED(col); }
 
 		/*! This function can be used to add custom items in widget \a w context
 		menu \a menu. */
@@ -355,10 +355,10 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		/*! \return The i18n'ed name of the property whose name is \a name,
 		 that will be displayed in PropertyEditor. */
-		inline QString propertyDescForName(const Q3CString &name) { return m_propDesc[name]; };
+		inline QString propertyDescForName(const Q3CString &name) { return m_propDesc[name]; }
 
 		/*! \return The i18n'ed name of the property's value whose name is \a name. */
-		inline QString propertyDescForValue(const Q3CString &name) { return m_propValDesc[name]; };
+		inline QString propertyDescForValue(const Q3CString &name) { return m_propValDesc[name]; }
 
 		/*! This method is called after WidgetPropertySet was filled with properties
 		 of a widget \a w, of class defined by \a info.

@@ -194,7 +194,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				
 				int alteringRequirements() const { return m_alteringRequirements; }
 
-				virtual void updateAlteringRequirements() {};
+				virtual void updateAlteringRequirements() {}
 
 				/*! Simplifies \a fieldActions dictionary. If this action has to be inserted
 				 Into the dictionary, an ActionDict is created first and then a copy of this action 

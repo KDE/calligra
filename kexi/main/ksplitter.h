@@ -60,7 +60,7 @@ public:
    * @param pos procentual position of the splitter. Must be int [0...100].
    */
   KDockSplitter(QWidget *parent= 0, const char *name= 0, Qt::Orientation orient= Qt::Vertical, int pos= 50);
-  virtual ~KDockSplitter(){};
+  virtual ~KDockSplitter(){}
 
   /**
    * Initialize the splitter. If @p c0 or @p c1 is 0L the child will not

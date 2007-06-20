@@ -24,7 +24,7 @@
 
 class TIFFStreamBase {
     public:
-       TIFFStreamBase( uint16 depth ) : m_depth(depth) {};
+       TIFFStreamBase( uint16 depth ) : m_depth(depth) {}
         virtual uint32 nextValue() =0;
         virtual void restart() =0;
         virtual void moveToLine(uint32 lineNumber) =0;

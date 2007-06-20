@@ -34,6 +34,8 @@
 
 #include "pole.h"
 
+#include <string.h>
+
 // enable to activate debugging output
 // #define POLE_DEBUG
 
