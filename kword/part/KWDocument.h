@@ -268,6 +268,9 @@ private:
     /// emits pageSetupChanged
     void firePageSetupChanged();
 
+    void initConfig();
+    void saveConfig();
+
 private:
     bool m_hasTOC;
     double m_defaultColumnSpacing;

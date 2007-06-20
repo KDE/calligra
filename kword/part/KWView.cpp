@@ -93,6 +93,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     connect(m_canvas, SIGNAL(documentSize(const QSizeF &)), m_zoomController, SLOT(setDocumentSize(const QSizeF&)));
     m_canvas->updateSize(); // to emit the doc size at least once
     m_zoomController->setZoom(m_document->zoomMode(), m_document->zoom() / 100.);
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)), this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
 }
 
 KWView::~KWView() {
@@ -1041,6 +1042,10 @@ if(frameForAnchor == 0) {/* can't happen later on... */ kDebug() << "spliting...
 
 // end of actions
 
+void KWView::zoomChanged (KoZoomMode::Mode mode, double zoom) {
+    m_document->setZoom(qRound(zoom * 100.0));
+    m_document->setZoomMode(mode);
+}
 
 void KWView::selectionChanged()
 {

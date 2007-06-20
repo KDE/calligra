@@ -108,6 +108,7 @@ private slots:
     void toggleViewFrameBorders(bool on);
     void formatPage();
     void inlineFrame();
+    void zoomChanged (KoZoomMode::Mode mode, double zoom);
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
