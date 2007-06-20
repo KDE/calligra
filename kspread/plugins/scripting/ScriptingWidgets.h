@@ -38,7 +38,18 @@ class ScriptingSheetsListView : public QWidget
 {
         Q_OBJECT
     public:
-        explicit ScriptingSheetsListView(ScriptingModule* module, QWidget* parent);
+
+        /**
+        * Constructor.
+        * \param module The \a ScriptingModule instance that should be used
+        * as datasource for what should be displayed within the listview.
+        * \param parent The parent QWidget this widget should be displayed in.
+        */
+        ScriptingSheetsListView(ScriptingModule* module, QWidget* parent);
+
+        /**
+        * Destructor.
+        */
         virtual ~ScriptingSheetsListView();
 
     public slots:
