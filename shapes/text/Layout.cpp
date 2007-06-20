@@ -648,10 +648,13 @@ static void drawDecorationLine (QPainter *painter, QColor color, KoCharacterStyl
             x = x + 2*halfWaveLength;
         }
     } else {
-        if (style == KoCharacterStyle::LongDashLine)
-            pen.setStyle(Qt::SolidLine);
-        else
+        if (style == KoCharacterStyle::LongDashLine) {
+            QVector<qreal> dashes;
+            dashes << 12 << 2;
+            pen.setDashPattern(dashes);
+        } else {
             pen.setStyle((Qt::PenStyle)style);
+        }
         painter->setPen(pen);
         if (type == KoCharacterStyle::DoubleLine) {
             painter->translate(0, -pen.width());
