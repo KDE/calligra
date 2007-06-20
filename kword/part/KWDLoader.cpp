@@ -923,34 +923,37 @@ void KWDLoader::fill(KoCharacterStyle *style, const QDomElement &formatElem) {
         QString value = element.attribute("value", "0");
         // TODO store other properties
         if (value != "0")
-            style->setStrikeOutStyle(Qt::SolidLine);
+            style->setStrikeOutStyle(KoCharacterStyle::SolidLine);
     }
     element = formatElem.firstChildElement( "UNDERLINE" );
     if( !element.isNull() ) {
-        QTextCharFormat::UnderlineStyle underline = QTextCharFormat::NoUnderline;
+        KoCharacterStyle::LineStyle underline = KoCharacterStyle::NoLineStyle;
         QString value = element.attribute("value", "0"); // "0" is NoUnderline
         if(value == "1" || value=="single")
-            underline = QTextCharFormat::SingleUnderline;
+            style->setUnderlineType( KoCharacterStyle::SingleLine );
         else if(value == "double")
-            underline = QTextCharFormat::SingleUnderline; // TODO support double underline!
+            style->setUnderlineType( KoCharacterStyle::DoubleLine );
         else if(value == "single-bold")
-            underline = QTextCharFormat::SingleUnderline; // TODO support single-bold underline!
-        else if(value == "wave")
-            underline = QTextCharFormat::WaveUnderline;
+            style->setUnderlineType( KoCharacterStyle::SingleLine ); // TODO support single-bold underline!
+        else if(value == "wave") {
+            style->setUnderlineType( KoCharacterStyle::SingleLine );
+            underline = KoCharacterStyle::WaveLine;
+        }
 
         QString type = element.attribute("styleline", "solid");
-        if(type == "solid" || underline != QTextCharFormat::SingleUnderline) ; // default, do nothing
+        if(type == "solid")
+            underline = KoCharacterStyle::SolidLine;
         else if(type == "dash")
-            underline = QTextCharFormat::DashUnderline;
+            underline = KoCharacterStyle::DashLine;
         else if(type == "dot")
-            underline = QTextCharFormat::DotLine;
+            underline = KoCharacterStyle::DottedLine;
         else if(type == "dashdot")
-            underline = QTextCharFormat::DashDotLine;
+            underline = KoCharacterStyle::DotDashLine;
         else if(type == "dashdotdot")
-            underline = QTextCharFormat::DashDotDotLine;
+            underline = KoCharacterStyle::DotDotDashLine;
 
         //style->setFontUnderline(underline != QTextCharFormat::NoUnderline);
-        style->setUnderlineStyle((Qt::PenStyle) underline);
+        style->setUnderlineStyle((KoCharacterStyle::LineStyle) underline);
     }
     element = formatElem.firstChildElement( "TEXTBACKGROUNDCOLOR" );
     if( !element.isNull() ) {
