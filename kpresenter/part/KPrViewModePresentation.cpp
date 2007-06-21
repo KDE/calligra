@@ -25,20 +25,26 @@
 
 #include <kdebug.h>
 
+#include <KoPointerEvent.h>
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
 #include <KoPADocument.h>
 #include <KoPAView.h>
+#include "KPrAnimationDirector.h"
+#include "KPrPresentationTool.h"
 
 KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * canvas )
 : KoPAViewMode( view, canvas )
 , m_savedParent( 0 )
-, m_animationDirector( 0 )    
+, m_tool( new KPrPresentationTool( *this ) )
+, m_animationDirector( 0 )
 {
 }
 
 KPrViewModePresentation::~KPrViewModePresentation()
 {
+    delete m_animationDirector;
+    delete m_tool;
 }
 
 void KPrViewModePresentation::paintEvent( QPaintEvent* event )
@@ -51,56 +57,47 @@ void KPrViewModePresentation::paintEvent( QPaintEvent* event )
 
 void KPrViewModePresentation::tabletEvent( QTabletEvent *event, const QPointF &point )
 {
+
 }
 
 void KPrViewModePresentation::mousePressEvent( QMouseEvent *event, const QPointF &point )
 {
+    KoPointerEvent ev( event, point );
+    m_tool->mousePressEvent( &ev );
 }
 
 void KPrViewModePresentation::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point )
 {
+    KoPointerEvent ev( event, point );
+    m_tool->mouseDoubleClickEvent( &ev );
 }
 
 void KPrViewModePresentation::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
 {
+    KoPointerEvent ev( event, point );
+    m_tool->mouseMoveEvent( &ev );
 }
 
 void KPrViewModePresentation::mouseReleaseEvent( QMouseEvent *event, const QPointF &point )
 {
+    KoPointerEvent ev( event, point );
+    m_tool->mouseReleaseEvent( &ev );
 }
 
 void KPrViewModePresentation::keyPressEvent( QKeyEvent *event )
 {
-    event->accept();
-
-    // move to a presentation tool
-    switch ( event->key() )
-    {
-        case Qt::Key_Escape:
-            m_view->setViewMode( m_savedViewMode );
-            break;
-        case Qt::Key_Home:
-        case Qt::Key_PageUp:
-        case Qt::Key_PageDown:
-        case Qt::Key_End:
-        case Qt::Key_Space:
-            if ( m_animationDirector )
-            {
-                m_animationDirector->navigate();
-            }
-            break;
-        default:    
-            event->ignore();
-            break;
-    }
+    m_tool->keyPressEvent( event );
 }
 
 void KPrViewModePresentation::keyReleaseEvent( QKeyEvent *event )
 {
+    m_tool->keyReleaseEvent( event );
 }
 
 void KPrViewModePresentation::wheelEvent( QWheelEvent * event, const QPointF &point )
 {
+    KoPointerEvent ev( event, point );
+    m_tool->wheelEvent( &ev );
 }
 
 void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
@@ -121,4 +118,19 @@ void KPrViewModePresentation::deactivate()
     m_canvas->showNormal();
     delete m_animationDirector;
     m_animationDirector = 0;
+}
+
+void KPrViewModePresentation::activateSavedViewMode()
+{
+    m_view->setViewMode( m_savedViewMode );
+}
+
+KPrAnimationDirector * KPrViewModePresentation::animationDirector()
+{
+    return m_animationDirector;
+}
+
+void KPrViewModePresentation::navigate()
+{
+    m_animationDirector->navigate();
 }

@@ -13,6 +13,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrDocument.cpp
      KPrView.cpp
      KPrViewModePresentation.cpp
+     KPrPresentationTool.cpp
      KPrAnimationDirector.cpp
      pageeffects/KPrPageEffect.cpp
      pageeffects/KPrCoverDownEffect.cpp

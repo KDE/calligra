@@ -22,7 +22,9 @@
 
 #include <KoPAViewMode.h>
 
-#include "KPrAnimationDirector.h"
+class QWidget;
+class KPrAnimationDirector;
+class KPrPresentationTool;
 
 class KPrViewModePresentation : public KoPAViewMode
 {
@@ -42,9 +44,33 @@ public:
 
     void activate( KoPAViewMode * previousViewMode );
     void deactivate();
+
+    /**
+     * @brief Activate the saved view mode
+     *
+     * This ends the presentation mode. The view mode that was active before the 
+     * presentation will be restored.
+     */
+    void activateSavedViewMode();
+
+    /**
+     * @brief Get the animation director
+     *
+     * Get the animation director used for effects
+     *
+     * @return animationDirector
+     */
+    KPrAnimationDirector * animationDirector();
+
+    /**
+     * Navigate in the presentation.
+     */
+    void navigate();
+
 private:
     KoPAViewMode * m_savedViewMode;
     QWidget * m_savedParent;
+    KPrPresentationTool * m_tool;
     KPrAnimationDirector * m_animationDirector;
 };
 
