@@ -862,13 +862,13 @@ double GNUMERICFilter::parseAttribute( const QDomElement &_element )
     if ( !ok )
         value = 2.0;
     if ( unit == "mm" )
-        return value;
+        return POINT_TO_MM(value);
     else if ( unit == "cm" )
-        return ( value/10.0 );
+        return ( POINT_TO_MM(value)/10.0 );
     else if ( unit == "in" )
-        return MM_TO_INCH( value );
+        return POINT_TO_INCH( value );
     else if ( unit == "Pt" || unit == "Px" || unit == "points" )
-        return MM_TO_POINT( value );
+        return value;
     else
         return value;
 }

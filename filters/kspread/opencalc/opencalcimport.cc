@@ -1293,27 +1293,27 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
     // I don't understand :(
     if ( styleStack.hasProperty( ooNS::fo, "page-width" ) )
     {
-        width = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "page-width" ) ) );
+        width = KoUnit::parseValue( styleStack.property( ooNS::fo, "page-width" ) );
     }
     if ( styleStack.hasProperty( ooNS::fo, "page-height" ) )
     {
-        height = KoUnit::toMM( KoUnit::parseValue( styleStack.property( ooNS::fo, "page-height" ) ) );
+        height = KoUnit::parseValue( styleStack.property( ooNS::fo, "page-height" ) );
     }
     if ( styleStack.hasProperty( ooNS::fo, "margin-top" ) )
     {
-        top = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-top" ) ) );
+        top = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-top" ) );
     }
     if ( styleStack.hasProperty( ooNS::fo, "margin-bottom" ) )
     {
-        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-bottom" ) ) );
+        bottom = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-bottom" ) );
     }
     if ( styleStack.hasProperty( ooNS::fo, "margin-left" ) )
     {
-        left = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-left" ) ) );
+        left = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-left" ) );
     }
     if ( styleStack.hasProperty( ooNS::fo, "margin-right" ) )
     {
-        right = KoUnit::toMM(KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-right" ) ) );
+        right = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-right" ) );
     }
     if ( styleStack.hasProperty( ooNS::style, "writing-mode" ) )
     {
