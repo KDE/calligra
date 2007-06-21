@@ -12,6 +12,8 @@ add_subdirectory( scripts )
 
 # the KSpread Scripting KParts::Plugin + Kross module
 set(krossmodulekspread_PART_SRCS ScriptingModule.cpp ScriptingFunction.cpp ScriptingWidgets.cpp ScriptingPart.cpp)
+
+qt4_wrap_cpp(krossmodulekspread_PART_SRCS ScriptingReader.h)
 kde4_automoc(${krossmodulekspread_PART_SRCS})
 kde4_add_plugin(krossmodulekspread ${krossmodulekspread_PART_SRCS})
 

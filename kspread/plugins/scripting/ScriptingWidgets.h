@@ -58,6 +58,16 @@ class ScriptingSheetsListView : public QWidget
         * Return the list of all selected sheets. Selected are those sheets the
         * user enabled the checkbutton for and the resulting list contains for
         * each such sheetitem a list of the name and the range rectangle.
+        *
+        * For example in python following structure got returned if there
+        * exist 3 sheets where Sheet1 and Sheet2 got selected. Sheet1 also does
+        * define the range A1:B2.
+        * [['Sheet1', 1, [1, 1, 2, 2]], ['Sheet2', 1], ['Sheet3', 0]]
+        *
+        * Each sheet contains a tuple of
+        * \li sheetname
+        * \li 1=enabled or 0=disabled
+        * \li optional range tuple [from column, from row, to column, to row]
         */
         QVariantList sheets();
 

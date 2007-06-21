@@ -1,27 +1,8 @@
 #!/usr/bin/env kross
 
 """
-Python script to export an OpenDocument Spreadsheet File to
-a CSV File.
-
-The script could be used in two ways;
-
-    1. Embedded in KSpread by execution via the "Tools=>Scripts"
-       menu or from the "Tools=>Script Manager". In that case
-       the document currently loaded and displayed by KSpread
-       will be exported to a HTML file.
-
-    2. As standalone script by running;
-
-            # make the script executable
-            chmod 755 `kde4-config --install data`/kspread/scripts/extensions/csvexport.py
-            # run the script
-            `kde4-config --install data`/kspread/scripts/extensions/csvexport.py
-
-       In that case the csvexport.py-script will use the with
-       Kross distributed krossrunner commandline-application
-       to execute the python script. A empty document will be
-       used in that case.
+KSpread python script to export an ISO OpenDocument spreadsheet file to
+a comma-separated-value file.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
@@ -30,10 +11,10 @@ Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 import os, datetime, sys, traceback, urlparse, csv
-import Kross
-import myKSpread
+import Kross, KSpread
 
 class CsvExporter:
+
     def __init__(self, scriptaction):
         self.scriptaction = scriptaction
         self.currentpath = self.scriptaction.currentPath()
@@ -48,6 +29,9 @@ class CsvExporter:
         self.savewidget.setMode("Saving")
         self.savewidget.setFilter("*.csv|CSV Files\n*.txt|Text Files\n*|All Files")
 
+        datapage = self.dialog.addPage("Sheets","Export Sheets","spreadsheet")
+        self.sheetslistview = KSpread.createSheetsListView(datapage)
+
         optionspage = self.dialog.addPage("Options","Comma Separated Value Options","configure")
         self.optionswidget = self.forms.createWidgetFromUIFile(optionspage, os.path.join(self.currentpath, "csvexportoptions.ui"))
 
@@ -58,13 +42,8 @@ class CsvExporter:
                 self.forms.showMessageBox("Error", "Error", "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def doExport(self):
-        config = myKSpread.KSpreadReader.Config()
-        #readerimpl = myKSpread.KSpreadReader.TestImpl(config)
-        readerimpl = myKSpread.KSpreadReader.FileImpl(config)
-        reader = myKSpread.KSpreadReader(readerimpl)
-        if not reader.hasFile():
-            #reader.setFile()
-            raise "No Document that could be exported loaded"
+        reader = KSpread.reader()
+        reader.setSheets( self.sheetslistview.sheets() )
 
         csvfilename = self.savewidget.selectedFile()
         if not csvfilename:
@@ -96,19 +75,19 @@ class CsvExporter:
 
         csvfile = open(csvfilename,'w')
         csvwriter = csv.writer(csvfile, dialect=dialectname)
-        try:
-            reader.openFile()
-            try:
-                while True:
-                    record = reader.readRecord()
-                    if record == None:
-                        break
-                    if len(record) > 0:
-                        print "=> %s" % record
-                        csvwriter.writerow( record )
-            finally:
-                reader.closeFile()
-        finally:
-            csvfile.close()
+
+        def changedSheet(sheetname):
+            print "changedSheet sheetname=%s" % sheetname
+            #csvfile.write("# %s\n" % sheetname)
+
+        def changedRow(row):
+            values = reader.currentValues()
+            #print "changedRow row=%i values=%s" % (row,values)
+            csvwriter.writerow(values)
+
+        reader.connect("changedSheet(QString)",changedSheet)
+        reader.connect("changedRow(int)",changedRow)
+        reader.start()
+        csvfile.close()
 
 CsvExporter( self )
