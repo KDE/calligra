@@ -1413,12 +1413,14 @@ void Canvas::processEscapeKey(QKeyEvent * event)
   if ( d->cellEditor )
     deleteEditor( false );
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
   if ( view()->isInsertingObject() )
   {
     view()->resetInsertHandle();
     setCursor( Qt::ArrowCursor );
     return;
   }
+#endif // KSPREAD_KOPART_EMBEDDING
 
   event->setAccepted(true); // ?
   QPoint cursor = cursorPos();

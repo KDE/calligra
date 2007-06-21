@@ -110,7 +110,7 @@
 #include <KoToolDockerFactory.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>
-#include <Toolbox.h>
+// #include <Toolbox.h>
 #include <KoTemplateCreateDia.h>
 #include <ktoolinvocation.h>
 #include <KoZoomAction.h>
@@ -130,7 +130,7 @@
 #include "Canvas.h"
 #include "Editors.h"
 #include "Global.h"
-#include "Handler.h"
+// #include "Handler.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Object.h"
@@ -279,13 +279,17 @@ public:
     QPoint findPos;
     QPoint findEnd;
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
     InsertHandler* insertHandler;
+#endif // KSPREAD_KOPART_EMBEDDING
 
     // Insert special character dialog
     KoCharSelectDia* specialCharDlg;
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
     // Holds a guarded pointer to the transformation toolbox.
     QPointer<KoTransformToolBox> transformToolBox;
+#endif // KSPREAD_KOPART_EMBEDDING
 
     // the last popup menu (may be 0).
     // Since only one popup menu can be opened at once, its pointer is stored here.
@@ -1721,7 +1725,9 @@ View::View( QWidget *_parent, Doc *_doc )
     d->spell.spellEndCellY   = 0;
     d->spell.spellCheckSelection = false;
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
     d->insertHandler = 0;
+#endif // KSPREAD_KOPART_EMBEDDING
     d->specialCharDlg = 0;
 
     setComponentData( Factory::global() );
@@ -1735,11 +1741,11 @@ View::View( QWidget *_parent, Doc *_doc )
 
     d->initActions();
 
-
+#if 0 // KSPREAD_KOPART_EMBEDDING
     // Handler for moving and resizing embedded parts
     KoContainerHandler* h = new KoContainerHandler( this, d->canvas );
     connect( h, SIGNAL( popupMenu( KoChild*, const QPoint& ) ), this, SLOT( popupChildMenu( KoChild*, const QPoint& ) ) );
-
+#endif // KSPREAD_KOPART_EMBEDDING
 
     connect( this, SIGNAL( childSelected( KoDocumentChild* ) ),
              this, SLOT( slotChildSelected( KoDocumentChild* ) ) );
@@ -1792,8 +1798,10 @@ View::~View()
     //  ElapsedTime el( "~View" );
     if ( doc()->isReadWrite() ) // make sure we're not embedded in Konq
         deleteEditor( true );
+#if 0 // KSPREAD_KOPART_EMBEDDING
     if ( !d->transformToolBox.isNull() )
         delete (&*d->transformToolBox);
+#endif // KSPREAD_KOPART_EMBEDDING
     /*if (d->calcLabel)
     {
         disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
@@ -1821,8 +1829,10 @@ View::~View()
     delete d->calcLabel;
 //     delete d->dcop;
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
     delete d->insertHandler;
     d->insertHandler = 0;
+#endif // KSPREAD_KOPART_EMBEDDING
 
     delete d->actions;
     delete d->zoomController;
@@ -2062,6 +2072,7 @@ Selection* View::choice() const
   return d->choice;
 }
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
 void View::resetInsertHandle()
 {
   d->actions->insertChartFrame->setChecked( false );
@@ -2074,6 +2085,7 @@ bool View::isInsertingObject()
 {
     return d->insertHandler;
 }
+#endif // KSPREAD_KOPART_EMBEDDING
 
 const Sheet* View::activeSheet() const
 {
@@ -6464,9 +6476,9 @@ void View::percent( bool b )
     manipulator->execute();
 }
 
-
 void View::insertObject()
 {
+#if 0 // KSPREAD_KOPART_EMBEDDING
   if (!activeSheet())
     return;
 
@@ -6483,10 +6495,12 @@ void View::insertObject()
 
   d->insertHandler = new InsertPartHandler( this, d->canvas, e );
   doc()->emitEndOperation();
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::insertChart()
 {
+#if 0 // KSPREAD_KOPART_EMBEDDING
   if (!activeSheet())
     return;
 
@@ -6509,6 +6523,7 @@ void View::insertChart()
 
   d->insertHandler = new InsertChartHandler( this, d->canvas, vec[0] );
   doc()->emitEndOperation();
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 
@@ -6954,6 +6969,7 @@ QMatrix View::matrix() const
 
 void View::transformPart()
 {
+#if 0 // KSPREAD_KOPART_EMBEDDING
     Q_ASSERT( selectedChild() );
 
     if ( d->transformToolBox.isNull() )
@@ -6968,6 +6984,7 @@ void View::transformPart()
         d->transformToolBox->show();
         d->transformToolBox->raise();
     }
+#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::slotChildSelected( KoDocumentChild* /*ch*/ )

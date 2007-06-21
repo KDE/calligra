@@ -161,7 +161,7 @@ SET (kspreadcommon_LIB_SRCS
 	Functions.cpp
 	GeneralProperty.cpp
 	GenValidationStyle.cpp
-	Handler.cpp
+# 	Handler.cpp
 	Localization.cpp
 	Map.cpp
 	Number.cpp
@@ -178,7 +178,7 @@ SET (kspreadcommon_LIB_SRCS
 	Style.cpp
 	StyleManager.cpp
 	StyleStorage.cpp
-	Toolbox.cpp
+# 	Toolbox.cpp
 	Undo.cpp
 	Util.cpp
 	Validity.cpp
