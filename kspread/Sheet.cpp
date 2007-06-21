@@ -3099,32 +3099,29 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     QString orientation = "Portrait";
     QString format;
 
-    // Laurent : Why we stored layout information as Millimeter ?!!!!!
-    // kspread used point for all other attribute
-    // I don't understand :(
     if ( styleStack.hasProperty( KoXmlNS::fo, "page-width" ) )
     {
-        width = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "page-width" ) ) );
+        width = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "page-width" ) );
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "page-height" ) )
     {
-        height = KoUnit::toMM( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "page-height" ) ) );
+        height = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "page-height" ) );
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-top" ) )
     {
-        top = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-top" ) ) );
+        top = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-top" ) );
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-bottom" ) )
     {
-        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-bottom" ) ) );
+        bottom = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-bottom" ) );
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-left" ) )
     {
-        left = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-left" ) ) );
+        left = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-left" ) );
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-right" ) )
     {
-        right = KoUnit::toMM(KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-right" ) ) );
+        right = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-right" ) );
     }
     if ( styleStack.hasProperty( KoXmlNS::style, "writing-mode" ) )
     {

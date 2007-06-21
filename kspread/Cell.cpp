@@ -472,10 +472,9 @@ void Cell::copyContent( const Cell& cell )
 
 bool Cell::needsPrinting() const
 {
-    if ( isDefault() )
-        return false;
-
     if ( !userInput().trimmed().isEmpty() )
+        return true;
+    if ( !comment().trimmed().isEmpty() )
         return true;
 
     const Style style = effectiveStyle();

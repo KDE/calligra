@@ -515,28 +515,6 @@ void CellView::paintCellBackground( QPainter& painter, const QPointF& paintCoord
     // disable antialiasing
     painter.setRenderHint( QPainter::Antialiasing, false );
 
-    // FIXME Stefan: Still needed?
-    // Handle printers separately.
-    if ( dynamic_cast<QPrinter*>(painter.device()) )
-    {
-        //bad hack but there is a qt bug
-        //so I can print backgroundcolor
-        QBrush brush(Qt::white);
-        if (d->style.backgroundColor().isValid() &&
-            d->style.backgroundColor() != QApplication::palette().base().color())
-        {
-            brush.setColor(d->style.backgroundColor());
-        }
-        painter.fillRect(cellRect, brush);
-
-        if (d->style.backgroundBrush().style() != Qt::NoBrush)
-        {
-            // Draw the background pattern.
-            painter.fillRect(cellRect, d->style.backgroundBrush());
-        }
-        return;
-    }
-
     if (d->style.backgroundColor().isValid() &&
         d->style.backgroundColor() != QApplication::palette().base().color())
     {
@@ -1209,7 +1187,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
        && cellRef.y() >= print->printRange().top()
        && cellRef.y() <= print->printRange().bottom() + 1 )
   {
-    if ( print->isOnNewPageX( cellRef.x() )
+    if ( print->isColumnOnNewPage( cellRef.x() )
          && cellRef.y() <= print->printRange().bottom() )
     {
       painter.setPen( cell.doc()->pageBorderColor() );
@@ -1223,7 +1201,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
       painter.drawLine( line );
     }
 
-    if ( print->isOnNewPageY( cellRef.y() ) &&
+    if ( print->isRowOnNewPage( cellRef.y() ) &&
          ( cellRef.x() <= print->printRange().right() ) )
     {
       painter.setPen( cell.doc()->pageBorderColor() );
@@ -1233,7 +1211,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     }
 
     if ( paintBorder & RightBorder ) {
-      if ( print->isOnNewPageX( cellRef.x() + 1 )
+      if ( print->isColumnOnNewPage( cellRef.x() + 1 )
            && cellRef.y() <= print->printRange().bottom() ) {
         painter.setPen( cell.doc()->pageBorderColor() );
 
@@ -1248,7 +1226,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     }
 
     if ( paintBorder & BottomBorder ) {
-      if ( print->isOnNewPageY( cellRef.y() + 1 )
+      if ( print->isRowOnNewPage( cellRef.y() + 1 )
            && cellRef.x() <= print->printRange().right() ) {
         painter.setPen( cell.doc()->pageBorderColor() );
         line = QLineF( cellRect.left(),  cellRect.bottom(),

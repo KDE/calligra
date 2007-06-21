@@ -4874,17 +4874,6 @@ void View::print( KPrinter &prt )
             d->canvas->deleteEditor( true ); // save changes
         }
 
-        int oldZoom = zoomHandler()->zoomInPercent();
-
-        //Comment from KWord
-        //   We don't get valid metrics from the printer - and we want a better resolution
-        //   anyway (it's the PS driver that takes care of the printer resolution).
-        //But KSpread uses fixed 300 dpis, so we can use it.
-        int dpiX = prt.logicalDpiX();
-        int dpiY = prt.logicalDpiY();
-
-        zoomHandler()->setZoomAndResolution( int( print->zoom() * 100 ), dpiX, dpiY );
-
         //store the current setting in a temporary variable
         KoPageFormat::Orientation _orient = print->orientation();
 
@@ -4902,14 +4891,6 @@ void View::print( KPrinter &prt )
 
         //Restore original orientation
         print->setPaperOrientation( _orient );
-
-        zoomHandler()->setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
-        doc()->newZoomAndResolution( true, false );
-
-        // Repaint at correct zoom
-        doc()->emitBeginOperation( false );
-        setZoom( oldZoom, false );
-        doc()->emitEndOperation();
 
         // Nothing to print
         if( !result )
@@ -6249,12 +6230,12 @@ void View::paperLayoutDlg()
   pl.format = print->paperFormat();
   pl.orientation = print->orientation();
 
-  pl.width =  MM_TO_POINT( print->paperWidth() );
-  pl.height = MM_TO_POINT( print->paperHeight() );
-  pl.left =   MM_TO_POINT( print->leftBorder() );
-  pl.right =  MM_TO_POINT( print->rightBorder() );
-  pl.top =    MM_TO_POINT( print->topBorder() );
-  pl.bottom = MM_TO_POINT( print->bottomBorder() );
+  pl.width =  print->paperWidth();
+  pl.height = print->paperHeight();
+  pl.left =   print->leftBorder();
+  pl.right =  print->rightBorder();
+  pl.top =    print->topBorder();
+  pl.bottom = print->bottomBorder();
 
   KoHeadFoot hf;
   hf.headLeft  = print->localizeHeadFootLine( print->headLeft()  );

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>,
-   2003 Philipp Mller <philipp.mueller@gmx.de>
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2003 Philipp Müller <philipp.mueller@gmx.de>
+   Copyright 1998, 1999 Torben Weis <weis@kde.org>,
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __SHEETPRINT_H__
-#define __SHEETPRINT_H__
+#ifndef KSPREAD_SHEET_PRINT
+#define KSPREAD_SHEET_PRINT
 
 #include <QList>
 #include <QObject>
@@ -54,8 +55,7 @@ class KSPREAD_EXPORT SheetPrint : public QObject
     Q_OBJECT
 
 public:
-
-    explicit SheetPrint( Sheet *sheet );
+    explicit SheetPrint( Sheet* sheet );
     ~SheetPrint();
 
     QString saveOasisSheetStyleLayout( KoGenStyles &mainStyles );
@@ -68,12 +68,7 @@ public:
     /**
      * @return the prinsheet width of the paper in millimeters.
      */
-    float prinsheetWidth()const { return m_paperWidth - m_leftBorder - m_rightBorder; }
-
-    /**
-     * @return the prinsheet width of the paper in zoomed points.
-     */
-    float prinsheetWidthPts() const;
+    float prinsheetWidth() const { return m_paperWidth - m_leftBorder - m_rightBorder; }
 
     /**
      * @return the prinsheet height of the paper in millimeters.
@@ -81,26 +76,14 @@ public:
     float prinsheetHeight() const;
 
     /**
-     * @return the prinsheet height of the paper in zoomed points.
-     */
-    float prinsheetHeightPts() const;
-
-    /**
      * @return the height of the paper in millimeters.
      */
     float paperHeight()const { return m_paperHeight; }
-    /**
-     * @return the height of the paper in zoomed points.
-     */
-    float paperHeightPts() const;
+
     /**
      * @return the width of the paper in millimeters.
      */
     float paperWidth()const { return m_paperWidth; }
-    /**
-     * @return the width of the paper in zoomed points.
-     */
-    float paperWidthPts() const;
 
     void setPaperHeight(float _val) { m_paperHeight=_val; }
     void setPaperWidth(float _val) { m_paperWidth=_val; }
@@ -109,39 +92,27 @@ public:
      * @return the left border in millimeters
      */
     float leftBorder()const { return m_leftBorder; }
-    /**
-     * @return the left border in zoomed points
-     */
-    float leftBorderPts() const;
+
     /**
      * @return the right border in millimeters
      */
     float rightBorder()const { return m_rightBorder; }
-    /**
-     * @return the right border in zoomed points
-     */
-    float rightBorderPts() const;
+
     /**
      * @return the top border in millimeters
      */
     float topBorder()const { return m_topBorder; }
-    /**
-     * @return the top border in zoomed points
-     */
-    float topBorderPts() const;
+
     /**
      * @return the bottom border in millimeters
      */
     float bottomBorder()const { return m_bottomBorder; }
-    /**
-     * @return the bottom border in zoomed points
-     */
-    float bottomBorderPts() const;
 
     /**
      * @return the orientation of the paper.
      */
-    KoPageFormat::Orientation orientation()const { return m_orientation; }
+    KoPageFormat::Orientation orientation() const { return m_orientation; }
+
     /**
      * @return the ascii name of the paper orientation ( like Portrait, Landscape )
      */
@@ -150,11 +121,12 @@ public:
     /**
      * @return the paper format.
      */
-    KoPageFormat::Format paperFormat()const { return m_paperFormat; }
+    KoPageFormat::Format paperFormat() const { return m_paperFormat; }
+
     /**
      * @return the ascii name of the paper format ( like A4, Letter etc. )
      */
-    QString paperFormatString()const;
+    QString paperFormatString() const;
 
     void setPaperFormat(KoPageFormat::Format format) { m_paperFormat = format; }
 
@@ -272,7 +244,7 @@ public:
      * case the left border of this column may be drawn highlighted to show
      * that this is a page break.
      */
-    bool isOnNewPageX( int column );
+    bool isColumnOnNewPage( int column );
 
     /**
      * Updates the new page list up to @p column
@@ -284,7 +256,7 @@ public:
      * case the top border of this row may be drawn highlighted to show
      * that this is a page break.
      */
-    bool isOnNewPageY( int _row );
+    bool isRowOnNewPage( int _row );
 
     /**
      * Updates the new page list up to @p row
@@ -683,55 +655,6 @@ private:
     QList<PrintObject*> m_printObjects;
 };
 
-
-class PrintNewPageEntry
-{
-public:
-    PrintNewPageEntry() :
-        m_iStartItem( 0 ), m_iEndItem( 0 ), m_dSize( 0 ),
-        m_dOffset( 0 ){}
-
-    explicit PrintNewPageEntry( int startItem,
-                                int endItem = 0,
-                                double size = 0,
-                                double offset = 0 )
-        : m_iStartItem( startItem )
-        , m_iEndItem( endItem )
-        , m_dSize( size )
-        , m_dOffset( offset ) {}
-
-    int startItem() const { return m_iStartItem; }
-    void setStartItem( int startItem ) { m_iStartItem = startItem; }
-
-    int endItem() const { return m_iEndItem; }
-    void setEndItem( int endItem ) { m_iEndItem = endItem; }
-
-    double size() const { return m_dSize; }
-    void setSize( double size ) { m_dSize = size; }
-
-    double offset() const { return m_dOffset; }
-    void setOffset( double offset ) { m_dOffset = offset; }
-
-    bool operator==( PrintNewPageEntry const & entry ) const;
-
-
-private:
-    int m_iStartItem;
-    int m_iEndItem;
-    double m_dSize;
-    double m_dOffset;
-};
-
-class PrintObject
-{
-  public:
-    PrintObject() : obj(0), p(0) {}
-
-    EmbeddedObject *obj;
-    QPixmap *p;
-};
-
 } // namespace KSpread
 
-#endif
-
+#endif // KSPREAD_SHEET_PRINT

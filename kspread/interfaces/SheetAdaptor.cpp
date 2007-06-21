@@ -353,7 +353,7 @@ float SheetAdaptor::paperHeight()const
 
 void SheetAdaptor::setPrinterHeight(float height)
 {
-    m_sheet->print()->setPaperHeight(height);
+    m_sheet->print()->setPaperHeight(MM_TO_POINT(height));
 }
 
 float SheetAdaptor::paperWidth()const
@@ -363,7 +363,7 @@ float SheetAdaptor::paperWidth()const
 
 void SheetAdaptor::setPaperWidth(float width)
 {
-    m_sheet->print()->setPaperWidth(width);
+    m_sheet->print()->setPaperWidth(MM_TO_POINT(width));
 }
 
 float SheetAdaptor::paperLeftBorder()const
@@ -396,9 +396,13 @@ QString SheetAdaptor::paperOrientation() const
     return m_sheet->print()->orientationString();
 }
 
-void SheetAdaptor::setPaperLayout(float leftBorder, float topBorder, float rightBorder, float bottomBoder, const QString& format, const QString& orientation)
+void SheetAdaptor::setPaperLayout(float leftBorder, float topBorder,
+                                  float rightBorder, float bottomBoder,
+                                  const QString& format, const QString& orientation)
 {
-    m_sheet->print()->setPaperLayout(leftBorder, topBorder, rightBorder, bottomBoder, format, orientation);
+    m_sheet->print()->setPaperLayout(MM_TO_POINT(leftBorder), MM_TO_POINT(topBorder),
+                                     MM_TO_POINT(rightBorder), MM_TO_POINT(bottomBoder),
+                                     format, orientation);
 }
 
 #if 0
