@@ -822,7 +822,6 @@ void KWDocument::saveConfig()
 //    interface.writeEntry( "SnapToGrid" , m_bSnapToGrid );
 //    interface.writeEntry( "ResolutionX", m_gridX );
 //    interface.writeEntry( "ResolutionY", m_gridY );
-    config->sync();
 }
 
 #include "KWDocument.moc"
