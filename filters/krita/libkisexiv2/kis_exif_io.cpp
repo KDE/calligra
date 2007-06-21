@@ -225,6 +225,38 @@ Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
     return new Exiv2::DataValue((const Exiv2::byte*)array.data(), array.size());
 }
 
+// Read and write Flash //
+
+KisMetaData::Value flashExifToKMD(const Exiv2::Value::AutoPtr value)
+{
+    uint16_t v = value->toLong();
+    QMap<QString, KisMetaData::Value> flashStructure;
+    bool fired = ( v & 0x01); // bit 1 is wether flash was fired or not
+    flashStructure["Fired"] = QVariant(fired);
+    int ret = ( (v >> 1) & 0x03); // bit 2 and 3 are Return
+    flashStructure["Return"] = QVariant(ret);
+    int mode = ( (v >> 3) & 0x03); // bit 4 and 5 are Mode
+    flashStructure["Mode"] = QVariant(mode);
+    bool function = ( (v >> 5) & 0x01); // bit 6 if function
+    flashStructure["Function"] = QVariant(function);
+    bool redEye = ( (v >> 6) & 0x01); // bit 7 if function
+    flashStructure["RedEyeMode"] = QVariant(redEye);
+    return KisMetaData::Value(flashStructure);
+}
+
+Exiv2::Value* flashKMDToExif(const KisMetaData::Value& value)
+{
+    uint16_t v =0;
+    QMap<QString, KisMetaData::Value> flashStructure = value.asStructure();
+    v = flashStructure["Fired"].asVariant().toBool();
+    v |= ( (flashStructure["Return"].asVariant().toInt() & 0x03) << 1 );
+    v |= ( (flashStructure["Mode"].asVariant().toInt() & 0x03) << 3 );
+    v |= ( (flashStructure["Function"].asVariant().toInt() & 0x03) << 5 );
+    v |= ( (flashStructure["RedEyeMode"].asVariant().toInt() & 0x03) << 6 );
+    return new Exiv2::ValueType<uint16_t>(v);
+}
+
+
 
 // ---- Implementation of KisExifIO ----//
 KisExifIO::KisExifIO() : d(new Private)
@@ -306,6 +338,8 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
                 v = kmdOECFStructureToExifOECF( entry.value() );
             } else if(exivKey == "Exif.Photo.DeviceSettingDescription") {
                 v = deviceSettingDescriptionKMDToExif( entry.value() );
+            } else if(exivKey == "Exif.Photo.Flash") {
+                v = flashKMDToExif( entry.value() );
             } else {
                 v = kmdValueToExivValue( entry.value(), Exiv2::ExifTags::tagType( exifKey.tag(), exifKey.ifdId()  ) );
             }
@@ -389,6 +423,8 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 v = KisMetaData::Value(exivValueToDateTime(it->getValue()));
             } else if(it->key() == "Exif.Photo.DeviceSettingDescription" ) {
                 v = deviceSettingDescriptionExifToKMD(it->getValue());
+            } else if(it->key() == "Exif.Photo.Flash" ) {
+                v = flashExifToKMD(it->getValue());
             }
             else {
                 v = exivValueToKMDValue(it->getValue());
