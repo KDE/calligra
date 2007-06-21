@@ -135,6 +135,7 @@ int MatrixEntryElement::tabBefore( int pos )
     }
     return static_cast<int>( tabNum )-1;
     */
+    return -1;
 }
 
 int MatrixEntryElement::tabPos( int i )

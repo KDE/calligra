@@ -25,6 +25,8 @@
 #include <kdebug.h>
 #include <KoXmlWriter.h>
 
+#include <assert.h>
+
 UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_baseElement = new RowElement( this );
@@ -146,6 +148,8 @@ ElementType UnderOverElement::elementType() const
         return UnderOver;
     else if( m_underElement->elementType() != Basic )
         return Under;
-    else if( m_overElement->elementType() != Basic )
+    else {
+        assert( m_overElement->elementType() != Basic );
         return Over;
+    }
 }

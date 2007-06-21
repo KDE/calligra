@@ -129,6 +129,7 @@ bool RowElement::readMathMLChild( const KoXmlElement& element )
     if ( ! tmpElement ) return false;
     m_rowElements << tmpElement;
     tmpElement->readMathML( element );
+    return true;
 }
 
 void RowElement::writeMathMLContent( KoXmlWriter* writer ) const
