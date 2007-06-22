@@ -29,17 +29,17 @@
 #ifdef __GNUC__
 #warning TODO reenable #include "kexidatetableedit.h"
 #else
-#pragma WARNING( TODO reenable #include \"kexidatetableedit.h\" )
+#pragma WARNING( TODO reenable #include "kexidatetableedit.h" )
 #endif
 #ifdef __GNUC__
 #warning TODO reenable #include "kexitimetableedit.h"
 #else
-#pragma WARNING( TODO reenable #include \"kexitimetableedit.h\" )
+#pragma WARNING( TODO reenable #include "kexitimetableedit.h" )
 #endif
 #ifdef __GNUC__
 #warning TODO reenable #include "kexidatetimetableedit.h"
 #else
-#pragma WARNING( TODO reenable #include \"kexidatetimetableedit.h\" )
+#pragma WARNING( TODO reenable #include "kexidatetimetableedit.h" )
 #endif
 #include "kexitableedit.h"
 #include "kexiinputtableedit.h"

@@ -1979,7 +1979,7 @@ void KexiMainWindow::setupProjectNavigator()
 #ifdef __GNUC__
 #warning TODO	d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 #else
-#pragma WARNING( TODO	d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, \"2\"*/); )
+#pragma WARNING( TODO	d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/); )
 #endif
 //		d->navToolWindow->hide();
 
@@ -2318,7 +2318,7 @@ KexiMainWindow::storeSettings()
 #ifdef __GNUC__
 #warning TODO	saveMainWindowSettings( d->config, "MainWindow" );
 #else
-#pragma WARNING( TODO	saveMainWindowSettings( d->config, \"MainWindow\" ); )
+#pragma WARNING( TODO	saveMainWindowSettings( d->config, "MainWindow" ); )
 #endif
 	KConfigGroup mainWindowGroup( d->config->group("MainWindow") );
 /*2.0:	KMdi::MdiMode modeToSave = mdiMode();

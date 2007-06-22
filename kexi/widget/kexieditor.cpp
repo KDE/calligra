@@ -120,7 +120,7 @@ KexiEditor::KexiEditor(QWidget *parent)
 #ifdef __GNUC__
 #warning TODO	Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container("edit", mainWin) );
 #else
-#pragma WARNING( TODO	Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container(\"edit\", mainWin) ); )
+#pragma WARNING( TODO	Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container("edit", mainWin) ); )
 #endif
 #ifdef __GNUC__
 #warning TODO	d->view->setContextMenu(pop);

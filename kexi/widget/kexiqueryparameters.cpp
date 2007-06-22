@@ -30,7 +30,7 @@
 #ifdef __GNUC__
 #warning TODO include "utils/kexidatetimeformatter.h"
 #else
-#pragma WARNING( TODO include \"utils/kexidatetimeformatter.h\" )
+#pragma WARNING( TODO include "utils/kexidatetimeformatter.h" )
 #endif
 
 //static

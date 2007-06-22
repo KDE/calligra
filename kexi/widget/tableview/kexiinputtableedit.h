@@ -31,7 +31,7 @@
 #ifdef __GNUC__
 #warning TODO reenable #include "kexitextformatter.h"
 #else
-#pragma WARNING( TODO reenable #include \"kexitextformatter.h\" )
+#pragma WARNING( TODO reenable #include "kexitextformatter.h" )
 #endif
 
 /*! @short General purpose cell editor using line edit widget.
